@@ -64,7 +64,7 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
 
     skeleton = (SkinLimb**)Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
     limb = (SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]);
-    data = Lib_SegmentedToVirtual(limb->limbData);
+    data = Lib_SegmentedToVirtual(limb->segment);
     temp_2 = (Struct_800A598C*)Lib_SegmentedToVirtual(data->unk_4);
 
     avb = &skin->avbTbl[limbIndex];
@@ -134,7 +134,7 @@ void Skin_DrawAnimatedLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbInde
     OPEN_DISPS(gfxCtx);
 
     skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
-    data = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
+    data = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->segment);
     if (!(drawFlag & SKIN_DRAW_FLAG_1)) {
         func_80137B34(gfxCtx, skin, limbIndex, arg3);
     }
@@ -155,7 +155,7 @@ void Skin_DrawLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* 
     skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
 
     if (dlistOverride == NULL) {
-        gfx = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->dlist;
+        gfx = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->segment;
     }
 
     if (gfx != NULL) {

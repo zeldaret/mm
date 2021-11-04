@@ -11,7 +11,7 @@ void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex) 
     s32 i;
     SkinLimb** skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
     SkinAnimatedLimbData* animatedLimbData =
-        Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
+        Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->segment);
     Struct_800A598C* temp_v0 = Lib_SegmentedToVirtual(animatedLimbData->unk_4);
 
     for (i = 0; i < ARRAY_COUNT(skin->avbTbl->buf); i++) {
@@ -60,7 +60,7 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
             avbEntry->buf[1] = NULL;
         } else {
             SkinAnimatedLimbData* animatedLimbData =
-                Lib_SegmentedToVirtual((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->limbData));
+                Lib_SegmentedToVirtual((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segment));
 
             { s32 tmp; }
 

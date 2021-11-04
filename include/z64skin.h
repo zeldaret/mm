@@ -54,11 +54,7 @@ typedef struct {
     /* 0x06 */ u8 child;
     /* 0x07 */ u8 sibling;
     /* 0x08 */ s32 segmentType; // Type of data contained in segment
-    /* 0x0C */ union {
-        void* segment;
-        Gfx* dlist;
-        SkinAnimatedLimbData* limbData;
-    };
+    /* 0x0C */ void* segment; // Gfx* if segmentType is SKIN_LIMB_TYPE_NORMAL, SkinAnimatedLimbData if segmentType is SKIN_LIMB_TYPE_NORMAL, NULL otherwise
 } SkinLimb; // size = 0x10
 
 
