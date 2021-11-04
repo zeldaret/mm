@@ -46,7 +46,7 @@ typedef SkinAnimatedLimbData Struct_800A5E28;
 
 typedef enum {
     /* 04 */ SKIN_LIMB_TYPE_ANIMATED = 4,
-    /* 11 */ SKIN_LIMB_TYPE_NORMAL = 11,
+    /* 11 */ SKIN_LIMB_TYPE_NORMAL = 11
 } SkinLimbType;
 
 typedef struct {
