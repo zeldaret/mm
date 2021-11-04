@@ -1,3 +1,9 @@
+/*
+ * File: z_en_tab.c
+ * Overlay: ovl_En_Tab
+ * Description: Talon B - Mr. Barten
+ */
+
 #include "z_en_tab.h"
 
 #define FLAGS 0x00000039

@@ -4,6 +4,7 @@
  * Description: Marine Research Lab Fish
  */
 
+#include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 #include "overlays/actors/ovl_En_Mushi2/z_en_mushi2.h"
 #include "z_en_fish2.h"
 
@@ -444,8 +445,8 @@ void func_80B2913C(EnFish2* this, GlobalContext* globalCtx) {
 
 void func_80B29194(EnFish2* this) {
     if ((this->unk_354 != NULL) && (this->unk_2C8 == 0)) {
-        EnMushi2* mushi = (EnMushi2*)this->unk_350;
-        mushi->unk_277 = 1;
+        EnFish* fish = (EnFish*)this->unk_350;
+        fish->unk_277 = 1;
     }
 
     this->unk_2C4 = 0;
@@ -1101,7 +1102,7 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
                 phi_v0 = &D_04091BE0;
             }
 
-            ptr->unk_20 = gSegments[(phi_v0 * 0x10) >> 0x1C] + (phi_v0 & 0xFFFFFF);
+            ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));
             ptr->unk_00 = true;
             ptr->unk_04 = *vec;
             ptr->unk_04.x += randPlusMinusPoint5Scaled(ptr->unk_00 + (this->unk_330 * 4000.0f));

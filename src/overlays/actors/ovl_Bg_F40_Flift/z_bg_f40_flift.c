@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_f40_flift.c
+ * Overlay: ovl_Bg_F40_Flift
+ * Description: Stone Tower Temple - Grey Square Stone Elevator
+ */
+
 #include "z_bg_f40_flift.h"
 
 #define FLAGS 0x00000010

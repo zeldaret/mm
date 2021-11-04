@@ -1,3 +1,9 @@
+/*
+ * File: z_en_horse_game_check.c
+ * Overlay: ovl_En_Horse_Game_Check
+ * Description:
+ */
+
 #include "z_en_horse_game_check.h"
 
 #define FLAGS 0x00000010

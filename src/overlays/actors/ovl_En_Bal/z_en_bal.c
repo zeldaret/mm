@@ -1,3 +1,9 @@
+/*
+ * File z_en_bal.c
+ * Overlay: ovl_En_Bal
+ * Description: Tingle With Balloon
+ */
+
 #include "z_en_bal.h"
 
 #define FLAGS 0x00000019

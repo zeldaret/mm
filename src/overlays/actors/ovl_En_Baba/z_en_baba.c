@@ -1,3 +1,9 @@
+/*
+ * File z_en_baba.c
+ * Overlay: ovl_En_Baba
+ * Description: Bomb Shop Lady
+ */
+
 #include "z_en_baba.h"
 
 #define FLAGS 0x00000019

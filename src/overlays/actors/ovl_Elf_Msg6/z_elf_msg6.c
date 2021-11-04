@@ -1,3 +1,9 @@
+/*
+ * File z_elf_msg6.c
+ * Overlay: ovl_Elf_Msg6
+ * Description: Tatl Hint (another proximity-activated C-up hint?)
+ */
+
 #include "z_elf_msg6.h"
 
 #define FLAGS 0x00000010

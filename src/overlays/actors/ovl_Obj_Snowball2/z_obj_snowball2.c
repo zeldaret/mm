@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_snowball2.c
+ * Overlay: ovl_Obj_Snowball2
+ * Description: Small Snowball
+ */
+
 #include "z_obj_snowball2.h"
 
 #define FLAGS 0x00800000

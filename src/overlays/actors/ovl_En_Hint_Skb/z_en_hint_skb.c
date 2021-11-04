@@ -1,3 +1,9 @@
+/*
+ * File: z_en_hint_skb.c
+ * Overlay: ovl_En_Hint_Skb
+ * Description: Stalchild that gives hints in Oceanside Spider House
+ */
+
 #include "z_en_hint_skb.h"
 
 #define FLAGS 0x00000019

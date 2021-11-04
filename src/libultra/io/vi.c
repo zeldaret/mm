@@ -18,7 +18,7 @@ void __osViInit(void) {
     }
 
     __osViNext->state = 0x20;
-    __osViNext->control = __osViNext->modep->comRegs.ctrl;
+    __osViNext->features = __osViNext->modep->comRegs.ctrl;
 
     while (*(vu32*)0xA4400010 > 10) {
         ;
