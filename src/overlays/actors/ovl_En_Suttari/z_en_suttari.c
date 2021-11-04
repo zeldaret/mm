@@ -748,7 +748,7 @@ s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
 }
 
 s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
-    UNK_TYPE1 sp7C[0x424];
+    f32 sp7C[256];
     Vec3f sp70;
     Vec3f sp64;
     Vec3f sp58;
@@ -758,10 +758,10 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
 
     sp54 = 0;
     sp50 = 0;
-    func_8013AF00(&sp7C, 3, this->unk404->count + 3);
+    func_8013AF00(sp7C, 3, this->unk404->count + 3);
     if (this->unk42C == 0) {
         sp58 = D_801D15B0;
-        func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, &sp7C,
+        func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, sp7C,
                       &sp58, this->unk42A);
         func_8013B878(globalCtx, this->unk404, this->unk420, &sp58);
         this->actor.world.pos.y = sp58.y;
@@ -777,7 +777,7 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
         sp58 = this->actor.world.pos;
     }
     this->unk408 = D_801D15B0;
-    if (func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, &sp7C,
+    if (func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, sp7C,
                       &this->unk408, this->unk42A)) {
         this->unk430 = 1;
     } else {
