@@ -1,9 +1,5 @@
 /*
-<<<<<<< HEAD
- * File z_en_baguo.c
-=======
  * File: z_en_baguo.c
->>>>>>> Add explanatory comment
  * Overlay: ovl_En_Baguo
  * Description: Nejiron
  */
@@ -311,7 +307,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
             // below our home position (e.g., we rolled off a ledge).
             i = true;
         }
-        if (this->actor.bgCheckFlags & 0x60 && this->actor.yDistToWater >= 40.0f) {
+        if (this->actor.bgCheckFlags & 0x60 && this->actor.depthInWater >= 40.0f) {
             // Force a detonation if we're too far below the water's surface.
             i = true;
         }
