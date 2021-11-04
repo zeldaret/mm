@@ -13,7 +13,7 @@ typedef struct {
     /* 0x18 */ Vec3f unk_18;
     /* 0x24 */ u8 unk_24;
     /* 0x26 */ s16 unk_26;
-    /* 0x28 */ char unk_28[0x4];
+    /* 0x28 */ UNK_TYPE1 unk_28[0x4];
     /* 0x2C */ s16 unk_2C;
     /* 0x2E */ s16 unk_2E;
     /* 0x30 */ s16 unk_30;
@@ -34,7 +34,7 @@ typedef struct Boss02 {
     /* 0x0158 */ s16 unk_0158;
     /* 0x015A */ s16 unk_015A;
     /* 0x015C */ u8 unk_015C;
-    /* 0x015D */ char unk015D[0x7];
+    /* 0x015D */ UNK_TYPE1 unk015D[0x7];
     /* 0x0164 */ f32 unk_0164;
     /* 0x0168 */ f32 unk_0168;
     /* 0x016C */ s16 unk_016C;
@@ -80,7 +80,7 @@ typedef struct Boss02 {
     /* 0x1D54 */ f32 unk_1D54;
     /* 0x1D58 */ f32 unk_1D58;
     /* 0x1D5C */ f32 unk_1D5C;
-    /* 0x1D60 */ char unk1D60[0x4];
+    /* 0x1D60 */ UNK_TYPE1 unk1D60[0x4];
     /* 0x1D64 */ f32 unk_1D64;
     /* 0x1D68 */ f32 unk_1D68;
     /* 0x1D6C */ f32 unk_1D6C;
