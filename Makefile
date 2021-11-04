@@ -153,6 +153,8 @@ build/src/libultra/io/%.o: OPTFLAGS := -O2
 build/src/libultra/libc/%.o: OPTFLAGS := -O2
 build/src/libultra/gu/%.o: OPTFLAGS := -O2
 build/src/libultra/rmon/%.o: OPTFLAGS := -O2
+build/src/libultra/flash/%.o: OPTFLAGS := -g
+build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv

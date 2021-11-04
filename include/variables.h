@@ -914,8 +914,6 @@ extern Actor* actorCutsceneCurrentCutsceneActor;
 extern GlobalContext* actorCutscenesGlobalCtxt;
 extern s16 actorCutsceneReturnCamera;
 extern s16 D_801BD8C6;
-extern ColliderCylinderInit fireObjCollisionInit;
-extern FireObjLightParams D_801BD8FC[2];
 extern GameStateOverlay gGameStateOverlayTable[];
 extern s32 graphNumGameStates;
 // extern UNK_TYPE2 D_801BDA70;
@@ -2515,8 +2513,6 @@ extern f32 D_801DD774;
 extern f32 D_801DD780;
 extern f32 D_801DD7B0;
 extern f32 D_801DD7C0;
-extern f32 D_801DD7D0;
-extern f32 D_801DD7D4;
 extern f32 D_801DD7E0;
 extern f32 D_801DD7E4;
 extern f32 D_801DD7E8;
@@ -3542,12 +3538,6 @@ extern StackEntry sys_flashromStackEntry;
 extern OSThread sys_flashromOSThread;
 extern s80185D40 D_801FD008;
 extern OSMesg D_801FD034;
-// extern UNK_TYPE1 D_801FD040;
-extern OSIoMesg D_801FD050;
-extern OSMesgQueue D_801FD068;
-extern OSPiHandle D_801FD080;
-// extern UNK_TYPE1 D_801FD0F4;
-// extern UNK_TYPE1 D_801FD0F8;
 // extern UNK_TYPE1 D_801FD120;
 // extern UNK_TYPE1 D_801FD140;
 // extern UNK_TYPE1 D_801FD158;
@@ -4073,5 +4063,6 @@ extern UNK_TYPE D_0502324C;
 extern GfxMasterList D_0E000000;
 
 extern UNK_TYPE D_0F000000;
+
 
 #endif

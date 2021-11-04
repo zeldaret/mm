@@ -491,7 +491,6 @@ beginseg
     include "build/src/code/z_fcurve_data_skelanime.o"
     include "build/data/code/code_801BD830.data.o"
     include "build/src/code/z_fireobj.o"
-    include "build/data/code/z_fireobj.data.o"
     include "build/src/code/z_game_dlftbls.o"
     include "build/src/code/z_horse.o"
     include "build/data/code/z_horse.data.o"
@@ -639,8 +638,7 @@ beginseg
     include "build/src/code/sys_flashrom.o"
     include "build/data/code/sys_flashrom.bss.o"
     include "build/asm/code/code_80185F90.text.o" // handwritten
-    include "build/src/code/osFlash.o"
-    include "build/data/code/osFlash.bss.o"
+    include "build/src/libultra/flash/osFlash.o"
     pad_text
     pad_text
     pad_text
