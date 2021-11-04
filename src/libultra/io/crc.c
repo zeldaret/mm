@@ -123,7 +123,7 @@ u8 __osContAddressCrc(u16 addr) {
 #define DATA_CRC_GENERATOR 0x85
 
 /**
- * CRC-8 with generating polynomial $ x^8 + x^7 + x^2 + 1 $, AKA 0x85 = 0b(1) 1000 0101
+ * CRC-8 with generating polynomial $ x^8 + x^7 + x^2 + 1 $, AKA 0x85 = 0b(1) 1000 0101.
  * Expects exactly 0x20 = 32 bytes of data.
  */
 u8 __osContDataCrc(u8* data) {
