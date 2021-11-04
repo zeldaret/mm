@@ -544,7 +544,6 @@ beginseg
     include "build/data/code/code_801C5C50.data.o"
     include "build/src/code/z_skelanime.o"
     include "build/src/code/z_skin.o"
-    include "build/data/code/z_skin.bss.o"
     include "build/src/code/z_skin_awb.o"
     include "build/src/code/z_skin_matrix.o"
     include "build/src/code/z_snap.o"
