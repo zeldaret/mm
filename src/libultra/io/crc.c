@@ -82,7 +82,7 @@
  *
  * Usually used as __osContAddressCrc(addr) | (addr << 5) to add the CRC to the end. The overall length of 10 + 5 bits
  * allows the address + CRC to fit into one s16.
- * 
+ *
  * `addr` is the address of a block in the mempak, only valid up to 0x7FF.
  */
 u8 __osContAddressCrc(u16 addr) {
