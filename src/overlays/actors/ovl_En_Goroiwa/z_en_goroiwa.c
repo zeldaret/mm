@@ -971,7 +971,7 @@ void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGoroiwa* this = THIS;
     f32 temp_f0;
     s32 params = ENGOROIWA_GET_FF(&this->actor);
-    s32 sp28 = params << 3;
+    s32 sp28 = params * 8;
     Path* sp2C = &globalCtx->setupPathList[params];
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
