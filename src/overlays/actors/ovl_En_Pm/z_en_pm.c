@@ -1447,11 +1447,11 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
     sp50 = 0;
     sp54 = 0;
 
-    func_8013AF00(&sp7C, 3, this->unk_234->count + 3);
+    func_8013AF00(sp7C, 3, this->unk_234->count + 3);
     if (!(this->unk_356 & 8)) {
         sp58 = D_801D15B0;
-        func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250,
-                      &sp7C, &sp58, this->unk_374);
+        func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250, sp7C,
+                      &sp58, this->unk_374);
         func_8013B878(globalCtx, this->unk_234, this->unk_250, &sp58);
         this->actor.world.pos.y = sp58.y;
         this->unk_356 |= 8;
@@ -1470,8 +1470,8 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
 
     this->unk_238 = D_801D15B0;
 
-    if (func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250,
-                      &sp7C, &this->unk_238, this->unk_374)) {
+    if (func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250, sp7C,
+                      &this->unk_238, this->unk_374)) {
         this->unk_356 |= 0x10;
     } else {
         sp70 = this->actor.world.pos;
