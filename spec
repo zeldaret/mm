@@ -194,8 +194,6 @@ beginseg
     include "build/src/libultra/io/pfsisplug.o"
     include "build/src/libultra/voice/voicegetstatus.o"
     include "build/src/libultra/io/cartrominit.o"
-//    include "build/data/boot/cartrominit.data.o"
-//    include "build/data/boot/cartrominit.bss.o"
     include "build/src/libultra/gu/guS2DInitBg.o"
     include "build/data/boot/guS2DInitBg.data.o"
     include "build/src/libultra/io/pfsselectbank.o"
