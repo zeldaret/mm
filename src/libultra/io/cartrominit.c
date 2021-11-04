@@ -3,7 +3,7 @@
 OSPiHandle CartRomHandle;
 
 OSPiHandle* osCartRomInit(void) {
-    register u32 a;
+    register u32 initialConfig;
     register s32 status;
     register u32 prevInt;
     register u32 lastLatency;
@@ -11,16 +11,16 @@ OSPiHandle* osCartRomInit(void) {
     register u32 lastRelDuration;
     register u32 lastPulse;
 
-    static u32 D_800980D0 = 1;
+    static s32 sCartRomNeedsInit = true;
 
     __osPiGetAccess();
 
-    if (!D_800980D0) {
+    if (!sCartRomNeedsInit) {
         __osPiRelAccess();
         return &CartRomHandle;
     }
 
-    D_800980D0 = 0;
+    sCartRomNeedsInit = false;
     CartRomHandle.type = DEVICE_TYPE_CART;
     CartRomHandle.baseAddress = 0xB0000000;
     CartRomHandle.domain = 0;
@@ -42,11 +42,11 @@ OSPiHandle* osCartRomInit(void) {
     HW_REG(PI_BSD_DOM1_RLS_REG, u32) = 3;
     HW_REG(PI_BSD_DOM1_PWD_REG, u32) = 0xFF;
 
-    a = HW_REG(CartRomHandle.baseAddress, u32);
-    CartRomHandle.latency = a & 0xFF;
-    CartRomHandle.pageSize = (a >> 0x10) & 0xF;
-    CartRomHandle.relDuration = (a >> 0x14) & 0xF;
-    CartRomHandle.pulse = (a >> 8) & 0xFF;
+    initialConfig = HW_REG(CartRomHandle.baseAddress, u32);
+    CartRomHandle.latency = initialConfig & 0xFF;
+    CartRomHandle.pageSize = (initialConfig >> 0x10) & 0xF;
+    CartRomHandle.relDuration = (initialConfig >> 0x14) & 0xF;
+    CartRomHandle.pulse = (initialConfig >> 8) & 0xFF;
 
     HW_REG(PI_BSD_DOM1_LAT_REG, u32) = lastLatency;
     HW_REG(PI_BSD_DOM1_PGS_REG, u32) = lastPageSize;

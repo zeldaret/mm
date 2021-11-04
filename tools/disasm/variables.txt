@@ -78,7 +78,7 @@
     0x80098060:("D_80098060","__OSViContext","[2]",0x60),
     0x800980C0:("__osViCurr","__OSViContext*","",0x4),
     0x800980C4:("__osViNext","__OSViContext*","",0x4),
-    0x800980D0:("D_800980D0","UNK_TYPE4","",0x4),
+    0x800980D0:("sCartRomNeedsInit","UNK_TYPE4","",0x4),
     0x800980E0:("osViModeFpalLan1","OSViMode","",0x50),
     0x80098130:("ldigs","char","[]",0x14),
     0x80098144:("udigs","char","[]",0x14),
