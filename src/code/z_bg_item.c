@@ -61,41 +61,41 @@ void DynaPoly_SetHeavySwitchPressedState(DynaPolyActor* dynaActor) {
 
 s32 DynaPoly_IsInRidingFallingState(DynaPolyActor* dynaActor) {
     if (dynaActor->stateFlags & DYNAPOLY_STATE_RIDING_FALLING) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
 s32 DynaPoly_IsInRidingMovingState(DynaPolyActor* dynaActor) {
     if (dynaActor->stateFlags & DYNAPOLY_STATE_RIDING_MOVING) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
 s32 DynaPoly_IsInRidingRotatingState(DynaPolyActor* dynaActor) {
     if (dynaActor->stateFlags & DYNAPOLY_STATE_RIDING_ROTATING) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
 s32 DynaPoly_IsInSwitchPressedState(DynaPolyActor* dynaActor) {
     if (dynaActor->stateFlags & DYNAPOLY_STATE_SWITCH_PRESSED) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
 s32 DynaPoly_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor) {
     if (dynaActor->stateFlags & DYNAPOLY_STATE_HEAVY_SWITCH_PRESSED) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
