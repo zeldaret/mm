@@ -399,8 +399,8 @@ Actor* func_80AF7DC4(EnPm* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 void func_80AF7E6C(EnPm* this) {
-    this->skelAnime.animPlaybackSpeed = this->unk_35C;
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->skelAnime.playSpeed = this->unk_35C;
+    SkelAnime_Update(&this->skelAnime);
 }
 
 s32 func_80AF7E98(EnPm* this, s32 arg1) {
@@ -432,7 +432,7 @@ s32 func_80AF7E98(EnPm* this, s32 arg1) {
     if (phi_v1) {
         this->unk_384 = arg1;
         ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
-        this->unk_35C = this->skelAnime.animPlaybackSpeed;
+        this->unk_35C = this->skelAnime.playSpeed;
     }
 
     return ret;
@@ -627,7 +627,7 @@ s32 func_80AF8478(EnPm* this, GlobalContext* globalCtx) {
             break;
 
         case 1:
-            if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+            if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 func_80AF7E98(this, 4);
                 this->unk_356 &= ~0x200;
                 this->unk_356 |= 0x20;
@@ -749,7 +749,7 @@ s32 func_80AF87C4(EnPm* this, GlobalContext* globalCtx) {
 }
 
 void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
-    SysMatrix_StatePush();
+    Matrix_StatePush();
 
     switch (arg2) {
         case 0:
@@ -771,7 +771,7 @@ void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
             break;
     }
 
-    SysMatrix_StatePop();
+    Matrix_StatePop();
 }
 
 void func_80AF898C(EnPm* this) {
@@ -861,7 +861,7 @@ void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
         this->unk_360 = 0.0f;
     }
     Math_SmoothStepToF(&this->unk_364, this->unk_360, 0.8f, 40.0f, 10.0f);
-    SysMatrix_InsertTranslation(this->unk_364, 0.0f, 0.0f, 1);
+    Matrix_InsertTranslation(this->unk_364, 0.0f, 0.0f, 1);
     this->unk_388 = sp28;
 }
 
@@ -1429,7 +1429,7 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
         sp38.z = this->unk_36E * temp;
         Lib_Vec3f_TranslateAndRotateY(&this->unk_26C, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
         this->unk_36E += this->unk_374;
-        if (func_801378B8(&this->skelAnime, 3.0f) || func_801378B8(&this->skelAnime, 8.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMAN_WALK);
         }
     }
@@ -1485,7 +1485,7 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
         this->unk_250 = sp50;
         this->unk_238 = sp58;
     } else if ((this->unk_258 != 91) &&
-               (func_801378B8(&this->skelAnime, 3.0f) || func_801378B8(&this->skelAnime, 8.0f))) {
+               (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f))) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 
@@ -1514,7 +1514,7 @@ s32 func_80AFA170(EnPm* this, GlobalContext* globalCtx) {
         case 16:
         case 17:
         case 18:
-            if ((this->unk_384 == 5) && func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+            if ((this->unk_384 == 5) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 func_80AF7E98(this, 6);
                 this->unk_36C = 40;
             } else if ((this->unk_384 == 6) && (DECR(this->unk_36C) == 0)) {
@@ -1529,11 +1529,11 @@ s32 func_80AFA170(EnPm* this, GlobalContext* globalCtx) {
         case 6:
         case 7:
         case 19:
-            if ((this->unk_384 == 11) && func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+            if ((this->unk_384 == 11) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 func_80AF7E98(this, 4);
             }
 
-            if ((this->unk_384 == 11) && func_801378B8(&this->skelAnime, 8.0f)) {
+            if ((this->unk_384 == 11) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
             }
 
@@ -1578,7 +1578,7 @@ s32 func_80AFA334(EnPm* this, GlobalContext* globalCtx) {
         case 20:
         case 21:
         case 22:
-            if (func_801378B8(&this->skelAnime, 0.0f)) {
+            if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_VO_NP_SLEEP_OUT);
             }
             break;
@@ -1758,7 +1758,7 @@ void func_80AFA5FC(EnPm* this, GlobalContext* globalCtx) {
 void func_80AFA724(EnPm* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
-    if (func_801378B8(&this->skelAnime, 3.0f) || func_801378B8(&this->skelAnime, 8.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 }
@@ -1767,7 +1767,7 @@ void EnPm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPm* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060096E8, NULL, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060096E8, NULL, this->jointTable, this->morphTable, 16);
     this->unk_384 = -1;
     func_80AF7E98(this, 0);
     Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -1828,7 +1828,7 @@ void func_80AFAA44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     switch (limbIndex) {
         case 15:
             if (ActorCutscene_GetCurrentIndex() == -1) {
-                SysMatrix_MultiplyVector3fByState(&D_801D15B0, &this->actor.focus.pos);
+                Matrix_MultiplyVector3fByState(&D_801D15B0, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }
             if ((this->unk_356 & 0x8000) && !(gSaveContext.weekEventReg[90] & 4)) {
@@ -1844,10 +1844,10 @@ void func_80AFAA44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
         case 8:
             if ((this->unk_258 == 9) || (this->unk_258 == 20) || (this->unk_258 == 21) || (this->unk_258 == 22)) {
-                SysMatrix_MultiplyVector3fByState(&D_801D15B0, &sp2C);
+                Matrix_MultiplyVector3fByState(&D_801D15B0, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             } else if (this->unk_258 == 24) {
-                SysMatrix_MultiplyVector3fByState(&D_801D15B0, &sp2C);
+                Matrix_MultiplyVector3fByState(&D_801D15B0, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             }
             func_80AF8890(this, gfx, 2);
@@ -1874,13 +1874,13 @@ void func_80AFABAC(GlobalContext* globalCtx, s32 arg1, EnPm* this, Gfx** gfx) {
     if (arg1 == 15) {
         func_8013AD9C(this->unk_370 + 0x4000, this->unk_372 + this->actor.shape.rot.y + 0x4000, &this->unk_284,
                       &this->unk_290, phi_v0, phi_v1);
-        SysMatrix_StatePop();
-        SysMatrix_InsertTranslation(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
+        Matrix_StatePop();
+        Matrix_InsertTranslation(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_290.y, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk_290.x, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->unk_290.z, MTXMODE_APPLY);
-        SysMatrix_StatePush();
+        Matrix_InsertXRotation_s(this->unk_290.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_290.z, MTXMODE_APPLY);
+        Matrix_StatePush();
     }
 }
 
@@ -1902,7 +1902,7 @@ void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AFB914[0]));
 
         POLY_OPA_DISP =
-            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           func_80AFAA04, func_80AFAA44, func_80AFABAC, &this->actor, POLY_OPA_DISP);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
