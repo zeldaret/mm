@@ -2548,10 +2548,10 @@ void SkelAnime_DrawFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** s
 void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
                       OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
 void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDraw unkDraw, Actor* actor,
+                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw, Actor* actor,
                    Mtx** mtx);
 void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDraw unkDraw, Actor* actor);
+                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw, Actor* actor);
 void SkelAnime_GetFrameData(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCount, Vec3s* dst);
 s16 Animation_GetLength(void* animation);
 s16 Animation_GetLastFrame(void* animation);
@@ -2688,8 +2688,8 @@ u32 func_8013A4C4(s32 flag);
 s16 func_8013A504(s16 val);
 s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError);
 Actor* func_8013A7C0(GlobalContext* globalCtx, s32 arg1);
-Gfx* func_8013A860(GlobalContext* globalCtx, s32 idx, void** skeleton, Vec3s* jointTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw2 unkActorDraw, Actor* actor, Mtx** mtx, Gfx* gfx);
-Gfx* func_8013AB00(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw2 unkActorDraw, Actor* actor, Gfx* gfx);
+Gfx* func_8013A860(GlobalContext* globalCtx, s32 idx, void** skeleton, Vec3s* jointTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkActorDraw, Actor* actor, Mtx** mtx, Gfx* gfx);
+Gfx* func_8013AB00(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkActorDraw, Actor* actor, Gfx* gfx);
 s32 func_8013AD6C(GlobalContext* globalCtx);
 s32 func_8013AD9C(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 arg5);
 void func_8013AED4(u16* arg0, u16 arg1, u16 arg2);

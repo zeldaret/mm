@@ -213,9 +213,9 @@ typedef s32 (*OverrideLimbDrawFlex)(struct GlobalContext* globalCtx, s32 limbInd
 typedef void (*PostLimbDrawFlex)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot,
                                  struct Actor* actor);
 
-typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
+typedef void (*UnkActorDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
 
-typedef void (*UnkActorDraw2)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor, Gfx** gfx);
+typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor, Gfx** gfx);
 
 typedef void (*AnimationEntryCallback)(struct GlobalContext*, AnimationEntryData*);
 
