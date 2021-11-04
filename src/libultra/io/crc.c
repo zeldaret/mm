@@ -76,15 +76,14 @@
 #define ADDRESS_CRC_GENERATOR 0x15
 #define ADDRESS_CRC_MASK ((1 << ADDRESS_CRC_LENGTH) - 1)
 
-// Valid addr up to 0x7FF
-// It's the address of a block of 0x20 bytes in the mempak
-// So that means the whole mempak has a 16-bit address space
 /**
- * CRC-5 with the generating polynomial $x^5 + x^4 + x^2 + 1 $, AKA 0x15 = 0b(1)1 0101.
+ * CRC-5 with the generating polynomial \f$ x^5 + x^4 + x^2 + 1 \f$, AKA 0x15 = 0b(1)1 0101.
  * It only works on the bits from 0x7FF = 11 11111111, i.e. 10 bits.
  *
  * Usually used as __osContAddressCrc(addr) | (addr << 5) to add the CRC to the end. The overall length of 10 + 5 bits
  * allows the address + CRC to fit into one s16.
+ * 
+ * `addr` is the address of a block in the mempak, only valid up to 0x7FF.
  */
 u8 __osContAddressCrc(u16 addr) {
     u32 addr32 = addr;
@@ -92,12 +91,12 @@ u8 __osContAddressCrc(u16 addr) {
     u32 bit;
     s32 i;
 
-    /* ret is used as a shift register for the CRC */
+    // ret is used as a shift register for the CRC
     for (bit = (1 << ADDRESS_CRC_MESSAGE_LENGTH); bit; bit >>= 1) {
         ret <<= 1;
         if (addr32 & bit) {
             if (ret & (1 << ADDRESS_CRC_LENGTH)) {
-                /* Same as ret++; ret ^= 0x15 since last bit always 0 after the shift */
+                // Same as ret++; ret ^= 0x15 since last bit always 0 after the shift
                 ret ^= ADDRESS_CRC_GENERATOR - 1;
             } else {
                 ret++;
@@ -106,7 +105,7 @@ u8 __osContAddressCrc(u16 addr) {
             ret ^= ADDRESS_CRC_GENERATOR;
         }
     }
-    /* Acts like 5 bits of 0s are appended to addr */
+    // Acts like 5 bits of 0s are appended to addr
     for (i = 0; i < ADDRESS_CRC_LENGTH; i++) {
         ret <<= 1;
         if (ret & (1 << ADDRESS_CRC_LENGTH)) {
@@ -114,7 +113,7 @@ u8 __osContAddressCrc(u16 addr) {
         }
     }
 
-    /* Discard the irrelevant bits above the actual remainder */
+    // Discard the irrelevant bits above the actual remainder
     return ret & ADDRESS_CRC_MASK;
 }
 
@@ -123,7 +122,7 @@ u8 __osContAddressCrc(u16 addr) {
 #define DATA_CRC_GENERATOR 0x85
 
 /**
- * CRC-8 with generating polynomial $ x^8 + x^7 + x^2 + 1 $, AKA 0x85 = 0b(1) 1000 0101.
+ * CRC-8 with generating polynomial \f$ x^8 + x^7 + x^2 + 1 \f$, AKA 0x85 = 0b(1) 1000 0101.
  * Expects exactly 0x20 = 32 bytes of data.
  */
 u8 __osContDataCrc(u8* data) {
@@ -131,13 +130,13 @@ u8 __osContDataCrc(u8* data) {
     u32 bit;
     u32 byte;
 
-    for (byte = DATA_CRC_MESSAGE_BYTES; byte; byte--, data++) {
-        /* Loop over each bit in the byte starting with most significant */
+    for (byte = DATA_CRC_MESSAGE_BYTES; byte != 0; byte--, data++) {
+        // Loop over each bit in the byte starting with most significant
         for (bit = (1 << (DATA_CRC_LENGTH - 1)); bit; bit >>= 1) {
             ret <<= 1;
             if (*data & bit) {
                 if (ret & (1 << DATA_CRC_LENGTH)) {
-                    /* Same as ret++; ret ^= 0x85 since last bit always 0 after the shift */
+                    // Same as ret++; ret ^= 0x85 since last bit always 0 after the shift
                     ret ^= DATA_CRC_GENERATOR - 1;
                 } else {
                     ret++;
@@ -147,7 +146,7 @@ u8 __osContDataCrc(u8* data) {
             }
         }
     }
-    /* Act like a byte of zeros is appended to data */
+    // Act like a byte of zeros is appended to data
     do {
         ret <<= 1;
         if (ret & (1 << DATA_CRC_LENGTH)) {
@@ -156,6 +155,6 @@ u8 __osContDataCrc(u8* data) {
         byte++;
     } while (byte < DATA_CRC_LENGTH);
 
-    /* Discarding the excess is done automatically by the return type */
+    // Discarding the excess is done automatically by the return type
     return ret;
 }

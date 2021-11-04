@@ -18,13 +18,13 @@ u8 __osVoiceContDataCrc(u8* data, u32 numBytes) {
     u32 bit;
     u32 byte;
 
-    for (byte = numBytes; byte; byte--, data++) {
-        /* Loop over each bit in the byte starting with most significant */
+    for (byte = numBytes; byte != 0; byte--, data++) {
+        // Loop over each bit in the byte starting with most significant
         for (bit = (1 << (VOICE_CRC_LENGTH - 1)); bit; bit >>= 1) {
             ret <<= 1;
             if (*data & bit) {
                 if (ret & (1 << VOICE_CRC_LENGTH)) {
-                    /* Same as ret++; ret ^= 0x85 since last bit always 0 after the shift */
+                    // Same as ret++; ret ^= 0x85 since last bit always 0 after the shift
                     ret ^= VOICE_CRC_GENERATOR - 1;
                 } else {
                     ret++;
@@ -34,7 +34,7 @@ u8 __osVoiceContDataCrc(u8* data, u32 numBytes) {
             }
         }
     }
-    /* Act like a byte of zeros is appended to data */
+    // Act like a byte of zeros is appended to data
     do {
         ret <<= 1;
         if (ret & (1 << VOICE_CRC_LENGTH)) {
@@ -43,6 +43,6 @@ u8 __osVoiceContDataCrc(u8* data, u32 numBytes) {
         byte++;
     } while (byte < VOICE_CRC_LENGTH);
 
-    /* Discarding the excess is done automatically by the return type */
+    // Discarding the excess is done automatically by the return type
     return ret;
 }
