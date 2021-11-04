@@ -80,7 +80,7 @@ u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* colCtx, s32 index, Acto
         return 0;
     }
 
-    if (((colCtx->dyna.bgActorFlags[index] & 2) != 0) || ((colCtx->dyna.bgActorFlags[index] & 1) == 0)) {
+    if (colCtx->dyna.bgActorFlags[index] & 2 || !(colCtx->dyna.bgActorFlags[index] & 1)) {
         return 0;
     }
 
@@ -90,12 +90,12 @@ u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* colCtx, s32 index, Acto
         return 0;
     }
 
-    if ((meshActor->flags & 1) != 0) {
+    if (meshActor->flags & 1) {
         BgCheck2_UpdateActorPosition(colCtx, index, actor);
         wasUpdated = 1;
     }
 
-    if ((meshActor->flags & 2) != 0) {
+    if (meshActor->flags & 2) {
         BgCheck2_UpdateActorYRotation(colCtx, index, actor);
         wasUpdated = 1;
     }
