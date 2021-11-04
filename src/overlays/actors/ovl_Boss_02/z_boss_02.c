@@ -686,7 +686,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
     static Color_RGBA8 D_809DFA98 = { 185, 140, 70, 255 };
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
-    s32 spDC;
+    CollisionPoly* spDC;
     Vec3f spD0;
     f32 spCC;
     f32 spC8;
@@ -701,7 +701,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
     f32 spA0;
     f32 sp9C;
     Vec3f sp90;
-    s32 sp8C;
+    CollisionPoly* sp8C;
     s32 sp88;
     Vec3f sp7C;
     Vec3f sp70;
@@ -1171,7 +1171,7 @@ void func_809DC218(Actor* thisx, GlobalContext* globalCtx) {
     Boss02* this = THIS;
     s32 pad;
     Vec3f sp24;
-    s32 sp20;
+    CollisionPoly* sp20;
 
     this->unk_014C++;
     if ((this->unk_014C + this->actor.params) & 1) {
@@ -1420,7 +1420,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 0x384, 0x44B);
     }
 
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
 
     spA4 = 0.0f;
@@ -1445,7 +1445,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(M_PI / 2, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(-(M_PI / 2));
-        SysMatrix_GetStateAsRSPMatrix(&matrix[i]);
+        Matrix_GetStateAsRSPMatrix(&matrix[i]);
 
         gSPMatrix(POLY_OPA_DISP++, &matrix[i], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
