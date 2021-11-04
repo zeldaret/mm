@@ -2275,8 +2275,6 @@ void EnHorse_UpdateIngoRace(EnHorse* this, GlobalContext* globalCtx) {
     }
 }
 
-/************ START OF NEW MM FUNCTIONS ************/
-
 void func_8088126C(EnHorse* this, GlobalContext* globalCtx) {
     this->skin.skelAnime.curFrame = 0.0f;
     func_80881290(this, globalCtx);
@@ -2492,8 +2490,6 @@ void func_808819D8(EnHorse* this, GlobalContext* globalCtx) {
                                  &this->rider->unk488);
     }
 }
-
-/************ END OF NEW MM FUNCTIONS ************/
 
 void EnHorse_CsMoveInit(EnHorse* this, GlobalContext* globalCtx, CsCmdActorAction* action) {
     this->animationIdx = ENHORSE_ANIM_GALLOP;
