@@ -138,7 +138,7 @@ void func_80B5B2E0(GlobalContext* globalCtx, Vec3f* pos, s16 params, Vec3f* vec,
 void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnOt* this = THIS;
-    s32 sp74;
+    u32 sp74;
     s32 pad2;
     Vec3f sp64;
     Vec3f sp58;
