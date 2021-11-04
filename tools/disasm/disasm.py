@@ -753,7 +753,7 @@ def disassemble_text(data, vram, data_regions, segment):
         if vaddr in segment[4].keys():
             if cur_file != "":
                 os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
-                with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.{section[2]}.s", "w") as outfile:
+                with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
                     outfile.write(result)
                 result = asm_header(".text")
             cur_file = segment[4][vaddr]
@@ -832,7 +832,7 @@ def disassemble_text(data, vram, data_regions, segment):
         result += f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */  {mnemonic:12}{op_str}\n"
 
     os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
-    with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.{section[2]}.s", "w") as outfile:
+    with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
 
 def disassemble_data(data, vram, end, segment):
@@ -1202,14 +1202,14 @@ for segment in files_spec:
 
         # manually set boot bss size...
         entry_asm = ""
-        with open(f"{ASM_OUT}/makerom/entry.reloc.s") as infile: # TODO why is this written out as .reloc.s
+        with open(f"{ASM_OUT}/makerom/entry.text.s") as infile:
             entry_asm = infile.read()
 
         entry_asm = entry_asm.replace("0x63b0", "%lo(_bootSegmentBssSize)")
         with open(f"{ASM_OUT}/makerom/entry.s", "w") as outfile:
             outfile.write(entry_asm)
 
-        os.remove(f"{ASM_OUT}/makerom/entry.reloc.s")
+        os.remove(f"{ASM_OUT}/makerom/entry.text.s")
 
         #out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x1000, 0x60\n"
 
