@@ -155,7 +155,7 @@ typedef struct EnHorse {
     /* 0x240 */ EnHorsePostdrawFunc postDrawFunc;
     /* 0x244 */ f32 yFront;             
     /* 0x248 */ f32 yBack;             
-    /* 0x24C */ s32 unk_24C;             
+    /* 0x24C */ u32 unk_24C;             
     /* 0x250 */ s16 followTimer;             
     /* 0x254 */ s32 prevAction;       
     /* 0x258 */ Vec3f riderPos;             

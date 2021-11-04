@@ -982,7 +982,7 @@ f32 func_800C3D50(s32 arg0, CollisionContext* colCtx, s32 arg2, CollisionPoly** 
 f32 func_800C3FA0(CollisionContext* colCtx, f32* arg1, Vec3f* arg2);
 f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, s32* arg2, Vec3f* arg3);
 // void func_800C4058(void);
-f32 func_800C40B4(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Vec3f* pos);
+f32 func_800C40B4(CollisionContext* colCtx, CollisionPoly** arg1, u32* arg2, Vec3f* pos);
 f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos);
 f32 func_800C4188(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** colPoly, s32* bgId, Actor* actor, Vec3f* pos);
 // void func_800C41E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);

@@ -3455,7 +3455,7 @@ void EnHorse_Vec3fOffset(Vec3f* src, s16 yaw, f32 dist, f32 height, Vec3f* dst) 
 }
 
 s32 EnHorse_CalcFloorHeight(EnHorse* this, GlobalContext* globalCtx, Vec3f* pos, CollisionPoly** polyFloor,
-                            f32* floorHeight, s32* bgId) {
+                            f32* floorHeight, u32* bgId) {
     f32 waterY;
     WaterBox* waterbox;
 
@@ -3530,7 +3530,7 @@ void EnHorse_CheckFloors(EnHorse* this, GlobalContext* globalCtx) {
     s32 pad;
     CollisionPoly* frontFloor;
     CollisionPoly* backFloor;
-    s32 sp80;
+    u32 sp80;
     s16 floorSlope;
     Vec3f frontPos;
     Vec3f backPos;
