@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_wturn.c
+ * Overlay: ovl_Obj_Wturn
+ * Description: Stone Tower Temple Inverter
+ */
+
 #include "z_obj_wturn.h"
 
 #define FLAGS 0x02100010

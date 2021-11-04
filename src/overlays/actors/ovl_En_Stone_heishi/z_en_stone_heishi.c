@@ -1,3 +1,9 @@
+/*
+ * File: z_en_stone_heishi.c
+ * Overlay: ovl_En_Stone_heishi
+ * Description: Shiro
+ */
+
 #include "z_en_stone_heishi.h"
 
 #define FLAGS 0x00000089

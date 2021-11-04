@@ -170,6 +170,25 @@ animdict = {
     "skelanime.prevFrameRot": "skelanime.prevRot",
     "skelanime.prevFramePos": "skelanime.prevTransl",
     "skelanime.unk3E": "skelanime.baseTransl",
+    
+    "skelAnime.unk03": "skelAnime.taper",
+    "skelAnime.animCurrentSeg": "skelAnime.animation",
+    "skelAnime.initialFrame": "skelAnime.startFrame",
+    "skelAnime.animFrameCount": "skelAnime.endFrame",
+    "skelAnime.totalFrames": "skelAnime.animLength",
+    "skelAnime.animCurrentFrame": "skelAnime.curFrame",
+    "skelAnime.animPlaybackSpeed": "skelAnime.playSpeed",
+    "skelAnime.limbDrawTbl": "skelAnime.jointTable",
+    "skelAnime.transitionDrawTbl": "skelAnime.morphTable",
+    "skelAnime.transCurrentFrame": "skelAnime.morphWeight",
+    "skelAnime.transitionStep": "skelAnime.morphRate",
+    "skelAnime.animUpdate": "skelAnime.update",
+    "skelAnime.flags": "skelAnime.moveFlags",
+    "skelAnime.prevFrameRot": "skelAnime.prevRot",
+    "skelAnime.prevFramePos": "skelAnime.prevTransl",
+    "skelAnime.unk3E": "skelAnime.baseTransl",
+    "actor.yDistToWater" : "actor.depthInWater",
+    "actor.yDistToPlayer" : "actor.playerHeightRel",
 }
 
 def replace_anim(file):

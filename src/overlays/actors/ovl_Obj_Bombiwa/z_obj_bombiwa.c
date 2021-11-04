@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_bombiwa.c
+ * Overlay: ovl_Obj_Bombiwa
+ * Description: Bombable boulder
+ */
+
 #include "z_obj_bombiwa.h"
 
 #define FLAGS 0x00000000

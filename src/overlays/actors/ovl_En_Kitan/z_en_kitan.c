@@ -1,3 +1,9 @@
+/*
+ * File: z_en_kitan.c
+ * Overlay: ovl_En_Kitan
+ * Description:
+ */
+
 #include "z_en_kitan.h"
 
 #define FLAGS 0x00000009

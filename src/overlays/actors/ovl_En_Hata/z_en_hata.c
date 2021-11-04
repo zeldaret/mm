@@ -1,3 +1,9 @@
+/*
+ * File: z_en_hata.c
+ * Overlay: ovl_En_Hata
+ * Description: Red Flag on Post
+ */
+
 #include "z_en_hata.h"
 
 #define FLAGS 0x00000000
