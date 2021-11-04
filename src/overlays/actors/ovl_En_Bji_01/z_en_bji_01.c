@@ -172,7 +172,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     } else {
                         this->textId = 0x5F1;
                     }
-                    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+                    func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                                   EXCH_ITEM_NONE);
                     break;
                 case PLAYER_FORM_HUMAN:
