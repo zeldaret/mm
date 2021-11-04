@@ -1,3 +1,9 @@
+/*
+ * File z_en_bb.c
+ * Overlay: ovl_En_Bb
+ * Description: Blue Bubble
+ */
+
 #include "z_en_bb.h"
 
 #define FLAGS 0x00000205

@@ -536,8 +536,7 @@ void func_80A724B8(EnDno* this, GlobalContext* globalCtx) {
 }
 
 void func_80A7256C(EnDno* this, GlobalContext* globalCtx) {
-    func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.yDistToPlayer,
-                  EXCH_ITEM_MINUS1);
+    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, EXCH_ITEM_MINUS1);
 }
 
 void func_80A72598(EnDno* this, GlobalContext* globalCtx) {

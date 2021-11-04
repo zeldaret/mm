@@ -1,3 +1,9 @@
+/*
+ * File: z_en_honotrap.c
+ * Overlay: ovl_En_Honotrap
+ * Description: Eye switch that shoots fire
+ */
+
 #include "z_en_honotrap.h"
 
 #define FLAGS 0x00000010

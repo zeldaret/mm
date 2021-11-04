@@ -1,3 +1,9 @@
+/*
+ * File: z_en_zov.c
+ * Overlay: ovl_En_Zov
+ * Description: Zora Vocalist - Lulu
+ */
+
 #include "z_en_zov.h"
 
 #define FLAGS 0x00000009

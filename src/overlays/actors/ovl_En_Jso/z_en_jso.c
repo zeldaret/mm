@@ -1,3 +1,9 @@
+/*
+ * File: z_en_jso.c
+ * Overlay: ovl_En_Jso
+ * Description: Garo
+ */
+
 #include "z_en_jso.h"
 
 #define FLAGS 0x00000015

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_fu_mizu.c
+ * Overlay: ovl_Bg_Fu_Mizu
+ * Description:
+ */
+
 #include "z_bg_fu_mizu.h"
 
 #define FLAGS 0x00000030

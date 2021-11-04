@@ -434,7 +434,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
         EnElforg_MoveToTarget(this, &this->actor.home.pos);
     }
 
-    scaledYDistance = this->actor.yDistToPlayer - (this->actor.shape.yOffset * this->actor.scale.y);
+    scaledYDistance = this->actor.playerHeightRel - (this->actor.shape.yOffset * this->actor.scale.y);
     if (!Player_InCsMode(&globalCtx->state)) {
         if ((this->actor.xzDistToPlayer < 30.0f) && (scaledYDistance < 12.0f) && (scaledYDistance > -68.0f)) {
             EnElforg_SetupFairyCollected(this, globalCtx);

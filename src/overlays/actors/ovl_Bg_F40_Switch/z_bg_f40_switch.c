@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_f40_switch.c
+ * Overlay: ovl_Bg_F40_Switch
+ * Description: Stone Tower Switch
+ */
+
 #include "z_bg_f40_switch.h"
 
 #define FLAGS 0x00000010

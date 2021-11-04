@@ -231,7 +231,7 @@ s32 func_80893ADC(EnTite* this) {
 
 s32 func_80893B10(EnTite* this) {
     Math_StepToF(&this->actor.velocity.y, 0.0f, 2.0f);
-    return Math_StepToF(&this->actor.world.pos.y, (this->actor.world.pos.y + this->actor.yDistToWater) - 1.0f, 2.0f);
+    return Math_StepToF(&this->actor.world.pos.y, (this->actor.world.pos.y + this->actor.depthInWater) - 1.0f, 2.0f);
 }
 
 void func_80893B70(EnTite* this) {
@@ -309,7 +309,7 @@ void func_80893F30(EnTite* this, GlobalContext* globalCtx) {
     if (this->unk_2BC > 0) {
         this->unk_2BC--;
     } else if ((Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) && (this->actor.xzDistToPlayer < 300.0f) &&
-               (this->actor.yDistToPlayer < 80.0f)) {
+               (this->actor.playerHeightRel < 80.0f)) {
         func_808945EC(this);
     }
 }
@@ -337,7 +337,7 @@ void func_8089408C(EnTite* this, GlobalContext* globalCtx) {
     if (!func_80893ADC(this)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP);
     } else {
-        this->actor.world.pos.y += this->actor.yDistToWater;
+        this->actor.world.pos.y += this->actor.depthInWater;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
     }
 
@@ -376,7 +376,7 @@ void func_8089408C(EnTite* this, GlobalContext* globalCtx) {
 
 void func_808942B4(EnTite* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.yDistToWater > 0.0f))) &&
+    if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.depthInWater > 0.0f))) &&
         (this->actor.velocity.y <= 0.0f)) {
         this->actor.speedXZ = 0.0f;
         this->collider.base.atFlags &= ~AT_HIT;
@@ -410,7 +410,7 @@ void func_80894414(EnTite* this) {
 void func_80894454(EnTite* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (this->actor.xzDistToPlayer > 450.0f) ||
-            (this->actor.yDistToPlayer > 80.0f)) {
+            (this->actor.playerHeightRel > 80.0f)) {
             func_80893ED4(this);
         } else if (!Actor_IsFacingPlayer(&this->actor, 0x2328)) {
             func_808945EC(this);
@@ -427,7 +427,7 @@ void func_8089452C(EnTite* this, GlobalContext* globalCtx) {
     Vec3f sp2C;
 
     Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
-    sp2C.y += this->actor.yDistToWater;
+    sp2C.y += this->actor.depthInWater;
     this->actor.velocity.y *= 0.75f;
     EffectSsGRipple_Spawn(globalCtx, &sp2C, 0, 500, 0);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
@@ -473,11 +473,11 @@ void func_80894638(EnTite* this, GlobalContext* globalCtx) {
     }
 
     if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (this->actor.xzDistToPlayer > 450.0f) ||
-        (this->actor.yDistToPlayer > 80.0f)) {
+        (this->actor.playerHeightRel > 80.0f)) {
         func_80893ED4(this);
-    } else if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.yDistToWater < 10.0f))) &&
+    } else if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.depthInWater < 10.0f))) &&
                Actor_IsFacingPlayer(&this->actor, 0xE38)) {
-        if ((this->actor.xzDistToPlayer <= 180.0f) && (this->actor.yDistToPlayer <= 80.0f)) {
+        if ((this->actor.xzDistToPlayer <= 180.0f) && (this->actor.playerHeightRel <= 80.0f)) {
             func_80893A9C(this, globalCtx);
         } else {
             func_8089484C(this);
@@ -494,7 +494,7 @@ void func_8089484C(EnTite* this) {
     this->actor.gravity = -1.0f;
     this->actor.speedXZ = 4.0f;
     if (func_80893ADC(this)) {
-        this->actor.world.pos.y += this->actor.yDistToWater;
+        this->actor.world.pos.y += this->actor.depthInWater;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
     } else {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP);
@@ -512,7 +512,7 @@ void func_80894910(EnTite* this, GlobalContext* globalCtx) {
 
         if (func_80893ADC(this)) {
             Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-            sp34.y += this->actor.yDistToWater;
+            sp34.y += this->actor.depthInWater;
             this->actor.velocity.y *= 0.75f;
             EffectSsGRipple_Spawn(globalCtx, &sp34, 0, 500, 0);
         }
@@ -520,7 +520,7 @@ void func_80894910(EnTite* this, GlobalContext* globalCtx) {
         func_80893BCC(this, globalCtx);
     }
 
-    if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.yDistToWater > 0.0f))) &&
+    if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.depthInWater > 0.0f))) &&
         (this->actor.velocity.y <= 0.0f)) {
         this->actor.speedXZ = 0.0f;
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4000);
@@ -534,9 +534,9 @@ void func_80894910(EnTite* this, GlobalContext* globalCtx) {
         }
 
         if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (this->actor.xzDistToPlayer > 450.0f) ||
-            (this->actor.yDistToPlayer > 80.0f)) {
+            (this->actor.playerHeightRel > 80.0f)) {
             func_80893ED4(this);
-        } else if ((this->actor.xzDistToPlayer <= 180.0f) && (this->actor.yDistToPlayer <= 80.0f)) {
+        } else if ((this->actor.xzDistToPlayer <= 180.0f) && (this->actor.playerHeightRel <= 80.0f)) {
             func_808945EC(this);
         } else {
             func_8089484C(this);
@@ -565,7 +565,7 @@ void func_80894BC8(EnTite* this, GlobalContext* globalCtx) {
     if (func_80893ADC(this) && (this->actor.velocity.y <= 0.0f)) {
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = 0.0f;
-        this->actor.world.pos.y += this->actor.yDistToWater - 1.0f;
+        this->actor.world.pos.y += this->actor.depthInWater - 1.0f;
     }
 
     if (this->actor.bgCheckFlags & 0x40) {
@@ -578,10 +578,10 @@ void func_80894BC8(EnTite* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->collider.base.acFlags |= AC_ON;
         if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) ||
-            (((this->actor.xzDistToPlayer > 450.0f) || (this->actor.yDistToPlayer > 80.0f)) &&
+            (((this->actor.xzDistToPlayer > 450.0f) || (this->actor.playerHeightRel > 80.0f)) &&
              (ABS_ALT(this->actor.shape.rot.x) < 4000) && (ABS_ALT(this->actor.shape.rot.z) < 4000))) {
             func_80893ED4(this);
-        } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.yDistToPlayer <= 80.0f) &&
+        } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.playerHeightRel <= 80.0f) &&
                    Actor_IsFacingPlayer(&this->actor, 0x1770)) {
             func_80893A9C(this, globalCtx);
         } else {
@@ -607,7 +607,7 @@ void func_80894E0C(EnTite* this, GlobalContext* globalCtx) {
     if ((func_80893ADC(this) != 0) && (this->actor.velocity.y <= 0.0f)) {
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = 0.0f;
-        this->actor.world.pos.y += this->actor.yDistToWater;
+        this->actor.world.pos.y += this->actor.depthInWater;
     }
 
     if (this->actor.bgCheckFlags & 0x40) {
@@ -623,10 +623,10 @@ void func_80894E0C(EnTite* this, GlobalContext* globalCtx) {
         } else if (this->unk_2B9 != 0) {
             func_808955E4(this);
         } else if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) ||
-                   (((this->actor.xzDistToPlayer > 450.0f) || (this->actor.yDistToPlayer > 80.0f)) &&
+                   (((this->actor.xzDistToPlayer > 450.0f) || (this->actor.playerHeightRel > 80.0f)) &&
                     (ABS_ALT(this->actor.shape.rot.x) < 4000) && (ABS_ALT(this->actor.shape.rot.z) < 4000))) {
             func_80893ED4(this);
-        } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.yDistToPlayer <= 80.0f) &&
+        } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.playerHeightRel <= 80.0f) &&
                    Actor_IsFacingPlayer(&this->actor, 0x1770)) {
             func_80893A9C(this, globalCtx);
         } else {
@@ -799,7 +799,7 @@ void func_80895738(EnTite* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80893A18(this);
         if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (this->actor.xzDistToPlayer > 450.0f) ||
-            (this->actor.yDistToPlayer > 80.0f)) {
+            (this->actor.playerHeightRel > 80.0f)) {
             func_80893ED4(this);
         } else if (!Actor_IsFacingPlayer(&this->actor, 0x2328)) {
             func_808945EC(this);
@@ -1045,15 +1045,15 @@ void func_808963B4(EnTite* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 0x40) {
         for (i = 5; i < ARRAY_COUNT(this->unk_2D0); i++) {
             Math_Vec3f_Copy(&sp48, &this->unk_2D0[i]);
-            sp48.y = this->actor.world.pos.y + this->actor.yDistToWater;
+            sp48.y = this->actor.world.pos.y + this->actor.depthInWater;
             EffectSsGRipple_Spawn(globalCtx, &sp48, 0, 220, 0);
         }
     } else if (this->actor.bgCheckFlags & 0x20) {
         s32 temp = globalCtx->gameplayFrames & 7;
 
-        if (!(temp & 1) && (this->actor.yDistToWater < 10.0f)) {
+        if (!(temp & 1) && (this->actor.depthInWater < 10.0f)) {
             Math_Vec3f_Copy(&sp48, &this->unk_2D0[5 + (temp >> 1)]);
-            sp48.y = this->actor.world.pos.y + this->actor.yDistToWater;
+            sp48.y = this->actor.world.pos.y + this->actor.depthInWater;
             EffectSsGRipple_Spawn(globalCtx, &sp48, 0, 220, 0);
         }
     }

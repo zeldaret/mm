@@ -1,3 +1,9 @@
+/*
+ * File: z_en_nnh.c
+ * Overlay: ovl_En_Nnh
+ * Description: Twisted Corpse of Deku Butler's Son
+ */
+
 #include "z_en_nnh.h"
 
 #define FLAGS 0x00000019

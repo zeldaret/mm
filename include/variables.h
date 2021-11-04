@@ -879,26 +879,6 @@ extern ColChkApplyFunc sApplyDamageFuncs[COLSHAPE_MAX];
 extern ColChkLineFunc sOCLineCheckFuncs[COLSHAPE_MAX];
 extern EffShieldParticleInit shieldParticleInitMetal;
 extern EffShieldParticleInit shieldParticleInitWood;
-extern UNK_TYPE1 D_801BA550;
-// extern UNK_TYPE1 D_801BA750;
-// extern UNK_TYPE1 D_801BA790;
-// extern UNK_TYPE1 D_801BA7F0;
-// extern UNK_TYPE1 D_801BA870;
-// extern UNK_TYPE1 D_801BA8C0;
-// extern UNK_TYPE1 D_801BAAC0;
-// extern UNK_TYPE1 D_801BAB40;
-// extern UNK_TYPE1 D_801BABB8;
-// extern UNK_TYPE1 D_801BACB8;
-// extern UNK_TYPE1 D_801BADB8;
-// extern UNK_TYPE1 D_801BAEB8;
-// extern UNK_TYPE1 D_801BAFB8;
-// extern UNK_TYPE1 D_801BAFF8;
-// extern UNK_TYPE1 D_801BB010;
-// extern UNK_TYPE1 D_801BB018;
-// extern UNK_TYPE1 D_801BB050;
-// extern UNK_TYPE1 D_801BB058;
-// extern UNK_TYPE2 D_801BB068;
-// extern UNK_TYPE1 D_801BB08C;
 // extern UNK_TYPE4 D_801BB090;
 // extern UNK_TYPE1 D_801BB094;
 // extern UNK_TYPE1 D_801BB0DC;
@@ -931,8 +911,6 @@ extern Actor* actorCutsceneCurrentCutsceneActor;
 extern GlobalContext* actorCutscenesGlobalCtxt;
 extern s16 actorCutsceneReturnCamera;
 extern s16 D_801BD8C6;
-extern ColliderCylinderInit fireObjCollisionInit;
-extern FireObjLightParams D_801BD8FC[2];
 extern GameStateOverlay gGameStateOverlayTable[];
 extern s32 graphNumGameStates;
 // extern UNK_TYPE2 D_801BDA70;
@@ -2532,8 +2510,6 @@ extern f32 D_801DD774;
 extern f32 D_801DD780;
 extern f32 D_801DD7B0;
 extern f32 D_801DD7C0;
-extern f32 D_801DD7D0;
-extern f32 D_801DD7D4;
 extern f32 D_801DD7E0;
 extern f32 D_801DD7E4;
 extern f32 D_801DD7E8;
@@ -3261,7 +3237,6 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE1 D_801F3F4A;
 // extern UNK_TYPE1 D_801F3F5A;
 extern GameInfo* gGameInfo;
-// extern UNK_TYPE1 D_801F3F70;
 // extern UNK_TYPE1 D_801F3F80;
 // extern UNK_TYPE1 D_801F3F83;
 // extern UNK_TYPE1 D_801F48C8;
@@ -3560,12 +3535,6 @@ extern StackEntry sys_flashromStackEntry;
 extern OSThread sys_flashromOSThread;
 extern s80185D40 D_801FD008;
 extern OSMesg D_801FD034;
-// extern UNK_TYPE1 D_801FD040;
-extern OSIoMesg D_801FD050;
-extern OSMesgQueue D_801FD068;
-extern OSPiHandle D_801FD080;
-// extern UNK_TYPE1 D_801FD0F4;
-// extern UNK_TYPE1 D_801FD0F8;
 // extern UNK_TYPE1 D_801FD120;
 // extern UNK_TYPE1 D_801FD140;
 // extern UNK_TYPE1 D_801FD158;
@@ -4057,7 +4026,7 @@ extern Gfx D_04075B30[]; // gFootShadowDL
 extern Gfx D_04076BC0[]; // gCircleShadowDL
 extern Gfx D_04077480[];
 extern UNK_TYPE D_04079B10;
-extern Gfx D_0407AB10[];
+extern Gfx D_0407AB10[]; // sun (sparkles when small) displaylist
 extern Gfx D_0407AB58[];
 extern Gfx D_0407AE00[]; // gZTargetLockOnTriangleDL
 extern UNK_TYPE D_0407AFB0;
@@ -4101,5 +4070,6 @@ extern UNK_TYPE D_0502324C;
 extern GfxMasterList D_0E000000;
 
 extern UNK_TYPE D_0F000000;
+
 
 #endif

@@ -302,7 +302,7 @@ void func_80ADB254(EnSellnuts* this, GlobalContext* globalCtx) {
     s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
-    if (((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f) ? true : false) &&
+    if (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f) ? true : false) &&
         ((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80ADB4F4;
@@ -390,7 +390,7 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
             }
         }
     } else if (((this->actor.xzDistToPlayer < 80.0f) &&
-                (((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) ? true : false)) ||
+                (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
                this->actor.isTargeted) {
         func_800B85E0(&this->actor, &globalCtx->state, 80.0f, EXCH_ITEM_2A);
         if (player->transformation == PLAYER_FORM_DEKU) {
@@ -416,7 +416,7 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (!(((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) ? true : false) ||
+    if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
         !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         this->unk_34C = 4;
         func_8013BC6C(&this->skelAnime, D_80ADD990, 4);
@@ -674,7 +674,7 @@ void func_80ADC37C(EnSellnuts* this, GlobalContext* globalCtx) {
                 this->unk_334++;
             }
         }
-    } else if (this->actor.yDistToPlayer > 500.0f) {
+    } else if (this->actor.playerHeightRel > 500.0f) {
         ActorCutscene_Stop(this->cutscene);
         this->actionFunc = func_80ADC580;
     }

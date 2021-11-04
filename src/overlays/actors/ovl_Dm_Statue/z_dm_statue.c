@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_statue.c
+ * Overlay: ovl_Dm_Statue
+ * Description: Elegy of Emptiness - Beam of Light When Creating Statue
+ */
+
 #include "z_dm_statue.h"
 
 #define FLAGS 0x04000030

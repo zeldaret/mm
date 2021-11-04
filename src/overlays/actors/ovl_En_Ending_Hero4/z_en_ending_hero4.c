@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ending_hero4.c
+ * Overlay: ovl_En_Ending_Hero4
+ * Description:
+ */
+
 #include "z_en_ending_hero4.h"
 
 #define FLAGS 0x00000009

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_kin2_bombwall.c
+ * Overlay: ovl_Bg_Kin2_Bombwall
+ * Description: Ocean Spider House - Bombable Wall
+ */
+
 #include "z_bg_kin2_bombwall.h"
 
 #define FLAGS 0x10000010

@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_oshihiki.c
+ * Overlay: ovl_Obj_Oshihiki
+ * Description: Pushable Block
+ */
+
 #include "z_obj_oshihiki.h"
 
 #define FLAGS 0x00000010

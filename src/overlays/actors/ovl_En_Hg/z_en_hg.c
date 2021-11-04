@@ -1,6 +1,6 @@
 /*
  * File: z_en_hg.c
- * Overlay: En_Hg
+ * Overlay: ovl_En_Hg
  * Description: Pamela's Father (Human)
  */
 
@@ -161,7 +161,7 @@ void func_80BCF354(EnHg* this) {
 
 void func_80BCF398(EnHg* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.health == 1) {
-        if ((this->actor.xzDistToPlayer < 200.0f && this->actor.yDistToPlayer < 40.0f) &&
+        if ((this->actor.xzDistToPlayer < 200.0f && this->actor.playerHeightRel < 40.0f) &&
             !func_800EE29C(globalCtx, 0x1E3)) {
             func_80BCF468(this);
         }
@@ -353,7 +353,7 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
 void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.yDistToPlayer) >= 80.0f)) {
+    if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.playerHeightRel) >= 80.0f)) {
         if (player->stateFlags2 & 0x08000000) {
             if (!D_80BD00C8) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
@@ -372,7 +372,7 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
                 func_80BCF88C(this);
             }
         } else {
-            if (this->actor.xzDistToPlayer < 60.0f && fabsf(this->actor.yDistToPlayer) < 40.0f) {
+            if (this->actor.xzDistToPlayer < 60.0f && fabsf(this->actor.playerHeightRel) < 40.0f) {
                 if ((this->actionFunc != func_80BCF8A0) && (this->actionFunc != func_80BCF95C)) {
                     if (!(gSaveContext.weekEventReg[0x3D] & 2)) {
                         gSaveContext.weekEventReg[0x3D] |= 2;

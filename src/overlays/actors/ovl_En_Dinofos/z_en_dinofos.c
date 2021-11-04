@@ -1372,10 +1372,10 @@ void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 30.0f, 60.0f, 0x5D);
     if (this->actionFunc != func_8089C7B8) {
-        if ((this->actor.yDistToWater > 0.0f) && (this->actor.yDistToWater < 10.0f)) {
+        if ((this->actor.depthInWater > 0.0f) && (this->actor.depthInWater < 10.0f)) {
             if (!((globalCtx->gameplayFrames % 4) & 1)) {
                 Math_Vec3f_Copy(&sp30, &this->unk_2D4[1 + (globalCtx->gameplayFrames % 4)]);
-                sp30.y = this->actor.world.pos.y + this->actor.yDistToWater;
+                sp30.y = this->actor.world.pos.y + this->actor.depthInWater;
                 EffectSsGRipple_Spawn(globalCtx, &sp30, 100, 320, 0);
             }
         }

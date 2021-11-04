@@ -252,6 +252,8 @@ animdict = {
     "skelAnime.prevFramePos": "skelAnime.prevTransl",
     "skelAnime.unk3E": "skelAnime.baseTransl",
     "actor.minVelocityY": "actor.terminalVelocity",
+    "actor.yDistToWater" : "actor.depthInWater",
+    "actor.yDistToPlayer" : "actor.playerHeightRel",
 }
 
 def replace_anim(file):

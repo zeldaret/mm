@@ -1,3 +1,9 @@
+/*
+ * File z_en_bigpamet.c
+ * Overlay: ovl_En_Bigpamet
+ * Description: Gekko & Snapper Miniboss - Snapper
+ */
+
 #include "z_en_bigpamet.h"
 
 #define FLAGS 0x00000435
