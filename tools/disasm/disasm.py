@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 
-import ast, math, os, re, struct
+import argparse, ast, math, os, re, struct
 from mips_isa import *
+from multiprocessing import Pool
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-j', dest='jobs', type=int, default=1, help='number of processes to run at once')
+
+args = parser.parse_args()
+jobs = args.jobs
 
 ASM_OUT = "asm/"
 DATA_OUT = "data/"
@@ -1299,8 +1306,12 @@ glabel {variables_ast[0x8009F8B0][0]}
 print("Disassembling Segments")
 
 # Textual disassembly for each segment
-for segment in files_spec:
-    disassemble_segment(segment)
+if jobs > 1:
+    with Pool(jobs) as p:
+        p.map(disassemble_segment, files_spec)
+else:
+    for segment in files_spec:
+        disassemble_segment(segment)
 
 print("Splitting text and migrating rodata")
 
