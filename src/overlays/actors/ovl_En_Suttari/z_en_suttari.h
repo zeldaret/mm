@@ -27,15 +27,10 @@ typedef struct EnSuttari {
     /* 0x1FC */ UNK_TYPE1 unk_1FC[0x1A];
     /* 0x216 */ Vec3s jointTable[16];
     /* 0x276 */ Vec3s morphTable[16];
-    /* 0x2D6 */ s16 unk2D6;
-    /* 0x2D8 */ s16 unk2D8;
-    /* 0x2DA */ UNK_TYPE1 unk_2DA[0x2];
-    /* 0x2DC */ s16 unk2DC;
-    /* 0x2DE */ s16 unk2DE;
-    /* 0x2E0 */ UNK_TYPE1 unk_2E0[0x2];
-    /* 0x2E2 */ s16 unk2E2;
-    /* 0x2E4 */ s16 unk2E4;
-    /* 0x2E6 */ UNK_TYPE1 unk_2E6[0x14];
+    /* 0x2D6 */ Vec3s unk2D6;
+    /* 0x2DC */ Vec3s unk2DC;
+    /* 0x2E2 */ Vec3s unk2E2;
+    /* 0x2E8 */ UNK_TYPE1 unk_2E8[0x12];
     /* 0x2FA */ s16 unk2FA[16];
     /* 0x31A */ s16 unk31A[16];
     /* 0x33A */ UNK_TYPE1 unk_33A[0xB6];
@@ -46,7 +41,7 @@ typedef struct EnSuttari {
     /* 0x3F8 */ Vec3f unk3F8;
     /* 0x404 */ Path* unk404;
     /* 0x408 */ Vec3f unk408;
-    /* 0x414 */ s32 unk414;
+    /* 0x414 */ f32 unk414;
     /* 0x418 */ s32 unk418;
     /* 0x41C */ s32 unk41C;
     /* 0x420 */ s32 unk420;

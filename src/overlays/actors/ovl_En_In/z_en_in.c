@@ -187,7 +187,7 @@ static ActorAnimationEntryS sAnimations[] = {
     { &D_0601B3C4, 0.0f, 0, -1, 2, 0 },  { &D_0601B3C4, 1.0f, 0, -1, 0, -4 }, { &D_06019EB4, 1.0f, 0, -1, 2, -4 },
 };
 
-static s16 D_808F6C0C[] = {
+static u16 D_808F6C0C[] = {
     4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6,
 };
 
@@ -215,11 +215,11 @@ s32 func_808F3178(EnIn* this, GlobalContext* globalCtx) {
 
     this->unk260 = tmp = func_8013DB90(globalCtx, &this->unk248, -6.0f);
     if (this->unk260 != 0 && prevUnk260 == 0 && tmp & 0xFF) {
-        Audio_PlayActorSound2(&this->actor, 0x802);
+        Audio_PlayActorSound2(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     this->unk261 = tmp = func_8013DB90(globalCtx, &this->unk254, -6.0f);
     if (this->unk261 != 0 && prevUnk261 == 0 && tmp & 0xFF) {
-        Audio_PlayActorSound2(&this->actor, 0x802);
+        Audio_PlayActorSound2(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     return 0;
 }
@@ -285,15 +285,15 @@ void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
         sp30.x = player->actor.world.pos.x;
         sp30.y = player->bodyPartsPos[7].y + 3.0f;
         sp30.z = player->actor.world.pos.z;
-        func_8013D2E0(&sp30, &this->actor.focus, &this->actor.shape, &this->unk352, &this->unk358, &this->unk35E,
-                      D_808F6C0C);
+        func_8013D2E0(&sp30, &this->actor.focus.pos, &this->actor.shape.rot, &this->unk352, &this->unk358,
+                      &this->unk35E, D_808F6C0C);
     } else {
-        Math_SmoothStepToS(&this->unk352, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk354, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk358, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk35A, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk35E, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->unk360, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->unk352.x, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->unk352.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->unk358.x, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->unk358.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->unk35E.x, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->unk35E.y, 0, 4, 1000, 1);
     }
     func_808F322C(this, 3);
     func_808F3178(this, globalCtx);
@@ -330,7 +330,7 @@ void func_808F3618(EnIn* this, GlobalContext* globalCtx) {
 
 void func_808F3690(EnIn* this, GlobalContext* globalCtx) {
     s16 sp36;
-    Vec3f sp28; // unsure if Vec3f, but it is probably size 0xC
+    Vec3f sp28;
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
     sp36 = this->actor.speedXZ * 400.0f;
@@ -1564,14 +1564,14 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     if (limbIndex == 16) {
         Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk35A, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->unk358, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk358.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(-this->unk358.x, MTXMODE_APPLY);
         Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         func_808F6334(this, globalCtx);
     }
     if (limbIndex == 9) {
-        Matrix_RotateY(this->unk360, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk35E, MTXMODE_APPLY);
+        Matrix_RotateY(this->unk35E.y, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk35E.x, MTXMODE_APPLY);
     }
     if (limbIndex == 9 || limbIndex == 10 || limbIndex == 13) {
         rot->y += (s16)(Math_SinS(this->unk376[limbIndex]) * 200.0f);
