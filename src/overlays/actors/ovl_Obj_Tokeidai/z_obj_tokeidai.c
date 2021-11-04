@@ -302,7 +302,40 @@ void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB32F0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3370.s")
+void func_80AB3370(ObjTokeidai* this, GlobalContext* globalCtx) {
+    f32 cos;
+    f32 sin;
+    Actor* thisx = &this->actor;
+
+    if (this->unk_154 < 0x4000) {
+        this->unk_154 += 0x28;
+    }
+    if (this->unk_154 >= 0x801) {
+        this->unk_156 += 4;
+    }
+    if (this->unk_156 < 0x80) {
+        thisx->shape.rot.x = this->unk_154 - 0x4000;
+        this->unk_15C = 0x28;
+    } else {
+        if (thisx->shape.rot.x < -0x1000) {
+            thisx->shape.rot.x += this->unk_15C;
+            if (this->unk_15C < 0x1E0) {
+                this->unk_15C += 0xA;
+            }
+        } else {
+            thisx->shape.rot.x += this->unk_15C;
+            this->actionFunc = func_80AB32F0;
+            thisx->minVelocityY = -7.5f;
+            thisx->gravity = -0.75f;
+            thisx->velocity.y = -2.0f;
+        }
+    }
+
+    sin = Math_SinS(this->unk_154);
+    cos = Math_CosS(this->unk_154);
+    thisx->world.pos.y = (1178.0f * cos) - (this->unk_156 * sin) + thisx->home.pos.y;
+    thisx->world.pos.z = (1178.0f * sin) + (this->unk_156 * cos) + thisx->home.pos.z;
+}
 
 void func_80AB34CC(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 1) {
