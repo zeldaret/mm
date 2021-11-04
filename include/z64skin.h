@@ -98,7 +98,7 @@ void func_80138410(PSkinAwb* skin);
 //void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex);
 void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader);
 void Skin_Free(GameState* gameState, PSkinAwb* skin);
-s32 func_801387D4(PSkinAwb* skin, SkinLimb** skeleton, MtxF* mf, u8 parentIndex, u8 limbIndex);
+//s32 func_801387D4(PSkinAwb* skin, SkinLimb** skeleton, MtxF* mf, u8 parentIndex, u8 limbIndex);
 s32 func_801388E4(PSkinAwb* skin, MtxF* arg1, Actor* actor, s32 arg3);
 
 #endif

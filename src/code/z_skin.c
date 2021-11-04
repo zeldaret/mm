@@ -52,7 +52,7 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
     f32 scale;
     SkinVtx* skinVertices;
     Vec3f sp88;
-    Vtx* spEC;
+    Vtx* vtx;
     SkinLimbModif* limbsModifications;
     Vec3f spDC;
     Vec3f spD0;
@@ -69,7 +69,7 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
 
     avb = &skin->avbTbl[limbIndex];
 
-    spEC = avb->buf[avb->index];
+    vtx = avb->buf[avb->index];
     count = data->unk_2;
 
     for (entry = temp_2; entry < &temp_2[count]; entry++) {
@@ -112,7 +112,7 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
             }
         }
 
-        func_80137970(&D_801F5AC0[limbsModifications[entry->unk_4].limbIndex], skinVertices, entry, spEC, &spDC);
+        func_80137970(&D_801F5AC0[limbsModifications[entry->unk_4].limbIndex], skinVertices, entry, vtx, &spDC);
     }
 
     gSPSegment(POLY_OPA_DISP++, 0x08, avb->buf[avb->index]);
@@ -129,16 +129,16 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
 void Skin_DrawAnimatedLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 drawFlag) {
     SkinLimb** skeleton;
     s32 pad[3];
-    SkinAnimatedLimbData* temp_t9;
+    SkinAnimatedLimbData* data;
 
     OPEN_DISPS(gfxCtx);
 
     skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
-    temp_t9 = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
+    data = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
     if (!(drawFlag & SKIN_DRAW_FLAG_1)) {
         func_80137B34(gfxCtx, skin, limbIndex, arg3);
     }
-    gSPDisplayList(POLY_OPA_DISP++, temp_t9->dlist);
+    gSPDisplayList(POLY_OPA_DISP++, data->dlist);
 
     CLOSE_DISPS(gfxCtx);
 }

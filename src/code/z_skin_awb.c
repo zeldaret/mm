@@ -16,13 +16,13 @@ void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex) 
 
     for (i = 0; i < ARRAY_COUNT(skin->avbTbl->buf); i++) {
         Vtx* vertices = skin->avbTbl[limbIndex].buf[i];
-        Struct_800A598C* phi_s0;
+        Struct_800A598C* entry;
 
-        for (phi_s0 = temp_v0; phi_s0 < temp_v0 + animatedLimbData->unk_2; phi_s0++) {
-            SkinVtx* skinVertices = Lib_SegmentedToVirtual(phi_s0->skinVertices);
+        for (entry = temp_v0; entry < &temp_v0[animatedLimbData->unk_2]; entry++) {
+            SkinVtx* skinVertices = Lib_SegmentedToVirtual(entry->skinVertices);
             SkinVtx* skinVtxEntry;
 
-            for (skinVtxEntry = skinVertices; skinVtxEntry < skinVertices + phi_s0->skinVerticesCount;) {
+            for (skinVtxEntry = skinVertices; skinVtxEntry < &skinVertices[entry->skinVerticesCount];) {
                 Vtx* vtx = &vertices[skinVtxEntry->vtxIndex];
 
                 skinVtxEntry++;
@@ -59,13 +59,14 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
             avbEntry->buf[0] = NULL;
             avbEntry->buf[1] = NULL;
         } else {
-            SkinAnimatedLimbData* temp_s1 =
+            SkinAnimatedLimbData* animatedLimbData =
                 Lib_SegmentedToVirtual((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->limbData));
 
             { s32 tmp; }
+
             avbEntry->index = 0;
-            avbEntry->buf[0] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
-            avbEntry->buf[1] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
+            avbEntry->buf[0] = ZeldaArena_Malloc(animatedLimbData->vtxCount * sizeof(Vtx));
+            avbEntry->buf[1] = ZeldaArena_Malloc(animatedLimbData->vtxCount * sizeof(Vtx));
 
             Skin_InitAnimatedLimb(gameState, skin, i);
         }
@@ -101,7 +102,7 @@ s32 func_801387D4(PSkinAwb* skin, SkinLimb** skeleton, MtxF* mf, u8 parentIndex,
     s32 pad;
     SkinLimb* limb = Lib_SegmentedToVirtual(skeleton[limbIndex]);
     MtxF* mtx;
-    s32 temp_ret;
+    s32 ret;
     MtxF sp28;
 
     if (parentIndex == LIMB_DONE) {
@@ -114,29 +115,32 @@ s32 func_801387D4(PSkinAwb* skin, SkinLimb** skeleton, MtxF* mf, u8 parentIndex,
     SkinMatrix_MtxFCopy(&sp28, &mf[limbIndex]);
 
     if (limb->child != LIMB_DONE) {
-        temp_ret = func_801387D4(skin, skeleton, mf, limbIndex, limb->child);
-        if (temp_ret) { // func_801387D4 only returns false
-            return temp_ret;
+        ret = func_801387D4(skin, skeleton, mf, limbIndex, limb->child);
+        if (ret) { // func_801387D4 only returns false
+            return ret;
         }
     }
 
     if (limb->sibling != LIMB_DONE) {
-        temp_ret = func_801387D4(skin, skeleton, mf, parentIndex, limb->sibling);
-        if (temp_ret) { // func_801387D4 only returns false
-            return temp_ret;
+        ret = func_801387D4(skin, skeleton, mf, parentIndex, limb->sibling);
+        if (ret) { // func_801387D4 only returns false
+            return ret;
         }
     }
 
     return false;
 }
 
+/**
+ * Recursively applies matrix tranformations to each limb
+ */
 s32 func_801388E4(PSkinAwb* skin, MtxF* arg1, Actor* actor, s32 arg3) {
     s32 i;
     s32 pad;
     f32 yRot;
     f32 xRot;
     f32 zRot;
-    s32 temp_ret;
+    s32 ret;
     f32 yTransl;
     f32 xTransl;
     f32 zTransl;
@@ -180,9 +184,9 @@ s32 func_801388E4(PSkinAwb* skin, MtxF* arg1, Actor* actor, s32 arg3) {
         actor->shape.rot.z, actor->world.pos.x, actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
         actor->world.pos.z);
 
-    temp_ret = func_801387D4(skin, Lib_SegmentedToVirtual(skin->skeletonHeader->segment), arg1, LIMB_DONE, 0);
-    if (!temp_ret) { // func_801387D4 only returns false
-        return temp_ret;
+    ret = func_801387D4(skin, Lib_SegmentedToVirtual(skin->skeletonHeader->segment), arg1, LIMB_DONE, 0);
+    if (!ret) { // func_801387D4 only returns false
+        return ret;
     }
 
     return false;
