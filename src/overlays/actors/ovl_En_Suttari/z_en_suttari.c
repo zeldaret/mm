@@ -748,16 +748,15 @@ s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
 }
 
 s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
+    s32 pad3[9];
     f32 sp7C[256];
     Vec3f sp70;
     Vec3f sp64;
     Vec3f sp58;
-    s32 sp54;
-    s32 sp50;
+    s32 sp54 = 0;
+    s32 sp50 = 0;
     s32 pad;
 
-    sp54 = 0;
-    sp50 = 0;
     func_8013AF00(sp7C, 3, this->unk404->count + 3);
     if (this->unk42C == 0) {
         sp58 = D_801D15B0;
