@@ -2,7 +2,7 @@
 #include "z64skin.h"
 
 MtxF D_801F5AC0[60];
-UNK_TYPE1 D_80160FC0[0x10];
+UNK_TYPE1 D_801F69C0[0x10];
 
 void func_80137970(MtxF* mtx, SkinVtx* skinVertices, Struct_800A598C* arg2, Vtx* verticesDst, Vec3f* arg4) {
     SkinVtx* skinVtxEntry;
