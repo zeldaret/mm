@@ -360,7 +360,7 @@ void _Putfld(_Pft* px, va_list* pap, u8 code, u8* ac);
 void osUnmapTLBAll(void);
 s32 osEPiStartDma(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
 // void __osVoiceContRead2(void);
-// void __osVoiceContDataCrc(void);
+u8 __osVoiceContDataCrc(u8* data, u32 numBytes);
 const char* strchr(const char* __s, s32 __c);
 size_t strlen(const char* __s);
 void* memcpy(void* __dest, const void* __src, size_t __n);
