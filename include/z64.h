@@ -498,8 +498,6 @@ typedef struct {
 
 typedef void(*osCreateThread_func)(void*);
 
-typedef void* (*PrintCallback)(void*, const char*, size_t);
-
 typedef enum {
     SLOWLY_CALLBACK_NO_ARGS,
     SLOWLY_CALLBACK_ONE_ARG,
