@@ -1,3 +1,9 @@
+/*
+ * File: z_arrow_light.c
+ * Overlay: ovl_Arrow_Light
+ * Description: Light Arrow
+ */
+
 #include "z_arrow_light.h"
 
 #define FLAGS 0x02000010

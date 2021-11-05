@@ -47,7 +47,7 @@ void TitleSetup_GameStateResetContext(void) {
 
 void TitleSetup_InitImpl(GameState* gameState) {
     func_80185908();
-    func_800E9360();
+    SaveContext_Init();
     TitleSetup_GameStateResetContext();
 
     gameState->running = 0;

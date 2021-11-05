@@ -1,3 +1,9 @@
+/*
+ * File: z_en_onpuman.c
+ * Overlay: ovl_En_Onpuman
+ * Description: Monkey Instrument Prompt
+ */
+
 #include "z_en_onpuman.h"
 
 #define FLAGS 0x00000009

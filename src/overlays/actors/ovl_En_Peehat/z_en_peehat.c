@@ -1,3 +1,9 @@
+/*
+ * File: z_en_peehat.c
+ * Overlay: ovl_En_Peehat
+ * Description: Peahat
+ */
+
 #include "z_en_peehat.h"
 
 #define FLAGS 0x00000015

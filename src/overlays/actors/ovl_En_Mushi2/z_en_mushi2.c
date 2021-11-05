@@ -1,7 +1,7 @@
 /*
  * File: z_en_mushi2.c
  * Overlay: ovl_En_Mushi2
- * Description: Burrowing Bugs
+ * Description: Group of three bugs that burrow underground
  */
 
 #include "overlays/actors/ovl_Obj_Bean/z_obj_bean.h"
@@ -261,8 +261,8 @@ s32 func_80A68DD4(EnMushi2* this, GlobalContext* globalCtx) {
     s32 pad2;
     f32 sp24;
 
-    if ((this->actor.xzDistToPlayer < 32.0f) && (this->actor.yDistToPlayer > -10.0f) &&
-        (this->actor.yDistToPlayer < 31.0f)) {
+    if ((this->actor.xzDistToPlayer < 32.0f) && (this->actor.playerHeightRel > -10.0f) &&
+        (this->actor.playerHeightRel < 31.0f)) {
         player = GET_PLAYER(globalCtx);
         sp2E = BINANG_ROT180(this->actor.yawTowardsPlayer);
         sp24 = Math_SinS(sp2E);
@@ -533,14 +533,14 @@ void func_80A697C4(EnMushi2* this, GlobalContext* globalCtx) {
 
         if (func_800CA1E8(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C,
                           &sp30)) {
-            this->actor.yDistToWater = sp2C - this->actor.world.pos.y;
-            if (this->actor.yDistToWater >= 1.0f) {
+            this->actor.depthInWater = sp2C - this->actor.world.pos.y;
+            if (this->actor.depthInWater >= 1.0f) {
                 this->unk_30C |= 0x20;
             } else {
                 this->unk_30C &= ~0x20;
             }
         } else {
-            this->actor.yDistToWater = BGCHECK_Y_MIN;
+            this->actor.depthInWater = BGCHECK_Y_MIN;
             this->unk_30C &= ~0x20;
         }
     }
@@ -966,7 +966,7 @@ void func_80A6AB08(EnMushi2* this, GlobalContext* globalCtx) {
 
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     func_80A69424(this, globalCtx);
-    Math_StepToF(&this->actor.world.pos.y, this->actor.world.pos.y + this->actor.yDistToWater, 2.8f);
+    Math_StepToF(&this->actor.world.pos.y, this->actor.world.pos.y + this->actor.depthInWater, 2.8f);
     this->skelAnime.playSpeed = this->unk_368 * 0.018f;
     this->skelAnime.playSpeed = CLAMP(this->skelAnime.playSpeed, 0.1f, 1.9f);
 
@@ -992,7 +992,7 @@ void func_80A6AB08(EnMushi2* this, GlobalContext* globalCtx) {
         Vec3f sp3C;
 
         sp3C.x = this->actor.world.pos.x;
-        sp3C.y = this->actor.world.pos.y + this->actor.yDistToWater;
+        sp3C.y = this->actor.world.pos.y + this->actor.depthInWater;
         sp3C.z = this->actor.world.pos.z;
         EffectSsGRipple_Spawn(globalCtx, &sp3C, 40, 200, 4);
     }
@@ -1030,7 +1030,7 @@ void func_80A6AE7C(EnMushi2* this, GlobalContext* globalCtx) {
     func_80A69424(this, globalCtx);
     temp_f2 = this->actor.scale.x - (1.0f / 20000.0f);
     Actor_SetScale(&this->actor, CLAMP_MIN(temp_f2, 0.001f));
-    if ((this->actor.flags & 0x40) && (this->actor.yDistToWater > 5.0f) && (this->actor.yDistToWater < 30.0f) &&
+    if ((this->actor.flags & 0x40) && (this->actor.depthInWater > 5.0f) && (this->actor.depthInWater < 30.0f) &&
         ((Rand_Next() & 0x1FF) < this->unk_368)) {
         EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, -5.0f, 5.0f, 5.0f,
                              ((Rand_ZeroOne() * 4.0f) + 2.0f) * this->actor.scale.x);

@@ -1,3 +1,9 @@
+/*
+ * File z_en_death.c
+ * Overlay: ovl_En_Death
+ * Description: Gomess
+ */
+
 #include "z_en_death.h"
 
 #define FLAGS 0x00001035
