@@ -92,7 +92,7 @@ u8 __osContAddressCrc(u16 addr) {
     s32 i;
 
     // ret is used as a shift register for the CRC
-    for (bit = (1 << ADDRESS_CRC_MESSAGE_LENGTH); bit; bit >>= 1) {
+    for (bit = (1 << ADDRESS_CRC_MESSAGE_LENGTH); bit != 0; bit >>= 1) {
         ret <<= 1;
         if (addr32 & bit) {
             if (ret & (1 << ADDRESS_CRC_LENGTH)) {
@@ -132,7 +132,7 @@ u8 __osContDataCrc(u8* data) {
 
     for (byte = DATA_CRC_MESSAGE_BYTES; byte != 0; byte--, data++) {
         // Loop over each bit in the byte starting with most significant
-        for (bit = (1 << (DATA_CRC_LENGTH - 1)); bit; bit >>= 1) {
+        for (bit = (1 << (DATA_CRC_LENGTH - 1)); bit != 0; bit >>= 1) {
             ret <<= 1;
             if (*data & bit) {
                 if (ret & (1 << DATA_CRC_LENGTH)) {
