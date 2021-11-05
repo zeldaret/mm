@@ -45,6 +45,7 @@ animdict = {
     "SysMatrix_NormalizeXYZ": "Matrix_NormalizeXYZ",
     "SysMatrix_InsertRotationAroundUnitVector_f": "Matrix_InsertRotationAroundUnitVector_f",
     "SysMatrix_InsertRotationAroundUnitVector_s": "Matrix_InsertRotationAroundUnitVector_s",
+    "SysMatrix_GetStateAsRSPMatrix": "Matrix_GetStateAsRSPMatrix",
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_8012403C": "Player_GetMask",
     "func_8012404c": "Player_RemoveMask",
