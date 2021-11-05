@@ -2,7 +2,6 @@
 #define _XSTDIO_H_
 #include "stdarg.h"
 
-
 typedef struct {
     /* 0x0 */ union {
         /* 0x0 */ s64 ll;
@@ -21,5 +20,13 @@ typedef struct {
     /* 0x30 */ u32 flags;
     /* 0x34 */ u8 qual;
 } _Pft;
+
+typedef void* (*PrintCallback)(void*, const char*, size_t);
+
+#define FLAGS_SPACE 1
+#define FLAGS_PLUS 2
+#define FLAGS_MINUS 4
+#define FLAGS_HASH 8
+#define FLAGS_ZERO 16
 
 #endif
