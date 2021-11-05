@@ -67,7 +67,7 @@ typedef enum {
 
 typedef enum {
     /* 0 */ OBJMURE_CHILD_STATE_0,
-    /* 1 */ OBJMURE_CHILD_STATE_1, // Dead
+    /* 1 */ OBJMURE_CHILD_STATE_DEAD,
     /* 2 */ OBJMURE_CHILD_STATE_2
 } ObjMureChildState;
 
@@ -132,7 +132,7 @@ void ObjMure_SpawnActors0(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0; i < maxChildren; i++) {
         switch (this->childrenStates[i]) {
-            case OBJMURE_CHILD_STATE_1:
+            case OBJMURE_CHILD_STATE_DEAD:
                 break;
             case OBJMURE_CHILD_STATE_2:
                 ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
@@ -178,7 +178,7 @@ void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx) {
             this->childrenStates[i] = OBJMURE_CHILD_STATE_0;
             this->children[i]->room = actor->room;
         } else {
-            this->childrenStates[i] = OBJMURE_CHILD_STATE_1;
+            this->childrenStates[i] = OBJMURE_CHILD_STATE_DEAD;
         }
     }
 }
@@ -200,7 +200,7 @@ void ObjMure_KillActorsImpl(ObjMure* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < maxChildren; i++) {
         switch (this->childrenStates[i]) {
-            case OBJMURE_CHILD_STATE_1:
+            case OBJMURE_CHILD_STATE_DEAD:
                 this->children[i] = NULL;
                 break;
             case OBJMURE_CHILD_STATE_2:
@@ -239,11 +239,11 @@ void ObjMure_CheckChildren(ObjMure* this, GlobalContext* globalCtx) {
                         this->childrenStates[i] = OBJMURE_CHILD_STATE_2;
                     }
                 } else {
-                    this->childrenStates[i] = OBJMURE_CHILD_STATE_1;
+                    this->childrenStates[i] = OBJMURE_CHILD_STATE_DEAD;
                     this->children[i] = NULL;
                 }
             } else if (this->childrenStates[i] == OBJMURE_CHILD_STATE_2 && this->children[i]->update == NULL) {
-                this->childrenStates[i] = OBJMURE_CHILD_STATE_1;
+                this->childrenStates[i] = OBJMURE_CHILD_STATE_DEAD;
                 this->children[i] = NULL;
             }
         }
