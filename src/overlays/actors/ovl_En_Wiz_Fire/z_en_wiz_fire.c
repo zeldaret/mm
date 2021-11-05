@@ -1,3 +1,9 @@
+/*
+ * File: z_en_wiz_fire.c
+ * Overlay: ovl_En_Wiz_Fire
+ * Description: Wizzrobe Fire/Ice Attack
+ */
+
 #include "z_en_wiz_fire.h"
 
 #define FLAGS 0x08000015

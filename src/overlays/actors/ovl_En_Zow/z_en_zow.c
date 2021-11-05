@@ -1,3 +1,9 @@
+/*
+ * File: z_en_zow.c
+ * Overlay: ovl_En_Zow
+ * Description: Great Bay - Zora Complaining About Water
+ */
+
 #include "z_en_zow.h"
 
 #define FLAGS 0x00000019

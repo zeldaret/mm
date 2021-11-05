@@ -1,3 +1,9 @@
+/*
+ * File: z_en_tanron5.c
+ * Overlay: ovl_En_Tanron5
+ * Description: Destructible props in Twinmold's arena
+ */
+
 #include "z_en_tanron5.h"
 
 #define FLAGS 0x00000030

@@ -129,7 +129,8 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),build/$f) \
 
 C_FILES       := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
-S_FILES       := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
+S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
+                 $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(wildcard baserom/*),build/$f.o) \
                  $(foreach f,$(C_FILES:.c=.o),build/$f) \
@@ -152,6 +153,8 @@ build/src/libultra/io/%.o: OPTFLAGS := -O2
 build/src/libultra/libc/%.o: OPTFLAGS := -O2
 build/src/libultra/gu/%.o: OPTFLAGS := -O2
 build/src/libultra/rmon/%.o: OPTFLAGS := -O2
+build/src/libultra/flash/%.o: OPTFLAGS := -g
+build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
@@ -231,7 +234,7 @@ disasm:
 	$(RM) -rf asm data
 	python3 tools/disasm/disasm.py
 
-diff-init: all
+diff-init: uncompressed
 	$(RM) -rf expected/
 	mkdir -p expected/
 	cp -r build expected/build

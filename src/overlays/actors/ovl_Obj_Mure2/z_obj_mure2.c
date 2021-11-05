@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_mure2.c
+ * Overlay: ovl_Obj_Mure2
+ * Description: Circle of rocks spawner
+ */
+
 #include "z_obj_mure2.h"
 
 #define FLAGS 0x00000000

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_syateki_crow.c
+ * Overlay: ovl_En_Syateki_Crow
+ * Description: Shooting Gallery Guay
+ */
+
 #include "z_en_syateki_crow.h"
 
 #define FLAGS 0x08000030

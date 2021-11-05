@@ -5,6 +5,7 @@
  */
 
 #include "z_en_elfbub.h"
+#include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 
 #define FLAGS 0x00000001
 
@@ -76,7 +77,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     childActor = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_ELFORG,
                                     this->actor.world.pos.x, this->actor.world.pos.y + 12.0f, this->actor.world.pos.z,
                                     this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
-                                    ((ENELFBUB_GET_SWITCHFLAG(&this->actor) & 0x7F) << 9) | 2);
+                                    ((ENELFBUB_GET_SWITCHFLAG(&this->actor) & 0x7F) << 9) | STRAY_FAIRY_TYPE_BUBBLE);
     if (childActor != NULL) {
         childActor->parent = &this->actor;
     }
@@ -153,12 +154,12 @@ void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    SysMatrix_InsertTranslation(0.0f, 0.0f, 1.0f, 1);
-    SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+    Matrix_InsertTranslation(0.0f, 0.0f, 1.0f, 1);
+    Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
     Matrix_Scale(this->xyScale + 1.0f, this->xyScale + 1.0f, 1.0f, 1);
-    SysMatrix_InsertZRotation_s(this->zRot, 1);
+    Matrix_InsertZRotation_s(this->zRot, 1);
     Matrix_Scale(this->xScale + 1.0f, 1.0f, 1.0f, 1);
-    SysMatrix_InsertZRotation_s(this->zRot * -1, 1);
+    Matrix_InsertZRotation_s(this->zRot * -1, 1);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_06001000);

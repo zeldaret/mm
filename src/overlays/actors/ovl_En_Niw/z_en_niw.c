@@ -8,6 +8,8 @@
 
 #define FLAGS 0x00800010
 
+#define THIS ((EnNiw*)thisx)
+
 void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -28,7 +30,6 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx);
 void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
-s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* actor);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
 extern FlexSkeletonHeader D_06002530;
@@ -125,8 +126,8 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 25.0f);
 
-    SkelAnime_InitSV(globalCtx, &this->skelanime, &D_06002530, &D_060000E8, this->limbDrawTbl,
-                     this->transitionDrawtable, ENNIW_LIMBCOUNT);
+    SkelAnime_InitFlex(globalCtx, &this->skelanime, &D_06002530, &D_060000E8, this->jointTable, this->morphTable,
+                       ENNIW_LIMBCOUNT);
     Math_Vec3f_Copy(&this->unk2A4, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk2B0, &this->actor.world.pos);
 
@@ -326,8 +327,7 @@ void func_808917F8(EnNiw* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 void EnNiw_SetupIdle(EnNiw* this) {
-    SkelAnime_ChangeAnim(&this->skelanime, &D_060000E8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_060000E8.common), 0,
-                         -10.0f);
+    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8), 0, -10.0f);
     this->unknownState28E = 0;
     this->actionFunc = EnNiw_Idle;
 }
@@ -523,13 +523,13 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 0x20) {
         // still touching water
         this->actor.gravity = 0.0f;
-        if (this->actor.yDistToWater > 15.0f) {
+        if (this->actor.depthInWater > 15.0f) {
             this->actor.world.pos.y += 2.0f;
         }
         if (this->unkTimer250 == 0) {
             this->unkTimer250 = 30;
             Math_Vec3f_Copy(&ripplePos, &this->actor.world.pos);
-            ripplePos.y += this->actor.yDistToWater;
+            ripplePos.y += this->actor.depthInWater;
 
             EffectSsGRipple_Spawn(globalCtx, &ripplePos, 100, 500, 30);
         }
@@ -629,8 +629,7 @@ void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
 }
 
 void EnNiw_SetupRunAway(EnNiw* this) {
-    SkelAnime_ChangeAnim(&this->skelanime, &D_060000E8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_060000E8.common), 0,
-                         -10.0f);
+    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8), 0, -10.0f);
     this->unk29A = Rand_ZeroFloat(1.99f);
     this->unknownState28E = 7;
     this->actionFunc = EnNiw_RunAway;
@@ -859,12 +858,12 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc = EnNiw_LandBeforeIdle;
         return;
 
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 15.0f) &&
+    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 15.0f) &&
                (this->unknownState28E != 6)) {
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
-        pos.y += this->actor.yDistToWater;
+        pos.y += this->actor.depthInWater;
         this->unkTimer250 = 30;
         EffectSsGSplash_Spawn(globalCtx, &pos, 0, 0, 0, 400);
         this->unkTimer252 = 0;
@@ -907,8 +906,8 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
-    EnNiw* this = (EnNiw*)actor;
+s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnNiw* this = THIS;
 
     if (limbIndex == 13) {
         rot->y += (s16)this->limbDRot;
@@ -933,8 +932,8 @@ void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*)thisx;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->skelanime.skeleton, this->skelanime.limbDrawTbl, this->skelanime.dListCount,
-                     EnNiw_LimbDraw, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
+                          EnNiw_LimbDraw, NULL, &this->actor);
     EnNiw_DrawFeathers(this, globalCtx);
 }
 
@@ -1007,11 +1006,11 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
                 isMaterialApplied++;
             }
 
-            SysMatrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
-            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
+            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(feather->scale, feather->scale, 1.0f, MTXMODE_APPLY);
-            SysMatrix_InsertZRotation_f(feather->zRot, MTXMODE_APPLY);
-            SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_InsertZRotation_f(feather->zRot, MTXMODE_APPLY);
+            Matrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

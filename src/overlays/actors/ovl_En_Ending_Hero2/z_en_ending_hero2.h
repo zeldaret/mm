@@ -10,8 +10,8 @@ typedef void (*EnEndingHero2ActionFunc)(struct EnEndingHero2*, GlobalContext*);
 typedef struct EnEndingHero2 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s limbDrawTable[20];
-    /* 0x200 */ Vec3s transitionDrawTable[20];
+    /* 0x188 */ Vec3s jointTable[20];
+    /* 0x200 */ Vec3s morphTable[20];
     /* 0x278 */ EnEndingHero2ActionFunc actionFunc;
     /* 0x27C */ u16 unk27C;
 } EnEndingHero2; // size = 0x280

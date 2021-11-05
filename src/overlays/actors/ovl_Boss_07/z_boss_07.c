@@ -1,3 +1,9 @@
+/*
+ * File: z_boss_07.c
+ * Overlay: ovl_Boss_07
+ * Description: Majora
+ */
+
 #include "z_boss_07.h"
 
 #define FLAGS 0x00000035

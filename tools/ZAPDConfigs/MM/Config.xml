@@ -2,4 +2,12 @@
     <SymbolMap File="SymbolMap_MM.txt"/>
     <ActorList File="ActorList_MM.txt"/>
     <ObjectList File="ObjectList_MM.txt"/>
+
+    <ExternalXMLFolder Path="assets/xml/"/>
+    <!--
+    !TODO: uncomment this line when the gameplay_keep XML is merged
+    -->
+    <!--
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="objects/gameplay_keep/"/>
+    -->
 </Root>
