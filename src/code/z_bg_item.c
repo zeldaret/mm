@@ -1,11 +1,11 @@
 #include "global.h"
 
 #define DYNAPOLY_STATE_NONE 0
-#define DYNAPOLY_STATE_RIDING_FALLING 1 << 0
-#define DYNAPOLY_STATE_RIDING_MOVING 1 << 1
-#define DYNAPOLY_STATE_RIDING_ROTATING 1 << 2
-#define DYNAPOLY_STATE_SWITCH_PRESSED 1 << 3
-#define DYNAPOLY_STATE_HEAVY_SWITCH_PRESSED 1 << 4
+#define DYNAPOLY_STATE_RIDING_FALLING (1 << 0)
+#define DYNAPOLY_STATE_RIDING_MOVING (1 << 1)
+#define DYNAPOLY_STATE_RIDING_ROTATING (1 << 2)
+#define DYNAPOLY_STATE_SWITCH_PRESSED (1 << 3)
+#define DYNAPOLY_STATE_HEAVY_SWITCH_PRESSED (1 << 4)
 
 void DynaPoly_Init(DynaPolyActor* dynaActor, s32 flags) {
     dynaActor->bgId = -1;
@@ -17,6 +17,7 @@ void DynaPoly_Init(DynaPolyActor* dynaActor, s32 flags) {
 
 void DynaPoly_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* dynaActor, CollisionHeader* meshHeader) {
     CollisionHeader* header = NULL;
+    
     BgCheck_RelocateMeshHeader(meshHeader, &header);
     dynaActor->bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, dynaActor, header);
 }
@@ -35,6 +36,7 @@ void DynaPoly_SetRidingMovingState(DynaPolyActor* dynaActor) {
 
 void DynaPoly_SetRidingMovingStateByIndex(CollisionContext* colCtx, s32 index) {
     DynaPolyActor* dynaActor = BgCheck_GetActorOfMesh(colCtx, index);
+    
     if (dynaActor != NULL) {
         DynaPoly_SetRidingMovingState(dynaActor);
     }
@@ -46,6 +48,7 @@ void DynaPoly_SetRidingRotatingState(DynaPolyActor* dynaActor) {
 
 void DynaPoly_SetRidingRotatingStateByIndex(CollisionContext* colCtx, s32 index) {
     DynaPolyActor* dynaActor = BgCheck_GetActorOfMesh(colCtx, index);
+    
     if (dynaActor != NULL) {
         DynaPoly_SetRidingRotatingState(dynaActor);
     }
