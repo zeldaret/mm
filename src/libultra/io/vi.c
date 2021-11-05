@@ -9,21 +9,21 @@ void __osViInit(void) {
     __osViNext->buffer = (void*)0x80000000;
     __osViCurr->buffer = (void*)0x80000000;
 
-    if (osTvType == 0) {
+    if (osTvType == OS_TV_PAL) {
         __osViNext->modep = &osViModePalLan1;
-    } else if (osTvType == 2) {
+    } else if (osTvType == OS_TV_MPAL) {
         __osViNext->modep = &osViModeMpalLan1;
-    } else {
+    } else { // OS_TV_NTSC or OS_TV_UNK28
         __osViNext->modep = &osViModeNtscLan1;
     }
 
     __osViNext->state = 0x20;
     __osViNext->features = __osViNext->modep->comRegs.ctrl;
 
-    while (*(vu32*)0xA4400010 > 10) {
+    while (HW_REG(VI_CURRENT_REG, u32) > 10) {
         ;
     }
-    *(vu32*)0xA4400000 = 0;
+    HW_REG(VI_STATUS_REG, u32) = 0;
 
     __osViSwapContext();
 }

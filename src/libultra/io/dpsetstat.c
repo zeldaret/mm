@@ -1,5 +1,5 @@
 #include "global.h"
 
 void osDpSetStatus(u32 data) {
-    *(u32*)0xA410000C = data;
+    HW_REG(DPC_STATUS_REG, u32) = data;
 }

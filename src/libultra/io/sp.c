@@ -5,6 +5,7 @@ s32 __osSpDeviceBusy(void) {
 
     if (status & (SP_STATUS_DMA_BUSY | SP_STATUS_DMA_FULL | SP_STATUS_IO_FULL)) {
         return true;
+    } else {
+        return false;
     }
-    return false;
 }
