@@ -20,6 +20,10 @@ typedef enum EnPoSisterType {
     POSISTER_TYPE_AMY,   // green
 } EnPoSisterType;
 
+// stateTimer gets reused:
+// in the death actionfunc it counts frames up to actionfunc changes
+// when spinning back into reality, it counts frames of the animation
+
 typedef struct EnPoSisters {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
@@ -30,11 +34,11 @@ typedef struct EnPoSisters {
     /* 0x018F */ u8 unk_18F; // timer, based on targeting from player?
     /* 0x0190 */ u8 unk_190; // count of 22C?
     /* 0x0191 */ u8 flags191;
-    /* 0x0192 */ s16 unk_192;
-    /* 0x0194 */ s16 unk_194; // timer?
+    /* 0x0192 */ s16 stateTimer;
+    /* 0x0194 */ s16 unk_194;
     /* 0x0196 */ Vec3s jointTable[12];
     /* 0x01DE */ Vec3s morphTable[12];
-    /* 0x0226 */ Color_RGBA8 color226;
+    /* 0x0226 */ Color_RGBA8 color;
     /* 0x022C */ Vec3f unk_22C[8]; // uh... these are used in draw
     /* 0x028C */ Vec3f unk_28C[8];
     /* 0x02EC */ f32 megDistToPlayer;
