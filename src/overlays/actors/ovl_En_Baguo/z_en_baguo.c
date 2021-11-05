@@ -16,7 +16,7 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_EmergeFromUnderground(EnBaguo* this, GlobalContext* globalCtx);
-void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_Idle(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_SetupRetreatUnderground(EnBaguo* this);
 void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx);
@@ -171,11 +171,11 @@ void EnBaguo_EmergeFromUnderground(EnBaguo* this, GlobalContext* globalCtx) {
         this->action = NEJIRON_ACTION_ACTIVE;
         this->actor.shape.yOffset = 2700.0f;
         this->timer = 60;
-        this->actionFunc = EnBaguo_Sit;
+        this->actionFunc = EnBaguo_Idle;
     }
 }
 
-void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_Idle(EnBaguo* this, GlobalContext* globalCtx) {
     s16 absoluteYaw;
     s16 yaw;
 
@@ -187,7 +187,7 @@ void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx) {
 
         // If this actor isn't mostly facing the player, do a discrete turn towards
         // them. It takes 8 frames to turn, and we must wait 8 frames to do another.
-        if (this->timer & 8) {
+        if ((this->timer & 8) != 0) {
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) > 200.0f) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
                 if ((globalCtx->gameplayFrames % 8) == 0) {
@@ -233,7 +233,7 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
     if (this->timer == 0) {
         this->timer = 100;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        this->actionFunc = EnBaguo_Sit;
+        this->actionFunc = EnBaguo_Idle;
         this->actor.speedXZ = 0.0f;
         return;
     }
@@ -355,13 +355,8 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo_CheckForDetonation(this, globalCtx);
     this->actionFunc(this, globalCtx);
 
-    if (this->blinkTimer != 0) {
-        this->blinkTimer--;
-    }
-
-    if (this->timer != 0) {
-        this->timer--;
-    }
+    DECR(this->blinkTimer);
+    DECR(this->timer);
 
     if (this->action != NEJIRON_ACTION_EXPLODING && this->action != NEJIRON_ACTION_INACTIVE) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);

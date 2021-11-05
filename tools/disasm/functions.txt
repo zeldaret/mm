@@ -10303,7 +10303,7 @@
     0x80A3B1F4:("EnBaguo_Destroy",),
     0x80A3B220:("EnBaguo_UndergroundIdle",),
     0x80A3B2CC:("EnBaguo_EmergeFromUnderground",),
-    0x80A3B3E0:("EnBaguo_Sit",),
+    0x80A3B3E0:("EnBaguo_Idle",),
     0x80A3B5E0:("EnBaguo_Roll",),
     0x80A3B794:("EnBaguo_SetupRetreatUnderground",),
     0x80A3B7B8:("EnBaguo_RetreatUnderground",),
