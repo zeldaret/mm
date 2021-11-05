@@ -217,7 +217,6 @@ beginseg
     include "build/src/libultra/os/settimer.o"
     include "build/data/boot/__libm_qnan_f.rodata.o"
     include "build/src/libultra/rmon/xldtob.o"
-    include "build/data/boot/xldtob.data.o"
     include "build/src/libultra/libc/ldiv.o"
     include "build/src/libultra/rmon/xlitob.o"
     include "build/src/libultra/io/sirawwrite.o"
