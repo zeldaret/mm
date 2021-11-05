@@ -1,3 +1,9 @@
+/*
+ * File: z_door_warp1.c
+ * Overlay: ovl_Door_Warp1
+ * Description: Blue Warp
+ */
+
 #include "z_door_warp1.h"
 
 #define FLAGS 0x00000000

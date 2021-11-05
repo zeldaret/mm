@@ -1,3 +1,9 @@
+/*
+ * File: z_item_etcetera.c
+ * Overlay: ovl_Item_Etcetera
+ * Description:
+ */
+
 #include "z_item_etcetera.h"
 
 #define FLAGS 0x00000010

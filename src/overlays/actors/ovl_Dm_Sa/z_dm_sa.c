@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_sa.c
+ * Overlay: ovl_Dm_Sa
+ * Description:
+ */
+
 #include "z_dm_sa.h"
 
 #define FLAGS 0x00000030
@@ -33,12 +39,12 @@ void func_80A2E960(SkelAnime* arg0, ActorAnimationEntry* animations, u16 index) 
     animations += index;
 
     if (animations->frameCount < 0.0f) {
-        frameCount = SkelAnime_GetFrameCount(&animations->animation->common);
+        frameCount = Animation_GetLastFrame(animations->animation);
     } else {
         frameCount = animations->frameCount;
     }
-    SkelAnime_ChangeAnim(arg0, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
-                         animations->mode, animations->morphFrames);
+    Animation_Change(arg0, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
+                     animations->mode, animations->morphFrames);
 }
 
 void DmSa_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -48,7 +54,7 @@ void DmSa_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->alpha = 0xFF;
     this->actor.targetArrowOffset = 3000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013328, NULL, 0, 0, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013328, NULL, 0, 0, 0);
     func_80A2E960(&this->skelAnime, D_80A2ED00, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmSa_DoNothing;
@@ -63,7 +69,7 @@ void DmSa_DoNothing(DmSa* this, GlobalContext* globalCtx) {
 void DmSa_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmSa* this = THIS;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->alpha += 0;
     this->actionFunc(this, globalCtx);
 }
@@ -114,7 +120,7 @@ void DmSa_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, func_80A2EBB0(globalCtx->state.gfxCtx, this->alpha));
     }
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                   func_80A2EB10, func_80A2EB2C, func_80A2EB44, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

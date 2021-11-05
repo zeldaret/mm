@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ending_hero.c
+ * Overlay: ovl_En_Ending_Hero
+ * Description:
+ */
+
 #include "z_en_ending_hero.h"
 
 #define FLAGS 0x00000009
@@ -42,8 +48,7 @@ void EnEndingHero_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B0CC, &D_06000BE0, this->limbDrawTable,
-                     this->transitionDrawTable, 15);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B0CC, &D_06000BE0, this->jointTable, this->morphTable, 15);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_80C1E748(this);
 }
@@ -57,7 +62,7 @@ void func_80C1E748(EnEndingHero* this) {
 }
 
 void func_80C1E764(EnEndingHero* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 }
 
 void EnEndingHero_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -93,8 +98,8 @@ void EnEndingHero_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C1E984[index]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, 0, 0,
-                     &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          0, 0, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

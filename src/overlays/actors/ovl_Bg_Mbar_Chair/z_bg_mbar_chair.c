@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_mbar_chair.c
+ * Overlay: ovl_Bg_Mbar_Chair
+ * Description: Milk Bar - Chair
+ */
+
 #include "z_bg_mbar_chair.h"
 
 #define FLAGS 0x00000000

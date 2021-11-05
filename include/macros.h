@@ -8,13 +8,10 @@
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
-#define HW_REG(reg, type) *(volatile type*)((reg) | 0xa0000000)
-
-// TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address
-// rather than add/sub 0x80000000
-#define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + 0x80000000)
-#define PHYSICAL_TO_VIRTUAL2(addr) ((uintptr_t)(addr)-0x80000000)
-#define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr)-0x80000000)
+// TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
+#define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + RDRAM_CACHED)
+#define PHYSICAL_TO_VIRTUAL2(addr) ((uintptr_t)(addr) - RDRAM_CACHED)
+#define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr) - RDRAM_CACHED)
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
 #define GET_ACTIVE_CAM(globalCtx) ((globalCtx)->cameraPtrs[(globalCtx)->activeCamera])
@@ -61,11 +58,13 @@
 #define CUR_UPG_VALUE_VOID(upg) \
     ((((void)0, gSaveContext.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
 
+#define CUR_FORM ((gSaveContext.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.playerForm)
+
 #define ALL_EQUIP_VALUE(equip) ((gSaveContext.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_EQUIP_VALUE(equip) ((gSaveContext.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_UPG_VALUE(upg) ((gSaveContext.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
 #define TAKE_EQUIPPED_ITEM(equip) (gSaveContext.equips.equipment = ((((void)0, gSaveContext.equips.equipment) & (gEquipNegMasks[equip])) | (u16)(0 << gEquipShifts[equip])))
-#define CUR_FORM_EQUIP(button) (gSaveContext.equips.buttonItems[gSaveContext.playerForm == PLAYER_FORM_HUMAN ? 0 : gSaveContext.playerForm][button])
+#define CUR_FORM_EQUIP(button) (gSaveContext.equips.buttonItems[CUR_FORM][button])
 #define CHECK_QUEST_ITEM(item) (((void)0, gSaveContext.inventory.questItems) & gBitFlags[item])
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.inventory.questItems = (((void)0, gSaveContext.inventory.questItems) & (-1 - gBitFlags[item])))
 
@@ -86,6 +85,7 @@ extern GraphicsContext* __gfxCtx;
 #define POLY_OPA_DISP __gfxCtx->polyOpa.p
 #define POLY_XLU_DISP __gfxCtx->polyXlu.p
 #define OVERLAY_DISP __gfxCtx->overlay.p
+#define DEBUG_DISP __gfxCtx->debug.p
 
 // __gfxCtx shouldn't be used directly.
 // Use the DISP macros defined above when writing to display buffers.
@@ -119,6 +119,7 @@ extern GraphicsContext* __gfxCtx;
 
 #define ALIGN8(val) (((val) + 7) & ~7)
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
+#define ALIGN64(val) (((val) + 0x3F) & ~0x3F)
 
 #define SQ(x) ((x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
@@ -137,5 +138,11 @@ extern GraphicsContext* __gfxCtx;
         (a) = (b);        \
         (b) = _temp;      \
     }
+
+#ifdef __GNUC__
+#define ALIGNED8 __attribute__ ((aligned (8)))
+#else
+#define ALIGNED8
+#endif
 
 #endif // _MACROS_H_

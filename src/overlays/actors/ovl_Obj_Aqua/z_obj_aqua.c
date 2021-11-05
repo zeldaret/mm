@@ -74,7 +74,7 @@ void func_80ACB6A0(ObjAqua* this, GlobalContext* globalCtx) {
     s32 angleOffset = 0;
     s32 i;
 
-    sp58.y = this->actor.world.pos.y + this->actor.yDistToWater;
+    sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
     for (i = 0; i < 4; i++) {
         sp58.x = this->actor.world.pos.x + Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f;
         sp58.z = this->actor.world.pos.z + Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f;
@@ -285,9 +285,9 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (actionFuncTemp) {
         s16 rotation = Math_SinS(this->unk_198) * 8000.0f;
 
-        SysMatrix_InsertZRotation_s(rotation, 1);
+        Matrix_InsertZRotation_s(rotation, 1);
         Matrix_Scale(1.3f, 1.0f, 1.0f, 1);
-        SysMatrix_InsertZRotation_s(rotation * -1, 1);
+        Matrix_InsertZRotation_s(rotation * -1, 1);
         Matrix_Scale(10.0f / 13.0f, 1.0f, 1.0f, 1);
     }
     Matrix_RotateY(yaw, 1);

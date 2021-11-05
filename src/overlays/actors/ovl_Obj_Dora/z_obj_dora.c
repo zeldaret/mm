@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_dora.c
+ * Overlay: ovl_Obj_Dora
+ * Description: Swordsman's School - Gong
+ */
+
 #include "z_obj_dora.h"
 
 #define FLAGS 0x00000010

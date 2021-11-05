@@ -1,3 +1,9 @@
+/*
+ * File: z_en_talk.c
+ * Overlay: ovl_En_Talk
+ * Description: Green Target Spot (e.g., Indigo-Go's Poster)
+ */
+
 #include "z_en_talk.h"
 
 #define FLAGS 0x00000009

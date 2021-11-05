@@ -1,3 +1,9 @@
+/*
+ * File: z_en_hgo.c
+ * Overlay: ovl_En_Hgo
+ * Description: Pamela's Father As a Gibdo
+ */
+
 #include "z_en_hgo.h"
 
 #define FLAGS 0x02000019

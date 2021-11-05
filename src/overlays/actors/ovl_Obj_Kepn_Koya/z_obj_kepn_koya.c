@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_kepn_koya.c
+ * Overlay: ovl_Obj_Kepn_Koya
+ * Description: Gorman Bros. Buildings
+ */
+
 #include "z_obj_kepn_koya.h"
 
 #define FLAGS 0x00000000
