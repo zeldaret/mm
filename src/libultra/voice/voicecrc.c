@@ -13,10 +13,10 @@
  * This function is essentially the same as __osContDataCrc, but allows for a variable message length, specified by
  * `numBytes`.
  */
-u8 __osVoiceContDataCrc(u8* data, u32 numBytes) {
+u8 __osVoiceContDataCrc(u8* data, size_t numBytes) {
     s32 ret = 0;
     u32 bit;
-    u32 byte;
+    size_t byte;
 
     for (byte = numBytes; byte != 0; byte--, data++) {
         // Loop over each bit in the byte starting with most significant
