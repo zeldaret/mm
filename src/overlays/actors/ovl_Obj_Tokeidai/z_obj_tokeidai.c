@@ -717,4 +717,21 @@ void ObjTokeidai_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4664.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4894.s")
+void func_80AB4894(Actor* thisx, GlobalContext* globalCtx) {
+    ObjTokeidai* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    Matrix_InsertTranslation(0.0f, this->unk_15E, 0.0f, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
+    Matrix_RotateY(-this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_InsertXRotation_s(-this->unk_160, MTXMODE_APPLY);
+    Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->unk_14C, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPDisplayList(POLY_OPA_DISP++, D_0600BA78);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
