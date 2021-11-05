@@ -3373,7 +3373,7 @@ beginseg
     name "ovl_Obj_Tokeidai"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tokeidai/z_obj_tokeidai.o"
-    include "build/data/ovl_Obj_Tokeidai/ovl_Obj_Tokeidai.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Tokeidai/ovl_Obj_Tokeidai_reloc.o"
 endseg
 
 beginseg
