@@ -7,11 +7,11 @@
 // pre-boot variables
 extern u32 osTvType;
 extern u32 osRomType;
-extern u32 osRomBase;
+extern uintptr_t osRomBase;
 extern u32 osResetType;
 extern u32 osCicId;
 extern u32 osVersion;
-extern u32 osMemSize;
+extern size_t osMemSize;
 extern s32 osAppNmiBuffer[0x10];
 extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];

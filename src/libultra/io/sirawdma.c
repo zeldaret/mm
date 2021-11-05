@@ -6,7 +6,7 @@ s32 __osSiRawStartDma(s32 direction, void* dramAddr) {
     }
 
     if (direction == OS_WRITE) {
-        osWritebackDCache(dramAddr, 0x40);
+        osWritebackDCache(dramAddr, PIF_RAM_SIZE);
     }
 
     HW_REG(SI_DRAM_ADDR_REG, u32) = osVirtualToPhysical(dramAddr);
@@ -18,7 +18,7 @@ s32 __osSiRawStartDma(s32 direction, void* dramAddr) {
     }
 
     if (direction == OS_READ) {
-        osInvalDCache(dramAddr, 0x40);
+        osInvalDCache(dramAddr, PIF_RAM_SIZE);
     }
     return 0;
 }
