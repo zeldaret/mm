@@ -4291,8 +4291,7 @@ beginseg
     name "ovl_En_Rail_Skb"
     compress
     include "build/src/overlays/actors/ovl_En_Rail_Skb/z_en_rail_skb.o"
-    include "build/data/ovl_En_Rail_Skb/ovl_En_Rail_Skb.data.o"
-    include "build/data/ovl_En_Rail_Skb/ovl_En_Rail_Skb.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Rail_Skb/ovl_En_Rail_Skb_reloc.o"
 endseg
 
 beginseg
