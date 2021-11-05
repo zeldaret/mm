@@ -715,7 +715,32 @@ void ObjTokeidai_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4394.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4664.s")
+void func_80AB4664(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    u32 gameplayFrames = globalCtx->gameplayFrames;
+    ObjTokeidai* this = THIS;
+
+    Matrix_RotateY(-this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, this->unk_15E, 0.0f, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, -5480.0f, 80.0f, MTXMODE_APPLY);
+    Matrix_InsertXRotation_s(-this->unk_160, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, 5480.0f, -80.0f, MTXMODE_APPLY);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gSPSegment(POLY_XLU_DISP++, 0x08,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, -gameplayFrames, 0, 0x20, 0x20));
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPDisplayList(POLY_OPA_DISP++, this->unk_144);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, 235, 180, (s32)(this->unk_16C * 2.55f));
+    gSPDisplayList(POLY_XLU_DISP++, this->unk_148);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 void func_80AB4894(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeidai* this = THIS;
