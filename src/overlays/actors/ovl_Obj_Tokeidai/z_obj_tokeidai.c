@@ -61,14 +61,14 @@ static InitChainEntry D_80AB49E0[] = {
     ICHAIN_F32(uncullZoneForward, 1100, ICHAIN_STOP),
 };
 
-extern UNK_TYPE D_06009A08;
-extern UNK_TYPE D_0600B0C0;
-extern UNK_TYPE D_0600B208;
-extern UNK_TYPE D_0600BA78;
+extern Gfx D_06009A08[];
+extern Gfx D_0600B0C0[];
+extern Gfx D_0600B208[];
+extern Gfx D_0600BA78[];
 extern UNK_TYPE D_0600CF28;
-extern UNK_TYPE D_0600D388;
-extern UNK_TYPE D_0600D8E0;
-extern UNK_TYPE D_0600D8E8;
+extern Gfx D_0600D388[];
+extern Gfx D_0600D8E0[];
+extern Gfx D_0600D8E8[];
 
 s32 func_80AB2790() {
     if (gSaveContext.isNight) {
@@ -102,7 +102,7 @@ void func_80AB2834(ObjTokeidai* this) {
 
 void func_80AB28C8(ObjTokeidai* this, GlobalContext* globalCtx) {
     this->actor.draw = func_80AB4894;
-    this->unk_144 = &D_0600BA78;
+    this->unk_144 = D_0600BA78;
     func_80AB27B4(this);
     if ((globalCtx->sceneNum == SCENE_CLOCKTOWER && gSaveContext.sceneSetupIndex == 2 &&
          globalCtx->csCtx.unk_12 == 0) ||
@@ -144,8 +144,8 @@ void func_80AB2BBC(ObjTokeidai* this, GlobalContext* globalCtx) {
     s32 type;
 
     this->actor.draw = func_80AB4664;
-    this->unk_144 = &D_0600B208;
-    this->unk_148 = &D_0600B0C0;
+    this->unk_144 = D_0600B208;
+    this->unk_148 = D_0600B0C0;
     if (gSaveContext.isNight) {
         this->unk_16C = 100;
     } else {
@@ -204,11 +204,11 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_80AB28C8(this, globalCtx);
             break;
         case 1:
-            this->unk_144 = &D_0600D388;
+            this->unk_144 = D_0600D388;
             break;
         case 8:
             Actor_SetScale(&this->actor, 1.0f);
-            this->unk_144 = &D_06009A08;
+            this->unk_144 = D_06009A08;
             this->actionFunc = func_80AB365C;
             break;
         case 5:
@@ -238,8 +238,8 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_80AB2BBC(this, globalCtx);
             break;
         case 11:
-            this->unk_144 = &D_0600D8E8;
-            this->unk_148 = &D_0600D8E0;
+            this->unk_144 = D_0600D8E8;
+            this->unk_148 = D_0600D8E0;
             this->actionFunc = func_80AB3BE8;
             break;
     }
@@ -694,7 +694,24 @@ void ObjTokeidai_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/ObjTokeidai_Draw.s")
+void ObjTokeidai_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjTokeidai* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    if (this->unk_144 != 0) {
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        func_8012C28C(globalCtx->state.gfxCtx);
+        gSPDisplayList(POLY_OPA_DISP++, this->unk_144);
+    }
+    if (this->unk_148 != 0) {
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        gSPDisplayList(POLY_XLU_DISP++, this->unk_148);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4394.s")
 

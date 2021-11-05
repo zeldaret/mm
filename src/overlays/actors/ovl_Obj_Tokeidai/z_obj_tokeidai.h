@@ -11,8 +11,8 @@ typedef void (*ObjTokeidaiActionFunc)(struct ObjTokeidai*, GlobalContext*);
 
 typedef struct ObjTokeidai {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ void* unk_144;
-    /* 0x0148 */ void* unk_148;
+    /* 0x0144 */ Gfx* unk_144;
+    /* 0x0148 */ Gfx* unk_148;
     /* 0x014C */ s16 unk_14C;
     /* 0x014E */ s16 unk_14E;
     /* 0x0150 */ s16 unk_150;
