@@ -65,10 +65,14 @@ extern Gfx D_06009A08[];
 extern Gfx D_0600B0C0[];
 extern Gfx D_0600B208[];
 extern Gfx D_0600BA78[];
-extern UNK_TYPE D_0600CF28;
+extern Gfx D_0600BEE8[];
+extern Gfx D_0600C368[];
+extern Gfx D_0600CF28[];
 extern Gfx D_0600D388[];
 extern Gfx D_0600D8E0[];
 extern Gfx D_0600D8E8[];
+extern Gfx D_0600E818[];
+extern Gfx D_0600F518[];
 
 s32 func_80AB2790() {
     if (gSaveContext.isNight) {
@@ -713,7 +717,38 @@ void ObjTokeidai_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4394.s")
+void func_80AB4394(Actor* thisx, GlobalContext* globalCtx) {
+    ObjTokeidai* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    Matrix_InsertTranslation(0.0f, this->unk_15E, 0.0f, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
+    Matrix_InsertXRotation_s(-this->unk_160, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
+    Matrix_StatePush();
+    Matrix_InsertZRotation_s(-this->unk_14C, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_0600CF28);
+    Matrix_StatePop();
+    Matrix_InsertTranslation(0.0f, 0.0f, this->unk_162, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_0600BEE8);
+    Matrix_InsertZRotation_s(-this->unk_152 * 2, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    if ((OBJ_TOKEIDAI_TYPE(&this->actor) == 9) || (OBJ_TOKEIDAI_TYPE(&this->actor) == 0xA)) {
+        gSPDisplayList(POLY_OPA_DISP++, D_0600F518);
+    } else {
+        gSPDisplayList(POLY_OPA_DISP++, D_0600E818);
+    }
+    Matrix_InsertTranslation(0.0f, -1112.0f, -19.6f, 1);
+    Matrix_RotateY((s16)this->unk_158, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_0600C368);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 void func_80AB4664(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
