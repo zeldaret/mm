@@ -1,3 +1,8 @@
+/*
+ * File: z_obj_mure.c
+ * Overlay: ovl_Obj_Mure
+ * Description: Spawns Fish, Bug, Butterfly
+ */
 #include "z_obj_mure.h"
 
 #define FLAGS 0x00000000
@@ -26,15 +31,24 @@ const ActorInit Obj_Mure_InitVars = {
     (ActorFunc)NULL,
 };
 
-static f32 sZClip[] = { 1600.0f, 1600.0f, 1000.0f, 1000.0f, 1000.0f };
+static f32 sZClip[] = {
+    1600.0f, 1600.0f, 1000.0f, 1000.0f, 1000.0f,
+};
 
-static s32 sMaxChildSpawns[] = { 12, 9, 8, 0 };
+static s32 sMaxChildSpawns[] = {
+    12,
+    9,
+    8,
+    0,
+};
 
-#define sSpawnActorIds D_808D87A4
-static s16 sSpawnActorIds[] = { ACTOR_EN_KUSA, 0, ACTOR_EN_FISH, ACTOR_EN_INSECT, ACTOR_EN_BUTTE };
+static s16 sSpawnActorIds[] = {
+    ACTOR_EN_KUSA, 0, ACTOR_EN_FISH, ACTOR_EN_INSECT, ACTOR_EN_BUTTE,
+};
 
-#define sSpawnParams D_808D87B0
-static s16 sSpawnParams[] = { 0, 2, -1, 0, -1 };
+static s16 sSpawnParams[] = {
+    0, 2, -1, 0, -1,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
@@ -75,10 +89,10 @@ s32 func_808D7928(ObjMure* this, GlobalContext* globalCtx) {
 void ObjMure_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMure* this = THIS;
 
-    this->chNum = (this->actor.params >> 0xC) & 0xF;
-    this->ptn = (this->actor.params >> 8) & 7;
-    this->svNum = (this->actor.params >> 5) & 3;
-    this->type = this->actor.params & 0x1F;
+    this->chNum = OBJ_MURE_GET_CHNUM(this->actor.params);
+    this->ptn = OBJ_MURE_GET_PTN(this->actor.params);
+    this->svNum = OBJ_MURE_GET_SVNUM(this->actor.params);
+    this->type = OBJ_MURE_GET_TYPE(this->actor.params);
     if (this->ptn >= 4) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -294,32 +308,32 @@ void ObjMure_SetChildToFollowPlayer(ObjMure* this, s32 idx1) {
 
 // Fish, Bugs
 void ObjMure_GroupBehavior0(ObjMure* this, GlobalContext* globalCtx) {
-    if (this->unk_1A4 <= 0) {
-        if (this->unk_1A6) {
-            this->unk_1A6 = false;
+    if (this->unk_19C <= 0) {
+        if (this->unk_19E) {
+            this->unk_19E = false;
             ObjMure_SetFollowTargets(this, (Rand_ZeroOne() * 0.5f) + 0.1f);
             if (this->actor.xzDistToPlayer < 60.0f) {
-                this->unk_1A4 = (s32)(Rand_ZeroOne() * 5.5f) + 4;
+                this->unk_19C = (s32)(Rand_ZeroOne() * 5.5f) + 4;
             } else {
-                this->unk_1A4 = (s32)(Rand_ZeroOne() * 40.5f) + 4;
+                this->unk_19C = (s32)(Rand_ZeroOne() * 40.5f) + 4;
             }
         } else {
-            this->unk_1A6 = true;
+            this->unk_19E = true;
             if (this->actor.xzDistToPlayer < 60.0f) {
-                this->unk_1A4 = (s32)(Rand_ZeroOne() * 10.5f) + 4;
+                this->unk_19C = (s32)(Rand_ZeroOne() * 10.5f) + 4;
                 ObjMure_SetFollowTargets(this, (Rand_ZeroOne() * 0.2f) + 0.8f);
             } else {
-                this->unk_1A4 = (s32)(Rand_ZeroOne() * 10.5f) + 4;
+                this->unk_19C = (s32)(Rand_ZeroOne() * 10.5f) + 4;
                 ObjMure_SetFollowTargets(this, (Rand_ZeroOne() * 0.2f) + 0.6f);
             }
         }
     }
     if (this->actor.xzDistToPlayer < 120.0f) {
-        this->unk_1A8++;
+        this->unk_1A0++;
     } else {
-        this->unk_1A8 = 0;
+        this->unk_1A0 = 0;
     }
-    if (this->unk_1A8 >= 80) {
+    if (this->unk_1A0 >= 80) {
         ObjMure_SetChildToFollowPlayer(this, 1);
     } else {
         ObjMure_SetChildToFollowPlayer(this, 0);
@@ -331,19 +345,19 @@ void ObjMure_GroupBehavior1(ObjMure* this, GlobalContext* globalCtx) {
     s32 maxChildren;
     s32 i;
 
-    if (this->unk_1A4 <= 0) {
-        if (this->unk_1A6) {
-            this->unk_1A6 = false;
+    if (this->unk_19C <= 0) {
+        if (this->unk_19E) {
+            this->unk_19E = false;
             ObjMure_SetFollowTargets(this, Rand_ZeroOne() * 0.2f);
             if (this->actor.xzDistToPlayer < 60.0f) {
-                this->unk_1A4 = (s32)(Rand_ZeroOne() * 5.5f) + 4;
+                this->unk_19C = (s32)(Rand_ZeroOne() * 5.5f) + 4;
             } else {
-                this->unk_1A4 = (s32)(Rand_ZeroOne() * 40.5f) + 4;
+                this->unk_19C = (s32)(Rand_ZeroOne() * 40.5f) + 4;
             }
         } else {
-            this->unk_1A6 = true;
+            this->unk_19E = true;
             ObjMure_SetFollowTargets(this, Rand_ZeroOne() * 0.7f);
-            this->unk_1A4 = (s32)(Rand_ZeroOne() * 10.5f) + 4;
+            this->unk_19C = (s32)(Rand_ZeroOne() * 10.5f) + 4;
         }
     }
 
@@ -375,8 +389,8 @@ void ObjMure_ActiveState(ObjMure* this, GlobalContext* globalCtx) {
 void ObjMure_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjMure* this = THIS;
 
-    if (this->unk_1A4 > 0) {
-        this->unk_1A4--;
+    if (this->unk_19C > 0) {
+        this->unk_19C--;
     }
     this->actionFunc(this, globalCtx);
 }
