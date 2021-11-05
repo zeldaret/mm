@@ -300,7 +300,17 @@ void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB32F0.s")
+void func_80AB32F0(ObjTokeidai* this, GlobalContext* globalCtx) {
+    this->actor.shape.rot.x += this->unk_15C;
+    if (this->unk_15C >= 0xA1) {
+        this->unk_15C -= 5;
+    }
+    this->actor.world.pos.z += 4.0f;
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    if (this->actor.world.pos.y < 0.0f) {
+        this->actionFunc = func_80AB3BD8;
+    }
+}
 
 void func_80AB3370(ObjTokeidai* this, GlobalContext* globalCtx) {
     f32 cos;
