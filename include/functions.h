@@ -275,9 +275,7 @@ void __osDequeueThread(OSThread** param_1, OSThread* param_2);
 void osDestroyThread(OSThread* puParm1);
 // void __osVoiceCheckResult(void);
 void bzero(void* begin, s32 length);
-s32 osSetRumble(OSPfs* pfs, u32 vibrate);
-// void osSetUpMempakWrite(void);
-// void osProbeRumblePak(void);
+
 void __osSiCreateAccessQueue(void);
 void __osSiGetAccess(void);
 void __osSiRelAccess(void);
