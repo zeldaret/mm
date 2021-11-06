@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_shutter.c
+ * Overlay: ovl_Obj_Shutter
+ * Description:
+ */
+
 #include "z_obj_shutter.h"
 
 #define FLAGS 0x00000030

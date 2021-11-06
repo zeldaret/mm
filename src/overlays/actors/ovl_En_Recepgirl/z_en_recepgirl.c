@@ -1,7 +1,7 @@
 /*
  * File: z_en_recepgirl.c
  * Overlay: ovl_En_Recepgirl
- * Description: Mayor's Receptionist
+ * Description: Mayor's receptionist
  */
 
 #include "z_en_recepgirl.h"

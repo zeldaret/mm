@@ -1,3 +1,9 @@
+/*
+ * File: z_en_rsn.c
+ * Overlay: ovl_En_Rsn
+ * Description: Bomb Shop Man in the credits?
+ */
+
 #include "z_en_rsn.h"
 
 #define FLAGS 0x02000019

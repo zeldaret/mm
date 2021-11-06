@@ -1,3 +1,9 @@
+/*
+ * File: z_en_geg.c
+ * Overlay: ovl_En_Geg
+ * Description: Goron With Don Gero's Mask
+ */
+
 #include "z_en_geg.h"
 
 #define FLAGS 0x00000019

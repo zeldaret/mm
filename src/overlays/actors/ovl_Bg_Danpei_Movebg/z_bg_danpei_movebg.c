@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_danpei_movebg.c
+ * Overlay: ovl_Bg_Danpei_Movebg
+ * Description: Moving platforms beneath Dampe's house
+ */
+
 #include "z_bg_danpei_movebg.h"
 
 #define FLAGS 0x00000010

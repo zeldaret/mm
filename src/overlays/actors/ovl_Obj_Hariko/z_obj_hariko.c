@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_hariko.c
+ * Overlay: ovl_Obj_Hariko
+ * Description: Little Cow Statue Head
+ */
+
 #include "z_obj_hariko.h"
 
 #define FLAGS 0x02000020
