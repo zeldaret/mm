@@ -3417,7 +3417,7 @@ void func_8018219C(MtxF* pfParm1, Vec3s* psParm2, s32 iParm3);
 void Matrix_InsertRotationAroundUnitVector_f(f32 rotation, Vec3f* vector, s32 appendToState);
 void Matrix_InsertRotationAroundUnitVector_s(s16 rotation, Vec3f* vector, s32 appendToState);
 u64* SysUcode_GetUCodeBoot(void);
-u32 SysUcode_GetUCodeBootSize(void);
+size_t SysUcode_GetUCodeBootSize(void);
 u64* SysUcode_GetUCode(void);
 u64* SysUcode_GetUCodeData(void);
 // void func_80182CE0(void);

@@ -17,7 +17,7 @@ extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];
 
 // data
-extern UNK_TYPE1 D_800969C0;
+extern u64 D_800969C0[];
 extern u8 D_80096B20;
 extern vu8 gViConfigUseDefault;
 extern u8 gViConfigAdditionalScanLines;
@@ -1641,8 +1641,8 @@ extern Vec3f D_801D15B0;
 extern Vec3s D_801D15BC;
 extern Mtx D_801D1DE0;
 extern MtxF D_801D1E20;
-extern UNK_PTR D_801D1E60;
-extern UNK_PTR D_801D1E64;
+// extern u64* D_801D1E60;
+// extern u64* D_801D1E64;
 // extern UNK_TYPE1 D_801D1E70;
 // extern UNK_TYPE1 D_801D2E80;
 // extern UNK_TYPE1 D_801D2F80;
@@ -3104,8 +3104,8 @@ extern UNK_PTR D_801E10B0;
 // extern UNK_TYPE2 D_801E1630;
 // extern UNK_TYPE1 D_801E1E40;
 // extern UNK_TYPE1 D_801E1E80;
-// extern UNK_TYPE1 D_801E2160;
-// extern UNK_TYPE1 D_801E3790;
+extern u64 D_801E2160[];
+extern u64 D_801E3790[];
 // extern UNK_TYPE1 D_801E3F40;
 // extern UNK_TYPE1 D_801E3FA0;
 
@@ -3431,7 +3431,7 @@ extern OSViMode* D_801FBB88;
 extern u16* gZBufferPtr;
 extern void* D_801FBB90;
 extern u64* gGfxSPTaskOutputBufferPtr;
-extern u32 gGfxSPTaskOutputBufferSize;
+extern size_t gGfxSPTaskOutputBufferSize;
 // extern UNK_TYPE1 D_801FBB9C;
 // extern UNK_TYPE1 D_801FBBA0;
 extern u16 (*gZBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
