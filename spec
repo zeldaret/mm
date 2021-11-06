@@ -170,7 +170,7 @@ beginseg
     include "build/src/libultra/voice/voicecontwrite20.o"
     include "build/src/libultra/io/crc.o"
     include "build/src/libultra/os/getactivequeue.o"
-    include "build/src/libultra/gu/normalize.o"
+    include "build/asm/boot/normalize.text.o"
     include "build/asm/boot/setcompare.text.o"
     include "build/asm/boot/getcompare.text.o"
     include "build/src/libultra/io/dpgetstat.o"
