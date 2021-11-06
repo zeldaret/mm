@@ -569,6 +569,7 @@
             0x801D15B0 : "",
             0x801D15D0 : "sys_math_atan",
             0x801D1DE0 : "sys_matrix",
+            0x801D1E60 : "sys_ucode",
             0x801D1E70 : "",
             0x801D2E80 : "", # audio_heap?
             0x801D3D90 : "",
