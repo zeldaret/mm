@@ -28,7 +28,7 @@ s32 osPfsIsPlug(OSMesgQueue* mq, u8* pattern) {
         __osPfsGetInitData(&bitpattern, &contData[0]);
 
         for (channel = 0; channel < __osMaxControllers; channel++) {
-            if ((contData[channel].status & CONT_ADDR_CRC_ER) == 0) {
+            if (!(contData[channel].status & CONT_ADDR_CRC_ER)) {
                 crcErrorCount--;
                 break;
             }
@@ -39,7 +39,7 @@ s32 osPfsIsPlug(OSMesgQueue* mq, u8* pattern) {
     } while (crcErrorCount > 0);
 
     for (channel = 0; channel < __osMaxControllers; channel++) {
-        if ((contData[channel].errno == 0) && ((contData[channel].status & CONT_CARD_ON) != 0)) {
+        if ((contData[channel].errno == 0) && (contData[channel].status & CONT_CARD_ON)) {
             bits |= (1 << channel);
         }
     }
