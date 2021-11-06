@@ -1,3 +1,9 @@
+/*
+ * File z_en_bbfall.c
+ * Overlay: ovl_En_Bbfall
+ * Description: Red Bubble
+ */
+
 #include "z_en_bbfall.h"
 
 #define FLAGS 0x00000215

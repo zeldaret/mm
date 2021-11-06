@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_crace_movebg.c
+ * Overlay: ovl_Bg_Crace_Movebg
+ * Description: Huge sliding doors in Deku Shrine
+ */
+
 #include "z_bg_crace_movebg.h"
 
 #define FLAGS 0x00000010

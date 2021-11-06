@@ -1,3 +1,9 @@
+/*
+ * File z_en_arrow.c
+ * Overlay: ovl_En_Arrow
+ * Description: Arrows and other projectiles
+ */
+
 #include "z_en_arrow.h"
 
 #define FLAGS 0x00000030

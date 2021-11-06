@@ -1,3 +1,9 @@
+/*
+ * File: z_en_hakurock.c
+ * Overlay: ovl_En_Hakurock
+ * Description: Rocks Kicked Up by Goht
+ */
+
 #include "z_en_hakurock.h"
 
 #define FLAGS 0x00000030

@@ -1,3 +1,9 @@
+/*
+ * File: z_boss_01.c
+ * Overlay: ovl_Boss_01
+ * Description: Odolwa
+ */
+
 #include "z_boss_01.h"
 
 #define FLAGS 0x00000035

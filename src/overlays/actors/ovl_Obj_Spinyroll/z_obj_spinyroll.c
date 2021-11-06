@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_spinyroll.c
+ * Overlay: ovl_Obj_Spinyroll
+ * Description: Spike-Covered Log
+ */
+
 #include "z_obj_spinyroll.h"
 
 #define FLAGS 0x00000010

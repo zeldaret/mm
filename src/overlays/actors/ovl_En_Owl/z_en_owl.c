@@ -545,7 +545,7 @@ void func_8095B6C8(EnOwl* this, GlobalContext* globalCtx) {
 void func_8095B76C(EnOwl* this, GlobalContext* globalCtx) {
     s32 pad;
     s16 sp4A;
-    f32 sp44 = func_80122524(&this->actor, this->path, this->unk_3F8, &sp4A);
+    f32 sp44 = Path_OrientAndGetDistSq(&this->actor, this->path, this->unk_3F8, &sp4A);
     Vec3s* points;
 
     Math_SmoothStepToS(&this->actor.world.rot.y, sp4A, 6, 0x800, 0x200);

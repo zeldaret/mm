@@ -1,3 +1,9 @@
+/*
+ * File: z_en_syateki_wf.c
+ * Overlay: ovl_En_Syateki_Wf
+ * Description: Shooting Gallery Wolfos
+ */
+
 #include "z_en_syateki_wf.h"
 
 #define FLAGS 0x08000030

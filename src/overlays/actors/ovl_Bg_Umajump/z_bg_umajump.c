@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_umajump.c
+ * Overlay: ovl_Bg_Umajump
+ * Description: Horse Jumping Fence
+ */
+
 #include "z_bg_umajump.h"
 
 #define FLAGS 0x00000000
