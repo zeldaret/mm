@@ -1,3 +1,9 @@
+/*
+ * File: z_en_weather_tag.c
+ * Overlay: ovl_En_Weather_Tag
+ * Description: Local weather changes
+ */
+
 #include "z_en_weather_tag.h"
 
 #define FLAGS 0x00000010

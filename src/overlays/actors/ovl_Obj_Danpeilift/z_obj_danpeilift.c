@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_danpeilift.c
+ * Overlay: ovl_Obj_Danpeilift
+ * Description: Deku Shrine & Snowhead Temple Elevator
+ */
+
 #include "z_obj_danpeilift.h"
 
 #define FLAGS 0x00000010

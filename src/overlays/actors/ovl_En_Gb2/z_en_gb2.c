@@ -1,3 +1,9 @@
+/*
+ * File: z_en_gb2.c
+ * Overlay: ovl_En_Gb2
+ * Description: Spirit House - Owner
+ */
+
 #include "z_en_gb2.h"
 
 #define FLAGS 0x00000039

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_gk.c
+ * Overlay: ovl_En_Gk
+ * Description: Goron Elder's Son
+ */
+
 #include "z_en_gk.h"
 
 #define FLAGS 0x00000009

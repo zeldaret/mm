@@ -379,7 +379,7 @@
             0x800F05C0 : "z_elf_message",
             0x800F07C0 : "code_800F07C0",
             0x800F1250 : "z_face_reaction",
-            0x800F12D0 : "code_800F12D0",
+            0x800F12D0 : "z_env_flags",
             0x800F1460 : "z_eventmgr",
             0x800F23E0 : "z_fcurve_data",
             0x800F2620 : "z_fcurve_data_skelanime",

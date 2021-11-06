@@ -1,3 +1,9 @@
+/*
+ * File: z_en_kusa.c
+ * Overlay: ovl_En_Kusa
+ * Description: Grass / Bush
+ */
+
 #include "z_en_kusa.h"
 
 #define FLAGS 0x00800010

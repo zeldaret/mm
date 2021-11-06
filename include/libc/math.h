@@ -1,5 +1,5 @@
-#ifndef _MATH_H_
-#define _MATH_H_
+#ifndef MATH_H
+#define MATH_H
 
 #include "PR/ultratypes.h"
 
@@ -25,5 +25,12 @@ typedef union {
 } fu;
 
 extern f32 __libm_qnan_f;
+
+float fabsf(float f);
+#pragma intrinsic(fabsf)
+float sqrtf(float f);
+#pragma intrinsic(sqrtf)
+double sqrt(double d);
+#pragma intrinsic(sqrt)
 
 #endif

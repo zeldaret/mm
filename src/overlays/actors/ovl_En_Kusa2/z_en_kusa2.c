@@ -1,3 +1,9 @@
+/*
+ * File: z_en_kusa2.c
+ * Overlay: ovl_En_Kusa2
+ * Description: Keaton grass?
+ */
+
 #include "z_en_kusa2.h"
 
 #define FLAGS 0x00800010
