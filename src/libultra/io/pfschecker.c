@@ -122,8 +122,8 @@ s32 osPfsChecker(OSPfs* pfs) {
         for (j = 0; j < pfs->dir_size; j++) {
             while (nextNodeInFile[j].inode_t.bank == bank &&
                    nextNodeInFile[j].ipage >= (u16)pfs->inodeStartPage) { // cast required
-                u8 val;
-                val = nextNodeInFile[j].inode_t.page;
+                u8 val = nextNodeInFile[j].inode_t.page;
+
                 nextNodeInFile[j] = checkedInode.inodePage[val] = tempInode.inodePage[val];
             }
         }
