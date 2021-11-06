@@ -517,7 +517,7 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, GlobalContext* globalCtx) {
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
         if (!(gSaveContext.weekEventReg[10] & 8)) {
-            func_800B8A1C(&this->actor, globalCtx, GI_WALLET_DEFAULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
+            func_800B8A1C(&this->actor, globalCtx, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
             func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }

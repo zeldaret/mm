@@ -763,7 +763,7 @@ void func_809C7A90(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->actionFunc = func_809C7C14;
     } else {
         if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !(gSaveContext.weekEventReg[59] & 0x10)) {
-            func_800B8A1C(&this->actor, globalCtx, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
+            func_800B8A1C(&this->actor, globalCtx, GI_QUIVER_40 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
         } else if (this->unk_280 < 0x884) {
             func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_RED, 500.0f, 100.0f);
         } else if (!(gSaveContext.weekEventReg[32] & 2)) {
@@ -820,7 +820,7 @@ void func_809C7D14(EnSyatekiMan* this, GlobalContext* globalCtx) {
     } else {
         if (this->unk_284 == 0x407) {
             if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !(gSaveContext.weekEventReg[59] & 0x20)) {
-                func_800B8A1C(&this->actor, globalCtx, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
+                func_800B8A1C(&this->actor, globalCtx, GI_QUIVER_40 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
             } else {
                 func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
             }
