@@ -1,6 +1,6 @@
 /*
  * File: z_en_bigslime.c
- * Overlay: En_Bigslime
+ * Overlay: ovl_En_Bigslime
  * Description: Mad Jelly & Gekko Miniboss: Fused Jellies & Gekko
  */
 
@@ -2869,7 +2869,7 @@ void EnBigslime_UpdateGekko(Actor* thisx, GlobalContext* globalCtx) {
             player = GET_PLAYER(globalCtx);
             vtxNorm.x = this->actor.world.pos.x;
             vtxNorm.z = this->actor.world.pos.z;
-            vtxNorm.y = player->actor.world.pos.y + player->actor.yDistToWater;
+            vtxNorm.y = player->actor.world.pos.y + player->actor.depthInWater;
             EffectSsGRipple_Spawn(globalCtx, &vtxNorm, 150, 550, 0);
             isGekkoOnGround = true;
         }

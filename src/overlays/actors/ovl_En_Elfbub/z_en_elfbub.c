@@ -5,6 +5,7 @@
  */
 
 #include "z_en_elfbub.h"
+#include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 
 #define FLAGS 0x00000001
 
@@ -76,7 +77,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     childActor = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_ELFORG,
                                     this->actor.world.pos.x, this->actor.world.pos.y + 12.0f, this->actor.world.pos.z,
                                     this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
-                                    ((ENELFBUB_GET_SWITCHFLAG(&this->actor) & 0x7F) << 9) | 2);
+                                    ((ENELFBUB_GET_SWITCHFLAG(&this->actor) & 0x7F) << 9) | STRAY_FAIRY_TYPE_BUBBLE);
     if (childActor != NULL) {
         childActor->parent = &this->actor;
     }

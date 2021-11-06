@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_ingate.c
+ * Overlay: ovl_Bg_Ingate
+ * Description: Swamp Tour Boat
+ */
+
 #include "z_bg_ingate.h"
 
 #define FLAGS 0x00000030

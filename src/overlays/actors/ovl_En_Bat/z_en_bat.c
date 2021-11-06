@@ -1,3 +1,9 @@
+/*
+ * File z_en_bat.c
+ * Overlay: ovl_En_Bat
+ * Description: Bad Bat
+ */
+
 #include "z_en_bat.h"
 
 #define FLAGS 0x00005005
