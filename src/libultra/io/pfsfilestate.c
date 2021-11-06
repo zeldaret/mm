@@ -23,7 +23,7 @@ s32 osPfsFileState(OSPfs* pfs, s32 fileNo, OSPfsState* state) {
     }
 
     if (pfs->activebank != 0) {
-        ret = __osPfsSelectBank(pfs, 0);
+        ret = __osPfsSelectBank(pfs, PFS_ID_BANK_256K);
         if (ret != 0) {
             return ret;
         }
