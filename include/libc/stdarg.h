@@ -1,5 +1,5 @@
-#ifndef _STDARG_H_
-#define _STDARG_H_
+#ifndef STDARG_H
+#define STDARG_H
 
 #include "ultra64.h"
 
@@ -41,5 +41,6 @@ typedef char *va_list;
                                           : __va_stack_arg(list, mode))))[-1]
 #define va_end(__list)
 
-#endif
-#endif
+#endif /* __GNUC__ */
+
+#endif /* STDARG_H */

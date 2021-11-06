@@ -3,13 +3,6 @@
 
 #include "z64.h"
 
-float fabsf(float f);
-#pragma intrinsic(fabsf)
-float sqrtf(float f);
-#pragma intrinsic(sqrtf)
-double sqrt(double d);
-#pragma intrinsic(sqrt)
-
 void bootproc(void);
 void Idle_ThreadEntry(void* arg);
 void ViConfig_UpdateVi(u32 arg0);
@@ -283,9 +276,7 @@ void __osDequeueThread(OSThread** param_1, OSThread* param_2);
 void osDestroyThread(OSThread* puParm1);
 // void __osVoiceCheckResult(void);
 void bzero(void* begin, s32 length);
-s32 osSetRumble(OSPfs* pfs, u32 vibrate);
-// void osSetUpMempakWrite(void);
-// void osProbeRumblePak(void);
+
 void __osSiCreateAccessQueue(void);
 void __osSiGetAccess(void);
 void __osSiRelAccess(void);
@@ -538,14 +529,14 @@ void EffectSpark_Init(EffSparkParams* params, EffSparkParams* init);
 void EffectSpark_Destroy(EffSparkParams* params);
 s32 EffectSpark_Update(EffSparkParams* params);
 void EffectSpark_Draw(EffSparkParams* params, GraphicsContext* gfxCtx);
-// void func_800AE2A0(void);
+void func_800AE2A0(GlobalContext* globalCtx, Color_RGBA8* arg1, s16 arg2, s16 arg3);
 void func_800AE434(GlobalContext* globalCtx, Color_RGBA8* color, s16 sParm3, s16 sParm4);
 void func_800AE5A0(GlobalContext* globalCtx);
-// void func_800AE5E4(void);
+void func_800AE5E4(GlobalContext* globalCtx, Color_RGBA8* arg1, s16 arg2, s16 arg3);
 void func_800AE778(GlobalContext* globalCtx, Color_RGBA8* color, s16 param_3, s16 param_4);
 void func_800AE8EC(GlobalContext* globalCtx);
-void func_800AE930(CollisionContext* colCtx, s32 param_2, float* param_3, f32 param_4, s16 param_5, CollisionPoly* param_6, s32 param_7);
-// void func_800AEF44(void);
+void func_800AE930(CollisionContext* colCtx, s32 param_2, Vec3f* param_3, f32 param_4, s16 param_5, CollisionPoly* param_6, s32 param_7);
+void func_800AEF44(s32 arg0);                     
 void EffectTireMark_InitParticle(EffTireMarkParticle* particle);
 void EffectTireMark_Init(EffTireMarkParams* params, EffTireMarkInit* init);
 void EffectTireMark_Destroy(EffTireMarkParams* params);
@@ -979,12 +970,12 @@ CollisionHeader* BgCheck_GetActorMeshHeader(CollisionContext* colCtx, s32 index)
 // void func_800C3C94(void);
 f32 func_800C3D50(s32 arg0, CollisionContext* colCtx, s32 arg2, CollisionPoly** arg3, s32* arg4, Vec3f* pos, Actor* actor, s32 arg7, f32 arg8, s32 arg9);
 // void func_800C3F40(void);
-// void func_800C3FA0(void);
+f32 func_800C3FA0(CollisionContext* colCtx, CollisionPoly** arg1, Vec3f* arg2);
 f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, s32* arg2, Vec3f* arg3);
 // void func_800C4058(void);
 f32 func_800C40B4(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Vec3f* pos);
 f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos);
-// void func_800C4188(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+f32 func_800C4188(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId, Actor* actor, Vec3f* pos);
 // void func_800C41E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800C4240(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800C42A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
@@ -1652,10 +1643,10 @@ void func_800F0590(GlobalContext* globalCtx, Vec3f* arg1, s32 arg2, s32 arg3);
 // void func_800F10AC(void);
 // void func_800F112C(void);
 u16 Text_GetFaceReaction(GlobalContext* globalCtx, u32 reactionSet);
-void func_800F12D0(GlobalContext* globalCtx);
-void func_800F1304(GlobalContext* globalCtx, s16 param_2);
-void func_800F1374(s32 param_1, s16 param_2);
-s16 func_800F13E8(GlobalContext* globalCtx, s16 param_2);
+void EnvFlags_UnsetAll(GlobalContext* globalCtx);
+void EnvFlags_Set(GlobalContext* globalCtx, s16 flag);
+void EnvFlags_Unset(GlobalContext* globalCtx, s16 flag);
+s32 EnvFlags_Get(GlobalContext* globalCtx, s16 flag);
 s16 func_800F1460(s16 param_1);
 ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 index);
 void ActorCutscene_Init(GlobalContext* globalCtx, ActorCutscene* cutscenes, s32 num);
@@ -2742,7 +2733,7 @@ s32 func_8013E5CC(Vec3f* param_1, Vec3s* param_2, Vec3f* param_3, Vec3f* param_4
 // void func_8013E8F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 s32 func_8013E950(Vec3f* param_1, Vec3f* param_2, s16 param_3, Vec3f* param_4, Vec3f* param_5, s16* param_6, s16* param_7, s16* param_8, s16* param_9, u16 param_10, u16 param_11, u16 param_12, u16 param_13);
 // void func_8013EC10(void);
-// void func_8013EC44(void);
+void func_8013EC44(f32 arg0, u8 arg1, u8 arg2, u8 arg3);
 void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3);
 void func_8013ED9C(void);
 void func_8013EDD0(void);
@@ -3007,8 +2998,8 @@ void func_80165438(UNK_PTR param_1);
 // void func_80165608(void);
 // void func_80165630(void);
 // void func_80165658(void);
-// void func_8016566C(void);
-// void func_80165690(void);
+void func_8016566C(s32 arg0);
+void func_80165690(void);
 // void func_801656A4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
 // void func_80165DCC(void);
 // void func_80165DF0(void);
@@ -3044,7 +3035,7 @@ void func_80169600(GlobalContext* globalCtx, s16 param_2);
 // void func_80169668(void);
 Camera* Play_GetCamera(GlobalContext* globalCtx, s16 index);
 s32 Play_CameraSetAtEye(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f* eye);
-// void func_8016981C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+void func_8016981C(GlobalContext* globalCtx, s16 arg1, Vec3f* arg2, Vec3f* arg3, Vec3f* arg4);
 // void func_80169940(void);
 // void func_80169988(void);
 void func_801699D4(GlobalContext* globalCtx, s16 arg1, s16 arg2);
