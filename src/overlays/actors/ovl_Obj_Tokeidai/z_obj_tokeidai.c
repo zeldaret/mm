@@ -32,10 +32,10 @@ void ObjTokeidai_RaiseTower(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_TowerTransformationStart(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_DoNothing(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_StaircaseIntoTowerIdle(ObjTokeidai* this, GlobalContext* globalCtx);
-void func_80AB3ED0(ObjTokeidai* this, GlobalContext* globalCtx);
-void func_80AB4040(ObjTokeidai* this, GlobalContext* globalCtx);
-void func_80AB4080(ObjTokeidai* this, GlobalContext* globalCtx);
-void func_80AB4160(ObjTokeidai* this, GlobalContext* globalCtx);
+void ObjTokeidai_TowerClockIdle(ObjTokeidai* this, GlobalContext* globalCtx);
+void ObjTokeidai_SmallClockIdle(ObjTokeidai* this, GlobalContext* globalCtx);
+void ObjTokeidai_TowerGearIdle(ObjTokeidai* this, GlobalContext* globalCtx);
+void ObjTokeidai_TowerTopIdle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_SetupTowerTransformationStart(ObjTokeidai* this);
 void ObjTokeidai_DrawClock(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_DrawTowerTop(Actor* thisx, GlobalContext* globalCtx);
@@ -43,8 +43,11 @@ void ObjTokeidai_DrawTowerGear(Actor* thisx, GlobalContext* globalCtx);
 
 // Silly overload defines that I'm not sure I should even be doing
 #define settleTimer clockFaceAdditionalRotation
+#define transformationRotationalVelocity clockFaceAdditionalRotation
+#define transformationWaitTimer clockFaceAdditionalRotation
 #define unk_154 clockFaceAdditionalRotation
 #define settleAmount clockFaceRotationTimer
+#define transformationRotationalAcceleration clockFaceRotationTimer
 #define unk_156 clockFaceRotationTimer
 #define unk_15C sunMoonDiskAdditionalRotation
 #define lightIntensity clockHour
@@ -126,7 +129,7 @@ void ObjTokeidai_InitTowerGear(ObjTokeidai* this, GlobalContext* globalCtx) {
         this->actor.shape.yOffset = 1500.0f;
         gSaveContext.weekEventReg[8] |= 0x40;
     } else {
-        this->actionFunc = func_80AB4080;
+        this->actionFunc = ObjTokeidai_TowerGearIdle;
     }
 }
 
@@ -148,7 +151,7 @@ void ObjTokeidai_InitTowerClock(ObjTokeidai* this, GlobalContext* globalCtx) {
         this->actor.home.pos.z += 13.0f;
         this->actionFunc = ObjTokeidai_TransformedClockIdle;
     } else {
-        this->actionFunc = func_80AB3ED0;
+        this->actionFunc = ObjTokeidai_TowerClockIdle;
     }
 }
 
@@ -191,7 +194,7 @@ void ObjTokeidai_InitTowerTop(ObjTokeidai* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.x = -0x4000;
         this->actionFunc = ObjTokeidai_TransformedTopIdle;
     } else {
-        this->actionFunc = func_80AB4160;
+        this->actionFunc = ObjTokeidai_TowerTopIdle;
     }
 }
 
@@ -234,13 +237,13 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
             Actor_SetScale(&this->actor, 0.02f);
             this->actor.draw = ObjTokeidai_DrawClock;
             ObjTokeidai_InitClock(this);
-            this->actionFunc = func_80AB4040;
+            this->actionFunc = ObjTokeidai_SmallClockIdle;
             break;
         case OBJ_TOKEIDAI_TYPE_VERY_SMALL_CLOCK:
             Actor_SetScale(&this->actor, 0.01f);
             this->actor.draw = ObjTokeidai_DrawClock;
             ObjTokeidai_InitClock(this);
-            this->actionFunc = func_80AB4040;
+            this->actionFunc = ObjTokeidai_SmallClockIdle;
             break;
         case OBJ_TOKEIDAI_TYPE_TOWER_TOP_TERMINA_FIELD:
             Actor_SetScale(&this->actor, 0.15f);
@@ -260,7 +263,7 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjTokeidai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_80AB3010(ObjTokeidai* this, s32 playSound) {
+void ObjTokeidai_HandleMinute(ObjTokeidai* this, s32 playSound) {
     s32 currentMinute;
 
     currentMinute = OBJ_TOKEIDAI_GET_CURRENT_MINUTE(this);
@@ -280,7 +283,9 @@ void func_80AB3010(ObjTokeidai* this, s32 playSound) {
             }
         }
         this->outerRingOrGearRotationTimer++;
-        if ((currentMinute == 15 && this->outerRingOrGearRotation < 0) || (currentMinute != 15 && this->outerRingOrGearRotation > OBJ_TOKEIDAI_GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute))) {
+        if ((currentMinute == 15 && this->outerRingOrGearRotation < 0) ||
+            (currentMinute != 15 &&
+             this->outerRingOrGearRotation > OBJ_TOKEIDAI_GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute))) {
             this->outerRingOrGearRotation = OBJ_TOKEIDAI_GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute);
             this->clockMinute = currentMinute;
             this->outerRingOrGearAdditionalRotation = 0x5A;
@@ -431,7 +436,8 @@ void ObjTokeidai_TowerTransformationFinish(ObjTokeidai* this, GlobalContext* glo
         this->clockFaceZTranslation -= 0xA;
     } else {
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
-        if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) || (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
+        if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
+            (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
             ObjTokeidai_TowerTransformationEndCutscene(this, globalCtx);
         } else {
             this->actionFunc = ObjTokeidai_DoNothing;
@@ -443,21 +449,21 @@ void ObjTokeidai_TowerTransformationFinish(ObjTokeidai* this, GlobalContext* glo
 }
 
 void ObjTokeidai_TowerTransformationWait(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (this->unk_154 > 0) {
-        this->unk_154--;
+    if (this->transformationWaitTimer > 0) {
+        this->transformationWaitTimer--;
     } else {
         this->actionFunc = ObjTokeidai_TowerTransformationFinish;
-        this->unk_154 = 0;
+        this->transformationWaitTimer = 0;
     }
 }
 
 void ObjTokeidai_TowerTopFall(ObjTokeidai* this, GlobalContext* globalCtx) {
-    this->xRotation += this->unk_154;
+    this->xRotation += this->transformationRotationalVelocity;
     if (this->xRotation < 0x4000) {
-        this->unk_154 += this->unk_156;
+        this->transformationRotationalVelocity += this->transformationRotationalAcceleration;
         return;
     }
-    this->unk_156 = 0x14;
+    this->transformationRotationalAcceleration = 0x14;
     this->xRotation = 0x4000;
     switch (this->reboundCount) {
         case 0:
@@ -471,13 +477,13 @@ void ObjTokeidai_TowerTopFall(ObjTokeidai* this, GlobalContext* globalCtx) {
             break;
     }
     this->reboundCount += 1;
-    if (this->unk_154 >= 0x191) {
-        this->unk_154 = -0xC8;
-    } else if (this->unk_154 >= 0x33) {
-        this->unk_154 = -(this->unk_154 >> 1);
+    if (this->transformationRotationalVelocity >= 0x191) {
+        this->transformationRotationalVelocity = -0xC8;
+    } else if (this->transformationRotationalVelocity >= 0x33) {
+        this->transformationRotationalVelocity = -(this->transformationRotationalVelocity >> 1);
     } else {
         this->actionFunc = ObjTokeidai_TowerTransformationWait;
-        this->unk_154 = 0xA;
+        this->transformationWaitTimer = 0xA;
     }
 }
 
@@ -496,13 +502,14 @@ void ObjTokeidai_TowerRaiseFinished(ObjTokeidai* this, GlobalContext* globalCtx)
         this->settleTimer--;
     } else {
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
-        if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) || (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
+        if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
+            (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_FALL);
         }
         this->yTranslation = 3400;
         this->actionFunc = ObjTokeidai_TowerTopFall;
-        this->unk_154 = 0;
-        this->unk_156 = 0xA;
+        this->transformationRotationalVelocity = 0;
+        this->transformationRotationalAcceleration = 0xA;
         this->reboundCount = 0;
     }
 }
@@ -513,12 +520,14 @@ void ObjTokeidai_RaiseTower(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (this->yTranslation < 3400) {
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
         this->yTranslation += 0x19;
-        if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) || (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
+        if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
+            (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
             func_800B9010(&this->actor, NA_SE_EV_CLOCK_TOWER_UP - SFX_FLAG);
         }
     } else {
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
-        if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) || (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
+        if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
+            (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_STOP);
         }
         this->yTranslation = 3400;
@@ -538,8 +547,8 @@ void ObjTokeidai_TowerTransformationStart(ObjTokeidai* this, GlobalContext* glob
 
 void ObjTokeidai_SetupTowerTransformationStart(ObjTokeidai* this) {
     this->actionFunc = ObjTokeidai_TowerTransformationStart;
-    this->unk_154 = 0;
-    this->unk_156 = 0;
+    this->clockFaceAdditionalRotation = 0;
+    this->clockFaceRotationTimer = 0;
     this->yTranslation = 0;
     this->xRotation = 0;
     this->clockFaceZTranslation = 0;
@@ -557,7 +566,7 @@ void ObjTokeidai_StaircaseIntoTowerIdle(ObjTokeidai* this, GlobalContext* global
     }
 }
 
-s32 func_80AB3C50(ObjTokeidai* this, GlobalContext* globalCtx) {
+s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (gSaveContext.inventory.items[0] == 0xFF) {
         return false;
     }
@@ -568,7 +577,7 @@ s32 func_80AB3C50(ObjTokeidai* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_80AB3CCC(ObjTokeidai* this, GlobalContext* globalCtx) {
+void ObjTokeidai_HandleHour(ObjTokeidai* this, GlobalContext* globalCtx) {
     s32 currentHour;
 
     currentHour = OBJ_TOKEIDAI_GET_CURRENT_HOUR(this);
@@ -585,7 +594,8 @@ void func_80AB3CCC(ObjTokeidai* this, GlobalContext* globalCtx) {
             }
         }
         this->clockFaceRotationTimer++;
-        if ((currentHour == 12 && this->clockFaceRotation < 0) || (currentHour != 12 && this->clockFaceRotation > OBJ_TOKEIDAI_GET_CLOCK_FACE_ROTATION(currentHour))) {
+        if ((currentHour == 12 && this->clockFaceRotation < 0) ||
+            (currentHour != 12 && this->clockFaceRotation > OBJ_TOKEIDAI_GET_CLOCK_FACE_ROTATION(currentHour))) {
             this->clockFaceRotation = OBJ_TOKEIDAI_GET_CLOCK_FACE_ROTATION(currentHour);
             this->clockHour = currentHour;
             this->clockFaceAdditionalRotation = 0;
@@ -612,7 +622,7 @@ void func_80AB3CCC(ObjTokeidai* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AB3ED0(ObjTokeidai* this, GlobalContext* globalCtx) {
+void ObjTokeidai_TowerClockIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (gSaveContext.day % 5 == 3 && this->clockHour < 6 && gSaveContext.time < CLOCK_TIME(6, 0)) {
         this->actor.draw = ObjTokeidai_DrawClock;
         ObjTokeidai_SetupTowerTransformationStart(this);
@@ -636,19 +646,19 @@ void func_80AB3ED0(ObjTokeidai* this, GlobalContext* globalCtx) {
         }
     }
     if (gSaveContext.day % 5 != 3 || gSaveContext.time >= CLOCK_TIME(6, 0)) {
-        func_80AB3010(this, true);
+        ObjTokeidai_HandleMinute(this, true);
     }
-    func_80AB3CCC(this, globalCtx);
+    ObjTokeidai_HandleHour(this, globalCtx);
 }
 
-void func_80AB4040(ObjTokeidai* this, GlobalContext* globalCtx) {
+void ObjTokeidai_SmallClockIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
     this->currentTime = gSaveContext.time;
-    func_80AB3010(this, true);
-    func_80AB3CCC(this, globalCtx);
+    ObjTokeidai_HandleMinute(this, true);
+    ObjTokeidai_HandleHour(this, globalCtx);
 }
 
-void func_80AB4080(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (func_80AB3C50(this, globalCtx)) {
+void ObjTokeidai_TowerGearIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (ObjTokeidai_IsPostFirstCycleFinalHours(this, globalCtx)) {
         this->actor.draw = ObjTokeidai_DrawTowerGear;
     } else {
         if (globalCtx->csCtx.state != 0) {
@@ -667,14 +677,14 @@ void func_80AB4080(ObjTokeidai* this, GlobalContext* globalCtx) {
                 this->actor.home.rot.x = 0;
             }
         }
-        func_80AB3010(this, false);
+        ObjTokeidai_HandleMinute(this, false);
     }
 }
 
-void func_80AB4160(ObjTokeidai* this, GlobalContext* globalCtx) {
+void ObjTokeidai_TowerTopIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
     s32 type;
 
-    if (func_80AB3C50(this, globalCtx)) {
+    if (ObjTokeidai_IsPostFirstCycleFinalHours(this, globalCtx)) {
         this->lightIntensity = 0;
         if ((this->actor.child == NULL)) {
             type = OBJ_TOKEIDAI_TYPE(&this->actor);
@@ -692,7 +702,7 @@ void func_80AB4160(ObjTokeidai* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        this->actor.shape.rot.y += -0x40;
+        this->actor.shape.rot.y -= 0x40;
         if (gSaveContext.isNight != 0) {
             if (this->lightIntensity < 100) {
                 this->lightIntensity += +4;
