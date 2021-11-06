@@ -8,9 +8,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_cmpdma/func_801789D4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_cmpdma/get_framebuffer.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_cmpdma/SysCfb_GetFbPtr.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_cmpdma/get_zbuffer.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_cmpdma/SysCfb_GetZBuffer.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_cmpdma/func_80178A24.s")
 

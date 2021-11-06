@@ -1,3 +1,9 @@
+/*
+ * File: z_en_scopenuts.c
+ * Overlay: ovl_En_Scopenuts
+ * Description: Astral Observatory - Business Scrub in Telescope
+ */
+
 #include "z_en_scopenuts.h"
 
 #define FLAGS 0x00000039

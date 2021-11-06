@@ -217,7 +217,6 @@ beginseg
     include "build/src/libultra/os/settimer.o"
     include "build/data/boot/__libm_qnan_f.rodata.o"
     include "build/src/libultra/rmon/xldtob.o"
-    include "build/data/boot/xldtob.data.o"
     include "build/src/libultra/libc/ldiv.o"
     include "build/src/libultra/rmon/xlitob.o"
     include "build/src/libultra/io/sirawwrite.o"
@@ -468,11 +467,8 @@ beginseg
     include "build/src/code/z_collision_check.o"
     include "build/src/code/code_800E8EA0.o"
     include "build/src/code/z_common_data.o"
-    include "build/data/code/z_common_data.bss.o"
     include "build/src/code/z_debug.o"
     include "build/src/code/z_debug_display.o"
-    include "build/data/code/z_debug_display.data.o"
-    include "build/data/code/z_debug_display.bss.o"
     include "build/src/code/z_debug_mode.o"
     include "build/data/code/z_debug_mode.data.o"
     include "build/data/code/z_debug_mode.bss.o"
@@ -487,14 +483,13 @@ beginseg
     include "build/src/code/code_800F07C0.o"
     include "build/data/code/code_801BC2A0.data.o"
     include "build/src/code/z_face_reaction.o"
-    include "build/src/code/code_800F12D0.o"
+    include "build/src/code/z_env_flags.o"
     include "build/src/code/z_eventmgr.o"
     include "build/data/code/z_eventmgr.bss.o"
     include "build/src/code/z_fcurve_data.o"
     include "build/src/code/z_fcurve_data_skelanime.o"
     include "build/data/code/code_801BD830.data.o"
     include "build/src/code/z_fireobj.o"
-    include "build/data/code/z_fireobj.data.o"
     include "build/src/code/z_game_dlftbls.o"
     include "build/src/code/z_horse.o"
     include "build/data/code/z_horse.data.o"
@@ -610,11 +605,10 @@ beginseg
     include "build/data/code/game.bss.o"
     include "build/src/code/gamealloc.o"
     include "build/src/code/graph.o"
-    include "build/data/code/graph.data.o"
-    include "build/data/code/graph.bss.o"
-    include "build/src/code/code_80174A40.o"
+    include "build/src/code/graphalloc.o"
     include "build/src/code/listalloc.o"
     include "build/src/code/main.o"
+    include "build/data/code/main.data.o"
     include "build/data/code/main.bss.o"
     include "build/src/code/padmgr.o"
     include "build/data/code/padmgr.data.o"
@@ -635,6 +629,7 @@ beginseg
     include "build/data/code/sys_matrix.data.o"
     include "build/data/code/sys_matrix.bss.o"
     include "build/src/code/sys_ucode.o"
+    include "build/src/code/code_80182CE0.o"
     include "build/data/code/code_801D1E70.data.o"
     include "build/src/code/code_80183070.o"
     include "build/src/code/c_keyframe.o"
@@ -642,8 +637,7 @@ beginseg
     include "build/src/code/sys_flashrom.o"
     include "build/data/code/sys_flashrom.bss.o"
     include "build/asm/code/code_80185F90.text.o" // handwritten
-    include "build/src/code/osFlash.o"
-    include "build/data/code/osFlash.bss.o"
+    include "build/src/libultra/flash/osFlash.o"
     pad_text
     pad_text
     pad_text
@@ -880,8 +874,7 @@ beginseg
     name "ovl_En_Tite"
     compress
     include "build/src/overlays/actors/ovl_En_Tite/z_en_tite.o"
-    include "build/data/ovl_En_Tite/ovl_En_Tite.data.o"
-    include "build/data/ovl_En_Tite/ovl_En_Tite.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Tite/ovl_En_Tite_reloc.o"
 endseg
 
 beginseg
@@ -1160,16 +1153,14 @@ beginseg
     name "ovl_Demo_Kankyo"
     compress
     include "build/src/overlays/actors/ovl_Demo_Kankyo/z_demo_kankyo.o"
-    include "build/data/ovl_Demo_Kankyo/ovl_Demo_Kankyo.data.o"
-    include "build/data/ovl_Demo_Kankyo/ovl_Demo_Kankyo.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Kankyo/ovl_Demo_Kankyo_reloc.o"
 endseg
 
 beginseg
     name "ovl_En_Floormas"
     compress
     include "build/src/overlays/actors/ovl_En_Floormas/z_en_floormas.o"
-    include "build/data/ovl_En_Floormas/ovl_En_Floormas.data.o"
-    include "build/data/ovl_En_Floormas/ovl_En_Floormas.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Floormas/ovl_En_Floormas_reloc.o"
 endseg
 
 beginseg
@@ -1564,8 +1555,11 @@ beginseg
     name "ovl_En_Goroiwa"
     compress
     include "build/src/overlays/actors/ovl_En_Goroiwa/z_en_goroiwa.o"
-    include "build/data/ovl_En_Goroiwa/ovl_En_Goroiwa.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Goroiwa/ovl_En_Goroiwa_reloc.o"
+#else
     include "build/data/ovl_En_Goroiwa/ovl_En_Goroiwa.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -2193,8 +2187,7 @@ beginseg
     name "ovl_En_Wf"
     compress
     include "build/src/overlays/actors/ovl_En_Wf/z_en_wf.o"
-    include "build/data/ovl_En_Wf/ovl_En_Wf.data.o"
-    include "build/data/ovl_En_Wf/ovl_En_Wf.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Wf/ovl_En_Wf_reloc.o"
 endseg
 
 beginseg
@@ -2554,9 +2547,11 @@ beginseg
     name "ovl_Boss_02"
     compress
     include "build/src/overlays/actors/ovl_Boss_02/z_boss_02.o"
-    include "build/data/ovl_Boss_02/ovl_Boss_02.data.o"
-    include "build/data/ovl_Boss_02/ovl_Boss_02.bss.o"
-    include "build/data/ovl_Boss_02/ovl_Boss_02.reloc.o"
+    #ifdef NON_MATCHING
+        include "build/src/overlays/actors/ovl_Boss_02/ovl_Boss_02_reloc.o"
+    #else
+        include "build/data/ovl_Boss_02/ovl_Boss_02.reloc.o"
+    #endif
 endseg
 
 beginseg
@@ -2867,8 +2862,7 @@ beginseg
     name "ovl_En_Baguo"
     compress
     include "build/src/overlays/actors/ovl_En_Baguo/z_en_baguo.o"
-    include "build/data/ovl_En_Baguo/ovl_En_Baguo.data.o"
-    include "build/data/ovl_En_Baguo/ovl_En_Baguo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Baguo/ovl_En_Baguo_reloc.o"
 endseg
 
 beginseg
@@ -2908,11 +2902,7 @@ beginseg
     name "ovl_En_Test4"
     compress
     include "build/src/overlays/actors/ovl_En_Test4/z_en_test4.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Test4/ovl_En_Test4_reloc.o"
-#else
-    include "build/data/ovl_En_Test4/ovl_En_Test4.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -3136,8 +3126,7 @@ beginseg
     name "ovl_En_Mushi2"
     compress
     include "build/src/overlays/actors/ovl_En_Mushi2/z_en_mushi2.o"
-    include "build/data/ovl_En_Mushi2/ovl_En_Mushi2.data.o"
-    include "build/data/ovl_En_Mushi2/ovl_En_Mushi2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mushi2/ovl_En_Mushi2_reloc.o"
 endseg
 
 beginseg
@@ -3583,8 +3572,7 @@ beginseg
     name "ovl_En_Elforg"
     compress
     include "build/src/overlays/actors/ovl_En_Elforg/z_en_elforg.o"
-    include "build/data/ovl_En_Elforg/ovl_En_Elforg.data.o"
-    include "build/data/ovl_En_Elforg/ovl_En_Elforg.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Elforg/ovl_En_Elforg_reloc.o"
 endseg
 
 beginseg
@@ -3982,8 +3970,7 @@ beginseg
     name "ovl_En_Po_Sisters"
     compress
     include "build/src/overlays/actors/ovl_En_Po_Sisters/z_en_po_sisters.o"
-    include "build/data/ovl_En_Po_Sisters/ovl_En_Po_Sisters.data.o"
-    include "build/data/ovl_En_Po_Sisters/ovl_En_Po_Sisters.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Po_Sisters/ovl_En_Po_Sisters_reloc.o"
 endseg
 
 beginseg
@@ -4054,8 +4041,7 @@ beginseg
     name "ovl_En_Fish2"
     compress
     include "build/src/overlays/actors/ovl_En_Fish2/z_en_fish2.o"
-    include "build/data/ovl_En_Fish2/ovl_En_Fish2.data.o"
-    include "build/data/ovl_En_Fish2/ovl_En_Fish2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fish2/ovl_En_Fish2_reloc.o"
 endseg
 
 beginseg
@@ -4200,9 +4186,7 @@ beginseg
     name "ovl_En_Ot"
     compress
     include "build/src/overlays/actors/ovl_En_Ot/z_en_ot.o"
-    include "build/data/ovl_En_Ot/ovl_En_Ot.data.o"
-    include "build/data/ovl_En_Ot/ovl_En_Ot.bss.o"
-    include "build/data/ovl_En_Ot/ovl_En_Ot.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ot/ovl_En_Ot_reloc.o"
 endseg
 
 beginseg

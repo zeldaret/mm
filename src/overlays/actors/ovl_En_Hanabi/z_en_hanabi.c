@@ -1,3 +1,9 @@
+/*
+ * File: z_en_hanabi.c
+ * Overlay: ovl_En_Hanabi
+ * Description: Fireworks
+ */
+
 #include "z_en_hanabi.h"
 
 #define FLAGS 0x00000030
