@@ -125,16 +125,6 @@ typedef struct {
     /* 0x06 */ u8 status;
     /* 0x07 */ u8 align1;
 } __OSContRequestHeader; // size = 0x8
-// typedef struct {
-//     /* 0x0 */ u8 dummy;
-//     /* 0x1 */ u8 txsize;
-//     /* 0x2 */ u8 rxsize;
-//     /* 0x3 */ u8 cmd;
-//     /* 0x4 */ u8 typeh;
-//     /* 0x5 */ u8 typel;
-//     /* 0x6 */ u8 status;
-//     /* 0x7 */ u8 dummy1;
-// } __OSContRequesFormat;
 
 typedef struct {
     /* 0x00 */ u8 txsize;
