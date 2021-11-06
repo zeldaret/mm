@@ -5142,7 +5142,7 @@ beginseg
     name "ovl_En_Bomjima"
     compress
     include "build/src/overlays/actors/ovl_En_Bomjima/z_en_bomjima.o"
-#ifdef non_EQUIVALENT
+#ifdef NON_EQUIVALENT
     include "build/src/overlays/actors/ovl_En_Bomjima/ovl_En_Bomjima_reloc.o"
 #else
     include "build/data/ovl_En_Bomjima/ovl_En_Bomjima.reloc.o"
