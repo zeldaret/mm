@@ -382,7 +382,7 @@ void guRotateF(float mf[4][4], f32 a, f32 x, f32 y, f32 z);
 void guRotate(Mtx* m, f32 a, f32 x, f32 y, f32 z);
 void __osSetGlobalIntMask(u32 mask);
 // void osVoiceInit(void);
-// void __osContChannelReset(void);
+s32 __osContChannelReset(OSMesgQueue* mq, s32 count);
 // void __osVoiceSetADConverter(void);
 s32 osAiSetFrequency(u32 frequency);
 s32 __osContRamRead(OSMesgQueue* mq, s32 channel, u16 address, u8* buffer);
