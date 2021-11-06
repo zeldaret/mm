@@ -251,7 +251,7 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
             case PLAYER_MASK_DON_GERO:
             case PLAYER_MASK_KAMARO:
             case PLAYER_MASK_BREMEN:
-            case PLAYER_MASK_SCENT:
+            case PLAYER_MASK_SCENTS:
                 return 0x685;
             case PLAYER_MASK_GARO:
             case PLAYER_MASK_CIRCUS_LEADER:

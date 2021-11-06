@@ -771,7 +771,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
         player->transformation == PLAYER_FORM_DEKU) {
         this->textId = 0x850;
     }
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_SCENT) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_SCENTS) {
         this->textId = 0x890;
     }
     if (func_800B84D0(&this->actor, globalCtx)) {
@@ -810,7 +810,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
 
     this->flags &= ~ENTRT_FULLY_AWAKE;
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_FIERCE_DEITY) {
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_SCENT) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_SCENTS) {
             this->textId = 0x890;
         } else {
             this->textId = this->tmpTextId;

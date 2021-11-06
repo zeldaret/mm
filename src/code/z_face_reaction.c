@@ -20,7 +20,7 @@
  * - index 0x0F: PLAYER_MASK_STONE
  * - index 0x10: PLAYER_MASK_BREMEN
  * - index 0x11: PLAYER_MASK_BLAST
- * - index 0x12: PLAYER_MASK_SCENT
+ * - index 0x12: PLAYER_MASK_SCENTS
  */
 // clang-format off
 static u16 sReactionTextIds[][PLAYER_MASK_GIANT - 1] = {

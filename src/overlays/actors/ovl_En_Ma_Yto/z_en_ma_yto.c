@@ -989,7 +989,7 @@ void EnMaYto_PostMilkRunGiveReward(EnMaYto* this, GlobalContext* globalCtx) {
         func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_HUGE, 500.0f, 100.0f);
         this->unk310 = 2;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MASK_ROMANIS, 500.0f, 100.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_MASK_ROMANI, 500.0f, 100.0f);
         this->unk310 = 1;
     }
 }
