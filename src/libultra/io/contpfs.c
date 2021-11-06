@@ -41,8 +41,8 @@ s32 __osRepairPackId(OSPfs* pfs, __OSPackId* badid, __OSPackId* newid) {
     if (pfs->activebank != 0) {
         ret = __osPfsSelectBank(pfs, PFS_ID_BANK_256K);
         if (ret != 0) {
-                return ret;
-            }
+            return ret;
+        }
     }
 
     do {
@@ -150,7 +150,7 @@ s32 __osCheckPackId(OSPfs* pfs, __OSPackId* check) {
         if (ret != 0) {
             return ret;
         }
-    } 
+    }
 
     index[0] = PFS_ID_0AREA;
     index[1] = PFS_ID_1AREA;
@@ -298,7 +298,7 @@ s32 __osPfsRWInode(OSPfs* pfs, __OSInode* inode, u8 flag, u8 bank) {
         if (ret != 0) {
             return ret;
         }
-    } 
+    }
 
     offset = ((bank > 0) ? 1 : pfs->inodeStartPage);
 
