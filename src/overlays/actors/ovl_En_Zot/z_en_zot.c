@@ -1215,7 +1215,7 @@ void func_80B98F30(EnZot* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B990A4;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 2, 10000.0f, 50.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_BLUE, 10000.0f, 50.0f);
     }
 }
 

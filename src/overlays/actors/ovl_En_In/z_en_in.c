@@ -492,7 +492,7 @@ void func_808F3D40(EnIn* this, GlobalContext* globalCtx) {
         this->actor.textId = textId;
         this->actor.flags |= 0x10000;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_MASK_GARO, 500.0f, 100.0f);
     }
 }
 
@@ -962,7 +962,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x347C:
                     this->actionFunc = func_808F3D40;
-                    func_800B8A1C(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
+                    func_800B8A1C(&this->actor, globalCtx, GI_MASK_GARO, 500.0f, 100.0f);
                     func_808F35D8(this, globalCtx);
                     ret = true;
                     break;
@@ -1127,7 +1127,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x349F:
                     this->actionFunc = func_808F3D40;
-                    func_800B8A1C(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
+                    func_800B8A1C(&this->actor, globalCtx, GI_MASK_GARO, 500.0f, 100.0f);
                     func_808F35D8(this, globalCtx);
                     ret = true;
                     break;

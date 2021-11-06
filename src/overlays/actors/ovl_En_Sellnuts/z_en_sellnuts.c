@@ -492,7 +492,7 @@ void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
         gSaveContext.weekEventReg[17] |= 0x80;
         this->actionFunc = func_80ADBCE4;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x97, 300.0f, 300.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_DEED_LAND, 300.0f, 300.0f);
     }
 }
 

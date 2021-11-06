@@ -629,9 +629,9 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                 case 0x802:
                     if (func_80147624(globalCtx)) {
                         if (gSaveContext.inventory.items[D_801C20C0] == ITEM_MASK_SCENT) {
-                            this->unk_458 = 4;
+                            this->unk_458 = GI_RUPEE_RED;
                         } else {
-                            this->unk_458 = 142;
+                            this->unk_458 = GI_MASK_SCENT;
                         }
                         func_800B8A1C(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
                         func_801477B4(globalCtx);
