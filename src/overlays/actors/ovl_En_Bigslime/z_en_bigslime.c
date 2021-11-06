@@ -3027,19 +3027,19 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
     EnBigslime_DrawGekko(&this->actor, globalCtx);
 }
 
-/* index -1: Limb Not used
- * index 0:  GEKKO_LIMB_WAIST
- * index 1:  GEKKO_LIMB_L_SHIN
- * index 2:  GEKKO_LIMB_L_FOOT
- * index 3:  GEKKO_LIMB_R_SHIN
- * index 4:  GEKKO_LIMB_R_FOOT
- * index 5:  GEKKO_LIMB_L_UPPER_ARM
- * index 6:  GEKKO_LIMB_L_FOREARM
- * index 7:  GEKKO_LIMB_L_HAND
- * index 8:  GEKKO_LIMB_R_UPPER_ARM
- * index 9:  GEKKO_LIMB_R_FOREARM
- * index 10: GEKKO_LIMB_R_HAND
- * index 11: GEKKO_LIMB_JAW
+/* value -1: Limb Not used
+ * value 0:  GEKKO_LIMB_WAIST
+ * value 1:  GEKKO_LIMB_L_SHIN
+ * value 2:  GEKKO_LIMB_L_FOOT
+ * value 3:  GEKKO_LIMB_R_SHIN
+ * value 4:  GEKKO_LIMB_R_FOOT
+ * value 5:  GEKKO_LIMB_L_UPPER_ARM
+ * value 6:  GEKKO_LIMB_L_FOREARM
+ * value 7:  GEKKO_LIMB_L_HAND
+ * value 8:  GEKKO_LIMB_R_UPPER_ARM
+ * value 9:  GEKKO_LIMB_R_FOREARM
+ * value 10: GEKKO_LIMB_R_HAND
+ * value 11: GEKKO_LIMB_JAW
  */
 static s8 limbPosIndex[] = {
     -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
