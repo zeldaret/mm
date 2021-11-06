@@ -21,7 +21,7 @@ s32 osPfsDeleteFile(OSPfs* pfs, u16 companyCode, u32 gameCode, u8* gameName, u8*
         return ret;
     }
     if (pfs->activebank != 0) {
-        ret = __osPfsSelectBank(pfs, 0);
+        ret = __osPfsSelectBank(pfs, PFS_ID_BANK_256K);
         if (ret != 0) {
             return ret;
         }
