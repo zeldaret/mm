@@ -1,7 +1,7 @@
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
-#include "stdint.h"
+#include "libc/stdint.h"
 #include "convert.h"
 #include "z64.h"
 

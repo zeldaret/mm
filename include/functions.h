@@ -3,13 +3,6 @@
 
 #include "z64.h"
 
-float fabsf(float f);
-#pragma intrinsic(fabsf)
-float sqrtf(float f);
-#pragma intrinsic(sqrtf)
-double sqrt(double d);
-#pragma intrinsic(sqrt)
-
 void bootproc(void);
 void Idle_ThreadEntry(void* arg);
 void ViConfig_UpdateVi(u32 arg0);
@@ -283,9 +276,7 @@ void __osDequeueThread(OSThread** param_1, OSThread* param_2);
 void osDestroyThread(OSThread* puParm1);
 // void __osVoiceCheckResult(void);
 void bzero(void* begin, s32 length);
-s32 osSetRumble(OSPfs* pfs, u32 vibrate);
-// void osSetUpMempakWrite(void);
-// void osProbeRumblePak(void);
+
 void __osSiCreateAccessQueue(void);
 void __osSiGetAccess(void);
 void __osSiRelAccess(void);

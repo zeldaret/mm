@@ -1,16 +1,17 @@
 #ifndef _Z64_H_
 #define _Z64_H_
 
-#include "stdarg.h"
-#include "stdbool.h"
-#include "stdint.h"
+#include "libc/math.h"
+#include "libc/stdarg.h"
+#include "libc/stdbool.h"
+#include "libc/stddef.h"
+#include "libc/stdint.h"
+#include "libc/stdlib.h"
 
 #include "ultra64.h"
 #include "io/controller.h"
 #include "osint.h"
-#include "math.h"
 #include "os.h"
-#include "stdlib.h"
 #include "xstdio.h"
 
 #include "bgm.h"

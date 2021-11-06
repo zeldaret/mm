@@ -1,6 +1,7 @@
 #ifndef _XSTDIO_H_
 #define _XSTDIO_H_
-#include "stdarg.h"
+
+#include "libc/stdarg.h"
 
 typedef struct {
     /* 0x0 */ union {
