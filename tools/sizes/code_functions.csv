@@ -1361,7 +1361,7 @@ asm/non_matchings/code/z_lib/Math_ApproachS.s,Math_ApproachS,0x800FFFD8,0x29
 asm/non_matchings/code/z_lib/Color_RGBA8_Copy.s,Color_RGBA8_Copy,0x8010007C,0xA
 asm/non_matchings/code/z_lib/func_801000A4.s,func_801000A4,0x801000A4,0xA
 asm/non_matchings/code/z_lib/func_801000CC.s,func_801000CC,0x801000CC,0xA
-asm/non_matchings/code/z_lib/func_801000F4.s,func_801000F4,0x801000F4,0xA
+asm/non_matchings/code/z_lib/Lib_PlaySfxByPos.s,Lib_PlaySfxByPos,0x801000F4,0xA
 asm/non_matchings/code/z_lib/Lib_Vec3f_TranslateAndRotateY.s,Lib_Vec3f_TranslateAndRotateY,0x8010011C,0x27
 asm/non_matchings/code/z_lib/Lib_LerpRGB.s,Lib_LerpRGB,0x801001B8,0xA4
 asm/non_matchings/code/z_lib/Math_Vec3f_StepTo.s,Math_Vec3f_StepTo,0x80100448,0x2D

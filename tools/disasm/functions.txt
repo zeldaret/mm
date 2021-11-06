@@ -1847,7 +1847,7 @@
     0x8010007C:("Color_RGBA8_Copy",),
     0x801000A4:("func_801000A4",),
     0x801000CC:("func_801000CC",),
-    0x801000F4:("func_801000F4",),
+    0x801000F4:("Lib_PlaySfxByPos",),
     0x8010011C:("Lib_Vec3f_TranslateAndRotateY",),
     0x801001B8:("Lib_LerpRGB",),
     0x80100448:("Math_Vec3f_StepTo",),
