@@ -116,7 +116,7 @@ s32 osMotorInit(OSMesgQueue* ctrlrqueue, OSPfs* pfs, s32 channel) {
     if (sp24[BLOCKSIZE - 1] != MOTOR_ID) {
         return 0xB;
     }
-    if ((pfs->status & PFS_MOTOR_INITIALIZED) == 0) {
+    if (!(pfs->status & PFS_MOTOR_INITIALIZED)) {
         _MakeMotorData(channel, &osPifBuffers[channel]);
     }
     pfs->status = PFS_MOTOR_INITIALIZED;
