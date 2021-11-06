@@ -371,7 +371,7 @@ s32 func_8093F34C(EnGoroiwa* this) {
     f32 z;
 
     Math_StepToF(&this->actor.speedXZ, D_80942DFC[this->unk_1E4], 0.3f);
-    Actor_SetVelocityYRotationAndGravity(&this->actor);
+    Actor_UpdateVelocityWithGravity(&this->actor);
     temp_v0 = &this->unk_1D0[this->unk_1D8];
     this->actor.velocity.y *= 0.97f;
     x = temp_v0->x;
@@ -1000,7 +1000,7 @@ void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    ActorShape_Init(&this->actor.shape, 595.0f, func_800B3FC0, 9.4f);
+    ActorShape_Init(&this->actor.shape, 595.0f, ActorShadow_DrawCircle, 9.4f);
     this->actor.shape.shadowAlpha = 200;
     func_8093EB58(this, globalCtx);
 
@@ -1179,7 +1179,7 @@ void func_80941A10(EnGoroiwa* this, GlobalContext* globalCtx) {
                 }
             }
 
-            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
+            func_800B8D50(&globalCtx->state, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
 
             if (sp34 == 2) {
                 func_80941EB4(this);
@@ -1189,7 +1189,7 @@ void func_80941A10(EnGoroiwa* this, GlobalContext* globalCtx) {
                 func_80941DB4(this);
             }
 
-            func_800B8E58(&player->actor, NA_SE_PL_BODY_HIT);
+            func_800B8E58(player, NA_SE_PL_BODY_HIT);
 
             if ((sp34 == 1) || (sp34 == 2)) {
                 this->unk_1CC = 50;
@@ -1238,7 +1238,7 @@ void func_80941DB4(EnGoroiwa* this) {
     this->actionFunc = func_80941E28;
     func_8093EAB0(this, 6);
     this->actor.gravity = -0.86f;
-    this->actor.minVelocityY = -15.0f;
+    this->actor.terminalVelocity = -15.0f;
     this->actor.speedXZ *= 0.15f;
     this->actor.velocity.y = 5.0f;
     this->unk_1C4 = 1.0f;
@@ -1286,8 +1286,8 @@ void func_80941FA4(EnGoroiwa* this, GlobalContext* globalCtx) {
 
     if (func_8094156C(this, globalCtx) == 0) {
         if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
-            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
-            func_800B8E58(&player->actor, NA_SE_PL_BODY_HIT);
+            func_800B8D50(&globalCtx->state, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
+            func_800B8E58(player, NA_SE_PL_BODY_HIT);
             if (((this->actor.home.rot.z & 3) == 1) || ((this->actor.home.rot.z & 3) == 2)) {
                 this->unk_1CC = 50;
             }
@@ -1314,8 +1314,8 @@ void func_809420F0(EnGoroiwa* this, GlobalContext* globalCtx) {
 
     if (func_8094156C(this, globalCtx) == 0) {
         if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
-            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
-            func_800B8E58(&player->actor, NA_SE_PL_BODY_HIT);
+            func_800B8D50(&globalCtx->state, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
+            func_800B8E58(player, NA_SE_PL_BODY_HIT);
             if (((this->actor.home.rot.z & 3) == 1) || ((this->actor.home.rot.z & 3) == 2)) {
                 this->unk_1CC = 50;
             }
@@ -1591,7 +1591,7 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
 
             Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
-            func_800BDFC0(globalCtx, phi_fp);
+            Gfx_DrawDListOpa(globalCtx, phi_fp);
 
             if ((ptr->unk_28 != 0) && (ptr->unk_2C > 0)) {
                 OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1628,6 +1628,6 @@ void EnGoroiwa_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actionFunc == func_8094220C) {
         func_80942B1C(this, globalCtx);
     } else if (this->actionFunc != func_80942604) {
-        func_800BDFC0(globalCtx, D_80942EB4[params]);
+        Gfx_DrawDListOpa(globalCtx, D_80942EB4[params]);
     }
 }

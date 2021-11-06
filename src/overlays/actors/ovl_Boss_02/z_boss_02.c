@@ -742,8 +742,8 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = this->unk_01A8 * D_809DF5B0;
         }
 
-        Actor_SetVelocityXYRotation(&this->actor);
-        Actor_ApplyMovement(&this->actor);
+        Actor_UpdateVelocityWithoutGravity(&this->actor);
+        Actor_UpdatePos(&this->actor);
 
         spD0 = this->actor.world.pos;
         if (D_809E0422 != 0) {
@@ -989,7 +989,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                     this->unk_0144 = 22;
                     this->actor.gravity = -1.0f * D_809DF5B0;
                     this->actor.velocity.y = 0.0f;
-                    this->actor.minVelocityY = -1000.0f * D_809DF5B0;
+                    this->actor.terminalVelocity = -1000.0f * D_809DF5B0;
                     this->unk_0164 = randPlusMinusPoint5Scaled(0.05f);
 
                     spC4 = player->actor.world.pos.x - this->actor.world.pos.x;
@@ -1019,7 +1019,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&this->unk_01BC[i], &this->actor.world.pos);
             this->unk_0B1C[i].y += this->unk_0164;
             Math_ApproachF(&this->unk_0B1C[i].x, -(M_PI / 2), 0.1f, 0.07f);
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 150.0f, 100.0f, 4);
 
             if (this->actor.bgCheckFlags & 1) {
@@ -2007,7 +2007,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
                 temp_a0_5->velocity.z *= phi_f0_2;
 
                 temp_a0_5->gravity *= phi_f0_2;
-                temp_a0_5->minVelocityY *= phi_f0_2;
+                temp_a0_5->terminalVelocity *= phi_f0_2;
 
                 temp_a0_5->scale.x *= phi_f0_2;
                 temp_a0_5->scale.y *= phi_f0_2;
@@ -2114,11 +2114,11 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             player->actor.shape.rot.y = -0x8000;
             player->actor.world.rot.y = player->actor.shape.rot.y;
             this->unk_1D24.x = player->actor.world.pos.x - 20.0f;
-            this->unk_1D24.y = (func_800B6FC8(player) + player->actor.world.pos.y) - 29.0f;
+            this->unk_1D24.y = (Player_GetHeight(player) + player->actor.world.pos.y) - 29.0f;
             this->unk_1D24.z = player->actor.world.pos.z - 50;
 
             this->unk_1D30.x = player->actor.world.pos.x;
-            this->unk_1D30.y = (func_800B6FC8(player) + player->actor.world.pos.y) - 17.0f;
+            this->unk_1D30.y = (Player_GetHeight(player) + player->actor.world.pos.y) - 17.0f;
             this->unk_1D30.z = player->actor.world.pos.z;
             if (this->unk_1D1C >= 30) {
                 if (this->unk_1D1C == 30) {
@@ -2182,7 +2182,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_1D1C == (u32)(KREG(92) + 125)) {
-                Actor_TitleCardCreate(globalCtx, &globalCtx->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&D_06008650),
+                TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&D_06008650),
                                       160, 180, 128, 40);
             }
 
