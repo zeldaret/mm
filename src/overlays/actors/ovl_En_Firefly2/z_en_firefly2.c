@@ -1,3 +1,9 @@
+/*
+ * File: z_en_firefly2.c
+ * Overlay: ovl_En_Firefly2
+ * Description: [Empty]
+ */
+
 #include "z_en_firefly2.h"
 
 #define FLAGS 0x00005015

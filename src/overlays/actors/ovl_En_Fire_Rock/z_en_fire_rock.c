@@ -1,3 +1,9 @@
+/*
+ * File: z_en_fire_rock.c
+ * Overlay: ovl_En_Fire_Rock
+ * Description: [Empty]
+ */
+
 #include "z_en_fire_rock.h"
 
 #define FLAGS 0x00000030

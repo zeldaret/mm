@@ -1,3 +1,9 @@
+/*
+ * File z_en_and.c
+ * Overlay: ovl_En_And
+ * Description: Anju in Wedding Dress
+ */
+
 #include "z_en_and.h"
 
 #define FLAGS 0x00000039
