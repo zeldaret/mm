@@ -74,8 +74,7 @@ beginseg
     include "build/src/libultra/os/destroythread.o"
     include "build/src/libultra/voice/voicecheckresult.o"
     include "build/asm/boot/bzero.text.o"
-    include "build/src/libultra/io/rumblepak.o"
-    include "build/data/boot/rumblepak.bss.o"
+    include "build/src/libultra/io/motor.o"
     include "build/src/libultra/io/siacs.o"
     include "build/src/libultra/io/controller.o"
     include "build/src/libultra/os/createthread.o"
@@ -3983,8 +3982,7 @@ beginseg
     name "ovl_En_Hakurock"
     compress
     include "build/src/overlays/actors/ovl_En_Hakurock/z_en_hakurock.o"
-    include "build/data/ovl_En_Hakurock/ovl_En_Hakurock.data.o"
-    include "build/data/ovl_En_Hakurock/ovl_En_Hakurock.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hakurock/ovl_En_Hakurock_reloc.o"
 endseg
 
 beginseg
