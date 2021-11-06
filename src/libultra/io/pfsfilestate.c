@@ -12,6 +12,7 @@ s32 osPfsFileState(OSPfs* pfs, s32 fileNo, OSPfsState* state) {
     if (fileNo >= pfs->dir_size || fileNo < 0) {
         return PFS_ERR_INVALID;
     }
+
     if (!(pfs->status & PFS_INITIALIZED)) {
         return PFS_ERR_INVALID;
     }
@@ -32,7 +33,7 @@ s32 osPfsFileState(OSPfs* pfs, s32 fileNo, OSPfsState* state) {
     if (ret != 0) {
         return ret;
     }
-    
+
     if (dir.company_code == 0 || dir.game_code == 0) {
         return PFS_ERR_INVALID;
     }
