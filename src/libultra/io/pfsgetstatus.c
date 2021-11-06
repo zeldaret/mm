@@ -30,7 +30,7 @@ s32 __osPfsGetStatus(OSMesgQueue* queue, s32 channel) {
 }
 
 void __osPfsRequestOneChannel(s32 channel, u8 poll) {
-    u8* bufptr;
+    uintptr_t bufptr;
     __OSContRequestHeaderAligned req;
     s32 idx;
 
@@ -56,7 +56,7 @@ void __osPfsRequestOneChannel(s32 channel, u8 poll) {
 }
 
 void __osPfsGetOneChannelData(s32 channel, OSContStatus* contData) {
-    u8* bufptr = (u8*)&__osPfsPifRam;
+    uintptr_t bufptr = (u8*)&__osPfsPifRam;
     __OSContRequestHeaderAligned req;
     s32 idx;
 
