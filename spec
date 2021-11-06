@@ -217,7 +217,6 @@ beginseg
     include "build/src/libultra/os/settimer.o"
     include "build/data/boot/__libm_qnan_f.rodata.o"
     include "build/src/libultra/rmon/xldtob.o"
-    include "build/data/boot/xldtob.data.o"
     include "build/src/libultra/libc/ldiv.o"
     include "build/src/libultra/rmon/xlitob.o"
     include "build/src/libultra/io/sirawwrite.o"
@@ -483,7 +482,7 @@ beginseg
     include "build/src/code/code_800F07C0.o"
     include "build/data/code/code_801BC2A0.data.o"
     include "build/src/code/z_face_reaction.o"
-    include "build/src/code/code_800F12D0.o"
+    include "build/src/code/z_env_flags.o"
     include "build/src/code/z_eventmgr.o"
     include "build/data/code/z_eventmgr.bss.o"
     include "build/src/code/z_fcurve_data.o"
@@ -1160,8 +1159,7 @@ beginseg
     name "ovl_En_Floormas"
     compress
     include "build/src/overlays/actors/ovl_En_Floormas/z_en_floormas.o"
-    include "build/data/ovl_En_Floormas/ovl_En_Floormas.data.o"
-    include "build/data/ovl_En_Floormas/ovl_En_Floormas.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Floormas/ovl_En_Floormas_reloc.o"
 endseg
 
 beginseg
@@ -1556,8 +1554,11 @@ beginseg
     name "ovl_En_Goroiwa"
     compress
     include "build/src/overlays/actors/ovl_En_Goroiwa/z_en_goroiwa.o"
-    include "build/data/ovl_En_Goroiwa/ovl_En_Goroiwa.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Goroiwa/ovl_En_Goroiwa_reloc.o"
+#else
     include "build/data/ovl_En_Goroiwa/ovl_En_Goroiwa.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -2545,9 +2546,11 @@ beginseg
     name "ovl_Boss_02"
     compress
     include "build/src/overlays/actors/ovl_Boss_02/z_boss_02.o"
-    include "build/data/ovl_Boss_02/ovl_Boss_02.data.o"
-    include "build/data/ovl_Boss_02/ovl_Boss_02.bss.o"
-    include "build/data/ovl_Boss_02/ovl_Boss_02.reloc.o"
+    #ifdef NON_MATCHING
+        include "build/src/overlays/actors/ovl_Boss_02/ovl_Boss_02_reloc.o"
+    #else
+        include "build/data/ovl_Boss_02/ovl_Boss_02.reloc.o"
+    #endif
 endseg
 
 beginseg
@@ -2858,8 +2861,7 @@ beginseg
     name "ovl_En_Baguo"
     compress
     include "build/src/overlays/actors/ovl_En_Baguo/z_en_baguo.o"
-    include "build/data/ovl_En_Baguo/ovl_En_Baguo.data.o"
-    include "build/data/ovl_En_Baguo/ovl_En_Baguo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Baguo/ovl_En_Baguo_reloc.o"
 endseg
 
 beginseg

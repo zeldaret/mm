@@ -1,7 +1,7 @@
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
-#include "stdint.h"
+#include "libc/stdint.h"
 #include "convert.h"
 #include "z64.h"
 
@@ -143,5 +143,11 @@ extern GraphicsContext* __gfxCtx;
     { SQ(range), (f32)range / leash }
 
 #define OVERLAY_RELOCATION_OFFSET(overlayEntry) (intptr_t)((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
+
+#ifdef __GNUC__
+#define ALIGNED8 __attribute__ ((aligned (8)))
+#else
+#define ALIGNED8
+#endif
 
 #endif // _MACROS_H_
