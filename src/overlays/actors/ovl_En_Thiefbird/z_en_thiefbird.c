@@ -573,9 +573,9 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, rot, 4, 0x1000, 0x100);
     }
 
-    if ((this->unk_18E == 0) || (player->stateFlags1 & 0x800000) ||
-        (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (this->collider.base.atFlags & AT_HIT) ||
-        (this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > -40.0f)) {
+    if ((this->unk_18E == 0) || (player->stateFlags1 & 0x800000) || (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) ||
+        (this->collider.base.atFlags & AT_HIT) || (this->actor.bgCheckFlags & 1) ||
+        (this->actor.depthInWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);

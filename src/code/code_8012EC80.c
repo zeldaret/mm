@@ -242,7 +242,7 @@ u8 gItemSlots[] = {
     SLOT_MASK_STONE,         // ITEM_MASK_STONE
     SLOT_MASK_BREMEN,        // ITEM_MASK_BREMEN
     SLOT_MASK_BLAST,         // ITEM_MASK_BLAST
-    SLOT_MASK_SCENTS,         // ITEM_MASK_SCENTS
+    SLOT_MASK_SCENTS,        // ITEM_MASK_SCENTS
     SLOT_MASK_GIANT,         // ITEM_MASK_GIANT
     SLOT_BOW,                // ITEM_BOW_ARROW_FIRE
     SLOT_BOW,                // ITEM_BOW_ARROW_ICE
