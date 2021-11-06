@@ -10,7 +10,7 @@ s32 osPfsFreeBlocks(OSPfs* pfs, s32* leftoverBytes) {
     s32 offset;
 
     if (!(pfs->status & PFS_INITIALIZED)) {
-        return (PFS_ERR_INVALID);
+        return PFS_ERR_INVALID;
     }
 
     ret = __osCheckId(pfs);
