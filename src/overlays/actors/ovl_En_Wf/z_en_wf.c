@@ -1201,7 +1201,8 @@ void func_80992E0C(EnWf* this, GlobalContext* globalCtx) {
         Vec3f sp60;
 
         if (this->unk_2A0 == 25) {
-            SoundSource_PlaySfxEachFrameFollowingPos(globalCtx, &this->actor.world.pos, 36, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            SoundSource_PlaySfxEachFrameFollowingPos(globalCtx, &this->actor.world.pos, 36,
+                                                     NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         }
 
         this->unk_2A0--;
