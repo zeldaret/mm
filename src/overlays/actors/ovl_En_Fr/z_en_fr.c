@@ -1,3 +1,9 @@
+/*
+ * File: z_en_fr.c
+ * Overlay: ovl_En_Fr
+ * Description:
+ */
+
 #include "z_en_fr.h"
 
 #define FLAGS 0x40000000

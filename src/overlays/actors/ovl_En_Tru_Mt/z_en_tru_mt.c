@@ -1,3 +1,9 @@
+/*
+ * File: z_en_tru_mt.c
+ * Overlay: ovl_En_Tru_Mt
+ * Description: Koume's Target Game - Koume on Broom
+ */
+
 #include "z_en_tru_mt.h"
 
 #define FLAGS 0x00000039

@@ -1,3 +1,9 @@
+/*
+ * File z_eff_kamejima_wave.c
+ * Overlay: ovl_Eff_Kamejima_Wave
+ * Description: Wave Created by Turtle Awakening
+ */
+
 #include "z_eff_kamejima_wave.h"
 
 #define FLAGS 0x00000010

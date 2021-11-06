@@ -1,3 +1,9 @@
+/*
+ * File: z_en_famos.c
+ * Overlay: ovl_En_Famos
+ * Description: Death Armos
+ */
+
 #include "z_en_famos.h"
 
 #define FLAGS 0x00000005
