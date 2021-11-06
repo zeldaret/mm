@@ -72,14 +72,14 @@ extern Gfx D_06011178[];
 void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHakurock* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 52.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 52.0f);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     if (this->actor.params == EN_HAKUROCK_TYPE_BOULDER) {
         this->actor.gravity = -1.5f;
     } else {
         this->collider.base.ocFlags1 &= ~OC1_NO_PUSH;
-        this->actor.minVelocityY = -100.0f;
+        this->actor.terminalVelocity = -100.0f;
         this->actor.gravity = -7.0f;
     }
     func_80B21FFC(this);
@@ -322,7 +322,7 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     rockParams = this->actor.params;
     if ((rockParams == EN_HAKUROCK_TYPE_BOULDER) || (rockParams == EN_HAKUROCK_TYPE_UNK_2)) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85);
         if (this->actor.floorHeight == BGCHECK_Y_MIN) {
             func_80B21FFC(this);
