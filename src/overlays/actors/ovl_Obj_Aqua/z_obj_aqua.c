@@ -185,7 +185,7 @@ void func_80ACBC8C(ObjAqua* this, GlobalContext* globalCtx) {
             func_80ACBD34(this);
         } else {
             func_80ACB6A0(this, globalCtx);
-            SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EV_BOMB_DROP_WATER);
+            SoundSource_PlaySfxFollowingPos(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EV_BOMB_DROP_WATER);
             Actor_MarkForDeath(&this->actor);
         }
     } else if (this->counter <= 0) {

@@ -117,7 +117,7 @@ void EnElfbub_Pop(EnElfbub* this, GlobalContext* globalCtx) {
                                               Rand_S16Offset(100, 50), 25, 0);
         }
 
-        SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);
+        SoundSource_PlaySfxFollowingPos(globalCtx, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);
         Actor_MarkForDeath(&this->actor);
     }
 }

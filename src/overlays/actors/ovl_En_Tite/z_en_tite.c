@@ -644,7 +644,7 @@ void func_80895020(EnTite* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.colorFilterTimer = 0;
-    SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_TEKU_DEAD);
+    SoundSource_PlaySfxFollowingPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_TEKU_DEAD);
     this->actor.flags &= ~1;
     this->actor.flags |= 0x10;
     this->unk_2BA = 1;
@@ -678,7 +678,7 @@ void func_808951B8(EnTite* this, GlobalContext* globalCtx) {
     if (this->unk_2BC == 0) {
         for (i = 0; i < ARRAY_COUNT(this->unk_2D0); i++) {
             func_800B3030(globalCtx, &this->unk_2D0[i], &D_801D15B0, &D_801D15B0, 40, 7, 1);
-            SoundSource_PlaySfxByPos(globalCtx, &this->unk_2D0[i], 11, NA_SE_EN_EXTINCT);
+            SoundSource_PlaySfxFollowingPos(globalCtx, &this->unk_2D0[i], 11, NA_SE_EN_EXTINCT);
         }
         Actor_MarkForDeath(&this->actor);
     } else {

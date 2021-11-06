@@ -911,7 +911,7 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
             Vec3f sp6C;
             s32 i;
 
-            SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
+            SoundSource_PlaySfxFollowingPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
 
             for (i = 0; i < 10; i++) {
                 Math_Vec3f_Copy(&sp6C, &this->actor.world.pos);

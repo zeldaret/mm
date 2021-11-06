@@ -19,7 +19,7 @@ void SoundSource_UpdateAll(GlobalContext* globalCtx) {
                 Audio_StopSfxByPos(&source->relativePos);
             } else {
                 SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &source->originPos, &source->relativePos);
-                if (source->isSoundReplayed) {
+                if (source->isSfxPlayedEachFrame) {
                     Audio_PlaySfxByPos(&source->relativePos, source->sfxId);
                 }
             }
@@ -29,7 +29,7 @@ void SoundSource_UpdateAll(GlobalContext* globalCtx) {
     }
 }
 
-void SoundSource_Add(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfxId, u32 isSoundReplayed) {
+void SoundSource_Add(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfxId, u32 isSfxPlayedEachFrame) {
     s32 countdown;
     SoundSource* source;
     s32 smallestCountdown = 0xFFFF;
@@ -57,17 +57,17 @@ void SoundSource_Add(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfx
 
     source->originPos = *pos;
     source->countdown = duration;
-    source->isSoundReplayed = isSoundReplayed;
+    source->isSfxPlayedEachFrame = isSfxPlayedEachFrame;
     source->sfxId = sfxId;
 
     SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &source->originPos, &source->relativePos);
     Audio_PlaySfxByPos(&source->relativePos, sfxId);
 }
 
-void SoundSource_PlaySfxByPos(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfxId) {
+void SoundSource_PlaySfxFollowingPos(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfxId) {
     SoundSource_Add(globalCtx, pos, duration, sfxId, false);
 }
 
-void SoundSource_PlaySfxByPosWithReplays(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfxId) {
+void SoundSource_PlaySfxEachFrameFollowingPos(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfxId) {
     SoundSource_Add(globalCtx, pos, duration, sfxId, true);
 }

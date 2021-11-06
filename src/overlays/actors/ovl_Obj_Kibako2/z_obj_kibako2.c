@@ -212,7 +212,7 @@ s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
 void ObjKibako2_Idle(ObjKibako2* this, GlobalContext* globalCtx) {
     if (ObjKibako2_ShouldBreak(this)) {
         ObjKibako2_Break(this, globalCtx);
-        SoundSource_PlaySfxByPos(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        SoundSource_PlaySfxFollowingPos(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         this->dyna.actor.flags |= 0x10;
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;

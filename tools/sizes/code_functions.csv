@@ -1127,8 +1127,8 @@ asm/non_matchings/code/z_eff_footmark/EffFootmark_Draw.s,EffFootmark_Draw,0x800F
 asm/non_matchings/code/z_sound_source/SoundSource_InitAll.s,SoundSource_InitAll,0x800F0390,0xC
 asm/non_matchings/code/z_sound_source/SoundSource_UpdateAll.s,SoundSource_UpdateAll,0x800F03C0,0x33
 asm/non_matchings/code/z_sound_source/SoundSource_Add.s,SoundSource_Add,0x800F048C,0x37
-asm/non_matchings/code/z_sound_source/SoundSource_PlaySfxByPos.s,SoundSource_PlaySfxByPos,0x800F0568,0xA
-asm/non_matchings/code/z_sound_source/SoundSource_PlaySfxByPosWithReplays.s,SoundSource_PlaySfxByPosWithReplays,0x800F0590,0xC
+asm/non_matchings/code/z_sound_source/SoundSource_PlaySfxFollowingPos.s,SoundSource_PlaySfxFollowingPos,0x800F0568,0xA
+asm/non_matchings/code/z_sound_source/SoundSource_PlaySfxEachFrameFollowingPos.s,SoundSource_PlaySfxEachFrameFollowingPos,0x800F0590,0xC
 asm/non_matchings/code/z_elf_message/func_800F05C0.s,func_800F05C0,0x800F05C0,0x80
 asm/non_matchings/code/code_800F07C0/func_800F07C0.s,func_800F07C0,0x800F07C0,0x32
 asm/non_matchings/code/code_800F07C0/func_800F0888.s,func_800F0888,0x800F0888,0x2F

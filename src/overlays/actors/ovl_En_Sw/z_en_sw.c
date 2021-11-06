@@ -685,7 +685,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
 
             this->unk_45C = 0;
         } else if (!func_808D90C4(this)) {
-            SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
+            SoundSource_PlaySfxFollowingPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             this->actor.flags &= ~1;
             if (!ENSW_GET_3(&this->actor)) {
