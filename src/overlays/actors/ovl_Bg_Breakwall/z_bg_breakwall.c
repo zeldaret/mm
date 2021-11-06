@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_breakwall.c
+ * Overlay: ovl_Bg_Breakwall
+ * Description: Great Bay Temple? (or the weather around it?)
+ */
+
 #include "z_bg_breakwall.h"
 
 #define FLAGS 0x00000030

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_wiz.c
+ * Overlay: ovl_En_Wiz
+ * Description: Wizzrobe
+ */
+
 #include "z_en_wiz.h"
 
 #define FLAGS 0x88101035

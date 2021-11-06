@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_dinner.c
+ * Overlay: ovl_Obj_Dinner
+ * Description: Cremia and Romani's dinner
+ */
+
 #include "z_obj_dinner.h"
 
 #define FLAGS 0x00000020

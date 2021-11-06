@@ -1,3 +1,9 @@
+/*
+ * File: z_en_nutsball.c
+ * Overlay: ovl_En_Nutsball
+ * Description: Deku nut Projectile
+ */
+
 #include "z_en_nutsball.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_iknv_doukutu.c
+ * Overlay: ovl_Bg_Iknv_Doukutu
+ * Description: Sharp's Cave
+ */
+
 #include "z_bg_iknv_doukutu.h"
 
 #define FLAGS 0x00000030

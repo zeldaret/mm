@@ -1,3 +1,9 @@
+/*
+ * File: z_en_tubo_trap.c
+ * Overlay: ovl_En_Tubo_Trap
+ * Description: Flying Pot Trap Enemy
+ */
+
 #include "z_en_tubo_trap.h"
 
 #define FLAGS 0x00000000
@@ -131,7 +137,7 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, GlobalContext* globalCtx) 
     Vec3f* actorPos = &this->actor.world.pos;
 
     pos = *actorPos;
-    pos.y += this->actor.yDistToWater;
+    pos.y += this->actor.depthInWater;
 
     EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 0x190);
 
@@ -166,7 +172,7 @@ void EnTuboTrap_HandleImpact(EnTuboTrap* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Player* player2 = GET_PLAYER(globalCtx);
 
-    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 15.0f)) {
+    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 15.0f)) {
         EnTuboTrap_SpawnEffectsInWater(this, globalCtx);
         SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_BOMB_DROP_WATER);
         EnTuboTrap_DropCollectible(this, globalCtx);
@@ -226,7 +232,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, GlobalContext* globalCtx) {
 
     if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->actor.world.pos.y)) {
         startingRotation = this->actor.home.rot.z;
-        if ((startingRotation == 0) || (this->actor.yDistToPlayer <= (startingRotation * 10.0f))) {
+        if ((startingRotation == 0) || (this->actor.playerHeightRel <= (startingRotation * 10.0f))) {
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
             this->actor.flags |= 0x11; // always update and can target
