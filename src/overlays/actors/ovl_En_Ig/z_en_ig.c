@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ig.c
+ * Overlay: ovl_En_Ig
+ * Description: The Goron named the same as the player
+ */
+
 #include "z_en_ig.h"
 
 #define FLAGS 0x00000019

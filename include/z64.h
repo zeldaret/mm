@@ -1,16 +1,17 @@
 #ifndef _Z64_H_
 #define _Z64_H_
 
-#include "stdarg.h"
-#include "stdbool.h"
-#include "stdint.h"
+#include "libc/math.h"
+#include "libc/stdarg.h"
+#include "libc/stdbool.h"
+#include "libc/stddef.h"
+#include "libc/stdint.h"
+#include "libc/stdlib.h"
 
 #include "ultra64.h"
 #include "io/controller.h"
 #include "osint.h"
-#include "math.h"
 #include "os.h"
-#include "stdlib.h"
 #include "irqmgr.h"
 #include "scheduler.h"
 #include "xstdio.h"
@@ -209,14 +210,9 @@ typedef struct {
 } FireObjInitParams; // size = 0xD
 
 typedef struct {
-    /* 0x0 */ u8 unk0;
-    /* 0x1 */ u8 unk1;
-    /* 0x2 */ u8 unk2;
-    /* 0x3 */ u8 unk3;
+    /* 0x0 */ Color_RGBA8 primColor;
     /* 0x4 */ u8 unk4;
-    /* 0x5 */ u8 unk5;
-    /* 0x6 */ u8 unk6;
-    /* 0x7 */ u8 unk7;
+    /* 0x5 */ Color_RGB8 envColor;
 } FireObjLightParams; // size = 0x8
 
 //! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
@@ -414,8 +410,6 @@ typedef struct {
 } Viewport; // size = 0x10
 
 typedef void(*osCreateThread_func)(void*);
-
-typedef void* (*PrintCallback)(void*, const char*, size_t);
 
 typedef enum {
     SLOWLY_CALLBACK_NO_ARGS,
@@ -854,7 +848,7 @@ typedef struct {
     /* 0xEC */ u8 unk_EC;
     /* 0xED */ u8 unk_ED;
     /* 0xEE */ u8 unk_EE[4];
-    /* 0xF2 */ u8 unk_F2[8];
+    /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo particle count
     /* 0xFA */ u8 unk_FA[4];
 } EnvironmentContext; // size = 0x100
 
@@ -1596,9 +1590,58 @@ typedef struct {
     /* 0x20 */ u16 fracPart[4][4];
 } MatrixInternal; // size = 0x40
 
+typedef struct DebugDispObject {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x14 */ Vec3f scale;
+    /* 0x20 */ Color_RGBA8 color;
+    /* 0x24 */ s16   type;
+    /* 0x28 */ struct DebugDispObject* next;
+    /* 0x2C */ s32 pad; //Padding not in the OOT version
+} DebugDispObject; // size = 0x30
+
 typedef struct {
     /* 0x00 */ u8* value;
     /* 0x04 */ const char* name;
 } FlagSetEntry; // size = 0x08
+
+// TODO: Dedicated Header?
+#define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
+#define FRAM_STATUS_REGISTER FRAM_BASE_ADDRESS // FRAM Base Address in Cart Memory
+#define FRAM_COMMAND_REGISTER 0x10000          // Located at 0x08010000 on the Cart
+
+enum fram_command {
+    /* Does nothing for FRAM_COMMAND_SET_MODE_READ_AND_STATUS, FRAM_MODE_NOP, FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS
+       Initializes fram to 0xFF in FRAM_MODE_ERASE
+       Writes Contents in FLASHRAM_MODE_WRITE
+       After execution, sets FRAM_MODE to FRAM_MODE_NOP */
+    FRAM_COMMAND_EXECUTE = 0xD2000000,
+    /* flashram->erase_offset = (command & 0xffff) * 128; */
+    FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET = 0x4B000000,
+    /* flashram->mode = FLASHRAM_MODE_ERASE;
+       flashram->status = 0x1111800800c20000LL; */
+    FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS = 0x78000000,
+    /* flashram->erase_offset = (command & 0xffff) * 128;
+       flashram->status = 0x1111800400c20000LL; */
+    FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS = 0xA5000000,
+    /* flashram->mode = FLASHRAM_MODE_WRITE; */
+    FRAM_COMMAND_SET_MODE_WRITE = 0xB4000000,
+    /* flashram->mode = FLASHRAM_MODE_STATUS;
+       flashram->status = 0x1111800100c20000LL; */
+    FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS = 0xE1000000,
+    /* flashram->mode = FLASHRAM_MODE_READ;
+       flashram->status = 0x11118004f0000000LL; */
+    FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
+    /* unk */
+    FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000
+};
+
+enum fram_mode {
+    FRAM_MODE_NOP = 0,
+    FRAM_MODE_ERASE,
+    FRAM_MODE_WRITE,
+    FRAM_MODE_READ,
+    FRAM_MODE_STATUS
+};
 
 #endif

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_market_step.c
+ * Overlay: ovl_Bg_Market_Step
+ * Description: West Clocktown - Stairs
+ */
+
 #include "z_bg_market_step.h"
 
 #define FLAGS 0x10000020

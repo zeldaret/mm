@@ -1,3 +1,9 @@
+/*
+ * File: z_demo_tre_lgt.c
+ * Overlay: ovl_Demo_Tre_Lgt
+ * Description: Light Radiating From Treasure Chest
+ */
+
 #include "z_demo_tre_lgt.h"
 
 #define FLAGS 0x00000010

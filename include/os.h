@@ -1,7 +1,7 @@
 #ifndef _OS_H_
 #define _OS_H_
 
-#include "stdlib.h"
+#include "libc/stdlib.h"
 #include "ultra64/thread.h"
 #include "ultra64/message.h"
 

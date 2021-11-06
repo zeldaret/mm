@@ -1,3 +1,9 @@
+/*
+ * File z_en_bombers2.c
+ * Overlay: ovl_En_Bombers2
+ * Description: Bombers - Hideout Guard
+ */
+
 #include "z_en_bombers2.h"
 
 #define FLAGS 0x00000009

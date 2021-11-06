@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_fireshield.c
+ * Overlay: ovl_Obj_Fireshield
+ * Description: Ring of fire
+ */
+
 #include "z_obj_fireshield.h"
 
 #define FLAGS 0x00000010
