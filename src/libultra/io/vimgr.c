@@ -14,8 +14,8 @@ OSThread viThread;
 u8 viThreadStack[0x1000];
 OSMesgQueue viEventQueue;
 OSMesg viEventBuf[6];
-viMesgStruct viRetraceMsg;
-viMesgStruct viCounterMsg;
+OSIoMesg viRetraceMsg;
+OSIoMesg viCounterMsg;
 OSMgrArgs __osViDevMgr = { 0 };
 u32 __additional_scanline = 0;
 
@@ -29,13 +29,13 @@ void osCreateViManager(OSPri pri) {
     if (!__osViDevMgr.initialized) {
         __osTimerServicesInit();
         __additional_scanline = 0;
-        osCreateMesgQueue(&viEventQueue, viEventBuf, 5);
-        viRetraceMsg.unk00 = 13;
-        viRetraceMsg.unk02 = 0;
-        viRetraceMsg.unk04 = 0;
-        viCounterMsg.unk00 = 14;
-        viCounterMsg.unk02 = 0;
-        viCounterMsg.unk04 = 0;
+        osCreateMesgQueue(&viEventQueue, viEventBuf, ARRAY_COUNT(viEventBuf) - 1);
+        viRetraceMsg.hdr.type = OS_MESG_TYPE_VRETRACE;
+        viRetraceMsg.hdr.pri = OS_MESG_PRI_NORMAL;
+        viRetraceMsg.hdr.retQueue = NULL;
+        viCounterMsg.hdr.type = OS_MESG_TYPE_COUNTER;
+        viCounterMsg.hdr.pri = OS_MESG_PRI_NORMAL;
+        viCounterMsg.hdr.retQueue = NULL;
         osSetEventMesg(OS_EVENT_VI, &viEventQueue, &viRetraceMsg);
         osSetEventMesg(OS_EVENT_COUNTER, &viEventQueue, &viCounterMsg);
         newPri = -1;
