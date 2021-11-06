@@ -162,8 +162,8 @@ void EnBaguo_EmergeFromUnderground(EnBaguo* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y += 0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((globalCtx->gameplayFrames % 8) == 0) {
-        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10, 8.0f,
-                      500, 10, 1);
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f,
+                                 10, 8.0f, 500, 10, 1);
     }
     Math_ApproachF(&this->actor.shape.shadowScale, 50.0f, 0.3f, 5.0f);
     Math_ApproachF(&this->actor.shape.yOffset, 2700.0f, 100.0f, 500.0f);
@@ -192,7 +192,7 @@ void EnBaguo_Idle(EnBaguo* this, GlobalContext* globalCtx) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
                 if ((globalCtx->gameplayFrames % 8) == 0) {
                     Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos,
-                                  this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
+                                             this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_VOICE);
                 }
             }
@@ -268,8 +268,8 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y -= 0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((globalCtx->gameplayFrames % 8) == 0) {
-        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10, 8.0f,
-                      500, 10, 1);
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f,
+                                 10, 8.0f, 500, 10, 1);
     }
     Math_ApproachF(&this->actor.shape.yOffset, -3000.0f, 100.0f, 500.0f);
     Math_ApproachZeroF(&this->actor.shape.shadowScale, 0.3f, 5.0f);

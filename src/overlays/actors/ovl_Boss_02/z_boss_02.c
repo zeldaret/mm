@@ -2182,8 +2182,8 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_1D1C == (u32)(KREG(92) + 125)) {
-                TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&D_06008650),
-                                      160, 180, 128, 40);
+                TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt,
+                                       Lib_SegmentedToVirtual(&D_06008650), 160, 180, 128, 40);
             }
 
             if (this->unk_1D1C == (u32)(BREG(27) + 335)) {
