@@ -114,16 +114,27 @@ typedef struct {
 } __OSContReadFormat;
 
 
+// Original name: __OSContRequesFormat
 typedef struct {
-    /* 0x0 */ u8 dummy;
-    /* 0x1 */ u8 txsize;
-    /* 0x2 */ u8 rxsize;
-    /* 0x3 */ u8 cmd;
-    /* 0x4 */ u8 typeh;
-    /* 0x5 */ u8 typel;
-    /* 0x6 */ u8 status;
-    /* 0x7 */ u8 dummy1;
-} __OSContRequesFormat;
+    /* 0x00 */ u8 align;
+    /* 0x01 */ u8 txsize;
+    /* 0x02 */ u8 rxsize;
+    /* 0x03 */ u8 poll;
+    /* 0x04 */ u8 typeh;
+    /* 0x05 */ u8 typel;
+    /* 0x06 */ u8 status;
+    /* 0x07 */ u8 align1;
+} __OSContRequestHeader; // size = 0x8
+// typedef struct {
+//     /* 0x0 */ u8 dummy;
+//     /* 0x1 */ u8 txsize;
+//     /* 0x2 */ u8 rxsize;
+//     /* 0x3 */ u8 cmd;
+//     /* 0x4 */ u8 typeh;
+//     /* 0x5 */ u8 typel;
+//     /* 0x6 */ u8 status;
+//     /* 0x7 */ u8 dummy1;
+// } __OSContRequesFormat;
 
 typedef struct {
     /* 0x00 */ u8 txsize;
@@ -147,7 +158,7 @@ typedef struct {
 
 extern OSPifRam __osContPifRam;
 // extern UNK_TYPE1 D_8009CF0C;
-extern u8 __osContLastCmd;
+extern u8 __osContLastPoll;
 extern u8 __osMaxControllers;
 // extern OSMesgQueue D_8009CF38;
 // extern OSMesg D_8009CF50;
