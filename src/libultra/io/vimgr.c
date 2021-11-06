@@ -1,15 +1,6 @@
 #include "global.h"
 #include "osint.h"
 
-typedef struct {
-    u16 unk00;
-    u8 unk02;
-    u32 unk04;
-    char pad[0xC];
-    u16 unk14;
-    u16 unk16;
-} viMesgStruct;
-
 OSThread viThread;
 u8 viThreadStack[0x1000];
 OSMesgQueue viEventQueue;
@@ -68,7 +59,7 @@ void viMgrMain(void* vargs) {
     OSMgrArgs* args;
     static u16 viRetrace;
     u32 addTime;
-    viMesgStruct* mesg;
+    OSIoMesg* mesg;
     u32 temp = 0; // always 0
 
     mesg = NULL;
@@ -81,8 +72,8 @@ void viMgrMain(void* vargs) {
 
     while (true) {
         osRecvMesg(args->eventQueue, (OSMesg)&mesg, OS_MESG_BLOCK);
-        switch (mesg->unk00) {
-            case 13:
+        switch (mesg->hdr.type) {
+            case OS_MESG_TYPE_VRETRACE:
                 __osViSwapContext();
                 viRetrace--;
                 if (!viRetrace) {
@@ -108,7 +99,7 @@ void viMgrMain(void* vargs) {
                 addTime = __osBaseCounter - addTime;
                 __osCurrentTime = __osCurrentTime + addTime;
                 break;
-            case 14:
+            case OS_MESG_TYPE_COUNTER:
                 __osTimerInterrupt();
                 break;
         }
