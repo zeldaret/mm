@@ -7,7 +7,7 @@ s32 osPfsInitPak(OSMesgQueue* queue, OSPfs* pfs, s32 channel) {
     s32 ret;
     u16 sum;
     u16 isum;
-    u8 temp[BLOCKSIZE];
+    u8 buf[BLOCKSIZE];
     __OSPackId* id;
     __OSPackId newid;
 
@@ -30,18 +30,18 @@ s32 osPfsInitPak(OSMesgQueue* queue, OSPfs* pfs, s32 channel) {
         return ret;
     }
 
-    ret = __osPfsSelectBank(pfs, 0);
+    ret = __osPfsSelectBank(pfs, PFS_ID_BANK_256K);
     if (ret != 0) {
         return ret;
     }
 
-    ret = __osContRamRead(pfs->queue, pfs->channel, PFS_ID_0AREA, temp);
+    ret = __osContRamRead(pfs->queue, pfs->channel, PFS_ID_0AREA, buf);
     if (ret != 0) {
-        return (ret);
+        return ret;
     }
 
-    __osIdCheckSum((u16*)temp, &sum, &isum);
-    id = (__OSPackId*)temp;
+    __osIdCheckSum((u16*)buf, &sum, &isum);
+    id = (__OSPackId*)buf;
     if ((id->checksum != sum) || (id->invertedChecksum != isum)) {
         ret = __osCheckPackId(pfs, id);
         if (ret != 0) {
@@ -50,7 +50,7 @@ s32 osPfsInitPak(OSMesgQueue* queue, OSPfs* pfs, s32 channel) {
         }
     }
 
-    if ((id->deviceid & 0x01) == 0) {
+    if (!(id->deviceid & 1)) {
         ret = __osRepairPackId(pfs, id, &newid);
         if (ret != 0) {
             if (ret == PFS_ERR_ID_FATAL) {
@@ -59,7 +59,7 @@ s32 osPfsInitPak(OSMesgQueue* queue, OSPfs* pfs, s32 channel) {
             return ret;
         }
         id = &newid;
-        if ((id->deviceid & 0x01) == 0) {
+        if (!(id->deviceid & 1)) {
             return PFS_ERR_DEVICE;
         }
     }
@@ -90,8 +90,8 @@ s32 osPfsInitPak(OSMesgQueue* queue, OSPfs* pfs, s32 channel) {
 s32 __osPfsCheckRamArea(OSPfs* pfs) {
     s32 i = 0;
     s32 ret = 0;
-    u8 temp1[BLOCKSIZE];
-    u8 temp2[BLOCKSIZE];
+    u8 writeBuf[BLOCKSIZE];
+    u8 readBuf[BLOCKSIZE];
     u8 saveReg[BLOCKSIZE];
 
     ret = __osPfsSelectBank(pfs, PFS_ID_BANK_256K);
@@ -105,20 +105,20 @@ s32 __osPfsCheckRamArea(OSPfs* pfs) {
     }
 
     for (i = 0; i < BLOCKSIZE; i++) {
-        temp1[i] = i;
+        writeBuf[i] = i;
     }
 
-    ret = __osContRamWrite(pfs->queue, pfs->channel, 0, temp1, 0);
+    ret = __osContRamWrite(pfs->queue, pfs->channel, 0, writeBuf, 0);
     if (ret != 0) {
         return ret;
     }
 
-    ret = __osContRamRead(pfs->queue, pfs->channel, 0, temp2);
+    ret = __osContRamRead(pfs->queue, pfs->channel, 0, readBuf);
     if (ret != 0) {
         return ret;
     }
 
-    if (bcmp(temp1, temp2, BLOCKSIZE) != 0) {
+    if (bcmp(writeBuf, readBuf, BLOCKSIZE) != 0) {
         return PFS_ERR_DEVICE;
     }
 
