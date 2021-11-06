@@ -53,7 +53,7 @@ static ColliderCylinderInit sCylinderInit = {
 void EnNutsball_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNutsball* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 400.0f, (ActorShadowFunc)ActorShadow_DrawCircle, 13.0f);
+    ActorShape_Init(&this->actor.shape, 400.0f, ActorShadow_DrawCircle, 13.0f);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.shape.rot.y = 0;
     this->actor.speedXZ = 10.0f;

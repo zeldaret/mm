@@ -86,7 +86,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
     s32 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     EnGinkoMan_SwitchAnimation(this, globalCtx);
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) { // Listen for dialogue start?
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
             func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
             func_801518B0(globalCtx, 0x44C, &this->actor);
