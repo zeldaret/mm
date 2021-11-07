@@ -63,7 +63,6 @@ beginseg
     include "build/src/libultra/voice/voicesetword.o"
     include "build/src/libultra/io/osViModeNtscHpf1.o"
     include "build/src/libultra/io/osViModePalLan1.o"
-//    include "build/data/boot/vimodeHpf.data.o"
     include "build/asm/boot/guScale.text.o"
     include "build/src/libultra/gu/sinf.o"
     include "build/src/libultra/gu/sins.o"
