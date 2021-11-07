@@ -35,7 +35,7 @@ void Idle_InitScreen(void) {
     Idle_InitFramebuffer((u32*)gFramebuffer1, 0x25800, 0x00010001);
     ViConfig_UpdateVi(0);
     osViSwapBuffer(gFramebuffer1);
-    osViBlack(0);
+    osViBlack(false);
 }
 
 void Idle_InitMemory(void) {

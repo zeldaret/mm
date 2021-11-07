@@ -6,7 +6,6 @@ extern const u32 sFaultDrawerFont[];
 FaultDrawer* sFaultDrawContext = &sFaultDrawerStruct;
 FaultDrawer sFaultDrawerDefault = {
     (u16*)FAULT_FB_ADDRESS,             // fb
-                                        // hard-coded pointer
     SCREEN_WIDTH,                       // w
     SCREEN_HEIGHT,                      // h
     16,                                 // yStart

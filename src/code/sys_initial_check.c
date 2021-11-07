@@ -68,7 +68,7 @@ void Check_DrawExpansionPakErrorMessage(void) {
                         CHECK_ERRMSG_STATIC_SEGMENT + sizeof(gExpansionPakNotInstalledErrorTex));
     osWritebackDCacheAll();
     osViSwapBuffer((u16*)FAULT_FB_ADDRESS);
-    osViBlack(0);
+    osViBlack(false);
 }
 
 /**
@@ -81,7 +81,7 @@ void Check_DrawRegionLockErrorMessage(void) {
     Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 56, 112, 208, 16, CHECK_ERRMSG_STATIC_SEGMENT);
     osWritebackDCacheAll();
     osViSwapBuffer((u16*)FAULT_FB_ADDRESS);
-    osViBlack(0);
+    osViBlack(false);
 }
 
 /**

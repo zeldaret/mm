@@ -4,14 +4,14 @@
 #include "ultra64/message.h"
 
 /* Special Features */
-#define OS_VI_GAMMA_ON          0x0001
-#define OS_VI_GAMMA_OFF         0x0002
-#define OS_VI_GAMMA_DITHER_ON   0x0004
-#define OS_VI_GAMMA_DITHER_OFF  0x0008
-#define OS_VI_DIVOT_ON          0x0010
-#define OS_VI_DIVOT_OFF         0x0020
-#define OS_VI_DITHER_FILTER_ON  0x0040
-#define OS_VI_DITHER_FILTER_OFF 0x0080
+#define OS_VI_GAMMA_ON          (1 << 0)
+#define OS_VI_GAMMA_OFF         (1 << 1)
+#define OS_VI_GAMMA_DITHER_ON   (1 << 2)
+#define OS_VI_GAMMA_DITHER_OFF  (1 << 3)
+#define OS_VI_DIVOT_ON          (1 << 4)
+#define OS_VI_DIVOT_OFF         (1 << 5)
+#define OS_VI_DITHER_FILTER_ON  (1 << 6)
+#define OS_VI_DITHER_FILTER_OFF (1 << 7)
 
 #define OS_VI_GAMMA         0x08
 #define OS_VI_GAMMA_DITHER  0x04

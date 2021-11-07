@@ -714,7 +714,7 @@ void Fault_CommitFB() {
     osViSetYScale(1.0f);
     osViSetMode(&osViModeNtscLan1);
     osViSetSpecialFeatures(0x42); // gama_disable|dither_fliter_enable_aa_mode3_disable
-    osViBlack(0);
+    osViBlack(false);
 
     if (sFaultContext->fb) {
         fb = sFaultContext->fb;
