@@ -135,9 +135,12 @@ typedef struct {
 
 // #define CONT_ERR_NO_CONTROLLER
 // #define CONT_ERR_DEVICE
+// #define CONT_ERR_NOT_READY
 // #define CONT_ERR_CONTRFAIL
 // #define CONT_ERR_VOICE_NO_RESPONSE
-// #define CONT_ERR_INVALID 
+// #define CONT_ERR_INVALID
+// #define CONT_ERR_VOICE_WORD
+// #define CONT_ERR_VOICE_MEMORY
 
 typedef struct {
     /* 0x0 */ OSMesgQueue* mq;
