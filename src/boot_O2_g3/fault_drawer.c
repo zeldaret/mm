@@ -22,19 +22,19 @@ FaultDrawer sFaultDrawerDefault = {
     8,                                  // charW
     8,                                  // charH
     0,                                  // charWPad
-    0,                                  //  charHPad
+    0,                                  // charHPad
     {
         // printColors
-        GPACK_RGBA5551(0, 0, 0, 1),
-        GPACK_RGBA5551(255, 0, 0, 1),
-        GPACK_RGBA5551(0, 255, 0, 1),
-        GPACK_RGBA5551(255, 255, 0, 1),
-        GPACK_RGBA5551(0, 0, 255, 1),
-        GPACK_RGBA5551(255, 0, 255, 1),
-        GPACK_RGBA5551(0, 255, 255, 1),
-        GPACK_RGBA5551(255, 255, 255, 1),
-        GPACK_RGBA5551(120, 120, 120, 1),
-        GPACK_RGBA5551(176, 176, 176, 1),
+        GPACK_RGBA5551(0, 0, 0, 1),       // BLACK
+        GPACK_RGBA5551(255, 0, 0, 1),     // RED
+        GPACK_RGBA5551(0, 255, 0, 1),     // GREEN
+        GPACK_RGBA5551(255, 255, 0, 1),   // YELLOW
+        GPACK_RGBA5551(0, 0, 255, 1),     // BLUE
+        GPACK_RGBA5551(255, 0, 255, 1),   // MAGENTA
+        GPACK_RGBA5551(0, 255, 255, 1),   // CYAN
+        GPACK_RGBA5551(255, 255, 255, 1), // WHITE
+        GPACK_RGBA5551(120, 120, 120, 1), // GRAY
+        GPACK_RGBA5551(176, 176, 176, 1), // GRAY
     },
     0,    // escCode
     0,    // osSyncPrintfEnabled
@@ -49,7 +49,8 @@ void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled) {
 
 void FaultDrawer_DrawRecImpl(s32 xStart, s32 yStart, s32 xEnd, s32 yEnd, u16 color) {
     u16* fb;
-    s32 x, y;
+    s32 x;
+    s32 y;
     s32 xDiff = sFaultDrawContext->w - xStart;
     s32 yDiff = sFaultDrawContext->h - yStart;
     s32 xSize = xEnd - xStart + 1;
@@ -77,7 +78,8 @@ void FaultDrawer_DrawRecImpl(s32 xStart, s32 yStart, s32 xEnd, s32 yEnd, u16 col
 }
 
 void FaultDrawer_DrawChar(char c) {
-    s32 x, y;
+    s32 x;
+    s32 y;
     u32 data;
     s32 cursorX = sFaultDrawContext->cursorX;
     s32 cursorY = sFaultDrawContext->cursorY;
@@ -176,8 +178,8 @@ void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
     for (; count != 0; count--, str++) {
         if (sFaultDrawContext->escCode) {
             sFaultDrawContext->escCode = false;
-            if (*str > 0x30 && *str < 0x3A) {
-                FaultDrawer_SetForeColor(sFaultDrawContext->printColors[*str - 0x30]);
+            if (*str >= '1' && *str <= '9') {
+                FaultDrawer_SetForeColor(sFaultDrawContext->printColors[*str - '0']);
             }
         } else {
             switch (*str) {
@@ -221,8 +223,8 @@ void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
 
 const char D_80099080[] = "(null)";
 
-void FaultDrawer_VPrintf(const char* str, char* args) { // va_list
-    _Printf(FaultDrawer_FormatStringFunc, sFaultDrawContext, str, args);
+void FaultDrawer_VPrintf(const char* fmt, va_list ap) {
+    _Printf(FaultDrawer_FormatStringFunc, sFaultDrawContext, fmt, ap);
 }
 
 void FaultDrawer_Printf(const char* fmt, ...) {
@@ -250,7 +252,7 @@ void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h) {
     sFaultDrawContext->h = h;
 }
 
-void FaultDrawer_SetInputCallback(void* callback) {
+void FaultDrawer_SetInputCallback(FaultDrawerCallback callback) {
     sFaultDrawContext->inputCallback = callback;
 }
 

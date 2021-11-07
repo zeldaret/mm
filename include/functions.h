@@ -101,7 +101,7 @@ void FaultDrawer_VPrintf(const char* str, char* args);
 void FaultDrawer_Printf(const char* fmt, ...);
 void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...);
 void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h);
-void FaultDrawer_SetInputCallback(void* func);
+void FaultDrawer_SetInputCallback(FaultDrawerCallback callback);
 void FaultDrawer_Init(void);
 void func_80084940(void);
 void func_80084968(void);
