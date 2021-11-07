@@ -183,7 +183,6 @@ beginseg
     include "build/src/libultra/io/osViModeNtscLan1.o"
     include "build/src/libultra/io/osViModeMpalLan1.o"
     include "build/src/libultra/io/vi.o"
-    include "build/data/boot/vi.data.o"
     include "build/src/libultra/io/viswapcontext.o"
     include "build/src/libultra/io/pigetcmdq.o"
     include "build/src/libultra/gu/cosf.o"
