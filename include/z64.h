@@ -620,7 +620,7 @@ typedef struct {
     /* 0x20 */ u16 printColors[10];
     /* 0x34 */ u8 escCode;
     /* 0x35 */ u8 osSyncPrintfEnabled;
-    /* 0x38 */ void* inputCallback;
+    /* 0x38 */ void (*inputCallback)();
 } FaultDrawer; // size = 0x3C
 
 typedef struct GfxPrint {
