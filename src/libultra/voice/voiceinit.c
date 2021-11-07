@@ -37,7 +37,7 @@ s32 osVoiceInit(OSMesgQueue* siMessageQ, OSVoiceHandle* hd, s32 channel) {
             if (errorCode != 0) {
                 return errorCode;
             }
-            if ((sp37 & 2) != 0) {
+            if (sp37 & 2) {
                 return 0xF;
             }
 
