@@ -122,6 +122,23 @@ typedef struct {
     /* 0xC */ u32* text_end;
 } OSProf; // size = 0x10
 
+#define VOICE_STATUS_READY 0 /* stop/end */
+#define VOICE_STATUS_START 1 /* Voice Undetected (no voice input) */
+#define VOICE_STATUS_CANCEL 3 /* Cancel (cancel extraneous noise) */
+#define VOICE_STATUS_BUSY 5 /* Detected/Detecting (voice being input, recognition processing under way) */
+#define VOICE_STATUS_END 7 /* End recognition processing (enable execution of Get Recognition Results command) */
+
+#define VOICE_WARN_TOO_SMALL 0x400 /* Voice level is too low (100 < Voice Level < 150) */
+#define VOICE_WARN_TOO_LARGE 0x800 /* Voice level is too high (Voice Level > 3500) */
+#define VOICE_WARN_NOT_FIT 0x4000 /* No words match recognition word (No. 1 Candidate Distance Value > 1600) */
+#define VOICE_WARN_TOO_NOISY 0x8000 /* Too much ambient noise (Relative Voice Level =< 400) */
+
+// #define CONT_ERR_NO_CONTROLLER
+// #define CONT_ERR_DEVICE
+// #define CONT_ERR_CONTRFAIL
+// #define CONT_ERR_VOICE_NO_RESPONSE
+// #define CONT_ERR_INVALID 
+
 typedef struct {
     /* 0x0 */ OSMesgQueue* mq;
     /* 0x4 */ s32 port; /* Controller port */

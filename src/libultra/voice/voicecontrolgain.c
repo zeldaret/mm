@@ -4,7 +4,7 @@ extern u8 D_80098180[];
 
 // Adjusts the input gain of the Voice Recognition System
 s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
-    s32 ret;
+    s32 errorCode;
     u8 phi_a2;
 
 
@@ -14,9 +14,9 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
         phi_a2 = 0x98;
     }
 
-    ret = __osVoiceSetADConverter(hd->mq, hd->port, phi_a2, hd);
-    if (ret != 0) {
-        return ret;
+    errorCode = __osVoiceSetADConverter(hd->mq, hd->port, phi_a2, hd);
+    if (errorCode != 0) {
+        return errorCode;
     }
     
     if (!((digital < 8) && (digital >= 0))){
@@ -30,10 +30,10 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
         return 5;
     }
 
-    ret = __osVoiceSetADConverter(hd->mq, hd->port, phi_a2, hd);
-    if (ret != 0) {
-        return ret;
+    errorCode = __osVoiceSetADConverter(hd->mq, hd->port, phi_a2, hd);
+    if (errorCode != 0) {
+        return errorCode;
     } 
 
-    return ret;
+    return errorCode;
 }

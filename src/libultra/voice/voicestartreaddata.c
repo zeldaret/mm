@@ -2,16 +2,16 @@
 
 // Start voice recognition by the Voice Recognition System
 s32 osVoiceStartReadData(OSVoiceHandle* hd) {
-    s32 ret;
-    u8 sp2B;
+    s32 errorCode;
+    u8 status;
     s32 sp24;
 
-    ret = __osVoiceGetStatus(hd->mq, hd->port, &sp2B);
-    if (ret != 0) {
-        return ret;
+    errorCode = __osVoiceGetStatus(hd->mq, hd->port, &status);
+    if (errorCode != 0) {
+        return errorCode;
     }
 
-    if ((sp2B & 2) != 0) {
+    if (status & 2) {
         return 0xF;
     }
 
@@ -20,17 +20,17 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
     }
 
     sp24 = 0x5000000;
-    ret = __osVoiceContWrite4(hd->mq, hd->port, 0, &sp24);
+    errorCode = __osVoiceContWrite4(hd->mq, hd->port, 0, &sp24);
 
-    if (ret == 0) {
-        ret = __osVoiceCheckResult(hd, &sp2B);
+    if (errorCode == 0) {
+        errorCode = __osVoiceCheckResult(hd, &status);
         
-        if ((ret & 0xFF00) != 0) {
-            ret = 5;
+        if (errorCode & 0xFF00) {
+            errorCode = 5;
         } else {
             hd->mode = 1;
         }
     }
 
-    return ret;
+    return errorCode;
 }
