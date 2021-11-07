@@ -27,7 +27,6 @@ beginseg
     include "build/src/boot_O2_g3/fault.o"
     include "build/data/boot/fault.bss.o"
     include "build/src/boot_O2_g3/fault_drawer.o"
-    include "build/data/boot/fault_drawer.bss.o"
     include "build/src/boot_O2/boot_80084940.o"
     include "build/src/boot_O2/loadfragment.o"
     include "build/data/boot/loadfragment.data.o"

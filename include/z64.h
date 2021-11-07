@@ -600,6 +600,8 @@ typedef union {
     F3DVertexNormal normal;
 } F3DVertex; // size = 0x10
 
+#define FAULT_FB_ADDRESS (u16*)(0x80400000 - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
+
 typedef struct {
     /* 0x00 */ u16* fb;
     /* 0x04 */ u16 w;
@@ -612,7 +614,7 @@ typedef struct {
     /* 0x12 */ u16 backColor;
     /* 0x14 */ u16 cursorX;
     /* 0x16 */ u16 cursorY;
-    /* 0x18 */ u32* font;
+    /* 0x18 */ const u32* font;
     /* 0x1C */ u8 charW;
     /* 0x1D */ u8 charH;
     /* 0x1E */ s8 charWPad;

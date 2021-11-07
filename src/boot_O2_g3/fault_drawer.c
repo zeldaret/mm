@@ -3,9 +3,11 @@
 
 extern const u32 sFaultDrawerFont[];
 
+FaultDrawer sFaultDrawerStruct;
+
 FaultDrawer* sFaultDrawContext = &sFaultDrawerStruct;
 FaultDrawer sFaultDrawerDefault = {
-    (u16*)0x803DA800,                   // fb - TODO map out buffers in this region and avoid hard-coded pointer
+    FAULT_FB_ADDRESS,                   // fb
     SCREEN_WIDTH,                       // w
     SCREEN_HEIGHT,                      // h
     16,                                 // yStart
@@ -16,7 +18,7 @@ FaultDrawer sFaultDrawerDefault = {
     GPACK_RGBA5551(0, 0, 0, 0),         // backColor
     22,                                 // cursorX
     16,                                 // cursorY
-    (u32*)sFaultDrawerFont,             // font
+    sFaultDrawerFont,             // font
     8,                                  // charW
     8,                                  // charH
     0,                                  // charWPad
@@ -80,7 +82,7 @@ void FaultDrawer_DrawChar(char c) {
     s32 cursorX = sFaultDrawContext->cursorX;
     s32 cursorY = sFaultDrawContext->cursorY;
     s32 shift = c % 4;
-    u32* dataPtr = &sFaultDrawContext->font[(((c / 8) * 16) + ((c & 4) >> 2))];
+    const u32* dataPtr = &sFaultDrawContext->font[(((c / 8) * 16) + ((c & 4) >> 2))];
     u16* fb = sFaultDrawContext->fb + (sFaultDrawContext->w * cursorY) + cursorX;
 
     if ((sFaultDrawContext->xStart <= cursorX) &&
