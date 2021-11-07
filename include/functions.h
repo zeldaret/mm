@@ -3,13 +3,6 @@
 
 #include "z64.h"
 
-float fabsf(float f);
-#pragma intrinsic(fabsf)
-float sqrtf(float f);
-#pragma intrinsic(sqrtf)
-double sqrt(double d);
-#pragma intrinsic(sqrt)
-
 typedef void (*arg3_8008633C)(void*);
 typedef void (*arg3_800863AC)(void*, u32);
 typedef void (*arg3_8008641C)(void*, u32, u32, u32, u32, u32, u32, u32, u32);

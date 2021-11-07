@@ -42,7 +42,7 @@ extern StackEntry* sStackInfoListEnd;
 // extern UNK_TYPE1 sGfxPrintUnkTLUT;
 // extern UNK_TYPE1 sGfxPrintUnkData;
 // extern UNK_TYPE1 sGfxPrintFontData;
-extern char D_80097500[0x1C];
+extern char D_80097508[0x18];
 // extern UNK_TYPE4 D_80097524;
 // extern u32 sRandInt;
 extern OSViMode osViModeNtscHpf1;
