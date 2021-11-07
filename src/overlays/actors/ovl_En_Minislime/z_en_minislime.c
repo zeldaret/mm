@@ -765,7 +765,7 @@ void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx) {
             player = GET_PLAYER(globalCtx);
             vec1.x = this->actor.world.pos.x;
             vec1.z = this->actor.world.pos.z;
-            vec1.y = player->actor.world.pos.y + player->actor.yDistToWater;
+            vec1.y = player->actor.world.pos.y + player->actor.depthInWater;
             EffectSsGRipple_Spawn(globalCtx, &vec1, 500, 720, 0);
         }
     }

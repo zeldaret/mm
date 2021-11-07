@@ -1,7 +1,17 @@
 #ifndef _ULTRA64_HARDWARE_H_
 #define _ULTRA64_HARDWARE_H_
 
-#define HW_REG(reg, type) *(volatile type*)((reg) | 0xa0000000)
+// Segment Wrapper
+// Uncached RDRAM
+#define KSEG1 0xA0000000 // 0xA0000000 - 0xBFFFFFFF  Physical memory, uncached, unmapped
+#define RDRAM_UNCACHED KSEG1
+
+// Cached RDRAM
+#define KSEG0 0x80000000 // 0x80000000 - 0x9FFFFFFF  Physical memory, cached, unmapped
+#define RDRAM_CACHED KSEG0
+
+// Volatile access wrapper, enforcing uncached memory
+#define HW_REG(reg, type) *(volatile type*)((reg) | KSEG1)
 
 #define AI_DRAM_ADDR_REG   0x04500000
 #define AI_LEN_REG         0x04500004
@@ -70,7 +80,7 @@
 
 #define PI_STATUS_BUSY    (1 << 0)
 #define PI_STATUS_IOBUSY  (1 << 1)
-#define PI_STATUS_ERROR   (PI_STATUS_BUSY | PI_STATUS_IOBUSY)
+#define PI_STATUS_ERROR   (1 << 2)
 
 #define PI_STATUS_RESET_CONTROLLER  (1 << 0)
 #define PI_STATUS_CLEAR_INTR        (1 << 1)

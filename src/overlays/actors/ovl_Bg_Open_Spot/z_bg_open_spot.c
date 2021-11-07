@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_open_spot.c
+ * Overlay: ovl_Bg_Open_Spot
+ * Description: Star Light Rays in Intro Scene
+ */
+
 #include "z_bg_open_spot.h"
 
 #define FLAGS 0x00000010

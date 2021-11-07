@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_kinoko.c
+ * Overlay: ovl_Obj_Kinoko
+ * Description: Mushroom
+ */
+
 #include "z_obj_kinoko.h"
 
 #define FLAGS 0x00000010

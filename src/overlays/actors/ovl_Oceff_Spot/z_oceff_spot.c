@@ -1,3 +1,9 @@
+/*
+ * File: z_oceff_spot.c
+ * Overlay: ovl_Oceff_Spot
+ * Description:
+ */
+
 #include "z_oceff_spot.h"
 
 #define FLAGS 0x02000010

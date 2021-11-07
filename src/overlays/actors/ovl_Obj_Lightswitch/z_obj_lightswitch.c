@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_lightswitch.c
+ * Overlay: ovl_Obj_Lightswitch
+ * Description: Sun Switch / STT Flip switch
+ */
+
 #include "z_obj_lightswitch.h"
 
 #define FLAGS 0x00000010
