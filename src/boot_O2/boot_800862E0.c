@@ -5,11 +5,11 @@ typedef struct InitFunc {
     void (*func)(void);
 } InitFunc;
 
-void* D_80097500 = NULL; // sInitFuncs
+void* sInitFuncs = NULL;
 
-char D_80097504[0x4] = {0x00, 0x00, 0x00, 0x00}; // sNew
+char sNew[0x4] = { 0x00, 0x00, 0x00, 0x00 };
 
-char D_80097508[0x18] = { // unk
+char D_80097508[0x18] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7F, 0x80, 0x00, 0x00,
     0xFF, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00,
 };
@@ -93,7 +93,7 @@ void func_800864EC(void* blk, u32 nBlk, u32 blkSize, arg3_800864EC arg3, s32 arg
 }
 
 void func_80086588(void) {
-    InitFunc* initFunc = (InitFunc*)&D_80097500;
+    InitFunc* initFunc = (InitFunc*)&sInitFuncs;
     u32 nextOffset = initFunc->nextOffset;
     InitFunc* prev = NULL;
 
@@ -109,7 +109,7 @@ void func_80086588(void) {
         prev = initFunc;
     }
 
-    D_80097500 = prev;
+    sInitFuncs = prev;
 }
 
 void SystemArena_Init(void* start, u32 size) {
