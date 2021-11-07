@@ -265,10 +265,9 @@ Vec3f* func_80BB19C0(Vec3f* arg0, EnGeg* this, GlobalContext* globalCtx) {
     sp34.z = (Math_CosS(sp30) * 50.0f) + player->actor.world.pos.z;
 
     if (Math_Vec3f_DistXZ(&this->actor.world.pos, &sp34) < sp2C) {
-        //clang-format off
-        *arg0 = sp40;
-        return arg0;
-        //clang-format on
+        // clang-format off
+        *arg0 = sp40; return arg0;
+        // clang-format on
     } else {
         *arg0 = sp34;
     }
