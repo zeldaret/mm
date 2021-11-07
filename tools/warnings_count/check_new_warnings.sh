@@ -109,9 +109,6 @@ else
     make_warnings uncompressed build
 fi
 
-echo "
-$(tput ${TPUTTERM} setaf 3)(lots of make output ${TPUTTERM} here...) 
-$RST"
 
 if [[ $full ]]; then
     $COMPARE_WARNINGS setup
