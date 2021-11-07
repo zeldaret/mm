@@ -25,12 +25,6 @@
         }                            \
     }
 
-#define FLAGS_SPACE 1
-#define FLAGS_PLUS 2
-#define FLAGS_MINUS 4
-#define FLAGS_HASH 8
-#define FLAGS_ZERO 16
-
 char spaces[] = "                                ";
 char zeroes[] = "00000000000000000000000000000000";
 

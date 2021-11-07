@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_ice_poly.c
+ * Overlay: ovl_Obj_Ice_Poly
+ * Description: Large Block of Meltable Ice
+ */
+
 #include "z_obj_ice_poly.h"
 
 #define FLAGS 0x00000010

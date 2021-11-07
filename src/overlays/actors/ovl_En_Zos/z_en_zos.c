@@ -1,3 +1,9 @@
+/*
+ * File: z_en_zos.c
+ * Overlay: ovl_En_Zos
+ * Description: Zora Synthesizer - Evan
+ */
+
 #include "z_en_zos.h"
 
 #define FLAGS 0x02000009

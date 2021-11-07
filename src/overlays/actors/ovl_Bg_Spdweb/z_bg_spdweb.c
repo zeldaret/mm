@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_spdweb.c
+ * Overlay: ovl_Bg_Spdweb
+ * Description: Spiderweb
+ */
+
 #include "z_bg_spdweb.h"
 
 #define FLAGS 0x00000000

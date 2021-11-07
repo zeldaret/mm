@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_dhouse.c
+ * Overlay: ovl_Obj_Dhouse
+ * Description: Dinner plate Prop
+ */
+
 #include "z_obj_dhouse.h"
 
 #define FLAGS 0x00400010

@@ -7,7 +7,9 @@ struct EnFish;
 
 typedef struct EnFish {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x138];
+    /* 0x144 */ char unk144[0x133];
+    /* 0x277 */ s8 unk_277;
+    /* 0x278 */ char unk278[0x4];
 } EnFish; // size = 0x27C
 
 extern const ActorInit En_Fish_InitVars;

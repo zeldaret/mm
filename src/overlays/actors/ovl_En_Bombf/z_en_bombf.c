@@ -1,3 +1,9 @@
+/*
+ * File z_en_bombf.c
+ * Overlay: ovl_En_Bombf
+ * Description: Bomb flower
+ */
+
 #include "z_en_bombf.h"
 
 #define FLAGS 0x00000011
