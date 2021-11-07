@@ -8,9 +8,6 @@ extern void* D_01000000;
 extern void* D_01000680;
 extern void* D_01001280;
 
-void Check_DrawExpansionPakErrorMessage(void);
-void Check_DrawRegionLockErrorMessage(void);
-
 void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value) {
     if (value & 1) {
         (&buffer[x])[y * SCREEN_WIDTH] = value;
@@ -18,21 +15,26 @@ void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value) {
 }
 
 void Check_WriteI4Pixel(u16* buffer, u32 x, u32 y, u32 value) {
-    Check_WriteRGBA16Pixel(buffer, x, y, (value * 4228) + 2115);
+    Check_WriteRGBA16Pixel(buffer, x, y, value * GPACK_RGBA5551(16, 16, 16, 0) + GPACK_RGBA5551(12, 12, 12, 1));
 }
 
+/**
+ * x and y are the coordinates that the bottom-left corner of the texture starts at.
+ */
 void Check_DrawI4Texture(u16* buffer, s32 x, s32 y, s32 width, s32 height, u8* texture) {
-    s32 phi_fp;
-    s32 phi_s2;
-    u8 temp;
-    u8* tex = texture;
+    s32 v;
+    s32 u;
+    u8 pixelPair;
+    u8* pixelPairPtr = texture;
 
-    for (phi_fp = 0; phi_fp < height; phi_fp++) {
-        for (phi_s2 = 0; phi_s2 < width; phi_s2 += 2, tex++) {
-            temp = *tex;
-            Check_WriteI4Pixel(buffer, x + phi_s2, y + phi_fp, temp >> 4);
-            temp = *tex;
-            Check_WriteI4Pixel(buffer, x + phi_s2 + 1, y + phi_fp, temp & 0xF);
+    for (v = 0; v < height; v++) {
+        for (u = 0; u < width; u += 2, pixelPairPtr++) {
+            // I4 textures are bitpacked 2 pixels per u8, so this writes a pair of pixels in each iteration using
+            // bitmasking
+            pixelPair = *pixelPairPtr;
+            Check_WriteI4Pixel(buffer, x + u, y + v, pixelPair >> 4);
+            pixelPair = *pixelPairPtr;
+            Check_WriteI4Pixel(buffer, x + u + 1, y + v, pixelPair & 0xF);
         }
     }
 }
@@ -40,6 +42,7 @@ void Check_DrawI4Texture(u16* buffer, s32 x, s32 y, s32 width, s32 height, u8* t
 void Check_ClearRGBA16(u16* buffer) {
     u32 x;
     u32 y;
+
     for (y = 0; y < SCREEN_HEIGHT; y++) {
         for (x = 0; x < SCREEN_WIDTH; x++) {
             Check_WriteRGBA16Pixel(buffer, x, y, 1);
@@ -49,7 +52,7 @@ void Check_ClearRGBA16(u16* buffer) {
 
 void Check_DrawExpansionPakErrorMessage(void) {
     DmaMgr_SendRequest0(CHECK_ERROR_MSG_STATIC_SEGMENT, (uintptr_t)_memerrmsgSegmentRomStart,
-                        (uintptr_t)&D_01001280 - (uintptr_t)&D_01000000);
+                        (uintptr_t)_memerrmsgSegmentEnd - (uintptr_t)_memerrmsgSegmentStart);
     Check_ClearRGBA16((u16*)FAULT_FB_ADDRESS);
     Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 96, 71, 128, 37, CHECK_ERROR_MSG_STATIC_SEGMENT);
     Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 96, 127, 128, 37, CHECK_ERROR_MSG_STATIC_SEGMENT + 0x940);
@@ -60,7 +63,7 @@ void Check_DrawExpansionPakErrorMessage(void) {
 
 void Check_DrawRegionLockErrorMessage(void) {
     DmaMgr_SendRequest0(CHECK_ERROR_MSG_STATIC_SEGMENT, (uintptr_t)_locerrmsgSegmentRomStart,
-                        (uintptr_t)&D_01000680 - (uintptr_t)&D_01000000);
+                        (uintptr_t)_locerrmsgSegmentEnd - (uintptr_t)_locerrmsgSegmentStart);
     Check_ClearRGBA16((u16*)FAULT_FB_ADDRESS);
     Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 56, 112, 208, 16, CHECK_ERROR_MSG_STATIC_SEGMENT);
     osWritebackDCacheAll();
