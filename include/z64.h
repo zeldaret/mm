@@ -600,7 +600,12 @@ typedef union {
     F3DVertexNormal normal;
 } F3DVertex; // size = 0x10
 
-#define FAULT_FB_ADDRESS (u16*)(0x80400000 - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
+// End of RDRAM without the Expansion Pak installed
+#define NORMAL_RDRAM_END 0x80400000
+// End of RDRAM with the Expansion Pak installed
+#define EXPANDED_RDRAM_END 0x80800000
+// Address at the end of normal RDRAM after which is room for a screen buffer
+#define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
 
 typedef struct {
     /* 0x00 */ u16* fb;

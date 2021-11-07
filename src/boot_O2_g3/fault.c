@@ -772,7 +772,7 @@ void Fault_SetOptionsFromController3(void) {
         graphSP = sGraphThread.context.sp;
         if (CHECK_BTN_ALL(input3->cur.button, BTN_R)) {
             static u32 faultCopyToLog;
-            
+
             faultCopyToLog = !faultCopyToLog;
             FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
         }
