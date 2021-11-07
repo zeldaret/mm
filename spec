@@ -8863,6 +8863,7 @@ beginseg
     compress
     romalign 0x1000
     include "build/baserom/memerrmsg.o"
+    number 1
 endseg
 
 beginseg
@@ -8870,6 +8871,7 @@ beginseg
     compress
     romalign 0x1000
     include "build/baserom/locerrmsg.o"
+    number 1
 endseg
 
 beginseg
