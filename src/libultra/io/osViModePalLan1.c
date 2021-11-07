@@ -1,7 +1,7 @@
 #include "global.h"
 
 OSViMode osViModePalLan1 = {
-    0x10, // type
+    OS_VI_PAL_LAN1, // type
     {
         // comRegs
         0x311E,       // ctrl
@@ -12,7 +12,7 @@ OSViMode osViModePalLan1 = {
         0xC6F0C6D,    // leap
         0x800300,     // hStart
         0x200,        // xScale
-        0             // vCurrent
+        0,            // vCurrent
     },
     { // fldRegs
       {

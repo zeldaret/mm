@@ -1,7 +1,7 @@
 #include "global.h"
 
 OSViMode osViModeMpalLan1 = {
-    0x1E, // type
+    OS_VI_MPAL_LAN1, // type
     {
         // comRegs
         0x311E,       // ctrl

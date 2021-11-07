@@ -1,7 +1,7 @@
 #include "global.h"
 
 OSViMode osViModeNtscHpf1 = {
-    9, // type
+    OS_VI_NTSC_HPF1, // type
     {
         // comRegs
         0x324E,    // ctrl
@@ -12,7 +12,7 @@ OSViMode osViModeNtscHpf1 = {
         0xC150C15, // leap
         0x6C02EC,  // hStart
         0x400,     // xScale
-        0          // vCurrent
+        0,         // vCurrent
     },
     { // fldRegs
       {

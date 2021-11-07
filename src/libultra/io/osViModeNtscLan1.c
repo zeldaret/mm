@@ -1,7 +1,7 @@
 #include "global.h"
 
 OSViMode osViModeNtscLan1 = {
-    2, // type
+    OS_VI_NTSC_LAN1, // type
     {
         // comRegs
         0x311E,       // ctrl
