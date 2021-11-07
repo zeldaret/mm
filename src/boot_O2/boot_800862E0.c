@@ -78,7 +78,7 @@ void func_800864EC(void* blk, size_t nBlk, size_t blkSize, arg3_800864EC arg3, s
         while (pos > end) {
             pos -= masked_arg2;
             arg3((void*)pos, 2);
-        } 
+        }
     }
 
     if (arg4 != 0) {
