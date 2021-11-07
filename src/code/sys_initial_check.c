@@ -1,9 +1,17 @@
+/**
+ * File: sys_initial_check.c
+ * Description: Functions for checking for the presence of the Expansion Pak and the correct TV type (PAL/NTSC/MPAL),
+ * and functions for printing error messages directly to screen if not found or incorrect.
+ *
+ * These checks are some of the first functions run in Main, before even setting up the system heap, and any image files
+ * are DMA'd directly to fixed RAM addresses.
+ */
 #include "global.h"
 #include "misc/locerrmsg/locerrmsg.h"
 #include "misc/memerrmsg/memerrmsg.h"
 
-// Address with enough room after to load either of the error message texture files before the fault screen buffer at
-// the end of RDRAM
+// Address with enough room after to load either of the error message image files before the fault screen buffer at the
+// end of RDRAM
 #define CHECK_ERRMSG_STATIC_SEGMENT \
     (u8*)(FAULT_FB_ADDRESS - sizeof(gExpansionPakNotInstalledErrorTex) - sizeof(gSeeInstructionBookletErrorTex))
 
@@ -26,10 +34,9 @@ void Check_DrawI4Texture(u16* buffer, s32 x, s32 y, s32 width, s32 height, u8* t
     u8 pixelPair;
     u8* pixelPairPtr = texture;
 
+    // I4 textures are bitpacked 2 pixels per byte, so this writes a pair of pixels in each iteration using bitmasking.
     for (v = 0; v < height; v++) {
         for (u = 0; u < width; u += 2, pixelPairPtr++) {
-            // I4 textures are bitpacked 2 pixels per u8, so this writes a pair of pixels in each iteration using
-            // bitmasking.
             pixelPair = *pixelPairPtr;
             Check_WriteI4Pixel(buffer, x + u, y + v, pixelPair >> 4);
             pixelPair = *pixelPairPtr;
@@ -50,7 +57,7 @@ void Check_ClearRGBA16(u16* buffer) {
 }
 
 /**
- * Draw error message textures directly to a screen buffer at the end of RDRAM
+ * Draw error message textures directly to a screen buffer at the end of normal RDRAM
  */
 void Check_DrawExpansionPakErrorMessage(void) {
     DmaMgr_SendRequest0(CHECK_ERRMSG_STATIC_SEGMENT, (uintptr_t)_memerrmsgSegmentRomStart,
@@ -65,7 +72,7 @@ void Check_DrawExpansionPakErrorMessage(void) {
 }
 
 /**
- * Draw error message texture directly to a screen buffer at the end of RDRAM
+ * Draw error message texture directly to a screen buffer at the end of normal RDRAM
  */
 void Check_DrawRegionLockErrorMessage(void) {
     DmaMgr_SendRequest0(CHECK_ERRMSG_STATIC_SEGMENT, (uintptr_t)_locerrmsgSegmentRomStart,
