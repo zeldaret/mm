@@ -15,9 +15,9 @@ s32 DmaMgr_FindDmaIndex(u32 vromAddr);
 const char* func_800809F4(u32 param_1);
 void DmaMgr_ProcessMsg(DmaRequest* req);
 void DmaMgr_ThreadEntry(void* arg);
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, size_t size, UNK_TYPE4 unused,
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused,
                            OSMesgQueue* callback, void* callbackMesg);
-s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, size_t size);
+s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size);
 void DmaMgr_Start(void);
 void DmaMgr_Stop(void);
 void* Yaz0_FirstDMA(void);
@@ -357,8 +357,8 @@ const char* strchr(const char* __s, s32 __c);
 size_t strlen(const char* __s);
 void* memcpy(void* __dest, const void* __src, size_t __n);
 void osCreateMesgQueue(OSMesgQueue* mq, OSMesg* msq, s32 count);
-void osInvalICache(void* vaddr, s32 nbytes);
-void osInvalDCache(void* vaddr, s32 nbytes);
+void osInvalICache(void* vaddr, size_t nbytes);
+void osInvalDCache(void* vaddr, size_t nbytes);
 void __osTimerServicesInit(void);
 void __osTimerInterrupt(void);
 void __osSetTimerIntr(OSTime tim);

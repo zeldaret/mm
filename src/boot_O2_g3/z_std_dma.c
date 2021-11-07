@@ -9,12 +9,12 @@ OSMesg sDmaMgrMsgs[32];
 OSThread sDmaMgrThread;
 u8 sDmaMgrStack[0x500];
 
-s32 DmaMgr_DMARomToRam(u32 rom, void* ram, size_t size) {
+s32 DmaMgr_DMARomToRam(uintptr_t rom, void* ram, size_t size) {
     OSIoMesg ioMsg;
     OSMesgQueue queue;
     OSMesg msg[1];
     s32 ret;
-    u32 buffSize = sDmaMgrDmaBuffSize;
+    size_t buffSize = sDmaMgrDmaBuffSize;
 
     osInvalDCache(ram, size);
     osCreateMesgQueue(&queue, msg, ARRAY_COUNT(msg));
@@ -23,7 +23,7 @@ s32 DmaMgr_DMARomToRam(u32 rom, void* ram, size_t size) {
         while (buffSize < size) {
             ioMsg.hdr.pri = 0;
             ioMsg.hdr.retQueue = &queue;
-            ioMsg.devAddr = (u32)rom;
+            ioMsg.devAddr = rom;
             ioMsg.dramAddr = ram;
             ioMsg.size = buffSize;
             ret = osEPiStartDma(gCartHandle, &ioMsg, 0);
@@ -39,9 +39,9 @@ s32 DmaMgr_DMARomToRam(u32 rom, void* ram, size_t size) {
     }
     ioMsg.hdr.pri = 0;
     ioMsg.hdr.retQueue = &queue;
-    ioMsg.devAddr = (u32)rom;
+    ioMsg.devAddr = rom;
     ioMsg.dramAddr = ram;
-    ioMsg.size = (u32)size;
+    ioMsg.size = size;
     ret = osEPiStartDma(gCartHandle, &ioMsg, 0);
     if (ret) {
         goto END;
