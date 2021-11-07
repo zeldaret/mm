@@ -4,10 +4,6 @@
 // of RDRAM
 #define CHECK_ERROR_MSG_STATIC_SEGMENT (u8*)(FAULT_FB_ADDRESS - 0x1280)
 
-extern void* D_01000000;
-extern void* D_01000680;
-extern void* D_01001280;
-
 void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value) {
     if (value & 1) {
         (&buffer[x])[y * SCREEN_WIDTH] = value;
