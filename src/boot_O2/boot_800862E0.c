@@ -14,7 +14,7 @@ char D_80097508[0x18] = {
     0xFF, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00,
 };
 
-void* SystemArena_MallocMin1(u32 size) {
+void* SystemArena_MallocMin1(size_t size) {
     if (size == 0) {
         size = 1;
     }
@@ -28,42 +28,42 @@ void SystemArena_FreeNull(void* ptr) {
     }
 }
 
-void func_8008633C(void* blk, u32 nBlk, u32 blkSize, arg3_8008633C arg3) {
-    u32 pos;
+void func_8008633C(void* blk, size_t nBlk, size_t blkSize, arg3_8008633C arg3) {
+    uintptr_t pos;
 
-    for (pos = (u32)blk; pos < (u32)blk + (nBlk * blkSize); pos = (u32)pos + (blkSize & ~0)) {
+    for (pos = blk; pos < (uintptr_t)blk + (nBlk * blkSize); pos += (blkSize & ~0)) {
         arg3((void*)pos);
     }
 }
 
-void func_800863AC(void* blk, u32 nBlk, s32 blkSize, arg3_800863AC arg3) {
-    u32 pos;
+void func_800863AC(void* blk, size_t nBlk, size_t blkSize, arg3_800863AC arg3) {
+    uintptr_t pos;
 
-    for (pos = (u32)blk; pos < (u32)blk + (nBlk * blkSize); pos = (u32)pos + (blkSize & ~0)) {
+    for (pos = blk; pos < (uintptr_t)blk + (nBlk * blkSize); pos += (blkSize & ~0)) {
         arg3((void*)pos, 2);
     }
 }
 
-void* func_8008641C(void* blk, u32 nBlk, u32 blkSize, arg3_8008641C arg3) {
-    u32 pos;
+void* func_8008641C(void* blk, size_t nBlk, size_t blkSize, arg3_8008641C arg3) {
+    uintptr_t pos;
 
     if (blk == NULL) {
         blk = SystemArena_MallocMin1(nBlk * blkSize);
     }
 
     if (blk != NULL && arg3 != NULL) {
-        pos = (u32)blk;
-        while (pos < (u32)blk + (nBlk * blkSize)) {
+        pos = blk;
+        while (pos < (uintptr_t)blk + (nBlk * blkSize)) {
             arg3((void*)pos, 0, 0, 0, 0, 0, 0, 0, 0);
-            pos = (u32)pos + (blkSize & ~0);
+            pos += (blkSize & ~0);
         }
     }
     return blk;
 }
 
-void func_800864EC(void* blk, u32 nBlk, u32 blkSize, arg3_800864EC arg3, s32 arg4) {
-    u32 pos;
-    u32 end;
+void func_800864EC(void* blk, size_t nBlk, size_t blkSize, arg3_800864EC arg3, s32 arg4) {
+    uintptr_t pos;
+    uintptr_t end;
     s32 masked_arg2;
 
     if (blk == NULL) {
@@ -73,18 +73,12 @@ void func_800864EC(void* blk, u32 nBlk, u32 blkSize, arg3_800864EC arg3, s32 arg
     if (arg3 != 0) {
         end = blk;
         masked_arg2 = (blkSize & ~0);
-        pos = (u32)end + (nBlk * blkSize);
-
-        if (masked_arg2) {}
+        pos = (uintptr_t)end + (nBlk * blkSize);
 
         while (pos > end) {
-            do {
-                pos -= masked_arg2;
-                arg3((void*)pos, 2);
-            } while (0);
-        }
-
-        if (!masked_arg2) {}
+            pos -= masked_arg2;
+            arg3((void*)pos, 2);
+        } 
     }
 
     if (arg4 != 0) {
@@ -112,7 +106,7 @@ void func_80086588(void) {
     sInitFuncs = prev;
 }
 
-void SystemArena_Init(void* start, u32 size) {
+void SystemArena_Init(void* start, size_t size) {
     SystemArena_InitArena(start, size);
     func_80086588();
 }
