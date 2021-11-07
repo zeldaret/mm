@@ -5,7 +5,7 @@
 s16 _Ldunscale(s16*, _Pft*);
 void _Genld(_Pft*, u8, u8*, s16, s16);
 
-const f64 D_800122E0[] = { 10e0L, 10e1L, 10e3L, 10e7L, 10e15L, 10e31L, 10e63L, 10e127L, 10e255L };
+const f64 digs[] = { 10e0L, 10e1L, 10e3L, 10e7L, 10e15L, 10e31L, 10e63L, 10e127L, 10e255L };
 
 /* float properties */
 #define _D0 0
@@ -83,7 +83,7 @@ void _Ldtob(_Pft* args, u8 type) {
             exp = -n;
             for (i = 0; n > 0; n >>= 1, i++) {
                 if ((n & 1) != 0) {
-                    val *= D_800122E0[i];
+                    val *= digs[i];
                 }
             }
         } else if (exp > 0) {
@@ -92,7 +92,7 @@ void _Ldtob(_Pft* args, u8 type) {
 
             for (n = exp, i = 0; n > 0; n >>= 1, i++) {
                 if ((n & 1) != 0) {
-                    factor *= D_800122E0[i];
+                    factor *= digs[i];
                 }
             }
             val /= factor;
