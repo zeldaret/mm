@@ -109,11 +109,11 @@ const char* func_800809F4(u32 a0) {
 }
 
 void DmaMgr_ProcessMsg(DmaRequest* req) {
-    u32 vrom;
+    uintptr_t vrom;
     void* ram;
     size_t size;
-    u32 romStart;
-    u32 romSize;
+    uintptr_t romStart;
+    size_t romSize;
     DmaEntry* dmaEntry;
     s32 index;
 
@@ -172,7 +172,7 @@ void DmaMgr_ThreadEntry(void* a0) {
     }
 }
 
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, size_t size, UNK_TYPE4 unused,
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused,
                            OSMesgQueue* queue, OSMesg msg) {
     if (gIrqMgrResetStatus >= 2) {
         return -2;
@@ -190,7 +190,7 @@ s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, 
     return 0;
 }
 
-s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, size_t size) {
+s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size) {
     DmaRequest req;
     OSMesgQueue queue;
     OSMesg msg[1];
