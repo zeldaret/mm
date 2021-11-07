@@ -1,3 +1,9 @@
+/*
+ * File: z_en_heishi.c
+ * Overlay: ovl_En_Heishi
+ * Description: Soldier
+ */
+
 #include "z_en_heishi.h"
 
 #define FLAGS 0x00000009

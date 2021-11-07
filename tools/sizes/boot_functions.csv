@@ -277,9 +277,9 @@ asm/non_matchings/boot/thread/__osDequeueThread.s,__osDequeueThread,0x80089430,0
 asm/non_matchings/boot/destroythread/osDestroyThread.s,osDestroyThread,0x80089470,0x44
 asm/non_matchings/boot/voicecheckresult/__osVoiceCheckResult.s,__osVoiceCheckResult,0x80089580,0x2C
 asm/non_matchings/boot/bzero/bzero.s,bzero,0x80089630,0x28
-asm/non_matchings/boot/rumblepak/osSetRumble.s,osSetRumble,0x800896D0,0x5A
-asm/non_matchings/boot/rumblepak/osSetUpMempakWrite.s,osSetUpMempakWrite,0x80089838,0x43
-asm/non_matchings/boot/rumblepak/osProbeRumblePak.s,osProbeRumblePak,0x80089944,0x57
+asm/non_matchings/boot/rumblepak/__osMotorAccess.s,__osMotorAccess,0x800896D0,0x5A
+asm/non_matchings/boot/rumblepak/_MakeMotorData.s,_MakeMotorData,0x80089838,0x43
+asm/non_matchings/boot/rumblepak/osMotorInit.s,osMotorInit,0x80089944,0x57
 asm/non_matchings/boot/siacs/__osSiCreateAccessQueue.s,__osSiCreateAccessQueue,0x80089AA0,0x14
 asm/non_matchings/boot/siacs/__osSiGetAccess.s,__osSiGetAccess,0x80089AF0,0x11
 asm/non_matchings/boot/siacs/__osSiRelAccess.s,__osSiRelAccess,0x80089B34,0xB
@@ -328,7 +328,7 @@ asm/non_matchings/boot/piacs/__osPiCreateAccessQueue.s,__osPiCreateAccessQueue,0
 asm/non_matchings/boot/piacs/__osPiGetAccess.s,__osPiGetAccess,0x8008C1E0,0x11
 asm/non_matchings/boot/piacs/__osPiRelAccess.s,__osPiRelAccess,0x8008C224,0xB
 asm/non_matchings/boot/devmgr/__osDevMgrMain.s,__osDevMgrMain,0x8008C260,0x104
-asm/non_matchings/boot/pirawdma/osPiRawStartDma.s,osPiRawStartDma,0x8008C670,0x34
+asm/non_matchings/boot/pirawdma/__osPiRawStartDma.s,__osPiRawStartDma,0x8008C670,0x34
 asm/non_matchings/boot/contpfs/__osSumcalc.s,__osSumcalc,0x8008C740,0x1D
 asm/non_matchings/boot/contpfs/__osIdCheckSum.s,__osIdCheckSum,0x8008C7B4,0x3F
 asm/non_matchings/boot/contpfs/__osRepairPackId.s,__osRepairPackId,0x8008C8B0,0xD4
@@ -371,11 +371,11 @@ asm/non_matchings/boot/guMtxIdent/guMtxIdent.s,guMtxIdent,0x8008FA60,0x14
 asm/non_matchings/boot/jammesg/osJamMesg.s,osJamMesg,0x8008FAB0,0x54
 asm/non_matchings/boot/setthreadpri/osSetThreadPri.s,osSetThreadPri,0x8008FC00,0x38
 asm/non_matchings/boot/getthreadpri/osGetThreadPri.s,osGetThreadPri,0x8008FCE0,0x8
-asm/non_matchings/boot/epirawread/osEPiRawReadIo.s,osEPiRawReadIo,0x8008FD00,0x58
+asm/non_matchings/boot/epirawread/__osEPiRawReadIo.s,__osEPiRawReadIo,0x8008FD00,0x58
 asm/non_matchings/boot/viswapbuf/osViSwapBuffer.s,osViSwapBuffer,0x8008FE60,0x14
 asm/non_matchings/boot/position/guPositionF.s,guPositionF,0x8008FEB0,0x6A
 asm/non_matchings/boot/position/guPosition.s,guPosition,0x80090058,0x1A
-asm/non_matchings/boot/epirawdma/osEPiRawStartDma.s,osEPiRawStartDma,0x800900C0,0x78
+asm/non_matchings/boot/epirawdma/__osEPiRawStartDma.s,__osEPiRawStartDma,0x800900C0,0x78
 asm/non_matchings/boot/sptaskyielded/osSpTaskYielded.s,osSpTaskYielded,0x800902A0,0x18
 asm/non_matchings/boot/bcmp/bcmp.s,bcmp,0x80090300,0x48
 asm/non_matchings/boot/gettime/osGetTime.s,osGetTime,0x80090420,0x24

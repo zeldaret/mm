@@ -1,3 +1,9 @@
+/*
+ * File: z_en_syateki_dekunuts.c
+ * Overlay: ovl_En_Syateki_Dekunuts
+ * Description: Shooting Gallery Deku Scrub
+ */
+
 #include "z_en_syateki_dekunuts.h"
 
 #define FLAGS 0x08000030

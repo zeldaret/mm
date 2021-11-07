@@ -106,7 +106,7 @@ void EnHoll_SetupAction(EnHoll* this) {
 }
 
 void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* transformedPlayerPos) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     Actor_CalcOffsetOrientedToDrawRotation(&this->actor, transformedPlayerPos, &player->actor.world.pos);
     this->playerSide = (transformedPlayerPos->z < 0.0f) ? EN_HOLL_BEHIND : EN_HOLL_BEFORE;
@@ -217,7 +217,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
 }
 
 void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 useViewEye = D_801D0D50 || globalCtx->csCtx.state != 0;
     Vec3f transformedPlayerPos;
     f32 enHollTop;
@@ -251,7 +251,7 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, GlobalContext* globalCtx) {
     f32 playerDistFromCentralPlane;
 
     if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
-        (playerDistFromCentralPlane = fabsf(this->actor.yDistToPlayer),
+        (playerDistFromCentralPlane = fabsf(this->actor.playerHeightRel),
          playerDistFromCentralPlane < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL)) {
         if (playerDistFromCentralPlane < EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
             globalCtx->bgCoverAlpha = 255;
@@ -260,7 +260,7 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, GlobalContext* globalCtx) {
         }
         if (playerDistFromCentralPlane > EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
             s32 enHollId = EN_HOLL_GET_ID_CAST(this);
-            s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
+            s32 playerSide = (this->actor.playerHeightRel > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
 
             this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
 
@@ -279,12 +279,12 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, GlobalContext* globalCtx) {
 void EnHoll_VerticalIdle(EnHoll* this, GlobalContext* globalCtx) {
 
     if (this->actor.xzDistToPlayer < EN_HOLL_RADIUS) {
-        f32 playerDistFromCentralPlane = fabsf(this->actor.yDistToPlayer);
+        f32 playerDistFromCentralPlane = fabsf(this->actor.playerHeightRel);
 
         if (playerDistFromCentralPlane < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL &&
             playerDistFromCentralPlane > EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
             s32 enHollId = EN_HOLL_GET_ID_CAST(this);
-            s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
+            s32 playerSide = (this->actor.playerHeightRel > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
 
             this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
             if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
@@ -307,7 +307,7 @@ void EnHoll_RoomTransitionIdle(EnHoll* this, GlobalContext* globalCtx) {
 
 void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnHoll* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((globalCtx->sceneLoadFlag == 0) && (globalCtx->unk_18B4A == 0) && !(player->stateFlags1 & 0x200)) {
         this->actionFunc(this, globalCtx);
@@ -330,7 +330,7 @@ void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
         dl = Gfx_CallSetupDL(dl, dlIndex);
         if (this->playerSide == EN_HOLL_BEHIND) {
-            SysMatrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+            Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
         }
         gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(dl++, 0, 0, 0, 0, 0, this->alpha);

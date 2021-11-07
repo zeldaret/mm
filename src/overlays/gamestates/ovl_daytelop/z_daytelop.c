@@ -205,7 +205,7 @@ void Daytelop_Main(GameState* thisx) {
 }
 
 void Daytelop_Destroy(GameState* thisx) {
-    ShrinkWindow_Fini();
+    ShrinkWindow_Destroy();
 }
 
 void Daytelop_nop80815770(DaytelopContext* this) {
@@ -226,8 +226,8 @@ void Daytelop_Init(GameState* thisx) {
     DaytelopContext* this = (DaytelopContext*)thisx;
 
     Game_SetFramerateDivisor(thisx, 1);
-    SysMatrix_StateAlloc(thisx);
-    ShrinkWindow_Fini();
+    Matrix_StateAlloc(thisx);
+    ShrinkWindow_Destroy();
     View_Init(&this->view, thisx->gfxCtx);
     thisx->main = Daytelop_Main;
     thisx->destroy = Daytelop_Destroy;

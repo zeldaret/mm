@@ -1,6 +1,6 @@
 /*
  * File: z_en_pametfrog.c
- * Overlay: En_Pametfrog
+ * Overlay: ovl_En_Pametfrog
  * Description: Gekko & Snapper Miniboss: Gekko
  */
 
@@ -207,8 +207,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 55.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInit);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600DF98, &D_0600F990, this->limbDrawTable,
-                     this->transitionDrawTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DF98, &D_0600F990, this->jointTable, this->morphTable, 24);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colElement);
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num)) {
@@ -274,10 +273,10 @@ void EnPametfrog_ChangeColliderThaw(EnPametfrog* this, GlobalContext* globalCtx)
 void EnPametfrog_JumpWaterEffects(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f pos;
 
-    if (this->actor.yDistToWater > 0.0f) {
+    if (this->actor.depthInWater > 0.0f) {
         pos.x = this->actor.world.pos.x;
         pos.z = this->actor.world.pos.z;
-        pos.y = this->actor.world.pos.y + this->actor.yDistToWater;
+        pos.y = this->actor.world.pos.y + this->actor.depthInWater;
         EffectSsGRipple_Spawn(globalCtx, &pos, 150, 550, 0);
         pos.y += 8.0f;
         EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 550);
@@ -287,10 +286,10 @@ void EnPametfrog_JumpWaterEffects(EnPametfrog* this, GlobalContext* globalCtx) {
 void EnPametfrog_IdleWaterEffects(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f pos;
 
-    if ((this->actor.yDistToWater > 0.0f) && ((globalCtx->gameplayFrames % 14) == 0)) {
+    if ((this->actor.depthInWater > 0.0f) && ((globalCtx->gameplayFrames % 14) == 0)) {
         pos.x = this->actor.world.pos.x;
         pos.z = this->actor.world.pos.z;
-        pos.y = this->actor.world.pos.y + this->actor.yDistToWater;
+        pos.y = this->actor.world.pos.y + this->actor.depthInWater;
         EffectSsGRipple_Spawn(globalCtx, &pos, 150, 550, 0);
     }
 }
@@ -336,8 +335,8 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
 
     Math3D_CrossProduct(&this->unk_2DC, &floorNorm, &vec2);
     EnPametfrog_Vec3fNormalize(&vec2);
-    SysMatrix_InsertRotationAroundUnitVector_f(rotation, &vec2, 0);
-    SysMatrix_MultiplyVector3fByState(&this->unk_2E8, &vec2);
+    Matrix_InsertRotationAroundUnitVector_f(rotation, &vec2, 0);
+    Matrix_MultiplyVector3fByState(&this->unk_2E8, &vec2);
     Math_Vec3f_Copy(&this->unk_2E8, &vec2);
     Math3D_CrossProduct(&this->unk_2E8, &floorNorm, &this->unk_2D0);
     EnPametfrog_Vec3fNormalize(&this->unk_2D0);
@@ -398,9 +397,9 @@ void EnPametfrog_PlaceSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_JumpOnGround(EnPametfrog* this, GlobalContext* globalCtx) {
-    if (func_801378B8(&this->skelAnime, 1.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_JUMP);
-    } else if (func_801378B8(&this->skelAnime, 11.0f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
         EnPametfrog_JumpWaterEffects(this, globalCtx);
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_WALK_WATER);
     }
@@ -440,11 +439,11 @@ void EnPametfrog_ApplyStun(EnPametfrog* this) {
 
 void EnPametfrog_SetupRearOnSnapper(EnPametfrog* this) {
     if (this->actionFunc == EnPametfrog_RearOnSnapperRise) {
-        SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06005694);
+        Animation_PlayOnce(&this->skelAnime, &D_06005694);
     } else if (this->actionFunc == EnPametfrog_RearOnSnapperWave) {
-        SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_060052EC);
+        Animation_PlayOnce(&this->skelAnime, &D_060052EC);
     } else {
-        SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06004680);
+        Animation_PlayOnce(&this->skelAnime, &D_06004680);
     }
 
     this->actor.flags &= ~1;
@@ -457,11 +456,11 @@ void EnPametfrog_RearOnSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f rearingPoint;
     s32 pad;
 
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         if (Rand_ZeroOne() < 0.5f) {
-            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06004D50);
+            Animation_PlayOnce(&this->skelAnime, &D_06004D50);
         } else {
-            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06004680);
+            Animation_PlayOnce(&this->skelAnime, &D_06004680);
         }
     }
 
@@ -479,13 +478,13 @@ void EnPametfrog_RearOnSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupRearOnSnapperWave(EnPametfrog* this) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06004894);
+    Animation_PlayOnce(&this->skelAnime, &D_06004894);
     this->timer = 15;
     this->actionFunc = EnPametfrog_RearOnSnapperWave;
 }
 
 void EnPametfrog_RearOnSnapperWave(EnPametfrog* this, GlobalContext* globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && this->timer > 0) {
+    if (SkelAnime_Update(&this->skelAnime) && this->timer > 0) {
         this->timer--;
         if (this->timer == 0) {
             EnPametfrog_SetupRearOnSnapper(this);
@@ -494,7 +493,7 @@ void EnPametfrog_RearOnSnapperWave(EnPametfrog* this, GlobalContext* globalCtx) 
 }
 
 void EnPametfrog_SetupRearOnSnapperRise(EnPametfrog* this) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_060050B8);
+    Animation_PlayOnce(&this->skelAnime, &D_060050B8);
     this->timer = 10;
     this->actor.params = GEKKO_REAR_ON_SNAPPER;
     this->actor.shape.rot.x = 0;
@@ -504,7 +503,7 @@ void EnPametfrog_SetupRearOnSnapperRise(EnPametfrog* this) {
 }
 
 void EnPametfrog_RearOnSnapperRise(EnPametfrog* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->timer--;
     if (this->timer == 0) {
         EnPametfrog_SetupRearOnSnapper(this);
@@ -518,7 +517,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx
     Vec3f eye;
     s16 yaw;
 
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06001F20);
+    Animation_PlayOnce(&this->skelAnime, &D_06001F20);
     this->actor.params = GEKKO_FALL_OFF_SNAPPER;
     this->actor.speedXZ = 7.0f;
     this->actor.velocity.y = 15.0f;
@@ -539,7 +538,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx
 void EnPametfrog_FallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     f32 sin;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.x += 0x800;
     this->actor.shape.rot.z += 0x1000;
     if (this->timer != 0) {
@@ -555,7 +554,7 @@ void EnPametfrog_FallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupJumpToWall(EnPametfrog* this) {
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_060039C4, 2.0f, 0.0f, 0.0f, 0, -2.0f);
+    Animation_Change(&this->skelAnime, &D_060039C4, 2.0f, 0.0f, 0.0f, 0, -2.0f);
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
     this->actor.bgCheckFlags &= ~8;
@@ -564,13 +563,13 @@ void EnPametfrog_SetupJumpToWall(EnPametfrog* this) {
 }
 
 void EnPametfrog_JumpToWall(EnPametfrog* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     EnPametfrog_JumpOnGround(this, globalCtx);
     if ((this->actor.bgCheckFlags & 1) && (this->actor.bgCheckFlags & 8) && (this->actor.wallBgId == BGCHECK_SCENE) &&
         (COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y) < 0.5f)) {
         EnPametfrog_SetupWallCrawl(this);
     } else if (!(this->actor.bgCheckFlags & 1) ||
-               ((this->skelAnime.animCurrentFrame > 1.0f) && (this->skelAnime.animCurrentFrame < 12.0f))) {
+               ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
         this->actor.speedXZ = 12.0f;
     } else {
         this->actor.speedXZ = 0.0f;
@@ -579,7 +578,7 @@ void EnPametfrog_JumpToWall(EnPametfrog* this, GlobalContext* globalCtx) {
 
 void EnPametfrog_SetupWallCrawl(EnPametfrog* this) {
     if (this->actionFunc == EnPametfrog_JumpToWall) {
-        SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001E14);
+        Animation_PlayLoop(&this->skelAnime, &D_06001E14);
         this->collider.base.acFlags |= AC_ON;
         this->unk_2D0.x = 0.0f;
         this->unk_2D0.z = 0.0f;
@@ -599,7 +598,7 @@ void EnPametfrog_SetupWallCrawl(EnPametfrog* this) {
         this->actor.floorPoly = this->actor.wallPoly;
         this->wallPauseTimer = 10;
     } else {
-        this->skelAnime.animPlaybackSpeed = 1.0f;
+        this->skelAnime.playSpeed = 1.0f;
     }
 
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_RUNAWAY);
@@ -623,7 +622,7 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, GlobalContext* globalCtx) {
     if (this->freezeTimer > 0) {
         this->freezeTimer--;
     } else {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
         this->timer--;
         this->actor.speedXZ = 8.0f;
         doubleSpeedXZ = this->actor.speedXZ * 2.0f;
@@ -657,7 +656,7 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, GlobalContext* globalCtx) {
             func_8086A238(this);
         }
 
-        if (func_801378B8(&this->skelAnime, 15.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 15.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_BOMCHU_WALK);
         }
 
@@ -682,7 +681,7 @@ void EnPametfrog_SetupWallPause(EnPametfrog* this) {
     f32 randFloat;
 
     this->actor.speedXZ = 0.0f;
-    this->skelAnime.animPlaybackSpeed = 1.5f;
+    this->skelAnime.playSpeed = 1.5f;
     if (this->timer != 0) {
         this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI / 30) : (-M_PI / 30);
     } else {
@@ -700,10 +699,10 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
     if (this->freezeTimer > 0) {
         this->freezeTimer--;
     } else {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
         this->timer--;
-        SysMatrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, 0);
-        SysMatrix_MultiplyVector3fByState(&this->unk_2D0, &vec);
+        Matrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, 0);
+        Matrix_MultiplyVector3fByState(&this->unk_2D0, &vec);
         Math_Vec3f_Copy(&this->unk_2D0, &vec);
         Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
         func_8086A238(this);
@@ -720,8 +719,7 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
 void EnPametfrog_SetupClimbDownWall(EnPametfrog* this) {
     s16 yaw;
 
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_060039C4, 0.0f, 0.0f, SkelAnime_GetFrameCount(&D_060039C4.common), 2,
-                         0.0f);
+    Animation_Change(&this->skelAnime, &D_060039C4, 0.0f, 0.0f, Animation_GetLastFrame(&D_060039C4), 2, 0.0f);
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.shape.rot.x = 0;
@@ -755,31 +753,30 @@ void EnPametfrog_ClimbDownWall(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupRunToSnapper(EnPametfrog* this) {
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_060039C4, 2.0f, 0.0f, 0.0f, 0, -2.0f);
+    Animation_Change(&this->skelAnime, &D_060039C4, 2.0f, 0.0f, 0.0f, 0, -2.0f);
     this->actor.params = GEKKO_RETURN_TO_SNAPPER;
     this->actionFunc = EnPametfrog_RunToSnapper;
 }
 
 void EnPametfrog_RunToSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     EnPametfrog_JumpOnGround(this, globalCtx);
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (!(this->actor.bgCheckFlags & 1) ||
-        ((this->skelAnime.animCurrentFrame > 1.0f) && (this->skelAnime.animCurrentFrame < 12.0f))) {
+    if (!(this->actor.bgCheckFlags & 1) || ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
         this->actor.speedXZ = 12.0f;
     } else {
         this->actor.speedXZ = 0.0f;
     }
 
     if ((this->actor.child->params == 1) && (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) < 120.0f) &&
-        func_801378B8(&this->skelAnime, 0.0f)) {
+        Animation_OnFrame(&this->skelAnime, 0.0f)) {
         EnPametfrog_SetupJumpOnSnapper(this);
     }
 }
 
 void EnPametfrog_SetupJumpOnSnapper(EnPametfrog* this) {
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06004680, 6.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_06004680, 6.0f);
     this->timer = 6;
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->collider.base.acFlags &= ~AC_ON;
@@ -796,7 +793,7 @@ void EnPametfrog_JumpOnSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     EnBigpamet* bigpamet;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->timer--;
     if (this->timer == 0) {
         EnPametfrog_SetupLandOnSnapper(this);
@@ -811,14 +808,14 @@ void EnPametfrog_JumpOnSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupLandOnSnapper(EnPametfrog* this) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06000994);
+    Animation_PlayOnce(&this->skelAnime, &D_06000994);
     this->actor.shape.rot.y = this->actor.child->shape.rot.y;
     this->actor.params = GEKKO_ON_SNAPPER;
     this->actionFunc = EnPametfrog_LandOnSnapper;
 }
 
 void EnPametfrog_LandOnSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         EnPametfrog_StopCutscene(this, globalCtx);
         EnPametfrog_SetupRearOnSnapper(this);
     }
@@ -829,7 +826,7 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f eye;
     f32 xzDist;
 
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06001F20);
+    Animation_PlayOnce(&this->skelAnime, &D_06001F20);
     if (this->actor.colChkInfo.health > 0) {
         this->actor.params = GEKKO_RETURN_TO_SNAPPER;
     }
@@ -868,7 +865,7 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_FallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->actor.colorFilterTimer = 0x10;
     if (this->timer > 0) {
         this->timer--;
@@ -890,7 +887,7 @@ void EnPametfrog_FallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupFallOnGround(EnPametfrog* this, GlobalContext* globalCtx) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06004298);
+    Animation_PlayOnce(&this->skelAnime, &D_06004298);
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.y += this->spinYaw;
     this->actor.shape.rot.z = 0;
@@ -903,15 +900,15 @@ void EnPametfrog_SetupFallOnGround(EnPametfrog* this, GlobalContext* globalCtx) 
 }
 
 void EnPametfrog_FallOnGround(EnPametfrog* this, GlobalContext* globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
-        if (this->skelAnime.animCurrentSeg == &D_06004298) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        if (this->skelAnime.animation == &D_06004298) {
             if (this->actor.colChkInfo.health == 0) {
                 this->timer--;
                 if (this->timer == 0) {
                     EnPametfrog_SetupDefeatGekko(this, globalCtx);
                 }
             } else {
-                SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_060030E4);
+                Animation_PlayOnce(&this->skelAnime, &D_060030E4);
             }
         } else {
             EnPametfrog_SetupRunToSnapper(this);
@@ -972,7 +969,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
     static Color_RGBA8 primColor = { 250, 250, 250, 255 };
     static Color_RGBA8 envColor = { 180, 180, 180, 255 };
-    s16 yaw = BINANG_ROT180(func_800DFCDC(ACTIVE_CAM));
+    s16 yaw = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
     Vec3f vec1;
     Vec3f vel;
     s32 i;
@@ -1044,7 +1041,7 @@ void EnPametfrog_PlayCutscene(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupLookAround(EnPametfrog* this) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_060066B4);
+    Animation_PlayOnce(&this->skelAnime, &D_060066B4);
     this->collider.base.atFlags &= ~AT_ON;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1055,7 +1052,7 @@ void EnPametfrog_LookAround(EnPametfrog* this, GlobalContext* globalCtx) {
     EnPametfrog_IdleWaterEffects(this, globalCtx);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 5, 0x400, 0x80);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && (func_801690CC(globalCtx) == 0)) {
+    if (SkelAnime_Update(&this->skelAnime) && (func_801690CC(globalCtx) == 0)) {
         if (!this->unk_2AE) {
             func_801A2E54(0x38);
             this->unk_2AE = true;
@@ -1065,7 +1062,7 @@ void EnPametfrog_LookAround(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupJumpToLink(EnPametfrog* this) {
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_060039C4);
+    Animation_PlayLoop(&this->skelAnime, &D_060039C4);
     this->collider.base.acFlags |= AC_ON;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnPametfrog_JumpToLink;
@@ -1074,10 +1071,9 @@ void EnPametfrog_SetupJumpToLink(EnPametfrog* this) {
 void EnPametfrog_JumpToLink(EnPametfrog* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x80);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     EnPametfrog_JumpOnGround(this, globalCtx);
-    if (!(this->actor.bgCheckFlags & 1) ||
-        (this->skelAnime.animCurrentFrame > 1.0f && this->skelAnime.animCurrentFrame < 12.0f)) {
+    if (!(this->actor.bgCheckFlags & 1) || (this->skelAnime.curFrame > 1.0f && this->skelAnime.curFrame < 12.0f)) {
         this->actor.speedXZ = 8.0f;
     } else {
         this->actor.speedXZ = 0.0f;
@@ -1085,13 +1081,13 @@ void EnPametfrog_JumpToLink(EnPametfrog* this, GlobalContext* globalCtx) {
 
     if ((this->collider.base.ocFlags1 & OC1_HIT) && (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) &&
         Actor_IsActorFacingLink(&this->actor, 0x3000) &&
-        (this->skelAnime.animCurrentFrame <= 2.0f || this->skelAnime.animCurrentFrame >= 11.0f)) {
+        (this->skelAnime.curFrame <= 2.0f || this->skelAnime.curFrame >= 11.0f)) {
         EnPametfrog_SetupMeleeAttack(this);
     }
 }
 
 void EnPametfrog_SetupMeleeAttack(EnPametfrog* this) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_0600F990);
+    Animation_PlayOnce(&this->skelAnime, &D_0600F990);
     this->timer = 7;
     this->actor.speedXZ = 0.0f;
     this->actionFunc = EnPametfrog_MeleeAttack;
@@ -1106,23 +1102,23 @@ static AnimationHeader* sAttackAnimations[] = {
 
 void EnPametfrog_MeleeAttack(EnPametfrog* this, GlobalContext* globalCtx) {
     EnPametfrog_IdleWaterEffects(this, globalCtx);
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         this->timer--;
         if (this->timer == 0) {
             EnPametfrog_SetupLookAround(this);
         } else if (this->timer == 6) {
-            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_0600F990);
+            Animation_PlayOnce(&this->skelAnime, &D_0600F990);
         } else {
-            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, sAttackAnimations[(s32)Rand_ZeroFloat(4.0f) % 4]);
+            Animation_PlayOnce(&this->skelAnime, sAttackAnimations[(s32)Rand_ZeroFloat(4.0f) % 4]);
         }
     }
 
-    if ((this->skelAnime.animCurrentSeg == &D_0600347C && func_801378B8(&this->skelAnime, 2.0f)) ||
-        (this->skelAnime.animCurrentSeg == &D_060070C4 && func_801378B8(&this->skelAnime, 9.0f)) ||
-        (this->skelAnime.animCurrentSeg == &D_06003F28 && func_801378B8(&this->skelAnime, 2.0f)) ||
-        ((this->skelAnime.animCurrentSeg == &D_0600F048) && func_801378B8(&this->skelAnime, 27.0f))) {
+    if ((this->skelAnime.animation == &D_0600347C && Animation_OnFrame(&this->skelAnime, 2.0f)) ||
+        (this->skelAnime.animation == &D_060070C4 && Animation_OnFrame(&this->skelAnime, 9.0f)) ||
+        (this->skelAnime.animation == &D_06003F28 && Animation_OnFrame(&this->skelAnime, 2.0f)) ||
+        ((this->skelAnime.animation == &D_0600F048) && Animation_OnFrame(&this->skelAnime, 27.0f))) {
         this->collider.base.atFlags |= AT_ON;
-        if (this->skelAnime.animCurrentSeg == &D_06003F28) {
+        if (this->skelAnime.animation == &D_06003F28) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_KICK);
         } else {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_PUNCH1);
@@ -1133,7 +1129,7 @@ void EnPametfrog_MeleeAttack(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupDamage(EnPametfrog* this) {
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06005D54, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_06005D54, -3.0f);
     this->timer = 20;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
@@ -1146,7 +1142,7 @@ void EnPametfrog_SetupDamage(EnPametfrog* this) {
 }
 
 void EnPametfrog_Damage(EnPametfrog* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->timer--;
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
     if (this->timer == 0) {
@@ -1159,9 +1155,9 @@ void EnPametfrog_Damage(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupStun(EnPametfrog* this) {
-    if (this->skelAnime.animCurrentSeg == &D_060039C4) {
-        this->skelAnime.animCurrentFrame = 0.0f;
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    if (this->skelAnime.animation == &D_060039C4) {
+        this->skelAnime.curFrame = 0.0f;
+        SkelAnime_Update(&this->skelAnime);
     }
 
     this->collider.base.atFlags &= ~AT_ON;
@@ -1191,7 +1187,7 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f at;
     s16 yawDiff;
 
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06001B08, 3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_06001B08, 3.0f);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_GREET);
     this->actor.flags &= ~1;
     this->actor.colChkInfo.health = 6;
@@ -1219,7 +1215,7 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_CallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         EnPametfrog_SetupSnapperSpawn(this, globalCtx);
     }
 }
@@ -1245,7 +1241,7 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx) 
 
     // Zooms in on Snapper spawn point
     Play_CameraSetAtEye(globalCtx, this->camId, &at, &eye);
-    this->quake = Quake_Add(ACTIVE_CAM, 6);
+    this->quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
     Quake_SetSpeed(this->quake, 18000);
     Quake_SetQuakeValues(this->quake, 2, 0, 0, 0);
     Quake_SetCountdown(this->quake, 15);
@@ -1268,7 +1264,7 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx) {
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     this->actor.params = GEKKO_GET_SNAPPER;
     Quake_RemoveFromIdx(this->quake);
-    this->quake = Quake_Add(ACTIVE_CAM, 3);
+    this->quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
     Quake_SetSpeed(this->quake, 20000);
     Quake_SetQuakeValues(this->quake, 17, 0, 0, 0);
     Quake_SetCountdown(this->quake, 12);
@@ -1408,16 +1404,16 @@ static s8 limbPosIndex[] = {
     -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
 };
 
-void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnPametfrog* this = THIS;
+void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
+    EnPametfrog* this = (EnPametfrog*)arg;
     Vec3f vec;
     Vec3s* center;
     s8 index;
 
     if (limbIndex == GEKKO_LIMB_HEAD) {
-        SysMatrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_GetStateTranslation(&this->actor.focus.pos);
         this->actor.focus.rot.y = this->actor.shape.rot.y;
-        SysMatrix_GetStateTranslationAndScaledY(2500.0f, &vec);
+        Matrix_GetStateTranslationAndScaledY(2500.0f, &vec);
         center = &this->collider.elements[0].dim.worldSphere.center;
         center->x = vec.x;
         center->y = vec.y;
@@ -1430,7 +1426,7 @@ void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
     index = limbPosIndex[limbIndex];
     if (index != -1) {
-        SysMatrix_GetStateTranslation(&this->limbPos[index]);
+        Matrix_GetStateTranslation(&this->limbPos[index]);
     }
 }
 
@@ -1439,8 +1435,8 @@ void EnPametfrog_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     Matrix_RotateY(this->spinYaw, MTXMODE_APPLY);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
-                     EnPametfrog_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, EnPametfrog_PostLimbDraw, &this->actor);
     func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->unk_2C8, this->unk_2CC,
                   this->unk_2C4, this->drawEffect);
 }

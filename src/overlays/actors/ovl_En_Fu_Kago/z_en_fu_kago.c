@@ -1,3 +1,9 @@
+/*
+ * File: z_en_fu_kago.c
+ * Overlay: ovl_En_Fu_Kago
+ * Description: Honey & Darling's Shop - Bomb Basket
+ */
+
 #include "z_en_fu_kago.h"
 
 #define FLAGS 0x00000030

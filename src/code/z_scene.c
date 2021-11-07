@@ -1,7 +1,7 @@
 #include "global.h"
 
 s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
-    u32 size;
+    size_t size;
 
     objectCtx->status[objectCtx->num].id = id;
     size = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
@@ -23,8 +23,8 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
     return objectCtx->num - 1;
 }
 
-void Object_InitBank(GameState* gamestate, ObjectContext* objectCtx) {
-    GlobalContext* globalCtx = (GlobalContext*)gamestate;
+void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
     s32 pad;
     u32 spaceSize;
     s32 i;
@@ -49,18 +49,18 @@ void Object_InitBank(GameState* gamestate, ObjectContext* objectCtx) {
     for (i = 0; i < OBJECT_EXCHANGE_BANK_MAX; i++) { objectCtx->status[i].id = 0; }
     // clang-format on
 
-    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&gamestate->heap, spaceSize);
+    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&gameState->heap, spaceSize);
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
-    gSegments[4] = PHYSICAL_TO_VIRTUAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
+    gSegments[0x04] = PHYSICAL_TO_VIRTUAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
 }
 
 void Object_UpdateBank(ObjectContext* objectCtx) {
     s32 i;
     ObjectStatus* status = &objectCtx->status[0];
     RomFile* objectFile;
-    u32 size;
+    size_t size;
 
     for (i = 0; i < objectCtx->num; i++) {
         if (status->id < 0) {
@@ -228,7 +228,7 @@ void Scene_HeaderCmdSpecialFiles(GlobalContext* globalCtx, SceneCmd* cmd) {
     if (cmd->specialFiles.subKeepIndex != 0) {
         globalCtx->objectCtx.subKeepIndex = Object_Spawn(&globalCtx->objectCtx, cmd->specialFiles.subKeepIndex);
         // TODO: Segment number enum?
-        gSegments[5] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment);
+        gSegments[0x05] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment);
     }
 
     if (cmd->specialFiles.cUpElfMsgNum != 0) {
@@ -354,7 +354,7 @@ s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
         { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
     };
     u32 vromStart = sceneTextureFiles[fileIndex].vromStart;
-    u32 size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
+    size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
         globalCtx->roomCtx.unk74 = THA_AllocEndAlign16(&globalCtx->state.heap, size);

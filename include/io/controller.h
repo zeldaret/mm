@@ -139,10 +139,17 @@ typedef struct {
     /* 0x01 */ u8 txsize;
     /* 0x02 */ u8 rxsize;
     /* 0x03 */ u8 cmd;
-    /* 0x04 */ u16 address;
+    /* 0x04 */ u8 hi;
+    /* 0x05 */ u8 lo;
     /* 0x06 */ u8 data[32];
     /* 0x26 */ u8 datacrc;
 } __OSContRamReadFormat;
 
+extern OSPifRam __osContPifRam;
+// extern UNK_TYPE1 D_8009CF0C;
+extern u8 __osContLastCmd;
+extern u8 __osMaxControllers;
+// extern OSMesgQueue D_8009CF38;
+// extern OSMesg D_8009CF50;
 
 #endif

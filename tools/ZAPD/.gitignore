@@ -338,3 +338,4 @@ ZAPDUtils/ZAPDUtils.a
 .vscode/
 build/
 ZAPDUtils/build/
+ZAPD/BuildInfo.h

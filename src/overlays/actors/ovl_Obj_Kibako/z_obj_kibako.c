@@ -120,7 +120,7 @@ void func_80926318(ObjKibako* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->actor.xzDistToPlayer < 100.0f) {
-        angle = this->actor.yawTowardsPlayer - PLAYER->actor.world.rot.y;
+        angle = this->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
         if (ABS_ALT(angle) >= 0x5556) {
             func_800B8A1C(&this->actor, globalCtx, 0, 36.0f, 30.0f);
         }
@@ -213,7 +213,7 @@ void ObjKibako_WaterBreak(ObjKibako* this, GlobalContext* globalCtx) {
     Vec3f pos;
     Vec3f velocity;
 
-    pos.y = worldPos->y + this->actor.yDistToWater;
+    pos.y = worldPos->y + this->actor.depthInWater;
     for (angle = 0, i = 0; i < 5; i++, angle += 0x3333) {
         pos.x = (Math_SinS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f) + worldPos->x;
         pos.z = (Math_CosS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f) + worldPos->z;
@@ -277,7 +277,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
             ObjKibako_SpawnCollectible(this, globalCtx);
         }
         func_800B8E58(&this->actor, NA_SE_PL_PULL_UP_WOODBOX);
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 19.0f)) {
+    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 19.0f)) {
         ObjKibako_WaterBreak(this, globalCtx);
         ObjKibako_SpawnCollectible(this, globalCtx);
         Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);

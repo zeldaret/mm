@@ -244,6 +244,8 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* v
     // Look for an available effect to allocate a light ray effect to.
     for (i = 0; i < ARRAY_COUNT(this->effect) - 1; i++, effect++) {
         if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
+            s32 requiredScopeTemp;
+
             effect->type = CLEAR_TAG_EFFECT_LIGHT_RAYS;
 
             effect->position = *position;
@@ -271,7 +273,6 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* v
 
             break;
         }
-    dummy:;
     }
 }
 
@@ -415,9 +416,9 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                 for (i = 0; i < 54; i++) {
                     lightRayMaxScale =
                         sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
-                    SysMatrix_InsertYRotation_f(Rand_ZeroFloat(M_PI * 2), 0);
-                    SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(M_PI * 2));
-                    SysMatrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
+                    Matrix_InsertYRotation_f(Rand_ZeroFloat(M_PI * 2), 0);
+                    Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(M_PI * 2));
+                    Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                     accel.x = vel.x * -0.03f;
                     accel.y = vel.y * -0.03f;
                     accel.z = vel.z * -0.03f;
@@ -488,9 +489,9 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             pos = this->actor.world.pos;
             for (i = 0; i < 44; i++) {
                 lightRayMaxScale = sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
-                SysMatrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
-                SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                SysMatrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
+                Matrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
+                Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
+                Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                 accel.x = vel.x * -0.03f;
                 accel.y = vel.y * -0.03f;
                 accel.z = vel.z * -0.03f;
@@ -508,7 +509,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Camera* camera;
     s32 pad;
 
@@ -797,10 +798,10 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             // Draw the debris effect.
-            SysMatrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
-            SysMatrix_InsertYRotation_f(effect->rotationY, MTXMODE_APPLY);
-            SysMatrix_RotateStateAroundXAxis(effect->rotationX);
+            Matrix_InsertYRotation_f(effect->rotationY, MTXMODE_APPLY);
+            Matrix_RotateStateAroundXAxis(effect->rotationX);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gClearTagDebrisEffectDL);
         }
@@ -816,7 +817,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)effect->primColor.a);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)effect->primColor.a);
                 func_800C0094(this->actor.floorPoly, effect->position.x, effect->position.y, effect->position.z, &mtxF);
-                SysMatrix_SetCurrentState(&mtxF);
+                Matrix_SetCurrentState(&mtxF);
                 Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, D_04030100);
@@ -841,7 +842,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)(effect->primColor.a * 0.7f));
                 func_800C0094(this->actor.floorPoly, effect->position.x, this->actor.floorHeight, effect->position.z,
                               &mtxF);
-                SysMatrix_SetCurrentState(&mtxF);
+                Matrix_SetCurrentState(&mtxF);
                 Matrix_Scale(effect->scale * 3.0f, 1.0f, effect->scale * 3.0f, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectGroundDL);
@@ -869,10 +870,10 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             gSPSegment(
                 POLY_XLU_DISP++, 0x08,
                 Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 32, 64, 1, 0, 0, 32, 32));
-            SysMatrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
-            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(effect->smokeScaleX * effect->scale, effect->smokeScaleY * effect->scale, 1.0f, MTXMODE_APPLY);
-            SysMatrix_InsertTranslation(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_InsertTranslation(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
         }
@@ -895,8 +896,8 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             gSPSegment(
                 POLY_XLU_DISP++, 0x08,
                 Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 32, 64, 1, 0, 0, 32, 32));
-            SysMatrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
-            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
@@ -917,8 +918,8 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
             // Draw the flash billboard effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColor.a);
-            SysMatrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
-            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(2.0f * effect->scale, 2.0f * effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectDL);
@@ -942,12 +943,12 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             // Draw the light ray effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)effect->primColor.r, (u8)effect->primColor.g,
                             (u8)effect->primColor.b, (u8)effect->primColor.a);
-            SysMatrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
-            SysMatrix_InsertYRotation_f(effect->rotationY, MTXMODE_APPLY);
-            SysMatrix_RotateStateAroundXAxis(effect->rotationX);
-            SysMatrix_InsertZRotation_f(effect->rotationZ, MTXMODE_APPLY);
+            Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_InsertYRotation_f(effect->rotationY, MTXMODE_APPLY);
+            Matrix_RotateStateAroundXAxis(effect->rotationX);
+            Matrix_InsertZRotation_f(effect->rotationZ, MTXMODE_APPLY);
             Matrix_Scale(effect->scale * 0.5f, effect->scale * 0.5f, effect->maxScale * effect->scale, MTXMODE_APPLY);
-            SysMatrix_RotateStateAroundXAxis(M_PI / 2);
+            Matrix_RotateStateAroundXAxis(M_PI / 2);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagLightRayEffectDL);
         }
@@ -967,8 +968,8 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
             // Apply material 16 times along a circle to give the appearance of a splash
             for (j = 0; j < 16; j++) {
-                SysMatrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_NEW);
-                SysMatrix_GetStateTranslationAndScaledZ(effect->maxScale, &vec);
+                Matrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_NEW);
+                Matrix_GetStateTranslationAndScaledZ(effect->maxScale, &vec);
                 /**
                  * Get the water surface at point (`x`, `ySurface`, `z`). `ySurface` doubles as position y input
                  * returns true if point is within the xz boundaries of an active water box, else false
@@ -979,10 +980,10 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                                   &ySurface, &waterBox)) {
                     if ((effect->position.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
-                        SysMatrix_InsertTranslation(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,
-                                                    MTXMODE_NEW);
-                        SysMatrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_APPLY);
-                        SysMatrix_RotateStateAroundXAxis(effect->rotationX);
+                        Matrix_InsertTranslation(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,
+                                                 MTXMODE_NEW);
+                        Matrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_APPLY);
+                        Matrix_RotateStateAroundXAxis(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
                         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                         gSPDisplayList(POLY_XLU_DISP++, D_0403A0F0);

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_iknin_susceil.c
+ * Overlay: ovl_Bg_Iknin_Susceil
+ * Description: Ikana Castle - Hot Checkered Ceiling
+ */
+
 #include "z_bg_iknin_susceil.h"
 
 #define FLAGS 0x00000030
@@ -49,7 +55,7 @@ static InitChainEntry sInitChain[] = {
 s32 func_80C0A740(BgIkninSusceil* this, GlobalContext* globalCtx) {
     s32 pad2[2];
     Vec3f offset;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
 
@@ -66,7 +72,7 @@ void func_80C0A838(BgIkninSusceil* this, GlobalContext* globalCtx) {
 
 void func_80C0A86C(BgIkninSusceil* this, GlobalContext* globalCtx, s16 verticalMag, s16 countdown, s32 arg4) {
     s32 pad;
-    s16 quake = Quake_Add(ACTIVE_CAM, 3);
+    s16 quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
 
     Quake_SetSpeed(quake, 0x7B30);
     Quake_SetQuakeValues(quake, verticalMag, 0, 0, 0);
@@ -84,7 +90,7 @@ s32 func_80C0A95C(BgIkninSusceil* this, GlobalContext* globalCtx) {
     s32 phi_t0 = true;
     s32 i;
     f32 new_var;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f offset;
     f32 temp1, temp2, temp3, temp4;
 
@@ -218,7 +224,7 @@ void func_80C0AE5C(BgIkninSusceil* this, GlobalContext* globalCtx) {
 void BgIkninSusceil_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgIkninSusceil* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->unk168 == 0) && (this->unk166 > 0) && (player->stateFlags3 & 0x100) && (player->unk_B48 > 1000.0f)) {
         this->unk168 = 2;

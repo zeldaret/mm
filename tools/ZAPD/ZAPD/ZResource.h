@@ -21,8 +21,6 @@
 #define GETSEGOFFSET(x) (x & 0x00FFFFFF)
 #define GETSEGNUM(x) ((x >> 24) & 0xFF)
 
-typedef uint32_t segptr_t;
-
 class ZFile;
 
 enum class ZResourceType
@@ -40,6 +38,7 @@ enum class ZResourceType
 	LimbTable,
 	Mtx,
 	Path,
+	PlayerAnimationData,
 	Room,
 	RoomCommand,
 	Scalar,
@@ -57,8 +56,8 @@ enum class ZResourceType
 class ResourceAttribute
 {
 public:
-	std::string key = "";
-	std::string value = "";
+	std::string key;
+	std::string value;
 	bool isRequired = false;
 	bool wasSet = false;
 };
@@ -70,54 +69,127 @@ public:
 	bool outputDeclaration = true;
 	uint32_t hash = 0;
 
+	/**
+	 * Constructor.
+	 * Child classes should not declare any other constructor besides this one
+	 */
 	ZResource(ZFile* nParent);
 	virtual ~ZResource() = default;
 
 	// Parsing from File
-	virtual void ExtractFromXML(tinyxml2::XMLElement* reader, uint32_t nRawDataIndex);
-	virtual void ExtractFromFile(uint32_t nRawDataIndex);
+	virtual void ExtractFromXML(tinyxml2::XMLElement* reader, offset_t nRawDataIndex);
+	virtual void ExtractFromFile(offset_t nRawDataIndex);
 
 	// Misc
+	/**
+	 * Parses additional attributes of the XML node.
+	 * Extra attritbutes have to be registered using `RegisterRequiredAttribute` or
+	 * `RegisterOptionalAttribute` in the constructor of the ZResource
+	 */
 	virtual void ParseXML(tinyxml2::XMLElement* reader);
+	/**
+	 * Extracts data from the binary file
+	 */
 	virtual void ParseRawData();
+	/**
+	 * Declares any data pointed by this resource that has not been declared already.
+	 * For example, a Vtx referenced by a Dlist should be declared here if it wasn't
+	 * declared previously by something else
+	 */
 	virtual void DeclareReferences(const std::string& prefix);
 	virtual void ParseRawDataLate();
 	virtual void DeclareReferencesLate(const std::string& prefix);
-	virtual std::string GetBodySourceCode() const;
+
+	/**
+	 * Adds this resource as a Declaration of its parent ZFile
+	 */
+	virtual Declaration* DeclareVar(const std::string& prefix, const std::string& bodyStr);
+	/**
+	 * Returns the body of the variable of the extracted resource, without any side-effect
+	 */
+	[[nodiscard]] virtual std::string GetBodySourceCode() const;
+	/**
+	 * Creates an automatically generated variable name for the current resource
+	 */
+	[[nodiscard]] virtual std::string GetDefaultName(const std::string& prefix) const;
 
 	virtual std::string GetSourceOutputCode(const std::string& prefix);
 	virtual std::string GetSourceOutputHeader(const std::string& prefix);
 	virtual void CalcHash();
+	/**
+	 * Exports the resource to binary format
+	 */
 	virtual void Save(const fs::path& outFolder);
 
 	// Properties
+	/**
+	 * Returns true if the resource will be externalized, and included back to the C file using
+	 * `#include`s
+	 */
 	virtual bool IsExternalResource() const;
-	virtual bool DoesSupportArray() const;  // Can this type be wrapped in an <Array> node?
-	virtual std::string GetSourceTypeName() const = 0;
-	virtual ZResourceType GetResourceType() const = 0;
-	virtual std::string GetExternalExtension() const;
+	/**
+	 * Can this type be wrapped in an <Array> node?
+	 */
+	virtual bool DoesSupportArray() const;
+	/**
+	 * The type of the resource as a C struct
+	 */
+	[[nodiscard]] virtual std::string GetSourceTypeName() const = 0;
+	/**
+	 * The type in the ZResource enum
+	 */
+	[[nodiscard]] virtual ZResourceType GetResourceType() const = 0;
+	/**
+	 * The filename extension for assets extracted as standalone files
+	 */
+	[[nodiscard]] virtual std::string GetExternalExtension() const;
 
 	// Getters/Setters
-	const std::string& GetName() const;
+	[[nodiscard]] const std::string& GetName() const;
 	void SetName(const std::string& nName);
-	const std::string& GetOutName() const;
+	[[nodiscard]] const std::string& GetOutName() const;
 	void SetOutName(const std::string& nName);
-	virtual uint32_t GetRawDataIndex() const;
-	virtual void SetRawDataIndex(uint32_t value);
-	virtual size_t GetRawDataSize() const = 0;
+	[[nodiscard]] offset_t GetRawDataIndex() const;
+	/**
+	 * The size of the current struct being extracted, not counting data referenced by it
+	 */
+	[[nodiscard]] virtual size_t GetRawDataSize() const = 0;
+	/**
+	 * The alignment of the extracted struct
+	 */
+	[[nodiscard]] virtual DeclarationAlignment GetDeclarationAlignment() const;
 	void SetInnerNode(bool inner);
-	bool WasDeclaredInXml() const;
+	/**
+	 * Returns `true` if this ZResource was declared using an XML node,
+	 * `false` otherwise (for example, a Vtx extracted indirectly by a DList)
+	 */
+	[[nodiscard]] bool WasDeclaredInXml() const;
+	[[nodiscard]] StaticConfig GetStaticConf() const;
 
 protected:
 	std::string name;
 	std::string outName;
-	uint32_t rawDataIndex;
+	offset_t rawDataIndex;
 	std::string sourceOutput;
-	bool isInner = false;  // Is this resource an inner node of another resource? inside of <Array>
-	bool canHaveInner = false;  // Can this type have an inner node?
-	bool isCustomAsset;  // If set to true, create a reference for the asset in the file, but don't
-	                     // actually try to extract it from the file
+
+	// Inner is used mostly for <Array> nodes
+	/**
+	 * Is this resource an inner node of another resource?
+	 * (namely inside an <Array>)
+	 */
+	bool isInner = false;
+	/**
+	 * Can this type have an inner node?
+	 */
+	bool canHaveInner = false;
+
+	/**
+	 * If set to true, create a reference for the asset in the file, but don't
+	 * actually try to extract it from the file
+	 */
+	bool isCustomAsset;
 	bool declaredInXml = false;
+	StaticConfig staticConf = StaticConfig::Global;
 
 	// Reading from this XMLs attributes should be performed in the overrided `ParseXML` method.
 	std::map<std::string, ResourceAttribute> registeredAttributes;
@@ -137,11 +209,12 @@ class ZResourceExporter
 {
 public:
 	ZResourceExporter() = default;
+	virtual ~ZResourceExporter() = default;
 
 	virtual void Save(ZResource* res, fs::path outPath, BinaryWriter* writer) = 0;
 };
 
-uint32_t Seg2Filespace(segptr_t segmentedAddress, uint32_t parentBaseAddress);
+offset_t Seg2Filespace(segptr_t segmentedAddress, uint32_t parentBaseAddress);
 
 typedef ZResource*(ZResourceFactoryFunc)(ZFile* nParent);
 
@@ -167,4 +240,4 @@ typedef ZResource*(ZResourceFactoryFunc)(ZFile* nParent);
 	public:                                                                                        \
 		ZResExp_##expFunc() { expFunc(); }                                                         \
 	};                                                                                             \
-	static ZResExp_##expFunc inst_ZResExp_##expFunc;
+	static ZResExp_##expFunc inst_ZResExp_##expFunc

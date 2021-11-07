@@ -1,3 +1,9 @@
+/*
+ * File: z_en_fu_mato.c
+ * Overlay: ovl_En_Fu_Mato
+ * Description: Honey & Darling's Shop - Target
+ */
+
 #include "z_en_fu_mato.h"
 
 #define FLAGS 0x00000030

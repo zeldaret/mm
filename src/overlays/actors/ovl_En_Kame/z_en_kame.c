@@ -1,3 +1,9 @@
+/*
+ * File: z_en_kame.c
+ * Overlay: ovl_En_Kame
+ * Description: Snapper Turtle
+ */
+
 #include "z_en_kame.h"
 
 #define FLAGS 0x00000405
