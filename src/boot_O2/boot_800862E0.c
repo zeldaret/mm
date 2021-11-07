@@ -15,7 +15,7 @@ char D_80097508[0x18] = { // unk
 };
 
 void* SystemArena_MallocMin1(u32 size) {
-    if (size == 1) {
+    if (size == 0) {
         size = 1;
     }
 
