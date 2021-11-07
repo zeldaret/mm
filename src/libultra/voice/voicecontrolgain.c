@@ -14,7 +14,7 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
         phi_a2 = 0x98;
     }
 
-    errorCode = __osVoiceSetADConverter(hd->mq, hd->port, phi_a2, hd);
+    errorCode = __osVoiceSetADConverter(hd->mq, hd->port, phi_a2);
     if (errorCode != 0) {
         return errorCode;
     }
@@ -30,7 +30,7 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
         return 5;
     }
 
-    errorCode = __osVoiceSetADConverter(hd->mq, hd->port, phi_a2, hd);
+    errorCode = __osVoiceSetADConverter(hd->mq, hd->port, phi_a2);
     if (errorCode != 0) {
         return errorCode;
     } 
