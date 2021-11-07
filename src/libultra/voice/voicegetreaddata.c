@@ -44,7 +44,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
                 return 0xF;
             }
 
-            sp38[1] = 0x600;
+            sp38[0] = 0x600; // Not reading in correctly since 0x600 is out-of-range for u8
             errorCode = __osVoiceContWrite4(hd->mq, hd->port, 0, sp38);
             if (errorCode != 0) {
                 return errorCode;
