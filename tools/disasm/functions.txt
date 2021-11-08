@@ -5736,7 +5736,7 @@
     0x808A7138:("EnSt_Init",),
     0x808A71D0:("EnSt_Destroy",),
     0x808A7230:("EnSt_Update",),
-    0x808A73E8:("func_808A73E8",),
+    0x808A73E8:("EnSt_OverrideLimbDraw",),
     0x808A7478:("func_808A7478",),
     0x808A7930:("ObjWturn_Init",),
     0x808A7954:("func_808A7954",),
