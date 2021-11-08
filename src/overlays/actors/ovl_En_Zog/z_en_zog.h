@@ -42,7 +42,6 @@ typedef struct EnZog {
     /* 0x320 */ s16 unk_320;
     /* 0x322 */ s16 unk_322;
     /* 0x324 */ s16 unk_324;
-    /* 0x326 */ char unk326[2];
     /* 0x328 */ EnZogActionFunc actionFunc;
 } EnZog; // size = 0x32C
 
