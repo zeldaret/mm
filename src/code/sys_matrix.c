@@ -27,13 +27,17 @@ MtxF* sCurrentMatrix; // "Matrix_now"
 
 #define MATRIX_STACK_SIZE 20
 
+/* Stack operations */
+
 // Matrix_Init
+/* Create the matrix stack and set the pointer to the top of it */
 void Matrix_StateAlloc(GameState* gameState) {
     sMatrixStack = THA_AllocEndAlign16(&gameState->heap, MATRIX_STACK_SIZE * sizeof(MtxF));
     sCurrentMatrix = sMatrixStack;
 }
 
 // Matrix_Push
+/* Place a new matrix on the top of the stack */
 void Matrix_StatePush(void) {
     MtxF* prev = sCurrentMatrix;
 
@@ -42,21 +46,39 @@ void Matrix_StatePush(void) {
 }
 
 // Matrix_Pop
+/* Discard the top matrix on the stack */
 void Matrix_StatePop(void) {
     sCurrentMatrix--;
 }
 
 // Matrix_Get
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_CopyCurrentState.s")
+/* Read and copy the top matrix from the stack */
+void Matrix_CopyCurrentState(MtxF *matrix) {
+    Matrix_MtxFCopy(matrix, sCurrentMatrix);
+}
 
-// Matrix_Push
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_SetCurrentState.s")
+// Matrix_Put
+/* Write a matrix to the top of the stack */
+void Matrix_SetCurrentState(MtxF *matrix) {
+    Matrix_MtxFCopy(sCurrentMatrix, matrix);
+}
 
 // Matrix_GetCurrent
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_GetCurrentState.s")
+/* Return pointer to top of the matrix stack */
+MtxF *Matrix_GetCurrentState(void) {
+    return sCurrentMatrix;
+}
 
 // Matrix_Mult
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_InsertMatrix.s")
+void Matrix_InsertMatrix(MtxF* mf, s32 mode) {
+    MtxF* cmf = Matrix_GetCurrentState();
+
+    if (mode == MTXMODE_APPLY) {
+        SkinMatrix_MtxFMtxFMult(cmf, mf, cmf);
+    } else {
+        Matrix_MtxFCopy(sCurrentMatrix, mf);
+    }
+}
 
 // Matrix_Translate
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_InsertTranslation.s")
@@ -95,12 +117,18 @@ void Matrix_StatePop(void) {
 // Matrix_MtxFToMtx
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_ToRSPMatrix.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_ToMtx.s")
+Mtx *Matrix_ToMtx(Mtx *dest) {
+    return Matrix_ToRSPMatrix(sCurrentMatrix, dest);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_NewMtx.s")
+Mtx *Matrix_NewMtx(GraphicsContext *gfxCtx) {
+    return Matrix_ToMtx(GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
+}
 
 // Matrix_MtxFToNewMtx
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_AppendToPolyOpaDisp.s")
+Mtx* Matrix_AppendToPolyOpaDisp(MtxF* src, GraphicsContext* gfxCtx) {
+    return Matrix_ToRSPMatrix(src, GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
+}
 
 // Matrix_MultVec3f
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_MultiplyVector3fByState.s")
@@ -117,7 +145,51 @@ void Matrix_StatePop(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_MultiplyVector3fXZByCurrentState.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_MtxFCopy.s")
+void Matrix_MtxFCopy(MtxF* dest, MtxF* src) {
+    f32 f0;
+    f32 f2;
+
+    if (1) {
+        f0 = src->mf[0][0];
+        f2 = src->mf[0][1];
+        dest->mf[0][0] = f0;
+        dest->mf[0][1] = f2;
+        f0 = src->mf[0][2];
+        f2 = src->mf[0][3];
+        dest->mf[0][2] = f0;
+        dest->mf[0][3] = f2;
+    }
+    if (1) {
+        f0 = src->mf[1][0];
+        f2 = src->mf[1][1];
+        dest->mf[1][0] = f0;
+        dest->mf[1][1] = f2;
+        f0 = src->mf[1][2];
+        f2 = src->mf[1][3];
+        dest->mf[1][2] = f0;
+        dest->mf[1][3] = f2;
+    }
+    if (1) {
+        f0 = src->mf[2][0];
+        f2 = src->mf[2][1];
+        dest->mf[2][0] = f0;
+        dest->mf[2][1] = f2;
+        f0 = src->mf[2][2];
+        f2 = src->mf[2][3];
+        dest->mf[2][2] = f0;
+        dest->mf[2][3] = f2;
+    }
+    if (1) {
+        f0 = src->mf[3][0];
+        f2 = src->mf[3][1];
+        dest->mf[3][0] = f0;
+        dest->mf[3][1] = f2;
+        f0 = src->mf[3][2];
+        f2 = src->mf[3][3];
+        dest->mf[3][2] = f0;
+        dest->mf[3][3] = f2;
+    }
+}
 
 // Matrix_MtxToMtxF
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_FromRSPMatrix.s")

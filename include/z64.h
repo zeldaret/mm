@@ -303,10 +303,10 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
 
-typedef struct {
-    /* 0x00 */ s16 intPart[16];
-    /* 0x20 */ u16 fracPart[16];
-} RSPMatrix; // size = 0x40
+// typedef struct {
+//     /* 0x00 */ s16 intPart[16];
+//     /* 0x20 */ u16 fracPart[16];
+// } RSPMatrix; // size = 0x40
 
 typedef struct {
     /* 0x0 */ s8 letterboxTarget;
