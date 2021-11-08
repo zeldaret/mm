@@ -1,5 +1,5 @@
 /*
- * File z_en_bigokuta.c
+ * File: z_en_bigokuta.c
  * Overlay: ovl_En_Bigokuta
  * Description: Big Octo
  */

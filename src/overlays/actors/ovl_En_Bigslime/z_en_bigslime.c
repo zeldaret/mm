@@ -1,5 +1,5 @@
 /*
- * File z_en_bigslime.c
+ * File: z_en_bigslime.c
  * Overlay: ovl_En_Bigslime
  * Description: Mad Jelly (miniboss)
  */

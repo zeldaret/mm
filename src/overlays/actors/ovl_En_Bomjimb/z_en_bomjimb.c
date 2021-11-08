@@ -1,5 +1,5 @@
 /*
- * File z_en_bomjimb.c
+ * File: z_en_bomjimb.c
  * Overlay: ovl_En_Bomjimb
  * Description: Bombers when chasing them
  */

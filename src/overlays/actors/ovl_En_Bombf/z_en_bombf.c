@@ -1,5 +1,5 @@
 /*
- * File z_en_bombf.c
+ * File: z_en_bombf.c
  * Overlay: ovl_En_Bombf
  * Description: Bomb flower
  */

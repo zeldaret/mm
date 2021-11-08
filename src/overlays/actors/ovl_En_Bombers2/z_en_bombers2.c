@@ -1,5 +1,5 @@
 /*
- * File z_en_bombers2.c
+ * File: z_en_bombers2.c
  * Overlay: ovl_En_Bombers2
  * Description: Bombers - Hideout Guard
  */

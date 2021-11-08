@@ -1,5 +1,5 @@
 /*
- * File z_en_clear_tag.c
+ * File: z_en_clear_tag.c
  * Overlay: ovl_En_Clear_Tag
  * Description: Various effects: explosions and pops, splashes, light rays
  */

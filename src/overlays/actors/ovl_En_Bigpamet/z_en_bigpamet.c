@@ -1,5 +1,5 @@
 /*
- * File z_en_bigpamet.c
+ * File: z_en_bigpamet.c
  * Overlay: ovl_En_Bigpamet
  * Description: Gekko & Snapper Miniboss - Snapper
  */

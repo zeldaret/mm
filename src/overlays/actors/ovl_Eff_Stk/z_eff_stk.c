@@ -1,5 +1,5 @@
 /*
- * File z_eff_stk.c
+ * File: z_eff_stk.c
  * Overlay: ovl_Eff_Stk
  * Description: Skullkid Effects (calling down moon / cursing Link)
  */

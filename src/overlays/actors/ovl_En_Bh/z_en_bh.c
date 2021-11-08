@@ -1,5 +1,5 @@
 /*
- * File z_en_bh.c
+ * File: z_en_bh.c
  * Overlay: ovl_En_Bh
  * Description: Brown Bird (on the Moon)
  */

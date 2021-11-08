@@ -1,5 +1,5 @@
 /*
- * File z_en_bubble.c
+ * File: z_en_bubble.c
  * Overlay: ovl_En_Bubble
  * Description: Bubble (flying skull enemy)
  */

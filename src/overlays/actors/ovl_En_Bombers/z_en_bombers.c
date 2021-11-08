@@ -1,5 +1,5 @@
 /*
- * File z_en_bombers.c
+ * File: z_en_bombers.c
  * Overlay: ovl_En_Bombers
  * Description: Bombers - Blue-Hatted Bomber
  */

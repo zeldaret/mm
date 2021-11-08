@@ -1,5 +1,5 @@
 /*
- * File z_elf_msg2.c
+ * File: z_elf_msg2.c
  * Overlay: ovl_Elf_Msg2
  * Description: Tatl Hint (Z-target-activated C-up hint?)
  */

@@ -1,5 +1,5 @@
 /*
- * File z_en_bombal.c
+ * File: z_en_bombal.c
  * Overlay: ovl_En_Bombal
  * Description: Bombers - Majora Balloon
  */

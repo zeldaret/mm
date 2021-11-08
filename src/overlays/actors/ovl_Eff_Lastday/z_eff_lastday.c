@@ -1,5 +1,5 @@
 /*
- * File z_eff_lastday.c
+ * File: z_eff_lastday.c
  * Overlay: ovl_Eff_Lastday
  * Description: Moon Crash Cutscene Fire Wall
  */

@@ -1,5 +1,5 @@
 /*
- * File z_en_bomjima.c
+ * File: z_en_bomjima.c
  * Overlay: ovl_En_Bomjima
  * Description: Bombers - Jim
  */

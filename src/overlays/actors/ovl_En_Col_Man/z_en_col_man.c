@@ -1,5 +1,5 @@
 /*
- * File z_en_col_man.c
+ * File: z_en_col_man.c
  * Overlay: ovl_En_Col_Man
  * Description: Piece of Heart spawned by Fish2
  */

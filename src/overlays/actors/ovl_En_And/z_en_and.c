@@ -1,5 +1,5 @@
 /*
- * File z_en_and.c
+ * File: z_en_and.c
  * Overlay: ovl_En_And
  * Description: Anju in Wedding Dress
  */

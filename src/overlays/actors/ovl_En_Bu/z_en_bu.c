@@ -1,5 +1,5 @@
 /*
- * File z_en_bu.c
+ * File: z_en_bu.c
  * Overlay: ovl_En_Bu
  * Description: Unused dummied-out enemy
  */

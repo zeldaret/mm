@@ -1,5 +1,5 @@
 /*
- * File z_en_box.c
+ * File: z_en_box.c
  * Overlay: ovl_En_Box
  * Description: Chest
  */

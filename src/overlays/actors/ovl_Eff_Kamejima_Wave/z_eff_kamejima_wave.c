@@ -1,5 +1,5 @@
 /*
- * File z_eff_kamejima_wave.c
+ * File: z_eff_kamejima_wave.c
  * Overlay: ovl_Eff_Kamejima_Wave
  * Description: Wave Created by Turtle Awakening
  */
