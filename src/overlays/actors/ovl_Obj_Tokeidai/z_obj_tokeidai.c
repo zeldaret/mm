@@ -1,7 +1,7 @@
 /*
  * File: z_obj_tokeidai.c
  * Overlay: ovl_Obj_Tokeidai
- * Description: Clock Face
+ * Description: Components of the Clock Tower (gears, clock face, counterweight, etc).
  */
 
 #include "z_obj_tokeidai.h"

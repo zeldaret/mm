@@ -1,7 +1,7 @@
 /*
  * File: z_en_bubble.c
  * Overlay: ovl_En_Bubble
- * Description: Bubble (flying skull enemy)
+ * Description: Shabom (unused)
  */
 
 #include "z_en_bubble.h"
