@@ -4432,9 +4432,7 @@ beginseg
     name "ovl_En_Zog"
     compress
     include "build/src/overlays/actors/ovl_En_Zog/z_en_zog.o"
-    include "build/data/ovl_En_Zog/ovl_En_Zog.data.o"
-    include "build/data/ovl_En_Zog/ovl_En_Zog.bss.o"
-    include "build/data/ovl_En_Zog/ovl_En_Zog.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Zog/ovl_En_Zog_reloc.o"
 endseg
 
 beginseg
