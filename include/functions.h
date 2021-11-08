@@ -386,7 +386,7 @@ s32 __osContChannelReset(OSMesgQueue* mq, s32 count);
 s32 __osVoiceSetADConverter(OSMesgQueue* mq, s32 port, u8 arg2); 
 s32 osAiSetFrequency(u32 frequency);
 s32 __osContRamRead(OSMesgQueue* mq, s32 channel, u16 address, u8* buffer);
-// void __osVoiceContWrite20(void);
+s32 __osVoiceContWrite20(OSMesgQueue*, s32, u8, u8*);
 u8 __osContAddressCrc(u16 addr);
 u8 __osContDataCrc(u8* data);
 OSThread* __osGetActiveQueue(void);
