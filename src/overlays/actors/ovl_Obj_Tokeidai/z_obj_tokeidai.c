@@ -17,8 +17,8 @@ void ObjTokeidai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void ObjTokeidai_CollapseGear(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_TransformedGearIdle(ObjTokeidai* this, GlobalContext* globalCtx);
-void func_80AB32F0(ObjTokeidai* this, GlobalContext* globalCtx);
-void func_80AB3370(ObjTokeidai* this, GlobalContext* globalCtx);
+void ObjTokeidai_TransformedClockFaceFall(ObjTokeidai* this, GlobalContext* globalCtx);
+void ObjTokeidai_TransformedClockFaceSlideOff(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_TransformedClockIdle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_CollapseTop(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_TransformedTopIdle(ObjTokeidai* this, GlobalContext* globalCtx);
@@ -45,11 +45,11 @@ void ObjTokeidai_DrawTowerGear(Actor* thisx, GlobalContext* globalCtx);
 #define settleTimer clockFaceAdditionalRotation
 #define transformationRotationalVelocity clockFaceAdditionalRotation
 #define transformationWaitTimer clockFaceAdditionalRotation
-#define unk_154 clockFaceAdditionalRotation
+#define slidingClockFaceAngle clockFaceAdditionalRotation
 #define settleAmount clockFaceRotationTimer
 #define transformationRotationalAcceleration clockFaceRotationTimer
-#define unk_156 clockFaceRotationTimer
-#define unk_15C sunMoonDiskAdditionalRotation
+#define aerialClockFaceSpeed clockFaceRotationTimer
+#define clockFaceRotationalVelocity sunMoonDiskAdditionalRotation
 #define lightIntensity clockHour
 
 const ActorInit Obj_Tokeidai_InitVars = {
@@ -317,10 +317,10 @@ void ObjTokeidai_TransformedGearIdle(ObjTokeidai* this, GlobalContext* globalCtx
     }
 }
 
-void func_80AB32F0(ObjTokeidai* this, GlobalContext* globalCtx) {
-    this->actor.shape.rot.x += this->unk_15C;
-    if (this->unk_15C >= 0xA1) {
-        this->unk_15C -= 5;
+void ObjTokeidai_TransformedClockFaceFall(ObjTokeidai* this, GlobalContext* globalCtx) {
+    this->actor.shape.rot.x += this->clockFaceRotationalVelocity;
+    if (this->clockFaceRotationalVelocity >= 0xA1) {
+        this->clockFaceRotationalVelocity -= 5;
     }
     this->actor.world.pos.z += 4.0f;
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
@@ -329,46 +329,46 @@ void func_80AB32F0(ObjTokeidai* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AB3370(ObjTokeidai* this, GlobalContext* globalCtx) {
+void ObjTokeidai_TransformedClockFaceSlideOff(ObjTokeidai* this, GlobalContext* globalCtx) {
     f32 cos;
     f32 sin;
     Actor* thisx = &this->actor;
 
-    if (this->unk_154 < 0x4000) {
-        this->unk_154 += 0x28;
+    if (this->slidingClockFaceAngle < 0x4000) {
+        this->slidingClockFaceAngle += 0x28;
     }
-    if (this->unk_154 >= 0x801) {
-        this->unk_156 += 4;
+    if (this->slidingClockFaceAngle >= 0x801) {
+        this->aerialClockFaceSpeed += 4;
     }
-    if (this->unk_156 < 0x80) {
-        thisx->shape.rot.x = this->unk_154 - 0x4000;
-        this->unk_15C = 0x28;
+    if (this->aerialClockFaceSpeed < 0x80) {
+        thisx->shape.rot.x = this->slidingClockFaceAngle - 0x4000;
+        this->clockFaceRotationalVelocity = 0x28;
     } else {
         if (thisx->shape.rot.x < -0x1000) {
-            thisx->shape.rot.x += this->unk_15C;
-            if (this->unk_15C < 0x1E0) {
-                this->unk_15C += 0xA;
+            thisx->shape.rot.x += this->clockFaceRotationalVelocity;
+            if (this->clockFaceRotationalVelocity < 0x1E0) {
+                this->clockFaceRotationalVelocity += 0xA;
             }
         } else {
-            thisx->shape.rot.x += this->unk_15C;
-            this->actionFunc = func_80AB32F0;
+            thisx->shape.rot.x += this->clockFaceRotationalVelocity;
+            this->actionFunc = ObjTokeidai_TransformedClockFaceFall;
             thisx->minVelocityY = -7.5f;
             thisx->gravity = -0.75f;
             thisx->velocity.y = -2.0f;
         }
     }
 
-    sin = Math_SinS(this->unk_154);
-    cos = Math_CosS(this->unk_154);
-    thisx->world.pos.y = (1178.0f * cos) - (this->unk_156 * sin) + thisx->home.pos.y;
-    thisx->world.pos.z = (1178.0f * sin) + (this->unk_156 * cos) + thisx->home.pos.z;
+    sin = Math_SinS(this->slidingClockFaceAngle);
+    cos = Math_CosS(this->slidingClockFaceAngle);
+    thisx->world.pos.y = (1178.0f * cos) - (this->aerialClockFaceSpeed * sin) + thisx->home.pos.y;
+    thisx->world.pos.z = (1178.0f * sin) + (this->aerialClockFaceSpeed * cos) + thisx->home.pos.z;
 }
 
 void ObjTokeidai_TransformedClockIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 1) {
-        this->actionFunc = func_80AB3370;
-        this->unk_154 = 0;
-        this->unk_156 = -0xD;
+        this->actionFunc = ObjTokeidai_TransformedClockFaceSlideOff;
+        this->slidingClockFaceAngle = 0;
+        this->aerialClockFaceSpeed = -0xD;
     }
 }
 
