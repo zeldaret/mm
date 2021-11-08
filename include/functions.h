@@ -1664,7 +1664,7 @@ ActorCutscene* ActorCutscene_GetCutscene(s16 index);
 s16 ActorCutscene_GetAdditionalCutscene(s16 index);
 s16 ActorCutscene_GetLength(s16 index);
 // void func_800F2138(void);
-// void func_800F2178(void);
+s32 func_800F2178(s16 arg0);
 s16 ActorCutscene_GetCurrentCamera(s16 index);
 // void func_800F21CC(void);
 s32 func_800F22C4(s16 param_1, Actor* actor);
