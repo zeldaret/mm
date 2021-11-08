@@ -12,11 +12,11 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
     }
 
     if (status & 2) {
-        return 0xF;
+        return CONT_ERR_VOICE_NO_RESPONSE;
     }
 
     if (hd->mode != 0) {
-        return 5;
+        return CONT_ERR_INVALID;
     }
 
     sp24 = 0x5000000;
@@ -26,7 +26,7 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
         errorCode = __osVoiceCheckResult(hd, &status);
         
         if (errorCode & 0xFF00) {
-            errorCode = 5;
+            errorCode = CONT_ERR_INVALID;
         } else {
             hd->mode = 1;
         }

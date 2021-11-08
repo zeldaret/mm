@@ -17,7 +17,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             }
 
             if (sp38[39] & 1) {
-                return 0xC;
+                return CONT_ERR_NOT_READY;
             }
 
             errorCode = __osVoiceContRead2(hd->mq, hd->port, 0, sp38);
@@ -29,7 +29,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             hd->status = temp_t9;
             D_8009CF60 = temp_t9;
             if ((temp_t9 != 0) && (temp_t9 != 7)) {
-                return 0xC;
+                return CONT_ERR_NOT_READY;
             }
         case 2:
             hd->mode = 2;
@@ -41,7 +41,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
 
             if (0) {}
             if (sp38[39] & 2) {
-                return 0xF;
+                return CONT_ERR_VOICE_NO_RESPONSE;
             }
 
             sp38[0] = 0x600; // Not reading in correctly since 0x600 is out-of-range for u8
@@ -59,7 +59,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             }
 
             if (sp38[39] & 1) {
-                return 0xF;
+                return CONT_ERR_VOICE_NO_RESPONSE;
             }
 
             errorCode = __osVoiceContRead36(hd->mq, hd->port, 0, sp38);
@@ -96,7 +96,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             }
 
             if (sp38[39] & 1) {
-                return 0xF;
+                return CONT_ERR_VOICE_NO_RESPONSE;
             }
 
             errorCode = __osVoiceContRead2(hd->mq, hd->port, 0, sp38);
@@ -106,12 +106,12 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
 
             hd->status = sp38[0] & 7;
             if ((sp38[0] & 7) != 0) {
-                return 0xF;
+                return CONT_ERR_VOICE_NO_RESPONSE;
             }
 
             break;
         default:
-            return 5;
+            return CONT_ERR_INVALID;
     }
     hd->mode = 0;
     return errorCode;

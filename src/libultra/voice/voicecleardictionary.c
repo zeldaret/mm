@@ -14,7 +14,7 @@ s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 words) {
 
     registration_word = &sp24;
     if (status & 2) {
-        return 0xF;
+        return CONT_ERR_VOICE_NO_RESPONSE;
     }
 
     sp24 = 0x2000000;
@@ -26,8 +26,8 @@ s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 words) {
     }
 
     errorCode = __osVoiceCheckResult(hd, &status);
-    if ((errorCode & 0xFF00) != 0) {
-        errorCode = 5;
+    if (errorCode & 0xFF00) {
+        errorCode = CONT_ERR_INVALID;
     }
 
     return errorCode;

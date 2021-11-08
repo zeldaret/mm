@@ -27,7 +27,7 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
 
     if (0) {
         dummy:
-        return 5;
+        return CONT_ERR_INVALID;
     }
 
     errorCode = __osVoiceSetADConverter(hd->mq, hd->port, phi_a2);

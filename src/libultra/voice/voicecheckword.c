@@ -13,34 +13,34 @@ s32 osVoiceCheckWord(u8* word) {
         currentWord = word[i + 1] + (new_var << 8);
         if (((currentWord != 0x815B) && (currentWord < 0x829F)) ||
             ((currentWord >= 0x82F2) && (currentWord < 0x8340)) || (currentWord == 0x837F) || (currentWord >= 0x8397)) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         } else if ((i == 0) && ((currentWord == 0x815B) || (currentWord == 0x82F1) || (currentWord == 0x82C1) ||
                                 (currentWord == 0x82EC) || (currentWord == 0x8393) || (currentWord == 0x8362) ||
                                 (currentWord == 0x838E) || (currentWord == 0x8395) || (currentWord == 0x8396))) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         } else if (((currentWord == 0x829F) || (currentWord == 0x8340)) && (currentWord != 0x82D3) &&
                    (currentWord != 0x8374) && (currentWord != 0x8394)) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         } else if (((currentWord == 0x82A1) || (currentWord == 0x8342)) && (currentWord != 0x82A4) &&
                    (currentWord != 0x82C4) && (currentWord != 0x82C5) && (currentWord != 0x82D3) &&
                    (currentWord != 0x8345) && (currentWord != 0x8365) && (currentWord != 0x8366) &&
                    (currentWord != 0x8374) && (currentWord != 0x8394)) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         } else if (((currentWord == 0x82A3) || (currentWord == 0x8344)) && (currentWord != 0x82C6) &&
                    (currentWord != 0x82C7) && (currentWord != 0x82D3) && (currentWord != 0x8367) &&
                    (currentWord != 0x8368) && (currentWord != 0x8374) && (currentWord != 0x8394)) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         } else if (((currentWord == 0x82A5) || (currentWord == 0x8346)) && (currentWord != 0x82A4) &&
                    (currentWord != 0x82B5) && (currentWord != 0x82B6) && (currentWord != 0x82BF) &&
                    (currentWord != 0x82C0) && (currentWord != 0x82C2) && (currentWord != 0x82D3) &&
                    (currentWord != 0x8345) && (currentWord != 0x8356) && (currentWord != 0x8357) &&
                    (currentWord != 0x8360) && (currentWord != 0x8361) && (currentWord != 0x8363) &&
                    (currentWord != 0x8374) && (currentWord != 0x8394)) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         } else if (((currentWord == 0x82A7) || (currentWord == 0x8348)) && (currentWord != 0x82A4) &&
                    (currentWord != 0x82D3) && (currentWord != 0x8345) && (currentWord != 0x8374) &&
                    (currentWord != 0x8394)) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         } else if (((currentWord == 0x82E1) || (currentWord == 0x82E3) || (currentWord == 0x82E5) ||
                     (currentWord == 0x8383) || (currentWord == 0x8385) || (currentWord == 0x8387)) &&
                    (currentWord != 0x82AB) && (currentWord != 0x82B5) && (currentWord != 0x82BF) &&
@@ -52,13 +52,13 @@ s32 osVoiceCheckWord(u8* word) {
                    (currentWord != 0x838A) && (currentWord != 0x834D) && (currentWord != 0x8357) &&
                    (currentWord != 0x8361) && (currentWord != 0x8372) && (currentWord != 0x8373) &&
                    (currentWord != 0x8394)) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         } else if ((currentWord == 0x815B) && ((currentWord == 0x82F1) || (currentWord == 0x82C1) ||
                                                (currentWord == 0x8393) || (currentWord == 0x8362))) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         } else if (((currentWord == 0x82F1) || (currentWord == 0x8393)) &&
                    ((currentWord == 0x82F1) || (currentWord == 0x8393))) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         } else if (((currentWord == 0x82C1) || (currentWord == 0x8362)) &&
                    ((currentWord == 0x815B) || (currentWord == 0x82A0) || (currentWord == 0x82A2) ||
                     (currentWord == 0x82A4) || (currentWord == 0x82A6) || (currentWord == 0x82A8) ||
@@ -86,7 +86,7 @@ s32 osVoiceCheckWord(u8* word) {
                     (currentWord == 0x8344) || (currentWord == 0x8346) || (currentWord == 0x8348) ||
                     (currentWord == 0x8383) || (currentWord == 0x8385) || (currentWord == 0x8387) ||
                     (currentWord == 0x8362) || (currentWord == 0x838E))) {
-            errorCode = 0xE;
+            errorCode = CONT_ERR_VOICE_WORD;
         }
 
         if (errorCode != 0) {
@@ -95,7 +95,7 @@ s32 osVoiceCheckWord(u8* word) {
     }
 
     if ((currentWord == 0x82C1) || (currentWord == 0x8362)) {
-        errorCode = 0xE;
+        errorCode = CONT_ERR_VOICE_WORD;
     }
 
     return errorCode;

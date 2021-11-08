@@ -7,7 +7,7 @@ extern u8 D_80097FA5;
 s32 osVoiceInit(OSMesgQueue* siMessageQ, OSVoiceHandle* hd, s32 channel) {
     s32 errorCode;
     u8* phi_s0;
-    u8 sp37 = 0;
+    u8 status = 0;
     s32 sp30;
     s32 pad;
 
@@ -15,13 +15,13 @@ s32 osVoiceInit(OSMesgQueue* siMessageQ, OSVoiceHandle* hd, s32 channel) {
     hd->mq = siMessageQ;
     hd->mode = 0;
     
-    errorCode = __osVoiceGetStatus(siMessageQ, channel, &sp37);
+    errorCode = __osVoiceGetStatus(siMessageQ, channel, &status);
     if (errorCode != 0) {
         return errorCode;
     }
 
     if (__osContChannelReset(siMessageQ, channel) != 0) {
-        return 4;
+        return CONT_ERR_CONTRFAIL;
     }
 
     for (phi_s0 = &D_80097FA0;;) {
@@ -33,12 +33,12 @@ s32 osVoiceInit(OSMesgQueue* siMessageQ, OSVoiceHandle* hd, s32 channel) {
         }
 
         if (phi_s0 == &D_80097FA5) {
-            errorCode = __osVoiceGetStatus(siMessageQ, channel, &sp37);
+            errorCode = __osVoiceGetStatus(siMessageQ, channel, &status);
             if (errorCode != 0) {
                 return errorCode;
             }
-            if (sp37 & 2) {
-                return 0xF;
+            if (status & 2) {
+                return CONT_ERR_VOICE_NO_RESPONSE;
             }
 
             sp30 = 0x100;
@@ -47,9 +47,9 @@ s32 osVoiceInit(OSMesgQueue* siMessageQ, OSVoiceHandle* hd, s32 channel) {
                 return errorCode;
             }
             
-            errorCode = __osVoiceCheckResult(hd, &sp37);
+            errorCode = __osVoiceCheckResult(hd, &status);
             if (errorCode & 0xFF00) {
-                errorCode = 5;
+                errorCode = CONT_ERR_INVALID;
             }
             
             return errorCode;

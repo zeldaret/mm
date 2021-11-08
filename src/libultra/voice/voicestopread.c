@@ -14,11 +14,11 @@ s32 osVoiceStopReadData(OSVoiceHandle* hd) {
     }
 
     if (sp3F & 2) {
-        return 0xF;
+        return CONT_ERR_VOICE_NO_RESPONSE;
     }
 
     if (hd->mode == 0) {
-        return 5;
+        return CONT_ERR_INVALID;
     }
 
     sp38 = 0x700;
@@ -33,13 +33,13 @@ s32 osVoiceStopReadData(OSVoiceHandle* hd) {
                     errorCode = 0;
                     hd->mode = 0;
                 } else {
-                    errorCode = 5;
+                    errorCode = CONT_ERR_INVALID;
                 }
             } else {
                 hd->mode = 0;
             }
 
-            if (errorCode != 0xF) {
+            if (errorCode != CONT_ERR_VOICE_NO_RESPONSE) {
                 break;
             }
         }
