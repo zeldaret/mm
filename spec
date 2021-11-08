@@ -597,8 +597,6 @@ beginseg
     include "build/data/code/code_801D15B0.data.o"
     include "build/src/code/sys_math_atan.o"
     include "build/src/code/sys_matrix.o"
-    include "build/data/code/sys_matrix.data.o"
-    include "build/data/code/sys_matrix.bss.o"
     include "build/src/code/sys_ucode.o"
     include "build/src/code/code_80182CE0.o"
     include "build/data/code/code_801D1E70.data.o"
