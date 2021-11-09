@@ -880,8 +880,7 @@ beginseg
     name "ovl_En_Peehat"
     compress
     include "build/src/overlays/actors/ovl_En_Peehat/z_en_peehat.o"
-    include "build/data/ovl_En_Peehat/ovl_En_Peehat.data.o"
-    include "build/data/ovl_En_Peehat/ovl_En_Peehat.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Peehat/ovl_En_Peehat_reloc.o"
 endseg
 
 beginseg
