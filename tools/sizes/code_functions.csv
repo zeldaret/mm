@@ -328,7 +328,7 @@ asm/non_matchings/code/z_actor/func_800B90AC.s,func_800B90AC,0x800B90AC,0x12
 asm/non_matchings/code/z_actor/func_800B90F4.s,func_800B90F4,0x800B90F4,0xB
 asm/non_matchings/code/z_actor/func_800B9120.s,func_800B9120,0x800B9120,0x14
 asm/non_matchings/code/z_actor/func_800b9170.s,func_800b9170,0x800B9170,0x71
-asm/non_matchings/code/z_actor/func_800B9334.s,func_800B9334,0x800B9334,0x56
+asm/non_matchings/code/z_actor/Actor_SpawnSetupActors.s,Actor_SpawnSetupActors,0x800B9334,0x56
 asm/non_matchings/code/z_actor/Actor_UpdateActor.s,Actor_UpdateActor,0x800B948C,0xBD
 asm/non_matchings/code/z_actor/Actor_UpdateAll.s,Actor_UpdateAll,0x800B9780,0xA1
 asm/non_matchings/code/z_actor/Actor_Draw.s,Actor_Draw,0x800B9A04,0xC6

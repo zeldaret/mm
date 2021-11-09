@@ -814,7 +814,7 @@
     0x800B90F4:("func_800B90F4",),
     0x800B9120:("func_800B9120",),
     0x800B9170:("func_800b9170",),
-    0x800B9334:("func_800B9334",),
+    0x800B9334:("Actor_SpawnSetupActors",),
     0x800B948C:("Actor_UpdateActor",),
     0x800B9780:("Actor_UpdateAll",),
     0x800B9A04:("Actor_Draw",),

@@ -2264,7 +2264,11 @@ void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* act
     func_800B722C(gameState, (Player*)actorCtx->actorList[ACTORCAT_PLAYER].first);
 }
 
-void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx) {
+/**
+ * Spawns the actors in the current setup (of the current scene/setup/room triple)
+ * Only spawns actors based on the time flags embedded in their rotation parameters
+ */
+void Actor_SpawnSetupActors(GlobalContext* globalCtx, ActorContext* actorCtx) {
     if (globalCtx->numSetupActors > 0) {
         ActorEntry* actorEntry = globalCtx->setupActorList;
         s32 temp_fp = actorCtx->unkC;
@@ -2289,6 +2293,8 @@ void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx) {
             }
             actorEntry++;
         }
+
+        // Prevents re-spawning the setup actors
         globalCtx->numSetupActors = -globalCtx->numSetupActors;
     }
 }
@@ -2405,7 +2411,7 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         params.runMainIfSet = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_10;
     }
 
-    func_800B9334(globalCtx, actorCtx);
+    Actor_SpawnSetupActors(globalCtx, actorCtx);
 
     if (actorCtx->unk2 != 0) {
         actorCtx->unk2--;
