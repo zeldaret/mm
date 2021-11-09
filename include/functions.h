@@ -470,7 +470,7 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital);
 s32 osVoiceStartReadData(OSVoiceHandle* hd);
 u32* osViGetCurrentFramebuffer(void);
 s32 __osSpSetPc(void* pc);
-s32 __osVoiceContWrite4(OSMesgQueue* hd, s32 arg1, s32 arg2, OSVoiceData* voiceData);
+s32 __osVoiceContWrite4(OSMesgQueue* mq, s32 port, u16 arg2, u8* dst[4]);
 void __osGetHWIntrRoutine(s32 idx, OSMesgQueue** outQueue, OSMesg* outMsg);
 void __osSetHWIntrRoutine(s32 idx, OSMesgQueue* queue, OSMesg msg);
 u32 __osGetWatchLo(void);

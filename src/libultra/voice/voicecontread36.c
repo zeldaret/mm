@@ -1,9 +1,9 @@
 #include "global.h"
 
 s32 __osVoiceContRead36(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[36]) {
-    u8* ptr;
-    u8 status;
     s32 errorCode;
+    u8 status;
+    u8* ptr;
     s32 retryCount = 2;
     s32 i;
 
