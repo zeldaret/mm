@@ -4,9 +4,9 @@ extern s32 D_80097FB0;
 
 s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16 arg2, u8* dst) {
     u8* ptr;
-    u8 sp63;
+    u8 status;
     s32 errorCode;
-    s32 var = 2;
+    s32 retryCount = 2;
     s32 i;
 
     __osSiGetAccess();
@@ -23,7 +23,7 @@ s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16 arg2, u8* dst) {
                 ;
             }
 
-            __osPfsPifRam.pifstatus = 1;
+            __osPfsPifRam.pifstatus = CONT_CMD_READ_BUTTON;
 
             ptr[0] = 0xFF;
             ptr[1] = 3;
@@ -47,7 +47,7 @@ s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16 arg2, u8* dst) {
 
         if (errorCode == 0) {
             if (ptr[8] != __osVoiceContDataCrc(&ptr[6], 2)) {
-                errorCode = __osVoiceGetStatus(mq, port, &sp63);
+                errorCode = __osVoiceGetStatus(mq, port, &status);
                 if (errorCode != 0) {
                     break;
                 }
@@ -60,7 +60,7 @@ s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16 arg2, u8* dst) {
             errorCode = CONT_ERR_NO_CONTROLLER;
         }
 
-    } while ((errorCode == CONT_ERR_CONTRFAIL) && (var-- >= 0));
+    } while ((errorCode == CONT_ERR_CONTRFAIL) && (retryCount-- >= 0));
 
     __osSiRelAccess();
 

@@ -6,7 +6,7 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
     s32 errorCode = 0;
     s32 i;
     u8* ptr = (u8*)&__osContPifRam;
-    s32 var = 2;
+    s32 retryCount = 2;
 
     __osSiGetAccess();
 
@@ -51,7 +51,7 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
         } else {
             errorCode = CONT_ERR_CONTRFAIL;
         }
-    } while ((errorCode == CONT_ERR_CONTRFAIL) && (var-- >= 0));
+    } while ((errorCode == CONT_ERR_CONTRFAIL) && (retryCount-- >= 0));
 
     __osSiRelAccess();
     

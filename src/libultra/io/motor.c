@@ -20,7 +20,7 @@ s32 __osMotorAccess(OSPfs* pfs, u32 vibrate) {
     }
 
     __osSiGetAccess();
-    osPifBuffers[pfs->channel].pifstatus = 1;
+    osPifBuffers[pfs->channel].pifstatus = CONT_CMD_READ_BUTTON;
     buf += pfs->channel;
     for (i = 0; i < BLOCKSIZE; i++) {
         ((__OSContRamReadFormat*)buf)->data[i] = vibrate;

@@ -74,11 +74,11 @@ void __osPackRequestData(u8 cmd) {
     __OSContRequesFormat requestformat;
     int i;
 
-    for (i = 0; i < 0xF; i++) {
+    for (i = 0; i < ARRAY_COUNT(__osContPifRam.ramarray); i++) {
         __osContPifRam.ramarray[i] = 0;
     }
 
-    __osContPifRam.pifstatus = 1;
+    __osContPifRam.pifstatus = CONT_CMD_READ_BUTTON;
     ptr = (u8*)__osContPifRam.ramarray;
     requestformat.dummy = 255;
     requestformat.txsize = 1;
