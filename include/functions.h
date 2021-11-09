@@ -468,7 +468,7 @@ float __ull_to_f(unsigned long long l);
 s32 osVoiceCheckWord(u8* word);
 s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital);
 s32 osVoiceStartReadData(OSVoiceHandle* hd);
-void* osViGetCurrentFramebuffer(void);
+u32* osViGetCurrentFramebuffer(void);
 s32 __osSpSetPc(void* pc);
 s32 __osVoiceContWrite4(OSMesgQueue* hd, s32 arg1, s32 arg2, OSVoiceData* voiceData);
 void __osGetHWIntrRoutine(s32 idx, OSMesgQueue** outQueue, OSMesg* outMsg);
