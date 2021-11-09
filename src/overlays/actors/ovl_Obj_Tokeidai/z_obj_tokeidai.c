@@ -30,31 +30,6 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Counterweight_Draw(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_TowerGear_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-// Used for regular clock functions
-#define clockFaceRotationalVelocity actionVar1
-#define clockFaceRotationTimer actionVar2
-#define sunMoonDiskRotationalVelocity actionVar3
-#define clockHour actionVar4
-
-// Used for regular counterweight functions
-#define spotlightIntensity actionVar4
-
-// Used in ObjTokeidai_TowerTransformation_FinishRaise
-#define settleTimer actionVar1
-#define settleAmount actionVar2
-
-// Used in ObjTokeidai_TowerTransformation_DropCounterweight
-#define transformationRotationalVelocity actionVar1
-#define transformationRotationalAcceleration actionVar2
-
-// Used in ObjTokeidai_TowerTransformation_Wait
-#define transformationWaitTimer actionVar1
-
-// Used in ObjTokeidai_TowerClock_SlideOff and ObjTokeidai_TowerClock_Fall
-#define slidingClockFaceAngle actionVar1
-#define aerialClockFaceSpeed actionVar2
-#define fallingClockFaceRotationalVelocity actionVar3
-
 const ActorInit Obj_Tokeidai_InitVars = {
     ACTOR_OBJ_TOKEIDAI,
     ACTORCAT_PROP,
@@ -610,7 +585,7 @@ s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, GlobalContext* glo
     if (gSaveContext.inventory.items[0] == 0xFF) {
         return false;
     }
-    if (gSaveContext.day % 5 == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) {
         ObjTokeidai_SetupTowerTransformation(this);
         return true;
     }
@@ -671,7 +646,7 @@ void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, GlobalContext* globalCtx)
 }
 
 void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (gSaveContext.day % 5 == 3 && this->clockHour < 6 && gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_DAY == 3 && this->clockHour < 6 && gSaveContext.time < CLOCK_TIME(6, 0)) {
         this->actor.draw = ObjTokeidai_Clock_Draw;
         ObjTokeidai_SetupTowerTransformation(this);
         gSaveContext.weekEventReg[8] |= 0x40;
@@ -683,7 +658,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
         this->currentTime += 3;
         this->actor.draw = ObjTokeidai_Clock_Draw;
     } else {
-        if ((globalCtx->actorCtx.unk5 & 2) == 0 &&
+        if (!(globalCtx->actorCtx.unk5 & 2) &&
             OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD &&
             ActorCutscene_GetCurrentIndex() == -1) {
             this->actor.draw = NULL;
@@ -695,7 +670,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (gSaveContext.day % 5 != 3 || gSaveContext.time >= CLOCK_TIME(6, 0)) {
+    if (CURRENT_DAY != 3 || gSaveContext.time >= CLOCK_TIME(6, 0)) {
         ObjTokeidai_RotateOnMinuteChange(this, true);
     }
     ObjTokeidai_RotateOnHourChange(this, globalCtx);
