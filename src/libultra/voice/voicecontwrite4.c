@@ -1,6 +1,6 @@
 #include "global.h"
 
-s32 __osVoiceContWrite4(OSMesgQueue* mq, s32 port, u16 arg2, u8* dst[4]) {
+s32 __osVoiceContWrite4(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[4]) {
     s32 errorCode;
     u8 status;
     u8* ptr;
@@ -48,7 +48,7 @@ s32 __osVoiceContWrite4(OSMesgQueue* mq, s32 port, u16 arg2, u8* dst[4]) {
         errorCode = (ptr[2] & 0xC0) >> 4;
 
         if (errorCode == 0) {
-            if (ptr[0xA] != (0, temp_s2)) {
+            if (ptr[0xA] != ((void)0, temp_s2)) {
                 errorCode = __osVoiceGetStatus(mq, port, &status);
                 if (errorCode != 0) {
                     break;
