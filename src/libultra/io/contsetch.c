@@ -8,7 +8,7 @@ s32 osContSetCh(u8 ch) {
     } else {
         __osMaxControllers = ch;
     }
-    __osContLastCmd = -2;
+    __osContLastCmd = CONT_CMD_END;
 
     __osSiRelAccess();
     return 0;

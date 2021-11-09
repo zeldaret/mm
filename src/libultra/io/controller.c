@@ -34,11 +34,11 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
 
     __osPackRequestData(0);
 
-    ret = __osSiRawStartDma(1, &__osContPifRam);
-    osRecvMesg(mq, &dummy, 1);
+    ret = __osSiRawStartDma(OS_WRITE, &__osContPifRam);
+    osRecvMesg(mq, &dummy, OS_MESG_BLOCK);
 
-    ret = __osSiRawStartDma(0, &__osContPifRam);
-    osRecvMesg(mq, &dummy, 1);
+    ret = __osSiRawStartDma(OS_READ, &__osContPifRam);
+    osRecvMesg(mq, &dummy, OS_MESG_BLOCK);
 
     __osContGetInitData(bitpattern, data);
     __osContLastCmd = 0;

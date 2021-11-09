@@ -1,7 +1,5 @@
 #include "global.h"
 
-extern s32 D_80097FB0;
-
 s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[2]) {
     u8* ptr;
     u8 status;

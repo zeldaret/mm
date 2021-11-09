@@ -8,7 +8,7 @@ OSMesgQueue __osPiAccessQueue;
 void __osPiCreateAccessQueue(void) {
     __osPiAccessQueueEnabled = 1;
     osCreateMesgQueue(&__osPiAccessQueue, D_8009E3F0, 1);
-    osSendMesg(&__osPiAccessQueue, NULL, 0);
+    osSendMesg(&__osPiAccessQueue, NULL, OS_MESG_NOBLOCK);
 }
 
 void __osPiGetAccess(void) {

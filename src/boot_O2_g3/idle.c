@@ -62,7 +62,7 @@ void Idle_InitCodeAndMemory(void) {
                            SEGMENT_ROM_END(code) - SEGMENT_ROM_START(code), 0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
-    osRecvMesg(&queue, NULL, 1);
+    osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
 
     sDmaMgrDmaBuffSize = oldSize;
 

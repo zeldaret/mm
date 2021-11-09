@@ -17,10 +17,10 @@ void IrqMgr_AddClient(IrqMgr* irqmgr, IrqMgrClient* param_2, OSMesgQueue* param_
     osSetIntMask(saveMask);
 
     if (irqmgr->prenmiStage > 0) {
-        osSendMesg(param_2->queue, &irqmgr->prenmiMsg.type, 0);
+        osSendMesg(param_2->queue, &irqmgr->prenmiMsg.type, OS_MESG_NOBLOCK);
     }
     if (irqmgr->prenmiStage > 1) {
-        osSendMesg(param_2->queue, &irqmgr->nmiMsg.type, 0);
+        osSendMesg(param_2->queue, &irqmgr->nmiMsg.type, OS_MESG_NOBLOCK);
     }
 }
 
@@ -54,7 +54,7 @@ void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg) {
     IrqMgrClient* iter = irqmgr->callbacks;
 
     while (iter != NULL) {
-        osSendMesg(iter->queue, msg, 0);
+        osSendMesg(iter->queue, msg, OS_MESG_NOBLOCK);
         iter = iter->next;
     }
 }
@@ -64,7 +64,7 @@ void IrqMgr_JamMesgForClient(IrqMgr* irqmgr, OSMesg msg) {
 
     while (iter != NULL) {
         if (iter->queue->validCount < iter->queue->msgCount) {
-            osSendMesg(iter->queue, msg, 0);
+            osSendMesg(iter->queue, msg, OS_MESG_NOBLOCK);
         }
         iter = iter->next;
     }
@@ -130,7 +130,7 @@ void IrqMgr_ThreadEntry(IrqMgr* irqmgr) {
             ;
         }
 
-        osRecvMesg(&irqmgr->irqQueue, (OSMesg*)&interrupt, 1);
+        osRecvMesg(&irqmgr->irqQueue, (OSMesg*)&interrupt, OS_MESG_BLOCK);
         switch (interrupt) {
             case 0x29A:
                 IrqMgr_HandleRetrace(irqmgr);

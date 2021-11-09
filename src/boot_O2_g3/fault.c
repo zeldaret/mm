@@ -802,7 +802,7 @@ void Fault_ThreadEntry(void* arg) {
     osSetEventMesg(12, &sFaultContext->queue, (OSMesg)2);
     while (1) {
         do {
-            osRecvMesg(&sFaultContext->queue, &msg, 1);
+            osRecvMesg(&sFaultContext->queue, &msg, OS_MESG_BLOCK);
 
             if (msg == (OSMesg)1) {
                 sFaultContext->msgId = 1;

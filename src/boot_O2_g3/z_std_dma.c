@@ -31,7 +31,7 @@ s32 DmaMgr_DMARomToRam(u32 rom, void* ram, size_t size) {
                 goto END;
             }
 
-            osRecvMesg(&queue, NULL, 1);
+            osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
             size -= buffSize;
             rom = rom + buffSize;
             ram = (u8*)ram + buffSize;
@@ -47,7 +47,7 @@ s32 DmaMgr_DMARomToRam(u32 rom, void* ram, size_t size) {
         goto END;
     }
 
-    osRecvMesg(&queue, NULL, 1);
+    osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
 
     osInvalDCache(ram, size);
 

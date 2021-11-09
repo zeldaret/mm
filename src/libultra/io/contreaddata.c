@@ -8,11 +8,11 @@ s32 osContStartReadData(OSMesgQueue* mq) {
 
     if (__osContLastCmd != 1) {
         __osPackReadData();
-        __osSiRawStartDma(1, &__osContPifRam);
-        osRecvMesg(mq, NULL, 1);
+        __osSiRawStartDma(OS_WRITE, &__osContPifRam);
+        osRecvMesg(mq, NULL, OS_MESG_BLOCK);
     }
 
-    ret = __osSiRawStartDma(0, &__osContPifRam);
+    ret = __osSiRawStartDma(OS_READ, &__osContPifRam);
     __osContLastCmd = 1;
 
     __osSiRelAccess();
