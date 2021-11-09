@@ -351,7 +351,7 @@ void _Putfld(_Pft* px, va_list* pap, u8 code, u8* ac);
 s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 words);
 void osUnmapTLBAll(void);
 s32 osEPiStartDma(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
-s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, s32, u8 dst[2]);
+s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16, u8 dst[2]);
 u8 __osVoiceContDataCrc(u8* data, u32 arg1);
 const char* strchr(const char* __s, s32 __c);
 size_t strlen(const char* __s);
