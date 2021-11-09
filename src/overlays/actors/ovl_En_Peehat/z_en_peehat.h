@@ -16,7 +16,6 @@ typedef struct EnPeehat {
     /* 0x2AC */ u8 unk_2AC;
     /* 0x2AD */ s8 unk_2AD;
     /* 0x2AE */ u8 unk_2AE;
-    /* 0x2AF */ char unk2AF[1];
     /* 0x2B0 */ s16 unk_2B0;
     /* 0x2B2 */ s16 unk_2B2;
     /* 0x2B4 */ s16 unk_2B4;

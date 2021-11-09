@@ -7,7 +7,7 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 root_dir = script_dir + "/../"
 src_dir = root_dir + "src/"
 
-def reaplce_things(output):
+def replace_things(output):
     output = output.splitlines()
 
     i = 0
@@ -96,7 +96,7 @@ def main():
 
     output = import_c_file(c_file_path)
 
-    output = reaplce_things(output)
+    output = replace_things(output)
 
     with open(os.path.join(root_dir, "ctx.c"), "w", encoding="UTF-8") as f:
         f.write(output)
