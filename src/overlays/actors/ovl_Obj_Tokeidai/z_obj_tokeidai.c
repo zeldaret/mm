@@ -317,12 +317,12 @@ void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSound) {
 void ObjTokeidai_TowerGear_Collapse(ObjTokeidai* this, GlobalContext* globalCtx) {
     if ((this->actor.bgCheckFlags & 1) || this->actor.world.pos.y < 0.0f) {
         this->actionFunc = ObjTokeidai_DoNothing;
-        return;
+    } else {
+        this->actor.shape.rot.x += 0x50;
+        this->actor.shape.rot.z += 0x50;
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     }
-    this->actor.shape.rot.x += 0x50;
-    this->actor.shape.rot.z += 0x50;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 }
 
 void ObjTokeidai_TowerGear_TransformedIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
@@ -403,10 +403,10 @@ void ObjTokeidai_TowerClock_TransformedIdle(ObjTokeidai* this, GlobalContext* gl
 void ObjTokeidai_Counterweight_Collapse(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (this->actor.world.pos.y < 0.0f) {
         this->actionFunc = ObjTokeidai_DoNothing;
-        return;
+    } else {
+        this->xRotation += 0x64;
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     }
-    this->xRotation += 0x64;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
 
 void ObjTokeidai_Counterweight_TransformedIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
@@ -736,7 +736,7 @@ void ObjTokeidai_Counterweight_Idle(ObjTokeidai* this, GlobalContext* globalCtx)
 
     if (ObjTokeidai_IsPostFirstCycleFinalHours(this, globalCtx)) {
         this->spotlightIntensity = 0;
-        if ((this->actor.child == NULL)) {
+        if (this->actor.child == NULL) {
             type = OBJ_TOKEIDAI_TYPE(&this->actor);
             if (type == OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_CLOCK_TOWN ||
                 type == OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_TERMINA_FIELD) {
@@ -756,7 +756,7 @@ void ObjTokeidai_Counterweight_Idle(ObjTokeidai* this, GlobalContext* globalCtx)
         this->actor.shape.rot.y -= 0x40;
         if (gSaveContext.isNight != 0) {
             if (this->spotlightIntensity < 100) {
-                this->spotlightIntensity += +4;
+                this->spotlightIntensity += 4;
             }
         } else if (this->spotlightIntensity > 0) {
             this->spotlightIntensity -= 4;
