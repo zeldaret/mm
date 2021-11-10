@@ -1,11 +1,10 @@
 #include "global.h"
 
 // Gets voice recognition result from the Voice Recognition System
-#ifdef NON_EQUIVALENT
 s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
     s32 errorCode;
-    u8 new_var;
     u8 temp_t9;
+    u8 new_var2;
     union {
         u8 sp38[40];
         u32 sp38_32[10];
@@ -75,31 +74,19 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             result->voice_sn = u.sp38[10] + (u.sp38[11] << 8);
             result->voice_time = u.sp38[12] + (u.sp38[13] << 8);
 
-            // Issue here with for-loop unrolling
-            new_var = 4;
             for (i = 0; i < 5; i++) {
-                result->answer[i] = u.sp38[14 + new_var*i] + (u.sp38[15 + new_var*i] << 8);
-                result->distance[i] = u.sp38[16 + new_var*i] + (u.sp38[17 + new_var*i] << 8);
+                result->answer[i] = u.sp38[14 + 4 * (i ^ 0)] + (u.sp38[15 + 4 * (i ^ 0)] << 8);
+                result->distance[i] = u.sp38[16 + 4 * (i ^ 0)] + (u.sp38[17 + 4 * (i ^ 0)] << 8);
             }
-            
-            // result->answer[0]   = u.sp38[14] + (u.sp38[15] << 8);
-            // result->distance[0] = u.sp38[16] + (u.sp38[17] << 8);
-            // result->answer[1]   = u.sp38[18] + (u.sp38[19] << 8);
-            // result->distance[1] = u.sp38[20] + (u.sp38[21] << 8);
-            // result->answer[2]   = u.sp38[22] + (u.sp38[23] << 8);
-            // result->distance[2] = u.sp38[24] + (u.sp38[25] << 8);
-            // result->answer[3]   = u.sp38[26] + (u.sp38[27] << 8);
-            // result->distance[3] = u.sp38[28] + (u.sp38[29] << 8);
-            // result->answer[4]   = u.sp38[30] + (u.sp38[31] << 8);
-            // result->distance[4] = u.sp38[32] + (u.sp38[33] << 8);
 
             if (result->answer[0] == 0x7FFF) {
                 result->answer_num = 0;
             }
 
-            // Issue here with regalloc
-            hd->status = u.sp38[34] & 7;
-            if ((D_8009CF60 == 0) || (hd->status == 0)) {
+            new_var2 = D_8009CF60;
+            temp_t9 = u.sp38[34] ^ 0;
+            hd->status = temp_t9 & 7;
+            if ((new_var2 == 0) || (hd->status == 0)) {
                 break;
             }
         case 4:
@@ -131,6 +118,3 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
     hd->mode = 0;
     return errorCode;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/voicegetreaddata/osVoiceGetReadData.s")
-#endif
