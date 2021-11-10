@@ -15,7 +15,7 @@
 
 OSMesg sArenaLockMsg[1];
 
-void __osMallocAddBlock(Arena* arena, void* start, s32 size);
+void __osMallocAddBlock(Arena* arena, void* start, size_t size);
 
 void ArenaImpl_LockInit(Arena* arena) {
     osCreateMesgQueue(&arena->lock, sArenaLockMsg, ARRAY_COUNT(sArenaLockMsg));
@@ -52,25 +52,26 @@ void __osMallocInit(Arena* arena, void* start, size_t size) {
     arena->isInit = true;
 }
 
-void __osMallocAddBlock(Arena* arena, void* start, s32 size) {
-    s32 diff;
-    s32 size2;
+void __osMallocAddBlock(Arena* arena, void* start, size_t size) {
+    ptrdiff_t diff;
+    s32 alignedSize;
     ArenaNode* firstNode;
     ArenaNode* lastNode;
 
     if (start != NULL) {
         firstNode = (ArenaNode*)ALIGN16((uintptr_t)start);
-        diff = (intptr_t)firstNode - (intptr_t)start;
-        size2 = (size - diff) & ~0xF;
+        diff = (uintptr_t)firstNode - (uintptr_t)start;
+        alignedSize = ((s32)size - diff) & ~0xF;
 
-        if (size2 > (s32)sizeof(ArenaNode)) {
+        if (alignedSize > (s32)sizeof(ArenaNode)) {
             firstNode->next = NULL;
             firstNode->prev = NULL;
-            firstNode->size = size2 - sizeof(ArenaNode);
+            firstNode->size = alignedSize - sizeof(ArenaNode);
             firstNode->isFree = true;
             firstNode->magic = NODE_MAGIC;
             ArenaImpl_Lock(arena);
             lastNode = ArenaImpl_GetLastBlock(arena);
+
             if (lastNode == NULL) {
                 arena->head = firstNode;
                 arena->start = start;
@@ -78,6 +79,7 @@ void __osMallocAddBlock(Arena* arena, void* start, s32 size) {
                 firstNode->prev = lastNode;
                 lastNode->next = firstNode;
             }
+
             ArenaImpl_Unlock(arena);
         }
     }
@@ -233,7 +235,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
         __osFree(arena, ptr);
         ptr = NULL;
     } else {
-        u32 diff;
+        size_t diff;
         void* newPtr;
         ArenaNode* node;
 
@@ -243,7 +245,9 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
             ArenaNode* next = node->next;
 
             diff = newSize - node->size;
-            if (((uintptr_t)next == ((uintptr_t)node + node->size + sizeof(ArenaNode))) && (next->isFree) &&
+            // Checks if the next node is contiguous to the current allocated node and it has enough space to fit the
+            // new requested size
+            if (((uintptr_t)next == (uintptr_t)node + node->size + sizeof(ArenaNode)) && (next->isFree) &&
                 (next->size >= diff)) {
                 ArenaNode* next2 = next->next;
 
