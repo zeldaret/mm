@@ -367,7 +367,7 @@ def visit_replace(top_node: ca.Node, callback: Callable[[ca.Node, bool], Any]) -
         ):
             pass
         else:
-            _: ca.Alignas = node
+            _: None = node
             assert False, f"Node with unknown type: {node}"
         return node
 
@@ -431,7 +431,7 @@ def random_type(random: Random) -> SimpleType:
     quals = []
     if random_bool(random, 0.5):
         quals = ["volatile"]
-    return ca.TypeDecl(declname=None, quals=quals, align=[], type=idtype)
+    return ca.TypeDecl(declname=None, quals=quals, type=idtype)
 
 
 def randomize_type(
@@ -960,7 +960,7 @@ def perm_randomize_function_type(
             main_fndecl.type = random_type(random)
         elif random_bool(random, PROB_RET_VOID):
             idtype = ca.IdentifierType(names=["void"])
-            main_fndecl.type = ca.TypeDecl(declname=None, quals=[], align=[], type=idtype)
+            main_fndecl.type = ca.TypeDecl(declname=None, quals=[], type=idtype)
         else:
             main_fndecl.type = randomize_type(
                 type, typemap, random, ensure_changed=True
@@ -1139,7 +1139,7 @@ def perm_sameline(
     )
 
 
-def perm_commutative(
+def perm_associative(
     fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
 ) -> None:
     """Change a+b into b+a, or similar for other commutative operations."""
@@ -1160,33 +1160,6 @@ def perm_commutative(
         node.op = ">" + node.op[1:]
     elif node.op[0] == ">":
         node.op = "<" + node.op[1:]
-
-
-def perm_add_sub(
-    fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
-) -> None:
-    """Change a-b into a+(-b), or a+b into a-(-b)."""
-    cands: List[ca.BinaryOp] = []
-
-    class Visitor(ca.NodeVisitor):
-        def visit_BinaryOp(self, node: ca.BinaryOp) -> None:
-            if node.op in ("+", "-") and region.contains_node(node):
-                cands.append(node)
-            self.generic_visit(node)
-
-    Visitor().visit(fn.body)
-    ensure(cands)
-    node = random.choice(cands)
-    node.left, node.right = node.right, node.left
-    node.op = "+" if node.op == "-" else "-"
-    if isinstance(node.right, ca.Constant):
-        val = node.right.value
-        node.right.value = val[1:] if val.startswith("-") else "-" + val
-    elif isinstance(node.right, ca.UnaryOp) and node.right.op == "-":
-        assert not isinstance(node.right.expr, ca.Typename)
-        node.right = node.right.expr
-    else:
-        node.right = ca.UnaryOp("-", node.right)
 
 
 def perm_condition(
@@ -1253,7 +1226,7 @@ def perm_condition(
 def perm_add_self_assignment(
     fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
 ) -> None:
-    """Introduce a "x = x;" or "x += 0;" somewhere."""
+    """Introduce a "x = x;" somewhere."""
     cands = get_insertion_points(fn, region)
     vars: List[str] = []
 
@@ -1268,10 +1241,7 @@ def perm_add_self_assignment(
     ensure(cands)
     var = random.choice(vars)
     where = random.choice(cands)
-    if random_bool(random, 0.5):
-        assignment = ca.Assignment("=", ca.ID(var), ca.ID(var))
-    else:
-        assignment = ca.Assignment("+=", ca.ID(var), ca.Constant("int", "0"))
+    assignment = ca.Assignment("=", ca.ID(var), ca.ID(var))
     ast_util.insert_statement(where[0], where[1], assignment)
 
 
@@ -1595,8 +1565,8 @@ def perm_cast_simple(
         new_type = random.choice(floating_type)
 
     # Surround the original expression with a cast to the chosen type
-    typedecl = ca.TypeDecl(None, [], [], ca.IdentifierType(new_type))
-    new_expr = ca.Cast(ca.Typename(None, [], [], typedecl), expr)
+    typedecl = ca.TypeDecl(None, [], ca.IdentifierType(new_type))
+    new_expr = ca.Cast(ca.Typename(None, [], typedecl), expr)
     replace_node(fn.body, expr, new_expr)
 
 
@@ -1954,8 +1924,7 @@ class Randomizer:
             (perm_condition, 10),
             (perm_dummy_comma_expr, 5),
             (perm_add_self_assignment, 5),
-            (perm_commutative, 5),
-            (perm_add_sub, 5),
+            (perm_associative, 5),
             (perm_inequalities, 5),
             (perm_compound_assignment, 5),
             (perm_remove_ast, 5),

@@ -30,7 +30,7 @@ class TypeMap:
 def basic_type(name: Union[str, List[str]]) -> TypeDecl:
     names = [name] if isinstance(name, str) else name
     idtype = IdentifierType(names=names)
-    return TypeDecl(declname=None, quals=[], align=[], type=idtype)
+    return TypeDecl(declname=None, quals=[], type=idtype)
 
 
 def pointer(type: Type) -> Type:

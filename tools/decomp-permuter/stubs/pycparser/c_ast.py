@@ -76,7 +76,6 @@ AnyNode = Union_[
     Statement,
     Type,
     InnerType,
-    "Alignas",
     "FuncDef",
     "EllipsisParam",
     "Enumerator",
@@ -94,9 +93,6 @@ class NodeVisitor:
         ...
 
     def generic_visit(self, node: Node) -> None:
-        ...
-
-    def visit_Alignas(self, node: Alignas) -> None:
         ...
 
     def visit_ArrayDecl(self, node: ArrayDecl) -> None:
@@ -241,18 +237,6 @@ class NodeVisitor:
         ...
 
 
-class Alignas(Node):
-    alignment: Union_[Expression, Typename]
-    coord: Optional[Coord]
-
-    def __init__(
-        self,
-        alignment: Union_[Expression, Typename],
-        coord: Optional[Coord] = None,
-    ):
-        ...
-
-
 class ArrayDecl(Node):
     type: Type
     dim: Optional[Expression]
@@ -360,7 +344,6 @@ class Continue(Node):
 class Decl(Node):
     name: Optional[str]
     quals: List[str]  # e.g. const
-    align: List[Alignas]
     storage: List[str]  # e.g. register
     funcspec: List[str]  # e.g. inline
     type: Union_[Type, "Struct", "Union", "Enum"]
@@ -371,7 +354,6 @@ class Decl(Node):
         self,
         name: Optional[str],
         quals: List[str],
-        align: List[Alignas],
         storage: List[str],
         funcspec: List[str],
         type: Union_[Type, "Struct", "Union", "Enum"],
@@ -658,13 +640,11 @@ class TypeDecl(Node):
     declname: Optional[str]
     quals: List[str]
     type: InnerType
-    align: List[Alignas]
 
     def __init__(
         self,
         declname: Optional[str],
         quals: List[str],
-        align: List[Alignas],
         type: InnerType,
         coord: Optional[Coord] = None,
     ):
@@ -691,16 +671,10 @@ class Typedef(Node):
 class Typename(Node):
     name: None
     quals: List[str]
-    align: List[Alignas]
     type: Type
 
     def __init__(
-        self,
-        name: None,
-        quals: List[str],
-        align: List[Alignas],
-        type: Type,
-        coord: Optional[Coord] = None,
+        self, name: None, quals: List[str], type: Type, coord: Optional[Coord] = None
     ):
         ...
 
