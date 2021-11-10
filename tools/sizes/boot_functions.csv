@@ -201,7 +201,7 @@ asm/non_matchings/boot/system_malloc/SystemArena_MallocR.s,SystemArena_MallocR,0
 asm/non_matchings/boot/system_malloc/SystemArena_Realloc.s,SystemArena_Realloc,0x80086E20,0xC
 asm/non_matchings/boot/system_malloc/SystemArena_Free.s,SystemArena_Free,0x80086E50,0xA
 asm/non_matchings/boot/system_malloc/SystemArena_Calloc.s,SystemArena_Calloc,0x80086E78,0x15
-asm/non_matchings/boot/system_malloc/SystemArena_AnalyzeArena.s,SystemArena_AnalyzeArena,0x80086ECC,0xE
+asm/non_matchings/boot/system_malloc/SystemArena_GetSizes.s,SystemArena_GetSizes,0x80086ECC,0xE
 asm/non_matchings/boot/system_malloc/SystemArena_CheckArena.s,SystemArena_CheckArena,0x80086F04,0x9
 asm/non_matchings/boot/system_malloc/SystemArena_InitArena.s,SystemArena_InitArena,0x80086F28,0xC
 asm/non_matchings/boot/system_malloc/SystemArena_Cleanup.s,SystemArena_Cleanup,0x80086F58,0x9
@@ -226,7 +226,7 @@ asm/non_matchings/boot/__osMalloc/__osMalloc.s,__osMalloc,0x80087324,0x39
 asm/non_matchings/boot/__osMalloc/__osMallocR.s,__osMallocR,0x80087408,0x39
 asm/non_matchings/boot/__osMalloc/__osFree.s,__osFree,0x800874EC,0x3E
 asm/non_matchings/boot/__osMalloc/__osRealloc.s,__osRealloc,0x800875E4,0x4C
-asm/non_matchings/boot/__osMalloc/__osAnalyzeArena.s,__osAnalyzeArena,0x80087714,0x2C
+asm/non_matchings/boot/__osMalloc/__osGetSizes.s,__osGetSizes,0x80087714,0x2C
 asm/non_matchings/boot/__osMalloc/__osCheckArena.s,__osCheckArena,0x800877C4,0x1B
 asm/non_matchings/boot/sprintf/proutSprintf.s,proutSprintf,0x80087830,0x9
 asm/non_matchings/boot/sprintf/vsprintf.s,vsprintf,0x80087854,0x14

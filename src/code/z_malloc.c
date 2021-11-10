@@ -37,11 +37,11 @@ void* ZeldaArena_Calloc(u32 num, size_t size) {
 }
 
 void ZeldaArena_GetSizes(size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {
-    __osAnalyzeArena(&sZeldaArena, outMaxFree, outFree, outAlloc);
+    __osGetSizes(&sZeldaArena, outMaxFree, outFree, outAlloc);
 }
 
-void ZeldaArena_Check() {
-    __osCheckArena(&sZeldaArena);
+s32 ZeldaArena_Check() {
+    return __osCheckArena(&sZeldaArena);
 }
 
 void ZeldaArena_Init(void* start, size_t size) {

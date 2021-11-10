@@ -279,7 +279,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
     return ptr;
 }
 
-void __osAnalyzeArena(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {
+void __osGetSizes(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {
     ArenaNode* iter;
 
     ArenaImpl_Lock(arena);
@@ -305,7 +305,7 @@ void __osAnalyzeArena(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t*
     ArenaImpl_Unlock(arena);
 }
 
-u32 __osCheckArena(Arena* heap) {
+s32 __osCheckArena(Arena* heap) {
     ArenaNode* iter;
     u32 err = 0;
 

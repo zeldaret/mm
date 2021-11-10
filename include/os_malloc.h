@@ -29,7 +29,7 @@ void* __osMalloc(Arena* arena, size_t size);
 void* __osMallocR(Arena* arena, size_t size);
 void __osFree(Arena* arena, void* ptr);
 void* __osRealloc(Arena* arena, void* ptr, size_t newSize);
-void __osAnalyzeArena(Arena* arena, size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated);
-u32 __osCheckArena(Arena* arena);
+void __osGetSizes(Arena* arena, size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated);
+s32 __osCheckArena(Arena* arena);
 
 #endif
