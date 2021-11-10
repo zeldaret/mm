@@ -35,7 +35,7 @@ s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[2]) {
 
         ptr[4] = arg2 >> 3;
         ptr[5] = __osContAddressCrc(arg2) | (arg2 << 5);
-        
+
         __osSiRawStartDma(OS_WRITE, &__osPfsPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
         __osSiRawStartDma(OS_READ, &__osPfsPifRam);
@@ -64,4 +64,3 @@ s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[2]) {
 
     return errorCode;
 }
-

@@ -17,7 +17,7 @@ s32 osVoiceInit(OSMesgQueue* siMessageQ, OSVoiceHandle* hd, s32 channel) {
     hd->port = channel;
     hd->mq = siMessageQ;
     hd->mode = 0;
-    
+
     errorCode = __osVoiceGetStatus(siMessageQ, channel, &status);
     if (errorCode != 0) {
         return errorCode;
@@ -55,14 +55,13 @@ s32 osVoiceInit(OSMesgQueue* siMessageQ, OSVoiceHandle* hd, s32 channel) {
             if (errorCode != 0) {
                 return errorCode;
             }
-            
+
             errorCode = __osVoiceCheckResult(hd, &status);
             if (errorCode & 0xFF00) {
                 errorCode = CONT_ERR_INVALID;
             }
-            
+
             return errorCode;
         }
     }
 }
-

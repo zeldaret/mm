@@ -38,7 +38,7 @@ s32 __osVoiceContWrite20(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[20]) {
         ptr[5] = __osContAddressCrc(arg2) | (arg2 << 5);
 
         bcopy(dst, &ptr[6], 20);
-        
+
         __osSiRawStartDma(OS_WRITE, &__osPfsPifRam);
         temp_s2 = __osVoiceContDataCrc(dst, 20);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);

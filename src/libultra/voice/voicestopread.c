@@ -31,7 +31,7 @@ s32 osVoiceStopReadData(OSVoiceHandle* hd) {
      */
     u.data32 = 0x700;
     errorCode = __osVoiceContWrite4(hd->mq, hd->port, 0, u.data);
-    
+
     if (errorCode == 0) {
         i = 0;
         do {

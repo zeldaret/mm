@@ -54,6 +54,6 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
     } while ((errorCode == CONT_ERR_CONTRFAIL) && (retryCount-- >= 0));
 
     __osSiRelAccess();
-    
+
     return errorCode;
 }

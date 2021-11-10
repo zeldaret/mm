@@ -37,7 +37,7 @@ s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word) {
         if (errorCode != 0) {
             return errorCode;
         }
-    } 
+    }
 
     errorCode = __osVoiceContWrite20(hd->mq, hd->port, 0, &data[20]);
     if (errorCode != 0) {

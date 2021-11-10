@@ -29,7 +29,7 @@ s32 osVoiceMaskDictionary(OSVoiceHandle* hd, u8* maskPattern, s32 size) {
 
     for (i = 0; i < sp3C; i += 2) {
         data[i + 20 - sp3C] = maskPattern[i];
-        data[i + 21 - sp3C] = maskPattern[i+1];
+        data[i + 21 - sp3C] = maskPattern[i + 1];
     }
 
     if (size & 1) {
@@ -46,4 +46,3 @@ s32 osVoiceMaskDictionary(OSVoiceHandle* hd, u8* maskPattern, s32 size) {
 
     return errorCode;
 }
-

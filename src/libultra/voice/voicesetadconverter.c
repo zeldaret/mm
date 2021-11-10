@@ -37,7 +37,7 @@ s32 __osVoiceSetADConverter(OSMesgQueue* mq, s32 port, u8 arg2) {
 
         ptr[3] = arg2;
         ptr[4] = __osContAddressCrc(sp48);
-        
+
         __osSiRawStartDma(OS_WRITE, &__osPfsPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
         __osSiRawStartDma(OS_READ, &__osPfsPifRam);

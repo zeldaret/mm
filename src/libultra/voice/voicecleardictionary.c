@@ -2,11 +2,11 @@
 
 /**
  * Initializes Voice Recognition System word registration dictionary.
- * 
+ *
  * The dictionary is initialized so that the specified "numWords" can be
  * registered in the dictionary. 1-255 words can be registered in the dictionary.
- * 
- * Words cannot be registered with the osVoiceSetWord before the dictionary 
+ *
+ * Words cannot be registered with the osVoiceSetWord before the dictionary
  * is initialized with the osVoiceClearDictionary function
  */
 s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 numWords) {

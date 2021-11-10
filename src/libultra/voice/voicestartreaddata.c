@@ -33,7 +33,7 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
 
     if (errorCode == 0) {
         errorCode = __osVoiceCheckResult(hd, &status);
-        
+
         if (errorCode & 0xFF00) {
             errorCode = CONT_ERR_INVALID;
         } else {
