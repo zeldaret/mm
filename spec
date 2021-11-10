@@ -521,7 +521,7 @@ beginseg
     include "build/data/code/z_parameter.data.o"
     include "build/data/code/z_parameter.bss.o"
     include "build/src/code/z_path.o"
-    include "build/src/code/z_pause.o"
+    include "build/src/code/z_frame_advance.o"
     include "build/src/code/z_player_lib.o"
     include "build/data/code/z_player_lib.data.o"
     include "build/data/code/z_player_lib.bss.o"
