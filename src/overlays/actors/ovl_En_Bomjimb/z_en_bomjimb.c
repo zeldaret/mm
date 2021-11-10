@@ -1,3 +1,9 @@
+/*
+ * File z_en_bomjimb.c
+ * Overlay: ovl_En_Bomjimb
+ * Description: Bomber Jim B
+ */
+
 #include "z_en_bomjimb.h"
 
 #define FLAGS 0x00000009

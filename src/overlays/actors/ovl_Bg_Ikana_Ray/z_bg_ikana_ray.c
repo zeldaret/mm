@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_ikana_ray.c
+ * Overlay: ovl_Bg_Ikana_Ray
+ * Description: Large light ray in Stone Tower Temple
+ */
+
 #include "z_bg_ikana_ray.h"
 
 #define FLAGS 0x00000000

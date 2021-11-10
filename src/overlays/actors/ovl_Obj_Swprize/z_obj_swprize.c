@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_swprize.c
+ * Overlay: ovl_Obj_Swprize
+ * Description: Spawner for dirt square prize?
+ */
+
 #include "z_obj_swprize.h"
 
 #define FLAGS 0x00000010

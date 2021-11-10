@@ -1,3 +1,9 @@
+/*
+ * File z_eff_lastday.c
+ * Overlay: ovl_Eff_Lastday
+ * Description: Moon Crash Cutscene Fire Wall
+ */
+
 #include "z_eff_lastday.h"
 
 #define FLAGS 0x00000030

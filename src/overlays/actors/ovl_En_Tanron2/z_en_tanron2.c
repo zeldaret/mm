@@ -1,3 +1,9 @@
+/*
+ * File: z_en_tanron2.c
+ * Overlay: ovl_En_Tanron2
+ * Description: Wart's Bubbles
+ */
+
 #include "z_en_tanron2.h"
 
 #define FLAGS 0x00000035

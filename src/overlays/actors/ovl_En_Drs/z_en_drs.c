@@ -1,3 +1,9 @@
+/*
+ * File: z_en_drs.c
+ * Overlay: ovl_En_Drs
+ * Description: Wedding dress manequin
+ */
+
 #include "z_en_drs.h"
 
 #define FLAGS 0x00000000

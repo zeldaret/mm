@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_kin2_shelf.c
+ * Overlay: ovl_Bg_Kin2_Shelf
+ * Description: Ocean Spider House - Drawers
+ */
+
 #include "z_bg_kin2_shelf.h"
 
 #define FLAGS 0x00000000

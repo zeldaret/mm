@@ -1,3 +1,9 @@
+/*
+ * File: z_en_rg.c
+ * Overlay: ovl_En_Rg
+ * Description: Racetrack Goron
+ */
+
 #include "z_en_rg.h"
 
 #define FLAGS 0x80000010
