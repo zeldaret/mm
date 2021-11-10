@@ -1,5 +1,16 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_pause/func_80122660.s")
+void func_80122660(FrameAdvanceContext* frameAdvCtx) {
+    frameAdvCtx->timer = 0;
+    frameAdvCtx->enabled = false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_pause/func_80122670.s")
+s32 func_80122670(FrameAdvanceContext* frameAdvCtx, Input* input) {
+    if (!frameAdvCtx->enabled || (CHECK_BTN_ALL(input->cur.button, BTN_Z) &&
+                                  (CHECK_BTN_ALL(input->press.button, BTN_R) ||
+                                   (CHECK_BTN_ALL(input->cur.button, BTN_R) && (++frameAdvCtx->timer >= 9))))) {
+        frameAdvCtx->timer = 0;
+        return true;
+    }
+    return false;
+}
