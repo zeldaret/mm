@@ -30,7 +30,6 @@ typedef struct EnTrt2 {
     /* 0x3B4 */ s16 unk_3B4;
     /* 0x3B6 */ s16 unk_3B6;
     /* 0x3B8 */ s16 unk_3B8;
-    /* 0x3BA */ char unk3BA[2];
     /* 0x3BC */ EnTrt2UnkFunc unk_3BC;
     /* 0x3C0 */ s16 unk_3C0;
     /* 0x3C2 */ Vec3s unk_3C2;
