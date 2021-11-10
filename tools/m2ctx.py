@@ -7,6 +7,46 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 root_dir = script_dir + "/../"
 src_dir = root_dir + "src/"
 
+# Read through the processes context and replace whatever
+def replace_things(output):
+    output = output.splitlines()
+
+    i = 0
+    while i < len(output):
+        line = output[i]
+
+        ############### actorLists[2].first -> Player* ###############
+        if "typedef struct ActorListEntry " in line:
+            actorListText = ""
+            i += 1
+            while not output[i].startswith("}"):
+                actorListText += output[i]
+                i += 1
+            actorCats = [
+                "actorSwitch",
+                "bg",
+                "player",
+                "explosive",
+                "npc",
+                "enemy",
+                "prop",
+                "itemAction",
+                "misc",
+                "boss",
+                "door",
+                "chest",
+            ]
+            actorList = []
+            for x in range(12):
+                actorList.append(actorListText.replace("first;", f"{actorCats[x]};") + "\n")
+                if x == 2:
+                    actorList[x] = actorList[x].replace("Actor*", "Player*")
+        elif "ActorListEntry actorList[12];" in line:
+            output[i] = "struct {\n" + "".join(actorList) + "};"
+        ########################################################
+
+        i += 1
+    return "\n".join(output)
 
 def get_c_dir(dirname):
     for root, dirs, files in os.walk(src_dir):
@@ -42,6 +82,8 @@ def main():
                                      description="Creates a ctx.c file for mips2c. "
                                      "Output will be saved as oot/ctx.c")
     parser.add_argument('filepath', help="path of c file to be processed")
+    parser.add_argument("--fix", "-f", dest="fix", action="store_true", default=False, 
+                            help="Apply custom replacements to the output to help aid m2c output")
     args = parser.parse_args()
 
     if args.filepath:
@@ -58,6 +100,9 @@ def main():
         print("Using file: {}".format(c_file_path))
 
     output = import_c_file(c_file_path)
+
+    if args.fix:
+        output = replace_things(output)
 
     with open(os.path.join(root_dir, "ctx.c"), "w", encoding="UTF-8") as f:
         f.write(output)
