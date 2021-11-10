@@ -2,7 +2,7 @@
 #define _MACROS_H_
 
 #include "libc/stdint.h"
-#include "convert.h"
+#include "ultra64/convert.h"
 #include "z64.h"
 
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
