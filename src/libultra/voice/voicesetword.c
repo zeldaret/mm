@@ -6,7 +6,7 @@ s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word) {
     s32 sp50;
     s32 errorCode;
     u8 status;
-    u8 sp20[0x28];
+    u8 data[40];
 
     errorCode = __osVoiceGetStatus(hd->mq, hd->port, &status);
     if (errorCode != 0) {
@@ -23,23 +23,23 @@ s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word) {
         sp50 += 2;
     }
 
-    bzero(&sp20, 0x28);
+    bzero(&data, 40);
 
     for (i = 0; i < sp50; i += 2) {
-        sp20[0x27 - sp50 + i] = word[i];
-        sp20[0x27 - sp50 + i - 1] = word[i + 1];
+        data[39 - sp50 + i] = word[i];
+        data[39 - sp50 + i - 1] = word[i + 1];
     }
 
-    sp20[0x27 - i - 5] = 3;
+    data[39 - i - 5] = 3;
 
     if (sp50 >= 0xF) {
-        errorCode = __osVoiceContWrite20(hd->mq, hd->port, 0, &sp20);
+        errorCode = __osVoiceContWrite20(hd->mq, hd->port, 0, &data[0]);
         if (errorCode != 0) {
             return errorCode;
         }
     } 
 
-    errorCode = __osVoiceContWrite20(hd->mq, hd->port, 0, &sp20[0x14]);
+    errorCode = __osVoiceContWrite20(hd->mq, hd->port, 0, &data[20]);
     if (errorCode != 0) {
         return errorCode;
     }

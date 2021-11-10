@@ -1,10 +1,18 @@
 #include "global.h"
 
-// Initializes Voice Recognition System word registration dictionary
-s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 words) {
-    u8* registration_word;
+/**
+ * Initializes Voice Recognition System word registration dictionary.
+ * 
+ * The dictionary is initialized so that the specified "numWords" can be
+ * registered in the dictionary. 1-255 words can be registered in the dictionary.
+ * 
+ * Words cannot be registered with the osVoiceSetWord before the dictionary 
+ * is initialized with the osVoiceClearDictionary function
+ */
+s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 numWords) {
+    u8* data; // u8 data[4];
     u8 status;
-    s32 sp24;
+    u32 data32; // data[4] as u32
     s32 errorCode;
 
     errorCode = __osVoiceGetStatus(hd->mq, hd->port, &status);
@@ -12,15 +20,22 @@ s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 words) {
         return errorCode;
     }
 
-    registration_word = &sp24;
+    data = (u8*)&data32;
+
     if (status & 2) {
         return CONT_ERR_VOICE_NO_RESPONSE;
     }
 
-    sp24 = 0x2000000;
-    registration_word[2] = words;
+    /**
+     * data[0] = 2
+     * data[1] = 0
+     * data[2] = numWords
+     * data[3] = 0
+     */
+    data32 = 0x2000000;
+    data[2] = numWords;
 
-    errorCode = __osVoiceContWrite4(hd->mq, hd->port, 0, registration_word);
+    errorCode = __osVoiceContWrite4(hd->mq, hd->port, 0, data);
     if (errorCode != 0) {
         return errorCode;
     }
