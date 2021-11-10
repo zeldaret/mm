@@ -1,4 +1,7 @@
 #include "global.h"
+#include "os_malloc.h"
+
+Arena sZeldaArena;
 
 void* ZeldaArena_Malloc(size_t size) {
     void* ptr = __osMalloc(&sZeldaArena, size);

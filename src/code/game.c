@@ -1,4 +1,5 @@
 #include "global.h"
+#include "os_malloc.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;

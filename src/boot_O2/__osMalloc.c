@@ -1,4 +1,8 @@
-#include "global.h"
+#include "os_malloc.h"
+#include "libc/stdbool.h"
+#include "libc/stdint.h"
+#include "macros.h"
+#include "functions.h"
 
 #define FILL_ALLOCBLOCK (1 << 0)
 #define FILL_FREEBLOCK (1 << 1)
