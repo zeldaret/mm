@@ -4013,6 +4013,7 @@ extern UNK_TYPE D_0406AB30;
 extern UNK_TYPE D_0406B730;
 extern UNK_TYPE D_0406BB0C;
 extern UNK_TYPE D_0406F380;
+extern Gfx D_040706E0[];
 extern UNK_TYPE D_04073F00;
 extern UNK_TYPE D_04075400;
 extern Gfx D_04075A40[];
@@ -4057,7 +4058,7 @@ extern UNK_TYPE D_0502324C;
 
 // other segments
 extern GfxMasterList D_0E000000;
-
+extern Mtx D_01000000;
 extern UNK_TYPE D_0F000000;
 
 

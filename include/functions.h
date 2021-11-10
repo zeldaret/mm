@@ -1312,7 +1312,7 @@ s16 Camera_ClearFlags(Camera* camera, s16 flags);
 // void func_800E0238(void);
 void func_800E02AC(Camera* camera, Actor* actor);
 // void func_800E0308(void);
-// void func_800E031C(void);
+f32 func_800E031C(Camera* camera);
 void func_800E0348(Camera* camera);
 DamageTable* DamageTable_Get(s32 index);
 void DamageTable_Clear(DamageTable* damageTable);
