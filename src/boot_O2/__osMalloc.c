@@ -241,7 +241,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
     } else {
         size_t diff;
         void* newPtr;
-        ArenaNode*  node = (uintptr_t)ptr - sizeof(ArenaNode);
+        ArenaNode* node = (uintptr_t)ptr - sizeof(ArenaNode);
 
         newSize = ALIGN16(newSize);
         if ((newSize != node->size) && (node->size < newSize)) {
