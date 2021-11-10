@@ -4,15 +4,18 @@
 s32 osVoiceStopReadData(OSVoiceHandle* hd) {
     s32 errorCode;
     s32 i;
-    u8 sp3F;
-    s32 sp38;
+    u8 status;
+    union {
+        u32 data32;
+        u8 data[4];
+    } u;
 
-    errorCode = __osVoiceGetStatus(hd->mq, hd->port, &sp3F);
+    errorCode = __osVoiceGetStatus(hd->mq, hd->port, &status);
     if (errorCode != 0) {
         return errorCode;
     }
 
-    if (sp3F & 2) {
+    if (status & 2) {
         return CONT_ERR_VOICE_NO_RESPONSE;
     }
 
@@ -20,13 +23,19 @@ s32 osVoiceStopReadData(OSVoiceHandle* hd) {
         return CONT_ERR_INVALID;
     }
 
-    sp38 = 0x700;
-    errorCode = __osVoiceContWrite4(hd->mq, hd->port, 0, &sp38);
+    /**
+     * data[0] = 0
+     * data[1] = 0
+     * data[2] = 7
+     * data[3] = 0
+     */
+    u.data32 = 0x700;
+    errorCode = __osVoiceContWrite4(hd->mq, hd->port, 0, u.data);
     
     if (errorCode == 0) {
         i = 0;
         do {
-            errorCode = __osVoiceCheckResult(hd, &sp3F);
+            errorCode = __osVoiceCheckResult(hd, &status);
             if (errorCode & 0xFF00) {
                 if (((errorCode & 7) == 0) || ((errorCode & 7) == 7)) {
                     errorCode = 0;

@@ -5,7 +5,7 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
     s32 errorCode;
     u8 status;
     union {
-        s32 data32;
+        u32 data32;
         u8 data[4];
     } u;
 

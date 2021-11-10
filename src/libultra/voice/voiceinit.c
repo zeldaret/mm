@@ -9,7 +9,7 @@ s32 osVoiceInit(OSMesgQueue* siMessageQ, OSVoiceHandle* hd, s32 channel) {
     u8* phi_s0;
     u8 status = 0;
     union {
-        s32 data32;
+        u32 data32;
         u8 data[4];
     } u;
     s32 pad;
