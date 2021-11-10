@@ -41,13 +41,13 @@ s32 osVoiceStopReadData(OSVoiceHandle* hd) {
                     errorCode = 0;
                     hd->mode = 0;
                 } else {
-                    errorCode = 5;
+                    errorCode = CONT_ERR_INVALID;
                 }
             } else {
                 hd->mode = 0;
             }
             i++;
-        } while ((errorCode == 15) && (i < 20));
+        } while ((errorCode == CONT_ERR_VOICE_NO_RESPONSE) && (i < 20));
     }
 
     if (i) {}
