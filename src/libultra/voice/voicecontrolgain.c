@@ -1,6 +1,6 @@
 #include "global.h"
 
-extern u8 D_80098180[];
+u8 D_80098180[] = { 0x00, 0x80, 0x40, 0xC0, 0x20, 0xA0, 0x60, 0xE0 };
 
 // Adjusts the input gain of the Voice Recognition System
 s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {

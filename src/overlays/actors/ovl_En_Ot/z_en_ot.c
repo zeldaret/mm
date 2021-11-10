@@ -382,9 +382,9 @@ void func_80B5BFB8(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5C154(EnOt* this, GlobalContext* globalCtx) {
     if (gSaveContext.weekEventReg[32] & 1) {
-        this->unk_38C = 4;
+        this->unk_38C = GI_RUPEE_RED;
     } else {
-        this->unk_38C = 12;
+        this->unk_38C = GI_HEART_PIECE;
         gSaveContext.weekEventReg[32] |= 1;
     }
     func_800B8A1C(&this->actor, globalCtx, this->unk_38C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);

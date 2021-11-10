@@ -77,10 +77,10 @@ void EnTuboTrap_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnTuboTrap_DropCollectible(EnTuboTrap* this, GlobalContext* globalCtx) {
     s32 itemParam = ((this->actor.params >> 8) & 0x3F);
-    s32 dropCount = func_800A8150(itemParam);
+    s32 dropItem00Id = func_800A8150(itemParam);
 
-    if (dropCount >= 0) {
-        Item_DropCollectible(globalCtx, &this->actor.world.pos, ((this->actor.params & 0x7F) << 8) | dropCount);
+    if (dropItem00Id > ITEM00_NO_DROP) {
+        Item_DropCollectible(globalCtx, &this->actor.world.pos, ((this->actor.params & 0x7F) << 8) | dropItem00Id);
     }
 }
 

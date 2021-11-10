@@ -827,7 +827,7 @@ void func_809C7D14(EnSyatekiMan* this, GlobalContext* globalCtx) {
         } else if (!(gSaveContext.weekEventReg[32] & 4)) {
             func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
-            func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_GOLD, 500.0f, 100.0f);
+            func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_HUGE, 500.0f, 100.0f);
         }
 
         player->actor.shape.rot.y = -0x8000;
