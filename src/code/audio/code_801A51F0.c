@@ -195,7 +195,6 @@ s32 func_801A54D0(u16 arg0) {
         PadMgr_UnlockSerialMesgQueue(msgQ);
 
         if ((errorCode == 0) || (D_801FD5A4 == 0)) {
-
             msgQ = PadMgr_LockSerialMesgQueue();
             errorCode = osVoiceMaskDictionary(&D_801FD5B8, D_801FD608, ((sp22 - 1) / 8) + 1);
             PadMgr_UnlockSerialMesgQueue(msgQ);
@@ -207,9 +206,49 @@ s32 func_801A54D0(u16 arg0) {
     return errorCode;
 }
 
+s32 func_801A5680(u16 arg0) {
+    s32 errorCode;
+    u8 phi_a3;
+    u8 sp22;
+    u8 i;
+    OSMesgQueue* msgQ;
+    
+    phi_a3 = true;
+    if (D_801FD5A0.unk_00 != 0) {
+        sp22 = D_801FD5A0.unk_00[0x258];
+    } else {
+        sp22 = 0x14;
+        phi_a3 = false;
+    }
 
+    if (arg0 == 0xFFFF) {
+        for (i = 0; i < (((sp22 - 1) / 8) + 1); i++) {
+            D_801FD608[i] = 0;
+        }
+    } else {
+        if (!(D_801FD608[arg0 / 8] & (1 << (arg0 % 8)))) {
+            phi_a3 = false;
+        } else {
+            D_801FD608[arg0 / 8] &= (1 << (arg0 % 8)) ^ 0xFF;
+        }
+    }
+    
+    if (phi_a3) {
+        msgQ = PadMgr_LockSerialMesgQueue();
+        errorCode = osVoiceStopReadData(&D_801FD5B8);
+        PadMgr_UnlockSerialMesgQueue(msgQ);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5680.s")
+        if ((errorCode == 0) || (D_801FD5A4 == 0)) {
+            msgQ = PadMgr_LockSerialMesgQueue();
+            errorCode = osVoiceMaskDictionary(&D_801FD5B8, D_801FD608, ((sp22 - 1) / 8) + 1);
+            PadMgr_UnlockSerialMesgQueue(msgQ);
+        }
+
+        D_801FD5A4 = 0;
+    }
+    
+    return errorCode;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5808.s")
 
