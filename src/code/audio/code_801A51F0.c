@@ -17,14 +17,15 @@ typedef struct {
 
 extern OSVoiceUnk D_801FD5A0;
 extern OSVoiceHandle D_801FD5B8;
+extern u8 D_801FD610[];
 
-char D_801D8E50[] =
+s8 D_801D8E50[] =
     "aa\0AA\0ii\0II\0uu\0UU\0ee\0EE\0oo\0OO\0KA\0GA\0KI\0GI\0KU\0GU\0KE\0GE\0KO\0GO\0SA\0ZA\0SI\0ZI\0SU\0ZU\0SE\0ZE\0SO"
     "\0ZO\0TA\0DA\0TI\0DI\0tu\0TU\0DU\0TE\0DE\0TO\0DO\0NA\0NI\0NU\0NE\0NO\0HA\0BA\0PA\0HI\0BI\0PI\0HU\0BU\0PU\0HE\0BE\0"
     "PE\0HO\0BO\0PO\0MA\0MI\0MU\0ME\0MO\0ya\0YA\0yu\0YU\0yo\0YO\0RA\0RI\0RU\0RE\0RO\0wa\0WA\0WI\0WE\0WO\0NN\0VU\0ka\0ke"
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
 
-char D_801D8F70[] = "aa\0AA\0ii\0II\0uu\0UU\0ee\0EE\0oo\0OO\0KA\0GA\0KI\0GI\0KU\0GU\0KE\0GE\0KO\0GO\0SA\0ZA\0SI\0ZI\0SU"
+s8 D_801D8F70[] = "aa\0AA\0ii\0II\0uu\0UU\0ee\0EE\0oo\0OO\0KA\0GA\0KI\0GI\0KU\0GU\0KE\0GE\0KO\0GO\0SA\0ZA\0SI\0ZI\0SU"
                     "\0ZU\0SE\0ZE\0SO\0ZO\0TA\0DA\0TI\0DI\0tu\0TU\0DU\0TE\0DE\0TO\0DO\0NA\0NI\0NU\0NE\0NO\0HA\0BA\0PA\0"
                     "HI\0BI\0PI\0HU\0BU\0PU\0HE\0BE\0PE\0HO\0BO\0PO\0MA\0MI\0  "
                     "\0MU\0ME\0MO\0ya\0YA\0yu\0YU\0yo\0YO\0RA\0RI\0RU\0RE\0RO\0wa\0WA\0WI\0WE\0WO\0NN\0VU\0ka\0ke\0\0\0"
@@ -122,4 +123,41 @@ void func_801A5A10(void) {
     D_801FD5A0.unk_00 = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5A1C.s")
+u8* func_801A5A1C(s8* arg0) {
+    u8* new_var1;
+    u8 i;
+    u8 j;
+    u8 temp_t6;
+    u8 temp_t8;
+    u8* new_var2;
+    u8 len = strlen(arg0);
+
+    for (j = 0, i = 0; i < len; i += 2) {
+
+        temp_t8 = arg0[i];
+        temp_t6 = arg0[i + 1];
+        
+        new_var1 = &temp_t8;
+        new_var2 = &temp_t6;
+
+        if (temp_t8 == 0x83) {
+            D_801FD610[j++] = D_801D8F70[3 * (temp_t6 - 0x40)];
+            D_801FD610[j++] = D_801D8F70[3 * (temp_t6 - 0x40) + 1];
+        } else if (temp_t8 == 0x82) {
+            D_801FD610[j++] = D_801D8E50[3 * (temp_t6 - 0x9F)];
+            D_801FD610[j++] = D_801D8E50[3 * (temp_t6 - 0x9F) + 1];
+        } else if (temp_t8 == 0x81 && temp_t6 == 0x5B) {
+            D_801FD610[j++] = 0x2D;
+            D_801FD610[j++] = 0x2D;
+        } else {
+            D_801FD610[j++] = 0x20;
+            D_801FD610[j++] = 0x20;
+        }
+    }
+    
+    D_801FD610[i] = 0;
+
+    return D_801FD610;
+  
+}
+
