@@ -34,7 +34,7 @@ echo "char measurement;" >> $TEMPC
 
 $(pwd)/tools/ido_recomp/linux/7.1/cc -G 0 -non_shared \
     -Xfullwarn -Xcpluscomm -O2 -g3 -Xcpluscomm -mips2 \
-    -I $(pwd)/include/ -I $(pwd)/src/ -I $(pwd)/assets/ -I $(pwd)/build/ \
+    -I $(pwd)/ -I $(pwd)/include/ -I $(pwd)/src/ -I $(pwd)/assets/ -I $(pwd)/build/ \
     -Wab,-r4300_mul -woff 624,649,838,712 -c $TEMPC -o $TEMPO
 
 LINE=$(${CROSS}objdump -t $TEMPO | grep measurement | cut -d' ' -f1)
