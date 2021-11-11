@@ -16,8 +16,8 @@ s32 __osVoiceSetADConverter(OSMesgQueue* mq, s32 port, u8 arg2) {
 
         ptr = (u8*)&__osPfsPifRam;
 
-        if ((__osContLastCmd != 0xD) || (port != D_80097FB0)) {
-            __osContLastCmd = 0xD;
+        if ((__osContLastPoll != 0xD) || (port != D_80097FB0)) {
+            __osContLastPoll = 0xD;
             D_80097FB0 = port;
 
             for (i = 0; i < port; i++, *ptr++ = 0) {

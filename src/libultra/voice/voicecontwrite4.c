@@ -14,8 +14,8 @@ s32 __osVoiceContWrite4(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[4]) {
 
         ptr = (u8*)&__osPfsPifRam;
 
-        if ((__osContLastCmd != 0xC) || (port != D_80097FB0)) {
-            __osContLastCmd = 0xC;
+        if ((__osContLastPoll != 0xC) || (port != D_80097FB0)) {
+            __osContLastPoll = 0xC;
             D_80097FB0 = port;
 
             for (i = 0; i < port; i++, *ptr++ = 0) {

@@ -331,7 +331,7 @@
     0x8009CEB8:("__osSiAccessQueue","OSMesgQueue","",0x18),
     0x8009CED0:("__osContPifRam","OSPifRam","",0x40),
     0x8009CF0C:("D_8009CF0C","UNK_TYPE1","",0x1),
-    0x8009CF10:("__osContLastCmd","u8","",0x1),
+    0x8009CF10:("__osContLastPoll","u8","",0x1),
     0x8009CF11:("__osMaxControllers","u8","",0x1),
     0x8009CF18:("__osEepromTimer","OSTimer","",0x20),
     0x8009CF38:("D_8009CF38","OSMesgQueue","",0x18),

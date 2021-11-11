@@ -81,7 +81,7 @@ extern float D_80097F90;
 extern s32 D_80097FB0;
 extern OSViMode osViModeNtscLan1;
 extern OSViMode osViModeMpalLan1;
-extern __OSViContext D_80098060[2];
+// extern __OSViContext D_80098060[2];
 extern __OSViContext* __osViCurr;
 extern __OSViContext* __osViNext;
 // extern UNK_TYPE4 D_800980D0;
