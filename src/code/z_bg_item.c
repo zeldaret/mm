@@ -17,7 +17,7 @@ void DynaPolyActor_Init(DynaPolyActor* dynaActor, s32 flags) {
 
 void DynaPolyActor_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* dynaActor, CollisionHeader* meshHeader) {
     CollisionHeader* header = NULL;
-    
+
     BgCheck_RelocateMeshHeader(meshHeader, &header);
     dynaActor->bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, dynaActor, header);
 }
@@ -36,7 +36,7 @@ void DynaPolyActor_SetRidingMovingState(DynaPolyActor* dynaActor) {
 
 void DynaPolyActor_SetRidingMovingStateByIndex(CollisionContext* colCtx, s32 index) {
     DynaPolyActor* dynaActor = BgCheck_GetActorOfMesh(colCtx, index);
-    
+
     if (dynaActor != NULL) {
         DynaPolyActor_SetRidingMovingState(dynaActor);
     }
@@ -48,7 +48,7 @@ void DynaPolyActor_SetRidingRotatingState(DynaPolyActor* dynaActor) {
 
 void DynaPolyActor_SetRidingRotatingStateByIndex(CollisionContext* colCtx, s32 index) {
     DynaPolyActor* dynaActor = BgCheck_GetActorOfMesh(colCtx, index);
-    
+
     if (dynaActor != NULL) {
         DynaPolyActor_SetRidingRotatingState(dynaActor);
     }
@@ -103,7 +103,7 @@ s32 DynaPolyActor_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor) {
 }
 
 s32 DynaPolyActor_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius,
-                          s16 startHeight) {
+                               s16 startHeight) {
     Vec3f startPos;
     Vec3f endPos;
     Vec3f intersectionPos;

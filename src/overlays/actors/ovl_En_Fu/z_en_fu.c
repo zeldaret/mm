@@ -781,7 +781,8 @@ void func_80962F4C(EnFu* this, GlobalContext* globalCtx) {
         func_801518B0(globalCtx, 0x288B, &this->actor);
     }
 
-    if ((!DynaPolyActor_IsInRidingRotatingState((DynaPolyActor*)this->actor.child) && (player->actor.bgCheckFlags & 1)) ||
+    if ((!DynaPolyActor_IsInRidingRotatingState((DynaPolyActor*)this->actor.child) &&
+         (player->actor.bgCheckFlags & 1)) ||
         (gSaveContext.unk_3DE0[4] < 1) || (this->unk_548 == this->unk_54C)) {
         player->stateFlags3 &= ~0x400000;
         func_80961E88(globalCtx);
