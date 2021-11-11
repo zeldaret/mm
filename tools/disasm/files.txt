@@ -488,6 +488,7 @@
             0x8019AEB0 : "[PADDING]",
             0x8019AEC0 : "code_8019AEC0",
             0x8019AF00 : "code_8019AF00",
+            0x801A4EB0 : "code_801A4EB0",
             0x801A51F0 : "code_801A51F0",
             0x801A5BC0 : "[PADDING]",
             0x801A5BD0 : "code_801A5BD0",
