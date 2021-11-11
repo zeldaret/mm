@@ -43,7 +43,6 @@ void func_801A4EB8(void) {
             if (((sp38[index] >> (i % 8)) & 1) == 1) {
                 func_801A54D0(i);
             }
-
         }
 
         func_801A53E8(0x320, 2, 0x400, 0x1F4, 0x7D0);
@@ -97,7 +96,7 @@ void func_801A5118(void) {
         D_801D8E3C &= 1;
         func_801A4EB8();
     }
-    
+
     if (D_801D8E3C != 0) {
         if (func_801A5808() != 0) {
             D_801D8E48++;
