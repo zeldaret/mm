@@ -1,16 +1,26 @@
 #include "global.h"
 
+/*
+char D_801E0EC0[] = "Error %d\n"
+char D_801E0ECC[] = "NAI_VRS:osVoiceClearDictionary %d\n"
+char D_801E0EF0[] = "NAI_VRS:dict error! (%d-%d %s)\n"
+char D_801E0F10[] = "NAI_VRS:Ina_SetVruGain Error!\n"
+char D_801E0F30[] = "NAI_VRS:mask on  %d\n"
+char D_801E0F48[] = "NAI_VRS:mask off %d\n"
+char D_801E0F60[] = "NAI_VRS:answer No.:%d Dist:%d Warn:%04X Level:%5d SN:%5d (Num:%d)\n"
+char D_801E0FA4[] = "NAI_VRS:error !! (ANS_MAX:%d DIST:%d WARNING:%04X LEVEL:%5d SN:%5d)\n"
+*/
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/D_801E0EC0.s")
 
-UNK_TYPE func_801A51F0(UNK_TYPE arg0) {
-    switch (arg0) {
-        case 1:
-        case 4:
-        case 5:
-        case 11:
-        case 13:
-        case 14:
-        case 15:
+s32 func_801A51F0(s32 errorCode) {
+    switch (errorCode) {
+        case CONT_ERR_NO_CONTROLLER:
+        case CONT_ERR_CONTRFAIL:
+        case CONT_ERR_INVALID:
+        case CONT_ERR_DEVICE:
+        case CONT_ERR_VOICE_MEMORY:
+        case CONT_ERR_VOICE_WORD:
+        case CONT_ERR_VOICE_NO_RESPONSE:
             return -1;
         default:
             return 0;
