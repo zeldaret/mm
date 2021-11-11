@@ -280,7 +280,11 @@ void func_80A6CA9C(EnFall* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CB74.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CD38.s")
+void func_80A6CD38(EnFall* this, GlobalContext* globalCtx) {
+    if (globalCtx->csCtx.state != 0 && globalCtx->sceneNum == SCENE_OKUJOU) {
+        func_800B9010(&this->actor, NA_SE_EV_MOON_FALL - SFX_FLAG);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CD74.s")
 
