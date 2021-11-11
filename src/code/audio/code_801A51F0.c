@@ -253,7 +253,6 @@ s32 func_801A5680(u16 arg0) {
     return errorCode;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5808.s")
 s32 func_801A5808(void) {
     s32 errorCode = 0;
     s32 ret;
@@ -320,29 +319,22 @@ void func_801A5A10(void) {
 }
 
 u8* func_801A5A1C(s8* arg0) {
-    u8* indexTemp1;
     u8 i;
     u8 j;
-    u8 temp_t6;
-    u8 temp_t8;
-    u8* index;
     u8 len = strlen(arg0);
+    u8 temp_t8[2];
 
     for (j = 0, i = 0; i < len; i += 2) {
+        temp_t8[0] = arg0[i];
+        temp_t8[1] = arg0[i + 1];
 
-        temp_t8 = arg0[i];
-        temp_t6 = arg0[i + 1];
-        
-        indexTemp1 = &temp_t8;
-        index = &temp_t6;
-
-        if (temp_t8 == 0x83) {
-            D_801FD610[j++] = D_801D8F70[3 * (temp_t6 - 0x40)];
-            D_801FD610[j++] = D_801D8F70[3 * (temp_t6 - 0x40) + 1];
-        } else if (temp_t8 == 0x82) {
-            D_801FD610[j++] = D_801D8E50[3 * (temp_t6 - 0x9F)];
-            D_801FD610[j++] = D_801D8E50[3 * (temp_t6 - 0x9F) + 1];
-        } else if (temp_t8 == 0x81 && temp_t6 == 0x5B) {
+        if (temp_t8[0] == 0x83) {
+            D_801FD610[j++] = D_801D8F70[3 * (temp_t8[1] - 0x40)];
+            D_801FD610[j++] = D_801D8F70[3 * (temp_t8[1] - 0x40) + 1];
+        } else if (temp_t8[0] == 0x82) {
+            D_801FD610[j++] = D_801D8E50[3 * (temp_t8[1] - 0x9F)];
+            D_801FD610[j++] = D_801D8E50[3 * (temp_t8[1] - 0x9F) + 1];
+        } else if (temp_t8[0] == 0x81 && temp_t8[1] == 0x5B) {
             D_801FD610[j++] = 0x2D;
             D_801FD610[j++] = 0x2D;
         } else {
