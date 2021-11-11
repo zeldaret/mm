@@ -98,7 +98,8 @@ void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_80A6C3FC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/EnFall_Destroy.s")
+void EnFall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C3AC.s")
 
