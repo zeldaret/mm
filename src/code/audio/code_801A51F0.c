@@ -1,5 +1,23 @@
 #include "global.h"
 
+// padmgr functions
+s32 func_80175008();
+void func_8017506C(s32);
+
+typedef struct {
+    /* 0x00 */ u8* unk_00;
+    /* 0x04 */ u8 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ u16 unk_0C;
+    /* 0x0E */ u16 unk_0E;
+    /* 0x10 */ u16 unk_10;
+    /* 0x12 */ u16 unk_12;
+    /* 0x14 */ u16 unk_14;
+} OSVoiceUnk; // size = 0x18
+
+extern OSVoiceUnk D_801FD5A0;
+extern OSVoiceHandle D_801FD5B8;
+
 char D_801D8E50[] =
     "aa\0AA\0ii\0II\0uu\0UU\0ee\0EE\0oo\0OO\0KA\0GA\0KI\0GI\0KU\0GU\0KE\0GE\0KO\0GO\0SA\0ZA\0SI\0ZI\0SU\0ZU\0SE\0ZE\0SO"
     "\0ZO\0TA\0DA\0TI\0DI\0tu\0TU\0DU\0TE\0DE\0TO\0DO\0NA\0NI\0NU\0NE\0NO\0HA\0BA\0PA\0HI\0BI\0PI\0HU\0BU\0PU\0HE\0BE\0"
@@ -41,17 +59,58 @@ s32 func_801A51F0(s32 errorCode) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5228.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5390.s")
+s32 func_801A5390(void) {
+    s32 temp_t6;
+    s32 sp18;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A53DC.s")
+    temp_t6 = D_801FD5A0.unk_08;
+    D_801FD5A0.unk_08 = 0;
+    sp18 = func_80175008();
+    osVoiceStartReadData(&D_801FD5B8);
+    func_8017506C(sp18);
+    return temp_t6;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A53E8.s")
+s32 func_801A53DC(void) {
+    return D_801FD5A0.unk_00;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A541C.s")
+void func_801A53E8(u16 arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
+    D_801FD5A0.unk_0C = arg0;
+    D_801FD5A0.unk_0E = arg1;
+    D_801FD5A0.unk_10 = arg2;
+    D_801FD5A0.unk_12 = arg3;
+    D_801FD5A0.unk_14 = arg4;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5488.s")
+void func_801A541C(s32 analog, s32 digital) {
+    s32 sp1C;
+    s32 sp18;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A54C4.s")
+    if (D_801FD5A0.unk_00 != 0) {
+        sp18 = func_80175008();
+        sp1C = osVoiceControlGain(&D_801FD5B8, analog, digital);
+        func_8017506C(sp18);
+        if (sp1C != 0) {
+            func_801A51F0(sp1C);
+        }
+    }
+}
+
+s32 func_801A5488(u8* word) {
+    s32 sp1C;
+    s32 sp18;
+    s32 temp_v0;
+
+    sp18 = func_80175008();
+    sp1C = osVoiceCheckWord(word);
+    func_8017506C(sp18);
+    return sp1C;
+}
+
+UNK_PTR func_801A54C4(void) {
+    return &D_801FD608;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A54D0.s")
 
@@ -59,6 +118,8 @@ s32 func_801A51F0(s32 errorCode) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5808.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5A10.s")
+void func_801A5A10(void) {
+    D_801FD5A0.unk_00 = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5A1C.s")
