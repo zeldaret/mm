@@ -104,37 +104,37 @@ s32 func_80B3CA20(EnDnp* this) {
     if ((this->unk_340 == 2) || (this->unk_340 == 9)) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
             Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_TURN);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
     } else if ((this->unk_340 == 24) || (this->unk_340 == 7)) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_TURN);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
     } else if (this->unk_340 == 14) {
         if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_GREET);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DEKUHIME_GREET);
         }
         if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if (this->unk_340 == 8) {
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_GREET);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DEKUHIME_GREET);
         }
         if (Animation_OnFrame(&this->skelAnime, 18.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if ((this->unk_340 == 17) && (this->unk_340 == 18)) {
         if (Animation_OnFrame(&this->skelAnime, 7.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     } else if (this->unk_340 == 21) {
         if (Animation_OnFrame(&this->skelAnime, 17.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     } else if (this->unk_340 == 23) {
         if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     }
 
@@ -276,7 +276,7 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_340 == 19) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_VO_DHVO04);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_VO_DHVO04);
             }
 
             if (this->unk_340 == 24) {

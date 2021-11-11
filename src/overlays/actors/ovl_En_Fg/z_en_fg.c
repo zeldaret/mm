@@ -184,7 +184,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_1);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.playSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
             this->actor.scale.x *= 1.5f;
@@ -210,7 +210,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_0);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_FROG_CRY_0);
             if (1) {}
             this->actor.params = FG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
@@ -226,7 +226,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             break;
         default:
             if (DECR(this->timer) == 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_JUMP);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_FROG_JUMP);
                 EnFg_UpdateAnimation(&this->skelAnime, 3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
@@ -261,7 +261,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_0);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_FROG_CRY_0);
             EnFg_UpdateAnimation(&this->skelAnime, 0);
             this->actor.params = FG_BLACK;
             this->skelAnime.playSpeed = 0.0f;

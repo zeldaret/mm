@@ -287,7 +287,7 @@ void EnMa4_RunInCircles(EnMa4* this, GlobalContext* globalCtx) {
     }
 
     if (sCurrentAnim == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
     sp34.x = this->pathPoints[this->pathIndex].x;
@@ -320,7 +320,7 @@ void EnMa4_RunInCircles(EnMa4* this, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
     if (this->skelAnime.animation == &D_06007328) { // Walking animation
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
 }

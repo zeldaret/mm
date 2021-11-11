@@ -436,11 +436,11 @@ void func_80A52074(EnDnk* this, GlobalContext* globalCtx) {
             break;
 
         case 438:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
             break;
 
         case 493:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
             break;
     }
 

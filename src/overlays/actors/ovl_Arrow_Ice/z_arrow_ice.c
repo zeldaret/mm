@@ -162,7 +162,7 @@ void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx) {
     ArrowIce_LerpFiredPosition(&this->firedPos, &this->actor.world.pos, 0.05f);
 
     if (arrow->unk_261 & 1) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_IT_EXPLOSION_ICE);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_IT_EXPLOSION_ICE);
         ArrowIce_SetupAction(this, ArrowIce_Hit);
         this->timer = 32;
         this->alpha = 255;

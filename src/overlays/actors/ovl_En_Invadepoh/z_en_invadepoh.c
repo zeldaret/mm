@@ -2620,7 +2620,7 @@ void func_80B48848(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B43E6C(this, 6, this->behaviorInfo.unk4C, 0x46);
     if (((this->actor.flags & 0x40) == 0x40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->actionTimer > 0) {
         this->actionTimer--;
@@ -3073,7 +3073,7 @@ void func_80B49C38(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (((this->actor.flags & 0x40) == 0x40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->clockTime >= 0.9999f) {
         Actor_MarkForDeath(&this->actor);
@@ -3299,7 +3299,7 @@ void func_80B4A67C(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
     if (((this->actor.flags & 0x40) == 0x40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->pathIndex == this->endPoint) {
         func_80B4A2C0(this);
@@ -3572,7 +3572,7 @@ void func_80B4B3DC(EnInvadepoh* this) {
     s32 pad;
 
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
@@ -3635,7 +3635,7 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actionTimer--;
     } else if (this->unk3BC >= 0) {
         if ((D_80B50348 == 0) && (Rand_ZeroOne() < 0.4f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
         }
         func_80B4B724(this);
     } else {
@@ -3656,7 +3656,7 @@ void func_80B4B768(EnInvadepoh* this, GlobalContext* globalCtx) {
                        0x64);
     func_80B44E90(this, globalCtx);
     if (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 19.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
     if (this->animPlayFlag) {
         func_80B4B510(this);
@@ -3833,7 +3833,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (((this->actor.flags & 0x40) == 0x40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (gSaveContext.time > CLOCK_TIME(20, 15)) {
         Actor_MarkForDeath(&this->actor);
@@ -4054,7 +4054,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (((this->actor.flags & 0x40) == 0x40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
 
     if (this->clockTime >= 0.9999f) {

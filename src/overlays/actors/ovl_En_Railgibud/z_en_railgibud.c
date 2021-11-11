@@ -300,7 +300,7 @@ void func_80BA5A34(EnRailgibud* this, GlobalContext* globalCtx) {
         player->actor.freezeTimer = 60;
         func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
         func_80123E90(globalCtx, &this->actor);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_AIM);
         func_80BA5AF0(this);
     }
     func_80BA6B9C(this, globalCtx);
@@ -339,7 +339,7 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
                 this->unk_3F2 = 60;
                 func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
                 func_80123E90(globalCtx, &this->actor);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_AIM);
             } else {
                 this->unk_3F2--;
             }
@@ -355,9 +355,9 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((globalCtx->gameplayFrames & 95) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
@@ -403,7 +403,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
             }
 
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_ATTACK);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
 
             if (!(player->stateFlags2 & 0x80) || (player->unk_B62 != 0)) {
@@ -432,7 +432,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
 
 void func_80BA6054(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 7);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->actor.speedXZ = -2.0f;
     this->actionFunc = func_80BA60B0;
 }
@@ -503,7 +503,7 @@ void func_80BA62D4(EnRailgibud* this, GlobalContext* globalCtx) {
 
 void func_80BA6440(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 7);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3F2 = 0;
     this->unk_3F4 = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -556,7 +556,7 @@ void func_80BA6604(EnRailgibud* this, GlobalContext* globalCtx) {
 void func_80BA6664(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 6);
     this->actor.flags &= ~1;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DEAD);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->unk_3F2 = 0;
     this->actionFunc = func_80BA66C8;
 }
@@ -859,7 +859,7 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
             this->unk_3FA = 1;
             func_801518B0(globalCtx, 0x13B2, &this->actor);
             this->textId = 0x13B2;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
         } else if (((this->actor.flags & 9) == 9) && !(this->collider.base.acFlags & AC_HIT)) {
             func_800B8614(&this->actor, &globalCtx->state, 100.0f);
@@ -1072,7 +1072,7 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
 
                 case 2:
                     this->unk_3F0 = 15;
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_WEAKENED2);
+                    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_WEAKENED2);
                     func_800BDC5C(&this->skelAnime, sAnimations, 15);
                     break;
 
@@ -1115,9 +1115,9 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
             case 5:
                 if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                     if (globalCtx->csCtx.frames < 280) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+                        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_CRY);
                     } else {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_WEAKENED1);
+                        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_REDEAD_WEAKENED1);
                     }
                 }
                 break;

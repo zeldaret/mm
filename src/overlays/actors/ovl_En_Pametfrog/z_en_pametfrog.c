@@ -398,10 +398,10 @@ void EnPametfrog_PlaceSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
 
 void EnPametfrog_JumpOnGround(EnPametfrog* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_JUMP);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_JUMP);
     } else if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
         EnPametfrog_JumpWaterEffects(this, globalCtx);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_WALK_WATER);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_WALK_WATER);
     }
 }
 
@@ -424,7 +424,7 @@ void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, GlobalContext* global
 
 void EnPametfrog_ApplyElectricStun(EnPametfrog* this) {
     this->freezeTimer = 40;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_COMMON_FREEZE);
     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
     this->drawEffect = GEKKO_DRAW_EFFECT_ELECTRIC_STUN;
     this->unk_2C8 = 0.75f;
@@ -433,7 +433,7 @@ void EnPametfrog_ApplyElectricStun(EnPametfrog* this) {
 
 void EnPametfrog_ApplyStun(EnPametfrog* this) {
     this->freezeTimer = 40;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_COMMON_FREEZE);
     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
 }
 
@@ -531,7 +531,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx
     eye.y = this->actor.focus.pos.y + 100.0f;
     eye.z = (Math_CosS(yaw) * 300.0f) + this->actor.focus.pos.z;
     Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.focus.pos, &eye);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_DAMAGE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_DAMAGE);
     this->actionFunc = EnPametfrog_FallOffSnapper;
 }
 
@@ -558,7 +558,7 @@ void EnPametfrog_SetupJumpToWall(EnPametfrog* this) {
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
     this->actor.bgCheckFlags &= ~8;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_VOICE2);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_VOICE2);
     this->actionFunc = EnPametfrog_JumpToWall;
 }
 
@@ -601,7 +601,7 @@ void EnPametfrog_SetupWallCrawl(EnPametfrog* this) {
         this->skelAnime.playSpeed = 1.0f;
     }
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_RUNAWAY);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_RUNAWAY);
     this->actor.speedXZ = 8.0f;
     this->timer = Rand_S16Offset(35, 15);
     this->actionFunc = EnPametfrog_WallCrawl;
@@ -657,11 +657,11 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, GlobalContext* globalCtx) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, 15.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_BOMCHU_WALK);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_BOMCHU_WALK);
         }
 
         if (((globalCtx->gameplayFrames % 60) == 0) && (Rand_ZeroOne() < 0.8f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_REAL);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_REAL);
         }
 
         if ((this->timer == 0) ||
@@ -689,7 +689,7 @@ void EnPametfrog_SetupWallPause(EnPametfrog* this) {
         this->wallRotation = (Rand_ZeroOne() < 0.5f ? -1 : 1) * (0x1000 + randFloat) * (M_PI / (15 * 0x8000));
     }
     this->timer = 15;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_RUNAWAY2);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_RUNAWAY2);
     this->actionFunc = EnPametfrog_WallPause;
 }
 
@@ -707,7 +707,7 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
         Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
         func_8086A238(this);
         if (((globalCtx->gameplayFrames % 60) == 0) && (Rand_ZeroOne() < 0.8f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_REAL);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_REAL);
         }
 
         if (this->timer == 0) {
@@ -785,7 +785,7 @@ void EnPametfrog_SetupJumpOnSnapper(EnPametfrog* this) {
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.params = GEKKO_JUMP_ON_SNAPPER;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_GREET);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_GREET);
     this->actionFunc = EnPametfrog_JumpOnSnapper;
 }
 
@@ -836,9 +836,9 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
     this->collider.base.acFlags &= ~AC_ON;
     this->timer = 10;
     if (this->actor.colChkInfo.health == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_DEAD);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_DEAD);
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_DAMAGE);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_DAMAGE);
     }
 
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
@@ -895,7 +895,7 @@ void EnPametfrog_SetupFallOnGround(EnPametfrog* this, GlobalContext* globalCtx) 
     this->timer = 5;
     EnPametfrog_ChangeColliderThaw(this, globalCtx);
     EnPametfrog_JumpWaterEffects(this, globalCtx);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_WALK_WATER);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_WALK_WATER);
     this->actionFunc = EnPametfrog_FallOnGround;
 }
 
@@ -1119,9 +1119,9 @@ void EnPametfrog_MeleeAttack(EnPametfrog* this, GlobalContext* globalCtx) {
         ((this->skelAnime.animation == &D_0600F048) && Animation_OnFrame(&this->skelAnime, 27.0f))) {
         this->collider.base.atFlags |= AT_ON;
         if (this->skelAnime.animation == &D_06003F28) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_KICK);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_KICK);
         } else {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_PUNCH1);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_PUNCH1);
         }
     } else {
         this->collider.base.atFlags &= ~AT_ON;
@@ -1134,7 +1134,7 @@ void EnPametfrog_SetupDamage(EnPametfrog* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.speedXZ = 10.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_DAMAGE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_DAMAGE);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
     func_800BE5CC(&this->actor, &this->collider, 0);
     this->actor.shape.rot.y = BINANG_ROT180(this->actor.world.rot.y);
@@ -1188,7 +1188,7 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     s16 yawDiff;
 
     Animation_MorphToPlayOnce(&this->skelAnime, &D_06001B08, 3.0f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_GREET);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FROG_GREET);
     this->actor.flags &= ~1;
     this->actor.colChkInfo.health = 6;
     this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);

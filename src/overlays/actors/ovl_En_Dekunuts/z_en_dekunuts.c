@@ -200,7 +200,7 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
         this->collider.base.acFlags |= AC_ON;
     } else if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_UP);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_UP);
     }
 
     this->collider.dim.height = (s32)((CLAMP(this->skelAnime.curFrame, 9.0f, 12.0f) - 9.0f) * 9.0f) + 5;
@@ -333,7 +333,7 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
 
         if (Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_NUTSBALL, pos.x, pos.y, pos.z,
                         this->actor.world.rot.x, this->actor.shape.rot.y, 0, params) != NULL) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_THROW);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_THROW);
         }
     } else if ((this->unk_190 >= 2) && Animation_OnFrame(&this->skelAnime, 12.0f)) {
         Animation_MorphToPlayOnce(&this->skelAnime, &D_06000168, -3.0f);
@@ -346,7 +346,7 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
 void func_808BDC9C(EnDekunuts* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &D_06002A5C, -5.0f);
     this->unk_190 = 0;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_DOWN);
     this->actionFunc = func_808BDD54;
 }
 
@@ -354,7 +354,7 @@ void func_808BDCF0(EnDekunuts* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &D_06002A5C, -5.0f);
     this->collider.base.acFlags &= ~AC_ON;
     this->unk_190 = 80;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_DOWN);
     this->actionFunc = func_808BDD54;
 }
 
@@ -382,7 +382,7 @@ void func_808BDE7C(EnDekunuts* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &D_06002DD4, -3.0f);
     this->collider.dim.height = 37;
     this->actor.colChkInfo.mass = 50;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->actor.world.rot.x = 0;
     this->actor.flags |= 0x20;
     this->collider.base.acFlags &= ~AC_ON;
@@ -418,7 +418,7 @@ void func_808BDFB8(EnDekunuts* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_18C != 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_WALK);
         this->unk_18C = 0;
     } else {
         this->unk_18C = 1;
@@ -490,8 +490,8 @@ void func_808BE294(EnDekunuts* this, s32 arg1) {
     this->actor.world.rot.x = 0;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_808BE358;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_CUTBODY);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_CUTBODY);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&D_0600259C));
 }
 
@@ -534,7 +534,7 @@ void func_808BE484(EnDekunuts* this) {
     Animation_PlayOnce(&this->skelAnime, &D_06002BD4);
     this->actionFunc = func_808BE4D4;
     this->actor.speedXZ = 0.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DEAD);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_DEAD);
 }
 
 void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx) {
@@ -604,7 +604,7 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
                 if (this->actor.colChkInfo.damageEffect == 1) {
                     this->unk_190 = 40;
                     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_808BE3A8(this);
                     return;
                 }

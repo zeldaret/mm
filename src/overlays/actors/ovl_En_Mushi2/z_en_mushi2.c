@@ -205,7 +205,7 @@ void func_80A68BC8(EnMushi2* this) {
     if (this->unk_36C > 0) {
         this->unk_36C--;
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_MUSI_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_MUSI_WALK);
 
         this->unk_36C = 3.0f / CLAMP_MIN(this->skelAnime.playSpeed, 0.12f);
         if (this->unk_36C < 2) {
@@ -819,7 +819,7 @@ void func_80A6A36C(EnMushi2* this, GlobalContext* globalCtx) {
     } else if (this->actor.bgCheckFlags & 0x20) {
         func_80A6AAA4(this);
     } else if (this->actor.bgCheckFlags & 1) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_GERUDOFT_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_GERUDOFT_WALK);
         func_80A68F24(this);
         func_80A691EC(this, this->actor.floorPoly, -1.0f);
         func_80A69388(this);
@@ -1045,7 +1045,7 @@ void func_80A6B078(EnMushi2* this) {
     this->unk_30C &= ~1;
     this->unk_368 = 50;
     this->skelAnime.playSpeed = 1.9f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTURA_BOUND);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_STALTURA_BOUND);
     func_80A68B6C(this);
     this->actionFunc = func_80A6B0D8;
 }

@@ -755,7 +755,7 @@ void func_80B97D6C(EnZot* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_ZORA_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_ZORA_WALK);
     }
 }
 

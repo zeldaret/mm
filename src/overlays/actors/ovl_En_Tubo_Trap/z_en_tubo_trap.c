@@ -245,7 +245,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, GlobalContext* globalCtx) {
                 this->targetHeight += transformationHeight;
             }
             this->originPos = this->actor.world.pos;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_POT_MOVE_START);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_POT_MOVE_START);
             this->actionFunc = EnTuboTrap_Levitate;
         }
     }
@@ -272,7 +272,7 @@ void EnTuboTrap_FlyAtPlayer(EnTuboTrap* this, GlobalContext* globalCtx) {
     // But in MM, certain sfxIds got reordered and devs forgot to update:
     // In MM, NA_SE_EN_MIZUBABA2_ATTACK is the old value 0x3837
     // In MM, NA_SE_EN_TUBOOCK_FLY is the new value 0x3AE0
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
 
     if ((SQ(dX) + SQ(dY) + SQ(dZ) > SQ(240.0f))) {
         Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);

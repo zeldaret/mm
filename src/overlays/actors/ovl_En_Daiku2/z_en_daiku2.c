@@ -245,7 +245,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
 
     func_800B8614(&this->actor, &globalCtx->state, 80.0f);
     if ((this->unk_276 == 8) && Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROCK_BROKEN);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_ROCK_BROKEN);
 
         for (i = 0; i < 10; i++) {
             Math_Vec3f_Copy(&sp70, &this->actor.world.pos);

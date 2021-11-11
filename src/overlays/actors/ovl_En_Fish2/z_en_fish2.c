@@ -532,7 +532,7 @@ void func_80B2951C(EnFish2* this) {
     Actor_MarkForDeath(this->unk_350);
     this->unk_350 = NULL;
     D_80B2B2F4 = &this->actor;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_M_EAT);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_DODO_M_EAT);
     this->actionFunc = func_80B295A4;
 }
 
@@ -641,7 +641,7 @@ void func_80B297FC(EnFish2* this, GlobalContext* globalCtx) {
                 }
 
                 this->unk_2B6 = 4;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_FISH_GROW_UP);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_FISH_GROW_UP);
                 this->unk_2C4++;
             }
             break;
@@ -892,7 +892,7 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
         if (temp_v0 != NULL) {
             temp_v0->speedXZ = 4.0f;
             temp_v0->velocity.y = 15.0f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_SY_PIECE_OF_HEART);
             gSaveContext.weekEventReg[81] &= (u8)~0x10;
             gSaveContext.weekEventReg[81] &= (u8)~0x20;
             gSaveContext.weekEventReg[81] &= (u8)~0x40;

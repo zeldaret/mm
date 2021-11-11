@@ -773,7 +773,7 @@ void func_800B8D98(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 a
 void func_800B8DD4(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5);
 void func_800B8E1C(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
 void func_800B8E58(Player* player, u16 sfxId);
-void Audio_PlayActorSound2(Actor* actor, u16 sfxId);
+void Actor_PlaySfxByPos2(Actor* actor, u16 sfxId);
 void func_800B8EF4(GlobalContext* globalCtx, Actor* actor);
 void func_800B8F98(Actor* actor, u16 sfxId);
 void func_800B8FC0(Actor* actor, u16 sfxId);

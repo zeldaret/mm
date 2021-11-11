@@ -144,7 +144,7 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
     }
 
     if (!(this->shiverTimer % 4)) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_ICE_SWING);
+        Actor_PlaySfxByPos2(&this->dyna.actor, NA_SE_EV_ICE_SWING);
     }
 
     if (this->shiverTimer == 0) {

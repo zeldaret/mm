@@ -560,7 +560,7 @@ void func_80B5C910(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5C950(EnOt* this, GlobalContext* globalCtx) {
     if (this->unk_32C & 8) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
         gSaveContext.weekEventReg[25] |= 4;
         func_80B5CAD0(this, globalCtx);
     }
@@ -581,7 +581,7 @@ void func_80B5C9D0(EnOt* this, GlobalContext* globalCtx) {
     this->actor.world.rot.x = this->actor.world.rot.x;
     this->actor.world.rot.y = this->actor.world.rot.y;
     this->actor.world.rot.z = this->actor.world.rot.z;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
     this->actionFunc = func_80B5CA30;
 }
 
@@ -938,7 +938,7 @@ void EnOt_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnOt* this = THIS;
 
     if ((this->animIdx == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
     }
 
     this->actionFunc(this, globalCtx);

@@ -102,7 +102,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalC
     if (this->dyna.actor.cutscene < 0 || ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         ObjWarpstone_SetupAction(this, ObjWarpstone_PlayOpeningCutscene);
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
+        Actor_PlaySfxByPos2(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }

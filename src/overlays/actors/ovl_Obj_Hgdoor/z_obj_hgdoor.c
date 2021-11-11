@@ -142,7 +142,7 @@ void func_80BD4358(ObjHgdoor* this, GlobalContext* globalCtx) {
             this->unk166 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
             switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                 case 1:
-                    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
+                    Actor_PlaySfxByPos2(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
                         this->dyna.actor.parent->colChkInfo.health = 1;
                     }

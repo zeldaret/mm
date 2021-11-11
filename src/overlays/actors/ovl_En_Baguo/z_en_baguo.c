@@ -148,7 +148,7 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx) {
     this->action = NEJIRON_ACTION_INACTIVE;
     if (this->actor.xzDistToPlayer < 200.0f && Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) {
         this->actor.draw = EnBaguo_DrawBody;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.world.rot.z = 0;
         this->actor.world.rot.x = this->actor.world.rot.z;
         this->actor.flags &= ~0x8000000;
@@ -193,7 +193,7 @@ void EnBaguo_Idle(EnBaguo* this, GlobalContext* globalCtx) {
                 if ((globalCtx->gameplayFrames % 8) == 0) {
                     Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos,
                                              this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_VOICE);
+                    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_BAKUO_VOICE);
                 }
             }
         }
@@ -255,7 +255,7 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
             this->actor.world.rot.z -= (s16)this->currentRotation.z;
         }
     }
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
 }
 
 void EnBaguo_SetupRetreatUnderground(EnBaguo* this) {
@@ -277,7 +277,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx) {
         this->actor.shape.yOffset = -3000.0f;
         this->actor.draw = EnBaguo_DrawBody;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.flags |= 0x8000000;
         this->actor.flags &= ~1;
         this->actionFunc = EnBaguo_UndergroundIdle;
@@ -332,8 +332,8 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
 
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_POP);
-                Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_DEAD);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_BAKUO_DEAD);
                 this->timer = 30;
                 this->actor.flags |= 0x8000000;
                 this->actor.flags &= ~1;

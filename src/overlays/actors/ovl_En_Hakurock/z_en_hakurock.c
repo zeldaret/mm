@@ -212,7 +212,7 @@ void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
 
     if (this->collider.base.atFlags & AT_HIT || ((this->counter == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
         ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROCK_BROKEN);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_ROCK_BROKEN);
         func_80B21EA4(this, 0);
         func_80B21FFC(this);
     }
@@ -247,7 +247,7 @@ void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx) {
         func_80B21FFC(this);
     } else if ((this->actor.bgCheckFlags & 1)) {
         func_80B21EA4(this, 2);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OBJECT_STICK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_OBJECT_STICK);
         func_80B224C0(this);
     }
 }

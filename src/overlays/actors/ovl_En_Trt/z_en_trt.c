@@ -869,7 +869,7 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
                 this->timer = 10;
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOTAKE_SURPRISED2);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_KOTAKE_SURPRISED2);
             }
         } else {
             this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
@@ -923,7 +923,7 @@ void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx) {
             EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 4);
             this->animationIdx = 4;
             this->blinkFunc = EnTrt_OpenEyes2;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
             this->timer = 30;
             this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
         }

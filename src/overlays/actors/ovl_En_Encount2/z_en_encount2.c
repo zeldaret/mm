@@ -172,7 +172,7 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
         EnEncount2_InitParticles(this, &curPos, 10);
     }
 
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
+    Actor_PlaySfxByPos2(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }

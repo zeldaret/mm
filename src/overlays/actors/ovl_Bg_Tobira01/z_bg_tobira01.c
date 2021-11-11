@@ -64,7 +64,7 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
 
     if (this->timer != prevTimer) {
         if (1) {}
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
+        Actor_PlaySfxByPos2(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
         this->dyna.actor.world.pos.y = (this->yOffset = (this->timer * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y);
         this->timer2 = 180;
     }

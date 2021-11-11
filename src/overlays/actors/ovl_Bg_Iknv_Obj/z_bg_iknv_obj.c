@@ -154,7 +154,7 @@ s32 func_80BD7E0C(BgIknvObj* this, s16 targetRotation, GlobalContext* globalCtx)
         func_800B9010(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
         return false;
     }
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+    Actor_PlaySfxByPos2(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
     return true;
 }
 

@@ -82,7 +82,7 @@ void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnDyExtra* this = THIS;
 
     DECR(this->unk14C);
-    Audio_PlayActorSound2(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
 }

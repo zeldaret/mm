@@ -94,7 +94,7 @@ s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.center.z = this->pos.z;
     if ((this->collider.base.acFlags & AC_HIT) && !this->hitFlag && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Audio_PlayActorSound2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
         globalCtx->interfaceCtx.unk_25C = 1;
         this->hitFlag = 1;
         return 1;

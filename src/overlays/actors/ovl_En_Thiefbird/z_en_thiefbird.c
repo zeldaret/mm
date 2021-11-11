@@ -502,7 +502,7 @@ void func_80C11590(EnThiefbird* this, GlobalContext* globalCtx) {
         } else {
             this->unk_192 -= Rand_S16Offset(4096, 4096);
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
     }
 
     if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
@@ -547,7 +547,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
 
     if (this->unk_18E != 0) {
@@ -577,7 +577,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
         (this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
             if (!(this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((D_80C1392C != 0) && CUR_UPG_VALUE(UPG_QUIVER) &&
                     (!((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18) ||
@@ -607,7 +607,7 @@ void func_80C11C60(EnThiefbird* this) {
     this->actor.shape.rot.x = 0;
     this->unk_18E = 40;
     this->actor.velocity.y = 0.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_DEAD);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_THIEFBIRD_DEAD);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= 0x10;
@@ -684,13 +684,13 @@ void func_80C11F6C(EnThiefbird* this, GlobalContext* globalCtx) {
 
     if (this->actor.colChkInfo.damageEffect == 5) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_COMMON_FREEZE);
     } else if (this->actor.colChkInfo.damageEffect == 1) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_COMMON_FREEZE);
     } else {
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_DAMAGE);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_THIEFBIRD_DAMAGE);
     }
 
     this->collider.base.acFlags &= ~AC_ON;
@@ -1043,7 +1043,7 @@ void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx2) {
     func_80C12D00(this);
     if (((this->skelAnime.animation == &D_06000604) && Animation_OnFrame(&this->skelAnime, 13.0f)) ||
         ((this->skelAnime.animation == &D_06000278) && Animation_OnFrame(&this->skelAnime, 1.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
 }
 

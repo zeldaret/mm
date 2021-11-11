@@ -308,31 +308,31 @@ void func_80989864(EnDg* this, GlobalContext* globalCtx) {
 
 void func_80989974(EnDg* this) {
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
 void func_809899C8(EnDg* this, f32 arg1) {
     if (Animation_OnFrame(&this->skelAnime, arg1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
     }
 }
 
 void func_80989A08(EnDg* this, f32 arg1) {
     if (Animation_OnFrame(&this->skelAnime, arg1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
 }
 
 void func_80989A48(EnDg* this) {
     if (Animation_OnFrame(&this->skelAnime, 23.0f) || Animation_OnFrame(&this->skelAnime, 28.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
     }
 }
 
 void func_80989A9C(EnDg* this, f32 arg1) {
     if (Animation_OnFrame(&this->skelAnime, arg1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
     }
 }
 
@@ -402,7 +402,7 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
     }
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->unk_290 = 1;
         D_8098C2FC = D_8098C2A8[this->unk_286];
         if (D_8098C2A0 == 0) {
@@ -470,7 +470,7 @@ void func_8098A064(EnDg* this, GlobalContext* globalCtx) {
             } else if ((this->actionFunc == func_8098B004) || (this->actionFunc == func_8098AB48)) {
                 if (DECR(this->unk_292) == 0) {
                     this->unk_292 = 10;
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+                    Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
                 }
             }
         }
@@ -658,9 +658,9 @@ void func_8098A70C(EnDg* this, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
     func_80989974(this);
     if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
     } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
@@ -818,7 +818,7 @@ void func_8098AE58(EnDg* this, GlobalContext* globalCtx) {
 void func_8098AF44(EnDg* this, GlobalContext* globalCtx) {
     if (func_801A46F8() == 1) {
         this->unk_292 = 10;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
         this->actionFunc = func_8098B004;
     }
 }
@@ -905,7 +905,7 @@ void func_8098B28C(EnDg* this, GlobalContext* globalCtx) {
     }
 
     func_80989974(this);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
 }
 
 void func_8098B390(EnDg* this, GlobalContext* globalCtx) {
@@ -936,7 +936,7 @@ void func_8098B464(EnDg* this, GlobalContext* globalCtx) {
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = -3.0f;
         this->unk_284 = 10;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         this->actionFunc = func_8098B560;
     }
 
@@ -963,7 +963,7 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
     if (DECR(this->unk_284) == 0) {
         if (!(this->unk_280 & 4)) {
             this->unk_280 |= 4;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_OUT_OF_WATER);
         }
         this->unk_284 = 5;
         EffectSsGRipple_Spawn(globalCtx, &sp54, 100, 500, 30);
@@ -999,7 +999,7 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
         this->unk_280 &= ~4;
         this->unk_28C = 8;
         this->unk_282 = Rand_S16Offset(60, 60);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80989140(&this->skelAnime, sAnimations, 2);
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         this->actionFunc = func_8098A468;
@@ -1040,7 +1040,7 @@ void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
         this->actor.velocity.y = 10.0f;
         this->actor.gravity = -3.0f;
         this->unk_282 = Rand_S16Offset(60, 60);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80989140(&this->skelAnime, sAnimations, 2);
         this->actionFunc = func_8098A468;
         Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
@@ -1075,7 +1075,7 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         if (this->unk_280 & 0x10) {
             this->unk_280 &= ~0x10;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_MONKEY_WALK);
         }
 
         this->actor.speedXZ = 0.0f;

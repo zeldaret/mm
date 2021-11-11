@@ -162,9 +162,9 @@ typedef struct Actor {
     /* 0x020 */ s16 unk20;
     /* 0x024 */ PosRot world; // Position/rotation in the world
     /* 0x038 */ s8 cutscene;
-    /* 0x039 */ u8 unk39; // Another set of flags? Seems related to sfx
+    /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
-    /* 0x050 */ u16 sfx; // SFX ID to play. Sound plays when value is set, then is cleared the following update cycle
+    /* 0x050 */ u16 sfxId; // Id of sound effect to play. Plays when value is set, then is cleared the following update cycle
     /* 0x054 */ f32 targetArrowOffset; // Height offset of the target arrow relative to `focus` position
     /* 0x058 */ Vec3f scale; // Scale of the actor in each axis
     /* 0x064 */ Vec3f velocity; // Velocity of the actor in each axis

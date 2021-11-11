@@ -895,7 +895,7 @@ void func_809C80C0(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_27E = 0;
         this->unk_280 = 0;
         player->stateFlags1 &= ~0x20;
-        Audio_PlayActorSound2(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_SY_FOUND);
         this->unk_272 = 0x1F;
         this->unk_274 = 0;
         this->unk_276 = 0;
@@ -917,7 +917,7 @@ void func_809C81D0(EnSyatekiMan* this, GlobalContext* globalCtx) {
     if (((this->unk_272 == 0) || (this->unk_26C > 140)) && (D_809C949C == 0) && (this->unk_27C < 4)) {
         D_809C949C = 1;
         this->unk_26C = 0;
-        Audio_PlayActorSound2(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_SY_FOUND);
         this->unk_274 = D_809C91C8[this->unk_27E];
         if (this->unk_27E == 3) {
             this->unk_27E = 0;
@@ -1037,7 +1037,7 @@ void func_809C8610(EnSyatekiMan* this, GlobalContext* globalCtx) {
             gSaveContext.unk_3E88[1] += 100;
             globalCtx->interfaceCtx.unk_25C += 10;
             this->unk_280 += 10;
-            Audio_PlayActorSound2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             D_809C94A0 = 0;
         } else {
             D_809C94A0++;
@@ -1144,7 +1144,7 @@ void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx) {
         if ((D_809C94A8 == (sp30 % 50)) && (this->unk_26C >= 70)) {
             if (this->unk_27E < 15) {
                 this->unk_190 = D_809C94D0[this->unk_27E++];
-                Audio_PlayActorSound2(&this->actor, NA_SE_SY_FOUND);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_SY_FOUND);
                 this->unk_26C = 0;
             }
         }

@@ -85,7 +85,7 @@ void func_8092C5C0(EnDns* this) {
 
     if (((this->unk_2F8 == 2) || (this->unk_2F8 == 3) || (this->unk_2F8 == 6) || (this->unk_2F8 == 7)) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 3.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 }
 
@@ -308,7 +308,7 @@ s32 func_8092CE38(EnDns* this) {
         this->unk_2C6 &= ~0x200;
         this->skelAnime.curFrame = 0.0f;
         if (this->unk_2D2 == 2) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_JUMP);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_JUMP);
         }
         this->unk_2D2++;
         if (this->unk_2D2 >= 3) {
@@ -321,7 +321,7 @@ s32 func_8092CE38(EnDns* this) {
                 this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
                 this->unk_2E4 = 0.0f;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_JUMP);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_JUMP);
             } else if (this->skelAnime.curFrame < 13.0f) {
                 frame = this->skelAnime.curFrame;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -332,7 +332,7 @@ s32 func_8092CE38(EnDns* this) {
         } else {
             if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                 Animation_OnFrame(&this->skelAnime, 13.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_WALK);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_NUTS_WALK);
             }
 
             if (this->skelAnime.curFrame > 7.0f) {

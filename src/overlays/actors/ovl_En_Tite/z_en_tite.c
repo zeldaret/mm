@@ -271,7 +271,7 @@ void func_80893BCC(EnTite* this, GlobalContext* globalCtx) {
                 }
             }
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
     }
 }
 
@@ -335,10 +335,10 @@ void func_80894024(EnTite* this, GlobalContext* globalCtx) {
 void func_8089408C(EnTite* this, GlobalContext* globalCtx) {
     Animation_PlayOnce(&this->skelAnime, &D_060004F8);
     if (!func_80893ADC(this)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_JUMP);
     } else {
         this->actor.world.pos.y += this->actor.depthInWater;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
     }
 
     if (this->actor.shape.yOffset < 0.0f) {
@@ -389,7 +389,7 @@ void func_808942B4(EnTite* this, GlobalContext* globalCtx) {
                 func_8089452C(this, globalCtx);
             } else {
                 this->actor.velocity.y = 0.0f;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
                 func_80894414(this);
             }
         }
@@ -430,7 +430,7 @@ void func_8089452C(EnTite* this, GlobalContext* globalCtx) {
     sp2C.y += this->actor.depthInWater;
     this->actor.velocity.y *= 0.75f;
     EffectSsGRipple_Spawn(globalCtx, &sp2C, 0, 500, 0);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
     this->actionFunc = func_808945B4;
 }
 
@@ -466,9 +466,9 @@ void func_80894638(EnTite* this, GlobalContext* globalCtx) {
 
     if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
         if (func_80893ADC(this)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_WALK_WATER);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_WALK_WATER);
         } else {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_WALK);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_WALK);
         }
     }
 
@@ -495,9 +495,9 @@ void func_8089484C(EnTite* this) {
     this->actor.speedXZ = 4.0f;
     if (func_80893ADC(this)) {
         this->actor.world.pos.y += this->actor.depthInWater;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_JUMP);
     }
     this->actionFunc = func_80894910;
 }
@@ -508,7 +508,7 @@ void func_80894910(EnTite* this, GlobalContext* globalCtx) {
     Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 1.0f, 0.0f);
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.bgCheckFlags & 0x40) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
 
         if (func_80893ADC(this)) {
             Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
@@ -569,7 +569,7 @@ void func_80894BC8(EnTite* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.bgCheckFlags & 0x40) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
     } else {
         func_80893BCC(this, globalCtx);
     }
@@ -611,7 +611,7 @@ void func_80894E0C(EnTite* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.bgCheckFlags & 0x40) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
     } else {
         func_80893BCC(this, globalCtx);
     }
@@ -691,7 +691,7 @@ void func_808951B8(EnTite* this, GlobalContext* globalCtx) {
 
 void func_808952EC(EnTite* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &D_06000A14, 1.5f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
     this->collider.base.acFlags &= ~AC_ON;
     func_80893A18(this);
     this->unk_2B9 = 1;
@@ -719,7 +719,7 @@ void func_80895424(EnTite* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags |= AC_ON;
         if (this->actor.bgCheckFlags & 2) {
             Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 20.0f, 11, 4.0f, 0, 0, 0);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
 
         if (this->unk_2BC == 0) {
@@ -735,7 +735,7 @@ void func_80895424(EnTite* this, GlobalContext* globalCtx) {
 void func_808955E4(EnTite* this) {
     this->unk_2B9 = 0;
     this->actor.velocity.y = 13.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
     this->actor.bgCheckFlags &= ~1;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80895640;
@@ -839,7 +839,7 @@ void func_80895AC0(EnTite* this, GlobalContext* globalCtx) {
         if (Rand_ZeroOne() < 0.25f) {
             func_8089595C(this, globalCtx);
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_WALK);
     }
 
     if ((this->unk_2BC == 1) || (this->unk_2BC == -1)) {
@@ -885,7 +885,7 @@ void func_80895D08(EnTite* this, GlobalContext* globalCtx) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089595C(this, globalCtx);
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_WALK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_WALK);
     }
     if ((this->actor.xzDistToPlayer < 240.0f) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
         func_8089408C(this, globalCtx);
@@ -967,7 +967,7 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
                 if (this->actor.colChkInfo.damageEffect == 5) {
                     this->unk_2BC = 40;
                     Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->unk_2BB = 32;
                     this->unk_2C8 = 0.5f;
                     this->unk_2C4 = 2.0f;
@@ -978,7 +978,7 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
                 if (this->actor.colChkInfo.damageEffect == 1) {
                     this->unk_2BC = 40;
                     Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80894DD0(this);
                     return;
                 }
@@ -1011,7 +1011,7 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
                 if (this->actor.colChkInfo.health == 0) {
                     func_80895020(this, globalCtx);
                 } else {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_DAMAGE);
+                    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_TEKU_DAMAGE);
 
                     if (this->unk_2B9 == 0) {
                         func_80894B2C(this);

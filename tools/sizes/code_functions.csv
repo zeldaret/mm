@@ -315,7 +315,7 @@ asm/non_matchings/code/z_actor/func_800B8D98.s,func_800B8D98,0x800B8D98,0xF
 asm/non_matchings/code/z_actor/func_800B8DD4.s,func_800B8DD4,0x800B8DD4,0x12
 asm/non_matchings/code/z_actor/func_800B8E1C.s,func_800B8E1C,0x800B8E1C,0xF
 asm/non_matchings/code/z_actor/func_800B8E58.s,func_800B8E58,0x800B8E58,0x1C
-asm/non_matchings/code/z_actor/Audio_PlayActorSound2.s,Audio_PlayActorSound2,0x800B8EC8,0xB
+asm/non_matchings/code/z_actor/Actor_PlaySfxByPos2.s,Actor_PlaySfxByPos2,0x800B8EC8,0xB
 asm/non_matchings/code/z_actor/func_800B8EF4.s,func_800B8EF4,0x800B8EF4,0x29
 asm/non_matchings/code/z_actor/func_800B8F98.s,func_800B8F98,0x800B8F98,0xA
 asm/non_matchings/code/z_actor/func_800B8FC0.s,func_800B8FC0,0x800B8FC0,0xA

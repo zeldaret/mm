@@ -1461,11 +1461,11 @@ void EnSuttari_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk428 != 0) {
         if (this->animationIdx == 2 || this->animationIdx == 6) {
             if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 16.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         } else if (this->animationIdx == 0 || this->animationIdx == 5) {
             if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 17.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         }
     }

@@ -430,7 +430,7 @@ void func_8095B158(EnOwl* this) {
     if (Animation_OnFrame(&this->skelAnime1, 2.0f) || Animation_OnFrame(&this->skelAnime1, 9.0f) ||
         Animation_OnFrame(&this->skelAnime1, 23.0f) || Animation_OnFrame(&this->skelAnime1, 40.0f) ||
         Animation_OnFrame(&this->skelAnime1, 58.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_OWL_FLUTTER);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_OWL_FLUTTER);
     }
 }
 
@@ -905,7 +905,7 @@ void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     if (this->actor.update != NULL) {
         if ((this->skelAnime1.animation == &D_06001ADC) && Animation_OnFrame(&this->skelAnime1, 4.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_OWL_FLUTTER);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_OWL_FLUTTER);
         }
 
         if (this->actionFlags & 2) {

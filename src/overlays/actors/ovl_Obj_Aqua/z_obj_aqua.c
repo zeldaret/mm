@@ -181,7 +181,7 @@ void func_80ACBC8C(ObjAqua* this, GlobalContext* globalCtx) {
         if (this->actor.bgCheckFlags & 1) {
             func_80ACB7F4(this, globalCtx);
             func_80ACBA10(this);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOTTLE_WATERING);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_BOTTLE_WATERING);
             func_80ACBD34(this);
         } else {
             func_80ACB6A0(this, globalCtx);

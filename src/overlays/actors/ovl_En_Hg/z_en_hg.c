@@ -167,7 +167,7 @@ void func_80BCF398(EnHg* this, GlobalContext* globalCtx) {
         }
         if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 0) &&
             (globalCtx->csCtx.frames == 20 || globalCtx->csCtx.frames == 60)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
     }
 }

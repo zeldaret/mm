@@ -156,7 +156,7 @@ void func_80C0ABA8(BgIkninSusceil* this, GlobalContext* globalCtx) {
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
         func_80C0A86C(this, globalCtx, 4, 14, 1);
         Flags_UnsetSwitch(globalCtx, GET_SUSCEIL_SWITCHFLAG(this));
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
+        Actor_PlaySfxByPos2(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
     } else {
         func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);

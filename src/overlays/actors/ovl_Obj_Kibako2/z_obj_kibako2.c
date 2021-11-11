@@ -236,7 +236,7 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->skulltulaNoiseTimer >= 0) {
         if (this->skulltulaNoiseTimer == 0) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+            Actor_PlaySfxByPos2(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
             if (Rand_ZeroOne() < 0.1f) {
                 this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
             } else {

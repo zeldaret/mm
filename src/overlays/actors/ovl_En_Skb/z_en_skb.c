@@ -290,7 +290,7 @@ void func_80994DA8(EnSkb* this, GlobalContext* globalCtx) {
 void func_80994E2C(EnSkb* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 1);
     this->actor.flags &= ~1;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_APPEAR);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_STALKID_APPEAR);
     this->unk_3D0 = 0;
     this->unk_3DE = 0;
     this->actionFunc = func_80994E94;
@@ -496,7 +496,7 @@ void func_8099556C(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_8099571C(EnSkb* this) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_STALKID_ATTACK);
     this->unk_3DC = 0;
     this->actor.shape.shadowScale = 0.0f;
     if (this->unk_3DE == 9) {
@@ -540,7 +540,7 @@ void func_809958F4(EnSkb* this) {
     this->unk_3E4 = 0;
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
     this->unk_3DE = 1;
     this->actionFunc = func_8099599C;
 }
@@ -585,7 +585,7 @@ void func_80995A8C(EnSkb* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_3DA, 1, 0x2EE, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Audio_PlayActorSound2(&this->actor, 0x3830);
+        Actor_PlaySfxByPos2(&this->actor, 0x3830);
     }
 
     if ((this->actor.xzDistToPlayer > 800.0f) || func_80996594(this, globalCtx)) {
@@ -605,7 +605,7 @@ void func_80995C24(EnSkb* this) {
 
 void func_80995C84(EnSkb* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, 3.0f) && (this->unk_3E4 == 0)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_STALKID_ATTACK);
         this->unk_3E4 = 1;
     } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
         this->unk_3E4 = 0;
@@ -637,7 +637,7 @@ void func_80995E08(EnSkb* this) {
     if (this->actor.bgCheckFlags & 1) {
         this->actor.speedXZ = 0.0f;
     }
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->unk_3E4 = 0;
     this->unk_3DE = 5;
     this->actionFunc = func_80995E64;
@@ -696,7 +696,7 @@ void func_80995F98(EnSkb* this) {
             this->actor.speedXZ = -4.0f;
         }
     }
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
     this->unk_3DE = 6;
     this->actionFunc = func_809960AC;
 }
@@ -748,7 +748,7 @@ void func_80996284(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_809962D4(EnSkb* this) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_8099630C;
 }
 
@@ -933,7 +933,7 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
 
                 case 3:
                     if (this->actor.colChkInfo.health != 0) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                         this->unk_3D2 = 0x50;
                     } else {
                         this->unk_3D2 = 3;
@@ -951,7 +951,7 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
                     this->unk_22C = 1.0f;
                     this->unk_230 = 0.5f;
                     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                     func_800BDC5C(&this->skelAnime, sAnimations, 3);
                     func_809963C4(this);
                     break;

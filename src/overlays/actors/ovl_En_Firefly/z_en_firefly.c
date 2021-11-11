@@ -332,7 +332,7 @@ void EnFirefly_SetupFall(EnFirefly* this, GlobalContext* globalCtx) {
     this->timer = 40;
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &D_0600017C, 0.0f, 6.0f, 6.0f, 2, 0.0f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FFLY_DEAD);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FFLY_DEAD);
     this->actor.flags |= 0x10;
 
     if (this->isInvisible) {
@@ -545,7 +545,7 @@ void EnFirefly_SetupStunned(EnFirefly* this) {
     }
 
     this->auraType = KEESE_AURA_NONE;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = EnFirefly_Stunned;
 }
 
@@ -666,7 +666,7 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FFLY_ATTACK);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FFLY_ATTACK);
 
         if (this->currentType != KEESE_NORMAL) {
             EnFirefly_Extinguish(this);
@@ -706,7 +706,7 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
 
         if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_FFLY_FLY);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_FFLY_FLY);
         }
     }
 

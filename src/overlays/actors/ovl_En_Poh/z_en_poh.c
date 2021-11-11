@@ -325,14 +325,14 @@ void func_80B2CEC8(EnPoh* this) {
     Animation_MorphToLoop(&this->skelAnime, &D_060001A8, -6.0f);
     this->unk_18E = 12;
     this->actor.speedXZ = 0.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_PO_LAUGH);
     this->actionFunc = func_80B2CF28;
 }
 
 void func_80B2CF28(EnPoh* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_KANTERA);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_PO_KANTERA);
         if (this->unk_18E != 0) {
             this->unk_18E--;
         }
@@ -388,7 +388,7 @@ void func_80B2D140(EnPoh* this, GlobalContext* globalCtx) {
     }
 
     if ((this->skelAnime.playSpeed < 0.5f) && (this->actor.xzDistToPlayer < 280.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
         this->skelAnime.playSpeed = 1.0f;
     }
 }
@@ -447,7 +447,7 @@ void func_80B2D300(EnPoh* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_18E == 18) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
+        Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
     }
 }
 
@@ -493,8 +493,8 @@ void func_80B2D76C(EnPoh* this) {
     this->unk_192 = 0x2000;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DISAPPEAR);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_PO_DISAPPEAR);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_PO_LAUGH);
     this->colliderCylinder.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80B2D7D4;
 }
@@ -523,8 +523,8 @@ void func_80B2D924(EnPoh* this) {
     this->unk_18C = 0;
     this->unk_192 = 0x2000;
     this->actor.speedXZ = 0.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_PO_LAUGH);
     this->colliderCylinder.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80B2D980;
 }
@@ -638,7 +638,7 @@ void func_80B2E0B0(EnPoh* this) {
     this->actor.home.pos.y = this->actor.world.pos.y;
     this->actor.scale.x = 0.0f;
     this->actor.scale.y = 0.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_METAL_BOX_BOUND);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_METAL_BOX_BOUND);
     this->actionFunc = func_80B2E180;
 }
 
@@ -689,7 +689,7 @@ void func_80B2E230(EnPoh* this, GlobalContext* globalCtx) {
 
 void func_80B2E3B0(EnPoh* this) {
     func_801A7328(&this->actor.projectedPos, NA_SE_EN_PO_BIG_CRY - SFX_FLAG);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH);
+    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_PO_LAUGH);
     this->actionFunc = func_80B2E3F8;
 }
 
@@ -705,9 +705,9 @@ void func_80B2E438(EnPoh* this, GlobalContext* globalCtx) {
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         if (!Actor_ApplyDamage(&this->actor)) {
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DEAD);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_PO_DEAD);
         } else if (this->actor.colChkInfo.damage != 0) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DAMAGE);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_PO_DAMAGE);
         }
 
         if (this->actor.colChkInfo.damageEffect != 14) {

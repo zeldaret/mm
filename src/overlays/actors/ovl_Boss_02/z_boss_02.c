@@ -758,7 +758,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
             this->unk_0170 = this->unk_017C;
             this->unk_0170.y = temp_f0;
             this->unk_016C = 120;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
         }
 
         this->actor.flags &= ~1;
@@ -967,7 +967,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                 D_809E042C->unk_1D5C = 0.0f;
                 play_sound(NA_SE_EN_INBOSS_DEAD_PRE2_OLD);
             } else if (!(this->unk_0146[1] & 0xF) && (Rand_ZeroOne() < 0.5f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
             }
             return;
 
@@ -1008,7 +1008,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                         Audio_QueueSeqCmd(0x8021);
                     }
 
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
+                    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
                 }
             }
             return;
@@ -1106,7 +1106,7 @@ void func_809DBFB4(Boss02* this, GlobalContext* globalCtx) {
                 this->unk_0156 = 15;
 
                 if (i == 0) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
+                    Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
                     this->unk_015C = 1;
                 } else {
                     func_8019F1C0(&this->unk_167C, NA_SE_EN_INBOSS_DAMAGE_OLD);
@@ -1232,9 +1232,9 @@ void Boss02_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         if (this->unk_016C != 0) {
             if ((this->unk_016C == 60) && (this->unk_0144 < 20)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
+                Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
             }
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_INBOSS_SAND_OLD - SFX_FLAG);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EN_INBOSS_SAND_OLD - SFX_FLAG);
 
             if (this->unk_0144 > 20) {
                 sp3C.x = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.x;

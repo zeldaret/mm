@@ -2132,7 +2132,7 @@ void func_800B8E58(Player* player, u16 sfxId) {
     }
 }
 
-void Audio_PlayActorSound2(Actor* actor, u16 sfxId) {
+void Actor_PlaySfxByPos2(Actor* actor, u16 sfxId) {
     func_8019F1C0(&actor->projectedPos, sfxId);
 }
 
@@ -2154,48 +2154,48 @@ void func_800B8EF4(GlobalContext* globalCtx, Actor* actor) {
 }
 
 void func_800B8F98(Actor* actor, u16 sfxId) {
-    actor->sfx = sfxId;
-    actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
-    actor->unk39 |= 0x02;
+    actor->sfxId = sfxId;
+    actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
+    actor->audioFlags |= 0x02;
 }
 
 void func_800B8FC0(Actor* actor, u16 sfxId) {
-    actor->sfx = sfxId;
-    actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
-    actor->unk39 |= 4;
+    actor->sfxId = sfxId;
+    actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
+    actor->audioFlags |= 4;
 }
 
 void func_800B8FE8(Actor* actor, u16 sfxId) {
-    actor->sfx = sfxId;
-    actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
-    actor->unk39 |= 0x08;
+    actor->sfxId = sfxId;
+    actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
+    actor->audioFlags |= 0x08;
 }
 
 void func_800B9010(Actor* actor, u16 sfxId) {
-    actor->sfx = sfxId;
-    actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
-    actor->unk39 |= 0x01;
+    actor->sfxId = sfxId;
+    actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
+    actor->audioFlags |= 0x01;
 }
 
 void func_800B9038(Actor* actor, s32 timer) {
-    actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
-    actor->unk39 |= 0x10;
+    actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
+    actor->audioFlags |= 0x10;
 
     if (timer < 40) {
-        actor->sfx = NA_SE_PL_WALK_DIRT - SFX_FLAG;
+        actor->sfxId = NA_SE_PL_WALK_DIRT - SFX_FLAG;
     } else if (timer < 100) {
-        actor->sfx = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
+        actor->sfxId = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
     } else {
-        actor->sfx = NA_SE_PL_WALK_SAND - SFX_FLAG;
+        actor->sfxId = NA_SE_PL_WALK_SAND - SFX_FLAG;
     }
 }
 
 void func_800B9084(Actor* actor) {
-    actor->unk39 |= 0x20;
+    actor->audioFlags |= 0x20;
 }
 
 void func_800B9098(Actor* actor) {
-    actor->unk39 |= 0x40;
+    actor->audioFlags |= 0x40;
 }
 
 s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon, s32 index, s32 arg4) {
@@ -2319,8 +2319,8 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
         actor->world.pos.y = -25000.0f;
     }
 
-    actor->sfx = 0;
-    actor->unk39 &= ~0x7F;
+    actor->sfxId = 0;
+    actor->audioFlags &= ~0x7F;
 
     if (actor->init != NULL) {
         if (Object_IsLoaded(&globalCtx->objectCtx, actor->objBankIndex)) {
@@ -2566,29 +2566,31 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
 }
 
 void func_800B9D1C(Actor* actor) {
-    s32 sfx = actor->sfx;
+    s32 sfxId = actor->sfxId;
 
-    if (sfx != 0) {
-        if (actor->unk39 & 2) {
-            Audio_PlaySoundGeneral(sfx, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
-        } else if (actor->unk39 & 4) {
-            play_sound(sfx);
-        } else if (actor->unk39 & 8) {
-            func_8019F128(sfx);
-        } else if (actor->unk39 & 0x10) {
-            func_801A0810(&D_801DB4A4, NA_SE_SY_TIMER - SFX_FLAG, (sfx - 1));
-        } else if (actor->unk39 & 1) {
-            func_8019F1C0(&actor->projectedPos, sfx);
+    if (sfxId != 0) {
+        if (actor->audioFlags & 2) {
+            Audio_PlaySoundGeneral(sfxId, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        } else if (actor->audioFlags & 4) {
+            play_sound(sfxId);
+        } else if (actor->audioFlags & 8) {
+            func_8019F128(sfxId);
+        } else if (actor->audioFlags & 0x10) {
+            func_801A0810(&D_801DB4A4, NA_SE_SY_TIMER - SFX_FLAG, (sfxId - 1));
+        } else if (actor->audioFlags & 1) {
+            func_8019F1C0(&actor->projectedPos, sfxId);
         }
     }
 
-    if (sfx) {}
+    if (sfxId) {}
 
-    if (actor->unk39 & 0x40) {
+    if (actor->audioFlags & 0x40) {
+        // 0x27 is NA_BGM_MUSIC_BOX_HOUSE
         func_801A1FB4(3, &actor->projectedPos, 0x27, 1500.0f);
     }
 
-    if (actor->unk39 & 0x20) {
+    if (actor->audioFlags & 0x20) {
+        // 0x71 is NA_BGM_KAMARO_DANCE
         func_801A1FB4(0, &actor->projectedPos, 0x71, 900.0f);
     }
 }
@@ -2888,7 +2890,7 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
             SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &phi_s0->world.pos, &phi_s0->projectedPos,
                                          &phi_s0->projectedW);
 
-            if ((phi_s0->unk39 & 0x7F) != 0) {
+            if ((phi_s0->audioFlags & 0x7F) != 0) {
                 func_800B9D1C(phi_s0);
             }
 
@@ -3948,7 +3950,7 @@ void func_800BCB50(GlobalContext* globalCtx, Vec3f* arg1) {
 
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration) {
     if ((colorFlag == 0x8000) && !(colorIntensityMax & 0x8000)) {
-        Audio_PlayActorSound2(actor, NA_SE_EN_LIGHT_ARROW_HIT);
+        Actor_PlaySfxByPos2(actor, NA_SE_EN_LIGHT_ARROW_HIT);
     }
 
     actor->colorFilterParams = colorFlag | xluFlag | ((colorIntensityMax & 0xF8) << 5) | duration;
@@ -4557,13 +4559,13 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
 
         if ((actor != NULL) && (arg6 > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
             if (mode == 0) {
-                Audio_PlayActorSound2(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+                Actor_PlaySfxByPos2(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else if (mode == 1) {
-                Audio_PlayActorSound2(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+                Actor_PlaySfxByPos2(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
             } else if (mode == 0xB) {
-                Audio_PlayActorSound2(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfxByPos2(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             } else if ((mode == 0x14) || (mode == 0x15)) {
-                Audio_PlayActorSound2(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
+                Actor_PlaySfxByPos2(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
             }
         }
 

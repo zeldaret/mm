@@ -157,7 +157,7 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
         if (prevBounced && panel->numBounces < 3 && panel->startFallingTimer <= 0) {
             finalPosY = panelXOffsets[i] + this->dyna.actor.world.pos.y;
             if (!panel->hasSoundPlayed) {
-                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
+                Actor_PlaySfxByPos2(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
                 panel->hasSoundPlayed = true;
             }
             panel->posChangeY += -2.5f;

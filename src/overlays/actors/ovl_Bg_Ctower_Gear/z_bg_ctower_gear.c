@@ -123,7 +123,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
                 }
             }
         }
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
+        Actor_PlaySfxByPos2(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
     }
 }
 

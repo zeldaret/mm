@@ -344,7 +344,7 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             ObjKibako_SetupIdle(this);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
+            Actor_PlaySfxByPos2(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         } else {
             Actor_MoveWithGravity(&this->actor);
             ObjKibako_SetupThrown(this);
