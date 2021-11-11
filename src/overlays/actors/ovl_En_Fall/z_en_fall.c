@@ -51,7 +51,52 @@ extern UNK_TYPE D_060077F0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C1DC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/EnFall_Init.s")
+void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnFall* this = THIS;
+    s32 objectIndex;
+
+    this->unk_150 = 0.0f;
+    this->unk_154 = 0;
+    switch (EN_FALL_TYPE1(&this->actor)) {
+        case 1:
+            this->unk_14C = 0.08f;
+            break;
+        case 2:
+            this->unk_14C = 0.04f;
+            break;
+        case 3:
+            this->unk_14C = 0.02f;
+            break;
+        case 4:
+            this->unk_14C = 0.01f;
+            break;
+        default:
+            this->unk_14C = 0.16f;
+            break;
+    }
+    switch (EN_FALL_TYPE2(&this->actor)) {
+        case 5:
+        case 6:
+        case 12:
+            objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_LODMOON);
+            break;
+        case 8:
+            objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MOONSTON);
+            break;
+        case 10:
+            objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_FALL2);
+            break;
+        default:
+            objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_FALL);
+            break;
+    }
+    if (objectIndex < 0) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+    this->unk_148 = objectIndex;
+    this->actionFunc = func_80A6C3FC;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/EnFall_Destroy.s")
 
