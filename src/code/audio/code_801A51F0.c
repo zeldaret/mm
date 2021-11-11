@@ -21,6 +21,7 @@ typedef struct {
 extern OSVoiceUnk D_801FD5A0;
 extern OSVoiceHandle D_801FD5B8;
 extern u8 D_801FD610[];
+extern s8 D_801FD5A4;
 
 s8 D_801D8E50[] =
     "aa\0AA\0ii\0II\0uu\0UU\0ee\0EE\0oo\0OO\0KA\0GA\0KI\0GI\0KU\0GU\0KE\0GE\0KO\0GO\0SA\0ZA\0SI\0ZI\0SU\0ZU\0SE\0ZE\0SO"
@@ -158,7 +159,51 @@ UNK_PTR func_801A54C4(void) {
     return &D_801FD608;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A54D0.s")
+s32 func_801A54D0(u16 arg0) {
+    s32 errorCode;
+    u8 phi_t0;
+    u8 sp22;
+    u8 i;
+    s32 sp1C;
+    
+    phi_t0 = true;
+    if (D_801FD5A0.unk_00 != 0) {
+        sp22 = D_801FD5A0.unk_00[0x258];
+    } else {
+        sp22 = 0x14;
+        phi_t0 = false;
+    }
+
+    if (arg0 == 0xFFFF) {
+        for (i = 0; i < sp22; i++) {
+            D_801FD608[i / 8] |= 1 << (i % 8);
+        }
+    } else {
+        if (D_801FD608[arg0 / 8] & (1 << (arg0 % 8))) {
+            phi_t0 = false;
+        } else {
+            D_801FD608[arg0 / 8] |= (1 << (arg0 % 8));
+        }
+    }
+    
+    if (phi_t0) {
+        sp1C = func_80175008();
+        errorCode = osVoiceStopReadData(&D_801FD5B8);
+        func_8017506C(sp1C);
+
+        if ((errorCode == 0) || (D_801FD5A4 == 0)) {
+            sp1C = func_80175008();
+            errorCode = osVoiceMaskDictionary(&D_801FD5B8, D_801FD608, ((sp22 - 1) / 8) + 1);
+            func_8017506C(sp1C);
+        }
+        
+        D_801FD5A4 = 0;
+    }
+    
+    return errorCode;
+}
+
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5680.s")
 
