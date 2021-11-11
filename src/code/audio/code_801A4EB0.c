@@ -1,7 +1,10 @@
 #include "global.h"
 
+void func_801A5080(u16 arg0);
+
 s32 func_801A5228(u8* arg0);
 void func_801A53E8(u16 arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4);
+
 
 void func_801A5680(u16 arg0);
 void func_801A54D0(u16 arg0);
@@ -46,7 +49,26 @@ void func_801A4EB8(void) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A4EB0/func_801A4FD8.s")
+void func_801A4FD8(void) {
+    s32 sp24;
+    OSMesgQueue* msgQ;
+
+    func_801A54D0(0xFFFF);
+    if (D_801D8E3C != 0) {
+        msgQ = PadMgr_LockSerialMesgQueue();
+        osVoiceStopReadData(&D_801FD5B8);
+        PadMgr_UnlockSerialMesgQueue(msgQ);
+
+        sp24 = func_801A5228(&D_801D8BE0);
+        func_801A54D0(0xFFFF);
+        if (sp24 == 0) {
+            func_801A53E8(0x320, 2, 0x400, 0x1F4, 0x7D0);
+            D_801D8E3C = 1;
+        }
+        func_801A5080(5);
+        func_801A5080(1);
+    }
+}
 
 void func_801A5080(u16 arg0) {
     if ((D_801D8E3C != 0) && (arg0 < 6)) {
