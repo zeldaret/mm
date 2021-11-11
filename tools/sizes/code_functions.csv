@@ -1705,7 +1705,7 @@ asm/non_matchings/code/z_player_lib/func_8012300C.s,func_8012300C,0x8012300C,0x4
 asm/non_matchings/code/z_player_lib/func_8012301C.s,func_8012301C,0x8012301C,0x49
 asm/non_matchings/code/z_player_lib/func_80123140.s,func_80123140,0x80123140,0x86
 asm/non_matchings/code/z_player_lib/func_80123358.s,func_80123358,0x80123358,0x23
-asm/non_matchings/code/z_player_lib/func_801233E4.s,func_801233E4,0x801233E4,0xF
+asm/non_matchings/code/z_player_lib/Player_InCsMode.s,Player_InCsMode,0x801233E4,0xF
 asm/non_matchings/code/z_player_lib/func_80123420.s,func_80123420,0x80123420,0x5
 asm/non_matchings/code/z_player_lib/func_80123434.s,func_80123434,0x80123434,0x5
 asm/non_matchings/code/z_player_lib/func_80123448.s,func_80123448,0x80123448,0x1A
@@ -1743,7 +1743,7 @@ asm/non_matchings/code/z_player_lib/func_801241B4.s,func_801241B4,0x801241B4,0xB
 asm/non_matchings/code/z_player_lib/func_801241E0.s,func_801241E0,0x801241E0,0xB
 asm/non_matchings/code/z_player_lib/func_8012420C.s,func_8012420C,0x8012420C,0x8
 asm/non_matchings/code/z_player_lib/func_8012422C.s,func_8012422C,0x8012422C,0xB
-asm/non_matchings/code/z_player_lib/func_80124258.s,func_80124258,0x80124258,0x8
+asm/non_matchings/code/z_player_lib/Player_GetExplosiveHeld.s,Player_GetExplosiveHeld,0x80124258,0x8
 asm/non_matchings/code/z_player_lib/func_80124278.s,func_80124278,0x80124278,0xF
 asm/non_matchings/code/z_player_lib/func_801242B4.s,func_801242B4,0x801242B4,0xA
 asm/non_matchings/code/z_player_lib/func_801242DC.s,func_801242DC,0x801242DC,0x51
