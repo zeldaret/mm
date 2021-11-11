@@ -582,7 +582,7 @@ void ObjTokeidai_StaircaseIntoTower_Idle(ObjTokeidai* this, GlobalContext* globa
 }
 
 s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (gSaveContext.inventory.items[0] == 0xFF) {
+    if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         return false;
     }
     if (CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) {
