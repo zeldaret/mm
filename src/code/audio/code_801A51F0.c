@@ -161,8 +161,8 @@ s32 func_801A5488(u8* word) {
     return sp1C;
 }
 
-UNK_PTR func_801A54C4(void) {
-    return &D_801FD608;
+u8* func_801A54C4(void) {
+    return D_801FD608;
 }
 
 s32 func_801A54D0(u16 arg0) {
