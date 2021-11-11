@@ -31,6 +31,7 @@ void func_80A6DC20(Actor* thisx, GlobalContext* globalCtx);
 void func_80A6DC40(Actor* thisx, GlobalContext* globalCtx);
 void func_80A6D75C(Actor* thisx, GlobalContext* globalCtx);
 void func_80A6E214(Actor* thisx, GlobalContext* globalCtx);
+void func_80A6D98C(Actor* thisx, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Fall_InitVars = {
@@ -258,7 +259,24 @@ void func_80A6C3FC(EnFall* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C9A8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CA9C.s")
+void func_80A6CA9C(EnFall* this, GlobalContext* globalCtx) {
+    if (func_800EE29C(globalCtx, 0x85)) {
+        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0) {
+            case 3:
+                if (this->unk_150 == 0.0f) {
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_EYE_FLASH);
+                }
+                this->unk_150 += 0.033333335f;
+                if (this->unk_150 > 1.0f) {
+                    this->unk_150 = 1.0f;
+                }
+                break;
+            case 4:
+                this->actor.draw = func_80A6D98C;
+                break;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CB74.s")
 
