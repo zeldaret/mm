@@ -56,7 +56,41 @@ extern UNK_TYPE D_06002970;
 extern UNK_TYPE D_06004E38;
 extern UNK_TYPE D_060077F0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6BF90.s")
+void func_80A6BF90(EnFall* this, GlobalContext* globalCtx) {
+    u16 temp_v0;
+    u16 temp_v1;
+    f32 phi_f0;
+
+    temp_v0 = gSaveContext.time;
+    temp_v1 = this->unk_144;
+    if (temp_v0 < temp_v1) {
+        phi_f0 = 1.0f - (((f32)temp_v1 - (f32)temp_v0) * (1.0f / 0x10000));
+    } else {
+        phi_f0 = ((f32)temp_v0 - (f32)temp_v1) * (1.0f / 0x10000);
+    }
+    switch (CURRENT_DAY) {
+        case 0:
+            Actor_SetScale(&this->actor, this->unk_14C * 1.2f);
+            this->actor.world.pos.y = this->actor.home.pos.y;
+            break;
+        case 1:
+            Actor_SetScale(&this->actor, this->unk_14C * 2.4f);
+            this->actor.world.pos.y = this->actor.home.pos.y;
+            break;
+        case 2:
+            Actor_SetScale(&this->actor, this->unk_14C * 3.6f);
+            this->actor.world.pos.y = this->actor.home.pos.y;
+            break;
+        case 3:
+            Actor_SetScale(&this->actor, this->unk_14C * 3.6f);
+            if (EN_FALL_TYPE(&this->actor) == 0xC) {
+                this->actor.world.pos.y = this->actor.home.pos.y + (phi_f0 * 6700.0f * (this->unk_14C * 6.25f));
+            } else {
+                this->actor.world.pos.y = this->actor.home.pos.y - (phi_f0 * 6700.0f * (this->unk_14C * 6.25f));
+            }
+            break;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C1DC.s")
 
