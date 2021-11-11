@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_iknin_susceil.c
+ * Overlay: ovl_Bg_Iknin_Susceil
+ * Description: Ikana Castle - Hot Checkered Ceiling
+ */
+
 #include "z_bg_iknin_susceil.h"
 
 #define FLAGS 0x00000030

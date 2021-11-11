@@ -1086,7 +1086,7 @@ void func_809928CC(EnWf* this, GlobalContext* globalCtx) {
                 func_8099223C(this);
             }
         } else if (Actor_IsActorFacingLink(&this->actor, 0x4000) && (this->actor.xzDistToPlayer < 60.0f) &&
-                   (fabsf(this->actor.yDistToPlayer) < 50.0f)) {
+                   (fabsf(this->actor.playerHeightRel) < 50.0f)) {
             sp2A = player->actor.shape.rot.y - this->actor.shape.rot.y;
             if (!func_800BC5EC(globalCtx, &this->actor) &&
                 (((globalCtx->gameplayFrames % 2) != 0) || (ABS_ALT(sp2A) < 0x38E0))) {

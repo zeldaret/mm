@@ -79,7 +79,7 @@ endif
 
 # Check code syntax with host compiler
 CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
-CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -include stdarg.h $(CHECK_WARNINGS)
+CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
 
 CPP        := cpp
 ELF2ROM    := tools/buildtools/elf2rom
@@ -92,7 +92,7 @@ ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -Wab,-r4300_mul -woff 624,649,838,712
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 624,649,838,712
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -153,6 +153,8 @@ build/src/libultra/io/%.o: OPTFLAGS := -O2
 build/src/libultra/libc/%.o: OPTFLAGS := -O2
 build/src/libultra/gu/%.o: OPTFLAGS := -O2
 build/src/libultra/rmon/%.o: OPTFLAGS := -O2
+build/src/libultra/flash/%.o: OPTFLAGS := -g
+build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv

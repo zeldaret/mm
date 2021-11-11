@@ -1,3 +1,9 @@
+/*
+ * File: z_en_maruta.c
+ * Overlay: ovl_En_Maruta
+ * Description: Swordsman's School - Practice Log
+ */
+
 #include "z_en_maruta.h"
 
 #define FLAGS 0x00000011

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_kin2_fence.c
+ * Overlay: ovl_Bg_Kin2_Fence
+ * Description: Ocean Spider House - Fireplace Grate
+ */
+
 #include "z_bg_kin2_fence.h"
 
 #define FLAGS 0x00000010

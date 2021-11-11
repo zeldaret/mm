@@ -1,3 +1,9 @@
+/*
+ * File: z_en_guard_nuts.c
+ * Overlay: ovl_En_Guard_Nuts
+ * Description: Deku Palace - Entrance Guard
+ */
+
 #include "z_en_guard_nuts.h"
 
 #define FLAGS 0x80100009

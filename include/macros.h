@@ -1,20 +1,17 @@
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
-#include "stdint.h"
+#include "libc/stdint.h"
 #include "convert.h"
 #include "z64.h"
 
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
-#define HW_REG(reg, type) *(volatile type*)((reg) | 0xa0000000)
-
-// TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address
-// rather than add/sub 0x80000000
-#define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + 0x80000000)
-#define PHYSICAL_TO_VIRTUAL2(addr) ((uintptr_t)(addr)-0x80000000)
-#define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr)-0x80000000)
+// TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
+#define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + RDRAM_CACHED)
+#define PHYSICAL_TO_VIRTUAL2(addr) ((uintptr_t)(addr) - RDRAM_CACHED)
+#define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr) - RDRAM_CACHED)
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
 #define GET_ACTIVE_CAM(globalCtx) ((globalCtx)->cameraPtrs[(globalCtx)->activeCamera])
@@ -141,5 +138,11 @@ extern GraphicsContext* __gfxCtx;
         (a) = (b);        \
         (b) = _temp;      \
     }
+
+#ifdef __GNUC__
+#define ALIGNED8 __attribute__ ((aligned (8)))
+#else
+#define ALIGNED8
+#endif
 
 #endif // _MACROS_H_

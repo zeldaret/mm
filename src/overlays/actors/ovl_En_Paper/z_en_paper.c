@@ -1,3 +1,9 @@
+/*
+ * File: z_en_paper.c
+ * Overlay: ovl_En_Paper
+ * Description: Tingle Confetti
+ */
+
 #include "z_en_paper.h"
 
 #define FLAGS 0x02100010

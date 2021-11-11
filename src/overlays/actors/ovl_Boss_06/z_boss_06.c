@@ -1,3 +1,9 @@
+/*
+ * File: z_boss_06.c
+ * Overlay: ovl_Boss_06
+ * Description: Igos du Ikana window - curtains and ray effects
+ */
+
 #include "z_boss_06.h"
 
 #define FLAGS 0x00000035

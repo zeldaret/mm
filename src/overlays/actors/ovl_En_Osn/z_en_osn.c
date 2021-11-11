@@ -1,3 +1,9 @@
+/*
+ * File: z_en_osn.c
+ * Overlay: ovl_En_Osn
+ * Description: Happy Mask Salesman
+ */
+
 #include "z_en_osn.h"
 
 #define FLAGS 0x00000019

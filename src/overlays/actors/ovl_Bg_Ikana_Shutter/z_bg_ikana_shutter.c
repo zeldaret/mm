@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_ikana_shutter.c
+ * Overlay: ovl_Bg_Ikana_Shutter
+ * Description: Metal shutter in switch room of Stone Tower Temple
+ */
+
 #include "z_bg_ikana_shutter.h"
 
 #define FLAGS 0x00000010

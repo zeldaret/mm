@@ -1,3 +1,9 @@
+/*
+ * File: z_en_water_effect.c
+ * Overlay: ovl_En_Water_Effect
+ * Description: Water splashing effect (used for Gyorg)
+ */
+
 #include "z_en_water_effect.h"
 
 #define FLAGS 0x00000035

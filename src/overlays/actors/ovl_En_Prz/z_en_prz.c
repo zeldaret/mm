@@ -1,3 +1,9 @@
+/*
+ * File: z_en_prz.c
+ * Overlay: ovl_En_Prz
+ * Description: Skullfish - Defeated
+ */
+
 #include "z_en_prz.h"
 
 #define FLAGS 0x00000015
