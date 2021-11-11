@@ -4,6 +4,9 @@
 s32 func_80175008();
 void func_8017506C(s32);
 
+// internal voice functions
+u8* func_801A5A1C(s8* arg0);
+
 typedef struct {
     /* 0x00 */ u8* unk_00;
     /* 0x04 */ u8 unk_04;
@@ -58,7 +61,49 @@ s32 func_801A51F0(s32 errorCode) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5228.s")
+s32 func_801A5228(u8* arg0) {
+    s32 temp_s2;
+    s32 errorCode;
+    u8 temp_s1;
+    u8 i;
+    u32 indexTemp;
+    s32 index;
+
+    D_801FD5A0.unk_04 = 0;
+    D_801FD5A0.unk_08 = 0;
+    D_801FD5A0.unk_0C = 1000;
+    D_801FD5A0.unk_0E = 5;
+    D_801FD5A0.unk_10 = 0;
+    D_801FD5A0.unk_00 = arg0;
+    
+    temp_s1 = arg0[600];
+    temp_s2 = func_80175008();
+    errorCode = osVoiceClearDictionary(&D_801FD5B8, temp_s1);
+    func_8017506C(temp_s2);
+
+    if (errorCode != 0) {
+        return errorCode;
+    } 
+
+    for (i = 0; i < (((temp_s1 - 1) / 8) + 1); i++) {
+        D_801FD608[i] = 0;
+
+    }
+
+    for (i = 0; i < temp_s1; i++) {
+        temp_s2 = func_80175008();
+        indexTemp = i;
+        index = indexTemp * 30;
+        errorCode = osVoiceSetWord(&D_801FD5B8, &arg0[index]);
+        func_8017506C(temp_s2);
+        
+        if (func_801A51F0(errorCode) != 0) {
+            func_801A5A1C(&arg0[index]);
+        }
+    }
+
+    return errorCode;
+}
 
 s32 func_801A5390(void) {
     s32 temp_t6;
@@ -124,12 +169,12 @@ void func_801A5A10(void) {
 }
 
 u8* func_801A5A1C(s8* arg0) {
-    u8* new_var1;
+    u8* indexTemp1;
     u8 i;
     u8 j;
     u8 temp_t6;
     u8 temp_t8;
-    u8* new_var2;
+    u8* index;
     u8 len = strlen(arg0);
 
     for (j = 0, i = 0; i < len; i += 2) {
@@ -137,8 +182,8 @@ u8* func_801A5A1C(s8* arg0) {
         temp_t8 = arg0[i];
         temp_t6 = arg0[i + 1];
         
-        new_var1 = &temp_t8;
-        new_var2 = &temp_t6;
+        indexTemp1 = &temp_t8;
+        index = &temp_t6;
 
         if (temp_t8 == 0x83) {
             D_801FD610[j++] = D_801D8F70[3 * (temp_t6 - 0x40)];
