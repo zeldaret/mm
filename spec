@@ -660,7 +660,6 @@ beginseg
     include "build/data/code/code_801D55B0.data.o"
     include "build/src/code/audio/code_801A4EB0.o"
     include "build/src/code/audio/code_801A51F0.o"
-    include "build/data/code/code_801A51F0.data.o"
     include "build/data/code/code_801A51F0.bss.o"
     pad_text
     include "build/src/code/code_801A5BD0.o"
