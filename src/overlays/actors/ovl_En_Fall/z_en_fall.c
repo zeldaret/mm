@@ -22,6 +22,15 @@ void func_80A6CD38(EnFall* this, GlobalContext* globalCtx);
 void func_80A6CD74(EnFall* this, GlobalContext* globalCtx);
 void func_80A6CF60(EnFall* this, GlobalContext* globalCtx);
 void func_80A6CF70(EnFall* this, GlobalContext* globalCtx);
+void func_80A6D220(Actor* thisx, GlobalContext* globalCtx);
+void func_80A6D88C(Actor* thisx, GlobalContext* globalCtx);
+void func_80A6DD3C(Actor* thisx, GlobalContext* globalCtx);
+void func_80A6D698(Actor* thisx, GlobalContext* globalCtx);
+void func_80A6E07C(Actor* thisx, GlobalContext* globalCtx);
+void func_80A6DC20(Actor* thisx, GlobalContext* globalCtx);
+void func_80A6DC40(Actor* thisx, GlobalContext* globalCtx);
+void func_80A6D75C(Actor* thisx, GlobalContext* globalCtx);
+void func_80A6E214(Actor* thisx, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Fall_InitVars = {
@@ -57,7 +66,7 @@ void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk_150 = 0.0f;
     this->unk_154 = 0;
-    switch (EN_FALL_TYPE1(&this->actor)) {
+    switch (EN_FALL_SCALE(&this->actor)) {
         case 1:
             this->unk_14C = 0.08f;
             break;
@@ -74,7 +83,7 @@ void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_14C = 0.16f;
             break;
     }
-    switch (EN_FALL_TYPE2(&this->actor)) {
+    switch (EN_FALL_TYPE(&this->actor)) {
         case 5:
         case 6:
         case 12:
@@ -101,9 +110,115 @@ void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnFall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C3AC.s")
+Actor* func_80A6C3AC(GlobalContext* globalCtx) {
+    Actor* temp_v1;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C3FC.s")
+    temp_v1 = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    while (temp_v1 != NULL) {
+        if (temp_v1->id == ACTOR_EN_FALL && EN_FALL_TYPE(temp_v1) == 0) {
+            return temp_v1;
+        }
+        temp_v1 = temp_v1->next;
+    }
+    return NULL;
+}
+
+void func_80A6C3FC(EnFall* this, GlobalContext* globalCtx) {
+    Actor* temp_v0;
+
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_148)) {
+        this->actor.objBankIndex = this->unk_148;
+        this->actionFunc = func_80A6CD74;
+        switch (EN_FALL_TYPE(&this->actor)) {
+            case 1:
+                this->actor.draw = func_80A6D88C;
+                this->actionFunc = func_80A6CD38;
+                Actor_SetScale(&this->actor, this->unk_14C);
+                break;
+            case 7:
+                this->actor.draw = func_80A6D88C;
+                this->actionFunc = func_80A6CB74;
+                Actor_SetScale(&this->actor, this->unk_14C * 3.0f);
+                if ((gSaveContext.weekEventReg[0x19] & 2) == 0) {
+                    Actor_MarkForDeath(&this->actor);
+                }
+                break;
+            case 9:
+                this->actionFunc = func_80A6CD38;
+                Actor_SetScale(&this->actor, this->unk_14C * 3.0f);
+                this->actor.draw = func_80A6D88C;
+                if ((gSaveContext.weekEventReg[0x19] & 2) != 0) {
+                    Actor_MarkForDeath(&this->actor);
+                }
+                break;
+            case 2:
+                this->actor.draw = func_80A6D88C;
+                Actor_SetScale(&this->actor, this->unk_14C * 5.3999996f);
+                this->actionFunc = func_80A6C9A8;
+                break;
+            case 3:
+                this->actor.update = func_80A6D220;
+                this->actor.draw = func_80A6DD3C;
+                this->unk_14C = 1.0f;
+                this->actor.shape.rot.z = 0;
+                this->unk_150 = 0.0f;
+                this->unk_158 = 0x64;
+                this->actor.shape.rot.x = this->actor.shape.rot.z;
+                break;
+            case 4:
+                this->actor.update = func_80A6D698;
+                this->actor.draw = func_80A6E07C;
+                this->unk_14C = 1.0f;
+                func_80A6C1DC(this);
+                Actor_SetScale(&this->actor, 1.0f);
+                this->actor.shape.rot.x = 0;
+                break;
+            case 5:
+                this->actor.draw = func_80A6DC20;
+                this->unk_144 = 0x4000;
+                this->unk_146 = CURRENT_DAY;
+                func_80A6BF90(this, globalCtx);
+                break;
+            case 6:
+            case 12:
+                this->actor.draw = func_80A6DC40;
+                this->unk_144 = 0x4000;
+                this->unk_146 = CURRENT_DAY;
+                func_80A6BF90(this, globalCtx);
+                break;
+            case 8:
+                this->actor.update = EnFall_Update;
+                this->actor.draw = NULL;
+                this->actionFunc = func_80A6CF70;
+                Actor_SetScale(&this->actor, 0.02f);
+                if ((globalCtx->actorCtx.unk5 & 2) == 0) {
+                    Actor_MarkForDeath(&this->actor);
+                }
+                temp_v0 = func_80A6C3AC(globalCtx);
+                this->actor.child = temp_v0;
+                if (temp_v0 == 0) {
+                    Actor_MarkForDeath(&this->actor);
+                }
+                break;
+            case 10:
+                this->actor.draw = NULL;
+                this->actionFunc = func_80A6CA9C;
+                Actor_SetScale(&this->actor, this->unk_14C * 3.0f);
+                break;
+            case 11:
+                this->actor.update = func_80A6D75C;
+                this->actor.draw = func_80A6E214;
+                Actor_SetScale(&this->actor, 0.2f);
+                break;
+            default:
+                this->actor.draw = func_80A6D88C;
+                this->unk_144 = 0x4000;
+                this->unk_146 = CURRENT_DAY;
+                func_80A6BF90(this, globalCtx);
+                break;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C7C0.s")
 
