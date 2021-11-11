@@ -3945,8 +3945,8 @@ extern AnimatedMaterial D_0402C980;
 extern AnimatedMaterial D_0402C9F8;
 extern FlexSkeletonHeader D_0402CA98;
 extern Gfx D_0402E510[];
-extern UNK_TYPE D_0402E65C;
-extern UNK_TYPE D_0402F0EC;
+extern AnimationHeader D_0402E65C;
+extern AnimationHeader D_0402F0EC;
 extern Gfx D_04030100[]; // Floor shockwave ring
 extern Gfx D_040301B0[];
 extern UNK_TYPE D_04032270;

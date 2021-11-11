@@ -1379,8 +1379,7 @@ beginseg
     name "ovl_En_Fish"
     compress
     include "build/src/overlays/actors/ovl_En_Fish/z_en_fish.o"
-    include "build/data/ovl_En_Fish/ovl_En_Fish.data.o"
-    include "build/data/ovl_En_Fish/ovl_En_Fish.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fish/ovl_En_Fish_reloc.o"
 endseg
 
 beginseg
