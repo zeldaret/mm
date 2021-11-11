@@ -149,10 +149,10 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjKibako2Contents contents = KIBAKO2_CONTENTS(&this->dyna.actor);
 
-    DynaPoly_Init(&this->dyna, 0);
+    DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06000B70);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000B70);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     this->dyna.actor.home.rot.z = 0;

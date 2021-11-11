@@ -40,8 +40,8 @@ void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    DynaPoly_Init(&this->dyna, 0);
-    DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_0600805C);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_0600805C);
     if (this->dyna.bgId == 0x32) {
         Actor_MarkForDeath(&this->dyna.actor);
     }

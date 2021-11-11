@@ -53,18 +53,18 @@ void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f offset;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPoly_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, 1);
     if (this->dyna.actor.params == CORRIDOR) {
-        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_060142E8);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060142E8);
         this->actionFunc = BgCtowerRot_CorridorRotate;
         return;
     }
     player = GET_PLAYER(globalCtx);
     if (this->dyna.actor.params == MAIN_DOOR) {
-        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06017410);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06017410);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y + 0x4000;
     } else {
-        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06017650);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06017650);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y - 0x4000;
     }
     Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);

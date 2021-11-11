@@ -153,7 +153,7 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80B3C96C);
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    DynaPoly_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, 1);
     BgCheck_RelocateMeshHeader(&D_06003CD0, &colHeader);
     this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
     Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x4);

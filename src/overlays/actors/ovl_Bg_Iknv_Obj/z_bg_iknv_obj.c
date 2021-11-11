@@ -74,7 +74,7 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
         case IKNV_OBJ_RAISED_DOOR:
             this->displayListPtr = D_06011880;
-            DynaPoly_Init(&this->dyna, 0);
+            DynaPolyActor_Init(&this->dyna, 0);
             BgCheck_RelocateMeshHeader(&D_060119D4, &colHeader);
             this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
             this->actionFunc = BgIknvObj_UpdateRaisedDoor;
@@ -83,7 +83,7 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
         case IKNV_OBJ_SAKON_DOOR:
             this->displayListPtr = D_060129C8;
             this->actionFunc = BgIknvObj_UpdateSakonDoor;
-            DynaPoly_Init(&this->dyna, 0);
+            DynaPolyActor_Init(&this->dyna, 0);
             BgCheck_RelocateMeshHeader(&D_06012CA4, &colHeader);
             this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
             Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);

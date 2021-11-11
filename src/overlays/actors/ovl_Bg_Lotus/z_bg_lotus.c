@@ -44,8 +44,8 @@ void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 sp2C;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPoly_Init(&this->dyna, 1);
-    DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
     this->dyna.actor.floorHeight =
         func_800C411C(&globalCtx->colCtx, &thisx->floorPoly, &sp2C, &this->dyna.actor, &this->dyna.actor.world.pos);
     this->timer2 = 96;
@@ -93,7 +93,7 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
     } else {
         this->dyna.actor.world.pos.y = this->height;
 
-        if (DynaPoly_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
             if (this->hasSpawnedRipples == 0) {
                 EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 0);
                 EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 8);

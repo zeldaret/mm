@@ -36,7 +36,7 @@ void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* header = 0;
 
     Actor_SetScale(thisx, 1.0);
-    DynaPoly_Init(&THIS->bg, 3);
+    DynaPolyActor_Init(&THIS->bg, 3);
     BgCheck_RelocateMeshHeader(&D_06002D30, &header);
     THIS->bg.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &THIS->bg, header);
 

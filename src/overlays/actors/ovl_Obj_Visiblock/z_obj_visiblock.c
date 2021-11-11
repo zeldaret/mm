@@ -40,8 +40,8 @@ void ObjVisiblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjVisiblock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPoly_Init(&this->dyna, 0);
-    DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06000AD0);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000AD0);
 }
 
 void ObjVisiblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {

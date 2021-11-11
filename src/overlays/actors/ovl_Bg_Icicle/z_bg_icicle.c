@@ -70,8 +70,8 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 paramsMid;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    DynaPoly_Init(&this->dyna, 0);
-    DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06000294);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000294);
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
     Collider_UpdateCylinder(thisx, &this->collider);

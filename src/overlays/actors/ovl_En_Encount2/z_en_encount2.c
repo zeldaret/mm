@@ -106,7 +106,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    DynaPoly_Init(&this->dyna, 0);
+    DynaPolyActor_Init(&this->dyna, 0);
     BgCheck_RelocateMeshHeader(&D_06002420, &colHeader);
     this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, func_800B3FC0, 25.0f);

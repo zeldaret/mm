@@ -61,8 +61,8 @@ void DmChar07_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->dyna.actor.params == DMCHAR07_STAGE) {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         this->isStage = 1;
-        DynaPoly_Init(&this->dyna, 0);
-        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06006688);
+        DynaPolyActor_Init(&this->dyna, 0);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06006688);
     } else {
         Actor_SetScale(&this->dyna.actor, 1.0f);
     }

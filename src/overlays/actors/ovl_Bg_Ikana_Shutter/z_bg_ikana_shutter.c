@@ -67,8 +67,8 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaShutter* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPoly_Init(&this->dyna, 0);
-    DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
     if (!((this->dyna.actor.params >> 8) & 1)) {
         if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx)) {
             func_80BD599C(this);

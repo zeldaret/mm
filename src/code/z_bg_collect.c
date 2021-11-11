@@ -61,13 +61,13 @@ void BgCheck2_AttachToMesh(CollisionContext* colCtx, Actor* actor, s32 index) {
 
     meshActor = BgCheck_GetActorOfMesh(colCtx, index);
     if (meshActor != NULL) {
-        DynaPoly_SetRidingFallingState(meshActor);
+        DynaPolyActor_SetRidingFallingState(meshActor);
 
         if ((actor->flags & 0x4000000) == 0x4000000) {
-            DynaPoly_SetSwitchPressedState(meshActor);
+            DynaPolyActor_SetSwitchPressedState(meshActor);
         }
         if ((actor->flags & 0x20000) == 0x20000) {
-            DynaPoly_SetHeavySwitchPressedState(meshActor);
+            DynaPolyActor_SetHeavySwitchPressedState(meshActor);
         }
     }
 }

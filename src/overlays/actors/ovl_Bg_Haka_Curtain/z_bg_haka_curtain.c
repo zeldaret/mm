@@ -51,8 +51,8 @@ void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaCurtain* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPoly_Init(&this->dyna, 1);
-    DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06001588);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06001588);
     if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
         func_80B6DE80(this);
         return;

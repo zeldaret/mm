@@ -41,8 +41,8 @@ void BgMbarChair_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgMbarChair* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPoly_Init(&this->dyna, 0);
-    DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_060019B4);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060019B4);
 }
 
 void BgMbarChair_Destroy(Actor* thisx, GlobalContext* globalCtx) {

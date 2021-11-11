@@ -70,8 +70,8 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
     thisx->world.rot.x = 0;
     thisx->shape.rot.z = 0;
     thisx->world.rot.z = 0;
-    DynaPoly_Init(&this->dyna, 1);
-    DynaPoly_LoadMesh(globalCtx, &this->dyna, sColHeaders[type]);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, sColHeaders[type]);
     this->speed = OBJRAILLIFT_GET_SPEED(thisx);
     if (this->speed < 0.0f) {
         this->speed = -this->speed;
@@ -187,7 +187,7 @@ void ObjRaillift_Move(ObjRaillift* this, GlobalContext* globalCtx) {
 Will teleport to what ever curpoint is set to
 */
 void ObjRaillift_Teleport(ObjRaillift* this, GlobalContext* globalCtx) {
-    if (!DynaPoly_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         ObjRaillift_UpdatePosition(this, this->curPoint);
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = ObjRaillift_Move;
@@ -237,7 +237,7 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
         s32 requiredScopeTemp;
 
         this->isWeightOnPrev = this->isWeightOn;
-        if (DynaPoly_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
             this->isWeightOn = true;
         } else {
             this->isWeightOn = false;

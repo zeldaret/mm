@@ -91,12 +91,12 @@ void ObjLightblock_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetScale(&this->dyna.actor, typeVars->scale);
-    DynaPoly_Init(&this->dyna, 0);
+    DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     if (Flags_GetSwitch(globalCtx, LIGHTBLOCK_DESTROYED(&this->dyna.actor))) {
         Actor_MarkForDeath(&this->dyna.actor);
     } else {
-        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06000B80);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000B80);
         Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         this->collider.dim.radius = typeVars->radius;

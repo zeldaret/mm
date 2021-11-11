@@ -147,7 +147,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
             this->oscillationTimer = minOscillationTimer;
         }
     } else {
-        if (DynaPoly_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
             if (!(this->burrowFlag & 1)) {
                 // Player is walking onto the Deku Flower, or falling on it from a height
                 this->oscillationTimer = 10;
@@ -175,7 +175,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
 }
 
 void ObjEtcetera_PlaySmallFlutterAnimation(ObjEtcetera* this, GlobalContext* globalCtx) {
-    if (DynaPoly_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
@@ -190,11 +190,11 @@ void ObjEtcetera_PlaySmallFlutterAnimation(ObjEtcetera* this, GlobalContext* glo
 void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCtx) {
     // In order to match, we are seemingly required to access scale.x at one point
     // without using this. We can create a thisx or dyna pointer to achieve that, but
-    // it's more likely they used dyna given that DynaPoly_IsInRidingMovingState takes a DynaPolyActor.
+    // it's more likely they used dyna given that DynaPolyActor_IsInRidingMovingState takes a DynaPolyActor.
     DynaPolyActor* dyna = &this->dyna;
     f32 scaleTemp;
 
-    if (DynaPoly_IsInRidingMovingState(dyna)) {
+    if (DynaPolyActor_IsInRidingMovingState(dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
@@ -233,7 +233,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectSegment(globalCtx, &this->dyna.actor);
-        DynaPoly_Init(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, 1);
         thisCollisionHeader = collisionHeaders[type];
         if (thisCollisionHeader != 0) {
             BgCheck_RelocateMeshHeader(thisCollisionHeader, &colHeader);

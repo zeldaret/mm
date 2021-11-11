@@ -108,8 +108,8 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     s16* alloc;
 
-    DynaPoly_Init(&this->dyna, 1);
-    DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06004D8C);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06004D8C);
 
     alloc = (s16*)Lib_SegmentedToVirtual(D_06004710);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {

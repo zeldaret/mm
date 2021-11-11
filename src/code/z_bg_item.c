@@ -7,7 +7,7 @@
 #define DYNAPOLY_STATE_SWITCH_PRESSED (1 << 3)
 #define DYNAPOLY_STATE_HEAVY_SWITCH_PRESSED (1 << 4)
 
-void DynaPoly_Init(DynaPolyActor* dynaActor, s32 flags) {
+void DynaPolyActor_Init(DynaPolyActor* dynaActor, s32 flags) {
     dynaActor->bgId = -1;
     dynaActor->pushForce = 0.0f;
     dynaActor->unk14C = 0.0f;
@@ -15,54 +15,54 @@ void DynaPoly_Init(DynaPolyActor* dynaActor, s32 flags) {
     dynaActor->stateFlags = DYNAPOLY_STATE_NONE;
 }
 
-void DynaPoly_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* dynaActor, CollisionHeader* meshHeader) {
+void DynaPolyActor_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* dynaActor, CollisionHeader* meshHeader) {
     CollisionHeader* header = NULL;
     
     BgCheck_RelocateMeshHeader(meshHeader, &header);
     dynaActor->bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, dynaActor, header);
 }
 
-void DynaPoly_ResetState(DynaPolyActor* dynaActor) {
+void DynaPolyActor_ResetState(DynaPolyActor* dynaActor) {
     dynaActor->stateFlags = DYNAPOLY_STATE_NONE;
 }
 
-void DynaPoly_SetRidingFallingState(DynaPolyActor* dynaActor) {
+void DynaPolyActor_SetRidingFallingState(DynaPolyActor* dynaActor) {
     dynaActor->stateFlags |= DYNAPOLY_STATE_RIDING_FALLING;
 }
 
-void DynaPoly_SetRidingMovingState(DynaPolyActor* dynaActor) {
+void DynaPolyActor_SetRidingMovingState(DynaPolyActor* dynaActor) {
     dynaActor->stateFlags |= DYNAPOLY_STATE_RIDING_MOVING;
 }
 
-void DynaPoly_SetRidingMovingStateByIndex(CollisionContext* colCtx, s32 index) {
+void DynaPolyActor_SetRidingMovingStateByIndex(CollisionContext* colCtx, s32 index) {
     DynaPolyActor* dynaActor = BgCheck_GetActorOfMesh(colCtx, index);
     
     if (dynaActor != NULL) {
-        DynaPoly_SetRidingMovingState(dynaActor);
+        DynaPolyActor_SetRidingMovingState(dynaActor);
     }
 }
 
-void DynaPoly_SetRidingRotatingState(DynaPolyActor* dynaActor) {
+void DynaPolyActor_SetRidingRotatingState(DynaPolyActor* dynaActor) {
     dynaActor->stateFlags |= DYNAPOLY_STATE_RIDING_ROTATING;
 }
 
-void DynaPoly_SetRidingRotatingStateByIndex(CollisionContext* colCtx, s32 index) {
+void DynaPolyActor_SetRidingRotatingStateByIndex(CollisionContext* colCtx, s32 index) {
     DynaPolyActor* dynaActor = BgCheck_GetActorOfMesh(colCtx, index);
     
     if (dynaActor != NULL) {
-        DynaPoly_SetRidingRotatingState(dynaActor);
+        DynaPolyActor_SetRidingRotatingState(dynaActor);
     }
 }
 
-void DynaPoly_SetSwitchPressedState(DynaPolyActor* dynaActor) {
+void DynaPolyActor_SetSwitchPressedState(DynaPolyActor* dynaActor) {
     dynaActor->stateFlags |= DYNAPOLY_STATE_SWITCH_PRESSED;
 }
 
-void DynaPoly_SetHeavySwitchPressedState(DynaPolyActor* dynaActor) {
+void DynaPolyActor_SetHeavySwitchPressedState(DynaPolyActor* dynaActor) {
     dynaActor->stateFlags |= DYNAPOLY_STATE_HEAVY_SWITCH_PRESSED;
 }
 
-s32 DynaPoly_IsInRidingFallingState(DynaPolyActor* dynaActor) {
+s32 DynaPolyActor_IsInRidingFallingState(DynaPolyActor* dynaActor) {
     if (dynaActor->stateFlags & DYNAPOLY_STATE_RIDING_FALLING) {
         return true;
     } else {
@@ -70,7 +70,7 @@ s32 DynaPoly_IsInRidingFallingState(DynaPolyActor* dynaActor) {
     }
 }
 
-s32 DynaPoly_IsInRidingMovingState(DynaPolyActor* dynaActor) {
+s32 DynaPolyActor_IsInRidingMovingState(DynaPolyActor* dynaActor) {
     if (dynaActor->stateFlags & DYNAPOLY_STATE_RIDING_MOVING) {
         return true;
     } else {
@@ -78,7 +78,7 @@ s32 DynaPoly_IsInRidingMovingState(DynaPolyActor* dynaActor) {
     }
 }
 
-s32 DynaPoly_IsInRidingRotatingState(DynaPolyActor* dynaActor) {
+s32 DynaPolyActor_IsInRidingRotatingState(DynaPolyActor* dynaActor) {
     if (dynaActor->stateFlags & DYNAPOLY_STATE_RIDING_ROTATING) {
         return true;
     } else {
@@ -86,7 +86,7 @@ s32 DynaPoly_IsInRidingRotatingState(DynaPolyActor* dynaActor) {
     }
 }
 
-s32 DynaPoly_IsInSwitchPressedState(DynaPolyActor* dynaActor) {
+s32 DynaPolyActor_IsInSwitchPressedState(DynaPolyActor* dynaActor) {
     if (dynaActor->stateFlags & DYNAPOLY_STATE_SWITCH_PRESSED) {
         return true;
     } else {
@@ -94,7 +94,7 @@ s32 DynaPoly_IsInSwitchPressedState(DynaPolyActor* dynaActor) {
     }
 }
 
-s32 DynaPoly_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor) {
+s32 DynaPolyActor_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor) {
     if (dynaActor->stateFlags & DYNAPOLY_STATE_HEAVY_SWITCH_PRESSED) {
         return true;
     } else {
@@ -102,7 +102,7 @@ s32 DynaPoly_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor) {
     }
 }
 
-s32 DynaPoly_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius,
+s32 DynaPolyActor_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius,
                           s16 startHeight) {
     Vec3f startPos;
     Vec3f endPos;
