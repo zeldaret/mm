@@ -753,7 +753,6 @@ void Fault_ProcessClients(void) {
 // needs in-function static bss
 void Fault_SetOptionsFromController3(void) {
     static u32 faultCustomOptions;
-
     Input* input3;
     u32 pad;
     u32 graphPC;

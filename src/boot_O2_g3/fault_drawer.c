@@ -93,6 +93,7 @@ void FaultDrawer_DrawChar(char c) {
         ((sFaultDrawContext->charH + cursorY - 1) <= sFaultDrawContext->yEnd)) {
         for (y = 0; y < sFaultDrawContext->charH; y++) {
             u32 mask = 0x10000000 << shift;
+
             data = *dataPtr;
             for (x = 0; x < sFaultDrawContext->charW; x++) {
                 if (mask & data) {
