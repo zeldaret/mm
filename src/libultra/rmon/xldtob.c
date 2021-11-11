@@ -49,7 +49,6 @@ void _Ldtob(_Pft* args, u8 type) {
     s16 err;
     s16 nsig;
     s16 exp;
-
     s32 i;
     s32 n;
     f64 factor;
