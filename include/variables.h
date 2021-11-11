@@ -1360,7 +1360,7 @@ extern u16 gEquipNegMasks[];
 extern u32 gUpgradeMasks[8];
 extern u32 gUpgradeNegMasks[];
 extern u8 gEquipShifts[];
-extern u8 gUpgradeShifts[16];
+extern u8 gUpgradeShifts[8];
 extern u16 gUpgradeCapacities[][4];
 extern u32 gGsFlagsMask[];
 extern u32 gGsFlagsShift[];

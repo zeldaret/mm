@@ -425,7 +425,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_Update(&this->skelAnime);
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRYS_MASK) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRY) {
         pos = player->bodyPartsPos[0];
         this->targetSpeedXZ = 5.0f;
         EnElforg_MoveToTarget(this, &pos);
@@ -471,7 +471,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
 
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 20.0f, 7);
         func_80ACCBB8(this, globalCtx);
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRYS_MASK) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRY) {
             if (!(this->flags & STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED)) {
                 play_sound(NA_SE_SY_FAIRY_MASK_SUCCESS);
             }

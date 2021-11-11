@@ -438,7 +438,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
 
             if (CURRENT_DAY == 3) {
                 if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
-                    ((gSaveContext.inventory.items[ITEM_OCARINA] == ITEM_NONE) ||
+                    ((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
                      (globalCtx->sceneNum == SCENE_CLOCKTOWER))) {
                     s32 phi_v0;
                     u32 entranceIndex = gSaveContext.entranceIndex;
