@@ -5,8 +5,8 @@ u8* func_801A5A1C(s8* arg0);
 
 typedef struct {
     /* 0x00 */ u8* unk_00;
-    /* 0x04 */ u8 unk_04;
-    /* 0x08 */ s32 unk_08;
+    /* 0x04 */ s8 unk_04;
+    /* 0x08 */ OSVoiceData* unk_08;
     /* 0x0C */ u16 unk_0C;
     /* 0x0E */ u16 unk_0E;
     /* 0x10 */ u16 unk_10;
@@ -16,8 +16,11 @@ typedef struct {
 
 extern OSVoiceUnk D_801FD5A0;
 extern OSVoiceHandle D_801FD5B8;
+extern OSVoiceData D_801FD5C8;
+extern OSVoiceData D_801FD5E8;
 extern u8 D_801FD610[];
 extern s8 D_801FD5A4;
+extern u8 D_801FD5C4;
 
 s8 D_801D8E50[] =
     "aa\0AA\0ii\0II\0uu\0UU\0ee\0EE\0oo\0OO\0KA\0GA\0KI\0GI\0KU\0GU\0KE\0GE\0KO\0GO\0SA\0ZA\0SI\0ZI\0SU\0ZU\0SE\0ZE\0SO"
@@ -67,7 +70,7 @@ s32 func_801A5228(u8* arg0) {
     s32 index;
 
     D_801FD5A0.unk_04 = 0;
-    D_801FD5A0.unk_08 = 0;
+    D_801FD5A0.unk_08 = NULL;
     D_801FD5A0.unk_0C = 1000;
     D_801FD5A0.unk_0E = 5;
     D_801FD5A0.unk_10 = 0;
@@ -104,12 +107,12 @@ s32 func_801A5228(u8* arg0) {
     return errorCode;
 }
 
-s32 func_801A5390(void) {
-    s32 temp_t6;
+OSVoiceData* func_801A5390(void) {
+    OSVoiceData* temp_t6;
     OSMesgQueue* msgQ;
 
     temp_t6 = D_801FD5A0.unk_08;
-    D_801FD5A0.unk_08 = 0;
+    D_801FD5A0.unk_08 = NULL;
 
     msgQ = PadMgr_LockSerialMesgQueue();
     osVoiceStartReadData(&D_801FD5B8);
@@ -171,9 +174,9 @@ s32 func_801A54D0(u16 arg0) {
     
     phi_t0 = true;
     if (D_801FD5A0.unk_00 != 0) {
-        sp22 = D_801FD5A0.unk_00[0x258];
+        sp22 = D_801FD5A0.unk_00[600];
     } else {
-        sp22 = 0x14;
+        sp22 = 20;
         phi_t0 = false;
     }
 
@@ -215,9 +218,9 @@ s32 func_801A5680(u16 arg0) {
     
     phi_a3 = true;
     if (D_801FD5A0.unk_00 != 0) {
-        sp22 = D_801FD5A0.unk_00[0x258];
+        sp22 = D_801FD5A0.unk_00[600];
     } else {
-        sp22 = 0x14;
+        sp22 = 20;
         phi_a3 = false;
     }
 
@@ -250,7 +253,62 @@ s32 func_801A5680(u16 arg0) {
     return errorCode;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/func_801A5808.s")
+void func_801A5808(void) {
+    s32 errorCode = 0;
+    s32 pad;
+    OSMesgQueue* msgQ;
+
+    switch (D_801FD5A0.unk_04) {
+        case 0:
+            msgQ = PadMgr_LockSerialMesgQueue();
+            errorCode = osVoiceStartReadData(&D_801FD5B8);
+            PadMgr_UnlockSerialMesgQueue(msgQ);
+
+            D_801FD5A4 = 1;
+            break;
+        case 1:
+            msgQ = PadMgr_LockSerialMesgQueue();
+            errorCode = osVoiceGetReadData(&D_801FD5B8, &D_801FD5C8);
+            PadMgr_UnlockSerialMesgQueue(msgQ);
+
+            if (func_801A51F0(errorCode) == 0) {
+                switch (D_801FD5C4) {
+                    case 0:
+                        D_801FD5A4 = 2;
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                        break;
+                    case 7:
+                        D_801FD5A4 = 2;
+                        break;
+                }
+            }
+            break;
+        case 2:
+            if (((D_801FD5C8.warning & D_801FD5A0.unk_10) == 0) && (D_801FD5A0.unk_0E >= D_801FD5C8.answer_num) && (D_801FD5A0.unk_0C >= D_801FD5C8.distance[0]) && (D_801FD5C8.voice_level >= D_801FD5A0.unk_12) && (D_801FD5C8.voice_sn >= D_801FD5A0.unk_14)) {
+                D_801FD5E8 = D_801FD5C8;
+                D_801FD5A0.unk_08 = &D_801FD5E8;
+            }
+
+            msgQ = PadMgr_LockSerialMesgQueue();
+            osVoiceStopReadData(&D_801FD5B8);
+            PadMgr_UnlockSerialMesgQueue(msgQ);
+            
+            msgQ = PadMgr_LockSerialMesgQueue();
+            errorCode = osVoiceStartReadData(&D_801FD5B8);
+            PadMgr_UnlockSerialMesgQueue(msgQ);
+
+            D_801FD5A4 = 1;
+            break;
+    }
+
+    func_801A51F0(errorCode);
+}
 
 void func_801A5A10(void) {
     D_801FD5A0.unk_00 = 0;
