@@ -290,7 +290,8 @@ void func_80A6CD38(EnFall* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CECC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CF60.s")
+void func_80A6CF60(EnFall* this, GlobalContext* globalCtx) {
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CF70.s")
 
