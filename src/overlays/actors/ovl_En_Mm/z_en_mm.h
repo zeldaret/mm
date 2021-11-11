@@ -14,6 +14,4 @@ typedef struct EnMm {
     /* 0x0194 */ EnMmActionFunc actionFunc;
 } EnMm; // size = 0x198
 
-//extern const ActorInit En_Mm_InitVars;
-
 #endif // Z_EN_MM_H
