@@ -122,7 +122,7 @@ void func_80C06768(ObjMoonStone* this, GlobalContext* globalCtx) {
             this->actor.draw = NULL;
             func_80C0685C(this);
         } else if (this->actor.xzDistToPlayer < 25.0f) {
-            func_800B8A1C(&this->actor, globalCtx, 0x96, 100.0f, 30.0f);
+            func_800B8A1C(&this->actor, globalCtx, GI_MOON_TEAR, 100.0f, 30.0f);
         }
     }
 }
