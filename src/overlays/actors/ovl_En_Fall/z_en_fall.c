@@ -257,7 +257,22 @@ void func_80A6C3FC(EnFall* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C7C0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C9A8.s")
+void func_80A6C9A8(EnFall* this, GlobalContext* globalCtx) {
+    func_80A6C7C0(this, globalCtx);
+    if (func_800EE29C(globalCtx, 0x85)) {
+        if (func_800EE29C(globalCtx, 0x85) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0 == 1) {
+            this->actor.draw = NULL;
+        } else {
+            this->actor.draw = func_80A6D88C;
+            if (func_800EE29C(globalCtx, 0x85) &&
+                globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0 == 2) {
+                func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x85));
+            }
+        }
+    } else {
+        this->actor.draw = NULL;
+    }
+}
 
 void func_80A6CA9C(EnFall* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x85)) {
