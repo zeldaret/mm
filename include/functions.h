@@ -1623,7 +1623,7 @@ void func_800F03C0(GlobalContext* globalCtx);
 void func_800F048C(GlobalContext* globalCtx, Vec3f* param_2, u8 param_3, u16 param_4, u8 param_5);
 void Audio_PlaySoundAtPosition(GlobalContext* globalCtx, Vec3f* position, s32 param_3, u16 sfxId);
 void func_800F0590(GlobalContext* globalCtx, Vec3f* arg1, s32 arg2, s32 arg3);
-// void func_800F05C0(void);
+u16 func_800F05C0(GlobalContext* globalCtx);
 // void func_800F07C0(void);
 // void func_800F0888(void);
 // void func_800F0944(void);
