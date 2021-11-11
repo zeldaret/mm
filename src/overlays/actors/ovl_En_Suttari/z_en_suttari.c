@@ -748,8 +748,7 @@ s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
 }
 
 s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
-    s32 pad3[9];
-    f32 sp7C[256];
+    f32 sp7C[265];
     Vec3f sp70;
     Vec3f sp64;
     Vec3f sp58;
