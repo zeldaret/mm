@@ -12,7 +12,7 @@ u8 D_801FD608[8];
 
 // Maybe all the same?
 // u8 D_801FD610[0x11B0];
-u8 D_801FD610[0x100];
+char D_801FD610[0x100];
 u8 D_801FD710[0x1B0];
 u8 D_801FD8C0[0x240];
 u8 D_801FDB00[0x600];
@@ -22,17 +22,43 @@ u8 D_801FE640[0x90];
 u8 D_801FE6D0[0xF0];
 
 // Data
-s8 D_801D8E50[] =
-    "aa\0AA\0ii\0II\0uu\0UU\0ee\0EE\0oo\0OO\0KA\0GA\0KI\0GI\0KU\0GU\0KE\0GE\0KO\0GO\0SA\0ZA\0SI\0ZI\0SU\0ZU\0SE\0ZE\0SO"
-    "\0ZO\0TA\0DA\0TI\0DI\0tu\0TU\0DU\0TE\0DE\0TO\0DO\0NA\0NI\0NU\0NE\0NO\0HA\0BA\0PA\0HI\0BI\0PI\0HU\0BU\0PU\0HE\0BE\0"
-    "PE\0HO\0BO\0PO\0MA\0MI\0MU\0ME\0MO\0ya\0YA\0yu\0YU\0yo\0YO\0RA\0RI\0RU\0RE\0RO\0wa\0WA\0WI\0WE\0WO\0NN\0VU\0ka\0ke"
-    "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+s8 D_801D8E50[] = {
+    'a',  'a',  '\0', 'A',  'A',  '\0', 'i',  'i',  '\0', 'I',  'I',  '\0', 'u',  'u',  '\0', 'U',  'U',  '\0',
+    'e',  'e',  '\0', 'E',  'E',  '\0', 'o',  'o',  '\0', 'O',  'O',  '\0', 'K',  'A',  '\0', 'G',  'A',  '\0',
+    'K',  'I',  '\0', 'G',  'I',  '\0', 'K',  'U',  '\0', 'G',  'U',  '\0', 'K',  'E',  '\0', 'G',  'E',  '\0',
+    'K',  'O',  '\0', 'G',  'O',  '\0', 'S',  'A',  '\0', 'Z',  'A',  '\0', 'S',  'I',  '\0', 'Z',  'I',  '\0',
+    'S',  'U',  '\0', 'Z',  'U',  '\0', 'S',  'E',  '\0', 'Z',  'E',  '\0', 'S',  'O',  '\0', 'Z',  'O',  '\0',
+    'T',  'A',  '\0', 'D',  'A',  '\0', 'T',  'I',  '\0', 'D',  'I',  '\0', 't',  'u',  '\0', 'T',  'U',  '\0',
+    'D',  'U',  '\0', 'T',  'E',  '\0', 'D',  'E',  '\0', 'T',  'O',  '\0', 'D',  'O',  '\0', 'N',  'A',  '\0',
+    'N',  'I',  '\0', 'N',  'U',  '\0', 'N',  'E',  '\0', 'N',  'O',  '\0', 'H',  'A',  '\0', 'B',  'A',  '\0',
+    'P',  'A',  '\0', 'H',  'I',  '\0', 'B',  'I',  '\0', 'P',  'I',  '\0', 'H',  'U',  '\0', 'B',  'U',  '\0',
+    'P',  'U',  '\0', 'H',  'E',  '\0', 'B',  'E',  '\0', 'P',  'E',  '\0', 'H',  'O',  '\0', 'B',  'O',  '\0',
+    'P',  'O',  '\0', 'M',  'A',  '\0', 'M',  'I',  '\0', 'M',  'U',  '\0', 'M',  'E',  '\0', 'M',  'O',  '\0',
+    'y',  'a',  '\0', 'Y',  'A',  '\0', 'y',  'u',  '\0', 'Y',  'U',  '\0', 'y',  'o',  '\0', 'Y',  'O',  '\0',
+    'R',  'A',  '\0', 'R',  'I',  '\0', 'R',  'U',  '\0', 'R',  'E',  '\0', 'R',  'O',  '\0', 'w',  'a',  '\0',
+    'W',  'A',  '\0', 'W',  'I',  '\0', 'W',  'E',  '\0', 'W',  'O',  '\0', 'N',  'N',  '\0', 'V',  'U',  '\0',
+    'k',  'a',  '\0', 'k',  'e',  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+    '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+};
 
-s8 D_801D8F70[] = "aa\0AA\0ii\0II\0uu\0UU\0ee\0EE\0oo\0OO\0KA\0GA\0KI\0GI\0KU\0GU\0KE\0GE\0KO\0GO\0SA\0ZA\0SI\0ZI\0SU"
-                  "\0ZU\0SE\0ZE\0SO\0ZO\0TA\0DA\0TI\0DI\0tu\0TU\0DU\0TE\0DE\0TO\0DO\0NA\0NI\0NU\0NE\0NO\0HA\0BA\0PA\0"
-                  "HI\0BI\0PI\0HU\0BU\0PU\0HE\0BE\0PE\0HO\0BO\0PO\0MA\0MI\0  "
-                  "\0MU\0ME\0MO\0ya\0YA\0yu\0YU\0yo\0YO\0RA\0RI\0RU\0RE\0RO\0wa\0WA\0WI\0WE\0WO\0NN\0VU\0ka\0ke\0\0\0"
-                  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+s8 D_801D8F70[] = {
+    'a',  'a',  '\0', 'A',  'A',  '\0', 'i',  'i',  '\0', 'I',  'I',  '\0', 'u',  'u',  '\0', 'U',  'U',  '\0',
+    'e',  'e',  '\0', 'E',  'E',  '\0', 'o',  'o',  '\0', 'O',  'O',  '\0', 'K',  'A',  '\0', 'G',  'A',  '\0',
+    'K',  'I',  '\0', 'G',  'I',  '\0', 'K',  'U',  '\0', 'G',  'U',  '\0', 'K',  'E',  '\0', 'G',  'E',  '\0',
+    'K',  'O',  '\0', 'G',  'O',  '\0', 'S',  'A',  '\0', 'Z',  'A',  '\0', 'S',  'I',  '\0', 'Z',  'I',  '\0',
+    'S',  'U',  '\0', 'Z',  'U',  '\0', 'S',  'E',  '\0', 'Z',  'E',  '\0', 'S',  'O',  '\0', 'Z',  'O',  '\0',
+    'T',  'A',  '\0', 'D',  'A',  '\0', 'T',  'I',  '\0', 'D',  'I',  '\0', 't',  'u',  '\0', 'T',  'U',  '\0',
+    'D',  'U',  '\0', 'T',  'E',  '\0', 'D',  'E',  '\0', 'T',  'O',  '\0', 'D',  'O',  '\0', 'N',  'A',  '\0',
+    'N',  'I',  '\0', 'N',  'U',  '\0', 'N',  'E',  '\0', 'N',  'O',  '\0', 'H',  'A',  '\0', 'B',  'A',  '\0',
+    'P',  'A',  '\0', 'H',  'I',  '\0', 'B',  'I',  '\0', 'P',  'I',  '\0', 'H',  'U',  '\0', 'B',  'U',  '\0',
+    'P',  'U',  '\0', 'H',  'E',  '\0', 'B',  'E',  '\0', 'P',  'E',  '\0', 'H',  'O',  '\0', 'B',  'O',  '\0',
+    'P',  'O',  '\0', 'M',  'A',  '\0', 'M',  'I',  '\0', ' ',  ' ',  '\0', 'M',  'U',  '\0', 'M',  'E',  '\0',
+    'M',  'O',  '\0', 'y',  'a',  '\0', 'Y',  'A',  '\0', 'y',  'u',  '\0', 'Y',  'U',  '\0', 'y',  'o',  '\0',
+    'Y',  'O',  '\0', 'R',  'A',  '\0', 'R',  'I',  '\0', 'R',  'U',  '\0', 'R',  'E',  '\0', 'R',  'O',  '\0',
+    'w',  'a',  '\0', 'W',  'A',  '\0', 'W',  'I',  '\0', 'W',  'E',  '\0', 'W',  'O',  '\0', 'N',  'N',  '\0',
+    'V',  'U',  '\0', 'k',  'a',  '\0', 'k',  'e',  '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+    '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+};
 
 /*
 char D_801E0EC0[] = "Error %d\n"
@@ -120,6 +146,7 @@ OSVoiceData* func_801A5390(void) {
     return temp_t6;
 }
 
+// Unused
 s32 func_801A53DC(void) {
     return D_801FD5A0.unk_00;
 }
@@ -132,32 +159,33 @@ void func_801A53E8(u16 arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
     D_801FD5A0.unk_14 = arg4;
 }
 
-void func_801A541C(s32 analog, s32 digital) {
-    s32 sp1C;
+// Unused
+// Could have a return? or be void return?
+s32 func_801A541C(s32 analog, s32 digital) {
+    s32 errorCode;
     OSMesgQueue* msgQ;
 
-    if (D_801FD5A0.unk_00 != 0) {
-
+    if (D_801FD5A0.unk_00 != NULL) {
         msgQ = PadMgr_LockSerialMesgQueue();
-        sp1C = osVoiceControlGain(&D_801FD5B8, analog, digital);
+        errorCode = osVoiceControlGain(&D_801FD5B8, analog, digital);
         PadMgr_UnlockSerialMesgQueue(msgQ);
 
-        if (sp1C != 0) {
-            func_801A51F0(sp1C);
+        if (errorCode != 0) {
+            func_801A51F0(errorCode);
         }
     }
 }
 
+// Unused
 s32 func_801A5488(u8* word) {
-    s32 sp1C;
+    s32 errorCode;
     OSMesgQueue* msgQ;
-    s32 temp_v0;
 
     msgQ = PadMgr_LockSerialMesgQueue();
-    sp1C = osVoiceCheckWord(word);
+    errorCode = osVoiceCheckWord(word);
     PadMgr_UnlockSerialMesgQueue(msgQ);
 
-    return sp1C;
+    return errorCode;
 }
 
 u8* func_801A54C4(void) {
@@ -172,7 +200,7 @@ s32 func_801A54D0(u16 arg0) {
     OSMesgQueue* msgQ;
 
     phi_t0 = true;
-    if (D_801FD5A0.unk_00 != 0) {
+    if (D_801FD5A0.unk_00 != NULL) {
         sp22 = D_801FD5A0.unk_00[600];
     } else {
         sp22 = 20;
@@ -216,7 +244,7 @@ s32 func_801A5680(u16 arg0) {
     OSMesgQueue* msgQ;
 
     phi_a3 = true;
-    if (D_801FD5A0.unk_00 != 0) {
+    if (D_801FD5A0.unk_00 != NULL) {
         sp22 = D_801FD5A0.unk_00[600];
     } else {
         sp22 = 20;
@@ -274,17 +302,17 @@ s32 func_801A5808(void) {
 
             if (func_801A51F0(errorCode) == 0) {
                 switch (D_801FD5B8.status) {
-                    case 0:
+                    case VOICE_STATUS_READY:
                         D_801FD5A0.unk_04 = 2;
                         break;
-                    case 1:
+                    case VOICE_STATUS_START:
                     case 2:
-                    case 3:
+                    case VOICE_STATUS_CANCEL:
                     case 4:
-                    case 5:
+                    case VOICE_STATUS_BUSY:
                     case 6:
                         break;
-                    case 7:
+                    case VOICE_STATUS_END:
                         D_801FD5A0.unk_04 = 2;
                         break;
                 }
@@ -315,8 +343,9 @@ s32 func_801A5808(void) {
     return ret;
 }
 
+// Unused
 void func_801A5A10(void) {
-    D_801FD5A0.unk_00 = 0;
+    D_801FD5A0.unk_00 = NULL;
 }
 
 u8* func_801A5A1C(s8* arg0) {
@@ -336,15 +365,15 @@ u8* func_801A5A1C(s8* arg0) {
             D_801FD610[j++] = D_801D8E50[3 * (temp_t8[1] - 0x9F)];
             D_801FD610[j++] = D_801D8E50[3 * (temp_t8[1] - 0x9F) + 1];
         } else if (temp_t8[0] == 0x81 && temp_t8[1] == 0x5B) {
-            D_801FD610[j++] = 0x2D;
-            D_801FD610[j++] = 0x2D;
+            D_801FD610[j++] = '-';
+            D_801FD610[j++] = '-';
         } else {
-            D_801FD610[j++] = 0x20;
-            D_801FD610[j++] = 0x20;
+            D_801FD610[j++] = ' ';
+            D_801FD610[j++] = ' ';
         }
     }
 
-    D_801FD610[i] = 0;
+    D_801FD610[i] = '\0';
 
     return D_801FD610;
 }
