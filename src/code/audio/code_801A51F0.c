@@ -253,9 +253,9 @@ s32 func_801A5680(u16 arg0) {
     return errorCode;
 }
 
-void func_801A5808(void) {
+s32 func_801A5808(void) {
     s32 errorCode = 0;
-    s32 pad;
+    s32 ret;
     OSMesgQueue* msgQ;
 
     switch (D_801FD5A0.unk_04) {
@@ -307,7 +307,7 @@ void func_801A5808(void) {
             break;
     }
 
-    func_801A51F0(errorCode);
+    return func_801A51F0(errorCode);
 }
 
 void func_801A5A10(void) {
