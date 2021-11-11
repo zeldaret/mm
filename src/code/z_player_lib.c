@@ -36,9 +36,19 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123140.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123358.s")
+s32 Player_InBlockingCsMode(GameState* gameState, Player* player) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_InCsMode.s")
+    return (player->stateFlags1 & 0x20000280) || player->unk_394 != 0 || globalCtx->sceneLoadFlag == 0x14 ||
+           globalCtx->unk_18B4A != 0 || (player->stateFlags1 & 1) || (player->stateFlags3 & 0x80) ||
+           globalCtx->actorCtx.unk268 != 0;
+}
+
+s32 Player_InCsMode(GameState* gameState) {
+    Player* player = GET_PLAYER(gameState);
+
+    return Player_InBlockingCsMode(gameState, player) || player->unk_AA5 == 5;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123420.s")
 

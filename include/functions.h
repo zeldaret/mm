@@ -2194,7 +2194,7 @@ void func_80122F28(Player* player, GlobalContext* globalCtx, Actor* actor);
 // void func_8012300C(void);
 void func_8012301C(s32 iParm1, GlobalContext* globalCtx);
 void func_80123140(GlobalContext* globalCtx, Player* param_2);
-u32 func_80123358(GlobalContext* globalCtx, Player* player);
+s32 Player_InBlockingCsMode(GameState* gameState, Player* player);
 s32 Player_InCsMode(GameState* gameState);
 // void func_80123420(void);
 // void func_80123434(void);

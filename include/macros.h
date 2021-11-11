@@ -33,7 +33,7 @@
     }                                      \
     (void)0
 
-#define GET_PLAYER(globalCtx) ((Player*)(globalCtx)->actorCtx.actorList[ACTORCAT_PLAYER].first)
+#define GET_PLAYER(globalCtx) ((Player*)((GlobalContext*)globalCtx)->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
 #define GET_FIRST_ENEMY(globalCtx) ((Actor*)(globalCtx)->actorCtx.actorList[ACTORCAT_ENEMY].first)
 
