@@ -225,8 +225,6 @@ beginseg
     include "build/src/libultra/io/spsetstat.o"
     pad_text
     include "build/src/libultra/io/vimgr.o"
-    include "build/data/boot/vimgr.data.o"
-    include "build/data/boot/vimgr.bss.o"
     include "build/src/libultra/io/vigetcurrcontext.o"
     include "build/asm/boot/writebackdcacheall.text.o"
     include "build/src/libultra/os/getcurrfaultthread.o"

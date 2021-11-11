@@ -284,6 +284,7 @@
             0x800980E0 : "guS2DInitBg",
             0x80098130 : "xldtob",
             0x80098160 : "vimgr",
+            0x80098180 : "voicecontrolgain",
 
             # .rodata section
             0x80098190 : "boot_main",

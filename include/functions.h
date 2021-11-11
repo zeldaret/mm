@@ -445,7 +445,7 @@ s32 __osSiRawWriteIo(u32 devAddr, u32 data);
 u32 __osSpGetStatus(void);
 void __osSpSetStatus(u32 value);
 void osCreateViManager(OSPri pri);
-void viMgrMain(OSDevMgr* iParm1);
+// void viMgrMain(OSDevMgr* iParm1);
 __OSViContext* __osViGetCurrentContext(void);
 void osWritebackDCacheAll(void);
 OSThread* __osGetCurrFaultedThread(void);
