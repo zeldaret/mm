@@ -1742,7 +1742,7 @@ asm/non_matchings/code/z_player_lib/func_80124190.s,func_80124190,0x80124190,0x9
 asm/non_matchings/code/z_player_lib/func_801241B4.s,func_801241B4,0x801241B4,0xB
 asm/non_matchings/code/z_player_lib/func_801241E0.s,func_801241E0,0x801241E0,0xB
 asm/non_matchings/code/z_player_lib/func_8012420C.s,func_8012420C,0x8012420C,0x8
-asm/non_matchings/code/z_player_lib/func_8012422C.s,func_8012422C,0x8012422C,0xB
+asm/non_matchings/code/z_player_lib/Player_ActionToExplosive.s,Player_ActionToExplosive,0x8012422C,0xB
 asm/non_matchings/code/z_player_lib/Player_GetExplosiveHeld.s,Player_GetExplosiveHeld,0x80124258,0x8
 asm/non_matchings/code/z_player_lib/func_80124278.s,func_80124278,0x80124278,0xF
 asm/non_matchings/code/z_player_lib/func_801242B4.s,func_801242B4,0x801242B4,0xA

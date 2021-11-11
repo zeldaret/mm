@@ -122,9 +122,20 @@ s32 Player_InCsMode(GameState* gameState) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012420C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012422C.s")
+s32 Player_ActionToExplosive(Player* player, s32 actionParam) {
+    s32 explosive = actionParam - PLAYER_AP_BOMB;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_GetExplosiveHeld.s")
+    // Relies on explosive-related action params to be contiguous
+    if ((explosive >= (PLAYER_AP_BOMB-PLAYER_AP_BOMB)) && (explosive <= (PLAYER_AP_BOMBCHU-PLAYER_AP_BOMB))) {
+        return explosive;
+    }
+
+    return -1;
+}
+
+s32 Player_GetExplosiveHeld(Player* player) {
+    return Player_ActionToExplosive(player, player->itemActionParam);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124278.s")
 
