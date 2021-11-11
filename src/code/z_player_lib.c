@@ -96,9 +96,17 @@ s32 Player_InCsMode(GameState* gameState) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124020.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_GetMask.s")
+u8 Player_GetMask(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_RemoveMask.s")
+    return player->currentMask;
+}
+
+void Player_RemoveMask(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    player->currentMask = PLAYER_MASK_NONE;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012405C.s")
 
