@@ -20,4 +20,7 @@ typedef struct {
     /* 0x4 */ OSPri priority;
 } __OSThreadTail;
 
+extern __osHwInt __osHwIntTable[];
+extern __OSEventState __osEventStateTab[];
+
 #endif

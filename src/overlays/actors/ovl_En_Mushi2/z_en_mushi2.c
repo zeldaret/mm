@@ -1222,7 +1222,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if ((this->unk_30C & 1) && func_80A68DD4(this, globalCtx)) {
-            func_800B8A1C(&this->actor, globalCtx, 0xBA, 60.0f, 30.0f);
+            func_800B8A1C(&this->actor, globalCtx, GI_MAX, 60.0f, 30.0f);
         }
     }
 }
