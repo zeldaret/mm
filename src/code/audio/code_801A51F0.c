@@ -1,9 +1,5 @@
 #include "global.h"
 
-// padmgr functions
-s32 func_80175008();
-void func_8017506C(s32);
-
 // internal voice functions
 u8* func_801A5A1C(s8* arg0);
 
@@ -63,7 +59,7 @@ s32 func_801A51F0(s32 errorCode) {
 }
 
 s32 func_801A5228(u8* arg0) {
-    s32 temp_s2;
+    OSMesgQueue* msgQ;
     s32 errorCode;
     u8 temp_s1;
     u8 i;
@@ -78,9 +74,10 @@ s32 func_801A5228(u8* arg0) {
     D_801FD5A0.unk_00 = arg0;
     
     temp_s1 = arg0[600];
-    temp_s2 = func_80175008();
+
+    msgQ = PadMgr_LockSerialMesgQueue();
     errorCode = osVoiceClearDictionary(&D_801FD5B8, temp_s1);
-    func_8017506C(temp_s2);
+    PadMgr_UnlockSerialMesgQueue(msgQ);
 
     if (errorCode != 0) {
         return errorCode;
@@ -92,11 +89,12 @@ s32 func_801A5228(u8* arg0) {
     }
 
     for (i = 0; i < temp_s1; i++) {
-        temp_s2 = func_80175008();
+
+        msgQ = PadMgr_LockSerialMesgQueue();
         indexTemp = i;
         index = indexTemp * 30;
         errorCode = osVoiceSetWord(&D_801FD5B8, &arg0[index]);
-        func_8017506C(temp_s2);
+        PadMgr_UnlockSerialMesgQueue(msgQ);
         
         if (func_801A51F0(errorCode) != 0) {
             func_801A5A1C(&arg0[index]);
@@ -108,13 +106,15 @@ s32 func_801A5228(u8* arg0) {
 
 s32 func_801A5390(void) {
     s32 temp_t6;
-    s32 sp18;
+    OSMesgQueue* msgQ;
 
     temp_t6 = D_801FD5A0.unk_08;
     D_801FD5A0.unk_08 = 0;
-    sp18 = func_80175008();
+
+    msgQ = PadMgr_LockSerialMesgQueue();
     osVoiceStartReadData(&D_801FD5B8);
-    func_8017506C(sp18);
+    PadMgr_UnlockSerialMesgQueue(msgQ);
+
     return temp_t6;
 }
 
@@ -132,12 +132,14 @@ void func_801A53E8(u16 arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
 
 void func_801A541C(s32 analog, s32 digital) {
     s32 sp1C;
-    s32 sp18;
+    OSMesgQueue* msgQ;
 
     if (D_801FD5A0.unk_00 != 0) {
-        sp18 = func_80175008();
+
+        msgQ = PadMgr_LockSerialMesgQueue();
         sp1C = osVoiceControlGain(&D_801FD5B8, analog, digital);
-        func_8017506C(sp18);
+        PadMgr_UnlockSerialMesgQueue(msgQ);
+
         if (sp1C != 0) {
             func_801A51F0(sp1C);
         }
@@ -146,12 +148,13 @@ void func_801A541C(s32 analog, s32 digital) {
 
 s32 func_801A5488(u8* word) {
     s32 sp1C;
-    s32 sp18;
+    OSMesgQueue* msgQ;
     s32 temp_v0;
 
-    sp18 = func_80175008();
+    msgQ = PadMgr_LockSerialMesgQueue();
     sp1C = osVoiceCheckWord(word);
-    func_8017506C(sp18);
+    PadMgr_UnlockSerialMesgQueue(msgQ);
+
     return sp1C;
 }
 
@@ -164,7 +167,7 @@ s32 func_801A54D0(u16 arg0) {
     u8 phi_t0;
     u8 sp22;
     u8 i;
-    s32 sp1C;
+    OSMesgQueue* msgQ;
     
     phi_t0 = true;
     if (D_801FD5A0.unk_00 != 0) {
@@ -187,16 +190,17 @@ s32 func_801A54D0(u16 arg0) {
     }
     
     if (phi_t0) {
-        sp1C = func_80175008();
+        msgQ = PadMgr_LockSerialMesgQueue();
         errorCode = osVoiceStopReadData(&D_801FD5B8);
-        func_8017506C(sp1C);
+        PadMgr_UnlockSerialMesgQueue(msgQ);
 
         if ((errorCode == 0) || (D_801FD5A4 == 0)) {
-            sp1C = func_80175008();
+
+            msgQ = PadMgr_LockSerialMesgQueue();
             errorCode = osVoiceMaskDictionary(&D_801FD5B8, D_801FD608, ((sp22 - 1) / 8) + 1);
-            func_8017506C(sp1C);
+            PadMgr_UnlockSerialMesgQueue(msgQ);
         }
-        
+
         D_801FD5A4 = 0;
     }
     

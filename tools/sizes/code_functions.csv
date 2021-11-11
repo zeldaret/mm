@@ -2684,9 +2684,9 @@ asm/non_matchings/code/padmgr/func_80174F44.s,func_80174F44,0x80174F44,0xE
 asm/non_matchings/code/padmgr/func_80174F7C.s,func_80174F7C,0x80174F7C,0x8
 asm/non_matchings/code/padmgr/func_80174F9C.s,func_80174F9C,0x80174F9C,0xE
 asm/non_matchings/code/padmgr/Padmgr_GetEventCallback.s,Padmgr_GetEventCallback,0x80174FD4,0xD
-asm/non_matchings/code/padmgr/func_80175008.s,func_80175008,0x80175008,0xD
+asm/non_matchings/code/padmgr/PadMgr_LockSerialMesgQueue.s,PadMgr_LockSerialMesgQueue,0x80175008,0xD
 asm/non_matchings/code/padmgr/Padmgr_SetEventCallback.s,Padmgr_SetEventCallback,0x8017503C,0xC
-asm/non_matchings/code/padmgr/func_8017506C.s,func_8017506C,0x8017506C,0xC
+asm/non_matchings/code/padmgr/PadMgr_UnlockSerialMesgQueue.s,PadMgr_UnlockSerialMesgQueue,0x8017506C,0xC
 asm/non_matchings/code/padmgr/Padmgr_Lock.s,Padmgr_Lock,0x8017509C,0xC
 asm/non_matchings/code/padmgr/Padmgr_Unlock.s,Padmgr_Unlock,0x801750CC,0xC
 asm/non_matchings/code/padmgr/func_801750FC.s,func_801750FC,0x801750FC,0x9A

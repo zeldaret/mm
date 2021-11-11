@@ -13,11 +13,11 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/Padmgr_GetEventCallback.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/func_80175008.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/PadMgr_LockSerialMesgQueue.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/Padmgr_SetEventCallback.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/func_8017506C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/PadMgr_UnlockSerialMesgQueue.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/Padmgr_Lock.s")
 
