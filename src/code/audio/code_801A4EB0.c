@@ -1,7 +1,6 @@
 #include "global.h"
 
 void func_801A5080(u16 arg0);
-
 s32 func_801A5228(OSVoiceDictionary* dict);
 void func_801A53E8(u16 distance, u16 answerNum, u16 warning, u16 voiceLevel, u16 voiceRelLevel);
 s32 func_801A5808(void);
@@ -10,10 +9,36 @@ s32 func_801A5680(u16 arg0);
 s32 func_801A54D0(u16 arg0);
 u8* func_801A54C4(void);
 
-extern OSVoiceDictionary D_801D8BE0;
 extern OSVoiceHandle sVoiceHandle;
-extern OSVoiceData* D_801D8E40;
-extern u8 D_801D8E48;
+
+OSVoiceDictionary D_801D8BE0 = {
+    {
+        // "アトナンジカン" - "atonanjikan" -  "How many hours"
+        { 0x83, 0x41, 0x83, 0x67, 0x83, 0x69, 0x83, 0x93, 0x83, 0x57, 0x83, 0x4A, 0x83, 0x93 },
+
+        // "ハイチーズ" - "haichīzu" - "say cheese"
+        { 0x83, 0x6E, 0x83, 0x43, 0x83, 0x60, 0x81, 0x5B, 0x83, 0x59 },
+
+        // "オキロー" - "okirō" - "wake up"
+        { 0x83, 0x49, 0x83, 0x4C, 0x83, 0x8D, 0x81, 0x5B },
+
+        // "オスワリ" - "osuwari" - "sit"
+        { 0x83, 0x49, 0x83, 0x58, 0x83, 0x8F, 0x83, 0x8A },
+
+        // "ミルク" - "miruku" - "milk"
+        { 0x83, 0x7E, 0x83, 0x8B, 0x83, 0x4E },
+
+        // "ハイヤー" - "haiyā" - "hiya!"
+        { 0x83, 0x6E, 0x83, 0x43, 0x83, 0x84, 0x81, 0x5B },
+    },
+
+    6, // number of words
+};
+
+u8 D_801D8E3C = 0;
+OSVoiceData* D_801D8E40 = NULL;
+u16 D_801D8E44 = 0xFFFF;
+u8 D_801D8E48 = 0;
 
 void func_801A4EB0(void) {
 }
