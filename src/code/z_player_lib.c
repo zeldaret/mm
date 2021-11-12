@@ -127,11 +127,20 @@ void Player_RemoveMask(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801241B4.s")
 
-// Player_ActionToBottle
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801241E0.s")
+s32 Player_ActionToBottle(Player* player, s32 actionParam) {
+    s32 bottle = actionParam - PLAYER_AP_BOTTLE;
 
-// Player_GetBottleHeld
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012420C.s")
+    // Relies on bottle-related action params to be contiguous
+    if ((bottle >= (PLAYER_AP_BOTTLE - PLAYER_AP_BOTTLE)) && (bottle <= (PLAYER_AP_BOTTLE_FAIRY - PLAYER_AP_BOTTLE))) {
+        return bottle;
+    }
+
+    return -1;
+}
+
+s32 Player_GetBottleHeld(Player* Player) {
+    return Player_ActionToBottle(Player, Player->itemActionParam);
+}
 
 s32 Player_ActionToExplosive(Player* player, s32 actionParam) {
     s32 explosive = actionParam - PLAYER_AP_BOMB;
