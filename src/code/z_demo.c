@@ -183,7 +183,7 @@ void func_800EA324(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
         sp3F = 0;
         globalCtx = temp_a3;
         sp44 = temp_t2;
-        temp_f0 = func_800F5A8C(phi_a0 & 0xFFFF, unksp22, unksp2A, temp_a3);
+        temp_f0 = func_800F5A8C(phi_a0 & 0xFFFF, unksp22, unksp2A);
         temp_a1 = csCtx->frames;
         temp_t0 = cmd->startFrame;
         temp_a3_2 = globalCtx;
@@ -588,7 +588,7 @@ void func_800EAFE0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk9B*
         globalCtx->envCtx.unk_E5 = 1;
         temp_a1 = cmd->startFrame;
         temp_a0 = cmd->endFrame;
-        temp_f0 = func_800F5A8C(temp_a0, temp_a1, csCtx->frames, (GlobalContext* ) cmd);
+        temp_f0 = func_800F5A8C(temp_a0, temp_a1, csCtx->frames);
 
         if (((cmd->unk0 == 1)) || (cmd->unk0 == 2)) {
             globalCtx->envCtx.unk_E6[0] = cmd->unk6;
@@ -840,7 +840,7 @@ void func_800EBB68(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
         }
 
         if (cmd->base == 2) {
-            f32  temp_f0 = func_800F5A8C(cmd->endFrame, cmd->startFrame, csCtx->frames, cmd);
+            f32  temp_f0 = func_800F5A8C(cmd->endFrame, cmd->startFrame, csCtx->frames);
 
             if (temp_f0 >= 0.9f) {
                 func_80165690();
