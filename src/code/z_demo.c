@@ -863,7 +863,102 @@ void func_800EBCD0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
+#ifdef NON_MATCHING
+// regalloc
+void func_800EBD60(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
+        f32 temp_f0;
+
+        globalCtx->envCtx.unk_E5 = 1;
+        temp_f0 = func_800F5A8C(cmd->endFrame, cmd->startFrame, csCtx->frames);
+
+        switch (cmd->base) {
+            case 0x1:
+            case 0x5:
+                globalCtx->envCtx.unk_E6[0] = 0xA0;
+                globalCtx->envCtx.unk_E6[1] = 0xA0;
+                globalCtx->envCtx.unk_E6[2] = 0xA0;
+                if (cmd->base == 1) {
+                    globalCtx->envCtx.unk_E6[3] = 255.0f * temp_f0;
+                    if (temp_f0 == 0.0f) {
+                        func_8019F128(0x2846);
+                    }
+                } else {
+                    globalCtx->envCtx.unk_E6[3] = (1.0f - temp_f0) * 255.0f;
+                }
+                break;
+
+            case 0x2:
+            case 0x6:
+                globalCtx->envCtx.unk_E6[0] = 0;
+                globalCtx->envCtx.unk_E6[1] = 0;
+                globalCtx->envCtx.unk_E6[2] = 0xFF;
+                if (cmd->base == 2) {
+                    globalCtx->envCtx.unk_E6[3] = 255.0f * temp_f0;
+                } else {
+                    globalCtx->envCtx.unk_E6[3] = (1.0f - temp_f0) * 255.0f;
+                }
+                break;
+
+            case 0x3:
+            case 0x7:
+                globalCtx->envCtx.unk_E6[0] = 0xFF;
+                globalCtx->envCtx.unk_E6[1] = 0;
+                globalCtx->envCtx.unk_E6[2] = 0;
+                if (cmd->base == 3) {
+                    globalCtx->envCtx.unk_E6[3] = (1.0f - temp_f0) * 255.0f;
+                } else {
+                    globalCtx->envCtx.unk_E6[3] = 255.0f * temp_f0;
+                }
+                break;
+
+            case 0x4:
+            case 0x8:
+                globalCtx->envCtx.unk_E6[0] = 0;
+                globalCtx->envCtx.unk_E6[1] = 0xFF;
+                globalCtx->envCtx.unk_E6[2] = 0;
+                if (cmd->base == 4) {
+                    globalCtx->envCtx.unk_E6[3] = (1.0f - temp_f0) * 255.0f;
+                } else {
+                    globalCtx->envCtx.unk_E6[3] = 255.0f * temp_f0;
+                }
+                break;
+
+            case 0x9:
+                gSaveContext.unk_3F48 = 1;
+                break;
+
+            case 0xA:
+            case 0xB:
+                globalCtx->envCtx.unk_E6[0] = 0;
+                globalCtx->envCtx.unk_E6[1] = 0;
+                globalCtx->envCtx.unk_E6[2] = 0;
+                if (cmd->base == 0xA) {
+                    globalCtx->envCtx.unk_E6[3] = (1.0f - temp_f0) * 255.0f;
+                } else {
+                    globalCtx->envCtx.unk_E6[3] = 255.0f * temp_f0;
+                }
+                break;
+
+            case 0xC:
+                globalCtx->envCtx.unk_E6[0] = (1.0f - temp_f0) * 160.0f;
+                globalCtx->envCtx.unk_E6[1] = (1.0f - temp_f0) * 160.0f;
+                globalCtx->envCtx.unk_E6[2] = (1.0f - temp_f0) * 160.0f;
+                globalCtx->envCtx.unk_E6[3] = 0xFF;
+                break;
+
+            case 0xD:
+                globalCtx->envCtx.unk_E6[0] = (160.0f * temp_f0);
+                globalCtx->envCtx.unk_E6[1] = (160.0f * temp_f0);
+                globalCtx->envCtx.unk_E6[2] = (160.0f * temp_f0);
+                globalCtx->envCtx.unk_E6[3] = 0xFF;
+                break;
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EBD60.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EC678.s")
 
