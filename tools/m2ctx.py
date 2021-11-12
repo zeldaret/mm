@@ -8,7 +8,7 @@ root_dir = script_dir + "/../"
 src_dir = root_dir + "src/"
 
 # Read through the processes context and replace whatever
-def replace_things(output):
+def custom_replacements(output):
     output = output.splitlines()
 
     i = 0
@@ -82,7 +82,7 @@ def main():
                                      description="Creates a ctx.c file for mips2c. "
                                      "Output will be saved as oot/ctx.c")
     parser.add_argument('filepath', help="path of c file to be processed")
-    parser.add_argument("--fix", "-f", dest="fix", action="store_true", default=False, 
+    parser.add_argument("--custom", "-c", dest="custom", action="store_true", default=False, 
                             help="Apply custom replacements to the output to help aid m2c output")
     args = parser.parse_args()
 
@@ -101,8 +101,8 @@ def main():
 
     output = import_c_file(c_file_path)
 
-    if args.fix:
-        output = replace_things(output)
+    if args.custom:
+        output = custom_replacements(output)
 
     with open(os.path.join(root_dir, "ctx.c"), "w", encoding="UTF-8") as f:
         f.write(output)
