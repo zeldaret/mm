@@ -960,7 +960,19 @@ void func_800EBD60(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EBD60.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EC678.s")
+extern UNK_TYPE D_801F4D48;
+
+// ??
+s32 func_800EC678(GlobalContext* globalCtx, CsCmdUnk5A* cmd) {
+    s32 sp1C = 0;
+
+    bcopy(cmd, &sp1C, 4U);
+    cmd = (CsCmdUnk5A* ) &cmd->unk4;
+    if (func_8016A168() == 0) {
+        func_80161998(cmd, &D_801F4D48);
+    }
+    return sp1C + 4;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EC6D4.s")
 
