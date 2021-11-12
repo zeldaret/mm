@@ -151,9 +151,14 @@ typedef struct {
 } OSVoiceData; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ u8* unk_00;
+    /* 0x000 */ u8 words[20][30]; // 20 words, each with up to 15 syllables
+    /* 0x258 */ u8 numWords;
+} OSVoiceDictionary; // size = 0x25C
+
+typedef struct {
+    /* 0x00 */ OSVoiceDictionary* dict;
     /* 0x04 */ s8 unk_04;
-    /* 0x08 */ OSVoiceData* unk_08;
+    /* 0x08 */ OSVoiceData* data;
     /* 0x0C */ u16 unk_0C;
     /* 0x0E */ u16 unk_0E;
     /* 0x10 */ u16 unk_10;

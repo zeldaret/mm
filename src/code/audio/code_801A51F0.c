@@ -67,45 +67,40 @@ s32 func_801A51F0(s32 errorCode) {
     }
 }
 
-s32 func_801A5228(u8* arg0) {
+s32 func_801A5228(OSVoiceDictionary* dict) {
     OSMesgQueue* msgQ;
     s32 errorCode;
-    u8 temp_s1;
+    u8 numWords;
     u8 i;
-    u32 indexTemp;
-    s32 index;
 
     D_801FD5A0.unk_04 = 0;
-    D_801FD5A0.unk_08 = NULL;
+    D_801FD5A0.data = NULL;
     D_801FD5A0.unk_0C = 1000;
     D_801FD5A0.unk_0E = 5;
     D_801FD5A0.unk_10 = 0;
-    D_801FD5A0.unk_00 = arg0;
+    D_801FD5A0.dict = dict;
 
-    temp_s1 = arg0[600];
+    numWords = dict->numWords;
 
     msgQ = PadMgr_LockSerialMesgQueue();
-    errorCode = osVoiceClearDictionary(&D_801FD5B8, temp_s1);
+    errorCode = osVoiceClearDictionary(&D_801FD5B8, numWords);
     PadMgr_UnlockSerialMesgQueue(msgQ);
 
     if (errorCode != 0) {
         return errorCode;
     }
 
-    for (i = 0; i < (((temp_s1 - 1) / 8) + 1); i++) {
+    for (i = 0; i < (((numWords - 1) / 8) + 1); i++) {
         D_801FD608[i] = 0;
     }
 
-    for (i = 0; i < temp_s1; i++) {
-
+    for (i = 0; i < numWords; i++) {
         msgQ = PadMgr_LockSerialMesgQueue();
-        indexTemp = i;
-        index = indexTemp * 30;
-        errorCode = osVoiceSetWord(&D_801FD5B8, &arg0[index]);
+        errorCode = osVoiceSetWord(&D_801FD5B8, &dict->words[i]);
         PadMgr_UnlockSerialMesgQueue(msgQ);
 
         if (func_801A51F0(errorCode) != 0) {
-            func_801A5A1C(&arg0[index]);
+            func_801A5A1C(&dict->words[i]);
         }
     }
 
@@ -116,8 +111,8 @@ OSVoiceData* func_801A5390(void) {
     OSVoiceData* temp_t6;
     OSMesgQueue* msgQ;
 
-    temp_t6 = D_801FD5A0.unk_08;
-    D_801FD5A0.unk_08 = NULL;
+    temp_t6 = D_801FD5A0.data;
+    D_801FD5A0.data = NULL;
 
     msgQ = PadMgr_LockSerialMesgQueue();
     osVoiceStartReadData(&D_801FD5B8);
@@ -127,8 +122,8 @@ OSVoiceData* func_801A5390(void) {
 }
 
 // Unused
-s32 func_801A53DC(void) {
-    return D_801FD5A0.unk_00;
+OSVoiceDictionary* func_801A53DC(void) {
+    return D_801FD5A0.dict;
 }
 
 void func_801A53E8(u16 arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
@@ -145,7 +140,7 @@ s32 func_801A541C(s32 analog, s32 digital) {
     s32 errorCode;
     OSMesgQueue* msgQ;
 
-    if (D_801FD5A0.unk_00 != NULL) {
+    if (D_801FD5A0.dict != NULL) {
         msgQ = PadMgr_LockSerialMesgQueue();
         errorCode = osVoiceControlGain(&D_801FD5B8, analog, digital);
         PadMgr_UnlockSerialMesgQueue(msgQ);
@@ -175,20 +170,20 @@ u8* func_801A54C4(void) {
 s32 func_801A54D0(u16 arg0) {
     s32 errorCode;
     u8 phi_t0;
-    u8 sp22;
+    u8 numWords;
     u8 i;
     OSMesgQueue* msgQ;
 
     phi_t0 = true;
-    if (D_801FD5A0.unk_00 != NULL) {
-        sp22 = D_801FD5A0.unk_00[600];
+    if (D_801FD5A0.dict != NULL) {
+        numWords = D_801FD5A0.dict->numWords;
     } else {
-        sp22 = 20;
+        numWords = 20;
         phi_t0 = false;
     }
 
     if (arg0 == 0xFFFF) {
-        for (i = 0; i < sp22; i++) {
+        for (i = 0; i < numWords; i++) {
             D_801FD608[i / 8] |= 1 << (i % 8);
         }
     } else {
@@ -206,7 +201,7 @@ s32 func_801A54D0(u16 arg0) {
 
         if ((errorCode == 0) || (D_801FD5A0.unk_04 == 0)) {
             msgQ = PadMgr_LockSerialMesgQueue();
-            errorCode = osVoiceMaskDictionary(&D_801FD5B8, D_801FD608, ((sp22 - 1) / 8) + 1);
+            errorCode = osVoiceMaskDictionary(&D_801FD5B8, D_801FD608, ((numWords - 1) / 8) + 1);
             PadMgr_UnlockSerialMesgQueue(msgQ);
         }
 
@@ -219,20 +214,20 @@ s32 func_801A54D0(u16 arg0) {
 s32 func_801A5680(u16 arg0) {
     s32 errorCode;
     u8 phi_a3;
-    u8 sp22;
+    u8 numWords;
     u8 i;
     OSMesgQueue* msgQ;
 
     phi_a3 = true;
-    if (D_801FD5A0.unk_00 != NULL) {
-        sp22 = D_801FD5A0.unk_00[600];
+    if (D_801FD5A0.dict != NULL) {
+        numWords = D_801FD5A0.dict->numWords;
     } else {
-        sp22 = 20;
+        numWords = 20;
         phi_a3 = false;
     }
 
     if (arg0 == 0xFFFF) {
-        for (i = 0; i < (((sp22 - 1) / 8) + 1); i++) {
+        for (i = 0; i < (((numWords - 1) / 8) + 1); i++) {
             D_801FD608[i] = 0;
         }
     } else {
@@ -250,7 +245,7 @@ s32 func_801A5680(u16 arg0) {
 
         if ((errorCode == 0) || (D_801FD5A0.unk_04 == 0)) {
             msgQ = PadMgr_LockSerialMesgQueue();
-            errorCode = osVoiceMaskDictionary(&D_801FD5B8, D_801FD608, ((sp22 - 1) / 8) + 1);
+            errorCode = osVoiceMaskDictionary(&D_801FD5B8, D_801FD608, ((numWords - 1) / 8) + 1);
             PadMgr_UnlockSerialMesgQueue(msgQ);
         }
 
@@ -303,7 +298,7 @@ s32 func_801A5808(void) {
                 (D_801FD5A0.unk_0C >= D_801FD5C8.distance[0]) && (D_801FD5C8.voice_level >= D_801FD5A0.unk_12) &&
                 (D_801FD5C8.voice_sn >= D_801FD5A0.unk_14)) {
                 D_801FD5E8 = D_801FD5C8;
-                D_801FD5A0.unk_08 = &D_801FD5E8;
+                D_801FD5A0.data = &D_801FD5E8;
             }
 
             msgQ = PadMgr_LockSerialMesgQueue();
@@ -325,26 +320,26 @@ s32 func_801A5808(void) {
 
 // Unused
 void func_801A5A10(void) {
-    D_801FD5A0.unk_00 = NULL;
+    D_801FD5A0.dict = NULL;
 }
 
-u8* func_801A5A1C(s8* arg0) {
+u8* func_801A5A1C(s8* word) {
     u8 i;
     u8 j;
-    u8 len = strlen(arg0);
-    u8 temp_t8[2];
+    u8 numSyllables = strlen(word); // technically twice the num of syllables
+    u8 syllable[2];
 
-    for (j = 0, i = 0; i < len; i += 2) {
-        temp_t8[0] = arg0[i];
-        temp_t8[1] = arg0[i + 1];
+    for (j = 0, i = 0; i < numSyllables; i += 2) {
+        syllable[0] = word[i];
+        syllable[1] = word[i + 1];
 
-        if (temp_t8[0] == 0x83) {
-            D_801FD610[j++] = D_801D8F70[temp_t8[1] - 0x40][0];
-            D_801FD610[j++] = D_801D8F70[temp_t8[1] - 0x40][1];
-        } else if (temp_t8[0] == 0x82) {
-            D_801FD610[j++] = D_801D8E50[temp_t8[1] - 0x9F][0];
-            D_801FD610[j++] = D_801D8E50[temp_t8[1] - 0x9F][1];
-        } else if (temp_t8[0] == 0x81 && temp_t8[1] == 0x5B) {
+        if (syllable[0] == 0x83) {
+            D_801FD610[j++] = D_801D8F70[syllable[1] - 0x40][0];
+            D_801FD610[j++] = D_801D8F70[syllable[1] - 0x40][1];
+        } else if (syllable[0] == 0x82) {
+            D_801FD610[j++] = D_801D8E50[syllable[1] - 0x9F][0];
+            D_801FD610[j++] = D_801D8E50[syllable[1] - 0x9F][1];
+        } else if (syllable[0] == 0x81 && syllable[1] == 0x5B) {
             D_801FD610[j++] = '-';
             D_801FD610[j++] = '-';
         } else {

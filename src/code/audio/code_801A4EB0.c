@@ -2,7 +2,7 @@
 
 void func_801A5080(u16 arg0);
 
-s32 func_801A5228(u8* arg0);
+s32 func_801A5228(OSVoiceDictionary* dict);
 void func_801A53E8(u16 arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4);
 s32 func_801A5808(void);
 OSVoiceData* func_801A5390(void);
@@ -10,7 +10,7 @@ s32 func_801A5680(u16 arg0);
 s32 func_801A54D0(u16 arg0);
 u8* func_801A54C4(void);
 
-extern u8 D_801D8BE0;
+extern OSVoiceDictionary D_801D8BE0;
 extern OSVoiceHandle D_801FD5B8;
 extern OSVoiceData* D_801D8E40;
 extern u8 D_801D8E48;
