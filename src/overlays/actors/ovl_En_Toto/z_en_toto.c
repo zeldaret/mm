@@ -712,7 +712,7 @@ void func_80BA4CB4(EnToto* this, GlobalContext* globalCtx) {
         }
     }
     if (this->unk2B5 == 4 && !Actor_HasParent(&this->actor, globalCtx)) {
-        func_800B8A1C(&this->actor, globalCtx, 0x83, 9999.9f, 9999.9f);
+        func_800B8A1C(&this->actor, globalCtx, GI_MASK_CIRCUS_LEADER, 9999.9f, 9999.9f);
     }
 }
 

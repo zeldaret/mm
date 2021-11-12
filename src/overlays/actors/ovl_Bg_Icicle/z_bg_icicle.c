@@ -200,7 +200,7 @@ void BgIcicle_Regrow(BgIcicle* this, GlobalContext* globalCtx) {
 }
 
 void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
-    s32 sp24;
+    s32 dropItem00Id;
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
@@ -212,9 +212,9 @@ void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->dyna.actor.world.pos, this->unk_160 << 4);
             }
         } else if (this->dyna.actor.params == ICICLE_STALAGMITE_FIXED_DROP) {
-            sp24 = func_800A8150(this->unk_160);
+            dropItem00Id = func_800A8150(this->unk_160);
             BgIcicle_Break(this, globalCtx, 50.0f);
-            Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, (this->unk_161 << 8) | sp24);
+            Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, (this->unk_161 << 8) | dropItem00Id);
         } else {
             if (this->dyna.actor.params == ICICLE_STALACTITE_REGROW) {
                 BgIcicle_Break(this, globalCtx, 40.0f);

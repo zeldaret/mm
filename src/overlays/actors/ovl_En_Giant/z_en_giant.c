@@ -77,7 +77,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(0)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
                 return true;
             }
             break;
@@ -85,7 +85,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(1)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
                 return true;
             }
             break;
@@ -93,7 +93,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(2)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
                 return true;
             }
             break;
@@ -101,7 +101,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(3)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                 return true;
             }
             break;

@@ -36,7 +36,7 @@ void func_80BFCFA0(EnScopecoin* this, GlobalContext* globalCtx) {
 
 void func_80BFCFB8(EnScopecoin* this, GlobalContext* globalCtx) {
     if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
-        Item_DropCollectible(globalCtx, &this->actor.world.pos, 2);
+        Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_RUPEE_RED);
         Actor_MarkForDeath(&this->actor);
     }
 }
