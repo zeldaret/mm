@@ -580,6 +580,13 @@
             0x801D2E80 : "", # audio_heap?
             0x801D3D90 : "",
             0x801D55B0 : "",
+            0x801D5FE0 : "audio_load",
+            0x801D5FF0 : "code_80192BE0",
+            0x801D6010 : "code_80194790",
+            0x801D6190 : "audio_effects",
+            0x801D61A0 : "audio_seqplayer",
+            0x801D6600 : "code_8019AF00",
+            0x801D8BE0 : "code_801A4EB0",
             0x801D8E50 : "code_801A51F0",
             0x801D9090 : "",
 
