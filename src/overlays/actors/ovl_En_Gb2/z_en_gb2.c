@@ -432,7 +432,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
-                    func_801159EC(this->unk_288 * -1);
+                    func_801159EC(-this->unk_288);
                     globalCtx->msgCtx.unk11F22 = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     func_800B7298(globalCtx, NULL, 7);
@@ -584,7 +584,7 @@ void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
                     func_801518B0(globalCtx, this->unk_26E, &this->actor);
                 } else {
                     func_8019F208();
-                    func_801159EC(this->unk_288 * -1);
+                    func_801159EC(-this->unk_288);
                     globalCtx->msgCtx.unk11F22 = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     func_800B7298(globalCtx, NULL, 7);
