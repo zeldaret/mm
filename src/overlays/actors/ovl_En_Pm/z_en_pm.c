@@ -671,7 +671,7 @@ UNK_TYPE* func_80AF8540(EnPm* this, GlobalContext* globalCtx) {
             return D_80AFB650;
 
         default:
-            if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
+            if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEI) {
                 return D_80AFB744;
             }
 
