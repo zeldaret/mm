@@ -205,7 +205,7 @@ void EnMm_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnMm* this = THIS;
-    
+
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     if (this->unk_190 != 0) {
