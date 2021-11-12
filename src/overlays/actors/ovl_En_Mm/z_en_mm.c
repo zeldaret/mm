@@ -176,7 +176,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
             }
             if (Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f) == 0) {
                 direction = this->actor.world.rot.y;
-                if (ABS_ALT((s16)(this->actor.world.rot.y - this->actor.shape.rot.y)) >= 0x4001) {
+                if (ABS_ALT((s16)(this->actor.world.rot.y - this->actor.shape.rot.y)) > 0x4000) {
                     direction = BINANG_ROT180(direction);
                 }
                 Math_ScaledStepToS(&this->actor.shape.rot.y, direction, (s16)(this->actor.speedXZ * 100.0f));
@@ -215,7 +215,7 @@ void EnMm_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnMm* this = THIS;
     Collider_ResetCylinderAC(globalCtx, &this->collider.base);
     this->actionFunc(this, globalCtx);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 10.0f, 20.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 10.0f, 20.0f, 31);
     Actor_SetHeight(&this->actor, 20.0f);
 }
 
