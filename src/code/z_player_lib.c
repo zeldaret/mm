@@ -205,12 +205,60 @@ s32 Player_GetExplosiveHeld(Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012669C.s")
 
-// Player_DrawGetItemImpl
-void func_80126808(GlobalContext* globalCtx, Player* player, Vec3f* refPos, s32 drawIdPlusOne);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126808.s")
+void Player_DrawGetItemImpl(GlobalContext* globalCtx, Player* player, Vec3f* refPos, s32 drawIdPlusOne) {
+    f32 sp34;
 
-// Player_DrawGetItem
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012697C.s")
+    if (player->stateFlags3 & 0x4000000) {
+        sp34 = 6.0f;
+    } else {
+        sp34 = 14.0f;
+    }
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(player->giObjectSegment);
+
+    gSPSegment(POLY_OPA_DISP++, 0x06, player->giObjectSegment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
+
+    Matrix_InsertTranslation((Math_SinS(player->actor.shape.rot.y) * 3.3f) + refPos->x, refPos->y + sp34, (Math_CosS(player->actor.shape.rot.y) * 3.3f) + refPos->z, MTXMODE_NEW);
+    Matrix_InsertRotation(0, (globalCtx->gameplayFrames * 1000), 0, MTXMODE_APPLY);
+    Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
+    GetItem_Draw(globalCtx, drawIdPlusOne - 1);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+extern Vec3f D_801F59E8;
+
+void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
+    if (!player->giObjectLoading || (osRecvMesg(&player->giObjectLoadQueue, NULL, 0) == 0)) {
+        Vec3f refPos;
+        s32 drawIdPlusOne;
+
+        player->giObjectLoading = false;
+        if ((player->actor.id == ACTOR_EN_TEST3) || ((player->transformation == PLAYER_FORM_DEKU) && (player->stateFlags1 & 0x400))) {
+            refPos.x = player->actor.world.pos.x;
+            refPos.z = player->actor.world.pos.z;
+            if (player->actor.id == ACTOR_EN_TEST3) {
+                if (player->stateFlags1 & 0x400) {
+                    refPos.y = player->actor.world.pos.y + 30.0f;
+                } else {
+                    refPos.x = player->bodyPartsPos[0xC].x;
+                    refPos.y = player->bodyPartsPos[0xC].y - 6.0f;
+                    refPos.z = player->bodyPartsPos[0xC].z;
+                }
+            } else {
+                refPos.y = player->actor.world.pos.y + 28.0f;
+            }
+        } else {
+            Math_Vec3f_Copy(&refPos, &D_801F59E8);
+        }
+
+        drawIdPlusOne = ABS_ALT(player->unk_B2A);
+        Player_DrawGetItemImpl(globalCtx, player, &refPos, drawIdPlusOne);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126AB4.s")
 
