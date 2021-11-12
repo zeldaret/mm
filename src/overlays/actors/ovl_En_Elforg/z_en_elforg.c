@@ -607,7 +607,7 @@ void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx) {
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C818));
             break;
     }
-    Matrix_InsertMatrix(&globalCtx->mf_187FC, 1);
+    Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
 
     POLY_XLU_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
