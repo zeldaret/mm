@@ -10,13 +10,15 @@
 #include "misc/locerrmsg/locerrmsg.h"
 #include "misc/memerrmsg/memerrmsg.h"
 
+#define SIZEOF_LOCERRMSG (sizeof(gNotDesignedForSystemErrorTex))
+#define SIZEOF_MEMERRMSG (sizeof(gExpansionPakNotInstalledErrorTex) + sizeof(gSeeInstructionBookletErrorTex))
+
 // Address with enough room after to load either of the error message image files before the fault screen buffer at the
 // end of RDRAM
-#define CHECK_ERRMSG_STATIC_SEGMENT \
-    (u8*)(FAULT_FB_ADDRESS - sizeof(gExpansionPakNotInstalledErrorTex) - sizeof(gSeeInstructionBookletErrorTex))
+#define CHECK_ERRMSG_STATIC_SEGMENT (u8*)(FAULT_FB_ADDRESS - MAX(SIZEOF_LOCERRMSG, SIZEOF_MEMERRMSG))
 
 void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value) {
-    if (value & 1) {
+    if (value & RGBA16_PIXEL_OPAQUE) {
         (&buffer[x])[y * SCREEN_WIDTH] = value;
     }
 }
