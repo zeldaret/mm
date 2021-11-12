@@ -181,7 +181,7 @@ typedef struct {
 } OSVoiceData; // size = 0x20
 
 typedef struct {
-    /* 0x000 */ u8 words[20][30]; // 20 words, each with up to 15 syllables
+    /* 0x000 */ u16 words[20][15]; // 20 words, each with up to 15 syllables
     /* 0x258 */ u8 numWords;
 } OSVoiceDictionary; // size = 0x25C
 
