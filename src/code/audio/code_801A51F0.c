@@ -1,14 +1,14 @@
 #include "global.h"
 
 // internal voice functions
-u8* func_801A5A1C(s8* arg0);
+u8* func_801A5A1C(s8* word);
 
 // BSS
 OSVoiceUnk D_801FD5A0;
-OSVoiceHandle D_801FD5B8;
-OSVoiceData D_801FD5C8;
-OSVoiceData D_801FD5E8;
-u8 D_801FD608[8];
+OSVoiceHandle sVoiceHandle;
+OSVoiceData D_801FD5C8; // Intermediate Voice Data during processsing?
+OSVoiceData D_801FD5E8; // Best Match Voice Data?
+u8 sVoiceMaskPattern[8];
 
 // Maybe all the same?
 // u8 D_801FD610[0x11B0];
@@ -73,17 +73,17 @@ s32 func_801A5228(OSVoiceDictionary* dict) {
     u8 numWords;
     u8 i;
 
-    D_801FD5A0.unk_04 = 0;
+    D_801FD5A0.mode = 0;
     D_801FD5A0.data = NULL;
-    D_801FD5A0.unk_0C = 1000;
-    D_801FD5A0.unk_0E = 5;
-    D_801FD5A0.unk_10 = 0;
+    D_801FD5A0.distance = 1000;
+    D_801FD5A0.answerNum = 5;
+    D_801FD5A0.warning = 0;
     D_801FD5A0.dict = dict;
 
     numWords = dict->numWords;
 
     msgQ = PadMgr_LockSerialMesgQueue();
-    errorCode = osVoiceClearDictionary(&D_801FD5B8, numWords);
+    errorCode = osVoiceClearDictionary(&sVoiceHandle, numWords);
     PadMgr_UnlockSerialMesgQueue(msgQ);
 
     if (errorCode != 0) {
@@ -91,12 +91,12 @@ s32 func_801A5228(OSVoiceDictionary* dict) {
     }
 
     for (i = 0; i < (((numWords - 1) / 8) + 1); i++) {
-        D_801FD608[i] = 0;
+        sVoiceMaskPattern[i] = 0;
     }
 
     for (i = 0; i < numWords; i++) {
         msgQ = PadMgr_LockSerialMesgQueue();
-        errorCode = osVoiceSetWord(&D_801FD5B8, &dict->words[i]);
+        errorCode = osVoiceSetWord(&sVoiceHandle, &dict->words[i]);
         PadMgr_UnlockSerialMesgQueue(msgQ);
 
         if (func_801A51F0(errorCode) != 0) {
@@ -108,17 +108,17 @@ s32 func_801A5228(OSVoiceDictionary* dict) {
 }
 
 OSVoiceData* func_801A5390(void) {
-    OSVoiceData* temp_t6;
+    OSVoiceData* voiceData;
     OSMesgQueue* msgQ;
 
-    temp_t6 = D_801FD5A0.data;
+    voiceData = D_801FD5A0.data;
     D_801FD5A0.data = NULL;
 
     msgQ = PadMgr_LockSerialMesgQueue();
-    osVoiceStartReadData(&D_801FD5B8);
+    osVoiceStartReadData(&sVoiceHandle);
     PadMgr_UnlockSerialMesgQueue(msgQ);
 
-    return temp_t6;
+    return voiceData;
 }
 
 // Unused
@@ -126,12 +126,12 @@ OSVoiceDictionary* func_801A53DC(void) {
     return D_801FD5A0.dict;
 }
 
-void func_801A53E8(u16 arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
-    D_801FD5A0.unk_0C = arg0;
-    D_801FD5A0.unk_0E = arg1;
-    D_801FD5A0.unk_10 = arg2;
-    D_801FD5A0.unk_12 = arg3;
-    D_801FD5A0.unk_14 = arg4;
+void func_801A53E8(u16 distance, u16 answerNum, u16 warning, u16 voiceLevel, u16 voiceRelLevel) {
+    D_801FD5A0.distance = distance;
+    D_801FD5A0.answerNum = answerNum;
+    D_801FD5A0.warning = warning;
+    D_801FD5A0.voiceLevel = voiceLevel;
+    D_801FD5A0.voiceRelLevel = voiceRelLevel;
 }
 
 // Unused
@@ -142,7 +142,7 @@ s32 func_801A541C(s32 analog, s32 digital) {
 
     if (D_801FD5A0.dict != NULL) {
         msgQ = PadMgr_LockSerialMesgQueue();
-        errorCode = osVoiceControlGain(&D_801FD5B8, analog, digital);
+        errorCode = osVoiceControlGain(&sVoiceHandle, analog, digital);
         PadMgr_UnlockSerialMesgQueue(msgQ);
 
         if (errorCode != 0) {
@@ -164,17 +164,16 @@ s32 func_801A5488(u8* word) {
 }
 
 u8* func_801A54C4(void) {
-    return D_801FD608;
+    return sVoiceMaskPattern;
 }
 
 s32 func_801A54D0(u16 arg0) {
     s32 errorCode;
-    u8 phi_t0;
+    u8 phi_t0 = true;
     u8 numWords;
     u8 i;
     OSMesgQueue* msgQ;
 
-    phi_t0 = true;
     if (D_801FD5A0.dict != NULL) {
         numWords = D_801FD5A0.dict->numWords;
     } else {
@@ -184,28 +183,28 @@ s32 func_801A54D0(u16 arg0) {
 
     if (arg0 == 0xFFFF) {
         for (i = 0; i < numWords; i++) {
-            D_801FD608[i / 8] |= 1 << (i % 8);
+            sVoiceMaskPattern[i / 8] |= 1 << (i % 8);
         }
     } else {
-        if (D_801FD608[arg0 / 8] & (1 << (arg0 % 8))) {
+        if (sVoiceMaskPattern[arg0 / 8] & (1 << (arg0 % 8))) {
             phi_t0 = false;
         } else {
-            D_801FD608[arg0 / 8] |= (1 << (arg0 % 8));
+            sVoiceMaskPattern[arg0 / 8] |= (1 << (arg0 % 8));
         }
     }
 
     if (phi_t0) {
         msgQ = PadMgr_LockSerialMesgQueue();
-        errorCode = osVoiceStopReadData(&D_801FD5B8);
+        errorCode = osVoiceStopReadData(&sVoiceHandle);
         PadMgr_UnlockSerialMesgQueue(msgQ);
 
-        if ((errorCode == 0) || (D_801FD5A0.unk_04 == 0)) {
+        if ((errorCode == 0) || (D_801FD5A0.mode == 0)) {
             msgQ = PadMgr_LockSerialMesgQueue();
-            errorCode = osVoiceMaskDictionary(&D_801FD5B8, D_801FD608, ((numWords - 1) / 8) + 1);
+            errorCode = osVoiceMaskDictionary(&sVoiceHandle, sVoiceMaskPattern, ((numWords - 1) / 8) + 1);
             PadMgr_UnlockSerialMesgQueue(msgQ);
         }
 
-        D_801FD5A0.unk_04 = 0;
+        D_801FD5A0.mode = 0;
     }
 
     return errorCode;
@@ -213,12 +212,11 @@ s32 func_801A54D0(u16 arg0) {
 
 s32 func_801A5680(u16 arg0) {
     s32 errorCode;
-    u8 phi_a3;
+    u8 phi_a3 = true;
     u8 numWords;
     u8 i;
     OSMesgQueue* msgQ;
 
-    phi_a3 = true;
     if (D_801FD5A0.dict != NULL) {
         numWords = D_801FD5A0.dict->numWords;
     } else {
@@ -228,28 +226,28 @@ s32 func_801A5680(u16 arg0) {
 
     if (arg0 == 0xFFFF) {
         for (i = 0; i < (((numWords - 1) / 8) + 1); i++) {
-            D_801FD608[i] = 0;
+            sVoiceMaskPattern[i] = 0;
         }
     } else {
-        if (!(D_801FD608[arg0 / 8] & (1 << (arg0 % 8)))) {
+        if (!(sVoiceMaskPattern[arg0 / 8] & (1 << (arg0 % 8)))) {
             phi_a3 = false;
         } else {
-            D_801FD608[arg0 / 8] &= (1 << (arg0 % 8)) ^ 0xFF;
+            sVoiceMaskPattern[arg0 / 8] &= (1 << (arg0 % 8)) ^ 0xFF;
         }
     }
 
     if (phi_a3) {
         msgQ = PadMgr_LockSerialMesgQueue();
-        errorCode = osVoiceStopReadData(&D_801FD5B8);
+        errorCode = osVoiceStopReadData(&sVoiceHandle);
         PadMgr_UnlockSerialMesgQueue(msgQ);
 
-        if ((errorCode == 0) || (D_801FD5A0.unk_04 == 0)) {
+        if ((errorCode == 0) || (D_801FD5A0.mode == 0)) {
             msgQ = PadMgr_LockSerialMesgQueue();
-            errorCode = osVoiceMaskDictionary(&D_801FD5B8, D_801FD608, ((numWords - 1) / 8) + 1);
+            errorCode = osVoiceMaskDictionary(&sVoiceHandle, sVoiceMaskPattern, ((numWords - 1) / 8) + 1);
             PadMgr_UnlockSerialMesgQueue(msgQ);
         }
 
-        D_801FD5A0.unk_04 = 0;
+        D_801FD5A0.mode = 0;
     }
 
     return errorCode;
@@ -262,23 +260,23 @@ s32 func_801A5808(void) {
 
     if (1) {}
 
-    switch (D_801FD5A0.unk_04) {
+    switch (D_801FD5A0.mode) {
         case 0:
             msgQ = PadMgr_LockSerialMesgQueue();
-            errorCode = osVoiceStartReadData(&D_801FD5B8);
+            errorCode = osVoiceStartReadData(&sVoiceHandle);
             PadMgr_UnlockSerialMesgQueue(msgQ);
 
-            D_801FD5A0.unk_04 = 1;
+            D_801FD5A0.mode = 1;
             break;
         case 1:
             msgQ = PadMgr_LockSerialMesgQueue();
-            errorCode = osVoiceGetReadData(&D_801FD5B8, &D_801FD5C8);
+            errorCode = osVoiceGetReadData(&sVoiceHandle, &D_801FD5C8);
             PadMgr_UnlockSerialMesgQueue(msgQ);
 
             if (func_801A51F0(errorCode) == 0) {
-                switch (D_801FD5B8.status) {
+                switch (sVoiceHandle.status) {
                     case VOICE_STATUS_READY:
-                        D_801FD5A0.unk_04 = 2;
+                        D_801FD5A0.mode = 2;
                         break;
                     case VOICE_STATUS_START:
                     case 2:
@@ -288,28 +286,28 @@ s32 func_801A5808(void) {
                     case 6:
                         break;
                     case VOICE_STATUS_END:
-                        D_801FD5A0.unk_04 = 2;
+                        D_801FD5A0.mode = 2;
                         break;
                 }
             }
             break;
         case 2:
-            if (((D_801FD5C8.warning & D_801FD5A0.unk_10) == 0) && (D_801FD5A0.unk_0E >= D_801FD5C8.answer_num) &&
-                (D_801FD5A0.unk_0C >= D_801FD5C8.distance[0]) && (D_801FD5C8.voice_level >= D_801FD5A0.unk_12) &&
-                (D_801FD5C8.voice_sn >= D_801FD5A0.unk_14)) {
+            if (((D_801FD5C8.warning & D_801FD5A0.warning) == 0) && (D_801FD5A0.answerNum >= D_801FD5C8.answerNum) &&
+                (D_801FD5A0.distance >= D_801FD5C8.distance[0]) && (D_801FD5C8.voiceLevel >= D_801FD5A0.voiceLevel) &&
+                (D_801FD5C8.voiceRelLevel >= D_801FD5A0.voiceRelLevel)) {
                 D_801FD5E8 = D_801FD5C8;
                 D_801FD5A0.data = &D_801FD5E8;
             }
 
             msgQ = PadMgr_LockSerialMesgQueue();
-            osVoiceStopReadData(&D_801FD5B8);
+            osVoiceStopReadData(&sVoiceHandle);
             PadMgr_UnlockSerialMesgQueue(msgQ);
 
             msgQ = PadMgr_LockSerialMesgQueue();
-            errorCode = osVoiceStartReadData(&D_801FD5B8);
+            errorCode = osVoiceStartReadData(&sVoiceHandle);
             PadMgr_UnlockSerialMesgQueue(msgQ);
 
-            D_801FD5A0.unk_04 = 1;
+            D_801FD5A0.mode = 1;
             break;
     }
 

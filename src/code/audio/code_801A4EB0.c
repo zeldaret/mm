@@ -3,7 +3,7 @@
 void func_801A5080(u16 arg0);
 
 s32 func_801A5228(OSVoiceDictionary* dict);
-void func_801A53E8(u16 arg0, u16 arg1, u16 arg2, u16 arg3, u16 arg4);
+void func_801A53E8(u16 distance, u16 answerNum, u16 warning, u16 voiceLevel, u16 voiceRelLevel);
 s32 func_801A5808(void);
 OSVoiceData* func_801A5390(void);
 s32 func_801A5680(u16 arg0);
@@ -11,7 +11,7 @@ s32 func_801A54D0(u16 arg0);
 u8* func_801A54C4(void);
 
 extern OSVoiceDictionary D_801D8BE0;
-extern OSVoiceHandle D_801FD5B8;
+extern OSVoiceHandle sVoiceHandle;
 extern OSVoiceData* D_801D8E40;
 extern u8 D_801D8E48;
 
@@ -27,7 +27,7 @@ void func_801A4EB8(void) {
 
     if (D_801D8E3C != 0) {
         msgQ = PadMgr_LockSerialMesgQueue();
-        osVoiceStopReadData(&D_801FD5B8);
+        osVoiceStopReadData(&sVoiceHandle);
         PadMgr_UnlockSerialMesgQueue(msgQ);
     }
 
@@ -58,7 +58,7 @@ void func_801A4FD8(void) {
     func_801A54D0(0xFFFF);
     if (D_801D8E3C != 0) {
         msgQ = PadMgr_LockSerialMesgQueue();
-        osVoiceStopReadData(&D_801FD5B8);
+        osVoiceStopReadData(&sVoiceHandle);
         PadMgr_UnlockSerialMesgQueue(msgQ);
 
         errorCode = func_801A5228(&D_801D8BE0);

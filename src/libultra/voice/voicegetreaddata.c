@@ -69,10 +69,10 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             }
 
             result->warning = u.data[4] + (u.data[5] << 8);
-            result->answer_num = u.data[6];
-            result->voice_level = u.data[8] + (u.data[9] << 8);
-            result->voice_sn = u.data[10] + (u.data[11] << 8);
-            result->voice_time = u.data[12] + (u.data[13] << 8);
+            result->answerNum = u.data[6];
+            result->voiceLevel = u.data[8] + (u.data[9] << 8);
+            result->voiceRelLevel = u.data[10] + (u.data[11] << 8);
+            result->voiceTime = u.data[12] + (u.data[13] << 8);
 
             for (i = 0; i < 5; i++) {
                 result->answer[i] = u.data[14 + 4 * (i ^ 0)] + (u.data[15 + 4 * (i ^ 0)] << 8);
@@ -80,7 +80,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             }
 
             if (result->answer[0] == 0x7FFF) {
-                result->answer_num = 0;
+                result->answerNum = 0;
             }
 
             new_var2 = D_8009CF60;

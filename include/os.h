@@ -161,10 +161,10 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u16 warning;     /* Warning */
-    /* 0x02 */ u16 answer_num;  /* Candidate number (0~5) */
-    /* 0x04 */ u16 voice_level; /* Voice input level */
-    /* 0x06 */ u16 voice_sn;    /* Relative voice level */
-    /* 0x08 */ u16 voice_time;  /* Voice input time */
+    /* 0x02 */ u16 answerNum;  /* Candidate number (0~5) */
+    /* 0x04 */ u16 voiceLevel; /* Voice input level */
+    /* 0x06 */ u16 voiceRelLevel;   /* Relative voice level "voice_sn" */
+    /* 0x08 */ u16 voiceTime;  /* Voice input time */
     /* 0x0A */ u16 answer[5];   /* Candidate word number */
     /* 0x14 */ u16 distance[5]; /* Distance value */
 } OSVoiceData; // size = 0x20
@@ -176,13 +176,13 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ OSVoiceDictionary* dict;
-    /* 0x04 */ s8 unk_04;
+    /* 0x04 */ s8 mode;
     /* 0x08 */ OSVoiceData* data;
-    /* 0x0C */ u16 unk_0C;
-    /* 0x0E */ u16 unk_0E;
-    /* 0x10 */ u16 unk_10;
-    /* 0x12 */ u16 unk_12;
-    /* 0x14 */ u16 unk_14;
+    /* 0x0C */ u16 distance;
+    /* 0x0E */ u16 answerNum;
+    /* 0x10 */ u16 warning;
+    /* 0x12 */ u16 voiceLevel;
+    /* 0x14 */ u16 voiceRelLevel;
 } OSVoiceUnk; // size = 0x18
 
 #endif
