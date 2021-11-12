@@ -1541,6 +1541,7 @@ DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, 
 // void func_800E9DBC(void);
 // void func_800E9E94(void);
 void func_800E9F78(GraphicsContext* gfxCtx);
+
 void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void func_800EA0D4(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void func_800EA0EC(GlobalContext* globalCtx, CutsceneContext* csCtx);
@@ -1590,6 +1591,7 @@ s32 func_800EE1D8(GlobalContext* globalCtx);
 u32 func_800EE200(GlobalContext* globalCtx, u32 uParm2);
 u32 func_800EE29C(GlobalContext* globalCtx, u32 uParm2);
 u32 func_800EE2F4(GlobalContext* globalCtx);
+
 void GetItem_Draw(GlobalContext* globalCtx, s16 index);
 void func_800EE364(GlobalContext* globalCtx, s16 index);
 void func_800EE400(GlobalContext* globalCtx, s16 index);
