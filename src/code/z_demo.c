@@ -974,7 +974,76 @@ s32 func_800EC678(GlobalContext* globalCtx, CsCmdUnk5A* cmd) {
     return sp1C + 4;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EC6D4.s")
+/**
+ * Counts how many masks the player has
+ * The count doesn't include transformation masks
+ */
+s32 func_800EC6D4(void) {
+    s32 count = 0;
+
+    if (INV_CONTENT(ITEM_MASK_TRUTH) == ITEM_MASK_TRUTH) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_KAFEI) == ITEM_MASK_KAFEI) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_ALL_NIGHT) == ITEM_MASK_ALL_NIGHT) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_KEATON) == ITEM_MASK_KEATON) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_GARO) == ITEM_MASK_GARO) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_CIRCUS_LEADER) == ITEM_MASK_CIRCUS_LEADER) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_POSTMAN) == ITEM_MASK_POSTMAN) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_COUPLE) == ITEM_MASK_COUPLE) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_GREAT_FAIRY) == ITEM_MASK_GREAT_FAIRY) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_DON_GERO) == ITEM_MASK_DON_GERO) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_CAPTAIN) == ITEM_MASK_CAPTAIN) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_STONE) == ITEM_MASK_STONE) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_BREMEN) == ITEM_MASK_BREMEN) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_BLAST) == ITEM_MASK_BLAST) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_SCENTS) == ITEM_MASK_SCENTS) {
+        count++;
+    }
+    if (INV_CONTENT(ITEM_MASK_GIANT) == ITEM_MASK_GIANT) {
+        count++;
+    }
+
+    return count;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EC924.s")
 
