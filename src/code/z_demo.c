@@ -503,17 +503,162 @@ void func_800EAD7C(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
+extern u16 D_801F4D40;
+
+#ifdef NON_MATCHING
+void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    s32 temp_a1;
+    u16 temp_a0;
+    s32 phi_a1;
+
+    if (csCtx->frames == cmd->startFrame) {
+        phi_a1 = (gSaveContext.day - 1) & 0xFF;
+        if (phi_a1 >= 3) {
+            phi_a1 = 0;
+        }
+
+        switch (cmd->base) {
+        case 0x1:
+            func_801A246C(0U, 1U);
+            return;
+        case 0x2:
+            func_801A246C(0U, 0U);
+            return;
+        case 0x3:
+            func_801A246C(0U, 2U);
+            return;
+        case 0x4:
+            func_801A246C(4U, 1U);
+            return;
+        case 0x5:
+            func_801A246C(4U, 0U);
+            return;
+        case 0x6:
+            func_801A246C(4U, 2U);
+            return;
+        case 0x7:
+            D_801F4D40 = func_801A8A50(0);
+            return;
+        case 0x8:
+            temp_a0 = D_801F4D40;
+            if (D_801F4D40 != 0xFFFF) {
+                D_801F4D40 = temp_a0;
+                func_801A25E4(temp_a0, phi_a1);
+            }
+            /* Duplicate return node #14. Try simplifying control flow for better match */
+            return;
+        }
+    } else {
+    //default:
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EADB0.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EAECC.s")
+void func_800EAECC(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    if (csCtx->frames == cmd->startFrame && csCtx->frames < cmd->endFrame) {
+        u8 frameCount = cmd->endFrame - cmd->startFrame;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EAF20.s")
+        Audio_QueueSeqCmd((frameCount << 0x10) | 0x140000FF);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EAFE0.s")
+void func_800EAF20(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk190* cmd) {
+    switch (cmd->unk0) {
+        case 1:
+            if (csCtx->frames == cmd->startFrame) {
+                func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
+            }
+            break;
 
+        case 2:
+            if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames) && ((csCtx->frames == cmd->startFrame) || !(globalCtx->state.frames & 0x3F))) {
+                func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
+            }
+            break;
+    }
+}
+
+void func_800EAFE0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk9B* cmd) {
+    f32 temp_f0;
+    u16 temp_a0;
+    u16 temp_a1;
+
+    if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
+        globalCtx->envCtx.unk_E5 = 1;
+        temp_a1 = cmd->startFrame;
+        temp_a0 = cmd->endFrame;
+        temp_f0 = func_800F5A8C(temp_a0, temp_a1, csCtx->frames, (GlobalContext* ) cmd);
+
+        if (((cmd->unk0 == 1)) || (cmd->unk0 == 2)) {
+            globalCtx->envCtx.unk_E6[0] = cmd->unk6;
+            globalCtx->envCtx.unk_E6[1] = cmd->unk7;
+            globalCtx->envCtx.unk_E6[2] = cmd->unk8;
+
+            if (cmd->unk0 == 2) {
+                globalCtx->envCtx.unk_E6[3] = (u8) (u32) ((1.0f - temp_f0) * 255.0f);
+            } else {
+                globalCtx->envCtx.unk_E6[3] = (u8) (u32) (255.0f * temp_f0);
+            }
+        }
+    }
+}
+
+#ifdef NON_MATCHING
+void func_800EB1DC(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdDayTime* cmd) {
+    u16 temp_a0;
+
+    if (csCtx->frames == cmd->startFrame) {
+        temp_a0 = ((u32) (((f32) cmd->hour * 60.0f) / 0.021972656f) & 0xFFFF) + (u32) ((f32) (cmd->minute + 1) / 0.021972656f);
+        gSaveContext.time = temp_a0;
+        gSaveContext.environmentTime = temp_a0;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EB1DC.s")
+#endif
 
+#ifdef NON_MATCHING
+// regalloc
+void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    s32 temp_a0;
+
+    csCtx->state = 4;
+    func_80165690();
+    func_801A3F54(0);
+    gSaveContext.unk_3F48 = 1;
+
+    if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
+        gSaveContext.unk_3F1E = 1;
+    }
+
+    gSaveContext.cutscene = 0;
+    if (cmd->base == 1) {
+        globalCtx->nextEntranceIndex = (u16) globalCtx->csCtx.sceneCsList[globalCtx->csCtx.unk_12].unk4;
+        gSaveContext.nextCutsceneIndex = 0;
+        globalCtx->sceneLoadFlag = 0x14;
+        if (gSaveContext.gameMode != 1) {
+            Scene_SetExitFade(globalCtx);
+        } else {
+            D_801BB12C++;
+            if (D_801BB12C >= 2) {
+                D_801BB12C = 0;
+            }
+            globalCtx->unk_1887F = 4;
+        }
+
+        temp_a0 = globalCtx->nextEntranceIndex & 0xF;
+        if (temp_a0 > 0) {
+            gSaveContext.nextCutsceneIndex = temp_a0 + 0xFFEF;
+        }
+
+        globalCtx->nextEntranceIndex &= 0xFFF0;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EB364.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EB4B4.s")
 
