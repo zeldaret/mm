@@ -28,9 +28,7 @@ typedef struct EnTru {
     /* 0x01E8 */ s32 unk_1E8;
     /* 0x01EC */ Vec3f unk_1EC;
     /* 0x01F8 */ Vec3f unk_1F8;
-    /* 0x0204 */ s16 unk_204;
-    /* 0x0206 */ s16 unk_206;
-    /* 0x0208 */ s16 unk_208;
+    /* 0x0204 */ Vec3s unk_204;
     /* 0x020A */ Vec3s jointTable[27];
     /* 0x02AC */ Vec3s morphTable[27];
     /* 0x034E */ u16 unk_34E;

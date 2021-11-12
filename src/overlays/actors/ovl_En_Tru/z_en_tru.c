@@ -1238,14 +1238,14 @@ void func_80A886D4(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
         Matrix_InsertTranslation(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         if (sp2C) {
-            s16 temp_t3 = this->unk_208;
+            s16 oldZ = this->unk_204.z;
 
-            this->unk_208 = this->unk_204;
-            this->unk_204 = temp_t3;
+            this->unk_204.z = this->unk_204.x;
+            this->unk_204.x = oldZ;
         }
-        Matrix_RotateY(this->unk_206, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_204, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_208, MTXMODE_APPLY);
+        Matrix_RotateY(this->unk_204.y, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk_204.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_204.z, MTXMODE_APPLY);
         Matrix_StatePush();
     }
 }
