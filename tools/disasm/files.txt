@@ -485,6 +485,7 @@
             0x8018EB60 : "audio_load",
             0x80192BE0 : "code_80192BE0",
             0x80194710 : "code_80194710",
+            0x80194790 : "code_80194790",
             0x80194930 : "audio_playback",
             0x80196A00 : "audio_effects",
             0x801974D0 : "audio_seqplayer",

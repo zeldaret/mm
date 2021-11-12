@@ -649,6 +649,7 @@ beginseg
     include "build/data/code/audio_load.bss.o"
     include "build/src/code/audio/code_80192BE0.o"
     include "build/src/code/code_80194710.o"
+    include "build/src/code/code_80194790.o"
     include "build/src/code/audio/audio_playback.o"
     include "build/src/code/audio/audio_effects.o"
     include "build/src/code/audio/audio_seqplayer.o"
