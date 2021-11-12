@@ -545,7 +545,6 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 D_801F4D40 = temp_a0;
                 func_801A25E4(temp_a0, phi_a1);
             }
-            /* Duplicate return node #14. Try simplifying control flow for better match */
             return;
         }
     } else {
@@ -661,7 +660,63 @@ void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EB364.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EB4B4.s")
+extern s16 D_801F4DE2;
+
+void func_800EB4B4(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    if (cmd->base == 1) {
+        if (csCtx->frames == cmd->startFrame) {
+            func_800EB364(globalCtx, csCtx, cmd);
+        }
+    } else if (cmd->base == 2) {
+        if (csCtx->frames == cmd->startFrame) {
+            func_80165690();
+
+            switch (D_801F4DE2) {
+                case 0x1F:
+                    if (gSaveContext.weekEventReg[0x14] & 2)  {
+                        globalCtx->nextEntranceIndex = 0x3010;
+                        globalCtx->sceneLoadFlag = 0x14;
+                        globalCtx->unk_1887F = 3;
+                    } else {
+                        globalCtx->nextEntranceIndex = 0x8600;
+                        gSaveContext.nextCutsceneIndex = 0xFFF0;
+                        globalCtx->sceneLoadFlag = 0x14;
+                        globalCtx->unk_1887F = 3;
+                    }
+                    break;
+
+                case 0x44:
+                    if (gSaveContext.weekEventReg[0x21] & 0x80) {
+                        globalCtx->nextEntranceIndex = 0xAE70;
+                        globalCtx->sceneLoadFlag = 0x14;
+                        globalCtx->unk_1887F = 3;
+                    } else {
+                        globalCtx->nextEntranceIndex = 0xAE00;
+                        gSaveContext.nextCutsceneIndex = 0xFFF0;
+                        globalCtx->sceneLoadFlag = 0x14;
+                        globalCtx->unk_1887F = 3;
+                    }
+                    break;
+
+                case 0x5F:
+                    gSaveContext.weekEventReg[0x37] |= 0x80;
+                    globalCtx->nextEntranceIndex = 0x6A80;
+                    gSaveContext.nextCutsceneIndex = 0xFFF0;
+                    globalCtx->sceneLoadFlag = 0x14;
+                    globalCtx->unk_1887F = 3;
+                    break;
+
+                case 0x36:
+                    gSaveContext.weekEventReg[0x34] |= 0x20;
+                    globalCtx->nextEntranceIndex = 0x2000;
+                    gSaveContext.nextCutsceneIndex = 0xFFF1;
+                    globalCtx->sceneLoadFlag = 0x14;
+                    globalCtx->unk_1887F = 3;
+                    break;
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EB6F8.s")
 
