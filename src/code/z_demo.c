@@ -76,15 +76,48 @@ void Cutscene_StepCutscene1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_StepCutscene2.s")
+void Cutscene_StepCutscene2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (globalCtx->sceneLoadFlag == 0x14)) {
+        gSaveContext.cutsceneTrigger = 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_Nop800EA210.s")
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == 0)) {
+        gSaveContext.cutscene = 0xFFFD;
+        gSaveContext.cutsceneTrigger = 1;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EA220.s")
+    if (gSaveContext.cutscene >= 0xFFF0) {
+        func_800EDA84(globalCtx, csCtx);
+        sCsStateHandlers2[csCtx->state](globalCtx, csCtx);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EA258.s")
+void Cutscene_Nop800EA210(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EA2B8.s")
+}
+
+s32 func_800EA220(GlobalContext* globalCtx, CutsceneContext* csCtx, f32 target) {
+    return Math_StepToF(&csCtx->unk_0C, target, 0.1f);
+}
+
+void func_800EA258(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+    Interface_ChangeAlpha(1);
+    ShrinkWindow_SetLetterboxTarget(0x20);
+    if (func_800EA220(globalCtx, csCtx, 1.0f) != 0) {
+        func_801A3F54(1);
+        csCtx->state += 1;
+    }
+}
+
+void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+    func_800ED980(globalCtx, csCtx);
+    Interface_ChangeAlpha(1);
+    ShrinkWindow_SetLetterboxTarget(0x20);
+    if (func_800EA220(globalCtx, csCtx, 1.0f) != 0) {
+        func_801A3F54(1);
+        csCtx->state += 1;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EA324.s")
 
