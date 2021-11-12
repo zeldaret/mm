@@ -833,9 +833,35 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EBB68.s")
+void func_800EBB68(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
+        if ((csCtx->frames == cmd->startFrame) && (cmd->base == 1)) {
+            func_8016566C(0xB4);
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EBCD0.s")
+        if (cmd->base == 2) {
+            f32  temp_f0 = func_800F5A8C(cmd->endFrame, cmd->startFrame, csCtx->frames, cmd);
+
+            if (temp_f0 >= 0.9f) {
+                func_80165690();
+            } else {
+                func_80165658((u32) ((1.0f - temp_f0) * 180.0f));
+            }
+        }
+    }
+}
+
+void func_800EBCD0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if ((csCtx->frames == cmd->startFrame) && (cmd->base == 1)) {
+        gSaveContext.hasTatl = true;
+        if (player->tatlActor != NULL) {
+            return;
+        }
+        player->tatlActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, player->actor.world.pos.x, player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EBD60.s")
 
