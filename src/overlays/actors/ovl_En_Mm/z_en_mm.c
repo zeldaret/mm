@@ -64,7 +64,7 @@ void EnMm_SetupAction(EnMm* this, EnMmActionFunc actionFunc) {
 void func_80965BBC(EnMm* this) {
     EnMm_SetupAction(this, func_8096611C);
     this->actor.room = -1;
-    if (this->actor.parent->id == 0) {
+    if (this->actor.parent->id == ACTOR_PLAYER) {
         gSaveContext.unk_1014 = 1;
     }
 }
@@ -107,7 +107,7 @@ void func_80665D3C(EnMm* this, GlobalContext* globalCtx) {
         ActorCutscene_StartAndSetUnkLinkFields(cutscene, &this->actor);
         EnMm_SetupAction(this, func_80965DB4);
     } else {
-	    ActorCutscene_SetIntentToPlay(cutscene);
+        ActorCutscene_SetIntentToPlay(cutscene);
     }
 }
 
@@ -145,7 +145,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
             func_800B75A0(this->actor.floorPoly, &sp50, &unused);
             temp_f14 += 3.0f * sp50.x;
             temp_f12 += 3.0f * sp50.z;
-            temp_f2 = sqrtf((temp_f14 * temp_f14) + (temp_f12 * temp_f12));
+            temp_f2 = sqrtf(SQ(temp_f14) + SQ(temp_f12));
 
             if ((temp_f2 < this->actor.speedXZ) ||
                 (func_800C9C74(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
@@ -170,7 +170,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
 
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_HUMAN_BOUND);
             } else {
-                func_800B8A1C(&this->actor, globalCtx, 0, 50.0f, 30.0f);
+                func_800B8A1C(&this->actor, globalCtx, GI_NONE, 50.0f, 30.0f);
             }
         }
 
@@ -211,9 +211,9 @@ void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_190 != 0) {
         s16 rotY = this->actor.world.rot.y - this->actor.shape.rot.y;
 
-        Matrix_RotateY(rotY, 1);
-        Matrix_InsertXRotation_s(this->unk_190, 1);
-        Matrix_RotateY(-rotY, 1);
+        Matrix_RotateY(rotY, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk_190, MTXMODE_APPLY);
+        Matrix_RotateY(-rotY, MTXMODE_APPLY);
     }
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, &D_04055628);
