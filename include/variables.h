@@ -1823,7 +1823,7 @@ extern UNK_PTR D_801D8B24;
 // extern UNK_TYPE1 D_801D8BE0;
 // extern u8 D_801D8E3C;
 // extern UNK_TYPE4 D_801D8E40;
-// extern u16 D_801D8E44;
+// extern u16 sTopScoreWordId;
 // extern UNK_TYPE1 D_801D8E48;
 // extern UNK_TYPE1 D_801D8E50;
 // extern UNK_TYPE1 D_801D8F70;

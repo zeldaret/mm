@@ -5,8 +5,8 @@ s32 func_801A5228(OSVoiceDictionary* dict);
 void func_801A53E8(u16 distance, u16 answerNum, u16 warning, u16 voiceLevel, u16 voiceRelLevel);
 s32 func_801A5808(void);
 OSVoiceData* func_801A5390(void);
-s32 func_801A5680(u16 arg0);
-s32 func_801A54D0(u16 arg0);
+s32 func_801A5680(u16 wordId);
+s32 func_801A54D0(u16 wordId);
 u8* func_801A54C4(void);
 
 extern OSVoiceHandle sVoiceHandle;
@@ -32,12 +32,12 @@ OSVoiceDictionary D_801D8BE0 = {
         { 0x83, 0x6E, 0x83, 0x43, 0x83, 0x84, 0x81, 0x5B },
     },
 
-    6, // number of words
+    VOICE_WORD_ID_MAX, // number of words
 };
 
 u8 D_801D8E3C = 0;
 OSVoiceData* D_801D8E40 = NULL;
-u16 D_801D8E44 = 0xFFFF;
+u16 sTopScoreWordId = VOICE_WORD_ID_NONE;
 u8 D_801D8E48 = 0;
 
 void func_801A4EB0(void) {
@@ -63,7 +63,7 @@ void func_801A4EB8(void) {
     }
 
     if (func_801A5228(&D_801D8BE0) == 0) {
-        for (i = 0; i < 6; i++) {
+        for (i = 0; i < VOICE_WORD_ID_MAX; i++) {
             index = i / 8;
             if (((sp38[index] >> (i % 8)) & 1) == 1) {
                 func_801A54D0(i);
@@ -80,14 +80,14 @@ void func_801A4FD8(void) {
     s32 errorCode;
     OSMesgQueue* msgQ;
 
-    func_801A54D0(0xFFFF);
+    func_801A54D0(VOICE_WORD_ID_NONE);
     if (D_801D8E3C != 0) {
         msgQ = PadMgr_LockSerialMesgQueue();
         osVoiceStopReadData(&sVoiceHandle);
         PadMgr_UnlockSerialMesgQueue(msgQ);
 
         errorCode = func_801A5228(&D_801D8BE0);
-        func_801A54D0(0xFFFF);
+        func_801A54D0(VOICE_WORD_ID_NONE);
         if (errorCode == 0) {
             func_801A53E8(800, 2, VOICE_WARN_TOO_SMALL, 500, 2000);
             D_801D8E3C = 1;
@@ -98,22 +98,22 @@ void func_801A4FD8(void) {
     }
 }
 
-void func_801A5080(u16 arg0) {
-    if ((D_801D8E3C != 0) && (arg0 < 6)) {
-        func_801A5680(arg0);
+void func_801A5080(u16 wordId) {
+    if ((D_801D8E3C != 0) && (wordId < VOICE_WORD_ID_MAX)) {
+        func_801A5680(wordId);
     }
 }
 
 // Unused
-void func_801A50C0(u16 arg0) {
-    if ((D_801D8E3C != 0) && (arg0 < 6)) {
-        func_801A54D0(arg0);
+void func_801A50C0(u16 wordId) {
+    if ((D_801D8E3C != 0) && (wordId < VOICE_WORD_ID_MAX)) {
+        func_801A54D0(wordId);
     }
 }
 
 // Used externally in many files
 u16 func_801A5100(void) {
-    return D_801D8E44;
+    return sTopScoreWordId;
 }
 
 // Unused
@@ -133,7 +133,7 @@ void func_801A5118(void) {
             D_801D8E48++;
             if (D_801D8E48 == 10) {
                 D_801D8E3C = 0;
-                D_801D8E44 = 0xFFFF;
+                sTopScoreWordId = VOICE_WORD_ID_NONE;
                 return;
             }
         } else {
@@ -142,9 +142,9 @@ void func_801A5118(void) {
 
         D_801D8E40 = func_801A5390();
         if (D_801D8E40 != 0) {
-            D_801D8E44 = D_801D8E40->answer[0];
+            sTopScoreWordId = D_801D8E40->answer[0];
         } else {
-            D_801D8E44 = 0xFFFF;
+            sTopScoreWordId = VOICE_WORD_ID_NONE;
         }
     }
 }

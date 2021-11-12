@@ -157,7 +157,7 @@ u8* func_801A54C4(void) {
     return sVoiceMaskPattern;
 }
 
-s32 func_801A54D0(u16 arg0) {
+s32 func_801A54D0(u16 wordId) {
     s32 errorCode;
     u8 phi_t0 = true;
     u8 numWords;
@@ -171,15 +171,15 @@ s32 func_801A54D0(u16 arg0) {
         phi_t0 = false;
     }
 
-    if (arg0 == 0xFFFF) {
+    if (wordId == VOICE_WORD_ID_NONE) {
         for (i = 0; i < numWords; i++) {
             sVoiceMaskPattern[i / 8] |= 1 << (i % 8);
         }
     } else {
-        if (sVoiceMaskPattern[arg0 / 8] & (1 << (arg0 % 8))) {
+        if (sVoiceMaskPattern[wordId / 8] & (1 << (wordId % 8))) {
             phi_t0 = false;
         } else {
-            sVoiceMaskPattern[arg0 / 8] |= (1 << (arg0 % 8));
+            sVoiceMaskPattern[wordId / 8] |= (1 << (wordId % 8));
         }
     }
 
@@ -200,7 +200,7 @@ s32 func_801A54D0(u16 arg0) {
     return errorCode;
 }
 
-s32 func_801A5680(u16 arg0) {
+s32 func_801A5680(u16 wordId) {
     s32 errorCode;
     u8 phi_a3 = true;
     u8 numWords;
@@ -214,15 +214,15 @@ s32 func_801A5680(u16 arg0) {
         phi_a3 = false;
     }
 
-    if (arg0 == 0xFFFF) {
+    if (wordId == VOICE_WORD_ID_NONE) {
         for (i = 0; i < (((numWords - 1) / 8) + 1); i++) {
             sVoiceMaskPattern[i] = 0;
         }
     } else {
-        if (!(sVoiceMaskPattern[arg0 / 8] & (1 << (arg0 % 8)))) {
+        if (!(sVoiceMaskPattern[wordId / 8] & (1 << (wordId % 8)))) {
             phi_a3 = false;
         } else {
-            sVoiceMaskPattern[arg0 / 8] &= (1 << (arg0 % 8)) ^ 0xFF;
+            sVoiceMaskPattern[wordId / 8] &= (1 << (wordId % 8)) ^ 0xFF;
         }
     }
 
