@@ -2213,7 +2213,7 @@
     0x80123E90:("func_80123E90",),
     0x80123F14:("func_80123F14",),
     0x80123F2C:("func_80123F2C",),
-    0x80123F48:("func_80123F48",),
+    0x80123F48:("Player_IsBurningStickInRange",),
     0x80124020:("func_80124020",),
     0x8012403C:("Player_GetMask",),
     0x8012404C:("Player_RemoveMask",),

@@ -34,6 +34,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012301C.s")
 
+// OoT's Player_SetBootData?
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123140.s")
 
 s32 Player_InBlockingCsMode(GameState* gameState, Player* player) {
@@ -92,7 +93,7 @@ s32 Player_InCsMode(GameState* gameState) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123F2C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123F48.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_IsBurningStickInRange.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124020.s")
 
@@ -126,8 +127,10 @@ void Player_RemoveMask(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801241B4.s")
 
+// Player_ActionToBottle
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801241E0.s")
 
+// Player_GetBottleHeld
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012420C.s")
 
 s32 Player_ActionToExplosive(Player* player, s32 actionParam) {
@@ -193,8 +196,11 @@ s32 Player_GetExplosiveHeld(Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012669C.s")
 
+// Player_DrawGetItemImpl
+void func_80126808(GlobalContext* globalCtx, Player* player, Vec3f* refPos, s32 drawIdPlusOne);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126808.s")
 
+// Player_DrawGetItem
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012697C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126AB4.s")
