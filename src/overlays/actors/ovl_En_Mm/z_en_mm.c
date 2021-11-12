@@ -15,7 +15,7 @@ void EnMm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80665D3C(EnMm* this, GlobalContext* globalCtx);
+void func_80965D3C(EnMm* this, GlobalContext* globalCtx);
 void func_80965DB4(EnMm* this, GlobalContext* globalCtx);
 void func_8096611C(EnMm* this, GlobalContext* globalCtx);
 void EnMm_SetupAction(EnMm* this, EnMmActionFunc actionFunc);
@@ -87,7 +87,7 @@ void EnMm_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     if (this->actor.cutscene >= 0) {
-        action = func_80665D3C;
+        action = func_80965D3C;
     } else {
         action = func_80965DB4;
     }
@@ -100,7 +100,7 @@ void EnMm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80665D3C(EnMm* this, GlobalContext* globalCtx) {
+void func_80965D3C(EnMm* this, GlobalContext* globalCtx) {
     s16 cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
 
     if (ActorCutscene_GetCanPlayNext(cutscene)) {
@@ -155,7 +155,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
 
             if (!Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f)) {
                 direction = this->actor.world.rot.y;
-                if (ABS_ALT((s16)(this->actor.world.rot.y - this->actor.shape.rot.y)) > 0x4000) {
+                if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->actor.shape.rot.y)) > 0x4000) {
                     direction = BINANG_ROT180(direction);
                 }
                 Math_ScaledStepToS(&this->actor.shape.rot.y, direction, this->actor.speedXZ * 100.0f);
