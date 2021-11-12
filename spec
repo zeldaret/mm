@@ -640,12 +640,11 @@ beginseg
     pad_text
     pad_text
     pad_text
+    include "build/data/code/audio_data.data.o"
     include "build/src/code/audio/audio_synthesis.o"
+    include "build/data/code/audio_synthesis.data.o"
     include "build/src/code/audio/audio_heap.o"
-    include "build/data/code/code_801D2E80.data.o"
     include "build/data/code/audio_heap.bss.o"
-    include "build/data/code/code_801D3D90.data.o"
-    include "build/data/code/code_801D55B0.data.o"
     include "build/src/code/audio/audio_load.o"
     include "build/data/code/audio_load.data.o"
     include "build/data/code/audio_load.bss.o"

@@ -577,9 +577,8 @@
             0x801D15D0 : "sys_math_atan",
             0x801D1DE0 : "sys_matrix",
             0x801D1E70 : "",
-            0x801D2E80 : "", # audio_heap?
-            0x801D3D90 : "",
-            0x801D55B0 : "",
+            0x801D2E80 : "audio_data",
+            0x801D5FB0 : "audio_synthesis",
             0x801D5FE0 : "audio_load",
             0x801D5FF0 : "code_80192BE0",
             0x801D6010 : "code_80194790",
