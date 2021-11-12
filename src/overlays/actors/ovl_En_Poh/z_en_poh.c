@@ -893,7 +893,8 @@ void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
     if (limbIndex == 18) {
         if ((this->actionFunc == func_80B2D300) && (this->unk_18E >= 19) && (this->actor.scale.x != 0.0f)) {
-            Matrix_Scale(0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, MTXMODE_APPLY);
+            Matrix_Scale(0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x,
+                         MTXMODE_APPLY);
         }
         Matrix_CopyCurrentState(&this->unk_3D8);
         func_80B2C910(&sp60, globalCtx);
