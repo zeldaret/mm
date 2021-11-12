@@ -9,17 +9,7 @@ OSVoiceHandle sVoiceHandle;
 OSVoiceData D_801FD5C8; // Intermediate Voice Data during processsing?
 OSVoiceData D_801FD5E8; // Best Match Voice Data?
 u8 sVoiceMaskPattern[8];
-
-// Maybe all the same?
-// u8 D_801FD610[0x11B0];
-char D_801FD610[0x100];
-u8 D_801FD710[0x1B0];
-u8 D_801FD8C0[0x240];
-u8 D_801FDB00[0x600];
-u8 D_801FE100[0x3C0];
-u8 D_801FE4C0[0x180];
-u8 D_801FE640[0x90];
-u8 D_801FE6D0[0xF0];
+char D_801FD610[256];
 
 // Data
 s8 D_801D8E50[96][3] = {
