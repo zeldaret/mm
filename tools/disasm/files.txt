@@ -497,6 +497,7 @@
             0x801A5BC0 : "[PADDING]",
             0x801A5BD0 : "code_801A5BD0",
             0x801A7B10 : "code_801A7B10",
+            0x801A9B10 : "jpegutils",
             0x801AA020 : "code_801AA020",
             0x801AA610 : "z_game_over",
             0x801AAAA0 : "z_construct",
