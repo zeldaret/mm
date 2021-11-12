@@ -718,7 +718,120 @@ void func_800EB4B4(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EB6F8.s")
+void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(0, 1) != 0xFF)) {
+        switch (cmd->base) {
+            case 0x1:
+                func_800EB364(globalCtx, csCtx, cmd);
+                break;
+
+            case 0x2:
+                if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
+                    globalCtx->nextEntranceIndex = 0x2400;
+                    gSaveContext.nextCutsceneIndex = 0xFFF0;
+                } else {
+                    globalCtx->nextEntranceIndex = 0x1C00;
+                    gSaveContext.nextCutsceneIndex = 0xFFF9;
+                }
+                globalCtx->sceneLoadFlag = 0x14;
+                break;
+
+            case 0x3:
+                if (INV_CONTENT(ITEM_MASK_GREAT_FAIRY) == ITEM_MASK_GREAT_FAIRY) {
+                    globalCtx->nextEntranceIndex = 0x4600;
+                    gSaveContext.nextCutsceneIndex = 0xFFF0;
+                } else {
+                    globalCtx->nextEntranceIndex = 0x1C10;
+                    gSaveContext.nextCutsceneIndex = 0xFFF9;
+                }
+                globalCtx->sceneLoadFlag = 0x14;
+                break;
+
+            case 0x4:
+                if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) {
+                    globalCtx->nextEntranceIndex = 0x6400;
+                    gSaveContext.nextCutsceneIndex = 0xFFF1;
+                } else {
+                    globalCtx->nextEntranceIndex = 0x1C20;
+                    gSaveContext.nextCutsceneIndex = 0xFFF9;
+                }
+                globalCtx->sceneLoadFlag = 0x14;
+                break;
+
+            case 0x5:
+                if (INV_CONTENT(ITEM_MASK_BLAST) == ITEM_MASK_BLAST) {
+                    globalCtx->nextEntranceIndex = 0xD400;
+                    gSaveContext.nextCutsceneIndex = 0xFFF0;
+                } else {
+                    globalCtx->nextEntranceIndex = 0x1C30;
+                    gSaveContext.nextCutsceneIndex = 0xFFF9;
+                }
+                globalCtx->sceneLoadFlag = 0x14;
+                break;
+
+            case 0x6:
+                if (INV_CONTENT(ITEM_MASK_CIRCUS_LEADER) == ITEM_MASK_CIRCUS_LEADER) {
+                    globalCtx->nextEntranceIndex = 0x2400;
+                    gSaveContext.nextCutsceneIndex = 0xFFF1;
+                } else {
+                    globalCtx->nextEntranceIndex = 0x1C50;
+                    gSaveContext.nextCutsceneIndex = 0xFFF9;
+                }
+                globalCtx->sceneLoadFlag = 0x14;
+                break;
+
+            case 0x7:
+                if (INV_CONTENT(ITEM_MASK_BREMEN) == ITEM_MASK_BREMEN) {
+                    globalCtx->nextEntranceIndex = 0x2400;
+                    gSaveContext.nextCutsceneIndex = 0xFFF3;
+                } else {
+                    globalCtx->nextEntranceIndex = 0x1C60;
+                    gSaveContext.nextCutsceneIndex = 0xFFF9;
+                }
+                globalCtx->sceneLoadFlag = 0x14;
+                break;
+
+            case 0x8:
+                globalCtx->nextEntranceIndex = 0x2000;
+                gSaveContext.nextCutsceneIndex = 0xFFF3;
+                globalCtx->sceneLoadFlag = 0x14;
+                break;
+
+            case 0x9:
+                if (INV_CONTENT(ITEM_MASK_COUPLE) == ITEM_MASK_COUPLE) {
+                    globalCtx->nextEntranceIndex = 0x5400;
+                    gSaveContext.nextCutsceneIndex = 0xFFF8;
+                } else {
+                    globalCtx->nextEntranceIndex = 0x1C70;
+                    gSaveContext.nextCutsceneIndex = 0xFFF9;
+                }
+                globalCtx->sceneLoadFlag = 0x14;
+                break;
+
+            case 0xA:
+                if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
+                    globalCtx->nextEntranceIndex = 0x7E00;
+                    gSaveContext.nextCutsceneIndex = 0xFFF0;
+                } else {
+                    globalCtx->nextEntranceIndex = 0x1C40;
+                    gSaveContext.nextCutsceneIndex = 0xFFF9;
+                }
+                globalCtx->sceneLoadFlag = 0x14;
+                break;
+
+            case 0xB:
+                if (INV_CONTENT(ITEM_MASK_POSTMAN) == ITEM_MASK_POSTMAN) {
+                    globalCtx->nextEntranceIndex = 0x5410;
+                    gSaveContext.nextCutsceneIndex = 0xFFF8;
+                } else {
+                    globalCtx->nextEntranceIndex = 0x1C80;
+                    gSaveContext.nextCutsceneIndex = 0xFFF9;
+                }
+                globalCtx->sceneLoadFlag = 0x14;
+                break;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EBB68.s")
 
