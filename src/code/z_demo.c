@@ -605,19 +605,20 @@ void func_800EAFE0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk9B*
     }
 }
 
-#ifdef NON_MATCHING
 void func_800EB1DC(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdDayTime* cmd) {
-    u16 temp_a0;
+    u16 nextTime;
+    u16 hourAsMinutes;
+    u16 minutes;
 
     if (csCtx->frames == cmd->startFrame) {
-        temp_a0 = ((u32) (((f32) cmd->hour * 60.0f) / 0.021972656f) & 0xFFFF) + (u32) ((f32) (cmd->minute + 1) / 0.021972656f);
-        gSaveContext.time = temp_a0;
-        gSaveContext.environmentTime = temp_a0;
+        hourAsMinutes = (cmd->hour * 60.0f) / (60.0f * 24 / 0x10000);
+        minutes = ((cmd->minute + 1) / (60.0f * 24 / 0x10000));
+
+        nextTime = hourAsMinutes + minutes;
+        gSaveContext.time = nextTime;
+        gSaveContext.environmentTime = nextTime;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EB1DC.s")
-#endif
 
 #ifdef NON_MATCHING
 // regalloc
