@@ -312,7 +312,54 @@ void func_80A6CA9C(EnFall* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CB74.s")
+void func_80A6CB74(EnFall* this, GlobalContext* globalCtx) {
+    if (func_800EE29C(globalCtx, 0x85)) {
+        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0) {
+            case 2:
+                func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x85));
+                break;
+            case 4:
+                this->actor.draw = NULL;
+                break;
+        }
+    }
+    if (globalCtx->sceneNum == SCENE_OKUJOU && gSaveContext.sceneSetupIndex == 2) {
+        switch (globalCtx->csCtx.unk_12) {
+            case 0:
+                switch (globalCtx->csCtx.frames) {
+                    case 0x424:
+                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_MOON_SCREAM1);
+                        break;
+                    case 0x441:
+                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_CRY);
+                        break;
+                    case 0x517:
+                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SLIP_MOON);
+                        break;
+                }
+                if (globalCtx->csCtx.frames >= 0x479) {
+                    func_800B9010(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
+                }
+                break;
+            case 1:
+                switch (globalCtx->csCtx.frames) {
+                    case 0x231:
+                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_MOON_SCREAM1);
+                        break;
+                    case 0x24E:
+                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_CRY);
+                        break;
+                    case 0x2E1:
+                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SLIP_MOON);
+                        break;
+                }
+                if (globalCtx->csCtx.frames >= 0x28A) {
+                    func_800B9010(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
+                }
+                break;
+        }
+    }
+}
 
 void func_80A6CD38(EnFall* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0 && globalCtx->sceneNum == SCENE_OKUJOU) {
