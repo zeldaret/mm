@@ -1,7 +1,7 @@
 /*
  * File: z_obj_blockstop.c
  * Overlay: ovl_Obj_Blockstop
- * Description:
+ * Description: Signals that a block has fallen in a hole and can't be moved
  */
 
 #include "z_obj_blockstop.h"
