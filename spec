@@ -5142,8 +5142,7 @@ beginseg
     name "ovl_En_Bomjimb"
     compress
     include "build/src/overlays/actors/ovl_En_Bomjimb/z_en_bomjimb.o"
-    include "build/data/ovl_En_Bomjimb/ovl_En_Bomjimb.data.o"
-    include "build/data/ovl_En_Bomjimb/ovl_En_Bomjimb.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bomjimb/ovl_En_Bomjimb_reloc.o"
 endseg
 
 beginseg

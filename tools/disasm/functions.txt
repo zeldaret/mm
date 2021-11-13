@@ -16515,7 +16515,7 @@
     0x80C02CA4:("func_80C02CA4",),
     0x80C02DAC:("func_80C02DAC",),
     0x80C02DC4:("EnBomjimb_Update",),
-    0x80C02FA8:("func_80C02FA8",),
+    0x80C02FA8:("EnBomjimb_OverrideLimbDraw",),
     0x80C03034:("EnBomjimb_Draw",),
     0x80C03530:("EnBombers_Init",),
     0x80C037F8:("EnBombers_Destroy",),
