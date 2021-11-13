@@ -1005,7 +1005,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                     }
 
                     if (spB0->unk_0144 >= 10) {
-                        Audio_QueueSeqCmd(NA_BGM_BOSS_CLEAR | 0x8000);
+                        Audio_QueueSeqCmd(NA_BGM_CLEAR_BOSS | 0x8000);
                     }
 
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);

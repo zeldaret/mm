@@ -464,7 +464,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
                 gSaveContext.inventory.strayFairies[gSaveContext.unk_48C8]++;
                 func_801518B0(globalCtx, 0x11, NULL);
                 if (gSaveContext.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
-                    func_801A3098(NA_BGM_ITEM_GET | 0x900);
+                    func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 }
             }
         }
