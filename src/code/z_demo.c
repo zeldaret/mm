@@ -1045,7 +1045,139 @@ s32 func_800EC6D4(void) {
     return count;
 }
 
+extern UNK_TYPE D_801BB160;
+extern u16 D_801BB124;
+extern u16 D_801BB128;
+
+#ifdef MIPS2C_OUTPUT
+void func_800EC924(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
+    u8 sp27;
+    u16 sp1E;
+    s32 temp_v1_2;
+    u16 temp_a0;
+    u16 temp_a1;
+    u16 temp_a1_3;
+    u16 temp_a1_4;
+    u16 temp_v0_2;
+
+    if ((cmd->startFrame < csCtx->frames) && (((cmd->endFrame < csCtx->frames) == 0))) {
+        if (cmd->type != 2) {
+            if (cmd->base != D_801BB124) {
+                if (D_801BB160 == 3) {
+                    csCtx->frames = csCtx->frames - 1;
+                }
+                D_801BB160 = 1;
+                D_801BB124 = cmd->base;
+                if (cmd->type == 4) {
+                    if (CHECK_QUEST_ITEM(0) && CHECK_QUEST_ITEM(1) && CHECK_QUEST_ITEM(2) && CHECK_QUEST_ITEM(3)) {
+                        temp_a1 = cmd->textId1;
+                        if (temp_a1 != 0xFFFF) {
+                            func_801518B0(globalCtx, temp_a1, NULL);
+                        }
+                    } else {
+                        func_801518B0(globalCtx, cmd->base, NULL);
+                    }
+                } else if (cmd->type == 5) {
+                    if (func_800EC6D4() == 0x14) {
+                        if (cmd->textId1 != 0xFFFF) {
+                            func_801518B0(globalCtx, cmd->textId1, NULL);
+                        }
+                    } else {
+                        func_801518B0(globalCtx, cmd->base, NULL);
+                    }
+                } else {
+                    func_801518B0(globalCtx, cmd->base, NULL);
+                }
+                return;
+            }
+        } else if (cmd->base != D_801BB128) {
+            D_801BB160 = 2;
+            D_801BB128 = cmd->base;
+            func_80152434(globalCtx, cmd->base);
+            return;
+        }
+
+        if ((s32) csCtx->frames >= (s32) cmd->endFrame) {
+            sp1E = csCtx->frames;
+            sp27 = func_80152498(&globalCtx->msgCtx);
+            if (sp27 != 2) {
+                temp_v1_2 = sp27 & 0xFF;
+                if ((temp_v1_2 != 0) && (temp_v1_2 != 7) && (temp_v1_2 != 8)) {
+                    csCtx->frames += -1;
+                    if (temp_v1_2 == 4) {
+                        cmd = cmd;
+                        if (func_80147624(globalCtx) != 0) {
+                            if (globalCtx->msgCtx.choiceIndex == 0) {
+                                if (cmd->base == 0x33BD) {
+                                    cmd = cmd;
+                                    func_8019F230();
+                                }
+                                temp_a1_3 = cmd->textId1;
+                                if (temp_a1_3 != 0xFFFF) {
+                                    cmd = cmd;
+                                    func_80151938(globalCtx, temp_a1_3);
+                                    if (cmd->type == 3) {
+                                        D_801BB160 = 3;
+                                        if (cmd->textId2 != 0xFFFF) {
+                                            csCtx->frames += 1;
+                                        }
+                                    }
+                                } else {
+                                    cmd = cmd;
+                                    func_801477B4(globalCtx);
+                                    csCtx->frames += 1;
+                                }
+                            } else {
+                                if (cmd->base == 0x33BD) {
+                                    cmd = cmd;
+                                    func_8019F208();
+                                }
+                                temp_a1_4 = cmd->textId2;
+                                if (temp_a1_4 != 0xFFFF) {
+                                    cmd = cmd;
+                                    func_80151938(globalCtx, temp_a1_4);
+                                    if (cmd->type == 3) {
+                                        D_801BB160 = 3;
+                                        if (cmd->textId1 != 0xFFFF) {
+                                            csCtx->frames += 1;
+                                        }
+                                    }
+                                } else {
+                                    cmd = cmd;
+                                    func_801477B4(globalCtx);
+                                    csCtx->frames += 1;
+                                }
+                            }
+                        }
+                    }
+                    if (sp27 == 5) {
+                        if (func_80147624(globalCtx) != 0) {
+                            func_80152434(globalCtx, cmd->base);
+                        }
+                    }
+                }
+            }
+            if ((sp27 == 2) && (D_801BB160 == 3)) {
+                csCtx->frames += -1;
+                D_801BB124 = D_801BB124 + 1;
+            }
+            if (csCtx->frames == sp1E) {
+                Interface_ChangeAlpha(1U);
+                D_801BB124 = 0;
+                D_801BB128 = 0;
+                func_80161C0C();
+                return;
+            }
+            func_80161BE0(1);
+            /* Duplicate return node #53. Try simplifying control flow for better match */
+            return;
+        }
+        /* Duplicate return node #53. Try simplifying control flow for better match */
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EC924.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800ECD7C.s")
 
