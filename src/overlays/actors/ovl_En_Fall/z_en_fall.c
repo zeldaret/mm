@@ -113,6 +113,7 @@ void func_80A6BF90(EnFall* this, GlobalContext* globalCtx) {
     }
 }
 
+// bss function
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C1DC.s")
 
 void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -441,17 +442,74 @@ void EnFall_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
+void func_80A6D100(f32 arg0);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D100.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D220.s")
+void func_80A6D220(Actor* thisx, GlobalContext* globalCtx) {
+    EnFall* this = THIS;
 
+    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 2) {
+        globalCtx->skyboxCtx.rotY -= 0.05f;
+    }
+
+    if (func_800EE29C(globalCtx, 0x1C2)) {
+        this->actor.draw = func_80A6DD3C;
+        if (this->unk_154 & 1) {
+            this->unk_150 += 0.01f;
+            if (this->unk_150 > 1.0f) {
+                this->unk_150 = 1.0f;
+            }
+        }
+        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x1C2));
+
+        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C2)]->unk0) {
+            default:
+                this->actor.draw = NULL;
+                this->unk_158 = 0;
+                break;
+            case 2:
+                if (this->unk_158 < 0x64) {
+                    this->unk_158 += 4;
+                }
+                if (this->unk_158 >= 0x65) {
+                    this->unk_158 = 0x64;
+                }
+                func_80A6D100(this->unk_158 * 0.01f);
+                break;
+            case 3:
+                if (this->unk_158 > 0) {
+                    this->unk_158 -= 2;
+                }
+                if (this->unk_158 < 0) {
+                    this->unk_158 = 0;
+                }
+                func_80A6D100(this->unk_158 * 0.01f);
+                break;
+            case 4:
+                this->unk_154 |= 1;
+                break;
+            case 5:
+                break;
+        }
+    } else {
+        this->actor.draw = NULL;
+    }
+    
+    if (func_800EE29C(globalCtx, 0x1C2) && this->unk_158 > 0) {
+        func_8019F128(0x214F);
+    }
+    Actor_SetScale(&this->actor, this->unk_14C * 1.74f);
+}
+
+// bss function
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D444.s")
 
+// bss function
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D504.s")
 
 void func_80A6D698(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
-    
+
     if (func_800EE29C(globalCtx, 0x1C3)) {
         if (func_800EE29C(globalCtx, 0x1C3) &&
             globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C3)]->unk0 == 2) {

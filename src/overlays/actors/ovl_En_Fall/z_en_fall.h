@@ -18,7 +18,7 @@ typedef struct EnFall {
     /* 0x149 */ char unk_149[0x3];
     /* 0x14C */ f32 unk_14C;
     /* 0x150 */ f32 unk_150;
-    /* 0x154 */ s16 unk_154;
+    /* 0x154 */ u16 unk_154;
     /* 0x156 */ char unk_156[0x2];
     /* 0x158 */ s32 unk_158;
     /* 0x15C */ char unk_15C[0x4];
