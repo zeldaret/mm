@@ -32,6 +32,7 @@ void func_80A6DC40(Actor* thisx, GlobalContext* globalCtx);
 void func_80A6D75C(Actor* thisx, GlobalContext* globalCtx);
 void func_80A6E214(Actor* thisx, GlobalContext* globalCtx);
 void func_80A6D98C(Actor* thisx, GlobalContext* globalCtx);
+void func_80A6E37C(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,
@@ -394,7 +395,19 @@ void func_80A6CD74(EnFall* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CECC.s")
+void func_80A6CECC(EnFall* this) {
+    s32 pad[2];
+
+    this->actor.draw = func_80A6E37C;
+    if (this->actor.child != NULL) {
+        Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.child->focus.pos);
+    }
+    this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos);
+    this->actor.world.rot.x = Math_Vec3f_Pitch(&this->actor.world.pos, &this->actor.home.pos);
+    this->actor.speedXZ = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.home.pos) / 82.0f;
+    this->actor.shape.rot.x = this->actor.world.rot.x;
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+}
 
 void func_80A6CF60(EnFall* this, GlobalContext* globalCtx) {
 }
