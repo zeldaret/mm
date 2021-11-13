@@ -367,7 +367,32 @@ void func_80A6CD38(EnFall* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CD74.s")
+void func_80A6CD74(EnFall* this, GlobalContext* globalCtx) {
+    u16 currentDay;
+
+    if (func_800EE29C(globalCtx, 0x85)) {
+        if (func_800EE29C(globalCtx, 0x85) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0 == 1) {
+            this->actor.draw = NULL;
+        } else {
+            Actor_SetScale(&this->actor, this->unk_14C * 3.6f);
+            this->actor.draw = func_80A6D88C;
+            if (func_800EE29C(globalCtx, 0x85) &&
+                globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0 == 2) {
+                func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x85));
+            }
+        }
+    } else {
+        if (this->actor.draw == NULL) {
+            this->actor.draw = func_80A6D88C;
+        }
+        currentDay = CURRENT_DAY;
+        if ((u16)this->unk_146 != (u32)currentDay) {
+            this->unk_146 = currentDay;
+            this->unk_144 = gSaveContext.time;
+        }
+        func_80A6BF90(this, globalCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CECC.s")
 
