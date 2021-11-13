@@ -449,7 +449,22 @@ void EnFall_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D504.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D698.s")
+void func_80A6D698(Actor* thisx, GlobalContext* globalCtx) {
+    EnFall* this = THIS;
+    
+    if (func_800EE29C(globalCtx, 0x1C3)) {
+        if (func_800EE29C(globalCtx, 0x1C3) &&
+            globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C3)]->unk0 == 2) {
+            func_80A6D444(this);
+            func_80A6D504(this);
+        } else if (this->unk_158 != 0) {
+            func_80A6C1DC(this);
+        }
+    } else if (thisx->home.rot.x != 0) {
+        func_80A6D444(this);
+        func_80A6D504(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D75C.s")
 
