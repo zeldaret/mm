@@ -399,7 +399,29 @@ void func_80A6CD74(EnFall* this, GlobalContext* globalCtx) {
 void func_80A6CF60(EnFall* this, GlobalContext* globalCtx) {
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6CF70.s")
+void func_80A6CF70(EnFall* this, GlobalContext* globalCtx) {
+    s32 pad;
+
+    if (func_800EE29C(globalCtx, 0x205) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x205)]->unk0 == 2 &&
+        this->actor.draw == NULL) {
+        func_80A6CECC(this);
+    }
+    if (this->actor.draw != NULL) {
+        if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, this->actor.speedXZ) <= 0.0f) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_GORON_BOUND_1);
+            gSaveContext.weekEventReg[0x4A] |= 0x80;
+            gSaveContext.weekEventReg[0x4A] |= 0x20;
+            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TEST, this->actor.world.pos.x,
+                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, -2);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
+                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
+            this->actor.draw = NULL;
+            this->actionFunc = func_80A6CF60;
+        } else {
+            func_800B9010(&this->actor, NA_SE_EV_MOONSTONE_FALL - SFX_FLAG);
+        }
+    }
+}
 
 void EnFall_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
