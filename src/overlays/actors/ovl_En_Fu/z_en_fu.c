@@ -804,7 +804,7 @@ void func_80962F4C(EnFu* this, GlobalContext* globalCtx) {
             func_801A2C20();
             gSaveContext.unk_3DE0[4] = 0;
             gSaveContext.unk_3DD0[4] = 5;
-            func_801A3098(0x922);
+            func_801A3098(NA_BGM_ITEM_GET | 0x900);
             func_8011B4E0(globalCtx, 1);
             this->unk_54A = 3;
             func_809632D0(this);

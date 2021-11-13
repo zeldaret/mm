@@ -449,7 +449,7 @@ void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
     globalCtx->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
 
-    if (gSaveContext.seqIndex == 0xFF || func_801A8A50(0) == 0x57) {
+    if (gSaveContext.seqIndex == 0xFF || func_801A8A50(0) == NA_BGM_FINAL_HOURS) {
         audio_setBGM(cmd->soundSettings.bgmId);
     }
 }
