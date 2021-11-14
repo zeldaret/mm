@@ -70,7 +70,8 @@ static s32 D_80A6E594[] = { 0x06000220, 0x06000428, 0x06000498 };
 
 extern UNK_TYPE D_06000198;
 extern Vtx D_060004C0[];
-extern UNK_TYPE D_060010E0;
+extern Gfx D_060010E0[];
+extern Gfx D_06001158[];
 extern UNK_TYPE D_060011D0;
 extern UNK_TYPE D_06001220;
 extern Gfx D_06002970[];
@@ -597,7 +598,27 @@ void func_80A6D98C(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6DA7C.s")
+void func_80A6DA7C(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnFall* this = THIS;
+    s32 temp_v1;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 20, 25, 30, 0, 0x3E7, 0x3200);
+    gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
+    gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH);
+    temp_v1 = (this->unk_150 * 200.0f) + 40.0f;
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, temp_v1, temp_v1, temp_v1, 255);
+    gSPDisplayList(POLY_OPA_DISP++, D_060010E0);
+    gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH);
+    gSPDisplayList(POLY_OPA_DISP++, D_06001158);
+    POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 void func_80A6DC20(Actor* thisx, GlobalContext* globalCtx) {
     func_80A6DA7C(thisx, globalCtx);
