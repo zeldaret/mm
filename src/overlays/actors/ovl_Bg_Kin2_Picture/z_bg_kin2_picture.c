@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_kin2_picture.c
+ * Overlay: ovl_Bg_Kin2_Picture
+ * Description: Ocean Spider House - Skullkid Painting
+ */
+
 #include "z_bg_kin2_picture.h"
 
 #define FLAGS 0x00000000

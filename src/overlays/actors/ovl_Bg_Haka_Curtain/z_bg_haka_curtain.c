@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_haka_curtain.c
+ * Overlay: ovl_Bg_Haka_Curtain
+ * Description: Curtain That Lifts to Reveal Flat's Tomb
+ */
+
 #include "z_bg_haka_curtain.h"
 
 #define FLAGS 0x00000010

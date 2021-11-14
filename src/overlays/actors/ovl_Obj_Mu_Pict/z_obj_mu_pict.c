@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_mu_pict.c
+ * Overlay: ovl_Obj_Mu_Pict
+ * Description:
+ */
+
 #include "z_obj_mu_pict.h"
 
 #define FLAGS 0x00000009

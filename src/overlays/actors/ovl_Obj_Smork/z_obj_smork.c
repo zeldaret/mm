@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_smork.c
+ * Overlay: ovl_Obj_Smork
+ * Description: Romani Ranch Chimney Smoke
+ */
+
 #include "z_obj_smork.h"
 
 #define FLAGS 0x00000030

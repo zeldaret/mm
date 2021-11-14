@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_dkjail_ivy.c
+ * Overlay: ovl_Bg_Dkjail_Ivy
+ * Description: Ivy in Deku Jail
+ */
+
 #include "z_bg_dkjail_ivy.h"
 
 #define FLAGS 0x00000000

@@ -1,3 +1,9 @@
+/*
+ * File z_elf_msg2.c
+ * Overlay: ovl_Elf_Msg2
+ * Description: Tatl Hint (Z-target-activated C-up hint?)
+ */
+
 #include "z_elf_msg2.h"
 
 #define FLAGS 0x00000010

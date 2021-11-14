@@ -1,3 +1,9 @@
+/*
+ * File: z_oceff_wipe6.c
+ * Overlay: ovl_Oceff_Wipe6
+ * Description:
+ */
+
 #include "z_oceff_wipe6.h"
 
 #define FLAGS 0x02000010

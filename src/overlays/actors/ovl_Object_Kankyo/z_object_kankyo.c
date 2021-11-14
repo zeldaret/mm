@@ -1,3 +1,9 @@
+/*
+ * File: z_object_kankyo.c
+ * Overlay: ovl_Object_Kankyo
+ * Description:
+ */
+
 #include "z_object_kankyo.h"
 
 #define FLAGS 0x02000030

@@ -1,12 +1,31 @@
 #ifndef _OS_H_
 #define _OS_H_
 
-#include "stdlib.h"
+#include "libc/stdlib.h"
 #include "ultra64/thread.h"
 #include "ultra64/message.h"
 
 #define OS_READ     0
 #define OS_WRITE    1
+
+/*
+ * I/O message types
+ */
+#define OS_MESG_TYPE_BASE        10
+#define OS_MESG_TYPE_LOOPBACK    (OS_MESG_TYPE_BASE+0)
+#define OS_MESG_TYPE_DMAREAD     (OS_MESG_TYPE_BASE+1)
+#define OS_MESG_TYPE_DMAWRITE    (OS_MESG_TYPE_BASE+2)
+#define OS_MESG_TYPE_VRETRACE    (OS_MESG_TYPE_BASE+3)
+#define OS_MESG_TYPE_COUNTER     (OS_MESG_TYPE_BASE+4)
+#define OS_MESG_TYPE_EDMAREAD    (OS_MESG_TYPE_BASE+5)
+#define OS_MESG_TYPE_EDMAWRITE   (OS_MESG_TYPE_BASE+6)
+
+/*
+ * I/O message priority
+ */
+#define OS_MESG_PRI_NORMAL    0
+#define OS_MESG_PRI_HIGH      1
+
 
 typedef u32 OSIntMask;
 
@@ -81,9 +100,7 @@ typedef struct {
     /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, size_t);
 } OSDevMgr; // size = 0x1C
 
-
 typedef u64 OSTime;
-
 
 typedef struct OSTimer_s {
     /* 0x00 */ struct OSTimer_s* next;
@@ -93,7 +110,6 @@ typedef struct OSTimer_s {
     /* 0x18 */ OSMesgQueue* mq;
     /* 0x1C */ OSMesg msg;
 } OSTimer; // size = 0x20
-
 
 typedef struct {
     /* 0x0 */ u16 type;

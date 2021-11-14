@@ -50,7 +50,7 @@ void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* textur
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_187FC, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(object);
+    gSegments[0x06] = PHYSICAL_TO_VIRTUAL(object);
     gSPSegment(POLY_XLU_DISP++, 0x06, object);
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);

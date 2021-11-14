@@ -1,3 +1,9 @@
+/*
+ * File: z_en_sekihi.c
+ * Overlay: ovl_En_Sekihi
+ * Description: Mikau's Grave & Song Pedestals
+ */
+
 #include "z_en_sekihi.h"
 
 #define FLAGS 0x00000019

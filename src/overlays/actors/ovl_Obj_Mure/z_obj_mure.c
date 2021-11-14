@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_mure.c
+ * Overlay: ovl_Obj_Mure
+ * Description: Bugs, Insects, Butterfly spawner and behavior
+ */
+
 #include "z_obj_mure.h"
 
 #define FLAGS 0x00000000

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_tobira01.c
+ * Overlay: ovl_Bg_Tobira01
+ * Description: Gate to Goron Shrine
+ */
+
 #include "z_bg_tobira01.h"
 
 #define FLAGS 0x00000030

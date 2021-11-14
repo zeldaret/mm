@@ -365,7 +365,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
             EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelanime.playSpeed = 2.0f;
         }
-    } else if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMAROS_MASK) {
+    } else if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMARO) {
         if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
             EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelanime.playSpeed = 2.0f;

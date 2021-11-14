@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_dblue_balance.c
+ * Overlay: ovl_Bg_Dblue_Balance
+ * Description: Great Bay Temple - See-Saw
+ */
+
 #include "z_bg_dblue_balance.h"
 
 #define FLAGS 0x00000000

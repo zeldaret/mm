@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_visiblock.c
+ * Overlay: ovl_Obj_Visiblock
+ * Description: Lens of Truth Platform
+ */
+
 #include "z_obj_visiblock.h"
 
 #define FLAGS 0x00000080

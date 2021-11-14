@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_goron_oyu.c
+ * Overlay: ovl_Bg_Goron_Oyu
+ * Description: Goron Hot Spring Water
+ */
+
 #include "z_bg_goron_oyu.h"
 
 #define FLAGS 0x00000030

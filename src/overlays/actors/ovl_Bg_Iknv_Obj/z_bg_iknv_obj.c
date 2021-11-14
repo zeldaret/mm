@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_iknv_obj.c
+ * Overlay: ovl_Bg_Iknv_Obj
+ * Description: Ikana - waterwheel, stone tower door, sakon's hideout door
+ */
+
 #include "z_bg_iknv_obj.h"
 
 #define FLAGS 0x00000010

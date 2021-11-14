@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_hsstump.c
+ * Overlay: ovl_Obj_HsStump
+ * Description: Ikana Canyon - Hookshotable Tree
+ */
+
 #include "z_obj_hsstump.h"
 
 #define FLAGS 0x00000010

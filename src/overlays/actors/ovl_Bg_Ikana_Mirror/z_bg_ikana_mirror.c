@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_ikana_mirror.c
+ * Overlay: ovl_Bg_Ikana_Mirror
+ * Description: Stone Tower Temple - Mirror
+ */
+
 #include "z_bg_ikana_mirror.h"
 
 #define FLAGS 0x00000010

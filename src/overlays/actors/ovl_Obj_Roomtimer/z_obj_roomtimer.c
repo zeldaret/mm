@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_roomtimer.c
+ * Overlay: ovl_Obj_Roomtimer
+ * Description:
+ */
+
 #include "z_obj_roomtimer.h"
 
 #define FLAGS 0x00000010

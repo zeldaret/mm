@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_usiyane.c
+ * Overlay: ovl_Obj_Usiyane
+ * Description: Roof of Cow Barn
+ */
+
 #include "z_obj_usiyane.h"
 
 #define FLAGS 0x00000020

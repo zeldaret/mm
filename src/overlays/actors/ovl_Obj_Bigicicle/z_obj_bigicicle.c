@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_bigicicle.c
+ * Overlay: ovl_Obj_Bigicicle
+ * Description: Large icicles
+ */
+
 #include "z_obj_bigicicle.h"
 
 #define FLAGS 0x00000000

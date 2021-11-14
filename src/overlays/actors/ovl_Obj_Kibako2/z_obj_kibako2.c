@@ -109,11 +109,11 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
 }
 
 void ObjKibako2_SpawnCollectible(ObjKibako2* this, GlobalContext* globalCtx) {
-    s32 collectible = func_800A8150(KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor));
+    s32 dropItem00Id = func_800A8150(KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor));
 
-    if (collectible >= 0) {
+    if (dropItem00Id > ITEM00_NO_DROP) {
         Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos,
-                             collectible | KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor) << 8);
+                             dropItem00Id | KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor) << 8);
     }
 }
 

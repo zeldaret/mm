@@ -1,3 +1,9 @@
+/*
+ * File: z_en_kanban.c
+ * Overlay: ovl_En_Kanban
+ * Description: Square signpost
+ */
+
 #include "z_en_kanban.h"
 
 #define FLAGS 0x00000019

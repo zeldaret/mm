@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_y2lift.c
+ * Overlay: ovl_Obj_Y2lift
+ * Description:
+ */
+
 #include "z_obj_y2lift.h"
 
 #define FLAGS 0x00000010

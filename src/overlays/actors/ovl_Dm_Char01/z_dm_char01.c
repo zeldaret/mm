@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_char01.c
+ * Overlay: ovl_Dm_Char01
+ * Description: Tatl and Tael (cutscene)
+ */
+
 #include "z_dm_char01.h"
 
 #define FLAGS 0x02000030

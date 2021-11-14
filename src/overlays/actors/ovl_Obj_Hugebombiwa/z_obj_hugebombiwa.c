@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_hugebombiwa.c
+ * Overlay: ovl_Obj_Hugebombiwa
+ * Description: Boulder Blocking Goron Racetrack
+ */
+
 #include "z_obj_hugebombiwa.h"
 
 #define FLAGS 0x00000010

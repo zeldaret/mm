@@ -29,7 +29,11 @@ typedef struct {
     /* 0x00 */ u16 unk0; // action; // "dousa"
     /* 0x02 */ u16 startFrame;
     /* 0x04 */ u16 endFrame;
-    /* 0x06 */ UNK_TYPE1 pad6[0x2A];
+    /* 0x06 */ UNK_TYPE1 pad6[0xA];
+    /* 0x10 */ s32 unk10;
+    /* 0x14 */ UNK_TYPE1 pad14[0x8];
+    /* 0x1C */ s32 unk1C;
+    /* 0x20 */ UNK_TYPE1 pad20[0x10];
 } CsCmdActorAction; // size = 0x30
 
 typedef struct {
