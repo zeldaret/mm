@@ -541,7 +541,30 @@ void func_80A6D698(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D75C.s")
+void func_80A6D75C(Actor* thisx, GlobalContext* globalCtx) {
+    EnFall* this = THIS;
+
+    if (func_800EE29C(globalCtx, 0x1C2) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C2)]->unk0 == 5) {
+        if (!(this->unk_154 & 2)) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
+        }
+        this->unk_154 |= 2;
+    }
+    if (this->unk_154 & 2) {
+        this->unk_150 += 0.033333335f;
+        if (this->unk_150 > 1.0f) {
+            this->unk_150 = 1.0f;
+        }
+        if (this->actor.scale.x < 18.0f) {
+            this->actor.scale.x += 0.2f;
+        }
+        this->actor.scale.z = this->actor.scale.x;
+        this->actor.scale.y = Math_SinS(this->unk_15C) * 5.0f;
+        if (this->unk_15C < 0x4000) {
+            this->unk_15C += 0x147;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D88C.s")
 
