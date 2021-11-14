@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_hsstump.c
+ * Overlay: ovl_Obj_HsStump
+ * Description: Ikana Canyon - Hookshotable Tree
+ */
+
 #include "z_obj_hsstump.h"
 
 #define FLAGS 0x00000010
@@ -41,8 +47,8 @@ void ObjHsStump_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->isHidden = OBJHSSTUMP_GET_ISHIDDEN(thisx);
     this->switchFlag = OBJHSSTUMP_GET_SWITCHFLAG(thisx); // Must be thisx to match
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011B0);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060011B0);
     switch (this->isHidden) {
         case true:
             if (Flags_GetSwitch(globalCtx, this->switchFlag)) {

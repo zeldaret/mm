@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_iceblock.c
+ * Overlay: ovl_Obj_Iceblock
+ * Description: Ice Block That Appears After Freezing Enemy
+ */
+
 #include "z_obj_iceblock.h"
 
 #define FLAGS 0x00000010

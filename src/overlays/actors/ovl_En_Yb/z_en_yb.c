@@ -1,3 +1,9 @@
+/*
+ * File: z_en_yb.c
+ * Overlay: ovl_En_Yb
+ * Description: Kamaro the Dancing Ghost
+ */
+
 #include "z_en_yb.h"
 
 #define FLAGS 0x02000019

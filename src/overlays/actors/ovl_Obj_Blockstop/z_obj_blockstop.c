@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_blockstop.c
+ * Overlay: ovl_Obj_Blockstop
+ * Description:
+ */
+
 #include "z_obj_blockstop.h"
 
 #define FLAGS 0x00000010

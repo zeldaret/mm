@@ -1,3 +1,9 @@
+/*
+ * File z_en_bom_bowl_man.c
+ * Overlay: ovl_En_Bom_Bowl_Man
+ * Description: Line of Bombers?
+ */
+
 #include "z_en_bom_bowl_man.h"
 
 #define FLAGS 0x00000009

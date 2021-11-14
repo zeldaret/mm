@@ -1,3 +1,9 @@
+/*
+ * File: z_en_kujiya.c
+ * Overlay: ovl_En_Kujiya
+ * Description: Clock Town - Lottery Shop
+ */
+
 #include "z_en_kujiya.h"
 
 #define FLAGS 0x08000009

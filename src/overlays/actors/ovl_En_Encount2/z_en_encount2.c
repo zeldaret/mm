@@ -1,3 +1,9 @@
+/*
+ * File: z_en_encount2.c
+ * Overlay: ovl_En_Encount2
+ * Description: Astral Observatory - Majora's Mask Balloon
+ */
+
 #include "z_en_encount2.h"
 
 #define FLAGS 0x00000010
@@ -100,7 +106,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    DynaPolyActor_Init(&this->dyna, 0);
     BgCheck_RelocateMeshHeader(&D_06002420, &colHeader);
     this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, func_800B3FC0, 25.0f);

@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_hgdoor.c
+ * Overlay: ovl_Obj_Hgdoor
+ * Description: Music Box House - Closet Door
+ */
+
 #include "z_obj_hgdoor.h"
 
 #define FLAGS 0x00100000
@@ -72,7 +78,7 @@ void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* header = NULL;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, 1);
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         BgCheck_RelocateMeshHeader(&D_06001D10, &header);
     } else {
@@ -97,7 +103,7 @@ void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this) {
 
 void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, GlobalContext* globalCtx) {
     if (!(gSaveContext.weekEventReg[75] & 0x20) && !(gSaveContext.weekEventReg[52] & 0x20) &&
-        (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.yDistToPlayer < 40.0f) &&
+        (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.playerHeightRel < 40.0f) &&
         OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         ObjHgdoor_SetChild(this, globalCtx);
         ObjHgdoor_SetParent(this, globalCtx);

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_jso2.c
+ * Overlay: ovl_En_Jso2
+ * Description: Garo Master
+ */
+
 #include "z_en_jso2.h"
 
 #define FLAGS 0x80100035

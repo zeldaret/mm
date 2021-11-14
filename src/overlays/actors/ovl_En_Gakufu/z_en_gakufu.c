@@ -1,3 +1,9 @@
+/*
+ * File: z_en_gakufu.c
+ * Overlay: ovl_En_Gakufu
+ * Description: Termina Field - 2D Song Buttons Appearing on Wall
+ */
+
 #include "z_en_gakufu.h"
 
 #define FLAGS 0x02000010

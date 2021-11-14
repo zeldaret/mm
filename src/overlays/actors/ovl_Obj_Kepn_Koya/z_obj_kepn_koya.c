@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_kepn_koya.c
+ * Overlay: ovl_Obj_Kepn_Koya
+ * Description: Gorman Bros. Buildings
+ */
+
 #include "z_obj_kepn_koya.h"
 
 #define FLAGS 0x00000000
@@ -34,8 +40,8 @@ void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600805C);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_0600805C);
     if (this->dyna.bgId == 0x32) {
         Actor_MarkForDeath(&this->dyna.actor);
     }

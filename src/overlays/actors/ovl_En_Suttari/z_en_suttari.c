@@ -396,7 +396,7 @@ void func_80BAAF1C(EnSuttari* this) {
 }
 
 void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
-    if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.yDistToPlayer < 100.0f)) {
+    if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.playerHeightRel < 100.0f)) {
         Vec3f effectVelOffset = { 0.0f, 0.0f, 0.0f };
         Vec3f effectPos;
         Vec3f effectVel;
@@ -428,7 +428,7 @@ void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
-    if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.yDistToPlayer < 100.0f)) {
+    if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.playerHeightRel < 100.0f)) {
         Vec3f effectVelOffset = { 0.0f, 0.0f, 0.0f };
         Vec3f effectPos;
         Vec3f effectVel;
@@ -491,7 +491,7 @@ void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
         EnSuttari_UpdateCollider(this, globalCtx);
     }
     SkelAnime_Update(&this->skelAnime);
-    if (!(this->flags1 & 4) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+    if (!(this->flags1 & 4) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         if (func_8013D5E8(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer) != 0) {
             sp30.x = player->actor.world.pos.x;
             sp30.y = player->bodyPartsPos[7].y + 3.0f;
@@ -748,20 +748,18 @@ s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
 }
 
 s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
-    UNK_TYPE1 sp7C[0x424];
+    f32 sp7C[265];
     Vec3f sp70;
     Vec3f sp64;
     Vec3f sp58;
-    s32 sp54;
-    s32 sp50;
+    s32 sp54 = 0;
+    s32 sp50 = 0;
     s32 pad;
 
-    sp54 = 0;
-    sp50 = 0;
-    func_8013AF00(&sp7C, 3, this->unk404->count + 3);
+    func_8013AF00(sp7C, 3, this->unk404->count + 3);
     if (this->unk42C == 0) {
         sp58 = D_801D15B0;
-        func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, &sp7C,
+        func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, sp7C,
                       &sp58, this->unk42A);
         func_8013B878(globalCtx, this->unk404, this->unk420, &sp58);
         this->actor.world.pos.y = sp58.y;
@@ -777,7 +775,7 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
         sp58 = this->actor.world.pos;
     }
     this->unk408 = D_801D15B0;
-    if (func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, &sp7C,
+    if (func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, sp7C,
                       &this->unk408, this->unk42A)) {
         this->unk430 = 1;
     } else {
@@ -988,7 +986,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
     func_80BABA90(this, 0, 0);
     func_80BAB434(this);
     if (player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_ZORA) {
-        if (this->actor.yDistToPlayer < 60.0f && this->actor.xzDistToPlayer < 500.0f) {
+        if (this->actor.playerHeightRel < 60.0f && this->actor.xzDistToPlayer < 500.0f) {
             this->unk3F2 = this->unk2DE;
             this->actionFunc = func_80BACBB0;
         }
@@ -1013,7 +1011,7 @@ void func_80BACBB0(EnSuttari* this, GlobalContext* globalCtx) {
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU) {
         this->actionFunc = func_80BACA14;
     }
-    if ((this->actor.yDistToPlayer < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
+    if ((this->actor.playerHeightRel < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
         if (this->actor.bgCheckFlags & 8) {
             target = this->actor.wallYaw;
         } else if (func_80BAA904(this, globalCtx)) {
@@ -1043,7 +1041,7 @@ void func_80BACD2C(EnSuttari* this, GlobalContext* globalCtx) {
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU) {
         this->actionFunc = func_80BACA14;
     }
-    if ((this->actor.yDistToPlayer < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
+    if ((this->actor.playerHeightRel < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
         this->actionFunc = func_80BACBB0;
         Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 0.1f);
     } else {
@@ -1089,7 +1087,7 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
         gSaveContext.weekEventReg[0x3A] |= 0x80;
         this->actionFunc = func_80BADDB4;
         this->actor.speedXZ = 0.0f;
-    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) {
+    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
         func_80BAB1A0(this, globalCtx);
     }
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);

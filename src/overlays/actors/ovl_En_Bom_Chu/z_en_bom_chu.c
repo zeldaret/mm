@@ -1,3 +1,9 @@
+/*
+ * File z_en_bom_chu.c
+ * Overlay: ovl_En_Bom_Chu
+ * Description: Bombchus
+ */
+
 #include "z_en_bom_chu.h"
 
 #define FLAGS 0x00000010

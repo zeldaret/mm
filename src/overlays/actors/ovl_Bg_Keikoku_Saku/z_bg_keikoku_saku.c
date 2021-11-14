@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_keikoku_saku.c
+ * Overlay: ovl_Bg_Keikoku_Saku
+ * Description: Termina Field Spiked Fence
+ */
+
 #include "z_bg_keikoku_saku.h"
 
 #define FLAGS 0x00000000

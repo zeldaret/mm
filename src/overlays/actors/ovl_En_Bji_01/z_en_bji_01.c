@@ -99,7 +99,7 @@ void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
 void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x444);
     if (this->actor.params == ENBJI01_PARAMS_DEFAULT) {
-        if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.yDistToPlayer <= 10.0f)) {
+        if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.playerHeightRel <= 10.0f)) {
             this->actor.flags |= 0x10000;
         } else {
             this->actor.flags &= ~0x10000;
@@ -144,7 +144,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     }
                     break;
                 case PLAYER_FORM_HUMAN:
-                    if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
+                    if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEI) {
                         this->textId = 0x236A;
                     } else if (gSaveContext.weekEventReg[74] & 0x10) {
                         this->textId = 0x5F6;
@@ -172,7 +172,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     } else {
                         this->textId = 0x5F1;
                     }
-                    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
+                    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
                     break;
                 case PLAYER_FORM_HUMAN:
                     this->textId = 0x5F7;

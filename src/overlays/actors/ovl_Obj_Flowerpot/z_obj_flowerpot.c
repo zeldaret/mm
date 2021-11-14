@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_flowerpot.c
+ * Overlay: ovl_Obj_Flowerpot
+ * Description: Breakable Pot With Grass
+ */
+
 #include "z_obj_flowerpot.h"
 
 #define FLAGS 0x00000000

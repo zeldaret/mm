@@ -1,3 +1,9 @@
+/*
+ * File: z_door_spiral.c
+ * Overlay: ovl_Door_Spiral
+ * Description: Staircase
+ */
+
 #include "z_door_spiral.h"
 
 #define FLAGS 0x00000010

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_elfgrp.c
+ * Overlay: ovl_En_Elfgrp
+ * Description: Group of Stray Fairies in Fairy Fountain
+ */
+
 #include "z_en_elfgrp.h"
 
 #define FLAGS 0x00000010

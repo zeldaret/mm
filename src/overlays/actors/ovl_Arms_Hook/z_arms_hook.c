@@ -1,3 +1,9 @@
+/*
+ * File: z_arms_hook.c
+ * Overlay: ovl_Arms_Hook
+ * Description: Hookshot tip
+ */
+
 #include "z_arms_hook.h"
 
 #define FLAGS 0x00000030

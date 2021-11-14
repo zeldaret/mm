@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_dblue_waterfall.c
+ * Overlay: ovl_Bg_Dblue_Waterfall
+ * Description: Great Bay Temple - Freezable Geyser
+ */
+
 #include "z_bg_dblue_waterfall.h"
 
 #define FLAGS 0x00000010

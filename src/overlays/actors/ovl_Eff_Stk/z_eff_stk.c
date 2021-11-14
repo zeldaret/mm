@@ -1,3 +1,9 @@
+/*
+ * File z_eff_stk.c
+ * Overlay: ovl_Eff_Stk
+ * Description: Skullkid Effects (calling down moon / cursing Link)
+ */
+
 #include "z_eff_stk.h"
 
 #define FLAGS 0x00000030

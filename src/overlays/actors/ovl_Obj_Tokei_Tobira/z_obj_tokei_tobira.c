@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_tokei_tobira.c
+ * Overlay: ovl_Obj_Tokei_Tobira
+ * Description: Clock Tower - Swinging Doors
+ */
+
 #include "z_obj_tokei_tobira.h"
 
 #define FLAGS 0x00000000

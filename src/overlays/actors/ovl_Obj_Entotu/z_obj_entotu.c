@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_entotu.c
+ * Overlay: ovl_Obj_Entotu
+ * Description: Clock tower chimney Expelling Smoke
+ */
+
 #include "z_obj_entotu.h"
 
 #define FLAGS 0x00000030

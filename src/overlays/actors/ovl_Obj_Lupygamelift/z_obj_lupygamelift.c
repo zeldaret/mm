@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_lupygamelift.c
+ * Overlay: ovl_Obj_Lupygamelift
+ * Description: Deku Scrub Playground - Rupee Elevator
+ */
+
 #include "z_obj_lupygamelift.h"
 
 #define FLAGS 0x00000030
