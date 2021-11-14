@@ -1399,7 +1399,7 @@ void func_800B72F8(DynaPolyActor* dyna, f32 a1, s16 a2) {
 }
 
 /**
- * Chcek if the player is facing the specified actor.
+ * Check if the player is facing the specified actor.
  * The maximum angle difference that qualifies as "facing" is specified by `tolerance`.
  */
 s32 Player_IsFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx) {
