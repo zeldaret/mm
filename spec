@@ -1957,8 +1957,6 @@ beginseg
     name "ovl_Effect_Ss_Stick"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Stick/z_eff_ss_stick.o"
-//    include "build/data/ovl_Effect_Ss_Stick/ovl_Effect_Ss_Stick.data.o"
-//    include "build/data/ovl_Effect_Ss_Stick/ovl_Effect_Ss_Stick.reloc.o"
     include "build/src/overlays/effects/ovl_Effect_Ss_Stick/ovl_Effect_Ss_Stick_reloc.o"
 endseg
 
