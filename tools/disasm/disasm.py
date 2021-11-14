@@ -3,15 +3,83 @@
 import argparse, ast, math, os, re, struct
 from mips_isa import *
 from multiprocessing import Pool
+from pathlib import Path
+import copy
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-j', dest='jobs', type=int, default=1, help='number of processes to run at once')
+parser.add_argument("--full", "-f", dest="full", action="store_true", default=False, help="Decompile all files regardless of whether they are used or not")
 
 args = parser.parse_args()
 jobs = args.jobs
 
 ASM_OUT = "asm/"
 DATA_OUT = "data/"
+
+def discard_decomped_files(files_spec):
+    root_path = Path(__file__).parent.parent.parent
+
+    with open(root_path / "spec", "r") as f:
+        spec = f.read()
+    spec = spec[:spec.find("name \"gameplay_keep\"")].splitlines()[:-2]
+
+    new_spec = []
+    for f in files_spec:
+        name, _, type, _, file_list = f
+
+        i = 0
+        #print(f"Looking for {name}")
+        while i < len(spec):
+            if spec[i].startswith("beginseg") and f"\"{name}\"" in spec[i+1]:
+                #print(f"Found {name} seg at {i+1}")
+                break
+            i += 1
+
+        seg_start = i
+        new_files = {}
+        included = False
+        saved_off = 0
+        for offset,file in file_list.items():
+            if file == "[PADDING]":
+                continue
+
+            if file == "":
+                file = f"{type}_{offset:08X}"
+                include = True
+            elif file == "flg_set_table" or "buffers" in file:
+                include = True
+            else:
+                include = False
+                i = seg_start
+                last_line = ""
+                while not spec[i].startswith("endseg"):
+                    if f"/{file}." in spec[i]:
+                        if spec[i].count(".") == 1:
+                            last_line = spec[i]
+                        if "build/asm/" in spec[i] or "build/data/" in spec[i]: 
+                            include = True
+                            break
+                    i += 1
+                else:
+                    if type != "overlay":
+                        assert last_line.count(".") == 1
+                        last_line = last_line.strip().split("build/",1)[1].replace(".o", ".c")[:-1]
+                        with open(root_path / last_line, "r") as f2:
+                            if "GLOBAL_ASM" in f2.read():
+                                include = True
+
+            if include:
+                new_files[offset] = file
+                included = True
+
+        if type == "overlay" and not included:
+            continue
+        if included:
+            f[4] = new_files
+
+        new_spec.append(f)
+
+    return new_spec
 
 MIPS_BRANCH_LIKELY_INSNS = [
     MIPS_INS_BEQL, MIPS_INS_BGEZALL,
@@ -113,6 +181,8 @@ def proper_name(symbol, in_data=False, is_symbol=True):
 
     # real names
     if symbol in functions and symbol in functions_ast.keys():
+        return functions_ast[symbol][0]
+    elif symbol in functions_ast.keys():
         return functions_ast[symbol][0]
     elif symbol in variables_ast.keys():
         return variables_ast[symbol][0]
@@ -795,12 +865,108 @@ def disassemble_text(data, vram, data_regions, segment):
     raw_insns = as_word_list(data)
 
     cur_file = ""
+    cur_vaddr = 0
 
     segment_dirname = ("" if segment[2] != "overlay" else "overlays/") + segment[0]
 
     delayed_insn = None
     delay_slot = False
 
+    for i,raw_insn in enumerate(raw_insns,0):
+        i *= 4
+        vaddr = vram + i
+        insn = decode_insn(raw_insns[i//4], vaddr)
+        mnemonic = insn.mnemonic
+        op_str = insn.op_str
+
+        if vaddr in full_file_list[segment[0]]:
+            if cur_file != "":
+                if cur_vaddr in segment[4]:
+                    os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
+                    with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
+                        outfile.write(result)
+                result = asm_header(".text")
+            cur_vaddr = vaddr
+            cur_file = full_file_list[segment[0]][vaddr]
+            if cur_file == "":
+                cur_file = f"{segment[0]}_{vaddr:08X}"
+
+        if cur_file == "[PADDING]": # workaround for assumed linker bug
+            continue
+
+        # DATA EMBEDDED IN TEXT
+        in_data = False
+        for region in data_regions:
+            if vaddr in range(region[0], region[1], 4):
+                in_data = True
+                break
+        if in_data:
+            if vaddr in functions: # TODO not really a function if it falls in a data region...
+                result += f"\nglabel {proper_name(vaddr, True)}\n"
+            result += f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */  .word 0x{raw_insn:08X}\n"
+            continue
+
+        # LABELS
+        if vaddr in functions:
+            result += f"\nglabel {proper_name(vaddr)}\n"
+        if vaddr in jtbl_labels:
+            result += f"glabel L{vaddr:08X}\n"
+        if vaddr in branch_labels:
+            result += f".L{vaddr:08X}:\n"
+
+        # INSTRUCTIONS FORMATTING/CORRECTING
+        if insn.id in MIPS_BRANCH_INSNS:
+            op_str_parts = []
+            for field in insn.fields:
+                if field == 'offset':
+                    op_str_parts.append(f".L{insn.offset:08X}")
+                else:
+                    op_str_parts.append(insn.format_field(field))
+            op_str = ", ".join(op_str_parts)
+            delayed_insn = insn
+        elif insn.id in MIPS_JUMP_INSNS:
+            op_str_parts = []
+            for field in insn.fields:
+                if field == 'target':
+                    op_str_parts.append(proper_name(insn.target, is_symbol=True))
+                else:
+                    op_str_parts.append(insn.format_field(field))
+            op_str = ", ".join(op_str_parts)
+            delayed_insn = insn
+        elif insn.id == MIPS_INS_LUI:
+            symbol_value = symbols.get(vaddr, None)
+            if symbol_value is not None:
+                op_str = f"{mips_gpr_names[insn.rt]}, %hi({proper_name(symbol_value)})"
+            else:
+                constant_value = constants.get(vaddr, None)
+                if constant_value is not None:
+                    op_str = f"{mips_gpr_names[insn.rt]}, (0x{constant_value:08X} >> 16)"
+        elif insn.id == MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
+            symbol_value = symbols.get(vaddr, None)
+            if symbol_value is not None:
+                if insn.id == MIPS_INS_ADDIU:
+                    op_str = f"{mips_gpr_names[insn.rt]}, {mips_gpr_names[insn.rs]}, %lo({proper_name(symbol_value)})"
+                else:
+                    op_str = f"{mips_fpr_names[insn.ft] if insn.id in MIPS_FP_LOAD_STORE_INSNS else mips_gpr_names[insn.rt]}, %lo({proper_name(symbol_value)})({mips_gpr_names[insn.base]})"
+        elif insn.id == MIPS_INS_ORI:
+            constant_value = constants.get(vaddr, None)
+            if constant_value is not None:
+                op_str = f"{mips_gpr_names[insn.rt]}, {mips_gpr_names[insn.rs]}, (0x{constant_value:08X} & 0xFFFF)"
+
+        if delay_slot:
+            mnemonic = " " + mnemonic
+            delayed_insn = None
+        delay_slot = False
+        if delayed_insn is not None:
+            delay_slot = True
+
+        result += f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */  {mnemonic:12}{op_str}\n"
+
+    os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
+    with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
+        outfile.write(result)
+
+    '''
     for i,raw_insn in enumerate(raw_insns,0):
         i *= 4
         vaddr = vram + i
@@ -892,6 +1058,7 @@ def disassemble_text(data, vram, data_regions, segment):
     os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
+    '''
 
 def disassemble_data(data, vram, end, segment):
     section_symbols = [sym for sym in symbols.values() if sym >= vram and sym < end]
@@ -910,55 +1077,74 @@ def disassemble_data(data, vram, end, segment):
 
     segment_dirname = ("" if segment[2] != "overlay" else "overlays/") + segment[0]
 
-    result = asm_header(".data")
-    cur_file = ""
+    file_syms = []
+    syms = []
+    file_name = ""
+    for i,sym in enumerate(section_symbols):
+        if i == 0:
+            if segment[2] == "overlay":
+                file_name = segment[0]
+            else:
+                file_name = full_file_list[segment[0]][sym]
 
-    for i,symbol in enumerate(section_symbols,0):
-        next_symbol = section_symbols[i + 1] if i < len(section_symbols) - 1 else end
+        if sym in full_file_list[segment[0]]:
+            new_file = full_file_list[segment[0]][sym]
+            if file_name != new_file:
+                file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
+                syms = []
+                file_name = new_file
+        syms.append(sym)
+    file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
 
-        # assert symbol % 4 == 0 , f"Unaligned .data symbol 0x{symbol:08X}"
-
-        if symbol in segment[4].keys():
-            if cur_file != "":
-                os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
-                with open(f"{DATA_OUT}/{segment_dirname}/{cur_file}.data.s", "w") as outfile:
-                    outfile.write(result)
-                result = asm_header(".data")
-            cur_file = segment[4][symbol]
-            if cur_file == "":
-                cur_file = f"{segment[0]}_{symbol:08X}"
-
-        data_offset = symbol - vram
-        data_size = next_symbol - symbol
-
-        if data_offset == len(data):
+    for i,file in enumerate(file_syms):
+        if file["first_sym"] not in segment[4]:
+            #print(f"Skipping {file['name']}")
             continue
+        
+        #print(f"Processing {file['name']}")
+        result = asm_header(".data")
 
-        result += f"\nglabel {proper_name(symbol, True)}\n"
+        for x,symbol in enumerate(file["syms"]):
+            if x + 1 < len(file["syms"]):
+                next_symbol = file["syms"][x + 1]
+            elif i + 1 < len(file_syms):
+                next_symbol = file_syms[i + 1]["first_sym"]
+            else:
+                next_symbol = end
 
-        if symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
-            result += "\n".join(\
-                [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}" for j,dbl_dwd in enumerate(as_dword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
-        elif symbol % 8 == 0 and data_size % 8 == 0 and symbol in dwords:
-            result += "\n".join(\
-                [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} */ .quad 0x{dword:08X}" for j,dword in enumerate(as_dword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
-        elif symbol % 4 == 0 and data_size % 4 == 0:
-            if symbol in floats:
+            #next_symbol = syms[x + 1] if x + 1 < len(syms) - 1 else end
+
+            data_offset = symbol - vram
+            data_size = next_symbol - symbol
+
+            if data_offset == len(data):
+                continue
+
+            result += f"\nglabel {proper_name(symbol, True)}\n"
+
+            if symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
                 result += "\n".join(\
-                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}" for j,flt_wd in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+                    [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}" for j,dbl_dwd in enumerate(as_dword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+            elif symbol % 8 == 0 and data_size % 8 == 0 and symbol in dwords:
+                result += "\n".join(\
+                    [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} */ .quad 0x{dword:08X}" for j,dword in enumerate(as_dword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+            elif symbol % 4 == 0 and data_size % 4 == 0:
+                if symbol in floats:
+                    result += "\n".join(\
+                        [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}" for j,flt_wd in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+                else:
+                    result += "\n".join(\
+                        [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}" for j,word in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+            elif symbol % 2 == 0 and data_size % 2 == 0:
+                result += "\n".join(\
+                    [f"/* {data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}" for j,hword in enumerate(as_hword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
             else:
                 result += "\n".join(\
-                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}" for j,word in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
-        elif symbol % 2 == 0 and data_size % 2 == 0:
-            result += "\n".join(\
-                [f"/* {data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}" for j,hword in enumerate(as_hword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
-        else:
-            result += "\n".join(\
-                [f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}" for j,byte in enumerate(data[data_offset:data_offset + data_size], 0)]) + "\n"
+                    [f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}" for j,byte in enumerate(data[data_offset:data_offset + data_size], 0)]) + "\n"
 
-    os.makedirs(f"{DATA_OUT}/{segment[0]}/", exist_ok=True)
-    with open(f"{DATA_OUT}/{segment[0]}/{cur_file}.data.s", "w") as outfile:
-        outfile.write(result)
+        os.makedirs(f"{DATA_OUT}/{segment[0]}/", exist_ok=True)
+        with open(f"{DATA_OUT}/{segment[0]}/{file['name']}.data.s", "w") as outfile:
+            outfile.write(result)
 
 def disassemble_rodata(data, vram, end, segment):
     section_symbols = [sym for sym in symbols.values() if sym >= vram and sym < end]
@@ -977,61 +1163,80 @@ def disassemble_rodata(data, vram, end, segment):
 
     segment_dirname = ("" if segment[2] != "overlay" else "overlays/") + segment[0]
 
-    result = asm_header(".rodata")
-    cur_file = ""
-
     force_ascii_str = False # hack for non-null-terminated strings in .data
 
-    for i,symbol in enumerate(section_symbols,0):
-        next_symbol = section_symbols[i + 1] if i < len(section_symbols) - 1 else end
+    file_syms = []
+    syms = []
+    file_name = ""
+    for i,sym in enumerate(section_symbols):
+        if i == 0:
+            if segment[2] == "overlay":
+                file_name = segment[0]
+            else:
+                file_name = full_file_list[segment[0]][sym]
 
-        # assert symbol % 4 == 0 , f"Unaligned .data symbol 0x{symbol:08X}"
+        if sym in full_file_list[segment[0]]:
+            new_file = full_file_list[segment[0]][sym]
+            if file_name != new_file:
+                file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
+                syms = []
+                file_name = new_file
+        syms.append(sym)
+    file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
 
-        if symbol in segment[4].keys():
-            if cur_file != "":
-                os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
-                with open(f"{DATA_OUT}/{segment_dirname}/{cur_file}.rodata.s", "w") as outfile:
-                    outfile.write(result)
-                result = asm_header(".rodata")
-            cur_file = segment[4][symbol]
-            if cur_file == "":
-                cur_file = f"{segment[0]}_{symbol:08X}"
-
-        data_offset = symbol - vram
-        data_size = next_symbol - symbol
-
-        if data_offset == len(data):
+    for i,file in enumerate(file_syms):
+        if file["first_sym"] not in segment[4]:
+            #print(f"Skipping {file['name']}")
             continue
+        
+        #print(f"Processing {file['name']}")
+        result = asm_header(".rodata")
 
-        force_ascii_str = symbol in [0x801D0708]
+        for x,symbol in enumerate(file["syms"]):
+            if x + 1 < len(file["syms"]):
+                next_symbol = file["syms"][x + 1]
+            elif i + 1 < len(file_syms):
+                next_symbol = file_syms[i + 1]["first_sym"]
+            else:
+                next_symbol = end
 
-        result += f"\nglabel {proper_name(symbol, True)}\n"
+            #next_symbol = syms[x + 1] if x + 1 < len(syms) - 1 else end
 
-        if symbol in strings:
-            string_data = data[data_offset:data_offset+data_size]
-            string_data = string_data[:string_data.index(0)]
-            assert all([b != 0 for b in string_data[:-1]]) , f"{symbol:08X} , {data_size:X} , {string_data}" # ensure strings don't have a null char midway through
-            result += f"/* {data_offset:06X} {symbol:08X} */ {try_decode_string(string_data, force_ascii=force_ascii_str)}\n{STR_INDENT}.balign 4\n"
-        elif symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
-            result += "\n".join(\
-                [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}" for j,dbl_dwd in enumerate(as_dword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
-        elif symbol % 4 == 0 and data_size % 4 == 0:
-            if symbol in floats:
+            data_offset = symbol - vram
+            data_size = next_symbol - symbol
+
+            if data_offset == len(data):
+                continue
+
+            force_ascii_str = symbol in [0x801D0708]
+            
+            result += f"\nglabel {proper_name(symbol, True)}\n"
+
+            if symbol in strings:
+                string_data = data[data_offset:data_offset+data_size]
+                string_data = string_data[:string_data.index(0)]
+                assert all([b != 0 for b in string_data[:-1]]) , f"{symbol:08X} , {data_size:X} , {string_data}" # ensure strings don't have a null char midway through
+                result += f"/* {data_offset:06X} {symbol:08X} */ {try_decode_string(string_data, force_ascii=force_ascii_str)}\n{STR_INDENT}.balign 4\n"
+            elif symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
                 result += "\n".join(\
-                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}" for j,flt_wd in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+                    [f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}" for j,dbl_dwd in enumerate(as_dword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+            elif symbol % 4 == 0 and data_size % 4 == 0:
+                if symbol in floats:
+                    result += "\n".join(\
+                        [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}" for j,flt_wd in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+                else:
+                    result += "\n".join(\
+                        [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}" for j,word in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
+            elif symbol % 2 == 0 and data_size % 2 == 0:
+                result += "\n".join(\
+                    [f"/* {data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}" for j,hword in enumerate(as_hword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
             else:
                 result += "\n".join(\
-                    [f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}" for j,word in enumerate(as_word_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
-        elif symbol % 2 == 0 and data_size % 2 == 0:
-            result += "\n".join(\
-                [f"/* {data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}" for j,hword in enumerate(as_hword_list(data[data_offset:data_offset + data_size]), 0)]) + "\n"
-        else:
-            result += "\n".join(\
-                [f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}" for j,byte in enumerate(data[data_offset:data_offset + data_size], 0)]) + "\n"
+                    [f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}" for j,byte in enumerate(data[data_offset:data_offset + data_size], 0)]) + "\n"
 
-    os.makedirs(f"{DATA_OUT}/{segment[0]}/", exist_ok=True)
-    with open(f"{DATA_OUT}/{segment[0]}/{cur_file}.rodata.s", "w") as outfile:
-        outfile.write(result)
+        os.makedirs(f"{DATA_OUT}/{segment[0]}/", exist_ok=True)
+        with open(f"{DATA_OUT}/{segment[0]}/{file['name']}.rodata.s", "w") as outfile:
+            outfile.write(result)
 
 def disassemble_bss(vram, end, segment):
     section_symbols = [sym for sym in symbols.values() if sym >= vram and sym < end]
@@ -1050,6 +1255,50 @@ def disassemble_bss(vram, end, segment):
 
     # ("" if segment[2] != "overlay" else "overlays/"
     segment_dirname = segment[0]
+
+    file_syms = []
+    syms = []
+    file_name = ""
+    for i,sym in enumerate(section_symbols):
+        if i == 0:
+            if segment[2] == "overlay":
+                file_name = segment[0]
+            else:
+                file_name = full_file_list[segment[0]][sym]
+
+        if sym in full_file_list[segment[0]]:
+            new_file = full_file_list[segment[0]][sym]
+            if file_name != new_file:
+                file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
+                syms = []
+                file_name = new_file
+        syms.append(sym)
+    file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
+
+    for i,file in enumerate(file_syms):
+        if file["first_sym"] not in segment[4]:
+            #print(f"Skipping {file['name']}")
+            continue
+        
+        #print(f"Processing {file['name']}")
+        result = asm_header(".bss")
+
+        for x,symbol in enumerate(file["syms"]):
+            if x + 1 < len(file["syms"]):
+                next_symbol = file["syms"][x + 1]
+            elif i + 1 < len(file_syms):
+                next_symbol = file_syms[i + 1]["first_sym"]
+            else:
+                next_symbol = end 
+
+            result += f"\nglabel {proper_name(symbol, True)}\n"
+            result += f"/* {symbol - vram:06X} {symbol:08X} */ .space 0x{next_symbol - symbol:X}\n"
+
+        os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
+        with open(f"{DATA_OUT}/{segment_dirname}/{file['name']}.bss.s", "w") as outfile:
+            outfile.write(result)
+
+    '''
 
     result = asm_header(".bss")
     cur_file = ""
@@ -1073,6 +1322,7 @@ def disassemble_bss(vram, end, segment):
     os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
     with open(f"{DATA_OUT}/{segment_dirname}/{cur_file}.bss.s", "w") as outfile:
         outfile.write(result)
+    '''
 
 def get_overlay_sections(vram, overlay):
     header_loc = len(overlay) - as_word_list(overlay)[-1]
@@ -1111,6 +1361,22 @@ with open("tools/disasm/functions.txt", "r") as infile:
 
 with open("tools/disasm/variables.txt", "r") as infile:
     variables_ast = ast.literal_eval(infile.read())
+
+full_file_list = {}
+for f in files_spec:
+    new = {}
+    for offset,name in f[4].items():
+        if name == "":
+            name = f"{f[2]}_{offset:08X}"
+        new[offset] = name
+
+    full_file_list[f[0]] = new
+
+if not args.full:
+    old_file_count = sum([len(f[4].keys()) for f in files_spec])
+    files_spec = discard_decomped_files(files_spec)
+    new_file_count = sum([len(f[4].keys()) for f in files_spec])
+    print(f"Pruned {old_file_count - new_file_count} files")
 
 # Precompute variable addends for all variables, this uses a lot of memory but the lookups later are fast
 for var in sorted(variables_ast.keys()):
@@ -1170,7 +1436,7 @@ for segment in files_spec:
     if segment[2] == 'makerom':
         continue
 
-    #print(f"Finding symbols from .text and .data in {segment[0]}")
+    print(f"Finding symbols from .text and .data in {segment[0]}")
 
     for section in segment[3]:
         if section[2] == 'text':
@@ -1213,7 +1479,7 @@ for segment in files_spec:
             dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
             while any([word != 0 for word in as_word_list(dmadata_entry)]):
                 vrom_start,vrom_end,prom_start,prom_end = as_word_list(dmadata_entry)
-                # print(f"{vrom_start:08X},{vrom_end:08X},{prom_start:08X},{prom_end:08X} : {filenames[i]}")
+                #print(f"{vrom_start:08X},{vrom_end:08X},{prom_start:08X},{prom_end:08X} : {filenames[i]}")
                 vrom_variables.append(("_" + filenames[i] + "SegmentRomStart", vrom_start))
                 vrom_variables.append(("_" + filenames[i] + "SegmentRomEnd", vrom_end))
                 i += 1
