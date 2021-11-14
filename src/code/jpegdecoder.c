@@ -1,4 +1,4 @@
-#include "global.h"
+#include "z64jpeg.h"
 
 u8* sJpegBitStreamPtr;
 u32 sJpegBitStreamByteIdx;
