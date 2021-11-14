@@ -173,7 +173,7 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->megCloneNum = ENPOSISTERS_GET_MEG_CLONE(thisx);
     this->unk_18E = 32;
     this->zTimer = 20;
-    this->unk_190 = 1;
+    this->fireCount = 1;
     this->flags191 = 0x20;
     this->megDistToPlayer = 110.0f;
     thisx->flags &= ~1; // targetable OFF
@@ -207,19 +207,20 @@ void EnPoSisters_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-// death function? called near one
-void func_80B1A648(EnPoSisters* this, s32 arg1, Vec3f* pos) {
+// update the fires as they spread away from the dying poe I think
+// only used once, arg2 is this->stateTimer
+void func_80B1A648(EnPoSisters* this, s32 timer, Vec3f* pos) {
     s32 i;
     Vec3f* ptr;
-    f32 temp_f20 = arg1;
+    f32 timerf = timer;
 
-    for (i = 0; i < this->unk_190; i++) {
-        ptr = &this->unk_22C[i];
-        ptr->x = Math_SinS(this->actor.shape.rot.y + (this->stateTimer * 0x800) + (i * 0x2000)) * (SQ(temp_f20) * 0.1f) +
+    for (i = 0; i < this->fireCount; i++) {
+        ptr = &this->fireLoc[i];
+        ptr->x = Math_SinS(this->actor.shape.rot.y + (this->stateTimer * 0x800) + (i * 0x2000)) * (SQ(timerf) * 0.1f) +
                  pos->x;
-        ptr->z = Math_CosS(this->actor.shape.rot.y + (this->stateTimer * 0x800) + (i * 0x2000)) * (SQ(temp_f20) * 0.1f) +
+        ptr->z = Math_CosS(this->actor.shape.rot.y + (this->stateTimer * 0x800) + (i * 0x2000)) * (SQ(timerf) * 0.1f) +
                  pos->z;
-        ptr->y = pos->y + temp_f20;
+        ptr->y = pos->y + timerf;
     }
 }
 
@@ -642,31 +643,31 @@ void EnPoSister_SetupDeathStage1(EnPoSisters* this) {
 // first half, stunned 
 void EnPoSister_DeathStage1(EnPoSisters* this, GlobalContext* globalCtx) {
     s32 i;
-    s32 end = this->unk_190;
+    s32 end = this->fireCount;
 
     this->stateTimer++;
     end++;
-    if (end > ARRAY_COUNT(this->unk_22C)) {
-        this->unk_190 = 8;
+    if (end > ARRAY_COUNT(this->fireLoc)) {
+        this->fireCount = 8;
     } else {
-        this->unk_190 = end;
+        this->fireCount = end;
     }
 
-    for (end = this->unk_190 - 1; end > 0; end--) {
-        this->unk_22C[end] = this->unk_22C[end - 1];
+    for (end = this->fireCount - 1; end > 0; end--) {
+        this->fireLoc[end] = this->fireLoc[end - 1];
     }
 
-    this->unk_22C[0].x =
+    this->fireLoc[0].x =
         (Math_SinS((this->actor.shape.rot.y + (this->stateTimer * 0x3000)) - 0x4000) * (3000.0f * this->actor.scale.x)) +
         this->actor.world.pos.x;
-    this->unk_22C[0].z =
+    this->fireLoc[0].z =
         (Math_CosS((this->actor.shape.rot.y + (this->stateTimer * 0x3000)) - 0x4000) * (3000.0f * this->actor.scale.x)) +
         this->actor.world.pos.z;
 
     if (this->stateTimer < 8) {
-        this->unk_22C[0].y = this->unk_22C[1].y - 9.0f;
+        this->fireLoc[0].y = this->fireLoc[1].y - 9.0f;
     } else {
-        this->unk_22C[0].y = this->unk_22C[1].y + 2.0f;
+        this->fireLoc[0].y = this->fireLoc[1].y + 2.0f;
         if (this->stateTimer >= 16) {
             if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.001f)) {
                 EnPoSister_SetupDeathStage2(this, globalCtx);
@@ -684,13 +685,15 @@ void EnPoSister_DeathStage1(EnPoSisters* this, GlobalContext* globalCtx) {
 // fading away, the fire has split and circles outward and away
 void EnPoSister_SetupDeathStage2(EnPoSisters* this, GlobalContext* globalCtx) {
     this->stateTimer = 0;
-    this->actor.world.pos.y = this->unk_22C[0].y;
+    this->actor.world.pos.y = this->fireLoc[0].y;
     Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x80);
     this->actionFunc = EnPoSister_DeathStage2;
 }
 
+// might be where meg never dissapears, she might start with stateTimer > 32
 void EnPoSister_DeathStage2(EnPoSisters* this, GlobalContext* globalCtx) {
     this->stateTimer++;
+
     if (this->stateTimer == 32) { // waiting for death animation to finish
         Actor_MarkForDeath(&this->actor);
     } else {
@@ -709,7 +712,7 @@ void EnPoSisters_SpawnMegClones(EnPoSisters* this, GlobalContext* globalCtx) {
         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_PO_SISTERS, this->actor.world.pos.x,
                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0xC00);
 
-    // if we cannot spawn all clones, kill what we have, fallback?
+    // if we cannot spawn all clones, abort
     if ((clone1 == NULL) || (clone2 == NULL) || (clone3 == NULL)) {
         if (clone1 != NULL) {
             Actor_MarkForDeath(clone1);
@@ -928,7 +931,7 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnPoSisters* this = THIS;
     f32 alpha;
     Vec3f pos;
-    s32 unusedArg; // func needs a pointer to value, but this func ignores it
+    s32 unusedArg; // func needs a pointer to value, but posister ignores it
 
     if (this->collider.base.atFlags & AT_HIT) { // collided with player
         this->collider.base.atFlags &= ~AT_HIT;
@@ -977,10 +980,10 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->flags191 & (0x10 | 0x8 | 0x4 | 0x2 | 0x1)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         if ((this->actionFunc == EnPoSisters_SpinAttack) || (this->actionFunc == func_80B1B020)) {
-            this->unk_190++;
-            this->unk_190 = CLAMP_MAX(this->unk_190, ARRAY_COUNT(this->unk_22C));
+            this->fireCount++;
+            this->fireCount = CLAMP_MAX(this->fireCount, ARRAY_COUNT(this->fireLoc));
         } else if (this->actionFunc != EnPoSister_DeathStage1) {
-            this->unk_190 = CLAMP_MIN(this->unk_190 - 1, 1);
+            this->fireCount = CLAMP_MIN(this->fireCount - 1, 1);
         }
 
         if (this->actionFunc == EnPoSisters_SpinAttack) {
@@ -1114,25 +1117,25 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
     if (limbIndex == 8) {
         if (this->flags191 & 0x20) {
-            for (end = this->unk_190 - 1; end > 0; end--) {
-                this->unk_22C[end] = this->unk_22C[end - 1];
+            for (end = this->fireCount - 1; end > 0; end--) {
+                this->fireLoc[end] = this->fireLoc[end - 1];
             }
 
-            Matrix_MultiplyVector3fByState(&D_80B1DAFC, this->unk_22C);
+            Matrix_MultiplyVector3fByState(&D_80B1DAFC, this->fireLoc);
         }
 
-        if (this->unk_190 > 0) {
+        if (this->fireCount > 0) {
             Color_RGBA8* sp38 = &D_80B1DA30[this->sisterType];
 
             brightness = Rand_ZeroFloat(0.3f) + 0.7f; // flickering light level
 
             if (this->actionFunc == EnPoSister_DeathStage2) {
-                Lights_PointNoGlowSetInfo(&this->lightInfo, this->unk_22C[0].x, this->unk_22C[0].y + 15.0f,
-                                          this->unk_22C[0].z, sp38->r * brightness, sp38->g * brightness, sp38->b * brightness,
+                Lights_PointNoGlowSetInfo(&this->lightInfo, this->fireLoc[0].x, this->fireLoc[0].y + 15.0f,
+                                          this->fireLoc[0].z, sp38->r * brightness, sp38->g * brightness, sp38->b * brightness,
                                           200);
             } else {
-                Lights_PointGlowSetInfo(&this->lightInfo, this->unk_22C[0].x, this->unk_22C[0].y + 15.0f,
-                                        this->unk_22C[0].z, sp38->r * brightness, sp38->g * brightness, sp38->b * brightness,
+                Lights_PointGlowSetInfo(&this->lightInfo, this->fireLoc[0].x, this->fireLoc[0].y + 15.0f,
+                                        this->fireLoc[0].z, sp38->r * brightness, sp38->g * brightness, sp38->b * brightness,
                                         200);
             }
         } else {
@@ -1195,7 +1198,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         phi_f20 = this->actor.scale.x * 0.5f;
     }
 
-    for (i = 0; i < this->unk_190; i++) {
+    for (i = 0; i < this->fireCount; i++) {
         if (this->actionFunc != EnPoSister_DeathStage2) {
             phi_s5 = ((-i * 31) + 248) & 0xFF;
         }
@@ -1203,7 +1206,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, temp_s7->r, temp_s7->g, temp_s7->b, phi_s5);
 
-        Matrix_InsertTranslation(this->unk_22C[i].x, this->unk_22C[i].y, this->unk_22C[i].z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->fireLoc[i].x, this->fireLoc[i].y, this->fireLoc[i].z, MTXMODE_NEW);
         Matrix_InsertRotation(0, BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), 0, MTXMODE_APPLY);
 
         if (this->actionFunc == EnPoSister_DeathStage1) {
