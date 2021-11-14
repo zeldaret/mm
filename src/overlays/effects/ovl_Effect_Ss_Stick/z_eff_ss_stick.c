@@ -39,6 +39,7 @@ u32 EffectSsStick_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
 void EffectSsStick_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     s32 pad;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+
     OPEN_DISPS(gfxCtx);
     Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(0.01f, 0.0025f, 0.01f, MTXMODE_APPLY);
