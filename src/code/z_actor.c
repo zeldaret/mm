@@ -2015,7 +2015,7 @@ s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRa
     if (!(player->stateFlags1 & 0x3C7080) && Player_GetExplosiveHeld(player) < 0) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
             if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
-                 getItemId == GI_LAND_TITLE_DEED ||
+                 getItemId == GI_DEED_LAND ||
                  (((player->heldActor != NULL) || (actor == player->targetActor)) &&
                   (getItemId > GI_NONE && getItemId < GI_MAX))) ||
                 (!(player->stateFlags1 & 0x20000800))) {
@@ -2139,7 +2139,7 @@ void func_800B8E1C(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 a
 }
 
 void func_800B8E58(Player* player, u16 sfxId) {
-    if (player->currentMask == PLAYER_MASK_GIANTS_MASK) {
+    if (player->currentMask == PLAYER_MASK_GIANT) {
         func_8019F170(&player->actor.projectedPos, sfxId);
     } else {
         Audio_PlaySoundGeneral(sfxId, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
