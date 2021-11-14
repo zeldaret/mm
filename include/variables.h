@@ -1268,7 +1268,7 @@ extern UNK_PTR D_801C02F8;
 // extern UNK_TYPE1 D_801C07F0;
 // extern UNK_TYPE1 D_801C0820;
 // extern UNK_TYPE1 D_801C0838;
-// extern UNK_TYPE1 D_801C0850;
+extern Gfx D_801C0850;
 // extern UNK_TYPE1 D_801C0860;
 extern UNK_PTR D_801C0870;
 // extern UNK_TYPE1 D_801C0890;
@@ -3808,7 +3808,7 @@ extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
 // keep objects
 
 extern Gfx D_040008D0[];
-extern UNK_TYPE D_040032B0;
+extern Gfx D_040032B0[];
 extern UNK_TYPE D_0400CF58;
 extern UNK_TYPE D_0400CF88;
 extern UNK_TYPE D_0400CF98;
