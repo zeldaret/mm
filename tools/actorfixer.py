@@ -209,6 +209,7 @@ animdict = {
     "func_800BE258": "Actor_SetDropFlag",
     "func_800BE2B8": "Actor_SetDropFlagJntSph",
     "Actor_TitleCardCreate": "TitleCard_InitBossName",
+    "Audio_PlayActorSound2": "Actor_PlaySfxByPos2",
     "zelda_malloc(": "ZeldaArena_Malloc(",
     "zelda_mallocR(": "ZeldaArena_MallocR(",
     "zelda_realloc": "ZeldaArena_Realloc",
