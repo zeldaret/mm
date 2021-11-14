@@ -47,7 +47,7 @@ void EffectSsStick_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->regs[0]].segment);
-    gSPSegment(POLY_OPA_DISP++, 0x0C, &D_801C0850);
+    gSPSegment(POLY_OPA_DISP++, 0x0C, D_801C0850);
     gSPDisplayList(POLY_OPA_DISP++, D_040032B0);
     CLOSE_DISPS(gfxCtx);
 }
