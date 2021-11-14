@@ -414,7 +414,7 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
         func_80989140(&this->skelAnime, sAnimations, 5);
         this->actor.flags &= ~1;
         this->actor.speedXZ = 0.0f;
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_TRUTH) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_TRUTH) {
             this->actor.flags |= 0x10000;
             func_800B8614(&this->actor, globalCtx, 100.0f);
             this->actionFunc = func_8098BBEC;

@@ -1,16 +1,18 @@
 #ifndef _Z64_H_
 #define _Z64_H_
 
-#include "stdarg.h"
-#include "stdbool.h"
-#include "stdint.h"
+#include "libc/math.h"
+#include "libc/stdarg.h"
+#include "libc/stdbool.h"
+#include "libc/stddef.h"
+#include "libc/stdint.h"
+#include "libc/stdlib.h"
 
 #include "ultra64.h"
+#include "ultra64/gs2dex.h"
 #include "io/controller.h"
 #include "osint.h"
-#include "math.h"
 #include "os.h"
-#include "stdlib.h"
 #include "xstdio.h"
 
 #include "bgm.h"
@@ -744,7 +746,7 @@ typedef struct {
     /* 0x258 */ s16 unk_258;
     /* 0x25A */ s16 unk_25A;
     /* 0x25C */ u16 unk_25C;
-    /* 0x25E */ u16 unk_25E[5];
+    /* 0x25E */ u16 unk_25E[5]; // ItemId
     /* 0x268 */ u16 unk_268[5];
     /* 0x272 */ u16 equipTargetItem;
     /* 0x274 */ u16 equipTargetSlot;

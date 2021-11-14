@@ -146,7 +146,7 @@ void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx) {
     this->action = NEJIRON_ACTION_INACTIVE;
-    if (this->actor.xzDistToPlayer < 200.0f && Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) {
+    if (this->actor.xzDistToPlayer < 200.0f && Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
         this->actor.draw = EnBaguo_DrawBody;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.world.rot.z = 0;
@@ -225,7 +225,7 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
     f32 zDistanceFromHome = this->actor.home.pos.z - this->actor.world.pos.z;
 
     if ((sqrtf(SQ(xDistanceFromHome) + SQ(zDistanceFromHome)) > this->maxDistanceFromHome) ||
-        (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK)) {
+        (Player_GetMask(globalCtx) == PLAYER_MASK_STONE)) {
         EnBaguo_SetupRetreatUnderground(this);
         return;
     }

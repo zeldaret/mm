@@ -1,7 +1,7 @@
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
-#include "stdint.h"
+#include "libc/stdint.h"
 #include "convert.h"
 #include "z64.h"
 
@@ -69,7 +69,7 @@
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.inventory.questItems = (((void)0, gSaveContext.inventory.questItems) & (-1 - gBitFlags[item])))
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
-#define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg) - 4)
+#define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
 
 #define CONTROLLER1(globalCtx) (&(globalCtx)->state.input[0])
 #define CONTROLLER2(globalCtx) (&(globalCtx)->state.input[1])

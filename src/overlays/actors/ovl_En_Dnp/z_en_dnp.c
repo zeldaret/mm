@@ -418,7 +418,7 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx) {
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
         if ((this->unk_322 & 0x400) && !(gSaveContext.weekEventReg[23] & 0x20)) {
-            func_800B8A1C(&this->actor, globalCtx, 0xBA, sp2C, sp28);
+            func_800B8A1C(&this->actor, globalCtx, GI_MAX, sp2C, sp28);
         }
         func_8013C964(&this->actor, globalCtx, sp2C, sp28, 0, this->unk_322 & 7);
         Actor_SetHeight(&this->actor, 30.0f);

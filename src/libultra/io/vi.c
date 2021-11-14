@@ -1,5 +1,9 @@
 #include "global.h"
 
+__OSViContext D_80098060[2] = { 0 };
+__OSViContext* __osViCurr = &D_80098060[0];
+__OSViContext* __osViNext = &D_80098060[1];
+
 void __osViInit(void) {
     bzero(D_80098060, sizeof(D_80098060));
     __osViCurr = &D_80098060[0];
@@ -9,9 +13,9 @@ void __osViInit(void) {
     __osViNext->buffer = (void*)0x80000000;
     __osViCurr->buffer = (void*)0x80000000;
 
-    if (osTvType == 0) {
+    if (osTvType == OS_TV_PAL) {
         __osViNext->modep = &osViModePalLan1;
-    } else if (osTvType == 2) {
+    } else if (osTvType == OS_TV_MPAL) {
         __osViNext->modep = &osViModeMpalLan1;
     } else {
         __osViNext->modep = &osViModeNtscLan1;
@@ -20,10 +24,9 @@ void __osViInit(void) {
     __osViNext->state = 0x20;
     __osViNext->features = __osViNext->modep->comRegs.ctrl;
 
-    while (*(vu32*)0xA4400010 > 10) {
-        ;
-    }
-    *(vu32*)0xA4400000 = 0;
+    while (HW_REG(VI_CURRENT_REG, u32) > 10) {}
+
+    HW_REG(VI_STATUS_REG, u32) = 0;
 
     __osViSwapContext();
 }
