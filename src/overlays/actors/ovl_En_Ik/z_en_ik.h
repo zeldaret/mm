@@ -11,7 +11,8 @@ typedef struct {
     /* 0x00 */ char unk_00[0x4];
     /* 0x04 */ Vec3f unk_04;
     /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ char unk_1C[0x8];
+    /* 0x1C */ Vec3s unk_1C;
+    /* 0x1C */ UNK_TYPE1 unk_22[0x2];
     /* 0x24 */ s32 unk_24;
 } EnIkStruct; // size = 0x28
 
@@ -37,8 +38,8 @@ typedef struct EnIk {
     /* 0x03AC */ ColliderCylinder colliderCylinder; // size = 0x4C
     /* 0x03F8 */ ColliderQuad colliderQuad; // size = 0x80
     /* 0x0478 */ ColliderTris colliderTris; // size = 0x20
-    /* 0x0498 */ char unk_498[0xB8];
-    /* 0x0498 */ EnIkStruct unk_550[7]; // size = 0x118
+    /* 0x0498 */ ColliderTrisElement shieldColliderItems[2];
+    /* 0x0550 */ EnIkStruct unk_550[7]; // size = 0x118
 } EnIk; // size = 0x668
 
 extern const ActorInit En_Ik_InitVars;
