@@ -48,7 +48,7 @@ const ActorInit En_Fall_InitVars = {
 
 static s32 D_80A6E4B0 = 0x00000000;
 
-static s8 D_80A6E4B4[] = {
+static u8 D_80A6E4B4[] = {
     0x04, 0x04, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x03, 0x00, 0x00, 0x03, 0x00, 0x01, 0x01, 0x01, 0x04,
     0x00, 0x04, 0x00, 0x01, 0x01, 0x01, 0x03, 0x00, 0x03, 0x00, 0x01, 0x01, 0x01, 0x04, 0x04, 0x01, 0x01, 0x00, 0x04,
     0x04, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x03, 0x00, 0x00, 0x03, 0x03, 0x00, 0x00, 0x01, 0x01, 0x01,
@@ -62,14 +62,14 @@ static s8 D_80A6E4B4[] = {
     0x02, 0x02, 0x00, 0x00, 0x00, 0x02, 0x02, 0x01, 0x01, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x02, 0x02, 0x00
 };
 
-static s8 D_80A6E584[] = { 0x00, 0x00, 0x00, 0x00 };
+static u8 D_80A6E584[] = { 0x00, 0x00, 0x00, 0x00 };
 
 static s32 D_80A6E588[] = { 0x44E10000, 0x447A0000, 0x4584D000 };
 
 static s32 D_80A6E594[] = { 0x06000220, 0x06000428, 0x06000498 };
 
 extern UNK_TYPE D_06000198;
-extern UNK_TYPE D_060004C0;
+extern Vtx D_060004C0[];
 extern UNK_TYPE D_060010E0;
 extern UNK_TYPE D_060011D0;
 extern UNK_TYPE D_06001220;
@@ -442,8 +442,26 @@ void EnFall_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-void func_80A6D100(f32 arg0);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D100.s")
+void func_80A6D100(f32 arg0) {
+    u8* phi_a0;
+    u8 unk[5];
+    Vtx* vertices;
+    s32 i;
+
+    vertices = Lib_SegmentedToVirtual(&D_060004C0);
+    if (arg0 > 1.0f) {
+        arg0 = 1.0f;
+    }
+    unk[0] = 0;
+    unk[1] = (s8)(255.0f * arg0);
+    unk[2] = (s8)(155.0f * arg0);
+    unk[3] = (s8)(104.0f * arg0);
+    unk[4] = (s8)(54.0f * arg0);
+
+    for (i = 0; i < 209; i++, vertices++) {
+        vertices->v.cn[3] = unk[D_80A6E4B4[i]];
+    }
+}
 
 void func_80A6D220(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
@@ -494,7 +512,6 @@ void func_80A6D220(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->actor.draw = NULL;
     }
-    
     if (func_800EE29C(globalCtx, 0x1C2) && this->unk_158 > 0) {
         func_8019F128(0x214F);
     }
