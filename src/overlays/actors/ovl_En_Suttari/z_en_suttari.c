@@ -491,7 +491,7 @@ void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
         EnSuttari_UpdateCollider(this, globalCtx);
     }
     SkelAnime_Update(&this->skelAnime);
-    if (!(this->flags1 & 4) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+    if (!(this->flags1 & 4) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         if (func_8013D5E8(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer) != 0) {
             sp30.x = player->actor.world.pos.x;
             sp30.y = player->bodyPartsPos[7].y + 3.0f;
@@ -749,12 +749,10 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     Vec3f sp70;
     Vec3f sp64;
     Vec3f sp58;
-    s32 sp54;
-    s32 sp50;
+    s32 sp54 = 0;
+    s32 sp50 = 0;
     s32 pad;
 
-    sp54 = 0;
-    sp50 = 0;
     func_8013AF00(sp7C, 3, this->unk404->count + 3);
     if (this->unk42C == 0) {
         sp58 = D_801D15B0;
@@ -1086,7 +1084,7 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
         gSaveContext.weekEventReg[0x3A] |= 0x80;
         this->actionFunc = func_80BADDB4;
         this->actor.speedXZ = 0.0f;
-    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) {
+    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
         func_80BAB1A0(this, globalCtx);
     }
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
