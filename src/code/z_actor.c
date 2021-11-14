@@ -8,6 +8,22 @@
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
 
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ u8 unk_0C;
+} struct_801AEE38_0; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ struct_801AEE38_0 sub_00;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ s16 unk_14;
+} struct_801AEE38; // size = 0x18
+
 // bss
 extern FaultClient D_801ED8A0;    // 2 funcs
 extern CollisionPoly* D_801ED8B0; // 1 func
@@ -2436,7 +2452,7 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         while (params.actor != NULL) {
             params.actor = Actor_UpdateActor(&params);
         }
-        if (i == 1) {
+        if (i == ACTORCAT_BG) {
             BgCheck_Update(globalCtx, sp38);
         }
     }
@@ -3172,18 +3188,16 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
     if (overlayEntry->vramStart == NULL) {
         actorInit = overlayEntry->initInfo;
     } else {
-        if (overlayEntry->loadedRamAddr == 0) {
+        if (overlayEntry->loadedRamAddr == NULL) {
             if (overlayEntry->allocType & ALLOCTYPE_ABSOLUTE) {
                 if (actorCtx->absoluteSpace == NULL) {
                     actorCtx->absoluteSpace = ZeldaArena_MallocR(AM_FIELD_SIZE);
                 }
                 gActorOverlayTable[index].loadedRamAddr = actorCtx->absoluteSpace;
+            } else if (overlayEntry->allocType & ALLOCTYPE_PERMANENT) {
+                gActorOverlayTable[index].loadedRamAddr = ZeldaArena_MallocR(overlaySize);
             } else {
-                if (overlayEntry->allocType & ALLOCTYPE_PERMANENT) {
-                    gActorOverlayTable[index].loadedRamAddr = ZeldaArena_MallocR(overlaySize);
-                } else {
-                    gActorOverlayTable[index].loadedRamAddr = ZeldaArena_Malloc(overlaySize);
-                }
+                gActorOverlayTable[index].loadedRamAddr = ZeldaArena_Malloc(overlaySize);
             }
 
             if (overlayEntry->loadedRamAddr == NULL) {
@@ -3335,7 +3349,7 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
                 phi_v1 = globalCtx->doorCtx.numTransitionActors;
             }
         }
-        phi_s0 += 1;
+        phi_s0++;
     }
 }
 #else
@@ -3678,14 +3692,16 @@ void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* acto
     actor->category = actorCategory;
 }
 
+// bitwise flags
 s32 D_801AEDB0[] = {
-    0x00000800, 0x00000020, 0x00000020, 0x00000800, 0x00001000, 0x00002000, 0x00000001, 0x00010000, 0x00000001,
+    0x800, 0x20, 0x20, 0x800, 0x1000, 0x2000, 0x1, 0x10000, 0x1,
 };
 
 s32 func_800BC188(s32 index) {
     if ((index < 0) || (index >= ARRAY_COUNT(D_801AEDB0))) {
         return 0;
     }
+
     return D_801AEDB0[index];
 }
 
@@ -3836,7 +3852,7 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx) 
         func_800C0094(sp44, arg0->x, sp54, arg0->z, &sp58);
         Matrix_SetCurrentState(&sp58);
     } else {
-        Matrix_InsertTranslation(arg0->x, arg0->y, arg0->z, 0);
+        Matrix_InsertTranslation(arg0->x, arg0->y, arg0->z, MTXMODE_NEW);
     }
     Matrix_Scale(arg1->x, 1.0f, arg1->z, MTXMODE_APPLY);
 
@@ -3993,7 +4009,7 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
     f32 sp54[2];
 
     spB0 = 0;
-    sp5C = 1.6e9f;
+    sp5C = SQ(40000.0f);
 
     for (spB4 = 0; spB4 < pathcount; spB4++) {
         sp60 = Math3D_XZDistanceSquared(pos1->x, pos1->z, points[spB4].x, points[spB4].z);
@@ -4042,7 +4058,7 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
             if (spA8[phi_s0_2] != 0) {
                 sp54[phi_s0_2] = Math3D_XZDistanceSquared(pos1->x, pos1->z, sp7C[phi_s0_2].x, sp7C[phi_s0_2].z);
             } else {
-                sp54[phi_s0_2] = 1.6e9f;
+                sp54[phi_s0_2] = SQ(40000.0f);
             }
         }
     }
@@ -4103,22 +4119,6 @@ s32 func_800BD2B4(GameState* gameState, Actor* actor, s16* arg2, f32 arg3, u16 (
         return 0;
     }
 }
-
-typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ u8 unk_0C;
-} struct_801AEE38_0; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ struct_801AEE38_0 sub_00;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ s16 unk_14;
-} struct_801AEE38; // size = 0x18
 
 struct_801AEE38 D_801AEE38[] = {
     { { 0x1C20, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, 0x0000 }, 170.0f, 0x3FFC },
@@ -4360,9 +4360,9 @@ void Actor_Noop(Actor* actor, GlobalContext* globalCtx) {
 #include "z_cheap_proc.c"
 
 /**
- * Finds the first actor instance of a specified ID and category within a given range from
- * an actor if there is one. If the ID provided is -1, this will look for any actor of the
- * specified category rather than a specific ID.
+ * Finds the first actor instance of a specified Id and category within a given range from
+ * an actor if there is one. If the Id provided is -1, this will look for any actor of the
+ * specified category rather than a specific Id.
  */
 Actor* Actor_FindNearby(GlobalContext* globalCtx, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance) {
     Actor* actor = globalCtx->actorCtx.actorList[actorCategory].first;
@@ -4385,11 +4385,8 @@ Actor* Actor_FindNearby(GlobalContext* globalCtx, Actor* inActor, s16 actorId, u
 
 s32 func_800BE184(GameState* gameState, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5) {
     Player* player = GET_PLAYER(gameState);
-    s16 phi_v0;
-    s16 temp_t0;
-
-    phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
-    temp_t0 = actor->yawTowardsPlayer - arg5;
+    s16 phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
+    s16 temp_t0 = actor->yawTowardsPlayer - arg5;
 
     if ((actor->xzDistToPlayer <= xzDist) && (player->swordState != 0)) {
         if ((arg4 >= ABS_ALT(phi_v0)) && (arg3 >= ABS_ALT(temp_t0))) {
@@ -4458,13 +4455,7 @@ void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere) {
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
     f32 xDiff = arg1->x - arg0->x;
     f32 zDiff = arg1->z - arg0->z;
-    f32 yDiff;
-
-    if (arg3) {
-        yDiff = arg1->y - arg0->y;
-    } else {
-        yDiff = arg0->y - arg1->y;
-    }
+    f32 yDiff = arg3 ? (arg1->y - arg0->y) : (arg0->y - arg1->y);
 
     arg2->y = Math_FAtan2F(zDiff, xDiff);
     arg2->x = Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
@@ -4604,13 +4595,13 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                     gDPSetEnvColor(POLY_XLU_DISP++, (gGameInfo->data[1268] + 0xC8), (gGameInfo->data[1269] + 0xC8),
                                    (gGameInfo->data[1270] + 0xFF), (u8)phi_f2);
 
-                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, 0);
-                    Matrix_Scale(sp124, sp124, sp124, 1);
+                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
+                    Matrix_Scale(sp124, sp124, sp124, MTXMODE_APPLY);
                     if ((i & 1) != 0) {
-                        Matrix_InsertYRotation_f(3.1415927f, 1);
+                        Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
                     }
                     if ((i & 2) != 0) {
-                        Matrix_InsertZRotation_f(3.1415927f, 1);
+                        Matrix_InsertZRotation_f(M_PI, MTXMODE_APPLY);
                     }
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4642,9 +4633,9 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, temp_v1_3 * 3, temp_v1_3 * -0xC, 0x20, 0x40,
                                                 1, 0U, 0U, 0x20, 0x20));
 
-                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, 0);
+                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_APPLY);
                     Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
-                    Matrix_Scale(sp118, sp118, 1.0f, 1);
+                    Matrix_Scale(sp118, sp118, 1.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4688,7 +4679,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U,
                                                 ((s32)((i * 0xA) + sp110) * -0x14) & 0x1FF, 0x20, 0x80));
 
-                    Matrix_InsertYRotation_f(3.1415927f, 1);
+                    Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
                     temp_s3->mf[3][0] = limbPos->x;
                     temp_s3->mf[3][1] = limbPos->y;
                     temp_s3->mf[3][2] = limbPos->z;
@@ -4725,10 +4716,10 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 100, 128);
                 }
                 Matrix_SetCurrentState(&globalCtx->mf_187FC);
-                Matrix_Scale(sp120, sp120, 1.0f, 1);
+                Matrix_Scale(sp120, sp120, 1.0f, MTXMODE_APPLY);
 
                 for (i = 0; i < arg3; i++) {
-                    Matrix_InsertZRotation_f(randPlusMinusPoint5Scaled(6.2831855f), 1);
+                    Matrix_InsertZRotation_f(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
                     temp_s3->mf[3][0] = limbPos->x;
                     temp_s3->mf[3][1] = limbPos->y;
                     temp_s3->mf[3][2] = limbPos->z;
@@ -4765,11 +4756,11 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                                (u8)gGameInfo->data[1558], (u8)gGameInfo->data[1559]);
 
                 Matrix_SetCurrentState(&globalCtx->mf_187FC);
-                Matrix_Scale(sp11C, sp11C, sp11C, 1);
+                Matrix_Scale(sp11C, sp11C, sp11C, MTXMODE_APPLY);
 
                 for (i = 0; i < arg3; i++) {
-                    Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(6.2831855f), 1);
+                    Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
+                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
                     temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->x;
                     temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->y;
                     temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->z;
@@ -4779,8 +4770,8 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
 
                     gSPDisplayList(POLY_XLU_DISP++, D_040234F0);
 
-                    Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(6.2831855f), 1);
+                    Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
+                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
                     temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->x;
                     temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->y;
                     temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->z;
@@ -4814,7 +4805,7 @@ void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s32 a
     s16 temp_s2;
     s32 j;
 
-    Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 0x1E, NA_SE_EV_ICE_BROKEN);
+    Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < arg3; i++) {
         temp_s2 = Actor_YawToPoint(actor, limbPos);
