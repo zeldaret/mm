@@ -64,7 +64,7 @@ static u8 D_80A6E4B4[] = {
 
 static u8 D_80A6E584[] = { 0x00, 0x00, 0x00, 0x00 };
 
-static s32 D_80A6E588[] = { 0x44E10000, 0x447A0000, 0x4584D000 };
+static Vec3f D_80A6E588[] = { 1800.0f, 1000.0f, 4250.0f };
 
 static s32 D_80A6E594[] = { 0x06000220, 0x06000428, 0x06000498 };
 
@@ -75,7 +75,7 @@ extern UNK_TYPE D_060011D0;
 extern UNK_TYPE D_06001220;
 extern UNK_TYPE D_06002970;
 extern UNK_TYPE D_06004E38;
-extern UNK_TYPE D_060077F0;
+extern Gfx D_060077F0[];
 
 void func_80A6BF90(EnFall* this, GlobalContext* globalCtx) {
     u16 temp_v0;
@@ -566,7 +566,21 @@ void func_80A6D75C(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D88C.s")
+void func_80A6D88C(Actor* thisx, GlobalContext* globalCtx) {
+    EnFall* this = THIS;
+    s32 temp_v1;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    Matrix_MultiplyVector3fByState(&D_80A6E588, &this->actor.focus.pos);
+    temp_v1 = (this->unk_150 * 200.0f) + 40.0f;
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, temp_v1, temp_v1, temp_v1, 255);
+    gSPDisplayList(POLY_OPA_DISP++, D_060077F0);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D98C.s")
 
