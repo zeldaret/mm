@@ -3,7 +3,6 @@
  * Description:
  */
 
-// #include "prevent_bss_reordering.h"
 #include "global.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
@@ -75,8 +74,8 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
                               COMBINED);
 
             dy = CLAMP(dy, 0.0f, 150.0f);
-            shadowScale = 1.0f - (dy * 0.0028571428f);
-            if ((dy * 0.0028571428f) > 1.0f) {
+            shadowScale = 1.0f - (dy * (1.0f / 350.0f));
+            if ((dy * (1.0f / 350.0f)) > 1.0f) {
                 shadowScale = 0.0f;
             }
 
@@ -121,10 +120,10 @@ void ActorShadow_DrawSquare(Actor* actor, Lights* lights, GlobalContext* globalC
     ActorShadow_Draw(actor, lights, globalCtx, D_04075A40, NULL);
 }
 
-Color_RGBA8 D_801AEC80 = { 255, 255, 255, 255 };
-
 void ActorShadow_DrawWhiteCircle(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
-    ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, &D_801AEC80);
+    static Color_RGBA8 color = { 255, 255, 255, 255 };
+
+    ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, &color);
 }
 
 void ActorShadow_DrawHorse(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
@@ -704,7 +703,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
             clampedFloat = CLAMP(temp_f0_2, 30.0f, 100.0f);
 
             if (Math_StepToF(&targetCtx->unk44, 80.0f, clampedFloat) != 0) {
-                targetCtx->unk4B += 1;
+                targetCtx->unk4B++;
             }
         } else {
             targetCtx->unk4B = (targetCtx->unk4B + 3) | 0x80;
@@ -1413,24 +1412,24 @@ s32 Player_IsFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx) 
 }
 
 /**
- * Chcek if `actorB` is facing `actorA`.
+ * Check if `actorB` is facing `actorA`.
  * The maximum angle difference that qualifies as "facing" is specified by `maxAngle`.
  *
  * This function is unused in the original game.
  */
 s32 Actor_ActorBIsFacingActorA(Actor* actorA, Actor* actorB, s16 tolerance) {
     s16 angle = BINANG_ROT180(Actor_YawBetweenActors(actorA, actorB));
-    s16 dist;
+    s16 dist = angle - actorB->shape.rot.y;
 
-    dist = angle - actorB->shape.rot.y;
     if (ABS_ALT(dist) < tolerance) {
         return true;
     }
+
     return false;
 }
 
 /**
- * Chcek if the specified actor is facing the player.
+ * Check if the specified actor is facing the player.
  * The maximum angle difference that qualifies as "facing" is specified by `tolerance`.
  */
 s32 Actor_IsFacingPlayer(Actor* actor, s16 angle) {
@@ -1443,7 +1442,7 @@ s32 Actor_IsFacingPlayer(Actor* actor, s16 angle) {
 }
 
 /**
- * Chcek if `actorA` is facing `actorB`.
+ * Check if `actorA` is facing `actorB`.
  * The maximum angle difference that qualifies as "facing" is specified by `tolerance`.
  */
 s32 Actor_ActorAIsFacingActorB(Actor* actorA, Actor* actorB, s16 tolerance) {
@@ -1456,7 +1455,7 @@ s32 Actor_ActorAIsFacingActorB(Actor* actorA, Actor* actorB, s16 tolerance) {
 }
 
 /**
- * Chcek if the specified actor is facing the player and is nearby.
+ * Check if the specified actor is facing the player and is nearby.
  * The maximum angle difference that qualifies as "facing" is specified by `tolerance`.
  * The minimum distance that qualifies as "nearby" is specified by `range`.
  */
@@ -1464,7 +1463,8 @@ s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 tolerance) {
     s16 yaw = actor->yawTowardsPlayer - actor->shape.rot.y;
 
     if (ABS_ALT(yaw) < tolerance) {
-    label:;
+        s16 pad;
+
         if (sqrtf(SQ(actor->xzDistToPlayer) + SQ(actor->playerHeightRel)) < range) {
             return true;
         }
@@ -1474,7 +1474,7 @@ s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 tolerance) {
 }
 
 /**
- * Chcek if `actorA` is facing `actorB` and is nearby.
+ * Check if `actorA` is facing `actorB` and is nearby.
  * The maximum angle difference that qualifies as "facing" is specified by `tolerance`.
  * The minimum distance that qualifies as "nearby" is specified by `range`.
  */
@@ -1497,9 +1497,10 @@ void func_800B75A0(CollisionPoly* poly, Vec3f* normal, s16* azimuth) {
 }
 
 s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
-    if (actor->bgCheckFlags & 0x01) {
-        actor->bgCheckFlags &= ~0x01;
-        actor->bgCheckFlags |= 0x04;
+    if (actor->bgCheckFlags & 1) {
+        actor->bgCheckFlags &= ~1;
+        actor->bgCheckFlags |= 4;
+
         if ((actor->velocity.y < 0.0f) && (arg2 & 0x10)) {
             actor->velocity.y = 0.0f;
         }
@@ -1542,14 +1543,14 @@ s32 func_800B7678(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, s32 arg3)
 
         if (actor->velocity.y <= 0.0f) {
             if (!(actor->bgCheckFlags & 1)) {
-                actor->bgCheckFlags |= 0x02;
+                actor->bgCheckFlags |= 2;
             } else if ((arg3 & 8) && (actor->gravity < 0.0f)) {
                 actor->velocity.y = -4.0f;
             } else if (!(arg3 & 0x100)) {
                 actor->velocity.y = 0.0f;
             }
 
-            actor->bgCheckFlags |= 0x01;
+            actor->bgCheckFlags |= 1;
             BgCheck2_AttachToMesh(&globalCtx->colCtx, actor, (s32)actor->floorBgId);
         }
     } else {
@@ -1565,7 +1566,7 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
     s32 pad;
     Vec3f pos;
 
-    if ((actor->floorBgId != 0x32) && (actor->bgCheckFlags & 1)) {
+    if ((actor->floorBgId != BGCHECK_SCENE) && (actor->bgCheckFlags & 1)) {
         BgCheck2_UpdateActorAttachedToMesh(&globalCtx->colCtx, actor->floorBgId, actor);
     }
 
@@ -1581,19 +1582,18 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
                              &actor->wallPoly, &bgId, actor, wallCheckHeight) != 0)))) {
             CollisionPoly* sp7C = actor->wallPoly;
 
-            actor->bgCheckFlags |= 0x08;
-            if ((flags & 0x200) && ((actor->bgCheckFlags & 0x1000) != 0) && ((s32)sp7C->normal.y > 0) &&
-                ((sqrtf(SQ(actor->colChkInfo.displacement.x) + SQ(actor->colChkInfo.displacement.y) +
-                        SQ(actor->colChkInfo.displacement.z)) < 10.0f))) {
-                actor->bgCheckFlags &= ~0x08;
-            } else if (actor->bgCheckFlags & 0x08) {
+            actor->bgCheckFlags |= 8;
+            if ((flags & 0x200) && (actor->bgCheckFlags & 0x1000) && ((s32)sp7C->normal.y > 0) &&
+                (sqrtf(SQXYZ(actor->colChkInfo.displacement)) < 10.0f)) {
+                actor->bgCheckFlags &= ~8;
+            } else if (actor->bgCheckFlags & 8) {
                 Math_Vec3f_Copy(&actor->world.pos, &pos);
             }
 
             actor->wallYaw = Math_FAtan2F(sp7C->normal.z, sp7C->normal.x);
             actor->wallBgId = bgId;
         } else {
-            actor->bgCheckFlags &= ~0x08;
+            actor->bgCheckFlags &= ~8;
         }
     }
 
@@ -1623,9 +1623,9 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
             actor->depthInWater = y - actor->world.pos.y;
             if (actor->depthInWater <= 0.0f) {
                 actor->bgCheckFlags &= ~(0x40 | 0x20);
-            } else if ((actor->bgCheckFlags & 0x20) == 0) {
+            } else if (!(actor->bgCheckFlags & 0x20)) {
                 actor->bgCheckFlags |= (0x40 | 0x20);
-                if ((flags & 0x40) == 0) {
+                if (!(flags & 0x40)) {
                     Vec3f sp64;
 
                     sp64.x = actor->world.pos.x;
@@ -1785,16 +1785,14 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
 f32 func_800B82EC(Actor* actor, Player* player, s16 angle) {
     f32 temp_f12;
     s16 temp_v0 = BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), angle);
-    s16 yaw;
-
-    yaw = ABS_ALT(temp_v0);
+    s16 yaw = ABS_ALT(temp_v0);
 
     if (player->unk_730 != NULL) {
         if ((yaw > 0x4000) || ((actor->flags & ACTOR_FLAG_8000000))) {
             return FLT_MAX;
         }
 
-        temp_f12 = actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yaw) * 0.000030517578f));
+        temp_f12 = actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yaw) * (1.0f / 0x8000)));
         return temp_f12;
     }
 
@@ -1837,7 +1835,7 @@ s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
 }
 
 s16 D_801AED48[] = {
-    0x0101, 0x0141, 0x0111, 0x0151, 0x0105, 0x0145, 0x0115, 0x0155,
+    0x101, 0x141, 0x111, 0x151, 0x105, 0x145, 0x115, 0x155,
 };
 
 s32 Actor_RequestTalk(Actor* actor, GameState* gameState) {
@@ -2039,7 +2037,7 @@ s32 Actor_PickUpFar(Actor* actor, GlobalContext* globalCtx, s32 getItemId) {
 }
 
 s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx) {
-    if (!actor->parent) {
+    if (actor->parent == NULL) {
         return true;
     }
 
@@ -2200,9 +2198,10 @@ void func_800B9098(Actor* actor) {
 
 s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon, s32 index, s32 arg4) {
     if (func_800C99D4(&globalCtx->colCtx, polygon, index) == 8) {
-        return 1;
+        return true;
     }
-    return 0;
+
+    return false;
 }
 
 void func_800B90F4(GlobalContext* globalCtx) {
@@ -2218,7 +2217,8 @@ void func_800B9120(ActorContext* actorCtx) {
     if (gSaveContext.time < CLOCK_TIME(6, 0) || gSaveContext.time > CLOCK_TIME(18, 0)) {
         phi_v0++;
     }
-    actorCtx->unkC = (0x200 >> phi_v0);
+
+    actorCtx->unkC = 0x200 >> phi_v0;
 }
 
 // Actor_InitContext // OoT's func_800304DC
