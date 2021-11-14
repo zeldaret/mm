@@ -517,16 +517,16 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, GlobalContext* globalCtx) {
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
         if (!(gSaveContext.weekEventReg[10] & 8)) {
-            Actor_PickUp(&this->actor, globalCtx, CUR_UPG_VALUE(UPG_WALLET) + 8, 500.0f, 100.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
-            Actor_PickUp(&this->actor, globalCtx, 2, 500.0f, 100.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }
     } else if (this->curTextId == 0x45C) { // "Whats this, you already saved up 5000?"
-        Actor_PickUp(&this->actor, globalCtx, 2, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_BLUE, 500.0f, 100.0f);
     } else if (!(gSaveContext.weekEventReg[59] & 8)) {
-        Actor_PickUp(&this->actor, globalCtx, 12, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, globalCtx, 2, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_BLUE, 500.0f, 100.0f);
     }
 }
 

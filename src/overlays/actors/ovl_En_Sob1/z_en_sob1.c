@@ -236,35 +236,35 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
     if (this->shopType == BOMB_SHOP) {
         switch (Player_GetMask(globalCtx)) {
             case PLAYER_MASK_NONE:
-            case PLAYER_MASK_BUNNY_HOOD:
-            case PLAYER_MASK_POSTMANS_HAT:
+            case PLAYER_MASK_BUNNY:
+            case PLAYER_MASK_POSTMAN:
                 return 0x644;
-            case PLAYER_MASK_GORON_MASK:
-            case PLAYER_MASK_ZORA_MASK:
-            case PLAYER_MASK_DEKU_MASK:
+            case PLAYER_MASK_GORON:
+            case PLAYER_MASK_ZORA:
+            case PLAYER_MASK_DEKU:
                 return 0x64B;
-            case PLAYER_MASK_MASK_OF_TRUTH:
-            case PLAYER_MASK_ALL_NIGHT_MASK:
-            case PLAYER_MASK_KEATON_MASK:
-            case PLAYER_MASK_ROMANIS_MASK:
-            case PLAYER_MASK_GREAT_FAIRYS_MASK:
-            case PLAYER_MASK_DON_GEROS_MASK:
-            case PLAYER_MASK_KAMAROS_MASK:
-            case PLAYER_MASK_BREMEN_MASK:
-            case PLAYER_MASK_MASK_OF_SCENTS:
+            case PLAYER_MASK_TRUTH:
+            case PLAYER_MASK_ALL_NIGHT:
+            case PLAYER_MASK_KEATON:
+            case PLAYER_MASK_ROMANI:
+            case PLAYER_MASK_GREAT_FAIRY:
+            case PLAYER_MASK_DON_GERO:
+            case PLAYER_MASK_KAMARO:
+            case PLAYER_MASK_BREMEN:
+            case PLAYER_MASK_SCENTS:
                 return 0x685;
-            case PLAYER_MASK_GAROS_MASK:
-            case PLAYER_MASK_CIRCUS_LEADERS_MASK:
-            case PLAYER_MASK_GIBDO_MASK:
-            case PLAYER_MASK_CAPTAINS_HAT:
+            case PLAYER_MASK_GARO:
+            case PLAYER_MASK_CIRCUS_LEADER:
+            case PLAYER_MASK_GIBDO:
+            case PLAYER_MASK_CAPTAIN:
                 return 0x686;
-            case PLAYER_MASK_COUPLES_MASK:
+            case PLAYER_MASK_COUPLE:
                 return 0x687;
-            case PLAYER_MASK_STONE_MASK:
+            case PLAYER_MASK_STONE:
                 return 0x688;
-            case PLAYER_MASK_BLAST_MASK:
+            case PLAYER_MASK_BLAST:
                 return 0x689;
-            case PLAYER_MASK_KAFEIS_MASK:
+            case PLAYER_MASK_KAFEI:
                 return 0x68A;
         }
     } else if (this->shopType == ZORA_SHOP) {

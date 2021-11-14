@@ -8,6 +8,25 @@
 #define OS_READ     0
 #define OS_WRITE    1
 
+/*
+ * I/O message types
+ */
+#define OS_MESG_TYPE_BASE        10
+#define OS_MESG_TYPE_LOOPBACK    (OS_MESG_TYPE_BASE+0)
+#define OS_MESG_TYPE_DMAREAD     (OS_MESG_TYPE_BASE+1)
+#define OS_MESG_TYPE_DMAWRITE    (OS_MESG_TYPE_BASE+2)
+#define OS_MESG_TYPE_VRETRACE    (OS_MESG_TYPE_BASE+3)
+#define OS_MESG_TYPE_COUNTER     (OS_MESG_TYPE_BASE+4)
+#define OS_MESG_TYPE_EDMAREAD    (OS_MESG_TYPE_BASE+5)
+#define OS_MESG_TYPE_EDMAWRITE   (OS_MESG_TYPE_BASE+6)
+
+/*
+ * I/O message priority
+ */
+#define OS_MESG_PRI_NORMAL    0
+#define OS_MESG_PRI_HIGH      1
+
+
 typedef u32 OSIntMask;
 
 typedef u32 OSPageMask;

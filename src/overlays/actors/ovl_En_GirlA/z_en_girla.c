@@ -257,7 +257,7 @@ s32 EnGirlA_CanBuyShieldHero(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyStick(GlobalContext* globalCtx, EnGirlA* this) {
-    if (CUR_CAPACITY(UPG_STICK) != 0 && AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICK)) {
+    if (CUR_CAPACITY(UPG_STICKS) != 0 && AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICKS)) {
         return CANBUY_RESULT_NO_ROOM;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
