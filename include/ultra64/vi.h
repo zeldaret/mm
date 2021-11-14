@@ -1,6 +1,7 @@
 #ifndef _ULTRA64_VI_H_
 #define _ULTRA64_VI_H_
 
+#include "PR/ultratypes.h"
 #include "ultra64/message.h"
 
 /* Special Features */
