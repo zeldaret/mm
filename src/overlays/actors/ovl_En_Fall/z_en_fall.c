@@ -73,7 +73,7 @@ extern Vtx D_060004C0[];
 extern UNK_TYPE D_060010E0;
 extern UNK_TYPE D_060011D0;
 extern UNK_TYPE D_06001220;
-extern UNK_TYPE D_06002970;
+extern Gfx D_06002970[];
 extern UNK_TYPE D_06004E38;
 extern Gfx D_060077F0[];
 
@@ -574,7 +574,7 @@ void func_80A6D88C(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    Matrix_MultiplyVector3fByState(&D_80A6E588, &this->actor.focus.pos);
+    Matrix_MultiplyVector3fByState(D_80A6E588, &this->actor.focus.pos);
     temp_v1 = (this->unk_150 * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, temp_v1, temp_v1, temp_v1, 255);
     gSPDisplayList(POLY_OPA_DISP++, D_060077F0);
@@ -582,7 +582,20 @@ void func_80A6D88C(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D98C.s")
+void func_80A6D98C(Actor* thisx, GlobalContext* globalCtx) {
+    EnFall* this = THIS;
+    s32 temp_v1;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    temp_v1 = (this->unk_150 * 200.0f) + 40.0f;
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, temp_v1, temp_v1, temp_v1, 255);
+    gSPDisplayList(POLY_OPA_DISP++, D_06002970);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6DA7C.s")
 
