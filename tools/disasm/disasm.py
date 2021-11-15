@@ -21,17 +21,23 @@ def discard_decomped_files(files_spec):
 
     with open(root_path / "spec", "r") as f:
         spec = f.read()
+    # No need to check anything beyond here
     spec = spec[:spec.find("name \"gameplay_keep\"")].splitlines()[:-2]
 
     new_spec = []
     for f in files_spec:
         name, _, type, _, file_list = f
 
+        # Find the beginseg for this file
         i = 0
         while i < len(spec):
             if spec[i].startswith("beginseg") and f"\"{name}\"" in spec[i+1]:
                 break
             i += 1
+
+        # For every fil;e within this segment, look through the seg for lines with this file's name
+        # if found, check whether it's still in build/asm/ or build/data/, in which case it's not decomped
+        # if all references to it are in build/src/ then it should be ok to skip, some code/boot files are a bit different
 
         seg_start = i
         new_files = {}
@@ -41,9 +47,11 @@ def discard_decomped_files(files_spec):
             if file == "[PADDING]":
                 continue
 
+            # why are these not named?
             if file == "":
                 file = f"{type}_{offset:08X}"
                 include = True
+            # flg_set_table is not in the spec, and buffers has its own section, just add them
             elif file == "flg_set_table" or "buffers" in file:
                 include = True
             else:
@@ -59,6 +67,10 @@ def discard_decomped_files(files_spec):
                             break
                     i += 1
                 else:
+                    # Many code/boot files only have a single section (i.e .text)
+                    # In that case it will be inside build/src/ and pragma in the asm
+                    # For these files, open the source and look for the pragmas to be sure
+                    # Overlays always have at least a data section we can check in the spec, so it's not needed for them
                     if type != "overlay":
                         assert last_line.count(".") == 1
                         last_line = last_line.strip().split("build/",1)[1].replace(".o", ".c")[:-1]
@@ -180,9 +192,7 @@ def proper_name(symbol, in_data=False, is_symbol=True):
         return "_do_action_staticSegmentRomStart + 0x480"
 
     # real names
-    if symbol in functions and symbol in functions_ast.keys():
-        return functions_ast[symbol][0]
-    elif symbol in functions_ast.keys():
+    if symbol in functions_ast.keys():
         return functions_ast[symbol][0]
     elif symbol in variables_ast.keys():
         return variables_ast[symbol][0]
@@ -393,9 +403,7 @@ def put_symbols(symbols_dict, setname, symbols):
     else:
         symbols_dict[setname] = symbols.copy()
 
-def put_text(type, name, text):
-    #if type not in files_text:
-    #    files_text[type] = {}
+def put_text(name, text):
     files_text[name] = text
 
 def update_symbols_from_dict(symbols_dict):
@@ -432,7 +440,7 @@ def update_symbols_from_dict(symbols_dict):
             files.update(symbol)
 
     for file in file_text:
-        put_text(file[0], file[1], file[2])
+        put_text(file[0], file[1])
 
 def find_symbols_in_text(section, rodata_section, data_regions):
     data, rodata = section[4], rodata_section[4] if rodata_section else None
@@ -749,7 +757,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
 
 
 
-        ############# Disassemble ##########
+        ############# Start text disassembly ##########
+        # Symbols aren't avaialble here yet, so placeholders are added
+        # in each instruction, to be looked up later
         mnemonic = insn.mnemonic
         op_str = insn.op_str
         instr = {"id":insn.id}
@@ -757,14 +767,13 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         if vaddr in full_file_list[info["name"]]:
             if cur_file != "":
                 if cur_vaddr in info["syms"]:
-                    result_files.append([info["name"], cur_file, results])
+                    result_files.append([cur_file, results])
                 results = [asm_header(".text")]
             cur_vaddr = vaddr
             cur_file = full_file_list[info["name"]][vaddr]
             if cur_file == "":
                 cur_file = f"{info['name']}_{vaddr:08X}"
 
-        # INSTRUCTIONS FORMATTING/CORRECTING
         if insn.id in MIPS_BRANCH_INSNS:
             op_str_parts = []
             for field in insn.fields:
@@ -817,8 +826,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                        "data": False,
                        })
 
-
-        ######### Disassemble ##############
+        ######### End text disassembly ##############
 
         if delay_slot and delayed_insn is not None:
             if delayed_insn.id == MIPS_INS_JAL or delayed_insn.id == MIPS_INS_JALR or \
@@ -841,7 +849,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
 
         delay_slot = delayed_insn is not None
 
-    result_files.append([info["name"], cur_file, results])
+    result_files.append([cur_file, results])
 
     put_symbols(symbols_dict, "branch_labels", func_branch_labels)
     put_symbols(symbols_dict, "jtbl_labels", func_jtbl_labels)
@@ -974,9 +982,6 @@ def asm_header(section_name):
 """
 
 def fixup_text_symbols(data, vram, data_regions, info):
-    if info["name"] in ("boot", "code"):
-        return
-
     segment_dirname = ("" if info["type"] != "overlay" else "overlays/")
     if info["type"] in ("boot", "code"):
         segment_dirname += info["type"]
@@ -986,8 +991,11 @@ def fixup_text_symbols(data, vram, data_regions, info):
     os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
 
     file = files_text[info["name"]]
-
+    # header
     text = [file.pop(0)]
+
+    # We didn't have full symbols available during initial disassembly,
+    # so here we loop over each instruction, and do symbol lookups, add labels etc
 
     for i,entry in enumerate(file):
         vaddr = entry["vaddr"]
@@ -1205,10 +1213,8 @@ def disassemble_data(data, vram, end, info):
 
     for i,file in enumerate(file_syms):
         if file["first_sym"] not in info["syms"]:
-            #print(f"Skipping {file['name']}")
             continue
         
-        #print(f"Processing {file['name']}")
         result = asm_header(".data")
 
         for x,symbol in enumerate(file["syms"]):
@@ -1218,8 +1224,6 @@ def disassemble_data(data, vram, end, info):
                 next_symbol = file_syms[i + 1]["first_sym"]
             else:
                 next_symbol = end
-
-            #next_symbol = syms[x + 1] if x + 1 < len(syms) - 1 else end
 
             data_offset = symbol - vram
             data_size = next_symbol - symbol
@@ -1304,10 +1308,8 @@ def disassemble_rodata(data, vram, end, info):
 
     for i,file in enumerate(file_syms):
         if file["first_sym"] not in info["syms"]:
-            #print(f"Skipping {file['name']}")
             continue
         
-        #print(f"Processing {file['name']}")
         result = asm_header(".rodata")
 
         for x,symbol in enumerate(file["syms"]):
@@ -1317,8 +1319,6 @@ def disassemble_rodata(data, vram, end, info):
                 next_symbol = file_syms[i + 1]["first_sym"]
             else:
                 next_symbol = end
-
-            #next_symbol = syms[x + 1] if x + 1 < len(syms) - 1 else end
 
             data_offset = symbol - vram
             data_size = next_symbol - symbol
@@ -1689,6 +1689,7 @@ with open("tools/disasm/functions.txt", "r") as infile:
 with open("tools/disasm/variables.txt", "r") as infile:
     variables_ast = ast.literal_eval(infile.read())
 
+# We need to keep a full list of original file offsets to know where to split files later
 full_file_list = {}
 for f in files_spec:
     new = {}
@@ -1699,9 +1700,13 @@ for f in files_spec:
     full_file_list[f[0]] = new
 
 if not args.full:
+    #Prune
     old_file_count = sum([len(f[4].keys()) for f in files_spec])
+
     files_spec = discard_decomped_files(files_spec)
+
     new_file_count = sum([len(f[4].keys()) for f in files_spec])
+
     pruned = old_file_count - new_file_count
     print(f"Pruned {pruned}/{old_file_count} files ({pruned / old_file_count:.02%})")
 
@@ -1757,7 +1762,8 @@ for segment in files_spec:
     if segment[3][-2][1] not in variables_ast:
         variables_ast.update({segment[3][-2][1] : (f"_{segment[0]}SegmentEnd","u8","[]",0x1)})
 
-
+# Flatten out files_spec so we can process everything evenly
+# Otherwise the entire code and boot sections are done by a single thread
 all_sections = []
 for segment in files_spec:
     if segment[0] == "boot" or segment[0] == "code":
@@ -1765,6 +1771,7 @@ for segment in files_spec:
         section_starts = [x[0] for x in segment[3]]
 
         for off,name in segment[4].items():
+            # loop over the vram starts for this segment's sections to find where it belongs (text, data, etc)
             for i,s in enumerate(section_starts):
                 if off < s:
                     break
@@ -1772,13 +1779,16 @@ for segment in files_spec:
                 i = len(section_starts)
             i -= 1
 
+            # Calculate the offset and size of this section relative to the section
             data_offset = off - segment[3][i][0]
             full_index = file_list.index(off)
             if segment[0] == "code" and name == "buffers":
+                # This is the end of code, hardcode it
                 data_size = 0x80800000 - file_list[full_index]
             else:
                 data_size = file_list[full_index + 1] - file_list[full_index]
 
+            # Create the section entry for this file
             new_entry = [
                 off, off + data_size, 
                 segment[3][i][2], 
@@ -1790,6 +1800,7 @@ for segment in files_spec:
 
             all_sections.append(new_entry)
 
+    # I don't remember what this is for but it's still needed
     for i,entry in enumerate(segment[3]):
         if segment[0] == "makerom" and i == 1:
             segment[2] = "ipl3"
@@ -1809,7 +1820,6 @@ for section in all_sections:
 
     print(f"Finding symbols from .text and .data in {section[-1]['name']}")
 
-    #for section in segment[3]:
     if section[2] == 'text':
         data_regions = []
         if section[3] is not None:
