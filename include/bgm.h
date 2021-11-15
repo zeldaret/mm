@@ -129,7 +129,7 @@
 #define NA_BGM_GOODBYE_GIANT 0x7C           //
 #define NA_BGM_TATL_AND_TAEL 0x7D           // Tatl and Tael "CHAT"
 #define NA_BGM_MOONS_DESTRUCTION 0x7E       // Moon's Destruction "MOON_VANISH"
-#define NA_BGM_NO_MUSIC 0x7F                // The End/Credits II "STAFFROLL2"
+#define NA_BGM_NO_MUSIC 0x7F                //
 #define NA_BGM_END_CREDITS_2 0x82           // The End/Credits II "STAFFROLL2"
 #define NA_BGM_DISABLED 0xFFFF
 
