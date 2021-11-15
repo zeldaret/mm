@@ -8860,14 +8860,16 @@ beginseg
     name "memerrmsg"
     compress
     romalign 0x1000
-    include "build/baserom/memerrmsg.o"
+    include "build/assets/misc/memerrmsg/memerrmsg.o"
+    number 1
 endseg
 
 beginseg
     name "locerrmsg"
     compress
     romalign 0x1000
-    include "build/baserom/locerrmsg.o"
+    include "build/assets/misc/locerrmsg/locerrmsg.o"
+    number 1
 endseg
 
 beginseg
