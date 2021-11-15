@@ -1233,7 +1233,247 @@ def get_overlay_sections(vram, overlay):
             [bss_vram, bss_end_vram, 'bss', None, None, rel_bss], \
             [bss_end_vram, bss_end_vram, 'reloc', None, overlay[header_loc:], None]]
 
-# 
+def disassemble_makerom(section):
+    os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
+
+    if section[2] == "rom_header":
+        pi_dom1_reg, clockrate, entrypoint, revision, \
+            chksum1, chksum2, pad1, pad2, \
+                rom_name, pad3, cart, cart_id, \
+                    region, version = struct.unpack(">IIIIIIII20sII2s1sB", section[4])
+
+        out = f"""/*
+ * The Legend of Zelda: Majora's Mask ROM header
+ */
+
+.word  0x{pi_dom1_reg:08X}             /* PI BSD Domain 1 register */
+.word  0x{clockrate:08X}             /* Clockrate setting */
+.word  0x{entrypoint:08X}             /* Entrypoint function (`entrypoint`) */
+.word  0x{revision:08X}             /* Revision */
+.word  0x{chksum1:08X}             /* Checksum 1 */
+.word  0x{chksum2:08X}             /* Checksum 2 */
+.word  0x{pad1:08X}             /* Unknown */
+.word  0x{pad2:08X}             /* Unknown */
+.ascii "{rom_name.decode('ascii')}" /* Internal ROM name */
+.word  0x{pad3:08X}             /* Unknown */
+.word  0x{cart:08X}             /* Cartridge */
+.ascii "{cart_id.decode('ascii')}"                   /* Cartridge ID */
+.ascii "{region.decode('ascii')}"                    /* Region */
+.byte  0x{version:02X}                   /* Version */
+"""
+        with open(ASM_OUT + "/makerom/rom_header.s", "w") as outfile:
+            outfile.write(out)
+
+    elif section[-1]["type"] == "ipl3":
+        # TODO disassemble this eventually, low priority
+        out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x40, 0xFC0\n"
+
+        with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
+            outfile.write(out)
+
+    elif section[-1]["type"] == "entry":
+        # hack: add symbol relocations manually
+        entry_addr = 0x80080000
+
+        functions.add(entry_addr)
+        symbols.update({entry_addr + 0x00 : 0x80099500,
+                        entry_addr + 0x04 : 0x80099500,
+                        entry_addr + 0x20 : 0x80080060,
+                        entry_addr + 0x24 : 0x80099EF0,
+                        entry_addr + 0x28 : 0x80080060,
+                        entry_addr + 0x30 : 0x80099EF0})
+        branch_labels.add(entry_addr + 0xC)
+        disassemble_text(section[4], entry_addr, [], section[-1])
+
+        # manually set boot bss size...
+        entry_asm = ""
+        with open(f"{ASM_OUT}/makerom/entry.text.s") as infile:
+            entry_asm = infile.read()
+
+        entry_asm = entry_asm.replace("0x63b0", "%lo(_bootSegmentBssSize)")
+        with open(f"{ASM_OUT}/makerom/entry.s", "w") as outfile:
+            outfile.write(entry_asm)
+
+        os.remove(f"{ASM_OUT}/makerom/entry.text.s")
+
+def disassemble_dmadata(section):
+    if section[2] == "bss":
+        return
+    os.makedirs(f"{ASM_OUT}/dmadata/", exist_ok=True)
+    out = f""".include "macro.inc"
+
+.macro DMA_TABLE_ENTRY segment
+    .4byte _\segment\()SegmentRomStart
+    .4byte _\segment\()SegmentRomEnd
+    .4byte _\segment\()SegmentRomStart
+    .4byte 0x00000000
+.endm
+
+.macro DMA_TABLE_ENTRY_UNSET segment
+    .4byte _\segment\()SegmentRomStart
+    .4byte _\segment\()SegmentRomEnd
+    .word 0xFFFFFFFF
+    .word 0xFFFFFFFF
+.endm
+
+glabel {variables_ast[0x8009F8B0][0]}
+"""
+    filenames = []
+    with open("tools/disasm/dma_filenames.txt","r") as infile:
+        filenames = ast.literal_eval(infile.read())
+
+    dmadata = section[4]
+    i = 0
+    dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
+    while any([word != 0 for word in as_word_list(dmadata_entry)]):
+        vrom_start,vrom_end,prom_start,prom_end = as_word_list(dmadata_entry)
+        if prom_start == 0xFFFFFFFF and prom_end == 0xFFFFFFFF:
+            out += f"DMA_TABLE_ENTRY_UNSET {filenames[i]}\n"
+        else:
+            out += f"DMA_TABLE_ENTRY {filenames[i]}\n"
+
+        vrom_variables.append(("_" + filenames[i] + "SegmentRomStart", vrom_start))
+        vrom_variables.append(("_" + filenames[i] + "SegmentRomEnd", vrom_end))
+
+        i += 1
+        dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
+
+    out += """
+.space 0x100
+
+.section .bss
+
+.space 0x10
+"""
+    with open(ASM_OUT + "/dmadata/dmadata.s", "w") as outfile:
+        outfile.write(out)
+
+def disassemble_segment(section):
+    print(f"Disassembling {section[-1]['name']} .{section[2]}")
+
+    if section[-1]["name"] == "makerom":
+        disassemble_makerom(section)
+    elif section[-1]["name"] == "dmadata":
+        disassemble_dmadata(section)
+    else:
+        if section[2] == 'text':
+            data_regions = []
+            if section[3] is not None:
+                for override_region in section[3]:
+                    if override_region[2] == 'data':
+                        data_regions.append((override_region[0], override_region[1]))
+
+            disassemble_text(section[4], section[0], data_regions, section[-1])
+        elif section[2] == 'data':
+            disassemble_data(section[4], section[0], section[1], section[-1])
+        elif section[2] == 'rodata':
+            disassemble_rodata(section[4], section[0], section[1], section[-1])
+        elif section[2] == 'bss':
+            disassemble_bss(section[0], section[1], section[-1])
+        elif section[2] == 'reloc':
+            words = as_word_list(section[4])
+
+            segment_dirname = section[-1]['name']
+
+            result = asm_header(".rodata")
+            result += f"\nglabel {section[-1]['name']}_Reloc\n"
+
+            lines = [words[i*8:(i+1)*8] for i in range(0, (len(words) // 8) + 1)]
+            for line in [line for line in lines if len(line) != 0]:
+                result += f"    .word {', '.join([f'0x{word:08X}' for word in line])}\n"
+
+            os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
+            with open(f"{DATA_OUT}/{segment_dirname}/{section[-1]['name']}.reloc.s", "w") as outfile:
+                outfile.write(result)
+
+def rodata_block_size(block):
+    def align(x, n):
+        while (x % n != 0):
+            x += 1
+        return x
+
+    accumulator = 0
+    for part in block.split(' */ .'):
+        part = part.strip()
+        if part.startswith('# '):
+            continue
+        elif part.startswith('asciz '):
+            part = part[len('asciz '):]
+            string = part[1:-1].encode('utf-8', 'ignore').decode('unicode_escape')
+            accumulator += len(string.encode('euc-jp') + b'\x00')
+        elif part.startswith('ascii'):
+            part = part[len('ascii '):]
+            string = part[1:-1].encode('utf-8', 'ignore').decode('unicode_escape')
+            accumulator += len(string.encode('euc-jp'))
+        elif part.startswith('balign '):
+            part = part[len('balign '):]
+            accumulator = align(accumulator, int(part, 16 if part.startswith('0x') else 10))
+        elif part.startswith('double '):
+            part = part[len('double '):]
+            accumulator = align(accumulator, 8)
+            accumulator += 8 * (part.count(',') + 1)
+        elif part.startswith('float '):
+            part = part[len('float '):]
+            accumulator = align(accumulator, 4)
+            accumulator += 4 * (part.count(',') + 1)
+        elif part.startswith('word '):
+            part = part[len('word '):]
+            accumulator = align(accumulator, 4)
+            accumulator += 4 * (part.count(',') + 1)
+        elif part.startswith('half '):
+            part = part[len('half '):]
+            accumulator = align(accumulator, 2)
+            accumulator += 2 * (part.count(',') + 1)
+        elif part.startswith('byte '):
+            part = part[len('byte '):]
+            accumulator += 1 * (part.count(',') + 1)
+    return accumulator
+
+def late_rodata_size(blocks):
+    return sum([rodata_block_size(block) for block in blocks])
+
+def text_block_size(asm):
+    return 4*len([line for line in asm.split("\n") if line.startswith("/*")])
+
+def rodata_syms(rodata):
+    return re.findall(rodata_symbols_regex, rodata)
+
+def rodata_blocks(rodata):
+    return ["glabel" + b for b in rodata.split("glabel")[1:]]
+
+def find_late_rodata_start(rodata):
+    """
+    Returns the symbol that is the first late_rodata symbol, or None if there is no late_rodata
+
+    Note this is approximate as const qualified floats/doubles end up in rdata and not late_rodata,
+        so there may be some overlap. This should not pose much of a problem however.
+    Also note that this method assumes the input rodata consists only of at most one block rodata and one block late_rodata,
+        that is that the file splits are correct.
+    """
+    first = None
+
+    for sym,body in rodata:
+        if sym.startswith("jtbl_") and ".word L" in body:
+            # jump tables are always late_rodata, so we can return early
+            # floats and doubles are very rarely not late_rodata, this is mostly seen in libultra, so we cannot return early for those
+            if first is not None:
+                return first
+            else:
+                return sym
+        elif (".float " in body or ".double " in body) and first is None:
+            # may be late_rodata, but we aren't sure yet
+            # it is confirmed either by reaching the end or by finding a jumptable, and it is proven wrong if something that is not late_rodata occurs after it
+            first = sym
+        elif (".asciz" in body or (".word " in body and ".float" not in body) or ".half " in body or ".byte " in body) and first is not None:
+            # reset first if something that is definitely not late_rodata is found
+            # word and not float is due to some floats needing to be output as words either due to being a specific NaN value, or GAS can't convert it properly
+            first = None
+    # May still be None at this point, that just means there is no late_rodata
+    return first
+
+
+
+#==========================================#
 
 print("Setting Up")
 
@@ -1349,180 +1589,13 @@ for segment in files_spec:
     if segment[2] == 'makerom':
         continue
 
-    print(f"Finding symbols from .rodata and .dmadata in {segment[0]}")
+    print(f"Finding symbols from .rodata in {segment[0]}")
 
     for section in segment[3]:
         if section[2] == 'rodata':
             find_symbols_in_rodata(section[4], section[0], section[1], section[5], segment)
-        elif section[2] == 'dmadata':
-            filenames = []
-            with open("tools/disasm/dma_filenames.txt","r") as infile:
-                filenames = ast.literal_eval(infile.read())
-
-            dmadata = segment[3][0][4]
-            i = 0
-            dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
-            while any([word != 0 for word in as_word_list(dmadata_entry)]):
-                vrom_start,vrom_end,prom_start,prom_end = as_word_list(dmadata_entry)
-                #print(f"{vrom_start:08X},{vrom_end:08X},{prom_start:08X},{prom_end:08X} : {filenames[i]}")
-                vrom_variables.append(("_" + filenames[i] + "SegmentRomStart", vrom_start))
-                vrom_variables.append(("_" + filenames[i] + "SegmentRomEnd", vrom_end))
-                i += 1
-                dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
-
-def disassemble_makerom(section):
-    os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
-
-    if section[2] == "rom_header":
-        pi_dom1_reg, clockrate, entrypoint, revision, \
-            chksum1, chksum2, pad1, pad2, \
-                rom_name, pad3, cart, cart_id, \
-                    region, version = struct.unpack(">IIIIIIII20sII2s1sB", section[4])
-
-        out = f"""/*
- * The Legend of Zelda: Majora's Mask ROM header
- */
-
-.word  0x{pi_dom1_reg:08X}             /* PI BSD Domain 1 register */
-.word  0x{clockrate:08X}             /* Clockrate setting */
-.word  0x{entrypoint:08X}             /* Entrypoint function (`entrypoint`) */
-.word  0x{revision:08X}             /* Revision */
-.word  0x{chksum1:08X}             /* Checksum 1 */
-.word  0x{chksum2:08X}             /* Checksum 2 */
-.word  0x{pad1:08X}             /* Unknown */
-.word  0x{pad2:08X}             /* Unknown */
-.ascii "{rom_name.decode('ascii')}" /* Internal ROM name */
-.word  0x{pad3:08X}             /* Unknown */
-.word  0x{cart:08X}             /* Cartridge */
-.ascii "{cart_id.decode('ascii')}"                   /* Cartridge ID */
-.ascii "{region.decode('ascii')}"                    /* Region */
-.byte  0x{version:02X}                   /* Version */
-"""
-        with open(ASM_OUT + "/makerom/rom_header.s", "w") as outfile:
-            outfile.write(out)
-
-    elif section[-1]["type"] == "ipl3":
-        # TODO disassemble this eventually, low priority
-        out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x40, 0xFC0\n"
-
-        with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
-            outfile.write(out)
-
-    elif section[-1]["type"] == "entry":
-        # hack: add symbol relocations manually
-        entry_addr = 0x80080000
-
-        functions.add(entry_addr)
-        symbols.update({entry_addr + 0x00 : 0x80099500,
-                        entry_addr + 0x04 : 0x80099500,
-                        entry_addr + 0x20 : 0x80080060,
-                        entry_addr + 0x24 : 0x80099EF0,
-                        entry_addr + 0x28 : 0x80080060,
-                        entry_addr + 0x30 : 0x80099EF0})
-        branch_labels.add(entry_addr + 0xC)
-        disassemble_text(section[4], entry_addr, [], section[-1])
-
-        # manually set boot bss size...
-        entry_asm = ""
-        with open(f"{ASM_OUT}/makerom/entry.text.s") as infile:
-            entry_asm = infile.read()
-
-        entry_asm = entry_asm.replace("0x63b0", "%lo(_bootSegmentBssSize)")
-        with open(f"{ASM_OUT}/makerom/entry.s", "w") as outfile:
-            outfile.write(entry_asm)
-
-        os.remove(f"{ASM_OUT}/makerom/entry.text.s")
-
-def disassemble_dmadata(section):
-    if section[2] == "bss":
-        return
-    os.makedirs(f"{ASM_OUT}/dmadata/", exist_ok=True)
-    out = f""".include "macro.inc"
-
-.macro DMA_TABLE_ENTRY segment
-    .4byte _\segment\()SegmentRomStart
-    .4byte _\segment\()SegmentRomEnd
-    .4byte _\segment\()SegmentRomStart
-    .4byte 0x00000000
-.endm
-
-.macro DMA_TABLE_ENTRY_UNSET segment
-    .4byte _\segment\()SegmentRomStart
-    .4byte _\segment\()SegmentRomEnd
-    .word 0xFFFFFFFF
-    .word 0xFFFFFFFF
-.endm
-
-glabel {variables_ast[0x8009F8B0][0]}
-"""
-    filenames = []
-    with open("tools/disasm/dma_filenames.txt","r") as infile:
-        filenames = ast.literal_eval(infile.read())
-
-    dmadata = section[4]
-    i = 0
-    dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
-    while any([word != 0 for word in as_word_list(dmadata_entry)]):
-        vrom_start,vrom_end,prom_start,prom_end = as_word_list(dmadata_entry)
-        if prom_start == 0xFFFFFFFF and prom_end == 0xFFFFFFFF:
-            out += f"DMA_TABLE_ENTRY_UNSET {filenames[i]}\n"
-        else:
-            out += f"DMA_TABLE_ENTRY {filenames[i]}\n"
-        i += 1
-        dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
-
-    out += """
-.space 0x100
-
-.section .bss
-
-.space 0x10
-"""
-    with open(ASM_OUT + "/dmadata/dmadata.s", "w") as outfile:
-        outfile.write(out)
-
-def disassemble_segment(section):
-    print(f"Disassembling {section[-1]['name']} .{section[2]}")
-
-    if section[-1]["name"] == "makerom":
-        disassemble_makerom(section)
-    elif section[-1]["name"] == "dmadata":
-        disassemble_dmadata(section)
-    else:
-        if section[2] == 'text':
-            data_regions = []
-            if section[3] is not None:
-                for override_region in section[3]:
-                    if override_region[2] == 'data':
-                        data_regions.append((override_region[0], override_region[1]))
-
-            disassemble_text(section[4], section[0], data_regions, section[-1])
-        elif section[2] == 'data':
-            disassemble_data(section[4], section[0], section[1], section[-1])
-        elif section[2] == 'rodata':
-            disassemble_rodata(section[4], section[0], section[1], section[-1])
-        elif section[2] == 'bss':
-            disassemble_bss(section[0], section[1], section[-1])
-        elif section[2] == 'reloc':
-            words = as_word_list(section[4])
-
-            segment_dirname = section[-1]['name']
-
-            result = asm_header(".rodata")
-            result += f"\nglabel {section[-1]['name']}_Reloc\n"
-
-            lines = [words[i*8:(i+1)*8] for i in range(0, (len(words) // 8) + 1)]
-            for line in [line for line in lines if len(line) != 0]:
-                result += f"    .word {', '.join([f'0x{word:08X}' for word in line])}\n"
-
-            os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
-            with open(f"{DATA_OUT}/{segment_dirname}/{section[-1]['name']}.reloc.s", "w") as outfile:
-                outfile.write(result)
 
 print("Disassembling Segments")
-
-#disassemble_makerom(next(segment for segment in files_spec if segment[2] == 'makerom'))
-#disassemble_dmadata(next(segment for segment in files_spec if segment[2] == 'dmadata'))
 
 # Textual disassembly for each segment
 all_sections = []
@@ -1545,91 +1618,6 @@ print("Splitting text and migrating rodata")
 func_regex = re.compile(r'\n\nglabel \S+\n')
 rodata_symbols_regex = re.compile(r'(?<=\n)glabel (.+)(?=\n)')
 asm_symbols_regex = re.compile(r'%(?:lo|hi)\((.+?)\)')
-
-def rodata_block_size(block):
-    def align(x, n):
-        while (x % n != 0):
-            x += 1
-        return x
-
-    accumulator = 0
-    for part in block.split(' */ .'):
-        part = part.strip()
-        if part.startswith('# '):
-            continue
-        elif part.startswith('asciz '):
-            part = part[len('asciz '):]
-            string = part[1:-1].encode('utf-8', 'ignore').decode('unicode_escape')
-            accumulator += len(string.encode('euc-jp') + b'\x00')
-        elif part.startswith('ascii'):
-            part = part[len('ascii '):]
-            string = part[1:-1].encode('utf-8', 'ignore').decode('unicode_escape')
-            accumulator += len(string.encode('euc-jp'))
-        elif part.startswith('balign '):
-            part = part[len('balign '):]
-            accumulator = align(accumulator, int(part, 16 if part.startswith('0x') else 10))
-        elif part.startswith('double '):
-            part = part[len('double '):]
-            accumulator = align(accumulator, 8)
-            accumulator += 8 * (part.count(',') + 1)
-        elif part.startswith('float '):
-            part = part[len('float '):]
-            accumulator = align(accumulator, 4)
-            accumulator += 4 * (part.count(',') + 1)
-        elif part.startswith('word '):
-            part = part[len('word '):]
-            accumulator = align(accumulator, 4)
-            accumulator += 4 * (part.count(',') + 1)
-        elif part.startswith('half '):
-            part = part[len('half '):]
-            accumulator = align(accumulator, 2)
-            accumulator += 2 * (part.count(',') + 1)
-        elif part.startswith('byte '):
-            part = part[len('byte '):]
-            accumulator += 1 * (part.count(',') + 1)
-    return accumulator
-
-def late_rodata_size(blocks):
-    return sum([rodata_block_size(block) for block in blocks])
-
-def text_block_size(asm):
-    return 4*len([line for line in asm.split("\n") if line.startswith("/*")])
-
-def rodata_syms(rodata):
-    return re.findall(rodata_symbols_regex, rodata)
-
-def rodata_blocks(rodata):
-    return ["glabel" + b for b in rodata.split("glabel")[1:]]
-
-def find_late_rodata_start(rodata):
-    """
-    Returns the symbol that is the first late_rodata symbol, or None if there is no late_rodata
-
-    Note this is approximate as const qualified floats/doubles end up in rdata and not late_rodata,
-        so there may be some overlap. This should not pose much of a problem however.
-    Also note that this method assumes the input rodata consists only of at most one block rodata and one block late_rodata,
-        that is that the file splits are correct.
-    """
-    first = None
-
-    for sym,body in rodata:
-        if sym.startswith("jtbl_") and ".word L" in body:
-            # jump tables are always late_rodata, so we can return early
-            # floats and doubles are very rarely not late_rodata, this is mostly seen in libultra, so we cannot return early for those
-            if first is not None:
-                return first
-            else:
-                return sym
-        elif (".float " in body or ".double " in body) and first is None:
-            # may be late_rodata, but we aren't sure yet
-            # it is confirmed either by reaching the end or by finding a jumptable, and it is proven wrong if something that is not late_rodata occurs after it
-            first = sym
-        elif (".asciz" in body or (".word " in body and ".float" not in body) or ".half " in body or ".byte " in body) and first is not None:
-            # reset first if something that is definitely not late_rodata is found
-            # word and not float is due to some floats needing to be output as words either due to being a specific NaN value, or GAS can't convert it properly
-            first = None
-    # May still be None at this point, that just means there is no late_rodata
-    return first
 
 # Split files and migrate rodata that should be migrated
 for root,dirs,files in os.walk(ASM_OUT):
