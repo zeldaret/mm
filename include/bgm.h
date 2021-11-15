@@ -3,8 +3,8 @@
 
 #define NA_BGM_STOP 0x100000FF
 
-#define NA_BGM_GENERAL_SFX 0x0              // General Sound Effects
-#define NA_BGM_NATURE_BACKGROUND 0x01       // Ambient background noises
+#define NA_BGM_GENERAL_SFX 0x00             // General Sound Effects
+#define NA_BGM_NATURE_AMBIENCE 0x01         // Ambient background noises
 #define NA_BGM_TERMINA_FIELD 0x02           // Termina Field
 #define NA_BGM_CHASE 0x03                   // Forest Chase
 #define NA_BGM_MAJORAS_THEME 0x04           // Majora's Theme "STALKID"
@@ -49,7 +49,7 @@
 #define NA_BGM_OPEN_CHEST 0x2B              // Open Chest "OPEN_TRE_BOX"
 #define NA_BGM_MARINE_RESEARCH_LAB 0x2C     // Marine Research Laboratory "DRUGSTORE"
 #define NA_BGM_GIANTS_THEME 0x2D            // The Four Giants "KYOJIN_ROOM"
-#define NA_BGM_GURU_GURU 0x2E               // Guru-Guru's Song "FUSHA"
+#define NA_BGM_SONG_OF_STORMS 0x2E          // Guru-Guru's Song "FUSHA"
 #define NA_BGM_ROMANI_RANCH 0x2F            // Romani Ranch "RONRON"
 #define NA_BGM_GORON_VILLAGE 0x30           // Goron Village
 #define NA_BGM_MAYORS_OFFICE 0x31           // Mayor Dotour "MEETING"

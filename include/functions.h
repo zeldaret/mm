@@ -3911,7 +3911,7 @@ void func_801A246C(u8 param_1, u8 param_2);
 // void func_801A27E8(void);
 // void func_801A281C(void);
 void func_801A29D4(UNK_TYPE arg0, f32 arg1, UNK_TYPE arg2);
-void func_801A2BB8(s32 arg0);
+void func_801A2BB8(s32 seqId);
 void func_801A2C20(void);
 // void func_801A2C44(void);
 // void func_801A2C88(void);

@@ -337,7 +337,7 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 func_80123F2C(globalCtx, 80);
                 this->unk_26A = 1;
                 this->actionFunc = func_809C80C0;
-                func_801A2BB8(0x25);
+                func_801A2BB8(NA_BGM_MINI_GAME_2);
                 break;
 
             case 0xA32:
@@ -657,7 +657,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 func_80112AFC(globalCtx);
                 func_80123F2C(globalCtx, 0x63);
                 this->unk_26A = 1;
-                func_801A2BB8(0x25);
+                func_801A2BB8(NA_BGM_MINI_GAME_2);
                 this->actionFunc = func_809C8808;
                 break;
 
