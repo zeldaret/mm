@@ -482,7 +482,8 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
                 sp60.y = this->actor.world.pos.y + 50.0f;
                 sp60.z = this->actor.world.pos.z;
 
-                temp_f14 = BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &poly, &bgId, &this->actor, &sp60);
+                temp_f14 =
+                    BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &poly, &bgId, &this->actor, &sp60);
                 temp_f2 = temp_f14 - this->actor.world.pos.y;
 
                 if (fabsf(temp_f2) < (fabsf(this->actor.velocity.y) + 0.01f)) {
@@ -513,8 +514,8 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
         WaterBox* sp44;
         f32 sp40;
 
-        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp40,
-                          &sp44)) {
+        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                   &sp40, &sp44)) {
             if ((this->actor.world.pos.y + this->unk_1DC) <= sp40) {
                 this->unk_1E5 |= 0x20;
                 if (sp40 < (this->unk_1DC + sp78)) {
@@ -1511,8 +1512,8 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
                     sp50.x = this->actor.world.pos.x;
                     sp50.y = this->actor.world.pos.y + 50.0f;
                     sp50.z = this->actor.world.pos.z;
-                    this->actor.floorHeight =
-                        BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp50);
+                    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly,
+                                                                          &bgId, &this->actor, &sp50);
                     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
                         this->actor.floorBgId = bgId;
                         if (this->actor.world.pos.y <= (this->actor.floorHeight + 2.0f)) {

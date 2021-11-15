@@ -453,6 +453,8 @@
     0x801AEFC0:("D_801AEFC0","UNK_TYPE1","",0x1),
     0x801AEFD0:("gActorOverlayTable","ActorOverlay","[ACTOR_ID_MAX]",0x5640),
     0x801B4610:("gMaxActorId","s32","",0x4),
+    0x801B46DC:("sceneSubdivisionList","BgCheckSceneSubdivisionEntry","[]",0x24),
+    0x801B4700:("customDynapolyMem","BgSpecialSceneMaxObjects","[]",0x8),
     0x801B4708:("D_801B4708","UNK_TYPE1","",0x1),
     0x801B4710:("D_801B4710","UNK_TYPE1","",0x1),
     0x801B4738:("D_801B4738","UNK_TYPE1","",0x1),

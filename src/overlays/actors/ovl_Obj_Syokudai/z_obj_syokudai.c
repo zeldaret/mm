@@ -156,7 +156,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     } else {
         if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &waterSurface,
-                          &waterBox) &&
+                                   &waterBox) &&
             ((waterSurface - thisx->world.pos.y) > OBJ_SYOKUDAI_FLAME_HEIGHT)) {
 
             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_OUT;

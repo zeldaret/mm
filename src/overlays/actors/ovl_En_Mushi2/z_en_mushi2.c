@@ -133,7 +133,8 @@ s32 func_80A68860(EnMushi2* this, GlobalContext* globalCtx) {
         return true;
     }
 
-    return WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30, &sp34);
+    return WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                  &sp30, &sp34);
 }
 
 s32 func_80A68910(EnMushi2* this, GlobalContext* globalCtx) {
@@ -466,8 +467,8 @@ s32 func_80A69468(EnMushi2* this, GlobalContext* globalCtx) {
     posB.y = (y + sp50.y) + this->actor.world.pos.y;
     posB.z = (z + sp50.z) + this->actor.world.pos.z;
 
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.prevPos, &posB, &this->unk_33C, &this->poly, true, true, true, true,
-                      &this->polyBgId)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.prevPos, &posB, &this->unk_33C, &this->poly, true,
+                                true, true, true, &this->polyBgId)) {
         this->unk_30C |= 6;
         return true;
     }
@@ -487,7 +488,8 @@ s32 func_80A6958C(EnMushi2* this, GlobalContext* globalCtx) {
     posB.y = (this->unk_31C.y * -4.0f) + this->actor.world.pos.y;
     posB.z = (this->unk_31C.z * -4.0f) + this->actor.world.pos.z;
 
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &this->unk_33C, &this->poly, true, true, true, true, &this->polyBgId)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &this->unk_33C, &this->poly, true, true, true, true,
+                                &this->polyBgId)) {
         this->unk_30C |= 0xA;
         return true;
     }
@@ -510,7 +512,8 @@ s32 func_80A6969C(EnMushi2* this, GlobalContext* globalCtx) {
     posB.y = this->actor.prevPos.y + sp38.y + (this->unk_328.y * -4.0f);
     posB.z = this->actor.prevPos.z + sp38.z + (this->unk_328.z * -4.0f);
 
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &this->unk_33C, &this->poly, true, true, true, true, &this->polyBgId)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &this->unk_33C, &this->poly, true, true, true, true,
+                                &this->polyBgId)) {
         this->unk_30C |= (0x10 | 0x2);
         return true;
     }
@@ -531,8 +534,8 @@ void func_80A697C4(EnMushi2* this, GlobalContext* globalCtx) {
             func_80A6969C(this, globalCtx);
         }
 
-        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C,
-                          &sp30)) {
+        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                   &sp2C, &sp30)) {
             this->actor.depthInWater = sp2C - this->actor.world.pos.y;
             if (this->actor.depthInWater >= 1.0f) {
                 this->unk_30C |= 0x20;
@@ -680,8 +683,8 @@ s32 func_80A69EE4(EnMushi2* this, GlobalContext* globalCtx) {
     f32 waterSurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface, &waterBox,
-                      &bgId) &&
+    if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                &waterSurface, &waterBox, &bgId) &&
         (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
@@ -1176,13 +1179,12 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk_34C != 0) {
             sp4C = 0.0f;
 
-            this->unk_354 = Math3D_DistanceSquared(&this->actor.world.pos, &this->unk_34C->actor.world.pos);
+            this->unk_354 = Math3D_Vec3fDistSq(&this->actor.world.pos, &this->unk_34C->actor.world.pos);
             if (this->unk_354 < this->unk_350) {
-                f32 dist = Math3D_NormalizedSignedDistanceFromPlane(
-                    COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.x),
-                    COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.y),
-                    COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.z), this->unk_34C->actor.floorPoly->dist,
-                    &this->actor.world.pos);
+                f32 dist = Math3D_DistPlaneToPos(COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.x),
+                                                 COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.y),
+                                                 COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.z),
+                                                 this->unk_34C->actor.floorPoly->dist, &this->actor.world.pos);
 
                 if (fabsf(dist) < 3.0f) {
                     sp4C = 1.9f;

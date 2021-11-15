@@ -298,7 +298,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
         }
 
         if ((this->actor.colChkInfo.mass != MASS_IMMOVABLE) &&
-            (Math3D_DistanceSquared(&this->actor.world.pos, &this->actor.prevPos) < 0.01f)) {
+            (Math3D_Vec3fDistSq(&this->actor.world.pos, &this->actor.prevPos) < 0.01f)) {
             this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         }
 

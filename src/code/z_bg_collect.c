@@ -7,7 +7,7 @@ void BgCheck2_UpdateActorPosition(CollisionContext* colCtx, s32 bgId, Actor* act
     Vec3f newPos;
     Vec3f posWithInv;
 
-    if (DynaPoly_IsBgIdBgActor(bgId) == false) {
+    if (!DynaPoly_IsBgIdBgActor(bgId)) {
         return;
     }
 
@@ -38,7 +38,7 @@ void BgCheck2_UpdateActorPosition(CollisionContext* colCtx, s32 bgId, Actor* act
 void BgCheck2_UpdateActorYRotation(CollisionContext* colCtx, s32 bgId, Actor* actor) {
     s16 angleChange;
 
-    if (DynaPoly_IsBgIdBgActor(bgId) == false) {
+    if (!DynaPoly_IsBgIdBgActor(bgId)) {
         return;
     }
 
@@ -55,7 +55,7 @@ void BgCheck2_UpdateActorYRotation(CollisionContext* colCtx, s32 bgId, Actor* ac
 void BgCheck2_AttachToMesh(CollisionContext* colCtx, Actor* actor, s32 bgId) {
     DynaPolyActor* meshActor;
 
-    if (DynaPoly_IsBgIdBgActor(bgId) == false) {
+    if (!DynaPoly_IsBgIdBgActor(bgId)) {
         return;
     }
 
@@ -76,7 +76,7 @@ u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* colCtx, s32 bgId, Actor
     u32 wasUpdated = 0;
     DynaPolyActor* meshActor;
 
-    if (DynaPoly_IsBgIdBgActor(bgId) == false) {
+    if (!DynaPoly_IsBgIdBgActor(bgId)) {
         return 0;
     }
 
@@ -90,12 +90,12 @@ u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* colCtx, s32 bgId, Actor
         return 0;
     }
 
-    if ((meshActor->unk154 & 1) != 0) {
+    if (meshActor->unk154 & 1) {
         BgCheck2_UpdateActorPosition(colCtx, bgId, actor);
         wasUpdated = 1;
     }
 
-    if ((meshActor->unk154 & 2) != 0) {
+    if (meshActor->unk154 & 2) {
         BgCheck2_UpdateActorYRotation(colCtx, bgId, actor);
         wasUpdated = 1;
     }

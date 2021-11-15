@@ -906,7 +906,7 @@ s32 func_80B44234(EnInvadepoh* this, Vec3f* vec) {
 
     for (i = 0, arr = this->pathPoints; i < temp_s3; i++, arr++) {
         Math_Vec3s_ToVec3f(&sp48, arr);
-        distance = Math3D_DistanceSquared(&sp48, vec);
+        distance = Math3D_Vec3fDistSq(&sp48, vec);
         if (distance < min) {
             min = distance;
             ret = i;
@@ -1384,7 +1384,7 @@ s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 ar
     while (actorIterator != NULL) {
         if ((actorIterator->id == ACTOR_EN_DOOR) && (actorIterator->update != NULL) &&
             (actorIterator->room == this->actor.room) &&
-            Math3D_DistanceSquared(&actorIterator->world.pos, &this->actor.world.pos) < range) {
+            Math3D_Vec3fDistSq(&actorIterator->world.pos, &this->actor.world.pos) < range) {
             ((EnDoor*)actorIterator)->unk1A7 = arg3;
             retVal = true;
             break;
@@ -1435,7 +1435,7 @@ void func_80B457A0(EnInvadepoh* this) {
 
     for (i = 0; i < this->unk379; i++) {
         if ((D_80B50320[i] != NULL) && D_80B50320[i]->drawAlien) {
-            distanceSquared = Math3D_DistanceSquared(&D_80B50320[i]->actor.world.pos, &this->actor.world.pos);
+            distanceSquared = Math3D_Vec3fDistSq(&D_80B50320[i]->actor.world.pos, &this->actor.world.pos);
             if (distanceSquared < phi_f20) {
                 phi_f20 = distanceSquared;
                 phi_s5 = i;
@@ -2880,7 +2880,7 @@ void func_80B49454(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 
     Math_Vec3f_Sum(&D_80B4EDD0[this->unk3AC], &this->actor.home.pos, &sp30);
-    if (Math3D_DistanceSquared(&this->actor.world.pos, &sp30) < SQ(400.0f)) {
+    if (Math3D_Vec3fDistSq(&this->actor.world.pos, &sp30) < SQ(400.0f)) {
         this->actor.speedXZ *= 0.8f;
     } else {
         Math_StepToF(&this->actor.speedXZ, 170.0f, 21.0f);
@@ -3614,7 +3614,7 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (this->unk3BC >= 0) {
         Math_Vec3s_ToVec3f(&sp28, &this->pathPoints[this->unk3BC]);
-        temp_f0 = Math3D_DistanceSquared(&this->actor.world.pos, &sp28);
+        temp_f0 = Math3D_Vec3fDistSq(&this->actor.world.pos, &sp28);
         if (temp_f0 < SQ(80.0f)) {
             this->actor.speedXZ *= 0.85f;
         } else if (temp_f0 < SQ(150.0f)) {
@@ -3808,7 +3808,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
         func_80B4516C(this);
         Math_StepToS(&this->behaviorInfo.unk4C, 0xBB8, 0x1F5);
-        if (Math3D_DistanceSquared(&this->actor.prevPos, &this->actor.world.pos) > SQ(0.01f)) {
+        if (Math3D_Vec3fDistSq(&this->actor.prevPos, &this->actor.world.pos) > SQ(0.01f)) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world.pos),
                                3, this->behaviorInfo.unk4C, 0x1F4);
         }

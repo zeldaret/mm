@@ -295,7 +295,7 @@ void func_80B289DC(EnFish2* this, GlobalContext* globalCtx) {
                 this->actor.gravity = 0.0f;
             }
         } else if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                 &this->unk_334, &sp2C)) {
+                                        &this->unk_334, &sp2C)) {
             if ((this->unk_334 != BGCHECK_Y_MIN) && (this->actor.world.pos.y < (this->unk_334 - this->unk_2D8))) {
                 this->actor.velocity.y = this->actor.world.rot.x * 0.001f * -0.1f;
                 if (this->actionFunc == func_80B297FC) {
@@ -373,8 +373,9 @@ void func_80B28C14(EnFish2* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->unk_334 == BGCHECK_Y_MIN) && !WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x,
-                                                           this->actor.world.pos.z, &this->unk_334, &waterbox)) {
+    if ((this->unk_334 == BGCHECK_Y_MIN) &&
+        !WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                              &this->unk_334, &waterbox)) {
         this->unk_334 = this->actor.world.pos.y;
     }
 
@@ -907,7 +908,7 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
         WaterBox* sp78;
 
         if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                          &this->unk_334, &sp78)) {
+                                 &this->unk_334, &sp78)) {
             Vec3f sp6C;
             s32 i;
 
@@ -1000,7 +1001,7 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
             }
 
             if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                              &this->unk_334, &sp6C)) {
+                                     &this->unk_334, &sp6C)) {
                 if ((this->unk_334 != BGCHECK_Y_MIN) && (this->unk_334 - this->unk_2D8 < this->actor.world.pos.y)) {
                     this->actor.world.pos.y = this->unk_334 - this->unk_2D8;
                 }
@@ -1012,8 +1013,8 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 f32 phi_f20 = 0;
                 WaterBox* sp4C;
 
-                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                  &this->unk_334, &sp4C)) {
+                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x,
+                                         this->actor.world.pos.z, &this->unk_334, &sp4C)) {
                     phi_f20 = D_80B2B3A8[temp_s0_2] + (this->unk_334 - this->unk_2D8);
                     phi_f2 = D_80B2B3A8[temp_s0_2 + 1] + this->unk_2D4;
                 }

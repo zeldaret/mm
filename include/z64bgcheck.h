@@ -1,5 +1,5 @@
-#ifndef _Z64_BGCHECK_H_
-#define _Z64_BGCHECK_H_
+#ifndef Z64_BGCHECK_H
+#define Z64_BGCHECK_H
 
 struct GlobalContext;
 struct Actor;
@@ -26,7 +26,7 @@ struct DynaPolyActor;
 
 #define WATERBOX_ROOM(p) ((((s32)p) >> 13) & 0x3F)
 
-// bccFlags
+// bccFlags (bgcheck check flags)
 #define BGCHECK_CHECK_WALL (1 << 0)
 #define BGCHECK_CHECK_FLOOR (1 << 1)
 #define BGCHECK_CHECK_CEILING (1 << 2)
@@ -35,17 +35,25 @@ struct DynaPolyActor;
 #define BGCHECK_CHECK_ALL \
     (BGCHECK_CHECK_WALL | BGCHECK_CHECK_FLOOR | BGCHECK_CHECK_CEILING | BGCHECK_CHECK_ONE_FACE | BGCHECK_CHECK_DYNA)
 
-// bciFlags
+// bciFlags (bgcheck ignore flags)
 #define BGCHECK_IGNORE_NONE 0
 #define BGCHECK_IGNORE_CEILING (1 << 0)
 #define BGCHECK_IGNORE_WALL (1 << 1)
 #define BGCHECK_IGNORE_FLOOR (1 << 2)
 
-// poly exclusion flags (xpFlags)
+// xpFlags (poly exclusion flags)
 #define COLPOLY_IGNORE_NONE 0
 #define COLPOLY_IGNORE_CAMERA (1 << 0)
 #define COLPOLY_IGNORE_ENTITY (1 << 1)
 #define COLPOLY_IGNORE_PROJECTILES (1 << 2)
+
+// Surface Types
+#define COLPOLY_SURFACE_GROUND 0
+#define COLPOLY_SURFACE_SAND 1
+#define COLPOLY_SURFACE_SNOW 14
+
+// CollisionContext flags
+#define BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW 1
 
 typedef struct {
     /* 0x0 */ Vec3s pos;
@@ -76,7 +84,7 @@ typedef struct CollisionPoly {
 
 typedef struct {
     /* 0x00 */ u16 cameraSType;
-    /* 0x02 */ s16 numCameras;
+    /* 0x02 */ s16 unk_02;
     /* 0x04 */ Vec3s* camPosData;
 } CamData;
 
@@ -85,27 +93,51 @@ typedef struct {
     /* 0x6 */ s16 xLength;
     /* 0x8 */ s16 zLength;
     /* 0xC */ u32 properties;
+    // 0x0008_0000 = ?
+    // 0x0007_E000 = room index, 0x3F = all rooms
+    // 0x0000_1F00 = lighting setting index
+    // 0x0000_00FF = CamData index
 } WaterBox; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ u32 data[2]; //attributes[2];
+    /* 0x0 */ u32 data[2];
+
+    // Word 0
+    // 0x8000_0000 = horse blocked
+    // 0x4000_0000 = floor surface recessed by 1 unit
+    // 0x3C00_0000 = ? (floor property?)
+    // 0x03E0_0000 = ? (wall property?)
+    // 0x001C_0000 = ?
+    // 0x0003_E000 = ?
+    // 0x0000_1F00 = scene exit index
+    // 0x0000_00FF = CamData index
+    // Word 1
+    // 0x0800_0000 = wall damage
+    // 0x07E0_0000 = conveyor direction
+    // 0x001C_0000 = conveyor speed
+    // 0x0002_0000 = is hookable surface
+    // 0x0001_F800 = echo/reverb
+    // 0x0000_07C0 = lighting setting index
+    // 0x0000_0030 = surface slope
+    // 0x0000_000F = type
+
 } SurfaceType; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Vec3s minBounds; //min
-    /* 0x06 */ Vec3s maxBounds; //max
-    /* 0x0C */ u16 numVertices; //numVertices;
-    /* 0x10 */ Vec3s* vtxList; //BgVertex* vertices;
-    /* 0x14 */ u16 numPolygons; //numPolygons;
-    /* 0x18 */ CollisionPoly* polyList; //polygons;
-    /* 0x1C */ SurfaceType* surfaceTypeList; //attributes;
-    /* 0x20 */ CamData* cameraDataList; //cameraData;
-    /* 0x24 */ u16 numWaterBoxes; //nbWaterBoxes MM
+    /* 0x00 */ Vec3s minBounds; // minimum coordinates of poly bounding box
+    /* 0x06 */ Vec3s maxBounds; // maximum coordinates of poly bounding box
+    /* 0x0C */ u16 numVertices;
+    /* 0x10 */ Vec3s* vtxList;
+    /* 0x14 */ u16 numPolygons;
+    /* 0x18 */ CollisionPoly* polyList;
+    /* 0x1C */ SurfaceType* surfaceTypeList;
+    /* 0x20 */ CamData* cameraDataList;
+    /* 0x24 */ u16 numWaterBoxes;
     /* 0x28 */ WaterBox* waterBoxes;
 } CollisionHeader; // size = 0x2C
 
 typedef struct {
-    /* 0x0 */ s16 polyId; //polyIndex;
+    /* 0x0 */ s16 polyId;
     /* 0x2 */ u16 next;
 } SSNode; // size = 0x4
 
@@ -114,14 +146,14 @@ typedef struct {
 } SSList;
 
 typedef struct {
-    /* 0x0 */ u16 max; //maxNodes;
-    /* 0x2 */ u16 count; //reservedNodes
-    /* 0x4 */ SSNode* tbl;//nodes;
+    /* 0x0 */ u16 max;
+    /* 0x2 */ u16 count;
+    /* 0x4 */ SSNode* tbl;
     /* 0x8 */ u8* polyCheckTbl;
 } SSNodeList; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ SSNode* tbl; //nodes
+    /* 0x0 */ SSNode* tbl;
     /* 0x4 */ u32 count;
     /* 0x8 */ s32 maxNodes;
 } DynaSSNodeList; // size = 0xC
@@ -171,17 +203,17 @@ typedef struct {
 } DynaCollisionContext; // size = 0x1418
 
 typedef struct {
-    /* 0x00 */ CollisionHeader* colHeader;
-    /* 0x04 */ Vec3f minBounds;
-    /* 0x10 */ Vec3f maxBounds;
-    /* 0x1C */ Vec3i subdivAmount;
-    /* 0x28 */ Vec3f subdivLength; 
-    /* 0x34 */ Vec3f subdivLengthInv;
-    /* 0x40 */ StaticLookup* lookupTbl;
+    /* 0x00 */ CollisionHeader* colHeader; // scene's static collision
+    /* 0x04 */ Vec3f minBounds;            // minimum coordinates of collision bounding box
+    /* 0x10 */ Vec3f maxBounds;            // maximum coordinates of collision bounding box
+    /* 0x1C */ Vec3i subdivAmount;         // x, y, z subdivisions of the scene's static collision
+    /* 0x28 */ Vec3f subdivLength;         // x, y, z subdivision worldspace lengths
+    /* 0x34 */ Vec3f subdivLengthInv;      // inverse of subdivision length
+    /* 0x40 */ StaticLookup* lookupTbl;    // 3d array of length subdivAmount
     /* 0x44 */ SSNodeList polyNodes;
     /* 0x0050 */ DynaCollisionContext dyna;
-    /* 0x1468 */ u32 memSize;
-    /* 0x146C */ u32 unk146C;
+    /* 0x1468 */ u32 memSize; // Size of all allocated memory plus CollisionContext
+    /* 0x146C */ u32 flags; // bit 0 reverses conveyor direction (i.e. water flow in Great Bay Temple)
 } CollisionContext; // size = 0x1470
 
 typedef struct {
@@ -198,7 +230,7 @@ typedef struct {
     /* 0x28 */ f32 chkDist;
     /* 0x2C */ DynaCollisionContext* dyna;
     /* 0x30 */ SSList* ssList;
-} DynaRaycast;
+} DynaRaycast; // size = 0x34
 
 typedef struct
 {
@@ -215,7 +247,7 @@ typedef struct
     /* 0x24 */ f32 chkDist;
     /* 0x28 */ s32 bccFlags;
     /* 0x2C */ Actor* actor;
-} StaticLineTest;
+} StaticLineTest; // size = 0x30
 
 typedef struct {
     /* 0x00 */ CollisionContext* colCtx;
@@ -231,7 +263,7 @@ typedef struct {
     /* 0x28 */ f32 chkDist;    // distance from poly
     /* 0x2C */ Actor* actor;
     /* 0x30 */ s32 bgId;
-} DynaLineTest;
+} DynaLineTest; // size = 0x34
 
 typedef struct {
     /* 0x00 */ CollisionPoly* poly;
@@ -241,7 +273,7 @@ typedef struct {
     /* 0x10 */ Vec3f* planeIntersect;
     /* 0x14 */ s32 chkOneFace;
     /* 0x18 */ f32 chkDist;
-} BgLineVsPolyTest;
+} BgLineVsPolyTest; // size = 0x1C
 
 typedef struct {
     /* 0x0 */ s16 sceneId;

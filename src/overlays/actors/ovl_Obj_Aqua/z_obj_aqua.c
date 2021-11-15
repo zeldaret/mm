@@ -133,8 +133,8 @@ s32 func_80ACBA60(ObjAqua* this, GlobalContext* globalCtx) {
     f32 ySurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
-                      &waterBox, &bgId) &&
+    if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                &ySurface, &waterBox, &bgId) &&
         (this->actor.world.pos.y < ySurface)) {
         return true;
     }

@@ -360,7 +360,8 @@ void func_808D93BC(EnSw* this) {
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
-s32 func_808D9440(GlobalContext* globalCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32* bgId) {
+s32 func_808D9440(GlobalContext* globalCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly,
+                  s32* bgId) {
     s32 ret = false;
 
     if (BgCheck_EntityLineTest1(&globalCtx->colCtx, posA, posB, posResult, outPoly, true, true, true, true, bgId) &&

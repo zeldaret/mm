@@ -928,7 +928,8 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
         checkPos.x = this->actor.world.pos.x;
         checkPos.y = this->actor.world.pos.y + 10.0f;
         checkPos.z = this->actor.world.pos.z;
-        this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &checkPos);
+        this->actor.floorHeight =
+            BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &checkPos);
     }
 
     this->actor.shape.shadowAlpha = this->unk_229;

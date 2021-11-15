@@ -928,7 +928,7 @@ void SSNode_SetValue(SSNode* node, s16* polyIndex, u16 next);
 void SSList_SetNull(SSList* head);
 void SSNodeList_SetSSListHead(SSNodeList* list, SSList* ssList, s16* polyIndex);
 void DynaSSNodeList_SetSSListHead(DynaSSNodeList* list, SSList* ssList, s16* polyIndex);
-void DynaSSNodeList_Initialize(GlobalContext* globalCtx, DynaSSNodeList* list);
+void DynaSSNodeList_Init(GlobalContext* globalCtx, DynaSSNodeList* list);
 void DynaSSNodeList_Alloc(GlobalContext* globalCtx, DynaSSNodeList* list, u32 numNodes);
 void DynaSSNodeList_ResetCount(DynaSSNodeList* list);
 u16 DynaSSNodeList_GetNextNodeIdx(DynaSSNodeList* list);
@@ -948,14 +948,14 @@ void BgCheck_GetSubdivisionMinBounds(CollisionContext* colCtx, Vec3f* pos, s32* 
 void BgCheck_GetSubdivisionMaxBounds(CollisionContext* colCtx, Vec3f* pos, s32* sx, s32* sy, s32* sz);
 void BgCheck_GetPolySubdivisionBounds(CollisionContext* colCtx, Vec3s* vtxList, CollisionPoly* polyList, s32* subdivMinX, s32* subdivMinY, s32* subdivMinZ, s32* subdivMaxX, s32* subdivMaxY, s32* subdivMaxZ, s16 polyId);
 s32 BgCheck_PolyIntersectsSubdivision(Vec3f* min, Vec3f* max, CollisionPoly* polyList, Vec3s* vtxList, s16 polyId);
-u32 BgCheck_InitializeStaticLookup(CollisionContext* colCtx, GlobalContext* globalCtx, StaticLookup* lookupTbl);
-s32 BgCheck_IsSpotScene(GlobalContext* globalCtx);
+u32 BgCheck_InitStaticLookup(CollisionContext* colCtx, GlobalContext* globalCtx, StaticLookup* lookupTbl);
+s32 BgCheck_IsSmallMemScene(GlobalContext* globalCtx);
 s32 BgCheck_TryGetCustomMemsize(s32 sceneId, u32* memSize);
 void BgCheck_SetSubdivisionDimension(f32 min, s32 subdivAmount, f32* max, f32* subdivLength, f32* subdivLengthInv);
 s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* globalCtx, s32* maxNodes, s32* maxPolygons, s32* maxVertices);
 void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, CollisionHeader* colHeader);
-void func_800C3C00(CollisionContext* colCtx, u32 arg1);
-void func_800C3C14(CollisionContext* colCtx, u32 arg1);
+void BgCheck_SetContextFlags(CollisionContext* colCtx, u32 flags);
+void BgCheck_UnsetContextFlags(CollisionContext* colCtx, u32 flags);
 CollisionHeader* BgCheck_GetCollisionHeader(CollisionContext* colCtx, s32 bgId);
 f32 BgCheck_RaycastFloorImpl(GlobalContext* globalCtx, CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, s32* outBgId, Vec3f* pos, Actor* actor, u32 arg7, f32 chkDist, s32 arg9);
 f32 BgCheck_CameraRaycastFloor1(CollisionContext* colCtx, CollisionPoly** outPoly, Vec3f* pos);
@@ -993,18 +993,18 @@ s32 BgCheck_AnyLineTest3(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec
 s32 BgCheck_SphVsFirstPolyImpl(CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, s32* outBgId, Vec3f* center, f32 radius, Actor* actor, u16 bciFlags);
 s32 BgCheck_SphVsFirstPoly(CollisionContext* colCtx, Vec3f* center, f32 radius);
 s32 BgCheck_SphVsFirstWall(CollisionContext* colCtx, Vec3f* center, f32 radius);
-void SSNodeList_Initialize(SSNodeList* this);
+void SSNodeList_Init(SSNodeList* this);
 void SSNodeList_Alloc(GlobalContext* globalCtx, SSNodeList* this, s32 tblMax, s32 numPolys);
 SSNode* SSNodeList_GetNextNode(SSNodeList* this);
 u16 SSNodeList_GetNextNodeIdx(SSNodeList* this);
-void ScaleRotPos_Initialize(ScaleRotPos* srp);
+void ScaleRotPos_Init(ScaleRotPos* srp);
 void ScaleRotPos_SetValue(ScaleRotPos* srp, Vec3f* scale, Vec3s* rot, Vec3f* pos);
-s32 ScaleRotPos_Equals(ScaleRotPos* a, ScaleRotPos* b);
+s32 ScaleRotPos_IsEqual(ScaleRotPos* a, ScaleRotPos* b);
 void DynaLookup_ResetLists(DynaLookup* dynaLookup);
 void DynaLookup_Reset(DynaLookup* dynaLookup);
 void DynaLookup_ResetVtxStartIndex(u16* vtxStartIndex);
 void DynaLookup_ResetWaterBoxStartIndex(u16* waterBoxStartIndex);
-void BgActor_Initialize(GlobalContext* globalCtx, BgActor* bgActor);
+void BgActor_Init(GlobalContext* globalCtx, BgActor* bgActor);
 void BgActor_SetActor(BgActor* bgActor, Actor* actor, CollisionHeader* colHeader);
 s32 BgActor_IsTransformUnchanged(BgActor* bgActor);
 void DynaPoly_NullPolyList(CollisionPoly** polyList);
@@ -3245,8 +3245,7 @@ f32 cos_rad(f32 rad);
 f32 Rand_ZeroFloat(f32 scale);
 f32 randPlusMinusPoint5Scaled(f32 scale);
 f32 Math3D_Normalize(Vec3f* vec);
-#define Math3D_PlaneVsLineSegClosestPoint func_80179678
-s32 func_80179678(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB, f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB, Vec3f* closestPoint);
+s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB, f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB, Vec3f* closestPoint);
 // UNK_TYPE4 func_80179798(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6);
 // void func_80179A44(void);
 void func_80179B34(float fParm1, f32 fParm2, f32 fParm5, f32 fParm6, f32 param_5, f32 param_6, f32 param_7, float* param_8, float* param_9);
@@ -3268,65 +3267,46 @@ f32 Math3D_XZDistanceSquared(f32 x1, f32 x2, f32 z1, f32 z2);
 f32 Math3D_XZDistance(f32 x1, f32 x2, f32 z1, f32 z2);
 f32 Math3D_LengthSquared(Vec3f* vec);
 f32 Math3D_Vec3fMagnitude(Vec3f* vec);
-#define Math3D_Vec3fDistSq Math3D_DistanceSquared
-f32 Math3D_DistanceSquared(Vec3f* a, Vec3f* b);
+f32 Math3D_Vec3fDistSq(Vec3f* a, Vec3f* b);
 f32 Math3D_Distance(Vec3f* a, Vec3f* b);
 f32 Math3D_DistanceS(Vec3s* s, Vec3f* f);
 f32 func_8017A7B8(f32* param_1, f32* param_2, f32 param_3, f32 param_4);
 f32 func_8017A7F8(f32* param_1, f32* param_2, f32 param_3, f32 param_4);
 f32 func_8017A838(f32* param_1, f32* param_2, f32 param_3, f32 param_4);
 void Math3D_CrossProduct(Vec3f* a, Vec3f* b, Vec3f* res);
-#define Math3D_SurfaceNorm Math3D_NormalVector
-void Math3D_NormalVector(Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* res);
-#define Math3D_PointRelativeToCubeFaces func_8017A954
-u32 func_8017A954(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
-#define Math3D_PointRelativeToCubeEdges func_8017AA0C
-u32 func_8017AA0C(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
-#define Math3D_PointRelativeToCubeVertices func_8017ABBC
-u32 func_8017ABBC(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
-#define Math3D_LineVsCube func_8017AD38
-s32 func_8017AD38(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b);
+void Math3D_SurfaceNorm(Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* res);
+u32 Math3D_PointRelativeToCubeFaces(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
+u32 Math3D_PointRelativeToCubeEdges(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
+u32 Math3D_PointRelativeToCubeVertices(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
+s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b);
 // void func_8017B68C(void);
 void func_8017B7F8(Vec3f* arg0, s16 arg1, f32* arg2, f32* arg3, f32* arg4);
 void Math3D_UnitNormalVector(Vec3f* a, Vec3f* b, Vec3f* c, f32* normX, f32* normY, f32* normZ, f32* param_7);
 f32 Math3D_SignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
 // void func_8017B9D8(void);
-#define Math3D_UDistPlaneToPos Math3D_NormalizedDistanceFromPlane
-f32 Math3D_NormalizedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
-#define Math3D_DistPlaneToPos Math3D_NormalizedSignedDistanceFromPlane
-f32 Math3D_NormalizedSignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
-#define Math3D_TriChkPointParaYDist func_8017BAD0
-s32 func_8017BAD0(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 ny);
+f32 Math3D_UDistPlaneToPos(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
+f32 Math3D_DistPlaneToPos(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
+s32 Math3D_TriChkPointParaYDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 ny);
 // void func_8017BD98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8017BDE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-#define Math3D_TriChkPointParaYIntersectDist func_8017BE30
-s32 func_8017BE30(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
-#define Math3D_TriChkPointParaYIntersectInsideTri func_8017BEE0
-s32 func_8017BEE0(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
+s32 Math3D_TriChkPointParaYIntersectDist(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
+s32 Math3D_TriChkPointParaYIntersectInsideTri(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
 // void func_8017BF8C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-#define Math3D_TriChkLineSegParaYIntersect func_8017C008
-s32 func_8017C008(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z, f32 x, f32* yIntersect, f32 y0, f32 y1);
+s32 Math3D_TriChkLineSegParaYIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z, f32 x, f32* yIntersect, f32 y0, f32 y1);
 // void func_8017C17C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8017C1F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
-#define Math3D_TriChkPointParaYIntersectInsideTri2 func_8017C494
-s32 func_8017C494(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
-#define Math3D_TriChkPointParaXDist func_8017C540
-s32 func_8017C540(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nx);
+s32 Math3D_TriChkPointParaYIntersectInsideTri2(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
+s32 Math3D_TriChkPointParaXDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nx);
 // void func_8017C808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-#define Math3D_TriChkPointParaXIntersect func_8017C850
-s32 func_8017C850(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 y, f32 z, f32* xIntersect);
+s32 Math3D_TriChkPointParaXIntersect(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 y, f32 z, f32* xIntersect);
 // void func_8017C904(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-#define Math3D_TriChkLineSegParaXIntersect func_8017C980
-s32 func_8017C980(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 y, f32 z, f32* xIntersect, f32 x0, f32 x1);
+s32 Math3D_TriChkLineSegParaXIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 y, f32 z, f32* xIntersect, f32 x0, f32 x1);
 // void func_8017CB08(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-#define Math3D_TriChkLineSegParaZDist func_8017CB7C
-s32 func_8017CB7C(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nz);
+s32 Math3D_TriChkLineSegParaZDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nz);
 // void func_8017CEA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-#define Math3D_TriChkPointParaZIntersect func_8017CEF0
-s32 func_8017CEF0(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 x, f32 y, f32* zIntersect);
+s32 Math3D_TriChkPointParaZIntersect(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 x, f32 y, f32* zIntersect);
 // void func_8017CFA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-#define Math3D_TriChkLineSegParaZIntersect func_8017D020
-s32 func_8017D020(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 x, f32 y, f32* zIntersect, f32 z0, f32 z1);
+s32 Math3D_TriChkLineSegParaZIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 x, f32 y, f32* zIntersect, f32 z0, f32 z1);
 // void func_8017D1AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8017D220(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017D2FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
@@ -3338,16 +3318,14 @@ u32 Math3D_IsPointInSphere(Sphere16* sphere, Vec3f* point);
 // void func_8017D814(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017D91C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017DA24(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-#define Math3D_LineVsSph Math3D_ColSphereLineSeg
-s32 Math3D_ColSphereLineSeg(Sphere16* sphere, LineSegment* line);
+s32 Math3D_LineVsSph(Sphere16* sphere, LineSegment* line);
 void func_8017DD34(Sphere16* sphere, TriNorm* tri, Vec3f* pfParm3);
 s32 Math3D_ColSphereTri(Sphere16* sphere, TriNorm* tri, Vec3f* uParm3);
 // void func_8017E294(void);
 UNK_TYPE func_8017E350(UNK_PTR, Vec3f*, Vec3f*, Vec3f*, Vec3f*);
 s32 Math3D_ColCylinderTri(Cylinder16* cylinder, TriNorm* tri, Vec3f* pzParm3);
 // void func_8017F1A0(void);
-#define Math3D_SphVsSph Math3D_ColSphereSphere
-s32 Math3D_ColSphereSphere(Sphere16* sphere1, Sphere16* sphere2);
+s32 Math3D_SphVsSph(Sphere16* sphere1, Sphere16* sphere2);
 s32 Math3D_ColSphereSphereIntersect(Sphere16* sphere1, Sphere16* sphere2, f32* intersectAmount);
 s32 Math3D_ColSphereSphereIntersectAndDistance(Sphere16* sphere1, Sphere16* sphere2, f32* intersectAmount, f32* dist);
 s32 Math3D_ColSphereCylinderDistance(Sphere16* sphere, Cylinder16* cylinder, f32* dist);
@@ -3355,12 +3333,9 @@ s32 Math3D_ColSphereCylinderDistanceAndAmount(Sphere16* sphere, Cylinder16* cyli
 s32 Math3D_ColCylinderCylinderAmount(Cylinder16* cylinder1, Cylinder16* cylinder2, f32* intersectAmount);
 s32 Math3D_ColCylinderCylinderAmountAndDistance(Cylinder16* cylinder1, Cylinder16* cylinder2, f32* intersectAmount, f32* dist);
 s32 Math3d_ColTriTri(TriNorm* tri1, TriNorm* tri2, Vec3f* uParm3);
-#define Math3D_XZInSphere func_8017F9C0
-s32 func_8017F9C0(Sphere16* sphere, f32 x, f32 z);
-#define Math3D_XYInSphere func_8017FA34
-s32 func_8017FA34(Sphere16* sphere, f32 x, f32 y);
-#define Math3D_YZInSphere func_8017FAA8
-s32 func_8017FAA8(Sphere16* sphere, f32 y, f32 z);
+s32 Math3D_XZInSphere(Sphere16* sphere, f32 x, f32 z);
+s32 Math3D_XYInSphere(Sphere16* sphere, f32 x, f32 y);
+s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z);
 // void func_8017FB1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // void func_8017FD44(void);
 u16 Math_GetAtan2Tbl(f32 opposite, f32 adjacent);
