@@ -30,17 +30,14 @@ s8 D_801D8F70[96][3] = {
     "WI", "WE", "WO", "NN", "VU", "ka", "ke", "",   "",   "",   "",   "",   "",   "",   "",   "",
 };
 
-/*
-char D_801E0EC0[] = "Error %d\n"
-char D_801E0ECC[] = "NAI_VRS:osVoiceClearDictionary %d\n"
-char D_801E0EF0[] = "NAI_VRS:dict error! (%d-%d %s)\n"
-char D_801E0F10[] = "NAI_VRS:Ina_SetVruGain Error!\n"
-char D_801E0F30[] = "NAI_VRS:mask on  %d\n"
-char D_801E0F48[] = "NAI_VRS:mask off %d\n"
-char D_801E0F60[] = "NAI_VRS:answer No.:%d Dist:%d Warn:%04X Level:%5d SN:%5d (Num:%d)\n"
-char D_801E0FA4[] = "NAI_VRS:error !! (ANS_MAX:%d DIST:%d WARNING:%04X LEVEL:%5d SN:%5d)\n"
-*/
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/D_801E0EC0.s")
+const char D_801E0EC0[] = "Error %d\n";
+const char D_801E0ECC[] = "NAI_VRS:osVoiceClearDictionary %d\n";
+const char D_801E0EF0[] = "NAI_VRS:dict error! (%d-%d %s)\n";
+const char D_801E0F10[] = "NAI_VRS:Ina_SetVruGain Error!\n";
+const char D_801E0F30[] = "NAI_VRS:mask on  %d\n";
+const char D_801E0F48[] = "NAI_VRS:mask off %d\n";
+const char D_801E0F60[] = "NAI_VRS:answer No.:%d Dist:%d Warn:%04X Level:%5d SN:%5d (Num:%d)\n";
+const char D_801E0FA4[] = "NAI_VRS:error !! (ANS_MAX:%d DIST:%d WARNING:%04X LEVEL:%5d SN:%5d)\n";
 
 s32 func_801A51F0(s32 errorCode) {
     switch (errorCode) {
