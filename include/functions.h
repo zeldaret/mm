@@ -3874,7 +3874,7 @@ void func_8019FDC8(UNK_PTR arg0, u16 sfxId, UNK_TYPE arg2);
 void func_801A0124(Vec3f* pos, u8 arg1);
 // void func_801A0184(void);
 // void func_801A01C4(void);
-void func_801A0204(UNK_TYPE);
+void func_801A0204(s8 seqId);
 // void func_801A0238(void);
 // void func_801A026C(void);
 // void func_801A0318(void);
