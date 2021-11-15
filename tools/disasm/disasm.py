@@ -26,6 +26,8 @@ def discard_decomped_files(files_spec):
     new_spec = []
     for f in files_spec:
         name, _, type, _, file_list = f
+        #if "Zov" not in name and "makerom" not in name:
+        #    continue
 
         i = 0
         #print(f"Looking for {name}")
@@ -482,6 +484,26 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
         if region[1] % 0x10 == 0:
             put_symbol(symbols_dict, "files", region[1])
 
+    insns = []
+    for i,raw_insn in enumerate(raw_insns,0):
+        insn = decode_insn(raw_insn, vram + i * 4)
+    
+        if insn.id == MIPS_INS_JR and insn.rs != MIPS_REG_RA:
+            # It's hard to find when two jump tables next to each other end, so do a naive first pass
+            # to try and find as many jump tables as possible.
+            # Luckily IDO has a very homogeneous output for jump tables for which it is very unlikely
+            # that other instructions will break up:
+            #   lui $at, %hi(jtbl)
+            #   addu $at, $at, $reg
+            #   lw $reg, %lo(jtbl)($at)
+            #   jr $reg
+            insn_m1 = insns[-1]
+            insn_m2 = insns[-2]
+            insn_m3 = insns[-3]
+            if insn_m1.id == MIPS_INS_LW and insn_m2.id == MIPS_INS_ADDU and insn_m3.id == MIPS_INS_LUI:
+                prospective_jtbls.add((insn_m3.imm << 0x10) + insn_m1.imm)
+        insns.append(insn)
+
     if relocs is not None:
         """
         Relocation info is our friend. Get symbols via relocations first.
@@ -489,7 +511,7 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
         prev_hi = None
         hi_vram = -1
         for reloc in relocs:
-            insn = decode_insn(raw_insns[reloc[2]//4], vram + reloc[2])
+            insn = insns[reloc[2]//4]
 
             if reloc[1] == 2: # R_MIPS_32
                 assert False , "R_MIPS_32 in .text section?"
@@ -517,31 +539,8 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
             else:
                 assert False , "Invalid relocation type encountered"
 
-    for i,raw_insn in enumerate(raw_insns,0):
-        i *= 4
-        vaddr = vram + i
-        insn = decode_insn(raw_insn, vaddr)
-
-        if insn.id == MIPS_INS_JR and insn.rs != MIPS_REG_RA:
-            # It's hard to find when two jump tables next to each other end, so do a naive first pass
-            # to try and find as many jump tables as possible.
-            # Luckily IDO has a very homogeneous output for jump tables for which it is very unlikely
-            # that other instructions will break up:
-            #   lui $at, %hi(jtbl)
-            #   addu $at, $at, $reg
-            #   lw $reg, %lo(jtbl)($at)
-            #   jr $reg
-            insn_m1 = decode_insn(raw_insns[i//4 - 1], vaddr - 0x4)
-            insn_m2 = decode_insn(raw_insns[i//4 - 2], vaddr - 0x8)
-            insn_m3 = decode_insn(raw_insns[i//4 - 3], vaddr - 0xC)
-
-            if insn_m1.id == MIPS_INS_LW and insn_m2.id == MIPS_INS_ADDU and insn_m3.id == MIPS_INS_LUI:
-                prospective_jtbls.add((insn_m3.imm << 0x10) + insn_m1.imm)
-
-    for i,raw_insn in enumerate(raw_insns,0):
-        i *= 4
-        vaddr = vram + i
-        insn = decode_insn(raw_insn, vaddr)
+    for i,insn in enumerate(insns,0):
+        vaddr = vram + i * 4
 
         # sometimes there's data embedded in .text in handwritten asm files that don't respect section contents
         in_data = False
@@ -589,12 +588,12 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
                 # check if anything branches past it in either branch or jtbl labels
                 if vaddr >= max(func_branch_labels, default=0) and vaddr >= max(func_jtbl_labels, default=0): # vaddr being largest in list means nothing branches past here
                     # mark next function after delay slot and after any nop padding if present
-                    if len(raw_insns) > i//4 + 2:
+                    if len(insns) > i + 2:
                         n_padding = 0
                         end = False
-                        while (raw_insns[i//4 + 2 + n_padding] == 0):
+                        while (raw_insns[i + 2 + n_padding] == 0):
                             n_padding += 1
-                            if len(raw_insns) <= i//4 + 2 + n_padding:
+                            if len(raw_insns) <= i + 2 + n_padding:
                                 end = True
                                 break
                         if not end:
@@ -629,8 +628,8 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
                 put_symbols(symbols_dict, "symbols", {lo_vram : symbol_value})
                 if insn.id == MIPS_INS_LW:
                     # try find jr within the same block
-                    cur_idx = i//4
-                    lookahead_insn = decode_insn(raw_insns[cur_idx], vram + cur_idx * 4) # TODO fix vaddr here
+                    cur_idx = i
+                    lookahead_insn = insns[cur_idx] # TODO fix vaddr here
                     # still in same block unless one of these instructions are found
                     while lookahead_insn.id not in [*MIPS_BRANCH_INSNS, MIPS_INS_JAL, MIPS_INS_JALR, MIPS_INS_J]:
                         if lookahead_insn.id == MIPS_INS_JR:
@@ -662,7 +661,7 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
                         # found end before finding jr insn, not a jtbl
                         if cur_idx >= len(raw_insns):
                             break
-                        lookahead_insn = decode_insn(raw_insns[cur_idx], vram + cur_idx * 4) # TODO fix vaddr here
+                        lookahead_insn = insns[cur_idx] # TODO fix vaddr here
                 elif insn.id == MIPS_INS_LD: # doubleword loads
                     put_symbol(symbols_dict, "dwords", symbol_value)
                 elif insn.id in [MIPS_INS_LWC1, MIPS_INS_SWC1]: # float load/stores
@@ -1554,6 +1553,8 @@ disassemble_makerom(next(segment for segment in files_spec if segment[2] == 'mak
 #    disassemble_segment(f)
 with Pool(jobs) as p:
     p.map(disassemble_segment, (segment for segment in files_spec if segment[2] != 'makerom'))
+
+#exit()
 
 print("Splitting text and migrating rodata")
 
