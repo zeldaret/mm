@@ -26,14 +26,10 @@ def discard_decomped_files(files_spec):
     new_spec = []
     for f in files_spec:
         name, _, type, _, file_list = f
-        #if "Zov" not in name and "makerom" not in name:
-        #    continue
 
         i = 0
-        #print(f"Looking for {name}")
         while i < len(spec):
             if spec[i].startswith("beginseg") and f"\"{name}\"" in spec[i+1]:
-                #print(f"Found {name} seg at {i+1}")
                 break
             i += 1
 
@@ -398,9 +394,9 @@ def put_symbols(symbols_dict, setname, symbols):
         symbols_dict[setname] = symbols.copy()
 
 def put_text(type, name, text):
-    if type not in files_text:
-        files_text[type] = {}
-    files_text[type][name] = text
+    #if type not in files_text:
+    #    files_text[type] = {}
+    files_text[name] = text
 
 def update_symbols_from_dict(symbols_dict):
     file_text = []
@@ -438,7 +434,11 @@ def update_symbols_from_dict(symbols_dict):
     for file in file_text:
         put_text(file[0], file[1], file[2])
 
-def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, info):
+def find_symbols_in_text(section, rodata_section, data_regions):
+    data, rodata = section[4], rodata_section[4] if rodata_section else None
+    vram, vram_rodata = section[0], rodata_section[0] if rodata_section else None
+    relocs, info = section[5], section[-1]
+
     symbols_dict = dict()
 
     print(f"Finding symbols from .text in {info['name']}")
@@ -843,20 +843,16 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
 
     result_files.append([info["name"], cur_file, results])
 
-    #if len(results) > 0:
-    #    assert cur_file != ""
-    #    put_text(info["name"], cur_file, results)
-    #    #files_text[info["name"]][cur_file] = results
-
     put_symbols(symbols_dict, "branch_labels", func_branch_labels)
     put_symbols(symbols_dict, "jtbl_labels", func_jtbl_labels)
 
     return symbols_dict, result_files
 
-def find_symbols_in_data(data, vram, end, relocs, segment_name):
+def find_symbols_in_data(section):
+    data, vram, end, relocs = section[4], section[0], section[1], section[5]
     symbols_dict = dict()
 
-    print(f"Finding symbols from .data in {segment_name}")
+    print(f"Finding symbols from .data in {section[-1]['name']}")
 
     # read relocations for symbols
     if relocs is not None:
@@ -878,7 +874,8 @@ def find_symbols_in_data(data, vram, end, relocs, segment_name):
 # matches several codepoint regions of EUC-JP
 strings_regex = re.compile(rb'^(?:[\x00\x1A\x1B\n\t\x20-\x7E\x8C\x8D]|\x30[\x00-\xFF]|[\x4E-\x9F][\x00-\xFF]|[\xA4\xA5\xBB][\xA1-\xF6]|[\xA1-\xA3\xB0-\xBF\xC0-\xCF][\xA1-\xFE]|\xFF[\x00-\xEF])+$')
 
-def find_symbols_in_rodata(data, vram, end, relocs, segment):
+def find_symbols_in_rodata(section):
+    data, vram, end, relocs = section[4], section[0], section[1], section[5]
     symbols_dict = dict()
     
     # read relocations for symbols
@@ -899,10 +896,10 @@ def find_symbols_in_rodata(data, vram, end, relocs, segment):
     section_symbols.add(vram)
     section_symbols.update(set([sym for sym in data_labels if sym >= vram and sym < end]))
     # TODO temp hack, move
-    for data_file_st in [sym for sym in segment[4].keys() if sym >= vram and sym < end]:
+    for data_file_st in [sym for sym in section[-1]["syms"].keys() if sym >= vram and sym < end]:
         section_symbols.add(data_file_st)
 
-    rodata_starts = [addr for addr,name in segment[4].items() if addr >= vram and addr < end]
+    rodata_starts = [addr for addr,name in section[-1]["syms"].items() if addr >= vram and addr < end]
     section_symbols.update(set(rodata_starts))
 
     section_symbols = list(section_symbols)
@@ -977,78 +974,84 @@ def asm_header(section_name):
 """
 
 def fixup_text_symbols(data, vram, data_regions, info):
-    segment_dirname = ("" if info["type"] != "overlay" else "overlays/") + info["name"]
+    if info["name"] in ("boot", "code"):
+        return
+
+    segment_dirname = ("" if info["type"] != "overlay" else "overlays/")
+    if info["type"] in ("boot", "code"):
+        segment_dirname += info["type"]
+    else:
+        segment_dirname += info["name"]
 
     os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
 
-    for name, file in files_text[info["name"]].items():
-        text = [file.pop(0)]
+    file = files_text[info["name"]]
 
-        for i,entry in enumerate(file):
-            vaddr = entry["vaddr"]
+    text = [file.pop(0)]
 
-            if vaddr in functions:
-                text.append(f"\nglabel {proper_name(vaddr, in_data=entry['data'])}\n")
-            if vaddr in jtbl_labels:
-                text.append(f"glabel L{vaddr:08X}\n")
-            if vaddr in branch_labels:
-                text.append(f".L{vaddr:08X}:\n")
+    for i,entry in enumerate(file):
+        vaddr = entry["vaddr"]
 
-            line = entry["addr"]
-            line += f"{entry['mnem']:12}"
+        if vaddr in functions:
+            text.append(f"\nglabel {proper_name(vaddr, in_data=entry['data'])}\n")
+        if vaddr in jtbl_labels:
+            text.append(f"glabel L{vaddr:08X}\n")
+        if vaddr in branch_labels:
+            text.append(f".L{vaddr:08X}:\n")
 
-            insn = entry["insn"]
-            if insn["id"] in MIPS_JUMP_INSNS:
-                for op_part in entry["op"]:
-                    if type(op_part) == list:
-                        line += proper_name(op_part[0], in_data=op_part[1], is_symbol=op_part[2])
-                    else:
-                        line += op_part
+        line = entry["addr"]
+        line += f"{entry['mnem']:12}"
 
-
-            elif insn["id"] == MIPS_INS_LUI:
-                symbol_value = symbols.get(vaddr, None)
-                if symbol_value is not None:
-                    line += f"{mips_gpr_names[insn['rt']]}, %hi({proper_name(symbol_value)})"
+        insn = entry["insn"]
+        if insn["id"] in MIPS_JUMP_INSNS:
+            for op_part in entry["op"]:
+                if type(op_part) == list:
+                    line += proper_name(op_part[0], in_data=op_part[1], is_symbol=op_part[2])
                 else:
-                    constant_value = constants.get(vaddr, None)
-                    if constant_value is not None:
-                        line += f"{mips_gpr_names[insn['rt']]}, (0x{constant_value:08X} >> 16)"
-                    else:
-                        line += entry["op"][0]
-
-            elif insn["id"] == MIPS_INS_ADDIU or insn["id"] in MIPS_LOAD_STORE_INSNS:
-                symbol_value = symbols.get(vaddr, None)
-                if symbol_value is not None:
-                    if insn["id"] == MIPS_INS_ADDIU:
-                        line += f"{mips_gpr_names[insn['rt']]}, {mips_gpr_names[insn['rs']]}, %lo({proper_name(symbol_value)})"
-                    else:
-                        line += f"{mips_fpr_names[insn['ft']] if insn['id'] in MIPS_FP_LOAD_STORE_INSNS else mips_gpr_names[insn['rt']]}, %lo({proper_name(symbol_value)})({mips_gpr_names[insn['base']]})"
-                else:
-                    line += entry["op"][0]
+                    line += op_part
 
 
-            elif insn["id"] == MIPS_INS_ORI:
+        elif insn["id"] == MIPS_INS_LUI:
+            symbol_value = symbols.get(vaddr, None)
+            if symbol_value is not None:
+                line += f"{mips_gpr_names[insn['rt']]}, %hi({proper_name(symbol_value)})"
+            else:
                 constant_value = constants.get(vaddr, None)
                 if constant_value is not None:
-                    line += f"{mips_gpr_names[insn['rt']]}, {mips_gpr_names[insn['rs']]}, (0x{constant_value:08X} & 0xFFFF)"
+                    line += f"{mips_gpr_names[insn['rt']]}, (0x{constant_value:08X} >> 16)"
                 else:
                     line += entry["op"][0]
 
+        elif insn["id"] == MIPS_INS_ADDIU or insn["id"] in MIPS_LOAD_STORE_INSNS:
+            symbol_value = symbols.get(vaddr, None)
+            if symbol_value is not None:
+                if insn["id"] == MIPS_INS_ADDIU:
+                    line += f"{mips_gpr_names[insn['rt']]}, {mips_gpr_names[insn['rs']]}, %lo({proper_name(symbol_value)})"
+                else:
+                    line += f"{mips_fpr_names[insn['ft']] if insn['id'] in MIPS_FP_LOAD_STORE_INSNS else mips_gpr_names[insn['rt']]}, %lo({proper_name(symbol_value)})({mips_gpr_names[insn['base']]})"
             else:
-                for part in entry["op"]:
-                    if type(part) == list:
-                        line += f"{proper_name(part[0], in_data=part[1], is_symbol=part[2])}"
-                    else:
-                        line += part
+                line += entry["op"][0]
 
-            line += "\n"
-            text.append(line)
 
-        with open(f"{ASM_OUT}/{segment_dirname}/{name}.text.s", "w") as outfile:
-            outfile.write("".join(text))
+        elif insn["id"] == MIPS_INS_ORI:
+            constant_value = constants.get(vaddr, None)
+            if constant_value is not None:
+                line += f"{mips_gpr_names[insn['rt']]}, {mips_gpr_names[insn['rs']]}, (0x{constant_value:08X} & 0xFFFF)"
+            else:
+                line += entry["op"][0]
 
-    del files_text[info["name"]]
+        else:
+            for part in entry["op"]:
+                if type(part) == list:
+                    line += f"{proper_name(part[0], in_data=part[1], is_symbol=part[2])}"
+                else:
+                    line += part
+
+        line += "\n"
+        text.append(line)
+
+    with open(f"{ASM_OUT}/{segment_dirname}/{info['name']}.text.s", "w") as outfile:
+        outfile.write("".join(text))
 
 def disassemble_text(data, vram, data_regions, info):
     result = asm_header(".text")
@@ -1171,7 +1174,14 @@ def disassemble_data(data, vram, end, info):
 
     section_symbols.sort()
 
-    segment_dirname = ("" if info["type"] != "overlay" else "overlays/") + info["name"]
+    segment_dirname = info["name"]
+    if info["type"] in ("boot", "code"):
+        segment_dirname = info["type"]
+
+    if info["type"] in ("boot", "code"):
+        sym_list = full_file_list[info["type"]]
+    else:
+        sym_list = full_file_list[info["name"]]
 
     file_syms = []
     syms = []
@@ -1181,10 +1191,10 @@ def disassemble_data(data, vram, end, info):
             if info["type"] == "overlay":
                 file_name = info["name"]
             else:
-                file_name = full_file_list[info["name"]][sym]
+                file_name = sym_list[sym]
 
-        if sym in full_file_list[info["name"]]:
-            new_file = full_file_list[info["name"]][sym]
+        if sym in sym_list:
+            new_file = sym_list[sym]
             if file_name != new_file:
                 file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
                 syms = []
@@ -1239,8 +1249,8 @@ def disassemble_data(data, vram, end, info):
                 result += "\n".join(\
                     [f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}" for j,byte in enumerate(data[data_offset:data_offset + data_size], 0)]) + "\n"
 
-        os.makedirs(f"{DATA_OUT}/{info['name']}/", exist_ok=True)
-        with open(f"{DATA_OUT}/{info['name']}/{file['name']}.data.s", "w") as outfile:
+        os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
+        with open(f"{DATA_OUT}/{segment_dirname}/{file['name']}.data.s", "w") as outfile:
             outfile.write(result)
 
 def disassemble_rodata(data, vram, end, info):
@@ -1261,7 +1271,14 @@ def disassemble_rodata(data, vram, end, info):
 
     section_symbols.sort()
 
-    segment_dirname = ("" if info["type"] != "overlay" else "overlays/") + info["name"]
+    segment_dirname = info["name"]
+    if info["type"] in ("boot", "code"):
+        segment_dirname = info["type"]
+
+    if info["type"] in ("boot", "code"):
+        sym_list = full_file_list[info["type"]]
+    else:
+        sym_list = full_file_list[info["name"]]
 
     force_ascii_str = False # hack for non-null-terminated strings in .data
 
@@ -1273,10 +1290,10 @@ def disassemble_rodata(data, vram, end, info):
             if info["type"] == "overlay":
                 file_name = info["name"]
             else:
-                file_name = full_file_list[info["name"]][sym]
+                file_name = sym_list[sym]
 
-        if sym in full_file_list[info["name"]]:
-            new_file = full_file_list[info["name"]][sym]
+        if sym in sym_list:
+            new_file = sym_list[sym]
             if file_name != new_file:
                 file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
                 syms = []
@@ -1335,8 +1352,8 @@ def disassemble_rodata(data, vram, end, info):
                 result += "\n".join(\
                     [f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}" for j,byte in enumerate(data[data_offset:data_offset + data_size], 0)]) + "\n"
 
-        os.makedirs(f"{DATA_OUT}/{info['name']}/", exist_ok=True)
-        with open(f"{DATA_OUT}/{info['name']}/{file['name']}.rodata.s", "w") as outfile:
+        os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
+        with open(f"{DATA_OUT}/{segment_dirname}/{file['name']}.rodata.s", "w") as outfile:
             outfile.write(result)
 
 def disassemble_bss(vram, end, info):
@@ -1355,7 +1372,12 @@ def disassemble_bss(vram, end, info):
     section_symbols.sort()
 
     # ("" if info["type"] != "overlay" else "overlays/"
-    segment_dirname = info["name"]
+    segment_dirname = info["name"] if info["type"] not in ("boot", "code") else info["type"]
+
+    if info["type"] in ("boot", "code"):
+        sym_list = full_file_list[info["type"]]
+    else:
+        sym_list = full_file_list[info["name"]]
 
     file_syms = []
     syms = []
@@ -1365,10 +1387,10 @@ def disassemble_bss(vram, end, info):
             if info["type"] == "overlay":
                 file_name = info["name"]
             else:
-                file_name = full_file_list[info["name"]][sym]
+                file_name = sym_list[sym]
 
-        if sym in full_file_list[info["name"]]:
-            new_file = full_file_list[info["name"]][sym]
+        if sym in sym_list:
+            new_file = sym_list[sym]
             if file_name != new_file:
                 file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
                 syms = []
@@ -1542,43 +1564,29 @@ glabel {variables_ast[0x8009F8B0][0]}
 def disassemble_segment(section):
     print(f"Disassembling {section[-1]['name']} .{section[2]}")
 
-    if section[-1]["name"] == "makerom":
-        disassemble_makerom(section)
-    elif section[-1]["name"] == "dmadata":
-        disassemble_dmadata(section)
-    else:
-        if section[2] == 'text':
-            fixup_text_symbols(section[4], section[0], data_regions, section[-1])
-            '''
-            data_regions = []
-            if section[3] is not None:
-                for override_region in section[3]:
-                    if override_region[2] == 'data':
-                        data_regions.append((override_region[0], override_region[1]))
+    if section[2] == 'text':
+        fixup_text_symbols(section[4], section[0], data_regions, section[-1])
+    elif section[2] == 'data':
+        disassemble_data(section[4], section[0], section[1], section[-1])
+    elif section[2] == 'rodata':
+        disassemble_rodata(section[4], section[0], section[1], section[-1])
+    elif section[2] == 'bss':
+        disassemble_bss(section[0], section[1], section[-1])
+    elif section[2] == 'reloc':
+        words = as_word_list(section[4])
 
-            disassemble_text(section[4], section[0], data_regions, section[-1])
-            '''
-        elif section[2] == 'data':
-            disassemble_data(section[4], section[0], section[1], section[-1])
-        elif section[2] == 'rodata':
-            disassemble_rodata(section[4], section[0], section[1], section[-1])
-        elif section[2] == 'bss':
-            disassemble_bss(section[0], section[1], section[-1])
-        elif section[2] == 'reloc':
-            words = as_word_list(section[4])
+        segment_dirname = section[-1]['name']
 
-            segment_dirname = section[-1]['name']
+        result = asm_header(".rodata")
+        result += f"\nglabel {section[-1]['name']}_Reloc\n"
 
-            result = asm_header(".rodata")
-            result += f"\nglabel {section[-1]['name']}_Reloc\n"
+        lines = [words[i*8:(i+1)*8] for i in range(0, (len(words) // 8) + 1)]
+        for line in [line for line in lines if len(line) != 0]:
+            result += f"    .word {', '.join([f'0x{word:08X}' for word in line])}\n"
 
-            lines = [words[i*8:(i+1)*8] for i in range(0, (len(words) // 8) + 1)]
-            for line in [line for line in lines if len(line) != 0]:
-                result += f"    .word {', '.join([f'0x{word:08X}' for word in line])}\n"
-
-            os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
-            with open(f"{DATA_OUT}/{segment_dirname}/{section[-1]['name']}.reloc.s", "w") as outfile:
-                outfile.write(result)
+        os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
+        with open(f"{DATA_OUT}/{segment_dirname}/{section[-1]['name']}.reloc.s", "w") as outfile:
+            outfile.write(result)
 
 def rodata_block_size(block):
     def align(x, n):
@@ -1690,9 +1698,6 @@ for f in files_spec:
         new[offset] = name
     full_file_list[f[0]] = new
 
-print(full_file_list["boot"])
-exit()
-
 if not args.full:
     old_file_count = sum([len(f[4].keys()) for f in files_spec])
     files_spec = discard_decomped_files(files_spec)
@@ -1737,16 +1742,6 @@ for segment in files_spec:
             section.append(binary[section[0] - segment_start:section[1] - segment_start]) # section[4]
             section.append(None) # section[5]
 
-all_sections = []
-for segment in files_spec:
-    for i,entry in enumerate(segment[3]):
-        if segment[0] == "makerom" and i == 1:
-            segment[2] = "ipl3"
-        elif segment[0] == "makerom" and i == 2:
-            segment[2] = "entry"
-        entry.append({"name":segment[0], "type":segment[2], "syms":segment[4]})
-    all_sections.extend(segment[3])
-
 print(f"Finding Symbols")
 
 for segment in files_spec:
@@ -1759,60 +1754,108 @@ for segment in files_spec:
     if segment[3][0][0] not in variables_ast:
         variables_ast.update({segment[3][0][0] : (f"_{segment[0]}SegmentStart","u8","[]",0x1)})
     # vram segment end
-    if segment[3][-1][1] not in variables_ast:
-        variables_ast.update({segment[3][-1][1] : (f"_{segment[0]}SegmentEnd","u8","[]",0x1)})
+    if segment[3][-2][1] not in variables_ast:
+        variables_ast.update({segment[3][-2][1] : (f"_{segment[0]}SegmentEnd","u8","[]",0x1)})
+
+
+all_sections = []
+for segment in files_spec:
+    if segment[0] == "boot" or segment[0] == "code":
+        file_list = list(full_file_list[segment[0]])
+        section_starts = [x[0] for x in segment[3]]
+
+        for off,name in segment[4].items():
+            for i,s in enumerate(section_starts):
+                if off < s:
+                    break
+            else:
+                i = len(section_starts)
+            i -= 1
+
+            data_offset = off - segment[3][i][0]
+            full_index = file_list.index(off)
+            if segment[0] == "code" and name == "buffers":
+                data_size = 0x80800000 - file_list[full_index]
+            else:
+                data_size = file_list[full_index + 1] - file_list[full_index]
+
+            new_entry = [
+                off, off + data_size, 
+                segment[3][i][2], 
+                None, 
+                segment[3][i][4][data_offset:data_offset+data_size] if segment[3][i][2] not in ("bss") else None, 
+                None if segment[3][i][2] in ["text", "reloc", "data"] else [],
+                {"name":name, "type":segment[2], "syms":{x:name for x in segment[4] if x >= off and x < off+data_size}}
+            ]
+
+            all_sections.append(new_entry)
+
+    for i,entry in enumerate(segment[3]):
+        if segment[0] == "makerom" and i == 1:
+            segment[2] = "ipl3"
+        elif segment[0] == "makerom" and i == 2:
+            segment[2] = "entry"
+        entry.append({"name":segment[0], "type":segment[2], "syms":segment[4]})
+
+    all_sections.extend(segment[3])
+
+del files_spec[:]
 
 pool = Pool(jobs)
 # Find symbols for each segment
-for segment in files_spec:
-    if segment[2] == 'makerom':
+for section in all_sections:
+    if section[-1]["name"] == 'makerom':
         continue
 
-    print(f"Finding symbols from .text and .data in {segment[0]}")
+    print(f"Finding symbols from .text and .data in {section[-1]['name']}")
 
-    for section in segment[3]:
-        if section[2] == 'text':
-            data_regions = []
-            if section[3] is not None:
-                for override_region in section[3]:
-                    if override_region[2] == 'data':
-                        data_regions.append((override_region[0], override_region[1]))
-            # try find a rodata section
-            for find_section in segment[3]:
-                if find_section[2] == 'rodata' and find_section[1] != find_section[0]:
-                    rodata_section = find_section
-                    break
-            else:
-                rodata_section = None
-            pool.apply_async(find_symbols_in_text, args=(section[4], rodata_section[4] if rodata_section is not None else None,
-                    section[0], rodata_section[0] if rodata_section is not None else None, data_regions, section[5], section[-1]), callback=update_symbols_from_dict)
-        elif section[2] == 'data':
-            pool.apply_async(find_symbols_in_data, args=(section[4], section[0], section[1], section[5], segment[0]), callback=update_symbols_from_dict)
+    #for section in segment[3]:
+    if section[2] == 'text':
+        data_regions = []
+        if section[3] is not None:
+            for override_region in section[3]:
+                if override_region[2] == 'data':
+                    data_regions.append((override_region[0], override_region[1]))
+        # try find a rodata section
+        for s in all_sections:
+            if (s[-1]["name"] == section[-1]["name"] 
+                and s[2] == "rodata"
+                and s[0] != s[1]):
+                rodata_section = s
+                break
+        else:
+            rodata_section = None
+        pool.apply_async(find_symbols_in_text, args=(section, rodata_section if rodata_section else None, data_regions), callback=update_symbols_from_dict)
+    elif section[2] == 'data':
+        pool.apply_async(find_symbols_in_data, args=(section), callback=update_symbols_from_dict)
 
 pool.close()
 pool.join()
 
 pool = Pool(jobs)
-for segment in files_spec:
-    if segment[2] == 'makerom':
+for section in all_sections:
+    if section[-1]["type"] == 'makerom':
         continue
 
-    print(f"Finding symbols from .rodata in {segment[0]}")
+    print(f"Finding symbols from .rodata in {section[-1]['name']}")
 
-    for section in segment[3]:
-        if section[2] == 'rodata':
-            pool.apply_async(find_symbols_in_rodata, args=(section[4], section[0], section[1], section[5], segment), callback=update_symbols_from_dict)
+    if section[2] == 'rodata':
+        pool.apply_async(find_symbols_in_rodata, args=(section), callback=update_symbols_from_dict)
 
 pool.close()
 pool.join()
 
 print("Disassembling Segments")
 
+for section in all_sections:
+    if section[-1]["name"] == "makerom":
+        disassemble_makerom(section)
+    elif section[-1]["name"] == "dmadata":
+        disassemble_dmadata(section)
+
 # Textual disassembly for each segment
-#for sec in all_sections:
-#    disassemble_segment(sec)
 with Pool(jobs) as p:
-    p.map(disassemble_segment, all_sections)
+    p.map(disassemble_segment, [sec for sec in all_sections if sec[-1]["name"] not in ("boot", "code", "makerom", "dmadata")])
 
 print("Splitting text and migrating rodata")
 
