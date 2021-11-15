@@ -859,14 +859,14 @@ def asm_header(section_name):
 .balign 16
 """
 
-def disassemble_text(data, vram, data_regions, segment):
+def disassemble_text(data, vram, data_regions, info):
     result = asm_header(".text")
     raw_insns = as_word_list(data)
 
     cur_file = ""
     cur_vaddr = 0
 
-    segment_dirname = ("" if segment[2] != "overlay" else "overlays/") + segment[0]
+    segment_dirname = ("" if info["type"] != "overlay" else "overlays/") + info["name"]
 
     delayed_insn = None
     delay_slot = False
@@ -878,17 +878,17 @@ def disassemble_text(data, vram, data_regions, segment):
         mnemonic = insn.mnemonic
         op_str = insn.op_str
 
-        if vaddr in full_file_list[segment[0]]:
+        if vaddr in full_file_list[info["name"]]:
             if cur_file != "":
-                if cur_vaddr in segment[4]:
+                if cur_vaddr in info["syms"]:
                     os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
                     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
                         outfile.write(result)
                 result = asm_header(".text")
             cur_vaddr = vaddr
-            cur_file = full_file_list[segment[0]][vaddr]
+            cur_file = full_file_list[info["name"]][vaddr]
             if cur_file == "":
-                cur_file = f"{segment[0]}_{vaddr:08X}"
+                cur_file = f"{info['name']}_{vaddr:08X}"
 
         if cur_file == "[PADDING]": # workaround for assumed linker bug
             continue
@@ -965,13 +965,13 @@ def disassemble_text(data, vram, data_regions, segment):
     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
 
-def disassemble_data(data, vram, end, segment):
+def disassemble_data(data, vram, end, info):
     section_symbols = [sym for sym in symbols.values() if sym >= vram and sym < end]
     section_symbols.append(vram)
     section_symbols.extend([sym for sym in data_labels if sym >= vram and sym < end])
     section_symbols.extend([sym for sym in variables_ast.keys() if sym >= vram and sym < end])
     # TODO temp hack, move
-    section_symbols.extend([sym for sym in segment[4].keys() if sym >= vram and sym < end])
+    section_symbols.extend([sym for sym in info["syms"].keys() if sym >= vram and sym < end])
 
     # remove symbols that are addends of other symbols
     section_symbols = [sym for sym in section_symbols if " + 0x" not in proper_name(sym, True) and " - 0x" not in proper_name(sym, True)]
@@ -980,29 +980,30 @@ def disassemble_data(data, vram, end, segment):
 
     section_symbols.sort()
 
-    segment_dirname = ("" if segment[2] != "overlay" else "overlays/") + segment[0]
+    segment_dirname = ("" if info["type"] != "overlay" else "overlays/") + info["name"]
 
     file_syms = []
     syms = []
     file_name = ""
     for i,sym in enumerate(section_symbols):
         if i == 0:
-            if segment[2] == "overlay":
-                file_name = segment[0]
+            if info["type"] == "overlay":
+                file_name = info["name"]
             else:
-                file_name = full_file_list[segment[0]][sym]
+                file_name = full_file_list[info["name"]][sym]
 
-        if sym in full_file_list[segment[0]]:
-            new_file = full_file_list[segment[0]][sym]
+        if sym in full_file_list[info["name"]]:
+            new_file = full_file_list[info["name"]][sym]
             if file_name != new_file:
                 file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
                 syms = []
                 file_name = new_file
         syms.append(sym)
-    file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
+    if len(syms) > 0:
+        file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
 
     for i,file in enumerate(file_syms):
-        if file["first_sym"] not in segment[4]:
+        if file["first_sym"] not in info["syms"]:
             #print(f"Skipping {file['name']}")
             continue
         
@@ -1047,26 +1048,29 @@ def disassemble_data(data, vram, end, segment):
                 result += "\n".join(\
                     [f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}" for j,byte in enumerate(data[data_offset:data_offset + data_size], 0)]) + "\n"
 
-        os.makedirs(f"{DATA_OUT}/{segment[0]}/", exist_ok=True)
-        with open(f"{DATA_OUT}/{segment[0]}/{file['name']}.data.s", "w") as outfile:
+        os.makedirs(f"{DATA_OUT}/{info['name']}/", exist_ok=True)
+        with open(f"{DATA_OUT}/{info['name']}/{file['name']}.data.s", "w") as outfile:
             outfile.write(result)
 
-def disassemble_rodata(data, vram, end, segment):
+def disassemble_rodata(data, vram, end, info):
     section_symbols = [sym for sym in symbols.values() if sym >= vram and sym < end]
     section_symbols.append(vram)
     section_symbols.extend([sym for sym in data_labels if sym >= vram and sym < end])
     section_symbols.extend([sym for sym in variables_ast.keys() if sym >= vram and sym < end])
     # TODO temp hack, move
-    section_symbols.extend([sym for sym in segment[4].keys() if sym >= vram and sym < end])
+    section_symbols.extend([sym for sym in info["syms"].keys() if sym >= vram and sym < end])
 
     # remove symbols that are addends of other symbols
     section_symbols = [sym for sym in section_symbols if " + 0x" not in proper_name(sym, True) and " - 0x" not in proper_name(sym, True)]
 
     section_symbols = list(set(section_symbols))
 
+    if len(section_symbols) == 0:
+        return
+
     section_symbols.sort()
 
-    segment_dirname = ("" if segment[2] != "overlay" else "overlays/") + segment[0]
+    segment_dirname = ("" if info["type"] != "overlay" else "overlays/") + info["name"]
 
     force_ascii_str = False # hack for non-null-terminated strings in .data
 
@@ -1075,22 +1079,23 @@ def disassemble_rodata(data, vram, end, segment):
     file_name = ""
     for i,sym in enumerate(section_symbols):
         if i == 0:
-            if segment[2] == "overlay":
-                file_name = segment[0]
+            if info["type"] == "overlay":
+                file_name = info["name"]
             else:
-                file_name = full_file_list[segment[0]][sym]
+                file_name = full_file_list[info["name"]][sym]
 
-        if sym in full_file_list[segment[0]]:
-            new_file = full_file_list[segment[0]][sym]
+        if sym in full_file_list[info["name"]]:
+            new_file = full_file_list[info["name"]][sym]
             if file_name != new_file:
                 file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
                 syms = []
                 file_name = new_file
         syms.append(sym)
-    file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
+    if len(syms) > 0:
+        file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
 
     for i,file in enumerate(file_syms):
-        if file["first_sym"] not in segment[4]:
+        if file["first_sym"] not in info["syms"]:
             #print(f"Skipping {file['name']}")
             continue
         
@@ -1139,17 +1144,17 @@ def disassemble_rodata(data, vram, end, segment):
                 result += "\n".join(\
                     [f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}" for j,byte in enumerate(data[data_offset:data_offset + data_size], 0)]) + "\n"
 
-        os.makedirs(f"{DATA_OUT}/{segment[0]}/", exist_ok=True)
-        with open(f"{DATA_OUT}/{segment[0]}/{file['name']}.rodata.s", "w") as outfile:
+        os.makedirs(f"{DATA_OUT}/{info['name']}/", exist_ok=True)
+        with open(f"{DATA_OUT}/{info['name']}/{file['name']}.rodata.s", "w") as outfile:
             outfile.write(result)
 
-def disassemble_bss(vram, end, segment):
+def disassemble_bss(vram, end, info):
     section_symbols = [sym for sym in symbols.values() if sym >= vram and sym < end]
     section_symbols.append(vram)
     section_symbols.extend([sym for sym in data_labels if sym >= vram and sym < end])
     section_symbols.extend([sym for sym in variables_ast.keys() if sym >= vram and sym < end])
     # TODO temp hack, move
-    section_symbols.extend([sym for sym in segment[4].keys() if sym >= vram and sym < end])
+    section_symbols.extend([sym for sym in info["syms"].keys() if sym >= vram and sym < end])
 
     # remove symbols that are addends of other symbols
     section_symbols = [sym for sym in section_symbols if " + 0x" not in proper_name(sym, True) and " - 0x" not in proper_name(sym, True)]
@@ -1158,30 +1163,31 @@ def disassemble_bss(vram, end, segment):
 
     section_symbols.sort()
 
-    # ("" if segment[2] != "overlay" else "overlays/"
-    segment_dirname = segment[0]
+    # ("" if info["type"] != "overlay" else "overlays/"
+    segment_dirname = info["name"]
 
     file_syms = []
     syms = []
     file_name = ""
     for i,sym in enumerate(section_symbols):
         if i == 0:
-            if segment[2] == "overlay":
-                file_name = segment[0]
+            if info["type"] == "overlay":
+                file_name = info["name"]
             else:
-                file_name = full_file_list[segment[0]][sym]
+                file_name = full_file_list[info["name"]][sym]
 
-        if sym in full_file_list[segment[0]]:
-            new_file = full_file_list[segment[0]][sym]
+        if sym in full_file_list[info["name"]]:
+            new_file = full_file_list[info["name"]][sym]
             if file_name != new_file:
                 file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
                 syms = []
                 file_name = new_file
         syms.append(sym)
-    file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
+    if len(syms) > 0:
+        file_syms.append({"name": file_name, "first_sym": syms[0], "syms": syms})
 
     for i,file in enumerate(file_syms):
-        if file["first_sym"] not in segment[4]:
+        if file["first_sym"] not in info["syms"]:
             #print(f"Skipping {file['name']}")
             continue
         
@@ -1202,32 +1208,6 @@ def disassemble_bss(vram, end, segment):
         os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
         with open(f"{DATA_OUT}/{segment_dirname}/{file['name']}.bss.s", "w") as outfile:
             outfile.write(result)
-
-    '''
-
-    result = asm_header(".bss")
-    cur_file = ""
-
-    for i,symbol in enumerate(section_symbols,0):
-        next_symbol = section_symbols[i + 1] if i < len(section_symbols) - 1 else end
-
-        if symbol in segment[4].keys():
-            if cur_file != "":
-                os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
-                with open(f"{DATA_OUT}/{segment_dirname}/{cur_file}.bss.s", "w") as outfile:
-                    outfile.write(result)
-                result = asm_header(".bss")
-            cur_file = segment[4][symbol]
-            if cur_file == "":
-                cur_file = f"{segment[0]}_{symbol:08X}"
-
-        result += f"\nglabel {proper_name(symbol, True)}\n"
-        result += f"/* {symbol - vram:06X} {symbol:08X} */ .space 0x{next_symbol - symbol:X}\n"
-
-    os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
-    with open(f"{DATA_OUT}/{segment_dirname}/{cur_file}.bss.s", "w") as outfile:
-        outfile.write(result)
-    '''
 
 def get_overlay_sections(vram, overlay):
     header_loc = len(overlay) - as_word_list(overlay)[-1]
@@ -1390,18 +1370,16 @@ for segment in files_spec:
                 i += 1
                 dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
 
-def disassemble_makerom(segment):
+def disassemble_makerom(section):
     os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
-    rom_header = segment[3][0][4]
-    ipl3 = segment[3][1][4]
-    entry = segment[3][2][4]
 
-    pi_dom1_reg, clockrate, entrypoint, revision, \
-        chksum1, chksum2, pad1, pad2, \
-            rom_name, pad3, cart, cart_id, \
-                region, version = struct.unpack(">IIIIIIII20sII2s1sB", rom_header)
+    if section[2] == "rom_header":
+        pi_dom1_reg, clockrate, entrypoint, revision, \
+            chksum1, chksum2, pad1, pad2, \
+                rom_name, pad3, cart, cart_id, \
+                    region, version = struct.unpack(">IIIIIIII20sII2s1sB", section[4])
 
-    out = f"""/*
+        out = f"""/*
  * The Legend of Zelda: Majora's Mask ROM header
  */
 
@@ -1420,49 +1398,46 @@ def disassemble_makerom(segment):
 .ascii "{region.decode('ascii')}"                    /* Region */
 .byte  0x{version:02X}                   /* Version */
 """
-    with open(ASM_OUT + "/makerom/rom_header.s", "w") as outfile:
-        outfile.write(out)
+        with open(ASM_OUT + "/makerom/rom_header.s", "w") as outfile:
+            outfile.write(out)
 
-    # TODO disassemble this eventually, low priority
-    out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x40, 0xFC0\n"
+    elif section[-1]["type"] == "ipl3":
+        # TODO disassemble this eventually, low priority
+        out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x40, 0xFC0\n"
 
-    with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
-        outfile.write(out)
+        with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
+            outfile.write(out)
 
-    # hack: add symbol relocations manually
-    entry_addr = 0x80080000
+    elif section[-1]["type"] == "entry":
+        # hack: add symbol relocations manually
+        entry_addr = 0x80080000
 
-    functions.add(entry_addr)
-    symbols.update({entry_addr + 0x00 : 0x80099500,
-                    entry_addr + 0x04 : 0x80099500,
-                    entry_addr + 0x20 : 0x80080060,
-                    entry_addr + 0x24 : 0x80099EF0,
-                    entry_addr + 0x28 : 0x80080060,
-                    entry_addr + 0x30 : 0x80099EF0})
-    branch_labels.add(entry_addr + 0xC)
+        functions.add(entry_addr)
+        symbols.update({entry_addr + 0x00 : 0x80099500,
+                        entry_addr + 0x04 : 0x80099500,
+                        entry_addr + 0x20 : 0x80080060,
+                        entry_addr + 0x24 : 0x80099EF0,
+                        entry_addr + 0x28 : 0x80080060,
+                        entry_addr + 0x30 : 0x80099EF0})
+        branch_labels.add(entry_addr + 0xC)
+        disassemble_text(section[4], entry_addr, [], section[-1])
 
-    disassemble_text(entry, entry_addr, [], segment)
+        # manually set boot bss size...
+        entry_asm = ""
+        with open(f"{ASM_OUT}/makerom/entry.text.s") as infile:
+            entry_asm = infile.read()
 
-    # manually set boot bss size...
-    entry_asm = ""
-    with open(f"{ASM_OUT}/makerom/entry.text.s") as infile:
-        entry_asm = infile.read()
+        entry_asm = entry_asm.replace("0x63b0", "%lo(_bootSegmentBssSize)")
+        with open(f"{ASM_OUT}/makerom/entry.s", "w") as outfile:
+            outfile.write(entry_asm)
 
-    entry_asm = entry_asm.replace("0x63b0", "%lo(_bootSegmentBssSize)")
-    with open(f"{ASM_OUT}/makerom/entry.s", "w") as outfile:
-        outfile.write(entry_asm)
+        os.remove(f"{ASM_OUT}/makerom/entry.text.s")
 
-    os.remove(f"{ASM_OUT}/makerom/entry.text.s")
-
-    #out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x1000, 0x60\n"
-
-    #with open(ASM_OUT + "/makerom/entry.s", "w") as outfile:
-    #    outfile.write(out)
-
-def disassemble_segment(segment):
-    if segment[2] == 'dmadata':
-        os.makedirs(f"{ASM_OUT}/dmadata/", exist_ok=True)
-        out = f""".include "macro.inc"
+def disassemble_dmadata(section):
+    if section[2] == "bss":
+        return
+    os.makedirs(f"{ASM_OUT}/dmadata/", exist_ok=True)
+    out = f""".include "macro.inc"
 
 .macro DMA_TABLE_ENTRY segment
     .4byte _\segment\()SegmentRomStart
@@ -1480,37 +1455,40 @@ def disassemble_segment(segment):
 
 glabel {variables_ast[0x8009F8B0][0]}
 """
-        filenames = []
-        with open("tools/disasm/dma_filenames.txt","r") as infile:
-            filenames = ast.literal_eval(infile.read())
+    filenames = []
+    with open("tools/disasm/dma_filenames.txt","r") as infile:
+        filenames = ast.literal_eval(infile.read())
 
-        dmadata = segment[3][0][4]
-        i = 0
+    dmadata = section[4]
+    i = 0
+    dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
+    while any([word != 0 for word in as_word_list(dmadata_entry)]):
+        vrom_start,vrom_end,prom_start,prom_end = as_word_list(dmadata_entry)
+        if prom_start == 0xFFFFFFFF and prom_end == 0xFFFFFFFF:
+            out += f"DMA_TABLE_ENTRY_UNSET {filenames[i]}\n"
+        else:
+            out += f"DMA_TABLE_ENTRY {filenames[i]}\n"
+        i += 1
         dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
-        while any([word != 0 for word in as_word_list(dmadata_entry)]):
-            vrom_start,vrom_end,prom_start,prom_end = as_word_list(dmadata_entry)
-            if prom_start == 0xFFFFFFFF and prom_end == 0xFFFFFFFF:
-                out += f"DMA_TABLE_ENTRY_UNSET {filenames[i]}\n"
-            else:
-                out += f"DMA_TABLE_ENTRY {filenames[i]}\n"
-            i += 1
-            dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
 
-        out += """
+    out += """
 .space 0x100
 
 .section .bss
 
 .space 0x10
 """
-        with open(ASM_OUT + "/dmadata/dmadata.s", "w") as outfile:
-            outfile.write(out)
-        return
+    with open(ASM_OUT + "/dmadata/dmadata.s", "w") as outfile:
+        outfile.write(out)
 
-    for section in segment[3]:
-        if (section[0] == section[1] and section[2] != 'reloc') or (section[2] != 'bss' and len(section[4]) == 0):
-            continue
-        print(f"Disassembling {segment[0]} .{section[2]}")
+def disassemble_segment(section):
+    print(f"Disassembling {section[-1]['name']} .{section[2]}")
+
+    if section[-1]["name"] == "makerom":
+        disassemble_makerom(section)
+    elif section[-1]["name"] == "dmadata":
+        disassemble_dmadata(section)
+    else:
         if section[2] == 'text':
             data_regions = []
             if section[3] is not None:
@@ -1518,43 +1496,49 @@ glabel {variables_ast[0x8009F8B0][0]}
                     if override_region[2] == 'data':
                         data_regions.append((override_region[0], override_region[1]))
 
-            disassemble_text(section[4], section[0], data_regions, segment)
+            disassemble_text(section[4], section[0], data_regions, section[-1])
         elif section[2] == 'data':
-            disassemble_data(section[4], section[0], section[1], segment)
+            disassemble_data(section[4], section[0], section[1], section[-1])
         elif section[2] == 'rodata':
-            disassemble_rodata(section[4], section[0], section[1], segment)
+            disassemble_rodata(section[4], section[0], section[1], section[-1])
         elif section[2] == 'bss':
-            disassemble_bss(section[0], section[1], segment)
+            disassemble_bss(section[0], section[1], section[-1])
         elif section[2] == 'reloc':
             words = as_word_list(section[4])
 
-            # ("" if segment[2] != "overlay" else "overlays/") + 
-            segment_dirname = segment[0]
+            segment_dirname = section[-1]['name']
 
             result = asm_header(".rodata")
-            result += f"\nglabel {segment[0]}_Reloc\n"
+            result += f"\nglabel {section[-1]['name']}_Reloc\n"
 
             lines = [words[i*8:(i+1)*8] for i in range(0, (len(words) // 8) + 1)]
             for line in [line for line in lines if len(line) != 0]:
                 result += f"    .word {', '.join([f'0x{word:08X}' for word in line])}\n"
 
             os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
-            with open(f"{DATA_OUT}/{segment_dirname}/{segment[0]}.reloc.s", "w") as outfile:
+            with open(f"{DATA_OUT}/{segment_dirname}/{section[-1]['name']}.reloc.s", "w") as outfile:
                 outfile.write(result)
 
 print("Disassembling Segments")
 
-disassemble_makerom(next(segment for segment in files_spec if segment[2] == 'makerom'))
+#disassemble_makerom(next(segment for segment in files_spec if segment[2] == 'makerom'))
+#disassemble_dmadata(next(segment for segment in files_spec if segment[2] == 'dmadata'))
 
 # Textual disassembly for each segment
-#for f in files_spec:
-#    if f[2] == "makerom":
-#        continue
-#    disassemble_segment(f)
-with Pool(jobs) as p:
-    p.map(disassemble_segment, (segment for segment in files_spec if segment[2] != 'makerom'))
+all_sections = []
+for segment in files_spec:
+    for i,entry in enumerate(segment[3]):
+        if segment[0] == "makerom" and i == 1:
+            segment[2] = "ipl3"
+        elif segment[0] == "makerom" and i == 2:
+            segment[2] = "entry"
+        entry.append({"name":segment[0], "type":segment[2], "syms":segment[4]})
+    all_sections.extend(segment[3])
 
-#exit()
+#for sec in all_sections:
+#    disassemble_segment(sec)
+with Pool(jobs) as p:
+    p.map(disassemble_segment, all_sections)
 
 print("Splitting text and migrating rodata")
 
