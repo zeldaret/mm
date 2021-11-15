@@ -586,7 +586,9 @@
             0x801D6600 : "code_8019AF00",
             0x801D8BE0 : "code_801A4EB0",
             0x801D8E50 : "code_801A51F0",
-            0x801D9090 : "",
+            0x801D9090 : "audio_sound_params",
+            0x801DB470 : "code_801A5BD0",
+            0x801DB4C0 : "code_801A7B10",
 
             # .rodata section
             0x801DBDF0 : "z_en_item00",
