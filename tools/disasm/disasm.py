@@ -56,7 +56,7 @@ def discard_decomped_files(files_spec):
                     if f"/{file}." in spec[i]:
                         if spec[i].count(".") == 1:
                             last_line = spec[i]
-                        if "build/asm/" in spec[i] or "build/data/" in spec[i]: 
+                        if "build/asm/" in spec[i] or "build/data/" in spec[i]:
                             include = True
                             break
                     i += 1
@@ -966,100 +966,6 @@ def disassemble_text(data, vram, data_regions, segment):
     with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
 
-    '''
-    for i,raw_insn in enumerate(raw_insns,0):
-        i *= 4
-        vaddr = vram + i
-        insn = decode_insn(raw_insns[i//4], vaddr)
-        mnemonic = insn.mnemonic
-        op_str = insn.op_str
-
-        if vaddr in segment[4].keys():
-            if cur_file != "":
-                os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
-                with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
-                    outfile.write(result)
-                result = asm_header(".text")
-            cur_file = segment[4][vaddr]
-            if cur_file == "":
-                cur_file = f"{segment[0]}_{vaddr:08X}"
-
-        if cur_file == "[PADDING]": # workaround for assumed linker bug
-            continue
-
-        # DATA EMBEDDED IN TEXT
-        in_data = False
-        for region in data_regions:
-            if vaddr in range(region[0], region[1], 4):
-                in_data = True
-                break
-        if in_data:
-            if vaddr in functions: # TODO not really a function if it falls in a data region...
-                result += f"\nglabel {proper_name(vaddr, True)}\n"
-            result += f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */  .word 0x{raw_insn:08X}\n"
-            continue
-
-        # LABELS
-        if vaddr in functions:
-            result += f"\nglabel {proper_name(vaddr)}\n"
-        if vaddr in jtbl_labels:
-            result += f"glabel L{vaddr:08X}\n"
-        if vaddr in branch_labels:
-            result += f".L{vaddr:08X}:\n"
-
-        # INSTRUCTIONS FORMATTING/CORRECTING
-        if insn.id in MIPS_BRANCH_INSNS:
-            op_str_parts = []
-            for field in insn.fields:
-                if field == 'offset':
-                    op_str_parts.append(f".L{insn.offset:08X}")
-                else:
-                    op_str_parts.append(insn.format_field(field))
-            op_str = ", ".join(op_str_parts)
-            delayed_insn = insn
-        elif insn.id in MIPS_JUMP_INSNS:
-            op_str_parts = []
-            for field in insn.fields:
-                if field == 'target':
-                    op_str_parts.append(proper_name(insn.target, is_symbol=True))
-                else:
-                    op_str_parts.append(insn.format_field(field))
-            op_str = ", ".join(op_str_parts)
-            delayed_insn = insn
-        elif insn.id == MIPS_INS_LUI:
-            symbol_value = symbols.get(vaddr, None)
-            if symbol_value is not None:
-                op_str = f"{mips_gpr_names[insn.rt]}, %hi({proper_name(symbol_value)})"
-            else:
-                constant_value = constants.get(vaddr, None)
-                if constant_value is not None:
-                    op_str = f"{mips_gpr_names[insn.rt]}, (0x{constant_value:08X} >> 16)"
-        elif insn.id == MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
-            symbol_value = symbols.get(vaddr, None)
-            if symbol_value is not None:
-                if insn.id == MIPS_INS_ADDIU:
-                    op_str = f"{mips_gpr_names[insn.rt]}, {mips_gpr_names[insn.rs]}, %lo({proper_name(symbol_value)})"
-                else:
-                    op_str = f"{mips_fpr_names[insn.ft] if insn.id in MIPS_FP_LOAD_STORE_INSNS else mips_gpr_names[insn.rt]}, %lo({proper_name(symbol_value)})({mips_gpr_names[insn.base]})"
-        elif insn.id == MIPS_INS_ORI:
-            constant_value = constants.get(vaddr, None)
-            if constant_value is not None:
-                op_str = f"{mips_gpr_names[insn.rt]}, {mips_gpr_names[insn.rs]}, (0x{constant_value:08X} & 0xFFFF)"
-
-        if delay_slot:
-            mnemonic = " " + mnemonic
-            delayed_insn = None
-        delay_slot = False
-        if delayed_insn is not None:
-            delay_slot = True
-
-        result += f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */  {mnemonic:12}{op_str}\n"
-
-    os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
-    with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
-        outfile.write(result)
-    '''
-
 def disassemble_data(data, vram, end, segment):
     section_symbols = [sym for sym in symbols.values() if sym >= vram and sym < end]
     section_symbols.append(vram)
@@ -1369,14 +1275,14 @@ for f in files_spec:
         if name == "":
             name = f"{f[2]}_{offset:08X}"
         new[offset] = name
-
     full_file_list[f[0]] = new
 
 if not args.full:
     old_file_count = sum([len(f[4].keys()) for f in files_spec])
     files_spec = discard_decomped_files(files_spec)
     new_file_count = sum([len(f[4].keys()) for f in files_spec])
-    print(f"Pruned {old_file_count - new_file_count} files")
+    pruned = old_file_count - new_file_count
+    print(f"Pruned {pruned}/{old_file_count} files ({pruned / old_file_count:.02%})")
 
 # Precompute variable addends for all variables, this uses a lot of memory but the lookups later are fast
 for var in sorted(variables_ast.keys()):
@@ -1642,6 +1548,10 @@ print("Disassembling Segments")
 disassemble_makerom(next(segment for segment in files_spec if segment[2] == 'makerom'))
 
 # Textual disassembly for each segment
+#for f in files_spec:
+#    if f[2] == "makerom":
+#        continue
+#    disassemble_segment(f)
 with Pool(jobs) as p:
     p.map(disassemble_segment, (segment for segment in files_spec if segment[2] != 'makerom'))
 
