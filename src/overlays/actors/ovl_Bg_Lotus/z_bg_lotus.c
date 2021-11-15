@@ -44,8 +44,8 @@ void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 bgId;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BgCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
     this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &thisx->floorPoly, &bgId,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
     this->timer2 = 96;
@@ -93,13 +93,13 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
     } else {
         this->dyna.actor.world.pos.y = this->height;
 
-        if (func_800CAF70(&this->dyna)) {
+        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
             if (this->hasSpawnedRipples == 0) {
                 EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 0);
                 EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 8);
                 this->timer = 40;
             }
-            if (gSaveContext.playerForm != 3) {
+            if (gSaveContext.playerForm != PLAYER_FORM_DEKU) {
                 this->timer = 40;
                 this->dyna.actor.flags |= 0x10;
                 this->actionFunc = BgLotus_Sink;

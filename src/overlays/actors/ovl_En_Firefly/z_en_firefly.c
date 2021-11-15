@@ -323,7 +323,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, GlobalContext* globalCtx) {
     }
 
     if ((this->timer == 0) && (this->actor.xzDistToPlayer < 200.0f) &&
-        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         EnFirefly_SetupDiveAttack(this);
     }
 }
@@ -462,7 +462,7 @@ void EnFirefly_DiveAttack(EnFirefly* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.x, this->targetPitch, 0x100);
     }
 
-    if ((this->timer == 0) || (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (player->stateFlags2 & 0x80) ||
+    if ((this->timer == 0) || (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (player->stateFlags2 & 0x80) ||
         (player->actor.freezeTimer > 0)) {
         EnFirefly_SetupFlyAway(this);
     }

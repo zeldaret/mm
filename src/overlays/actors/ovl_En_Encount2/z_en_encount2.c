@@ -106,7 +106,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    BgCheck3_BgActorInit(&this->dyna, 0);
+    DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&D_06002420, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, func_800B3FC0, 25.0f);

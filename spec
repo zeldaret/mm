@@ -61,7 +61,8 @@ beginseg
     include "build/data/boot/setintmask.rodata.o"
     include "build/asm/boot/getintmask.text.o"
     include "build/src/libultra/voice/voicesetword.o"
-    include "build/data/boot/vimodeHpf.data.o"
+    include "build/src/libultra/io/osViModeNtscHpf1.o"
+    include "build/src/libultra/io/osViModePalLan1.o"
     include "build/asm/boot/guScale.text.o"
     include "build/src/libultra/gu/sinf.o"
     include "build/src/libultra/gu/sins.o"
@@ -74,8 +75,7 @@ beginseg
     include "build/src/libultra/os/destroythread.o"
     include "build/src/libultra/voice/voicecheckresult.o"
     include "build/asm/boot/bzero.text.o"
-    include "build/src/libultra/io/rumblepak.o"
-    include "build/data/boot/rumblepak.bss.o"
+    include "build/src/libultra/io/motor.o"
     include "build/src/libultra/io/siacs.o"
     include "build/src/libultra/io/controller.o"
     include "build/src/libultra/os/createthread.o"
@@ -180,8 +180,9 @@ beginseg
     include "build/src/libultra/io/pfsdeletefile.o"
     include "build/src/libultra/gu/ortho.o"
     include "build/asm/boot/interrupt.text.o"
+    include "build/src/libultra/io/osViModeNtscLan1.o"
+    include "build/src/libultra/io/osViModeMpalLan1.o"
     include "build/src/libultra/io/vi.o"
-    include "build/data/boot/vi.data.o"
     include "build/src/libultra/io/viswapcontext.o"
     include "build/src/libultra/io/pigetcmdq.o"
     include "build/src/libultra/gu/cosf.o"
@@ -217,7 +218,6 @@ beginseg
     include "build/src/libultra/os/settimer.o"
     include "build/data/boot/__libm_qnan_f.rodata.o"
     include "build/src/libultra/rmon/xldtob.o"
-    include "build/data/boot/xldtob.data.o"
     include "build/src/libultra/libc/ldiv.o"
     include "build/src/libultra/rmon/xlitob.o"
     include "build/src/libultra/io/sirawwrite.o"
@@ -225,8 +225,6 @@ beginseg
     include "build/src/libultra/io/spsetstat.o"
     pad_text
     include "build/src/libultra/io/vimgr.o"
-    include "build/data/boot/vimgr.data.o"
-    include "build/data/boot/vimgr.bss.o"
     include "build/src/libultra/io/vigetcurrcontext.o"
     include "build/asm/boot/writebackdcacheall.text.o"
     include "build/src/libultra/os/getcurrfaultthread.o"
@@ -457,7 +455,6 @@ beginseg
     include "build/src/code/z_bgcheck.o"
     include "build/src/code/z_bg_collect.o"
     include "build/src/code/z_bg_item.o"
-    include "build/src/code/code_800CB000.o"
     include "build/src/code/z_camera.o"
     include "build/data/code/z_camera.data.o"
     include "build/data/code/z_camera.bss.o"
@@ -482,7 +479,7 @@ beginseg
     include "build/src/code/code_800F07C0.o"
     include "build/data/code/code_801BC2A0.data.o"
     include "build/src/code/z_face_reaction.o"
-    include "build/src/code/code_800F12D0.o"
+    include "build/src/code/z_env_flags.o"
     include "build/src/code/z_eventmgr.o"
     include "build/data/code/z_eventmgr.bss.o"
     include "build/src/code/z_fcurve_data.o"
@@ -2546,9 +2543,11 @@ beginseg
     name "ovl_Boss_02"
     compress
     include "build/src/overlays/actors/ovl_Boss_02/z_boss_02.o"
-    include "build/data/ovl_Boss_02/ovl_Boss_02.data.o"
-    include "build/data/ovl_Boss_02/ovl_Boss_02.bss.o"
-    include "build/data/ovl_Boss_02/ovl_Boss_02.reloc.o"
+    #ifdef NON_MATCHING
+        include "build/src/overlays/actors/ovl_Boss_02/ovl_Boss_02_reloc.o"
+    #else
+        include "build/data/ovl_Boss_02/ovl_Boss_02.reloc.o"
+    #endif
 endseg
 
 beginseg
@@ -2859,8 +2858,7 @@ beginseg
     name "ovl_En_Baguo"
     compress
     include "build/src/overlays/actors/ovl_En_Baguo/z_en_baguo.o"
-    include "build/data/ovl_En_Baguo/ovl_En_Baguo.data.o"
-    include "build/data/ovl_En_Baguo/ovl_En_Baguo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Baguo/ovl_En_Baguo_reloc.o"
 endseg
 
 beginseg
@@ -3827,8 +3825,7 @@ beginseg
     name "ovl_En_Pm"
     compress
     include "build/src/overlays/actors/ovl_En_Pm/z_en_pm.o"
-    include "build/data/ovl_En_Pm/ovl_En_Pm.data.o"
-    include "build/data/ovl_En_Pm/ovl_En_Pm.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Pm/ovl_En_Pm_reloc.o"
 endseg
 
 beginseg
@@ -3983,8 +3980,7 @@ beginseg
     name "ovl_En_Hakurock"
     compress
     include "build/src/overlays/actors/ovl_En_Hakurock/z_en_hakurock.o"
-    include "build/data/ovl_En_Hakurock/ovl_En_Hakurock.data.o"
-    include "build/data/ovl_En_Hakurock/ovl_En_Hakurock.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hakurock/ovl_En_Hakurock_reloc.o"
 endseg
 
 beginseg
