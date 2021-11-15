@@ -3,6 +3,7 @@
 
 #include "z64.h"
 #include "segment_symbols.h"
+#include "macros.h"
 
 // pre-boot variables
 extern u32 osTvType;
