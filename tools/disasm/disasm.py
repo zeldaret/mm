@@ -2,7 +2,7 @@
 
 import argparse, ast, math, os, re, struct
 from mips_isa import *
-from multiprocessing import Pool
+from multiprocessing import Pool, Manager
 from pathlib import Path
 import copy
 
@@ -163,6 +163,8 @@ functions_ast = None
 variables_ast = None
 
 vars_cache = {} # (address: variable + addend)
+
+files_text = {}
 
 def proper_name(symbol, in_data=False, is_symbol=True):
     # hacks
@@ -395,7 +397,16 @@ def put_symbols(symbols_dict, setname, symbols):
     else:
         symbols_dict[setname] = symbols.copy()
 
+def put_text(type, name, text):
+    if type not in files_text:
+        files_text[type] = {}
+    files_text[type][name] = text
+
 def update_symbols_from_dict(symbols_dict):
+    file_text = []
+    if type(symbols_dict) == tuple:
+        symbols_dict, file_text = symbols_dict
+
     for setname, symbol in symbols_dict.items():
         if setname == "functions":
             functions.update(symbol)
@@ -424,10 +435,13 @@ def update_symbols_from_dict(symbols_dict):
         elif setname == "files":
             files.update(symbol)
 
-def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, segment_name):
+    for file in file_text:
+        put_text(file[0], file[1], file[2])
+
+def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, info):
     symbols_dict = dict()
 
-    print(f"Finding symbols from .text in {segment_name}")
+    print(f"Finding symbols from .text in {info['name']}")
 
     if rodata is not None:
         rodata_words = as_word_list(rodata)
@@ -539,6 +553,18 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
             else:
                 assert False , "Invalid relocation type encountered"
 
+    result_files = []
+    results = [asm_header(".text")]
+    raw_insns = as_word_list(data)
+
+    cur_file = ""
+    cur_vaddr = 0
+
+    segment_dirname = ("" if info["type"] != "overlay" else "overlays/") + info["name"]
+
+    delayed_insn = None
+    delay_slot = False
+
     for i,insn in enumerate(insns,0):
         vaddr = vram + i * 4
 
@@ -549,6 +575,14 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
                 in_data = True
                 break
         if in_data:
+            results.append({
+                           "vaddr": vaddr,
+                           "insn":{"id":insn.id},
+                           "addr": f"/* {i*4:06X} {vaddr:08X} {raw_insns[i]:08X} */  ",
+                           "mnem": "",
+                           "op": [f"  .word 0x{raw_insns[i]:08X}"],
+                           "data": True,
+                           })
             continue
 
         if vaddr in functions or vaddr in symbols_dict["functions"]:
@@ -713,6 +747,79 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
                                  MIPS_INS_SUB_S, MIPS_INS_ADD_S]:
                 clobber_conditionally(insn)
 
+
+
+        ############# Disassemble ##########
+        mnemonic = insn.mnemonic
+        op_str = insn.op_str
+        instr = {"id":insn.id}
+
+        if vaddr in full_file_list[info["name"]]:
+            if cur_file != "":
+                if cur_vaddr in info["syms"]:
+                    result_files.append([info["name"], cur_file, results])
+                results = [asm_header(".text")]
+            cur_vaddr = vaddr
+            cur_file = full_file_list[info["name"]][vaddr]
+            if cur_file == "":
+                cur_file = f"{info['name']}_{vaddr:08X}"
+
+        # INSTRUCTIONS FORMATTING/CORRECTING
+        if insn.id in MIPS_BRANCH_INSNS:
+            op_str_parts = []
+            for field in insn.fields:
+                if field == 'offset':
+                    op_str_parts.append(f".L{insn.offset:08X}")
+                else:
+                    op_str_parts.append(insn.format_field(field))
+            op_str = [", ".join(op_str_parts)]
+
+
+        elif insn.id in MIPS_JUMP_INSNS:
+            op_str = []
+            op_str_parts = []
+            for field in insn.fields:
+                if field == 'target':
+                    op_str_parts.append([insn.target, False, True])
+                else:
+                    op_str_parts.append(insn.format_field(field))
+            for x,part in enumerate(op_str_parts):
+                if x + 1 < len(op_str_parts):
+                    part += ", "
+                op_str.append(part)
+
+
+        elif insn.id == MIPS_INS_LUI:
+            op_str = [op_str]
+            instr["rt"] = insn.rt
+
+
+        elif insn.id == MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
+            op_str = [op_str]
+            instr["rt"] = insn.rt
+            instr["rs"] = insn.rs
+            instr["ft"] = insn.ft
+            instr["base"] = insn.base
+
+
+        elif insn.id == MIPS_INS_ORI:
+            op_str = [op_str]
+            instr["rt"] = insn.rt
+            instr["rs"] = insn.rs
+
+
+        results.append({
+                       "vaddr": vaddr,
+                       "insn":instr,
+                       "addr": f"/* {i*4:06X} {vaddr:08X} {raw_insns[i]:08X} */  ",
+                       "mnem": mnemonic,
+                       "op": op_str,
+                       "data": False,
+                       })
+
+
+        ######### Disassemble ##############
+
         if delay_slot and delayed_insn is not None:
             if delayed_insn.id == MIPS_INS_JAL or delayed_insn.id == MIPS_INS_JALR or \
                 (delayed_insn.id == MIPS_INS_JR and delayed_insn.rs == MIPS_REG_RA):
@@ -734,10 +841,17 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, 
 
         delay_slot = delayed_insn is not None
 
+    result_files.append([info["name"], cur_file, results])
+
+    #if len(results) > 0:
+    #    assert cur_file != ""
+    #    put_text(info["name"], cur_file, results)
+    #    #files_text[info["name"]][cur_file] = results
+
     put_symbols(symbols_dict, "branch_labels", func_branch_labels)
     put_symbols(symbols_dict, "jtbl_labels", func_jtbl_labels)
 
-    return symbols_dict
+    return symbols_dict, result_files
 
 def find_symbols_in_data(data, vram, end, relocs, segment_name):
     symbols_dict = dict()
@@ -858,6 +972,80 @@ def asm_header(section_name):
 
 .balign 16
 """
+
+def fixup_text_symbols(data, vram, data_regions, info):
+    segment_dirname = ("" if info["type"] != "overlay" else "overlays/") + info["name"]
+
+    os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
+
+    for name, file in files_text[info["name"]].items():
+        text = [file.pop(0)]
+
+        for i,entry in enumerate(file):
+            vaddr = entry["vaddr"]
+
+            if vaddr in functions:
+                text.append(f"\nglabel {proper_name(vaddr, in_data=entry['data'])}\n")
+            if vaddr in jtbl_labels:
+                text.append(f"glabel L{vaddr:08X}\n")
+            if vaddr in branch_labels:
+                text.append(f".L{vaddr:08X}:\n")
+
+            line = entry["addr"]
+            line += f"{entry['mnem']:12}"
+
+            insn = entry["insn"]
+            if insn["id"] in MIPS_JUMP_INSNS:
+                for op_part in entry["op"]:
+                    if type(op_part) == list:
+                        line += proper_name(op_part[0], in_data=op_part[1], is_symbol=op_part[2])
+                    else:
+                        line += op_part
+
+
+            elif insn["id"] == MIPS_INS_LUI:
+                symbol_value = symbols.get(vaddr, None)
+                if symbol_value is not None:
+                    line += f"{mips_gpr_names[insn['rt']]}, %hi({proper_name(symbol_value)})"
+                else:
+                    constant_value = constants.get(vaddr, None)
+                    if constant_value is not None:
+                        line += f"{mips_gpr_names[insn['rt']]}, (0x{constant_value:08X} >> 16)"
+                    else:
+                        line += entry["op"][0]
+
+            elif insn["id"] == MIPS_INS_ADDIU or insn["id"] in MIPS_LOAD_STORE_INSNS:
+                symbol_value = symbols.get(vaddr, None)
+                if symbol_value is not None:
+                    if insn["id"] == MIPS_INS_ADDIU:
+                        line += f"{mips_gpr_names[insn['rt']]}, {mips_gpr_names[insn['rs']]}, %lo({proper_name(symbol_value)})"
+                    else:
+                        line += f"{mips_fpr_names[insn['ft']] if insn['id'] in MIPS_FP_LOAD_STORE_INSNS else mips_gpr_names[insn['rt']]}, %lo({proper_name(symbol_value)})({mips_gpr_names[insn['base']]})"
+                else:
+                    line += entry["op"][0]
+
+
+            elif insn["id"] == MIPS_INS_ORI:
+                constant_value = constants.get(vaddr, None)
+                if constant_value is not None:
+                    line += f"{mips_gpr_names[insn['rt']]}, {mips_gpr_names[insn['rs']]}, (0x{constant_value:08X} & 0xFFFF)"
+                else:
+                    line += entry["op"][0]
+
+            else:
+                for part in entry["op"]:
+                    if type(part) == list:
+                        line += f"{proper_name(part[0], in_data=part[1], is_symbol=part[2])}"
+                    else:
+                        line += part
+
+            line += "\n"
+            text.append(line)
+
+        with open(f"{ASM_OUT}/{segment_dirname}/{name}.text.s", "w") as outfile:
+            outfile.write("".join(text))
+
+    del files_text[info["name"]]
 
 def disassemble_text(data, vram, data_regions, info):
     result = asm_header(".text")
@@ -1357,6 +1545,8 @@ def disassemble_segment(section):
         disassemble_dmadata(section)
     else:
         if section[2] == 'text':
+            fixup_text_symbols(section[4], section[0], data_regions, section[-1])
+            '''
             data_regions = []
             if section[3] is not None:
                 for override_region in section[3]:
@@ -1364,6 +1554,7 @@ def disassemble_segment(section):
                         data_regions.append((override_region[0], override_region[1]))
 
             disassemble_text(section[4], section[0], data_regions, section[-1])
+            '''
         elif section[2] == 'data':
             disassemble_data(section[4], section[0], section[1], section[-1])
         elif section[2] == 'rodata':
@@ -1540,6 +1731,16 @@ for segment in files_spec:
             section.append(binary[section[0] - segment_start:section[1] - segment_start]) # section[4]
             section.append(None) # section[5]
 
+all_sections = []
+for segment in files_spec:
+    for i,entry in enumerate(segment[3]):
+        if segment[0] == "makerom" and i == 1:
+            segment[2] = "ipl3"
+        elif segment[0] == "makerom" and i == 2:
+            segment[2] = "entry"
+        entry.append({"name":segment[0], "type":segment[2], "syms":segment[4]})
+    all_sections.extend(segment[3])
+
 print(f"Finding Symbols")
 
 for segment in files_spec:
@@ -1578,10 +1779,9 @@ for segment in files_spec:
             else:
                 rodata_section = None
             pool.apply_async(find_symbols_in_text, args=(section[4], rodata_section[4] if rodata_section is not None else None,
-                    section[0], rodata_section[0] if rodata_section is not None else None, data_regions, section[5], segment[0]), callback=update_symbols_from_dict)
+                    section[0], rodata_section[0] if rodata_section is not None else None, data_regions, section[5], section[-1]), callback=update_symbols_from_dict)
         elif section[2] == 'data':
             pool.apply_async(find_symbols_in_data, args=(section[4], section[0], section[1], section[5], segment[0]), callback=update_symbols_from_dict)
-
 pool.close()
 pool.join()
 
@@ -1598,16 +1798,6 @@ for segment in files_spec:
 print("Disassembling Segments")
 
 # Textual disassembly for each segment
-all_sections = []
-for segment in files_spec:
-    for i,entry in enumerate(segment[3]):
-        if segment[0] == "makerom" and i == 1:
-            segment[2] = "ipl3"
-        elif segment[0] == "makerom" and i == 2:
-            segment[2] = "entry"
-        entry.append({"name":segment[0], "type":segment[2], "syms":segment[4]})
-    all_sections.extend(segment[3])
-
 #for sec in all_sections:
 #    disassemble_segment(sec)
 with Pool(jobs) as p:
