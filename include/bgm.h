@@ -34,7 +34,7 @@
 #define NA_BGM_WOODFALL_TEMPLE 0x1C         // Woodfall Temple "JUNGLE_DUNGEON"
 #define NA_BGM_MARKET 0x1D                  // Clock Town Day 1		Duplicate of #15. Interesting filename in MM3D.	✘
 #define NA_BGM_OPENING 0x1E                 // Forest Ambush
-#define NA_BGM_HOUSE 0x1F                   // House "LINK_HOUSE"
+#define NA_BGM_INSIDE_A_HOUSE 0x1F          // House "LINK_HOUSE"
 #define NA_BGM_GAME_OVER 0x20               // Game Over
 #define NA_BGM_CLEAR_BOSS 0x21              // Boss Clear
 #define NA_BGM_GET_ITEM 0x22                // Item Catch
