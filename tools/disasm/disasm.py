@@ -879,11 +879,13 @@ def find_symbols_in_data(data, vram, end, relocs, segment_name):
 strings_regex = re.compile(rb'^(?:[\x00\x1A\x1B\n\t\x20-\x7E\x8C\x8D]|\x30[\x00-\xFF]|[\x4E-\x9F][\x00-\xFF]|[\xA4\xA5\xBB][\xA1-\xF6]|[\xA1-\xA3\xB0-\xBF\xC0-\xCF][\xA1-\xFE]|\xFF[\x00-\xEF])+$')
 
 def find_symbols_in_rodata(data, vram, end, relocs, segment):
+    symbols_dict = dict()
+    
     # read relocations for symbols
     if relocs is not None:
         for reloc in relocs:
             if reloc[1] == 2: # R_MIPS_32
-                data_labels.add(as_word(data[reloc[2] : reloc[2] + 4]))
+                put_symbol(symbols_dict, "data_labels", as_word(data[reloc[2] : reloc[2] + 4]))
             elif reloc[1] == 4: # R_MIPS_26
                 assert False , "R_MIPS_26 in .rodata section?"
             elif reloc[1] == 5: # R_MIPS_HI16
@@ -953,12 +955,13 @@ def find_symbols_in_rodata(data, vram, end, relocs, segment):
                             #     done = True
                             # if done:
                             #     break
-                            data_labels.add(symbol + k)
-                            strings.add(symbol + k)
-                            data_labels.add(symbol + j + 1)
+                            put_symbol(symbols_dict, "data_labels", symbol + k)
+                            put_symbol(symbols_dict, "data_labels", symbol + j + 1)
+                            put_symbol(symbols_dict, "strings", symbol + k)
                             k = j + 1
 
     # TODO more
+    return symbols_dict
 
 def asm_header(section_name): 
     return f""".include "macro.inc"
@@ -1687,6 +1690,9 @@ for f in files_spec:
         new[offset] = name
     full_file_list[f[0]] = new
 
+print(full_file_list["boot"])
+exit()
+
 if not args.full:
     old_file_count = sum([len(f[4].keys()) for f in files_spec])
     files_spec = discard_decomped_files(files_spec)
@@ -1782,9 +1788,11 @@ for segment in files_spec:
                     section[0], rodata_section[0] if rodata_section is not None else None, data_regions, section[5], section[-1]), callback=update_symbols_from_dict)
         elif section[2] == 'data':
             pool.apply_async(find_symbols_in_data, args=(section[4], section[0], section[1], section[5], segment[0]), callback=update_symbols_from_dict)
+
 pool.close()
 pool.join()
 
+pool = Pool(jobs)
 for segment in files_spec:
     if segment[2] == 'makerom':
         continue
@@ -1793,7 +1801,10 @@ for segment in files_spec:
 
     for section in segment[3]:
         if section[2] == 'rodata':
-            find_symbols_in_rodata(section[4], section[0], section[1], section[5], segment)
+            pool.apply_async(find_symbols_in_rodata, args=(section[4], section[0], section[1], section[5], segment), callback=update_symbols_from_dict)
+
+pool.close()
+pool.join()
 
 print("Disassembling Segments")
 
