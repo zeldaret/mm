@@ -177,29 +177,25 @@ MIPS_LOAD_STORE_INSNS = [
 ]
 
 functions = set()  # vram of functions
-data_labels = (
-    set()
-)  # vram of data labels, TODO this + functions can merge into something more general eventually
+# vram of data labels, TODO this + functions can merge into something more general eventually
+data_labels = set()
 branch_labels = set()  # vram of branch labels via branch/jump instructions
 jtbls = set()  # vram of jump tables
-jtbl_labels = (
-    set()
-)  # vram of branch labels via jtbls, higher output priority than regular branch labels
+# vram of branch labels via jtbls, higher output priority than regular branch labels
+jtbl_labels = set()
 floats = set()  # vram of floats
 doubles = set()  # vram of doubles
 prospective_strings = set()  # vram of possible strings
 strings = set()  # vram of confirmed strings
-symbols = (
-    {}
-)  # lui/addiu pairs : {addr of %hi : full symbol} AND {addr of %lo : full symbol} , twice the space complexity but much less time complexity
-constants = (
-    {}
-)  # lui/ori pairs : {addr of %hi : full constant} AND {addr of %lo : full constant} , twice the space complexity but much less time complexity
+# lui/addiu pairs : {addr of %hi : full symbol} AND {addr of %lo : full symbol} ,
+# twice the space complexity but much less time complexity
+symbols = {}
+# lui/ori pairs : {addr of %hi : full constant} AND {addr of %lo : full constant} ,
+# twice the space complexity but much less time complexity
+constants = {}
 dwords = set()  # doublewords
-multiply_referenced_rodata = (
-    set()
-)  # rodata with more than 1 reference outside of the same function cannot be migrated
-
+# rodata with more than 1 reference outside of the same function cannot be migrated
+multiply_referenced_rodata = set()
 files = set()  # vram start of file
 
 vrom_variables = list()  # (name,addr)
@@ -214,29 +210,24 @@ files_text = {}
 
 def proper_name(symbol, in_data=False, is_symbol=True):
     # hacks
-    if (
-        symbol == 0x809C46F0
-    ):  # ovl_En_Encount4 fake symbol at the very end of the data section
+    # ovl_En_Encount4 fake symbol at the very end of the data section
+    if symbol == 0x809C46F0:
         return variables_ast[0x809C46DC][0] + " + 0x14"
     elif symbol == 0x801EF66D:  # z_message_nes constant-folding stray fairy array
         return variables_ast[0x801EF670][0] + f" - 0x{0x801EF670 - 0x801EF66D:X}"
     elif symbol == 0x80A09740:  # boss_07 symbol with large addend folded into %lo
         return variables_ast[0x80A09A60][0] + f" - 0x{0x80A09A60 - 0x80A09740:X}"
-    elif (
-        symbol == 0x80B80248
-    ):  # bg_ikana_mirror symbol with large addend folded into %lo
+    # bg_ikana_mirror symbol with large addend folded into %lo
+    elif symbol == 0x80B80248:
         return variables_ast[0x80B801A8][0] + f" + 0x{0x80B80248 - 0x80B801A8:X}"
-    elif (
-        symbol == 0x8084D2FC
-    ):  # player symbol with very large addend folded into %lo, since we don't know the real symbol just use the first data symbol for now
+    # player symbol with very large addend folded into %lo, since we don't know the real symbol just use the first data symbol for now
+    elif symbol == 0x8084D2FC:
         return variables_ast[0x8085B9F0][0] + f" - 0x{0x8085B9F0 - 0x8084D2FC:X}"
-    elif (
-        symbol == 0x001ABAB0 or symbol == 0x001E3BB0
-    ):  # OS_K0_TO_PHYSICAL on rspS2DEX text and data symbols
+    # OS_K0_TO_PHYSICAL on rspS2DEX text and data symbols
+    elif symbol == 0x001ABAB0 or symbol == 0x001E3BB0:
         return variables_ast[symbol + 0x80000000][0] + " - 0x80000000"
-    elif (
-        symbol == 0x00AC0480
-    ):  # do_action_static + 0x480, this is the only rom segment that has a constant offset folded into it so just hack it
+    # do_action_static + 0x480, this is the only rom segment that has a constant offset folded into it so just hack it
+    elif symbol == 0x00AC0480:
         return "_do_action_staticSegmentRomStart + 0x480"
 
     # real names
@@ -246,14 +237,13 @@ def proper_name(symbol, in_data=False, is_symbol=True):
         return variables_ast[symbol][0]
     elif symbol in [addr for _, addr in vrom_variables]:
         # prefer "start" vrom symbols
-        if symbol in [
-            addr for name, addr in vrom_variables if "SegmentRomStart" in name
-        ]:
-            return [
-                name
-                for name, addr in vrom_variables
-                if "SegmentRomStart" in name and addr == symbol
-            ][0]
+        filteredVromSymbols = {
+            addr: name
+            for name, addr in vrom_variables
+            if "SegmentRomStart" in name and addr == symbol
+        }
+        if symbol in filteredVromSymbols:
+            return filteredVromSymbols[symbol]
         else:
             return [name for name, addr in vrom_variables if addr == symbol][0]
 
@@ -440,11 +430,9 @@ def reduce_float(flt_str, is_double=False):
         return int_part + "." + frac_part
 
     def to_binary(flt_str):
-        return (
-            as_dword(struct.pack(">d", float(flt_str)))
-            if is_double
-            else as_word(struct.pack(">f", float(flt_str)))
-        )
+        if is_double:
+            return as_dword(struct.pack(">d", float(flt_str)))
+        return as_word(struct.pack(">f", float(flt_str)))
 
     exponent = ""
     if "e" in flt_str:
@@ -1341,9 +1329,8 @@ def disassemble_text(data, vram, data_regions, info):
                 in_data = True
                 break
         if in_data:
-            if (
-                vaddr in functions
-            ):  # TODO not really a function if it falls in a data region...
+            # TODO not really a function if it falls in a data region...
+            if vaddr in functions:
                 result += f"\nglabel {proper_name(vaddr, True)}\n"
             result += (
                 f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */  .word 0x{raw_insn:08X}\n"
@@ -1680,9 +1667,10 @@ def disassemble_rodata(data, vram, end, info):
             if symbol in strings:
                 string_data = data[data_offset : data_offset + data_size]
                 string_data = string_data[: string_data.index(0)]
+                # ensure strings don't have a null char midway through
                 assert all(
                     [b != 0 for b in string_data[:-1]]
-                ), f"{symbol:08X} , {data_size:X} , {string_data}"  # ensure strings don't have a null char midway through
+                ), f"{symbol:08X} , {data_size:X} , {string_data}"
                 r += f"/* {data_offset:06X} {symbol:08X} */ {try_decode_string(string_data, force_ascii=force_ascii_str)}\n{STR_INDENT}.balign 4\n"
             elif symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
                 r += (
@@ -2226,7 +2214,7 @@ for var in sorted(variables_ast.keys()):
         strings.add(var)
 
 # Read in binary and relocation data for each segment
-for seg,segment in enumerate(files_spec):
+for seg, segment in enumerate(files_spec):
     binary = None
     with open(segment[1] + "/" + segment[0], "rb") as infile:
         binary = bytes(infile.read())
@@ -2238,16 +2226,16 @@ for seg,segment in enumerate(files_spec):
         for section in segment[3]:
             segment[4].update({section[0]: segment[0]})
     else:
-        segment_start = segment[3][0][
-            0
-        ]  # start addr of first section of segment's sections
+        # start addr of first section of segment's sections
+        segment_start = segment[3][0][0]
         # read section binary regions
-        for i,section in enumerate(segment[3]):
+        for i, section in enumerate(segment[3]):
             if section[2] == "bss":
                 continue
+            # section[4]
             section.append(
                 binary[section[0] - segment_start : section[1] - segment_start]
-            )  # section[4]
+            )
             section.append(None)  # section[5]
 
 print(f"Finding segment positions")
@@ -2371,7 +2359,7 @@ pool = Pool(jobs)
 for section in all_sections:
     if section[-1]["type"] == "makerom":
         continue
-    
+
     if section[2] == "rodata":
         pool.apply_async(
             find_symbols_in_rodata, args=(section), callback=update_symbols_from_dict
@@ -2437,9 +2425,8 @@ for root, dirs, files in os.walk(ASM_OUT):
             late_rodata_info = []
             target = rdata_info  # first populate rdata
             for sym, block in rodata_info:
-                if (
-                    sym == first_late_rodata
-                ):  # now populate late_rodata, if there is any
+                # now populate late_rodata, if there is any
+                if sym == first_late_rodata:
                     target = late_rodata_info
                 target.append((sym, block))
 
@@ -2553,7 +2540,8 @@ for root, dirs, files in os.walk(ASM_OUT):
                             0x80AFBBFC,
                             0x80AFBE28,
                             0x80983320,
-                        ]:  # hacks for especially badly behaved rodata, TODO these are ALL jumptables associated with
+                        ]:
+                            # hacks for especially badly behaved rodata, TODO these are ALL jumptables associated with
                             # comparatively tiny functions, can we swat these programmatically?
                             late_rodata_alignment = f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
 
