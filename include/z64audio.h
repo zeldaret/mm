@@ -90,7 +90,7 @@ typedef enum {
     /* -1  */ NOTE_INVALID = 0xFF
 } OcarinaNoteIdx;
 
-typedef void (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
+typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
 
 struct Note;
 struct NotePool;
@@ -214,10 +214,10 @@ typedef struct {
     /* 0x158 */ ReverbRingBufferItem items2[2][5];
     /* 0x270 */ s16* filterLeft;
     /* 0x274 */ s16* filterRight;
-    /* 0x278 */ s16* filterLeftState;
-    /* 0x27C */ s16* filterRightState;
-    /* 0x280 */ void* unk_280;
-    /* 0x284 */ void* unk_284;
+    /* 0x278 */ s16* unk_278;
+    /* 0x27C */ s16* unk_27C;
+    /* 0x280 */ s16* filterLeftState;
+    /* 0x284 */ s16* filterRightState;
     /* 0x288 */ SoundFontSound sound;
     /* 0x290 */ SoundFontSample sample;
     /* 0x2A0 */ AdpcmLoop loop;
@@ -641,10 +641,7 @@ typedef struct {
     /* 0x0A */ u16 unk_A;
     /* 0x0C */ u16 leakRtl;
     /* 0x0E */ u16 leakLtr;
-    union { // Likely a fake union, currently needed for match
-        /* 0x10 */ s8 unk_10s;
-        /* 0x10 */ s16 unk_10u;
-                };
+    /* 0x10 */ s8 unk_10;
     /* 0x12 */ u16 unk_12;
     /* 0x14 */ s16 lowPassFilterCutoffLeft;
     /* 0x16 */ s16 lowPassFilterCutoffRight;
