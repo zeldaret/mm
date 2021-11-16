@@ -1470,9 +1470,11 @@ def disassemble_data(data, vram, end, info):
         if file["first_sym"] not in info["syms"]:
             continue
 
-        result = asm_header(".data")
+        result = [asm_header(".data")]
 
         for x, symbol in enumerate(file["syms"]):
+            if symbol >= end:
+                break
             if x + 1 < len(file["syms"]):
                 next_symbol = file["syms"][x + 1]
             elif i + 1 < len(file_syms):
@@ -1486,10 +1488,10 @@ def disassemble_data(data, vram, end, info):
             if data_offset == len(data):
                 continue
 
-            result += f"\nglabel {proper_name(symbol, True)}\n"
+            r = f"\nglabel {proper_name(symbol, True)}\n"
 
             if symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
-                result += (
+                r += (
                     "\n".join(
                         [
                             f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}"
@@ -1504,7 +1506,7 @@ def disassemble_data(data, vram, end, info):
                     + "\n"
                 )
             elif symbol % 8 == 0 and data_size % 8 == 0 and symbol in dwords:
-                result += (
+                r += (
                     "\n".join(
                         [
                             f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} */ .quad 0x{dword:08X}"
@@ -1520,7 +1522,7 @@ def disassemble_data(data, vram, end, info):
                 )
             elif symbol % 4 == 0 and data_size % 4 == 0:
                 if symbol in floats:
-                    result += (
+                    r += (
                         "\n".join(
                             [
                                 f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}"
@@ -1535,7 +1537,7 @@ def disassemble_data(data, vram, end, info):
                         + "\n"
                     )
                 else:
-                    result += (
+                    r += (
                         "\n".join(
                             [
                                 f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}"
@@ -1550,7 +1552,7 @@ def disassemble_data(data, vram, end, info):
                         + "\n"
                     )
             elif symbol % 2 == 0 and data_size % 2 == 0:
-                result += (
+                r += (
                     "\n".join(
                         [
                             f"/* {data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}"
@@ -1565,7 +1567,7 @@ def disassemble_data(data, vram, end, info):
                     + "\n"
                 )
             else:
-                result += (
+                r += (
                     "\n".join(
                         [
                             f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}"
@@ -1576,11 +1578,13 @@ def disassemble_data(data, vram, end, info):
                     )
                     + "\n"
                 )
+            result.append(r)
 
-        with open(
-            f"{DATA_OUT}/{segment_dirname}/{file['name']}.data.s", "w"
-        ) as outfile:
-            outfile.write(result)
+        if len(result) > 1:
+            with open(
+                f"{DATA_OUT}/{segment_dirname}/{file['name']}.data.s", "w"
+            ) as outfile:
+                outfile.write("".join(result))
 
 
 def disassemble_rodata(data, vram, end, info):
@@ -1648,9 +1652,11 @@ def disassemble_rodata(data, vram, end, info):
         if file["first_sym"] not in info["syms"]:
             continue
 
-        result = asm_header(".rodata")
+        result = [asm_header(".rodata")]
 
         for x, symbol in enumerate(file["syms"]):
+            if symbol >= end:
+                break
             if x + 1 < len(file["syms"]):
                 next_symbol = file["syms"][x + 1]
             elif i + 1 < len(file_syms):
@@ -1666,7 +1672,7 @@ def disassemble_rodata(data, vram, end, info):
 
             force_ascii_str = symbol in [0x801D0708]
 
-            result += f"\nglabel {proper_name(symbol, True)}\n"
+            r = f"\nglabel {proper_name(symbol, True)}\n"
 
             if symbol in strings:
                 string_data = data[data_offset : data_offset + data_size]
@@ -1674,9 +1680,9 @@ def disassemble_rodata(data, vram, end, info):
                 assert all(
                     [b != 0 for b in string_data[:-1]]
                 ), f"{symbol:08X} , {data_size:X} , {string_data}"  # ensure strings don't have a null char midway through
-                result += f"/* {data_offset:06X} {symbol:08X} */ {try_decode_string(string_data, force_ascii=force_ascii_str)}\n{STR_INDENT}.balign 4\n"
+                r += f"/* {data_offset:06X} {symbol:08X} */ {try_decode_string(string_data, force_ascii=force_ascii_str)}\n{STR_INDENT}.balign 4\n"
             elif symbol % 8 == 0 and data_size % 8 == 0 and symbol in doubles:
-                result += (
+                r += (
                     "\n".join(
                         [
                             f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}"
@@ -1692,7 +1698,7 @@ def disassemble_rodata(data, vram, end, info):
                 )
             elif symbol % 4 == 0 and data_size % 4 == 0:
                 if symbol in floats:
-                    result += (
+                    r += (
                         "\n".join(
                             [
                                 f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}"
@@ -1707,7 +1713,7 @@ def disassemble_rodata(data, vram, end, info):
                         + "\n"
                     )
                 else:
-                    result += (
+                    r += (
                         "\n".join(
                             [
                                 f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}"
@@ -1722,7 +1728,7 @@ def disassemble_rodata(data, vram, end, info):
                         + "\n"
                     )
             elif symbol % 2 == 0 and data_size % 2 == 0:
-                result += (
+                r += (
                     "\n".join(
                         [
                             f"/* {data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}"
@@ -1737,7 +1743,7 @@ def disassemble_rodata(data, vram, end, info):
                     + "\n"
                 )
             else:
-                result += (
+                r += (
                     "\n".join(
                         [
                             f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}"
@@ -1749,10 +1755,13 @@ def disassemble_rodata(data, vram, end, info):
                     + "\n"
                 )
 
-        with open(
-            f"{DATA_OUT}/{segment_dirname}/{file['name']}.rodata.s", "w"
-        ) as outfile:
-            outfile.write(result)
+            result.append(r)
+
+        if len(result) > 1:
+            with open(
+                f"{DATA_OUT}/{segment_dirname}/{file['name']}.rodata.s", "w"
+            ) as outfile:
+                outfile.write("".join(result))
 
 
 def disassemble_bss(vram, end, info):
@@ -1816,9 +1825,11 @@ def disassemble_bss(vram, end, info):
         if file["first_sym"] not in info["syms"]:
             continue
 
-        result = asm_header(".bss")
+        result = [asm_header(".bss")]
 
         for x, symbol in enumerate(file["syms"]):
+            if symbol >= end:
+                break
             if x + 1 < len(file["syms"]):
                 next_symbol = file["syms"][x + 1]
             elif i + 1 < len(file_syms):
@@ -1826,11 +1837,16 @@ def disassemble_bss(vram, end, info):
             else:
                 next_symbol = end
 
-            result += f"\nglabel {proper_name(symbol, True)}\n"
-            result += f"/* {symbol - vram:06X} {symbol:08X} */ .space 0x{next_symbol - symbol:X}\n"
+            result.append(f"\nglabel {proper_name(symbol, True)}\n")
+            result.append(
+                f"/* {symbol - vram:06X} {symbol:08X} */ .space 0x{next_symbol - symbol:X}\n"
+            )
 
-        with open(f"{DATA_OUT}/{segment_dirname}/{file['name']}.bss.s", "w") as outfile:
-            outfile.write(result)
+        if len(result) > 1:
+            with open(
+                f"{DATA_OUT}/{segment_dirname}/{file['name']}.bss.s", "w"
+            ) as outfile:
+                outfile.write("".join(result))
 
 
 def get_overlay_sections(vram, overlay):
