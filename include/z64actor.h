@@ -228,12 +228,12 @@ typedef enum {
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 bgId;
-    /* 0x148 */ f32 unk148;
+    /* 0x148 */ f32 pushForce;
     /* 0x14C */ f32 unk14C;
-    /* 0x150 */ s16 unk150;
+    /* 0x150 */ s16 yRotation;
     /* 0x152 */ u16 unk152;
-    /* 0x154 */ u32 unk154;
-    /* 0x158 */ u8 unk_158;
+    /* 0x154 */ u32 flags;
+    /* 0x158 */ u8 stateFlags;
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
 
@@ -257,7 +257,7 @@ typedef enum {
     /* 0x10 */ ITEM00_MASK,
     /* 0x11 */ ITEM00_SMALL_KEY,
     /* 0x12 */ ITEM00_FLEXIBLE,
-    /* 0x13 */ ITEM00_RUPEE_ORANGE,
+    /* 0x13 */ ITEM00_RUPEE_HUGE,
     /* 0x14 */ ITEM00_RUPEE_PURPLE,
     /* 0x15 */ ITEM00_3_HEARTS,
     /* 0x16 */ ITEM00_SHIELD_HERO,
