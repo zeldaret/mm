@@ -557,7 +557,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
 
     symbols_dict = dict()
 
-    # print(f"Finding symbols from .text in {info['name']}")
+    print(f"Finding symbols from .text in {info['name']}")
 
     if rodata is not None:
         rodata_words = as_word_list(rodata)
@@ -1052,7 +1052,7 @@ def find_symbols_in_data(section):
     data, vram, end, relocs = section[4], section[0], section[1], section[5]
     symbols_dict = dict()
 
-    # print(f"Finding symbols from .data in {section[-1]['name']}")
+    print(f"Finding symbols from .data in {section[-1]['name']}")
 
     # read relocations for symbols
     if relocs is not None:
@@ -1083,6 +1083,8 @@ strings_regex = re.compile(
 def find_symbols_in_rodata(section):
     data, vram, end, relocs = section[4], section[0], section[1], section[5]
     symbols_dict = dict()
+
+    print(f"Finding symbols from .rodata in {section[-1]['name']}")
 
     # read relocations for symbols
     if relocs is not None:
@@ -1237,7 +1239,8 @@ def fixup_text_symbols(data, vram, data_regions, info):
             text.append(f".L{vaddr:08X}:\n")
 
         line = entry["addr"]
-        line += f"{entry['mnem']:12}"
+        if not entry["data"]:
+            line += f"{entry['mnem']:12}"
 
         insn = entry["insn"]
         if insn["id"] in MIPS_JUMP_INSNS:
@@ -2223,7 +2226,7 @@ for var in sorted(variables_ast.keys()):
         strings.add(var)
 
 # Read in binary and relocation data for each segment
-for segment in files_spec:
+for seg,segment in enumerate(files_spec):
     binary = None
     with open(segment[1] + "/" + segment[0], "rb") as infile:
         binary = bytes(infile.read())
@@ -2239,7 +2242,7 @@ for segment in files_spec:
             0
         ]  # start addr of first section of segment's sections
         # read section binary regions
-        for section in segment[3]:
+        for i,section in enumerate(segment[3]):
             if section[2] == "bss":
                 continue
             section.append(
@@ -2334,8 +2337,6 @@ for section in all_sections:
     if section[-1]["name"] == "makerom":
         continue
 
-    print(f"Finding symbols from .text and .data in {section[-1]['name']}")
-    
     if section[2] == "text":
         data_regions = []
         if section[3] is not None:
@@ -2370,8 +2371,6 @@ pool = Pool(jobs)
 for section in all_sections:
     if section[-1]["type"] == "makerom":
         continue
-
-    print(f"Finding symbols from .rodata in {section[-1]['name']}")
     
     if section[2] == "rodata":
         pool.apply_async(
