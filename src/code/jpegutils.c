@@ -1,5 +1,5 @@
 #include "z64jpeg.h"
-#include "stdbool.h"
+#include "libc/stdbool.h"
 
 void JpegUtils_ProcessQuantizationTable(u8* dqt, JpegQuantizationTable* qt, u8 count) {
     u8 i;
