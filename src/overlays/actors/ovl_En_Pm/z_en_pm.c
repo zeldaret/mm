@@ -1854,7 +1854,8 @@ void func_80AFAA44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-void func_80AFABAC(GlobalContext* globalCtx, s32 arg1, EnPm* this, Gfx** gfx) {
+void func_80AFABAC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) {
+    EnPm* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
 
