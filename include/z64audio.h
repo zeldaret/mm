@@ -7,7 +7,7 @@
 
 #define TATUMS_PER_BEAT 48
 
-#define IS_SEQUENCE_CHANNEL_VALID(ptr) ((void*)(ptr) != (void*)&gAudioContext.sequenceChannelNone)
+#define IS_SEQUENCE_CHANNEL_VALID(ptr) ((uintptr_t)(ptr) != (uintptr_t)&gAudioContext.sequenceChannelNone)
 
 #define MAX_CHANNELS_PER_BANK 3
 
@@ -617,7 +617,7 @@ typedef struct {
     /* 0x14 */ s16* filter;
     /* 0x18 */ u8 unk_18; // New to MM
     /* 0x19 */ u8 unk_19; // New to MM
-    /* 0x1A */ char pad_1A[0x6];
+    /* 0x1A */ UNK_TYPE1 pad_1A[0x6];
 } NoteSubEu; // size = 0x20
 
 typedef struct Note {
@@ -852,15 +852,6 @@ typedef struct {
 } SampleDma; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ s32 sampleBankId1;
-    /* 0x04 */ s32 sampleBankId2;
-    /* 0x08 */ s32 baseAddr1;
-    /* 0x0C */ s32 baseAddr2;
-    /* 0x10 */ u32 medium1;
-    /* 0x14 */ u32 medium2;
-} SampleRelocInfo; // size = 0x18
-
-typedef struct {
     /* 0x0000 */ char unk_0000;
     /* 0x0001 */ s8 numSynthesisReverbs;
     /* 0x0002 */ u16 unk_2;
@@ -1086,7 +1077,7 @@ typedef struct {
     /* 0x1C */ u32      priority; // lower is more prioritized
     /* 0x20 */ u16      sfxParams;
     /* 0x22 */ u16      sfxId;
-    /* 0x25 */ u8       sfxUnk01;
+    /* 0x25 */ u8       sfxFlags;
     /* 0x24 */ u8       sfxImportance;
     /* 0x26 */ u8       state; // uses SfxState enum
     /* 0x27 */ u8       freshness;
@@ -1125,7 +1116,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8 importance;
-    /* 0x1 */ u8 unk_01; // may be swapped with importance
+    /* 0x1 */ u8 flags;
     /* 0x2 */ u16 params;
 } SoundParams; // size = 0x4
 
@@ -1154,7 +1145,6 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8 noteIdx;
-    /* 0x1 */ u8 unk_01;
     /* 0x2 */ u16 length; // number of frames the note is sustained
     /* 0x4 */ u8 volume;
     /* 0x5 */ u8 vibrato;
