@@ -65,7 +65,7 @@
 #define NA_BGM_CAVERN 0x3B                  // Clock Town Cavern "NORMAL_DUNGEON"
 #define NA_BGM_MILK_BAR 0x3C                // Milk Bar Latte
 #define NA_BGM_ZELDA_APPEAR 0x3D            // Meet Zelda (OoT)
-#define NA_BGM_WOODS_OF_MYSTERY 0x3E        // Saria's Song from OoT "MAYOIMORI"
+#define NA_BGM_SARIAS_SONG 0x3E             // Saria's Theme Song from OoT "MAYOIMORI"
 #define NA_BGM_GORON_GOAL 0x3F              // Goron Race Goal
 #define NA_BGM_HORSE 0x40                   // Gorman Race
 #define NA_BGM_HORSE_GOAL 0x41              // Race Finish
