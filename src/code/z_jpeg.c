@@ -1,4 +1,5 @@
 #include "z64jpeg.h"
+#include "stdbool.h"
 #include "variables.h"
 
 #define MARKER_ESCAPE 0x00
