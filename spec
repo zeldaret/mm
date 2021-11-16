@@ -657,6 +657,7 @@ beginseg
     include "build/data/code/audio_effects.data.o"
     include "build/src/code/audio/audio_seqplayer.o"
     include "build/data/code/audio_seqplayer.data.o"
+    include "build/data/code/audio_dramStack.data.o"
     include "build/asm/code/code_8019AE40.text.o" // handwritten
     pad_text
     include "build/asm/code/code_8019AEC0.text.o" // handwritten

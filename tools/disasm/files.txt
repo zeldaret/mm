@@ -583,6 +583,7 @@
             0x801D6010 : "code_80194790",
             0x801D6190 : "audio_effects",
             0x801D61A0 : "audio_seqplayer",
+            0x801D6200 : "audio_dramStack",
             0x801D6600 : "code_8019AF00",
             0x801D8BE0 : "code_801A4EB0",
             0x801D8E50 : "code_801A51F0",
