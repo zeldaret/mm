@@ -1,5 +1,6 @@
 #include "z64jpeg.h"
 #include "libc/stdbool.h"
+#include "macros.h"
 
 u8* sJpegBitStreamPtr;
 u32 sJpegBitStreamByteIdx;
