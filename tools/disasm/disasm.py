@@ -557,7 +557,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
 
     symbols_dict = dict()
 
-    print(f"Finding symbols from .text in {info['name']}")
+    # print(f"Finding symbols from .text in {info['name']}")
 
     if rodata is not None:
         rodata_words = as_word_list(rodata)
@@ -951,7 +951,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         ############# Start text disassembly ##########
         # Symbols aren't avaialble here yet, so placeholders are added
         # in each instruction, to be looked up later
-        mnemonic = insn.mnemonic
+        mnemonic = f" {insn.mnemonic}" if delay_slot else insn.mnemonic
         op_str = insn.op_str
         instr = {"id": insn.id}
 
@@ -1052,7 +1052,7 @@ def find_symbols_in_data(section):
     data, vram, end, relocs = section[4], section[0], section[1], section[5]
     symbols_dict = dict()
 
-    print(f"Finding symbols from .data in {section[-1]['name']}")
+    # print(f"Finding symbols from .data in {section[-1]['name']}")
 
     # read relocations for symbols
     if relocs is not None:
@@ -2020,7 +2020,7 @@ def disassemble_segment(section):
     if section[-1]["name"] == "[PADDING]":
         return
 
-    print(f"Disassembling {section[-1]['name']} .{section[2]}")
+    # print(f"Disassembling {section[-1]['name']} .{section[2]}")
 
     if section[2] == "text":
         fixup_text_symbols(section[4], section[0], data_regions, section[-1])
@@ -2231,13 +2231,13 @@ for segment in files_spec:
             )  # section[4]
             section.append(None)  # section[5]
 
-print(f"Finding Symbols")
+print(f"Finding segment positions")
 
 for segment in files_spec:
     if segment[2] == "makerom":
         continue
 
-    print(f"Finding segment positions in {segment[0]}")
+    # print(f"Finding segment positions in {segment[0]}")
 
     # vram segment start
     if segment[3][0][0] not in variables_ast:
@@ -2312,13 +2312,13 @@ for segment in files_spec:
 
 del files_spec[:]
 
+print(f"Finding symbols from .text and .data")
+
 pool = Pool(jobs)
 # Find symbols for each segment
 for section in all_sections:
     if section[-1]["name"] == "makerom":
         continue
-
-    print(f"Finding symbols from .text and .data in {section[-1]['name']}")
 
     if section[2] == "text":
         data_regions = []
@@ -2350,12 +2350,12 @@ for section in all_sections:
 pool.close()
 pool.join()
 
+print(f"Finding symbols from .rodata")
+
 pool = Pool(jobs)
 for section in all_sections:
     if section[-1]["type"] == "makerom":
         continue
-
-    print(f"Finding symbols from .rodata in {section[-1]['name']}")
 
     if section[2] == "rodata":
         pool.apply_async(
@@ -2402,7 +2402,7 @@ for root, dirs, files in os.walk(ASM_OUT):
             .replace(".text.s", ".rodata.s")
         )
 
-        print(asm_path)
+        # print(asm_path)
 
         asm = ""
         with open(asm_path, "r") as infile:
