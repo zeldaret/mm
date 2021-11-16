@@ -1,6 +1,7 @@
 #include "z64jpeg.h"
 #include "libc/stdbool.h"
 #include "variables.h"
+#include "functions.h"
 
 #define MARKER_ESCAPE 0x00
 #define MARKER_SOI 0xD8
