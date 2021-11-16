@@ -753,13 +753,11 @@ void Fault_ProcessClients(void) {
 // needs in-function static bss
 void Fault_SetOptionsFromController3(void) {
     static u32 faultCustomOptions;
-    Input* input3;
+    Input* input3 = &sFaultContext->padInput[3];
     u32 pad;
     u32 graphPC;
     u32 graphRA;
     u32 graphSP;
-
-    input3 = &sFaultContext->padInput[3];
 
     if (CHECK_BTN_ALL(input3->press.button, 0x80)) {
         faultCustomOptions = !faultCustomOptions;
