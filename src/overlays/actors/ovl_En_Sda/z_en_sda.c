@@ -1,7 +1,7 @@
 /*
  * File: z_en_sda.c
  * Overlay: ovl_En_Sda
- * Description: Dynamic Shadow for Link
+ * Description: Dynamic Shadow for Player
  */
 
 #include "z_en_sda.h"

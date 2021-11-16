@@ -1,7 +1,7 @@
 /*
  * File: z_en_scopenuts.c
  * Overlay: ovl_En_Scopenuts
- * Description: Business Scrub that sells you a Heart Piece (viewable from Telescope)
+ * Description: Business Scrub that sells you a Heart Piece
  */
 
 #include "z_en_scopenuts.h"

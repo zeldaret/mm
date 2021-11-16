@@ -1,7 +1,7 @@
 /*
  * File: z_obj_blockstop.c
  * Overlay: ovl_Obj_Blockstop
- * Description: Signals that a block has fallen in a hole and can't be moved
+ * Description: Snowhead Temple - plays a cutscene when a block falls into a hole
  */
 
 #include "z_obj_blockstop.h"
