@@ -13,12 +13,14 @@
 #include "io/controller.h"
 #include "osint.h"
 #include "os.h"
+#include "irqmgr.h"
+#include "scheduler.h"
 #include "xstdio.h"
 
 #include "bgm.h"
-#include "sfx.h"
 #include "color.h"
 #include "ichain.h"
+#include "sfx.h"
 
 #include "z64actor.h"
 #include "z64animation.h"
@@ -36,12 +38,6 @@
 #include "z64save.h"
 #include "z64transition.h"
 #include "regs.h"
-
-#define SCREEN_WIDTH  320
-#define SCREEN_HEIGHT 240
-
-#define SCREEN_WIDTH_HIGH_RES  576
-#define SCREEN_HEIGHT_HIGH_RES 454
 
 #define Z_THREAD_ID_IDLE     1
 #define Z_THREAD_ID_SLOWLY   2
@@ -249,30 +245,6 @@ typedef struct {
     /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // 0xAE0 entries
 } GameInfo; // size = 0x15D4
 
-typedef struct IrqMgrClient {
-    /* 0x0 */ struct IrqMgrClient* next;
-    /* 0x4 */ OSMesgQueue* queue;
-} IrqMgrClient; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 type;
-    /* 0x2 */ u8 misc[30];
-} OSScMsg;
-
-typedef struct {
-    /* 0x000 */ OSScMsg verticalRetraceMesg;
-    /* 0x020 */ OSScMsg prenmiMsg;
-    /* 0x040 */ OSScMsg nmiMsg;
-    /* 0x060 */ OSMesgQueue irqQueue;
-    /* 0x078 */ OSMesg irqBuffer[8];
-    /* 0x098 */ OSThread thread;
-    /* 0x248 */ IrqMgrClient* callbacks;
-    /* 0x24C */ u8 prenmiStage;
-    /* 0x250 */ OSTime lastPrenmiTime;
-    /* 0x258 */ OSTimer prenmiTimer;
-    /* 0x278 */ OSTime lastFrameTime;
-} IrqMgr; // size = 0x280
-
 typedef struct {
     /* 0x0000 */ u32    size;
     /* 0x0004 */ void*  bufp;
@@ -316,44 +288,6 @@ typedef struct {
     /* 0x20308 */ u16 tailMagic; // 5678
 } GfxPool; // size = 0x20310
 
-typedef struct {
-    /* 0x00 */ u16*     fb1;
-    /* 0x04 */ u16*     swapBuffer;
-    /* 0x08 */ OSViMode* viMode;
-    /* 0x0C */ u32      features;
-    /* 0x10 */ u8       unk_10;
-    /* 0x11 */ s8       updateRate;
-    /* 0x12 */ s8       updateRate2;
-    /* 0x13 */ u8       unk_13;
-    /* 0x14 */ f32      xScale;
-    /* 0x18 */ f32      yScale;
-} CfbInfo; // size = 0x1C
-
-#define OS_SC_NEEDS_RDP         0x0001
-#define OS_SC_NEEDS_RSP         0x0002
-#define OS_SC_DRAM_DLIST        0x0004
-#define OS_SC_PARALLEL_TASK     0x0010
-#define OS_SC_LAST_TASK         0x0020
-#define OS_SC_SWAPBUFFER        0x0040
-
-#define OS_SC_RCP_MASK          0x0003
-#define OS_SC_TYPE_MASK         0x0007
-
-#define OS_SC_DP                0x0001
-#define OS_SC_SP                0x0002
-#define OS_SC_YIELD             0x0010
-#define OS_SC_YIELDED           0x0020
-
-typedef struct OSScTask {
-    /* 0x00 */ struct OSScTask* next;
-    /* 0x04 */ u32      state;
-    /* 0x08 */ u32      flags;
-    /* 0x0C */ CfbInfo* framebuffer;
-    /* 0x10 */ OSTask   list;
-    /* 0x50 */ OSMesgQueue* msgQ;
-    /* 0x54 */ OSMesg   msg;
-} OSScTask; // size = 0x58
-
 typedef struct GraphicsContext {
     /* 0x000 */ Gfx*        polyOpaBuffer;  // Pointer to "Zelda 0"
     /* 0x004 */ Gfx*        polyXluBuffer;  // Pointer to "Zelda 1"
@@ -391,28 +325,6 @@ typedef struct GraphicsContext {
     /* 0x2F8 */ f32         yScale;
     /* 0x2FC */ GfxMasterList* masterList;
 } GraphicsContext; // size = 0x300
-
-typedef struct {
-    /* 0x000 */ OSMesgQueue interruptQ;
-    /* 0x018 */ OSMesg      intBuf[64];
-    /* 0x118 */ OSMesgQueue cmdQ;
-    /* 0x130 */ OSMesg      cmdMsgBuf[8];
-    /* 0x150 */ OSThread    thread;
-    /* 0x300 */ OSScTask*   audioListHead;
-    /* 0x304 */ OSScTask*   gfxListHead;
-    /* 0x308 */ OSScTask*   audioListTail;
-    /* 0x30C */ OSScTask*   gfxListTail;
-    /* 0x310 */ OSScTask*   curRSPTask;
-    /* 0x314 */ OSScTask*   curRDPTask;
-    /* 0x318 */ s32         retraceCount;
-    /* 0x318 */ s32         doAudio;
-    /* 0x320 */ CfbInfo*    curBuf;
-    /* 0x324 */ CfbInfo*    pendingSwapBuf1;
-    /* 0x328 */ CfbInfo*    pendingSwapBuf2;
-    /* 0x32C */ char unk_32C[0x3];
-    /* 0x32F */ u8 shouldUpdateVi;
-    /* 0x330 */ IrqMgrClient irqClient;
-} SchedContext; // size = 0x338
 
 typedef enum IRQ_MSG_TYPE {
     IRQ_VERTICAL_RETRACE_MSG = 0x1,
@@ -600,6 +512,13 @@ typedef union {
     F3DVertexColor color;
     F3DVertexNormal normal;
 } F3DVertex; // size = 0x10
+
+// End of RDRAM without the Expansion Pak installed
+#define NORMAL_RDRAM_END 0x80400000
+// End of RDRAM with the Expansion Pak installed
+#define EXPANDED_RDRAM_END 0x80800000
+// Address at the end of normal RDRAM after which is room for a screen buffer
+#define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
 
 typedef struct {
     /* 0x00 */ u16* fb;
