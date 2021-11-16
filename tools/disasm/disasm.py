@@ -2036,7 +2036,7 @@ def disassemble_segment(section):
     if section[-1]["name"] == "[PADDING]":
         return
 
-    # print(f"Disassembling {section[-1]['name']} .{section[2]}")
+    print(f"Disassembling {section[-1]['name']} .{section[2]}")
 
     if section[2] == "text":
         fixup_text_symbols(section[4], section[0], data_regions, section[-1])
@@ -2253,7 +2253,7 @@ for segment in files_spec:
     if segment[2] == "makerom":
         continue
 
-    # print(f"Finding segment positions in {segment[0]}")
+    print(f"Finding segment positions in {segment[0]}")
 
     # vram segment start
     if segment[3][0][0] not in variables_ast:
@@ -2328,14 +2328,14 @@ for segment in files_spec:
 
 del files_spec[:]
 
-print(f"Finding symbols from .text and .data")
-
 pool = Pool(jobs)
 # Find symbols for each segment
 for section in all_sections:
     if section[-1]["name"] == "makerom":
         continue
 
+    print(f"Finding symbols from .text and .data in {section[-1]['name']}")
+    
     if section[2] == "text":
         data_regions = []
         if section[3] is not None:
@@ -2366,13 +2366,13 @@ for section in all_sections:
 pool.close()
 pool.join()
 
-print(f"Finding symbols from .rodata")
-
 pool = Pool(jobs)
 for section in all_sections:
     if section[-1]["type"] == "makerom":
         continue
 
+    print(f"Finding symbols from .rodata in {section[-1]['name']}")
+    
     if section[2] == "rodata":
         pool.apply_async(
             find_symbols_in_rodata, args=(section), callback=update_symbols_from_dict
@@ -2381,12 +2381,12 @@ for section in all_sections:
 pool.close()
 pool.join()
 
-print("Disassembling Segments")
-
 for section in all_sections:
     if section[-1]["name"] == "makerom":
+        print(f"Disassembling makerom")
         disassemble_makerom(section)
     elif section[-1]["name"] == "dmadata":
+        print(f"Disassembling dmadata")
         disassemble_dmadata(section)
 
 # Textual disassembly for each segment
@@ -2418,7 +2418,7 @@ for root, dirs, files in os.walk(ASM_OUT):
             .replace(".text.s", ".rodata.s")
         )
 
-        # print(asm_path)
+        print(asm_path)
 
         asm = ""
         with open(asm_path, "r") as infile:
