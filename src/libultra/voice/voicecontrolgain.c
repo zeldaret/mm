@@ -18,14 +18,9 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
         return errorCode;
     }
 
-    if (!((digital < 8) && (digital >= 0))) {
-        goto dummy;
-    }
-
-    phi_a2 = D_80098180[digital] + 2;
-
-    if (0) {
-    dummy:
+    if (((digital < 8) && (digital >= 0))) {
+        phi_a2 = D_80098180[digital] + 2;
+    } else {
         return CONT_ERR_INVALID;
     }
 
