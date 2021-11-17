@@ -3,6 +3,7 @@
 
 #include "z64.h"
 #include "segment_symbols.h"
+#include "macros.h"
 
 // pre-boot variables
 extern u32 osTvType;
@@ -11,7 +12,7 @@ extern u32 osRomBase;
 extern u32 osResetType;
 extern u32 osCicId;
 extern u32 osVersion;
-extern u32 osMemSize;
+extern size_t osMemSize;
 extern s32 osAppNmiBuffer[0x10];
 extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];
@@ -3272,7 +3273,7 @@ extern u8 D_801F4E30;
 // extern UNK_TYPE1 D_801F4E68;
 extern f32 D_801F4E70;
 // extern UNK_TYPE1 D_801F4E74;
-// extern UNK_TYPE1 D_801F4E78;
+extern u16 D_801F4E78;
 extern s16 D_801F4E7A;
 // extern UNK_TYPE1 D_801F4E80;
 // extern UNK_TYPE1 D_801F4EE0;

@@ -457,7 +457,6 @@ beginseg
     include "build/data/code/z_bgcheck.bss.o"
     include "build/src/code/z_bg_collect.o"
     include "build/src/code/z_bg_item.o"
-    include "build/src/code/code_800CB000.o"
     include "build/src/code/z_camera.o"
     include "build/data/code/z_camera.data.o"
     include "build/data/code/z_camera.bss.o"
@@ -3827,8 +3826,7 @@ beginseg
     name "ovl_En_Pm"
     compress
     include "build/src/overlays/actors/ovl_En_Pm/z_en_pm.o"
-    include "build/data/ovl_En_Pm/ovl_En_Pm.data.o"
-    include "build/data/ovl_En_Pm/ovl_En_Pm.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Pm/ovl_En_Pm_reloc.o"
 endseg
 
 beginseg
@@ -8861,14 +8859,16 @@ beginseg
     name "memerrmsg"
     compress
     romalign 0x1000
-    include "build/baserom/memerrmsg.o"
+    include "build/assets/misc/memerrmsg/memerrmsg.o"
+    number 1
 endseg
 
 beginseg
     name "locerrmsg"
     compress
     romalign 0x1000
-    include "build/baserom/locerrmsg.o"
+    include "build/assets/misc/locerrmsg/locerrmsg.o"
+    number 1
 endseg
 
 beginseg
