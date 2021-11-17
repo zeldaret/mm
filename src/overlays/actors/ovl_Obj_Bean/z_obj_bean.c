@@ -221,33 +221,31 @@ void func_809372A8(ObjBean* this) {
     Math_Vec3s_ToVec3f(&this->unk_1BC, this->unk_1D4);
 }
 
-#ifdef NON_MATCHING
-// Stack
 void func_809372D0(ObjBean* this) {
-    s32 pad;
+    Actor* actor = &this->dyna.actor;
     Vec3f sp38;
     f32 sp34;
     f32 temp_f2;
     f32 temp_f12;
 
     Math_Vec3s_ToVec3f(&sp38, &this->unk_1D4[this->unk_1DC]);
-    Math_Vec3f_Diff(&sp38, &this->unk_1BC, &this->dyna.actor.velocity);
+    Math_Vec3f_Diff(&sp38, &this->unk_1BC, &actor->velocity);
 
-    sp34 = Math3D_Vec3fMagnitude(&this->dyna.actor.velocity);
+    sp34 = Math3D_Vec3fMagnitude(&actor->velocity);
     temp_f2 = D_80938FF8[this->unk_1DE].x;
     temp_f12 = D_80938FF8[this->unk_1DE].y;
-    if (sp34 < (this->dyna.actor.speedXZ * 8.0f)) {
+    if (sp34 < (actor->speedXZ * 8.0f)) {
         temp_f2 = ((temp_f2 - 2.0f) * 0.1f) + 2.0f;
         temp_f12 *= 0.4f;
     }
 
-    Math_StepToF(&this->dyna.actor.speedXZ, temp_f2, temp_f12);
+    Math_StepToF(&actor->speedXZ, temp_f2, temp_f12);
 
-    if ((this->dyna.actor.speedXZ + 0.05f) < sp34) {
-        Math_Vec3f_Scale(&this->dyna.actor.velocity, this->dyna.actor.speedXZ / sp34);
-        this->unk_1BC.x += this->dyna.actor.velocity.x;
-        this->unk_1BC.y += this->dyna.actor.velocity.y;
-        this->unk_1BC.z += this->dyna.actor.velocity.z;
+    if ((actor->speedXZ + 0.05f) < sp34) {
+        Math_Vec3f_Scale(&actor->velocity, actor->speedXZ / sp34);
+        this->unk_1BC.x += actor->velocity.x;
+        this->unk_1BC.y += actor->velocity.y;
+        this->unk_1BC.z += actor->velocity.z;
     } else {
         Math_Vec3f_Copy(&this->unk_1BC, &sp38);
         this->unk_1DA = this->unk_1DC;
@@ -256,12 +254,9 @@ void func_809372D0(ObjBean* this) {
         } else {
             this->unk_1DC++;
         }
-        this->dyna.actor.speedXZ *= 0.5f;
+        actor->speedXZ *= 0.5f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bean/func_809372D0.s")
-#endif
 
 s32 func_80937468(ObjBean* this, GlobalContext* globalCtx) {
     Actor* bgActor = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;

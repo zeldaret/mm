@@ -1504,11 +1504,7 @@ beginseg
     name "ovl_Obj_Bean"
     compress
     include "build/src/overlays/actors/ovl_Obj_Bean/z_obj_bean.o"
-#ifdef NON_MACTHING
     include "build/src/overlays/actors/ovl_Obj_Bean/ovl_Obj_Bean_reloc.o"
-#else
-    include "build/data/ovl_Obj_Bean/ovl_Obj_Bean.reloc.o"
-#endif
 endseg
 
 beginseg

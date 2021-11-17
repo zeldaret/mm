@@ -198,7 +198,7 @@ void func_80A68B6C(EnMushi2* this) {
 }
 
 s32 func_80A68BA0(EnMushi2* this) {
-    return (D_80A6B994 > 3) && this->unk_34C == 0;
+    return (D_80A6B994 > 3) && this->unk_34C == NULL;
 }
 
 void func_80A68BC8(EnMushi2* this) {
@@ -603,11 +603,11 @@ void func_80A69ADC(Actor* thisx) {
         sp44 = Math3D_SignedDistanceFromPlane(
             this->unk_310.x, this->unk_310.y, this->unk_310.z,
             func_80A69AA8(this->unk_310.x, this->unk_310.y, this->unk_310.z, &this->actor.world.pos),
-            &bean->actor.world.pos);
+            &bean->dyna.actor.world.pos);
         sp40 = Math3D_SignedDistanceFromPlane(
             this->unk_328.x, this->unk_328.y, this->unk_328.z,
             func_80A69AA8(this->unk_328.x, this->unk_328.y, this->unk_328.z, &this->actor.world.pos),
-            &bean->actor.world.pos);
+            &bean->dyna.actor.world.pos);
         sp3C = Math3D_XZLength(sp44, sp40);
 
         if (fabsf(sp3C) > 0.1f) {
@@ -649,11 +649,11 @@ void func_80A69D3C(EnMushi2* this) {
         sp40 = Math3D_SignedDistanceFromPlane(
             this->unk_310.x, this->unk_310.y, this->unk_310.z,
             func_80A69AA8(this->unk_310.x, this->unk_310.y, this->unk_310.z, &this->actor.world.pos),
-            &this->unk_34C->actor.world.pos);
+            &this->unk_34C->dyna.actor.world.pos);
         sp3C = Math3D_SignedDistanceFromPlane(
             this->unk_328.x, this->unk_328.y, this->unk_328.z,
             func_80A69AA8(this->unk_328.x, this->unk_328.y, this->unk_328.z, &this->actor.world.pos),
-            &this->unk_34C->actor.world.pos);
+            &this->unk_34C->dyna.actor.world.pos);
         sp38 = Math3D_XZLengthSquared(sp40, sp3C);
 
         if (fabsf(sp38) > 0.010000001f) {
@@ -837,7 +837,7 @@ void func_80A6A508(Actor* thisx) {
     }
 
     this->unk_368 = Rand_S16Offset(10, 30);
-    if (this->unk_34C == 0) {
+    if (this->unk_34C == NULL) {
         func_80A69CE0(thisx);
     } else {
         func_80A69ADC(thisx);
@@ -1115,7 +1115,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 phi_f0;
     s32 temp;
 
-    if ((this->unk_34C != NULL) && (this->unk_34C->actor.update == NULL)) {
+    if ((this->unk_34C != NULL) && (this->unk_34C->dyna.actor.update == NULL)) {
         this->unk_34C = NULL;
     }
 
@@ -1134,7 +1134,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_36A--;
     }
 
-    if ((this->unk_34C != 0) && ((this->actionFunc == func_80A6A5C0) || (this->actionFunc == func_80A6A824)) &&
+    if ((this->unk_34C != NULL) && ((this->actionFunc == func_80A6A5C0) || (this->actionFunc == func_80A6A824)) &&
         (this->unk_354 < SQ(3.0f))) {
         this->unk_30C |= 0x80;
         func_80A6B078(this);
@@ -1173,16 +1173,16 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_80A68BC8(this);
         }
 
-        if (this->unk_34C != 0) {
+        if (this->unk_34C != NULL) {
             sp4C = 0.0f;
 
-            this->unk_354 = Math3D_DistanceSquared(&this->actor.world.pos, &this->unk_34C->actor.world.pos);
+            this->unk_354 = Math3D_DistanceSquared(&this->actor.world.pos, &this->unk_34C->dyna.actor.world.pos);
             if (this->unk_354 < this->unk_350) {
                 f32 dist = Math3D_NormalizedSignedDistanceFromPlane(
-                    COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.x),
-                    COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.y),
-                    COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.z), this->unk_34C->actor.floorPoly->dist,
-                    &this->actor.world.pos);
+                    COLPOLY_GET_NORMAL(this->unk_34C->dyna.actor.floorPoly->normal.x),
+                    COLPOLY_GET_NORMAL(this->unk_34C->dyna.actor.floorPoly->normal.y),
+                    COLPOLY_GET_NORMAL(this->unk_34C->dyna.actor.floorPoly->normal.z),
+                    this->unk_34C->dyna.actor.floorPoly->dist, &this->actor.world.pos);
 
                 if (fabsf(dist) < 3.0f) {
                     sp4C = 1.9f;
@@ -1201,7 +1201,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
                  !(this->unk_358 > 0.999f) || !(this->unk_354 < SQ(20.0f)))) {
                 s32 phi_v0 = true;
 
-                if (this->unk_34C == 0) {
+                if (this->unk_34C == NULL) {
                     this->collider.base.ocFlags1 |= OC1_TYPE_PLAYER;
                 } else {
                     this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
