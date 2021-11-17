@@ -716,7 +716,7 @@
             0x801FD140 : "audio_load",
             0x801FD1F0 : "code_8019AF00",
             0x801FD5A0 : "code_801A51F0",
-            0x801FE7C0 : "code_801A5BD0",
+            0x801FD710 : "code_801A5BD0",
             0x801FFD00 : "code_801A7B10",
             0x80208E90 : "code_801AA020",
             0x80208EA0 : "gfxbuffers",
