@@ -624,7 +624,27 @@ void func_80A6DC20(Actor* thisx, GlobalContext* globalCtx) {
     func_80A6DA7C(thisx, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6DC40.s")
+void func_80A6DC40(Actor* thisx, GlobalContext* globalCtx) {
+    f32 temp_f0;
+    f32 temp_f0_2;
+    f32 zTranslation;
+    f32 yTranslation;
+    f32 xTranslation;
+
+    temp_f0 = Actor_DistanceToPoint(thisx, &globalCtx->view.eye);
+    if (temp_f0 > 9000.0f) {
+        temp_f0_2 = 9000.0f / temp_f0;
+        xTranslation = (-(globalCtx->view.eye.x - thisx->world.pos.x) * temp_f0_2) + globalCtx->view.eye.x;
+        yTranslation = (-(globalCtx->view.eye.y - thisx->world.pos.y) * temp_f0_2) + globalCtx->view.eye.y;
+        zTranslation = (-(globalCtx->view.eye.z - thisx->world.pos.z) * temp_f0_2) + globalCtx->view.eye.z;
+        Matrix_InsertTranslation(xTranslation, yTranslation, zTranslation, MTXMODE_NEW);
+        Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
+        Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(thisx->shape.rot.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(thisx->shape.rot.z, MTXMODE_APPLY);
+    }
+    func_80A6DA7C(thisx, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6DD3C.s")
 
