@@ -285,7 +285,7 @@ void EnDno_DoNothing(EnDno* this, GlobalContext* globalCtx) {
 void func_80A71B68(EnDno* this, GlobalContext* globalCtx) {
     this->unk_452 = 0;
     this->actor.textId = 0;
-    if (CHECK_QUEST_ITEM(6)) {
+    if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
         if (gSaveContext.weekEventReg[27] & 1) {
             if (!(this->unk_3B0 & 0x20)) {
                 func_8013E1C8(&this->skelAnime, sAnimations, 6, &this->unk_32C);
@@ -349,7 +349,7 @@ void func_80A71C3C(EnDno* this, GlobalContext* globalCtx) {
 }
 
 void func_80A71E54(EnDno* this, GlobalContext* globalCtx) {
-    if (CHECK_QUEST_ITEM(6)) {
+    if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
         if (gSaveContext.weekEventReg[27] & 1) {
             this->unk_464 = 0x811;
         } else {
@@ -566,7 +566,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                     } else if ((this->unk_32C == 5) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         if (Flags_GetSwitch(globalCtx, ENDNO_GET_3F80(&this->actor))) {
                             func_801518B0(globalCtx, 0x801, &this->actor);
-                        } else if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_SCENTS) {
+                        } else if (Player_GetMask(globalCtx) == PLAYER_MASK_SCENTS) {
                             func_801518B0(globalCtx, 0x806, &this->actor);
                         } else {
                             func_801518B0(globalCtx, 0x800, &this->actor);
@@ -629,9 +629,9 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                 case 0x802:
                     if (func_80147624(globalCtx)) {
                         if (gSaveContext.inventory.items[D_801C20C0] == ITEM_MASK_SCENTS) {
-                            this->unk_458 = 4;
+                            this->unk_458 = GI_RUPEE_RED;
                         } else {
-                            this->unk_458 = 142;
+                            this->unk_458 = GI_MASK_SCENTS;
                         }
                         func_800B8A1C(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
                         func_801477B4(globalCtx);

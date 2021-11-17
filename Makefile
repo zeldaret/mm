@@ -232,7 +232,7 @@ setup:
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py
+	python3 tools/disasm/disasm.py -j $(N_THREADS)
 
 diff-init: uncompressed
 	$(RM) -rf expected/
