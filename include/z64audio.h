@@ -1147,6 +1147,15 @@ typedef struct {
     /* 0x2 */ u16 params;
 } SfxParams; // size = 0x4
 
+typedef struct {
+    /* 0x00 */ u16 sfxId;
+    /* 0x02 */ u8 token;
+    /* 0x04 */ s8* reverbAdd;
+    /* 0x08 */ Vec3f* pos;
+    /* 0x0C */ f32* freqScale;
+    /* 0x10 */ f32* vol;
+} SoundRequest; // size = 0x14
+
 /**
  * Note:
  * Flag for resolving C_RIGHT and C_LEFT only being two semitones apart
