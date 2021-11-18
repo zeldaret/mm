@@ -75,6 +75,7 @@ extern Gfx D_06001158[];
 extern Gfx D_060011D0[];
 extern UNK_TYPE D_06001220;
 extern Gfx D_06002970[];
+extern Gfx D_06003C30[];
 extern UNK_TYPE D_06004E38;
 extern Gfx D_060077F0[];
 
@@ -674,8 +675,27 @@ void func_80A6DD3C(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+// bss function
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6E07C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6E214.s")
+void func_80A6E214(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnFall* this = THIS;
+
+    if (!(this->unk_150 <= 0.0f)) {
+        if (this->unk_150 > 1.0f) {
+            this->unk_150 = 1.0f;
+        }
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&D_06004E38));
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
+        gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(this->unk_150 * 255.0f));
+        gSPDisplayList(POLY_XLU_DISP++, D_06003C30);
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6E37C.s")
