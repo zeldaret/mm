@@ -3033,7 +3033,7 @@ void func_80169600(GlobalContext* globalCtx, s16 param_2);
 Camera* Play_GetCamera(GlobalContext* globalCtx, s16 index);
 s32 Play_CameraSetAtEye(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f* eye);
 void func_8016981C(GlobalContext* globalCtx, s16 arg1, Vec3f* arg2, Vec3f* arg3, Vec3f* arg4);
-// void func_80169940(void);
+void func_80169940(GlobalContext* globalCtx, s16 camId, f32 arg2);
 // void func_80169988(void);
 void func_801699D4(GlobalContext* globalCtx, s16 arg1, s16 arg2);
 // void func_80169A50(void);
@@ -3838,12 +3838,12 @@ void func_8019E014(void);
 // void func_8019EB2C(void);
 // void func_8019F024(void);
 // void func_8019F05C(void);
+void func_8019F170(Vec3f* pos, u16 sfxId);
+void func_8019F1C0(Vec3f* pos, u16 sfxId);
 void play_sound(u16 sfxId);
 void func_8019F128(u16 sfxId);
-// void func_8019F170(void);
-void func_8019F1C0(Vec3f* pos, u16 sfxId);
-void func_8019F208(void);
-void func_8019F230(void); // Plays "No" sound
+void func_8019F208(void); // decide
+void func_8019F230(void); // cancel
 // void func_8019F258(void);
 // void func_8019F300(void);
 void func_8019F420(Vec3f* pos, u16 sfxId);
