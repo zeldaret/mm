@@ -72,7 +72,7 @@ extern UNK_TYPE D_06000198;
 extern Vtx D_060004C0[];
 extern Gfx D_060010E0[];
 extern Gfx D_06001158[];
-extern UNK_TYPE D_060011D0;
+extern Gfx D_060011D0[];
 extern UNK_TYPE D_06001220;
 extern Gfx D_06002970[];
 extern UNK_TYPE D_06004E38;
@@ -646,7 +646,33 @@ void func_80A6DC40(Actor* thisx, GlobalContext* globalCtx) {
     func_80A6DA7C(thisx, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6DD3C.s")
+void func_80A6DD3C(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnFall* this = THIS;
+    u32 gameplayFrames = globalCtx->gameplayFrames;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    this->unk_15C += (s32)(4.0f + (this->unk_150 * 12.0f));
+    this->unk_15E += (s32)(2.0f + (this->unk_150 * 6.0f));
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, (s32)(((1.0f - this->unk_150) * 160.0f) + (255.0f * this->unk_150)),
+                    (s32)((70.0f * (1.0f - this->unk_150)) + (255.0f * this->unk_150)),
+                    (s32)(70.0f * (1.0f - this->unk_150)), 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, (s32)(((1.0f - this->unk_150) * 50.0f) + (200.0f * this->unk_150)),
+                   (s32)(20.0f * (1.0f - this->unk_150)), (s32)(20.0f * (1.0f - this->unk_150)), 255);
+    gSPSegment(POLY_XLU_DISP++, 0x09,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames, -this->unk_15E, 0x40, 0x40, 1,
+                                -gameplayFrames, -this->unk_15C, 0x40, 0x40));
+    gSPSegment(POLY_XLU_DISP++, 0x0A,
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames * 2, -this->unk_15C, 0x40, 0x40, 1,
+                                -gameplayFrames * 2, -this->unk_15C, 0x40, 0x40));
+    gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
+    gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
+    gSPDisplayList(POLY_XLU_DISP++, D_060011D0);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6E07C.s")
 

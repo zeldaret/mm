@@ -22,7 +22,7 @@ typedef struct EnFall {
     /* 0x156 */ char unk_156[0x2];
     /* 0x158 */ s32 unk_158;
     /* 0x15C */ s16 unk_15C;
-    /* 0x15E */ char unk_15E[0x2];
+    /* 0x15E */ s16 unk_15E;
     /* 0x160 */ EnFallActionFunc actionFunc;
 } EnFall; // size = 0x164
 
