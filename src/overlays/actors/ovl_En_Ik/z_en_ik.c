@@ -244,6 +244,7 @@ static InitChainEntry D_8092C168[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
+// TODO: Need to figure out what type this is
 s32 D_8092C174[] = { 0x00000000, 0x00080000, 0xFFFF96C8, 0xFFFFFF40, 0xFFFF9600,
                      0xFFFFFF00, 0x08000200, 0x00000000, 0x00000000 };
 
@@ -257,7 +258,11 @@ s32 D_8092C1A8[] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00FFFFFF, 0xFFFFFFFF,
 
 s32 D_8092C1C8[] = { 0x44FA0000, 0xC3480000, 0xC5A28000 };
 
+// Vec3f D_8092C1C8[] = { 2000.0f, -200.0f, -5200.0f };
+
 s32 D_8092C1D4[] = { 0x43960000, 0xC3480000, 0x00000000 };
+
+// Vec3f D_8092C1D4[] = { 300.0f, -200.0f, 0.0f };
 
 s32 D_8092C1E0[] = { 0xFFFFFF00, 0x01020304, 0x05FFFFFF, 0x06FFFF07, 0xFFFF08FF, 0x090AFF0B, 0xFF0CFFFF, 0xFFFF0000 };
 
@@ -272,18 +277,29 @@ extern DamageTable D_8092C140;
 extern CollisionCheckInfoInit D_8092C160;
 extern InitChainEntry D_8092C168[];
 
+// Vertical Axe attack
 extern AnimationHeader D_06000CE8;
 extern AnimationHeader D_060136A0;
+// Pull axe out of ground anim
 extern AnimationHeader D_060015F8;
+// Axe stuck in ground anim
 extern AnimationHeader D_06001ABC;
+// Horizontal Swinging anim
 extern AnimationHeader D_06002484;
-extern AnimationHeader D_0600367C;
-extern UNK_TYPE D_0600391C;
-extern UNK_TYPE D_06004A04;
-extern UNK_TYPE D_06005254;
-extern AnimationHeader D_060057F4;
-extern AnimationHeader D_06006294;
+// Recover from swinging axe anim
 extern AnimationHeader D_06002E7C;
+// Another damage anim
+extern AnimationHeader D_0600367C;
+// ??? Anim
+extern UNK_TYPE D_0600391C;
+// Death Anim
+extern AnimationHeader D_06004A04;
+// Take Damage Anim
+extern AnimationHeader D_06005254;
+// "Running" Anim
+extern AnimationHeader D_060057F4;
+//Walking anim
+extern AnimationHeader D_06006294;
 
 void EnIk_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
@@ -977,6 +993,7 @@ void EnIk_Update(Actor* thisx, GlobalContext* globalCtx2) {
 //     Gfx* phi_s2_2;
 //     Gfx* unkDisp;
 
+//     OPEN_DISPS(globalCtx->state.gfxCtx);
 //     if (this->unk_2F4 == 3) {
 //         sp54 = 0;
 
@@ -1010,6 +1027,7 @@ void EnIk_Update(Actor* thisx, GlobalContext* globalCtx2) {
 //         gfx->polyXlu.p = phi_s3_2;
 //         gfx->polyOpa.p = phi_s2_2;
 //     }
+//     CLOSE_DISPS(globalCtx->state.gfxCtx);
 // }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/EnIk_Draw.s")
