@@ -51,7 +51,9 @@ s32 Player_InCsMode(GameState* gameState) {
     return Player_InBlockingCsMode(gameState, player) || player->unk_AA5 == 5;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123420.s")
+s32 func_80123420(Player* player) {
+    return player->stateFlags3 & 0x80000000;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123434.s")
 
