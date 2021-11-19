@@ -2199,11 +2199,11 @@ void func_800B9038(Actor* actor, s32 timer) {
     // the io ports of the music macro language (func_801A0810 / Audio_PlaySfxAtPosWithSoundScriptIO is
     // the function that it's used for)
     if (timer < 40) {
-        actor->sfxId = 0;
+        actor->sfxId = 3;
     } else if (timer < 100) {
-        actor->sfxId = 1;
-    } else {
         actor->sfxId = 2;
+    } else {
+        actor->sfxId = 1;
     }
 }
 
