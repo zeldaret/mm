@@ -34,11 +34,22 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012301C.s")
 
+// OoT's Player_SetBootData?
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123140.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123358.s")
+s32 Player_InBlockingCsMode(GameState* gameState, Player* player) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801233E4.s")
+    return (player->stateFlags1 & 0x20000280) || player->unk_394 != 0 || globalCtx->sceneLoadFlag == 0x14 ||
+           globalCtx->unk_18B4A != 0 || (player->stateFlags1 & 1) || (player->stateFlags3 & 0x80) ||
+           globalCtx->actorCtx.unk268 != 0;
+}
+
+s32 Player_InCsMode(GameState* gameState) {
+    Player* player = GET_PLAYER(gameState);
+
+    return Player_InBlockingCsMode(gameState, player) || player->unk_AA5 == 5;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123420.s")
 
@@ -82,13 +93,21 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123F2C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123F48.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_IsBurningStickInRange.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124020.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_GetMask.s")
+u8 Player_GetMask(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_RemoveMask.s")
+    return player->currentMask;
+}
+
+void Player_RemoveMask(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    player->currentMask = PLAYER_MASK_NONE;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012405C.s")
 
@@ -108,13 +127,35 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801241B4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801241E0.s")
+s32 Player_ActionToBottle(Player* player, s32 actionParam) {
+    s32 bottle = actionParam - PLAYER_AP_BOTTLE;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012420C.s")
+    // Relies on bottle-related action params to be contiguous
+    if ((bottle >= (PLAYER_AP_BOTTLE - PLAYER_AP_BOTTLE)) && (bottle <= (PLAYER_AP_BOTTLE_FAIRY - PLAYER_AP_BOTTLE))) {
+        return bottle;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012422C.s")
+    return -1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124258.s")
+s32 Player_GetBottleHeld(Player* Player) {
+    return Player_ActionToBottle(Player, Player->itemActionParam);
+}
+
+s32 Player_ActionToExplosive(Player* player, s32 actionParam) {
+    s32 explosive = actionParam - PLAYER_AP_BOMB;
+
+    // Relies on explosive-related action params to be contiguous
+    if ((explosive >= (PLAYER_AP_BOMB-PLAYER_AP_BOMB)) && (explosive <= (PLAYER_AP_BOMBCHU-PLAYER_AP_BOMB))) {
+        return explosive;
+    }
+
+    return -1;
+}
+
+s32 Player_GetExplosiveHeld(Player* player) {
+    return Player_ActionToExplosive(player, player->itemActionParam);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124278.s")
 
@@ -164,9 +205,60 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012669C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126808.s")
+void Player_DrawGetItemImpl(GlobalContext* globalCtx, Player* player, Vec3f* refPos, s32 drawIdPlusOne) {
+    f32 sp34;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012697C.s")
+    if (player->stateFlags3 & 0x4000000) {
+        sp34 = 6.0f;
+    } else {
+        sp34 = 14.0f;
+    }
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(player->giObjectSegment);
+
+    gSPSegment(POLY_OPA_DISP++, 0x06, player->giObjectSegment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
+
+    Matrix_InsertTranslation((Math_SinS(player->actor.shape.rot.y) * 3.3f) + refPos->x, refPos->y + sp34, (Math_CosS(player->actor.shape.rot.y) * 3.3f) + refPos->z, MTXMODE_NEW);
+    Matrix_InsertRotation(0, (globalCtx->gameplayFrames * 1000), 0, MTXMODE_APPLY);
+    Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
+    GetItem_Draw(globalCtx, drawIdPlusOne - 1);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+extern Vec3f D_801F59E8;
+
+void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
+    if (!player->giObjectLoading || (osRecvMesg(&player->giObjectLoadQueue, NULL, 0) == 0)) {
+        Vec3f refPos;
+        s32 drawIdPlusOne;
+
+        player->giObjectLoading = false;
+        if ((player->actor.id == ACTOR_EN_TEST3) || ((player->transformation == PLAYER_FORM_DEKU) && (player->stateFlags1 & 0x400))) {
+            refPos.x = player->actor.world.pos.x;
+            refPos.z = player->actor.world.pos.z;
+            if (player->actor.id == ACTOR_EN_TEST3) {
+                if (player->stateFlags1 & 0x400) {
+                    refPos.y = player->actor.world.pos.y + 30.0f;
+                } else {
+                    refPos.x = player->bodyPartsPos[0xC].x;
+                    refPos.y = player->bodyPartsPos[0xC].y - 6.0f;
+                    refPos.z = player->bodyPartsPos[0xC].z;
+                }
+            } else {
+                refPos.y = player->actor.world.pos.y + 28.0f;
+            }
+        } else {
+            Math_Vec3f_Copy(&refPos, &D_801F59E8);
+        }
+
+        drawIdPlusOne = ABS_ALT(player->unk_B2A);
+        Player_DrawGetItemImpl(globalCtx, player, &refPos, drawIdPlusOne);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126AB4.s")
 
