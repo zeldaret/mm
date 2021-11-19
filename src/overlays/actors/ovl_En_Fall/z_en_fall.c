@@ -34,6 +34,20 @@ void func_80A6E214(Actor* thisx, GlobalContext* globalCtx);
 void func_80A6D98C(Actor* thisx, GlobalContext* globalCtx);
 void func_80A6E37C(Actor* thisx, GlobalContext* globalCtx);
 
+typedef struct {
+    u8 unk_00;
+    char unk_01[0x3];
+    Vec3f unk_04;
+    Vec3f unk_10;
+    s16 unk_1C;
+    s16 unk_1E;
+    s16 unk_20;
+    char unk_22[0x2];
+} UnkFallStruct;
+
+extern UnkFallStruct D_80A6E990[];
+extern s32 D_80A6F098[];
+
 const ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,
     ACTORCAT_ITEMACTION,
@@ -568,8 +582,24 @@ void func_80A6D220(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, this->unk_14C * 1.74f);
 }
 
-// bss function
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D444.s")
+void func_80A6D444(EnFall* this) {
+    s32 i;
+
+    for (i = 0; i < 50; i++) {
+        if (D_80A6E990[i].unk_00 < 3) {
+            D_80A6E990[i].unk_04.x += D_80A6E990[i].unk_10.x;
+            D_80A6E990[i].unk_04.y += D_80A6E990[i].unk_10.y;
+            D_80A6E990[i].unk_04.z += D_80A6E990[i].unk_10.z;
+            D_80A6E990[i].unk_1C += 0x64;
+            D_80A6E990[i].unk_1E += 0xC8;
+            D_80A6E990[i].unk_20 += 0x12C;
+            if ((this->actor.world.pos.y + 3000.0f) < D_80A6E990[i].unk_04.y) {
+                D_80A6E990[i].unk_00 = 3;
+                this->unk_158 -= 1;
+            }
+        }
+    }
+}
 
 // bss function
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D504.s")
