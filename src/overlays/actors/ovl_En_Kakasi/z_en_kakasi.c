@@ -1014,8 +1014,8 @@ void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx) {
             Audio_PlaySoundAtPosition(globalCtx, &tempWorldPos, 0x32, NA_SE_EV_BOMB_DROP_WATER);
 
         } else {
-            Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 5,
-                          4.0f, 200, 10, 1);
+            Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos,
+                                     this->actor.shape.shadowScale - 20.0f, 5, 4.0f, 200, 10, 1);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
     }
@@ -1080,8 +1080,8 @@ void EnKakasi_RisingOutOfGround(EnKakasi* this, GlobalContext* globalCtx) {
     }
     if (this->actor.shape.yOffset < -10.0f) {
         if ((globalCtx->gameplayFrames % 8) == 0) {
-            Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10,
-                          8.0f, 500, 10, 1);
+            Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos,
+                                     this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
         Math_ApproachF(&this->actor.shape.yOffset, 0.0f, 0.5f, 200.0f);
