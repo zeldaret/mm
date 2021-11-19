@@ -934,7 +934,7 @@ void func_808DAA60(EnSw* this, GlobalContext* globalCtx) {
     Vec3f sp34;
     f32 temp_f16;
 
-    sp44 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_1E4->unk_04);
+    sp44 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_1E4->points);
     sp40 = 0;
 
     if (DECR(this->unk_454) == 0) {
@@ -1009,7 +1009,7 @@ void func_808DACF4(EnSw* this, GlobalContext* globalCtx) {
     if ((temp_f6 != 0) && (temp_f6 < (s32)sp4C)) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_374);
         this->unk_4A0 += this->unk_49C;
-        if ((this->unk_4A0 >= this->unk_1E4->unk_00) || (this->unk_4A0 < 0)) {
+        if ((this->unk_4A0 >= this->unk_1E4->count) || (this->unk_4A0 < 0)) {
             this->unk_49C = -this->unk_49C;
             this->unk_4A0 += this->unk_49C * 2;
         }
