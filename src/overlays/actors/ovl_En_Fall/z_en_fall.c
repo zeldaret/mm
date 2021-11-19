@@ -45,8 +45,7 @@ typedef struct {
     char unk_22[0x2];
 } UnkFallStruct;
 
-extern UnkFallStruct D_80A6E990[];
-extern s32 D_80A6F098[];
+UnkFallStruct D_80A6E990[50];
 
 const ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,
