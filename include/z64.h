@@ -24,6 +24,7 @@
 
 #include "z64actor.h"
 #include "z64animation.h"
+#include "z64audio.h"
 #include "z64bgcheck.h"
 #include "z64collision_check.h"
 #include "z64cutscene.h"
@@ -441,29 +442,6 @@ typedef struct {
 } s80185D40; // size = 0x2C
 
 typedef struct {
-    /* 0x00 */ u32 unk0;
-    /* 0x04 */ u8 unk4;
-    /* 0x05 */ u8 unk5;
-    /* 0x06 */ u8 unk6;
-    /* 0x07 */ UNK_TYPE1 pad7[0x2];
-    /* 0x09 */ u8 unk9;
-    /* 0x0A */ UNK_TYPE1 padA[0x2];
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ u16 unk10;
-    /* 0x12 */ u16 unk12;
-    /* 0x14 */ u16 unk14;
-    /* 0x16 */ UNK_TYPE1 pad16[0x2];
-    /* 0x18 */ u32 unk18;
-    /* 0x1C */ u32 unk1C;
-    /* 0x20 */ u32 unk20;
-    /* 0x24 */ u32 unk24;
-    /* 0x28 */ u32 unk28;
-    /* 0x2C */ u32 unk2C;
-    /* 0x30 */ u32 unk30;
-    /* 0x34 */ u32 unk34;
-} s8018CFAC; // size = 0x38
-
-typedef struct {
     /* 0x0 */ u8 unk0;
     /* 0x1 */ u8 unk1;
     /* 0x2 */ u8 unk2;
@@ -473,10 +451,6 @@ typedef struct {
     /* 0x6 */ u8 unk6;
     /* 0x7 */ u8 unk7;
 } s801AEC84; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x14];
-} s801FE7C0; // size = 0x14
 
 typedef struct {
     /* 0x00 */ Vec3f unk0;
@@ -607,12 +581,6 @@ typedef struct {
 } View; // size = 0x168
 
 typedef void(*fault_update_input_func)(Input* input);
-
-typedef struct {
-    /* 0x00 */ u8 noteIdx;
-    /* 0x01 */ u8 state;
-    /* 0x02 */ u8 pos;
-} OcarinaStaff; // size = 0x3;
 
 typedef struct {
     /* 0x000 */ View view;
@@ -1296,12 +1264,6 @@ typedef struct ActorListEntry {
 #define OS_SC_DONE_MSG          2
 #define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
 #define OS_SC_PRE_NMI_MSG       4
-
-typedef struct {
-    /* 0x0000 */ OSTask task;
-    /* 0x0040 */ OSMesgQueue* taskQueue;
-    /* 0x0044 */ char unk_44[0xC];
-} AudioTask; // size = 0x50
 
 typedef struct {
     /* 0x000 */ IrqMgr* irqMgr;
