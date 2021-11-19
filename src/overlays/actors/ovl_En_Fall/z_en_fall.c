@@ -36,13 +36,9 @@ void func_80A6E37C(Actor* thisx, GlobalContext* globalCtx);
 
 typedef struct {
     u8 unk_00;
-    char unk_01[0x3];
     Vec3f unk_04;
     Vec3f unk_10;
-    s16 unk_1C;
-    s16 unk_1E;
-    s16 unk_20;
-    char unk_22[0x2];
+    Vec3s unk_1C;
 } UnkFallStruct;
 
 UnkFallStruct D_80A6E990[50];
@@ -585,9 +581,9 @@ void func_80A6D444(EnFall* this) {
             D_80A6E990[i].unk_04.x += D_80A6E990[i].unk_10.x;
             D_80A6E990[i].unk_04.y += D_80A6E990[i].unk_10.y;
             D_80A6E990[i].unk_04.z += D_80A6E990[i].unk_10.z;
-            D_80A6E990[i].unk_1C += 0x64;
-            D_80A6E990[i].unk_1E += 0xC8;
-            D_80A6E990[i].unk_20 += 0x12C;
+            D_80A6E990[i].unk_1C.x += 0x64;
+            D_80A6E990[i].unk_1C.y += 0xC8;
+            D_80A6E990[i].unk_1C.z += 0x12C;
             if ((this->actor.world.pos.y + 3000.0f) < D_80A6E990[i].unk_04.y) {
                 D_80A6E990[i].unk_00 = 3;
                 this->unk_158 -= 1;
@@ -614,9 +610,9 @@ s32 func_80A6D504(EnFall* this) {
             D_80A6E990[i].unk_10.x = 0.0f;
             D_80A6E990[i].unk_10.z = 0.0f;
             D_80A6E990[i].unk_10.y = 80.0f;
-            D_80A6E990[i].unk_1C = (s16)randPlusMinusPoint5Scaled(65536.0f);
-            D_80A6E990[i].unk_1E = (s16)randPlusMinusPoint5Scaled(65536.0f);
-            D_80A6E990[i].unk_20 = (s16)randPlusMinusPoint5Scaled(65536.0f);
+            D_80A6E990[i].unk_1C.x = randPlusMinusPoint5Scaled(65536.0f);
+            D_80A6E990[i].unk_1C.y = randPlusMinusPoint5Scaled(65536.0f);
+            D_80A6E990[i].unk_1C.z = randPlusMinusPoint5Scaled(65536.0f);
             this->unk_158 += 1;
             return 1;
         }
@@ -792,7 +788,8 @@ void func_80A6E07C(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_InsertTranslation(D_80A6E990[i].unk_04.x, D_80A6E990[i].unk_04.y, D_80A6E990[i].unk_04.z,
                                      MTXMODE_NEW);
             Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
-            Matrix_InsertRotation(D_80A6E990[i].unk_1C, D_80A6E990[i].unk_1E, D_80A6E990[i].unk_20, MTXMODE_APPLY);
+            Matrix_InsertRotation(D_80A6E990[i].unk_1C.x, D_80A6E990[i].unk_1C.y, D_80A6E990[i].unk_1C.z,
+                                  MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_80A6E594[D_80A6E990[i].unk_00]);
