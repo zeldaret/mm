@@ -1,3 +1,22 @@
+/**
+ * Frame advance allows you to advance through the game one frame at a time on command.
+ * To advance a frame, hold Z and press R on the specified controller (see z_play).
+ * Holding Z and R will advance a frame every half second.
+ *
+ * FrameAdvance_Update returns true when frame advance is not active (game will run normally)
+ *
+ * Note: While the system is fully hooked up, there is no way to enable it in game
+ * Instead one would have to add something like:
+ *
+ * if (CHECK_BTN_ALL(input->cur.button, BTN_R) && CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
+ *     frameAdvCtx->enabled = !frameAdvCtx->enabled;
+ * }
+ *
+ * to the start of FrameAdvance_Update, which would allow the system to be toggled on and off by holding R
+ * and pressing Dpad Down on the specified controller.
+ *
+ * Note2: Controllers 2-4's inputs are normally zeroed out, so this would also need to be fixed to use frame advance
+ */
 #include "global.h"
 
 void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx) {
