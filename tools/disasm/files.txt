@@ -498,12 +498,12 @@
             0x801A5BD0 : "code_801A5BD0",
             0x801A7B10 : "code_801A7B10",
             0x801A9B10 : "jpegutils",
-            0x801AA020 : "code_801AA020",
+            0x801AA020 : "jpegdecoder",
             0x801AA610 : "z_game_over",
             0x801AAAA0 : "z_construct",
 
             # .data section
-            0x801AAAB0 : "z_en_a_keep",
+            0x801AAAB0 : "rsp",
             0x801ADE60 : "",
             0x801ADEC0 : "z_en_item00",
             0x801AE240 : "z_eff_blure",
@@ -530,6 +530,7 @@
             0x801BD910 : "",
             0x801BDA70 : "z_horse",
             0x801BDAC0 : "z_jpeg",
+            0x801BDB00 : "z_kaleido_setup",
             0x801BDB30 : "z_kanfont",
             0x801BDB90 : "z_kankyo",
             0x801BE960 : "z_lib",
@@ -672,7 +673,7 @@
             0x801E1070 : "code_801A7B10",
             0x801E1100 : "audio_init_params",
             0x801E1110 : "z_game_over",
-            0x801E1180 : "",
+            0x801E1180 : "rsp",
 
             # .bss section
             0x801E3FA0 : "code_801E3FA0",
@@ -728,7 +729,7 @@
             0x801FD5A0 : "code_801A51F0",
             0x801FD710 : "code_801A5BD0",
             0x801FFD00 : "code_801A7B10",
-            0x80208E90 : "code_801AA020",
+            0x80208E90 : "jpegdecoder",
             0x80208EA0 : "gfxbuffers",
             0x8024A4C0 : "buffers",
         },

@@ -162,6 +162,11 @@ build/src/code/audio/%.o: OPTFLAGS := -O2
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
 build/src/boot_O2_g3/fault_drawer.o: CFLAGS += -trapuv
 
+build/src/code/jpegutils.o: OPTFLAGS := -O2
+build/src/code/jpegdecoder.o: OPTFLAGS := -O2
+build/src/code/jpegutils.o: CC := $(CC_OLD)
+build/src/code/jpegdecoder.o: CC := $(CC_OLD)
+
 build/src/libultra/libc/ll.o: OPTFLAGS := -O1
 build/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
 build/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
