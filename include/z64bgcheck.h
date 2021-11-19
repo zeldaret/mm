@@ -19,6 +19,7 @@ struct DynaPolyActor;
 #define BG_ACTOR_MAX 50
 #define DYNA_WATERBOX_MAX 30
 #define BGCHECK_SCENE BG_ACTOR_MAX
+#define BGCHECK_Y_MAX 32000.0f
 #define BGCHECK_Y_MIN -32000.0f
 #define BGCHECK_XYZ_ABSMAX 32760.0f
 #define BGCHECK_SUBDIV_OVERLAP 50
@@ -138,12 +139,12 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ s16 polyId;
-    /* 0x2 */ u16 next;
+    /* 0x2 */ u16 next; // index of the next SSNode in the list, or SS_NULL if last element 
 } SSNode; // size = 0x4
 
 typedef struct {
-    u16 head;
-} SSList;
+    u16 head; // index of the first SSNode in the list, or SS_NULL if the list is empty
+} SSList; // represents a linked list of type SSNode
 
 typedef struct {
     /* 0x0 */ u16 max;
@@ -213,7 +214,7 @@ typedef struct {
     /* 0x44 */ SSNodeList polyNodes;
     /* 0x0050 */ DynaCollisionContext dyna;
     /* 0x1468 */ u32 memSize; // Size of all allocated memory plus CollisionContext
-    /* 0x146C */ u32 flags; // bit 0 reverses conveyor direction (i.e. water flow in Great Bay Temple)
+    /* 0x146C */ u32 flags;   // bit 0 reverses conveyor direction (i.e. water flow in Great Bay Temple)
 } CollisionContext; // size = 0x1470
 
 typedef struct {
@@ -227,7 +228,7 @@ typedef struct {
     /* 0x1C */ s32 unk1C;
     /* 0x20 */ struct Actor* actor;
     /* 0x24 */ u32 unk_24;
-    /* 0x28 */ f32 chkDist;
+    /* 0x28 */ f32 checkDist;
     /* 0x2C */ DynaCollisionContext* dyna;
     /* 0x30 */ SSList* ssList;
 } DynaRaycast; // size = 0x34
@@ -244,7 +245,7 @@ typedef struct
     /* 0x18 */ Vec3f* outPos;
     /* 0x1C */ CollisionPoly** outPoly;
     /* 0x20 */ f32 outDistSq;
-    /* 0x24 */ f32 chkDist;
+    /* 0x24 */ f32 checkDist;
     /* 0x28 */ s32 bccFlags;
     /* 0x2C */ Actor* actor;
 } StaticLineTest; // size = 0x30
@@ -258,9 +259,9 @@ typedef struct {
     /* 0x14 */ Vec3f* posB;
     /* 0x18 */ Vec3f* posResult;
     /* 0x1C */ CollisionPoly** resultPoly;
-    /* 0x20 */ s32 chkOneFace; // bccFlags & 0x8
-    /* 0x24 */ f32* distSq;    // distance from posA to poly squared
-    /* 0x28 */ f32 chkDist;    // distance from poly
+    /* 0x20 */ s32 checkOneFace; // bccFlags & 0x8
+    /* 0x24 */ f32* distSq;      // distance from posA to poly squared
+    /* 0x28 */ f32 checkDist;    // distance from poly
     /* 0x2C */ Actor* actor;
     /* 0x30 */ s32 bgId;
 } DynaLineTest; // size = 0x34
@@ -271,8 +272,8 @@ typedef struct {
     /* 0x08 */ Vec3f* posA;
     /* 0x0C */ Vec3f* posB;
     /* 0x10 */ Vec3f* planeIntersect;
-    /* 0x14 */ s32 chkOneFace;
-    /* 0x18 */ f32 chkDist;
+    /* 0x14 */ s32 checkOneFace;
+    /* 0x18 */ f32 checkDist;
 } BgLineVsPolyTest; // size = 0x1C
 
 typedef struct {

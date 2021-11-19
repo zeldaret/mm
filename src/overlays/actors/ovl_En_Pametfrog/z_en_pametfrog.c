@@ -744,7 +744,7 @@ void EnPametfrog_ClimbDownWall(EnPametfrog* this, GlobalContext* globalCtx) {
 
     if (this->actor.bgCheckFlags & 1) {
         EnPametfrog_SetupRunToSnapper(this);
-    } else if (this->actor.floorHeight == -32000.0f) {
+    } else if (this->actor.floorHeight == BGCHECK_Y_MIN) {
         yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
         this->actor.world.pos.x += 5.0f * Math_SinS(yaw);
         this->actor.world.pos.z += 5.0f * Math_CosS(yaw);
