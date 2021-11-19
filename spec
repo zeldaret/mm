@@ -2010,8 +2010,7 @@ beginseg
     name "ovl_Effect_Ss_Kakera"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.o"
-    include "build/data/ovl_Effect_Ss_Kakera/ovl_Effect_Ss_Kakera.data.o"
-    include "build/data/ovl_Effect_Ss_Kakera/ovl_Effect_Ss_Kakera.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Kakera/ovl_Effect_Ss_Kakera_reloc.o"
 endseg
 
 beginseg
