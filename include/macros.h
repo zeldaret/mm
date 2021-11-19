@@ -5,6 +5,12 @@
 #include "convert.h"
 #include "z64.h"
 
+#define SCREEN_WIDTH  320
+#define SCREEN_HEIGHT 240
+
+#define SCREEN_WIDTH_HIGH_RES  576
+#define SCREEN_HEIGHT_HIGH_RES 454
+
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 

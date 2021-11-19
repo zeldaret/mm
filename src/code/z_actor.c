@@ -1405,12 +1405,12 @@ u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 csMode) {
 
 void func_800B72E0(DynaPolyActor* dyna) {
     dyna->unk14C = 0.0f;
-    dyna->unk148 = 0.0f;
+    dyna->pushForce = 0.0f;
 }
 
-void func_800B72F8(DynaPolyActor* dyna, f32 a1, s16 a2) {
-    dyna->unk150 = a2;
-    dyna->unk148 += a1;
+void func_800B72F8(DynaPolyActor* dyna, f32 extraPushForce, s16 yRotation) {
+    dyna->yRotation = yRotation;
+    dyna->pushForce += extraPushForce;
 }
 
 /**
