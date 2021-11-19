@@ -1452,7 +1452,7 @@ typedef struct ActorContext_unk_20C {
 } ActorContext_unk_20C; // size = 0x8
 
 typedef struct ActorContextFlags {
-    /* 0x00 */ u32 swch[4]; // First 0x40 are permanent, second 0x40 are temporary
+    /* 0x00 */ u32 switches[4]; // First 0x40 are permanent, second 0x40 are temporary
     /* 0x10 */ u32 chest;
     /* 0x14 */ u32 clearedRoom;
     /* 0x18 */ u32 clearedRoomTemp;

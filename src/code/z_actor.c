@@ -736,7 +736,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
  */
 s32 Flags_GetSwitch(GlobalContext* globalCtx, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        return globalCtx->actorCtx.flags.swch[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
+        return globalCtx->actorCtx.flags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
 }
@@ -746,7 +746,7 @@ s32 Flags_GetSwitch(GlobalContext* globalCtx, s32 flag) {
  */
 void Flags_SetSwitch(GlobalContext* globalCtx, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        globalCtx->actorCtx.flags.swch[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
+        globalCtx->actorCtx.flags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
 
@@ -755,7 +755,7 @@ void Flags_SetSwitch(GlobalContext* globalCtx, s32 flag) {
  */
 void Flags_UnsetSwitch(GlobalContext* globalCtx, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        globalCtx->actorCtx.flags.swch[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
+        globalCtx->actorCtx.flags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }
 
@@ -2142,11 +2142,11 @@ void func_800B8E58(Player* player, u16 sfxId) {
     if (player->currentMask == PLAYER_MASK_GIANT) {
         func_8019F170(&player->actor.projectedPos, sfxId);
     } else {
-        Audio_PlaySoundGeneral(sfxId, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        Audio_PlaySfxGeneral(sfxId, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
     }
 }
 
-void Actor_PlaySfxByPos2(Actor* actor, u16 sfxId) {
+void Actor_PlaySfxAtPos(Actor* actor, u16 sfxId) {
     func_8019F1C0(&actor->projectedPos, sfxId);
 }
 
@@ -2195,12 +2195,15 @@ void func_800B9038(Actor* actor, s32 timer) {
     actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
     actor->audioFlags |= 0x10;
 
+    // The sfxId here are not actually sound effects, but instead this is data that gets sent into
+    // the io ports of the music macro language (func_801A0810 / Audio_PlaySfxAtPosWithSoundScriptIO is
+    // the function that it's used for)
     if (timer < 40) {
-        actor->sfxId = NA_SE_PL_WALK_DIRT - SFX_FLAG;
+        actor->sfxId = 0;
     } else if (timer < 100) {
-        actor->sfxId = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
+        actor->sfxId = 1;
     } else {
-        actor->sfxId = NA_SE_PL_WALK_SAND - SFX_FLAG;
+        actor->sfxId = 2;
     }
 }
 
@@ -2237,8 +2240,7 @@ void func_800B9120(ActorContext* actorCtx) {
     actorCtx->unkC = 0x200 >> phi_v0;
 }
 
-// Actor_InitContext // OoT's func_800304DC
-void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* actorEntry) {
+void Actor_InitContext(GameState* gameState, ActorContext* actorCtx, ActorEntry* actorEntry) {
     ActorOverlay* overlayEntry;
     u32* cycleFlags;
     s32 i;
@@ -2260,8 +2262,8 @@ void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* act
     }
 
     actorCtx->flags.chest = cycleFlags[0];
-    actorCtx->flags.swch[0] = cycleFlags[1];
-    actorCtx->flags.swch[1] = cycleFlags[2];
+    actorCtx->flags.switches[0] = cycleFlags[1];
+    actorCtx->flags.switches[1] = cycleFlags[2];
     if (globalCtx->sceneNum == SCENE_INISIE_R) {
         cycleFlags = gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
@@ -2586,7 +2588,7 @@ void func_800B9D1C(Actor* actor) {
 
     if (sfxId != 0) {
         if (actor->audioFlags & 2) {
-            Audio_PlaySoundGeneral(sfxId, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+            Audio_PlaySfxGeneral(sfxId, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
         } else if (actor->audioFlags & 4) {
             play_sound(sfxId);
         } else if (actor->audioFlags & 8) {
@@ -3032,7 +3034,7 @@ void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx) {
 
     CollisionCheck_ClearContext(globalCtx, &globalCtx->colChkCtx);
     actorCtx->flags.clearedRoomTemp = 0;
-    actorCtx->flags.swch[3] = 0;
+    actorCtx->flags.switches[3] = 0;
     actorCtx->flags.collectible[3] = 0;
     globalCtx->msgCtx.unk_12030 = 0;
 }
@@ -3063,8 +3065,7 @@ void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx) {
     globalCtx->msgCtx.unk_12030 = 0;
 }
 
-// Actor_CleanupContext
-void func_800BA9B4(ActorContext* actorCtx, GlobalContext* globalCtx) {
+void Actor_CleanupContext(ActorContext* actorCtx, GlobalContext* globalCtx) {
     s32 i;
 
     Fault_RemoveClient(&D_801ED8A0);
@@ -3966,7 +3967,7 @@ void func_800BCB50(GlobalContext* globalCtx, Vec3f* arg1) {
 
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration) {
     if ((colorFlag == 0x8000) && !(colorIntensityMax & 0x8000)) {
-        Actor_PlaySfxByPos2(actor, NA_SE_EN_LIGHT_ARROW_HIT);
+        Actor_PlaySfxAtPos(actor, NA_SE_EN_LIGHT_ARROW_HIT);
     }
 
     actor->colorFilterParams = colorFlag | xluFlag | ((colorIntensityMax & 0xF8) << 5) | duration;
@@ -4550,13 +4551,13 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
 
         if ((actor != NULL) && (arg6 > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
             if (mode == 0) {
-                Actor_PlaySfxByPos2(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+                Actor_PlaySfxAtPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else if (mode == 1) {
-                Actor_PlaySfxByPos2(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+                Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
             } else if (mode == 0xB) {
-                Actor_PlaySfxByPos2(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfxAtPos(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             } else if ((mode == 0x14) || (mode == 0x15)) {
-                Actor_PlaySfxByPos2(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
+                Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
             }
         }
 
