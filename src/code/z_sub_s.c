@@ -159,7 +159,7 @@ Actor* func_ActorCategoryIterateById(GlobalContext* globalCtx, Actor* actorListS
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E5CC.s")
 
 Actor* func_8013E640(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart,
-                                               u8 actorCategory, s16 actorId, void* data, func_8013E640_arg6 foundActor) {
+                                               u8 actorCategory, s16 actorId, void* verifyData, VerifyActor verifyActor) {
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
@@ -168,7 +168,7 @@ Actor* func_8013E640(GlobalContext* globalCtx, Actor* actor, Actor* actorListSta
     while (actorIter != NULL &&
            (actorId != actorIter->id ||
             (actorId == actorIter->id &&
-             (foundActor == NULL || (foundActor != NULL && !foundActor(globalCtx, actor, actorIter, data)))))) {
+             (verifyActor == NULL || (verifyActor != NULL && !verifyActor(globalCtx, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
     return actorIter;
