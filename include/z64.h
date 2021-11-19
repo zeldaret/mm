@@ -882,7 +882,7 @@ typedef struct {
     /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
-    /* 0x12022 */ UNK_TYPE1 unk12022;
+    /* 0x12022 */ u8 unk12022;
     /* 0x12023 */ u8 unk12023;
     /* 0x12024 */ UNK_TYPE1 unk12024[0x6];
     /* 0x1202A */ u16 unk1202A;
@@ -890,7 +890,9 @@ typedef struct {
     /* 0x1202E */ u16 unk1202E;
     /* 0x12030 */ UNK_TYPE1 pad12030[0x14];
     /* 0x12044 */ s16 unk12044;
-    /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
+    /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
+    /* 0x12048 */ u8 unk12048; // EnKakasi
+    /* 0x12049 */ UNK_TYPE1 pad12049[0x21];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];

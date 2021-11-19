@@ -170,7 +170,7 @@ beginseg
     include "build/src/libultra/voice/voicecontwrite20.o"
     include "build/src/libultra/io/crc.o"
     include "build/src/libultra/os/getactivequeue.o"
-    include "build/src/libultra/gu/normalize.o"
+    include "build/asm/boot/normalize.text.o"
     include "build/asm/boot/setcompare.text.o"
     include "build/asm/boot/getcompare.text.o"
     include "build/src/libultra/io/dpgetstat.o"
@@ -1724,8 +1724,7 @@ beginseg
     name "ovl_En_Mm"
     compress
     include "build/src/overlays/actors/ovl_En_Mm/z_en_mm.o"
-    include "build/data/ovl_En_Mm/ovl_En_Mm.data.o"
-    include "build/data/ovl_En_Mm/ovl_En_Mm.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mm/ovl_En_Mm_reloc.o"
 endseg
 
 beginseg
@@ -1787,8 +1786,7 @@ beginseg
     name "ovl_En_Kakasi"
     compress
     include "build/src/overlays/actors/ovl_En_Kakasi/z_en_kakasi.o"
-    include "build/data/ovl_En_Kakasi/ovl_En_Kakasi.data.o"
-    include "build/data/ovl_En_Kakasi/ovl_En_Kakasi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kakasi/ovl_En_Kakasi_reloc.o"
 endseg
 
 beginseg
