@@ -15,6 +15,10 @@ void BgHakaBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BD6274(BgHakaBombwall* this, GlobalContext* globalCtx);
+void func_80BD6314(BgHakaBombwall* this, GlobalContext* globalCtx);
+void func_80BD63D0(BgHakaBombwall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Haka_Bombwall_InitVars = {
     ACTOR_BG_HAKA_BOMBWALL,

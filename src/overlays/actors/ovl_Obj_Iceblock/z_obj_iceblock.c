@@ -15,6 +15,20 @@ void ObjIceblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjIceblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A257B4(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A2586C(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A25994(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A25AA8(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A25BBC(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A25C70(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A25D28(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A25E50(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A25FD4(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A26144(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A262EC(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A265C0(ObjIceblock* this, GlobalContext* globalCtx);
+void func_80A266E0(ObjIceblock* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Iceblock_InitVars = {
     ACTOR_OBJ_ICEBLOCK,

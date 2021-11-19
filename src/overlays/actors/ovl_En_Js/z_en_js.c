@@ -15,6 +15,14 @@ void EnJs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8096971C(EnJs* this, GlobalContext* globalCtx);
+void func_80969898(EnJs* this, GlobalContext* globalCtx);
+void func_80969B5C(EnJs* this, GlobalContext* globalCtx);
+void func_80969DA4(EnJs* this, GlobalContext* globalCtx);
+void func_8096A104(EnJs* this, GlobalContext* globalCtx);
+void func_8096A38C(EnJs* this, GlobalContext* globalCtx);
+void func_8096A6F4(EnJs* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Js_InitVars = {
     ACTOR_EN_JS,

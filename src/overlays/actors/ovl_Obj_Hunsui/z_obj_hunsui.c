@@ -15,6 +15,11 @@ void ObjHunsui_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHunsui_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHunsui_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B9CE64(ObjHunsui* this, GlobalContext* globalCtx);
+void func_80B9D120(ObjHunsui* this, GlobalContext* globalCtx);
+void func_80B9D508(ObjHunsui* this, GlobalContext* globalCtx);
+void func_80B9D714(ObjHunsui* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Hunsui_InitVars = {
     ACTOR_OBJ_HUNSUI,

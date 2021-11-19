@@ -14,6 +14,12 @@ void ObjGrassCarry_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjGrassCarry_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjGrassCarry_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809AB3D8(ObjGrassCarry* this, GlobalContext* globalCtx);
+void func_809AB43C(ObjGrassCarry* this, GlobalContext* globalCtx);
+void func_809AB4A8(ObjGrassCarry* this, GlobalContext* globalCtx);
+void func_809AB610(ObjGrassCarry* this, GlobalContext* globalCtx);
+void func_809AB77C(ObjGrassCarry* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Grass_Carry_InitVars = {
     ACTOR_OBJ_GRASS_CARRY,

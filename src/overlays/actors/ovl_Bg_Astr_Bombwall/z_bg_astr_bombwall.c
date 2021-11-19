@@ -15,6 +15,10 @@ void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C0A38C(BgAstrBombwall* this, GlobalContext* globalCtx);
+void func_80C0A418(BgAstrBombwall* this, GlobalContext* globalCtx);
+void func_80C0A4BC(BgAstrBombwall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Astr_Bombwall_InitVars = {
     ACTOR_BG_ASTR_BOMBWALL,

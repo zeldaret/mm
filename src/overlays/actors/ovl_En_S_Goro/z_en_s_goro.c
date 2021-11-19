@@ -15,6 +15,18 @@ void EnSGoro_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSGoro_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSGoro_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BBE73C(EnSGoro* this, GlobalContext* globalCtx);
+void func_80BBE844(EnSGoro* this, GlobalContext* globalCtx);
+void func_80BBE904(EnSGoro* this, GlobalContext* globalCtx);
+void func_80BBE9F8(EnSGoro* this, GlobalContext* globalCtx);
+void func_80BBEAD8(EnSGoro* this, GlobalContext* globalCtx);
+void func_80BBEBF8(EnSGoro* this, GlobalContext* globalCtx);
+void func_80BBECBC(EnSGoro* this, GlobalContext* globalCtx);
+void func_80BBEEB4(EnSGoro* this, GlobalContext* globalCtx);
+void func_80BBEF34(EnSGoro* this, GlobalContext* globalCtx);
+void func_80BBEFA0(EnSGoro* this, GlobalContext* globalCtx);
+void func_80BBF01C(EnSGoro* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_S_Goro_InitVars = {
     ACTOR_EN_S_GORO,

@@ -15,6 +15,9 @@ void ObjLupygamelift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjLupygamelift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjLupygamelift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AF04D8(ObjLupygamelift* this, GlobalContext* globalCtx);
+void func_80AF0530(ObjLupygamelift* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Lupygamelift_InitVars = {
     ACTOR_OBJ_LUPYGAMELIFT,

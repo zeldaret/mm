@@ -15,6 +15,20 @@ void EnScopenuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScopenuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScopenuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BCB078(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCB1C8(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCB4DC(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCB52C(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCB90C(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCB980(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCBA00(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCBC60(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCBD28(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCBF0C(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCBFFC(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCC288(EnScopenuts* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Scopenuts_InitVars = {
     ACTOR_EN_SCOPENUTS,

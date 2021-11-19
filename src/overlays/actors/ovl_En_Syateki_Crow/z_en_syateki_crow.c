@@ -15,6 +15,11 @@ void EnSyatekiCrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx);
+void func_809CA840(EnSyatekiCrow* this, GlobalContext* globalCtx);
+void func_809CA8E4(EnSyatekiCrow* this, GlobalContext* globalCtx);
+void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Syateki_Crow_InitVars = {
     ACTOR_EN_SYATEKI_CROW,

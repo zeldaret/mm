@@ -15,6 +15,13 @@ void ObjSpinyroll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpinyroll_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpinyroll_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A1E9E0(ObjSpinyroll* this, GlobalContext* globalCtx);
+void func_80A1EA4C(ObjSpinyroll* this, GlobalContext* globalCtx);
+void func_80A1EAE0(ObjSpinyroll* this, GlobalContext* globalCtx);
+void func_80A1EB54(ObjSpinyroll* this, GlobalContext* globalCtx);
+void func_80A1EC38(ObjSpinyroll* this, GlobalContext* globalCtx);
+void func_80A1ECD4(ObjSpinyroll* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Spinyroll_InitVars = {
     ACTOR_OBJ_SPINYROLL,

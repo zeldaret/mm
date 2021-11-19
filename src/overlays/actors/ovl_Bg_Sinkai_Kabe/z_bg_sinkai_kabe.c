@@ -14,6 +14,8 @@ void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSinkaiKabe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSinkaiKabe_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B6DA20(BgSinkaiKabe* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Sinkai_Kabe_InitVars = {
     ACTOR_BG_SINKAI_KABE,

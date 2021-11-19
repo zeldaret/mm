@@ -15,6 +15,7 @@ void ElfMsg3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg3_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void ElfMsg3_SetupAction(ElfMsg3* this, ElfMsg3ActionFunc actionFunc);
+void func_80A2CF7C(ElfMsg3* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit Elf_Msg3_InitVars = {

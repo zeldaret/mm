@@ -15,6 +15,8 @@ void DmChar04_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmChar04_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar04_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AABE34(DmChar04* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Dm_Char04_InitVars = {
     ACTOR_DM_CHAR04,

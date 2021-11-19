@@ -15,6 +15,14 @@ void EnDoor_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDoor_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80866A5C(EnDoor* this, GlobalContext* globalCtx);
+void func_80866B20(EnDoor* this, GlobalContext* globalCtx);
+void func_80866F94(EnDoor* this, GlobalContext* globalCtx);
+void func_8086704C(EnDoor* this, GlobalContext* globalCtx);
+void func_80867080(EnDoor* this, GlobalContext* globalCtx);
+void func_808670F0(EnDoor* this, GlobalContext* globalCtx);
+void func_80867144(EnDoor* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Door_InitVars = {
     ACTOR_EN_DOOR,

@@ -14,6 +14,13 @@ void ObjPurify_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjPurify_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjPurify_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A84EC0(ObjPurify* this, GlobalContext* globalCtx);
+void func_80A84FB4(ObjPurify* this, GlobalContext* globalCtx);
+void func_80A85010(ObjPurify* this, GlobalContext* globalCtx);
+void func_80A85074(ObjPurify* this, GlobalContext* globalCtx);
+void func_80A850E8(ObjPurify* this, GlobalContext* globalCtx);
+void func_80A85194(ObjPurify* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Purify_InitVars = {
     ACTOR_OBJ_PURIFY,

@@ -15,6 +15,12 @@ void EnMm3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMm3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMm3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A6F2C8(EnMm3* this, GlobalContext* globalCtx);
+void func_80A6F9DC(EnMm3* this, GlobalContext* globalCtx);
+void func_80A6FBFC(EnMm3* this, GlobalContext* globalCtx);
+void func_80A6FE30(EnMm3* this, GlobalContext* globalCtx);
+void func_80A6FEEC(EnMm3* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Mm3_InitVars = {
     ACTOR_EN_MM3,

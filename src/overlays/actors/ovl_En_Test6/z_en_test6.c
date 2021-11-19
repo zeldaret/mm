@@ -15,12 +15,11 @@ void EnTest6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest6_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTest6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void EnTest6_SetupAction(EnTest6* this, EnTest6ActionFunc actionFunc);
 void func_80A9156C(EnTest6* this, GlobalContext* globalCtx);
 void func_80A91760(EnTest6* this, GlobalContext* globalCtx);
 void func_80A92188(EnTest6* this, GlobalContext* globalCtx);
 void func_80A92950(EnTest6* this, GlobalContext* globalCtx);
-
-void EnTest6_SetupAction(EnTest6* this, EnTest6ActionFunc actionFunc);
 
 #if 0
 const ActorInit En_Test6_InitVars = {

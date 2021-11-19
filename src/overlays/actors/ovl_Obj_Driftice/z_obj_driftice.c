@@ -15,6 +15,11 @@ void ObjDriftice_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDriftice_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDriftice_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A671BC(ObjDriftice* this, GlobalContext* globalCtx);
+void func_80A671E0(ObjDriftice* this, GlobalContext* globalCtx);
+void func_80A67450(ObjDriftice* this, GlobalContext* globalCtx);
+void func_80A674C4(ObjDriftice* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Driftice_InitVars = {
     ACTOR_OBJ_DRIFTICE,

@@ -15,6 +15,10 @@ void BgHakuginBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80ABCCE4(BgHakuginBombwall* this, GlobalContext* globalCtx);
+void func_80ABCD98(BgHakuginBombwall* this, GlobalContext* globalCtx);
+void func_80ABCE60(BgHakuginBombwall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Hakugin_Bombwall_InitVars = {
     ACTOR_BG_HAKUGIN_BOMBWALL,

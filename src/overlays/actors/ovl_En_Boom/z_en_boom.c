@@ -15,9 +15,8 @@ void EnBoom_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBoom_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBoom_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808A2918(EnBoom* this, GlobalContext* globalCtx);
-
 void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc);
+void func_808A2918(EnBoom* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Boom_InitVars = {

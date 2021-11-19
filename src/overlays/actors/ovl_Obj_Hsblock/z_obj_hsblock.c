@@ -15,9 +15,9 @@ void ObjHsblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHsblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHsblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_8093E0A0(ObjHsblock* this, GlobalContext* globalCtx);
-
 void ObjHsblock_SetupAction(ObjHsblock* this, ObjHsblockActionFunc actionFunc);
+void func_8093E0A0(ObjHsblock* this, GlobalContext* globalCtx);
+void func_8093E10C(ObjHsblock* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit Obj_Hsblock_InitVars = {

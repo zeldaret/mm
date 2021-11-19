@@ -15,6 +15,18 @@ void EnNeoReeba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNeoReeba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNeoReeba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B7CA70(EnNeoReeba* this, GlobalContext* globalCtx);
+void func_80B7CB88(EnNeoReeba* this, GlobalContext* globalCtx);
+void func_80B7CD28(EnNeoReeba* this, GlobalContext* globalCtx);
+void func_80B7CE94(EnNeoReeba* this, GlobalContext* globalCtx);
+void func_80B7CFFC(EnNeoReeba* this, GlobalContext* globalCtx);
+void func_80B7D150(EnNeoReeba* this, GlobalContext* globalCtx);
+void func_80B7D2E4(EnNeoReeba* this, GlobalContext* globalCtx);
+void func_80B7D398(EnNeoReeba* this, GlobalContext* globalCtx);
+void func_80B7D47C(EnNeoReeba* this, GlobalContext* globalCtx);
+void func_80B7D5A4(EnNeoReeba* this, GlobalContext* globalCtx);
+void func_80B7D788(EnNeoReeba* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Neo_Reeba_InitVars = {
     ACTOR_EN_NEO_REEBA,

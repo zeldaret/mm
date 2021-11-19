@@ -14,9 +14,8 @@ void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx);
 void ItemEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ItemEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80920044(ItemEtcetera* this, GlobalContext* globalCtx);
-
 void ItemEtcetera_SetupAction(ItemEtcetera* this, ItemEtceteraActionFunc actionFunc);
+void func_80920044(ItemEtcetera* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit Item_Etcetera_InitVars = {

@@ -15,6 +15,11 @@ void EnTsn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTsn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AE0304(EnTsn* this, GlobalContext* globalCtx);
+void func_80AE0704(EnTsn* this, GlobalContext* globalCtx);
+void func_80AE0C88(EnTsn* this, GlobalContext* globalCtx);
+void func_80AE0D78(EnTsn* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Tsn_InitVars = {
     ACTOR_EN_TSN,

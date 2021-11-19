@@ -18,6 +18,7 @@ void func_809358D8(EnKusa* this, GlobalContext* globalCtx);
 void func_809359AC(EnKusa* this, GlobalContext* globalCtx);
 void func_80935BBC(EnKusa* this, GlobalContext* globalCtx);
 void func_80935D64(EnKusa* this, GlobalContext* globalCtx);
+void func_80936168(EnKusa* this, GlobalContext* globalCtx);
 void func_809361A4(EnKusa* this, GlobalContext* globalCtx);
 void func_80936220(EnKusa* this, GlobalContext* globalCtx);
 void func_809362D8(EnKusa* this, GlobalContext* globalCtx);

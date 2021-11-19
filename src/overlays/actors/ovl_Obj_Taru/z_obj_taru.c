@@ -15,6 +15,10 @@ void ObjTaru_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTaru_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTaru_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B9C07C(ObjTaru* this, GlobalContext* globalCtx);
+void func_80B9C174(ObjTaru* this, GlobalContext* globalCtx);
+void func_80B9C1A0(ObjTaru* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Taru_InitVars = {
     ACTOR_OBJ_TARU,

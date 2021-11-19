@@ -15,6 +15,16 @@ void EnBal_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBal_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBal_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A61B5C(EnBal* this, GlobalContext* globalCtx);
+void func_80A61CE4(EnBal* this, GlobalContext* globalCtx);
+void func_80A61E5C(EnBal* this, GlobalContext* globalCtx);
+void func_80A621C4(EnBal* this, GlobalContext* globalCtx);
+void func_80A622A0(EnBal* this, GlobalContext* globalCtx);
+void func_80A624DC(EnBal* this, GlobalContext* globalCtx);
+void func_80A62830(EnBal* this, GlobalContext* globalCtx);
+void func_80A634C8(EnBal* this, GlobalContext* globalCtx);
+void func_80A635F0(EnBal* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bal_InitVars = {
     ACTOR_EN_BAL,

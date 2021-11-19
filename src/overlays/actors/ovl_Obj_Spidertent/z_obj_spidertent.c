@@ -15,6 +15,10 @@ void ObjSpidertent_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpidertent_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpidertent_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B30808(ObjSpidertent* this, GlobalContext* globalCtx);
+void func_80B30A4C(ObjSpidertent* this, GlobalContext* globalCtx);
+void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Spidertent_InitVars = {
     ACTOR_OBJ_SPIDERTENT,

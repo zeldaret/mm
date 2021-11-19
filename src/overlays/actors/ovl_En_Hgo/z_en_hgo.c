@@ -15,6 +15,11 @@ void EnHgo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BD0410(EnHgo* this, GlobalContext* globalCtx);
+void func_80BD0434(EnHgo* this, GlobalContext* globalCtx);
+void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx);
+void func_80BD0660(EnHgo* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,

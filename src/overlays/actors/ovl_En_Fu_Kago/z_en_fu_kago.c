@@ -15,6 +15,11 @@ void EnFuKago_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFuKago_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFuKago_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80ACF9A8(EnFuKago* this, GlobalContext* globalCtx);
+void func_80ACF9FC(EnFuKago* this, GlobalContext* globalCtx);
+void func_80AD0028(EnFuKago* this, GlobalContext* globalCtx);
+void func_80AD0288(EnFuKago* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Fu_Kago_InitVars = {
     ACTOR_EN_FU_KAGO,

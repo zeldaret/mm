@@ -15,6 +15,15 @@ void EnKendoJs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKendoJs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKendoJs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B2654C(EnKendoJs* this, GlobalContext* globalCtx);
+void func_80B26AFC(EnKendoJs* this, GlobalContext* globalCtx);
+void func_80B27030(EnKendoJs* this, GlobalContext* globalCtx);
+void func_80B27188(EnKendoJs* this, GlobalContext* globalCtx);
+void func_80B2740C(EnKendoJs* this, GlobalContext* globalCtx);
+void func_80B274BC(EnKendoJs* this, GlobalContext* globalCtx);
+void func_80B276D8(EnKendoJs* this, GlobalContext* globalCtx);
+void func_80B27774(EnKendoJs* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Kendo_Js_InitVars = {
     ACTOR_EN_KENDO_JS,

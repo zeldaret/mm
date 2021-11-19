@@ -14,6 +14,24 @@ void EnKaizoku_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKaizoku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKaizoku_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B85FA8(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B868B8(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B86B74(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B872F4(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B8760C(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B8798C(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B87D3C(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B87E9C(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B87FDC(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B88278(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B88378(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B887AC(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B88964(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B88D6C(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B89280(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B894C0(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B8971C(EnKaizoku* this, GlobalContext* globalCtx);
+
 #if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_80B8AB3C = {

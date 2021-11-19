@@ -15,6 +15,8 @@ void EnBh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C22DEC(EnBh* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bh_InitVars = {
     ACTOR_EN_BH,

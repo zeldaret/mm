@@ -15,6 +15,11 @@ void BgIkanaBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BD4F2C(BgIkanaBombwall* this, GlobalContext* globalCtx);
+void func_80BD4F9C(BgIkanaBombwall* this, GlobalContext* globalCtx);
+void func_80BD503C(BgIkanaBombwall* this, GlobalContext* globalCtx);
+void func_80BD5134(BgIkanaBombwall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Ikana_Bombwall_InitVars = {
     ACTOR_BG_IKANA_BOMBWALL,

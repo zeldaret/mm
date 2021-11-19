@@ -15,10 +15,11 @@ void ObjectKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjectKankyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjectKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void ObjectKankyo_SetupAction(ObjectKankyo* this, ObjectKankyoActionFunc actionFunc);
+void func_808DC18C(ObjectKankyo* this, GlobalContext* globalCtx);
 void func_808DCB7C(ObjectKankyo* this, GlobalContext* globalCtx);
 void func_808DCBF8(ObjectKankyo* this, GlobalContext* globalCtx);
-
-void ObjectKankyo_SetupAction(ObjectKankyo* this, ObjectKankyoActionFunc actionFunc);
+void func_808DCDB4(ObjectKankyo* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit Object_Kankyo_InitVars = {

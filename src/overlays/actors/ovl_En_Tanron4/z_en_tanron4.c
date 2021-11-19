@@ -15,6 +15,9 @@ void EnTanron4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron4_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron4_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BE3DFC(EnTanron4* this, GlobalContext* globalCtx);
+void func_80BE42A4(EnTanron4* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Tanron4_InitVars = {
     ACTOR_EN_TANRON4,

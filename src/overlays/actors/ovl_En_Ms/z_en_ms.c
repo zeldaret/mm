@@ -15,6 +15,11 @@ void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80952734(EnMs* this, GlobalContext* globalCtx);
+void func_809527F8(EnMs* this, GlobalContext* globalCtx);
+void func_809529AC(EnMs* this, GlobalContext* globalCtx);
+void func_80952A1C(EnMs* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ms_InitVars = {
     ACTOR_EN_MS,

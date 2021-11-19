@@ -15,6 +15,25 @@ void ObjSwitch_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwitch_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwitch_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8093B668(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093B710(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093B940(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093B9E4(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093BB70(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093BCDC(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093BD4C(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093BDC0(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093BE2C(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093BF04(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093BF70(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093C0B8(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093C15C(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093C250(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093C2D4(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093C3DC(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093C488(ObjSwitch* this, GlobalContext* globalCtx);
+void func_8093C598(ObjSwitch* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Switch_InitVars = {
     ACTOR_OBJ_SWITCH,

@@ -15,6 +15,12 @@ void BgSpdweb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpdweb_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgSpdweb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809CE234(BgSpdweb* this, GlobalContext* globalCtx);
+void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx);
+void func_809CE830(BgSpdweb* this, GlobalContext* globalCtx);
+void func_809CEBC0(BgSpdweb* this, GlobalContext* globalCtx);
+void func_809CEEAC(BgSpdweb* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Spdweb_InitVars = {
     ACTOR_BG_SPDWEB,

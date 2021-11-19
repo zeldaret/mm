@@ -14,6 +14,12 @@ void EnElfgrp_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnElfgrp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnElfgrp_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A3A398(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A520(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A600(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A7FC(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A8F8(EnElfgrp* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Elfgrp_InitVars = {
     ACTOR_EN_ELFGRP,

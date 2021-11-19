@@ -15,6 +15,8 @@ void BgBotihasira_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgBotihasira_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgBotihasira_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B2815C(BgBotihasira* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Botihasira_InitVars = {
     ACTOR_BG_BOTIHASIRA,

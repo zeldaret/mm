@@ -14,7 +14,6 @@ void EnDrs_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80C1E2D4(EnDrs* this, GlobalContext* globalCtx);
 void func_80C1E3DC(EnDrs* this, GlobalContext* globalCtx);
 
 #if 0

@@ -16,7 +16,6 @@ void EnNwc_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNwc_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809448A4(EnNwc* this, GlobalContext* globalCtx);
-void func_809449D0(EnNwc* this, GlobalContext* globalCtx);
 void func_80944A50(EnNwc* this, GlobalContext* globalCtx);
 void func_80944E44(EnNwc* this, GlobalContext* globalCtx);
 void func_80944EFC(EnNwc* this, GlobalContext* globalCtx);

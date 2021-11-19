@@ -15,6 +15,16 @@ void EnJgameTsn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJgameTsn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJgameTsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C13BB8(EnJgameTsn* this, GlobalContext* globalCtx);
+void func_80C13E90(EnJgameTsn* this, GlobalContext* globalCtx);
+void func_80C13F9C(EnJgameTsn* this, GlobalContext* globalCtx);
+void func_80C14044(EnJgameTsn* this, GlobalContext* globalCtx);
+void func_80C1418C(EnJgameTsn* this, GlobalContext* globalCtx);
+void func_80C14230(EnJgameTsn* this, GlobalContext* globalCtx);
+void func_80C144F8(EnJgameTsn* this, GlobalContext* globalCtx);
+void func_80C14554(EnJgameTsn* this, GlobalContext* globalCtx);
+void func_80C14610(EnJgameTsn* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Jgame_Tsn_InitVars = {
     ACTOR_EN_JGAME_TSN,

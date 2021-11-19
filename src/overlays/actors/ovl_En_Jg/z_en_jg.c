@@ -15,6 +15,17 @@ void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B74134(EnJg* this, GlobalContext* globalCtx);
+void func_80B741F8(EnJg* this, GlobalContext* globalCtx);
+void func_80B742F8(EnJg* this, GlobalContext* globalCtx);
+void func_80B74440(EnJg* this, GlobalContext* globalCtx);
+void func_80B74550(EnJg* this, GlobalContext* globalCtx);
+void func_80B747C8(EnJg* this, GlobalContext* globalCtx);
+void func_80B749D0(EnJg* this, GlobalContext* globalCtx);
+void func_80B74AD8(EnJg* this, GlobalContext* globalCtx);
+void func_80B74B54(EnJg* this, GlobalContext* globalCtx);
+void func_80B74BC8(EnJg* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Jg_InitVars = {
     ACTOR_EN_JG,

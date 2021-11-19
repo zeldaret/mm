@@ -15,6 +15,10 @@ void BgDkjailIvy_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDkjailIvy_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDkjailIvy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80ADE6C0(BgDkjailIvy* this, GlobalContext* globalCtx);
+void func_80ADE748(BgDkjailIvy* this, GlobalContext* globalCtx);
+void func_80ADE7F4(BgDkjailIvy* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Dkjail_Ivy_InitVars = {
     ACTOR_BG_DKJAIL_IVY,

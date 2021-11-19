@@ -15,6 +15,10 @@ void BgKin2Shelf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Shelf_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Shelf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B700C0(BgKin2Shelf* this, GlobalContext* globalCtx);
+void func_80B70230(BgKin2Shelf* this, GlobalContext* globalCtx);
+void func_80B704B4(BgKin2Shelf* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Kin2_Shelf_InitVars = {
     ACTOR_BG_KIN2_SHELF,

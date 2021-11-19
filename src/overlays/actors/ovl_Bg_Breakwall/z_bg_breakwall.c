@@ -14,6 +14,7 @@ void BgBreakwall_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgBreakwall_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void BgBreakwall_SetupAction(BgBreakwall* this, BgBreakwallActionFunc actionFunc);
+void func_808B76CC(BgBreakwall* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit Bg_Breakwall_InitVars = {

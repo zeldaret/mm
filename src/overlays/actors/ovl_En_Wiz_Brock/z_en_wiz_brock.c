@@ -15,6 +15,9 @@ void EnWizBrock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWizBrock_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWizBrock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A490E4(EnWizBrock* this, GlobalContext* globalCtx);
+void func_80A490FC(EnWizBrock* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Wiz_Brock_InitVars = {
     ACTOR_EN_WIZ_BROCK,

@@ -15,6 +15,14 @@ void ObjOcarinalift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjOcarinalift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjOcarinalift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AC96A4(ObjOcarinalift* this, GlobalContext* globalCtx);
+void func_80AC96D0(ObjOcarinalift* this, GlobalContext* globalCtx);
+void func_80AC99D4(ObjOcarinalift* this, GlobalContext* globalCtx);
+void func_80AC9A7C(ObjOcarinalift* this, GlobalContext* globalCtx);
+void func_80AC9AE0(ObjOcarinalift* this, GlobalContext* globalCtx);
+void func_80AC9B5C(ObjOcarinalift* this, GlobalContext* globalCtx);
+void func_80AC9C48(ObjOcarinalift* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Ocarinalift_InitVars = {
     ACTOR_OBJ_OCARINALIFT,

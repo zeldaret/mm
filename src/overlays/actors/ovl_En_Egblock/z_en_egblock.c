@@ -15,6 +15,10 @@ void EnEgblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEgblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEgblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80ABA8A4(EnEgblock* this, GlobalContext* globalCtx);
+void func_80ABA988(EnEgblock* this, GlobalContext* globalCtx);
+void func_80ABA9B8(EnEgblock* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Egblock_InitVars = {
     ACTOR_EN_EGBLOCK,

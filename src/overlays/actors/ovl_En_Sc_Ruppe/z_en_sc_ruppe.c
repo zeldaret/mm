@@ -15,7 +15,6 @@ void EnScRuppe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScRuppe_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BD6A8C(EnScRuppe* this, GlobalContext* globalCtx);
 void func_80BD6B18(EnScRuppe* this, GlobalContext* globalCtx);
 
 #if 0

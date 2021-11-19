@@ -15,6 +15,13 @@ void EnVm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnVm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808CC490(EnVm* this, GlobalContext* globalCtx);
+void func_808CC610(EnVm* this, GlobalContext* globalCtx);
+void func_808CC820(EnVm* this, GlobalContext* globalCtx);
+void func_808CCAA4(EnVm* this, GlobalContext* globalCtx);
+void func_808CCB50(EnVm* this, GlobalContext* globalCtx);
+void func_808CCCF0(EnVm* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Vm_InitVars = {
     ACTOR_EN_VM,

@@ -15,6 +15,9 @@ void EnFall2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFall2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFall2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C1B8A4(EnFall2* this, GlobalContext* globalCtx);
+void func_80C1B9D4(EnFall2* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Fall2_InitVars = {
     ACTOR_EN_FALL2,

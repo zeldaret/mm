@@ -15,6 +15,18 @@ void EnWiz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWiz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWiz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A46280(EnWiz* this, GlobalContext* globalCtx);
+void func_80A462F8(EnWiz* this, GlobalContext* globalCtx);
+void func_80A46414(EnWiz* this, GlobalContext* globalCtx);
+void func_80A46764(EnWiz* this, GlobalContext* globalCtx);
+void func_80A468CC(EnWiz* this, GlobalContext* globalCtx);
+void func_80A46990(EnWiz* this, GlobalContext* globalCtx);
+void func_80A46CC4(EnWiz* this, GlobalContext* globalCtx);
+void func_80A46E24(EnWiz* this, GlobalContext* globalCtx);
+void func_80A470D8(EnWiz* this, GlobalContext* globalCtx);
+void func_80A473B8(EnWiz* this, GlobalContext* globalCtx);
+void func_80A476C8(EnWiz* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,

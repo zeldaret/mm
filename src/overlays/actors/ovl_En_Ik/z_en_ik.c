@@ -15,6 +15,20 @@ void EnIk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80929F20(EnIk* this, GlobalContext* globalCtx);
+void func_8092A020(EnIk* this, GlobalContext* globalCtx);
+void func_8092A188(EnIk* this, GlobalContext* globalCtx);
+void func_8092A33C(EnIk* this, GlobalContext* globalCtx);
+void func_8092A5BC(EnIk* this, GlobalContext* globalCtx);
+void func_8092A754(EnIk* this, GlobalContext* globalCtx);
+void func_8092A994(EnIk* this, GlobalContext* globalCtx);
+void func_8092AB14(EnIk* this, GlobalContext* globalCtx);
+void func_8092ABD8(EnIk* this, GlobalContext* globalCtx);
+void func_8092ACFC(EnIk* this, GlobalContext* globalCtx);
+void func_8092AE14(EnIk* this, GlobalContext* globalCtx);
+void func_8092AFD4(EnIk* this, GlobalContext* globalCtx);
+void func_8092B098(EnIk* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ik_InitVars = {
     ACTOR_EN_IK,

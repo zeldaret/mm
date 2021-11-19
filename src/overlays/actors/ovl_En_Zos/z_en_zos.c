@@ -15,6 +15,12 @@ void EnZos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BBB8AC(EnZos* this, GlobalContext* globalCtx);
+void func_80BBBDE0(EnZos* this, GlobalContext* globalCtx);
+void func_80BBC14C(EnZos* this, GlobalContext* globalCtx);
+void func_80BBC24C(EnZos* this, GlobalContext* globalCtx);
+void func_80BBC37C(EnZos* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Zos_InitVars = {
     ACTOR_EN_ZOS,

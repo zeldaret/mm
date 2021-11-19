@@ -15,6 +15,21 @@ void EnAkindonuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAkindonuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAkindonuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BEEDC0(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEEE10(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEF18C(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEF20C(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEF360(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEF450(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEF4B8(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEF518(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEF770(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEF83C(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEF9F0(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEFAF0(EnAkindonuts* this, GlobalContext* globalCtx);
+void func_80BEFD74(EnAkindonuts* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Akindonuts_InitVars = {
     ACTOR_EN_AKINDONUTS,

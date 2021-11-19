@@ -15,10 +15,9 @@ void OceffStorm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void OceffStorm_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffStorm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc);
 void func_80981928(OceffStorm* this, GlobalContext* globalCtx);
 void func_80981B48(OceffStorm* this, GlobalContext* globalCtx);
-
-void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc);
 
 #if 0
 const ActorInit Oceff_Storm_InitVars = {

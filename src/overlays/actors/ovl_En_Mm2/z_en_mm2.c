@@ -15,7 +15,6 @@ void EnMm2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMm2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMm2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809A2080(EnMm2* this, GlobalContext* globalCtx);
 void func_809A20FC(EnMm2* this, GlobalContext* globalCtx);
 
 #if 0

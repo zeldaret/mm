@@ -15,6 +15,23 @@ void EnLiftNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLiftNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLiftNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AE9F70(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEA044(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEA128(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEA1A0(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEAC64(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEACF8(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEAF14(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEAFA0(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB148(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB230(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB294(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB428(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB598(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB698(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB8A4(EnLiftNuts* this, GlobalContext* globalCtx);
+void func_80AEB934(EnLiftNuts* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Lift_Nuts_InitVars = {
     ACTOR_EN_LIFT_NUTS,

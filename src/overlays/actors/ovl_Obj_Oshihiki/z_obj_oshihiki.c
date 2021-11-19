@@ -15,6 +15,11 @@ void ObjOshihiki_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjOshihiki_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjOshihiki_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80917FC0(ObjOshihiki* this, GlobalContext* globalCtx);
+void func_80918108(ObjOshihiki* this, GlobalContext* globalCtx);
+void func_8091834C(ObjOshihiki* this, GlobalContext* globalCtx);
+void func_80918574(ObjOshihiki* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Oshihiki_InitVars = {
     ACTOR_OBJ_OSHIHIKI,

@@ -15,6 +15,22 @@ void EnEgol_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEgol_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEgol_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A7D168(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7D240(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7D2C4(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7D780(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7DAF0(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7E344(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7E4B4(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7E820(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7E970(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7EA28(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7EAD8(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7EB54(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7EBDC(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7EC84(EnEgol* this, GlobalContext* globalCtx);
+void func_80A7ED14(EnEgol* this, GlobalContext* globalCtx);
+
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[6] = {
 static ColliderJntSphElementInit D_80A80C64[6] = {

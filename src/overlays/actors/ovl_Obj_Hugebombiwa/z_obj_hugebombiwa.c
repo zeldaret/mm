@@ -15,6 +15,11 @@ void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHugebombiwa_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHugebombiwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A54C04(ObjHugebombiwa* this, GlobalContext* globalCtx);
+void func_80A54CEC(ObjHugebombiwa* this, GlobalContext* globalCtx);
+void func_80A55064(ObjHugebombiwa* this, GlobalContext* globalCtx);
+void func_80A55564(ObjHugebombiwa* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Hugebombiwa_InitVars = {
     ACTOR_OBJ_HUGEBOMBIWA,

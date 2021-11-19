@@ -15,6 +15,10 @@ void ObjFlowerpot_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjFlowerpot_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjFlowerpot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A1C838(ObjFlowerpot* this, GlobalContext* globalCtx);
+void func_80A1CC0C(ObjFlowerpot* this, GlobalContext* globalCtx);
+void func_80A1CEF4(ObjFlowerpot* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Flowerpot_InitVars = {
     ACTOR_OBJ_FLOWERPOT,

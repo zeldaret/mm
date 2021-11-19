@@ -15,6 +15,11 @@ void ObjDanpeilift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDanpeilift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDanpeilift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C1AF84(ObjDanpeilift* this, GlobalContext* globalCtx);
+void func_80C1AF94(ObjDanpeilift* this, GlobalContext* globalCtx);
+void func_80C1B210(ObjDanpeilift* this, GlobalContext* globalCtx);
+void func_80C1B26C(ObjDanpeilift* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Danpeilift_InitVars = {
     ACTOR_OBJ_DANPEILIFT,

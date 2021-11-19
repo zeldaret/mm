@@ -15,6 +15,21 @@ void EnTalkGibud_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalkGibud_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AFEB7C(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFEC4C(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFED7C(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFF288(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFF378(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFF4AC(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFF6A0(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFF76C(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFF8E4(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFFA68(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFFE94(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80AFFFBC(EnTalkGibud* this, GlobalContext* globalCtx);
+void func_80B00158(EnTalkGibud* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Talk_Gibud_InitVars = {
     ACTOR_EN_TALK_GIBUD,

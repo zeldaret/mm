@@ -15,6 +15,18 @@ void EnPp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPp_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPp_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B1E970(EnPp* this, GlobalContext* globalCtx);
+void func_80B1EC24(EnPp* this, GlobalContext* globalCtx);
+void func_80B1F048(EnPp* this, GlobalContext* globalCtx);
+void func_80B1F188(EnPp* this, GlobalContext* globalCtx);
+void func_80B1F29C(EnPp* this, GlobalContext* globalCtx);
+void func_80B1F560(EnPp* this, GlobalContext* globalCtx);
+void func_80B1F6B4(EnPp* this, GlobalContext* globalCtx);
+void func_80B1F940(EnPp* this, GlobalContext* globalCtx);
+void func_80B1FC7C(EnPp* this, GlobalContext* globalCtx);
+void func_80B20030(EnPp* this, GlobalContext* globalCtx);
+void func_80B203BC(EnPp* this, GlobalContext* globalCtx);
+
 #if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_80B21624 = {

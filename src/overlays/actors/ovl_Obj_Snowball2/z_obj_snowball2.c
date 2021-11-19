@@ -15,6 +15,11 @@ void ObjSnowball2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSnowball2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSnowball2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx);
+void func_80B39FA8(ObjSnowball2* this, GlobalContext* globalCtx);
+void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx);
+void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Snowball2_InitVars = {
     ACTOR_OBJ_SNOWBALL2,

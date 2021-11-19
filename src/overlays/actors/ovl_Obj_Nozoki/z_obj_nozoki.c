@@ -14,15 +14,17 @@ void ObjNozoki_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjNozoki_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjNozoki_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void ObjNozoki_SetupAction(ObjNozoki* this, ObjNozokiActionFunc actionFunc);
 void func_80BA2514(ObjNozoki* this, GlobalContext* globalCtx);
+void func_80BA27C4(ObjNozoki* this, GlobalContext* globalCtx);
 void func_80BA28DC(ObjNozoki* this, GlobalContext* globalCtx);
 void func_80BA2AB4(ObjNozoki* this, GlobalContext* globalCtx);
 void func_80BA2BA4(ObjNozoki* this, GlobalContext* globalCtx);
+void func_80BA2C94(ObjNozoki* this, GlobalContext* globalCtx);
 void func_80BA3044(ObjNozoki* this, GlobalContext* globalCtx);
+void func_80BA311C(ObjNozoki* this, GlobalContext* globalCtx);
 void func_80BA3230(ObjNozoki* this, GlobalContext* globalCtx);
 void func_80BA3344(ObjNozoki* this, GlobalContext* globalCtx);
-
-void ObjNozoki_SetupAction(ObjNozoki* this, ObjNozokiActionFunc actionFunc);
 
 #if 0
 const ActorInit Obj_Nozoki_InitVars = {

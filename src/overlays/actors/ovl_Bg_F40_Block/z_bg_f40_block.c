@@ -15,6 +15,12 @@ void BgF40Block_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Block_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Block_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BC4344(BgF40Block* this, GlobalContext* globalCtx);
+void func_80BC4380(BgF40Block* this, GlobalContext* globalCtx);
+void func_80BC44F4(BgF40Block* this, GlobalContext* globalCtx);
+void func_80BC4530(BgF40Block* this, GlobalContext* globalCtx);
+void func_80BC457C(BgF40Block* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_F40_Block_InitVars = {
     ACTOR_BG_F40_BLOCK,

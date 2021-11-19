@@ -15,6 +15,8 @@ void EnDs2n_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDs2n_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDs2n_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AE16A0(EnDs2n* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ds2n_InitVars = {
     ACTOR_EN_DS2N,

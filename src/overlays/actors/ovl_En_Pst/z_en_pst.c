@@ -15,7 +15,6 @@ void EnPst_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPst_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPst_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B2BD98(EnPst* this, GlobalContext* globalCtx);
 void func_80B2BE54(EnPst* this, GlobalContext* globalCtx);
 
 #if 0

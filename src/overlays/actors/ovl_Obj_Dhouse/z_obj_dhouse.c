@@ -15,6 +15,10 @@ void ObjDhouse_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDhouse_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDhouse_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B1391C(ObjDhouse* this, GlobalContext* globalCtx);
+void func_80B13940(ObjDhouse* this, GlobalContext* globalCtx);
+void func_80B139F4(ObjDhouse* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Dhouse_InitVars = {
     ACTOR_OBJ_DHOUSE,

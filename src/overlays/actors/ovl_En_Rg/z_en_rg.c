@@ -15,7 +15,6 @@ void EnRg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BF4EBC(EnRg* this, GlobalContext* globalCtx);
 void func_80BF4FC4(EnRg* this, GlobalContext* globalCtx);
 
 #if 0

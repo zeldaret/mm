@@ -15,6 +15,13 @@ void EnWdhand_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWdhand_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWdhand_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AF4A88(EnWdhand* this, GlobalContext* globalCtx);
+void func_80AF4C64(EnWdhand* this, GlobalContext* globalCtx);
+void func_80AF4F30(EnWdhand* this, GlobalContext* globalCtx);
+void func_80AF4FF8(EnWdhand* this, GlobalContext* globalCtx);
+void func_80AF520C(EnWdhand* this, GlobalContext* globalCtx);
+void func_80AF5820(EnWdhand* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Wdhand_InitVars = {
     ACTOR_EN_WDHAND,

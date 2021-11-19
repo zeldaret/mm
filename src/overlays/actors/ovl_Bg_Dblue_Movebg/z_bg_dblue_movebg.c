@@ -15,6 +15,16 @@ void BgDblueMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A2A1E0(BgDblueMovebg* this, GlobalContext* globalCtx);
+void func_80A2A32C(BgDblueMovebg* this, GlobalContext* globalCtx);
+void func_80A2A444(BgDblueMovebg* this, GlobalContext* globalCtx);
+void func_80A2A688(BgDblueMovebg* this, GlobalContext* globalCtx);
+void func_80A2A714(BgDblueMovebg* this, GlobalContext* globalCtx);
+void func_80A2A7F8(BgDblueMovebg* this, GlobalContext* globalCtx);
+void func_80A2AAB8(BgDblueMovebg* this, GlobalContext* globalCtx);
+void func_80A2AED0(BgDblueMovebg* this, GlobalContext* globalCtx);
+void func_80A2B1A0(BgDblueMovebg* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Dblue_Movebg_InitVars = {
     ACTOR_BG_DBLUE_MOVEBG,

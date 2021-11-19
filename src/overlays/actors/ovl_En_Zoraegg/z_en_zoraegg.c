@@ -15,6 +15,15 @@ void EnZoraegg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZoraegg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZoraegg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B32084(EnZoraegg* this, GlobalContext* globalCtx);
+void func_80B320E0(EnZoraegg* this, GlobalContext* globalCtx);
+void func_80B322BC(EnZoraegg* this, GlobalContext* globalCtx);
+void func_80B32390(EnZoraegg* this, GlobalContext* globalCtx);
+void func_80B324B0(EnZoraegg* this, GlobalContext* globalCtx);
+void func_80B32B10(EnZoraegg* this, GlobalContext* globalCtx);
+void func_80B32B3C(EnZoraegg* this, GlobalContext* globalCtx);
+void func_80B32D08(EnZoraegg* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Zoraegg_InitVars = {
     ACTOR_EN_ZORAEGG,

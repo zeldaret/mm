@@ -15,6 +15,18 @@ void EnGrasshopper_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGrasshopper_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGrasshopper_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809A6668(EnGrasshopper* this, GlobalContext* globalCtx);
+void func_809A67A4(EnGrasshopper* this, GlobalContext* globalCtx);
+void func_809A6B6C(EnGrasshopper* this, GlobalContext* globalCtx);
+void func_809A6E74(EnGrasshopper* this, GlobalContext* globalCtx);
+void func_809A700C(EnGrasshopper* this, GlobalContext* globalCtx);
+void func_809A71CC(EnGrasshopper* this, GlobalContext* globalCtx);
+void func_809A753C(EnGrasshopper* this, GlobalContext* globalCtx);
+void func_809A78EC(EnGrasshopper* this, GlobalContext* globalCtx);
+void func_809A7A8C(EnGrasshopper* this, GlobalContext* globalCtx);
+void func_809A7BBC(EnGrasshopper* this, GlobalContext* globalCtx);
+void func_809A7CE0(EnGrasshopper* this, GlobalContext* globalCtx);
+
 #if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_809A8CDC = {

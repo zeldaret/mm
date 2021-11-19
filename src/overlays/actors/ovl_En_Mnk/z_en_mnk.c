@@ -15,6 +15,24 @@ void EnMnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMnk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMnk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AB675C(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB6920(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB7204(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB740C(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB7488(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB75A4(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB7DCC(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB7E50(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB80BC(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB81D8(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB8878(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB8B18(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB8E4C(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB8FD8(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB9084(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB92CC(EnMnk* this, GlobalContext* globalCtx);
+void func_80AB94E4(EnMnk* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Mnk_InitVars = {
     ACTOR_EN_MNK,

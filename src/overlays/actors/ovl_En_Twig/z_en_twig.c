@@ -15,6 +15,10 @@ void EnTwig_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTwig_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTwig_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AC0A6C(EnTwig* this, GlobalContext* globalCtx);
+void func_80AC0AC8(EnTwig* this, GlobalContext* globalCtx);
+void func_80AC0D2C(EnTwig* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Twig_InitVars = {
     ACTOR_EN_TWIG,

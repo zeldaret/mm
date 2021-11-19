@@ -14,7 +14,6 @@ void DmAn_Init(Actor* thisx, GlobalContext* globalCtx);
 void DmAn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmAn_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80C1C958(DmAn* this, GlobalContext* globalCtx);
 void func_80C1CAB0(DmAn* this, GlobalContext* globalCtx);
 void func_80C1CC80(DmAn* this, GlobalContext* globalCtx);
 

@@ -15,6 +15,18 @@ void EnPeehat_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPeehat_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPeehat_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80897520(EnPeehat* this, GlobalContext* globalCtx);
+void func_808976DC(EnPeehat* this, GlobalContext* globalCtx);
+void func_80897910(EnPeehat* this, GlobalContext* globalCtx);
+void func_80897A94(EnPeehat* this, GlobalContext* globalCtx);
+void func_80897D48(EnPeehat* this, GlobalContext* globalCtx);
+void func_80897F44(EnPeehat* this, GlobalContext* globalCtx);
+void func_80898144(EnPeehat* this, GlobalContext* globalCtx);
+void func_80898338(EnPeehat* this, GlobalContext* globalCtx);
+void func_80898454(EnPeehat* this, GlobalContext* globalCtx);
+void func_80898594(EnPeehat* this, GlobalContext* globalCtx);
+void func_808986A4(EnPeehat* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Peehat_InitVars = {
     ACTOR_EN_PEEHAT,

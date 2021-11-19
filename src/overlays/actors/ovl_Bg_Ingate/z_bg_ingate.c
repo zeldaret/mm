@@ -15,6 +15,11 @@ void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80953F9C(BgIngate* this, GlobalContext* globalCtx);
+void func_809542A0(BgIngate* this, GlobalContext* globalCtx);
+void func_80954340(BgIngate* this, GlobalContext* globalCtx);
+void func_809543D4(BgIngate* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Ingate_InitVars = {
     ACTOR_BG_INGATE,

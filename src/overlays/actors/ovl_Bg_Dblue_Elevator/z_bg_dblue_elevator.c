@@ -15,6 +15,10 @@ void BgDblueElevator_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueElevator_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueElevator_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B924F8(BgDblueElevator* this, GlobalContext* globalCtx);
+void func_80B925B8(BgDblueElevator* this, GlobalContext* globalCtx);
+void func_80B92660(BgDblueElevator* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Dblue_Elevator_InitVars = {
     ACTOR_BG_DBLUE_ELEVATOR,

@@ -20,6 +20,7 @@ void func_80A2C0F8(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C168(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C208(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C2E0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C33C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C3F0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx);

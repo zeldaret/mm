@@ -15,9 +15,8 @@ void DmChar06_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmChar06_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar06_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80AAE6F0(DmChar06* this, GlobalContext* globalCtx);
-
 void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc);
+void func_80AAE6F0(DmChar06* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit Dm_Char06_InitVars = {

@@ -15,6 +15,13 @@ void DemoSyoten_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoSyoten_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoSyoten_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C16A64(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C16A74(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C16BD4(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C16DD4(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C16EAC(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C17008(DemoSyoten* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Demo_Syoten_InitVars = {
     ACTOR_DEMO_SYOTEN,

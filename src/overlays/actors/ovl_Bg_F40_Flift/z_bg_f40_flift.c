@@ -15,6 +15,9 @@ void BgF40Flift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Flift_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Flift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808D75F0(BgF40Flift* this, GlobalContext* globalCtx);
+void func_808D7714(BgF40Flift* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_F40_Flift_InitVars = {
     ACTOR_BG_F40_FLIFT,

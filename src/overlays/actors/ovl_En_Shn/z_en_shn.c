@@ -15,7 +15,6 @@ void EnShn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnShn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnShn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80AE69E8(EnShn* this, GlobalContext* globalCtx);
 void func_80AE6A64(EnShn* this, GlobalContext* globalCtx);
 
 #if 0

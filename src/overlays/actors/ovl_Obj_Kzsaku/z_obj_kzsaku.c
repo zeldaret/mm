@@ -15,6 +15,10 @@ void ObjKzsaku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C08B7C(ObjKzsaku* this, GlobalContext* globalCtx);
+void func_80C08BD0(ObjKzsaku* this, GlobalContext* globalCtx);
+void func_80C08CB0(ObjKzsaku* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Kzsaku_InitVars = {
     ACTOR_OBJ_KZSAKU,

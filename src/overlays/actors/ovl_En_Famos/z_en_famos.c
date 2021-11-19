@@ -15,6 +15,21 @@ void EnFamos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFamos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808AD18C(EnFamos* this, GlobalContext* globalCtx);
+void func_808AD294(EnFamos* this, GlobalContext* globalCtx);
+void func_808AD378(EnFamos* this, GlobalContext* globalCtx);
+void func_808AD42C(EnFamos* this, GlobalContext* globalCtx);
+void func_808AD5B0(EnFamos* this, GlobalContext* globalCtx);
+void func_808AD68C(EnFamos* this, GlobalContext* globalCtx);
+void func_808AD840(EnFamos* this, GlobalContext* globalCtx);
+void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx);
+void func_808ADAE8(EnFamos* this, GlobalContext* globalCtx);
+void func_808ADB70(EnFamos* this, GlobalContext* globalCtx);
+void func_808ADC64(EnFamos* this, GlobalContext* globalCtx);
+void func_808ADDA8(EnFamos* this, GlobalContext* globalCtx);
+void func_808ADE74(EnFamos* this, GlobalContext* globalCtx);
+void func_808ADFF0(EnFamos* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Famos_InitVars = {
     ACTOR_EN_FAMOS,

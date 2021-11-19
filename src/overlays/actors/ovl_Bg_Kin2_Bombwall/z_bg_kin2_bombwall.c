@@ -15,6 +15,10 @@ void BgKin2Bombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B6E4CC(BgKin2Bombwall* this, GlobalContext* globalCtx);
+void func_80B6E558(BgKin2Bombwall* this, GlobalContext* globalCtx);
+void func_80B6E614(BgKin2Bombwall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Kin2_Bombwall_InitVars = {
     ACTOR_BG_KIN2_BOMBWALL,

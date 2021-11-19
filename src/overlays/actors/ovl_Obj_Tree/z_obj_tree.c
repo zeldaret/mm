@@ -15,6 +15,9 @@ void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTree_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B9A220(ObjTree* this, GlobalContext* globalCtx);
+void func_80B9A27C(ObjTree* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Tree_InitVars = {
     ACTOR_OBJ_TREE,

@@ -14,7 +14,6 @@ void EnGo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnGo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A14798(EnGo* this, GlobalContext* globalCtx);
 void func_80A149B0(EnGo* this, GlobalContext* globalCtx);
 void func_80A14B30(EnGo* this, GlobalContext* globalCtx);
 void func_80A14E14(EnGo* this, GlobalContext* globalCtx);

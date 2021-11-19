@@ -15,6 +15,11 @@ void ObjLift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjLift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjLift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8093D7A0(ObjLift* this, GlobalContext* globalCtx);
+void func_8093D8B4(ObjLift* this, GlobalContext* globalCtx);
+void func_8093DA48(ObjLift* this, GlobalContext* globalCtx);
+void func_8093DB90(ObjLift* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Lift_InitVars = {
     ACTOR_OBJ_LIFT,

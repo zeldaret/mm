@@ -14,6 +14,9 @@ void EffKamejimaWave_Init(Actor* thisx, GlobalContext* globalCtx);
 void EffKamejimaWave_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffKamejimaWave_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BCEC6C(EffKamejimaWave* this, GlobalContext* globalCtx);
+void func_80BCEDE0(EffKamejimaWave* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Eff_Kamejima_Wave_InitVars = {
     ACTOR_EFF_KAMEJIMA_WAVE,

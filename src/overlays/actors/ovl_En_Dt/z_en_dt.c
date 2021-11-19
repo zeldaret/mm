@@ -15,6 +15,15 @@ void EnDt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BE9E94(EnDt* this, GlobalContext* globalCtx);
+void func_80BEA088(EnDt* this, GlobalContext* globalCtx);
+void func_80BEA394(EnDt* this, GlobalContext* globalCtx);
+void func_80BEA8F0(EnDt* this, GlobalContext* globalCtx);
+void func_80BEAB44(EnDt* this, GlobalContext* globalCtx);
+void func_80BEABF8(EnDt* this, GlobalContext* globalCtx);
+void func_80BEAD2C(EnDt* this, GlobalContext* globalCtx);
+void func_80BEADD4(EnDt* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dt_InitVars = {
     ACTOR_EN_DT,

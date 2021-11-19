@@ -15,6 +15,14 @@ void ObjMine_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMine_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjMine_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A82F98(ObjMine* this, GlobalContext* globalCtx);
+void func_80A82FC8(ObjMine* this, GlobalContext* globalCtx);
+void func_80A83258(ObjMine* this, GlobalContext* globalCtx);
+void func_80A832D0(ObjMine* this, GlobalContext* globalCtx);
+void func_80A83A88(ObjMine* this, GlobalContext* globalCtx);
+void func_80A83B28(ObjMine* this, GlobalContext* globalCtx);
+void func_80A83D00(ObjMine* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Mine_InitVars = {
     ACTOR_OBJ_MINE,

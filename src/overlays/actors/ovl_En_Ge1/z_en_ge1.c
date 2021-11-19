@@ -15,6 +15,9 @@ void EnGe1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGe1_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGe1_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80945CAC(EnGe1* this, GlobalContext* globalCtx);
+void func_80945CE4(EnGe1* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ge1_InitVars = {
     ACTOR_EN_GE1,

@@ -15,6 +15,14 @@ void EnTakaraya_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTakaraya_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTakaraya_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80ADEE4C(EnTakaraya* this, GlobalContext* globalCtx);
+void func_80ADF050(EnTakaraya* this, GlobalContext* globalCtx);
+void func_80ADF338(EnTakaraya* this, GlobalContext* globalCtx);
+void func_80ADF520(EnTakaraya* this, GlobalContext* globalCtx);
+void func_80ADF654(EnTakaraya* this, GlobalContext* globalCtx);
+void func_80ADF730(EnTakaraya* this, GlobalContext* globalCtx);
+void func_80ADF7CC(EnTakaraya* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Takaraya_InitVars = {
     ACTOR_EN_TAKARAYA,

@@ -14,9 +14,8 @@ void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest5_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A90478(EnTest5* this, GlobalContext* globalCtx);
-
 void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc);
+void func_80A90478(EnTest5* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Test5_InitVars = {

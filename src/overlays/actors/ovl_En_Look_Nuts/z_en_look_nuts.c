@@ -15,6 +15,11 @@ void EnLookNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLookNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A67AA8(EnLookNuts* this, GlobalContext* globalCtx);
+void func_80A67D0C(EnLookNuts* this, GlobalContext* globalCtx);
+void func_80A67FC4(EnLookNuts* this, GlobalContext* globalCtx);
+void func_80A680FC(EnLookNuts* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,

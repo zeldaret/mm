@@ -15,6 +15,10 @@ void BgIkanaDharma_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaDharma_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BEC5E0(BgIkanaDharma* this, GlobalContext* globalCtx);
+void func_80BEC790(BgIkanaDharma* this, GlobalContext* globalCtx);
+void func_80BEC808(BgIkanaDharma* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Ikana_Dharma_InitVars = {
     ACTOR_BG_IKANA_DHARMA,

@@ -15,6 +15,10 @@ void BgGoronOyu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B400C8(BgGoronOyu* this, GlobalContext* globalCtx);
+void func_80B40100(BgGoronOyu* this, GlobalContext* globalCtx);
+void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Goron_Oyu_InitVars = {
     ACTOR_BG_GORON_OYU,

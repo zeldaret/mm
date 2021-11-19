@@ -14,6 +14,10 @@ void EnDoorEtc_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDoorEtc_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDoorEtc_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AC20A8(EnDoorEtc* this, GlobalContext* globalCtx);
+void func_80AC21A0(EnDoorEtc* this, GlobalContext* globalCtx);
+void func_80AC2354(EnDoorEtc* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Door_Etc_InitVars = {
     ACTOR_EN_DOOR_ETC,

@@ -17,15 +17,8 @@ void EnRz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80BFC058(EnRz* this, GlobalContext* globalCtx);
 void func_80BFC078(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC19C(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC214(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC270(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC2F4(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC36C(EnRz* this, GlobalContext* globalCtx);
 void func_80BFC3F8(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC608(EnRz* this, GlobalContext* globalCtx);
 void func_80BFC674(EnRz* this, GlobalContext* globalCtx);
-void func_80BFC728(EnRz* this, GlobalContext* globalCtx);
 void func_80BFC7E0(EnRz* this, GlobalContext* globalCtx);
 void func_80BFC8F8(EnRz* this, GlobalContext* globalCtx);
 

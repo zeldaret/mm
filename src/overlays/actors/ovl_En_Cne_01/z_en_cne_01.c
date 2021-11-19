@@ -15,7 +15,6 @@ void EnCne01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCne01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809CB520(EnCne01* this, GlobalContext* globalCtx);
 void func_809CB5A0(EnCne01* this, GlobalContext* globalCtx);
 void func_809CB5D8(EnCne01* this, GlobalContext* globalCtx);
 void func_809CB5FC(EnCne01* this, GlobalContext* globalCtx);

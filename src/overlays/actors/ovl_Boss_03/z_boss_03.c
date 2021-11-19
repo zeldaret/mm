@@ -26,6 +26,7 @@ void func_809E4C90(Boss03* this, GlobalContext* globalCtx);
 void func_809E4E80(Boss03* this, GlobalContext* globalCtx);
 void func_809E5B64(Boss03* this, GlobalContext* globalCtx);
 void func_809E6640(Boss03* this, GlobalContext* globalCtx);
+void func_809E6A38(Boss03* this, GlobalContext* globalCtx);
 void func_809E6BC0(Boss03* this, GlobalContext* globalCtx);
 
 #if 0

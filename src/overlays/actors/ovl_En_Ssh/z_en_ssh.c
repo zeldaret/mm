@@ -15,14 +15,11 @@ void EnSsh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSsh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSsh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809755C0(EnSsh* this, GlobalContext* globalCtx);
+void EnSsh_SetupAction(EnSsh* this, EnSshActionFunc actionFunc);
 void func_80975720(EnSsh* this, GlobalContext* globalCtx);
-void func_809758B0(EnSsh* this, GlobalContext* globalCtx);
 void func_80975998(EnSsh* this, GlobalContext* globalCtx);
 void func_80975A98(EnSsh* this, GlobalContext* globalCtx);
 void func_80975C14(EnSsh* this, GlobalContext* globalCtx);
-
-void EnSsh_SetupAction(EnSsh* this, EnSshActionFunc actionFunc);
 
 #if 0
 const ActorInit En_Ssh_InitVars = {

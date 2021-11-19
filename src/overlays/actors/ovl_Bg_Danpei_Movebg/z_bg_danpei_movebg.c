@@ -14,6 +14,13 @@ void BgDanpeiMovebg_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgDanpeiMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDanpeiMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AF6EA8(BgDanpeiMovebg* this, GlobalContext* globalCtx);
+void func_80AF70FC(BgDanpeiMovebg* this, GlobalContext* globalCtx);
+void func_80AF71FC(BgDanpeiMovebg* this, GlobalContext* globalCtx);
+void func_80AF72F8(BgDanpeiMovebg* this, GlobalContext* globalCtx);
+void func_80AF7354(BgDanpeiMovebg* this, GlobalContext* globalCtx);
+void func_80AF746C(BgDanpeiMovebg* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Danpei_Movebg_InitVars = {
     ACTOR_BG_DANPEI_MOVEBG,

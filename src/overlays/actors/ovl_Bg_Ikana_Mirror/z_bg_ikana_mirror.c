@@ -15,6 +15,9 @@ void BgIkanaMirror_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaMirror_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaMirror_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B7FA9C(BgIkanaMirror* this, GlobalContext* globalCtx);
+void func_80B7FBA4(BgIkanaMirror* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Ikana_Mirror_InitVars = {
     ACTOR_BG_IKANA_MIRROR,

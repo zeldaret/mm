@@ -19,6 +19,7 @@ void func_808FAF94(EnRr* this, GlobalContext* globalCtx);
 void func_808FB088(EnRr* this, GlobalContext* globalCtx);
 void func_808FB1C0(EnRr* this, GlobalContext* globalCtx);
 void func_808FB2C0(EnRr* this, GlobalContext* globalCtx);
+void func_808FB398(EnRr* this, GlobalContext* globalCtx);
 void func_808FB42C(EnRr* this, GlobalContext* globalCtx);
 void func_808FB680(EnRr* this, GlobalContext* globalCtx);
 void func_808FB710(EnRr* this, GlobalContext* globalCtx);

@@ -15,6 +15,14 @@ void BgCraceMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgCraceMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgCraceMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A7099C(BgCraceMovebg* this, GlobalContext* globalCtx);
+void func_80A70A08(BgCraceMovebg* this, GlobalContext* globalCtx);
+void func_80A70A9C(BgCraceMovebg* this, GlobalContext* globalCtx);
+void func_80A70DA8(BgCraceMovebg* this, GlobalContext* globalCtx);
+void func_80A70E70(BgCraceMovebg* this, GlobalContext* globalCtx);
+void func_80A70F2C(BgCraceMovebg* this, GlobalContext* globalCtx);
+void func_80A71040(BgCraceMovebg* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Crace_Movebg_InitVars = {
     ACTOR_BG_CRACE_MOVEBG,

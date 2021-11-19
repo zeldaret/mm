@@ -15,14 +15,13 @@ void EnElf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnElf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnElf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void EnElf_SetupAction(EnElf* this, EnElfActionFunc actionFunc);
 void func_8088DD34(EnElf* this, GlobalContext* globalCtx);
 void func_8088E018(EnElf* this, GlobalContext* globalCtx);
 void func_8088E0E0(EnElf* this, GlobalContext* globalCtx);
 void func_8088E0F0(EnElf* this, GlobalContext* globalCtx);
 void func_8088E484(EnElf* this, GlobalContext* globalCtx);
 void func_8088E850(EnElf* this, GlobalContext* globalCtx);
-
-void EnElf_SetupAction(EnElf* this, EnElfActionFunc actionFunc);
 
 #if 0
 const ActorInit En_Elf_InitVars = {

@@ -15,7 +15,6 @@ void EnTruMt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTruMt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTruMt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B76A64(EnTruMt* this, GlobalContext* globalCtx);
 void func_80B76BB8(EnTruMt* this, GlobalContext* globalCtx);
 void func_80B76C38(EnTruMt* this, GlobalContext* globalCtx);
 

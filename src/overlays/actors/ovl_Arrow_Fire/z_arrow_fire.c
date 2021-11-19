@@ -15,11 +15,9 @@ void ArrowFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ArrowFire_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80920440(ArrowFire* this, GlobalContext* globalCtx);
-void func_8092058C(ArrowFire* this, GlobalContext* globalCtx);
-void func_809207A0(ArrowFire* this, GlobalContext* globalCtx);
-
 void ArrowFire_SetupAction(ArrowFire* this, ArrowFireActionFunc actionFunc);
+void func_80920440(ArrowFire* this, GlobalContext* globalCtx);
+void func_809207A0(ArrowFire* this, GlobalContext* globalCtx);
 
 #if 0
 // static ColliderQuadInit sQuadInit = {

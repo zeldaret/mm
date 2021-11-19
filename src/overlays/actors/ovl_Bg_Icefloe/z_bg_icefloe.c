@@ -15,6 +15,10 @@ void BgIcefloe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIcefloe_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIcefloe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AC4AE8(BgIcefloe* this, GlobalContext* globalCtx);
+void func_80AC4C34(BgIcefloe* this, GlobalContext* globalCtx);
+void func_80AC4D2C(BgIcefloe* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Icefloe_InitVars = {
     ACTOR_BG_ICEFLOE,

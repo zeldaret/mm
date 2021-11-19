@@ -15,6 +15,10 @@ void BgLastBwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgLastBwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgLastBwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C187F8(BgLastBwall* this, GlobalContext* globalCtx);
+void func_80C18884(BgLastBwall* this, GlobalContext* globalCtx);
+void func_80C18928(BgLastBwall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Last_Bwall_InitVars = {
     ACTOR_BG_LAST_BWALL,
