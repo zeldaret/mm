@@ -55,15 +55,31 @@ s32 func_80123420(Player* player) {
     return player->stateFlags3 & 0x80000000;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123434.s")
+s32 func_80123434(Player* player) {
+    return player->stateFlags1 & 0x40030000;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123448.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801234B0.s")
+s32 func_801234B0(Player* player) {
+    return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801234D4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123590.s")
+s32 func_80123590(GameState* gameState, Actor* actor) {
+    Player* player = GET_PLAYER(gameState);
+
+    if ((player->stateFlags1 & 0x800) && (player->leftHandActor == actor)) {
+        player->unk_388 = NULL;
+        player->leftHandActor = NULL;
+        player->actor.child = NULL;
+        player->stateFlags1 &= ~0x800;
+        return 1;
+    }
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801235DC.s")
 
