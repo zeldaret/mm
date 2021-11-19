@@ -80,9 +80,10 @@ static u8 D_80A6E584[] = { 0x00, 0x00, 0x00, 0x00 };
 
 static Vec3f D_80A6E588[] = { 1800.0f, 1000.0f, 4250.0f };
 
-static s32 D_80A6E594[] = { 0x06000220, 0x06000428, 0x06000498 };
-
-extern UNK_TYPE D_06000198;
+extern Gfx D_06000198[];
+extern Gfx D_06000220[];
+extern Gfx D_06000428[];
+extern Gfx D_06000498[];
 extern Vtx D_060004C0[];
 extern Gfx D_060010E0[];
 extern Gfx D_06001158[];
@@ -92,8 +93,10 @@ extern Gfx D_06002970[];
 extern Gfx D_06003C30[];
 extern Gfx D_06000400[];
 extern Gfx D_060004C8[];
-extern UNK_TYPE D_06004E38;
+extern AnimatedMaterial D_06004E38;
 extern Gfx D_060077F0[];
+
+static Gfx* D_80A6E594[] = { D_06000220, D_06000428, D_06000498 };
 
 void func_80A6BF90(EnFall* this, GlobalContext* globalCtx) {
     u16 temp_v0;
@@ -785,8 +788,30 @@ void func_80A6DD3C(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-// bss function
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6E07C.s")
+void func_80A6E07C(Actor* thisx, GlobalContext* globalCtx) {
+    EnFall* this = THIS;
+    f32 temp_f20;
+    s32 i;
+
+    temp_f20 = this->unk_14C * 0.06f;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPDisplayList(POLY_OPA_DISP++, D_06000198);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0x00, 0x00, 0x00, 255);
+    for (i = 0; i < 50; i++) {
+        if (D_80A6E990[i].unk_00 < 3) {
+            Matrix_InsertTranslation(D_80A6E990[i].unk_04.x, D_80A6E990[i].unk_04.y, D_80A6E990[i].unk_04.z,
+                                     MTXMODE_NEW);
+            Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
+            Matrix_InsertRotation(D_80A6E990[i].unk_1C, D_80A6E990[i].unk_1E, D_80A6E990[i].unk_20, MTXMODE_APPLY);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, D_80A6E594[D_80A6E990[i].unk_00]);
+        }
+    }
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 void func_80A6E214(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
