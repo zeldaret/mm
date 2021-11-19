@@ -428,7 +428,7 @@ beginseg
     compress
     after "dmadata"
     include "build/src/code/z_en_a_keep.o"
-    include "build/data/code/z_en_a_keep.data.o"
+    include "build/data/code/rsp.data.o"
     include "build/data/code/code_801ADE60.data.o"
     include "build/data/code/code_801E3FA0.bss.o"
     include "build/src/code/z_en_item00.o"
@@ -492,8 +492,8 @@ beginseg
     include "build/src/code/z_horse.o"
     include "build/data/code/z_horse.data.o"
     include "build/src/code/z_jpeg.o"
-    include "build/data/code/z_jpeg.data.o"
     include "build/src/code/z_kaleido_setup.o"
+    include "build/data/code/z_kaleido_setup.data.o"
     include "build/src/code/z_kanfont.o"
     include "build/src/code/z_kankyo.o"
     include "build/data/code/z_kankyo.data.o"
@@ -676,11 +676,11 @@ beginseg
     include "build/data/code/code_801A7B10.bss.o"
     include "build/data/code/audio_init_params.rodata.o"
     include "build/src/code/jpegutils.o"
-    include "build/src/code/code_801AA020.o"
-    include "build/data/code/code_801AA020.bss.o"
+    include "build/src/code/jpegdecoder.o"
     include_readonly "build/src/code/z_game_over.o"
     include "build/src/code/z_construct.o"
-    include "build/data/code/code_801E1180.rodata.o"
+    include "build/data/code/audio_sound_params.data.o"
+    include "build/data/code/rsp.rodata.o"
 endseg
 
 beginseg
