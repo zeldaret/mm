@@ -682,7 +682,7 @@ beginseg
     include "build/src/code/jpegdecoder.o"
     include_readonly "build/src/code/z_game_over.o"
     include "build/src/code/z_construct.o"
-    include "build/data/code/code_801D9090.data.o"
+    include "build/data/code/audio_sound_params.data.o"
     include "build/data/code/rsp.rodata.o"
 endseg
 
