@@ -1761,7 +1761,7 @@ void func_800FD654(GlobalContext* globalCtx, Color_RGB8* pzParm2, f32 fParm3);
 // u32 get_days_elapsed(void);
 // void reset_days_elapsed(void);
 // u32 get_current_day(void);
-void func_800FD750(UNK_TYPE arg0);
+void func_800FD750(u16 seqId);
 // void func_800FD768(void);
 void func_800FD78C(GlobalContext* globalCtx);
 void func_800FD858(GlobalContext* globalCtx);

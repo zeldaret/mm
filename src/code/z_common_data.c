@@ -7,7 +7,7 @@ void SaveContext_Init(void) {
     gSaveContext.playerForm = 0;
     gSaveContext.seqIndex = 0xFF;
     gSaveContext.nightSeqIndex = 0xFF;
-    gSaveContext.unk_3F46 = 0;
+    gSaveContext.unk_3F46 = NA_BGM_GENERAL_SFX;
     gSaveContext.nextCutsceneIndex = 0xFFEF;
     gSaveContext.cutsceneTrigger = 0;
     gSaveContext.unk_3F4D = 0;
