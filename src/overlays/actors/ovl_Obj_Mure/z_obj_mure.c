@@ -173,7 +173,7 @@ void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx) {
         this->children[i] = Actor_SpawnAsChildAndCutscene(
             &globalCtx->actorCtx, globalCtx, sSpawnActorIds[this->type], spawnPos.x, spawnPos.y, spawnPos.z,
             actor->world.rot.x, actor->world.rot.y, actor->world.rot.z,
-            (this->type == 4 && i == 0) ? 1 : sSpawnParams[this->type], this->actor.cutscene, this->actor.unk20, NULL);
+            (this->type == OBJMURE_TYPE_BUTTERFLY && i == 0) ? 1 : sSpawnParams[this->type], this->actor.cutscene, this->actor.unk20, NULL);
         if (this->children[i] != NULL) {
             this->childrenStates[i] = OBJMURE_CHILD_STATE_0;
             this->children[i]->room = actor->room;
