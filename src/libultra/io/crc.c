@@ -34,7 +34,7 @@
  * \f[ m(X) X^n = Q(X) p(X) + R(X) \f]
  * (\f$ R(X) \f$ is the *remainder after dividing by \f$ p(X) \f$*).
  * - Therefore, \f$ m(X) X^n - R(X) \f$ is divisible by the generator polynomial. This means that if we append the
- * binary number corresponding to \f$ R(X) \f$ to the message and rerun the algorithm, we will get 0 if now errors have
+ * binary number corresponding to \f$ R(X) \f$ to the message and rerun the algorithm, we will get 0 if no errors have
  * been introduced.
  *
  *
