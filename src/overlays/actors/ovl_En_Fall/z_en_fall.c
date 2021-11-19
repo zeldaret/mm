@@ -280,7 +280,53 @@ void func_80A6C3FC(EnFall* this, GlobalContext* globalCtx) {
     }
 }
 
+#ifdef NON_MATCHING
+// Actually matches, but requires in-function static, which I can't do without decompiling the rest.
+void func_80A6C7C0(EnFall* this, GlobalContext* globalCtx) {
+    static s32 D_80A6E4B0 = 0x00000000;
+
+    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 1 && globalCtx->csCtx.unk_12 == 0) {
+        switch (D_80A6E4B0) {
+            case 0:
+                if (globalCtx->csCtx.state != 0) {
+                    D_80A6E4B0 = D_80A6E4B0 + 2;
+                }
+                break;
+            case 2:
+                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
+                    CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
+                    if (gSaveContext.weekEventReg[0x5D] & 4) {
+                        if (ActorCutscene_GetCanPlayNext(0xC)) {
+                            ActorCutscene_Start(0xC, &this->actor);
+                            D_80A6E4B0 += 1;
+                        } else {
+                            ActorCutscene_SetIntentToPlay(0xC);
+                        }
+                    } else if (ActorCutscene_GetCanPlayNext(0xB)) {
+                        ActorCutscene_Start(0xB, &this->actor);
+                        gSaveContext.weekEventReg[0x5D] |= 4;
+                        D_80A6E4B0 += 1;
+                    } else {
+                        ActorCutscene_SetIntentToPlay(0xB);
+                    }
+                } else if (globalCtx->csCtx.frames >= 0x641) {
+                    globalCtx->nextEntranceIndex = 0x2C00;
+                    gSaveContext.nextCutsceneIndex = 0xFFF2;
+                    globalCtx->sceneLoadFlag = 0x14;
+                    globalCtx->unk_1887F = 2;
+                    gSaveContext.nextTransition = 2;
+                    D_80A6E4B0 = 9;
+                }
+                break;
+            case 9:
+                globalCtx->csCtx.frames -= 1;
+                break;
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C7C0.s")
+#endif
 
 void func_80A6C9A8(EnFall* this, GlobalContext* globalCtx) {
     func_80A6C7C0(this, globalCtx);
