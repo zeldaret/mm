@@ -1696,11 +1696,7 @@ void FireObj_Update(GlobalContext* globalCtx, FireObj* fire, Actor* actor);
 void func_800F40A0(GlobalContext* globalCtx, s32 param_2);
 // void func_800F415C(void);
 UNK_TYPE func_800F41E4(GlobalContext* globalCtx, ActorContext* actorCtx);
-// void func_800F42A0(void);
-// void func_800F43BC(void);
-// void func_800F44F4(void);
-// void func_800F4540(void);
-// s32 func_800F470C(UNK_TYPE4 param_1, UNK_TYPE4 param_2, s32 param_3, u32 param_4);
+
 void func_800F4A10(GlobalContext* globalCtx);
 void func_800F4C0C(GlobalContext* globalCtx);
 void func_800F4E20(GlobalContext* globalCtx);
@@ -2067,7 +2063,7 @@ s32 func_8010BF58(Actor* actor, GlobalContext* globalCtx, s32* param_3, UNK_PTR 
 void Nmi_Init(void);
 void Nmi_SetPrenmiStart(void);
 // s32 Nmi_GetPrenmiHasStarted(void);
-// void func_8010C1B0(void);
+void MsgEvent_SendNullTask(void);
 f32 OLib_Vec3fDist(Vec3f* a, Vec3f* b);
 f32 OLib_Vec3fDistOutDiff(Vec3f* a, Vec3f* b, Vec3f* dest);
 f32 OLib_Vec3fDistXZ(Vec3f* a, Vec3f* b);
@@ -3413,10 +3409,12 @@ void func_8018219C(MtxF* pfParm1, Vec3s* psParm2, s32 iParm3);
 // void func_801822C4(void);
 void Matrix_InsertRotationAroundUnitVector_f(f32 rotation, Vec3f* vector, s32 appendToState);
 void Matrix_InsertRotationAroundUnitVector_s(s16 rotation, Vec3f* vector, s32 appendToState);
+
 u64* SysUcode_GetUCodeBoot(void);
 u32 SysUcode_GetUCodeBootSize(void);
 u64* SysUcode_GetUCode(void);
 u64* SysUcode_GetUCodeData(void);
+
 // void func_80182CE0(void);
 // void func_80183020(void);
 // void func_80183058(void);
@@ -4025,18 +4023,7 @@ s32 func_801A8A50(s32 param1);
 // void func_801A982C(void);
 // void func_801A99B8(void);
 // void func_801A9A74(void);
-// void func_801A9B10(void);
-// void func_801A9B78(void);
-// void func_801A9BFC(void);
-// void func_801A9C68(void);
-// void func_801A9D10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5);
-// void func_801A9DCC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5);
-// void func_801A9EA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE1 param_6);
-// void func_801A9F4C(void);
-// void func_801AA020(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_801AA248(void);
-// void func_801AA3E4(void);
-// void func_801AA520(void);
+
 void GameOver_Init(GlobalContext* globalCtx);
 void GameOver_FadeLights(GlobalContext* globalCtx);
 void GameOver_Update(GlobalContext* globalCtx);

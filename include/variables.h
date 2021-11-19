@@ -360,7 +360,7 @@ extern u16 viRetrace;
 extern DmaEntry dmadata[1568];
 // extern UNK_TYPE1 D_80186028;
 // extern UNK_TYPE1 D_801AAAB0;
-// extern UNK_TYPE1 D_801AD370;
+extern u64 gJpegUCode[];
 extern ActorInit En_A_Obj_InitVars;
 extern ColliderCylinderInit enAObjCylinderInit;
 extern InitChainEntry enAObjInitVar;
@@ -1867,7 +1867,7 @@ extern s8 D_801DB4B8;
 // extern UNK_TYPE1 D_801DB8B8;
 // extern UNK_TYPE1 D_801DB900;
 extern UNK_PTR D_801DB930;
-extern s8018CFAC D_801DB958[21];
+extern AudioSpec D_801DB958[21];
 
 // rodata
 extern f32 D_801DBDF0;
@@ -3107,7 +3107,7 @@ extern UNK_PTR D_801E10B0;
 // extern UNK_TYPE1 D_801E1E80;
 // extern UNK_TYPE1 D_801E2160;
 // extern UNK_TYPE1 D_801E3790;
-// extern UNK_TYPE1 D_801E3F40;
+extern u64 gJpegUCodeData[];
 // extern UNK_TYPE1 D_801E3FA0;
 
 // bss
@@ -3635,7 +3635,7 @@ extern OSMesg D_801FD034;
 // extern UNK_TYPE1 D_801FE4C0;
 // extern UNK_TYPE1 D_801FE640;
 // extern UNK_TYPE1 D_801FE6D0;
-extern s801FE7C0 D_801FE7C0[1];
+extern SoundRequest D_801FE7C0[1];
 // extern UNK_TYPE1 D_801FFBC0;
 // extern UNK_TYPE1 D_801FFBC8;
 // extern UNK_TYPE1 D_801FFBD0;
@@ -3789,11 +3789,6 @@ extern OSMesg D_80203290[1];
 // extern UNK_TYPE4 D_80208E6C;
 // extern UNK_TYPE4 D_80208E70;
 // extern UNK_TYPE4 D_80208E74;
-// extern UNK_TYPE1 D_80208E90;
-// extern UNK_TYPE1 D_80208E94;
-// extern UNK_TYPE1 D_80208E98;
-// extern UNK_TYPE1 D_80208E99;
-// extern UNK_TYPE1 D_80208E9C;
 
 // post-code buffers
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
