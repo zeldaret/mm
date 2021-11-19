@@ -170,7 +170,7 @@ beginseg
     include "build/src/libultra/voice/voicecontwrite20.o"
     include "build/src/libultra/io/crc.o"
     include "build/src/libultra/os/getactivequeue.o"
-    include "build/src/libultra/gu/normalize.o"
+    include "build/asm/boot/normalize.text.o"
     include "build/asm/boot/setcompare.text.o"
     include "build/asm/boot/getcompare.text.o"
     include "build/src/libultra/io/dpgetstat.o"
@@ -639,36 +639,47 @@ beginseg
     pad_text
     pad_text
     pad_text
-    include "build/src/code/audio_synthesis.o"
-    include "build/src/code/audio_heap.o"
-    include "build/data/code/code_801D2E80.data.o"
+    include "build/data/code/audio_data.data.o"
+    include "build/src/code/audio/audio_synthesis.o"
+    include "build/data/code/audio_synthesis.data.o"
+    include "build/src/code/audio/audio_heap.o"
     include "build/data/code/audio_heap.bss.o"
-    include "build/data/code/code_801D3D90.data.o"
-    include "build/src/code/audio_load.o"
+    include "build/src/code/audio/audio_load.o"
+    include "build/data/code/audio_load.data.o"
     include "build/data/code/audio_load.bss.o"
-    include "build/src/code/code_80192BE0.o"
-    include "build/src/code/code_80194710.o"
-    include "build/src/code/audio_playback.o"
-    include "build/src/code/audio_effects.o"
-    include "build/src/code/audio_seqplayer.o"
+    include "build/src/code/audio/code_80192BE0.o"
+    include "build/data/code/code_80192BE0.data.o"
+    include "build/src/code/audio/code_80194710.o"
+    include "build/src/code/audio/code_80194790.o"
+    include "build/data/code/code_80194790.data.o"
+    include "build/src/code/audio/audio_playback.o"
+    include "build/src/code/audio/audio_effects.o"
+    include "build/data/code/audio_effects.data.o"
+    include "build/src/code/audio/audio_seqplayer.o"
+    include "build/data/code/audio_seqplayer.data.o"
+    include "build/data/code/audio_dramStack.data.o"
     include "build/asm/code/code_8019AE40.text.o" // handwritten
     pad_text
     include "build/asm/code/code_8019AEC0.text.o" // handwritten
-    include "build/src/code/code_8019AF00.o"
+    include "build/src/code/audio/code_8019AF00.o"
+    include "build/data/code/code_8019AF00.data.o"
     include "build/data/code/code_8019AF00.bss.o"
-    include "build/data/code/code_801D55B0.data.o"
     include "build/src/code/audio/code_801A4EB0.o"
     include "build/src/code/audio/code_801A51F0.o"
     pad_text
-    include "build/src/code/code_801A5BD0.o"
+    include "build/data/code/audio_sound_params.data.o"
+    include "build/src/code/audio/code_801A5BD0.o"
+    include "build/data/code/code_801A5BD0.data.o"
     include "build/data/code/code_801A5BD0.bss.o"
-    include "build/src/code/code_801A7B10.o"
+    include "build/src/code/audio/code_801A7B10.o"
+    include "build/data/code/code_801A7B10.data.o"
     include "build/data/code/code_801A7B10.bss.o"
+    include "build/data/code/audio_init_params.rodata.o"
+    include "build/src/code/jpegutils.o"
     include "build/src/code/code_801AA020.o"
     include "build/data/code/code_801AA020.bss.o"
     include_readonly "build/src/code/z_game_over.o"
     include "build/src/code/z_construct.o"
-    include "build/data/code/code_801D9090.data.o"
     include "build/data/code/code_801E1180.rodata.o"
 endseg
 
@@ -1725,8 +1736,7 @@ beginseg
     name "ovl_En_Mm"
     compress
     include "build/src/overlays/actors/ovl_En_Mm/z_en_mm.o"
-    include "build/data/ovl_En_Mm/ovl_En_Mm.data.o"
-    include "build/data/ovl_En_Mm/ovl_En_Mm.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mm/ovl_En_Mm_reloc.o"
 endseg
 
 beginseg
@@ -1788,8 +1798,7 @@ beginseg
     name "ovl_En_Kakasi"
     compress
     include "build/src/overlays/actors/ovl_En_Kakasi/z_en_kakasi.o"
-    include "build/data/ovl_En_Kakasi/ovl_En_Kakasi.data.o"
-    include "build/data/ovl_En_Kakasi/ovl_En_Kakasi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kakasi/ovl_En_Kakasi_reloc.o"
 endseg
 
 beginseg

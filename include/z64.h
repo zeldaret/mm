@@ -948,7 +948,7 @@ typedef struct {
     /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
-    /* 0x12022 */ UNK_TYPE1 unk12022;
+    /* 0x12022 */ u8 unk12022;
     /* 0x12023 */ u8 unk12023;
     /* 0x12024 */ UNK_TYPE1 unk12024[0x6];
     /* 0x1202A */ u16 unk1202A;
@@ -956,7 +956,9 @@ typedef struct {
     /* 0x1202E */ u16 unk1202E;
     /* 0x12030 */ UNK_TYPE1 pad12030[0x14];
     /* 0x12044 */ s16 unk12044;
-    /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
+    /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
+    /* 0x12048 */ u8 unk12048; // EnKakasi
+    /* 0x12049 */ UNK_TYPE1 pad12049[0x21];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
@@ -1564,6 +1566,38 @@ typedef struct {
     /* 0x4 */ s32 unk4;
     /* 0x8 */ s32 unk8;
 } struct_80133038_arg2; // size = 0xC
+
+typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
+
+typedef s32 (*func_8013E640_arg6)(struct GlobalContext*, Actor*, Actor*, void*);
+
+struct struct_8013DF3C_arg1;
+typedef void (*struct_8013DF3C_arg1_unk_func1)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+typedef s32 (*struct_8013DF3C_arg1_unk_func2)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+
+typedef struct struct_8013DF3C_arg1 {
+    /* 0x00 */ Path* setupPathList;
+    /* 0x04 */ s32 pathIndex;
+    /* 0x08 */ Vec3s* points;
+    /* 0x0C */ s32 count;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ u8 unk_1C;
+    /* 0x1D */ u8 unk_1D;
+    /* 0x20 */ Vec3f unk_20;
+    /* 0x2C */ Vec3f unk_2C;
+    /* 0x38 */ Vec3f unk_38;
+    /* 0x44 */ Vec3f* unk_44;
+    /* 0x48 */ Actor* actor;
+    /* 0x4C */ f32 unk_4C;
+    /* 0x50 */ f32 unk_50;
+    /* 0x54 */ Vec3s unk_54;
+    /* 0x5C */ struct_8013DF3C_arg1_unk_func1 unk_5C;
+    /* 0x60 */ struct_8013DF3C_arg1_unk_func2 unk_60;
+    /* 0x64 */ struct_8013DF3C_arg1_unk_func2 unk_64;
+    /* 0x68 */ struct_8013DF3C_arg1_unk_func2 unk_68;
+} struct_8013DF3C_arg1; // size = 0x6C
 
 typedef struct {
     /* 0x00 */ u32 type;
