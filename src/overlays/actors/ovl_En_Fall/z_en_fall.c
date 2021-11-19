@@ -131,8 +131,14 @@ void func_80A6BF90(EnFall* this, GlobalContext* globalCtx) {
     }
 }
 
-// bss function
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C1DC.s")
+void func_80A6C1DC(EnFall* this) {
+    s32 i;
+
+    for (i = 0; i < 50; i++) {
+        D_80A6E990[i].unk_00 = 3;
+    }
+    this->unk_158 = 0;
+}
 
 void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
