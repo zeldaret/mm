@@ -607,8 +607,34 @@ void func_80A6D444(EnFall* this) {
     }
 }
 
-// bss function
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6D504.s")
+s32 func_80A6D504(EnFall* this) {
+    s16 sp2E;
+    s32 i;
+    f32 temp_f16;
+
+    for (i = 0; i < 50; i++) {
+        if (D_80A6E990[i].unk_00 >= 3) {
+            D_80A6E990[i].unk_00 = (s32)Rand_ZeroFloat(3.0f);
+            D_80A6E990[i].unk_04.x = this->actor.world.pos.x;
+            D_80A6E990[i].unk_04.y = this->actor.world.pos.y;
+            D_80A6E990[i].unk_04.z = this->actor.world.pos.z;
+            sp2E = randPlusMinusPoint5Scaled(65536.0f);
+            temp_f16 = (1.0f - (Rand_ZeroFloat(1.0f) * Rand_ZeroFloat(1.0f))) * 3000.0f;
+            D_80A6E990[i].unk_04.x += Math_SinS(sp2E) * temp_f16;
+            D_80A6E990[i].unk_04.z += Math_CosS(sp2E) * temp_f16;
+            D_80A6E990[i].unk_10.x = 0.0f;
+            D_80A6E990[i].unk_10.z = 0.0f;
+            D_80A6E990[i].unk_10.y = 80.0f;
+            D_80A6E990[i].unk_1C = (s16)randPlusMinusPoint5Scaled(65536.0f);
+            D_80A6E990[i].unk_1E = (s16)randPlusMinusPoint5Scaled(65536.0f);
+            D_80A6E990[i].unk_20 = (s16)randPlusMinusPoint5Scaled(65536.0f);
+            this->unk_158 += 1;
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 void func_80A6D698(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
