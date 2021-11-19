@@ -1684,8 +1684,8 @@ asm/non_matchings/code/z_parameter/func_80121FC4.s,func_80121FC4,0x80121FC4,0x14
 asm/non_matchings/code/z_path/func_801224E0.s,func_801224E0,0x801224E0,0x11
 asm/non_matchings/code/z_path/func_80122524.s,func_80122524,0x80122524,0x2A
 asm/non_matchings/code/z_path/func_801225CC.s,func_801225CC,0x801225CC,0x25
-asm/non_matchings/code/z_frame_advance/FrameAdvance_Init.s,FrameAdvance_Init,0x80122660,0x4
-asm/non_matchings/code/z_frame_advance/FrameAdvance_Update.s,FrameAdvance_Update,0x80122670,0x1C
+asm/non_matchings/code/z_pause/func_80122660.s,func_80122660,0x80122660,0x4
+asm/non_matchings/code/z_pause/func_80122670.s,func_80122670,0x80122670,0x1C
 asm/non_matchings/code/z_player_lib/func_801226E0.s,func_801226E0,0x801226E0,0x19
 asm/non_matchings/code/z_player_lib/func_80122744.s,func_80122744,0x80122744,0x7
 asm/non_matchings/code/z_player_lib/func_80122760.s,func_80122760,0x80122760,0x42

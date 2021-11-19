@@ -403,7 +403,7 @@
             0x8010CB70 : "[PADDING]",
             0x8010CB80 : "z_parameter",
             0x801224E0 : "z_path",
-            0x80122660 : "z_frame_advance",
+            0x80122660 : "z_pause",
             0x801226E0 : "z_player_lib",
             0x80129EF0 : "z_prenmi",
             0x8012A080 : "z_quake",
