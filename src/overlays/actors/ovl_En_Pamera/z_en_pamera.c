@@ -1,6 +1,6 @@
 /*
  * File: z_en_pamera.c
- * Overlay: En_Pamera
+ * Overlay: ovl_En_Pamera
  * Description: Pamela
  */
 
@@ -434,7 +434,7 @@ void func_80BD909C(EnPamera* this, GlobalContext* globalCtx) {
 void func_80BD90AC(EnPamera* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK && (this->actionFunc != func_80BD8758) &&
+    if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE && (this->actionFunc != func_80BD8758) &&
         (this->actionFunc != func_80BD8964) && (this->actionFunc != func_80BD8A7C) &&
         (this->actionFunc != func_80BD8F60) && ((this->actionFunc != func_80BD8B70) || (this->pathIndex != 0)) &&
         ((this->actionFunc != func_80BD8DB0) || (this->actor.speedXZ != 3.0f)) &&
@@ -590,9 +590,9 @@ void func_80BD9840(EnPamera* this, GlobalContext* globalCtx) {
         func_80BD9904(this);
     }
     if (gSaveContext.weekEventReg[14] & 4) {
-        func_801A0204(0x27);
+        func_801A0204(NA_BGM_MUSIC_BOX_HOUSE);
     } else {
-        func_801A0204(0x1F);
+        func_801A0204(NA_BGM_INSIDE_A_HOUSE);
     }
 }
 
@@ -610,7 +610,7 @@ void func_80BD9938(EnPamera* this) {
 
 void func_80BD994C(EnPamera* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO_MASK) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
             if (1) {}
             func_80BD93CC(this, 0, 1);
             func_801518B0(globalCtx, 0x15A8, &this->actor);

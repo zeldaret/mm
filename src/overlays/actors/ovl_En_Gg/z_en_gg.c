@@ -1,3 +1,9 @@
+/*
+ * File: z_en_gg.c
+ * Overlay: ovl_En_Gg
+ * Description: Darmani's Ghost
+ */
+
 #include "z_en_gg.h"
 
 #define FLAGS 0x00000089

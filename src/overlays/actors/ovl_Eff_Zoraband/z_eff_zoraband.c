@@ -1,3 +1,9 @@
+/*
+ * File z_eff_zoraband.c
+ * Overlay: ovl_Eff_Zoraband
+ * Description:
+ */
+
 #include "z_eff_zoraband.h"
 
 #define FLAGS 0x00000030

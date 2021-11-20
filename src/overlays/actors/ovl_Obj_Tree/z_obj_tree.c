@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_tree.c
+ * Overlay: ovl_Obj_Tree
+ * Description: Single tree (e.g. North Clock Town)
+ */
+
 #include "z_obj_tree.h"
 
 #define FLAGS 0x02000000

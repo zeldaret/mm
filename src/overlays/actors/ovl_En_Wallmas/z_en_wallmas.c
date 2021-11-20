@@ -1,3 +1,9 @@
+/*
+ * File: z_en_wallmas.c
+ * Overlay: ovl_En_Wallmas
+ * Description: Wallmaster
+ */
+
 #include "z_en_wallmas.h"
 
 #define FLAGS 0x00000415

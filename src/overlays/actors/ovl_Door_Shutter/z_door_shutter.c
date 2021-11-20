@@ -1,3 +1,9 @@
+/*
+ * File: z_door_shutter.c
+ * Overlay: ovl_Door_Shutter
+ * Description: Studded Lifting Door / Ikana Castle Rolling Door
+ */
+
 #include "z_door_shutter.h"
 
 #define FLAGS 0x00000010

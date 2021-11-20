@@ -1,6 +1,6 @@
 /*
  * File: z_en_pametfrog.c
- * Overlay: En_Pametfrog
+ * Overlay: ovl_En_Pametfrog
  * Description: Gekko & Snapper Miniboss: Gekko
  */
 
@@ -273,10 +273,10 @@ void EnPametfrog_ChangeColliderThaw(EnPametfrog* this, GlobalContext* globalCtx)
 void EnPametfrog_JumpWaterEffects(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f pos;
 
-    if (this->actor.yDistToWater > 0.0f) {
+    if (this->actor.depthInWater > 0.0f) {
         pos.x = this->actor.world.pos.x;
         pos.z = this->actor.world.pos.z;
-        pos.y = this->actor.world.pos.y + this->actor.yDistToWater;
+        pos.y = this->actor.world.pos.y + this->actor.depthInWater;
         EffectSsGRipple_Spawn(globalCtx, &pos, 150, 550, 0);
         pos.y += 8.0f;
         EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 550);
@@ -286,10 +286,10 @@ void EnPametfrog_JumpWaterEffects(EnPametfrog* this, GlobalContext* globalCtx) {
 void EnPametfrog_IdleWaterEffects(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f pos;
 
-    if ((this->actor.yDistToWater > 0.0f) && ((globalCtx->gameplayFrames % 14) == 0)) {
+    if ((this->actor.depthInWater > 0.0f) && ((globalCtx->gameplayFrames % 14) == 0)) {
         pos.x = this->actor.world.pos.x;
         pos.z = this->actor.world.pos.z;
-        pos.y = this->actor.world.pos.y + this->actor.yDistToWater;
+        pos.y = this->actor.world.pos.y + this->actor.depthInWater;
         EffectSsGRipple_Spawn(globalCtx, &pos, 150, 550, 0);
     }
 }
@@ -1054,7 +1054,7 @@ void EnPametfrog_LookAround(EnPametfrog* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (SkelAnime_Update(&this->skelAnime) && (func_801690CC(globalCtx) == 0)) {
         if (!this->unk_2AE) {
-            func_801A2E54(0x38);
+            func_801A2E54(NA_BGM_MINI_BOSS);
             this->unk_2AE = true;
         }
         EnPametfrog_SetupJumpToLink(this);
@@ -1274,7 +1274,7 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, GlobalContext* g
 
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     if (this->actor.params == GEKKO_INIT_SNAPPER) {
-        func_801A2E54(0x38);
+        func_801A2E54(NA_BGM_MINI_BOSS);
         EnPametfrog_SetupRunToSnapper(this);
     }
 }

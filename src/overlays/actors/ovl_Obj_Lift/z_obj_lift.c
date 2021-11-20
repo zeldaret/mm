@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_lift.c
+ * Overlay: ovl_Obj_Lift
+ * Description: Dampé's Grave - Brown Elevator
+ */
+
 #include "z_obj_lift.h"
 
 #define FLAGS 0x00000010

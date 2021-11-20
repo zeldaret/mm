@@ -1,3 +1,9 @@
+/*
+ * File z_en_am.c
+ * Overlay: ovl_En_Am
+ * Description: Armos
+ */
+
 #include "z_en_am.h"
 
 #define FLAGS 0x00000405

@@ -1,3 +1,9 @@
+/*
+ * File: z_boss_05.c
+ * Overlay: ovl_Boss_05
+ * Description: Bio Deku Baba
+ */
+
 #include "z_boss_05.h"
 
 #define FLAGS 0x00000005

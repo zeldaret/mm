@@ -1,3 +1,9 @@
+/*
+ * File: z_arrow_fire.c
+ * Overlay: ovl_Arrow_Fire
+ * Description: Fire Arrow
+ */
+
 #include "z_arrow_fire.h"
 
 #define FLAGS 0x02000010

@@ -425,7 +425,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_Update(&this->skelAnime);
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRYS_MASK) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRY) {
         pos = player->bodyPartsPos[0];
         this->targetSpeedXZ = 5.0f;
         EnElforg_MoveToTarget(this, &pos);
@@ -434,7 +434,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
         EnElforg_MoveToTarget(this, &this->actor.home.pos);
     }
 
-    scaledYDistance = this->actor.yDistToPlayer - (this->actor.shape.yOffset * this->actor.scale.y);
+    scaledYDistance = this->actor.playerHeightRel - (this->actor.shape.yOffset * this->actor.scale.y);
     if (!func_801233E4(globalCtx)) {
         if ((this->actor.xzDistToPlayer < 30.0f) && (scaledYDistance < 12.0f) && (scaledYDistance > -68.0f)) {
             EnElforg_SetupFairyCollected(this, globalCtx);
@@ -464,14 +464,14 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
                 gSaveContext.inventory.strayFairies[gSaveContext.unk_48C8]++;
                 func_801518B0(globalCtx, 0x11, NULL);
                 if (gSaveContext.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
-                    func_801A3098(0x922);
+                    func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 }
             }
         }
 
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 20.0f, 7);
         func_80ACCBB8(this, globalCtx);
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRYS_MASK) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRY) {
             if (!(this->flags & STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED)) {
                 play_sound(NA_SE_SY_FAIRY_MASK_SUCCESS);
             }

@@ -1,3 +1,9 @@
+/*
+ * File z_en_bombers.c
+ * Overlay: ovl_En_Bombers
+ * Description: Bombers - Blue-Hatted Bomber
+ */
+
 #include "z_en_bombers.h"
 
 #define FLAGS 0x00000009

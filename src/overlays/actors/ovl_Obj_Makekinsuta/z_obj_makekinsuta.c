@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_makekinsuta.c
+ * Overlay: ovl_Obj_Makekinsuta
+ * Description: Dirt Patch with Skulltula hiding in it
+ */
+
 #include "z_obj_makekinsuta.h"
 
 #define FLAGS 0x00000010

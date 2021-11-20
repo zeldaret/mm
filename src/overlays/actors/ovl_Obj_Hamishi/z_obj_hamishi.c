@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_hamishi.c
+ * Overlay: ovl_Obj_Hamishi
+ * Description: Hammer Stone
+ */
+
 #include "z_obj_hamishi.h"
 
 #define FLAGS 0x00000010

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_elf.c
+ * Overlay: ovl_En_Elf
+ * Description: Fairies
+ */
+
 #include "z_en_elf.h"
 
 #define FLAGS 0x02000030
