@@ -1,12 +1,7 @@
 #include "global.h"
 #include "vt.h"
 
-static Vtx sVertices[] = {
-    VTX(-32, -32, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
-    VTX(32, 32, 0, 1024, 0, 0xFF, 0xFF, 0xFF, 0xFF),
-    VTX(-32, 32, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
-    VTX(32, -32, 0, 1024, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
-};
+#include "assets/code/eff_shield_particle/eff_shield_particle.c"
 
 void EffectShieldParticle_Init(void* thisx, void* initParamsx) {
     EffectShieldParticle* this = (EffectShieldParticle*)thisx;
@@ -203,7 +198,7 @@ void EffectShieldParticle_Draw(void* thisx, GraphicsContext* gfxCtx) {
             }
 
             gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPVertex(POLY_XLU_DISP++, sVertices, 4, 0);
+            gSPVertex(POLY_XLU_DISP++, sEffShieldParticleVtx, 4, 0);
             gSP2Triangles(POLY_XLU_DISP++, 0, 1, 2, 0, 0, 3, 1, 0);
         }
     }
