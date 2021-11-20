@@ -302,9 +302,9 @@ void ObjTokeidai_TowerGear_TransformedIdle(ObjTokeidai* this, GlobalContext* glo
 }
 
 /**
- * This doesn't seem to be used in the final game. This, used in conjunction
- * with the following function, would make the tower's clock slide off the
- * tower and spin through the air.
+ * This is hard to see in the final game. This, used in conjunction
+ * with the following function, makes the tower's clock slide off the
+ * tower and spin through the air when the moon crashes.
  */
 void ObjTokeidai_TowerClock_Fall(ObjTokeidai* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.x += this->fallingClockFaceRotationalVelocity;
@@ -319,7 +319,7 @@ void ObjTokeidai_TowerClock_Fall(ObjTokeidai* this, GlobalContext* globalCtx) {
 }
 
 /**
- * This doesn't seem to be used in the final game. Presumably, this would make the
+ * This is hard to see in the final game. This makes the
  * tower's clock slide off as the moon crashes into it.
  */
 void ObjTokeidai_TowerClock_SlideOff(ObjTokeidai* this, GlobalContext* globalCtx) {
@@ -386,8 +386,9 @@ void ObjTokeidai_Counterweight_TransformedIdle(ObjTokeidai* this, GlobalContext*
 }
 
 /**
- * This doesn't seem to be used in the final game. Presumably, this would make the walls of
- * the clock tower appear to buckle as the moon crashes into it.
+ * This is hard to see in the final game. It makes the walls of
+ * the clock tower tip over as the moon crashes into it, but the
+ * giant moon mostly obscures it.
  */
 void ObjTokeidai_Walls_Collapse(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (this->actor.shape.rot.x < 0x4000) {
