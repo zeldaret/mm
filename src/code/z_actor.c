@@ -4528,24 +4528,20 @@ TexturePtr* D_801AEFA8[] = {
     D_040923E0,
 };
 
-#ifdef NON_MATCHING
-// stack is one variable too big
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 arg3, f32 arg4, f32 arg5, f32 arg6,
                    u8 mode) {
     if (arg6 > 0.001f) {
         s32 temp_v1_3;
-
-        f32 temp_f0;
+        s16 i;
+        MtxF* temp_s3;
         f32 phi_f2;
         f32 sp124;
         f32 sp120;
         f32 sp11C;
         f32 sp118;
         Vec3f* limbAux = limbPos;
-        MtxF* temp_s3;
         u32 sp110 = globalCtx->gameplayFrames;
         f32 sp74;
-        s16 i;
 
         temp_s3 = Matrix_GetCurrentState();
 
@@ -4582,11 +4578,9 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
 
                 sp74 = arg6 * 255.0f;
                 for (i = 0; i < arg3; i++) {
-                    temp_f0 = (f32)(i & 3);
-                    temp_f0 = 30.0f * temp_f0;
-
-                    phi_f2 = sp74 - temp_f0;
-                    if (sp74 < temp_f0) {
+                    phi_f2 = i & 3;
+                    phi_f2 = sp74 - (30.0f * phi_f2);
+                    if (sp74 < (30.0f * (i & 3))) {
                         phi_f2 = 0.0f;
                     }
                     if (phi_f2 > 255.0f) {
@@ -4634,7 +4628,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, temp_v1_3 * 3, temp_v1_3 * -0xC, 0x20, 0x40,
                                                 1, 0U, 0U, 0x20, 0x20));
 
-                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_APPLY);
+                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
                     Matrix_Scale(sp118, sp118, 1.0f, MTXMODE_APPLY);
 
@@ -4662,11 +4656,9 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                 sp74 = arg6 * 255.0f;
 
                 for (i = 0; i < arg3; i++) {
-                    temp_f0 = (i & 3);
-                    temp_f0 = 30.0f * temp_f0;
-
-                    phi_f2 = sp74 - temp_f0;
-                    if (sp74 < temp_f0) {
+                    phi_f2 = i & 3;
+                    phi_f2 = sp74 - 30.0f * phi_f2;
+                    if (sp74 < 30.0f * (i & 3)) {
                         phi_f2 = 0.0f;
                     }
                     phi_f2 = phi_f2;
@@ -4790,9 +4782,6 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE680.s")
-#endif
 
 static Color_RGBA8 D_801AEFB8 = { 170, 255, 255, 255 };
 static Color_RGBA8 D_801AEFBC = { 200, 200, 255, 255 };
