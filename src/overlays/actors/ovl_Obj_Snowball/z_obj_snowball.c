@@ -31,6 +31,9 @@ void func_80B04B48(ObjSnowball* this, GlobalContext* globalCtx);
 void func_80B04B60(ObjSnowball* this, GlobalContext* globalCtx);
 void func_80B04D34(Actor* thisx, GlobalContext* globalCtx);
 
+extern Gfx D_060072F0;
+extern Gfx D_060077D0;
+extern Gfx D_06007C60;
 extern Gfx D_060082D0;
 extern Gfx D_06008B90;
 
@@ -93,9 +96,9 @@ static Color_RGBA8 D_80B04FB8 = { 180, 180, 180, 255 };
 static Vec3f D_80B04FBC = { 0.0f, 0.3f, 0.0f };
 
 static Gfx* D_80B04FC8[] = {
-    0x060072F0,
-    0x060077D0,
-    0x06007C60,
+    &D_060072F0,
+    &D_060077D0,
+    &D_06007C60,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -191,27 +194,25 @@ void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
             phi_s4 = 0;
             phi_s0 = 0x40;
             phi_f22 = 1.0f;
-        } else {
-            if (temp_s7 < 6) {
-                temp_s2 = D_80B04FC8[1];
-                gravity = -340;
-                phi_s4 = 0;
-                phi_f22 = 0.9f;
-                if (Rand_ZeroOne() < 0.4f) {
-                    phi_s0 = 0x20;
-                } else {
-                    phi_s0 = 0x40;
-                }
+        } else if (temp_s7 < 6) {
+            temp_s2 = D_80B04FC8[1];
+            gravity = -340;
+            phi_s4 = 0;
+            phi_f22 = 0.9f;
+            if (Rand_ZeroOne() < 0.4f) {
+                phi_s0 = 0x20;
             } else {
-                temp_s2 = D_80B04FC8[0];
-                gravity = -400;
-                phi_s4 = 1;
-                phi_f22 = 0.8f;
-                if (Rand_Next() > 0) {
-                    phi_s0 = 0x21;
-                } else {
-                    phi_s0 = 0x41;
-                }
+                phi_s0 = 0x40;
+            }
+        } else {
+            temp_s2 = D_80B04FC8[0];
+            gravity = -400;
+            phi_s4 = 1;
+            phi_f22 = 0.8f;
+            if (Rand_Next() > 0) {
+                phi_s0 = 0x21;
+            } else {
+                phi_s0 = 0x41;
             }
         }
 
@@ -336,6 +337,7 @@ void func_80B03688(ObjSnowball* this, GlobalContext* globalCtx) {
     }
 }
 
+#define NON_MATCHING
 #ifdef NON_MATCHING
 void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
     f32 temp_f30 = sqrtf(arg1);
@@ -375,22 +377,20 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
             } else {
                 phi_s0 = 0x41;
             }
-        } else {
-            if ((i & 3) == 1) {
-                temp_s1 = D_80B04FC8[1];
-                phi_s2 = -340;
-                phi_s3 = 1;
-                if (Rand_Next() > 0) {
-                    phi_s0 = 0x21;
-                } else {
-                    phi_s0 = 0x41;
-                }
+        } else if ((i & 3) == 1) {
+            temp_s1 = D_80B04FC8[1];
+            phi_s2 = -340;
+            phi_s3 = 1;
+            if (Rand_Next() > 0) {
+                phi_s0 = 0x21;
             } else {
-                temp_s1 = D_80B04FC8[2];
-                phi_s2 = -280;
-                phi_s3 = 0;
-                phi_s0 = 0x40;
+                phi_s0 = 0x41;
             }
+        } else {
+            temp_s1 = D_80B04FC8[2];
+            phi_s2 = -280;
+            phi_s3 = 0;
+            phi_s0 = 0x40;
         }
 
         EffectSsKakera_Spawn(globalCtx, &spD8, &spCC, &spD8, phi_s2, phi_s0, 30, 0, 0,
@@ -488,7 +488,7 @@ void ObjSnowball_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (sp34) {
         this->actor.textId = 0x238;
         this->actor.flags |= 1;
-        this->actor.targetArrowOffset = 466.66666f;
+        this->actor.targetArrowOffset = 1400.0f / 3.0f;
         Actor_SetHeight(&this->actor, 24.0f);
         this->actor.targetMode = 3;
     }
