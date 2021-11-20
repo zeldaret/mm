@@ -505,8 +505,6 @@ void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalConte
     func_800B4F78(targetCtx, actor->category, globalCtx);
 }
 
-#ifdef NON_MATCHING
-// stack is too big
 void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -517,13 +515,12 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
         if (targetCtx->unk48 != 0) {
             TargetContextEntry* entry;
             s16 spCE = 0xFF;
-            f32 temp1;
+            f32 var1 = 1.0f;
             Vec3f spBC;
             s32 spB8;
             f32 spB4;
             s32 spB0;
             s32 spAC;
-            f32 var1 = 1.0f;
             f32 var2;
             s32 i;
 
@@ -582,7 +579,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
                         Matrix_InsertZRotation_s((targetCtx->unk4B * 512), MTXMODE_APPLY);
 
                         for (i = 0; i < 4; i++) {
-                            Matrix_InsertZRotation_s(M_PI / 2, MTXMODE_APPLY);
+                            Matrix_InsertZRotation_s(0x4000, MTXMODE_APPLY);
                             Matrix_StatePush();
                             Matrix_InsertTranslation(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
                             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -621,9 +618,6 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_DrawZTarget.s")
-#endif
 
 // OoT: func_8002C7BC
 void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameState* gameState) {
