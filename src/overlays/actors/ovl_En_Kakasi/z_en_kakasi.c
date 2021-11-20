@@ -323,13 +323,13 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 this->actor.flags |= 0x10000;
             }
 
-            if (Actor_RequestTalk(&this->actor, globalCtx)) {
+            if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
                 player->stateFlags1 &= ~0x20;
                 this->unkState196 = 2;
                 this->actor.flags &= ~0x10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
-                func_800B8500(&this->actor, globalCtx, 9999.9f, 9999.9f, -1);
+                func_800B8500(&this->actor, &globalCtx->state, 9999.9f, 9999.9f, -1);
             }
         }
     }
@@ -347,12 +347,12 @@ void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
 
     // first talk to scarecrow dialogue
     this->actor.textId = 0x1644;
-    if (func_800B8718(&this->actor, globalCtx) != 0) {
+    if (func_800B8718(&this->actor, &globalCtx->state)) {
         this->skelanime.playSpeed = 1.0f;
         EnKakasi_SetupSongTeach(this, globalCtx);
         return;
     }
-    if (Actor_RequestTalk(&this->actor, globalCtx)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->skelanime.playSpeed = 1.0f;
         EnKakasi_SetupDialogue(this);
         return;
@@ -379,8 +379,8 @@ void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIM_IDLE);
     }
     if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8614(&this->actor, globalCtx, 100.0f);
-        func_800B874C(&this->actor, globalCtx, 100.0f, 80.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+        func_800B874C(&this->actor, &globalCtx->state, 100.0f, 80.0f);
     }
 }
 
@@ -811,7 +811,7 @@ void EnKakasi_DancingRemark(EnKakasi* this, GlobalContext* globalCtx) {
         if (currentDay == 3 && gSaveContext.isNight) {
             EnKakasi_SetupDigAway(this);
         } else {
-            func_801A2BB8(0x3E);
+            func_801A2BB8(NA_BGM_SARIAS_SONG);
             EnKakasi_SetupDanceNightAway(this);
         }
     }
@@ -1100,10 +1100,10 @@ void EnKakasi_SetupIdleRisen(EnKakasi* this) {
 
 void EnKakasi_IdleRisen(EnKakasi* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 1000, 0);
-    if (Actor_RequestTalk(&this->actor, globalCtx)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnKakasi_RisenDialogue;
     } else {
-        func_800B8614(&this->actor, globalCtx, 70.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 70.0f);
     }
 }
 

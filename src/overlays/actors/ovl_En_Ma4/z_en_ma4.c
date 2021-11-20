@@ -751,7 +751,7 @@ void EnMa4_SetupHorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
     gSaveContext.weekEventReg[0x8] &= (u8)~0x01;
     this->actionFunc = EnMa4_HorsebackGameEnd;
     Audio_QueueSeqCmd(NA_BGM_STOP);
-    Audio_QueueSeqCmd(0x8041);
+    Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
 }
 
 void EnMa4_HorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {

@@ -339,12 +339,12 @@ void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.params == 2) {
         if (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 100.0f) {
-            func_801A1DB8(&this->actor.projectedPos, 0x2E, 540.0f);
+            func_801A1DB8(&this->actor.projectedPos, NA_BGM_SONG_OF_STORMS, 540.0f);
         }
         return;
     }
     if (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 200.0f) {
-        func_801A1D44(&this->actor.projectedPos, 0x2E, 540.0f);
+        func_801A1D44(&this->actor.projectedPos, NA_BGM_SONG_OF_STORMS, 540.0f);
     }
     if (this->unusedTimer != 0) {
         this->unusedTimer--;
