@@ -1604,8 +1604,6 @@ typedef struct DebugDispObject {
     /* 0x2C */ s32 pad; //Padding not in the OOT version
 } DebugDispObject; // size = 0x30
 
-typedef s32 (*func_8013E640_arg6)(GlobalContext*, Actor*, Actor*, void*);
-
 typedef struct {
     /* 0x00 */ u8* value;
     /* 0x04 */ const char* name;
