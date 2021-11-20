@@ -7,6 +7,9 @@ struct EnBomjima;
 
 typedef void (*EnBomjimaActionFunc)(struct EnBomjima*, GlobalContext*);
 
+#define ENBOMJIMA_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
+#define ENBOMJIMA_GET_F(thisx) ((thisx)->params & 0xF)
+
 typedef struct EnBomjima {
     /* 0x0000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;

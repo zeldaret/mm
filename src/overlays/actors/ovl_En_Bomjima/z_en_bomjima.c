@@ -153,8 +153,8 @@ void EnBomjima_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     gSaveContext.weekEventReg[83] &= (u8)~0x4;
     this->actor.targetMode = 0;
-    this->unk_2E6 = (this->actor.params >> 4) & 0xF;
-    this->unk_2E4 = this->actor.params & 0xF;
+    this->unk_2E6 = ENBOMJIMA_GET_F0(&this->actor);
+    this->unk_2E4 = ENBOMJIMA_GET_F(&this->actor);
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->unk_2E6 == 0) {
@@ -351,7 +351,7 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
 }
 
 void func_80BFEA94(EnBomjima* this, GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[6].first;
+    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
 
     while (actor != NULL) {
         if (actor->id != ACTOR_EN_BOMBAL) {
