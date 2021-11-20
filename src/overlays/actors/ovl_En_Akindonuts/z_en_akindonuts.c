@@ -185,7 +185,7 @@ s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    func_8017B7F8(&sp30, func_80086B30(phi_f12, phi_f14) * 10430.378f, &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }
@@ -569,7 +569,7 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
 
         case 0x15FE:
             if (!(gSaveContext.weekEventReg[62] & 1)) {
-                gSaveContext.weekEventReg[62] |= 0x1;
+                gSaveContext.weekEventReg[62] |= 1;
                 this->unk_33C = 0x15FF;
                 break;
             }
@@ -587,7 +587,7 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
         case 0x15EA:
             this->unk_32C |= 0x1;
             if (this->unk_32C & 8) {
-                this->unk_32C &= ~0x8;
+                this->unk_32C &= ~8;
 
                 switch (func_80BED27C(this)) {
                     case 2:
@@ -670,7 +670,7 @@ void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
         case 0x15EA:
             this->unk_32C |= 0x1;
             if (this->unk_32C & 8) {
-                this->unk_32C &= ~0x8;
+                this->unk_32C &= ~8;
 
                 switch (func_80BED27C(this)) {
                     case 2:
@@ -747,7 +747,7 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
 
         case 0x1610:
             if (!(gSaveContext.weekEventReg[62] & 8)) {
-                gSaveContext.weekEventReg[62] |= 0x8;
+                gSaveContext.weekEventReg[62] |= 8;
                 this->unk_33C = 0x1611;
                 break;
             }
@@ -765,7 +765,7 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
         case 0x15EA:
             this->unk_32C |= 0x1;
             if (this->unk_32C & 0x8) {
-                this->unk_32C &= ~0x8;
+                this->unk_32C &= ~8;
 
                 switch (func_80BED2FC(this)) {
                     case 2:
@@ -843,7 +843,7 @@ void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
         case 0x1618:
             this->unk_32C |= 0x1;
             if (this->unk_32C & 0x8) {
-                this->unk_32C &= ~0x8;
+                this->unk_32C &= ~8;
 
                 switch (func_80BED2FC(this)) {
                     case 2:
@@ -926,7 +926,7 @@ void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
         case 0x15EA:
             this->unk_32C |= 0x1;
             if (this->unk_32C & 0x8) {
-                this->unk_32C &= ~0x8;
+                this->unk_32C &= ~8;
 
                 switch (func_80BED35C(this)) {
                     case 2:
@@ -1004,7 +1004,7 @@ void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
         case 0x15EA:
             this->unk_32C |= 0x1;
             if (this->unk_32C & 0x8) {
-                this->unk_32C &= ~0x8;
+                this->unk_32C &= ~8;
 
                 switch (func_80BED35C(this)) {
                     case 2:
@@ -1046,41 +1046,41 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     s32 params = ENAKINDONUTS_GET_3(&this->actor);
-    s32 itemGiven = func_80123810(globalCtx);
+    s32 itemActionParam = func_80123810(globalCtx);
 
-    if (itemGiven > 0) {
-        if (itemGiven == ITEM_DEED_MOUNTAIN) {
+    if (itemActionParam > PLAYER_AP_NONE) {
+        if (itemActionParam == PLAYER_AP_DEED_LAND) {
             player->actor.textId = D_80BF048C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15E4) {
-                player->unk_A87 = itemGiven;
+                player->unk_A87 = itemActionParam;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemGiven == ITEM_LETTER_KAFEI) {
+        } else if (itemActionParam == PLAYER_AP_DEED_SWAMP) {
             player->actor.textId = D_80BF0494[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15F9) {
-                player->unk_A87 = itemGiven;
+                player->unk_A87 = itemActionParam;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemGiven == ITEM_PENDANT_MEMORIES) {
+        } else if (itemActionParam == PLAYER_AP_DEED_MOUNTAIN) {
             player->actor.textId = D_80BF049C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x160C) {
-                player->unk_A87 = itemGiven;
+                player->unk_A87 = itemActionParam;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemGiven == ITEM_TINGLE_MAP) {
+        } else if (itemActionParam == PLAYER_AP_DEED_OCEAN) {
             player->actor.textId = D_80BF04A4[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x1621) {
-                player->unk_A87 = itemGiven;
+                player->unk_A87 = itemActionParam;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1091,7 +1091,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80BEF18C;
         }
         func_801477B4(globalCtx);
-    } else if (itemGiven < 0) {
+    } else if (itemActionParam < PLAYER_AP_NONE) {
         this->unk_33C = D_80BF04AC[params];
         func_80151938(globalCtx, this->unk_33C);
         this->actionFunc = func_80BEF18C;
@@ -1159,13 +1159,13 @@ void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx) {
-    s16 sp26 = this->skelAnime.animCurrentFrame;
-    s16 sp24 = SkelAnime_GetFrameCount(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp26 = this->skelAnime.curFrame;
+    s16 sp24 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
     s16 phi_v0;
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
 
-    if ((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) {
+    if ((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) {
         phi_v0 = true;
     } else {
         phi_v0 = false;
@@ -1220,7 +1220,7 @@ void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEEDC0(EnAkindonuts* this, GlobalContext* globalCtx) {
-    if (this->skelAnime.animCurrentFrame == this->skelAnime.animFrameCount) {
+    if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
         this->actionFunc = func_80BEEE10;
         func_8013BC6C(&this->skelAnime, sAnimations, 0);
     }
@@ -1234,10 +1234,10 @@ void func_80BEEE10(EnAkindonuts* this, GlobalContext* globalCtx) {
         this->unk_2DC(this, globalCtx);
         this->actionFunc = func_80BEEFA8;
     } else if (((this->actor.xzDistToPlayer < 100.0f) &&
-                (((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) ? true : false)) ||
+                (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
                this->actor.isTargeted) {
         func_800B8614(&this->actor, globalCtx, 100.0f);
-    } else if (!(((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) ? true : false) ||
+    } else if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
                !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         this->unk_338 = 4;
         func_8013BC6C(&this->skelAnime, sAnimations, 4);
@@ -1301,8 +1301,8 @@ void func_80BEF18C(EnAkindonuts* this, GlobalContext* globalCtx) {
 
 void func_80BEF20C(EnAkindonuts* this, GlobalContext* globalCtx) {
     u8 sp27 = func_80152498(&globalCtx->msgCtx);
-    s16 sp24 = this->skelAnime.animCurrentFrame;
-    s16 sp22 = SkelAnime_GetFrameCount(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp24 = this->skelAnime.curFrame;
+    s16 sp22 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
 
     if (this->unk_356 == 40) {
         this->unk_338 = 5;
@@ -1363,8 +1363,8 @@ void func_80BEF4B8(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEF518(EnAkindonuts* this, GlobalContext* globalCtx) {
-    s16 sp26 = this->skelAnime.animCurrentFrame;
-    s16 sp24 = SkelAnime_GetFrameCount(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp26 = this->skelAnime.curFrame;
+    s16 sp24 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
 
     switch (sp26) {
         case 10:
@@ -1470,8 +1470,8 @@ void func_80BEF770(EnAkindonuts* this, GlobalContext* globalCtx) {
 
 void func_80BEF83C(EnAkindonuts* this, GlobalContext* globalCtx) {
     Vec3f sp34;
-    s16 sp32 = this->skelAnime.animCurrentFrame;
-    s16 sp30 = SkelAnime_GetFrameCount(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp32 = this->skelAnime.curFrame;
+    s16 sp30 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
 
     if (sp32 == sp30) {
         Math_SmoothStepToS(&this->unk_362, 0x1C71, 3, 0x100, 0);
@@ -1558,7 +1558,7 @@ void func_80BEFAF0(EnAkindonuts* this, GlobalContext* globalCtx) {
                 this->unk_334++;
             }
         }
-    } else if (this->actor.yDistToPlayer > 500.0f) {
+    } else if (this->actor.playerHeightRel > 500.0f) {
         ActorCutscene_Stop(this->cutscene);
         this->actionFunc = func_80BEFD74;
     }
@@ -1600,7 +1600,7 @@ void EnAkindonuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnAkindonuts* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600AC70, &D_06005488, this->jointTable, this->morphTable, 28);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600AC70, &D_06005488, this->jointTable, this->morphTable, 28);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
@@ -1637,7 +1637,7 @@ void EnAkindonuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnAkindonuts* this = THIS;
 
     Actor_SetHeight(&this->actor, 60.0f);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 
     this->actionFunc(this, globalCtx);
@@ -1712,6 +1712,6 @@ void EnAkindonuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnAkindonuts* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                   EnAkindonuts_OverrideLimbDraw, EnAkindonuts_PostLimbDraw, EnAkindonuts_UnkActorDraw, &this->actor);
 }

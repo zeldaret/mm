@@ -38,7 +38,7 @@ typedef struct EnAkindonuts {
     /* 0x034C */ f32 unk_34C;
     /* 0x0350 */ s16 unk_350;
     /* 0x0352 */ s16 unk_352;
-    /* 0x0354 */ char unk354[0x2];
+    /* 0x0354 */ UNK_TYPE1 unk354[0x2];
     /* 0x0356 */ s16 unk_356;
     /* 0x0358 */ f32 unk_358;
     /* 0x035C */ s16 unk_35C;
