@@ -394,6 +394,7 @@ void func_80A5BB40(EnKusa2* this, GlobalContext* globalCtx, s32 arg2) {
 #else
 static Vec3f D_80A5EB0C = { 0.0f, 0.3f, 0.0f };
 static Vec3f D_80A5EB18 = { 0.0f, 0.0f, 0.0f };
+void func_80A5BB40(EnKusa2* this, GlobalContext* globalCtx, s32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kusa2/func_80A5BB40.s")
 #endif
 
