@@ -416,7 +416,7 @@ void func_80B71354(EnRailSkb* this) {
 
 void func_80B713A4(EnRailSkb* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        if ((this->actor.xzDistToPlayer > 65.0f) || (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT)) {
+        if ((this->actor.xzDistToPlayer > 65.0f) || (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN)) {
             func_80B70FA0(this);
         } else {
             func_800BDC5C(&this->skelAnime, sAnimations, 2);
@@ -493,12 +493,12 @@ void func_80B716A8(EnRailSkb* this, GlobalContext* globalCtx) {
         this->unk_3FE = 1;
         func_80B71D8C(this, globalCtx, func_80B723F8);
         if (!func_80B7285C(this)) {
-            func_801518B0(globalCtx, 5100, &this->actor);
-            this->unk_400 = 5100;
+            func_801518B0(globalCtx, 0x13EC, &this->actor);
+            this->unk_400 = 0x13EC;
             func_80B72830(this, 1);
         } else {
-            func_801518B0(globalCtx, 5109, &this->actor);
-            this->unk_400 = 5109;
+            func_801518B0(globalCtx, 0x13F5, &this->actor);
+            this->unk_400 = 0x13F5;
         }
         func_800BDC5C(&this->skelAnime, sAnimations, 12);
         func_80B717C8(this);
@@ -523,7 +523,7 @@ void func_80B717E0(EnRailSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 3:
-            if ((globalCtx->gameplayFrames & 1) != 0) {
+            if ((globalCtx->gameplayFrames % 2) != 0) {
                 this->unk_3FA = 1;
             }
             break;
@@ -697,7 +697,7 @@ void func_80B71EA8(EnRailSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80B71F3C(EnRailSkb* this, GlobalContext* globalCtx) {
-    if (((this->unk_400 == 5101) || (this->unk_400 == 5109)) && (this->unk_3F2 != 1)) {
+    if (((this->unk_400 == 0x13ED) || (this->unk_400 == 0x13F5)) && (this->unk_3F2 != 1)) {
         func_80B71D8C(this, globalCtx, func_80B71DF0);
         func_80B717C8(this);
         this->unk_3F2 = 1;
@@ -705,49 +705,49 @@ void func_80B71F3C(EnRailSkb* this, GlobalContext* globalCtx) {
 
     if (func_80147624(globalCtx)) {
         switch (this->unk_400) {
-            case 5100:
-                func_801518B0(globalCtx, 5101, &this->actor);
-                this->unk_400 = 5101;
+            case 0x13EC:
+                func_801518B0(globalCtx, 0x13ED, &this->actor);
+                this->unk_400 = 0x13ED;
                 break;
 
-            case 5101:
-                func_801518B0(globalCtx, 5102, &this->actor);
-                this->unk_400 = 5102;
+            case 0x13ED:
+                func_801518B0(globalCtx, 0x13EE, &this->actor);
+                this->unk_400 = 0x13EE;
                 break;
 
-            case 5102:
-                func_801518B0(globalCtx, 5103, &this->actor);
-                this->unk_400 = 5103;
+            case 0x13EE:
+                func_801518B0(globalCtx, 0x13EF, &this->actor);
+                this->unk_400 = 0x13EF;
                 break;
 
-            case 5103:
-            case 5109:
-                func_801518B0(globalCtx, 5104, &this->actor);
-                this->unk_400 = 5104;
+            case 0x13EF:
+            case 0x13F5:
+                func_801518B0(globalCtx, 0x13F0, &this->actor);
+                this->unk_400 = 0x13F0;
                 break;
 
-            case 5105:
-                func_801518B0(globalCtx, 5106, &this->actor);
-                this->unk_400 = 5106;
+            case 0x13F1:
+                func_801518B0(globalCtx, 0x13F2, &this->actor);
+                this->unk_400 = 0x13F2;
                 break;
 
-            case 5106:
+            case 0x13F2:
                 if (this->unk_3FC == 1) {
-                    func_801518B0(globalCtx, 5108, &this->actor);
-                    this->unk_400 = 5108;
+                    func_801518B0(globalCtx, 0x13F4, &this->actor);
+                    this->unk_400 = 0x13F4;
                 } else {
                     func_801477B4(globalCtx);
                     func_80B71D8C(this, globalCtx, func_80B71650);
                 }
                 break;
 
-            case 5107:
-                func_801518B0(globalCtx, 5106, &this->actor);
-                this->unk_400 = 5106;
+            case 0x13F3:
+                func_801518B0(globalCtx, 0x13F2, &this->actor);
+                this->unk_400 = 0x13F2;
                 this->unk_3FC = 1;
                 break;
 
-            case 5108:
+            case 0x13F4:
                 func_801477B4(globalCtx);
                 func_80B71D8C(this, globalCtx, func_80B718B0);
                 break;
@@ -759,12 +759,12 @@ void func_80B72100(EnRailSkb* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
-            func_801518B0(globalCtx, 5105, &this->actor);
-            this->unk_400 = 5105;
+            func_801518B0(globalCtx, 0x13F1, &this->actor);
+            this->unk_400 = 0x13F1;
         } else {
             func_8019F208();
-            func_801518B0(globalCtx, 5107, &this->actor);
-            this->unk_400 = 5107;
+            func_801518B0(globalCtx, 0x13F3, &this->actor);
+            this->unk_400 = 0x13F3;
         }
     }
 }
@@ -926,7 +926,7 @@ s32 func_80B7285C(EnRailSkb* this) {
 void func_80B72880(EnRailSkb* this, GlobalContext* globalCtx) {
     if ((this->actionFunc == func_80B70FF8) || (this->actionFunc == func_80B716A8)) {
         if (this->actionFunc != func_80B716A8) {
-            if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT) {
+            if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
                 this->actor.flags &= ~(4 | 1);
                 this->actor.flags |= (8 | 1);
                 this->actor.flags |= 0x100000;
@@ -934,7 +934,7 @@ void func_80B72880(EnRailSkb* this, GlobalContext* globalCtx) {
                 this->actor.textId = 0;
                 func_80B71650(this);
             }
-        } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAINS_HAT) {
+        } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAIN) {
             this->actor.flags &= ~(8 | 1);
             this->actor.flags &= ~0x100000;
             this->actor.flags |= 5;
