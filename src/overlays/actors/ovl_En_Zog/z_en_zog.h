@@ -10,13 +10,8 @@ typedef void (*EnZogActionFunc)(struct EnZog*, GlobalContext*);
 #define ENZOG_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENZOG_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
-enum {
-    /* 2 */ ENZOG_F_2 = 2,
-};
-
-enum {
-    /* 63 */ ENZOG_FC00_63 = 63,
-};
+#define ENZOG_F_2 2
+#define ENZOG_FC00_63 63
 
 typedef struct EnZog {
     /* 0x000 */ Actor actor;
