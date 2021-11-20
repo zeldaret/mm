@@ -462,7 +462,7 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
         this->timer = 5;
-        func_801A1F00(3, 0x5A);
+        func_801A1F00(3, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
         globalCtx->setPlayerTalkAnim(globalCtx, &D_0400E2A8, 0);
     } else {

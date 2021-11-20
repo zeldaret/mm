@@ -860,7 +860,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x3475:
                     SET_FLAGS_START_RACE;
-                    func_800FD750(0x40);
+                    func_800FD750(NA_BGM_HORSE);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk_1887F = 5;
                     globalCtx->sceneLoadFlag = 0x14;
@@ -1107,7 +1107,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x3475:
                     SET_FLAGS_START_RACE;
-                    func_800FD750(0x40);
+                    func_800FD750(NA_BGM_HORSE);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk_1887F = 5;
                     globalCtx->sceneLoadFlag = 0x14;

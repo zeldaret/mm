@@ -449,7 +449,7 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, GlobalContext* globalCtx) {
 void EnBigpo_SpawnCutsceneStage7(EnBigpo* this) {
     this->idleTimer = 15;
     if (this->unkBool204 == false) {
-        func_801A2E54(0x38);
+        func_801A2E54(NA_BGM_MINI_BOSS);
         this->unkBool204 = true;
     }
     this->actionFunc = EnBigpo_SpawnCutsceneStage8;
@@ -535,7 +535,7 @@ void EnBigpo_WarpingIn(EnBigpo* this, GlobalContext* globalCtx) {
     if (this->idleTimer == 32) {
         this->mainColor.a = 255; // fully visible
         if (this->unkBool204 == false) {
-            func_801A2E54(0x38);
+            func_801A2E54(NA_BGM_MINI_BOSS);
             this->unkBool204 = true;
         }
         EnBigpo_SetupIdleFlying(this);

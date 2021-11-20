@@ -590,9 +590,9 @@ void func_80BD9840(EnPamera* this, GlobalContext* globalCtx) {
         func_80BD9904(this);
     }
     if (gSaveContext.weekEventReg[14] & 4) {
-        func_801A0204(0x27);
+        func_801A0204(NA_BGM_MUSIC_BOX_HOUSE);
     } else {
-        func_801A0204(0x1F);
+        func_801A0204(NA_BGM_INSIDE_A_HOUSE);
     }
 }
 
