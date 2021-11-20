@@ -234,8 +234,8 @@ void func_80A5B508(void) {
     sp74[6] = tempf7 * temp_f26 * temp_f20 * temp_f2;
     sp74[7] = tempf8 * temp_f22 * temp_f24 * temp_f2;
 
-    sp50 = (sp74[1] * 0.2f);
-    sp4C = (sp74[3] * 0.2f);
+    sp50 = sp74[1] * 0.2f;
+    sp4C = sp74[3] * 0.2f;
 
     for (i = 0, idx = 0; i < 2; i++, idx += 4) {
         tempf1 = sp74[(idx + 0) & 7];
@@ -319,11 +319,11 @@ void func_80A5B508(void);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kusa2/func_80A5B508.s")
 #endif
 
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
 // Meant to be a MtxF?, but using a2 instead of v0 for the end value
 void func_80A5B954(f32 arg0[2][16], f32 arg1) {
     s32 i;
-    MtxF* matrix = SysMatrix_GetCurrentState();
+    MtxF* matrix = Matrix_GetCurrentState();
 
     for (i = 0; i < ARRAY_COUNT(arg0[0]); i++) {
         matrix->mf[0][i] += arg0[0][i] * arg1;
@@ -358,7 +358,7 @@ void func_80A5BAFC(EnKusa2* this, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 35.0f, 0.0f, 0x45);
 }
 
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
 void func_80A5BB40(EnKusa2* this, GlobalContext* globalCtx, s32 arg2) {
     static Vec3f D_80A5EB0C = { 0.0f, 0.3f, 0.0f };
     static Vec3f D_80A5EB18 = { 0.0f, 0.0f, 0.0f };
@@ -399,7 +399,8 @@ static Vec3f D_80A5EB18 = { 0.0f, 0.0f, 0.0f };
 
 void func_80A5BD14(EnKusa2* this, GlobalContext* globalCtx, s32 arg2) {
     static s32 D_80A5EB24[] = {
-        0, 0, 0, 0, 0, 0, 0, 0, 2,
+        ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN,
+        ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_RED,
     };
     EnKusa2* kusa2 = this->unk_1C0;
 
@@ -424,7 +425,7 @@ void func_80A5BDB0(EnKusa2* this, GlobalContext* globalCtx) {
     Vec3f sp50;
     s16 phi_s0;
 
-    sp50.y = this->actor.world.pos.y + this->actor.yDistToWater;
+    sp50.y = this->actor.world.pos.y + this->actor.depthInWater;
 
     for (phi_s0 = 0, i = 0; i < 4; i++, phi_s0 += 0x4000) {
         sp50.x = (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.x;
@@ -512,11 +513,10 @@ EnKusa2UnkBssSubStruct2* func_80A5C0B8(EnKusa2UnkBssStruct* arg0) {
 
 EnKusa2UnkBssSubStruct* func_80A5C104(EnKusa2UnkBssStruct* arg0, Vec3f* arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
     static s32 D_80A5EB48 = 0;
-    EnKusa2UnkBssSubStruct* temp_s0;
+    EnKusa2UnkBssSubStruct* temp_s0 = func_80A5C074(arg0);
     f32 sp20;
     f32 temp_f6;
 
-    temp_s0 = func_80A5C074(arg0);
     Math_Vec3f_Copy(&temp_s0->unk_00, arg1);
     Math_Vec3f_Copy(&temp_s0->unk_0C, &D_801D15B0);
 
@@ -545,7 +545,7 @@ EnKusa2UnkBssSubStruct* func_80A5C104(EnKusa2UnkBssStruct* arg0, Vec3f* arg1, f3
     temp_s0->unk_40 = -1.5f;
     temp_s0->unk_44 = -50.0f * sp20;
     temp_s0->unk_48 = 140.0f;
-    temp_s0->unk_4C = 19600.0f;
+    temp_s0->unk_4C = SQ(140.0f);
     temp_s0->unk_50 = 819.2f;
     temp_s0->unk_54 = 327.68f;
     temp_s0->unk_58 = 2.5f;
@@ -554,7 +554,7 @@ EnKusa2UnkBssSubStruct* func_80A5C104(EnKusa2UnkBssStruct* arg0, Vec3f* arg1, f3
     temp_s0->unk_64 = 0.35f;
     temp_s0->unk_68 = 0.0875f;
     temp_s0->unk_6C = 160.0f;
-    temp_s0->unk_70 = 25600.0f;
+    temp_s0->unk_70 = SQ(160.0f);
     temp_s0->unk_74 = 204.8f;
     temp_s0->unk_78 = 100.0f;
     temp_s0->unk_7C = 327.68f;
@@ -619,7 +619,7 @@ void func_80A5C410(EnKusa2UnkBssStruct* arg0, EnKusa2UnkBssSubStruct2* arg1, Vec
             if (phi_v0 || phi_s2) {
                 f32 phi_f22;
 
-                if (temp_f0 < 0.0001f) {
+                if (temp_f0 < SQ(0.01f)) {
                     phi_f22 = 0.0f;
                 } else {
                     phi_f22 = sqrtf(temp_f0);
@@ -862,12 +862,10 @@ void func_80A5CD0C(EnKusa2* this) {
 
 void func_80A5CF44(EnKusa2* this) {
     s32 i;
-
     Vec3f spA8;
     Vec3f sp9C;
     Vec3s sp94;
     Vec3s sp8C;
-
     f32 temp_f20;
     s16 temp_s0;
     s32 phi_s2;
@@ -1110,17 +1108,17 @@ void func_80A5D9C8(EnKusa2* this, GlobalContext* globalCtx) {
     Vec3f sp30;
     s32 sp2C;
 
-    D_80A5EAF4.x += 0x2AF8;
-    D_80A5EAF4.y += 0x4268;
-    D_80A5EAF4.z += 0x2328;
+    D_80A5EAF4.x += 11000;
+    D_80A5EAF4.y += 17000;
+    D_80A5EAF4.z += 9000;
 
     this->actor.scale.x = (Math_SinS(D_80A5EAF4.x) * 0.020000001f) + 0.4f;
     this->actor.scale.y = (Math_SinS(D_80A5EAF4.y) * 0.020000001f) + 0.4f;
     this->actor.scale.z = (Math_SinS(D_80A5EAF4.z) * 0.020000001f) + 0.4f;
 
-    D_80A5EB04.x += 0x4650;
-    D_80A5EB04.y += 0x4268;
-    D_80A5EB04.z += 0x3E80;
+    D_80A5EB04.x += 18000;
+    D_80A5EB04.y += 17000;
+    D_80A5EB04.z += 16000;
 
     D_80A5EAFC.x = Math_SinS(D_80A5EB04.x) * 1000.0f;
     D_80A5EAFC.y = Math_SinS(D_80A5EB04.y) * 1000.0f;
@@ -1308,7 +1306,7 @@ void func_80A5E210(EnKusa2* this, GlobalContext* globalCtx) {
         this->unk_1CC += 1000;
     } else {
         func_80A5BF60(this, 10);
-        this->unk_1CF += -20;
+        this->unk_1CF -= 20;
         this->unk_1CC += 5000;
     }
 
@@ -1358,15 +1356,15 @@ void func_80A5E4BC(EnKusa2* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     func_80A5BAFC(this, globalCtx);
     func_80A5BF60(this, 6);
-    this->actor.shape.rot.x += -0x5DC;
+    this->actor.shape.rot.x -= 0x5DC;
     this->actor.shape.rot.y += this->unk_1CC;
 
-    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 5.0f) && (Rand_ZeroOne() < 0.8f)) {
+    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 5.0f) && (Rand_ZeroOne() < 0.8f)) {
         EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, 20.0f, 10.0f, 20.0f, (Rand_ZeroOne() * 0.08f) + 0.04f);
     }
 
     this->unk_1CF -= 15;
-    if (this->unk_1CF < 16) {
+    if (this->unk_1CF <= 15) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -1418,7 +1416,7 @@ void func_80A5E6F0(Actor* thisx, GlobalContext* globalCtx) {
         EnKusa2UnkBssSubStruct2* s = &D_80A5F1C0.unk_0480[i];
 
         if (s->unk_2C > 0) {
-            SysMatrix_SetStateRotationAndTranslation(s->unk_04.x, s->unk_04.y, s->unk_04.z, &s->unk_20);
+            Matrix_SetStateRotationAndTranslation(s->unk_04.x, s->unk_04.y, s->unk_04.z, &s->unk_20);
             Matrix_Scale(s->unk_00, s->unk_00, s->unk_00, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1462,7 +1460,7 @@ void func_80A5E9B4(Actor* thisx, GlobalContext* globalCtx) {
     sp18.x = thisx->shape.rot.x + D_80A5EAFC.x;
     sp18.y = thisx->shape.rot.y + D_80A5EAFC.y;
     sp18.z = thisx->shape.rot.z + D_80A5EAFC.z;
-    SysMatrix_SetStateRotationAndTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
+    Matrix_SetStateRotationAndTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
     func_800BDFC0(globalCtx, D_050078A0);
 }

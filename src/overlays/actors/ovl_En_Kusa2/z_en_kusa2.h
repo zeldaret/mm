@@ -53,7 +53,7 @@ typedef struct {
     /* 0x20 */ Vec3s unk_20;
     /* 0x26 */ Vec3s unk_26;
     /* 0x2C */ s16 unk_2C;
-    /* 0x2C */ char unk2E[0x2];
+    /* 0x2C */ UNK_TYPE1 unk2E[0x2];
 } EnKusa2UnkBssSubStruct2; // size = 0x30
 
 typedef struct {
@@ -71,7 +71,7 @@ typedef struct EnKusa2 {
     /* 0x01BE */ s8 unk_1BE;
     /* 0x01C0 */ struct EnKusa2* unk_1C0;
     /* 0x01C4 */ s16 unk_1C4;
-    /* 0x01C6 */ char unk1C6[0x2];
+    /* 0x01C6 */ UNK_TYPE1 unk1C6[0x2];
     /* 0x01C8 */ s16 unk_1C8;
     /* 0x01CA */ s16 unk_1CA;
     /* 0x01CC */ s16 unk_1CC;
