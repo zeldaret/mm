@@ -9,6 +9,8 @@ typedef void (*EnGmActionFunc)(struct EnGm*, GlobalContext*);
 typedef s32 (*EnGmUnkFunc)(struct EnGm*, GlobalContext*);
 typedef void (*EnGmUnkFunc2)(struct EnGm*, GlobalContext*);
 
+#define ENGM_GET_FF(thisx) ((thisx)->params & 0xFF)
+
 typedef struct EnGm {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
