@@ -13,6 +13,13 @@ void BgGoronOyu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B40100(BgGoronOyu* this, GlobalContext* globalCtx);
+void func_80B400C8(BgGoronOyu* this, GlobalContext* globalCtx);
+void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx);
+void func_80B40308(BgGoronOyu* this, GlobalContext* globalCtx);
+void func_80B40394(BgGoronOyu* this, GlobalContext* globalCtx);
+void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx);
+
 /*const ActorInit Bg_Goron_Oyu_InitVars = {
     ACTOR_BG_GORON_OYU,
     ACTORCAT_BG,
@@ -25,133 +32,115 @@ void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx);
     (ActorFunc)BgGoronOyu_Draw,
 };*/
 
-void func_80B40100(BgGoronOyu* _this, GlobalContext* globalCtx);
-void func_80B400C8(BgGoronOyu* _this, GlobalContext* globalCtx);
-void func_80B401F8(BgGoronOyu* _this, GlobalContext* globalCtx);
-void func_80B40308(BgGoronOyu* _this, GlobalContext* globalCtx);
-void func_80B40394(BgGoronOyu* _this, GlobalContext* globalCtx);
-void func_80B40160(BgGoronOyu* _this, GlobalContext* globalCtx);
+extern CollisionHeader D_06000988;
+extern Vec3f D_80B40780;
 
-void func_80B40080(BgGoronOyu* _this) {
-    _this->unk17E = 1;
-    _this->actionFunc = &func_80B400C8;
+void func_80B40080(BgGoronOyu* this) {
+    this->unk17E = 1;
+    this->actionFunc = func_80B400C8;
 }
 
-void func_80B4009C(BgGoronOyu* _this) {
-    BgGoronOyuActionFunc actionCallback;
-
-    _this->unk17E = 0;
-    _this->initialActorCutscene = _this->polyActor.actor.cutscene;
-
-    actionCallback = &func_80B40100;
-    _this->actionFunc = actionCallback;
-    _this->flt164 = 20.0f;
+void func_80B4009C(BgGoronOyu* this) {
+    this->unk17E = 0;
+    this->initialActorCutscene = this->polyActor.actor.cutscene;
+    this->actionFunc = func_80B40100;
+    this->flt164 = 20.0f;
 }
 
-void func_80B400C8(BgGoronOyu* _this, GlobalContext* globalCtx) {
-    func_80B40308(_this, globalCtx);
-    func_80B401F8(_this, globalCtx);
+void func_80B400C8(BgGoronOyu* this, GlobalContext* globalCtx) {
+    func_80B40308(this, globalCtx);
+    func_80B401F8(this, globalCtx);
 }
 
-void func_80B40100(BgGoronOyu* _this, GlobalContext* globalCtx) {
-    s16 actorCutscene;
-    s16 actorCutscene_2;
+void func_80B40100(BgGoronOyu* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->initialActorCutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->initialActorCutscene, &this->polyActor.actor);
 
-    actorCutscene = _this->initialActorCutscene;
+        this->actionFunc = func_80B40160;
+    } else {
+        ActorCutscene_SetIntentToPlay(this->initialActorCutscene);
+    }
+}
 
-    if (ActorCutscene_GetCanPlayNext(actorCutscene) != 0) {
-        actorCutscene_2 = _this->initialActorCutscene;
-        ActorCutscene_StartAndSetUnkLinkFields(actorCutscene_2, &_this->polyActor.actor);
+void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx) {
+    Math_StepToF(&this->flt164, 0.0f, 0.2f);
+    this->polyActor.actor.world.pos.y = this->polyActor.actor.home.pos.y - this->flt164;
+    func_80B40308(this, globalCtx);
 
-        _this->actionFunc = &func_80B40160;
-        return;
+    if (this->flt164 <= 0.0f) {
+        ActorCutscene_Stop(this->initialActorCutscene);
+        this->flt164 = 0.0f;
+        func_80B40080(this);
     }
 
-    ActorCutscene_SetIntentToPlay(_this->initialActorCutscene);
+    func_8019F1C0(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
-void func_80B40160(BgGoronOyu* _this, GlobalContext* globalCtx) {
-    Math_StepToF(&_this->flt164, 0.0f, 0.2f);
-    _this->polyActor.actor.world.pos.y = _this->polyActor.actor.home.pos.y - _this->flt164;
-    func_80B40308(_this, globalCtx);
-
-    if (_this->flt164 <= 0.0f) {
-        ActorCutscene_Stop(_this->initialActorCutscene);
-        _this->flt164 = 0.0f;
-        func_80B40080(_this);
-    }
-
-    // SFX ID
-    func_8019F1C0(&D_80B40780, (u16)0x205EU);
-}
-
-void func_80B401F8(BgGoronOyu* _this, GlobalContext* globalCtx) {
+void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx) {
     Player* player;
     Vec3f playerWorldDistance;
 
-    if (Actor_HasParent(&_this->polyActor.actor, globalCtx) != 0) {
-        _this->polyActor.actor.parent = NULL;
+    if (Actor_HasParent(&this->polyActor.actor, globalCtx)) {
+        this->polyActor.actor.parent = NULL;
         return;
     }
 
     player = GET_PLAYER(globalCtx);
+    Math_Vec3f_DistXYZAndStoreDiff(&this->waterBoxPos, &player->actor.world.pos, &playerWorldDistance);
 
-    Math_Vec3f_DistXYZAndStoreDiff(&_this->collisionHeaderMinVec3f, &player->actor.world.pos, &playerWorldDistance);
-
-    if (playerWorldDistance.x >= 0.0f && playerWorldDistance.x <= _this->collisionHeaderMaxX &&
-        playerWorldDistance.z >= 0.0f && playerWorldDistance.z <= _this->collisionHeaderMaxY &&
+    if (playerWorldDistance.x >= 0.0f && playerWorldDistance.x <= this->waterBoxXLength &&
+        playerWorldDistance.z >= 0.0f && playerWorldDistance.z <= this->waterBoxZLength &&
         fabsf(playerWorldDistance.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-        func_800B8A1C(&_this->polyActor.actor, globalCtx, 0xBA, _this->polyActor.actor.xzDistToPlayer,
-                      fabsf(_this->polyActor.actor.playerHeightRel));
+        func_800B8A1C(&this->polyActor.actor, globalCtx, 0xBA, this->polyActor.actor.xzDistToPlayer,
+                      fabsf(this->polyActor.actor.playerHeightRel));
     }
 }
 
-void func_80B40308(BgGoronOyu* _this, GlobalContext* globalCtx) {
-    CollisionHeader* colHeader;
+void func_80B40308(BgGoronOyu* this, GlobalContext* globalCtx) {
+    WaterBox* waterBox;
     f32 sp28;
 
-    if (func_800CA1AC(globalCtx, &globalCtx->colCtx, _this->polyActor.actor.world.pos.x,
-                      _this->polyActor.actor.world.pos.z, &sp28, &colHeader) != 0) {
-        Math_Vec3s_ToVec3f(&_this->collisionHeaderMinVec3f, &colHeader->minBounds);
-        _this->collisionHeaderMaxX = colHeader->maxBounds.x;
-        _this->collisionHeaderMaxY = colHeader->maxBounds.y;
+    if (func_800CA1AC(globalCtx, &globalCtx->colCtx, this->polyActor.actor.world.pos.x,
+                      this->polyActor.actor.world.pos.z, &sp28, &waterBox) != 0) {
+        Math_Vec3s_ToVec3f(&this->waterBoxPos, &waterBox->xMin);
+        this->waterBoxXLength = waterBox->xLength;
+        this->waterBoxZLength = waterBox->zLength;
     }
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B40394.s")
 
 void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgGoronOyu* _this = (BgGoronOyu*)thisx;
-    void* unkPad;
-    CollisionHeader* actorCollisionHeader = NULL;
+    BgGoronOyu* this = (BgGoronOyu*)thisx;
+    s32 pad;
+    CollisionHeader* colHeader = NULL;
 
-    Actor_SetScale(&_this->polyActor.actor, 0.1f);
-    DynaPolyActor_Init(&_this->polyActor, 1);
-    BgCheck_RelocateMeshHeader(&D_6000988, &actorCollisionHeader);
+    Actor_SetScale(&this->polyActor.actor, 0.1f);
+    DynaPolyActor_Init(&this->polyActor, 1);
+    BgCheck_RelocateMeshHeader(&D_06000988, &colHeader);
 
-    _this->polyActor.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &_this->polyActor, actorCollisionHeader);
+    this->polyActor.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->polyActor, colHeader);
 
-    func_80B40308(_this, globalCtx);
+    func_80B40308(this, globalCtx);
 
-    if (!!thisx->params) {
+    if (thisx->params != 0) {
         thisx->world.pos.y = thisx->home.pos.y;
-        func_80B40080(_this);
-        return;
+        func_80B40080(this);
+    } else {
+        thisx->world.pos.y = thisx->home.pos.y - 20.0f;
+        func_80B4009C(this);
     }
-
-    thisx->world.pos.y = thisx->home.pos.y - 20.0f;
-    func_80B4009C(_this);
 }
 
 void BgGoronOyu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgGoronOyu* _this = (BgGoronOyu*)thisx;
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, _this->polyActor.bgId);
+    BgGoronOyu* this = (BgGoronOyu*)thisx;
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->polyActor.bgId);
 }
 
 void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgGoronOyu* _this = (BgGoronOyu*)thisx;
-    _this->actionFunc(_this, globalCtx);
-    func_80B40394(_this, globalCtx);
+    BgGoronOyu* this = (BgGoronOyu*)thisx;
+    this->actionFunc(this, globalCtx);
+    func_80B40394(this, globalCtx);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/BgGoronOyu_Draw.s")
