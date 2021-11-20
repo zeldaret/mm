@@ -212,7 +212,7 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
             this->unk_16A = 10;
 
             Matrix_StatePush();
-            Matrix_RotateY((s16)randPlusMinusPoint5Scaled(256.0f) + this->actor.world.rot.y, MTXMODE_NEW);
+            Matrix_RotateY((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
             sp54.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
             Matrix_MultiplyVector3fByState(&sp54, &this->actor.velocity);
             Matrix_StatePop();
@@ -654,7 +654,7 @@ void func_80A4B0C8(EnWizFire* this, GlobalContext* globalCtx) {
                                     -globalCtx->state.frames & 0x7F, 0x20, 0x40, 1, globalCtx->state.frames & 0xFF,
                                     globalCtx->state.frames & 0xFF, 0x10, 0x10));
 
-        Matrix_RotateY(0, 1);
+        Matrix_RotateY(0, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_06005750);

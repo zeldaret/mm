@@ -10,10 +10,10 @@ typedef void (*EnWizFireActionFunc)(struct EnWizFire*, GlobalContext*);
 typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
-    /* 0x02 */ char unk02[0x4];
+    /* 0x02 */ UNK_TYPE1 unk02[0x4];
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ s16 unk_08;
-    /* 0x0A */ char unk0A[0x2];
+    /* 0x0A */ UNK_TYPE1 unk0A[0x2];
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ Vec3f unk_10;
     /* 0x1C */ Vec3f unk_1C;
