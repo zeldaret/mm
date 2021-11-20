@@ -66,7 +66,7 @@ typedef enum {
 
 typedef struct EnKanban {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk144[4]; // actionFunc?
+    /* 0x144 */ UNK_TYPE1 unk144[4]; // actionFunc?
     /* 0x148 */ u8 frameCount;
     /* 0x14A */ s16 airTimer;
     /* 0x14C */ u8 actionState;
