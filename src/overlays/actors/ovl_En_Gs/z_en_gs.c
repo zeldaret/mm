@@ -357,8 +357,8 @@ f32 func_80998334(EnGs* this, GlobalContext* globalCtx, f32* arg2, f32* arg3, s1
 
     if (arg9 == 0) {
         sp2C = Math_SmoothStepToF(arg2, *arg3, arg5, arg6, arg7);
-        this->unk_1B0[0].x = (__sinf((*arg4 % arg8) * (1.0f / arg8) * 360.0f * 0.017453292f) * *arg2) + 1.0f;
-        this->unk_1B0[0].y = 1.0f - (__sinf((*arg4 % arg8) * (1.0f / arg8) * 360.0f * 0.017453292f) * *arg2);
+        this->unk_1B0[0].x = (__sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2) + 1.0f;
+        this->unk_1B0[0].y = 1.0f - (__sinf(DEGF_TO_RADF((*arg4 % arg8) * (1.0f / arg8) * 360.0f)) * *arg2);
         (*arg4)++;
     }
     return sp2C;
@@ -391,7 +391,7 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
     if (func_8013E2D4(&this->actor, this->unk_212, -1, 0)) {
         Player* player = GET_PLAYER(globalCtx);
 
-        Matrix_RotateY(this->actor.shape.rot.y, 0);
+        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
         Matrix_GetStateTranslationAndScaledZ(160.0f, &sp38);
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
@@ -733,8 +733,8 @@ s32 func_80998F9C(EnGs* this, GlobalContext* globalCtx) {
         sp40 = Math_SmoothStepToF(&this->unk_1EC, this->unk_1F0, 0.8f, 0.02f, 0.001f);
         this->unk_1B0[0].x = this->unk_1E4 + 1.0f;
         this->unk_1B0[0].y = this->unk_1DC + 1.0f;
-        this->unk_1B0[0].x += __sinf((this->unk_1D4 % 10) * 0.1f * 360.0f * (M_PI / 180.0f)) * this->unk_1EC;
-        this->unk_1B0[0].y += __sinf((this->unk_1D4 % 10) * 0.1f * 360.0f * (M_PI / 180.0f)) * this->unk_1EC;
+        this->unk_1B0[0].x += __sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
+        this->unk_1B0[0].y += __sinf(DEGF_TO_RADF((this->unk_1D4 % 10) * 0.1f * 360.0f)) * this->unk_1EC;
         this->unk_1D4++;
         if ((sp48 == 0.0f) && (sp44 == 0.0f) && (sp40 == 0.0f)) {
             this->unk_216 = 0;
@@ -810,7 +810,7 @@ s32 func_809995A4(EnGs* this, GlobalContext* globalCtx) {
             this->unk_21C = 3;
             this->unk_21E = 40;
             this->unk_1D4 = 0;
-            this->unk_19D += 1;
+            this->unk_19D++;
         }
     }
 
@@ -878,7 +878,7 @@ s32 func_809995A4(EnGs* this, GlobalContext* globalCtx) {
         }
 
         if (this->actor.playerHeightRel < -12000.0f) {
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, 9, this->actor.world.pos.x, this->actor.world.pos.y,
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 0);
             Actor_MarkForDeath(&this->actor);
             sp7C = 0;
