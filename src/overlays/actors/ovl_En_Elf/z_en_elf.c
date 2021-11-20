@@ -84,7 +84,7 @@ void func_8088C51C(EnElf* this, s32 arg1) {
             this->unk_24C = 0x200;
             this->unk_26C = func_8088D3EC;
             this->unk_25C = 0x64;
-            this->skelAnime.animPlaybackSpeed = 1.0f;
+            this->skelAnime.playSpeed = 1.0f;
             this->unk_250 = 5.0f;
             this->unk_254 = 20.0f;
             break;
@@ -95,7 +95,7 @@ void func_8088C51C(EnElf* this, s32 arg1) {
             this->unk_26C = func_8088D3EC;
             this->unk_25C = 0x64;
             this->unk_250 = 1.0f;
-            this->skelAnime.animPlaybackSpeed = 1.0f;
+            this->skelAnime.playSpeed = 1.0f;
             this->unk_254 = 5.0f;
             break;
 
@@ -103,7 +103,7 @@ void func_8088C51C(EnElf* this, s32 arg1) {
             this->unk_24A = 0x400;
             this->unk_24C = 0;
             this->unk_26C = func_8088D3EC;
-            this->skelAnime.animPlaybackSpeed = 1.0f;
+            this->skelAnime.playSpeed = 1.0f;
             this->unk_254 = 0.0f;
             this->unk_250 = 5.0f;
             break;
@@ -112,7 +112,7 @@ void func_8088C51C(EnElf* this, s32 arg1) {
             this->unk_24A = 0x1000;
             this->unk_24C = 0x200;
             this->unk_26C = func_8088D3EC;
-            this->skelAnime.animPlaybackSpeed = 1.0f;
+            this->skelAnime.playSpeed = 1.0f;
             this->unk_250 = 3.0f;
             this->unk_254 = 10.0f;
             break;
@@ -123,7 +123,7 @@ void func_8088C51C(EnElf* this, s32 arg1) {
             this->unk_25C = 1;
             this->unk_250 = 0.0f;
             this->unk_254 = 0.0f;
-            this->skelAnime.animPlaybackSpeed = 1.0f;
+            this->skelAnime.playSpeed = 1.0f;
             break;
 
         case 6:
@@ -132,7 +132,7 @@ void func_8088C51C(EnElf* this, s32 arg1) {
             this->unk_26C = func_8088D3EC;
             this->unk_250 = 0.0f;
             this->unk_254 = 0.0f;
-            this->skelAnime.animPlaybackSpeed = 1.0f;
+            this->skelAnime.playSpeed = 1.0f;
             break;
 
         case 1:
@@ -141,14 +141,14 @@ void func_8088C51C(EnElf* this, s32 arg1) {
             this->unk_26C = func_8088D3EC;
             this->unk_250 = 5.0f;
             this->unk_254 = 7.5f;
-            this->skelAnime.animPlaybackSpeed = 2.0f;
+            this->skelAnime.playSpeed = 2.0f;
             break;
 
         case 2:
             this->unk_24A = 0x400;
             this->unk_24C = 0x1000;
             this->unk_26C = func_8088D470;
-            this->skelAnime.animPlaybackSpeed = 1.0f;
+            this->skelAnime.playSpeed = 1.0f;
             this->unk_250 = 10.0f;
             this->unk_254 = 20.0f;
             break;
@@ -158,7 +158,7 @@ void func_8088C51C(EnElf* this, s32 arg1) {
             this->unk_26C = func_8088D504;
             this->unk_254 = 1.0f;
             this->unk_250 = 1.0f;
-            this->skelAnime.animPlaybackSpeed = 1.0f;
+            this->skelAnime.playSpeed = 1.0f;
             break;
 
         case 4:
@@ -167,7 +167,7 @@ void func_8088C51C(EnElf* this, s32 arg1) {
             this->unk_26C = func_8088D3EC;
             this->unk_250 = 60.0f;
             this->unk_254 = 20.0f;
-            this->skelAnime.animPlaybackSpeed = 2.0f;
+            this->skelAnime.playSpeed = 2.0f;
             break;
 
         case 9:
@@ -176,7 +176,7 @@ void func_8088C51C(EnElf* this, s32 arg1) {
             this->unk_26C = func_8088D3EC;
             this->unk_25C = 0x2A;
             this->unk_254 = 1.0f;
-            this->skelAnime.animPlaybackSpeed = 1.0f;
+            this->skelAnime.playSpeed = 1.0f;
             this->unk_250 = 5.0f;
             break;
     }
@@ -355,7 +355,7 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->elfMsg = NULL;
             this->unk_234 = NULL;
             this->unk_269 = 20;
-            if ((gSaveContext.naviTimer >= 0x64C8) || (gSaveContext.naviTimer < 0xBB8)) {
+            if ((gSaveContext.naviTimer >= 25800) || (gSaveContext.naviTimer < 3000)) {
                 gSaveContext.naviTimer = 0;
             }
             this->unk_266 = func_800F05C0(globalCtx);
@@ -507,11 +507,8 @@ void func_8088D5A0(EnElf* this, Vec3f* arg1, f32 arg2) {
 void func_8088D660(EnElf* this, Vec3f* targetPos, f32 arg2) {
     f32 xVelTarget = ((targetPos->x + this->unk_224.x) - this->actor.world.pos.x) * arg2;
     f32 zVelTarget = ((targetPos->z + this->unk_224.z) - this->actor.world.pos.z) * arg2;
-    f32 xVelDirection;
-    f32 zVelDirection;
-
-    xVelDirection = (xVelTarget >= 0.0f) ? 1.0f : -1.0f;
-    zVelDirection = (zVelTarget >= 0.0f) ? 1.0f : -1.0f;
+    f32 xVelDirection = (xVelTarget >= 0.0f) ? 1.0f : -1.0f;
+    f32 zVelDirection = (zVelTarget >= 0.0f) ? 1.0f : -1.0f;
 
     xVelTarget = fabsf(xVelTarget);
     zVelTarget = fabsf(zVelTarget);
@@ -545,11 +542,8 @@ void func_8088D864(EnElf* this, Vec3f* targetPos) {
 
 void func_8088D8D0(EnElf* this, Vec3f* arg1) {
     f32 yVelTarget = (((Math_SinS(this->unk_246) * this->unk_250) + arg1->y) - this->actor.world.pos.y) * 0.2f;
-    f32 yVelAbs;
-    f32 yVelDirection;
-
-    yVelAbs = fabsf(yVelTarget);
-    yVelDirection = (yVelTarget >= 0.0f) ? 1.0f : -1.0f;
+    f32 yVelAbs = fabsf(yVelTarget);
+    f32 yVelDirection = (yVelTarget >= 0.0f) ? 1.0f : -1.0f;
 
     this->unk_246 += this->unk_24A;
     yVelAbs = CLAMP(yVelAbs, 0.0f, 30.0f);
@@ -646,11 +640,11 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
     Player* player2 = GET_PLAYER(globalCtx);
     f32 heightDiff;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 
     if (Rand_ZeroOne() < 0.05f) {
         this->unk_250 = Rand_ZeroFloat(10.0f) + 10.0f;
-        this->unk_24A = (s32)Rand_ZeroFloat(1024.0f) + 0x200;
+        this->unk_24A = (s32)Rand_ZeroFloat(0x400) + 0x200;
     }
 
     func_8088CBAC(this, globalCtx);
@@ -714,7 +708,7 @@ void func_8088E018(EnElf* this, GlobalContext* globalCtx) {
     Vec3f parentPos;
     Actor* parent;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     func_8088D3EC(this, globalCtx);
     parent = this->actor.parent;
 
@@ -734,7 +728,7 @@ void func_8088E0E0(EnElf* this, GlobalContext* globalCtx) {
 void func_8088E0F0(EnElf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToF(&this->unk_254, 30.0f, 0.1f, 4.0f, 1.0f);
 
     this->unk_224.x = Math_CosS(this->unk_248) * this->unk_254;
@@ -780,7 +774,7 @@ void func_8088E0F0(EnElf* this, GlobalContext* globalCtx) {
 void func_8088E304(EnElf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (this->unk_224.y > 200.0f) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -814,7 +808,7 @@ void func_8088E304(EnElf* this, GlobalContext* globalCtx) {
 void func_8088E484(EnElf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 
     this->unk_224.z = 0.0f;
     this->unk_224.x = 0.0f;
@@ -841,7 +835,7 @@ void func_8088E5A8(EnElf* this, GlobalContext* globalCtx) {
         func_8088EFA4(this, globalCtx);
     }
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 
     this->unk_26C(this, globalCtx);
 }
@@ -1097,10 +1091,10 @@ void func_8088EFA4(EnElf* this, GlobalContext* globalCtx) {
         }
     } else if ((arrayPointerActor != NULL) && (player->unk_730 != NULL)) {
         u8 temp = this->unk_269;
-        u16 targetSound = this->unk_269 == 0 ? NA_SE_PL_WALK_GROUND - SFX_FLAG : NA_SE_PL_WALK_GROUND - SFX_FLAG;
+        u16 targetSfxId = this->unk_269 == 0 ? NA_SE_PL_WALK_GROUND - SFX_FLAG : NA_SE_PL_WALK_GROUND - SFX_FLAG;
 
         if (!temp) {
-            Audio_PlayActorSound2(&this->actor, targetSound);
+            Audio_PlayActorSound2(&this->actor, targetSfxId);
         }
         this->fairyFlags |= 1;
     }
@@ -1279,30 +1273,30 @@ void func_8088F9E4(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_8088FA38(EnElf* this, GlobalContext* globalCtx) {
-    Vec3f naviRefPos;
+    Vec3f refPos;
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->fairyFlags & 0x10) {
-        naviRefPos = globalCtx->actorCtx.targetContext.unk0;
+        refPos = globalCtx->actorCtx.targetContext.unk0;
 
         if (this->unk_234 != NULL) {
-            naviRefPos = this->unk_234->world.pos;
+            refPos = this->unk_234->world.pos;
         } else {
             if ((player->unk_730 == NULL) || (&player->actor == player->unk_730) || (&this->actor == player->unk_730) ||
                 (this->unk_264 & 4)) {
-                naviRefPos.x = player->bodyPartsPos[7].x + (Math_SinS(player->actor.shape.rot.y) * 20.0f);
-                naviRefPos.y = player->bodyPartsPos[7].y + 5.0f;
-                naviRefPos.z = player->bodyPartsPos[7].z + (Math_CosS(player->actor.shape.rot.y) * 20.0f);
+                refPos.x = player->bodyPartsPos[7].x + (Math_SinS(player->actor.shape.rot.y) * 20.0f);
+                refPos.y = player->bodyPartsPos[7].y + 5.0f;
+                refPos.z = player->bodyPartsPos[7].z + (Math_CosS(player->actor.shape.rot.y) * 20.0f);
                 this->unk_264 &= ~4;
             }
         }
-        this->actor.focus.pos = naviRefPos;
+        this->actor.focus.pos = refPos;
         this->fairyFlags &= ~0x10;
     }
 
     func_8088E5A8(this, globalCtx);
-    naviRefPos = this->actor.focus.pos;
-    func_8088DB4C(this, &naviRefPos, 0, 30.0f, 0.2f);
+    refPos = this->actor.focus.pos;
+    func_8088DB4C(this, &refPos, 0, 30.0f, 0.2f);
 
     if (this->actor.speedXZ >= 5.0f) {
         func_8088F5F4(this, globalCtx, 0x10);
@@ -1420,9 +1414,10 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
                                 break;
 
                             case 3:
-                                if (gSaveContext.isNight == 0) {
+                                if (!gSaveContext.isNight) {
                                     func_80151938(globalCtx, 0x248);
-                                } else if ((gSaveContext.time < 0x4000) && (gSaveContext.weekEventReg[74] & 0x20)) {
+                                } else if ((gSaveContext.time < CLOCK_TIME(6, 0)) &&
+                                           (gSaveContext.weekEventReg[74] & 0x20)) {
                                     func_80151938(globalCtx, 0x225);
                                 } else {
                                     func_80151938(globalCtx, 0x249);
@@ -1463,7 +1458,7 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((player->tatlTextId == 0) && (player->unk_730 == NULL)) {
-        if ((gSaveContext.naviTimer >= 0x258) && (gSaveContext.naviTimer < 0xBB9)) {
+        if ((gSaveContext.naviTimer >= 600) && (gSaveContext.naviTimer <= 3000)) {
             player->tatlTextId = func_800F05C0(globalCtx);
         }
     }
@@ -1473,12 +1468,12 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (func_800B84D0(thisx, globalCtx)) {
-        func_8019FDC8(&D_801DB4A4, 0x6873, 0x20);
+        func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
         if (thisx->textId == func_800F05C0(globalCtx)) {
             this->fairyFlags |= 0x80;
-            gSaveContext.naviTimer = 0xBB9;
+            gSaveContext.naviTimer = 3001;
         }
 
         this->fairyFlags |= 0x10;
@@ -1562,8 +1557,8 @@ s32 EnElf_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         }
         scale *= this->actor.scale.x * 124.99999f;
 
-        SysMatrix_MultiplyVector3fByState(&zeroVec, &sp34);
-        SysMatrix_InsertTranslation(sp34.x, sp34.y, sp34.z, MTXMODE_NEW);
+        Matrix_MultiplyVector3fByState(&zeroVec, &sp34);
+        Matrix_InsertTranslation(sp34.x, sp34.y, sp34.z, MTXMODE_NEW);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     }
 
@@ -1580,7 +1575,7 @@ void EnElf_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     s32 pad2;
 
-    if (player->currentMask != PLAYER_MASK_GIANTS_MASK) {
+    if (player->currentMask != PLAYER_MASK_GIANT) {
         if (!(this->fairyFlags & 8) &&
             (!func_800EE29C(globalCtx, 0xC9) ||
              (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0xC9)]->unk0 != 6)) &&
@@ -1615,8 +1610,8 @@ void EnElf_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->outerColor.r, (u8)(s8)this->outerColor.g,
                            (u8)(s8)this->outerColor.b, (u8)(s8)(envAlpha * alphaScale));
 
-            POLY_XLU_DISP = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                            EnElf_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
+            POLY_XLU_DISP = SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                           EnElf_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
@@ -1638,7 +1633,5 @@ void func_808908D0(Vec3f* vec, GlobalContext* globalCtx, u32 action) {
     endPos.z = npcAction->unk18.z;
 
     lerp = func_800F5A8C(npcAction->endFrame, npcAction->startFrame, globalCtx->csCtx.frames, globalCtx);
-    vec->x = ((endPos.x - startPos.x) * lerp) + startPos.x;
-    vec->y = ((endPos.y - startPos.y) * lerp) + startPos.y;
-    vec->z = ((endPos.z - startPos.z) * lerp) + startPos.z;
+    VEC3F_LERPIMPDST(vec, &startPos, &endPos, lerp);
 }
