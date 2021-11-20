@@ -1,7 +1,7 @@
 /*
  * File: z_obj_blockstop.c
  * Overlay: ovl_Obj_Blockstop
- * Description: Snowhead Temple - plays a cutscene when a block falls into a hole
+ * Description: Push Block Trigger - Blockstop switch triggered by pushblock (Snowhead)
  */
 
 #include "z_obj_blockstop.h"
