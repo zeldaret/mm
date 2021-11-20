@@ -2450,8 +2450,8 @@ void SkelAnime_DrawLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skele
 void SkelAnime_DrawOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
 void SkelAnime_DrawFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, Mtx** limbMatricies);
 void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
-void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDraw unkDraw, Actor* actor, Mtx** mtx);
-void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDraw unkDraw, Actor* actor);
+void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw, Actor* actor, Mtx** mtx);
+void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw, Actor* actor);
 void SkelAnime_GetFrameData(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCount, Vec3s* dst);
 s16 Animation_GetLength(void* animation);
 s16 Animation_GetLastFrame(void* animation);
