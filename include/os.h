@@ -1,12 +1,32 @@
 #ifndef _OS_H_
 #define _OS_H_
 
-#include "stdlib.h"
+#include "libc/stdint.h"
+#include "libc/stdlib.h"
 #include "ultra64/thread.h"
 #include "ultra64/message.h"
 
 #define OS_READ     0
 #define OS_WRITE    1
+
+/*
+ * I/O message types
+ */
+#define OS_MESG_TYPE_BASE        10
+#define OS_MESG_TYPE_LOOPBACK    (OS_MESG_TYPE_BASE+0)
+#define OS_MESG_TYPE_DMAREAD     (OS_MESG_TYPE_BASE+1)
+#define OS_MESG_TYPE_DMAWRITE    (OS_MESG_TYPE_BASE+2)
+#define OS_MESG_TYPE_VRETRACE    (OS_MESG_TYPE_BASE+3)
+#define OS_MESG_TYPE_COUNTER     (OS_MESG_TYPE_BASE+4)
+#define OS_MESG_TYPE_EDMAREAD    (OS_MESG_TYPE_BASE+5)
+#define OS_MESG_TYPE_EDMAWRITE   (OS_MESG_TYPE_BASE+6)
+
+/*
+ * I/O message priority
+ */
+#define OS_MESG_PRI_NORMAL    0
+#define OS_MESG_PRI_HIGH      1
+
 
 typedef u32 OSIntMask;
 
@@ -65,7 +85,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ OSIoMesgHdr hdr;
     /* 0x08 */ void* dramAddr;
-    /* 0x0C */ u32 devAddr;
+    /* 0x0C */ uintptr_t devAddr;
     /* 0x10 */ size_t size;
     /* 0x14 */ OSPiHandle* piHandle;
 } OSIoMesg; // size = 0x88
