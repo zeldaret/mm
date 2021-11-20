@@ -371,7 +371,7 @@ void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
 }
 
 #ifdef NON_MATCHING
-void func_80A118F8(EnGoStruct ptr[16], Vec3f arg1) {
+void func_80A118F8(EnGoStruct ptr[32], Vec3f arg1) {
     static u8 D_80A1667C[] = {
         3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2, 3, 1, 1, 2,
     };
@@ -956,7 +956,7 @@ void func_80A132C8(EnGo* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 temp_v1 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
-    if ((fabsf(this->actor.yDistToPlayer) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
+    if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
         func_8013AED4(&this->unk_390, 3, 7);
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(temp_v1) >= 0x1C70) ||
                (gSaveContext.weekEventReg[21] & 4) || (gSaveContext.weekEventReg[21] & 8)) {
@@ -1061,7 +1061,7 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
 }
 
 void func_80A136B8(GlobalContext* globalCtx, s16 arg1, s16 arg2, s16 arg3) {
-    s16 sp26 = Quake_Add(Play_GetCamera(globalCtx, 0), 3);
+    s16 sp26 = Quake_Add(Play_GetCamera(globalCtx, MAIN_CAM), 3);
 
     Quake_SetCountdown(sp26, arg3);
     Quake_SetSpeed(sp26, arg1);
@@ -1580,7 +1580,7 @@ void func_80A14B30(EnGo* this, GlobalContext* globalCtx) {
             this->unk_390 &= ~0x8000;
         }
     } else if (this->unk_390 & 0x200) {
-        if ((this->actor.xzDistToPlayer < 160.0f) && (this->actor.yDistToPlayer < 20.0f) && (this->unk_3EC == 0)) {
+        if ((this->actor.xzDistToPlayer < 160.0f) && (this->actor.playerHeightRel < 20.0f) && (this->unk_3EC == 0)) {
             func_80A12C48(this, globalCtx, 3);
             this->unk_390 &= ~0x80;
             this->unk_390 &= ~0x200;
@@ -1603,7 +1603,8 @@ void func_80A14B30(EnGo* this, GlobalContext* globalCtx) {
             this->actor.shape.yOffset = (this->actor.scale.y / this->unk_3A4) * 14.0f;
             func_8013AED4(&this->unk_390, 3, 7);
         }
-    } else if ((this->actor.xzDistToPlayer >= 240.0f) || (this->actor.yDistToPlayer >= 20.0f) || (this->unk_3EC != 0)) {
+    } else if ((this->actor.xzDistToPlayer >= 240.0f) || (this->actor.playerHeightRel >= 20.0f) ||
+               (this->unk_3EC != 0)) {
         func_80A12C48(this, globalCtx, 4);
         this->unk_390 &= ~0x80;
         this->unk_390 &= ~0x200;
@@ -1817,7 +1818,7 @@ void func_80A153FC(EnGo* this, GlobalContext* globalCtx) {
 
         if (this->actor.bgCheckFlags & 1) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_BIGBALL_ROLL - SFX_FLAG);
-            func_800AE930(&globalCtx->colCtx, Effect_GetParams(this->unk_3E8), &this->actor.world.pos.x, 18.0f,
+            func_800AE930(&globalCtx->colCtx, Effect_GetParams(this->unk_3E8), &this->actor.world.pos, 18.0f,
                           this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
         } else {
             func_800AEF44(Effect_GetParams(this->unk_3E8));
@@ -1906,8 +1907,8 @@ void func_80A157C4(EnGo* this, GlobalContext* globalCtx) {
 void EnGo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGo* this = THIS;
 
-    this->unk_288 = func_8013D924(0x1D8, globalCtx);
-    this->unk_289 = func_8013D924(0x1F7, globalCtx);
+    this->unk_288 = func_8013D924(OBJECT_TAISOU, globalCtx);
+    this->unk_289 = func_8013D924(OBJECT_HAKUGIN_DEMO, globalCtx);
     this->actionFunc = func_80A14798;
 }
 

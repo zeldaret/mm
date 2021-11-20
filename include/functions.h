@@ -533,7 +533,7 @@ void func_800AE5E4(GlobalContext* globalCtx, Color_RGBA8* arg1, s16 arg2, s16 ar
 void func_800AE778(GlobalContext* globalCtx, Color_RGBA8* color, s16 param_3, s16 param_4);
 void func_800AE8EC(GlobalContext* globalCtx);
 void func_800AE930(CollisionContext* colCtx, s32 param_2, Vec3f* param_3, f32 param_4, s16 param_5, CollisionPoly* param_6, s32 param_7);
-void func_800AEF44(void* effectParams);                      
+void func_800AEF44(void* effectParams);
 void EffectTireMark_InitParticle(EffTireMarkParticle* particle);
 void EffectTireMark_Init(EffTireMarkParams* params, EffTireMarkInit* init);
 void EffectTireMark_Destroy(EffTireMarkParams* params);
