@@ -202,7 +202,7 @@ void func_80997D38(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_80997DEC(EnGs* this, GlobalContext* globalCtx) {
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_TRUTH) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_TRUTH) {
         this->unk_210 = 0x20D1;
     } else {
         this->unk_210 = 0x20D0;
