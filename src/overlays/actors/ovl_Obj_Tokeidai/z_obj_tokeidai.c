@@ -425,10 +425,10 @@ void ObjTokeidai_TowerTransformation_EndCutscene(ObjTokeidai* this, GlobalContex
 void ObjTokeidai_TowerTransformation_FinishTransformation(ObjTokeidai* this, GlobalContext* globalCtx) {
     s32 type;
 
-    if (this->clockFaceZTranslation >= -0x13F) {
+    if (this->clockFaceZTranslation > -320) {
         // Recess the clock face before ending the cutscene, since the Termina
         // Field version of the cutscene looks right at it.
-        this->clockFaceZTranslation -= 0xA;
+        this->clockFaceZTranslation -= 10;
     } else {
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
         if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
@@ -524,7 +524,7 @@ void ObjTokeidai_TowerTransformation_RaiseTower(ObjTokeidai* this, GlobalContext
 
     if (this->yTranslation < 3400) {
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
-        this->yTranslation += 0x19;
+        this->yTranslation += 25;
         if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
             (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
             func_800B9010(&this->actor, NA_SE_EV_CLOCK_TOWER_UP - SFX_FLAG);
