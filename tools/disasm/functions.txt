@@ -3951,7 +3951,7 @@
     0x801A2C44:("func_801A2C44",),
     0x801A2C88:("func_801A2C88",),
     0x801A2D54:("func_801A2D54",),
-    0x801A2DE0:("func_801A2DE0",),
+    0x801A2DE0:("Audio_IsSequencePlaying",),
     0x801A2E54:("func_801A2E54",),
     0x801A2ED8:("func_801A2ED8",),
     0x801A2F88:("func_801A2F88",),

@@ -134,8 +134,8 @@ void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, Actor* door, s16 arg3, 
     enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.moveFlags |= 3;
     AnimationContext_SetMoveActor(globalCtx, &enHy->actor, &enHy->skelAnime, 1.0f);
-    ((EnDoor*)door)->unk1A1 = 1;
-    ((EnDoor*)door)->unk1A0 = sp3B;
+    ((EnDoor*)door)->unk_1A1 = 1;
+    ((EnDoor*)door)->unk_1A0 = sp3B;
 }
 
 s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
