@@ -703,7 +703,7 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     this->unk434 = sp44 - unkStruct->unk4;
     this->unk436 = unkStruct->unk8 - unkStruct->unk4;
     if (unkStruct->unk0 != 10 && unkStruct->unk0 != 11) {
-        sp48->unk1A7 = 0x4B;
+        sp48->unk_1A7 = 0x4B;
     }
     Math_Vec3f_Copy(&this->unk438, &sp38);
     Math_Vec3f_Copy(&this->unk444, &sp2C);
@@ -1139,7 +1139,7 @@ void func_80BAD230(EnSuttari* this, GlobalContext* globalCtx) {
         this->textId = 0x2A31;
         func_801518B0(globalCtx, this->textId, &this->actor);
         this->flags1 |= 0x4000;
-        Audio_QueueSeqCmd(0x8003);
+        Audio_QueueSeqCmd(NA_BGM_CHASE | 0x8000);
         this->actionFunc = func_80BAD380;
     } else {
         ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
