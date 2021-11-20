@@ -315,7 +315,7 @@ Actor* func_80AF7CB0(EnPm* this, GlobalContext* globalCtx, u8 actorCat, s16 acto
     Actor* actor;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, phi_s0, actorCat, actorId);
+        actor = SubS_GetActorById(globalCtx, phi_s0, actorCat, actorId);
         phi_s0 = actor;
 
         if (actor == NULL) {
@@ -367,7 +367,7 @@ Actor* func_80AF7D60(GlobalContext* globalCtx, s32 arg1) {
             return NULL;
     }
 
-    return func_8013A7C0(globalCtx, phi_a1);
+    return SubS_GetDoorByUnk1A5(globalCtx, phi_a1);
 }
 
 Actor* func_80AF7DC4(EnPm* this, GlobalContext* globalCtx, s32 arg2) {
@@ -375,7 +375,7 @@ Actor* func_80AF7DC4(EnPm* this, GlobalContext* globalCtx, s32 arg2) {
     Actor* actor;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, phi_s0, ACTORCAT_PROP, ACTOR_EN_PST);
+        actor = SubS_GetActorById(globalCtx, phi_s0, ACTORCAT_PROP, ACTOR_EN_PST);
         phi_s0 = actor;
 
         if (actor == NULL) {

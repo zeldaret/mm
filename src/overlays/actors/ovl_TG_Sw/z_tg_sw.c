@@ -56,7 +56,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, GlobalContext* globalCtx) {
     if (1) {}
 
     do {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_ENEMY, ACTOR_EN_SW);
+        actor = SubS_GetActorById(globalCtx, actor, ACTORCAT_ENEMY, ACTOR_EN_SW);
         if (actor == NULL) {
             break;
         }
@@ -71,7 +71,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, GlobalContext* globalCtx) {
     actor = NULL;
 
     do {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_SW);
+        actor = SubS_GetActorById(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_SW);
 
         if (actor == NULL) {
             break;

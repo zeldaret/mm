@@ -134,7 +134,7 @@ void func_80A714B4(EnDno* this, GlobalContext* globalCtx) {
     Actor* actor = NULL;
 
     do {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
+        actor = SubS_GetActorById(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
             if (ENDNO_GET_F(actor) == ENDNO_GET_F_1) {
                 Actor_SetSwitchFlag(globalCtx, ENDNO_GET_7F0(actor));
@@ -164,8 +164,7 @@ void func_80A715DC(EnDno* this, GlobalContext* globalCtx) {
     Vec3f sp70;
 
     do {
-        crace =
-            (BgCraceMovebg*)func_ActorCategoryIterateById(globalCtx, &crace->actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
+        crace = (BgCraceMovebg*)SubS_GetActorById(globalCtx, &crace->actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (crace != NULL) {
             if (ENDNO_GET_F(&crace->actor) == ENDNO_GET_F_0 && !(crace->unk_170 & 1)) {
                 if (func_8013E5CC(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C, &this->actor.prevPos,
@@ -187,7 +186,7 @@ void func_80A71788(EnDno* this, GlobalContext* globalCtx) {
     Actor* actor = NULL;
 
     do {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
+        actor = SubS_GetActorById(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
             Actor_UnsetSwitchFlag(globalCtx, ENDNO_GET_7F0(actor));
             actor = actor->next;
@@ -201,7 +200,7 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor* actor = NULL;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_DNO);
+        actor = SubS_GetActorById(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_DNO);
         if (actor != NULL) {
             if (actor != thisx) {
                 Actor_MarkForDeath(thisx);
@@ -248,7 +247,7 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
                         Actor_MarkForDeath(thisx);
                     } else {
                         func_8013E1C8(&this->skelAnime, sAnimations, 13, &this->unk_32C);
-                        this->unk_460 = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_DNQ);
+                        this->unk_460 = SubS_GetActorById(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_DNQ);
                         if (this->unk_460 == NULL) {
                             Actor_MarkForDeath(thisx);
                         } else {

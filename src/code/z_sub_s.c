@@ -1,13 +1,13 @@
 #include "global.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-//! @TODO: Should probably just return `EnDoor` instance after c and h file split
-Actor* func_8013A7C0(GlobalContext* globalCtx, s32 unk_1A5) {
+//! @TODO: Should just return `EnDoor` instance after c and h file split
+Actor* SubS_GetDoorByUnk1A5(GlobalContext* globalCtx, s32 unk_1A5) {
     Actor* actor = NULL;
     EnDoor* door;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        actor = SubS_GetActorById(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)actor;
         if (actor == NULL) {
             break;
@@ -48,7 +48,7 @@ Actor* func_8013A7C0(GlobalContext* globalCtx, s32 unk_1A5) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BB34.s")
 
-Actor* func_8013BB7C(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
+Actor* SubS_GetClosestActorById(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
     Actor* actorTmp;
     f32 dist;
@@ -57,7 +57,7 @@ Actor* func_8013BB7C(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s
     s32 isSetup = false;
 
     do {
-        actorIter = func_ActorCategoryIterateById(globalCtx, actorIter, actorCategory, actorId);
+        actorIter = SubS_GetActorById(globalCtx, actorIter, actorCategory, actorId);
         actorTmp = actorIter;
         if (actorTmp == NULL) {
             break;
@@ -116,7 +116,7 @@ Actor* func_8013BB7C(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D924.s")
 
-Actor* func_ActorCategoryIterateById(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
+Actor* SubS_GetActorById(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
     Actor* actor = actorListStart;
 
     if (actor == NULL) {
@@ -158,17 +158,17 @@ Actor* func_ActorCategoryIterateById(GlobalContext* globalCtx, Actor* actorListS
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E5CC.s")
 
-Actor* func_8013E640(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart,
-                                               u8 actorCategory, s16 actorId, void* verifyData, VerifyActor verifyActor) {
+Actor* SubS_GetActorByFunction(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
+                               s16 actorId, void* verifyData, VerifyActor verifyActor) {
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
         actorIter = globalCtx->actorCtx.actorList[actorCategory].first;
     }
-    while (actorIter != NULL &&
-           (actorId != actorIter->id ||
-            (actorId == actorIter->id &&
-             (verifyActor == NULL || (verifyActor != NULL && !verifyActor(globalCtx, actor, actorIter, verifyData)))))) {
+    while (actorIter != NULL && (actorId != actorIter->id ||
+                                 (actorId == actorIter->id &&
+                                  (verifyActor == NULL ||
+                                   (verifyActor != NULL && !verifyActor(globalCtx, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
     return actorIter;
