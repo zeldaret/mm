@@ -32,7 +32,7 @@ typedef struct EnTru {
     /* 0x020A */ Vec3s jointTable[27];
     /* 0x02AC */ Vec3s morphTable[27];
     /* 0x034E */ u16 unk_34E;
-    /* 0x0350 */ char unk350[0x4];
+    /* 0x0350 */ UNK_TYPE1 unk350[0x4];
     /* 0x0354 */ s32* unk_354;
     /* 0x0358 */ f32 unk_358;
     /* 0x035C */ f32 unk_35C;
@@ -49,7 +49,7 @@ typedef struct EnTru {
     /* 0x0374 */ s16 unk_374;
     /* 0x0378 */ EnTruUnkFunc unk_378;
     /* 0x037C */ s32 unk_37C;
-    /* 0x0380 */ char unk380[0x4];
+    /* 0x0380 */ UNK_TYPE1 unk380[0x4];
     /* 0x0384 */ s32 unk_384;
     /* 0x0388 */ s32 unk_388;
     /* 0x038C */ s32 unk_38C;
