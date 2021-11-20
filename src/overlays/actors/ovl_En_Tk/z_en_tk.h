@@ -56,7 +56,7 @@ typedef struct EnTk {
     /* 0x03CE */ u16 unk_3CE;
     /* 0x03D0 */ s32 unk_3D0;
     /* 0x03D4 */ Vec3f unk_3D4;
-    /* 0x03E0 */ s32 unk_3E0;
+    /* 0x03E0 */ f32 unk_3E0;
     /* 0x03E4 */ s32 unk_3E4;
     /* 0x03E8 */ s32 unk_3E8;
     /* 0x03EC */ s32 unk_3EC;

@@ -913,7 +913,7 @@ void func_80AEE2C0(EnTk* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80AEE300(s32 arg0, Actor* arg1, Actor* arg2, void* _arg3) {
+s32 func_80AEE300(GlobalContext* globalCtx, Actor* arg1, Actor* arg2, void* _arg3) {
     EnTkStruct* arg3 = (EnTkStruct*)_arg3;
     f32 temp_f0;
 
