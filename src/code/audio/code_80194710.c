@@ -1,5 +1,13 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80194710/func_80194710.s")
+void Audio_osInvalDCache(void* buf, s32 size) {
+    OSIntMask prevMask = osSetIntMask(1);
+    osInvalDCache(buf, size);
+    osSetIntMask(prevMask);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80194710/func_80194750.s")
+void Audio_osWritebackDCache(void* buf, s32 size) {
+    OSIntMask prevMask = osSetIntMask(1);
+    osWritebackDCache(buf, size);
+    osSetIntMask(prevMask);
+}

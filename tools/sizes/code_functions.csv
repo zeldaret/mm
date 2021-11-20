@@ -3238,8 +3238,8 @@ asm/non_matchings/code/code_80192BE0/func_80194548.s,func_80194548,0x80194548,0x
 asm/non_matchings/code/code_80192BE0/func_80194568.s,func_80194568,0x80194568,0x40
 asm/non_matchings/code/code_80192BE0/func_80194668.s,func_80194668,0x80194668,0x1F
 asm/non_matchings/code/code_80192BE0/func_801946E4.s,func_801946E4,0x801946E4,0xB
-asm/non_matchings/code/code_80194710/func_80194710.s,func_80194710,0x80194710,0x10
-asm/non_matchings/code/code_80194710/func_80194750.s,func_80194750,0x80194750,0x10
+asm/non_matchings/code/code_80194710/Audio_osInvalDCache.s,Audio_osInvalDCache,0x80194710,0x10
+asm/non_matchings/code/code_80194710/Audio_osWritebackDCache.s,Audio_osWritebackDCache,0x80194750,0x10
 asm/non_matchings/code/code_80194710/func_80194790.s,func_80194790,0x80194790,0x1D
 asm/non_matchings/code/code_80194710/func_80194804.s,func_80194804,0x80194804,0xF
 asm/non_matchings/code/code_80194710/func_80194840.s,func_80194840,0x80194840,0x1C
