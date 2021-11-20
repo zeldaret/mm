@@ -348,13 +348,13 @@ s32 func_80BB1D64(EnGeg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp40;
     Vec3f sp34;
-    s16 y = (this->actor.yawTowardsPlayer - this->unk_46E) - this->actor.shape.rot.y;
+    s16 yaw = (this->actor.yawTowardsPlayer - this->unk_46E) - this->actor.shape.rot.y;
 
-    Math_SmoothStepToS(&this->unk_46A, y, 4, 0x2AA8, 1);
+    Math_SmoothStepToS(&this->unk_46A, yaw, 4, 0x2AA8, 1);
     this->unk_46A = CLAMP(this->unk_46A, -0x1FFE, 0x1FFE);
 
-    y = (this->actor.yawTowardsPlayer - this->unk_46A) - this->actor.shape.rot.y;
-    Math_SmoothStepToS(&this->unk_46E, y, 4, 0x2AA8, 1);
+    yaw = (this->actor.yawTowardsPlayer - this->unk_46A) - this->actor.shape.rot.y;
+    Math_SmoothStepToS(&this->unk_46E, yaw, 4, 0x2AA8, 1);
     this->unk_46E = CLAMP(this->unk_46E, -0x1C70, 0x1C70);
 
     if (this->unk_230 & 0x20) {
@@ -367,12 +367,12 @@ s32 func_80BB1D64(EnGeg* this, GlobalContext* globalCtx) {
     sp34 = this->actor.world.pos;
     sp34.y += 70.0f;
 
-    y = Math_Vec3f_Pitch(&sp34, &sp40);
-    Math_SmoothStepToS(&this->unk_468, y - this->unk_46C, 4, 0x2AA8, 1);
+    yaw = Math_Vec3f_Pitch(&sp34, &sp40);
+    Math_SmoothStepToS(&this->unk_468, yaw - this->unk_46C, 4, 0x2AA8, 1);
     this->unk_468 = CLAMP(this->unk_468, -0x1C70, 0x1C70);
 
-    y = Math_Vec3f_Pitch(&sp34, &sp40);
-    Math_SmoothStepToS(&this->unk_46C, y - this->unk_468, 4, 0x2AA8, 1);
+    yaw = Math_Vec3f_Pitch(&sp34, &sp40);
+    Math_SmoothStepToS(&this->unk_46C, yaw - this->unk_468, 4, 0x2AA8, 1);
     this->unk_46C = CLAMP(this->unk_46C, -0x1C70, 0x1C70);
 
     return true;
@@ -772,7 +772,7 @@ void func_80BB30B4(EnGeg* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         if (player->transformation == PLAYER_FORM_GORON) {
             this->unk_496 = 0xD6A;
-        } else if (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK) {
+        } else if (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GERO) {
             this->unk_496 = 0xD89;
         } else {
             this->unk_496 = 0xD6E;
@@ -787,15 +787,15 @@ void func_80BB30B4(EnGeg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BB31B8(EnGeg* this, GlobalContext* globalCtx) {
-    s32 sp2C = 0x88;
+    s32 getItemId = GI_MASK_DON_GERO;
 
     if (INV_CONTENT(ITEM_MASK_DON_GERO) == ITEM_MASK_DON_GERO) {
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GERO) {
             this->unk_496 = 0xD8B;
-            sp2C = 5;
+            getItemId = GI_RUPEE_PURPLE;
         } else {
             this->unk_496 = 0xD73;
-            sp2C = 5;
+            getItemId = GI_RUPEE_PURPLE;
         }
     } else {
         this->unk_496 = 0xD70;
@@ -804,12 +804,12 @@ void func_80BB31B8(EnGeg* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         gSaveContext.weekEventReg[61] |= 1;
-        if (sp2C == 0x88) {
+        if (getItemId == GI_MASK_DON_GERO) {
             this->unk_230 |= 0x40;
         }
         this->actionFunc = func_80BB32AC;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, sp2C, 300.0f, 300.0f);
+        func_800B8A1C(&this->actor, globalCtx, getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -865,8 +865,8 @@ void EnGeg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGeg* this = THIS;
     s32 pad2;
     s32 sp34[] = {
-        0x0000003E,
-        0x00000F64,
+        0x3E,
+        0xF64,
     };
 
     if (gSaveContext.weekEventReg[61] & 1) {
@@ -928,14 +928,14 @@ s32 func_80BB3728(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     func_8018219C(&sp28, &sp68, 0);
     *arg2 = sp7C;
 
-    if ((arg4 == 0) && (arg5 == 0)) {
+    if (!arg4 && !arg5) {
         arg3->x = sp68.x;
         arg3->y = sp68.y;
         arg3->z = sp68.z;
         return true;
     }
 
-    if (arg5 != 0) {
+    if (arg5) {
         sp68.z = arg0;
         sp68.y = arg1;
     }
@@ -992,15 +992,15 @@ void EnGeg_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     switch (limbIndex) {
         case 17:
             if (this->unk_230 & 2) {
-                phi_v1 = 1;
+                phi_v1 = true;
             } else {
-                phi_v1 = 0;
+                phi_v1 = false;
             }
 
             if (this->unk_242 != 0) {
-                phi_v0 = 1;
+                phi_v0 = true;
             } else {
-                phi_v0 = 0;
+                phi_v0 = false;
             }
 
             func_80BB3728(this->unk_468 + this->unk_46C + 0x4000,
@@ -1017,15 +1017,15 @@ void EnGeg_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
         case 10:
             if (this->unk_230 & 2) {
-                phi_v1 = 1;
+                phi_v1 = true;
             } else {
-                phi_v1 = 0;
+                phi_v1 = false;
             }
 
             if (this->unk_242 != 0) {
-                phi_v0 = 1;
+                phi_v0 = true;
             } else {
-                phi_v0 = 0;
+                phi_v0 = false;
             }
 
             func_80BB3728(this->unk_46C + 0x4000, this->unk_46E + this->actor.shape.rot.y + 0x4000, &this->unk_484,
