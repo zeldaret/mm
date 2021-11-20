@@ -385,8 +385,8 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnTanron3_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* actor) {
-    EnTanron3* this = (EnTanron3*)actor;
+                               Actor* thisx) {
+    EnTanron3* this = THIS;
 
     if (limbIndex == 1) {
         rot->y += this->bodyRotation;
