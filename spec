@@ -4134,8 +4134,7 @@ beginseg
     name "ovl_Bg_Goron_Oyu"
     compress
     include "build/src/overlays/actors/ovl_Bg_Goron_Oyu/z_bg_goron_oyu.o"
-    include "build/data/ovl_Bg_Goron_Oyu/ovl_Bg_Goron_Oyu.data.o"
-    include "build/data/ovl_Bg_Goron_Oyu/ovl_Bg_Goron_Oyu.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Goron_Oyu/ovl_Bg_Goron_Oyu_reloc.o"
 endseg
 
 beginseg
