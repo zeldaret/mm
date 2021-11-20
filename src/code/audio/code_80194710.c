@@ -9,7 +9,7 @@ void Audio_osInvalDCache(void* buf, s32 size) {
 
 void Audio_osWritebackDCache(void* buf, s32 size) {
     OSIntMask prevMask = osSetIntMask(1);
-    
+
     osWritebackDCache(buf, size);
     osSetIntMask(prevMask);
 }
