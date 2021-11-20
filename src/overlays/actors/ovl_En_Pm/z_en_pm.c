@@ -1417,9 +1417,9 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
     if (!func_8013AD6C(globalCtx) && (this->unk_374 != 0)) {
         if ((sp44 != NULL) && (sp44->actor.update != NULL)) {
             if (((f32)this->unk_36E / this->unk_36C) <= 0.9f) {
-                sp44->unk1A7 = this->unk_260;
+                sp44->unk_1A7 = this->unk_260;
             } else {
-                sp44->unk1A7 = 0;
+                sp44->unk_1A7 = 0;
             }
         }
         this->unk_36E = CLAMP(this->unk_36E, 0, this->unk_36C);

@@ -1385,7 +1385,7 @@ s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 ar
         if ((actorIterator->id == ACTOR_EN_DOOR) && (actorIterator->update != NULL) &&
             (actorIterator->room == this->actor.room) &&
             Math3D_DistanceSquared(&actorIterator->world.pos, &this->actor.world.pos) < range) {
-            ((EnDoor*)actorIterator)->unk1A7 = arg3;
+            ((EnDoor*)actorIterator)->unk_1A7 = arg3;
             retVal = true;
             break;
         }

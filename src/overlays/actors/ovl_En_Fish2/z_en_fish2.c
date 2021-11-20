@@ -268,7 +268,7 @@ s32 func_80B288E8(EnFish2* this, Vec3f vec, s32 arg2) {
 }
 
 s32 func_80B2899C(EnFish2* this, GlobalContext* globalCtx) {
-    if (func_800C5A64(&globalCtx->colCtx, &this->unk_2F4, this->unk_33C, &this->actor)) {
+    if (func_800C5A64(&globalCtx->colCtx, &this->unk_2F4, this->unk_33C)) {
         return true;
     }
 
