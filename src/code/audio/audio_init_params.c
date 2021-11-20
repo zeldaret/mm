@@ -5,4 +5,8 @@ const s16 D_801E1100[] = {
     0x0030, // gTatumsPerBeat
 };
 
-const AudioContextInitSizes D_801E1104 = { 0x137F00, 0x1C480, 0x1A000 };
+const AudioContextInitSizes D_801E1104 = {
+    0x137F00, // heapSize
+    0x1C480,  // initPoolSize
+    0x1A000,  // permanentPoolSize
+};
