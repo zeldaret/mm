@@ -167,7 +167,7 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     phi_v1 = 0;
                 } else {
                     phi_v1 = 1;
-                    this->actor.floorHeight = (this->actor.world.pos.y + this->actor.depthInWater);
+                    this->actor.floorHeight = this->actor.world.pos.y + this->actor.depthInWater;
                 }
                 func_80A587A0(this, &sp88, phi_v1);
             }
@@ -425,7 +425,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
             sp74.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
             sp74.y = this->actor.world.pos.y;
             sp74.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
-            func_80A599E8(this, &sp74, 0U);
+            func_80A599E8(this, &sp74, 0);
         }
     }
 
@@ -461,11 +461,11 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
                     }
                 }
 
-                if ((ptr->unk_2A & 1) == 0) {
+                if ((ptr->unk_2A % 2) == 0) {
                     if (ptr->unk_2A == 0) {
-                        func_80A599E8(this, &ptr->unk_04, 1U);
+                        func_80A599E8(this, &ptr->unk_04, 1);
                     } else if ((ptr->unk_01 & 1) == 0) {
-                        func_80A599E8(this, &ptr->unk_04, 3U);
+                        func_80A599E8(this, &ptr->unk_04, 3);
                     }
 
                     if (ptr->unk_10.y < -20.0f) {
@@ -503,7 +503,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
                         ptr->unk_1C.y = 0.0f;
                         if (ptr->unk_2A == 0) {
                             for (j = 0; j < 5; j++) {
-                                func_80A599E8(this, &ptr->unk_04, 2U);
+                                func_80A599E8(this, &ptr->unk_04, 2);
                             }
                             Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_PLANT_BROKEN);
                         }
