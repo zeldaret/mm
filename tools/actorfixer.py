@@ -154,6 +154,9 @@ animdict = {
     "MainHeap_Init": "ZeldaArena_Init",
     "MainHeap_Cleanup": "ZeldaArena_Cleanup",
     "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
+    "func_800A81F0": "EffectBlure_AddVertex",
+    "func_800A8514": "EffectBlure_AddSpace",
+    "Effect_GetParams": "Effect_GetByIndex",
 
     "skelanime.unk03": "skelanime.taper",
     "skelanime.animCurrentSeg": "skelanime.animation",
