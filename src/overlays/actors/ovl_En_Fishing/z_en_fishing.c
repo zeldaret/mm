@@ -16,8 +16,8 @@
 
 void EnFishing_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFishing_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnFishing_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnFishing_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx);
+void EnFishing_DrawFish(Actor* thisx, GlobalContext* globalCtx);
 
 void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx);
 void EnFishing_DrawOwner(Actor* thisx, GlobalContext* globalCtx);
@@ -253,8 +253,8 @@ const ActorInit En_Fishing_InitVars = {
     sizeof(EnFishing),
     (ActorFunc)EnFishing_Init,
     (ActorFunc)EnFishing_Destroy,
-    (ActorFunc)EnFishing_Update,
-    (ActorFunc)EnFishing_Draw,
+    (ActorFunc)EnFishing_UpdateFish,
+    (ActorFunc)EnFishing_DrawFish,
 };
 
 static f32 D_8090CCD0 = 0.0f;
@@ -878,6 +878,7 @@ void EnFishing_Init(Actor* thisx, GlobalContext* globalCtx2) {
         thisx->flags |= 9;
 
         if (sLinkAge != 1) {
+            // HIGH_SCORE(HS_FISHING) from OoT
             if (gSaveContext.roomInf[127][2] & 0x1000) {
                 D_8090CD08 = 0;
             } else {
@@ -2902,7 +2903,7 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, GlobalContext* globalCtx) {
 
 #ifdef NON_MATCHING
 // D_80917266 in case 5 around the large branching
-void EnFishing_Update(Actor* thisx, GlobalContext* globalCtx2) {
+void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
     s16 i;
     s16 sp134 = 10;
     f32 sp130;
@@ -3808,16 +3809,16 @@ void EnFishing_Update(Actor* thisx, GlobalContext* globalCtx2) {
             if ((D_8090CD14 < 3) || ((D_809171C8 != 0) && (D_809171D4 > 50)) || (D_809171D4 >= 6000) ||
                 ((D_80917272 == 0) && (D_80917274 == 0)) || (D_80917266 == 0) ||
                 (((D_809171FE & 0x7F) == 0) && (Rand_ZeroOne() < 0.05f) && (D_80917206 != 2))) {
-                // Assignment here removed in MM
+                // Assignment of OoT's D_80B7A67C here removed in MM
 
                 if ((D_80917272 == 0) && (D_80917274 == 0)) {
-                    // Assignment here removed in MM
+                    // Assignment of OoT's D_80B7E086 here removed in MM
                     if (((sLinkAge == 1) && (gSaveContext.roomInf[127][2] & 0x400)) ||
                         ((sLinkAge != 1) && (gSaveContext.roomInf[127][2] & 0x800))) {
-                        // Assignment here removed in MM, this is now an empty branch
+                        // Assignment of OoT's D_80B7A67C here removed in MM, this is now an empty branch
                     }
                 } else {
-                    // Assignment here removed in MM
+                    // Assignment of OoT's D_80B7E086 here removed in MM
                     func_8013EC44(0.0f, 1, 3, 1);
                     Audio_QueueSeqCmd(0x100A00FF);
                 }
@@ -4232,7 +4233,7 @@ void EnFishing_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fishing/EnFishing_Update.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fishing/EnFishing_UpdateFish.s")
 #endif
 
 s32 EnFishing_FishOverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
@@ -4290,7 +4291,7 @@ void EnFishing_LoachPostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     }
 }
 
-void EnFishing_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnFishing_DrawFish(Actor* thisx, GlobalContext* globalCtx) {
     EnFishing* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
