@@ -3,7 +3,7 @@
  * Overlay: ovl_Door_Warp1
  * Description: Blue Warp
  */
- 
+
 #include "overlays/actors/ovl_Dm_Hina/z_dm_hina.h"
 #include "z_door_warp1.h"
 
@@ -84,7 +84,12 @@ typedef struct {
     Color_RGB8 unk_00[4];
 } EnDoorWarp1Colours;
 
-static EnDoorWarp1Colours D_808BBB50 = { { { 50, 150, 0 }, { 100, 150, 200 }, { 0, 50, 200 }, { 120, 150, 0 } } };
+static EnDoorWarp1Colours D_808BBB50 = { {
+    { 50, 150, 0 },
+    { 100, 150, 200 },
+    { 0, 50, 200 },
+    { 120, 150, 0 },
+} };
 
 void DoorWarp1_SetupAction(DoorWarp1* this, DoorWarp1ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -169,8 +174,8 @@ void DoorWarp1_Init(Actor* thisx, GlobalContext* globalCtx) {
         case ENDOORWARP1_FF_4:
         case ENDOORWARP1_FF_5:
             this->unk_1D3 = 1;
-            BcCheck3_BgActorInit(&this->dyna, 0);
-            BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06008BD4);
+            DynaPolyActor_Init(&this->dyna, 0);
+            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06008BD4);
             func_808B8C48(this, globalCtx);
             break;
 
@@ -229,7 +234,7 @@ void func_808B8924(DoorWarp1* this, GlobalContext* globalCtx) {
 
 void func_808B8A7C(DoorWarp1* this, GlobalContext* globalCtx) {
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002CA8, &D_06001374, NULL, NULL, 0);
-    SkelAnime_ChangeAnimImpl(&this->skelAnime, &D_06001374, 1.0f, 1.0f, 1.0f, 2, 40.0f, 1);
+    Animation_ChangeImpl(&this->skelAnime, &D_06001374, 1.0f, 1.0f, 1.0f, 2, 40.0f, 1);
     this->unk_1C4 = 0;
     this->unk_1C6 = -140;
     this->unk_1C8 = -80;
@@ -593,7 +598,7 @@ void func_808B9CE8(DoorWarp1* this, GlobalContext* globalCtx) {
         if (1) {}
         gSaveContext.roomInf[126][4] =
             ((gSaveContext.roomInf[126][4] + 1) & 0xFF) | (((void)0, gSaveContext.roomInf[126][4]) & ~0xFF);
-        Item_Give(globalCtx, func_808B849C(this, globalCtx) + 92);
+        Item_Give(globalCtx, func_808B849C(this, globalCtx) + (ITEM_REMAINS_ODOLWA - 1));
         DoorWarp1_SetupAction(this, func_808B9E94);
     }
 }
@@ -643,8 +648,8 @@ void func_808B9FD0(DoorWarp1* this, GlobalContext* globalCtx) {
     } else {
         ActorCutscene_Start(globalCtx->unk_1879C[9], NULL);
         func_801A5CFC(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
-        SkelAnime_ChangeAnimImpl(&this->skelAnime, &D_06001374, 1.0f, SkelAnime_GetFrameCount(&D_06001374.common),
-                                 SkelAnime_GetFrameCount(&D_06001374.common), 2, 40.0f, 1);
+        Animation_ChangeImpl(&this->skelAnime, &D_06001374, 1.0f, Animation_GetLastFrame(&D_06001374.common),
+                             Animation_GetLastFrame(&D_06001374.common), 2, 40.0f, 1);
         this->unk_1CA = 50;
         D_808BC004 = player2->actor.world.pos.y;
         DoorWarp1_SetupAction(this, func_808BA550);
@@ -955,12 +960,12 @@ void func_808BACCC(DoorWarp1* this, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0xFF, 200, 255, 255, (u8)this->unk_1B8);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, (u8)this->unk_1B8);
 
-    POLY_XLU_DISP = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, NULL,
-                                    &this->dyna.actor, POLY_XLU_DISP);
+    POLY_XLU_DISP = SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL,
+                                   &this->dyna.actor, POLY_XLU_DISP);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 }
 
 void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
@@ -993,8 +998,8 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255.0f * sp84, 255, 255, (u8)this->unk_1B4);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255.0f * sp84, 255, 255);
 
-    SysMatrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 1.0f,
-                                this->dyna.actor.world.pos.z, MTXMODE_NEW);
+    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 1.0f,
+                             this->dyna.actor.world.pos.z, MTXMODE_NEW);
     phi_f12 = 1.0f;
     if (this->unk_203 != 0) {
         phi_f12 = this->unk_204 * phi_f12;
@@ -1002,19 +1007,19 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
     Matrix_Scale(phi_f12, phi_f12, phi_f12, MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x0A, Matrix_NewMtx(globalCtx->state.gfxCtx));
-    SysMatrix_StatePush();
+    Matrix_StatePush();
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100,
                                 0x100, 1, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100, 0x100));
 
-    SysMatrix_InsertTranslation(0.0f, this->unk_1A4 * 230.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, this->unk_1A4 * 230.0f, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(((this->unk_1C6 * sp90) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C6 * sp90) / 100.0f) + 1.0f,
                  MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x09, Matrix_NewMtx(globalCtx->state.gfxCtx));
     gSPDisplayList(POLY_XLU_DISP++, D_060001A0);
 
-    SysMatrix_StatePop();
+    Matrix_StatePop();
 
     if (this->unk_1B0 > 0.0f) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255.0f * sp84, 255, 255, (u8)this->unk_1B0);
@@ -1025,7 +1030,7 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100,
                                     0x100, 1, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100));
 
-        SysMatrix_InsertTranslation(0.0f, this->unk_1A8 * 60.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertTranslation(0.0f, this->unk_1A8 * 60.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(((this->unk_1C8 * sp8C) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C8 * sp8C) / 100.0f) + 1.0f,
                      MTXMODE_APPLY);
 
@@ -1049,8 +1054,8 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     s32 sp60 = 0;
 
     if (this->unk_1D4 != 0) {
-        SysMatrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
-                                    this->dyna.actor.world.pos.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
+                                 this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(4.0f, this->unk_1AC, 4.0f, MTXMODE_APPLY);
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060044D8));
         func_800BE03C(globalCtx, D_06003230);
@@ -1067,8 +1072,8 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
         }
     }
 
-    SysMatrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                this->dyna.actor.world.pos.z, MTXMODE_NEW);
+    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                             MTXMODE_NEW);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060057D8));
@@ -1084,8 +1089,8 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     gfxCtx = globalCtx->state.gfxCtx;
 
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06007238));
-    SysMatrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                this->dyna.actor.world.pos.z, MTXMODE_NEW);
+    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                             MTXMODE_NEW);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, 0.0f, 1.0f, MTXMODE_APPLY);
 

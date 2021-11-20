@@ -25,7 +25,7 @@ enum {
 typedef struct DoorWarp1 {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ SkelAnime skelAnime;
-    /* 0x01A0 */ DmHina* unk_1A0;
+    /* 0x01A0 */ struct DmHina* unk_1A0;
     /* 0x01A4 */ f32 unk_1A4;
     /* 0x01A8 */ f32 unk_1A8;
     /* 0x01AC */ f32 unk_1AC;

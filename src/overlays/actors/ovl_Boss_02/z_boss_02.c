@@ -1825,7 +1825,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             if (D_809E0434 != NULL) {
                 D_809E0434->unk_203 = 0;
                 D_809E0434->unk_204 = 1.0f;
-                D_809E0434->actor.world.pos.y = 60.0f;
+                D_809E0434->dyna.actor.world.pos.y = 60.0f;
             }
 
             player->actor.world.pos.x *= 10.0f;
@@ -1897,7 +1897,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             if (D_809E0434 != 0) {
                 D_809E0434->unk_203 = 1;
                 D_809E0434->unk_204 = 0.1f;
-                D_809E0434->actor.world.pos.y = 3155.0f;
+                D_809E0434->dyna.actor.world.pos.y = 3155.0f;
             }
 
             player->actor.world.pos.x *= 0.1f;
