@@ -3222,7 +3222,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
     ActorInit* actorInit;
     s32 objBankIndex;
     ActorOverlay* overlayEntry;
-    
+
     if (actorCtx->totalLoadedActors >= 0xFF) {
         return NULL;
     }
@@ -3233,8 +3233,9 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
     }
 
     objBankIndex = Object_GetIndex(&globalCtx->objectCtx, actorInit->objectId);
-    if ((objBankIndex < 0) || ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(globalCtx, globalCtx->roomCtx.currRoom.num) &&
-                       (actorInit->id != ACTOR_BOSS_05))) {
+    if ((objBankIndex < 0) ||
+        ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(globalCtx, globalCtx->roomCtx.currRoom.num) &&
+         (actorInit->id != ACTOR_BOSS_05))) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
     }
