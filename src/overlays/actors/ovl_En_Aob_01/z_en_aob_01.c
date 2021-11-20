@@ -88,7 +88,7 @@ typedef struct {
     s16 unk_06;
 } EnAobStruct;
 
-EnAobStruct sAnimations[] = {
+static EnAobStruct D_809C384C[] = {
     { { -4130.0f, 150.0f, 1367.0f }, 84, 0 },  { { -4861.0f, 172.0f, 1606.0f }, 94, 4 },
     { { -4139.0f, 155.0f, 2133.0f }, 73, 6 },  { { -4406.0f, 144.0f, 1416.0f }, 88, 2 },
     { { -4156.0f, 155.0f, 1731.0f }, 42, 0 },  { { -4033.0f, 157.0f, 1994.0f }, -65, 1 },
@@ -135,12 +135,12 @@ void func_809C11EC(EnAob01* this, GlobalContext* globalCtx) {
 
     func_809C1158(this, globalCtx);
 
-    for (i = 0; i < ARRAY_COUNT(sAnimations); i++) {
-        unk = (this->unk_1D8[sAnimations[i].unk_06]->unk1 << 0xA) | (i << 5);
+    for (i = 0; i < ARRAY_COUNT(D_809C384C); i++) {
+        unk = (this->unk_1D8[D_809C384C[i].unk_06]->unk1 << 0xA) | (i << 5);
 
         this->unk_3F8[i] = Actor_SpawnAsChildAndCutscene(
-            &globalCtx->actorCtx, globalCtx, ACTOR_EN_DG, sAnimations[i].unk_00.x, sAnimations[i].unk_00.y,
-            sAnimations[i].unk_00.z, 0, sAnimations[i].unk_04 * 182.04445f, 0, unk, 0xFFFF, this->actor.unk20, NULL);
+            &globalCtx->actorCtx, globalCtx, ACTOR_EN_DG, D_809C384C[i].unk_00.x, D_809C384C[i].unk_00.y,
+            D_809C384C[i].unk_00.z, 0, D_809C384C[i].unk_04 * 182.04445f, 0, unk, 0xFFFF, this->actor.unk20, NULL);
     }
 }
 
@@ -299,22 +299,22 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 &= ~2;
 
                 switch (player->transformation) {
-                    case 1:
+                    case PLAYER_FORM_GORON:
                         this->unk_210 = 0x3548;
                         this->unk_2D2 |= 0x10;
                         break;
 
-                    case 2:
+                    case PLAYER_FORM_ZORA:
                         this->unk_210 = 0x3549;
                         this->unk_2D2 |= 0x10;
                         break;
 
-                    case 3:
+                    case PLAYER_FORM_DEKU:
                         this->unk_210 = 0x354A;
                         this->unk_2D2 |= 0x10;
                         break;
 
-                    case 4:
+                    case PLAYER_FORM_HUMAN:
                         if (gSaveContext.rupees < 10) {
                             this->unk_210 = 0x3524;
                             this->unk_2D2 |= 0x10;
@@ -403,7 +403,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
         case 0x3529:
             if (this->unk_2D2 & 2) {
                 this->unk_2D2 &= ~2;
-                func_801159EC(this->unk_434 * -1);
+                func_801159EC(-this->unk_434);
                 func_800B7298(globalCtx, NULL, 7);
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
@@ -474,7 +474,7 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 void func_809C1EC8(EnAob01* this, GlobalContext* globalCtx) {
-    static s16 D_809C392C[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+    static u16 D_809C392C[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp30;
 
@@ -483,8 +483,8 @@ void func_809C1EC8(EnAob01* this, GlobalContext* globalCtx) {
         sp30.x = player->actor.world.pos.x;
         sp30.y = player->bodyPartsPos[7].y + 3.0f;
         sp30.z = player->actor.world.pos.z;
-        func_8013D2E0(&sp30, &this->actor.focus, &this->actor.shape, &this->unk_2D4.x, &this->unk_2DA.x,
-                      &this->unk_2E0.x, D_809C392C);
+        func_8013D2E0(&sp30, &this->actor.focus.pos, &this->actor.shape.rot, &this->unk_2D4, &this->unk_2DA,
+                      &this->unk_2E0, D_809C392C);
     } else {
         Math_SmoothStepToS(&this->unk_2D4.x, 0, 4, 1000, 1);
         Math_SmoothStepToS(&this->unk_2D4.y, 0, 4, 1000, 1);
@@ -858,20 +858,20 @@ void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 s32 func_809C2EC4(EnAob01* this, GlobalContext* globalCtx) {
-    Actor* doggywoggy = globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first;
+    Actor* dog = globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first;
 
-    while (doggywoggy != NULL) {
-        if (doggywoggy->id == ACTOR_EN_DG) {
-            this->unk_432 = ((EnDg*)doggywoggy)->unk_288;
+    while (dog != NULL) {
+        if (dog->id == ACTOR_EN_DG) {
+            this->unk_432 = ((EnDg*)dog)->unk_288;
             if (this->unk_432 == -1) {
                 return false;
             }
 
-            if (this->unk_432 == ENDG_GET_3E0(doggywoggy)) {
+            if (this->unk_432 == ENDG_GET_3E0(dog)) {
                 return true;
             }
         }
-        doggywoggy = doggywoggy->next;
+        dog = dog->next;
     }
 
     return false;
@@ -1006,15 +1006,15 @@ s32 EnAob01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
 
     if (limbIndex == 15) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, 1);
-        Matrix_InsertXRotation_s(this->unk_2DA.y, 1);
-        Matrix_InsertZRotation_s(this->unk_2DA.x * -1, 1);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, 1);
+        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk_2DA.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_2DA.x * -1, MTXMODE_APPLY);
+        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(this->unk_2E0.y * -1, 1);
-        Matrix_InsertZRotation_s(this->unk_2E0.x * -1, 1);
+        Matrix_InsertXRotation_s(this->unk_2E0.y * -1, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_2E0.x * -1, MTXMODE_APPLY);
     }
 
     if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 12)) {
