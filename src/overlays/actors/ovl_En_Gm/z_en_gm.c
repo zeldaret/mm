@@ -1375,9 +1375,9 @@ s32 func_80950804(EnGm* this, GlobalContext* globalCtx) {
     if (!func_8013AD6C(globalCtx) && (this->unk_3C4 != 0)) {
         if ((sp44 != NULL) && (sp44->actor.update != NULL)) {
             if ((this->unk_3BA / (f32)this->unk_3B8) <= 0.9f) {
-                sp44->unk1A7 = this->unk_261;
+                sp44->unk_1A7 = this->unk_261;
             } else {
-                sp44->unk1A7 = 0;
+                sp44->unk_1A7 = 0;
             }
         }
 
