@@ -822,9 +822,9 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B5D37C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
+s32 func_80B5D37C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
     s32 pad;
-    EnOt* temp_s0 = (EnOt*)arg1->unk_48;
+    EnOt* temp_s0 = (EnOt*)arg1->actor;
     f32 sp24;
     f32 sp20;
 
@@ -843,10 +843,10 @@ s32 func_80B5D37C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
     return false;
 }
 
-s32 func_80B5D470(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
+s32 func_80B5D470(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
     s32 pad;
     s32 ret;
-    Actor* temp_s1 = arg1->unk_48;
+    Actor* temp_s1 = arg1->actor;
     Vec3f sp50;
     Vec3f sp44;
     f32 temp;
@@ -871,14 +871,14 @@ s32 func_80B5D470(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
         ret = true;
     } else {
         temp = SQ(temp_s1->speedXZ) / arg1->unk_50;
-        sp34 = ABS(arg1->unk_54 - temp_s1->world.rot.x);
+        sp34 = ABS(arg1->unk_54.x - temp_s1->world.rot.x);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
 
-        sp34 = ABS(arg1->unk_56 - temp_s1->world.rot.y);
+        sp34 = ABS(arg1->unk_54.y - temp_s1->world.rot.y);
 
-        Math_SmoothStepToS(&temp_s1->world.rot.x, arg1->unk_54, 1, sp2C, 0);
+        Math_SmoothStepToS(&temp_s1->world.rot.x, arg1->unk_54.x, 1, sp2C, 0);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
-        Math_SmoothStepToS(&temp_s1->world.rot.y, arg1->unk_56, 1, sp2C, 0);
+        Math_SmoothStepToS(&temp_s1->world.rot.y, arg1->unk_54.y, 1, sp2C, 0);
         Math_SmoothStepToS(&temp_s1->shape.rot.y, temp_s1->world.rot.y, 2, sp2C, 0);
     }
 
