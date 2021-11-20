@@ -47,6 +47,8 @@ Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GameStat
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
 void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player);
 s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3);
+void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
+Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actorToRemove);
 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
@@ -2353,7 +2355,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
             Actor_MarkForDeath(actor);
         } else {
             if (((params->updateActorIfSet) && !(actor->flags & params->updateActorIfSet)) ||
-                ((params->updateActorIfSet) &&
+                ((!params->updateActorIfSet) &&
                  (!(actor->flags & ACTOR_FLAG_100000) ||
                   ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & 0x200))) &&
                  (params->unkC != 0) && (actor != params->unk10) && ((actor != params->player->heldActor)) &&
@@ -3213,60 +3215,57 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
     return actorInit;
 }
 
-#ifdef NON_MATCHING
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
                                      s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 arg11, Actor* parent) {
     s32 pad;
     Actor* actor;
-    ActorInit* sp2C; // actorInit
-    s32 sp28;        // objBankIndex
-    // s32 pad2;
-    u32 sp20;           // segmentAux
-    ActorOverlay* sp1C; // overlayEntry
-
+    ActorInit* actorInit;
+    s32 objBankIndex;
+    ActorOverlay* overlayEntry;
+    
     if (actorCtx->totalLoadedActors >= 0xFF) {
         return NULL;
     }
 
-    sp2C = Actor_LoadOverlay(actorCtx, index);
-    if (sp2C == NULL) {
+    actorInit = Actor_LoadOverlay(actorCtx, index);
+    if (actorInit == NULL) {
         return NULL;
     }
 
-    sp28 = Object_GetIndex(&globalCtx->objectCtx, sp2C->objectId);
-    if ((sp28 < 0) || ((sp2C->type == ACTORCAT_ENEMY) && Flags_GetClear(globalCtx, globalCtx->roomCtx.currRoom.num) &&
-                       (sp2C->id != ACTOR_BOSS_05))) {
+    objBankIndex = Object_GetIndex(&globalCtx->objectCtx, actorInit->objectId);
+    if ((objBankIndex < 0) || ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(globalCtx, globalCtx->roomCtx.currRoom.num) &&
+                       (actorInit->id != ACTOR_BOSS_05))) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
     }
 
-    actor = ZeldaArena_Malloc(sp2C->instanceSize);
+    actor = ZeldaArena_Malloc(actorInit->instanceSize);
     if (actor == NULL) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
     }
 
-    sp1C = &gActorOverlayTable[index];
-    if (sp1C->vramStart != 0) {
-        sp1C->numLoaded++;
+    overlayEntry = &gActorOverlayTable[index];
+    if (overlayEntry->vramStart != 0) {
+        overlayEntry->numLoaded++;
     }
 
-    bzero(actor, sp2C->instanceSize);
-    actor->overlayEntry = sp1C;
-    actor->id = sp2C->id;
-    actor->flags = sp2C->flags;
+    bzero(actor, actorInit->instanceSize);
+    actor->overlayEntry = overlayEntry;
+    actor->id = actorInit->id;
+    actor->flags = actorInit->flags;
 
-    if (sp2C->id == ACTOR_EN_PART) {
+    if (actorInit->id == ACTOR_EN_PART) {
         actor->objBankIndex = rotZ;
         rotZ = 0;
     } else {
-        actor->objBankIndex = sp28;
+        actor->objBankIndex = objBankIndex;
     }
 
-    actor->init = sp2C->init;
-    actor->destroy = sp2C->destroy;
-    actor->update = sp2C->update;
-    actor->draw = sp2C->draw;
+    actor->init = actorInit->init;
+    actor->destroy = actorInit->destroy;
+    actor->update = actorInit->update;
+    actor->draw = actorInit->draw;
 
     if (parent != NULL) {
         actor->room = parent->room;
@@ -3295,23 +3294,17 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
         actor->unk20 = 0x3FF;
     }
 
-    Actor_AddToCategory(actorCtx, actor, sp2C->type);
+    Actor_AddToCategory(actorCtx, actor, actorInit->type);
 
-    goto dummy_label_;
-dummy_label_:;
+    {
+        u32 sp20 = gSegments[6];
 
-    sp20 = gSegments[6];
-    Actor_Init(actor, globalCtx);
-    gSegments[6] = sp20;
-
-    //    goto dummy_label_47816;
-    // dummy_label_47816:;
+        Actor_Init(actor, globalCtx);
+        gSegments[6] = sp20;
+    }
 
     return actor;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnAsChildAndCutscene.s")
-#endif
 
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 actorId, f32 posX,
                           f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params) {
