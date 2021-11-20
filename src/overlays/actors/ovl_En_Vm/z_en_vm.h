@@ -5,7 +5,7 @@
 
 struct EnVm;
 
-typedef void (*EnVmActionFunc)(struct EnVm* this, GlobalContext* globalCtx);
+typedef void (*EnVmActionFunc)(struct EnVm*, GlobalContext*);
 
 typedef struct EnVm {
     /* 0x0000 */ Actor actor;

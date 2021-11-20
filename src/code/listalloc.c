@@ -1,9 +1,62 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/listalloc/func_80174AA0.s")
+ListAlloc* ListAlloc_Init(ListAlloc* this) {
+    this->prev = NULL;
+    this->next = NULL;
+    return this;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/listalloc/func_80174AB4.s")
+void* ListAlloc_Alloc(ListAlloc* this, size_t size) {
+    ListAlloc* ptr = SystemArena_Malloc(size + sizeof(ListAlloc));
+    ListAlloc* next;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/listalloc/func_80174B20.s")
+    if (ptr == NULL) {
+        return NULL;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/listalloc/func_80174BA0.s")
+    next = this->next;
+    if (next != NULL) {
+        next->next = ptr;
+    }
+
+    ptr->prev = next;
+    ptr->next = NULL;
+    this->next = ptr;
+
+    if (this->prev == NULL) {
+        this->prev = ptr;
+    }
+
+    return (u8*)ptr + sizeof(ListAlloc);
+}
+
+void ListAlloc_Free(ListAlloc* this, void* data) {
+    ListAlloc* ptr = &((ListAlloc*)data)[-1];
+
+    if (ptr->prev != NULL) {
+        ptr->prev->next = ptr->next;
+    }
+
+    if (ptr->next != NULL) {
+        ptr->next->prev = ptr->prev;
+    }
+
+    if (this->prev == ptr) {
+        this->prev = ptr->next;
+    }
+
+    if (this->next == ptr) {
+        this->next = ptr->prev;
+    }
+
+    SystemArena_Free(ptr);
+}
+
+void ListAlloc_FreeAll(ListAlloc* this) {
+    ListAlloc* iter = this->prev;
+
+    while (iter != NULL) {
+        ListAlloc_Free(this, (u8*)iter + sizeof(ListAlloc));
+        iter = this->prev;
+    }
+}

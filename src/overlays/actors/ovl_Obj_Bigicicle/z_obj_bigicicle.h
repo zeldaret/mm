@@ -5,7 +5,7 @@
 
 struct ObjBigicicle;
 
-typedef void (*ObjBigicicleActionFunc)(struct ObjBigicicle* this, GlobalContext* globalCtx);
+typedef void (*ObjBigicicleActionFunc)(struct ObjBigicicle*, GlobalContext*);
 
 typedef struct ObjBigicicle {
     /* 0x0000 */ Actor actor;

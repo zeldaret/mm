@@ -42,8 +42,8 @@ typedef struct EnMaYto {
     /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
     /* 0x200 */ s32 unk200; // unused
     /* 0x204 */ s32 type;
-    /* 0x208 */ Vec3s limbDrawTbl[MA2_LIMB_MAX];
-    /* 0x28C */ Vec3s transitionDrawTbl[MA2_LIMB_MAX];
+    /* 0x208 */ Vec3s jointTable[MA2_LIMB_MAX];
+    /* 0x28C */ Vec3s morphTable[MA2_LIMB_MAX];
     /* 0x310 */ s16 unk310; // state?
     /* 0x312 */ UNK_TYPE1 unk_312[0x2];
     /* 0x314 */ s16 currentAnim; // Used only in DefaultWait

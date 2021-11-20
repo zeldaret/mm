@@ -5,7 +5,7 @@
 
 struct ObjLupygamelift;
 
-typedef void (*ObjLupygameliftActionFunc)(struct ObjLupygamelift* this, GlobalContext* globalCtx);
+typedef void (*ObjLupygameliftActionFunc)(struct ObjLupygamelift*, GlobalContext*);
 
 typedef struct ObjLupygamelift {
     /* 0x0000 */ Actor actor;

@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_chan.c
+ * Overlay: ovl_Obj_Chan
+ * Description: Goron Shrine chandelier
+ */
+
 #include "z_obj_chan.h"
 
 #define FLAGS 0x00000030

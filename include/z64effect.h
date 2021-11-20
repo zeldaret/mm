@@ -91,12 +91,19 @@ typedef struct {
 } EffBlureInit1; // size = 0x1A0
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x8];
-    /* 0x08 */ Color_RGBA8 unk8;
-    /* 0x0C */ Color_RGBA8 unkC;
-    /* 0x10 */ Color_RGBA8 unk10;
-    /* 0x14 */ Color_RGBA8 unk14;
-    /* 0x18 */ UNK_TYPE1 pad18[0xC];
+    /* 0x00 */ s32 calcMode;
+    /* 0x04 */ u16 flags;
+    /* 0x06 */ s16 addAngleChange;
+    /* 0x08 */ u8 p1StartColor[4];
+    /* 0x0C */ u8 p2StartColor[4];
+    /* 0x10 */ u8 p1EndColor[4];
+    /* 0x14 */ u8 p2EndColor[4];
+    /* 0x18 */ u8 elemDuration;
+    /* 0x19 */ u8 unkFlag;
+    /* 0x1A */ u8 drawMode; // 0: simple; 1: simple with alt colors; 2+: smooth
+    /* 0x1B */ u8 mode4Param;
+    /* 0x1C */ Color_RGBA8 altPrimColor; // used with drawMode 1
+    /* 0x20 */ Color_RGBA8 altEnvColor; // used with drawMode 1
 } EffBlureInit2; // size = 0x24
 
 typedef struct {
@@ -267,16 +274,37 @@ typedef struct {
     /* 0x8 */ s32 size;
 } EffectSsInfo; // size = 0xC
 
+typedef struct {
+    /* 0x0 */ EffectSs* data_table; // Name from debug assert
+    /* 0x4 */ s32 searchIndex;
+    /* 0x8 */ s32 size;
+} EffectTableInfo; // size = 0xC
+
+typedef struct {
+    /* 0x0 */ UNK_TYPE4 unk0;
+    /* 0x4 */ EffectSsInitFunc init;
+} ParticleOverlayInfo; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ u32 vromStart;
+    /* 0x04 */ u32 vromEnd;
+    /* 0x08 */ void* vramStart;
+    /* 0x0C */ void* vramEnd;
+    /* 0x10 */ void* loadedRamAddr;
+    /* 0x14 */ ParticleOverlayInfo* overlayInfo;
+    /* 0x18 */ u32 unk18; // Always 0x01000000?
+} ParticleOverlay; // size = 0x1C
+
 typedef enum {
     /* 0x00 */ EFFECT_SS_DUST,
     /* 0x01 */ EFFECT_SS_KIRAKIRA,
-    /* 0x02 */ EFFECT_SS_UNSET_02,
+    /* 0x02 */ EFFECT_SS_UNSET_02, // Deleted
     /* 0x03 */ EFFECT_SS_BOMB2,
     /* 0x04 */ EFFECT_SS_BLAST,
     /* 0x05 */ EFFECT_SS_G_SPK,
     /* 0x06 */ EFFECT_SS_D_FIRE,
     /* 0x07 */ EFFECT_SS_BUBBLE,
-    /* 0x08 */ EFFECT_SS_UNSET_08,
+    /* 0x08 */ EFFECT_SS_UNSET_08, // Deleted
     /* 0x09 */ EFFECT_SS_G_RIPPLE,
     /* 0x0A */ EFFECT_SS_G_SPLASH,
     /* 0x0B */ EFFECT_SS_UNSET_0B,
@@ -286,8 +314,8 @@ typedef enum {
     /* 0x0F */ EFFECT_SS_HAHEN,
     /* 0x10 */ EFFECT_SS_STICK,
     /* 0x11 */ EFFECT_SS_SIBUKI,
-    /* 0x12 */ EFFECT_SS_UNSET_12,
-    /* 0x13 */ EFFECT_SS_UNSET_13,
+    /* 0x12 */ EFFECT_SS_UNSET_12, // Deleted
+    /* 0x13 */ EFFECT_SS_UNSET_13, // Deleted
     /* 0x14 */ EFFECT_SS_STONE1,
     /* 0x15 */ EFFECT_SS_HITMARK,
     /* 0x16 */ EFFECT_SS_FHG_FLASH,
@@ -299,11 +327,11 @@ typedef enum {
     /* 0x1C */ EFFECT_SS_FIRE_TAIL,
     /* 0x1D */ EFFECT_SS_EN_FIRE,
     /* 0x1E */ EFFECT_SS_EXTRA,
-    /* 0x1F */ EFFECT_SS_UNSET_1F,
+    /* 0x1F */ EFFECT_SS_UNSET_1F, // Deleted
     /* 0x20 */ EFFECT_SS_DEAD_DB,
     /* 0x21 */ EFFECT_SS_DEAD_DD,
     /* 0x22 */ EFFECT_SS_DEAD_DS,
-    /* 0x23 */ EFFECT_SS_UNSET_23,
+    /* 0x23 */ EFFECT_SS_UNSET_23, // Deleted
     /* 0x24 */ EFFECT_SS_ICE_SMOKE,
     /* 0x25 */ EFFECT_EN_ICE_BLOCK,
     /* 0x26 */ EFFECT_SS_SBN,

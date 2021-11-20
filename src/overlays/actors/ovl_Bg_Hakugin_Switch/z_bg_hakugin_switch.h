@@ -5,7 +5,7 @@
 
 struct BgHakuginSwitch;
 
-typedef void (*BgHakuginSwitchActionFunc)(struct BgHakuginSwitch* this, GlobalContext* globalCtx);
+typedef void (*BgHakuginSwitchActionFunc)(struct BgHakuginSwitch*, GlobalContext*);
 
 typedef struct BgHakuginSwitch {
     /* 0x0000 */ Actor actor;

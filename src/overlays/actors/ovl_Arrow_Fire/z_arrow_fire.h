@@ -5,7 +5,7 @@
 
 struct ArrowFire;
 
-typedef void (*ArrowFireActionFunc)(struct ArrowFire* this, GlobalContext* globalCtx);
+typedef void (*ArrowFireActionFunc)(struct ArrowFire*, GlobalContext*);
 
 typedef struct ArrowFire {
     /* 0x0000 */ Actor actor;

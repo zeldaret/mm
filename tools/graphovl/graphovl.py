@@ -3,9 +3,17 @@
 # Generates graphs for actor overlay files
 #
 
-from graphviz import Digraph
-import argparse, os, re
+import argparse, os, re, sys
 from configparser import ConfigParser
+
+try:
+    from graphviz import Digraph
+except ModuleNotFoundError:
+    print("Module 'graphviz' is not installed", file=sys.stderr)
+    print("You can install it using: pip3 install graphviz", file=sys.stderr)
+    print("You may also need to install it on your system", file=sys.stderr)
+    print("On Debian/Ubuntu derivates you can use: apt install graphviz", file=sys.stderr)
+    sys.exit(1)
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 config = ConfigParser()
@@ -44,7 +52,10 @@ def capture_definitions(content):
 
 # Capture all function definitions in the block, name only
 def capture_definition_names(content):
-    return [x.group().split("(")[0] for x in re.finditer(func_defs_regexpr, content)]
+    definitions = []
+    for x in re.finditer(func_defs_regexpr, content):
+        definitions.append(x.group().split("(")[0])
+    return definitions
 
 setupaction_regexpr = re.compile(r"_SetupAction+\([^\)]*\)(\.[^\)]*\))?;")
 
@@ -54,7 +65,12 @@ def capture_setupaction_calls(content):
 
 # Captures the function name of a setupaction call
 def capture_setupaction_call_arg(content):
-    return [x.group().split(",")[1].strip().split(");")[0].strip() for x in re.finditer(setupaction_regexpr, content)]
+    transitionList = []
+    for x in re.finditer(setupaction_regexpr, content):
+        func = x.group().split(",")[1].strip().split(");")[0].strip()
+        if func not in transitionList:
+            transitionList.append(func)
+    return transitionList
 
 # Search for the function definition by supplied function name
 def definition_by_name(content, name):
@@ -72,10 +88,13 @@ def get_code_body(content, funcname) -> str:
 
     all_lines = content.splitlines(True)
     for raw_line in all_lines[line_num:len(all_lines)]:
-        if raw_line.count("{") > 0:
-            bracket_count += raw_line.count("{")
-        if raw_line.count("}") > 0:
-            bracket_count -= raw_line.count("}")
+        # Ignore commented stuff
+        if "//" in raw_line:
+            raw_line = raw_line[:raw_line.index("//")]
+
+        bracket_count += raw_line.count("{")
+        bracket_count -= raw_line.count("}")
+
         if bracket_count == 0:
             break
         else:
@@ -165,7 +184,8 @@ def action_var_values_in_func(code_body, action_var, macros, enums):
         elif index in enums:
             index = str(enums[index])
 
-        transition.append(index)
+        if index not in transition:
+            transition.append(index)
     return transition
 
 def setup_line_numbers(content, func_names):
@@ -195,7 +215,7 @@ def addFunctionTransitionToGraph(dot, index: int, func_name: str, action_transit
         edgeColor = config.get("colors", "actionFuncInit")
     dot.edge(indexStr, funcIndex, color=edgeColor)
 
-def addCallNamesToGraph(dot, func_names: list, index: int, code_body: str, setupAction=False, rawActorFunc=False):
+def addCallNamesToGraph(dot, func_names: list, index: int, code_body: str, removeList: list, setupAction=False, rawActorFunc=False):
     edgeColor = config.get("colors", "funcCall")
     fontColor = config.get("colors", "fontcolor")
     bubbleColor = config.get("colors", "bubbleColor")
@@ -206,6 +226,8 @@ def addCallNamesToGraph(dot, func_names: list, index: int, code_body: str, setup
         if call not in func_names:
             continue
         if call in seen:
+            continue
+        if call in removeList:
             continue
 
         if setupAction and "_SetupAction" in call:
@@ -220,6 +242,27 @@ def addCallNamesToGraph(dot, func_names: list, index: int, code_body: str, setup
         dot.node(calledFuncIndex, call, fontcolor=fontColor, color=bubbleColor)
         dot.edge(indexStr, calledFuncIndex, color=edgeColor)
 
+def addCallbacksToGraph(dot, func_names: list, index: int, code_body: str, transitionList: list):
+    edgeColor = config.get("colors", "callback")
+    fontColor = config.get("colors", "fontcolor")
+    bubbleColor = config.get("colors", "bubbleColor")
+
+    indexStr = str(index)
+    seen = set()
+    for call_with_arguments in capture_calls(code_body):
+        call_with_arguments = call_with_arguments.replace("\n", "").replace(" ", "")
+        name, arguments = call_with_arguments.split("(", 1)
+        argumentList = [x.strip() for x in arguments.split(",")]
+        for callback in [x for x in func_names if x in argumentList]:
+            if callback in transitionList:
+                # already catched in another edge
+                continue
+            seen.add(callback)
+
+            calledFuncIndex = str(index_of_func(callback))
+
+            dot.node(calledFuncIndex, callback, fontcolor=fontColor, color=bubbleColor)
+            dot.edge(indexStr, calledFuncIndex, color=edgeColor)
 
 def loadConfigFile(selectedStyle):
     # For a list of colors, see https://www.graphviz.org/doc/info/colors.html
@@ -235,6 +278,7 @@ def loadConfigFile(selectedStyle):
     config.set('colors', 'actionFunc', 'Black')
     config.set('colors', 'fontColor', 'Black')
     config.set('colors', 'bubbleColor', 'Black')
+    config.set('colors', 'callback', 'blue')
 
     if os.path.exists(configFilename):
         config.read(configFilename)
@@ -258,14 +302,20 @@ def main():
     parser.add_argument("filename", help="Filename without the z_ or ovl_ prefix, e.x. Door_Ana")
     parser.add_argument("--loners", help="Include functions that are not called or call any other overlay function", action="store_true")
     parser.add_argument("-s", "--style", help="Use a color style defined in graphovl_styles folder. i.e. solarized")
+    parser.add_argument("--format", help="Select output file format. Defaults to 'png'", default="png")
+    parser.add_argument("-r", "--remove", help="A space-separated list of nodes to remove from the graph", nargs='+')
     args = parser.parse_args()
+
+    removeList = []
+    if args.remove is not None:
+        removeList = args.remove
 
     loadConfigFile(args.style)
     fontColor = config.get("colors", "fontcolor")
     bubbleColor = config.get("colors", "bubbleColor")
 
     fname = args.filename
-    dot = Digraph(comment = fname, format = 'png')
+    dot = Digraph(comment = fname, format = args.format)
     dot.attr(bgcolor=config.get("colors", "background"))
     contents = ""
 
@@ -319,6 +369,9 @@ def main():
         action_var = actionVarMatch.group(1).strip()
 
     for index, func_name in enumerate(func_names):
+        if func_name in removeList:
+            continue
+
         indexStr = str(index)
         if args.loners:
             dot.node(indexStr, func_name, fontcolor=fontColor, color=bubbleColor)
@@ -342,13 +395,20 @@ def main():
             """
             transitionList = action_var_values_in_func(code_body, actionIdentifier, macros, enums)
 
+        # Remove functions calls
+        transitionList = [x for x in transitionList if x not in removeList]
+
         for action_transition in transitionList:
             addFunctionTransitionToGraph(dot, index, func_name, action_transition)
 
-        addCallNamesToGraph(dot, func_names, index, code_body, setupAction, rawActorFunc)
+        addCallNamesToGraph(dot, func_names, index, code_body, removeList, setupAction, rawActorFunc)
+
+        addCallbacksToGraph(dot, func_names, index, code_body, transitionList)
 
     # print(dot.source)
-    dot.render("graphs/" + fname + ".gv")
+    outname = f"graphs/{fname}.gv"
+    dot.render(outname)
+    print(f"Written to {outname}.{args.format}")
 
 if __name__ == "__main__":
     main()

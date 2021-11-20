@@ -5,7 +5,7 @@
 
 struct BgIkanaRotaryroom;
 
-typedef void (*BgIkanaRotaryroomActionFunc)(struct BgIkanaRotaryroom* this, GlobalContext* globalCtx);
+typedef void (*BgIkanaRotaryroomActionFunc)(struct BgIkanaRotaryroom*, GlobalContext*);
 
 typedef struct BgIkanaRotaryroom {
     /* 0x0000 */ Actor actor;

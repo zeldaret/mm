@@ -5,7 +5,7 @@
 
 struct EnTakaraya;
 
-typedef void (*EnTakarayaActionFunc)(struct EnTakaraya* this, GlobalContext* globalCtx);
+typedef void (*EnTakarayaActionFunc)(struct EnTakaraya*, GlobalContext*);
 
 typedef struct EnTakaraya {
     /* 0x0000 */ Actor actor;

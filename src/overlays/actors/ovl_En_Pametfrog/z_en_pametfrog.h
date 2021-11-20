@@ -58,8 +58,8 @@ typedef enum {
 typedef struct EnPametfrog {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s limbDrawTable[GEKKO_LIMB_MAX];
-    /* 0x218 */ Vec3s transitionDrawTable[GEKKO_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[GEKKO_LIMB_MAX];
+    /* 0x218 */ Vec3s morphTable[GEKKO_LIMB_MAX];
     /* 0x2A8 */ EnPametfrogActionFunc actionFunc;
     /* 0x2AC */ u8 drawEffect;
     /* 0x2AD */ u8 wallPauseTimer; // Gekko stops 10 times along wall/ceiling after being blown off of Snapper

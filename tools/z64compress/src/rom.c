@@ -1279,10 +1279,10 @@ void rom_dma(struct rom *rom, unsigned int offset, int num_entries, bool matchin
 		
 		/* invalid dma conditions */
 		else if (
-			(dma->Pend & 15) /* not 16-byte aligned */
-			|| (dma->Pstart & 15)
-			|| (dma->start  & 15)
-			|| (dma->end & 15)
+			(dma->Pend & 3) /* not 4-byte aligned */
+			|| (dma->Pstart & 3)
+			|| (dma->start  & 3)
+			|| (dma->end & 3)
 			|| dma->start > dma->end
 			|| (dma->Pstart > dma->Pend && dma->Pend)
 			|| dma->Pend > rom->data_sz

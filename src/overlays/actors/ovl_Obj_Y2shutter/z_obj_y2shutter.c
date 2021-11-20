@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_y2shutter.c
+ * Overlay: ovl_Obj_Y2shutter
+ * Description:
+ */
+
 #include "z_obj_y2shutter.h"
 
 #define FLAGS 0x00000010

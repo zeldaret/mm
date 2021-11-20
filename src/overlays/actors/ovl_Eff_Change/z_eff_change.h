@@ -5,7 +5,7 @@
 
 struct EffChange;
 
-typedef void (*EffChangeActionFunc)(struct EffChange* this, GlobalContext* globalCtx);
+typedef void (*EffChangeActionFunc)(struct EffChange*, GlobalContext*);
 
 typedef struct EffChange {
     /* 0x0000 */ Actor actor;

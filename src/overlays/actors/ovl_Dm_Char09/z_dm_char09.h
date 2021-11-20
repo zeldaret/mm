@@ -5,7 +5,7 @@
 
 struct DmChar09;
 
-typedef void (*DmChar09ActionFunc)(struct DmChar09* this, GlobalContext* globalCtx);
+typedef void (*DmChar09ActionFunc)(struct DmChar09*, GlobalContext*);
 
 typedef struct DmChar09 {
     /* 0x0000 */ Actor actor;

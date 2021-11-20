@@ -5,3 +5,4 @@ def apply(config, args):
     config['myimg'] = 'mm.us.rev1.rom_uncompressed.z64'
     config['mapfile'] = 'build/mm.map'
     config['source_directories'] = ['./src','./include']
+    config['makeflags'] = ['KEEP_MDEBUG=1']

@@ -5,7 +5,7 @@
 
 struct DemoMoonend;
 
-typedef void (*DemoMoonendActionFunc)(struct DemoMoonend* this, GlobalContext* globalCtx);
+typedef void (*DemoMoonendActionFunc)(struct DemoMoonend*, GlobalContext*);
 
 typedef struct DemoMoonend {
     /* 0x0000 */ Actor actor;

@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_stk.c
+ * Overlay: ovl_Dm_Stk
+ * Description: Skull Kid (cutscene)
+ */
+
 #include "z_dm_stk.h"
 
 #define FLAGS 0x02000030

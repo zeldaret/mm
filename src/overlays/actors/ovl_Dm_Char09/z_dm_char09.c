@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_char09.c
+ * Overlay: ovl_Dm_Char09
+ * Description: Pirates' Fortress cutscene characters
+ */
+
 #include "z_dm_char09.h"
 
 #define FLAGS 0x00000030

@@ -5,7 +5,7 @@
 
 struct BgBreakwall;
 
-typedef void (*BgBreakwallActionFunc)(struct BgBreakwall* this, GlobalContext* globalCtx);
+typedef void (*BgBreakwallActionFunc)(struct BgBreakwall*, GlobalContext*);
 
 typedef struct BgBreakwall {
     /* 0x0000 */ Actor actor;

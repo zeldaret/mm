@@ -1,3 +1,9 @@
+/*
+ * File z_en_dekubaba.c
+ * Overlay: ovl_En_Dekubaba
+ * Description: Deku Baba
+ */
+
 #include "z_en_dekubaba.h"
 
 #define FLAGS 0x00000405

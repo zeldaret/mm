@@ -1,3 +1,9 @@
+/*
+ * File: z_en_snowman.c
+ * Overlay: ovl_En_Snowman
+ * Description: Enos
+ */
+
 #include "z_en_snowman.h"
 
 #define FLAGS 0x00000005

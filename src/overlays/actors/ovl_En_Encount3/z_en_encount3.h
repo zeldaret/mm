@@ -5,7 +5,7 @@
 
 struct EnEncount3;
 
-typedef void (*EnEncount3ActionFunc)(struct EnEncount3* this, GlobalContext* globalCtx);
+typedef void (*EnEncount3ActionFunc)(struct EnEncount3*, GlobalContext*);
 
 typedef struct EnEncount3 {
     /* 0x0000 */ Actor actor;

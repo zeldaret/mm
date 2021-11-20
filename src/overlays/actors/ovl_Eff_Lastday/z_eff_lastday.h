@@ -5,7 +5,7 @@
 
 struct EffLastday;
 
-typedef void (*EffLastdayActionFunc)(struct EffLastday* this, GlobalContext* globalCtx);
+typedef void (*EffLastdayActionFunc)(struct EffLastday*, GlobalContext*);
 
 typedef struct EffLastday {
     /* 0x0000 */ Actor actor;

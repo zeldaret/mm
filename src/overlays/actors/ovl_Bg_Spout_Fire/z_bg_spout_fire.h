@@ -5,7 +5,7 @@
 
 struct BgSpoutFire;
 
-typedef void (*BgSpoutFireActionFunc)(struct BgSpoutFire* this, GlobalContext* globalCtx);
+typedef void (*BgSpoutFireActionFunc)(struct BgSpoutFire*, GlobalContext*);
 
 typedef struct BgSpoutFire {
     /* 0x0000 */ Actor actor;

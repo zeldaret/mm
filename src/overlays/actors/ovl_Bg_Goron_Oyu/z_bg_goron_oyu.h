@@ -4,7 +4,9 @@
 #include "global.h"
 
 struct BgGoronOyu;
+
 typedef void (*BgGoronOyuActionFunc)(struct BgGoronOyu*, GlobalContext*);
+
 typedef struct BgGoronOyu {
     /* 0x000 */ DynaPolyActor polyActor;
     /* 0x15C */ BgGoronOyuActionFunc actionFunc;

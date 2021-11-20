@@ -5,7 +5,7 @@
 
 struct EnScopenuts;
 
-typedef void (*EnScopenutsActionFunc)(struct EnScopenuts* this, GlobalContext* globalCtx);
+typedef void (*EnScopenutsActionFunc)(struct EnScopenuts*, GlobalContext*);
 
 typedef struct EnScopenuts {
     /* 0x0000 */ Actor actor;

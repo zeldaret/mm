@@ -234,7 +234,7 @@ void EnMinislime_Disappear(EnMinislime* this, GlobalContext* globalCtx) {
 }
 
 void EnMinislime_SetupFall(EnMinislime* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yaw;
 
     this->collider.base.atFlags |= AT_ON;
@@ -324,6 +324,8 @@ void EnMinislime_IceArrowDamage(EnMinislime* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&this->shakeRefPos, &this->actor.world.pos);
         } else if (this->frozenTimer > 0) {
             if ((this->frozenTimer < 20) || ((this->frozenTimer < 40) && ((this->frozenTimer % 2) != 0))) {
+                s32 requiredScopeTemp;
+
                 invFrozenTimer = 1.0f / this->frozenTimer;
                 randFloat = Rand_ZeroFloat(invFrozenTimer);
                 randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
@@ -331,7 +333,6 @@ void EnMinislime_IceArrowDamage(EnMinislime* this, GlobalContext* globalCtx) {
                 randFloat = Rand_ZeroFloat(invFrozenTimer);
                 randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
                 this->actor.world.pos.z = randSign * (invFrozenTimer + randFloat) + this->shakeRefPos.z;
-            dummy:; // required for match
             }
         }
     } else {
@@ -761,10 +762,10 @@ void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (this->actor.bgCheckFlags & 2) {
-            player = PLAYER;
+            player = GET_PLAYER(globalCtx);
             vec1.x = this->actor.world.pos.x;
             vec1.z = this->actor.world.pos.z;
-            vec1.y = player->actor.world.pos.y + player->actor.yDistToWater;
+            vec1.y = player->actor.world.pos.y + player->actor.depthInWater;
             EffectSsGRipple_Spawn(globalCtx, &vec1, 500, 720, 0);
         }
     }

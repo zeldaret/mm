@@ -1,3 +1,9 @@
+/*
+ * File z_en_demo_heishi.c
+ * Overlay: ovl_En_Demo_heishi
+ * Description: Unused(?) version of Shiro
+ */
+
 #include "z_en_demo_heishi.h"
 
 #define FLAGS 0x00000009

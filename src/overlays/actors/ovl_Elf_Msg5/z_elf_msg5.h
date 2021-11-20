@@ -5,7 +5,7 @@
 
 struct ElfMsg5;
 
-typedef void (*ElfMsg5ActionFunc)(struct ElfMsg5* this, GlobalContext* globalCtx);
+typedef void (*ElfMsg5ActionFunc)(struct ElfMsg5*, GlobalContext*);
 
 typedef struct ElfMsg5 {
     /* 0x0000 */ Actor actor;

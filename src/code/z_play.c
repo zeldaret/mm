@@ -86,7 +86,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCamera.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016970C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEye.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016981C.s")
 

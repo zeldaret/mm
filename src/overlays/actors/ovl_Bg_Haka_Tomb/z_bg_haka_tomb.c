@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_haka_tomb.c
+ * Overlay: ovl_Bg_Haka_Tomb
+ * Description: Flat's Tomb
+ */
+
 #include "z_bg_haka_tomb.h"
 
 #define FLAGS 0x00000000
@@ -41,8 +47,8 @@ void BgHakaTomb_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaTomb* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, D_06000EE8);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, D_06000EE8);
     func_8013E3B8(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     func_80BD6624(this);
 }
@@ -116,9 +122,9 @@ void BgHakaTomb_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_NEW);
-    SysMatrix_InsertXRotation_s(this->dyna.actor.world.rot.x, MTXMODE_APPLY);
-    SysMatrix_InsertZRotation_s(this->dyna.actor.world.rot.z, MTXMODE_APPLY);
-    SysMatrix_MultiplyVector3fByState(&D_80BD68A4, &vec);
+    Matrix_InsertXRotation_s(this->dyna.actor.world.rot.x, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->dyna.actor.world.rot.z, MTXMODE_APPLY);
+    Matrix_MultiplyVector3fByState(&D_80BD68A4, &vec);
     Math_Vec3f_Sum(&this->dyna.actor.world.pos, &vec, &this->dyna.actor.focus.pos);
 }
 

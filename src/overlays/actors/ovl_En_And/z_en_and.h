@@ -5,7 +5,7 @@
 
 struct EnAnd;
 
-typedef void (*EnAndActionFunc)(struct EnAnd* this, GlobalContext* globalCtx);
+typedef void (*EnAndActionFunc)(struct EnAnd*, GlobalContext*);
 
 typedef struct EnAnd {
     /* 0x0000 */ Actor actor;

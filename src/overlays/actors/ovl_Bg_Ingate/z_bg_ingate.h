@@ -5,7 +5,7 @@
 
 struct BgIngate;
 
-typedef void (*BgIngateActionFunc)(struct BgIngate* this, GlobalContext* globalCtx);
+typedef void (*BgIngateActionFunc)(struct BgIngate*, GlobalContext*);
 
 typedef struct BgIngate {
     /* 0x0000 */ Actor actor;

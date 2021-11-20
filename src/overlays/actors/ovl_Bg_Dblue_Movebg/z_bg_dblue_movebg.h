@@ -5,7 +5,7 @@
 
 struct BgDblueMovebg;
 
-typedef void (*BgDblueMovebgActionFunc)(struct BgDblueMovebg* this, GlobalContext* globalCtx);
+typedef void (*BgDblueMovebgActionFunc)(struct BgDblueMovebg*, GlobalContext*);
 
 typedef struct BgDblueMovebg {
     /* 0x0000 */ Actor actor;

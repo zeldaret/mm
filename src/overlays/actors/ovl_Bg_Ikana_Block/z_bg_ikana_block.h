@@ -5,7 +5,7 @@
 
 struct BgIkanaBlock;
 
-typedef void (*BgIkanaBlockActionFunc)(struct BgIkanaBlock* this, GlobalContext* globalCtx);
+typedef void (*BgIkanaBlockActionFunc)(struct BgIkanaBlock*, GlobalContext*);
 
 typedef struct BgIkanaBlock {
     /* 0x0000 */ Actor actor;

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_goron_oyu.c
+ * Overlay: ovl_Bg_Goron_Oyu
+ * Description: Goron Hot Spring Water
+ */
+
 #include "z_bg_goron_oyu.h"
 
 #define FLAGS 0x00000030
@@ -88,15 +94,15 @@ void func_80B401F8(BgGoronOyu* _this, GlobalContext* globalCtx) {
         return;
     }
 
-    player = PLAYER;
+    player = GET_PLAYER(globalCtx);
 
     Math_Vec3f_DistXYZAndStoreDiff(&_this->collisionHeaderMinVec3f, &player->actor.world.pos, &playerWorldDistance);
 
     if (playerWorldDistance.x >= 0.0f && playerWorldDistance.x <= _this->collisionHeaderMaxX &&
         playerWorldDistance.z >= 0.0f && playerWorldDistance.z <= _this->collisionHeaderMaxY &&
-        fabsf(playerWorldDistance.y) < 100.0f && player->actor.yDistToWater > 12.0f) {
+        fabsf(playerWorldDistance.y) < 100.0f && player->actor.depthInWater > 12.0f) {
         func_800B8A1C(&_this->polyActor.actor, globalCtx, 0xBA, _this->polyActor.actor.xzDistToPlayer,
-                      fabsf(_this->polyActor.actor.yDistToPlayer));
+                      fabsf(_this->polyActor.actor.playerHeightRel));
     }
 }
 
@@ -120,7 +126,7 @@ void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* actorCollisionHeader = NULL;
 
     Actor_SetScale(&_this->polyActor.actor, 0.1f);
-    BcCheck3_BgActorInit(&_this->polyActor, 1);
+    DynaPolyActor_Init(&_this->polyActor, 1);
     BgCheck_RelocateMeshHeader(&D_6000988, &actorCollisionHeader);
 
     _this->polyActor.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &_this->polyActor, actorCollisionHeader);

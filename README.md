@@ -133,3 +133,8 @@ Anyone who wishes to contribute to the OOT or MM projects **must not have access
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
 
 For more information on getting started, see our [Contributing Guide](CONTRIBUTING.md) and our [Code Review Guidelines](REVIEWING.md) to see what code quality guidelines we follow.
+
+## FAQ
+
+### Q: Why does MM use transient assembly?
+A: It is the view of the MM project leads that transient asm is safer than storing the disassembly in the repo. We feel like the C code is more transformative than a straight disassembly.

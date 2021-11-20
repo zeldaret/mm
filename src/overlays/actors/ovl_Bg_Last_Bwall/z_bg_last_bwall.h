@@ -5,7 +5,7 @@
 
 struct BgLastBwall;
 
-typedef void (*BgLastBwallActionFunc)(struct BgLastBwall* this, GlobalContext* globalCtx);
+typedef void (*BgLastBwallActionFunc)(struct BgLastBwall*, GlobalContext*);
 
 typedef struct BgLastBwall {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct ObjIceblock;
 
-typedef void (*ObjIceblockActionFunc)(struct ObjIceblock* this, GlobalContext* globalCtx);
+typedef void (*ObjIceblockActionFunc)(struct ObjIceblock*, GlobalContext*);
 
 typedef struct ObjIceblock {
     /* 0x0000 */ Actor actor;

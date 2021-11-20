@@ -70,8 +70,8 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 paramsMid;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000294);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000294);
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
     Collider_UpdateCylinder(thisx, &this->collider);
@@ -107,7 +107,7 @@ void BgIcicle_Break(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
     s32 j;
     s32 i;
 
-    func_800F0568(globalCtx, &this->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
+    Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 10; j++) {
@@ -200,7 +200,7 @@ void BgIcicle_Regrow(BgIcicle* this, GlobalContext* globalCtx) {
 }
 
 void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
-    s32 sp24;
+    s32 dropItem00Id;
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
@@ -212,9 +212,9 @@ void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->dyna.actor.world.pos, this->unk_160 << 4);
             }
         } else if (this->dyna.actor.params == ICICLE_STALAGMITE_FIXED_DROP) {
-            sp24 = func_800A8150(this->unk_160);
+            dropItem00Id = func_800A8150(this->unk_160);
             BgIcicle_Break(this, globalCtx, 50.0f);
-            Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, (this->unk_161 << 8) | sp24);
+            Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, (this->unk_161 << 8) | dropItem00Id);
         } else {
             if (this->dyna.actor.params == ICICLE_STALACTITE_REGROW) {
                 BgIcicle_Break(this, globalCtx, 40.0f);

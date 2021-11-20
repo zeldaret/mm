@@ -221,7 +221,7 @@ wow_main
 		}
 	}
 	
-	fprintf(printer, "welcome to z64compress <z64.me>\n");
+	fprintf(printer, "welcome to z64compress 1.0.1 <z64.me>\n");
 	
 	if (argc <= 1)
 	{

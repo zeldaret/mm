@@ -5,7 +5,7 @@
 
 struct EnRailSkb;
 
-typedef void (*EnRailSkbActionFunc)(struct EnRailSkb* this, GlobalContext* globalCtx);
+typedef void (*EnRailSkbActionFunc)(struct EnRailSkb*, GlobalContext*);
 
 typedef struct EnRailSkb {
     /* 0x0000 */ Actor actor;

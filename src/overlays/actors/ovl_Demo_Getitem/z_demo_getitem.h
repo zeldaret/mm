@@ -5,7 +5,7 @@
 
 struct DemoGetitem;
 
-typedef void (*DemoGetitemActionFunc)(struct DemoGetitem* this, GlobalContext* globalCtx);
+typedef void (*DemoGetitemActionFunc)(struct DemoGetitem*, GlobalContext*);
 
 typedef struct DemoGetitem {
     /* 0x0000 */ Actor actor;

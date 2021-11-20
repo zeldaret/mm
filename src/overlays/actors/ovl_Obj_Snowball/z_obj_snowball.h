@@ -5,7 +5,7 @@
 
 struct ObjSnowball;
 
-typedef void (*ObjSnowballActionFunc)(struct ObjSnowball* this, GlobalContext* globalCtx);
+typedef void (*ObjSnowballActionFunc)(struct ObjSnowball*, GlobalContext*);
 
 typedef struct ObjSnowball {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnTruMt;
 
-typedef void (*EnTruMtActionFunc)(struct EnTruMt* this, GlobalContext* globalCtx);
+typedef void (*EnTruMtActionFunc)(struct EnTruMt*, GlobalContext*);
 
 typedef struct EnTruMt {
     /* 0x0000 */ Actor actor;

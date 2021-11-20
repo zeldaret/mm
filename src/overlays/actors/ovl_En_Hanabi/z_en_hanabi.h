@@ -5,7 +5,7 @@
 
 struct EnHanabi;
 
-typedef void (*EnHanabiActionFunc)(struct EnHanabi* this, GlobalContext* globalCtx);
+typedef void (*EnHanabiActionFunc)(struct EnHanabi*, GlobalContext*);
 
 typedef struct EnHanabi {
     /* 0x0000 */ Actor actor;

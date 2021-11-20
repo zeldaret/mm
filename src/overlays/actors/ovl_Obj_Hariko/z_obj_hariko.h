@@ -5,7 +5,7 @@
 
 struct ObjHariko;
 
-typedef void (*ObjHarikoActionFunc)(struct ObjHariko* this, GlobalContext* globalCtx);
+typedef void (*ObjHarikoActionFunc)(struct ObjHariko*, GlobalContext*);
 
 typedef struct ObjHariko {
     /* 0x0000 */ Actor actor;

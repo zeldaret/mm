@@ -5,7 +5,7 @@
 
 struct DemoEffect;
 
-typedef void (*DemoEffectActionFunc)(struct DemoEffect* this, GlobalContext* globalCtx);
+typedef void (*DemoEffectActionFunc)(struct DemoEffect*, GlobalContext*);
 
 typedef struct DemoEffect {
     /* 0x0000 */ Actor actor;

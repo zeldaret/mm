@@ -5,7 +5,7 @@
 
 struct EnRuppecrow;
 
-typedef void (*EnRuppecrowActionFunc)(struct EnRuppecrow* this, GlobalContext* globalCtx);
+typedef void (*EnRuppecrowActionFunc)(struct EnRuppecrow*, GlobalContext*);
 
 typedef struct EnRuppecrow {
     /* 0x0000 */ Actor actor;

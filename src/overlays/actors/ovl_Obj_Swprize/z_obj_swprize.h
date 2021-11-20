@@ -5,7 +5,7 @@
 
 struct ObjSwprize;
 
-typedef void (*ObjSwprizeActionFunc)(struct ObjSwprize* this, GlobalContext* globalCtx);
+typedef void (*ObjSwprizeActionFunc)(struct ObjSwprize*, GlobalContext*);
 
 typedef struct ObjSwprize {
     /* 0x0000 */ Actor actor;

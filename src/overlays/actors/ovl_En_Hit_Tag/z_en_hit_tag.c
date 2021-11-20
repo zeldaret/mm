@@ -1,3 +1,9 @@
+/*
+ * File: z_en_hit_tag.c
+ * Overlay: ovl_En_Hit_Tag
+ * Description: Invisible hitbox that can spawn rupees
+ */
+
 #include "z_en_hit_tag.h"
 
 #define FLAGS 0x00000010

@@ -5,7 +5,7 @@
 
 struct DmAh;
 
-typedef void (*DmAhActionFunc)(struct DmAh* this, GlobalContext* globalCtx);
+typedef void (*DmAhActionFunc)(struct DmAh*, GlobalContext*);
 
 typedef struct DmAh {
     /* 0x0000 */ Actor actor;

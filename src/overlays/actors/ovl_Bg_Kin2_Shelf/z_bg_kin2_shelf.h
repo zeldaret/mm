@@ -5,7 +5,7 @@
 
 struct BgKin2Shelf;
 
-typedef void (*BgKin2ShelfActionFunc)(struct BgKin2Shelf* this, GlobalContext* globalCtx);
+typedef void (*BgKin2ShelfActionFunc)(struct BgKin2Shelf*, GlobalContext*);
 
 typedef struct BgKin2Shelf {
     /* 0x0000 */ Actor actor;

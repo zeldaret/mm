@@ -17,7 +17,7 @@ void PreRender_SetValuesSave(PreRender* this, u32 width, u32 height, void* fbuf,
 
 void PreRender_Init(PreRender* this) {
     bzero(this, sizeof(PreRender));
-    func_80174AA0(&this->alloc);
+    ListAlloc_Init(&this->alloc);
 }
 
 /**
@@ -35,7 +35,7 @@ void PreRender_SetValues(PreRender* this, u32 width, u32 height, void* fbuf, voi
 }
 
 void PreRender_Destroy(PreRender* this) {
-    func_80174BA0(&this->alloc);
+    ListAlloc_FreeAll(&this->alloc);
 }
 
 void func_8016FDB8(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, u32 arg4) {
@@ -283,8 +283,8 @@ void PreRender_AntiAliasAlgorithm(PreRender* this, s32 x, s32 y) {
     s32 pxR2;
     s32 pxG2;
     s32 pxB2;
-    Color_RGB5A1 pxIn;
-    Color_RGB5A1 pxOut;
+    Color_RGBA16 pxIn;
+    Color_RGBA16 pxOut;
     u32 pxR3;
     u32 pxG3;
     u32 pxB3;

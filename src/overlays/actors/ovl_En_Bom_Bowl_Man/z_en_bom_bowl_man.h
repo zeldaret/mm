@@ -5,7 +5,7 @@
 
 struct EnBomBowlMan;
 
-typedef void (*EnBomBowlManActionFunc)(struct EnBomBowlMan* this, GlobalContext* globalCtx);
+typedef void (*EnBomBowlManActionFunc)(struct EnBomBowlMan*, GlobalContext*);
 
 typedef struct EnBomBowlMan {
     /* 0x0000 */ Actor actor;

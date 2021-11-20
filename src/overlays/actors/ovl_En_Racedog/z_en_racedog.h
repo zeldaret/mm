@@ -5,7 +5,7 @@
 
 struct EnRacedog;
 
-typedef void (*EnRacedogActionFunc)(struct EnRacedog* this, GlobalContext* globalCtx);
+typedef void (*EnRacedogActionFunc)(struct EnRacedog*, GlobalContext*);
 
 typedef struct EnRacedog {
     /* 0x0000 */ Actor actor;

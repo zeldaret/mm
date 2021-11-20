@@ -1,3 +1,9 @@
+/*
+ * File: z_en_nutsball.c
+ * Overlay: ovl_En_Nutsball
+ * Description: Deku nut Projectile
+ */
+
 #include "z_en_nutsball.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
@@ -83,7 +89,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNutsball* this = THIS;
     GlobalContext* globalCtx2 = globalCtx;
 
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f worldPos;
     Vec3s worldRot;
     Vec3f spawnBurstPos;
@@ -115,9 +121,9 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
                 spawnBurstPos.z = this->actor.world.pos.z;
                 EffectSsHahen_SpawnBurst(globalCtx, &spawnBurstPos, 6.0f, 0, 7, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
                 if (this->actor.params == 1) {
-                    func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_NUTS_BROKEN);
+                    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_NUTS_BROKEN);
                 } else {
-                    func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
+                    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
                 }
                 Actor_MarkForDeath(&this->actor);
             }
@@ -165,8 +171,8 @@ void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
-    SysMatrix_InsertZRotation_s(this->actor.home.rot.z, 1);
+    Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->actor.home.rot.z, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_04058BA0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -5,7 +5,7 @@
 
 struct BgBotihasira;
 
-typedef void (*BgBotihasiraActionFunc)(struct BgBotihasira* this, GlobalContext* globalCtx);
+typedef void (*BgBotihasiraActionFunc)(struct BgBotihasira*, GlobalContext*);
 
 typedef struct BgBotihasira {
     /* 0x0000 */ Actor actor;

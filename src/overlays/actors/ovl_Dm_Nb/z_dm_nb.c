@@ -72,7 +72,7 @@ void DmNb_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmNb* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06008C40, NULL, this->limbDrawTable, this->transitionDrawTable, 8);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008C40, NULL, this->jointTable, this->morphTable, 8);
     this->unk1F0 = -1;
     func_80C1DED0(this, 0);
     this->actor.flags &= ~1;
@@ -87,17 +87,17 @@ void DmNb_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmNb* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 0x4);
+    SkelAnime_Update(&this->skelAnime);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
 }
 
-void DmNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {
+void DmNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void DmNb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmNb* this = THIS;
 
     func_8012C5B0(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                   NULL, DmNb_UnkActorDraw, &this->actor);
 }

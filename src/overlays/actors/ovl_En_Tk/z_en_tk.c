@@ -1,3 +1,9 @@
+/*
+ * File: z_en_tk.c
+ * Overlay: ovl_En_Tk
+ * Description: Dampé
+ */
+
 #include "z_en_tk.h"
 
 #define FLAGS 0x00000009

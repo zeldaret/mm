@@ -5,7 +5,7 @@
 
 struct BgDkjailIvy;
 
-typedef void (*BgDkjailIvyActionFunc)(struct BgDkjailIvy* this, GlobalContext* globalCtx);
+typedef void (*BgDkjailIvyActionFunc)(struct BgDkjailIvy*, GlobalContext*);
 
 typedef struct BgDkjailIvy {
     /* 0x0000 */ Actor actor;

@@ -70,8 +70,8 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
     thisx->world.rot.x = 0;
     thisx->shape.rot.z = 0;
     thisx->world.rot.z = 0;
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, sColHeaders[type]);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, sColHeaders[type]);
     this->speed = OBJRAILLIFT_GET_SPEED(thisx);
     if (this->speed < 0.0f) {
         this->speed = -this->speed;
@@ -187,7 +187,7 @@ void ObjRaillift_Move(ObjRaillift* this, GlobalContext* globalCtx) {
 Will teleport to what ever curpoint is set to
 */
 void ObjRaillift_Teleport(ObjRaillift* this, GlobalContext* globalCtx) {
-    if (!func_800CAF70(&this->dyna)) {
+    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         ObjRaillift_UpdatePosition(this, this->curPoint);
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = ObjRaillift_Move;
@@ -234,8 +234,10 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     if (OBJRAILLIFT_SHOULD_REACT_TO_WEIGHT(thisx)) {
+        s32 requiredScopeTemp;
+
         this->isWeightOnPrev = this->isWeightOn;
-        if (func_800CAF70(&this->dyna)) {
+        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
             this->isWeightOn = true;
         } else {
             this->isWeightOn = false;
@@ -251,7 +253,6 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
         target = this->isWeightOn ? -8.0f : 0.0f;
         Math_StepToF(&this->cycleSpeed, target, step);
         this->dyna.actor.shape.yOffset = ((Math_SinS(this->cycle) * this->maxHeight) + this->cycleSpeed) * 10.0f;
-    dummy:;
     }
     if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM && this->dyna.actor.child != NULL) {
         if (this->dyna.actor.child->update == NULL) {

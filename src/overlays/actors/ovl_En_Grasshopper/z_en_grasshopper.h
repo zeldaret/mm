@@ -5,7 +5,7 @@
 
 struct EnGrasshopper;
 
-typedef void (*EnGrasshopperActionFunc)(struct EnGrasshopper* this, GlobalContext* globalCtx);
+typedef void (*EnGrasshopperActionFunc)(struct EnGrasshopper*, GlobalContext*);
 
 typedef struct EnGrasshopper {
     /* 0x0000 */ Actor actor;

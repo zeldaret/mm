@@ -34,8 +34,8 @@ typedef struct EnIn {
     /* 0x254 */ Vec3f unk254;
     /* 0x260 */ u8 unk260;
     /* 0x261 */ u8 unk261;
-    /* 0x262 */ Vec3s limbDrawTbl[20];
-    /* 0x2DA */ Vec3s transitionDrawTbl[20];
+    /* 0x262 */ Vec3s jointTable[20];
+    /* 0x2DA */ Vec3s morphTable[20];
     /* 0x352 */ s16 unk352;
     /* 0x354 */ s16 unk354;
     /* 0x356 */ char unk356[0x2];

@@ -1,7 +1,45 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_path/func_801224E0.s")
+Path* Path_GetByIndex(GlobalContext* globalCtx, s16 index, s16 max) {
+    Path* path;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_path/func_80122524.s")
+    if (index != max) {
+        path = &globalCtx->setupPathList[index];
+    } else {
+        path = NULL;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_path/func_801225CC.s")
+    return path;
+}
+
+f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw) {
+    f32 dx;
+    f32 dz;
+    Vec3s* pointPos;
+
+    if (path == NULL) {
+        return -1.0;
+    }
+
+    pointPos = Lib_SegmentedToVirtual(path->points);
+    pointPos = &pointPos[waypoint];
+
+    dx = pointPos->x - actor->world.pos.x;
+    dz = pointPos->z - actor->world.pos.z;
+
+    *yaw = Math_Atan2S(dx, dz);
+
+    return SQ(dx) + SQ(dz);
+}
+
+void Path_CopyLastPoint(Path* path, Vec3f* dest) {
+    Vec3s* pointPos;
+
+    if (path != NULL) {
+        pointPos = &((Vec3s*)Lib_SegmentedToVirtual(path->points))[path->count - 1];
+
+        dest->x = pointPos->x;
+        dest->y = pointPos->y;
+        dest->z = pointPos->z;
+    }
+}

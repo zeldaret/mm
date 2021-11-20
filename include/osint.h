@@ -3,12 +3,11 @@
 
 // TODO should be in libultra/os
 
-#include "stdarg.h"
+#include "libc/stdarg.h"
 #include "os.h"
 #include "os_internal.h"
 #include "ultraerror.h"
 #include "ultralog.h"
-#include "sptask.h"
 
 typedef struct {
     /* 0x0 */ OSMesgQueue* messageQueue;
@@ -20,5 +19,8 @@ typedef struct {
     /* 0x0 */ OSThread* next;
     /* 0x4 */ OSPri priority;
 } __OSThreadTail;
+
+extern __osHwInt __osHwIntTable[];
+extern __OSEventState __osEventStateTab[];
 
 #endif

@@ -5,7 +5,7 @@
 
 struct ObjWturn;
 
-typedef void (*ObjWturnActionFunc)(struct ObjWturn* this, GlobalContext* globalCtx);
+typedef void (*ObjWturnActionFunc)(struct ObjWturn*, GlobalContext*);
 
 typedef struct ObjWturn {
     /* 0x0000 */ Actor actor;

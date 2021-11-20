@@ -223,13 +223,13 @@ void func_80A358FC(ObjBell* this, GlobalContext* globalCtx) {
 }
 
 void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {
-    SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
+    Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    SysMatrix_InsertTranslation(0.0f, 2600.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, 2600.0f, 0.0f, MTXMODE_APPLY);
     Matrix_RotateY(thisx->world.rot.y, MTXMODE_APPLY);
-    SysMatrix_InsertXRotation_s(thisx->world.rot.x, MTXMODE_APPLY);
+    Matrix_InsertXRotation_s(thisx->world.rot.x, MTXMODE_APPLY);
     Matrix_RotateY(-thisx->world.rot.y, MTXMODE_APPLY);
-    SysMatrix_InsertTranslation(0.0f, -2600.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, -2600.0f, 0.0f, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -241,7 +241,7 @@ void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A35B18(Actor* thisx, GlobalContext* globalCtx) {
-    SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
+    Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
     Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -252,7 +252,7 @@ void func_80A35B18(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
-    SysMatrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y - 4.0f, thisx->world.pos.z, MTXMODE_NEW);
+    Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y - 4.0f, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
@@ -264,8 +264,8 @@ void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
 void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06001BA8);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06001BA8);
     Actor_SetScale(&this->dyna.actor, 0.08f);
     Collider_InitAndSetSphere(globalCtx, &this->collider1, &this->dyna.actor, &sCylinderInit1);
     Collider_InitAndSetSphere(globalCtx, &this->collider2, &this->dyna.actor, &sCylinderInit2);
@@ -300,9 +300,9 @@ void ObjBell_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_80A35BD4(thisx, globalCtx);
     func_80A359B4(thisx, globalCtx);
     Math_Vec3s_ToVec3f(&sp30, &this->collider1.dim.modelSphere.center);
-    SysMatrix_MultiplyVector3fByState(&sp30, &sp24);
+    Matrix_MultiplyVector3fByState(&sp30, &sp24);
     Math_Vec3f_ToVec3s(&this->collider1.dim.worldSphere.center, &sp24);
     Math_Vec3s_ToVec3f(&sp30, &this->collider2.dim.modelSphere.center);
-    SysMatrix_MultiplyVector3fByState(&sp30, &sp24);
+    Matrix_MultiplyVector3fByState(&sp30, &sp24);
     Math_Vec3f_ToVec3s(&this->collider2.dim.worldSphere.center, &sp24);
 }

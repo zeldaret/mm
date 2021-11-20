@@ -5,7 +5,7 @@
 
 struct ObjHunsui;
 
-typedef void (*ObjHunsuiActionFunc)(struct ObjHunsui* this, GlobalContext* globalCtx);
+typedef void (*ObjHunsuiActionFunc)(struct ObjHunsui*, GlobalContext*);
 
 typedef struct ObjHunsui {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnBubble;
 
-typedef void (*EnBubbleActionFunc)(struct EnBubble* this, GlobalContext* globalCtx);
+typedef void (*EnBubbleActionFunc)(struct EnBubble*, GlobalContext*);
 
 typedef struct EnBubble {
     /* 0x0000 */ Actor actor;

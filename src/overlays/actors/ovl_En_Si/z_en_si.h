@@ -5,7 +5,7 @@
 
 struct EnSi;
 
-typedef void (*EnSiActionFunc)(struct EnSi* this, GlobalContext* globalCtx);
+typedef void (*EnSiActionFunc)(struct EnSi*, GlobalContext*);
 
 typedef struct EnSi {
     /* 0x0000 */ Actor actor;

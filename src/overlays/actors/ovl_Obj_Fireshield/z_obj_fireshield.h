@@ -5,7 +5,7 @@
 
 struct ObjFireshield;
 
-typedef void (*ObjFireshieldActionFunc)(struct ObjFireshield* this, GlobalContext* globalCtx);
+typedef void (*ObjFireshieldActionFunc)(struct ObjFireshield*, GlobalContext*);
 
 typedef struct ObjFireshield {
     /* 0x0000 */ Actor actor;

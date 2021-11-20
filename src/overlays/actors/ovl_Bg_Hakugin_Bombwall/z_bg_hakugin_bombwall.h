@@ -5,7 +5,7 @@
 
 struct BgHakuginBombwall;
 
-typedef void (*BgHakuginBombwallActionFunc)(struct BgHakuginBombwall* this, GlobalContext* globalCtx);
+typedef void (*BgHakuginBombwallActionFunc)(struct BgHakuginBombwall*, GlobalContext*);
 
 typedef struct BgHakuginBombwall {
     /* 0x0000 */ Actor actor;

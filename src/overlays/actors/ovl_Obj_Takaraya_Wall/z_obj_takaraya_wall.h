@@ -5,7 +5,7 @@
 
 struct ObjTakarayaWall;
 
-typedef void (*ObjTakarayaWallActionFunc)(struct ObjTakarayaWall* this, GlobalContext* globalCtx);
+typedef void (*ObjTakarayaWallActionFunc)(struct ObjTakarayaWall*, GlobalContext*);
 
 typedef struct ObjTakarayaWall {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct ObjChan;
 
-typedef void (*ObjChanActionFunc)(struct ObjChan* this, GlobalContext* globalCtx);
+typedef void (*ObjChanActionFunc)(struct ObjChan*, GlobalContext*);
 
 typedef struct ObjChan {
     /* 0x0000 */ Actor actor;

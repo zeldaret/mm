@@ -5,7 +5,7 @@
 
 struct EffZoraband;
 
-typedef void (*EffZorabandActionFunc)(struct EffZoraband* this, GlobalContext* globalCtx);
+typedef void (*EffZorabandActionFunc)(struct EffZoraband*, GlobalContext*);
 
 typedef struct EffZoraband {
     /* 0x0000 */ Actor actor;

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_zog.c
+ * Overlay: ovl_En_Zog
+ * Description: Mikau
+ */
+
 #include "z_en_zog.h"
 
 #define FLAGS 0x00000009

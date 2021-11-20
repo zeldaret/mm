@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_toge.c
+ * Overlay: ovl_Obj_Toge
+ * Description: Blade Trap
+ */
+
 #include "z_obj_toge.h"
 
 #define FLAGS 0x00000010

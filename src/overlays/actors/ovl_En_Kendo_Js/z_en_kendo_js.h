@@ -5,7 +5,7 @@
 
 struct EnKendoJs;
 
-typedef void (*EnKendoJsActionFunc)(struct EnKendoJs* this, GlobalContext* globalCtx);
+typedef void (*EnKendoJsActionFunc)(struct EnKendoJs*, GlobalContext*);
 
 typedef struct EnKendoJs {
     /* 0x0000 */ Actor actor;

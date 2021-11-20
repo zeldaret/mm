@@ -5,7 +5,7 @@
 
 struct ObjKendoKanban;
 
-typedef void (*ObjKendoKanbanActionFunc)(struct ObjKendoKanban* this, GlobalContext* globalCtx);
+typedef void (*ObjKendoKanbanActionFunc)(struct ObjKendoKanban*, GlobalContext*);
 
 typedef struct ObjKendoKanban {
     /* 0x0000 */ Actor actor;

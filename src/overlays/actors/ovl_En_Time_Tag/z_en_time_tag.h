@@ -5,7 +5,7 @@
 
 struct EnTimeTag;
 
-typedef void (*EnTimeTagActionFunc)(struct EnTimeTag* this, GlobalContext* globalCtx);
+typedef void (*EnTimeTagActionFunc)(struct EnTimeTag*, GlobalContext*);
 
 typedef struct EnTimeTag {
     /* 0x0000 */ Actor actor;

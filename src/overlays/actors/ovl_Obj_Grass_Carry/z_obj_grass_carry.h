@@ -5,7 +5,7 @@
 
 struct ObjGrassCarry;
 
-typedef void (*ObjGrassCarryActionFunc)(struct ObjGrassCarry* this, GlobalContext* globalCtx);
+typedef void (*ObjGrassCarryActionFunc)(struct ObjGrassCarry*, GlobalContext*);
 
 typedef struct ObjGrassCarry {
     /* 0x0000 */ Actor actor;

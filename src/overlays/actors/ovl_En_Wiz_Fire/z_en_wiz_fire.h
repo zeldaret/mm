@@ -5,7 +5,7 @@
 
 struct EnWizFire;
 
-typedef void (*EnWizFireActionFunc)(struct EnWizFire* this, GlobalContext* globalCtx);
+typedef void (*EnWizFireActionFunc)(struct EnWizFire*, GlobalContext*);
 
 typedef struct EnWizFire {
     /* 0x0000 */ Actor actor;

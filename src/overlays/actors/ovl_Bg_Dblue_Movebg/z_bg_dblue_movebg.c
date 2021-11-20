@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_dblue_movebg.c
+ * Overlay: ovl_Bg_Dblue_Movebg
+ * Description: Great Bay Temple - Waterwheels and push switches
+ */
+
 #include "z_bg_dblue_movebg.h"
 
 #define FLAGS 0x00000030

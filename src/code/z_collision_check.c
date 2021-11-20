@@ -38,10 +38,6 @@ TriNorm D_801EF5C8;
 TriNorm D_801EF600;
 TriNorm D_801EF638;
 
-//! @TODO: These are fake bss symbols likely related to z_message_nes
-UNK_TYPE1 D_801EF66C;
-UNK_TYPE1 D_801EF66D;
-
 /**
  * Gets the damage and effect that should be applied for the collision between
  * `at` and `ac`, referring to the ac actor's damage chart if applicable.
@@ -331,7 +327,7 @@ s32 Collider_FreeJntSph(GlobalContext* globalCtx, ColliderJntSph* collider) {
 
     collider->count = 0;
     if (collider->elements != NULL) {
-        zelda_free(collider->elements);
+        ZeldaArena_Free(collider->elements);
     }
     collider->elements = NULL;
     return 1;
@@ -363,7 +359,7 @@ s32 Collider_SetJntSphToActor(GlobalContext* globalCtx, ColliderJntSph* collider
 
     Collider_SetBaseToActor(globalCtx, &collider->base, &src->base);
     collider->count = src->count;
-    collider->elements = zelda_malloc(src->count * sizeof(ColliderJntSphElement));
+    collider->elements = ZeldaArena_Malloc(src->count * sizeof(ColliderJntSphElement));
 
     if (collider->elements == NULL) {
         collider->count = 0;
@@ -389,7 +385,7 @@ s32 Collider_SetJntSphAllocType1(GlobalContext* globalCtx, ColliderJntSph* spher
 
     Collider_SetBaseType1(globalCtx, &sphereGroup->base, actor, &src->base);
     sphereGroup->count = src->count;
-    sphereGroup->elements = zelda_malloc(src->count * sizeof(ColliderJntSphElement));
+    sphereGroup->elements = ZeldaArena_Malloc(src->count * sizeof(ColliderJntSphElement));
 
     if (sphereGroup->elements == NULL) {
         sphereGroup->count = 0;
@@ -685,7 +681,7 @@ s32 Collider_FreeTris(GlobalContext* globalCtx, ColliderTris* tris) {
 
     tris->count = 0;
     if (tris->elements != NULL) {
-        zelda_free(tris->elements);
+        ZeldaArena_Free(tris->elements);
     }
     tris->elements = NULL;
 
@@ -718,7 +714,7 @@ s32 Collider_SetTrisAllocType1(GlobalContext* globalCtx, ColliderTris* tris, Act
 
     Collider_SetBaseType1(globalCtx, &tris->base, actor, &src->base);
     tris->count = src->count;
-    tris->elements = zelda_malloc(tris->count * sizeof(ColliderTrisElement));
+    tris->elements = ZeldaArena_Malloc(tris->count * sizeof(ColliderTrisElement));
 
     if (tris->elements == NULL) {
         tris->count = 0;
@@ -2917,8 +2913,8 @@ void CollisionCheck_AC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt,
 /**
  * Iterates through all AT colliders, testing them for AC collisions with each AC collider, setting the info regarding
  * the collision for each AC and AT collider that collided. Then spawns hitmarks and plays sound effects for each
- * successful collision. To collide, an AT collider must share a type (PLAYER, ENEMY, or BOMB) with the AC collider and
- * the toucher and bumper elements that overlapped must share a dmgFlag.
+ * successful collision. To collide, an AT collider must share a type (AC_TYPE_PLAYER, AC_TYPE_ENEMY, or AC_TYPE_OTHER)
+ * with the AC collider and the toucher and bumper elements that overlapped must share a dmgFlag.
  */
 void CollisionCheck_AT(GlobalContext* globalCtx, CollisionCheckContext* colCtxt) {
     Collider** col;
@@ -3695,7 +3691,7 @@ void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider) {
             D_801EE1C0.x = collider->elements[i].dim.modelSphere.center.x;
             D_801EE1C0.y = collider->elements[i].dim.modelSphere.center.y;
             D_801EE1C0.z = collider->elements[i].dim.modelSphere.center.z;
-            SysMatrix_MultiplyVector3fByState(&D_801EE1C0, &D_801EE1D0);
+            Matrix_MultiplyVector3fByState(&D_801EE1C0, &D_801EE1D0);
             collider->elements[i].dim.worldSphere.center.x = D_801EE1D0.x;
             collider->elements[i].dim.worldSphere.center.y = D_801EE1D0.y;
             collider->elements[i].dim.worldSphere.center.z = D_801EE1D0.z;
@@ -3737,7 +3733,7 @@ void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
         D_801EE1E0.x = collider->dim.modelSphere.center.x;
         D_801EE1E0.y = collider->dim.modelSphere.center.y;
         D_801EE1E0.z = collider->dim.modelSphere.center.z;
-        SysMatrix_MultiplyVector3fByState(&D_801EE1E0, &D_801EE1F0);
+        Matrix_MultiplyVector3fByState(&D_801EE1E0, &D_801EE1F0);
         collider->dim.worldSphere.center.x = D_801EE1F0.x;
         collider->dim.worldSphere.center.y = D_801EE1F0.y;
         collider->dim.worldSphere.center.z = D_801EE1F0.z;

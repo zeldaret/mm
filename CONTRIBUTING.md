@@ -14,7 +14,7 @@ Useful Links
 ------------
 
 - [Discord](https://discord.zelda64.dev/) - Primary discussion platform.
-- [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) - We use this to track decompilation progress, not GitHub Issues.
+- [Google Sheets reservation board](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) - We use this to track decompilation progress, not GitHub Issues.
 
 - [Installation guide](https://github.com/zeldaret/mm/blob/master/README.md#installation) - Instructions for getting this repository set up and built on your machine.
 - [Code Review Guidelines](REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
@@ -50,8 +50,12 @@ An *actor* is any thing in the game that moves or performs actions or interactio
 
 You should [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
 
-We track who is working on what on the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation).
-After joining the Discord, ask to be added to the Trello board so you can claim your code file and avoid duplicate work. You may need to add a card if a card for your file does not currently exist.
+We track who is working on what on the [Google Sheets reservation board](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro).
+After joining the Discord, open the Google Sheets reservation board so you can claim your code file and avoid duplicate work.
+
+The work flow is: Reserve a file, decompile it, submit a PR, and then repeat while addressing review comments. The expectation is that one reservation goes to one file which ends up in a one file PR.
+
+Please note that unless it is communicated beforehand you will be expected to fully complete the file if you reserve it on Google Sheets reservation board. Exceptions are always easy to approve if it's communicated to the team. Real life circumstances can prevent someone from finishing. In these cases they should link their repo/branch in the Google Sheets reservation board and unreserve immediately. Communicate any issues with your reservations as early as possible.
 
 Style Guide & Conventions
 -------------------------
@@ -119,8 +123,7 @@ Documenting is more than just adding comments. Documenting also includes:
 - Using (or adding) constants, enums, and macros when possible
 - Explaining sections of code that are not straightforward
 
-Overlays are not required to be documented at this time, but `code/` and `boot/` should be documented as much as possible.
-When an overlay documentation has been started, it will be required to be completed.
+Overlays are not required to be documented at this time, but `code/` and `boot/` should be documented. When documentation on a file has been started it should be as complete as possible.
 
 For right now, object segment symbols should not be documented/renamed.
 These will be given names when object reconstruction is ready.
@@ -156,4 +159,4 @@ Once all comments are addressed, it is courteous to ping the reviewer on either 
 After all the comments are addressed and at least one contributor has approved the review, the project lead can then review and merge the code.
 The project lead is also responsible for ensuring that all of these procedures are followed.
 
-Throughout the PR process, you (the author) should update the card on [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) with the appropriate column and labels.
+Throughout the PR process, you (the author) should update the row on [Google Sheets reservation board](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) with the appropriate information as the decompilation process progresses.

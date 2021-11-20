@@ -5,7 +5,7 @@
 
 struct ObjHugebombiwa;
 
-typedef void (*ObjHugebombiwaActionFunc)(struct ObjHugebombiwa* this, GlobalContext* globalCtx);
+typedef void (*ObjHugebombiwaActionFunc)(struct ObjHugebombiwa*, GlobalContext*);
 
 typedef struct ObjHugebombiwa {
     /* 0x0000 */ Actor actor;

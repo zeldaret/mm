@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_tobira01.c
+ * Overlay: ovl_Bg_Tobira01
+ * Description: Gate to Goron Shrine
+ */
+
 #include "z_bg_tobira01.h"
 
 #define FLAGS 0x00000030
@@ -25,7 +31,7 @@ extern Gfx D_06000088[];
 extern CollisionHeader D_060011C0;
 
 void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 cutsceneId = this->dyna.actor.cutscene;
     s16 prevTimer;
 
@@ -72,8 +78,8 @@ void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgTobira01* this = THIS;
     s32 pad;
 
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011C0);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060011C0);
     gSaveContext.weekEventReg[88] &= (u8)~0x40;
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->timer2 = gSaveContext.isNight;

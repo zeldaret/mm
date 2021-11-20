@@ -5,7 +5,7 @@
 
 struct ObjFlowerpot;
 
-typedef void (*ObjFlowerpotActionFunc)(struct ObjFlowerpot* this, GlobalContext* globalCtx);
+typedef void (*ObjFlowerpotActionFunc)(struct ObjFlowerpot*, GlobalContext*);
 
 typedef struct ObjFlowerpot {
     /* 0x0000 */ Actor actor;

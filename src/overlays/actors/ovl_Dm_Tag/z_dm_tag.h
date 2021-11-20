@@ -5,7 +5,7 @@
 
 struct DmTag;
 
-typedef void (*DmTagActionFunc)(struct DmTag* this, GlobalContext* globalCtx);
+typedef void (*DmTagActionFunc)(struct DmTag*, GlobalContext*);
 
 typedef struct DmTag {
     /* 0x0000 */ Actor actor;

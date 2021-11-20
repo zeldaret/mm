@@ -5,7 +5,7 @@
 
 struct BgF40Block;
 
-typedef void (*BgF40BlockActionFunc)(struct BgF40Block* this, GlobalContext* globalCtx);
+typedef void (*BgF40BlockActionFunc)(struct BgF40Block*, GlobalContext*);
 
 typedef struct BgF40Block {
     /* 0x0000 */ Actor actor;

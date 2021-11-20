@@ -5,7 +5,7 @@
 
 struct EnStoneheishi;
 
-typedef void (*EnStoneheishiActionFunc)(struct EnStoneheishi* this, GlobalContext* globalCtx);
+typedef void (*EnStoneheishiActionFunc)(struct EnStoneheishi*, GlobalContext*);
 
 typedef struct EnStoneheishi {
     /* 0x0000 */ Actor actor;

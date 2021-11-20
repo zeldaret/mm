@@ -5,7 +5,7 @@
 
 struct EnHitTag;
 
-typedef void (*EnHitTagActionFunc)(struct EnHitTag* this, GlobalContext* globalCtx);
+typedef void (*EnHitTagActionFunc)(struct EnHitTag*, GlobalContext*);
 
 typedef struct EnHitTag {
     /* 0x0000 */ Actor actor;

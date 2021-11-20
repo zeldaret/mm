@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_hakugin_switch.c
+ * Overlay: ovl_Bg_Hakugin_Switch
+ * Description: Goron Link Switch
+ */
+
 #include "z_bg_hakugin_switch.h"
 
 #define FLAGS 0x00000010

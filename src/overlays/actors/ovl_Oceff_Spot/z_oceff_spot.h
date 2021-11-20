@@ -5,7 +5,7 @@
 
 struct OceffSpot;
 
-typedef void (*OceffSpotActionFunc)(struct OceffSpot* this, GlobalContext* globalCtx);
+typedef void (*OceffSpotActionFunc)(struct OceffSpot*, GlobalContext*);
 
 typedef struct OceffSpot {
     /* 0x0000 */ Actor actor;

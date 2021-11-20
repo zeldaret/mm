@@ -5,7 +5,7 @@
 
 struct DmAl;
 
-typedef void (*DmAlActionFunc)(struct DmAl* this, GlobalContext* globalCtx);
+typedef void (*DmAlActionFunc)(struct DmAl*, GlobalContext*);
 
 typedef struct DmAl {
     /* 0x0000 */ Actor actor;

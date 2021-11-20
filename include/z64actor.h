@@ -76,6 +76,32 @@ typedef struct {
     /* 0x3A */ s16 unk3A;
 } ActorEnTest20C; // size = 0x3C
 
+struct EnDno_ActorUnkStruct;
+typedef s32 (*EnDno_ActorUnkFunc)(struct GlobalContext*, struct EnDno_ActorUnkStruct*);
+
+typedef struct EnDno_ActorUnkStruct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ UNK_TYPE1 unk_0C[0x4];
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ UNK_TYPE1 unk_12[0xA];
+    /* 0x1C */ u8 unk_1C;
+    /* 0x1D */ u8 unk_1D;
+    /* 0x20 */ Vec3f unk_20;
+    /* 0x2C */ Vec3f unk_2C;
+    /* 0x38 */ Vec3f unk_38;
+    /* 0x44 */ UNK_TYPE1 unk_44[0x4];
+    /* 0x48 */ struct Actor* unk_48;
+    /* 0x4C */ f32 unk_4C;
+    /* 0x50 */ f32 unk_50;
+    /* 0x54 */ s16 unk_54;
+    /* 0x56 */ s16 unk_56;
+    /* 0x58 */ s32 unk_58;
+    /* 0x5C */ EnDno_ActorUnkFunc unk_5C;
+    /* 0x60 */ EnDno_ActorUnkFunc unk_60;
+    /* 0x64 */ EnDno_ActorUnkFunc unk_64;
+    /* 0x68 */ EnDno_ActorUnkFunc unk_68;
+} EnDno_ActorUnkStruct; // size >= 0x6C
+
 typedef struct {
     /* 0x00 */ s16 id;
     /* 0x02 */ u8 type;
@@ -116,7 +142,7 @@ typedef struct {
     /* 0x10 */ f32 shadowScale; // Changes the size of the shadow
     /* 0x14 */ u8 shadowAlpha; // Default is 255
     /* 0x15 */ u8 feetFloorFlags; // Set if the actor's foot is clipped under the floor. & 1 is right foot, & 2 is left
-    /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDraw
+    /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDrawOpa
 } ActorShape; // size = 0x30
 
 typedef struct Actor {
@@ -146,12 +172,12 @@ typedef struct Actor {
     /* 0x085 */ u8 floorBgId; // Bg ID of the floor polygon directly below the actor
     /* 0x086 */ s16 wallYaw; // Y rotation of the wall polygon the actor is touching
     /* 0x088 */ f32 floorHeight; // Y position of the floor polygon directly below the actor
-    /* 0x08C */ f32 yDistToWater; // Distance to the surface of active waterbox. Negative value means above water
+    /* 0x08C */ f32 depthInWater; // Directed distance to the surface of active waterbox. Negative value means water is below.
     /* 0x090 */ u16 bgCheckFlags; // See comments below actor struct for wip docs. TODO: macros for these flags
     /* 0x092 */ s16 yawTowardsPlayer; // Y rotation difference between the actor and the player
     /* 0x094 */ f32 xyzDistToPlayerSq; // Squared distance between the actor and the player in the x,y,z axis
     /* 0x098 */ f32 xzDistToPlayer; // Distance between the actor and the player in the XZ plane
-    /* 0x09C */ f32 yDistToPlayer; // Dist is negative if the actor is above the player
+    /* 0x09C */ f32 playerHeightRel; // Directed distance is negative if the player is below.
     /* 0x0A0 */ CollisionCheckInfo colChkInfo; // Variables related to the Collision Check system
     /* 0x0BC */ ActorShape shape; // Variables related to the physical shape of the actor
     /* 0x0EC */ Vec3f projectedPos; // Position of the actor in projected space
@@ -202,15 +228,14 @@ typedef enum {
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 bgId;
-    /* 0x148 */ f32 unk148;
+    /* 0x148 */ f32 pushForce;
     /* 0x14C */ f32 unk14C;
-    /* 0x150 */ s16 unk150;
+    /* 0x150 */ s16 yRotation;
     /* 0x152 */ u16 unk152;
-    /* 0x154 */ u32 unk154;
-    /* 0x158 */ u8 unk_158;
+    /* 0x154 */ u32 flags;
+    /* 0x158 */ u8 stateFlags;
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
-
 
 typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
@@ -232,7 +257,7 @@ typedef enum {
     /* 0x10 */ ITEM00_MASK,
     /* 0x11 */ ITEM00_SMALL_KEY,
     /* 0x12 */ ITEM00_FLEXIBLE,
-    /* 0x13 */ ITEM00_RUPEE_ORANGE,
+    /* 0x13 */ ITEM00_RUPEE_HUGE,
     /* 0x14 */ ITEM00_RUPEE_PURPLE,
     /* 0x15 */ ITEM00_3_HEARTS,
     /* 0x16 */ ITEM00_SHIELD_HERO,
@@ -265,12 +290,16 @@ typedef struct EnItem00 {
     /* 0x1A4 */ s8 unk1A4;
 } EnItem00; // size = 0x1A8
 
-typedef struct {
-    /* 0x000 */ Actor base;
-    /* 0x144 */ ActorFunc update;
+struct EnAObj;
+
+typedef void (*EnAObjActionFunc)(struct EnAObj*, struct GlobalContext*);
+
+typedef struct EnAObj {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnAObjActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collision;
     /* 0x194 */ UNK_TYPE1 pad194[0x14];
-} ActorEnAObj; // size = 0x1A8
+} EnAObj; // size = 0x1A8
 
 typedef enum {
     /* 0x00 */ ACTORCAT_SWITCH,

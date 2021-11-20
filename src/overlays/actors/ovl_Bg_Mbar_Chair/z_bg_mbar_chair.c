@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_mbar_chair.c
+ * Overlay: ovl_Bg_Mbar_Chair
+ * Description: Milk Bar - Chair
+ */
+
 #include "z_bg_mbar_chair.h"
 
 #define FLAGS 0x00000000
@@ -35,8 +41,8 @@ void BgMbarChair_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgMbarChair* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060019B4);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060019B4);
 }
 
 void BgMbarChair_Destroy(Actor* thisx, GlobalContext* globalCtx) {

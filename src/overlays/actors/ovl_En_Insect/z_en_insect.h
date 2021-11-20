@@ -5,7 +5,7 @@
 
 struct EnInsect;
 
-typedef void (*EnInsectActionFunc)(struct EnInsect* this, GlobalContext* globalCtx);
+typedef void (*EnInsectActionFunc)(struct EnInsect*, GlobalContext*);
 
 typedef struct EnInsect {
     /* 0x0000 */ Actor actor;

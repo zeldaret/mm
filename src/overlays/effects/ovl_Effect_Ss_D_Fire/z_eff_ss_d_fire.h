@@ -11,8 +11,9 @@ typedef struct {
     /* 0x26 */ s16 scaleStep;
     /* 0x28 */ s16 alpha;
     /* 0x2A */ s16 fadeDelay;
-    /* 0x2C */ s32 life;
-} EffectSsDFireInitParams; // size = 0x30
+    /* 0x2C */ s16 unk_2C;
+    /* 0x30 */ s32 life;
+} EffectSsDFireInitParams; // size = 0x34
 
 extern const EffectSsInit Effect_Ss_D_Fire_InitVars;
 

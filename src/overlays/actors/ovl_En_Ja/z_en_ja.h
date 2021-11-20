@@ -5,7 +5,7 @@
 
 struct EnJa;
 
-typedef void (*EnJaActionFunc)(struct EnJa* this, GlobalContext* globalCtx);
+typedef void (*EnJaActionFunc)(struct EnJa*, GlobalContext*);
 
 typedef struct EnJa {
     /* 0x0000 */ Actor actor;

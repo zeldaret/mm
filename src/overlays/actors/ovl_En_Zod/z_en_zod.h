@@ -5,7 +5,7 @@
 
 struct EnZod;
 
-typedef void (*EnZodActionFunc)(struct EnZod* this, GlobalContext* globalCtx);
+typedef void (*EnZodActionFunc)(struct EnZod*, GlobalContext*);
 
 typedef struct EnZod {
     /* 0x0000 */ Actor actor;

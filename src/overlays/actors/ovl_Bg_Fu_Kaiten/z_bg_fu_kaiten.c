@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_fu_kaiten.c
+ * Overlay: ovl_Bg_Fu_Kaiten
+ * Description: Honey & Darling's Shop - Rotating Platform
+ */
+
 #include "z_bg_fu_kaiten.h"
 
 #define FLAGS 0x00000030
@@ -30,7 +36,7 @@ void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* header = 0;
 
     Actor_SetScale(thisx, 1.0);
-    BcCheck3_BgActorInit(&THIS->bg, 3);
+    DynaPolyActor_Init(&THIS->bg, 3);
     BgCheck_RelocateMeshHeader(&D_06002D30, &header);
     THIS->bg.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &THIS->bg, header);
 

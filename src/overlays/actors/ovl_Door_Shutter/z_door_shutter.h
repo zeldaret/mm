@@ -5,7 +5,7 @@
 
 struct DoorShutter;
 
-typedef void (*DoorShutterActionFunc)(struct DoorShutter* this, GlobalContext* globalCtx);
+typedef void (*DoorShutterActionFunc)(struct DoorShutter*, GlobalContext*);
 
 typedef struct DoorShutter {
     /* 0x0000 */ Actor actor;
