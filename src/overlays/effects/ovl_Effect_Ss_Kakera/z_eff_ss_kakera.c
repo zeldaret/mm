@@ -79,7 +79,7 @@ void EffectSsKakera_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     s16 pad;
     f32 scale = this->regs[7] / 256.0f;
-    s32 color_index = this->regs[12];
+    s32 colorIndex = this->regs[12];
 
     OPEN_DISPS(gfxCtx);
     if (this->regs[10] != KAKERA_OBJECT_DEFAULT) {
@@ -98,17 +98,17 @@ void EffectSsKakera_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     if ((((this->regs[4] >> 7) & 1) << 7) == 0x80) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        if (color_index >= 0) {
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, D_8097EAD8[color_index].lod, D_8097EAD8[color_index].color.r,
-                            D_8097EAD8[color_index].color.g, D_8097EAD8[color_index].color.b, 255);
+        if (colorIndex >= 0) {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, D_8097EAD8[colorIndex].lod, D_8097EAD8[colorIndex].color.r,
+                            D_8097EAD8[colorIndex].color.g, D_8097EAD8[colorIndex].color.b, 255);
         }
         gSPDisplayList(POLY_XLU_DISP++, this->gfx);
     } else {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_8012C28C(globalCtx->state.gfxCtx);
-        if (color_index >= 0) {
-            gDPSetPrimColor(POLY_OPA_DISP++, 0, D_8097EAD8[color_index].lod, D_8097EAD8[color_index].color.r,
-                            D_8097EAD8[color_index].color.g, D_8097EAD8[color_index].color.b, 255);
+        if (colorIndex >= 0) {
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, D_8097EAD8[colorIndex].lod, D_8097EAD8[colorIndex].color.r,
+                            D_8097EAD8[colorIndex].color.g, D_8097EAD8[colorIndex].color.b, 255);
         }
         gSPDisplayList(POLY_OPA_DISP++, this->gfx);
     }
@@ -307,33 +307,33 @@ void func_8097E7E0(EffectSs* this, GlobalContext* globalCtx) {
                 this->regs[1] = this->regs[9];
             }
         } else {
-	        if (this->pos.y <= ((player->actor.floorHeight - ((this->regs[4] >> 2) & 3)) - 600.0f)) {
-	            this->life = 0;
-	        }
+            if (this->pos.y <= ((player->actor.floorHeight - ((this->regs[4] >> 2) & 3)) - 600.0f)) {
+                this->life = 0;
+            }
         }
     } else {
-	    switch (this->regs[4] & 3) {
-	        case 0:
-	            this->regs[8] = 0;
-	            break;
-	        case 1:
-	            if ((this->velocity.y < 0.0f) &&
-	                (func_800C5A20(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->regs[4] >> 2) & 3]))) {
-	                this->velocity.x *= func_8097DE30(0.9f, 0.2f);
-	                this->velocity.y *= -0.8f;
-	                this->velocity.z *= func_8097DE30(0.9f, 0.2f);
-	                if (this->regs[8] > 0) {
-	                    this->regs[8] -= 1;
-	                }
-	            }
-	            break;
-	        case 2:
-	            if (func_800C5A20(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->regs[4] >> 2) & 3])) {
-	                this->regs[8] = 0;
-	            }
-	            break;
-	    }
-	}
+        switch (this->regs[4] & 3) {
+            case 0:
+                this->regs[8] = 0;
+                break;
+            case 1:
+                if ((this->velocity.y < 0.0f) &&
+                    (func_800C5A20(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->regs[4] >> 2) & 3]))) {
+                    this->velocity.x *= func_8097DE30(0.9f, 0.2f);
+                    this->velocity.y *= -0.8f;
+                    this->velocity.z *= func_8097DE30(0.9f, 0.2f);
+                    if (this->regs[8] > 0) {
+                        this->regs[8] -= 1;
+                    }
+                }
+                break;
+            case 2:
+                if (func_800C5A20(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->regs[4] >> 2) & 3])) {
+                    this->regs[8] = 0;
+                }
+                break;
+        }
+    }
 }
 
 void EffectSsKakera_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
