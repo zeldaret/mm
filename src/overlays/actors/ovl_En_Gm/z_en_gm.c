@@ -1507,7 +1507,7 @@ void func_80950CDC(EnGm* this, GlobalContext* globalCtx) {
 
     this->unk_3C4 = REG(15) + *unk_14;
 
-    if (!func_80133038(globalCtx, &D_80951820, &sp20) ||
+    if (!func_80133038(globalCtx, (void*)&D_80951820, &sp20) ||
         ((this->unk_258 != sp20.unk0) && !func_80950280(this, globalCtx, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~1;
