@@ -1,6 +1,10 @@
 #include "global.h"
 #include "vt.h"
 
+#define DYNA_RAYCAST_FLOORS 1
+#define DYNA_RAYCAST_WALLS 2
+#define DYNA_RAYCAST_CEILINGS 4
+
 static u32 sWallFlags[32] = {
     0, 1, 3, 5, 8, 16, 32, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
@@ -173,7 +177,7 @@ s32 func_800BFDEC(CollisionPoly* polyA, CollisionPoly* polyB, u32* outVtxId0, u3
     s32 count;
 
     *outVtxId0 = *outVtxId1 = 0;
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(vtxIdA); i++) {
         vtxIdA[i] = COLPOLY_VTX_INDEX(polyA->vtxData[i]);
         vtxIdB[i] = COLPOLY_VTX_INDEX(polyB->vtxData[i]);
     }
@@ -1905,7 +1909,10 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
     f32 temp_f0;
     s32 result;
     CollisionPoly* poly;
-    f32 dx, dy, dz; // change between posPrev to posNext
+    // change between posPrev to posNext
+    f32 dx;
+    f32 dy;
+    f32 dz;
     Vec3f sphCenter;
     s32 dynaPolyCollision;
     Vec3f posIntersect;
@@ -1921,7 +1928,10 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
     s32 bccFlags;
     Vec3f posIntersect2;
     s32 bgId2;
-    f32 nx, ny, nz; // unit normal of polygon
+    // unit normal of polygon
+    f32 nx;
+    f32 ny;
+    f32 nz;
 
     result = false;
     *outBgId = BGCHECK_SCENE;
@@ -3180,10 +3190,6 @@ void DynaPoly_UpdateBgActorTransforms(GlobalContext* globalCtx, DynaCollisionCon
     }
 }
 
-#define DYNA_RAYCAST_FLOORS 1
-#define DYNA_RAYCAST_WALLS 2
-#define DYNA_RAYCAST_CEILINGS 4
-
 /**
  * Perform dyna poly raycast toward floor on a list of floor, wall, or ceiling polys
  * `listType` specifies the poly list type (e.g. DYNA_RAYCAST_FLOORS)
@@ -4158,7 +4164,7 @@ Vec3s* func_800C98CC(CollisionContext* colCtx, s32 camId, s32 bgId) {
     if (cameraDataList == NULL) {
         return NULL;
     }
-    return (Vec3s*)Lib_SegmentedToVirtual(cameraDataList[camId].camPosData);
+    return Lib_SegmentedToVirtual(cameraDataList[camId].camPosData);
 }
 
 /**
