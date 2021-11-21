@@ -3,15 +3,16 @@
 
 #include "z64.h"
 #include "segment_symbols.h"
+#include "macros.h"
 
 // pre-boot variables
 extern u32 osTvType;
 extern u32 osRomType;
-extern u32 osRomBase;
+extern uintptr_t osRomBase;
 extern u32 osResetType;
 extern u32 osCicId;
 extern u32 osVersion;
-extern u32 osMemSize;
+extern size_t osMemSize;
 extern s32 osAppNmiBuffer[0x10];
 extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];
@@ -81,15 +82,15 @@ extern float D_80097F90;
 // extern UNK_TYPE4 D_80097FB0;
 extern OSViMode osViModeNtscLan1;
 extern OSViMode osViModeMpalLan1;
-extern __OSViContext D_80098060[2];
+// extern __OSViContext D_80098060[2];
 extern __OSViContext* __osViCurr;
 extern __OSViContext* __osViNext;
-// extern UNK_TYPE4 D_800980D0;
+// extern UNK_TYPE4 sCartRomNeedsInit;
 extern OSViMode osViModeFpalLan1;
 // extern u8 ldigs[];
 // extern u8 udigs[];
-extern OSDevMgr __osViDevMgr;
-extern UNK_TYPE4 __additional_scanline;
+// extern OSDevMgr __osViDevMgr;
+extern u32 __additional_scanline;
 // extern UNK_TYPE1 D_80098180;
 extern char bootThreadName[];
 extern char idleThreadName[];
@@ -352,14 +353,14 @@ extern OSPiHandle CartRomHandle;
 extern OSThread viThread;
 extern u8 viThreadStack[0x1000];
 extern OSMesgQueue viEventQueue;
-extern OSMesg viEventBuf[5];
-extern OSIoMesg viRetraceMsg;
-extern OSIoMesg viCounterMsg;
+// extern OSMesg viEventBuf[5];
+// extern OSIoMesg viRetraceMsg;
+// extern OSIoMesg viCounterMsg;
 extern u16 viRetrace;
 extern DmaEntry dmadata[1568];
 // extern UNK_TYPE1 D_80186028;
 // extern UNK_TYPE1 D_801AAAB0;
-// extern UNK_TYPE1 D_801AD370;
+extern u64 gJpegUCode[];
 extern ActorInit En_A_Obj_InitVars;
 extern ColliderCylinderInit enAObjCylinderInit;
 extern InitChainEntry enAObjInitVar;
@@ -1360,7 +1361,7 @@ extern u16 gEquipNegMasks[];
 extern u32 gUpgradeMasks[8];
 extern u32 gUpgradeNegMasks[];
 extern u8 gEquipShifts[];
-extern u8 gUpgradeShifts[16];
+extern u8 gUpgradeShifts[8];
 extern u16 gUpgradeCapacities[][4];
 extern u32 gGsFlagsMask[];
 extern u32 gGsFlagsShift[];
@@ -1866,7 +1867,7 @@ extern s8 D_801DB4B8;
 // extern UNK_TYPE1 D_801DB8B8;
 // extern UNK_TYPE1 D_801DB900;
 extern UNK_PTR D_801DB930;
-extern s8018CFAC D_801DB958[21];
+extern AudioSpec D_801DB958[21];
 
 // rodata
 extern f32 D_801DBDF0;
@@ -3106,7 +3107,7 @@ extern UNK_PTR D_801E10B0;
 // extern UNK_TYPE1 D_801E1E80;
 // extern UNK_TYPE1 D_801E2160;
 // extern UNK_TYPE1 D_801E3790;
-// extern UNK_TYPE1 D_801E3F40;
+extern u64 gJpegUCodeData[];
 // extern UNK_TYPE1 D_801E3FA0;
 
 // bss
@@ -3272,7 +3273,7 @@ extern u8 D_801F4E30;
 // extern UNK_TYPE1 D_801F4E68;
 extern f32 D_801F4E70;
 // extern UNK_TYPE1 D_801F4E74;
-// extern UNK_TYPE1 D_801F4E78;
+extern u16 D_801F4E78;
 extern s16 D_801F4E7A;
 // extern UNK_TYPE1 D_801F4E80;
 // extern UNK_TYPE1 D_801F4EE0;
@@ -3634,7 +3635,7 @@ extern OSMesg D_801FD034;
 // extern UNK_TYPE1 D_801FE4C0;
 // extern UNK_TYPE1 D_801FE640;
 // extern UNK_TYPE1 D_801FE6D0;
-extern s801FE7C0 D_801FE7C0[1];
+extern SoundRequest D_801FE7C0[1];
 // extern UNK_TYPE1 D_801FFBC0;
 // extern UNK_TYPE1 D_801FFBC8;
 // extern UNK_TYPE1 D_801FFBD0;
@@ -3788,11 +3789,6 @@ extern OSMesg D_80203290[1];
 // extern UNK_TYPE4 D_80208E6C;
 // extern UNK_TYPE4 D_80208E70;
 // extern UNK_TYPE4 D_80208E74;
-// extern UNK_TYPE1 D_80208E90;
-// extern UNK_TYPE1 D_80208E94;
-// extern UNK_TYPE1 D_80208E98;
-// extern UNK_TYPE1 D_80208E99;
-// extern UNK_TYPE1 D_80208E9C;
 
 // post-code buffers
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
