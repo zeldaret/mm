@@ -2,7 +2,7 @@
 
 const s16 D_801E1100[] = {
     0x1C00, // unused
-    0x0030, // gTatumsPerBeat
+    0x30,   // gTatumsPerBeat
 };
 
 const AudioContextInitSizes D_801E1104 = {
