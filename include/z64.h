@@ -1567,6 +1567,14 @@ typedef struct {
     /* 0x8 */ s32 unk8;
 } struct_80133038_arg2; // size = 0xC
 
+typedef struct player_lib_struct {
+    char unk0;
+    char unk1;
+    char unk2;
+    char unk3;
+    Vec3s* unk4;
+} player_lib_struct;
+
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 
 typedef s32 (*func_8013E640_arg6)(struct GlobalContext*, Actor*, Actor*, void*);

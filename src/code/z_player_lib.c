@@ -1,8 +1,23 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801226E0.s")
+s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
+    if (arg1 == 0){
+        func_80169E6C(globalCtx, 0, 0xBFF);
+        if (globalCtx->sceneNum == SCENE_KAKUSIANA){
+            return 1;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122744.s")
+    gSaveContext.respawn[0].data = 0;
+    return arg1;
+}
+
+s32 func_80122744(GlobalContext* globalCtx, player_lib_struct* arg1, u32 arg2, Vec3s* arg3) {
+    arg1->unk0 = arg2;
+    arg1->unk1 = 0;
+    arg1->unk4 = arg3;
+    return 1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122760.s")
 
