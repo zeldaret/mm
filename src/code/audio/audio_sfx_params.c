@@ -1,5 +1,19 @@
 #include "global.h"
 
+/**
+ * TODO:
+ * the number of #efined sfx's we have for each bank does not seem to line up with the
+ * number of SfxParam entries for each bank. So at some point either through hacking or
+ * decompilation/documentation of sequence 0, the sfxs should be verified, especially
+ * the ones that come at the end of the list (all the earlier sfxs in each bank seem fine).
+ *
+ * After that, defines should be paired with sfxparams to make it easier to look up
+ * specific sfxsparams for a a certain sfx i.e.:
+ *      { 0x18, 0, 0x1 }, // NA_SE_EN_DODO_J_WALK
+ *      { 0x30, 0, 0x1 }, // NA_SE_EN_DODO_J_CRY
+ *      { 0x30, 0, 0x1 }, // NA_SE_EN_DODO_J_FIRE
+ */
+
 SfxParams sEnemyBankParams[] = {
     { 0x18, 0, 0x1 },    { 0x30, 0, 0x1 },    { 0x30, 0, 0x1 },    { 0x38, 0, 0x1 },    { 0x40, 0, 0x1 },
     { 0x30, 0, 0x3 },    { 0x36, 0, 0 },      { 0x38, 0, 0 },      { 0x40, 0, 0x3 },    { 0x58, 0, 0x3 },
