@@ -85,7 +85,7 @@ extern OSViMode osViModeMpalLan1;
 // extern __OSViContext D_80098060[2];
 extern __OSViContext* __osViCurr;
 extern __OSViContext* __osViNext;
-// extern UNK_TYPE4 D_800980D0;
+// extern UNK_TYPE4 sCartRomNeedsInit;
 extern OSViMode osViModeFpalLan1;
 // extern u8 ldigs[];
 // extern u8 udigs[];

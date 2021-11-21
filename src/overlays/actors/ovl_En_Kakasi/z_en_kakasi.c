@@ -811,7 +811,7 @@ void EnKakasi_DancingRemark(EnKakasi* this, GlobalContext* globalCtx) {
         if (currentDay == 3 && gSaveContext.isNight) {
             EnKakasi_SetupDigAway(this);
         } else {
-            func_801A2BB8(0x3E);
+            func_801A2BB8(NA_BGM_SARIAS_SONG);
             EnKakasi_SetupDanceNightAway(this);
         }
     }
