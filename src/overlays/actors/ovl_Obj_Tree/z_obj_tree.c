@@ -102,7 +102,7 @@ void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.uncullZoneForward = 4000.0f;
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
-        BcCheck3_BgActorInit(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, 1);
         BgCheck_RelocateMeshHeader(&D_06001B2C, &colHeader);
         this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
     }

@@ -141,7 +141,7 @@ animdict = {
     "func_801376DC": "SkelAnime_CopyFrameTableFalse",
     "func_80137748": "SkelAnime_UpdateTranslation",
     "func_801378B8": "Animation_OnFrame",
-    "SkelAnime_CopyVec3s": "SkelAnime_Cop
+    "SkelAnime_CopyVec3s": "SkelAnime_CopyFrameTable",
     "SysMatrix_StatePop": "Matrix_StatePop",
     "SysMatrix_GetCurrentState": "Matrix_GetCurrentState",
     "zelda_malloc(": "ZeldaArena_Malloc(",

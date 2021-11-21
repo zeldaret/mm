@@ -84,7 +84,7 @@ void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (gSaveContext.inventory.items[10] == ITEM_NONE) {
+    if (gSaveContext.inventory.items[SLOT_MAGIC_BEANS] == ITEM_NONE) {
         this->actor.textId = 0x92E; // "[...] You're the first customer [...]"
     } else {
         this->actor.textId = 0x932; // "[...] So you liked my Magic Beans [...]"
@@ -111,8 +111,8 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
         case 5:
             if (func_80147624(globalCtx) != 0) {
                 func_801477B4(globalCtx);
-                func_800B8A1C(&this->actor, globalCtx, GI_MAGIC_BEAN, this->actor.xzDistToPlayer,
-                              this->actor.yDistToPlayer);
+                func_800B8A1C(&this->actor, globalCtx, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
+                              this->actor.playerHeightRel);
                 this->actionFunc = EnMs_Sell;
             }
             break;
@@ -125,12 +125,12 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
                         if (gSaveContext.rupees < 10) {
                             play_sound(NA_SE_SY_ERROR);
                             func_80151938(globalCtx, 0x935); // "[...] You don't have enough Rupees."
-                        } else if (AMMO(ITEM_MAGIC_BEAN) >= 20) {
+                        } else if (AMMO(ITEM_MAGIC_BEANS) >= 20) {
                             play_sound(NA_SE_SY_ERROR);
                             func_80151938(globalCtx, 0x937); // "[...] You can't carry anymore."
                         } else {
                             func_8019F208();
-                            func_800B8A1C(&this->actor, globalCtx, GI_MAGIC_BEAN, 90.0f, 10.0f);
+                            func_800B8A1C(&this->actor, globalCtx, GI_MAGIC_BEANS, 90.0f, 10.0f);
                             func_801159EC(-10);
                             this->actionFunc = EnMs_Sell;
                         }
@@ -152,10 +152,10 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
 void EnMs_Sell(EnMs* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.textId = 0;
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
+        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = EnMs_TalkAfterPurchase;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MAGIC_BEAN, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+        func_800B8A1C(&this->actor, globalCtx, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
@@ -164,7 +164,7 @@ void EnMs_TalkAfterPurchase(EnMs* this, GlobalContext* globalCtx) {
         func_80151938(globalCtx, 0x936); // "You can plant 'em whenever you want [...]"
         this->actionFunc = EnMs_Talk;
     } else {
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, -1);
+        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
     }
 }
 
