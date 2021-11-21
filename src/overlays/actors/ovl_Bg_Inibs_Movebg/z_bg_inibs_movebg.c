@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_inibs_movebg.c
+ * Overlay: ovl_Bg_Inibs_Movebg
+ * Description: Twinmold Arena
+ */
+
 #include "z_bg_inibs_movebg.h"
 
 #define FLAGS 0x00000030

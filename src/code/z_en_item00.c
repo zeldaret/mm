@@ -434,15 +434,13 @@ void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Minor regalloc issue where it uses v1 instead of v0
 void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnItem00* this = THIS;
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
     s32 sp38 = player->stateFlags3 & 0x1000;
     s32 getItemId = GI_NONE;
-    s32 pad2;
+    s32 params;
 
     if (this->unk152 > 0) {
         this->unk152--;
@@ -471,8 +469,8 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
-    if ((this->actor.params == ITEM00_SHIELD_HERO) || (this->actor.params == ITEM00_MAP) ||
-        (this->actor.params == ITEM00_COMPASS)) {
+    params = this->actor.params;
+    if ((params == ITEM00_SHIELD_HERO) || (params == ITEM00_MAP) || (params == ITEM00_COMPASS)) {
         this->actor.shape.yOffset = fabsf(Math_CosS(this->actor.shape.rot.x) * 37.0f);
     }
 
@@ -480,10 +478,10 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if (!((sp38 != 0) && (this->actor.xzDistToPlayer <= 60.0f) && (this->actor.yDistToPlayer >= -100.0f) &&
-          (this->actor.yDistToPlayer <= 100.0f)) &&
-        !((sp38 == 0) && (this->actor.xzDistToPlayer <= 30.0f) && (this->actor.yDistToPlayer >= -50.0f) &&
-          (this->actor.yDistToPlayer <= 50.0f))) {
+    if (!((sp38 != 0) && (this->actor.xzDistToPlayer <= 60.0f) && (this->actor.playerHeightRel >= -100.0f) &&
+          (this->actor.playerHeightRel <= 100.0f)) &&
+        !((sp38 == 0) && (this->actor.xzDistToPlayer <= 30.0f) && (this->actor.playerHeightRel >= -50.0f) &&
+          (this->actor.playerHeightRel <= 50.0f))) {
         if (!Actor_HasParent(&this->actor, globalCtx)) {
             return;
         }
@@ -622,9 +620,6 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->unk14A = 0;
     this->actionFunc = func_800A6A40;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_en_item00/EnItem00_Update.s")
-#endif
 
 void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx);
 void EnItem00_DrawSprite(EnItem00* this, GlobalContext* globalCtx);

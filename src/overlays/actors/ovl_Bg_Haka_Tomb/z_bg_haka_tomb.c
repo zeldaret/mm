@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_haka_tomb.c
+ * Overlay: ovl_Bg_Haka_Tomb
+ * Description: Flat's Tomb
+ */
+
 #include "z_bg_haka_tomb.h"
 
 #define FLAGS 0x00000000

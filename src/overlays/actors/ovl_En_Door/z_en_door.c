@@ -1,3 +1,9 @@
+/*
+ * File: z_en_door.c
+ * Overlay: ovl_En_Door
+ * Description: Wooden Door
+ */
+
 #include "z_en_door.h"
 
 #define FLAGS 0x00000010

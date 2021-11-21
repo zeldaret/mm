@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_jgame_light.c
+ * Overlay: ovl_Obj_Jgame_Light
+ * Description: Fisherman's Jumping Game - Torch
+ */
+
 #include "z_obj_jgame_light.h"
 
 #define FLAGS 0x00000010

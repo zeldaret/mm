@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_kzsaku.c
+ * Overlay: ovl_Obj_Kzsaku
+ * Description: Underwater grate
+ */
+
 #include "z_obj_kzsaku.h"
 
 #define FLAGS 0x00000030

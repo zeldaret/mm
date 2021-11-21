@@ -179,7 +179,7 @@ halt_rdp:
         if (dpTask->type == M_GFXTASK) {
             // Try to stop DP
             osSyncPrintf("DP止めようとします\n");
-            bzero(dpTask->output_buff, (u32)dpTask->output_buff_size - (u32)dpTask->output_buff);
+            bzero(dpTask->outputBuff, (u32)dpTask->outputBuffSize - (u32)dpTask->outputBuff);
             osSendMesg(&sched->interruptQ, RDP_DONE_MSG, OS_MESG_NOBLOCK);
         }
     }
@@ -336,8 +336,8 @@ void Sched_RunTask(SchedContext* sched, OSScTask* spTask, OSScTask* dpTask) {
 
         if (spTask->list.t.type == M_AUDTASK) {
             // Set global pointers to audio task data for use in audio processing
-            gAudioSPDataPtr = spTask->list.t.data_ptr;
-            gAudioSPDataSize = spTask->list.t.data_size;
+            gAudioSPDataPtr = spTask->list.t.dataPtr;
+            gAudioSPDataSize = spTask->list.t.dataSize;
         }
 
         // Begin task execution
@@ -527,7 +527,7 @@ void Sched_FaultClient(void* param1, void* param2) {
     spTask = sched->curRSPTask;
     if (spTask != NULL) {
         FaultDrawer_Printf("RSPTask %08x %08x %02x %02x\n%01x %08x %08x\n", spTask, spTask->next, spTask->state,
-                           spTask->flags, spTask->list.t.type, spTask->list.t.data_ptr, spTask->list.t.data_size);
+                           spTask->flags, spTask->list.t.type, spTask->list.t.dataPtr, spTask->list.t.dataSize);
     }
 
     dpTask = sched->curRDPTask;

@@ -1,7 +1,7 @@
 #ifndef _OS_H_
 #define _OS_H_
 
-#include "stdlib.h"
+#include "libc/stdlib.h"
 #include "ultra64/thread.h"
 #include "ultra64/message.h"
 
@@ -81,9 +81,7 @@ typedef struct {
     /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, size_t);
 } OSDevMgr; // size = 0x1C
 
-
 typedef u64 OSTime;
-
 
 typedef struct OSTimer_s {
     /* 0x00 */ struct OSTimer_s* next;
@@ -93,7 +91,6 @@ typedef struct OSTimer_s {
     /* 0x18 */ OSMesgQueue* mq;
     /* 0x1C */ OSMesg msg;
 } OSTimer; // size = 0x20
-
 
 typedef struct {
     /* 0x0 */ u16 type;

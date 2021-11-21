@@ -1,3 +1,9 @@
+/*
+ * File z_en_boj_02.c
+ * Overlay: ovl_En_Boj_02
+ * Description: [Empty]
+ */
+
 #include "z_en_boj_02.h"
 
 #define FLAGS 0x00000019

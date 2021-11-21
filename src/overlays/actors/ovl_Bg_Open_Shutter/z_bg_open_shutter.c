@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_open_shutter.c
+ * Overlay: ovl_Bg_Open_Shutter
+ * Description:
+ */
+
 #include "z_bg_open_shutter.h"
 
 #define FLAGS 0x00000010

@@ -505,7 +505,7 @@ void func_80C11590(EnThiefbird* this, GlobalContext* globalCtx) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
     }
 
-    if ((this->actor.yDistToWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
         this->unk_190 = -4096;
     } else if (this->actor.world.pos.y < (this->actor.home.pos.y - 75.0f)) {
         this->unk_190 = -Rand_S16Offset(2048, 2048);
@@ -529,7 +529,7 @@ void func_80C11590(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_18E == 0) && (this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & 0x800000) &&
-        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) && (this->actor.yDistToWater < -40.0f)) {
+        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) && (this->actor.depthInWater < -40.0f)) {
         func_80C118E4(this);
     }
 }
@@ -574,7 +574,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
 
     if ((this->unk_18E == 0) || (player->stateFlags1 & 0x800000) ||
         (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (this->collider.base.atFlags & AT_HIT) ||
-        (this->actor.bgCheckFlags & 1) || (this->actor.yDistToWater > -40.0f)) {
+        (this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
@@ -841,7 +841,7 @@ void func_80C126A8(EnThiefbird* this) {
 void func_80C126D8(EnThiefbird* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachS(&this->actor.shape.rot.x, 0x3000, 6, 0x1000);
-    if (this->actor.yDistToPlayer > 100.0f) {
+    if (this->actor.playerHeightRel > 100.0f) {
         Actor_MarkForDeath(&this->actor);
     }
 }

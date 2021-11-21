@@ -1,6 +1,6 @@
 /*
  * File: z_en_pamera.c
- * Overlay: En_Pamera
+ * Overlay: ovl_En_Pamera
  * Description: Pamela
  */
 

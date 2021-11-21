@@ -251,7 +251,7 @@ typedef struct Player {
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ Vec3f unk_AF0[2];
     /* 0xB08 */ f32 unk_B08[8];
-    /* 0xB28 */ s16 unk_B28;
+    /* 0xB28 */ s16 unk_B28; //Burning stick timer?
     /* 0xB2A */ s8 unk_B2A;
     /* 0xB2B */ s8 unk_B2B;
     /* 0xB2C */ f32 windSpeed;

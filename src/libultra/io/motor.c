@@ -1,12 +1,16 @@
-#include "ultra64.h"
-#include "global.h"
+#include "ultra64/motor.h"
+
+#include "io/controller.h"
+#include "functions.h"
 
 #define BANK_ADDR 0x400
 #define MOTOR_ID 0x80
 
+OSPifRam osPifBuffers[MAXCONTROLLERS];
+
 s32 __osPfsSelectBank(OSPfs* pfs, u8 bank);
 
-s32 osSetRumble(OSPfs* pfs, u32 vibrate) {
+s32 __osMotorAccess(OSPfs* pfs, u32 vibrate) {
     s32 i;
     s32 ret;
     u8* buf = (u8*)&osPifBuffers[pfs->channel];
@@ -45,10 +49,11 @@ s32 osSetRumble(OSPfs* pfs, u32 vibrate) {
 
     return ret;
 }
-void osSetUpMempakWrite(u32 channel, OSPifRam* buf) {
+
+void _MakeMotorData(s32 channel, OSPifRam* buf) {
     u8* bufptr = (u8*)buf;
     __OSContRamReadFormat mempakwr;
-    u32 i;
+    s32 i;
 
     mempakwr.dummy = 0xFF;
     mempakwr.txsize = 0x23;
@@ -68,7 +73,7 @@ void osSetUpMempakWrite(u32 channel, OSPifRam* buf) {
     *bufptr = 0xFE;
 }
 
-s32 osProbeRumblePak(OSMesgQueue* ctrlrqueue, OSPfs* pfs, u32 channel) {
+s32 osMotorInit(OSMesgQueue* ctrlrqueue, OSPfs* pfs, s32 channel) {
     s32 ret;
     u8 sp24[BLOCKSIZE];
 
@@ -111,8 +116,8 @@ s32 osProbeRumblePak(OSMesgQueue* ctrlrqueue, OSPfs* pfs, u32 channel) {
     if (sp24[BLOCKSIZE - 1] != MOTOR_ID) {
         return 0xB;
     }
-    if ((pfs->status & PFS_MOTOR_INITIALIZED) == 0) {
-        osSetUpMempakWrite(channel, &osPifBuffers[channel]);
+    if (!(pfs->status & PFS_MOTOR_INITIALIZED)) {
+        _MakeMotorData(channel, &osPifBuffers[channel]);
     }
     pfs->status = PFS_MOTOR_INITIALIZED;
 

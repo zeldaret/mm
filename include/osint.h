@@ -3,7 +3,7 @@
 
 // TODO should be in libultra/os
 
-#include "stdarg.h"
+#include "libc/stdarg.h"
 #include "os.h"
 #include "os_internal.h"
 #include "ultraerror.h"

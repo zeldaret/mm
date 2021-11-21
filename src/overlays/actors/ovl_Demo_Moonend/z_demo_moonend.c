@@ -1,3 +1,9 @@
+/*
+ * File: z_demo_moonend.c
+ * Overlay: ovl_Demo_Moonend
+ * Description: Moon Disappearing (cutscene)
+ */
+
 #include "z_demo_moonend.h"
 
 #define FLAGS 0x00000030

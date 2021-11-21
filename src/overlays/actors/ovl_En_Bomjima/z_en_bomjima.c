@@ -1,3 +1,9 @@
+/*
+ * File z_en_bomjima.c
+ * Overlay: ovl_En_Bomjima
+ * Description: Bombers - Jim
+ */
+
 #include "z_en_bomjima.h"
 
 #define FLAGS 0x00000019

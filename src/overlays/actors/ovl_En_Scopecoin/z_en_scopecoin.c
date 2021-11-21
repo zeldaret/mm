@@ -1,3 +1,9 @@
+/*
+ * File: z_en_scopecoin.c
+ * Overlay: ovl_En_Scopecoin
+ * Description: Telescope Coin
+ */
+
 #include "z_en_scopecoin.h"
 
 #define FLAGS 0x00000030

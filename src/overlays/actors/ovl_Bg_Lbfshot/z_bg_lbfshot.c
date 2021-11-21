@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_lbfshot.c
+ * Overlay: ovl_Bg_Lbfshot
+ * Description: Rainbow Hookshot Pillar
+ */
+
 #include "z_bg_lbfshot.h"
 
 #define FLAGS 0x00000000

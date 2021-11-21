@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_fu_kaiten.c
+ * Overlay: ovl_Bg_Fu_Kaiten
+ * Description: Honey & Darling's Shop - Rotating Platform
+ */
+
 #include "z_bg_fu_kaiten.h"
 
 #define FLAGS 0x00000030

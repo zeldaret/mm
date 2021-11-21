@@ -1,3 +1,9 @@
+/*
+ * File: z_mir_ray2.c
+ * Overlay: ovl_Mir_Ray2
+ * Description:
+ */
+
 #include "z_mir_ray2.h"
 
 #define FLAGS 0x00000030

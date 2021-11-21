@@ -5,7 +5,7 @@
  */
 
 #include "z_select.h"
-#include "alloca.h"
+#include "libc/alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
 void Select_LoadTitle(SelectContext* this) {

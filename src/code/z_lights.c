@@ -329,9 +329,7 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
     Lights* lights;
     s32 i;
 
-    // TODO allocation should be a macro
-    lights = (Lights*)((int)gfxCtx->polyOpa.d - sizeof(Lights));
-    gfxCtx->polyOpa.d = (void*)lights;
+    lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
 
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientG;
@@ -356,9 +354,7 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
 Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambientB) {
     Lights* lights;
 
-    // TODO allocation should be a macro
-    lights = (Lights*)((int)gfxCtx->polyOpa.d - sizeof(Lights));
-    gfxCtx->polyOpa.d = (void*)lights;
+    lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
 
     lights->l.a.l.col[0] = ambientR;
     lights->l.a.l.colc[0] = ambientR;

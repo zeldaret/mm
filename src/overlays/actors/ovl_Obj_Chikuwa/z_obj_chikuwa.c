@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_chikuwa.c
+ * Overlay: ovl_Obj_Chikuwa
+ * Description: Falling Block Row
+ */
+
 #include "z_obj_chikuwa.h"
 
 #define FLAGS 0x00000010

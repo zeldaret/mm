@@ -1,3 +1,9 @@
+/*
+ * File z_en_bombal.c
+ * Overlay: ovl_En_Bombal
+ * Description: Bombers - Majora Balloon
+ */
+
 #include "z_en_bombal.h"
 
 #define FLAGS 0x00000010

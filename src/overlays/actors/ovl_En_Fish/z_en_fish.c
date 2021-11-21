@@ -1,3 +1,9 @@
+/*
+ * File: z_en_fish.c
+ * Overlay: ovl_En_Fish
+ * Description: Fish
+ */
+
 #include "z_en_fish.h"
 
 #define FLAGS 0x00000000

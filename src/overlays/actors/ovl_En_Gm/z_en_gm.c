@@ -1,3 +1,9 @@
+/*
+ * File: z_en_gm.c
+ * Overlay: ovl_En_Gm
+ * Description: Gorman
+ */
+
 #include "z_en_gm.h"
 
 #define FLAGS 0x00000019

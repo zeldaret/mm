@@ -1,7 +1,7 @@
 /*
  * File: z_en_zot.c
  * Overlay: ovl_En_Zot
- * Description: Great Bay - Zora With Directions to Zora Hall
+ * Description: Great Bay - Zora With Directions to Zora Hall / Pot Game Zora
  */
 
 #include "z_en_zot.h"

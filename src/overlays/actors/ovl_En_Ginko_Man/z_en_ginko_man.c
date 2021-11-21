@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ginko_man.c
+ * Overlay: ovl_En_Ginko_Man
+ * Description: Bank Teller
+ */
+
 #include "z_en_ginko_man.h"
 
 #define FLAGS 0x00000009

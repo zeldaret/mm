@@ -1,3 +1,9 @@
+/*
+ * File: z_en_go.c
+ * Overlay: ovl_En_Go
+ * Description: Goron
+ */
+
 #include "z_en_go.h"
 
 #define FLAGS 0x02000019

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ruppecrow.c
+ * Overlay: ovl_En_Ruppecrow
+ * Description: Guay Circling Clock Town
+ */
+
 #include "z_en_ruppecrow.h"
 
 #define FLAGS 0x00004030

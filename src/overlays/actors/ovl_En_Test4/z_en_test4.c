@@ -287,8 +287,6 @@ void func_80A425E4(EnTest4* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// 1 instruction in the wrong place
 void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 dayTemp;
     EnTest4* this = THIS;
@@ -317,11 +315,12 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
             if (gSaveContext.time < CLOCK_TIME(6, 1)) {
                 gSaveContext.time = CLOCK_TIME(6, 0);
                 gSaveContext.gameMode = 0;
-                do {
+                {
                     GameState* state = &globalCtx->state;
                     state->running = false;
-                } while (0);
+                }
                 SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
+                if (this && this && this) {}
                 this->unk_144 = 1;
                 gSaveContext.time = CLOCK_TIME(6, 0);
                 Actor_MarkForDeath(&this->actor);
@@ -363,9 +362,6 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.unk_3F64 = 1000.0f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test4/EnTest4_Init.s")
-#endif
 
 void EnTest4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
