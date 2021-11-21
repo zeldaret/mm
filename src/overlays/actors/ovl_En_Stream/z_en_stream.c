@@ -16,6 +16,7 @@ void EnStream_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnStream_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnStream_SetupAction(EnStream* this, EnStreamActionFunc actionFunc);
+void func_809657F4(EnStream* this, GlobalContext* globalCtx);
 void func_8096597C(EnStream* this, GlobalContext* globalCtx);
 
 #if 0

@@ -15,6 +15,7 @@ void EnSGoro_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSGoro_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSGoro_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BBE498(EnSGoro* this, GlobalContext* globalCtx);
 void func_80BBE73C(EnSGoro* this, GlobalContext* globalCtx);
 void func_80BBE844(EnSGoro* this, GlobalContext* globalCtx);
 void func_80BBE904(EnSGoro* this, GlobalContext* globalCtx);

@@ -15,6 +15,7 @@ void EnTab_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTab_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTab_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BE127C(EnTab* this, GlobalContext* globalCtx);
 void func_80BE1348(EnTab* this, GlobalContext* globalCtx);
 
 #if 0

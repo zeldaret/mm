@@ -26,6 +26,7 @@ void func_80B1F940(EnPp* this, GlobalContext* globalCtx);
 void func_80B1FC7C(EnPp* this, GlobalContext* globalCtx);
 void func_80B20030(EnPp* this, GlobalContext* globalCtx);
 void func_80B203BC(EnPp* this, GlobalContext* globalCtx);
+void func_80B20F70(EnPp* this, GlobalContext* globalCtx);
 
 #if 0
 // static DamageTable sDamageTable = {

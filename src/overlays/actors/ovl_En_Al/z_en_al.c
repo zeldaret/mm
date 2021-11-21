@@ -15,6 +15,7 @@ void EnAl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAl_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BDF5E8(EnAl* this, GlobalContext* globalCtx);
 void func_80BDF6C4(EnAl* this, GlobalContext* globalCtx);
 
 #if 0

@@ -15,6 +15,7 @@ void EnKaizoku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKaizoku_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B85FA8(EnKaizoku* this, GlobalContext* globalCtx);
+void func_80B86804(EnKaizoku* this, GlobalContext* globalCtx);
 void func_80B868B8(EnKaizoku* this, GlobalContext* globalCtx);
 void func_80B86B74(EnKaizoku* this, GlobalContext* globalCtx);
 void func_80B872F4(EnKaizoku* this, GlobalContext* globalCtx);

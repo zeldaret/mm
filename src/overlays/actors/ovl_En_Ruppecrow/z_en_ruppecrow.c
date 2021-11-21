@@ -15,6 +15,7 @@ void EnRuppecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BE3178(EnRuppecrow* this, GlobalContext* globalCtx);
 void func_80BE32DC(EnRuppecrow* this, GlobalContext* globalCtx);
 void func_80BE3354(EnRuppecrow* this, GlobalContext* globalCtx);
 void func_80BE348C(EnRuppecrow* this, GlobalContext* globalCtx);

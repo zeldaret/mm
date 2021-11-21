@@ -17,6 +17,7 @@ void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void ArrowLight_SetupAction(ArrowLight* this, ArrowLightActionFunc actionFunc);
 void func_809243AC(ArrowLight* this, GlobalContext* globalCtx);
+void func_809244F8(ArrowLight* this, GlobalContext* globalCtx);
 void func_809246C4(ArrowLight* this, GlobalContext* globalCtx);
 
 #if 0

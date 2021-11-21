@@ -24,6 +24,7 @@ void func_809F7968(Boss07* this, GlobalContext* globalCtx);
 void func_809F7BC4(Boss07* this, GlobalContext* globalCtx);
 void func_809F805C(Boss07* this, GlobalContext* globalCtx);
 void func_809F86B8(Boss07* this, GlobalContext* globalCtx);
+void func_809F87C8(Boss07* this, GlobalContext* globalCtx);
 void func_809F8908(Boss07* this, GlobalContext* globalCtx);
 void func_809F8B1C(Boss07* this, GlobalContext* globalCtx);
 void func_809F8D04(Boss07* this, GlobalContext* globalCtx);

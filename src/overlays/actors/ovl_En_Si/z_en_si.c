@@ -15,6 +15,7 @@ void EnSi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8098CB70(EnSi* this, GlobalContext* globalCtx);
 void func_8098CBDC(EnSi* this, GlobalContext* globalCtx);
 
 #if 0

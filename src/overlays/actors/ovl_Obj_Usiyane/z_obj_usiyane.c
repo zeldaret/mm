@@ -15,6 +15,10 @@ void ObjUsiyane_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjUsiyane_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjUsiyane_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C07DC4(ObjUsiyane* this, GlobalContext* globalCtx);
+void func_80C081C8(ObjUsiyane* this, GlobalContext* globalCtx);
+void func_80C082E0(ObjUsiyane* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Usiyane_InitVars = {
     ACTOR_OBJ_USIYANE,

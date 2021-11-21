@@ -15,6 +15,7 @@ void DmChar03_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmChar03_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar03_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AAB5F8(DmChar03* this, GlobalContext* globalCtx);
 void func_80AAB644(DmChar03* this, GlobalContext* globalCtx);
 void func_80AAB700(DmChar03* this, GlobalContext* globalCtx);
 

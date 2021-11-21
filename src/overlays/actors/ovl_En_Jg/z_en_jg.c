@@ -15,12 +15,16 @@ void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B73F1C(EnJg* this, GlobalContext* globalCtx);
+void func_80B7406C(EnJg* this, GlobalContext* globalCtx);
+void func_80B7408C(EnJg* this, GlobalContext* globalCtx);
 void func_80B74134(EnJg* this, GlobalContext* globalCtx);
 void func_80B741F8(EnJg* this, GlobalContext* globalCtx);
 void func_80B742F8(EnJg* this, GlobalContext* globalCtx);
 void func_80B74440(EnJg* this, GlobalContext* globalCtx);
 void func_80B74550(EnJg* this, GlobalContext* globalCtx);
 void func_80B747C8(EnJg* this, GlobalContext* globalCtx);
+void func_80B74840(EnJg* this, GlobalContext* globalCtx);
 void func_80B749D0(EnJg* this, GlobalContext* globalCtx);
 void func_80B74AD8(EnJg* this, GlobalContext* globalCtx);
 void func_80B74B54(EnJg* this, GlobalContext* globalCtx);

@@ -15,8 +15,10 @@ void EnScopenuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScopenuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScopenuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BCAFA8(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCB078(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCB1C8(EnScopenuts* this, GlobalContext* globalCtx);
+void func_80BCB230(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCB4DC(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCB52C(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx);

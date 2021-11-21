@@ -14,7 +14,13 @@ void EnKitan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKitan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKitan_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C094A8(EnKitan* this, GlobalContext* globalCtx);
+void func_80C09518(EnKitan* this, GlobalContext* globalCtx);
+void func_80C095C8(EnKitan* this, GlobalContext* globalCtx);
+void func_80C09648(EnKitan* this, GlobalContext* globalCtx);
 void func_80C09708(EnKitan* this, GlobalContext* globalCtx);
+void func_80C09990(EnKitan* this, GlobalContext* globalCtx);
+void func_80C09AA4(EnKitan* this, GlobalContext* globalCtx);
 void func_80C09B50(EnKitan* this, GlobalContext* globalCtx);
 
 #if 0

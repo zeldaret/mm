@@ -14,6 +14,7 @@ void DmGm_Init(Actor* thisx, GlobalContext* globalCtx);
 void DmGm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmGm_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C248A8(DmGm* this, GlobalContext* globalCtx);
 void func_80C24A00(DmGm* this, GlobalContext* globalCtx);
 void func_80C24BD0(DmGm* this, GlobalContext* globalCtx);
 

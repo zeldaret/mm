@@ -15,6 +15,8 @@ void EnAni_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809679D0(EnAni* this, GlobalContext* globalCtx);
+void func_80967A48(EnAni* this, GlobalContext* globalCtx);
 void func_80967AB4(EnAni* this, GlobalContext* globalCtx);
 
 #if 0

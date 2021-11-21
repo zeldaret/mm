@@ -20,6 +20,7 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx);
 void func_8088E018(EnElf* this, GlobalContext* globalCtx);
 void func_8088E0E0(EnElf* this, GlobalContext* globalCtx);
 void func_8088E0F0(EnElf* this, GlobalContext* globalCtx);
+void func_8088E304(EnElf* this, GlobalContext* globalCtx);
 void func_8088E484(EnElf* this, GlobalContext* globalCtx);
 void func_8088E850(EnElf* this, GlobalContext* globalCtx);
 

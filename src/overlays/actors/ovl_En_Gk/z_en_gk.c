@@ -15,14 +15,18 @@ void EnGk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B51698(EnGk* this, GlobalContext* globalCtx);
+void func_80B51760(EnGk* this, GlobalContext* globalCtx);
 void func_80B51970(EnGk* this, GlobalContext* globalCtx);
 void func_80B51B40(EnGk* this, GlobalContext* globalCtx);
 void func_80B51D9C(EnGk* this, GlobalContext* globalCtx);
 void func_80B51EA4(EnGk* this, GlobalContext* globalCtx);
+void func_80B51FD0(EnGk* this, GlobalContext* globalCtx);
 void func_80B5202C(EnGk* this, GlobalContext* globalCtx);
 void func_80B5216C(EnGk* this, GlobalContext* globalCtx);
 void func_80B521E8(EnGk* this, GlobalContext* globalCtx);
 void func_80B5227C(EnGk* this, GlobalContext* globalCtx);
+void func_80B52340(EnGk* this, GlobalContext* globalCtx);
 void func_80B52430(EnGk* this, GlobalContext* globalCtx);
 void func_80B5253C(EnGk* this, GlobalContext* globalCtx);
 void func_80B525E0(EnGk* this, GlobalContext* globalCtx);

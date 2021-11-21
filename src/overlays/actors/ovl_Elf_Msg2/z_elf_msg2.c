@@ -15,6 +15,7 @@ void ElfMsg2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg2_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void ElfMsg2_SetupAction(ElfMsg2* this, ElfMsg2ActionFunc actionFunc);
+void func_8096EE64(ElfMsg2* this, GlobalContext* globalCtx);
 void func_8096EF98(ElfMsg2* this, GlobalContext* globalCtx);
 void func_8096EFD0(ElfMsg2* this, GlobalContext* globalCtx);
 

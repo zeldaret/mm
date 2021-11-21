@@ -15,10 +15,21 @@ void EnZos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BBB2C4(EnZos* this, GlobalContext* globalCtx);
+void func_80BBB354(EnZos* this, GlobalContext* globalCtx);
+void func_80BBB4CC(EnZos* this, GlobalContext* globalCtx);
+void func_80BBB574(EnZos* this, GlobalContext* globalCtx);
+void func_80BBB718(EnZos* this, GlobalContext* globalCtx);
 void func_80BBB8AC(EnZos* this, GlobalContext* globalCtx);
+void func_80BBBB84(EnZos* this, GlobalContext* globalCtx);
+void func_80BBBCBC(EnZos* this, GlobalContext* globalCtx);
+void func_80BBBD5C(EnZos* this, GlobalContext* globalCtx);
 void func_80BBBDE0(EnZos* this, GlobalContext* globalCtx);
+void func_80BBC070(EnZos* this, GlobalContext* globalCtx);
 void func_80BBC14C(EnZos* this, GlobalContext* globalCtx);
+void func_80BBC22C(EnZos* this, GlobalContext* globalCtx);
 void func_80BBC24C(EnZos* this, GlobalContext* globalCtx);
+void func_80BBC298(EnZos* this, GlobalContext* globalCtx);
 void func_80BBC37C(EnZos* this, GlobalContext* globalCtx);
 
 #if 0

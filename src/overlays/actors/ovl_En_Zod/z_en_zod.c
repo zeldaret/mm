@@ -15,9 +15,15 @@ void EnZod_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZod_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZod_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BAF7CC(EnZod* this, GlobalContext* globalCtx);
 void func_80BAF99C(EnZod* this, GlobalContext* globalCtx);
+void func_80BAFADC(EnZod* this, GlobalContext* globalCtx);
 void func_80BAFB84(EnZod* this, GlobalContext* globalCtx);
+void func_80BAFC00(EnZod* this, GlobalContext* globalCtx);
+void func_80BAFC10(EnZod* this, GlobalContext* globalCtx);
+void func_80BAFD00(EnZod* this, GlobalContext* globalCtx);
 void func_80BAFDB4(EnZod* this, GlobalContext* globalCtx);
+void func_80BAFE34(EnZod* this, GlobalContext* globalCtx);
 void func_80BAFF14(EnZod* this, GlobalContext* globalCtx);
 
 #if 0

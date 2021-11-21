@@ -15,7 +15,9 @@ void EnGg2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGg2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGg2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B3AE60(EnGg2* this, GlobalContext* globalCtx);
 void func_80B3AFB0(EnGg2* this, GlobalContext* globalCtx);
+void func_80B3B05C(EnGg2* this, GlobalContext* globalCtx);
 void func_80B3B0A0(EnGg2* this, GlobalContext* globalCtx);
 void func_80B3B120(EnGg2* this, GlobalContext* globalCtx);
 void func_80B3B21C(EnGg2* this, GlobalContext* globalCtx);

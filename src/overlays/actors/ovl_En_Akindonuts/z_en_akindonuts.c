@@ -15,6 +15,7 @@ void EnAkindonuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAkindonuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAkindonuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx);
 void func_80BEEDC0(EnAkindonuts* this, GlobalContext* globalCtx);
 void func_80BEEE10(EnAkindonuts* this, GlobalContext* globalCtx);
 void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx);

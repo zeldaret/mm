@@ -19,6 +19,7 @@ void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx);
 void func_80AD1634(EnOsn* this, GlobalContext* globalCtx);
 void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx);
 void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx);
+void func_80AD1A4C(EnOsn* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Osn_InitVars = {

@@ -15,9 +15,15 @@ void EnTsn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTsn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AE0010(EnTsn* this, GlobalContext* globalCtx);
 void func_80AE0304(EnTsn* this, GlobalContext* globalCtx);
+void func_80AE0418(EnTsn* this, GlobalContext* globalCtx);
+void func_80AE0460(EnTsn* this, GlobalContext* globalCtx);
+void func_80AE04C4(EnTsn* this, GlobalContext* globalCtx);
+void func_80AE04FC(EnTsn* this, GlobalContext* globalCtx);
 void func_80AE0704(EnTsn* this, GlobalContext* globalCtx);
 void func_80AE0C88(EnTsn* this, GlobalContext* globalCtx);
+void func_80AE0D10(EnTsn* this, GlobalContext* globalCtx);
 void func_80AE0D78(EnTsn* this, GlobalContext* globalCtx);
 
 #if 0

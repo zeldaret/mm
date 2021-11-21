@@ -15,6 +15,7 @@ void EnMThunder_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMThunder_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMThunder_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808B58CC(EnMThunder* this, GlobalContext* globalCtx);
 void func_808B5984(EnMThunder* this, GlobalContext* globalCtx);
 void func_808B5F68(EnMThunder* this, GlobalContext* globalCtx);
 void func_808B60D4(EnMThunder* this, GlobalContext* globalCtx);

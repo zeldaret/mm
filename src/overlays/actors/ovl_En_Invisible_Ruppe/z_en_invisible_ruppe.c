@@ -14,6 +14,7 @@ void EnInvisibleRuppe_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnInvisibleRuppe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnInvisibleRuppe_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C2590C(EnInvisibleRuppe* this, GlobalContext* globalCtx);
 void func_80C259E8(EnInvisibleRuppe* this, GlobalContext* globalCtx);
 
 #if 0

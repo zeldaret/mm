@@ -15,6 +15,8 @@ void BgIkninside_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkninside_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkninside_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C07220(BgIkninside* this, GlobalContext* globalCtx);
+void func_80C07230(BgIkninside* this, GlobalContext* globalCtx);
 void func_80C072D0(BgIkninside* this, GlobalContext* globalCtx);
 
 #if 0

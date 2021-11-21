@@ -15,6 +15,7 @@ void EnAh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BD36B8(EnAh* this, GlobalContext* globalCtx);
 void func_80BD3768(EnAh* this, GlobalContext* globalCtx);
 
 #if 0

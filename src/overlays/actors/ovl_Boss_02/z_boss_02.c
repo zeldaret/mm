@@ -17,17 +17,8 @@ void Boss02_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss02_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809DAA74(Boss02* this, GlobalContext* globalCtx);
 void func_809DAA98(Boss02* this, GlobalContext* globalCtx);
-void func_809DAAA8(Boss02* this, GlobalContext* globalCtx);
 void func_809DAB78(Boss02* this, GlobalContext* globalCtx);
-void func_809DC218(Actor* thisx, GlobalContext* globalCtx);
-void func_809DC78C(Actor* thisx, GlobalContext* globalCtx);
-void func_809DD0A8(Actor* thisx, GlobalContext* globalCtx);
-void func_809DD0CC(GlobalContext* globalCtx);
-void func_809DD2F8(GlobalContext* globalCtx);
-void func_809DD934(Boss02* this, GlobalContext* globalCtx);
-void func_809DEAC4(Boss02* this, GlobalContext* globalCtx);
 
 extern Gfx D_06000230[];
 extern Gfx D_060002E0[];

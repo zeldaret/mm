@@ -15,6 +15,8 @@ void EnDoorEtc_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDoorEtc_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80AC20A8(EnDoorEtc* this, GlobalContext* globalCtx);
+void func_80AC2118(EnDoorEtc* this, GlobalContext* globalCtx);
+void func_80AC2154(EnDoorEtc* this, GlobalContext* globalCtx);
 void func_80AC21A0(EnDoorEtc* this, GlobalContext* globalCtx);
 void func_80AC2354(EnDoorEtc* this, GlobalContext* globalCtx);
 

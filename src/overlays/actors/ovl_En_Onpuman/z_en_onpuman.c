@@ -14,6 +14,9 @@ void EnOnpuman_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOnpuman_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOnpuman_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B11F78(EnOnpuman* this, GlobalContext* globalCtx);
+void func_80B1202C(EnOnpuman* this, GlobalContext* globalCtx);
+void func_80B1217C(EnOnpuman* this, GlobalContext* globalCtx);
 void func_80B121D8(EnOnpuman* this, GlobalContext* globalCtx);
 
 #if 0

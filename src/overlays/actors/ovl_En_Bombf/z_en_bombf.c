@@ -19,6 +19,7 @@ void EnBombf_SetupAction(EnBombf* this, EnBombfActionFunc actionFunc);
 void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx);
 void func_808AEE3C(EnBombf* this, GlobalContext* globalCtx);
 void func_808AEF68(EnBombf* this, GlobalContext* globalCtx);
+void func_808AEFD4(EnBombf* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Bombf_InitVars = {

@@ -15,6 +15,7 @@ void EnSekihi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSekihi_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A44DE8(EnSekihi* this, GlobalContext* globalCtx);
+void func_80A44F40(EnSekihi* this, GlobalContext* globalCtx);
 void func_80A450B0(EnSekihi* this, GlobalContext* globalCtx);
 void func_80A45130(EnSekihi* this, GlobalContext* globalCtx);
 

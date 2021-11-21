@@ -15,7 +15,9 @@ void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80953F8C(BgIngate* this, GlobalContext* globalCtx);
 void func_80953F9C(BgIngate* this, GlobalContext* globalCtx);
+void func_809541B8(BgIngate* this, GlobalContext* globalCtx);
 void func_809542A0(BgIngate* this, GlobalContext* globalCtx);
 void func_80954340(BgIngate* this, GlobalContext* globalCtx);
 void func_809543D4(BgIngate* this, GlobalContext* globalCtx);

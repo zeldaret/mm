@@ -14,6 +14,7 @@ void EnTrt2_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt2_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx);
 void func_80AD4FE4(EnTrt2* this, GlobalContext* globalCtx);
 
 #if 0

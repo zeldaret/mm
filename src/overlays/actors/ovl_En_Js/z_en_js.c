@@ -16,10 +16,14 @@ void EnJs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_8096971C(EnJs* this, GlobalContext* globalCtx);
+void func_80969748(EnJs* this, GlobalContext* globalCtx);
 void func_80969898(EnJs* this, GlobalContext* globalCtx);
 void func_80969B5C(EnJs* this, GlobalContext* globalCtx);
+void func_80969C54(EnJs* this, GlobalContext* globalCtx);
 void func_80969DA4(EnJs* this, GlobalContext* globalCtx);
 void func_8096A104(EnJs* this, GlobalContext* globalCtx);
+void func_8096A1E8(EnJs* this, GlobalContext* globalCtx);
+void func_8096A2C0(EnJs* this, GlobalContext* globalCtx);
 void func_8096A38C(EnJs* this, GlobalContext* globalCtx);
 void func_8096A6F4(EnJs* this, GlobalContext* globalCtx);
 

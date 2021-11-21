@@ -15,6 +15,7 @@ void EnScopecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScopecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScopecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BCD590(EnScopecrow* this, GlobalContext* globalCtx);
 void func_80BCD640(EnScopecrow* this, GlobalContext* globalCtx);
 
 #if 0

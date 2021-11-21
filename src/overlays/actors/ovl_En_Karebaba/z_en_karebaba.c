@@ -24,6 +24,7 @@ void func_808F1C84(EnKarebaba* this, GlobalContext* globalCtx);
 void func_808F200C(EnKarebaba* this, GlobalContext* globalCtx);
 void func_808F21A4(EnKarebaba* this, GlobalContext* globalCtx);
 void func_808F228C(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F241C(EnKarebaba* this, GlobalContext* globalCtx);
 void func_808F254C(EnKarebaba* this, GlobalContext* globalCtx);
 
 #if 0

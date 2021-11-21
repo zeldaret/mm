@@ -14,9 +14,18 @@ void EnElfgrp_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnElfgrp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnElfgrp_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A3A0AC(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A0F4(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A210(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A274(EnElfgrp* this, GlobalContext* globalCtx);
 void func_80A3A398(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A484(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A4AC(EnElfgrp* this, GlobalContext* globalCtx);
 void func_80A3A520(EnElfgrp* this, GlobalContext* globalCtx);
 void func_80A3A600(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A610(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A6F4(EnElfgrp* this, GlobalContext* globalCtx);
+void func_80A3A77C(EnElfgrp* this, GlobalContext* globalCtx);
 void func_80A3A7FC(EnElfgrp* this, GlobalContext* globalCtx);
 void func_80A3A8F8(EnElfgrp* this, GlobalContext* globalCtx);
 

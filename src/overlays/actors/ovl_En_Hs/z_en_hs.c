@@ -15,7 +15,12 @@ void EnHs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80952FE0(EnHs* this, GlobalContext* globalCtx);
+void func_80953098(EnHs* this, GlobalContext* globalCtx);
 void func_80953180(EnHs* this, GlobalContext* globalCtx);
+void func_809532C0(EnHs* this, GlobalContext* globalCtx);
+void func_809532D0(EnHs* this, GlobalContext* globalCtx);
+void func_80953354(EnHs* this, GlobalContext* globalCtx);
 void func_8095345C(EnHs* this, GlobalContext* globalCtx);
 
 #if 0
