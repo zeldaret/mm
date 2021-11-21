@@ -3879,7 +3879,7 @@
     0x801E1070:("jtbl_801E1070","UNK_PTR","",0x4),
     0x801E10B0:("jtbl_801E10B0","UNK_PTR","",0x4),
     0x801E10C4:("jtbl_801E10C4","UNK_PTR","",0x4),
-    0x801E1100:("D_801E1100","UNK_TYPE4","",0x4),
+    0x801E1100:("D_801E1100","s16","[2]",0x4),
     0x801E1104:("D_801E1104","AudioContextInitSizes","",0xC),
     0x801E1110:("sGameOverTimer","UNK_TYPE2","",0x2),
     0x801E1120:("jtbl_801E1120","UNK_PTR","",0x4),
