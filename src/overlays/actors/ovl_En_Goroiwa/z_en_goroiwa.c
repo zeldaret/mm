@@ -15,13 +15,20 @@ void EnGoroiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGoroiwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809419D0(EnGoroiwa* this);
 void func_80941A10(EnGoroiwa* this, GlobalContext* globalCtx);
-void func_80941E28(EnGoroiwa* this, GlobalContext* globalCtx);
-void func_80941F10(EnGoroiwa* this, GlobalContext* globalCtx);
-void func_80941FA4(EnGoroiwa* this, GlobalContext* globalCtx);
-void func_809420F0(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_809421E0(EnGoroiwa* this);
 void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_809425CC(EnGoroiwa* this);
 void func_80942604(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_80941DB4(EnGoroiwa* this);
+void func_80941E28(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_80941EB4(EnGoroiwa* this);
+void func_80941F10(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_80941F54(EnGoroiwa* this);
+void func_80941FA4(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_80942084(EnGoroiwa* this);
+void func_809420F0(EnGoroiwa* this, GlobalContext* globalCtx);
 
 extern Gfx D_060032E0[];
 extern Gfx D_060082D0[];
