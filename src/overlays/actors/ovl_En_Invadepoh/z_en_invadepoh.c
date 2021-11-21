@@ -1385,7 +1385,7 @@ s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 ar
         if ((actorIterator->id == ACTOR_EN_DOOR) && (actorIterator->update != NULL) &&
             (actorIterator->room == this->actor.room) &&
             Math3D_Vec3fDistSq(&actorIterator->world.pos, &this->actor.world.pos) < range) {
-            ((EnDoor*)actorIterator)->unk1A7 = arg3;
+            ((EnDoor*)actorIterator)->unk_1A7 = arg3;
             retVal = true;
             break;
         }
@@ -1699,7 +1699,7 @@ void func_80B4627C(EnInvadepoh* this, GlobalContext* globalCtx) {
         } else {
             func_80B454BC(this, globalCtx);
             func_80B452EC(this, globalCtx);
-            Audio_QueueSeqCmd(0x800D);
+            Audio_QueueSeqCmd(NA_BGM_ALIEN_INVASION | 0x8000);
             func_80B46F88(this);
         }
     } else if (D_80B4E940 == 3) {
@@ -1987,7 +1987,7 @@ void func_80B46EE8(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         ActorCutscene_Stop(D_80B50404[0]);
-        Audio_QueueSeqCmd(0x800D);
+        Audio_QueueSeqCmd(NA_BGM_ALIEN_INVASION | 0x8000);
         func_80B46F88(this);
     }
 }
@@ -2036,7 +2036,7 @@ void func_80B470E0(EnInvadepoh* this) {
 
 void func_80B47108(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (this->actionTimer == 100) {
-        func_801A3098(0x19);
+        func_801A3098(NA_BGM_CLEAR_EVENT);
     }
     this->actionTimer--;
     if (this->actionTimer <= 0) {

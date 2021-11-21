@@ -1056,7 +1056,7 @@ void EnPametfrog_LookAround(EnPametfrog* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (SkelAnime_Update(&this->skelAnime) && (func_801690CC(globalCtx) == 0)) {
         if (!this->unk_2AE) {
-            func_801A2E54(0x38);
+            func_801A2E54(NA_BGM_MINI_BOSS);
             this->unk_2AE = true;
         }
         EnPametfrog_SetupJumpToLink(this);
@@ -1276,7 +1276,7 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, GlobalContext* g
 
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     if (this->actor.params == GEKKO_INIT_SNAPPER) {
-        func_801A2E54(0x38);
+        func_801A2E54(NA_BGM_MINI_BOSS);
         EnPametfrog_SetupRunToSnapper(this);
     }
 }

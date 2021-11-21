@@ -29,19 +29,3 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A99B8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A9A74.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A9B10.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A9B78.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A9BFC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A9C68.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A9D10.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A9DCC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A9EA4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A9F4C.s")

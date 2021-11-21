@@ -24,6 +24,7 @@
 
 #include "z64actor.h"
 #include "z64animation.h"
+#include "z64audio.h"
 #include "z64bgcheck.h"
 #include "z64collision_check.h"
 #include "z64cutscene.h"
@@ -391,29 +392,6 @@ typedef struct {
 } s80185D40; // size = 0x2C
 
 typedef struct {
-    /* 0x00 */ u32 unk0;
-    /* 0x04 */ u8 unk4;
-    /* 0x05 */ u8 unk5;
-    /* 0x06 */ u8 unk6;
-    /* 0x07 */ UNK_TYPE1 pad7[0x2];
-    /* 0x09 */ u8 unk9;
-    /* 0x0A */ UNK_TYPE1 padA[0x2];
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ u16 unk10;
-    /* 0x12 */ u16 unk12;
-    /* 0x14 */ u16 unk14;
-    /* 0x16 */ UNK_TYPE1 pad16[0x2];
-    /* 0x18 */ u32 unk18;
-    /* 0x1C */ u32 unk1C;
-    /* 0x20 */ u32 unk20;
-    /* 0x24 */ u32 unk24;
-    /* 0x28 */ u32 unk28;
-    /* 0x2C */ u32 unk2C;
-    /* 0x30 */ u32 unk30;
-    /* 0x34 */ u32 unk34;
-} s8018CFAC; // size = 0x38
-
-typedef struct {
     /* 0x0 */ u8 unk0;
     /* 0x1 */ u8 unk1;
     /* 0x2 */ u8 unk2;
@@ -423,10 +401,6 @@ typedef struct {
     /* 0x6 */ u8 unk6;
     /* 0x7 */ u8 unk7;
 } s801AEC84; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x14];
-} s801FE7C0; // size = 0x14
 
 typedef struct {
     /* 0x00 */ Vec3f unk0;
@@ -541,12 +515,6 @@ typedef struct {
 } View; // size = 0x168
 
 typedef void(*fault_update_input_func)(Input* input);
-
-typedef struct {
-    /* 0x00 */ u8 noteIdx;
-    /* 0x01 */ u8 state;
-    /* 0x02 */ u8 pos;
-} OcarinaStaff; // size = 0x3;
 
 typedef struct {
     /* 0x000 */ View view;
@@ -1232,12 +1200,6 @@ typedef struct ActorListEntry {
 #define OS_SC_PRE_NMI_MSG       4
 
 typedef struct {
-    /* 0x0000 */ OSTask task;
-    /* 0x0040 */ OSMesgQueue* taskQueue;
-    /* 0x0044 */ char unk_44[0xC];
-} AudioTask; // size = 0x50
-
-typedef struct {
     /* 0x000 */ IrqMgr* irqMgr;
     /* 0x004 */ SchedContext* sched;
     /* 0x008 */ OSScTask audioTask;
@@ -1311,7 +1273,7 @@ struct TargetContext {
     /* 0x50 */ TargetContextEntry unk50[3];
     /* 0x8C */ Actor* unk8C;
     /* 0x90 */ Actor* unk90;
-    /* 0x94 */ UNK_TYPE1 pad94[0x4];
+    /* 0x94 */ Actor* unk_94;
 }; // size = 0x98
 
 struct s800B948C {
@@ -1500,6 +1462,38 @@ typedef struct {
     /* 0x4 */ s32 unk4;
     /* 0x8 */ s32 unk8;
 } struct_80133038_arg2; // size = 0xC
+
+typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
+
+typedef s32 (*func_8013E640_arg6)(struct GlobalContext*, Actor*, Actor*, void*);
+
+struct struct_8013DF3C_arg1;
+typedef void (*struct_8013DF3C_arg1_unk_func1)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+typedef s32 (*struct_8013DF3C_arg1_unk_func2)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+
+typedef struct struct_8013DF3C_arg1 {
+    /* 0x00 */ Path* setupPathList;
+    /* 0x04 */ s32 pathIndex;
+    /* 0x08 */ Vec3s* points;
+    /* 0x0C */ s32 count;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ u8 unk_1C;
+    /* 0x1D */ u8 unk_1D;
+    /* 0x20 */ Vec3f unk_20;
+    /* 0x2C */ Vec3f unk_2C;
+    /* 0x38 */ Vec3f unk_38;
+    /* 0x44 */ Vec3f* unk_44;
+    /* 0x48 */ Actor* actor;
+    /* 0x4C */ f32 unk_4C;
+    /* 0x50 */ f32 unk_50;
+    /* 0x54 */ Vec3s unk_54;
+    /* 0x5C */ struct_8013DF3C_arg1_unk_func1 unk_5C;
+    /* 0x60 */ struct_8013DF3C_arg1_unk_func2 unk_60;
+    /* 0x64 */ struct_8013DF3C_arg1_unk_func2 unk_64;
+    /* 0x68 */ struct_8013DF3C_arg1_unk_func2 unk_68;
+} struct_8013DF3C_arg1; // size = 0x6C
 
 typedef struct {
     /* 0x00 */ u32 type;
