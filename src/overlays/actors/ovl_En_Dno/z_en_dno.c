@@ -339,7 +339,7 @@ void func_80A71C3C(EnDno* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x222);
     }
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         globalCtx->msgCtx.unk11F22 = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80A71E54(this, globalCtx);
@@ -374,7 +374,7 @@ void func_80A71E54(EnDno* this, GlobalContext* globalCtx) {
 
 void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->unk_466, 0, 0x16C);
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             if (!(this->unk_3B0 & 0x10) ||
                 Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xE38)) {
@@ -528,7 +528,7 @@ void func_80A724B8(EnDno* this, GlobalContext* globalCtx) {
         func_80A71424(&this->unk_466, 0, this->actor.yawTowardsPlayer, this->actor.home.rot.y, 0x2000, 0x2D8);
     }
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80A725E0(this, globalCtx);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
         func_800B8614(&this->actor, &globalCtx->state, 60.0f);
@@ -541,7 +541,7 @@ void func_80A7256C(EnDno* this, GlobalContext* globalCtx) {
 }
 
 void func_80A72598(EnDno* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80A725E0(this, globalCtx);
     } else {
         func_80A7256C(this, globalCtx);
@@ -556,7 +556,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
     s32 pad[2];
 
     func_80A71424(&this->unk_466, 0, 0, 0, 0x2000, 0x16C);
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             switch (this->unk_328) {
                 case 0:

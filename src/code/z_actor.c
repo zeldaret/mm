@@ -1850,7 +1850,7 @@ s16 D_801AED48[] = {
     0x101, 0x141, 0x111, 0x151, 0x105, 0x145, 0x115, 0x155,
 };
 
-s32 Actor_RequestTalk(Actor* actor, GameState* gameState) {
+s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
     if (actor->flags & ACTOR_FLAG_100) {
         actor->flags &= ~ACTOR_FLAG_100;
         return true;
@@ -1892,10 +1892,10 @@ s32 func_800B863C(Actor* actor, GameState* gameState) {
     return func_800B8614(actor, gameState, cylRadius);
 }
 
-s32 func_800B867C(Actor* actor, GameState* gameState) {
+s32 Actor_TextboxIsClosing(Actor* actor, GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-    if (func_80152498(&globalCtx->msgCtx) == 2) {
+    if (Message_GetState(&globalCtx->msgCtx) == 2) {
         actor->flags &= ~ACTOR_FLAG_100;
         return true;
     }
@@ -1905,7 +1905,7 @@ s32 func_800B867C(Actor* actor, GameState* gameState) {
 
 /**
  * Changes the actor the Player is focussing on
- * Fails if Player is not already focussing on an actor
+ * Fails if Player is not already focussing on an actor or in a talking state
  */
 s32 func_800B86C8(Actor* actor1, GameState* gameState, Actor* actor2) {
     Actor* targetActor;
@@ -1913,7 +1913,7 @@ s32 func_800B86C8(Actor* actor1, GameState* gameState, Actor* actor2) {
 
     targetActor = player->targetActor;
 
-    if ((player->actor.flags & 0x100) && (targetActor != NULL)) {
+    if ((player->actor.flags & ACTOR_FLAG_100) && (targetActor != NULL)) {
         player->targetActor = actor2;
         player->unk_730 = actor2;
         return true;
@@ -1970,13 +1970,13 @@ s32 func_800B886C(Actor* actor, GameState* gameState) {
     return false;
 }
 
-void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y) {
-    Vec3f sp1C;
-    f32 sp18;
+void Actor_GetScreenPos(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y) {
+    Vec3f projectedPos;
+    f32 w;
 
-    func_800B4EDC(globalCtx, &actor->focus.pos, &sp1C, &sp18);
-    *x = (sp1C.x * sp18 * (SCREEN_WIDTH / 2)) + (SCREEN_WIDTH / 2);
-    *y = (sp1C.y * sp18 * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
+    func_800B4EDC(globalCtx, &actor->focus.pos, &projectedPos, &w);
+    *x = (projectedPos.x * w * (SCREEN_WIDTH / 2)) + (SCREEN_WIDTH / 2);
+    *y = (projectedPos.y * w * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
 }
 
 s32 func_800B8934(GameState* gameState, Actor* actor) {
@@ -3415,7 +3415,7 @@ s32 func_800BB59C(GlobalContext* globalCtx, Actor* actor) {
     s16 x;
     s16 y;
 
-    func_800B8898(globalCtx, actor, &x, &y);
+    Actor_GetScreenPos(globalCtx, actor, &x, &y);
 
     return (x > -20) && (x < gScreenWidth + 20) && (y > -160) && (y < gScreenHeight + 160);
 }
@@ -4093,7 +4093,7 @@ s32 D_801AEE30[] = { 0, 0 };
 // unused
 s32 func_800BD2B4(GameState* gameState, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GameState*, Actor*),
                   s16 (*arg5)(GameState*, Actor*)) {
-    if (Actor_RequestTalk(actor, gameState)) {
+    if (Actor_ProcessTalkRequest(actor, gameState)) {
         *arg2 = 1;
         return 1;
     } else if (*arg2 != 0) {

@@ -170,7 +170,7 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
     yawTemp = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     yaw = ABS_ALT(yawTemp);
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BC701C(this, globalCtx);
     } else if (yaw <= 0x2890) {
         func_800B8614(&this->actor, &globalCtx->state, 60.0f);
@@ -197,7 +197,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     } else if (this->unusedTimer == 0) {
         this->unusedTimer = 6;
-        if (func_80152498(&globalCtx->msgCtx) != 5) {
+        if (Message_GetState(&globalCtx->msgCtx) != 5) {
             if (this->unk266 == 0) {
                 if (this->headZRotTarget != 0) {
                     this->headZRotTarget = 0;
@@ -213,7 +213,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
         func_801477B4(globalCtx);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
@@ -312,7 +312,7 @@ void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
 
 void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BC7068;
     } else {
         func_800B8500(&this->actor, &globalCtx->state, 400.0f, 400.0f, EXCH_ITEM_MINUS1);

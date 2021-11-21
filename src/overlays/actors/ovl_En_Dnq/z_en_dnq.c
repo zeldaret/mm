@@ -324,7 +324,7 @@ s32* func_80A52CF8(EnDnq* this, GlobalContext* globalCtx) {
 s32 func_80A52D44(EnDnq* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if ((this->unk_37C & 7) && Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if ((this->unk_37C & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_8013AED4(&this->unk_37C, 0, 7);
         this->unk_380 = func_80A52CF8(this, globalCtx);
         this->actionFunc = func_80A52FB8;
@@ -347,7 +347,7 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
     if (!(gSaveContext.weekEventReg[23] & 0x20)) {
         this->unk_390 = 70.0f;
         if (func_80114F2C(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) &&
-            (func_80152498(&globalCtx->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
+            (Message_GetState(&globalCtx->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
             if ((DECR(this->unk_384) == 0) && (gSaveContext.weekEventReg[29] & 0x40)) {
                 func_801518B0(globalCtx, 0x969, NULL);
                 this->unk_384 = 200;

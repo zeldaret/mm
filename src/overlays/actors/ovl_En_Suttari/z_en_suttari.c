@@ -988,7 +988,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80BACBB0;
         }
     } else if ((player->transformation == PLAYER_FORM_HUMAN) && CUR_EQUIP_VALUE_VOID(EQUIP_SWORD) != 0) {
-        if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk3F2 = this->unk2DC.y;
             func_80BAAB78(this, globalCtx);
             this->actionFunc = func_80BADA9C;
@@ -1104,7 +1104,7 @@ void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
     }
     this->unk428 = unkStruct.unk0;
     func_80BAC2FC(this, globalCtx);
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isTargeted) {
@@ -1114,7 +1114,7 @@ void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD130(EnSuttari* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0x43;
@@ -1147,7 +1147,7 @@ void func_80BAD230(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD2B4(EnSuttari* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->textId == 0x2A30) {
             ActorCutscene_Stop(this->cutscenes[0]);
             ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
@@ -1164,7 +1164,7 @@ void func_80BAD2B4(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
     Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags1 & 0x40) && (globalCtx->msgCtx.unk11F04 != 0x2A31)) {
@@ -1238,7 +1238,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
     }
     func_80BAB434(this);
     if ((this->flags1 & 0x20) && (this->unk430 == 0) && (unkStruct.unk0 != 7)) {
-        if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_801518B0(globalCtx, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
@@ -1276,7 +1276,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
             return;
         }
         if ((this->flags1 & 0x20) && (unkStruct.unk0 != 9)) {
-            if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+            if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
                 func_801518B0(globalCtx, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;
             } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
@@ -1288,7 +1288,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_80BAAB78(this, globalCtx);
         gSaveContext.weekEventReg[0x51] |= 4;
@@ -1299,7 +1299,7 @@ void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
-    u8 talkstate = func_80152498(&globalCtx->msgCtx);
+    u8 talkstate = Message_GetState(&globalCtx->msgCtx);
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
@@ -1389,7 +1389,7 @@ void func_80BADE14(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BADE8C(EnSuttari* this, GlobalContext* globalCtx) {
     this->unk3F2 = this->unk2DC.y;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_801518B0(globalCtx, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;

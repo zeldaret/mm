@@ -855,7 +855,7 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
 
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->textId == 0) && (this->unk_3F8 == 0)) {
-        if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk_3FA = 1;
             func_801518B0(globalCtx, 0x13B2, &this->actor);
             this->textId = 0x13B2;
@@ -865,7 +865,7 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
             func_800B8614(&this->actor, &globalCtx->state, 100.0f);
         }
     } else {
-        switch (func_80152498(&globalCtx->msgCtx)) {
+        switch (Message_GetState(&globalCtx->msgCtx)) {
             case 5:
                 if (func_80147624(globalCtx)) {
                     func_801518B0(globalCtx, 0x13B3, &this->actor);

@@ -233,7 +233,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
 
     this->actor.textId = sTextIds[this->unk_28A];
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BE6B40(this, globalCtx);
         return;
     }
@@ -304,7 +304,7 @@ void func_80BE6B40(EnDaiku2* this, GlobalContext* globalCtx) {
 
 void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0x0);
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         s32 day = gSaveContext.day - 1;
 
         func_801477B4(globalCtx);
@@ -342,7 +342,7 @@ void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 pad[3];
     s16 sp3A = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268);
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BE6BC0;
         return;
     }
@@ -376,7 +376,7 @@ void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx) {
     Vec3f sp40;
     s16 var;
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BE6BC0;
         return;
     }

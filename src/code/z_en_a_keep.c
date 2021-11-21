@@ -27,7 +27,7 @@ void EnAObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx) {
     s32 yawDiff;
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnAObj_Update2;
     } else {
         yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y));
@@ -39,7 +39,7 @@ void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx) {
 }
 
 void EnAObj_Update2(EnAObj* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnAObj_Update1;
     }
 }

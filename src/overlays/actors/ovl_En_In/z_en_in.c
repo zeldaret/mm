@@ -381,7 +381,7 @@ void func_808F395C(EnIn* this, GlobalContext* globalCtx) {
     if (this->unk4B0 == 0) {
         this->actionFunc = func_808F5A94;
     }
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->actionFunc = func_808F5A34;
         this->unk48C = 1;
@@ -425,7 +425,7 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F3AD4(EnIn* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
@@ -449,7 +449,7 @@ void func_808F3B40(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F3BD4(EnIn* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
@@ -473,7 +473,7 @@ void func_808F3C40(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F3CD4(EnIn* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
@@ -1222,7 +1222,7 @@ s32 func_808F5674(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     s32 pad;
     s32 ret = false;
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 2:
             func_808F4054(globalCtx, this, arg2, this->actor.textId);
             ret = true;
@@ -1257,7 +1257,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         *arg3 = 1;
         return 0;
     }
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         *arg3 = 1;
         return 1;
     }
@@ -1519,7 +1519,7 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 newUnk4C8;
 
-    newUnk4C8 = func_80152498(&globalCtx->msgCtx);
+    newUnk4C8 = Message_GetState(&globalCtx->msgCtx);
     this->unk4C4 += this->unk4C0 != 0.0f ? 40.0f : -40.0f;
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 

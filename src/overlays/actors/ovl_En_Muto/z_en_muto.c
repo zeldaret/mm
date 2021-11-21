@@ -148,7 +148,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x2363;
     }
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnMuto_SetupDialogue(this, globalCtx);
         return;
     }
@@ -196,7 +196,7 @@ void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx) {
 void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx) {
     if (!this->isInMayorsRoom) {
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
-        if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+        if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
             func_801477B4(globalCtx);
 
             if (this->actor.textId == 0x62C) {

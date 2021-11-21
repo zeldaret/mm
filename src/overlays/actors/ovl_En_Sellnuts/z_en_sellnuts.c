@@ -350,7 +350,7 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (Player_GetExchangeItemId(&globalCtx->state) == EXCH_ITEM_2A) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
@@ -426,7 +426,7 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
     s32 temp_v0_2;
 
     if (temp_v0 == 0x10) {
@@ -462,7 +462,7 @@ void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBAB8(EnSellnuts* this, GlobalContext* globalCtx) {
-    u8 sp27 = func_80152498(&globalCtx->msgCtx);
+    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
@@ -497,7 +497,7 @@ void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBC60(EnSellnuts* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
@@ -507,7 +507,7 @@ void func_80ADBC60(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBCE4(EnSellnuts* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
         func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
         this->unk_340 = D_80ADD930[this->unk_33A];
         this->actionFunc = func_80ADBC60;
@@ -515,7 +515,7 @@ void func_80ADBCE4(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBD64(EnSellnuts* this, GlobalContext* globalCtx) {
-    u8 sp27 = func_80152498(&globalCtx->msgCtx);
+    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
@@ -566,7 +566,7 @@ void func_80ADBE80(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBFA0(EnSellnuts* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (this->unk_34C == 0) {
@@ -706,7 +706,7 @@ void func_80ADC580(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         player->linearVelocity = 0.0f;
         this->actor.flags &= ~0x10000;
         func_801518B0(globalCtx, this->unk_340, &this->actor);
@@ -729,7 +729,7 @@ void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADC6D0(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (player->transformation == PLAYER_FORM_DEKU) {
@@ -747,7 +747,7 @@ void func_80ADC6D0(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADC7B4(EnSellnuts* this, GlobalContext* globalCtx) {
-    s32 temp = func_80152498(&globalCtx->msgCtx);
+    s32 temp = Message_GetState(&globalCtx->msgCtx);
 
     if (this->unk_366 == 0) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {

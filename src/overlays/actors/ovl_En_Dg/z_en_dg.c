@@ -1095,7 +1095,7 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_80989D38(this, globalCtx);
         this->actionFunc = func_8098BC54;
@@ -1105,7 +1105,7 @@ void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098BC54(EnDg* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 2) {
+    if (Message_GetState(&globalCtx->msgCtx) == 2) {
         func_80989140(&this->skelAnime, sAnimations, 0);
         this->actionFunc = func_8098BA64;
     }

@@ -609,7 +609,7 @@ void func_80BD9938(EnPamera* this) {
 }
 
 void func_80BD994C(EnPamera* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
             if (1) {}
             func_80BD93CC(this, 0, 1);
@@ -642,7 +642,7 @@ void func_80BD9A9C(EnPamera* this) {
 }
 
 void EnPamera_HandleDialogue(EnPamera* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
         case 1:
         case 2:

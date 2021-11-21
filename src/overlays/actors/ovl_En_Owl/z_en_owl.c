@@ -233,7 +233,7 @@ void func_8095A920(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 s32 func_8095A978(EnOwl* this, GlobalContext* globalCtx, u16 textId, f32 targetDist, f32 arg4) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         return true;
     }
 
@@ -247,7 +247,7 @@ s32 func_8095A978(EnOwl* this, GlobalContext* globalCtx, u16 textId, f32 targetD
 }
 
 s32 func_8095A9FC(EnOwl* this, GlobalContext* globalCtx, u16 textId) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         return true;
     }
 
@@ -302,7 +302,7 @@ void func_8095ABA8(EnOwl* this) {
 }
 
 void func_8095ABF0(EnOwl* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
         Audio_QueueSeqCmd(0x110000FF);
         func_8095AAD0(this, globalCtx);
         this->actor.flags &= ~0x10000;
@@ -311,7 +311,7 @@ void func_8095ABF0(EnOwl* this, GlobalContext* globalCtx) {
 
 // Unused?
 void func_8095AC50(EnOwl* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
         Audio_QueueSeqCmd(0x110000FF);
         if ((this->unk_3DA % 64) == 0) {
             func_8095AAD0(this, globalCtx);
@@ -335,7 +335,7 @@ void func_8095ACEC(EnOwl* this) {
 }
 
 void func_8095AD54(EnOwl* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case OWL_REPEAT:
                 func_80151938(globalCtx, 0x7D1);
@@ -351,14 +351,14 @@ void func_8095AD54(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 void func_8095AE00(EnOwl* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_80151938(globalCtx, 0x7D2);
         this->actionFunc = func_8095AD54;
     }
 }
 
 void func_8095AE60(EnOwl* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_80151938(globalCtx, 0x7D1);
         this->actionFunc = func_8095AE00;
     }
@@ -373,7 +373,7 @@ void func_8095AEC0(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 void func_8095AF2C(EnOwl* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
             if (func_80147624(globalCtx)) {
                 if (globalCtx->msgCtx.unk11F04 == 0xBFE) {
@@ -509,7 +509,7 @@ void func_8095B480(EnOwl* this, GlobalContext* globalCtx) {
 
 void func_8095B574(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_8095BA84;
         func_801A3098(NA_BGM_OWL);
         this->actionFlags |= 0x40;
@@ -615,7 +615,7 @@ void func_8095B9FC(EnOwl* this, GlobalContext* globalCtx) {
 void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
             if (func_80147624(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
@@ -719,7 +719,7 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
 
 void func_8095BE0C(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_8095BA84;
         func_801A3098(NA_BGM_OWL);
         this->unk_406 = 1;

@@ -363,7 +363,7 @@ void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         EnMa4_StartDialogue(this, globalCtx);
         EnMa4_SetupDialogueHandler(this);
     } else if (this->type != MA4_TYPE_ALIENS_WON || ABS_ALT(yaw) < 0x4000) {
@@ -648,7 +648,7 @@ void EnMa4_SetupDialogueHandler(EnMa4* this) {
 void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
     s32 temp_v0;
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         default:
             break;
 
@@ -692,7 +692,7 @@ void EnMa4_BeginHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
 }
 
 void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         // "You're feeling confident"
         func_801518B0(globalCtx, 0x336E, &this->actor);
         this->actionFunc = EnMa4_HorsebackGameTalking;
@@ -702,7 +702,7 @@ void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, GlobalContext* glob
 }
 
 void EnMa4_HorsebackGameTalking(EnMa4* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnMa4_HorsebackGameWait;
     }
 }
@@ -865,7 +865,7 @@ void EnMa4_EndEponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     this->actor.flags |= 0x10000;
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         player->stateFlags1 &= ~0x20;
         func_801518B0(globalCtx, 0x334C, &this->actor);
         this->textId = 0x334C;

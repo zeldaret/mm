@@ -425,7 +425,7 @@ void EnMaYto_DefaultWait(EnMaYto* this, GlobalContext* globalCtx) {
         EnMaYto_ChangeAnim(this, 11);
     }
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnMaYto_DefaultStartDialogue(this, globalCtx);
         EnMaYto_SetupDefaultDialogueHandler(this);
     } else if (ABS_ALT(direction) < 0x1555) {
@@ -440,7 +440,7 @@ void EnMaYto_SetupDefaultDialogueHandler(EnMaYto* this) {
 }
 
 void EnMaYto_DefaultDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
             EnMaYto_DefaultHandlePlayerChoice(this, globalCtx);
             break;
@@ -535,13 +535,13 @@ void EnMaYto_SetupDinnerWait(EnMaYto* this) {
 void EnMaYto_DinnerWait(EnMaYto* this, GlobalContext* globalCtx) {
     s16 direction = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnMaYto_DinnerStartDialogue(this, globalCtx);
         EnMaYto_SetupDinnerDialogueHandler(this);
     } else {
         Actor* child = this->actor.child;
 
-        if (child != NULL && Actor_RequestTalk(child, &globalCtx->state)) {
+        if (child != NULL && Actor_ProcessTalkRequest(child, &globalCtx->state)) {
             func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
             EnMaYto_DinnerStartDialogue(this, globalCtx);
             EnMaYto_SetupDinnerDialogueHandler(this);
@@ -572,7 +572,7 @@ void EnMaYto_SetupDinnerDialogueHandler(EnMaYto* this) {
 }
 
 void EnMaYto_DinnerDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
             EnMaYto_DinnerHandlePlayerChoice(this, globalCtx);
             break;
@@ -730,13 +730,13 @@ void EnMaYto_BarnWait(EnMaYto* this, GlobalContext* globalCtx) {
     s16 direction = this->actor.shape.rot.y + 0x471C;
 
     direction -= this->actor.yawTowardsPlayer;
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnMaYto_BarnStartDialogue(this, globalCtx);
         EnMaYto_SetupBarnDialogueHandler(this);
     } else {
         Actor* child = this->actor.child;
 
-        if (child != NULL && Actor_RequestTalk(child, &globalCtx->state)) {
+        if (child != NULL && Actor_ProcessTalkRequest(child, &globalCtx->state)) {
             func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
             EnMaYto_BarnStartDialogue(this, globalCtx);
             EnMaYto_SetupBarnDialogueHandler(this);
@@ -762,7 +762,7 @@ void EnMaYto_SetupBarnDialogueHandler(EnMaYto* this) {
 }
 
 void EnMaYto_BarnDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
             EnMaYto_BarnChooseNextDialogue(this, globalCtx);
             break;
@@ -912,7 +912,7 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
 void EnMaYto_AfterMilkRunInit(EnMaYto* this, GlobalContext* globalCtx) {
     this->actor.flags |= 0x10000;
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
 
         if (gSaveContext.weekEventReg[0x34] & 1) { // if (ProtectedCremia)
@@ -942,7 +942,7 @@ void EnMaYto_SetupAfterMilkRunDialogueHandler(EnMaYto* this) {
 }
 
 void EnMaYto_AfterMilkRunDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
         case 1:
         case 2:
@@ -999,7 +999,7 @@ void EnMaYto_SetupPostMilkRunExplainReward(EnMaYto* this) {
 }
 
 void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (this->unk310 == 1) {
             // Romani's mask explanation
             EnMaYto_SetFaceExpression(this, 0, 1);
@@ -1095,14 +1095,14 @@ void EnMaYto_SetupPostMilkRunWaitDialogueEnd(EnMaYto* this) {
 }
 
 void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 6 || func_80152498(&globalCtx->msgCtx) == 5) {
-        if (func_80147624(globalCtx) && func_80152498(&globalCtx->msgCtx) == 5) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 || Message_GetState(&globalCtx->msgCtx) == 5) {
+        if (func_80147624(globalCtx) && Message_GetState(&globalCtx->msgCtx) == 5) {
             func_800B7298(globalCtx, &this->actor, 7);
             func_801477B4(globalCtx);
         }
     }
 
-    if (func_80152498(&globalCtx->msgCtx) == 0 && globalCtx->msgCtx.unk120B1 == 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 0 && globalCtx->msgCtx.unk120B1 == 0) {
         EnMaYto_SetupPostMilkRunEnd(this);
     }
 }

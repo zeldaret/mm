@@ -710,7 +710,7 @@ UNK_TYPE* func_80AF8540(EnPm* this, GlobalContext* globalCtx) {
 s32 func_80AF86F0(EnPm* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if ((this->unk_356 & 7) && Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if ((this->unk_356 & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_8013AED4(&this->unk_356, 0, 7);
         this->unk_398 = 0;
         this->unk_378 = 0;
@@ -845,7 +845,7 @@ void func_80AF8BA8(s32 arg0) {
 
 void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 sp28 = func_80152498(&globalCtx->msgCtx);
+    s32 sp28 = Message_GetState(&globalCtx->msgCtx);
     u16 temp_a0 = globalCtx->msgCtx.unk11F04;
 
     if ((player->targetActor == &this->actor) && ((temp_a0 < 255) || (temp_a0 > 512)) && (sp28 == 3) &&

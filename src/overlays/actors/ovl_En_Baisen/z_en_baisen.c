@@ -151,7 +151,7 @@ void func_80BE87FC(EnBaisen* this) {
 }
 
 void func_80BE887C(EnBaisen* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BE895C(this, globalCtx);
     } else {
         if (this->paramCopy != 0) {
@@ -223,7 +223,7 @@ void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx) {
             EnBaisen_ChangeAnimation(this, 0);
         }
     }
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         this->textIdIndex++;
         if (this->textIdIndex < 6) {

@@ -2755,7 +2755,7 @@ void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff * 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (func_800B867C(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
         func_80B48948(this);
     }
 }
@@ -2785,7 +2785,7 @@ void func_80B490F0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_RequestTalk(&this->actor, &globalCtx->state);
+    s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3103,7 +3103,7 @@ void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (func_800B867C(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.weekEventReg[54] |= 0x10;
             this->actor.textId = 0x332E;
@@ -3168,7 +3168,7 @@ void func_80B4A1B8(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_RequestTalk(&this->actor, &globalCtx->state);
+    s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3330,7 +3330,7 @@ void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
-    if (func_800B867C(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.weekEventReg[54] |= 0x10;
             this->actor.textId = 0x332E;
@@ -3397,7 +3397,7 @@ void func_80B4ABDC(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_RequestTalk(&this->actor, &globalCtx->state);
+    s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3433,7 +3433,7 @@ void func_80B4AD3C(EnInvadepoh* this) {
 }
 
 void func_80B4AD60(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnInvadepoh_SetTextID(this, globalCtx, 0x3331);
         func_80B4ADB8(this);
     } else {
@@ -3446,7 +3446,7 @@ void func_80B4ADB8(EnInvadepoh* this) {
 }
 
 void func_80B4ADCC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (this->textId == 0x3331) {
             if (gSaveContext.weekEventReg[22] & 2) {
                 EnInvadepoh_SetTextID(this, globalCtx, 0x3334);
@@ -3492,7 +3492,7 @@ void func_80B4AF80(EnInvadepoh* this) {
 }
 
 void func_80B4AF94(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnInvadepoh_SetTextID(this, globalCtx, 0x3334);
         func_80151BB4(globalCtx, 0x1E);
         func_80151BB4(globalCtx, 0x1D);
@@ -3512,7 +3512,7 @@ void func_80B4B048(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (globalCtx->msgCtx.unk120B1 == 0) {
         if (globalCtx->msgCtx.unk11F22 == 0) {
             D_80B4E998 = 1;
-        } else if ((func_80152498(&globalCtx->msgCtx) == 6) || (func_80152498(&globalCtx->msgCtx) == 5)) {
+        } else if ((Message_GetState(&globalCtx->msgCtx) == 6) || (Message_GetState(&globalCtx->msgCtx) == 5)) {
             D_80B4E998 = 1;
         }
     }
@@ -3869,7 +3869,7 @@ void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
-    if (func_800B867C(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
         func_80B4BBE0(this);
     }
 }
@@ -3959,7 +3959,7 @@ void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_RequestTalk(&this->actor, &globalCtx->state);
+    s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 6);
@@ -4091,7 +4091,7 @@ void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (func_800B867C(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
         func_80B4C6C8(this);
     }
 }
@@ -4175,7 +4175,7 @@ void func_80B4D054(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_RequestTalk(&this->actor, &globalCtx->state);
+    s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);

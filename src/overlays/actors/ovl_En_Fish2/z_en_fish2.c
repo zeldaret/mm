@@ -331,7 +331,7 @@ void func_80B28C14(EnFish2* this, GlobalContext* globalCtx) {
     Actor* itemAction = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
     WaterBox* waterbox;
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80B29128(this);
         return;
     }
@@ -437,7 +437,7 @@ void func_80B29128(EnFish2* this) {
 }
 
 void func_80B2913C(EnFish2* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         func_80B28B5C(this);
     }

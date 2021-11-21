@@ -317,7 +317,7 @@ void func_80994E94(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80994F7C(EnSkb* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_3E2 = 1;
         if (this->unk_3E0 == 1) {
             func_801518B0(globalCtx, 0x13F8, &this->actor);
@@ -338,7 +338,7 @@ void func_8099504C(EnSkb* this) {
 }
 
 void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_3E2 = 1;
         if (this->unk_3E0 == 1) {
             func_801518B0(globalCtx, 0x13F8, &this->actor);
@@ -363,7 +363,7 @@ void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
         case 1:
         case 2:

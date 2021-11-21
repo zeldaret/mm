@@ -182,7 +182,7 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if (!(player->stateFlags2 & 0x08000000) && !func_80152498(&globalCtx->msgCtx)) {
+    if (!(player->stateFlags2 & 0x08000000) && !Message_GetState(&globalCtx->msgCtx)) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveWithGravity(&this->actor);
@@ -221,8 +221,8 @@ void func_80BCF6D0(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCF710(EnHg* this, GlobalContext* globalCtx) {
-    if (!func_80152498(&globalCtx->msgCtx)) {
-        if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (!Message_GetState(&globalCtx->msgCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_801518B0(globalCtx, 0x24F, &this->actor);
         } else {
             func_800B8614(&this->actor, &globalCtx->state, 80.0f);

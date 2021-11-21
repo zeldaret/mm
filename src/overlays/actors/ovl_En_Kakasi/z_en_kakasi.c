@@ -323,7 +323,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 this->actor.flags |= 0x10000;
             }
 
-            if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+            if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
                 player->stateFlags1 &= ~0x20;
                 this->unkState196 = 2;
                 this->actor.flags &= ~0x10000;
@@ -352,13 +352,13 @@ void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
         EnKakasi_SetupSongTeach(this, globalCtx);
         return;
     }
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->skelanime.playSpeed = 1.0f;
         EnKakasi_SetupDialogue(this);
         return;
     }
     if (globalCtx->actorCtx.unk5 & 0x4) {
-        func_800B8898(globalCtx, &this->actor, &passedValue1, &passedValue2);
+        Actor_GetScreenPos(globalCtx, &this->actor, &passedValue1, &passedValue2);
         if (this->actor.projectedPos.z > -20.0f && passedValue1 > 0 && passedValue1 < 0x140 && passedValue2 > 0 &&
             passedValue2 < 0xF0 && this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
             // faster shaking
@@ -424,7 +424,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
         this->unkState1A8 = 0;
     }
 
-    if (this->unkMsgState1AC == func_80152498(&globalCtx->msgCtx) && func_80147624(globalCtx) != 0) {
+    if (this->unkMsgState1AC == Message_GetState(&globalCtx->msgCtx) && func_80147624(globalCtx) != 0) {
         func_801477B4(globalCtx);
         if (this->unkMsgState1AC == 5) {
             // bad song input
@@ -569,7 +569,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx) {
  * before actually teaching
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx) != 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx) != 0) {
         func_80152434(globalCtx, 0x35);
         this->unkState1A8 = 0;
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -743,7 +743,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 
     func_8096FAAC(this, globalCtx);
 
-    if (this->unkState1A8 != 0 && func_80152498(&globalCtx->msgCtx) == this->unkMsgState1AC &&
+    if (this->unkState1A8 != 0 && Message_GetState(&globalCtx->msgCtx) == this->unkMsgState1AC &&
         func_80147624(globalCtx) != 0) {
 
         func_801477B4(globalCtx);
@@ -1100,7 +1100,7 @@ void EnKakasi_SetupIdleRisen(EnKakasi* this) {
 
 void EnKakasi_IdleRisen(EnKakasi* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 1000, 0);
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnKakasi_RisenDialogue;
     } else {
         func_800B8614(&this->actor, &globalCtx->state, 70.0f);
@@ -1110,7 +1110,7 @@ void EnKakasi_IdleRisen(EnKakasi* this, GlobalContext* globalCtx) {
 void EnKakasi_RisenDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 1000, 0);
 
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx) != 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx) != 0) {
         func_801477B4(globalCtx);
         EnKakasi_SetupIdleRisen(this);
     }

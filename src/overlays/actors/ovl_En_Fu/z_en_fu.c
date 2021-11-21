@@ -388,7 +388,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
         this->actor.flags |= 0x10000;
     }
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (this->unk_54A == 2) {
             if (this->unk_552 == 0x287D) {
                 if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
@@ -583,7 +583,7 @@ void func_809628BC(EnFu* this) {
 }
 
 void func_809628D0(EnFu* this, GlobalContext* globalCtx) {
-    u8 sp27 = func_80152498(&globalCtx->msgCtx);
+    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
 
     switch (sp27) {
         case 0:
@@ -846,8 +846,8 @@ void func_80963350(EnFu* this, GlobalContext* globalCtx) {
     static s32 D_80964C24 = 0;
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((this->unk_54A == 0) && (((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) ||
-                                 ((func_80152498(&globalCtx->msgCtx) == 2) && (globalCtx->msgCtx.unk12023 == 1)))) {
+    if ((this->unk_54A == 0) && (((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) ||
+                                 ((Message_GetState(&globalCtx->msgCtx) == 2) && (globalCtx->msgCtx.unk12023 == 1)))) {
         func_801477B4(globalCtx);
         this->unk_54A = 2;
         D_80964C24 = 1;
@@ -899,7 +899,7 @@ void func_80963610(EnFu* this) {
 void func_80963630(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if ((gSaveContext.weekEventReg[22] & 0x10) && (gSaveContext.weekEventReg[22] & 0x20) && (CURRENT_DAY == 3) &&
             (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             if (gSaveContext.weekEventReg[22] & 0x40) {

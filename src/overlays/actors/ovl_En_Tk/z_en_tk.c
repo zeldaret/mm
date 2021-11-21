@@ -299,7 +299,7 @@ void func_80AECA3C(EnTk* this, GlobalContext* globalCtx) {
 }
 
 void func_80AECA90(EnTk* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         globalCtx->msgCtx.unk11F22 = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80AEDE10(this, globalCtx);
@@ -326,7 +326,7 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
     struct_80133038_arg2 sp34;
 
     this->actor.textId = 0;
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         globalCtx->msgCtx.unk11F22 = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80AED4F8(this, globalCtx);
@@ -562,7 +562,7 @@ void func_80AED610(EnTk* this, GlobalContext* globalCtx) {
         func_8013E1C8(&this->skelAnime, D_80AEF868, 7, &this->unk_2D4);
     }
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer - 0x1555, 0x71C)) {
                 if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
@@ -696,7 +696,7 @@ void func_80AED940(EnTk* this, GlobalContext* globalCtx) {
         } while (actor != NULL);
     }
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_2CA &= ~0x80;
         this->actor.flags &= ~0x10000;
         globalCtx->msgCtx.unk11F22 = 0;
@@ -801,7 +801,7 @@ void func_80AEDF5C(EnTk* this, GlobalContext* globalCtx) {
         func_8013E1C8(&this->skelAnime, D_80AEF868, 7, &this->unk_2D4);
     }
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             switch (this->unk_2E6) {
                 case 0x1404:
@@ -1196,7 +1196,7 @@ void func_80AEED38(EnTk* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    if (!func_80152498(&globalCtx->msgCtx) && !func_801690CC(globalCtx) && (this->unk_2C6-- <= 0)) {
+    if (!Message_GetState(&globalCtx->msgCtx) && !func_801690CC(globalCtx) && (this->unk_2C6-- <= 0)) {
         func_801518B0(globalCtx, 0x140C, NULL);
         this->unk_2CA |= 0x4000;
         this->unk_2C6 = 200;

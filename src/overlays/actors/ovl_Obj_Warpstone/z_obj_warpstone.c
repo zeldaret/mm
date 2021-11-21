@@ -138,9 +138,9 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->isTalking) {
-        if (func_800B867C(&this->dyna.actor, &globalCtx->state) != 0) {
+        if (Actor_TextboxIsClosing(&this->dyna.actor, &globalCtx->state) != 0) {
             this->isTalking = false;
-        } else if ((func_80152498(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
+        } else if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
             if (globalCtx->msgCtx.choiceIndex != 0) {
                 func_8019F208();
                 globalCtx->msgCtx.unk11F22 = 0x4D;
@@ -151,7 +151,7 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
             }
         }
-    } else if (Actor_RequestTalk(&this->dyna.actor, &globalCtx->state)) {
+    } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
         this->isTalking = true;
     } else if (!this->actionFunc(this, globalCtx)) {
         func_800B863C(&this->dyna.actor, &globalCtx->state);

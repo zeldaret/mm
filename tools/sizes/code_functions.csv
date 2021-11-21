@@ -283,12 +283,12 @@ asm/non_matchings/code/z_actor/Actor_GetWorldPosShapeRot.s,Actor_GetWorldPosShap
 asm/non_matchings/code/z_actor/func_800B82EC.s,func_800B82EC,0x800B82EC,0x34
 asm/non_matchings/code/z_actor/func_800B83BC.s,func_800B83BC,0x800B83BC,0xF
 asm/non_matchings/code/z_actor/func_800B83F8.s,func_800B83F8,0x800B83F8,0x36
-asm/non_matchings/code/z_actor/Actor_RequestTalk.s,Actor_RequestTalk,0x800B84D0,0xC
+asm/non_matchings/code/z_actor/Actor_ProcessTalkRequest.s,Actor_ProcessTalkRequest,0x800B84D0,0xC
 asm/non_matchings/code/z_actor/func_800B8500.s,func_800B8500,0x800B8500,0x38
 asm/non_matchings/code/z_actor/func_800B85E0.s,func_800B85E0,0x800B85E0,0xD
 asm/non_matchings/code/z_actor/func_800B8614.s,func_800B8614,0x800B8614,0xA
 asm/non_matchings/code/z_actor/func_800B863C.s,func_800B863C,0x800B863C,0x10
-asm/non_matchings/code/z_actor/func_800B867C.s,func_800B867C,0x800B867C,0x13
+asm/non_matchings/code/z_actor/Actor_TextboxIsClosing.s,Actor_TextboxIsClosing,0x800B867C,0x13
 asm/non_matchings/code/z_actor/func_800B86C8.s,func_800B86C8,0x800B86C8,0x10
 asm/non_matchings/code/z_actor/Player_GetExchangeItemId.s,Player_GetExchangeItemId,0x800B8708,0x4
 asm/non_matchings/code/z_actor/func_800B8718.s,func_800B8718,0x800B8718,0xD
@@ -296,7 +296,7 @@ asm/non_matchings/code/z_actor/func_800B874C.s,func_800B874C,0x800B874C,0x2E
 asm/non_matchings/code/z_actor/func_800B8804.s,func_800B8804,0x800B8804,0xA
 asm/non_matchings/code/z_actor/func_800B882C.s,func_800B882C,0x800B882C,0x10
 asm/non_matchings/code/z_actor/func_800B886C.s,func_800B886C,0x800B886C,0xB
-asm/non_matchings/code/z_actor/func_800B8898.s,func_800B8898,0x800B8898,0x27
+asm/non_matchings/code/z_actor/Actor_GetScreenPos.s,Actor_GetScreenPos,0x800B8898,0x27
 asm/non_matchings/code/z_actor/func_800B8934.s,func_800B8934,0x800B8934,0x31
 asm/non_matchings/code/z_actor/Actor_HasParent.s,Actor_HasParent,0x800B89F8,0x9
 asm/non_matchings/code/z_actor/Actor_PickUp.s,Actor_PickUp,0x800B8A1C,0x5A
@@ -2374,7 +2374,7 @@ asm/non_matchings/code/z_message/func_80151C9C.s,func_80151C9C,0x80151C9C,0x42
 asm/non_matchings/code/z_message/func_80151DA4.s,func_80151DA4,0x80151DA4,0x1A4
 asm/non_matchings/code/z_message/func_80152434.s,func_80152434,0x80152434,0xC
 asm/non_matchings/code/z_message/func_80152464.s,func_80152464,0x80152464,0xD
-asm/non_matchings/code/z_message/func_80152498.s,func_80152498,0x80152498,0x7D
+asm/non_matchings/code/z_message/Message_GetState.s,Message_GetState,0x80152498,0x7D
 asm/non_matchings/code/z_message/func_8015268C.s,func_8015268C,0x8015268C,0x176
 asm/non_matchings/code/z_message/func_80152C64.s,func_80152C64,0x80152C64,0x12
 asm/non_matchings/code/z_message/func_80152CAC.s,func_80152CAC,0x80152CAC,0x85

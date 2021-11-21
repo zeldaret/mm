@@ -253,7 +253,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     func_80BA383C(this, globalCtx);
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         func_80BA36C0(this, globalCtx, 1);
         if (globalCtx->sceneNum != 0x12) {
             Flags_SetSwitch(globalCtx, this->actor.params & 0x7F);
@@ -315,7 +315,7 @@ void func_80BA3C88(EnToto* this) {
 void func_80BA3CC4(EnToto* this, GlobalContext* globalCtx) {
     func_80BA383C(this, globalCtx);
     func_80BA3C88(this);
-    if (func_800B867C(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
         func_80BA36C0(this, globalCtx, this->text->unk1);
     } else {
         func_80BA4C44(this, globalCtx);
@@ -419,21 +419,21 @@ s32 func_80BA407C(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA40D4(EnToto* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         return 1;
     }
     return 0;
 }
 
 s32 func_80BA4128(EnToto* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 2) {
+    if (Message_GetState(&globalCtx->msgCtx) == 2) {
         return 1;
     }
     return 0;
 }
 
 s32 func_80BA415C(EnToto* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 4 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 4 && func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             func_8019F230();
         } else {

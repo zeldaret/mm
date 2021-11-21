@@ -213,7 +213,7 @@ void func_809C6810(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         u16 sp22;
 
         func_800BDC5C(&this->skelAnime, sAnimations, 2);
@@ -381,7 +381,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
         player->stateFlags1 |= 0x20;
     }
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 2:
             this->actionFunc = func_809C6848;
             this->unk_26A = 0;
@@ -510,7 +510,7 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C72D8(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         u16 sp26 = Text_GetFaceReaction(globalCtx, 0x30);
 
         if (sp26 != 0) {
@@ -715,7 +715,7 @@ void func_809C7990(EnSyatekiMan* this, GlobalContext* globalCtx) {
         player->stateFlags1 |= 0x20;
     }
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 2:
             this->actionFunc = func_809C72D8;
             this->unk_26A = 0;
@@ -782,7 +782,7 @@ void func_809C7A90(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if ((CURRENT_DAY == 3) && (gSaveContext.time > CLOCK_TIME(12, 00))) {
             func_801518B0(globalCtx, 0xA36, &this->actor);
             this->unk_284 = 0xA36;
@@ -841,7 +841,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (CURRENT_DAY != 3) {
-        if ((func_80152498(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
             player->stateFlags1 &= ~0x20;
             this->unk_280 = 0;
             this->unk_26A = 0;
@@ -849,7 +849,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
             gSaveContext.weekEventReg[63] &= (u8)~2;
             this->actionFunc = func_809C6810;
         }
-    } else if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0x408, &this->actor);
         this->unk_284 = 0x408;
         player->stateFlags1 &= ~0x20;

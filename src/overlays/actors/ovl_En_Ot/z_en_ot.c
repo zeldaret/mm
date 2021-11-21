@@ -535,7 +535,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
     if ((gSaveContext.weekEventReg[84] & 0x10) && (this->unk_33C == 1)) {
         this->actor.textId = 0;
         this->unk_384 = 1;
-        if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk_3A0 = BINANG_ADD(sp3E, 0x4000);
             this->unk_360->unk_3A0 = this->unk_3A0;
             func_80B5C9A8(this, globalCtx);
@@ -616,7 +616,7 @@ void func_80B5CBA0(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5CBEC(EnOt* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_80B5CC88(this, globalCtx);
     } else {
@@ -648,7 +648,7 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 temp;
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             temp = Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))),
                                       3, 0xE38, 0x38E);
@@ -690,7 +690,7 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
     s32 pad;
 
     this->actor.textId = 0;
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80B5D114(this, globalCtx);
         return;
     }
@@ -744,7 +744,7 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
     u16 phi_a1;
     s32 temp;
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             temp = Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
             this->actor.world.rot.y = this->actor.shape.rot.y;

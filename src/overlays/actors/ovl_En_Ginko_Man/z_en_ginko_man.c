@@ -86,7 +86,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
     s32 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     EnGinkoMan_SwitchAnimation(this, globalCtx);
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
             func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
             func_801518B0(globalCtx, 0x44C, &this->actor);
@@ -477,7 +477,7 @@ void EnGinkoMan_SetupDialogue(EnGinkoMan* this) {
 }
 
 void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) { // get dialogue state?
+    switch (Message_GetState(&globalCtx->msgCtx)) { // get dialogue state?
         case 2:
             EnGinkoMan_SetupIdle(this);
             break;
@@ -537,7 +537,7 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
 
 // separate function to handle bank rewards... if the bank has a parent actor? might be unused
 void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
-    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (!(gSaveContext.weekEventReg[10] & 8) && (this->curTextId == 0x45B)) {
             // "What's this? You've already saved up 200 Rupees!?!  Well, little guy, here's your special gift. Take
             // it!"
@@ -552,7 +552,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
 
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
-        if ((func_80152498(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
             if (!(gSaveContext.weekEventReg[59] & 8)) {
                 gSaveContext.weekEventReg[59] |= 8;
             }
