@@ -94,7 +94,7 @@ void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgLadder_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgLadder* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgLadder_ActionWait(BgLadder* this, GlobalContext* globalCtx) {
