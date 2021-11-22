@@ -1,6 +1,6 @@
 /*
  * File: z_en_bigpo.c
- * Overlay: ovl_En_Bigpi
+ * Overlay: ovl_En_Bigpo
  * Description: Big Poe. Found under Dampe's house and in Beneath the Well
  */
 
