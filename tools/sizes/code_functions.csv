@@ -528,7 +528,7 @@ asm/non_matchings/code/z_bgcheck/BgCheck_ActorMeshUpdateParams.s,BgCheck_ActorMe
 asm/non_matchings/code/z_bgcheck/BgCheck_IsActorMeshIndexValid.s,BgCheck_IsActorMeshIndexValid,0x800C6024,0x8
 asm/non_matchings/code/z_bgcheck/BgCheck_DynaInit.s,BgCheck_DynaInit,0x800C6044,0x15
 asm/non_matchings/code/z_bgcheck/BgCheck_DynaAlloc.s,BgCheck_DynaAlloc,0x800C6098,0x3C
-asm/non_matchings/code/z_bgcheck/BgCheck_AddActorMesh.s,BgCheck_AddActorMesh,0x800C6188,0x30
+asm/non_matchings/code/z_bgcheck/DynaPoly_SetBgActor.s,DynaPoly_SetBgActor,0x800C6188,0x30
 asm/non_matchings/code/z_bgcheck/BgCheck_GetActorOfMesh.s,BgCheck_GetActorOfMesh,0x800C6248,0x1D
 asm/non_matchings/code/z_bgcheck/func_800C62BC.s,func_800C62BC,0x800C62BC,0x16
 asm/non_matchings/code/z_bgcheck/func_800C6314.s,func_800C6314,0x800C6314,0x16
@@ -536,10 +536,10 @@ asm/non_matchings/code/z_bgcheck/func_800C636C.s,func_800C636C,0x800C636C,0x16
 asm/non_matchings/code/z_bgcheck/func_800C63C4.s,func_800C63C4,0x800C63C4,0x16
 asm/non_matchings/code/z_bgcheck/func_800C641C.s,func_800C641C,0x800C641C,0x16
 asm/non_matchings/code/z_bgcheck/func_800C6474.s,func_800C6474,0x800C6474,0x16
-asm/non_matchings/code/z_bgcheck/BgCheck_RemoveActorMesh.s,BgCheck_RemoveActorMesh,0x800C64CC,0x22
+asm/non_matchings/code/z_bgcheck/DynaPoly_DeleteBgActor.s,DynaPoly_DeleteBgActor,0x800C64CC,0x22
 asm/non_matchings/code/z_bgcheck/func_800C6554.s,func_800C6554,0x800C6554,0x6
 asm/non_matchings/code/z_bgcheck/BgCheck_CalcWaterboxDimensions.s,BgCheck_CalcWaterboxDimensions,0x800C656C,0xB3
-asm/non_matchings/code/z_bgcheck/BgCheck_AddActorMeshToLists.s,BgCheck_AddActorMeshToLists,0x800C6838,0x2C5
+asm/non_matchings/code/z_bgcheck/DynaPoly_SetBgActorToLists.s,DynaPoly_SetBgActorToLists,0x800C6838,0x2C5
 asm/non_matchings/code/z_bgcheck/BgCheck_ResetFlagsIfLoadedActor.s,BgCheck_ResetFlagsIfLoadedActor,0x800C734C,0x26
 asm/non_matchings/code/z_bgcheck/BgCheck_Update.s,BgCheck_Update,0x800C73E4,0x62
 asm/non_matchings/code/z_bgcheck/func_800C756C.s,func_800C756C,0x800C756C,0x3C
@@ -556,8 +556,8 @@ asm/non_matchings/code/z_bgcheck/func_800C8EEC.s,func_800C8EEC,0x800C8EEC,0x70
 asm/non_matchings/code/z_bgcheck/func_800C90AC.s,func_800C90AC,0x800C90AC,0x5C
 asm/non_matchings/code/z_bgcheck/func_800C921C.s,func_800C921C,0x800C921C,0x59
 asm/non_matchings/code/z_bgcheck/func_800C9380.s,func_800C9380,0x800C9380,0x58
-asm/non_matchings/code/z_bgcheck/BgCheck_RelocateMeshHeaderPointers.s,BgCheck_RelocateMeshHeaderPointers,0x800C94E0,0x21
-asm/non_matchings/code/z_bgcheck/BgCheck_RelocateMeshHeader.s,BgCheck_RelocateMeshHeader,0x800C9564,0xD
+asm/non_matchings/code/z_bgcheck/CollisionHeader_GetVirtualPointers.s,CollisionHeader_GetVirtualPointers,0x800C94E0,0x21
+asm/non_matchings/code/z_bgcheck/CollisionHeader_GetVirtual.s,CollisionHeader_GetVirtual,0x800C9564,0xD
 asm/non_matchings/code/z_bgcheck/BgCheck_RelocateAllMeshHeaders.s,BgCheck_RelocateAllMeshHeaders,0x800C9598,0x2A
 asm/non_matchings/code/z_bgcheck/func_800C9640.s,func_800C9640,0x800C9640,0x15
 asm/non_matchings/code/z_bgcheck/BgCheck_GetPolygonAttributes.s,BgCheck_GetPolygonAttributes,0x800C9694,0x1C

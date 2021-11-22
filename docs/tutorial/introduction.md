@@ -43,10 +43,10 @@ and turn it into compilable C code:
 void func_809529AC(EnMs *this, GlobalContext *globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.textId = 0;
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
+        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+        func_800B8A1C(&this->actor, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 ```

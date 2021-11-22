@@ -103,8 +103,8 @@ void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, 1);
-        BgCheck_RelocateMeshHeader(&D_06001B2C, &colHeader);
-        this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+        CollisionHeader_GetVirtual(&D_06001B2C, &colHeader);
+        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     }
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -127,7 +127,7 @@ void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!(this->dyna.actor.params & 0x8000)) {
         bgId = this->dyna.bgId;
-        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, bgId);
     }
 
     Collider_DestroyCylinder(globalCtx, &this->collider);

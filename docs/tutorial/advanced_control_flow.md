@@ -104,10 +104,10 @@ void func_80952734(EnMs* this, GlobalContext* globalCtx) {
 void func_809529AC(EnMs *this, GlobalContext *globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.textId = 0;
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
+        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+        func_800B8A1C(&this->actor, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
@@ -116,7 +116,7 @@ void func_80952A1C(EnMs *this, GlobalContext *globalCtx) {
         func_80151938(globalCtx, 0x936U);
         this->actionFunc = func_809527F8;
     } else {
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, -1);
+        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
     }
 }
 
@@ -168,7 +168,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
         }
         if (func_80147624(globalCtx) != 0) {
             func_801477B4(globalCtx);
-            func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+            func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             return;
         }
@@ -258,7 +258,7 @@ block_5:
         goto block_17;
     }
     func_801477B4(globalCtx);
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -360,7 +360,7 @@ block_5:
         goto block_17;
     }
     func_801477B4(globalCtx);
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -430,7 +430,7 @@ block_5:
         return;
     }
     func_801477B4(globalCtx);
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -588,7 +588,7 @@ block_5:
         return;
     }
     func_801477B4(globalCtx);
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -651,7 +651,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
                 return;
             }
             func_801477B4(globalCtx);
-            func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+            func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             break;
 
@@ -702,7 +702,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
         case 5:
             if (func_80147624(globalCtx) != 0) {
                 func_801477B4(globalCtx);
-                func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+                func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
                 this->actionFunc = func_809529AC;
             }
             break;
