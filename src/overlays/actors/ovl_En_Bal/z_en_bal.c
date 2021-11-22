@@ -1,7 +1,7 @@
 /*
  * File: z_en_bal.c
  * Overlay: ovl_En_Bal
- * Description: Tingle With Balloon
+ * Description: Tingle with Balloon
  */
 
 #include "z_en_bal.h"

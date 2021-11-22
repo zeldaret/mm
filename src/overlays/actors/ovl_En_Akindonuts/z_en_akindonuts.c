@@ -1,7 +1,7 @@
 /*
  * File: z_en_akindonuts.c
  * Overlay: ovl_En_Akindonuts
- * Description: Business Scrubs that are part of the Moon's Tear/Deed trade quest
+ * Description: Trade quest Business Scrubs
  */
 
 #include "z_en_akindonuts.h"

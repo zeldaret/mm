@@ -1,7 +1,7 @@
 /*
  * File: z_obj_makekinsuta.c
  * Overlay: ovl_Obj_Makekinsuta
- * Description: Soft soil with Skulltula hiding in it
+ * Description: Swamp Spider House - Soft soil with Skulltula hiding in it
  */
 
 #include "z_obj_makekinsuta.h"
