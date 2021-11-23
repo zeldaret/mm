@@ -296,7 +296,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2D54.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2DE0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_IsSequencePlaying.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2E54.s")
 

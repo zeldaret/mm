@@ -18,8 +18,8 @@ void DynaPolyActor_Init(DynaPolyActor* dynaActor, s32 flags) {
 void DynaPolyActor_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* dynaActor, CollisionHeader* meshHeader) {
     CollisionHeader* header = NULL;
 
-    BgCheck_RelocateMeshHeader(meshHeader, &header);
-    dynaActor->bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, dynaActor, header);
+    CollisionHeader_GetVirtual(meshHeader, &header);
+    dynaActor->bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &dynaActor->actor, header);
 }
 
 void DynaPolyActor_ResetState(DynaPolyActor* dynaActor) {
@@ -34,8 +34,8 @@ void DynaPolyActor_SetRidingMovingState(DynaPolyActor* dynaActor) {
     dynaActor->stateFlags |= DYNAPOLY_STATE_RIDING_MOVING;
 }
 
-void DynaPolyActor_SetRidingMovingStateByIndex(CollisionContext* colCtx, s32 index) {
-    DynaPolyActor* dynaActor = BgCheck_GetActorOfMesh(colCtx, index);
+void DynaPolyActor_SetRidingMovingStateByIndex(CollisionContext* colCtx, s32 bgId) {
+    DynaPolyActor* dynaActor = DynaPoly_GetActor(colCtx, bgId);
 
     if (dynaActor != NULL) {
         DynaPolyActor_SetRidingMovingState(dynaActor);
@@ -46,8 +46,8 @@ void DynaPolyActor_SetRidingRotatingState(DynaPolyActor* dynaActor) {
     dynaActor->stateFlags |= DYNAPOLY_STATE_RIDING_ROTATING;
 }
 
-void DynaPolyActor_SetRidingRotatingStateByIndex(CollisionContext* colCtx, s32 index) {
-    DynaPolyActor* dynaActor = BgCheck_GetActorOfMesh(colCtx, index);
+void DynaPolyActor_SetRidingRotatingStateByIndex(CollisionContext* colCtx, s32 bgId) {
+    DynaPolyActor* dynaActor = DynaPoly_GetActor(colCtx, bgId);
 
     if (dynaActor != NULL) {
         DynaPolyActor_SetRidingRotatingState(dynaActor);
@@ -125,16 +125,16 @@ s32 DynaPolyActor_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActo
     endPos.y = startPos.y;
     endPos.z = sign * adjustedEndRadius * cos + startPos.z;
 
-    if (func_800C56E0(&globalCtx->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true, &bgId,
-                      &dynaActor->actor, 0.0f)) {
+    if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false,
+                                true, &bgId, &dynaActor->actor, 0.0f)) {
         return false;
     }
     startPos.x = (dynaActor->actor.world.pos.x * 2.0f) - startPos.x;
     startPos.z = (dynaActor->actor.world.pos.z * 2.0f) - startPos.z;
     endPos.x = sign * adjustedEndRadius * sin + startPos.x;
     endPos.z = sign * adjustedEndRadius * cos + startPos.z;
-    if (func_800C56E0(&globalCtx->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true, &bgId,
-                      &dynaActor->actor, 0.0f)) {
+    if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false,
+                                true, &bgId, &dynaActor->actor, 0.0f)) {
         return false;
     }
     return true;

@@ -88,7 +88,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     pos.x = this->dyna.actor.world.pos.x;
     pos.y = this->dyna.actor.world.pos.y + 10.0f;
     pos.z = this->dyna.actor.world.pos.z;
-    func_800C411C(&globalCtx->colCtx, &this->dyna.actor.floorPoly, &floorBgId, &this->dyna.actor, &pos);
+    BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->dyna.actor.floorPoly, &floorBgId, &this->dyna.actor, &pos);
     this->dyna.actor.floorBgId = floorBgId;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
@@ -101,7 +101,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -236,9 +236,9 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
         DynaPolyActor_Init(&this->dyna, 1);
         thisCollisionHeader = collisionHeaders[type];
         if (thisCollisionHeader != 0) {
-            BgCheck_RelocateMeshHeader(thisCollisionHeader, &colHeader);
+            CollisionHeader_GetVirtual(thisCollisionHeader, &colHeader);
         }
-        this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
 
         type = DEKU_FLOWER_TYPE(&this->dyna.actor);
         switch (type) {
@@ -292,7 +292,7 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
         if (floorPoly != NULL && this->burrowFlag & 1) {
-            func_800FAAB4(globalCtx, func_800C9C9C(&globalCtx->colCtx, floorPoly, floorBgId));
+            func_800FAAB4(globalCtx, SurfaceType_GetLightSettingIndex(&globalCtx->colCtx, floorPoly, floorBgId));
         }
     }
     this->actionFunc(this, globalCtx);

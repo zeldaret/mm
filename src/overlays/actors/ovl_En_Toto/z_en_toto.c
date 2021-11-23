@@ -612,7 +612,7 @@ s32 func_80BA47E0(EnToto* this, GlobalContext* globalCtx) {
 
 s32 func_80BA49A4(EnToto* this, GlobalContext* globalCtx) {
     func_800B7298(globalCtx, NULL, 0x44);
-    func_801A31EC(0x54, 4, this->unk2B3 ^ 0xF);
+    func_801A31EC(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->unk2B3 ^ 0xF);
     this->unk2B1 = 4;
     return 0;
 }
@@ -621,8 +621,8 @@ s32 func_80BA4A00(EnToto* this, GlobalContext* globalCtx) {
     Actor* actor;
 
     if (DECR(this->unk2B1) == 0) {
-        if (!func_801A2DE0(0x54)) {
-            actor = (Actor*)GET_PLAYER(globalCtx); // Needed for regalloc, possible FAKE MATCH
+        if (!Audio_IsSequencePlaying(NA_BGM_BALLAD_OF_THE_WIND_FISH)) {
+            actor = &GET_PLAYER(globalCtx)->actor;
             actor = actor->next;
             while (actor != NULL) {
                 Actor_MarkForDeath(actor);
