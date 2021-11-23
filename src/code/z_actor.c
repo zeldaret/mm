@@ -335,8 +335,8 @@ void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 y) {
     f32 yPos = actor->world.pos.y;
 
     actor->world.pos.y += y;
-    actor->floorHeight =
-        func_800C4188(globalCtx, &globalCtx->colCtx, &actor->floorPoly, &floorBgId, actor, &actor->world.pos);
+    actor->floorHeight = BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &actor->floorPoly, &floorBgId,
+                                                       actor, &actor->world.pos);
     actor->floorBgId = floorBgId;
     actor->world.pos.y = yPos;
 }
@@ -1528,7 +1528,8 @@ s32 func_800B7678(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, s32 arg3)
 
     arg2->y += (arg3 & 0x800) ? 10.0f : 50.0f;
 
-    actor->floorHeight = func_800C4188(globalCtx, &globalCtx->colCtx, &actor->floorPoly, &bgId, actor, arg2);
+    actor->floorHeight =
+        BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &actor->floorPoly, &bgId, actor, arg2);
     actor->bgCheckFlags &= ~(0x80 | 0x04 | 0x02);
     if (actor->floorHeight <= BGCHECK_Y_MIN) {
         return func_800B761C(actor, BGCHECK_Y_MIN, arg3);
@@ -1587,11 +1588,11 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
 
         actor->bgCheckFlags &= ~0x1000;
         if ((!(flags & 0x80) &&
-             ((func_800C4D3C(&globalCtx->colCtx, &pos, &actor->world.pos, &actor->prevPos, wallCheckRadius,
-                             &actor->wallPoly, &bgId, actor, wallCheckHeight) != 0))) ||
+             ((BgCheck_EntitySphVsWall3(&globalCtx->colCtx, &pos, &actor->world.pos, &actor->prevPos, wallCheckRadius,
+                                        &actor->wallPoly, &bgId, actor, wallCheckHeight) != 0))) ||
             ((flags & 0x80) &&
-             ((func_800C4DA4(&globalCtx->colCtx, &pos, &actor->world.pos, &actor->prevPos, wallCheckRadius,
-                             &actor->wallPoly, &bgId, actor, wallCheckHeight) != 0)))) {
+             ((BgCheck_EntitySphVsWall4(&globalCtx->colCtx, &pos, &actor->world.pos, &actor->prevPos, wallCheckRadius,
+                                        &actor->wallPoly, &bgId, actor, wallCheckHeight) != 0)))) {
             CollisionPoly* sp7C = actor->wallPoly;
 
             actor->bgCheckFlags |= 8;
@@ -1615,8 +1616,8 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
         f32 y;
 
         pos.y = actor->prevPos.y + 4.0f;
-        if (func_800C4F84(&globalCtx->colCtx, &y, &pos, (ceilingCheckHeight + sp94) - 4.0f, &D_801ED8B0, &D_801ED8B4,
-                          actor) != 0) {
+        if (BgCheck_EntityCheckCeiling(&globalCtx->colCtx, &y, &pos, (ceilingCheckHeight + sp94) - 4.0f, &D_801ED8B0,
+                                       &D_801ED8B4, actor)) {
             actor->bgCheckFlags |= 0x10;
             actor->world.pos.y = (y + sp94) - 4.0f;
         } else {
@@ -1631,7 +1632,8 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
         func_800B7678(globalCtx, actor, &pos, flags);
         y = actor->world.pos.y;
 
-        if (func_800CA1AC(globalCtx, &globalCtx->colCtx, actor->world.pos.x, actor->world.pos.z, &y, &waterbox) != 0) {
+        if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, actor->world.pos.x, actor->world.pos.z, &y,
+                                 &waterbox)) {
             actor->depthInWater = y - actor->world.pos.y;
             if (actor->depthInWater <= 0.0f) {
                 actor->bgCheckFlags &= ~(0x40 | 0x20);
@@ -1661,7 +1663,8 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
         WaterBox* waterbox;
         f32 y = actor->world.pos.y;
 
-        if (func_800CA1AC(globalCtx, &globalCtx->colCtx, actor->world.pos.x, actor->world.pos.z, &y, &waterbox) != 0) {
+        if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, actor->world.pos.x, actor->world.pos.z, &y,
+                                 &waterbox)) {
             actor->depthInWater = y - actor->world.pos.y;
 
             if (actor->depthInWater < 0.0f) {
@@ -2156,7 +2159,7 @@ void func_800B8EF4(GlobalContext* globalCtx, Actor* actor) {
             sfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
         }
     } else {
-        sfxId = func_800C9BDC(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
+        sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
     }
 
     func_8019F1C0(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
@@ -3836,7 +3839,7 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx) 
     sp48.y = arg0->y + 1.0f;
     sp48.z = arg0->z;
 
-    sp54 = func_800C4000(globalCtx, &globalCtx->colCtx, &sp44, &sp48);
+    sp54 = BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &sp44, &sp48);
     if (sp44 != NULL) {
         func_800C0094(sp44, arg0->x, sp54, arg0->z, &sp58);
         Matrix_SetCurrentState(&sp58);
