@@ -204,7 +204,7 @@ void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
         colHeader->waterBoxes = (WaterBox*)Lib_SegmentedToVirtual(colHeader->waterBoxes);
     }
 
-    BgCheck_Init(&globalCtx->colCtx, globalCtx, colHeader);
+    BgCheck_Allocate(&globalCtx->colCtx, globalCtx, colHeader);
 }
 
 // SceneTableEntry Header Command 0x04: Room List

@@ -472,17 +472,18 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
             this->unk_1C4 = 0.0f;
 
             if (!(this->unk_1E5 & 0x20)) {
-                CollisionPoly* sp6C;
+                CollisionPoly* poly;
                 Vec3f sp60;
                 s32 pad[2];
-                s32 sp54;
+                s32 bgId;
                 Vec3f sp48;
 
                 sp60.x = this->actor.world.pos.x;
                 sp60.y = this->actor.world.pos.y + 50.0f;
                 sp60.z = this->actor.world.pos.z;
 
-                temp_f14 = func_800C4188(globalCtx, &globalCtx->colCtx, &sp6C, &sp54, &this->actor, &sp60);
+                temp_f14 =
+                    BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &poly, &bgId, &this->actor, &sp60);
                 temp_f2 = temp_f14 - this->actor.world.pos.y;
 
                 if (fabsf(temp_f2) < (fabsf(this->actor.velocity.y) + 0.01f)) {
@@ -513,8 +514,8 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
         WaterBox* sp44;
         f32 sp40;
 
-        if (func_800CA1E8(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp40,
-                          &sp44)) {
+        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                   &sp40, &sp44)) {
             if ((this->actor.world.pos.y + this->unk_1DC) <= sp40) {
                 this->unk_1E5 |= 0x20;
                 if (sp40 < (this->unk_1DC + sp78)) {
@@ -1367,7 +1368,7 @@ void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx) {
             spC4.y = ptr->unk_00.y + 25.0f;
             spC4.z = ptr->unk_00.z;
 
-            ptr->unk_18 = func_800C411C(&globalCtx->colCtx, &ptr->unk_28, &spD0, &this->actor, &spC4);
+            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &ptr->unk_28, &spD0, &this->actor, &spC4);
 
             if (ptr->unk_10 <= 0.0f) {
                 Matrix_InsertRotation(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, 0);
@@ -1449,7 +1450,7 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnGoroiwa* this = THIS;
     Player* player = GET_PLAYER(globalCtx);
-    s32 sp60;
+    s32 bgId;
     s32 sp5C = false;
     Vec3f sp50;
     f32 sp4C;
@@ -1511,10 +1512,10 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
                     sp50.x = this->actor.world.pos.x;
                     sp50.y = this->actor.world.pos.y + 50.0f;
                     sp50.z = this->actor.world.pos.z;
-                    this->actor.floorHeight =
-                        func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &sp60, &this->actor, &sp50);
+                    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly,
+                                                                          &bgId, &this->actor, &sp50);
                     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
-                        this->actor.floorBgId = sp60;
+                        this->actor.floorBgId = bgId;
                         if (this->actor.world.pos.y <= (this->actor.floorHeight + 2.0f)) {
                             this->actor.bgCheckFlags |= 1;
                         } else {

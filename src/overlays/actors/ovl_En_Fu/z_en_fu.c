@@ -264,7 +264,7 @@ void func_80961D7C(GlobalContext* globalCtx) {
             EnBom* bomb = (EnBom*)explosive;
 
             if (bomb->actor.floorBgId != BGCHECK_SCENE) {
-                DynaPolyActor* fuKago = BgCheck_GetActorOfMesh(&globalCtx->colCtx, bomb->actor.floorBgId);
+                DynaPolyActor* fuKago = DynaPoly_GetActor(&globalCtx->colCtx, bomb->actor.floorBgId);
 
                 if ((fuKago != NULL) && (fuKago->actor.id == ACTOR_EN_FU_KAGO)) {
                     Math_SmoothStepToF(&bomb->actor.world.pos.x, fuKago->actor.world.pos.x, 0.1f, 1.0f, 0.5f);

@@ -752,7 +752,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
             spD0.y = 2000.0f;
         }
 
-        temp_f0 = func_800C3FA0(&globalCtx->colCtx, &spDC, &spD0);
+        temp_f0 = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &spDC, &spD0);
         if (((this->unk_017C.y < temp_f0) && (temp_f0 <= this->unk_0188.y)) ||
             ((temp_f0 < this->unk_017C.y) && (this->unk_0188.y <= temp_f0))) {
             this->unk_0170 = this->unk_017C;
@@ -1057,8 +1057,8 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                     spD0.x = this->unk_0170.x + sp90.x;
                     spD0.y = this->unk_0170.y + (1000.0f * D_809DF5B0);
                     spD0.z = this->unk_0170.z + sp90.z;
-                    if (func_800C40B4(&globalCtx->colCtx, &sp8C, &sp88, &spD0) != BGCHECK_Y_MIN) {
-                        spA0 = func_800C3FA0(&globalCtx->colCtx, &sp8C, &spD0);
+                    if (BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &sp8C, &sp88, &spD0) != BGCHECK_Y_MIN) {
+                        spA0 = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp8C, &spD0);
                         Matrix_GetStateTranslationAndScaledZ(5.0f * D_809DF5B0, &sp70);
                         sp70.y = 2.0f * D_809DF5B0;
                         sp64.y = 0.3f * D_809DF5B0;
@@ -1183,7 +1183,8 @@ void func_809DC218(Actor* thisx, GlobalContext* globalCtx) {
             sp24.y = 2000.0f;
         }
 
-        if ((this->actor.focus.pos.y < func_800C3FA0(&globalCtx->colCtx, &sp20, &sp24)) || (D_809E0422 != 0)) {
+        if ((this->actor.focus.pos.y < BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp20, &sp24)) ||
+            (D_809E0422 != 0)) {
             this->actor.flags &= ~1;
         } else {
             this->actor.flags |= 1;

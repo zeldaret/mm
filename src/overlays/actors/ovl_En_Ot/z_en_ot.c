@@ -138,7 +138,7 @@ void func_80B5B2E0(GlobalContext* globalCtx, Vec3f* pos, s16 params, Vec3f* vec,
 void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnOt* this = THIS;
-    s32 sp74;
+    s32 bgId;
     s32 pad2;
     Vec3f sp64;
     Vec3f sp58;
@@ -183,9 +183,9 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             switch (this->unk_344) {
                 case 0:
-                    this->actor.world.pos.y =
-                        func_800C40B4(&globalCtx->colCtx, &this->actor.floorPoly, &sp74, &this->actor.world.pos) +
-                        50.0f;
+                    this->actor.world.pos.y = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &this->actor.floorPoly,
+                                                                          &bgId, &this->actor.world.pos) +
+                                              50.0f;
                     if (gSaveContext.weekEventReg[84] & 0x10) {
                         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
                         Matrix_GetStateTranslationAndScaledZ(52.519997f, &sp64);
@@ -242,7 +242,8 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
                     } else {
                         Player* player = GET_PLAYER(globalCtx);
 
-                        if (func_800C9B90(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
+                        if (SurfaceType_IsHorseBlocked(&globalCtx->colCtx, player->actor.floorPoly,
+                                                       player->actor.floorBgId)) {
                             Actor_SetScale(&this->actor, 0.0f);
                             func_80B5C910(this, globalCtx);
                         } else {
@@ -1007,7 +1008,7 @@ void func_80B5DB6C(Actor* thisx, GlobalContext* globalCtx) {
             s32 sp4C = false;
 
             if (gSaveContext.weekEventReg[13] & 1) {
-                if (!func_800C9B90(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
+                if (!SurfaceType_IsHorseBlocked(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
                     sp4C = true;
                 }
             }
@@ -1021,7 +1022,7 @@ void func_80B5DB6C(Actor* thisx, GlobalContext* globalCtx) {
                 temp->actor.cutscene = this->actor.cutscene;
                 this->unk_32C |= 8;
             }
-        } else if (func_800C9B90(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
+        } else if (SurfaceType_IsHorseBlocked(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
             player->unk_B2B = 29;
         }
     }

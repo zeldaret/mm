@@ -251,13 +251,13 @@ void func_80893BCC(EnTite* this, GlobalContext* globalCtx) {
     s32 j;
 
     if (this->actor.bgCheckFlags & 2) {
-        u32 temp_v0 = func_800C9BB8(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        u32 surface = func_800C9BB8(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if ((temp_v0 == 0) || (temp_v0 == 1)) {
+        if ((surface == COLPOLY_SURFACE_GROUND) || (surface == COLPOLY_SURFACE_SAND)) {
             for (i = 5; i < ARRAY_COUNT(this->unk_2D0); i++) {
                 func_800BBFB0(globalCtx, &this->unk_2D0[i], 1.0f, 2, 80, 15, 1);
             }
-        } else if (temp_v0 == 14) {
+        } else if (surface == COLPOLY_SURFACE_SNOW) {
             Vec3f* ptr;
 
             for (i = 5; i < ARRAY_COUNT(this->unk_2D0); i++) {

@@ -107,7 +107,7 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjRaillift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjRaillift* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjRaillift_DoNothing(ObjRaillift* this, GlobalContext* globalCtx) {
