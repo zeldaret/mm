@@ -93,8 +93,6 @@ vrom_variables = list() # (name,addr)
 functions_ast = None
 variables_ast = None
 
-vars_cache = {} # (address: variable + addend)
-
 def proper_name(symbol, in_data=False, is_symbol=True):
     # hacks
     if symbol == 0x809C46F0: # ovl_En_Encount4 fake symbol at the very end of the data section
@@ -125,8 +123,6 @@ def proper_name(symbol, in_data=False, is_symbol=True):
             return [name for name,addr in vrom_variables if addr == symbol][0]
 
     # addends
-    #if is_symbol and symbol in vars_cache.keys():
-    #    return vars_cache[symbol]
     if is_symbol:
         for vram_iter in variables_ast.irange(maximum=symbol, reverse=True):
             symbolInfo = variables_ast[vram_iter]
@@ -1128,10 +1124,6 @@ with open("tools/disasm/variables.txt", "r") as infile:
 
 # Precompute variable addends for all variables, this uses a lot of memory but the lookups later are fast
 for var in sorted(variables_ast.keys()):
-    #for i in range(var, var + variables_ast[var][3], 1):
-    #    addend = i - var
-    #    assert addend >= 0
-    #    vars_cache.update({i : f"{variables_ast[var][0]}" + (f" + 0x{addend:X}" if addend > 0 else "")})
     # also add to floats, doubles & strings
     var_type = variables_ast[var][1]
 
