@@ -86,7 +86,15 @@ void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122EEC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122F28.s")
+void func_80122F28(Player* player) {
+    if ((player->actor.category == 2) && (!(player->stateFlags1 & (0x20000000 | 0xA00000 | 0xC00))) && (!(player->stateFlags2 & 1))) {
+        if (player->doorType < 0) {
+            ActorCutscene_SetIntentToPlay(0x7C);
+        } else {
+            ActorCutscene_SetIntentToPlay(0x7D);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122F9C.s")
 

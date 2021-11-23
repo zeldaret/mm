@@ -2188,7 +2188,7 @@ void func_801229A0(GlobalContext* globalCtx, Player* player);
 // void func_80122D44(void);
 // void func_80122ED8(void);
 // void func_80122EEC(void);
-void func_80122F28(Player* player, GlobalContext* globalCtx, Actor* actor);
+void func_80122F28(Player* player);
 // void func_80122F9C(void);
 // void func_80122FCC(void);
 // void func_8012300C(void);
