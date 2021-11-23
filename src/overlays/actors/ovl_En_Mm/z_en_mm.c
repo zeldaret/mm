@@ -148,7 +148,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
             temp_f2 = sqrtf(SQ(temp_f14) + SQ(temp_f12));
 
             if ((temp_f2 < this->actor.speedXZ) ||
-                (func_800C9C74(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
+                (SurfaceType_GetSlope(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
                 this->actor.speedXZ = CLAMP_MAX(temp_f2, 16.0f);
                 this->actor.world.rot.y = Math_FAtan2F(temp_f12, temp_f14);
             }
