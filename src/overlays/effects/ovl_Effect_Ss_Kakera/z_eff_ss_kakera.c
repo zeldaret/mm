@@ -312,7 +312,7 @@ void func_8097E7E0(EffectSs* this, GlobalContext* globalCtx) {
                 break;
             case 1:
                 if ((this->velocity.y < 0.0f) &&
-                    (func_800C5A20(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->regs[4] >> 2) & 3]))) {
+                    (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->regs[4] >> 2) & 3]))) {
                     this->velocity.x *= func_8097DE30(0.9f, 0.2f);
                     this->velocity.y *= -0.8f;
                     this->velocity.z *= func_8097DE30(0.9f, 0.2f);
@@ -322,7 +322,7 @@ void func_8097E7E0(EffectSs* this, GlobalContext* globalCtx) {
                 }
                 break;
             case 2:
-                if (func_800C5A20(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->regs[4] >> 2) & 3])) {
+                if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &this->pos, D_8097EB64[(this->regs[4] >> 2) & 3])) {
                     this->regs[8] = 0;
                 }
                 break;
