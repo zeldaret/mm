@@ -41,9 +41,9 @@ u32 EffectSsKakera_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     if (params->dList != NULL) {
         this->gfx = params->dList;
         switch (params->objId) {
-            case 1:
-            case 2:
-            case 3:
+            case GAMEPLAY_KEEP:
+            case GAMEPLAY_FIELD_KEEP:
+            case GAMEPLAY_DANGEON_KEEP:
                 this->regs[10] = KAKERA_OBJECT_DEFAULT;
                 break;
             default:
@@ -161,9 +161,7 @@ void func_8097E19C(EffectSs* this) {
 }
 
 void func_8097E34C(EffectSs* this) {
-    this->accel.z = 0.0f;
-    this->accel.y = 0.0f;
-    this->accel.x = 0.0f;
+    this->accel.x = this->accel.y = this->accel.z = 0.0f;
 }
 
 f32 func_8097E368(f32 arg0, s32 arg1) {
@@ -297,12 +295,8 @@ void func_8097E7E0(EffectSs* this, GlobalContext* globalCtx) {
                 this->regs[9] = 0;
                 this->regs[0] = 0;
                 this->regs[4] &= ~0x60;
-                this->accel.z = 0.0f;
-                this->accel.y = 0.0f;
-                this->accel.x = 0.0f;
-                this->velocity.z = 0.0f;
-                this->velocity.y = 0.0f;
-                this->velocity.x = 0.0f;
+                this->accel.x = this->accel.y = this->accel.z = 0.0f;
+                this->velocity.x = this->velocity.y = this->velocity.z = 0.0f;
                 this->regs[5] = this->regs[9];
                 this->regs[1] = this->regs[9];
             }
@@ -339,16 +333,16 @@ void func_8097E7E0(EffectSs* this, GlobalContext* globalCtx) {
 void EffectSsKakera_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     switch (((this->regs[4] >> 5) & 3) << 5) {
         case 0x20:
-            this->regs[2] += 1147;
-            this->regs[3] += 313;
+            this->regs[2] += 0x47B;
+            this->regs[3] += 0x139;
             break;
         case 0x40:
-            this->regs[2] += 6780;
-            this->regs[3] += 1147;
+            this->regs[2] += 0x1A7C;
+            this->regs[3] += 0x47B;
             break;
         case 0x60:
-            this->regs[2] += 16167;
-            this->regs[3] += 3233;
+            this->regs[2] += 0x3F27;
+            this->regs[3] += 0xCA1;
             break;
     }
     func_8097E19C(this);
