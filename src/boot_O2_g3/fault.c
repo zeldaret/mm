@@ -575,15 +575,12 @@ void Fault_DrawMemDump(u32 pc, u32 sp, u32 unk0, u32 unk1) {
     sFaultContext->faultActive = 1;
 }
 
-#ifdef NON_MATCHING
-// T registers regalloc in the while loop
 void Fault_FindNextStackCall(uintptr_t* spPtr, uintptr_t* pcPtr, uintptr_t* raPtr) {
     uintptr_t sp = *spPtr;
     uintptr_t pc = *pcPtr;
     uintptr_t ra = *raPtr;
     u32 lastOpc;
-    u32 opc;
-    u32 opcHi;
+    u16 opcHi;
     s16 opcLo;
     u32 imm;
 
@@ -601,15 +598,15 @@ void Fault_FindNextStackCall(uintptr_t* spPtr, uintptr_t* pcPtr, uintptr_t* raPt
 
     lastOpc = 0;
     while (true) {
-        opc = *(uintptr_t*)pc;
-        opcHi = (*(uintptr_t*)pc >> 16) & 0xFFFF;
-        opcLo = opc & 0xFFFF;
+        opcHi = *(uintptr_t*)pc >> 16;
+        opcLo = *(uintptr_t*)pc & 0xFFFF;
         imm = opcLo;
+
         if (opcHi == 0x8FBF) {
             ra = *(uintptr_t*)(sp + imm);
         } else if (opcHi == 0x27BD) {
             sp += imm;
-        } else if (opc == 0x42000018) {
+        } else if (*(uintptr_t*)pc == 0x42000018) {
             sp = 0;
             pc = 0;
             ra = 0;
@@ -618,11 +615,11 @@ void Fault_FindNextStackCall(uintptr_t* spPtr, uintptr_t* pcPtr, uintptr_t* raPt
         if (lastOpc == 0x3E00008) {
             pc = ra;
             goto end;
-        } else if (lastOpc >> 26 == 2) {
+        } else if ((lastOpc >> 26) == 2) {
             pc = pc >> 28 << 28 | lastOpc << 6 >> 4;
             goto end;
         }
-        lastOpc = opc;
+        lastOpc = *(uintptr_t*)pc;
         pc += 4;
     }
 
@@ -631,9 +628,6 @@ end:
     *pcPtr = pc;
     *raPtr = ra;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/fault/Fault_FindNextStackCall.s")
-#endif
 
 void Fault_DrawStackTrace(OSThread* t, u32 flags) {
     s32 y;
