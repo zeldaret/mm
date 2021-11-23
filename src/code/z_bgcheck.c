@@ -4028,7 +4028,7 @@ void BgCheck_InitCollisionHeaders(CollisionContext* colCtx, GlobalContext* globa
     for (i = 0; i < BG_ACTOR_MAX; i++) {
         flag = dyna->bgActorFlags[i];
         if ((flag & 1) && !(flag & 2)) {
-            Actor_SetObjectSegment(globalCtx, dyna->bgActors[i].actor);
+            Actor_SetObjectDependency(globalCtx, dyna->bgActors[i].actor);
             CollisionHeader_SegmentedToVirtual(dyna->bgActors[i].colHeader);
         }
     }
