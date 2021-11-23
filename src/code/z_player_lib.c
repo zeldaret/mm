@@ -43,11 +43,36 @@ s32 func_80122760(GlobalContext* globalCtx, PlayerLib_80122744_arg1* arg1, f32 a
     return 1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122868.s")
+void func_80122868(GlobalContext* globalCtx, Player* player) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801229A0.s")
+    if (player->invincibilityTimer > 0) {
+        s32 phi_v0 = 50 - player->invincibilityTimer;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801229EC.s")
+        phi_v0 = CLAMP(phi_v0, 8, 40);
+
+        player->unk_B5F += phi_v0;
+        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0xFF, 0, 0, 0, 0, 0xFA0 - (s32) (Math_CosS((player->unk_B5F << 8)) * 2000.0f));
+    } else if (gSaveContext.unk_1016 != 0) {
+        player->unk_B5F += 10;
+        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0xFF, 0, 0, 0xFA0 - (s32) (Math_CosS((player->unk_B5F << 8)) * 2000.0f));
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_801229A0(GlobalContext* globalCtx, Player* player) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    if ((gSaveContext.unk_1016 != 0) || (player->invincibilityTimer > 0)) {
+        POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801229FC.s")
 
