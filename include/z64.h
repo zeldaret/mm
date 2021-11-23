@@ -1567,13 +1567,13 @@ typedef struct {
     /* 0x8 */ s32 unk8;
 } struct_80133038_arg2; // size = 0xC
 
-typedef struct player_lib_struct {
-    char unk0;
-    char unk1;
-    char unk2;
-    char unk3;
-    Vec3s* unk4;
-} player_lib_struct;
+typedef struct PlayerLib_80122744_arg1 {
+    /* 0x00 */ s8 unk_00;
+    /* 0x01 */ s8 unk_01;
+    /* 0x02 */ s8 unk_02;
+    /* 0x03 */ s8 unk_03;
+    /* 0x04 */ Vec3s* unk_04;
+} PlayerLib_80122744_arg1; // size = 0x08
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 

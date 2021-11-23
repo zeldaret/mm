@@ -2177,8 +2177,8 @@ void Path_CopyLastPoint(Path* path, Vec3f* dest);
 // UNK_TYPE4 func_80122670(s32* param_1, Input* input);
 
 // void func_801226E0(void);
-s32 func_80122744(GlobalContext* globalCtx, player_lib_struct* arg1, u32 arg2, Vec3s* arg3);
-s32 func_80122760(GlobalContext* globalCtx, UNK_PTR arg1, f32 arg2);
+s32 func_80122744(GlobalContext* globalCtx, PlayerLib_80122744_arg1* arg1, u32 arg2, Vec3s* arg3);
+s32 func_80122760(GlobalContext* globalCtx, PlayerLib_80122744_arg1* arg1, f32 arg2);
 void func_80122868(GlobalContext* globalCtx, Player* player);
 void func_801229A0(GlobalContext* globalCtx, Player* player);
 // void func_801229EC(void);

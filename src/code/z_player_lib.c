@@ -12,14 +12,36 @@ s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
     return arg1;
 }
 
-s32 func_80122744(GlobalContext* globalCtx, player_lib_struct* arg1, u32 arg2, Vec3s* arg3) {
-    arg1->unk0 = arg2;
-    arg1->unk1 = 0;
-    arg1->unk4 = arg3;
+s32 func_80122744(GlobalContext* globalCtx, PlayerLib_80122744_arg1* arg1, u32 arg2, Vec3s* arg3) {
+    arg1->unk_00 = arg2;
+    arg1->unk_01 = 0;
+    arg1->unk_04 = arg3;
     return 1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122760.s")
+s32 func_80122760(GlobalContext* globalCtx, PlayerLib_80122744_arg1* arg1, f32 arg2) {
+    if (arg1->unk_01 < arg1->unk_00) {
+        Player* player = GET_PLAYER(globalCtx);
+        Vec3f sp30;
+        s32 pad;
+        s16 yaw;
+        f32 distXZ;
+
+        Math_Vec3s_ToVec3f(&sp30, &arg1->unk_04[arg1->unk_01]);
+        yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &sp30);
+        func_800B6F20(globalCtx, globalCtx->actorCtx.pad26C, arg2, yaw);
+        globalCtx->actorCtx.unk268 = 1;
+        distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &sp30);
+
+        if ((fabsf(player->actor.world.pos.y - sp30.y) < 50.0f) && (distXZ < arg2)) {
+            arg1->unk_01++;
+        }
+
+        return 0;
+    }
+
+    return 1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122868.s")
 
