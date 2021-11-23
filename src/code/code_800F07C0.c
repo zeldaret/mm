@@ -247,7 +247,7 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThr
                                                     : (NA_SE_PL_WALK_WATER1 - SFX_FLAG)) +
                 SFX_FLAG;
     } else {
-        sfxId = func_800C9BDC(&globalCtx->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
+        sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
     }
     enHy->isLeftFootOnGround = isFootOnGround = func_8013DB90(globalCtx, &enHy->leftFootPos, distAboveThreshold);
     if (enHy->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
