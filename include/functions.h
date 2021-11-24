@@ -2148,7 +2148,7 @@ void func_80122F28(Player* player);
 // void func_80122F9C(void);
 // void func_80122FCC(void);
 // void func_8012300C(void);
-void func_8012301C(s32 iParm1, GlobalContext* globalCtx);
+void func_8012301C(Player* player, GlobalContext* globalCtx);
 void func_80123140(GlobalContext* globalCtx, Player* player);
 s32 Player_InBlockingCsMode(GameState* gameState, Player* player);
 s32 Player_InCsMode(GameState* gameState);
@@ -2865,11 +2865,13 @@ void func_801588D0(GlobalContext* globalCtx, s16 param_2);
 // void func_8015E750(void);
 void func_8015E7EC(GlobalContext* globalCtx, UNK_PTR puParm2);
 // void func_8015F8A8(UNK_TYPE4 ctxt);
+
 // void func_80160A90(void);
-// void func_80160AF8(void);
+void func_80160AF8(Actor* thisx, GlobalContext* globalCtx);
 // void func_80160B40(void);
-// void func_80160B80(void);
-// void func_80160BC0(void);
+void func_80160B80(Actor* thisx, GlobalContext* globalCtx);
+void func_80160BC0(Actor* thisx, GlobalContext* globalCtx);
+
 void ShrinkWindow_SetLetterboxTarget(s32 target);
 s32 ShrinkWindow_GetLetterboxTarget(void);
 void ShrinkWindow_SetLetterboxMagnitude(s32 magnitude);

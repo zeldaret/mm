@@ -102,7 +102,31 @@ void func_80122F28(Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012300C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012301C.s")
+void func_8012301C(Player* player, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    s32 pad;
+
+    player->unk_AE7++;
+
+    if (player->unk_AE7 == 2) {
+        s16 objectId = gLinkFormObjectIndexes[((void)0, gSaveContext.playerForm)];
+
+        gActorOverlayTable->initInfo->objectId = objectId;
+        func_8012F73C(&globalCtx->objectCtx, player->actor.objBankIndex, objectId);
+        player->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, 1);
+    } else if (player->unk_AE7 >= 3) {
+        s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, gActorOverlayTable->initInfo->objectId);
+
+        if (Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
+            player->actor.objBankIndex = objBankIndex;
+            player->actor.shape.rot.z = gSaveContext.playerForm + 1;
+            player->actor.init = func_80160AF8;
+            player->actor.update = func_80160B80;
+            player->actor.draw = func_80160BC0;
+            gSaveContext.equippedMask = 0;
+        }
+    }
+}
 
 // OoT's Player_SetBootData?
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123140.s")
