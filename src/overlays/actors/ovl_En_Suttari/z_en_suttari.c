@@ -201,14 +201,14 @@ void EnSuttari_UpdateTime(void) {
 }
 
 s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
-    Vec3f sp2C;
+    Vec3f pos;
     s32 pad;
-    s32 sp24;
+    CollisionPoly* poly;
 
-    sp2C.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
-    sp2C.y = this->actor.world.pos.y + 100.0f;
-    sp2C.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
-    if (func_800C4000(globalCtx, &globalCtx->colCtx, &sp24, &sp2C) > -500.0f) {
+    pos.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
+    pos.y = this->actor.world.pos.y + 100.0f;
+    pos.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
+    if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &pos) > -500.0f) {
         return false;
     }
     return true;
@@ -703,7 +703,7 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     this->unk434 = sp44 - unkStruct->unk4;
     this->unk436 = unkStruct->unk8 - unkStruct->unk4;
     if (unkStruct->unk0 != 10 && unkStruct->unk0 != 11) {
-        sp48->unk1A7 = 0x4B;
+        sp48->unk_1A7 = 0x4B;
     }
     Math_Vec3f_Copy(&this->unk438, &sp38);
     Math_Vec3f_Copy(&this->unk444, &sp2C);

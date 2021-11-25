@@ -195,8 +195,6 @@ beginseg
     include "build/src/libultra/io/pfsisplug.o"
     include "build/src/libultra/voice/voicegetstatus.o"
     include "build/src/libultra/io/cartrominit.o"
-    include "build/data/boot/cartrominit.data.o"
-    include "build/data/boot/cartrominit.bss.o"
     include "build/src/libultra/gu/guS2DInitBg.o"
     include "build/data/boot/guS2DInitBg.data.o"
     include "build/src/libultra/io/pfsselectbank.o"
@@ -453,8 +451,6 @@ beginseg
     include "build/data/code/z_actor.bss.o"
     include "build/src/code/z_actor_dlftbls.o"
     include "build/src/code/z_bgcheck.o"
-    include "build/data/code/z_bgcheck.data.o"
-    include "build/data/code/z_bgcheck.bss.o"
     include "build/src/code/z_bg_collect.o"
     include "build/src/code/z_bg_item.o"
     include "build/src/code/z_camera.o"
@@ -3755,9 +3751,7 @@ beginseg
     name "ovl_En_Tk"
     compress
     include "build/src/overlays/actors/ovl_En_Tk/z_en_tk.o"
-    include "build/data/ovl_En_Tk/ovl_En_Tk.data.o"
-    include "build/data/ovl_En_Tk/ovl_En_Tk.bss.o"
-    include "build/data/ovl_En_Tk/ovl_En_Tk.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Tk/ovl_En_Tk_reloc.o"
 endseg
 
 beginseg

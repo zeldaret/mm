@@ -77,13 +77,6 @@ typedef struct {
 } ActorCutscene; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ s16 polyStartIndex;
-    /* 0x2 */ s16 ceilingNodeHead;
-    /* 0x4 */ s16 wallNodeHead;
-    /* 0x6 */ s16 floorNodeHead;
-} ActorMeshPolyLists; // size = 0x8
-
-typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
@@ -102,49 +95,6 @@ typedef struct {
     /* 0x04 */ void* start;
     /* 0x08 */ void* end;
 } PolygonType2; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ u16 floorHead;
-    /* 0x2 */ u16 wallHead;
-    /* 0x4 */ u16 ceilingHead;
-} BgMeshSubdivision; // size = 0x6
-
-typedef struct {
-    /* 0x0 */ u32 attributes[2];
-} BgPolygonAttributes; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 polyIndex;
-    /* 0x2 */ u16 next;
-} BgPolygonLinkedListNode; // size = 0x4
-
-typedef struct {
-    /* 0x0 */ u16 maxNodes;
-    /* 0x2 */ u16 reservedNodes;
-    /* 0x4 */ BgPolygonLinkedListNode* nodes;
-    /* 0x8 */ u8* unk8;
-} BgScenePolygonLists; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ s16 sceneNumber;
-    /* 0x2 */ UNK_TYPE1 pad2[0x2];
-    /* 0x4 */ u32 maxMemory;
-} BgSpecialSceneMaxMemory; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 sceneId;
-    /* 0x2 */ s16 maxNodes;
-    /* 0x4 */ s16 maxPolygons;
-    /* 0x6 */ s16 maxVertices;
-} BgSpecialSceneMaxObjects; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 sceneNumber;
-    /* 0x2 */ s16 xSubdivisions;
-    /* 0x4 */ s16 ySubdivisions;
-    /* 0x6 */ s16 zSubdivisions;
-    /* 0x8 */ s32 unk8;
-} BgSpecialSceneMeshSubdivision; // size = 0xC
 
 typedef struct {
     /* 0x0 */ s16 func;
@@ -460,27 +410,11 @@ typedef struct {
 } s80874650; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ Vec3f scale;
-    /* 0x0C */ Vec3s rotation;
-    /* 0x14 */ Vec3f pos;
-} ActorMeshParams; // size = 0x20
-
-typedef struct {
-    /* 0x0 */ BgPolygonLinkedListNode* nodes;
-    /* 0x4 */ u32 nextFreeNode;
-    /* 0x8 */ s32 maxNodes;
-} BgPolygonLinkedList; // size = 0xC
-
-typedef struct {
     /* 0x00 */ f32 x[4];
     /* 0x10 */ f32 y[4];
     /* 0x20 */ f32 z[4];
     /* 0x30 */ f32 w[4];
 } z_Matrix; // size = 0x40
-
-typedef struct {
-    /* 0x0 */ Vec3s pos;
-} BgVertex; // size = 0x6
 
 typedef union {
     F3DVertexColor color;
@@ -1339,7 +1273,7 @@ struct TargetContext {
     /* 0x50 */ TargetContextEntry unk50[3];
     /* 0x8C */ Actor* unk8C;
     /* 0x90 */ Actor* unk90;
-    /* 0x94 */ UNK_TYPE1 pad94[0x4];
+    /* 0x94 */ Actor* unk_94;
 }; // size = 0x98
 
 struct s800B948C {

@@ -155,8 +155,8 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_NONE;
         }
     } else {
-        if (func_800CA1E8(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &waterSurface,
-                          &waterBox) &&
+        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &waterSurface,
+                                   &waterBox) &&
             ((waterSurface - thisx->world.pos.y) > OBJ_SYOKUDAI_FLAME_HEIGHT)) {
 
             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_OUT;
