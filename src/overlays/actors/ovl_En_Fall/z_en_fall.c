@@ -127,8 +127,8 @@ void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
     s32 objectIndex;
 
-    this->unk_150 = 0.0f;
-    this->unk_154 = 0;
+    this->eyeGlowIntensity = 0.0f;
+    this->flags = 0;
     switch (EN_FALL_SCALE(&this->actor)) {
         case 1:
             this->scale = 0.08f;
@@ -223,7 +223,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 this->actor.draw = EnFall_FireBall_Draw;
                 this->scale = 1.0f;
                 this->actor.shape.rot.z = 0;
-                this->unk_150 = 0.0f;
+                this->fireBallIntensity = 0.0f;
                 this->unk_158 = 0x64;
                 this->actor.shape.rot.x = this->actor.shape.rot.z;
                 break;
@@ -346,12 +346,12 @@ void EnFall_StoppedOpenMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCont
     if (func_800EE29C(globalCtx, 0x85)) {
         switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0) {
             case 3:
-                if (this->unk_150 == 0.0f) {
+                if (this->eyeGlowIntensity == 0.0f) {
                     Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_EYE_FLASH);
                 }
-                this->unk_150 += 0.033333335f;
-                if (this->unk_150 > 1.0f) {
-                    this->unk_150 = 1.0f;
+                this->eyeGlowIntensity += 0.033333335f;
+                if (this->eyeGlowIntensity > 1.0f) {
+                    this->eyeGlowIntensity = 1.0f;
                 }
                 break;
             case 4:
@@ -535,10 +535,10 @@ void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (func_800EE29C(globalCtx, 0x1C2)) {
         this->actor.draw = EnFall_FireBall_Draw;
-        if (this->unk_154 & 1) {
-            this->unk_150 += 0.01f;
-            if (this->unk_150 > 1.0f) {
-                this->unk_150 = 1.0f;
+        if (this->flags & EN_FALL_FLAG_FIRE_BALL_BRIGHTENS) {
+            this->fireBallIntensity += 0.01f;
+            if (this->fireBallIntensity > 1.0f) {
+                this->fireBallIntensity = 1.0f;
             }
         }
         func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x1C2));
@@ -567,7 +567,7 @@ void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
                 EnFall_FireBall_UpdateVertexNormals(this->unk_158 * 0.01f);
                 break;
             case 4:
-                this->unk_154 |= 1;
+                this->flags |= EN_FALL_FLAG_FIRE_BALL_BRIGHTENS;
                 break;
             case 5:
                 break;
@@ -650,15 +650,15 @@ void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
     if (func_800EE29C(globalCtx, 0x1C2) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C2)]->unk0 == 5) {
-        if (!(this->unk_154 & 2)) {
+        if (!(this->flags & EN_FALL_FLAG_FIRE_RING_APPEARS)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
         }
-        this->unk_154 |= 2;
+        this->flags |= EN_FALL_FLAG_FIRE_RING_APPEARS;
     }
-    if (this->unk_154 & 2) {
-        this->unk_150 += 0.033333335f;
-        if (this->unk_150 > 1.0f) {
-            this->unk_150 = 1.0f;
+    if (this->flags & EN_FALL_FLAG_FIRE_RING_APPEARS) {
+        this->fireRingOpacity += 0.033333335f;
+        if (this->fireRingOpacity > 1.0f) {
+            this->fireRingOpacity = 1.0f;
         }
         if (this->actor.scale.x < 18.0f) {
             this->actor.scale.x += 0.2f;
@@ -681,7 +681,7 @@ void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     Matrix_MultiplyVector3fByState(D_80A6E588, &this->actor.focus.pos);
-    temp_v1 = (this->unk_150 * 200.0f) + 40.0f;
+    temp_v1 = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, temp_v1, temp_v1, temp_v1, 255); // this lights up the eyes
     gSPDisplayList(POLY_OPA_DISP++, D_060077F0);
 
@@ -696,7 +696,7 @@ void EnFall_OpenMouthMoon_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    temp_v1 = (this->unk_150 * 200.0f) + 40.0f;
+    temp_v1 = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, temp_v1, temp_v1, temp_v1, 255);
     gSPDisplayList(POLY_OPA_DISP++, D_06002970);
 
@@ -715,7 +715,7 @@ void EnFall_LodMoon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 20, 25, 30, 0, 0x3E7, 0x3200);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH);
-    temp_v1 = (this->unk_150 * 200.0f) + 40.0f;
+    temp_v1 = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, temp_v1, temp_v1, temp_v1, 255);
     gSPDisplayList(POLY_OPA_DISP++, D_060010E0);
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH);
@@ -759,19 +759,19 @@ void EnFall_FireBall_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    this->unk_15C += (s32)(4.0f + (this->unk_150 * 12.0f));
-    this->unk_15E += (s32)(2.0f + (this->unk_150 * 6.0f));
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, (s32)(((1.0f - this->unk_150) * 160.0f) + (255.0f * this->unk_150)),
-                    (s32)((70.0f * (1.0f - this->unk_150)) + (255.0f * this->unk_150)),
-                    (s32)(70.0f * (1.0f - this->unk_150)), 255);
-    gDPSetEnvColor(POLY_XLU_DISP++, (s32)(((1.0f - this->unk_150) * 50.0f) + (200.0f * this->unk_150)),
-                   (s32)(20.0f * (1.0f - this->unk_150)), (s32)(20.0f * (1.0f - this->unk_150)), 255);
+    this->unk_15C += (s32)(4.0f + (this->fireBallIntensity * 12.0f));
+    this->unk_15E += (s32)(2.0f + (this->fireBallIntensity * 6.0f));
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, (s32)(((1.0f - this->fireBallIntensity) * 160.0f) + (255.0f * this->fireBallIntensity)),
+                    (s32)((70.0f * (1.0f - this->fireBallIntensity)) + (255.0f * this->fireBallIntensity)),
+                    (s32)(70.0f * (1.0f - this->fireBallIntensity)), 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, (s32)(((1.0f - this->fireBallIntensity) * 50.0f) + (200.0f * this->fireBallIntensity)),
+                   (s32)(20.0f * (1.0f - this->fireBallIntensity)), (s32)(20.0f * (1.0f - this->fireBallIntensity)), 255);
     gSPSegment(POLY_XLU_DISP++, 0x09,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames, -this->unk_15E, 0x40, 0x40, 1,
-                                -gameplayFrames, -this->unk_15C, 0x40, 0x40));
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames, -this->unk_15E, 64, 64, 1,
+                                -gameplayFrames, -this->unk_15C, 64, 64));
     gSPSegment(POLY_XLU_DISP++, 0x0A,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames * 2, -this->unk_15C, 0x40, 0x40, 1,
-                                -gameplayFrames * 2, -this->unk_15C, 0x40, 0x40));
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames * 2, -this->unk_15C, 64, 64, 1,
+                                -gameplayFrames * 2, -this->unk_15C, 64, 64));
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
     gSPDisplayList(POLY_XLU_DISP++, D_060011D0);
@@ -810,9 +810,9 @@ void EnFall_FireRing_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFall* this = THIS;
 
-    if (!(this->unk_150 <= 0.0f)) {
-        if (this->unk_150 > 1.0f) {
-            this->unk_150 = 1.0f;
+    if (!(this->fireRingOpacity <= 0.0f)) {
+        if (this->fireRingOpacity > 1.0f) {
+            this->fireRingOpacity = 1.0f;
         }
         OPEN_DISPS(globalCtx->state.gfxCtx);
         AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&D_06004E38));
@@ -820,7 +820,7 @@ void EnFall_FireRing_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
         gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(this->unk_150 * 255.0f));
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(this->fireRingOpacity * 255.0f));
         gSPDisplayList(POLY_XLU_DISP++, D_06003C30);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

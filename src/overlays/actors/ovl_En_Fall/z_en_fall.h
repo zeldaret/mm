@@ -6,6 +6,9 @@
 #define EN_FALL_SCALE(thisx) ((thisx)->params & 0x7F)
 #define EN_FALL_TYPE(thisx) (((thisx)->params & 0xF80) >> 7)
 
+#define EN_FALL_FLAG_FIRE_BALL_BRIGHTENS (1 << 0)
+#define EN_FALL_FLAG_FIRE_RING_APPEARS (1 << 1)
+
 typedef enum {
     EN_FALL_TYPE_TERMINA_FIELD_MOON,
     EN_FALL_TYPE_TITLE_SCREEN_MOON,
@@ -32,11 +35,15 @@ typedef struct EnFall {
     /* 0x146 */ s16 currentDay;
     /* 0x148 */ u8 objIndex;
     /* 0x14C */ f32 scale;
-    /* 0x150 */ f32 unk_150;
-    /* 0x154 */ u16 unk_154;
-    /* 0x158 */ s32 unk_158;
-    /* 0x15C */ s16 unk_15C;
-    /* 0x15E */ s16 unk_15E;
+    /* 0x150 */ union {
+                    f32 eyeGlowIntensity;
+                    f32 fireBallIntensity;
+                    f32 fireRingOpacity;
+                };
+    /* 0x154 */ u16 flags;
+    /* 0x158 */ s32 unk_158; // Something for vertices for Fire Ball and something for Debris
+    /* 0x15C */ s16 unk_15C; // Two Tex Scroll for Fire Ball and Y-Scale for Fire Ring
+    /* 0x15E */ s16 unk_15E; // Two Tex Scroll for Fire Ball
     /* 0x160 */ EnFallActionFunc actionFunc;
 } EnFall; // size = 0x164
 
