@@ -644,7 +644,7 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
                     sphereCenter.y += 5.0f;
 
                     // Check if the debris has hit the ground.
-                    if (func_800C5A20(&globalCtx->colCtx, &sphereCenter, 11.0f)) {
+                    if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &sphereCenter, 11.0f)) {
                         effect->position.y = originalYPosition;
 
                         // Bounce the debris effect.
@@ -978,8 +978,8 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
                  */
                 ySurface = effect->position.y;
-                if (func_800CA1AC(globalCtx, &globalCtx->colCtx, effect->position.x + vec.x, effect->position.z + vec.z,
-                                  &ySurface, &waterBox)) {
+                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, effect->position.x + vec.x,
+                                         effect->position.z + vec.z, &ySurface, &waterBox)) {
                     if ((effect->position.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
                         Matrix_InsertTranslation(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,

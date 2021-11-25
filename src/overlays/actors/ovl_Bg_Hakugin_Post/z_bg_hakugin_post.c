@@ -523,7 +523,7 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 sp44.x = this->dyna.actor.home.pos.x + unkStruct1->unk_14.x;
                 sp44.y = this->unk_16C + unkStruct1->unk_14.y;
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
-                func_8013ECE0(Math3D_DistanceSquared(&sp44, &GET_PLAYER(globalCtx)->actor.world.pos), 255, 20, 150);
+                func_8013ECE0(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(globalCtx)->actor.world.pos), 255, 20, 150);
                 quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
                 Quake_SetSpeed(quake, 20000);
                 Quake_SetQuakeValues(quake, 7, 0, 0, 0);
@@ -704,8 +704,8 @@ void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.world.rot.z = 0;
         this->dyna.actor.shape.rot.x = 0;
         this->dyna.actor.shape.rot.z = 0;
-        BcCheck3_BgActorInit(&this->dyna, 1);
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600D3B0);
+        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_0600D3B0);
         func_80A9B3BC(this, globalCtx);
         func_80A9CA94(this);
     } else {
@@ -718,7 +718,7 @@ void BgHakuginPost_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgHakuginPost* this = THIS;
 
     if (BGHAKUGINPOST_GET_7(&this->dyna.actor) == 7) {
-        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         func_80A9AE3C(this, globalCtx);
     }
 }

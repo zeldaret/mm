@@ -722,9 +722,9 @@ void Scene_DrawConfigGreatBayTemple(GlobalContext* globalCtx) {
 
     if (Flags_GetSwitch(globalCtx, 0x33) && Flags_GetSwitch(globalCtx, 0x34) && Flags_GetSwitch(globalCtx, 0x35) &&
         Flags_GetSwitch(globalCtx, 0x36)) {
-        func_800C3C00(&globalCtx->colCtx, 1);
+        BgCheck_SetContextFlags(&globalCtx->colCtx, BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW);
     } else {
-        func_800C3C14(&globalCtx->colCtx, 1);
+        BgCheck_UnsetContextFlags(&globalCtx->colCtx, BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW);
     }
 
     dList = (Gfx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 18);

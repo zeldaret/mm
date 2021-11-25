@@ -260,9 +260,8 @@ void func_808D4190(GlobalContext* globalCtx, EnRd* this, s32 arg2) {
 }
 
 s32 func_808D41FC(GlobalContext* globalCtx) {
-    if ((Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO_MASK) ||
-        (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT) ||
-        (Player_GetMask(globalCtx) == PLAYER_MASK_GAROS_MASK)) {
+    if ((Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) || (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) ||
+        (Player_GetMask(globalCtx) == PLAYER_MASK_GARO)) {
         return false;
     }
     return true;

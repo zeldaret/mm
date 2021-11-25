@@ -942,7 +942,7 @@ s32 Collider_QuadSetNearestAC(GlobalContext* globalCtx, ColliderQuad* quad, Vec3
         return 1;
     }
     Math_Vec3s_ToVec3f(&dcMid, &quad->dim.dcMid);
-    acDist = Math3D_DistanceSquared(&dcMid, hitPos);
+    acDist = Math3D_Vec3fDistSq(&dcMid, hitPos);
 
     if (acDist < quad->dim.acDist) {
         quad->dim.acDist = acDist;
@@ -3511,7 +3511,7 @@ s32 CollisionCheck_LineOC_JntSph(GlobalContext* globalCtx, CollisionCheckContext
 
         D_801EDEB0.a = *a;
         D_801EDEB0.b = *b;
-        if (Math3D_ColSphereLineSeg(&element->dim.worldSphere, &D_801EDEB0) != 0) {
+        if (Math3D_LineVsSph(&element->dim.worldSphere, &D_801EDEB0) != 0) {
             return 1;
         }
     }
@@ -3549,7 +3549,7 @@ s32 CollisionCheck_LineOC_Sphere(GlobalContext* globalCtx, CollisionCheckContext
 
     D_801EDFC8.a = *a;
     D_801EDFC8.b = *b;
-    if (Math3D_ColSphereLineSeg(&sphere->dim.worldSphere, &D_801EDFC8) != 0) {
+    if (Math3D_LineVsSph(&sphere->dim.worldSphere, &D_801EDFC8) != 0) {
         return 1;
     }
 

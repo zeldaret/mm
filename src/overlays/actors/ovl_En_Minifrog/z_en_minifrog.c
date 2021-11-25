@@ -335,7 +335,7 @@ void EnMinifrog_Idle(EnMinifrog* this, GlobalContext* globalCtx) {
             this->flags |= 1;
         }
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) &&
-               (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK)) {
+               (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GERO)) {
         func_800B8614(&this->actor, globalCtx, 110.0f);
     }
 }
@@ -462,7 +462,7 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
         this->timer = 5;
-        func_801A1F00(3, 0x5A);
+        func_801A1F00(3, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
         globalCtx->setPlayerTalkAnim(globalCtx, &D_0400E2A8, 0);
     } else {
@@ -577,7 +577,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
     } else if ((this->actor.xzDistToPlayer < 150.0f) &&
                (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) ||
                 ((this->actor.flags & 0x10000) == 0x10000)) &&
-               Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK) {
+               Player_GetMask(globalCtx) == PLAYER_MASK_DON_GERO) {
         func_800B8614(&this->actor, globalCtx, 160.0f);
     }
 }

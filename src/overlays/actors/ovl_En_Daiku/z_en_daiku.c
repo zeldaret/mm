@@ -184,7 +184,7 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
     s32 day = gSaveContext.day - 1;
     s32 pad2;
 
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEI) {
         if (this->unk_278 == ENDAIKU_PARAMS_FF_1) {
             this->actor.textId = 0x2365;
         } else {

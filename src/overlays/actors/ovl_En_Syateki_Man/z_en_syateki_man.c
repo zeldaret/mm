@@ -337,7 +337,7 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 func_80123F2C(globalCtx, 80);
                 this->unk_26A = 1;
                 this->actionFunc = func_809C80C0;
-                func_801A2BB8(0x25);
+                func_801A2BB8(NA_BGM_MINI_GAME_2);
                 break;
 
             case 0xA32:
@@ -657,7 +657,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 func_80112AFC(globalCtx);
                 func_80123F2C(globalCtx, 0x63);
                 this->unk_26A = 1;
-                func_801A2BB8(0x25);
+                func_801A2BB8(NA_BGM_MINI_GAME_2);
                 this->actionFunc = func_809C8808;
                 break;
 
@@ -827,7 +827,7 @@ void func_809C7D14(EnSyatekiMan* this, GlobalContext* globalCtx) {
         } else if (!(gSaveContext.weekEventReg[32] & 4)) {
             func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
-            func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_GOLD, 500.0f, 100.0f);
+            func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_HUGE, 500.0f, 100.0f);
         }
 
         player->actor.shape.rot.y = -0x8000;
@@ -1160,7 +1160,7 @@ void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx) {
             func_801A2C20();
             this->actionFunc = func_809C8BF0;
             if (this->unk_280 == 50) {
-                func_801A3098(0x922);
+                func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 func_8011B4E0(globalCtx, 1);
             }
         }

@@ -48,6 +48,9 @@
  */
 
 void func_800DDFE0(Camera* camera);
+s32 Camera_ChangeMode(Camera* camera, s16 mode);
+s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags);
+s16 Camera_UnsetFlags(Camera* camera, s16 flags);
 
 #include "z_camera_data.c"
 
@@ -499,7 +502,7 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3) {
     toPoint.z = to->pos.z + fromToNorm.z;
     floorPoly = &to->poly;
 
-    if (!func_800C54AC(colCtx, from, &toPoint, &toNewPos, floorPoly, (arg3 & 1) ? 0 : 1, 1,
+    if (!BgCheck_CameraLineTest1(colCtx, from, &toPoint, &toNewPos, floorPoly, (arg3 & 1) ? 0 : 1, 1,
                                  (arg3 & 2) ? 0 : 1, -1, &floorBgId)) {
         toNewPos = to->pos;
         if (1) {}
@@ -520,7 +523,7 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3) {
                 floorPolyY = to->pos.y;
             }
         } else {
-            floorPolyY = func_800C4488(colCtx, floorPoly, &floorBgId, &toNewPos);
+            floorPolyY = BgCheck_CameraRaycastFloor2(colCtx, floorPoly, &floorBgId, &toNewPos);
         }
 
         if ((to->pos.y - floorPolyY) > 5.0f) {
@@ -559,7 +562,7 @@ s32 Camera_BGCheckInfo(Camera* camera, Vec3f* from, CamColChk* to) {
     Vec3f toNewPos;
     Vec3f fromToNorm;
 
-    if (func_800C54AC(&camera->globalCtx->colCtx, from, &to->pos, &toNewPos, &to->poly, 1, 1, 1, -1,
+    if (BgCheck_CameraLineTest1(&camera->globalCtx->colCtx, from, &to->pos, &toNewPos, &to->poly, 1, 1, 1, -1,
                                 &to->bgId)) {
         floorPoly = to->poly;
         to->norm.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
@@ -585,7 +588,7 @@ s32 Camera_BGCheck(Camera* camera, Vec3f* from, Vec3f* to) {
     s32 bgId;
     CollisionPoly* poly = NULL;
 
-    if (func_800C54AC(colCtx, from, to, &intersect, &poly, 1, 1, 1, -1, &bgId)) {
+    if (BgCheck_CameraLineTest1(colCtx, from, to, &intersect, &poly, 1, 1, 1, -1, &bgId)) {
         *to = intersect;
         return true;
     }
@@ -602,8 +605,8 @@ s32 Camera_CheckOOB(Camera* camera, Vec3f* from, Vec3f* to) {
     CollisionContext* colCtx = &camera->globalCtx->colCtx;
 
     poly = NULL;
-    if ((func_800C54AC(colCtx, from, to, &intersect, &poly, 1, 1, 1, 0, &bgId)) &&
-        (func_800C01B8(poly, from) < 0.0f)) {
+    if ((BgCheck_CameraLineTest1(colCtx, from, to, &intersect, &poly, 1, 1, 1, 0, &bgId)) &&
+        (CollisionPoly_GetPointDistanceFromPlane(poly, from) < 0.0f)) {
         return true;
     }
 
@@ -667,7 +670,7 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor*
 f32 Camera_GetFloorYNorm(Camera* camera, Vec3f* floorNorm, Vec3f* chkPos, s32* bgId) {
     CollisionContext* colCtx = &camera->globalCtx->colCtx;
     CollisionPoly* floorPoly;
-    f32 floorY = func_800C40B4(colCtx, &floorPoly, bgId, chkPos);
+    f32 floorY = BgCheck_EntityRaycastFloor3(colCtx, &floorPoly, bgId, chkPos);
 
     if (floorY == BGCHECK_Y_MIN) {
         // no floor
@@ -707,10 +710,10 @@ f32 Camera_GetFloorYLayer(Camera* camera, Vec3f* norm, Vec3f* pos, s32* bgId) {
     f32 floorY;
 
     if (camera->trackActor != NULL) {
-        floorY = func_800C41E4(camera->globalCtx, &camera->globalCtx->colCtx, &floorPoly, bgId,
+        floorY = BgCheck_EntityRaycastFloor5_3(camera->globalCtx, &camera->globalCtx->colCtx, &floorPoly, bgId,
                                (Actor*)camera->trackActor, pos);
     } else {
-        floorY = func_800C4488(colCtx, &floorPoly, bgId, pos);
+        floorY = BgCheck_CameraRaycastFloor2(colCtx, &floorPoly, bgId, pos);
     }
 
     if ((floorY == BGCHECK_Y_MIN) ||
@@ -760,7 +763,7 @@ Vec3s* Camera_GetCamDataVec3s(Camera* camera, u32 camDataId) {
  * there is no camera data for that poly.
  */
 s32 Camera_GetBgCamDataId(Camera* camera, s32* bgId, CollisionPoly* poly) {
-    s32 bgCamDataId = func_800C9704(&camera->globalCtx->colCtx, poly, *bgId);
+    s32 bgCamDataId = SurfaceType_GetCamDataIndex(&camera->globalCtx->colCtx, poly, *bgId);
     s32 ret;
 
     if (BgCheck_GetBgCamDataSetting(&camera->globalCtx->colCtx, bgCamDataId, *bgId) == CAM_SET_NONE) {
@@ -787,8 +790,7 @@ s32 Camera_GetWaterBoxCamSetting(Camera* camera, f32* waterY) {
     Actor_GetWorldPosShapeRot(&playerPosShape, (Actor*)camera->trackActor);
     *waterY = playerPosShape.pos.y;
 
-    // WaterBox_GetSurfaceImpl
-    if (!func_800C9EBC(camera->globalCtx, &camera->globalCtx->colCtx, playerPosShape.pos.x, playerPosShape.pos.z,
+    if (!WaterBox_GetSurfaceImpl(camera->globalCtx, &camera->globalCtx->colCtx, playerPosShape.pos.x, playerPosShape.pos.z,
                        waterY, &waterBox, &sp30)) {
         // player's position is not in a waterbox
         *waterY = playerPosShape.pos.y;
@@ -800,8 +802,7 @@ s32 Camera_GetWaterBoxCamSetting(Camera* camera, f32* waterY) {
         return -1;
     }
 
-    // WaterBox_GetCameraSType
-    camSetting = func_800CA648(&camera->globalCtx->colCtx, waterBox, sp30);
+    camSetting = WaterBox_GetCameraSetting(&camera->globalCtx->colCtx, waterBox, sp30);
 
     // -2: no camera data idx
     return (camSetting == CAM_SET_NONE) ? -2 : camSetting;
@@ -2195,7 +2196,7 @@ s32 Camera_Normal1(Camera *camera) {
         
         if (func_800CBA7C(camera) == 0) {
             func_800CED90(camera, &spB4, &sp9C, norm1->unk_04, norm1->unk_0C, &D_801EDC30[camera->camId], &anim->unk_0C);
-            sp58 = func_800C4488(&camera->globalCtx->colCtx, &sp60, &sp5C, sp4C);
+            sp58 = BgCheck_CameraRaycastFloor2(&camera->globalCtx->colCtx, &sp60, &sp5C, sp4C);
             if ((norm1->unk_22 & 8) &&  func_800CB924(camera)) {
                 phi_f16_2 = 25.0f;
             } else {
@@ -4511,7 +4512,7 @@ s32 Camera_KeepOn4(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&spA8, sp40, sp3C);
     D_801EDDD0 = sp38->pos;
     D_801EDDD0.y = data->y + sp88;
-    temp_f0_2 = func_800C4488(&camera->globalCtx->colCtx, &spC0, &sp84, &D_801EDDD0);
+    temp_f0_2 = BgCheck_CameraRaycastFloor2(&camera->globalCtx->colCtx, &spC0, &sp84, &D_801EDDD0);
     if ((keep4->unk_00 + data->y) < temp_f0_2) {
         D_801EDDD0.y = temp_f0_2 + 10.0f;
     } else {
@@ -7019,7 +7020,7 @@ s32 func_800DE890(Camera* camera) {
 s32 func_800DE954(Camera* camera) {
     Player* player = (Player*)camera->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first;
 
-    if ((camera->camId == CAM_ID_MAIN) && ((Actor*)camera->trackActor == camera->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) && (player->currentMask == PLAYER_MASK_GIANTS_MASK)) {
+    if ((camera->camId == CAM_ID_MAIN) && ((Actor*)camera->trackActor == camera->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) && (player->currentMask == PLAYER_MASK_GIANT)) {
         Camera_ChangeSettingFlags(camera, CAM_SET_GIANT, 0x2);
         return true;
     } else {
@@ -7086,7 +7087,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             } else {
                 spA0 = sp68.pos;
                 spA0.y += Camera_GetTrackedActorHeight(camera);
-                playerGroundY = func_800C41E4(camera->globalCtx, &camera->globalCtx->colCtx, &sp90, &bgId, (Actor*)camera->trackActor, &spA0);
+                playerGroundY = BgCheck_EntityRaycastFloor5_3(camera->globalCtx, &camera->globalCtx->colCtx, &sp90, &bgId, (Actor*)camera->trackActor, &spA0);
                 if (playerGroundY != BGCHECK_Y_MIN) {
                     camera->bgId = bgId;
                     camera->playerGroundY = playerGroundY;
@@ -7095,7 +7096,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             }
 
             if ((sp98 != 0) && (Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f)) {
-                meshActor = BgCheck_GetActorOfMesh(&camera->globalCtx->colCtx, camera->bgId);
+                meshActor = DynaPoly_GetActor(&camera->globalCtx->colCtx, camera->bgId);
                 if (meshActor != NULL) {
                     camera->floorNorm.x = COLPOLY_GET_NORMAL(sp90->normal.x);
                     camera->floorNorm.y = COLPOLY_GET_NORMAL(sp90->normal.y);
@@ -7141,7 +7142,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
                 }
                 spA0 = sp68.pos;
                 spA0.y += Camera_GetTrackedActorHeight(camera);
-                playerGroundY = func_800C4488(&camera->globalCtx->colCtx, &sp8C, &bgId, &spA0);
+                playerGroundY = BgCheck_CameraRaycastFloor2(&camera->globalCtx->colCtx, &sp8C, &bgId, &spA0);
                 if ((playerGroundY != BGCHECK_Y_MIN) && (sp8C != sp90) && (bgId == BGCHECK_SCENE) && ((camera->playerGroundY - 2.0f) < playerGroundY)) {
                     bgCamDataId = Camera_GetBgCamDataId(camera, &bgId, sp8C);
                     if ((bgCamDataId != -1) && (bgId == BGCHECK_SCENE)) {
