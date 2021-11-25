@@ -1059,7 +1059,7 @@ s32 WaterBox_GetSurface1(GlobalContext* globalCtx, CollisionContext* colCtx, f32
 s32 WaterBox_GetSurface1_2(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox);
 s32 WaterBox_GetSurface2(GlobalContext* globalCtx, CollisionContext* colCtx, Vec3f* pos, f32 surfaceChkDist, WaterBox** outWaterBox, s32* bgId);
 f32 func_800CA568(CollisionContext* colCtx, s32 waterBoxId, s32 bgId);
-u16 WaterBox_GetCameraSType(CollisionContext* colCtx, WaterBox* waterBox, s32 bgId);
+u16 WaterBox_GetCameraSetting(CollisionContext* colCtx, WaterBox* waterBox, s32 bgId);
 void func_800CA6B8(CollisionContext* colCtx, WaterBox* waterBox);
 u32 WaterBox_GetLightSettingIndex(CollisionContext* colCtx, WaterBox* waterBox);
 s32 func_800CA6F0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox, s32* bgId);
