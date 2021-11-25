@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "ultra64.h"
 #include "global.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -57,9 +58,9 @@ s16 Camera_UnsetFlags(Camera* camera, s16 flags);
 // UnkStruct_D801ED920* D_801ED920;
 GlobalContext* D_801EDC28;
 SwingAnimation D_801EDC30[4];
-static Vec3f D_801EDDD0;
-static Vec3f D_801EDDE0;
-static Vec3f D_801EDDF0;
+Vec3f D_801EDDD0;
+Vec3f D_801EDDE0;
+Vec3f D_801EDDF0;
 
 /*===============================================================*/
 /*                    Camera Private Functions                   */
@@ -7550,7 +7551,7 @@ s32 Camera_AddQuake(Camera* camera, s32 arg1, s16 y, s32 countdown) {
         return false;
     }
 
-    Quake_SetSpeed(quakeIdx, 0x61A8);
+    Quake_SetSpeed(quakeIdx, 0x61A8); 
     Quake_SetQuakeValues(quakeIdx, y, 0, 0, 0);
     Quake_SetCountdown(quakeIdx, countdown);
     return true;
