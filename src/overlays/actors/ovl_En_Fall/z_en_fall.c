@@ -120,7 +120,7 @@ void EnFall_RisingDebris_ResetParticles(EnFall* this) {
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
         debrisParticles[i].dListIndex = 3;
     }
-    this->unk_158 = 0;
+    this->activeDebrisParticleCount = 0;
 }
 
 void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -224,7 +224,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 this->scale = 1.0f;
                 this->actor.shape.rot.z = 0;
                 this->fireBallIntensity = 0.0f;
-                this->unk_158 = 0x64;
+                this->fireBallOpacity = 100;
                 this->actor.shape.rot.x = this->actor.shape.rot.z;
                 break;
             case EN_FALL_TYPE_CRASH_RISING_DEBRIS:
@@ -282,14 +282,14 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A6C7C0(EnFall* this, GlobalContext* globalCtx) {
-    static s32 D_80A6E4B0 = 0;
+void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globalCtx) {
+    static s32 sGiantsCutsceneState = 0;
 
     if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 1 && globalCtx->csCtx.unk_12 == 0) {
-        switch (D_80A6E4B0) {
+        switch (sGiantsCutsceneState) {
             case 0:
                 if (globalCtx->csCtx.state != 0) {
-                    D_80A6E4B0 = D_80A6E4B0 + 2;
+                    sGiantsCutsceneState += 2;
                 }
                 break;
             case 2:
@@ -298,14 +298,14 @@ void func_80A6C7C0(EnFall* this, GlobalContext* globalCtx) {
                     if (gSaveContext.weekEventReg[0x5D] & 4) {
                         if (ActorCutscene_GetCanPlayNext(0xC)) {
                             ActorCutscene_Start(0xC, &this->actor);
-                            D_80A6E4B0 += 1;
+                            sGiantsCutsceneState++;
                         } else {
                             ActorCutscene_SetIntentToPlay(0xC);
                         }
                     } else if (ActorCutscene_GetCanPlayNext(0xB)) {
                         ActorCutscene_Start(0xB, &this->actor);
                         gSaveContext.weekEventReg[0x5D] |= 4;
-                        D_80A6E4B0 += 1;
+                        sGiantsCutsceneState++;
                     } else {
                         ActorCutscene_SetIntentToPlay(0xB);
                     }
@@ -315,7 +315,7 @@ void func_80A6C7C0(EnFall* this, GlobalContext* globalCtx) {
                     globalCtx->sceneLoadFlag = 0x14;
                     globalCtx->unk_1887F = 2;
                     gSaveContext.nextTransition = 2;
-                    D_80A6E4B0 = 9;
+                    sGiantsCutsceneState = 9;
                 }
                 break;
             case 9:
@@ -326,7 +326,7 @@ void func_80A6C7C0(EnFall* this, GlobalContext* globalCtx) {
 }
 
 void EnFall_CrashingMoon_PerformCutsceneActions(EnFall* this, GlobalContext* globalCtx) {
-    func_80A6C7C0(this, globalCtx);
+    EnFall_CrashingMoon_HandleGiantsCutscene(this, globalCtx);
     if (func_800EE29C(globalCtx, 0x85)) {
         if (func_800EE29C(globalCtx, 0x85) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0 == 1) {
             this->actor.draw = NULL;
@@ -491,23 +491,24 @@ void EnFall_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-void EnFall_FireBall_UpdateVertexNormals(f32 arg0) {
-    static u8 D_80A6E4B4[] = { 0x04, 0x04, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x03, 0x00, 0x00, 0x03, 0x00,
-                               0x01, 0x01, 0x01, 0x04, 0x00, 0x04, 0x00, 0x01, 0x01, 0x01, 0x03, 0x00, 0x03, 0x00, 0x01,
-                               0x01, 0x01, 0x04, 0x04, 0x01, 0x01, 0x00, 0x04, 0x04, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01,
-                               0x01, 0x03, 0x03, 0x00, 0x00, 0x03, 0x03, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x04,
-                               0x00, 0x04, 0x04, 0x00, 0x04, 0x04, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x03, 0x00,
-                               0x00, 0x03, 0x03, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x04, 0x04, 0x00, 0x04,
-                               0x00, 0x01, 0x01, 0x01, 0x03, 0x00, 0x03, 0x03, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01,
-                               0x01, 0x04, 0x04, 0x00, 0x04, 0x04, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x03,
-                               0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02, 0x01, 0x01, 0x00, 0x00, 0x02, 0x02, 0x00, 0x01,
-                               0x01, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00, 0x00, 0x02, 0x01,
-                               0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x01, 0x02, 0x02, 0x00, 0x00, 0x02, 0x01, 0x01,
-                               0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x02, 0x02, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x02,
-                               0x02, 0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x02, 0x02, 0x00, 0x00, 0x00,
-                               0x02, 0x02, 0x01, 0x01, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x02, 0x02, 0x00, 0x00 };
-    u8* phi_a0;
-    u8 unk[5];
+void EnFall_FireBall_UpdateVertexAlpha(f32 arg0) {
+    static u8 sAlphaModIndex[] = {
+        0x04, 0x04, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x03, 0x00, 0x00, 0x03, 0x00, 0x01, 0x01, 0x01,
+        0x04, 0x00, 0x04, 0x00, 0x01, 0x01, 0x01, 0x03, 0x00, 0x03, 0x00, 0x01, 0x01, 0x01, 0x04, 0x04, 0x01, 0x01,
+        0x00, 0x04, 0x04, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x03, 0x00, 0x00, 0x03, 0x03, 0x00, 0x00,
+        0x01, 0x01, 0x01, 0x01, 0x01, 0x04, 0x00, 0x04, 0x04, 0x00, 0x04, 0x04, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+        0x03, 0x03, 0x00, 0x00, 0x03, 0x03, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x04, 0x04, 0x00, 0x04,
+        0x00, 0x01, 0x01, 0x01, 0x03, 0x00, 0x03, 0x03, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x04, 0x04,
+        0x00, 0x04, 0x04, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02,
+        0x02, 0x01, 0x01, 0x00, 0x00, 0x02, 0x02, 0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00, 0x00, 0x01,
+        0x00, 0x02, 0x00, 0x00, 0x02, 0x01, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x01, 0x02, 0x02, 0x00, 0x00,
+        0x02, 0x01, 0x01, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x02, 0x02, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x02,
+        0x02, 0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x02, 0x02, 0x00, 0x00, 0x00, 0x02, 0x02, 0x01,
+        0x01, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x02, 0x02, 0x00, 0x00
+    };
+    
+    s32 pad;
+    u8 alphaMod[5];
     Vtx* vertices;
     s32 i;
 
@@ -515,14 +516,14 @@ void EnFall_FireBall_UpdateVertexNormals(f32 arg0) {
     if (arg0 > 1.0f) {
         arg0 = 1.0f;
     }
-    unk[0] = 0;
-    unk[1] = (s8)(255.0f * arg0);
-    unk[2] = (s8)(155.0f * arg0);
-    unk[3] = (s8)(104.0f * arg0);
-    unk[4] = (s8)(54.0f * arg0);
+    alphaMod[0] = 0;
+    alphaMod[1] = (s8)(255.0f * arg0);
+    alphaMod[2] = (s8)(155.0f * arg0);
+    alphaMod[3] = (s8)(104.0f * arg0);
+    alphaMod[4] = (s8)(54.0f * arg0);
 
     for (i = 0; i < 209; i++, vertices++) {
-        vertices->v.cn[3] = unk[D_80A6E4B4[i]];
+        vertices->v.cn[3] = alphaMod[sAlphaModIndex[i]];
     }
 }
 
@@ -546,25 +547,25 @@ void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
         switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C2)]->unk0) {
             default:
                 this->actor.draw = NULL;
-                this->unk_158 = 0;
+                this->fireBallOpacity = 0;
                 break;
             case 2:
-                if (this->unk_158 < 0x64) {
-                    this->unk_158 += 4;
+                if (this->fireBallOpacity < 100) {
+                    this->fireBallOpacity += 4;
                 }
-                if (this->unk_158 >= 0x65) {
-                    this->unk_158 = 0x64;
+                if (this->fireBallOpacity > 100) {
+                    this->fireBallOpacity = 100;
                 }
-                EnFall_FireBall_UpdateVertexNormals(this->unk_158 * 0.01f);
+                EnFall_FireBall_UpdateVertexAlpha(this->fireBallOpacity * 0.01f);
                 break;
             case 3:
-                if (this->unk_158 > 0) {
-                    this->unk_158 -= 2;
+                if (this->fireBallOpacity > 0) {
+                    this->fireBallOpacity -= 2;
                 }
-                if (this->unk_158 < 0) {
-                    this->unk_158 = 0;
+                if (this->fireBallOpacity < 0) {
+                    this->fireBallOpacity = 0;
                 }
-                EnFall_FireBall_UpdateVertexNormals(this->unk_158 * 0.01f);
+                EnFall_FireBall_UpdateVertexAlpha(this->fireBallOpacity * 0.01f);
                 break;
             case 4:
                 this->flags |= EN_FALL_FLAG_FIRE_BALL_BRIGHTENS;
@@ -575,7 +576,7 @@ void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->actor.draw = NULL;
     }
-    if (func_800EE29C(globalCtx, 0x1C2) && this->unk_158 > 0) {
+    if (func_800EE29C(globalCtx, 0x1C2) && this->fireBallOpacity > 0) {
         func_8019F128(NA_SE_EV_MOON_FALL_LAST - SFX_FLAG);
     }
     Actor_SetScale(&this->actor, this->scale * 1.74f);
@@ -594,7 +595,7 @@ void EnFall_RisingDebris_UpdateParticles(EnFall* this) {
             debrisParticles[i].rot.z += 0x12C;
             if ((this->actor.world.pos.y + 3000.0f) < debrisParticles[i].pos.y) {
                 debrisParticles[i].dListIndex = 3;
-                this->unk_158 -= 1;
+                this->activeDebrisParticleCount--;
             }
         }
     }
@@ -621,7 +622,7 @@ s32 EnFall_RisingDebris_InitializeParticles(EnFall* this) {
             debrisParticles[i].rot.x = randPlusMinusPoint5Scaled(65536.0f);
             debrisParticles[i].rot.y = randPlusMinusPoint5Scaled(65536.0f);
             debrisParticles[i].rot.z = randPlusMinusPoint5Scaled(65536.0f);
-            this->unk_158 += 1;
+            this->activeDebrisParticleCount++;
             return 1;
         }
     }
@@ -637,7 +638,7 @@ void EnFall_RisingDebris_Update(Actor* thisx, GlobalContext* globalCtx) {
             globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C3)]->unk0 == 2) {
             EnFall_RisingDebris_UpdateParticles(this);
             EnFall_RisingDebris_InitializeParticles(this);
-        } else if (this->unk_158 != 0) {
+        } else if (this->activeDebrisParticleCount != 0) {
             EnFall_RisingDebris_ResetParticles(this);
         }
     } else if (thisx->home.rot.x != 0) {
@@ -672,7 +673,7 @@ void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Vec3f D_80A6E588[] = { 1800.0f, 1000.0f, 4250.0f };
+    static Vec3f sMoonsTearOffset[] = { 1800.0f, 1000.0f, 4250.0f };
     EnFall* this = THIS;
     s32 temp_v1;
 
@@ -680,7 +681,7 @@ void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    Matrix_MultiplyVector3fByState(D_80A6E588, &this->actor.focus.pos);
+    Matrix_MultiplyVector3fByState(sMoonsTearOffset, &this->actor.focus.pos);
     temp_v1 = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, temp_v1, temp_v1, temp_v1, 255);
     gSPDisplayList(POLY_OPA_DISP++, D_060077F0);
@@ -761,11 +762,13 @@ void EnFall_FireBall_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     this->fireBallYTexScroll1 += (s32)(4.0f + (this->fireBallIntensity * 12.0f));
     this->fireBallYTexScroll2 += (s32)(2.0f + (this->fireBallIntensity * 6.0f));
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, (s32)(((1.0f - this->fireBallIntensity) * 160.0f) + (255.0f * this->fireBallIntensity)),
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80,
+                    (s32)(((1.0f - this->fireBallIntensity) * 160.0f) + (255.0f * this->fireBallIntensity)),
                     (s32)((70.0f * (1.0f - this->fireBallIntensity)) + (255.0f * this->fireBallIntensity)),
                     (s32)(70.0f * (1.0f - this->fireBallIntensity)), 255);
-    gDPSetEnvColor(POLY_XLU_DISP++, (s32)(((1.0f - this->fireBallIntensity) * 50.0f) + (200.0f * this->fireBallIntensity)),
-                   (s32)(20.0f * (1.0f - this->fireBallIntensity)), (s32)(20.0f * (1.0f - this->fireBallIntensity)), 255);
+    gDPSetEnvColor(
+        POLY_XLU_DISP++, (s32)(((1.0f - this->fireBallIntensity) * 50.0f) + (200.0f * this->fireBallIntensity)),
+        (s32)(20.0f * (1.0f - this->fireBallIntensity)), (s32)(20.0f * (1.0f - this->fireBallIntensity)), 255);
 
     // Glowing sphere of fire
     gSPSegment(POLY_XLU_DISP++, 0x09,
@@ -785,7 +788,7 @@ void EnFall_FireBall_Draw(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Gfx* D_80A6E594[] = { D_06000220, D_06000428, D_06000498 };
+    static Gfx* sDebrisDLists[] = { D_06000220, D_06000428, D_06000498 };
     EnFall* this = THIS;
     f32 scale;
     s32 i;
@@ -805,7 +808,7 @@ void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                   MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_80A6E594[debrisParticles[i].dListIndex]);
+            gSPDisplayList(POLY_OPA_DISP++, sDebrisDLists[debrisParticles[i].dListIndex]);
         }
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);

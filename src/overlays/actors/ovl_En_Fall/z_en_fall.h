@@ -41,10 +41,13 @@ typedef struct EnFall {
                     f32 fireRingOpacity;
                 };
     /* 0x154 */ u16 flags;
-    /* 0x158 */ s32 unk_158; // Something for vertices for Fire Ball and something for Debris
+    /* 0x158 */ union {
+                    s32 fireBallOpacity;
+                    s32 activeDebrisParticleCount;
+                };
     /* 0x15C */ union {
-                    s16 fireWallYScale;
                     s16 fireBallYTexScroll1;
+                    s16 fireWallYScale;
                 };
     /* 0x15E */ s16 fireBallYTexScroll2;
     /* 0x160 */ EnFallActionFunc actionFunc;
