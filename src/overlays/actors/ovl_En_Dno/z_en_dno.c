@@ -709,8 +709,8 @@ void func_80A72C04(EnDno* this, GlobalContext* globalCtx) {
     func_8013DCE0(globalCtx, &this->unk_334, &this->actor, &this->unk_340, globalCtx->setupPathList,
                   ENDNO_GET_7F(&this->actor), 1, 0, 1, 0);
     func_8013DF3C(globalCtx, &this->unk_340);
-    this->actor.world.rot.y = this->unk_340.unk_56;
-    this->actor.world.rot.x = this->unk_340.unk_54;
+    this->actor.world.rot.y = this->unk_340.unk_54.y;
+    this->actor.world.rot.x = this->unk_340.unk_54.x;
     Actor_SetSwitchFlag(globalCtx, ENDNO_GET_3F80(&this->actor));
     this->actionFunc = func_80A730A0;
 }
@@ -721,8 +721,8 @@ void func_80A72CF8(EnDno* this, GlobalContext* globalCtx) {
                        this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x201);
 }
 
-s32 func_80A72D8C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    Actor* actor = arg1->unk_48;
+s32 func_80A72D8C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
+    Actor* actor = arg1->actor;
     s32 pad;
     s32 ret = false;
     f32 sp38;
@@ -748,21 +748,21 @@ s32 func_80A72D8C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
         ret = true;
     } else {
         sp38 = actor->speedXZ / sqrtf(arg1->unk_4C);
-        sp2C = ABS(arg1->unk_54 - actor->world.rot.x);
+        sp2C = ABS(arg1->unk_54.x - actor->world.rot.x);
         temp_v0_2 = sp2C;
         temp_v0_2 *= sp38;
         temp_v0_2 += 0x71C;
-        sp2C = ABS(arg1->unk_56 - actor->world.rot.y);
+        sp2C = ABS(arg1->unk_54.y - actor->world.rot.y);
 
-        Math_ScaledStepToS(&actor->world.rot.x, arg1->unk_54, temp_v0_2);
-        Math_ScaledStepToS(&actor->world.rot.y, arg1->unk_56, (s32)(sp2C * sp38) + 0x71C);
+        Math_ScaledStepToS(&actor->world.rot.x, arg1->unk_54.x, temp_v0_2);
+        Math_ScaledStepToS(&actor->world.rot.y, arg1->unk_54.y, (s32)(sp2C * sp38) + 0x71C);
     }
 
     return ret;
 }
 
-s32 func_80A72FAC(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    Actor* actor = arg1->unk_48;
+s32 func_80A72FAC(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
+    Actor* actor = arg1->actor;
     EnDno* dno = (EnDno*)actor;
     f32 sp24 = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
     f32 sp20 = gFramerateDivisorHalf;
