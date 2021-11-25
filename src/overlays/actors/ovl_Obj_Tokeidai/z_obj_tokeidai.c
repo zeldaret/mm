@@ -2,12 +2,12 @@
  * File: z_obj_tokeidai.c
  * Overlay: ovl_Obj_Tokeidai
  * Description: Components of the Clock Tower (gears, clock face, counterweight, etc). Also used for wall clocks.
- * 
+ *
  * This actor handles most of the functionality related to the Clock Tower and the various
  * wall clocks around Clock Town. Among its responsibilities are making the clocks correctly
  * tell the time by spinning the various pieces and gears and controlling the spotlight that
  * is emitted from the Clock Tower at night.
- * 
+ *
  * On the midnight of the Final Day, the Clock Tower opens up, and the various pieces of it
  * are moved around. This actor is responsible for managing all of this movement. Additionally,
  * if the moon crashes into Termina, this actor is responsible for making the pieces of the
