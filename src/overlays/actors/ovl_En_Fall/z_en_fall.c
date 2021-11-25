@@ -27,8 +27,8 @@ void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_FireBall_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_RisingDebris_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx);
-void func_80A6DC20(Actor* thisx, GlobalContext* globalCtx);
-void func_80A6DC40(Actor* thisx, GlobalContext* globalCtx);
+void EnFall_LodMoon_DrawWithoutLerp(Actor* thisx, GlobalContext* globalCtx);
+void EnFall_LodMoon_DrawWithLerp(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_FireRing_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_OpenMouthMoon_Draw(Actor* thisx, GlobalContext* globalCtx);
@@ -105,7 +105,7 @@ void EnFall_Moon_AdjustScaleAndPosition(EnFall* this, GlobalContext* globalCtx) 
             break;
         case 3:
             Actor_SetScale(&this->actor, this->scale * 3.6f);
-            if (EN_FALL_TYPE(&this->actor) == EN_FALL_TYPE_INVERTED_STONE_TOWER_GAMEPLAY_MOON) {
+            if (EN_FALL_TYPE(&this->actor) == EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER) {
                 this->actor.world.pos.y = this->actor.home.pos.y + (phi_f0 * 6700.0f * (this->scale * 6.25f));
             } else {
                 this->actor.world.pos.y = this->actor.home.pos.y - (phi_f0 * 6700.0f * (this->scale * 6.25f));
@@ -147,9 +147,9 @@ void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
     switch (EN_FALL_TYPE(&this->actor)) {
-        case EN_FALL_TYPE_UNK_5:
-        case EN_FALL_TYPE_REGULAR_GAMEPLAY_MOON:
-        case EN_FALL_TYPE_INVERTED_STONE_TOWER_GAMEPLAY_MOON:
+        case EN_FALL_TYPE_LODMOON_NO_LERP:
+        case EN_FALL_TYPE_LODMOON:
+        case EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER:
             objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_LODMOON);
             break;
         case EN_FALL_TYPE_MOONS_TEAR:
@@ -235,15 +235,15 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 Actor_SetScale(&this->actor, 1.0f);
                 this->actor.shape.rot.x = 0;
                 break;
-            case EN_FALL_TYPE_UNK_5:
-                this->actor.draw = func_80A6DC20;
+            case EN_FALL_TYPE_LODMOON_NO_LERP:
+                this->actor.draw = EnFall_LodMoon_DrawWithoutLerp;
                 this->dayStartTime = CLOCK_TIME(6, 0);
                 this->currentDay = CURRENT_DAY;
                 EnFall_Moon_AdjustScaleAndPosition(this, globalCtx);
                 break;
-            case EN_FALL_TYPE_REGULAR_GAMEPLAY_MOON:
-            case EN_FALL_TYPE_INVERTED_STONE_TOWER_GAMEPLAY_MOON:
-                this->actor.draw = func_80A6DC40;
+            case EN_FALL_TYPE_LODMOON:
+            case EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER:
+                this->actor.draw = EnFall_LodMoon_DrawWithLerp;
                 this->dayStartTime = CLOCK_TIME(6, 0);
                 this->currentDay = CURRENT_DAY;
                 EnFall_Moon_AdjustScaleAndPosition(this, globalCtx);
@@ -725,11 +725,11 @@ void EnFall_LodMoon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_80A6DC20(Actor* thisx, GlobalContext* globalCtx) {
+void EnFall_LodMoon_DrawWithoutLerp(Actor* thisx, GlobalContext* globalCtx) {
     EnFall_LodMoon_Draw(thisx, globalCtx);
 }
 
-void func_80A6DC40(Actor* thisx, GlobalContext* globalCtx) {
+void EnFall_LodMoon_DrawWithLerp(Actor* thisx, GlobalContext* globalCtx) {
     f32 temp_f0;
     f32 temp_f0_2;
     f32 zTranslation;
