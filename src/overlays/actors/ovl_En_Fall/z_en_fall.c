@@ -664,9 +664,9 @@ void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.scale.x += 0.2f;
         }
         this->actor.scale.z = this->actor.scale.x;
-        this->actor.scale.y = Math_SinS(this->unk_15C) * 5.0f;
-        if (this->unk_15C < 0x4000) {
-            this->unk_15C += 0x147;
+        this->actor.scale.y = Math_SinS(this->fireWallYScale) * 5.0f;
+        if (this->fireWallYScale < 0x4000) {
+            this->fireWallYScale += 0x147;
         }
     }
 }
@@ -682,7 +682,7 @@ void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     Matrix_MultiplyVector3fByState(D_80A6E588, &this->actor.focus.pos);
     temp_v1 = (this->eyeGlowIntensity * 200.0f) + 40.0f;
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, temp_v1, temp_v1, temp_v1, 255); // this lights up the eyes
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, temp_v1, temp_v1, temp_v1, 255);
     gSPDisplayList(POLY_OPA_DISP++, D_060077F0);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -759,19 +759,24 @@ void EnFall_FireBall_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    this->unk_15C += (s32)(4.0f + (this->fireBallIntensity * 12.0f));
-    this->unk_15E += (s32)(2.0f + (this->fireBallIntensity * 6.0f));
+    this->fireBallYTexScroll1 += (s32)(4.0f + (this->fireBallIntensity * 12.0f));
+    this->fireBallYTexScroll2 += (s32)(2.0f + (this->fireBallIntensity * 6.0f));
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, (s32)(((1.0f - this->fireBallIntensity) * 160.0f) + (255.0f * this->fireBallIntensity)),
                     (s32)((70.0f * (1.0f - this->fireBallIntensity)) + (255.0f * this->fireBallIntensity)),
                     (s32)(70.0f * (1.0f - this->fireBallIntensity)), 255);
     gDPSetEnvColor(POLY_XLU_DISP++, (s32)(((1.0f - this->fireBallIntensity) * 50.0f) + (200.0f * this->fireBallIntensity)),
                    (s32)(20.0f * (1.0f - this->fireBallIntensity)), (s32)(20.0f * (1.0f - this->fireBallIntensity)), 255);
+
+    // Glowing sphere of fire
     gSPSegment(POLY_XLU_DISP++, 0x09,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames, -this->unk_15E, 64, 64, 1,
-                                -gameplayFrames, -this->unk_15C, 64, 64));
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames, -this->fireBallYTexScroll2, 64, 64, 1,
+                                -gameplayFrames, -this->fireBallYTexScroll1, 64, 64));
+
+    // "Flecks" of fire
     gSPSegment(POLY_XLU_DISP++, 0x0A,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames * 2, -this->unk_15C, 64, 64, 1,
-                                -gameplayFrames * 2, -this->unk_15C, 64, 64));
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames * 2, -this->fireBallYTexScroll1, 64, 64, 1,
+                                -gameplayFrames * 2, -this->fireBallYTexScroll1, 64, 64));
+
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
     gSPDisplayList(POLY_XLU_DISP++, D_060011D0);

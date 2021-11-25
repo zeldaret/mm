@@ -42,8 +42,11 @@ typedef struct EnFall {
                 };
     /* 0x154 */ u16 flags;
     /* 0x158 */ s32 unk_158; // Something for vertices for Fire Ball and something for Debris
-    /* 0x15C */ s16 unk_15C; // Two Tex Scroll for Fire Ball and Y-Scale for Fire Ring
-    /* 0x15E */ s16 unk_15E; // Two Tex Scroll for Fire Ball
+    /* 0x15C */ union {
+                    s16 fireWallYScale;
+                    s16 fireBallYTexScroll1;
+                };
+    /* 0x15E */ s16 fireBallYTexScroll2;
     /* 0x160 */ EnFallActionFunc actionFunc;
 } EnFall; // size = 0x164
 
