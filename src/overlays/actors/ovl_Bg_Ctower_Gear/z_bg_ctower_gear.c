@@ -158,7 +158,7 @@ void BgCtowerGear_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     type = BGCTOWERGEAR_GET_TYPE(this);
     if ((type == WATER_WHEEL) || (type == ORGAN)) {
-        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
 
