@@ -6,7 +6,7 @@
 #define EN_FALL_SCALE(thisx) ((thisx)->params & 0x7F)
 #define EN_FALL_TYPE(thisx) (((thisx)->params & 0xF80) >> 7)
 
-#define EN_FALL_FLAG_FIRE_BALL_BRIGHTENS (1 << 0)
+#define EN_FALL_FLAG_FIRE_BALL_INTENSIFIES (1 << 0)
 #define EN_FALL_FLAG_FIRE_RING_APPEARS (1 << 1)
 
 typedef enum {
@@ -38,11 +38,11 @@ typedef struct EnFall {
     /* 0x150 */ union {
                     f32 eyeGlowIntensity;
                     f32 fireBallIntensity;
-                    f32 fireRingOpacity;
+                    f32 fireRingAlpha;
                 };
     /* 0x154 */ u16 flags;
     /* 0x158 */ union {
-                    s32 fireBallOpacity;
+                    s32 fireBallAlpha;
                     s32 activeDebrisParticleCount;
                 };
     /* 0x15C */ union {
