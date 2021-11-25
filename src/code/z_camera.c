@@ -1215,7 +1215,7 @@ f32 Camera_CalcSlopeYAdj(Vec3f* floorNorm, s16 playerYRot, s16 eyeAtYaw, f32 adj
     return (Camera_fabsf(tmp) * adjAmt) * Math_CosS(playerYRot - eyeAtYaw);
 }
 
-// TODO: D_801AECF0 as Vec2f matchecd, but real data type is unknown
+// TODO: D_801AECF0 as Vec2f matched, but real data type is unknown
 // Note: D_801AECF0 size is unknown but OoT arrays indexed by actor->targetMode are size 10
 f32 func_800CD6CC(Actor* actor) {
     return sqrtf(D_801AECF0[actor->targetMode].x / D_801AECF0[actor->targetMode].y);
