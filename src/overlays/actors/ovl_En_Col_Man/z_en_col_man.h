@@ -21,8 +21,8 @@ typedef enum {
     /* 0 */ EN_COL_MAN_HEART_PIECE,
     /* 1 */ EN_COL_MAN_RECOVERY_HEART,
     /* 2 */ EN_COL_MAN_FALLING_ROCK,
-    /* 3 */ EN_COL_MAN_BOMB,
-    /* 4 */ EN_COL_MAN_UNK4,
+    /* 3 */ EN_COL_MAN_CUTSCENE_BOMB,
+    /* 4 */ EN_COL_MAN_GAMEPLAY_BOMB,
 } EnColManType;
 
 extern const ActorInit En_Col_Man_InitVars;

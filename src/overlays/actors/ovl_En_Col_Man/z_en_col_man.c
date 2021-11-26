@@ -61,8 +61,8 @@ const ActorInit En_Col_Man_InitVars = {
     (ActorFunc)NULL,
 };
 
-static Color_RGBA8 primColor = { 0x3C, 0x32, 0x14, 0xFF };
-static Color_RGBA8 envColor = { 0x28, 0x1E, 0x1E, 0xFF };
+static Color_RGBA8 primColor = { 60, 50, 20, 255 };
+static Color_RGBA8 envColor = { 40, 30, 30, 255 };
 
 extern Gfx D_0405AAB0[];
 extern Gfx D_0405F6F0[];
@@ -86,8 +86,8 @@ void EnColMan_Init(Actor* thisx, GlobalContext* globalCtx) {
             ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
             func_80AFDF60(this);
             break;
-        case EN_COL_MAN_BOMB:
-        case EN_COL_MAN_UNK4:
+        case EN_COL_MAN_CUTSCENE_BOMB:
+        case EN_COL_MAN_GAMEPLAY_BOMB:
             func_80AFE234(this);
             break;
     }
@@ -100,7 +100,7 @@ void EnColMan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80AFDD60(EnColMan* this) {
-    if (!(gSaveContext.weekEventReg[0x38] & 2)) {
+    if (!(gSaveContext.weekEventReg[56] & 2)) {
         this->actor.draw = func_80AFE414;
         this->actor.shape.yOffset = 700.0f;
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
@@ -129,14 +129,14 @@ void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.0f;
         }
     }
-    if (!(gSaveContext.weekEventReg[0x38] & 2)) {
+    if (!(gSaveContext.weekEventReg[56] & 2)) {
         this->actor.shape.rot.y += 0x3E8;
     }
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actor.draw = NULL;
         this->actionFunc = EnColMan_SetHeartPieceCollectedAndKill;
-    } else if (!(gSaveContext.weekEventReg[0x38] & 2)) {
+    } else if (!(gSaveContext.weekEventReg[56] & 2)) {
         func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 40.0f, 40.0f);
     } else {
         func_800B8A1C(&this->actor, globalCtx, GI_RECOVERY_HEART, 40.0f, 40.0f);
@@ -145,7 +145,7 @@ void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx) {
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
-        gSaveContext.weekEventReg[0x38] |= 2;
+        gSaveContext.weekEventReg[56] |= 2;
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -186,7 +186,7 @@ void func_80AFDFB4(EnColMan* this, GlobalContext* globalCtx) {
             accel.x = 0.0f;
 
             func_800B0EB0(globalCtx, &this->actor.world.pos, &velocity, &accel, &primColor, &envColor,
-                          Rand_ZeroFloat(50.0f) + 60.0f, 0x1E, Rand_ZeroFloat(5.0f) + 20.0f);
+                          Rand_ZeroFloat(50.0f) + 60.0f, 30, Rand_ZeroFloat(5.0f) + 20.0f);
         }
 
         Actor_MarkForDeath(&this->actor);
@@ -203,7 +203,7 @@ void func_80AFE25C(EnColMan* this, GlobalContext* globalCtx) {
     this->scale = BREG(55) * 0.01f + 0.05f;
 
     if (BREG(60) || (this->actor.world.rot.z != 0)) {
-        if (this->actor.params == EN_COL_MAN_BOMB) {
+        if (this->actor.params == EN_COL_MAN_CUTSCENE_BOMB) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.parent->world.pos.x,
                         this->actor.parent->world.pos.y, this->actor.parent->world.pos.z, 0, 0, 0, 0);
         } else {
