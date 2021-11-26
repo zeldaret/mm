@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse, ast, math, os, re, struct
+import bisect
 from mips_isa import *
 from multiprocessing import Pool
 
@@ -91,8 +92,7 @@ vrom_variables = list() # (name,addr)
 
 functions_ast = None
 variables_ast = None
-
-vars_cache = {} # (address: variable + addend)
+variable_addrs = None
 
 def proper_name(symbol, in_data=False, is_symbol=True):
     # hacks
@@ -124,8 +124,15 @@ def proper_name(symbol, in_data=False, is_symbol=True):
             return [name for name,addr in vrom_variables if addr == symbol][0]
 
     # addends
-    if is_symbol and symbol in vars_cache.keys():
-        return vars_cache[symbol]
+    if is_symbol:
+        symbol_index = bisect.bisect(variable_addrs, symbol)
+        if symbol_index:
+            vram_addr = variable_addrs[symbol_index-1]
+            symbol_name, _, _, symbol_size = variables_ast[vram_addr]
+
+            if vram_addr < symbol < vram_addr + symbol_size:
+                return f"{symbol_name} + 0x{symbol-vram_addr:X}"
+
 
     # generated names
     if symbol in functions and not in_data:
@@ -1112,13 +1119,8 @@ with open("tools/disasm/functions.txt", "r") as infile:
 with open("tools/disasm/variables.txt", "r") as infile:
     variables_ast = ast.literal_eval(infile.read())
 
-# Precompute variable addends for all variables, this uses a lot of memory but the lookups later are fast
+# Find floats, doubles, and strings
 for var in sorted(variables_ast.keys()):
-    for i in range(var, var + variables_ast[var][3], 1):
-        addend = i - var
-        assert addend >= 0
-        vars_cache.update({i : f"{variables_ast[var][0]}" + (f" + 0x{addend:X}" if addend > 0 else "")})
-    # also add to floats, doubles & strings
     var_type = variables_ast[var][1]
 
     if var_type == "f64":
@@ -1163,6 +1165,9 @@ for segment in files_spec:
     # vram segment end
     if segment[3][-1][1] not in variables_ast:
         variables_ast.update({segment[3][-1][1] : (f"_{segment[0]}SegmentEnd","u8","[]",0x1)})
+
+# Construct variable_addrs, now that variable_addrs is fully constructed
+variable_addrs = sorted(variables_ast.keys())
 
 pool = Pool(jobs)
 # Find symbols for each segment
