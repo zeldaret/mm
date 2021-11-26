@@ -275,6 +275,7 @@ typedef enum {
     /* 0x07 */ GI_RUPEE_HUGE,
     /* 0x08 */ GI_WALLET_ADULT,
     /* 0x09 */ GI_WALLET_GIANT,
+    /* 0x0A */ GI_RECOVERY_HEART,
     /* 0x0C */ GI_HEART_PIECE = 0x0C,
     /* 0x0D */ GI_HEART_CONTAINER,
     /* 0x16 */ GI_BOMBS_10 = 0x16,
