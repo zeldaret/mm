@@ -89,6 +89,7 @@ multiply_referenced_rodata = set() # rodata with more than 1 reference outside o
 files = set()          # vram start of file
 
 vrom_variables = list() # (name,addr)
+vrom_addrs = set()     # set of addrs from vrom_variables, for faster lookup
 
 functions_ast = None
 variables_ast = None
@@ -116,7 +117,7 @@ def proper_name(symbol, in_data=False, is_symbol=True):
         return functions_ast[symbol][0]
     elif symbol in variables_ast.keys():
         return variables_ast[symbol][0]
-    elif symbol in [addr for _,addr in vrom_variables]:
+    elif symbol in vrom_addrs:
         # prefer "start" vrom symbols
         if symbol in [addr for name,addr in vrom_variables if "SegmentRomStart" in name]:
             return [name for name,addr in vrom_variables if "SegmentRomStart" in name and addr == symbol][0]
@@ -149,7 +150,7 @@ def proper_name(symbol, in_data=False, is_symbol=True):
 
 def lookup_name(symbol, word):
     # hacks for vrom variables in data
-    if word in [addr for _,addr in vrom_variables]:
+    if word in vrom_addrs:
         if word == 0: # no makerom segment start
             return "0x00000000"
         if symbol in [0x801AE4A0, # effect table
@@ -1223,6 +1224,9 @@ for segment in files_spec:
                 vrom_variables.append(("_" + filenames[i] + "SegmentRomEnd", vrom_end))
                 i += 1
                 dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
+
+# Construct vrom_addrs, now that vrom_variables is fully constructed
+vrom_addrs = {addr for _, addr in vrom_variables}
 
 def disassemble_makerom(segment):
     os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
