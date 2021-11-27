@@ -404,7 +404,7 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
         }
 
         if ((this->unk_398 == 4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KINGNUTS_DAMAGE);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EN_KINGNUTS_DAMAGE);
         }
 
         if (((this->unk_398 == 3) || (this->unk_398 == 6)) &&

@@ -436,11 +436,11 @@ void func_80A52074(EnDnk* this, GlobalContext* globalCtx) {
             break;
 
         case 438:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
             break;
 
         case 493:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
             break;
     }
 

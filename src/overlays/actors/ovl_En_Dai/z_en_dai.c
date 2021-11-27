@@ -304,7 +304,7 @@ s32 func_80B3E96C(EnDai* this, GlobalContext* globalCtx) {
                 break;
 
             case 1:
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
+                Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WEATHER_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0x1388, 0x708, 0x3E8, 0);
                 func_80B3E5DC(this, 3);
@@ -470,7 +470,7 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROLL_AND_FALL);
+                    Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_ROLL_AND_FALL);
                     break;
 
                 case 3:
@@ -493,27 +493,27 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
 
         case 2:
             if (globalCtx->csCtx.frames == 360) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
+                Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
             }
             if (Animation_OnFrame(&this->skelAnime, 43.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
+                Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
 
         case 3:
             if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
+                Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
 
         case 4:
             if (Animation_OnFrame(&this->skelAnime, 30.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP2);
+                Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP2);
             }
             if (Animation_OnFrame(&this->skelAnime, 35.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_0);
+                Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_GORON_BOUND_0);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;

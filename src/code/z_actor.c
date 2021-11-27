@@ -2118,7 +2118,7 @@ void func_800B8E58(Player* player, u16 sfxId) {
     }
 }
 
-void Actor_PlaySfxAtPos(Actor* actor, u16 sfxId) {
+void Actor_PlaySfxAtProjectedPos(Actor* actor, u16 sfxId) {
     func_8019F1C0(&actor->projectedPos, sfxId);
 }
 
@@ -3931,7 +3931,7 @@ void func_800BCB50(GlobalContext* globalCtx, Vec3f* arg1) {
 
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration) {
     if ((colorFlag == 0x8000) && !(colorIntensityMax & 0x8000)) {
-        Actor_PlaySfxAtPos(actor, NA_SE_EN_LIGHT_ARROW_HIT);
+        Actor_PlaySfxAtProjectedPos(actor, NA_SE_EN_LIGHT_ARROW_HIT);
     }
 
     actor->colorFilterParams = colorFlag | xluFlag | ((colorIntensityMax & 0xF8) << 5) | duration;
@@ -4511,13 +4511,13 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
 
         if ((actor != NULL) && (arg6 > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
             if (mode == 0) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+                Actor_PlaySfxAtProjectedPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else if (mode == 1) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+                Actor_PlaySfxAtProjectedPos(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
             } else if (mode == 0xB) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfxAtProjectedPos(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             } else if ((mode == 0x14) || (mode == 0x15)) {
-                Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
+                Actor_PlaySfxAtProjectedPos(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
             }
         }
 

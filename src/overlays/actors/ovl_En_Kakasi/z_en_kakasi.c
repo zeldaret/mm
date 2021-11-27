@@ -221,24 +221,24 @@ void EnKakasi_8096F88C(GlobalContext* globalCtx, EnKakasi* this) {
 void EnKakasi_CheckAnimationSfx(EnKakasi* this) {
     if (this->animIndex == ENKAKASI_ANIM_SIDEWAYS_SHAKING || this->animIndex == ENKAKASI_ANIM_ARMS_CROSSED_STILL) {
         if (Animation_OnFrame(&this->skelanime, 1.0f) || Animation_OnFrame(&this->skelanime, 8.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KAKASHI_SWING);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_KAKASHI_SWING);
         }
     }
     if (this->animIndex == ENKAKASI_ANIM_HOPPING_REGULAR || this->animIndex == ENKAKASI_ANIM_SLOWROLL) {
         if (Animation_OnFrame(&this->skelanime, 4.0f) || Animation_OnFrame(&this->skelanime, 8.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KAKASHI_SWING);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_KAKASHI_SWING);
         }
         if (Animation_OnFrame(&this->skelanime, 1.0f) || Animation_OnFrame(&this->skelanime, 9.0f) ||
             Animation_OnFrame(&this->skelanime, 16.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_KAKASHI_JUMP);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_IT_KAKASHI_JUMP);
         }
         if (Animation_OnFrame(&this->skelanime, 18.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KAKASHI_ROLL);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_KAKASHI_ROLL);
         }
     }
     if (this->animIndex == ENKAKASI_ANIM_SPIN_REACH_OFFER || this->animIndex == ENKAKASI_ANIM_TWIRL) {
         if (Animation_OnFrame(&this->skelanime, 1.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KAKASH_LONGI_ROLL);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_KAKASH_LONGI_ROLL);
         }
     }
 }
@@ -631,7 +631,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
             this->unk190 = 0;
             this->unkCounter1A4 = 0;
             ActorCutscene_Stop(this->actorCutscenes[0]);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YASE_DEAD);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EN_YASE_DEAD);
             if (this) {}
             this->unkState196 = 2;
             this->cutsceneCamId = MAIN_CAM;
@@ -1016,7 +1016,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx) {
         } else {
             Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos,
                                      this->actor.shape.shadowScale - 20.0f, 5, 4.0f, 200, 10, 1);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
     }
 
@@ -1065,7 +1065,7 @@ void EnKakasi_SetupRiseOutOfGround(EnKakasi* this, GlobalContext* globalCtx) {
 
     } else {
         ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[cutsceneIndex], &this->actor);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actor.draw = EnKakasi_Draw;
         this->unkState196 = 6;
         this->actionFunc = EnKakasi_RisingOutOfGround;
@@ -1082,7 +1082,7 @@ void EnKakasi_RisingOutOfGround(EnKakasi* this, GlobalContext* globalCtx) {
         if ((globalCtx->gameplayFrames % 8) == 0) {
             Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos,
                                      this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
         Math_ApproachF(&this->actor.shape.yOffset, 0.0f, 0.5f, 200.0f);
     } else {

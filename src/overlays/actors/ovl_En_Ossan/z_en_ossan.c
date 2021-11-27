@@ -551,7 +551,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
         func_8013BC6C(&this->skelAnime, animations, 9);
     }
     if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
+        Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_HANKO);
     }
 }
 

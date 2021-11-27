@@ -212,7 +212,7 @@ animdict = {
     "func_800B867C": "Actor_TextboxIsClosing",
     "func_80152498": "Message_GetState",
     "func_800B8898": "Actor_GetScreenPos",
-    "Audio_PlayActorSound2": "Actor_PlaySfxAtPos",
+    "Audio_PlayActorSound2": "Actor_PlaySfxAtProjectedPos",
     "zelda_malloc(": "ZeldaArena_Malloc(",
     "zelda_mallocR(": "ZeldaArena_MallocR(",
     "zelda_realloc": "ZeldaArena_Realloc",
