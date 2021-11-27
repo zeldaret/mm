@@ -3284,37 +3284,33 @@ Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* 
                                          parent->unk20, parent);
 }
 
-#ifdef NON_MATCHING
 void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCtx) {
-    TransitionActorEntry* phi_s0;
-    s32 phi_s2;
-    s16 phi_v1;
+    TransitionActorEntry* transitionActorList = globalCtx->doorCtx.transitionActorList;
+    s32 i;
+    s16 numTransitionActors = globalCtx->doorCtx.numTransitionActors;
 
-    phi_s0 = globalCtx->doorCtx.transitionActorList;
-    phi_v1 = globalCtx->doorCtx.numTransitionActors;
+    for (i = 0; i < numTransitionActors; transitionActorList++, i++) {
+        if (transitionActorList->id >= 0) {
+            if ((transitionActorList->sides[0].room >= 0 &&
+                 (globalCtx->roomCtx.currRoom.num == transitionActorList->sides[0].room ||
+                  globalCtx->roomCtx.prevRoom.num == transitionActorList->sides[0].room)) ||
+                (transitionActorList->sides[1].room >= 0 &&
+                 (globalCtx->roomCtx.currRoom.num == transitionActorList->sides[1].room ||
+                  globalCtx->roomCtx.prevRoom.num == transitionActorList->sides[1].room))) {
+                s16 rotY = ((transitionActorList->rotY >> 7) & 0x1FF) * (0x10000 / 360.0f);
 
-    for (phi_s2 = 0; phi_s2 < phi_v1; phi_s2++) {
-        if (phi_s0->id >= 0) {
-            if ((phi_s0->sides[0].room >= 0 && (globalCtx->roomCtx.currRoom.num == phi_s0->sides[0].room ||
-                                                globalCtx->roomCtx.prevRoom.num == phi_s0->sides[0].room)) ||
-                (phi_s0->sides[1].room >= 0 && (globalCtx->roomCtx.currRoom.num == phi_s0->sides[1].room ||
-                                                globalCtx->roomCtx.prevRoom.num == phi_s0->sides[1].room))) {
-                s16 rotY = ((phi_s0->rotY >> 7) & 0x1FF) * 182.04445f;
-
-                if (Actor_SpawnAsChildAndCutscene(
-                        actorCtx, globalCtx, phi_s0->id & 0x1FFF, phi_s0->pos.x, phi_s0->pos.y, phi_s0->pos.z, 0, rotY,
-                        0, (phi_s2 << 0xA) + (phi_s0->params & 0x3FF), phi_s0->pos.x & 0x7F, 0x3FF, 0) != NULL) {
-                    phi_s0->id = -phi_s0->id;
+                if (Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, transitionActorList->id & 0x1FFF,
+                                                  transitionActorList->pos.x, transitionActorList->pos.y,
+                                                  transitionActorList->pos.z, 0, rotY, 0,
+                                                  (i << 0xA) + (transitionActorList->params & 0x3FF),
+                                                  transitionActorList->rotY & 0x7F, 0x3FF, 0) != NULL) {
+                    transitionActorList->id = -transitionActorList->id;
                 }
-                phi_v1 = globalCtx->doorCtx.numTransitionActors;
+                numTransitionActors = globalCtx->doorCtx.numTransitionActors;
             }
         }
-        phi_s0++;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s")
-#endif
 
 Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* gameState) {
     s16 rotX = (actorEntry->rot.x >> 7) & 0x1FF;
