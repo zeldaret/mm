@@ -54,7 +54,7 @@ void EnStream_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnStream_PlayerIsInRange(Vec3f* vortexWorldPos, Vec3f* playerWorldPos, Vec3f* posDifference, f32 vortexYScale) {
-    s32 ret = 0;
+    s32 ret = EN_STREAM_PLAYER_OUTSIDE_RANGE;
     f32 smallConstant = 28.0f;
     f32 upperBounds = 160 * vortexYScale * 50.0f;
     f32 lowerBounds = 0 * vortexYScale * 50.0f;
@@ -71,12 +71,12 @@ s32 EnStream_PlayerIsInRange(Vec3f* vortexWorldPos, Vec3f* playerWorldPos, Vec3f
 
         range = ((75.0f - smallConstant) * (posDifference->y / (upperBounds - lowerBounds))) + 28.0f;
         if (xzDist <= range) {
-            ret = 1;
+            ret = EN_STREAM_PLAYER_WITHIN_RANGE_INSIDE_VORTEX;
         }
     }
 
-    if ((posDifference->y <= lowerBounds) && (xzDist <= 28.0f)) {
-        ret = 2;
+    if (posDifference->y <= lowerBounds && xzDist <= 28.0f) {
+        ret = EN_STREAM_PLAYER_WITHIN_RANGE_BELOW_VORTEX;
     }
 
     return ret;
@@ -91,7 +91,7 @@ void EnStream_SuckPlayer(EnStream* this, GlobalContext* globalCtx) {
     s32 pad30[2];
 
     if (EnStream_PlayerIsInRange(&this->actor.world.pos, &player->actor.world.pos, &posDifference,
-                                 this->actor.scale.y)) {
+                                 this->actor.scale.y) != EN_STREAM_PLAYER_OUTSIDE_RANGE) {
         xzDist = sqrtf(SQ(posDifference.x) + SQ(posDifference.z));
         yDistWithOffset = player->actor.world.pos.y - (this->actor.world.pos.y - 90.0f);
         player->unk_B84 = Math_Atan2S(-posDifference.x, -posDifference.z);
@@ -118,7 +118,8 @@ void EnStream_WaitForPlayer(EnStream* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f temp;
 
-    if (EnStream_PlayerIsInRange(&this->actor.world.pos, &player->actor.world.pos, &temp, this->actor.scale.y)) {
+    if (EnStream_PlayerIsInRange(&this->actor.world.pos, &player->actor.world.pos, &temp, this->actor.scale.y) !=
+        EN_STREAM_PLAYER_OUTSIDE_RANGE) {
         EnStream_SetupAction(this, EnStream_SuckPlayer);
     }
 }
