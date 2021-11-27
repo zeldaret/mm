@@ -11,17 +11,12 @@ typedef void (*EnSwActionFunc)(struct EnSw*, GlobalContext*);
 #define ENSW_GET_3FC(thisx) (((thisx)->params & 0x3FC) >> 2)
 #define ENSW_GET_FF00(thisx) ((((thisx)->params & 0xFF00) >> 8) & 0xFF)
 
-typedef struct {
-    u8 unk_00;
-    s32 unk_04;
-} EnSwUnkStruct;
-
 typedef struct EnSw {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
     /* 0x0188 */ EnSwActionFunc actionFunc;
     /* 0x018C */ ColliderSphere collider;
-    /* 0x01E4 */ EnSwUnkStruct* unk_1E4;
+    /* 0x01E4 */ Path* unk_1E4;
     /* 0x01E8 */ Vec3s jointTable[30];
     /* 0x029C */ Vec3s morphTable[30];
     /* 0x0350 */ Vec3f unk_350;

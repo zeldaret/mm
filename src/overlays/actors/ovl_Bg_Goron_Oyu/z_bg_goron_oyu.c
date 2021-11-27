@@ -101,9 +101,9 @@ void func_80B40308(BgGoronOyu* this, GlobalContext* globalCtx) {
     WaterBox* waterBox;
     f32 sp28;
 
-    if (func_800CA1AC(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z, &sp28,
-                      &waterBox) != 0) {
-        Math_Vec3s_ToVec3f(&this->waterBoxPos, &waterBox->xMin);
+    if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z, &sp28,
+                      &waterBox)) {
+        Math_Vec3s_ToVec3f(&this->waterBoxPos, &waterBox->minPos);
         this->waterBoxXLength = waterBox->xLength;
         this->waterBoxZLength = waterBox->zLength;
     }
@@ -116,7 +116,7 @@ void func_80B40394(BgGoronOyu* this, GlobalContext* globalCtx) {
     CollisionPoly* poly;
     s32 pad;
 
-    if ((globalCtx->state.frames & 3) == 0) {
+    if ((globalCtx->state.frames % 4) == 0) {
         Vec3f sp40;
         Vec3f sp34;
 
@@ -128,7 +128,7 @@ void func_80B40394(BgGoronOyu* this, GlobalContext* globalCtx) {
         sp40.z = 0.0f;
         sp6E = -200 - (s32)(Rand_ZeroOne() * 50.0f);
 
-        if (func_800C4000(globalCtx, &globalCtx->colCtx, &poly, &sp60) < this->waterBoxPos.y) {
+        if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &sp60) < this->waterBoxPos.y) {
             sp60.y = this->waterBoxPos.y + 10.0f;
             EffectSsIceSmoke_Spawn(globalCtx, &sp60, &sp40, &D_801D15B0, sp6E);
         }
@@ -140,7 +140,7 @@ void func_80B40394(BgGoronOyu* this, GlobalContext* globalCtx) {
         sp34.z = 0.0f;
         sp6E = -200 - (s32)(Rand_ZeroOne() * 50.0f);
 
-        if (func_800C4000(globalCtx, &globalCtx->colCtx, &poly, &sp54) < this->waterBoxPos.y) {
+        if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &sp54) < this->waterBoxPos.y) {
             sp54.y = this->waterBoxPos.y + 10.0f;
             EffectSsIceSmoke_Spawn(globalCtx, &sp54, &sp34, &D_801D15B0, sp6E);
         }
@@ -154,9 +154,9 @@ void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
     DynaPolyActor_Init(&this->dyna, 1);
-    BgCheck_RelocateMeshHeader(&D_06000988, &colHeader);
+    CollisionHeader_GetVirtual(&D_06000988, &colHeader);
 
-    this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
 
     func_80B40308(this, globalCtx);
 
@@ -172,7 +172,7 @@ void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgGoronOyu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgGoronOyu* this = (BgGoronOyu*)thisx;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx) {
