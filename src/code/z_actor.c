@@ -3387,22 +3387,21 @@ s32 func_800BB59C(GlobalContext* globalCtx, Actor* actor) {
     return (x > -20) && (x < gScreenWidth + 20) && (y > -160) && (y < gScreenHeight + 160);
 }
 
-#ifdef NON_EQUIVALENT
 void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player, s32 actorCategory) {
-    GlobalContext* globalCtx = gameState;
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
+    f32 temp_f0_2;
     Actor* sp8C;
+    Actor* phi_s0;
+    s32 phi_s2;
     CollisionPoly* sp80;
     s32 sp7C;
     Vec3f sp70;
-    f32 temp_f0_2;
-    Actor* phi_s0;
-    s32 phi_s2;
     s32 phi_s2_2;
 
     phi_s0 = actorCtx->actorList[actorCategory].first;
     sp8C = player->unk_730;
     while (phi_s0 != 0) {
-        if ((phi_s0->update != 0) && (phi_s0 != &player->actor)) {
+        if ((phi_s0->update != 0) && ((Player*)phi_s0 != player)) {
             if ((phi_s0->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1)) != 0) {
                 if ((actorCategory == ACTORCAT_ENEMY) &&
                     ((phi_s0->flags & (ACTOR_FLAG_4 | ACTOR_FLAG_1)) == (ACTOR_FLAG_4 | ACTOR_FLAG_1))) {
@@ -3414,28 +3413,21 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
 
                 if ((phi_s0 != sp8C) || (phi_s0->flags & ACTOR_FLAG_80000)) {
                     temp_f0_2 = func_800B82EC(phi_s0, player, D_801ED8DC);
-                    phi_s2 = (phi_s0->flags & 1) != 0;
-                    if (phi_s2 != 0) {
-                        // phi_s2 = 0;
-                        // if (temp_f0_2 < D_801ED8C8) {
-                        //    phi_s2 = 1;
-                        //}
-                        phi_s2 = temp_f0_2 < D_801ED8C8 ? 1 : 0;
+                    phi_s2_2 = (phi_s0->flags & 1) != 0;
+                    if (phi_s2_2) {
+                        phi_s2_2 = temp_f0_2 < D_801ED8C8;
                     }
+                    phi_s2 = phi_s2_2;
                     phi_s2_2 = (phi_s0->flags & ACTOR_FLAG_40000000) != 0;
                     if (phi_s2_2) {
-                        // phi_s2_2 = 0;
-                        // if (temp_f0_2 < D_801ED8D0) {
-                        //    phi_s2_2 = 1;
-                        //}
                         phi_s2_2 = temp_f0_2 < D_801ED8D0;
                     }
 
-                    if (((phi_s2 != 0) || (phi_s2_2 != 0)) && (func_800B83BC(phi_s0, temp_f0_2) != 0)) {
+                    if (((phi_s2) || (phi_s2_2)) && (func_800B83BC(phi_s0, temp_f0_2))) {
                         if (func_800BB59C(globalCtx, phi_s0)) {
-                            if (((func_800C54AC(&globalCtx->colCtx, &player->actor.focus.pos, &phi_s0->focus.pos, &sp70,
-                                                &sp80, 1, 1, 1, 1, &sp7C) == 0) ||
-                                 (func_800C9D50(&globalCtx->colCtx, sp80, sp7C) != 0))) {
+                            if (((!BgCheck_CameraLineTest1(&globalCtx->colCtx, &player->actor.focus.pos,
+                                                           &phi_s0->focus.pos, &sp70, &sp80, 1, 1, 1, 1, &sp7C)) ||
+                                 (SurfaceType_IsIgnoredByProjectiles(&globalCtx->colCtx, sp80, sp7C)))) {
                                 if (phi_s0->targetPriority != 0) {
                                     if ((phi_s2 != 0) && (phi_s0->targetPriority < D_801ED8D4)) {
                                         D_801ED8BC = phi_s0;
@@ -3464,10 +3456,6 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
         phi_s0 = phi_s0->next;
     }
 }
-#else
-void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player, s32 actorCategory);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB604.s")
-#endif
 
 u8 D_801AED8C[] = {
     ACTORCAT_BOSS,  ACTORCAT_ENEMY,  ACTORCAT_BG,   ACTORCAT_EXPLOSIVES, ACTORCAT_NPC,  ACTORCAT_ITEMACTION,
