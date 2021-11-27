@@ -2802,39 +2802,35 @@ s32 func_800BA2D8(GlobalContext* globalCtx, Actor* actor) {
     return func_800BA2FC(globalCtx, actor, &actor->projectedPos, actor->projectedW);
 }
 
-#ifdef NON_MATCHING
 s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3) {
-    f32 temp_f14;
-    f32 phi_f12;
-    f32 phi_f2;
-    f32 phi_f14;
-    f32 phi_f16;
-
     if ((-actor->uncullZoneScale < arg2->z) && (arg2->z < (actor->uncullZoneForward + actor->uncullZoneScale))) {
+        f32 temp_f14;
+        f32 phi_f12;
+        f32 phi_f2;
+        f32 phi_f14;
+        f32 phi_f16;
+
         phi_f2 = CLAMP_MIN(arg3, 1.0f);
 
         if (globalCtx->view.fovy != 60.0f) {
-            temp_f14 = globalCtx->unk_187F0.y * 0.57735026f;
             phi_f12 = actor->uncullZoneScale * globalCtx->unk_187F0.x * 0.76980036f;
-            phi_f14 = temp_f14 * actor->uncullZoneDownward;
-            phi_f16 = actor->uncullZoneScale * temp_f14;
+
+            phi_f14 = globalCtx->unk_187F0.y * 0.57735026f;
+            phi_f16 = actor->uncullZoneScale * phi_f14;
+            phi_f14 *= actor->uncullZoneDownward;
         } else {
-            phi_f12 = actor->uncullZoneScale;
+            phi_f16 = phi_f12 = actor->uncullZoneScale;
             phi_f14 = actor->uncullZoneDownward;
-            phi_f16 = actor->uncullZoneScale;
         }
 
         if (((fabsf(arg2->x) - phi_f12) < phi_f2) && ((-phi_f2 < (arg2->y + phi_f14))) &&
             ((arg2->y - phi_f16) < phi_f2)) {
-            return 1;
+            return true;
         }
     }
 
     return false;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA2FC.s")
-#endif
 
 #ifdef NON_EQUIVALENT
 // weird DISPS stuff
