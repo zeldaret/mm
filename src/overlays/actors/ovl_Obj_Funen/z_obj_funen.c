@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_funen.c
+ * Overlay: ovl_Obj_Funen
+ * Description:
+ */
+
 #include "z_obj_funen.h"
 
 #define FLAGS 0x00000030
@@ -8,15 +14,9 @@ void ObjFunen_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Funen_InitVars = {
-    ACTOR_OBJ_FUNEN,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FUNEN,
-    sizeof(ObjFunen),
-    (ActorFunc)ObjFunen_Init,
-    (ActorFunc)func_800BDFB0,
-    (ActorFunc)func_800BDFB0,
-    (ActorFunc)ObjFunen_Draw,
+    ACTOR_OBJ_FUNEN,       ACTORCAT_PROP,         FLAGS,
+    OBJECT_FUNEN,          sizeof(ObjFunen),      (ActorFunc)ObjFunen_Init,
+    (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)ObjFunen_Draw,
 };
 
 extern Gfx D_060000D0[];
@@ -36,7 +36,7 @@ void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_RotateY((s16)(func_800DFCDC(ACTIVE_CAM) - 0x8000), 1);
+    Matrix_RotateY((s16)(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) - 0x8000), 1);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 

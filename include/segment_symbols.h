@@ -1,7 +1,7 @@
 #ifndef _SEGMENT_SYMBOLS_H_
 #define _SEGMENT_SYMBOLS_H_
 
-#include <z64.h>
+#include "z64.h"
 
 #define DECLARE_SEGMENT(name)          \
     extern u8 _##name##SegmentStart[]; \
@@ -18,6 +18,18 @@
 #define DECLARE_OVERLAY_SEGMENT(name) \
     DECLARE_SEGMENT(ovl_##name)       \
     DECLARE_ROM_SEGMENT(ovl_##name)
+
+#define SEGMENT_START(segment) (_ ## segment ## SegmentStart)
+#define SEGMENT_END(segment) (_ ## segment ## SegmentEnd)
+#define SEGMENT_SIZE(segment) ((uintptr_t)SEGMENT_END(segment) - (uintptr_t)SEGMENT_START(segment))
+
+#define SEGMENT_ROM_START(segment) (_ ## segment ## SegmentRomStart)
+#define SEGMENT_ROM_END(segment) (_ ## segment ## SegmentRomEnd)
+#define SEGMENT_ROM_SIZE(segment) ((uintptr_t)SEGMENT_ROM_END(segment) - (uintptr_t)SEGMENT_ROM_START(segment))
+
+#define SEGMENT_BSS_START(segment) (_ ## segment ## SegmentBssStart)
+#define SEGMENT_BSS_END(segment) (_ ## segment ## SegmentBssEnd)
+#define SEGMENT_BSS_SIZE(segment) ((uintptr_t)SEGMENT_BSS_END(segment) - (uintptr_t)SEGMENT_BSS_START(segment))
 
 DECLARE_SEGMENT(boot)
 DECLARE_ROM_SEGMENT(boot)
@@ -1149,14 +1161,16 @@ DECLARE_ROM_SEGMENT(scene_texture_07)
 DECLARE_ROM_SEGMENT(scene_texture_08)
 DECLARE_ROM_SEGMENT(nintendo_rogo_static)
 DECLARE_ROM_SEGMENT(title_static)
+DECLARE_SEGMENT(memerrmsg)
 DECLARE_ROM_SEGMENT(memerrmsg)
+DECLARE_SEGMENT(locerrmsg)
 DECLARE_ROM_SEGMENT(locerrmsg)
 DECLARE_ROM_SEGMENT(parameter_static)
 DECLARE_ROM_SEGMENT(week_static)
 DECLARE_ROM_SEGMENT(daytelop_static)
 DECLARE_ROM_SEGMENT(ger_daytelop_static)
 DECLARE_ROM_SEGMENT(fra_daytelop_static)
-DECLARE_ROM_SEGMENT(spa_daytelop_static)
+DECLARE_ROM_SEGMENT(esp_daytelop_static)
 DECLARE_ROM_SEGMENT(d2_fine_static)
 DECLARE_ROM_SEGMENT(d2_cloud_static)
 DECLARE_ROM_SEGMENT(d2_fine_pal_static)

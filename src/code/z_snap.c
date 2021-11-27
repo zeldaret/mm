@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 typedef struct {
     Actor actor;
@@ -114,15 +113,15 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     s16 x;
     s16 y;
     f32 distance;
-    CollisionPoly* unk1;
+    CollisionPoly* poly;
     Camera* camera;
     Actor* actors[2];
     s32 ret = 0;
-    u32 unk2;
+    s32 bgId;
 
-    camera = ACTIVE_CAM;
+    camera = GET_ACTIVE_CAM(globalCtx);
 
-    distance = CamMath_Distance(pos, &camera->eye);
+    distance = OLib_Vec3fDist(pos, &camera->eye);
     if ((distance < distanceMin) || (distanceMax < distance)) {
         func_8013A41C(0x3f);
         ret = 0x3f;
@@ -143,14 +142,15 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
         ret |= 0x3d;
     }
 
-    if (func_800C576C(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &unk1, 1, 1, 1, 1, &unk2) != 0) {
+    if (BgCheck_ProjectileLineTest(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &poly, true, true, true, true,
+                                   &bgId)) {
         func_8013A41C(0x3c);
         ret |= 0x3c;
     }
 
     actors[0] = actor;
-    actors[1] = &PLAYER->base;
-    if (CollisionCheck_LineOCCheck(globalCtx, &globalCtx->colCheckCtx, pos, &camera->eye, actors, 2) != 0) {
+    actors[1] = &GET_PLAYER(globalCtx)->actor;
+    if (CollisionCheck_LineOCCheck(globalCtx, &globalCtx->colChkCtx, pos, &camera->eye, actors, 2) != 0) {
         func_8013A41C(0x3b);
         ret |= 0x3b;
     }

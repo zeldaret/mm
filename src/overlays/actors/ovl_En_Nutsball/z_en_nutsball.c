@@ -1,4 +1,11 @@
+/*
+ * File: z_en_nutsball.c
+ * Overlay: ovl_En_Nutsball
+ * Description: Deku nut Projectile
+ */
+
 #include "z_en_nutsball.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS 0x00000010
 
@@ -82,12 +89,12 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNutsball* this = THIS;
     GlobalContext* globalCtx2 = globalCtx;
 
-    ActorPlayer* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f worldPos;
     Vec3s worldRot;
     Vec3f spawnBurstPos;
     f32 spdXZ;
-    u32 bgId;
+    s32 bgId;
     CollisionPoly* poly;
 
     if (!(player->stateFlags1 & 0x300000C0)) {
@@ -102,11 +109,11 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
         if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 16) ||
             (this->collider.base.atFlags & AT_HIT) || (this->collider.base.acFlags & AC_HIT) ||
             (this->collider.base.ocFlags1 & OC1_HIT)) {
-            if ((player->unk144 == 1) && (this->collider.base.atFlags & AT_HIT) &&
+            if ((player->currentShield == PLAYER_SHIELD_HEROS_SHIELD) && (this->collider.base.atFlags & AT_HIT) &&
                 (this->collider.base.atFlags & AT_TYPE_ENEMY) && (this->collider.base.atFlags & AT_BOUNCED)) {
                 EnNutsball_InitColliderParams(this);
-                func_8018219C(&player->unkD04, &worldRot, 0);
-                this->actor.world.rot.y = worldRot.y + 0x8000;
+                func_8018219C(&player->shieldMf, &worldRot, 0);
+                this->actor.world.rot.y = BINANG_ROT180(worldRot.y);
                 this->timer = 20;
             } else {
                 spawnBurstPos.x = this->actor.world.pos.x;
@@ -114,9 +121,9 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
                 spawnBurstPos.z = this->actor.world.pos.z;
                 EffectSsHahen_SpawnBurst(globalCtx, &spawnBurstPos, 6.0f, 0, 7, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
                 if (this->actor.params == 1) {
-                    func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_NUTS_BROKEN);
+                    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_NUTS_BROKEN);
                 } else {
-                    func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
+                    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
                 }
                 Actor_MarkForDeath(&this->actor);
             }
@@ -128,13 +135,13 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         Actor_SetVelocityAndMoveXYRotation(&this->actor);
         Math_Vec3f_Copy(&worldPos, &this->actor.world.pos);
-        func_800B78B8(globalCtx, &this->actor, 10.0f, 5.0f, 10.0f, 7);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 5.0f, 10.0f, 0x7);
 
         if (this->actor.bgCheckFlags & 8) {
             if (func_800C9A4C(&globalCtx2->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
                 this->actor.bgCheckFlags &= ~8;
-                if (func_800C55C4(&globalCtx2->colCtx, &this->actor.prevPos, &worldPos, &this->actor.world.pos, &poly,
-                                  1, 0, 0, 1, &bgId)) {
+                if (BgCheck_EntityLineTest1(&globalCtx2->colCtx, &this->actor.prevPos, &worldPos,
+                                            &this->actor.world.pos, &poly, true, false, false, true, &bgId)) {
                     if (func_800C9A4C(&globalCtx2->colCtx, poly, bgId) & 0x30) {
                         this->actor.world.pos.x += this->actor.velocity.x * 0.01f;
                         this->actor.world.pos.z += this->actor.velocity.z * 0.01f;
@@ -150,11 +157,11 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         this->actor.flags |= 0x1000000;
 
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
         if (this->timer < this->timerThreshold) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
     }
 }
@@ -162,10 +169,10 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnNutsball* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx)
+    OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    SysMatrix_InsertMatrix(&globalCtx->unk187FC, 1);
-    SysMatrix_InsertZRotation_s(this->actor.home.rot.z, 1);
+    Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->actor.home.rot.z, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_04058BA0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

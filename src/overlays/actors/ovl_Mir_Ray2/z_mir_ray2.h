@@ -1,7 +1,7 @@
 #ifndef Z_MIR_RAY2_H
 #define Z_MIR_RAY2_H
 
-#include <global.h>
+#include "global.h"
 
 struct MirRay2;
 

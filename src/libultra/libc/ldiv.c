@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 ldiv_t ldiv(long numer, long denom) {
     ldiv_t val;

@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_HSSTUMP_H
 #define Z_OBJ_HSSTUMP_H
 
-#include <global.h>
+#include "global.h"
 
 #define OBJHSSTUMP_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
 #define OBJHSSTUMP_GET_ISHIDDEN(thisx) (((thisx)->params >> 12) & 0xF)

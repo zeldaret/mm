@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 s32 osContStartReadData(OSMesgQueue* mq) {
     s32 ret;
@@ -7,14 +6,14 @@ s32 osContStartReadData(OSMesgQueue* mq) {
 
     __osSiGetAccess();
 
-    if (__osContLastCmd != 1) {
+    if (__osContLastPoll != 1) {
         __osPackReadData();
         __osSiRawStartDma(1, &__osContPifRam);
         osRecvMesg(mq, NULL, 1);
     }
 
     ret = __osSiRawStartDma(0, &__osContPifRam);
-    __osContLastCmd = 1;
+    __osContLastPoll = 1;
 
     __osSiRelAccess();
 

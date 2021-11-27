@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void guRotateF(float m[4][4], float a, float x, float y, float z) {
     static float D_80097F90 = 0.017453292; // TODO this is PI / 180.0, we should define pi somewhere

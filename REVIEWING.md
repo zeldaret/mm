@@ -13,7 +13,7 @@ Useful Links
 ------------
 
 - [Discord](https://discord.zelda64.dev/) - Primary discussion platform.
-- [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) - We use this to track decompilation progress, not GitHub Issues.
+- [Google Sheets reservation board](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) - We use this to track decompilation progress, not GitHub Issues.
 
 - [Contributing guide](https://github.com/zeldaret/mm/blob/master/CONTRIBUTING.md) - Instructions for contributors.
 - [Installation guide](https://github.com/zeldaret/mm/blob/master/README.md#installation) - Instructions for getting this repository set up and built on your machine.

@@ -1,6 +1,6 @@
 /*
  * File: z_bg_ctower_gear.c
- * Overlay: Bg_Ctower_Gear
+ * Overlay: ovl_Bg_Ctower_Gear
  * Description: Different Cogs/Organ inside Clock Tower
  */
 
@@ -40,17 +40,11 @@ const ActorInit Bg_Ctower_Gear_InitVars = {
 };
 
 extern Gfx D_06010828[];
-
 extern Gfx D_06015F30[];
-
 extern Gfx D_060160A0[];
-
 extern CollisionHeader D_06016E70;
-
 extern Gfx D_06017018[];
-
 extern Gfx D_06018118[];
-
 extern CollisionHeader D_06018588;
 
 static Vec3f D_80AD3270[] = {
@@ -96,14 +90,14 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     rotZ = this->dyna.actor.shape.rot.z & 0x1FFF;
     if ((flags != 0) && (rotZ < 0x1B58) && (rotZ >= 0x1388)) {
         Matrix_RotateY(this->dyna.actor.home.rot.y, 0);
-        SysMatrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
-        SysMatrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
+        Matrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
+        Matrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
         for (i = 0; i < 4; i++) {
             if ((u32)Rand_Next() >= 0x40000000) {
                 splashOffset.x = D_80AD3270[i].x - (Rand_ZeroOne() * 30.0f);
                 splashOffset.y = D_80AD3270[i].y;
                 splashOffset.z = D_80AD3270[i].z;
-                SysMatrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
+                Matrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
                 splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                 splashSpawnPos.y += this->dyna.actor.world.pos.y;
                 splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
@@ -114,14 +108,14 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     if ((rotZ < 0x1F4) && (rotZ >= 0)) {
         if (flags != 0) {
             Matrix_RotateY(this->dyna.actor.home.rot.y, 0);
-            SysMatrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
-            SysMatrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
+            Matrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
+            Matrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
             for (i = 0; i < 3; i++) {
                 for (j = 0; j < 2; j++) {
                     splashOffset.x = D_80AD32A0[i].x + (Rand_ZeroOne() * 10.0f);
                     splashOffset.y = D_80AD32A0[i].y;
                     splashOffset.z = D_80AD32A0[i].z;
-                    SysMatrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
+                    Matrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
                     splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                     splashSpawnPos.y += this->dyna.actor.world.pos.y;
                     splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
@@ -149,11 +143,11 @@ void BgCtowerGear_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     }
     if (type == WATER_WHEEL) {
-        BcCheck3_BgActorInit(&this->dyna, 3);
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06018588);
+        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06018588);
     } else if (type == ORGAN) {
-        BcCheck3_BgActorInit(&this->dyna, 0);
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06016E70);
+        DynaPolyActor_Init(&this->dyna, 0);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06016E70);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -164,7 +158,7 @@ void BgCtowerGear_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     type = BGCTOWERGEAR_GET_TYPE(this);
     if ((type == WATER_WHEEL) || (type == ORGAN)) {
-        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
 
@@ -188,7 +182,7 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerGear* this = THIS;
 
     if (func_800EE29C(globalCtx, 0x68)) {
-        switch (globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x68)]->unk0) {
+        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x68)]->unk0) {
             case 1:
                 this->dyna.actor.draw = NULL;
                 func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);

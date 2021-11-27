@@ -91,8 +91,8 @@ void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (!(this->disableDraw & 1)) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 

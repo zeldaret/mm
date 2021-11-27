@@ -13,11 +13,15 @@ This document aims to be a small reference of how to create a compatible xml fil
     - [Background](#background)
     - [Blob](#blob)
     - [DList](#dlist)
+    - [TextureAnimation](#textureanimation)
     - [Scene and Room](#scene-and-room)
+    - [AltHeader](#altheader)
     - [Animation](#animation)
     - [PlayerAnimation](#playeranimation)
     - [CurveAnimation](#curveanimation)
+    - [LegacyAnimation](#legacyanimation)
     - [Skeleton](#skeleton)
+    - [LimbTable](#limbtable)
     - [Limb](#limb)
     - [Symbol](#symbol)
     - [Collision](#collision)
@@ -28,6 +32,7 @@ This document aims to be a small reference of how to create a compatible xml fil
     - [Cutscene](#cutscene)
     - [Array](#array)
     - [Path](#path)
+    - [PlayerAnimationData](#playeranimationdata)
 
 ## Basic XML
 
@@ -40,11 +45,11 @@ An example of an object xml:
         <Animation Name="gJabuJabuAnim" Offset="0x1F4C"/>
 
         <Skeleton Name="gJabuJabuSkel" Type="Flex" LimbType="Standard" Offset="0xB9A8"/>
-            
+
         <!-- Jabu Jabu eye textures -->
-        <Texture Name="gJabuJabuEyeOpenTex" OutName="jabu_jabu_eye_open" Format="rgb5a1" Width="16" Height="32" Offset="0x7698"/>
-        <Texture Name="gJabuJabuEyeHalfTex" OutName="jabu_jabu_eye_half" Format="rgb5a1" Width="16" Height="32" Offset="0x7A98"/>
-        <Texture Name="gJabuJabuEyeClosedTex" OutName="jabu_jabu_eye_closed" Format="rgb5a1" Width="16" Height="32" Offset="0x7E98"/>
+        <Texture Name="gJabuJabuEyeOpenTex" OutName="jabu_jabu_eye_open" Format="rgba16" Width="16" Height="32" Offset="0x7698"/>
+        <Texture Name="gJabuJabuEyeHalfTex" OutName="jabu_jabu_eye_half" Format="rgba16" Width="16" Height="32" Offset="0x7A98"/>
+        <Texture Name="gJabuJabuEyeClosedTex" OutName="jabu_jabu_eye_closed" Format="rgba16" Width="16" Height="32" Offset="0x7E98"/>
 
 
         <Collision Name="gJabuJabu1Col" Offset="0x0A1C"/>
@@ -65,6 +70,20 @@ For most resources inside a `<File>` tag **you should also set an `Offset` attri
 
 It's worth noting that every tag expects a `Name="gNameOfTheAsset"`. This is will be the name of the extracted variable in the output C code. Every asset must be prefixed with `g` and the suffix should represent the type of the variable.
 
+Every tag can accept a `Static` attribute to specify if the asset should be marked as `static` or not.
+There are 3 valid values (defaults to `Global`):
+
+- `Global`: Mark static if the flag `--static` was used.
+- `On`: Override the global config and **always mark** as `static`.
+- `Off`: Override the global config and **don't mark** as `static`.
+
+This table summarizes if the asset will be marked `static` (✅) or not (❌)
+| `Static=""` attribute in XML | Without `--static` flag | With `--static` flag |
+| ---------------------------- | ----------------------- | -------------------- |
+| `On`                         | ✅                       | ✅                    |
+| `Global` (default)           | ❌                       | ✅                    |
+| `Off`                        | ❌                       | ❌                    |
+
 -------------------------
 
 ### File
@@ -78,11 +97,33 @@ It's worth noting that every tag expects a `Name="gNameOfTheAsset"`. This is wil
 - Attributes:
 
   - `Name`: Required. The name of the file in `baserom/` which will be extracted.
-  - `Segment`: Required. This is the segment number of the current file. Expects a decimal number, usually 6 if it is an object, or 128 for overlays (It's kinda a whacky hack to get around of the `0x80` addresses).
+  - `OutName`: Optional. The output name of the generated C source file. Defaults to the value passed to `Name`.
+  - `Segment`: Optional. This is the segment number of the current file. Expects a decimal number between 0 and 15 inclusive, usually 6 if it is an object. If not specified, the file will use VRAM instead of segmented addresses.
   - `BaseAddress`: Optional. RAM address of the file. Expects a hex number (with `0x` prefix). Default value: `0`.
   - `RangeStart`: Optional. File offset where the extraction will begin. Hex. Default value: `0x000000000`.
   - `RangeEnd`: Optional. File offset where the extraction will end. Hex. Default value: `0xFFFFFFFF`.
   - `Game`: Optional. Valid values: `OOT`, `MM`, `SW97` and `OOTSW97`. Default value: `OOT`.
+
+-------------------------
+
+### ExternalFile
+
+Allows ZAPD to map segmented addresses to variables declared in other files by using its XML.
+
+It is useful for objects that use variables from `gameplay_keep`, `gameplay_dangeon_keep`, `gameplay_field_keep`, etc.
+
+This tag can be used in the global `config.xml` file.
+
+- Example of this tag:
+
+```xml
+<ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="objects/gameplay_keep/"/>
+```
+
+- Attributes:
+
+  - `XmlPath`: Required. The path of the XML, relative to the value set by `ExternalXMLFolder` in the configuration file.
+  - `OutPath`: Required. The path were the header for the corresponding external file is. It is used to `#include` it in the generated `.c` file.
 
 -------------------------
 
@@ -108,7 +149,7 @@ u64 gCraterSmokeConeTex[] = {
 
   - `Name`: Required. Suxffixed by `Tex`, unless it is a palette, in that case it is suffixed by `TLUT`.
   - `OutName`: Required. The filename of the extracted `.png` file.
-  - `Format`: Required. The format of the image. Valid values: `rgba32`, `rgb5a1`, `i4`, `i8`, `ia4`, `ia8`, `ia16`, `ci4` and `ci8`.
+  - `Format`: Required. The format of the image. Valid values: `rgba32`, `rgba16`, `i4`, `i8`, `ia4`, `ia8`, `ia16`, `ci4` and `ci8`.
   - `Width`: Required. Width in pixels of the image.
   - `Height`: Required. Height in pixels of the image.
   - `TlutOffset`: Optional. Specifies the tlut's offset used by this texture. This attribute is only valid if `Format` is either `ci4` or `ci8`, otherwise an exception would be thrown.
@@ -123,10 +164,10 @@ The following is a list of the texture formats the Nintendo 64 supports, with th
 | 8-bit I                                         | `G_IM_FMT_I, G_IM_SIZ_8b`        | `i8`            |
 | 8-bit IA (4/4)                                  | `G_IM_FMT_IA, G_IM_SIZ_8b`       | `ia8`           |
 | 8-bit CI                                        | `G_IM_FMT_CI, G_IM_SIZ_8b`       | `ci8`           |
-| 16-bit red, green, blue, alpha (RGBA) (5/5/5/1) | `G_IM_FMT_RGBA, G_IM_SIZ_16b`    | `rgb5a1`        |
+| 16-bit red, green, blue, alpha (RGBA) (5/5/5/1) | `G_IM_FMT_RGBA, G_IM_SIZ_16b`    | `rgba16`        |
 | 16-bit IA (8/8)                                 | `G_IM_FMT_IA, G_IM_SIZ_16b`      | `ia16`          |
 | 16-bit YUV (Luminance, Blue-Y, Red-Y)           | `G_IM_FMT_YUV, G_IM_SIZ_16b`     | (not used)      |
-| 32-bit RGBA (8/8/8/8)                           | `G_IM_FMT_RGBA, G_IM_SIZ_32b`    | `rgba8`         |
+| 32-bit RGBA (8/8/8/8)                           | `G_IM_FMT_RGBA, G_IM_SIZ_32b`    | `rgba32`        |
 
 If you want to know more about this formats, you can check [`gsDPLoadTextureBlock`](http://n64devkit.square7.ch/n64man/gdp/gDPLoadTextureBlock.htm) for most formats, or [`gDPLoadTextureBlock_4b`](http://n64devkit.square7.ch/n64man/gdp/gDPLoadTextureBlock_4b.htm) for the 4-bit formats.
 
@@ -193,9 +234,77 @@ A.k.a. Display list, or Gfx.
 
 -------------------------
 
+### TextureAnimation
+
+A data type exclusive to Majora's Mask, that has scrolling, color changing, and texture changing capabilities. Declaring the main array will generate everything else; textures for the TextureCycle type must be declared manually in the XML to use symbols. (If it does reference any undeclared textures, ZAPD will warn and give the their offsets.)
+
+```xml
+<TextureAnimation Name="gRosaSistersTexAnim" Offset="0xD768"/>
+```
+
+- Attributes:
+
+  - `Name`: Required. Suxffixed by `TexAnim`.
+
+-------------------------
+
 ### Scene and Room
 
-TODO. I'm hoping somebody else will do this.
+`Scene`s and `Room`s are a bit special, because `Room`s usually needs assets declared in their respective `Scene` (which is in a different file), so they need to be extracted together.
+
+To accomplish this, the scene and each of their rooms must be declared in the same XML.
+
+- Example:
+
+```xml
+<Root>
+    <File Name="spot12_scene" Segment="2">
+        <Cutscene Name="gSpot12Cs_006490" Offset="0x6490"/>
+
+        <Scene Name="spot12_scene" Offset="0x0"/>
+    </File>
+    <File Name="spot12_room_0" Segment="3">
+        <Room Name="spot12_room_0" Offset="0x0"/>
+    </File>
+    <File Name="spot12_room_1" Segment="3">
+        <Room Name="spot12_room_1" Offset="0x0"/>
+    </File>
+</Root>
+
+```
+
+- Attributes:
+
+  - `HackMode`: Optional. This is a simple non-hardcoded way to handle some edge cases. Valid values: `syotes_room`.
+
+-------------------------
+
+### AltHeader
+
+Like `Scene`s and `Room`s, `AltHeader`s is special too. It should always be declared in the same `File` as a `Scene` or a `Room`.
+
+- Example:
+
+```xml
+<File Name="spot01_scene" Segment="2">
+    <Path Name="gSpot01Path_0003D0" NumPaths="3" Offset="0x3D0"/>
+
+    <Texture Name="gSpot01TLUT_00A870" OutName="spot01_tlut_A870" Format="rgb5a1" Width="220" Height="1" Offset="0xA870"/>
+    <Texture Name="gSpot01GrassTex" OutName="spot01_grass" Format="rgb5a1" Width="32" Height="32" Offset="0xAA50"/>
+
+    <Texture Name="gSpot01WindowDayTex" OutName="spot01_window_day" Format="rgb5a1" Width="32" Height="64" Offset="0x15b50"/>
+    <Texture Name="gSpot01WindowNightTex" OutName="spot01_window_night" Format="rgb5a1" Width="32" Height="64" Offset="0x16b50"/>
+
+    <Cutscene Name="gKakarikoFirstTimeCs" Offset="0xA540"/>
+
+    <Scene Name="spot01_scene" Offset="0x0"/>
+    <AltHeader Name="gKakarikoAltHeader_009980" Offset="0x9980"/>
+</File>
+```
+
+- Attributes:
+
+  - `Name`: Required. Suxffixed by `AltHeader`.
 
 -------------------------
 
@@ -242,6 +351,22 @@ TODO. I'm hoping somebody else will do this.
 
 -------------------------
 
+### LegacyAnimation
+
+Useful only for the unused `object_human`'s animation data.
+
+- Example:
+
+```xml
+<LegacyAnimation Name="gHumanAnim_011A9C" Offset="0x11A9C"/>
+```
+
+- Attributes:
+
+  - `Name`: Required. Suxffixed by `Anim`.
+
+-------------------------
+
 ### Skeleton
 
 - Example:
@@ -254,9 +379,25 @@ TODO. I'm hoping somebody else will do this.
 
   - `Name`: Required. Suxffixed by `Skel`.
   - `Type`: Required. Valid values: `Normal`, `Flex` and `Curve`.
-  - `LimbType`: Required. Valid values: `Standard`, `LOD`, `Skin` and `Curve`.
+  - `LimbType`: Required. Valid values: `Standard`, `LOD`, `Skin`, `Curve` and `Legacy`.
 
 ※ There are no restrictions in the `Type` and `LimbType` attributes besides the valid values, so any skeleton type can be combined with any limb type.
+
+-------------------------
+
+### LimbTable
+
+- Example:
+
+```xml
+<LimbTable Name="gHumanLimbTable_011FC8" LimbType="Legacy" Count="41" Offset="0x11FC8"/>
+```
+
+- Attributes:
+
+  - `Name`: Required. Suxffixed by `Skel`.
+  - `LimbType`: Required. Valid values: `Standard`, `LOD`, `Skin`, `Curve` and `Legacy`.
+  - `Count`: Required. Amount of limbs. Integer.
 
 -------------------------
 
@@ -271,7 +412,7 @@ TODO. I'm hoping somebody else will do this.
 - Attributes:
 
   - `Name`: Required. Suxffixed by `Limb`.
-  - `LimbType`: Required. Valid values: `Standard`, `LOD`, `Skin` and `Curve`.
+  - `LimbType`: Required. Valid values: `Standard`, `LOD`, `Skin`, `Curve` and `Legacy`.
 
 -------------------------
 
@@ -296,6 +437,7 @@ extern u8 gJsjutanShadowTex[2048];
   - `Type`: The type of the declared variable. If missing, it will default to `void*`.
   - `TypeSize`: The size in bytes of the type. If missing, it will default to `4` (the size of a word and a pointer). Integer or hex value.
   - `Count`: Optional. If it is present, the variable will be declared as an array instead of a plain variable. The value of this attribute specifies the length of the array. If `Count` is present but it has no value (`Count=""`), then the length of the array will not be specified either in the declared variable. Integer or hex value.
+  - `Static`: This attribute can't be enabled on a Symbol node. A warning will be showed in this case.
 
 -------------------------
 
@@ -332,7 +474,7 @@ u64 pad34F8 = { 0 };
 - Attributes:
 
   - `Name`: Required. Suxffixed by ~~`TBD`~~.
-  - `Type`: Required. Valid values: `s8`, `u8`, `s16`, `u16`, `s32`, `u32`, `s64`, `u64`, `f32` and `f64`.
+  - `Type`: Required. Valid values: `s8`, `u8`, `x8`, `s16`, `u16`, `x16`, `s32`, `u32`, `x32`, `s64`, `u64`, `x64`, `f32` and `f64`.
 
 ※ Can be wrapped in an [`Array`](#array) tag.
 
@@ -464,8 +606,6 @@ Currently, only [`Scalar`](#scalar), [`Vector`](#vector) and [`Vtx`](#vtx) suppo
 
 -------------------------
 
--------------------------
-
 ### Path
 
 - Example:
@@ -478,5 +618,22 @@ Currently, only [`Scalar`](#scalar), [`Vector`](#vector) and [`Vtx`](#vtx) suppo
 
   - `Name`: Required. Suxffixed by `Path`.
   - `NumPaths`: Optional. The amount of paths contained in the array. It must be a positive integer.
+
+-------------------------
+
+### PlayerAnimationData
+
+Allows the extraction of the specific data of the player animations which are found in the `link_animetion` file.
+
+- Example:
+
+```xml
+<PlayerAnimationData Name="gPlayerAnimData_000000" FrameCount="20" Offset="0x0"/>
+```
+
+- Attributes:
+
+  - `Name`: Required. Suxffixed by `AnimData`.
+  - `FrameCount`: Required. The length of the animation in frames. It must be a positive integer.
 
 -------------------------

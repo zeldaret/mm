@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
+
 #ifdef NON_MATCHING
 void func_800A81F0(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
     EffectBlureElement* elem;
@@ -46,7 +46,7 @@ void func_800A81F0(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
                 Math_Vec3f_Scale(&sp154, scale);
 
                 SkinMatrix_SetTranslate(&sp110, sp160.x, sp160.y, sp160.z);
-                Matrix_MakeRotationAroundUnitVector(&spD0, this->addAngle, sp154.x, sp154.y, sp154.z);
+                SkinMatrix_SetRotateAroundVec(&spD0, this->addAngle, sp154.x, sp154.y, sp154.z);
                 SkinMatrix_MtxFMtxFMult(&sp110, &spD0, &sp90);
                 SkinMatrix_SetTranslate(&sp110, -sp160.x, -sp160.y, -sp160.z);
                 SkinMatrix_MtxFMtxFMult(&sp90, &sp110, &sp50);
@@ -67,39 +67,39 @@ void func_800A81F0(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800A81F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800A81F0.s")
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800A8514.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800A8514.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/EffectBlure_Initcommon.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/EffectBlure_Initcommon.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/EffectBlure_Init1.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/EffectBlure_Init1.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/EffectBlure_Init2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/EffectBlure_Init2.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/EffectBlure_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/EffectBlure_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/EffectBlure_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/EffectBlure_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800A8C78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800A8C78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800A8DE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800A8DE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800A92FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800A92FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800A9330.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800A9330.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800A9804.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800A9804.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800AA190.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800AA190.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800AA460.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800AA460.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800AA498.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800AA498.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800AA700.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800AA700.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/func_800AABE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/func_800AABE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_eff_blure/EffectBlure_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_blure/EffectBlure_Draw.s")

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_test.c
+ * Overlay: ovl_En_Test
+ * Description:
+ */
+
 #include "z_en_test.h"
 
 #define FLAGS 0x00000010
@@ -9,7 +15,7 @@ void EnTest_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTest_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Test_InitVars = {
     ACTOR_EN_TEST,
     ACTORCAT_ITEMACTION,
@@ -21,22 +27,23 @@ const ActorInit En_Test_InitVars = {
     (ActorFunc)EnTest_Update,
     (ActorFunc)EnTest_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test_0x80862B70/func_80862B70.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test_0x80862B70/func_80862CBC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test/func_80862B70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test_0x80862B70/func_80862EDC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test/func_80862CBC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test_0x80862B70/func_80863048.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test/func_80862EDC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test_0x80862B70/EnTest_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test/func_80863048.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test_0x80862B70/EnTest_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test/EnTest_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test_0x80862B70/EnTest_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test/EnTest_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test_0x80862B70/func_808634B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test/EnTest_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test_0x80862B70/EnTest_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test/func_808634B8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test/EnTest_Draw.s")

@@ -1,13 +1,17 @@
 #ifndef Z_EN_SNOWMAN_H
 #define Z_EN_SNOWMAN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnSnowman;
 
+typedef void (*EnSnowmanActionFunc)(struct EnSnowman*, GlobalContext*);
+
 typedef struct EnSnowman {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x234];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x13C];
+    /* 0x0280 */ EnSnowmanActionFunc actionFunc;
+    /* 0x0284 */ char unk_284[0xF4];
 } EnSnowman; // size = 0x378
 
 extern const ActorInit En_Snowman_InitVars;

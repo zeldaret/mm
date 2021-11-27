@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type) {
     info->type = type;
@@ -132,7 +131,7 @@ void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* global
         posF.x = params->point.x;
         posF.y = params->point.y;
         posF.z = params->point.z;
-        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->unk187B0, &posF, &adjustedPos);
+        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &posF, &adjustedPos);
         if ((adjustedPos.z > -radiusF) && (600 + radiusF > adjustedPos.z) && (400 > fabsf(adjustedPos.x) - radiusF) &&
             (400 > fabsf(adjustedPos.y) - radiusF)) {
             light = Lights_FindSlot(lights);
@@ -330,9 +329,7 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
     Lights* lights;
     s32 i;
 
-    // TODO allocation should be a macro
-    lights = (Lights*)((int)gfxCtx->polyOpa.d - sizeof(Lights));
-    gfxCtx->polyOpa.d = (void*)lights;
+    lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
 
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientG;
@@ -357,9 +354,7 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
 Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambientB) {
     Lights* lights;
 
-    // TODO allocation should be a macro
-    lights = (Lights*)((int)gfxCtx->polyOpa.d - sizeof(Lights));
-    gfxCtx->polyOpa.d = (void*)lights;
+    lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
 
     lights->l.a.l.col[0] = ambientR;
     lights->l.a.l.colc[0] = ambientR;
@@ -407,7 +402,6 @@ void Lights_GlowCheck(GlobalContext* globalCtx) {
     }
 }
 
-#if 1
 void Lights_DrawGlow(GlobalContext* globalCtx) {
     Gfx* dl;
     LightPoint* params;
@@ -434,7 +428,7 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
 
                     gDPSetPrimColor(dl++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
 
-                    SysMatrix_InsertTranslation(params->x, params->y, params->z, 0);
+                    Matrix_InsertTranslation(params->x, params->y, params->z, MTXMODE_NEW);
                     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
                     gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -452,6 +446,3 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/Lights_DrawGlow.asm")
-#endif

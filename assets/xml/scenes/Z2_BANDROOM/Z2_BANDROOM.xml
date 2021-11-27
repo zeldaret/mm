@@ -15,7 +15,7 @@
         <Room Name="Z2_BANDROOM_room_03" Offset="0x0"/>
     </File>
     <File Name="Z2_BANDROOM_room_04" Segment="3" Game="MM">
-        <Texture Name="Z2_BANDROOM_room_04Tex_005A38" Format="rgb5a1" Width="64" Height="64" Offset="0x5A38"/>
+        <Texture Name="Z2_BANDROOM_room_04Tex_005A38" Format="rgba16" Width="64" Height="64" Offset="0x5A38"/>
 
         <Room Name="Z2_BANDROOM_room_04" Offset="0x0"/>
     </File>

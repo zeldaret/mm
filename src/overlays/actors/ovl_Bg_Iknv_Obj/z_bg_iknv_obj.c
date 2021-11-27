@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_iknv_obj.c
+ * Overlay: ovl_Bg_Iknv_Obj
+ * Description: Ikana - waterwheel, stone tower door, sakon's hideout door
+ */
+
 #include "z_bg_iknv_obj.h"
 
 #define FLAGS 0x00000010
@@ -33,21 +39,21 @@ const ActorInit Bg_Iknv_Obj_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { 
-        COLTYPE_NONE, 
+    {
+        COLTYPE_NONE,
         AT_NONE,
-        AC_ON | AC_TYPE_ENEMY, 
-        OC1_ON | OC1_TYPE_ALL, 
-        OC2_TYPE_1, 
-        COLSHAPE_CYLINDER, 
+        AC_ON | AC_TYPE_ENEMY,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
     },
-    { 
-        ELEMTYPE_UNK0, 
-        { 0x00000000, 0x00, 0x00 }, 
-        { 0xF7CFFFFF, 0x00, 0x00 }, 
-        TOUCH_NONE | TOUCH_SFX_NORMAL, 
-        BUMP_ON, 
-        OCELEM_ON, 
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
     },
     { 40, 40, 0, { 0, 0, 0 } },
 };
@@ -68,18 +74,18 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
         case IKNV_OBJ_RAISED_DOOR:
             this->displayListPtr = D_06011880;
-            BcCheck3_BgActorInit(&this->dyna, 0);
-            BgCheck_RelocateMeshHeader(&D_060119D4, &colHeader);
-            this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+            DynaPolyActor_Init(&this->dyna, 0);
+            CollisionHeader_GetVirtual(&D_060119D4, &colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             this->actionFunc = BgIknvObj_UpdateRaisedDoor;
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
             break;
         case IKNV_OBJ_SAKON_DOOR:
             this->displayListPtr = D_060129C8;
             this->actionFunc = BgIknvObj_UpdateSakonDoor;
-            BcCheck3_BgActorInit(&this->dyna, 0);
-            BgCheck_RelocateMeshHeader(&D_06012CA4, &colHeader);
-            this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+            DynaPolyActor_Init(&this->dyna, 0);
+            CollisionHeader_GetVirtual(&D_06012CA4, &colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
             this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -88,7 +94,7 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
         default:
             Actor_MarkForDeath(&this->dyna.actor);
-    } 
+    }
 }
 
 void BgIknvObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -102,7 +108,7 @@ void BgIknvObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
             return;
         }
     }
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 s32 func_80BD7CEC(BgIknvObj* this) {
@@ -130,7 +136,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_WOOD_WATER_WHEEL - SFX_FLAG);
     }
 
-    if ((globalCtx->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk12 == 4) &&
+    if ((globalCtx->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 4) &&
         (globalCtx->csCtx.frames == 0x5D7)) {
         func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }
@@ -138,7 +144,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx) {
 
 s32 func_80BD7E0C(BgIknvObj* this, s16 targetRotation, GlobalContext* globalCtx) {
     this->dyna.actor.shape.yOffset = 0.0f;
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     if (targetRotation != this->dyna.actor.shape.rot.y) {
         Math_SmoothStepToS(&this->dyna.actor.shape.rot.y, targetRotation, 2, 100, 100);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
@@ -157,7 +163,7 @@ void func_80BD7ED8(BgIknvObj* this, GlobalContext* globalCtx) {
         this->actionFunc = BgIknvObj_UpdateSakonDoor;
         gSaveContext.weekEventReg[51] &= (u8)~0x10;
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void func_80BD7F4C(BgIknvObj* this, GlobalContext* globalCtx) {
@@ -168,7 +174,7 @@ void func_80BD7F4C(BgIknvObj* this, GlobalContext* globalCtx) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         this->dyna.actor.home.rot.x = 0;
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void func_80BD7FDC(BgIknvObj* this, GlobalContext* globalCtx) {
@@ -183,7 +189,7 @@ void func_80BD8040(BgIknvObj* this, GlobalContext* globalCtx) {
     if (func_80BD7CEC(this)) {
         this->actionFunc = func_80BD7FDC;
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx) {
@@ -191,7 +197,7 @@ void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80BD8040;
         gSaveContext.weekEventReg[89] |= 0x80;
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, GlobalContext* globalCtx) {

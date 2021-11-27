@@ -1,7 +1,10 @@
 #ifndef _COLOR_H_
 #define _COLOR_H_
 
-#include <PR/ultratypes.h>
+#include "PR/ultratypes.h"
+
+// For checking the alpha bit in an RGBA16 pixel
+#define RGBA16_PIXEL_OPAQUE 1
 
 typedef struct {
     /* 0x0 */ u8 r;
@@ -28,6 +31,10 @@ typedef struct {
     f32 r, g, b, a;
 } Color_RGBAf;
 
+typedef struct {
+    u32 r, g, b, a;
+} Color_RGBAu32;
+
 typedef union {
     struct {
         u16 r : 5;
@@ -36,6 +43,6 @@ typedef union {
         u16 a : 1;
     };
     u16 rgba;
-} Color_RGB5A1;
+} Color_RGBA16;
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_MOON_STONE_H
 #define Z_OBJ_MOON_STONE_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjMoonStone;
 

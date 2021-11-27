@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_KEPN_KOYA_H
 #define Z_OBJ_KEPN_KOYA_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjKepnKoya;
 

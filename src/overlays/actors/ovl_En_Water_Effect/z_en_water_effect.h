@@ -1,7 +1,7 @@
 #ifndef Z_EN_WATER_EFFECT_H
 #define Z_EN_WATER_EFFECT_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnWaterEffect;
 

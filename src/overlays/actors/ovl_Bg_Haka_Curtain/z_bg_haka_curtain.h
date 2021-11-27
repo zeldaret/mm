@@ -1,7 +1,7 @@
 #ifndef Z_BG_HAKA_CURTAIN_H
 #define Z_BG_HAKA_CURTAIN_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgHakaCurtain;
 

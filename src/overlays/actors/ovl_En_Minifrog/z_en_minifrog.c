@@ -29,8 +29,6 @@ extern AnimationHeader D_06001534;
 extern FlexSkeletonHeader D_0600B538;
 extern UNK_TYPE4 D_060059A0;
 extern UNK_TYPE4 D_06005BA0;
-extern UNK_TYPE1 D_0400DEA8;
-extern UNK_TYPE1 D_0400E2A8;
 
 const ActorInit En_Minifrog_InitVars = {
     ACTOR_EN_MINIFROG,
@@ -94,8 +92,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 15.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B538, &D_06001534, this->limbDrawTable,
-                     this->transitionDrawTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B538, &D_06001534, this->jointTable, this->morphTable, 24);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -183,7 +180,7 @@ EnMinifrog* EnMinifrog_GetFrog(GlobalContext* globalCtx) {
 void EnMinifrog_SetJumpState(EnMinifrog* this) {
     if (this->jumpState == MINIFROG_STATE_GROUND) {
         this->jumpState = MINIFROG_STATE_JUMP;
-        SkelAnime_ChangeAnim(&this->skelAnime, &D_060007BC, 1.0f, 0.0f, 7.0f, 2, -5.0f);
+        Animation_Change(&this->skelAnime, &D_060007BC, 1.0f, 0.0f, 7.0f, 2, -5.0f);
     }
 }
 
@@ -197,10 +194,10 @@ void EnMinifrog_JumpTimer(EnMinifrog* this) {
 }
 
 void EnMinifrog_Jump(EnMinifrog* this) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     switch (this->jumpState) {
         case MINIFROG_STATE_JUMP:
-            if (func_801378B8(&this->skelAnime, 4.0f)) {
+            if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
                 this->actor.bgCheckFlags &= ~1;
                 this->actor.velocity.y = 6.0f;
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_JUMP);
@@ -210,8 +207,8 @@ void EnMinifrog_Jump(EnMinifrog* this) {
         case MINIFROG_STATE_AIR:
             if (this->actor.bgCheckFlags & 1) {
                 this->jumpState = MINIFROG_STATE_GROUND;
-                SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06001534, -2.5f);
-                SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+                Animation_MorphToLoop(&this->skelAnime, &D_06001534, -2.5f);
+                SkelAnime_Update(&this->skelAnime);
             }
             break;
     }
@@ -240,7 +237,7 @@ void EnMinifrog_SetCamera(EnMinifrog* this, GlobalContext* globalCtx) {
     Vec3f eye;
     s32 i;
 
-    eye = ACTIVE_CAM->eye;
+    eye = GET_ACTIVE_CAM(globalCtx)->eye;
     yaw = Math_Vec3f_Yaw(&eye, &this->actor.world.pos);
     pitch = -Math_Vec3f_Pitch(&eye, &this->actor.world.pos);
     vec5.x = this->actor.world.pos.x - (5.0f * Math_SinS(yaw) * Math_CosS(pitch));
@@ -291,7 +288,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             default:
                 func_801477B4(globalCtx);
                 EnMinifrog_SetCamera(this, globalCtx);
-                func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
+                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
                 if (this->actor.cutscene != -1) {
                     if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                         ActorCutscene_Stop(this->actor.cutscene);
@@ -338,7 +335,7 @@ void EnMinifrog_Idle(EnMinifrog* this, GlobalContext* globalCtx) {
             this->flags |= 1;
         }
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) &&
-               (func_8012403C(globalCtx) == 0xD)) {
+               (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GERO)) {
         func_800B8614(&this->actor, globalCtx, 110.0f);
     }
 }
@@ -416,7 +413,7 @@ void EnMinifrog_NextFrogReturned(EnMinifrog* this, GlobalContext* globalCtx) {
         this->actionFunc = EnMinifrog_ContinueChoirCutscene;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
-        globalCtx->func_18798(globalCtx, &D_0400DEA8, 0);
+        globalCtx->setPlayerTalkAnim(globalCtx, &D_0400DEA8, 0);
     }
 }
 
@@ -447,7 +444,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, GlobalContext* globalCtx) {
         this->flags &= ~0x100;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
-        globalCtx->func_18798(globalCtx, &D_0400DEA8, 0);
+        globalCtx->setPlayerTalkAnim(globalCtx, &D_0400DEA8, 0);
     } else if (this->timer <= 0) {
         this->actionFunc = EnMinifrog_NextFrogReturned;
         this->timer = 30;
@@ -465,9 +462,9 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
         this->timer = 5;
-        func_801A1F00(3, 0x5A);
+        func_801A1F00(3, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
-        globalCtx->func_18798(globalCtx, &D_0400E2A8, 0);
+        globalCtx->setPlayerTalkAnim(globalCtx, &D_0400E2A8, 0);
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
@@ -580,7 +577,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
     } else if ((this->actor.xzDistToPlayer < 150.0f) &&
                (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) ||
                 ((this->actor.flags & 0x10000) == 0x10000)) &&
-               func_8012403C(globalCtx) == 0xD) {
+               Player_GetMask(globalCtx) == PLAYER_MASK_DON_GERO) {
         func_800B8614(&this->actor, globalCtx, 160.0f);
     }
 }
@@ -591,9 +588,9 @@ void EnMinifrog_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 25.0f, 12.0f, 0.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 12.0f, 0.0f, 0x1D);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     this->actor.focus.rot.y = this->actor.shape.rot.y;
 }
 
@@ -608,7 +605,7 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnMinifrog_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx) {
+                                Actor* arg) {
     if (limbIndex == 1) {
         pos->z -= 500.0f;
     }
@@ -620,19 +617,19 @@ s32 EnMinifrog_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     return 0;
 }
 
-void EnMinifrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnMinifrog* this = THIS;
+void EnMinifrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
+    EnMinifrog* this = (EnMinifrog*)arg;
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+        Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
     if (limbIndex == 4) {
-        SysMatrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_GetStateTranslation(&this->actor.focus.pos);
     }
 }
 
@@ -650,7 +647,7 @@ void EnMinifrog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, D_808A4D74[0]);
     gSPSegment(POLY_OPA_DISP++, 0x09, D_808A4D74[0]);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor->r, envColor->g, envColor->b, envColor->a);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnMinifrog_OverrideLimbDraw, EnMinifrog_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnMinifrog_OverrideLimbDraw, EnMinifrog_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

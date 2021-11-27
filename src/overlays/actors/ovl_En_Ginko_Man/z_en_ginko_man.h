@@ -1,7 +1,7 @@
 #ifndef Z_EN_GINKO_MAN_H
 #define Z_EN_GINKO_MAN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnGinkoMan;
 
@@ -11,8 +11,8 @@ typedef struct EnGinkoMan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnGinkoManActionFunc actionFunc;
-    /* 0x18C */ Vec3s limbDrawTbl[0x10];
-    /* 0x1EC */ Vec3s transitionDrawTbl[0x10];
+    /* 0x18C */ Vec3s jointTable[0x10];
+    /* 0x1EC */ Vec3s morphTable[0x10];
     /* 0x24C */ Vec3s limb15Rot;
     /* 0x252 */ Vec3s limb8Rot;
     /* 0x258 */ s16 curTextId;
@@ -34,15 +34,6 @@ extern const ActorInit En_Ginko_Man_InitVars;
 #define GINKOMAN_CHOICE_YES  0
 #define GINKOMAN_CHOICE_NO   1
 
-extern FlexSkeletonHeader object_ginko_skeleton[];
-extern Gfx object_ginko_limb15_dlist[];
-
-extern AnimationHeader object_ginko_floorsmacking_anim[];
-extern AnimationHeader object_ginko_sitting_anim[];
-extern AnimationHeader object_ginko_amazed_anim[];
-extern AnimationHeader object_ginko_stamp_reach_anim[];
-extern AnimationHeader object_ginko_advertising_anim[];
-
 typedef enum {
     /* 0 */ GINKO_FLOORSMACKING,
     /* 1 */ GINKO_SITTING,
@@ -50,8 +41,5 @@ typedef enum {
     /* 3 */ GINKO_AMAZED,
     /* 4 */ GINKO_ADVERTISING,
 } GinkoAnimationIndex;
-
-// values to get wallet capacity
-extern u16 D_801C1E2C[]; // wallet capacities
 
 #endif // Z_EN_GINKO_MAN_H

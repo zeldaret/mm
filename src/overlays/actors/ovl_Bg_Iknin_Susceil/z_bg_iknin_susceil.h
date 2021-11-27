@@ -1,7 +1,7 @@
 #ifndef Z_BG_IKNIN_SUSCEIL_H
 #define Z_BG_IKNIN_SUSCEIL_H
 
-#include <global.h>
+#include "global.h"
 
 #define GET_SUSCEIL_SWITCHFLAG(this) (((this)->dyna.actor.params) & 0x7F)
 

@@ -10,4 +10,4 @@ fi
 
 #echo "Replace $1 with $2?"
 #read
-grep -rl "$1" asm/**/*.asm src/**/*.{c,h} include/**/*.h tables/*.txt undef.txt | xargs sed -i "s/\b$1\b/$2/g"
+grep -rl "$1" asm/**/*.s src/**/*.{c,h} include/**/*.h tools/disasm/functions.txt tools/disasm/variables.txt | xargs sed -i "s/\b$1\b/$2/g"

@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_ROTLIFT_H
 #define Z_OBJ_ROTLIFT_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjRotlift;
 

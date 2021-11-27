@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
+#include "overlays/gamestates/ovl_title/z_title.h"
 
 void TitleSetup_GameStateResetContext(void) {
     XREG(2) = 0;
@@ -9,7 +9,7 @@ void TitleSetup_GameStateResetContext(void) {
     XREG(13) = 0;
     XREG(31) = 0;
     XREG(41) = 0x50;
-    XREG(43) = 0xFFFFFC54;
+    XREG(43) = 0xFC54;
 
     XREG(44) = 0xD7;
     XREG(45) = 0xDA;
@@ -47,7 +47,7 @@ void TitleSetup_GameStateResetContext(void) {
 
 void TitleSetup_InitImpl(GameState* gameState) {
     func_80185908();
-    func_800E9360();
+    SaveContext_Init();
     TitleSetup_GameStateResetContext();
 
     gameState->running = 0;
@@ -62,6 +62,6 @@ void TitleSetup_Destroy(GameState* gameState) {
 }
 
 void TitleSetup_Init(GameState* gameState) {
-    gameState->destroy = &TitleSetup_Destroy;
+    gameState->destroy = TitleSetup_Destroy;
     TitleSetup_InitImpl(gameState);
 }

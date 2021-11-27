@@ -1,3 +1,9 @@
+/*
+ * File: z_en_okarina_effect.c
+ * Overlay: ovl_En_Okarina_Effect
+ * Description:
+ */
+
 #include "z_en_okarina_effect.h"
 
 #define FLAGS 0x02000010
@@ -34,7 +40,7 @@ void EnOkarinaEffect_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnOkarinaEffect* this = THIS;
 
-    if (globalCtx->kankyoContext.unkF2[1]) {
+    if (globalCtx->envCtx.unk_F2[1]) {
         Actor_MarkForDeath(&this->actor);
     }
     EnOkarinaEffect_SetupAction(this, func_8096B104);
@@ -42,26 +48,26 @@ void EnOkarinaEffect_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx) {
     this->unk144 = 0x50;
-    globalCtx->kankyoContext.unkF2[4] = 0x3C;
+    globalCtx->envCtx.unk_F2[4] = 0x3C;
     D_801F4E70 = 501.0f;
-    globalCtx->kankyoContext.unkE3 = 2;
+    globalCtx->envCtx.unk_E3 = 2;
     func_800FD78C(globalCtx);
     EnOkarinaEffect_SetupAction(this, func_8096B174);
 }
 
 void func_8096B174(EnOkarinaEffect* this, GlobalContext* globalCtx) {
     DECR(this->unk144);
-    if (!globalCtx->pauseCtx.unk1EC && !globalCtx->unk17000 && !globalCtx->msgCtx.unk11F10 &&
+    if (!globalCtx->pauseCtx.state && !globalCtx->gameOverCtx.state && !globalCtx->msgCtx.unk11F10 &&
         !FrameAdvance_IsEnabled(globalCtx) && this->unk144 == 0) {
         EnOkarinaEffect_SetupAction(this, func_8096B1FC);
     }
 }
 
 void func_8096B1FC(EnOkarinaEffect* this, GlobalContext* globalCtx) {
-    if (globalCtx->kankyoContext.unkF2[4]) {
+    if (globalCtx->envCtx.unk_F2[4]) {
         if ((globalCtx->state.frames & 3) == 0) {
-            --globalCtx->kankyoContext.unkF2[4];
-            if (globalCtx->kankyoContext.unkF2[4] == 8) {
+            --globalCtx->envCtx.unk_F2[4];
+            if (globalCtx->envCtx.unk_F2[4] == 8) {
                 func_800FD858(globalCtx);
             }
         }

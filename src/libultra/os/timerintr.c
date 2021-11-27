@@ -1,12 +1,14 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
+OSTimer D_8009E590;
 OSTime __osCurrentTime;
 u32 __osBaseCounter;
 u32 __osViIntrCount;
 u32 __osTimerCounter;
+s32 D_8009E5C8[2]; // dummy bss padding required
+OSPifRam __osPfsPifRam;
 
-extern OSTimer* __osTimerList = &D_8009E590;
+OSTimer* __osTimerList = &D_8009E590;
 
 void __osTimerServicesInit(void) {
     __osCurrentTime = 0;

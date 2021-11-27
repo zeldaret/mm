@@ -1,7 +1,7 @@
 #ifndef Z_DM_NB_H
 #define Z_DM_NB_H
 
-#include <global.h>
+#include "global.h"
 
 struct DmNb;
 
@@ -11,8 +11,8 @@ typedef struct DmNb {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ DmNbActionFunc actionFunc;
-    /* 0x18C */ Vec3s limbDrawTable[8];
-    /* 0x1BC */ Vec3s transitionDrawTable[8];
+    /* 0x18C */ Vec3s jointTable[8];
+    /* 0x1BC */ Vec3s morphTable[8];
     /* 0x1EC */ u8 unk1EC;
     /* 0x1F0 */ s32 unk1F0;
     /* 0x1F4 */ s32 unk1F4;

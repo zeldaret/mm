@@ -1,3 +1,9 @@
+/*
+ * File: z_en_nnh.c
+ * Overlay: ovl_En_Nnh
+ * Description: Twisted Corpse of Deku Butler's Son
+ */
+
 #include "z_en_nnh.h"
 
 #define FLAGS 0x00000019
@@ -95,7 +101,7 @@ void EnNnh_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void EnNnh_Draw(Actor* thisx, GlobalContext* globalCtx) {

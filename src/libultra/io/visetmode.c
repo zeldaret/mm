@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void osViSetMode(OSViMode* modep) {
     register u32 saveMask;
@@ -8,7 +7,7 @@ void osViSetMode(OSViMode* modep) {
 
     __osViNext->modep = modep;
     __osViNext->state = 1;
-    __osViNext->control = __osViNext->modep->comRegs.ctrl;
+    __osViNext->features = __osViNext->modep->comRegs.ctrl;
 
     __osRestoreInt(saveMask);
 }

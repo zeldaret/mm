@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_ikana_shutter.c
+ * Overlay: ovl_Bg_Ikana_Shutter
+ * Description: Metal shutter in switch room of Stone Tower Temple
+ */
+
 #include "z_bg_ikana_shutter.h"
 
 #define FLAGS 0x00000010
@@ -61,8 +67,8 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaShutter* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
     if (!((this->dyna.actor.params >> 8) & 1)) {
         if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx)) {
             func_80BD599C(this);
@@ -81,7 +87,7 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgIkanaShutter_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaShutter* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80BD5828(BgIkanaShutter* this) {
@@ -146,7 +152,7 @@ void func_80BD5A18(BgIkanaShutter* this, GlobalContext* globalCtx) {
     this->dyna.actor.velocity.y *= 0.978f;
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
-        quake = Quake_Add(ACTIVE_CAM, 3);
+        quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
         Quake_SetSpeed(quake, 0x5420);
         Quake_SetQuakeValues(quake, 4, 0, 0, 0);
         Quake_SetCountdown(quake, 12);

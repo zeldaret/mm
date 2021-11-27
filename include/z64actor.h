@@ -1,11 +1,11 @@
 #ifndef _Z64ACTOR_H_
 #define _Z64ACTOR_H_
 
-#include <PR/ultratypes.h>
-#include <z64math.h>
-#include <z64animation.h>
-#include <z64collision_check.h>
-#include <unk.h>
+#include "PR/ultratypes.h"
+#include "z64math.h"
+#include "z64animation.h"
+#include "z64collision_check.h"
+#include "unk.h"
 
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
@@ -39,7 +39,7 @@ typedef struct {
     /* 0x04 */ s16 cylHeight;
     /* 0x06 */ s16 cylYShift;
     /* 0x08 */ u8 mass;
-} CollisionCheckInfoInit2;
+} CollisionCheckInfoInit2; // size = 0xC
 
 typedef struct {
     /* 0x00 */ DamageTable* damageTable;
@@ -103,8 +103,7 @@ typedef struct {
     /* 0x14 */ ActorInit* initInfo;
     /* 0x18 */ char* name;
     /* 0x1C */ u16 allocType; // bit 0: don't allocate memory, use actorContext->0x250? bit 1: Always keep loaded?
-    /* 0x1E */ s8 nbLoaded; // original name: "clients"
-    /* 0x1F */ UNK_TYPE1 pad1F[0x1];
+    /* 0x1E */ s8 numLoaded; // original name: "clients"
 } ActorOverlay; // size = 0x20
 
 typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* globalCtx);
@@ -117,7 +116,7 @@ typedef struct {
     /* 0x10 */ f32 shadowScale; // Changes the size of the shadow
     /* 0x14 */ u8 shadowAlpha; // Default is 255
     /* 0x15 */ u8 feetFloorFlags; // Set if the actor's foot is clipped under the floor. & 1 is right foot, & 2 is left
-    /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDraw
+    /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDrawOpa
 } ActorShape; // size = 0x30
 
 typedef struct Actor {
@@ -147,12 +146,12 @@ typedef struct Actor {
     /* 0x085 */ u8 floorBgId; // Bg ID of the floor polygon directly below the actor
     /* 0x086 */ s16 wallYaw; // Y rotation of the wall polygon the actor is touching
     /* 0x088 */ f32 floorHeight; // Y position of the floor polygon directly below the actor
-    /* 0x08C */ f32 yDistToWater; // Distance to the surface of active waterbox. Negative value means above water
+    /* 0x08C */ f32 depthInWater; // Directed distance to the surface of active waterbox. Negative value means water is below.
     /* 0x090 */ u16 bgCheckFlags; // See comments below actor struct for wip docs. TODO: macros for these flags
     /* 0x092 */ s16 yawTowardsPlayer; // Y rotation difference between the actor and the player
     /* 0x094 */ f32 xyzDistToPlayerSq; // Squared distance between the actor and the player in the x,y,z axis
     /* 0x098 */ f32 xzDistToPlayer; // Distance between the actor and the player in the XZ plane
-    /* 0x09C */ f32 yDistToPlayer; // Dist is negative if the actor is above the player
+    /* 0x09C */ f32 playerHeightRel; // Directed distance is negative if the player is below.
     /* 0x0A0 */ CollisionCheckInfo colChkInfo; // Variables related to the Collision Check system
     /* 0x0BC */ ActorShape shape; // Variables related to the physical shape of the actor
     /* 0x0EC */ Vec3f projectedPos; // Position of the actor in projected space
@@ -203,78 +202,14 @@ typedef enum {
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 bgId;
-    /* 0x148 */ f32 unk148;
+    /* 0x148 */ f32 pushForce;
     /* 0x14C */ f32 unk14C;
-    /* 0x150 */ s16 unk150;
+    /* 0x150 */ s16 yRotation;
     /* 0x152 */ u16 unk152;
-    /* 0x154 */ u32 unk154;
-    /* 0x158 */ u8 unk_158;
+    /* 0x154 */ u32 flags;
+    /* 0x158 */ u8 stateFlags;
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
-
-typedef struct {
-    /* 0x000 */ Actor base;
-    /* 0x144 */ UNK_TYPE1 unk144;
-    /* 0x145 */ UNK_TYPE1 pad145[0x2];
-    /* 0x147 */ s8 itemActionParam;
-    /* 0x148 */ UNK_TYPE1 pad148[0x2];
-    /* 0x14A */ s8 heldItemActionParam;
-    /* 0x14B */ u8 unk14B;
-    /* 0x14C */ UNK_TYPE1 pad14C[0x5];
-    /* 0x151 */ u8 unk151;
-    /* 0x152 */ UNK_TYPE1 unk152;
-    /* 0x153 */ u8 unk153; // isWearingAMask
-    /* 0x154 */ UNK_TYPE1 pad154[0x1F8];
-    /* 0x34C */ Actor* heldActor;
-    /* 0x350 */ UNK_TYPE1 pad350[0x18];
-    /* 0x368 */ Vec3f unk368;
-    /* 0x374 */ UNK_TYPE1 pad374[0x8];
-    /* 0x37C */ s8 doorType;
-    /* 0x37D */ s8 doorDirection;
-    /* 0x37E */ s8 doorTimer;
-    /* 0x37F */ s8 unk37F;
-    /* 0x380 */ Actor* doorActor;
-    /* 0x384 */ UNK_TYPE1 unk384[0x10];
-    /* 0x394 */ u8 unk394;
-    /* 0x395 */ UNK_TYPE1 pad395[0x37];
-    /* 0x3CC */ s16 unk3CC;
-    /* 0x3CE */ s8 unk3CE;
-    /* 0x3CF */ UNK_TYPE1 pad3CF[0x361];
-    /* 0x730 */ Actor* unk730;
-    /* 0x734 */ UNK_TYPE1 pad734[0x338];
-    /* 0xA6C */ u32 stateFlags1;
-    /* 0xA70 */ u32 unkA70;
-    /* 0xA74 */ u32 unkA74;
-    /* 0xA78 */ UNK_TYPE1 padA78[0x8];
-    /* 0xA80 */ Actor* unkA80;
-    /* 0xA84 */ UNK_TYPE1 padA84[0x4];
-    /* 0xA88 */ Actor* unkA88;
-    /* 0xA8C */ f32 unkA8C;
-    /* 0xA90 */ UNK_TYPE1 padA90[0x44];
-    /* 0xAD4 */ s16 unkAD4;
-    /* 0xAD6 */ UNK_TYPE1 padAD6[0x8];
-    /* 0xADE */ u8 unkADE;
-    /* 0xADF */ UNK_TYPE1 padADF[0x4];
-    /* 0xAE3 */ s8 unkAE3;
-    /* 0xAE4 */ UNK_TYPE1 padAE4[0x3];
-    /* 0xAE7 */ s8 unkAE7;
-    /* 0xAE8 */ UNK_TYPE1 padAE8[0x20];
-    /* 0xB08 */ f32 unkB08;
-    /* 0xB0C */ UNK_TYPE1 padB0C[0x1C];
-    /* 0xB28 */ s16 unkB28;
-    /* 0xB2A */ UNK_TYPE1 padB2A[0x1E];
-    /* 0xB48 */ f32 unkB48;
-    /* 0xB4C */ UNK_TYPE1 padB4C[0x34];
-    /* 0xB80 */ f32 unk_B80;
-    /* 0xB84 */ s16 unk_B84;
-    /* 0xB86 */ char unk_B86[0x16];
-    /* 0xB9C */ Vec3f unkB9C;
-    /* 0xBA8 */ UNK_TYPE1 padBA8[0x44];
-    /* 0xBEC */ Vec3f bodyPartsPos[18];
-    /* 0xCC4 */ MtxF mf_CC4;
-    /* 0xD04 */ MtxF unkD04;
-    /* 0xD44 */ UNK_TYPE1 padD44[0x34];
-} ActorPlayer; // size = 0xD78
 
 typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
@@ -296,7 +231,7 @@ typedef enum {
     /* 0x10 */ ITEM00_MASK,
     /* 0x11 */ ITEM00_SMALL_KEY,
     /* 0x12 */ ITEM00_FLEXIBLE,
-    /* 0x13 */ ITEM00_RUPEE_ORANGE,
+    /* 0x13 */ ITEM00_RUPEE_HUGE,
     /* 0x14 */ ITEM00_RUPEE_PURPLE,
     /* 0x15 */ ITEM00_3_HEARTS,
     /* 0x16 */ ITEM00_SHIELD_HERO,
@@ -329,12 +264,16 @@ typedef struct EnItem00 {
     /* 0x1A4 */ s8 unk1A4;
 } EnItem00; // size = 0x1A8
 
-typedef struct {
-    /* 0x000 */ Actor base;
-    /* 0x144 */ ActorFunc update;
+struct EnAObj;
+
+typedef void (*EnAObjActionFunc)(struct EnAObj*, struct GlobalContext*);
+
+typedef struct EnAObj {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnAObjActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collision;
     /* 0x194 */ UNK_TYPE1 pad194[0x14];
-} ActorEnAObj; // size = 0x1A8
+} EnAObj; // size = 0x1A8
 
 typedef enum {
     /* 0x00 */ ACTORCAT_SWITCH,
@@ -491,7 +430,7 @@ typedef enum {
     /* 0x076 */ ACTOR_UNSET_76,
     /* 0x077 */ ACTOR_UNSET_77,
     /* 0x078 */ ACTOR_UNSET_78,
-    /* 0x079 */ ACTOR_UNSET_79,
+    /* 0x079 */ ACTOR_EN_FISHING,
     /* 0x07A */ ACTOR_OBJ_OSHIHIKI,
     /* 0x07B */ ACTOR_EFF_DUST,
     /* 0x07C */ ACTOR_BG_UMAJUMP,
@@ -1062,5 +1001,15 @@ typedef enum {
     /* 0x2B1 */ ACTOR_EN_RSN,
     /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
 } ActorID;
+
+typedef enum {
+    /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
+    /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
+    /* 0x02 */ CLEAR_TAG_POP,
+    /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
+    /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
+    /* 0x23 */ CLEAR_TAG_SPLASH = 35,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200,
+} ClearTagType;
 
 #endif

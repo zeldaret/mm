@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_LIGHTSWITCH_H
 #define Z_OBJ_LIGHTSWITCH_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjLightswitch;
 
@@ -30,16 +30,6 @@ typedef struct ObjLightswitch {
 } ObjLightswitch; // size = 0x1C0
 
 extern const ActorInit Obj_Lightswitch_InitVars;
-
-extern Gfx D_06000C20[]; 
-extern Gfx D_06000420[]; 
-extern Gfx D_06001420[];
-
-// opa func
-extern s32 D_801AEFA0;
-
-// xlu func
-extern s32 D_801AEF88;
 
 #define LIGHTSWITCH_FACE_ASLEEP 0
 #define LIGHTSWITCH_FACE_WAKING 1

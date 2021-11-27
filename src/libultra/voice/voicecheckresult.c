@@ -1,4 +1,3 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/voicecheckresult/__osVoiceCheckResult.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/voicecheckresult/__osVoiceCheckResult.s")

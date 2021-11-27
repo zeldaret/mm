@@ -1,5 +1,42 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
+
+Vec3f D_801EDE00;
+Vec3f D_801EDE10;
+Vec3f D_801EDE20;
+Vec3f D_801EDE30;
+TriNorm D_801EDE40;
+TriNorm D_801EDE78;
+LineSegment D_801EDEB0;
+TriNorm D_801EDEC8;
+TriNorm D_801EDF00;
+Vec3f D_801EDF38;
+Vec3f D_801EDF48;
+TriNorm D_801EDF58;
+TriNorm D_801EDF90;
+LineSegment D_801EDFC8;
+Vec3f D_801EDFE0;
+Vec3f D_801EDFF0;
+TriNorm D_801EE000;
+TriNorm D_801EE038;
+TriNorm D_801EE070[2];
+Vec3f D_801EE0D8;
+TriNorm D_801EE0E8[2];
+TriNorm D_801EE150;
+TriNorm D_801EE188;
+Vec3f D_801EE1C0;
+Vec3f D_801EE1D0;
+Vec3f D_801EE1E0;
+Vec3f D_801EE1F0;
+EffSparkParams D_801EE200;
+TriNorm D_801EE6C8;
+TriNorm D_801EE700;
+EffSparkParams D_801EE738;
+EffSparkParams D_801EEC00;
+EffSparkParams D_801EF0C8;
+TriNorm D_801EF590;
+TriNorm D_801EF5C8;
+TriNorm D_801EF600;
+TriNorm D_801EF638;
 
 /**
  * Gets the damage and effect that should be applied for the collision between
@@ -290,7 +327,7 @@ s32 Collider_FreeJntSph(GlobalContext* globalCtx, ColliderJntSph* collider) {
 
     collider->count = 0;
     if (collider->elements != NULL) {
-        zelda_free(collider->elements);
+        ZeldaArena_Free(collider->elements);
     }
     collider->elements = NULL;
     return 1;
@@ -322,7 +359,7 @@ s32 Collider_SetJntSphToActor(GlobalContext* globalCtx, ColliderJntSph* collider
 
     Collider_SetBaseToActor(globalCtx, &collider->base, &src->base);
     collider->count = src->count;
-    collider->elements = zelda_malloc(src->count * sizeof(ColliderJntSphElement));
+    collider->elements = ZeldaArena_Malloc(src->count * sizeof(ColliderJntSphElement));
 
     if (collider->elements == NULL) {
         collider->count = 0;
@@ -348,7 +385,7 @@ s32 Collider_SetJntSphAllocType1(GlobalContext* globalCtx, ColliderJntSph* spher
 
     Collider_SetBaseType1(globalCtx, &sphereGroup->base, actor, &src->base);
     sphereGroup->count = src->count;
-    sphereGroup->elements = zelda_malloc(src->count * sizeof(ColliderJntSphElement));
+    sphereGroup->elements = ZeldaArena_Malloc(src->count * sizeof(ColliderJntSphElement));
 
     if (sphereGroup->elements == NULL) {
         sphereGroup->count = 0;
@@ -644,7 +681,7 @@ s32 Collider_FreeTris(GlobalContext* globalCtx, ColliderTris* tris) {
 
     tris->count = 0;
     if (tris->elements != NULL) {
-        zelda_free(tris->elements);
+        ZeldaArena_Free(tris->elements);
     }
     tris->elements = NULL;
 
@@ -677,7 +714,7 @@ s32 Collider_SetTrisAllocType1(GlobalContext* globalCtx, ColliderTris* tris, Act
 
     Collider_SetBaseType1(globalCtx, &tris->base, actor, &src->base);
     tris->count = src->count;
-    tris->elements = zelda_malloc(tris->count * sizeof(ColliderTrisElement));
+    tris->elements = ZeldaArena_Malloc(tris->count * sizeof(ColliderTrisElement));
 
     if (tris->elements == NULL) {
         tris->count = 0;
@@ -904,7 +941,7 @@ s32 Collider_QuadSetNearestAC(GlobalContext* globalCtx, ColliderQuad* quad, Vec3
         return 1;
     }
     Math_Vec3s_ToVec3f(&dcMid, &quad->dim.dcMid);
-    acDist = Math3D_DistanceSquared(&dcMid, hitPos);
+    acDist = Math3D_Vec3fDistSq(&dcMid, hitPos);
 
     if (acDist < quad->dim.acDist) {
         quad->dim.acDist = acDist;
@@ -1353,38 +1390,38 @@ void CollisionCheck_BlueBlood(GlobalContext* globalCtx, Collider* collider, Vec3
     D_801EEC00.position.x = v->z;
     D_801EEC00.particleFactor1 = 5;
     D_801EEC00.particleFactor2 = 5;
-    D_801EEC00.colorStart[0].red = 10;
-    D_801EEC00.colorStart[0].green = 10;
-    D_801EEC00.colorStart[0].blue = 200;
-    D_801EEC00.colorStart[0].alpha = 255;
-    D_801EEC00.colorStart[1].red = 0;
-    D_801EEC00.colorStart[1].green = 0;
-    D_801EEC00.colorStart[1].blue = 128;
-    D_801EEC00.colorStart[1].alpha = 255;
-    D_801EEC00.colorStart[2].red = 0;
-    D_801EEC00.colorStart[2].green = 0;
-    D_801EEC00.colorStart[2].blue = 128;
-    D_801EEC00.colorStart[2].alpha = 255;
-    D_801EEC00.colorStart[3].red = 0;
-    D_801EEC00.colorStart[3].green = 0;
-    D_801EEC00.colorStart[3].blue = 128;
-    D_801EEC00.colorStart[3].alpha = 255;
-    D_801EEC00.colorEnd[0].red = 0;
-    D_801EEC00.colorEnd[0].green = 0;
-    D_801EEC00.colorEnd[0].blue = 32;
-    D_801EEC00.colorEnd[0].alpha = 0;
-    D_801EEC00.colorEnd[1].red = 0;
-    D_801EEC00.colorEnd[1].green = 0;
-    D_801EEC00.colorEnd[1].blue = 32;
-    D_801EEC00.colorEnd[1].alpha = 0;
-    D_801EEC00.colorEnd[2].red = 0;
-    D_801EEC00.colorEnd[2].green = 0;
-    D_801EEC00.colorEnd[2].blue = 64;
-    D_801EEC00.colorEnd[2].alpha = 0;
-    D_801EEC00.colorEnd[3].red = 0;
-    D_801EEC00.colorEnd[3].green = 0;
-    D_801EEC00.colorEnd[3].blue = 64;
-    D_801EEC00.colorEnd[3].alpha = 0;
+    D_801EEC00.colorStart[0].r = 10;
+    D_801EEC00.colorStart[0].g = 10;
+    D_801EEC00.colorStart[0].b = 200;
+    D_801EEC00.colorStart[0].a = 255;
+    D_801EEC00.colorStart[1].r = 0;
+    D_801EEC00.colorStart[1].g = 0;
+    D_801EEC00.colorStart[1].b = 128;
+    D_801EEC00.colorStart[1].a = 255;
+    D_801EEC00.colorStart[2].r = 0;
+    D_801EEC00.colorStart[2].g = 0;
+    D_801EEC00.colorStart[2].b = 128;
+    D_801EEC00.colorStart[2].a = 255;
+    D_801EEC00.colorStart[3].r = 0;
+    D_801EEC00.colorStart[3].g = 0;
+    D_801EEC00.colorStart[3].b = 128;
+    D_801EEC00.colorStart[3].a = 255;
+    D_801EEC00.colorEnd[0].r = 0;
+    D_801EEC00.colorEnd[0].g = 0;
+    D_801EEC00.colorEnd[0].b = 32;
+    D_801EEC00.colorEnd[0].a = 0;
+    D_801EEC00.colorEnd[1].r = 0;
+    D_801EEC00.colorEnd[1].g = 0;
+    D_801EEC00.colorEnd[1].b = 32;
+    D_801EEC00.colorEnd[1].a = 0;
+    D_801EEC00.colorEnd[2].r = 0;
+    D_801EEC00.colorEnd[2].g = 0;
+    D_801EEC00.colorEnd[2].b = 64;
+    D_801EEC00.colorEnd[2].a = 0;
+    D_801EEC00.colorEnd[3].r = 0;
+    D_801EEC00.colorEnd[3].g = 0;
+    D_801EEC00.colorEnd[3].b = 64;
+    D_801EEC00.colorEnd[3].a = 0;
     D_801EEC00.age = 0;
     D_801EEC00.duration = 16;
     D_801EEC00.velocity = 8.0f;
@@ -1393,7 +1430,7 @@ void CollisionCheck_BlueBlood(GlobalContext* globalCtx, Collider* collider, Vec3
     Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EEC00);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_collision_check/CollisionCheck_BlueBlood.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_BlueBlood.s")
 #endif
 
 /**
@@ -1411,38 +1448,38 @@ void CollisionCheck_GreenBlood(GlobalContext* globalCtx, Collider* collider, Vec
     D_801EF0C8.position.x = v->z;
     D_801EF0C8.particleFactor1 = 5;
     D_801EF0C8.particleFactor2 = 5;
-    D_801EF0C8.colorStart[0].red = 10;
-    D_801EF0C8.colorStart[0].green = 200;
-    D_801EF0C8.colorStart[0].blue = 10;
-    D_801EF0C8.colorStart[0].alpha = 255;
-    D_801EF0C8.colorStart[1].red = 0;
-    D_801EF0C8.colorStart[1].green = 128;
-    D_801EF0C8.colorStart[1].blue = 0;
-    D_801EF0C8.colorStart[1].alpha = 255;
-    D_801EF0C8.colorStart[2].red = 0;
-    D_801EF0C8.colorStart[2].green = 128;
-    D_801EF0C8.colorStart[2].blue = 0;
-    D_801EF0C8.colorStart[2].alpha = 255;
-    D_801EF0C8.colorStart[3].red = 0;
-    D_801EF0C8.colorStart[3].green = 128;
-    D_801EF0C8.colorStart[3].blue = 0;
-    D_801EF0C8.colorStart[3].alpha = 255;
-    D_801EF0C8.colorEnd[0].red = 0;
-    D_801EF0C8.colorEnd[0].green = 32;
-    D_801EF0C8.colorEnd[0].blue = 0;
-    D_801EF0C8.colorEnd[0].alpha = 0;
-    D_801EF0C8.colorEnd[1].red = 0;
-    D_801EF0C8.colorEnd[1].green = 32;
-    D_801EF0C8.colorEnd[1].blue = 0;
-    D_801EF0C8.colorEnd[1].alpha = 0;
-    D_801EF0C8.colorEnd[2].red = 0;
-    D_801EF0C8.colorEnd[2].green = 64;
-    D_801EF0C8.colorEnd[2].blue = 0;
-    D_801EF0C8.colorEnd[2].alpha = 0;
-    D_801EF0C8.colorEnd[3].red = 0;
-    D_801EF0C8.colorEnd[3].green = 64;
-    D_801EF0C8.colorEnd[3].blue = 0;
-    D_801EF0C8.colorEnd[3].alpha = 0;
+    D_801EF0C8.colorStart[0].r = 10;
+    D_801EF0C8.colorStart[0].g = 200;
+    D_801EF0C8.colorStart[0].b = 10;
+    D_801EF0C8.colorStart[0].a = 255;
+    D_801EF0C8.colorStart[1].r = 0;
+    D_801EF0C8.colorStart[1].g = 128;
+    D_801EF0C8.colorStart[1].b = 0;
+    D_801EF0C8.colorStart[1].a = 255;
+    D_801EF0C8.colorStart[2].r = 0;
+    D_801EF0C8.colorStart[2].g = 128;
+    D_801EF0C8.colorStart[2].b = 0;
+    D_801EF0C8.colorStart[2].a = 255;
+    D_801EF0C8.colorStart[3].r = 0;
+    D_801EF0C8.colorStart[3].g = 128;
+    D_801EF0C8.colorStart[3].b = 0;
+    D_801EF0C8.colorStart[3].a = 255;
+    D_801EF0C8.colorEnd[0].r = 0;
+    D_801EF0C8.colorEnd[0].g = 32;
+    D_801EF0C8.colorEnd[0].b = 0;
+    D_801EF0C8.colorEnd[0].a = 0;
+    D_801EF0C8.colorEnd[1].r = 0;
+    D_801EF0C8.colorEnd[1].g = 32;
+    D_801EF0C8.colorEnd[1].b = 0;
+    D_801EF0C8.colorEnd[1].a = 0;
+    D_801EF0C8.colorEnd[2].r = 0;
+    D_801EF0C8.colorEnd[2].g = 64;
+    D_801EF0C8.colorEnd[2].b = 0;
+    D_801EF0C8.colorEnd[2].a = 0;
+    D_801EF0C8.colorEnd[3].r = 0;
+    D_801EF0C8.colorEnd[3].g = 64;
+    D_801EF0C8.colorEnd[3].b = 0;
+    D_801EF0C8.colorEnd[3].a = 0;
     D_801EF0C8.age = 0;
     D_801EF0C8.duration = 16;
     D_801EF0C8.velocity = 8.0f;
@@ -1450,7 +1487,7 @@ void CollisionCheck_GreenBlood(GlobalContext* globalCtx, Collider* collider, Vec
     Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EF0C8);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_collision_check/CollisionCheck_GreenBlood.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_GreenBlood.s")
 #endif
 
 /**
@@ -2876,8 +2913,8 @@ void CollisionCheck_AC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt,
 /**
  * Iterates through all AT colliders, testing them for AC collisions with each AC collider, setting the info regarding
  * the collision for each AC and AT collider that collided. Then spawns hitmarks and plays sound effects for each
- * successful collision. To collide, an AT collider must share a type (PLAYER, ENEMY, or BOMB) with the AC collider and
- * the toucher and bumper elements that overlapped must share a dmgFlag.
+ * successful collision. To collide, an AT collider must share a type (AC_TYPE_PLAYER, AC_TYPE_ENEMY, or AC_TYPE_OTHER)
+ * with the AC collider and the toucher and bumper elements that overlapped must share a dmgFlag.
  */
 void CollisionCheck_AT(GlobalContext* globalCtx, CollisionCheckContext* colCtxt) {
     Collider** col;
@@ -3473,7 +3510,7 @@ s32 CollisionCheck_LineOC_JntSph(GlobalContext* globalCtx, CollisionCheckContext
 
         D_801EDEB0.a = *a;
         D_801EDEB0.b = *b;
-        if (Math3D_ColSphereLineSeg(&element->dim.worldSphere, &D_801EDEB0) != 0) {
+        if (Math3D_LineVsSph(&element->dim.worldSphere, &D_801EDEB0) != 0) {
             return 1;
         }
     }
@@ -3511,7 +3548,7 @@ s32 CollisionCheck_LineOC_Sphere(GlobalContext* globalCtx, CollisionCheckContext
 
     D_801EDFC8.a = *a;
     D_801EDFC8.b = *b;
-    if (Math3D_ColSphereLineSeg(&sphere->dim.worldSphere, &D_801EDFC8) != 0) {
+    if (Math3D_LineVsSph(&sphere->dim.worldSphere, &D_801EDFC8) != 0) {
         return 1;
     }
 
@@ -3654,7 +3691,7 @@ void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider) {
             D_801EE1C0.x = collider->elements[i].dim.modelSphere.center.x;
             D_801EE1C0.y = collider->elements[i].dim.modelSphere.center.y;
             D_801EE1C0.z = collider->elements[i].dim.modelSphere.center.z;
-            SysMatrix_MultiplyVector3fByState(&D_801EE1C0, &D_801EE1D0);
+            Matrix_MultiplyVector3fByState(&D_801EE1C0, &D_801EE1D0);
             collider->elements[i].dim.worldSphere.center.x = D_801EE1D0.x;
             collider->elements[i].dim.worldSphere.center.y = D_801EE1D0.y;
             collider->elements[i].dim.worldSphere.center.z = D_801EE1D0.z;
@@ -3664,7 +3701,7 @@ void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_collision_check/Collider_UpdateSpheres.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/Collider_UpdateSpheres.s")
 #endif
 
 /**
@@ -3696,7 +3733,7 @@ void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
         D_801EE1E0.x = collider->dim.modelSphere.center.x;
         D_801EE1E0.y = collider->dim.modelSphere.center.y;
         D_801EE1E0.z = collider->dim.modelSphere.center.z;
-        SysMatrix_MultiplyVector3fByState(&D_801EE1E0, &D_801EE1F0);
+        Matrix_MultiplyVector3fByState(&D_801EE1E0, &D_801EE1F0);
         collider->dim.worldSphere.center.x = D_801EE1F0.x;
         collider->dim.worldSphere.center.y = D_801EE1F0.y;
         collider->dim.worldSphere.center.z = D_801EE1F0.z;
@@ -3704,7 +3741,7 @@ void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_collision_check/Collider_UpdateSphere.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/Collider_UpdateSphere.s")
 #endif
 
 /**
@@ -3722,38 +3759,38 @@ void CollisionCheck_SpawnRedBlood(GlobalContext* globalCtx, Vec3f* v) {
     D_801EE200.position.x = v->z;
     D_801EE200.particleFactor1 = 5;
     D_801EE200.particleFactor2 = 5;
-    D_801EE200.colorStart[0].red = 128;
-    D_801EE200.colorStart[0].green = 0;
-    D_801EE200.colorStart[0].blue = 64;
-    D_801EE200.colorStart[0].alpha = 255;
-    D_801EE200.colorStart[1].red = 128;
-    D_801EE200.colorStart[1].green = 0;
-    D_801EE200.colorStart[1].blue = 64;
-    D_801EE200.colorStart[1].alpha = 255;
-    D_801EE200.colorStart[2].red = 255;
-    D_801EE200.colorStart[2].green = 128;
-    D_801EE200.colorStart[2].blue = 0;
-    D_801EE200.colorStart[2].alpha = 255;
-    D_801EE200.colorStart[3].red = 255;
-    D_801EE200.colorStart[3].green = 128;
-    D_801EE200.colorStart[3].blue = 0;
-    D_801EE200.colorStart[3].alpha = 255;
-    D_801EE200.colorEnd[0].red = 64;
-    D_801EE200.colorEnd[0].green = 0;
-    D_801EE200.colorEnd[0].blue = 32;
-    D_801EE200.colorEnd[0].alpha = 0;
-    D_801EE200.colorEnd[1].red = 64;
-    D_801EE200.colorEnd[1].green = 0;
-    D_801EE200.colorEnd[1].blue = 32;
-    D_801EE200.colorEnd[1].alpha = 0;
-    D_801EE200.colorEnd[2].red = 128;
-    D_801EE200.colorEnd[2].green = 0;
-    D_801EE200.colorEnd[2].blue = 64;
-    D_801EE200.colorEnd[2].alpha = 0;
-    D_801EE200.colorEnd[3].red = 128;
-    D_801EE200.colorEnd[3].green = 0;
-    D_801EE200.colorEnd[3].blue = 64;
-    D_801EE200.colorEnd[3].alpha = 0;
+    D_801EE200.colorStart[0].r = 128;
+    D_801EE200.colorStart[0].g = 0;
+    D_801EE200.colorStart[0].b = 64;
+    D_801EE200.colorStart[0].a = 255;
+    D_801EE200.colorStart[1].r = 128;
+    D_801EE200.colorStart[1].g = 0;
+    D_801EE200.colorStart[1].b = 64;
+    D_801EE200.colorStart[1].a = 255;
+    D_801EE200.colorStart[2].r = 255;
+    D_801EE200.colorStart[2].g = 128;
+    D_801EE200.colorStart[2].b = 0;
+    D_801EE200.colorStart[2].a = 255;
+    D_801EE200.colorStart[3].r = 255;
+    D_801EE200.colorStart[3].g = 128;
+    D_801EE200.colorStart[3].b = 0;
+    D_801EE200.colorStart[3].a = 255;
+    D_801EE200.colorEnd[0].r = 64;
+    D_801EE200.colorEnd[0].g = 0;
+    D_801EE200.colorEnd[0].b = 32;
+    D_801EE200.colorEnd[0].a = 0;
+    D_801EE200.colorEnd[1].r = 64;
+    D_801EE200.colorEnd[1].g = 0;
+    D_801EE200.colorEnd[1].b = 32;
+    D_801EE200.colorEnd[1].a = 0;
+    D_801EE200.colorEnd[2].r = 128;
+    D_801EE200.colorEnd[2].g = 0;
+    D_801EE200.colorEnd[2].b = 64;
+    D_801EE200.colorEnd[2].a = 0;
+    D_801EE200.colorEnd[3].r = 128;
+    D_801EE200.colorEnd[3].g = 0;
+    D_801EE200.colorEnd[3].b = 64;
+    D_801EE200.colorEnd[3].a = 0;
     D_801EE200.age = 0;
     D_801EE200.duration = 16;
     D_801EE200.velocity = 8.0f;
@@ -3762,7 +3799,7 @@ void CollisionCheck_SpawnRedBlood(GlobalContext* globalCtx, Vec3f* v) {
     Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EE200);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnRedBlood.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnRedBlood.s")
 #endif
 
 /**
@@ -3780,38 +3817,38 @@ void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
     D_801EE738.position.x = v->z;
     D_801EE738.particleFactor1 = 5;
     D_801EE738.particleFactor2 = 5;
-    D_801EE738.colorStart[0].red = 255;
-    D_801EE738.colorStart[0].green = 255;
-    D_801EE738.colorStart[0].blue = 255;
-    D_801EE738.colorStart[0].alpha = 255;
-    D_801EE738.colorStart[1].red = 100;
-    D_801EE738.colorStart[1].green = 100;
-    D_801EE738.colorStart[1].blue = 100;
-    D_801EE738.colorStart[1].alpha = 100;
-    D_801EE738.colorStart[2].red = 100;
-    D_801EE738.colorStart[2].green = 100;
-    D_801EE738.colorStart[2].blue = 100;
-    D_801EE738.colorStart[2].alpha = 100;
-    D_801EE738.colorStart[3].red = 100;
-    D_801EE738.colorStart[3].green = 100;
-    D_801EE738.colorStart[3].blue = 100;
-    D_801EE738.colorStart[3].alpha = 100;
-    D_801EE738.colorEnd[0].red = 50;
-    D_801EE738.colorEnd[0].green = 50;
-    D_801EE738.colorEnd[0].blue = 50;
-    D_801EE738.colorEnd[0].alpha = 50;
-    D_801EE738.colorEnd[1].red = 50;
-    D_801EE738.colorEnd[1].green = 50;
-    D_801EE738.colorEnd[1].blue = 50;
-    D_801EE738.colorEnd[1].alpha = 50;
-    D_801EE738.colorEnd[2].red = 50;
-    D_801EE738.colorEnd[2].green = 50;
-    D_801EE738.colorEnd[2].blue = 50;
-    D_801EE738.colorEnd[2].alpha = 50;
-    D_801EE738.colorEnd[3].red = 0;
-    D_801EE738.colorEnd[3].green = 0;
-    D_801EE738.colorEnd[3].blue = 0;
-    D_801EE738.colorEnd[3].alpha = 0;
+    D_801EE738.colorStart[0].r = 255;
+    D_801EE738.colorStart[0].g = 255;
+    D_801EE738.colorStart[0].b = 255;
+    D_801EE738.colorStart[0].a = 255;
+    D_801EE738.colorStart[1].r = 100;
+    D_801EE738.colorStart[1].g = 100;
+    D_801EE738.colorStart[1].b = 100;
+    D_801EE738.colorStart[1].a = 100;
+    D_801EE738.colorStart[2].r = 100;
+    D_801EE738.colorStart[2].g = 100;
+    D_801EE738.colorStart[2].b = 100;
+    D_801EE738.colorStart[2].a = 100;
+    D_801EE738.colorStart[3].r = 100;
+    D_801EE738.colorStart[3].g = 100;
+    D_801EE738.colorStart[3].b = 100;
+    D_801EE738.colorStart[3].a = 100;
+    D_801EE738.colorEnd[0].r = 50;
+    D_801EE738.colorEnd[0].g = 50;
+    D_801EE738.colorEnd[0].b = 50;
+    D_801EE738.colorEnd[0].a = 50;
+    D_801EE738.colorEnd[1].r = 50;
+    D_801EE738.colorEnd[1].g = 50;
+    D_801EE738.colorEnd[1].b = 50;
+    D_801EE738.colorEnd[1].a = 50;
+    D_801EE738.colorEnd[2].r = 50;
+    D_801EE738.colorEnd[2].g = 50;
+    D_801EE738.colorEnd[2].b = 50;
+    D_801EE738.colorEnd[2].a = 50;
+    D_801EE738.colorEnd[3].r = 0;
+    D_801EE738.colorEnd[3].g = 0;
+    D_801EE738.colorEnd[3].b = 0;
+    D_801EE738.colorEnd[3].a = 0;
     D_801EE738.age = 0;
     D_801EE738.duration = 16;
     D_801EE738.velocity = 8.0f;
@@ -3820,7 +3857,7 @@ void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
     Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EE738);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.s")
 #endif
 
 /**

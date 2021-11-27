@@ -70,8 +70,8 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 paramsMid;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000294);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000294);
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
     Collider_UpdateCylinder(thisx, &this->collider);
@@ -94,7 +94,7 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgIcicle_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIcicle* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -107,7 +107,7 @@ void BgIcicle_Break(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
     s32 j;
     s32 i;
 
-    func_800F0568(globalCtx, &this->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
+    Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 10; j++) {
@@ -151,7 +151,7 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
 
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = BgIcicle_Fall;
     } else {
@@ -165,8 +165,8 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
 }
 
 void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
-    if ((this->collider.base.atFlags & 2) || (this->dyna.actor.bgCheckFlags & 1)) {
-        this->collider.base.atFlags &= ~2;
+    if ((this->collider.base.atFlags & AT_HIT) || (this->dyna.actor.bgCheckFlags & 1)) {
+        this->collider.base.atFlags &= ~AT_HIT;
         this->dyna.actor.bgCheckFlags &= ~1;
 
         if (this->dyna.actor.world.pos.y < this->dyna.actor.floorHeight) {
@@ -186,9 +186,9 @@ void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
     } else {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
         this->dyna.actor.world.pos.y += 40.0f;
-        func_800B78B8(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
         this->dyna.actor.world.pos.y -= 40.0f;
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
@@ -200,10 +200,10 @@ void BgIcicle_Regrow(BgIcicle* this, GlobalContext* globalCtx) {
 }
 
 void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
-    s32 sp24;
+    s32 dropItem00Id;
 
-    if (this->collider.base.acFlags & 2) {
-        this->collider.base.acFlags &= ~2;
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
 
         if (this->dyna.actor.params == ICICLE_STALAGMITE_RANDOM_DROP) {
             BgIcicle_Break(this, globalCtx, 50.0f);
@@ -212,9 +212,9 @@ void BgIcicle_UpdateAttacked(BgIcicle* this, GlobalContext* globalCtx) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->dyna.actor.world.pos, this->unk_160 << 4);
             }
         } else if (this->dyna.actor.params == ICICLE_STALAGMITE_FIXED_DROP) {
-            sp24 = func_800A8150(this->unk_160);
+            dropItem00Id = func_800A8150(this->unk_160);
             BgIcicle_Break(this, globalCtx, 50.0f);
-            Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, (this->unk_161 << 8) | sp24);
+            Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, (this->unk_161 << 8) | dropItem00Id);
         } else {
             if (this->dyna.actor.params == ICICLE_STALACTITE_REGROW) {
                 BgIcicle_Break(this, globalCtx, 40.0f);
@@ -240,7 +240,7 @@ void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actionFunc != BgIcicle_Regrow) {
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 

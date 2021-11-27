@@ -1,5 +1,12 @@
-#include <ultra64.h>
-#include <global.h>
+#include "prevent_bss_reordering.h"
+#include "global.h"
+#include "prevent_bss_reordering.h"
+
+StackEntry sBootThreadInfo;
+OSThread sIdleThread;
+u8 sIdleThreadStack[0x400];
+StackEntry sIdleThreadInfo;
+u8 sBootThreadStack[0x400];
 
 void bootproc(void) {
     StackCheck_Init(&sBootThreadInfo, sBootThreadStack, sBootThreadStack + sizeof(sBootThreadStack), 0, -1, "boot");

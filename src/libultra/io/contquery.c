@@ -1,12 +1,11 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 s32 osContStartQuery(OSMesgQueue* mq) {
     s32 ret;
 
     __osSiGetAccess();
 
-    if (__osContLastCmd != 0) {
+    if (__osContLastPoll != 0) {
         __osPackRequestData(0);
         __osSiRawStartDma(1, &__osContPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
@@ -14,7 +13,7 @@ s32 osContStartQuery(OSMesgQueue* mq) {
 
     ret = __osSiRawStartDma(0, &__osContPifRam);
 
-    __osContLastCmd = 0;
+    __osContLastPoll = 0;
 
     __osSiRelAccess();
 

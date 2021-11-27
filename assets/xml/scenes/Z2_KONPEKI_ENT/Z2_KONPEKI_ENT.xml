@@ -1,6 +1,6 @@
 <Root>
     <File Name="Z2_KONPEKI_ENT" Segment="2" Game="MM">
-        <Texture Name="Z2_KONPEKI_ENTTex_005020" Format="rgb5a1" Width="64" Height="64" Offset="0x5020"/>
+        <Texture Name="Z2_KONPEKI_ENTTex_005020" Format="rgba16" Width="64" Height="64" Offset="0x5020"/>
 
         <Scene Name="Z2_KONPEKI_ENT" Offset="0x0"/>
     </File>

@@ -1,7 +1,7 @@
 #ifndef Z_BG_OPEN_SPOT_H
 #define Z_BG_OPEN_SPOT_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgOpenSpot;
 

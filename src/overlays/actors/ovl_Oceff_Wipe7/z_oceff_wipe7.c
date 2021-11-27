@@ -1,3 +1,9 @@
+/*
+ * File: z_oceff_wipe7.c
+ * Overlay: ovl_Oceff_Wipe7
+ * Description:
+ */
+
 #include "z_oceff_wipe7.h"
 
 #define FLAGS 0x02000010
@@ -9,7 +15,7 @@ void OceffWipe7_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe7_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe7_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Oceff_Wipe7_InitVars = {
     ACTOR_OCEFF_WIPE7,
     ACTORCAT_ITEMACTION,
@@ -21,12 +27,13 @@ const ActorInit Oceff_Wipe7_InitVars = {
     (ActorFunc)OceffWipe7_Update,
     (ActorFunc)OceffWipe7_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe7/OceffWipe7_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe7/OceffWipe7_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe7_0x80BCDCB0/OceffWipe7_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe7/OceffWipe7_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe7/OceffWipe7_Draw.s")

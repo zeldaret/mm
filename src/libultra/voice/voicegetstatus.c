@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 #include "io/controller.h"
 
 s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
@@ -25,7 +24,7 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
             ptr += 4;
             *ptr = CONT_CMD_END;
 
-            __osContLastCmd = CONT_CMD_END;
+            __osContLastPoll = CONT_CMD_END;
             ret = __osSiRawStartDma(OS_WRITE, &__osContPifRam);
             osRecvMesg(mq, NULL, OS_MESG_BLOCK);
         }
