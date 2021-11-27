@@ -53,7 +53,7 @@ void EnStream_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnStream_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-s32 EnStream_PlayerIsInRange(Vec3f* vortexPosRot, Vec3f* playerPosRot, Vec3f* posDifference, f32 vortexYScale) {
+s32 EnStream_PlayerIsInRange(Vec3f* vortexWorldPos, Vec3f* playerWorldPos, Vec3f* posDifference, f32 vortexYScale) {
     s32 ret = 0;
     f32 smallConstant = 28.0f;
     f32 upperBounds = 160 * vortexYScale * 50.0f;
@@ -61,9 +61,9 @@ s32 EnStream_PlayerIsInRange(Vec3f* vortexPosRot, Vec3f* playerPosRot, Vec3f* po
     f32 xzDist;
     f32 range;
 
-    posDifference->x = playerPosRot->x - vortexPosRot->x;
-    posDifference->y = playerPosRot->y - vortexPosRot->y;
-    posDifference->z = playerPosRot->z - vortexPosRot->z;
+    posDifference->x = playerWorldPos->x - vortexWorldPos->x;
+    posDifference->y = playerWorldPos->y - vortexWorldPos->y;
+    posDifference->z = playerWorldPos->z - vortexWorldPos->z;
     xzDist = sqrtf(SQ(posDifference->x) + SQ(posDifference->z));
 
     if (lowerBounds <= posDifference->y && posDifference->y <= upperBounds) {
