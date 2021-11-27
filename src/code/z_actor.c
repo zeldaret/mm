@@ -341,8 +341,6 @@ void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 y) {
     actor->world.pos.y = yPos;
 }
 
-#ifdef NON_MATCHING
-// regalloc
 void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
     f32 spEC;
     f32 temp_f12;
@@ -356,8 +354,6 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
     s32 numLights;
     s8 phi_v1;
     u8 temp_v0;
-    f32 phi_f0;
-    // f32 phi_f8;
     Light* phi_s0;
     s32 lightNumMax;
 
@@ -372,23 +368,9 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
         if (spEC > 20.0f) {
             temp_f20 = actor->shape.shadowScale;
             temp_v0 = actor->shape.shadowAlpha;
-            // actor->shape.shadowScale = temp_f20 * 0.3f;
             actor->shape.shadowScale *= 0.3f;
             temp_f12 = (spEC - 20.0f) * 0.02f;
-            // if (temp_f12 > 1.0f) {
-            //    phi_f0 = 1.0f;
-            //} else {
-            //    phi_f0 = temp_f12;
-            //}
-            phi_f0 = CLAMP_MIN(temp_f12, 1.0f);
-            /*temp_f8 = (f32) temp_v0;
-            phi_f8 = temp_f8;
-            if ((s32) temp_v0 < 0) {
-                phi_f8 = temp_f8 + 4294967296.0f;
-            }
-            actor->shape.shadowAlpha = (u8) (u32) (phi_f0 * phi_f8);*/
-            // actor->shape.shadowAlpha = (phi_f0 *  temp_v0);
-            actor->shape.shadowAlpha *= phi_f0;
+            actor->shape.shadowAlpha = CLAMP_MAX(temp_f12, 1.0f) * actor->shape.shadowAlpha;
             ActorShadow_DrawCircle(actor, mapper, globalCtx);
             actor->shape.shadowScale = temp_f20;
             actor->shape.shadowAlpha = temp_v0;
@@ -430,9 +412,6 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4B50.s")
-#endif
 
 void func_800B4EDC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, f32* arg3) {
     SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, arg1, arg2, arg3);
