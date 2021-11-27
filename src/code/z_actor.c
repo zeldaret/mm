@@ -2300,10 +2300,10 @@ typedef struct {
                                  // flag set that matches this bitmask
 } UpdateActor_Params;            // size = 0x1C
 
-#ifdef NON_MATCHING
 Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     GlobalContext* globalCtx = params->globalCtx;
     Actor* actor = params->actor;
+    Actor* nextActor;
 
     if (actor->world.pos.y < -25000.0f) {
         actor->world.pos.y = -25000.0f;
@@ -2318,20 +2318,22 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
             actor->init(actor, globalCtx);
             actor->init = NULL;
         }
-        actor = actor->next;
+        nextActor = actor->next;
     } else if (actor->update == NULL) {
         if (!actor->isDrawn) {
-            actor = Actor_Delete(&globalCtx->actorCtx, actor, globalCtx);
+            nextActor = Actor_Delete(&globalCtx->actorCtx, actor, globalCtx);
         } else {
             Actor_Destroy(actor, globalCtx);
-            actor = actor->next;
+            nextActor = actor->next;
         }
     } else {
         if (!Object_IsLoaded(&globalCtx->objectCtx, actor->objBankIndex)) {
             Actor_MarkForDeath(actor);
         } else {
+            s32 tmp = (params->updateActorIfSet == 0);
+
             if (((params->updateActorIfSet) && !(actor->flags & params->updateActorIfSet)) ||
-                ((!params->updateActorIfSet) &&
+                ((tmp = (params->updateActorIfSet == 0)) &&
                  (!(actor->flags & ACTOR_FLAG_100000) ||
                   ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & 0x200))) &&
                  (params->unkC != 0) && (actor != params->unk10) && ((actor != params->player->heldActor)) &&
@@ -2370,13 +2372,10 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                 CollisionCheck_ResetDamage(&actor->colChkInfo);
             }
         }
-        actor = actor->next;
+        nextActor = actor->next;
     }
-    return actor;
+    return nextActor;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateActor.s")
-#endif
 
 u32 D_801AED58[] = {
     0x100002C2, 0x100002C2, 0x00000200, 0x100006C2, 0x00000282, 0x300002C2,
