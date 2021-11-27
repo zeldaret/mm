@@ -173,8 +173,7 @@ void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s3
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-//#ifdef NON_MATCHING
-#if 1
+#ifdef NON_MATCHING
 // regalloc (and float regalloc)
 void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
     f32 distToFloor = actor->world.pos.y - actor->floorHeight;
