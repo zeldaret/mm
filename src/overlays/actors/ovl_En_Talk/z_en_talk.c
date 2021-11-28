@@ -47,7 +47,9 @@ void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.textId = (this->actor.params & 0x3F) + 0x1C00;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/EnTalk_Destroy.s")
+void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnTalk* this = THIS;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/func_80BDE058.s")
 
