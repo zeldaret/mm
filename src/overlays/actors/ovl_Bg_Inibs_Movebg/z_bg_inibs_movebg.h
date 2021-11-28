@@ -6,8 +6,9 @@
 struct BgInibsMovebg;
 
 typedef struct BgInibsMovebg {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x24];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ s32 unk_15C[0x2];
+    /* 0x164 */ s32 unk_164;
 } BgInibsMovebg; // size = 0x168
 
 extern const ActorInit Bg_Inibs_Movebg_InitVars;
