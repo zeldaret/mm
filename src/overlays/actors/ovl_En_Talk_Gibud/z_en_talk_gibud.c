@@ -43,6 +43,7 @@ void func_80AFF700(EnTalkGibud* this);
 void func_80AFF880(EnTalkGibud* this);
 void func_80AFF9CC(EnTalkGibud* this);
 void func_80AFFFA4(EnTalkGibud* this);
+void func_80B000FC(EnTalkGibud* this);
 
 extern AnimationHeader D_060009C4;
 extern AnimationHeader D_06000F1C;
@@ -70,7 +71,8 @@ typedef struct {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ s16 unk_0E;
 } EnTalkGibudUnkStruct;
 
 const ActorInit En_Talk_Gibud_InitVars = {
@@ -156,11 +158,11 @@ static DamageTable D_80B0137C = {
 static CollisionCheckInfoInit2 D_80B0139C = { 8, 0, 0, 0, MASS_HEAVY };
 
 static EnTalkGibudUnkStruct D_80B013A8[] = {
-    { 0x00000024, 0x00000015, 0x00000001, 0x00010000 }, { 0x0000002E, 0x0000000A, 0x00000005, 0x00000000 },
-    { 0x00000017, 0x0000001F, 0x00000001, 0x00010000 }, { 0x00000016, 0x0000001A, 0x00000001, 0x00010000 },
-    { 0x00000020, 0x0000001B, 0x00000001, 0x00010000 }, { 0x00000012, 0x00000009, 0x0000000A, 0x00000000 },
-    { 0x0000000E, 0x00000006, 0x0000000A, 0x00000000 }, { 0x00000018, 0x00000020, 0x00000001, 0x00010000 },
-    { 0x00000022, 0x0000001E, 0x00000001, 0x00010000 }, { 0x00000026, 0x00000018, 0x00000001, 0x00010000 },
+    { 0x00000024, 0x00000015, 0x00000001, 0x0001, 0x0000 }, { 0x0000002E, 0x0000000A, 0x00000005, 0x0000, 0x0000 },
+    { 0x00000017, 0x0000001F, 0x00000001, 0x0001, 0x0000 }, { 0x00000016, 0x0000001A, 0x00000001, 0x0001, 0x0000 },
+    { 0x00000020, 0x0000001B, 0x00000001, 0x0001, 0x0000 }, { 0x00000012, 0x00000009, 0x0000000A, 0x0000, 0x0000 },
+    { 0x0000000E, 0x00000006, 0x0000000A, 0x0000, 0x0000 }, { 0x00000018, 0x00000020, 0x00000001, 0x0001, 0x0000 },
+    { 0x00000022, 0x0000001E, 0x00000001, 0x0001, 0x0000 }, { 0x00000026, 0x00000018, 0x00000001, 0x0001, 0x0000 },
 };
 
 // static InitChainEntry sInitChain[] = {
@@ -599,7 +601,51 @@ void func_80AFFFA4(EnTalkGibud* this) {
     this->actionFunc = func_80AFFFBC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFFBC.s")
+void func_80AFFFBC(EnTalkGibud* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    EnTalkGibudUnkStruct* unkStruct;
+
+    switch (func_80152498(&globalCtx->msgCtx)) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+            break;
+        case 5:
+            func_80AFFC10(this, globalCtx);
+            break;
+        case 6:
+            if (func_80147624(globalCtx)) {
+                if (this->unk_3DC == 0x138A) {
+                    unkStruct = &D_80B013A8[this->unk_290];
+                    if (unkStruct->unk_0C == 0) {
+                        func_80115A14((s16)unkStruct->unk_04, unkStruct->unk_08 * -1);
+                    } else {
+                        func_80123D50(globalCtx, player, 0x12, 0x15);
+                    }
+                    player->stateFlags1 |= 0x20;
+                    player->stateFlags1 |= 0x20000000;
+                    this->actor.flags |= 0x100000;
+                    func_80B000FC(this);
+                } else {
+                    func_80AFFE3C(this);
+                }
+            }
+            break;
+        case 16:
+            func_80AFFD3C(this, globalCtx);
+            break;
+    }
+    func_80B00384(this, globalCtx);
+}
 
 void func_80B000FC(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, D_80B01200, 9);
