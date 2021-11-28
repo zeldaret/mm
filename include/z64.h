@@ -764,11 +764,10 @@ typedef struct {
 
 typedef struct {
     /* 0x00000 */ View view;
-    /* 0x00168 */ void* skyboxStaticSegment[2];
-    /* 0x00170 */ char unk170[8]; // more static segments?
+    /* 0x00168 */ void* skyboxStaticSegment[4];
     /* 0x00178 */ void* skyboxPaletteStaticSegment;
-    /* 0x0017C */ Gfx* unk17C;
-    /* 0x00180 */ Gfx* unk180;
+    /* 0x0017C */ Gfx* dListBuf;
+    /* 0x00180 */ Gfx* roomDL;
     /* 0x00184 */ Vtx* roomVtx;
     /* 0x00188 */ DmaRequest unk188;
     /* 0x001A8 */ DmaRequest unk1A8;

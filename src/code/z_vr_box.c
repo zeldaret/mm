@@ -140,7 +140,7 @@ void func_801434E4(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType) 
     func_801431E8(gameState, skyboxCtx, skyType);
 
     if (skyType != 0) {
-        skyboxCtx->unk17C = THA_AllocEndAlign16(&gameState->heap, 0x3840);
+        skyboxCtx->dListBuf = THA_AllocEndAlign16(&gameState->heap, 0x3840);
 
         if (skyType == 5) {
             // Allocate enough space for the vertices for a 6 sided skybox (cube)
