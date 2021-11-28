@@ -55,8 +55,8 @@ void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = EnHitTag_WaitForHit;
     pCylinder = &this->cylinder;
-    Collider_InitAndSetCylinder(globalCtx, &this->cylinder, &this->actor, &sCylinderInit);
-    Collider_UpdateCylinder(&this->actor, &this->cylinder);
+    Collider_InitAndSetCylinder(globalCtx, pCylinder, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, pCylinder);
     if (Flags_GetSwitch(globalCtx, ENHITTAG_GET_SWITCHFLAG(this)) {
         Actor_MarkForDeath(&this->actor);
     }
