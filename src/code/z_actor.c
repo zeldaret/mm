@@ -2376,14 +2376,15 @@ u32 D_801AED58[] = {
     0x10000282, 0x00000002, 0x300002C2, 0x100006C2, 0x00000002, 0x100002C2,
 };
 
-#ifdef NON_EQUIVALENT
 void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
-    UpdateActor_Params params;
-    ActorListEntry* sp3C;
-    DynaCollisionContext* sp38;
     s32 i;
-    Actor* phi_s0_3;
+    Actor* actor;
     Player* player = GET_PLAYER(globalCtx);
+    u32* tmp;
+    s32 cat;
+    Actor* next;
+    ActorListEntry* entry;
+    UpdateActor_Params params;
 
     params.player = player;
     params.globalCtx = globalCtx;
@@ -2400,6 +2401,8 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         actorCtx->unk2--;
     }
 
+    tmp = D_801AED58;
+
     if (player->stateFlags2 & 0x8000000) {
         params.updateActorIfSet = 0x2000000;
     } else {
@@ -2412,53 +2415,47 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         params.unk10 = NULL;
     }
 
-    sp38 = &globalCtx->colCtx.dyna;
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
-        params.unkC = D_801AED58[i] & player->stateFlags1;
-        params.actor = actorCtx->actorList[i].first;
+    for (i = 0, entry = actorCtx->actorList; i < ARRAY_COUNT(actorCtx->actorList); entry++, tmp++, i++) {
+        params.unkC = *tmp & player->stateFlags1;
+        params.actor = entry->first;
+
         while (params.actor != NULL) {
             params.actor = Actor_UpdateActor(&params);
         }
+
         if (i == ACTORCAT_BG) {
-            BgCheck_Update(globalCtx, sp38);
+            DynaPoly_Setup(globalCtx, &globalCtx->colCtx.dyna);
         }
     }
 
-    sp3C = actorCtx->actorList;
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
-        if (actorCtx->actorList[i].unk_08 != 0) {
-            Actor* phi_s0;
+    for (i = 0, entry = actorCtx->actorList; i < ARRAY_COUNT(actorCtx->actorList); entry++, i++) {
+        if (entry->unk_08 != 0) {
+            actor = entry->first;
 
-            phi_s0 = actorCtx->actorList[i].first;
-            while (phi_s0 != 0) {
-                // Actor* phi_s0_2;
-
-                u8 temp_v0_3;
-
-                temp_v0_3 = phi_s0->category;
-                if (i == temp_v0_3) {
-                    phi_s0 = phi_s0->next;
+            while (actor != NULL) {
+                if (i == actor->category) {
+                    actor = actor->next;
                 } else {
-                    phi_s0 = phi_s0->next;
-                    phi_s0->category = i;
-                    Actor_RemoveFromCategory(globalCtx, actorCtx, phi_s0);
-                    Actor_AddToCategory(actorCtx, phi_s0, temp_v0_3);
+                    next = actor->next;
+                    cat = actor->category;
+                    actor->category = i;
+                    Actor_RemoveFromCategory(globalCtx, actorCtx, actor);
+                    Actor_AddToCategory(actorCtx, actor, cat);
+                    actor = next;
                 }
             }
-            actorCtx->actorList[i].unk_08 = 0;
+            entry->unk_08 = 0;
         }
-        // sp3C++;
     }
 
-    phi_s0_3 = player->unk_730;
-    if (!(&params)) {}
-    if ((phi_s0_3 != 0) && (phi_s0_3->update == 0)) {
+    actor = player->unk_730;
+    if ((actor != NULL) && (actor->update == NULL)) {
+        actor = NULL;
         func_80123DA4(player);
-        phi_s0_3 = NULL;
     }
 
-    if ((phi_s0_3 == NULL) || (player->unk_738 < 5)) {
-        phi_s0_3 = NULL;
+    if ((actor == NULL) || (player->unk_738 < 5)) {
+        actor = NULL;
         if (actorCtx->targetContext.unk4B != 0) {
             actorCtx->targetContext.unk4B = 0;
             play_sound(NA_SE_SY_LOCK_OFF);
@@ -2466,16 +2463,13 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     }
 
     if (!(player->stateFlags1 & 2)) {
-        func_800B5814(&actorCtx->targetContext, player, phi_s0_3, globalCtx);
+        func_800B5814(&actorCtx->targetContext, player, actor, &globalCtx->state);
     }
 
     TitleCard_Update(&globalCtx->state, &actorCtx->titleCtxt);
     func_800B6474(globalCtx);
-    BgCheck_UpdateAllActorMeshes(globalCtx, sp38);
+    DynaPoly_UpdateBgActorTransforms(globalCtx, &globalCtx->colCtx.dyna);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateAll.s")
-#endif
 
 void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     Lights* light;
