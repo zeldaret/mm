@@ -4943,7 +4943,7 @@ beginseg
     name "ovl_En_Hit_Tag"
     compress
     include "build/src/overlays/actors/ovl_En_Hit_Tag/z_en_hit_tag.o"
-    include "build/data/ovl_En_Hit_Tag/ovl_En_Hit_Tag.data.o"
+    //include "build/data/ovl_En_Hit_Tag/ovl_En_Hit_Tag.data.o"
     include "build/data/ovl_En_Hit_Tag/ovl_En_Hit_Tag.reloc.o"
 endseg
 
