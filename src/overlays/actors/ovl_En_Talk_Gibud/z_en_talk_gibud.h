@@ -15,7 +15,9 @@ typedef struct EnTalkGibud {
     /* 0x01D8 */ Vec3f unk_1D8;
     /* 0x01E4 */ Vec3f unk_1E4;
     /* 0x01F0 */ Vec3f unk_1F0;
-    /* 0x01FC */ char unk_1FC[0xA8];
+    /* 0x01FC */ char unk_1FC[0xA0];
+    /* 0x029C */ f32 unk_29C;
+    /* 0x02A0 */ f32 unk_2A0;
     /* 0x02A4 */ Vec3s jointTable[26];
     /* 0x0340 */ Vec3s morphTable[26];
     /* 0x03DC */ char unk_3DC[0x4];
@@ -25,7 +27,12 @@ typedef struct EnTalkGibud {
     /* 0x03E8 */ char unk_3E8[0x2];
     /* 0x03EA */ s16 unk_3EA;
     /* 0x03EC */ s16 unk_3EC;
-    /* 0x03EE */ char unk_3EE[0xA];
+    /* 0x03EE */ s16 unk_3EE;
+    /* 0x03F0 */ s16 unk_3F0;
+    /* 0x03F2 */ s16 unk_3F2;
+    /* 0x03F4 */ s16 unk_3F4;
+    /* 0x03F6 */ s8 unk_3F6;
+    /* 0x03F7 */ s8 unk_3F7;
 } EnTalkGibud; // size = 0x3F8
 
 extern const ActorInit En_Talk_Gibud_InitVars;
