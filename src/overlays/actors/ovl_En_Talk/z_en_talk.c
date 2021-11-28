@@ -32,7 +32,20 @@ const ActorInit En_Talk_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/EnTalk_Init.s")
+void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnTalk* this = THIS;
+    s8 temp_v0;
+
+    temp_v0 = this->actor.home.rot.x - 0x1;
+
+    if (temp_v0 >= 0x0 && temp_v0 < 0x7) {
+        this->actor.targetMode = temp_v0;
+    }
+
+    Actor_SetScale(&this->actor, 1.0f);
+    this->actionFunc = func_80BDE090;
+    this->actor.textId = (this->actor.params & 0x3F) + 0x1C00;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/EnTalk_Destroy.s")
 
