@@ -14,7 +14,7 @@ void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BE20E8(EnHitTag* this, GlobalContext* globalCtx);
+void EnHitTag_WaitForHit(EnHitTag* this, GlobalContext* globalCtx);
 
 const ActorInit En_Hit_Tag_InitVars = {
     ACTOR_EN_HIT_TAG,
@@ -53,7 +53,7 @@ void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHitTag* this = (EnHitTag*)thisx;
 
     Actor_SetScale(&this->actor, 1.0f);
-    this->actionFunc = func_80BE20E8;
+    this->actionFunc = EnHitTag_WaitForHit;
     pCylinder = &this->cylinder;
     Collider_InitAndSetCylinder(globalCtx, &this->cylinder, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->cylinder);
@@ -67,7 +67,7 @@ void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->cylinder);
 }
 
-void func_80BE20E8(EnHitTag* this, GlobalContext* globalCtx) {
+void EnHitTag_WaitForHit(EnHitTag* this, GlobalContext* globalCtx) {
     Vec3f dropLocation;
     s32 i;
 
@@ -79,12 +79,11 @@ void func_80BE20E8(EnHitTag* this, GlobalContext* globalCtx) {
         dropLocation.z = this->actor.world.pos.z;
 
         for (i = 0; i < 3; i++) {
-            Item_DropCollectible(globalCtx, &dropLocation, 0U);
+            Item_DropCollectible(globalCtx, &dropLocation, ITEM00_RUPEE_GREEN);
         }
-
-        return;
+    } else {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->cylinder.base);
     }
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->cylinder.base);
 }
 
 void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx) {

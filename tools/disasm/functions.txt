@@ -16068,7 +16068,7 @@
     0x80BE1E9C:("EnNimotsu_Draw",),
     0x80BE2030:("EnHitTag_Init",),
     0x80BE20BC:("EnHitTag_Destroy",),
-    0x80BE20E8:("func_80BE20E8",),
+    0x80BE20E8:("EnHitTag_WaitForHit",),
     0x80BE21A0:("EnHitTag_Update",),
     0x80BE2260:("func_80BE2260",),
     0x80BE2330:("func_80BE2330",),
