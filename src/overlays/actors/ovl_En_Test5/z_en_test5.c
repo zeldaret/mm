@@ -35,13 +35,12 @@ void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc) {
 void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx2) {
     EnTest5* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
-
     WaterBox* water;
-    f32 _; // Unused water surface
+    f32 ySurface; // Unused
 
     // If not spawned above a water source, immediately despawn
-    if (!WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &_,
-                              &water)) {
+    if (!WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                              &ySurface, &water)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -84,10 +83,9 @@ void EnTest5_HandleBottleAction(EnTest5* this, GlobalContext* globalCtx) {
 void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx2) {
     EnTest5* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
-
     Vec3f steamPos;
-    CollisionPoly* _; // Unused collision poly
-    UNK_TYPE pad;
+    CollisionPoly* poly; // Unused
+    UNK_TYPE pad;        // Unused
 
     this->actionFunc(this, globalCtx);
 
@@ -97,7 +95,7 @@ void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx2) {
         steamPos.y = this->minPos.y + 100.0f;
         steamPos.z = (Rand_ZeroOne() * this->zLength) + this->minPos.z;
 
-        if ((BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &_, &steamPos) + 10.0f) < this->minPos.y) {
+        if ((BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &steamPos) + 10.0f) < this->minPos.y) {
             Vec3f steamVel;
 
             steamPos.y = this->minPos.y + 10.0f;
