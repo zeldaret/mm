@@ -1,6 +1,6 @@
 #include "global.h"
 
-extern Mtx* sSkyboxDrawMatrix;
+Mtx* sSkyboxDrawMatrix;
 
 Mtx* SkyboxDraw_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z) {
     Matrix_InsertTranslation(x, y, z, MTXMODE_NEW);
