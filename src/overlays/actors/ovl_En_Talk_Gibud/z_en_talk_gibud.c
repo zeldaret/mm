@@ -568,7 +568,22 @@ void func_80AFFC10(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFC9C.s")
+s32 func_80AFFC9C(EnTalkGibud* this, GlobalContext* globalCtx, s32 arg2) {
+    EnTalkGibudUnkStruct* unkStruct = &D_80B013A8[this->unk_290];
+
+    if (unkStruct->unk_00 == arg2) {
+        if (unkStruct->unk_0C == 0) {
+            if (AMMO(unkStruct->unk_04) >= unkStruct->unk_08) {
+                return 0;
+            }
+            return 1;
+        }
+        if (func_80114F2C((u8)unkStruct->unk_04)) {
+            return 0;
+        }
+    }
+    return 2;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFD3C.s")
 
