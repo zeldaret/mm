@@ -13,11 +13,9 @@
 void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx);
-
 void func_80BDE058(EnTalk* this, GlobalContext* globalCtx);
 void func_80BDE090(EnTalk* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Talk_InitVars = {
     ACTOR_EN_TALK,
     ACTORCAT_ITEMACTION,
@@ -30,21 +28,19 @@ const ActorInit En_Talk_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
-
 void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTalk* this = THIS;
-    s8 temp_v0;
+    s8 targetMode;
 
-    temp_v0 = this->actor.home.rot.x - 0x1;
+    targetMode = this->actor.home.rot.x - 0x1;
 
-    if (temp_v0 >= 0x0 && temp_v0 < 0x7) {
-        this->actor.targetMode = temp_v0;
+    if (targetMode >= 0x0 && targetMode < 0x7) {
+        this->actor.targetMode = targetMode;
     }
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = func_80BDE090;
-    this->actor.textId = (this->actor.params & 0x3F) + 0x1C00;
+    this->actor.textId = GET_TEXT_ID(this);
 }
 
 void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -63,7 +59,7 @@ void func_80BDE090(EnTalk* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if ((this->actor.xzDistToPlayer < 40.0f && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) != 0) ||
+    if ((this->actor.xzDistToPlayer < 40.0f && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx)) ||
         this->actor.isTargeted) {
         func_800B8614(&this->actor, globalCtx, 120.0f);
     }

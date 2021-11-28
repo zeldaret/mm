@@ -14,4 +14,6 @@ typedef struct EnTalk {
 
 extern const ActorInit En_Talk_InitVars;
 
+#define GET_TEXT_ID(this) ((this->actor.params & 0x3F) + 0x1C00)
+
 #endif // Z_EN_TALK_H
