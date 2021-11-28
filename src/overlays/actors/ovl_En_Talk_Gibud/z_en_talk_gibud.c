@@ -41,6 +41,8 @@ void func_80AFFE94(EnTalkGibud* this, GlobalContext* globalCtx);
 void func_80AFF6A0(EnTalkGibud* this, GlobalContext* globalCtx);
 void func_80AFF700(EnTalkGibud* this);
 void func_80AFF880(EnTalkGibud* this);
+void func_80AFF9CC(EnTalkGibud* this);
+void func_80AFFFA4(EnTalkGibud* this);
 
 #if 0
 const ActorInit En_Talk_Gibud_InitVars = {
@@ -117,9 +119,9 @@ extern InitChainEntry D_80B01448[];
 extern ActorAnimationEntry D_80B01200[];
 
 extern FlexSkeletonHeader D_060053E8;
-extern UNK_TYPE D_06009298;
+extern AnimationHeader D_06009298;
 extern AnimationHeader D_0600ABE0;
-extern UNK_TYPE D_06010B88;
+extern FlexSkeletonHeader D_06010B88;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/EnTalkGibud_Init.s")
 
@@ -138,8 +140,8 @@ void func_80AFEB7C(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer <= 150.0f && func_800B715C(globalCtx)) {
         func_80AFEC08(this);
     }
-    Math_SmoothStepToS(&this->unk_3E0, 0, 1, 0x64, 0);
-    Math_SmoothStepToS(&this->unk_3E6, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 0x64, 0);
 }
 
 void func_80AFEC08(EnTalkGibud* this) {
@@ -149,7 +151,7 @@ void func_80AFEC08(EnTalkGibud* this) {
 
 void func_80AFEC4C(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 rot = this->actor.shape.rot.y + this->unk_3E0 + this->unk_3E6;
+    s16 rot = this->actor.shape.rot.y + this->unk_3DE.y + this->unk_3E4.y;
     s16 yaw = BINANG_SUB(this->actor.yawTowardsPlayer, rot);
 
     if (ABS_ALT(yaw) < 0x2008) {
@@ -179,8 +181,8 @@ void func_80AFED7C(EnTalkGibud* this, GlobalContext* globalCtx) {
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xFA);
     this->actor.world.rot = this->actor.shape.rot;
-    Math_SmoothStepToS(&this->unk_3E0, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->unk_3E6, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 100, 0);
     if (func_80B0040C(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
         if (this->unk_3EE == 0 && this->actor.xzDistToPlayer <= 45.0f) {
             player->actor.freezeTimer = 0;
@@ -292,8 +294,8 @@ void func_80AFF288(EnTalkGibud* this, GlobalContext* globalCtx) {
         this->actor.speedXZ += 0.15f;
     }
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Math_SmoothStepToS(&this->unk_3E0, 0, 1, 0x12C, 0);
-    Math_SmoothStepToS(&this->unk_3E6, 0, 1, 0x12C, 0);
+    Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 0x12C, 0);
+    Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 0x12C, 0);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80AFF330(this);
@@ -313,7 +315,7 @@ void func_80AFF378(EnTalkGibud* this, GlobalContext* globalCtx) {
         func_80AFF45C(this);
         this->unk_3EA = 0;
     } else {
-        this->unk_3E0 = Math_SinS(this->unk_3EA * 0xFA0) * (0x256F * ((60 - this->unk_3EA) / 60.0f));
+        this->unk_3DE.y = Math_SinS(this->unk_3EA * 0xFA0) * (0x256F * ((60 - this->unk_3EA) / 60.0f));
         this->unk_3EA++;
     }
 }
@@ -325,8 +327,8 @@ void func_80AFF45C(EnTalkGibud* this) {
 }
 
 void func_80AFF4AC(EnTalkGibud* this, GlobalContext* globalCtx) {
-    Math_SmoothStepToS(&this->unk_3E0, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->unk_3E6, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 100, 0);
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 5.0f) {
         if (this->actor.speedXZ > 0.2f) {
             this->actor.speedXZ -= 0.2f;
@@ -385,7 +387,27 @@ void func_80AFF700(EnTalkGibud* this) {
     this->actor.speedXZ = -2.0f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF76C.s")
+void func_80AFF76C(EnTalkGibud* this, GlobalContext* globalCtx) {
+    if (this->actor.speedXZ < 0.0f) {
+        this->actor.speedXZ += 0.15f;
+    }
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        this->unk_3F7 = -1;
+        this->actor.world.rot.y = this->actor.shape.rot.y;
+        if (this->unk_3F0 > 0 && this->unk_3F6 == 0 && this->unk_3F2 == 0) {
+            this->actor.hintId = 0x2A;
+            this->actor.flags &= ~(0x8 | 0x1);
+            this->actor.flags |= (0x4 | 0x1);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
+            this->unk_3F2 = 1;
+        }
+        if (func_80B00484(this, globalCtx)) {
+            func_80AFF45C(this);
+        } else {
+            func_80AFED08(this);
+        }
+    }
+}
 
 void func_80AFF880(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, D_80B01200, 6);
@@ -395,29 +417,145 @@ void func_80AFF880(EnTalkGibud* this) {
     this->actionFunc = func_80AFF8E4;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF8E4.s")
+void func_80AFF8E4(EnTalkGibud* this, GlobalContext* globalCtx) {
+    if (this->unk_3EA > 300) {
+        func_80AFF9CC(this);
+    } else {
+        Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 250, 0);
+        Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 250, 0);
+        this->unk_3EA += 1;
+    }
+    if (this->unk_3EA == 20 && this->unk_3F0 > 0 && this->unk_3F6 == 0 && this->unk_3F2 == 0) {
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
+        this->unk_3F2 = 1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF9CC.s")
+void func_80AFF9CC(EnTalkGibud* this) {
+    Animation_Change(&this->skelAnime, &D_06009298, -1.0f, Animation_GetLastFrame(&D_06009298), 0.0f, 2, -8.0f);
+    this->actor.flags |= 1;
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_REVERSE);
+    this->unk_3EA = 0;
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    this->actionFunc = func_80AFFA68;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFA68.s")
+void func_80AFFA68(EnTalkGibud* this, GlobalContext* globalCtx) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        this->actor.colChkInfo.health = 8;
+        func_80AFEB38(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFAB0.s")
+void func_80AFFAB0(EnTalkGibud* this, GlobalContext* globalCtx) {
+    switch (this->unk_290) {
+        case 0:
+            func_801518B0(globalCtx, 0x138C, &this->actor);
+            this->unk_3DC = 0x138C;
+            break;
+        case 1:
+            func_801518B0(globalCtx, 0x138D, &this->actor);
+            this->unk_3DC = 0x138D;
+            break;
+        case 2:
+            func_801518B0(globalCtx, 0x138E, &this->actor);
+            this->unk_3DC = 0x138E;
+            break;
+        case 3:
+            func_801518B0(globalCtx, 0x138F, &this->actor);
+            this->unk_3DC = 0x138F;
+            break;
+        case 4:
+            func_801518B0(globalCtx, 0x1390, &this->actor);
+            this->unk_3DC = 0x1390;
+            break;
+        case 5:
+            func_801518B0(globalCtx, 0x1391, &this->actor);
+            this->unk_3DC = 0x1391;
+            break;
+        case 6:
+            func_801518B0(globalCtx, 0x1392, &this->actor);
+            this->unk_3DC = 0x1392;
+            break;
+        case 7:
+            func_801518B0(globalCtx, 0x1393, &this->actor);
+            this->unk_3DC = 0x1393;
+            break;
+        case 8:
+            func_801518B0(globalCtx, 0x1394, &this->actor);
+            this->unk_3DC = 0x1394;
+            break;
+        case 9:
+            func_801518B0(globalCtx, 0x1395, &this->actor);
+            this->unk_3DC = 0x1395;
+            break;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFC10.s")
+void func_80AFFC10(EnTalkGibud* this, GlobalContext* globalCtx) {
+    if (func_80147624(globalCtx)) {
+        switch (this->unk_3DC) {
+            case 0x1388:
+                func_80AFFAB0(this, globalCtx);
+                break;
+            case 0x138C:
+            case 0x138D:
+            case 0x138E:
+            case 0x138F:
+            case 0x1390:
+            case 0x1391:
+            case 0x1392:
+            case 0x1393:
+            case 0x1394:
+            case 0x1395:
+                func_801518B0(globalCtx, 0xFF, &this->actor);
+                this->unk_3DC = 0xFF;
+                break;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFC9C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFD3C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFE3C.s")
+void func_80AFFE3C(EnTalkGibud* this) {
+    this->unk_3F4 = 0;
+    if (this->actionFunc != func_80AFFFBC) {
+        func_800BDC5C(&this->skelAnime, D_80B01200, 9);
+    }
+    this->actionFunc = func_80AFFE94;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFE94.s")
+void func_80AFFE94(EnTalkGibud* this, GlobalContext* globalCtx) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        this->unk_3F4 = 1;
+        func_801518B0(globalCtx, 0x1388, &this->actor);
+        this->unk_3DC = 0x1388;
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
+        func_80AFFFA4(this);
+    } else if (this->actor.xzDistToPlayer < 100.0f && !(this->collider.base.acFlags & AC_HIT)) {
+        func_800E9250(globalCtx, &this->actor, &this->unk_3DE, &this->unk_3E4, this->actor.focus.pos);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
+    } else {
+        Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 100, 0);
+        Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 100, 0);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFFA4.s")
+void func_80AFFFA4(EnTalkGibud* this) {
+    this->unk_294 = 0;
+    this->actionFunc = func_80AFFFBC;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFFBC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B000FC.s")
+void func_80B000FC(EnTalkGibud* this) {
+    func_800BDC5C(&this->skelAnime, D_80B01200, 9);
+    this->actor.flags &= -2;
+    this->unk_3EA = 0x28;
+    this->actionFunc = func_80B00158;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00158.s")
 
@@ -470,22 +608,22 @@ void func_80B004D0(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80B005EC(EnTalkGibud* this, GlobalContext* globalCtx) {
-    s16 temp_v0 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->unk_3E6;
+    s16 temp_v0 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->unk_3E4.y;
     s16 phi_a2 = CLAMP(temp_v0, -500, 500);
 
-    temp_v0 -= this->unk_3E0;
+    temp_v0 -= this->unk_3DE.y;
     temp_v0 = CLAMP(temp_v0, -500, 500);
 
     if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
-        this->unk_3E6 += ABS_ALT(phi_a2);
-        this->unk_3E0 += ABS_ALT(temp_v0);
+        this->unk_3E4.y += ABS_ALT(phi_a2);
+        this->unk_3DE.y += ABS_ALT(temp_v0);
     } else {
-        this->unk_3E6 -= ABS_ALT(phi_a2);
-        this->unk_3E0 -= ABS_ALT(temp_v0);
+        this->unk_3E4.y -= ABS_ALT(phi_a2);
+        this->unk_3DE.y -= ABS_ALT(temp_v0);
     }
 
-    this->unk_3E6 = CLAMP(this->unk_3E6, -0x495F, 0x495F);
-    this->unk_3E0 = CLAMP(this->unk_3E0, -0x256F, 0x256F);
+    this->unk_3E4.y = CLAMP(this->unk_3E4.y, -0x495F, 0x495F);
+    this->unk_3DE.y = CLAMP(this->unk_3DE.y, -0x256F, 0x256F);
 }
 
 s32 func_80B00760(EnTalkGibud* this, GlobalContext* globalCtx) {
