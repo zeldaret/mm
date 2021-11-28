@@ -51,8 +51,15 @@ void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnTalk* this = THIS;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/func_80BDE058.s")
+void func_80BDE058(EnTalk* this, GlobalContext* globalCtx) {
+    if (func_800B867C(&this->actor, globalCtx) != 0) {
+        this->actionFunc = func_80BDE090;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/func_80BDE090.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/EnTalk_Update.s")
+void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnTalk* this = THIS;
+    this->actionFunc(this, globalCtx);
+}
