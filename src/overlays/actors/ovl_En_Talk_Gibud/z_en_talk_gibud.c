@@ -44,7 +44,35 @@ void func_80AFF880(EnTalkGibud* this);
 void func_80AFF9CC(EnTalkGibud* this);
 void func_80AFFFA4(EnTalkGibud* this);
 
-#if 0
+extern AnimationHeader D_060009C4;
+extern AnimationHeader D_06000F1C;
+extern AnimationHeader D_06001600;
+extern FlexSkeletonHeader D_060053E8;
+extern AnimationHeader D_06005DF4;
+extern AnimationHeader D_060061E4;
+extern AnimationHeader D_06006678;
+extern AnimationHeader D_06006B08;
+extern AnimationHeader D_06006EEC;
+extern AnimationHeader D_060073A4;
+extern AnimationHeader D_06007BBC;
+extern AnimationHeader D_060081A8;
+extern AnimationHeader D_06009298;
+extern AnimationHeader D_06009900;
+extern AnimationHeader D_0600A450;
+extern AnimationHeader D_0600ABE0;
+extern FlexSkeletonHeader D_06010B88;
+extern AnimationHeader D_060113EC;
+extern AnimationHeader D_060118D8;
+extern AnimationHeader D_06011DB8;
+extern AnimationHeader D_0601216C;
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+} EnTalkGibudUnkStruct;
+
 const ActorInit En_Talk_Gibud_InitVars = {
     ACTOR_EN_TALK_GIBUD,
     ACTORCAT_ENEMY,
@@ -57,10 +85,34 @@ const ActorInit En_Talk_Gibud_InitVars = {
     (ActorFunc)EnTalkGibud_Draw,
 };
 
+static ActorAnimationEntry D_80B01200[] = {
+    { &D_06006678, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06006B08, 0.5f, 0.0f, 0.0f, 3, 0.0f },
+    { &D_06006EEC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060073A4, 0.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &D_06007BBC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060081A8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &D_06009298, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_06009900, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &D_0600A450, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_0600ABE0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &D_060113EC, 0.4f, 0.0f, 0.0f, 1, -8.0f }, { &D_0601216C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &D_060118D8, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06011DB8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+};
+
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B01350 = {
-    { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7EFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    {
+        COLTYPE_HIT0,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7EFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 20, 70, 0, { 0, 0, 0 } },
 };
 
@@ -103,6 +155,14 @@ static DamageTable D_80B0137C = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B0139C = { 8, 0, 0, 0, MASS_HEAVY };
 
+static EnTalkGibudUnkStruct D_80B013A8[] = {
+    { 0x00000024, 0x00000015, 0x00000001, 0x00010000 }, { 0x0000002E, 0x0000000A, 0x00000005, 0x00000000 },
+    { 0x00000017, 0x0000001F, 0x00000001, 0x00010000 }, { 0x00000016, 0x0000001A, 0x00000001, 0x00010000 },
+    { 0x00000020, 0x0000001B, 0x00000001, 0x00010000 }, { 0x00000012, 0x00000009, 0x0000000A, 0x00000000 },
+    { 0x0000000E, 0x00000006, 0x0000000A, 0x00000000 }, { 0x00000018, 0x00000020, 0x00000001, 0x00010000 },
+    { 0x00000022, 0x0000001E, 0x00000001, 0x00010000 }, { 0x00000026, 0x00000018, 0x00000001, 0x00010000 },
+};
+
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B01448[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
@@ -110,18 +170,9 @@ static InitChainEntry D_80B01448[] = {
     ICHAIN_F32_DIV1000(gravity, -3500, ICHAIN_STOP),
 };
 
-#endif
+static s32 D_80B01454[] = { 0x00000000, 0x00000000, 0x00000000 };
 
-extern ColliderCylinderInit D_80B01350;
-extern DamageTable D_80B0137C;
-extern CollisionCheckInfoInit2 D_80B0139C;
-extern InitChainEntry D_80B01448[];
-extern ActorAnimationEntry D_80B01200[];
-
-extern FlexSkeletonHeader D_060053E8;
-extern AnimationHeader D_06009298;
-extern AnimationHeader D_0600ABE0;
-extern FlexSkeletonHeader D_06010B88;
+static s32 D_80B01460[] = { 0x00000000, 0x3F19999A, 0x00000000, 0x00000000 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/EnTalkGibud_Init.s")
 
