@@ -173,8 +173,6 @@ void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s3
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
-// regalloc (and float regalloc)
 void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
     f32 distToFloor = actor->world.pos.y - actor->floorHeight;
 
@@ -208,19 +206,19 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
         MtxF spFC;
         CollisionPoly* spF8;
         s32 spF4;
-        f32 floorHeight[2]; // spEC
-        f32 distToFloor;
+        f32 floorHeight[2];
+        f32 pad;
         f32 shadowAlpha;
         f32 shadowScaleX;
         f32 shadowScaleZ;
         Light* lightPtr;
         s32 lightNumMax;
-        s32 i; // spD0
+        s32 i;
         s32 j;
         s32 lightNum;
         Vec3f* feetPosPtr;
         s32 numLights;
-        f32* floorHeightPtr; // spBC
+        f32* floorHeightPtr;
         s32 spB8;
 
         numLights = mapper->numLights - 2;
@@ -233,7 +231,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
         actor->shape.feetFloorFlags = 0;
         spB8 = 2;
 
-        for (i = 0; i < ARRAY_COUNT(floorHeight); i++) {
+        for (i = 0; i < ARRAY_COUNT(floorHeight); i++, spB8 >>= 1) {
             feetPosPtr->y += 50.0f;
             *floorHeightPtr = func_80169100(globalCtx, &sp13C, &spF8, &spF4, feetPosPtr);
             feetPosPtr->y -= 50.0f;
@@ -254,7 +252,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                         }
                         actor->shape.unk_17 &= ~spB8;
 
-                        if (!mapper->l.l) {}
+                        if (!mapper->l.l) {} // POSSIBLE FAKE MATCH
                     }
                 }
 
@@ -262,7 +260,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                     distToFloor = 30.0f;
                 }
 
-                shadowAlpha = (f32)actor->shape.shadowAlpha * (1.0f - (distToFloor * 0.033333335f));
+                shadowAlpha = actor->shape.shadowAlpha * (1.0f - (distToFloor * 0.033333335f));
                 shadowScaleZ = 1.0f - (distToFloor * 0.014285714f);
                 shadowScaleX = actor->shape.shadowScale * shadowScaleZ * actor->scale.x;
 
@@ -291,7 +289,6 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                     }
                 }
             }
-            spB8 >>= 1;
             feetPosPtr++;
             floorHeightPtr++;
         }
@@ -311,9 +308,6 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/ActorShadow_DrawFeet.s")
-#endif
 
 void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex,
                       Vec3f* rightFootPos) {
