@@ -7,6 +7,8 @@ struct EnHitTag;
 
 typedef void (*EnHitTagActionFunc)(struct EnHitTag*, GlobalContext*);
 
+#define ENHITTAG_GET_SWITCHFLAG(thisx) (s32)(thisx->actor.params & 0xFE00) >> 9)
+
 typedef struct EnHitTag {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ ColliderCylinder cylinder;
