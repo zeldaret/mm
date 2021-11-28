@@ -584,7 +584,39 @@ s32 func_80AFFC9C(EnTalkGibud* this, GlobalContext* globalCtx, s32 arg2) {
     return 2;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFD3C.s")
+void func_80AFFD3C(EnTalkGibud* this, GlobalContext* globalCtx) {
+    Player* temp_v1 = GET_PLAYER(globalCtx);
+    s32 temp_v0;
+
+    if (this->unk_294 == 0) {
+        temp_v0 = func_80123810(globalCtx);
+        if (temp_v0 != 0) {
+            this->unk_294 = temp_v0;
+        }
+        if (this->unk_294 > 0) {
+            switch (func_80AFFC9C(this, globalCtx, this->unk_294)) {
+                case 0:
+                    temp_v1->actor.textId = 0x138A;
+                    this->unk_3DC = 0x138A;
+                    break;
+                case 1:
+                    temp_v1->actor.textId = 0x138B;
+                    this->unk_3DC = 0x138B;
+                    break;
+                case 2:
+                    temp_v1->actor.textId = 0x1389;
+                    this->unk_3DC = 0x1389;
+                    break;
+                default:
+                    break;
+            }
+            func_801477B4(globalCtx);
+        } else if (this->unk_294 < 0) {
+            func_801518B0(globalCtx, 0x1389U, &this->actor);
+            this->unk_3DC = 0x1389;
+        }
+    }
+}
 
 void func_80AFFE3C(EnTalkGibud* this) {
     this->unk_3F4 = 0;
