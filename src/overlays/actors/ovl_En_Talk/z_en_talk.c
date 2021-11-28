@@ -57,7 +57,17 @@ void func_80BDE058(EnTalk* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/func_80BDE090.s")
+void func_80BDE090(EnTalk* this, GlobalContext* globalCtx) {
+    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+        this->actionFunc = func_80BDE058;
+        return;
+    }
+
+    if ((this->actor.xzDistToPlayer < 40.0f && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) != 0) ||
+        this->actor.isTargeted) {
+        func_800B8614(&this->actor, globalCtx, 120.0f);
+    }
+}
 
 void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTalk* this = THIS;
