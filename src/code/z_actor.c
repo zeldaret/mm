@@ -2795,6 +2795,7 @@ void func_800B9EF4(GlobalContext* globalCtx, s32 numActors, Actor** actors) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
+void func_800B9EF4(GlobalContext* globalCtx, s32 numActors, Actor** actors);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9EF4.s")
 #endif
 
@@ -2832,73 +2833,59 @@ s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3)
     return false;
 }
 
-#ifdef NON_EQUIVALENT
-// weird DISPS stuff
 void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
+    s32 pad[2];
+    Gfx* ref2;
+    Gfx* tmp2;
+    s32 pad2;
     Gfx* sp58;
-    GraphicsContext* sp44;
-    Actor* temp_s0;
-    Actor* temp_s0_2;
-    Gfx* temp_s0_3;
-    Gfx* temp_t9;
-    Gfx* temp_v0_2;
-    Gfx* temp_v0_3;
-    Gfx* temp_v1;
-    s32 temp_s7;
-    ActorListEntry* phi_fp;
-    Actor* phi_s0;
-    s32 phi_s6;
+    ActorListEntry* actorEntry;
+    Actor* actor;
+    s32 actorFlags;
     s32 i;
 
     if (globalCtx->unk_18844 != 0) {
-        phi_s6 = ACTOR_FLAG_200000;
+        actorFlags = ACTOR_FLAG_200000;
     } else {
-        phi_s6 = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_20;
+        actorFlags = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_20;
     }
 
-    sp44 = globalCtx->state.gfxCtx;
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     Actor_DrawAllSetup(globalCtx);
 
-    // temp_t9 = sp44->polyXlu.p;
-    // sp58 = temp_t9;
-    // sp44->polyXlu.p = temp_t9 + 8;
     sp58 = POLY_XLU_DISP;
-    POLY_XLU_DISP = &POLY_XLU_DISP[1];
+    POLY_XLU_DISP = &sp58[1];
 
-    phi_fp = actorCtx->actorList;
+    for (i = 0, actorEntry = actorCtx->actorList; i < ARRAY_COUNT(actorCtx->actorList); i++, actorEntry++) {
+        actor = actorEntry->first;
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++, phi_fp++) {
-        phi_s0 = phi_fp->first;
-        while (phi_s0 != NULL) {
-            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &phi_s0->world.pos, &phi_s0->projectedPos,
-                                         &phi_s0->projectedW);
+        while (actor != NULL) {
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &actor->world.pos, &actor->projectedPos,
+                                         &actor->projectedW);
 
-            if ((phi_s0->audioFlags & 0x7F) != 0) {
-                func_800B9D1C(phi_s0);
+            if (actor->audioFlags & 0x7F) {
+                func_800B9D1C(actor);
             }
 
-            if (func_800BA2D8(globalCtx, phi_s0)) {
-                phi_s0->flags |= ACTOR_FLAG_40;
+            if (func_800BA2D8(globalCtx, actor)) {
+                actor->flags |= ACTOR_FLAG_40;
             } else {
-                phi_s0->flags &= ~ACTOR_FLAG_40;
+                actor->flags &= ~ACTOR_FLAG_40;
             }
 
-            phi_s0->isDrawn = false;
-            if ((phi_s0->init == NULL) && (phi_s0->draw != NULL)) {
-                if (phi_s0->flags & phi_s6) {
-                    if ((phi_s0->flags & ACTOR_FLAG_80) &&
-                        ((globalCtx->roomCtx.currRoom.unk5 == 0) || (globalCtx->actorCtx.unk4 == 0x64) ||
-                         (globalCtx->roomCtx.currRoom.num != phi_s0->room))) {
-                        if (Actor_RecordUndrawnActor(globalCtx, phi_s0) != 0) {}
-                    } else {
-                        Actor_Draw(globalCtx, phi_s0);
-                    }
+            actor->isDrawn = false;
+            if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & actorFlags)) {
+                if ((actor->flags & ACTOR_FLAG_80) &&
+                    ((globalCtx->roomCtx.currRoom.unk5 == 0) || (globalCtx->actorCtx.unk4 == 0x64) ||
+                     (actor->room != globalCtx->roomCtx.currRoom.num))) {
+                    if (Actor_RecordUndrawnActor(globalCtx, actor)) {}
+                } else {
+                    Actor_Draw(globalCtx, actor);
                 }
             }
 
-            phi_s0 = phi_s0->next;
+            actor = actor->next;
         }
     }
 
@@ -2906,17 +2893,13 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     EffectSS_DrawAllParticles(globalCtx);
     EffFootmark_Draw(globalCtx);
 
-    temp_s0_3 = POLY_XLU_DISP;
-    // temp_s0_3 = sp44->polyXlu.p;
-    // sp58->words.w0 = 0xDE000000;
-    // temp_v0_2 = temp_s0_3 + 8;
-    // sp58->words.w1 = (u32) temp_v0_2;
-    // sp44->polyXlu.p = temp_v0_2;
-    gSPDisplayList(sp58, POLY_XLU_DISP++);
+    ref2 = POLY_XLU_DISP;
+    gSPDisplayList(sp58, &ref2[1]);
+    POLY_XLU_DISP = &ref2[1];
 
     if (globalCtx->actorCtx.unk3 != 0) {
         Math_StepToC(&globalCtx->actorCtx.unk4, 100, 20);
-        if ((GET_PLAYER(globalCtx)->stateFlags2 & 0x8000000)) {
+        if (GET_PLAYER(globalCtx)->stateFlags2 & 0x8000000) {
             func_800B90F4(globalCtx);
         }
     } else {
@@ -2927,31 +2910,19 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         func_800B9EF4(globalCtx, globalCtx->actorCtx.undrawnActorCount, globalCtx->actorCtx.undrawnActors);
     }
 
-    // temp_v0_3 = sp44->polyXlu.p;
-    // temp_v0_3->words.w0 = 0xDF000000;
-    // temp_v0_3->words.w1 = 0;
-    // temp_v1 = temp_v0_3 + 8;
-    // temp_s0_3->words.w1 = (u32) temp_v1;
-    // temp_s0_3->words.w0 = 0xDE010000;
-    // sp44->polyXlu.p = temp_v1;
-
-    // gSPEndDisplayList(POLY_XLU_DISP++);
-    // gSPBranchList(POLY_XLU_DISP++, POLY_XLU_DISP);
-    // temp_v0_3 = POLY_XLU_DISP;
-    gSPEndDisplayList(POLY_XLU_DISP++);
-    gSPBranchList(temp_s0_3, POLY_XLU_DISP);
+    tmp2 = POLY_XLU_DISP;
+    gSPEndDisplayList(&tmp2[0]);
+    gSPBranchList(ref2, &tmp2[1]);
+    POLY_XLU_DISP = &tmp2[1];
 
     if (globalCtx->unk_18844 == 0) {
         Lights_DrawGlow(globalCtx);
     }
 
-    TitleCard_Draw(globalCtx, &actorCtx->titleCtxt);
+    TitleCard_Draw(&globalCtx->state, &actorCtx->titleCtxt);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_DrawAll.s")
-#endif
 
 /**
  * Kills every actor which its object is not loaded
