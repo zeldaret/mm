@@ -12,13 +12,11 @@ typedef struct EnTalkGibud {
     /* 0x0144 */ ColliderCylinder collider;
     /* 0x0190 */ SkelAnime skelAnime;
     /* 0x01D4 */ EnTalkGibudActionFunc actionFunc;
-    /* 0x01D8 */ Vec3f unk_1D8;
-    /* 0x01E4 */ Vec3f unk_1E4;
-    /* 0x01F0 */ Vec3f unk_1F0;
-    /* 0x01FC */ char unk_1FC[0x94];
+    /* 0x01D8 */ Vec3f unk_1D8[15];
+    /* 0x028C */ s32 unk_28C;
     /* 0x0290 */ s32 unk_290;
     /* 0x0294 */ s32 unk_294;
-    /* 0x0298 */ char unk_298[0x4];
+    /* 0x0298 */ s32 unk_298;
     /* 0x029C */ f32 unk_29C;
     /* 0x02A0 */ f32 unk_2A0;
     /* 0x02A4 */ Vec3s jointTable[26];

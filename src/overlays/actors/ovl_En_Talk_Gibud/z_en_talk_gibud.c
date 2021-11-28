@@ -935,8 +935,60 @@ void EnTalkGibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.y += 50.0f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00F08.s")
+s32 func_80B00F08(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                  Gfx** gfx) {
+    EnTalkGibud* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00F64.s")
+    if (limbIndex == 12) {
+        rot->y += this->unk_3E4.y;
+    } else if (limbIndex == 23) {
+        rot->y += this->unk_3DE.y;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/EnTalkGibud_Draw.s")
+    return false;
+}
+
+void func_80B00F64(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+    EnTalkGibud* this = THIS;
+
+    if ((this->unk_3F0 != 0) &&
+        ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8) || (limbIndex == 9) ||
+         (limbIndex == 11) || (limbIndex == 14) || (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18) ||
+         (limbIndex == 20) || (limbIndex == 21) || (limbIndex == 22) || (limbIndex == 24) || (limbIndex == 25))) {
+        Matrix_GetStateTranslation(&this->unk_1D8[this->unk_28C]);
+        this->unk_28C++;
+    }
+}
+
+void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnTalkGibud* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    this->unk_28C = 0;
+    if (this->actor.shape.shadowAlpha == 255) {
+        func_8012C28C(globalCtx->state.gfxCtx);
+
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
+        gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
+
+        POLY_OPA_DISP =
+            SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                               this->skelAnime.dListCount, func_80B00F08, func_80B00F64, &this->actor, POLY_OPA_DISP);
+    } else {
+        func_8012C2DC(globalCtx->state.gfxCtx);
+
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
+        gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
+
+        POLY_XLU_DISP =
+            SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                               this->skelAnime.dListCount, func_80B00F08, func_80B00F64, &this->actor, POLY_XLU_DISP);
+    }
+    if (this->unk_3F0 > 0) {
+        func_800BE680(globalCtx, &this->actor, this->unk_1D8, ARRAY_COUNT(this->unk_1D8), this->unk_2A0, 0.5f,
+                      this->unk_29C, this->unk_3F6);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
