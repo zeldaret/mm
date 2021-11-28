@@ -40,10 +40,50 @@ static ColliderCylinderInit D_80BE21F0 = {
 
 extern ColliderCylinderInit D_80BE21F0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Init.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Init.s")
+void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ColliderCylinder* pCylinder;
+    EnHitTag* this = (EnHitTag* ) thisx;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Destroy.s")
+    Actor_SetScale(&this->actor, 1.0f);
+    this->actionFunc = func_80BE20E8;
+    pCylinder = &this->cylinder;
+    Collider_InitAndSetCylinder(globalCtx, &this->cylinder, &this->actor, &D_80BE21F0);
+    Collider_UpdateCylinder(&this->actor, &this->cylinder);
+    if (Flags_GetSwitch(globalCtx, (s32) (this->actor.params & 0xFE00) >> 9) != 0) {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/func_80BE20E8.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Destroy.s")
+void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnHitTag* this = (EnHitTag* ) thisx;
+    Collider_DestroyCylinder(globalCtx, &this->cylinder);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Update.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/func_80BE20E8.s")
+void func_80BE20E8(EnHitTag* this, GlobalContext* globalCtx) {
+    Vec3f dropLocation;
+    s32 numCollectibles;
+
+    if (this->cylinder.base.acFlags & AC_HIT) {
+        play_sound(NA_SE_SY_GET_RUPY);
+        Actor_MarkForDeath(&this->actor);
+        dropLocation.x = this->actor.world.pos.x;
+        dropLocation.y = this->actor.world.pos.y;
+        dropLocation.z = this->actor.world.pos.z;
+
+        for (numCollectibles = 0; numCollectibles < 3; numCollectibles++) {
+            Item_DropCollectible(globalCtx, &dropLocation, 0U);
+        }
+
+        return;
+    }
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->cylinder.base);
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Update.s")
+void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnHitTag* this = (EnHitTag* ) thisx;
+    this->actionFunc(this, globalCtx);
+}

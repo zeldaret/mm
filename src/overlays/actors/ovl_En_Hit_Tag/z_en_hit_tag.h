@@ -9,7 +9,7 @@ typedef void (*EnHitTagActionFunc)(struct EnHitTag*, GlobalContext*);
 
 typedef struct EnHitTag {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x4C];
+    /* 0x0144 */ ColliderCylinder cylinder;
     /* 0x0190 */ EnHitTagActionFunc actionFunc;
 } EnHitTag; // size = 0x194
 
