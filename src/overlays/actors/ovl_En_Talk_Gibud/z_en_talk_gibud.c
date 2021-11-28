@@ -44,6 +44,7 @@ void func_80AFF880(EnTalkGibud* this);
 void func_80AFF9CC(EnTalkGibud* this);
 void func_80AFFFA4(EnTalkGibud* this);
 void func_80B000FC(EnTalkGibud* this);
+void func_80AFEB38(EnTalkGibud* this);
 
 extern AnimationHeader D_060009C4;
 extern AnimationHeader D_06000F1C;
@@ -171,11 +172,57 @@ static InitChainEntry D_80B01448[] = {
     ICHAIN_F32_DIV1000(gravity, -3500, ICHAIN_STOP),
 };
 
-static s32 D_80B01454[] = { 0x00000000, 0x00000000, 0x00000000 };
+static Vec3f D_80B01454[] = { 0.0f, 0.0f, 0.0f };
 
 static s32 D_80B01460[] = { 0x00000000, 0x3F19999A, 0x00000000, 0x00000000 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/EnTalkGibud_Init.s")
+void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnTalkGibud* this = THIS;
+    s32 i;
+
+    Actor_ProcessInitChain(&this->actor, D_80B01448);
+    this->actor.targetMode = 0;
+    this->actor.hintId = 0x2D;
+    this->actor.textId = 0;
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B01350);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80B0137C, &D_80B0139C);
+    this->unk_3EA = 0;
+    this->unk_3EC = 0;
+    this->unk_3EE = 0;
+    this->unk_294 = 0;
+    this->unk_3F0 = 0;
+    this->unk_3F6 = 0;
+    this->unk_3F4 = 0;
+    this->unk_3F2 = 0;
+    this->unk_290 = thisx->params & 0xF;
+    this->unk_298 = (thisx->params & 0xFF0) >> 4;
+    this->unk_29C = 0.0f;
+    this->unk_2A0 = 0.0f;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_1D8); i++) {
+        this->unk_1D8[i] = D_801D15B0;
+    }
+
+    if (this->unk_290 < 0) {
+        this->unk_290 = 0;
+    }
+    if (this->unk_290 >= 10) {
+        this->unk_290 = 9;
+    }
+
+    if (this->unk_298 == 0xFF) {
+        this->unk_298 = -1;
+    }
+    if (this->unk_298 != -1 && Flags_GetSwitch(globalCtx, this->unk_298)) {
+        Actor_MarkForDeath(&this->actor);
+    }
+
+    func_80AFEB38(this);
+}
 
 void EnTalkGibud_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnTalkGibud* this = THIS;
