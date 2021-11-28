@@ -64,7 +64,7 @@ void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/func_80BE20E8.s")
 void func_80BE20E8(EnHitTag* this, GlobalContext* globalCtx) {
     Vec3f dropLocation;
-    s32 numCollectibles;
+    s32 i;
 
     if (this->cylinder.base.acFlags & AC_HIT) {
         play_sound(NA_SE_SY_GET_RUPY);
@@ -73,7 +73,7 @@ void func_80BE20E8(EnHitTag* this, GlobalContext* globalCtx) {
         dropLocation.y = this->actor.world.pos.y;
         dropLocation.z = this->actor.world.pos.z;
 
-        for (numCollectibles = 0; numCollectibles < 3; numCollectibles++) {
+        for (i = 0; i < 3; i++) {
             Item_DropCollectible(globalCtx, &dropLocation, 0U);
         }
 
