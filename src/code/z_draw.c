@@ -322,7 +322,7 @@ static s801BB170 D_801BB170[] = {
 
 void GetItem_Draw(GameState* gameState, s16 index) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
-    
+
     D_801BB170[index].unk0(gameState, index);
 }
 
