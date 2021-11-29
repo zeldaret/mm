@@ -200,8 +200,8 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_29C = 0.0f;
     this->unk_2A0 = 0.0f;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_1D8); i++) {
-        this->unk_1D8[i] = D_801D15B0;
+    for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
+        this->limbPos[i] = D_801D15B0;
     }
 
     if (this->requestedItemIndex < 0) {
@@ -898,7 +898,7 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
         Actor_ApplyDamage(&this->actor);
 
         switch (this->actor.colChkInfo.damageEffect) {
-            case 15:
+            case 0xF:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 if (player->unk_ADC != 0) {
                     this->unk_3F7 = player->unk_ADD;
@@ -911,7 +911,7 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case 14:
+            case 0xE:
                 if (this->type == EN_TALK_GIBUD_TYPE_REDEAD) {
                     this->actor.colChkInfo.health = 0;
                     this->actor.shape.yOffset = 0.0f;
@@ -919,7 +919,7 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case 2:
+            case 0x2:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     func_80AFF880(this);
@@ -931,7 +931,7 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 this->unk_29C = 1.0f;
                 break;
 
-            case 4:
+            case 0x4:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     func_80AFF880(this);
@@ -943,7 +943,7 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 this->unk_29C = 1.0f;
                 break;
 
-            case 12:
+            case 0xC:
                 if ((this->actionFunc != func_80AFF030) &&
                     ((this->actionFunc != func_80AFF6A0) || (this->unk_3EA == 0))) {
                     this->unk_29C = 1.0f;
@@ -953,7 +953,7 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case 1:
+            case 0x1:
                 if ((this->actionFunc != func_80AFF6A0) || (this->unk_3EA == 0)) {
                     func_80AFF618(this);
                 }
@@ -1019,8 +1019,8 @@ void EnTalkGibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.y += 50.0f;
 }
 
-s32 func_80B00F08(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                  Gfx** gfx) {
+s32 EnTalkGibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                 Actor* thisx, Gfx** gfx) {
     EnTalkGibud* this = THIS;
 
     if (limbIndex == 12) {
@@ -1032,15 +1032,16 @@ s32 func_80B00F08(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80B00F64(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnTalkGibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
+                              Gfx** gfx) {
     EnTalkGibud* this = THIS;
 
     if ((this->unk_3F0 != 0) &&
         ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8) || (limbIndex == 9) ||
          (limbIndex == 11) || (limbIndex == 14) || (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18) ||
          (limbIndex == 20) || (limbIndex == 21) || (limbIndex == 22) || (limbIndex == 24) || (limbIndex == 25))) {
-        Matrix_GetStateTranslation(&this->unk_1D8[this->unk_28C]);
-        this->unk_28C++;
+        Matrix_GetStateTranslation(&this->limbPos[this->limbIndex]);
+        this->limbIndex++;
     }
 }
 
@@ -1049,28 +1050,28 @@ void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    this->unk_28C = 0;
+    this->limbIndex = 0;
     if (this->actor.shape.shadowAlpha == 255) {
         func_8012C28C(globalCtx->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
 
-        POLY_OPA_DISP =
-            SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                               this->skelAnime.dListCount, func_80B00F08, func_80B00F64, &this->actor, POLY_OPA_DISP);
+        POLY_OPA_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                           this->skelAnime.dListCount, EnTalkGibud_OverrideLimbDraw,
+                                           EnTalkGibud_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         func_8012C2DC(globalCtx->state.gfxCtx);
 
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
 
-        POLY_XLU_DISP =
-            SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                               this->skelAnime.dListCount, func_80B00F08, func_80B00F64, &this->actor, POLY_XLU_DISP);
+        POLY_XLU_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                           this->skelAnime.dListCount, EnTalkGibud_OverrideLimbDraw,
+                                           EnTalkGibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
     if (this->unk_3F0 > 0) {
-        func_800BE680(globalCtx, &this->actor, this->unk_1D8, ARRAY_COUNT(this->unk_1D8), this->unk_2A0, 0.5f,
+        func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->unk_2A0, 0.5f,
                       this->unk_29C, this->unk_3F6);
     }
 

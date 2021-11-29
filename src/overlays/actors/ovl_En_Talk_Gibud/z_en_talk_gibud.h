@@ -37,8 +37,8 @@ typedef struct EnTalkGibud {
     /* 0x0144 */ ColliderCylinder collider;
     /* 0x0190 */ SkelAnime skelAnime;
     /* 0x01D4 */ EnTalkGibudActionFunc actionFunc;
-    /* 0x01D8 */ Vec3f unk_1D8[15];
-    /* 0x028C */ s32 unk_28C;
+    /* 0x01D8 */ Vec3f limbPos[15];
+    /* 0x028C */ s32 limbIndex;
     /* 0x0290 */ s32 requestedItemIndex;
     /* 0x0294 */ s32 itemActionParam;
     /* 0x0298 */ s32 switchFlag;
