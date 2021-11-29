@@ -14,6 +14,7 @@ void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
+void func_80BE3178(EnRuppecrow *, GlobalContext *);
 
 #if 0
 const ActorInit En_Ruppecrow_InitVars = {
@@ -94,8 +95,9 @@ extern ColliderJntSphInit D_80BE39D4;
 extern CollisionCheckInfoInit D_80BE39E4;
 extern DamageTable D_80BE39EC;
 extern InitChainEntry D_80BE3A0C[];
-
-extern UNK_TYPE D_060000F0;
+extern AnimationHeader D_060000F0;
+extern FlexSkeletonHeader D_060010C0;
+extern ColliderJntSphElementInit* D_80BE39E0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2260.s")
 
@@ -133,7 +135,29 @@ extern UNK_TYPE D_060000F0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE35A4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/EnRuppecrow_Init.s")
+void EnRuppecrow_Init(Actor *thisx, GlobalContext *globalCtx2) {
+    EnRuppecrow *this = THIS;
+    GlobalContext *globalCtx = globalCtx2;
+
+    Actor_ProcessInitChain(&this->actor, D_80BE3A0C);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060010C0, &D_060000F0, &this->joinTable, &this->morphTable, 9);
+    ActorShape_Init(&this->actor.shape, 2000.0f, func_800B3FC0, 20.0f); 
+    
+    Collider_InitJntSph(globalCtx, &this->collider);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_80BE39D4, &this->colliderElement);
+    this->collider.elements->dim.worldSphere.radius = D_80BE39E0->dim.modelSphere.radius; 
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80BE39EC, &D_80BE39E4);
+    
+    Actor_SetScale(&this->actor, 0.01f);
+    this->actor.flags |= 0x2000000;
+    
+    this->path = func_8013D648(globalCtx, (s16) ((s32)(this->actor.params & 0xFC00) >> 0xA), 0x3F);
+    if (this->path != NULL) {
+        this->actionFunc = func_80BE3178;
+    } else {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/EnRuppecrow_Destroy.s")
 
