@@ -272,10 +272,45 @@ s32 Player_GetExplosiveHeld(Player* player) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124278.s")
 
 s32 func_801242B4(Player* player) {
-    return (player->stateFlags1 & 0x8000000) && player->currentBoots < 5;
+    return (player->stateFlags1 & 0x8000000) && player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801242DC.s")
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x02 */ u16 unk_02;
+} struct_801BFFA0;
+
+extern struct_801BFFA0 D_801BFFA0[];
+
+s32 func_801242DC(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    struct_801BFFA0* sp18;
+    s32 sp1C;
+
+    if (globalCtx->roomCtx.currRoom.unk2 == 3) {
+        sp1C = 0;
+    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 0x50)) {
+        sp1C = 3;
+    } else if (player->stateFlags1 & 0x8000000) {
+        if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) && (player->actor.bgCheckFlags & 1)) {
+            sp1C = 1;
+        } else {
+            sp1C = 2;
+        }
+    } else {
+        return 0;
+    }
+
+    sp18 = &D_801BFFA0[sp1C];
+    if (!Player_InCsMode(&globalCtx->state)) {
+        if ((sp18->unk_00 != 0) && !(gSaveContext.textTriggerFlags & sp18->unk_00) && (sp1C == 0)) {
+            func_801518B0(globalCtx, sp18->unk_02, NULL);
+            gSaveContext.textTriggerFlags |= sp18->unk_00;
+        }
+    }
+
+    return sp1C + 1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
 
