@@ -30,7 +30,7 @@ typedef enum {
 
 typedef enum {
     /* 0 */ EN_TALK_GIBUD_GRAB_START,
-    /* 1 */ EN_TALK_GIBUD_GRAB_IN_PROGRESS,
+    /* 1 */ EN_TALK_GIBUD_GRAB_ATTACK,
     /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE,
 } EnTalkGibudGrabState;
 
