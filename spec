@@ -3871,7 +3871,7 @@ beginseg
     name "ovl_En_Talk_Gibud"
     compress
     include "build/src/overlays/actors/ovl_En_Talk_Gibud/z_en_talk_gibud.o"
-    include "build/data/ovl_En_Talk_Gibud/ovl_En_Talk_Gibud.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Talk_Gibud/ovl_En_Talk_Gibud_reloc.o"
 endseg
 
 beginseg

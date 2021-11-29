@@ -45,6 +45,7 @@ void func_80AFF9CC(EnTalkGibud* this);
 void func_80AFFFA4(EnTalkGibud* this);
 void func_80B000FC(EnTalkGibud* this);
 void func_80AFEB38(EnTalkGibud* this);
+void func_80B00384(EnTalkGibud* this, GlobalContext* globalCtx);
 
 extern AnimationHeader D_060009C4;
 extern AnimationHeader D_06000F1C;
@@ -172,9 +173,9 @@ static InitChainEntry D_80B01448[] = {
     ICHAIN_F32_DIV1000(gravity, -3500, ICHAIN_STOP),
 };
 
-static Vec3f D_80B01454[] = { 0.0f, 0.0f, 0.0f };
+static Vec3f D_80B01454 = { 0.0f, 0.0f, 0.0f };
 
-static s32 D_80B01460[] = { 0x00000000, 0x3F19999A, 0x00000000, 0x00000000 };
+static Vec3f D_80B01460 = { 0.0f, 0.600000023842f, 0.0f };
 
 void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -747,9 +748,49 @@ void func_80B000FC(EnTalkGibud* this) {
     this->actionFunc = func_80B00158;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00158.s")
+void func_80B00158(EnTalkGibud* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    Vec3f velocity = D_80B01454;
+    Vec3f accel = D_80B01460;
+    Vec3f pos;
+    s32 phi_s3;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00384.s")
+    if (this->unk_3EA > 0) {
+        phi_s3 = CLAMP_MAX(this->unk_3EA, 3);
+        for (i = 0; i < phi_s3; i++) {
+            pos = this->actor.world.pos;
+            pos.x += Rand_Centered() * 20.0f;
+            pos.y += 50.0f + (Rand_Centered() * 50.0f);
+            pos.z += Rand_Centered() * 20.0f;
+            velocity.x += Rand_Centered() * 1.5f;
+            velocity.z += Rand_Centered() * 1.5f;
+            func_800B3030(globalCtx, &pos, &velocity, &accel, 100, 0, 1);
+        }
+        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+        player->stateFlags1 |= 0x20000000;
+        this->unk_3EA += -1;
+    } else {
+        if (this->unk_298 != -1) {
+            Actor_SetSwitchFlag(globalCtx, this->unk_298);
+        }
+        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~0x20000000;
+        Actor_MarkForDeath(&this->actor);
+    }
+}
+
+void func_80B00384(EnTalkGibud* this, GlobalContext* globalCtx) {
+    s16 temp;
+
+    temp = this->actor.yawTowardsPlayer;
+    Math_ScaledStepToS(&this->actor.shape.rot.y, temp, 0x320);
+    temp -= this->actor.shape.rot.y;
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    Math_ScaledStepToS(&this->unk_3E4.y, temp, 0x258);
+    temp -= this->unk_3E4.y;
+    Math_ScaledStepToS(&this->unk_3DE.y, temp, 0x190);
+}
 
 s32 func_80B0040C(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
