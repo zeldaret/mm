@@ -2175,8 +2175,8 @@ s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRan
 // void func_80124020(void);
 u8 Player_GetMask(GlobalContext* globalCtx);
 void Player_RemoveMask(GlobalContext* globalCtx);
-// void func_8012405C(void);
-// void func_80124088(void);
+s32 func_8012405C(GameState* gameState);
+s32 func_80124088(GameState* gameState);
 s32 func_801240C8(Player* player);
 s32 func_801240DC(Player* player);
 // void func_80124110(void);

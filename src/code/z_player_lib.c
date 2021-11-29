@@ -221,9 +221,17 @@ void Player_RemoveMask(GlobalContext* globalCtx) {
     player->currentMask = PLAYER_MASK_NONE;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012405C.s")
+s32 func_8012405C(GameState* gameState) {
+    Player* player = GET_PLAYER(gameState);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124088.s")
+    return player->transformation == 4 && player->currentShield == 2;
+}
+
+s32 func_80124088(GameState* gameState) {
+    Player* player = GET_PLAYER(gameState);
+
+    return player->transformation == 4 && player->rightHandType == 8 && player->currentShield == 2;
+}
 
 s32 func_801240C8(Player* player) {
     return player->itemActionParam == 0xD;
