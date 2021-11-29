@@ -33,14 +33,47 @@ const ActorInit En_Mm2_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Init.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Init.s")
+void EnMm2_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnMm2* this = (EnMm2*)thisx;
+    Actor_SetScale(&this->actor, 0.015f);
+    this->actionFunc = func_809A20FC;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Destroy.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Destroy.s")
+void EnMm2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/func_809A2080.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/func_809A2080.s")
+void func_809A2080(EnMm2* this, GlobalContext* globalCtx) {
+    u8 temp_v0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/func_809A20FC.s")
+    temp_v0 = func_80152498(&globalCtx->msgCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Update.s")
+    if (temp_v0 != 2) {
+        if ((temp_v0 == 5) && (func_80147624(globalCtx))) {
+            func_801477B4(globalCtx);
+            this->actionFunc = func_809A20FC;
+        }
+    } else {
+        this->actionFunc = func_809A20FC;
+    }
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/func_809A20FC.s")
+void func_809A20FC(EnMm2* this, GlobalContext* globalCtx) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        func_801518B0(globalCtx, 0x277BU, &this->actor);
+        this->actionFunc = func_809A2080;
+    } else if ((this->actor.xzDistToPlayer < 60.0f) && (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx))) {
+        func_800B8614(&this->actor, globalCtx, 110.0f);
+    }
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Update.s")
+void EnMm2_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnMm2* this = (EnMm2*)thisx;
+    this->actionFunc(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Draw.s")
