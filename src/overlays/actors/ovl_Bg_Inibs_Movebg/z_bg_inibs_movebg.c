@@ -40,11 +40,14 @@ void BgInibsMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
 
-    ((BgInibsMovebg *) thisx)->unk_15C[0] = D_80B96560[((u16) this->dyna.actor.params) & 0xF];
-    this->unk_15C[1] = D_80B96568[((u16) this->dyna.actor.params) & 0xF];
-    this->unk_164 = D_80B96570[((u16) ((BgInibsMovebg *) thisx)->dyna.actor.params) & 0xF];
+    THIS->unk_15C = D_80B96560[((u16) this->dyna.actor.params) & 0xF];
+    this->unk_160 = D_80B96568[((u16) this->dyna.actor.params) & 0xF];
+    this->unk_164 = D_80B96570[((u16) THIS->dyna.actor.params) & 0xF];
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Destroy.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Destroy.s")
+void BgInibsMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, THIS->dyna.bgId);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Draw.s")
