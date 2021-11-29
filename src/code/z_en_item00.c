@@ -656,7 +656,7 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
                         }
                     } else {
                         Matrix_Scale(16.0f, 16.0f, 16.0f, MTXMODE_APPLY);
-                        GetItem_Draw(globalCtx, 8);
+                        GetItem_Draw(&globalCtx->state, 8);
                     }
                     break;
                 }
@@ -676,13 +676,13 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 EnItem00_DrawSprite(this, globalCtx);
                 break;
             case ITEM00_SHIELD_HERO:
-                GetItem_Draw(globalCtx, GID_SHIELD_HERO);
+                GetItem_Draw(&globalCtx->state, GID_SHIELD_HERO);
                 break;
             case ITEM00_MAP:
-                GetItem_Draw(globalCtx, GID_DUNGEON_MAP);
+                GetItem_Draw(&globalCtx->state, GID_DUNGEON_MAP);
                 break;
             case ITEM00_COMPASS:
-                GetItem_Draw(globalCtx, GID_COMPASS);
+                GetItem_Draw(&globalCtx->state, GID_COMPASS);
             case ITEM00_MASK:
             case ITEM00_FLEXIBLE:
             case ITEM00_3_HEARTS:

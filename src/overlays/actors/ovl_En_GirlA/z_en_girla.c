@@ -601,5 +601,5 @@ void EnGirlA_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->drawFunc != NULL) {
         this->drawFunc(&this->actor, globalCtx, 0);
     }
-    GetItem_Draw(globalCtx, this->getItemDrawId);
+    GetItem_Draw(&globalCtx->state, this->getItemDrawId);
 }

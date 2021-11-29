@@ -1,4 +1,5 @@
 #include "global.h"
+#include "code/z_eff_footmark/z_eff_footmark.c"
 
 void EffFootmark_Init(GlobalContext* globalCtx) {
     EffFootmark* footmark;
@@ -102,7 +103,7 @@ void EffFootmark_Draw(GlobalContext* globalCtx) {
 
     func_8012C448(globalCtx->state.gfxCtx);
 
-    gSPDisplayList(gfxCtx->polyXlu.p++, D_801BC240);
+    gSPDisplayList(gfxCtx->polyXlu.p++, sz_eff_footmark1DL);
 
     for (footmark = globalCtx->footprintInfo, i = 0; i < 100; i++, footmark++) {
         if (footmark->actor != NULL) {
@@ -114,7 +115,7 @@ void EffFootmark_Draw(GlobalContext* globalCtx) {
             gDPSetPrimColor(gfxCtx->polyXlu.p++, 0, 0, footmark->red, footmark->green, footmark->blue,
                             footmark->alpha >> 8);
 
-            gSPDisplayList(gfxCtx->polyXlu.p++, D_801BC288);
+            gSPDisplayList(gfxCtx->polyXlu.p++, sz_eff_footmark2DL);
         }
     }
 }

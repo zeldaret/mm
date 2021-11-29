@@ -997,20 +997,20 @@ typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*,
 
 typedef void(*cutscene_update_func)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
-typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
+typedef void(*draw_func)(GameState* gameState, s16 index);
 
 typedef void(*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
 
 typedef struct {
     /* 0x00 */ draw_func unk0;
-    /* 0x04 */ u32 unk4;
-    /* 0x08 */ u32 unk8;
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ u32 unk10;
-    /* 0x14 */ u32 unk14;
-    /* 0x18 */ u32 unk18;
-    /* 0x1C */ u32 unk1C;
-    /* 0x20 */ u32 unk20;
+    /* 0x04 */ Gfx* unk4;
+    /* 0x08 */ Gfx* unk8;
+    /* 0x0C */ Gfx* unkC;
+    /* 0x10 */ Gfx* unk10;
+    /* 0x14 */ Gfx* unk14;
+    /* 0x18 */ Gfx* unk18;
+    /* 0x1C */ Gfx* unk1C;
+    /* 0x20 */ Gfx* unk20;
 } s801BB170; // size = 0x24
 
 typedef struct Camera {
