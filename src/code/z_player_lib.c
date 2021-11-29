@@ -225,9 +225,13 @@ void Player_RemoveMask(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124088.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801240C8.s")
+s32 func_801240C8(Player* player) {
+    return player->itemActionParam == 0xD;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801240DC.s")
+s32 func_801240DC(Player* player) {
+    return func_801240C8(player) && player->leftHandActor == NULL;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124110.s")
 
