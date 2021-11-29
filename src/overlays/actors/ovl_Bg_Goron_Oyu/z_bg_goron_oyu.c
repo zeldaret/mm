@@ -8,6 +8,8 @@
 
 #define FLAGS 0x00000030
 
+#define THIS ((BgGoronOyu*)thisx)
+
 void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgGoronOyu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -148,7 +150,7 @@ void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx) {
 }
 
 void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgGoronOyu* this = (BgGoronOyu*)thisx;
+    BgGoronOyu* this = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
@@ -170,13 +172,13 @@ void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgGoronOyu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgGoronOyu* this = (BgGoronOyu*)thisx;
+    BgGoronOyu* this = THIS;
 
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgGoronOyu* this = (BgGoronOyu*)thisx;
+    BgGoronOyu* this = THIS;
 
     this->actionFunc(this, globalCtx);
     BgGoronOyu_SpawnParticles(this, globalCtx);

@@ -776,7 +776,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     s16 i;
     s16 j;
     Vec3f vec;
-    CollisionHeader* waterBox;
+    WaterBox* waterBox;
     f32 ySurface;
     MtxF mtxF;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
