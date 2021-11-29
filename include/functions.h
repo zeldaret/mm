@@ -2172,7 +2172,7 @@ void func_80123DA4(Player* player);
 void func_80123E90(GlobalContext* globalCtx, Actor* actor);
 void func_80123F2C(GlobalContext* globalCtx, s32 arg1);
 s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRange, f32 yRange);
-// void func_80124020(void);
+u8 func_80124020(void);
 u8 Player_GetMask(GlobalContext* globalCtx);
 void Player_RemoveMask(GlobalContext* globalCtx);
 s32 func_8012405C(GameState* gameState);

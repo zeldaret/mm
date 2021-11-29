@@ -207,7 +207,11 @@ s32 func_80123590(GameState* gameState, Actor* actor) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_IsBurningStickInRange.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124020.s")
+extern u8 D_801BFF98[];
+
+u8 func_80124020(void) {
+    return D_801BFF98[(void)0, gSaveContext.playerForm];
+}
 
 u8 Player_GetMask(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
