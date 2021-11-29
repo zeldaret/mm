@@ -39,9 +39,9 @@ void BgInibsMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
 
-    THIS->unk_15C = D_80B96560[((u16)this->dyna.actor.params) & 0xF];
-    this->unk_160 = D_80B96568[((u16)this->dyna.actor.params) & 0xF];
-    this->unk_164 = D_80B96570[((u16)THIS->dyna.actor.params) & 0xF];
+    THIS->unk_15C = D_80B96560[BGINIBSMOVEBG_GET_F(this->dyna)];
+    this->unk_160 = D_80B96568[BGINIBSMOVEBG_GET_F(this->dyna)];
+    this->unk_164 = D_80B96570[BGINIBSMOVEBG_GET_F(THIS->dyna)];
 }
 
 void BgInibsMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -53,7 +53,7 @@ void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 temp_a1;
     BgInibsMovebg* new_var5;
     s32 new_var4;
-    new_var5 = (BgInibsMovebg*)thisx;
+    new_var5 = THIS;
     new_var = new_var5->unk_164;
 
     if (new_var != 0) {

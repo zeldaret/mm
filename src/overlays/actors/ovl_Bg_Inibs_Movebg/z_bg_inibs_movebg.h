@@ -5,6 +5,9 @@
 
 struct BgInibsMovebg;
 
+//#define BGINIBSMOVEBG_GET_F(thisx) (u16)(thisx.actor.params & 0xF)
+#define BGINIBSMOVEBG_GET_F(thisx) (u16)(thisx.actor.params) & 0xF
+
 typedef struct BgInibsMovebg {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ s32 unk_15C;
