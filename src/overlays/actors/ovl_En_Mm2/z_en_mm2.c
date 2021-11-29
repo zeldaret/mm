@@ -33,7 +33,34 @@ const ActorInit En_Mm2_InitVars = {
 
 #endif
 
-extern UNK_TYPE D_809A29D8;
+extern Gfx* D_809A29D8;
+/*static Gfx sDisplayList[] = {
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPPipeSync(),
+    gsDPSetCombineLERP(PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, TEXEL0, SHADE, 0, COMBINED, 0, 0, 0, 0, COMBINED),
+    gsDPSetPrimColor(0, 0xFF, 0xFF, 0xFF, 0x9B, 0xFF),
+    gsDPSetEnvColor(0x87, 0x00, 0x00, 0xFF),
+    gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
+    gsDPPipeSync(),
+    gsDPSetTextureLUT(G_TT_NONE),
+    gsDPLoadTextureBlock(0x809A2270, G_IM_FMT_I, G_IM_SIZ_8b, 32, 32, 0, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_LIGHTING | G_SHADING_SMOOTH),
+    gsSPVertex(0x809A2870, 10, 0),
+    gsSP2Triangles(0, 1, 2, 0, 2, 3, 0, 0),
+    gsSP2Triangles(4, 5, 6, 0, 7, 8, 6, 0),
+    gsSP2Triangles(6, 5, 7, 0, 6, 9, 4, 0),
+    gsDPPipeSync(),
+    gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, PRIMITIVE, 0, COMBINED, 0, 0, 0, 0, COMBINED),
+    gsDPPipeSync(),
+    gsDPLoadTextureBlock(0x809A2670, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0, G_TX_MIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_CLAMP, 4, 4, G_TX_NOLOD, G_TX_NOLOD),
+    gsDPSetPrimColor(0, 0x80, 0xFF, 0xFF, 0xFF, 0xFF),
+    gsSPVertex(0x809A2910, 12, 0),
+    gsSP2Triangles(0, 1, 2, 0, 3, 1, 0, 0),
+    gsSP2Triangles(4, 5, 6, 0, 7, 5, 4, 0),
+    gsSP2Triangles(0, 8, 3, 0, 6, 9, 4, 0),
+    gsSP2Triangles(2, 10, 0, 0, 4, 11, 7, 0),
+    gsSPEndDisplayList(),
+};*/
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Init.s")
 void EnMm2_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -53,7 +80,7 @@ void func_809A2080(EnMm2* this, GlobalContext* globalCtx) {
     temp_v0 = func_80152498(&globalCtx->msgCtx);
 
     if (temp_v0 != 2) {
-        if ((temp_v0 == 5) && (func_80147624(globalCtx))) {
+        if (temp_v0 == 5 && func_80147624(globalCtx)) {
             func_801477B4(globalCtx);
             this->actionFunc = func_809A20FC;
         }
