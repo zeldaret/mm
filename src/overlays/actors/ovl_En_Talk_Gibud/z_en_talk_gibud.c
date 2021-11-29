@@ -15,6 +15,7 @@ void EnTalkGibud_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalkGibud_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void EnTalkGibud_SetupIdle(EnTalkGibud* this);
 void EnTalkGibud_Idle(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_SetupAttemptStun(EnTalkGibud* this);
 void EnTalkGibud_AttemptStun(EnTalkGibud* this, GlobalContext* globalCtx);
@@ -28,24 +29,23 @@ void EnTalkGibud_SetupTurnAwayAndShakeHead(EnTalkGibud* this);
 void EnTalkGibud_TurnAwayAndShakeHead(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_SetupWalkToHome(EnTalkGibud* this);
 void EnTalkGibud_WalkToHome(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_Stunned(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupDamage(EnTalkGibud* this);
+void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupDead(EnTalkGibud* this);
+void EnTalkGibud_Dead(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupRevive(EnTalkGibud* this);
+void EnTalkGibud_Revive(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_PassiveIdle(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupTalk(EnTalkGibud* this);
+void EnTalkGibud_Talk(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupDisappear(EnTalkGibud* this);
+void EnTalkGibud_Disappear(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalCtx);
 s32 EnTalkGibud_PlayerCanBeGrabbed(EnTalkGibud* this, GlobalContext* globalCtx);
 s32 EnTalkGibud_PlayerOutOfRange(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, GlobalContext* globalCtx);
 s32 EnTalkGibud_MoveToIdealGrabPositionAndRotation(EnTalkGibud* this, GlobalContext* globalCtx);
-void EnTalkGibud_Dead(EnTalkGibud* this, GlobalContext* globalCtx);
-void EnTalkGibud_Disappear(EnTalkGibud* this, GlobalContext* globalCtx);
-void EnTalkGibud_Revive(EnTalkGibud* this, GlobalContext* globalCtx);
-void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx);
-void EnTalkGibud_Talk(EnTalkGibud* this, GlobalContext* globalCtx);
-void EnTalkGibud_PassiveIdle(EnTalkGibud* this, GlobalContext* globalCtx);
-void EnTalkGibud_Stunned(EnTalkGibud* this, GlobalContext* globalCtx);
-void EnTalkGibud_SetupDamage(EnTalkGibud* this);
-void EnTalkGibud_SetupDead(EnTalkGibud* this);
-void EnTalkGibud_SetupRevive(EnTalkGibud* this);
-void EnTalkGibud_SetupTalk(EnTalkGibud* this);
-void EnTalkGibud_SetupDisappear(EnTalkGibud* this);
-void EnTalkGibud_SetupIdle(EnTalkGibud* this);
-void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalCtx);
 
 extern FlexSkeletonHeader D_060053E8; // Gibdo skeleton
 extern AnimationHeader D_06006678;    // grab attack
