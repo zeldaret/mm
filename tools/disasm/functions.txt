@@ -12860,7 +12860,7 @@
     0x80B0094C:("func_80B0094C",),
     0x80B00B8C:("func_80B00B8C",),
     0x80B00C94:("func_80B00C94",),
-    0x80B00D9C:("func_80B00D9C",),
+    0x80B00D9C:("EnTalkGibud_UpdateEffect",),
     0x80B00E48:("EnTalkGibud_Update",),
     0x80B00F08:("EnTalkGibud_OverrideLimbDraw",),
     0x80B00F64:("EnTalkGibud_PostLimbDraw",),

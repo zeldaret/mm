@@ -191,14 +191,14 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->grabState = EN_TALK_GIBUD_GRAB_START;
     this->unk_3EE = 0;
     this->itemActionParam = PLAYER_AP_NONE;
-    this->unk_3F0 = 0;
-    this->unk_3F6 = 0;
+    this->effectTimer = 0;
+    this->effectType = 0;
     this->isTalking = false;
     this->type = EN_TALK_GIBUD_TYPE_GIBDO;
     this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx);
     this->switchFlag = EN_TALK_GIBUD_SWITCH_FLAG(thisx);
-    this->unk_29C = 0.0f;
-    this->unk_2A0 = 0.0f;
+    this->effectAlpha = 0.0f;
+    this->effectScale = 0.0f;
 
     for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
         this->limbPos[i] = D_801D15B0;
@@ -456,7 +456,7 @@ void func_80AFF618(EnTalkGibud* this) {
     this->unk_3EA = 0xA;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (this->unk_3F0 != 0) {
+    if (this->effectTimer != 0) {
         func_800BCB70(&this->actor, 0U, 0xC8, 0, 0x28);
     } else {
         func_800BCB70(&this->actor, 0U, 0xC8, 0, 0x28);
@@ -494,7 +494,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_3F7 = -1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if (this->unk_3F0 > 0 && this->unk_3F6 == 0 && this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
+        if (this->effectTimer > 0 && this->effectType == 0 && this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
             this->actor.hintId = 0x2A;
             this->actor.flags &= ~(0x8 | 0x1);
             this->actor.flags |= (0x4 | 0x1);
@@ -525,7 +525,8 @@ void EnTalkGibud_Dead(EnTalkGibud* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 250, 0);
         this->unk_3EA += 1;
     }
-    if (this->unk_3EA == 20 && this->unk_3F0 > 0 && this->unk_3F6 == 0 && this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
+    if (this->unk_3EA == 20 && this->effectTimer > 0 && this->effectType == 0 &&
+        this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
         this->type = EN_TALK_GIBUD_TYPE_REDEAD;
     }
@@ -933,9 +934,9 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 } else {
                     EnTalkGibud_SetupDamage(this);
                 }
-                this->unk_3F0 = 180;
-                this->unk_3F6 = 0;
-                this->unk_29C = 1.0f;
+                this->effectTimer = 180;
+                this->effectType = 0;
+                this->effectAlpha = 1.0f;
                 break;
 
             case 0x4:
@@ -945,17 +946,17 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 } else {
                     EnTalkGibud_SetupDamage(this);
                 }
-                this->unk_3F0 = 60;
-                this->unk_3F6 = 20;
-                this->unk_29C = 1.0f;
+                this->effectTimer = 60;
+                this->effectType = 20;
+                this->effectAlpha = 1.0f;
                 break;
 
             case 0xC:
                 if ((this->actionFunc != EnTalkGibud_Grab) &&
                     ((this->actionFunc != func_80AFF6A0) || (this->unk_3EA == 0))) {
-                    this->unk_29C = 1.0f;
-                    this->unk_3F0 = 40;
-                    this->unk_3F6 = 30;
+                    this->effectAlpha = 1.0f;
+                    this->effectTimer = 40;
+                    this->effectType = 30;
                     func_80AFF618(this);
                 }
                 break;
@@ -1001,15 +1002,15 @@ void func_80B00C94(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B00D9C(EnTalkGibud* this, GlobalContext* globalCtx) {
-    if (this->unk_3F0 > 0) {
-        this->unk_3F0--;
+void EnTalkGibud_UpdateEffect(EnTalkGibud* this, GlobalContext* globalCtx) {
+    if (this->effectTimer > 0) {
+        this->effectTimer--;
     }
-    if (this->unk_3F0 < 0x14) {
-        Math_SmoothStepToF(&this->unk_2A0, 0.0f, 0.5f, 0.03f, 0.0f);
-        this->unk_29C = this->unk_3F0 * 0.05f;
+    if (this->effectTimer < 20) {
+        Math_SmoothStepToF(&this->effectScale, 0.0f, 0.5f, 0.03f, 0.0f);
+        this->effectAlpha = this->effectTimer * 0.05f;
     } else {
-        Math_SmoothStepToF(&this->unk_2A0, 0.5f, 0.1f, 0.02f, 0.0f);
+        Math_SmoothStepToF(&this->effectScale, 0.5f, 0.1f, 0.02f, 0.0f);
     }
 }
 
@@ -1023,7 +1024,7 @@ void EnTalkGibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80B008FC(this, globalCtx);
     func_80B00B8C(this, globalCtx);
     func_80B00C94(this, globalCtx);
-    func_80B00D9C(this, globalCtx);
+    EnTalkGibud_UpdateEffect(this, globalCtx);
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
 }
@@ -1045,7 +1046,7 @@ void EnTalkGibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
                               Gfx** gfx) {
     EnTalkGibud* this = THIS;
 
-    if ((this->unk_3F0 != 0) &&
+    if ((this->effectTimer != 0) &&
         ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8) || (limbIndex == 9) ||
          (limbIndex == 11) || (limbIndex == 14) || (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18) ||
          (limbIndex == 20) || (limbIndex == 21) || (limbIndex == 22) || (limbIndex == 24) || (limbIndex == 25))) {
@@ -1079,9 +1080,9 @@ void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                            this->skelAnime.dListCount, EnTalkGibud_OverrideLimbDraw,
                                            EnTalkGibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
-    if (this->unk_3F0 > 0) {
-        func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->unk_2A0, 0.5f,
-                      this->unk_29C, this->unk_3F6);
+    if (this->effectTimer > 0) {
+        func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->effectScale, 0.5f,
+                      this->effectAlpha, this->effectType);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
