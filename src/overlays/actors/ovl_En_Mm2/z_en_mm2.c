@@ -33,6 +33,8 @@ const ActorInit En_Mm2_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_809A29D8;
+
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Init.s")
 void EnMm2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMm2* this = (EnMm2*)thisx;
@@ -76,4 +78,13 @@ void EnMm2_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Draw.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm2/EnMm2_Draw.s")
+void EnMm2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    GraphicsContext* gfxCtx;
+    EnMm2* this = (EnMm2*)thisx;
+
+    gfxCtx = globalCtx->state.gfxCtx;
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx), (0x00 | 0x02) | 0x00);
+    gSPDisplayList(gfxCtx->polyOpa.p++, (u32)(&D_809A29D8));
+}
