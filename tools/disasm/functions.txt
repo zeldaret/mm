@@ -12840,7 +12840,7 @@
     0x80AFF9CC:("EnTalkGibud_SetupRevive",),
     0x80AFFA68:("EnTalkGibud_Revive",),
     0x80AFFAB0:("EnTalkGibud_GetTextIdForRequestedItem",),
-    0x80AFFC10:("func_80AFFC10",),
+    0x80AFFC10:("EnTalkGibud_GetNextTextBoxId",),
     0x80AFFC9C:("EnTalkGibud_PresentedItemMatchesRequest",),
     0x80AFFD3C:("EnTalkGibud_CheckPresentedItem",),
     0x80AFFE3C:("EnTalkGibud_SetupPassiveIdle",),
