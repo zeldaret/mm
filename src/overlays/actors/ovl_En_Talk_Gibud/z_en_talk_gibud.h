@@ -28,6 +28,18 @@ typedef enum {
     /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD,
 } EnTalkGibudType;
 
+typedef enum {
+    /* 0 */ EN_TALK_GIBUD_GRAB_START,
+    /* 1 */ EN_TALK_GIBUD_GRAB_IN_PROGRESS,
+    /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE,
+} EnTalkGibudGrabState;
+
+typedef enum {
+    /* 0 */ EN_TALK_GIBUD_REQUESTED_ITEM_MET,
+    /* 1 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO,
+    /* 2 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET,
+} EnTalkGibudRequestedItemState;
+
 struct EnTalkGibud;
 
 typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, GlobalContext*);
@@ -46,15 +58,15 @@ typedef struct EnTalkGibud {
     /* 0x02A0 */ f32 unk_2A0;
     /* 0x02A4 */ Vec3s jointTable[26];
     /* 0x0340 */ Vec3s morphTable[26];
-    /* 0x03DC */ s16 unk_3DC;
-    /* 0x03DE */ Vec3s unk_3DE;
-    /* 0x03E4 */ Vec3s unk_3E4;
+    /* 0x03DC */ s16 textId;
+    /* 0x03DE */ Vec3s headRotation;
+    /* 0x03E4 */ Vec3s upperBodyRotation;
     /* 0x03EA */ s16 unk_3EA;
-    /* 0x03EC */ s16 unk_3EC;
+    /* 0x03EC */ s16 grabState;
     /* 0x03EE */ s16 unk_3EE;
     /* 0x03F0 */ s16 unk_3F0;
     /* 0x03F2 */ s16 type;
-    /* 0x03F4 */ s16 unk_3F4;
+    /* 0x03F4 */ s16 isTalking;
     /* 0x03F6 */ u8 unk_3F6;
     /* 0x03F7 */ s8 unk_3F7;
 } EnTalkGibud; // size = 0x3F8

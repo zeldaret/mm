@@ -15,36 +15,36 @@ void EnTalkGibud_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalkGibud_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80AFEB7C(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFEC08(EnTalkGibud* this);
-void func_80AFEC4C(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFED08(EnTalkGibud* this);
-void func_80AFED7C(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFEFD4(EnTalkGibud* this);
-void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFF22C(EnTalkGibud* this);
-void func_80AFF288(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFF330(EnTalkGibud* this);
-void func_80AFF378(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFF45C(EnTalkGibud* this);
-void func_80AFF4AC(EnTalkGibud* this, GlobalContext* globalCtx);
-s32 func_80B0040C(EnTalkGibud* this, GlobalContext* globalCtx);
-s32 func_80B00484(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80B005EC(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_Idle(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupAttemptStun(EnTalkGibud* this);
+void EnTalkGibud_AttemptStun(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupWalkToPlayer(EnTalkGibud* this);
+void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupGrab(EnTalkGibud* this);
+void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupFailGrab(EnTalkGibud* this);
+void EnTalkGibud_FailGrab(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupTurnAwayAndShakeHead(EnTalkGibud* this);
+void EnTalkGibud_TurnAwayAndShakeHead(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupWalkToHome(EnTalkGibud* this);
+void EnTalkGibud_WalkToHome(EnTalkGibud* this, GlobalContext* globalCtx);
+s32 EnTalkGibud_PlayerCanBeGrabbed(EnTalkGibud* this, GlobalContext* globalCtx);
+s32 EnTalkGibud_PlayerTooFarFromHome(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, GlobalContext* globalCtx);
 s32 func_80B00760(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFF8E4(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80B00158(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFFA68(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFF76C(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_Dead(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_DisappearWhenRequestFulfilled(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_Revive(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx);
 void func_80AFFFBC(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFFE94(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_PassiveIdle(EnTalkGibud* this, GlobalContext* globalCtx);
 void func_80AFF6A0(EnTalkGibud* this, GlobalContext* globalCtx);
-void func_80AFF700(EnTalkGibud* this);
-void func_80AFF880(EnTalkGibud* this);
-void func_80AFF9CC(EnTalkGibud* this);
+void EnTalkGibud_SetupDamage(EnTalkGibud* this);
+void EnTalkGibud_SetupDead(EnTalkGibud* this);
+void EnTalkGibud_SetupRevive(EnTalkGibud* this);
 void func_80AFFFA4(EnTalkGibud* this);
-void func_80B000FC(EnTalkGibud* this);
-void func_80AFEB38(EnTalkGibud* this);
+void EnTalkGibud_SetupDisappearWhenRequestFulfilled(EnTalkGibud* this);
+void EnTalkGibud_SetupIdle(EnTalkGibud* this);
 void func_80B00384(EnTalkGibud* this, GlobalContext* globalCtx);
 
 extern FlexSkeletonHeader D_060053E8; // Gibdo skeleton
@@ -188,12 +188,12 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_3EA = 0;
-    this->unk_3EC = 0;
+    this->grabState = EN_TALK_GIBUD_GRAB_START;
     this->unk_3EE = 0;
     this->itemActionParam = PLAYER_AP_NONE;
     this->unk_3F0 = 0;
     this->unk_3F6 = 0;
-    this->unk_3F4 = 0;
+    this->isTalking = false;
     this->type = EN_TALK_GIBUD_TYPE_GIBDO;
     this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx);
     this->switchFlag = EN_TALK_GIBUD_SWITCH_FLAG(thisx);
@@ -218,7 +218,7 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     }
 
-    func_80AFEB38(this);
+    EnTalkGibud_SetupIdle(this);
 }
 
 void EnTalkGibud_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -227,27 +227,27 @@ void EnTalkGibud_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80AFEB38(EnTalkGibud* this) {
+void EnTalkGibud_SetupIdle(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
-    this->actionFunc = func_80AFEB7C;
+    this->actionFunc = EnTalkGibud_Idle;
 }
 
-void func_80AFEB7C(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_Idle(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer <= 150.0f && func_800B715C(globalCtx)) {
-        func_80AFEC08(this);
+        EnTalkGibud_SetupAttemptStun(this);
     }
-    Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 0x64, 0);
-    Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
 }
 
-void func_80AFEC08(EnTalkGibud* this) {
+void EnTalkGibud_SetupAttemptStun(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
-    this->actionFunc = func_80AFEC4C;
+    this->actionFunc = EnTalkGibud_AttemptStun;
 }
 
-void func_80AFEC4C(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_AttemptStun(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 rot = this->actor.shape.rot.y + this->unk_3DE.y + this->unk_3E4.y;
+    s16 rot = this->actor.shape.rot.y + this->headRotation.y + this->upperBodyRotation.y;
     s16 yaw = BINANG_SUB(this->actor.yawTowardsPlayer, rot);
 
     if (ABS_ALT(yaw) < 0x2008) {
@@ -255,37 +255,37 @@ void func_80AFEC4C(EnTalkGibud* this, GlobalContext* globalCtx) {
         func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
         func_80123E90(globalCtx, &this->actor);
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
-        func_80AFED08(this);
+        EnTalkGibud_SetupWalkToPlayer(this);
     }
-    func_80B005EC(this, globalCtx);
+    EnTalkGibud_TurnTowardsPlayer(this, globalCtx);
 }
 
-void func_80AFED08(EnTalkGibud* this) {
+void EnTalkGibud_SetupWalkToPlayer(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_WALK);
     this->actor.speedXZ = 0.4f;
-    if (this->actionFunc == func_80AFEC4C) {
-        this->unk_3EA = 0x50;
+    if (this->actionFunc == EnTalkGibud_AttemptStun) {
+        this->unk_3EA = 80;
     } else {
-        this->unk_3EA = 0x14;
+        this->unk_3EA = 20;
     }
-    this->actionFunc = func_80AFED7C;
+    this->actionFunc = EnTalkGibud_WalkToPlayer;
 }
 
-void func_80AFED7C(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xFA);
     this->actor.world.rot = this->actor.shape.rot;
-    Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 100, 0);
-    if (func_80B0040C(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
+    Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
+    if (EnTalkGibud_PlayerCanBeGrabbed(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
         if (this->unk_3EE == 0 && this->actor.xzDistToPlayer <= 45.0f) {
             player->actor.freezeTimer = 0;
-            if ((gSaveContext.playerForm == PLAYER_FORM_GORON) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
-                func_80AFF22C(this);
+            if (gSaveContext.playerForm == PLAYER_FORM_GORON || gSaveContext.playerForm == PLAYER_FORM_DEKU) {
+                EnTalkGibud_SetupFailGrab(this);
             } else if (globalCtx->grabPlayer(globalCtx, player)) {
-                func_80AFEFD4(this);
+                EnTalkGibud_SetupGrab(this);
             }
         } else {
             if (this->unk_3EA == 0) {
@@ -299,9 +299,9 @@ void func_80AFED7C(EnTalkGibud* this, GlobalContext* globalCtx) {
             }
         }
     } else if (this->unk_3EE == 0 && this->actor.xzDistToPlayer <= 45.0f) {
-        func_80AFF45C(this);
-    } else if (func_80B00484(this, globalCtx)) {
-        func_80AFF45C(this);
+        EnTalkGibud_SetupWalkToHome(this);
+    } else if (EnTalkGibud_PlayerTooFarFromHome(this, globalCtx)) {
+        EnTalkGibud_SetupWalkToHome(this);
     }
     if (this->unk_3EE > 0) {
         this->unk_3EE--;
@@ -314,30 +314,30 @@ void func_80AFED7C(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AFEFD4(EnTalkGibud* this) {
+void EnTalkGibud_SetupGrab(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_GRAB_START);
     this->unk_3EA = 0;
     this->actor.flags &= -2;
-    this->unk_3EC = 0;
-    this->actionFunc = func_80AFF030;
+    this->grabState = EN_TALK_GIBUD_GRAB_START;
+    this->actionFunc = EnTalkGibud_Grab;
 }
 
-void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player2 = GET_PLAYER(globalCtx);
     Player* player = player2;
     s32 sp34;
     u16 sp32;
 
-    switch (this->unk_3EC) {
-        case 0:
+    switch (this->grabState) {
+        case EN_TALK_GIBUD_GRAB_START:
             sp34 = func_80B00760(this, globalCtx);
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && sp34 == 1) {
-                this->unk_3EC = 1;
+                this->grabState = EN_TALK_GIBUD_GRAB_IN_PROGRESS;
                 func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_GRAB_ATTACK);
             }
             break;
 
-        case 1:
+        case EN_TALK_GIBUD_GRAB_IN_PROGRESS:
             if (this->unk_3EA == 20) {
                 s16 requiredScopeTemp;
 
@@ -361,16 +361,16 @@ void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx) {
                 }
                 func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_GRAB_END);
                 this->actor.flags |= 1;
-                this->unk_3EC = 2;
+                this->grabState = EN_TALK_GIBUD_GRAB_RELEASE;
                 this->unk_3EA = 0;
             }
             break;
 
-        case 2:
+        case EN_TALK_GIBUD_GRAB_RELEASE:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->unk_3EE = 20;
                 this->actor.shape.yOffset = 0.0f;
-                func_80AFED08(this);
+                EnTalkGibud_SetupWalkToPlayer(this);
             } else {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
@@ -378,53 +378,57 @@ void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AFF22C(EnTalkGibud* this) {
+/**
+ * If the Gibdo/Redead tries to grab Goron or Deku Link, it will fail to
+ * do so. It will appear to take damage and shake its head side-to-side.
+ */
+void EnTalkGibud_SetupFailGrab(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
-    this->actionFunc = func_80AFF288;
+    this->actionFunc = EnTalkGibud_FailGrab;
     this->actor.speedXZ = -2.0f;
 }
 
-void func_80AFF288(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_FailGrab(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (this->actor.speedXZ < 0.0f) {
         this->actor.speedXZ += 0.15f;
     }
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 0x12C, 0);
-    Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 0x12C, 0);
+    Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x12C, 0);
+    Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x12C, 0);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        func_80AFF330(this);
+        EnTalkGibud_SetupTurnAwayAndShakeHead(this);
     }
 }
 
-void func_80AFF330(EnTalkGibud* this) {
+void EnTalkGibud_SetupTurnAwayAndShakeHead(EnTalkGibud* this) {
     this->unk_3EA = 0;
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_WALK);
-    this->actionFunc = func_80AFF378;
+    this->actionFunc = EnTalkGibud_TurnAwayAndShakeHead;
 }
 
-void func_80AFF378(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_TurnAwayAndShakeHead(EnTalkGibud* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 5, 3500, 200);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->unk_3EA > 60) {
-        func_80AFF45C(this);
+        EnTalkGibud_SetupWalkToHome(this);
         this->unk_3EA = 0;
     } else {
-        this->unk_3DE.y = Math_SinS(this->unk_3EA * 0xFA0) * (0x256F * ((60 - this->unk_3EA) / 60.0f));
+        this->headRotation.y = Math_SinS(this->unk_3EA * 0xFA0) * (0x256F * ((60 - this->unk_3EA) / 60.0f));
         this->unk_3EA++;
     }
 }
 
-void func_80AFF45C(EnTalkGibud* this) {
+void EnTalkGibud_SetupWalkToHome(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_WALK);
     this->actor.speedXZ = 0.4f;
-    this->actionFunc = func_80AFF4AC;
+    this->actionFunc = EnTalkGibud_WalkToHome;
 }
 
-void func_80AFF4AC(EnTalkGibud* this, GlobalContext* globalCtx) {
-    Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 100, 0);
+void EnTalkGibud_WalkToHome(EnTalkGibud* this, GlobalContext* globalCtx) {
+    Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 5.0f) {
         if (this->actor.speedXZ > 0.2f) {
             this->actor.speedXZ -= 0.2f;
@@ -434,16 +438,16 @@ void func_80AFF4AC(EnTalkGibud* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 200, 10);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (this->actor.world.rot.y == this->actor.home.rot.y) {
-            func_80AFEB38(this);
+            EnTalkGibud_SetupIdle(this);
         }
     } else {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 450);
         this->actor.world.rot = this->actor.shape.rot;
     }
-    if (func_80B0040C(this, globalCtx)) {
+    if (EnTalkGibud_PlayerCanBeGrabbed(this, globalCtx)) {
         if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
             Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
-            func_80AFED08(this);
+            EnTalkGibud_SetupWalkToPlayer(this);
         }
     }
 }
@@ -463,9 +467,9 @@ void func_80AFF618(EnTalkGibud* this) {
 void func_80AFF6A0(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (this->actor.colorFilterTimer == 0) {
         if (this->actor.colChkInfo.health == 0) {
-            func_80AFF880(this);
+            EnTalkGibud_SetupDead(this);
         } else {
-            func_80AFF700(this);
+            EnTalkGibud_SetupDamage(this);
         }
     }
     if (this->unk_3EA != 0) {
@@ -473,17 +477,17 @@ void func_80AFF6A0(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AFF700(EnTalkGibud* this) {
+void EnTalkGibud_SetupDamage(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3EA = 0;
     this->unk_3EE = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->actionFunc = func_80AFF76C;
+    this->actionFunc = EnTalkGibud_Damage;
     this->actor.speedXZ = -2.0f;
 }
 
-void func_80AFF76C(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (this->actor.speedXZ < 0.0f) {
         this->actor.speedXZ += 0.15f;
     }
@@ -497,28 +501,28 @@ void func_80AFF76C(EnTalkGibud* this, GlobalContext* globalCtx) {
             SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
             this->type = EN_TALK_GIBUD_TYPE_REDEAD;
         }
-        if (func_80B00484(this, globalCtx)) {
-            func_80AFF45C(this);
+        if (EnTalkGibud_PlayerTooFarFromHome(this, globalCtx)) {
+            EnTalkGibud_SetupWalkToHome(this);
         } else {
-            func_80AFED08(this);
+            EnTalkGibud_SetupWalkToPlayer(this);
         }
     }
 }
 
-void func_80AFF880(EnTalkGibud* this) {
+void EnTalkGibud_SetupDead(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_DEATH);
     this->actor.flags &= -2;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->unk_3EA = 0;
-    this->actionFunc = func_80AFF8E4;
+    this->actionFunc = EnTalkGibud_Dead;
 }
 
-void func_80AFF8E4(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_Dead(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (this->unk_3EA > 300) {
-        func_80AFF9CC(this);
+        EnTalkGibud_SetupRevive(this);
     } else {
-        Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 250, 0);
-        Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 250, 0);
+        Math_SmoothStepToS(&this->headRotation.y, 0, 1, 250, 0);
+        Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 250, 0);
         this->unk_3EA += 1;
     }
     if (this->unk_3EA == 20 && this->unk_3F0 > 0 && this->unk_3F6 == 0 && this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
@@ -527,19 +531,19 @@ void func_80AFF8E4(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AFF9CC(EnTalkGibud* this) {
+void EnTalkGibud_SetupRevive(EnTalkGibud* this) {
     Animation_Change(&this->skelAnime, &D_06009298, -1.0f, Animation_GetLastFrame(&D_06009298), 0.0f, 2, -8.0f);
     this->actor.flags |= 1;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_REVERSE);
     this->unk_3EA = 0;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actionFunc = func_80AFFA68;
+    this->actionFunc = EnTalkGibud_Revive;
 }
 
-void func_80AFFA68(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_Revive(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->actor.colChkInfo.health = 8;
-        func_80AFEB38(this);
+        EnTalkGibud_SetupIdle(this);
     }
 }
 
@@ -547,50 +551,50 @@ void func_80AFFAB0(EnTalkGibud* this, GlobalContext* globalCtx) {
     switch (this->requestedItemIndex) {
         case 0:
             func_801518B0(globalCtx, 0x138C, &this->actor);
-            this->unk_3DC = 0x138C;
+            this->textId = 0x138C;
             break;
         case 1:
             func_801518B0(globalCtx, 0x138D, &this->actor);
-            this->unk_3DC = 0x138D;
+            this->textId = 0x138D;
             break;
         case 2:
             func_801518B0(globalCtx, 0x138E, &this->actor);
-            this->unk_3DC = 0x138E;
+            this->textId = 0x138E;
             break;
         case 3:
             func_801518B0(globalCtx, 0x138F, &this->actor);
-            this->unk_3DC = 0x138F;
+            this->textId = 0x138F;
             break;
         case 4:
             func_801518B0(globalCtx, 0x1390, &this->actor);
-            this->unk_3DC = 0x1390;
+            this->textId = 0x1390;
             break;
         case 5:
             func_801518B0(globalCtx, 0x1391, &this->actor);
-            this->unk_3DC = 0x1391;
+            this->textId = 0x1391;
             break;
         case 6:
             func_801518B0(globalCtx, 0x1392, &this->actor);
-            this->unk_3DC = 0x1392;
+            this->textId = 0x1392;
             break;
         case 7:
             func_801518B0(globalCtx, 0x1393, &this->actor);
-            this->unk_3DC = 0x1393;
+            this->textId = 0x1393;
             break;
         case 8:
             func_801518B0(globalCtx, 0x1394, &this->actor);
-            this->unk_3DC = 0x1394;
+            this->textId = 0x1394;
             break;
         case 9:
             func_801518B0(globalCtx, 0x1395, &this->actor);
-            this->unk_3DC = 0x1395;
+            this->textId = 0x1395;
             break;
     }
 }
 
 void func_80AFFC10(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx)) {
-        switch (this->unk_3DC) {
+        switch (this->textId) {
             case 0x1388:
                 func_80AFFAB0(this, globalCtx);
                 break;
@@ -605,27 +609,28 @@ void func_80AFFC10(EnTalkGibud* this, GlobalContext* globalCtx) {
             case 0x1394:
             case 0x1395:
                 func_801518B0(globalCtx, 0xFF, &this->actor);
-                this->unk_3DC = 0xFF;
+                this->textId = 0xFF;
                 break;
         }
     }
 }
 
-s32 func_80AFFC9C(EnTalkGibud* this, GlobalContext* globalCtx, s32 itemActionParam) {
+s32 EnTalkGibud_PlayerHasRequestedItem(EnTalkGibud* this, GlobalContext* globalCtx, s32 itemActionParam) {
     EnTalkGibudRequestedItem* requestedItem = &sRequestedItemTable[this->requestedItemIndex];
 
     if (requestedItem->itemActionParam == itemActionParam) {
         if (!requestedItem->isBottledItem) {
             if (AMMO(requestedItem->item) >= requestedItem->amount) {
-                return 0;
+                return EN_TALK_GIBUD_REQUESTED_ITEM_MET;
+            } else {
+                return EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO;
             }
-            return 1;
         }
         if (func_80114F2C(requestedItem->item)) {
-            return 0;
+            return EN_TALK_GIBUD_REQUESTED_ITEM_MET;
         }
     }
-    return 2;
+    return EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET;
 }
 
 void func_80AFFD3C(EnTalkGibud* this, GlobalContext* globalCtx) {
@@ -638,18 +643,18 @@ void func_80AFFD3C(EnTalkGibud* this, GlobalContext* globalCtx) {
             this->itemActionParam = itemActionParam;
         }
         if (this->itemActionParam > PLAYER_AP_NONE) {
-            switch (func_80AFFC9C(this, globalCtx, this->itemActionParam)) {
-                case 0:
+            switch (EnTalkGibud_PlayerHasRequestedItem(this, globalCtx, this->itemActionParam)) {
+                case EN_TALK_GIBUD_REQUESTED_ITEM_MET:
                     player->actor.textId = 0x138A;
-                    this->unk_3DC = 0x138A;
+                    this->textId = 0x138A;
                     break;
-                case 1:
+                case EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO:
                     player->actor.textId = 0x138B;
-                    this->unk_3DC = 0x138B;
+                    this->textId = 0x138B;
                     break;
-                case 2:
+                case EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET:
                     player->actor.textId = 0x1389;
-                    this->unk_3DC = 0x1389;
+                    this->textId = 0x1389;
                     break;
                 default:
                     break;
@@ -657,32 +662,32 @@ void func_80AFFD3C(EnTalkGibud* this, GlobalContext* globalCtx) {
             func_801477B4(globalCtx);
         } else if (this->itemActionParam < PLAYER_AP_NONE) {
             func_801518B0(globalCtx, 0x1389, &this->actor);
-            this->unk_3DC = 0x1389;
+            this->textId = 0x1389;
         }
     }
 }
 
-void func_80AFFE3C(EnTalkGibud* this) {
-    this->unk_3F4 = 0;
+void EnTalkGibud_SetupPassiveIdle(EnTalkGibud* this) {
+    this->isTalking = false;
     if (this->actionFunc != func_80AFFFBC) {
         func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
     }
-    this->actionFunc = func_80AFFE94;
+    this->actionFunc = EnTalkGibud_PassiveIdle;
 }
 
-void func_80AFFE94(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_PassiveIdle(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
-        this->unk_3F4 = 1;
+        this->isTalking = true;
         func_801518B0(globalCtx, 0x1388, &this->actor);
-        this->unk_3DC = 0x1388;
+        this->textId = 0x1388;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
         func_80AFFFA4(this);
     } else if (this->actor.xzDistToPlayer < 100.0f && !(this->collider.base.acFlags & AC_HIT)) {
-        func_800E9250(globalCtx, &this->actor, &this->unk_3DE, &this->unk_3E4, this->actor.focus.pos);
+        func_800E9250(globalCtx, &this->actor, &this->headRotation, &this->upperBodyRotation, this->actor.focus.pos);
         func_800B8614(&this->actor, globalCtx, 100.0f);
     } else {
-        Math_SmoothStepToS(&this->unk_3DE.y, 0, 1, 100, 0);
-        Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 100, 0);
+        Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
+        Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
     }
 }
 
@@ -714,7 +719,7 @@ void func_80AFFFBC(EnTalkGibud* this, GlobalContext* globalCtx) {
             break;
         case 6:
             if (func_80147624(globalCtx)) {
-                if (this->unk_3DC == 0x138A) {
+                if (this->textId == 0x138A) {
                     requestedItem = &sRequestedItemTable[this->requestedItemIndex];
                     if (!requestedItem->isBottledItem) {
                         func_80115A14(requestedItem->item, -requestedItem->amount);
@@ -724,9 +729,9 @@ void func_80AFFFBC(EnTalkGibud* this, GlobalContext* globalCtx) {
                     player->stateFlags1 |= 0x20;
                     player->stateFlags1 |= 0x20000000;
                     this->actor.flags |= 0x100000;
-                    func_80B000FC(this);
+                    EnTalkGibud_SetupDisappearWhenRequestFulfilled(this);
                 } else {
-                    func_80AFFE3C(this);
+                    EnTalkGibud_SetupPassiveIdle(this);
                 }
             }
             break;
@@ -737,14 +742,14 @@ void func_80AFFFBC(EnTalkGibud* this, GlobalContext* globalCtx) {
     func_80B00384(this, globalCtx);
 }
 
-void func_80B000FC(EnTalkGibud* this) {
+void EnTalkGibud_SetupDisappearWhenRequestFulfilled(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
     this->actor.flags &= -2;
     this->unk_3EA = 0x28;
-    this->actionFunc = func_80B00158;
+    this->actionFunc = EnTalkGibud_DisappearWhenRequestFulfilled;
 }
 
-void func_80B00158(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_DisappearWhenRequestFulfilled(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f velocity = sVelocity;
     Vec3f accel = sAccel;
@@ -783,12 +788,12 @@ void func_80B00384(EnTalkGibud* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, temp, 0x320);
     temp -= this->actor.shape.rot.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    Math_ScaledStepToS(&this->unk_3E4.y, temp, 0x258);
-    temp -= this->unk_3E4.y;
-    Math_ScaledStepToS(&this->unk_3DE.y, temp, 0x190);
+    Math_ScaledStepToS(&this->upperBodyRotation.y, temp, 0x258);
+    temp -= this->upperBodyRotation.y;
+    Math_ScaledStepToS(&this->headRotation.y, temp, 0x190);
 }
 
-s32 func_80B0040C(EnTalkGibud* this, GlobalContext* globalCtx) {
+s32 EnTalkGibud_PlayerCanBeGrabbed(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f) && !(player->stateFlags1 & 0x2C6080) &&
@@ -799,7 +804,7 @@ s32 func_80B0040C(EnTalkGibud* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80B00484(EnTalkGibud* this, GlobalContext* globalCtx) {
+s32 EnTalkGibud_PlayerTooFarFromHome(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
@@ -810,15 +815,16 @@ s32 func_80B00484(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80B004D0(EnTalkGibud* this, GlobalContext* globalCtx) {
-    if (this->actionFunc != func_80AFF030 && this->actionFunc != func_80AFF8E4 && this->actionFunc != func_80B00158 &&
-        this->actionFunc != func_80AFFA68 && this->actionFunc != func_80AFF76C && this->actionFunc != func_80AFFFBC) {
-        if (this->actionFunc != func_80AFFE94) {
+    if (this->actionFunc != EnTalkGibud_Grab && this->actionFunc != EnTalkGibud_Dead &&
+        this->actionFunc != EnTalkGibud_DisappearWhenRequestFulfilled && this->actionFunc != EnTalkGibud_Revive &&
+        this->actionFunc != EnTalkGibud_Damage && this->actionFunc != func_80AFFFBC) {
+        if (this->actionFunc != EnTalkGibud_PassiveIdle) {
             if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
                 this->actor.flags &= ~(0x4 | 0x1);
                 this->actor.flags |= (0x8 | 0x1);
                 this->actor.hintId = 0xFF;
                 this->actor.textId = 0;
-                func_80AFFE3C(this);
+                EnTalkGibud_SetupPassiveIdle(this);
             }
         } else if (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO) {
             this->actor.flags &= ~(0x8 | 0x1);
@@ -829,28 +835,28 @@ void func_80B004D0(EnTalkGibud* this, GlobalContext* globalCtx) {
                 this->actor.hintId = 0x2D;
             }
             this->actor.textId = 0;
-            func_80AFF45C(this);
+            EnTalkGibud_SetupWalkToHome(this);
         }
     }
 }
 
-void func_80B005EC(EnTalkGibud* this, GlobalContext* globalCtx) {
-    s16 temp_v0 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->unk_3E4.y;
+void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, GlobalContext* globalCtx) {
+    s16 temp_v0 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->upperBodyRotation.y;
     s16 phi_a2 = CLAMP(temp_v0, -500, 500);
 
-    temp_v0 -= this->unk_3DE.y;
+    temp_v0 -= this->headRotation.y;
     temp_v0 = CLAMP(temp_v0, -500, 500);
 
     if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
-        this->unk_3E4.y += ABS_ALT(phi_a2);
-        this->unk_3DE.y += ABS_ALT(temp_v0);
+        this->upperBodyRotation.y += ABS_ALT(phi_a2);
+        this->headRotation.y += ABS_ALT(temp_v0);
     } else {
-        this->unk_3E4.y -= ABS_ALT(phi_a2);
-        this->unk_3DE.y -= ABS_ALT(temp_v0);
+        this->upperBodyRotation.y -= ABS_ALT(phi_a2);
+        this->headRotation.y -= ABS_ALT(temp_v0);
     }
 
-    this->unk_3E4.y = CLAMP(this->unk_3E4.y, -0x495F, 0x495F);
-    this->unk_3DE.y = CLAMP(this->unk_3DE.y, -0x256F, 0x256F);
+    this->upperBodyRotation.y = CLAMP(this->upperBodyRotation.y, -0x495F, 0x495F);
+    this->headRotation.y = CLAMP(this->headRotation.y, -0x256F, 0x256F);
 }
 
 s32 func_80B00760(EnTalkGibud* this, GlobalContext* globalCtx) {
@@ -885,7 +891,8 @@ void func_80B008BC(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80B008FC(EnTalkGibud* this, GlobalContext* globalCtx) {
-    if (this->actionFunc == func_80AFED7C || this->actionFunc == func_80AFF4AC || this->actionFunc == func_80AFF76C) {
+    if (this->actionFunc == EnTalkGibud_WalkToPlayer || this->actionFunc == EnTalkGibud_WalkToHome ||
+        this->actionFunc == EnTalkGibud_Damage) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     }
 }
@@ -905,9 +912,9 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 }
                 this->actor.shape.yOffset = 0.0f;
                 if (this->actor.colChkInfo.health == 0) {
-                    func_80AFF880(this);
+                    EnTalkGibud_SetupDead(this);
                 } else {
-                    func_80AFF700(this);
+                    EnTalkGibud_SetupDamage(this);
                 }
                 break;
 
@@ -915,16 +922,16 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 if (this->type == EN_TALK_GIBUD_TYPE_REDEAD) {
                     this->actor.colChkInfo.health = 0;
                     this->actor.shape.yOffset = 0.0f;
-                    func_80AFF880(this);
+                    EnTalkGibud_SetupDead(this);
                 }
                 break;
 
             case 0x2:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
-                    func_80AFF880(this);
+                    EnTalkGibud_SetupDead(this);
                 } else {
-                    func_80AFF700(this);
+                    EnTalkGibud_SetupDamage(this);
                 }
                 this->unk_3F0 = 180;
                 this->unk_3F6 = 0;
@@ -934,9 +941,9 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
             case 0x4:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
-                    func_80AFF880(this);
+                    EnTalkGibud_SetupDead(this);
                 } else {
-                    func_80AFF700(this);
+                    EnTalkGibud_SetupDamage(this);
                 }
                 this->unk_3F0 = 60;
                 this->unk_3F6 = 20;
@@ -944,7 +951,7 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 break;
 
             case 0xC:
-                if ((this->actionFunc != func_80AFF030) &&
+                if ((this->actionFunc != EnTalkGibud_Grab) &&
                     ((this->actionFunc != func_80AFF6A0) || (this->unk_3EA == 0))) {
                     this->unk_29C = 1.0f;
                     this->unk_3F0 = 40;
@@ -965,12 +972,13 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
 void func_80B00B8C(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->actionFunc != func_80AFF8E4 && this->actionFunc != func_80B00158 && this->actionFunc != func_80AFFA68 &&
-        (this->actionFunc != func_80AFF030 || this->unk_3EC == 2)) {
-        if (this->unk_3F4 != 1) {
+    if (this->actionFunc != EnTalkGibud_Dead && this->actionFunc != EnTalkGibud_DisappearWhenRequestFulfilled &&
+        this->actionFunc != EnTalkGibud_Revive &&
+        (this->actionFunc != EnTalkGibud_Grab || this->grabState == EN_TALK_GIBUD_GRAB_RELEASE)) {
+        if (this->isTalking != true) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            if (((this->actionFunc != func_80AFF76C) ||
+            if (((this->actionFunc != EnTalkGibud_Damage) ||
                  ((player->unk_ADC != 0) && (player->unk_ADD != this->unk_3F7))) &&
                 ((this->actionFunc != func_80AFF6A0) || (this->unk_3EA == 0))) {
                 CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -984,7 +992,8 @@ void func_80B00C94(EnTalkGibud* this, GlobalContext* globalCtx) {
     Vec3f sp28;
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 35.0f, 29);
-    if (this->actionFunc == func_80AFF030 && this->unk_3EC == 0 && (this->actor.bgCheckFlags & 8)) {
+    if (this->actionFunc == EnTalkGibud_Grab && this->grabState == EN_TALK_GIBUD_GRAB_START &&
+        (this->actor.bgCheckFlags & 8)) {
         sp28 = player->actor.world.pos;
         sp28.x += 10.0f * Math_SinS(this->actor.wallYaw);
         sp28.z += 10.0f * Math_CosS(this->actor.wallYaw);
@@ -1024,9 +1033,9 @@ s32 EnTalkGibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     EnTalkGibud* this = THIS;
 
     if (limbIndex == 12) {
-        rot->y += this->unk_3E4.y;
+        rot->y += this->upperBodyRotation.y;
     } else if (limbIndex == 23) {
-        rot->y += this->unk_3DE.y;
+        rot->y += this->headRotation.y;
     }
 
     return false;
