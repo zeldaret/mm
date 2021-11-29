@@ -61,14 +61,21 @@ typedef struct EnTalkGibud {
     /* 0x03DC */ s16 textId;
     /* 0x03DE */ Vec3s headRotation;
     /* 0x03E4 */ Vec3s upperBodyRotation;
-    /* 0x03EA */ s16 unk_3EA;
+    /* 0x03EA */ union {
+                    s16 stunPreventionTimer;
+                    s16 grabDamageTimer;
+                    s16 headShakeTimer;
+                    s16 stunTimer;
+                    s16 deathTimer;
+                    s16 disappearanceTimer;
+                };
     /* 0x03EC */ s16 grabState;
-    /* 0x03EE */ s16 unk_3EE;
+    /* 0x03EE */ s16 grabPreventionTimer;
     /* 0x03F0 */ s16 effectTimer;
     /* 0x03F2 */ s16 type;
     /* 0x03F4 */ s16 isTalking;
     /* 0x03F6 */ u8 effectType;
-    /* 0x03F7 */ s8 unk_3F7;
+    /* 0x03F7 */ s8 unk_3F7; // related to player->unk_ADD
 } EnTalkGibud; // size = 0x3F8
 
 extern const ActorInit En_Talk_Gibud_InitVars;
