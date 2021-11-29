@@ -5,7 +5,6 @@
 
 struct BgInibsMovebg;
 
-//#define BGINIBSMOVEBG_GET_F(thisx) (u16)(thisx.actor.params & 0xF)
 #define BGINIBSMOVEBG_GET_F(thisx) (u16)(thisx.actor.params) & 0xF
 
 typedef struct BgInibsMovebg {
