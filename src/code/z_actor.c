@@ -3896,8 +3896,6 @@ Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx) {
     return func_800B8018(arg0, &globalCtx->view.eye, &lightDir, globalCtx->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
-// small regalloc
 void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 parm5) {
     s32 spB4;
     s32 spB0;
@@ -3922,15 +3920,15 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
         }
     }
 
-    sp94.x = points[spB0].x;
-    sp94.z = points[spB0].z;
-    pos2->y = points[spB0].y;
+    sp94.x = (points + spB0)->x;
+    sp94.z = (points + spB0)->z;
+    pos2->y = (points + spB0)->y;
     if (spB0 != 0) {
-        sp64.x = points[spB0 - 1].x;
-        sp64.z = points[spB0 - 1].z;
+        sp64.x = (points + spB0 - 1)->x;
+        sp64.z = (points + spB0 - 1)->z;
     } else if (parm5) {
-        sp64.x = points[pathcount - 1].x;
-        sp64.z = points[pathcount - 1].z;
+        sp64.x = (points + pathcount - 1)->x;
+        sp64.z = (points + pathcount - 1)->z;
     }
 
     if ((spB0 != 0) || (parm5)) {
@@ -3939,8 +3937,8 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
     }
 
     if (spB0 + 1 != pathcount) {
-        sp70.x = points[spB0 + 1].x;
-        sp70.z = points[spB0 + 1].z;
+        sp70.x = (points + spB0 + 1)->x;
+        sp70.z = (points + spB0 + 1)->z;
     } else if (parm5) {
         sp70.x = points->x;
         sp70.z = points->z;
@@ -3998,11 +3996,6 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
         pos2->z = sp94.z;
     }
 }
-#else
-s32 D_801AEE28[] = { 0, 0 };
-s32 D_801AEE30[] = { 0, 0 };
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCCDC.s")
-#endif
 
 // unused
 s32 func_800BD2B4(GameState* gameState, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GameState*, Actor*),
