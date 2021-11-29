@@ -780,12 +780,12 @@ void EnTalkGibud_Disappear(EnTalkGibud* this, GlobalContext* globalCtx) {
     Vec3f velocity = sVelocity;
     Vec3f accel = sAccel;
     Vec3f pos;
-    s32 phi_s3;
+    s32 numFlamesToSpawn;
     s32 i;
 
     if (this->disappearanceTimer > 0) {
-        phi_s3 = CLAMP_MAX(this->disappearanceTimer, 3);
-        for (i = 0; i < phi_s3; i++) {
+        numFlamesToSpawn = CLAMP_MAX(this->disappearanceTimer, 3);
+        for (i = 0; i < numFlamesToSpawn; i++) {
             pos = this->actor.world.pos;
             pos.x += Rand_Centered() * 20.0f;
             pos.y += 50.0f + (Rand_Centered() * 50.0f);
@@ -867,18 +867,18 @@ void EnTalkGibud_CheckForGibdoMask(EnTalkGibud* this, GlobalContext* globalCtx) 
 }
 
 void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, GlobalContext* globalCtx) {
-    s16 temp_v0 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->upperBodyRotation.y;
-    s16 phi_a2 = CLAMP(temp_v0, -500, 500);
+    s16 headAngle = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->upperBodyRotation.y;
+    s16 upperBodyAngle = CLAMP(headAngle, -500, 500);
 
-    temp_v0 -= this->headRotation.y;
-    temp_v0 = CLAMP(temp_v0, -500, 500);
+    headAngle -= this->headRotation.y;
+    headAngle = CLAMP(headAngle, -500, 500);
 
     if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
-        this->upperBodyRotation.y += ABS_ALT(phi_a2);
-        this->headRotation.y += ABS_ALT(temp_v0);
+        this->upperBodyRotation.y += ABS_ALT(upperBodyAngle);
+        this->headRotation.y += ABS_ALT(headAngle);
     } else {
-        this->upperBodyRotation.y -= ABS_ALT(phi_a2);
-        this->headRotation.y -= ABS_ALT(temp_v0);
+        this->upperBodyRotation.y -= ABS_ALT(upperBodyAngle);
+        this->headRotation.y -= ABS_ALT(headAngle);
     }
 
     this->upperBodyRotation.y = CLAMP(this->upperBodyRotation.y, -0x495F, 0x495F);
