@@ -67,6 +67,7 @@ void func_80B40100(BgGoronOyu* this, GlobalContext* globalCtx) {
 
 void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx) {
     static Vec3f D_80B40780 = { 0, 0, 0 };
+    
     Math_StepToF(&this->unk_164, 0.0f, 0.2f);
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - this->unk_164;
     BgGoronOyu_UpdateWaterBoxInfo(this, globalCtx);
