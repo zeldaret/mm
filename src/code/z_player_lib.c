@@ -312,7 +312,64 @@ s32 func_801242DC(GlobalContext* globalCtx) {
     return sp1C + 1;
 }
 
+typedef struct {
+    /* 0x00 */ s16 unk_0;
+    /* 0x02 */ s16 unk_2;
+    /* 0x04 */ s16 unk_4;
+    /* 0x06 */ s16 unk_6;
+    /* 0x08 */ s16 unk_8;
+} struct_801F59D0;
+
+extern struct_801F59D0 D_801F59D0;
+
+#ifdef NON_MATCHING
+void func_80124420(Player* player) {
+    int new_var;
+    s16 sp28;
+    s16 sp26;
+    f32 sp20;
+    f32 temp_f10;
+
+    D_801F59D0.unk_6 = D_801F59D0.unk_6 - (D_801F59D0.unk_6 >> 3);
+    D_801F59D0.unk_8 = D_801F59D0.unk_8 - (D_801F59D0.unk_8 >> 3);
+    D_801F59D0.unk_6 = D_801F59D0.unk_6 + (-D_801F59D0.unk_0 >> 2);
+    D_801F59D0.unk_8 = D_801F59D0.unk_8 + (-D_801F59D0.unk_2 >> 2);
+
+    sp26 = player->actor.world.rot.y - player->actor.shape.rot.y;
+    sp20 = Math_CosS(sp26);
+    sp28 = (randPlusMinusPoint5Scaled(2.0f) + 10.0f) * (player->actor.speedXZ * -200.0f * sp20);
+    sp20 = Math_SinS(sp26);
+    temp_f10 = randPlusMinusPoint5Scaled(2.0f) + 10.0f;
+    new_var = ((s16) (temp_f10 * ((player->actor.speedXZ * 100.0f) * sp20)));
+
+    D_801F59D0.unk_6 = (D_801F59D0.unk_6 + (sp28 >> 2));
+    D_801F59D0.unk_8 = D_801F59D0.unk_8 + (new_var >> 2);
+
+    if (D_801F59D0.unk_6 > 0x1770) {
+        D_801F59D0.unk_6 = 0x1770;
+    } else if (D_801F59D0.unk_6 < -0x1770) {
+        D_801F59D0.unk_6 = -0x1770;
+    }
+
+    if (D_801F59D0.unk_8 > 0x1770) {
+        D_801F59D0.unk_8 = 0x1770;
+    } else if (D_801F59D0.unk_8 < -0x1770) {
+        D_801F59D0.unk_8 = -0x1770;
+    }
+
+    D_801F59D0.unk_0 += D_801F59D0.unk_6;
+    D_801F59D0.unk_2 += D_801F59D0.unk_8;
+
+    if (D_801F59D0.unk_0 < 0) {
+        D_801F59D0.unk_4 = D_801F59D0.unk_0 >> 1;
+    } else {
+        D_801F59D0.unk_4 = 0;
+    }
+}
+#else
+void func_80124420(Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124618.s")
 
