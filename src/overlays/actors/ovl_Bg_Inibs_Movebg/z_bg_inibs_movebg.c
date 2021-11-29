@@ -39,6 +39,7 @@ void BgInibsMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
 
+    //for some reason doesn't match if I don't use the THIS macro twice here
     THIS->unk_15C = D_80B96560[BGINIBSMOVEBG_GET_F(this->dyna)];
     this->unk_160 = D_80B96568[BGINIBSMOVEBG_GET_F(this->dyna)];
     this->unk_164 = D_80B96570[BGINIBSMOVEBG_GET_F(THIS->dyna)];
