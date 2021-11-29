@@ -271,7 +271,9 @@ s32 Player_GetExplosiveHeld(Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124278.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801242B4.s")
+s32 func_801242B4(Player* player) {
+    return (player->stateFlags1 & 0x8000000) && player->currentBoots < 5;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801242DC.s")
 
