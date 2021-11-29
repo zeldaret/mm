@@ -34,20 +34,42 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Init.s")
 void BgInibsMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgInibsMovebg* this = (BgInibsMovebg* ) thisx;
+    BgInibsMovebg* this = (BgInibsMovebg*)thisx;
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
 
-    THIS->unk_15C = D_80B96560[((u16) this->dyna.actor.params) & 0xF];
-    this->unk_160 = D_80B96568[((u16) this->dyna.actor.params) & 0xF];
-    this->unk_164 = D_80B96570[((u16) THIS->dyna.actor.params) & 0xF];
+    THIS->unk_15C = D_80B96560[((u16)this->dyna.actor.params) & 0xF];
+    this->unk_160 = D_80B96568[((u16)this->dyna.actor.params) & 0xF];
+    this->unk_164 = D_80B96570[((u16)THIS->dyna.actor.params) & 0xF];
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Destroy.s")
 void BgInibsMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, THIS->dyna.bgId);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Inibs_Movebg/BgInibsMovebg_Draw.s")
+void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 new_var;
+    s32 temp_a1;
+    BgInibsMovebg* new_var5;
+    s32 new_var4;
+    new_var5 = (BgInibsMovebg*)thisx;
+    new_var = new_var5->unk_164;
+
+    if (new_var != 0) {
+        new_var = new_var5->unk_164;
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual((void*)new_var));
+    }
+
+    temp_a1 = new_var5->unk_15C;
+    if (temp_a1 != 0) {
+        func_800BDFC0(globalCtx, (void*)temp_a1);
+    }
+
+    new_var4 = new_var5->unk_160;
+    if (((BgInibsMovebg*)thisx)->unk_160 != 0) {
+        func_800BE03C(globalCtx, (void*)new_var4);
+    }
+
+    if (new_var5->unk_160 != 0) {}
+}
