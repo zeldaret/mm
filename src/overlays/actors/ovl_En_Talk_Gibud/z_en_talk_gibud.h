@@ -40,6 +40,35 @@ typedef enum {
     /* 2 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET,
 } EnTalkGibudRequestedItemState;
 
+typedef enum {
+    /*  0 */ EN_TALK_GIBUD_LIMB_ROOT,       // Root of Left Leg Root, Right Leg Root, Upper Body Root, and Pelvis
+    /*  1 */ EN_TALK_GIBUD_LIMB_LEFT_LEG_ROOT,
+    /*  2 */ EN_TALK_GIBUD_LIMB_LEFT_THIGH,
+    /*  3 */ EN_TALK_GIBUD_LIMB_LEFT_LOWER_LEG,
+    /*  4 */ EN_TALK_GIBUD_LIMB_LEFT_FOOT_ROOT,
+    /*  5 */ EN_TALK_GIBUD_LIMB_LEFT_FOOT,
+    /*  6 */ EN_TALK_GIBUD_LIMB_RIGHT_LEG_ROOT,
+    /*  7 */ EN_TALK_GIBUD_LIMB_RIGHT_THIGH,
+    /*  8 */ EN_TALK_GIBUD_LIMB_RIGHT_LOWER_LEG,
+    /*  9 */ EN_TALK_GIBUD_LIMB_RIGHT_FOOT_ROOT,
+    /* 10 */ EN_TALK_GIBUD_LIMB_RIGHT_FOOT,
+    /* 11 */ EN_TALK_GIBUD_LIMB_UPPER_BODY_ROOT,
+    /* 12 */ EN_TALK_GIBUD_LIMB_UPPER_BODY, // Root of Torso
+    /* 13 */ EN_TALK_GIBUD_LIMB_TORSO,      // Root of Left Arm Root, Right Arm Root, and Head Root
+    /* 14 */ EN_TALK_GIBUD_LIMB_LEFT_ARM_ROOT,
+    /* 15 */ EN_TALK_GIBUD_LIMB_LEFT_SHOULDER_AND_UPPER_ARM,
+    /* 16 */ EN_TALK_GIBUD_LIMB_LEFT_FOREARM,
+    /* 17 */ EN_TALK_GIBUD_LIMB_LEFT_HAND,
+    /* 18 */ EN_TALK_GIBUD_LIMB_RIGHT_ARM_ROOT,
+    /* 19 */ EN_TALK_GIBUD_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM,
+    /* 20 */ EN_TALK_GIBUD_LIMB_RIGHT_FOREARM,
+    /* 21 */ EN_TALK_GIBUD_LIMB_RIGHT_HAND,
+    /* 22 */ EN_TALK_GIBUD_LIMB_HEAD_ROOT,
+    /* 23 */ EN_TALK_GIBUD_LIMB_HEAD,
+    /* 24 */ EN_TALK_GIBUD_LIMB_PELVIS,
+    /* 25 */ EN_TALK_GIBUD_LIMB_MAX,
+} EnTalkGibudLimbs;
+
 struct EnTalkGibud;
 
 typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, GlobalContext*);
@@ -62,13 +91,13 @@ typedef struct EnTalkGibud {
     /* 0x03DE */ Vec3s headRotation;
     /* 0x03E4 */ Vec3s upperBodyRotation;
     /* 0x03EA */ union {
-                    s16 stunPreventionTimer;
-                    s16 grabDamageTimer;
-                    s16 headShakeTimer;
-                    s16 stunTimer;
-                    s16 deathTimer;
-                    s16 disappearanceTimer;
-                };
+        s16 stunPreventionTimer;
+        s16 grabDamageTimer;
+        s16 headShakeTimer;
+        s16 stunTimer;
+        s16 deathTimer;
+        s16 disappearanceTimer;
+    };
     /* 0x03EC */ s16 grabState;
     /* 0x03EE */ s16 grabPreventionTimer;
     /* 0x03F0 */ s16 effectTimer;
@@ -76,7 +105,7 @@ typedef struct EnTalkGibud {
     /* 0x03F4 */ s16 isTalking;
     /* 0x03F6 */ u8 effectType;
     /* 0x03F7 */ s8 unk_3F7; // related to player->unk_ADD
-} EnTalkGibud; // size = 0x3F8
+} EnTalkGibud;               // size = 0x3F8
 
 extern const ActorInit En_Talk_Gibud_InitVars;
 

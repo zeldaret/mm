@@ -1081,9 +1081,9 @@ s32 EnTalkGibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
                                  Actor* thisx, Gfx** gfx) {
     EnTalkGibud* this = THIS;
 
-    if (limbIndex == 12) {
+    if (limbIndex == EN_TALK_GIBUD_LIMB_UPPER_BODY) {
         rot->y += this->upperBodyRotation.y;
-    } else if (limbIndex == 23) {
+    } else if (limbIndex == EN_TALK_GIBUD_LIMB_HEAD) {
         rot->y += this->headRotation.y;
     }
 
@@ -1095,9 +1095,14 @@ void EnTalkGibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     EnTalkGibud* this = THIS;
 
     if ((this->effectTimer != 0) &&
-        ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8) || (limbIndex == 9) ||
-         (limbIndex == 11) || (limbIndex == 14) || (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18) ||
-         (limbIndex == 20) || (limbIndex == 21) || (limbIndex == 22) || (limbIndex == 24) || (limbIndex == 25))) {
+        ((limbIndex == EN_TALK_GIBUD_LIMB_LEFT_LOWER_LEG) || (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_FOOT_ROOT) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_LEG_ROOT) || (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_LOWER_LEG) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_FOOT_ROOT) || (limbIndex == EN_TALK_GIBUD_LIMB_UPPER_BODY_ROOT) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_ARM_ROOT) || (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_FOREARM) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_HAND) || (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_ARM_ROOT) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_FOREARM) || (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_HAND) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_HEAD_ROOT) || (limbIndex == EN_TALK_GIBUD_LIMB_PELVIS) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_MAX))) {
         Matrix_GetStateTranslation(&this->limbPos[this->limbIndex]);
         this->limbIndex++;
     }
