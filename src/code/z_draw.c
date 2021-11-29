@@ -604,7 +604,7 @@ void func_800EF364(GameState* gameState, s16 index) {
     gSPDisplayList(POLY_XLU_DISP++, D_801BB170[index].unk8);
 
     Matrix_FromRSPMatrix(Lib_SegmentedToVirtual(D_801BB170[index].unk10), &sp4C);
-    Matrix_InsertMatrix(&sp4C, 1);
+    Matrix_InsertMatrix(&sp4C, MTXMODE_APPLY);
     Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -630,7 +630,7 @@ void func_800EF4D4(GameState* gameState, s16 index) {
     gSPDisplayList(POLY_XLU_DISP++, D_801BB170[index].unk8);
 
     Matrix_FromRSPMatrix(Lib_SegmentedToVirtual(D_801BB170[index].unk10), &sp4C);
-    Matrix_InsertMatrix(&sp4C, 1);
+    Matrix_InsertMatrix(&sp4C, MTXMODE_APPLY);
     Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
