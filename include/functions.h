@@ -2209,7 +2209,7 @@ s32 func_801242B4(Player* player);
 // void func_80125D4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_801262C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_801263FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-void func_80126440(GlobalContext* globalCtx, Collider* param_2, s32* param_3, Vec3f* param_4, Vec3f* param_5);
+s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, struct_80126440_arg2* arg2, Vec3f* arg3, Vec3f* arg4);
 // void func_801265C8(void);
 // void func_8012669C(void);
 void Player_DrawGetItem(GlobalContext* globalCtx, Player* player);

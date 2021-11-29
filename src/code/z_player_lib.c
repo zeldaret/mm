@@ -405,7 +405,33 @@ void func_80124420(Player* player);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801263FC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126440.s")
+s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, struct_80126440_arg2* arg2, Vec3f* arg3, Vec3f* arg4) {
+    if (arg2->unk_00 == 0) {
+        if (collider != NULL) {
+            Collider_ResetQuadAT(globalCtx, &collider->base);
+        }
+        Math_Vec3f_Copy(&arg2->unk_04, arg3);
+        Math_Vec3f_Copy(&arg2->unk_10, arg4);
+        arg2->unk_00 = 1;
+
+        return 1;
+    } else if ((arg2->unk_04.x == arg3->x) && (arg2->unk_04.y == arg3->y) && (arg2->unk_04.z == arg3->z) && (arg2->unk_10.x == arg4->x) && (arg2->unk_10.y == arg4->y) && (arg2->unk_10.z == arg4->z)) {
+        if (collider != NULL) {
+            Collider_ResetQuadAT(globalCtx, &collider->base);
+        }
+
+        return 0;
+    } else {
+        if (collider != NULL) {
+            Collider_SetQuadVertices(collider, arg4, arg3, &arg2->unk_10, &arg2->unk_04);
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &collider->base);
+        }
+        Math_Vec3f_Copy(&arg2->unk_10, arg4);
+        Math_Vec3f_Copy(&arg2->unk_04, arg3);
+        arg2->unk_00 = 1;
+    }
+    return 1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801265C8.s")
 

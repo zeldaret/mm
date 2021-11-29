@@ -1590,4 +1590,10 @@ enum fram_mode {
     FRAM_MODE_STATUS
 };
 
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ Vec3f unk_04;
+    /* 0x10 */ Vec3f unk_10;
+} struct_80126440_arg2; // size >= 0x1C
+
 #endif
