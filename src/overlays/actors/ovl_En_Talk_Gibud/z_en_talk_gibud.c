@@ -17,8 +17,8 @@ void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnTalkGibud_SetupIdle(EnTalkGibud* this);
 void EnTalkGibud_Idle(EnTalkGibud* this, GlobalContext* globalCtx);
-void EnTalkGibud_SetupAttemptStun(EnTalkGibud* this);
-void EnTalkGibud_AttemptStun(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupAttemptPlayerStun(EnTalkGibud* this);
+void EnTalkGibud_AttemptPlayerStun(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_SetupWalkToPlayer(EnTalkGibud* this);
 void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_SetupGrab(EnTalkGibud* this);
@@ -42,7 +42,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_SetupDisappear(EnTalkGibud* this);
 void EnTalkGibud_Disappear(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalCtx);
-s32 EnTalkGibud_PlayerCanBeGrabbed(EnTalkGibud* this, GlobalContext* globalCtx);
+s32 EnTalkGibud_PlayerInRangeWithCorrectState(EnTalkGibud* this, GlobalContext* globalCtx);
 s32 EnTalkGibud_PlayerOutOfRange(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, GlobalContext* globalCtx);
 s32 EnTalkGibud_MoveToIdealGrabPositionAndRotation(EnTalkGibud* this, GlobalContext* globalCtx);
@@ -65,10 +65,10 @@ extern AnimationHeader D_06011DB8;    // clapping dance (called wait_dance_b in 
 extern AnimationHeader D_0601216C;    // squatting dance (called wait_kosakku in MM3D)
 
 typedef struct {
-    /* 0x00 */ s32 itemActionParam;
-    /* 0x04 */ s32 item;
-    /* 0x08 */ s32 amount;
-    /* 0x0C */ s16 isBottledItem;
+    /* 0x0 */ s32 itemActionParam;
+    /* 0x4 */ s32 item;
+    /* 0x8 */ s32 amount;
+    /* 0xC */ s16 isBottledItem;
 } EnTalkGibudRequestedItem;
 
 const ActorInit En_Talk_Gibud_InitVars = {
@@ -198,9 +198,9 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->stunPreventionTimer = 0;
+    this->playerStunWaitTimer = 0;
     this->grabState = EN_TALK_GIBUD_GRAB_START;
-    this->grabPreventionTimer = 0;
+    this->grabWaitTimer = 0;
     this->itemActionParam = PLAYER_AP_NONE;
     this->effectTimer = 0;
     this->effectType = 0;
@@ -249,18 +249,18 @@ void EnTalkGibud_SetupIdle(EnTalkGibud* this) {
  */
 void EnTalkGibud_Idle(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer <= 150.0f && func_800B715C(globalCtx)) {
-        EnTalkGibud_SetupAttemptStun(this);
+        EnTalkGibud_SetupAttemptPlayerStun(this);
     }
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
 }
 
-void EnTalkGibud_SetupAttemptStun(EnTalkGibud* this) {
+void EnTalkGibud_SetupAttemptPlayerStun(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
-    this->actionFunc = EnTalkGibud_AttemptStun;
+    this->actionFunc = EnTalkGibud_AttemptPlayerStun;
 }
 
-void EnTalkGibud_AttemptStun(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_AttemptPlayerStun(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 rot = this->actor.shape.rot.y + this->headRotation.y + this->upperBodyRotation.y;
     s16 yaw = BINANG_SUB(this->actor.yawTowardsPlayer, rot);
@@ -278,10 +278,10 @@ void EnTalkGibud_AttemptStun(EnTalkGibud* this, GlobalContext* globalCtx) {
 void EnTalkGibud_SetupWalkToPlayer(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_WALK);
     this->actor.speedXZ = 0.4f;
-    if (this->actionFunc == EnTalkGibud_AttemptStun) {
-        this->stunPreventionTimer = 80;
+    if (this->actionFunc == EnTalkGibud_AttemptPlayerStun) {
+        this->playerStunWaitTimer = 80;
     } else {
-        this->stunPreventionTimer = 20;
+        this->playerStunWaitTimer = 20;
     }
     this->actionFunc = EnTalkGibud_WalkToPlayer;
 }
@@ -294,32 +294,34 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, GlobalContext* globalCtx) {
     this->actor.world.rot = this->actor.shape.rot;
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
-    if (EnTalkGibud_PlayerCanBeGrabbed(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
-        if (this->grabPreventionTimer == 0 && this->actor.xzDistToPlayer <= 45.0f) {
+    if (EnTalkGibud_PlayerInRangeWithCorrectState(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
+        if (this->grabWaitTimer == 0 && this->actor.xzDistToPlayer <= 45.0f) {
             player->actor.freezeTimer = 0;
             if (gSaveContext.playerForm == PLAYER_FORM_GORON || gSaveContext.playerForm == PLAYER_FORM_DEKU) {
+                // If the Gibdo/Redead tries to grab Goron or Deku Link, it will fail to
+                // do so. It will appear to take damage and shake its head side-to-side.
                 EnTalkGibud_SetupGrabFail(this);
             } else if (globalCtx->grabPlayer(globalCtx, player)) {
                 EnTalkGibud_SetupGrab(this);
             }
         } else {
-            if (this->stunPreventionTimer == 0) {
+            if (this->playerStunWaitTimer == 0) {
                 player->actor.freezeTimer = 40;
-                this->stunPreventionTimer = 60;
+                this->playerStunWaitTimer = 60;
                 func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
                 func_80123E90(globalCtx, &this->actor);
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
             } else {
-                this->stunPreventionTimer--;
+                this->playerStunWaitTimer--;
             }
         }
-    } else if (this->grabPreventionTimer == 0 && this->actor.xzDistToPlayer <= 45.0f) {
+    } else if (this->grabWaitTimer == 0 && this->actor.xzDistToPlayer <= 45.0f) {
         EnTalkGibud_SetupWalkToHome(this);
     } else if (EnTalkGibud_PlayerOutOfRange(this, globalCtx)) {
         EnTalkGibud_SetupWalkToHome(this);
     }
-    if (this->grabPreventionTimer > 0) {
-        this->grabPreventionTimer--;
+    if (this->grabWaitTimer > 0) {
+        this->grabWaitTimer--;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
@@ -346,6 +348,7 @@ void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx) {
     switch (this->grabState) {
         case EN_TALK_GIBUD_GRAB_START:
             inPositionToAttack = EnTalkGibud_MoveToIdealGrabPositionAndRotation(this, globalCtx);
+            // Needs to have this "== true" to match.
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && inPositionToAttack == true) {
                 this->grabState = EN_TALK_GIBUD_GRAB_ATTACK;
                 func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_GRAB_ATTACK);
@@ -369,8 +372,8 @@ void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
 
-            if (!(player->stateFlags2 & 0x80) || (player->unk_B62 != 0)) {
-                if ((player->unk_B62 != 0) && (player->stateFlags2 & 0x80)) {
+            if (!(player->stateFlags2 & 0x80) || player->unk_B62 != 0) {
+                if (player->unk_B62 != 0 && (player->stateFlags2 & 0x80)) {
                     player->stateFlags2 &= ~0x80;
                     player->unk_AE8 = 100;
                 }
@@ -383,7 +386,7 @@ void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx) {
 
         case EN_TALK_GIBUD_GRAB_RELEASE:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                this->grabPreventionTimer = 20;
+                this->grabWaitTimer = 20;
                 this->actor.shape.yOffset = 0.0f;
                 EnTalkGibud_SetupWalkToPlayer(this);
             } else {
@@ -393,10 +396,6 @@ void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
 }
 
-/**
- * If the Gibdo/Redead tries to grab Goron or Deku Link, it will fail to
- * do so. It will appear to take damage and shake its head side-to-side.
- */
 void EnTalkGibud_SetupGrabFail(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
@@ -428,7 +427,7 @@ void EnTalkGibud_TurnAwayAndShakeHead(EnTalkGibud* this, GlobalContext* globalCt
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->headShakeTimer > 60) {
         EnTalkGibud_SetupWalkToHome(this);
-        this->stunPreventionTimer = 0;
+        this->playerStunWaitTimer = 0;
     } else {
         this->headRotation.y =
             Math_SinS(this->headShakeTimer * 0xFA0) * (0x256F * ((60 - this->headShakeTimer) / 60.0f));
@@ -460,8 +459,8 @@ void EnTalkGibud_WalkToHome(EnTalkGibud* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 450);
         this->actor.world.rot = this->actor.shape.rot;
     }
-    if (EnTalkGibud_PlayerCanBeGrabbed(this, globalCtx)) {
-        if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
+    if (EnTalkGibud_PlayerInRangeWithCorrectState(this, globalCtx)) {
+        if (gSaveContext.playerForm != PLAYER_FORM_GORON && gSaveContext.playerForm != PLAYER_FORM_DEKU &&
             Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
             EnTalkGibud_SetupWalkToPlayer(this);
         }
@@ -473,9 +472,9 @@ void EnTalkGibud_SetupStunned(EnTalkGibud* this) {
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (this->effectTimer != 0) {
-        func_800BCB70(&this->actor, 0U, 0xC8, 0, 0x28);
+        func_800BCB70(&this->actor, 0, 0xC8, 0, 0x28);
     } else {
-        func_800BCB70(&this->actor, 0U, 0xC8, 0, 0x28);
+        func_800BCB70(&this->actor, 0, 0xC8, 0, 0x28);
     }
     this->actionFunc = EnTalkGibud_Stunned;
 }
@@ -497,7 +496,7 @@ void EnTalkGibud_SetupDamage(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->stunTimer = 0;
-    this->grabPreventionTimer = 0;
+    this->grabWaitTimer = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actionFunc = EnTalkGibud_Damage;
     this->actor.speedXZ = -2.0f;
@@ -757,6 +756,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, GlobalContext* globalCtx) {
         case 6:
             if (func_80147624(globalCtx)) {
                 if (this->textId == 0x138A) {
+                    // Remove the requested item/amount from the player's inventory
                     requestedItem = &sRequestedItemTable[this->requestedItemIndex];
                     if (!requestedItem->isBottledItem) {
                         func_80115A14(requestedItem->item, -requestedItem->amount);
@@ -830,7 +830,7 @@ void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalC
     Math_ScaledStepToS(&this->headRotation.y, temp, 0x190);
 }
 
-s32 EnTalkGibud_PlayerCanBeGrabbed(EnTalkGibud* this, GlobalContext* globalCtx) {
+s32 EnTalkGibud_PlayerInRangeWithCorrectState(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f) && !(player->stateFlags1 & 0x2C6080) &&
@@ -841,6 +841,11 @@ s32 EnTalkGibud_PlayerCanBeGrabbed(EnTalkGibud* this, GlobalContext* globalCtx) 
     return false;
 }
 
+/**
+ * Gibdos/Redeads have a very short range around their home where they will
+ * engage with the player. If the player is out of this range, they will simply
+ * walk back to their home.
+ */
 s32 EnTalkGibud_PlayerOutOfRange(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
