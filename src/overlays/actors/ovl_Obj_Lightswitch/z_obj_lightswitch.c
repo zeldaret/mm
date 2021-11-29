@@ -237,7 +237,7 @@ void ObjLightSwitch_SetupAsleep(ObjLightswitch* this) {
 
 void ObjLightSwitch_Asleep(ObjLightswitch* this, GlobalContext* globalCtx) {
     if (this->colorShiftTimer == 0) {
-        Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_SUN_MARK_FLASH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SUN_MARK_FLASH);
     }
     this->colorShiftTimer++;
 
@@ -250,7 +250,7 @@ void ObjLightSwitch_Asleep(ObjLightswitch* this, GlobalContext* globalCtx) {
         ObjLightSwitch_SetupEnabled(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_WAKING;
-        Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_FOOT_SWITCH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
@@ -308,7 +308,7 @@ void ObjLightSwitch_Disabled(ObjLightswitch* this, GlobalContext* globalCtx) {
         ObjLightswitch_SetupIdle(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_ASLEEP;
-        Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_FOOT_SWITCH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 

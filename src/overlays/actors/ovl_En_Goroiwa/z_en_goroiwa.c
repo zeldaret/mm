@@ -495,7 +495,7 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
                         func_8093EF54(globalCtx, &sp48, &D_80942E30[ENGOROIWA_GET_C000(&this->actor)],
                                       &D_80942E3C[ENGOROIWA_GET_C000(&this->actor)], this->actor.scale.x);
                     }
-                    Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_EV_BIGBALL_BOUND);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGBALL_BOUND);
                 }
             }
         }
@@ -1230,7 +1230,7 @@ void func_80941A10(EnGoroiwa* this, GlobalContext* globalCtx) {
         }
 
         if (this->actor.bgCheckFlags & 1) {
-            Actor_PlaySfxAtProjectedPos(&this->actor, D_80942E9C[this->unk_1E4][this->actor.home.rot.x & 1]);
+            Actor_PlaySfxAtPos(&this->actor, D_80942E9C[this->unk_1E4][this->actor.home.rot.x & 1]);
         }
     }
 }

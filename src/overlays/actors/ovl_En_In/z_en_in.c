@@ -215,11 +215,11 @@ s32 func_808F3178(EnIn* this, GlobalContext* globalCtx) {
 
     this->unk260 = tmp = func_8013DB90(globalCtx, &this->unk248, -6.0f);
     if (this->unk260 != 0 && prevUnk260 == 0 && tmp & 0xFF) {
-        Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     this->unk261 = tmp = func_8013DB90(globalCtx, &this->unk254, -6.0f);
     if (this->unk261 != 0 && prevUnk261 == 0 && tmp & 0xFF) {
-        Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     return 0;
 }
@@ -258,7 +258,7 @@ s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
         if (this->colliderJntSph.base.atFlags & AT_BOUNCED) {
             return 0;
         }
-        Actor_PlaySfxAtProjectedPos(&player->actor, 0x83E);
+        Actor_PlaySfxAtPos(&player->actor, 0x83E);
         func_800B8D98(&globalCtx->state, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
     }
     return 1;
@@ -356,7 +356,7 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
         }
     }
     if (this->skelAnime.animation == &D_060198A8 && Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_VO_IN_CRY_0);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_CRY_0);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk486 = this->unk488 %= 8;
@@ -418,9 +418,9 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
     if (this->unk4B0 == 2) {
-        Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_VO_IN_LOST);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
     } else {
-        Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_VO_IN_JOY0);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
     }
 }
 
@@ -1379,9 +1379,9 @@ void func_808F5C98(EnIn* this, GlobalContext* globalCtx) {
     }
     if (this->unk4A8 == 2) {
         if (this->unk4B0 == 2) {
-            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_VO_IN_LOST);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
         } else {
-            Actor_PlaySfxAtProjectedPos(&this->actor, NA_SE_VO_IN_JOY0);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
         }
         this->unk4A8 = 3;
     } else if (this->unk4A8 < 3) {
