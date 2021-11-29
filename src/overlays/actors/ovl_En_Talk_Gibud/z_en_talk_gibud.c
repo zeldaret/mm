@@ -334,7 +334,7 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, GlobalContext* globalCtx) {
 void EnTalkGibud_SetupGrab(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_GRAB_START);
     this->grabDamageTimer = 0;
-    this->actor.flags &= -2;
+    this->actor.flags &= ~1;
     this->grabState = EN_TALK_GIBUD_GRAB_START;
     this->actionFunc = EnTalkGibud_Grab;
 }
@@ -526,7 +526,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx) {
 
 void EnTalkGibud_SetupDead(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_DEATH);
-    this->actor.flags &= -2;
+    this->actor.flags &= ~1;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->deathTimer = 0;
     this->actionFunc = EnTalkGibud_Dead;
@@ -566,52 +566,52 @@ void EnTalkGibud_Revive(EnTalkGibud* this, GlobalContext* globalCtx) {
 void EnTalkGibud_GetTextIdForRequestedItem(EnTalkGibud* this, GlobalContext* globalCtx) {
     switch (this->requestedItemIndex) {
         case 0:
-            // Leeeave me something blue that bestows health!
+            // Blue Potion
             func_801518B0(globalCtx, 0x138C, &this->actor);
             this->textId = 0x138C;
             break;
         case 1:
-            // Leeeave me something delicious to chomp on.
+            // Beans
             func_801518B0(globalCtx, 0x138D, &this->actor);
             this->textId = 0x138D;
             break;
         case 2:
-            // Leeeave me H...2...O.
+            // Spring Water
             func_801518B0(globalCtx, 0x138E, &this->actor);
             this->textId = 0x138E;
             break;
         case 3:
-            // Leeeaave me something deliciously fresh!
+            // Fish
             func_801518B0(globalCtx, 0x138F, &this->actor);
             this->textId = 0x138F;
             break;
         case 4:
-            // Leeeaave me something small and creepy!
+            // Bugs
             func_801518B0(globalCtx, 0x1390, &this->actor);
             this->textId = 0x1390;
             break;
         case 5:
-            // Leeeaave me something that makes a blinding flash!
+            // Deku Nuts
             func_801518B0(globalCtx, 0x1391, &this->actor);
             this->textId = 0x1391;
             break;
         case 6:
-            // Leeeaave me ten refreshing blasts!
+            // Bombs
             func_801518B0(globalCtx, 0x1392, &this->actor);
             this->textId = 0x1392;
             break;
         case 7:
-            // Leeeaave me something warm that can melt ice and quench one's spirits.
+            // Hot Spring Water
             func_801518B0(globalCtx, 0x1393, &this->actor);
             this->textId = 0x1393;
             break;
         case 8:
-            // Leeave me a ghost...A big one at that!
+            // Big Poe
             func_801518B0(globalCtx, 0x1394, &this->actor);
             this->textId = 0x1394;
             break;
         case 9:
-            // Leeeaave me something rich in calcium!
+            // Milk
             func_801518B0(globalCtx, 0x1395, &this->actor);
             this->textId = 0x1395;
             break;
@@ -672,17 +672,14 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, GlobalContext* globalCtx)
         if (this->itemActionParam > PLAYER_AP_NONE) {
             switch (EnTalkGibud_PresentedItemMatchesRequest(this, globalCtx, this->itemActionParam)) {
                 case EN_TALK_GIBUD_REQUESTED_ITEM_MET:
-                    // Ah! Thisss! Thissss! I bear you no remorssse!
                     player->actor.textId = 0x138A;
                     this->textId = 0x138A;
                     break;
                 case EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO:
-                    // ...Not enough. Leeeeave more!
                     player->actor.textId = 0x138B;
                     this->textId = 0x138B;
                     break;
                 case EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET:
-                    // If you don't have it, I have no need for you! Awayyy!
                     player->actor.textId = 0x1389;
                     this->textId = 0x1389;
                     break;
@@ -691,7 +688,6 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, GlobalContext* globalCtx)
             }
             func_801477B4(globalCtx);
         } else if (this->itemActionParam < PLAYER_AP_NONE) {
-            // If you don't have it, I have no need for you! Awayyy!
             func_801518B0(globalCtx, 0x1389, &this->actor);
             this->textId = 0x1389;
         }
@@ -713,7 +709,6 @@ void EnTalkGibud_SetupPassiveIdle(EnTalkGibud* this) {
 void EnTalkGibud_PassiveIdle(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->isTalking = true;
-        // Leeeeave it! Leeeeave it!
         func_801518B0(globalCtx, 0x1388, &this->actor);
         this->textId = 0x1388;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
@@ -781,7 +776,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, GlobalContext* globalCtx) {
 
 void EnTalkGibud_SetupDisappear(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
-    this->actor.flags &= -2;
+    this->actor.flags &= ~1;
     this->disappearanceTimer = 40;
     this->actionFunc = EnTalkGibud_Disappear;
 }
