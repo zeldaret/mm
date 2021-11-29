@@ -23,6 +23,11 @@ typedef enum {
     /* 13 */ EN_TALK_GIBUD_ANIMATION_DANCE_CLAP,
 } EnTalkGibudAnimations;
 
+typedef enum {
+    /* 0 */ EN_TALK_GIBUD_TYPE_GIBDO,
+    /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD,
+} EnTalkGibudType;
+
 struct EnTalkGibud;
 
 typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, GlobalContext*);
@@ -48,7 +53,7 @@ typedef struct EnTalkGibud {
     /* 0x03EC */ s16 unk_3EC;
     /* 0x03EE */ s16 unk_3EE;
     /* 0x03F0 */ s16 unk_3F0;
-    /* 0x03F2 */ s16 unk_3F2;
+    /* 0x03F2 */ s16 type;
     /* 0x03F4 */ s16 unk_3F4;
     /* 0x03F6 */ u8 unk_3F6;
     /* 0x03F7 */ s8 unk_3F7;

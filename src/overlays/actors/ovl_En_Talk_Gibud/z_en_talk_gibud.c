@@ -194,7 +194,7 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_3F0 = 0;
     this->unk_3F6 = 0;
     this->unk_3F4 = 0;
-    this->unk_3F2 = 0;
+    this->type = EN_TALK_GIBUD_TYPE_GIBDO;
     this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx);
     this->switchFlag = EN_TALK_GIBUD_SWITCH_FLAG(thisx);
     this->unk_29C = 0.0f;
@@ -490,12 +490,12 @@ void func_80AFF76C(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_3F7 = -1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if (this->unk_3F0 > 0 && this->unk_3F6 == 0 && this->unk_3F2 == 0) {
+        if (this->unk_3F0 > 0 && this->unk_3F6 == 0 && this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
             this->actor.hintId = 0x2A;
             this->actor.flags &= ~(0x8 | 0x1);
             this->actor.flags |= (0x4 | 0x1);
             SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
-            this->unk_3F2 = 1;
+            this->type = EN_TALK_GIBUD_TYPE_REDEAD;
         }
         if (func_80B00484(this, globalCtx)) {
             func_80AFF45C(this);
@@ -521,9 +521,9 @@ void func_80AFF8E4(EnTalkGibud* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->unk_3E4.y, 0, 1, 250, 0);
         this->unk_3EA += 1;
     }
-    if (this->unk_3EA == 20 && this->unk_3F0 > 0 && this->unk_3F6 == 0 && this->unk_3F2 == 0) {
+    if (this->unk_3EA == 20 && this->unk_3F0 > 0 && this->unk_3F6 == 0 && this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
-        this->unk_3F2 = 1;
+        this->type = EN_TALK_GIBUD_TYPE_REDEAD;
     }
 }
 
@@ -823,7 +823,7 @@ void func_80B004D0(EnTalkGibud* this, GlobalContext* globalCtx) {
         } else if (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO) {
             this->actor.flags &= ~(0x8 | 0x1);
             this->actor.flags |= (0x4 | 0x1);
-            if (this->unk_3F2 == 1) {
+            if (this->type == EN_TALK_GIBUD_TYPE_REDEAD) {
                 this->actor.hintId = 0x2A;
             } else {
                 this->actor.hintId = 0x2D;
@@ -912,7 +912,7 @@ void func_80B0094C(EnTalkGibud* this, GlobalContext* globalCtx) {
                 break;
 
             case 14:
-                if (this->unk_3F2 == 1) {
+                if (this->type == EN_TALK_GIBUD_TYPE_REDEAD) {
                     this->actor.colChkInfo.health = 0;
                     this->actor.shape.yOffset = 0.0f;
                     func_80AFF880(this);
