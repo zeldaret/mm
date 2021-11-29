@@ -788,6 +788,10 @@ typedef struct {
     /* 0x00227 */ u8 envB;
 } SkyboxContext; // size = 0x228
 
+typedef enum {
+    /* 0x05 */ SKYBOX_CUTSCENE_MAP = 5
+} SkyboxId;
+
 typedef struct ListAlloc {
     /* 0x00 */ struct ListAlloc* prev;
     /* 0x04 */ struct ListAlloc* next;

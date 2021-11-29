@@ -54,7 +54,7 @@ void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyb
     gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[900]);
     gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[1200]);
 
-    if (skyboxId == 5) {
+    if (skyboxId == SKYBOX_CUTSCENE_MAP) {
         gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[1500]);
     }
 
