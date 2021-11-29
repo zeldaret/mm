@@ -6,6 +6,23 @@
 #define EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx) ((thisx)->params & 0xF)
 #define EN_TALK_GIBUD_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF0) >> 4)
 
+typedef enum {
+    /*  0 */ EN_TALK_GIBUD_ANIMATION_GRAB_ATTACK,
+    /*  1 */ EN_TALK_GIBUD_ANIMATION_GRAB_END,
+    /*  2 */ EN_TALK_GIBUD_ANIMATION_GRAB_START,
+    /*  3 */ EN_TALK_GIBUD_ANIMATION_LOOK_AWAY,
+    /*  4 */ EN_TALK_GIBUD_ANIMATION_CROUCH_WIPING_TEARS,
+    /*  5 */ EN_TALK_GIBUD_ANIMATION_CROUCH_CRYING,
+    /*  6 */ EN_TALK_GIBUD_ANIMATION_DEATH,
+    /*  7 */ EN_TALK_GIBUD_ANIMATION_DAMAGE,
+    /*  8 */ EN_TALK_GIBUD_ANIMATION_CROUCH_END,
+    /*  9 */ EN_TALK_GIBUD_ANIMATION_IDLE,
+    /* 10 */ EN_TALK_GIBUD_ANIMATION_WALK,
+    /* 11 */ EN_TALK_GIBUD_ANIMATION_DANCE_SQUAT,
+    /* 12 */ EN_TALK_GIBUD_ANIMATION_DANCE_PIROUETTE,
+    /* 13 */ EN_TALK_GIBUD_ANIMATION_DANCE_CLAP,
+} EnTalkGibudAnimations;
+
 struct EnTalkGibud;
 
 typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, GlobalContext*);

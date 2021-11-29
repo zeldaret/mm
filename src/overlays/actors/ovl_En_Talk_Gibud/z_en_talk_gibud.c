@@ -60,9 +60,9 @@ extern AnimationHeader D_0600A450;    // standing up from crouch
 extern AnimationHeader D_0600ABE0;    // idle
 extern FlexSkeletonHeader D_06010B88; // Redead skeleton
 extern AnimationHeader D_060113EC;    // walk
-extern AnimationHeader D_060118D8;    // dance 1
-extern AnimationHeader D_06011DB8;    // dance 2
-extern AnimationHeader D_0601216C;    // dance 3
+extern AnimationHeader D_060118D8;    // pirouette (called wait_baree in MM3D)
+extern AnimationHeader D_06011DB8;    // clapping dance (called wait_dance_b in MM3D)
+extern AnimationHeader D_0601216C;    // squatting dance (called wait_kosakku in MM3D)
 
 typedef struct {
     /* 0x00 */ s32 itemActionParam;
@@ -228,7 +228,7 @@ void EnTalkGibud_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80AFEB38(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 9);
+    func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
     this->actionFunc = func_80AFEB7C;
 }
 
@@ -241,7 +241,7 @@ void func_80AFEB7C(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFEC08(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 9);
+    func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
     this->actionFunc = func_80AFEC4C;
 }
 
@@ -261,7 +261,7 @@ void func_80AFEC4C(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFED08(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 10);
+    func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_WALK);
     this->actor.speedXZ = 0.4f;
     if (this->actionFunc == func_80AFEC4C) {
         this->unk_3EA = 0x50;
@@ -315,7 +315,7 @@ void func_80AFED7C(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFEFD4(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 2);
+    func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_GRAB_START);
     this->unk_3EA = 0;
     this->actor.flags &= -2;
     this->unk_3EC = 0;
@@ -333,7 +333,7 @@ void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx) {
             sp34 = func_80B00760(this, globalCtx);
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && sp34 == 1) {
                 this->unk_3EC = 1;
-                func_800BDC5C(&this->skelAnime, sAnimations, 0);
+                func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_GRAB_ATTACK);
             }
             break;
 
@@ -359,7 +359,7 @@ void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx) {
                     player->stateFlags2 &= ~0x80;
                     player->unk_AE8 = 100;
                 }
-                func_800BDC5C(&this->skelAnime, sAnimations, 1);
+                func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_GRAB_END);
                 this->actor.flags |= 1;
                 this->unk_3EC = 2;
                 this->unk_3EA = 0;
@@ -379,7 +379,7 @@ void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFF22C(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 7);
+    func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->actionFunc = func_80AFF288;
     this->actor.speedXZ = -2.0f;
@@ -400,7 +400,7 @@ void func_80AFF288(EnTalkGibud* this, GlobalContext* globalCtx) {
 
 void func_80AFF330(EnTalkGibud* this) {
     this->unk_3EA = 0;
-    func_800BDC5C(&this->skelAnime, sAnimations, 10);
+    func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_WALK);
     this->actionFunc = func_80AFF378;
 }
 
@@ -417,7 +417,7 @@ void func_80AFF378(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFF45C(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 10);
+    func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_WALK);
     this->actor.speedXZ = 0.4f;
     this->actionFunc = func_80AFF4AC;
 }
@@ -474,7 +474,7 @@ void func_80AFF6A0(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFF700(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 7);
+    func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3EA = 0;
     this->unk_3EE = 0;
@@ -506,7 +506,7 @@ void func_80AFF76C(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFF880(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 6);
+    func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_DEATH);
     this->actor.flags &= -2;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->unk_3EA = 0;
@@ -665,7 +665,7 @@ void func_80AFFD3C(EnTalkGibud* this, GlobalContext* globalCtx) {
 void func_80AFFE3C(EnTalkGibud* this) {
     this->unk_3F4 = 0;
     if (this->actionFunc != func_80AFFFBC) {
-        func_800BDC5C(&this->skelAnime, sAnimations, 9);
+        func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
     }
     this->actionFunc = func_80AFFE94;
 }
@@ -738,7 +738,7 @@ void func_80AFFFBC(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80B000FC(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 9);
+    func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
     this->actor.flags &= -2;
     this->unk_3EA = 0x28;
     this->actionFunc = func_80B00158;
