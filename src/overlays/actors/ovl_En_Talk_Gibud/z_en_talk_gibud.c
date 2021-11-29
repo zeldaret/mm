@@ -83,7 +83,7 @@ const ActorInit En_Talk_Gibud_InitVars = {
     (ActorFunc)EnTalkGibud_Draw,
 };
 
-static ActorAnimationEntry D_80B01200[] = {
+static ActorAnimationEntry sAnimations[] = {
     { &D_06006678, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06006B08, 0.5f, 0.0f, 0.0f, 3, 0.0f },
     { &D_06006EEC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060073A4, 0.0f, 0.0f, 0.0f, 2, -8.0f },
     { &D_06007BBC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060081A8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
@@ -93,8 +93,7 @@ static ActorAnimationEntry D_80B01200[] = {
     { &D_060118D8, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06011DB8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B01350 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT0,
         AT_NONE,
@@ -114,8 +113,7 @@ static ColliderCylinderInit D_80B01350 = {
     { 20, 70, 0, { 0, 0, 0 } },
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80B0137C = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(2, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -150,8 +148,7 @@ static DamageTable D_80B0137C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80B0139C = { 8, 0, 0, 0, MASS_HEAVY };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
 static EnTalkGibudRequestedItem sRequestedItemTable[] = {
     { PLAYER_AP_BOTTLE_POTION_BLUE, ITEM_POTION_BLUE, 1, true },
@@ -166,31 +163,30 @@ static EnTalkGibudRequestedItem sRequestedItemTable[] = {
     { PLAYER_AP_BOTTLE_MILK, ITEM_MILK_BOTTLE, 1, true },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B01448[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -3500, ICHAIN_STOP),
 };
 
-static Vec3f D_80B01454 = { 0.0f, 0.0f, 0.0f };
+static Vec3f sVelocity = { 0.0f, 0.0f, 0.0f };
 
-static Vec3f D_80B01460 = { 0.0f, 0.600000023842f, 0.0f };
+static Vec3f sAccel = { 0.0f, 0.600000023842f, 0.0f };
 
 void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnTalkGibud* this = THIS;
     s32 i;
 
-    Actor_ProcessInitChain(&this->actor, D_80B01448);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.targetMode = 0;
     this->actor.hintId = 0x2D;
     this->actor.textId = 0;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B01350);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80B0137C, &D_80B0139C);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_3EA = 0;
     this->unk_3EC = 0;
     this->unk_3EE = 0;
@@ -232,7 +228,7 @@ void EnTalkGibud_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80AFEB38(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, D_80B01200, 9);
+    func_800BDC5C(&this->skelAnime, sAnimations, 9);
     this->actionFunc = func_80AFEB7C;
 }
 
@@ -245,7 +241,7 @@ void func_80AFEB7C(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFEC08(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, D_80B01200, 9);
+    func_800BDC5C(&this->skelAnime, sAnimations, 9);
     this->actionFunc = func_80AFEC4C;
 }
 
@@ -265,7 +261,7 @@ void func_80AFEC4C(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFED08(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, D_80B01200, 10);
+    func_800BDC5C(&this->skelAnime, sAnimations, 10);
     this->actor.speedXZ = 0.4f;
     if (this->actionFunc == func_80AFEC4C) {
         this->unk_3EA = 0x50;
@@ -319,7 +315,7 @@ void func_80AFED7C(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFEFD4(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, D_80B01200, 2);
+    func_800BDC5C(&this->skelAnime, sAnimations, 2);
     this->unk_3EA = 0;
     this->actor.flags &= -2;
     this->unk_3EC = 0;
@@ -337,7 +333,7 @@ void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx) {
             sp34 = func_80B00760(this, globalCtx);
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && sp34 == 1) {
                 this->unk_3EC = 1;
-                func_800BDC5C(&this->skelAnime, D_80B01200, 0);
+                func_800BDC5C(&this->skelAnime, sAnimations, 0);
             }
             break;
 
@@ -363,7 +359,7 @@ void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx) {
                     player->stateFlags2 &= ~0x80;
                     player->unk_AE8 = 100;
                 }
-                func_800BDC5C(&this->skelAnime, D_80B01200, 1);
+                func_800BDC5C(&this->skelAnime, sAnimations, 1);
                 this->actor.flags |= 1;
                 this->unk_3EC = 2;
                 this->unk_3EA = 0;
@@ -383,7 +379,7 @@ void func_80AFF030(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFF22C(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, D_80B01200, 7);
+    func_800BDC5C(&this->skelAnime, sAnimations, 7);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->actionFunc = func_80AFF288;
     this->actor.speedXZ = -2.0f;
@@ -404,7 +400,7 @@ void func_80AFF288(EnTalkGibud* this, GlobalContext* globalCtx) {
 
 void func_80AFF330(EnTalkGibud* this) {
     this->unk_3EA = 0;
-    func_800BDC5C(&this->skelAnime, D_80B01200, 10);
+    func_800BDC5C(&this->skelAnime, sAnimations, 10);
     this->actionFunc = func_80AFF378;
 }
 
@@ -421,7 +417,7 @@ void func_80AFF378(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFF45C(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, D_80B01200, 10);
+    func_800BDC5C(&this->skelAnime, sAnimations, 10);
     this->actor.speedXZ = 0.4f;
     this->actionFunc = func_80AFF4AC;
 }
@@ -478,7 +474,7 @@ void func_80AFF6A0(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFF700(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, D_80B01200, 7);
+    func_800BDC5C(&this->skelAnime, sAnimations, 7);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3EA = 0;
     this->unk_3EE = 0;
@@ -510,7 +506,7 @@ void func_80AFF76C(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFF880(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, D_80B01200, 6);
+    func_800BDC5C(&this->skelAnime, sAnimations, 6);
     this->actor.flags &= -2;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->unk_3EA = 0;
@@ -669,7 +665,7 @@ void func_80AFFD3C(EnTalkGibud* this, GlobalContext* globalCtx) {
 void func_80AFFE3C(EnTalkGibud* this) {
     this->unk_3F4 = 0;
     if (this->actionFunc != func_80AFFFBC) {
-        func_800BDC5C(&this->skelAnime, D_80B01200, 9);
+        func_800BDC5C(&this->skelAnime, sAnimations, 9);
     }
     this->actionFunc = func_80AFFE94;
 }
@@ -742,7 +738,7 @@ void func_80AFFFBC(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80B000FC(EnTalkGibud* this) {
-    func_800BDC5C(&this->skelAnime, D_80B01200, 9);
+    func_800BDC5C(&this->skelAnime, sAnimations, 9);
     this->actor.flags &= -2;
     this->unk_3EA = 0x28;
     this->actionFunc = func_80B00158;
@@ -750,8 +746,8 @@ void func_80B000FC(EnTalkGibud* this) {
 
 void func_80B00158(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f velocity = D_80B01454;
-    Vec3f accel = D_80B01460;
+    Vec3f velocity = sVelocity;
+    Vec3f accel = sAccel;
     Vec3f pos;
     s32 phi_s3;
     s32 i;
