@@ -47,34 +47,29 @@ void func_80B000FC(EnTalkGibud* this);
 void func_80AFEB38(EnTalkGibud* this);
 void func_80B00384(EnTalkGibud* this, GlobalContext* globalCtx);
 
-extern AnimationHeader D_060009C4;
-extern AnimationHeader D_06000F1C;
-extern AnimationHeader D_06001600;
-extern FlexSkeletonHeader D_060053E8;
-extern AnimationHeader D_06005DF4;
-extern AnimationHeader D_060061E4;
-extern AnimationHeader D_06006678;
-extern AnimationHeader D_06006B08;
-extern AnimationHeader D_06006EEC;
-extern AnimationHeader D_060073A4;
-extern AnimationHeader D_06007BBC;
-extern AnimationHeader D_060081A8;
-extern AnimationHeader D_06009298;
-extern AnimationHeader D_06009900;
-extern AnimationHeader D_0600A450;
-extern AnimationHeader D_0600ABE0;
-extern FlexSkeletonHeader D_06010B88;
-extern AnimationHeader D_060113EC;
-extern AnimationHeader D_060118D8;
-extern AnimationHeader D_06011DB8;
-extern AnimationHeader D_0601216C;
+extern FlexSkeletonHeader D_060053E8; // Gibdo skeleton
+extern AnimationHeader D_06006678;    // grab attack
+extern AnimationHeader D_06006B08;    // release grab
+extern AnimationHeader D_06006EEC;    // start grab
+extern AnimationHeader D_060073A4;    // look away?
+extern AnimationHeader D_06007BBC;    // wiping away tears while crouching
+extern AnimationHeader D_060081A8;    // crying while crouching
+extern AnimationHeader D_06009298;    // death
+extern AnimationHeader D_06009900;    // damage
+extern AnimationHeader D_0600A450;    // standing up from crouch
+extern AnimationHeader D_0600ABE0;    // idle
+extern FlexSkeletonHeader D_06010B88; // Redead skeleton
+extern AnimationHeader D_060113EC;    // walk
+extern AnimationHeader D_060118D8;    // dance 1
+extern AnimationHeader D_06011DB8;    // dance 2
+extern AnimationHeader D_0601216C;    // dance 3
 
 typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s16 unk_0C;
-} EnTalkGibudUnkStruct;
+    /* 0x00 */ s32 itemActionParam;
+    /* 0x04 */ s32 item;
+    /* 0x08 */ s32 amount;
+    /* 0x0C */ s16 isBottledItem;
+} EnTalkGibudRequestedItem;
 
 const ActorInit En_Talk_Gibud_InitVars = {
     ACTOR_EN_TALK_GIBUD,
@@ -158,12 +153,17 @@ static DamageTable D_80B0137C = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B0139C = { 8, 0, 0, 0, MASS_HEAVY };
 
-static EnTalkGibudUnkStruct D_80B013A8[] = {
-    { 0x00000024, 0x00000015, 0x00000001, 0x0001 }, { 0x0000002E, 0x0000000A, 0x00000005, 0x0000 },
-    { 0x00000017, 0x0000001F, 0x00000001, 0x0001 }, { 0x00000016, 0x0000001A, 0x00000001, 0x0001 },
-    { 0x00000020, 0x0000001B, 0x00000001, 0x0001 }, { 0x00000012, 0x00000009, 0x0000000A, 0x0000 },
-    { 0x0000000E, 0x00000006, 0x0000000A, 0x0000 }, { 0x00000018, 0x00000020, 0x00000001, 0x0001 },
-    { 0x00000022, 0x0000001E, 0x00000001, 0x0001 }, { 0x00000026, 0x00000018, 0x00000001, 0x0001 },
+static EnTalkGibudRequestedItem sRequestedItemTable[] = {
+    { PLAYER_AP_BOTTLE_POTION_BLUE, ITEM_POTION_BLUE, 1, true },
+    { PLAYER_AP_BEAN, ITEM_BEAN, 5, false },
+    { PLAYER_AP_BOTTLE_SPRING_WATER, ITEM_SPRING_WATER, 1, true },
+    { PLAYER_AP_BOTTLE_FISH, ITEM_FISH, 1, true },
+    { PLAYER_AP_BOTTLE_BUG, ITEM_BUG, 1, true },
+    { PLAYER_AP_NUT, ITEM_NUT, 10, false },
+    { PLAYER_AP_BOMB, ITEM_BOMB, 10, false },
+    { PLAYER_AP_BOTTLE_HOT_SPRING_WATER, ITEM_HOT_SPRING_WATER, 1, true },
+    { PLAYER_AP_BOTTLE_BIG_POE, ITEM_BIG_POE, 1, true },
+    { PLAYER_AP_BOTTLE_MILK, ITEM_MILK_BOTTLE, 1, true },
 };
 
 // static InitChainEntry sInitChain[] = {
@@ -194,13 +194,13 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_3EA = 0;
     this->unk_3EC = 0;
     this->unk_3EE = 0;
-    this->unk_294 = 0;
+    this->itemActionParam = PLAYER_AP_NONE;
     this->unk_3F0 = 0;
     this->unk_3F6 = 0;
     this->unk_3F4 = 0;
     this->unk_3F2 = 0;
-    this->unk_290 = thisx->params & 0xF;
-    this->unk_298 = (thisx->params & 0xFF0) >> 4;
+    this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx);
+    this->switchFlag = EN_TALK_GIBUD_SWITCH_FLAG(thisx);
     this->unk_29C = 0.0f;
     this->unk_2A0 = 0.0f;
 
@@ -208,17 +208,17 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_1D8[i] = D_801D15B0;
     }
 
-    if (this->unk_290 < 0) {
-        this->unk_290 = 0;
+    if (this->requestedItemIndex < 0) {
+        this->requestedItemIndex = 0;
     }
-    if (this->unk_290 >= 10) {
-        this->unk_290 = 9;
+    if (this->requestedItemIndex >= ARRAY_COUNT(sRequestedItemTable)) {
+        this->requestedItemIndex = ARRAY_COUNT(sRequestedItemTable) - 1;
     }
 
-    if (this->unk_298 == 0xFF) {
-        this->unk_298 = -1;
+    if (this->switchFlag == 0xFF) {
+        this->switchFlag = -1;
     }
-    if (this->unk_298 != -1 && Flags_GetSwitch(globalCtx, this->unk_298)) {
+    if (this->switchFlag != -1 && Flags_GetSwitch(globalCtx, this->switchFlag)) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -548,7 +548,7 @@ void func_80AFFA68(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFFAB0(EnTalkGibud* this, GlobalContext* globalCtx) {
-    switch (this->unk_290) {
+    switch (this->requestedItemIndex) {
         case 0:
             func_801518B0(globalCtx, 0x138C, &this->actor);
             this->unk_3DC = 0x138C;
@@ -615,17 +615,17 @@ void func_80AFFC10(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80AFFC9C(EnTalkGibud* this, GlobalContext* globalCtx, s32 arg2) {
-    EnTalkGibudUnkStruct* unkStruct = &D_80B013A8[this->unk_290];
+s32 func_80AFFC9C(EnTalkGibud* this, GlobalContext* globalCtx, s32 itemActionParam) {
+    EnTalkGibudRequestedItem* requestedItem = &sRequestedItemTable[this->requestedItemIndex];
 
-    if (unkStruct->unk_00 == arg2) {
-        if (unkStruct->unk_0C == 0) {
-            if (AMMO(unkStruct->unk_04) >= unkStruct->unk_08) {
+    if (requestedItem->itemActionParam == itemActionParam) {
+        if (!requestedItem->isBottledItem) {
+            if (AMMO(requestedItem->item) >= requestedItem->amount) {
                 return 0;
             }
             return 1;
         }
-        if (func_80114F2C((u8)unkStruct->unk_04)) {
+        if (func_80114F2C(requestedItem->item)) {
             return 0;
         }
     }
@@ -633,34 +633,34 @@ s32 func_80AFFC9C(EnTalkGibud* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 void func_80AFFD3C(EnTalkGibud* this, GlobalContext* globalCtx) {
-    Player* temp_v1 = GET_PLAYER(globalCtx);
-    s32 temp_v0;
+    Player* player = GET_PLAYER(globalCtx);
+    s32 itemActionParam;
 
-    if (this->unk_294 == 0) {
-        temp_v0 = func_80123810(globalCtx);
-        if (temp_v0 != 0) {
-            this->unk_294 = temp_v0;
+    if (this->itemActionParam == PLAYER_AP_NONE) {
+        itemActionParam = func_80123810(globalCtx);
+        if (itemActionParam != PLAYER_AP_NONE) {
+            this->itemActionParam = itemActionParam;
         }
-        if (this->unk_294 > 0) {
-            switch (func_80AFFC9C(this, globalCtx, this->unk_294)) {
+        if (this->itemActionParam > PLAYER_AP_NONE) {
+            switch (func_80AFFC9C(this, globalCtx, this->itemActionParam)) {
                 case 0:
-                    temp_v1->actor.textId = 0x138A;
+                    player->actor.textId = 0x138A;
                     this->unk_3DC = 0x138A;
                     break;
                 case 1:
-                    temp_v1->actor.textId = 0x138B;
+                    player->actor.textId = 0x138B;
                     this->unk_3DC = 0x138B;
                     break;
                 case 2:
-                    temp_v1->actor.textId = 0x1389;
+                    player->actor.textId = 0x1389;
                     this->unk_3DC = 0x1389;
                     break;
                 default:
                     break;
             }
             func_801477B4(globalCtx);
-        } else if (this->unk_294 < 0) {
-            func_801518B0(globalCtx, 0x1389U, &this->actor);
+        } else if (this->itemActionParam < PLAYER_AP_NONE) {
+            func_801518B0(globalCtx, 0x1389, &this->actor);
             this->unk_3DC = 0x1389;
         }
     }
@@ -691,13 +691,13 @@ void func_80AFFE94(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFFFA4(EnTalkGibud* this) {
-    this->unk_294 = 0;
+    this->itemActionParam = PLAYER_AP_NONE;
     this->actionFunc = func_80AFFFBC;
 }
 
 void func_80AFFFBC(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    EnTalkGibudUnkStruct* unkStruct;
+    EnTalkGibudRequestedItem* requestedItem;
 
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 0:
@@ -719,11 +719,11 @@ void func_80AFFFBC(EnTalkGibud* this, GlobalContext* globalCtx) {
         case 6:
             if (func_80147624(globalCtx)) {
                 if (this->unk_3DC == 0x138A) {
-                    unkStruct = &D_80B013A8[this->unk_290];
-                    if (unkStruct->unk_0C == 0) {
-                        func_80115A14((s16)unkStruct->unk_04, unkStruct->unk_08 * -1);
+                    requestedItem = &sRequestedItemTable[this->requestedItemIndex];
+                    if (!requestedItem->isBottledItem) {
+                        func_80115A14(requestedItem->item, -requestedItem->amount);
                     } else {
-                        func_80123D50(globalCtx, player, 0x12, 0x15);
+                        func_80123D50(globalCtx, player, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                     }
                     player->stateFlags1 |= 0x20;
                     player->stateFlags1 |= 0x20000000;
@@ -771,8 +771,8 @@ void func_80B00158(EnTalkGibud* this, GlobalContext* globalCtx) {
         player->stateFlags1 |= 0x20000000;
         this->unk_3EA += -1;
     } else {
-        if (this->unk_298 != -1) {
-            Actor_SetSwitchFlag(globalCtx, this->unk_298);
+        if (this->switchFlag != -1) {
+            Actor_SetSwitchFlag(globalCtx, this->switchFlag);
         }
         player->stateFlags1 &= ~0x20;
         player->stateFlags1 &= ~0x20000000;

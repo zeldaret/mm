@@ -3,6 +3,9 @@
 
 #include "global.h"
 
+#define EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx) ((thisx)->params & 0xF)
+#define EN_TALK_GIBUD_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF0) >> 4)
+
 struct EnTalkGibud;
 
 typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, GlobalContext*);
@@ -14,9 +17,9 @@ typedef struct EnTalkGibud {
     /* 0x01D4 */ EnTalkGibudActionFunc actionFunc;
     /* 0x01D8 */ Vec3f unk_1D8[15];
     /* 0x028C */ s32 unk_28C;
-    /* 0x0290 */ s32 unk_290;
-    /* 0x0294 */ s32 unk_294;
-    /* 0x0298 */ s32 unk_298;
+    /* 0x0290 */ s32 requestedItemIndex;
+    /* 0x0294 */ s32 itemActionParam;
+    /* 0x0298 */ s32 switchFlag;
     /* 0x029C */ f32 unk_29C;
     /* 0x02A0 */ f32 unk_2A0;
     /* 0x02A4 */ Vec3s jointTable[26];
