@@ -8,6 +8,7 @@
     - [`tools/overlayhelpers/actor_symbols.py`](#toolsoverlayhelpersactor_symbolspy)
     - [`first_diff.py`](#first_diffpy)
     - [`sym_info.py`](#sym_infopy)
+    - [`extract_assets.py`](#extract_assetspy)
     - [`tools/assist.py`](#toolsassistpy)
     - [`tools/get_actor_sizes.py`](#toolsget_actor_sizespy)
     - [`tools/progress.py`](#toolsprogresspy)
@@ -18,6 +19,7 @@
     - [`tools/timeconv.py`](#toolstimeconvpy)
     - [`tools/sfx_convert.py`](#toolssfx_convertpy)
     - [`tools/vt_fmt.py`](#toolsvt_fmtpy)
+    - [`tools/graphovl.py`](#toolsgraphovlpy)
     - [`tools/warnings_count/check_new_warnings.sh`](#toolswarnings_countcheck_new_warningssh)
     - [`tools/warnings_count/update_current_warnings.sh`](#toolswarnings_countupdate_current_warningssh)
     - [`fixle.sh`](#fixlesh)
@@ -34,6 +36,7 @@
     - [`tools/overlayhelpers/colchkinfoinit.py`](#toolsoverlayhelperscolchkinfoinitpy)
     - [`tools/overlayhelpers/damage_table.py`](#toolsoverlayhelpersdamage_tablepy)
     - [`tools/vtxdis`](#toolsvtxdis)
+    - [Reservation Tracking](#reservation-tracking)
 
 ## Introduction
 
@@ -102,6 +105,10 @@ $ ./sym_info.py ObjTree_Init
 Symbol ObjTree_Init (RAM: 0x80B9A0B0, ROM: 0xFFF210, build/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o)
 ```
 
+### `extract_assets.py`
+
+A tool that will use ZAPD to extract assets from the baserom.
+
 ### `tools/assist.py`
 
 Searches for similar functions to the one you are passing, and it tells you which one are decompiled. You can pass the name of an overlay and it will search for similar functions for every function in said overlay.
@@ -161,6 +168,18 @@ Replaces sfx ids by their corresponding defines from `sfx.h`. Run on a single fi
 
 Replaces VT symbols by their corresponding macros. Not many files in MM need this; ask if you need help with it.
 
+### `tools/graphovl.py`
+
+Creates a graph of action functions (black and green arrows) and function calls (blue arrows) for a given overlay file. For best results, run this from the root directory
+
+Example: `./tools/graphovl/graphovl.py En_Firefly`
+
+This will save a `.png` of the overlay in the `/graphs` directory.
+
+See Example below.
+
+![Graph](images/En_Firefly.png)
+
 ### `tools/warnings_count/check_new_warnings.sh`
 
 Runs a make from clean and checks if new warnings have been produced: we use Jenkins to check this as well, but you should run this before opening a PR.
@@ -187,7 +206,7 @@ Formats all C files in the repo using `clang-format-11` (instructions on how to 
 
 mips_to_c (or mips2c) is a tool that takes MIPS assembly and will attempt to convert it to C.
 
-There are different ways you can run mpips2c:
+There are different ways you can run mips2c:
 
 - Clone the repo and run it loclly on your own machine. Follow set up instructions at <https://github.com/matt-kempster/mips_to_c>
 - An online version is available at <https://simonsoftware.se/other/mips_to_c.py>.
@@ -259,3 +278,7 @@ Extracts a damagetable from its address. Can also reconvert existing damagetable
 ### `tools/vtxdis`
 
 Extracts vertex data from a file. Essentially irrelevant since MM requires extracting this data with ZAPD anyway.
+
+### Reservation Tracking
+
+We use a [Google Sheet](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro/edit#gid=0>) to keep track of all the files worked on and their merge status. On this board one can reserve a file to work on. It is common courtesy to not work on a file that is being worked on by another contributor. If there is a specific file you are interested in and it is reserved, reach out to the individual who has it reserved to come to some agreement.

@@ -36,6 +36,9 @@ graphs/
 tools/decomp-permuter/
 tools/mips_to_c/
 
+# Documentation / Tutorial
+!docs/
+
 # Assets
 *.png
 *.jpg
