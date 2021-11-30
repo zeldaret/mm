@@ -15,9 +15,9 @@ void EnRuppecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80BE3178(EnRuppecrow *, GlobalContext *);
-void func_80BE2260(EnRuppecrow *, GlobalContext *);    /* extern */
-void func_80BE2808(EnRuppecrow *);                     /* extern */
-void func_80BE30F4(EnRuppecrow *, GlobalContext *);    /* extern */
+s32 func_80BE2260(EnRuppecrow *, GlobalContext *);
+void func_80BE2808(EnRuppecrow *);
+void func_80BE30F4(EnRuppecrow *, GlobalContext *);
 
 #if 0
 const ActorInit En_Ruppecrow_InitVars = {
@@ -102,7 +102,18 @@ extern AnimationHeader D_060000F0;
 extern FlexSkeletonHeader D_060010C0;
 extern ColliderJntSphElementInit* D_80BE39E0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2260.s")
+s32 func_80BE2260(EnRuppecrow *this, GlobalContext *globalCtx) {
+    UNK_TYPE pad;
+
+    this->collider.elements->dim.worldSphere.center.x = (s16)this->actor.world.pos.x;
+    this->collider.elements->dim.worldSphere.center.y = (s16)(D_80BE39E0->dim.modelSphere.center.y + this->actor.world.pos.y);
+    this->collider.elements->dim.worldSphere.center.z = (s16)this->actor.world.pos.z;
+
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 12.0f, 25.0f, 50.0f, 0x07);
+
+    return true;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2330.s")
 
@@ -114,7 +125,17 @@ extern ColliderJntSphElementInit* D_80BE39E0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2794.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2808.s")
+void func_80BE2808(EnRuppecrow *this) {
+    EnItem00* item;
+    s16 phi_s0;
+
+    for (phi_s0 = 0; phi_s0 < 20; phi_s0++) {
+        item = this->items[phi_s0];
+        if (item != NULL && item->unk152 == 0) {
+            Actor_MarkForDeath(&item->actor);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2874.s")
 
@@ -179,7 +200,6 @@ void EnRuppecrow_Update(Actor *thisx, GlobalContext *globalCtx) {
     func_80BE2260(this, globalCtx);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/EnRuppecrow_Draw.s")
 void EnRuppecrow_Draw(Actor *thisx, GlobalContext *globalCtx) {
     EnRuppecrow *this = THIS;
 

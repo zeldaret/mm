@@ -9,7 +9,7 @@ typedef void (*EnRuppecrowActionFunc)(struct EnRuppecrow*, GlobalContext*);
 
 typedef struct EnRuppecrow {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ UNK_TYPE unk_144[20];
+    /* 0x0144 */ EnItem00* items[20];
     /* 0x0194 */ SkelAnime skelAnime;
     /* 0x01D8 */ EnRuppecrowActionFunc actionFunc;
     /* 0x01DC */ UNK_TYPE unk_1DC;
