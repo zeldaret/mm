@@ -41,7 +41,7 @@ void EnMm2_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnMm2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-//Action function whilst Link is reading the letter.
+// Action function whilst Link is reading the letter.
 void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx) {
     u8 temp_v0;
 
@@ -57,7 +57,8 @@ void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx) {
     }
 }
 
-//Action function that awaits Link to read the letter, changing the A button to "Check" when he is within range to do so (and facing the letter).
+// Action function that awaits Link to read the letter, changing the A button to "Check" when he is within range to do
+// so (and facing the letter).
 void EnMm2_WaitForRead(EnMm2* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         func_801518B0(globalCtx, 0x277BU, &this->actor);
