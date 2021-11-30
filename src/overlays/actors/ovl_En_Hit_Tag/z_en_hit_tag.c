@@ -64,6 +64,7 @@ void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnHitTag* this = THIS;
+    
     Collider_DestroyCylinder(globalCtx, &this->cylinder);
 }
 
