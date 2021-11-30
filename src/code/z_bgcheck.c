@@ -855,28 +855,30 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
  * `outPoly` returns the poly collided with
  * `outY` returns the y coordinate needed to not collide with `outPoly`
  */
-#ifdef NON_MATCHING
 s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionContext* colCtx, f32* outY, Vec3f* pos,
                                f32 checkHeight, CollisionPoly** outPoly, Actor* actor) {
     s32 result = false;
     // u16 nextId;
     CollisionPoly* curPoly;
     CollisionPoly* polyList;
-    f32 ceilingY;
-    Vec3s* vtxList;
-    SSNode* curNode;
     s32 curPolyId;
+    f32 ceilingY;
+    SSNode* curNode;
+    Vec3s* vtxList;
 
     if (lookup->ceiling.head == SS_NULL) {
         return result;
     }
-    curNode = &colCtx->polyNodes.tbl[lookup->ceiling.head];
     polyList = colCtx->colHeader->polyList;
     vtxList = colCtx->colHeader->vtxList;
+    curNode = &colCtx->polyNodes.tbl[lookup->ceiling.head];
 
     *outY = pos->y;
 
     while (true) {
+        f32 intersectDist;
+        f32 ny;
+
         curPolyId = curNode->polyId;
         curPoly = &polyList[curPolyId];
         if (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIA, xpFlags) ||
@@ -892,8 +894,8 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
         }
 
         if (CollisionPoly_CheckYIntersectApprox2(curPoly, vtxList, pos->x, pos->z, &ceilingY)) {
-            f32 intersectDist = ceilingY - *outY;
-            f32 ny = COLPOLY_GET_NORMAL(curPoly->normal.y);
+            intersectDist = ceilingY - *outY;
+            ny = COLPOLY_GET_NORMAL(curPoly->normal.y);
 
             if (intersectDist > 0 && intersectDist < checkHeight && intersectDist * ny <= 0) {
                 *outY = ceilingY - checkHeight;
@@ -910,11 +912,6 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
     }
     return result;
 }
-#else
-s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionContext* colCtx, f32* outY, Vec3f* pos,
-                               f32 checkHeight, CollisionPoly** outPoly, Actor* actor);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_CheckStaticCeiling.s")
-#endif
 
 /**
  * Tests if line `posA` to `posB` intersects with a static poly in list `ssList`. Uses polyCheckTbl
