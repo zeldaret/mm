@@ -44,8 +44,8 @@ void EnFr_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Flags_GetSwitch(globalCtx, ENFR_GET_SWITCHFLAG(thisx))) {
         Actor_MarkForDeath(&this->actor);
-    } else if (this->actor.xyzDistToPlayerSq < (gGameInfo->data[0x37D] * gGameInfo->data[0x37D])) {
-        this->actor.flags &= 0xBFFFFFFF;
+    } else if (this->actor.xyzDistToPlayerSq < SQ(IREG(29))) {
+        this->actor.flags &= ~0x40000000;
     } else {
         this->actor.flags |= 0x40000000;
     }
