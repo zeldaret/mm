@@ -4034,8 +4034,8 @@ extern UNK_TYPE D_0502324C;
 
 // other segments
 extern GfxMasterList D_0E000000;
-
-extern UNK_TYPE D_0F000000;
+extern Gfx D_0E0001C8[];
+extern u16 D_0F000000[]; // framebuffer
 
 
 #endif

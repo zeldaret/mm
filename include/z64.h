@@ -1503,20 +1503,20 @@ typedef struct {
 } struct_801F8010; // size = 0x10
 
 typedef struct {
+    /* 0x00 */ u32 unk_00;
+    /* 0x04 */ u32 setScissor;
+    /* 0x08 */ Color_RGBA8_u32 primColor;
+    /* 0x0C */ Color_RGBA8_u32 envColor;
+    /* 0x10 */ u16* tlut;
+    /* 0x14 */ Gfx* monoDl;
+} VisMono; // size = 0x18
+
+typedef struct {
     /* 0x00 */ u32 useRgba;
     /* 0x04 */ u32 setScissor;
     /* 0x08 */ Color_RGBA8 primColor;
     /* 0x08 */ Color_RGBA8 envColor;
 } struct_801F8020; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 primColor;
-    /* 0x0C */ Color_RGBA8 envColor;
-    /* 0x10 */ u16* tlut;
-    /* 0x14 */ Gfx* monoDl;
-} VisMono; // size = 0x18
 
 typedef enum {
     MTXMODE_NEW,  // generates a new matrix
