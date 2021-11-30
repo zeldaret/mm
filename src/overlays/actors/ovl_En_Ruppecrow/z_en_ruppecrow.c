@@ -15,6 +15,9 @@ void EnRuppecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80BE3178(EnRuppecrow *, GlobalContext *);
+void func_80BE2260(EnRuppecrow *, GlobalContext *);    /* extern */
+void func_80BE2808(EnRuppecrow *);                     /* extern */
+void func_80BE30F4(EnRuppecrow *, GlobalContext *);    /* extern */
 
 #if 0
 const ActorInit En_Ruppecrow_InitVars = {
@@ -165,6 +168,15 @@ void EnRuppecrow_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/EnRuppecrow_Update.s")
+void EnRuppecrow_Update(Actor *thisx, GlobalContext *globalCtx) {
+    EnRuppecrow *this = THIS;
+
+    func_80BE30F4(this, globalCtx);
+    this->actionFunc(this, globalCtx);
+    func_80BE2808(this);
+    this->actor.focus.pos = this->actor.world.pos;  
+    SkelAnime_Update(&this->skelAnime);
+    func_80BE2260(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/EnRuppecrow_Draw.s")
