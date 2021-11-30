@@ -34,6 +34,7 @@ const ActorInit En_Mm2_InitVars = {
 
 void EnMm2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMm2* this = THIS;
+
     Actor_SetScale(&this->actor, 0.015f);
     this->actionFunc = EnMm2_WaitForRead;
 }
@@ -70,6 +71,7 @@ void EnMm2_WaitForRead(EnMm2* this, GlobalContext* globalCtx) {
 
 void EnMm2_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnMm2* this = THIS;
+
     this->actionFunc(this, globalCtx);
 }
 
