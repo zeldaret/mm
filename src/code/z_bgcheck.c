@@ -79,8 +79,6 @@ char D_801EDAF8[80];
 Vec3f D_801EDB48[3]; // polyVerts
 Vec3f D_801EDB70[3];
 Plane D_801EDB98;
-Sphere16 D_801EDBA8;
-TriNorm D_801EDBB0;
 
 void BgCheck_GetStaticLookupIndicesFromPos(CollisionContext* colCtx, Vec3f* pos, Vec3i* sector);
 f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast);
@@ -421,8 +419,6 @@ s32 CollisionPoly_LineVsPoly(BgLineVsPolyTest* a0);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/CollisionPoly_LineVsPoly.s")
 #endif
 
-#ifdef NON_MATCHING
-// OK but .bss order issues
 s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius) {
     static Sphere16 sphere; // D_801EDBA8
     static TriNorm tri;     // D_801EDBB0
@@ -437,10 +433,6 @@ s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, 
     sphere.radius = radius;
     return Math3D_ColSphereTri(&sphere, &tri, &intersect);
 }
-#else
-s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/CollisionPoly_SphVsPoly.s")
-#endif
 
 #ifdef NON_MATCHING
 /**
