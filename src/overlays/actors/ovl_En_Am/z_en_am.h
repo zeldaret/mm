@@ -7,11 +7,30 @@ struct EnAm;
 
 typedef void (*EnAmActionFunc)(struct EnAm*, GlobalContext*);
 
+typedef enum {
+    /* 0 */ ARMOS_PUSHABLE,
+    /* 1 */ ARMOS_ENEMY
+} ArmosType;
+
 typedef struct EnAm {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0xEC];
+    /* 0x0144 */ SkelAnime skelAnime;
+    /* 0x0188 */ Vec3s jointTable[14];
+    /* 0x01DC */ Vec3s morphTable[14];
     /* 0x0230 */ EnAmActionFunc actionFunc;
-    /* 0x0234 */ char unk_234[0x14C];
+    /* 0x0234 */ u8 unk_234;
+    /* 0x0235 */ s8 unk_235;
+    /* 0x0236 */ s16 deathTimer;
+    /* 0x0238 */ s16 unk_238;
+    /* 0x023A */ s16 unk_23A;
+    /* 0x023C */ s16 unk_23C;
+    /* 0x023C */ s16 unk_23D;
+    /* 0x023C */ f32 unk_240;
+    /* 0x0244 */ f32 unk_244;
+    /* 0x0248 */ f32 unk_248;
+    /* 0x024C */ Vec3f unk_24C[13];
+    /* 0x02E8 */ ColliderCylinder enemyCollider;
+    /* 0x0334 */ ColliderCylinder collider2;
 } EnAm; // size = 0x380
 
 extern const ActorInit En_Am_InitVars;
