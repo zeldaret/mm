@@ -42,7 +42,7 @@ void EnFr_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnFr_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFr* this = THIS;
 
-    if (Flags_GetSwitch(globalCtx, ENFR_GET_SWITCHFLAG(thisx))) {
+    if (Flags_GetSwitch(globalCtx, ENFR_GET_SWITCHFLAG(&this->actor))) {
         Actor_MarkForDeath(&this->actor);
     } else if (this->actor.xyzDistToPlayerSq < SQ(IREG(29))) {
         this->actor.flags &= ~0x40000000;
