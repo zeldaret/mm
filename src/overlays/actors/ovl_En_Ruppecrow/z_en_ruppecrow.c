@@ -179,4 +179,10 @@ void EnRuppecrow_Update(Actor *thisx, GlobalContext *globalCtx) {
     func_80BE2260(this, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/EnRuppecrow_Draw.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/EnRuppecrow_Draw.s")
+void EnRuppecrow_Draw(Actor *thisx, GlobalContext *globalCtx) {
+    EnRuppecrow *this = THIS;
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32)this->skelAnime.dListCount, NULL, NULL, &this->actor);
+}
