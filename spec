@@ -548,7 +548,6 @@ beginseg
     include "build/data/code/code_8013EC10.bss.o"
     include "build/src/code/z_view.o"
     include "build/src/code/z_vimode.o"
-    include "build/data/code/z_vimode.data.o"
     include "build/src/code/code_80140E80.o"
     include "build/src/code/z_vismono.o"
     include "build/src/code/code_801420C0.o"

@@ -1498,7 +1498,7 @@ typedef struct struct_8013DF3C_arg1 {
 typedef struct {
     /* 0x00 */ u32 type;
     /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 color;
+    /* 0x08 */ Color_RGBA8_u32 color;
     /* 0x0C */ Color_RGBA8 envColor;
 } struct_801F8010; // size = 0x10
 
@@ -1581,5 +1581,23 @@ enum fram_mode {
     FRAM_MODE_READ,
     FRAM_MODE_STATUS
 };
+
+typedef struct {
+    /* 0x0000 */ OSViMode customViMode;
+    /* 0x0050 */ s32 viHeight;
+    /* 0x0054 */ s32 viWidth;
+    /* 0x0058 */ s32 unk_58; // Right adjustment?
+    /* 0x005c */ s32 unk_5C; // Left adjustment?
+    /* 0x0060 */ s32 unk_60; // Bottom adjustment?
+    /* 0x0064 */ s32 unk_64; // Top adjustment?
+    /* 0x0068 */ s32 viModeBase; // enum: {0, 1, 2, 3}
+    /* 0x006C */ s32 viTvType;
+    /* 0x0070 */ u32 unk_70; // bool
+    /* 0x0074 */ u32 unk_74; // bool
+    /* 0x0078 */ u32 unk_78; // bool
+    /* 0x007c */ u32 unk_7C; // bool
+    /* 0x0080 */ u32 viFeatures;
+    /* 0x0084 */ u32 unk_84;
+} ViMode; // size = 0x88
 
 #endif
