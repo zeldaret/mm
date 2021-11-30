@@ -146,7 +146,47 @@ void func_80BE2808(EnRuppecrow *this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2E18.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2F6C.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2F6C.s")
+void func_80BE35A4(EnRuppecrow *, GlobalContext *); /* extern */
+
+void func_80BE2F6C(EnRuppecrow *this) {
+    f32 scale;
+
+    this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
+    this->actor.velocity.y = 0.0f;
+    Animation_Change(&this->skelAnime, &D_060000F0, 0.4f, 0.0f, 0.0f, 0x1, -3.0f);
+    
+    this->actor.shape.yOffset = 0.0f;
+    this->actor.targetArrowOffset = 0.0f;
+    this->actor.bgCheckFlags &= 0xFFFE;
+
+    scale = this->actor.scale.x * 100.0f;
+    this->actor.world.pos.y += 20.0f * scale;
+    
+    Audio_PlayActorSound2(&this->actor, 0x38EBU);
+       
+    this->unk_2CC = 0.5f;
+    if (this->actor.colChkInfo.damageEffect == 3) {
+        this->unk_2C4 = 0xA;
+        this->unk_2C8 = 1.0f;
+        this->unk_2D0 = 0.75f;
+    } else if (this->actor.colChkInfo.damageEffect == 4) {
+        this->unk_2C4 = 0x14;
+        this->unk_2C8 = 5.0f;
+    } else if (this->actor.colChkInfo.damageEffect == 2) {
+        this->unk_2C4 = 0x0;
+        this->unk_2C8 = 5.0f;
+    }
+
+    func_800BCB70(&this->actor, 0x4000, 0xFF, 0x0, 0x28);
+    if (this->actor.flags & 0x8000) {
+        this->actor.speedXZ = 0.0f;
+    }
+
+    this->collider.base.acFlags &= 0xFFFE;
+    this->actor.flags |= 0x10;   
+    this->actionFunc = func_80BE35A4;
+}
 
 void func_80BE30F4(EnRuppecrow *this, GlobalContext *globalCtx) {
     if (this->collider.base.acFlags & 0x2) {
