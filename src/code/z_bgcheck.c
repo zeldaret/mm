@@ -2154,7 +2154,6 @@ s32 BgCheck_EntityCheckCeiling(CollisionContext* colCtx, f32* outY, Vec3f* pos, 
     return BgCheck_CheckCeilingImpl(colCtx, COLPOLY_IGNORE_ENTITY, outY, pos, checkHeight, outPoly, outBgId, actor);
 }
 
-#ifdef NON_MATCHING
 /**
  * Tests if a line from `posA` to `posB` intersects with a poly
  * returns true if it does, else false
@@ -2174,12 +2173,9 @@ s32 BgCheck_CheckLineImpl(CollisionContext* colCtx, u16 xpFlags1, u16 xpFlags2, 
     StaticLineTest checkLine;
     Vec3f sectorMin;
     Vec3f sectorMax;
-    s32 k;
+    s32 temp_lo;
     StaticLookup* lookup;
     s32 j;
-    StaticLookup* jLookup;
-    s32 temp_lo;
-    s32 pad[2];
 
     lookupTbl = colCtx->lookupTbl;
     posBTemp = *posB;
@@ -2219,11 +2215,15 @@ s32 BgCheck_CheckLineImpl(CollisionContext* colCtx, u16 xpFlags1, u16 xpFlags2, 
         sectorMax.z = colCtx->subdivLength.z + sectorMin.z;
 
         for (i = subdivMin[2]; i < subdivMax[2] + 1; i++) {
-            jLookup = iLookup + subdivMin[1] * colCtx->subdivAmount.x;
+            StaticLookup* jLookup = iLookup + subdivMin[1] * colCtx->subdivAmount.x;
+            s32 pad;
+
             sectorMin.y = subdivMin[1] * colCtx->subdivLength.y + colCtx->minBounds.y;
             sectorMax.y = colCtx->subdivLength.y + sectorMin.y;
 
             for (j = subdivMin[1]; j < subdivMax[1] + 1; j++) {
+                s32 k;
+
                 lookup = jLookup + subdivMin[0];
                 sectorMin.x = subdivMin[0] * colCtx->subdivLength.x + colCtx->minBounds.x;
                 sectorMax.x = colCtx->subdivLength.x + sectorMin.x;
@@ -2264,9 +2264,6 @@ s32 BgCheck_CheckLineImpl(CollisionContext* colCtx, u16 xpFlags1, u16 xpFlags2, 
     }
     return result;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_CheckLineImpl.s")
-#endif
 
 /**
  * Get bccFlags
