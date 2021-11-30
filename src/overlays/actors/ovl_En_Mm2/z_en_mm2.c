@@ -15,8 +15,8 @@ void EnMm2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMm2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMm2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809A2080(EnMm2* this, GlobalContext* globalCtx);
-void func_809A20FC(EnMm2* this, GlobalContext* globalCtx);
+void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx);
+void EnMm2_WaitForRead(EnMm2* this, GlobalContext* globalCtx);
 
 const ActorInit En_Mm2_InitVars = {
     ACTOR_EN_MM2,
@@ -35,13 +35,14 @@ const ActorInit En_Mm2_InitVars = {
 void EnMm2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMm2* this = (EnMm2*)thisx;
     Actor_SetScale(&this->actor, 0.015f);
-    this->actionFunc = func_809A20FC;
+    this->actionFunc = EnMm2_WaitForRead;
 }
 
 void EnMm2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_809A2080(EnMm2* this, GlobalContext* globalCtx) {
+//Action function whilst Link is reading the letter.
+void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx) {
     u8 temp_v0;
 
     temp_v0 = func_80152498(&globalCtx->msgCtx);
@@ -49,17 +50,18 @@ void func_809A2080(EnMm2* this, GlobalContext* globalCtx) {
     if (temp_v0 != 2) {
         if (temp_v0 == 5 && func_80147624(globalCtx)) {
             func_801477B4(globalCtx);
-            this->actionFunc = func_809A20FC;
+            this->actionFunc = EnMm2_WaitForRead;
         }
     } else {
-        this->actionFunc = func_809A20FC;
+        this->actionFunc = EnMm2_WaitForRead;
     }
 }
 
-void func_809A20FC(EnMm2* this, GlobalContext* globalCtx) {
+//Action function that awaits Link to read the letter, changing the A button to "Check" when he is within range to do so (and facing the letter).
+void EnMm2_WaitForRead(EnMm2* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         func_801518B0(globalCtx, 0x277BU, &this->actor);
-        this->actionFunc = func_809A2080;
+        this->actionFunc = EnMm2_Reading;
     } else if ((this->actor.xzDistToPlayer < 60.0f) && (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx))) {
         func_800B8614(&this->actor, globalCtx, 110.0f);
     }
