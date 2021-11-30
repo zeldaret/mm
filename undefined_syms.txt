@@ -4,8 +4,8 @@ D_80000000 = 0x80000000;    // __osExceptionPreamble
 D_80000004 = 0x80000004;    // __osExceptionPreamble
 D_80000008 = 0x80000008;    // __osExceptionPreamble
 D_8000000C = 0x8000000C;    // __osExceptionPreamble
-D_80000010 = 0x80000010;    // 
-D_80000020 = 0x80000020;    // 
+D_80000010 = 0x80000010;    //
+D_80000020 = 0x80000020;    //
 
 osTvType       = 0x80000300;
 osRomType      = 0x80000304;
@@ -1714,12 +1714,12 @@ D_06001300 = 0x06001300;
 
 // ovl_En_Cow
 
-D_060001CC = 0x060001CC;
-D_06004010 = 0x06004010;
-D_06004264 = 0x06004264;
-D_06004348 = 0x06004348;
-D_06004C30 = 0x06004C30;
-D_06004E98 = 0x06004E98;
+gCowBodyChewAnim = 0x060001CC;
+gCowBodySkel = 0x06004010;
+gCowBodyMoveHeadAnim = 0x06004264;
+gCowTailIdleAnim = 0x06004348;
+gCowTailSkel = 0x06004C30;
+gCowTailSwishAnim = 0x06004E98;
 
 // ovl_En_Crow
 
