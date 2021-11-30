@@ -36,14 +36,14 @@ graphs/
 tools/decomp-permuter/
 tools/mips_to_c/
 
-# Documentation / Tutorial
-!docs/
-
 # Assets
 *.png
 *.jpg
 !*_custom*
 .extracted-assets.json
+
+# Docs
+!docs/**/*.png
 
 # Per-user configuration
 .python-version
