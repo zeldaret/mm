@@ -1030,7 +1030,6 @@ s32 BgCheck_CheckLineInSubdivision(StaticLineTest* arg0) {
  * returns true if any poly intersects the sphere, else returns false
  * `outPoly` returns the pointer of the first poly found that intersects
  */
-#ifdef NON_MATCHING
 s32 BgCheck_SphVsFirstStaticPolyList(SSNode* node, u16 xpFlags, CollisionContext* colCtx, Vec3f* center, f32 radius,
                                      CollisionPoly** outPoly, Actor* actor) {
     Vec3s* vtxList;
@@ -1038,7 +1037,6 @@ s32 BgCheck_SphVsFirstStaticPolyList(SSNode* node, u16 xpFlags, CollisionContext
     CollisionPoly* curPoly;
     u16 nextId;
     s16 curPolyId;
-    s32 pad;
 
     polyList = colCtx->colHeader->polyList;
     vtxList = colCtx->colHeader->vtxList;
@@ -1069,17 +1067,14 @@ s32 BgCheck_SphVsFirstStaticPolyList(SSNode* node, u16 xpFlags, CollisionContext
         }
         if (node->next != SS_NULL) {
             node = &colCtx->polyNodes.tbl[node->next];
+            { s32 pad; }
+
             continue;
         }
         break;
     }
     return false;
 }
-#else
-s32 BgCheck_SphVsFirstStaticPolyList(SSNode* node, u16 xpFlags, CollisionContext* colCtx, Vec3f* center, f32 radius,
-                                     CollisionPoly** outPoly, Actor* actor);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_SphVsFirstStaticPolyList.s")
-#endif
 
 /**
  * Get first static poly intersecting sphere `center` `radius` within `lookup`
