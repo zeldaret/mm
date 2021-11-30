@@ -18,6 +18,7 @@ void func_80BE3178(EnRuppecrow *, GlobalContext *);
 s32 func_80BE2260(EnRuppecrow *, GlobalContext *);
 void func_80BE2808(EnRuppecrow *);
 void func_80BE30F4(EnRuppecrow *, GlobalContext *);
+void func_80BE2F6C(EnRuppecrow *);
 
 #if 0
 const ActorInit En_Ruppecrow_InitVars = {
@@ -147,7 +148,18 @@ void func_80BE2808(EnRuppecrow *this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2F6C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE30F4.s")
+void func_80BE30F4(EnRuppecrow *this, GlobalContext *globalCtx) {
+    if (this->collider.base.acFlags & 0x2) {
+        this->collider.base.acFlags &= 0xFFFD;
+        func_800BE258(&this->actor, this->collider.elements);
+        if (this->actor.colChkInfo.damageEffect != 1) {
+            this->actor.colChkInfo.health = 0;
+            this->actor.flags &= ~1;
+            Enemy_StartFinishingBlow(globalCtx, &this->actor);
+            func_80BE2F6C(this);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE3178.s")
 
