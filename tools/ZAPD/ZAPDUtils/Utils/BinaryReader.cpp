@@ -1,7 +1,7 @@
 #include "BinaryReader.h"
-#include "Stream.h"
 #include <math.h>
 #include <stdexcept>
+#include "Stream.h"
 
 BinaryReader::BinaryReader(Stream* nStream)
 {
@@ -23,7 +23,7 @@ uint32_t BinaryReader::GetBaseAddress()
 	return stream->GetBaseAddress();
 }
 
-void BinaryReader::Read([[maybe_unused]]char* buffer, int32_t length)
+void BinaryReader::Read([[maybe_unused]] char* buffer, int32_t length)
 {
 	stream->Read(length);
 }
@@ -133,9 +133,9 @@ Color3b BinaryReader::ReadColor3b()
 
 std::string BinaryReader::ReadString()
 {
-	std::string res = "";
+	std::string res;
 	char c;
-		
+
 	do
 	{
 		c = ReadChar();
@@ -143,7 +143,6 @@ std::string BinaryReader::ReadString()
 		if (c != 0)
 			res += c;
 	} while (c != 0);
-
 
 	return res;
 }

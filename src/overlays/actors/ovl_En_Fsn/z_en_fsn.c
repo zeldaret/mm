@@ -125,12 +125,12 @@ u16 EnFsn_GetWelcome(GlobalContext* globalCtx) {
     switch (Player_GetMask(globalCtx)) {
         case PLAYER_MASK_NONE:
             return 0x29CC;
-        case PLAYER_MASK_DEKU_MASK:
+        case PLAYER_MASK_DEKU:
             return 0x29FC;
-        case PLAYER_MASK_GORON_MASK:
-        case PLAYER_MASK_ZORA_MASK:
+        case PLAYER_MASK_GORON:
+        case PLAYER_MASK_ZORA:
             return 0x29FD;
-        case PLAYER_MASK_KAFEIS_MASK:
+        case PLAYER_MASK_KAFEI:
             return 0x2364;
         default:
             return 0x29FE;
@@ -711,8 +711,8 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->animationIdx == 4) {
-        s16 curFrame = this->skelAnime.animCurrentFrame;
-        s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animationSeg->common);
+        s16 curFrame = this->skelAnime.curFrame;
+        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
         if (curFrame == frameCount) {
             this->animationIdx = 5;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
@@ -745,15 +745,15 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
-    s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animationSeg->common);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
         this->animationIdx = 11;
         func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
     } else {
-        if (this->animationIdx == 11 && func_801378B8(&this->skelAnime, 18.0f)) {
+        if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO);
         }
         if (this->flags & ENFSN_CALM_DOWN) {
@@ -770,7 +770,7 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
                     this->animationIdx = 5;
                     func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
                 } else {
-                    if (func_801378B8(&this->skelAnime, 28.0f)) {
+                    if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
                         Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO);
                     }
                     return;
@@ -827,7 +827,7 @@ void EnFsn_StartBuying(EnFsn* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnFsn_DeterminePrice;
                 break;
             case 0x29CF:
-                player->unk_A87 = 0;
+                player->unk_A87 = PLAYER_AP_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -904,20 +904,21 @@ void EnFsn_SetupDeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 itemGiven;
+    s32 itemActionParam;
     u8 buttonItem;
 
     if (func_80152498(&globalCtx->msgCtx) == 16) {
-        itemGiven = func_80123810(globalCtx);
-        if (itemGiven > 0) {
+        itemActionParam = func_80123810(globalCtx);
+        if (itemActionParam > PLAYER_AP_NONE) {
             if (player->heldItemButton == 0) {
                 buttonItem = CUR_FORM_EQUIP(player->heldItemButton);
             } else {
                 buttonItem = gSaveContext.equips.buttonItems[0][player->heldItemButton];
             }
-            this->price = (buttonItem < 40) ? gItemPrices[buttonItem] : 0;
+            this->price = (buttonItem < ITEM_MOON_TEAR) ? gItemPrices[buttonItem] : 0;
             if (this->price > 0) {
                 player->actor.textId = 0x29EF;
+                // player->unk_A87 should be set to itemActionParam?
                 player->unk_A87 = buttonItem;
                 this->actionFunc = EnFsn_MakeOffer;
             } else {
@@ -926,7 +927,7 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
             }
             this->actor.textId = player->actor.textId;
             func_801477B4(globalCtx);
-        } else if (itemGiven < 0) {
+        } else if (itemActionParam < PLAYER_AP_NONE) {
             if (CURRENT_DAY == 3) {
                 this->actor.textId = 0x29DF;
             } else {
@@ -967,14 +968,14 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
                         this->getItemId = GI_RUPEE_PURPLE;
                         break;
                     case 200:
-                        this->getItemId = GI_RUPEE_GOLD;
+                        this->getItemId = GI_RUPEE_HUGE;
                         break;
                 }
                 this->actionFunc = EnFsn_GiveItem;
                 break;
             case 1:
                 func_8019F230();
-                player->unk_A87 = 0;
+                player->unk_A87 = PLAYER_AP_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -989,7 +990,7 @@ void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
         }
         this->actor.parent = NULL;
         if (ENFSN_IS_SHOP(&this->actor) && !this->isSelling) {
-            func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
+            func_80123D50(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
         }
         this->actionFunc = EnFsn_SetupResumeInteraction;
     } else if (this->isSelling == true) {
@@ -1000,7 +1001,7 @@ void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_SetupResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (CHECK_QUEST_ITEM(18)) {
+    if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         if (globalCtx->msgCtx.unk120B1 == 0) {
             EnFsn_HandleSetupResumeInteraction(this, globalCtx);
         }
@@ -1180,7 +1181,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
 
     if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
-        if (CHECK_QUEST_ITEM(18)) {
+        if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
@@ -1252,7 +1253,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
             }
         }
     } else if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
-        if (CHECK_QUEST_ITEM(18)) {
+        if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
@@ -1299,7 +1300,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx)
             }
         }
     } else if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
-        if (CHECK_QUEST_ITEM(18)) {
+        if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
@@ -1398,8 +1399,7 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013320, &D_06012C34, this->limbDrawTable,
-                     this->transitionDrawTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013320, &D_06012C34, this->jointTable, this->morphTable, 19);
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
         this->actor.flags &= ~1;
@@ -1442,7 +1442,7 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnFsn_UpdateStickDirectionPromptAnim(this);
         EnFsn_UpdateCursorAnim(this);
     }
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (ENFSN_IS_BACKROOM(&this->actor)) {
         EnFsn_UpdateCollider(this, globalCtx);
     }
@@ -1559,7 +1559,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     s32 limbRotTableIdx;
 
     if (limbIndex == 16) {
-        SysMatrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
     }
     if (ENFSN_IS_BACKROOM(&this->actor)) {
         switch (limbIndex) {
@@ -1614,8 +1614,8 @@ void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C5B0(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnFsn_OverrideLimbDraw, EnFsn_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnFsn_OverrideLimbDraw, EnFsn_PostLimbDraw, &this->actor);
 
     for (i = 0; i < this->totalSellingItems; i++) {
         this->items[i]->actor.scale.x = 0.2f;

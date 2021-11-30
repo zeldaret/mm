@@ -51,7 +51,7 @@ ZOverlay::ZOverlay()
 	entries = std::vector<RelocationEntry*>();
 }
 
-ZOverlay::ZOverlay(std::string nName) : ZOverlay()
+ZOverlay::ZOverlay(const std::string& nName) : ZOverlay()
 {
 	name = nName;
 }
@@ -251,7 +251,7 @@ ZOverlay* ZOverlay::FromBuild(fs::path buildPath, fs::path cfgFolderPath)
 
 std::string ZOverlay::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
-	std::string output = "";
+	std::string output;
 
 	output += ".section .ovl\n";
 
@@ -286,7 +286,7 @@ std::string ZOverlay::GetSourceOutputCode([[maybe_unused]] const std::string& pr
 	return output;
 }
 
-SectionType ZOverlay::GetSectionTypeFromStr(std::string sectionName)
+SectionType ZOverlay::GetSectionTypeFromStr(const std::string& sectionName)
 {
 	if (sectionName == ".rel.text" || sectionName == ".text")
 		return SectionType::Text;

@@ -81,7 +81,7 @@ public:
 	{
 		char buffer[32768];
 		// char buffer[2048];
-		std::string output = "";
+		std::string output;
 		va_list va;
 
 		va_start(va, format);

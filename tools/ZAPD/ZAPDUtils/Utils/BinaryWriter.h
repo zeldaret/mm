@@ -28,7 +28,7 @@ public:
 	void Write(uint64_t value);
 	void Write(float value);
 	void Write(double value);
-	void Write(std::string str);
+	void Write(const std::string& str);
 
 protected:
 	std::shared_ptr<Stream> stream;

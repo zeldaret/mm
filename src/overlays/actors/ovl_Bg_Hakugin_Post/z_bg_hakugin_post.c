@@ -234,7 +234,7 @@ BgHakuginPostUnkStruct1* func_80A9B32C(BgHakuginPostUnkStruct* unkStruct, BgHaku
 }
 
 void func_80A9B384(Vec3f* arg0) {
-    MtxF* matrix = SysMatrix_GetCurrentState();
+    MtxF* matrix = Matrix_GetCurrentState();
 
     matrix->mf[3][0] = arg0->x;
     matrix->mf[3][1] = arg0->y;
@@ -523,7 +523,7 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 sp44.x = this->dyna.actor.home.pos.x + unkStruct1->unk_14.x;
                 sp44.y = this->unk_16C + unkStruct1->unk_14.y;
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
-                func_8013ECE0(Math3D_DistanceSquared(&sp44, &GET_PLAYER(globalCtx)->actor.world.pos), 255, 20, 150);
+                func_8013ECE0(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(globalCtx)->actor.world.pos), 255, 20, 150);
                 quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
                 Quake_SetSpeed(quake, 20000);
                 Quake_SetQuakeValues(quake, 7, 0, 0, 0);
@@ -704,8 +704,8 @@ void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.world.rot.z = 0;
         this->dyna.actor.shape.rot.x = 0;
         this->dyna.actor.shape.rot.z = 0;
-        BcCheck3_BgActorInit(&this->dyna, 1);
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600D3B0);
+        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_0600D3B0);
         func_80A9B3BC(this, globalCtx);
         func_80A9CA94(this);
     } else {
@@ -718,7 +718,7 @@ void BgHakuginPost_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgHakuginPost* this = THIS;
 
     if (BGHAKUGINPOST_GET_7(&this->dyna.actor) == 7) {
-        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         func_80A9AE3C(this, globalCtx);
     }
 }
@@ -1013,8 +1013,8 @@ void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
     for (i = 0; i < D_80A9E028.count; i++) {
@@ -1035,8 +1035,8 @@ void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
         for (i = 0; i < ARRAY_COUNT(D_80A9E028.unk_02A4); i++) {
             unkStruct2 = &D_80A9E028.unk_02A4[i];
             if (unkStruct2->unk_2C > 0) {
-                SysMatrix_SetStateRotationAndTranslation(unkStruct2->unk_04.x, unkStruct2->unk_04.y,
-                                                         unkStruct2->unk_04.z, &unkStruct2->unk_20);
+                Matrix_SetStateRotationAndTranslation(unkStruct2->unk_04.x, unkStruct2->unk_04.y, unkStruct2->unk_04.z,
+                                                      &unkStruct2->unk_20);
                 Matrix_Scale(unkStruct2->unk_00, unkStruct2->unk_00, unkStruct2->unk_00, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

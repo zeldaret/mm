@@ -1,3 +1,9 @@
+/*
+ * File z_en_bsb.c
+ * Overlay: ovl_En_Bsb
+ * Description: Captain Keeta
+ */
+
 #include "z_en_bsb.h"
 
 #define FLAGS 0x02000035

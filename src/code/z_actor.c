@@ -53,7 +53,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             }
 
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
-            SysMatrix_SetCurrentState(&mtx);
+            Matrix_SetCurrentState(&mtx);
 
             if (dlist != D_04076BC0) {
                 Matrix_RotateY((f32)actor->shape.rot.y * (M_PI / 32768), MTXMODE_APPLY);
@@ -117,7 +117,7 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
     sp58 = Math_FAtan2F(light->l.dir[0], light->l.dir[2]);
     arg6 *= (4.5f - (light->l.dir[1] * 0.035f));
     arg6 = (arg6 < 1.0f) ? 1.0f : arg6;
-    SysMatrix_SetCurrentState(arg2);
+    Matrix_SetCurrentState(arg2);
     Matrix_RotateY(sp58, MTXMODE_APPLY);
     Matrix_Scale(arg5, 1.0f, arg5 * arg6, MTXMODE_APPLY);
 
@@ -319,7 +319,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 
 void Actor_SetObjectSegment(GlobalContext* globalCtx, Actor* actor) {
     // TODO: Segment number enum
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[actor->objBankIndex].segment);
+    gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[actor->objBankIndex].segment);
 }
 
 #if 0
@@ -509,8 +509,8 @@ f32 Actor_YDistance(Actor* actor1, Actor* actor2) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B72E0.s")
 
 void func_800B72F8(DynaPolyActor* dpactor, f32 a1, s16 a2) {
-    dpactor->unk150 = a2;
-    dpactor->unk148 += a1;
+    dpactor->yRotation = a2;
+    dpactor->pushForce += a1;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsLinkFacingActor.s")
@@ -744,7 +744,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
                 if ((entry->allocType & 1) != 0) {
                     entry->loadedRamAddr = NULL;
                 } else {
-                    zelda_free(ramAddr);
+                    ZeldaArena_Free(ramAddr);
                     entry->loadedRamAddr = NULL;
                 }
             }

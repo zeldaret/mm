@@ -40,8 +40,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-extern Gfx D_0E0002E0[];
-
 void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
@@ -200,11 +198,10 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        SysMatrix_InsertTranslation(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z,
-                                    MTXMODE_NEW);
+        Matrix_InsertTranslation(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
         Matrix_RotateY(transform->shape.rot.y, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
         // Draw blue effect over the screen when arrow hits
@@ -215,21 +212,21 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
                             (s32)(150.0f * this->blueingEffectMagnitude) & 0xFF);
             gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
             gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
-            gSPDisplayList(POLY_XLU_DISP++, D_0E0002E0);
+            gSPDisplayList(POLY_XLU_DISP++, D_0E000000.fillRect);
         }
 
         // Draw ice on the arrow
         func_8012C2DC(globalCtx->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, (s32)(this->alpha * 0.5f) & 0xFF);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 128);
-        SysMatrix_InsertRotation(0x4000, 0, 0, MTXMODE_APPLY);
+        Matrix_InsertRotation(0x4000, 0, 0, MTXMODE_APPLY);
         if (this->timer != 0) {
-            SysMatrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         } else {
-            SysMatrix_InsertTranslation(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_InsertTranslation(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
         }
         Matrix_Scale(this->radius * 0.2f, this->height * 3.0f, this->radius * 0.2f, MTXMODE_APPLY);
-        SysMatrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, sIceArrowDL);
         gSPDisplayList(POLY_XLU_DISP++,

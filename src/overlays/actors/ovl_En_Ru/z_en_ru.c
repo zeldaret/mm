@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ru.c
+ * Overlay: ovl_En_Ru
+ * Description: Ruto
+ */
+
 #include "z_en_ru.h"
 
 #define FLAGS 0x00000019

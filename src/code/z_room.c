@@ -77,7 +77,7 @@ void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtx) {
 
 #ifdef NON_MATCHING
 s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32 index) {
-    u32 size;
+    size_t size;
 
     // XXX: this should use a branch-likely
     if (roomCtx->unk31 == 0) {
@@ -111,7 +111,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
             roomCtx->unk31 = 0;
             roomCtx->currRoom.segment = roomCtx->activeRoomVram;
             // TODO: Segment number enum
-            gSegments[3] = PHYSICAL_TO_VIRTUAL(roomCtx->activeRoomVram);
+            gSegments[0x03] = PHYSICAL_TO_VIRTUAL(roomCtx->activeRoomVram);
 
             Scene_ProcessHeader(globalCtx, (SceneCmd*)roomCtx->currRoom.segment);
             func_80123140(globalCtx, GET_PLAYER(globalCtx));
@@ -137,7 +137,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
 void Room_Draw(GlobalContext* globalCtx, Room* room, u32 flags) {
     if (room->segment != NULL) {
         // TODO: Segment number enum
-        gSegments[3] = PHYSICAL_TO_VIRTUAL(room->segment);
+        gSegments[0x03] = PHYSICAL_TO_VIRTUAL(room->segment);
         roomDrawFuncs[room->mesh->type0.type](globalCtx, room, flags);
     }
     return;

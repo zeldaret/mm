@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_tokeidai.c
+ * Overlay: ovl_Obj_Tokeidai
+ * Description: Clock Face
+ */
+
 #include "z_obj_tokeidai.h"
 
 #define FLAGS 0x00000030

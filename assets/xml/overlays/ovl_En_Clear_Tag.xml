@@ -1,5 +1,5 @@
 <Root>
-    <File Name="ovl_En_Clear_Tag" BaseAddress="0x80947F60" RangeStart="0x2F00" RangeEnd="0x5D00" Segment="128">
+    <File Name="ovl_En_Clear_Tag" BaseAddress="0x80947F60" RangeStart="0x2F00" RangeEnd="0x5D00">
 
         <!-- Debris from explosion -->
         <DList Name="gClearTagDebrisEffectMaterialDL" Offset="0x3130"/>

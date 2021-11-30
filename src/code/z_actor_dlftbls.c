@@ -736,7 +736,7 @@ void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1) {
     s32 i;
     u8* ramStart;
     u8* ramEnd;
-    u32 size;
+    size_t size;
     u32 offset;
 
     for (i = 0; i < gMaxActorId; i++, overlayEntry++) {

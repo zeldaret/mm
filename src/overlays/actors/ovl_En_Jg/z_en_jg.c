@@ -1,3 +1,9 @@
+/*
+ * File: z_en_jg.c
+ * Overlay: ovl_En_Jg
+ * Description: Goron Elder
+ */
+
 #include "z_en_jg.h"
 
 #define FLAGS 0x00000019

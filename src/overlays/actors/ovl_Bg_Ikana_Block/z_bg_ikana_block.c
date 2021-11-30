@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_ikana_block.c
+ * Overlay: ovl_Bg_Ikana_Block
+ * Description: Stone Tower Temple - Rotating Room Pushblock
+ */
+
 #include "z_bg_ikana_block.h"
 
 #define FLAGS 0x00000010

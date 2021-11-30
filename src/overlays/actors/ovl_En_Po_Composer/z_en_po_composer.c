@@ -1,3 +1,9 @@
+/*
+ * File: z_en_po_composer.c
+ * Overlay: ovl_En_Po_Composer
+ * Description: Poe Composers
+ */
+
 #include "z_en_po_composer.h"
 
 #define FLAGS 0x02100019

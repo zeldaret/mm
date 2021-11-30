@@ -1,6 +1,7 @@
 #include "CollisionExporter.h"
 
-void ExporterExample_Collision::Save(ZResource* res, [[maybe_unused]]fs::path outPath, BinaryWriter* writer)
+void ExporterExample_Collision::Save(ZResource* res, [[maybe_unused]] fs::path outPath,
+                                     BinaryWriter* writer)
 {
 	ZCollisionHeader* col = (ZCollisionHeader*)res;
 
@@ -35,9 +36,10 @@ void ExporterExample_Collision::Save(ZResource* res, [[maybe_unused]]fs::path ou
 
 	for (uint16_t i = 0; i < col->vertices.size(); i++)
 	{
-		writer->Write(col->vertices[i].x);
-		writer->Write(col->vertices[i].y);
-		writer->Write(col->vertices[i].z);
+		for (uint32_t j = 0; j < col->vertices[i].dimensions; j++)
+		{
+			writer->Write(col->vertices[i].scalars[j].scalarData.s16);
+		}
 	}
 
 	writer->Seek(col->polySegmentOffset, SeekOffsetType::Start);

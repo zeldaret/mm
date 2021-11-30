@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_char05.c
+ * Overlay: ovl_Dm_Char05
+ * Description: Cutscene mask objects
+ */
+
 #include "z_dm_char05.h"
 
 #define FLAGS 0x00000030

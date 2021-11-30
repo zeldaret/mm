@@ -1,41 +1,41 @@
 #include "RoomExporter.h"
+#include <CollisionExporter.h>
 #include <Utils/BinaryWriter.h>
-#include <Utils/MemoryStream.h>
 #include <Utils/File.h>
-#include <ZRoom/Commands/SetWind.h>
-#include <ZRoom/Commands/SetTimeSettings.h>
-#include <ZRoom/Commands/SetSkyboxModifier.h>
-#include <ZRoom/Commands/SetSoundSettings.h>
+#include <Utils/MemoryStream.h>
 #include <ZRoom/Commands/SetCameraSettings.h>
+#include <ZRoom/Commands/SetCollisionHeader.h>
+#include <ZRoom/Commands/SetCsCamera.h>
+#include <ZRoom/Commands/SetEchoSettings.h>
+#include <ZRoom/Commands/SetEntranceList.h>
+#include <ZRoom/Commands/SetLightingSettings.h>
 #include <ZRoom/Commands/SetMesh.h>
 #include <ZRoom/Commands/SetRoomBehavior.h>
-#include <ZRoom/Commands/SetCsCamera.h>
 #include <ZRoom/Commands/SetRoomList.h>
-#include <ZRoom/Commands/SetCollisionHeader.h>
-#include <ZRoom/Commands/SetEntranceList.h>
+#include <ZRoom/Commands/SetSkyboxModifier.h>
+#include <ZRoom/Commands/SetSkyboxSettings.h>
+#include <ZRoom/Commands/SetSoundSettings.h>
 #include <ZRoom/Commands/SetSpecialObjects.h>
 #include <ZRoom/Commands/SetStartPositionList.h>
-#include <ZRoom/Commands/SetSkyboxSettings.h>
-#include <ZRoom/Commands/SetLightingSettings.h>
-#include <ZRoom/Commands/SetEchoSettings.h>
-#include <CollisionExporter.h>
+#include <ZRoom/Commands/SetTimeSettings.h>
+#include <ZRoom/Commands/SetWind.h>
 
 void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* writer)
 {
-	ZRoom* room = (ZRoom*)res;
+	ZRoom* room = dynamic_cast<ZRoom*>(res);
 
-	//MemoryStream* memStream = new MemoryStream();
-	//BinaryWriter* writer = new BinaryWriter(memStream);
+	// MemoryStream* memStream = new MemoryStream();
+	// BinaryWriter* writer = new BinaryWriter(memStream);
 
-	for (uint i = 0; i < room->commands.size() * 8; i++)
+	for (size_t i = 0; i < room->commands.size() * 8; i++)
 		writer->Write((uint8_t)0);
 
-	for (uint i = 0; i < room->commands.size(); i++)
+	for (size_t i = 0; i < room->commands.size(); i++)
 	{
 		ZRoomCommand* cmd = room->commands[i];
-		
+
 		writer->Seek(i * 8, SeekOffsetType::Start);
-		
+
 		writer->Write((uint8_t)cmd->cmdID);
 
 		switch (cmd->cmdID)
@@ -44,115 +44,115 @@ void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* 
 		{
 			SetWind* cmdSetWind = (SetWind*)cmd;
 
-			writer->Write((uint8_t)0); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
+			writer->Write((uint8_t)0);  // 0x01
+			writer->Write((uint8_t)0);  // 0x02
+			writer->Write((uint8_t)0);  // 0x03
 
-			writer->Write(cmdSetWind->windWest); // 0x04
-			writer->Write(cmdSetWind->windVertical); // 0x05
-			writer->Write(cmdSetWind->windSouth); // 0x06
-			writer->Write(cmdSetWind->clothFlappingStrength); // 0x07
+			writer->Write(cmdSetWind->windWest);               // 0x04
+			writer->Write(cmdSetWind->windVertical);           // 0x05
+			writer->Write(cmdSetWind->windSouth);              // 0x06
+			writer->Write(cmdSetWind->clothFlappingStrength);  // 0x07
 		}
-			break;
+		break;
 		case RoomCommand::SetTimeSettings:
 		{
 			SetTimeSettings* cmdTime = (SetTimeSettings*)cmd;
 
-			writer->Write((uint8_t)0); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
+			writer->Write((uint8_t)0);  // 0x01
+			writer->Write((uint8_t)0);  // 0x02
+			writer->Write((uint8_t)0);  // 0x03
 
-			writer->Write(cmdTime->hour); // 0x04
-			writer->Write(cmdTime->min); // 0x05
-			writer->Write(cmdTime->unk); // 0x06
-			writer->Write((uint8_t)0); // 0x07
+			writer->Write(cmdTime->hour);  // 0x04
+			writer->Write(cmdTime->min);   // 0x05
+			writer->Write(cmdTime->unk);   // 0x06
+			writer->Write((uint8_t)0);     // 0x07
 		}
 		break;
 		case RoomCommand::SetSkyboxModifier:
 		{
 			SetSkyboxModifier* cmdSkybox = (SetSkyboxModifier*)cmd;
 
-			writer->Write((uint8_t)0); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
+			writer->Write((uint8_t)0);  // 0x01
+			writer->Write((uint8_t)0);  // 0x02
+			writer->Write((uint8_t)0);  // 0x03
 
-			writer->Write(cmdSkybox->disableSky); // 0x04
-			writer->Write(cmdSkybox->disableSunMoon); // 0x05
-			writer->Write((uint8_t)0); // 0x06
-			writer->Write((uint8_t)0); // 0x07
+			writer->Write(cmdSkybox->disableSky);      // 0x04
+			writer->Write(cmdSkybox->disableSunMoon);  // 0x05
+			writer->Write((uint8_t)0);                 // 0x06
+			writer->Write((uint8_t)0);                 // 0x07
 		}
 		break;
 		case RoomCommand::SetEchoSettings:
 		{
 			SetEchoSettings* cmdEcho = (SetEchoSettings*)cmd;
 
-			writer->Write((uint8_t)0); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write((uint8_t)0); // 0x04
-			writer->Write((uint8_t)0); // 0x05
-			writer->Write((uint8_t)0); // 0x06
-			writer->Write((uint8_t)cmdEcho->echo); // 0x07
+			writer->Write((uint8_t)0);              // 0x01
+			writer->Write((uint8_t)0);              // 0x02
+			writer->Write((uint8_t)0);              // 0x03
+			writer->Write((uint8_t)0);              // 0x04
+			writer->Write((uint8_t)0);              // 0x05
+			writer->Write((uint8_t)0);              // 0x06
+			writer->Write((uint8_t)cmdEcho->echo);  // 0x07
 		}
 		break;
 		case RoomCommand::SetSoundSettings:
 		{
 			SetSoundSettings* cmdSound = (SetSoundSettings*)cmd;
 
-			writer->Write((uint8_t)cmdSound->reverb); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write((uint8_t)0); // 0x04
-			writer->Write((uint8_t)0); // 0x05
+			writer->Write((uint8_t)cmdSound->reverb);  // 0x01
+			writer->Write((uint8_t)0);                 // 0x02
+			writer->Write((uint8_t)0);                 // 0x03
+			writer->Write((uint8_t)0);                 // 0x04
+			writer->Write((uint8_t)0);                 // 0x05
 
-			writer->Write(cmdSound->nightTimeSFX); // 0x06
-			writer->Write(cmdSound->musicSequence); // 0x07
+			writer->Write(cmdSound->nightTimeSFX);   // 0x06
+			writer->Write(cmdSound->musicSequence);  // 0x07
 		}
 		break;
 		case RoomCommand::SetSkyboxSettings:
 		{
 			SetSkyboxSettings* cmdSkybox = (SetSkyboxSettings*)cmd;
 
-			writer->Write((uint8_t)cmdSkybox->unk1); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write((uint8_t)cmdSkybox->skyboxNumber); // 0x04
-			writer->Write((uint8_t)cmdSkybox->cloudsType); // 0x05
-			writer->Write((uint8_t)cmdSkybox->isIndoors); // 0x06
+			writer->Write((uint8_t)cmdSkybox->unk1);          // 0x01
+			writer->Write((uint8_t)0);                        // 0x02
+			writer->Write((uint8_t)0);                        // 0x03
+			writer->Write((uint8_t)cmdSkybox->skyboxNumber);  // 0x04
+			writer->Write((uint8_t)cmdSkybox->cloudsType);    // 0x05
+			writer->Write((uint8_t)cmdSkybox->isIndoors);     // 0x06
 		}
 		break;
 		case RoomCommand::SetRoomBehavior:
 		{
 			SetRoomBehavior* cmdRoom = (SetRoomBehavior*)cmd;
 
-			writer->Write((uint8_t)cmdRoom->gameplayFlags); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write(cmdRoom->gameplayFlags2); // 0x04
+			writer->Write((uint8_t)cmdRoom->gameplayFlags);  // 0x01
+			writer->Write((uint8_t)0);                       // 0x02
+			writer->Write((uint8_t)0);                       // 0x03
+			writer->Write(cmdRoom->gameplayFlags2);          // 0x04
 		}
 		break;
 		case RoomCommand::SetCsCamera:
 		{
 			SetCsCamera* cmdCsCam = (SetCsCamera*)cmd;
 
-			writer->Write((uint8_t)cmdCsCam->cameras.size()); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
+			writer->Write((uint8_t)cmdCsCam->cameras.size());  // 0x01
+			writer->Write((uint8_t)0);                         // 0x02
+			writer->Write((uint8_t)0);                         // 0x03
 
-			writer->Write(cmdCsCam->segmentOffset); // 0x04
+			writer->Write(cmdCsCam->segmentOffset);  // 0x04
 		}
 		break;
 		case RoomCommand::SetMesh:
 		{
 			SetMesh* cmdMesh = (SetMesh*)cmd;
-			 
+
 			int baseStreamEnd = writer->GetStream().get()->GetLength();
 
-			writer->Write((uint8_t)cmdMesh->data); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
+			writer->Write((uint8_t)cmdMesh->data);  // 0x01
+			writer->Write((uint8_t)0);              // 0x02
+			writer->Write((uint8_t)0);              // 0x03
 
-			writer->Write(baseStreamEnd); // 0x04
+			writer->Write(baseStreamEnd);  // 0x04
 
 			uint32_t oldOffset = writer->GetBaseAddress();
 			writer->Seek(baseStreamEnd, SeekOffsetType::Start);
@@ -163,15 +163,13 @@ void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* 
 
 			if (cmdMesh->meshHeaderType == 0)
 			{
-				//writer->Write(cmdMesh->)
+				// writer->Write(cmdMesh->)
 			}
 			else if (cmdMesh->meshHeaderType == 1)
 			{
-
 			}
 			else if (cmdMesh->meshHeaderType == 2)
 			{
-
 			}
 
 			writer->Seek(oldOffset, SeekOffsetType::Start);
@@ -181,20 +179,20 @@ void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* 
 		{
 			SetCameraSettings* cmdCam = (SetCameraSettings*)cmd;
 
-			writer->Write((uint8_t)cmdCam->cameraMovement); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write(cmdCam->mapHighlight); // 0x04
+			writer->Write((uint8_t)cmdCam->cameraMovement);  // 0x01
+			writer->Write((uint8_t)0);                       // 0x02
+			writer->Write((uint8_t)0);                       // 0x03
+			writer->Write(cmdCam->mapHighlight);             // 0x04
 		}
 		break;
 		case RoomCommand::SetLightingSettings:
 		{
 			SetLightingSettings* cmdLight = (SetLightingSettings*)cmd;
 
-			writer->Write((uint8_t)cmdLight->settings.size()); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write(cmdLight->segmentOffset); // 0x04
+			writer->Write((uint8_t)cmdLight->settings.size());  // 0x01
+			writer->Write((uint8_t)0);                          // 0x02
+			writer->Write((uint8_t)0);                          // 0x03
+			writer->Write(cmdLight->segmentOffset);             // 0x04
 
 			uint32_t oldOffset = writer->GetBaseAddress();
 			writer->Seek(cmdLight->segmentOffset, SeekOffsetType::Start);
@@ -236,17 +234,17 @@ void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* 
 		{
 			SetRoomList* cmdRoom = (SetRoomList*)cmd;
 
-			writer->Write((uint8_t)cmdRoom->rooms.size()); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
+			writer->Write((uint8_t)cmdRoom->romfile->rooms.size());  // 0x01
+			writer->Write((uint8_t)0);                               // 0x02
+			writer->Write((uint8_t)0);                               // 0x03
 
-			int baseStreamEnd = writer->GetLength();
-			writer->Write(baseStreamEnd); // 0x04
+			auto baseStreamEnd = writer->GetLength();
+			writer->Write(baseStreamEnd);  // 0x04
 
 			uint32_t oldOffset = writer->GetBaseAddress();
 			writer->Seek(baseStreamEnd, SeekOffsetType::Start);
 
-			for (RoomEntry entry : cmdRoom->rooms)
+			for (const auto& entry : cmdRoom->romfile->rooms)
 			{
 				writer->Write(entry.virtualAddressStart);
 				writer->Write(entry.virtualAddressEnd);
@@ -261,10 +259,10 @@ void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* 
 
 			int streamEnd = writer->GetStream().get()->GetLength();
 
-			writer->Write((uint8_t)0); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write(streamEnd); // 0x04
+			writer->Write((uint8_t)0);  // 0x01
+			writer->Write((uint8_t)0);  // 0x02
+			writer->Write((uint8_t)0);  // 0x03
+			writer->Write(streamEnd);   // 0x04
 
 			// TODO: NOT DONE
 
@@ -284,10 +282,10 @@ void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* 
 
 			uint32_t baseStreamEnd = writer->GetStream().get()->GetLength();
 
-			writer->Write((uint8_t)0); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write(baseStreamEnd); // 0x04
+			writer->Write((uint8_t)0);     // 0x01
+			writer->Write((uint8_t)0);     // 0x02
+			writer->Write((uint8_t)0);     // 0x03
+			writer->Write(baseStreamEnd);  // 0x04
 
 			uint32_t oldOffset = writer->GetBaseAddress();
 			writer->Seek(baseStreamEnd, SeekOffsetType::Start);
@@ -305,12 +303,12 @@ void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* 
 		{
 			SetSpecialObjects* cmdSpecObj = (SetSpecialObjects*)cmd;
 
-			writer->Write((uint8_t)cmdSpecObj->elfMessage); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write((uint8_t)0); // 0x04
-			writer->Write((uint8_t)0); // 0x05
-			writer->Write((uint16_t)cmdSpecObj->globalObject); // 0x06
+			writer->Write((uint8_t)cmdSpecObj->elfMessage);     // 0x01
+			writer->Write((uint8_t)0);                          // 0x02
+			writer->Write((uint8_t)0);                          // 0x03
+			writer->Write((uint8_t)0);                          // 0x04
+			writer->Write((uint8_t)0);                          // 0x05
+			writer->Write((uint16_t)cmdSpecObj->globalObject);  // 0x06
 		}
 		break;
 		case RoomCommand::SetStartPositionList:
@@ -319,10 +317,10 @@ void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* 
 
 			uint32_t baseStreamEnd = writer->GetStream().get()->GetLength();
 
-			writer->Write((uint8_t)cmdStartPos->actors.size()); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write(baseStreamEnd); // 0x04
+			writer->Write((uint8_t)cmdStartPos->actors.size());  // 0x01
+			writer->Write((uint8_t)0);                           // 0x02
+			writer->Write((uint8_t)0);                           // 0x03
+			writer->Write(baseStreamEnd);                        // 0x04
 
 			uint32_t oldOffset = writer->GetBaseAddress();
 			writer->Seek(baseStreamEnd, SeekOffsetType::Start);
@@ -344,30 +342,31 @@ void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* 
 		break;
 		case RoomCommand::EndMarker:
 		{
-			writer->Write((uint8_t)0); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write((uint8_t)0); // 0x04
-			writer->Write((uint8_t)0); // 0x05
-			writer->Write((uint8_t)0); // 0x06
-			writer->Write((uint8_t)0); // 0x07
+			writer->Write((uint8_t)0);  // 0x01
+			writer->Write((uint8_t)0);  // 0x02
+			writer->Write((uint8_t)0);  // 0x03
+			writer->Write((uint8_t)0);  // 0x04
+			writer->Write((uint8_t)0);  // 0x05
+			writer->Write((uint8_t)0);  // 0x06
+			writer->Write((uint8_t)0);  // 0x07
 		}
 		break;
 		default:
 			printf("UNIMPLEMENTED COMMAND: %i\n", (int)cmd->cmdID);
 
-			writer->Write((uint8_t)0); // 0x01
-			writer->Write((uint8_t)0); // 0x02
-			writer->Write((uint8_t)0); // 0x03
-			writer->Write((uint8_t)0); // 0x04
-			writer->Write((uint8_t)0); // 0x05
-			writer->Write((uint8_t)0); // 0x06
-			writer->Write((uint8_t)0); // 0x07
+			writer->Write((uint8_t)0);  // 0x01
+			writer->Write((uint8_t)0);  // 0x02
+			writer->Write((uint8_t)0);  // 0x03
+			writer->Write((uint8_t)0);  // 0x04
+			writer->Write((uint8_t)0);  // 0x05
+			writer->Write((uint8_t)0);  // 0x06
+			writer->Write((uint8_t)0);  // 0x07
 
 			break;
 		}
 	}
 
-	//writer->Close();
-	//File::WriteAllBytes(StringHelper::Sprintf("%s", res->GetName().c_str()), memStream->ToVector());
+	// writer->Close();
+	// File::WriteAllBytes(StringHelper::Sprintf("%s", res->GetName().c_str()),
+	// memStream->ToVector());
 }

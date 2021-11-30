@@ -85,7 +85,7 @@ void BinaryWriter::Write(double value)
 	stream->Write((char*)&value, sizeof(double));
 }
 
-void BinaryWriter::Write(std::string str)
+void BinaryWriter::Write(const std::string& str)
 {
 	int strLen = str.size();
 	stream->Write((char*)&strLen, sizeof(int));

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_karebaba.c
+ * Overlay: ovl_En_Karebaba
+ * Description: Wilted Deku Baba
+ */
+
 #include "z_en_karebaba.h"
 
 #define FLAGS 0x00000005

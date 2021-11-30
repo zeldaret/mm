@@ -355,8 +355,8 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
 
 void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = sAnimations[this->actor.params];
-    s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&animations[this->animationIdx].animationSeg->common);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(animations[this->animationIdx].animationSeg);
 
     if (this->animationIdx == 3) {
         frameCount = 0;
@@ -550,7 +550,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
         this->animationIdx = 9;
         func_8013BC6C(&this->skelAnime, animations, 9);
     }
-    if (this->animationIdx == 11 && func_801378B8(&this->skelAnime, 18.0f)) {
+    if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO);
     }
 }
@@ -1329,14 +1329,12 @@ void EnOssan_Blink(EnOssan* this) {
 }
 
 void EnOssan_InitCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013320, &D_06012C34, this->limbDrawTbl, this->transitionDrawTbl,
-                     19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013320, &D_06012C34, this->jointTable, this->morphTable, 19);
     this->actor.draw = EnOssan_DrawCuriosityShopMan;
 }
 
 void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060028A0, &D_06009D34, this->limbDrawTbl, this->transitionDrawTbl,
-                     16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060028A0, &D_06009D34, this->jointTable, this->morphTable, 16);
     this->actor.draw = EnOssan_DrawPartTimeWorker;
 }
 
@@ -1521,7 +1519,7 @@ void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
         this->actionFunc(this, globalCtx);
         Actor_SetHeight(&this->actor, 90.0f);
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     } else {
         this->actionFunc(this, globalCtx);
     }
@@ -1642,7 +1640,7 @@ s32 EnOssan_OverrideLimbDrawCuriosityShopMan(GlobalContext* globalCtx, s32 limbI
     EnOssan* this = THIS;
 
     if (limbIndex == 16) {
-        SysMatrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1652,8 +1650,8 @@ s32 EnOssan_OverrideLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbInd
     EnOssan* this = THIS;
 
     if (limbIndex == 15) {
-        SysMatrix_InsertXRotation_s(this->headRotPartTimeWorker.y, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->headRotPartTimeWorker.x, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRotPartTimeWorker.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->headRotPartTimeWorker.x, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1674,7 +1672,7 @@ void EnOssan_PostLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbIndex,
     EnOssan* this = THIS;
 
     if (limbIndex == 15) {
-        SysMatrix_MultiplyVector3fByState(&sPartTimeWorkerFocusOffset, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&sPartTimeWorkerFocusOffset, &this->actor.focus.pos);
     }
 }
 
@@ -1686,8 +1684,8 @@ void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnOssan_OverrideLimbDrawCuriosityShopMan, EnOssan_PostLimbDrawCuriosityShopMan, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnOssan_OverrideLimbDrawCuriosityShopMan, EnOssan_PostLimbDrawCuriosityShopMan, &this->actor);
     EnOssan_DrawCursor(globalCtx, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnOssan_DrawStickDirectionPrompts(globalCtx, this);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -1701,8 +1699,8 @@ void EnOssan_DrawPartTimeWorker(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnOssan_OverrideLimbDrawPartTimeWorker, EnOssan_PostLimbDrawPartTimeWorker, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnOssan_OverrideLimbDrawPartTimeWorker, EnOssan_PostLimbDrawPartTimeWorker, &this->actor);
     EnOssan_DrawCursor(globalCtx, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnOssan_DrawStickDirectionPrompts(globalCtx, this);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

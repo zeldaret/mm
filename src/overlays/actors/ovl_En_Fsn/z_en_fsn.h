@@ -27,8 +27,8 @@ typedef struct EnFsn {
     /* 0x24E */ s16 limbRotZTable[19];
     /* 0x274 */ Vec3s headRot;
     /* 0x27A */ Vec3s unk27A; // Set but never used
-    /* 0x280 */ Vec3s limbDrawTable[19];
-    /* 0x2F2 */ Vec3s transitionDrawTable[19];
+    /* 0x280 */ Vec3s jointTable[19];
+    /* 0x2F2 */ Vec3s morphTable[19];
     /* 0x364 */ s16 eyeTextureIdx;
     /* 0x366 */ s16 blinkTimer;
     /* 0x368 */ s16 cutsceneState;

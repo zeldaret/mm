@@ -88,7 +88,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     pos.x = this->dyna.actor.world.pos.x;
     pos.y = this->dyna.actor.world.pos.y + 10.0f;
     pos.z = this->dyna.actor.world.pos.z;
-    func_800C411C(&globalCtx->colCtx, &this->dyna.actor.floorPoly, &floorBgId, &this->dyna.actor, &pos);
+    BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->dyna.actor.floorPoly, &floorBgId, &this->dyna.actor, &pos);
     this->dyna.actor.floorBgId = floorBgId;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
@@ -101,7 +101,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -120,8 +120,7 @@ void ObjEtcetera_DoNormalOscillation(ObjEtcetera* this, GlobalContext* globalCtx
 }
 
 void ObjEtcetera_StartSmallFlutterAnimation(ObjEtcetera* this) {
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_040117A8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_040117A8.common), 2,
-                         0.0f);
+    Animation_Change(&this->skelAnime, &D_040117A8, 1.0f, 0.0f, Animation_GetLastFrame(&D_040117A8), 2, 0.0f);
     this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
     this->actionFunc = ObjEtcetera_PlaySmallFlutterAnimation;
 }
@@ -132,8 +131,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
 
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
         // Player is launching out of the Deku Flower
-        SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
-                             0.0f);
+        Animation_Change(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0400EB7C), 2, 0.0f);
         this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
         this->actionFunc = ObjEtcetera_DoIntenseOscillation;
         Actor_SetScale(&this->dyna.actor, 0.01f);
@@ -142,14 +140,14 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->oscillationTimer = 30;
         this->burrowFlag &= ~1;
     } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
-               (this->dyna.actor.yDistToPlayer > 0.0f)) {
+               (this->dyna.actor.playerHeightRel > 0.0f)) {
         // Player is hovering above the Deku Flower
-        minOscillationTimer = 10 - (s32)(this->dyna.actor.yDistToPlayer * 0.05f);
+        minOscillationTimer = 10 - (s32)(this->dyna.actor.playerHeightRel * 0.05f);
         if (this->oscillationTimer < minOscillationTimer) {
             this->oscillationTimer = minOscillationTimer;
         }
     } else {
-        if (func_800CAF70(&this->dyna)) {
+        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
             if (!(this->burrowFlag & 1)) {
                 // Player is walking onto the Deku Flower, or falling on it from a height
                 this->oscillationTimer = 10;
@@ -177,12 +175,12 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
 }
 
 void ObjEtcetera_PlaySmallFlutterAnimation(ObjEtcetera* this, GlobalContext* globalCtx) {
-    if (func_800CAF70(&this->dyna)) {
+    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
     }
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         this->dyna.actor.draw = ObjEtcetera_DrawIdle;
         this->actionFunc = ObjEtcetera_Idle;
     }
@@ -192,16 +190,16 @@ void ObjEtcetera_PlaySmallFlutterAnimation(ObjEtcetera* this, GlobalContext* glo
 void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCtx) {
     // In order to match, we are seemingly required to access scale.x at one point
     // without using this. We can create a thisx or dyna pointer to achieve that, but
-    // it's more likely they used dyna given that func_800CAF70 takes a DynaPolyActor.
+    // it's more likely they used dyna given that DynaPolyActor_IsInRidingMovingState takes a DynaPolyActor.
     DynaPolyActor* dyna = &this->dyna;
     f32 scaleTemp;
 
-    if (func_800CAF70(dyna)) {
+    if (DynaPolyActor_IsInRidingMovingState(dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
     }
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (this->oscillationTimer > 0) {
         this->oscillationTimer--;
     } else {
@@ -235,12 +233,12 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectSegment(globalCtx, &this->dyna.actor);
-        BcCheck3_BgActorInit(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, 1);
         thisCollisionHeader = collisionHeaders[type];
         if (thisCollisionHeader != 0) {
-            BgCheck_RelocateMeshHeader(thisCollisionHeader, &colHeader);
+            CollisionHeader_GetVirtual(thisCollisionHeader, &colHeader);
         }
-        this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
 
         type = DEKU_FLOWER_TYPE(&this->dyna.actor);
         switch (type) {
@@ -272,8 +270,8 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 break;
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
             case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
-                SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f,
-                                     SkelAnime_GetFrameCount(&D_0400EB7C.common), 2, 0.0f);
+                Animation_Change(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0400EB7C), 2,
+                                 0.0f);
                 this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
                 this->actionFunc = ObjEtcetera_DoIntenseOscillation;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
@@ -294,7 +292,7 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
         if (floorPoly != NULL && this->burrowFlag & 1) {
-            func_800FAAB4(globalCtx, func_800C9C9C(&globalCtx->colCtx, floorPoly, floorBgId));
+            func_800FAAB4(globalCtx, SurfaceType_GetLightSettingIndex(&globalCtx->colCtx, floorPoly, floorBgId));
         }
     }
     this->actionFunc(this, globalCtx);
@@ -317,5 +315,5 @@ void ObjEtcetera_DrawAnimated(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 
     func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, NULL, &this->dyna.actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->dyna.actor);
 }

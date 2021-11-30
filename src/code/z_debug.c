@@ -12,7 +12,7 @@ void GameInfo_Init(void) {
     gGameInfo->unk_02 = 0;
     gGameInfo->unk_04 = 0;
     gGameInfo->unk_03 = 0;
-    
+
     for (i = 0; i < ARRAY_COUNT(gGameInfo->data); i++) {
         gGameInfo->data[i] = 0;
     }
