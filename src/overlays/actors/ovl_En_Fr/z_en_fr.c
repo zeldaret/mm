@@ -29,10 +29,10 @@ const ActorInit En_Fr_InitVars = {
 void EnFr_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFr* this = THIS;
 
-    if (Flags_GetSwitch(globalCtx, ENFR_GET_SWITCHFLAG(thisx))) {
+    if (Flags_GetSwitch(globalCtx, ENFR_GET_SWITCHFLAG(&this->actor))) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        this->actor.targetMode = ENFR_GET_TARGETMODE(thisx);
+        this->actor.targetMode = ENFR_GET_TARGETMODE(&this->actor);
     }
 }
 
