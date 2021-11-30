@@ -1515,16 +1515,12 @@ s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* globalCtx, s32* maxNodes, s
 /**
  * Allocate CollisionContext
  */
-#ifdef NON_MATCHING
 void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, CollisionHeader* colHeader) {
     u32 tblMax;
     u32 memSize;
     u32 lookupTblMemSize;
     SSNodeList* nodeList;
-    s32 useCustomSubdivisions;
-    u32 customMemSize;
     s32 customNodeListMax;
-    s32 i;
 
     customNodeListMax = -1;
     colCtx->colHeader = colHeader;
@@ -1539,6 +1535,10 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
         colCtx->subdivAmount.y = 4;
         colCtx->subdivAmount.z = 16;
     } else {
+        u32 customMemSize;
+        s32 useCustomSubdivisions;
+        s32 i;
+
         if (BgCheck_TryGetCustomMemsize(globalCtx->sceneNum, &customMemSize)) {
             colCtx->memSize = customMemSize;
         } else {
@@ -1607,10 +1607,6 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
     DynaPoly_Init(globalCtx, &colCtx->dyna);
     DynaPoly_Alloc(globalCtx, &colCtx->dyna);
 }
-#else
-void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, CollisionHeader* colHeader);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_Allocate.s")
-#endif
 
 /**
  * Enables CollisionContext wide flags
