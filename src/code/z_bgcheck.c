@@ -71,7 +71,7 @@ BgSpecialSceneMaxObjects sCustomDynapolyMem[] = {
 char D_801ED950[80];
 char D_801ED9A0[80];
 Vec3f D_801ED9F0[3]; // polyVerts
-Vec3f D_801EDA18[3]; // polyVerts //not ok, needs to be inlined to match
+Vec3f D_801EDA18[3]; // polyVerts
 MtxF D_801EDA40;
 Vec3f D_801EDA80[3]; // polyVerts
 char D_801EDAA8[80];
@@ -322,40 +322,34 @@ s32 CollisionPoly_CheckYIntersectApprox1(CollisionPoly* poly, Vec3s* vtxList, f3
  * Checks if point (`x`,`z`) is within `checkDist` of `poly`, computing `yIntersect` if true
  * Determinant max 0.0f (checks if on or within poly)
  */
-#ifdef NON_MATCHING
 s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect, f32 checkDist) {
-    static Vec3f polyVerts[3]; // D_801EDA18
     Vec3s* sVerts;
     f32 nx;
     f32 ny;
     f32 nz;
 
     sVerts = &vtxList[COLPOLY_VTX_INDEX(poly->flags_vIA)];
-    polyVerts[0].x = sVerts->x;
-    polyVerts[0].y = sVerts->y;
-    polyVerts[0].z = sVerts->z;
+    D_801EDA18[0].x = sVerts->x;
+    D_801EDA18[0].y = sVerts->y;
+    D_801EDA18[0].z = sVerts->z;
     sVerts = &vtxList[COLPOLY_VTX_INDEX(poly->flags_vIB)];
-    polyVerts[1].x = sVerts->x;
-    polyVerts[1].y = sVerts->y;
-    polyVerts[1].z = sVerts->z;
-    sVerts = &vtxList[poly->vIC];
-    polyVerts[2].x = sVerts->x;
-    polyVerts[2].y = sVerts->y;
-    polyVerts[2].z = sVerts->z;
+    D_801EDA18[1].x = sVerts->x;
+    D_801EDA18[1].y = sVerts->y;
+    D_801EDA18[1].z = sVerts->z;
+    sVerts = &vtxList[(s32)poly->vIC];
+    D_801EDA18[2].x = sVerts->x;
+    D_801EDA18[2].y = sVerts->y;
+    D_801EDA18[2].z = sVerts->z;
 
-    if (!func_8017A304(&polyVerts[0], &polyVerts[1], &polyVerts[2], z, x, checkDist)) {
+    if (!func_8017A304(&D_801EDA18[0], &D_801EDA18[1], &D_801EDA18[2], z, x, checkDist)) {
         return 0;
     }
     nx = COLPOLY_GET_NORMAL(poly->normal.x);
     ny = COLPOLY_GET_NORMAL(poly->normal.y);
     nz = COLPOLY_GET_NORMAL(poly->normal.z);
-    return Math3D_TriChkPointParaYIntersectInsideTri2(&polyVerts[0], &polyVerts[1], &polyVerts[2], nx, ny, nz,
+    return Math3D_TriChkPointParaYIntersectInsideTri2(&D_801EDA18[0], &D_801EDA18[1], &D_801EDA18[2], nx, ny, nz,
                                                       poly->dist, z, x, yIntersect, checkDist);
 }
-#else
-s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect, f32 checkDist);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/CollisionPoly_CheckYIntersect.s")
-#endif
 
 s32 CollisionPoly_CheckYIntersectApprox2(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect) {
     return CollisionPoly_CheckYIntersectApprox1(poly, vtxList, x, z, yIntersect, 1.0f);
