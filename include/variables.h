@@ -3408,7 +3408,7 @@ extern volatile OSTime sRSPOtherTotalTime;
 extern volatile OSTime gRDPTotalTime;
 // extern UNK_TYPE1 D_801FBB28;
 extern OSViMode D_801FBB30;
-extern u32* gFramebuffers[2];
+extern u16* gFramebuffers[2];
 extern OSViMode* D_801FBB88;
 extern u16* gZBufferPtr;
 extern void* D_801FBB90;
@@ -3426,7 +3426,7 @@ extern void* gGfxSPTaskOutputBufferEnd;
 // extern UNK_TYPE1 D_801FBBC0;
 extern u64 (*gGfxSPTaskOutputBuffer2)[0x3000];
 extern void* gGfxSPTaskOutputBufferEnd2;
-extern UNK_TYPE2 D_801FBBCC;
+extern s16 D_801FBBCC;
 extern UNK_TYPE2 D_801FBBCE;
 // extern UNK_TYPE1 D_801FBBD0;
 // extern UNK_TYPE1 D_801FBBD2;
@@ -3778,7 +3778,7 @@ extern GfxPool gGfxPools[2];
 extern u8 gAudioHeap[0x138000];
 extern u8 gSystemHeap[UNK_SIZE];
 
-extern u8 D_80780000[0x4600];
+extern u16 D_80780000[0x4600];
 extern u8 D_80784600[0x56200];
 extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
 
