@@ -50,20 +50,20 @@ static ColliderCylinderInit sCylinderInit = {
 
 void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     ColliderCylinder* pCylinder;
-    EnHitTag* this = (EnHitTag*)thisx;
+    EnHitTag* this = THIS;
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = EnHitTag_WaitForHit;
     pCylinder = &this->cylinder;
     Collider_InitAndSetCylinder(globalCtx, pCylinder, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, pCylinder);
-    if (Flags_GetSwitch(globalCtx, ENHITTAG_GET_SWITCHFLAG(this)) {
+    if (Flags_GetSwitch(globalCtx, ENHITTAG_GET_SWITCHFLAG(thisx))) {
         Actor_MarkForDeath(&this->actor);
     }
 }
 
 void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnHitTag* this = (EnHitTag*)thisx;
+    EnHitTag* this = THIS;
     Collider_DestroyCylinder(globalCtx, &this->cylinder);
 }
 
@@ -87,6 +87,6 @@ void EnHitTag_WaitForHit(EnHitTag* this, GlobalContext* globalCtx) {
 }
 
 void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnHitTag* this = (EnHitTag*)thisx;
+    EnHitTag* this = THIS;
     this->actionFunc(this, globalCtx);
 }
