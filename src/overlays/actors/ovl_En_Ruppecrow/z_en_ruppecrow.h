@@ -33,8 +33,7 @@ typedef struct EnRuppecrow {
     /* 0x02C8 */ f32 unk_2C8;
     /* 0x02CC */ f32 unk_2CC;
     /* 0x02D0 */ f32 unk_2D0;
-    /* 0x02D4 */ f32 unk_2D4;
-    /* 0x02D8 */ UNK_TYPE unk_2D8[6];
+    /* 0x02D4 */ Vec3f limbPos[4];
 } EnRuppecrow; // size = 0x304
 
 extern const ActorInit En_Ruppecrow_InitVars;

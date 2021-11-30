@@ -124,7 +124,13 @@ s32 func_80BE2260(EnRuppecrow *this, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2668.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2728.s")
+void func_80BE2728(EnRuppecrow *this, GlobalContext *globalCtx) {
+    if ((u8)this->unk_2C4 == 0xA) {
+        this->unk_2C4 = 0x0;
+        this->unk_2C8 = 0.0f;
+        func_800BF7CC(globalCtx, &this->actor, this->limbPos, 0x4, 0x2, 0.2f, 0.2f);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2794.s")
 
