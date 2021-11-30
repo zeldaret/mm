@@ -434,7 +434,6 @@ s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, 
     return Math3D_ColSphereTri(&sphere, &tri, &intersect);
 }
 
-#ifdef NON_MATCHING
 /**
  * Add poly to StaticLookup table
  * Table is sorted by poly's smallest y vertex component
@@ -472,6 +471,8 @@ void StaticLookup_AddPolyToSSList(CollisionContext* colCtx, SSList* ssList, Coll
     while (true) {
         // if at the end of the list
         if (curNode->next == SS_NULL) {
+            s32 pad;
+
             newNodeId = SSNodeList_GetNextNodeIdx(&colCtx->polyNodes);
             SSNode_SetValue(&colCtx->polyNodes.tbl[newNodeId], &polyId, SS_NULL);
             curNode->next = newNodeId;
@@ -493,9 +494,6 @@ void StaticLookup_AddPolyToSSList(CollisionContext* colCtx, SSList* ssList, Coll
         curNode = nextNode;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/StaticLookup_AddPolyToSSList.s")
-#endif
 
 /**
  * Add CollisionPoly to StaticLookup list
