@@ -70,7 +70,7 @@ void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, GlobalCo
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, dispObj->color.r, dispObj->color.g, dispObj->color.b, dispObj->color.a);
     Matrix_InsertTranslation(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, 0);
     Matrix_Scale(dispObj->scale.x, dispObj->scale.y, dispObj->scale.z, 1);
-    Matrix_InsertMatrix(&globalCtx->mf_187FC, 1);
+    Matrix_InsertMatrix(&globalCtx->billboardMtxF, 1);
     Matrix_InsertRotation(dispObj->rot.x, dispObj->rot.y, dispObj->rot.z, 1);
 
     gDPLoadTextureBlock(POLY_XLU_DISP++, texture, G_IM_FMT_I, G_IM_SIZ_8b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,

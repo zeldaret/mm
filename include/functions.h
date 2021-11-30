@@ -2970,7 +2970,7 @@ void func_80166B30(GlobalContext* globalCtx);
 void func_80167814(GlobalContext* globalCtx);
 void func_80167DE4(GlobalContext* globalCtx);
 // void func_80167F0C(void);
-void func_80168090(GlobalContext* globalCtx);
+void Play_Draw(GlobalContext* globalCtx);
 void func_80168DAC(GlobalContext* globalCtx);
 void Play_Update(GlobalContext* globalCtx);
 s32 func_801690CC(GlobalContext* globalCtx);

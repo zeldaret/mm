@@ -1396,9 +1396,9 @@ struct GlobalContext {
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 unk_1879C[10];
-    /* 0x187B0 */ MtxF projectionMatrix;
+    /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
-    /* 0x187FC */ MtxF mf_187FC;
+    /* 0x187FC */ MtxF billboardMtxF;
     /* 0x1883C */ Mtx* unk_1883C;
     /* 0x18840 */ u32 gameplayFrames;
     /* 0x18844 */ u8 unk_18844;
