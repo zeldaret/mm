@@ -205,7 +205,18 @@ s32 func_80123590(GameState* gameState, Actor* actor) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123F2C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_IsBurningStickInRange.s")
+s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRange, f32 yRange) {
+    Player* this = GET_PLAYER(globalCtx);
+    Vec3f diff;
+    s32 pad;
+
+    if ((this->itemActionParam == PLAYER_AP_STICK) && (this->unk_B28 != 0)) {
+        Math_Vec3f_Diff(&this->swordInfo[0].tip, pos, &diff);
+        return ((SQ(diff.x) + SQ(diff.z)) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
+    } else {
+        return false;
+    }
+}
 
 extern u8 D_801BFF98[];
 
