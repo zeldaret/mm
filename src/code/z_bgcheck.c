@@ -3342,8 +3342,6 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_RaycastFloorDyna.s")
 #endif
 
-#ifdef NON_MATCHING
-// regalloc, minor instruction ordering
 /**
  * Performs collision detection on a BgActor's wall polys on sphere `pos`, `radius`
  * returns true if a collision was detected
@@ -3370,8 +3368,6 @@ s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx, u16 xpFlags, DynaCo
     f32 invNormalXZ;
     f32 planeDist;
     f32 temp_f18;
-    f32 zIntersectDist;
-    f32 xIntersectDist;
     f32 zMin;
     f32 zMax;
     f32 xMin;
@@ -3441,6 +3437,8 @@ s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx, u16 xpFlags, DynaCo
             }
         }
         if (CollisionPoly_CheckZIntersectApprox(poly, dyna->vtxList, resultPos.x, pos->y, &intersect)) {
+            s32 pad;
+
             if (fabsf(intersect - resultPos.z) <= radius / temp_f18) {
                 if ((intersect - resultPos.z) * nz <= 4.0f) {
                     if (BgCheck_ComputeWallDisplacement(colCtx, poly, &resultPos.x, &resultPos.z, nx, ny, nz,
@@ -3516,7 +3514,8 @@ s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx, u16 xpFlags, DynaCo
         }
 
         if (CollisionPoly_CheckXIntersectApprox(poly, dyna->vtxList, pos->y, resultPos.z, &intersect)) {
-            xIntersectDist = intersect - resultPos.x;
+            f32 xIntersectDist = intersect - resultPos.x;
+
             if (fabsf(xIntersectDist) <= radius / temp_f18) {
                 if (xIntersectDist * nx <= 4.0f) {
                     if (BgCheck_ComputeWallDisplacement(colCtx, poly, &resultPos.x, &resultPos.z, nx, ny, nz,
@@ -3536,12 +3535,6 @@ s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx, u16 xpFlags, DynaCo
     *outZ = resultPos.z;
     return result;
 }
-#else
-s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx, u16 xpFlags, DynaCollisionContext* dyna, SSList* ssList,
-                                   f32* outX, f32* outZ, CollisionPoly** outPoly, s32* outBgId, Vec3f* pos, f32 radius,
-                                   s32 bgId, Actor* actor);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_SphVsDynaWallInBgActor.s")
-#endif
 
 /**
  * Performs collision detection on all dyna poly walls using sphere `pos`, `radius`
