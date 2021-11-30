@@ -53,8 +53,6 @@ void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl) {
     }
 }
 
-void* func_80163700(void* arg0, void* arg1);
-
 void KaleidoManager_Init(GlobalContext* globalCtx) {
     s32 largestSize = 0;
     s32 size;

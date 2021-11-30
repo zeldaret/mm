@@ -1556,7 +1556,7 @@ extern ActorInit Player_InitVars;
 // extern UNK_TYPE1 gKaleidoMgrOverlayTable;
 // extern UNK_TYPE1 D_801D0B8C;
 // extern UNK_TYPE4 sKaleidoAreaPtr;
-// extern UNK_TYPE4 gKaleidoMgrCurOvl;
+extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
 // extern UNK_TYPE4 D_801D0BB0;
 // extern UNK_TYPE1 D_801D0C80;
 // extern UNK_TYPE1 D_801D0CB0;
