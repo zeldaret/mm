@@ -140,7 +140,7 @@ void EnRuppecrow_Init(Actor *thisx, GlobalContext *globalCtx2) {
     GlobalContext *globalCtx = globalCtx2;
 
     Actor_ProcessInitChain(&this->actor, D_80BE3A0C);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060010C0, &D_060000F0, &this->joinTable, &this->morphTable, 9);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060010C0, &D_060000F0, this->joinTable, this->morphTable, 9);
     ActorShape_Init(&this->actor.shape, 2000.0f, func_800B3FC0, 20.0f); 
     
     Collider_InitJntSph(globalCtx, &this->collider);
@@ -159,7 +159,11 @@ void EnRuppecrow_Init(Actor *thisx, GlobalContext *globalCtx2) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/EnRuppecrow_Destroy.s")
+void EnRuppecrow_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+    EnRuppecrow *this = THIS;
+
+    Collider_DestroyJntSph(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/EnRuppecrow_Update.s")
 
