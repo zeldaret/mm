@@ -50,7 +50,7 @@ void ViMode_Configure(ViMode* viMode, s32 mode, s32 type, s32 unk_70, s32 unk_74
     unk_top &= ~1;
     unk_bottom &= ~1;
 
-    yScaleLo = (cond_4C ? 2 : 1) * (0x800 / (unk_70 ? 1 : 2));
+    yScaleLo = (cond_4C ? 2 : 1) * (((SCREEN_HEIGHT << 11) / SCREEN_HEIGHT) / (unk_70 ? 1 : 2));
 
     yScaleHi0 = not_78 ? (cond_40 ? 0x1000000 : 0x2000000) : 0;
     yScaleHi1 = not_78 ? (cond_40 ? 0x3000000 : 0x2000000) : 0;
@@ -136,7 +136,7 @@ void ViMode_Configure(ViMode* viMode, s32 mode, s32 type, s32 unk_70, s32 unk_74
         }
     }
 
-    viMode->customViMode.comRegs.xScale = 0x400;
+    viMode->customViMode.comRegs.xScale = (SCREEN_WIDTH << 10) / SCREEN_WIDTH;
     viMode->customViMode.comRegs.vCurrent = 0;
 
     viMode->customViMode.fldRegs[0].origin = width * 2 * (unk_7C ? 1 : 2);
@@ -335,7 +335,7 @@ void ViMode_Update(ViMode* viMode, Input* input) {
 
 void func_80140CE0(struct_801F8010* arg0) {
     arg0->type = 0;
-    arg0->setScissor = 0;
+    arg0->setScissor = false;
     arg0->color.r = 255;
     arg0->color.g = 255;
     arg0->color.b = 255;
@@ -346,20 +346,12 @@ void func_80140D04(struct_801F8010* arg0) {
 }
 
 void func_80140D10(struct_801F8010* arg0, Gfx** _gfx) {
-#define gDPSetColorMod(pkt, type, m, l, rgba)                                        \
-    {                                                                                \
-        Gfx* _g = (Gfx*)(pkt);                                                       \
-                                                                                     \
-        _g->words.w0 = (_SHIFTL(type, 24, 8) | _SHIFTL(m, 8, 8) | _SHIFTL(l, 0, 8)); \
-        _g->words.w1 = (rgba);                                                       \
-    }
-
     Gfx* gfx = *_gfx;
 
     gDPPipeSync(gfx++);
     gDPSetPrimDepth(gfx++, -1, -1);
 
-    if (arg0->setScissor == 1) {
+    if (arg0->setScissor == true) {
         gSPDisplayList(gfx++, D_0E0001C8);
     }
 
@@ -368,15 +360,15 @@ void func_80140D10(struct_801F8010* arg0, Gfx** _gfx) {
             gSPDisplayList(gfx++, sz_vimode_3DL);
             break;
         case 2:
-            gDPSetColorMod(gfx++, G_SETPRIMCOLOR, 0, 0, arg0->color.rgba);
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, arg0->color.rgba);
             gSPDisplayList(gfx++, sz_vimode_4DL);
             break;
         case 3:
-            gDPSetColorMod(gfx++, G_SETBLENDCOLOR, 0, 0, arg0->color.rgba);
+            gDPSetColor(gfx++, G_SETBLENDCOLOR, arg0->color.rgba);
             gSPDisplayList(gfx++, sz_vimode_1DL);
             break;
         case 4:
-            gDPSetColorMod(gfx++, G_SETFOGCOLOR, 0, 0, arg0->color.rgba);
+            gDPSetColor(gfx++, G_SETFOGCOLOR, arg0->color.rgba);
             gSPDisplayList(gfx++, sz_vimode_2DL);
             break;
     }

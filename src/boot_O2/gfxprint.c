@@ -5,12 +5,13 @@ extern u16 sGfxPrintUnkTLUT[16];
 extern u8 sGfxPrintUnkData[8];
 extern u8 sGfxPrintFontData[2048];
 
-#define gDPSetPrimColorMod(pkt, m, l, rgba)                                                    \
-    {                                                                                          \
-        Gfx* _g = (Gfx*)(pkt);                                                                 \
-                                                                                               \
-        _g->words.w0 = (_SHIFTL(G_SETPRIMCOLOR, 24, 8) | _SHIFTL(m, 8, 8) | _SHIFTL(l, 0, 8)); \
-        _g->words.w1 = (rgba);                                                                 \
+// A copy of gDPSetColor but without the do while wrapper
+#define gDPSetColorMod(pkt, c, d)         \
+    {                                     \
+        Gfx* _g = (Gfx*)(pkt);            \
+                                          \
+        _g->words.w0 = _SHIFTL(c, 24, 8); \
+        _g->words.w1 = (unsigned int)(d); \
     }
 
 void GfxPrint_InitDlist(GfxPrint* this) {
@@ -34,7 +35,7 @@ void GfxPrint_InitDlist(GfxPrint* this) {
         gDPSetTileSize(this->dlist++, i * 2, 0, 0, 60, 1020);
     }
 
-    gDPSetPrimColorMod(this->dlist++, 0, 0, this->color.rgba);
+    gDPSetColorMod(this->dlist++, G_SETPRIMCOLOR, this->color.rgba);
 
     gDPLoadMultiTile_4b(this->dlist++, sGfxPrintUnkData, 0, 1, G_IM_FMT_CI, 2, 8, 0, 0, 1, 7, 4,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 1, 3, G_TX_NOLOD, G_TX_NOLOD);
@@ -54,7 +55,7 @@ void GfxPrint_SetColor(GfxPrint* this, u32 r, u32 g, u32 b, u32 a) {
     this->color.b = b;
     this->color.a = a;
     gDPPipeSync(this->dlist++);
-    gDPSetPrimColorMod(this->dlist++, 0, 0, this->color.rgba);
+    gDPSetColorMod(this->dlist++, G_SETPRIMCOLOR, this->color.rgba);
 }
 
 void GfxPrint_SetPosPx(GfxPrint* this, s32 x, s32 y) {
@@ -94,12 +95,12 @@ void GfxPrint_PrintCharImpl(GfxPrint* this, u8 c) {
     }
 
     if (this->flag & GFXPRINT_FLAG4) {
-        gDPSetPrimColorMod(this->dlist++, 0, 0, 0);
+        gDPSetColorMod(this->dlist++, G_SETPRIMCOLOR, 0);
 
         gSPTextureRectangle(this->dlist++, this->posX + 4, this->posY + 4, this->posX + 4 + 32, this->posY + 4 + 32,
                             (c & 3) << 1, (u16)(c & 4) * 64, (u16)(c >> 3) * 256, 1024, 1024);
 
-        gDPSetPrimColorMod(this->dlist++, 0, 0, this->color.rgba);
+        gDPSetColorMod(this->dlist++, G_SETPRIMCOLOR, this->color.rgba);
     }
 
     gSPTextureRectangle(this->dlist++, this->posX, this->posY, this->posX + 32, this->posY + 32, (u16)(tile & 7),
