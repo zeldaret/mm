@@ -858,7 +858,6 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
 s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionContext* colCtx, f32* outY, Vec3f* pos,
                                f32 checkHeight, CollisionPoly** outPoly, Actor* actor) {
     s32 result = false;
-    // u16 nextId;
     CollisionPoly* curPoly;
     CollisionPoly* polyList;
     s32 curPolyId;
