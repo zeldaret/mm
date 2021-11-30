@@ -19,6 +19,8 @@ s32 func_80BE2260(EnRuppecrow *, GlobalContext *);
 void func_80BE2808(EnRuppecrow *);
 void func_80BE30F4(EnRuppecrow *, GlobalContext *);
 void func_80BE2F6C(EnRuppecrow *);
+void func_80BE35A4(EnRuppecrow *, GlobalContext *);
+void func_80BE2728(EnRuppecrow *, GlobalContext *);
 
 #if 0
 const ActorInit En_Ruppecrow_InitVars = {
@@ -146,9 +148,6 @@ void func_80BE2808(EnRuppecrow *this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2E18.s")
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2F6C.s")
-void func_80BE35A4(EnRuppecrow *, GlobalContext *); /* extern */
-
 void func_80BE2F6C(EnRuppecrow *this) {
     f32 scale;
 
@@ -209,7 +208,39 @@ void func_80BE30F4(EnRuppecrow *this, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE348C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE35A4.s")
+void func_80BE35A4(EnRuppecrow *this, GlobalContext *globalCtx) {
+    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+
+    if ((u8) this->unk_2C4 != 0xA) {
+        Math_StepToF(&this->unk_2C8, 0.0f, 0.05f);
+
+        this->unk_2CC = (this->unk_2C8 + 1.0f) * 0.25f;
+        if (this->unk_2CC > 0.5f) {
+            this->unk_2CC = 0.5f;
+        } else {
+            this->unk_2CC = this->unk_2CC;
+        }
+    } else if (Math_StepToF(&this->unk_2D0, 0.5f, 0.0125f) == 0) {
+        func_800B9010(&this->actor, 0x20B2U);
+    }
+
+    this->actor.colorFilterTimer = 0x28;
+    if (!(this->actor.flags & 0x8000)) {
+        if ((u8)this->unk_2C4 != 0xA) {
+            Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4000, 0x200);
+            this->actor.shape.rot.z += 0x1780;
+        }
+        if (this->actor.bgCheckFlags & 1 || this->actor.floorHeight == -32000.0f) {
+            func_80BE2728(this, globalCtx);
+            func_800B3030(globalCtx, &this->actor.world.pos, &D_801D15B0, &D_801D15B0, (s16)(this->actor.scale.x * 10000.0f), 0x0, 0x0);
+            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0xB, 0x3878U);
+            Actor_MarkForDeath(&this->actor);
+            return;
+        }
+    }
+
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+}
 
 void EnRuppecrow_Init(Actor *thisx, GlobalContext *globalCtx2) {
     EnRuppecrow *this = THIS;
