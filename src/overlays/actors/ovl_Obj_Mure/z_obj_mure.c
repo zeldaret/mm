@@ -62,7 +62,8 @@ typedef enum {
     /* 1 */ OBJMURE_TYPE_UNDEFINED,
     /* 2 */ OBJMURE_TYPE_FISH,
     /* 3 */ OBJMURE_TYPE_BUGS,
-    /* 4 */ OBJMURE_TYPE_BUTTERFLY
+    /* 4 */ OBJMURE_TYPE_BUTTERFLY,
+    /* 5 */ OBJMURE_TYPE_MAX
 } ObjMureType;
 
 typedef enum {
@@ -98,7 +99,7 @@ void ObjMure_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    if (this->type >= 5) {
+    if (this->type >= OBJMURE_TYPE_MAX) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
