@@ -215,7 +215,34 @@ void func_80BE2B80(EnRuppecrow* this, GlobalContext* globalCtx2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2D4C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2E18.s")
+void func_80BE2E18(EnRuppecrow *this, GlobalContext *globalCtx) {
+    Player *player;
+
+    player = GET_PLAYER(globalCtx);
+    switch (player->transformation) {
+        case PLAYER_FORM_DEKU:
+            this->unk_2B8 = 7.0f;
+            break;
+        case PLAYER_FORM_GORON:
+            this->unk_2B8 = (player->stateFlags3 & 0x1000) ? 19.0f : 7.0f;
+            break;       
+        case PLAYER_FORM_ZORA:
+            this->unk_2B8 = 7.0f;
+            break;
+        case PLAYER_FORM_HUMAN:
+            this->unk_2B8 = (player->stateFlags1 & 0x800000) ? 16.0f : 7.0f; 
+            break;
+    }
+
+    this->skelAnime.playSpeed = this->unk_2B8 / 6.0f;
+    if (this->actor.xzDistToPlayer > 800.0f) {
+        this->unk_2B8 *= 0.5f;
+    } else if (this->actor.xzDistToPlayer > 500.0f) {
+        this->unk_2B8 *= 0.8f;
+    } else if (this->actor.xzDistToPlayer < 150.0f) {
+        this->unk_2B8 *= 1.2f;
+    }
+}
 
 void func_80BE2F6C(EnRuppecrow* this) {
     f32 scale;
