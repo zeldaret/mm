@@ -142,7 +142,27 @@ void func_80BE2728(EnRuppecrow* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2794.s")
+s32 func_80BE2794(GlobalContext *globalCtx) {
+    Player *player;
+
+    player = GET_PLAYER(globalCtx);
+    switch (player->transformation) {
+        case PLAYER_FORM_DEKU: 
+            return false; 
+        case PLAYER_FORM_GORON: 
+            return true; 
+        case PLAYER_FORM_ZORA: 
+            return false; 
+        case PLAYER_FORM_HUMAN: 
+            if (player->stateFlags1 & 0x800000) {
+                return true;
+            } else {
+                return false;
+            }
+    }
+
+    return false;
+}
 
 void func_80BE2808(EnRuppecrow* this) {
     EnItem00* item;
