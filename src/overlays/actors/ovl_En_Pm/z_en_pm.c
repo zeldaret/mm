@@ -1682,8 +1682,8 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
     };
     u16 time = gSaveContext.time;
     u16 sp3C = 0;
-    u32* unk_14 = &gSaveContext.unk_14;
     struct_80133038_arg2 sp2C;
+    u32* unk_14 = &gSaveContext.unk_14;
 
     this->unk_374 = REG(15) + *unk_14;
     if (this->unk_38C != 0) {

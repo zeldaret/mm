@@ -1057,10 +1057,9 @@ void func_80BACE4C(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
     struct_80133038_arg2 unkStruct;
 
-    this->unk42A = REG(15) + *unk_14;
+    this->unk42A = REG(15) + (0, gSaveContext.unk_14);
     if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
         ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~1;
@@ -1082,10 +1081,9 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
     struct_80133038_arg2 unkStruct;
 
-    this->unk42A = REG(15) + *unk_14;
+    this->unk42A = REG(15) + (0, gSaveContext.unk_14);
     if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
         ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~1;
@@ -1204,7 +1202,6 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
     struct_80133038_arg2 unkStruct;
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
@@ -1213,7 +1210,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
         this->animationIdx = 2;
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
     }
-    this->unk42A = REG(15) + *unk_14;
+    this->unk42A = REG(15) + (0, gSaveContext.unk_14);
     if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
         ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~1;
@@ -1240,7 +1237,6 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
     struct_80133038_arg2 unkStruct;
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
@@ -1252,7 +1248,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
             this->animationIdx = 2;
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
         }
-        this->unk42A = REG(15) + *unk_14;
+        this->unk42A = REG(15) + (0, gSaveContext.unk_14);
         if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
             ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
             this->actor.flags &= ~1;

@@ -877,7 +877,7 @@ typedef struct {
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
     /* 0x12078 */ s32 bankRupeesSelected;
-    /* 0x1207C */ s32 bankRupees; 
+    /* 0x1207C */ s32 bankRupees;
     /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
     /* 0x120B1 */ u8 unk120B1;
     /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
@@ -1196,7 +1196,7 @@ typedef struct {
     /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
     /* 0x130 */ OSThread thread;
 } AudioMgr; // size = 0x2E0
- 
+
 typedef struct {
     /* 0x00 */ MtxF displayMatrix;
     /* 0x40 */ Actor* actor;
@@ -1397,8 +1397,9 @@ typedef struct EnHy {
 typedef struct {
     /* 0x0 */ u8 unk0;
     /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8; // game script pointer?
-} struct_80133038_arg2; // size = 0xC
+    /* 0x8 */ s32 unk8;
+    /* 0xC */ s32 unkC;
+} struct_80133038_arg2; // size = 0x10
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 

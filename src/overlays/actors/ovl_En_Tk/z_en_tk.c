@@ -313,8 +313,8 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
     s32 temp3;
     f32 sp48;
     f32 sp44;
-    u8 temp4;
     struct_80133038_arg2 sp34;
+    u8 temp4;
 
     this->actor.textId = 0;
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
