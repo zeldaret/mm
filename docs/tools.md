@@ -215,8 +215,6 @@ mips_to_c's accuracy can be improved when some context to what the existing C so
 
 ### Permuter
 
-(Exists in a subrepo.)
-
 Use when you're low on ideas for matching a function. This goes through a series of heuristic random replacements known to help improve matching, although often at the expense of clarity.
 
 To set up the permuter, clone the repository <https://github.com/simonlindholm/decomp-permuter> in a directory of your choice. Follow the usage section of the README and ensure you have all the prerequisites installed.
@@ -281,4 +279,4 @@ Extracts vertex data from a file. Essentially irrelevant since MM requires extra
 
 ### Reservation Tracking
 
-We use a [Google Sheet](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro/edit#gid=0>) to keep track of all the files worked on and their merge status. On this board one can reserve a file to work on. It is common courtesy to not work on a file that is being worked on by another contributor. If there is a specific file you are interested in and it is reserved, reach out to the individual who has it reserved to come to some agreement.
+We use a [Google Sheet](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro/edit#gid=0>) to keep track of all the files worked on and their merge status. On this board one can reserve a file to work on. It is common courtesy to not work on a file that is being worked on by another contributor. If there is a specific file you would like to work on and it is reserved by someone else, reach out to the individual who has it reserved to come to some agreement.
