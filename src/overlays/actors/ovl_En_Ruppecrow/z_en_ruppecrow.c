@@ -297,7 +297,23 @@ void func_80BE3354(EnRuppecrow *this, GlobalContext *globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE348C.s")
+void func_80BE348C(EnRuppecrow *this, GlobalContext *globalCtx) {
+    if (this->actor.bgCheckFlags & 0x8) {
+        this->actor.world.rot.y *= -1;
+    }
+    Math_ApproachF(&this->actor.speedXZ, this->unk_2B8, 0.1f, 0.1f);
+    Math_ApproachF(&this->actor.velocity.y, 3.0f, 0.2f, 0.5f);
+    if (this->actor.world.pos.y > 1000.0f || this->actor.xzDistToPlayer > 2000.0f) {
+        Actor_MarkForDeath(&this->actor);
+    } else {
+        this->unk_2BE += 0x800;
+        this->actor.shape.yOffset = Math_SinS(this->unk_2BE) * 500.0f;
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        if ((globalCtx->state.frames % 43) == 0) {
+            Audio_PlayActorSound2(&this->actor, 0x38B6U);
+        }
+    }
+}
 
 void func_80BE35A4(EnRuppecrow* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
