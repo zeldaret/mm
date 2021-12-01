@@ -701,6 +701,22 @@ typedef struct {
 } InterfaceContext; // size = 0x348
 
 typedef struct {
+    /* 0x00 */ void* loadedRamAddr;
+    /* 0x04 */ u32 vromStart;
+    /* 0x08 */ u32 vromEnd;
+    /* 0x0C */ void* vramStart;
+    /* 0x10 */ void* vramEnd;
+    /* 0x14 */ u32 offset; // loadedRamAddr - vramStart
+    /* 0x18 */ const char* name;
+} KaleidoMgrOverlay; // size = 0x1C
+
+typedef enum {
+    /* 0x00 */ KALEIDO_OVL_KALEIDO_SCOPE,
+    /* 0x01 */ KALEIDO_OVL_PLAYER_ACTOR,
+    /* 0x02 */ KALEID_OVL_MAX
+} KaleidoMgrOverlayType;
+
+typedef struct {
     /* 0x00 */ u16 unk_0;
     /* 0x02 */ u16 unk_2;
     /* 0x04 */ f32 unk_4;

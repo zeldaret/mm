@@ -740,7 +740,7 @@
     ['ovl_file_choose', 'baserom/', 'overlay', [], { 0x80804010 : "ovl_file_choose" }],
     ['ovl_daytelop', 'baserom/', 'overlay', [], { 0x80814EB0 : "ovl_daytelop" }],
     ['ovl_kaleido_scope', 'baserom/', 'overlay', [], { 0x808160A0 : "ovl_kaleido_scope" }],
-    ['ovl_Player_Actor', 'baserom/', 'overlay', [], { 0x8082DA90 : "ovl_Player_Actor" }],
+    ['ovl_player_actor', 'baserom/', 'overlay', [], { 0x8082DA90 : "ovl_player_actor" }],
     ['ovl_En_Test', 'baserom/', 'overlay', [], { 0x80862B70 : "ovl_En_Test" }],
     ['ovl_En_GirlA', 'baserom/', 'overlay', [], { 0x80863870 : "ovl_En_GirlA" }],
     ['ovl_En_Part', 'baserom/', 'overlay', [], { 0x80865370 : "ovl_En_Part" }],

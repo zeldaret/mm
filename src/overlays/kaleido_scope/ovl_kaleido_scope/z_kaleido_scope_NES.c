@@ -66,4 +66,4 @@ extern UNK_TYPE D_0C006C00;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80828788.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8082895C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_Update.s")
