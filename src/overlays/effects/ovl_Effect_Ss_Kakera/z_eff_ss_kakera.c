@@ -59,8 +59,8 @@ u32 EffectSsKakera_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     this->vec = params->unk_18;
     this->regs[0] = params->unk_2C;
     this->regs[1] = params->gravity;
-    this->regs[2] = Rand_ZeroOne() * 32768.0f;
-    this->regs[3] = Rand_ZeroOne() * 32768.0f;
+    this->regs[2] = Rand_ZeroOne() * 0x8000;
+    this->regs[3] = Rand_ZeroOne() * 0x8000;
     this->regs[4] = params->unk_26;
     this->regs[5] = params->unk_28;
     this->regs[6] = params->unk_2A;
@@ -263,26 +263,26 @@ s32 func_8097E698(EffectSs* this) {
     diff.z = this->pos.z - this->vec.z;
     distance = sqrtf(SQXYZ(diff));
     if (distance > 1000.0f) {
-        return 0;
+        return false;
     }
     if (this->regs[0] != 0) {
         if (func_8097E420(this, &diff, distance) == 0) {
-            return 0;
+            return false;
         }
         if (func_8097E4B0(this, &diff, distance) == 0) {
-            return 0;
+            return false;
         }
         if (func_8097E4F0(this, &diff, distance) == 0) {
-            return 0;
+            return false;
         }
         if (func_8097E584(this, &diff, distance) == 0) {
-            return 0;
+            return false;
         }
     }
     if (func_8097E660(this, &diff, distance) == 0) {
-        return 0;
+        return false;
     } else {
-        return 1;
+        return true;
     }
 }
 
@@ -317,7 +317,7 @@ void func_8097E7E0(EffectSs* this, GlobalContext* globalCtx) {
                     this->velocity.y *= -0.8f;
                     this->velocity.z *= func_8097DE30(0.9f, 0.2f);
                     if (this->regs[8] > 0) {
-                        this->regs[8] -= 1;
+                        this->regs[8]--;
                     }
                 }
                 break;
@@ -346,7 +346,7 @@ void EffectSsKakera_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) 
             break;
     }
     func_8097E19C(this);
-    if (func_8097E698(this) == 0) {
+    if (!func_8097E698(this)) {
         this->life = 0;
     }
     func_8097E7E0(this, globalCtx);
