@@ -1,11 +1,14 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_scope_call/func_801639A0.s")
+void (*sKaleidoScopeUpdateFunc)(GlobalContext* globalCtx);
+void (*sKaleidoScopeDrawFunc)(GlobalContext* globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_scope_call/func_801639EC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_scope_call/KaleidoScopeCall_LoadPlayer.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_scope_call/func_80163A38.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_scope_call/KaleidoScopeCall_Init.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_scope_call/func_80163A58.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_scope_call/KaleidoScopeCall_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_scope_call/func_80163C0C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_scope_call/KaleidoScopeCall_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_scope_call/KaleidoScopeCall_Draw.s")
