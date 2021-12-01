@@ -40,7 +40,7 @@ void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = func_80BDE090;
-    this->actor.textId = GET_TEXT_ID(this);
+    this->actor.textId = EN_TALK_GET_TEXT_ID(this);
 }
 
 void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
