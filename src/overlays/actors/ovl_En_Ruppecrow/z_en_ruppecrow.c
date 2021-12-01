@@ -14,13 +14,22 @@ void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
-void func_80BE3178(EnRuppecrow *, GlobalContext *);
-s32 func_80BE2260(EnRuppecrow *, GlobalContext *);
-void func_80BE2808(EnRuppecrow *);
-void func_80BE30F4(EnRuppecrow *, GlobalContext *);
-void func_80BE2F6C(EnRuppecrow *);
-void func_80BE35A4(EnRuppecrow *, GlobalContext *);
-void func_80BE2728(EnRuppecrow *, GlobalContext *);
+void func_80BE3178(EnRuppecrow*, GlobalContext*);
+s32 func_80BE2260(EnRuppecrow*, GlobalContext*);
+void func_80BE2808(EnRuppecrow*);
+void func_80BE30F4(EnRuppecrow*, GlobalContext*);
+void func_80BE2F6C(EnRuppecrow*);
+void func_80BE35A4(EnRuppecrow*, GlobalContext*);
+void func_80BE2728(EnRuppecrow*, GlobalContext*);
+void func_80BE2B80(EnRuppecrow*, GlobalContext*);
+s32 func_80BE2D4C(GlobalContext*);
+void func_80BE32DC(EnRuppecrow*, GlobalContext*);
+s32 func_80BE2330(void*, u8*, s32);
+s32 func_80BE24CC(void*, u8*, s32);
+void func_80BE2668(Path*, s32, PosRot*, s16*);
+s32 func_80BE2794(GlobalContext*);
+void func_80BE2874(EnRuppecrow*, GlobalContext*);
+void func_80BE3354();
 
 #if 0
 const ActorInit En_Ruppecrow_InitVars = {
@@ -105,11 +114,12 @@ extern AnimationHeader D_060000F0;
 extern FlexSkeletonHeader D_060010C0;
 extern ColliderJntSphElementInit* D_80BE39E0;
 
-s32 func_80BE2260(EnRuppecrow *this, GlobalContext *globalCtx) {
+s32 func_80BE2260(EnRuppecrow* this, GlobalContext* globalCtx) {
     UNK_TYPE pad;
 
     this->collider.elements->dim.worldSphere.center.x = (s16)this->actor.world.pos.x;
-    this->collider.elements->dim.worldSphere.center.y = (s16)(D_80BE39E0->dim.modelSphere.center.y + this->actor.world.pos.y);
+    this->collider.elements->dim.worldSphere.center.y =
+        (s16)(D_80BE39E0->dim.modelSphere.center.y + this->actor.world.pos.y);
     this->collider.elements->dim.worldSphere.center.z = (s16)this->actor.world.pos.z;
 
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -124,7 +134,7 @@ s32 func_80BE2260(EnRuppecrow *this, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2668.s")
 
-void func_80BE2728(EnRuppecrow *this, GlobalContext *globalCtx) {
+void func_80BE2728(EnRuppecrow* this, GlobalContext* globalCtx) {
     if ((u8)this->unk_2C4 == 0xA) {
         this->unk_2C4 = 0x0;
         this->unk_2C8 = 0.0f;
@@ -134,7 +144,7 @@ void func_80BE2728(EnRuppecrow *this, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2794.s")
 
-void func_80BE2808(EnRuppecrow *this) {
+void func_80BE2808(EnRuppecrow* this) {
     EnItem00* item;
     s16 phi_s0;
 
@@ -148,28 +158,60 @@ void func_80BE2808(EnRuppecrow *this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2874.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2B80.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2B80.s")
+void func_80BE2B80(EnRuppecrow* this, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    s16 sp32;
+    s16 sp30;
+
+    func_80BE2668(this->path, this->unk_250, &this->actor.world, &sp30);
+    if (this->actor.bgCheckFlags & 8) {
+        sp32 = this->actor.wallYaw;
+    }
+
+    Math_SmoothStepToS(&this->actor.world.rot.y, sp32, 0x4, 0x3E8, 0x1);
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    Math_SmoothStepToS(&this->actor.world.rot.x, -sp30, 0x4, 0x3E8, 0x1);
+
+    if (this->unk_2B4 & 0x1) {
+        if (func_80BE24CC(this, this->path, this->unk_250)) {
+            this->unk_250 = (this->unk_250 <= 0) ? (this->path->count - 0x1) : (this->unk_250 - 0x1);
+
+            if ((this->actionFunc == &func_80BE3354) &&
+                (!func_80BE2794(globalCtx) || (this->unk_250 & 0x1) == 0)) {
+                func_80BE2874(this, globalCtx);
+            }
+        }
+    } else if (func_80BE2330(this, this->path, this->unk_250)) {
+        this->unk_250 = (this->unk_250 >= this->path->count - 0x1) ? 0x0 : this->unk_250 + 0x1;
+
+        if (this->actionFunc == &func_80BE3354 &&
+            (!func_80BE2794(globalCtx) || (this->unk_250 & 1) == 0)) {
+            func_80BE2874(this, globalCtx);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2D4C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2E18.s")
 
-void func_80BE2F6C(EnRuppecrow *this) {
+void func_80BE2F6C(EnRuppecrow* this) {
     f32 scale;
 
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &D_060000F0, 0.4f, 0.0f, 0.0f, 0x1, -3.0f);
-    
+
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;
     this->actor.bgCheckFlags &= 0xFFFE;
 
     scale = this->actor.scale.x * 100.0f;
     this->actor.world.pos.y += 20.0f * scale;
-    
+
     Audio_PlayActorSound2(&this->actor, 0x38EBU);
-       
+
     this->unk_2CC = 0.5f;
     if (this->actor.colChkInfo.damageEffect == 3) {
         this->unk_2C4 = 0xA;
@@ -189,11 +231,11 @@ void func_80BE2F6C(EnRuppecrow *this) {
     }
 
     this->collider.base.acFlags &= 0xFFFE;
-    this->actor.flags |= 0x10;   
+    this->actor.flags |= 0x10;
     this->actionFunc = func_80BE35A4;
 }
 
-void func_80BE30F4(EnRuppecrow *this, GlobalContext *globalCtx) {
+void func_80BE30F4(EnRuppecrow* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & 0x2) {
         this->collider.base.acFlags &= 0xFFFD;
         func_800BE258(&this->actor, this->collider.elements);
@@ -214,10 +256,10 @@ void func_80BE30F4(EnRuppecrow *this, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE348C.s")
 
-void func_80BE35A4(EnRuppecrow *this, GlobalContext *globalCtx) {
+void func_80BE35A4(EnRuppecrow* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
 
-    if ((u8) this->unk_2C4 != 0xA) {
+    if ((u8)this->unk_2C4 != 0xA) {
         Math_StepToF(&this->unk_2C8, 0.0f, 0.05f);
 
         this->unk_2CC = (this->unk_2C8 + 1.0f) * 0.25f;
@@ -238,7 +280,8 @@ void func_80BE35A4(EnRuppecrow *this, GlobalContext *globalCtx) {
         }
         if (this->actor.bgCheckFlags & 1 || this->actor.floorHeight == -32000.0f) {
             func_80BE2728(this, globalCtx);
-            func_800B3030(globalCtx, &this->actor.world.pos, &D_801D15B0, &D_801D15B0, (s16)(this->actor.scale.x * 10000.0f), 0x0, 0x0);
+            func_800B3030(globalCtx, &this->actor.world.pos, &D_801D15B0, &D_801D15B0,
+                          (s16)(this->actor.scale.x * 10000.0f), 0x0, 0x0);
             Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0xB, 0x3878U);
             Actor_MarkForDeath(&this->actor);
             return;
@@ -248,23 +291,23 @@ void func_80BE35A4(EnRuppecrow *this, GlobalContext *globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
 
-void EnRuppecrow_Init(Actor *thisx, GlobalContext *globalCtx2) {
-    EnRuppecrow *this = THIS;
-    GlobalContext *globalCtx = globalCtx2;
+void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
+    EnRuppecrow* this = THIS;
+    GlobalContext* globalCtx = globalCtx2;
 
     Actor_ProcessInitChain(&this->actor, D_80BE3A0C);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060010C0, &D_060000F0, this->joinTable, this->morphTable, 9);
-    ActorShape_Init(&this->actor.shape, 2000.0f, func_800B3FC0, 20.0f); 
-    
+    ActorShape_Init(&this->actor.shape, 2000.0f, func_800B3FC0, 20.0f);
+
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_80BE39D4, &this->colliderElement);
-    this->collider.elements->dim.worldSphere.radius = D_80BE39E0->dim.modelSphere.radius; 
+    this->collider.elements->dim.worldSphere.radius = D_80BE39E0->dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80BE39EC, &D_80BE39E4);
-    
+
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags |= 0x2000000;
-    
-    this->path = func_8013D648(globalCtx, (s16) ((s32)(this->actor.params & 0xFC00) >> 0xA), 0x3F);
+
+    this->path = func_8013D648(globalCtx, (s16)((s32)(this->actor.params & 0xFC00) >> 0xA), 0x3F);
     if (this->path != NULL) {
         this->actionFunc = func_80BE3178;
     } else {
@@ -272,26 +315,27 @@ void EnRuppecrow_Init(Actor *thisx, GlobalContext *globalCtx2) {
     }
 }
 
-void EnRuppecrow_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    EnRuppecrow *this = THIS;
+void EnRuppecrow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnRuppecrow* this = THIS;
 
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
-void EnRuppecrow_Update(Actor *thisx, GlobalContext *globalCtx) {
-    EnRuppecrow *this = THIS;
+void EnRuppecrow_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnRuppecrow* this = THIS;
 
     func_80BE30F4(this, globalCtx);
     this->actionFunc(this, globalCtx);
     func_80BE2808(this);
-    this->actor.focus.pos = this->actor.world.pos;  
+    this->actor.focus.pos = this->actor.world.pos;
     SkelAnime_Update(&this->skelAnime);
     func_80BE2260(this, globalCtx);
 }
 
-void EnRuppecrow_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    EnRuppecrow *this = THIS;
+void EnRuppecrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnRuppecrow* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32)this->skelAnime.dListCount, NULL, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                          (s32)this->skelAnime.dListCount, NULL, NULL, &this->actor);
 }

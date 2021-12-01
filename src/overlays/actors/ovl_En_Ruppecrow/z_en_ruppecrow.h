@@ -19,7 +19,7 @@ typedef struct EnRuppecrow {
     /* 0x0250 */ UNK_TYPE unk_250;
     /* 0x0254 */ ColliderJntSph collider;
     /* 0x0274 */ ColliderJntSphElement colliderElement;
-    /* 0x02B4 */ s16 unk_2B4;
+    /* 0x02B4 */ u16 unk_2B4;
     /* 0x02B6 */ s16 unk_2B6;
     /* 0x02B8 */ s16 unk_2B8;
     /* 0x02BA */ s16 unk_2BA;
