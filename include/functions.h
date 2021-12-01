@@ -2219,7 +2219,6 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player);
 // void func_801271B0(void);
 // void func_80127438(void);
 // void func_80127488(void);
-// void func_8012754C(void);
 // void func_80127594(void);
 // void func_801278F8(void);
 // void func_80127A60(void);

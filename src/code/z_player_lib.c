@@ -531,7 +531,12 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127488.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012754C.s")
+extern AnimatedMaterial D_0A001CD8;
+
+void func_8012754C(GlobalContext* globalCtx, Player* player) {
+    gSegments[10] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
+    AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&D_0A001CD8));
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")
 
