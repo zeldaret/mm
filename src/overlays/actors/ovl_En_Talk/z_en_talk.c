@@ -44,17 +44,16 @@ void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnTalk* this = THIS;
 }
 
 void func_80BDE058(EnTalk* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx) != 0) {
+    if (func_800B867C(&this->actor, globalCtx)) {
         this->actionFunc = func_80BDE090;
     }
 }
 
 void func_80BDE090(EnTalk* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = func_80BDE058;
         return;
     }
@@ -67,5 +66,6 @@ void func_80BDE090(EnTalk* this, GlobalContext* globalCtx) {
 
 void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTalk* this = THIS;
+    
     this->actionFunc(this, globalCtx);
 }
