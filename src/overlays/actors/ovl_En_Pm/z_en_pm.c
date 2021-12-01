@@ -893,7 +893,7 @@ s32 func_80AF8DD4(EnPm* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2, u8 actorCat, s16 actorId) {
+s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2, u8 actorCat, s16 actorId) {
     u8 sp4F = this->actor.params & 0xFF;
     Vec3s* sp48;
     Vec3f sp3C;
@@ -904,8 +904,8 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->unk_234 = NULL;
     sp2C = func_80AF7CB0(this, globalCtx, actorCat, actorId);
-    if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80AFB430[arg2->unk0]);
+    if (D_80AFB430[arg2->result] >= 0) {
+        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80AFB430[arg2->result]);
     }
 
     if ((sp2C != NULL) && (sp2C->update != NULL)) {
@@ -923,7 +923,7 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     u16 sp56 = gSaveContext.time - 0x3FFC;
     u8 sp55 = this->actor.params & 0xFF;
     EnDoor* sp50;
@@ -934,9 +934,9 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
 
     this->unk_234 = NULL;
-    sp50 = func_80AF7D60(globalCtx, arg2->unk0);
-    if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp55, D_80AFB430[arg2->unk0]);
+    sp50 = func_80AF7D60(globalCtx, arg2->result);
+    if (D_80AFB430[arg2->result] >= 0) {
+        this->unk_234 = func_8013BB34(globalCtx, sp55, D_80AFB430[arg2->result]);
     }
 
     if ((sp50 != NULL) && (sp50->actor.update != NULL)) {
@@ -955,8 +955,8 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
                 this->unk_260 = 0x4B;
             }
 
-            this->unk_36C = arg2->unk8 - arg2->unk4;
-            this->unk_36E = sp56 - arg2->unk4;
+            this->unk_36C = arg2->time1 - arg2->time0;
+            this->unk_36E = sp56 - arg2->time0;
             this->actor.flags &= ~1;
             if (gSaveContext.weekEventReg[90] & 8) {
                 this->unk_356 |= 0x800;
@@ -971,7 +971,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     u16 sp2E = (u16)(gSaveContext.time - 0x3FFC);
     u16 phi_v1;
     u8 sp2B = this->actor.params & 0xFF;
@@ -980,8 +980,8 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->unk_234 = NULL;
 
-    if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp2B, D_80AFB430[arg2->unk0]);
+    if (D_80AFB430[arg2->result] >= 0) {
+        this->unk_234 = func_8013BB34(globalCtx, sp2B, D_80AFB430[arg2->result]);
     }
 
     if ((this->unk_234 != NULL) && (this->unk_234->count < 3)) {
@@ -992,13 +992,13 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         if ((this->unk_258 < 38) && (this->unk_258 != 0) && (this->unk_374 >= 0)) {
             phi_v1 = sp2E;
         } else {
-            phi_v1 = arg2->unk4;
+            phi_v1 = arg2->time0;
         }
 
-        if (arg2->unk8 < phi_v1) {
-            this->unk_248 = (phi_v1 - arg2->unk8) + 0xFFFF;
+        if (arg2->time1 < phi_v1) {
+            this->unk_248 = (phi_v1 - arg2->time1) + 0xFFFF;
         } else {
-            this->unk_248 = arg2->unk8 - phi_v1;
+            this->unk_248 = arg2->time1 - phi_v1;
         }
 
         this->unk_254 = sp2E - phi_v1;
@@ -1012,7 +1012,7 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             Flags_UnsetSwitch(globalCtx, 0);
         }
 
-        switch (arg2->unk0) {
+        switch (arg2->result) {
             case 83:
             case 84:
             case 85:
@@ -1051,7 +1051,7 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     u8 sp4F = this->actor.params & 0xFF;
     Vec3f sp40;
     Vec3f sp34;
@@ -1060,8 +1060,8 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
 
     this->unk_234 = NULL;
-    if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80AFB430[arg2->unk0]);
+    if (D_80AFB430[arg2->result] >= 0) {
+        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80AFB430[arg2->result]);
     }
 
     if ((this->unk_234 != 0) && (this->unk_234->count >= 2)) {
@@ -1072,7 +1072,7 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
-        if (arg2->unk0 == 24) {
+        if (arg2->result == 24) {
             Flags_UnsetSwitch(globalCtx, 0);
             Flags_UnsetSwitch(globalCtx, 1);
             this->unk_394 = 0;
@@ -1084,7 +1084,7 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     u8 sp4F = this->actor.params & 0xFF;
     Vec3f sp40;
     Vec3f sp34;
@@ -1093,13 +1093,13 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
     s32 phi_a3 = -1;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         case 3:
         case 4:
         case 5:
         case 6:
         case 7:
-            phi_a3 = arg2->unk0 - 3;
+            phi_a3 = arg2->result - 3;
             break;
 
         case 19:
@@ -1112,7 +1112,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     }
 
     this->unk_234 = NULL;
-    phi_a3 = D_80AFB430[arg2->unk0];
+    phi_a3 = D_80AFB430[arg2->result];
     if (phi_a3 >= 0) {
         this->unk_234 = func_8013BB34(globalCtx, sp4F, phi_a3);
     }
@@ -1126,7 +1126,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
 
-        switch (arg2->unk0) {
+        switch (arg2->result) {
             case 27:
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
                 Flags_SetSwitch(globalCtx, 0);
@@ -1158,7 +1158,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
                 gSaveContext.weekEventReg[60] |= 4;
 
             default:
-                if (arg2->unk0 == 0x1D) {
+                if (arg2->result == 0x1D) {
                     this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
                 }
                 func_8013AED4(&this->unk_356, 3, 7);
@@ -1171,7 +1171,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF98A0(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF98A0(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_MM3, 116.0f, 26.0f, -219.0f, 0,
@@ -1182,7 +1182,7 @@ s32 func_80AF98A0(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF992C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF992C(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     static Vec3f D_80AFB8EC = { 116.0f, 26.0f, -219.0f };
     static Vec3s D_80AFB8F8 = { 0x0000, 0xC0BA, 0x0000 };
     s32 pad;
@@ -1194,7 +1194,7 @@ s32 func_80AF992C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->actor.targetMode = 6;
     this->actor.gravity = -1.0f;
     this->unk_368 = 80.0f;
-    if (arg2->unk0 == 14) {
+    if (arg2->result == 14) {
         this->unk_356 &= ~0x200;
         func_80AF7E98(this, 13);
     } else {
@@ -1204,7 +1204,7 @@ s32 func_80AF992C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return true;
 }
 
-s32 func_80AF9A0C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF9A0C(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_80AF8ED4(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_AN)) {
@@ -1222,7 +1222,7 @@ s32 func_80AF9A0C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF9AB0(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF9AB0(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_80AF8ED4(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_TEST3)) {
@@ -1240,7 +1240,7 @@ s32 func_80AF9AB0(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF9B54(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF9B54(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_80AF8ED4(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_AL)) {
@@ -1258,7 +1258,7 @@ s32 func_80AF9B54(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret;
 
     this->actor.flags |= 1;
@@ -1267,7 +1267,7 @@ s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         case 16:
             ret = func_80AF9A0C(this, globalCtx, arg2);
             break;
@@ -1682,7 +1682,7 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
     };
     u16 time = gSaveContext.time;
     u16 sp3C = 0;
-    struct_80133038_arg2 sp2C;
+    ScheduleResult sp2C;
     u32* unk_14 = &gSaveContext.unk_14;
 
     this->unk_374 = REG(15) + *unk_14;
@@ -1692,17 +1692,17 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
         gSaveContext.time = time;
     }
 
-    if (!func_80133038(globalCtx, D_80AFB900[this->unk_38C], &sp2C) ||
-        ((this->unk_258 != sp2C.unk0) && !func_80AF9BF8(this, globalCtx, &sp2C))) {
+    if (!Schedule_RunScript(globalCtx, D_80AFB900[this->unk_38C], &sp2C) ||
+        ((this->unk_258 != sp2C.result) && !func_80AF9BF8(this, globalCtx, &sp2C))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~1;
-        sp2C.unk0 = 0;
+        sp2C.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= 1;
     }
 
-    this->unk_258 = sp2C.unk0;
+    this->unk_258 = sp2C.result;
     this->unk_268 = func_80AF8040(this, globalCtx);
     func_80AFA438(this, globalCtx);
     if (this->unk_38C != 0) {

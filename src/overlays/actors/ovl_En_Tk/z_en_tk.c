@@ -24,8 +24,8 @@ void func_80AECB0C(EnTk* this, GlobalContext* globalCtx);
 void func_80AECB6C(EnTk* this, GlobalContext* globalCtx);
 void func_80AECE0C(EnTk* this, GlobalContext* globalCtx);
 s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx);
-s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2);
-s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2);
+s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2);
+s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2);
 void func_80AED4F8(EnTk* this, GlobalContext* globalCtx);
 void func_80AED610(EnTk* this, GlobalContext* globalCtx);
 void func_80AED898(EnTk* this, GlobalContext* globalCtx);
@@ -313,7 +313,7 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
     s32 temp3;
     f32 sp48;
     f32 sp44;
-    struct_80133038_arg2 sp34;
+    ScheduleResult sp34;
     u8 temp4;
 
     this->actor.textId = 0;
@@ -347,14 +347,14 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
     this->unk_2DC -= temp3;
     this->unk_2E0 += REG(15);
 
-    if (func_80133038(globalCtx, (UNK_TYPE*)D_80AEF800, &sp34)) {
-        if ((this->unk_3CC != sp34.unk0) && !func_80AED354(this, globalCtx, &sp34)) {
+    if (Schedule_RunScript(globalCtx, (UNK_TYPE*)D_80AEF800, &sp34)) {
+        if ((this->unk_3CC != sp34.result) && !func_80AED354(this, globalCtx, &sp34)) {
             return;
         }
-        temp4 = sp34.unk0;
+        temp4 = sp34.result;
     } else {
-        sp34.unk0 = 0;
-        temp4 = sp34.unk0;
+        sp34.result = 0;
+        temp4 = sp34.result;
     }
 
     if (!temp4 && (this->unk_3CC != 0)) {
@@ -365,7 +365,7 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
         this->actor.draw = EnTk_Draw;
     }
 
-    this->unk_3CC = sp34.unk0;
+    this->unk_3CC = sp34.result;
     func_80AECE0C(this, globalCtx);
 
     if (this->unk_3CE & 8) {
@@ -492,20 +492,20 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 phi_v1 = false;
 
-    if (arg2->unk0 != 0) {
+    if (arg2->result != 0) {
         phi_v1 = func_80AED38C(this, globalCtx, arg2);
     }
     return phi_v1;
 }
 
-s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     u16 sp1E = gSaveContext.time - 0x3FFC;
     u8 params = ENTK_GET_F800(&this->actor);
     u16 phi_a1;
-    s32 idx = arg2->unk0 - 1;
+    s32 idx = arg2->result - 1;
 
     this->unk_3C8 = func_8013BB34(globalCtx, params, D_80AEF8E8[idx + 1]);
     if (this->unk_3C8 == 0) {
@@ -515,10 +515,10 @@ s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     if ((this->unk_3CC <= 0) && (this->unk_3CC != 0) && (this->unk_3D0 >= 0)) {
         phi_a1 = sp1E;
     } else {
-        phi_a1 = arg2->unk4;
+        phi_a1 = arg2->time0;
     }
 
-    this->unk_3E4 = arg2->unk8 - phi_a1;
+    this->unk_3E4 = arg2->time1 - phi_a1;
     this->unk_3F0 = sp1E - phi_a1;
     phi_a1 = this->unk_3C8->count - 2;
     this->unk_3E8 = this->unk_3E4 / phi_a1;

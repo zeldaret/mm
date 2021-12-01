@@ -2518,7 +2518,7 @@
     0x80132E9C:("func_80132E9C",),
     0x80132FDC:("func_80132FDC",),
     0x80133000:("func_80133000",),
-    0x80133038:("func_80133038",),
+    0x80133038:("Schedule_RunScript",),
     0x801330E0:("SkelAnime_DrawLimbLod",),
     0x801332F0:("SkelAnime_DrawLod",),
     0x801334A0:("SkelAnime_DrawFlexLimbLod",),

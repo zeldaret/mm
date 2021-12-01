@@ -1395,11 +1395,11 @@ typedef struct EnHy {
 } EnHy;
 
 typedef struct {
-    /* 0x0 */ u8 unk0;
-    /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8;
-    /* 0xC */ s32 unkC;
-} struct_80133038_arg2; // size = 0x10
+    /* 0x0 */ u8 result;
+    /* 0x4 */ s32 time0;
+    /* 0x8 */ s32 time1;
+    /* 0xC */ s32 hasResult;
+} ScheduleResult; // size = 0x10
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 

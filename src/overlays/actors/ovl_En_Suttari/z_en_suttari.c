@@ -631,12 +631,12 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
     }
 }
 
-s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg2* unkStruct) {
+s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unkStruct) {
     u16 sp26 = gSaveContext.time - 0x3FFC;
     u16 pad1;
     u8 sp23 = ENSUTTARI_GET_PATH(&this->actor);
     u16 pad2;
-    UNK_TYPE sp1C = D_80BAE8F8[unkStruct->unk0];
+    UNK_TYPE sp1C = D_80BAE8F8[unkStruct->result];
     u16 phi_a0;
 
     if (sp1C >= 0) {
@@ -648,12 +648,12 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     if ((this->unk428 != 0 && this->unk428 < 0xC) && (this->unk42A >= 0)) {
         phi_a0 = sp26;
     } else {
-        phi_a0 = unkStruct->unk4;
+        phi_a0 = unkStruct->time0;
     }
-    if (unkStruct->unk8 < phi_a0) {
-        this->unk418 = (phi_a0 - unkStruct->unk8) + 0xFFFF;
+    if (unkStruct->time1 < phi_a0) {
+        this->unk418 = (phi_a0 - unkStruct->time1) + 0xFFFF;
     } else {
-        this->unk418 = unkStruct->unk8 - phi_a0;
+        this->unk418 = unkStruct->time1 - phi_a0;
     }
     this->unk424 = sp26 - phi_a0;
     phi_a0 = this->unk404->count - 2;
@@ -664,7 +664,7 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     return 1;
 }
 
-s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg2* unkStruct) {
+s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unkStruct) {
     s32 pad;
     EnDoor* sp48;
     u8 sp47;
@@ -680,7 +680,7 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
         return 0;
     }
     sp48 = (EnDoor*)SubS_FindNearestActor(&this->actor, globalCtx, ACTORCAT_DOOR, ACTOR_EN_DOOR);
-    sp24 = D_80BAE8F8[unkStruct->unk0];
+    sp24 = D_80BAE8F8[unkStruct->result];
     if ((sp48 != NULL) && (sp24 >= 0)) {
         this->unk404 = func_8013BB34(globalCtx, sp47, sp24);
     }
@@ -690,9 +690,9 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     sp28 = (Vec3s*)Lib_SegmentedToVirtual(this->unk404->points);
     Math_Vec3s_ToVec3f(&sp38, &sp28[0]);
     Math_Vec3s_ToVec3f(&sp2C, &sp28[1]);
-    this->unk434 = sp44 - unkStruct->unk4;
-    this->unk436 = unkStruct->unk8 - unkStruct->unk4;
-    if (unkStruct->unk0 != 10 && unkStruct->unk0 != 11) {
+    this->unk434 = sp44 - unkStruct->time0;
+    this->unk436 = unkStruct->time1 - unkStruct->time0;
+    if (unkStruct->result != 10 && unkStruct->result != 11) {
         sp48->unk_1A7 = 0x4B;
     }
     Math_Vec3f_Copy(&this->unk438, &sp38);
@@ -702,10 +702,10 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     return 1;
 }
 
-s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg2* unkStruct) {
+s32 func_80BABF64(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unkStruct) {
     s32 ret;
 
-    switch (unkStruct->unk0) {
+    switch (unkStruct->result) {
         case 15:
         case 14:
         case 13:
@@ -1057,17 +1057,17 @@ void func_80BACE4C(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
-    struct_80133038_arg2 unkStruct;
+    ScheduleResult unkStruct;
 
     this->unk42A = REG(15) + (0, gSaveContext.unk_14);
-    if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
-        ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+    if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
+        ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~1;
-        unkStruct.unk0 = 0;
+        unkStruct.result = 0;
     } else {
         this->actor.flags |= 1;
     }
-    this->unk428 = unkStruct.unk0;
+    this->unk428 = unkStruct.result;
     func_80BAC2FC(this, globalCtx);
     func_80BAB434(this);
     if (this->unk428 == 5) {
@@ -1081,17 +1081,17 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
-    struct_80133038_arg2 unkStruct;
+    ScheduleResult unkStruct;
 
     this->unk42A = REG(15) + (0, gSaveContext.unk_14);
-    if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
-        ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+    if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
+        ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~1;
-        unkStruct.unk0 = 0;
+        unkStruct.result = 0;
     } else {
         this->actor.flags |= 1;
     }
-    this->unk428 = unkStruct.unk0;
+    this->unk428 = unkStruct.result;
     func_80BAC2FC(this, globalCtx);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0x2A3A, &this->actor);
@@ -1202,7 +1202,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
-    struct_80133038_arg2 unkStruct;
+    ScheduleResult unkStruct;
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
@@ -1211,21 +1211,21 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
     }
     this->unk42A = REG(15) + (0, gSaveContext.unk_14);
-    if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
-        ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+    if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
+        ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~1;
-        unkStruct.unk0 = 0;
+        unkStruct.result = 0;
     } else {
         this->actor.flags |= 1;
     }
-    this->unk428 = unkStruct.unk0;
+    this->unk428 = unkStruct.result;
     func_80BAC2FC(this, globalCtx);
     if ((this->unk430 == 1) && (this->unk404->unk1 == 0xFF)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
     func_80BAB434(this);
-    if ((this->flags1 & 0x20) && (this->unk430 == 0) && (unkStruct.unk0 != 7)) {
+    if ((this->flags1 & 0x20) && (this->unk430 == 0) && (unkStruct.result != 7)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_801518B0(globalCtx, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
@@ -1237,7 +1237,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
-    struct_80133038_arg2 unkStruct;
+    ScheduleResult unkStruct;
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
@@ -1249,20 +1249,20 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
         }
         this->unk42A = REG(15) + (0, gSaveContext.unk_14);
-        if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
-            ((this->unk428 != unkStruct.unk0) && !func_80BABF64(this, globalCtx, &unkStruct))) {
+        if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
+            ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
             this->actor.flags &= ~1;
-            unkStruct.unk0 = 0;
+            unkStruct.result = 0;
         } else {
             this->actor.flags |= 1;
         }
-        this->unk428 = unkStruct.unk0;
+        this->unk428 = unkStruct.result;
         func_80BAC2FC(this, globalCtx);
         if ((this->unk430 == 1) && (this->unk404->unk1 == 0xFF)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-        if ((this->flags1 & 0x20) && (unkStruct.unk0 != 9)) {
+        if ((this->flags1 & 0x20) && (unkStruct.result != 9)) {
             if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
                 func_801518B0(globalCtx, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;

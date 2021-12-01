@@ -1,68 +1,75 @@
 #include "global.h"
 
+// TODO update names in functions.txt?
+
+// TODO document offsets
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    s8 unk3;
-} cmd0;
+    u8 cmd;
+} ScheduleCmdBase;
 
-s32 func_801323D0(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd0* cmd = (cmd0*)*arg1;
-    u16 a0 = (cmd->unk1 << 8) | cmd->unk2;
+typedef struct {
+    ScheduleCmdBase base;
+    u8 flagByte;
+    u8 flagMask;
+    s8 offset;
+} ScheduleCmdFlagCheckS;
 
-    if (gSaveContext.weekEventReg[a0 >> 8] & (a0 & 0xFF)) {
-        *arg1 = *arg1 + cmd->unk3;
+s32 Schedule_FlagCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdFlagCheckS* cmd = (ScheduleCmdFlagCheckS*)*script;
+    u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
+
+    if (gSaveContext.weekEventReg[flag >> 8] & (flag & 0xFF)) {
+        *script = *script + cmd->offset;
     }
 
-    return 0;
+    return false;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-} cmd1;
+    ScheduleCmdBase base;
+    u8 flagByte;
+    u8 flagMask;
+    u8 offsetH;
+    u8 offsetL;
+} ScheduleCmdFlagCheckL;
 
-s32 func_80132428(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd1* cmd = (cmd1*)*arg1;
-    u16 a0 = (cmd->unk1 << 8) | cmd->unk2;
+s32 Schedule_FlagCheckL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdFlagCheckL* cmd = (ScheduleCmdFlagCheckL*)*script;
+    u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
 
-    if (gSaveContext.weekEventReg[a0 >> 8] & (a0 & 0xFF)) {
-        *arg1 = *arg1 + (s16)((cmd->unk3 << 8) | cmd->unk4);;
+    if (gSaveContext.weekEventReg[flag >> 8] & (flag & 0xFF)) {
+        *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);;
     }
 
-    return 0;
+    return false;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-    s8 unk5;
-} cmd2;
+    ScheduleCmdBase base;
+    u8 startHr;
+    u8 startMin;
+    u8 endHr;
+    u8 endMin;
+    s8 offset;
+} ScheduleCmdTimeRangeCheckS;
 
-s32 func_80132494(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
+s32 Schedule_TimeRangeCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
     s32 inRange = 0;
-    cmd2* cmd = (cmd2*)*arg1;
+    ScheduleCmdTimeRangeCheckS* cmd = (ScheduleCmdTimeRangeCheckS*)*script;
 
     f32 f;
     u16 start;
     u16 end;
     u16 now;
 
-    f = cmd->unk1 * 60.0f;
-    f += cmd->unk2;
+    f = cmd->startHr * 60.0f;
+    f += cmd->startMin;
     start = f * 45.5f;
     start -= 0x3FFC;
 
 
-    f = cmd->unk3 * 60.0f;
-    f += cmd->unk4;
+    f = cmd->endHr * 60.0f;
+    f += cmd->endMin;
     end = f * 45.5f;
     end -= 0x3FFC;
     end -= 1;
@@ -75,39 +82,39 @@ s32 func_80132494(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg
     }
 
     if (inRange == 1) {
-        *arg1 = *arg1 + cmd->unk5;
+        *script = *script + cmd->offset;
     }
 
-    return 0;
+    return false;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-    u8 unk5;
-    u8 unk6;
-} cmd3;
+    ScheduleCmdBase base;
+    u8 startHr;
+    u8 startMin;
+    u8 endHr;
+    u8 endMin;
+    u8 offsetH;
+    u8 offsetL;
+} ScheduleCmdTimeRangeCheckL;
 
-s32 func_801326B8(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    s32 inRange = 0;
-    cmd3* cmd = (cmd3*)*arg1;
+s32 Schedule_TimeRangeCheckL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    s32 inRange = false;
+    ScheduleCmdTimeRangeCheckL* cmd = (ScheduleCmdTimeRangeCheckL*)*script;
 
     f32 f;
     u16 start;
     u16 end;
     u16 now;
 
-    f = cmd->unk1 * 60.0f;
-    f += cmd->unk2;
+    f = cmd->startHr * 60.0f;
+    f += cmd->startMin;
     start = f * 45.5f;
     start -= 0x3FFC;
 
 
-    f = cmd->unk3 * 60.0f;
-    f += cmd->unk4;
+    f = cmd->endHr * 60.0f;
+    f += cmd->endMin;
     end = f * 45.5f;
     end -= 0x3FFC;
     end -= 1;
@@ -116,203 +123,216 @@ s32 func_801326B8(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg
     now -= 0x3FFC;
 
     if ((start <= now) && (now <= end)) {
-        inRange = 1;
+        inRange = true;
     }
 
-    if (inRange == 1) {
-        *arg1 = *arg1 + (s16)((cmd->unk5 << 8) | cmd->unk6);
+    if (inRange == true) { // direct comparison required to match
+        *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 
-    return 0;
+    return false;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-} cmd4;
+    ScheduleCmdBase base;
+    u8 retH;
+    u8 retL;
+} ScheduleCmdReturnL;
 
-s32 func_801328F0(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd4* cmd = (cmd4*)*arg1;
+s32 Schedule_ReturnL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdReturnL* cmd = (ScheduleCmdReturnL*)*script;
 
-    arg2->unk0 = (cmd->unk1 << 8) | cmd->unk2;
-    arg2->unkC = 1;
+    result->result = (cmd->retH << 8) | cmd->retL; //! @bug result is a u8, value is truncated
+    result->hasResult = true;
 
-    return 1;
+    return true;
 }
 
-s32 func_80132920(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    arg2->unkC = 0;
+s32 Schedule_End(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    result->hasResult = false;
 
-    return 1;
+    return true;
 }
 
-s32 func_80132938(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    arg2->unkC = 1;
+s32 Schedule_ReturnEmpty(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    result->hasResult = true;
 
-    return 1;
-}
-
-s32 func_80132954(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    return 0;
+    return true;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    s8 unk2;
-} cmd8;
-
-s32 func_8013296C(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd8* cmd = (cmd8*)*arg1;
-
-    if (((cmd->unk1 == 0) && (gSaveContext.inventory.items[gItemSlots[0x2D]] == 0x2D)) ||
-        ((cmd->unk1 == 1) && (gSaveContext.inventory.items[gItemSlots[0x2F]] == 0x2F)) ||
-        ((cmd->unk1 == 2) && (Player_GetMask(globalCtx) == 7))) {
-        *arg1 = *arg1 + cmd->unk2;
-    }
-
-    return 0;
-}
-
-typedef struct {
-    u8 unk0;
-    u8 unk1;
-} cmd9;
-
-s32 func_80132A18(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd9* cmd = (cmd9*)*arg1;
-
-    arg2->unk0 = cmd->unk1;
-    arg2->unkC = 1;
-
-    return 1;
-}
-
-typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    s8 unk3;
-} cmd10;
-
-s32 func_80132A3C(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd10* cmd = (cmd10*)*arg1;
-    s16 a0 = (cmd->unk1 << 8) | cmd->unk2;
-
-    if (a0 != globalCtx->sceneNum) {
-        *arg1 = *arg1 + cmd->unk3;
-    }
-
-    return 0;
-}
-
-typedef struct {
-    u8 unk0;
+    ScheduleCmdBase base;
     u8 unk1;
     u8 unk2;
     u8 unk3;
-    u8 unk4;
-} cmd11;
+} ScheduleCmdNop;
 
-s32 func_80132A80(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd11* cmd = (cmd11*)*arg1;
-    s16 a0 = (cmd->unk1 << 8) | cmd->unk2;
+s32 Schedule_Nop(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    return false;
+}
 
-    if (a0 != globalCtx->sceneNum) {
-        *arg1 = *arg1 + (s16)((cmd->unk3 << 8) | cmd->unk4);
+typedef enum {
+    /* 0 */ SCH_ITEM_CHECK_ROOM_KEY,
+    /* 1 */ SCH_ITEM_CHECK_LETTER_KAFEI,
+    /* 2 */ SCH_ITEM_CHECK_MASK_ROMANI,
+} ScheduleItemCheck;
+
+typedef struct {
+    ScheduleCmdBase base;
+    u8 which;
+    s8 offset;
+} ScheduleCmdItemCheckS;
+
+s32 Schedule_ItemCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdItemCheckS* cmd = (ScheduleCmdItemCheckS*)*script;
+
+    if (((cmd->which == SCH_ITEM_CHECK_ROOM_KEY) && (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_ROOM_KEY)) ||
+        ((cmd->which == SCH_ITEM_CHECK_LETTER_KAFEI) && (INV_CONTENT(ITEM_LETTER_KAFEI) == ITEM_LETTER_KAFEI)) ||
+        ((cmd->which == SCH_ITEM_CHECK_MASK_ROMANI) && (Player_GetMask(globalCtx) == PLAYER_MASK_ROMANI))) {
+        *script = *script + cmd->offset;
     }
 
-    return 0;
+    return false;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    s8 unk3;
-} cmd12;
+    ScheduleCmdBase base;
+    u8 res;
+} ScheduleCmdReturnS;
 
-s32 func_80132AD8(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd12* cmd = (cmd12*)*arg1;
-    s16 a0 = (cmd->unk1 << 8) | cmd->unk2;
+s32 Schedule_ReturnS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdReturnS* cmd = (ScheduleCmdReturnS*)*script;
 
-    if (a0 != (s16)gSaveContext.day) {
-        *arg1 = *arg1 + cmd->unk3;
-    }
+    result->result = cmd->res;
+    result->hasResult = true;
 
-    return 0;
+    return true;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-} cmd13;
+    ScheduleCmdBase base;
+    u8 sceneH;
+    u8 sceneL;
+    s8 offset;
+} ScheduleCmdSceneCheckS;
 
-s32 func_80132B24(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd13* cmd = (cmd13*)*arg1;
-    s16 a0 = (cmd->unk1 << 8) | cmd->unk2;
+s32 Schedule_SceneCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdSceneCheckS* cmd = (ScheduleCmdSceneCheckS*)*script;
+    s16 scene = (cmd->sceneH << 8) | cmd->sceneL;
 
-    if (a0 != (s16)gSaveContext.day) {
-        *arg1 = *arg1 + (s16)((cmd->unk3 << 8) | cmd->unk4);
+    if (scene != globalCtx->sceneNum) {
+        *script = *script + cmd->offset;
     }
 
-    return 0;
+    return false;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-    u8 unk5;
-} cmd14;
+    ScheduleCmdBase base;
+    u8 sceneH;
+    u8 sceneL;
+    u8 offsetH;
+    u8 offsetL;
+} ScheduleCmdSceneCheckL;
 
-s32 func_80132B84(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd14* cmd = (cmd14*)*arg1;
+s32 Schedule_SceneCheckL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdSceneCheckL* cmd = (ScheduleCmdSceneCheckL*)*script;
+    s16 scene = (cmd->sceneH << 8) | cmd->sceneL;
+
+    if (scene != globalCtx->sceneNum) {
+        *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
+    }
+
+    return false;
+}
+
+typedef struct {
+    ScheduleCmdBase base;
+    u8 dayH;
+    u8 dayL;
+    s8 offset;
+} ScheduleCmdDayCheckS;
+
+s32 Schedule_DayCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdDayCheckS* cmd = (ScheduleCmdDayCheckS*)*script;
+    s16 day = (cmd->dayH << 8) | cmd->dayL;
+
+    if (day != (s16)gSaveContext.day) {
+        *script = *script + cmd->offset;
+    }
+
+    return false;
+}
+
+typedef struct {
+    ScheduleCmdBase base;
+    u8 dayH;
+    u8 dayL;
+    u8 offsetH;
+    u8 offsetL;
+} ScheduleCmdDayCheckL;
+
+s32 Schedule_DayCheckL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdDayCheckL* cmd = (ScheduleCmdDayCheckL*)*script;
+    s16 day = (cmd->dayH << 8) | cmd->dayL;
+
+    if (day != (s16)gSaveContext.day) {
+        *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
+    }
+
+    return false;
+}
+
+typedef struct {
+    ScheduleCmdBase base;
+    u8 time0Hr;
+    u8 time0Min;
+    u8 time1Hr;
+    u8 time1Min;
+    u8 res;
+} ScheduleCmdReturnTime;
+
+s32 Schedule_ReturnTime(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdReturnTime* cmd = (ScheduleCmdReturnTime*)*script;
     f32 f;
     u16 time0;
     u16 time1;
 
-    f = cmd->unk1 * 60.0f;
-    f += cmd->unk2;
+    f = cmd->time0Hr * 60.0f;
+    f += cmd->time0Min;
     time0 = f * 45.5f;
     time0 -= 0x3FFC;
 
 
-    f = cmd->unk3 * 60.0f;
-    f += cmd->unk4;
+    f = cmd->time1Hr * 60.0f;
+    f += cmd->time1Min;
     time1 = f * 45.5f;
     time1 -= 0x3FFC;
     time1 -= 1;
 
-    arg2->unk0 = cmd->unk5;
-    arg2->unk4 = time0;
-    arg2->unk8 = time1;
-    arg2->unkC = 1;
+    result->result = cmd->res;
+    result->time0 = time0;
+    result->time1 = time1;
+    result->hasResult = true;
 
-    return 1;
+    return true;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    s8 unk3;
-} cmd15;
+    ScheduleCmdBase base;
+    u8 timeHr;
+    u8 timeMin;
+    s8 offset;
+} ScheduleCmdTimeCheckS;
 
-s32 func_80132D70(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd15* cmd = (cmd15*)*arg1;
+s32 Schedule_TimeCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdTimeCheckS* cmd = (ScheduleCmdTimeCheckS*)*script;
     f32 f;
     u16 testTime;
     u16 now;
 
-    f = cmd->unk1 * 60.0f;
-    f += cmd->unk2;
+    f = cmd->timeHr * 60.0f;
+    f += cmd->timeMin;
     testTime = f * 45.5f;
     testTime -= 0x3FFC;
 
@@ -320,88 +340,116 @@ s32 func_80132D70(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg
     now -= 0x3FFC;
 
     if (now < testTime) {
-        *arg1 = *arg1 + cmd->unk3;
+        *script = *script + cmd->offset;
     }
 
-    return 0;
+    return false;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-} cmd16;
+    ScheduleCmdBase base;
+    u8 timeHr;
+    u8 timeMin;
+    u8 offsetH;
+    u8 offsetL;
+} ScheduleCmdTimeCheckL;
 
-s32 func_80132E9C(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd16* cmd = (cmd16*)*arg1;
+s32 Schedule_TimeCheckL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdTimeCheckL* cmd = (ScheduleCmdTimeCheckL*)*script;
     f32 f;
     u16 testTime;
     u16 now;
 
-    f = (cmd->unk1 * 60.0f);
-    f += cmd->unk2;
+    f = (cmd->timeHr * 60.0f);
+    f += cmd->timeMin;
     testTime = (u16)(f * 45.5f) - 0x3FFC;
     now = gSaveContext.time - 0x3FFC;
 
     if (now < testTime) {
-        *arg1 = *arg1 + (s16)((cmd->unk3 << 8) | cmd->unk4);
+        *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 
-    return 0;
+    return false;
 }
 
 typedef struct {
-    u8 unk0;
-    s8 unk1;
-} cmd17;
+    ScheduleCmdBase base;
+    s8 offset;
+} ScheduleCmdJumpS;
 
-s32 func_80132FDC(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd17* cmd = (cmd17*)*arg1;
+s32 Schedule_JumpS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdJumpS* cmd = (ScheduleCmdJumpS*)*script;
 
-    *arg1 = *arg1 + cmd->unk1;
-    return 0;
+    *script = *script + cmd->offset;
+    return false;
 }
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-} cmd18;
+    ScheduleCmdBase base;
+    u8 offsetH;
+    u8 offsetL;
+} ScheduleCmdJumpL;
 
-s32 func_80133000(GlobalContext* globalCtx, u8** arg1, struct_80133038_arg2* arg2) {
-    cmd18* cmd = (cmd18*)*arg1;
+s32 Schedule_JumpL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdJumpL* cmd = (ScheduleCmdJumpL*)*script;
 
-    *arg1 = *arg1 + (s16)((cmd->unk1 << 8) | cmd->unk2);
-    return 0;
+    *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
+    return false;
 }
 
-s32 func_80133038(GlobalContext* globalCtx, u8* arg1, struct_80133038_arg2* arg2) {
-    static s32 (*D_801C5C50[])(GlobalContext*, u8**, struct_80133038_arg2*) = {
-        func_801323D0, func_80132428, func_80132494, func_801326B8,
-        func_801328F0, func_80132920, func_80132938, func_80132954,
-        func_8013296C, func_80132A18, func_80132A3C, func_80132A80,
-        func_80132AD8, func_80132B24, func_80132B84, func_80132D70,
-        func_80132E9C, func_80132FDC, func_80133000
+s32 Schedule_RunScript(GlobalContext* globalCtx, u8* script, ScheduleResult* result) {
+    static s32 (*sCmdFuncs[])(GlobalContext*, u8**, ScheduleResult*) = {
+        Schedule_FlagCheckS,
+        Schedule_FlagCheckL,
+        Schedule_TimeRangeCheckS,
+        Schedule_TimeRangeCheckL,
+        Schedule_ReturnL,
+        Schedule_End,
+        Schedule_ReturnEmpty,
+        Schedule_Nop,
+        Schedule_ItemCheckS,
+        Schedule_ReturnS,
+        Schedule_SceneCheckS,
+        Schedule_SceneCheckL,
+        Schedule_DayCheckS,
+        Schedule_DayCheckL,
+        Schedule_ReturnTime,
+        Schedule_TimeCheckS,
+        Schedule_TimeCheckL,
+        Schedule_JumpS,
+        Schedule_JumpL
     };
 
-    static u8 D_801C5C9C[] = { // TODO
-        4, 5, 6, 7,
-        3, 1, 1, 4,
-        3, 2, 4, 5,
-        4, 5, 6, 4,
-        5, 2, 3
+    static u8 sCmdSizes[] = {
+        sizeof(ScheduleCmdFlagCheckS),
+        sizeof(ScheduleCmdFlagCheckL),
+        sizeof(ScheduleCmdTimeRangeCheckS),
+        sizeof(ScheduleCmdTimeRangeCheckL),
+        sizeof(ScheduleCmdReturnL),
+        sizeof(ScheduleCmdBase),
+        sizeof(ScheduleCmdBase),
+        sizeof(ScheduleCmdNop),
+        sizeof(ScheduleCmdItemCheckS),
+        sizeof(ScheduleCmdReturnS),
+        sizeof(ScheduleCmdSceneCheckS),
+        sizeof(ScheduleCmdSceneCheckL),
+        sizeof(ScheduleCmdDayCheckS),
+        sizeof(ScheduleCmdDayCheckL),
+        sizeof(ScheduleCmdReturnTime),
+        sizeof(ScheduleCmdTimeCheckS),
+        sizeof(ScheduleCmdTimeCheckL),
+        sizeof(ScheduleCmdJumpS),
+        sizeof(ScheduleCmdJumpL)
     };
 
     u8 size;
-    s32 ret;
+    s32 stop;
 
     do {
-        size = D_801C5C9C[*arg1];
-        ret = (*D_801C5C50[*arg1])(globalCtx, &arg1, arg2);
-        arg1 += size;
-    } while (ret == 0);
+        size = sCmdSizes[*script];
+        stop = (*sCmdFuncs[*script])(globalCtx, &script, result);
+        script += size;
+    } while (!stop);
 
-    return arg2->unkC;
+    return result->hasResult;
 }
