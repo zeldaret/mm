@@ -213,7 +213,41 @@ void func_80BE2B80(EnRuppecrow* this, GlobalContext* globalCtx2) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2D4C.s")
+s32 func_80BE2D4C(GlobalContext *globalCtx) {
+    Player* player;
+
+    player = GET_PLAYER(globalCtx);
+    if (globalCtx->msgCtx.unk1202A == 3) {
+        switch (player->transformation) {
+            case PLAYER_FORM_DEKU:
+                if (globalCtx->msgCtx.unk1202E == 0) {
+                    return true;
+                }
+                break;
+            case PLAYER_FORM_GORON:
+                if (globalCtx->msgCtx.unk1202E == 1) { 
+                    return true;
+                }
+                break;
+            case PLAYER_FORM_ZORA:
+                if (globalCtx->msgCtx.unk1202E == 2) {
+                    return true;
+                }
+                break;
+            case PLAYER_FORM_HUMAN:
+                if (globalCtx->msgCtx.unk1202E == 0) {
+                    return true;
+                } else if (globalCtx->msgCtx.unk1202E == 1) {
+                    return true;
+                } else if (globalCtx->msgCtx.unk1202E == 2) {
+                    return true;
+                }
+                break;
+        }
+    }
+
+    return false;
+}
 
 void func_80BE2E18(EnRuppecrow *this, GlobalContext *globalCtx) {
     Player *player;
