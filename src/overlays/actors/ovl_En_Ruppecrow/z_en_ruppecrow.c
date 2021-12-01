@@ -29,7 +29,9 @@ s32 func_80BE24CC(void*, u8*, s32);
 void func_80BE2668(Path*, s32, PosRot*, s16*);
 s32 func_80BE2794(GlobalContext*);
 void func_80BE2874(EnRuppecrow*, GlobalContext*);
-void func_80BE3354();
+void func_80BE3354(EnRuppecrow*, GlobalContext*);
+void func_80BE2E18(EnRuppecrow *, GlobalContext *);
+void func_80BE348C(EnRuppecrow *, GlobalContext *);
 
 #if 0
 const ActorInit En_Ruppecrow_InitVars = {
@@ -271,7 +273,29 @@ void func_80BE30F4(EnRuppecrow* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE32DC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE3354.s")
+void func_80BE3354(EnRuppecrow *this, GlobalContext *globalCtx) {
+    func_80BE2B80(this, globalCtx);
+    if (this->unk_2BC >= 0x14) {
+        this->unk_2B8 = 6.0f;
+        this->actor.gravity = 0.0f;
+        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
+        Math_ApproachF(&this->actor.velocity.y, 3.0f, 0.2f, 0.5f);
+        this->actionFunc = func_80BE348C;
+        this->skelAnime.playSpeed = 1.0f;
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    } else {
+        if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+            func_80BE2E18(this, globalCtx);
+            Math_ApproachF(&this->actor.speedXZ, this->unk_2B8, 0.2f, 0.5f);
+        }
+        Actor_SetVelocityAndMoveXYRotation(&this->actor);
+        this->unk_2BE += 0x1000;
+        this->actor.shape.yOffset = Math_SinS(this->unk_2BE) * 500.0f;        
+        if ((globalCtx->state.frames % 43) == 0) {
+            Audio_PlayActorSound2(&this->actor, 0x38B6U);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE348C.s")
 
