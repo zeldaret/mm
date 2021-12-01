@@ -30,8 +30,8 @@ void func_80BE2668(Path*, s32, PosRot*, s16*);
 s32 func_80BE2794(GlobalContext*);
 void func_80BE2874(EnRuppecrow*, GlobalContext*);
 void func_80BE3354(EnRuppecrow*, GlobalContext*);
-void func_80BE2E18(EnRuppecrow *, GlobalContext *);
-void func_80BE348C(EnRuppecrow *, GlobalContext *);
+void func_80BE2E18(EnRuppecrow*, GlobalContext*);
+void func_80BE348C(EnRuppecrow*, GlobalContext*);
 
 #if 0
 const ActorInit En_Ruppecrow_InitVars = {
@@ -144,18 +144,18 @@ void func_80BE2728(EnRuppecrow* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80BE2794(GlobalContext *globalCtx) {
-    Player *player;
+s32 func_80BE2794(GlobalContext* globalCtx) {
+    Player* player;
 
     player = GET_PLAYER(globalCtx);
     switch (player->transformation) {
-        case PLAYER_FORM_DEKU: 
-            return false; 
-        case PLAYER_FORM_GORON: 
-            return true; 
-        case PLAYER_FORM_ZORA: 
-            return false; 
-        case PLAYER_FORM_HUMAN: 
+        case PLAYER_FORM_DEKU:
+            return false;
+        case PLAYER_FORM_GORON:
+            return true;
+        case PLAYER_FORM_ZORA:
+            return false;
+        case PLAYER_FORM_HUMAN:
             if (player->stateFlags1 & 0x800000) {
                 return true;
             } else {
@@ -198,22 +198,20 @@ void func_80BE2B80(EnRuppecrow* this, GlobalContext* globalCtx2) {
         if (func_80BE24CC(this, this->path, this->unk_250)) {
             this->unk_250 = (this->unk_250 <= 0) ? (this->path->count - 0x1) : (this->unk_250 - 0x1);
 
-            if ((this->actionFunc == &func_80BE3354) &&
-                (!func_80BE2794(globalCtx) || (this->unk_250 % -2) == 0)) {
+            if ((this->actionFunc == &func_80BE3354) && (!func_80BE2794(globalCtx) || (this->unk_250 % -2) == 0)) {
                 func_80BE2874(this, globalCtx);
             }
         }
     } else if (func_80BE2330(this, this->path, this->unk_250)) {
         this->unk_250 = (this->unk_250 >= this->path->count - 0x1) ? 0x0 : this->unk_250 + 0x1;
 
-        if (this->actionFunc == &func_80BE3354 &&
-            (!func_80BE2794(globalCtx) || (this->unk_250 % -2) == 0)) {
+        if (this->actionFunc == &func_80BE3354 && (!func_80BE2794(globalCtx) || (this->unk_250 % -2) == 0)) {
             func_80BE2874(this, globalCtx);
         }
     }
 }
 
-s32 func_80BE2D4C(GlobalContext *globalCtx) {
+s32 func_80BE2D4C(GlobalContext* globalCtx) {
     Player* player;
 
     player = GET_PLAYER(globalCtx);
@@ -225,7 +223,7 @@ s32 func_80BE2D4C(GlobalContext *globalCtx) {
                 }
                 break;
             case PLAYER_FORM_GORON:
-                if (globalCtx->msgCtx.unk1202E == 1) { 
+                if (globalCtx->msgCtx.unk1202E == 1) {
                     return true;
                 }
                 break;
@@ -249,8 +247,8 @@ s32 func_80BE2D4C(GlobalContext *globalCtx) {
     return false;
 }
 
-void func_80BE2E18(EnRuppecrow *this, GlobalContext *globalCtx) {
-    Player *player;
+void func_80BE2E18(EnRuppecrow* this, GlobalContext* globalCtx) {
+    Player* player;
 
     player = GET_PLAYER(globalCtx);
     switch (player->transformation) {
@@ -259,12 +257,12 @@ void func_80BE2E18(EnRuppecrow *this, GlobalContext *globalCtx) {
             break;
         case PLAYER_FORM_GORON:
             this->unk_2B8 = (player->stateFlags3 & 0x1000) ? 19.0f : 7.0f;
-            break;       
+            break;
         case PLAYER_FORM_ZORA:
             this->unk_2B8 = 7.0f;
             break;
         case PLAYER_FORM_HUMAN:
-            this->unk_2B8 = (player->stateFlags1 & 0x800000) ? 16.0f : 7.0f; 
+            this->unk_2B8 = (player->stateFlags1 & 0x800000) ? 16.0f : 7.0f;
             break;
     }
 
@@ -334,7 +332,7 @@ void func_80BE30F4(EnRuppecrow* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE32DC.s")
 
-void func_80BE3354(EnRuppecrow *this, GlobalContext *globalCtx) {
+void func_80BE3354(EnRuppecrow* this, GlobalContext* globalCtx) {
     func_80BE2B80(this, globalCtx);
     if (this->unk_2BC >= 0x14) {
         this->unk_2B8 = 6.0f;
@@ -351,14 +349,14 @@ void func_80BE3354(EnRuppecrow *this, GlobalContext *globalCtx) {
         }
         Actor_SetVelocityAndMoveXYRotation(&this->actor);
         this->unk_2BE += 0x1000;
-        this->actor.shape.yOffset = Math_SinS(this->unk_2BE) * 500.0f;        
+        this->actor.shape.yOffset = Math_SinS(this->unk_2BE) * 500.0f;
         if ((globalCtx->state.frames % 43) == 0) {
             Audio_PlayActorSound2(&this->actor, 0x38B6U);
         }
     }
 }
 
-void func_80BE348C(EnRuppecrow *this, GlobalContext *globalCtx) {
+void func_80BE348C(EnRuppecrow* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 0x8) {
         this->actor.world.rot.y *= -1;
     }
