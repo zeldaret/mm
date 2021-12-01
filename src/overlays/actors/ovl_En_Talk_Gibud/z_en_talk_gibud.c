@@ -430,7 +430,7 @@ void EnTalkGibud_TurnAwayAndShakeHead(EnTalkGibud* this, GlobalContext* globalCt
         this->playerStunWaitTimer = 0;
     } else {
         this->headRotation.y =
-            Math_SinS(this->headShakeTimer * 0xFA0) * (0x256F * ((60 - this->headShakeTimer) / 60.0f));
+            Math_SinS(this->headShakeTimer * 4000) * (0x256F * ((60 - this->headShakeTimer) / 60.0f));
         this->headShakeTimer++;
     }
 }
