@@ -158,7 +158,6 @@ void func_80BE2808(EnRuppecrow* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2874.s")
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2B80.s")
 void func_80BE2B80(EnRuppecrow* this, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     s16 sp32;
@@ -178,7 +177,7 @@ void func_80BE2B80(EnRuppecrow* this, GlobalContext* globalCtx2) {
             this->unk_250 = (this->unk_250 <= 0) ? (this->path->count - 0x1) : (this->unk_250 - 0x1);
 
             if ((this->actionFunc == &func_80BE3354) &&
-                (!func_80BE2794(globalCtx) || (this->unk_250 & 0x1) == 0)) {
+                (!func_80BE2794(globalCtx) || (this->unk_250 % -2) == 0)) {
                 func_80BE2874(this, globalCtx);
             }
         }
@@ -186,7 +185,7 @@ void func_80BE2B80(EnRuppecrow* this, GlobalContext* globalCtx2) {
         this->unk_250 = (this->unk_250 >= this->path->count - 0x1) ? 0x0 : this->unk_250 + 0x1;
 
         if (this->actionFunc == &func_80BE3354 &&
-            (!func_80BE2794(globalCtx) || (this->unk_250 & 1) == 0)) {
+            (!func_80BE2794(globalCtx) || (this->unk_250 % -2) == 0)) {
             func_80BE2874(this, globalCtx);
         }
     }
