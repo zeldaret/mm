@@ -398,6 +398,7 @@ void func_80124420(Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
 #endif
 
+void func_80124618(f32*, f32, Vec3f*);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124618.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801246F4.s")
@@ -412,7 +413,14 @@ void func_80124420(Player* player);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801251C4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125318.s")
+void func_80125318(Vec3f* arg0, Vec3s* arg1) {
+    arg0->x = 0.0f;
+    arg0->y = 0.0f;
+    arg0->z = 0.0f;
+    arg1->x = 0;
+    arg1->y = 0;
+    arg1->z = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125340.s")
 
@@ -424,7 +432,12 @@ void func_80124420(Player* player);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125CE0.s")
+void func_80125CE0(Player* player, f32* arg1, Vec3f* arg2, Vec3s* arg3) {
+    Matrix_JointPosition(arg2, arg3);
+    func_80125318(arg2, arg3);
+    func_80124618(arg1, player->skelAnime.curFrame, player->unk_AF0);
+    Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125D4C.s")
 
@@ -534,7 +547,7 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
 extern AnimatedMaterial D_0A001CD8;
 
 void func_8012754C(GlobalContext* globalCtx, Player* player) {
-    gSegments[10] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
+    gSegments[0xA] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
     AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&D_0A001CD8));
 }
 
