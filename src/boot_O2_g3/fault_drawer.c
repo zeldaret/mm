@@ -33,8 +33,8 @@ FaultDrawer sFaultDrawerDefault = {
         GPACK_RGBA5551(255, 0, 255, 1),   // MAGENTA
         GPACK_RGBA5551(0, 255, 255, 1),   // CYAN
         GPACK_RGBA5551(255, 255, 255, 1), // WHITE
-        GPACK_RGBA5551(120, 120, 120, 1), // GRAY
-        GPACK_RGBA5551(176, 176, 176, 1), // GRAY
+        GPACK_RGBA5551(120, 120, 120, 1), // DARK GRAY
+        GPACK_RGBA5551(176, 176, 176, 1), // LIGHT GRAY
     },
     0,    // escCode
     0,    // osSyncPrintfEnabled
