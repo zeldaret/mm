@@ -66,6 +66,6 @@ void func_80BDE090(EnTalk* this, GlobalContext* globalCtx) {
 
 void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTalk* this = THIS;
-    
+
     this->actionFunc(this, globalCtx);
 }
