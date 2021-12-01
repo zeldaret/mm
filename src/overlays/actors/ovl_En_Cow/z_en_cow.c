@@ -199,7 +199,7 @@ void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
         this->actor.scale.x = 0.01f;
     }
 
-    if (this->animationCycle >= 0x11) {
+    if (this->animationCycle > 0x10) {
         this->actor.scale.y = ((Math_SinS((this->animationCycle * 0x400) - 0x4000) * (1.0f / 100.0f)) + 1.0f) * 0.01f;
     } else {
         this->actor.scale.y = 0.01f;
