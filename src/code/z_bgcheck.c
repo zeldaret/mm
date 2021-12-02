@@ -68,6 +68,8 @@ BgSpecialSceneMaxObjects sCustomDynapolyMem[] = {
     { SCENE_21MITURINMAE, 1000, 600, 512 },
 };
 
+// TODO: All these bss variables are localized to one function and can
+// likely be made into in-function static bss variables in the future
 char D_801ED950[80];
 char D_801ED9A0[80];
 Vec3f D_801ED9F0[3]; // polyVerts
