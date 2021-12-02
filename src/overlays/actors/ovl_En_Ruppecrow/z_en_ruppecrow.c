@@ -342,7 +342,38 @@ void func_80BE30F4(EnRuppecrow* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE3178.s")
+void func_80BE3178(EnRuppecrow *this, GlobalContext *globalCtx) {
+    Player *player;
+
+    player = GET_PLAYER(globalCtx);
+    func_80BE2B80(this, globalCtx);
+    if (this->actor.xzDistToPlayer < 1000.0f && func_80BE2D4C(globalCtx)) {
+        if (Actor_IsActorFacingLink(&this->actor, 0x4000)) {
+            this->unk_2B4 |= 0x1;
+            if (this->unk_250 > 0) {
+                this->unk_250--;
+            } else {
+                this->unk_250 = this->path->count - 1;
+            }
+        }
+        
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        this->actionFunc = func_80BE32DC;        
+    }
+
+    if (((s32)player->stateFlags2 * 0x10) < 0) {
+        Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.1f, 1.0f);
+    } else {
+        Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.1f, 0.1f);
+    }
+
+    Actor_SetVelocityAndMoveXYRotation(&this->actor);
+    this->unk_2BE += 0x1000;
+    this->actor.shape.yOffset = Math_SinS(this->unk_2BE) * 500.0f;
+    if (globalCtx->state.frames % 43 == 0) {
+        Audio_PlayActorSound2(&this->actor, 0x38B6U);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE32DC.s")
 
