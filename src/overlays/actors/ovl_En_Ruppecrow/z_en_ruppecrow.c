@@ -194,7 +194,63 @@ void func_80BE2808(EnRuppecrow* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2874.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2874.s")
+void func_80BE2874(EnRuppecrow *this, GlobalContext *globalCtx) {
+    Player *player;
+    f32 phi_f0;
+    EnItem00* item;
+    s16 sp3A;    
+    
+    player = GET_PLAYER(globalCtx);
+    sp3A = this->unk_2BC;
+    if (!(player->stateFlags3 & 0x1000)) {
+        if ((this->unk_2BC & 1)) {
+            phi_f0 = 10.0f;
+        } else {
+            phi_f0 = -10.0f;
+        }
+    } else {
+        phi_f0 = 0.0f;
+    }
+
+    if (func_80BE2794(globalCtx) && (this->unk_2BC % 5) == 4) {
+        if (this->unk_2BC == 19) {
+            item = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0, this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x2);
+            this->items[sp3A] = item;
+            this->items[sp3A]->actor.gravity = -5.0f;
+            this->items[sp3A]->actor.velocity.y = 0.0f;
+            Audio_PlayActorSound2(&this->actor, 0x28D9U);
+            this->items[sp3A]->unk152 = 0x3C;
+            this->items[sp3A]->actor.flags |= 0x10;
+        } else {
+            item = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0, this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x1);
+            this->items[sp3A] = item;
+            this->items[sp3A]->actor.gravity = -5.0f;
+            this->items[sp3A]->actor.velocity.y = 0.0f;
+            Audio_PlayActorSound2(&this->actor, 0x28D9U);
+            this->items[sp3A]->unk152 = 0x3C;
+            this->items[sp3A]->actor.flags |= 0x10;
+        }
+    } else if (this->unk_2BC == 19) {
+        item = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0, this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x2);
+        this->items[sp3A] = item;
+        this->items[sp3A]->actor.gravity = -5.0f;
+        this->items[sp3A]->actor.velocity.y = 0.0f;
+        Audio_PlayActorSound2(&this->actor, 0x28D9U);
+        this->items[sp3A]->unk152 = 0x3C;
+        this->items[sp3A]->actor.flags |= 0x10;
+    } else {
+        item = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0, this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x0);
+        this->items[sp3A] = item;
+        this->items[sp3A]->actor.gravity = -5.0f;
+        this->items[sp3A]->actor.velocity.y = 0.0f;
+        Audio_PlayActorSound2(&this->actor, 0x28D9U);
+        this->items[sp3A]->unk152 = 0x3C;
+        this->items[sp3A]->actor.flags |= 0x10;
+    }
+
+    this->unk_2BC++;
+}
 
 void func_80BE2B80(EnRuppecrow* this, GlobalContext* globalCtx) {
     Vec3s sp30;
