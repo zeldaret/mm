@@ -24,9 +24,9 @@ void func_80BE2728(EnRuppecrow*, GlobalContext*);
 void func_80BE2B80(EnRuppecrow*, GlobalContext*);
 s32 func_80BE2D4C(GlobalContext*);
 void func_80BE32DC(EnRuppecrow*, GlobalContext*);
-s32 func_80BE2330(void*, u8*, s32);
+s32 func_80BE2330(EnRuppecrow *, Path *, s32);
 s32 func_80BE24CC(void*, u8*, s32);
-void func_80BE2668(Path*, s32, PosRot*, s16*);
+f32 func_80BE2668(Path*, s32, PosRot*, Vec3s*);
 s32 func_80BE2794(GlobalContext*);
 void func_80BE2874(EnRuppecrow*, GlobalContext*);
 void func_80BE3354(EnRuppecrow*, GlobalContext*);
@@ -134,7 +134,23 @@ s32 func_80BE2260(EnRuppecrow* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE24CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2668.s")
+f32 func_80BE2668(Path *path, s32 arg1, PosRot *world, Vec3s* arg3) {    
+    Vec3s *points;
+    Vec3f sp20;
+
+    if (path != NULL) {
+        points = Lib_SegmentedToVirtual(path->points);
+        points = &points[arg1];
+        sp20.x = (f32)points->x;
+        sp20.y = (f32)points->y;
+        sp20.z = (f32)points->z;
+    }
+    
+    arg3->y = Math_Vec3f_Yaw(&world->pos, &sp20);
+    arg3->x = Math_Vec3f_Pitch(&world->pos, &sp20);
+
+    return sp20.y - world->pos.y;
+}
 
 void func_80BE2728(EnRuppecrow* this, GlobalContext* globalCtx) {
     if ((u8)this->unk_2C4 == 0xA) {
@@ -180,19 +196,17 @@ void func_80BE2808(EnRuppecrow* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2874.s")
 
-void func_80BE2B80(EnRuppecrow* this, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
-    s16 sp32;
-    s16 sp30;
+void func_80BE2B80(EnRuppecrow* this, GlobalContext* globalCtx) {
+    Vec3s sp30;
 
     func_80BE2668(this->path, this->unk_250, &this->actor.world, &sp30);
     if (this->actor.bgCheckFlags & 8) {
-        sp32 = this->actor.wallYaw;
+        sp30.y = this->actor.wallYaw;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, sp32, 0x4, 0x3E8, 0x1);
+    Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 0x4, 0x3E8, 0x1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Math_SmoothStepToS(&this->actor.world.rot.x, -sp30, 0x4, 0x3E8, 0x1);
+    Math_SmoothStepToS(&this->actor.world.rot.x, -sp30.x, 0x4, 0x3E8, 0x1);
 
     if (this->unk_2B4 & 0x1) {
         if (func_80BE24CC(this, this->path, this->unk_250)) {
