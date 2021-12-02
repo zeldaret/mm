@@ -363,8 +363,32 @@ s32 func_801234B0(Player* player) {
     return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
 }
 
+s32 func_801234D4(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801234D4.s")
+    return 
+        (player->stateFlags2 & 8) 
+        ||
+        player->actor.speedXZ != 0.0f 
+        || 
+        (
+            (player->transformation != PLAYER_FORM_ZORA) 
+            && 
+            (player->stateFlags1 & 0x8000000)
+        )
+        || 
+        (
+            (player->transformation == PLAYER_FORM_ZORA) 
+            && 
+            (player->stateFlags1 & 0x8000000) 
+            && 
+            (
+                !(player->actor.bgCheckFlags & 1)
+                || 
+                (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)
+            )
+        );
+}
 
 s32 func_80123590(GameState* gameState, Actor* actor) {
     Player* player = GET_PLAYER(gameState);

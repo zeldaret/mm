@@ -2156,7 +2156,7 @@ s32 Player_InCsMode(GameState* gameState);
 // void func_80123434(void);
 // void func_80123448(void);
 // void func_801234B0(void);
-// void func_801234D4(void);
+s32 func_801234D4(GlobalContext* globalCtx);
 s32 func_80123590(GameState* globalCtx, Actor* player);
 // void func_8012364C(void);
 s32 func_80123810(GlobalContext* globalCtx);
