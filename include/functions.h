@@ -2222,7 +2222,6 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player);
 // void func_80127594(void);
 // void func_801278F8(void);
 // void func_80127A60(void);
-// void func_80127B64(void);
 // void func_80127BE8(void);
 // void func_80127DA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_80128388(void);

@@ -84,12 +84,18 @@ void func_801229A0(GlobalContext* globalCtx, Player* player) {
 void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} struct_801F58B0; // size = 0x1C
+
 extern s16 D_801BFD9E[];
-extern Vec3f D_801F58B0[3][7];
-extern Vec3f D_801F59AC[3][7]; // end of D_801F58B0
+extern struct_801F58B0 D_801F58B0[3][3];
 extern s32 D_801F59C8[2];
 
-void func_80127B64(Vec3f arg0[7], UNK_TYPE arg1, Vec3f* arg2);
+void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
 
 void func_801229FC(Player* player) {
     if (player->maskObjectLoading == 1) {
@@ -107,7 +113,7 @@ void func_801229FC(Player* player) {
                 s32 i;
 
                 for (i = 0; i < ARRAY_COUNT(D_801F58B0); i++) {
-                    func_80127B64(D_801F58B0[i], 3, &player->bodyPartsPos[7]);
+                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]), &player->bodyPartsPos[7]);
                 }
             }
         }
@@ -594,7 +600,19 @@ void func_8012754C(GlobalContext* globalCtx, Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127A60.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127B64.s")
+void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2) {
+    s32 i;
+
+    for (i = 0; i < count; i++) {
+        Math_Vec3f_Copy(&arg0->unk_00, arg2);
+        Math_Vec3f_Copy(&arg0->unk_0C, &D_801D15B0);
+        // maybe fake match?
+        arg0++;
+        arg0[-1].unk_18 = 0;
+        arg0[-1].unk_1A = 0;
+    }
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127BE8.s")
 
