@@ -290,9 +290,17 @@ s32 func_80122F9C(GlobalContext* globalCtx) {
     return (player->stateFlags2 & 0x80000) && player->unk_AE7 == 2;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122FCC.s")
+s32 func_80122FCC(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012300C.s")
+    return (player->stateFlags2 & 0x80000) && (player->unk_AE7 == 1 || player->unk_AE7 == 3);
+}
+
+void func_8012300C(GlobalContext* globalCtx, s32 arg1) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    player->unk_B2B = arg1;
+}
 
 void func_8012301C(Player* player, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
