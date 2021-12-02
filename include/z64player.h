@@ -189,6 +189,21 @@ typedef struct {
 typedef void (*PlayerFuncD58)(struct GlobalContext*, struct Player*);
 
 
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 unk_01;
+    /* 0x02 */ char unk_02[2]; // probably alignment padding
+    /* 0x04 */ MtxF unk_04;
+} struct_80122D44_arg1_unk_04; // size = 0x44
+
+typedef struct {
+    /* 0x00 */ s8 unk_00;
+    /* 0x01 */ s8 unk_01;
+    /* 0x02 */ char unk_02[2]; // probably alignment padding
+    /* 0x04 */ struct_80122D44_arg1_unk_04 unk_04[4];
+} struct_80122D44_arg1; // size >= 0x114
+
+
 typedef struct Player {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s8 currentShield;
@@ -266,8 +281,8 @@ typedef struct Player {
     /* 0x388 */ Actor* unk_388;
     /* 0x38C */ s16 unk_38C;
     /* 0x390 */ Actor* rideActor;
-    /* 0x394 */ u8 unk_394;
-    /* 0x395 */ u8 unk_395;
+    /* 0x394 */ u8 unk_394; // csMode?
+    /* 0x395 */ u8 unk_395; // prevCsMode?
     /* 0x396 */ u8 unk_396;
     /* 0x397 */ u8 unk_397;
     /* 0x398 */ Actor* unk_398;
@@ -283,7 +298,8 @@ typedef struct Player {
     /* 0x3CC */ s16 unk_3CC;
     /* 0x3CE */ s8 unk_3CE;
     /* 0x3CF */ u8 unk_3CF;
-    /* 0x3D0 */ char unk_3D0[0x148];
+    /* 0x3D0 */ struct_80122D44_arg1 unk_3D0;
+    /* 0x404 */ UNK_TYPE1 unk_404[0x34];
     /* 0x518 */ ColliderCylinder cylinder;
     /* 0x564 */ ColliderQuad swordQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;

@@ -130,11 +130,60 @@ void func_801229FC(Player* player) {
     }
 }
 
+void func_80122BA4(GraphicsContext** gfxCtx, struct_80122D44_arg1*, UNK_TYPE, s32);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122BA4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122C20.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122D44.s")
+struct _struct_D_801BFDD0_0x8 {
+    /* 0x0 */ u8 unk_0;                             /* inferred */
+    /* 0x1 */ u8 unk_1;                             /* inferred */
+    /* 0x2 */ u8 unk_2;                             /* inferred */
+    ///* 0x3 */ char pad_3[1];
+    /* 0x4 */ Gfx* unk_4;                            /* inferred */
+};
+extern struct _struct_D_801BFDD0_0x8 D_801BFDD0[3];/* = {
+    { 0xB4, 0xC8, 0xFF, 0x600BDD8 },
+    { 0x9B, 0, 0, 0x6014690 },
+    { 0xFF, 0, 0, 0x6011AB8 },
+};*/
+
+extern AnimatedMaterial D_06013138;
+
+void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
+    struct _struct_D_801BFDD0_0x8* temp_s3;
+    struct_80122D44_arg1_unk_04* phi_s2 = arg1->unk_04;
+    s32 phi_s6 = false;
+    s32 i;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    for (i = 0; i != ARRAY_COUNT(arg1->unk_04); i++) {
+        if ((phi_s2->unk_01 != 0) && (phi_s2->unk_01 != 0xFF)) {
+            temp_s3 = &D_801BFDD0[phi_s2->unk_00 - 1];
+            Matrix_SetCurrentState(&phi_s2->unk_04);
+
+            gDPPipeSync(POLY_XLU_DISP++);
+
+            if (!phi_s6 && phi_s2->unk_00 == 2) {
+                AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&D_06013138));
+                phi_s6 = true;
+            }
+
+            Scene_SetRenderModeXlu(globalCtx, 1, 2);
+            gDPSetEnvColor(POLY_XLU_DISP++, temp_s3->unk_0, temp_s3->unk_1, temp_s3->unk_2, phi_s2->unk_01);
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            gSPDisplayList(POLY_XLU_DISP++, temp_s3->unk_4);
+        }
+
+        phi_s2++;
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122ED8.s")
 
@@ -595,11 +644,10 @@ void func_80127488(GraphicsContext** gfxCtx, Player* player, u8 arg2) {
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, arg2);
     gSPDisplayList(POLY_XLU_DISP++, D_06011AB8);
 
-    func_80122BA4(gfxCtx, player->unk_3D0, 3, arg2);
+    func_80122BA4(gfxCtx, &player->unk_3D0, 3, arg2);
 
     CLOSE_DISPS(*gfxCtx);
 }
-
 
 extern AnimatedMaterial D_0A001CD8;
 
