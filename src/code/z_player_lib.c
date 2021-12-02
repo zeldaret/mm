@@ -10,6 +10,35 @@ typedef struct {
 
 extern struct_801F59D0 D_801F59D0;
 
+
+
+struct _struct_D_801BFFB0_0x5 {
+    /* 0x0 */ u8 unk_0;                             /* inferred */
+    /* 0x1 */ u8 unk_1;                             /* inferred */
+    /* 0x2 */ u8 unk_2;                             /* inferred */
+    /* 0x3 */ u8 unk_3;                             /* inferred */
+    /* 0x4 */ u8 unk_4;                             /* inferred */
+};                                                  /* size = 0x5 */
+
+// gPlayerModelTypes
+extern u8 D_801BFFB0[0xF][5];/* = {
+    { 2, 0, 8, 0xC, 0x10 },
+    { 1, 2, 7, 0xF, 0x10 },
+    { 1, 2, 8, 0xD, 0x10 },
+    { 0, 0, 6, 0xE, 0x10 },
+    { 0, 0, 6, 0xE, 0x10 },
+    { 3, 3, 7, 0xE, 0x10 },
+    { 4, 1, 9, 0xE, 0x10 },
+    { 5, 0, 6, 0xE, 0x10 },
+    { 0, 4, 6, 0xE, 0x10 },
+    { 4, 0, 0xB, 0xE, 0x10 },
+    { 3, 1, 7, 0xE, 0x10 },
+    { 0, 0, 0xA, 0xE, 0x10 },
+    { 0, 5, 6, 0xE, 0x10 },
+    { 0, 2, 6, 0xF, 0x10 },
+    { 0, 1, 7, 0xE, 0x10 },
+};*/
+
 s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
     if (arg1 == 0){
         func_80169E6C(globalCtx, 0, 0xBFF);
@@ -437,36 +466,41 @@ s32 func_80123960(Player* player, s32 arg1) {
     return temp_v1_2;
 }
 
+//void func_801239AC(Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801239AC.s")
 
 void func_80123AA4(Player* player, s32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123AA4.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123AA4.s")
 
-struct _struct_D_801BFFB0_0x5 {
-    /* 0x0 */ u8 unk_0;                             /* inferred */
-    /* 0x1 */ u8 unk_1;                             /* inferred */
-    /* 0x2 */ u8 unk_2;                             /* inferred */
-    /* 0x3 */ u8 unk_3;                             /* inferred */
-    /* 0x4 */ u8 unk_4;                             /* inferred */
-};                                                  /* size = 0x5 */
+extern s32 D_801F59E0;
 
-extern struct _struct_D_801BFFB0_0x5 D_801BFFB0[0xF];/* = {
-    { 2, 0, 8, 0xC, 0x10 },
-    { 1, 2, 7, 0xF, 0x10 },
-    { 1, 2, 8, 0xD, 0x10 },
-    { 0, 0, 6, 0xE, 0x10 },
-    { 0, 0, 6, 0xE, 0x10 },
-    { 3, 3, 7, 0xE, 0x10 },
-    { 4, 1, 9, 0xE, 0x10 },
-    { 5, 0, 6, 0xE, 0x10 },
-    { 0, 4, 6, 0xE, 0x10 },
-    { 4, 0, 0xB, 0xE, 0x10 },
-    { 3, 1, 7, 0xE, 0x10 },
-    { 0, 0, 0xA, 0xE, 0x10 },
-    { 0, 5, 6, 0xE, 0x10 },
-    { 0, 2, 6, 0xF, 0x10 },
-    { 0, 1, 7, 0xE, 0x10 },
-};*/
+// sPlayerDListGroups
+extern Gfx** D_801C02F8[];
+
+// Player_SetModels
+void func_80123AA4(Player* player, s32 modelGroup) {
+    u8* aux;
+
+    D_801F59E0 = player->transformation * 2;
+    player->leftHandType = D_801BFFB0[modelGroup][1];
+    player->rightHandType = D_801BFFB0[modelGroup][2];
+    player->sheathType = D_801BFFB0[modelGroup][3];
+
+    if (player->sheathType == 0xE) {
+        if (gSaveContext.equips.buttonItems[CUR_FORM][0] == 0xFF) {
+            player->sheathType = 0xF;
+        }
+    }
+
+    aux = D_801BFFB0[modelGroup];
+
+    player->leftHandDLists = &D_801C02F8[aux[1]][D_801F59E0];
+    player->rightHandDLists = &D_801C02F8[aux[2]][D_801F59E0];
+    player->sheathDLists = &D_801C02F8[aux[3]][D_801F59E0];
+    player->waistDLists = &D_801C02F8[aux[4]][D_801F59E0];
+
+    func_801239AC(player);
+}
 
 void func_80123BD4(Player* player, s32 arg1) {
     player->modelGroup = arg1;
@@ -474,7 +508,7 @@ void func_80123BD4(Player* player, s32 arg1) {
     if (arg1 == 1) {
         player->modelAnimType = 0;
     } else {
-        player->modelAnimType = D_801BFFB0[arg1].unk_0;
+        player->modelAnimType = D_801BFFB0[arg1][0];
     }
 
     if ((player->modelAnimType < 3) && ((((player->transformation != PLAYER_FORM_FIERCE_DEITY)) && (player->transformation != PLAYER_FORM_HUMAN)) || (player->currentShield == 0))) {
