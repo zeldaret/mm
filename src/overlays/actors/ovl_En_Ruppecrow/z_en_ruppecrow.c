@@ -375,7 +375,19 @@ void func_80BE3178(EnRuppecrow *this, GlobalContext *globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE32DC.s")
+void func_80BE32DC(EnRuppecrow *this, GlobalContext *globalCtx) {
+    func_80BE2B80(this, globalCtx);
+
+    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+        func_80BE2E18(this, globalCtx);
+        this->actionFunc = func_80BE3354;
+    } else {
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    }
+
+    Actor_SetVelocityAndMoveXYRotation(&this->actor);
+}
 
 void func_80BE3354(EnRuppecrow* this, GlobalContext* globalCtx) {
     func_80BE2B80(this, globalCtx);
