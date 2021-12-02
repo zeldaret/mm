@@ -148,7 +148,65 @@ void func_80122BA4(GraphicsContext** gfxCtx, struct_80122D44_arg1* arg1, s32 arg
     }
 }
 
+#ifdef NON_EQUIVALENT
+// Probably equivalent, but I'm not sure
+// Maybe it is a unrolled loop?
+void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
+    u8 temp_v0;
+    struct_80122D44_arg1_unk_04* temp_v1;
+    s32 phi_a1;
+
+    temp_v1 = arg1->unk_04;
+    temp_v0 = temp_v1->unk_01;
+    if (temp_v0 != 0) {
+        phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
+
+        if (phi_a1 >= temp_v0) {
+            temp_v1->unk_01 = 0;
+        } else {
+            temp_v1->unk_01 = (temp_v0 - phi_a1);
+        }
+    }
+
+    temp_v1++;
+    temp_v0 = temp_v1->unk_01;
+    if (temp_v0 != 0) {
+        phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
+
+        if (phi_a1 >= temp_v0) {
+            temp_v1->unk_01 = 0;
+        } else {
+            temp_v1->unk_01 = (temp_v0 - phi_a1);
+        }
+    }
+
+    temp_v1++;
+    temp_v0 = temp_v1->unk_01;
+    if (temp_v0 != 0) {
+        phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
+
+        if (phi_a1 >= temp_v0) {
+            temp_v1->unk_01 = 0;
+        } else {
+            temp_v1->unk_01 = (temp_v0 - phi_a1);
+        }
+    }
+
+    temp_v1++;
+    temp_v0 = temp_v1->unk_01;
+    if (temp_v0 != 0) {
+        phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
+
+        if (phi_a1 >= temp_v0) {
+            temp_v1->unk_01 = 0;
+        } else {
+            temp_v1->unk_01 = (temp_v0 - phi_a1);
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122C20.s")
+#endif
 
 struct _struct_D_801BFDD0_0x8 {
     /* 0x0 */ u8 unk_0;                             /* inferred */
