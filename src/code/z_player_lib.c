@@ -403,7 +403,23 @@ s32 func_80123590(GameState* gameState, Actor* actor) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801235DC.s")
+s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (player->stateFlags3 & 0x1000) {
+        player->unk_B08[0] = arg1;
+        player->unk_B08[1] += arg1 * 0.05f;
+        player->currentYaw = arg2;
+        player->actor.home.rot.y = arg2;
+        player->actor.shape.rot.y = arg2;
+        player->unk_B8C = 4;
+        player->invincibilityTimer = 20;
+
+        return true;
+    }
+
+    return false;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012364C.s")
 
