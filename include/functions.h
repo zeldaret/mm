@@ -2160,7 +2160,7 @@ s32 func_801234D4(GlobalContext* globalCtx);
 s32 func_80123590(GameState* globalCtx, Actor* player);
 // void func_8012364C(void);
 s32 func_80123810(GlobalContext* globalCtx);
-// void func_80123960(void);
+s32 func_80123960(Player* player, s32 arg1);
 // void func_801239AC(void);
 // void func_80123AA4(void);
 // void func_80123BD4(void);

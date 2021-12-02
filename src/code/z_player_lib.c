@@ -425,7 +425,17 @@ s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123960.s")
+extern u8 D_801BFF3C[];
+
+s32 func_80123960(Player* player, s32 arg1) {
+    s32 temp_v1_2;
+
+    temp_v1_2 = D_801BFF3C[arg1];
+    if ((temp_v1_2 == 2) && func_801234B0(player)) {
+        return 1;
+    }
+    return temp_v1_2;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801239AC.s")
 
