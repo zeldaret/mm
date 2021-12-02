@@ -130,8 +130,23 @@ void func_801229FC(Player* player) {
     }
 }
 
-void func_80122BA4(GraphicsContext** gfxCtx, struct_80122D44_arg1*, UNK_TYPE, s32);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122BA4.s")
+void func_80122BA4(GraphicsContext** gfxCtx, struct_80122D44_arg1* arg1, s32 arg2, s32 arg3) {
+    if (arg2 == arg1->unk_00) {
+        s32 index;
+
+        arg1->unk_01--;
+        if (arg1->unk_01 < 0) {
+            arg1->unk_01 = 3;
+        }
+
+        index = arg1->unk_01;
+        arg1->unk_04[index].unk_00 = arg1->unk_00;
+        arg1->unk_04[index].unk_01 = arg3;
+        Matrix_CopyCurrentState(&arg1->unk_04[index].unk_04);
+
+        arg1->unk_00 = 0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122C20.s")
 

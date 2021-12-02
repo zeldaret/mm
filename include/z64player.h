@@ -197,7 +197,7 @@ typedef struct {
 } struct_80122D44_arg1_unk_04; // size = 0x44
 
 typedef struct {
-    /* 0x00 */ s8 unk_00;
+    /* 0x00 */ u8 unk_00;
     /* 0x01 */ s8 unk_01;
     /* 0x02 */ char unk_02[2]; // probably alignment padding
     /* 0x04 */ struct_80122D44_arg1_unk_04 unk_04[4];
