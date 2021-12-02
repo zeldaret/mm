@@ -350,10 +350,14 @@ s32 func_80123420(Player* player) {
 }
 
 s32 func_80123434(Player* player) {
-    return player->stateFlags1 & 0x40030000;
+    return player->stateFlags1 & (0x40000000 | 0x30000);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123448.s")
+s32 func_80123448(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    return (player->stateFlags1 & 0x400000) && (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == 0));
+}
 
 s32 func_801234B0(Player* player) {
     return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
