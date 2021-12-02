@@ -97,6 +97,7 @@ extern s32 D_801F59C8[2];
 
 void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
 
+// Load mask?
 void func_801229FC(Player* player) {
     if (player->maskObjectLoading == 1) {
         // TODO: check if player->maskId is unsigned
@@ -585,7 +586,20 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127438.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127488.s")
+extern Gfx D_06011AB8[];
+
+void func_80127488(GraphicsContext** gfxCtx, Player* player, u8 arg2) {
+    OPEN_DISPS(*gfxCtx);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(*gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, arg2);
+    gSPDisplayList(POLY_XLU_DISP++, D_06011AB8);
+
+    func_80122BA4(gfxCtx, player->unk_3D0, 3, arg2);
+
+    CLOSE_DISPS(*gfxCtx);
+}
+
 
 extern AnimatedMaterial D_0A001CD8;
 
