@@ -2142,7 +2142,7 @@ void func_801229A0(GlobalContext* globalCtx, Player* player);
 // void func_80122BA4(void);
 // void func_80122C20(void);
 // void func_80122D44(void);
-// void func_80122ED8(void);
+u8 func_80122ED8(s32 index);
 // void func_80122EEC(void);
 void func_80122F28(Player* player);
 // void func_80122F9C(void);

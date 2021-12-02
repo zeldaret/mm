@@ -257,10 +257,22 @@ void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+extern u8 D_801BFDE8[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122ED8.s")
+u8 func_80122ED8(s32 index) {
+    return D_801BFDE8[index];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122EEC.s")
+u8 func_80122EEC(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    u8 temp_v1;
+
+    if (player->currentMask != PLAYER_MASK_NONE) {
+        return func_80122ED8(player->currentMask - 1);
+    } else {
+        return 0xFF;
+    }
+}
 
 void func_80122F28(Player* player) {
     if ((player->actor.category == 2) && (!(player->stateFlags1 & (0x20000000 | 0xA00000 | 0xC00))) && (!(player->stateFlags2 & 1))) {
