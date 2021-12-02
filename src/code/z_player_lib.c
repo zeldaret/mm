@@ -614,11 +614,20 @@ s32 func_801240DC(Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124148.s")
 
+// Player_ActionToSword
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124168.s")
 
+// Player_GetSwordHeld
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124190.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801241B4.s")
+// Player_HoldsTwoHandedWeapon
+s32 func_801241B4(Player* player) {
+    if ((player->itemActionParam >= PLAYER_AP_SWORD_GREAT_FAIRY) && (player->itemActionParam <= PLAYER_AP_STICK)) {
+        return true;
+    }
+
+    return false;
+}
 
 s32 Player_ActionToBottle(Player* player, s32 actionParam) {
     s32 bottle = actionParam - PLAYER_AP_BOTTLE;
