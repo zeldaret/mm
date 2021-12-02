@@ -1,5 +1,15 @@
 #include "global.h"
 
+typedef struct {
+    /* 0x00 */ s16 unk_0;
+    /* 0x02 */ s16 unk_2;
+    /* 0x04 */ s16 unk_4;
+    /* 0x06 */ s16 unk_6;
+    /* 0x08 */ s16 unk_8;
+} struct_801F59D0;
+
+extern struct_801F59D0 D_801F59D0;
+
 s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
     if (arg1 == 0){
         func_80169E6C(globalCtx, 0, 0xBFF);
@@ -74,7 +84,44 @@ void func_801229A0(GlobalContext* globalCtx, Player* player) {
 void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801229FC.s")
+extern s16 D_801BFD9E[];
+extern Vec3f D_801F58B0[3][7];
+extern Vec3f D_801F59AC[3][7]; // end of D_801F58B0
+extern s32 D_801F59C8[2];
+
+void func_80127B64(Vec3f arg0[7], UNK_TYPE arg1, Vec3f* arg2);
+
+void func_801229FC(Player* player) {
+    if (player->maskObjectLoading == 1) {
+        // TODO: check if player->maskId is unsigned
+        s16 temp_s1 = D_801BFD9E[(u8)player->maskId];
+
+        osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
+        DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, objectFileTable[temp_s1].vromStart, objectFileTable[temp_s1].vromEnd - objectFileTable[temp_s1].vromStart, 0, &player->maskObjectLoadQueue, NULL);
+        player->maskObjectLoading += 1;
+    } else if (player->maskObjectLoading == 2) {
+        if (osRecvMesg(&player->maskObjectLoadQueue, NULL, 0) == 0) {
+            player->maskObjectLoading = 0;
+
+            if (player->currentMask == PLAYER_MASK_GREAT_FAIRY) {
+                s32 i;
+
+                for (i = 0; i < ARRAY_COUNT(D_801F58B0); i++) {
+                    func_80127B64(D_801F58B0[i], 3, &player->bodyPartsPos[7]);
+                }
+            }
+        }
+    } else if ((player->currentMask != 0) && (player->currentMask != (u8)player->maskId)) {
+        player->maskObjectLoading = 1;
+        player->maskId = player->currentMask;
+    } else if (player->currentMask == 8) {
+        s32 i;
+
+        for (i = 0; i < ARRAY_COUNT(D_801F59C8); i++) {
+            D_801F59C8[i] += Rand_S16Offset(4, 0x17) + (s32) (fabsf(player->linearVelocity) * 50.0f);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122BA4.s")
 
@@ -338,16 +385,6 @@ s32 func_801242DC(GlobalContext* globalCtx) {
 
     return sp1C + 1;
 }
-
-typedef struct {
-    /* 0x00 */ s16 unk_0;
-    /* 0x02 */ s16 unk_2;
-    /* 0x04 */ s16 unk_4;
-    /* 0x06 */ s16 unk_6;
-    /* 0x08 */ s16 unk_8;
-} struct_801F59D0;
-
-extern struct_801F59D0 D_801F59D0;
 
 #ifdef NON_MATCHING
 void func_80124420(Player* player) {
