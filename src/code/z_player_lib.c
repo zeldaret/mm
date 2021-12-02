@@ -284,7 +284,11 @@ void func_80122F28(Player* player) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122F9C.s")
+s32 func_80122F9C(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    return (player->stateFlags2 & 0x80000) && player->unk_AE7 == 2;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122FCC.s")
 
