@@ -439,9 +439,50 @@ s32 func_80123960(Player* player, s32 arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801239AC.s")
 
+void func_80123AA4(Player* player, s32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123AA4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123BD4.s")
+struct _struct_D_801BFFB0_0x5 {
+    /* 0x0 */ u8 unk_0;                             /* inferred */
+    /* 0x1 */ u8 unk_1;                             /* inferred */
+    /* 0x2 */ u8 unk_2;                             /* inferred */
+    /* 0x3 */ u8 unk_3;                             /* inferred */
+    /* 0x4 */ u8 unk_4;                             /* inferred */
+};                                                  /* size = 0x5 */
+
+extern struct _struct_D_801BFFB0_0x5 D_801BFFB0[0xF];/* = {
+    { 2, 0, 8, 0xC, 0x10 },
+    { 1, 2, 7, 0xF, 0x10 },
+    { 1, 2, 8, 0xD, 0x10 },
+    { 0, 0, 6, 0xE, 0x10 },
+    { 0, 0, 6, 0xE, 0x10 },
+    { 3, 3, 7, 0xE, 0x10 },
+    { 4, 1, 9, 0xE, 0x10 },
+    { 5, 0, 6, 0xE, 0x10 },
+    { 0, 4, 6, 0xE, 0x10 },
+    { 4, 0, 0xB, 0xE, 0x10 },
+    { 3, 1, 7, 0xE, 0x10 },
+    { 0, 0, 0xA, 0xE, 0x10 },
+    { 0, 5, 6, 0xE, 0x10 },
+    { 0, 2, 6, 0xF, 0x10 },
+    { 0, 1, 7, 0xE, 0x10 },
+};*/
+
+void func_80123BD4(Player* player, s32 arg1) {
+    player->modelGroup = arg1;
+
+    if (arg1 == 1) {
+        player->modelAnimType = 0;
+    } else {
+        player->modelAnimType = D_801BFFB0[arg1].unk_0;
+    }
+
+    if ((player->modelAnimType < 3) && ((((player->transformation != PLAYER_FORM_FIERCE_DEITY)) && (player->transformation != PLAYER_FORM_HUMAN)) || (player->currentShield == 0))) {
+        player->modelAnimType = 0;
+    }
+
+    func_80123AA4(player, arg1);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123C58.s")
 
