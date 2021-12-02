@@ -39,6 +39,16 @@ extern u8 D_801BFFB0[0xF][5];/* = {
     { 0, 1, 7, 0xE, 0x10 },
 };*/
 
+
+extern s32 D_801F59E0;
+
+// sPlayerDListGroups
+extern Gfx** D_801C02F8[];
+
+
+s32 func_801241B4(Player* player);
+
+
 s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
     if (arg1 == 0){
         func_80169E6C(globalCtx, 0, 0xBFF);
@@ -466,16 +476,31 @@ s32 func_80123960(Player* player, s32 arg1) {
     return temp_v1_2;
 }
 
-//void func_801239AC(Player* player);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801239AC.s")
+void func_801239AC(Player* player) {
+    u8 phi_v0;
 
-void func_80123AA4(Player* player, s32 arg1);
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123AA4.s")
+    if (player->stateFlags1 & 0x400000) {
+        if ((player->heldItemActionParam < 0) || (player->heldItemActionParam == player->itemActionParam)) {
+            if (func_801241B4(player) == 0) {
+                if (func_801234B0(player) == 0) {
+                    D_801F59E0 = player->transformation * 2;
+                    player->rightHandType = 8;
+                    player->rightHandDLists = &D_801C02F8[8][D_801F59E0];
 
-extern s32 D_801F59E0;
+                    if (player->sheathType == 0xE) {
+                        player->sheathType = 0xC;
+                    } else if (player->sheathType == 0xF) {
+                        player->sheathType = 0xD;
+                    }
 
-// sPlayerDListGroups
-extern Gfx** D_801C02F8[];
+                    player->sheathDLists = &D_801C02F8[player->sheathType][D_801F59E0];
+                    player->modelAnimType = 2;
+                    player->heldItemActionParam = -1;
+                }
+            }
+        }
+    }
+}
 
 // Player_SetModels
 void func_80123AA4(Player* player, s32 modelGroup) {
