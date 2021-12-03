@@ -841,7 +841,34 @@ void func_80124618(f32*, f32, Vec3f*);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124CC4.s")
 
+#ifdef NON_EQUIVALENT
+// Float fun, maybe equivalent
+void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
+    f32 phi_f12;
+
+    if (*arg0 < arg2) {
+        *arg1 += arg3;
+    } else {
+        *arg1 -= arg3;
+    }
+
+    if (*arg1 < -arg4) {
+        phi_f12 = -arg4;
+    } else if (arg4 < *arg1) {
+        phi_f12 = arg4;
+    } else {
+        phi_f12 = *arg1;
+    }
+
+    *arg1 = phi_f12;
+    *arg0 += (s16)*arg1;
+    if (((s16) *arg1 * (arg2 - *arg0)) < 0) {
+        *arg0 = arg2;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124F18.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124FF0.s")
 
