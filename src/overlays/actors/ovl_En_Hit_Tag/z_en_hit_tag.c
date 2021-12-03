@@ -49,14 +49,14 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ColliderCylinder* pCylinder;
+    ColliderCylinder* cylinder;
     EnHitTag* this = THIS;
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = EnHitTag_WaitForHit;
-    pCylinder = &this->cylinder;
-    Collider_InitAndSetCylinder(globalCtx, pCylinder, &this->actor, &sCylinderInit);
-    Collider_UpdateCylinder(&this->actor, pCylinder);
+    cylinder = &this->cylinder;
+    Collider_InitAndSetCylinder(globalCtx, cylinder, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, cylinder);
     if (Flags_GetSwitch(globalCtx, ENHITTAG_GET_SWITCHFLAG(thisx))) {
         Actor_MarkForDeath(&this->actor);
     }
