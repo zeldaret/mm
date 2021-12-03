@@ -26,16 +26,23 @@ const ActorInit Bg_Inibs_Movebg_InitVars = {
     (ActorFunc)BgInibsMovebg_Draw,
 };
 
-Gfx* D_80B96560[] = { 0x060062D8, 0x06001DC0 };
-Gfx* D_80B96568[] = { 0x06006140, 0x06001C10 };
-AnimatedMaterial* D_80B96570[] = { 0x06006858, 0x06002598 };
+extern Gfx D_060062D8[];
+extern Gfx D_06001DC0[];
+extern Gfx D_06006140[];
+extern Gfx D_06001C10[];
+extern AnimatedMaterial D_06006858;
+extern AnimatedMaterial D_06002598;
+Gfx* D_80B96560[] = { D_060062D8, D_06001DC0 };
+Gfx* D_80B96568[] = { D_06006140, D_06001C10 };
+AnimatedMaterial* D_80B96570[] = { &D_06006858, &D_06002598 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
 void BgInibsMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgInibsMovebg* this = (BgInibsMovebg*)thisx;
+    BgInibsMovebg* this = THIS;
+
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
 
@@ -46,11 +53,13 @@ void BgInibsMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void BgInibsMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgInibsMovebg* this = THIS;
+
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgInibsMovebg* this = THIS;
+
     AnimatedMaterial* animMat;
     Gfx* dl1;
     Gfx* dl2;
