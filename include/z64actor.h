@@ -1022,7 +1022,7 @@ typedef enum {
 #define ACTOR_FLAG_20            (1 << 5)
 // 
 #define ACTOR_FLAG_40            (1 << 6)
-// 
+// Invisible
 #define ACTOR_FLAG_80            (1 << 7)
 // Related to talk
 #define ACTOR_FLAG_100           (1 << 8)
