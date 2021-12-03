@@ -82,7 +82,7 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 // Eye Textures
-static UNK_TYPE4* D_80BD0F80[] = {
+static TexturePtr* sEyeTextures[] = {
     &D_06011138,
     &D_06011938,
     &D_06012138,
@@ -93,8 +93,8 @@ void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06012A58, &D_0600B644, this->limbDrawTbl,
-                       this->transitionDrawTbl, HGO_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06012A58, &D_0600B644, this->jointTable,
+                       this->morphTable, HGO_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
@@ -144,7 +144,7 @@ void func_80BD049C(EnHgo* this) {
 
 void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO_MASK) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
             if (!(this->unk_310 & 4)) {
                 this->unk_310 |= 4;
                 func_801518B0(globalCtx, 0x15A5, &this->actor);
@@ -184,7 +184,6 @@ void func_80BD064C(EnHgo* this) {
 }
 
 void func_80BD0660(EnHgo* this, GlobalContext* globalCtx) {
-
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 0:
         case 1:
@@ -207,11 +206,11 @@ void func_80BD0660(EnHgo* this, GlobalContext* globalCtx) {
 void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx)) {
         switch (this->unk_314) {
-            case 5519:
+            case 0x158F:
                 func_801518B0(globalCtx, 0x1590, &this->actor);
                 this->unk_314 = 0x1590;
                 break;
-            case 5520:
+            case 0x1590:
                 if (gSaveContext.weekEventReg[14] & 4) {
                     func_801518B0(globalCtx, 0x1591, &this->actor);
                     this->unk_314 = 0x1591;
@@ -220,35 +219,35 @@ void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
                 func_801518B0(globalCtx, 0x1592, &this->actor);
                 this->unk_314 = 0x1592;
                 break;
-            case 5521:
+            case 0x1591:
                 func_801518B0(globalCtx, 0x1592, &this->actor);
                 this->unk_314 = 0x1592;
                 break;
-            case 5523:
+            case 0x1593:
                 func_801518B0(globalCtx, 0x1594, &this->actor);
                 this->unk_314 = 0x1594;
                 break;
-            case 5525:
+            case 0x1595:
                 func_801518B0(globalCtx, 0x1596, &this->actor);
                 this->unk_314 = 0x1596;
                 break;
-            case 5526:
+            case 0x1596:
                 func_801518B0(globalCtx, 0x1597, &this->actor);
                 this->unk_314 = 0x1597;
                 break;
-            case 5528:
+            case 0x1598:
                 func_801518B0(globalCtx, 0x1599, &this->actor);
                 this->unk_314 = 0x1599;
                 break;
-            case 5541:
+            case 0x15A5:
                 func_801518B0(globalCtx, 0x15A6, &this->actor);
                 this->unk_314 = 0x15A6;
                 break;
-            case 5542:
+            case 0x15A6:
                 func_801518B0(globalCtx, 0x15A7, &this->actor);
                 this->unk_314 = 0x15A7;
                 break;
-            case 5543:
+            case 0x15A7:
                 func_801477B4(globalCtx);
                 func_80BD049C(this);
                 break;
@@ -259,7 +258,7 @@ void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
 s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
     u32 actionIndex;
 
-    if (func_800EE29C(globalCtx, 0x1E6U) != 0) {
+    if (func_800EE29C(globalCtx, 0x1E6) != 0) {
         actionIndex = func_800EE200(globalCtx, 0x1E6);
         if (this->unk_316 != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
             this->unk_316 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
@@ -317,7 +316,7 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.state == 0) && (((gSaveContext.weekEventReg[75]) & 0x20)) &&
         (this->actionFunc == func_80BD0410)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xC6, this->actor.focus.pos.x, this->actor.focus.pos.y,
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,
                     this->actor.focus.pos.z, 7, 0, 0, 0x7F5A);
         func_80BD0420(this);
     }
@@ -349,15 +348,14 @@ void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (func_80BD0898(this, globalCtx)) {
         func_800E8F08(&this->unk_300, &this->unk_306);
-    } else {
-        if (this->actionFunc != func_80BD0410) {
+    } else if (this->actionFunc != func_80BD0410) {
             if (this->actionFunc != func_80BD0434) {
                 Collider_UpdateCylinder(&this->actor, &this->collider);
                 CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
                 func_80BD0B8C(this, globalCtx);
             }
         }
-    }
+    
 }
 
 s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
@@ -384,7 +382,7 @@ void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BD0F80[this->unk_30C]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_30C]));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
     Matrix_SetCurrentState(&this->unk_1D8);

@@ -38,8 +38,8 @@ typedef struct EnHgo {
     /* 0x1D4 */ EnHgoActionFunc actionFunc;
     /* 0x1D8 */ MtxF unk_1D8;
     /* 0x218 */ s32 unk_218;
-    /* 0x21C */ Vec3s limbDrawTbl[HGO_LIMB_MAX];
-    /* 0x28E */ Vec3s transitionDrawTbl[HGO_LIMB_MAX];
+    /* 0x21C */ Vec3s jointTable[HGO_LIMB_MAX];
+    /* 0x28E */ Vec3s morphTable[HGO_LIMB_MAX];
     /* 0x300 */ Vec3s unk_300;
     /* 0x306 */ Vec3s unk_306;
     /* 0x30C */ s16 unk_30C;
