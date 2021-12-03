@@ -466,10 +466,10 @@ s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
 
 extern u8 D_801BFF3C[];
 
-s32 func_80123960(Player* player, s32 arg1) {
+s32 func_80123960(Player* player, s32 actionParam) {
     s32 temp_v1_2;
 
-    temp_v1_2 = D_801BFF3C[arg1];
+    temp_v1_2 = D_801BFF3C[actionParam];
     if ((temp_v1_2 == 2) && func_801234B0(player)) {
         return 1;
     }
@@ -543,9 +543,27 @@ void func_80123BD4(Player* player, s32 arg1) {
     func_80123AA4(player, arg1);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123C58.s")
+void func_80123C58(Player* player) {
+    player->heldItemActionParam = player->itemActionParam;
+    func_80123BD4(player, func_80123960(player, player->itemActionParam));
+    player->unk_AA5 = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123C90.s")
+extern u8 D_801BFF90[];
+
+void func_80123C90(GlobalContext* globalCtx, Player* player) {
+    if (player->unk_394 != 0x86) {
+        player->currentShield = CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD);
+        if ((player->transformation != 2) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) && (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
+            player->currentBoots = D_801BFF90[player->transformation];
+        }
+        func_80123BD4(player, func_80123960(player, player->itemActionParam));
+        func_80123140(globalCtx, player);
+        if (player->unk_B62 != 0) {
+            player->unk_B62 = 1;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123D50.s")
 
