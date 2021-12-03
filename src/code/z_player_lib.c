@@ -952,7 +952,25 @@ s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, struct_80126
     return 1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801265C8.s")
+extern u8 D_801C096C[];
+
+void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* arg2, Vec3f* arg3) {
+    if (player->stateFlags1 & 0x400000) {
+        Vec3f sp4C;
+        Vec3f sp40;
+        Vec3f sp34;
+        Vec3f sp28;
+
+        player->shieldQuad.base.colType = D_801C096C[player->currentShield];
+        Matrix_MultiplyVector3fByState(&arg3[0], &sp28);
+        Matrix_MultiplyVector3fByState(&arg3[1], &sp34);
+        Matrix_MultiplyVector3fByState(&arg3[2], &sp40);
+        Matrix_MultiplyVector3fByState(&arg3[3], &sp4C);
+        Collider_SetQuadVertices(arg2, &sp28, &sp34, &sp40, &sp4C);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &arg2->base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &arg2->base);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012669C.s")
 
