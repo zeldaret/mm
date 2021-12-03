@@ -24,8 +24,8 @@ void func_80BE2728(EnRuppecrow*, GlobalContext*);
 void func_80BE2B80(EnRuppecrow*, GlobalContext*);
 s32 func_80BE2D4C(GlobalContext*);
 void func_80BE32DC(EnRuppecrow*, GlobalContext*);
-s32 func_80BE2330(EnRuppecrow *, Path *, s32);
-s32 func_80BE24CC(void*, u8*, s32);
+s32 func_80BE2330(EnRuppecrow*, Path*, s32);
+s32 func_80BE24CC(void*, Path*, s32);
 f32 func_80BE2668(Path*, s32, PosRot*, Vec3s*);
 s32 func_80BE2794(GlobalContext*);
 void func_80BE2874(EnRuppecrow*, GlobalContext*);
@@ -134,8 +134,8 @@ s32 func_80BE2260(EnRuppecrow* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE24CC.s")
 
-f32 func_80BE2668(Path *path, s32 arg1, PosRot *world, Vec3s* arg3) {    
-    Vec3s *points;
+f32 func_80BE2668(Path* path, s32 arg1, PosRot* world, Vec3s* arg3) {
+    Vec3s* points;
     Vec3f sp20;
 
     if (path != NULL) {
@@ -145,7 +145,7 @@ f32 func_80BE2668(Path *path, s32 arg1, PosRot *world, Vec3s* arg3) {
         sp20.y = (f32)points->y;
         sp20.z = (f32)points->z;
     }
-    
+
     arg3->y = Math_Vec3f_Yaw(&world->pos, &sp20);
     arg3->x = Math_Vec3f_Pitch(&world->pos, &sp20);
 
@@ -194,58 +194,62 @@ void func_80BE2808(EnRuppecrow* this) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2874.s")
-void func_80BE2874(EnRuppecrow *this, GlobalContext *globalCtx) {
-    Player *player;
+void func_80BE2874(EnRuppecrow* this, GlobalContext* globalCtx) {
+    Player* player;
     f32 phi_f0;
     EnItem00* item;
-    s16 sp3A;    
-    
+    s16 sp3A;
+
     player = GET_PLAYER(globalCtx);
     sp3A = this->unk_2BC;
+
     if (!(player->stateFlags3 & 0x1000)) {
-        if ((this->unk_2BC & 1)) {
-            phi_f0 = 10.0f;
-        } else {
-            phi_f0 = -10.0f;
-        }
+        phi_f0 = this->unk_2BC & 1 ? 10.0f : -10.0f;
     } else {
         phi_f0 = 0.0f;
     }
 
     if (func_80BE2794(globalCtx) && (this->unk_2BC % 5) == 4) {
         if (this->unk_2BC == 19) {
-            item = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0, this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x2);
+            item = (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0,
+                                          this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x2);
             this->items[sp3A] = item;
             this->items[sp3A]->actor.gravity = -5.0f;
             this->items[sp3A]->actor.velocity.y = 0.0f;
-            Audio_PlayActorSound2(&this->actor, 0x28D9U);
-            this->items[sp3A]->unk152 = 0x3C;
+            Audio_PlayActorSound2(&this->actor, 0x28D9);
+            item = this->items[sp3A];
+            item->unk152 = 0x3C;
             this->items[sp3A]->actor.flags |= 0x10;
         } else {
-            item = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0, this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x1);
+            item = (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0,
+                                          this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x1);
             this->items[sp3A] = item;
             this->items[sp3A]->actor.gravity = -5.0f;
             this->items[sp3A]->actor.velocity.y = 0.0f;
-            Audio_PlayActorSound2(&this->actor, 0x28D9U);
-            this->items[sp3A]->unk152 = 0x3C;
+            Audio_PlayActorSound2(&this->actor, 0x28D9);
+            item = this->items[sp3A];
+            item->unk152 = 0x3C;
             this->items[sp3A]->actor.flags |= 0x10;
         }
     } else if (this->unk_2BC == 19) {
-        item = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0, this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x2);
+        item = (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0,
+                                      this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x2);
         this->items[sp3A] = item;
         this->items[sp3A]->actor.gravity = -5.0f;
         this->items[sp3A]->actor.velocity.y = 0.0f;
-        Audio_PlayActorSound2(&this->actor, 0x28D9U);
-        this->items[sp3A]->unk152 = 0x3C;
+        Audio_PlayActorSound2(&this->actor, 0x28D9);
+        item = this->items[sp3A];
+        item->unk152 = 0x3C;
         this->items[sp3A]->actor.flags |= 0x10;
     } else {
-        item = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0, this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x0);
+        item = (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xE, this->actor.world.pos.x + phi_f0,
+                                      this->actor.world.pos.y, this->actor.world.pos.z, 0x0, 0x0, 0x0, 0x0);
         this->items[sp3A] = item;
         this->items[sp3A]->actor.gravity = -5.0f;
         this->items[sp3A]->actor.velocity.y = 0.0f;
-        Audio_PlayActorSound2(&this->actor, 0x28D9U);
-        this->items[sp3A]->unk152 = 0x3C;
+        Audio_PlayActorSound2(&this->actor, 0x28D9);
+        item = this->items[sp3A];
+        item->unk152 = 0x3C;
         this->items[sp3A]->actor.flags |= 0x10;
     }
 
@@ -398,8 +402,8 @@ void func_80BE30F4(EnRuppecrow* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BE3178(EnRuppecrow *this, GlobalContext *globalCtx) {
-    Player *player;
+void func_80BE3178(EnRuppecrow* this, GlobalContext* globalCtx) {
+    Player* player;
 
     player = GET_PLAYER(globalCtx);
     func_80BE2B80(this, globalCtx);
@@ -412,9 +416,9 @@ void func_80BE3178(EnRuppecrow *this, GlobalContext *globalCtx) {
                 this->unk_250 = this->path->count - 1;
             }
         }
-        
+
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        this->actionFunc = func_80BE32DC;        
+        this->actionFunc = func_80BE32DC;
     }
 
     if (((s32)player->stateFlags2 * 0x10) < 0) {
@@ -431,7 +435,7 @@ void func_80BE3178(EnRuppecrow *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_80BE32DC(EnRuppecrow *this, GlobalContext *globalCtx) {
+void func_80BE32DC(EnRuppecrow* this, GlobalContext* globalCtx) {
     func_80BE2B80(this, globalCtx);
 
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
