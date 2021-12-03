@@ -5897,7 +5897,7 @@
     0x808B0B4C:("func_808B0B4C",),
     0x808B0B9C:("func_808B0B9C",),
     0x808B0CC8:("EnAm_Update",),
-    0x808B0EA4:("func_808B0EA4",),
+    0x808B0EA4:("EnAm_PostLimbDraw",),
     0x808B0F98:("EnAm_Draw",),
     0x808B1330:("EnDekubaba_Init",),
     0x808B1504:("EnDekubaba_Destroy",),

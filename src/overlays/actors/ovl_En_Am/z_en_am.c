@@ -35,7 +35,7 @@ void func_808B07A8(EnAm* this, GlobalContext* globalCtx);
 void func_808B0820(EnAm* this);
 void func_808B0894(EnAm* this, GlobalContext* globalCtx);
 void func_808B0B4C(EnAm* this, GlobalContext* globalCtx);
-void func_808B0EA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
+void EnAm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
 
 const ActorInit En_Am_InitVars = {
     ACTOR_EN_AM,
@@ -162,9 +162,9 @@ static Vec3f D_808B117C[] = {
     { 800.0f, -1000.0f, -1000.0f },
 };
 
-extern AnimationHeader D_06000238;
-extern AnimationHeader D_0600033C;
-extern AnimationHeader D_06005B3C;
+extern AnimationHeader D_06000238; // Wake up
+extern AnimationHeader D_0600033C; // Hop Anim
+extern AnimationHeader D_06005B3C; // Take Damage
 extern SkeletonHeader D_06005948;
 
 void EnAm_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -174,7 +174,7 @@ void EnAm_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 42.857143f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005948, &D_0600033C, this->jointTable, this->morphTable, 14);
     Collider_InitAndSetCylinder(globalCtx, &this->enemyCollider, &this->actor, &sEnemyCylinderInit);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(globalCtx, &this->interactCollider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->actor.home.pos.x -= 9.0f * Math_SinS(this->actor.shape.rot.y);
     this->actor.home.pos.z -= 9.0f * Math_CosS(this->actor.shape.rot.y);
@@ -187,9 +187,10 @@ void EnAm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnAm* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->enemyCollider);
-    Collider_DestroyCylinder(globalCtx, &this->collider2);
+    Collider_DestroyCylinder(globalCtx, &this->interactCollider);
 }
 
+// EnAm_Hop
 void func_808AFE38(EnAm* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f pos;
@@ -210,7 +211,7 @@ void func_808AFF9C(EnAm* this) {
 
     Animation_Change(&this->skelAnime, &D_0600033C, 0.0f, lastFrame, lastFrame, 0, 0.0f);
     this->enemyCollider.info.bumper.dmgFlags = 0x80000088;
-    this->collider2.info.bumper.dmgFlags = 0x77CFFF77;
+    this->interactCollider.info.bumper.dmgFlags = 0x77CFFF77;
     if (this->actor.colChkInfo.health != 0) {
         this->enemyCollider.base.atFlags &= ~1;
     }
@@ -219,8 +220,8 @@ void func_808AFF9C(EnAm* this) {
 }
 
 void func_808B0040(EnAm* this, GlobalContext* globalCtx) {
-    if (((this->enemyCollider.base.ocFlags1 & 2) && (this->enemyCollider.base.ocFlags2 & 1)) ||
-        (this->collider2.base.acFlags & 2)) {
+    if (((this->enemyCollider.base.ocFlags1 & OC1_HIT) && (this->enemyCollider.base.ocFlags2 & OC2_HIT_PLAYER)) ||
+        (this->interactCollider.base.acFlags & AC_HIT)) {
         if (this->unk_234 == 0) {
             func_808B00D8(this);
         }
@@ -235,18 +236,18 @@ void func_808B0040(EnAm* this, GlobalContext* globalCtx) {
     }
 }
 
+// EnAm_WakeUp
 void func_808B00D8(EnAm* this) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_AMOS_WAVE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_AMOS_VOICE);
-    this->unk_238 = 0x12C;
+    this->returnHomeTimer = 300;
     this->actionFunc = func_808B0124;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Am/func_808B0124.s")
 void func_808B0124(EnAm* this, GlobalContext* globalCtx) {
     s32 sp2C;
     f32 sp28;
-    u8 pad; // could be fake
+    u8 pad;
     f32 sp20;
     f32 sin;
 
@@ -254,19 +255,19 @@ void func_808B0124(EnAm* this, GlobalContext* globalCtx) {
         this->unk_234 = 0xFF;
         this->actor.flags |= 1;
         this->enemyCollider.info.bumper.dmgFlags = 0x81C2C788;
-        this->collider2.info.bumper.dmgFlags = 0x760D3877;
+        this->interactCollider.info.bumper.dmgFlags = 0x760D3877;
         this->enemyCollider.base.atFlags |= 1;
         this->actor.shape.yOffset = 0.0f;
         func_808B0358(this);
-        return;
+    } else {
+        sp2C = this->unk_234 + 0x14;
+        sp20 = randPlusMinusPoint5Scaled(10.0f);
+        sp28 = Math_CosS(this->actor.shape.rot.y) * sp20;
+        sin = Math_SinS(this->actor.shape.rot.y);
+        this->actor.world.pos.x = this->actor.home.pos.x + sp28;
+        this->actor.world.pos.z = this->actor.home.pos.z + (sin * sp20);
+        this->unk_234 = sp2C;
     }
-    sp2C = this->unk_234 + 0x14;
-    sp20 = randPlusMinusPoint5Scaled(10.0f);
-    sp28 = Math_CosS(this->actor.shape.rot.y) * sp20;
-    sin = Math_SinS(this->actor.shape.rot.y);
-    this->actor.world.pos.x = this->actor.home.pos.x + sp28;
-    this->actor.world.pos.z = this->actor.home.pos.z + (sin * sp20);
-    this->unk_234 = sp2C;
 }
 
 void func_808B0208(EnAm* this, GlobalContext* globalCtx) {
@@ -297,7 +298,7 @@ void func_808B0208(EnAm* this, GlobalContext* globalCtx) {
 
 void func_808B0358(EnAm* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &D_06000238, 4.0f);
-    this->deathTimer = 3;
+    this->unk_236 = 3;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_240 = 6.0f;
@@ -308,11 +309,11 @@ void func_808B03C0(EnAm* this, GlobalContext* globalCtx) {
     this->unk_23C = this->actor.yawTowardsPlayer;
     func_808B0208(this, globalCtx);
     if ((this->actor.bgCheckFlags & 2)) {
-        this->deathTimer--;
+        this->unk_236--;
     }
-    if (this->deathTimer == 0) {
+    if (this->unk_236 == 0) {
         func_808B0640(this);
-    } else if ((this->unk_238 == 0) || Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
+    } else if ((this->returnHomeTimer == 0) || Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
         func_808B0460(this);
     }
 }
@@ -351,7 +352,7 @@ void func_808B0508(EnAm* this, GlobalContext* globalCtx) {
 void func_808B057C(EnAm* this) {
     this->unk_240 = 6.0f;
     this->unk_23C = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
-    this->deathTimer = 1;
+    this->unk_236 = 1;
     this->actionFunc = func_808B05C8;
 }
 
@@ -364,15 +365,15 @@ void func_808B05C8(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void func_808B0640(EnAm* this) {
-    this->deathTimer = 0x28;
+    this->unk_236 = 0x28;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_240 = 0.0f;
     this->actionFunc = func_808B066C;
 }
 
 void func_808B066C(EnAm* this, GlobalContext* globalCtx) {
-    if (this->deathTimer != 0) {
-        this->deathTimer--;
+    if (this->unk_236 != 0) {
+        this->unk_236--;
     } else {
         this->unk_23C = this->actor.yawTowardsPlayer;
         func_808B0208(this, globalCtx);
@@ -400,7 +401,7 @@ void func_808B07A8(EnAm* this, GlobalContext* globalCtx) {
         if (this->actor.colChkInfo.health == 0) {
             func_808B0820(this);
         } else {
-            this->enemyCollider.base.acFlags |= 1;
+            this->enemyCollider.base.acFlags |= AC_ON;
             func_808B0358(this);
         }
     }
@@ -408,7 +409,7 @@ void func_808B07A8(EnAm* this, GlobalContext* globalCtx) {
 
 void func_808B0820(EnAm* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &D_06000238, 4.0f);
-    this->deathTimer = 64;
+    this->unk_236 = 64;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.flags |= 0x10;
     this->actor.speedXZ = 0.0f;
@@ -416,16 +417,15 @@ void func_808B0820(EnAm* this) {
     this->actionFunc = func_808B0894;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Am/func_808B0894.s")
 void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f dustPos;
     s32 pad;
 
-    this->deathTimer -= 1;
+    this->unk_236 -= 1;
     this->unk_23C = this->actor.yawTowardsPlayer;
     func_808B0208(this, globalCtx);
-    if (this->deathTimer == 1) {
+    if (this->unk_236 == 1) {
         EnBom* bomb = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
                                           this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 2, 0);
         if (bomb != NULL) {
@@ -441,10 +441,10 @@ void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
 
             func_800B0EB0(globalCtx, &dustPos, &D_801D15B0, &D_801D15B0, &D_808B1120, &D_808B1124, 200, 45, 12);
         }
-    } else if (this->deathTimer == 0) {
+    } else if (this->unk_236 == 0) {
         Actor_MarkForDeath(&this->actor);
         return;
-    } else if (!(this->deathTimer & 3)) {
+    } else if (!(this->unk_236 & 3)) {
         func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 4);
     }
     if (this->actor.world.rot.z < 0x1F40) {
@@ -462,20 +462,21 @@ void func_808B0AD0(EnAm* this, GlobalContext* globalCtx) {
 
 void func_808B0B4C(EnAm* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
-    if (SkelAnime_Update(&this->skelAnime) != 0) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         func_808B0358(this);
     }
 }
 
+// EnAm_UpdateDamage
 s32 func_808B0B9C(EnAm* this, GlobalContext* globalCtx) {
-    if ((this->enemyCollider.base.acFlags & 2) != 0) {
+    if (this->enemyCollider.base.acFlags & 2) {
         this->enemyCollider.base.acFlags &= ~2;
         func_800BE258(&this->actor, &this->enemyCollider.info);
-        if (Actor_ApplyDamage(&this->actor) == 0) {
+        if (!Actor_ApplyDamage(&this->actor)) {
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
         }
         if (this->actor.colChkInfo.damageEffect == 0xD) {
-            return 1;
+            return true;
         }
         if (this->actor.colChkInfo.health != 0) {
             this->enemyCollider.base.atFlags &= ~1;
@@ -488,12 +489,11 @@ s32 func_808B0B9C(EnAm* this, GlobalContext* globalCtx) {
                         this->enemyCollider.info.bumper.hitPos.y, this->enemyCollider.info.bumper.hitPos.z, 0, 0, 0, 4);
         }
         func_808B06D0(this, globalCtx);
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Am/EnAm_Update.s")
 void EnAm_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnAm* this = THIS;
     s32 pad;
@@ -508,20 +508,20 @@ void EnAm_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
         }
     }
-    if (this->unk_238 != 0) {
-        this->unk_238--;
+    if (this->returnHomeTimer != 0) {
+        this->returnHomeTimer--;
     }
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 30.0f, 100.0f, 0x1D);
     Actor_SetHeight(&this->actor, 64.0f);
     Collider_UpdateCylinder(&this->actor, &this->enemyCollider);
-    Collider_UpdateCylinder(&this->actor, &this->collider2);
+    Collider_UpdateCylinder(&this->actor, &this->interactCollider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->enemyCollider.base);
     if (this->enemyCollider.base.acFlags & AC_ON) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->enemyCollider.base);
     }
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->interactCollider.base);
     if (this->enemyCollider.base.atFlags & AC_ON) {
         this->actor.flags |= 0x1000000;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->enemyCollider.base);
@@ -531,7 +531,7 @@ void EnAm_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_248 = (this->unk_248 > 0.7f) ? 0.7f : this->unk_248;
 }
 
-void func_808B0EA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
+void EnAm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
     s32 i;
     s32 phi_s3;
     Vec3f* phi_s1;
@@ -562,14 +562,14 @@ void func_808B0EA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void EnAm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* gfx;
-    EnAm* this = (EnAm*)thisx;
+    EnAm* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gfx = POLY_OPA_DISP;
     gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
     gDPSetEnvColor(&gfx[1], 0, 0, 0, this->unk_234);
     POLY_OPA_DISP = &gfx[2];
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, func_808B0EA4,
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnAm_PostLimbDraw,
                       &this->actor);
     func_800BE680(globalCtx, &this->actor, this->unk_24C, 0xD, this->unk_248, 0.0f, this->unk_244, 0x14);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
