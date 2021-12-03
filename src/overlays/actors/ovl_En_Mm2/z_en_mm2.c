@@ -44,12 +44,10 @@ void EnMm2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 // Action function whilst Link is reading the letter.
 void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx) {
-    u8 temp_v0;
+    u8 talkState = func_80152498(&globalCtx->msgCtx);
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
-
-    if (temp_v0 != 2) {
-        if (temp_v0 == 5 && func_80147624(globalCtx)) {
+    if (talkState != 2) {
+        if (talkState == 5 && func_80147624(globalCtx)) {
             func_801477B4(globalCtx);
             this->actionFunc = EnMm2_WaitForRead;
         }
@@ -62,7 +60,7 @@ void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx) {
 // so (and facing the letter).
 void EnMm2_WaitForRead(EnMm2* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
-        func_801518B0(globalCtx, 0x277BU, &this->actor);
+        func_801518B0(globalCtx, 0x277B, &this->actor);
         this->actionFunc = EnMm2_Reading;
     } else if ((this->actor.xzDistToPlayer < 60.0f) && (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx))) {
         func_800B8614(&this->actor, globalCtx, 110.0f);
