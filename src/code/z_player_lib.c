@@ -924,17 +924,17 @@ s32 func_801263FC(GlobalContext* globalCtx, Vec3s* arg1, s32* arg2, Vec3f* arg3,
     return 0;
 }
 
-s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, struct_80126440_arg2* arg2, Vec3f* arg3, Vec3f* arg4) {
-    if (arg2->unk_00 == 0) {
+s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, WeaponInfo* weaponInfo, Vec3f* arg3, Vec3f* arg4) {
+    if (weaponInfo->active == 0) {
         if (collider != NULL) {
             Collider_ResetQuadAT(globalCtx, &collider->base);
         }
-        Math_Vec3f_Copy(&arg2->unk_04, arg3);
-        Math_Vec3f_Copy(&arg2->unk_10, arg4);
-        arg2->unk_00 = 1;
+        Math_Vec3f_Copy(&weaponInfo->tip, arg3);
+        Math_Vec3f_Copy(&weaponInfo->base, arg4);
+        weaponInfo->active = 1;
 
         return 1;
-    } else if ((arg2->unk_04.x == arg3->x) && (arg2->unk_04.y == arg3->y) && (arg2->unk_04.z == arg3->z) && (arg2->unk_10.x == arg4->x) && (arg2->unk_10.y == arg4->y) && (arg2->unk_10.z == arg4->z)) {
+    } else if ((weaponInfo->tip.x == arg3->x) && (weaponInfo->tip.y == arg3->y) && (weaponInfo->tip.z == arg3->z) && (weaponInfo->base.x == arg4->x) && (weaponInfo->base.y == arg4->y) && (weaponInfo->base.z == arg4->z)) {
         if (collider != NULL) {
             Collider_ResetQuadAT(globalCtx, &collider->base);
         }
@@ -942,14 +942,15 @@ s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, struct_80126
         return 0;
     } else {
         if (collider != NULL) {
-            Collider_SetQuadVertices(collider, arg4, arg3, &arg2->unk_10, &arg2->unk_04);
+            Collider_SetQuadVertices(collider, arg4, arg3, &weaponInfo->base, &weaponInfo->tip);
             CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &collider->base);
         }
-        Math_Vec3f_Copy(&arg2->unk_10, arg4);
-        Math_Vec3f_Copy(&arg2->unk_04, arg3);
-        arg2->unk_00 = 1;
+        Math_Vec3f_Copy(&weaponInfo->base, arg4);
+        Math_Vec3f_Copy(&weaponInfo->tip, arg3);
+        weaponInfo->active = 1;
+
+        return 1;
     }
-    return 1;
 }
 
 extern u8 D_801C096C[];
@@ -972,7 +973,30 @@ void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* arg2,
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012669C.s")
+void func_8012669C(GlobalContext* globalCtx, Player* player, Vec3f* arg2, Vec3f* arg3) {
+    Vec3f sp3C;
+    Vec3f sp30;
+
+    Matrix_MultiplyVector3fByState(arg2, &sp3C);
+    Matrix_MultiplyVector3fByState(arg3, &sp30);
+
+    if (player->swordState != 0) {
+        if ((func_80126440(globalCtx, NULL, &player->swordInfo[0], &sp3C, &sp30) != 0) && (player->transformation != PLAYER_FORM_GORON) && (!(player->stateFlags1 & 0x400000))) {
+            func_800A81F0(Effect_GetParams(player->blureEffectIndex[0]), &player->swordInfo[0].tip, &player->swordInfo[0].base);
+        }
+        if ((player->swordState > 0) && ((player->swordAnimation < 0x1E) || (player->stateFlags2 & 0x20000))) {
+            Matrix_MultiplyVector3fByState(&arg2[1], &sp3C);
+            Matrix_MultiplyVector3fByState(&arg3[1], &sp30);
+            func_80126440(globalCtx, &player->swordQuads[0], &player->swordInfo[1], &sp3C, &sp30);
+            Matrix_MultiplyVector3fByState(&arg2[2], &sp3C);
+            Matrix_MultiplyVector3fByState(&arg3[2], &sp30);
+            func_80126440(globalCtx, &player->swordQuads[1], &player->swordInfo[2], &sp3C, &sp30);
+        }
+    } else {
+        Math_Vec3f_Copy(&player->swordInfo[0].tip, &sp3C);
+        Math_Vec3f_Copy(&player->swordInfo[0].base, &sp30);
+    }
+}
 
 void Player_DrawGetItemImpl(GlobalContext* globalCtx, Player* player, Vec3f* refPos, s32 drawIdPlusOne) {
     f32 sp34;
