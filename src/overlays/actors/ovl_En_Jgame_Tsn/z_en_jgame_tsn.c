@@ -1,3 +1,9 @@
+/*
+ * File: z_en_jgame_tsn.c
+ * Overlay: ovl_En_Jgame_Tsn
+ * Description: Fisherman's Jumping Game - Fisherman
+ */
+
 #include "z_en_jgame_tsn.h"
 
 #define FLAGS 0x02000019

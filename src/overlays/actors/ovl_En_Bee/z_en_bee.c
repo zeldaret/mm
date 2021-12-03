@@ -1,3 +1,9 @@
+/*
+ * File z_en_bee.c
+ * Overlay: ovl_En_Bee
+ * Description: Giant Bee
+ */
+
 #include "z_en_bee.h"
 
 #define FLAGS 0x00000005

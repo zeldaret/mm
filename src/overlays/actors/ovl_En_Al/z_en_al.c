@@ -1,3 +1,9 @@
+/*
+ * File z_en_al.c
+ * Overlay: ovl_En_Al
+ * Description: Madame Aroma
+ */
+
 #include "z_en_al.h"
 
 #define FLAGS 0x00000039

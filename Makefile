@@ -79,7 +79,7 @@ endif
 
 # Check code syntax with host compiler
 CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
-CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -include stdarg.h $(CHECK_WARNINGS)
+CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
 
 CPP        := cpp
 ELF2ROM    := tools/buildtools/elf2rom
@@ -92,7 +92,7 @@ ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -Wab,-r4300_mul -woff 624,649,838,712
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 624,649,838,712
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -153,10 +153,19 @@ build/src/libultra/io/%.o: OPTFLAGS := -O2
 build/src/libultra/libc/%.o: OPTFLAGS := -O2
 build/src/libultra/gu/%.o: OPTFLAGS := -O2
 build/src/libultra/rmon/%.o: OPTFLAGS := -O2
+build/src/libultra/flash/%.o: OPTFLAGS := -g
+build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
+
+build/src/code/audio/%.o: OPTFLAGS := -O2
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
 build/src/boot_O2_g3/fault_drawer.o: CFLAGS += -trapuv
+
+build/src/code/jpegutils.o: OPTFLAGS := -O2
+build/src/code/jpegdecoder.o: OPTFLAGS := -O2
+build/src/code/jpegutils.o: CC := $(CC_OLD)
+build/src/code/jpegdecoder.o: CC := $(CC_OLD)
 
 build/src/libultra/libc/ll.o: OPTFLAGS := -O1
 build/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
@@ -170,6 +179,7 @@ build/src/boot_O2_g3/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(
 build/src/libultra/%.o: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
 build/src/code/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/code/audio/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
 build/src/overlays/actors/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/overlays/effects/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
@@ -230,9 +240,9 @@ setup:
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py
+	python3 tools/disasm/disasm.py -j $(N_THREADS)
 
-diff-init: all
+diff-init: uncompressed
 	$(RM) -rf expected/
 	mkdir -p expected/
 	cp -r build expected/build

@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_yado.c
+ * Overlay: ovl_Obj_Yado
+ * Description: Stockpot Inn - 2nd Floor Window
+ */
+
 #include "z_obj_yado.h"
 
 #define FLAGS 0x00000030

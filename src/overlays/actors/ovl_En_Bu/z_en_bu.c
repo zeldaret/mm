@@ -1,3 +1,9 @@
+/*
+ * File z_en_bu.c
+ * Overlay: ovl_En_Bu
+ * Description: Unused dummied-out enemy
+ */
+
 #include "z_en_bu.h"
 
 #define FLAGS 0x00000001

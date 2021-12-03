@@ -1,3 +1,9 @@
+/*
+ * File: z_en_kendo_js.c
+ * Overlay: ovl_En_Kendo_Js
+ * Description: Swordsman
+ */
+
 #include "z_en_kendo_js.h"
 
 #define FLAGS 0x0A000019

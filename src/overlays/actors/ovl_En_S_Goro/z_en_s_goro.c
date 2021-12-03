@@ -1,3 +1,9 @@
+/*
+ * File: z_en_s_goro.c
+ * Overlay: ovl_En_S_Goro
+ * Description: Goron Complaining About Crying / Bomb Shop Goron
+ */
+
 #include "z_en_s_goro.h"
 
 #define FLAGS 0x00000019

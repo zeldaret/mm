@@ -1,3 +1,9 @@
+/*
+ * File: z_en_st.c
+ * Overlay: ovl_En_St
+ * Description: Skulltula
+ */
+
 #include "z_en_st.h"
 
 #define FLAGS 0x01004035

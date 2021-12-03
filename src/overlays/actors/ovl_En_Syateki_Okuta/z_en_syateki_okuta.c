@@ -1,3 +1,9 @@
+/*
+ * File: z_en_syateki_okuta.c
+ * Overlay: ovl_En_Syateki_Okuta
+ * Description: Shooting Gallery Octorok
+ */
+
 #include "z_en_syateki_okuta.h"
 
 #define FLAGS 0x08000030

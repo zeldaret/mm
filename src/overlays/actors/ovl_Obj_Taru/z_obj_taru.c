@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_taru.c
+ * Overlay: ovl_Obj_Taru
+ * Description: Wooden Barrel
+ */
+
 #include "z_obj_taru.h"
 
 #define FLAGS 0x00000000

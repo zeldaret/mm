@@ -1,3 +1,9 @@
+/*
+ * File: z_en_invisible_ruppe.c
+ * Overlay: ovl_En_Invisible_Ruppe
+ * Description: Invisible Rupee
+ */
+
 #include "z_en_invisible_ruppe.h"
 
 #define FLAGS 0x00000000

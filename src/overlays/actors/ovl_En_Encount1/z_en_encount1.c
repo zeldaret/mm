@@ -1,3 +1,9 @@
+/*
+ * File: z_en_encount1.c
+ * Overlay: ovl_En_Encount1
+ * Description:
+ */
+
 #include "z_en_encount1.h"
 
 #define FLAGS 0x08100010

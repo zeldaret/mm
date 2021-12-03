@@ -45,6 +45,7 @@ animdict = {
     "SysMatrix_NormalizeXYZ": "Matrix_NormalizeXYZ",
     "SysMatrix_InsertRotationAroundUnitVector_f": "Matrix_InsertRotationAroundUnitVector_f",
     "SysMatrix_InsertRotationAroundUnitVector_s": "Matrix_InsertRotationAroundUnitVector_s",
+    "SysMatrix_GetStateAsRSPMatrix": "Matrix_GetStateAsRSPMatrix",
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_8012403C": "Player_GetMask",
     "func_8012404c": "Player_RemoveMask",
@@ -170,6 +171,25 @@ animdict = {
     "skelanime.prevFrameRot": "skelanime.prevRot",
     "skelanime.prevFramePos": "skelanime.prevTransl",
     "skelanime.unk3E": "skelanime.baseTransl",
+    
+    "skelAnime.unk03": "skelAnime.taper",
+    "skelAnime.animCurrentSeg": "skelAnime.animation",
+    "skelAnime.initialFrame": "skelAnime.startFrame",
+    "skelAnime.animFrameCount": "skelAnime.endFrame",
+    "skelAnime.totalFrames": "skelAnime.animLength",
+    "skelAnime.animCurrentFrame": "skelAnime.curFrame",
+    "skelAnime.animPlaybackSpeed": "skelAnime.playSpeed",
+    "skelAnime.limbDrawTbl": "skelAnime.jointTable",
+    "skelAnime.transitionDrawTbl": "skelAnime.morphTable",
+    "skelAnime.transCurrentFrame": "skelAnime.morphWeight",
+    "skelAnime.transitionStep": "skelAnime.morphRate",
+    "skelAnime.animUpdate": "skelAnime.update",
+    "skelAnime.flags": "skelAnime.moveFlags",
+    "skelAnime.prevFrameRot": "skelAnime.prevRot",
+    "skelAnime.prevFramePos": "skelAnime.prevTransl",
+    "skelAnime.unk3E": "skelAnime.baseTransl",
+    "actor.yDistToWater" : "actor.depthInWater",
+    "actor.yDistToPlayer" : "actor.playerHeightRel",
 }
 
 def replace_anim(file):

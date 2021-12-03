@@ -74,7 +74,7 @@ void func_80ACB6A0(ObjAqua* this, GlobalContext* globalCtx) {
     s32 angleOffset = 0;
     s32 i;
 
-    sp58.y = this->actor.world.pos.y + this->actor.yDistToWater;
+    sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
     for (i = 0; i < 4; i++) {
         sp58.x = this->actor.world.pos.x + Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f;
         sp58.z = this->actor.world.pos.z + Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f;
@@ -133,8 +133,8 @@ s32 func_80ACBA60(ObjAqua* this, GlobalContext* globalCtx) {
     f32 ySurface;
     s32 bgId;
 
-    if (func_800C9EBC(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
-                      &waterBox, &bgId) &&
+    if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                &ySurface, &waterBox, &bgId) &&
         (this->actor.world.pos.y < ySurface)) {
         return true;
     }

@@ -449,7 +449,7 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, GlobalContext* globalCtx) {
 void EnBigpo_SpawnCutsceneStage7(EnBigpo* this) {
     this->idleTimer = 15;
     if (this->unkBool204 == false) {
-        func_801A2E54(0x38);
+        func_801A2E54(NA_BGM_MINI_BOSS);
         this->unkBool204 = true;
     }
     this->actionFunc = EnBigpo_SpawnCutsceneStage8;
@@ -535,7 +535,7 @@ void EnBigpo_WarpingIn(EnBigpo* this, GlobalContext* globalCtx) {
     if (this->idleTimer == 32) {
         this->mainColor.a = 255; // fully visible
         if (this->unkBool204 == false) {
-            func_801A2E54(0x38);
+            func_801A2E54(NA_BGM_MINI_BOSS);
             this->unkBool204 = true;
         }
         EnBigpo_SetupIdleFlying(this);
@@ -834,7 +834,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, GlobalContext* globalCtx) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH);
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_MAX, 35.0f, 60.0f);
         this->actor.world.pos.y = (sin_rad(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
     }
 }

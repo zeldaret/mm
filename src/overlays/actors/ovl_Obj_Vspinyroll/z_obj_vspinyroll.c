@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_vspinyroll.c
+ * Overlay: ovl_Obj_Vspinyroll
+ * Description: Spiked rollers
+ */
+
 #include "z_obj_vspinyroll.h"
 
 #define FLAGS 0x00000010

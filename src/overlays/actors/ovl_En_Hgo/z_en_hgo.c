@@ -1,6 +1,6 @@
 /*
- * File: z_en_pamera.c
- * Overlay: En_Hgo
+ * File: z_en_hgo.c
+ * Overlay: ovl_En_Hgo
  * Description: Pamela's Father As a Gibdo
  */
 

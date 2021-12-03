@@ -1,3 +1,9 @@
+/*
+ * File z_en_boom.c
+ * Overlay: ovl_En_Boom
+ * Description: Zora boomerangs
+ */
+
 #include "z_en_boom.h"
 
 #define FLAGS 0x00000030

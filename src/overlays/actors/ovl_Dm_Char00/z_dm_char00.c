@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_char00.c
+ * Overlay: ovl_Dm_Char00
+ * Description: Tatl (cutscene)
+ */
+
 #include "z_dm_char00.h"
 
 #define FLAGS 0x00000030

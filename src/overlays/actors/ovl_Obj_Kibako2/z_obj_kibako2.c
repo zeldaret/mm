@@ -109,11 +109,11 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
 }
 
 void ObjKibako2_SpawnCollectible(ObjKibako2* this, GlobalContext* globalCtx) {
-    s32 collectible = func_800A8150(KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor));
+    s32 dropItem00Id = func_800A8150(KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor));
 
-    if (collectible >= 0) {
+    if (dropItem00Id > ITEM00_NO_DROP) {
         Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos,
-                             collectible | KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor) << 8);
+                             dropItem00Id | KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor) << 8);
     }
 }
 
@@ -149,10 +149,10 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjKibako2Contents contents = KIBAKO2_CONTENTS(&this->dyna.actor);
 
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000B70);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000B70);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     this->dyna.actor.home.rot.z = 0;
@@ -177,7 +177,7 @@ void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako2* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
@@ -190,12 +190,12 @@ s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
         if (ac != NULL) {
             if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 31)) {
                 // Powder Keg
-                if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
+                if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
                     shouldBreak = true;
                 }
             } else if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 3)) {
                 // Explosives
-                if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
+                if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
                     shouldBreak = true;
                 }
             } else if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 8 | 1 << 10)) {

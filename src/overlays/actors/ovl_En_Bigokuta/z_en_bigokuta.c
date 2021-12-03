@@ -1,3 +1,9 @@
+/*
+ * File z_en_bigokuta.c
+ * Overlay: ovl_En_Bigokuta
+ * Description: Big Octo
+ */
+
 #include "z_en_bigokuta.h"
 
 #define FLAGS 0x00000005
