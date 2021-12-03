@@ -870,8 +870,10 @@ void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124F18.s")
 #endif
 
+//void func_80124FF0(f32 arg0, s16 arg1, f32* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124FF0.s")
 
+void func_801251C4(Player* player, Vec3f* arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801251C4.s")
 
 void func_80125318(Vec3f* arg0, Vec3s* arg1) {
@@ -883,9 +885,19 @@ void func_80125318(Vec3f* arg0, Vec3s* arg1) {
     arg1->z = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125340.s")
+extern s32 D_801C0958 /* = false */;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012536C.s")
+void func_80125340(void) {
+    Matrix_StatePush();
+    D_801C0958 = true;
+}
+
+void func_8012536C(void) {
+    if (D_801C0958) {
+        Matrix_StatePop();
+        D_801C0958 = false;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801253A4.s")
 
