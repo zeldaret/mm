@@ -579,13 +579,39 @@ void func_80123DA4(Player* player) {
     player->stateFlags2 &= ~0x2000;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123DC0.s")
+void func_80123DC0(Player* player) {
+    if ((player->actor.bgCheckFlags & 1) || (player->stateFlags1 & (0x8000000 | 0x800000 | 0x200000)) || (!(player->stateFlags1 & 0xC0000) && ((player->actor.world.pos.y - player->actor.floorHeight) < 100.0f))) {
+        player->stateFlags1 &= ~(0x40000000 | 0x80000 | 0x40000| 0x30000 | 0x10000 | 0x8000);
+    } else if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000))) {
+        player->stateFlags1 |= 0x80000;
+    } else if ((player->stateFlags1 & 0x40000) && (player->transformation == PLAYER_FORM_DEKU)) {
+        player->stateFlags1 &= ~(0x40000000 | 0x20000 | 0x10000 | 0x8000);
+    }
+    func_80123DA4(player);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123E90.s")
+void func_80123E90(GlobalContext* globalCtx, Actor* actor) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123F14.s")
+    func_80123DC0(player);
+    player->unk_730 = actor;
+    player->unk_A78 = actor;
+    player->stateFlags1 |= 0x10000;
+    func_800DFD78(Play_GetCamera(globalCtx, MAIN_CAM), 8, actor);
+    func_800DF840(Play_GetCamera(globalCtx, MAIN_CAM), 9);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123F2C.s")
+s32 func_80123F14(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    return player->stateFlags1 & 0x800000;
+}
+
+s32 func_80123F2C(GlobalContext* globalCtx, s32 arg1) {
+    globalCtx->unk_1887C = arg1 + 1;
+
+    return 1;
+}
 
 s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRange, f32 yRange) {
     Player* this = GET_PLAYER(globalCtx);
