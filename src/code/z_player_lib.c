@@ -674,15 +674,24 @@ s32 func_80124110(Player* player, s32 actionParam) {
     return 0;
 }
 
-void func_80124148(Player* player) {
-    func_80124110(player, player->itemActionParam);
+s32 func_80124148(Player* player) {
+    return func_80124110(player, player->itemActionParam);
 }
 
 // Player_ActionToSword
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124168.s")
+s32 func_80124168(s32 actionParam) {
+    s32 sword = actionParam - PLAYER_AP_UNK_2;
+
+    if ((sword > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2)) && (sword <= (PLAYER_AP_UNK_8 - PLAYER_AP_UNK_2))) {
+        return sword;
+    }
+    return 0;
+}
 
 // Player_GetSwordHeld
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124190.s")
+s32 func_80124190(Player* player) {
+    return func_80124168(player->itemActionParam);
+}
 
 // Player_HoldsTwoHandedWeapon
 s32 func_801241B4(Player* player) {
