@@ -903,6 +903,7 @@ void func_8012536C(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125500.s")
 
+s32 func_80125580(GlobalContext* globalCtx, Vec3s* arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
 
 void func_80125CE0(Player* player, f32* arg1, Vec3f* arg2, Vec3s* arg3) {
@@ -916,7 +917,12 @@ void func_80125CE0(Player* player, f32* arg1, Vec3f* arg2, Vec3s* arg3) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801262C8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801263FC.s")
+s32 func_801263FC(GlobalContext* globalCtx, Vec3s* arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player) {
+    if (func_80125580(globalCtx, arg1, arg2, arg3, arg4, player) == 0) {
+        *arg2 = 0;
+    }
+    return 0;
+}
 
 s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, struct_80126440_arg2* arg2, Vec3f* arg3, Vec3f* arg4) {
     if (arg2->unk_00 == 0) {
