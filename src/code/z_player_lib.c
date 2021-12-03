@@ -732,7 +732,15 @@ s32 Player_GetExplosiveHeld(Player* player) {
     return Player_ActionToExplosive(player, player->itemActionParam);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124278.s")
+s32 func_80124278(Actor* actor, s32 arg1) {
+    s32 phi_v1 = 0;
+
+    // Fake match?
+    if ((arg1 == 1) || ((phi_v1 = arg1 - 3, (phi_v1 >= 0)) && (phi_v1 < 4))) {
+        return phi_v1;
+    }
+    return -1;
+}
 
 s32 func_801242B4(Player* player) {
     return (player->stateFlags1 & 0x8000000) && player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER;
