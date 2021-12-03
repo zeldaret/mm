@@ -73,7 +73,7 @@ void EnMm2_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-void EnMm2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+/*void EnMm2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     GraphicsContext* gfxCtx;
     EnMm2* this = THIS;
 
@@ -81,4 +81,14 @@ void EnMm2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx), (0x00 | 0x02) | 0x00);
     gSPDisplayList(gfxCtx->polyOpa.p++, sEnMm2DL);
+}*/
+
+void EnMm2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), (0x00 | 0x02) | 0x00);
+    gSPDisplayList(POLY_OPA_DISP++, sEnMm2DL);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
