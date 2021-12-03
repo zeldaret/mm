@@ -565,9 +565,19 @@ void func_80123C90(GlobalContext* globalCtx, Player* player) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123D50.s")
+void func_80123D50(GlobalContext* globalCtx, Player* player, s32 arg2, s32 arg3) {
+    func_80114FD0(globalCtx, arg2, player->heldItemButton);
+    if (arg2 != 0x12) {
+        player->heldItemId = arg2;
+        player->itemActionParam = arg3;
+    }
+    player->heldItemActionParam = arg3;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123DA4.s")
+void func_80123DA4(Player* player) {
+    player->unk_730 = NULL;
+    player->stateFlags2 &= ~0x2000;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123DC0.s")
 

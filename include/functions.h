@@ -2079,7 +2079,7 @@ void func_801149A0(s32 arg0, s16 arg1);
 // void func_80114CA0(void);
 UNK_TYPE func_80114E90(void);
 UNK_TYPE func_80114F2C(UNK_TYPE arg0);
-// void func_80114FD0(void);
+void func_80114FD0(GlobalContext* globalCtx, u8 arg1, u8 arg2);
 // void func_80115130(void);
 // void func_801152B8(void);
 // void func_801153C8(void);
