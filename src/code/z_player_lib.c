@@ -647,13 +647,13 @@ void Player_RemoveMask(GlobalContext* globalCtx) {
 s32 func_8012405C(GameState* gameState) {
     Player* player = GET_PLAYER(gameState);
 
-    return player->transformation == 4 && player->currentShield == 2;
+    return player->transformation == PLAYER_FORM_HUMAN && player->currentShield == 2;
 }
 
 s32 func_80124088(GameState* gameState) {
     Player* player = GET_PLAYER(gameState);
 
-    return player->transformation == 4 && player->rightHandType == 8 && player->currentShield == 2;
+    return player->transformation == PLAYER_FORM_HUMAN && player->rightHandType == 8 && player->currentShield == 2;
 }
 
 s32 func_801240C8(Player* player) {
@@ -664,9 +664,19 @@ s32 func_801240DC(Player* player) {
     return func_801240C8(player) && player->leftHandActor == NULL;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124110.s")
+s32 func_80124110(Player* player, s32 actionParam) {
+    s32 temp_v0 = actionParam - PLAYER_AP_UNK_2;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124148.s")
+    if (((player->transformation != PLAYER_FORM_GORON) && ((actionParam - PLAYER_AP_UNK_2) > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2))) && ((actionParam - PLAYER_AP_UNK_2) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_UNK_2))) {
+        return temp_v0;
+    }
+
+    return 0;
+}
+
+void func_80124148(Player* player) {
+    func_80124110(player, player->itemActionParam);
+}
 
 // Player_ActionToSword
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124168.s")
