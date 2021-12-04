@@ -54,7 +54,7 @@ void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = EnHitTag_WaitForHit;
-    cylinder = &this->cylinder;
+    cylinder = &this->collider;
     Collider_InitAndSetCylinder(globalCtx, cylinder, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, cylinder);
     if (Flags_GetSwitch(globalCtx, ENHITTAG_GET_SWITCHFLAG(thisx))) {
@@ -65,14 +65,14 @@ void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnHitTag* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->cylinder);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void EnHitTag_WaitForHit(EnHitTag* this, GlobalContext* globalCtx) {
     Vec3f dropLocation;
     s32 i;
 
-    if (this->cylinder.base.acFlags & AC_HIT) {
+    if (this->collider.base.acFlags & AC_HIT) {
         play_sound(NA_SE_SY_GET_RUPY);
         Actor_MarkForDeath(&this->actor);
         dropLocation.x = this->actor.world.pos.x;
@@ -83,7 +83,7 @@ void EnHitTag_WaitForHit(EnHitTag* this, GlobalContext* globalCtx) {
             Item_DropCollectible(globalCtx, &dropLocation, ITEM00_RUPEE_GREEN);
         }
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->cylinder.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
