@@ -42,7 +42,7 @@ void ObjYado_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     D_80C16470 = (AnimatedMaterial*)Lib_SegmentedToVirtual(&D_060012E8);
-    this->colorFlag = gSaveContext.isNight;
+    this->isNight = gSaveContext.isNight;
 }
 
 void ObjYado_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -51,7 +51,7 @@ void ObjYado_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void ObjYado_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjYado* this = THIS;
 
-    this->colorFlag = gSaveContext.isNight;
+    this->isNight = gSaveContext.isNight;
 }
 
 void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -60,7 +60,7 @@ void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    if (this->colorFlag != 0) {
+    if (this->isNight) {
         gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(globalCtx->state.gfxCtx, 128, 95, 95, 70, 155));
         gSPSegment(POLY_OPA_DISP++, 0x0A, Gfx_PrimColor(globalCtx->state.gfxCtx, 128, 0, 40, 40, 255));
     } else {
