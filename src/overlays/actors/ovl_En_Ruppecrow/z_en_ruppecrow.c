@@ -48,8 +48,7 @@ const ActorInit En_Ruppecrow_InitVars = {
     (ActorFunc)EnRuppecrow_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_80BE39B0[1] = {
+static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -63,8 +62,7 @@ static ColliderJntSphElementInit D_80BE39B0[1] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80BE39D4 = {
+static ColliderJntSphInit sJntSphInit = {
     {
         COLTYPE_HIT3,
         AT_NONE,
@@ -74,14 +72,12 @@ static ColliderJntSphInit D_80BE39D4 = {
         COLSHAPE_JNTSPH,
     },
     1,
-    D_80BE39B0, // sJntSphElementsInit,
+    sJntSphElementsInit,
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_80BE39E4 = { 1, 15, 30, 30 };
+static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 30 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80BE39EC = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -116,8 +112,7 @@ static DamageTable D_80BE39EC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80BE3A0C[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
@@ -127,7 +122,7 @@ s32 func_80BE2260(EnRuppecrow* this, GlobalContext* globalCtx) {
 
     this->collider.elements->dim.worldSphere.center.x = (s16)this->actor.world.pos.x;
     this->collider.elements->dim.worldSphere.center.y =
-        (s16)(D_80BE39D4.elements->dim.modelSphere.center.y + this->actor.world.pos.y);
+        (s16)(sJntSphInit.elements->dim.modelSphere.center.y + this->actor.world.pos.y);
     this->collider.elements->dim.worldSphere.center.z = (s16)this->actor.world.pos.z;
 
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -606,14 +601,14 @@ void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     EnRuppecrow* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
 
-    Actor_ProcessInitChain(&this->actor, D_80BE3A0C);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060010C0, &D_060000F0, this->joinTable, this->morphTable, 9);
     ActorShape_Init(&this->actor.shape, 2000.0f, func_800B3FC0, 20.0f);
 
     Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_80BE39D4, &this->colliderElement);
-    this->collider.elements->dim.worldSphere.radius = D_80BE39D4.elements->dim.modelSphere.radius;
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80BE39EC, &D_80BE39E4);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, &this->colliderElement);
+    this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius;
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags |= 0x2000000;
