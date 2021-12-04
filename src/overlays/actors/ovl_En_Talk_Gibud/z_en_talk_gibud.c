@@ -194,7 +194,7 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.hintId = 0x2D;
     this->actor.textId = 0;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, EN_TALK_GIBUD_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -513,7 +513,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx) {
             this->actor.hintId = 0x2A;
             this->actor.flags &= ~(0x8 | 0x1);
             this->actor.flags |= (0x4 | 0x1);
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, EN_TALK_GIBUD_LIMB_MAX);
             this->type = EN_TALK_GIBUD_TYPE_REDEAD;
         }
         if (EnTalkGibud_PlayerOutOfRange(this, globalCtx)) {
@@ -542,7 +542,7 @@ void EnTalkGibud_Dead(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
     if (this->deathTimer == 20 && this->effectTimer > 0 && this->effectType == 0 &&
         this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, EN_TALK_GIBUD_LIMB_MAX);
         this->type = EN_TALK_GIBUD_TYPE_REDEAD;
     }
 }
@@ -1081,9 +1081,9 @@ s32 EnTalkGibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
                                  Actor* thisx, Gfx** gfx) {
     EnTalkGibud* this = THIS;
 
-    if (limbIndex == EN_TALK_GIBUD_LIMB_UPPER_BODY) {
+    if (limbIndex == EN_TALK_GIBUD_LIMB_UPPER_BODY_ROOT) {
         rot->y += this->upperBodyRotation.y;
-    } else if (limbIndex == EN_TALK_GIBUD_LIMB_HEAD) {
+    } else if (limbIndex == EN_TALK_GIBUD_LIMB_HEAD_ROOT) {
         rot->y += this->headRotation.y;
     }
 
@@ -1095,14 +1095,14 @@ void EnTalkGibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     EnTalkGibud* this = THIS;
 
     if ((this->effectTimer != 0) &&
-        ((limbIndex == EN_TALK_GIBUD_LIMB_LEFT_LOWER_LEG) || (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_FOOT_ROOT) ||
-         (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_LEG_ROOT) || (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_LOWER_LEG) ||
-         (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_FOOT_ROOT) || (limbIndex == EN_TALK_GIBUD_LIMB_UPPER_BODY_ROOT) ||
-         (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_ARM_ROOT) || (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_FOREARM) ||
-         (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_HAND) || (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_ARM_ROOT) ||
+        ((limbIndex == EN_TALK_GIBUD_LIMB_LEFT_THIGH) || (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_LOWER_LEG) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_FOOT) || (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_THIGH) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_LOWER_LEG) || (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_FOOT) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_TORSO) || (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_SHOULDER_AND_UPPER_ARM) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_FOREARM) || (limbIndex == EN_TALK_GIBUD_LIMB_LEFT_HAND) ||
+         (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) ||
          (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_FOREARM) || (limbIndex == EN_TALK_GIBUD_LIMB_RIGHT_HAND) ||
-         (limbIndex == EN_TALK_GIBUD_LIMB_HEAD_ROOT) || (limbIndex == EN_TALK_GIBUD_LIMB_PELVIS) ||
-         (limbIndex == EN_TALK_GIBUD_LIMB_MAX))) {
+         (limbIndex == EN_TALK_GIBUD_LIMB_HEAD) || (limbIndex == EN_TALK_GIBUD_LIMB_PELVIS))) {
         Matrix_GetStateTranslation(&this->limbPos[this->limbIndex]);
         this->limbIndex++;
     }
