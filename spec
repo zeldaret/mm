@@ -4949,8 +4949,7 @@ beginseg
     name "ovl_En_Ruppecrow"
     compress
     include "build/src/overlays/actors/ovl_En_Ruppecrow/z_en_ruppecrow.o"
-    include "build/data/ovl_En_Ruppecrow/ovl_En_Ruppecrow.data.o"
-    include "build/data/ovl_En_Ruppecrow/ovl_En_Ruppecrow.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ruppecrow/ovl_En_Ruppecrow_reloc.o"
 endseg
 
 beginseg

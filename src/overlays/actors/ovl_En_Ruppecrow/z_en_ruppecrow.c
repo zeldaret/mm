@@ -33,7 +33,9 @@ void func_80BE3354(EnRuppecrow*, GlobalContext*);
 void func_80BE2E18(EnRuppecrow*, GlobalContext*);
 void func_80BE348C(EnRuppecrow*, GlobalContext*);
 
-#if 0
+extern AnimationHeader D_060000F0;
+extern FlexSkeletonHeader D_060010C0;
+
 const ActorInit En_Ruppecrow_InitVars = {
     ACTOR_EN_RUPPECROW,
     ACTORCAT_ENEMY,
@@ -49,15 +51,30 @@ const ActorInit En_Ruppecrow_InitVars = {
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80BE39B0[1] = {
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 20 }, 100 },
     },
 };
 
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80BE39D4 = {
-    { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80BE39B0, // sJntSphElementsInit,
+    {
+        COLTYPE_HIT3,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    1,
+    D_80BE39B0, // sJntSphElementsInit,
 };
 
 // sColChkInfoInit
@@ -105,23 +122,12 @@ static InitChainEntry D_80BE3A0C[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
-#endif
-
-extern ColliderJntSphElementInit D_80BE39B0[1];
-extern ColliderJntSphInit D_80BE39D4;
-extern CollisionCheckInfoInit D_80BE39E4;
-extern DamageTable D_80BE39EC;
-extern InitChainEntry D_80BE3A0C[];
-extern AnimationHeader D_060000F0;
-extern FlexSkeletonHeader D_060010C0;
-extern ColliderJntSphElementInit* D_80BE39E0;
-
 s32 func_80BE2260(EnRuppecrow* this, GlobalContext* globalCtx) {
     UNK_TYPE pad;
 
     this->collider.elements->dim.worldSphere.center.x = (s16)this->actor.world.pos.x;
     this->collider.elements->dim.worldSphere.center.y =
-        (s16)(D_80BE39E0->dim.modelSphere.center.y + this->actor.world.pos.y);
+        (s16)(D_80BE39D4.elements->dim.modelSphere.center.y + this->actor.world.pos.y);
     this->collider.elements->dim.worldSphere.center.z = (s16)this->actor.world.pos.z;
 
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -606,7 +612,7 @@ void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_80BE39D4, &this->colliderElement);
-    this->collider.elements->dim.worldSphere.radius = D_80BE39E0->dim.modelSphere.radius;
+    this->collider.elements->dim.worldSphere.radius = D_80BE39D4.elements->dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80BE39EC, &D_80BE39E4);
 
     Actor_SetScale(&this->actor, 0.01f);
