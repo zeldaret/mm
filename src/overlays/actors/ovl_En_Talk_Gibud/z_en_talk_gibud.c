@@ -6,7 +6,7 @@
 
 #include "z_en_talk_gibud.h"
 
-#define FLAGS 0x00000415 
+#define FLAGS 0x00000415
 
 #define THIS ((EnTalkGibud*)thisx)
 
