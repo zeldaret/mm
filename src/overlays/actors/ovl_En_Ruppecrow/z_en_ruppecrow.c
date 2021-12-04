@@ -25,7 +25,7 @@ void func_80BE2B80(EnRuppecrow*, GlobalContext*);
 s32 func_80BE2D4C(GlobalContext*);
 void func_80BE32DC(EnRuppecrow*, GlobalContext*);
 s32 func_80BE2330(EnRuppecrow*, Path*, s32);
-s32 func_80BE24CC(void*, Path*, s32);
+s32 func_80BE24CC(EnRuppecrow*, Path*, s32);
 f32 func_80BE2668(Path*, s32, PosRot*, Vec3s*);
 s32 func_80BE2794(GlobalContext*);
 void func_80BE2874(EnRuppecrow*, GlobalContext*);
@@ -168,7 +168,41 @@ s32 func_80BE2330(EnRuppecrow* this, Path* path, s32 arg2) {
     return result;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE24CC.s")
+s32 func_80BE24CC(EnRuppecrow* this, Path* path, s32 arg2) {
+    Vec3s* points3s;
+    s32 pathCount;
+    s32 idx;
+    s32 result;
+    f32 y;
+    f32 x;
+    Vec3f vec;
+    Vec3f points3f;
+
+    idx = arg2;
+    points3s = Lib_SegmentedToVirtual(path->points);
+    pathCount = path->count;
+    result = false;
+
+    Math_Vec3s_ToVec3f(&points3f, &points3s[idx]);
+
+    if (idx == 0) {
+        y = points3s[0].x - points3s[1].x;
+        x = points3s[0].z - points3s[1].z;
+    } else {
+        if (idx == (pathCount - 1)) {
+            y = points3s[pathCount - 2].x - points3s[pathCount - 1].x;
+            x = points3s[pathCount - 2].z - points3s[pathCount - 1].z;
+        } else {
+            y = points3s[idx - 1].x - points3s[idx + 1].x;
+            x = points3s[idx - 1].z - points3s[idx + 1].z;
+        }
+    }
+    func_8017B7F8(&points3f, (func_80086B30(y, x) * 10430.378f), &vec.z, &vec.y, &vec.x);
+    if (((this->actor.world.pos.x * vec.z) + (vec.y * this->actor.world.pos.z) + vec.x) > 0.0f) {
+        result = true;
+    }
+    return result;
+}
 
 f32 func_80BE2668(Path* path, s32 arg1, PosRot* world, Vec3s* arg3) {
     Vec3s* points;
