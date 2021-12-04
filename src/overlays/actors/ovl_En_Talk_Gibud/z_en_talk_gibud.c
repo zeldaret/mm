@@ -194,7 +194,8 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.hintId = 0x2D;
     this->actor.textId = 0;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, EN_TALK_GIBUD_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable,
+                       EN_TALK_GIBUD_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -513,7 +514,8 @@ void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx) {
             this->actor.hintId = 0x2A;
             this->actor.flags &= ~(0x8 | 0x1);
             this->actor.flags |= (0x4 | 0x1);
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, EN_TALK_GIBUD_LIMB_MAX);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable,
+                               EN_TALK_GIBUD_LIMB_MAX);
             this->type = EN_TALK_GIBUD_TYPE_REDEAD;
         }
         if (EnTalkGibud_PlayerOutOfRange(this, globalCtx)) {
@@ -542,7 +544,8 @@ void EnTalkGibud_Dead(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
     if (this->deathTimer == 20 && this->effectTimer > 0 && this->effectType == 0 &&
         this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, EN_TALK_GIBUD_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable,
+                           EN_TALK_GIBUD_LIMB_MAX);
         this->type = EN_TALK_GIBUD_TYPE_REDEAD;
     }
 }
