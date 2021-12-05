@@ -228,8 +228,8 @@ f32 EnRuppecrow_GetOrientationToNextPoint(Path* path, s32 arg1, PosRot* world, V
 void func_80BE2728(EnRuppecrow* this, GlobalContext* globalCtx) {
     if (this->currentEffect == EN_RUPPECROW_EFFECT_ICE) {
         this->currentEffect = EN_RUPPECROW_EFFECT_NONE;
-        this->unk_2C8.x = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->limbPos, 0x4, 0x2, 0.2f, 0.2f);
+        this->unk_2C8 = 0.0f;
+        func_800BF7CC(globalCtx, &this->actor, this->limbPos, EN_RUPPECROW_LIMB_POS_COUNT, 0x2, 0.2f, 0.2f);
     }
 }
 
@@ -417,13 +417,21 @@ void EnRuppecrow_UpdateSpeed(EnRuppecrow* this, GlobalContext* globalCtx) {
             this->speedModifier = 7.0f;
             break;
         case PLAYER_FORM_GORON:
-            this->speedModifier = (player->stateFlags3 & 0x1000) ? 19.0f : 7.0f;
+            if (player->stateFlags3 & 0x1000) {
+                this->speedModifier = 19.0f; // Goron roll
+            } else {
+                this->speedModifier = 7.0f; // Walking
+            }
             break;
         case PLAYER_FORM_ZORA:
             this->speedModifier = 7.0f;
             break;
         case PLAYER_FORM_HUMAN:
-            this->speedModifier = (player->stateFlags1 & 0x800000) ? 16.0f : 7.0f;
+            if (player->stateFlags1 & 0x800000) {
+                this->speedModifier = 16.0f;
+            } else {
+                this->speedModifier = 7.0f;
+            }
             break;
     }
 
@@ -453,17 +461,17 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
 
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_KAICHO_DEAD);
 
-    this->unk_2C8.y = 0.5f;
+    this->unk_2CC = 0.5f;
     if (this->actor.colChkInfo.damageEffect == 0x3) {
         this->currentEffect = EN_RUPPECROW_EFFECT_ICE;
-        this->unk_2C8.x = 1.0f;
-        this->unk_2C8.z = 0.75f;
+        this->unk_2C8 = 1.0f;
+        this->unk_2D0 = 0.75f;
     } else if (this->actor.colChkInfo.damageEffect == 0x4) {
         this->currentEffect = EN_RUPPECROW_EFFECT_LIGHT;
-        this->unk_2C8.x = 5.0f;
+        this->unk_2C8 = 5.0f;
     } else if (this->actor.colChkInfo.damageEffect == 0x2) {
         this->currentEffect = EN_RUPPECROW_EFFECT_NONE;
-        this->unk_2C8.x = 5.0f;
+        this->unk_2C8 = 5.0f;
     }
 
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0x0, 0x28);
@@ -544,6 +552,8 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, GlobalContext* global
     if (this->rupeeIndex >= EN_RUPPECROW_RUPEE_COUNT) {
         // Finished spawning rupees; fly up and then despawn
         this->speedModifier = 6.0f;
+
+        // Source of the "Termina Field Guay Glitch"; guay will no longer fall if killed after this point
         this->actor.gravity = 0.0f;
 
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
@@ -591,10 +601,10 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
 
     if (this->currentEffect != EN_RUPPECROW_EFFECT_ICE) {
-        Math_StepToF(&this->unk_2C8.x, 0.0f, 0.05f);
-        this->unk_2C8.y = (this->unk_2C8.x + 1.0f) * 0.25f;
-        this->unk_2C8.y = CLAMP_MAX(this->unk_2C8.y, 0.5f);
-    } else if (Math_StepToF(&this->unk_2C8.z, 0.5f, 0.0125f) == 0) {
+        Math_StepToF(&this->unk_2C8, 0.0f, 0.05f);
+        this->unk_2CC = (this->unk_2C8 + 1.0f) * 0.25f;
+        this->unk_2CC = CLAMP_MAX(this->unk_2CC, 0.5f);
+    } else if (Math_StepToF(&this->unk_2D0, 0.5f, 0.0125f) == 0) {
         func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
     }
 
@@ -624,7 +634,8 @@ void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060010C0, &D_060000F0, this->joinTable, this->morphTable, 9);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060010C0, &D_060000F0, this->joinTable, this->morphTable,
+                       EN_RUPPECROW_LIMB_COUNT);
     ActorShape_Init(&this->actor.shape, 2000.0f, func_800B3FC0, 20.0f);
 
     Collider_InitJntSph(globalCtx, &this->collider);
