@@ -274,7 +274,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 this->actor.draw = NULL;
                 this->actionFunc = EnFall_MoonsTear_Fall;
                 Actor_SetScale(&this->actor, 0.02f);
-                if ((globalCtx->actorCtx.unk5 & 2) == 0) {
+                if (!(globalCtx->actorCtx.unk5 & 2)) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 moon = EnFall_MoonsTear_GetTerminaFieldMoon(globalCtx);
@@ -826,7 +826,7 @@ void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, D_06000198);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
-    gDPSetEnvColor(POLY_OPA_DISP++, 0x00, 0x00, 0x00, 255);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
         if (debrisParticles[i].dListIndex < 3) {
             Matrix_InsertTranslation(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z,
