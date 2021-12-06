@@ -30,17 +30,15 @@ const ActorInit En_Talk_InitVars = {
 
 void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTalk* this = THIS;
-    s8 targetMode;
+    s8 targetMode = this->actor.home.rot.x - 0x1;
 
-    targetMode = this->actor.home.rot.x - 0x1;
-
-    if (targetMode >= 0x0 && targetMode < 0x7) {
+    if (targetMode >= 0 && targetMode < 7) {
         this->actor.targetMode = targetMode;
     }
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = func_80BDE090;
-    this->actor.textId = EN_TALK_GET_TEXT_ID(this);
+    this->actor.textId = ENTALK_GET_TEXT_ID(&this->actor);
 }
 
 void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
