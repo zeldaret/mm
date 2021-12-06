@@ -408,7 +408,7 @@ asm/non_matchings/code/z_actor/func_800BE568.s,func_800BE568,0x800BE568,0x19
 asm/non_matchings/code/z_actor/func_800BE5CC.s,func_800BE5CC,0x800BE5CC,0x1C
 asm/non_matchings/code/z_actor/func_800BE63C.s,func_800BE63C,0x800BE63C,0x11
 asm/non_matchings/code/z_actor/func_800BE680.s,func_800BE680,0x800BE680,0x453
-asm/non_matchings/code/z_actor/func_800BF7CC.s,func_800BF7CC,0x800BF7CC,0x75
+asm/non_matchings/code/z_actor/Actor_SpawnIceEffects.s,Actor_SpawnIceEffects,0x800BF7CC,0x75
 asm/non_matchings/code/z_actor_dlftbls/ActorOverlayTable_FaultPrint.s,ActorOverlayTable_FaultPrint,0x800BF9A0,0x36
 asm/non_matchings/code/z_actor_dlftbls/ActorOverlayTable_FaultAddrConv.s,ActorOverlayTable_FaultAddrConv,0x800BFA78,0x1C
 asm/non_matchings/code/z_actor_dlftbls/ActorOverlayTable_Init.s,ActorOverlayTable_Init,0x800BFAE8,0x16

@@ -173,7 +173,7 @@ void func_808BD3B4(EnDekunuts* this, GlobalContext* globalCtx) {
         this->unk_18E = 0;
         this->collider.base.colType = COLTYPE_HIT6;
         this->unk_210 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_21C, 8, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_21C, 8, 2, 0.2f, 0.2f);
     }
 }
 

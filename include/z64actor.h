@@ -1007,7 +1007,6 @@ typedef enum {
     /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
 } ActorID;
 
-#define ACTOR_FLAG_NONE          (0)
 // Targetability / ACTOR_FLAG_TARGETABLE?
 #define ACTOR_FLAG_1             (1 << 0)
 // 
@@ -1070,8 +1069,6 @@ typedef enum {
 #define ACTOR_FLAG_20000000      (1 << 29)
 // 
 #define ACTOR_FLAG_40000000      (1 << 30)
-
-#define ACTOR_FLAGS_ALL(flags, mask) (((flags) & (mask)) == (mask))
 
 typedef enum {
     /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,

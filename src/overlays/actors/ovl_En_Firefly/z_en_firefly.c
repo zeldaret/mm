@@ -173,7 +173,7 @@ void EnFirefly_SpawnIceEffects(EnFirefly* this, GlobalContext* globalCtx) {
     if (this->unk_18F == 0xA) {
         this->unk_18F = 0;
         this->unk_2E8.x = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, &this->unk_2F8, 3, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, &this->unk_2F8, 3, 2, 0.2f, 0.2f);
     }
 }
 

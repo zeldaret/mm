@@ -85,6 +85,8 @@
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
 
+#define CHECK_FLAG_ALL(flags, mask) (((flags) & (mask)) == (mask))
+
 extern GraphicsContext* __gfxCtx;
 
 #define WORK_DISP __gfxCtx->work.p

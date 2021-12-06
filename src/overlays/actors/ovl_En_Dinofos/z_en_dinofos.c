@@ -408,7 +408,7 @@ void func_8089ACEC(EnDinofos* this, GlobalContext* globalCtx) {
         this->unk_28A = 0;
         this->colliderJntSph.base.colType = COLTYPE_HIT0;
         this->unk_2B0 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_2D4, 12, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D4, 12, 2, 0.3f, 0.2f);
         this->actor.flags |= 0x400;
     }
 }

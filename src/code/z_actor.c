@@ -665,7 +665,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
             }
 
             sfxId =
-                ACTOR_FLAGS_ALL(actor->flags, ACTOR_FLAG_4 | ACTOR_FLAG_1) ? NA_SE_SY_LOCK_ON : NA_SE_SY_LOCK_ON_HUMAN;
+                CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_4 | ACTOR_FLAG_1) ? NA_SE_SY_LOCK_ON : NA_SE_SY_LOCK_ON_HUMAN;
             play_sound(sfxId);
         }
 
@@ -3364,7 +3364,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
     while (actor != NULL) {
         if ((actor->update != NULL) && ((Player*)actor != player)) {
             if (actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1)) {
-                if ((actorCategory == ACTORCAT_ENEMY) && ACTOR_FLAGS_ALL(actor->flags, ACTOR_FLAG_4 | ACTOR_FLAG_1)) {
+                if ((actorCategory == ACTORCAT_ENEMY) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_4 | ACTOR_FLAG_1)) {
                     if ((actor->xyzDistToPlayerSq < SQ(500.0f)) && (actor->xyzDistToPlayerSq < D_801ED8CC)) {
                         actorCtx->targetContext.unk90 = actor;
                         D_801ED8CC = actor->xyzDistToPlayerSq;
@@ -4387,7 +4387,8 @@ void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
 }
 
 void func_800BE504(Actor* actor, ColliderCylinder* collider) {
-    if ((collider->info.acHitInfo->toucher.dmgFlags & 0x13820)) {
+    // Checks if was hit by either DMG_NORMAL_ARROW, DMG_FIRE_ARROW, DMG_ICE_ARROW, DMG_LIGHT_ARROW or DMG_DEKU_BUBBLE
+    if ((collider->info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
@@ -4395,15 +4396,15 @@ void func_800BE504(Actor* actor, ColliderCylinder* collider) {
 }
 
 void func_800BE568(Actor* actor, ColliderSphere* collider) {
-    if (collider->info.acHitInfo->toucher.dmgFlags & 0x13820) {
+    if (collider->info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
     }
 }
 
-void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2) {
-    if (collider->elements[arg2].info.acHitInfo->toucher.dmgFlags & 0x13820) {
+void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex) {
+    if (collider->elements[colliderIndex].info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
@@ -4425,7 +4426,7 @@ TexturePtr* D_801AEFA8[] = {
     D_040923E0,
 };
 
-void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 arg3, f32 arg4, f32 arg5, f32 arg6,
+void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 arg4, f32 arg5, f32 arg6,
                    u8 mode) {
     if (arg6 > 0.001f) {
         s32 temp_v1_3;
@@ -4461,12 +4462,12 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
         switch (mode) {
             case 0xA:
             case 0xB:
-                sp124 = ((gGameInfo->data[1267] * 0.01f) + 2.3f) * arg4;
-                sp118 = ((gGameInfo->data[1276] * 0.0001f) + 0.035f) * arg5;
+                sp124 = ((KREG(19) * 0.01f) + 2.3f) * arg4;
+                sp118 = ((KREG(28) * 0.0001f) + 0.035f) * arg5;
                 func_800BCC68(limbPos, globalCtx);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08,
-                           Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, sp110 & 0xFF, 0x20, 0x10, 1, 0U,
+                           Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, sp110 & 0xFF, 0x20, 0x10, 1, 0,
                                             (sp110 * 2) & 0xFF, 0x40, 0x20));
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
@@ -4484,15 +4485,15 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                         phi_f2 = 255.0f;
                     }
 
-                    gDPSetEnvColor(POLY_XLU_DISP++, (gGameInfo->data[1268] + 0xC8), (gGameInfo->data[1269] + 0xC8),
-                                   (gGameInfo->data[1270] + 0xFF), (u8)phi_f2);
+                    gDPSetEnvColor(POLY_XLU_DISP++, KREG(20) + 0xC8, KREG(21) + 0xC8,
+                                   KREG(22) + 0xFF, (u8)phi_f2);
 
                     Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_Scale(sp124, sp124, sp124, MTXMODE_APPLY);
-                    if ((i & 1) != 0) {
+                    if (i & 1) {
                         Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
                     }
-                    if ((i & 2) != 0) {
+                    if (i & 2) {
                         Matrix_InsertZRotation_f(M_PI, MTXMODE_APPLY);
                     }
 
@@ -4523,7 +4524,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                     temp_v1_3 = ((i * 3) + sp110);
                     gSPSegment(POLY_XLU_DISP++, 0x08,
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, temp_v1_3 * 3, temp_v1_3 * -0xC, 0x20, 0x40,
-                                                1, 0U, 0U, 0x20, 0x20));
+                                                1, 0, 0, 0x20, 0x20));
 
                     Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
@@ -4563,11 +4564,11 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                         phi_f2 = 255.0f;
                     }
 
-                    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, (mode), (u8)phi_f2);
+                    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, mode, (u8)phi_f2);
 
                     gSPSegment(POLY_XLU_DISP++, 0x08,
-                               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U,
-                                                ((s32)((i * 0xA) + sp110) * -0x14) & 0x1FF, 0x20, 0x80));
+                               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
+                                                ((i * 10 + sp110) * -0x14) & 0x1FF, 0x20, 0x80));
 
                     Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
                     temp_s3->mf[3][0] = limbPos->x;
@@ -4585,7 +4586,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
 
             case 0x14:
             case 0x15:
-                sp120 = (((f32)gGameInfo->data[1267] * 0.01f) + 4.0f) * arg4;
+                sp120 = ((KREG(19) * 0.01f) + 4.0f) * arg4;
 
                 gSPDisplayList(POLY_XLU_DISP++, D_04023348);
 
@@ -4595,11 +4596,11 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                 }
 
                 if (mode == 0x15) {
-                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(gGameInfo->data[1552] + 0xFF),
-                                    (u8)(gGameInfo->data[1553] + 0xFF), (u8)(gGameInfo->data[1554] + 0xFF), (u8)phi_f2);
+                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 0xFF),
+                                    (u8)(sREG(17) + 0xFF), (u8)(sREG(18) + 0xFF), (u8)phi_f2);
 
-                    gDPSetEnvColor(POLY_XLU_DISP++, (u8)gGameInfo->data[1555], (u8)(gGameInfo->data[1556] + 0xFF),
-                                   (u8)(gGameInfo->data[1557] + 0xFF), 0x80);
+                    gDPSetEnvColor(POLY_XLU_DISP++, (u8)sREG(19), (u8)(sREG(20) + 0xFF),
+                                   (u8)(sREG(21) + 0xFF), 0x80);
                 } else {
                     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF, 0xC8, (u8)phi_f2);
 
@@ -4627,23 +4628,23 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
             case 0x1F:
             case 0x20:
                 if (mode == 0x1E) {
-                    sp11C = (((f32)gGameInfo->data[1267] * 0.01f) + 1.0f) * arg4;
+                    sp11C = (KREG(19) * 0.01f + 1.0f) * arg4;
                 } else if (mode == 0x1F) {
-                    sp11C = (((f32)gGameInfo->data[1267] * 0.01f) + 1.5f) * arg4;
+                    sp11C = (KREG(19) * 0.01f + 1.5f) * arg4;
                 } else {
-                    sp11C = (((f32)gGameInfo->data[1267] * 0.01f) + 2.0f) * arg4;
+                    sp11C = (KREG(19) * 0.01f + 2.0f) * arg4;
                 }
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_801AEFA8[globalCtx->gameplayFrames & 3]));
 
                 gSPDisplayList(POLY_XLU_DISP++, D_04023480);
 
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(gGameInfo->data[1552] + 0xFF),
-                                (u8)(gGameInfo->data[1553] + 0xFF), (u8)(gGameInfo->data[1554] + 0x96),
-                                (u8)(gGameInfo->data[1555] + 0xFF));
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 0xFF),
+                                (u8)(sREG(17) + 0xFF), (u8)(sREG(18) + 0x96),
+                                (u8)(sREG(19) + 0xFF));
 
-                gDPSetEnvColor(POLY_XLU_DISP++, (u8)(gGameInfo->data[1556] + 0xFF), (u8)(gGameInfo->data[1557] + 0xFF),
-                               (u8)gGameInfo->data[1558], (u8)gGameInfo->data[1559]);
+                gDPSetEnvColor(POLY_XLU_DISP++, (u8)(sREG(20) + 0xFF), (u8)(sREG(21) + 0xFF),
+                               (u8)sREG(22), (u8)sREG(23));
 
                 Matrix_SetCurrentState(&globalCtx->mf_187FC);
                 Matrix_Scale(sp11C, sp11C, sp11C, MTXMODE_APPLY);
@@ -4651,9 +4652,9 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
                 for (i = 0; i < arg3; i++) {
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                     Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
-                    temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->x;
-                    temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->y;
-                    temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->z;
+                    temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
+                    temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
+                    temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4662,9 +4663,9 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
 
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                     Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
-                    temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->x;
-                    temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->y;
-                    temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)gGameInfo->data[1560] + 30.0f) + limbPos->z;
+                    temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
+                    temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
+                    temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4680,31 +4681,33 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
     }
 }
 
-static Color_RGBA8 D_801AEFB8 = { 170, 255, 255, 255 };
-static Color_RGBA8 D_801AEFBC = { 200, 200, 255, 255 };
-static Vec3f D_801AEFC0 = { 0.0f, -1.0f, 0.0f };
-
-void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s32 arg3, s32 arg4, f32 arg5, f32 arg6) {
+void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, s32 arg4, f32 scale, f32 arg6) {
+    static Color_RGBA8 primColor = { 170, 255, 255, 255 };
+    static Color_RGBA8 envColor = { 200, 200, 255, 255 };
+    static Vec3f accel = { 0.0f, -1.0f, 0.0f };
     s32 i;
     s32 pad;
-    Vec3f sp84;
-    s16 temp_s0;
-    s16 temp_s2;
+    Vec3f velocity;
+    s16 randomYaw;
+    s16 yaw;
     s32 j;
 
     Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < arg3; i++) {
-        temp_s2 = Actor_YawToPoint(actor, limbPos);
+        yaw = Actor_YawToPoint(actor, limbPos);
 
         for (j = 0; j < arg4; j++) {
-            temp_s0 = (Rand_Next() >> 0x13) + temp_s2;
-            sp84.z = Rand_ZeroFloat(5.0f);
-            sp84.x = Math_SinS(temp_s0) * sp84.z;
-            sp84.y = Rand_ZeroFloat(4.0f) + 8.0f;
-            sp84.z *= Math_CosS(temp_s0);
-            EffectSsEnIce_Spawn(globalCtx, limbPos, Rand_ZeroFloat(arg6) + arg5, &sp84, &D_801AEFC0, &D_801AEFB8,
-                                &D_801AEFBC, 30);
+            randomYaw = (Rand_Next() >> 0x13) + yaw;
+
+            velocity.z = Rand_ZeroFloat(5.0f);
+
+            velocity.x = Math_SinS(randomYaw) * velocity.z;
+            velocity.y = Rand_ZeroFloat(4.0f) + 8.0f;
+            velocity.z *= Math_CosS(randomYaw);
+
+            EffectSsEnIce_Spawn(globalCtx, limbPos, Rand_ZeroFloat(arg6) + scale, &velocity, &accel, &primColor,
+                                &envColor, 30);
         }
 
         limbPos++;

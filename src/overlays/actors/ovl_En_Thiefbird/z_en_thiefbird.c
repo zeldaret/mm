@@ -466,7 +466,7 @@ void func_80C114C0(EnThiefbird* this, GlobalContext* globalCtx) {
     if (this->unk_18C == 10) {
         this->unk_18C = 0;
         this->unk_3D4 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_350, 11, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_350, 11, 2, 0.2f, 0.2f);
         this->actor.flags |= 0x200;
     }
 }

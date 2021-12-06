@@ -266,7 +266,7 @@ void EnPametfrog_ChangeColliderThaw(EnPametfrog* this, GlobalContext* globalCtx)
         this->collider.base.colType = COLTYPE_HIT6;
         this->collider.elements->info.elemType = ELEMTYPE_UNK1;
         this->unk_2C4 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->limbPos, 12, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, 12, 2, 0.3f, 0.2f);
     }
 }
 

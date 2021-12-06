@@ -259,7 +259,7 @@ void func_808D0A48(EnFloormas* this, GlobalContext* globalCtx) {
         this->unk_18C = 0;
         this->collider.base.colType = COLTYPE_HIT0;
         this->unk_2C4 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_2D0, ARRAY_COUNT(this->unk_2D0), 2,
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D0, ARRAY_COUNT(this->unk_2D0), 2,
                       this->actor.scale.x * 30.000002f, this->actor.scale.x * 20.0f);
         if (this->actor.scale.x > 0.009f) {
             this->actor.flags |= 0x400;

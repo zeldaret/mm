@@ -393,7 +393,7 @@ void func_80990854(EnWf* this, GlobalContext* globalCtx) {
         this->collider2.base.colType = COLTYPE_HIT5;
         this->collider3.base.colType = COLTYPE_HIT5;
         this->unk_2AC = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_2B8, 10, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2B8, 10, 2, 0.3f, 0.2f);
         this->actor.flags |= 0x400;
     }
 }

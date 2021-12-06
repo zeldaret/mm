@@ -248,7 +248,7 @@ void func_808D8ED0(EnSw* this, GlobalContext* globalCtx) {
         sp54.z += this->unk_380[i].z;
         Math_Vec3f_Copy(&this->unk_380[i], &sp54);
     }
-    func_800BF7CC(globalCtx, &this->actor, this->unk_380, ARRAY_COUNT(this->unk_380), 3, 0.1f, 0.3f);
+    Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_380, ARRAY_COUNT(this->unk_380), 3, 0.1f, 0.3f);
 }
 
 void func_808D8FC4(EnSw* this, GlobalContext* globalCtx) {

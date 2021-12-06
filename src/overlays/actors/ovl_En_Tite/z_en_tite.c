@@ -291,7 +291,7 @@ void func_80893E54(EnTite* this, GlobalContext* globalCtx) {
         this->unk_2BB = 0;
         this->collider.base.colType = COLTYPE_HIT6;
         this->unk_2C4 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_2D0, 9, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D0, 9, 2, 0.2f, 0.2f);
         this->actor.flags |= 0x200;
     }
 }
