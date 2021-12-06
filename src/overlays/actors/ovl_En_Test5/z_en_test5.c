@@ -53,7 +53,6 @@ void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx2) {
 }
 
 void EnTest5_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnTest5* this = THIS;
 }
 
 void EnTest5_HandleBottleAction(EnTest5* this, GlobalContext* globalCtx) {
@@ -85,12 +84,12 @@ void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Vec3f steamPos;
     CollisionPoly* poly; // Unused
-    UNK_TYPE pad;        // Unused
+    s32 pad;             // Unused
 
     this->actionFunc(this, globalCtx);
 
     // If it's the hot spring variant, generate steam clouds
-    if (IS_VARIANT_HOT_SPRING(this) && (globalCtx->state.frames & 0x03) == 0) {
+    if (ENTEST5_IS_HOT_SPRING(&this->actor) && (globalCtx->state.frames % 4) == 0) {
         steamPos.x = (Rand_ZeroOne() * this->xLength) + this->minPos.x;
         steamPos.y = this->minPos.y + 100.0f;
         steamPos.z = (Rand_ZeroOne() * this->zLength) + this->minPos.z;
