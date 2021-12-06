@@ -1007,6 +1007,13 @@ typedef enum {
     /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
 } ActorID;
 
+typedef enum {
+    /* 0 */ DOORLOCK_NORMAL,
+    /* 1 */ DOORLOCK_BOSS,
+    /* 2 */ DOORLOCK_2, // DOORLOCK_NORMAL_SPIRIT on OoT
+    /* 3 */ DOORLOCK_MAX
+} DoorLockType;
+
 // Targetability / ACTOR_FLAG_TARGETABLE?
 #define ACTOR_FLAG_1             (1 << 0)
 // 

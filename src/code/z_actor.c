@@ -30,14 +30,14 @@ extern Gfx D_06000530[];
 extern Gfx D_06000400[];
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ Gfx* unk_14;
-    /* 0x18 */ Gfx* unk_18;
-} struct_801AEDD4; // size = 0x1C
+    /* 0x00 */ f32 chainAngle;
+    /* 0x04 */ f32 chainLength;
+    /* 0x08 */ f32 yShift;
+    /* 0x0C */ f32 chainsScale;
+    /* 0x10 */ f32 chainsRotZInit;
+    /* 0x14 */ Gfx* chainDL;
+    /* 0x18 */ Gfx* lockDL;
+} DoorLockInfo; // size = 0x1C
 
 // bss
 extern FaultClient D_801ED8A0;    // 2 funcs
@@ -3809,54 +3809,59 @@ void func_800BC848(Actor* actor, GameState* gameState, s16 arg2, s16 arg3) {
     func_800BC770(gameState, arg2, arg3);
 }
 
-struct_801AEDD4 D_801AEDD4[] = {
-    { 0.540000021458f, 6000.0f, 5000.0, 1.0f, 0.0f, D_05000230, D_05000140 },
-    { 0.643999993801f, 12000.0f, 8000.0f, 1.0f, 0.0f, D_06000530, D_06000400 },
-    { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, D_05000230, D_05000140 },
+DoorLockInfo sDoorLocksInfo[DOORLOCK_MAX] = {
+    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0, 1.0f, 0.0f, D_05000230, D_05000140 },
+    /* DOORLOCK_BOSS */ { 0.644f, 12000.0f, 8000.0f, 1.0f, 0.0f, D_06000530, D_06000400 },
+    /* DOORLOCK_2 */ { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, D_05000230, D_05000140 },
 };
 
+/**
+ * Draws chains and lock of a locked door, of the specified `type` (see `DoorLockType`).
+ * `frame` can be 0 to 10, where 0 is "open" and 10 is "closed", the chains slide accordingly.
+ */
 void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
     s32 pad[2];
-    MtxF spA8;
+    MtxF baseMtxF;
     s32 i;
-    f32 sin;
-    f32 cos;
-    struct_801AEDD4* entry = &D_801AEDD4[type];
-    f32 phi_f20 = entry->unk_10;
-    f32 phi_f2;
+    f32 chainsTranslateX;
+    f32 chainsTranslateY;
+    DoorLockInfo* entry = &sDoorLocksInfo[type];
+    f32 chainRotZ = entry->chainsRotZInit;
+    f32 rotZStep;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, entry->unk_08, 500.0f, MTXMODE_APPLY);
-    Matrix_CopyCurrentState(&spA8);
+    Matrix_InsertTranslation(0.0f, entry->yShift, 500.0f, MTXMODE_APPLY);
+    Matrix_CopyCurrentState(&baseMtxF);
 
-    sin = __sinf(entry->unk_00 - phi_f20) * -(10 - frame) * 0.1f * entry->unk_04;
-    cos = __cosf(entry->unk_00 - phi_f20) * (10 - frame) * 0.1f * entry->unk_04;
+    chainsTranslateX = __sinf(entry->chainAngle - chainRotZ) * -(10 - frame) * 0.1f * entry->chainLength;
+    chainsTranslateY = __cosf(entry->chainAngle - chainRotZ) * (10 - frame) * 0.1f * entry->chainLength;
 
     for (i = 0; i < 4; i++) {
-        Matrix_SetCurrentState(&spA8);
-        Matrix_InsertZRotation_f(phi_f20, MTXMODE_APPLY);
-        Matrix_InsertTranslation(sin, cos, 0.0f, MTXMODE_APPLY);
-        if (entry->unk_0C != 1.0f) {
-            Matrix_Scale(entry->unk_0C, entry->unk_0C, entry->unk_0C, MTXMODE_APPLY);
+        Matrix_SetCurrentState(&baseMtxF);
+        Matrix_InsertZRotation_f(chainRotZ, MTXMODE_APPLY);
+        Matrix_InsertTranslation(chainsTranslateX, chainsTranslateY, 0.0f, MTXMODE_APPLY);
+        if (entry->chainsScale != 1.0f) {
+            Matrix_Scale(entry->chainsScale, entry->chainsScale, entry->chainsScale, MTXMODE_APPLY);
         }
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, entry->unk_14);
+        gSPDisplayList(POLY_OPA_DISP++, entry->chainDL);
 
         if ((i % 2) != 0) {
-            phi_f2 = 2.0f * entry->unk_00;
+            rotZStep = 2.0f * entry->chainAngle;
         } else {
-            phi_f2 = M_PI - (2.0f * entry->unk_00);
+            rotZStep = M_PI - (2.0f * entry->chainAngle);
         }
-        phi_f20 += phi_f2;
+
+        chainRotZ += rotZStep;
     }
 
-    Matrix_SetCurrentState(&spA8);
+    Matrix_SetCurrentState(&baseMtxF);
     Matrix_Scale(frame * 0.1f, frame * 0.1f, frame * 0.1f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, entry->unk_18);
+    gSPDisplayList(POLY_OPA_DISP++, entry->lockDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
