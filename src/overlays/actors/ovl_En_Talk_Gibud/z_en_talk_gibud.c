@@ -216,11 +216,11 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->limbPos[i] = D_801D15B0;
     }
 
-    if (this->requestedItemIndex < 0) {
-        this->requestedItemIndex = 0;
+    if (this->requestedItemIndex < EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BLUE_POTION) {
+        this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BLUE_POTION;
     }
-    if (this->requestedItemIndex >= ARRAY_COUNT(sRequestedItemTable)) {
-        this->requestedItemIndex = ARRAY_COUNT(sRequestedItemTable) - 1;
+    if (this->requestedItemIndex > EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK) {
+        this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK;
     }
 
     if (this->switchFlag == 0xFF) {
@@ -341,8 +341,12 @@ void EnTalkGibud_SetupGrab(EnTalkGibud* this) {
 }
 
 void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx) {
-    Player* player2 = GET_PLAYER(globalCtx);
-    Player* player = player2;
+    // This function needs to have two different temps for Player to match,
+    // but you don't have to necessarily use them both. This is just the most
+    // likely scenario; they got an Actor* pointer in the first temp, then
+    // casted it to Player* in the second temp.
+    Actor* playerActor = &GET_PLAYER(globalCtx)->actor;
+    Player* player = (Player*)playerActor;
     s32 inPositionToAttack;
     u16 damageSfxId;
 
@@ -362,7 +366,7 @@ void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx) {
 
                 damageSfxId = player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S;
                 globalCtx->damagePlayer(globalCtx, -8);
-                func_800B8E58(&player->actor, damageSfxId);
+                func_800B8E58(playerActor, damageSfxId);
                 func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->grabDamageTimer = 0;
             } else {
@@ -568,53 +572,43 @@ void EnTalkGibud_Revive(EnTalkGibud* this, GlobalContext* globalCtx) {
 
 void EnTalkGibud_GetTextIdForRequestedItem(EnTalkGibud* this, GlobalContext* globalCtx) {
     switch (this->requestedItemIndex) {
-        case 0:
-            // Blue Potion
+        case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BLUE_POTION:
             func_801518B0(globalCtx, 0x138C, &this->actor);
             this->textId = 0x138C;
             break;
-        case 1:
-            // Beans
+        case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BEANS:
             func_801518B0(globalCtx, 0x138D, &this->actor);
             this->textId = 0x138D;
             break;
-        case 2:
-            // Spring Water
+        case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_SPRING_WATER:
             func_801518B0(globalCtx, 0x138E, &this->actor);
             this->textId = 0x138E;
             break;
-        case 3:
-            // Fish
+        case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_FISH:
             func_801518B0(globalCtx, 0x138F, &this->actor);
             this->textId = 0x138F;
             break;
-        case 4:
-            // Bugs
+        case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BUGS:
             func_801518B0(globalCtx, 0x1390, &this->actor);
             this->textId = 0x1390;
             break;
-        case 5:
-            // Deku Nuts
+        case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_DEKU_NUTS:
             func_801518B0(globalCtx, 0x1391, &this->actor);
             this->textId = 0x1391;
             break;
-        case 6:
-            // Bombs
+        case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BOMBS:
             func_801518B0(globalCtx, 0x1392, &this->actor);
             this->textId = 0x1392;
             break;
-        case 7:
-            // Hot Spring Water
+        case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_HOT_SPRING_WATER:
             func_801518B0(globalCtx, 0x1393, &this->actor);
             this->textId = 0x1393;
             break;
-        case 8:
-            // Big Poe
+        case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BIG_POE:
             func_801518B0(globalCtx, 0x1394, &this->actor);
             this->textId = 0x1394;
             break;
-        case 9:
-            // Milk
+        case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK:
             func_801518B0(globalCtx, 0x1395, &this->actor);
             this->textId = 0x1395;
             break;
@@ -817,15 +811,15 @@ void EnTalkGibud_Disappear(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalCtx) {
-    s16 temp;
+    s16 target;
 
-    temp = this->actor.yawTowardsPlayer;
-    Math_ScaledStepToS(&this->actor.shape.rot.y, temp, 0x320);
-    temp -= this->actor.shape.rot.y;
+    target = this->actor.yawTowardsPlayer;
+    Math_ScaledStepToS(&this->actor.shape.rot.y, target, 0x320);
+    target -= this->actor.shape.rot.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    Math_ScaledStepToS(&this->upperBodyRotation.y, temp, 0x258);
-    temp -= this->upperBodyRotation.y;
-    Math_ScaledStepToS(&this->headRotation.y, temp, 0x190);
+    Math_ScaledStepToS(&this->upperBodyRotation.y, target, 0x258);
+    target -= this->upperBodyRotation.y;
+    Math_ScaledStepToS(&this->headRotation.y, target, 0x190);
 }
 
 s32 EnTalkGibud_PlayerInRangeWithCorrectState(EnTalkGibud* this, GlobalContext* globalCtx) {
@@ -995,8 +989,8 @@ void EnTalkGibud_CheckDamageEffect(EnTalkGibud* this, GlobalContext* globalCtx) 
                 break;
 
             case EN_TALK_GIBUD_DMGEFF_ZORA_MAGIC:
-                if ((this->actionFunc != EnTalkGibud_Grab) &&
-                    ((this->actionFunc != EnTalkGibud_Stunned) || (this->stunTimer == 0))) {
+                if (this->actionFunc != EnTalkGibud_Grab &&
+                    (this->actionFunc != EnTalkGibud_Stunned || this->stunTimer == 0)) {
                     this->effectAlpha = 1.0f;
                     this->effectTimer = 40;
                     this->effectType = 30;
@@ -1005,7 +999,7 @@ void EnTalkGibud_CheckDamageEffect(EnTalkGibud* this, GlobalContext* globalCtx) 
                 break;
 
             case EN_TALK_GIBUD_DMGEFF_STUN:
-                if ((this->actionFunc != EnTalkGibud_Stunned) || (this->stunTimer == 0)) {
+                if ((this->actionFunc != EnTalkGibud_Stunned) || this->stunTimer == 0) {
                     EnTalkGibud_SetupStunned(this);
                 }
                 break;
@@ -1022,9 +1016,9 @@ void EnTalkGibud_CheckCollision(EnTalkGibud* this, GlobalContext* globalCtx) {
         if (this->isTalking != true) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            if (((this->actionFunc != EnTalkGibud_Damage) ||
-                 ((player->unk_ADC != 0) && (player->unk_ADD != this->unk_3F7))) &&
-                ((this->actionFunc != EnTalkGibud_Stunned) || (this->stunTimer == 0))) {
+            if ((this->actionFunc != EnTalkGibud_Damage ||
+                 (player->unk_ADC != 0 && player->unk_ADD != this->unk_3F7)) &&
+                (this->actionFunc != EnTalkGibud_Stunned || this->stunTimer == 0)) {
                 CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
             }
         }
