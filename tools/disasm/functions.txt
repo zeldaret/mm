@@ -894,7 +894,7 @@
     0x800BE5CC:("func_800BE5CC",),
     0x800BE63C:("func_800BE63C",),
     0x800BE680:("func_800BE680",),
-    0x800BF7CC:("func_800BF7CC",),
+    0x800BF7CC:("Actor_SpawnIceEffects",),
     0x800BF9A0:("ActorOverlayTable_FaultPrint",),
     0x800BFA78:("ActorOverlayTable_FaultAddrConv",),
     0x800BFAE8:("ActorOverlayTable_Init",),
