@@ -21,7 +21,7 @@ void* KaleidoManager_FaultAddrConvFunc(void* address, void* param) {
     u8* ramStart;
     u8* ramEnd;
     size_t size;
-    u32 offset;
+    uintptr_t offset;
 
     if (ovl != NULL) {
         size = (u8*)ovl->vramEnd - (u8*)ovl->vramStart;
@@ -40,14 +40,14 @@ void* KaleidoManager_FaultAddrConvFunc(void* address, void* param) {
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl) {
     ovl->loadedRamAddr = sKaleidoAreaPtr;
     Load2_LoadOverlay(ovl->vromStart, ovl->vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
-    ovl->offset = (u32)ovl->loadedRamAddr - (u32)ovl->vramStart;
+    ovl->offset = (uintptr_t)ovl->loadedRamAddr - (uintptr_t)ovl->vramStart;
     gKaleidoMgrCurOvl = ovl;
 }
 
 void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl) {
     if (ovl->loadedRamAddr != NULL) {
         ovl->offset = 0;
-        bzero(ovl->loadedRamAddr, (u32)ovl->vramEnd - (u32)ovl->vramStart);
+        bzero(ovl->loadedRamAddr, (uintptr_t)ovl->vramEnd - (uintptr_t)ovl->vramStart);
         ovl->loadedRamAddr = NULL;
         gKaleidoMgrCurOvl = NULL;
     }
@@ -59,7 +59,7 @@ void KaleidoManager_Init(GlobalContext* globalCtx) {
     u32 i;
 
     for (i = 0; i < ARRAY_COUNT(gKaleidoMgrOverlayTable); i++) {
-        size = (u32)gKaleidoMgrOverlayTable[i].vramEnd - (u32)gKaleidoMgrOverlayTable[i].vramStart;
+        size = (uintptr_t)gKaleidoMgrOverlayTable[i].vramEnd - (uintptr_t)gKaleidoMgrOverlayTable[i].vramStart;
         if (size > largestSize) {
             largestSize = size;
         }
@@ -87,17 +87,17 @@ void* KaleidoManager_GetRamAddr(void* vram) {
         KaleidoMgrOverlay* ovl = &gKaleidoMgrOverlayTable[0];
 
         do {
-            if (((u32)vram >= (u32)ovl->vramStart) && ((u32)ovl->vramEnd >= (u32)vram)) {
+            if (((uintptr_t)vram >= (uintptr_t)ovl->vramStart) && ((uintptr_t)ovl->vramEnd >= (uintptr_t)vram)) {
                 KaleidoManager_LoadOvl(ovl);
-                return (void*)((u32)vram + ovl->offset);
+                return (void*)((uintptr_t)vram + ovl->offset);
             }
             ovl++;
         } while (ovl != (KaleidoMgrOverlay*)&sKaleidoAreaPtr);
 
         return NULL;
-    } else if (((u32)vram < (u32)gKaleidoMgrCurOvl->vramStart) || ((u32)vram >= (u32)gKaleidoMgrCurOvl->vramEnd)) {
+    } else if (((uintptr_t)vram < (uintptr_t)gKaleidoMgrCurOvl->vramStart) || ((uintptr_t)vram >= (uintptr_t)gKaleidoMgrCurOvl->vramEnd)) {
         return NULL;
     }
 
-    return (void*)((u32)vram + gKaleidoMgrCurOvl->offset);
+    return (void*)((uintptr_t)vram + gKaleidoMgrCurOvl->offset);
 }
