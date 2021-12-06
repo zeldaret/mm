@@ -2925,7 +2925,7 @@
     0x801631DC:("func_801631DC",),
     0x80163334:("func_80163334",),
     0x80163660:("func_80163660",),
-    0x80163700:("func_80163700",),
+    0x80163700:("KaleidoManager_FaultAddrConvFunc",),
     0x80163758:("KaleidoManager_LoadOvl",),
     0x801637B4:("KaleidoManager_ClearOvl",),
     0x80163804:("KaleidoManager_Init",),

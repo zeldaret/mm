@@ -15,7 +15,7 @@ void* sKaleidoAreaPtr = NULL;
 KaleidoMgrOverlay* gKaleidoMgrCurOvl = NULL;
 FaultAddrConvClient sKaleidoAreaFaultClient;
 
-void* func_80163700(void* address, void* param) {
+void* KaleidoManager_FaultAddrConvFunc(void* address, void* param) {
     u8* ptr = address;
     KaleidoMgrOverlay* ovl = &gKaleidoMgrCurOvl[0];
     u8* ramStart;
@@ -67,7 +67,7 @@ void KaleidoManager_Init(GlobalContext* globalCtx) {
 
     sKaleidoAreaPtr = THA_AllocEndAlign16(&globalCtx->state.heap, largestSize);
     gKaleidoMgrCurOvl = NULL;
-    Fault_AddAddrConvClient(&sKaleidoAreaFaultClient, func_80163700, NULL);
+    Fault_AddAddrConvClient(&sKaleidoAreaFaultClient, KaleidoManager_FaultAddrConvFunc, NULL);
 }
 
 void KaleidoManager_Destroy() {
