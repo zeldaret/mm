@@ -8,10 +8,6 @@
 #define OBJ_TOKEIDAI_GET_CURRENT_MINUTE(this) ((s32)((this)->currentTime * (360 * 2.0f / 0x10000)) % 30)
 #define OBJ_TOKEIDAI_GET_CLOCK_FACE_ROTATION(currentHour) ((s16)(currentHour * (0x10000 / 24.0f)))
 #define OBJ_TOKEIDAI_GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute) ((s16)(currentMinute * (0x10000 * 12.0f / 360)))
-#define OBJ_TOKEIDAI_IS_TOWER_OPENED() ((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4)
-#define OBJ_TOKEIDAI_IS_STARTING_TOWER_OPENING_CS(globalCtx) \
-        (((globalCtx)->sceneNum == SCENE_CLOCKTOWER && gSaveContext.sceneSetupIndex == 2 && (globalCtx)->csCtx.unk_12 == 0) || \
-        ((globalCtx)->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 2 && (globalCtx)->csCtx.unk_12 == 0))
 
 typedef enum {
     /*  0 */ OBJ_TOKEIDAI_TYPE_TOWER_GEAR_CLOCK_TOWN,
