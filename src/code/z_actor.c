@@ -3963,7 +3963,7 @@ void func_800BCCDC(Vec3s* points, s32 pathCount, Vec3f* pos1, Vec3f* pos2, s32 a
     }
 
     if (arg4 && (((spA0[0] != 0) && (spA0[1] != 0)) || ((spA0[0] != 0) && (spA8[0] != 0) && (sp54[0] < sp54[1])) ||
-                    ((spA0[1] != 0) && (spA8[1] != 0) && (sp54[1] < sp54[0])))) {
+                 ((spA0[1] != 0) && (spA8[1] != 0) && (sp54[1] < sp54[0])))) {
         pos2->x = pos1->x;
         pos2->z = pos1->z;
     } else if ((spA8[0] != 0) && (spA8[1] != 0)) {
@@ -4400,7 +4400,8 @@ void func_800BE568(Actor* actor, ColliderSphere* collider) {
 }
 
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex) {
-    if (collider->elements[colliderIndex].info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
+    if (collider->elements[colliderIndex].info.acHitInfo->toucher.dmgFlags &
+        (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20)) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
@@ -4481,8 +4482,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                         phi_f2 = 255.0f;
                     }
 
-                    gDPSetEnvColor(POLY_XLU_DISP++, KREG(20) + 0xC8, KREG(21) + 0xC8,
-                                   KREG(22) + 0xFF, (u8)phi_f2);
+                    gDPSetEnvColor(POLY_XLU_DISP++, KREG(20) + 0xC8, KREG(21) + 0xC8, KREG(22) + 0xFF, (u8)phi_f2);
 
                     Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_Scale(sp124, sp124, sp124, MTXMODE_APPLY);
@@ -4592,11 +4592,10 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                 }
 
                 if (mode == 0x15) {
-                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 0xFF),
-                                    (u8)(sREG(17) + 0xFF), (u8)(sREG(18) + 0xFF), (u8)phi_f2);
+                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 0xFF), (u8)(sREG(17) + 0xFF),
+                                    (u8)(sREG(18) + 0xFF), (u8)phi_f2);
 
-                    gDPSetEnvColor(POLY_XLU_DISP++, (u8)sREG(19), (u8)(sREG(20) + 0xFF),
-                                   (u8)(sREG(21) + 0xFF), 0x80);
+                    gDPSetEnvColor(POLY_XLU_DISP++, (u8)sREG(19), (u8)(sREG(20) + 0xFF), (u8)(sREG(21) + 0xFF), 0x80);
                 } else {
                     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF, 0xC8, (u8)phi_f2);
 
@@ -4635,12 +4634,11 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 gSPDisplayList(POLY_XLU_DISP++, D_04023480);
 
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 0xFF),
-                                (u8)(sREG(17) + 0xFF), (u8)(sREG(18) + 0x96),
-                                (u8)(sREG(19) + 0xFF));
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 0xFF), (u8)(sREG(17) + 0xFF),
+                                (u8)(sREG(18) + 0x96), (u8)(sREG(19) + 0xFF));
 
-                gDPSetEnvColor(POLY_XLU_DISP++, (u8)(sREG(20) + 0xFF), (u8)(sREG(21) + 0xFF),
-                               (u8)sREG(22), (u8)sREG(23));
+                gDPSetEnvColor(POLY_XLU_DISP++, (u8)(sREG(20) + 0xFF), (u8)(sREG(21) + 0xFF), (u8)sREG(22),
+                               (u8)sREG(23));
 
                 Matrix_SetCurrentState(&globalCtx->mf_187FC);
                 Matrix_Scale(sp11C, sp11C, sp11C, MTXMODE_APPLY);
@@ -4677,7 +4675,8 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
     }
 }
 
-void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, s32 arg4, f32 scale, f32 arg6) {
+void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, s32 arg4, f32 scale,
+                           f32 arg6) {
     static Color_RGBA8 primColor = { 170, 255, 255, 255 };
     static Color_RGBA8 envColor = { 200, 200, 255, 255 };
     static Vec3f accel = { 0.0f, -1.0f, 0.0f };

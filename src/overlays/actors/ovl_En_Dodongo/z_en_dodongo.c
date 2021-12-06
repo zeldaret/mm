@@ -439,7 +439,8 @@ void func_80876D28(EnDodongo* this, GlobalContext* globalCtx) {
         this->unk_300 = 0;
         this->collider1.base.colType = COLTYPE_HIT0;
         this->unk_33C = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, &this->unk_348[0], 9, 2, this->unk_334 * 0.3f, this->unk_334 * 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, &this->unk_348[0], 9, 2, this->unk_334 * 0.3f,
+                              this->unk_334 * 0.2f);
         this->actor.flags |= 0x400;
     }
 }
