@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_stick.c
  * Overlay: ovl_Effect_Ss_Stick
- * Description: Deku Stick
+ * Description: Breaking Deku Stick Fragment
  */
 
 #include "z_eff_ss_stick.h"
