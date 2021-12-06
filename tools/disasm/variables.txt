@@ -3905,7 +3905,7 @@
     0x801ED8C0:("D_801ED8C0","UNK_TYPE1","",0x1),
     0x801ED8C4:("D_801ED8C4","UNK_TYPE1","",0x1),
     0x801ED8C8:("D_801ED8C8","f32","",0x4),
-    0x801ED8CC:("D_801ED8CC","f32","",0x4),
+    0x801ED8CC:("sBgmEnemyDistSq","f32","",0x4),
     0x801ED8D0:("D_801ED8D0","f32","",0x4),
     0x801ED8D4:("D_801ED8D4","UNK_TYPE1","",0x1),
     0x801ED8D8:("D_801ED8D8","UNK_TYPE1","",0x1),

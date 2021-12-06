@@ -24,6 +24,21 @@ typedef struct {
     /* 0x14 */ s16 unk_14;
 } struct_801AEE38; // size = 0x18
 
+extern Gfx D_05000140[];
+extern Gfx D_05000230[];
+extern Gfx D_06000530[];
+extern Gfx D_06000400[];
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ Gfx* unk_14;
+    /* 0x18 */ Gfx* unk_18;
+} struct_801AEDD4; // size = 0x1C
+
 // bss
 extern FaultClient D_801ED8A0;    // 2 funcs
 extern CollisionPoly* D_801ED8B0; // 1 func
@@ -33,7 +48,7 @@ extern Actor* D_801ED8BC;         // 2 funcs
 extern Actor* D_801ED8C0;         // 2 funcs
 extern Actor* D_801ED8C4;         // 2 funcs
 extern f32 D_801ED8C8;            // 2 funcs
-extern f32 D_801ED8CC;            // 2 funcs
+extern f32 sBgmEnemyDistSq;       // 2 funcs
 extern f32 D_801ED8D0;            // 2 funcs
 extern s32 D_801ED8D4;            // 2 funcs
 extern s32 D_801ED8D8;            // 2 funcs
@@ -261,7 +276,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                 }
 
                 shadowAlpha = actor->shape.shadowAlpha * (1.0f - (distToFloor * 0.033333335f));
-                shadowScaleZ = 1.0f - (distToFloor * 0.014285714f);
+                shadowScaleZ = 1.0f - (distToFloor * (1.0f / 70.0f));
                 shadowScaleX = actor->shape.shadowScale * shadowScaleZ * actor->scale.x;
 
                 for (lightPtr = mapper->l.l, j = 0; j < numLights; lightPtr++, j++) {
@@ -373,7 +388,7 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &sp94);
             temp_f22 = (f32)actor->shape.shadowAlpha * (1.0f - (spEC * (1.0f / 30.0f)));
             phi_s0 = mapper->l.l;
-            shadowScaleZ = 1.0f - (spEC * 0.014285714f);
+            shadowScaleZ = 1.0f - (spEC * (1.0f / 70.0f));
             temp_f24 = actor->shape.shadowScale * shadowScaleZ * actor->scale.x;
 
             lightNumMax = 0;
@@ -463,7 +478,7 @@ void func_800B5040(TargetContext* targetCtx, Actor* actor, s32 type, GlobalConte
 }
 
 void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx) {
-    targetCtx->unk90 = NULL;
+    targetCtx->bgmEnemy = NULL;
     targetCtx->unk8C = NULL;
     targetCtx->targetedActor = NULL;
     targetCtx->arrowPointedActor = NULL;
@@ -2564,13 +2579,11 @@ void func_800B9D1C(Actor* actor) {
     if (sfxId) {}
 
     if (actor->audioFlags & 0x40) {
-        // 0x27 is NA_BGM_MUSIC_BOX_HOUSE
-        func_801A1FB4(3, &actor->projectedPos, 0x27, 1500.0f);
+        func_801A1FB4(3, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
     }
 
     if (actor->audioFlags & 0x20) {
-        // 0x71 is NA_BGM_KAMARO_DANCE
-        func_801A1FB4(0, &actor->projectedPos, 0x71, 900.0f);
+        func_801A1FB4(0, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
     }
 }
 
@@ -3321,8 +3334,8 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
         actorCtx->targetContext.unk8C = NULL;
     }
 
-    if (actor == actorCtx->targetContext.unk90) {
-        actorCtx->targetContext.unk90 = NULL;
+    if (actor == actorCtx->targetContext.bgmEnemy) {
+        actorCtx->targetContext.bgmEnemy = NULL;
     }
 
     func_801A72CC(&actor->projectedPos);
@@ -3365,9 +3378,9 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
         if ((actor->update != NULL) && ((Player*)actor != player)) {
             if (actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1)) {
                 if ((actorCategory == ACTORCAT_ENEMY) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_4 | ACTOR_FLAG_1)) {
-                    if ((actor->xyzDistToPlayerSq < SQ(500.0f)) && (actor->xyzDistToPlayerSq < D_801ED8CC)) {
-                        actorCtx->targetContext.unk90 = actor;
-                        D_801ED8CC = actor->xyzDistToPlayerSq;
+                    if ((actor->xyzDistToPlayerSq < SQ(500.0f)) && (actor->xyzDistToPlayerSq < sBgmEnemyDistSq)) {
+                        actorCtx->targetContext.bgmEnemy = actor;
+                        sBgmEnemyDistSq = actor->xyzDistToPlayerSq;
                     }
                 }
 
@@ -3428,10 +3441,10 @@ void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, A
     s32 i;
 
     D_801ED8B8 = D_801ED8BC = D_801ED8C0 = D_801ED8C4 = NULL;
-    D_801ED8C8 = D_801ED8D0 = D_801ED8CC = FLT_MAX;
+    D_801ED8C8 = D_801ED8D0 = sBgmEnemyDistSq = FLT_MAX;
     D_801ED8D4 = D_801ED8D8 = INT32_MAX;
 
-    actorCtx->targetContext.unk90 = NULL;
+    actorCtx->targetContext.bgmEnemy = NULL;
     D_801ED8DC = player->actor.shape.rot.y;
 
     actorCategories = D_801AED8C;
@@ -3796,21 +3809,6 @@ void func_800BC848(Actor* actor, GameState* gameState, s16 arg2, s16 arg3) {
     func_800BC770(gameState, arg2, arg3);
 }
 
-extern Gfx D_05000140[];
-extern Gfx D_05000230[];
-extern Gfx D_06000530[];
-extern Gfx D_06000400[];
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ Gfx* unk_14;
-    /* 0x18 */ Gfx* unk_18;
-} struct_801AEDD4; // size = 0x1C
-
 struct_801AEDD4 D_801AEDD4[] = {
     { 0.540000021458f, 6000.0f, 5000.0, 1.0f, 0.0f, D_05000230, D_05000140 },
     { 0.643999993801f, 12000.0f, 8000.0f, 1.0f, 0.0f, D_06000530, D_06000400 },
@@ -3824,10 +3822,8 @@ void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
     f32 sin;
     f32 cos;
     struct_801AEDD4* entry = &D_801AEDD4[type];
-    f32 phi_f20;
+    f32 phi_f20 = entry->unk_10;
     f32 phi_f2;
-
-    phi_f20 = entry->unk_10;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -3898,7 +3894,7 @@ Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx) {
     return func_800B8018(arg0, &globalCtx->view.eye, &lightDir, globalCtx->state.gfxCtx);
 }
 
-void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 parm5) {
+void func_800BCCDC(Vec3s* points, s32 pathCount, Vec3f* pos1, Vec3f* pos2, s32 arg4) {
     s32 spB4;
     s32 spB0;
     s32 spA8[2] = { 0, 0 };
@@ -3914,7 +3910,7 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
     spB0 = 0;
     sp5C = SQ(40000.0f);
 
-    for (spB4 = 0; spB4 < pathcount; spB4++) {
+    for (spB4 = 0; spB4 < pathCount; spB4++) {
         sp60 = Math3D_XZDistanceSquared(pos1->x, pos1->z, points[spB4].x, points[spB4].z);
         if (sp60 < sp5C) {
             sp5C = sp60;
@@ -3928,30 +3924,30 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
     if (spB0 != 0) {
         sp64.x = (points + spB0 - 1)->x;
         sp64.z = (points + spB0 - 1)->z;
-    } else if (parm5) {
-        sp64.x = (points + pathcount - 1)->x;
-        sp64.z = (points + pathcount - 1)->z;
+    } else if (arg4) {
+        sp64.x = (points + pathCount - 1)->x;
+        sp64.z = (points + pathCount - 1)->z;
     }
 
-    if ((spB0 != 0) || (parm5)) {
+    if ((spB0 != 0) || arg4) {
         spA8[0] =
             Math3D_PointDistToLine2D(pos1->x, pos1->z, sp64.x, sp64.z, sp94.x, sp94.z, &sp7C[0].x, &sp7C[0].z, &sp60);
     }
 
-    if (spB0 + 1 != pathcount) {
+    if (spB0 + 1 != pathCount) {
         sp70.x = (points + spB0 + 1)->x;
         sp70.z = (points + spB0 + 1)->z;
-    } else if (parm5) {
+    } else if (arg4) {
         sp70.x = points->x;
         sp70.z = points->z;
     }
 
-    if ((spB0 + 1 != pathcount) || (parm5)) {
+    if ((spB0 + 1 != pathCount) || arg4) {
         spA8[1] =
             Math3D_PointDistToLine2D(pos1->x, pos1->z, sp94.x, sp94.z, sp70.x, sp70.z, &sp7C[1].x, &sp7C[1].z, &sp60);
     }
 
-    if (parm5) {
+    if (arg4) {
         s32 phi_s0_2;
 
         spA0[0] = ((sp64.x - pos1->x) * (sp94.z - pos1->z)) < ((sp64.z - pos1->z) * (sp94.x - pos1->x));
@@ -3966,7 +3962,7 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
         }
     }
 
-    if ((parm5) && (((spA0[0] != 0) && (spA0[1] != 0)) || ((spA0[0] != 0) && (spA8[0] != 0) && (sp54[0] < sp54[1])) ||
+    if (arg4 && (((spA0[0] != 0) && (spA0[1] != 0)) || ((spA0[0] != 0) && (spA8[0] != 0) && (sp54[0] < sp54[1])) ||
                     ((spA0[1] != 0) && (spA8[1] != 0) && (sp54[1] < sp54[0])))) {
         pos2->x = pos1->x;
         pos2->z = pos1->z;
@@ -3990,7 +3986,7 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
     } else if (spA8[1] != 0) {
         pos2->x = sp7C[1].x;
         pos2->z = sp7C[1].z;
-    } else if ((parm5) && ((((sp64.x - pos1->x) * (sp70.z - pos1->z)) < ((sp64.z - pos1->z) * (sp70.x - pos1->x))))) {
+    } else if (arg4 && ((((sp64.x - pos1->x) * (sp70.z - pos1->z)) < ((sp64.z - pos1->z) * (sp70.x - pos1->x))))) {
         pos2->x = pos1->x;
         pos2->z = pos1->z;
     } else {
@@ -4000,21 +3996,21 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
 }
 
 // unused
-s32 func_800BD2B4(GameState* gameState, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GameState*, Actor*),
+s32 func_800BD2B4(GameState* gameState, Actor* actor, s16* arg2, f32 arg3, u16 (*textIdCallback)(GameState*, Actor*),
                   s16 (*arg5)(GameState*, Actor*)) {
     if (Actor_ProcessTalkRequest(actor, gameState)) {
-        *arg2 = 1;
-        return 1;
-    } else if (*arg2 != 0) {
+        *arg2 = true;
+        return true;
+    } else if (*arg2) {
         *arg2 = arg5(gameState, actor);
-        return 0;
-    } else if (func_800B8934(gameState, actor) == 0) {
-        return 0;
+        return false;
+    } else if (!func_800B8934(gameState, actor)) {
+        return false;
     } else if (!func_800B8614(actor, gameState, arg3)) {
-        return 0;
+        return false;
     } else {
-        actor->textId = arg4(gameState, actor);
-        return 0;
+        actor->textId = textIdCallback(gameState, actor);
+        return false;
     }
 }
 

@@ -3119,7 +3119,7 @@ extern s32 D_801ED8B4;
 // extern UNK_TYPE1 D_801ED8C0;
 // extern UNK_TYPE1 D_801ED8C4;
 extern f32 D_801ED8C8;
-extern f32 D_801ED8CC;
+extern f32 sBgmEnemyDistSq;
 extern f32 D_801ED8D0;
 // extern UNK_TYPE1 D_801ED8D4;
 // extern UNK_TYPE1 D_801ED8D8;

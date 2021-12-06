@@ -1281,7 +1281,7 @@ struct TargetContext {
     /* 0x4D */ UNK_TYPE1 pad4D[0x3];
     /* 0x50 */ TargetContextEntry unk50[3];
     /* 0x8C */ Actor* unk8C;
-    /* 0x90 */ Actor* unk90;
+    /* 0x90 */ Actor* bgmEnemy;
     /* 0x94 */ Actor* unk_94;
 }; // size = 0x98
 
