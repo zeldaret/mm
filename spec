@@ -1329,8 +1329,7 @@ beginseg
     name "ovl_En_Fr"
     compress
     include "build/src/overlays/actors/ovl_En_Fr/z_en_fr.o"
-    include "build/data/ovl_En_Fr/ovl_En_Fr.data.o"
-    include "build/data/ovl_En_Fr/ovl_En_Fr.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fr/ovl_En_Fr_reloc.o"
 endseg
 
 beginseg
