@@ -59,7 +59,7 @@ void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Action function that awaits Link to read the letter, changing the A button to "Check" when he is within range to do 
+ * Action function that awaits Link to read the letter, changing the A button to "Check" when he is within range to do
  * so (and facing the letter).
  */
 void EnMm2_WaitForRead(EnMm2* this, GlobalContext* globalCtx) {
