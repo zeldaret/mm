@@ -119,7 +119,78 @@ extern UNK_TYPE D_060201BC;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1A4C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Init.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Init.s")
+void func_80AD1398(EnOsn*, GlobalContext*);            /* extern */
+void func_80AD144C(EnOsn*, GlobalContext*);            /* extern */
+void func_80AD1634(EnOsn*, GlobalContext*);         /* extern */
+void func_80AD16A8(EnOsn*, GlobalContext*);         /* extern */
+void func_80AD1A4C(EnOsn*, GlobalContext*);         /* extern */
+extern FlexSkeletonHeader D_060202F0;
+extern ActorAnimationEntry D_80AD22C0;
+
+void EnOsn_Init(Actor *thisx, GlobalContext *globalCtx)
+{
+  s32 pad;
+  EnOsn *this = (EnOsn *) thisx;
+
+  Actor_ProcessInitChain(&this->actor, D_80AD2570);
+  ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+  SkelAnime_InitFlex(globalCtx, &this->anime, &D_060202F0, (AnimationHeader *) (&D_060201BC), 0, 0, 0);
+  Collider_InitCylinder(globalCtx, &this->collider);
+  Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80AD2518);
+  CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80AD2550, &D_80AD2544);
+  this->unk_1D8[0x24] = -1;
+  switch (this->actor.params & 3)
+  {
+    case 0:
+      if (((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC030)) || (gSaveContext.entranceIndex == 0xC060))
+    {
+      this->unk_1EA = (u16) (this->unk_1EA | 1);
+    }
+      this->unk_1D8[0x18] = 1;
+      if (globalCtx->sceneNum == 0x63)
+    {
+      if ((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC060))
+      {
+        this->actionFunc = func_80AD16A8;
+        return;
+      }
+      if (gSaveContext.entranceIndex == 0xC030)
+      {
+        func_80AD1398(this, globalCtx);
+        this->actionFunc = func_80AD1634;
+        return;
+      }
+      func_80AD144C(this, globalCtx);
+      return;
+    }
+      func_80AD144C(this, globalCtx);
+      return;
+
+    case 1:
+      this->unk_1D8[0x14] = 0xF;
+      func_800BDC5C(&this->anime, (ActorAnimationEntry *) (&D_80AD22C0), this->unk_1D8[0x14]);
+      this->actionFunc = func_80AD1A4C;
+      return;
+
+    case 2:
+      this->unk_1D8[0x14] = 0x10;
+      func_800BDC5C(&this->anime, (ActorAnimationEntry *) (&D_80AD22C0), this->unk_1D8[0x14]);
+      this->actionFunc = func_80AD1A4C;
+      return;
+
+    case 3:
+      this->actor.flags &= -2;
+      this->actionFunc = func_80AD16A8;
+      return;
+
+    default:
+      Actor_MarkForDeath(&this->actor);
+      return;
+
+  }
+
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Destroy.s")
 
