@@ -15,8 +15,8 @@ void* sKaleidoAreaPtr = NULL;
 KaleidoMgrOverlay* gKaleidoMgrCurOvl = NULL;
 FaultAddrConvClient sKaleidoAreaFaultClient;
 
-void* func_80163700(void* arg0, void* arg1) {
-    u8* ptr = arg0;
+void* func_80163700(void* address, void* param) {
+    u8* ptr = address;
     KaleidoMgrOverlay* ovl = &gKaleidoMgrCurOvl[0];
     u8* ramStart;
     u8* ramEnd;
