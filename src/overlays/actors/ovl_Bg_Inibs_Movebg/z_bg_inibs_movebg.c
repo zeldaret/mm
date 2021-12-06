@@ -65,7 +65,7 @@ void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* dl2;
 
     animMat = this->unk_164;
-    if (animMat != 0) {
+    if (animMat != NULL) {
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(this->unk_164));
     }
 
