@@ -1723,8 +1723,7 @@ beginseg
     name "ovl_En_Stream"
     compress
     include "build/src/overlays/actors/ovl_En_Stream/z_en_stream.o"
-    include "build/data/ovl_En_Stream/ovl_En_Stream.data.o"
-    include "build/data/ovl_En_Stream/ovl_En_Stream.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Stream/ovl_En_Stream_reloc.o"
 endseg
 
 beginseg
