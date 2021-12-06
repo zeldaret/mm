@@ -353,7 +353,6 @@ void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx) {
     switch (this->grabState) {
         case EN_TALK_GIBUD_GRAB_START:
             inPositionToAttack = EnTalkGibud_MoveToIdealGrabPositionAndRotation(this, globalCtx);
-            // Needs to have this "== true" to match.
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && inPositionToAttack == true) {
                 this->grabState = EN_TALK_GIBUD_GRAB_ATTACK;
                 func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_GRAB_ATTACK);
@@ -811,9 +810,8 @@ void EnTalkGibud_Disappear(EnTalkGibud* this, GlobalContext* globalCtx) {
 }
 
 void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalCtx) {
-    s16 target;
+    s16 target = this->actor.yawTowardsPlayer;
 
-    target = this->actor.yawTowardsPlayer;
     Math_ScaledStepToS(&this->actor.shape.rot.y, target, 0x320);
     target -= this->actor.shape.rot.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
