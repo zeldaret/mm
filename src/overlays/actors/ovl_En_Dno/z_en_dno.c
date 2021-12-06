@@ -136,7 +136,7 @@ void func_80A714B4(EnDno* this, GlobalContext* globalCtx) {
     do {
         actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
-            if (ENDNO_GET_F(actor) == ENDNO_GET_F_1) {
+            if ((s32)ENDNO_GET_F(actor) == ENDNO_GET_F_1) {
                 Actor_SetSwitchFlag(globalCtx, ENDNO_GET_7F0(actor));
             }
             actor = actor->next;
