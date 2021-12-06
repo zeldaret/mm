@@ -27,7 +27,6 @@ beginseg
     include "build/src/boot_O2_g3/fault.o"
     include "build/data/boot/fault.bss.o"
     include "build/src/boot_O2_g3/fault_drawer.o"
-    include "build/data/boot/fault_drawer.bss.o"
     include "build/src/boot_O2/boot_80084940.o"
     include "build/src/boot_O2/loadfragment.o"
     include "build/data/boot/loadfragment.data.o"
@@ -1188,8 +1187,7 @@ beginseg
     name "ovl_Obj_Mure"
     compress
     include "build/src/overlays/actors/ovl_Obj_Mure/z_obj_mure.o"
-    include "build/data/ovl_Obj_Mure/ovl_Obj_Mure.data.o"
-    include "build/data/ovl_Obj_Mure/ovl_Obj_Mure.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Mure/ovl_Obj_Mure_reloc.o"
 endseg
 
 beginseg
@@ -1330,8 +1328,7 @@ beginseg
     name "ovl_En_Fr"
     compress
     include "build/src/overlays/actors/ovl_En_Fr/z_en_fr.o"
-    include "build/data/ovl_En_Fr/ovl_En_Fr.data.o"
-    include "build/data/ovl_En_Fr/ovl_En_Fr.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fr/ovl_En_Fr_reloc.o"
 endseg
 
 beginseg
@@ -1626,8 +1623,7 @@ beginseg
     name "ovl_En_Gm"
     compress
     include "build/src/overlays/actors/ovl_En_Gm/z_en_gm.o"
-    include "build/data/ovl_En_Gm/ovl_En_Gm.data.o"
-    include "build/data/ovl_En_Gm/ovl_En_Gm.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Gm/ovl_En_Gm_reloc.o"
 endseg
 
 beginseg
@@ -2229,8 +2225,7 @@ beginseg
     name "ovl_En_Cow"
     compress
     include "build/src/overlays/actors/ovl_En_Cow/z_en_cow.o"
-    include "build/data/ovl_En_Cow/ovl_En_Cow.data.o"
-    include "build/data/ovl_En_Cow/ovl_En_Cow.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Cow/ovl_En_Cow_reloc.o"
 endseg
 
 beginseg
@@ -3290,8 +3285,7 @@ beginseg
     name "ovl_Dm_Stk"
     compress
     include "build/src/overlays/actors/ovl_Dm_Stk/z_dm_stk.o"
-    include "build/data/ovl_Dm_Stk/ovl_Dm_Stk.data.o"
-    include "build/data/ovl_Dm_Stk/ovl_Dm_Stk.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Stk/ovl_Dm_Stk_reloc.o"
 endseg
 
 beginseg
@@ -4942,8 +4936,7 @@ beginseg
     name "ovl_En_Hit_Tag"
     compress
     include "build/src/overlays/actors/ovl_En_Hit_Tag/z_en_hit_tag.o"
-    include "build/data/ovl_En_Hit_Tag/ovl_En_Hit_Tag.data.o"
-    include "build/data/ovl_En_Hit_Tag/ovl_En_Hit_Tag.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hit_Tag/ovl_En_Hit_Tag_reloc.o"
 endseg
 
 beginseg
