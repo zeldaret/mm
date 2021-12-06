@@ -3866,8 +3866,8 @@ void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_800BCB50(GlobalContext* globalCtx, Vec3f* arg1) {
-    CollisionCheck_SpawnShieldParticlesMetal(globalCtx, arg1);
+void Actor_SpawnShieldParticlesMetal(GlobalContext* globalCtx, Vec3f* v) {
+    CollisionCheck_SpawnShieldParticlesMetal(globalCtx, v);
 }
 
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration) {

@@ -863,7 +863,7 @@
     0x800BC7D8:("func_800BC7D8",),
     0x800BC848:("func_800BC848",),
     0x800BC8B8:("Actor_DrawDoorLock",),
-    0x800BCB50:("func_800BCB50",),
+    0x800BCB50:("Actor_SpawnShieldParticlesMetal",),
     0x800BCB70:("Actor_SetColorFilter",),
     0x800BCBF4:("func_800BCBF4",),
     0x800BCC68:("func_800BCC68",),
