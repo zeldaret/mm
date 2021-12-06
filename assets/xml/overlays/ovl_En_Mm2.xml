@@ -2,10 +2,10 @@
     <File Name="ovl_En_Mm2" BaseAddress="0x809A2030" RangeStart="0x240" RangeEnd="0xAD0">
         <Texture Name="sEnMm2Tex1" OutName="EnMm2_tex_1" Format="i8" Width="32" Height="32" Offset="0x240"/>
         <Texture Name="sEnMm2Tex2" OutName="EnMm2_tex_2" Format="i8" Width="16" Height="16" Offset="0x640"/>
-	<Array Name="sEnMm2Vtx1" Count="10" Offset="0x840">
+	<Array Name="sEnMm21Vtx" Count="10" Offset="0x840">
 		<Vtx/>
 	</Array>
-	<Array Name="sEnMm2Vtx2" Count="12" Offset="0x8E0">
+	<Array Name="sEnMm22Vtx" Count="12" Offset="0x8E0">
 		<Vtx/>
 	</Array>
 	<DList Name="sEnMm2DL" Offset="0x9A8"/>
