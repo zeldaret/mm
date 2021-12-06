@@ -42,7 +42,9 @@ void EnMm2_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnMm2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-// Action function whilst Link is reading the letter.
+/**
+ * Action function whilst Link is reading the letter.
+ */
 void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
 
