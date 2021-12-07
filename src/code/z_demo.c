@@ -12,13 +12,7 @@ glabel D_801F4D48
 /* 010DA8 801F4D48 */ .space 0x80
 
 glabel D_801F4DC8
-/* 010E28 801F4DC8 */ .space 0x2
-
-glabel D_801F4DCA
-/* 010E2A 801F4DCA */ .space 0x2
-
-glabel D_801F4DCC
-/* 010E2C 801F4DCC */ .space 0x10
+/* 010E28 801F4DC8 */ .space 0x14
 
 glabel D_801F4DDC
 /* 010E3C 801F4DDC */ .space 0x4
@@ -29,6 +23,8 @@ glabel D_801F4DE0
 glabel D_801F4DE2
 /* 010E42 801F4DE2 */ .space 0xE
 #endif
+
+extern u16 D_801F4DC8[10];
 
 
 #if 0
@@ -1332,7 +1328,18 @@ s32 func_800EE1D8(GlobalContext* globalCtx) {
     return phi_v1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EE200.s")
+s32 func_800EE200(GlobalContext* globalCtx, u16 arg1) {
+    s32 i;
+    s32 phi_v1 = -1;
+
+    for (i = 0; i < ARRAY_COUNT(D_801F4DC8); i++) {
+        if (arg1 == D_801F4DC8[i]) {
+            phi_v1 = i;
+        }
+    }
+
+    return phi_v1;
+}
 
 s32 func_800EE29C(GlobalContext* globalCtx, u16 arg1) {
 
