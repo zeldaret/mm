@@ -196,7 +196,6 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 this->targetRotationStep = 0x1000;
                 this->nextRotationAngle = 0x3A98;
 
-                // Copy the player's current postition so it can be used to set the target position later
                 Math_Vec3f_Copy(&this->targetPos, &player->actor.world.pos);
                 if (!(this->timer & ((1 << 4) - 1))) {
                     if (Rand_ZeroOne() < 0.5f && this->actor.xzDistToPlayer <= 200.0f) {
