@@ -16,9 +16,9 @@ void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnTanron3_SetupAct(EnTanron3* this, GlobalContext* globalCtx);
-void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx);
-void EnTanron3_Kill(EnTanron3* this, GlobalContext* globalCtx);
+void EnTanron3_SetupSwimOrFlop(EnTanron3* this, GlobalContext* globalCtx);
+void EnTanron3_SwimOrFlop(EnTanron3* this, GlobalContext* globalCtx);
+void EnTanron3_Die(EnTanron3* this, GlobalContext* globalCtx);
 
 static Vec3f sZeroVec[] = { 0.0f, 0.0f, 0.0f };
 
@@ -86,19 +86,19 @@ void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
     s16 i;
 
     for (i = 0; i < 150; i++, effectPtr++) {
-        if ((effectPtr->unk_00 == 0) || (effectPtr->unk_00 == 1)) {
-            effectPtr->unk_00 = 2;
-            effectPtr->unk_04 = *effectPos;
-            effectPtr->unk_10 = *sZeroVec;
-            effectPtr->unk_1C = *sZeroVec;
-            effectPtr->unk_1C.y = -2.0f;
+        if ((effectPtr->type == 0) || (effectPtr->type == 1)) {
+            effectPtr->type = 2;
+            effectPtr->pos = *effectPos;
+            effectPtr->velocity = *sZeroVec;
+            effectPtr->accel = *sZeroVec;
+            effectPtr->accel.y = -2.0f;
             effectPtr->unk_34.x = 0.1f;
             effectPtr->unk_34.y = 0.0f;
-            effectPtr->unk_34.z = Rand_ZeroFloat(M_PI * 2);
+            effectPtr->unk_34.z = Rand_ZeroFloat(2 * M_PI);
             effectPtr->unk_02 = Rand_ZeroFloat(100.0f);
-            effectPtr->unk_10.x = randPlusMinusPoint5Scaled(25.0f);
-            effectPtr->unk_10.z = randPlusMinusPoint5Scaled(25.0f);
-            return;
+            effectPtr->velocity.x = randPlusMinusPoint5Scaled(25.0f);
+            effectPtr->velocity.z = randPlusMinusPoint5Scaled(25.0f);
+            break;
         }
     }
 }
@@ -111,7 +111,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DA20, &D_0600DAAC, this->jointTable, this->morphTable, 10);
     Actor_SetScale(&this->actor, 0.02f);
-    EnTanron3_SetupAct(this, globalCtx);
+    EnTanron3_SetupSwimOrFlop(this, globalCtx);
     this->actor.flags &= ~1;
     this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
@@ -119,7 +119,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    sGyorg->unk_252--;
+    sGyorg->numSmallFishAlive--;
 }
 
 void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
@@ -141,12 +141,12 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnTanron3_SetupAct(EnTanron3* this, GlobalContext* globalCtx) {
-    this->actionFunc = EnTanron3_Act;
+void EnTanron3_SetupSwimOrFlop(EnTanron3* this, GlobalContext* globalCtx) {
+    this->actionFunc = EnTanron3_SwimOrFlop;
     Animation_MorphToLoop(&this->skelAnime, &D_0600DAAC, -10.0f);
     this->rotationStep = 0;
     this->rotationScale = 5;
-    this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] = 50;
+    this->workTimer[TANRON3_WORK_TIMER_PICK_DIRECTION] = 50;
     this->actor.speedXZ = 5.0f;
     this->speedMaxStep = 0.5f;
     this->deviationFromCurrentPos.x = randPlusMinusPoint5Scaled(500.0f);
@@ -156,7 +156,7 @@ void EnTanron3_SetupAct(EnTanron3* this, GlobalContext* globalCtx) {
     this->timer = Rand_ZeroFloat(100.0f);
 }
 
-void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
+void EnTanron3_SwimOrFlop(EnTanron3* this, GlobalContext* globalCtx) {
     s32 atanTemp;
     f32 xDistance;
     f32 yDistance;
@@ -166,37 +166,42 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     this->skelAnime.curFrame = 4.0f;
-    if ((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
-        // Player is standing on the central platform
-        this->isPassive = true;
-    } else if (this->isPassive && this->workTimer[TIMER_ATTACK_OR_WAIT] == 0 && !(this->timer & 0x1F)) {
+    if ((player->actor.bgCheckFlags & 1) && player->actor.shape.feetPos[0].y >= 438.0f) {
+        // Player is standing on the central platform, so stop chasing them
+        this->isNonHostile = true;
+    } else if (this->isNonHostile && this->workTimer[TANRON3_WORK_TIMER_WAIT] == 0 && !(this->timer & ((1 << 5) - 1))) {
         xDistance = this->currentPos.x - player->actor.world.pos.x;
         zDistance = this->currentPos.z - player->actor.world.pos.z;
         if (sqrtf(SQ(xDistance) + SQ(zDistance)) < 500.0f) {
-            this->isPassive = false;
-            this->workTimer[TIMER_ATTACK_OR_WAIT] = 150;
+            // Player is in the water and close enough, so start chasing them
+            this->isNonHostile = false;
+            this->workTimer[TANRON3_WORK_TIMER_ATTACK] = 150;
         }
     }
+
     if (this->actor.world.pos.y < this->waterSurfaceYPos) {
         this->isBeached = false;
-        switch (this->isPassive) {
+        switch (this->isNonHostile) {
             case false:
                 this->targetSpeedXZ = 5.0f;
                 this->targetRotationStep = 0x1000;
                 this->nextRotationAngle = 0x3A98;
                 Math_Vec3f_Copy(&this->currentPos, &player->actor.world.pos);
-                if (!(this->timer & 0xF)) {
-                    if ((Rand_ZeroOne() < 0.5f) && (this->actor.xzDistToPlayer <= 200.0f)) {
+                if (!(this->timer & ((1 << 4) - 1))) {
+                    if (Rand_ZeroOne() < 0.5f && this->actor.xzDistToPlayer <= 200.0f) {
                         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
                     }
                 }
-                if ((this->workTimer[TIMER_ATTACK_OR_WAIT] == 0) || (player->stateFlags2 & 0x80)) {
-                    this->workTimer[TIMER_ATTACK_OR_WAIT] = 150;
-                    this->isPassive = true;
+
+                // If the player gets eaten by Gyorg, or if the attack timer ran out,
+                // stop chasing the player for a little bit.
+                if (this->workTimer[TANRON3_WORK_TIMER_ATTACK] == 0 || (player->stateFlags2 & 0x80)) {
+                    this->workTimer[TANRON3_WORK_TIMER_WAIT] = 150;
+                    this->isNonHostile = true;
                 }
                 break;
             case true:
-                if ((sGyorg->unk_324 != 0) && (!(this->timer & 0x7))) {
+                if (sGyorg->unk_324 != 0 && (!(this->timer & ((1 << 3) - 1)))) {
                     this->nextRotationAngle = 0x4E20;
                     this->actor.speedXZ = 6.0f;
                 } else {
@@ -211,15 +216,17 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
                 extraScaleY = 150.0f;
                 break;
         }
-        if (this->workTimer[TIMER_OUT_OF_WATER] == 0) {
-            if ((this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] == 0) && (this->actor.speedXZ > 1.0f)) {
-                this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] = Rand_ZeroFloat(20.0f);
+
+        if (this->workTimer[TANRON3_WORK_TIMER_OUT_OF_WATER] == 0) {
+            if (this->workTimer[TANRON3_WORK_TIMER_PICK_DIRECTION] == 0 && this->actor.speedXZ > 1.0f) {
+                this->workTimer[TANRON3_WORK_TIMER_PICK_DIRECTION] = Rand_ZeroFloat(20.0f);
                 this->deviationFromCurrentPos.x = randPlusMinusPoint5Scaled(100.0f);
                 this->deviationFromCurrentPos.y = randPlusMinusPoint5Scaled(50.0f + extraScaleY);
                 this->deviationFromCurrentPos.z = randPlusMinusPoint5Scaled(100.0f);
             }
             this->targetPos.y = this->currentPos.y + this->deviationFromCurrentPos.y + 50.0f;
         }
+
         this->targetPos.x = this->currentPos.x + this->deviationFromCurrentPos.x;
         this->targetPos.z = this->currentPos.z + this->deviationFromCurrentPos.z;
         xDistance = this->targetPos.x - this->actor.world.pos.x;
@@ -238,7 +245,7 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
             case false:
                 this->actor.gravity = -1.0f;
                 this->targetPos.y = this->waterSurfaceYPos - 50.0f;
-                this->workTimer[TIMER_OUT_OF_WATER] = 25;
+                this->workTimer[TANRON3_WORK_TIMER_OUT_OF_WATER] = 25;
                 Math_ApproachS(&this->actor.world.rot.x, 0x3000, 5, 0xBD0);
                 if (this->actor.bgCheckFlags & 8) {
                     this->actor.speedXZ = 0.0f;
@@ -270,10 +277,11 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
                     this->actor.world.rot.y = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x) +
                                               (s16)randPlusMinusPoint5Scaled(52768.0f);
                 }
+
                 Math_ApproachS(&this->actor.shape.rot.y, this->targetShapeRotation.y, 3, 0x500);
                 Math_ApproachS(&this->actor.shape.rot.x, this->targetShapeRotation.x, 3, 0xC00);
                 Math_ApproachS(&this->actor.shape.rot.z, this->targetShapeRotation.z, 3, 0xC00);
-                if ((Rand_ZeroOne() < 0.5f) & !(this->timer % 4)) {
+                if ((Rand_ZeroOne() < 0.5f) & !(this->timer & ((1 << 2) - 1))) {
                     Vec3f effectPos;
 
                     effectPos.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
@@ -285,6 +293,7 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
         }
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     }
+
     this->currentRotationAngle += this->nextRotationAngle;
     this->trunkRotation = Math_SinS(this->currentRotationAngle) * 5000.0f;
     this->bodyRotation = Math_SinS(this->currentRotationAngle + 0x6978) * 5000.0f;
@@ -294,26 +303,26 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnTanron3_SetupKill(EnTanron3* this, GlobalContext* globalCtx) {
+void EnTanron3_SetupDie(EnTanron3* this, GlobalContext* globalCtx) {
     f32 xDistance;
     f32 yDistance;
     f32 zDistance;
     Player* player = GET_PLAYER(globalCtx);
 
-    this->actionFunc = EnTanron3_Kill;
+    this->actionFunc = EnTanron3_Die;
     xDistance = this->actor.world.pos.x - player->actor.world.pos.x;
     yDistance = this->actor.world.pos.y - player->actor.world.pos.y + 30.0f;
     zDistance = this->actor.world.pos.z - player->actor.world.pos.z;
     this->actor.world.rot.x = Math_FAtan2F(sqrtf(SQ(xDistance) + SQ(zDistance)), -yDistance);
     this->actor.world.rot.y = Math_FAtan2F(zDistance, xDistance);
-    this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] = 6;
+    this->workTimer[TANRON3_WORK_TIMER_DIE] = 6;
     this->actor.speedXZ = 10.0f;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
 }
 
-void EnTanron3_Kill(EnTanron3* this, GlobalContext* globalCtx) {
+void EnTanron3_Die(EnTanron3* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
-    if (this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] == 0) {
+    if (this->workTimer[TANRON3_WORK_TIMER_DIE] == 0) {
         EnTanron3_SpawnBubbles(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         if (Rand_ZeroOne() < 0.3f) {
@@ -337,7 +346,7 @@ void EnTanron3_CheckCollisions(EnTanron3* this, GlobalContext* globalCtx) {
         if (this->deathTimer == 0) {
             this->deathTimer = 15;
             this->fogTimer = 15;
-            EnTanron3_SetupKill(this, globalCtx);
+            EnTanron3_SetupDie(this, globalCtx);
             sGyorg->unk_324 = 20;
         }
     }
@@ -351,7 +360,8 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (KREG(63) == 0) {
         this->timer++;
-        for (i = 0; i < TIMER_MAX; i++) {
+
+        for (i = 0; i < TANRON3_WORK_TIMER_MAX; i++) {
             if (this->workTimer[i] != 0) {
                 this->workTimer[i]--;
             }
@@ -362,8 +372,10 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->fogTimer != 0) {
             this->fogTimer--;
         }
+
         this->actionFunc(this, globalCtx);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 20.0f, 5);
+
         if (((this->actor.prevPos.y < this->waterSurfaceYPos) && (this->waterSurfaceYPos <= this->actor.world.pos.y)) ||
             ((this->actor.prevPos.y > this->waterSurfaceYPos) && (this->waterSurfaceYPos >= this->actor.world.pos.y))) {
             splashPos.x = this->actor.world.pos.x;
@@ -373,14 +385,16 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
         }
     }
+
     EnTanron3_CheckCollisions(this, globalCtx);
     Collider_UpdateCylinder(&this->actor, &this->atCollider);
     Collider_UpdateCylinder(&this->actor, &this->acCollider);
     CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->atCollider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->acCollider.base);
-    if ((s8)sGyorg->actor.colChkInfo.health <= 0 && this->actionFunc != EnTanron3_Kill) {
-        EnTanron3_SetupKill(this, globalCtx);
-        this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] = 0;
+
+    if ((s8)sGyorg->actor.colChkInfo.health <= 0 && this->actionFunc != EnTanron3_Die) {
+        EnTanron3_SetupDie(this, globalCtx);
+        this->workTimer[TANRON3_WORK_TIMER_DIE] = 0;
     }
 }
 
@@ -397,7 +411,7 @@ s32 EnTanron3_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     if (limbIndex == 4) {
         rot->y += this->trunkRotation;
     }
-    return 0;
+    return false;
 }
 
 void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx) {
