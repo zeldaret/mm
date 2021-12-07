@@ -1593,8 +1593,8 @@ s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeleton
 void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, Actor* arg2, s16 arg3, s16 arg4);
 s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5);
 s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3);
-s32 func_800F0E94(EnHy* enHy, GlobalContext* globalCtx, f32 gravity, s16 animIndex);
-s32 func_800F0EEC(EnHy* enHy, GlobalContext* globalCtx, s16 animIndex);
+s32 EnHy_SetPointFowards(EnHy* enHy, GlobalContext* globalCtx, f32 gravity, s16 animIndex);
+s32 EnHy_SetPointBackwards(EnHy* enHy, GlobalContext* globalCtx, s16 animIndex);
 s32 EnHy_MoveForwards(EnHy* enHy, f32 arg1);
 s32 EnHy_MoveBackwards(EnHy* enHy, f32 arg1);
 void EnHy_UpdateCollider(EnHy* enHy, GlobalContext* globalCtx);
