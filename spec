@@ -665,7 +665,7 @@ beginseg
     include "build/data/code/code_801A51F0.data.o"
     include "build/data/code/code_801A51F0.bss.o"
     pad_text
-    include "build/data/code/audio_sound_params.data.o"
+    include "build/src/code/audio/audio_sfx_params.o"
     include "build/src/code/audio/code_801A5BD0.o"
     include "build/data/code/code_801A5BD0.data.o"
     include "build/data/code/code_801A5BD0.bss.o"
@@ -677,7 +677,6 @@ beginseg
     include "build/src/code/jpegdecoder.o"
     include_readonly "build/src/code/z_game_over.o"
     include "build/src/code/z_construct.o"
-    include "build/data/code/audio_sound_params.data.o"
     include "build/data/code/rsp.rodata.o"
 endseg
 
