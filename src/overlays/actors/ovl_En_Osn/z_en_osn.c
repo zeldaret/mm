@@ -157,10 +157,10 @@ void func_80AD1634(EnOsn* this, GlobalContext* globalCtx) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD16A8.s")
 void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
-    u8 temp_v0_2;
+    u8 pad;
     u32 temp_v0;
 
-    if (func_800EE29C(globalCtx, 0x82U)) {
+    if (func_800EE29C(globalCtx, 0x82)) {
         temp_v0 = func_800EE200(globalCtx, 0x82);
         this->unk_1F0[0] = 0;
         if (this->unk_1ED != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
@@ -250,9 +250,9 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
             func_80AD0AB0(this);
         }
         if ((this->unk_1EC == 0x14) &&
-            (((Animation_OnFrame(&this->anime, 17.0f) != 0)) || (Animation_OnFrame(&this->anime, 27.0f) != 0) ||
-             (Animation_OnFrame(&this->anime, 37.0f) != 0) || (Animation_OnFrame(&this->anime, 47.0f) != 0) ||
-             (Animation_OnFrame(&this->anime, 57.0f) != 0) || (Animation_OnFrame(&this->anime, 67.0f) != 0))) {
+            (((Animation_OnFrame(&this->anime, 17.0f))) || (Animation_OnFrame(&this->anime, 27.0f)) ||
+             (Animation_OnFrame(&this->anime, 37.0f)) || (Animation_OnFrame(&this->anime, 47.0f)) ||
+             (Animation_OnFrame(&this->anime, 57.0f)) || (Animation_OnFrame(&this->anime, 67.0f)))) {
             Audio_PlayActorSound2(&this->actor, 0x29B3U);
         }
         func_800EDF24(&this->actor, globalCtx, temp_v0);
