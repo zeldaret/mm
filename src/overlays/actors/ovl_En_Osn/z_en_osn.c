@@ -81,6 +81,12 @@ static InitChainEntry D_80AD2570[] = {
 
 #endif
 
+void func_80AD1634(EnOsn*, GlobalContext*);         /* extern */
+void func_80AD16A8(EnOsn*, GlobalContext*);         /* extern */
+void func_80AD1A4C(EnOsn*, GlobalContext*);         /* extern */
+
+extern FlexSkeletonHeader D_060202F0;
+extern ActorAnimationEntry D_80AD22C0;
 extern ColliderCylinderInit D_80AD2518;
 extern CollisionCheckInfoInit2 D_80AD2544;
 extern DamageTable D_80AD2550;
@@ -120,18 +126,11 @@ extern UNK_TYPE D_060201BC;
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1A4C.s")
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Init.s")
-void func_80AD1398(EnOsn*, GlobalContext*);            /* extern */
-void func_80AD144C(EnOsn*, GlobalContext*);            /* extern */
-void func_80AD1634(EnOsn*, GlobalContext*);         /* extern */
-void func_80AD16A8(EnOsn*, GlobalContext*);         /* extern */
-void func_80AD1A4C(EnOsn*, GlobalContext*);         /* extern */
-extern FlexSkeletonHeader D_060202F0;
-extern ActorAnimationEntry D_80AD22C0;
 
 void EnOsn_Init(Actor *thisx, GlobalContext *globalCtx)
 {
   s32 pad;
-  EnOsn *this = (EnOsn *) thisx;
+  EnOsn *this = THIS;
 
   Actor_ProcessInitChain(&this->actor, D_80AD2570);
   ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
@@ -192,7 +191,14 @@ void EnOsn_Init(Actor *thisx, GlobalContext *globalCtx)
 
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Destroy.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Destroy.s")
+
+void EnOsn_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnOsn* this = THIS;
+
+    SkelAnime_Free(&this->anime, globalCtx);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Update.s")
 
