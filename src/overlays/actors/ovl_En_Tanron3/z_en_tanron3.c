@@ -16,8 +16,8 @@ void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnTanron3_SetupSwimOrFlop(EnTanron3* this, GlobalContext* globalCtx);
-void EnTanron3_SwimOrFlop(EnTanron3* this, GlobalContext* globalCtx);
+void EnTanron3_SetupLive(EnTanron3* this, GlobalContext* globalCtx);
+void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx);
 void EnTanron3_Die(EnTanron3* this, GlobalContext* globalCtx);
 
 static Vec3f sZeroVec[] = { 0.0f, 0.0f, 0.0f };
@@ -111,7 +111,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DA20, &D_0600DAAC, this->jointTable, this->morphTable, 10);
     Actor_SetScale(&this->actor, 0.02f);
-    EnTanron3_SetupSwimOrFlop(this, globalCtx);
+    EnTanron3_SetupLive(this, globalCtx);
     this->actor.flags &= ~1;
     this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
@@ -141,8 +141,8 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnTanron3_SetupSwimOrFlop(EnTanron3* this, GlobalContext* globalCtx) {
-    this->actionFunc = EnTanron3_SwimOrFlop;
+void EnTanron3_SetupLive(EnTanron3* this, GlobalContext* globalCtx) {
+    this->actionFunc = EnTanron3_Live;
     Animation_MorphToLoop(&this->skelAnime, &D_0600DAAC, -10.0f);
     this->rotationStep = 0;
     this->rotationScale = 5;
@@ -156,7 +156,15 @@ void EnTanron3_SetupSwimOrFlop(EnTanron3* this, GlobalContext* globalCtx) {
     this->timer = Rand_ZeroFloat(100.0f);
 }
 
-void EnTanron3_SwimOrFlop(EnTanron3* this, GlobalContext* globalCtx) {
+/**
+ * This controls the vast majority of the fish's behavior while it's alive, including:
+ * - deciding whether to be hostile or not
+ * - determing whether the fish is beached or not
+ * - swimming towards the player to attack them
+ * - swimming around idly if the player is out of range
+ * - flopping around on land if it beaches itself
+ */
+void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
     s32 atanTemp;
     f32 xDistance;
     f32 yDistance;
@@ -180,12 +188,15 @@ void EnTanron3_SwimOrFlop(EnTanron3* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.world.pos.y < this->waterSurfaceYPos) {
+        // The fish is below the water's surface, so it's no longer beached if it was before
         this->isBeached = false;
         switch (this->isNonHostile) {
             case false:
                 this->targetSpeedXZ = 5.0f;
                 this->targetRotationStep = 0x1000;
                 this->nextRotationAngle = 0x3A98;
+
+                // Copy the player's current postition so it can be used to set the target position later
                 Math_Vec3f_Copy(&this->currentPos, &player->actor.world.pos);
                 if (!(this->timer & ((1 << 4) - 1))) {
                     if (Rand_ZeroOne() < 0.5f && this->actor.xzDistToPlayer <= 200.0f) {
@@ -201,6 +212,7 @@ void EnTanron3_SwimOrFlop(EnTanron3* this, GlobalContext* globalCtx) {
                 }
                 break;
             case true:
+                // When non-hostile, the fish idly swims around
                 if (sGyorg->unk_324 != 0 && (!(this->timer & ((1 << 3) - 1)))) {
                     this->nextRotationAngle = 0x4E20;
                     this->actor.speedXZ = 6.0f;
@@ -232,17 +244,21 @@ void EnTanron3_SwimOrFlop(EnTanron3* this, GlobalContext* globalCtx) {
         xDistance = this->targetPos.x - this->actor.world.pos.x;
         yDistance = this->targetPos.y - this->actor.world.pos.y;
         zDistance = this->targetPos.z - this->actor.world.pos.z;
+
+        // Rotate the fish to look towards its target
         xzDistance = sqrtf(SQ(xDistance) + SQ(zDistance));
         atanTemp = Math_FAtan2F(xzDistance, -yDistance);
         Math_ApproachS(&this->actor.world.rot.x, atanTemp, this->rotationScale, this->rotationStep);
         atanTemp = Math_FAtan2F(zDistance, xDistance);
         Math_SmoothStepToS(&this->actor.world.rot.y, atanTemp, this->rotationScale, this->rotationStep, 0);
         Math_ApproachS(&this->rotationStep, this->targetRotationStep, 1, 0x100);
+
         Math_ApproachF(&this->actor.speedXZ, this->targetSpeedXZ, 1.0f, this->speedMaxStep);
         Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
     } else {
         switch (this->isBeached) {
             case false:
+                // Fish is above water but hasn't touched land yet
                 this->actor.gravity = -1.0f;
                 this->targetPos.y = this->waterSurfaceYPos - 50.0f;
                 this->workTimer[TANRON3_WORK_TIMER_OUT_OF_WATER] = 25;
@@ -254,6 +270,7 @@ void EnTanron3_SwimOrFlop(EnTanron3* this, GlobalContext* globalCtx) {
                     }
                 }
                 if (this->actor.bgCheckFlags & 1) {
+                    // Fish has touched land
                     this->isBeached = true;
                 }
                 break;
@@ -261,6 +278,7 @@ void EnTanron3_SwimOrFlop(EnTanron3* this, GlobalContext* globalCtx) {
                 this->nextRotationAngle = 0x3A98;
                 this->actor.gravity = -1.5f;
                 if (this->actor.bgCheckFlags & 1) {
+                    // Fish is still touching land, so it's still beached. Randomly flop around
                     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
                     this->actor.speedXZ = Rand_ZeroFloat(2.0f) + 2.0f;
                     if (Rand_ZeroOne() < 0.5f) {
@@ -376,6 +394,7 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 20.0f, 5);
 
+        // The fish has either just entered or just exited the water, so create a splash effect
         if (((this->actor.prevPos.y < this->waterSurfaceYPos) && (this->waterSurfaceYPos <= this->actor.world.pos.y)) ||
             ((this->actor.prevPos.y > this->waterSurfaceYPos) && (this->waterSurfaceYPos >= this->actor.world.pos.y))) {
             splashPos.x = this->actor.world.pos.x;
