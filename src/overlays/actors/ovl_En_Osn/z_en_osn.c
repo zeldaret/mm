@@ -115,7 +115,8 @@ void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
 void func_80AD0A24(EnOsn* this) {
     s16 sp1E;
     s16 new_var;
-    sp1E = (s16)((s32)this->anime.curFrame);
+    
+    sp1E = (s16)this->anime.curFrame;
     new_var = Animation_GetLastFrame((&D_80AD22C0)[this->unk_1EC].animation);
     if ((this->unk_1EC == 0x15) && (sp1E == new_var)) {
         this->unk_1EC = 0x16;
