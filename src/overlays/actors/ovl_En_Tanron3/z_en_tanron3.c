@@ -149,10 +149,10 @@ void EnTanron3_SetupLive(EnTanron3* this, GlobalContext* globalCtx) {
     this->workTimer[TANRON3_WORK_TIMER_PICK_DIRECTION] = 50;
     this->actor.speedXZ = 5.0f;
     this->speedMaxStep = 0.5f;
-    this->deviationFromCurrentPos.x = randPlusMinusPoint5Scaled(500.0f);
-    this->deviationFromCurrentPos.y = randPlusMinusPoint5Scaled(100.0f);
-    this->deviationFromCurrentPos.z = randPlusMinusPoint5Scaled(500.0f);
-    Math_Vec3f_Copy(&this->currentPos, &this->actor.world.pos);
+    this->deviation.x = randPlusMinusPoint5Scaled(500.0f);
+    this->deviation.y = randPlusMinusPoint5Scaled(100.0f);
+    this->deviation.z = randPlusMinusPoint5Scaled(500.0f);
+    Math_Vec3f_Copy(&this->targetPos, &this->actor.world.pos);
     this->timer = Rand_ZeroFloat(100.0f);
 }
 
@@ -178,8 +178,8 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
         // Player is standing on the central platform, so stop chasing them
         this->isNonHostile = true;
     } else if (this->isNonHostile && this->workTimer[TANRON3_WORK_TIMER_WAIT] == 0 && !(this->timer & ((1 << 5) - 1))) {
-        xDistance = this->currentPos.x - player->actor.world.pos.x;
-        zDistance = this->currentPos.z - player->actor.world.pos.z;
+        xDistance = this->targetPos.x - player->actor.world.pos.x;
+        zDistance = this->targetPos.z - player->actor.world.pos.z;
         if (sqrtf(SQ(xDistance) + SQ(zDistance)) < 500.0f) {
             // Player is in the water and close enough, so start chasing them
             this->isNonHostile = false;
@@ -197,7 +197,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 this->nextRotationAngle = 0x3A98;
 
                 // Copy the player's current postition so it can be used to set the target position later
-                Math_Vec3f_Copy(&this->currentPos, &player->actor.world.pos);
+                Math_Vec3f_Copy(&this->targetPos, &player->actor.world.pos);
                 if (!(this->timer & ((1 << 4) - 1))) {
                     if (Rand_ZeroOne() < 0.5f && this->actor.xzDistToPlayer <= 200.0f) {
                         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
@@ -221,10 +221,10 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 }
                 this->targetRotationStep = 0x200;
                 this->targetSpeedXZ = 2.0f;
-                atanTemp = Math_FAtan2F(this->currentPos.z, this->currentPos.x);
+                atanTemp = Math_FAtan2F(this->targetPos.z, this->targetPos.x);
                 Matrix_RotateY(atanTemp, MTXMODE_NEW);
-                Matrix_GetStateTranslationAndScaledZ(700.0f, &this->currentPos);
-                this->currentPos.y = 250.0f;
+                Matrix_GetStateTranslationAndScaledZ(700.0f, &this->targetPos);
+                this->targetPos.y = 250.0f;
                 extraScaleY = 150.0f;
                 break;
         }
@@ -232,18 +232,18 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
         if (this->workTimer[TANRON3_WORK_TIMER_OUT_OF_WATER] == 0) {
             if (this->workTimer[TANRON3_WORK_TIMER_PICK_DIRECTION] == 0 && this->actor.speedXZ > 1.0f) {
                 this->workTimer[TANRON3_WORK_TIMER_PICK_DIRECTION] = Rand_ZeroFloat(20.0f);
-                this->deviationFromCurrentPos.x = randPlusMinusPoint5Scaled(100.0f);
-                this->deviationFromCurrentPos.y = randPlusMinusPoint5Scaled(50.0f + extraScaleY);
-                this->deviationFromCurrentPos.z = randPlusMinusPoint5Scaled(100.0f);
+                this->deviation.x = randPlusMinusPoint5Scaled(100.0f);
+                this->deviation.y = randPlusMinusPoint5Scaled(50.0f + extraScaleY);
+                this->deviation.z = randPlusMinusPoint5Scaled(100.0f);
             }
-            this->targetPos.y = this->currentPos.y + this->deviationFromCurrentPos.y + 50.0f;
+            this->targetPosWithDeviation.y = this->targetPos.y + this->deviation.y + 50.0f;
         }
 
-        this->targetPos.x = this->currentPos.x + this->deviationFromCurrentPos.x;
-        this->targetPos.z = this->currentPos.z + this->deviationFromCurrentPos.z;
-        xDistance = this->targetPos.x - this->actor.world.pos.x;
-        yDistance = this->targetPos.y - this->actor.world.pos.y;
-        zDistance = this->targetPos.z - this->actor.world.pos.z;
+        this->targetPosWithDeviation.x = this->targetPos.x + this->deviation.x;
+        this->targetPosWithDeviation.z = this->targetPos.z + this->deviation.z;
+        xDistance = this->targetPosWithDeviation.x - this->actor.world.pos.x;
+        yDistance = this->targetPosWithDeviation.y - this->actor.world.pos.y;
+        zDistance = this->targetPosWithDeviation.z - this->actor.world.pos.z;
 
         // Rotate the fish to look towards its target
         xzDistance = sqrtf(SQ(xDistance) + SQ(zDistance));
@@ -260,7 +260,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
             case false:
                 // Fish is above water but hasn't touched land yet
                 this->actor.gravity = -1.0f;
-                this->targetPos.y = this->waterSurfaceYPos - 50.0f;
+                this->targetPosWithDeviation.y = this->waterSurfaceYPos - 50.0f;
                 this->workTimer[TANRON3_WORK_TIMER_OUT_OF_WATER] = 25;
                 Math_ApproachS(&this->actor.world.rot.x, 0x3000, 5, 0xBD0);
                 if (this->actor.bgCheckFlags & 8) {

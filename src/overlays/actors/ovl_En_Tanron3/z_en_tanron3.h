@@ -31,14 +31,14 @@ typedef struct EnTanron3 {
     /* 0x188 */ Vec3s jointTable[10];
     /* 0x1C4 */ Vec3s morphTable[10];
     /* 0x200 */ s16 timer;
-    /* 0x202 */ u8 isNonHostile; // if true, the fish will not move towards the player to attack them
-    /* 0x203 */ u8 isBeached; // if true, the fish is on the central platform flopping around
+    /* 0x202 */ u8 isNonHostile; // If true, the fish will not move towards the player to attack them
+    /* 0x203 */ u8 isBeached; // If true, the fish is on the central platform flopping around
     /* 0x204 */ s16 workTimer[TANRON3_WORK_TIMER_MAX];
     /* 0x20A */ s16 deathTimer;
     /* 0x20C */ s16 fogTimer;
-    /* 0x210 */ Vec3f targetPos;
-    /* 0x21C */ Vec3f currentPos;
-    /* 0x228 */ Vec3f deviationFromCurrentPos;
+    /* 0x210 */ Vec3f targetPosWithDeviation; // The destination that the fish actually ends up moving towards
+    /* 0x21C */ Vec3f targetPos; // The exact destination where the fish wants to be located
+    /* 0x228 */ Vec3f deviation; // A random deviation added to targetPos
     /* 0x234 */ s16 rotationStep;
     /* 0x236 */ s16 targetRotationStep;
     /* 0x238 */ s16 rotationScale;
