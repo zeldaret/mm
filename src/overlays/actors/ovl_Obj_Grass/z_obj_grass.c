@@ -1,7 +1,7 @@
 /*
  * File: z_obj_grass.c
  * Overlay: ovl_Obj_Grass
- * Description:
+ * Description: "Master" instance of grass for unit spawned by Obj_Grass_Unit
  */
 
 #include "z_obj_grass.h"

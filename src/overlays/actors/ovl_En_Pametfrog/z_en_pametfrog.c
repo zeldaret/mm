@@ -335,7 +335,7 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
 
     Math3D_CrossProduct(&this->unk_2DC, &floorNorm, &vec2);
     EnPametfrog_Vec3fNormalize(&vec2);
-    Matrix_InsertRotationAroundUnitVector_f(rotation, &vec2, 0);
+    Matrix_InsertRotationAroundUnitVector_f(rotation, &vec2, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&this->unk_2E8, &vec2);
     Math_Vec3f_Copy(&this->unk_2E8, &vec2);
     Math3D_CrossProduct(&this->unk_2E8, &floorNorm, &this->unk_2D0);
