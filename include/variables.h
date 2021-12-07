@@ -3111,7 +3111,6 @@ extern EffTables sEffTable;
 // extern UNK_TYPE1 D_801ED4C0;
 // extern UNK_TYPE1 D_801ED890;
 // extern UNK_TYPE1 D_801ED894;
-// extern UNK_TYPE1 D_801ED8A0;
 extern CollisionPoly* D_801ED8B0;
 extern s32 D_801ED8B4;
 // extern UNK_TYPE1 D_801ED8B8;

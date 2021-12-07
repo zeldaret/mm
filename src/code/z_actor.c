@@ -40,21 +40,21 @@ typedef struct {
 } DoorLockInfo; // size = 0x1C
 
 // bss
-extern FaultClient D_801ED8A0;    // 2 funcs
-extern CollisionPoly* D_801ED8B0; // 1 func
-extern s32 D_801ED8B4;            // 2 funcs
-extern Actor* D_801ED8B8;         // 2 funcs
-extern Actor* D_801ED8BC;         // 2 funcs
-extern Actor* D_801ED8C0;         // 2 funcs
-extern Actor* D_801ED8C4;         // 2 funcs
-extern f32 D_801ED8C8;            // 2 funcs
-extern f32 sBgmEnemyDistSq;       // 2 funcs
-extern f32 D_801ED8D0;            // 2 funcs
-extern s32 D_801ED8D4;            // 2 funcs
-extern s32 D_801ED8D8;            // 2 funcs
-extern s16 D_801ED8DC;            // 2 funcs
-extern Mtx D_801ED8E0;            // 1 func
-extern Actor* D_801ED920;         // 2 funcs. 1 out of z_actor
+extern FaultClient sActorFaultClient;  // 2 funcs
+extern CollisionPoly* D_801ED8B0;      // 1 func
+extern s32 D_801ED8B4;                 // 2 funcs
+extern Actor* D_801ED8B8;              // 2 funcs
+extern Actor* D_801ED8BC;              // 2 funcs
+extern Actor* D_801ED8C0;              // 2 funcs
+extern Actor* D_801ED8C4;              // 2 funcs
+extern f32 D_801ED8C8;                 // 2 funcs
+extern f32 sBgmEnemyDistSq;            // 2 funcs
+extern f32 D_801ED8D0;                 // 2 funcs
+extern s32 D_801ED8D4;                 // 2 funcs
+extern s32 D_801ED8D8;                 // 2 funcs
+extern s16 D_801ED8DC;                 // 2 funcs
+extern Mtx D_801ED8E0;                 // 1 func
+extern Actor* D_801ED920;              // 2 funcs. 1 out of z_actor
 
 // Internal forward declarations
 void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx);
@@ -2262,7 +2262,7 @@ void Actor_InitContext(GameState* gameState, ActorContext* actorCtx, ActorEntry*
     Actor_SpawnEntry(actorCtx, actorEntry, gameState);
     Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorList[ACTORCAT_PLAYER].first, globalCtx);
     func_800B9120(actorCtx);
-    Fault_AddClient(&D_801ED8A0, (void*)Actor_PrintLists, actorCtx, NULL);
+    Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
     func_800B722C(gameState, (Player*)actorCtx->actorList[ACTORCAT_PLAYER].first);
 }
 
@@ -3010,7 +3010,7 @@ void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx) {
 void Actor_CleanupContext(ActorContext* actorCtx, GlobalContext* globalCtx) {
     s32 i;
 
-    Fault_RemoveClient(&D_801ED8A0);
+    Fault_RemoveClient(&sActorFaultClient);
 
     for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
         if (i != ACTORCAT_PLAYER) {
