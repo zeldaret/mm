@@ -38,7 +38,7 @@ typedef struct EnTanron3 {
     /* 0x20C */ s16 fogTimer;
     /* 0x210 */ Vec3f targetPosWithDeviation; // The destination that the fish actually ends up moving towards
     /* 0x21C */ Vec3f targetPos; // The exact destination where the fish wants to be located
-    /* 0x228 */ Vec3f deviation; // A random deviation added to targetPos
+    /* 0x228 */ Vec3f deviation; // A random amount of "noise" added to targetPos
     /* 0x234 */ s16 rotationStep;
     /* 0x236 */ s16 targetRotationStep;
     /* 0x238 */ s16 rotationScale;

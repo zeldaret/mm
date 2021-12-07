@@ -211,7 +211,6 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 }
                 break;
             case true:
-                // When non-hostile, the fish idly swims around
                 if (sGyorg->unk_324 != 0 && (!(this->timer & ((1 << 3) - 1)))) {
                     this->nextRotationAngle = 0x4E20;
                     this->actor.speedXZ = 6.0f;
@@ -220,10 +219,18 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 }
                 this->targetRotationStep = 0x200;
                 this->targetSpeedXZ = 2.0f;
+
+                // If the fish is idly swimming around, this code will make it spin in a circle.
+                // Its target is constantly updated, so it constantly rotates to face it, and its
+                // momentum keeps it spinning. This code can also be reached when the fish "give up"
+                // on attacking the player; in that case, this code will make it turn in the
+                // opposite direction and swim away. In both cases, the fish's target y-position
+                // will be slightly above the halfway point of the water.
                 atanTemp = Math_FAtan2F(this->targetPos.z, this->targetPos.x);
                 Matrix_RotateY(atanTemp, MTXMODE_NEW);
                 Matrix_GetStateTranslationAndScaledZ(700.0f, &this->targetPos);
                 this->targetPos.y = 250.0f;
+
                 extraScaleY = 150.0f;
                 break;
         }
