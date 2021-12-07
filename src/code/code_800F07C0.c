@@ -1,3 +1,8 @@
+/*
+ * File: code_800F07C0.c
+ * Description: Unused System for NPCs (includes animation, door interaction, blinking, pathing, and collider helpers)
+ */
+
 #include "global.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
