@@ -99,7 +99,6 @@ extern UNK_TYPE D_060192A0;
 extern UNK_TYPE D_060201BC;
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0830.s")
-
 void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
@@ -112,21 +111,17 @@ void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0998.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0A24.s")
-
-/*void func_80AD0A24(EnOsn *this)
-{
-  s16 sp1E;
-  int new_var;
-  sp1E = (s16) this->anime.curFrame;
-  new_var = Animation_GetLastFrame((ActorAnimationEntry*)(D_80AD22C0).animation);
-  if ((this->unk_1EC[0] == 0x15) && (sp1E == new_var))
-  {
-    this->unk_1EC[0] = 0x16U;
-    sp1E = 0x16;
-    func_800BDC5C(&this->anime, (ActorAnimationEntry *) (&D_80AD22C0), sp1E);
-  }
-}*/
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0A24.s")
+void func_80AD0A24(EnOsn* this) {
+    s16 sp1E;
+    s16 new_var;
+    sp1E = (s16)((s32)this->anime.curFrame);
+    new_var = Animation_GetLastFrame((&D_80AD22C0)[this->unk_1EC].animation);
+    if ((this->unk_1EC == 0x15) && (sp1E == new_var)) {
+        this->unk_1EC = 0x16;
+        func_800BDC5C(&this->anime, (ActorAnimationEntry*)(&D_80AD22C0), 0x16);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0AB0.s")
 
