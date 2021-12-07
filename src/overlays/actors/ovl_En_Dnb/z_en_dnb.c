@@ -1,7 +1,7 @@
 /*
  * File: z_en_dnb.c
  * Overlay: ovl_En_Dnb
- * Description:
+ * Description: Unused invisible snowy mountain that explodes?
  */
 
 #include "z_en_dnb.h"
@@ -108,8 +108,8 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     s16* alloc;
 
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06004D8C);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06004D8C);
 
     alloc = (s16*)Lib_SegmentedToVirtual(D_06004710);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
@@ -122,7 +122,7 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnDnb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnDnb* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {

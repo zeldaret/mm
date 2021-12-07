@@ -138,7 +138,7 @@ void func_80B5B2E0(GlobalContext* globalCtx, Vec3f* pos, s16 params, Vec3f* vec,
 void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnOt* this = THIS;
-    s32 sp74;
+    s32 bgId;
     s32 pad2;
     Vec3f sp64;
     Vec3f sp58;
@@ -183,9 +183,9 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             switch (this->unk_344) {
                 case 0:
-                    this->actor.world.pos.y =
-                        func_800C40B4(&globalCtx->colCtx, &this->actor.floorPoly, &sp74, &this->actor.world.pos) +
-                        50.0f;
+                    this->actor.world.pos.y = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &this->actor.floorPoly,
+                                                                          &bgId, &this->actor.world.pos) +
+                                              50.0f;
                     if (gSaveContext.weekEventReg[84] & 0x10) {
                         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
                         Matrix_GetStateTranslationAndScaledZ(52.519997f, &sp64);
@@ -242,7 +242,8 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
                     } else {
                         Player* player = GET_PLAYER(globalCtx);
 
-                        if (func_800C9B90(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
+                        if (SurfaceType_IsHorseBlocked(&globalCtx->colCtx, player->actor.floorPoly,
+                                                       player->actor.floorBgId)) {
                             Actor_SetScale(&this->actor, 0.0f);
                             func_80B5C910(this, globalCtx);
                         } else {
@@ -822,9 +823,9 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B5D37C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
+s32 func_80B5D37C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
     s32 pad;
-    EnOt* temp_s0 = (EnOt*)arg1->unk_48;
+    EnOt* temp_s0 = (EnOt*)arg1->actor;
     f32 sp24;
     f32 sp20;
 
@@ -843,10 +844,10 @@ s32 func_80B5D37C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
     return false;
 }
 
-s32 func_80B5D470(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
+s32 func_80B5D470(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
     s32 pad;
     s32 ret;
-    Actor* temp_s1 = arg1->unk_48;
+    Actor* temp_s1 = arg1->actor;
     Vec3f sp50;
     Vec3f sp44;
     f32 temp;
@@ -871,14 +872,14 @@ s32 func_80B5D470(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
         ret = true;
     } else {
         temp = SQ(temp_s1->speedXZ) / arg1->unk_50;
-        sp34 = ABS(arg1->unk_54 - temp_s1->world.rot.x);
+        sp34 = ABS(arg1->unk_54.x - temp_s1->world.rot.x);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
 
-        sp34 = ABS(arg1->unk_56 - temp_s1->world.rot.y);
+        sp34 = ABS(arg1->unk_54.y - temp_s1->world.rot.y);
 
-        Math_SmoothStepToS(&temp_s1->world.rot.x, arg1->unk_54, 1, sp2C, 0);
+        Math_SmoothStepToS(&temp_s1->world.rot.x, arg1->unk_54.x, 1, sp2C, 0);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
-        Math_SmoothStepToS(&temp_s1->world.rot.y, arg1->unk_56, 1, sp2C, 0);
+        Math_SmoothStepToS(&temp_s1->world.rot.y, arg1->unk_54.y, 1, sp2C, 0);
         Math_SmoothStepToS(&temp_s1->shape.rot.y, temp_s1->world.rot.y, 2, sp2C, 0);
     }
 
@@ -1007,7 +1008,7 @@ void func_80B5DB6C(Actor* thisx, GlobalContext* globalCtx) {
             s32 sp4C = false;
 
             if (gSaveContext.weekEventReg[13] & 1) {
-                if (!func_800C9B90(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
+                if (!SurfaceType_IsHorseBlocked(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
                     sp4C = true;
                 }
             }
@@ -1021,7 +1022,7 @@ void func_80B5DB6C(Actor* thisx, GlobalContext* globalCtx) {
                 temp->actor.cutscene = this->actor.cutscene;
                 this->unk_32C |= 8;
             }
-        } else if (func_800C9B90(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
+        } else if (SurfaceType_IsHorseBlocked(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
             player->unk_B2B = 29;
         }
     }
