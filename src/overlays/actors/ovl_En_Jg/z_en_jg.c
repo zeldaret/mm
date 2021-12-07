@@ -30,6 +30,7 @@ extern AnimationHeader D_06013DD8;
 extern AnimationHeader D_0601436C;
 extern AnimationHeader D_06018CE4;
 extern AnimationHeader D_0601ADC0;
+extern FlexSkeletonHeader D_0601AFF0;
 
 const ActorInit En_Jg_InitVars = {
     ACTOR_EN_JG,
@@ -139,6 +140,7 @@ static Vec3f D_80B759D8 = { 0.0f, 0.0f, -0.070000000298f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B7406C.s")
 
+void func_80B7408C(EnJg* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B7408C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74134.s")
@@ -153,14 +155,18 @@ static Vec3f D_80B759D8 = { 0.0f, 0.0f, -0.070000000298f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B747C8.s")
 
+void func_80B74840(EnJg* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74840.s")
 
+void func_80B749D0(EnJg* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B749D0.s")
 
+void func_80B74AD8(EnJg* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74AD8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74B54.s")
 
+void func_80B74BC8(EnJg* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74BC8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74E5C.s")
@@ -171,14 +177,93 @@ static Vec3f D_80B759D8 = { 0.0f, 0.0f, -0.070000000298f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B751F8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/EnJg_Init.s")
+void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnJg* this = THIS;
+    ColliderCylinder* collider = &this->collider;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/EnJg_Destroy.s")
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0601AFF0, &D_0601ADC0, this->jointTable, this->morphTable, 35);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B75820);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80B75858, &D_80B7584C);
+    Actor_SetScale(&this->actor, 0.01f);
+    if ((this->actor.params & 1) == 0) {
+        if (globalCtx->sceneNum == SCENE_SPOT00 && gSaveContext.sceneSetupIndex == 7 && globalCtx->csCtx.unk_12 == 0) {
+            this->unk_39E = 0;
+            this->unk_3A0 = 3;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->actionFunc = func_80B74BC8;
+        } else {
+            this->unk_1E0 = func_8013D648(globalCtx, ((this->actor.params & 0xFC00) >> 0xA), 0x3F);
+            this->unk_39E = 4;
+            this->unk_3A0 = 1;
+            this->unk_3A2 = 1000;
+            this->unk_3CE = 3500;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->actionFunc = func_80B74840;
+        }
+    } else {
+        this->unk_39E = 0;
+        this->unk_3C8 = this->actor.cutscene;
+        func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+        this->actionFunc = func_80B7408C;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/EnJg_Update.s")
+void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnJg* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B75658.s")
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B75708.s")
+void EnJg_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnJg* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/EnJg_Draw.s")
+    if (this->actionFunc != func_80B749D0 && this->actionFunc != func_80B74AD8) {
+        func_80B73AE4(this, globalCtx);
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        SkelAnime_Update(&this->skelAnime);
+        if (this->unk_3A0 != 3 && ((this->actor.params & 1) == 0)) {
+            func_80B7517C(this, globalCtx);
+        }
+        func_800E9250(globalCtx, &this->actor, &this->unk_1EC, &this->unk_1F2, this->actor.focus.pos);
+    }
+    this->actionFunc(this, globalCtx);
+}
+
+s32 func_80B75658(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnJg* this = THIS;
+
+    if (limbIndex == 1) {
+        if (this->unk_3CC & 4) {
+            Math_SmoothStepToS(&this->unk_39C, this->actor.yawTowardsPlayer - this->actor.shape.rot.y, 5, 0x1000,
+                               0x100);
+            Matrix_RotateY(this->unk_39C, 1);
+        } else {
+            Math_SmoothStepToS(&this->unk_39C, 0, 5, 0x1000, 0x100);
+            Matrix_RotateY(this->unk_39C, 1);
+        }
+    }
+    return false;
+}
+
+void func_80B75708(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnJg* this = THIS;
+
+    if (limbIndex == 21) {
+        Matrix_MultiplyVector3fByState(&D_80B759B4, &this->actor.focus.pos);
+    }
+    if (limbIndex == 22) {
+        Matrix_MultiplyVector3fByState(&D_80B759C0, &this->unk_3A4);
+        Matrix_RotateY(this->actor.shape.rot.y, 0);
+        Matrix_MultiplyVector3fByState(&D_80B759CC, &this->unk_3B0);
+        Matrix_MultiplyVector3fByState(&D_80B759D8, &this->unk_3BC);
+    }
+}
+
+void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnJg* this = THIS;
+
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          func_80B75658, func_80B75708, &this->actor);
+}
