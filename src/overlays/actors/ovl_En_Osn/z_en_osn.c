@@ -81,9 +81,9 @@ static InitChainEntry D_80AD2570[] = {
 
 #endif
 
-void func_80AD1634(EnOsn*, GlobalContext*);         /* extern */
-void func_80AD16A8(EnOsn*, GlobalContext*);         /* extern */
-void func_80AD1A4C(EnOsn*, GlobalContext*);         /* extern */
+void func_80AD1634(EnOsn*, GlobalContext*); /* extern */
+void func_80AD16A8(EnOsn*, GlobalContext*); /* extern */
+void func_80AD1A4C(EnOsn*, GlobalContext*); /* extern */
 
 extern FlexSkeletonHeader D_060202F0;
 extern ActorAnimationEntry D_80AD22C0;
@@ -95,7 +95,15 @@ extern InitChainEntry D_80AD2570[];
 extern UNK_TYPE D_060192A0;
 extern UNK_TYPE D_060201BC;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0830.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0830.s")
+
+void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
+    this->collider.dim.pos.x = this->actor.world.pos.x;
+    this->collider.dim.pos.y = this->actor.world.pos.y;
+    this->collider.dim.pos.z = this->actor.world.pos.z;
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD08B0.s")
 
@@ -127,68 +135,61 @@ extern UNK_TYPE D_060201BC;
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Init.s")
 
-void EnOsn_Init(Actor *thisx, GlobalContext *globalCtx)
-{
-  s32 pad;
-  EnOsn *this = THIS;
+void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnOsn* this = THIS;
 
-  Actor_ProcessInitChain(&this->actor, D_80AD2570);
-  ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-  SkelAnime_InitFlex(globalCtx, &this->anime, &D_060202F0, (AnimationHeader *) (&D_060201BC), 0, 0, 0);
-  Collider_InitCylinder(globalCtx, &this->collider);
-  Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80AD2518);
-  CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80AD2550, &D_80AD2544);
-  this->unk_1D8[0x24] = -1;
-  switch (this->actor.params & 3)
-  {
-    case 0:
-      if (((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC030)) || (gSaveContext.entranceIndex == 0xC060))
-    {
-      this->unk_1EA = (u16) (this->unk_1EA | 1);
+    Actor_ProcessInitChain(&this->actor, D_80AD2570);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+    SkelAnime_InitFlex(globalCtx, &this->anime, &D_060202F0, (AnimationHeader*)(&D_060201BC), 0, 0, 0);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80AD2518);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80AD2550, &D_80AD2544);
+    this->unk_1D8[0x24] = -1;
+    switch (this->actor.params & 3) {
+        case 0:
+            if (((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC030)) ||
+                (gSaveContext.entranceIndex == 0xC060)) {
+                this->unk_1EA = (u16)(this->unk_1EA | 1);
+            }
+            this->unk_1D8[0x18] = 1;
+            if (globalCtx->sceneNum == 0x63) {
+                if ((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC060)) {
+                    this->actionFunc = func_80AD16A8;
+                    return;
+                }
+                if (gSaveContext.entranceIndex == 0xC030) {
+                    func_80AD1398(this, globalCtx);
+                    this->actionFunc = func_80AD1634;
+                    return;
+                }
+                func_80AD144C(this, globalCtx);
+                return;
+            }
+            func_80AD144C(this, globalCtx);
+            return;
+
+        case 1:
+            this->unk_1D8[0x14] = 0xF;
+            func_800BDC5C(&this->anime, (ActorAnimationEntry*)(&D_80AD22C0), this->unk_1D8[0x14]);
+            this->actionFunc = func_80AD1A4C;
+            return;
+
+        case 2:
+            this->unk_1D8[0x14] = 0x10;
+            func_800BDC5C(&this->anime, (ActorAnimationEntry*)(&D_80AD22C0), this->unk_1D8[0x14]);
+            this->actionFunc = func_80AD1A4C;
+            return;
+
+        case 3:
+            this->actor.flags &= -2;
+            this->actionFunc = func_80AD16A8;
+            return;
+
+        default:
+            Actor_MarkForDeath(&this->actor);
+            return;
     }
-      this->unk_1D8[0x18] = 1;
-      if (globalCtx->sceneNum == 0x63)
-    {
-      if ((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC060))
-      {
-        this->actionFunc = func_80AD16A8;
-        return;
-      }
-      if (gSaveContext.entranceIndex == 0xC030)
-      {
-        func_80AD1398(this, globalCtx);
-        this->actionFunc = func_80AD1634;
-        return;
-      }
-      func_80AD144C(this, globalCtx);
-      return;
-    }
-      func_80AD144C(this, globalCtx);
-      return;
-
-    case 1:
-      this->unk_1D8[0x14] = 0xF;
-      func_800BDC5C(&this->anime, (ActorAnimationEntry *) (&D_80AD22C0), this->unk_1D8[0x14]);
-      this->actionFunc = func_80AD1A4C;
-      return;
-
-    case 2:
-      this->unk_1D8[0x14] = 0x10;
-      func_800BDC5C(&this->anime, (ActorAnimationEntry *) (&D_80AD22C0), this->unk_1D8[0x14]);
-      this->actionFunc = func_80AD1A4C;
-      return;
-
-    case 3:
-      this->actor.flags &= -2;
-      this->actionFunc = func_80AD16A8;
-      return;
-
-    default:
-      Actor_MarkForDeath(&this->actor);
-      return;
-
-  }
-
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Destroy.s")
@@ -200,7 +201,30 @@ void EnOsn_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Update.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Update.s")
+
+void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
+    u32 pad1;
+    u16 pad2;
+    u32 sp34;
+    EnOsn* this = THIS;
+
+    sp34 = Flags_GetSwitch(globalCtx, 0);
+    this->actionFunc(this, globalCtx);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    SkelAnime_Update(&this->anime);
+    if ((this->actor.params & 3) == 0) {
+        if (sp34 != 0) {
+            this->actor.flags |= 1;
+            func_80AD0830(this, globalCtx);
+            this->actor.draw = EnOsn_Draw;
+        } else {
+            this->actor.draw = 0;
+            this->actor.flags &= -2;
+        }
+    }
+    func_800E9250(globalCtx, &this->actor, (Vec3s* ) this->unk_1D8, (Vec3s* ) &this->unk_1D8[6], this->actor.focus.pos);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1DA8.s")
 
