@@ -443,6 +443,8 @@ typedef union {
 // Address at the end of normal RDRAM after which is room for a screen buffer
 #define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
 
+typedef void (*FaultDrawerCallback)(void);
+
 typedef struct {
     /* 0x00 */ u16* fb;
     /* 0x04 */ u16 w;
@@ -455,7 +457,7 @@ typedef struct {
     /* 0x12 */ u16 backColor;
     /* 0x14 */ u16 cursorX;
     /* 0x16 */ u16 cursorY;
-    /* 0x18 */ u32* font;
+    /* 0x18 */ const u32* font;
     /* 0x1C */ u8 charW;
     /* 0x1D */ u8 charH;
     /* 0x1E */ s8 charWPad;
@@ -463,7 +465,7 @@ typedef struct {
     /* 0x20 */ u16 printColors[10];
     /* 0x34 */ u8 escCode;
     /* 0x35 */ u8 osSyncPrintfEnabled;
-    /* 0x38 */ void* inputCallback;
+    /* 0x38 */ FaultDrawerCallback inputCallback;
 } FaultDrawer; // size = 0x3C
 
 typedef struct GfxPrint {
