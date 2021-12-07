@@ -88,6 +88,8 @@ void func_80AD0998(EnOsn*);                 /* extern */
 void func_80AD0A24(EnOsn*);                 /* extern */
 void func_80AD0AB0(EnOsn*);                 /* extern */
 void func_80AD14C8(EnOsn*, GlobalContext*);         /* extern */
+s16 func_80AD0E10(EnOsn*, GlobalContext*);          /* extern */
+void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx); /* extern */
 
 extern FlexSkeletonHeader D_060202F0;
 extern ActorAnimationEntry D_80AD22C0;
@@ -149,7 +151,32 @@ void func_80AD144C(EnOsn* this, GlobalContext* arg1) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD14C8.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD14C8.s")
+void func_80AD14C8(EnOsn* arg0, GlobalContext* arg1) {
+    s16 temp_v1;
+
+    temp_v1 = arg0->actor.yawTowardsPlayer - arg0->actor.shape.rot.y;
+    if ((gSaveContext.inventory.items[0] != 0xFF) && ((*(gBitFlags + 0x34) & gSaveContext.inventory.questItems) == 0)) {
+        if (func_800B84D0(&arg0->actor, arg1)) {
+            arg0->actionFunc = func_80AD1634;
+            return;
+        }
+        if (((arg0->actor.xzDistToPlayer < 100.0f) || (arg0->actor.isTargeted != 0)) && ((s32) temp_v1 < 0x4000) && ((s32) temp_v1 >= -0x3FFF)) {
+            func_800B863C(&arg0->actor, arg1);
+            arg0->actor.textId = 0xFFFF;
+        }
+    } else {
+        if (func_800B84D0(&arg0->actor, arg1)) {
+            arg0->unk_1F0[0x4] = func_80AD0E10(arg0, arg1);
+            func_801518B0(arg1, arg0->unk_1F0[0x4], &arg0->actor);
+            arg0->actionFunc = func_80AD19A0;
+            return;
+        }
+        if (((arg0->actor.xzDistToPlayer < 100.0f) || (arg0->actor.isTargeted != 0)) && ((s32) temp_v1 < 0x4000) && ((s32) temp_v1 >= -0x3FFF)) {
+            func_800B863C(&arg0->actor, arg1);
+        }
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1634.s")
 void func_80AD1634(EnOsn* this, GlobalContext* globalCtx) {
