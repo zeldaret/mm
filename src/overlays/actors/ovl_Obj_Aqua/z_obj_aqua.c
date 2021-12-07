@@ -133,8 +133,8 @@ s32 func_80ACBA60(ObjAqua* this, GlobalContext* globalCtx) {
     f32 ySurface;
     s32 bgId;
 
-    if (func_800C9EBC(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
-                      &waterBox, &bgId) &&
+    if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                &ySurface, &waterBox, &bgId) &&
         (this->actor.world.pos.y < ySurface)) {
         return true;
     }
@@ -285,12 +285,12 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (actionFuncTemp) {
         s16 rotation = Math_SinS(this->unk_198) * 8000.0f;
 
-        Matrix_InsertZRotation_s(rotation, 1);
-        Matrix_Scale(1.3f, 1.0f, 1.0f, 1);
-        Matrix_InsertZRotation_s(rotation * -1, 1);
-        Matrix_Scale(10.0f / 13.0f, 1.0f, 1.0f, 1);
+        Matrix_InsertZRotation_s(rotation, MTXMODE_APPLY);
+        Matrix_Scale(1.3f, 1.0f, 1.0f, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(rotation * -1, MTXMODE_APPLY);
+        Matrix_Scale(10.0f / 13.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     }
-    Matrix_RotateY(yaw, 1);
+    Matrix_RotateY(yaw, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

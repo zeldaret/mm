@@ -464,7 +464,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
                 gSaveContext.inventory.strayFairies[gSaveContext.unk_48C8]++;
                 func_801518B0(globalCtx, 0x11, NULL);
                 if (gSaveContext.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
-                    func_801A3098(0x922);
+                    func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 }
             }
         }
@@ -607,7 +607,7 @@ void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx) {
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C818));
             break;
     }
-    Matrix_InsertMatrix(&globalCtx->mf_187FC, 1);
+    Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
 
     POLY_XLU_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

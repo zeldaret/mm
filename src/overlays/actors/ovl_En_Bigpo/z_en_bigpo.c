@@ -1,7 +1,7 @@
 /*
- * File z_en_bigpo.c
- * Overlay: ovl_En_Bigpi
- * Description: Big Poe. Leader of the Poes, found under Dampe's house and in Beneath the Well
+ * File: z_en_bigpo.c
+ * Overlay: ovl_En_Bigpo
+ * Description: Big Poe. Found under Dampe's house and in Beneath the Well
  */
 
 #include "z_en_bigpo.h"
@@ -449,7 +449,7 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, GlobalContext* globalCtx) {
 void EnBigpo_SpawnCutsceneStage7(EnBigpo* this) {
     this->idleTimer = 15;
     if (this->unkBool204 == false) {
-        func_801A2E54(0x38);
+        func_801A2E54(NA_BGM_MINI_BOSS);
         this->unkBool204 = true;
     }
     this->actionFunc = EnBigpo_SpawnCutsceneStage8;
@@ -535,7 +535,7 @@ void EnBigpo_WarpingIn(EnBigpo* this, GlobalContext* globalCtx) {
     if (this->idleTimer == 32) {
         this->mainColor.a = 255; // fully visible
         if (this->unkBool204 == false) {
-            func_801A2E54(0x38);
+            func_801A2E54(NA_BGM_MINI_BOSS);
             this->unkBool204 = true;
         }
         EnBigpo_SetupIdleFlying(this);

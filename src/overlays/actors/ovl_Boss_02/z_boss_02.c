@@ -752,7 +752,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
             spD0.y = 2000.0f;
         }
 
-        temp_f0 = func_800C3FA0(&globalCtx->colCtx, &spDC, &spD0);
+        temp_f0 = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &spDC, &spD0);
         if (((this->unk_017C.y < temp_f0) && (temp_f0 <= this->unk_0188.y)) ||
             ((temp_f0 < this->unk_017C.y) && (this->unk_0188.y <= temp_f0))) {
             this->unk_0170 = this->unk_017C;
@@ -1005,7 +1005,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                     }
 
                     if (spB0->unk_0144 >= 10) {
-                        Audio_QueueSeqCmd(0x8021);
+                        Audio_QueueSeqCmd(NA_BGM_CLEAR_BOSS | 0x8000);
                     }
 
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
@@ -1051,14 +1051,14 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                 sp9C = Rand_ZeroFloat(M_PI);
 
                 for (i = 0; i < 15; i++) {
-                    Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + sp9C, 0);
+                    Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + sp9C, MTXMODE_NEW);
                     Matrix_GetStateTranslationAndScaledZ((10 - this->unk_0146[0]) * (D_809DF5B0 * 300.0f) * 0.1f,
                                                          &sp90);
                     spD0.x = this->unk_0170.x + sp90.x;
                     spD0.y = this->unk_0170.y + (1000.0f * D_809DF5B0);
                     spD0.z = this->unk_0170.z + sp90.z;
-                    if (func_800C40B4(&globalCtx->colCtx, &sp8C, &sp88, &spD0) != BGCHECK_Y_MIN) {
-                        spA0 = func_800C3FA0(&globalCtx->colCtx, &sp8C, &spD0);
+                    if (BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &sp8C, &sp88, &spD0) != BGCHECK_Y_MIN) {
+                        spA0 = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp8C, &spD0);
                         Matrix_GetStateTranslationAndScaledZ(5.0f * D_809DF5B0, &sp70);
                         sp70.y = 2.0f * D_809DF5B0;
                         sp64.y = 0.3f * D_809DF5B0;
@@ -1183,7 +1183,8 @@ void func_809DC218(Actor* thisx, GlobalContext* globalCtx) {
             sp24.y = 2000.0f;
         }
 
-        if ((this->actor.focus.pos.y < func_800C3FA0(&globalCtx->colCtx, &sp20, &sp24)) || (D_809E0422 != 0)) {
+        if ((this->actor.focus.pos.y < BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp20, &sp24)) ||
+            (D_809E0422 != 0)) {
             this->actor.flags &= ~1;
         } else {
             this->actor.flags |= 1;
@@ -1342,7 +1343,7 @@ void func_809DC78C(Actor* thisx, GlobalContext* globalCtx) {
         if (D_809E0430 != 0) {
             D_809E0430--;
             if (D_809E0430 == 0) {
-                Audio_QueueSeqCmd(0x801B);
+                Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
             }
         }
     }
