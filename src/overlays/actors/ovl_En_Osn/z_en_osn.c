@@ -87,6 +87,7 @@ void EnOsn_Idle(EnOsn*, GlobalContext*);    /* extern */
 void func_80AD0998(EnOsn*);                 /* extern */
 void func_80AD0A24(EnOsn*);                 /* extern */
 void func_80AD0AB0(EnOsn*);                 /* extern */
+void func_80AD14C8(EnOsn*, GlobalContext*);         /* extern */
 
 extern FlexSkeletonHeader D_060202F0;
 extern ActorAnimationEntry D_80AD22C0;
@@ -115,7 +116,7 @@ void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
 void func_80AD0A24(EnOsn* this) {
     s16 sp1E;
     s16 new_var;
-    
+
     sp1E = (s16)this->anime.curFrame;
     new_var = Animation_GetLastFrame((&D_80AD22C0)[this->unk_1EC].animation);
     if ((this->unk_1EC == 0x15) && (sp1E == new_var)) {
@@ -134,7 +135,19 @@ void func_80AD0A24(EnOsn* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1398.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD144C.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD144C.s")
+void func_80AD144C(EnOsn* this, GlobalContext* arg1) {
+    u32 sp1C;
+
+    sp1C = Flags_GetSwitch(arg1, 0);
+    this->cutscene = this->actor.cutscene;
+    func_800BDC5C(&this->anime, (ActorAnimationEntry*) &D_80AD22C0, 0);
+    if (sp1C == 0) {
+        this->actionFunc = func_80AD16A8;
+    } else {
+        this->actionFunc = func_80AD14C8;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD14C8.s")
 
