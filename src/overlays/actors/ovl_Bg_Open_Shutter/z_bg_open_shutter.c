@@ -1,7 +1,7 @@
 /*
  * File: z_bg_open_shutter.c
  * Overlay: ovl_Bg_Open_Shutter
- * Description:
+ * Description: Sliding doors in opening dungeon
  */
 
 #include "z_bg_open_shutter.h"

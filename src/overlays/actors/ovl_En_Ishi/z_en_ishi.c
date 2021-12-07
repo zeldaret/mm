@@ -1,7 +1,7 @@
 /*
  * File: z_en_ishi.c
  * Overlay: ovl_En_Ishi
- * Description: Rock
+ * Description: Liftable rocks and silver boulders
  */
 
 #include "z_en_ishi.h"

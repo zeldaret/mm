@@ -642,12 +642,12 @@ s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
 
     if (limbIndex == 15) {
         Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->limb15Rot.y, 1);
-        Matrix_InsertZRotation_s(this->limb15Rot.x, 1);
+        Matrix_InsertXRotation_s(this->limb15Rot.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->limb15Rot.x, MTXMODE_APPLY);
         Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(-this->limb8Rot.y, 1);
-        Matrix_InsertZRotation_s(-this->limb8Rot.x, 1);
+        Matrix_InsertXRotation_s(-this->limb8Rot.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(-this->limb8Rot.x, MTXMODE_APPLY);
     }
 
     return 0;

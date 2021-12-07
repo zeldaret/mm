@@ -1,7 +1,7 @@
 /*
  * File: z_obj_grass_carry.c
  * Overlay: ovl_Obj_Grass_Carry
- * Description:
+ * Description: Grass that the player is holding (spawned by Obj_Grass_Unit)
  */
 
 #include "z_obj_grass_carry.h"

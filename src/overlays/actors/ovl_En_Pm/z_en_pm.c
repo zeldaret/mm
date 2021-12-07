@@ -861,7 +861,7 @@ void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
         this->unk_360 = 0.0f;
     }
     Math_SmoothStepToF(&this->unk_364, this->unk_360, 0.8f, 40.0f, 10.0f);
-    Matrix_InsertTranslation(this->unk_364, 0.0f, 0.0f, 1);
+    Matrix_InsertTranslation(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
     this->unk_388 = sp28;
 }
 

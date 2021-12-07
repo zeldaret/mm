@@ -1,7 +1,7 @@
 /*
  * File: z_obj_vspinyroll.c
  * Overlay: ovl_Obj_Vspinyroll
- * Description: Spiked rollers
+ * Description: Vertical Spiked rollers
  */
 
 #include "z_obj_vspinyroll.h"

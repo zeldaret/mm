@@ -1,7 +1,7 @@
 /*
  * File: z_en_ending_hero3.c
  * Overlay: ovl_En_Ending_Hero3
- * Description:
+ * Description: Mutoh watching moon disappearance and wedding
  */
 
 #include "z_en_ending_hero3.h"

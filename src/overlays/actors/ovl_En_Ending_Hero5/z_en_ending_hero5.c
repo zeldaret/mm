@@ -1,7 +1,7 @@
 /*
  * File: z_en_ending_hero5.c
  * Overlay: ovl_En_Ending_Hero5
- * Description:
+ * Description: Carpenters watching moon disappearance and Indigo-Go's
  */
 
 #include "z_en_ending_hero5.h"

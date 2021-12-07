@@ -1,7 +1,7 @@
 /*
  * File: z_en_kusa2.c
  * Overlay: ovl_En_Kusa2
- * Description: Keaton grass?
+ * Description: Keaton grass
  */
 
 #include "z_en_kusa2.h"

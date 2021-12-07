@@ -1,5 +1,5 @@
 /*
- * File z_en_clear_tag.c
+ * File: z_en_clear_tag.c
  * Overlay: ovl_En_Clear_Tag
  * Description: Various effects: explosions and pops, splashes, light rays
  */
@@ -416,7 +416,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                 for (i = 0; i < 54; i++) {
                     lightRayMaxScale =
                         sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
-                    Matrix_InsertYRotation_f(Rand_ZeroFloat(M_PI * 2), 0);
+                    Matrix_InsertYRotation_f(Rand_ZeroFloat(M_PI * 2), MTXMODE_NEW);
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(M_PI * 2));
                     Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                     accel.x = vel.x * -0.03f;
@@ -489,7 +489,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             pos = this->actor.world.pos;
             for (i = 0; i < 44; i++) {
                 lightRayMaxScale = sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
-                Matrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
+                Matrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
                 Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                 Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                 accel.x = vel.x * -0.03f;

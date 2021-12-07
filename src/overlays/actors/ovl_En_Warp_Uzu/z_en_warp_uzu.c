@@ -81,7 +81,7 @@ void func_80A66208(EnWarpUzu* this, GlobalContext* globalCtx) {
     Vec3f sp24;
 
     this->actor.textId = 0;
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&D_80A664FC, &sp24);
     Math_Vec3f_Sum(&this->actor.world.pos, &sp24, &this->actor.focus.pos);
     Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.shape.rot);
