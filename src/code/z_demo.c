@@ -25,30 +25,24 @@ glabel D_801F4DE2
 #endif
 
 extern u16 D_801F4DC8[10];
+extern s8 D_801F4DE0;
 
-
-#if 0
+#if NON_MATCHING
 void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    ?* temp_v0;
-    ?* phi_v0;
+    s32 i;
 
     csCtx->state = 0;
     csCtx->frames = 0;
     csCtx->unk_0C = 0.0f;
     globalCtx->csCtx.sceneCsCount = 0;
     globalCtx->csCtx.unk_12 = 0;
-    D_801F4DCA = 0;
-    D_801F4DCA = 0;
-    phi_v0 = &D_801F4DCC;
-    do {
-        temp_v0 = phi_v0 + 8;
-        temp_v0->unk_-6 = 0;
-        temp_v0->unk_-4 = 0;
-        temp_v0->unk_-2 = 0;
-        temp_v0->unk_-8 = 0;
-        phi_v0 = temp_v0;
-    } while (temp_v0 != &D_801F4DDC);
+
+    for (i = 0; i < ARRAY_COUNT(D_801F4DC8); i++) {
+        D_801F4DC8[i] = 0;
+    }
+
     D_801F4DE0 = 0;
+
     func_801A3F54(0);
 }
 #else
