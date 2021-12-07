@@ -103,7 +103,7 @@ s32 func_800EA220(GlobalContext* globalCtx, CutsceneContext* csCtx, f32 target) 
 void func_800EA258(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     Interface_ChangeAlpha(1);
     ShrinkWindow_SetLetterboxTarget(0x20);
-    if (func_800EA220(globalCtx, csCtx, 1.0f) != 0) {
+    if (func_800EA220(globalCtx, csCtx, 1.0f)) {
         func_801A3F54(1);
         csCtx->state += 1;
     }
@@ -113,7 +113,7 @@ void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     func_800ED980(globalCtx, csCtx);
     Interface_ChangeAlpha(1);
     ShrinkWindow_SetLetterboxTarget(0x20);
-    if (func_800EA220(globalCtx, csCtx, 1.0f) != 0) {
+    if (func_800EA220(globalCtx, csCtx, 1.0f)) {
         func_801A3F54(1);
         csCtx->state += 1;
     }
@@ -1201,34 +1201,152 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_ProcessCommands.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800ED980.s")
+void func_800ED980(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+    if (gSaveContext.cutscene >= 0xFFF0) {
+        csCtx->frames += 1;
+        Cutscene_ProcessCommands(globalCtx, csCtx, globalCtx->csCtx.segment);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800ED9C4.s")
+void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+    if (func_800EA220(globalCtx, csCtx, 0.0f)) {
+        func_801A3F54(0);
+        csCtx->state = 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDA04.s")
+void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+    if (func_800EA220(globalCtx, csCtx, 0.0f)) {
+        s16 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDA84.s")
+        csCtx->linkAction = NULL;
+
+        for (i = 0; i < ARRAY_COUNT(csCtx->npcActions); i++) {
+            csCtx->npcActions[i] = NULL;
+        }
+
+        gSaveContext.cutscene = 0;
+        gSaveContext.gameMode = 0;
+        ActorCutscene_Stop(0x7F);
+        func_801A3F54(0);
+        csCtx->state = 0;
+    }
+}
+
+void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == 0) && (func_801233E4(globalCtx) == 0)) {
+        gSaveContext.cutscene = 0xFFFD;
+    }
+
+    if (gSaveContext.cutscene >= 0xFFF0) {
+        if (csCtx->state == 0) {
+            s16 i;
+
+            D_801BB124 = 0;
+            D_801BB128 = 0;
+            csCtx->linkAction = NULL;
+
+            for (i = 0; i < ARRAY_COUNT(csCtx->npcActions); i++) {
+                csCtx->npcActions[i] = NULL;
+            }
+
+            csCtx->state++;
+            if (csCtx->state == 1) {
+                func_801A3F54(1);
+
+                csCtx->frames = 0xFFFF;
+                csCtx->unk_14 = ActorCutscene_GetCurrentCamera(0x7F);
+                func_8016119C(Play_GetCamera(globalCtx, csCtx->unk_14), &D_801F4D48);
+                csCtx->unk_18 = 0xFFFF;
+
+                if (gSaveContext.cutsceneTrigger == 0) {
+                    Interface_ChangeAlpha(1);
+                    ShrinkWindow_SetLetterboxTarget(0x20);
+                    ShrinkWindow_SetLetterboxMagnitude(0x20);
+                    csCtx->state += 1;
+                }
+
+                func_800ED980(globalCtx, csCtx);
+            }
+
+            gSaveContext.cutsceneTrigger = 0;
+        }
+    }
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDBE0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/nop_800EDDB0.s")
+void nop_800EDDB0(GlobalContext* globalCtx) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDDBC.s")
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDDCC.s")
+void func_800EDDBC(UNK_TYPE arg0, UNK_TYPE arg1) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDE34.s")
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDF24.s")
+void func_800EDDCC(GlobalContext* globalCtx, u8 arg1) {
+    if (gGameInfo->data[0xA1F] == 0) {
+        globalCtx->csCtx.unk_12 = arg1;
+        globalCtx->csCtx.segment = Lib_SegmentedToVirtual(globalCtx->csCtx.sceneCsList[arg1].data);
+    }
+
+    gSaveContext.cutsceneTrigger = 1;
+}
+
+void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 index) {
+    Vec3f sp24;
+    Vec3f sp18;
+    CsCmdActorAction* entry = globalCtx->csCtx.npcActions[index];
+    f32 temp_f0;
+
+    sp24.x = entry->startPos.x;
+    sp24.y = entry->startPos.y;
+    sp24.z = entry->startPos.z;
+    sp18.x = entry->endPos.x;
+    sp18.y = entry->endPos.y;
+    sp18.z = entry->endPos.z;
+
+    temp_f0 = func_800F5A8C(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+    actor->world.pos.x = ((sp18.x - sp24.x) * temp_f0) + sp24.x;
+    actor->world.pos.y = ((sp18.y - sp24.y) * temp_f0) + sp24.y;
+    actor->world.pos.z = ((sp18.z - sp24.z) * temp_f0) + sp24.z;
+}
+
+void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 arg2) {
+    func_800EDE34(actor, globalCtx, arg2);
+    actor->world.rot.y = (u16)globalCtx->csCtx.npcActions[arg2]->urot.y;
+    actor->shape.rot.y = actor->world.rot.y;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDF78.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EE0CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EE1D8.s")
+s32 func_800EE1D8(GlobalContext* globalCtx) {
+    s32 phi_v1 = 0;
+
+    if (gSaveContext.sceneSetupIndex > 0) {
+        phi_v1 = gSaveContext.sceneSetupIndex;
+    }
+    return phi_v1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EE200.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EE29C.s")
+s32 func_800EE29C(GlobalContext* globalCtx, u16 arg1) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EE2F4.s")
+    if (globalCtx->csCtx.state != 0) {
+        s32 index = func_800EE200(globalCtx, arg1);
+
+        if (index != -1) {
+            return globalCtx->csCtx.npcActions[index] != 0;
+        }
+    }
+
+    return 0;
+}
+
+u8 func_800EE2F4(GlobalContext* globalCtx) {
+    return gSaveContext.cutsceneTrigger != 0 || globalCtx->csCtx.state != 0;
+}
