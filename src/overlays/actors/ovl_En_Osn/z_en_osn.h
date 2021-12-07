@@ -20,7 +20,9 @@ typedef struct EnOsn {
     /* 0x01F0 */ s8 unk_1F0;
     /* 0x01F1 */ char unk_1F1[0x3];
     /* 0x01F4 */ s16 unk_1F4;
-    /* 0x01F6 */ char unk_1F6[0xA];
+    /* 0x01F6 */ char unk_1F6[0x6];
+    /* 0x01FC */ u8 unk_1FC;
+    /* 0x01FD */ char unk_1FD[0x3];
 } EnOsn; // size = 0x200
 
 extern const ActorInit En_Osn_InitVars;
