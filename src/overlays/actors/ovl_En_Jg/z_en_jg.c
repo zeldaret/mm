@@ -126,7 +126,14 @@ static Vec3f D_80B759D8 = { 0.0f, 0.0f, -0.070000000298f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73A90.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73AE4.s")
+void func_80B73AE4(EnJg* this, GlobalContext* globalCtx) {
+    this->collider.dim.pos.x = this->actor.world.pos.x;
+    this->collider.dim.pos.y = this->actor.world.pos.y;
+    this->collider.dim.pos.z = this->actor.world.pos.z;
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 30.0f, 30.0f, 7U);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73B98.s")
 
@@ -173,7 +180,13 @@ void func_80B74BC8(EnJg* this, GlobalContext* globalCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B750A0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B7517C.s")
+void func_80B7517C(EnJg* this, GlobalContext* globalCtx) {
+    s16 scale = (Rand_ZeroOne() * 20.0f) + 30.0f;
+
+    if (globalCtx->state.frames % 8 == 0) {
+        EffectSsIceSmoke_Spawn(globalCtx, &this->unk_3A4, &this->unk_3B0, &this->unk_3BC, scale);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B751F8.s")
 
