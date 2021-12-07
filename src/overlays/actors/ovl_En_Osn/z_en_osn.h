@@ -14,7 +14,9 @@ typedef struct EnOsn {
     /* 0x01D4 */ EnOsnActionFunc actionFunc;
     /* 0x01D8 */ char unk_1D8[0x12];
     /* 0x01EA */ u16  unk_1EA;
-    /* 0x01EC */ char unk_1EC[0x14];
+    /* 0x01EC */ char unk_1EC[0x2];
+    /* 0x01EE */ s16 cutscene;
+    /* 0x01F0 */ char unk_1F0[0x10];
 } EnOsn; // size = 0x200
 
 extern const ActorInit En_Osn_InitVars;

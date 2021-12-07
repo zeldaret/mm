@@ -111,6 +111,20 @@ void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0A24.s")
 
+/*void func_80AD0A24(EnOsn *this)
+{
+  s16 sp1E;
+  int new_var;
+  sp1E = (s16) this->anime.curFrame;
+  new_var = Animation_GetLastFrame((ActorAnimationEntry*)(D_80AD22C0).animation);
+  if ((this->unk_1EC[0] == 0x15) && (sp1E == new_var))
+  {
+    this->unk_1EC[0] = 0x16U;
+    sp1E = 0x16;
+    func_800BDC5C(&this->anime, (ActorAnimationEntry *) (&D_80AD22C0), sp1E);
+  }
+}*/
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0AB0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0B38.s")
@@ -125,7 +139,19 @@ void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD14C8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1634.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1634.s")
+
+void func_80AD1634(EnOsn* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
+        ActorCutscene_Start(this->cutscene, &this->actor);
+        this->actionFunc = func_80AD16A8;
+        return;
+    }
+    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+        ActorCutscene_Stop(0x7C);
+    }
+    ActorCutscene_SetIntentToPlay(this->cutscene);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD16A8.s")
 
