@@ -1179,7 +1179,25 @@ void func_800EC924(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbo
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EC924.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800ECD7C.s")
+void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
+    s32 i;
+    s32 sp30;
+
+    bcopy(*cutscenePtr, &sp30, sizeof(s32));
+    *cutscenePtr += 4;
+
+    for (i = 0; i < sp30; i++) {
+        CsCmdActorAction* temp_v0;
+
+        temp_v0 = *cutscenePtr;
+
+        if ((csCtx->frames >= temp_v0->startFrame) && (csCtx->frames < temp_v0->endFrame)) {
+            csCtx->npcActions[index] = temp_v0;
+        }
+
+        *cutscenePtr += 0x30;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_ProcessCommands.s")
 
