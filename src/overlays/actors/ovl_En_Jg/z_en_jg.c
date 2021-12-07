@@ -15,7 +15,22 @@ void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
+extern AnimationHeader D_060077CC;
+extern AnimationHeader D_06009440;
+extern AnimationHeader D_0600A07C;
+extern AnimationHeader D_0600BDD8;
+extern AnimationHeader D_0600C7A8;
+extern AnimationHeader D_0600D630;
+extern AnimationHeader D_0600DB54;
+extern AnimationHeader D_0600E8FC;
+extern AnimationHeader D_0600FE48;
+extern AnimationHeader D_06011F50;
+extern AnimationHeader D_060129F4;
+extern AnimationHeader D_06013DD8;
+extern AnimationHeader D_0601436C;
+extern AnimationHeader D_06018CE4;
+extern AnimationHeader D_0601ADC0;
+
 const ActorInit En_Jg_InitVars = {
     ACTOR_EN_JG,
     ACTORCAT_NPC,
@@ -30,8 +45,22 @@ const ActorInit En_Jg_InitVars = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B75820 = {
-    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 60, 80, 0, { 0, 0, 0 } },
 };
 
@@ -74,13 +103,25 @@ static DamageTable D_80B75858 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-#endif
+static ActorAnimationEntryS D_80B75878[] = {
+    { &D_0601ADC0, 1.0f, 0, -1, 0, -10 },  { &D_06009440, 1.0f, 0, -1, 0, -10 }, { &D_0600BDD8, 1.0f, 0, -1, 0, -10 },
+    { &D_0600C7A8, 1.0f, 0, -1, 0, -10 },  { &D_0600DB54, 1.0f, 0, -1, 2, -10 }, { &D_0600E8FC, 1.0f, 0, -1, 0, -10 },
+    { &D_0601436C, 1.0f, 0, -1, 0, -10 },  { &D_0600DB54, 2.0f, 0, -1, 2, 0 },   { &D_0600DB54, -2.0f, 0, -1, 2, 0 },
+    { &D_06009440, -1.0f, 0, -1, 0, -10 }, { &D_06011F50, 1.0f, 0, -1, 2, 0 },   { &D_060129F4, 1.0f, 0, -1, 0, 0 },
+    { &D_06013DD8, 1.0f, 1, 44, 2, 0 },    { &D_060077CC, 1.0f, 0, -1, 0, 0 },   { &D_0600D630, 1.0f, 0, -1, 2, 0 },
+    { &D_0600FE48, 1.0f, 0, -1, 2, 0 },    { &D_06018CE4, 1.0f, 0, -1, 0, 0 },   { &D_0601ADC0, 1.0f, 0, -1, 0, 0 },
+    { &D_0600A07C, 1.0f, 0, -1, 0, 0 },
+};
 
-extern ColliderCylinderInit D_80B75820;
-extern CollisionCheckInfoInit2 D_80B7584C;
-extern DamageTable D_80B75858;
+static Vec3f D_80B759A8 = { 0.0f, 0.0f, 0.0f };
 
-extern UNK_TYPE D_0601ADC0;
+static Vec3f D_80B759B4 = { 0.0f, 0.0f, 0.0f };
+
+static Vec3f D_80B759C0 = { 1000.0f, -500.0f, 0.0f };
+
+static Vec3f D_80B759CC = { 0.0f, 0.0f, 0.75f };
+
+static Vec3f D_80B759D8 = { 0.0f, 0.0f, -0.070000000298f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73A90.s")
 
