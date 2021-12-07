@@ -83,7 +83,10 @@ static InitChainEntry D_80AD2570[] = {
 
 void func_80AD1634(EnOsn*, GlobalContext*); /* extern */
 void func_80AD16A8(EnOsn*, GlobalContext*); /* extern */
-void EnOsn_Idle(EnOsn*, GlobalContext*); /* extern */
+void EnOsn_Idle(EnOsn*, GlobalContext*);    /* extern */
+void func_80AD0998(EnOsn*);                 /* extern */
+void func_80AD0A24(EnOsn*);                 /* extern */
+void func_80AD0AB0(EnOsn*);                 /* extern */
 
 extern FlexSkeletonHeader D_060202F0;
 extern ActorAnimationEntry D_80AD22C0;
@@ -140,7 +143,6 @@ void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD14C8.s")
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1634.s")
-
 void func_80AD1634(EnOsn* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->actor);
@@ -154,136 +156,120 @@ void func_80AD1634(EnOsn* this, GlobalContext* globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD16A8.s")
-
-void func_80AD0998(EnOsn*);                            /* extern */
-void func_80AD0A24(EnOsn*);                            /* extern */
-void func_80AD0AB0(EnOsn*);                            /* extern */
-
-/*void func_80AD16A8(EnOsn* arg0, GlobalContext* arg1) {
-    u32 temp_v0;
+void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
     u8 temp_v0_2;
-    u8 phi_v0;
-    u8 phi_v0_2;
-    u8 phi_v0_3;
-    u8 phi_v0_4;
+    u32 temp_v0;
 
-    if (func_800EE29C(arg1, 0x82U) != 0) {
-        temp_v0 = func_800EE200(arg1, 0x82U);
-        arg0->unk_1F0[0] = 0;
-        if ((u8) arg0->unk_1ED != arg1->csCtx.npcActions[temp_v0]->unk0) {
-            arg0->unk_1ED = arg1->csCtx.npcActions[temp_v0]->unk0;
-            switch (arg1->csCtx.npcActions[temp_v0]->unk0) {
-            case 1:
-                arg0->unk_1EC = 2;
-                break;
-            case 2:
-                arg0->unk_1EC = 1;
-                break;
-            case 3:
-                arg0->unk_1EC = 7;
-                break;
-            case 4:
-                arg0->unk_1EC = 3;
-                break;
-            case 5:
-                arg0->unk_1EC = 6;
-                break;
-            case 6:
-                arg0->unk_1EC = 5;
-                break;
-            case 7:
-                arg0->unk_1EC = 4;
-                break;
-            default:
-                arg0->unk_1EC = 0;
-                break;
-            case 10:
-                arg0->unk_1EC = 8;
-                break;
-            case 11:
-                arg0->unk_1EC = 9;
-                break;
-            case 13:
-                arg0->unk_1EC = 0xA;
-                break;
-            case 15:
-                arg0->unk_1EC = 0xB;
-                break;
-            case 16:
-                arg0->unk_1EC = 0xC;
-                break;
-            case 17:
-                arg0->unk_1EC = 0xD;
-                break;
-            case 18:
-                arg0->unk_1EC = 0xE;
-                break;
-            case 19:
-                arg0->unk_1EC = 0x11;
-                break;
-            case 20:
-                arg0->unk_1EC = 0x12;
-                break;
-            case 21:
-                arg0->unk_1EC = 0x14;
-                break;
-            case 22:
-                arg0->unk_1EC = 0x15;
-                break;
-            case 23:
-                arg0->unk_1EC = 0x17;
-                break;
-            case 24:
-                arg0->unk_1EC = 0x18;
-                break;
-            case 25:
-                arg0->unk_1EC = 0;
-                break;
+    if (func_800EE29C(globalCtx, 0x82U)) {
+        temp_v0 = func_800EE200(globalCtx, 0x82);
+        this->unk_1F0[0] = 0;
+        if (this->unk_1ED != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+            this->unk_1ED = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+            switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+                case 1:
+                    this->unk_1EC = 2;
+                    break;
+                case 2:
+                    this->unk_1EC = 1;
+                    break;
+                case 3:
+                    this->unk_1EC = 7;
+                    break;
+                case 4:
+                    this->unk_1EC = 3;
+                    break;
+                case 5:
+                    this->unk_1EC = 6;
+                    break;
+                case 6:
+                    this->unk_1EC = 5;
+                    break;
+                case 7:
+                    this->unk_1EC = 4;
+                    break;
+                case 8:
+                    this->unk_1EC = 0;
+                    break;
+                case 10:
+                    this->unk_1EC = 8;
+                    break;
+                case 11:
+                    this->unk_1EC = 9;
+                    break;
+                case 13:
+                    this->unk_1EC = 0xA;
+                    break;
+                case 15:
+                    this->unk_1EC = 0xB;
+                    break;
+                case 16:
+                    this->unk_1EC = 0xC;
+                    break;
+                case 17:
+                    this->unk_1EC = 0xD;
+                    break;
+                case 18:
+                    this->unk_1EC = 0xE;
+                    break;
+                case 19:
+                    this->unk_1EC = 0x11;
+                    break;
+                case 20:
+                    this->unk_1EC = 0x12;
+                    break;
+                case 21:
+                    this->unk_1EC = 0x14;
+                    break;
+                case 22:
+                    this->unk_1EC = 0x15;
+                    break;
+                case 23:
+                    this->unk_1EC = 0x17;
+                    break;
+                case 24:
+                    this->unk_1EC = 0x18;
+                    break;
+                default:
+                    this->unk_1EC = 0;
+                    break;
             }
-            func_800BDC5C(&arg0->anime, (ActorAnimationEntry*) &D_80AD22C0, arg0->unk_1EC);
+            func_800BDC5C(&this->anime, (ActorAnimationEntry*)&D_80AD22C0, this->unk_1EC);
         }
-        temp_v0_2 = arg0->unk_1EC;
-        phi_v0 = temp_v0_2;
-        if ((temp_v0_2 == 5) && (arg1->sceneNum == 8) && (gSaveContext.sceneSetupIndex == 0xB) && (arg1->csCtx.frames == 0x190)) {
-            Audio_PlayActorSound2(&arg0->actor, 0x697DU);
-            phi_v0 = arg0->unk_1EC;
+
+        if ((this->unk_1EC == 5) && (globalCtx->sceneNum == 8) && (gSaveContext.sceneSetupIndex == 0xB) &&
+            (globalCtx->csCtx.frames == 0x190)) {
+            Audio_PlayActorSound2(&this->actor, 0x697DU);
         }
-        phi_v0_2 = phi_v0;
-        if (phi_v0 == 0x12) {
-            func_80AD0998(arg0);
-            phi_v0_2 = arg0->unk_1EC;
+        if (this->unk_1EC == 0x12) {
+            func_80AD0998(this);
         }
-        phi_v0_3 = phi_v0_2;
-        if (phi_v0_2 == 0x15) {
-            func_80AD0A24(arg0);
-            phi_v0_3 = arg0->unk_1EC;
+        if (this->unk_1EC == 0x15) {
+            func_80AD0A24(this);
         }
-        phi_v0_4 = phi_v0_3;
-        if (phi_v0_3 == 0x18) {
-            func_80AD0AB0(arg0);
-            phi_v0_4 = arg0->unk_1EC;
+        if (this->unk_1EC == 0x18) {
+            func_80AD0AB0(this);
         }
-        if ((phi_v0_4 == 0x14) && (((Animation_OnFrame(&arg0->anime, 17.0f) != 0)) || (Animation_OnFrame(&arg0->anime, 27.0f) != 0) || (Animation_OnFrame(&arg0->anime, 37.0f) != 0) || (Animation_OnFrame(&arg0->anime, 47.0f) != 0) || (Animation_OnFrame(&arg0->anime, 57.0f) != 0) || (Animation_OnFrame(&arg0->anime, 67.0f) != 0))) {
-            Audio_PlayActorSound2(&arg0->actor, 0x29B3U);
+        if ((this->unk_1EC == 0x14) &&
+            (((Animation_OnFrame(&this->anime, 17.0f) != 0)) || (Animation_OnFrame(&this->anime, 27.0f) != 0) ||
+             (Animation_OnFrame(&this->anime, 37.0f) != 0) || (Animation_OnFrame(&this->anime, 47.0f) != 0) ||
+             (Animation_OnFrame(&this->anime, 57.0f) != 0) || (Animation_OnFrame(&this->anime, 67.0f) != 0))) {
+            Audio_PlayActorSound2(&this->actor, 0x29B3U);
         }
-        func_800EDF24(&arg0->actor, arg1, temp_v0);
+        func_800EDF24(&this->actor, globalCtx, temp_v0);
         return;
     }
-    arg0->unk_1F0[0] = 1;
-    arg0->unk_1ED = 0x63;
-    func_80AD144C(arg0, arg1);
-}*/
-
+    this->unk_1F0[0] = 1;
+    this->unk_1ED = 0x63;
+    func_80AD144C(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD19A0.s")
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Idle.s")
-
 void EnOsn_Idle(EnOsn* this, GlobalContext* globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Init.s")
-
 void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnOsn* this = THIS;
@@ -342,7 +328,6 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Destroy.s")
-
 void EnOsn_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnOsn* this = THIS;
 
@@ -351,7 +336,6 @@ void EnOsn_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Update.s")
-
 void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     u32 pad1;
     u16 pad2;
@@ -372,7 +356,7 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.flags &= -2;
         }
     }
-    func_800E9250(globalCtx, &this->actor, (Vec3s* ) this->unk_1D8, (Vec3s* ) &this->unk_1D8[6], this->actor.focus.pos);
+    func_800E9250(globalCtx, &this->actor, (Vec3s*)this->unk_1D8, (Vec3s*)&this->unk_1D8[6], this->actor.focus.pos);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1DA8.s")
