@@ -747,7 +747,7 @@ void func_800EBB68(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
             if (temp_f0 >= 0.9f) {
                 func_80165690();
             } else {
-                func_80165658((u32) ((1.0f - temp_f0) * 180.0f));
+                func_80165658((1.0f - temp_f0) * 180.0f);
             }
         }
     }
@@ -1089,9 +1089,7 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
     *cutscenePtr += 4;
 
     for (i = 0; i < sp30; i++) {
-        CsCmdActorAction* temp_v0;
-
-        temp_v0 = *cutscenePtr;
+        CsCmdActorAction* temp_v0 = *(CsCmdActorAction**)cutscenePtr;
 
         if ((csCtx->frames >= temp_v0->startFrame) && (csCtx->frames < temp_v0->endFrame)) {
             csCtx->npcActions[index] = temp_v0;
