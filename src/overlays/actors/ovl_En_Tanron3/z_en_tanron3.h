@@ -7,7 +7,7 @@ struct EnTanron3;
 
 typedef void (*EnTanron3ActionFunc)(struct EnTanron3*, GlobalContext*);
 
-#define TANRON3_WORK_TIMER_PICK_DIRECTION 0
+#define TANRON3_WORK_TIMER_PICK_NEW_DEVIATION 0
 #define TANRON3_WORK_TIMER_DIE 0
 #define TANRON3_WORK_TIMER_OUT_OF_WATER 1
 #define TANRON3_WORK_TIMER_ATTACK 2

@@ -146,7 +146,7 @@ void EnTanron3_SetupLive(EnTanron3* this, GlobalContext* globalCtx) {
     Animation_MorphToLoop(&this->skelAnime, &D_0600DAAC, -10.0f);
     this->rotationStep = 0;
     this->rotationScale = 5;
-    this->workTimer[TANRON3_WORK_TIMER_PICK_DIRECTION] = 50;
+    this->workTimer[TANRON3_WORK_TIMER_PICK_NEW_DEVIATION] = 50;
     this->actor.speedXZ = 5.0f;
     this->speedMaxStep = 0.5f;
     this->deviation.x = randPlusMinusPoint5Scaled(500.0f);
@@ -236,8 +236,8 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
         }
 
         if (this->workTimer[TANRON3_WORK_TIMER_OUT_OF_WATER] == 0) {
-            if (this->workTimer[TANRON3_WORK_TIMER_PICK_DIRECTION] == 0 && this->actor.speedXZ > 1.0f) {
-                this->workTimer[TANRON3_WORK_TIMER_PICK_DIRECTION] = Rand_ZeroFloat(20.0f);
+            if (this->workTimer[TANRON3_WORK_TIMER_PICK_NEW_DEVIATION] == 0 && this->actor.speedXZ > 1.0f) {
+                this->workTimer[TANRON3_WORK_TIMER_PICK_NEW_DEVIATION] = Rand_ZeroFloat(20.0f);
                 this->deviation.x = randPlusMinusPoint5Scaled(100.0f);
                 this->deviation.y = randPlusMinusPoint5Scaled(50.0f + extraScaleY);
                 this->deviation.z = randPlusMinusPoint5Scaled(100.0f);
