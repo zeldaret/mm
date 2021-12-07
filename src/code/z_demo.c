@@ -1270,8 +1270,52 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
+#ifdef NON_MATCHING
+void func_800EDBE0(GlobalContext* globalCtx) {
+    CutsceneEntry* temp_a3;
+    s16 sp2A;
+    SceneTableEntry* sp24;
+    s32 temp_v0_3;
 
+    if (((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 1)) && (gSaveContext.respawnFlag <= 0)) {
+        sp2A = func_800F21CC();
+        if (sp2A != -1) {
+            temp_v0_3 = func_800F2138(sp2A);
+            if (temp_v0_3 != -1) {
+                temp_a3 = ((void)0, globalCtx->csCtx.sceneCsList);
+                if ((temp_a3[temp_v0_3].unk7 != 0xFF) && (gSaveContext.respawnFlag == 0)) {
+                    if (temp_a3[temp_v0_3].unk7 == 0xFE)
+                    {
+                        ActorCutscene_Start(sp2A, NULL);
+                        gSaveContext.showTitleCard = 0;
+                    }
+                    else
+                    if (!((1 << (temp_a3[temp_v0_3].unk7 % 8)) & gSaveContext.weekEventReg[temp_a3[temp_v0_3].unk7 / 8]))
+                    {
+                        gSaveContext.weekEventReg[(temp_a3[temp_v0_3].unk7 / 8)] |= 1 << (temp_a3[temp_v0_3].unk7 % 8);
+                        ActorCutscene_Start(sp2A, NULL);
+                        gSaveContext.showTitleCard = 0;
+                    }
+                }
+            } else {
+                ActorCutscene_StartAndSetUnkLinkFields(sp2A, NULL);
+            }
+        }
+    }
+
+    if ((gSaveContext.respawnFlag == 0) || (gSaveContext.respawnFlag == -2)) {
+        sp24 = globalCtx->loadedScene;
+        if ((sp24->titleTextId != 0) && (gSaveContext.showTitleCard != 0)) {
+            if ((Entrance_GetTransitionFlags(gSaveContext.sceneSetupIndex + gSaveContext.entranceIndex) & 0x4000) != 0) {
+                func_80151A68(globalCtx, sp24->titleTextId);
+            }
+        }
+        gSaveContext.showTitleCard = 1;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDBE0.s")
+#endif
 
 void nop_800EDDB0(GlobalContext* globalCtx) {
 
