@@ -680,8 +680,6 @@ void func_809DAAA8(Boss02* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y = -500.0f;
 }
 
-#ifdef NON_MATCHING
-// Saving to spC8 rather than spC4 at line 18dc
 void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
     static Color_RGBA8 D_809DFA98 = { 185, 140, 70, 255 };
     s32 pad;
@@ -992,15 +990,15 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                     this->actor.minVelocityY = -1000.0f * D_809DF5B0;
                     this->unk_0164 = randPlusMinusPoint5Scaled(0.05f);
 
-                    spC4 = player->actor.world.pos.x - this->actor.world.pos.x;
-                    spC8 = player->actor.world.pos.z - this->actor.world.pos.z;
-                    if (sqrtf(SQ(spC4) + SQ(spC8)) < (400.0f * D_809DF5B0)) {
+                    spCC = player->actor.world.pos.x - this->actor.world.pos.x;
+                    spC4 = player->actor.world.pos.z - this->actor.world.pos.z;
+                    if (sqrtf(SQ(spCC) + SQ(spC4)) < (400.0f * D_809DF5B0)) {
                         this->actor.speedXZ = 15.0f * D_809DF5B0;
                     }
 
-                    spC4 = this->actor.world.pos.x;
-                    spC8 = this->actor.world.pos.z;
-                    if (sqrtf(SQ(spC4) + SQ(spC8)) < (400.0f * D_809DF5B0)) {
+                    spCC = this->actor.world.pos.x;
+                    spC4 = this->actor.world.pos.z;
+                    if (sqrtf(SQ(spCC) + SQ(spC4)) < (400.0f * D_809DF5B0)) {
                         this->actor.speedXZ = 15.0f * D_809DF5B0;
                     }
 
@@ -1081,10 +1079,6 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
     CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
 }
-#else
-static Color_RGBA8 D_809DFA98 = { 185, 140, 70, 255 };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/func_809DAB78.s")
-#endif
 
 void func_809DBFB4(Boss02* this, GlobalContext* globalCtx) {
     Boss02* temp_s6 = this->unk_1674;
