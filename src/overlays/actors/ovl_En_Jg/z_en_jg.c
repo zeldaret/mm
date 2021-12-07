@@ -191,8 +191,8 @@ void func_80B7517C(EnJg* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B751F8.s")
 
 void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
     EnJg* this = THIS;
-    ColliderCylinder* collider = &this->collider;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0601AFF0, &D_0601ADC0, this->jointTable, this->morphTable, 35);
@@ -200,14 +200,14 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80B75820);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80B75858, &D_80B7584C);
     Actor_SetScale(&this->actor, 0.01f);
-    if ((this->actor.params & 1) == 0) {
+    if ((thisx->params & 1) == 0) {
         if (globalCtx->sceneNum == SCENE_SPOT00 && gSaveContext.sceneSetupIndex == 7 && globalCtx->csCtx.unk_12 == 0) {
             this->unk_39E = 0;
             this->unk_3A0 = 3;
             func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
             this->actionFunc = func_80B74BC8;
         } else {
-            this->unk_1E0 = func_8013D648(globalCtx, ((this->actor.params & 0xFC00) >> 0xA), 0x3F);
+            this->unk_1E0 = func_8013D648(globalCtx, ((thisx->params & 0xFC00) >> 0xA), 0x3F);
             this->unk_39E = 4;
             this->unk_3A0 = 1;
             this->unk_3A2 = 1000;
