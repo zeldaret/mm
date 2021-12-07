@@ -90,6 +90,7 @@ void func_80AD0AB0(EnOsn*);                                /* extern */
 void func_80AD14C8(EnOsn*, GlobalContext*);                /* extern */
 s16 func_80AD0E10(EnOsn*, GlobalContext*);                 /* extern */
 void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx); /* extern */
+void func_80AD10FC(EnOsn*, GlobalContext*);
 
 extern FlexSkeletonHeader D_060202F0;
 extern ActorAnimationEntry D_80AD22C0;
@@ -303,7 +304,22 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
     func_80AD144C(this, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD19A0.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD19A0.s")
+void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx) {
+    u8 temp_v0;
+
+    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    if ((temp_v0 == 6 || temp_v0 == 5) && func_80147624(globalCtx)) {
+        if (this->unk_1EA & 0x20) {
+            this->unk_1EA &= 0xFFDF;
+            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.unk12023 = 4;
+            this->actionFunc = func_80AD14C8;
+        } else {
+            func_80AD10FC(this, globalCtx);
+        }
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Idle.s")
 void EnOsn_Idle(EnOsn* this, GlobalContext* globalCtx) {
