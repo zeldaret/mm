@@ -103,7 +103,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
                                    SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
         }
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
         if (globalCtx->envCtx.unk_11 == 0) {
@@ -120,7 +120,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
                                    SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
         }
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
         osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
         size = SEGMENT_ROM_SIZE(d2_fine_pal_static);
@@ -129,7 +129,7 @@ void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyTy
         DmaMgr_SendRequestImpl(&skyboxCtx->unk1C8, skyboxCtx->skyboxPaletteStaticSegment,
                                SEGMENT_ROM_START(d2_fine_pal_static), size, 0, &skyboxCtx->loadQueue, NULL);
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
     }
 }
 

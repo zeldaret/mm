@@ -321,7 +321,7 @@ s32 func_80A68F9C(EnMushi2* this, s16 arg1) {
     matrix->mf[3][2] = 0.0f;
     matrix->mf[3][3] = 0.0f;
 
-    Matrix_RotateY(arg1, 1);
+    Matrix_RotateY(arg1, MTXMODE_APPLY);
 
     this->unk_310.x = matrix->mf[0][0];
     this->unk_310.y = matrix->mf[0][1];
@@ -368,7 +368,7 @@ s32 func_80A690C4(EnMushi2* this, s16 arg1) {
     matrix->mf[3][2] = 0.0f;
     matrix->mf[3][3] = 0.0f;
 
-    Matrix_InsertXRotation_s(arg1, 1);
+    Matrix_InsertXRotation_s(arg1, MTXMODE_APPLY);
 
     this->unk_310.x = matrix->mf[0][0];
     this->unk_310.y = matrix->mf[0][1];

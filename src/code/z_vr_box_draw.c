@@ -63,5 +63,5 @@ void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyb
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_80143A04(SkyboxContext* skyboxCtx) {
+void SkyboxDraw_Noop(SkyboxContext* skyboxCtx) {
 }
