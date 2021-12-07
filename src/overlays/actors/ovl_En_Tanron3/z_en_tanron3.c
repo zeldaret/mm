@@ -264,7 +264,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
     } else {
         switch (this->isBeached) {
             case false:
-                // Fish is above water but hasn't touched land yet
+                // Fish is above water but hasn't touched land before
                 this->actor.gravity = -1.0f;
                 this->targetPosWithDeviation.y = this->waterSurfaceYPos - 50.0f;
                 this->workTimer[TANRON3_WORK_TIMER_OUT_OF_WATER] = 25;
