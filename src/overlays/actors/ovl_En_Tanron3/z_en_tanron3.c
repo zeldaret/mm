@@ -119,7 +119,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    sGyorg->numSmallFishAlive--;
+    sGyorg->unk_252--;
 }
 
 void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
