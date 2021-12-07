@@ -1315,9 +1315,50 @@ void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 arg2) {
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDF78.s")
+void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 iParm3) {
+    Vec3f sp44;
+    Vec3f sp38;
+    CsCmdActorAction* entry;
+    f32 temp_f0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EE0CC.s")
+    sp44.x = (f32) globalCtx->csCtx.npcActions[iParm3]->startPos.x;
+    sp44.y = (f32) globalCtx->csCtx.npcActions[iParm3]->startPos.y;
+    sp44.z = (f32) globalCtx->csCtx.npcActions[iParm3]->startPos.z;
+    sp38.x = (f32) globalCtx->csCtx.npcActions[iParm3]->endPos.x;
+    sp38.y = (f32) globalCtx->csCtx.npcActions[iParm3]->endPos.y;
+    sp38.z = (f32) globalCtx->csCtx.npcActions[iParm3]->endPos.z;
+
+    entry = globalCtx->csCtx.npcActions[iParm3];
+    temp_f0 = func_800F5A8C(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+
+    actor->world.pos.x = ((sp38.x - sp44.x) * temp_f0) + sp44.x;
+    actor->world.pos.y = ((sp38.y - sp44.y) * temp_f0) + sp44.y;
+    actor->world.pos.z = ((sp38.z - sp44.z) * temp_f0) + sp44.z;
+
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&sp44, &sp38), 10, 1000, 1);
+    actor->shape.rot.y = actor->world.rot.y;
+}
+
+void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 arg2) {
+    Vec3f sp44;
+    Vec3f sp38;
+    CsCmdActorAction* entry;
+    f32 temp_f0;
+
+    sp44.x = globalCtx->csCtx.npcActions[arg2]->startPos.x;
+    sp44.z = globalCtx->csCtx.npcActions[arg2]->startPos.z;
+    sp38.x = globalCtx->csCtx.npcActions[arg2]->endPos.x;
+    sp38.z = globalCtx->csCtx.npcActions[arg2]->endPos.z;
+
+    entry = globalCtx->csCtx.npcActions[arg2];
+    temp_f0 = func_800F5A8C(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+
+    actor->world.pos.x = ((sp38.x - sp44.x) * temp_f0) + sp44.x;
+    actor->world.pos.z = ((sp38.z - sp44.z) * temp_f0) + sp44.z;
+
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&sp44, &sp38), 10, 1000, 1);
+    actor->shape.rot.y = actor->world.rot.y;
+}
 
 s32 func_800EE1D8(GlobalContext* globalCtx) {
     s32 phi_v1 = 0;
