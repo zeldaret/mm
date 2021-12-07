@@ -81,14 +81,14 @@ static InitChainEntry D_80AD2570[] = {
 
 #endif
 
-void func_80AD1634(EnOsn*, GlobalContext*); /* extern */
-void func_80AD16A8(EnOsn*, GlobalContext*); /* extern */
-void EnOsn_Idle(EnOsn*, GlobalContext*);    /* extern */
-void func_80AD0998(EnOsn*);                 /* extern */
-void func_80AD0A24(EnOsn*);                 /* extern */
-void func_80AD0AB0(EnOsn*);                 /* extern */
-void func_80AD14C8(EnOsn*, GlobalContext*);         /* extern */
-s16 func_80AD0E10(EnOsn*, GlobalContext*);          /* extern */
+void func_80AD1634(EnOsn*, GlobalContext*);                /* extern */
+void func_80AD16A8(EnOsn*, GlobalContext*);                /* extern */
+void EnOsn_Idle(EnOsn*, GlobalContext*);                   /* extern */
+void func_80AD0998(EnOsn*);                                /* extern */
+void func_80AD0A24(EnOsn*);                                /* extern */
+void func_80AD0AB0(EnOsn*);                                /* extern */
+void func_80AD14C8(EnOsn*, GlobalContext*);                /* extern */
+s16 func_80AD0E10(EnOsn*, GlobalContext*);                 /* extern */
 void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx); /* extern */
 
 extern FlexSkeletonHeader D_060202F0;
@@ -138,12 +138,12 @@ void func_80AD0A24(EnOsn* this) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1398.s")
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD144C.s")
-void func_80AD144C(EnOsn* this, GlobalContext* arg1) {
+void func_80AD144C(EnOsn* this, GlobalContext* globalCtx) {
     u32 sp1C;
 
-    sp1C = Flags_GetSwitch(arg1, 0);
+    sp1C = Flags_GetSwitch(globalCtx, 0);
     this->cutscene = this->actor.cutscene;
-    func_800BDC5C(&this->anime, (ActorAnimationEntry*) &D_80AD22C0, 0);
+    func_800BDC5C(&this->anime, (ActorAnimationEntry*)&D_80AD22C0, 0);
     if (sp1C == 0) {
         this->actionFunc = func_80AD16A8;
     } else {
@@ -152,28 +152,32 @@ void func_80AD144C(EnOsn* this, GlobalContext* arg1) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD14C8.s")
-void func_80AD14C8(EnOsn* arg0, GlobalContext* arg1) {
+void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
     s16 temp_v1;
+    temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    temp_v1 = arg0->actor.yawTowardsPlayer - arg0->actor.shape.rot.y;
-    if ((gSaveContext.inventory.items[0] != 0xFF) && ((*(gBitFlags + 0x34) & gSaveContext.inventory.questItems) == 0)) {
-        if (func_800B84D0(&arg0->actor, arg1)) {
-            arg0->actionFunc = func_80AD1634;
+    if ((gSaveContext.inventory.items[0] != 0xFF) &&
+        (((*(gBitFlags + 0xD)) & gSaveContext.inventory.questItems) == 0)) {
+        if (gSaveContext.inventory.questItems) {}
+        if (func_800B84D0(&this->actor, globalCtx)) {
+            this->actionFunc = func_80AD1634;
             return;
         }
-        if (((arg0->actor.xzDistToPlayer < 100.0f) || (arg0->actor.isTargeted != 0)) && ((s32) temp_v1 < 0x4000) && ((s32) temp_v1 >= -0x3FFF)) {
-            func_800B863C(&arg0->actor, arg1);
-            arg0->actor.textId = 0xFFFF;
+        if ((((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted != 0)) && (((s32)temp_v1) < 0x4000)) &&
+            (((s32)temp_v1) >= (-0x3FFF))) {
+            func_800B863C(&this->actor, globalCtx);
+            this->actor.textId = 0xFFFF;
         }
     } else {
-        if (func_800B84D0(&arg0->actor, arg1)) {
-            arg0->unk_1F0[0x4] = func_80AD0E10(arg0, arg1);
-            func_801518B0(arg1, arg0->unk_1F0[0x4], &arg0->actor);
-            arg0->actionFunc = func_80AD19A0;
+        if (func_800B84D0(&this->actor, globalCtx)) {
+            this->unk_1F4 = (s16)func_80AD0E10(this, globalCtx);
+            func_801518B0(globalCtx, this->unk_1F4, &this->actor);
+            this->actionFunc = func_80AD19A0;
             return;
         }
-        if (((arg0->actor.xzDistToPlayer < 100.0f) || (arg0->actor.isTargeted != 0)) && ((s32) temp_v1 < 0x4000) && ((s32) temp_v1 >= -0x3FFF)) {
-            func_800B863C(&arg0->actor, arg1);
+        if ((((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted != 0)) && (((s32)temp_v1) < 0x4000)) &&
+            (((s32)temp_v1) >= (-0x3FFF))) {
+            func_800B863C(&this->actor, globalCtx);
         }
     }
 }
@@ -198,7 +202,7 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
 
     if (func_800EE29C(globalCtx, 0x82)) {
         temp_v0 = func_800EE200(globalCtx, 0x82);
-        this->unk_1F0[0] = 0;
+        this->unk_1F0 = 0;
         if (this->unk_1ED != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
             this->unk_1ED = globalCtx->csCtx.npcActions[temp_v0]->unk0;
             switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
@@ -294,7 +298,7 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
         func_800EDF24(&this->actor, globalCtx, temp_v0);
         return;
     }
-    this->unk_1F0[0] = 1;
+    this->unk_1F0 = 1;
     this->unk_1ED = 0x63;
     func_80AD144C(this, globalCtx);
 }
