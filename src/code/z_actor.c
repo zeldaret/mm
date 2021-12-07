@@ -1844,6 +1844,7 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 }
 
 // Actor_PickUpExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_PickUp
+// This function is also used to toggle the "Speak" action on the A button
 s32 func_800B8500(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange, s32 exchangeItemId) {
     Player* player = GET_PLAYER(gameState);
 
