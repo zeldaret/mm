@@ -124,8 +124,8 @@ void func_800B1054(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f*
     EffectSsDust_Spawn(globalCtx, 1, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10, 1);
 }
 
-extern Color_RGBA8 D_801AE3B0;
-extern Color_RGBA8 D_801AE3B4;
+static Color_RGBA8 D_801AE3B0 = { 170, 130, 90, 255 };
+static Color_RGBA8 D_801AE3B4 = { 100, 60, 20, 255 };
 
 void func_800B10C0(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel) {
     EffectSsDust_Spawn(globalCtx, 4, pos, velocity, accel, &D_801AE3B0, &D_801AE3B4, 100, 5, 10, 0);
@@ -206,8 +206,8 @@ void func_800B1598(GlobalContext* globalCtx, f32 randScale, Vec3f* srcPos) {
     }
 }
 
-extern Color_RGBA8 D_801AE3B8;
-extern Color_RGBA8 D_801AE3BC;
+static Color_RGBA8 D_801AE3B8 = { 255, 255, 200, 255 };
+static Color_RGBA8 D_801AE3BC = { 255, 200, 0, 0 };
 
 void EffectSsKiraKira_SpawnSmallYellow(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel) {
     Color_RGBA8 primColor = D_801AE3B8;
@@ -307,8 +307,8 @@ void EffectSsBlast_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
     EffectSs_Spawn(globalCtx, EFFECT_SS_BLAST, 128, &initParams);
 }
 
-extern Color_RGBA8 D_801AE3C0;
-extern Color_RGBA8 D_801AE3C4;
+static Color_RGBA8 D_801AE3C0 = { 255, 255, 255, 255 };
+static Color_RGBA8 D_801AE3C4 = { 200, 200, 200, 0 };
 
 void EffectSsBlast_SpawnWhiteCustomScale(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale,
                                          s16 scaleStep, s16 life) {
@@ -320,8 +320,8 @@ void EffectSsBlast_SpawnShockwave(GlobalContext* globalCtx, Vec3f* pos, Vec3f* v
     EffectSsBlast_Spawn(globalCtx, pos, velocity, accel, primColor, envColor, 100, 375, 35, life);
 }
 
-extern Color_RGBA8 D_801AE3C8;
-extern Color_RGBA8 D_801AE3CC;
+static Color_RGBA8 D_801AE3C8 = { 255, 255, 255, 255 };
+static Color_RGBA8 D_801AE3CC = { 200, 200, 200, 0 };
 
 void EffectSsBlast_SpawnWhiteShockwave(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel) {
     EffectSsBlast_SpawnShockwave(globalCtx, pos, velocity, accel, &D_801AE3C8, &D_801AE3CC, 10);
@@ -364,8 +364,8 @@ void EffectSsGSpk_SpawnNoAccel(GlobalContext* globalCtx, Actor* actor, Vec3f* po
     EffectSs_Spawn(globalCtx, EFFECT_SS_G_SPK, 128, &initParams);
 }
 
-extern Color_RGBA8 D_801AE3D0;
-extern Color_RGBA8 D_801AE3D4;
+static Color_RGBA8 D_801AE3D0 = { 255, 255, 150, 255 };
+static Color_RGBA8 D_801AE3D4 = { 255, 0, 0, 0 };
 
 void EffectSsGSpk_SpawnFuse(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, Vec3f* velocity, Vec3f* accel) {
     Color_RGBA8 primColor = D_801AE3D0;
@@ -374,8 +374,8 @@ void EffectSsGSpk_SpawnFuse(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, 
     EffectSsGSpk_SpawnSmall(globalCtx, actor, pos, velocity, accel, &primColor, &envColor);
 }
 
-extern Color_RGBA8 D_801AE3D8;
-extern Color_RGBA8 D_801AE3DC;
+static Color_RGBA8 D_801AE3D8 = { 255, 255, 150, 255 };
+static Color_RGBA8 D_801AE3DC = { 255, 0, 0, 0 };
 
 // unused
 void EffectSsGSpk_SpawnRandColor(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
@@ -585,7 +585,7 @@ void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstSca
     }
 }
 
-extern Vec3f D_801AE3E0;
+static Vec3f D_801AE3E0 = { 0.0f, -2.0f, 0.0f };
 
 void func_800B2364(GlobalContext* globalCtx, Vec3f* pos, Gfx* dList) {
     Vec3f posVec = D_801AE3E0;
@@ -624,8 +624,7 @@ void EffectSsSibuki_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
     EffectSs_Spawn(globalCtx, EFFECT_SS_SIBUKI, 128, &initParams);
 }
 
-extern Vec3f D_801AE3EC;
-extern Vec3f D_801AE3F8;
+static Vec3f D_801AE3EC = { 0.0f, 0.0f, 0.0f };
 
 void EffectSsSibuki_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos) {
     s16 i;
@@ -759,11 +758,6 @@ void EffectSsIcePiece_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 scale, Vec
     EffectSs_Spawn(globalCtx, EFFECT_SS_ICE_PIECE, 128, &initParams);
 }
 
-extern Vec3f D_801AE3F8;
-extern Vec3f D_801AE404[10];
-
-#ifdef NON_MATCHING
-/* needs data migration to match */
 void EffectSsIcePiece_SpawnBurst(GlobalContext* globalCtx, Vec3f* refPos, f32 scale) {
     static Vec3f accel = { 0.0f, 0.0f, 0.0f };
     static Vec3f vecScales[] = {
@@ -799,9 +793,6 @@ void EffectSsIcePiece_SpawnBurst(GlobalContext* globalCtx, Vec3f* refPos, f32 sc
                                &accel, 25);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsIcePiece_SpawnBurst.s")
-#endif
 
 // EffectSsEnIce Spawn Functions
 
@@ -824,8 +815,8 @@ void EffectSsEnIce_SpawnFlyingVec3f(GlobalContext* globalCtx, Actor* actor, Vec3
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_ICE, 80, &initParams);
 }
 
-extern Color_RGBA8 D_801AE47C;
-extern Color_RGBA8 D_801AE480;
+static Color_RGBA8 D_801AE47C = { 150, 150, 150, 250 };
+static Color_RGBA8 D_801AE480 = { 235, 245, 255, 255 };
 
 void func_800B2B44(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, f32 scale) {
     EffectSsEnIce_SpawnFlyingVec3f(globalCtx, actor, pos, &D_801AE47C, &D_801AE480, scale);
@@ -874,13 +865,10 @@ void EffectSsFireTail_Spawn(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, 
     EffectSs_Spawn(globalCtx, EFFECT_SS_FIRE_TAIL, 128, &initParams);
 }
 
-extern Color_RGBA8 D_801AE484;
-extern Color_RGBA8 D_801AE488;
-
-#ifdef NON_MATCHING
-// needs data migration to match
 void EffectSsFireTail_SpawnFlame(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, f32 arg3, s16 bodyPart,
                                  f32 colorIntensity) {
+    static Color_RGBA8 D_801AE484 = { 255, 255, 0, 255 };
+    static Color_RGBA8 D_801AE488 = { 255, 0, 0, 255 };
 
     D_801AE484.g = (s32)(255.0f * colorIntensity);
     D_801AE484.b = 0;
@@ -892,11 +880,6 @@ void EffectSsFireTail_SpawnFlame(GlobalContext* globalCtx, Actor* actor, Vec3f* 
     EffectSsFireTail_Spawn(globalCtx, actor, pos, arg3, &actor->velocity, 15, &D_801AE484, &D_801AE488,
                            (colorIntensity == 1.0f) ? 0 : 1, bodyPart, 1);
 }
-#else
-void EffectSsFireTail_SpawnFlame(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, f32 arg3, s16 bodyPart,
-                                 f32 colorIntensity);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsFireTail_SpawnFlame.s")
-#endif
 
 void EffectSsFireTail_SpawnFlameOnPlayer(GlobalContext* globalCtx, f32 scale, s16 bodyPart, f32 colorIntensity) {
     Player* player = GET_PLAYER(globalCtx);
@@ -982,8 +965,13 @@ void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
     EffectSs_Spawn(globalCtx, EFFECT_SS_DEAD_DB, 120, &initParams);
 }
 
-extern Color_RGBA8 D_801AE48C;
-extern Color_RGBA8 D_801AE490[4];
+static Color_RGBA8 D_801AE48C = { 255, 255, 255, 255 };
+static Color_RGBA8 D_801AE490[] = {
+    { 255, 0, 0, 255 },
+    { 0, 255, 0, 255 },
+    { 0, 0, 255, 255 },
+    { 150, 150, 150, 255 },
+};
 
 void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
                    s32 colorIndex) {
