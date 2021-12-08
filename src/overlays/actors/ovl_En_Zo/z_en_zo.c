@@ -113,58 +113,58 @@ static Gfx D_8099F5E8[3] = {
 };
 
 s32 EnZo_SetAnimation(SkelAnime* skel_anime, s16 index) {
-    s16 frame_count;
-    s32 did_change;
+    s16 frameCount;
+    s32 didChange;
 
-    did_change = false;
+    didChange = false;
     if ((index >= 0) && (index < 7)) {
-        did_change = true;
-        frame_count = sAnimations[index].frameCount;
-        if (frame_count < 0) {
-            frame_count = Animation_GetLastFrame(sAnimations[index].animationSeg);
+        didChange = true;
+        frameCount = sAnimations[index].frameCount;
+        if (frameCount < 0) {
+            frameCount = Animation_GetLastFrame(sAnimations[index].animationSeg);
         }
         Animation_Change(skel_anime, sAnimations[index].animationSeg, sAnimations[index].playbackSpeed,
-                         sAnimations[index].frame, frame_count, sAnimations[index].mode,
+                         sAnimations[index].frame, frameCount, sAnimations[index].mode,
                          sAnimations[index].transitionRate);
     }
-    return did_change;
+    return didChange;
 }
 
 s32 EnZo_PlayWalkSound(EnZo* this, GlobalContext* globalCtx) {
-    u8 left_was_grounded;
-    u8 right_was_grounded;
+    u8 leftWasGrounded;
+    u8 rightWasGrounded;
     EnZo* temp;
-    u16 sound;
-    u8 foot_grounded;
-    s32 water_sfx;
+    u16 sfxId;
+    u8 isFootGrounded;
+    s32 waterSfxId;
 
-    left_was_grounded = this->isLeftFootGrounded;
-    right_was_grounded = this->isRightFootGrounded;
+    leftWasGrounded = this->isLeftFootGrounded;
+    rightWasGrounded = this->isRightFootGrounded;
     if (this->actor.bgCheckFlags & 0x20) {
         if (this->actor.depthInWater < 20.0f) {
-            water_sfx = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+            waterSfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
         } else {
-            water_sfx = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+            waterSfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
         }
-        sound = water_sfx + SFX_FLAG;
+        sfxId = waterSfxId + SFX_FLAG;
     } else {
-        sound = SurfaceType_GetSfx(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
+        sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
     }
-    foot_grounded = func_8013DB90(globalCtx, &this->leftFootPos, -6.0f);
-    this->isLeftFootGrounded = foot_grounded;
-    if ((foot_grounded & 0xFF) && (!left_was_grounded) && (foot_grounded)) {
-        Audio_PlayActorSound2(&this->actor, sound);
+    isFootGrounded = func_8013DB90(globalCtx, &this->leftFootPos, -6.0f);
+    this->isLeftFootGrounded = isFootGrounded;
+    if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
+        Audio_PlayActorSound2(&this->actor, sfxId);
     }
     temp = this;
-    foot_grounded = func_8013DB90(globalCtx, &temp->rightFootPos, -6.0f);
-    temp->isRightFootGrounded = foot_grounded;
-    if ((foot_grounded & 0xFF) && (!right_was_grounded) && (foot_grounded)) {
-        Audio_PlayActorSound2(&this->actor, sound);
+    isFootGrounded = func_8013DB90(globalCtx, &temp->rightFootPos, -6.0f);
+    temp->isRightFootGrounded = isFootGrounded;
+    if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
+        Audio_PlayActorSound2(&this->actor, sfxId);
     }
     return 0;
 }
 
-void EnZo_Blink(EnZo* this, s32 num_eyes) {
+void EnZo_Blink(EnZo* this, s32 maxEyeIndex) {
     s16 time;
 
     if (this->blinkTimer == 0) {
@@ -175,7 +175,7 @@ void EnZo_Blink(EnZo* this, s32 num_eyes) {
     }
     if (time == 0) {
         this->eyeIndex++;
-        if (this->eyeIndex >= num_eyes) {
+        if (this->eyeIndex >= maxEyeIndex) {
             this->eyeIndex = 0;
             this->blinkTimer = Rand_S16Offset(0x1E, 0x1E);
         }
@@ -261,11 +261,11 @@ void EnZo_DoNothing(EnZo* this, GlobalContext* globalCtx) {
 
 void EnZo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnZo* this = THIS;
-    SkelAnime* skel_anime = &this->skelAnime;
+    SkelAnime* skelAnime = &this->skelAnime;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D208, NULL, this->jointTable, this->morphTable, 20);
-    EnZo_SetAnimation(skel_anime, 0);
+    EnZo_SetAnimation(skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -338,14 +338,14 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     u8* alloc = GRAPH_ALLOC(globalCtx->state.gfxCtx, 0x1000);
     u8* allocHead;
-    Gfx* eye_textures[3] = { 0x060050A0, 0x060058A0, 0x060060A0 };
+    Gfx* eyeTextures[3] = { 0x060050A0, 0x060058A0, 0x060060A0 };
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gDPPipeSync(POLY_OPA_DISP++);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eye_textures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[this->eyeIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x0C, &D_8099F5E8[2]);
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
