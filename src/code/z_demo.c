@@ -421,36 +421,34 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
         switch (cmd->base) {
         case 0x1:
-            func_801A246C(0U, 1U);
-            return;
+            func_801A246C(0, 1);
+            break;
         case 0x2:
-            func_801A246C(0U, 0U);
-            return;
+            func_801A246C(0, 0);
+            break;
         case 0x3:
-            func_801A246C(0U, 2U);
-            return;
+            func_801A246C(0, 2);
+            break;
         case 0x4:
-            func_801A246C(4U, 1U);
-            return;
+            func_801A246C(4, 1);
+            break;
         case 0x5:
-            func_801A246C(4U, 0U);
-            return;
+            func_801A246C(4, 0);
+            break;
         case 0x6:
-            func_801A246C(4U, 2U);
-            return;
+            func_801A246C(4, 2);
+            break;
         case 0x7:
             D_801F4D40 = func_801A8A50(0);
-            return;
+            break;
         case 0x8:
             temp_a0 = D_801F4D40;
             if (D_801F4D40 != 0xFFFF) {
                 D_801F4D40 = temp_a0;
                 func_801A25E4(temp_a0, phi_a1);
             }
-            return;
+            break;
         }
-    } else {
-    //default:
     }
 }
 #else
@@ -868,7 +866,7 @@ extern UNK_TYPE D_801F4D48;
 s32 func_800EC678(GlobalContext* globalCtx, CsCmdUnk5A* cmd) {
     s32 sp1C = 0;
 
-    bcopy(cmd, &sp1C, 4U);
+    bcopy(cmd, &sp1C, 4);
     cmd = (CsCmdUnk5A* ) &cmd->unk4;
     if (func_8016A168() == 0) {
         func_80161998(cmd, &D_801F4D48);
@@ -951,62 +949,62 @@ extern UNK_TYPE D_801BB160;
 extern u16 D_801BB124;
 extern u16 D_801BB128;
 
-#ifdef MIPS2C_OUTPUT
+#ifdef NON_EQUIVALENT
 void func_800EC924(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
     u8 sp27;
     u16 sp1E;
-    s32 temp_v1_2;
-    u16 temp_a0;
-    u16 temp_a1;
-    u16 temp_a1_3;
-    u16 temp_a1_4;
     u16 temp_v0_2;
 
-    if ((cmd->startFrame < csCtx->frames) && (((cmd->endFrame < csCtx->frames) == 0))) {
-        if (cmd->type != 2) {
-            if (cmd->base != D_801BB124) {
-                if (D_801BB160 == 3) {
-                    csCtx->frames = csCtx->frames - 1;
-                }
-                D_801BB160 = 1;
-                D_801BB124 = cmd->base;
-                if (cmd->type == 4) {
-                    if (CHECK_QUEST_ITEM(0) && CHECK_QUEST_ITEM(1) && CHECK_QUEST_ITEM(2) && CHECK_QUEST_ITEM(3)) {
-                        temp_a1 = cmd->textId1;
-                        if (temp_a1 != 0xFFFF) {
-                            func_801518B0(globalCtx, temp_a1, NULL);
-                        }
-                    } else {
-                        func_801518B0(globalCtx, cmd->base, NULL);
-                    }
-                } else if (cmd->type == 5) {
-                    if (func_800EC6D4() == 0x14) {
-                        if (cmd->textId1 != 0xFFFF) {
-                            func_801518B0(globalCtx, cmd->textId1, NULL);
-                        }
-                    } else {
-                        func_801518B0(globalCtx, cmd->base, NULL);
+    if ((cmd->startFrame >= csCtx->frames) || ((cmd->endFrame < csCtx->frames))) {
+        return;
+    }
+
+    if (cmd->type != 2) {
+        if (cmd->base != D_801BB124) {
+            if (D_801BB160 == 3) {
+                csCtx->frames = csCtx->frames - 1;
+            }
+            D_801BB160 = 1;
+            D_801BB124 = cmd->base;
+            if (cmd->type == 4) {
+                if (CHECK_QUEST_ITEM(0) && CHECK_QUEST_ITEM(1) && CHECK_QUEST_ITEM(2) && CHECK_QUEST_ITEM(3)) {
+                    if (cmd->textId1 != 0xFFFF) {
+                        func_801518B0(globalCtx, cmd->textId1, NULL);
                     }
                 } else {
                     func_801518B0(globalCtx, cmd->base, NULL);
                 }
-                return;
+            } else if (cmd->type == 5) {
+                cmd = cmd;
+                if (func_800EC6D4() == 0x14) {
+                    if (cmd->textId1 != 0xFFFF) {
+                        func_801518B0(globalCtx, cmd->textId1, NULL);
+                    }
+                } else {
+                    func_801518B0(globalCtx, cmd->base, NULL);
+                }
+            } else {
+                func_801518B0(globalCtx, cmd->base, NULL);
             }
-        } else if (cmd->base != D_801BB128) {
+        } else {
+            goto block_22;
+        }
+    } else {
+        temp_v0_2 = cmd->base;
+        if (temp_v0_2 != D_801BB128) {
             D_801BB160 = 2;
-            D_801BB128 = cmd->base;
+            D_801BB128 = temp_v0_2;
             func_80152434(globalCtx, cmd->base);
             return;
         }
-
-        if ((s32) csCtx->frames >= (s32) cmd->endFrame) {
+block_22:
+        if (csCtx->frames >= cmd->endFrame) {
             sp1E = csCtx->frames;
             sp27 = func_80152498(&globalCtx->msgCtx);
             if (sp27 != 2) {
-                temp_v1_2 = sp27 & 0xFF;
-                if ((temp_v1_2 != 0) && (temp_v1_2 != 7) && (temp_v1_2 != 8)) {
+                if ((sp27 != 0) && (sp27 != 7) && (sp27 != 8)) {
                     csCtx->frames += -1;
-                    if (temp_v1_2 == 4) {
+                    if (sp27 == 4) {
                         cmd = cmd;
                         if (func_80147624(globalCtx) != 0) {
                             if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -1014,10 +1012,10 @@ void func_800EC924(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbo
                                     cmd = cmd;
                                     func_8019F230();
                                 }
-                                temp_a1_3 = cmd->textId1;
-                                if (temp_a1_3 != 0xFFFF) {
+
+                                if (cmd->textId1 != 0xFFFF) {
                                     cmd = cmd;
-                                    func_80151938(globalCtx, temp_a1_3);
+                                    func_80151938(globalCtx, cmd->textId1);
                                     if (cmd->type == 3) {
                                         D_801BB160 = 3;
                                         if (cmd->textId2 != 0xFFFF) {
@@ -1034,10 +1032,10 @@ void func_800EC924(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbo
                                     cmd = cmd;
                                     func_8019F208();
                                 }
-                                temp_a1_4 = cmd->textId2;
-                                if (temp_a1_4 != 0xFFFF) {
+
+                                if (cmd->textId2 != 0xFFFF) {
                                     cmd = cmd;
-                                    func_80151938(globalCtx, temp_a1_4);
+                                    func_80151938(globalCtx, cmd->textId2);
                                     if (cmd->type == 3) {
                                         D_801BB160 = 3;
                                         if (cmd->textId1 != 0xFFFF) {
@@ -1052,6 +1050,7 @@ void func_800EC924(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbo
                             }
                         }
                     }
+
                     if (sp27 == 5) {
                         if (func_80147624(globalCtx) != 0) {
                             func_80152434(globalCtx, cmd->base);
@@ -1071,11 +1070,9 @@ void func_800EC924(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbo
                 return;
             }
             func_80161BE0(1);
-            /* Duplicate return node #53. Try simplifying control flow for better match */
-            return;
         }
-        /* Duplicate return node #53. Try simplifying control flow for better match */
     }
+    
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EC924.s")
