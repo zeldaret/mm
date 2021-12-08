@@ -177,7 +177,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
     if ((player->actor.bgCheckFlags & 1) && player->actor.shape.feetPos[0].y >= 438.0f) {
         // Player is standing on the central platform, so stop chasing them
         this->isNonHostile = true;
-    } else if (this->isNonHostile && this->workTimer[TANRON3_WORK_TIMER_WAIT] == 0 && !(this->timer & ((1 << 5) - 1))) {
+    } else if (this->isNonHostile && this->workTimer[TANRON3_WORK_TIMER_WAIT] == 0 && !(this->timer & 0x1F)) {
         xDistance = this->targetPos.x - player->actor.world.pos.x;
         zDistance = this->targetPos.z - player->actor.world.pos.z;
         if (sqrtf(SQ(xDistance) + SQ(zDistance)) < 500.0f) {
@@ -197,7 +197,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 this->nextRotationAngle = 0x3A98;
 
                 Math_Vec3f_Copy(&this->targetPos, &player->actor.world.pos);
-                if (!(this->timer & ((1 << 4) - 1))) {
+                if (!(this->timer & 0xF)) {
                     if (Rand_ZeroOne() < 0.5f && this->actor.xzDistToPlayer <= 200.0f) {
                         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
                     }
@@ -211,7 +211,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 }
                 break;
             case true:
-                if (sGyorg->unk_324 != 0 && (!(this->timer & ((1 << 3) - 1)))) {
+                if (sGyorg->unk_324 != 0 && !(this->timer & 0x7)) {
                     this->nextRotationAngle = 0x4E20;
                     this->actor.speedXZ = 6.0f;
                 } else {
@@ -299,13 +299,13 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                         this->targetShapeRotation.y = (s16)Rand_ZeroFloat(0x10000);
                     }
                     this->actor.world.rot.y = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x) +
-                                              (s16)randPlusMinusPoint5Scaled(52768.0f);
+                                              (s16)randPlusMinusPoint5Scaled(0xCE20);
                 }
 
                 Math_ApproachS(&this->actor.shape.rot.y, this->targetShapeRotation.y, 3, 0x500);
                 Math_ApproachS(&this->actor.shape.rot.x, this->targetShapeRotation.x, 3, 0xC00);
                 Math_ApproachS(&this->actor.shape.rot.z, this->targetShapeRotation.z, 3, 0xC00);
-                if ((Rand_ZeroOne() < 0.5f) & !(this->timer & ((1 << 2) - 1))) {
+                if ((Rand_ZeroOne() < 0.5f) & !(this->timer % 4)) {
                     Vec3f effectPos;
 
                     effectPos.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
