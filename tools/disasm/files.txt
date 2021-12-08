@@ -521,6 +521,7 @@
             0x801BA200 : "z_collision_check",
             0x801BA550 : "z_debug_display",
             0x801BB090 : "z_debug_mode",
+            0x801BB120 : "z_demo",
             0x801BB170 : "z_draw",
             0x801BC240 : "z_eff_footmark",
             0x801BC2A0 : "",

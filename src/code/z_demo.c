@@ -1,8 +1,37 @@
 #include "global.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
-#if 0
+void Cutscene_Nop800EA210(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+void func_800EA258(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+void func_800ED980(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
+// Unused
+UNK_TYPE4 D_801BB120 = 0;
+u16 D_801BB124 = 0;
+u16 D_801BB128 = 0;
+u8 D_801BB12C = 0;
+u8  D_801BB130 = 0;
+CutsceneStateHandler sCsStateHandlers1[] = {
+    Cutscene_Nop800EA210,
+    func_800EA258,
+    Cutscene_Nop800EA210,
+    func_800ED9C4,
+    Cutscene_Nop800EA210,
+};
+CutsceneStateHandler sCsStateHandlers2[] = {
+    Cutscene_Nop800EA210,
+    func_800EA2B8,
+    func_800ED980,
+    func_800EDA04,
+    func_800ED980,
+};
+u16 D_801BB15C = 0xFFFF;
+s32 D_801BB160 = 0;
+
+#if 0
 glabel D_801F4D40
 /* 010DA0 801F4D40 */ .space 0x2
 
@@ -25,8 +54,14 @@ glabel D_801F4DE2
 /* 010E42 801F4DE2 */ .space 0xE
 #endif
 
+// bss
+extern u16 D_801F4D40;
+extern s16 D_801F4D42;
+extern UNK_TYPE D_801F4D48;
 extern u16 D_801F4DC8[10];
+extern UNK_TYPE D_801F4DDC;
 extern s8 D_801F4DE0;
+extern s16 D_801F4DE2;
 
 #ifdef NON_MATCHING
 void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -108,11 +143,6 @@ void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx) {
         csCtx->state += 1;
     }
 }
-
-extern u8 D_801BB130;
-extern u16 D_801BB15C;
-extern s8 D_801F4E68;
-extern s16 D_801F4D42;
 
 #ifdef NON_EQUIVALENT
 // Command X: Misc. Actions
@@ -404,8 +434,6 @@ void func_800EAD7C(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
-extern u16 D_801F4D40;
-
 #ifdef NON_MATCHING
 void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     s32 temp_a1;
@@ -559,8 +587,6 @@ void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EB364.s")
 #endif
-
-extern s16 D_801F4DE2;
 
 void func_800EB4B4(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (cmd->base == 1) {
@@ -861,8 +887,6 @@ void func_800EBD60(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EBD60.s")
 #endif
 
-extern UNK_TYPE D_801F4D48;
-
 // ??
 s32 func_800EC678(GlobalContext* globalCtx, CsCmdUnk5A* cmd) {
     s32 sp1C = 0;
@@ -945,10 +969,6 @@ s32 func_800EC6D4(void) {
 
     return count;
 }
-
-extern UNK_TYPE D_801BB160;
-extern u16 D_801BB124;
-extern u16 D_801BB128;
 
 #ifdef NON_EQUIVALENT
 void func_800EC924(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbox* cmd) {

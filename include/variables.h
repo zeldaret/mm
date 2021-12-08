@@ -877,14 +877,11 @@ extern EffShieldParticleInit shieldParticleInitWood;
 // extern UNK_TYPE1 D_801BB0DC;
 // extern UNK_TYPE2 D_801BB0FC;
 // extern UNK_TYPE1 D_801BB100;
-// extern UNK_TYPE2 D_801BB124;
-// extern UNK_TYPE2 D_801BB128;
+
 extern u8 D_801BB12C;
-// extern UNK_TYPE1 D_801BB130;
-extern cutscene_update_func sCsStateHandlers1[5];
-extern cutscene_update_func sCsStateHandlers2[5];
-// extern UNK_TYPE2 D_801BB15C;
-// extern UNK_TYPE4 D_801BB160;
+extern CutsceneStateHandler sCsStateHandlers1[];
+extern CutsceneStateHandler sCsStateHandlers2[];
+
 extern s801BB170 D_801BB170[118];
 // extern UNK_TYPE1 D_801BC210;
 extern Gfx D_801BC240[9];
@@ -3251,7 +3248,7 @@ extern u8 D_801F4E30;
 // extern UNK_TYPE1 D_801F4E5C;
 // extern UNK_TYPE1 D_801F4E60;
 // extern UNK_TYPE1 D_801F4E64;
-// extern UNK_TYPE1 D_801F4E68;
+extern s8 D_801F4E68;
 extern f32 D_801F4E70;
 // extern UNK_TYPE1 D_801F4E74;
 extern u16 D_801F4E78;
