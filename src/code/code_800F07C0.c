@@ -243,14 +243,17 @@ void EnHy_UpdateCollider(EnHy* enHy, GlobalContext* globalCtx) {
 s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThreshold) {
     u8 wasLeftFootOnGround = enHy->isLeftFootOnGround;
     u8 wasRightFootOnGround = enHy->isRightFootOnGround;
-    s32 pad;
+    s32 waterSfxId;
     u16 sfxId;
     u8 isFootOnGround;
 
     if (enHy->actor.bgCheckFlags & 0x20) {
-        sfxId = ((enHy->actor.depthInWater < 20.0f) ? (NA_SE_PL_WALK_WATER0 - SFX_FLAG)
-                                                    : (NA_SE_PL_WALK_WATER1 - SFX_FLAG)) +
-                SFX_FLAG;
+        if(enHy->actor.depthInWater < 20.0f) {
+            waterSfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+        } else {
+            waterSfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+        }
+        sfxId = waterSfxId + SFX_FLAG;
     } else {
         sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
     }
