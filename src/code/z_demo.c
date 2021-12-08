@@ -28,7 +28,7 @@ glabel D_801F4DE2
 extern u16 D_801F4DC8[10];
 extern s8 D_801F4DE0;
 
-#if NON_MATCHING
+#ifdef NON_MATCHING
 void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     s32 i;
 
@@ -84,7 +84,6 @@ void Cutscene_StepCutscene2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 void Cutscene_Nop800EA210(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-
 }
 
 s32 func_800EA220(GlobalContext* globalCtx, CutsceneContext* csCtx, f32 target) {
@@ -134,217 +133,217 @@ void func_800EA324(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase*
     }
 
     switch (cmd->base) {
-    case 0x1:
-        if (sp3F) {
-            func_800FD78C(globalCtx);
-            globalCtx->envCtx.unk_F2[0] = 0x3C;
-        }
-        break;
-    case 0x2:
-        if (sp3F) {
-            func_801A47DC(0xF, 0, 0);
-            func_800FB320(globalCtx, 3);
-            D_801F4E68 = 1;
-        }
-        break;
-    case 0x3:
-        if (globalCtx->envCtx.unk_8C.fogFar < 12800) {
-            globalCtx->envCtx.unk_8C.fogFar += 35;
-        }
-        break;
-    case 0x4:
-        if (sp3F) {
-            globalCtx->envCtx.unk_19 = 1;
-            globalCtx->envCtx.unk_17 = 1;
-            globalCtx->envCtx.unk_18 = 0;
-            globalCtx->envCtx.unk_1A = 0x3C;
-            globalCtx->envCtx.unk_21 = 1;
-            globalCtx->envCtx.unk_1F = 0;
-            globalCtx->envCtx.unk_20 = 1;
-            globalCtx->envCtx.unk_24 = 0x3C;
-            globalCtx->envCtx.unk_22 = globalCtx->envCtx.unk_24;
-        }
-        break;
-    case 0x5:
-        if (sp3F && (csCtx->state != 4)) {
-            csCtx->state = 3;
-        }
-        break;
-    case 0x7:
-        if (sp3F) {
-            if (globalCtx->loadedScene->titleTextId != 0) {
-                func_80151A68(globalCtx, globalCtx->loadedScene->titleTextId);
+        case 0x1:
+            if (sp3F) {
+                func_800FD78C(globalCtx);
+                globalCtx->envCtx.unk_F2[0] = 0x3C;
             }
-        }
-        break;
-    case 0x8:
-        func_8019F128(0x2150);
-        if (sp3F) {
-            D_801F4D42 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
-            Quake_SetSpeed(D_801F4D42, 0x55F0);
-            Quake_SetQuakeValues(D_801F4D42, 6, 4, 0, 0);
-            Quake_SetCountdown(D_801F4D42, 800);
-        }
-        break;
-    case 0x9:
-        if (sp3F) {
-            Quake_Init();
-        }
-        break;
-    case 0xA:
-        D_801F6D30.r = 0xFF;
-        D_801F6D30.g = 0xFF;
-        D_801F6D30.b = 0xFF;
-        D_801F6D30.a = 0xFF * temp_f0;
-        break;
-    case 0xB:
-        D_801F6D30.r = 0xFF;
-        D_801F6D30.g = 0xB4;
-        D_801F6D30.b = 0x64;
-        D_801F6D30.a = 0xFF * temp_f0;
-        break;
-    case 0xC:
-        globalCtx->roomCtx.currRoom.segment = NULL;
-        break;
-    case 0xD:
-        if (globalCtx->state.frames & 8) {
-            if (globalCtx->envCtx.unk_8C.ambientColor[0] < 0x28) {
-                globalCtx->envCtx.unk_8C.ambientColor[0] += 2;
-                globalCtx->envCtx.unk_8C.diffuseColor1[1] -= 3;
-                globalCtx->envCtx.unk_8C.diffuseColor1[2] -= 3;
+            break;
+        case 0x2:
+            if (sp3F) {
+                func_801A47DC(0xF, 0, 0);
+                func_800FB320(globalCtx, 3);
+                D_801F4E68 = 1;
             }
-        } else {
-            if (globalCtx->envCtx.unk_8C.ambientColor[0] >= 3) {
-                globalCtx->envCtx.unk_8C.ambientColor[0] -= 2;
-                globalCtx->envCtx.unk_8C.diffuseColor1[1] += 3;
-                globalCtx->envCtx.unk_8C.diffuseColor1[2] += 3;
+            break;
+        case 0x3:
+            if (globalCtx->envCtx.unk_8C.fogFar < 12800) {
+                globalCtx->envCtx.unk_8C.fogFar += 35;
             }
-        }
-        break;
-    case 0xE:
-        globalCtx->unk_18845 = 1;
-        break;
-    case 0xF:
-        globalCtx->unk_18845 = 0;
-        break;
-    case 0x10:
-        if (sp3F) {
-            globalCtx->envCtx.unk_EA = 1;
-        }
-        func_8019F128(0x20C0);
-        break;
-    case 0x11:
-        gSaveContext.unk_3F58 = 1;
-        break;
-    case 0x12:
-        if (gSaveContext.isNight == 0) {
-            gSaveContext.time -= (u16) gGameInfo->data[0xF];
-        } else {
-            gSaveContext.time -= 2 * gGameInfo->data[0xF];
-        }
-        break;
-    case 0x13:
-        func_8019D758(csCtx, csCtx->frames, cmd, globalCtx);
-        csCtx->frames = cmd->startFrame - 1;
-        break;
-    case 0x14:
-        EnvFlags_Set(globalCtx, 3);
-        break;
-    case 0x15:
-        EnvFlags_Set(globalCtx, 4);
-        break;
-    case 0x16:
-        gSaveContext.playerForm = PLAYER_FORM_DEKU;
-        break;
-    case 0x17:
-        player->stateFlags2 |= 0x4000000;
-        break;
-    case 0x18:
-        player->stateFlags2 &= ~0x4000000;
-        break;
-    case 0x19:
-        D_801BB130 = gSaveContext.playerForm;
-        gSaveContext.playerForm = 4;
-        gSaveContext.equippedMask = 0;
-        break;
-    case 0x1A:
-        func_8019F128(0x2159U);
-        if (sp3F) {
-            D_801F4D42 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
-            Quake_SetSpeed(D_801F4D42, 30000);
-            Quake_SetQuakeValues(D_801F4D42, 20, 10, 0, (s16) 0);
-            Quake_SetCountdown(D_801F4D42, 800);
-        }
-        break;
-    case 0x1B:
-        if (sp3F) {
-            globalCtx->nextEntranceIndex = 0x1C00;
-            gSaveContext.nextCutsceneIndex = 0xFFF8;
-            globalCtx->sceneLoadFlag = 0x14;
-            globalCtx->unk_1887F = 3;
-        }
-        break;
-    case 0x1C:
-        if (sp3F) {
-            globalCtx->envCtx.unk_17 = 0xD;
-        }
-        break;
-    case 0x1D:
-        gSaveContext.playerForm = D_801BB130;
-        break;
-    case 0x1E:
-        D_801F4DE0 = 1;
-        break;
-    case 0x1F:
-        D_801F4DE0 = 0;
-        break;
-    case 0x21:
-        if (sp3F) {
-            func_80146EE8(globalCtx, csCtx->frames, cmd);
-        }
-        break;
-    case 0x22:
-        if (sp3F) {
-            func_80144A94(&globalCtx->sramCtx, csCtx->frames, cmd);
-        }
-        break;
-    case 0x23:
-        if (D_801BB15C != csCtx->frames) {
-            D_801BB15C = csCtx->frames;
-            if (gGameInfo->data[0xF] != 0) {
-                temp_t5 = gGameInfo->data[0xF] + gSaveContext.time;
-                gSaveContext.time += temp_t5;
-                gSaveContext.time = (u16)gSaveContext.unk_14 + temp_t5;
+            break;
+        case 0x4:
+            if (sp3F) {
+                globalCtx->envCtx.unk_19 = 1;
+                globalCtx->envCtx.unk_17 = 1;
+                globalCtx->envCtx.unk_18 = 0;
+                globalCtx->envCtx.unk_1A = 0x3C;
+                globalCtx->envCtx.unk_21 = 1;
+                globalCtx->envCtx.unk_1F = 0;
+                globalCtx->envCtx.unk_20 = 1;
+                globalCtx->envCtx.unk_24 = 0x3C;
+                globalCtx->envCtx.unk_22 = globalCtx->envCtx.unk_24;
             }
-        }
-        break;
-    case 0x24:
-        func_8019F128(0x2150);
-        if (sp3F) {
-            D_801F4D42 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
-            Quake_SetSpeed(D_801F4D42, 22000);
-            Quake_SetQuakeValues(D_801F4D42, 2, 1, 0, 0);
-            Quake_SetCountdown(D_801F4D42, 800);
-        }
-        break;
-    case 0x26:
-        gSaveContext.day = 9;
+            break;
+        case 0x5:
+            if (sp3F && (csCtx->state != 4)) {
+                csCtx->state = 3;
+            }
+            break;
+        case 0x7:
+            if (sp3F) {
+                if (globalCtx->loadedScene->titleTextId != 0) {
+                    func_80151A68(globalCtx, globalCtx->loadedScene->titleTextId);
+                }
+            }
+            break;
+        case 0x8:
+            func_8019F128(0x2150);
+            if (sp3F) {
+                D_801F4D42 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                Quake_SetSpeed(D_801F4D42, 0x55F0);
+                Quake_SetQuakeValues(D_801F4D42, 6, 4, 0, 0);
+                Quake_SetCountdown(D_801F4D42, 800);
+            }
+            break;
+        case 0x9:
+            if (sp3F) {
+                Quake_Init();
+            }
+            break;
+        case 0xA:
+            D_801F6D30.r = 0xFF;
+            D_801F6D30.g = 0xFF;
+            D_801F6D30.b = 0xFF;
+            D_801F6D30.a = 0xFF * temp_f0;
+            break;
+        case 0xB:
+            D_801F6D30.r = 0xFF;
+            D_801F6D30.g = 0xB4;
+            D_801F6D30.b = 0x64;
+            D_801F6D30.a = 0xFF * temp_f0;
+            break;
+        case 0xC:
+            globalCtx->roomCtx.currRoom.segment = NULL;
+            break;
+        case 0xD:
+            if (globalCtx->state.frames & 8) {
+                if (globalCtx->envCtx.unk_8C.ambientColor[0] < 0x28) {
+                    globalCtx->envCtx.unk_8C.ambientColor[0] += 2;
+                    globalCtx->envCtx.unk_8C.diffuseColor1[1] -= 3;
+                    globalCtx->envCtx.unk_8C.diffuseColor1[2] -= 3;
+                }
+            } else {
+                if (globalCtx->envCtx.unk_8C.ambientColor[0] >= 3) {
+                    globalCtx->envCtx.unk_8C.ambientColor[0] -= 2;
+                    globalCtx->envCtx.unk_8C.diffuseColor1[1] += 3;
+                    globalCtx->envCtx.unk_8C.diffuseColor1[2] += 3;
+                }
+            }
+            break;
+        case 0xE:
+            globalCtx->unk_18845 = 1;
+            break;
+        case 0xF:
+            globalCtx->unk_18845 = 0;
+            break;
+        case 0x10:
+            if (sp3F) {
+                globalCtx->envCtx.unk_EA = 1;
+            }
+            func_8019F128(0x20C0);
+            break;
+        case 0x11:
+            gSaveContext.unk_3F58 = 1;
+            break;
+        case 0x12:
+            if (gSaveContext.isNight == 0) {
+                gSaveContext.time -= (u16)gGameInfo->data[0xF];
+            } else {
+                gSaveContext.time -= 2 * gGameInfo->data[0xF];
+            }
+            break;
+        case 0x13:
+            func_8019D758(csCtx, csCtx->frames, cmd, globalCtx);
+            csCtx->frames = cmd->startFrame - 1;
+            break;
+        case 0x14:
+            EnvFlags_Set(globalCtx, 3);
+            break;
+        case 0x15:
+            EnvFlags_Set(globalCtx, 4);
+            break;
+        case 0x16:
+            gSaveContext.playerForm = PLAYER_FORM_DEKU;
+            break;
+        case 0x17:
+            player->stateFlags2 |= 0x4000000;
+            break;
+        case 0x18:
+            player->stateFlags2 &= ~0x4000000;
+            break;
+        case 0x19:
+            D_801BB130 = gSaveContext.playerForm;
+            gSaveContext.playerForm = 4;
+            gSaveContext.equippedMask = 0;
+            break;
+        case 0x1A:
+            func_8019F128(0x2159U);
+            if (sp3F) {
+                D_801F4D42 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                Quake_SetSpeed(D_801F4D42, 30000);
+                Quake_SetQuakeValues(D_801F4D42, 20, 10, 0, (s16)0);
+                Quake_SetCountdown(D_801F4D42, 800);
+            }
+            break;
+        case 0x1B:
+            if (sp3F) {
+                globalCtx->nextEntranceIndex = 0x1C00;
+                gSaveContext.nextCutsceneIndex = 0xFFF8;
+                globalCtx->sceneLoadFlag = 0x14;
+                globalCtx->unk_1887F = 3;
+            }
+            break;
+        case 0x1C:
+            if (sp3F) {
+                globalCtx->envCtx.unk_17 = 0xD;
+            }
+            break;
+        case 0x1D:
+            gSaveContext.playerForm = D_801BB130;
+            break;
+        case 0x1E:
+            D_801F4DE0 = 1;
+            break;
+        case 0x1F:
+            D_801F4DE0 = 0;
+            break;
+        case 0x21:
+            if (sp3F) {
+                func_80146EE8(globalCtx, csCtx->frames, cmd);
+            }
+            break;
+        case 0x22:
+            if (sp3F) {
+                func_80144A94(&globalCtx->sramCtx, csCtx->frames, cmd);
+            }
+            break;
+        case 0x23:
+            if (D_801BB15C != csCtx->frames) {
+                D_801BB15C = csCtx->frames;
+                if (gGameInfo->data[0xF] != 0) {
+                    temp_t5 = gGameInfo->data[0xF] + gSaveContext.time;
+                    gSaveContext.time += temp_t5;
+                    gSaveContext.time = (u16)gSaveContext.unk_14 + temp_t5;
+                }
+            }
+            break;
+        case 0x24:
+            func_8019F128(0x2150);
+            if (sp3F) {
+                D_801F4D42 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                Quake_SetSpeed(D_801F4D42, 22000);
+                Quake_SetQuakeValues(D_801F4D42, 2, 1, 0, 0);
+                Quake_SetCountdown(D_801F4D42, 800);
+            }
+            break;
+        case 0x26:
+            gSaveContext.day = 9;
 
-        {
-            GameState* gameState = &globalCtx->state;
-            gameState->running = false;
-        }
-        SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
+            {
+                GameState* gameState = &globalCtx->state;
+                gameState->running = false;
+            }
+            SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
 
-        func_80146F5C(globalCtx, csCtx->frames, cmd);
+            func_80146F5C(globalCtx, csCtx->frames, cmd);
 
-    case 0x27:
-        gSaveContext.playerForm = PLAYER_FORM_ZORA;
-        break;
+        case 0x27:
+            gSaveContext.playerForm = PLAYER_FORM_ZORA;
+            break;
 
-    case 0x28:
-        csCtx->frames = cmd->startFrame - 1;
-        break;
+        case 0x28:
+            csCtx->frames = cmd->startFrame - 1;
+            break;
     }
 }
 #else
@@ -420,34 +419,34 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
         }
 
         switch (cmd->base) {
-        case 0x1:
-            func_801A246C(0, 1);
-            break;
-        case 0x2:
-            func_801A246C(0, 0);
-            break;
-        case 0x3:
-            func_801A246C(0, 2);
-            break;
-        case 0x4:
-            func_801A246C(4, 1);
-            break;
-        case 0x5:
-            func_801A246C(4, 0);
-            break;
-        case 0x6:
-            func_801A246C(4, 2);
-            break;
-        case 0x7:
-            D_801F4D40 = func_801A8A50(0);
-            break;
-        case 0x8:
-            temp_a0 = D_801F4D40;
-            if (D_801F4D40 != 0xFFFF) {
-                D_801F4D40 = temp_a0;
-                func_801A25E4(temp_a0, phi_a1);
-            }
-            break;
+            case 0x1:
+                func_801A246C(0, 1);
+                break;
+            case 0x2:
+                func_801A246C(0, 0);
+                break;
+            case 0x3:
+                func_801A246C(0, 2);
+                break;
+            case 0x4:
+                func_801A246C(4, 1);
+                break;
+            case 0x5:
+                func_801A246C(4, 0);
+                break;
+            case 0x6:
+                func_801A246C(4, 2);
+                break;
+            case 0x7:
+                D_801F4D40 = func_801A8A50(0);
+                break;
+            case 0x8:
+                temp_a0 = D_801F4D40;
+                if (D_801F4D40 != 0xFFFF) {
+                    D_801F4D40 = temp_a0;
+                    func_801A25E4(temp_a0, phi_a1);
+                }
+                break;
         }
     }
 }
@@ -472,7 +471,8 @@ void func_800EAF20(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk190
             break;
 
         case 2:
-            if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames) && ((csCtx->frames == cmd->startFrame) || !(globalCtx->state.frames & 0x3F))) {
+            if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames) &&
+                ((csCtx->frames == cmd->startFrame) || !(globalCtx->state.frames & 0x3F))) {
                 func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
             }
             break;
@@ -496,9 +496,9 @@ void func_800EAFE0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk9B*
             globalCtx->envCtx.unk_E6[2] = cmd->unk8;
 
             if (cmd->unk0 == 2) {
-                globalCtx->envCtx.unk_E6[3] = (u8) (u32) ((1.0f - temp_f0) * 255.0f);
+                globalCtx->envCtx.unk_E6[3] = (u8)(u32)((1.0f - temp_f0) * 255.0f);
             } else {
-                globalCtx->envCtx.unk_E6[3] = (u8) (u32) (255.0f * temp_f0);
+                globalCtx->envCtx.unk_E6[3] = (u8)(u32)(255.0f * temp_f0);
             }
         }
     }
@@ -535,7 +535,7 @@ void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
     gSaveContext.cutscene = 0;
     if (cmd->base == 1) {
-        globalCtx->nextEntranceIndex = (u16) globalCtx->csCtx.sceneCsList[globalCtx->csCtx.unk_12].unk4;
+        globalCtx->nextEntranceIndex = (u16)globalCtx->csCtx.sceneCsList[globalCtx->csCtx.unk_12].unk4;
         gSaveContext.nextCutsceneIndex = 0;
         globalCtx->sceneLoadFlag = 0x14;
         if (gSaveContext.gameMode != 1) {
@@ -573,7 +573,7 @@ void func_800EB4B4(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             switch (D_801F4DE2) {
                 case 0x1F:
-                    if (gSaveContext.weekEventReg[0x14] & 2)  {
+                    if (gSaveContext.weekEventReg[0x14] & 2) {
                         globalCtx->nextEntranceIndex = 0x3010;
                         globalCtx->sceneLoadFlag = 0x14;
                         globalCtx->unk_1887F = 3;
@@ -740,7 +740,7 @@ void func_800EBB68(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
         }
 
         if (cmd->base == 2) {
-            f32  temp_f0 = func_800F5A8C(cmd->endFrame, cmd->startFrame, csCtx->frames);
+            f32 temp_f0 = func_800F5A8C(cmd->endFrame, cmd->startFrame, csCtx->frames);
 
             if (temp_f0 >= 0.9f) {
                 func_80165690();
@@ -759,7 +759,8 @@ void func_800EBCD0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
         if (player->tatlActor != NULL) {
             return;
         }
-        player->tatlActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, player->actor.world.pos.x, player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
+        player->tatlActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, player->actor.world.pos.x,
+                                        player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
     }
 }
 
@@ -867,7 +868,7 @@ s32 func_800EC678(GlobalContext* globalCtx, CsCmdUnk5A* cmd) {
     s32 sp1C = 0;
 
     bcopy(cmd, &sp1C, 4);
-    cmd = (CsCmdUnk5A* ) &cmd->unk4;
+    cmd = (CsCmdUnk5A*)&cmd->unk4;
     if (func_8016A168() == 0) {
         func_80161998(cmd, &D_801F4D48);
     }
@@ -997,7 +998,7 @@ void func_800EC924(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbo
             func_80152434(globalCtx, cmd->base);
             return;
         }
-block_22:
+    block_22:
         if (csCtx->frames >= cmd->endFrame) {
             sp1E = csCtx->frames;
             sp27 = func_80152498(&globalCtx->msgCtx);
@@ -1072,7 +1073,6 @@ block_22:
             func_80161BE0(1);
         }
     }
-    
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EC924.s")
@@ -1115,7 +1115,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     cutscenePtr = cutscenePtr + 4;
     bcopy(cutscenePtr, &sp50, 4U);
     cutscenePtr += 4;
-    if (((s16) sp50 < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) && (csCtx->state != 4)) {
+    if (((s16)sp50 < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) && (csCtx->state != 4)) {
         csCtx->state = 3;
         return;
     }
@@ -1128,7 +1128,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
         }
         if (((sp5C >= 0x64U) && (sp5C < 0x96U)) || (sp5C == 0xC9) || ((sp5C >= 0x1C2U) && (sp5C < 0x258U))) {
             phi_s0 = 0;
-loop_13:
+        loop_13:
 
             temp_v1 = &D_801F4DC8[phi_s0];
             temp_v0 = *temp_v1;
@@ -1136,7 +1136,7 @@ loop_13:
                 func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
                 sp5C = -2U;
             } else if (temp_v0 == 0) {
-                *temp_v1 = (u16) sp5C;
+                *temp_v1 = (u16)sp5C;
                 func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
                 sp5C = -2U;
             } else {
@@ -1147,96 +1147,96 @@ loop_13:
             }
         }
         if (sp5C >= 0x133U) {
-            switch (sp5C) {                   /* switch 3; irregular */
-            default:                            /* switch 3 */
-                if (sp5C != -2) {
-                    goto block_120;
-                }
-                break;
-            case 0x190:                         /* switch 3 */
-                bcopy(cutscenePtr, &sp58, 4U);
-                cutscenePtr = cutscenePtr + 4;
-                for (j = 0; j < sp58; j++) {
-                    func_800EAF20(globalCtx, csCtx, (CsCmdUnk190* ) cutscenePtr);
-                    cutscenePtr = cutscenePtr + 0xC;
-                }
-                break;
-            case 0x15E:                         /* switch 3 */
-                bcopy(cutscenePtr, &sp58, 4U);
-                cutscenePtr = cutscenePtr + 4;
-                for (j = 0; j < sp58; j++) {
-                    func_800EB4B4(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
-                    cutscenePtr = cutscenePtr + 8;
-                }
-                break;
-            case 0x15F:                         /* switch 3 */
-                bcopy(cutscenePtr, &sp58, 4U);
-                cutscenePtr = cutscenePtr + 4;
-                for (j = 0; j < sp58; j++) {
-                    func_800EB6F8(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
-                    cutscenePtr = cutscenePtr + 8;
-                }
-                break;
+            switch (sp5C) { /* switch 3; irregular */
+                default:    /* switch 3 */
+                    if (sp5C != -2) {
+                        goto block_120;
+                    }
+                    break;
+                case 0x190: /* switch 3 */
+                    bcopy(cutscenePtr, &sp58, 4U);
+                    cutscenePtr = cutscenePtr + 4;
+                    for (j = 0; j < sp58; j++) {
+                        func_800EAF20(globalCtx, csCtx, (CsCmdUnk190*)cutscenePtr);
+                        cutscenePtr = cutscenePtr + 0xC;
+                    }
+                    break;
+                case 0x15E: /* switch 3 */
+                    bcopy(cutscenePtr, &sp58, 4U);
+                    cutscenePtr = cutscenePtr + 4;
+                    for (j = 0; j < sp58; j++) {
+                        func_800EB4B4(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                        cutscenePtr = cutscenePtr + 8;
+                    }
+                    break;
+                case 0x15F: /* switch 3 */
+                    bcopy(cutscenePtr, &sp58, 4U);
+                    cutscenePtr = cutscenePtr + 4;
+                    for (j = 0; j < sp58; j++) {
+                        func_800EB6F8(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                        cutscenePtr = cutscenePtr + 8;
+                    }
+                    break;
             }
         } else if (sp5C >= 0x9EU) {
             if (sp5C >= 0xC9U) {
-                switch (sp5C) {               /* switch 1 */
-                case 0x12C:                     /* switch 1 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EAC08(globalCtx, csCtx, (CsCmdMusicChange* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
-                case 0x12D:                     /* switch 1 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EAC44(globalCtx, csCtx, (CsCmdMusicChange* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
-                case 0x12E:                     /* switch 1 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                            func_800EAD14(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
+                switch (sp5C) { /* switch 1 */
+                    case 0x12C: /* switch 1 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EAC08(globalCtx, csCtx, (CsCmdMusicChange*)cutscenePtr);
                             cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
-                case 0x12F:                     /* switch 1 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EAECC(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
-                case 0x130:                     /* switch 1 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EAD48(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
-                case 0x131:                     /* switch 1 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EAD7C(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
-                case 0x132:                     /* switch 1 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EADB0(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
+                        }
+                        break;
+                    case 0x12D: /* switch 1 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EAC44(globalCtx, csCtx, (CsCmdMusicChange*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 8;
+                        }
+                        break;
+                    case 0x12E: /* switch 1 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EAD14(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 8;
+                        }
+                        break;
+                    case 0x12F: /* switch 1 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EAECC(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 8;
+                        }
+                        break;
+                    case 0x130: /* switch 1 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EAD48(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 8;
+                        }
+                        break;
+                    case 0x131: /* switch 1 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EAD7C(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 8;
+                        }
+                        break;
+                    case 0x132: /* switch 1 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EADB0(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 8;
+                        }
+                        break;
                 }
             } else {
                 if (sp5C != 0xC8) {
@@ -1248,8 +1248,9 @@ loop_13:
                     phi_s0_12 = 0;
                     if (sp58 & 3 != 0) {
                         while ((sp58 & 3) != phi_s0_12) {
-                            if (((s32) csCtx->frames >= ((CsCmdBase*)cutscenePtr)->startFrame) && ((s32) csCtx->frames < ((CsCmdBase*)cutscenePtr)->endFrame)) {
-                                csCtx->linkAction = (CsCmdActorAction* ) cutscenePtr;
+                            if (((s32)csCtx->frames >= ((CsCmdBase*)cutscenePtr)->startFrame) &&
+                                ((s32)csCtx->frames < ((CsCmdBase*)cutscenePtr)->endFrame)) {
+                                csCtx->linkAction = (CsCmdActorAction*)cutscenePtr;
                             }
                             phi_s0_12 = phi_s0_12 + 1;
                             cutscenePtr = cutscenePtr + 0x30;
@@ -1258,22 +1259,26 @@ loop_13:
                             goto block_83;
                         }
                     } else {
-block_83:
+                    block_83:
                         do {
-                            if ((csCtx->frames >= ((CsCmdBase*)cutscenePtr)->startFrame) && (csCtx->frames < ((CsCmdBase*)cutscenePtr)->endFrame)) {
-                                csCtx->linkAction = (CsCmdActorAction* ) cutscenePtr;
+                            if ((csCtx->frames >= ((CsCmdBase*)cutscenePtr)->startFrame) &&
+                                (csCtx->frames < ((CsCmdBase*)cutscenePtr)->endFrame)) {
+                                csCtx->linkAction = (CsCmdActorAction*)cutscenePtr;
                             }
                             cutscenePtr = cutscenePtr + 0x30;
-                            if ((csCtx->frames >= ((CsCmdBase*)cutscenePtr)->startFrame) && (csCtx->frames < ((CsCmdBase*)cutscenePtr)->endFrame)) {
-                                csCtx->linkAction = (CsCmdActorAction* ) cutscenePtr;
+                            if ((csCtx->frames >= ((CsCmdBase*)cutscenePtr)->startFrame) &&
+                                (csCtx->frames < ((CsCmdBase*)cutscenePtr)->endFrame)) {
+                                csCtx->linkAction = (CsCmdActorAction*)cutscenePtr;
                             }
                             cutscenePtr = cutscenePtr + 0x30;
-                            if ((csCtx->frames >= ((CsCmdBase*)cutscenePtr)->startFrame) && (csCtx->frames < ((CsCmdBase*)cutscenePtr)->endFrame)) {
-                                csCtx->linkAction = (CsCmdActorAction* ) cutscenePtr;
+                            if ((csCtx->frames >= ((CsCmdBase*)cutscenePtr)->startFrame) &&
+                                (csCtx->frames < ((CsCmdBase*)cutscenePtr)->endFrame)) {
+                                csCtx->linkAction = (CsCmdActorAction*)cutscenePtr;
                             }
                             cutscenePtr = cutscenePtr + 0x30;
-                            if ((csCtx->frames >= ((CsCmdBase*)cutscenePtr)->startFrame) && (csCtx->frames < ((CsCmdBase*)cutscenePtr)->endFrame)) {
-                                csCtx->linkAction = (CsCmdActorAction* ) cutscenePtr;
+                            if ((csCtx->frames >= ((CsCmdBase*)cutscenePtr)->startFrame) &&
+                                (csCtx->frames < ((CsCmdBase*)cutscenePtr)->endFrame)) {
+                                csCtx->linkAction = (CsCmdActorAction*)cutscenePtr;
                             }
                             phi_s0_12 = phi_s0_12 + 4;
                             cutscenePtr = cutscenePtr + 0x30;
@@ -1283,88 +1288,88 @@ block_83:
             }
         } else {
             if (sp5C >= 0x5B) {
-                switch (sp5C) {               /* switch 2 */
-                case 0x96:                      /* switch 2 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EA324(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
-                        cutscenePtr += 8;
-                    }
-                    break;
-                case 0x97:                      /* switch 2 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EABAC(globalCtx, csCtx, (CsCmdEnvLighting* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
-                case 0x9C:                      /* switch 2 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EAC94(globalCtx, csCtx, (CsCmdMusicFade* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 0xC;
-                    }
-                    break;
-                case 0x9B:                      /* switch 2 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EAFE0(globalCtx, csCtx, (CsCmdUnk9B* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 0xC;
-                    }
-                    break;
-                case 0x9D:                      /* switch 2 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EB1DC(globalCtx, csCtx, (CsCmdDayTime* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 0xC;
-                    }
-                    break;
-                case 0x98:                      /* switch 2 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EBD60(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
-                case 0x99:                      /* switch 2 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EBB68(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
-                case 0x9A:                      /* switch 2 */
-                    bcopy(cutscenePtr, &sp58, 4U);
-                    cutscenePtr = cutscenePtr + 4;
-                    for (j = 0; j < sp58; j++) {
-                        func_800EBCD0(globalCtx, csCtx, (CsCmdBase* ) cutscenePtr);
-                        cutscenePtr = cutscenePtr + 8;
-                    }
-                    break;
+                switch (sp5C) { /* switch 2 */
+                    case 0x96:  /* switch 2 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EA324(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                            cutscenePtr += 8;
+                        }
+                        break;
+                    case 0x97: /* switch 2 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EABAC(globalCtx, csCtx, (CsCmdEnvLighting*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 8;
+                        }
+                        break;
+                    case 0x9C: /* switch 2 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EAC94(globalCtx, csCtx, (CsCmdMusicFade*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 0xC;
+                        }
+                        break;
+                    case 0x9B: /* switch 2 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EAFE0(globalCtx, csCtx, (CsCmdUnk9B*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 0xC;
+                        }
+                        break;
+                    case 0x9D: /* switch 2 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EB1DC(globalCtx, csCtx, (CsCmdDayTime*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 0xC;
+                        }
+                        break;
+                    case 0x98: /* switch 2 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EBD60(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 8;
+                        }
+                        break;
+                    case 0x99: /* switch 2 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EBB68(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 8;
+                        }
+                        break;
+                    case 0x9A: /* switch 2 */
+                        bcopy(cutscenePtr, &sp58, 4U);
+                        cutscenePtr = cutscenePtr + 4;
+                        for (j = 0; j < sp58; j++) {
+                            func_800EBCD0(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                            cutscenePtr = cutscenePtr + 8;
+                        }
+                        break;
                 }
             } else if (sp5C == 0xA) {
                 bcopy(cutscenePtr, &sp58, 4U);
                 cutscenePtr = cutscenePtr + 4;
                 for (j = 0; j < sp58; j++) {
                     if (((CsCmdTextbox*)cutscenePtr)->base != 0xFFFF) {
-                        func_800EC924(globalCtx, csCtx, (CsCmdTextbox* ) cutscenePtr);
+                        func_800EC924(globalCtx, csCtx, (CsCmdTextbox*)cutscenePtr);
                     }
                     cutscenePtr = cutscenePtr + 0xC;
                 }
 
             } else if (sp5C == 0x5A) {
-                cutscenePtr = &cutscenePtr[func_800EC678(globalCtx, (CsCmdUnk5A* ) cutscenePtr)];
+                cutscenePtr = &cutscenePtr[func_800EC678(globalCtx, (CsCmdUnk5A*)cutscenePtr)];
             } else {
-            //default:                        /* switch 2 */
-            //default:                        /* switch 1 */
-block_120:
+                // default:                        /* switch 2 */
+                // default:                        /* switch 1 */
+            block_120:
                 bcopy(cutscenePtr, &sp58, 4U);
                 cutscenePtr = cutscenePtr + 4;
                 if (sp58 > 0) {
@@ -1380,7 +1385,7 @@ block_120:
                         }
                     } else {
                         do {
-loop_124:
+                        loop_124:
                             cutscenePtr = cutscenePtr + 0x20;
                         } while (phi_s0_23 != sp58);
                     }
@@ -1480,14 +1485,11 @@ void func_800EDBE0(GlobalContext* globalCtx) {
             if (temp_v0_3 != -1) {
                 temp_a3 = ((void)0, globalCtx->csCtx.sceneCsList);
                 if ((temp_a3[temp_v0_3].unk7 != 0xFF) && (gSaveContext.respawnFlag == 0)) {
-                    if (temp_a3[temp_v0_3].unk7 == 0xFE)
-                    {
+                    if (temp_a3[temp_v0_3].unk7 == 0xFE) {
                         ActorCutscene_Start(sp2A, NULL);
                         gSaveContext.showTitleCard = 0;
-                    }
-                    else
-                    if (!((1 << (temp_a3[temp_v0_3].unk7 % 8)) & gSaveContext.weekEventReg[temp_a3[temp_v0_3].unk7 / 8]))
-                    {
+                    } else if (!((1 << (temp_a3[temp_v0_3].unk7 % 8)) &
+                                 gSaveContext.weekEventReg[temp_a3[temp_v0_3].unk7 / 8])) {
                         gSaveContext.weekEventReg[(temp_a3[temp_v0_3].unk7 / 8)] |= 1 << (temp_a3[temp_v0_3].unk7 % 8);
                         ActorCutscene_Start(sp2A, NULL);
                         gSaveContext.showTitleCard = 0;
@@ -1502,7 +1504,8 @@ void func_800EDBE0(GlobalContext* globalCtx) {
     if ((gSaveContext.respawnFlag == 0) || (gSaveContext.respawnFlag == -2)) {
         sp24 = globalCtx->loadedScene;
         if ((sp24->titleTextId != 0) && (gSaveContext.showTitleCard != 0)) {
-            if ((Entrance_GetTransitionFlags(gSaveContext.sceneSetupIndex + gSaveContext.entranceIndex) & 0x4000) != 0) {
+            if ((Entrance_GetTransitionFlags(gSaveContext.sceneSetupIndex + gSaveContext.entranceIndex) & 0x4000) !=
+                0) {
                 func_80151A68(globalCtx, sp24->titleTextId);
             }
         }
@@ -1514,11 +1517,9 @@ void func_800EDBE0(GlobalContext* globalCtx) {
 #endif
 
 void nop_800EDDB0(GlobalContext* globalCtx) {
-
 }
 
 void func_800EDDBC(UNK_TYPE arg0, UNK_TYPE arg1) {
-
 }
 
 void func_800EDDCC(GlobalContext* globalCtx, u8 arg1) {
@@ -1561,12 +1562,12 @@ void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 iParm3) {
     CsCmdActorAction* entry;
     f32 temp_f0;
 
-    sp44.x = (f32) globalCtx->csCtx.npcActions[iParm3]->startPos.x;
-    sp44.y = (f32) globalCtx->csCtx.npcActions[iParm3]->startPos.y;
-    sp44.z = (f32) globalCtx->csCtx.npcActions[iParm3]->startPos.z;
-    sp38.x = (f32) globalCtx->csCtx.npcActions[iParm3]->endPos.x;
-    sp38.y = (f32) globalCtx->csCtx.npcActions[iParm3]->endPos.y;
-    sp38.z = (f32) globalCtx->csCtx.npcActions[iParm3]->endPos.z;
+    sp44.x = (f32)globalCtx->csCtx.npcActions[iParm3]->startPos.x;
+    sp44.y = (f32)globalCtx->csCtx.npcActions[iParm3]->startPos.y;
+    sp44.z = (f32)globalCtx->csCtx.npcActions[iParm3]->startPos.z;
+    sp38.x = (f32)globalCtx->csCtx.npcActions[iParm3]->endPos.x;
+    sp38.y = (f32)globalCtx->csCtx.npcActions[iParm3]->endPos.y;
+    sp38.z = (f32)globalCtx->csCtx.npcActions[iParm3]->endPos.z;
 
     entry = globalCtx->csCtx.npcActions[iParm3];
     temp_f0 = func_800F5A8C(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
