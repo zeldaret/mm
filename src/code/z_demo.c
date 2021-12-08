@@ -1085,6 +1085,7 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
 }
 
 #ifdef NON_EQUIVALENT
+//#if 1
 // I haven't checked equivalence tho
 void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, u8* cutscenePtr) {
     s32 i;
@@ -1093,7 +1094,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     s32 cmdEntries; // sp58
     s32 pad;
     s32 cutsceneEndFrame; // sp50
-    u16 temp_v0;
+    s16 temp_v0;
     u16* temp_v1;
     s16 phi_s0;
     s32 phi_s0_12;
@@ -1133,7 +1134,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                     cmdType = -2U;
                     break;
                 }
-                phi_s0 = phi_s0 + 1;
+                phi_s0++;
             }
         }
 
@@ -1219,6 +1220,15 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
+            case 0x132: /* switch 1 */
+                bcopy(cutscenePtr, &cmdEntries, 4U);
+                cutscenePtr += 4;
+                for (j = 0; j < cmdEntries; j++) {
+                    func_800EADB0(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    cutscenePtr += 8;
+                }
+                break;
+
             case 0x190: /* switch 3 */
                 bcopy(cutscenePtr, &cmdEntries, 4U);
                 cutscenePtr += 4;
@@ -1227,29 +1237,22 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                     cutscenePtr += 0xC;
                 }
                 break;
-            case 0x15E: /* switch 3 */
+
+            case 0x9B: /* switch 2 */
                 bcopy(cutscenePtr, &cmdEntries, 4U);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EB4B4(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
-                }
-                break;
-            case 0x15F: /* switch 3 */
-                bcopy(cutscenePtr, &cmdEntries, 4U);
-                cutscenePtr += 4;
-                for (j = 0; j < cmdEntries; j++) {
-                    func_800EB6F8(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    func_800EAFE0(globalCtx, csCtx, (CsCmdUnk9B*)cutscenePtr);
+                    cutscenePtr += 0xC;
                 }
                 break;
 
-            case 0x132: /* switch 1 */
-                bcopy(cutscenePtr, &cmdEntries, 4U);
+            case CS_CMD_SETTIME: /* switch 2 */
+                bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EADB0(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    Cutscene_Command_SetTime(globalCtx, csCtx, (CsCmdDayTime*)cutscenePtr);
+                    cutscenePtr += sizeof(CsCmdDayTime);
                 }
                 break;
 
@@ -1265,44 +1268,25 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x98: /* switch 2 */
+            case 0x5A:
+                cutscenePtr = &cutscenePtr[func_800EC678(globalCtx, (CsCmdUnk5A*)cutscenePtr)];
+                break;
+
+            case 0x15E: /* switch 3 */
                 bcopy(cutscenePtr, &cmdEntries, 4U);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EBD60(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    func_800EB4B4(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += 8;
                 }
                 break;
-            case 0x99: /* switch 2 */
+
+            case 0x15F: /* switch 3 */
                 bcopy(cutscenePtr, &cmdEntries, 4U);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EBB68(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    func_800EB6F8(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += 8;
-                }
-                break;
-            case 0x9A: /* switch 2 */
-                bcopy(cutscenePtr, &cmdEntries, 4U);
-                cutscenePtr += 4;
-                for (j = 0; j < cmdEntries; j++) {
-                    func_800EBCD0(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
-                }
-                break;
-            case 0x9B: /* switch 2 */
-                bcopy(cutscenePtr, &cmdEntries, 4U);
-                cutscenePtr += 4;
-                for (j = 0; j < cmdEntries; j++) {
-                    func_800EAFE0(globalCtx, csCtx, (CsCmdUnk9B*)cutscenePtr);
-                    cutscenePtr += 0xC;
-                }
-                break;
-            case CS_CMD_SETTIME: /* switch 2 */
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
-                for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_SetTime(globalCtx, csCtx, (CsCmdDayTime*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdDayTime);
                 }
                 break;
 
@@ -1317,10 +1301,33 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x5A:
-                cutscenePtr = &cutscenePtr[func_800EC678(globalCtx, (CsCmdUnk5A*)cutscenePtr)];
+            case 0x98: /* switch 2 */
+                bcopy(cutscenePtr, &cmdEntries, 4U);
+                cutscenePtr += 4;
+                for (j = 0; j < cmdEntries; j++) {
+                    func_800EBD60(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    cutscenePtr += 8;
+                }
                 break;
 
+            case 0x99: /* switch 2 */
+                bcopy(cutscenePtr, &cmdEntries, 4U);
+                cutscenePtr += 4;
+                for (j = 0; j < cmdEntries; j++) {
+                    func_800EBB68(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    cutscenePtr += 8;
+                }
+                break;
+
+            case 0x9A: /* switch 2 */
+                bcopy(cutscenePtr, &cmdEntries, 4U);
+                cutscenePtr += 4;
+                for (j = 0; j < cmdEntries; j++) {
+                    func_800EBCD0(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    cutscenePtr += 8;
+                }
+                break;
+                
             case -2:
             default:
                 bcopy(cutscenePtr, &cmdEntries, 4U);
@@ -1332,6 +1339,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
         }
     }
 }
+
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_ProcessCommands.s")
 #endif
