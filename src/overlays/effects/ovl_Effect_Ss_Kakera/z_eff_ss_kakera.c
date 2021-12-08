@@ -13,23 +13,17 @@ void EffectSsKakera_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
 void EffectSsKakera_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
 
 void func_8097E130(EffectSs* this, GlobalContext* globalCtx);
-f32 func_8097E368(f32, s32);
-f32 func_8097E384(f32, s32);
-f32 func_8097E3C0(f32, s32);
-f32 func_8097E400(f32, s32);
 
 const EffectSsInit Effect_Ss_Kakera_InitVars = {
     EFFECT_SS_KAKERA,
     EffectSsKakera_Init,
 };
-KakeraColorStruct D_8097EAD8[] = { { 0, { 255, 255, 255 } }, { 0, { 235, 170, 130 } }, { 1, { 210, 190, 170 } } };
+KakeraColorStruct D_8097EAD8[] = {
+    { 0, { 255, 255, 255 } },
+    { 0, { 235, 170, 130 } },
+    { 1, { 210, 190, 170 } },
+};
 f32 D_8097EAE4[] = { 1.0f, 100.0f, 40.0f, 5.0f, 100.0f, 40.0f, 5.0f, 100.0f, 40.0f, 5.0f };
-f32 D_8097EB0C[] = { 0.05f, 1.0f };
-f32 D_8097EB14[] = { 4.0f, 0.1f, 0.3f, 0.9f, -0.1f, -0.3f, -0.9f };
-f32 D_8097EB30[] = { 0.1f, 1.0f, 6.0f };
-f32 (*D_8097EB3C[])(f32, s32) = { func_8097E368, func_8097E384, func_8097E384, func_8097E384, func_8097E3C0,
-                                  func_8097E3C0, func_8097E3C0, func_8097E400, func_8097E400, func_8097E400 };
-f32 D_8097EB64[] = { 10.0f, 20.0f, 40.0f };
 
 u32 EffectSsKakera_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsKakeraInitParams* params = PARAMS;
@@ -191,6 +185,7 @@ f32 func_8097E400(f32 arg0, s32 index) {
 }
 
 s32 func_8097E420(EffectSs* this, Vec3f* diff, f32 distance) {
+    static f32 D_8097EB0C[] = { 0.05f, 1.0f };
     f32 phi_f0;
     s32 index = this->regs[0] & 3;
 
@@ -207,6 +202,7 @@ s32 func_8097E420(EffectSs* this, Vec3f* diff, f32 distance) {
 }
 
 s32 func_8097E4B0(EffectSs* this, Vec3f* diff, f32 distance) {
+    static f32 D_8097EB14[] = { 4.0f, 0.1f, 0.3f, 0.9f, -0.1f, -0.3f, -0.9f };
     s32 index = (this->regs[0] >> 2) & 7;
 
     if (index != 0) {
@@ -216,6 +212,7 @@ s32 func_8097E4B0(EffectSs* this, Vec3f* diff, f32 distance) {
 }
 
 s32 func_8097E4F0(EffectSs* this, Vec3f* diff, f32 distance) {
+    static f32 D_8097EB30[] = { 0.1f, 1.0f, 6.0f };
     f32 phi_f0;
     s32 index = (this->regs[0] >> 5) & 3;
 
@@ -232,6 +229,9 @@ s32 func_8097E4F0(EffectSs* this, Vec3f* diff, f32 distance) {
 }
 
 s32 func_8097E584(EffectSs* this, Vec3f* diff, f32 distance) {
+    static f32 (*D_8097EB3C[])(f32,
+                               s32) = { func_8097E368, func_8097E384, func_8097E384, func_8097E384, func_8097E3C0,
+                                        func_8097E3C0, func_8097E3C0, func_8097E400, func_8097E400, func_8097E400 };
     f32 center;
     f32 rand;
     s32 index;
@@ -287,10 +287,11 @@ s32 func_8097E698(EffectSs* this) {
 }
 
 void func_8097E7E0(EffectSs* this, GlobalContext* globalCtx) {
+    static f32 D_8097EB64[] = { 10.0f, 20.0f, 40.0f };
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->regs[8] == 0) {
-        if ((((this->regs[4] >> 4) & 1) * 0x10) == 0x10) {
+        if ((((this->regs[4] >> 4) & 1) << 4) == (1 << 4)) {
             if (this->pos.y <= (player->actor.floorHeight - ((this->regs[4] >> 2) & 3))) {
                 this->regs[9] = 0;
                 this->regs[0] = 0;
