@@ -130,13 +130,12 @@ s32 EnZo_SetAnimation(SkelAnime* skel_anime, s16 index) {
     return didChange;
 }
 
-s32 EnZo_PlayWalkSound(EnZo* this, GlobalContext* globalCtx) {
+s32 EnZo_PlayWalkingSound(EnZo* this, GlobalContext* globalCtx) {
     u8 leftWasGrounded;
     u8 rightWasGrounded;
-    EnZo* temp;
+    s32 waterSfxId;
     u16 sfxId;
     u8 isFootGrounded;
-    s32 waterSfxId;
 
     leftWasGrounded = this->isLeftFootGrounded;
     rightWasGrounded = this->isRightFootGrounded;
@@ -150,14 +149,11 @@ s32 EnZo_PlayWalkSound(EnZo* this, GlobalContext* globalCtx) {
     } else {
         sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
     }
-    isFootGrounded = func_8013DB90(globalCtx, &this->leftFootPos, -6.0f);
-    this->isLeftFootGrounded = isFootGrounded;
+    this->isLeftFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->leftFootPos, -6.0f);
     if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
         Audio_PlayActorSound2(&this->actor, sfxId);
     }
-    temp = this;
-    isFootGrounded = func_8013DB90(globalCtx, &temp->rightFootPos, -6.0f);
-    temp->isRightFootGrounded = isFootGrounded;
+    this->isRightFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->rightFootPos, -6.0f);
     if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
         Audio_PlayActorSound2(&this->actor, sfxId);
     }
@@ -287,7 +283,7 @@ void EnZo_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     EnZo_LookAtPlayer(this, globalCtx);
-    EnZo_PlayWalkSound(this, globalCtx);
+    EnZo_PlayWalkingSound(this, globalCtx);
     EnZo_UpdateCollider(this, globalCtx);
 }
 

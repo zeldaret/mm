@@ -8616,7 +8616,7 @@
     0x8099D810:("OceffWipe4_Update",),
     0x8099D870:("OceffWipe4_Draw",),
     0x8099E790:("EnZo_SetAnimation",),
-    0x8099E858:("EnZo_PlayWalkSound",),
+    0x8099E858:("EnZo_PlayWalkingSound",),
     0x8099E96C:("EnZo_Blink",),
     0x8099E9E0:("EnZo_UpdateCollider",),
     0x8099EA60:("EnZo_LookAtPlayer",),
