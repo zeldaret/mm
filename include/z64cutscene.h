@@ -50,7 +50,8 @@ typedef struct {
     /* 0x4 */ u16 endFrame;
     /* 0x6 */ u8 hour;
     /* 0x7 */ u8 minute;
-} CsCmdDayTime; // size = 0x8
+    /* 0x8 */ UNK_TYPE1 unk_08[0x04];
+} CsCmdDayTime; // size = 0xC
 
 typedef struct {
     /* 0x0 */ u16 setting;
@@ -103,6 +104,19 @@ typedef struct {
     /* 0x8 */ u8 unk8;
     /* 0x9 */ UNK_TYPE1 pad9[0x3];
 } CsCmdUnk9B; // size = 0xC
+
+typedef enum {
+    /* 0 */ CS_STATE_IDLE,
+    /* 1 */ CS_STATE_SKIPPABLE_INIT,
+    /* 2 */ CS_STATE_SKIPPABLE_EXEC,
+    /* 3 */ CS_STATE_UNSKIPPABLE_INIT,
+    /* 4 */ CS_STATE_UNSKIPPABLE_EXEC
+} CutsceneState;
+
+typedef enum {
+    /* 0x0000 */ CS_CMD_00,
+    /* 0x009D */ CS_CMD_SETTIME = 0x9D,
+} CutsceneCmd;
 
 typedef union CutsceneData {
     s32 i;

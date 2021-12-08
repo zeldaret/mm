@@ -154,6 +154,7 @@ animdict = {
     "MainHeap_Init": "ZeldaArena_Init",
     "MainHeap_Cleanup": "ZeldaArena_Cleanup",
     "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
+    "func_801A3F54": "Audio_SetCutsceneFlag",
 
     "skelanime.unk03": "skelanime.taper",
     "skelanime.animCurrentSeg": "skelanime.animation",
@@ -171,7 +172,7 @@ animdict = {
     "skelanime.prevFrameRot": "skelanime.prevRot",
     "skelanime.prevFramePos": "skelanime.prevTransl",
     "skelanime.unk3E": "skelanime.baseTransl",
-    
+
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",
     "skelAnime.initialFrame": "skelAnime.startFrame",
