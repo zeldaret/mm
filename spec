@@ -1825,8 +1825,7 @@ beginseg
     name "ovl_Obj_Roomtimer"
     compress
     include "build/src/overlays/actors/ovl_Obj_Roomtimer/z_obj_roomtimer.o"
-    include "build/data/ovl_Obj_Roomtimer/ovl_Obj_Roomtimer.data.o"
-    include "build/data/ovl_Obj_Roomtimer/ovl_Obj_Roomtimer.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Roomtimer/ovl_Obj_Roomtimer_reloc.o"
 endseg
 
 beginseg
