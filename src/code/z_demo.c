@@ -32,7 +32,9 @@ u16 D_801BB15C = 0xFFFF;
 s32 D_801BB160 = 0;
 
 // bss
+#ifndef NON_MATCHING
 u16 D_801F4D40;
+#endif
 s16 sQuakeIndex;
 struct_801F4D48 D_801F4D48;
 u16 D_801F4DC8[10];
@@ -40,7 +42,6 @@ UNK_TYPE D_801F4DDC;
 s8 D_801F4DE0;
 s16 D_801F4DE2;
 
-#ifdef NON_MATCHING
 void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     s32 i;
 
@@ -58,9 +59,6 @@ void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
     func_801A3F54(0);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_Init.s")
-#endif
 
 void func_800EA0D4(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     csCtx->state = 1;
@@ -413,12 +411,13 @@ void func_800EAD7C(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
 #ifdef NON_MATCHING
 void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    static u16 D_801F4D40;
     s32 temp_a1;
     u16 temp_a0;
-    s32 phi_a1;
+    u8 phi_a1;
 
     if (csCtx->frames == cmd->startFrame) {
-        phi_a1 = (gSaveContext.day - 1) & 0xFF;
+        phi_a1 = (gSaveContext.day - 1);
         if (phi_a1 >= 3) {
             phi_a1 = 0;
         }
@@ -446,10 +445,9 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 D_801F4D40 = func_801A8A50(0);
                 break;
             case 0x8:
-                temp_a0 = D_801F4D40;
-                if (D_801F4D40 != 0xFFFF) {
-                    D_801F4D40 = temp_a0;
-                    func_801A25E4(temp_a0, phi_a1);
+                if (D_801F4D40 != 0xFFFF)
+                {
+                    func_801A25E4(D_801F4D40, phi_a1);
                 }
                 break;
         }
@@ -524,11 +522,7 @@ void func_800EB1DC(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdDayTim
     }
 }
 
-#ifdef NON_MATCHING
-// regalloc
 void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    s32 temp_a0;
-
     csCtx->state = 4;
     func_80165690();
     func_801A3F54(0);
@@ -553,17 +547,13 @@ void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
             globalCtx->unk_1887F = 4;
         }
 
-        temp_a0 = globalCtx->nextEntranceIndex & 0xF;
-        if (temp_a0 > 0) {
-            gSaveContext.nextCutsceneIndex = temp_a0 + 0xFFEF;
+        if ((globalCtx->nextEntranceIndex & 0xF) > 0) {
+            gSaveContext.nextCutsceneIndex = (globalCtx->nextEntranceIndex & 0xF) + 0xFFEF;
         }
 
         globalCtx->nextEntranceIndex &= 0xFFF0;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EB364.s")
-#endif
 
 void func_800EB4B4(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (cmd->base == 1) {
@@ -845,9 +835,9 @@ void func_800EBD60(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 break;
 
             case 0xC:
-                globalCtx->envCtx.unk_E6[0] = (1.0f - temp_f0) * 160.0f;
-                globalCtx->envCtx.unk_E6[1] = (1.0f - temp_f0) * 160.0f;
-                globalCtx->envCtx.unk_E6[2] = (1.0f - temp_f0) * 160.0f;
+                globalCtx->envCtx.unk_E6[0] = (160.0f * (1.0f - temp_f0));
+                globalCtx->envCtx.unk_E6[1] = (160.0f * (1.0f - temp_f0));
+                globalCtx->envCtx.unk_E6[2] = (u16)(160.0f * (1.0f - temp_f0));
                 globalCtx->envCtx.unk_E6[3] = 0xFF;
                 break;
 
