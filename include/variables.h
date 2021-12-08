@@ -3218,7 +3218,7 @@ extern GameInfo* gGameInfo;
 // extern UNK_TYPE1 D_801F3F83;
 // extern UNK_TYPE1 D_801F48C8;
 // extern UNK_TYPE1 D_801F4D40;
-// extern UNK_TYPE2 D_801F4D42;
+// extern UNK_TYPE2 sQuakeIndex;
 // extern UNK_TYPE1 D_801F4D48;
 // extern UNK_TYPE1 D_801F4DC8;
 // extern UNK_TYPE1 D_801F4DCA;

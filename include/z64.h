@@ -1584,4 +1584,27 @@ enum fram_mode {
     FRAM_MODE_STATUS
 };
 
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ UNK_TYPE1 unk_0E[0x02];
+    /* 0x10 */ UNK_TYPE1 unk_10[0x2C];
+    /* 0x3C */ UNK_TYPE1 unk_3C[0x01];
+    /* 0x3D */ u8 unk_3D;
+    /* 0x3E */ UNK_TYPE1 unk_3E[0x02];
+    /* 0x40 */ UNK_TYPE1 unk_40[0x2C];
+    /* 0x6C */ UNK_TYPE1 unk_6C[0x01];
+    /* 0x6D */ u8 unk_6D;
+    /* 0x6E */ UNK_TYPE1 unk_6E[0x02];
+    /* 0x70 */ UNK_PTR unk_70;
+    /* 0x74 */ UNK_PTR unk_74;
+    /* 0x78 */ UNK_PTR unk_78;
+    /* 0x7C */ Camera* camera;
+} struct_801F4D48; // size = 0x80
+
 #endif

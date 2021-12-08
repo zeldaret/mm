@@ -31,37 +31,14 @@ CutsceneStateHandler sCsStateHandlers2[] = {
 u16 D_801BB15C = 0xFFFF;
 s32 D_801BB160 = 0;
 
-#if 0
-glabel D_801F4D40
-/* 010DA0 801F4D40 */ .space 0x2
-
-glabel D_801F4D42
-/* 010DA2 801F4D42 */ .space 0x6
-
-glabel D_801F4D48
-/* 010DA8 801F4D48 */ .space 0x80
-
-glabel D_801F4DC8
-/* 010E28 801F4DC8 */ .space 0x14
-
-glabel D_801F4DDC
-/* 010E3C 801F4DDC */ .space 0x4
-
-glabel D_801F4DE0
-/* 010E40 801F4DE0 */ .space 0x2
-
-glabel D_801F4DE2
-/* 010E42 801F4DE2 */ .space 0xE
-#endif
-
 // bss
-extern u16 D_801F4D40;
-extern s16 D_801F4D42;
-extern UNK_TYPE D_801F4D48;
-extern u16 D_801F4DC8[10];
-extern UNK_TYPE D_801F4DDC;
-extern s8 D_801F4DE0;
-extern s16 D_801F4DE2;
+u16 D_801F4D40;
+s16 sQuakeIndex;
+struct_801F4D48 D_801F4D48;
+u16 D_801F4DC8[10];
+UNK_TYPE D_801F4DDC;
+s8 D_801F4DE0;
+s16 D_801F4DE2;
 
 #ifdef NON_MATCHING
 void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -209,10 +186,10 @@ void func_800EA324(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase*
         case 0x8:
             func_8019F128(0x2150);
             if (sp3F) {
-                D_801F4D42 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
-                Quake_SetSpeed(D_801F4D42, 0x55F0);
-                Quake_SetQuakeValues(D_801F4D42, 6, 4, 0, 0);
-                Quake_SetCountdown(D_801F4D42, 800);
+                sQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                Quake_SetSpeed(sQuakeIndex, 0x55F0);
+                Quake_SetQuakeValues(sQuakeIndex, 6, 4, 0, 0);
+                Quake_SetCountdown(sQuakeIndex, 800);
             }
             break;
         case 0x9:
@@ -299,10 +276,10 @@ void func_800EA324(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase*
         case 0x1A:
             func_8019F128(0x2159U);
             if (sp3F) {
-                D_801F4D42 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
-                Quake_SetSpeed(D_801F4D42, 30000);
-                Quake_SetQuakeValues(D_801F4D42, 20, 10, 0, (s16)0);
-                Quake_SetCountdown(D_801F4D42, 800);
+                sQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                Quake_SetSpeed(sQuakeIndex, 30000);
+                Quake_SetQuakeValues(sQuakeIndex, 20, 10, 0, 0);
+                Quake_SetCountdown(sQuakeIndex, 800);
             }
             break;
         case 0x1B:
@@ -350,10 +327,10 @@ void func_800EA324(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase*
         case 0x24:
             func_8019F128(0x2150);
             if (sp3F) {
-                D_801F4D42 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
-                Quake_SetSpeed(D_801F4D42, 22000);
-                Quake_SetQuakeValues(D_801F4D42, 2, 1, 0, 0);
-                Quake_SetCountdown(D_801F4D42, 800);
+                sQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                Quake_SetSpeed(sQuakeIndex, 22000);
+                Quake_SetQuakeValues(sQuakeIndex, 2, 1, 0, 0);
+                Quake_SetCountdown(sQuakeIndex, 800);
             }
             break;
         case 0x26:
