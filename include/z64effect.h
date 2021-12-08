@@ -249,7 +249,7 @@ typedef struct {
     /* 0x0C */ void* vramEnd;
     /* 0x10 */ void* loadedRamAddr;
     /* 0x14 */ EffectSsInit* initInfo;
-    /* 0x18 */ u32 unk18; // Always 0x01000000?
+    /* 0x18 */ u8 unk18; // Always 1?
 } EffectSsOverlay; // size = 0x1C
 
 typedef struct EffectSs {
