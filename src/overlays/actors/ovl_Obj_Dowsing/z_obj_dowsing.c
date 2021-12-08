@@ -10,11 +10,12 @@
 
 #define THIS ((ObjDowsing*)thisx)
 
+s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx);
+s32 func_80B23DD0(ObjDowsing* this, GlobalContext* globalCtx);
 void ObjDowsing_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Obj_Dowsing_InitVars = {
     ACTOR_OBJ_DOWSING,
     ACTORCAT_ITEMACTION,
@@ -27,14 +28,42 @@ const ActorInit Obj_Dowsing_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
+s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx) {
+    s32 type = this->actor.params >> 7;
+    s32 flag = this->actor.params & 0x7F;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dowsing/func_80B23D50.s")
+    if (type == 1) {
+        return Actor_GetCollectibleFlag(globalCtx, flag);
+    } else if (type == 2) {
+        return Actor_GetChestFlag(globalCtx, flag);
+    } else if (type == 3) {
+        return Flags_GetSwitch(globalCtx, flag);
+    } else {
+        return 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dowsing/func_80B23DD0.s")
+s32 func_80B23DD0(ObjDowsing* this, GlobalContext* globalCtx) {
+    if (ObjDowsing_GetFlag(this, globalCtx)) {
+        Actor_MarkForDeath(&this->actor);
+        return 1;
+    }
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dowsing/ObjDowsing_Init.s")
+void ObjDowsing_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjDowsing* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dowsing/ObjDowsing_Destroy.s")
+    func_80B23DD0(this, globalCtx);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dowsing/ObjDowsing_Update.s")
+void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjDowsing* this = THIS;
+
+    if (!func_80B23DD0(this, globalCtx)) {
+        func_800B8C50(thisx, globalCtx);
+    }
+}

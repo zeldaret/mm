@@ -3991,7 +3991,6 @@ beginseg
     name "ovl_Obj_Dowsing"
     compress
     include "build/src/overlays/actors/ovl_Obj_Dowsing/z_obj_dowsing.o"
-    include "build/data/ovl_Obj_Dowsing/ovl_Obj_Dowsing.data.o"
     include "build/data/ovl_Obj_Dowsing/ovl_Obj_Dowsing.reloc.o"
 endseg
 
