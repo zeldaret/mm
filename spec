@@ -5218,8 +5218,7 @@ beginseg
     name "ovl_Obj_Kzsaku"
     compress
     include "build/src/overlays/actors/ovl_Obj_Kzsaku/z_obj_kzsaku.o"
-    include "build/data/ovl_Obj_Kzsaku/ovl_Obj_Kzsaku.data.o"
-    include "build/data/ovl_Obj_Kzsaku/ovl_Obj_Kzsaku.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Kzsaku/ovl_Obj_Kzsaku_reloc.o"
 endseg
 
 beginseg
