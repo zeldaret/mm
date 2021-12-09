@@ -36,6 +36,7 @@
 #include "z64object.h"
 #include "z64player.h"
 #include "z64scene.h"
+#include "z64schedule.h"
 #include "z64save.h"
 #include "z64transition.h"
 #include "regs.h"
@@ -1393,13 +1394,6 @@ typedef struct EnHy {
     /* 0x3E6 */ s16 eyeTexIndex;
     /* 0x3E8 */ s16 blinkTimer;
 } EnHy;
-
-typedef struct {
-    /* 0x0 */ u8 result;
-    /* 0x4 */ s32 time0;
-    /* 0x8 */ s32 time1;
-    /* 0xC */ s32 hasResult;
-} ScheduleResult; // size = 0x10
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 

@@ -120,14 +120,55 @@ static u16 D_80BAE800[] = {
     4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6,
 };
 
-static UNK_TYPE D_80BAE820[] = {
-    0xC00027C,  0x210877,   0xA006D31,  0x2000000, 0x19250200, 0x19001E19, 0x2010F01, 0x140D0201, 0x14012D01,
-    0x50E0114,  0x12D0E0E,  0x10F0114,  0x70E0019, 0x1E060E,   0x19,       0xD0A000D, 0x3D020019, 0x1E3102,
-    0x1E002D,   0x2502002D, 0x1001902,  0x100010F, 0xD02010F,  0x1140105,  0xE010F01, 0x14090E01, 0x10F0B,
-    0xE002D01,  0x20E00,    0x1E002D0A, 0xE001900, 0x1E080505, 0xC000125,  0xA006E20, 0x2120000,  0x14140200,
-    0x14001E08, 0xF001E03,  0x4000405,  0xE001400, 0x1E0F0E12, 0x1403,     0x50C0003, 0x270A0013, 0x22021200,
-    0x13001602, 0x13001319, 0xD021319,  0x105,     0xE131900,  0x10400,    0x50E1200, 0x13000C05, 0x5000000,
-};
+SCHEDULE_START(D_80BAE820)
+/* 0x0000 */ SCHEDULE_CMD_DAY_CHECK_S(2, 0x0080 - 0x0004),
+/* 0x0004 */ SCHEDULE_CMD_FLAG_CHECK_S(0x21, 0x08, 0x007F - 0x0008),
+/* 0x0008 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_ICHIBA, 0x003D - 0x000C),
+/* 0x000C */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0,  0,  0, 25, 0x0037 - 0x0012),
+/* 0x0012 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0, 25,  0, 30, 0x0031 - 0x0018),
+/* 0x0018 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 1, 15,  1, 20, 0x002B - 0x001E),
+/* 0x001E */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 1, 20,  1, 45, 0x0025 - 0x0024),
+/* 0x0024 */ SCHEDULE_CMD_END(),
+/* 0x0025 */ SCHEDULE_CMD_RETURN_TIME( 1, 20,  1, 45, 14),
+/* 0x002B */ SCHEDULE_CMD_RETURN_TIME( 1, 15,  1, 20,  7),
+/* 0x0031 */ SCHEDULE_CMD_RETURN_TIME( 0, 25,  0, 30,  6),
+/* 0x0037 */ SCHEDULE_CMD_RETURN_TIME( 0,  0,  0, 25, 13),
+/* 0x003D */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_AYASHIISHOP, 0x007E - 0x0041),
+/* 0x0041 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0, 25,  0, 30, 0x0078 - 0x0047),
+/* 0x0047 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0, 30,  0, 45, 0x0072 - 0x004D),
+/* 0x004D */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0, 45,  1,  0, 0x006C - 0x0053),
+/* 0x0053 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 1,  0,  1, 15, 0x0066 - 0x0059),
+/* 0x0059 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 1, 15,  1, 20, 0x0060 - 0x005F),
+/* 0x005F */ SCHEDULE_CMD_END(),
+/* 0x0060 */ SCHEDULE_CMD_RETURN_TIME( 1, 15,  1, 20,  9),
+/* 0x0066 */ SCHEDULE_CMD_RETURN_TIME( 1,  0,  1, 15, 11),
+/* 0x006C */ SCHEDULE_CMD_RETURN_TIME( 0, 45,  1,  0,  2),
+/* 0x0072 */ SCHEDULE_CMD_RETURN_TIME( 0, 30,  0, 45, 10),
+/* 0x0078 */ SCHEDULE_CMD_RETURN_TIME( 0, 25,  0, 30,  8),
+/* 0x007E */ SCHEDULE_CMD_END(),
+/* 0x007F */ SCHEDULE_CMD_END(),
+/* 0x0080 */ SCHEDULE_CMD_DAY_CHECK_S(1, 0x00A9 - 0x0084),
+/* 0x0084 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_BACKTOWN, 0x00A8 - 0x0088),
+/* 0x0088 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(18,  0,  0, 20, 0x00A2 - 0x008E),
+/* 0x008E */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0, 20,  0, 30, 0x009C - 0x0094),
+/* 0x0094 */ SCHEDULE_CMD_TIME_CHECK_S( 0, 30, 0x009B - 0x0098),
+/* 0x0098 */ SCHEDULE_CMD_RETURN_L(4),
+/* 0x009B */ SCHEDULE_CMD_END(),
+/* 0x009C */ SCHEDULE_CMD_RETURN_TIME( 0, 20,  0, 30, 15),
+/* 0x00A2 */ SCHEDULE_CMD_RETURN_TIME(18,  0,  0, 20,  3),
+/* 0x00A8 */ SCHEDULE_CMD_END(),
+/* 0x00A9 */ SCHEDULE_CMD_DAY_CHECK_S(3, 0x00D4 - 0x00AD),
+/* 0x00AD */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_IKANA, 0x00D3 - 0x00B1),
+/* 0x00B1 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(18,  0, 19,  0, 0x00CD - 0x00B7),
+/* 0x00B7 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(19,  0, 19, 25, 0x00CA - 0x00BD),
+/* 0x00BD */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(19, 25,  0,  0, 0x00C4 - 0x00C3),
+/* 0x00C3 */ SCHEDULE_CMD_END(),
+/* 0x00C4 */ SCHEDULE_CMD_RETURN_TIME(19, 25,  0,  0,  1),
+/* 0x00CA */ SCHEDULE_CMD_RETURN_L(5),
+/* 0x00CD */ SCHEDULE_CMD_RETURN_TIME(18,  0, 19,  0, 12),
+/* 0x00D3 */ SCHEDULE_CMD_END(),
+/* 0x00D4 */ SCHEDULE_CMD_END(),
+SCHEDULE_END
 
 static s32 D_80BAE8F8[] = {
     -1, -1, -1, -1, -1, -1, 1, 2, 0, 3, 1, 2, 0, 0, 3, 0,
@@ -1059,7 +1100,7 @@ void func_80BACE4C(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
     ScheduleResult unkStruct;
 
-    this->unk42A = REG(15) + (0, gSaveContext.unk_14);
+    this->unk42A = REG(15) + ((void)0, gSaveContext.unk_14);
     if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
         ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~1;
@@ -1083,7 +1124,7 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
     ScheduleResult unkStruct;
 
-    this->unk42A = REG(15) + (0, gSaveContext.unk_14);
+    this->unk42A = REG(15) + ((void)0, gSaveContext.unk_14);
     if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
         ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~1;
@@ -1210,7 +1251,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
         this->animationIdx = 2;
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
     }
-    this->unk42A = REG(15) + (0, gSaveContext.unk_14);
+    this->unk42A = REG(15) + ((void)0, gSaveContext.unk_14);
     if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
         ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
         this->actor.flags &= ~1;
@@ -1248,7 +1289,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
             this->animationIdx = 2;
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
         }
-        this->unk42A = REG(15) + (0, gSaveContext.unk_14);
+        this->unk42A = REG(15) + ((void)0, gSaveContext.unk_14);
         if (!Schedule_RunScript(globalCtx, D_80BAE820, &unkStruct) ||
             ((this->unk428 != unkStruct.result) && !func_80BABF64(this, globalCtx, &unkStruct))) {
             this->actor.flags &= ~1;

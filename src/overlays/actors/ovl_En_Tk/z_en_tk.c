@@ -62,12 +62,12 @@ void func_80AEF5F4(Actor* thisx, GlobalContext* globalCtx);
 
 static s32 D_80AF0050;
 
-static u32 D_80AEF800[] = {
-    0x03060012,
-    0x00000105,
-    0x0E060012,
-    0x00010500,
-};
+SCHEDULE_START(D_80AEF800)
+/* 0x0000 */ SCHEDULE_CMD_TIME_RANGE_CHECK_L( 6,  0, 18,  0, 0x0008 - 0x0007),
+/* 0x0007 */ SCHEDULE_CMD_END(),
+/* 0x0008 */ SCHEDULE_CMD_RETURN_TIME( 6,  0, 18,  0,  1),
+/* 0x000E */ SCHEDULE_CMD_END(),
+SCHEDULE_END
 
 const ActorInit En_Tk_InitVars = {
     ACTOR_EN_TK,
@@ -347,7 +347,7 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
     this->unk_2DC -= temp3;
     this->unk_2E0 += REG(15);
 
-    if (Schedule_RunScript(globalCtx, (UNK_TYPE*)D_80AEF800, &sp34)) {
+    if (Schedule_RunScript(globalCtx, D_80AEF800, &sp34)) {
         if ((this->unk_3CC != sp34.result) && !func_80AED354(this, globalCtx, &sp34)) {
             return;
         }
