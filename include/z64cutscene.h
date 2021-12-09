@@ -120,6 +120,7 @@ typedef enum {
     /* 0x0096 */ CS_CMD_MISC = 0x96,
     /* 0x0097 */ CS_CMD_SET_LIGHTING,
     /* 0x0098 */ CS_CMD_SCENE_TRANS_FX,
+    /* 0x009A */ CS_CMD_GIVETATL = 0x9A,
     /* 0x009C */ CS_CMD_FADESEQ = 0x9C,
     /* 0x009D */ CS_CMD_SETTIME = 0x9D,
     /* 0x00C8 */ CS_CMD_SET_PLAYER_ACTION = 0xC8,

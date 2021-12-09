@@ -28,12 +28,10 @@ CutsceneStateHandler sCsStateHandlers2[] = {
     func_800EDA04,
     func_800ED980,
 };
-u16 D_801BB15C = 0xFFFF;
-s32 D_801BB160 = 0;
 
 // bss
 #ifndef NON_MATCHING
-u16 D_801F4D40;
+u16 activeSequence;
 #endif
 s16 sQuakeIndex;
 struct_801F4D48 D_801F4D48;
@@ -119,16 +117,18 @@ void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 // Command 0x96: Misc. Actions
 void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    static u16 D_801BB15C = 0xFFFF;
     GlobalContext* globalCtx = globalCtx2;
     Player* player = GET_PLAYER(globalCtx);
     u8 sp3F = false;
     f32 temp_f0;
+    int new_var;
     u16 temp_t5;
 
-    if ((csCtx->frames < cmd->startFrame) || (csCtx->frames >= cmd->endFrame && cmd->startFrame != cmd->endFrame)) {
+    if ((csCtx->frames < cmd->startFrame) || (csCtx->frames >= cmd->endFrame && cmd->endFrame != cmd->startFrame)) {
         return;
     }
 
@@ -187,6 +187,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
                 sQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
                 Quake_SetSpeed(sQuakeIndex, 0x55F0);
                 Quake_SetQuakeValues(sQuakeIndex, 6, 4, 0, 0);
+                if (!gSaveContext.unk_14) {}
                 Quake_SetCountdown(sQuakeIndex, 800);
             }
             break;
@@ -248,7 +249,8 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             }
             break;
         case 0x13:
-            func_8019D758(csCtx, csCtx->frames, cmd, globalCtx);
+            // AudioOcarina_PlayLongScarecrowAfterCredits
+            func_8019D758();
             csCtx->frames = cmd->startFrame - 1;
             break;
         case 0x14:
@@ -304,21 +306,20 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x21:
             if (sp3F) {
-                func_80146EE8(globalCtx, csCtx->frames, cmd);
+                func_80146EE8(globalCtx);
             }
             break;
         case 0x22:
             if (sp3F) {
-                func_80144A94(&globalCtx->sramCtx, csCtx->frames, cmd);
+                func_80144A94(&globalCtx->sramCtx);
             }
             break;
         case 0x23:
             if (D_801BB15C != csCtx->frames) {
                 D_801BB15C = csCtx->frames;
                 if (gGameInfo->data[0xF] != 0) {
-                    temp_t5 = gGameInfo->data[0xF] + gSaveContext.time;
-                    gSaveContext.time += temp_t5;
-                    gSaveContext.time = (u16)gSaveContext.unk_14 + temp_t5;
+                    gSaveContext.time += gGameInfo->data[0xF];
+                    gSaveContext.time += (u16)gSaveContext.unk_14;
                 }
             }
             break;
@@ -331,6 +332,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
                 Quake_SetCountdown(sQuakeIndex, 800);
             }
             break;
+
         case 0x26:
             gSaveContext.day = 9;
 
@@ -340,7 +342,8 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             }
             SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
 
-            func_80146F5C(globalCtx, csCtx->frames, cmd);
+            func_80146F5C(globalCtx);
+            break;
 
         case 0x27:
             gSaveContext.playerForm = PLAYER_FORM_ZORA;
@@ -352,6 +355,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
     }
 }
 #else
+static u16 D_801BB15C = 0xFFFF;
 void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase* cmd);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_Command_Misc.s")
 #endif
@@ -423,7 +427,7 @@ void func_800EAD7C(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 #ifdef NON_MATCHING
 // Matches, but I don't want to deal with bss reordering yet
 void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    static u16 activeSequence; // D_801F4D40
+    static u16 activeSequence; // activeSequence
     u8 dayMinusOne;
 
     if (csCtx->frames == cmd->startFrame) {
@@ -764,8 +768,8 @@ void func_800EBB68(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
-// Gives Tatl to the player
-void func_800EBCD0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+// Command 0x9A: Gives Tatl to the player
+void Cutscene_Command_GiveTatlToPlayer(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((csCtx->frames == cmd->startFrame) && (cmd->base == 1)) {
@@ -957,6 +961,8 @@ s32 func_800EC6D4(void) {
 
     return count;
 }
+
+s32 D_801BB160 = 0;
 
 #ifdef NON_EQUIVALENT
 // Command 0xA: Textbox
@@ -1334,11 +1340,11 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x9A: 
+            case CS_CMD_GIVETATL:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EBCD0(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_GiveTatlToPlayer(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += 8;
                 }
                 break;

@@ -1559,7 +1559,7 @@
     0x800EB4B4:("func_800EB4B4",),
     0x800EB6F8:("func_800EB6F8",),
     0x800EBB68:("func_800EBB68",),
-    0x800EBCD0:("func_800EBCD0",),
+    0x800EBCD0:("Cutscene_Command_GiveTatlToPlayer",),
     0x800EBD60:("Cutscene_Command_TransitionFX",),
     0x800EC678:("func_800EC678",),
     0x800EC6D4:("func_800EC6D4",),
