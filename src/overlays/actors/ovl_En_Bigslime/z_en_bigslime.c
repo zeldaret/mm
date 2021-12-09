@@ -2878,7 +2878,7 @@ void EnBigslime_UpdateGekko(Actor* thisx, GlobalContext* globalCtx) {
 /**
  * Related to transforming and drawing shadows
  */
-void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* dList, f32 scaleX, f32 scalez, f32 scaleY,
+void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* shadowDList, f32 scaleX, f32 scalez, f32 scaleY,
                              s16 rotation, f32 alpha) {
     f32 yDistMinY;
     f32 xz;
@@ -2904,14 +2904,14 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* dList, f
 
     Matrix_RotateY(rotation, MTXMODE_APPLY);
     Matrix_Scale(scaleX, 1.0f, scalez, MTXMODE_APPLY);
-    if (dList != D_06011050) {
+    if (shadowDList != D_06011050) {
         gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                           COMBINED);
     }
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(alpha * xz));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, dList);
+    gSPDisplayList(POLY_OPA_DISP++, shadowDList);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
