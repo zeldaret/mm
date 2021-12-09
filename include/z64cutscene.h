@@ -125,7 +125,8 @@ typedef enum {
     /* 0x00C8 */ CS_CMD_SET_PLAYER_ACTION = 0xC8,
     /* 0x012C */ CS_CMD_PLAYSEQ = 0x12C,
     /* 0x012D */ CS_CMD_STOPSEQ,
-    /* 0x012D */ CS_CMD_PLAYAMBIENCE,
+    /* 0x012E */ CS_CMD_PLAYAMBIENCE,
+    /* 0x012F */ CS_CMD_STOPAMBIENCE,
 } CutsceneCmd;
 
 typedef union CutsceneData {

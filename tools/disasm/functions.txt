@@ -1551,7 +1551,7 @@
     0x800EAD48:("func_800EAD48",),
     0x800EAD7C:("func_800EAD7C",),
     0x800EADB0:("func_800EADB0",),
-    0x800EAECC:("func_800EAECC",),
+    0x800EAECC:("Cutscene_Command_FadeAmbienceSequence",),
     0x800EAF20:("func_800EAF20",),
     0x800EAFE0:("func_800EAFE0",),
     0x800EB1DC:("Cutscene_Command_SetTime",),
