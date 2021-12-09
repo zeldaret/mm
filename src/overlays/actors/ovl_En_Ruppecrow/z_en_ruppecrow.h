@@ -32,15 +32,11 @@ typedef struct EnRuppecrow {
     /* 0x254 */ ColliderJntSph collider;
     /* 0x274 */ ColliderJntSphElement colliderElement;
     /* 0x2B4 */ u16 isGoingCounterClockwise;
-    /* 0x2B6 */ UNK_TYPE2 unk_2B6; // unused
     /* 0x2B8 */ f32 speedModifier;
     /* 0x2BC */ s16 rupeeIndex;
     /* 0x2BE */ s16 yOffset;
     /* 0x2C0 */ UNK_TYPE4 unk_2C0; // unused
     /* 0x2C4 */ u8 currentEffect; 
-    /* 0x2C5 */ UNK_TYPE1 unk_2C5; // unused 
-    /* 0x2C6 */ UNK_TYPE1 unk_2C6; // unused
-    /* 0x2C7 */ UNK_TYPE1 unk_2C7; // unused
     /* 0x2C8 */ f32 unk_2C8; // set but not used
     /* 0x2CC */ f32 unk_2CC; // set but not used
     /* 0x2D0 */ f32 unk_2D0;
