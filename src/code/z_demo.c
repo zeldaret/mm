@@ -1084,28 +1084,25 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
     }
 }
 
-#ifdef NON_EQUIVALENT
-//#if 1
+#ifdef NON_MATCHING
 // I haven't checked equivalence tho
 void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, u8* cutscenePtr) {
     s32 i;
-    s32 totalEntries;
-    u32 cmdType; // sp5C
-    s32 cmdEntries; // sp58
-    s32 pad;
-    s32 cutsceneEndFrame; // sp50
-    s16 temp_v0;
-    u16* temp_v1;
     s16 phi_s0;
-    s32 phi_s0_12;
-    s32 phi_s0_23;
+    s32 totalEntries;
     s32 j;
+    u32 cmdType; // sp5C
+    s32 pad;
+    s32 cmdEntries; // sp58
+    s32 cutsceneEndFrame; // sp50
+    s16 phi_s0_23;
 
     bcopy(cutscenePtr, &totalEntries, 4);
     cutscenePtr += 4;
     bcopy(cutscenePtr, &cutsceneEndFrame, 4);
     cutscenePtr += 4;
-    if (((s16)cutsceneEndFrame < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) && (csCtx->state != CS_STATE_UNSKIPPABLE_EXEC)) {
+    if (((u16)cutsceneEndFrame < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) && (csCtx->state != CS_STATE_UNSKIPPABLE_EXEC)) 
+    {
         csCtx->state = CS_STATE_UNSKIPPABLE_INIT;
         return;
     }
@@ -1118,23 +1115,18 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
             break;
         }
 
-        if (((cmdType >= 0x64U) && (cmdType < 0x96U)) || (cmdType == 0xC9) || ((cmdType >= 0x1C2U) && (cmdType < 0x258U))) {
-            phi_s0 = 0;
-
-            while (phi_s0 < 0xA) {
-                temp_v1 = &D_801F4DC8[phi_s0];
-                temp_v0 = *temp_v1;
-                if ((cmdType & 0xFFFF) == temp_v0) {
+        if (((cmdType >= 0x64) && (cmdType < 0x96)) || (cmdType == 0xC9) || ((cmdType >= 0x1C2) && (cmdType < 0x258))) {
+            for (phi_s0 = 0; phi_s0 < ARRAY_COUNT(D_801F4DC8); phi_s0++) {
+                if ((u16)cmdType == D_801F4DC8[phi_s0]) {
                     func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
-                    cmdType = -2U;
+                    cmdType = -2;
                     break;
-                } else if (temp_v0 == 0) {
-                    *temp_v1 = (u16)cmdType;
+                } else if (D_801F4DC8[phi_s0] == 0) {
+                    D_801F4DC8[phi_s0] = cmdType;
                     func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
-                    cmdType = -2U;
+                    cmdType = -2;
                     break;
                 }
-                phi_s0++;
             }
         }
 
@@ -1327,8 +1319,11 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                     cutscenePtr += 8;
                 }
                 break;
-                
+
             case -2:
+                // Very useful and necessary case
+                break;
+
             default:
                 bcopy(cutscenePtr, &cmdEntries, 4U);
                 cutscenePtr += 4;
