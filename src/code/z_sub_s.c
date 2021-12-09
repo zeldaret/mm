@@ -9,18 +9,23 @@ Actor* SubS_GetDoorByUnk1A5(GlobalContext* globalCtx, s32 unk_1A5) {
     while (true) {
         actor = SubS_GetActorById(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)actor;
+
         if (actor == NULL) {
             break;
         }
+
         if ((door->unk_1A4 == 5) && (door->unk_1A5 == (u8)unk_1A5)) {
             break;
         }
+
         if (actor->next == NULL) {
             door = NULL;
             break;
         }
+
         actor = actor->next;
     }
+
     return &door->actor;
 }
 
@@ -58,11 +63,13 @@ Actor* SubS_GetClosestActorById(Actor* actor, GlobalContext* globalCtx, u8 actor
 
     do {
         actorIter = SubS_GetActorById(globalCtx, actorIter, actorCategory, actorId);
+        
         actorTmp = actorIter;
         if (actorTmp == NULL) {
             break;
         }
         actorIter = actorTmp;
+
         if (actorIter != actor) {
             dist = Actor_DistanceBetweenActors(actor, actorIter);
             if (!isSetup || dist < minDist) {
@@ -71,8 +78,10 @@ Actor* SubS_GetClosestActorById(Actor* actor, GlobalContext* globalCtx, u8 actor
                 isSetup = true;
             }
         }
+
         actorIter = actorIter->next;
     } while (actorIter != NULL);
+
     return closestActor;
 }
 
@@ -122,9 +131,11 @@ Actor* SubS_GetActorById(GlobalContext* globalCtx, Actor* actorListStart, u8 act
     if (actor == NULL) {
         actor = globalCtx->actorCtx.actorList[actorCategory].first;
     }
+
     while (actor != NULL && actorId != actor->id) {
         actor = actor->next;
     }
+
     return actor;
 }
 
@@ -165,12 +176,14 @@ Actor* SubS_GetActorByFunction(GlobalContext* globalCtx, Actor* actor, Actor* ac
     if (actorListStart == NULL) {
         actorIter = globalCtx->actorCtx.actorList[actorCategory].first;
     }
+
     while (actorIter != NULL && (actorId != actorIter->id ||
                                  (actorId == actorIter->id &&
                                   (verifyActor == NULL ||
                                    (verifyActor != NULL && !verifyActor(globalCtx, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
+
     return actorIter;
 }
 
