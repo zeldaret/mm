@@ -15,6 +15,10 @@ void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B74AD8(EnJg* this, GlobalContext* globalCtx);
+void func_80B74134(EnJg* this, GlobalContext* globalCtx);
+s32 func_80B750A0(EnJg* this, GlobalContext* globalCtx);
+
 extern AnimationHeader D_060077CC;
 extern AnimationHeader D_06009440;
 extern AnimationHeader D_0600A07C;
@@ -145,10 +149,19 @@ void func_80B73AE4(EnJg* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73F1C.s")
 
+void func_80B7406C(EnJg* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B7406C.s")
 
-void func_80B7408C(EnJg* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B7408C.s")
+void func_80B7408C(EnJg* this, GlobalContext* globalCtx) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        this->unk_3CC |= 4;
+        func_801518B0(globalCtx, this->unk_3CE, &this->actor);
+        this->actionFunc = func_80B74134;
+    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
+        func_800B863C(&this->actor, globalCtx);
+        this->unk_3CE = func_80B750A0(this, globalCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74134.s")
 
@@ -156,6 +169,7 @@ void func_80B7408C(EnJg* this, GlobalContext* globalCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B742F8.s")
 
+void func_80B74440(EnJg* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74440.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74550.s")
@@ -165,11 +179,39 @@ void func_80B7408C(EnJg* this, GlobalContext* globalCtx);
 void func_80B74840(EnJg* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74840.s")
 
-void func_80B749D0(EnJg* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B749D0.s")
+void func_80B749D0(EnJg* this, GlobalContext* globalCtx) {
+    if (this->unk_148->update == NULL) {
+        this->unk_148 = NULL;
+        if (this->unk_39E == 8) {
+            if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
+                this->unk_39E = 0;
+                if (this->unk_3CE == 0xDAC) {
+                    func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+                    this->actionFunc = func_80B7406C;
+                } else {
+                    this->unk_3A2 = 0x3E8;
+                    func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+                    this->actionFunc = func_80B74440;
+                }
+            }
+        }
+    } else {
+        if (func_800B84D0(&this->actor, globalCtx)) {
+            func_801518B0(globalCtx, 0x236, &this->actor);
+            this->actionFunc = func_80B74AD8;
+        } else if (this->actor.isTargeted != 0) {
+            func_800B863C(&this->actor, globalCtx);
+        }
+    }
+}
 
-void func_80B74AD8(EnJg* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74AD8.s")
+void func_80B74AD8(EnJg* this, GlobalContext* globalCtx) {
+    if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) != 0) {
+        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.unk12023 = 4;
+        this->actionFunc = func_80B749D0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74B54.s")
 
@@ -178,7 +220,30 @@ void func_80B74BC8(EnJg* this, GlobalContext* globalCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74E5C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B750A0.s")
+s32 func_80B750A0(EnJg* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if ((this->actor.params & 1) == 0) {
+        if (player->transformation == PLAYER_FORM_GORON) {
+            if ((gSaveContext.weekEventReg[0x18] & 0x10) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
+                CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
+                return 0xDBC;
+            }
+            return 0xDB6;
+        }
+        if (gSaveContext.weekEventReg[0x18] & 0x20) {
+            return 0xDB5;
+        }
+        return 0xDAE;
+    }
+    if (player->transformation == PLAYER_FORM_GORON) {
+        if (gSaveContext.weekEventReg[0x4D] & 0x80) {
+            return 0xDDE;
+        }
+        return 0xDCD;
+    }
+    return 0xDCB;
+}
 
 void func_80B7517C(EnJg* this, GlobalContext* globalCtx) {
     s16 scale = (Rand_ZeroOne() * 20.0f) + 30.0f;
