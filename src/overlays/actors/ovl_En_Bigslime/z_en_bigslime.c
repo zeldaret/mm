@@ -334,16 +334,15 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };
 
-// gSaveContext.weekEventReg[KEY] = VALUE
-// KEY | VALUE
-static s32 isFrogReturnedFlags[] = {
-    (32 << 8) | 0x40, // Woodfall Temple Frog Returned
-    (32 << 8) | 0x80, // Great Bay Temple Frog Returned
-    (33 << 8) | 0x01, // Southern Swamp Frog Returned
-    (33 << 8) | 0x02, // Laundry Pool Frog Returned
-};
-
 void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
+    // gSaveContext.weekEventReg[KEY] = VALUE
+    // KEY | VALUE
+    static s32 isFrogReturnedFlags[] = {
+        (32 << 8) | 0x40, // Woodfall Temple Frog Returned
+        (32 << 8) | 0x80, // Great Bay Temple Frog Returned
+        (33 << 8) | 0x01, // Southern Swamp Frog Returned
+        (33 << 8) | 0x02, // Laundry Pool Frog Returned
+    };
     EnBigslime* this = THIS;
     GlobalContext* globalCtx2 = globalCtx;
     s32 i;
@@ -728,21 +727,20 @@ void EnBigslime_InitFallMinislime(EnBigslime* this) {
     this->minislimeState = MINISLIME_ACTIVE_INIT_STATE;
 }
 
-// Minislime spawn at these vertices when Frozen Bigslime Shatters
-static s32 sMinislimeSpawnVtx[] = {
-    7,  9,  11,  13,  15,  // 5 equally spaced vertices on vtx ring 2 from top
-    52, 56, 60,  64,  68,  // 5 equally spaced vertices on vtx ring 5 from top
-    94, 98, 102, 106, 110, // 5 equally spaced vertices on vtx ring 7 from top
-};
-
 void EnBigslime_SetMinislimeBreakLocation(EnBigslime* this) {
+    // Minislime spawn at these vertices when Frozen Bigslime Shatters
+    static s32 minislimeSpawnVtx[] = {
+        7,  9,  11,  13,  15,  // 5 equally spaced vertices on vtx ring 2 from top
+        52, 56, 60,  64,  68,  // 5 equally spaced vertices on vtx ring 5 from top
+        94, 98, 102, 106, 110, // 5 equally spaced vertices on vtx ring 7 from top
+    };
     Vtx* dynamicVtx;
     EnMinislime* minislime;
     s32 i;
 
     this->minislimeState = MINISLIME_ACTIVE_CONTINUE_STATE;
     for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
-        dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][sMinislimeSpawnVtx[i]];
+        dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][minislimeSpawnVtx[i]];
         minislime = this->minislime[i];
         minislime->actor.params = MINISLIME_BREAK_BIGSLIME;
         minislime->actor.world.pos.x = (dynamicVtx->n.ob[0] * this->actor.scale.x) + this->actor.world.pos.x;
@@ -1988,9 +1986,8 @@ void EnBigslime_SetupMelt(EnBigslime* this) {
     this->actionFunc = EnBigslime_Melt;
 }
 
-static Vec3f sIceSmokeVelocity = { 0.0f, 2.0f, 0.0f };
-
 void EnBigslime_Melt(EnBigslime* this, GlobalContext* globalCtx) {
+    static Vec3f iceSmokeVelocity = { 0.0f, 2.0f, 0.0f };
     Vec3f iceSmokePos;
     Vtx* targetVtx;
     Vtx* dynamicVtx;
@@ -2003,7 +2000,7 @@ void EnBigslime_Melt(EnBigslime* this, GlobalContext* globalCtx) {
         iceSmokePos.x = (dynamicVtx->n.ob[0] * this->actor.scale.x) + this->actor.world.pos.x;
         iceSmokePos.y = (dynamicVtx->n.ob[1] * this->actor.scale.y) + this->actor.world.pos.y;
         iceSmokePos.z = (dynamicVtx->n.ob[2] * this->actor.scale.z) + this->actor.world.pos.z;
-        EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &sIceSmokeVelocity, &gZeroVec3f, 600);
+        EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &iceSmokeVelocity, &gZeroVec3f, 600);
     }
 
     func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
@@ -2439,9 +2436,9 @@ void EnBigslime_GekkoDespawn(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupFrogSpawn(EnBigslime* this, GlobalContext* globalCtx) {
-    static Color_RGBA8 sDustPrimColor = { 250, 250, 250, 255 };
-    static Color_RGBA8 sDustEnvColor = { 180, 180, 180, 255 };
-    static Vec3f sHahenAccel = { 0.0f, -0.5f, 0.0f };
+    static Color_RGBA8 dustPrimColor = { 250, 250, 250, 255 };
+    static Color_RGBA8 dustEnvColor = { 180, 180, 180, 255 };
+    static Vec3f hahenAccel = { 0.0f, -0.5f, 0.0f };
     Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
     Vec3f* worldPos;
     Vec3f dustPos;
@@ -2463,14 +2460,14 @@ void EnBigslime_SetupFrogSpawn(EnBigslime* this, GlobalContext* globalCtx) {
     Audio_PlaySoundAtPosition(globalCtx, worldPos, 40, NA_SE_EN_NPC_APPEAR);
 
     // dust cloud where the red frog appears
-    func_800B0DE0(globalCtx, &dustPos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 50);
+    func_800B0DE0(globalCtx, &dustPos, &gZeroVec3f, &gZeroVec3f, &dustPrimColor, &dustEnvColor, 500, 50);
 
     for (i = 0; i < 25; i++) {
         hahenVel.x = randPlusMinusPoint5Scaled(5.0f);
         hahenVel.y = Rand_ZeroFloat(3.0f) + 4.0f;
         hahenVel.z = randPlusMinusPoint5Scaled(5.0f);
-        EffectSsHahen_Spawn(globalCtx, worldPos, &hahenVel, &sHahenAccel, 0, Rand_S16Offset(12, 3),
-                            HAHEN_OBJECT_DEFAULT, 10, 0);
+        EffectSsHahen_Spawn(globalCtx, worldPos, &hahenVel, &hahenAccel, 0, Rand_S16Offset(12, 3), HAHEN_OBJECT_DEFAULT,
+                            10, 0);
     }
 
     this->spawnFrogTimer = 40;
@@ -2505,7 +2502,7 @@ void EnBigslime_SetupDespawn(EnBigslime* this) {
         this->minislime[i]->actor.params = MINISLIME_DEFEAT_MELT;
     }
 
-    this->isDespawned = 0;
+    this->isDespawned = false;
     this->gekkoCollider.base.ocFlags1 &= ~OC1_ON;
     this->actionFunc = EnBigslime_Despawn;
 }
@@ -2520,9 +2517,9 @@ void EnBigslime_Despawn(EnBigslime* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->isDespawned == 0) {
+    if (!this->isDespawned) {
         Actor_SetRoomClearedTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
-        this->isDespawned = 1;
+        this->isDespawned = true;
     }
 
     if (counter == MINISLIME_NUM_SPAWN) {
@@ -2904,7 +2901,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* dList, f
 
     Matrix_RotateY(rotation, MTXMODE_APPLY);
     Matrix_Scale(scaleX, 1.0f, scalez, MTXMODE_APPLY);
-    if ((u32)dList != (u32)&D_06011050) {
+    if (dList != &D_06011050[0]) {
         gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                           COMBINED);
     }
@@ -2972,17 +2969,16 @@ void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-// 28 equidistance-spaced vtx Points (uniformally over the sphere)
-static EnBigslimeBubbles sBubbles[] = {
-    { 0, 0.3f },    { 6, 0.1f },    { 12, 0.45f }, { 18, 0.5f },   { 24, 0.6f },   { 30, 0.2f },   { 36, 0.4f },
-    { 42, 0.25f },  { 48, 0.35f },  { 54, 0.65f }, { 60, 0.25f },  { 66, 0.55f },  { 72, 0.3f },   { 78, 0.1f },
-    { 84, 0.45f },  { 90, 0.5f },   { 96, 0.6f },  { 102, 0.2f },  { 108, 0.4f },  { 114, 0.15f }, { 120, 0.35f },
-    { 126, 0.65f }, { 132, 0.25f }, { 138, 0.3f }, { 144, 0.15f }, { 150, 0.45f }, { 156, 0.3f },  { 161, 0.25f },
-};
-
 void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
+    // 28 equidistance-spaced vtx Points (uniformally over the sphere)
+    static EnBigslimeBubbles bubblesInfoPtrInfo[] = {
+        { 0, 0.3f },    { 6, 0.1f },    { 12, 0.45f }, { 18, 0.5f },   { 24, 0.6f },   { 30, 0.2f },   { 36, 0.4f },
+        { 42, 0.25f },  { 48, 0.35f },  { 54, 0.65f }, { 60, 0.25f },  { 66, 0.55f },  { 72, 0.3f },   { 78, 0.1f },
+        { 84, 0.45f },  { 90, 0.5f },   { 96, 0.6f },  { 102, 0.2f },  { 108, 0.4f },  { 114, 0.15f }, { 120, 0.35f },
+        { 126, 0.65f }, { 132, 0.25f }, { 138, 0.3f }, { 144, 0.15f }, { 150, 0.45f }, { 156, 0.3f },  { 161, 0.25f },
+    };
     EnBigslime* this = THIS;
-    EnBigslimeBubbles* bubbles;
+    EnBigslimeBubbles* bubblesInfoPtr;
     Vtx* dynamicVtx;
     MtxF* sysMatrix;
     s32 i;
@@ -3010,11 +3006,14 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
         sysMatrix = Matrix_GetCurrentState();
 
         for (i = 0; i < 28; i++) {
-            bubbles = &sBubbles[i];
-            dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][bubbles->v];
-            sysMatrix->wx = dynamicVtx->n.ob[0] * this->actor.scale.x * bubbles->scaleVtx + this->actor.world.pos.x;
-            sysMatrix->wy = dynamicVtx->n.ob[1] * this->actor.scale.y * bubbles->scaleVtx + this->actor.world.pos.y;
-            sysMatrix->wz = dynamicVtx->n.ob[2] * this->actor.scale.z * bubbles->scaleVtx + this->actor.world.pos.z;
+            bubblesInfoPtr = &bubblesInfoPtrInfo[i];
+            dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][bubblesInfoPtr->v];
+            sysMatrix->wx =
+                dynamicVtx->n.ob[0] * this->actor.scale.x * bubblesInfoPtr->scaleVtx + this->actor.world.pos.x;
+            sysMatrix->wy =
+                dynamicVtx->n.ob[1] * this->actor.scale.y * bubblesInfoPtr->scaleVtx + this->actor.world.pos.y;
+            sysMatrix->wz =
+                dynamicVtx->n.ob[2] * this->actor.scale.z * bubblesInfoPtr->scaleVtx + this->actor.world.pos.z;
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, &D_0600F9D0);
@@ -3027,28 +3026,26 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
     EnBigslime_DrawGekko(&this->actor, globalCtx);
 }
 
-/* value -1: Limb Not used
- * value 0:  GEKKO_LIMB_WAIST
- * value 1:  GEKKO_LIMB_L_SHIN
- * value 2:  GEKKO_LIMB_L_FOOT
- * value 3:  GEKKO_LIMB_R_SHIN
- * value 4:  GEKKO_LIMB_R_FOOT
- * value 5:  GEKKO_LIMB_L_UPPER_ARM
- * value 6:  GEKKO_LIMB_L_FOREARM
- * value 7:  GEKKO_LIMB_L_HAND
- * value 8:  GEKKO_LIMB_R_UPPER_ARM
- * value 9:  GEKKO_LIMB_R_FOREARM
- * value 10: GEKKO_LIMB_R_HAND
- * value 11: GEKKO_LIMB_JAW
- */
-static s8 limbPosIndex[] = {
-    -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
-};
-
-// Some kind of offset for the position of the Gekkos right foot
-static Vec3f sRightFootOffset = { 1500.0f, 2200.0f, 0.0f };
-
 void EnBigslime_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    /* value -1: Limb Not used
+     * value 0:  GEKKO_LIMB_WAIST
+     * value 1:  GEKKO_LIMB_L_SHIN
+     * value 2:  GEKKO_LIMB_L_FOOT
+     * value 3:  GEKKO_LIMB_R_SHIN
+     * value 4:  GEKKO_LIMB_R_FOOT
+     * value 5:  GEKKO_LIMB_L_UPPER_ARM
+     * value 6:  GEKKO_LIMB_L_FOREARM
+     * value 7:  GEKKO_LIMB_L_HAND
+     * value 8:  GEKKO_LIMB_R_UPPER_ARM
+     * value 9:  GEKKO_LIMB_R_FOREARM
+     * value 10: GEKKO_LIMB_R_HAND
+     * value 11: GEKKO_LIMB_JAW
+     */
+    static s8 limbPosIndex[] = {
+        -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
+    };
+    // Some kind of offset for the position of the Gekkos right foot
+    static Vec3f rightFootOffsetRef = { 1500.0f, 2200.0f, 0.0f };
     EnBigslime* this = THIS;
     Vec3f rightFootOffset;
 
@@ -3061,32 +3058,31 @@ void EnBigslime_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         Matrix_GetStateTranslation(&this->limbPos[limbPosIndex[limbIndex]]);
     }
 
-    if ((u32)&limbPosIndex[GEKKO_LIMB_R_ANKLE] == (u32)&limbPosIndex[limbIndex]) {
-        Matrix_MultiplyVector3fByState(&sRightFootOffset, &rightFootOffset);
+    if (limbIndex == GEKKO_LIMB_R_ANKLE) {
+        Matrix_MultiplyVector3fByState(&rightFootOffsetRef, &rightFootOffset);
         this->gekkoCollider.dim.pos.y = rightFootOffset.y;
     }
 }
 
-static Color_RGBA8 sGekkoDamageColor = { 255, 0, 0, 0 };
-static Color_RGBA8 sGekkoStunColor = { 0, 0, 255, 0 };
-
 void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
+    static Color_RGBA8 gekkoDamageColor = { 255, 0, 0, 0 };
+    static Color_RGBA8 gekkoStunColor = { 0, 0, 255, 0 };
     Vec3f gekkoPos;
     EnBigslime* this = THIS;
     s32 pad;
 
     func_8012C28C(globalCtx->state.gfxCtx);
     if (this->actionFunc == EnBigslime_DamageGekko) {
-        func_800AE434(globalCtx, &sGekkoDamageColor, this->damageSpinTimer, 20);
+        func_800AE434(globalCtx, &gekkoDamageColor, this->damageSpinTimer, 20);
     } else if ((this->actionFunc == EnBigslime_CutsceneDefeat) || (this->actionFunc == EnBigslime_GekkoDespawn)) {
-        func_800AE434(globalCtx, &sGekkoDamageColor, 20, 20);
+        func_800AE434(globalCtx, &gekkoDamageColor, 20, 20);
     } else if (this->actionFunc == EnBigslime_StunGekko) {
         if (this->gekkoDrawEffect == GEKKO_DRAW_EFFECT_FROZEN) {
-            func_800AE434(globalCtx, &sGekkoDamageColor, this->stunTimer, 80);
+            func_800AE434(globalCtx, &gekkoDamageColor, this->stunTimer, 80);
         } else if (this->gekkoDrawEffect == GEKKO_DRAW_EFFECT_ELECTRIC_STUN) {
-            func_800AE434(globalCtx, &sGekkoStunColor, this->stunTimer, 40);
+            func_800AE434(globalCtx, &gekkoStunColor, this->stunTimer, 40);
         } else {
-            func_800AE434(globalCtx, &sGekkoStunColor, this->stunTimer, 40);
+            func_800AE434(globalCtx, &gekkoStunColor, this->stunTimer, 40);
         }
     }
 
