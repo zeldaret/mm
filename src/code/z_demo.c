@@ -368,22 +368,22 @@ void Cutscene_Command_SetLighting(GlobalContext* globalCtx, CutsceneContext* csC
     }
 }
 
-// Command 0x12C: Play Background Music
-void Cutscene_Command_PlayBGM(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdMusicChange* cmd) {
+// Command 0x12C: Play Background Music or Fanfare
+void Cutscene_Command_PlaySequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdMusicChange* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         func_801A2C88(cmd->sequence - 1);
     }
 }
 
-// Command 0x12D: Stop Background Music
-void Cutscene_Command_StopBGM(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdMusicChange* cmd) {
+// Command 0x12D: Stop Background Music or Fanfare
+void Cutscene_Command_StopSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdMusicChange* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         func_801A2D54(cmd->sequence - 1);
     }
 }
 
-// Command 0x9C: Fade Background Music over duration
-void Cutscene_Command_FadeBGM(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdMusicFade* cmd) {
+// Command 0x9C: Fade Background Music or Fanfare over duration
+void Cutscene_Command_FadeSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdMusicFade* cmd) {
     if ((csCtx->frames == cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
         u8 frameCount = cmd->endFrame - cmd->startFrame;
 
@@ -395,35 +395,41 @@ void Cutscene_Command_FadeBGM(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     }
 }
 
-void func_800EAD14(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+// Command 0x12E: Play Ambience music
+void Cutscene_Command_PlayAmbienceSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
+        // Audio_PlayNatureAmbienceSequence
+        // nightSeqIndex is be natureAmbienceId
         func_801A4A28(globalCtx->soundCtx.nightSeqIndex);
     }
 }
 
+// Command 0x130: 
 void func_800EAD48(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
+        // Audio_SetSfxReverbIndexExceptOcarinaBank
         func_801A4428(2);
     }
 }
 
+// Command 0x131: 
 void func_800EAD7C(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
+        // Audio_SetSfxReverbIndexExceptOcarinaBank
         func_801A4428(1);
     }
 }
 
 #ifdef NON_MATCHING
+// Matches, but I don't want to deal with bss reordering yet
 void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     static u16 D_801F4D40;
-    s32 temp_a1;
-    u16 temp_a0;
-    u8 phi_a1;
+    u8 dayMinusOne;
 
     if (csCtx->frames == cmd->startFrame) {
-        phi_a1 = (gSaveContext.day - 1);
-        if (phi_a1 >= 3) {
-            phi_a1 = 0;
+        dayMinusOne = (gSaveContext.day - 1);
+        if (dayMinusOne >= 3) {
+            dayMinusOne = 0;
         }
 
         switch (cmd->base) {
@@ -446,12 +452,13 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 func_801A246C(4, 2);
                 break;
             case 0x7:
+                // Audio_GetActiveSequence
                 D_801F4D40 = func_801A8A50(0);
                 break;
             case 0x8:
-                if (D_801F4D40 != 0xFFFF)
-                {
-                    func_801A25E4(D_801F4D40, phi_a1);
+                if (D_801F4D40 != 0xFFFF) {
+                    // Audio_PlayBgmForDayScene
+                    func_801A25E4(D_801F4D40, dayMinusOne);
                 }
                 break;
         }
@@ -971,7 +978,7 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
             } else if (cmd->type == 5) {
                 cmd = cmd;
-                if (func_800EC6D4() == 0x14) {
+                if (func_800EC6D4() == 20) {
                     if (cmd->textId1 != 0xFFFF) {
                         func_801518B0(globalCtx, cmd->textId1, NULL);
                     }
@@ -1138,7 +1145,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
         }
 
         switch (cmdType) {
-            case 0x96:  /* switch 2 */
+            case CS_CMD_MISC:  /* switch 2 */
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1156,38 +1163,38 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_PLAYBGM: /* switch 1 */
+            case CS_CMD_PLAYSEQ: /* switch 1 */
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_PlayBGM(globalCtx, csCtx, (CsCmdMusicChange*)cutscenePtr);
+                    Cutscene_Command_PlaySequence(globalCtx, csCtx, (CsCmdMusicChange*)cutscenePtr);
                     cutscenePtr += 8;
                 }
                 break;
 
-            case CS_CMD_STOPBGM: /* switch 1 */
+            case CS_CMD_STOPSEQ: /* switch 1 */
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_StopBGM(globalCtx, csCtx, (CsCmdMusicChange*)cutscenePtr);
+                    Cutscene_Command_StopSequence(globalCtx, csCtx, (CsCmdMusicChange*)cutscenePtr);
                     cutscenePtr += 8;
                 }
                 break;
 
-            case CS_CMD_FADEBGM: /* switch 2 */
+            case CS_CMD_FADESEQ: /* switch 2 */
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_FadeBGM(globalCtx, csCtx, (CsCmdMusicFade*)cutscenePtr);
+                    Cutscene_Command_FadeSequence(globalCtx, csCtx, (CsCmdMusicFade*)cutscenePtr);
                     cutscenePtr += 0xC;
                 }
                 break;
 
-            case 0x12E: /* switch 1 */
+            case CS_CMD_PLAYAMBIENCE: /* switch 1 */
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EAD14(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_PlayAmbienceSequence(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += 8;
                 }
                 break;
