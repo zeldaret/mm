@@ -439,7 +439,6 @@ beginseg
     include "build/src/code/z_effect.o"
     include "build/data/code/z_effect.bss.o"
     include "build/src/code/z_effect_soft_sprite.o"
-    include "build/data/code/z_effect_soft_sprite.data.o"
     include "build/src/code/z_effect_soft_sprite_old_init.o"
     include "build/src/code/z_effect_soft_sprite_dlftbls.o"
     include "build/src/code/flg_set.o"

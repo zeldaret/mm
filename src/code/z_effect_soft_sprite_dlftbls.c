@@ -13,7 +13,7 @@
 #define EFFECT_SS_OVERLAY_UNSET \
     { 0 }
 
-EffectSsOverlay particleOverlayTable[] = {
+EffectSsOverlay gParticleOverlayTable[] = {
     EFFECT_SS_OVERLAY(Effect_Ss_Dust),
     EFFECT_SS_OVERLAY(Effect_Ss_Kirakira),
     EFFECT_SS_OVERLAY_UNSET,
