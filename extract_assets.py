@@ -77,21 +77,23 @@ def main():
     parser.add_argument("-Z", help="Pass the argument on to ZAPD, e.g. `-ZWunaccounted` to warn about unaccounted blocks in XMLs. Each argument should be passed separately, *without* the leading dash.", metavar="ZAPD_ARG", action="append")
     args = parser.parse_args()
 
-    badZAPDArg = False;
-    for i in range(len(args.Z)):
-        z = args.Z[i]
-        if z[0] == '-':
-            print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: argument \"{z}\" starts with \"-\", which is not supported.", file=os.sys.stderr);
-            badZAPDArg = True;
-        else:
-            args.Z[i] = "-" + z;
+    global ZAPDArgs;
+    ZAPDArgs = "";
+    if args.Z is not None:
+        badZAPDArg = False;
+        for i in range(len(args.Z)):
+            z = args.Z[i]
+            if z[0] == '-':
+                print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: argument \"{z}\" starts with \"-\", which is not supported.", file=os.sys.stderr);
+                badZAPDArg = True;
+            else:
+                args.Z[i] = "-" + z;
 
-    if badZAPDArg:
-        exit(1);
+        if badZAPDArg:
+            exit(1);
 
-    global ZAPDArgs
-    ZAPDArgs = " ".join(args.Z);
-    print("Using extra ZAPD arguments: " + ZAPDArgs);
+        ZAPDArgs = " ".join(args.Z);
+        print("Using extra ZAPD arguments: " + ZAPDArgs);
 
     global mainAbort
     mainAbort = Event()
