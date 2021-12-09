@@ -9,7 +9,9 @@ typedef void (*EnInvisibleRuppeActionFunc)(struct EnInvisibleRuppe*, GlobalConte
 
 typedef struct EnInvisibleRuppe {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x50];
+    /* 0x0144 */ ColliderCylinder collider;
+    /* 0x0190 */ s16 unk_190;
+    /* 0x0192 */ s16 unk_192;
     /* 0x0194 */ EnInvisibleRuppeActionFunc actionFunc;
 } EnInvisibleRuppe; // size = 0x198
 
