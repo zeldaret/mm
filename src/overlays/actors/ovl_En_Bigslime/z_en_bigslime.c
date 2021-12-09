@@ -2971,7 +2971,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx) {
 
 void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
     // 28 equidistance-spaced vtx Points (uniformally over the sphere)
-    static EnBigslimeBubbles bubblesInfoPtrInfo[] = {
+    static EnBigslimeBubbles bubblesInfo[] = {
         { 0, 0.3f },    { 6, 0.1f },    { 12, 0.45f }, { 18, 0.5f },   { 24, 0.6f },   { 30, 0.2f },   { 36, 0.4f },
         { 42, 0.25f },  { 48, 0.35f },  { 54, 0.65f }, { 60, 0.25f },  { 66, 0.55f },  { 72, 0.3f },   { 78, 0.1f },
         { 84, 0.45f },  { 90, 0.5f },   { 96, 0.6f },  { 102, 0.2f },  { 108, 0.4f },  { 114, 0.15f }, { 120, 0.35f },
@@ -3006,7 +3006,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
         sysMatrix = Matrix_GetCurrentState();
 
         for (i = 0; i < 28; i++) {
-            bubblesInfoPtr = &bubblesInfoPtrInfo[i];
+            bubblesInfoPtr = &bubblesInfo[i];
             dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][bubblesInfoPtr->v];
             sysMatrix->wx =
                 dynamicVtx->n.ob[0] * this->actor.scale.x * bubblesInfoPtr->scaleVtx + this->actor.world.pos.x;
