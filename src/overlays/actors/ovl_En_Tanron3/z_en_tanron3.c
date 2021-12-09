@@ -305,7 +305,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 Math_ApproachS(&this->actor.shape.rot.y, this->targetShapeRotation.y, 3, 0x500);
                 Math_ApproachS(&this->actor.shape.rot.x, this->targetShapeRotation.x, 3, 0xC00);
                 Math_ApproachS(&this->actor.shape.rot.z, this->targetShapeRotation.z, 3, 0xC00);
-                if ((Rand_ZeroOne() < 0.5f) & !(this->timer % 4)) {
+                if ((Rand_ZeroOne() < 0.5f) & !(this->timer & 0x3)) {
                     Vec3f effectPos;
 
                     effectPos.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
