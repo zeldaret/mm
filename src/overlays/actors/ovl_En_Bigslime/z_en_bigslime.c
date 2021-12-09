@@ -2901,7 +2901,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* dList, f
 
     Matrix_RotateY(rotation, MTXMODE_APPLY);
     Matrix_Scale(scaleX, 1.0f, scalez, MTXMODE_APPLY);
-    if (dList != &D_06011050[0]) {
+    if (dList != D_06011050) {
         gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                           COMBINED);
     }
