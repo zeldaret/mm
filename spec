@@ -525,7 +525,7 @@ beginseg
     include "build/data/code/code_801C2730.data.o"
     include "build/src/code/z_scene_proc.o"
     include "build/src/code/z_scene_table.o"
-    include "build/src/code/code_801323D0.o"
+    include "build/src/code/z_schedule.o"
     include "build/src/code/z_skelanime.o"
     include "build/src/code/z_skin.o"
     include "build/data/code/z_skin.bss.o"
