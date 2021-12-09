@@ -42,7 +42,8 @@ typedef struct {
     /* 0x0 */ u16 base;
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
-} CsCmdBase; // size = 0x6
+    /* 0x6 */ UNK_TYPE1 unk_06[0x02];
+} CsCmdBase; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u16 unk0;
@@ -115,7 +116,14 @@ typedef enum {
 
 typedef enum {
     /* 0x0000 */ CS_CMD_00,
+    /* 0x000A */ CS_CMD_TEXTBOX = 0xA,
+    /* 0x0097 */ CS_CMD_SET_LIGHTING = 0x97,
+    /* 0x0098 */ CS_CMD_SCENE_TRANS_FX,
+    /* 0x009C */ CS_CMD_FADEBGM = 0x9C,
     /* 0x009D */ CS_CMD_SETTIME = 0x9D,
+    /* 0x00C8 */ CS_CMD_SET_PLAYER_ACTION = 0xC8,
+    /* 0x012C */ CS_CMD_PLAYBGM = 0x12C,
+    /* 0x012D */ CS_CMD_STOPBGM = 0x12D,
 } CutsceneCmd;
 
 typedef union CutsceneData {

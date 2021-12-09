@@ -352,20 +352,20 @@ void EnGiant_PlaySound(EnGiant* this) {
 
 void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
     CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
-    f32 floatUnk10 = actorAction->unk10;
+    f32 floatUnk10 = actorAction->startPos.y;
     s32 pad[2];
-    f32 floatUnk1C = actorAction->unk1C;
+    f32 floatUnk1C = actorAction->endPos.y;
     f32 functionTemp;
 
-    functionTemp = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames);
+    functionTemp = Environment_LerpWeight(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames);
     this->actor.world.pos.y = ((floatUnk1C - floatUnk10) * functionTemp) + floatUnk10;
 }
 
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, this->unk_24A)) {
         EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->action) {
+            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -387,8 +387,8 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
 
     if (func_800EE29C(globalCtx, this->unk_24A)) {
         func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->action) {
+            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);

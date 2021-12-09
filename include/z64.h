@@ -753,8 +753,8 @@ typedef struct {
     /* 0xE2 */ s8 unk_E2;
     /* 0xE3 */ u8 unk_E3; // modified by unused func in EnWeatherTag
     /* 0xE4 */ u8 unk_E4;
-    /* 0xE5 */ u8 unk_E5;
-    /* 0xE6 */ u8 unk_E6[4];
+    /* 0xE5 */ u8 fillScreen;
+    /* 0xE6 */ u8 screenFillColor[4];
     /* 0xEA */ u8 unk_EA;
     /* 0xEB */ u8 unk_EB;
     /* 0xEC */ u8 unk_EC;

@@ -8,7 +8,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F5954.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F5A8C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpWeight.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F5B10.s")
 
