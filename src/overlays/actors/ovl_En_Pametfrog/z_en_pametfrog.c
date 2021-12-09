@@ -262,7 +262,7 @@ void EnPametfrog_Freeze(EnPametfrog* this) {
 void EnPametfrog_Thaw(EnPametfrog* this, GlobalContext* globalCtx) {
     this->freezeTimer = 0;
     if (this->drawEffect == GEKKO_DRAW_EFFECT_FROZEN) {
-        this->drawEffect = GEKKO_DRAW_EFFECT_NONE;
+        this->drawEffect = GEKKO_DRAW_EFFECT_THAW;
         this->collider.base.colType = COLTYPE_HIT6;
         this->collider.elements->info.elemType = ELEMTYPE_UNK1;
         this->unk_2C4 = 0.0f;
@@ -407,7 +407,7 @@ void EnPametfrog_JumpOnGround(EnPametfrog* this, GlobalContext* globalCtx) {
 
 void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_FIRE) {
-        this->drawEffect = GEKKO_DRAW_EFFECT_NONE;
+        this->drawEffect = GEKKO_DRAW_EFFECT_THAW;
         this->unk_2C4 = 3.0f;
         this->unk_2C8 = 0.75f;
     } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_LIGHT) {
@@ -1305,7 +1305,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
                 } else {
                     EnPametfrog_Thaw(this, globalCtx);
                     if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_FIRE) {
-                        this->drawEffect = GEKKO_DRAW_EFFECT_NONE;
+                        this->drawEffect = GEKKO_DRAW_EFFECT_THAW;
                         this->unk_2C8 = 0.75f;
                         this->unk_2C4 = 4.0f;
                     } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_LIGHT) {

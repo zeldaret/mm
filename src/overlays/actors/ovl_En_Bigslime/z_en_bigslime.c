@@ -941,7 +941,7 @@ void EnBigslime_GekkoFreeze(EnBigslime* this) {
 
 void EnBigslime_GekkoThaw(EnBigslime* this, GlobalContext* globalCtx) {
     if (this->gekkoDrawEffect == GEKKO_DRAW_EFFECT_FROZEN) {
-        this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_NONE;
+        this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_THAW;
         this->gekkoCollider.base.colType = COLTYPE_HIT6;
         this->gekkoCollider.info.elemType = ELEMTYPE_UNK1;
         this->unk_388 = 0.0f;
@@ -2651,7 +2651,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
                         this->unk_388 = 4.0f;
                         this->unk_38C = 0.75f;
                         if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) {
-                            this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_NONE;
+                            this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_THAW;
                         } else {
                             this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_LIGHT_ORBS;
                             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
@@ -2686,7 +2686,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
                         this->unk_388 = 3.0f;
                         this->unk_38C = 0.75f;
                         if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) {
-                            this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_NONE;
+                            this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_THAW;
                         } else {
                             this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_LIGHT_ORBS;
                             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
