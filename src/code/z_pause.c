@@ -1,7 +1,7 @@
 /*
  * File: z_pause.c
  * Description: Frame Advance debug feature
- * 
+ *
  * This allows you to advance through the game one frame at a time on command.
  * To advance a frame, hold Z and press R on the specified controller (see z_play).
  * Holding Z and R will advance a frame every half second.
@@ -26,8 +26,8 @@ void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx) {
 }
 
 /*
-* Returns true when frame advance is not active (game will run normally)
-*/
+ * Returns true when frame advance is not active (game will run normally)
+ */
 s32 FrameAdvance_Update(FrameAdvanceContext* frameAdvCtx, Input* input) {
     if (!frameAdvCtx->enabled || (CHECK_BTN_ALL(input->cur.button, BTN_Z) &&
                                   (CHECK_BTN_ALL(input->press.button, BTN_R) ||
