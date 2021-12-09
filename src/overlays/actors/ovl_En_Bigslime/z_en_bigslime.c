@@ -159,12 +159,14 @@ static Vtx sBigslimeStaticVtx[BIGSLIME_NUM_VTX] = {
 };
 
 // Dynamic data: used to draw the real shape and has 2 states
-static Vtx sBigslimeDynamicVtx[2][BIGSLIME_NUM_VTX] = { {
+static Vtx sBigslimeDynamicVtx[2][BIGSLIME_NUM_VTX] = {
+    {
 #include "overlays/ovl_En_Bigslime/sBigslimeDynamicState0Vtx.vtx.inc"
-                                                        },
-                                                        {
+    },
+    {
 #include "overlays/ovl_En_Bigslime/sBigslimeDynamicState1Vtx.vtx.inc"
-                                                        } };
+    },
+};
 
 // Target data: used to define the shape the dynamic vertices morph to
 static Vtx sBigslimeTargetVtx[BIGSLIME_NUM_VTX] = {
@@ -366,8 +368,8 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
-        if ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
-             (u8)isFrogReturnedFlags[this->actor.params - 1]) == 0) {
+        if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
+              (u8)isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&globalCtx2->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
                         this->actor.params);
@@ -648,7 +650,7 @@ void EnBigslime_UpdateBigslimeCollider(EnBigslime* this, GlobalContext* globalCt
         dim->height = (vtxRingMaxY[i] - vtxRingMinY[i + 1]) * this->actor.scale.y;
         dim->radius = maxScaleXScaleZ *
                       (vtxRingMaxXZDist[i] < vtxRingMaxXZDist[i + 1] ? vtxRingMaxXZDist[i + 1] : vtxRingMaxXZDist[i]);
-        dim->height = dim->height <= 0 ? 1 : dim->height;
+        dim->height = CLAMP_MIN(dim->height, 1);
         dim->pos.x = this->actor.world.pos.x;
         dim->pos.z = this->actor.world.pos.z;
     }
@@ -970,17 +972,17 @@ void EnBigslime_SetupCutsceneStartBattle(EnBigslime* this, GlobalContext* global
     EnBigslime_UpdateCameraIntroCs(this, globalCtx, 25);
 
     this->gekkoRot.y = this->actor.yawTowardsPlayer + 0x8000;
-    this->isInitJump = 0;
+    this->isInitJump = false;
     this->actionFunc = EnBigslime_CutsceneStartBattle;
 }
 
 void EnBigslime_CutsceneStartBattle(EnBigslime* this, GlobalContext* globalCtx) {
     if (this->isAnimUpdate) {
         EnBigslime_SetupCutsceneNoticePlayer(this);
-    } else if ((this->isInitJump == 0) && Math_ScaledStepToS(&this->gekkoRot.y, this->actor.yawTowardsPlayer, 0x200)) {
+    } else if (!this->isInitJump && Math_ScaledStepToS(&this->gekkoRot.y, this->actor.yawTowardsPlayer, 0x200)) {
         Animation_PlayOnce(&this->skelAnime, &D_060010F4);
         EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_JUMP);
-        this->isInitJump = 1;
+        this->isInitJump = true;
     }
 }
 
@@ -1957,9 +1959,9 @@ void EnBigslime_FrozenGround(EnBigslime* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->iceShardRefPos, &this->actor.world.pos);
     } else if ((this->freezeTimer < 20) || ((this->freezeTimer < 40) && ((this->freezeTimer % 2) != 0))) {
         invFreezerTimer = 1.0f / this->freezeTimer;
-        randFloat = Rand_ZeroFloat(4.0f * invFreezerTimer);
 
         // clang-format off
+        randFloat = Rand_ZeroFloat(4.0f * invFreezerTimer);
         randSign = Rand_ZeroOne() < 0.5f ? -1 : 1; \
         this->actor.world.pos.x = randSign * (1.0f + invFreezerTimer + randFloat) + this->iceShardRefPos.x;
         // clang-format on
@@ -2111,7 +2113,7 @@ void EnBigslime_SetupIdleLookAround(EnBigslime* this) {
     Animation_PlayOnce(&this->skelAnime, &D_060069FC);
     this->idleTimer = 60;
     this->actor.speedXZ = 0.0f;
-    if ((s16)(Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->gekkoRot.y) > 0) {
+    if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
         this->gekkoYaw = this->gekkoRot.y + ((u32)Rand_Next() >> 20) + 0x2000;
     } else {
         this->gekkoYaw = this->gekkoRot.y - ((u32)Rand_Next() >> 20) - 0x2000;
@@ -2132,7 +2134,7 @@ void EnBigslime_IdleLookAround(EnBigslime* this, GlobalContext* globalCtx) {
     }
 
     if ((this->skelAnime.animation == &D_060069FC) && Math_ScaledStepToS(&this->gekkoRot.y, this->gekkoYaw, 0x400)) {
-        if ((s16)(Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->gekkoRot.y) > 0) {
+        if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
             this->gekkoYaw = this->gekkoRot.y + ((u32)Rand_Next() >> 20) + 0x2000;
         } else {
             this->gekkoYaw = this->gekkoRot.y - ((u32)Rand_Next() >> 20) - 0x2000;
@@ -2354,7 +2356,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, GlobalContext* globalCtx) 
     subCamAt.y = this->actor.world.pos.y + 40.0f;
     subCamAt.z = this->actor.world.pos.z;
 
-    if ((s16)(Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.world.rot.y) > 0) {
+    if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->actor.world.rot.y) > 0) {
         yawOffset = this->actor.world.rot.y + 0x4000;
     } else {
         yawOffset = this->actor.world.rot.y - 0x4000;
@@ -2637,7 +2639,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
     if (this->gekkoCollider.base.acFlags & AC_HIT) {
         this->gekkoCollider.base.acFlags &= ~AC_HIT;
         if ((this->gekkoDrawEffect != GEKKO_DRAW_EFFECT_FROZEN) ||
-            ((this->gekkoCollider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3) == 0)) {
+            !(this->gekkoCollider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             EnBigslime_EndThrowMinislime(this);
             if (this->actor.colChkInfo.damageEffect != BIGSLIME_DMGEFF_HOOKSHOT) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {
