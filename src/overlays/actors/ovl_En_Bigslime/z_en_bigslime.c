@@ -2875,6 +2875,9 @@ void EnBigslime_UpdateGekko(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Related to transforming and drawing shadows
+ */
 void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* dList, f32 scaleX, f32 scalez, f32 scaleY,
                              s16 rotation, f32 alpha) {
     f32 yDistMinY;
