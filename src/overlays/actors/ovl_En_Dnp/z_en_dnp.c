@@ -255,7 +255,7 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
     static s32 D_80B3DE74[] = {
         0, 16, 14, 10, 18, 12, 5, 7, 2, 19, 21, 22, 24, 8,
     };
-    u32 temp_v0;
+    s32 temp_v0;
     s32 val;
 
     if (!(gSaveContext.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
@@ -266,7 +266,7 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
 
     if (func_800EE29C(globalCtx, 0x65)) {
         temp_v0 = func_800EE200(globalCtx, 0x65);
-        val = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+        val = globalCtx->csCtx.npcActions[temp_v0]->action;
         if (this->unk_324 != (u8)val) {
             func_80B3CC38(this, D_80B3DE74[val]);
             if (this->unk_340 == 16) {

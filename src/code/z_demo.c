@@ -1571,7 +1571,6 @@ s32 func_800EE200(GlobalContext* globalCtx, u16 arg1) {
 }
 
 s32 func_800EE29C(GlobalContext* globalCtx, u16 arg1) {
-
     if (globalCtx->csCtx.state != 0) {
         s32 index = func_800EE200(globalCtx, arg1);
 

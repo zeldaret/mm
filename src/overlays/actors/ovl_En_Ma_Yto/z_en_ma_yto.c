@@ -1053,10 +1053,10 @@ static u16 D_80B915F0 = 99;
 
 void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x22C) != 0) {
-        u32 csActionIndex = func_800EE200(globalCtx, 0x22C);
+        s32 csActionIndex = func_800EE200(globalCtx, 0x22C);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[csActionIndex]->startFrame) {
-            u16 action = globalCtx->csCtx.npcActions[csActionIndex]->unk0;
+            u16 action = globalCtx->csCtx.npcActions[csActionIndex]->action;
 
             if (1) {}
 

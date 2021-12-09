@@ -466,12 +466,12 @@ void func_8092D4D8(EnDns* this, GlobalContext* globalCtx) {
 
 void func_8092D5E8(EnDns* this, GlobalContext* globalCtx) {
     static s32 D_8092DE0C[] = { 0, 0, 4, 6 };
-    u32 temp_v0;
+    s32 temp_v0;
     u32 temp_v1;
 
     if (func_800EE29C(globalCtx, this->unk_2C8)) {
         temp_v0 = func_800EE200(globalCtx, this->unk_2C8);
-        temp_v1 = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+        temp_v1 = globalCtx->csCtx.npcActions[temp_v0]->action;
         if (this->unk_1D8 != (u8)temp_v1) {
             func_8092C63C(this, D_8092DE0C[temp_v1]);
             this->unk_1D8 = temp_v1;

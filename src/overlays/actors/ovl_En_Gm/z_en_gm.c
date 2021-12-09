@@ -1566,7 +1566,7 @@ void func_80950F2C(EnGm* this, GlobalContext* globalCtx) {
     s16 yaw;
 
     if (func_800EE29C(globalCtx, 0x20E)) {
-        sp2C = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x20E)]->unk0;
+        sp2C = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x20E)]->action;
         if (this->unk_259 != (sp2C & 0xFF)) {
             if (sp2C == 3) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHAIR_ROLL);

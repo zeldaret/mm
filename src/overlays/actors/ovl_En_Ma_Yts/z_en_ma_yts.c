@@ -403,13 +403,13 @@ void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
 static u16 D_80B8E32C = 99;
 void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x78) != 0) {
-        u32 actionIndex = func_800EE200(globalCtx, 0x78);
+        s32 actionIndex = func_800EE200(globalCtx, 0x78);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[actionIndex]->startFrame) {
-            if (globalCtx->csCtx.npcActions[actionIndex]->unk0 != D_80B8E32C) {
-                D_80B8E32C = globalCtx->csCtx.npcActions[actionIndex]->unk0;
+            if (globalCtx->csCtx.npcActions[actionIndex]->action != D_80B8E32C) {
+                D_80B8E32C = globalCtx->csCtx.npcActions[actionIndex]->action;
                 this->endCreditsFlag = 0;
-                switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+                switch (globalCtx->csCtx.npcActions[actionIndex]->action) {
                     case 1:
                         this->hasBow = true;
                         EnMaYts_ChangeAnim(this, 0);

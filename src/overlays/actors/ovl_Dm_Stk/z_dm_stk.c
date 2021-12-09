@@ -1128,21 +1128,21 @@ void func_80AA1C64(DmStk* this, GlobalContext* globalCtx) {
 
 void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
     s32 pad;
-    u32 temp_v0;
+    s32 temp_v0;
 
     if (func_800EE29C(globalCtx, 0x6B)) {
         temp_v0 = func_800EE200(globalCtx, 0x6B);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[temp_v0]->startFrame) {
-            if (this->unk_334 != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
-                this->unk_334 = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+            if (this->unk_334 != globalCtx->csCtx.npcActions[temp_v0]->action) {
+                this->unk_334 = globalCtx->csCtx.npcActions[temp_v0]->action;
                 if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
                     this->unk_32D = 6;
                 } else {
                     this->unk_32D = 9;
                 }
 
-                switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+                switch (globalCtx->csCtx.npcActions[temp_v0]->action) {
                     case 0:
                     case 1:
                         this->unk_2E0 = 3;
@@ -1711,7 +1711,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 gSPDisplayList(POLY_OPA_DISP++, D_06005870);
 
                 if (func_800EE29C(globalCtx, 0x201) &&
-                    (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x201)]->unk0 == 2) && (this->unk_337 >= 0)) {
+                    (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x201)]->action == 2) && (this->unk_337 >= 0)) {
                     Matrix_StatePush();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
                     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_337].segment);

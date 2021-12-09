@@ -691,8 +691,8 @@ void func_80BA4CB4(EnToto* this, GlobalContext* globalCtx) {
     CsCmdActorAction* action;
 
     action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x20D)];
-    if (this->unk2B5 != action->unk0) {
-        this->unk2B5 = action->unk0;
+    if (this->unk2B5 != action->action) {
+        this->unk2B5 = action->action;
         if (this->unk2B5 != 4) {
             if (this->unk2B5 == 3) {
                 Animation_MorphToPlayOnce(&this->skelAnime, &D_06001DF0, -4.0f);

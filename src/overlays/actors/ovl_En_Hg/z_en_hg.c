@@ -278,10 +278,11 @@ void func_80BCF93C(EnHg* this) {
 
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x1E4)) {
-        u32 actionIndex = func_800EE200(globalCtx, 0x1E4);
-        if (this->cutscenes[3] != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-            this->cutscenes[3] = globalCtx->csCtx.npcActions[actionIndex]->unk0;
-            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+        s32 actionIndex = func_800EE200(globalCtx, 0x1E4);
+
+        if (this->cutscenes[3] != globalCtx->csCtx.npcActions[actionIndex]->action) {
+            this->cutscenes[3] = globalCtx->csCtx.npcActions[actionIndex]->action;
+            switch (globalCtx->csCtx.npcActions[actionIndex]->action) {
                 case 1:
                     this->currentAnimation = 0;
                     func_800BDC5C(&this->skelAnime, sAnimations, 0);

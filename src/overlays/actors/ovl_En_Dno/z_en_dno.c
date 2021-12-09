@@ -869,12 +869,12 @@ void func_80A732C8(EnDno* this, GlobalContext* globalCtx) {
 void func_80A73408(EnDno* this, GlobalContext* globalCtx) {
     s32 phi_a2;
     u8 sp33 = true;
-    u32 temp_v0;
+    s32 temp_v0;
 
     if (func_800EE29C(globalCtx, 0x1DB)) {
         temp_v0 = func_800EE200(globalCtx, 0x1DB);
-        if (this->unk_468 != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
-            switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+        if (this->unk_468 != globalCtx->csCtx.npcActions[temp_v0]->action) {
+            switch (globalCtx->csCtx.npcActions[temp_v0]->action) {
                 case 1:
                     phi_a2 = 13;
                     break;
