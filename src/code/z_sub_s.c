@@ -1,7 +1,15 @@
+/*
+ * File: z_sub_s.c
+ * Description: Various miscellaneous helpers
+ */
+
 #include "global.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 //! @TODO: Should just return `EnDoor` instance after c and h file split
+/**
+ * Finds the first EnDoor instance with unk_1A4 == 5 and the specified unk_1A5.
+ */
 Actor* SubS_DoorFind(GlobalContext* globalCtx, s32 unk_1A5) {
     Actor* actor = NULL;
     EnDoor* door;
@@ -53,6 +61,9 @@ Actor* SubS_DoorFind(GlobalContext* globalCtx, s32 unk_1A5) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BB34.s")
 
+/**
+ * Finds the nearest actor instance of a specified Id and category to an actor.
+ */
 Actor* SubS_ActorFindNearest(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
     Actor* actorTmp;
@@ -125,6 +136,9 @@ Actor* SubS_ActorFindNearest(Actor* actor, GlobalContext* globalCtx, u8 actorCat
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D924.s")
 
+/**
+ * Finds the first actor instance of a specified Id and category.
+ */
 Actor* SubS_ActorFind(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
     Actor* actor = actorListStart;
 
@@ -169,6 +183,10 @@ Actor* SubS_ActorFind(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E5CC.s")
 
+/**
+ * Finds the first actor instance of a specified Id and category verified with a custom callback.
+ * The callback should return `true` when the actor is succesfully verified.
+ */
 Actor* SubS_ActorFindCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
                             s16 actorId, void* verifyData, VerifyActor verifyActor) {
     Actor* actorIter = actorListStart;
