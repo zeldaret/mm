@@ -879,7 +879,7 @@ void Cutscene_Command_TransitionFX(GlobalContext* globalCtx, CutsceneContext* cs
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_Command_TransitionFX.s")
 #endif
 
-// ??
+// Camera-related
 s32 func_800EC678(GlobalContext* globalCtx, CsCmdUnk5A* cmd) {
     s32 sp1C = 0;
 
@@ -1195,7 +1195,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_FADESEQ: 
+            case CS_CMD_FADESEQ:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1213,7 +1213,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_STOPAMBIENCE: 
+            case CS_CMD_FADEAMBIENCE: 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1222,7 +1222,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x130: 
+            case CS_CMD_130: 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1231,7 +1231,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x131: 
+            case CS_CMD_131: 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1240,7 +1240,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x132: 
+            case CS_CMD_132: 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1249,7 +1249,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x190: 
+            case CS_CMD_190: 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1258,7 +1258,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x9B: 
+            case CS_CMD_9B: 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1288,11 +1288,11 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x5A:
+            case CS_CMD_5A:
                 cutscenePtr = &cutscenePtr[func_800EC678(globalCtx, (CsCmdUnk5A*)cutscenePtr)];
                 break;
 
-            case 0x15E: 
+            case CS_CMD_15E: 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1301,7 +1301,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x15F: 
+            case CS_CMD_15F: 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1331,7 +1331,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case 0x99: 
+            case CS_CMD_99: 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {

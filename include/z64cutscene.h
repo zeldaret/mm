@@ -1,5 +1,5 @@
-#ifndef _Z64CUTSCENE_H_
-#define _Z64CUTSCENE_H_
+#ifndef Z64CUTSCENE_H
+#define Z64CUTSCENE_H
 
 #include "ultra64.h"
 #include "unk.h"
@@ -70,7 +70,9 @@ typedef struct {
     /* 0x0 */ u16 type;
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
-} CsCmdMusicFade; // size = 0x6
+    /* 0x6 */ u16 unk_06;
+    /* 0x8 */ u32 unk_08;
+} CsCmdMusicFade; // size = 0xC
 
 typedef struct {
     /* 0x0 */ u16 base;
@@ -115,19 +117,28 @@ typedef enum {
 } CutsceneState;
 
 typedef enum {
-    /* 0x0000 */ CS_CMD_00,
-    /* 0x000A */ CS_CMD_TEXTBOX = 0xA,
-    /* 0x0096 */ CS_CMD_MISC = 0x96,
-    /* 0x0097 */ CS_CMD_SET_LIGHTING,
-    /* 0x0098 */ CS_CMD_SCENE_TRANS_FX,
-    /* 0x009A */ CS_CMD_GIVETATL = 0x9A,
-    /* 0x009C */ CS_CMD_FADESEQ = 0x9C,
-    /* 0x009D */ CS_CMD_SETTIME = 0x9D,
-    /* 0x00C8 */ CS_CMD_SET_PLAYER_ACTION = 0xC8,
-    /* 0x012C */ CS_CMD_PLAYSEQ = 0x12C,
-    /* 0x012D */ CS_CMD_STOPSEQ,
-    /* 0x012E */ CS_CMD_PLAYAMBIENCE,
-    /* 0x012F */ CS_CMD_STOPAMBIENCE,
+    ///* 0x000 */ CS_CMD_00,
+    /* 0x00A */ CS_CMD_TEXTBOX = 0xA,
+    /* 0x05A */ CS_CMD_5A = 0x5A,
+    /* 0x096 */ CS_CMD_MISC = 0x96,
+    /* 0x097 */ CS_CMD_SET_LIGHTING,
+    /* 0x098 */ CS_CMD_SCENE_TRANS_FX,
+    /* 0x099 */ CS_CMD_99,
+    /* 0x09A */ CS_CMD_GIVETATL,
+    /* 0x09B */ CS_CMD_9B,
+    /* 0x09C */ CS_CMD_FADESEQ,
+    /* 0x09D */ CS_CMD_SETTIME,
+    /* 0x0C8 */ CS_CMD_SET_PLAYER_ACTION = 0xC8,
+    /* 0x12C */ CS_CMD_PLAYSEQ = 0x12C,
+    /* 0x130 */ CS_CMD_130 = 0x130,
+    /* 0x131 */ CS_CMD_131 = 0x131,
+    /* 0x132 */ CS_CMD_132 = 0x132,
+    /* 0x12D */ CS_CMD_STOPSEQ,
+    /* 0x12E */ CS_CMD_PLAYAMBIENCE,
+    /* 0x12F */ CS_CMD_FADEAMBIENCE,
+    /* 0x15E */ CS_CMD_15E = 0x15E,
+    /* 0x15F */ CS_CMD_15F,
+    /* 0x190 */ CS_CMD_190 = 0x190,
 } CutsceneCmd;
 
 typedef union CutsceneData {
