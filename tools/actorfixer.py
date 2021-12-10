@@ -157,8 +157,7 @@ animdict = {
     "func_8013A7C0": "SubS_DoorFind",
     "func_8013E640": "SubS_ActorFindCustom",
     "func_ActorCategoryIterateById": "SubS_ActorFind",
-    "func_8013BB7C": "SubS_ActorFindNearest"
-
+    "func_8013BB7C": "SubS_ActorFindNearest",
     
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",
