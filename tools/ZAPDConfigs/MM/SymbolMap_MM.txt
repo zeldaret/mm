@@ -1,1 +1,1 @@
-801D1DE0 gMtxClear
+801D1DE0 gIdentityMtx

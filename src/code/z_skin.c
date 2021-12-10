@@ -189,7 +189,7 @@ void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinP
     if (!(drawFlag & SKIN_DRAW_FLAG_CUSTOM_MATRIX)) {
         Mtx* mtx;
 
-        gSPMatrix(POLY_OPA_DISP++, &gMtxClear, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &skin->mtx);
         if (mtx == NULL) {
             goto close_disps;
