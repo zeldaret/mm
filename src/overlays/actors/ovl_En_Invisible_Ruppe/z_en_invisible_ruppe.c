@@ -59,21 +59,21 @@ void func_80C258A0(EnInvisibleRuppe* this, GlobalContext* globalCtx) {
 }
 
 void func_80C2590C(EnInvisibleRuppe* this, GlobalContext* globalCtx) {
-    if ((this->collider.base.ocFlags1 & 2) != 0) {
+    if (this->collider.base.ocFlags1 & OC1_HIT) {
         switch (this->actor.params & 3) {
             case 0:
                 play_sound(NA_SE_SY_GET_RUPY);
-                Item_DropCollectible(globalCtx, &this->actor.world.pos, 0x8000);
+                Item_DropCollectible(globalCtx, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_GREEN);
                 break;
 
             case 1:
                 play_sound(NA_SE_SY_GET_RUPY);
-                Item_DropCollectible(globalCtx, &this->actor.world.pos, 0x8001);
+                Item_DropCollectible(globalCtx, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_BLUE);
                 break;
 
             case 2:
                 play_sound(NA_SE_SY_GET_RUPY);
-                Item_DropCollectible(globalCtx, &this->actor.world.pos, 0x8002);
+                Item_DropCollectible(globalCtx, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_RED);
                 break;
         }
 
@@ -93,13 +93,13 @@ void EnInvisibleRuppe_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnInvisibleRuppe* this = THIS;
     s32 pad;
 
-    this->unk_190 = (this->actor.params & 0x1FC) >> 2;
+    this->unk_190 = INVISIBLERUPPE_GET_7F0(this);
 
     if (this->unk_190 == 0x7F) {
         this->unk_190 = -1;
     }
 
-    if (this->unk_190 >= 0 && Flags_GetSwitch(globalCtx, this->unk_190) != 0) {
+    if ((this->unk_190 >= 0) && Flags_GetSwitch(globalCtx, this->unk_190)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -107,16 +107,18 @@ void EnInvisibleRuppe_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
-    this->actionFunc = &func_80C2590C;
+    this->actionFunc = func_80C2590C;
 }
 
 void EnInvisibleRuppe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnInvisibleRuppe* this = THIS;
+
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void EnInvisibleRuppe_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnInvisibleRuppe* this = THIS;
+
     this->actionFunc(this, globalCtx);
     func_80C258A0(this, globalCtx);
 }
