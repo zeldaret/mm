@@ -270,12 +270,17 @@ rupees = int((src % bytes_per_mask) / bytes_per_rupee)
 #print("")
 
 if args.format == 'csv':
-    version = 1
+    version = 2
     git_object = git.Repo().head.object
     timestamp = str(git_object.committed_date)
     git_hash = git_object.hexsha
-    csv_list = [version, timestamp, git_hash, code, code_size, boot, boot_size,
-                ovl, ovl_size, src, asm, len(non_matching_functions)]
+    csv_list = [
+        version, timestamp, git_hash, src, total,
+        boot, boot_size, code, code_size, ovl, ovl_size,
+    ]
+    csv_list += [
+        assets, assets_total,
+    ]
     for assetCat in assetsCategories:
         csv_list += [assetsTracker[assetCat]["currentSize"], assetsTracker[assetCat]["totalSize"]]
 
