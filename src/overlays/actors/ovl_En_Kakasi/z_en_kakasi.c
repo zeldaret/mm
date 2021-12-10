@@ -329,7 +329,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 this->actor.flags &= ~0x10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
-                func_800B8500(&this->actor, &globalCtx->state, 9999.9f, 9999.9f, -1);
+                func_800B8500(&this->actor, globalCtx, 9999.9f, 9999.9f, -1);
             }
         }
     }
@@ -379,8 +379,8 @@ void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIM_IDLE);
     }
     if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
-        func_800B874C(&this->actor, &globalCtx->state, 100.0f, 80.0f);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B874C(&this->actor, globalCtx, 100.0f, 80.0f);
     }
 }
 
@@ -1103,7 +1103,7 @@ void EnKakasi_IdleRisen(EnKakasi* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnKakasi_RisenDialogue;
     } else {
-        func_800B8614(&this->actor, &globalCtx->state, 70.0f);
+        func_800B8614(&this->actor, globalCtx, 70.0f);
     }
 }
 

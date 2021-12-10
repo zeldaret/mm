@@ -1845,10 +1845,11 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 
 // Actor_PickUpExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_PickUp
 // This function is also used to toggle the "Speak" action on the A button
-s32 func_800B8500(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange, s32 exchangeItemId) {
-    Player* player = GET_PLAYER(gameState);
+s32 func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId) {
+    Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(gameState)) ||
+    if ((player->actor.flags & ACTOR_FLAG_100) ||
+        ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(&globalCtx->state)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1863,18 +1864,18 @@ s32 func_800B8500(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange, s
     return true;
 }
 
-s32 func_800B85E0(Actor* actor, GameState* gameState, f32 radius, s32 exchangeItemId) {
-    return func_800B8500(actor, gameState, radius, radius, exchangeItemId);
+s32 func_800B85E0(Actor* actor, GlobalContext* globalCtx, f32 radius, s32 exchangeItemId) {
+    return func_800B8500(actor, globalCtx, radius, radius, exchangeItemId);
 }
 
-s32 func_800B8614(Actor* actor, GameState* gameState, f32 radius) {
-    return func_800B85E0(actor, gameState, radius, EXCH_ITEM_NONE);
+s32 func_800B8614(Actor* actor, GlobalContext* globalCtx, f32 radius) {
+    return func_800B85E0(actor, globalCtx, radius, EXCH_ITEM_NONE);
 }
 
-s32 func_800B863C(Actor* actor, GameState* gameState) {
+s32 func_800B863C(Actor* actor, GlobalContext* globalCtx) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
-    return func_800B8614(actor, gameState, cylRadius);
+    return func_800B8614(actor, globalCtx, cylRadius);
 }
 
 s32 Actor_TextboxIsClosing(Actor* actor, GameState* gameState) {
@@ -1892,9 +1893,9 @@ s32 Actor_TextboxIsClosing(Actor* actor, GameState* gameState) {
  * Changes the actor the Player is focussing on
  * Fails if Player is not already focussing on an actor or in a talking state
  */
-s32 func_800B86C8(Actor* actor1, GameState* gameState, Actor* actor2) {
+s32 func_800B86C8(Actor* actor1, GlobalContext* globalCtx, Actor* actor2) {
     Actor* targetActor;
-    Player* player = GET_PLAYER(gameState);
+    Player* player = GET_PLAYER(globalCtx);
 
     targetActor = player->targetActor;
 
@@ -1907,8 +1908,8 @@ s32 func_800B86C8(Actor* actor1, GameState* gameState, Actor* actor2) {
     return false;
 }
 
-s32 Player_GetExchangeItemId(GameState* gameState) {
-    Player* player = GET_PLAYER(gameState);
+s32 Player_GetExchangeItemId(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
     return player->exchangeItemId;
 }
@@ -1923,10 +1924,10 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
 }
 
 // Similar to func_800B8500
-s32 func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange) {
-    Player* player = GET_PLAYER(gameState);
+s32 func_800B874C(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange) {
+    Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(gameState) ||
+    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(&globalCtx->state) ||
         (yRange < fabsf(actor->playerHeightRel)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
         (xzRange < actor->xzDistToPlayer)) {
         return false;
@@ -1937,18 +1938,18 @@ s32 func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange) {
     return true;
 }
 
-s32 func_800B8804(Actor* actor, GameState* gameState, f32 xzRange) {
-    return func_800B874C(actor, gameState, xzRange, 20.0f);
+s32 func_800B8804(Actor* actor, GlobalContext* globalCtx, f32 xzRange) {
+    return func_800B874C(actor, globalCtx, xzRange, 20.0f);
 }
 
-s32 func_800B882C(Actor* actor, GameState* gameState) {
+s32 func_800B882C(Actor* actor, GlobalContext* globalCtx) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
-    return func_800B8804(actor, gameState, cylRadius);
+    return func_800B8804(actor, globalCtx, cylRadius);
 }
 
-s32 func_800B886C(Actor* actor, GameState* gameState) {
-    if (!(GET_PLAYER(gameState)->actor.flags & 0x20000000)) {
+s32 func_800B886C(Actor* actor, GlobalContext* globalCtx) {
+    if (!(GET_PLAYER(globalCtx)->actor.flags & 0x20000000)) {
         return true;
     }
 
@@ -2093,8 +2094,8 @@ s32 Actor_NotMounted(GlobalContext* globalCtx, Actor* horse) {
     return false;
 }
 
-void func_800B8D10(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6) {
-    Player* player = GET_PLAYER(gameState);
+void func_800B8D10(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6) {
+    Player* player = GET_PLAYER(globalCtx);
 
     player->unk_B74 = arg6;
     player->unk_B75 = arg5;
@@ -2103,20 +2104,20 @@ void func_800B8D10(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 a
     player->unk_B7C = arg4;
 }
 
-void func_800B8D50(GameState* gameState, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5) {
-    func_800B8D10(gameState, actor, arg2, yaw, arg4, 3, arg5);
+void func_800B8D50(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5) {
+    func_800B8D10(globalCtx, actor, arg2, yaw, arg4, 3, arg5);
 }
 
-void func_800B8D98(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
-    func_800B8D50(gameState, actor, arg2, arg3, arg4, 0);
+void func_800B8D98(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
+    func_800B8D50(globalCtx, actor, arg2, arg3, arg4, 0);
 }
 
-void func_800B8DD4(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5) {
-    func_800B8D10(gameState, actor, arg2, arg3, arg4, 2, arg5);
+void func_800B8DD4(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5) {
+    func_800B8D10(globalCtx, actor, arg2, arg3, arg4, 2, arg5);
 }
 
-void func_800B8E1C(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
-    func_800B8DD4(gameState, actor, arg2, arg3, arg4, 0);
+void func_800B8E1C(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
+    func_800B8DD4(globalCtx, actor, arg2, arg3, arg4, 0);
 }
 
 void func_800B8E58(Player* player, u16 sfxId) {
@@ -3728,8 +3729,8 @@ s16 Actor_TestFloorInDirection(Actor* actor, GlobalContext* globalCtx, f32 dista
 /**
  * Returns true if the player is targeting the provided actor
  */
-s32 Actor_IsTargeted(GameState* gameState, Actor* actor) {
-    Player* player = GET_PLAYER(gameState);
+s32 Actor_IsTargeted(GlobalContext* globalCtx, Actor* actor) {
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags3 & 0x80000000) && actor->isTargeted) {
         return true;
@@ -3741,8 +3742,8 @@ s32 Actor_IsTargeted(GameState* gameState, Actor* actor) {
 /**
  * Returns true if the player is targeting an actor other than the provided actor
  */
-s32 Actor_OtherIsTargeted(GameState* gameState, Actor* actor) {
-    Player* player = GET_PLAYER(gameState);
+s32 Actor_OtherIsTargeted(GlobalContext* globalCtx, Actor* actor) {
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags3 & 0x80000000) && !actor->isTargeted) {
         return true;
@@ -3867,8 +3868,8 @@ void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void Actor_SpawnShieldParticlesMetal(GlobalContext* globalCtx, Vec3f* v) {
-    CollisionCheck_SpawnShieldParticlesMetal(globalCtx, v);
+void Actor_SpawnShieldParticlesMetal(GlobalContext* globalCtx, Vec3f* pos) {
+    CollisionCheck_SpawnShieldParticlesMetal(globalCtx, pos);
 }
 
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration) {
@@ -4002,20 +4003,20 @@ void func_800BCCDC(Vec3s* points, s32 pathCount, Vec3f* pos1, Vec3f* pos2, s32 a
 }
 
 // unused
-s32 func_800BD2B4(GameState* gameState, Actor* actor, s16* arg2, f32 arg3, u16 (*textIdCallback)(GameState*, Actor*),
-                  s16 (*arg5)(GameState*, Actor*)) {
-    if (Actor_ProcessTalkRequest(actor, gameState)) {
+s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3,
+                  u16 (*textIdCallback)(GlobalContext*, Actor*), s16 (*arg5)(GlobalContext*, Actor*)) {
+    if (Actor_ProcessTalkRequest(actor, &globalCtx->state)) {
         *arg2 = true;
         return true;
     } else if (*arg2) {
-        *arg2 = arg5(gameState, actor);
+        *arg2 = arg5(globalCtx, actor);
         return false;
-    } else if (!func_800B8934(gameState, actor)) {
+    } else if (!func_800B8934(&globalCtx->state, actor)) {
         return false;
-    } else if (!func_800B8614(actor, gameState, arg3)) {
+    } else if (!func_800B8614(actor, globalCtx, arg3)) {
         return false;
     } else {
-        actor->textId = textIdCallback(gameState, actor);
+        actor->textId = textIdCallback(globalCtx, actor);
         return false;
     }
 }
@@ -4283,8 +4284,8 @@ Actor* Actor_FindNearby(GlobalContext* globalCtx, Actor* inActor, s16 actorId, u
     return NULL;
 }
 
-s32 func_800BE184(GameState* gameState, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5) {
-    Player* player = GET_PLAYER(gameState);
+s32 func_800BE184(GlobalContext* globalCtx, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5) {
+    Player* player = GET_PLAYER(globalCtx);
     s16 phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
     s16 temp_t0 = actor->yawTowardsPlayer - arg5;
 

@@ -476,7 +476,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
                 ActorCutscene_SetIntentToPlay(this->cutscene);
             }
         }
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
         this->actionFunc = EnTrt_ItemGiven;
     }
 }
@@ -791,7 +791,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
         this->actionFunc = EnTrt_BeginInteraction;
     } else if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
                (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
-        func_800B8614(&this->actor, &globalCtx->state, 200.0f);
+        func_800B8614(&this->actor, globalCtx, 200.0f);
     }
     if (DECR(this->timer) == 0) {
         this->timer = 40;
@@ -837,7 +837,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
         this->actionFunc = EnTrt_BeginInteraction;
     } else if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
                (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
-        func_800B8614(&this->actor, &globalCtx->state, 200.0f);
+        func_800B8614(&this->actor, globalCtx, 200.0f);
     }
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
@@ -1020,7 +1020,7 @@ void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
         }
         func_80151938(globalCtx, this->textId);
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1039,7 +1039,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
     } else {
         if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= 50.0f) &&
             (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
-            func_800B8614(&this->actor, &globalCtx->state, 200.0f);
+            func_800B8614(&this->actor, globalCtx, 200.0f);
         }
     }
     if (talkState == 6 && func_80147624(globalCtx)) {
@@ -1093,7 +1093,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1116,7 +1116,7 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
                         player->stateFlags2 |= 0x20000000;
                         func_801518B0(globalCtx, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(globalCtx, this, true);
-                        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
+                        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
                         break;
                     case 1:
                     default:

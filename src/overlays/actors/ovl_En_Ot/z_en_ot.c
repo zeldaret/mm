@@ -543,7 +543,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
             func_80B5D114(this, globalCtx);
         } else if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) &&
                    (this->actor.xzDistToPlayer < 130.0f)) {
-            func_800B8614(&this->actor, &globalCtx->state, 130.0f);
+            func_800B8614(&this->actor, globalCtx, 130.0f);
         }
     }
 }
@@ -612,7 +612,7 @@ void func_80B5CB0C(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5CBA0(EnOt* this, GlobalContext* globalCtx) {
     this->actor.flags |= 0x10000;
-    func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
     this->actionFunc = func_80B5CBEC;
 }
 
@@ -623,7 +623,7 @@ void func_80B5CBEC(EnOt* this, GlobalContext* globalCtx) {
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
     }
 }
 
@@ -699,11 +699,11 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
     if (this->unk_32C & 0x800) {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
     } else {
         this->actor.flags &= ~0x10000;
         if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) && (this->actor.xzDistToPlayer < 130.0f)) {
-            func_800B8614(&this->actor, &globalCtx->state, 130.0f);
+            func_800B8614(&this->actor, globalCtx, 130.0f);
         }
     }
 

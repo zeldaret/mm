@@ -85,7 +85,7 @@ void func_80C06640(ObjMoonStone* this, GlobalContext* globalCtx) {
     } else {
         s32 phi_v0 = ABS_ALT(sp1A);
         if (phi_v0 < 0x1555) {
-            func_800B8614(&this->actor, &globalCtx->state, 80.0f);
+            func_800B8614(&this->actor, globalCtx, 80.0f);
         }
     }
 }

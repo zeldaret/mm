@@ -415,7 +415,7 @@ void func_80B97240(EnZot* this, GlobalContext* globalCtx) {
         func_80B97110(this, globalCtx);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, globalCtx) &&
                Actor_IsFacingPlayer(&this->actor, 0x3000)) {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 
@@ -528,7 +528,7 @@ void func_80B975F8(EnZot* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B973BC;
     } else {
-        func_800B8500(&this->actor, &globalCtx->state, 10000.0f, 1000.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, globalCtx, 10000.0f, 1000.0f, EXCH_ITEM_NONE);
     }
 }
 
@@ -588,7 +588,7 @@ void func_80B97708(EnZot* this, GlobalContext* globalCtx) {
         func_80B975F8(this, globalCtx);
         this->actionFunc = func_80B975F8;
     } else if (func_80B96DF0(this, globalCtx)) {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 
@@ -712,7 +712,7 @@ void func_80B97B5C(EnZot* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80B97A44;
         func_80B9787C(this, globalCtx);
     } else if (func_80B96DF0(this, globalCtx)) {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 
@@ -741,7 +741,7 @@ void func_80B97CC8(EnZot* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80B97C40;
         func_801518B0(globalCtx, 0x128B, &this->actor);
     } else if (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 
@@ -822,7 +822,7 @@ void func_80B97FD0(EnZot* this, GlobalContext* globalCtx) {
             func_80B96BEC(this, 6, 2);
         }
     } else if (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 
@@ -943,7 +943,7 @@ void func_80B9849C(EnZot* this, GlobalContext* globalCtx) {
         }
         this->actionFunc = func_80B98728;
     } else {
-        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -953,7 +953,7 @@ void func_80B9854C(EnZot* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B9849C;
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     } else {
         Actor_PickUp(&this->actor, globalCtx, this->unk_2D4, 10000.0f, 50.0f);
     }
@@ -1079,7 +1079,7 @@ void func_80B98998(EnZot* this, GlobalContext* globalCtx) {
         func_80B98178(this, globalCtx);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, globalCtx) &&
                Actor_IsFacingPlayer(&this->actor, 0x7000)) {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 
@@ -1145,7 +1145,7 @@ void func_80B98BF4(EnZot* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80B98AD0;
         }
     } else {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 
@@ -1155,17 +1155,17 @@ void func_80B98CA8(EnZot* this, GlobalContext* globalCtx) {
         func_8019B544(0xFFFF);
         this->actionFunc = func_80B98BF4;
         this->actor.flags |= 0x10000;
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B98AD0;
         func_80B98A4C(this, globalCtx);
     } else {
         if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, globalCtx)) {
-            func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+            func_800B8614(&this->actor, globalCtx, 120.0f);
         }
 
         if ((gSaveContext.playerForm == PLAYER_FORM_ZORA) || (this->actor.xzDistToPlayer < 100.0f)) {
-            func_800B874C(&this->actor, &globalCtx->state, 120.0, 100.0f);
+            func_800B874C(&this->actor, globalCtx, 120.0, 100.0f);
         }
     }
 
@@ -1257,7 +1257,7 @@ void func_80B990A4(EnZot* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80B98F94;
         func_80B98E10(this, globalCtx);
     } else if (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 
@@ -1309,7 +1309,7 @@ void func_80B992C0(EnZot* this, GlobalContext* globalCtx) {
         func_80B96BEC(this, 0, 0);
     } else {
         if (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) && (this->actor.xzDistToPlayer < 100.0f)) {
-            func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+            func_800B8614(&this->actor, globalCtx, 120.0f);
         }
         this->actor.speedXZ = 1.5f;
         func_80B96FB0(this);

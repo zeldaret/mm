@@ -82,7 +82,7 @@ void func_80C0883C(EnNnh* this, GlobalContext* globalCtx) {
         func_80C088A4(this);
         return;
     }
-    func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+    func_800B8614(&this->actor, globalCtx, 100.0f);
 }
 
 void func_80C088A4(EnNnh* this) {

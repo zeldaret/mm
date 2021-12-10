@@ -154,7 +154,7 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
         this->isTalking = true;
     } else if (!this->actionFunc(this, globalCtx)) {
-        func_800B863C(&this->dyna.actor, &globalCtx->state);
+        func_800B863C(&this->dyna.actor, globalCtx);
     }
 
     Collider_ResetCylinderAC(globalCtx, &this->collider.base);

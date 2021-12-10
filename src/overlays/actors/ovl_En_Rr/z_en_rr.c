@@ -330,7 +330,7 @@ void func_808FA4F4(EnRr* this, GlobalContext* globalCtx) {
         player->actor.world.pos.y += sp2C;
         player->actor.world.pos.z += sp30 * Math_CosS(this->actor.shape.rot.y);
 
-        func_800B8D50(&globalCtx->state, &this->actor, sp30, this->actor.shape.rot.y, sp2C, sp38);
+        func_800B8D50(globalCtx, &this->actor, sp30, this->actor.shape.rot.y, sp2C, sp38);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SUISEN_THROW);
     }
 }

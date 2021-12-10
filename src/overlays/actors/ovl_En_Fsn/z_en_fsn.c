@@ -198,7 +198,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) && this->cutsceneState == 0) {
         Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
             this->actor.textId = 0;
         }
@@ -739,7 +739,7 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
         } else if (((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= 15.0f)) &&
                    (player->actor.world.pos.y > 0.0f) &&
                    ((player->actor.world.pos.z >= -35.0f) && (player->actor.world.pos.z <= -20.0f))) {
-            func_800B8614(&this->actor, &globalCtx->state, 400.0f);
+            func_800B8614(&this->actor, globalCtx, 400.0f);
         }
     }
 }
@@ -1030,7 +1030,7 @@ void EnFsn_ResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
             this->actionFunc = EnFsn_ConverseBackroom;
         }
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1349,7 +1349,7 @@ void EnFsn_IdleBackroom(EnFsn* this, GlobalContext* globalCtx) {
         EnFsn_HandleConversationBackroom(this, globalCtx);
         this->actionFunc = EnFsn_ConverseBackroom;
     } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
-        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 

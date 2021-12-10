@@ -104,7 +104,7 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
             phi_v1 = ABS(temp_v0);
             if (phi_a0 >= 0x2AAB) {
                 if (phi_v1 < 0x238E) {
-                    func_800B8614(&this->actor, &globalCtx->state, 70.0f);
+                    func_800B8614(&this->actor, globalCtx, 70.0f);
                 }
             }
         }

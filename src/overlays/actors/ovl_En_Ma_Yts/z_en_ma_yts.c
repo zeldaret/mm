@@ -366,7 +366,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
         }
         EnMaYts_SetupDialogueHandler(this);
     } else if (ABS_ALT(sp26) < 0x4000) {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 

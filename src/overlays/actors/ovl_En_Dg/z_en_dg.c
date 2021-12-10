@@ -416,7 +416,7 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 0.0f;
         if (Player_GetMask(globalCtx) == PLAYER_MASK_TRUTH) {
             this->actor.flags |= 0x10000;
-            func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+            func_800B8614(&this->actor, globalCtx, 100.0f);
             this->actionFunc = func_8098BBEC;
         } else {
             this->actionFunc = func_8098BA64;
@@ -1100,7 +1100,7 @@ void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
         func_80989D38(this, globalCtx);
         this->actionFunc = func_8098BC54;
     } else {
-        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 

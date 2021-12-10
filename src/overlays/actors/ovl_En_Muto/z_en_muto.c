@@ -175,7 +175,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
         }
     }
 
-    func_800B8614(&this->actor, &globalCtx->state, 80.0f);
+    func_800B8614(&this->actor, globalCtx, 80.0f);
 }
 
 void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx) {
@@ -186,7 +186,7 @@ void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx) {
     if (this->targetActor != NULL) {
         this->shouldSetHeadRotation = true;
         this->cutsceneState = 1;
-        func_800B86C8(this->targetActor, &globalCtx->state, this->targetActor);
+        func_800B86C8(this->targetActor, globalCtx, this->targetActor);
     }
 
     this->isInDialogue = true;

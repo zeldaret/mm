@@ -269,10 +269,10 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= 0x10000;
-            func_800B8500(&this->actor, &globalCtx->state, 9999.9f, 9999.9f, EXCH_ITEM_NONE);
+            func_800B8500(&this->actor, globalCtx, 9999.9f, 9999.9f, EXCH_ITEM_NONE);
         } else {
             this->actor.flags &= ~0x10000;
-            func_800B8614(&this->actor, &globalCtx->state, 50.0f);
+            func_800B8614(&this->actor, globalCtx, 50.0f);
             if (globalCtx->sceneNum == 0x12) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(globalCtx, this->actor.home.rot.x)) {

@@ -240,7 +240,7 @@ s32 func_8095A978(EnOwl* this, GlobalContext* globalCtx, u16 textId, f32 targetD
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < targetDist) {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, &globalCtx->state, targetDist, arg4, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, globalCtx, targetDist, arg4, EXCH_ITEM_NONE);
     }
 
     return false;
@@ -253,7 +253,7 @@ s32 func_8095A9FC(EnOwl* this, GlobalContext* globalCtx, u16 textId) {
 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8500(&this->actor, &globalCtx->state, 350.0f, 1000.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, globalCtx, 350.0f, 1000.0f, EXCH_ITEM_NONE);
     }
 
     return false;
@@ -516,7 +516,7 @@ void func_8095B574(EnOwl* this, GlobalContext* globalCtx) {
         this->unk_406 = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, &globalCtx->state, 200.0f, 400.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, globalCtx, 200.0f, 400.0f, EXCH_ITEM_NONE);
     } else {
         this->actor.flags &= ~0x10000;
     }
@@ -726,11 +726,11 @@ void func_8095BE0C(EnOwl* this, GlobalContext* globalCtx) {
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
         if (this->actor.isTargeted) {
-            func_800B8500(&this->actor, &globalCtx->state, 200.0f, 200.0f, EXCH_ITEM_NONE);
+            func_800B8500(&this->actor, globalCtx, 200.0f, 200.0f, EXCH_ITEM_NONE);
         }
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, &globalCtx->state, 200.0f, 200.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, globalCtx, 200.0f, 200.0f, EXCH_ITEM_NONE);
     } else {
         this->actor.flags &= ~0x10000;
     }

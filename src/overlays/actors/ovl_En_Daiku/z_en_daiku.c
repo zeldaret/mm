@@ -234,7 +234,7 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
         s16 angle = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
         this->unk_280 = this->actor.yawTowardsPlayer;
         if ((this->unk_278 == ENDAIKU_PARAMS_FF_1) || (this->unk_278 == ENDAIKU_PARAMS_FF_2) || (angle <= 0x2890)) {
-            func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+            func_800B8614(&this->actor, globalCtx, 100.0f);
         }
     }
 }

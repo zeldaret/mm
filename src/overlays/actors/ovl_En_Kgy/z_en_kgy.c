@@ -601,7 +601,7 @@ void func_80B41CBC(EnKgy* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, globalCtx, 4);
     } else {
-        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -610,7 +610,7 @@ void func_80B41D64(EnKgy* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actionFunc = func_80B41CBC;
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     } else {
         Actor_PickUp(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
     }
@@ -862,7 +862,7 @@ void func_80B425A0(EnKgy* this, GlobalContext* globalCtx) {
         func_80B411DC(this, globalCtx, 0);
         func_80B40E18(this, this->actor.textId);
     } else if (this->actor.xzDistToPlayer < 200.0f) {
-        func_800B8614(&this->actor, &globalCtx->state, 210.0f);
+        func_800B8614(&this->actor, globalCtx, 210.0f);
     }
 }
 
@@ -963,7 +963,7 @@ void func_80B4296C(EnKgy* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~0x10000;
     } else {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_NONE);
     }
 }
 
@@ -1084,7 +1084,7 @@ void func_80B42D28(EnKgy* this, GlobalContext* globalCtx) {
             } else {
                 this->actor.textId = 0xC1D;
             }
-            func_800B8614(&this->actor, &globalCtx->state, 210.0f);
+            func_800B8614(&this->actor, globalCtx, 210.0f);
         }
 
         if ((this->unk_2D2 == 0) && (this->actor.xzDistToPlayer < 200.0f)) {

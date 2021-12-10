@@ -353,7 +353,7 @@ s32 func_8089A968(EnDinofos* this) {
 void func_8089A9B0(EnDinofos* this, GlobalContext* globalCtx) {
     if (func_8089A968(this)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
-            if (!Actor_OtherIsTargeted(&globalCtx->state, &this->actor) &&
+            if (!Actor_OtherIsTargeted(globalCtx, &this->actor) &&
                 (((this->actionFunc != func_8089C56C) && (Rand_ZeroOne() > 0.35f)) ||
                  ((this->actionFunc == func_8089C56C) && (Rand_ZeroOne() > 0.8f)))) {
                 func_8089C4F8(this);
@@ -636,7 +636,7 @@ void func_8089B8B0(EnDinofos* this, GlobalContext* globalCtx) {
 
     if (this->actionFunc != func_8089B98C) {
         Animation_MorphToLoop(&this->skelAnime, &D_06000580, -4.0f);
-        if (Actor_OtherIsTargeted(&globalCtx->state, &this->actor)) {
+        if (Actor_OtherIsTargeted(globalCtx, &this->actor)) {
             phi_f0 = 170.0f;
         } else {
             phi_f0 = 70.0f;
@@ -658,7 +658,7 @@ void func_8089B98C(EnDinofos* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     if (!func_8089AE00(this, globalCtx)) {
-        if (Actor_OtherIsTargeted(&globalCtx->state, &this->actor)) {
+        if (Actor_OtherIsTargeted(globalCtx, &this->actor)) {
             phi_f0 = 170.0f;
         } else {
             phi_f0 = 70.0f;
@@ -782,7 +782,7 @@ void func_8089BD28(EnDinofos* this, GlobalContext* globalCtx) {
         }
 
         this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
-        if (Actor_OtherIsTargeted(&globalCtx->state, &this->actor)) {
+        if (Actor_OtherIsTargeted(globalCtx, &this->actor)) {
             sp2C = 100.0f;
         }
 

@@ -304,7 +304,7 @@ void func_80AECA90(EnTk* this, GlobalContext* globalCtx) {
         globalCtx->msgCtx.unk11F10 = 0;
         func_80AEDE10(this, globalCtx);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
-        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 
@@ -707,7 +707,7 @@ void func_80AED940(EnTk* this, GlobalContext* globalCtx) {
             func_8013E8F8(&this->actor, globalCtx, 100.0f, 100.0f, 0, 0x4000, 0x4000);
         }
     } else {
-        func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
     }
 }
 

@@ -33,7 +33,7 @@ void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx) {
         yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y));
 
         if ((yawDiff < 0x2800) || ((this->actor.params == 1) && (yawDiff > 0x5800))) {
-            func_800B863C(&this->actor, &globalCtx->state);
+            func_800B863C(&this->actor, globalCtx);
         }
     }
 }

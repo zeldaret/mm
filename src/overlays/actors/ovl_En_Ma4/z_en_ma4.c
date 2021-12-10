@@ -368,7 +368,7 @@ void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
         EnMa4_SetupDialogueHandler(this);
     } else if (this->type != MA4_TYPE_ALIENS_WON || ABS_ALT(yaw) < 0x4000) {
         if (!(player->stateFlags1 & 0x800000)) {
-            func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+            func_800B8614(&this->actor, globalCtx, 100.0f);
         }
     }
 }
@@ -697,7 +697,7 @@ void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, GlobalContext* glob
         func_801518B0(globalCtx, 0x336E, &this->actor);
         this->actionFunc = EnMa4_HorsebackGameTalking;
     } else if ((gSaveContext.unk_3DE0[4] < 115 * 100)) { // timer < 115 seconds
-        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 
@@ -850,7 +850,7 @@ void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
         Player* player = GET_PLAYER(globalCtx);
 
         player->stateFlags1 |= 0x20;
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
         D_80AC0260 = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
@@ -872,7 +872,7 @@ void EnMa4_EndEponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~0x10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 

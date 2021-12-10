@@ -423,9 +423,9 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
         }
         func_809628BC(this);
     } else if (this->unk_54A == 2) {
-        func_800B8614(&this->actor, &globalCtx->state, 500.0f);
+        func_800B8614(&this->actor, globalCtx, 500.0f);
     } else {
-        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 100);
 }
@@ -940,7 +940,7 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
         player->stateFlags1 &= ~0x20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 

@@ -250,7 +250,7 @@ void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
         }
         this->actionFunc = func_809C6E30;
     } else {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 
     if (player->actor.world.pos.z < 135.0f) {
@@ -521,7 +521,7 @@ void func_809C72D8(EnSyatekiMan* this, GlobalContext* globalCtx) {
         }
         this->actionFunc = func_809C7990;
     } else {
-        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
 
@@ -796,7 +796,7 @@ void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_26A = 0;
         this->actionFunc = func_809C6E30;
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -858,7 +858,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_26A = 0;
         this->actionFunc = func_809C7990;
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 

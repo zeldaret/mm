@@ -993,7 +993,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
             func_80BAAB78(this, globalCtx);
             this->actionFunc = func_80BADA9C;
         } else if (this->actor.xzDistToPlayer < 200.0f) {
-            func_800B8614(&this->actor, &globalCtx->state, 200.0f);
+            func_800B8614(&this->actor, globalCtx, 200.0f);
         }
     }
     Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 0.1f);
@@ -1108,7 +1108,7 @@ void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
         func_801518B0(globalCtx, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isTargeted) {
-        func_800B863C(&this->actor, &globalCtx->state);
+        func_800B863C(&this->actor, globalCtx);
     }
     Actor_MoveWithGravity(&this->actor);
 }
@@ -1242,7 +1242,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
             func_801518B0(globalCtx, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, &globalCtx->state);
+            func_800B863C(&this->actor, globalCtx);
         }
     }
     Actor_MoveWithGravity(&this->actor);
@@ -1280,7 +1280,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
                 func_801518B0(globalCtx, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;
             } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-                func_800B863C(&this->actor, &globalCtx->state);
+                func_800B863C(&this->actor, globalCtx);
             }
         }
         Actor_MoveWithGravity(&this->actor);
@@ -1294,7 +1294,7 @@ void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
         gSaveContext.weekEventReg[0x51] |= 4;
     } else if (this->actor.xzDistToPlayer < 500.0f) {
         this->actor.flags |= 0x10000;
-        func_800B8614(&this->actor, &globalCtx->state, 500.0f);
+        func_800B8614(&this->actor, globalCtx, 500.0f);
     }
 }
 
@@ -1395,7 +1395,7 @@ void func_80BADE8C(EnSuttari* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80BAD130;
     } else {
         this->actor.flags |= 0x10000;
-        func_800B8614(&this->actor, &globalCtx->state, 500.0f);
+        func_800B8614(&this->actor, globalCtx, 500.0f);
     }
 }
 

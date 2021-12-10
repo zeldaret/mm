@@ -328,7 +328,7 @@ void func_80994F7C(EnSkb* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80995190;
         this->actor.speedXZ = 0.0f;
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && !(this->collider.base.acFlags & AC_HIT)) {
-        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 
@@ -358,7 +358,7 @@ void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_80995A30(this);
     } else if (!(this->collider.base.acFlags & AC_HIT)) {
-        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 

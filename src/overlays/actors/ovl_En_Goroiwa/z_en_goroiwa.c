@@ -1180,7 +1180,7 @@ void func_80941A10(EnGoroiwa* this, GlobalContext* globalCtx) {
                 }
             }
 
-            func_800B8D50(&globalCtx->state, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
+            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
 
             if (sp34 == 2) {
                 func_80941EB4(this);
@@ -1287,7 +1287,7 @@ void func_80941FA4(EnGoroiwa* this, GlobalContext* globalCtx) {
 
     if (func_8094156C(this, globalCtx) == 0) {
         if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
-            func_800B8D50(&globalCtx->state, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
+            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
             func_800B8E58(player, NA_SE_PL_BODY_HIT);
             if (((this->actor.home.rot.z & 3) == 1) || ((this->actor.home.rot.z & 3) == 2)) {
                 this->unk_1CC = 50;
@@ -1315,7 +1315,7 @@ void func_809420F0(EnGoroiwa* this, GlobalContext* globalCtx) {
 
     if (func_8094156C(this, globalCtx) == 0) {
         if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
-            func_800B8D50(&globalCtx->state, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
+            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
             func_800B8E58(player, NA_SE_PL_BODY_HIT);
             if (((this->actor.home.rot.z & 3) == 1) || ((this->actor.home.rot.z & 3) == 2)) {
                 this->unk_1CC = 50;

@@ -1595,7 +1595,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
                 if (func_800B8718(&this->actor, &globalCtx->state)) {
                     this->unk_33A = 2;
                 } else {
-                    func_800B874C(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer,
+                    func_800B874C(&this->actor, globalCtx, this->actor.xzDistToPlayer,
                                   fabsf(this->actor.playerHeightRel));
                 }
                 break;

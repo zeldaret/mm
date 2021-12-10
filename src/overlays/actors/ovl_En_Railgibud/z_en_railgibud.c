@@ -862,7 +862,7 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
         } else if (((this->actor.flags & 9) == 9) && !(this->collider.base.acFlags & AC_HIT)) {
-            func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+            func_800B8614(&this->actor, globalCtx, 100.0f);
         }
     } else {
         switch (Message_GetState(&globalCtx->msgCtx)) {

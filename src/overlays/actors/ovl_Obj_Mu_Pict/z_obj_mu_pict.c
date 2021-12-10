@@ -76,7 +76,7 @@ void func_80C06B70(ObjMuPict* this, GlobalContext* globalCtx) {
             func_80C06C54(this);
         }
     } else if (ABS_ALT(yawDiff) < 0x2AAA) {
-        func_800B8614(&this->actor, &globalCtx->state, 80.0f);
+        func_800B8614(&this->actor, globalCtx, 80.0f);
     }
 }
 

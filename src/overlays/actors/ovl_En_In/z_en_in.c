@@ -259,7 +259,7 @@ s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
             return 0;
         }
         Actor_PlaySfxAtPos(&player->actor, 0x83E);
-        func_800B8D98(&globalCtx->state, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
+        func_800B8D98(globalCtx, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
     }
     return 1;
 }
@@ -386,7 +386,7 @@ void func_808F395C(EnIn* this, GlobalContext* globalCtx) {
         this->actionFunc = func_808F5A34;
         this->unk48C = 1;
     } else {
-        func_800B8614(&this->actor, &globalCtx->state, 200.0f);
+        func_800B8614(&this->actor, globalCtx, 200.0f);
     }
 }
 
@@ -430,7 +430,7 @@ void func_808F3AD4(EnIn* this, GlobalContext* globalCtx) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -454,7 +454,7 @@ void func_808F3BD4(EnIn* this, GlobalContext* globalCtx) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -478,7 +478,7 @@ void func_808F3CD4(EnIn* this, GlobalContext* globalCtx) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -606,7 +606,7 @@ void func_808F4054(GlobalContext* globalCtx, EnIn* this, s32 arg2, u16 textId) {
 }
 
 void func_808F4108(EnIn* this, GlobalContext* globalCtx, u16 textId) {
-    func_800B86C8(&this->actor, &globalCtx->state, &this->unk4A4->actor);
+    func_800B86C8(&this->actor, globalCtx, &this->unk4A4->actor);
     this->actor.textId = 0;
     this->unk4A4->actor.textId = textId;
     this->unk4A4->unk48C = 2;
@@ -1295,10 +1295,10 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (this->actor.xyzDistToPlayerSq <= SQ(80.0f)) {
-        if (func_800B8614(&this->actor, &globalCtx->state, 80.0f)) {
+        if (func_800B8614(&this->actor, globalCtx, 80.0f)) {
             this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
         }
-    } else if (func_800B863C(&this->actor, &globalCtx->state)) {
+    } else if (func_800B863C(&this->actor, globalCtx)) {
         this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
     }
     return 0;

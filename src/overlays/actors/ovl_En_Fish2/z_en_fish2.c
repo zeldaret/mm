@@ -429,7 +429,7 @@ void func_80B28C14(EnFish2* this, GlobalContext* globalCtx) {
             itemAction = itemAction->next;
         }
 
-        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 

@@ -344,7 +344,7 @@ void func_80A71C3C(EnDno* this, GlobalContext* globalCtx) {
         globalCtx->msgCtx.unk11F10 = 0;
         func_80A71E54(this, globalCtx);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
-        func_800B8614(&this->actor, &globalCtx->state, 60.0f);
+        func_800B8614(&this->actor, globalCtx, 60.0f);
     }
 }
 
@@ -531,13 +531,12 @@ void func_80A724B8(EnDno* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80A725E0(this, globalCtx);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
-        func_800B8614(&this->actor, &globalCtx->state, 60.0f);
+        func_800B8614(&this->actor, globalCtx, 60.0f);
     }
 }
 
 void func_80A7256C(EnDno* this, GlobalContext* globalCtx) {
-    func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                  EXCH_ITEM_MINUS1);
+    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, EXCH_ITEM_MINUS1);
 }
 
 void func_80A72598(EnDno* this, GlobalContext* globalCtx) {

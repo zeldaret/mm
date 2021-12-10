@@ -103,7 +103,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
         }
         EnGinkoMan_SetupDialogue(this);
     } else if (ABS_ALT(yaw) < 0x1555) {
-        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
+        func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 
@@ -559,7 +559,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
             EnGinkoMan_SetupIdle(this);
         }
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, globalCtx, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 

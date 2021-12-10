@@ -225,7 +225,7 @@ void func_80BCF710(EnHg* this, GlobalContext* globalCtx) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_801518B0(globalCtx, 0x24F, &this->actor);
         } else {
-            func_800B8614(&this->actor, &globalCtx->state, 80.0f);
+            func_800B8614(&this->actor, globalCtx, 80.0f);
         }
     }
 }
