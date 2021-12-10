@@ -328,6 +328,7 @@ typedef enum {
     /* 0x8D */ GI_MASK_BLAST,
     /* 0x8E */ GI_MASK_SCENTS,
     /* 0x8F */ GI_MASK_GIANT,
+    /* 0x92 */ GI_MILK = 0x92,
     /* 0x96 */ GI_MOON_TEAR = 0x96,
     /* 0x97 */ GI_DEED_LAND,
     /* 0x98 */ GI_DEED_SWAMP,
