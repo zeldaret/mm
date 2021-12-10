@@ -7,7 +7,8 @@ struct EnInvisibleRuppe;
 
 typedef void (*EnInvisibleRuppeActionFunc)(struct EnInvisibleRuppe*, GlobalContext*);
 
-#define INVISIBLERUPPE_GET_7F0(thisx) (((thisx)->actor.params & 0x1FC) >> 2)
+#define INVISIBLERUPPE_GET_3(thisx) ((thisx)->actor.params & 3)
+#define INVISIBLERUPPE_GET_1FC(thisx) (((thisx)->actor.params & 0x1FC) >> 2)
 
 typedef struct EnInvisibleRuppe {
     /* 0x0000 */ Actor actor;
