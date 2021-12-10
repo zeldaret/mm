@@ -10,7 +10,7 @@ typedef void (*BgGoronOyuActionFunc)(struct BgGoronOyu*, GlobalContext*);
 typedef struct BgGoronOyu {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgGoronOyuActionFunc actionFunc;
-    /* 0x160 */ u8 unk_160[4];
+    /* 0x160 */ UNK_TYPE unk_160;
     /* 0x164 */ f32 unk_164;
     /* 0x168 */ Vec3f waterBoxPos;
     /* 0x174 */ f32 waterBoxXLength;

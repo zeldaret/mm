@@ -151,8 +151,8 @@ void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx) {
 }
 
 void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgGoronOyu* this = THIS;
     s32 pad;
+    BgGoronOyu* this = THIS;
     CollisionHeader* colHeader = NULL;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
