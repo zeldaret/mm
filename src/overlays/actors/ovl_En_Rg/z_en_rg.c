@@ -1,7 +1,7 @@
 /*
  * File: z_en_rg.c
  * Overlay: ovl_En_Rg
- * Description: Racetrack Goron
+ * Description: Racing Goron
  */
 
 #include "z_en_rg.h"

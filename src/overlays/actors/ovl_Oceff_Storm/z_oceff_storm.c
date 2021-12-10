@@ -1,7 +1,7 @@
 /*
  * File: z_oceff_storm.c
  * Overlay: ovl_Oceff_Storm
- * Description:
+ * Description: Song of Storms Ocarina Effect
  */
 
 #include "z_oceff_storm.h"

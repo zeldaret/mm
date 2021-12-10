@@ -1,5 +1,5 @@
 /*
- * File z_en_clear_tag.c
+ * File: z_en_clear_tag.c
  * Overlay: ovl_En_Clear_Tag
  * Description: Various effects: explosions and pops, splashes, light rays
  */
@@ -416,7 +416,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                 for (i = 0; i < 54; i++) {
                     lightRayMaxScale =
                         sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
-                    Matrix_InsertYRotation_f(Rand_ZeroFloat(M_PI * 2), 0);
+                    Matrix_InsertYRotation_f(Rand_ZeroFloat(M_PI * 2), MTXMODE_NEW);
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(M_PI * 2));
                     Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                     accel.x = vel.x * -0.03f;
@@ -489,7 +489,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             pos = this->actor.world.pos;
             for (i = 0; i < 44; i++) {
                 lightRayMaxScale = sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
-                Matrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
+                Matrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
                 Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                 Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                 accel.x = vel.x * -0.03f;
@@ -642,7 +642,7 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
                     sphereCenter.y += 5.0f;
 
                     // Check if the debris has hit the ground.
-                    if (func_800C5A20(&globalCtx->colCtx, &sphereCenter, 11.0f)) {
+                    if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &sphereCenter, 11.0f)) {
                         effect->position.y = originalYPosition;
 
                         // Bounce the debris effect.
@@ -976,8 +976,8 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
                  */
                 ySurface = effect->position.y;
-                if (func_800CA1AC(globalCtx, &globalCtx->colCtx, effect->position.x + vec.x, effect->position.z + vec.z,
-                                  &ySurface, &waterBox)) {
+                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, effect->position.x + vec.x,
+                                         effect->position.z + vec.z, &ySurface, &waterBox)) {
                     if ((effect->position.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
                         Matrix_InsertTranslation(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,
