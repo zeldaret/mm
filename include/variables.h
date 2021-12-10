@@ -3313,7 +3313,7 @@ extern Arena sZeldaArena;
 // extern UNK_TYPE1 D_801F6AD4;
 // extern UNK_TYPE1 D_801F6AD5;
 // extern UNK_TYPE1 D_801F6ADA;
-// extern UNK_TYPE1 D_801F6AE0;
+// extern UNK_TYPE1 sSkyboxDrawMatrix;
 // extern UNK_TYPE1 D_801F6AF0;
 // extern UNK_TYPE1 D_801F6AF2;
 // extern UNK_TYPE4 D_801F6B00;

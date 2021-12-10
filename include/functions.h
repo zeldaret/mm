@@ -2665,11 +2665,11 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 ar
 void func_80143148(SkyboxContext* skyboxCtx, s32 arg1);
 void func_801431E8(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType);
 void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType);
-void func_801434E4(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType);
-// void func_801435A0(void);
-// void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7);
-// void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_80143A04(void);
+void func_801434E4(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType);    
+Mtx* SkyboxDraw_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z);
+void SkyboxDraw_SetColors(SkyboxContext* skyboxCtx, u8 primR, u8 primG, u8 primB, u8 envR, u8 envG, u8 envB);
+void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyboxId, s16 blend, f32 x, f32 y, f32 z);
+void SkyboxDraw_Noop(SkyboxContext* skyboxCtx);
 void func_80143A10(u8 owlId);
 // void func_80143A54(void);
 void func_80143AC4(void);
