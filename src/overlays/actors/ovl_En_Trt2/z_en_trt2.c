@@ -1,7 +1,7 @@
 /*
  * File: z_en_trt2.c
  * Overlay: ovl_En_Trt2
- * Description:
+ * Description: Kotake in Southern Swamp and Woods of Mystery
  */
 
 #include "z_en_trt2.h"
