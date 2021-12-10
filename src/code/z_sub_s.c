@@ -63,7 +63,7 @@ Actor* SubS_ActorFindNearest(Actor* actor, GlobalContext* globalCtx, u8 actorCat
 
     do {
         actorIter = SubS_ActorFind(globalCtx, actorIter, actorCategory, actorId);
-        
+
         actorTmp = actorIter;
         if (actorTmp == NULL) {
             break;
@@ -170,7 +170,7 @@ Actor* SubS_ActorFind(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E5CC.s")
 
 Actor* SubS_ActorFindCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
-                               s16 actorId, void* verifyData, VerifyActor verifyActor) {
+                            s16 actorId, void* verifyData, VerifyActor verifyActor) {
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
