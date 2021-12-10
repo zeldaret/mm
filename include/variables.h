@@ -4019,14 +4019,14 @@ extern Gfx D_05007890[];
 extern UNK_TYPE D_050078A0;
 extern UNK_TYPE D_05007938;
 extern Gfx D_05007980[];
-extern UNK_TYPE D_05007E00;
-extern UNK_TYPE D_05008018;
+extern Gfx D_05007E00[];
+extern CollisionHeader D_05008018;
 extern UNK_TYPE D_050085F0;
 extern Gfx D_05017EA0[]; // pot displaylist
 extern Gfx D_05018090[]; // pot break shard displaylist
 extern UNK_TYPE D_050182A8;
-extern UNK_TYPE D_0501B508;
-extern UNK_TYPE D_0501C058;
+extern Gfx D_0501B508[];
+extern Gfx D_0501C058[];
 extern Gfx D_0501D980[];
 extern Gfx D_050219E0[];
 extern UNK_TYPE D_05023008;
