@@ -2,12 +2,12 @@
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 //! @TODO: Should just return `EnDoor` instance after c and h file split
-Actor* SubS_GetDoorByUnk1A5(GlobalContext* globalCtx, s32 unk_1A5) {
+Actor* SubS_DoorFind(GlobalContext* globalCtx, s32 unk_1A5) {
     Actor* actor = NULL;
     EnDoor* door;
 
     while (true) {
-        actor = SubS_GetActorById(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        actor = SubS_ActorFind(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)actor;
 
         if (actor == NULL) {
@@ -53,7 +53,7 @@ Actor* SubS_GetDoorByUnk1A5(GlobalContext* globalCtx, s32 unk_1A5) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BB34.s")
 
-Actor* SubS_GetClosestActorById(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
+Actor* SubS_ActorFindNearest(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
     Actor* actorTmp;
     f32 dist;
@@ -62,7 +62,7 @@ Actor* SubS_GetClosestActorById(Actor* actor, GlobalContext* globalCtx, u8 actor
     s32 isSetup = false;
 
     do {
-        actorIter = SubS_GetActorById(globalCtx, actorIter, actorCategory, actorId);
+        actorIter = SubS_ActorFind(globalCtx, actorIter, actorCategory, actorId);
         
         actorTmp = actorIter;
         if (actorTmp == NULL) {
@@ -125,7 +125,7 @@ Actor* SubS_GetClosestActorById(Actor* actor, GlobalContext* globalCtx, u8 actor
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D924.s")
 
-Actor* SubS_GetActorById(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
+Actor* SubS_ActorFind(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
     Actor* actor = actorListStart;
 
     if (actor == NULL) {
@@ -169,7 +169,7 @@ Actor* SubS_GetActorById(GlobalContext* globalCtx, Actor* actorListStart, u8 act
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E5CC.s")
 
-Actor* SubS_GetActorByFunction(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
+Actor* SubS_ActorFindCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
                                s16 actorId, void* verifyData, VerifyActor verifyActor) {
     Actor* actorIter = actorListStart;
 

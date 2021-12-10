@@ -429,7 +429,7 @@ void func_80C11338(EnThiefbird* this, GlobalContext* globalCtx) {
     this->unk_3EC = NULL;
 
     do {
-        item = (EnItem00*)SubS_GetActorById(globalCtx, &item->actor, ACTORCAT_MISC, ACTOR_EN_ITEM00);
+        item = (EnItem00*)SubS_ActorFind(globalCtx, &item->actor, ACTORCAT_MISC, ACTOR_EN_ITEM00);
         if (item != NULL) {
             if (item->unk152 > 0) {
                 if (Actor_XZDistanceBetweenActors(&player->actor, &item->actor) > 10.0f) {

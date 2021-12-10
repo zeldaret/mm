@@ -154,10 +154,10 @@ animdict = {
     "MainHeap_Init": "ZeldaArena_Init",
     "MainHeap_Cleanup": "ZeldaArena_Cleanup",
     "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
-    "func_8013A7C0": "SubS_GetDoorByUnk1A5",
-    "func_8013E640": "SubS_GetActorByFunction",
-    "func_ActorCategoryIterateById": "SubS_GetActorById",
-    "func_8013BB7C": "SubS_GetClosestActorById"
+    "func_8013A7C0": "SubS_DoorFind",
+    "func_8013E640": "SubS_ActorFindCustom",
+    "func_ActorCategoryIterateById": "SubS_ActorFind",
+    "func_8013BB7C": "SubS_ActorFindNearest"
 
     
     "skelAnime.unk03": "skelAnime.taper",
