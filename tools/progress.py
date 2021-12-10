@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, csv, git, json, os, re
+import argparse, csv, git, json, os, re, sys
 
 parser = argparse.ArgumentParser()
 
@@ -14,6 +14,9 @@ NOT_ATTEMPTED_PATTERN = r'#pragma\s+GLOBAL_ASM\s*\(\s*"(.*?)"\s*\)'
 
 # TODO: consider making this a parameter of this script
 GAME_VERSION = "mm.us.rev1"
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 def GetFunctionsByPattern(pattern, files):
     functions = []
@@ -86,16 +89,27 @@ not_attempted_functions = list(set(not_attempted_functions).difference(non_match
 if not args.matching:
     non_matching_functions = []
 
-# Get asset files
-archive_files = GetCsvFilelist(GAME_VERSION, "archive.csv")
-audio_files = GetCsvFilelist(GAME_VERSION, "audio.csv")
-deleted_files = GetCsvFilelist(GAME_VERSION, "deleted.csv")
-interface_files = GetCsvFilelist(GAME_VERSION, "interface.csv")
-misc_files = GetCsvFilelist(GAME_VERSION, "misc.csv")
-object_files = GetCsvFilelist(GAME_VERSION, "object.csv")
-scene_files = GetCsvFilelist(GAME_VERSION, "scene.csv")
-segment_files = GetCsvFilelist(GAME_VERSION, "segment.csv")
-text_files = GetCsvFilelist(GAME_VERSION, "text.csv")
+assetsCategories = [
+    "archive",
+    "audio",
+    "deleted",
+    "interface",
+    "misc",
+    "objects",
+    "scenes",
+    "segment",
+    "text",
+]
+assetsTracker = dict()
+
+for assetCat in assetsCategories:
+    assetsTracker[assetCat] = dict()
+    # Get asset files
+    assetsTracker[assetCat]["files"] = GetCsvFilelist(GAME_VERSION, f"{assetCat}.csv")
+    assetsTracker[assetCat]["currentSize"] = 0
+    assetsTracker[assetCat]["totalSize"] = 0
+    assetsTracker[assetCat]["percent"] = 0
+
 
 # Initialize all the code values
 src = 0
@@ -108,16 +122,6 @@ asm_code = 0
 asm_boot = 0
 asm_ovl = 0
 asm_libultra = 0
-
-archive = 0
-audio = 0
-deleted = 0
-interface = 0
-misc = 0
-object_ = 0
-scene = 0
-segment = 0
-text = 0
 
 for line in map_file:
     line_split =  list(filter(None, line.split(" ")))
@@ -148,24 +152,13 @@ for line in map_file:
                     asm_ovl += file_size
 
         if (section == ".data"):
-            if (obj_file.startswith("build/assets/archive")):
-                archive += file_size
-            elif (obj_file.startswith("build/assets/audio")):
-                audio += file_size
-            elif (obj_file.startswith("build/assets/deleted")):
-                deleted += file_size
-            elif (obj_file.startswith("build/assets/interface")):
-                interface += file_size
-            elif (obj_file.startswith("build/assets/misc")):
-                misc += file_size
-            elif (obj_file.startswith("build/assets/objects")):
-                object_ += file_size
-            elif (obj_file.startswith("build/assets/scenes")):
-                scene += file_size
-            elif (obj_file.startswith("build/assets/segment")):
-                segment += file_size
-            elif (obj_file.startswith("build/assets/text")):
-                text += file_size
+            if (obj_file.startswith("build/assets/")):
+                assetCat = obj_file.split("/")[2]
+                if assetCat in assetsTracker:
+                    assetsTracker[assetCat]["currentSize"] += file_size
+                else:
+                    eprint(f"Found file '{obj_file.strip()}' in unknown asset category '{assetCat}'")
+                    eprint("I'll ignore this for now, but please fix it!")
 
 # Add libultra to boot.
 src_boot += src_libultra
@@ -207,33 +200,9 @@ ovl_size = src_ovl + asm_ovl
 handwritten = 0 # Currently unsure of any handwritten asm in MM
 
 # Calculate size of all assets
-archive_size = 0
-audio_size = 0
-deleted_size = 0
-interface_size = 0
-misc_size = 0
-object_size = 0
-scene_size = 0
-segment_size = 0
-text_size = 0
-for index, f in archive_files:
-    archive_size += os.stat(os.path.join("baserom", f)).st_size
-for index, f in audio_files:
-    audio_size += os.stat(os.path.join("baserom", f)).st_size
-for index, f in deleted_files:
-    deleted_size += os.stat(os.path.join("baserom", f)).st_size
-for index, f in interface_files:
-    interface_size += os.stat(os.path.join("baserom", f)).st_size
-for index, f in misc_files:
-    misc_size += os.stat(os.path.join("baserom", f)).st_size
-for index, f in object_files:
-    object_size += os.stat(os.path.join("baserom", f)).st_size
-for index, f in scene_files:
-    scene_size += os.stat(os.path.join("baserom", f)).st_size
-for index, f in segment_files:
-    segment_size += os.stat(os.path.join("baserom", f)).st_size
-for index, f in text_files:
-    text_size += os.stat(os.path.join("baserom", f)).st_size
+for assetCat in assetsTracker:
+    for index, f in assetsTracker[assetCat]["files"]:
+        assetsTracker[assetCat]["totalSize"] += os.stat(os.path.join("baserom", f)).st_size
 
 # Calculate asm and src totals
 src = src_code + src_boot + src_ovl
@@ -247,8 +216,8 @@ asm += non_matching_asm + not_attempted_asm
 total = src + asm
 
 # Calculate assets totals
-assets = archive + audio + deleted + interface + misc + object_ + scene + segment + text
-assets_total = archive_size + audio_size + deleted_size + interface_size + misc_size + object_size + scene_size + segment_size + text_size
+assets = sum(x["currentSize"] for x in assetsTracker.values())
+assets_total = sum(x["totalSize"] for x in assetsTracker.values())
 
 # Convert vaules to percentages
 src_percent = 100 * src / total
@@ -258,15 +227,9 @@ boot_percent = 100 * boot / boot_size
 ovl_percent = 100 * ovl / ovl_size
 
 assets_percent = 100 * assets / assets_total
-archive_percent = 100 * archive / archive_size
-audio_percent = 100 * audio / audio_size
-deleted_percent = 100 * deleted / deleted_size
-interface_percent = 100 * interface / interface_size
-misc_percent = 100 * misc / misc_size
-object_percent = 100 * object_ / object_size
-scene_percent = 100 * scene / scene_size
-segment_percent = 100 * segment / segment_size
-text_percent = 100 * text / text_size
+
+for assetCat in assetsTracker:
+    assetsTracker[assetCat]["percent"] = 100 * assetsTracker[assetCat]["currentSize"] / assetsTracker[assetCat]["totalSize"]
 
 # convert bytes to masks and rupees
 num_masks = 24
@@ -311,17 +274,12 @@ if args.format == 'csv':
     git_object = git.Repo().head.object
     timestamp = str(git_object.committed_date)
     git_hash = git_object.hexsha
-    csv_list = [str(version), timestamp, git_hash, str(code), str(code_size), str(boot), str(boot_size),
-                str(ovl), str(ovl_size), str(src), str(asm), str(len(non_matching_functions)),
-                str(archive), str(archive_size),
-                str(audio), str(audio_size), 
-                str(deleted), str(deleted_size), 
-                str(misc), str(misc_size), str(object_), str(object_size),
-                str(scene), str(scene_size), 
-                str(segment), str(segment_size),
-                str(text), str(text_size),]
+    csv_list = [version, timestamp, git_hash, code, code_size, boot, boot_size,
+                ovl, ovl_size, src, asm, len(non_matching_functions)]
+    for assetCat in assetsCategories:
+        csv_list += [assetsTracker[assetCat]["currentSize"], assetsTracker[assetCat]["totalSize"]]
 
-    print(",".join(csv_list))
+    print(",".join(map(str, csv_list)))
 elif args.format == 'shield-json':
     # https://shields.io/endpoint
     print(json.dumps({
@@ -338,16 +296,12 @@ elif args.format == 'text':
     print("    code:      {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(code, code_size, adjective, round(code_percent, 4)))
     print("    overlays:  {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(ovl, ovl_size, adjective, round(ovl_percent, 4)))
     print()
+
     print("assets:     {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(assets, assets_total, round(assets_percent, 4)))
-    print("    archive:   {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(archive, archive_size, round(archive_percent, 4)))
-    print("    audio:     {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(audio, audio_size, round(audio_percent, 4)))
-    print("    deleted:   {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(deleted, deleted_size, round(deleted_percent, 4)))
-    print("    interface: {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(interface, interface_size, round(interface_percent, 4)))
-    print("    misc:      {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(misc, misc_size, round(misc_percent, 4)))
-    print("    objects:   {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(object_, object_size, round(object_percent, 4)))
-    print("    scenes:    {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(scene, scene_size, round(scene_percent, 4)))
-    print("    segment:   {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(segment, segment_size, round(segment_percent, 4)))
-    print("    text:      {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(text, text_size, round(text_percent, 4)))
+    for assetCat in assetsTracker:
+        data = assetsTracker[assetCat]
+        print("    {:<10} {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(f"{assetCat}:", data["currentSize"], data["totalSize"], round(data["percent"], 4)))
+
     print()
     print("------------------------------------\n")
 
