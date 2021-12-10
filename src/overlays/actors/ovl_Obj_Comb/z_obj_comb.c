@@ -1,7 +1,7 @@
 /*
  * File: z_obj_comb.c
  * Overlay: ovl_Obj_Comb
- * Description: Honeycomb
+ * Description: Beehive
  */
 
 #include "z_obj_comb.h"

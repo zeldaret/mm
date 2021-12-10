@@ -1,7 +1,7 @@
 #include "global.h"
 
 // Blocks the current thread until all currently queued scheduler tasks have been completed
-void func_8010C1B0(void) {
+void MsgEvent_SendNullTask(void) {
     OSScTask task;
     OSMesgQueue queue;
     OSMesg msg;

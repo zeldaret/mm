@@ -1,5 +1,5 @@
 /*
- * File z_obj_ghaka.c
+ * File: z_obj_ghaka.c
  * Overlay: ovl_Obj_Ghaka
  * Description: Darmani's Gravestone
  */
@@ -87,12 +87,12 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if (this->dyna.unk148 < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) &&
+    if (this->dyna.pushForce < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) &&
         player->transformation == PLAYER_FORM_GORON) {
         func_80B3C2B0(this);
     } else {
         player->stateFlags2 &= ~0x10;
-        this->dyna.unk148 = 0.0f;
+        this->dyna.pushForce = 0.0f;
     }
 }
 
@@ -136,7 +136,7 @@ void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
 
     if (stepTemp) {
         player->stateFlags2 &= ~0x10;
-        this->dyna.unk148 = 0.0f;
+        this->dyna.pushForce = 0.0f;
         func_80B3C2C4(this, globalCtx);
         gSaveContext.weekEventReg[20] |= 0x20;
         func_80B3C260(this);
@@ -153,9 +153,9 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80B3C96C);
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck_RelocateMeshHeader(&D_06003CD0, &colHeader);
-    this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+    DynaPolyActor_Init(&this->dyna, 1);
+    CollisionHeader_GetVirtual(&D_06003CD0, &colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x4);
     if (this->dyna.actor.floorPoly == 0) {
         Actor_MarkForDeath(&this->dyna.actor);
@@ -169,7 +169,7 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjGhaka_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjGhaka* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjGhaka_Update(Actor* thisx, GlobalContext* globalCtx) {

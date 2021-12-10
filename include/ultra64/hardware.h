@@ -96,6 +96,7 @@
 #define SI_STATUS_INTERRUPT     (1 << 12)
 
 #define PIF_RAM_START  0x1FC007C0
+#define PIF_RAM_SIZE   0x40
 
 #define MI_INIT_MODE_REG  0x04300000
 #define MI_MODE_REG       MI_INIT_MODE_REG

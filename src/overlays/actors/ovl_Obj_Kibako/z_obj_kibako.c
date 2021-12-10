@@ -83,13 +83,13 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx) {
-    s32 collectible;
+    s32 dropItem00Id;
 
     if (this->isDropCollected == 0) {
-        collectible = func_800A8150(KIBAKO_COLLECTIBLE_ID(&this->actor));
-        if (collectible >= 0) {
+        dropItem00Id = func_800A8150(KIBAKO_COLLECTIBLE_ID(&this->actor));
+        if (dropItem00Id > ITEM00_NO_DROP) {
             Item_DropCollectible(globalCtx, &this->actor.world.pos,
-                                 collectible | KIBAKO_COLLECTIBLE_FLAG(&this->actor) << 8);
+                                 dropItem00Id | KIBAKO_COLLECTIBLE_FLAG(&this->actor) << 8);
             this->isDropCollected = 1;
         }
     }
@@ -122,7 +122,7 @@ void func_80926318(ObjKibako* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer < 100.0f) {
         angle = this->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
         if (ABS_ALT(angle) >= 0x5556) {
-            func_800B8A1C(&this->actor, globalCtx, 0, 36.0f, 30.0f);
+            func_800B8A1C(&this->actor, globalCtx, GI_NONE, 36.0f, 30.0f);
         }
     }
 }
@@ -298,7 +298,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
         }
 
         if ((this->actor.colChkInfo.mass != MASS_IMMOVABLE) &&
-            (Math3D_DistanceSquared(&this->actor.world.pos, &this->actor.prevPos) < 0.01f)) {
+            (Math3D_Vec3fDistSq(&this->actor.world.pos, &this->actor.prevPos) < 0.01f)) {
             this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         }
 
@@ -333,7 +333,7 @@ void ObjKibako_SetupHeld(ObjKibako* this) {
 void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f pos;
-    s32 sp2C;
+    s32 bgId;
 
     func_80926394(this, globalCtx);
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
@@ -352,7 +352,8 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
         pos.x = this->actor.world.pos.x;
         pos.y = this->actor.world.pos.y + 20.0f;
         pos.z = this->actor.world.pos.z;
-        this->actor.floorHeight = func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &pos);
+        this->actor.floorHeight =
+            BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &pos);
     }
 }
 
