@@ -125,7 +125,7 @@ void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjTree* this = THIS;
     s32 bgId;
 
-    if (!(OBJTREE_ISLARGE(&this->dyna.actor))) {
+    if (!OBJTREE_ISLARGE(&this->dyna.actor)) {
         bgId = this->dyna.bgId;
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, bgId);
     }

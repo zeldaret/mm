@@ -134,13 +134,13 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
         if (this->skelAnime.animation == &D_0600A280) {
             Animation_PlayLoop(&this->skelAnime, &D_06001384);
         } else if (this->skelAnime.animation == &D_0600AD98) {
-            if (this->actor.textId == 0x2ADA) { // Mayor's office on is the left (meeting ongoing)
+            if (this->actor.textId == 0x2ADA) { // Mayor's office is on the left (meeting ongoing)
                 Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
             } else {
                 Animation_MorphToLoop(&this->skelAnime, &D_06009890, 10.0f);
             }
         } else {
-            if (this->actor.textId == 0x2ADA) { // Mayor's office on is the left (meeting ongoing)
+            if (this->actor.textId == 0x2ADA) { // Mayor's office is on the left (meeting ongoing)
                 Animation_MorphToLoop(&this->skelAnime, &D_06009890, 10.0f);
             } else {
                 Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
@@ -158,9 +158,9 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
 
             if (gSaveContext.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
-                this->actor.textId = 0x2ADF;            // Mayor's office on is the left (meeting ended)
+                this->actor.textId = 0x2ADF;            // Mayor's office is on the left (meeting ended)
             } else {
-                this->actor.textId = 0x2ADA; // Mayor's office on is the left (meeting ongoing)
+                this->actor.textId = 0x2ADA; // Mayor's office is on the left (meeting ongoing)
             }
         } else if (this->actor.textId == 0x2ADC) { // hear directions again?
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
@@ -169,8 +169,8 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
             Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
 
             if (this->actor.textId == 0x2ADD) {        // "So..."
-                this->actor.textId = 0x2ADE;           // Mayor's office on is the left, drawing room on the right
-            } else if (this->actor.textId == 0x2ADA) { // Mayor's office on is the left (meeting ongoing)
+                this->actor.textId = 0x2ADE;           // Mayor's office is on the left, drawing room on the right
+            } else if (this->actor.textId == 0x2ADA) { // Mayor's office is on the left (meeting ongoing)
                 this->actor.textId = 0x2ADB;           // drawing room on the right
             } else {
                 this->actor.textId = 0x2AE0; // drawing room on the right, don't go in without an appointment
