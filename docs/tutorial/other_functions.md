@@ -413,11 +413,12 @@ And now we've run out of functions. Time for `Update`.
 
 Update runs every frame and usually is responsible for the actor's common logic updates: for example, updating timers, blinking, updating collision, running the `actionFunc`, and so on, either directly or through other functions it calls. A lot of subsidiary functions that are not common to every state (e.g. updating position, or the text when talking, etc.)  are carried out by one of the action functions we have already decomped.
 
-Change the prototype to `EnRecepgirl* this`, remake the context and run mips2c:
+Remake the context and run mips2c:
 ```C
 ? func_80C100DC(EnRecepgirl *); // extern
 
-void EnRecepgirl_Update(EnRecepgirl *this, GlobalContext *globalCtx) {
+void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
+    EnRecepgirl* this = (EnRecepgirl *) thisx;
     ? sp30;
 
     this->actionFunc(this, globalCtx);
@@ -434,7 +435,7 @@ void func_80C100DC(EnRecepgirl *);
 
 [...]
 
-void EnRecepgirl_Update(EnRecepgirl *this, GlobalContext *globalCtx) {
+void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnRecepgirl* this = THIS;
     ? sp30;
 
@@ -483,7 +484,7 @@ It's entirely possible that `unk_2AD` is not real, and is just padding: see [Typ
 
 So `sp30` is in the wrong place: it's `4` too high on the stack in ours. This is because the main four functions do not actually take `GlobalContext`: they really take `Gamestate` and recast it with a temp, just like `EnRecepgirl* this = THIS;`. We haven't implemented this in the repo yet, though, so for now, it suffices to put a pad on the stack where it would go instead: experience has shown when it matters, it goes above the actor recast, so we end up with
 ```C
-void EnRecepgirl_Update(EnRecepgirl *this, GlobalContext *globalCtx) {
+void EnRecepgirl_Update(Actor *thisx, GlobalContext *globalCtx) {
     s32 pad;
     EnRecepgirl* this = THIS;
     Vec3s sp30;
