@@ -1112,7 +1112,6 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
 }
 
 #ifdef NON_MATCHING
-// I haven't checked equivalence tho
 void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, u8* cutscenePtr) {
     s32 i;
     s16 phi_s0;

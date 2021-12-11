@@ -278,7 +278,7 @@
  *   cccccccc eeeeeeee
  *   size = 0x8
  */
-#define CS_NPC_ACTION_LIST(cmdType, entries) CMD_W(cmdType), CMD_W(entries)
+#define CS_ACTOR_ACTION_LIST(cmdType, entries) CMD_W(cmdType), CMD_W(entries)
 
 /**
  * ARGS
@@ -291,37 +291,11 @@
  *   aaaassss eeeeuuuu vvvvwwww iiiiiiii jjjjjjjj kkkkkkkk llllllll mmmmmmmm nnnnnnnn xxxxxxxx yyyyyyyy zzzzzzzz
  *   size = 0x30
  */
-#define CS_NPC_ACTION(npcAction, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ) \
+#define CS_ACTOR_ACTION(npcAction, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ) \
     CMD_HH(npcAction, startFrame), CMD_HH(endFrame, rotX), CMD_HH(rotY, rotZ), \
     CMD_W(startX), CMD_W(startY), CMD_W(startZ), \
     CMD_W(endX), CMD_W(endY), CMD_W(endZ), \
     CMD_W(normX), CMD_W(normY), CMD_W(normZ)
-
-#if 0
-/**
- * ARGS
- *   s32 cmdType (c), s32 entries (e)
- * FORMAT
- *   cccccccc eeeeeeee
- *   size = 0x8
- */
-#define CS_PLAYER_ACTION_LIST(entries) CS_CMD_SET_PLAYER_ACTION, CMD_W(entries)
-
-/**
- * ARGS
- *   s16 linkAction (a), s16 startFrame (s), s16 endFrame (e),
- *   s16 rotX (u),       s16 rotY (v),       s16 rotZ (w),
- *   s32 startX (i),     s32 startY (j),     s32 startZ (k),
- *   s32 endX (l),       s32 endY (m),       s32 endZ (n),
- *   s32 normX (x),      s32 normY (y),      s32 normZ (z),
- * FORMAT
- *   aaaassss eeeeuuuu vvvvwwww iiiiiiii jjjjjjjj kkkkkkkk llllllll mmmmmmmm nnnnnnnn xxxxxxxx yyyyyyyy zzzzzzzz
- *   size = 0x30
- */
-#define CS_PLAYER_ACTION(linkAction, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ) \
-    CS_NPC_ACTION(linkAction, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ)
-
-#endif
 
 
 
@@ -582,6 +556,34 @@
  */
 #define CS_SCENE_UNK_190(base, startFrame, endFrame, unk6, unk7, unk8) \
     CMD_HH(base, startFrame), CMD_HBB(endFrame, unk6, unk7), CMD_BBBB(unk8, 0, 0, 0)
+
+
+
+
+
+
+
+
+/**
+ * ARGS
+ *   s32 entries (e)
+ * FORMAT
+ *   00000004 eeeeeeee
+ *   size = 0x8
+ */
+#define CS_SCENE_UNKNOWN_CMD_LIST(cmd, entries) cmd, CMD_W(entries)
+
+/**
+ * ARGS
+ *   
+ * FORMAT
+ *   Capital U is Unused
+ *   mmmmssss eeeeUUUU
+ *   size = 0x30
+ */
+#define CS_SCENE_UNKNOWN_CMD(base, startFrame, endFrame, unk_06) \
+    CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
+
 
 
 
