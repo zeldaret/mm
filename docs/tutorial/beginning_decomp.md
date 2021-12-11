@@ -208,6 +208,7 @@ static s32 D_80C106C8 = 0;
 InitChainEntry D_80C106C0[2]; // unable to generate initializer
 
 void EnRecepgirl_Init(EnRecepgirl *this, GlobalContext *globalCtx) {
+    EnRecepgirl* this = (EnRecepgirl *) thisx;
     void **temp_s0;
     void **phi_s0;
 
@@ -243,7 +244,8 @@ static void *D_80C106B0[4] = {(void *)0x600F8F0, (void *)0x600FCF0, (void *)0x60
 static s32 D_80C106C8 = 0;
 InitChainEntry D_80C106C0[2]; // unable to generate initializer
 
-void EnRecepgirl_Init(EnRecepgirl *this, GlobalContext *globalCtx) {
+void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
+    EnRecepgirl* this = (EnRecepgirl *) thisx;
     void **temp_s0;
     void **phi_s0;
 
@@ -273,13 +275,13 @@ void EnRecepgirl_Init(EnRecepgirl *this, GlobalContext *globalCtx) {
 
 Typically for all but the simplest functions, there is a lot that needs fixing before we are anywhere near seeing how close we are to the original code. You will notice that mips2c creates a lot of temporary variables. Usually most of these will turn out to not be real, and we need to remove the right ones to get the code to match.
 
-First, change the first argument back to `Actor* thisx` so that the function matches its prototype above. To allow the function to find the variables, we need another correction. Half of this has already been done at the top of the function, where we have
+To allow the function to find the variables, we need another correction. Half of this has already been done at the top of the file, where we have
 
 ```C
 #define THIS ((EnRecepgirl*)thisx)
 ```
 
-To do the other half, write the following at the beginning of the function, before any declarations:
+To do the other half, replace the recast at the beginning of the function, before any declarations:
 
 ```C
 EnRecepgirl* this = THIS;

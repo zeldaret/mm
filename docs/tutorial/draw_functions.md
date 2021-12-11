@@ -15,25 +15,14 @@ Unless it is completely invisible, an actor usually has a draw function as one o
 void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx);
 ```
 
-As in Init, Destroy and Update, it is much more convenient to feed mips2c the fake prototype
-
-```C
-void EnRecepgirl_Draw(EnRecepgirl* this, GlobalContext* globalCtx);
-```
-
-so that it fills out the struct fields from the actual actor; we then put a
-
-```C
-EnRecepgirl* this = THIS;
-```
-
-in the declarations as before. From now on, the process is rather different from the decompilation process used for the other functions. Here is the output of mips2c after sorting out the actor struct from Init, and with the arguments set back to `Actor* thisx`:
+From now on, the process is rather different from the decompilation process used for the other functions. Here is the output of mips2c after sorting out the actor struct from Init, and with the arguments set back to `Actor* thisx`:
 ```C
 s32 func_80C10558(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor); // extern
 void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *actor); // extern
 void *D_80C106B0[4] = {(void *)0x600F8F0, (void *)0x600FCF0, (void *)0x60100F0, (void *)0x600FCF0};
 
-void EnRecepgirl_Draw(EnRecepgirl *this, GlobalContext *globalCtx) {
+void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
+    EnRecepgirl* this = (EnRecepgirl *) thisx;
     GraphicsContext *sp30;
     Gfx *temp_v1;
     GraphicsContext *temp_a0;
