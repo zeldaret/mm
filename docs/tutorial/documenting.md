@@ -502,13 +502,12 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
         if (this->skelAnime.animation == &D_0600A280) {
             Animation_ChangeDefaultRepeat(&this->skelAnime, &D_06001384);
         } else if (this->skelAnime.animation == &D_0600AD98) {
-            if (this->actor.textId == 0x2ADA) { // "The room on your left is The Mayor's office [...]" (meeting ongoing)
+            if (this->actor.textId == 0x2ADA) { // Mayor's office on is the left (meeting ongoing)
                 Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
             } else {
                 Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
             }
-        } else if (this->actor.textId ==
-                   0x2ADA) { // "The room on your left is The Mayor's office [...]" (meeting ongoing)
+        } else if (this->actor.textId == 0x2ADA) { // Mayor's office on is the left (meeting ongoing)
             Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
         } else {
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
@@ -523,10 +522,10 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
             Actor_SetSwitchFlag(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
-            if (gSaveContext.weekEventReg[63] & 0x80) { // meeting ended
-                this->actor.textId = 0x2ADF; // "The room on your left is The Mayor's office [...]" (meeting ended)
+            if (gSaveContext.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
+                this->actor.textId = 0x2ADF; // Mayor's office on is the left (meeting ended)
             } else {
-                this->actor.textId = 0x2ADA; // "The room on your left is The Mayor's office [...]" (meeting ongoing)
+                this->actor.textId = 0x2ADA; // Mayor's office on is the left (meeting ongoing)
             }
         } else if (this->actor.textId == 0x2ADC) { // hear directions again?
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
@@ -537,7 +536,7 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
             if (this->actor.textId == 0x2ADD) { // "So..."
                 this->actor.textId = 0x2ADE;    // Mayor's office on is the left, drawing room on the right
             } else if (this->actor.textId ==
-                       0x2ADA) {             // "The room on your left is The Mayor's office [...]" (meeting ongoing)
+                       0x2ADA) {             // Mayor's office on is the left (meeting ongoing)
                 this->actor.textId = 0x2ADB; // drawing room on the right
             } else {
                 this->actor.textId = 0x2AE0; // drawing room on the right, don't go in without an appointment
@@ -556,6 +555,46 @@ $ ./tools/graphovl/graphovl.py En_Recepgirl
 produces
 
 ![EnRecepgirl's function flow graph](images/En_Recepgirl.gv.png)
+
+
+## Miscellaneous other documentation
+
+We like to make macros for reading an actor's `params` (indeed, this is required even if you don't know what the params are for). A simple example is `ObjTree`, which has the following code in its `Init` function:
+
+```c
+    if (this->dyna.actor.params & 0x8000) {
+        Actor_SetScale(&this->dyna.actor, 0.15f);
+        this->dyna.actor.uncullZoneForward = 4000.0f;
+    } else {
+        Actor_SetScale(&this->dyna.actor, 0.1f);
+        DynaPolyActor_Init(&this->dyna, 1);
+        CollisionHeader_GetVirtual(&D_06001B2C, &colHeader);
+        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    }
+```
+
+Looking through the rest of the actor, it becomes apparent that `params & 0x8000` is only used for changing the size of the tree: ones with this bit set are larger. So we make a macro in the header:
+
+```c
+#define OBJTREE_ISLARGE(thisx) ((thisx)->params & 0x8000)
+```
+
+Notice that we use `thisx`: this makes the form of every one of these macros the same. However, we only use `thisx` if required for matching, so when we add it to the actor, we use `&this->dyna.actor` (in this case, since `ObjTree` is a dynapoly actor).
+
+```c
+    if (OBJTREE_ISLARGE(&this->dyna.actor)) {
+        Actor_SetScale(&this->dyna.actor, 0.15f);
+        this->dyna.actor.uncullZoneForward = 4000.0f;
+    } else {
+        Actor_SetScale(&this->dyna.actor, 0.1f);
+        DynaPolyActor_Init(&this->dyna, 1);
+        CollisionHeader_GetVirtual(&D_06001B2C, &colHeader);
+        this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    }
+```
+
+Much clearer!
+
 
 We have now essentially documented this as far as we can without the object, so we'd better do that next.
 

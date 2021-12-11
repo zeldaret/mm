@@ -201,24 +201,6 @@ In this case, we want the assembly file for `EnRecepgirl_Init`. You can copy the
 We shall also include the data file, which is located at `data/overlays/ovl_En_Recepgirl/ovl_En_Recepgirl.data.s`. Hence the whole command will be
 ```
 $ ../mips_to_c/mips_to_c.py asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Init.s data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.s --context ctx.c
-```
-
-However, there is one more thing we should do before we run this. *For the main four functions only*, a very common pattern is that the first argument is recast to a new variable with the actual actor's type. This allows us to access the extra struct variables that this particular actor has, rather than just everything in the general `Actor` struct. More simply, we will end up with
-```C
-EnRecepgirl* this = THIS;
-```
-at the top of the function, where you can see from the top of the file that `THIS` just expands to `(EnRecepgirl*)thisx`. Since `Init` (and the other "main four" functions) will access these struct variables, it is a good idea to change the `Init` prototype to be wrong, to fool mips2c so that it will output the actual variable rather than just its offset in the struct.
-
-That's a lot of words for: change `Actor* thisx` in the `Init` prototype in the C file to `EnRecepgirl* this`:
-```C
-void EnRecepgirl_Init(EnRecepgirl *this, GlobalContext *globalCtx)
-```
-and remake the context file. (It's a good idea to do the same for all of the "main four", so we won't mention it again). *Once you have the function decompiled, remember to put the arguments back to how they should be in both the prototype and the function itself*
-
-This will give the following output:
-```
-$ ../../mips_to_c/mips_to_c.py asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Init.s data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.s --cont
-ext ctx.c
 ? func_80C10148(EnRecepgirl *); // extern
 extern FlexSkeletonHeader D_06011B60;
 static void *D_80C106B0[4] = {(void *)0x600F8F0, (void *)0x600FCF0, (void *)0x60100F0, (void *)0x600FCF0};

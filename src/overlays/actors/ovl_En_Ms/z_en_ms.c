@@ -92,10 +92,7 @@ void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
 
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         this->actionFunc = EnMs_Talk;
-        return;
-    }
-
-    if ((this->actor.xzDistToPlayer < 90.0f) && (ABS_ALT(yawDiff) < 0x2000)) {
+    } else if ((this->actor.xzDistToPlayer < 90.0f) && (ABS_ALT(yawDiff) < 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 90.0f);
     }
 }

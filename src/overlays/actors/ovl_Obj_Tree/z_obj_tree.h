@@ -7,6 +7,8 @@ struct ObjTree;
 
 typedef void (*ObjTreeActionFunc)(struct ObjTree*, GlobalContext*);
 
+#define OBJTREE_ISLARGE(thisx) ((thisx)->params & 0x8000)
+
 typedef struct ObjTree {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ColliderCylinder collider;

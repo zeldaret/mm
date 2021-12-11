@@ -97,7 +97,7 @@ void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjTree* this = THIS;
     CollisionHeader* colHeader = NULL;
 
-    if (this->dyna.actor.params & 0x8000) {
+    if (OBJTREE_ISLARGE(&this->dyna.actor)) {
         Actor_SetScale(&this->dyna.actor, 0.15f);
         this->dyna.actor.uncullZoneForward = 4000.0f;
     } else {
@@ -111,7 +111,7 @@ void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->dyna.actor.colChkInfo, &sDamageTable, &sColchkInfoInit);
 
-    if (this->dyna.actor.params & 0x8000) {
+    if (OBJTREE_ISLARGE(&this->dyna.actor)) {
         this->collider.dim.height = 220;
     }
 
@@ -125,7 +125,7 @@ void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjTree* this = THIS;
     s32 bgId;
 
-    if (!(this->dyna.actor.params & 0x8000)) {
+    if (!(OBJTREE_ISLARGE(&this->dyna.actor))) {
         bgId = this->dyna.bgId;
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, bgId);
     }
