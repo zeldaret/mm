@@ -282,7 +282,7 @@ Extracts vertex data from a file. Essentially irrelevant since MM requires extra
 We use a [Google Sheet](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro/edit#gid=0) to keep track of all the files' decompilation statuses and their function statistics. On this board one can reserve a file to work on. The columns are
 
 - **Actor Id**: The enum that uniquely identifies the actor for spawning etc., useful for looking in KZ/VerboseOcarina/Spectrum. For `boot`/`code`, the VRAM of the file's .text start is given instead.
-- **Overlay/File name**: Hopefully obvious, although some remain unknown.
+- **Overlay/File name**: Name of the Overlay or File in the codebase.
 - **Function size statistics**: Intended as a crude estimate of how hard a file will be. Beginners should look for small largest function size and total size; the columns give a rough estimate of the distribution of function sizes without getting unnecessarily statistically descriptive. As you become more experienced, you should work on larger files to 
 - **Description**: What the file is. It's helpful if you can fill this in if you know! They should be synchronised with the short top-of-file descriptions.
 - **Status**: (Free)/Reserved/PR/Merged. To be kept up-to-date by the reserver.
