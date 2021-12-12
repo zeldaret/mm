@@ -18,6 +18,12 @@ void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80B74AD8(EnJg* this, GlobalContext* globalCtx);
 void func_80B74134(EnJg* this, GlobalContext* globalCtx);
 s32 func_80B750A0(EnJg* this, GlobalContext* globalCtx);
+void func_80B751F8(EnJg* this, GlobalContext* globalCtx);
+void func_80B74550(EnJg* this, GlobalContext* globalCtx);
+void func_80B742F8(EnJg* this, GlobalContext* globalCtx);
+void func_80B747C8(EnJg* this, GlobalContext* globalCtx);
+void func_80B74B54(EnJg* this, GlobalContext* globalCtx);
+s32 func_80B74E5C(EnJg* this);
 
 extern AnimationHeader D_060077CC;
 extern AnimationHeader D_06009440;
@@ -143,14 +149,58 @@ void func_80B73AE4(EnJg* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73C58.s")
 
+s8 func_80B73DF4(EnJg* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73DF4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73E3C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73F1C.s")
+void func_80B73F1C(EnJg* this, GlobalContext* globalCtx) {
+    switch (this->unk_3CE) {
+        case 0xDAC:
+            this->unk_39E = 3;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->actionFunc = func_80B74550;
+            break;
+        case 0xDAD:
+            this->unk_39E = 4;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->actionFunc = func_80B742F8;
+            break;
+        case 0xDB7:
+            this->unk_39E = 4;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->actionFunc = func_80B74550;
+            break;
+        case 0xDAE:
+        case 0xDB3:
+        case 0xDB6:
+        case 0xDBA:
+        case 0xDBD:
+        case 0xDC4:
+            this->unk_39E = 0;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->actionFunc = func_80B74550;
+            break;
+        case 0xDB0:
+        case 0xDBB:
+        case 0xDBC:
+        case 0xDC6:
+            this->unk_39E = 6;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->actionFunc = func_80B74550;
+            break;
+        case 0xDB4:
+        case 0xDB5:
+            this->unk_39E = 2;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->actionFunc = func_80B74550;
+            break;
+    }
+}
 
-void func_80B7406C(EnJg* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B7406C.s")
+void func_80B7406C(EnJg* this, GlobalContext* globalCtx) {
+    func_80B751F8(this, globalCtx);
+}
 
 void func_80B7408C(EnJg* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
@@ -172,7 +222,55 @@ void func_80B7408C(EnJg* this, GlobalContext* globalCtx) {
 void func_80B74440(EnJg* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74440.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74550.s")
+void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
+    u8 sp27;
+    s16 currentFrame;
+    s16 lastFrame;
+    s32 temp;
+
+    sp27 = func_80152498(&globalCtx->msgCtx);
+    currentFrame = this->skelAnime.curFrame;
+    lastFrame = Animation_GetLastFrame(D_80B75878[this->unk_39E].animationSeg);
+    if ((this->unk_39E == 4) && (currentFrame == lastFrame)) {
+        this->unk_39E = 5;
+        func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+    }
+    if ((sp27 == 5) && (func_80147624(globalCtx))) {
+        temp = this->unk_3CE;
+        if ((temp == 0xDB4) || (temp == 0xDB5) || (temp == 0xDC4) || (temp == 0xDC6)) {
+            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.unk12023 = 4;
+            this->unk_3CC &= ~0x4;
+            this->actionFunc = func_80B747C8;
+        } else if ((this->unk_3CE == 0xDBB) || (this->unk_3CE == 0xDBC)) {
+            if ((gSaveContext.weekEventReg[0x18] & 0x80) == 0) {
+                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.unk12023 = 4;
+                this->unk_3CC &= ~0x4;
+                this->actionFunc = func_80B747C8;
+            } else if (((gSaveContext.weekEventReg[0x18] & 0x40) != 0) ||
+                       (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
+                this->unk_3CE = func_80B74E5C(this);
+                func_801518B0(globalCtx, this->unk_3CE, &this->actor);
+                this->actionFunc = func_80B73F1C;
+            } else {
+                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.unk12023 = 4;
+                this->unk_3CC &= ~0x4;
+                this->unk_3C8 = func_80B73DF4(this);
+                if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+                    ActorCutscene_Stop(0x7C);
+                }
+                ActorCutscene_SetIntentToPlay(this->unk_3C8);
+                this->actionFunc = func_80B74B54;
+            }
+        } else {
+            this->unk_3CE = func_80B74E5C(this);
+            func_801518B0(globalCtx, this->unk_3CE, &this->actor);
+            this->actionFunc = func_80B73F1C;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B747C8.s")
 
@@ -199,7 +297,7 @@ void func_80B749D0(EnJg* this, GlobalContext* globalCtx) {
         if (func_800B84D0(&this->actor, globalCtx)) {
             func_801518B0(globalCtx, 0x236, &this->actor);
             this->actionFunc = func_80B74AD8;
-        } else if (this->actor.isTargeted != 0) {
+        } else if (this->actor.isTargeted) {
             func_800B863C(&this->actor, globalCtx);
         }
     }
@@ -253,7 +351,40 @@ void func_80B7517C(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B751F8.s")
+void func_80B751F8(EnJg* this, GlobalContext* globalCtx) {
+    s16 currentFrame;
+    s16 lastFrame;
+
+    currentFrame = this->skelAnime.curFrame;
+    lastFrame = Animation_GetLastFrame(D_80B75878[this->unk_39E].animationSeg);
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        this->unk_3CC |= 4;
+        this->actor.speedXZ = 0.0f;
+        if (this->unk_3CE == 0xDAC) {
+            this->unk_3A0 = 0;
+        } else if (this->unk_3CE == 0xDAE) {
+            gSaveContext.weekEventReg[0x18] |= 0x20;
+        } else if (this->unk_3CE == 0xDB6) {
+            gSaveContext.weekEventReg[0x18] |= 0x10;
+        }
+        func_801518B0(globalCtx, this->unk_3CE, &this->actor);
+        this->actionFunc = func_80B73F1C;
+    } else {
+        if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
+            func_800B863C(&this->actor, globalCtx);
+            if (this->unk_3A0 == 0) {
+                this->unk_3CE = func_80B750A0(this, globalCtx);
+            }
+        }
+        this->unk_3A2--;
+        if ((this->unk_3A2 <= 0) && (currentFrame == lastFrame)) {
+            this->unk_39E = 7;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            func_8019F1C0(&D_80B759A8, 0x295C);
+            this->actionFunc = func_80B74840;
+        }
+    }
+}
 
 void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
