@@ -969,7 +969,6 @@ s32 D_801BB160 = 0;
 void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
     u8 sp27;
     u16 sp1E;
-    u16 temp_v0_2;
 
     if ((cmd->startFrame >= csCtx->frames) || ((cmd->endFrame < csCtx->frames))) {
         return;
@@ -991,7 +990,6 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                     func_801518B0(globalCtx, cmd->base, NULL);
                 }
             } else if (cmd->type == 5) {
-                cmd = cmd;
                 if (func_800EC6D4() == 20) {
                     if (cmd->textId1 != 0xFFFF) {
                         func_801518B0(globalCtx, cmd->textId1, NULL);
@@ -1002,89 +1000,82 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
             } else {
                 func_801518B0(globalCtx, cmd->base, NULL);
             }
-        } else {
-            goto block_22;
-        }
-    } else {
-        temp_v0_2 = cmd->base;
-        if (temp_v0_2 != D_801BB128) {
-            D_801BB160 = 2;
-            D_801BB128 = temp_v0_2;
-            func_80152434(globalCtx, cmd->base);
             return;
         }
-    block_22:
-        if (csCtx->frames >= cmd->endFrame) {
-            sp1E = csCtx->frames;
-            sp27 = func_80152498(&globalCtx->msgCtx);
-            if (sp27 != 2) {
-                if ((sp27 != 0) && (sp27 != 7) && (sp27 != 8)) {
-                    csCtx->frames += -1;
-                    if (sp27 == 4) {
-                        cmd = cmd;
-                        if (func_80147624(globalCtx) != 0) {
-                            if (globalCtx->msgCtx.choiceIndex == 0) {
-                                if (cmd->base == 0x33BD) {
-                                    cmd = cmd;
-                                    func_8019F230();
-                                }
+    } else  if (D_801BB128 != cmd->base) {
+        D_801BB160 = 2;
+        D_801BB128 = cmd->base;
+        func_80152434(globalCtx, cmd->base);
+        return;
+    }
 
-                                if (cmd->textId1 != 0xFFFF) {
-                                    cmd = cmd;
-                                    func_80151938(globalCtx, cmd->textId1);
-                                    if (cmd->type == 3) {
-                                        D_801BB160 = 3;
-                                        if (cmd->textId2 != 0xFFFF) {
-                                            csCtx->frames += 1;
-                                        }
+
+    if (csCtx->frames >= cmd->endFrame) {
+        sp1E = csCtx->frames;
+        sp27 = func_80152498(&globalCtx->msgCtx);
+        if (sp27 != 2) {
+            if ((sp27 != 0) && (sp27 != 7) && (sp27 != 8)) {
+                csCtx->frames--;
+                if (sp27 == 4) {
+                    if (func_80147624(globalCtx) != 0) {
+                        if (globalCtx->msgCtx.choiceIndex == 0) {
+                            if (cmd->base == 0x33BD) {
+                                func_8019F230();
+                            }
+
+                            if (cmd->textId1 != 0xFFFF) {
+                                func_80151938(globalCtx, cmd->textId1);
+                                if (cmd->type == 3) {
+                                    D_801BB160 = 3;
+                                    if (cmd->textId2 != 0xFFFF) {
+                                        csCtx->frames++;
                                     }
-                                } else {
-                                    cmd = cmd;
-                                    func_801477B4(globalCtx);
-                                    csCtx->frames += 1;
                                 }
                             } else {
-                                if (cmd->base == 0x33BD) {
-                                    cmd = cmd;
-                                    func_8019F208();
-                                }
+                                func_801477B4(globalCtx);
+                                csCtx->frames++;
+                            }
+                        } else {
+                            if (cmd->base == 0x33BD) {
+                                func_8019F208();
+                            }
 
-                                if (cmd->textId2 != 0xFFFF) {
-                                    cmd = cmd;
-                                    func_80151938(globalCtx, cmd->textId2);
-                                    if (cmd->type == 3) {
-                                        D_801BB160 = 3;
-                                        if (cmd->textId1 != 0xFFFF) {
-                                            csCtx->frames += 1;
-                                        }
+                            if (cmd->textId2 != 0xFFFF) {
+                                cmd = cmd;
+                                func_80151938(globalCtx, cmd->textId2);
+                                if (cmd->type == 3) {
+                                    D_801BB160 = 3;
+                                    if (cmd->textId1 != 0xFFFF) {
+                                        csCtx->frames++;
                                     }
-                                } else {
-                                    cmd = cmd;
-                                    func_801477B4(globalCtx);
-                                    csCtx->frames += 1;
                                 }
+                            } else {
+                                cmd = cmd;
+                                func_801477B4(globalCtx);
+                                csCtx->frames++;
                             }
                         }
                     }
+                }
 
-                    if (sp27 == 5) {
-                        if (func_80147624(globalCtx) != 0) {
-                            func_80152434(globalCtx, cmd->base);
-                        }
+                if (sp27 == 5) {
+                    if (func_80147624(globalCtx) != 0) {
+                        func_80152434(globalCtx, cmd->base);
                     }
                 }
             }
-            if ((sp27 == 2) && (D_801BB160 == 3)) {
-                csCtx->frames += -1;
-                D_801BB124 = D_801BB124 + 1;
-            }
-            if (csCtx->frames == sp1E) {
-                Interface_ChangeAlpha(1);
-                D_801BB124 = 0;
-                D_801BB128 = 0;
-                func_80161C0C();
-                return;
-            }
+        }
+        if ((sp27 == 2) && (D_801BB160 == 3)) {
+            csCtx->frames--;
+            D_801BB124++;
+        }
+        if (csCtx->frames == sp1E) {
+            Interface_ChangeAlpha(1);
+            D_801BB124 = 0;
+            D_801BB128 = 0;
+            func_80161C0C();
+            return;
+        } else {
             func_80161BE0(1);
         }
     }
@@ -1518,7 +1509,7 @@ void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 index) {
 
 void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 arg2) {
     func_800EDE34(actor, globalCtx, arg2);
-    actor->world.rot.y = (u16)globalCtx->csCtx.npcActions[arg2]->urot.y;
+    actor->world.rot.y = globalCtx->csCtx.npcActions[arg2]->urot.y;
     actor->shape.rot.y = actor->world.rot.y;
 }
 
@@ -1528,12 +1519,12 @@ void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 iParm3) {
     CsCmdActorAction* entry;
     f32 temp_f0;
 
-    sp44.x = (f32)globalCtx->csCtx.npcActions[iParm3]->startPos.x;
-    sp44.y = (f32)globalCtx->csCtx.npcActions[iParm3]->startPos.y;
-    sp44.z = (f32)globalCtx->csCtx.npcActions[iParm3]->startPos.z;
-    sp38.x = (f32)globalCtx->csCtx.npcActions[iParm3]->endPos.x;
-    sp38.y = (f32)globalCtx->csCtx.npcActions[iParm3]->endPos.y;
-    sp38.z = (f32)globalCtx->csCtx.npcActions[iParm3]->endPos.z;
+    sp44.x = globalCtx->csCtx.npcActions[iParm3]->startPos.x;
+    sp44.y = globalCtx->csCtx.npcActions[iParm3]->startPos.y;
+    sp44.z = globalCtx->csCtx.npcActions[iParm3]->startPos.z;
+    sp38.x = globalCtx->csCtx.npcActions[iParm3]->endPos.x;
+    sp38.y = globalCtx->csCtx.npcActions[iParm3]->endPos.y;
+    sp38.z = globalCtx->csCtx.npcActions[iParm3]->endPos.z;
 
     entry = globalCtx->csCtx.npcActions[iParm3];
     temp_f0 = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
