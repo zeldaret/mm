@@ -94,11 +94,6 @@ typedef struct {
 } CsCmdUnk190; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ UNK_TYPE4 unk0;
-    /* 0x4 */ UNK_TYPE4 unk4;
-} CsCmdUnk5A; // size = 0x8
-
-typedef struct {
     /* 0x0 */ u16 unk0;
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
@@ -118,7 +113,7 @@ typedef enum {
 
 typedef enum {
     /* 0x00A */ CS_CMD_TEXTBOX = 0xA,
-    /* 0x05A */ CS_CMD_5A = 0x5A,
+    /* 0x05A */ CS_CMD_CAMERA = 0x5A,
     /* 0x096 */ CS_CMD_MISC = 0x96,
     /* 0x097 */ CS_CMD_SET_LIGHTING,
     /* 0x098 */ CS_CMD_SCENE_TRANS_FX,
@@ -147,7 +142,7 @@ typedef enum {
     /* 0x133 */ CS_CMD_STOPSEQ,
     /* 0x134 */ CS_CMD_PLAYAMBIENCE,
     /* 0x135 */ CS_CMD_FADEAMBIENCE,
-    /* 0x15E */ CS_CMD_15E = 0x15E,
+    /* 0x15E */ CS_CMD_TERMINATOR = 0x15E,
     /* 0x15F */ CS_CMD_15F,
     /* 0x190 */ CS_CMD_190 = 0x190,
 } CutsceneCmd;

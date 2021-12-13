@@ -67,7 +67,7 @@
  *   00000003 eeeeeeee
  *   size = 0x8
  */
-#define CS_CMD_UNK_5A_LIST(entries) CS_CMD_5A, CMD_W(entries)
+#define CS_CAMERA_LIST(entries) CS_CMD_CAMERA, CMD_W(entries)
 
 
 
@@ -493,7 +493,7 @@
  *   00000004 eeeeeeee
  *   size = 0x8
  */
-#define CS_SCENE_UNK_15E_LIST(entries) CS_CMD_15E, CMD_W(entries)
+#define CS_TERMINATOR_LIST(entries) CS_CMD_TERMINATOR, CMD_W(entries)
 
 /**
  * ARGS
@@ -503,8 +503,8 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x30
  */
-#define CS_SCENE_UNK_15E(base, startFrame, endFrame, unk_06) \
-    CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
+#define CS_TERMINATOR(base, startFrame, endFrame) \
+    CMD_HH(base, startFrame), CMD_HH(endFrame, endFrame)
 
 
 

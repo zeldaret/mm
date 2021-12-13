@@ -507,7 +507,7 @@ void func_800EAF20(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk190
     }
 }
 
-// Command 0x9B: 
+// Command 0x9B: FadeColorScreen/Cutscene_Command_ChangeHue/Cutscene_Command_ScreenFillColor
 void func_800EAFE0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk9B* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         f32 alpha;
@@ -578,8 +578,8 @@ void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
-// Command 0x15E: Cutscene_Command_Terminator
-void func_800EB4B4(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+// Command 0x15E: 
+void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (cmd->base == 1) {
         if (csCtx->frames == cmd->startFrame) {
             func_800EB364(globalCtx, csCtx, cmd);
@@ -880,12 +880,12 @@ void Cutscene_Command_TransitionFX(GlobalContext* globalCtx, CutsceneContext* cs
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_Command_TransitionFX.s")
 #endif
 
-// Camera-related
-s32 func_800EC678(GlobalContext* globalCtx, CsCmdUnk5A* cmd) {
+// Command 0x5A: Camera
+s32 Cutscene_Command_Camera(GlobalContext* globalCtx, u8* cmd) {
     s32 sp1C = 0;
 
     bcopy(cmd, &sp1C, 4);
-    cmd = (CsCmdUnk5A*)&cmd->unk4;
+    cmd += 4;
     if (func_8016A168() == 0) {
         func_80161998(cmd, &D_801F4D48);
     }
@@ -1279,15 +1279,15 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_5A:
-                cutscenePtr = &cutscenePtr[func_800EC678(globalCtx, (CsCmdUnk5A*)cutscenePtr)];
+            case CS_CMD_CAMERA:
+                cutscenePtr = &cutscenePtr[Cutscene_Command_Camera(globalCtx, cutscenePtr)];
                 break;
 
-            case CS_CMD_15E: 
+            case CS_CMD_TERMINATOR: 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EB4B4(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_Terminator(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += 8;
                 }
                 break;

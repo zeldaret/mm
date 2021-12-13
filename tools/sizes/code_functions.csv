@@ -1070,12 +1070,12 @@ asm/non_matchings/code/z_demo/func_800EAF20.s,func_800EAF20,0x800EAF20,0x30
 asm/non_matchings/code/z_demo/func_800EAFE0.s,func_800EAFE0,0x800EAFE0,0x7F
 asm/non_matchings/code/z_demo/Cutscene_Command_SetTime.s,Cutscene_Command_SetTime,0x800EB1DC,0x62
 asm/non_matchings/code/z_demo/func_800EB364.s,func_800EB364,0x800EB364,0x54
-asm/non_matchings/code/z_demo/func_800EB4B4.s,func_800EB4B4,0x800EB4B4,0x91
+asm/non_matchings/code/z_demo/Cutscene_Command_Terminator.s,Cutscene_Command_Terminator,0x800EB4B4,0x91
 asm/non_matchings/code/z_demo/func_800EB6F8.s,func_800EB6F8,0x800EB6F8,0x11C
 asm/non_matchings/code/z_demo/func_800EBB68.s,func_800EBB68,0x800EBB68,0x5A
 asm/non_matchings/code/z_demo/Cutscene_Command_GiveTatlToPlayer.s,Cutscene_Command_GiveTatlToPlayer,0x800EBCD0,0x24
 asm/non_matchings/code/z_demo/Cutscene_Command_TransitionFX.s,Cutscene_Command_TransitionFX,0x800EBD60,0x246
-asm/non_matchings/code/z_demo/func_800EC678.s,func_800EC678,0x800EC678,0x17
+asm/non_matchings/code/z_demo/Cutscene_Command_Camera.s,Cutscene_Command_Camera,0x800EC678,0x17
 asm/non_matchings/code/z_demo/func_800EC6D4.s,func_800EC6D4,0x800EC6D4,0x94
 asm/non_matchings/code/z_demo/Cutscene_Command_Textbox.s,Cutscene_Command_Textbox,0x800EC924,0x116
 asm/non_matchings/code/z_demo/func_800ECD7C.s,func_800ECD7C,0x800ECD7C,0x31
