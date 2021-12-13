@@ -167,8 +167,8 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x30
  */
-#define CS_LIGHTING(setting, startFrame, endFrame, unused0) \
-    CMD_HH(setting, startFrame), CMD_HH(endFrame, unused0)
+#define CS_LIGHTING(setting, startFrame, endFrame) \
+    CMD_HH(setting, startFrame), CMD_HH(endFrame, endFrame)
 
 
 
@@ -647,7 +647,7 @@
  *   00000004 eeeeeeee
  *   size = 0x8
  */
-#define CS_SCENE_UNKNOWN_CMD_LIST(cmd, entries) cmd, CMD_W(entries)
+#define CS_UNK_DATA_LIST(cmd, entries) CMD_W(cmd), CMD_W(entries)
 
 /**
  * ARGS
@@ -655,9 +655,9 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
-#define CS_SCENE_UNKNOWN_CMD(base, startFrame, endFrame, unk_06) \
+#define CS_UNK_DATA(base, startFrame, endFrame, unk_06) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
 
 
