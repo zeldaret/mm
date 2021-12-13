@@ -60,7 +60,7 @@ void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
 void func_800EA0D4(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     csCtx->state = CS_STATE_SKIPPABLE_INIT;
-    csCtx->linkAction = NULL;
+    csCtx->playerAction = NULL;
 }
 
 void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -1281,7 +1281,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
                     if ((csCtx->frames >= cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
-                        csCtx->linkAction = (CsCmdActorAction*)cutscenePtr;
+                        csCtx->playerAction = (CsCmdActorAction*)cutscenePtr;
                     }
                     cutscenePtr += sizeof(CsCmdActorAction);
                 }
@@ -1380,11 +1380,12 @@ void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
+// unused
 void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (func_800EA220(globalCtx, csCtx, 0.0f)) {
         s16 i;
 
-        csCtx->linkAction = NULL;
+        csCtx->playerAction = NULL;
 
         for (i = 0; i < ARRAY_COUNT(csCtx->npcActions); i++) {
             csCtx->npcActions[i] = NULL;
@@ -1408,7 +1409,7 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
         D_801BB124 = 0;
         D_801BB128 = 0;
-        csCtx->linkAction = NULL;
+        csCtx->playerAction = NULL;
 
         for (i = 0; i < ARRAY_COUNT(csCtx->npcActions); i++) {
             csCtx->npcActions[i] = NULL;

@@ -187,6 +187,8 @@ build/src/overlays/fbdemos/%.o: CC := python3 tools/asm-processor/build.py $(CC)
 build/src/overlays/gamestates/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/overlays/kaleido_scope/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
+build/assets/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+
 #### Main Targets ###
 
 uncompressed: $(ROM)

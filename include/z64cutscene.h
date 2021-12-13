@@ -35,7 +35,7 @@ typedef struct {
     };
     /* 0x0C */ Vec3i startPos;
     /* 0x18 */ Vec3i endPos;
-    /* 0x24 */ Vec3i normal;
+    /* 0x24 */ Vec3f normal;
 } CsCmdActorAction; // size = 0x30
 
 typedef struct {
