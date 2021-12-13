@@ -153,7 +153,7 @@
  *   00000004 eeeeeeee
  *   size = 0x8
  */
-#define CS_SCENE_UNK_99_LIST(entries) CS_CMD_99, CMD_W(entries)
+#define CS_MOTIONBLUR_LIST(entries) CS_CMD_MOTIONBLUR, CMD_W(entries)
 
 /**
  * ARGS
@@ -163,8 +163,8 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x30
  */
-#define CS_SCENE_UNK_99(base, startFrame, endFrame, unused0) \
-    CMD_HH(base, startFrame), CMD_HH(endFrame, unused0)
+#define CS_MOTIONBLUR(base, startFrame, endFrame) \
+    CMD_HH(base, startFrame), CMD_HH(endFrame, endFrame)
 
 
 
@@ -392,8 +392,8 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x30
  */
-#define CS_SCENE_UNK_132(base, startFrame, endFrame, unk_06) \
-    CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
+#define CS_SCENE_UNK_132(base, startFrame, endFrame) \
+    CMD_HH(base, startFrame), CMD_HH(endFrame, endFrame)
 
 
 

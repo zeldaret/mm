@@ -439,35 +439,42 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
         }
 
         switch (cmd->base) {
-            case 0x1:
+            case 1:
                 // func_801A246C(SEQ_PLAYER_BGM_MAIN, TYPE_1);
                 func_801A246C(0, 1);
                 break;
-            case 0x2:
+
+            case 2:
                 // func_801A246C(SEQ_PLAYER_BGM_MAIN, TYPE_0);
                 func_801A246C(0, 0);
                 break;
-            case 0x3:
+
+            case 3:
                 // func_801A246C(SEQ_PLAYER_BGM_MAIN, TYPE_2);
                 func_801A246C(0, 2);
                 break;
-            case 0x4:
+
+            case 4:
                 // func_801A246C(SEQ_PLAYER_NATURE, TYPE_1);
                 func_801A246C(4, 1);
                 break;
-            case 0x5:
+
+            case 5:
                 // func_801A246C(SEQ_PLAYER_NATURE, TYPE_0);
                 func_801A246C(4, 0);
                 break;
-            case 0x6:
+
+            case 6:
                 // func_801A246C(SEQ_PLAYER_NATURE, TYPE_2);
                 func_801A246C(4, 2);
                 break;
-            case 0x7:
+
+            case 7:
                 // Audio_GetActiveSequence
                 activeSequence = func_801A8A50(0);
                 break;
-            case 0x8:
+
+            case 8:
                 if (activeSequence != 0xFFFF) {
                     // Audio_PlayBgmForDayScene
                     func_801A25E4(activeSequence, dayMinusOne);
@@ -635,14 +642,16 @@ void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCt
     }
 }
 
+// Command 0x15F: 
+// Related to credits?
 void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(0, 1) != 0xFF)) {
         switch (cmd->base) {
-            case 0x1:
+            case 1:
                 func_800EB364(globalCtx, csCtx, cmd);
                 break;
 
-            case 0x2:
+            case 2:
                 if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
                     globalCtx->nextEntranceIndex = 0x2400;
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
@@ -653,7 +662,7 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 globalCtx->sceneLoadFlag = 0x14;
                 break;
 
-            case 0x3:
+            case 3:
                 if (INV_CONTENT(ITEM_MASK_GREAT_FAIRY) == ITEM_MASK_GREAT_FAIRY) {
                     globalCtx->nextEntranceIndex = 0x4600;
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
@@ -664,7 +673,7 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 globalCtx->sceneLoadFlag = 0x14;
                 break;
 
-            case 0x4:
+            case 4:
                 if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) {
                     globalCtx->nextEntranceIndex = 0x6400;
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
@@ -675,7 +684,7 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 globalCtx->sceneLoadFlag = 0x14;
                 break;
 
-            case 0x5:
+            case 5:
                 if (INV_CONTENT(ITEM_MASK_BLAST) == ITEM_MASK_BLAST) {
                     globalCtx->nextEntranceIndex = 0xD400;
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
@@ -686,7 +695,7 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 globalCtx->sceneLoadFlag = 0x14;
                 break;
 
-            case 0x6:
+            case 6:
                 if (INV_CONTENT(ITEM_MASK_CIRCUS_LEADER) == ITEM_MASK_CIRCUS_LEADER) {
                     globalCtx->nextEntranceIndex = 0x2400;
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
@@ -697,7 +706,7 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 globalCtx->sceneLoadFlag = 0x14;
                 break;
 
-            case 0x7:
+            case 7:
                 if (INV_CONTENT(ITEM_MASK_BREMEN) == ITEM_MASK_BREMEN) {
                     globalCtx->nextEntranceIndex = 0x2400;
                     gSaveContext.nextCutsceneIndex = 0xFFF3;
@@ -708,13 +717,13 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 globalCtx->sceneLoadFlag = 0x14;
                 break;
 
-            case 0x8:
+            case 8:
                 globalCtx->nextEntranceIndex = 0x2000;
                 gSaveContext.nextCutsceneIndex = 0xFFF3;
                 globalCtx->sceneLoadFlag = 0x14;
                 break;
 
-            case 0x9:
+            case 9:
                 if (INV_CONTENT(ITEM_MASK_COUPLE) == ITEM_MASK_COUPLE) {
                     globalCtx->nextEntranceIndex = 0x5400;
                     gSaveContext.nextCutsceneIndex = 0xFFF8;
@@ -725,7 +734,7 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 globalCtx->sceneLoadFlag = 0x14;
                 break;
 
-            case 0xA:
+            case 10:
                 if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
                     globalCtx->nextEntranceIndex = 0x7E00;
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
@@ -736,7 +745,7 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 globalCtx->sceneLoadFlag = 0x14;
                 break;
 
-            case 0xB:
+            case 11:
                 if (INV_CONTENT(ITEM_MASK_POSTMAN) == ITEM_MASK_POSTMAN) {
                     globalCtx->nextEntranceIndex = 0x5410;
                     gSaveContext.nextCutsceneIndex = 0xFFF8;
@@ -750,8 +759,8 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
-// MotionBlur
-void func_800EBB68(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+// Command 0x99: Motion blur
+void Cutscene_Command_MotionBlur(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         if ((csCtx->frames == cmd->startFrame) && (cmd->base == 1)) {
             func_8016566C(180);
@@ -1087,19 +1096,19 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
 
 void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
     s32 i;
-    s32 sp30;
+    s32 count;
 
-    bcopy(*cutscenePtr, &sp30, sizeof(s32));
+    bcopy(*cutscenePtr, &count, sizeof(s32));
     *cutscenePtr += 4;
 
-    for (i = 0; i < sp30; i++) {
-        CsCmdActorAction* temp_v0 = *(CsCmdActorAction**)cutscenePtr;
+    for (i = 0; i < count; i++) {
+        CsCmdActorAction* actorAction = *(CsCmdActorAction**)cutscenePtr;
 
-        if ((csCtx->frames >= temp_v0->startFrame) && (csCtx->frames < temp_v0->endFrame)) {
-            csCtx->npcActions[index] = temp_v0;
+        if ((csCtx->frames >= actorAction->startFrame) && (csCtx->frames < actorAction->endFrame)) {
+            csCtx->npcActions[index] = actorAction;
         }
 
-        *cutscenePtr += 0x30;
+        *cutscenePtr += sizeof(CsCmdActorAction);
     }
 }
 
@@ -1322,11 +1331,11 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_99: 
+            case CS_CMD_MOTIONBLUR:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EBB68(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_MotionBlur(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += 8;
                 }
                 break;

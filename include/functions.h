@@ -1520,7 +1520,7 @@ void func_800EAF20(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk190
 void func_800EAFE0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk9B* cmd);
 void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd);
 void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd);
-void func_800EBB68(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd);
+void Cutscene_Command_MotionBlur(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd);
 void Cutscene_Command_GiveTatlToPlayer(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd);
 void Cutscene_Command_TransitionFX(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd);
 // u32 func_800EC6D4(void);
