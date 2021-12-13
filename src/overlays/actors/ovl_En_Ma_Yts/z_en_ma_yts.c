@@ -323,12 +323,12 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
                 // Saying to non-human Link: "Cremia went to town."
                 gSaveContext.weekEventReg[0x41] |= 0x80;
                 EnMaYts_SetFaceExpression(this, 0, 0);
-                func_801518B0(globalCtx, 0x335F, &this->actor);
+                Message_StartTextbox(globalCtx, 0x335F, &this->actor);
                 this->textId = 0x335F;
             } else {
                 // Saying to non-human Link: "Pretend you did not hear that."
                 EnMaYts_SetFaceExpression(this, 4, 3);
-                func_801518B0(globalCtx, 0x3362, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3362, &this->actor);
                 this->textId = 0x3362;
                 func_80151BB4(globalCtx, 5);
             }
@@ -336,29 +336,29 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
             if (!(gSaveContext.weekEventReg[0x41] & 0x40)) {
                 gSaveContext.weekEventReg[0x41] |= 0x40;
                 EnMaYts_SetFaceExpression(this, 0, 0);
-                func_801518B0(globalCtx, 0x3363, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3363, &this->actor);
                 this->textId = 0x3363;
             } else {
                 EnMaYts_SetFaceExpression(this, 4, 2);
-                func_801518B0(globalCtx, 0x3366, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3366, &this->actor);
                 this->textId = 0x3366;
                 func_80151BB4(globalCtx, 5);
             }
         } else if (!(gSaveContext.weekEventReg[0x15] & 0x20)) {
             EnMaYts_SetFaceExpression(this, 0, 0);
-            func_801518B0(globalCtx, 0x3367, &this->actor);
+            Message_StartTextbox(globalCtx, 0x3367, &this->actor);
             this->textId = 0x3367;
         } else {
             if (!(gSaveContext.weekEventReg[0x41] & 0x20)) {
                 // Saying to Grasshopper: "Cremia went to town."
                 gSaveContext.weekEventReg[0x41] |= 0x20;
                 EnMaYts_SetFaceExpression(this, 4, 2);
-                func_801518B0(globalCtx, 0x3369, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3369, &this->actor);
                 this->textId = 0x3369;
             } else {
                 // Saying to Grasshopper: "You're our bodyguard."
                 EnMaYts_SetFaceExpression(this, 0, 0);
-                func_801518B0(globalCtx, 0x336C, &this->actor);
+                Message_StartTextbox(globalCtx, 0x336C, &this->actor);
                 this->textId = 0x336C;
                 func_80151BB4(globalCtx, 5);
             }
@@ -451,46 +451,46 @@ void EnMaYts_ChooseNextDialogue(EnMaYts* this, GlobalContext* globalCtx) {
         switch (this->textId) {
             case 0x335F:
                 EnMaYts_SetFaceExpression(this, 0, 2);
-                func_801518B0(globalCtx, 0x3360, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3360, &this->actor);
                 this->textId = 0x3360;
                 break;
 
             case 0x3360:
                 EnMaYts_SetFaceExpression(this, 4, 3);
-                func_801518B0(globalCtx, 0x3361, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3361, &this->actor);
                 this->textId = 0x3361;
                 func_80151BB4(globalCtx, 5);
                 break;
 
             case 0x3363:
                 EnMaYts_SetFaceExpression(this, 1, 1);
-                func_801518B0(globalCtx, 0x3364, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3364, &this->actor);
                 this->textId = 0x3364;
                 break;
 
             case 0x3364:
                 EnMaYts_SetFaceExpression(this, 4, 2);
-                func_801518B0(globalCtx, 0x3365, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3365, &this->actor);
                 this->textId = 0x3365;
                 func_80151BB4(globalCtx, 5);
                 break;
 
             case 0x3367:
                 EnMaYts_SetFaceExpression(this, 4, 3);
-                func_801518B0(globalCtx, 0x3368, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3368, &this->actor);
                 this->textId = 0x3368;
                 func_80151BB4(globalCtx, 5);
                 break;
 
             case 0x3369:
                 EnMaYts_SetFaceExpression(this, 0, 0);
-                func_801518B0(globalCtx, 0x336A, &this->actor);
+                Message_StartTextbox(globalCtx, 0x336A, &this->actor);
                 this->textId = 0x336A;
                 break;
 
             case 0x336A:
                 EnMaYts_SetFaceExpression(this, 3, 3);
-                func_801518B0(globalCtx, 0x336B, &this->actor);
+                Message_StartTextbox(globalCtx, 0x336B, &this->actor);
                 this->textId = 0x336B;
                 func_80151BB4(globalCtx, 5);
                 break;

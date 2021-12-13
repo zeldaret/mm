@@ -657,7 +657,7 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
             if (1) {}
             if (!temp) {
                 gSaveContext.weekEventReg[23] |= 0x10;
-                func_801518B0(globalCtx, 0x1069, NULL);
+                Message_StartTextbox(globalCtx, 0x1069, NULL);
             }
             break;
 
@@ -771,12 +771,12 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
                         } else {
                             phi_a1 = 0x10A5;
                         }
-                        func_801518B0(globalCtx, phi_a1, &this->actor);
+                        Message_StartTextbox(globalCtx, phi_a1, &this->actor);
                         func_80B5D114(this, globalCtx);
                         break;
 
                     case 1:
-                        func_801518B0(globalCtx, 0x106D, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x106D, &this->actor);
                         func_80B5D114(this, globalCtx);
                         break;
                 }

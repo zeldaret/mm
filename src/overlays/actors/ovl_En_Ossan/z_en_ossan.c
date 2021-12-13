@@ -387,7 +387,7 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
                 case 10:
                     this->animationIdx++;
                     func_8013BC6C(&this->skelAnime, animations, this->animationIdx);
-                    func_801518B0(globalCtx, this->textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->textId, &this->actor);
                     EnOssan_SetupStartShopping(globalCtx, this, false);
                     break;
                 case 5:
@@ -412,7 +412,7 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
     } else {
         EnOssan_SetHaveMet(this);
         this->textId = EnOssan_GetWelcomePartTimeWorker(this, globalCtx);
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
         EnOssan_SetupStartShopping(globalCtx, this, false);
     }
 }
@@ -1095,7 +1095,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
                         player->stateFlags2 |= 0x20000000;
-                        func_801518B0(globalCtx, this->textId, &this->actor);
+                        Message_StartTextbox(globalCtx, this->textId, &this->actor);
                         EnOssan_SetupStartShopping(globalCtx, this, true);
                         func_800B85E0(&this->actor, globalCtx, 100.0f, -1);
                         break;
@@ -1113,7 +1113,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
         item->restockFunc(globalCtx, item);
         player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
         player->stateFlags2 |= 0x20000000;
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
         EnOssan_SetupStartShopping(globalCtx, this, true);
         func_800B85E0(&this->actor, globalCtx, 100.0f, -1);
     }

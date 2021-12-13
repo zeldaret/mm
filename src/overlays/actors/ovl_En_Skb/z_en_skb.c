@@ -320,9 +320,9 @@ void func_80994F7C(EnSkb* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->unk_3E2 = 1;
         if (this->unk_3E0 == 1) {
-            func_801518B0(globalCtx, 0x13F8, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F8, &this->actor);
         } else {
-            func_801518B0(globalCtx, 0x13F6, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F6, &this->actor);
             this->unk_3E0 = 1;
         }
         this->actionFunc = func_80995190;
@@ -341,12 +341,12 @@ void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->unk_3E2 = 1;
         if (this->unk_3E0 == 1) {
-            func_801518B0(globalCtx, 0x13F8, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F8, &this->actor);
             if (this->unk_3DE == 2) {
                 func_800BDC5C(&this->skelAnime, sAnimations, 11);
             }
         } else {
-            func_801518B0(globalCtx, 0x13F6, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F6, &this->actor);
             this->unk_3E0 = 1;
         }
         this->actionFunc = func_80995190;
@@ -373,7 +373,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
 
         case 5:
             if (func_80147624(globalCtx)) {
-                func_801518B0(globalCtx, 0x13F7, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13F7, &this->actor);
                 if (this->unk_3DE == 2) {
                     func_800BDC5C(&this->skelAnime, sAnimations, 11);
                 }

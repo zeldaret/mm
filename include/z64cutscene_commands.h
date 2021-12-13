@@ -23,7 +23,6 @@
 #define CS_TEXT_LIST(entries) CS_CMD_TEXTBOX, CMD_W(entries)
 
 
-#if 0
 /**
  * ARGS
  *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e), s16 type (o), 
@@ -37,25 +36,79 @@
 
 /**
  * ARGS
+ *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e),
+ *   s16 topOptionBranch (y), s16 bottomOptionBranch (n)
+ * FORMAT
+ *   iiiissss eeee0000 yyyynnnn
+ *   size = 0xC
+ */
+#define CS_TEXT_DEFAULT(messageId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
+    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXTBOX_TYPE_DEFAULT, topOptionBranch, bottomOptionBranch)
+
+/**
+ * ARGS
+ *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e),
+ *   s16 topOptionBranch (y), s16 bottomOptionBranch (n)
+ * FORMAT
+ *   iiiissss eeee0001 yyyynnnn
+ *   size = 0xC
+ */
+#define CS_TEXT_TYPE_1(messageId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
+    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXTBOX_TYPE_1, topOptionBranch, bottomOptionBranch)
+
+/**
+ * ARGS
+ *   s16 ocarinaSongAction (o), s16 startFrame (s), s16 endFrame (e), s16 messageId (i)
+ * FORMAT
+ *   oooossss eeee0002 iiiiFFFF
+ *   size = 0xC
+ */
+#define CS_TEXT_LEARN_SONG(ocarinaSongAction, startFrame, endFrame, messageId) \
+    CS_TEXT_DISPLAY_TEXTBOX(ocarinaSongAction, startFrame, endFrame, CS_TEXTBOX_TYPE_LEARN_SONG, messageId, 0xFFFF)
+
+/**
+ * ARGS
+ *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e),
+ *   s16 topOptionBranch (y), s16 bottomOptionBranch (n)
+ * FORMAT
+ *   iiiissss eeee0001 yyyynnnn
+ *   size = 0xC
+ */
+#define CS_TEXT_TYPE_3(messageId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
+    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXTBOX_TYPE_3, topOptionBranch, bottomOptionBranch)
+
+/**
+ * If Player has the 4 bosses remains then alternativeMessageId is used, otherwise defaultMessageId is used
+ * ARGS
+ *   s16 defaultMessageId (d), s16 startFrame (s), s16 endFrame (e), s16 alternativeMessageId (a)
+ * FORMAT
+ *   ddddssss eeee0004 aaaaFFFF
+ *   size = 0xC
+ */
+#define CS_TEXT_BOSSES_REMAINS(defaultMessageId, startFrame, endFrame, alternativeMessageId) \
+    CS_TEXT_DISPLAY_TEXTBOX(defaultMessageId, startFrame, endFrame, CS_TEXTBOX_TYPE_BOSSES_REMAINS, alternativeMessageId, 0xFFFF)
+
+/**
+ * If Player has every non-transformation mask then alternativeMessageId is used, otherwise defaultMessageId is used
+ * ARGS
+ *   s16 defaultMessageId (d), s16 startFrame (s), s16 endFrame (e), s16 alternativeMessageId (a)
+ * FORMAT
+ *   ddddssss eeee0004 aaaaFFFF
+ *   size = 0xC
+ */
+#define CS_TEXT_ALL_NORMAL_MASKS(defaultMessageId, startFrame, endFrame, alternativeMessageId) \
+    CS_TEXT_DISPLAY_TEXTBOX(defaultMessageId, startFrame, endFrame, CS_TEXTBOX_TYPE_ALL_NORMAL_MASKS, alternativeMessageId, 0xFFFF)
+
+/**
+ * ARGS
  *   s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   FFFFssss eeeeFFFF FFFFFFFF
  *   size = 0xC
  */
 #define CS_TEXT_NONE(startFrame, endFrame) \
-    CS_TEXT_DISPLAY_TEXTBOX(0xFFFF, startFrame, endFrame, 0xFFFF, 0xFFFF, 0xFFFF)
+    CS_TEXT_DISPLAY_TEXTBOX(0xFFFF, startFrame, endFrame, CS_TEXTBOX_TYPE_NONE, 0xFFFF, 0xFFFF)
 
-/**
- * ARGS
- *   s16 ocarinaSongAction (o), s16 startFrame (s), s16 endFrame (e), s16 topOptionBranch (i)
- * FORMAT
- *   oooossss eeee0002 iiiiFFFF
- *   size = 0xC
- */
-#define CS_TEXT_LEARN_SONG(ocarinaSongAction, startFrame, endFrame, messageId) \
-    CS_TEXT_DISPLAY_TEXTBOX(ocarinaSongAction, startFrame, endFrame, 0x0002, messageId, 0xFFFF)
-
-#endif
 
 
 

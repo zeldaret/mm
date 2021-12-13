@@ -1103,7 +1103,7 @@ void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx) {
     if (this->unk_339 >= 3) {
         this->unk_339 = 0;
         if (!(player->stateFlags2 & 0x8000000)) {
-            func_801518B0(globalCtx, 0x2013, &this->actor);
+            Message_StartTextbox(globalCtx, 0x2013, &this->actor);
         }
     }
 
@@ -1534,7 +1534,7 @@ void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
         if (this->unk_328 > 800) {
             this->unk_328 = 0;
             if (!(player->stateFlags2 & 0x8000000)) {
-                func_801518B0(globalCtx, 0x2014, &this->actor);
+                Message_StartTextbox(globalCtx, 0x2014, &this->actor);
             }
         }
         if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {

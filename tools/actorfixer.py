@@ -156,6 +156,7 @@ animdict = {
     "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
     "func_801A3F54": "Audio_SetCutsceneFlag",
     "func_800EA0EC": "Cutscene_End",
+    "func_801518B0": "Message_StartTextbox",
 
     "skelanime.unk03": "skelanime.taper",
     "skelanime.animCurrentSeg": "skelanime.animation",

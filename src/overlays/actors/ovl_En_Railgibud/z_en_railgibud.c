@@ -857,7 +857,7 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->unk_400 == 0) && (this->unk_3F8 == 0)) {
         if (func_800B84D0(&this->actor, globalCtx)) {
             this->unk_3FA = 1;
-            func_801518B0(globalCtx, 0x13B2, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13B2, &this->actor);
             this->unk_400 = 0x13B2;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
@@ -868,7 +868,7 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
         switch (func_80152498(&globalCtx->msgCtx)) {
             case 5:
                 if (func_80147624(globalCtx)) {
-                    func_801518B0(globalCtx, 0x13B3, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x13B3, &this->actor);
                     this->unk_400 = 0x13B3;
                 }
                 break;

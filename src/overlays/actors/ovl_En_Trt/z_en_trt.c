@@ -344,13 +344,13 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
         switch (this->textId) {
             case 0x883:
                 this->textId = 0x884;
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
                 gSaveContext.weekEventReg[0x35] |= 8;
                 func_80123D50(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                 break;
             case 0x888:
                 this->textId = 0x889;
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
                 break;
             case 0x889:
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
@@ -409,7 +409,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                 this->tmpTextId = this->textId;
                 this->textId = 0x88E;
                 gSaveContext.weekEventReg[0x55] |= 8;
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
                 this->actionFunc = EnTrt_EndConversation;
             }
         } else {
@@ -433,7 +433,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                 this->textId = 0x835;
                 EnTrt_SetupStartShopping(globalCtx, this, false);
             }
-            func_801518B0(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->textId, &this->actor);
         }
     }
 }
@@ -879,7 +879,7 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
     } else if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(40, 20);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
         this->animationIdx = 5;
         switch (this->textId) {
             case 0x834:
@@ -930,7 +930,7 @@ void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx) {
     } else if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(40, 20);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
         this->animationIdx = 5;
         this->actionFunc = EnTrt_TryToGiveRedPotionAfterSurprised;
     }
@@ -951,7 +951,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
             this->tmpTextId = this->textId;
             this->textId = 0x88E;
             gSaveContext.weekEventReg[0x55] |= 8;
-            func_801518B0(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->textId, &this->actor);
             this->actionFunc = EnTrt_EndConversation;
         }
     }
@@ -972,12 +972,12 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                 this->tmpTextId = this->textId;
                 this->textId = 0x88E;
                 gSaveContext.weekEventReg[0x55] |= 8;
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
                 this->actionFunc = EnTrt_EndConversation;
             }
         } else {
             this->textId = 0x83C;
-            func_801518B0(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->textId, &this->actor);
         }
     }
 }
@@ -1035,7 +1035,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
     } else {
         if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= 50.0f) &&
             (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
@@ -1114,7 +1114,7 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
                         player->stateFlags2 |= 0x20000000;
-                        func_801518B0(globalCtx, this->textId, &this->actor);
+                        Message_StartTextbox(globalCtx, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(globalCtx, this, true);
                         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
                         break;
@@ -1408,7 +1408,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
             } else {
                 this->textId = 0x886;
             }
-            func_801518B0(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->textId, &this->actor);
             this->actionFunc = EnTrt_Goodbye;
         }
     }

@@ -252,7 +252,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
         func_801149A0(itemId2, slotId);
         this->unk_3E8 = D_060033B0;
         if (!func_80152498(&globalCtx->msgCtx)) {
-            func_801518B0(globalCtx, 0xF4, NULL);
+            Message_StartTextbox(globalCtx, 0xF4, NULL);
         }
         itemId1 = ITEM_BOTTLE;
     } else if (phi_a3 != 0) {
@@ -276,7 +276,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
         }
 
         if (!func_80152498(&globalCtx->msgCtx)) {
-            func_801518B0(globalCtx, 0xF5, NULL);
+            Message_StartTextbox(globalCtx, 0xF5, NULL);
         }
     } else {
         return false;

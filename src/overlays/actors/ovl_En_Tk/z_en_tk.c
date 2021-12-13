@@ -544,16 +544,16 @@ void func_80AED4F8(EnTk* this, GlobalContext* globalCtx) {
 
 void func_80AED544(EnTk* this, GlobalContext* globalCtx) {
     if (!(gSaveContext.weekEventReg[31] & 0x10)) {
-        func_801518B0(globalCtx, 0x13FE, &this->actor);
+        Message_StartTextbox(globalCtx, 0x13FE, &this->actor);
         gSaveContext.weekEventReg[31] |= 0x10;
     } else if (gSaveContext.time < CLOCK_TIME(9, 0)) {
-        func_801518B0(globalCtx, 0x13FF, &this->actor);
+        Message_StartTextbox(globalCtx, 0x13FF, &this->actor);
     } else if (gSaveContext.time < CLOCK_TIME(12, 0)) {
-        func_801518B0(globalCtx, 0x1400, &this->actor);
+        Message_StartTextbox(globalCtx, 0x1400, &this->actor);
     } else if (gSaveContext.time < CLOCK_TIME(15, 0)) {
-        func_801518B0(globalCtx, 0x1401, &this->actor);
+        Message_StartTextbox(globalCtx, 0x1401, &this->actor);
     } else {
-        func_801518B0(globalCtx, 0x1402, &this->actor);
+        Message_StartTextbox(globalCtx, 0x1402, &this->actor);
     }
 }
 
@@ -567,15 +567,15 @@ void func_80AED610(EnTk* this, GlobalContext* globalCtx) {
             if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer - 0x1555, 0x71C)) {
                 if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
                     func_8013E1C8(&this->skelAnime, D_80AEF868, 4, &this->unk_2D4);
-                    func_801518B0(globalCtx, 0x13FD, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x13FD, &this->actor);
                 } else if (CURRENT_DAY != 2) {
                     func_80AED544(this, globalCtx);
                 } else if (!Flags_GetSwitch(globalCtx, ENTK_GET_7F0(&this->actor))) {
-                    func_801518B0(globalCtx, 0x1403, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x1403, &this->actor);
                 } else if (gSaveContext.weekEventReg[60] & 2) {
                     func_80AED544(this, globalCtx);
                 } else {
-                    func_801518B0(globalCtx, 0x1413, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x1413, &this->actor);
                 }
                 break;
             }
@@ -777,12 +777,12 @@ void func_80AEDE10(EnTk* this, GlobalContext* globalCtx) {
                     break;
 
                 case 4:
-                    func_801518B0(globalCtx, 0x140F, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x140F, &this->actor);
                     func_8013E1C8(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
                     break;
 
                 case 3:
-                    func_801518B0(globalCtx, 0x1410, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x1410, &this->actor);
                     func_8013E1C8(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
                     break;
             }
@@ -818,12 +818,12 @@ void func_80AEDF5C(EnTk* this, GlobalContext* globalCtx) {
                         } else {
                             func_8013E1C8(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
                         }
-                        func_801518B0(globalCtx, this->unk_2E6, &this->actor);
+                        Message_StartTextbox(globalCtx, this->unk_2E6, &this->actor);
                     }
                     break;
 
                 case 0x1414:
-                    func_801518B0(globalCtx, this->unk_2E6, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_2E6, &this->actor);
                     break;
             }
             break;
@@ -1198,7 +1198,7 @@ void func_80AEED38(EnTk* this, GlobalContext* globalCtx) {
     }
 
     if (!func_80152498(&globalCtx->msgCtx) && !func_801690CC(globalCtx) && (this->unk_2C6-- <= 0)) {
-        func_801518B0(globalCtx, 0x140C, NULL);
+        Message_StartTextbox(globalCtx, 0x140C, NULL);
         this->unk_2CA |= 0x4000;
         this->unk_2C6 = 200;
     }

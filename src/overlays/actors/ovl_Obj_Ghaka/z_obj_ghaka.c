@@ -111,12 +111,12 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
                 case 0:
                     func_8019F208();
                     this->dyna.actor.textId = 0xCF5;
-                    func_801518B0(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
+                    Message_StartTextbox(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
                     break;
                 case 1:
                     func_8019F208();
                     this->dyna.actor.textId = 0xCF7;
-                    func_801518B0(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
+                    Message_StartTextbox(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
                     break;
                 case 2:
                     func_8019F230();

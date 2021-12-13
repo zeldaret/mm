@@ -360,27 +360,27 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
                 case 0x60E:
                     gSaveContext.weekEventReg[17] |= 0x20;
                     gSaveContext.weekEventReg[86] |= 4;
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x628:
                     gSaveContext.weekEventReg[77] |= 0x40;
                     gSaveContext.weekEventReg[86] |= 4;
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x614:
                     gSaveContext.weekEventReg[17] |= 0x40;
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x610:
                 case 0x616:
                 case 0x629:
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
@@ -498,7 +498,7 @@ void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADBC60(EnSellnuts* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
-        func_801518B0(globalCtx, this->unk_340, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
@@ -709,7 +709,7 @@ void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         player->linearVelocity = 0.0f;
         this->actor.flags &= ~0x10000;
-        func_801518B0(globalCtx, this->unk_340, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
         if (this->unk_340 == 0x625) {
             this->unk_338 |= 1;
             this->actor.draw = EnSellnuts_Draw;
