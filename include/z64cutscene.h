@@ -102,9 +102,9 @@ typedef struct {
     /* 0x0 */ u16 unk0;
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
-    /* 0x6 */ u8 unk6;
-    /* 0x7 */ u8 unk7;
-    /* 0x8 */ u8 unk8;
+    /* 0x6 */ u8 r;
+    /* 0x7 */ u8 g;
+    /* 0x8 */ u8 b;
     /* 0x9 */ UNK_TYPE1 pad9[0x3];
 } CsCmdUnk9B; // size = 0xC
 

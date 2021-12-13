@@ -735,7 +735,7 @@ typedef struct {
     /* 0x80 */ OSMesg unk_80;
     /* 0x84 */ f32 unk_84;
     /* 0x88 */ f32 unk_88;
-    /* 0x8C */ LightSettings2 unk_8C;
+    /* 0x8C */ LightSettingsAdjustments lightAdjustments;
     /* 0xA8 */ f32 unk_A8;
     /* 0xAC */ Vec3s windDir;
     /* 0xB4 */ f32 windSpeed;
@@ -755,7 +755,7 @@ typedef struct {
     /* 0xE4 */ u8 unk_E4;
     /* 0xE5 */ u8 fillScreen;
     /* 0xE6 */ u8 screenFillColor[4];
-    /* 0xEA */ u8 unk_EA;
+    /* 0xEA */ u8 sandstormState;
     /* 0xEB */ u8 unk_EB;
     /* 0xEC */ u8 unk_EC;
     /* 0xED */ u8 unk_ED;

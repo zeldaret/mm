@@ -1314,7 +1314,7 @@ void func_809DC78C(Actor* thisx, GlobalContext* globalCtx) {
     Boss02* this = THIS;
 
     this->unk_01AC = D_809DF5B0;
-    globalCtx->envCtx.unk_EA = 0xD;
+    globalCtx->envCtx.sandstormState = 0xD;
 
     if (D_809E0434 != NULL) {
         this->unk_1D74 = KREG(23) + -15.0f;
@@ -1797,7 +1797,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             this->unk_1D18 = 0;
             func_80169AFC(globalCtx, this->unk_1D22, 0);
             this->unk_1D22 = 0;
-            func_800EA0EC(globalCtx, &globalCtx->csCtx);
+            Cutscene_End(globalCtx, &globalCtx->csCtx);
             this->actor.flags |= 1;
             player->stateFlags1 &= ~0x100;
             this->unk_1D70 = 0.01f;
@@ -1811,7 +1811,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         Actor_SetScale(&player->actor, this->unk_1D70);
     }
 
-    globalCtx->envCtx.unk_8C.fogNear = this->unk_1D74;
+    globalCtx->envCtx.lightAdjustments.fogNear = this->unk_1D74;
 
     if (sp57) {
         D_809E0422 = 1 - D_809E0422;
@@ -2190,7 +2190,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             if (this->unk_1D1C == (u32)(BREG(27) + 335)) {
                 func_80169AFC(globalCtx, this->unk_1D22, 0);
                 this->unk_1D22 = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->actor.flags |= 1;
                 this->unk_1D20 = 0;
@@ -2251,7 +2251,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             if (this->unk_1D1C == 30) {
                 func_80169AFC(globalCtx, this->unk_1D22, 0);
                 this->unk_1D22 = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->unk_1D20 = 0;
                 this->actor.flags |= 1;

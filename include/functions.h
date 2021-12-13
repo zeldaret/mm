@@ -1504,9 +1504,9 @@ void func_800E9F78(GraphicsContext* gfxCtx);
 
 void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void func_800EA0D4(GlobalContext* globalCtx, CutsceneContext* csCtx);
-void func_800EA0EC(GlobalContext* globalCtx, CutsceneContext* csCtx);
-void Cutscene_StepCutscene1(GlobalContext* globalCtx, CutsceneContext* csCtx);
-void Cutscene_StepCutscene2(GlobalContext* globalCtx, CutsceneContext* csCtx);
+void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx);
+void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx);
+void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void Cutscene_Nop800EA210(GlobalContext* globalCtx, CutsceneContext* csCtx);
 s32 func_800EA220(GlobalContext* globalCtx, CutsceneContext* csCtx, f32 target);
 void func_800EA258(GlobalContext* globalCtx, CutsceneContext* csCtx);

@@ -562,7 +562,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
                 camera->eyeNext = this->eye;
                 camera->at = this->at;
                 func_80169AFC(globalCtx, this->camId, 0);
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->cameraState = 0;
                 this->camId = 0;

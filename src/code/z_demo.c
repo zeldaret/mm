@@ -63,19 +63,19 @@ void func_800EA0D4(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     csCtx->linkAction = NULL;
 }
 
-void func_800EA0EC(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (csCtx->state != CS_STATE_UNSKIPPABLE_EXEC) {
         csCtx->state = CS_STATE_UNSKIPPABLE_INIT;
     }
 }
 
-void Cutscene_StepCutscene1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (gSaveContext.cutscene < 0xFFF0) {
         sCsStateHandlers1[csCtx->state](globalCtx, csCtx);
     }
 }
 
-void Cutscene_StepCutscene2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if ((gSaveContext.cutsceneTrigger != 0) && (globalCtx->sceneLoadFlag == 0x14)) {
         gSaveContext.cutsceneTrigger = 0;
     }
@@ -91,6 +91,7 @@ void Cutscene_StepCutscene2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
+// Cutscene_Nop / Cutscene_DoNothing / Cutscene_Wait
 void Cutscene_Nop800EA210(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
@@ -123,7 +124,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
     static u16 D_801BB15C = 0xFFFF;
     GlobalContext* globalCtx = globalCtx2;
     Player* player = GET_PLAYER(globalCtx);
-    u8 sp3F = false;
+    u8 sp3F = 0;
     f32 temp_f0;
     int new_var;
     u16 temp_t5;
@@ -134,30 +135,30 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
 
     temp_f0 = Environment_LerpWeight(cmd->endFrame - 1, cmd->startFrame, csCtx->frames);
     if (csCtx->frames == cmd->startFrame) {
-        sp3F = true;
+        sp3F = 1;
     }
 
     switch (cmd->base) {
         case 0x1:
-            if (sp3F) {
+            if (sp3F != 0) {
                 func_800FD78C(globalCtx);
                 globalCtx->envCtx.unk_F2[0] = 0x3C;
             }
             break;
         case 0x2:
-            if (sp3F) {
+            if (sp3F != 0) {
                 func_801A47DC(0xF, 0, 0);
                 func_800FB320(globalCtx, 3);
                 D_801F4E68 = 1;
             }
             break;
         case 0x3:
-            if (globalCtx->envCtx.unk_8C.fogFar < 12800) {
-                globalCtx->envCtx.unk_8C.fogFar += 35;
+            if (globalCtx->envCtx.lightAdjustments.fogFar < 12800) {
+                globalCtx->envCtx.lightAdjustments.fogFar += 35;
             }
             break;
         case 0x4:
-            if (sp3F) {
+            if (sp3F != 0) {
                 globalCtx->envCtx.unk_19 = 1;
                 globalCtx->envCtx.unk_17 = 1;
                 globalCtx->envCtx.unk_18 = 0;
@@ -175,7 +176,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             }
             break;
         case 0x7:
-            if (sp3F) {
+            if (sp3F != 0) {
                 if (globalCtx->loadedScene->titleTextId != 0) {
                     func_80151A68(globalCtx, globalCtx->loadedScene->titleTextId);
                 }
@@ -183,7 +184,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x8:
             func_8019F128(0x2150);
-            if (sp3F) {
+            if (sp3F != 0) {
                 sQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
                 Quake_SetSpeed(sQuakeIndex, 0x55F0);
                 Quake_SetQuakeValues(sQuakeIndex, 6, 4, 0, 0);
@@ -192,7 +193,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             }
             break;
         case 0x9:
-            if (sp3F) {
+            if (sp3F != 0) {
                 Quake_Init();
             }
             break;
@@ -213,16 +214,16 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0xD:
             if (globalCtx->state.frames & 8) {
-                if (globalCtx->envCtx.unk_8C.ambientColor[0] < 0x28) {
-                    globalCtx->envCtx.unk_8C.ambientColor[0] += 2;
-                    globalCtx->envCtx.unk_8C.diffuseColor1[1] -= 3;
-                    globalCtx->envCtx.unk_8C.diffuseColor1[2] -= 3;
+                if (globalCtx->envCtx.lightAdjustments.ambientColor[0] < 0x28) {
+                    globalCtx->envCtx.lightAdjustments.ambientColor[0] += 2;
+                    globalCtx->envCtx.lightAdjustments.diffuseColor1[1] -= 3;
+                    globalCtx->envCtx.lightAdjustments.diffuseColor1[2] -= 3;
                 }
             } else {
-                if (globalCtx->envCtx.unk_8C.ambientColor[0] >= 3) {
-                    globalCtx->envCtx.unk_8C.ambientColor[0] -= 2;
-                    globalCtx->envCtx.unk_8C.diffuseColor1[1] += 3;
-                    globalCtx->envCtx.unk_8C.diffuseColor1[2] += 3;
+                if (globalCtx->envCtx.lightAdjustments.ambientColor[0] >= 3) {
+                    globalCtx->envCtx.lightAdjustments.ambientColor[0] -= 2;
+                    globalCtx->envCtx.lightAdjustments.diffuseColor1[1] += 3;
+                    globalCtx->envCtx.lightAdjustments.diffuseColor1[2] += 3;
                 }
             }
             break;
@@ -233,8 +234,8 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             globalCtx->unk_18845 = 0;
             break;
         case 0x10:
-            if (sp3F) {
-                globalCtx->envCtx.unk_EA = 1;
+            if (sp3F != 0) {
+                globalCtx->envCtx.sandstormState = 1;
             }
             func_8019F128(0x20C0);
             break;
@@ -270,12 +271,12 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x19:
             D_801BB130 = gSaveContext.playerForm;
-            gSaveContext.playerForm = 4;
+            gSaveContext.playerForm = PLAYER_FORM_HUMAN;
             gSaveContext.equippedMask = 0;
             break;
         case 0x1A:
             func_8019F128(0x2159);
-            if (sp3F) {
+            if (sp3F != 0) {
                 sQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
                 Quake_SetSpeed(sQuakeIndex, 30000);
                 Quake_SetQuakeValues(sQuakeIndex, 20, 10, 0, 0);
@@ -283,7 +284,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             }
             break;
         case 0x1B:
-            if (sp3F) {
+            if (sp3F != 0) {
                 globalCtx->nextEntranceIndex = 0x1C00;
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
                 globalCtx->sceneLoadFlag = 0x14;
@@ -291,7 +292,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             }
             break;
         case 0x1C:
-            if (sp3F) {
+            if (sp3F != 0) {
                 globalCtx->envCtx.unk_17 = 0xD;
             }
             break;
@@ -305,18 +306,19 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             D_801F4DE0 = 0;
             break;
         case 0x21:
-            if (sp3F) {
+            if (sp3F != 0) {
                 func_80146EE8(globalCtx);
             }
             break;
         case 0x22:
-            if (sp3F) {
+            if (sp3F != 0) {
                 func_80144A94(&globalCtx->sramCtx);
             }
             break;
         case 0x23:
             if (D_801BB15C != csCtx->frames) {
                 D_801BB15C = csCtx->frames;
+
                 if (gGameInfo->data[0xF] != 0) {
                     gSaveContext.time += gGameInfo->data[0xF];
                     gSaveContext.time += (u16)gSaveContext.unk_14;
@@ -325,7 +327,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x24:
             func_8019F128(0x2150);
-            if (sp3F) {
+            if (sp3F != 0) {
                 sQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
                 Quake_SetSpeed(sQuakeIndex, 22000);
                 Quake_SetQuakeValues(sQuakeIndex, 2, 1, 0, 0);
@@ -487,6 +489,7 @@ void Cutscene_Command_FadeAmbienceSequence(GlobalContext* globalCtx, CutsceneCon
     }
 }
 
+// Command 0x190:
 void func_800EAF20(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk190* cmd) {
     switch (cmd->unk0) {
         case 1:
@@ -504,26 +507,23 @@ void func_800EAF20(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk190
     }
 }
 
+// Command 0x9B: 
 void func_800EAFE0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk9B* cmd) {
-    f32 temp_f0;
-    u16 temp_a0;
-    u16 temp_a1;
-
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
+        f32 alpha;
+
         globalCtx->envCtx.fillScreen = true;
-        temp_a1 = cmd->startFrame;
-        temp_a0 = cmd->endFrame;
-        temp_f0 = Environment_LerpWeight(temp_a0, temp_a1, csCtx->frames);
+        alpha = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
 
         if (((cmd->unk0 == 1)) || (cmd->unk0 == 2)) {
-            globalCtx->envCtx.screenFillColor[0] = cmd->unk6;
-            globalCtx->envCtx.screenFillColor[1] = cmd->unk7;
-            globalCtx->envCtx.screenFillColor[2] = cmd->unk8;
+            globalCtx->envCtx.screenFillColor[0] = cmd->r;
+            globalCtx->envCtx.screenFillColor[1] = cmd->g;
+            globalCtx->envCtx.screenFillColor[2] = cmd->b;
 
             if (cmd->unk0 == 2) {
-                globalCtx->envCtx.screenFillColor[3] = (u8)(u32)((1.0f - temp_f0) * 255.0f);
+                globalCtx->envCtx.screenFillColor[3] = (1.0f - alpha) * 255.0f;
             } else {
-                globalCtx->envCtx.screenFillColor[3] = (u8)(u32)(255.0f * temp_f0);
+                globalCtx->envCtx.screenFillColor[3] = 255.0f * alpha;
             }
         }
     }
@@ -578,7 +578,7 @@ void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
-// Cutscene_Command_Terminator?
+// Command 0x15E: Cutscene_Command_Terminator
 void func_800EB4B4(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (cmd->base == 1) {
         if (csCtx->frames == cmd->startFrame) {
@@ -750,10 +750,11 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
+// MotionBlur
 void func_800EBB68(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         if ((csCtx->frames == cmd->startFrame) && (cmd->base == 1)) {
-            func_8016566C(0xB4);
+            func_8016566C(180);
         }
 
         if (cmd->base == 2) {
@@ -1359,7 +1360,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
 
 void func_800ED980(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (gSaveContext.cutscene >= 0xFFF0) {
-        csCtx->frames += 1;
+        csCtx->frames++;
         Cutscene_ProcessCommands(globalCtx, csCtx, globalCtx->csCtx.segment);
     }
 }
