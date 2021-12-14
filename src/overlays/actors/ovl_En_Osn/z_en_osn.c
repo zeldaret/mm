@@ -112,7 +112,18 @@ void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD08B0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0998.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0998.s")
+void func_80AD0998(EnOsn* arg0) {
+    s16 sp1E;
+    s16 new_var;
+
+    sp1E = (s16)arg0->anime.curFrame;
+    new_var = Animation_GetLastFrame((&D_80AD22C0)[arg0->unk_1EC].animation);
+    if ((arg0->unk_1EC == 0x12) && (sp1E == new_var)) {
+        arg0->unk_1EC = 0x13;
+        func_800BDC5C(&arg0->anime, (ActorAnimationEntry*) &D_80AD22C0, 0x13);
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0A24.s")
 void func_80AD0A24(EnOsn* this) {
@@ -146,6 +157,99 @@ void func_80AD0AB0(EnOsn* this) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0B38.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0E10.s")
+
+/*s16 func_80AD0B38(EnOsn*, GlobalContext*, SaveContext*, EnOsn*); 
+
+s16 func_80AD0E10(EnOsn* arg0, GlobalContext* arg1) {
+    u16 temp_v0;
+    u16 temp_v0_3;
+    u16 temp_v0_4;
+    u16 temp_v0_5;
+    u16 temp_v0_6;
+    u16 temp_v0_7;
+    u16 temp_v1;
+    u16 temp_v1_2;
+    u8 temp_a0;
+    u8 temp_a0_2;
+    //u8 temp_v0_2;
+
+    if ((gSaveContext.inventory.items[0] != 0xFF) && ((*(gBitFlags + 0xD) & gSaveContext.inventory.questItems) != 0)) {
+        temp_v1 = arg0->unk_1EA;
+        if ((temp_v1 & 1) != 0) {
+            arg0->unk_1EA = temp_v1 | 0x20;
+            if ((gSaveContext.inventory.items[0] != 0xFF) && (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32)) {
+                if ((gSaveContext.day == 3) && (temp_v0 = gSaveContext.time, (((s32) temp_v0 < 0x3555) == 0)) && ((s32) temp_v0 < 0x4000)) {
+                    return 0x2006;
+                }
+                return 0x1FCD;
+            }
+            return 0x1FAF;
+        }
+        //temp_v0_2 = arg1->actorCtx.actorList[3].first;
+        if (arg1->actorCtx.actorList[3].first->id == 3) {
+            if ((temp_v1 & 4) != 0) {
+                arg0->unk_1EA = temp_v1 | 0x20;
+                if ((gSaveContext.day == 3) && (temp_v0_3 = gSaveContext.time, (((s32) temp_v0_3 < 0x3555) == 0)) && ((s32) temp_v0_3 < 0x4000)) {
+                    return 0x2006;
+                }
+                return 0x1FCD;
+            }
+            arg0->unk_1EA = temp_v1 | 4;
+            return 0x1FC8;
+        }
+        if (arg1->actorCtx.actorList[3].first->id == 1) {
+            if ((temp_v1 & 8) != 0) {
+                arg0->unk_1EA = temp_v1 | 0x20;
+                if ((gSaveContext.day == 3) && (temp_v0_4 = gSaveContext.time, (((s32) temp_v0_4 < 0x3555) == 0)) && ((s32) temp_v0_4 < 0x4000)) {
+                    return 0x2006;
+                }
+                return 0x1FCD;
+            }
+            arg0->unk_1EA = temp_v1 | 8;
+            temp_a0 = gSaveContext.weekEventReg[0x4C];
+            if ((temp_a0 & 0x20) != 0) {
+                return 0x1FC8;
+            }
+            gSaveContext.weekEventReg[0x4C] = temp_a0 | 0x20;
+            return 0x1FCE;
+        }
+        if (arg1->actorCtx.actorList[3].first->id == 2) {
+            if ((temp_v1 & 0x10) != 0) {
+                arg0->unk_1EA = temp_v1 | 0x20;
+                if ((gSaveContext.day == 3) && (temp_v0_5 = gSaveContext.time, (((s32) temp_v0_5 < 0x3555) == 0)) && ((s32) temp_v0_5 < 0x4000)) {
+                    return 0x2006;
+                }
+                return 0x1FCD;
+            }
+            arg0->unk_1EA = temp_v1 | 0x10;
+            temp_a0_2 = gSaveContext.weekEventReg[0x4C];
+            if ((temp_a0_2 & 0x40) != 0) {
+                return 0x1FC8;
+            }
+            gSaveContext.weekEventReg[0x4C] = temp_a0_2 | 0x40;
+            return 0x1FD0;
+        }
+        arg0 = arg0;
+        if (Player_GetMask(arg1) == 0) {
+            temp_v1_2 = arg0->unk_1EA;
+            if ((temp_v1_2 & 2) != 0) {
+                arg0->unk_1EA = temp_v1_2 | 0x20;
+                if ((gSaveContext.day == 3) && (temp_v0_6 = gSaveContext.time, (((s32) temp_v0_6 < 0x3555) == 0)) && ((s32) temp_v0_6 < 0x4000)) {
+                    return 0x2006;
+                }
+                return 0x1FCD;
+            }
+            arg0->unk_1EA = temp_v1_2 | 2;
+            return 0x1FC8;
+        }
+        return func_80AD0B38(arg0, arg1, &gSaveContext, arg0);
+    }
+    arg0->unk_1EA |= 0x20;
+    if ((gSaveContext.day == 3) && (temp_v0_7 = gSaveContext.time, (((s32) temp_v0_7 < 0x3555) == 0)) && ((s32) temp_v0_7 < 0x4000)) {
+        return 0x2004;
+    }
+    return 0x1FAE;
+}*/
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD10FC.s")
 
