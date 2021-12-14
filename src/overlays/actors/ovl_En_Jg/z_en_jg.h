@@ -15,7 +15,8 @@ typedef struct EnJg {
     /* 0x198 */ SkelAnime skelAnime;
     /* 0x1DC */ EnJgActionFunc actionFunc;
     /* 0x1E0 */ Path* unk_1E0;
-    /* 0x1E4 */ char unk_1E4[0x8];
+    /* 0x1E4 */ char unk_1E4[0x4];
+    /* 0x1E8 */ Actor* unk_1E8;
     /* 0x1EC */ Vec3s unk_1EC;
     /* 0x1F2 */ Vec3s unk_1F2;
     /* 0x1F8 */ Vec3s jointTable[35];
@@ -28,7 +29,8 @@ typedef struct EnJg {
     /* 0x3B0 */ Vec3f unk_3B0;
     /* 0x3BC */ Vec3f unk_3BC;
     /* 0x3C8 */ s16 unk_3C8;
-    /* 0x3CA */ char unk_3CA[0x2];
+    /* 0x3CA */ u8 unk_3CA;
+    /* 0x3CB */ u8 unk_3CB;
     /* 0x3CC */ u16 unk_3CC;
     /* 0x3CE */ u16 unk_3CE;
     /* 0x3D0 */ char unk_3D0[0x4];

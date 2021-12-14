@@ -24,6 +24,7 @@ void func_80B742F8(EnJg* this, GlobalContext* globalCtx);
 void func_80B747C8(EnJg* this, GlobalContext* globalCtx);
 void func_80B74B54(EnJg* this, GlobalContext* globalCtx);
 s32 func_80B74E5C(EnJg* this);
+void func_80B74BC8(EnJg* this, GlobalContext* globalCtx);
 
 extern AnimationHeader D_060077CC;
 extern AnimationHeader D_06009440;
@@ -311,10 +312,87 @@ void func_80B74AD8(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74B54.s")
+void func_80B74B54(EnJg* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->unk_3C8)) {
+        ActorCutscene_Start(this->unk_3C8, &this->actor);
+        this->actionFunc = func_80B74BC8;
+    } else {
+        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+            ActorCutscene_Stop(0x7C);
+        }
+        ActorCutscene_SetIntentToPlay(this->unk_3C8);
+    }
+}
 
-void func_80B74BC8(EnJg* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74BC8.s")
+void func_80B74BC8(EnJg* this, GlobalContext* globalCtx) {
+    s32 pad;
+    u32 temp_v0;
+
+    if (func_800EE29C(globalCtx, 0x1D6)) {
+        temp_v0 = func_800EE200(globalCtx, 0x1D6);
+        if (this->unk_3CB != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+            this->unk_3CB = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+            switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+                case 1:
+                    this->unk_3CA = 0x11;
+                    if (this->unk_1E8 != NULL) {
+                        Actor_MarkForDeath(this->unk_1E8);
+                        this->unk_1E8 = NULL;
+                    }
+                    break;
+                case 2:
+                    this->unk_3CA = 0xA;
+                    break;
+                case 3:
+                    this->unk_3CA = 0xB;
+                    break;
+                case 4:
+                    this->unk_3CA = 0xC;
+                    break;
+                case 5:
+                    this->unk_3CA = 0xD;
+                    break;
+                case 6:
+                    this->unk_3CA = 0xE;
+                    break;
+                case 7:
+                    this->unk_3CA = 0xF;
+                    break;
+                case 8:
+                    this->unk_3CA = 0x10;
+                    break;
+                case 9:
+                    this->unk_3CA = 0x12;
+                    break;
+                default:
+                    this->unk_3CA = 0;
+                    break;
+            }
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_3CA);
+        }
+        if ((!(this->unk_3CC & 8)) &&
+            (((this->unk_3CA == 0xA) && (Animation_OnFrame(&this->skelAnime, 14.0f)) && (this->unk_3A0 != 3)) ||
+             (((this->unk_3CA == 0xB) || (this->unk_3CA == 0xC)) && (this->unk_3A0 == 3)))) {
+            this->unk_3CC |= 8;
+            this->unk_1E8 = Actor_SpawnAsChildAndCutscene(
+                &globalCtx->actorCtx, globalCtx, ACTOR_OBJ_JG_GAKKI, this->actor.world.pos.x, this->actor.world.pos.y,
+                this->actor.world.pos.z, this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z,
+                this->actor.params, this->actor.cutscene, this->actor.unk20, NULL);
+        }
+        if (this->unk_3CA == 0xA) {
+            if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
+                func_8019F1C0(&D_80B759A8, 0x295D);
+            } else if (Animation_OnFrame(&this->skelAnime, 38.0f)) {
+                func_8019F1C0(&D_80B759A8, 0x295F);
+            }
+        }
+    } else {
+        this->unk_3CB = 0x63;
+        this->unk_3A2 = 0x3E8;
+        gSaveContext.weekEventReg[0x18] |= 0x40;
+        this->actionFunc = func_80B7406C;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74E5C.s")
 
