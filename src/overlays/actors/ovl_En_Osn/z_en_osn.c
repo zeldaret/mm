@@ -254,13 +254,12 @@ temp_v0_7 < 0x4000)) { return 0x2004;
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1398.s")
 void func_80AD1398(EnOsn* arg0) {
-    s16 temp_a0;
-    s16 temp_a0_2;
-
-    arg0->cutscene = (s16) arg0->actor.cutscene;
-    if (((gSaveContext.inventory.items[0] == 0xFF) || (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32)) && ((temp_a0 = arg0->cutscene, arg0 = arg0, arg0->cutscene = ActorCutscene_GetAdditionalCutscene(temp_a0), (gSaveContext.inventory.items[0] != 0xFF)) || (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32))) {
-        temp_a0_2 = arg0->cutscene; 
-        arg0->cutscene = ActorCutscene_GetAdditionalCutscene(temp_a0_2);
+    arg0->cutscene = (s16)arg0->actor.cutscene;
+    if (((gSaveContext.inventory.items[0] == 0xFF) || (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32)) &&
+        ((arg0 = arg0, arg0->cutscene = ActorCutscene_GetAdditionalCutscene(arg0->cutscene),
+          (gSaveContext.inventory.items[0] != 0xFF)) ||
+         (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32))) {
+        arg0->cutscene = ActorCutscene_GetAdditionalCutscene(arg0->cutscene);
     }
 }
 
