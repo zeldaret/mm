@@ -55,7 +55,8 @@ void ObjJgGakki_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjJgGakki_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjJgGakki* this = (ObjJgGakki*)thisx;
+    ObjJgGakki* this = THIS;
+
     SkelAnime_Update(&this->skelAnime);
 }
 
