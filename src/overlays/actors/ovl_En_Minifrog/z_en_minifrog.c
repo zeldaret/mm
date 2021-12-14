@@ -569,8 +569,8 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
         this->actionFunc = EnMinifrog_YellowFrogDialog;
         if (!(gSaveContext.weekEventReg[34] & 1)) { // Not spoken with MINIFROG_YELLOW
             Message_StartTextbox(globalCtx, 0xD76,
-                          &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it
-                                         // looks like you've lost a little weight..."
+                                 &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken,
+                                                // but it looks like you've lost a little weight..."
         } else {
             Message_StartTextbox(globalCtx, 0xD7F, &this->actor); // "Well, if it isn't the great Don Gero."
         }

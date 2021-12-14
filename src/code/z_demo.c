@@ -13,7 +13,7 @@ UNK_TYPE4 D_801BB120 = 0;
 u16 D_801BB124 = 0;
 u16 D_801BB128 = 0;
 u8 D_801BB12C = 0;
-u8  D_801BB130 = 0;
+u8 D_801BB130 = 0;
 
 // bss
 #ifndef NON_MATCHING
@@ -56,11 +56,11 @@ void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 CutsceneStateHandler sCsStateHandlers1[] = {
-    Cutscene_Nop800EA210,
-    func_800EA258,
-    Cutscene_Nop800EA210,
-    func_800ED9C4,
-    Cutscene_Nop800EA210,
+    /* CS_STATE_IDLE */ Cutscene_Nop800EA210,
+    /* CS_STATE_SKIPPABLE_INIT */ func_800EA258,
+    /* CS_STATE_SKIPPABLE_EXEC */ Cutscene_Nop800EA210,
+    /* CS_STATE_UNSKIPPABLE_INIT */ func_800ED9C4,
+    /* CS_STATE_UNSKIPPABLE_EXEC */ Cutscene_Nop800EA210,
 };
 
 void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -70,11 +70,11 @@ void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 CutsceneStateHandler sCsStateHandlers2[] = {
-    Cutscene_Nop800EA210,
-    func_800EA2B8,
-    func_800ED980,
-    func_800EDA04,
-    func_800ED980,
+    /* CS_STATE_IDLE */ Cutscene_Nop800EA210,
+    /* CS_STATE_SKIPPABLE_INIT */ func_800EA2B8,
+    /* CS_STATE_SKIPPABLE_EXEC */ func_800ED980,
+    /* CS_STATE_UNSKIPPABLE_INIT */ func_800EDA04,
+    /* CS_STATE_UNSKIPPABLE_EXEC */ func_800ED980,
 };
 
 void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -412,7 +412,7 @@ void Cutscene_Command_PlayAmbienceSequence(GlobalContext* globalCtx, CutsceneCon
     }
 }
 
-// Command 0x130: 
+// Command 0x130:
 void func_800EAD48(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         // Audio_SetSfxReverbIndexExceptOcarinaBank
@@ -420,7 +420,7 @@ void func_800EAD48(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
-// Command 0x131: 
+// Command 0x131:
 void func_800EAD7C(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         // Audio_SetSfxReverbIndexExceptOcarinaBank
@@ -587,7 +587,7 @@ void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     }
 }
 
-// Command 0x15E: 
+// Command 0x15E:
 void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (cmd->base == 1) {
         if (csCtx->frames == cmd->startFrame) {
@@ -644,7 +644,7 @@ void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCt
     }
 }
 
-// Command 0x15F: 
+// Command 0x15F:
 // Related to credits?
 void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(0, 1) != 0xFF)) {
@@ -996,7 +996,8 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
             D_801BB160 = CS_TEXTBOX_TYPE_1;
             D_801BB124 = cmd->base;
             if (cmd->type == CS_TEXTBOX_TYPE_BOSSES_REMAINS) {
-                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) && CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
+                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
+                    CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                     if (cmd->textId1 != 0xFFFF) {
                         Message_StartTextbox(globalCtx, cmd->textId1, NULL);
                     }
@@ -1117,7 +1118,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     s32 j;
     u32 cmdType; // sp5C
     s32 pad;
-    s32 cmdEntries; // sp58
+    s32 cmdEntries;       // sp58
     s32 cutsceneEndFrame; // sp50
     s16 phi_s0_23;
     CsCmdBase* cmd;
@@ -1127,8 +1128,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     bcopy(cutscenePtr, &cutsceneEndFrame, 4);
     cutscenePtr += 4;
 
-    if (((u16)cutsceneEndFrame < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) && (csCtx->state != CS_STATE_UNSKIPPABLE_EXEC)) 
-    {
+    if (((u16)cutsceneEndFrame < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) &&
+        (csCtx->state != CS_STATE_UNSKIPPABLE_EXEC)) {
         csCtx->state = CS_STATE_UNSKIPPABLE_INIT;
         return;
     }
@@ -1166,7 +1167,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_SET_LIGHTING: 
+            case CS_CMD_SET_LIGHTING:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1175,7 +1176,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_PLAYSEQ: 
+            case CS_CMD_PLAYSEQ:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1184,7 +1185,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_STOPSEQ: 
+            case CS_CMD_STOPSEQ:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1202,7 +1203,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_PLAYAMBIENCE: 
+            case CS_CMD_PLAYAMBIENCE:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1211,7 +1212,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_FADEAMBIENCE: 
+            case CS_CMD_FADEAMBIENCE:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1220,7 +1221,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_130: 
+            case CS_CMD_130:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1229,7 +1230,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_131: 
+            case CS_CMD_131:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1238,7 +1239,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_132: 
+            case CS_CMD_132:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1247,7 +1248,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_190: 
+            case CS_CMD_190:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1256,7 +1257,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_9B: 
+            case CS_CMD_9B:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1265,7 +1266,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_SETTIME: 
+            case CS_CMD_SETTIME:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1290,7 +1291,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr = &cutscenePtr[Cutscene_Command_Camera(globalCtx, cutscenePtr)];
                 break;
 
-            case CS_CMD_TERMINATOR: 
+            case CS_CMD_TERMINATOR:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1299,7 +1300,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_15F: 
+            case CS_CMD_15F:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
@@ -1320,7 +1321,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_SCENE_TRANS_FX: 
+            case CS_CMD_SCENE_TRANS_FX:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {

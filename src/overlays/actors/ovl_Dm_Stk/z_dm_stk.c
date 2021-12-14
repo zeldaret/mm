@@ -1711,7 +1711,8 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 gSPDisplayList(POLY_OPA_DISP++, D_06005870);
 
                 if (func_800EE29C(globalCtx, 0x201) &&
-                    (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x201)]->action == 2) && (this->unk_337 >= 0)) {
+                    (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x201)]->action == 2) &&
+                    (this->unk_337 >= 0)) {
                     Matrix_StatePush();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
                     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_337].segment);
