@@ -110,8 +110,6 @@ void* Graph_FaultAddrConvFunc(void* address, void* param) {
     return NULL;
 }
 
-#undef NON_MATCHING
-
 void Graph_Init(GraphicsContext* gfxCtx) {
     bzero(gfxCtx, sizeof(GraphicsContext));
     gfxCtx->gfxPoolIdx = 0;
