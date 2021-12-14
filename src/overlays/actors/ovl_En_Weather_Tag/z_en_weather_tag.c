@@ -191,11 +191,11 @@ void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     globalCtx->envCtx.windSpeed = (this->actor.world.rot.z * partialResult) + 30.0f;
     if (partialResult > 0.01f) {
-        globalCtx->envCtx.unk_EA = 8;
+        globalCtx->envCtx.sandstormState = 8;
         D_801F4E30 = 0x9B;
-    } else if (globalCtx->envCtx.unk_EA == 8) {
+    } else if (globalCtx->envCtx.sandstormState == 8) {
         D_801F4E30 = 0;
-        globalCtx->envCtx.unk_EA = 9;
+        globalCtx->envCtx.sandstormState = 9;
     }
 }
 
@@ -429,20 +429,20 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     range = WEATHER_TAG_RANGE100(this);
 
     if (distance < range) {
-        globalCtx->envCtx.unk_EA = 6;
+        globalCtx->envCtx.sandstormState = 6;
         strength = 1.0f - (distance / range);
         if (0.8f < strength) {
             strength = 1.0f;
         }
         D_801F4E30 = (200.0f * strength);
     } else {
-        if (globalCtx->envCtx.unk_EA == 6) {
+        if (globalCtx->envCtx.sandstormState == 6) {
             D_801F4E30 = 0;
-            globalCtx->envCtx.unk_EA = 7;
+            globalCtx->envCtx.sandstormState = 7;
         }
     }
 
-    Math_SmoothStepToS(&globalCtx->envCtx.unk_8C.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
+    Math_SmoothStepToS(&globalCtx->envCtx.lightAdjustments.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
 }
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene

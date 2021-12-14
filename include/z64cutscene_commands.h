@@ -145,8 +145,8 @@
  *   uuuussss eeeeUUUU
  *   size = 0x30
  */
-#define CS_MISC(unk, startFrame, endFrame, unused0) \
-    CMD_HH(unk, startFrame), CMD_HH(endFrame, unused0)
+#define CS_MISC(unk, startFrame, endFrame, unk_06) \
+    CMD_HH(unk, startFrame), CMD_HH(endFrame, unk_06)
 
 
 

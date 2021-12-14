@@ -3994,7 +3994,7 @@
     0x801F3F83:("D_801F3F83","UNK_TYPE1","",0x1),
     0x801F48C8:("D_801F48C8","UNK_TYPE1","",0x1),
     0x801F4D40:("activeSequence","u16","",0x2),
-    0x801F4D42:("sQuakeIndex","UNK_TYPE2","",0x2),
+    0x801F4D42:("sCutsceneQuakeIndex","UNK_TYPE2","",0x2),
     0x801F4D48:("D_801F4D48","UNK_TYPE","",0x80),
     0x801F4DC8:("D_801F4DC8","u16","[10]",0x14),
     0x801F4DDC:("D_801F4DDC","UNK_TYPE1","",0x1),

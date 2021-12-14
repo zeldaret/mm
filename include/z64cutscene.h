@@ -42,7 +42,7 @@ typedef struct {
     /* 0x0 */ u16 base;
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
-    /* 0x6 */ UNK_TYPE1 unk_06[0x02];
+    /* 0x6 */ u16 unk_06;
 } CsCmdBase; // size = 0x8
 
 typedef struct {

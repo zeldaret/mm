@@ -14,26 +14,12 @@ u16 D_801BB124 = 0;
 u16 D_801BB128 = 0;
 u8 D_801BB12C = 0;
 u8  D_801BB130 = 0;
-CutsceneStateHandler sCsStateHandlers1[] = {
-    Cutscene_Nop800EA210,
-    func_800EA258,
-    Cutscene_Nop800EA210,
-    func_800ED9C4,
-    Cutscene_Nop800EA210,
-};
-CutsceneStateHandler sCsStateHandlers2[] = {
-    Cutscene_Nop800EA210,
-    func_800EA2B8,
-    func_800ED980,
-    func_800EDA04,
-    func_800ED980,
-};
 
 // bss
 #ifndef NON_MATCHING
 u16 activeSequence;
 #endif
-s16 sQuakeIndex;
+s16 sCutsceneQuakeIndex;
 struct_801F4D48 D_801F4D48;
 u16 D_801F4DC8[10];
 UNK_TYPE D_801F4DDC;
@@ -69,11 +55,27 @@ void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
+CutsceneStateHandler sCsStateHandlers1[] = {
+    Cutscene_Nop800EA210,
+    func_800EA258,
+    Cutscene_Nop800EA210,
+    func_800ED9C4,
+    Cutscene_Nop800EA210,
+};
+
 void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (gSaveContext.cutscene < 0xFFF0) {
         sCsStateHandlers1[csCtx->state](globalCtx, csCtx);
     }
 }
+
+CutsceneStateHandler sCsStateHandlers2[] = {
+    Cutscene_Nop800EA210,
+    func_800EA2B8,
+    func_800ED980,
+    func_800EDA04,
+    func_800ED980,
+};
 
 void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if ((gSaveContext.cutsceneTrigger != 0) && (globalCtx->sceneLoadFlag == 0x14)) {
@@ -185,11 +187,11 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
         case 0x8:
             func_8019F128(0x2150);
             if (sp3F != 0) {
-                sQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
-                Quake_SetSpeed(sQuakeIndex, 0x55F0);
-                Quake_SetQuakeValues(sQuakeIndex, 6, 4, 0, 0);
+                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                Quake_SetSpeed(sCutsceneQuakeIndex, 0x55F0);
+                Quake_SetQuakeValues(sCutsceneQuakeIndex, 6, 4, 0, 0);
                 if (!gSaveContext.unk_14) {}
-                Quake_SetCountdown(sQuakeIndex, 800);
+                Quake_SetCountdown(sCutsceneQuakeIndex, 800);
             }
             break;
         case 0x9:
@@ -277,10 +279,10 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
         case 0x1A:
             func_8019F128(0x2159);
             if (sp3F != 0) {
-                sQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
-                Quake_SetSpeed(sQuakeIndex, 30000);
-                Quake_SetQuakeValues(sQuakeIndex, 20, 10, 0, 0);
-                Quake_SetCountdown(sQuakeIndex, 800);
+                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                Quake_SetSpeed(sCutsceneQuakeIndex, 30000);
+                Quake_SetQuakeValues(sCutsceneQuakeIndex, 20, 10, 0, 0);
+                Quake_SetCountdown(sCutsceneQuakeIndex, 800);
             }
             break;
         case 0x1B:
@@ -328,10 +330,10 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
         case 0x24:
             func_8019F128(0x2150);
             if (sp3F != 0) {
-                sQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
-                Quake_SetSpeed(sQuakeIndex, 22000);
-                Quake_SetQuakeValues(sQuakeIndex, 2, 1, 0, 0);
-                Quake_SetCountdown(sQuakeIndex, 800);
+                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
+                Quake_SetQuakeValues(sCutsceneQuakeIndex, 2, 1, 0, 0);
+                Quake_SetCountdown(sCutsceneQuakeIndex, 800);
             }
             break;
 
@@ -507,7 +509,7 @@ void func_800EAF20(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk190
 
         case 2:
             if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames) &&
-                ((csCtx->frames == cmd->startFrame) || !(globalCtx->state.frames & 0x3F))) {
+                ((csCtx->frames == cmd->startFrame) || (globalCtx->state.frames % 64) == 0)) {
                 func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
             }
             break;
@@ -1021,68 +1023,64 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
         return;
     }
 
-
     if (csCtx->frames >= cmd->endFrame) {
         originalCsFrames = csCtx->frames;
         dialogState = func_80152498(&globalCtx->msgCtx);
-        if (dialogState != 2) {
-            if ((dialogState != 0) && (dialogState != 7) && (dialogState != 8)) {
-                csCtx->frames--;
-                if (dialogState == 4 && func_80147624(globalCtx)) {
-                    if (globalCtx->msgCtx.choiceIndex == 0) {
-                        if (cmd->base == 0x33BD) {
-                            func_8019F230();
-                        }
+        if (dialogState != 2 && dialogState != 0 && dialogState != 7 && dialogState != 8) {
+            csCtx->frames--;
+            if (dialogState == 4 && func_80147624(globalCtx)) {
+                if (globalCtx->msgCtx.choiceIndex == 0) {
+                    if (cmd->base == 0x33BD) {
+                        func_8019F230();
+                    }
 
-                        if (cmd->textId1 != 0xFFFF) {
-                            func_80151938(globalCtx, cmd->textId1);
-                            if (cmd->type == CS_TEXTBOX_TYPE_3) {
-                                D_801BB160 = CS_TEXTBOX_TYPE_3;
-                                if (cmd->textId2 != 0xFFFF) {
-                                    csCtx->frames++;
-                                }
+                    if (cmd->textId1 != 0xFFFF) {
+                        func_80151938(globalCtx, cmd->textId1);
+                        if (cmd->type == CS_TEXTBOX_TYPE_3) {
+                            D_801BB160 = CS_TEXTBOX_TYPE_3;
+                            if (cmd->textId2 != 0xFFFF) {
+                                csCtx->frames++;
                             }
-                        } else {
-                            func_801477B4(globalCtx);
-                            csCtx->frames++;
                         }
                     } else {
-                        if (cmd->base == 0x33BD) {
-                            func_8019F208();
-                        }
-
-                        if (cmd->textId2 != 0xFFFF) {
-                            func_80151938(globalCtx, cmd->textId2);
-                            if (cmd->type == CS_TEXTBOX_TYPE_3) {
-                                D_801BB160 = CS_TEXTBOX_TYPE_3;
-                                if (cmd->textId1 != 0xFFFF) {
-                                    csCtx->frames++;
-                                }
-                            }
-                        } else {
-                            func_801477B4(globalCtx);
-                            csCtx->frames++;
-                        }
+                        func_801477B4(globalCtx);
+                        csCtx->frames++;
                     }
-                }
+                } else {
+                    if (cmd->base == 0x33BD) {
+                        func_8019F208();
+                    }
 
-                if (dialogState == 5) {
-                    if (func_80147624(globalCtx) != 0) {
-                        func_80152434(globalCtx, cmd->base);
+                    if (cmd->textId2 != 0xFFFF) {
+                        func_80151938(globalCtx, cmd->textId2);
+                        if (cmd->type == CS_TEXTBOX_TYPE_3) {
+                            D_801BB160 = CS_TEXTBOX_TYPE_3;
+                            if (cmd->textId1 != 0xFFFF) {
+                                csCtx->frames++;
+                            }
+                        }
+                    } else {
+                        func_801477B4(globalCtx);
+                        csCtx->frames++;
                     }
                 }
             }
+
+            if (dialogState == 5 && func_80147624(globalCtx) != 0) {
+                func_80152434(globalCtx, cmd->base);
+            }
         }
+
         if ((dialogState == 2) && (D_801BB160 == CS_TEXTBOX_TYPE_3)) {
             csCtx->frames--;
             D_801BB124++;
         }
+
         if (originalCsFrames == csCtx->frames) {
             Interface_ChangeAlpha(1);
             D_801BB124 = 0;
             D_801BB128 = 0;
             func_80161C0C();
-            return;
         } else {
             func_80161BE0(1);
         }
@@ -1128,6 +1126,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     cutscenePtr += 4;
     bcopy(cutscenePtr, &cutsceneEndFrame, 4);
     cutscenePtr += 4;
+
     if (((u16)cutsceneEndFrame < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) && (csCtx->state != CS_STATE_UNSKIPPABLE_EXEC)) 
     {
         csCtx->state = CS_STATE_UNSKIPPABLE_INIT;
@@ -1454,12 +1453,12 @@ void func_800EDBE0(GlobalContext* globalCtx) {
                 if ((temp_a3[temp_v0_3].unk7 != 0xFF) && (gSaveContext.respawnFlag == 0)) {
                     if (temp_a3[temp_v0_3].unk7 == 0xFE) {
                         ActorCutscene_Start(sp2A, NULL);
-                        gSaveContext.showTitleCard = 0;
+                        gSaveContext.showTitleCard = false;
                     } else if (!((1 << (temp_a3[temp_v0_3].unk7 % 8)) &
                                  gSaveContext.weekEventReg[temp_a3[temp_v0_3].unk7 / 8])) {
                         gSaveContext.weekEventReg[(temp_a3[temp_v0_3].unk7 / 8)] |= 1 << (temp_a3[temp_v0_3].unk7 % 8);
                         ActorCutscene_Start(sp2A, NULL);
-                        gSaveContext.showTitleCard = 0;
+                        gSaveContext.showTitleCard = false;
                     }
                 }
             } else {
@@ -1470,13 +1469,13 @@ void func_800EDBE0(GlobalContext* globalCtx) {
 
     if ((gSaveContext.respawnFlag == 0) || (gSaveContext.respawnFlag == -2)) {
         sp24 = globalCtx->loadedScene;
-        if ((sp24->titleTextId != 0) && (gSaveContext.showTitleCard != 0)) {
+        if ((sp24->titleTextId != 0) && gSaveContext.showTitleCard) {
             if ((Entrance_GetTransitionFlags(gSaveContext.sceneSetupIndex + gSaveContext.entranceIndex) & 0x4000) !=
                 0) {
                 func_80151A68(globalCtx, sp24->titleTextId);
             }
         }
-        gSaveContext.showTitleCard = 1;
+        gSaveContext.showTitleCard = true;
     }
 }
 #else
