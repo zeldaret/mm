@@ -27,8 +27,8 @@ const ActorInit Obj_Jg_Gakki_InitVars = {
     (ActorFunc)ObjJgGakki_Draw,
 };
 
-extern AnimationHeader D_0601B1E8;
-extern SkeletonHeader D_0601B210;
+extern AnimationHeader D_0601B1E8; // gGoronElderDrumAnim
+extern SkeletonHeader D_0601B210; // gGoronElderDrumSkel
 
 void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
