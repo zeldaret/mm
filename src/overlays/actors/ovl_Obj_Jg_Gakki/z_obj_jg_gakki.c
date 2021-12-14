@@ -15,7 +15,6 @@ void ObjJgGakki_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgGakki_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgGakki_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Obj_Jg_Gakki_InitVars = {
     ACTOR_OBJ_JG_GAKKI,
     ACTORCAT_PROP,
@@ -28,14 +27,38 @@ const ActorInit Obj_Jg_Gakki_InitVars = {
     (ActorFunc)ObjJgGakki_Draw,
 };
 
-#endif
+extern AnimationHeader D_0601B1E8;
+extern SkeletonHeader D_0601B210;
 
-extern UNK_TYPE D_0601B1E8;
+void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    ObjJgGakki* this = (ObjJgGakki*)thisx;
+    f32 frame_count = Animation_GetLastFrame(&D_0601B1E8);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Init.s")
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &D_0601B210, NULL, NULL, NULL, 0);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Destroy.s")
+    if (((globalCtx->sceneNum == 8) && (gSaveContext.sceneSetupIndex == 7)) && (globalCtx->csCtx.unk_12 == 0)) {
+        Animation_Change(&this->skelAnime, &D_0601B1E8, 1.0f, frame_count, frame_count, 2, 0.0f);
+    } else if ((globalCtx->sceneNum == 0x5D) || (globalCtx->sceneNum == 0x50)) {
+        Animation_Change(&this->skelAnime, &D_0601B1E8, 1.0f, 0.0f, frame_count, (u8)2, 0.0f);
+    } else {
+        Actor_MarkForDeath(&this->actor);
+    }
+    Actor_SetScale(&this->actor, 0.01f);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Update.s")
+void ObjJgGakki_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ObjJgGakki* this = (ObjJgGakki*)thisx;
+    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Draw.s")
+void ObjJgGakki_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjJgGakki* this = (ObjJgGakki*)thisx;
+    SkelAnime_Update(&this->skelAnime);
+}
+
+void ObjJgGakki_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjJgGakki* this = (ObjJgGakki*)thisx;
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
+}
