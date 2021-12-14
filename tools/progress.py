@@ -292,6 +292,9 @@ boot_size = src_boot # + asm_boot
 ovl_size  = src_ovl  # + asm_ovl
 handwritten = asm_code + asm_boot + asm_ovl
 
+# Calculate the total amount of decompilable code
+total = code_size + boot_size + ovl_size
+
 # Calculate size of all assets
 for assetCat in assetsTracker:
     for index, f in assetsTracker[assetCat]["files"]:
@@ -308,9 +311,6 @@ asm = asm_code + asm_boot + asm_ovl
 # Take out the non-matchings and not attempted in grand totals
 src -= non_matching_asm + not_attempted_asm
 asm += non_matching_asm + not_attempted_asm
-
-# Calculate the total amount of decompilable code
-total = src + asm
 
 # Calculate assets totals
 assets = sum(x["currentSize"] for x in assetsTracker.values())
@@ -394,16 +394,16 @@ elif args.format == 'text':
     adjective = "decompiled" if not args.matching else "matched"
     assetsAdjective = "debinarized" if not args.matching else "identified"
 
-    print("src:  {:>9} / {:>8} total bytes {:<13} {:>9.4f}%".format(src, total, adjective, round(src_percent, 4)))
-    print("    boot:      {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(boot, boot_size, adjective, round(boot_percent, 4)))
-    print("    code:      {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(code, code_size, adjective, round(code_percent, 4)))
-    print("    overlays:  {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(ovl, ovl_size, adjective, round(ovl_percent, 4)))
+    print("src:    {:>9} / {:>8} total bytes {:<13} {:>9.4f}%".format(src, total, adjective, round(src_percent, 4)))
+    print("    boot:       {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(boot, boot_size, adjective, round(boot_percent, 4)))
+    print("    code:       {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(code, code_size, adjective, round(code_percent, 4)))
+    print("    overlays:   {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(ovl, ovl_size, adjective, round(ovl_percent, 4)))
     print()
 
-    print("assets:     {:>9} / {:>8} total bytes {} {:>9.4f}%".format(assets, assets_total, assetsAdjective, round(assets_percent, 4)))
+    print("assets: {:>9} / {:>8} total bytes {:<13} {:>9.4f}%".format(assets, assets_total, assetsAdjective, round(assets_percent, 4)))
     for assetCat in assetsTracker:
         data = assetsTracker[assetCat]
-        print("    {:<10} {:>9} / {:>8} bytes {} {:>9.4f}%".format(f"{assetCat}:", data["currentSize"], data["totalSize"], assetsAdjective, round(data["percent"], 4)))
+        print("    {:<10}  {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(f"{assetCat}:", data["currentSize"], data["totalSize"], assetsAdjective, round(data["percent"], 4)))
 
     print()
     print("------------------------------------\n")
