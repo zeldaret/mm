@@ -32,7 +32,7 @@ extern SkeletonHeader D_0601B210;
 
 void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    ObjJgGakki* this = (ObjJgGakki*)thisx;
+    ObjJgGakki* this = THIS;
     f32 frame_count = Animation_GetLastFrame(&D_0601B1E8);
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
