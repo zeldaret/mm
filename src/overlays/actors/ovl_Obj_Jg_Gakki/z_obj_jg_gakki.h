@@ -9,7 +9,7 @@ typedef struct ObjJgGakki {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ ColliderCylinder colliderCylinder;
-} ObjJgGakki; /* size = 0x1D4 */
+} ObjJgGakki; // size = 0x1D4
 
 extern const ActorInit Obj_Jg_Gakki_InitVars;
 

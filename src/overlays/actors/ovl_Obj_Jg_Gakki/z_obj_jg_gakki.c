@@ -33,14 +33,14 @@ extern SkeletonHeader D_0601B210;
 void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     ObjJgGakki* this = THIS;
-    f32 frame_count = Animation_GetLastFrame(&D_0601B1E8);
+    f32 frameCount = Animation_GetLastFrame(&D_0601B1E8);
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_0601B210, NULL, NULL, NULL, 0);
 
-    if (((globalCtx->sceneNum == 8) && (gSaveContext.sceneSetupIndex == 7)) && (globalCtx->csCtx.unk_12 == 0)) {
+    if (((globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7)) && (globalCtx->csCtx.unk_12 == 0)) {
         Animation_Change(&this->skelAnime, &D_0601B1E8, 1.0f, frame_count, frame_count, 2, 0.0f);
-    } else if ((globalCtx->sceneNum == 0x5D) || (globalCtx->sceneNum == 0x50)) {
+    } else if ((globalCtx->sceneNum == SCENE_17SETUGEN) || (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA)) {
         Animation_Change(&this->skelAnime, &D_0601B1E8, 1.0f, 0.0f, frame_count, (u8)2, 0.0f);
     } else {
         Actor_MarkForDeath(&this->actor);
