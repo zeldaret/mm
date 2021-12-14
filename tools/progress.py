@@ -400,7 +400,7 @@ elif args.format == 'text':
     print("    overlays:  {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(ovl, ovl_size, adjective, round(ovl_percent, 4)))
     print()
 
-    print("assets:     {:>9} / {:>8} bytes {} {:>9.4f}%".format(assets, assets_total, assetsAdjective, round(assets_percent, 4)))
+    print("assets:     {:>9} / {:>8} total bytes {} {:>9.4f}%".format(assets, assets_total, assetsAdjective, round(assets_percent, 4)))
     for assetCat in assetsTracker:
         data = assetsTracker[assetCat]
         print("    {:<10} {:>9} / {:>8} bytes {} {:>9.4f}%".format(f"{assetCat}:", data["currentSize"], data["totalSize"], assetsAdjective, round(data["percent"], 4)))
