@@ -94,14 +94,14 @@ typedef enum {
 } CsTextboxType;
 
 typedef struct {
-    /* 0x0 */ u16 unk0;
+    /* 0x0 */ u16 type;
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
     /* 0x6 */ u8 unk6;
     /* 0x7 */ u8 unk7;
     /* 0x8 */ u8 unk8;
     /* 0x9 */ UNK_TYPE1 pad9[0x3];
-} CsCmdUnk190; // size = 0xC
+} CsRumble; // size = 0xC
 
 typedef struct {
     /* 0x0 */ u16 unk0;
@@ -154,7 +154,7 @@ typedef enum {
     /* 0x135 */ CS_CMD_FADEAMBIENCE,
     /* 0x15E */ CS_CMD_TERMINATOR = 0x15E,
     /* 0x15F */ CS_CMD_15F,
-    /* 0x190 */ CS_CMD_190 = 0x190,
+    /* 0x190 */ CS_CMD_RUMBLE = 0x190,
 } CutsceneCmd;
 
 typedef union CutsceneData {

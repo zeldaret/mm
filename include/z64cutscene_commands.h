@@ -620,7 +620,7 @@
  *   00000004 eeeeeeee
  *   size = 0x8
  */
-#define CS_SCENE_UNK_190_LIST(entries) CS_CMD_190, CMD_W(entries)
+#define CS_RUMBLE_LIST(entries) CS_CMD_RUMBLE, CMD_W(entries)
 
 /**
  * ARGS
@@ -630,7 +630,7 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x30
  */
-#define CS_SCENE_UNK_190(base, startFrame, endFrame, unk6, unk7, unk8) \
+#define CS_RUMBLE(base, startFrame, endFrame, unk6, unk7, unk8) \
     CMD_HH(base, startFrame), CMD_HBB(endFrame, unk6, unk7), CMD_BBBB(unk8, 0, 0, 0)
 
 

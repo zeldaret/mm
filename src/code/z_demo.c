@@ -498,9 +498,9 @@ void Cutscene_Command_FadeAmbienceSequence(GlobalContext* globalCtx, CutsceneCon
     }
 }
 
-// Command 0x190:
-void func_800EAF20(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk190* cmd) {
-    switch (cmd->unk0) {
+// Command 0x190: Rumble
+void Cutscene_Command_Rumble(GlobalContext* globalCtx, CutsceneContext* csCtx, CsRumble* cmd) {
+    switch (cmd->type) {
         case 1:
             if (csCtx->frames == cmd->startFrame) {
                 func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
@@ -1248,11 +1248,11 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_190:
+            case CS_CMD_RUMBLE:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EAF20(globalCtx, csCtx, (CsCmdUnk190*)cutscenePtr);
+                    Cutscene_Command_Rumble(globalCtx, csCtx, (CsRumble*)cutscenePtr);
                     cutscenePtr += 0xC;
                 }
                 break;

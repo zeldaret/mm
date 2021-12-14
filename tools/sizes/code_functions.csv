@@ -1066,7 +1066,7 @@ asm/non_matchings/code/z_demo/func_800EAD48.s,func_800EAD48,0x800EAD48,0xD
 asm/non_matchings/code/z_demo/func_800EAD7C.s,func_800EAD7C,0x800EAD7C,0xD
 asm/non_matchings/code/z_demo/func_800EADB0.s,func_800EADB0,0x800EADB0,0x47
 asm/non_matchings/code/z_demo/Cutscene_Command_FadeAmbienceSequence.s,Cutscene_Command_FadeAmbienceSequence,0x800EAECC,0x15
-asm/non_matchings/code/z_demo/func_800EAF20.s,func_800EAF20,0x800EAF20,0x30
+asm/non_matchings/code/z_demo/Cutscene_Command_Rumble.s,Cutscene_Command_Rumble,0x800EAF20,0x30
 asm/non_matchings/code/z_demo/func_800EAFE0.s,func_800EAFE0,0x800EAFE0,0x7F
 asm/non_matchings/code/z_demo/Cutscene_Command_SetTime.s,Cutscene_Command_SetTime,0x800EB1DC,0x62
 asm/non_matchings/code/z_demo/func_800EB364.s,func_800EB364,0x800EB364,0x54
