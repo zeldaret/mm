@@ -61,6 +61,7 @@ void ObjJgGakki_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjJgGakki_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    ObjJgGakki* this = (ObjJgGakki*)thisx;
+    ObjJgGakki* this = THIS;
+
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
 }
