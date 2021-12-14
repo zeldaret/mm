@@ -154,6 +154,12 @@ assetsCategories = [
 ]
 assetsTracker = dict()
 
+# Manual fixer for files that would be counted in wrong categories
+# "filename": "correctSection"
+fileSectionFixer = {
+    "osFlash": "code" # Currently in `src/libultra` (would be counted as boot)
+}
+
 for assetCat in assetsCategories:
     assetsTracker[assetCat] = dict()
     # Get asset files
@@ -186,12 +192,25 @@ for line in map_file:
         obj_vram = int(line_split[1], 16)
         file_size = int(line_split[2], 16)
         obj_file = line_split[3].strip()
+        objFileSplit = obj_file.split("/")
 
         fileData = {"name": obj_file, "vram": obj_vram, "size": file_size, "section": section, "symbols": []}
         mapFileList.append(fileData)
 
         if (section == ".text"):
-            if (obj_file.startswith("build/src")):
+            objFileName = objFileSplit[-1].split(".o")[0]
+
+            if objFileName in fileSectionFixer:
+                correctSection = fileSectionFixer[objFileName]
+                if correctSection == "code":
+                    src_code += file_size
+                elif correctSection == "libultra":
+                    src_libultra += file_size
+                elif correctSection == "boot":
+                    src_boot += file_size
+                elif correctSection == "overlays":
+                    src_ovl += file_size
+            elif (obj_file.startswith("build/src")):
                 if (obj_file.startswith("build/src/code")):
                     src_code += file_size
                 elif (obj_file.startswith("build/src/libultra")):
@@ -268,10 +287,10 @@ boot = src_boot - (non_matching_asm_boot + not_attempted_asm_boot)
 ovl = src_ovl - (non_matching_asm_ovl + not_attempted_asm_ovl)
 
 # Total code bucket sizes
-code_size = src_code + asm_code
-boot_size = src_boot + asm_boot
-ovl_size = src_ovl + asm_ovl
-handwritten = 0 # Currently unsure of any handwritten asm in MM
+code_size = src_code # + asm_code
+boot_size = src_boot # + asm_boot
+ovl_size  = src_ovl  # + asm_ovl
+handwritten = asm_code + asm_boot + asm_ovl
 
 # Calculate size of all assets
 for assetCat in assetsTracker:
