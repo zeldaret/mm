@@ -16,7 +16,7 @@ typedef struct EnZo {
     /* 0x0194 */ ColliderCylinder collider;
     /* 0x01D8 */ UNK_TYPE1 unk_1D8[0x4];
     /* 0x01DC */ Path* path;
-    /* 0x01E0 */ s16 unk_1E0;
+    /* 0x01E0 */ s16 waypoint;
     /* 0x01E4 */ Vec3f leftFootPos;
     /* 0x01F0 */ Vec3f rightFootPos;
     /* 0x01FC */ u8 isLeftFootGrounded;

@@ -15,7 +15,7 @@ void EnZo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_8099EC50(EnZo* this, GlobalContext* globalCtx);
+void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx);
 void func_8099ED4C(EnZo* this, GlobalContext* globalCtx);
 void EnZo_DoNothing(EnZo* this, GlobalContext* globalCtx);
 
@@ -215,22 +215,22 @@ void func_8099EBD8(EnZo* this, GlobalContext* globalCtx) {
         EnZo_SetAnimation(&this->skelAnime, 6);
     }
     if (ENZO_GET_PATH(&this->actor) != 0x3F) {
-        this->actionFunc = func_8099EC50;
+        this->actionFunc = EnZo_FollowPath;
     } else {
         this->actionFunc = EnZo_DoNothing;
     }
 }
 
-void func_8099EC50(EnZo* this, GlobalContext* globalCtx) {
+void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx) {
     s16 speed;
-    Vec3f unused;
+    Vec3f pos;
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
     speed = this->actor.speedXZ * 400.0f;
-    if (func_8013D68C(this->path, this->unk_1E0, &unused) && func_8013D768(&this->actor, &unused, speed)) {
-        this->unk_1E0++;
-        if (this->unk_1E0 >= this->path->count) {
-            this->unk_1E0 = 0;
+    if (func_8013D68C(this->path, this->waypoint, &pos) && func_8013D768(&this->actor, &pos, speed)) {
+        this->waypoint++;
+        if (this->waypoint >= this->path->count) {
+            this->waypoint = 0;
         }
     }
     if (this->actor.depthInWater > 60.0f) {

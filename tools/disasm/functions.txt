@@ -8621,7 +8621,7 @@
     0x8099E9E0:("EnZo_UpdateCollider",),
     0x8099EA60:("EnZo_LookAtPlayer",),
     0x8099EBD8:("func_8099EBD8",),
-    0x8099EC50:("func_8099EC50",),
+    0x8099EC50:("EnZo_FollowPath",),
     0x8099ED4C:("func_8099ED4C",),
     0x8099EE24:("EnZo_DoNothing",),
     0x8099EE34:("EnZo_Init",),
