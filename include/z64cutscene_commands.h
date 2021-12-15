@@ -13,19 +13,19 @@
  */
 #define CS_BEGIN_CUTSCENE(totalEntries, endFrame) CMD_W(totalEntries), CMD_W(endFrame)
 
+
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000013 eeeeeeee
+ *   0000000A eeeeeeee
  *   size = 0x8
  */
 #define CS_TEXT_LIST(entries) CS_CMD_TEXTBOX, CMD_W(entries)
 
-
 /**
  * ARGS
- *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e), s16 type (o), 
+ *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e), s16 type (o),
  *   s16 topOptionBranch (y), s16 bottomOptionBranch (n)
  * FORMAT
  *   iiiissss eeeeoooo yyyynnnn
@@ -71,7 +71,7 @@
  *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e),
  *   s16 topOptionBranch (y), s16 bottomOptionBranch (n)
  * FORMAT
- *   iiiissss eeee0001 yyyynnnn
+ *   iiiissss eeee0003 yyyynnnn
  *   size = 0xC
  */
 #define CS_TEXT_TYPE_3(messageId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
@@ -93,7 +93,7 @@
  * ARGS
  *   s16 defaultMessageId (d), s16 startFrame (s), s16 endFrame (e), s16 alternativeMessageId (a)
  * FORMAT
- *   ddddssss eeee0004 aaaaFFFF
+ *   ddddssss eeee0005 aaaaFFFF
  *   size = 0xC
  */
 #define CS_TEXT_ALL_NORMAL_MASKS(defaultMessageId, startFrame, endFrame, alternativeMessageId) \
@@ -110,29 +110,21 @@
     CS_TEXT_DISPLAY_TEXTBOX(0xFFFF, startFrame, endFrame, CS_TEXTBOX_TYPE_NONE, 0xFFFF, 0xFFFF)
 
 
-
-
-
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000003 eeeeeeee
+ *   0000005A eeeeeeee
  *   size = 0x8
  */
 #define CS_CAMERA_LIST(entries) CS_CMD_CAMERA, CMD_W(entries)
 
 
-
-
-
-
-
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000003 eeeeeeee
+ *   00000096 eeeeeeee
  *   size = 0x8
  */
 #define CS_MISC_LIST(entries) CS_CMD_MISC, CMD_W(entries)
@@ -143,18 +135,17 @@
  * FORMAT
  *   Capital U is Unused
  *   uuuussss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_MISC(unk, startFrame, endFrame, unk_06) \
     CMD_HH(unk, startFrame), CMD_HH(endFrame, unk_06)
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   00000097 eeeeeeee
  *   size = 0x8
  */
 #define CS_LIGHTING_LIST(entries) CS_CMD_SET_LIGHTING, CMD_W(entries)
@@ -165,62 +156,52 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_LIGHTING(setting, startFrame, endFrame) \
     CMD_HH(setting, startFrame), CMD_HH(endFrame, endFrame)
-
-
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   00000098 eeeeeeee
  *   size = 0x8
  */
 #define CS_SCENE_TRANS_FX_LIST(entries) CS_CMD_SCENE_TRANS_FX, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 transitionType (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_SCENE_TRANS_FX(transitionType, startFrame, endFrame, unused0) \
     CMD_HH(transitionType, startFrame), CMD_HH(endFrame, unused0)
-
-
-
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
- *   size = 0x8
+ *   00000099 eeeeeeee
+ *   size = 0x08
  */
 #define CS_MOTIONBLUR_LIST(entries) CS_CMD_MOTIONBLUR, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_MOTIONBLUR(base, startFrame, endFrame) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, endFrame)
-
-
-
 
 
 /**
@@ -234,75 +215,64 @@
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
- *   
+ *   Capital U is Unused
+ *   mmmmssss eeeeUUUU
+ *   size = 0x08
  */
-#define CS_GIVETATL(unk, startFrame, endFrame, unk_06) \
-    CMD_HH(unk, startFrame), CMD_HH(endFrame, unk_06)
-
-
-
-
-
+#define CS_GIVETATL(base, startFrame, endFrame) \
+    CMD_HH(base, startFrame), CMD_HH(endFrame, endFrame)
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   0000009B eeeeeeee
  *   size = 0x8
  */
 #define CS_FADESCREEN_LIST(entries) CS_CMD_FADESCREEN, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e),
+ *   u8 red (r), u8 green (g), blue (b)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   mmmmssss eeeerrgg bbUUUUUU
+ *   size = 0x0C
  */
-#define CS_FADESCREEN(base, startFrame, endFrame, unk6, unk7, unk8) \
-    CMD_HH(base, startFrame), CMD_HBB(endFrame, unk6, unk7), CMD_BBBB(unk8, 0, 0, 0)
-
-
-
-
+#define CS_FADESCREEN(base, startFrame, endFrame, red, green, blue) \
+    CMD_HH(base, startFrame), CMD_HBB(endFrame, red, green), CMD_BBBB(blue, 0, 0, 0)
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   0000009C eeeeeeee
  *   size = 0x8
  */
 #define CS_FADESEQ_LIST(entries) CS_CMD_FADESEQ, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   mmmmssss eeeeUUUU UUUUUUUU
+ *   size = 0x0C
  */
 #define CS_FADESEQ(base, startFrame, endFrame, unk_06, unk_08) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06), CMD_W(unk_08)
-
-
-
-
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   0000008C eeeeeeee
+ *   0000009D eeeeeeee
  *   size = 0x8
  */
 #define CS_TIME_LIST(entries) CS_CMD_SETTIME, CMD_W(entries)
@@ -316,12 +286,7 @@
  *   size = 0xC
  */
 #define CS_TIME(unk, startFrame, endFrame, hour, min, unused) \
-    CMD_HH(unk, startFrame), \
-    CMD_HBB(endFrame, hour, min), \
-    CMD_W(unused)
-
-
-
+    CMD_HH(unk, startFrame), CMD_HBB(endFrame, hour, min), CMD_W(unused)
 
 
 /**
@@ -355,7 +320,7 @@
  * ARGS
  *   s32 cmdType (c), s32 entries (e)
  * FORMAT
- *   cccccccc eeeeeeee
+ *   000000C8 eeeeeeee
  *   size = 0x8
  */
 #define CS_PLAYER_ACTION_LIST(entries) CS_CMD_SET_PLAYER_ACTION, CMD_W(entries)
@@ -375,48 +340,39 @@
     CS_ACTOR_ACTION(playerAction, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ)
 
 
-
-
-
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   0000012C eeeeeeee
  *   size = 0x8
  */
 #define CS_PLAYSEQ_LIST(entries) CS_CMD_PLAYSEQ, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_PLAYSEQ(base, startFrame, endFrame, unk_06) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
-
-
-
-
-
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   00000130 eeeeeeee
  *   size = 0x8
  */
 #define CS_SCENE_UNK_130_LIST(entries) CS_CMD_130, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
@@ -426,191 +382,151 @@
     CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
 
 
-
-
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   00000131 eeeeeeee
  *   size = 0x8
  */
 #define CS_SCENE_UNK_131_LIST(entries) CS_CMD_131, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_SCENE_UNK_131(base, startFrame, endFrame, unk_06) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
-
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   00000132 eeeeeeee
  *   size = 0x8
  */
 #define CS_SCENE_UNK_132_LIST(entries) CS_CMD_132, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_SCENE_UNK_132(base, startFrame, endFrame) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, endFrame)
-
-
-
-
-
-
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   00000133 eeeeeeee
  *   size = 0x8
  */
 #define CS_STOPSEQ_LIST(entries) CS_CMD_STOPSEQ, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_STOPSEQ(base, startFrame, endFrame, unk_06) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
-
-
-
-
-
-
-
-
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   00000134 eeeeeeee
  *   size = 0x8
  */
 #define CS_PLAYAMBIENCE_LIST(entries) CS_CMD_PLAYAMBIENCE, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_PLAYAMBIENCE(base, startFrame, endFrame, unk_06) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
-
-
-
-
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   00000135 eeeeeeee
  *   size = 0x8
  */
 #define CS_FADEAMBIENCE_LIST(entries) CS_CMD_FADEAMBIENCE, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_FADEAMBIENCE(base, startFrame, endFrame, unk_06) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
-
-
-
-
-
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   0000015E eeeeeeee
  *   size = 0x8
  */
 #define CS_TERMINATOR_LIST(entries) CS_CMD_TERMINATOR, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_TERMINATOR(base, startFrame, endFrame) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, endFrame)
-
-
-
 
 
 /**
  * ARGS
  *   s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   0000015F eeeeeeee
  *   size = 0x8
  */
 #define CS_SCENE_UNK_15F_LIST(entries) CS_CMD_15F, CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_SCENE_UNK_15F(base, startFrame, endFrame, unk_06) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
-
-
-
-
-
-
 
 
 /**
@@ -624,34 +540,28 @@
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x30
+ *   size = 0x08
  */
 #define CS_RUMBLE(base, startFrame, endFrame, unk6, unk7, unk8) \
     CMD_HH(base, startFrame), CMD_HBB(endFrame, unk6, unk7), CMD_BBBB(unk8, 0, 0, 0)
 
 
-
-
-
-
-
-
 /**
  * ARGS
- *   s32 entries (e)
+ *   s32 cmd (c), s32 entries (e)
  * FORMAT
- *   00000004 eeeeeeee
+ *   cccccccc eeeeeeee
  *   size = 0x8
  */
 #define CS_UNK_DATA_LIST(cmd, entries) CMD_W(cmd), CMD_W(entries)
 
 /**
  * ARGS
- *   
+ *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
@@ -659,12 +569,6 @@
  */
 #define CS_UNK_DATA(base, startFrame, endFrame, unk_06) \
     CMD_HH(base, startFrame), CMD_HH(endFrame, unk_06)
-
-
-
-
-
-
 
 
 /**
