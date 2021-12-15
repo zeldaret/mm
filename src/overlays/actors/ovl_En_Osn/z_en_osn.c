@@ -890,7 +890,18 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_800E9250(globalCtx, &this->actor, (Vec3s*)this->unk_1D8, (Vec3s*)&this->unk_1D8[6], this->actor.focus.pos);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1DA8.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1DA8.s")
+s32 func_80AD1DA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor, Gfx** gfx) {
+    EnOsn* this = (EnOsn*)actor;
+
+    if (this->unk_1F0 && limbIndex == 0xB) {
+        Matrix_InsertXRotation_s(this->unk_1DA, 1);
+    }
+    if ((this->unk_1EC == 9 || this->unk_1EC == 8) && limbIndex == 0xA) {
+        *dList = 0;
+    }
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1E28.s")
 

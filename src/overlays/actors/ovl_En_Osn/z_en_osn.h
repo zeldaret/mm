@@ -12,12 +12,14 @@ typedef struct EnOsn {
     /* 0x0144 */ ColliderCylinder collider;
     /* 0X0190 */ SkelAnime anime;
     /* 0x01D4 */ EnOsnActionFunc actionFunc;
-    /* 0x01D8 */ char unk_1D8[0x12];
+    /* 0x01D8 */ char unk_1D8[0x2];
+    /* 0x01DA */ s16 unk_1DA;
+    /* 0x01DC */ char unk_1DC[0xE];
     /* 0x01EA */ u16  unk_1EA;
     /* 0x01EC */ u8 unk_1EC;
     /* 0x01ED */ u8 unk_1ED;
     /* 0x01EE */ s16 cutscene;
-    /* 0x01F0 */ s8 unk_1F0;
+    /* 0x01F0 */ u8 unk_1F0;
     /* 0x01F1 */ char unk_1F1[0x3];
     /* 0x01F4 */ u16 unk_1F4;
     /* 0x01F6 */ char unk_1F6[0x2];
