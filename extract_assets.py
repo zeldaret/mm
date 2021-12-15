@@ -16,7 +16,7 @@ def ExtractFile(xmlPath, outputPath, outputSourcePath):
         return
 
     execStr = "tools/ZAPD/ZAPD.out e -eh -i %s -b baserom/ -o %s -osf %s -gsf 1 -rconf tools/ZAPDConfigs/MM/Config.xml" % (xmlPath, outputPath, outputSourcePath)
-    
+
     if globalUnaccounted:
         execStr += " -wu"
 
@@ -70,6 +70,7 @@ def main():
     parser = argparse.ArgumentParser(description="baserom asset extractor")
     parser.add_argument("-s", "--single", help="asset path relative to assets/, e.g. objects/gameplay_keep")
     parser.add_argument("-f", "--force", help="Force the extraction of every xml instead of checking the touched ones.", action="store_true")
+    parser.add_argument("-j", "--jobs", help="Number of cpu cores to extract with.")
     parser.add_argument("-u", "--unaccounted", help="Enables ZAPD unaccounted detector warning system.", action="store_true")
     args = parser.parse_args()
 
@@ -104,7 +105,9 @@ def main():
                     xmlFiles.append(fullPath)
 
         try:
-            numCores = cpu_count()
+            numCores = int(args.jobs or 0)
+            if numCores <= 0:
+                numCores = 1
             print("Extracting assets with " + str(numCores) + " CPU cores.")
             with get_context("fork").Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
                 p.map(ExtractFunc, xmlFiles)

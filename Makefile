@@ -230,12 +230,12 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
-	python3 extract_assets.py
+	python3 extract_assets.py -j $(N_THREADS)
 
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py -j ${N_THREADS}
+	python3 tools/disasm/disasm.py -j $(N_THREADS)
 
 diff-init: uncompressed
 	$(RM) -rf expected/

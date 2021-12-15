@@ -68,7 +68,7 @@ brew install coreutils make python3 libpng
 
 You'll also need to [build and install mips-linux-binutils](docs/BUILDING_BINUTILS_MACOS.md).
 
-The makefile should alias Apple's out-of-date `make` to `gmake` automatically, but if you have issues, try using `gmake` in place of `make`.
+Apple's version of `make` is very out-of-date, so you should use the brew-installed `gmake` in place of `make` from now on.
 
 You should now be able to continue from [step 2](#2-clone-the-repository) of the Linux instructions.
 
@@ -139,10 +139,9 @@ This means that something is wrong with the ROM's contents. Either the baserom f
 
 Running `make init` will also make the `./expected` directory and copy all of the files there, which will be useful when running the diff script. The diff script is useful in decompiling functions and can be ran with this command: `./tools/asm-differ/diff.py -wmo3 <insert_function_here>`
 
-**Note**: to speed up the build, you can either:
-* Pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has, which is the output of `nproc` (which should be installed as part of `coreutils`).
-* Pass `-j` to `make setup` and `make`, to use as many threads as possible, but beware that this can use too much memory on lower-end systems, and even high-end systems tend to be fastest with roughly `-j$(nproc)` threads.
-Both of these have the disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-j` or `-jN`).
+**Note**: to speed up the build, you can pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has, which is the output of `nproc` (which should be installed as part of `coreutils`). 
+The disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-jN`).
+(`-j` also exists, which uses unlimited jobs, but is generally slower.)
 
 
 ## Contributing
