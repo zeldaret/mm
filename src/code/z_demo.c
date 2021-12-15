@@ -7,6 +7,7 @@ void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 void func_800ED980(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx);
 
 // Unused
 UNK_TYPE4 D_801BB120 = 0;
@@ -17,7 +18,7 @@ u8 sCutsceneStoredPlayerForm = 0;
 
 // bss
 #ifndef NON_MATCHING
-u16 activeSequence;
+static u16 activeSequence;
 #endif
 s16 sCutsceneQuakeIndex;
 struct_801F4D48 sCutsceneCameraInfo;
@@ -1517,10 +1518,10 @@ void func_800EDDCC(GlobalContext* globalCtx, u8 arg1) {
     gSaveContext.cutsceneTrigger = 1;
 }
 
-void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 index) {
+void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex) {
     Vec3f sp24;
     Vec3f sp18;
-    CsCmdActorAction* entry = globalCtx->csCtx.npcActions[index];
+    CsCmdActorAction* entry = globalCtx->csCtx.npcActions[npcActionIndex];
     f32 temp_f0;
 
     sp24.x = entry->startPos.x;
@@ -1536,26 +1537,26 @@ void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 index) {
     actor->world.pos.z = ((sp18.z - sp24.z) * temp_f0) + sp24.z;
 }
 
-void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 arg2) {
-    func_800EDE34(actor, globalCtx, arg2);
-    actor->world.rot.y = globalCtx->csCtx.npcActions[arg2]->urot.y;
+void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 npcActionIndex) {
+    func_800EDE34(actor, globalCtx, npcActionIndex);
+    actor->world.rot.y = globalCtx->csCtx.npcActions[npcActionIndex]->urot.y;
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 iParm3) {
+void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex) {
     Vec3f sp44;
     Vec3f sp38;
     CsCmdActorAction* entry;
     f32 temp_f0;
 
-    sp44.x = globalCtx->csCtx.npcActions[iParm3]->startPos.x;
-    sp44.y = globalCtx->csCtx.npcActions[iParm3]->startPos.y;
-    sp44.z = globalCtx->csCtx.npcActions[iParm3]->startPos.z;
-    sp38.x = globalCtx->csCtx.npcActions[iParm3]->endPos.x;
-    sp38.y = globalCtx->csCtx.npcActions[iParm3]->endPos.y;
-    sp38.z = globalCtx->csCtx.npcActions[iParm3]->endPos.z;
+    sp44.x = globalCtx->csCtx.npcActions[npcActionIndex]->startPos.x;
+    sp44.y = globalCtx->csCtx.npcActions[npcActionIndex]->startPos.y;
+    sp44.z = globalCtx->csCtx.npcActions[npcActionIndex]->startPos.z;
+    sp38.x = globalCtx->csCtx.npcActions[npcActionIndex]->endPos.x;
+    sp38.y = globalCtx->csCtx.npcActions[npcActionIndex]->endPos.y;
+    sp38.z = globalCtx->csCtx.npcActions[npcActionIndex]->endPos.z;
 
-    entry = globalCtx->csCtx.npcActions[iParm3];
+    entry = globalCtx->csCtx.npcActions[npcActionIndex];
     temp_f0 = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
     actor->world.pos.x = ((sp38.x - sp44.x) * temp_f0) + sp44.x;
@@ -1566,6 +1567,7 @@ void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 iParm3) {
     actor->shape.rot.y = actor->world.rot.y;
 }
 
+// unused
 void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 arg2) {
     Vec3f sp44;
     Vec3f sp38;
