@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define ROOMTIMER_GET_SWITCHFLAG(thisx) (((thisx)->params >> 9) & 0x7F)
+
 struct ObjRoomtimer;
 
 typedef void (*ObjRoomtimerActionFunc)(struct ObjRoomtimer*, GlobalContext*);

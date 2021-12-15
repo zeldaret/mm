@@ -33,7 +33,7 @@ const ActorInit Obj_Roomtimer_InitVars = {
 void ObjRoomtimer_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjRoomtimer* this = THIS;
 
-    this->flag = (this->actor.params >> 9) & 0x7F;
+    this->flag = ROOMTIMER_GET_SWITCHFLAG(thisx);
     this->actor.params &= 0x1FF;
 
     if (this->actor.params != 0x1FF) {
