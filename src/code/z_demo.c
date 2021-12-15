@@ -56,6 +56,8 @@ void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
+typedef void(*CutsceneStateHandler)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+
 CutsceneStateHandler sCsStateHandlers1[] = {
     /* CS_STATE_IDLE */ Cutscene_Nop800EA210,
     /* CS_STATE_SKIPPABLE_INIT */ func_800EA258,
