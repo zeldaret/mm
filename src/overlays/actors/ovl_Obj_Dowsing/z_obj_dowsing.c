@@ -29,14 +29,14 @@ const ActorInit Obj_Dowsing_InitVars = {
 };
 
 s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx) {
-    s32 type = this->actor.params >> 7;
-    s32 flag = this->actor.params & 0x7F;
+    s32 type = DOWSING_GET_TYPE(this);
+    s32 flag = DOWSING_GET_FLAG(this);
 
-    if (type == 1) {
+    if (type == DOWSING_COLLECTIBLE) {
         return Actor_GetCollectibleFlag(globalCtx, flag);
-    } else if (type == 2) {
+    } else if (type == DOWSING_CHEST) {
         return Actor_GetChestFlag(globalCtx, flag);
-    } else if (type == 3) {
+    } else if (type == DOWSING_SWITCH) {
         return Flags_GetSwitch(globalCtx, flag);
     } else {
         return 0;
