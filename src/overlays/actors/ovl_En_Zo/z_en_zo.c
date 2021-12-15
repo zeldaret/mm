@@ -1,7 +1,7 @@
 /*
  * File: z_en_zo.c
  * Overlay: ovl_En_Zo
- * Description: Zoras
+ * Description: Unused Zora Actor
  */
 
 #include "z_en_zo.h"
