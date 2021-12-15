@@ -16,7 +16,7 @@ void EnZo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx);
-void func_8099ED4C(EnZo* this, GlobalContext* globalCtx);
+void EnZo_TreadWater(EnZo* this, GlobalContext* globalCtx);
 void EnZo_DoNothing(EnZo* this, GlobalContext* globalCtx);
 
 extern AnimationHeader D_06004248; // standing
@@ -112,7 +112,7 @@ static Gfx D_8099F5E8[3] = {
     gsSPEndDisplayList(),
 };
 
-s32 EnZo_SetAnimation(SkelAnime* skel_anime, s16 index) {
+s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
     s16 frameCount;
     s32 didChange;
 
@@ -123,7 +123,7 @@ s32 EnZo_SetAnimation(SkelAnime* skel_anime, s16 index) {
         if (frameCount < 0) {
             frameCount = Animation_GetLastFrame(sAnimations[index].animationSeg);
         }
-        Animation_Change(skel_anime, sAnimations[index].animationSeg, sAnimations[index].playbackSpeed,
+        Animation_Change(skelAnime, sAnimations[index].animationSeg, sAnimations[index].playbackSpeed,
                          sAnimations[index].frame, frameCount, sAnimations[index].mode,
                          sAnimations[index].transitionRate);
     }
@@ -235,13 +235,13 @@ void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx) {
     }
     if (this->actor.depthInWater > 60.0f) {
         EnZo_SetAnimation(&this->skelAnime, 1);
-        this->actionFunc = func_8099ED4C;
+        this->actionFunc = EnZo_TreadWater;
         this->actor.gravity = 0.0f;
         this->actor.speedXZ = 0.0f;
     }
 }
 
-void func_8099ED4C(EnZo* this, GlobalContext* globalCtx) {
+void EnZo_TreadWater(EnZo* this, GlobalContext* globalCtx) {
     f32 phi_f0;
 
     if (this->actor.depthInWater < (sREG(0) + 50.0f)) {
