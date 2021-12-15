@@ -161,15 +161,7 @@ s32 EnZo_PlayWalkingSound(EnZo* this, GlobalContext* globalCtx) {
 }
 
 void EnZo_Blink(EnZo* this, s32 maxEyeIndex) {
-    s16 time;
-
-    if (this->blinkTimer == 0) {
-        time = 0;
-    } else {
-        this->blinkTimer--;
-        time = this->blinkTimer;
-    }
-    if (time == 0) {
+    if (DECR(this->blinkTimer) == 0) {
         this->eyeIndex++;
         if (this->eyeIndex >= maxEyeIndex) {
             this->eyeIndex = 0;
@@ -187,10 +179,9 @@ void EnZo_UpdateCollider(EnZo* this, GlobalContext* globalCtx) {
 }
 
 void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
-    Player* player;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f focus;
 
-    player = GET_PLAYER(globalCtx);
     SkelAnime_Update(&this->skelAnime);
     if (func_8013D5E8(this->actor.shape.rot.y, 10000, this->actor.yawTowardsPlayer)) {
         focus.x = player->actor.world.pos.x;
@@ -242,14 +233,14 @@ void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx) {
 }
 
 void EnZo_TreadWater(EnZo* this, GlobalContext* globalCtx) {
-    f32 phi_f0;
+    f32 targetYVel;
 
     if (this->actor.depthInWater < (sREG(0) + 50.0f)) {
-        phi_f0 = -1.0f;
+        targetYVel = -1.0f;
     } else {
-        phi_f0 = 1.0f;
+        targetYVel = 1.0f;
     }
-    Math_ApproachF(&this->actor.velocity.y, phi_f0, (sREG(1) + 18.0f) * 0.01f, (sREG(2) + 12.0f) * 0.01f);
+    Math_ApproachF(&this->actor.velocity.y, targetYVel, (sREG(1) + 18.0f) * 0.01f, (sREG(2) + 12.0f) * 0.01f);
 }
 
 void EnZo_DoNothing(EnZo* this, GlobalContext* globalCtx) {
@@ -310,22 +301,20 @@ s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
 void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
     EnZo* this = (EnZo*)actor;
-    Vec3f sp30;
-    Vec3f sp24;
+    Vec3f sp30 = D_8099F5CC;
+    Vec3f zeroVec = D_8099F5D8;
 
-    sp30 = D_8099F5CC;
-    sp24 = D_8099F5D8;
     if (D_8099F578[limbIndex] >= 0) {
-        Matrix_MultiplyVector3fByState(&sp24, &this->unk_364[D_8099F578[limbIndex]]);
+        Matrix_MultiplyVector3fByState(&zeroVec, &this->unk_364[D_8099F578[limbIndex]]);
     }
     if (limbIndex == 15) {
         Matrix_MultiplyVector3fByState(&sp30, &actor->focus.pos);
     }
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&sp24, &this->leftFootPos);
+        Matrix_MultiplyVector3fByState(&zeroVec, &this->leftFootPos);
     }
     if (limbIndex == 7) {
-        Matrix_MultiplyVector3fByState(&sp24, &this->rightFootPos);
+        Matrix_MultiplyVector3fByState(&zeroVec, &this->rightFootPos);
     }
 }
 
