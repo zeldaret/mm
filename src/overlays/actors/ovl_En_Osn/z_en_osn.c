@@ -192,7 +192,7 @@ void func_80AD0AB0(EnOsn* this) {
     new_var = Animation_GetLastFrame((&D_80AD22C0)[this->unk_1EC].animation);
     if (sp1E == new_var) {
         this->unk_1FC -= 8;
-        if (this->unk_1F6[6] < 8) {
+        if (this->unk_1FC < 8) {
             this->unk_1FC = 0;
             Actor_MarkForDeath(&this->actor);
         }
@@ -894,4 +894,44 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1E28.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Draw.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Draw.s")
+s32 func_80AD1DA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor, Gfx** gfx); 
+void func_80AD1E28(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx); 
+extern void* D_80AD2588;
+extern void* D_80AD258C;
+extern void* D_80AD2590;
+extern void* D_80AD2594;
+extern void* D_80AD2598;
+
+void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    GraphicsContext* temp_s0;
+    EnOsn* this = THIS;
+    
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    
+    if (this->unk_1FC == 0xFF) {
+        func_8012C28C(globalCtx->state.gfxCtx);
+        if ((this->unk_1EC == 0xB) || (this->unk_1EC == 0xC) || (this->unk_1EC == 0x17) || (globalCtx->msgCtx.unk11F04 == 0x1FCA)) {
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD258C));
+            gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
+        } else if ((this->unk_1EC == 7) || (this->unk_1EC == 3) || (this->unk_1EC == 0xD)) {
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2590));
+            gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2598));
+        } else {
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2588));
+            gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
+        }
+        gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
+        Scene_SetRenderModeXlu(globalCtx, 0, 1);
+        POLY_OPA_DISP = SkelAnime_DrawFlex(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount, func_80AD1DA8, func_80AD1E28, &this->actor, POLY_OPA_DISP);
+    } else {
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2588));
+        gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk_1FC);
+        Scene_SetRenderModeXlu(globalCtx, 1, 2U);
+        POLY_XLU_DISP = SkelAnime_DrawFlex(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount, func_80AD1DA8, func_80AD1E28, &this->actor, POLY_XLU_DISP);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
