@@ -5,7 +5,8 @@ PROGRAMS := vtxdis
 all: $(PROGRAMS)
 	$(MAKE) -C ZAPD
 	$(MAKE) -C buildtools
-	$(MAKE) -C z64compress
+# CFLAGS is needed for platforms without -march and -mtune available; you can remove it to use the defaults from z64compress
+	$(MAKE) -C z64compress CFLAGS="-DNDEBUG -s -Os -flto -Wall -Wextra"
 
 clean:
 	$(RM) $(PROGRAMS)
