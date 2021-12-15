@@ -48,7 +48,7 @@ void ObjKzsaku_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, col);
 
-    this->switchFlag = (thisx->params & 0x7F00) >> 8;
+    this->switchFlag = KZSAKU_GET_SWITCHFLAG(thisx);
     this->unk_160 = 0.0f;
 
     if (Flags_GetSwitch(globalCtx, this->switchFlag)) {

@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define KZSAKU_GET_SWITCHFLAG(thisx) (((thisx)->params & 0x7F00) >> 8)
+
 struct ObjKzsaku;
 
 typedef void (*ObjKzsakuActionFunc)(struct ObjKzsaku*, GlobalContext*);
