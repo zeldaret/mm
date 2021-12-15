@@ -210,7 +210,7 @@ void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
     func_8013D9C8(globalCtx, this->limbRotY, this->limbRotZ, 20);
 }
 
-void func_8099EBD8(EnZo* this, GlobalContext* globalCtx) {
+void EnZo_Walk(EnZo* this, GlobalContext* globalCtx) {
     if (ENZO_GET_PATH(&this->actor) != 0x3F) {
         EnZo_SetAnimation(&this->skelAnime, 6);
     }
@@ -267,7 +267,7 @@ void EnZo_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->path = func_8013D648(globalCtx, ENZO_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actionFunc = func_8099EBD8;
+    this->actionFunc = EnZo_Walk;
     this->actor.gravity = -4.0f;
 }
 
