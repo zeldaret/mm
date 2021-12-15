@@ -704,11 +704,11 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ void* loadedRamAddr;
-    /* 0x04 */ u32 vromStart;
-    /* 0x08 */ u32 vromEnd;
+    /* 0x04 */ uintptr_t vromStart;
+    /* 0x08 */ uintptr_t vromEnd;
     /* 0x0C */ void* vramStart;
     /* 0x10 */ void* vramEnd;
-    /* 0x14 */ u32 offset; // loadedRamAddr - vramStart
+    /* 0x14 */ uintptr_t offset; // loadedRamAddr - vramStart
     /* 0x18 */ const char* name;
 } KaleidoMgrOverlay; // size = 0x1C
 

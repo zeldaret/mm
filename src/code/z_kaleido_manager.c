@@ -95,7 +95,8 @@ void* KaleidoManager_GetRamAddr(void* vram) {
         } while (ovl != (KaleidoMgrOverlay*)&sKaleidoAreaPtr);
 
         return NULL;
-    } else if (((uintptr_t)vram < (uintptr_t)gKaleidoMgrCurOvl->vramStart) || ((uintptr_t)vram >= (uintptr_t)gKaleidoMgrCurOvl->vramEnd)) {
+    } else if (((uintptr_t)vram < (uintptr_t)gKaleidoMgrCurOvl->vramStart) ||
+               ((uintptr_t)vram >= (uintptr_t)gKaleidoMgrCurOvl->vramEnd)) {
         return NULL;
     }
 
