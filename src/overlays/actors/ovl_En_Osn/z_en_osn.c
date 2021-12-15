@@ -86,7 +86,6 @@ void func_80AD16A8(EnOsn*, GlobalContext*); /* extern */
 void EnOsn_Idle(EnOsn*, GlobalContext*);    /* extern */
 void func_80AD0998(EnOsn*);                 /* extern */
 void func_80AD0A24(EnOsn*);                 /* extern */
-// void func_80AD0AB0(EnOsn*);                                /* extern */
 void func_80AD14C8(EnOsn*, GlobalContext*);                /* extern */
 s32 func_80AD0E10(EnOsn*, GlobalContext*);                 /* extern */
 void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx); /* extern */
@@ -110,7 +109,53 @@ void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD08B0.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD08B0.s")
+s32 func_80AD08B0(GlobalContext* arg0) {
+    switch (Player_GetMask(arg0)) {
+    case 11:
+        return 0x1FD6;
+    case 12:
+        return 0x1FD8;
+    case 1:
+        return 0x1FDA;
+    case 20:
+        return 0x1FDC;
+    case 2:
+        return 0x1FDE;
+    case 13:
+        return 0x1FE0;
+    case 18:
+        return 0x1FE2;
+    case 10:
+        return 0x1FE4;
+    case 19:
+        return 0x1FE6;
+    case 14:
+        return 0x1FE8;
+    case 16:
+        return 0x1FEA;
+    case 9:
+        return 0x1FEC;
+    case 4:
+        return 0x1FEE;
+    case 15:
+        return 0x1FF0;
+    case 17:
+        return 0x1FF2;
+    case 8:
+        return 0x1FF4;
+    case 5:
+        return 0x1FF6;
+    case 6:
+        return 0x1FF8;
+    case 3:
+        return 0x1FFA;
+    case 7:
+        return 0x1FFC;
+    default:
+        return 0;
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0998.s")
 void func_80AD0998(EnOsn* arg0) {
@@ -372,6 +417,169 @@ s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD10FC.s")
+//u16 func_80AD08B0(GlobalContext*, Actor*, u16);     /* extern */
+
+/*void func_80AD10FC(EnOsn* this, GlobalContext* arg1) {
+    u16 temp_a3;
+    u16 phi_a3;
+
+    temp_a3 = this->unk_1F4;
+    phi_a3 = temp_a3;
+    switch (temp_a3) {
+    case 0x1FC8:
+        this->unk_1F4 = 0x1FC9U;
+        phi_a3 = this->unk_1F4 & 0xFFFF;
+        break;
+    case 0x1FC9:
+        this->unk_1F4 = 0x1FCAU;
+        phi_a3 = this->unk_1F4 & 0xFFFF;
+        break;
+    case 0x1FCA:
+        if ((gSaveContext.day == 3) && ((((s32) gSaveContext.time >= 0x3555))) && ((s32) gSaveContext.time < 0x4000)) {
+            this->unk_1F4 = 0x2007U;
+        } else {
+            this->unk_1F4 = 0x1FCBU;
+        }
+        phi_a3 = this->unk_1F4;
+        break;
+    case 0x1FCB:
+    case 0x2007:
+        this->unk_1F4 = 0x1FCCU;
+        this->unk_1EA = (u16) (this->unk_1EA | 0x20);
+        phi_a3 = this->unk_1F4 & 0xFFFF;
+        break;
+    case 0x1FCE:
+    case 0x1FD0:
+        this->unk_1F4 = 0x1FCFU;
+        phi_a3 = this->unk_1F4 & 0xFFFF;
+        break;
+    case 0x1FCF:
+        this->unk_1F4 = 0x1FCAU;
+        phi_a3 = this->unk_1F4 & 0xFFFF;
+        break;
+    case 0x1FD1:
+    case 0x1FD2:
+        this->unk_1F4 = func_80AD08B0(arg1, this, temp_a3);
+        phi_a3 = this->unk_1F4;
+        break;
+    case 0x1FD6:
+        this->unk_1F4 = 0x1FD7;
+        phi_a3 = this->unk_1F4 & 0xFFFF;
+        break;
+    case 0x1FD8:
+        this->unk_1F4 = 0x1FD9;
+        phi_a3 = this->unk_1F4 & 0xFFFF;
+        break;
+    case 0x1FDA:
+        this->unk_1F4 = 0x1FDB;
+        phi_a3 = this->unk_1F4 & 0xFFFF;
+        break;
+    case 0x1FDC:
+        this->unk_1F4 = 0x1FDD;
+block_38:
+        phi_a3 = this->unk_1F4 & 0xFFFF;
+        break;
+    case 0x1FDE:
+        this->unk_1F4 = 0x1FDF;
+        phi_a3 = 0x1FDF & 0xFFFF;
+        break;
+    case 0x1FE0:
+        this->unk_1F4 = 0x1FE1;
+        phi_a3 = 0x1FE1 & 0xFFFF;
+        break;
+    case 0x1FE2:
+        this->unk_1F4 = 0x1FE3;
+        phi_a3 = 0x1FE3 & 0xFFFF;
+        break;
+    case 0x1FE4:
+        this->unk_1F4 = 0x1FE5;
+        phi_a3 = 0x1FE5 & 0xFFFF;
+        break;
+    case 0x1FE6:
+        this->unk_1F4 = 0x1FE7;
+        phi_a3 = 0x1FE7 & 0xFFFF;
+        break;
+    case 0x1FE8:
+        this->unk_1F4 = 0x1FE9;
+        phi_a3 = 0x1FE9 & 0xFFFF;
+        break;
+    case 0x1FEA:
+        this->unk_1F4 = 0x1FEB;
+        phi_a3 = 0x1FEB & 0xFFFF;
+        break;
+    case 0x1FEC:
+        this->unk_1F4 = 0x1FED;
+        phi_a3 = 0x1FED & 0xFFFF;
+        break;
+    case 0x1FEE:
+        this->unk_1F4 = 0x1FEF;
+        phi_a3 = 0x1FEF & 0xFFFF;
+        break;
+    case 0x1FF0:
+        this->unk_1F4 = 0x1FF1;
+        goto block_38;
+    case 0x1FF2:
+        this->unk_1F4 = 0x1FF3;
+        phi_a3 = 0x1FF3 & 0xFFFF;
+        break;
+    case 0x1FF4:
+        this->unk_1F4 = 0x1FF5;
+        phi_a3 = 0x1FF5 & 0xFFFF;
+        break;
+    case 0x1FF6:
+        this->unk_1F4 = 0x1FF7;
+        phi_a3 = 0x1FF7 & 0xFFFF;
+        break;
+    case 0x1FF8:
+        this->unk_1F4 = 0x1FF9;
+        phi_a3 = 0x1FF9 & 0xFFFF;
+        break;
+    case 0x1FFA:
+        this->unk_1F4 = 0x1FFB;
+        phi_a3 = 0x1FFB & 0xFFFF;
+        break;
+    case 0x1FFC:
+        this->unk_1F4 = 0x1FFD;
+        phi_a3 = 0x1FFD & 0xFFFF;
+        break;
+    case 0x1FD7:
+    case 0x1FDB:
+    case 0x1FDD:
+    case 0x1FDF:
+    case 0x1FE1:
+    case 0x1FE7:
+    case 0x1FF1:
+    case 0x1FF3:
+    case 0x1FF7:
+    case 0x1FF9:
+    case 0x1FFB:
+        this->unk_1F4 = 0x1FD3;
+        phi_a3 = 0x1FD3 & 0xFFFF;
+        break;
+    case 0x1FD9:
+    case 0x1FE3:
+    case 0x1FE9:
+    case 0x1FEB:
+    case 0x1FED:
+    case 0x1FEF:
+    case 0x1FF5:
+    case 0x1FFD:
+        this->unk_1F4 = 0x1FD4;
+        phi_a3 = 0x1FD4 & 0xFFFF;
+        break;
+    case 0x1FE5:
+        this->unk_1F4 = 0x1FFE;
+        phi_a3 = 0x1FFE & 0xFFFF;
+        break;
+    case 0x1FD3:
+    case 0x1FD4:
+    case 0x1FFE:
+        this->unk_1F4 = 0x1FD5;
+        this->unk_1EA = (u16) (this->unk_1EA | 0x20);
+        goto block_38;
+    }
+    func_801518B0(arg1, phi_a3 & 0xFFFF, &this->actor);
+}*/
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1398.s")
 void func_80AD1398(EnOsn* arg0) {
