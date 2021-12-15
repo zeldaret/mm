@@ -516,8 +516,8 @@ void Cutscene_Command_Rumble(GlobalContext* globalCtx, CutsceneContext* csCtx, C
     }
 }
 
-// Command 0x9B: FadeColorScreen/Cutscene_Command_ChangeHue/Cutscene_Command_ScreenFillColor
-void func_800EAFE0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdUnk9B* cmd) {
+// Command 0x9B: 
+void Cutscene_Command_FadeColorScreen(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdFadeScreen* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         f32 alpha;
 
@@ -1276,11 +1276,11 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_9B:
+            case CS_CMD_FADESCREEN:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EAFE0(globalCtx, csCtx, (CsCmdUnk9B*)cutscenePtr);
+                    Cutscene_Command_FadeColorScreen(globalCtx, csCtx, (CsCmdFadeScreen*)cutscenePtr);
                     cutscenePtr += 0xC;
                 }
                 break;

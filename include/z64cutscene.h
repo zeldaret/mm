@@ -111,7 +111,7 @@ typedef struct {
     /* 0x7 */ u8 g;
     /* 0x8 */ u8 b;
     /* 0x9 */ UNK_TYPE1 pad9[0x3];
-} CsCmdUnk9B; // size = 0xC
+} CsCmdFadeScreen; // size = 0xC
 
 typedef enum {
     /* 0 */ CS_STATE_IDLE,
@@ -129,7 +129,7 @@ typedef enum {
     /* 0x098 */ CS_CMD_SCENE_TRANS_FX,
     /* 0x099 */ CS_CMD_MOTIONBLUR,
     /* 0x09A */ CS_CMD_GIVETATL,
-    /* 0x09B */ CS_CMD_9B,
+    /* 0x09B */ CS_CMD_FADESCREEN,
     /* 0x09C */ CS_CMD_FADESEQ,
     /* 0x09D */ CS_CMD_SETTIME,
     /* 0x0C8 */ CS_CMD_SET_PLAYER_ACTION = 0xC8,
