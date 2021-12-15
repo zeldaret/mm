@@ -1,7 +1,7 @@
 /*
  * File: z_en_zo.c
  * Overlay: ovl_En_Zo
- * Description: Unused Zora Actor
+ * Description: Zoras (unused)
  */
 
 #include "z_en_zo.h"
@@ -26,6 +26,9 @@ extern AnimationHeader D_06000D48;
 extern AnimationHeader D_0600219C;
 extern AnimationHeader D_06002898; // walking
 extern FlexSkeletonHeader D_0600D208;
+extern TexturePtr D_060050A0;
+extern TexturePtr D_060058A0;
+extern TexturePtr D_060060A0;
 
 const ActorInit En_Zo_InitVars = {
     ACTOR_EN_ZO,
@@ -92,32 +95,21 @@ static DamageTable sDamageTable = {
     /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
-static ActorAnimationEntryS sAnimations[7] = {
+static ActorAnimationEntryS sAnimations[] = {
     { &D_06004248, 1.0f, 0, -1, 0, 0 },  { &D_06004248, 1.0f, 0, -1, 0, -4 }, { &D_06003610, 1.0f, 0, -1, 0, -4 },
     { &D_06000598, 1.0f, 0, -1, 0, -4 }, { &D_06000D48, 1.0f, 0, -1, 0, -4 }, { &D_0600219C, 1.0f, 0, -1, 0, -4 },
     { &D_06002898, 1.0f, 0, -1, 0, -4 },
 };
-static s8 D_8099F578[20] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
-static s8 D_8099F58C[16] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13, 0 };
-static u8 D_8099F59C[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-static u16 D_8099F5AC[16] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
-static Vec3f D_8099F5CC = { 400.0f, 0.0f, 0.0f };
-static Vec3f D_8099F5D8 = { 0.0f, 0.0f, 0.0f };
-static Gfx D_8099F5E8[3] = {
-    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          G_RM_FOG_SHADE_A,
-                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
-    gsDPSetAlphaCompare(G_AC_THRESHOLD),
-    gsSPEndDisplayList(),
-};
+s8 D_8099F578[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
+s8 D_8099F58C[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13, 0 };
+u8 D_8099F59C[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+u16 D_8099F5AC[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
 
 s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
     s16 frameCount;
-    s32 didChange;
+    s32 didChange = false;
 
-    didChange = false;
-    if ((index >= 0) && (index < 7)) {
+    if ((index >= 0) && (index < ARRAY_COUNT(sAnimations))) {
         didChange = true;
         frameCount = sAnimations[index].frameCount;
         if (frameCount < 0) {
@@ -301,8 +293,8 @@ s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
 void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
     EnZo* this = (EnZo*)actor;
-    Vec3f sp30 = D_8099F5CC;
-    Vec3f zeroVec = D_8099F5D8;
+    Vec3f sp30 = { 400.0f, 0.0f, 0.0f };
+    Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if (D_8099F578[limbIndex] >= 0) {
         Matrix_MultiplyVector3fByState(&zeroVec, &this->unk_364[D_8099F578[limbIndex]]);
@@ -318,12 +310,21 @@ void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
+Gfx D_8099F5E8[] = {
+    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          G_RM_FOG_SHADE_A,
+                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+    gsDPSetAlphaCompare(G_AC_THRESHOLD),
+    gsSPEndDisplayList(),
+};
+
 void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnZo* this = THIS;
     s32 i;
     u8* alloc = GRAPH_ALLOC(globalCtx->state.gfxCtx, 0x1000);
     u8* allocHead;
-    Gfx* eyeTextures[3] = { 0x060050A0, 0x060058A0, 0x060060A0 };
+    TexturePtr eyeTextures[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
