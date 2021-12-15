@@ -416,170 +416,191 @@ s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
     return 0x1FAE;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD10FC.s")
-//u16 func_80AD08B0(GlobalContext*, Actor*, u16);     /* extern */
-
-/*void func_80AD10FC(EnOsn* this, GlobalContext* arg1) {
-    u16 temp_a3;
-    u16 phi_a3;
-
-    temp_a3 = this->unk_1F4;
-    phi_a3 = temp_a3;
-    switch (temp_a3) {
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD10FC.s")
+void func_80AD10FC(EnOsn *this, GlobalContext *arg1)
+{
+  switch (this->unk_1F4)
+  {
     case 0x1FC8:
-        this->unk_1F4 = 0x1FC9U;
-        phi_a3 = this->unk_1F4 & 0xFFFF;
-        break;
+      this->unk_1F4 = 0x1FC9U;
+      break;
+
     case 0x1FC9:
-        this->unk_1F4 = 0x1FCAU;
-        phi_a3 = this->unk_1F4 & 0xFFFF;
-        break;
+      this->unk_1F4 = 0x1FCAU;
+      break;
+
     case 0x1FCA:
-        if ((gSaveContext.day == 3) && ((((s32) gSaveContext.time >= 0x3555))) && ((s32) gSaveContext.time < 0x4000)) {
-            this->unk_1F4 = 0x2007U;
-        } else {
-            this->unk_1F4 = 0x1FCBU;
-        }
-        phi_a3 = this->unk_1F4;
-        break;
-    case 0x1FCB:
-    case 0x2007:
-        this->unk_1F4 = 0x1FCCU;
-        this->unk_1EA = (u16) (this->unk_1EA | 0x20);
-        phi_a3 = this->unk_1F4 & 0xFFFF;
-        break;
-    case 0x1FCE:
-    case 0x1FD0:
-        this->unk_1F4 = 0x1FCFU;
-        phi_a3 = this->unk_1F4 & 0xFFFF;
-        break;
-    case 0x1FCF:
-        this->unk_1F4 = 0x1FCAU;
-        phi_a3 = this->unk_1F4 & 0xFFFF;
-        break;
-    case 0x1FD1:
-    case 0x1FD2:
-        this->unk_1F4 = func_80AD08B0(arg1, this, temp_a3);
-        phi_a3 = this->unk_1F4;
-        break;
-    case 0x1FD6:
-        this->unk_1F4 = 0x1FD7;
-        phi_a3 = this->unk_1F4 & 0xFFFF;
-        break;
-    case 0x1FD8:
-        this->unk_1F4 = 0x1FD9;
-        phi_a3 = this->unk_1F4 & 0xFFFF;
-        break;
-    case 0x1FDA:
-        this->unk_1F4 = 0x1FDB;
-        phi_a3 = this->unk_1F4 & 0xFFFF;
-        break;
-    case 0x1FDC:
-        this->unk_1F4 = 0x1FDD;
-block_38:
-        phi_a3 = this->unk_1F4 & 0xFFFF;
-        break;
-    case 0x1FDE:
-        this->unk_1F4 = 0x1FDF;
-        phi_a3 = 0x1FDF & 0xFFFF;
-        break;
-    case 0x1FE0:
-        this->unk_1F4 = 0x1FE1;
-        phi_a3 = 0x1FE1 & 0xFFFF;
-        break;
-    case 0x1FE2:
-        this->unk_1F4 = 0x1FE3;
-        phi_a3 = 0x1FE3 & 0xFFFF;
-        break;
-    case 0x1FE4:
-        this->unk_1F4 = 0x1FE5;
-        phi_a3 = 0x1FE5 & 0xFFFF;
-        break;
-    case 0x1FE6:
-        this->unk_1F4 = 0x1FE7;
-        phi_a3 = 0x1FE7 & 0xFFFF;
-        break;
-    case 0x1FE8:
-        this->unk_1F4 = 0x1FE9;
-        phi_a3 = 0x1FE9 & 0xFFFF;
-        break;
-    case 0x1FEA:
-        this->unk_1F4 = 0x1FEB;
-        phi_a3 = 0x1FEB & 0xFFFF;
-        break;
-    case 0x1FEC:
-        this->unk_1F4 = 0x1FED;
-        phi_a3 = 0x1FED & 0xFFFF;
-        break;
-    case 0x1FEE:
-        this->unk_1F4 = 0x1FEF;
-        phi_a3 = 0x1FEF & 0xFFFF;
-        break;
-    case 0x1FF0:
-        this->unk_1F4 = 0x1FF1;
-        goto block_38;
-    case 0x1FF2:
-        this->unk_1F4 = 0x1FF3;
-        phi_a3 = 0x1FF3 & 0xFFFF;
-        break;
-    case 0x1FF4:
-        this->unk_1F4 = 0x1FF5;
-        phi_a3 = 0x1FF5 & 0xFFFF;
-        break;
-    case 0x1FF6:
-        this->unk_1F4 = 0x1FF7;
-        phi_a3 = 0x1FF7 & 0xFFFF;
-        break;
-    case 0x1FF8:
-        this->unk_1F4 = 0x1FF9;
-        phi_a3 = 0x1FF9 & 0xFFFF;
-        break;
-    case 0x1FFA:
-        this->unk_1F4 = 0x1FFB;
-        phi_a3 = 0x1FFB & 0xFFFF;
-        break;
-    case 0x1FFC:
-        this->unk_1F4 = 0x1FFD;
-        phi_a3 = 0x1FFD & 0xFFFF;
-        break;
-    case 0x1FD7:
-    case 0x1FDB:
-    case 0x1FDD:
-    case 0x1FDF:
-    case 0x1FE1:
-    case 0x1FE7:
-    case 0x1FF1:
-    case 0x1FF3:
-    case 0x1FF7:
-    case 0x1FF9:
-    case 0x1FFB:
-        this->unk_1F4 = 0x1FD3;
-        phi_a3 = 0x1FD3 & 0xFFFF;
-        break;
-    case 0x1FD9:
-    case 0x1FE3:
-    case 0x1FE9:
-    case 0x1FEB:
-    case 0x1FED:
-    case 0x1FEF:
-    case 0x1FF5:
-    case 0x1FFD:
-        this->unk_1F4 = 0x1FD4;
-        phi_a3 = 0x1FD4 & 0xFFFF;
-        break;
-    case 0x1FE5:
-        this->unk_1F4 = 0x1FFE;
-        phi_a3 = 0x1FFE & 0xFFFF;
-        break;
-    case 0x1FD3:
-    case 0x1FD4:
-    case 0x1FFE:
-        this->unk_1F4 = 0x1FD5;
-        this->unk_1EA = (u16) (this->unk_1EA | 0x20);
-        goto block_38;
+      if (((gSaveContext.day == 3) && (((s32) gSaveContext.time) >= 0x3555)) && (((s32) gSaveContext.time) < 0x4000))
+    {
+      this->unk_1F4 = 0x2007U;
     }
-    func_801518B0(arg1, phi_a3 & 0xFFFF, &this->actor);
-}*/
+    else
+    {
+      this->unk_1F4 = 0x1FCBU;
+    }
+      break;
+
+    case 0x1FCB:
+
+    case 0x2007:
+      this->unk_1F4 = 0x1FCCU;
+      this->unk_1EA |= 0x20;
+      break;
+
+    case 0x1FCE:
+
+    case 0x1FD0:
+      this->unk_1F4 = 0x1FCFU;
+      break;
+
+    case 0x1FCF:
+      this->unk_1F4 = 0x1FCAU;
+      break;
+
+    case 0x1FD1:
+
+    case 0x1FD2:
+      this->unk_1F4 = func_80AD08B0(arg1);
+      break;
+
+    case 0x1FD6:
+      this->unk_1F4 = 0x1FD7U;
+      break;
+
+    case 0x1FD8:
+      this->unk_1F4 = 0x1FD9U;
+      break;
+
+    case 0x1FDA:
+      this->unk_1F4 = 0x1FDBU;
+      break;
+
+    case 0x1FDC:
+      this->unk_1F4 = 0x1FDDU;
+      break;
+
+    case 0x1FDE:
+      this->unk_1F4 = 0x1FDFU;
+      break;
+
+    case 0x1FE0:
+      this->unk_1F4 = 0x1FE1U;
+      break;
+
+    case 0x1FE2:
+      this->unk_1F4 = 0x1FE3U;
+      break;
+
+    case 0x1FE4:
+      this->unk_1F4 = 0x1FE5U;
+      break;
+
+    case 0x1FE6:
+      this->unk_1F4 = 0x1FE7U;
+      break;
+
+    case 0x1FE8:
+      this->unk_1F4 = 0x1FE9U;
+      break;
+
+    case 0x1FEA:
+      this->unk_1F4 = 0x1FEBU;
+      break;
+
+    case 0x1FEC:
+      this->unk_1F4 = 0x1FEDU;
+      break;
+
+    case 0x1FEE:
+      this->unk_1F4 = 0x1FEFU;
+      break;
+
+    case 0x1FF0:
+      this->unk_1F4 = 0x1FF1U;
+      break;
+
+    case 0x1FF2:
+      this->unk_1F4 = 0x1FF3U;
+      break;
+
+    case 0x1FF4:
+      this->unk_1F4 = 0x1FF5U;
+      break;
+
+    case 0x1FF6:
+      this->unk_1F4 = 0x1FF7U;
+      break;
+
+    case 0x1FF8:
+      this->unk_1F4 = 0x1FF9U;
+      break;
+
+    case 0x1FFA:
+      this->unk_1F4 = 0x1FFBU;
+      break;
+
+    case 0x1FFC:
+      this->unk_1F4 = 0x1FFDU;
+      break;
+
+    case 0x1FD7:
+
+    case 0x1FDB:
+
+    case 0x1FDD:
+
+    case 0x1FDF:
+
+    case 0x1FE1:
+
+    case 0x1FE7:
+
+    case 0x1FF1:
+
+    case 0x1FF3:
+
+    case 0x1FF7:
+
+    case 0x1FF9:
+
+    case 0x1FFB:
+      this->unk_1F4 = 0x1FD3U;
+      break;
+
+    case 0x1FD9:
+
+    case 0x1FE3:
+
+    case 0x1FE9:
+
+    case 0x1FEB:
+
+    case 0x1FED:
+
+    case 0x1FEF:
+
+    case 0x1FF5:
+
+    case 0x1FFD:
+      this->unk_1F4 = 0x1FD4U;
+      break;
+
+    case 0x1FE5:
+      this->unk_1F4 = 0x1FFEU;
+      break;
+
+    case 0x1FD3:
+
+    case 0x1FD4:
+
+    case 0x1FFE:
+      this->unk_1F4 = 0x1FD5U;
+      this->unk_1EA |= 0x20;
+
+  }
+
+  func_801518B0(arg1, this->unk_1F4, &this->actor);
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1398.s")
 void func_80AD1398(EnOsn* arg0) {
