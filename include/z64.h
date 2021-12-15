@@ -428,6 +428,8 @@ typedef union {
 // Address at the end of normal RDRAM after which is room for a screen buffer
 #define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
 
+typedef void (*FaultDrawerCallback)(void);
+
 typedef struct {
     /* 0x00 */ u16* fb;
     /* 0x04 */ u16 w;
@@ -440,7 +442,7 @@ typedef struct {
     /* 0x12 */ u16 backColor;
     /* 0x14 */ u16 cursorX;
     /* 0x16 */ u16 cursorY;
-    /* 0x18 */ u32* font;
+    /* 0x18 */ const u32* font;
     /* 0x1C */ u8 charW;
     /* 0x1D */ u8 charH;
     /* 0x1E */ s8 charWPad;
@@ -448,7 +450,7 @@ typedef struct {
     /* 0x20 */ u16 printColors[10];
     /* 0x34 */ u8 escCode;
     /* 0x35 */ u8 osSyncPrintfEnabled;
-    /* 0x38 */ void* inputCallback;
+    /* 0x38 */ FaultDrawerCallback inputCallback;
 } FaultDrawer; // size = 0x3C
 
 typedef struct GfxPrint {
@@ -780,11 +782,10 @@ typedef struct {
 
 typedef struct {
     /* 0x00000 */ View view;
-    /* 0x00168 */ void* skyboxStaticSegment[2];
-    /* 0x00170 */ char unk170[8]; // more static segments?
+    /* 0x00168 */ void* skyboxStaticSegment[4];
     /* 0x00178 */ void* skyboxPaletteStaticSegment;
-    /* 0x0017C */ Gfx* unk17C;
-    /* 0x00180 */ Gfx* unk180;
+    /* 0x0017C */ Gfx* dListBuf;
+    /* 0x00180 */ Gfx* roomDL;
     /* 0x00184 */ Vtx* roomVtx;
     /* 0x00188 */ DmaRequest unk188;
     /* 0x001A8 */ DmaRequest unk1A8;
@@ -804,6 +805,10 @@ typedef struct {
     /* 0x00226 */ u8 envG;
     /* 0x00227 */ u8 envB;
 } SkyboxContext; // size = 0x228
+
+typedef enum {
+    /* 0x05 */ SKYBOX_CUTSCENE_MAP = 5
+} SkyboxId;
 
 typedef struct ListAlloc {
     /* 0x00 */ struct ListAlloc* prev;
