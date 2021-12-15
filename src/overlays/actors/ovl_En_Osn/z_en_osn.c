@@ -88,7 +88,7 @@ void func_80AD0998(EnOsn*);                 /* extern */
 void func_80AD0A24(EnOsn*);                 /* extern */
 // void func_80AD0AB0(EnOsn*);                                /* extern */
 void func_80AD14C8(EnOsn*, GlobalContext*);                /* extern */
-s16 func_80AD0E10(EnOsn*, GlobalContext*);                 /* extern */
+s32 func_80AD0E10(EnOsn*, GlobalContext*);                 /* extern */
 void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx); /* extern */
 
 extern FlexSkeletonHeader D_060202F0;
@@ -287,113 +287,89 @@ s32 func_80AD0B38(EnOsn* arg0, GlobalContext* arg1) {
     return 0x1FCDU;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0E10.s")
-/*s16 func_80AD0B38(EnOsn*, GlobalContext*, SaveContext*, EnOsn*);
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0E10.s")
+s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-s16 func_80AD0B38(EnOsn*, GlobalContext*, SaveContext*, EnOsn*);
+    if ((gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE) && CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
+        if (this->unk_1EA & 1) {
+            this->unk_1EA |= 0x20;
+            if ((gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE) && (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
+                if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) && (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                    return 0x2006;
+                }
+            return 0x1FCD;
+            }
+            return 0x1FAF;
+        }
 
-s16 func_80AD0E10(EnOsn *arg0, GlobalContext *arg1)
-{
-  s32 temp_v0_2 = arg1->actorCtx.actorList[2].first->id;
-  if ((gSaveContext.inventory.items[0] != 0xFF) && (((*(gBitFlags + 0xD)) & gSaveContext.inventory.questItems) != 0))
-  {
-    if ((arg0->unk_1EA & 1) != 0)
-    {
-      arg0->unk_1EA |= 0x20;
-      if ((gSaveContext.inventory.items[0] != 0xFF) && (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32))
-      {
-        if (((gSaveContext.day == 3) && ((((s32) gSaveContext.time) < 0x3555) == 0)) && (((s32) gSaveContext.time) <
-0x4000))
-        {
- if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } if (1) { }
-          return 0x2006;
+        if (player->transformation == PLAYER_FORM_DEKU) {
+            if (this->unk_1EA & 4) {
+                this->unk_1EA |= 0x20;
+                if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) && (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                    return 0x2006;
+                }
+                return 0x1FCD;
+            }
+            this->unk_1EA |= 4;
+            return 0x1FC8;
         }
-        return 0x1FCD;
-      }
-      return 0x1FAF;
+
+        if (player->transformation == PLAYER_FORM_GORON) {
+            if (this->unk_1EA & 8) {
+                this->unk_1EA |= 0x20;
+                if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) && (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                    return 0x2006;
+                }
+                return 0x1FCD;
+            }
+            this->unk_1EA |= 8;
+            if (gSaveContext.weekEventReg[0x4C] & 0x20) {
+                return 0x1FC8;
+            }
+            
+            gSaveContext.weekEventReg[0x4C] |= 0x20;
+            return 0x1FCE;
+        }
+
+        if (player->transformation == PLAYER_FORM_ZORA) {
+            if (this->unk_1EA & 0x10) {
+                this->unk_1EA |= 0x20;
+                if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) && (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                    return 0x2006;
+                }
+                return 0x1FCD;
+            }
+            this->unk_1EA |= 0x10;
+            if (gSaveContext.weekEventReg[0x4C] & 0x40) {
+                return 0x1FC8;
+            } 
+            gSaveContext.weekEventReg[0x4C] |= 0x40;
+            return 0x1FD0;
+        }
+
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_NONE) {
+            if (this->unk_1EA & 2) {
+                this->unk_1EA |= 0x20;
+                if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) && (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                    return 0x2006;
+                }
+                return 0x1FCD;
+            }
+            this->unk_1EA |= 2;
+            return 0x1FC8;
+        }
+
+        return func_80AD0B38(this, globalCtx);
     }
 
-    if (temp_v0_2 == 3)
-    {
-      if (arg0->unk_1EA & 4)
-      {
-        arg0->unk_1EA |= 0x20;
-        if (((gSaveContext.day == 3) && ((((s32) gSaveContext.time) < 0x3555) == 0)) && (((s32) gSaveContext.time) <
-0x4000))
-        {
-          return 0x2006;
-        }
-        return 0x1FCD;
-      }
-      arg0->unk_1EA |= 4;
-      return 0x1FC8;
+    this->unk_1EA |= 0x20;
+    if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) && (gSaveContext.time < CLOCK_TIME(6, 0))) {
+        return 0x2004;
     }
-    if (temp_v0_2 == 1)
-    {
-      if ((arg0->unk_1EA & 8) != 0)
-      {
-        arg0->unk_1EA |= 0x20;
-        if (((gSaveContext.day == 3) && ((((s32) gSaveContext.time) < 0x3555) == 0)) && (((s32) gSaveContext.time) <
-0x4000))
-        {
-          return 0x2006;
-        }
-        return 0x1FCD;
-      }
-      arg0->unk_1EA |= 8;
-      if ((gSaveContext.weekEventReg[0x4C] & 0x20) != 0)
-      {
-        return 0x1FC8;
-      }
-      gSaveContext.weekEventReg[0x4C] = gSaveContext.weekEventReg[0x4C] | 0x20;
-      return 0x1FCE;
-    }
-    if (temp_v0_2 == 2)
-    {
-      if ((arg0->unk_1EA & 0x10) != 0)
-      {
-        arg0->unk_1EA |= 0x20;
-        if (((gSaveContext.day == 3) && ((((s32) gSaveContext.time) < 0x3555) == 0)) && (((s32) gSaveContext.time) <
-0x4000))
-        {
-          return 0x2006;
-        }
-        return 0x1FCD;
-      }
-      arg0->unk_1EA |= 0x10;
-      if ((gSaveContext.weekEventReg[0x4C] & 0x40) != 0)
-      {
-        return 0x1FC8;
-      }
-      gSaveContext.weekEventReg[0x4C] = gSaveContext.weekEventReg[0x4C] | 0x40;
-      return 0x1FD0;
-    }
-    arg0 = arg0;
-    if (Player_GetMask(arg1) == 0)
-    {
-      if ((arg0->unk_1EA & 2) != 0)
-      {
-        arg0->unk_1EA |= 0x20;
-        if (((gSaveContext.day == 3) && ((((s32) gSaveContext.time) < 0x3555) == 0)) && (((s32) gSaveContext.time) <
-0x4000))
-        {
-          return 0x2006;
-        }
-        return 0x1FCD;
-      }
-      arg0->unk_1EA |= 2;
-      return 0x1FC8;
-    }
-    return func_80AD0B38(arg0, arg1, &gSaveContext, arg0);
-  }
-  arg0->unk_1EA |= 0x20;
-  temp_v0_2 = gSaveContext.day;
-  if (((temp_v0_2 == 3) && ((((s32) gSaveContext.time) < 0x3555) == 0)) && (((s32) gSaveContext.time) < 0x4000))
-  {
-    return 0x2004;
-  }
-  return 0x1FAE;
-}*/
+
+    return 0x1FAE;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD10FC.s")
 
