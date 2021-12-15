@@ -13,14 +13,14 @@ UNK_TYPE4 D_801BB120 = 0;
 u16 D_801BB124 = 0;
 u16 D_801BB128 = 0;
 u8 D_801BB12C = 0;
-u8 D_801BB130 = 0;
+u8 sCutsceneStoredPlayerForm = 0;
 
 // bss
 #ifndef NON_MATCHING
 u16 activeSequence;
 #endif
 s16 sCutsceneQuakeIndex;
-struct_801F4D48 D_801F4D48;
+struct_801F4D48 sCutsceneCameraInfo;
 u16 D_801F4DC8[10];
 UNK_TYPE D_801F4DDC;
 s8 D_801F4DE0;
@@ -272,7 +272,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             player->stateFlags2 &= ~0x4000000;
             break;
         case 0x19:
-            D_801BB130 = gSaveContext.playerForm;
+            sCutsceneStoredPlayerForm = gSaveContext.playerForm;
             gSaveContext.playerForm = PLAYER_FORM_HUMAN;
             gSaveContext.equippedMask = 0;
             break;
@@ -299,7 +299,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             }
             break;
         case 0x1D:
-            gSaveContext.playerForm = D_801BB130;
+            gSaveContext.playerForm = sCutsceneStoredPlayerForm;
             break;
         case 0x1E:
             D_801F4DE0 = 1;
@@ -917,7 +917,7 @@ s32 Cutscene_Command_Camera(GlobalContext* globalCtx, u8* cmd) {
     bcopy(cmd, &sp1C, 4);
     cmd += 4;
     if (func_8016A168() == 0) {
-        func_80161998(cmd, &D_801F4D48);
+        func_80161998(cmd, &sCutsceneCameraInfo);
     }
     return sp1C + 4;
 }
@@ -1440,7 +1440,7 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
             csCtx->frames = 0xFFFF;
             csCtx->unk_14 = ActorCutscene_GetCurrentCamera(0x7F);
-            func_8016119C(Play_GetCamera(globalCtx, csCtx->unk_14), &D_801F4D48);
+            func_8016119C(Play_GetCamera(globalCtx, csCtx->unk_14), &sCutsceneCameraInfo);
             csCtx->unk_18 = 0xFFFF;
 
             if (gSaveContext.cutsceneTrigger == 0) {

@@ -879,8 +879,6 @@ extern EffShieldParticleInit shieldParticleInitWood;
 // extern UNK_TYPE1 D_801BB100;
 
 extern u8 D_801BB12C;
-extern CutsceneStateHandler sCsStateHandlers1[];
-extern CutsceneStateHandler sCsStateHandlers2[];
 
 extern s801BB170 D_801BB170[118];
 // extern UNK_TYPE1 D_801BC210;
@@ -3217,14 +3215,11 @@ extern GameInfo* gGameInfo;
 // extern UNK_TYPE1 D_801F3F80;
 // extern UNK_TYPE1 D_801F3F83;
 // extern UNK_TYPE1 D_801F48C8;
-// extern UNK_TYPE2 sCutsceneQuakeIndex;
-// extern UNK_TYPE1 D_801F4D48;
-// extern UNK_TYPE1 D_801F4DC8;
-// extern UNK_TYPE1 D_801F4DCA;
-// extern UNK_TYPE2 D_801F4DCC[8];
-// extern UNK_TYPE1 D_801F4DDC;
-// extern UNK_TYPE1 D_801F4DE0;
-// extern UNK_TYPE2 D_801F4DE2;
+
+extern UNK_TYPE D_801F4DDC;
+extern s8 D_801F4DE0;
+extern s16 D_801F4DE2;
+
 extern ActorCutscene* actorCutscenes;
 extern s16 actorCutsceneCount;
 extern u8 actorCutsceneWaiting[16];
