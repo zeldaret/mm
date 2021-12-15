@@ -87,7 +87,7 @@ typedef enum {
     /*      0 */ CS_TEXTBOX_TYPE_DEFAULT,
     /*      1 */ CS_TEXTBOX_TYPE_1,
     /*      2 */ CS_TEXTBOX_TYPE_LEARN_SONG,
-    /*      3 */ CS_TEXTBOX_TYPE_3, // changes the current frame?
+    /*      3 */ CS_TEXTBOX_TYPE_3,
     /*      4 */ CS_TEXTBOX_TYPE_BOSSES_REMAINS,
     /*      5 */ CS_TEXTBOX_TYPE_ALL_NORMAL_MASKS,
     /* 0xFFFF */ CS_TEXTBOX_TYPE_NONE = 0xFFFF,

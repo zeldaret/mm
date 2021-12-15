@@ -655,9 +655,11 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 2:
                 if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
+                    // Milk bar
                     globalCtx->nextEntranceIndex = 0x2400;
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
+                    // SPOT00
                     globalCtx->nextEntranceIndex = 0x1C00;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
@@ -666,9 +668,11 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 3:
                 if (INV_CONTENT(ITEM_MASK_GREAT_FAIRY) == ITEM_MASK_GREAT_FAIRY) {
+                    // Fairy's fountain
                     globalCtx->nextEntranceIndex = 0x4600;
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
+                    // SPOT00
                     globalCtx->nextEntranceIndex = 0x1C10;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
@@ -677,9 +681,11 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 4:
                 if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) {
+                    // Romani ranch
                     globalCtx->nextEntranceIndex = 0x6400;
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                 } else {
+                    // SPOT00
                     globalCtx->nextEntranceIndex = 0x1C20;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
@@ -688,9 +694,11 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 5:
                 if (INV_CONTENT(ITEM_MASK_BLAST) == ITEM_MASK_BLAST) {
+                    // West clock town
                     globalCtx->nextEntranceIndex = 0xD400;
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
+                    // SPOT00
                     globalCtx->nextEntranceIndex = 0x1C30;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
@@ -699,9 +707,11 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 6:
                 if (INV_CONTENT(ITEM_MASK_CIRCUS_LEADER) == ITEM_MASK_CIRCUS_LEADER) {
+                    // Milk bar
                     globalCtx->nextEntranceIndex = 0x2400;
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                 } else {
+                    // SPOT00
                     globalCtx->nextEntranceIndex = 0x1C50;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
@@ -710,9 +720,11 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 7:
                 if (INV_CONTENT(ITEM_MASK_BREMEN) == ITEM_MASK_BREMEN) {
+                    // Milk bar
                     globalCtx->nextEntranceIndex = 0x2400;
                     gSaveContext.nextCutsceneIndex = 0xFFF3;
                 } else {
+                    // SPOT00
                     globalCtx->nextEntranceIndex = 0x1C60;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
@@ -720,6 +732,7 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 break;
 
             case 8:
+                // Ikana canyon
                 globalCtx->nextEntranceIndex = 0x2000;
                 gSaveContext.nextCutsceneIndex = 0xFFF3;
                 globalCtx->sceneLoadFlag = 0x14;
@@ -727,9 +740,11 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 9:
                 if (INV_CONTENT(ITEM_MASK_COUPLE) == ITEM_MASK_COUPLE) {
+                    // Termina field
                     globalCtx->nextEntranceIndex = 0x5400;
                     gSaveContext.nextCutsceneIndex = 0xFFF8;
                 } else {
+                    // SPOT00
                     globalCtx->nextEntranceIndex = 0x1C70;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
@@ -738,9 +753,11 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 10:
                 if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
+                    // Cucco shack
                     globalCtx->nextEntranceIndex = 0x7E00;
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
+                    // SPOT00
                     globalCtx->nextEntranceIndex = 0x1C40;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
@@ -749,9 +766,11 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 11:
                 if (INV_CONTENT(ITEM_MASK_POSTMAN) == ITEM_MASK_POSTMAN) {
+                    // Termina field
                     globalCtx->nextEntranceIndex = 0x5410;
                     gSaveContext.nextCutsceneIndex = 0xFFF8;
                 } else {
+                    // SPOT00
                     globalCtx->nextEntranceIndex = 0x1C80;
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
