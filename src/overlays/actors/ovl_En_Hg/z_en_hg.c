@@ -165,7 +165,7 @@ void func_80BCF398(EnHg* this, GlobalContext* globalCtx) {
             !Cutscene_CheckActorAction(globalCtx, 0x1E3)) {
             func_80BCF468(this);
         }
-        if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 0) &&
+        if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.currentCsIndex == 0) &&
             (globalCtx->csCtx.frames == 20 || globalCtx->csCtx.frames == 60)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
@@ -343,7 +343,7 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
                 }
                 break;
         }
-        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         return;
     } else if (globalCtx->csCtx.state == 0) {
         func_80BCF354(this);

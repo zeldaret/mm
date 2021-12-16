@@ -893,7 +893,7 @@ void func_80A73408(EnDno* this, GlobalContext* globalCtx) {
                 func_8013E1C8(&this->skelAnime, sAnimations, phi_a2, &this->unk_32C);
             }
         }
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 
     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->unk_32C == 17)) {

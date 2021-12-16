@@ -1088,10 +1088,10 @@ asm/non_matchings/code/z_demo/func_800EDBE0.s,func_800EDBE0,0x800EDBE0,0x74
 asm/non_matchings/code/z_demo/nop_800EDDB0.s,nop_800EDDB0,0x800EDDB0,0x3
 asm/non_matchings/code/z_demo/func_800EDDBC.s,func_800EDDBC,0x800EDDBC,0x4
 asm/non_matchings/code/z_demo/Cutscene_LoadCutsceneData.s,Cutscene_LoadCutsceneData,0x800EDDCC,0x1A
-asm/non_matchings/code/z_demo/func_800EDE34.s,func_800EDE34,0x800EDE34,0x3C
-asm/non_matchings/code/z_demo/func_800EDF24.s,func_800EDF24,0x800EDF24,0x15
-asm/non_matchings/code/z_demo/func_800EDF78.s,func_800EDF78,0x800EDF78,0x55
-asm/non_matchings/code/z_demo/func_800EE0CC.s,func_800EE0CC,0x800EE0CC,0x43
+asm/non_matchings/code/z_demo/Cutscene_ActorTranslate.s,Cutscene_ActorTranslate,0x800EDE34,0x3C
+asm/non_matchings/code/z_demo/Cutscene_ActorTranslateAndYaw.s,Cutscene_ActorTranslateAndYaw,0x800EDF24,0x15
+asm/non_matchings/code/z_demo/Cutscene_ActorTranslateAndYawSmooth.s,Cutscene_ActorTranslateAndYawSmooth,0x800EDF78,0x55
+asm/non_matchings/code/z_demo/Cutscene_ActorTranslateXZAndYawSmooth.s,Cutscene_ActorTranslateXZAndYawSmooth,0x800EE0CC,0x43
 asm/non_matchings/code/z_demo/Cutscene_GetSceneSetupIndex.s,Cutscene_GetSceneSetupIndex,0x800EE1D8,0xA
 asm/non_matchings/code/z_demo/Cutscene_GetActorActionIndex.s,Cutscene_GetActorActionIndex,0x800EE200,0x27
 asm/non_matchings/code/z_demo/Cutscene_CheckActorAction.s,Cutscene_CheckActorAction,0x800EE29C,0x16

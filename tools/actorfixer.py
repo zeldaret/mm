@@ -155,10 +155,16 @@ animdict = {
     "MainHeap_Cleanup": "ZeldaArena_Cleanup",
     "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
     "func_801A3F54": "Audio_SetCutsceneFlag",
-    "func_800EA0EC": "Cutscene_End",
     "func_801518B0": "Message_StartTextbox",
+    "func_800EA0EC": "Cutscene_End",
+    "func_800EDE34": "Cutscene_ActorTranslate",
+    "func_800EDF24": "Cutscene_ActorTranslateAndYaw",
+    "func_800EDF78": "Cutscene_ActorTranslateAndYawSmooth",
+    "func_800EE0CC": "Cutscene_ActorTranslateXZAndYawSmooth",
+    "func_800EE1D8": "Cutscene_GetSceneSetupIndex",
     "func_800EE200": "Cutscene_GetActorActionIndex",
     "func_800EE29C": "Cutscene_CheckActorAction",
+    "func_800EE2F4": "Cutscene_IsPlayingCs",
 
     "skelanime.unk03": "skelanime.taper",
     "skelanime.animCurrentSeg": "skelanime.animation",
@@ -197,6 +203,7 @@ animdict = {
     "actor.yDistToPlayer" : "actor.playerHeightRel",
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",
+    "csCtx.unk_12": "csCtx.currentCsIndex",
 }
 
 def replace_anim(file):

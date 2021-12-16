@@ -842,7 +842,7 @@ void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
             }
         }
 
-        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         if (D_80AC0260 == 2 && this->animTimer == 0 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMa4_ChangeAnim(this, 7);
         }

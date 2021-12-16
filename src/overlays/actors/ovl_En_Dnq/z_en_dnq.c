@@ -412,7 +412,7 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
             func_80A5257C(this, this->unk_398 + 1);
         }
 
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 }
 

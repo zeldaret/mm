@@ -386,7 +386,7 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
     this->actor.draw = EnGiant_Draw;
 
     if (Cutscene_CheckActorAction(globalCtx, this->unk_24A)) {
-        func_800EDF24(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_24A));
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_24A));
         if (this->csAction != globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action) {
             this->csAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);

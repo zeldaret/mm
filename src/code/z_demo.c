@@ -1520,7 +1520,7 @@ void Cutscene_LoadCutsceneData(GlobalContext* globalCtx, u8 csIndex) {
     gSaveContext.cutsceneTrigger = 1;
 }
 
-void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
+void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry = globalCtx->csCtx.actorActions[actorActionIndex];
@@ -1540,14 +1540,14 @@ void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex)
     actor->world.pos.z = ((end.z - start.z) * t) + start.z;
 }
 
-void func_800EDF24(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
-    func_800EDE34(actor, globalCtx, actorActionIndex);
+void Cutscene_ActorTranslateAndYaw(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
+    Cutscene_ActorTranslate(actor, globalCtx, actorActionIndex);
 
     actor->world.rot.y = globalCtx->csCtx.actorActions[actorActionIndex]->urot.y;
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
+void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry;
@@ -1572,7 +1572,7 @@ void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex)
 }
 
 // unused
-void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
+void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry;

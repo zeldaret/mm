@@ -402,7 +402,7 @@ void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
 
 static u16 D_80B8E32C = 99;
 void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x78) != 0) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x78)) {
         s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x78);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
@@ -433,9 +433,9 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
             }
         }
 
-        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         if ((D_80B8E32C == 2) && (this->endCreditsFlag == 0) &&
-            (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0)) {
+            Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->endCreditsFlag++;
             EnMaYts_ChangeAnim(this, 5);
         }

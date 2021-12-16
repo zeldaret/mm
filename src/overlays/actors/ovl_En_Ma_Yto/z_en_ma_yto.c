@@ -1052,7 +1052,7 @@ void EnMaYto_SetupWarmFuzzyFeelingCs(EnMaYto* this) {
 static u16 D_80B915F0 = 99;
 
 void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x22C) != 0) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x22C)) {
         s32 csActionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x22C);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[csActionIndex]->startFrame) {
@@ -1080,7 +1080,7 @@ void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, GlobalContext* globalCtx) {
             }
         }
 
-        func_800EDF24(&this->actor, globalCtx, csActionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, csActionIndex);
         if (D_80B915F0 == 2 && this->skelAnime.animation == &D_06001FD0 &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMaYto_ChangeAnim(this, 20);

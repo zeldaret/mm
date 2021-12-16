@@ -190,7 +190,7 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_12HAKUGINMAE) &&
-        (globalCtx->csCtx.unk_12 == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
+        (globalCtx->csCtx.currentCsIndex == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
             Actor_SetSwitchFlag(globalCtx, 20);
             this->unk_1CE |= (0x80 | 0x10);
@@ -518,7 +518,7 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_800EDF24(&this->actor, globalCtx, sp2C);
+    Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, sp2C);
 }
 
 void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {

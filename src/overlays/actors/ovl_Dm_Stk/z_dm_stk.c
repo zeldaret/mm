@@ -773,7 +773,7 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
                     func_80A9FED8(this, globalCtx);
                 } else if (gSaveContext.sceneSetupIndex == 0) {
                     func_80AA0100(this, globalCtx);
-                } else if ((gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.unk_12 == 0)) {
+                } else if ((gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.currentCsIndex == 0)) {
                     func_80AA0158(this, globalCtx);
                 }
                 break;
@@ -786,9 +786,9 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
 
             case SCENE_OPENINGDAN:
                 if (gSaveContext.sceneSetupIndex == 0) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA01C0(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA0264(this, globalCtx);
                     }
                 }
@@ -796,19 +796,19 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
 
             case SCENE_OKUJOU:
                 if (gSaveContext.sceneSetupIndex == 0) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA0420(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA05F0(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 2) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 2) {
                         func_80AA09DC(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 3) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 3) {
                         func_80AA0B08(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 2) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA0DA8(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA0E1C(this, globalCtx);
                     }
                 }
@@ -816,15 +816,15 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
 
             case SCENE_00KEIKOKU:
                 if (gSaveContext.sceneSetupIndex == 3) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA0634(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 2) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 2) {
                         func_80AA066C(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 7) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA071C(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA076C(this, globalCtx);
                     }
                 }
@@ -972,7 +972,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 3) &&
-        (globalCtx->csCtx.unk_12 > 0)) {
+        (globalCtx->csCtx.currentCsIndex > 0)) {
         globalCtx->envCtx.unk_17 = 15;
         globalCtx->envCtx.unk_18 = 15;
     }
@@ -1402,7 +1402,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
             }
         }
 
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     } else {
         this->unk_334 = 99;
     }
@@ -1631,7 +1631,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 3) &&
-        (globalCtx->csCtx.unk_12 > 0)) {
+        (globalCtx->csCtx.currentCsIndex > 0)) {
         globalCtx->envCtx.unk_17 = 15;
         globalCtx->envCtx.unk_18 = 15;
     }

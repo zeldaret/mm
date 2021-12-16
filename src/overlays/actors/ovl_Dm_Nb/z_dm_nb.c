@@ -60,7 +60,7 @@ void func_80C1DF18(DmNb* this, GlobalContext* globalCtx) {
                 this->unk1EC = actionUnk0;
                 func_80C1DED0(this, sp2C[actionUnk0]);
             }
-            func_800EDF24(&this->actor, globalCtx, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         }
     } else if (this->unk1F8 != 0) {
         this->unk1F8 = 0;

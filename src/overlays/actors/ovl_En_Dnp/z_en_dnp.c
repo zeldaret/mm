@@ -259,7 +259,7 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
     s32 val;
 
     if (!(gSaveContext.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
-        (globalCtx->csCtx.unk_12 == 0)) {
+        (globalCtx->csCtx.currentCsIndex == 0)) {
         this->unk_322 |= 0x20;
         gSaveContext.weekEventReg[29] |= 0x40;
     }
@@ -292,7 +292,7 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             func_80B3CC38(this, this->unk_340 + 1);
         }
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 }
 

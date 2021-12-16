@@ -1123,7 +1123,7 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
                 break;
         }
 
-        func_800EDF24(&this->actor, globalCtx, sp2C);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, sp2C);
         return true;
     }
 
