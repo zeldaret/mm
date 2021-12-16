@@ -42,5 +42,8 @@ tools/mips_to_c/
 !*_custom*
 .extracted-assets.json
 
+# Docs
+!docs/**/*.png
+
 # Per-user configuration
 .python-version
