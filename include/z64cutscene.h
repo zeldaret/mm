@@ -58,13 +58,15 @@ typedef struct {
     /* 0x0 */ u16 setting;
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
-} CsCmdEnvLighting; // size = 0x6
+    /* 0x6 */ u16 unk_06;
+} CsCmdEnvLighting; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u16 sequence;
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
-} CsCmdMusicChange; // size = 0x6
+    /* 0x6 */ u16 unk_06;
+} CsCmdMusicChange; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u16 type;

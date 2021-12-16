@@ -1183,7 +1183,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_Misc(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1192,7 +1192,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_SetLighting(globalCtx, csCtx, (CsCmdEnvLighting*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdEnvLighting);
                 }
                 break;
 
@@ -1201,7 +1201,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_PlaySequence(globalCtx, csCtx, (CsCmdMusicChange*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdMusicChange);
                 }
                 break;
 
@@ -1210,7 +1210,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_StopSequence(globalCtx, csCtx, (CsCmdMusicChange*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdMusicChange);
                 }
                 break;
 
@@ -1219,7 +1219,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_FadeSequence(globalCtx, csCtx, (CsCmdMusicFade*)cutscenePtr);
-                    cutscenePtr += 0xC;
+                    cutscenePtr += sizeof(CsCmdMusicFade);
                 }
                 break;
 
@@ -1228,7 +1228,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_PlayAmbienceSequence(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1237,7 +1237,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_FadeAmbienceSequence(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1246,7 +1246,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     func_800EAD48(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1255,7 +1255,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     func_800EAD7C(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1264,7 +1264,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     func_800EADB0(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1273,7 +1273,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_Rumble(globalCtx, csCtx, (CsRumble*)cutscenePtr);
-                    cutscenePtr += 0xC;
+                    cutscenePtr += sizeof(CsRumble);
                 }
                 break;
 
@@ -1282,7 +1282,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_FadeColorScreen(globalCtx, csCtx, (CsCmdFadeScreen*)cutscenePtr);
-                    cutscenePtr += 0xC;
+                    cutscenePtr += sizeof(CsCmdFadeScreen);
                 }
                 break;
 
@@ -1316,7 +1316,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_Terminator(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1325,7 +1325,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     func_800EB6F8(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1355,7 +1355,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_MotionBlur(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1364,7 +1364,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_GiveTatlToPlayer(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1376,7 +1376,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    cutscenePtr += 8;
+                    cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
         }
