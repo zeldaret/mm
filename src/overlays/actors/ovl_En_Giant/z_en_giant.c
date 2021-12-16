@@ -364,8 +364,10 @@ void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionI
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
     if (Cutscene_CheckActorAction(globalCtx, this->unk_24A)) {
         EnGiant_UpdatePosition(this, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_24A));
-        if (this->csAction != globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action) {
-            this->csAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action;
+        if (this->csAction !=
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action) {
+            this->csAction =
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -387,8 +389,10 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
 
     if (Cutscene_CheckActorAction(globalCtx, this->unk_24A)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_24A));
-        if (this->csAction != globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action) {
-            this->csAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action;
+        if (this->csAction !=
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action) {
+            this->csAction =
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);

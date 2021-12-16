@@ -56,7 +56,7 @@ void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
-typedef void(*CutsceneStateHandler)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+typedef void (*CutsceneStateHandler)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
 CutsceneStateHandler sCsStateHandlers1[] = {
     /* CS_STATE_0 */ Cutscene_DoNothing,
@@ -187,7 +187,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             }
             break;
         case 0x8:
-            func_8019F128(0x2150);
+            func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (sp3F != 0) {
                 sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 0x55F0);
@@ -241,16 +241,16 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             if (sp3F != 0) {
                 globalCtx->envCtx.sandstormState = 1;
             }
-            func_8019F128(0x20C0);
+            func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
             break;
         case 0x11:
             gSaveContext.unk_3F58 = 1;
             break;
         case 0x12:
             if (gSaveContext.isNight == 0) {
-                gSaveContext.time -= (u16) REG(15);
+                gSaveContext.time -= (u16)REG(15);
             } else {
-                gSaveContext.time -= 2 *  REG(15);
+                gSaveContext.time -= 2 * REG(15);
             }
             break;
         case 0x13:
@@ -279,7 +279,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             gSaveContext.equippedMask = PLAYER_MASK_NONE;
             break;
         case 0x1A:
-            func_8019F128(0x2159);
+            func_8019F128(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
             if (sp3F != 0) {
                 sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 30000);
@@ -323,14 +323,14 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             if (D_801BB15C != csCtx->frames) {
                 D_801BB15C = csCtx->frames;
 
-                if ( REG(15) != 0) {
-                    gSaveContext.time +=  REG(15);
+                if (REG(15) != 0) {
+                    gSaveContext.time += REG(15);
                     gSaveContext.time += (u16)gSaveContext.unk_14;
                 }
             }
             break;
         case 0x24:
-            func_8019F128(0x2150);
+            func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (sp3F != 0) {
                 sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
@@ -518,7 +518,7 @@ void Cutscene_Command_Rumble(GlobalContext* globalCtx, CutsceneContext* csCtx, C
     }
 }
 
-// Command 0x9B: 
+// Command 0x9B:
 void Cutscene_Command_FadeColorScreen(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdFadeScreen* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         f32 alpha;
@@ -833,7 +833,7 @@ void Cutscene_Command_TransitionFX(GlobalContext* globalCtx, CutsceneContext* cs
                 if (cmd->base == 1) {
                     globalCtx->envCtx.screenFillColor[3] = 255.0f * temp_f0;
                     if (temp_f0 == 0.0f) {
-                        func_8019F128(0x2846);
+                        func_8019F128(NA_SE_EV_S_STONE_FLASH);
                     }
                 } else {
                     globalCtx->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
@@ -1149,8 +1149,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     bcopy(cutscenePtr, &cutsceneEndFrame, 4);
     cutscenePtr += 4;
 
-    if (((u16)cutsceneEndFrame < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) &&
-        (csCtx->state != CS_STATE_4)) {
+    if (((u16)cutsceneEndFrame < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) && (csCtx->state != CS_STATE_4)) {
         csCtx->state = CS_STATE_3;
         return;
     }
@@ -1583,7 +1582,6 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, GlobalContext* globalCtx,
     Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
-
 
 /**
  * Interpolates the actor's XZ position and yaw based on the corresponding actor action's
