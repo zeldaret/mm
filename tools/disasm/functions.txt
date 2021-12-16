@@ -1538,7 +1538,7 @@
     0x800EA0EC:("Cutscene_End",),
     0x800EA110:("Cutscene_Update1",),
     0x800EA15C:("Cutscene_Update2",),
-    0x800EA210:("Cutscene_Nop800EA210",),
+    0x800EA210:("Cutscene_DoNothing",),
     0x800EA220:("func_800EA220",),
     0x800EA258:("func_800EA258",),
     0x800EA2B8:("func_800EA2B8",),

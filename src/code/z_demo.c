@@ -1,7 +1,7 @@
 #include "global.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
-void Cutscene_Nop800EA210(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+void Cutscene_DoNothing(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 void func_800EA258(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* cCtxt);
@@ -59,11 +59,11 @@ void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 typedef void(*CutsceneStateHandler)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
 CutsceneStateHandler sCsStateHandlers1[] = {
-    /* CS_STATE_IDLE */ Cutscene_Nop800EA210,
+    /* CS_STATE_IDLE */ Cutscene_DoNothing,
     /* CS_STATE_SKIPPABLE_INIT */ func_800EA258,
-    /* CS_STATE_SKIPPABLE_EXEC */ Cutscene_Nop800EA210,
+    /* CS_STATE_SKIPPABLE_EXEC */ Cutscene_DoNothing,
     /* CS_STATE_UNSKIPPABLE_INIT */ func_800ED9C4,
-    /* CS_STATE_UNSKIPPABLE_EXEC */ Cutscene_Nop800EA210,
+    /* CS_STATE_UNSKIPPABLE_EXEC */ Cutscene_DoNothing,
 };
 
 void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -73,7 +73,7 @@ void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 CutsceneStateHandler sCsStateHandlers2[] = {
-    /* CS_STATE_IDLE */ Cutscene_Nop800EA210,
+    /* CS_STATE_IDLE */ Cutscene_DoNothing,
     /* CS_STATE_SKIPPABLE_INIT */ func_800EA2B8,
     /* CS_STATE_SKIPPABLE_EXEC */ func_800ED980,
     /* CS_STATE_UNSKIPPABLE_INIT */ func_800EDA04,
@@ -96,8 +96,7 @@ void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
-// Cutscene_Nop / Cutscene_DoNothing / Cutscene_Wait
-void Cutscene_Nop800EA210(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void Cutscene_DoNothing(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 s32 func_800EA220(GlobalContext* globalCtx, CutsceneContext* csCtx, f32 target) {
@@ -1498,6 +1497,7 @@ void func_800EDBE0(GlobalContext* globalCtx) {
                 func_80151A68(globalCtx, sp24->titleTextId);
             }
         }
+
         gSaveContext.showTitleCard = true;
     }
 }
@@ -1626,5 +1626,5 @@ s32 func_800EE29C(GlobalContext* globalCtx, u16 arg1) {
 }
 
 u8 func_800EE2F4(GlobalContext* globalCtx) {
-    return gSaveContext.cutsceneTrigger != 0 || globalCtx->csCtx.state != 0;
+    return gSaveContext.cutsceneTrigger != 0 || globalCtx->csCtx.state != CS_STATE_IDLE;
 }
