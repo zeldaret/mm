@@ -1513,10 +1513,10 @@ void func_800EDDCC(GlobalContext* globalCtx, u8 arg1);
 void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex);
 void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 npcActionIndex);
 void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex);
-s32 func_800EE1D8(GlobalContext* globalCtx);
+s32 Cutscene_GetSceneSetupIndex(GlobalContext* globalCtx);
 s32 func_800EE200(GlobalContext* globalCtx, u16 arg1);
 s32 func_800EE29C(GlobalContext* globalCtx, u16 arg1);
-u8 func_800EE2F4(GlobalContext* globalCtx);
+u8 Cutscene_IsPlayingCs(GlobalContext* globalCtx);
 
 void GetItem_Draw(GlobalContext* globalCtx, s16 index);
 void func_800EE364(GlobalContext* globalCtx, s16 index);

@@ -248,9 +248,9 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x12:
             if (gSaveContext.isNight == 0) {
-                gSaveContext.time -= (u16)gGameInfo->data[0xF];
+                gSaveContext.time -= (u16) REG(15);
             } else {
-                gSaveContext.time -= 2 * gGameInfo->data[0xF];
+                gSaveContext.time -= 2 *  REG(15);
             }
             break;
         case 0x13:
@@ -323,8 +323,8 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             if (D_801BB15C != csCtx->frames) {
                 D_801BB15C = csCtx->frames;
 
-                if (gGameInfo->data[0xF] != 0) {
-                    gSaveContext.time += gGameInfo->data[0xF];
+                if ( REG(15) != 0) {
+                    gSaveContext.time +=  REG(15);
                     gSaveContext.time += (u16)gSaveContext.unk_14;
                 }
             }
@@ -1512,7 +1512,7 @@ void func_800EDDBC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
 void func_800EDDCC(GlobalContext* globalCtx, u8 arg1) {
-    if (gGameInfo->data[0xA1F] == 0) {
+    if (dREG(95) == 0) {
         globalCtx->csCtx.unk_12 = arg1;
         globalCtx->csCtx.segment = Lib_SegmentedToVirtual(globalCtx->csCtx.sceneCsList[arg1].data);
     }
@@ -1591,40 +1591,40 @@ void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 arg2) {
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-s32 func_800EE1D8(GlobalContext* globalCtx) {
-    s32 phi_v1 = 0;
+s32 Cutscene_GetSceneSetupIndex(GlobalContext* globalCtx) {
+    s32 sceneSetupIndex = 0;
 
     if (gSaveContext.sceneSetupIndex > 0) {
-        phi_v1 = gSaveContext.sceneSetupIndex;
+        sceneSetupIndex = gSaveContext.sceneSetupIndex;
     }
-    return phi_v1;
+    return sceneSetupIndex;
 }
 
 s32 func_800EE200(GlobalContext* globalCtx, u16 arg1) {
     s32 i;
-    s32 phi_v1 = -1;
+    s32 index = -1;
 
     for (i = 0; i < ARRAY_COUNT(D_801F4DC8); i++) {
         if (arg1 == D_801F4DC8[i]) {
-            phi_v1 = i;
+            index = i;
         }
     }
 
-    return phi_v1;
+    return index;
 }
 
 s32 func_800EE29C(GlobalContext* globalCtx, u16 arg1) {
-    if (globalCtx->csCtx.state != 0) {
+    if (globalCtx->csCtx.state != CS_STATE_IDLE) {
         s32 index = func_800EE200(globalCtx, arg1);
 
         if (index != -1) {
-            return globalCtx->csCtx.npcActions[index] != 0;
+            return globalCtx->csCtx.npcActions[index] != NULL;
         }
     }
 
     return 0;
 }
 
-u8 func_800EE2F4(GlobalContext* globalCtx) {
+u8 Cutscene_IsPlayingCs(GlobalContext* globalCtx) {
     return gSaveContext.cutsceneTrigger != 0 || globalCtx->csCtx.state != CS_STATE_IDLE;
 }

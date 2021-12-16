@@ -227,7 +227,7 @@ void EnMa4_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->hasBow = false;
     }
 
-    if (func_800EE1D8(globalCtx) != 0) { // if (sceneSetupIndex != 0)
+    if (Cutscene_GetSceneSetupIndex(globalCtx) != 0) { // if (sceneSetupIndex != 0)
         EnMa4_ChangeAnim(this, 0);
         this->state = MA4_STATE_HORSEBACKGAME;
         EnMa4_InitHorsebackGame(this, globalCtx);
