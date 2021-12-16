@@ -34,7 +34,7 @@ void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     csCtx->frames = 0;
     csCtx->unk_0C = 0.0f;
     globalCtx->csCtx.sceneCsCount = 0;
-    globalCtx->csCtx.unk_12 = 0;
+    globalCtx->csCtx.currentCsIndex = 0;
 
     for (i = 0; i < ARRAY_COUNT(D_801F4DC8); i++) {
         D_801F4DC8[i] = 0;
@@ -568,7 +568,7 @@ void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
     gSaveContext.cutscene = 0;
     if (cmd->base == 1) {
-        globalCtx->nextEntranceIndex = (u16)globalCtx->csCtx.sceneCsList[globalCtx->csCtx.unk_12].unk4;
+        globalCtx->nextEntranceIndex = globalCtx->csCtx.sceneCsList[globalCtx->csCtx.currentCsIndex].nextEntranceIndex;
         gSaveContext.nextCutsceneIndex = 0;
         globalCtx->sceneLoadFlag = 0x14;
         if (gSaveContext.gameMode != 1) {
@@ -1441,8 +1441,8 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
             Audio_SetCutsceneFlag(1);
 
             csCtx->frames = 0xFFFF;
-            csCtx->unk_14 = ActorCutscene_GetCurrentCamera(0x7F);
-            func_8016119C(Play_GetCamera(globalCtx, csCtx->unk_14), &sCutsceneCameraInfo);
+            csCtx->csCamId = ActorCutscene_GetCurrentCamera(0x7F);
+            func_8016119C(Play_GetCamera(globalCtx, csCtx->csCamId), &sCutsceneCameraInfo);
             csCtx->unk_18 = 0xFFFF;
 
             if (gSaveContext.cutsceneTrigger == 0) {
@@ -1511,10 +1511,10 @@ void nop_800EDDB0(GlobalContext* globalCtx) {
 void func_800EDDBC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
-void func_800EDDCC(GlobalContext* globalCtx, u8 arg1) {
+void func_800EDDCC(GlobalContext* globalCtx, u8 csIndex) {
     if (dREG(95) == 0) {
-        globalCtx->csCtx.unk_12 = arg1;
-        globalCtx->csCtx.segment = Lib_SegmentedToVirtual(globalCtx->csCtx.sceneCsList[arg1].data);
+        globalCtx->csCtx.currentCsIndex = csIndex;
+        globalCtx->csCtx.segment = Lib_SegmentedToVirtual(globalCtx->csCtx.sceneCsList[csIndex].data);
     }
 
     gSaveContext.cutsceneTrigger = 1;
@@ -1576,7 +1576,7 @@ void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 arg2) {
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry;
-    f32 temp_f0;
+    f32 t;
 
     start.x = globalCtx->csCtx.actorActions[arg2]->startPos.x;
     start.z = globalCtx->csCtx.actorActions[arg2]->startPos.z;
@@ -1584,10 +1584,10 @@ void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 arg2) {
     end.z = globalCtx->csCtx.actorActions[arg2]->endPos.z;
 
     entry = globalCtx->csCtx.actorActions[arg2];
-    temp_f0 = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+    t = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
-    actor->world.pos.x = ((end.x - start.x) * temp_f0) + start.x;
-    actor->world.pos.z = ((end.z - start.z) * temp_f0) + start.z;
+    actor->world.pos.x = ((end.x - start.x) * t) + start.x;
+    actor->world.pos.z = ((end.z - start.z) * t) + start.z;
 
     Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;

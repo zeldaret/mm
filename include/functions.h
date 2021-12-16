@@ -1509,7 +1509,7 @@ void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void func_800EDBE0(GlobalContext* globalCtx);
 void nop_800EDDB0(GlobalContext* globalCtx);
-void func_800EDDCC(GlobalContext* globalCtx, u8 arg1);
+void func_800EDDCC(GlobalContext* globalCtx, u8 csIndex);
 void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex);
 void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 npcActionIndex);
 void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex);

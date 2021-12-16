@@ -1,5 +1,5 @@
-#ifndef _Z64_H_
-#define _Z64_H_
+#ifndef Z64_H
+#define Z64_H
 
 #include "libc/math.h"
 #include "libc/stdarg.h"
@@ -106,24 +106,6 @@ typedef struct {
     /* 0x4 */ UNK_TYPE1 pad4[0x4];
     /* 0x8 */ CameraModeParams* modes;
 } CameraStateParams; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ u8    sceneCsCount;
-    /* 0x04 */ void* segment;
-    /* 0x08 */ u8    state;
-    /* 0x0C */ f32   unk_0C;
-    /* 0x10 */ u16   frames;
-    /* 0x12 */ u16   unk_12;
-    /* 0x14 */ s32   unk_14;
-    /* 0x18 */ u16   unk_18;
-    /* 0x1A */ u8    unk_1A;
-    /* 0x1B */ u8    unk_1B;
-    /* 0x1C */ CutsceneCameraPoint* cameraFocus;
-    /* 0x20 */ CutsceneCameraPoint* cameraPosition;
-    /* 0x24 */ CsCmdActorAction* playerAction;
-    /* 0x28 */ CsCmdActorAction* actorActions[10]; // "npcdemopnt"
-    /* 0x50 */ CutsceneEntry* sceneCsList;
-} CutsceneContext; // size = 0x54
 
 typedef struct {
     /* 0x0 */ s16 x;
