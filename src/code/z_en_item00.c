@@ -927,7 +927,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, s32 para
             Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
         }
     } else {
-        params = func_800A7650((params & 0xFF));
+        params = func_800A7650(params & 0xFF);
         if ((s32)params != ITEM00_NO_DROP) {
             spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y,
                                        spawnPos->z, 0, 0, 0, (s32)params | param8000 | param7F00);
