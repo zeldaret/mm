@@ -1520,10 +1520,10 @@ void func_800EDDCC(GlobalContext* globalCtx, u8 csIndex) {
     gSaveContext.cutsceneTrigger = 1;
 }
 
-void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex) {
+void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
-    CsCmdActorAction* entry = globalCtx->csCtx.actorActions[npcActionIndex];
+    CsCmdActorAction* entry = globalCtx->csCtx.actorActions[actorActionIndex];
     f32 t;
 
     start.x = entry->startPos.x;
@@ -1540,27 +1540,27 @@ void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex) {
     actor->world.pos.z = ((end.z - start.z) * t) + start.z;
 }
 
-void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 npcActionIndex) {
-    func_800EDE34(actor, globalCtx, npcActionIndex);
+void func_800EDF24(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
+    func_800EDE34(actor, globalCtx, actorActionIndex);
 
-    actor->world.rot.y = globalCtx->csCtx.actorActions[npcActionIndex]->urot.y;
+    actor->world.rot.y = globalCtx->csCtx.actorActions[actorActionIndex]->urot.y;
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex) {
+void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry;
     f32 t;
 
-    start.x = globalCtx->csCtx.actorActions[npcActionIndex]->startPos.x;
-    start.y = globalCtx->csCtx.actorActions[npcActionIndex]->startPos.y;
-    start.z = globalCtx->csCtx.actorActions[npcActionIndex]->startPos.z;
-    end.x = globalCtx->csCtx.actorActions[npcActionIndex]->endPos.x;
-    end.y = globalCtx->csCtx.actorActions[npcActionIndex]->endPos.y;
-    end.z = globalCtx->csCtx.actorActions[npcActionIndex]->endPos.z;
+    start.x = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.x;
+    start.y = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.y;
+    start.z = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.z;
+    end.x = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.x;
+    end.y = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.y;
+    end.z = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.z;
 
-    entry = globalCtx->csCtx.actorActions[npcActionIndex];
+    entry = globalCtx->csCtx.actorActions[actorActionIndex];
     t = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
     actor->world.pos.x = ((end.x - start.x) * t) + start.x;
@@ -1572,18 +1572,18 @@ void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex) {
 }
 
 // unused
-void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 arg2) {
+void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry;
     f32 t;
 
-    start.x = globalCtx->csCtx.actorActions[arg2]->startPos.x;
-    start.z = globalCtx->csCtx.actorActions[arg2]->startPos.z;
-    end.x = globalCtx->csCtx.actorActions[arg2]->endPos.x;
-    end.z = globalCtx->csCtx.actorActions[arg2]->endPos.z;
+    start.x = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.x;
+    start.z = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.z;
+    end.x = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.x;
+    end.z = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.z;
 
-    entry = globalCtx->csCtx.actorActions[arg2];
+    entry = globalCtx->csCtx.actorActions[actorActionIndex];
     t = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
     actor->world.pos.x = ((end.x - start.x) * t) + start.x;
