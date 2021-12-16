@@ -154,6 +154,8 @@ animdict = {
     "MainHeap_Init": "ZeldaArena_Init",
     "MainHeap_Cleanup": "ZeldaArena_Cleanup",
     "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
+    "func_800FB320": "Kankyo_AddLightningBolts",
+    "func_800F5A8C": "Environment_LerpWeight",
     "func_801A3F54": "Audio_SetCutsceneFlag",
     "func_801518B0": "Message_StartTextbox",
     "func_800EA0EC": "Cutscene_End",
