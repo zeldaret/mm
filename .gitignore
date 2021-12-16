@@ -43,7 +43,7 @@ tools/mips_to_c/
 .extracted-assets.json
 
 # Docs
-!docs/tutorial/**/*.png
+!docs/**/*.png
 !.vscode/extensions.json
 
 # Per-user configuration
