@@ -1460,6 +1460,7 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 #ifdef NON_MATCHING
+// HandleFlags?
 void func_800EDBE0(GlobalContext* globalCtx) {
     CutsceneEntry* temp_a3;
     s16 sp2A;
@@ -1520,6 +1521,10 @@ void Cutscene_LoadCutsceneData(GlobalContext* globalCtx, u8 csIndex) {
     gSaveContext.cutsceneTrigger = 1;
 }
 
+/**
+ * Interpolates the actor's position based on the corresponding actor action's position
+ * and the current cutscene frame
+ */
 void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
@@ -1540,6 +1545,10 @@ void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorAc
     actor->world.pos.z = ((end.z - start.z) * t) + start.z;
 }
 
+/**
+ * Interpolates the actor's position based on the corresponding actor action's position
+ * and the current cutscene frame, and sets the actor's yaw using the actor action yaw
+ */
 void Cutscene_ActorTranslateAndYaw(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
     Cutscene_ActorTranslate(actor, globalCtx, actorActionIndex);
 
@@ -1547,6 +1556,10 @@ void Cutscene_ActorTranslateAndYaw(Actor* actor, GlobalContext* globalCtx, s32 a
     actor->shape.rot.y = actor->world.rot.y;
 }
 
+/**
+ * Interpolates the actor's position and yaw based on the corresponding actor action's
+ * position and the current cutscene frame
+ */
 void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
@@ -1571,7 +1584,11 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, GlobalContext* globalCtx,
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-// unused
+
+/**
+ * Interpolates the actor's XZ position and yaw based on the corresponding actor action's
+ * position and the current cutscene frame
+ */
 void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
