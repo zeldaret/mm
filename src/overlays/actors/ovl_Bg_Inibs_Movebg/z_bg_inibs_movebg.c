@@ -26,12 +26,12 @@ const ActorInit Bg_Inibs_Movebg_InitVars = {
     (ActorFunc)BgInibsMovebg_Draw,
 };
 
-extern Gfx D_060062D8[];
-extern Gfx D_06001DC0[];
-extern Gfx D_06006140[];
 extern Gfx D_06001C10[];
-extern AnimatedMaterial D_06006858;
+extern Gfx D_06001DC0[];
 extern AnimatedMaterial D_06002598;
+extern Gfx D_06006140[];
+extern Gfx D_060062D8[];
+extern AnimatedMaterial D_06006858;
 Gfx* D_80B96560[] = { D_060062D8, D_06001DC0 };
 Gfx* D_80B96568[] = { D_06006140, D_06001C10 };
 AnimatedMaterial* D_80B96570[] = { &D_06006858, &D_06002598 };
