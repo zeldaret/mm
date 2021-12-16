@@ -1048,7 +1048,7 @@ asm/non_matchings/code/z_debug_mode/func_800E9DBC.s,func_800E9DBC,0x800E9DBC,0x3
 asm/non_matchings/code/z_debug_mode/func_800E9E94.s,func_800E9E94,0x800E9E94,0x39
 asm/non_matchings/code/z_debug_mode/func_800E9F78.s,func_800E9F78,0x800E9F78,0x3A
 asm/non_matchings/code/z_demo/Cutscene_Init.s,Cutscene_Init,0x800EA060,0x1D
-asm/non_matchings/code/z_demo/func_800EA0D4.s,func_800EA0D4,0x800EA0D4,0x6
+asm/non_matchings/code/z_demo/Cutscene_Start.s,Cutscene_Start,0x800EA0D4,0x6
 asm/non_matchings/code/z_demo/Cutscene_End.s,Cutscene_End,0x800EA0EC,0x9
 asm/non_matchings/code/z_demo/Cutscene_Update1.s,Cutscene_Update1,0x800EA110,0x13
 asm/non_matchings/code/z_demo/Cutscene_Update2.s,Cutscene_Update2,0x800EA15C,0x2D
@@ -1093,8 +1093,8 @@ asm/non_matchings/code/z_demo/func_800EDF24.s,func_800EDF24,0x800EDF24,0x15
 asm/non_matchings/code/z_demo/func_800EDF78.s,func_800EDF78,0x800EDF78,0x55
 asm/non_matchings/code/z_demo/func_800EE0CC.s,func_800EE0CC,0x800EE0CC,0x43
 asm/non_matchings/code/z_demo/Cutscene_GetSceneSetupIndex.s,Cutscene_GetSceneSetupIndex,0x800EE1D8,0xA
-asm/non_matchings/code/z_demo/func_800EE200.s,func_800EE200,0x800EE200,0x27
-asm/non_matchings/code/z_demo/func_800EE29C.s,func_800EE29C,0x800EE29C,0x16
+asm/non_matchings/code/z_demo/Cutscene_GetActorActionIndex.s,Cutscene_GetActorActionIndex,0x800EE200,0x27
+asm/non_matchings/code/z_demo/Cutscene_CheckActorAction.s,Cutscene_CheckActorAction,0x800EE29C,0x16
 asm/non_matchings/code/z_demo/Cutscene_IsPlayingCs.s,Cutscene_IsPlayingCs,0x800EE2F4,0xB
 asm/non_matchings/code/z_draw/GetItem_Draw.s,GetItem_Draw,0x800EE320,0x11
 asm/non_matchings/code/z_draw/func_800EE364.s,func_800EE364,0x800EE364,0x27
@@ -1252,7 +1252,7 @@ asm/non_matchings/code/z_kankyo/func_800FAAB4.s,func_800FAAB4,0x800FAAB4,0x5B
 asm/non_matchings/code/z_kankyo/func_800FAC20.s,func_800FAC20,0x800FAC20,0xD5
 asm/non_matchings/code/z_kankyo/func_800FAF74.s,func_800FAF74,0x800FAF74,0x27
 asm/non_matchings/code/z_kankyo/func_800FB010.s,func_800FB010,0x800FB010,0xC4
-asm/non_matchings/code/z_kankyo/func_800FB320.s,func_800FB320,0x800FB320,0x1A
+asm/non_matchings/code/z_kankyo/Kankyo_AddLightningBolts.s,Kankyo_AddLightningBolts,0x800FB320,0x1A
 asm/non_matchings/code/z_kankyo/func_800FB388.s,func_800FB388,0x800FB388,0xF4
 asm/non_matchings/code/z_kankyo/func_800FB758.s,func_800FB758,0x800FB758,0x97
 asm/non_matchings/code/z_kankyo/func_800FB9B4.s,func_800FB9B4,0x800FB9B4,0xC2

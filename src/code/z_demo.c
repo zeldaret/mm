@@ -45,7 +45,7 @@ void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     Audio_SetCutsceneFlag(0);
 }
 
-void func_800EA0D4(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void Cutscene_Start(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     csCtx->state = CS_STATE_SKIPPABLE_INIT;
     csCtx->playerAction = NULL;
 }
@@ -152,7 +152,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
         case 0x2:
             if (sp3F != 0) {
                 func_801A47DC(0xF, 0, 0);
-                func_800FB320(globalCtx, 3);
+                Kankyo_AddLightningBolts(globalCtx, 3);
                 D_801F4E68 = 1;
             }
             break;
@@ -276,7 +276,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
         case 0x19:
             sCutsceneStoredPlayerForm = gSaveContext.playerForm;
             gSaveContext.playerForm = PLAYER_FORM_HUMAN;
-            gSaveContext.equippedMask = 0;
+            gSaveContext.equippedMask = PLAYER_MASK_NONE;
             break;
         case 0x1A:
             func_8019F128(0x2159);
@@ -1124,7 +1124,7 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
         CsCmdActorAction* actorAction = *(CsCmdActorAction**)cutscenePtr;
 
         if ((csCtx->frames >= actorAction->startFrame) && (csCtx->frames < actorAction->endFrame)) {
-            csCtx->npcActions[index] = actorAction;
+            csCtx->actorActions[index] = actorAction;
         }
 
         *cutscenePtr += sizeof(CsCmdActorAction);
@@ -1408,8 +1408,8 @@ void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
         csCtx->playerAction = NULL;
 
-        for (i = 0; i < ARRAY_COUNT(csCtx->npcActions); i++) {
-            csCtx->npcActions[i] = NULL;
+        for (i = 0; i < ARRAY_COUNT(csCtx->actorActions); i++) {
+            csCtx->actorActions[i] = NULL;
         }
 
         gSaveContext.cutscene = 0;
@@ -1432,8 +1432,8 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
         D_801BB128 = 0;
         csCtx->playerAction = NULL;
 
-        for (i = 0; i < ARRAY_COUNT(csCtx->npcActions); i++) {
-            csCtx->npcActions[i] = NULL;
+        for (i = 0; i < ARRAY_COUNT(csCtx->actorActions); i++) {
+            csCtx->actorActions[i] = NULL;
         }
 
         csCtx->state++;
@@ -1521,73 +1521,75 @@ void func_800EDDCC(GlobalContext* globalCtx, u8 arg1) {
 }
 
 void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex) {
-    Vec3f sp24;
-    Vec3f sp18;
-    CsCmdActorAction* entry = globalCtx->csCtx.npcActions[npcActionIndex];
-    f32 temp_f0;
+    Vec3f start;
+    Vec3f end;
+    CsCmdActorAction* entry = globalCtx->csCtx.actorActions[npcActionIndex];
+    f32 t;
 
-    sp24.x = entry->startPos.x;
-    sp24.y = entry->startPos.y;
-    sp24.z = entry->startPos.z;
-    sp18.x = entry->endPos.x;
-    sp18.y = entry->endPos.y;
-    sp18.z = entry->endPos.z;
+    start.x = entry->startPos.x;
+    start.y = entry->startPos.y;
+    start.z = entry->startPos.z;
+    end.x = entry->endPos.x;
+    end.y = entry->endPos.y;
+    end.z = entry->endPos.z;
 
-    temp_f0 = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
-    actor->world.pos.x = ((sp18.x - sp24.x) * temp_f0) + sp24.x;
-    actor->world.pos.y = ((sp18.y - sp24.y) * temp_f0) + sp24.y;
-    actor->world.pos.z = ((sp18.z - sp24.z) * temp_f0) + sp24.z;
+    t = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+
+    actor->world.pos.x = ((end.x - start.x) * t) + start.x;
+    actor->world.pos.y = ((end.y - start.y) * t) + start.y;
+    actor->world.pos.z = ((end.z - start.z) * t) + start.z;
 }
 
 void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 npcActionIndex) {
     func_800EDE34(actor, globalCtx, npcActionIndex);
-    actor->world.rot.y = globalCtx->csCtx.npcActions[npcActionIndex]->urot.y;
+
+    actor->world.rot.y = globalCtx->csCtx.actorActions[npcActionIndex]->urot.y;
     actor->shape.rot.y = actor->world.rot.y;
 }
 
 void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex) {
-    Vec3f sp44;
-    Vec3f sp38;
+    Vec3f start;
+    Vec3f end;
     CsCmdActorAction* entry;
-    f32 temp_f0;
+    f32 t;
 
-    sp44.x = globalCtx->csCtx.npcActions[npcActionIndex]->startPos.x;
-    sp44.y = globalCtx->csCtx.npcActions[npcActionIndex]->startPos.y;
-    sp44.z = globalCtx->csCtx.npcActions[npcActionIndex]->startPos.z;
-    sp38.x = globalCtx->csCtx.npcActions[npcActionIndex]->endPos.x;
-    sp38.y = globalCtx->csCtx.npcActions[npcActionIndex]->endPos.y;
-    sp38.z = globalCtx->csCtx.npcActions[npcActionIndex]->endPos.z;
+    start.x = globalCtx->csCtx.actorActions[npcActionIndex]->startPos.x;
+    start.y = globalCtx->csCtx.actorActions[npcActionIndex]->startPos.y;
+    start.z = globalCtx->csCtx.actorActions[npcActionIndex]->startPos.z;
+    end.x = globalCtx->csCtx.actorActions[npcActionIndex]->endPos.x;
+    end.y = globalCtx->csCtx.actorActions[npcActionIndex]->endPos.y;
+    end.z = globalCtx->csCtx.actorActions[npcActionIndex]->endPos.z;
 
-    entry = globalCtx->csCtx.npcActions[npcActionIndex];
-    temp_f0 = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+    entry = globalCtx->csCtx.actorActions[npcActionIndex];
+    t = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
-    actor->world.pos.x = ((sp38.x - sp44.x) * temp_f0) + sp44.x;
-    actor->world.pos.y = ((sp38.y - sp44.y) * temp_f0) + sp44.y;
-    actor->world.pos.z = ((sp38.z - sp44.z) * temp_f0) + sp44.z;
+    actor->world.pos.x = ((end.x - start.x) * t) + start.x;
+    actor->world.pos.y = ((end.y - start.y) * t) + start.y;
+    actor->world.pos.z = ((end.z - start.z) * t) + start.z;
 
-    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&sp44, &sp38), 10, 1000, 1);
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
 
 // unused
 void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 arg2) {
-    Vec3f sp44;
-    Vec3f sp38;
+    Vec3f start;
+    Vec3f end;
     CsCmdActorAction* entry;
     f32 temp_f0;
 
-    sp44.x = globalCtx->csCtx.npcActions[arg2]->startPos.x;
-    sp44.z = globalCtx->csCtx.npcActions[arg2]->startPos.z;
-    sp38.x = globalCtx->csCtx.npcActions[arg2]->endPos.x;
-    sp38.z = globalCtx->csCtx.npcActions[arg2]->endPos.z;
+    start.x = globalCtx->csCtx.actorActions[arg2]->startPos.x;
+    start.z = globalCtx->csCtx.actorActions[arg2]->startPos.z;
+    end.x = globalCtx->csCtx.actorActions[arg2]->endPos.x;
+    end.z = globalCtx->csCtx.actorActions[arg2]->endPos.z;
 
-    entry = globalCtx->csCtx.npcActions[arg2];
+    entry = globalCtx->csCtx.actorActions[arg2];
     temp_f0 = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
-    actor->world.pos.x = ((sp38.x - sp44.x) * temp_f0) + sp44.x;
-    actor->world.pos.z = ((sp38.z - sp44.z) * temp_f0) + sp44.z;
+    actor->world.pos.x = ((end.x - start.x) * temp_f0) + start.x;
+    actor->world.pos.z = ((end.z - start.z) * temp_f0) + start.z;
 
-    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&sp44, &sp38), 10, 1000, 1);
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
 
@@ -1600,12 +1602,12 @@ s32 Cutscene_GetSceneSetupIndex(GlobalContext* globalCtx) {
     return sceneSetupIndex;
 }
 
-s32 func_800EE200(GlobalContext* globalCtx, u16 arg1) {
+s32 Cutscene_GetActorActionIndex(GlobalContext* globalCtx, u16 actorActionCmd) {
     s32 i;
     s32 index = -1;
 
     for (i = 0; i < ARRAY_COUNT(D_801F4DC8); i++) {
-        if (arg1 == D_801F4DC8[i]) {
+        if (actorActionCmd == D_801F4DC8[i]) {
             index = i;
         }
     }
@@ -1613,16 +1615,16 @@ s32 func_800EE200(GlobalContext* globalCtx, u16 arg1) {
     return index;
 }
 
-s32 func_800EE29C(GlobalContext* globalCtx, u16 arg1) {
+s32 Cutscene_CheckActorAction(GlobalContext* globalCtx, u16 actorActionCmd) {
     if (globalCtx->csCtx.state != CS_STATE_IDLE) {
-        s32 index = func_800EE200(globalCtx, arg1);
+        s32 index = Cutscene_GetActorActionIndex(globalCtx, actorActionCmd);
 
         if (index != -1) {
-            return globalCtx->csCtx.npcActions[index] != NULL;
+            return globalCtx->csCtx.actorActions[index] != NULL;
         }
     }
 
-    return 0;
+    return false;
 }
 
 u8 Cutscene_IsPlayingCs(GlobalContext* globalCtx) {

@@ -162,7 +162,7 @@ void func_80BCF354(EnHg* this) {
 void func_80BCF398(EnHg* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.health == 1) {
         if ((this->actor.xzDistToPlayer < 200.0f && this->actor.playerHeightRel < 40.0f) &&
-            !func_800EE29C(globalCtx, 0x1E3)) {
+            !Cutscene_CheckActorAction(globalCtx, 0x1E3)) {
             func_80BCF468(this);
         }
         if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 0) &&
@@ -277,12 +277,12 @@ void func_80BCF93C(EnHg* this) {
 }
 
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x1E4)) {
-        s32 actionIndex = func_800EE200(globalCtx, 0x1E4);
+    if (Cutscene_CheckActorAction(globalCtx, 0x1E4)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1E4);
 
-        if (this->cutscenes[3] != globalCtx->csCtx.npcActions[actionIndex]->action) {
-            this->cutscenes[3] = globalCtx->csCtx.npcActions[actionIndex]->action;
-            switch (globalCtx->csCtx.npcActions[actionIndex]->action) {
+        if (this->cutscenes[3] != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->cutscenes[3] = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->currentAnimation = 0;
                     func_800BDC5C(&this->skelAnime, sAnimations, 0);

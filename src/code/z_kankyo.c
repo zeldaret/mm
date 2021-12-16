@@ -64,7 +64,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FB010.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FB320.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Kankyo_AddLightningBolts.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FB388.s")
 

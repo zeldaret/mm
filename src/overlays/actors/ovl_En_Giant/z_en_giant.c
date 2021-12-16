@@ -351,7 +351,7 @@ void EnGiant_PlaySound(EnGiant* this) {
 }
 
 void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
-    CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
+    CsCmdActorAction* actorAction = globalCtx->csCtx.actorActions[actionIndex];
     f32 floatUnk10 = actorAction->startPos.y;
     s32 pad[2];
     f32 floatUnk1C = actorAction->endPos.y;
@@ -362,10 +362,10 @@ void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionI
 }
 
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, this->unk_24A)) {
-        EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->action) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->action;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_24A)) {
+        EnGiant_UpdatePosition(this, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_24A));
+        if (this->csAction != globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action) {
+            this->csAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -385,10 +385,10 @@ void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* global
 void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
     this->actor.draw = EnGiant_Draw;
 
-    if (func_800EE29C(globalCtx, this->unk_24A)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->action) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->action;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_24A)) {
+        func_800EDF24(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_24A));
+        if (this->csAction != globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action) {
+            this->csAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_24A)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);

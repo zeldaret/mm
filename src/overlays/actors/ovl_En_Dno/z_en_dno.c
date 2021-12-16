@@ -871,10 +871,10 @@ void func_80A73408(EnDno* this, GlobalContext* globalCtx) {
     u8 sp33 = true;
     s32 temp_v0;
 
-    if (func_800EE29C(globalCtx, 0x1DB)) {
-        temp_v0 = func_800EE200(globalCtx, 0x1DB);
-        if (this->unk_468 != globalCtx->csCtx.npcActions[temp_v0]->action) {
-            switch (globalCtx->csCtx.npcActions[temp_v0]->action) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1DB)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 0x1DB);
+        if (this->unk_468 != globalCtx->csCtx.actorActions[temp_v0]->action) {
+            switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
                 case 1:
                     phi_a2 = 13;
                     break;

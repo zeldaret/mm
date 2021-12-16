@@ -1677,7 +1677,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
     switch (this->unk_1D18) {
         case 0:
             if (player->stateFlags1 & 0x100) {
-                func_800EA0D4(globalCtx, &globalCtx->csCtx);
+                Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 this->unk_1D22 = func_801694DC(globalCtx);
                 func_80169590(globalCtx, 0, 1);
                 func_80169590(globalCtx, this->unk_1D22, 7);
@@ -2104,7 +2104,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             if ((gSaveContext.weekEventReg[52] & 0x20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
                 break;
             }
-            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            Cutscene_Start(globalCtx, &globalCtx->csCtx);
             this->unk_1D22 = func_801694DC(globalCtx);
             func_80169590(globalCtx, 0, 1);
             func_80169590(globalCtx, this->unk_1D22, 7);
@@ -2202,7 +2202,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
 
         case 100:
             if (ActorCutscene_GetCurrentIndex() == -1) {
-                func_800EA0D4(globalCtx, &globalCtx->csCtx);
+                Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 this->unk_1D22 = func_801694DC(globalCtx);
                 func_80169590(globalCtx, 0, 1);
                 func_80169590(globalCtx, this->unk_1D22, 7);

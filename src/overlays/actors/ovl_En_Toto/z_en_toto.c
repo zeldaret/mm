@@ -690,7 +690,7 @@ s32 func_80BA4C44(EnToto* this, GlobalContext* globalCtx) {
 void func_80BA4CB4(EnToto* this, GlobalContext* globalCtx) {
     CsCmdActorAction* action;
 
-    action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x20D)];
+    action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x20D)];
     if (this->unk2B5 != action->action) {
         this->unk2B5 = action->action;
         if (this->unk2B5 != 4) {
@@ -720,7 +720,7 @@ void EnToto_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnToto* this = THIS;
     s32 pad;
 
-    if (func_800EE29C(globalCtx, 0x20D)) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x20D)) {
         func_80BA4CB4(this, globalCtx);
     } else {
         D_80BA51B8[this->actionFuncIndex](this, globalCtx);

@@ -136,11 +136,11 @@ void func_80BD433C(ObjHgdoor* this) {
 void func_80BD4358(ObjHgdoor* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
-    if (func_800EE29C(globalCtx, 0x1E3)) {
-        actionIndex = func_800EE200(globalCtx, 0x1E3);
-        if (this->unk166 != globalCtx->csCtx.npcActions[actionIndex]->action) {
-            this->unk166 = globalCtx->csCtx.npcActions[actionIndex]->action;
-            switch (globalCtx->csCtx.npcActions[actionIndex]->action) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1E3)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1E3);
+        if (this->unk166 != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->unk166 = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {

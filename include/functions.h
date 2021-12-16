@@ -1503,7 +1503,7 @@ DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, 
 void func_800E9F78(GraphicsContext* gfxCtx);
 
 void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx);
-void func_800EA0D4(GlobalContext* globalCtx, CutsceneContext* csCtx);
+void Cutscene_Start(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx);
@@ -1514,8 +1514,8 @@ void func_800EDE34(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex);
 void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 npcActionIndex);
 void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 npcActionIndex);
 s32 Cutscene_GetSceneSetupIndex(GlobalContext* globalCtx);
-s32 func_800EE200(GlobalContext* globalCtx, u16 arg1);
-s32 func_800EE29C(GlobalContext* globalCtx, u16 arg1);
+s32 Cutscene_GetActorActionIndex(GlobalContext* globalCtx, u16 actorActionCmd);
+s32 Cutscene_CheckActorAction(GlobalContext* globalCtx, u16 actorActionCmd);
 u8 Cutscene_IsPlayingCs(GlobalContext* globalCtx);
 
 void GetItem_Draw(GlobalContext* globalCtx, s16 index);
@@ -1665,7 +1665,7 @@ void func_800FAAB4(GlobalContext* globalCtx, u8 arg1);
 // void func_800FAC20(void);
 // void func_800FAF74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5);
 // void func_800FB010(void);
-void func_800FB320(GlobalContext* globalCtx, u8 param_2);
+void Kankyo_AddLightningBolts(GlobalContext* globalCtx, u8 param_2);
 // void func_800FB388(void);
 void func_800FB758(GlobalContext* globalCtx);
 // void func_800FB9B4(void);

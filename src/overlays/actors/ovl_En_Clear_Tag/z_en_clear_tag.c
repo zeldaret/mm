@@ -533,7 +533,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             }
             break;
         case 1:
-            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            Cutscene_Start(globalCtx, &globalCtx->csCtx);
             this->camId = func_801694DC(globalCtx);
             func_80169590(globalCtx, 0, 1);
             func_80169590(globalCtx, this->camId, 7);

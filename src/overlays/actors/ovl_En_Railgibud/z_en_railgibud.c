@@ -1060,11 +1060,11 @@ void func_80BA7D30(EnRailgibud* this, GlobalContext* globalCtx) {
 s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
     s32 sp2C;
 
-    if (func_800EE29C(globalCtx, this->unk_3FC)) {
-        sp2C = func_800EE200(globalCtx, this->unk_3FC);
-        if (this->unk_3FE != globalCtx->csCtx.npcActions[sp2C]->action) {
-            this->unk_3FE = globalCtx->csCtx.npcActions[sp2C]->action;
-            switch (globalCtx->csCtx.npcActions[sp2C]->action) {
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3FC)) {
+        sp2C = Cutscene_GetActorActionIndex(globalCtx, this->unk_3FC);
+        if (this->unk_3FE != globalCtx->csCtx.actorActions[sp2C]->action) {
+            this->unk_3FE = globalCtx->csCtx.actorActions[sp2C]->action;
+            switch (globalCtx->csCtx.actorActions[sp2C]->action) {
                 case 1:
                     this->unk_3F0 = 9;
                     func_800BDC5C(&this->skelAnime, sAnimations, 9);

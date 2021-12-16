@@ -157,6 +157,8 @@ animdict = {
     "func_801A3F54": "Audio_SetCutsceneFlag",
     "func_800EA0EC": "Cutscene_End",
     "func_801518B0": "Message_StartTextbox",
+    "func_800EE200": "Cutscene_GetActorActionIndex",
+    "func_800EE29C": "Cutscene_CheckActorAction",
 
     "skelanime.unk03": "skelanime.taper",
     "skelanime.animCurrentSeg": "skelanime.animation",
@@ -193,6 +195,8 @@ animdict = {
     "skelAnime.unk3E": "skelAnime.baseTransl",
     "actor.yDistToWater" : "actor.depthInWater",
     "actor.yDistToPlayer" : "actor.playerHeightRel",
+    "csCtx.npcActions": "csCtx.actorActions",
+    "csCtx->npcActions": "csCtx->actorActions",
 }
 
 def replace_anim(file):

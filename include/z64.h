@@ -121,7 +121,7 @@ typedef struct {
     /* 0x1C */ CutsceneCameraPoint* cameraFocus;
     /* 0x20 */ CutsceneCameraPoint* cameraPosition;
     /* 0x24 */ CsCmdActorAction* playerAction;
-    /* 0x28 */ CsCmdActorAction* npcActions[10]; // "npcdemopnt"
+    /* 0x28 */ CsCmdActorAction* actorActions[10]; // "npcdemopnt"
     /* 0x50 */ CutsceneEntry* sceneCsList;
 } CutsceneContext; // size = 0x54
 

@@ -395,9 +395,9 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
     s32 temp_v0;
     u32 temp_v1;
 
-    if (func_800EE29C(globalCtx, 0x69)) {
-        temp_v0 = func_800EE200(globalCtx, 0x69);
-        temp_v1 = globalCtx->csCtx.npcActions[temp_v0]->action;
+    if (Cutscene_CheckActorAction(globalCtx, 0x69)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 0x69);
+        temp_v1 = globalCtx->csCtx.actorActions[temp_v0]->action;
         if (this->unk_1DC != (u8)temp_v1) {
             func_80A5257C(this, D_80A535FC[temp_v1]);
             this->unk_1DC = temp_v1;

@@ -706,12 +706,12 @@ void func_80BD9C70(EnPamera* this, GlobalContext* globalCtx) {
 s32 func_80BD9CB8(EnPamera* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
-    if (func_800EE29C(globalCtx, 0x1E5)) {
-        actionIndex = func_800EE200(globalCtx, 0x1E5);
-        if (this->unk_326 != globalCtx->csCtx.npcActions[actionIndex]->action) {
-            this->unk_326 = globalCtx->csCtx.npcActions[actionIndex]->action;
+    if (Cutscene_CheckActorAction(globalCtx, 0x1E5)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1E5);
+        if (this->unk_326 != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->unk_326 = globalCtx->csCtx.actorActions[actionIndex]->action;
 
-            switch (globalCtx->csCtx.npcActions[actionIndex]->action) {
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     func_80BD9E88(this);
                     break;

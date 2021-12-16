@@ -820,15 +820,15 @@ void EnMa4_SetupEponasSongCs(EnMa4* this) {
 
 static u16 D_80AC0260 = 99;
 void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x78) != 0) {
-        s32 actionIndex = func_800EE200(globalCtx, 0x78);
+    if (Cutscene_CheckActorAction(globalCtx, 0x78) != 0) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x78);
 
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[actionIndex]->startFrame) {
-            if (globalCtx->csCtx.npcActions[actionIndex]->action != D_80AC0260) {
-                D_80AC0260 = globalCtx->csCtx.npcActions[actionIndex]->action;
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
+            if (globalCtx->csCtx.actorActions[actionIndex]->action != D_80AC0260) {
+                D_80AC0260 = globalCtx->csCtx.actorActions[actionIndex]->action;
                 this->animTimer = 0;
 
-                switch (globalCtx->csCtx.npcActions[actionIndex]->action) {
+                switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                     case 1:
                         this->hasBow = true;
                         EnMa4_ChangeAnim(this, 1);
