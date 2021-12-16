@@ -552,8 +552,6 @@ beginseg
     include "build/src/code/code_801420C0.o"
     include "build/src/code/z_vr_box.o"
     include "build/src/code/z_vr_box_draw.o"
-    include "build/data/code/z_vr_box_draw.data.o"
-    include "build/data/code/z_vr_box_draw.bss.o"
     include "build/src/code/z_sram_NES.o"
     include "build/data/code/z_sram_NES.data.o"
     include "build/data/code/z_sram_NES.bss.o"
