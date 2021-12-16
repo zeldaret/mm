@@ -99,6 +99,8 @@ extern InitChainEntry D_80AD2570[];
 
 extern UNK_TYPE D_060192A0;
 extern UNK_TYPE D_060201BC;
+extern Vec3f D_80AD2574;
+extern Vec3s D_80AD2580;
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0830.s")
 void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
@@ -903,7 +905,27 @@ s32 func_80AD1DA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1E28.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1E28.s")
+void func_80AD1E28(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
+    EnOsn* this = (EnOsn*)actor;
+    Vec3f sp30 = D_80AD2574;
+    Vec3s sp28 = D_80AD2580;
+
+    if (limbIndex == 0xB) {
+        Matrix_MultiplyVector3fByState(&sp30, &actor->focus.pos);
+    }
+    if (((this->unk_1EC == 0x11) || (this->unk_1EC == 0x15) || (this->unk_1EC == 0x16)) && (limbIndex == 6)) {
+        Matrix_StatePush();
+        Matrix_InsertTranslation(-400.0f, 1100.0f, -200.0f, 1);
+        Matrix_InsertXRotation_s(sp28.x, 1);
+        Matrix_RotateY(sp28.y, 1);
+        Matrix_InsertZRotation_s(sp28.z, 1);
+        
+        gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList((*gfx)++, &D_060192A0);
+        Matrix_StatePop();
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Draw.s")
 s32 func_80AD1DA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor, Gfx** gfx); 
