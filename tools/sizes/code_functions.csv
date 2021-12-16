@@ -1069,7 +1069,7 @@ asm/non_matchings/code/z_demo/Cutscene_Command_FadeAmbienceSequence.s,Cutscene_C
 asm/non_matchings/code/z_demo/Cutscene_Command_Rumble.s,Cutscene_Command_Rumble,0x800EAF20,0x30
 asm/non_matchings/code/z_demo/Cutscene_Command_FadeColorScreen.s,Cutscene_Command_FadeColorScreen,0x800EAFE0,0x7F
 asm/non_matchings/code/z_demo/Cutscene_Command_SetTime.s,Cutscene_Command_SetTime,0x800EB1DC,0x62
-asm/non_matchings/code/z_demo/func_800EB364.s,func_800EB364,0x800EB364,0x54
+asm/non_matchings/code/z_demo/Cutscene_TerminatorImpl.s,Cutscene_TerminatorImpl,0x800EB364,0x54
 asm/non_matchings/code/z_demo/Cutscene_Command_Terminator.s,Cutscene_Command_Terminator,0x800EB4B4,0x91
 asm/non_matchings/code/z_demo/func_800EB6F8.s,func_800EB6F8,0x800EB6F8,0x11C
 asm/non_matchings/code/z_demo/Cutscene_Command_MotionBlur.s,Cutscene_Command_MotionBlur,0x800EBB68,0x5A
@@ -1087,7 +1087,7 @@ asm/non_matchings/code/z_demo/func_800EDA84.s,func_800EDA84,0x800EDA84,0x57
 asm/non_matchings/code/z_demo/func_800EDBE0.s,func_800EDBE0,0x800EDBE0,0x74
 asm/non_matchings/code/z_demo/nop_800EDDB0.s,nop_800EDDB0,0x800EDDB0,0x3
 asm/non_matchings/code/z_demo/func_800EDDBC.s,func_800EDDBC,0x800EDDBC,0x4
-asm/non_matchings/code/z_demo/func_800EDDCC.s,func_800EDDCC,0x800EDDCC,0x1A
+asm/non_matchings/code/z_demo/Cutscene_LoadCutsceneData.s,Cutscene_LoadCutsceneData,0x800EDDCC,0x1A
 asm/non_matchings/code/z_demo/func_800EDE34.s,func_800EDE34,0x800EDE34,0x3C
 asm/non_matchings/code/z_demo/func_800EDF24.s,func_800EDF24,0x800EDF24,0x15
 asm/non_matchings/code/z_demo/func_800EDF78.s,func_800EDF78,0x800EDF78,0x55

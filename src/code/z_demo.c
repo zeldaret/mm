@@ -30,7 +30,7 @@ s16 D_801F4DE2;
 void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     s32 i;
 
-    csCtx->state = CS_STATE_IDLE;
+    csCtx->state = CS_STATE_0;
     csCtx->frames = 0;
     csCtx->unk_0C = 0.0f;
     globalCtx->csCtx.sceneCsCount = 0;
@@ -46,24 +46,24 @@ void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 void Cutscene_Start(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    csCtx->state = CS_STATE_SKIPPABLE_INIT;
+    csCtx->state = CS_STATE_1;
     csCtx->playerAction = NULL;
 }
 
 void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    if (csCtx->state != CS_STATE_UNSKIPPABLE_EXEC) {
-        csCtx->state = CS_STATE_UNSKIPPABLE_INIT;
+    if (csCtx->state != CS_STATE_4) {
+        csCtx->state = CS_STATE_3;
     }
 }
 
 typedef void(*CutsceneStateHandler)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
 CutsceneStateHandler sCsStateHandlers1[] = {
-    /* CS_STATE_IDLE */ Cutscene_DoNothing,
-    /* CS_STATE_SKIPPABLE_INIT */ func_800EA258,
-    /* CS_STATE_SKIPPABLE_EXEC */ Cutscene_DoNothing,
-    /* CS_STATE_UNSKIPPABLE_INIT */ func_800ED9C4,
-    /* CS_STATE_UNSKIPPABLE_EXEC */ Cutscene_DoNothing,
+    /* CS_STATE_0 */ Cutscene_DoNothing,
+    /* CS_STATE_1 */ func_800EA258,
+    /* CS_STATE_2 */ Cutscene_DoNothing,
+    /* CS_STATE_3 */ func_800ED9C4,
+    /* CS_STATE_4 */ Cutscene_DoNothing,
 };
 
 void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -73,11 +73,11 @@ void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 CutsceneStateHandler sCsStateHandlers2[] = {
-    /* CS_STATE_IDLE */ Cutscene_DoNothing,
-    /* CS_STATE_SKIPPABLE_INIT */ func_800EA2B8,
-    /* CS_STATE_SKIPPABLE_EXEC */ func_800ED980,
-    /* CS_STATE_UNSKIPPABLE_INIT */ func_800EDA04,
-    /* CS_STATE_UNSKIPPABLE_EXEC */ func_800ED980,
+    /* CS_STATE_0 */ Cutscene_DoNothing,
+    /* CS_STATE_1 */ func_800EA2B8,
+    /* CS_STATE_2 */ func_800ED980,
+    /* CS_STATE_3 */ func_800EDA04,
+    /* CS_STATE_4 */ func_800ED980,
 };
 
 void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -85,7 +85,7 @@ void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
         gSaveContext.cutsceneTrigger = 0;
     }
 
-    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_IDLE)) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0)) {
         gSaveContext.cutscene = 0xFFFD;
         gSaveContext.cutsceneTrigger = 1;
     }
@@ -175,8 +175,8 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             }
             break;
         case 0x5:
-            if (sp3F && (csCtx->state != CS_STATE_UNSKIPPABLE_EXEC)) {
-                csCtx->state = CS_STATE_UNSKIPPABLE_INIT;
+            if (sp3F && (csCtx->state != CS_STATE_4)) {
+                csCtx->state = CS_STATE_3;
             }
             break;
         case 0x7:
@@ -556,8 +556,8 @@ void Cutscene_Command_SetTime(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     }
 }
 
-void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    csCtx->state = CS_STATE_UNSKIPPABLE_EXEC;
+void Cutscene_TerminatorImpl(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    csCtx->state = CS_STATE_4;
     func_80165690();
     Audio_SetCutsceneFlag(0);
     gSaveContext.unk_3F48 = 1;
@@ -593,7 +593,7 @@ void func_800EB364(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (cmd->base == 1) {
         if (csCtx->frames == cmd->startFrame) {
-            func_800EB364(globalCtx, csCtx, cmd);
+            Cutscene_TerminatorImpl(globalCtx, csCtx, cmd);
         }
     } else if (cmd->base == 2) {
         if (csCtx->frames == cmd->startFrame) {
@@ -652,7 +652,7 @@ void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
     if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(0, 1) != 0xFF)) {
         switch (cmd->base) {
             case 1:
-                func_800EB364(globalCtx, csCtx, cmd);
+                Cutscene_TerminatorImpl(globalCtx, csCtx, cmd);
                 break;
 
             case 2:
@@ -1150,8 +1150,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     cutscenePtr += 4;
 
     if (((u16)cutsceneEndFrame < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) &&
-        (csCtx->state != CS_STATE_UNSKIPPABLE_EXEC)) {
-        csCtx->state = CS_STATE_UNSKIPPABLE_INIT;
+        (csCtx->state != CS_STATE_4)) {
+        csCtx->state = CS_STATE_3;
         return;
     }
 
@@ -1390,14 +1390,14 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
 void func_800ED980(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (gSaveContext.cutscene >= 0xFFF0) {
         csCtx->frames++;
-        Cutscene_ProcessCommands(globalCtx, csCtx, globalCtx->csCtx.segment);
+        Cutscene_ProcessCommands(globalCtx, csCtx, (void*)globalCtx->csCtx.csData);
     }
 }
 
 void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (func_800EA220(globalCtx, csCtx, 0.0f)) {
         Audio_SetCutsceneFlag(0);
-        csCtx->state = CS_STATE_IDLE;
+        csCtx->state = CS_STATE_0;
     }
 }
 
@@ -1416,16 +1416,16 @@ void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx) {
         gSaveContext.gameMode = 0;
         ActorCutscene_Stop(0x7F);
         Audio_SetCutsceneFlag(0);
-        csCtx->state = CS_STATE_IDLE;
+        csCtx->state = CS_STATE_0;
     }
 }
 
 void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_IDLE) && !func_801233E4(globalCtx)) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !func_801233E4(globalCtx)) {
         gSaveContext.cutscene = 0xFFFD;
     }
 
-    if (gSaveContext.cutscene >= 0xFFF0 && csCtx->state == CS_STATE_IDLE) {
+    if (gSaveContext.cutscene >= 0xFFF0 && csCtx->state == CS_STATE_0) {
         s16 i;
 
         D_801BB124 = 0;
@@ -1437,7 +1437,7 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
         }
 
         csCtx->state++;
-        if (csCtx->state == CS_STATE_SKIPPABLE_INIT) {
+        if (csCtx->state == CS_STATE_1) {
             Audio_SetCutsceneFlag(1);
 
             csCtx->frames = 0xFFFF;
@@ -1511,10 +1511,10 @@ void nop_800EDDB0(GlobalContext* globalCtx) {
 void func_800EDDBC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
-void func_800EDDCC(GlobalContext* globalCtx, u8 csIndex) {
+void Cutscene_LoadCutsceneData(GlobalContext* globalCtx, u8 csIndex) {
     if (dREG(95) == 0) {
         globalCtx->csCtx.currentCsIndex = csIndex;
-        globalCtx->csCtx.segment = Lib_SegmentedToVirtual(globalCtx->csCtx.sceneCsList[csIndex].data);
+        globalCtx->csCtx.csData = Lib_SegmentedToVirtual(globalCtx->csCtx.sceneCsList[csIndex].segmentedData);
     }
 
     gSaveContext.cutsceneTrigger = 1;
@@ -1616,7 +1616,7 @@ s32 Cutscene_GetActorActionIndex(GlobalContext* globalCtx, u16 actorActionCmd) {
 }
 
 s32 Cutscene_CheckActorAction(GlobalContext* globalCtx, u16 actorActionCmd) {
-    if (globalCtx->csCtx.state != CS_STATE_IDLE) {
+    if (globalCtx->csCtx.state != CS_STATE_0) {
         s32 index = Cutscene_GetActorActionIndex(globalCtx, actorActionCmd);
 
         if (index != -1) {
@@ -1628,5 +1628,5 @@ s32 Cutscene_CheckActorAction(GlobalContext* globalCtx, u16 actorActionCmd) {
 }
 
 u8 Cutscene_IsPlayingCs(GlobalContext* globalCtx) {
-    return gSaveContext.cutsceneTrigger != 0 || globalCtx->csCtx.state != CS_STATE_IDLE;
+    return gSaveContext.cutsceneTrigger != 0 || globalCtx->csCtx.state != CS_STATE_0;
 }

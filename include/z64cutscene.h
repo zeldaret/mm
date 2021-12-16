@@ -114,11 +114,11 @@ typedef struct {
 } CsCmdFadeScreen; // size = 0xC
 
 typedef enum {
-    /* 0 */ CS_STATE_IDLE,
-    /* 1 */ CS_STATE_SKIPPABLE_INIT,
-    /* 2 */ CS_STATE_SKIPPABLE_EXEC,
-    /* 3 */ CS_STATE_UNSKIPPABLE_INIT,
-    /* 4 */ CS_STATE_UNSKIPPABLE_EXEC
+    /* 0 */ CS_STATE_0,
+    /* 1 */ CS_STATE_1,
+    /* 2 */ CS_STATE_2,
+    /* 3 */ CS_STATE_3,
+    /* 4 */ CS_STATE_4
 } CutsceneState;
 
 typedef enum {
@@ -165,23 +165,23 @@ typedef union CutsceneData {
 } CutsceneData;
 
 typedef struct {
-    /* 0x0 */ CutsceneData* data;
+    /* 0x0 */ CutsceneData* segmentedData;
     /* 0x4 */ s16 nextEntranceIndex;
     /* 0x6 */ u8 unk6;
     /* 0x7 */ u8 unk7; // a weekEventReg bitpack?
 } CutsceneEntry; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8    sceneCsCount;
-    /* 0x04 */ void* segment;
-    /* 0x08 */ u8    state;
-    /* 0x0C */ f32   unk_0C;
-    /* 0x10 */ u16   frames;
-    /* 0x12 */ u16   currentCsIndex;
-    /* 0x14 */ s32   csCamId;
-    /* 0x18 */ u16   unk_18;
-    /* 0x1A */ u8    unk_1A;
-    /* 0x1B */ u8    unk_1B;
+    /* 0x00 */ u8            sceneCsCount;
+    /* 0x04 */ CutsceneData* csData;
+    /* 0x08 */ u8            state;
+    /* 0x0C */ f32           unk_0C;
+    /* 0x10 */ u16           frames;
+    /* 0x12 */ u16           currentCsIndex;
+    /* 0x14 */ s32           csCamId;
+    /* 0x18 */ u16           unk_18;
+    /* 0x1A */ u8            unk_1A;
+    /* 0x1B */ u8            unk_1B;
     /* 0x1C */ CutsceneCameraPoint* cameraFocus;
     /* 0x20 */ CutsceneCameraPoint* cameraPosition;
     /* 0x24 */ CsCmdActorAction*    playerAction;
