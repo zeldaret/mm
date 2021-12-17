@@ -374,6 +374,7 @@ if args.format == 'csv':
     csv_list = [
         version, timestamp, git_hash, src, total,
         boot, boot_size, code, code_size, ovl, ovl_size,
+        asm, len(non_matching_functions),
     ]
     csv_list += [
         assets, assets_total,
