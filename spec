@@ -473,7 +473,7 @@ beginseg
     include "build/data/code/z_eff_footmark.data.o"
     include "build/src/code/code_800F0390.o"
     include "build/src/code/z_elf_message.o"
-    include "build/src/code/code_800F07C0.o"
+    include "build/src/code/z_en_hy.o"
     include "build/src/code/z_face_reaction.o"
     include "build/src/code/z_env_flags.o"
     include "build/src/code/z_eventmgr.o"
