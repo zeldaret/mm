@@ -86,7 +86,7 @@ typedef enum {
     /* 21 */ OCARINA_SONG_ZELDAS_LULLABY,
     /* 22 */ OCARINA_SONG_SCARECROW,
     /* 23 */ OCARINA_SONG_TERMINA_WALL,
-    /* 24 */ OCARINA_SONG_MAX,
+    /* 24 */ OCARINA_SONG_MAX
 } OcarinaSongId;
 
 typedef enum {

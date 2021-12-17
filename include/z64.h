@@ -1119,7 +1119,7 @@ typedef struct {
 typedef enum {
     QUAKE2_INACTIVE,
     QUAKE2_ACTIVE,
-    QUAKE2_SETUP,
+    QUAKE2_SETUP
 } Quake2State;
 
 typedef struct {

@@ -92,7 +92,7 @@ typedef enum {
     /*      3 */ CS_TEXTBOX_TYPE_3,
     /*      4 */ CS_TEXTBOX_TYPE_BOSSES_REMAINS,
     /*      5 */ CS_TEXTBOX_TYPE_ALL_NORMAL_MASKS,
-    /* 0xFFFF */ CS_TEXTBOX_TYPE_NONE = 0xFFFF,
+    /* 0xFFFF */ CS_TEXTBOX_TYPE_NONE = 0xFFFF
 } CsTextboxType;
 
 typedef struct {
@@ -156,7 +156,7 @@ typedef enum {
     /* 0x135 */ CS_CMD_FADEAMBIENCE,
     /* 0x15E */ CS_CMD_TERMINATOR = 0x15E,
     /* 0x15F */ CS_CMD_15F,
-    /* 0x190 */ CS_CMD_RUMBLE = 0x190,
+    /* 0x190 */ CS_CMD_RUMBLE = 0x190
 } CutsceneCmd;
 
 typedef union CutsceneData {

@@ -934,7 +934,7 @@ s32 Cutscene_CountNormalMasks(void) {
     if (INV_CONTENT(ITEM_MASK_TRUTH) == ITEM_MASK_TRUTH) {
         count++;
     }
-    if (INV_CONTENT(ITEM_MASK_KAFEI) == ITEM_MASK_KAFEI) {
+    if (INV_CONTENT(ITEM_MASK_KAFEIS_MASK) == ITEM_MASK_KAFEIS_MASK) {
         count++;
     }
     if (INV_CONTENT(ITEM_MASK_ALL_NIGHT) == ITEM_MASK_ALL_NIGHT) {
