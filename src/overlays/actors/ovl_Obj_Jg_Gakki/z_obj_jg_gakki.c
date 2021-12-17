@@ -52,7 +52,7 @@ void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
 void ObjJgGakki_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjJgGakki* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void ObjJgGakki_Update(Actor* thisx, GlobalContext* globalCtx) {
