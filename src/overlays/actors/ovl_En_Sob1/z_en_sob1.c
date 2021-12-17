@@ -264,7 +264,7 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
                 return 0x688;
             case PLAYER_MASK_BLAST:
                 return 0x689;
-            case PLAYER_MASK_KAFEI:
+            case PLAYER_MASK_KAFEIS_MASK:
                 return 0x68A;
         }
     } else if (this->shopType == ZORA_SHOP) {

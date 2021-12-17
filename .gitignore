@@ -44,6 +44,7 @@ tools/mips_to_c/
 
 # Docs
 !docs/**/*.png
+!.vscode/extensions.json
 
 # Per-user configuration
 .python-version

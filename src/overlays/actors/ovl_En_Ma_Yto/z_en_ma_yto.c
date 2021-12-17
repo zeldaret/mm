@@ -1140,7 +1140,7 @@ void EnMaYto_DefaultStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
                     this->textId = 0x235E;
                     break;
 
-                case PLAYER_MASK_KAFEI:
+                case PLAYER_MASK_KAFEIS_MASK:
                     EnMaYto_SetFaceExpression(this, 1, 2);
                     Message_StartTextbox(globalCtx, 0x235F, &this->actor);
                     this->textId = 0x235F;
@@ -1198,7 +1198,7 @@ void EnMaYto_DinnerStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
                         this->textId = 0x235E;
                         break;
 
-                    case PLAYER_MASK_KAFEI:
+                    case PLAYER_MASK_KAFEIS_MASK:
                         Message_StartTextbox(globalCtx, 0x235F, &this->actor);
                         this->textId = 0x235F;
                         break;
