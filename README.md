@@ -5,7 +5,7 @@
 [jenkins]: https://jenkins.deco.mp/job/MM/job/master
 [jenkins-badge]: https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.deco.mp%2Fjob%2FMM%2Fjob%2Fmaster
 
-[progress]: https://zelda64.dev/progress.html
+[progress]: https://zelda64.dev/games/mm
 [progress-badge]: https://img.shields.io/endpoint?url=https://zelda64.dev/reports/progress-mm-shield.json
 
 [contributors]: https://github.com/zeldaret/mm/graphs/contributors
