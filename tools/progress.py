@@ -55,19 +55,12 @@ def GetCsvFilelist(version, filelist):
     with open(path, newline='') as f:
         return list(csv.reader(f, delimiter=','))
 
-def GetRemovableSize(mapFileList, functions_to_count):
+def GetRemovableSize(functionSizes, functions_to_count):
     size = 0
 
-    for mapFile in mapFileList:
-        if mapFile["section"] != ".text":
-            continue
-        if not mapFile["name"].startswith("build/src/"):
-            continue
-
-        for symbol in mapFile["symbols"]:
-            symbolName = symbol["name"]
-            if symbolName in functions_to_count:
-                size += symbol["size"]
+    for func in functions_to_count:
+        if func in functionSizes:
+            size += functionSizes[func]
 
     return size
 
@@ -94,6 +87,19 @@ def CalculateMapSizes(mapFileList):
         size = mapFile["size"] - accumulatedSize
         mapFile["symbols"][-1]["size"] = size
     return mapFileList
+
+def GetFunctionSizes(mapFileList):
+    functionSizes = dict()
+
+    for mapFile in mapFileList:
+        if mapFile["section"] != ".text":
+            continue
+
+        for symbol in mapFile["symbols"]:
+            symbolName = symbol["name"]
+            functionSizes[symbolName] = symbol["size"]
+
+    return functionSizes
 
 def CalculateNonNamedAssets(mapFileList, assetsTracker):
     for mapFile in mapFileList:
@@ -239,6 +245,7 @@ for line in map_file:
         mapFileList[-1]["symbols"].append(symbolData)
 
 mapFileList = CalculateMapSizes(mapFileList)
+functionSizes = GetFunctionSizes(mapFileList)
 
 assetsTracker = CalculateNonNamedAssets(mapFileList, assetsTracker)
 
@@ -254,18 +261,18 @@ non_matching_functions_ovl = list(map(lambda x: x.split("/")[-1].split(".")[0], 
 non_matching_functions_code = list(map(lambda x: x.split("/")[-1].split(".")[0], filter(lambda x: "/code/" in x, non_matching_functions)))
 non_matching_functions_boot = list(map(lambda x: x.split("/")[-1].split(".")[0], filter(lambda x: "/boot/" in x, non_matching_functions)))
 
-non_matching_asm_ovl = GetRemovableSize(mapFileList, non_matching_functions_ovl)
-non_matching_asm_code = GetRemovableSize(mapFileList, non_matching_functions_code)
-non_matching_asm_boot = GetRemovableSize(mapFileList, non_matching_functions_boot)
+non_matching_asm_ovl = GetRemovableSize(functionSizes, non_matching_functions_ovl)
+non_matching_asm_code = GetRemovableSize(functionSizes, non_matching_functions_code)
+non_matching_asm_boot = GetRemovableSize(functionSizes, non_matching_functions_boot)
 
 # Calculate Not Attempted
 not_attempted_functions_ovl = list(map(lambda x: x.split("/")[-1].split(".")[0], filter(lambda x: "/overlays/" in x, not_attempted_functions)))
 not_attempted_functions_code = list(map(lambda x: x.split("/")[-1].split(".")[0], filter(lambda x: "/code/" in x, not_attempted_functions)))
 not_attempted_functions_boot = list(map(lambda x: x.split("/")[-1].split(".")[0], filter(lambda x: "/boot/" in x, not_attempted_functions)))
 
-not_attempted_asm_ovl = GetRemovableSize(mapFileList, not_attempted_functions_ovl)
-not_attempted_asm_code = GetRemovableSize(mapFileList, not_attempted_functions_code)
-not_attempted_asm_boot = GetRemovableSize(mapFileList, not_attempted_functions_boot)
+not_attempted_asm_ovl = GetRemovableSize(functionSizes, not_attempted_functions_ovl)
+not_attempted_asm_code = GetRemovableSize(functionSizes, not_attempted_functions_code)
+not_attempted_asm_boot = GetRemovableSize(functionSizes, not_attempted_functions_boot)
 
 # All the non matching asm is the sum of non-matching code
 non_matching_asm = non_matching_asm_ovl + non_matching_asm_code + non_matching_asm_boot
