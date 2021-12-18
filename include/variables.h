@@ -3217,7 +3217,7 @@ extern GameInfo* gGameInfo;
 // extern UNK_TYPE1 D_801F48C8;
 
 extern UNK_TYPE D_801F4DDC;
-extern s8 D_801F4DE0;
+extern u8 D_801F4DE0;
 extern s16 D_801F4DE2;
 
 extern ActorCutscene* actorCutscenes;
@@ -3242,7 +3242,7 @@ extern u8 D_801F4E30;
 // extern UNK_TYPE1 D_801F4E5C;
 // extern UNK_TYPE1 D_801F4E60;
 // extern UNK_TYPE1 D_801F4E64;
-extern s8 D_801F4E68;
+extern u8 D_801F4E68;
 extern f32 D_801F4E70;
 // extern UNK_TYPE1 D_801F4E74;
 extern u16 D_801F4E78;
