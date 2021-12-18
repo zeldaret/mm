@@ -90,7 +90,7 @@ void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x932; // "[...] So you liked my Magic Beans [...]"
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnMs_Talk;
     } else if ((this->actor.xzDistToPlayer < 90.0f) && (ABS_ALT(yawDiff) < 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 90.0f);
@@ -157,7 +157,7 @@ void EnMs_Sell(EnMs* this, GlobalContext* globalCtx) {
 }
 
 void EnMs_TalkAfterPurchase(EnMs* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80151938(globalCtx, 0x936); // "You can plant 'em whenever you want [...]"
         this->actionFunc = EnMs_Talk;
     } else {
