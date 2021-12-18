@@ -112,47 +112,47 @@ void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD08B0.s")
-s32 func_80AD08B0(GlobalContext* arg0) {
-    switch (Player_GetMask(arg0)) {
-    case 11:
+s32 func_80AD08B0(GlobalContext* globalCtx) {
+    switch (Player_GetMask(globalCtx)) {
+    case PLAYER_MASK_GREAT_FAIRY:
         return 0x1FD6;
-    case 12:
+    case PLAYER_MASK_GIBDO:
         return 0x1FD8;
-    case 1:
+    case PLAYER_MASK_TRUTH:
         return 0x1FDA;
-    case 20:
+    case PLAYER_MASK_GIANT:
         return 0x1FDC;
-    case 2:
+    case PLAYER_MASK_KAFEI:
         return 0x1FDE;
-    case 13:
+    case PLAYER_MASK_DON_GERO:
         return 0x1FE0;
-    case 18:
+    case PLAYER_MASK_BLAST:
         return 0x1FE2;
-    case 10:
+    case PLAYER_MASK_COUPLE:
         return 0x1FE4;
-    case 19:
+    case PLAYER_MASK_SCENTS:
         return 0x1FE6;
-    case 14:
+    case PLAYER_MASK_KAMARO:
         return 0x1FE8;
-    case 16:
+    case PLAYER_MASK_STONE:
         return 0x1FEA;
-    case 9:
+    case PLAYER_MASK_POSTMAN:
         return 0x1FEC;
-    case 4:
+    case PLAYER_MASK_BUNNY:
         return 0x1FEE;
-    case 15:
+    case PLAYER_MASK_CAPTAIN:
         return 0x1FF0;
-    case 17:
+    case PLAYER_MASK_BREMEN:
         return 0x1FF2;
-    case 8:
+    case PLAYER_MASK_CIRCUS_LEADER:
         return 0x1FF4;
-    case 5:
+    case PLAYER_MASK_KEATON:
         return 0x1FF6;
-    case 6:
+    case PLAYER_MASK_GARO:
         return 0x1FF8;
-    case 3:
+    case PLAYER_MASK_ALL_NIGHT:
         return 0x1FFA;
-    case 7:
+    case PLAYER_MASK_ROMANI:
         return 0x1FFC;
     default:
         return 0;
@@ -160,15 +160,15 @@ s32 func_80AD08B0(GlobalContext* arg0) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0998.s")
-void func_80AD0998(EnOsn* arg0) {
+void func_80AD0998(EnOsn* this) {
     s16 sp1E;
     s16 new_var;
 
-    sp1E = (s16)arg0->anime.curFrame;
-    new_var = Animation_GetLastFrame((&D_80AD22C0)[arg0->unk_1EC].animation);
-    if ((arg0->unk_1EC == 0x12) && (sp1E == new_var)) {
-        arg0->unk_1EC = 0x13;
-        func_800BDC5C(&arg0->anime, (ActorAnimationEntry*)&D_80AD22C0, 0x13);
+    sp1E = (s16)this->anime.curFrame;
+    new_var = Animation_GetLastFrame((&D_80AD22C0)[this->unk_1EC].animation);
+    if ((this->unk_1EC == 0x12) && (sp1E == new_var)) {
+        this->unk_1EC = 0x13;
+        func_800BDC5C(&this->anime, (ActorAnimationEntry*)&D_80AD22C0, 0x13);
     }
 }
 
@@ -202,132 +202,132 @@ void func_80AD0AB0(EnOsn* this) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0B38.s")
-s32 func_80AD0B38(EnOsn* arg0, GlobalContext* arg1) {
-    switch (Player_GetMask(arg1)) {
+s32 func_80AD0B38(EnOsn* this, GlobalContext* globalCtx) {
+    switch (Player_GetMask(globalCtx)) {
         case 11:
-            if ((arg0->unk_1F8 & 1) == 0) {
-                arg0->unk_1F8 |= 1;
+            if ((this->unk_1F8 & 1) == 0) {
+                this->unk_1F8 |= 1;
                 return 0x1FD1U;
             }
             break;
         case 12:
-            if ((arg0->unk_1F8 & 2) == 0) {
-                arg0->unk_1F8 |= 2;
+            if ((this->unk_1F8 & 2) == 0) {
+                this->unk_1F8 |= 2;
                 return 0x1FD1U;
             }
             break;
         case 1:
-            if ((arg0->unk_1F8 & 4) == 0) {
-                arg0->unk_1F8 |= 4;
+            if ((this->unk_1F8 & 4) == 0) {
+                this->unk_1F8 |= 4;
                 return 0x1FD1U;
             }
             break;
         case 20:
-            if ((arg0->unk_1F8 & 8) == 0) {
-                arg0->unk_1F8 |= 8;
+            if ((this->unk_1F8 & 8) == 0) {
+                this->unk_1F8 |= 8;
                 return 0x1FD1U;
             }
             break;
         case 2:
-            if ((arg0->unk_1F8 & 0x10) == 0) {
-                arg0->unk_1F8 |= 0x10;
+            if ((this->unk_1F8 & 0x10) == 0) {
+                this->unk_1F8 |= 0x10;
                 return 0x1FD1U;
             }
             break;
         case 13:
-            if ((arg0->unk_1F8 & 0x20) == 0) {
-                arg0->unk_1F8 |= 0x20;
+            if ((this->unk_1F8 & 0x20) == 0) {
+                this->unk_1F8 |= 0x20;
                 return 0x1FD1U;
             }
             break;
         case 18:
-            if ((arg0->unk_1F8 & 0x40) == 0) {
-                arg0->unk_1F8 |= 0x40;
+            if ((this->unk_1F8 & 0x40) == 0) {
+                this->unk_1F8 |= 0x40;
                 return 0x1FD1U;
             }
             break;
         case 10:
-            if ((arg0->unk_1F8 & 0x80) == 0) {
-                arg0->unk_1F8 |= 0x80;
+            if ((this->unk_1F8 & 0x80) == 0) {
+                this->unk_1F8 |= 0x80;
                 return 0x1FD1U;
             }
             break;
         case 19:
-            if ((arg0->unk_1F8 & 0x100) == 0) {
-                arg0->unk_1F8 |= 0x100;
+            if ((this->unk_1F8 & 0x100) == 0) {
+                this->unk_1F8 |= 0x100;
                 return 0x1FD1U;
             }
             break;
         case 14:
-            if ((arg0->unk_1F8 & 0x200) == 0) {
-                arg0->unk_1F8 |= 0x200;
+            if ((this->unk_1F8 & 0x200) == 0) {
+                this->unk_1F8 |= 0x200;
                 return 0x1FD1U;
             }
             break;
         case 16:
-            if ((arg0->unk_1F8 & 0x400) == 0) {
-                arg0->unk_1F8 |= 0x400;
+            if ((this->unk_1F8 & 0x400) == 0) {
+                this->unk_1F8 |= 0x400;
                 return 0x1FD1U;
             }
             break;
         case 9:
-            if ((arg0->unk_1F8 & 0x800) == 0) {
-                arg0->unk_1F8 |= 0x800;
+            if ((this->unk_1F8 & 0x800) == 0) {
+                this->unk_1F8 |= 0x800;
                 return 0x1FD2U;
             }
             break;
         case 4:
-            if ((arg0->unk_1F8 & 0x1000) == 0) {
-                arg0->unk_1F8 |= 0x1000;
+            if ((this->unk_1F8 & 0x1000) == 0) {
+                this->unk_1F8 |= 0x1000;
                 return 0x1FD2U;
             }
             break;
         case 15:
-            if ((arg0->unk_1F8 & 0x2000) == 0) {
-                arg0->unk_1F8 |= 0x2000;
+            if ((this->unk_1F8 & 0x2000) == 0) {
+                this->unk_1F8 |= 0x2000;
                 return 0x1FD1U;
             }
             break;
         case 17:
-            if ((arg0->unk_1F8 & 0x4000) == 0) {
-                arg0->unk_1F8 |= 0x4000;
+            if ((this->unk_1F8 & 0x4000) == 0) {
+                this->unk_1F8 |= 0x4000;
                 return 0x1FD1U;
             }
             break;
         case 8:
-            if ((arg0->unk_1F8 & 0x8000) == 0) {
-                arg0->unk_1F8 |= 0x8000;
+            if ((this->unk_1F8 & 0x8000) == 0) {
+                this->unk_1F8 |= 0x8000;
                 return 0x1FD1U;
             }
             break;
         case 5:
-            if ((arg0->unk_1F8 & 0x10000) == 0) {
-                arg0->unk_1F8 |= 0x10000;
+            if ((this->unk_1F8 & 0x10000) == 0) {
+                this->unk_1F8 |= 0x10000;
                 return 0x1FD1U;
             }
             break;
         case 6:
-            if ((arg0->unk_1F8 & 0x20000) == 0) {
-                arg0->unk_1F8 |= 0x20000;
+            if ((this->unk_1F8 & 0x20000) == 0) {
+                this->unk_1F8 |= 0x20000;
                 return 0x1FD1U;
             }
             break;
         case 3:
-            if ((arg0->unk_1F8 & 0x40000) == 0) {
-                arg0->unk_1F8 |= 0x40000;
+            if ((this->unk_1F8 & 0x40000) == 0) {
+                this->unk_1F8 |= 0x40000;
                 return 0x1FD1U;
             }
             break;
         case 7:
-            if ((arg0->unk_1F8 & 0x80000) == 0) {
-                arg0->unk_1F8 |= 0x80000;
+            if ((this->unk_1F8 & 0x80000) == 0) {
+                this->unk_1F8 |= 0x80000;
                 return 0x1FD1U;
             }
             break;
         default:
             break;
     }
-    arg0->unk_1EA |= 0x20;
+    this->unk_1EA |= 0x20;
     if (gSaveContext.day == 3 && ((gSaveContext.time >= 0x3555)) && gSaveContext.time < 0x4000) {
         return 0x2006U;
     }
@@ -419,7 +419,7 @@ s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD10FC.s")
-void func_80AD10FC(EnOsn *this, GlobalContext *arg1)
+void func_80AD10FC(EnOsn *this, GlobalContext *globalCtx)
 {
   switch (this->unk_1F4)
   {
@@ -462,7 +462,7 @@ void func_80AD10FC(EnOsn *this, GlobalContext *arg1)
     case 0x1FD1:
 
     case 0x1FD2:
-      this->unk_1F4 = func_80AD08B0(arg1);
+      this->unk_1F4 = func_80AD08B0(globalCtx);
       break;
 
     case 0x1FD6:
@@ -601,17 +601,17 @@ void func_80AD10FC(EnOsn *this, GlobalContext *arg1)
 
   }
 
-  func_801518B0(arg1, this->unk_1F4, &this->actor);
+  func_801518B0(globalCtx, this->unk_1F4, &this->actor);
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD1398.s")
-void func_80AD1398(EnOsn* arg0) {
-    arg0->cutscene = (s16)arg0->actor.cutscene;
+void func_80AD1398(EnOsn* this) {
+    this->cutscene = (s16)this->actor.cutscene;
     if (((gSaveContext.inventory.items[0] == 0xFF) || (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32)) &&
-        ((arg0 = arg0, arg0->cutscene = ActorCutscene_GetAdditionalCutscene(arg0->cutscene),
+        ((this = this, this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene),
           (gSaveContext.inventory.items[0] != 0xFF)) ||
          (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32))) {
-        arg0->cutscene = ActorCutscene_GetAdditionalCutscene(arg0->cutscene);
+        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
     }
 }
 
