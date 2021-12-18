@@ -143,7 +143,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     }
                     break;
                 case PLAYER_FORM_HUMAN:
-                    if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEI) {
+                    if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
                         this->textId = 0x236A;
                     } else if (gSaveContext.weekEventReg[74] & 0x10) {
                         this->textId = 0x5F6;
