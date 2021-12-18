@@ -312,7 +312,7 @@ beginseg
     name "icon_item_gameover_static"
     compress
     romalign 0x1000
-    include "build/assets/static/icon_item_gameover_static/icon_item_gameover_static.o"
+    include "build/assets/interface/icon_item_gameover_static/icon_item_gameover_static.o"
     number 12
 endseg
 
@@ -8835,7 +8835,7 @@ beginseg
     name "nintendo_rogo_static"
     compress
     romalign 0x1000
-    include "build/assets/static/nintendo_rogo_static/nintendo_rogo_static.o"
+    include "build/assets/misc/nintendo_rogo_static/nintendo_rogo_static.o"
     number 1
 endseg
 
@@ -8879,7 +8879,7 @@ beginseg
     name "daytelop_static"
     compress
     romalign 0x1000
-    include "build/assets/static/daytelop_static/daytelop_static.o"
+    include "build/assets/misc/daytelop_static/daytelop_static.o"
     number 9
 endseg
 
@@ -8887,7 +8887,7 @@ beginseg
     name "ger_daytelop_static"
     compress
     romalign 0x1000
-    include "build/assets/static/ger_daytelop_static/ger_daytelop_static.o"
+    include "build/assets/misc/ger_daytelop_static/ger_daytelop_static.o"
     number 9
 endseg
 
@@ -8895,7 +8895,7 @@ beginseg
     name "fra_daytelop_static"
     compress
     romalign 0x1000
-    include "build/assets/static/fra_daytelop_static/fra_daytelop_static.o"
+    include "build/assets/misc/fra_daytelop_static/fra_daytelop_static.o"
     number 9
 endseg
 
@@ -8903,7 +8903,7 @@ beginseg
     name "esp_daytelop_static"
     compress
     romalign 0x1000
-    include "build/assets/static/esp_daytelop_static/esp_daytelop_static.o"
+    include "build/assets/misc/esp_daytelop_static/esp_daytelop_static.o"
     number 9
 endseg
 
