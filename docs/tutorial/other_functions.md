@@ -116,11 +116,11 @@ void func_80C1019C(EnRecepgirl *this, GlobalContext *globalCtx) {
             Animation_ChangeTransitionRepeat(temp_a0, &D_06009890, -4.0f);
         }
     }
-    if (func_800B84D0((Actor *) this, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest((Actor *) this, globalCtx) != 0) {
         func_80C10290(this);
         return;
     }
-    if (Actor_IsActorFacingLink((Actor *) this, 0x2000) != 0) {
+    if (Actor_IsFacingPlayer((Actor *) this, 0x2000) != 0) {
         func_800B8614((Actor *) this, globalCtx, 60.0f);
         if (Player_GetMask(globalCtx) == 2) {
             this->actor.textId = 0x2367;
@@ -168,11 +168,11 @@ void func_80C1019C(EnRecepgirl *this, GlobalContext *globalCtx) {
             Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
         }
     }
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, globalCtx) != 0) {
         func_80C10290(this);
         return;
     }
-    if (Actor_IsActorFacingLink(&this->actor, 0x2000) != 0) {
+    if (Actor_IsFacingPlayer(&this->actor, 0x2000) != 0) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
         if (Player_GetMask(globalCtx) == 2) {
             this->actor.textId = 0x2367;
@@ -203,9 +203,9 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, globalCtx) != 0) {
         func_80C10290(this);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2000)) {
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
         if (Player_GetMask(globalCtx) == 2) {
             this->actor.textId = 0x2367;
@@ -282,7 +282,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
             Animation_MorphToPlayOnce(sp20, &D_0600A280, -4.0f);
         }
     }
-    temp_v0_2 = func_80152498(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC;
         func_80C10148(this);
@@ -291,7 +291,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
     if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
         temp_v0_3 = this->actor.textId;
         if (temp_v0_3 == 0x2AD9) {
-            Actor_SetSwitchFlag(globalCtx, (s32) this->actor.params);
+            Flags_SetSwitch(globalCtx, (s32) this->actor.params);
             Animation_MorphToPlayOnce(sp20, &D_0600AD98, 10.0f);
             if ((*(&gSaveContext + 0xF37) & 0x80) != 0) {
                 this->actor.textId = 0x2ADF;
@@ -340,7 +340,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         }
     }
 
-    temp_v0_2 = func_80152498(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC;
         func_80C10148(this);
@@ -349,7 +349,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
 
     if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) {
-            Actor_SetSwitchFlag(globalCtx, this->actor.params);
+            Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
             if ((*(&gSaveContext + 0xF37) & 0x80) != 0) {
                 this->actor.textId = 0x2ADF;
@@ -390,7 +390,7 @@ The yellow shows registers that don't match, the different colours on the regist
 ```
 somehow we skipped over `t0`. Where is this in the code? The `153` in the middle is the line number in the C file (the `3f0`s are the offsets into the assembly file), we have `--source` if you want to see the code explicitly, or you can do it the old-fashioned way, and work it out from nearby function calls. In this case, `func_80C10148` is run straight after, and the only place that is called is
 ```C
-    temp_v0_2 = func_80152498(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC;
         func_80C10148(this);
