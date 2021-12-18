@@ -312,7 +312,7 @@ beginseg
     name "icon_item_gameover_static"
     compress
     romalign 0x1000
-    include "build/assets/static/icon_item_gameover_static/icon_item_gameover_static.o"
+    include "build/assets/interface/icon_item_gameover_static/icon_item_gameover_static.o"
     number 12
 endseg
 
@@ -1627,8 +1627,7 @@ beginseg
     name "ovl_En_Ms"
     compress
     include "build/src/overlays/actors/ovl_En_Ms/z_en_ms.o"
-    include "build/data/ovl_En_Ms/ovl_En_Ms.data.o"
-    include "build/data/ovl_En_Ms/ovl_En_Ms.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ms/ovl_En_Ms_reloc.o"
 endseg
 
 beginseg
@@ -4457,8 +4456,7 @@ beginseg
     name "ovl_Obj_Tree"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o"
-    include "build/data/ovl_Obj_Tree/ovl_Obj_Tree.data.o"
-    include "build/data/ovl_Obj_Tree/ovl_Obj_Tree.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Tree/ovl_Obj_Tree_reloc.o"
 endseg
 
 beginseg
@@ -5264,8 +5262,7 @@ beginseg
     name "ovl_En_Recepgirl"
     compress
     include "build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
-    include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.o"
-    include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Recepgirl/ovl_En_Recepgirl_reloc.o"
 endseg
 
 beginseg
@@ -8838,7 +8835,7 @@ beginseg
     name "nintendo_rogo_static"
     compress
     romalign 0x1000
-    include "build/assets/static/nintendo_rogo_static/nintendo_rogo_static.o"
+    include "build/assets/misc/nintendo_rogo_static/nintendo_rogo_static.o"
     number 1
 endseg
 
@@ -8882,7 +8879,7 @@ beginseg
     name "daytelop_static"
     compress
     romalign 0x1000
-    include "build/assets/static/daytelop_static/daytelop_static.o"
+    include "build/assets/misc/daytelop_static/daytelop_static.o"
     number 9
 endseg
 
@@ -8890,7 +8887,7 @@ beginseg
     name "ger_daytelop_static"
     compress
     romalign 0x1000
-    include "build/assets/static/ger_daytelop_static/ger_daytelop_static.o"
+    include "build/assets/misc/ger_daytelop_static/ger_daytelop_static.o"
     number 9
 endseg
 
@@ -8898,7 +8895,7 @@ beginseg
     name "fra_daytelop_static"
     compress
     romalign 0x1000
-    include "build/assets/static/fra_daytelop_static/fra_daytelop_static.o"
+    include "build/assets/misc/fra_daytelop_static/fra_daytelop_static.o"
     number 9
 endseg
 
@@ -8906,7 +8903,7 @@ beginseg
     name "esp_daytelop_static"
     compress
     romalign 0x1000
-    include "build/assets/static/esp_daytelop_static/esp_daytelop_static.o"
+    include "build/assets/misc/esp_daytelop_static/esp_daytelop_static.o"
     number 9
 endseg
 
