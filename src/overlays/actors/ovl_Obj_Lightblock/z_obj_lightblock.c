@@ -110,7 +110,7 @@ void ObjLightblock_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjLightblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjLightblock* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
