@@ -1,4 +1,4 @@
-/* 
+/*
  * File: sys_ucode.c
  * Description: Functions for obtaining locations and sizes of microcode
  */
