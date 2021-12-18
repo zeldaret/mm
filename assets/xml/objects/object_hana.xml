@@ -1,7 +1,6 @@
 ﻿<Root>
     <File Name="object_hana" Segment="6">
-        <!-- <Blob Name="object_hana_Blob_000000" Size="0x8" Offset="0x0" /> -->
-        <DList Name="object_hana_DL_000008" Offset="0x8" />
+        <DList Name="object_hana_DL_000000" Offset="0x0" />
         <DList Name="object_hana_DL_0000A0" Offset="0xA0" />
         <DList Name="object_hana_DL_000140" Offset="0x140" />
         <DList Name="object_hana_DL_0001E0" Offset="0x1E0" />

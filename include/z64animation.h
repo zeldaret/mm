@@ -41,6 +41,7 @@ typedef struct {
                                // far model display list.
 } StandardLimb; // size = 0xC
 
+// Model has limbs with only rigid meshes
 typedef struct {
     /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
     /* 0x06 */ u8 child;
@@ -55,14 +56,6 @@ typedef struct {
     /* 0x08 */ s32 unk_8; // Type of data contained in segment
     /* 0x0C */ void* segment; // Segment address of data. Currently unclear what.
 } SkinLimb; // size = 0x10
-
-// Model has limbs with only rigid meshes
-typedef struct {
-    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
-    /* 0x06 */ u8 child;
-    /* 0x07 */ u8 sibling;
-    /* 0x08 */ Gfx* dLists[2]; // Near and far
-} LodLimb; // size = 0x10
 
 // Model has limbs with only rigid meshes
 typedef struct {
