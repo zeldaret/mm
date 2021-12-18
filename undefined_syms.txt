@@ -127,6 +127,10 @@ D_A4800018 = 0xA4800018; // SI_STATUS_REG
 gFramebuffer1 = 0x80000500;
 D_80025D00 = 0x80025D00;
 
+// Ucode symbols
+rspBootTextEnd = 0x160;
+rspBootTextEnd = rspBootTextStart + rspBootTextSize;
+
 // Segmented Addresses
 
 // segment 0x01
