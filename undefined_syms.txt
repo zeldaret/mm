@@ -128,8 +128,9 @@ gFramebuffer1 = 0x80000500;
 D_80025D00 = 0x80025D00;
 
 // Ucode symbols
-rspBootTextEnd = 0x160;
-rspBootTextEnd = rspBootTextStart + rspBootTextSize;
+
+rspbootTextSize = 0x160;
+rspbootTextEnd = rspbootTextStart + rspbootTextSize;
 
 // Segmented Addresses
 
