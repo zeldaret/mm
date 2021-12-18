@@ -48,7 +48,7 @@ void SetActorList::DeclareReferencesLate(const std::string& prefix)
 	if (actors.empty())
 		return;
 
-	std::string declaration = "";
+	std::string declaration;
 
 	size_t largestlength = 0;
 	for (const auto& entry : actors)
@@ -72,19 +72,16 @@ void SetActorList::DeclareReferencesLate(const std::string& prefix)
 
 	const auto& entry = actors.front();
 
-	DeclarationPadding padding = DeclarationPadding::Pad16;
-	if (Globals::Instance->game == ZGame::MM_RETAIL)
-		padding = DeclarationPadding::None;
-
 	std::string varName = StringHelper::Sprintf("%sActorList_%06X", prefix.c_str(), segmentOffset);
-	parent->AddDeclarationArray(segmentOffset, DeclarationAlignment::Align4, padding,
+	parent->AddDeclarationArray(segmentOffset, DeclarationAlignment::Align4,
 	                            actors.size() * entry.GetRawDataSize(), entry.GetSourceTypeName(),
 	                            varName, GetActorListArraySize(), declaration);
 }
 
 std::string SetActorList::GetBodySourceCode() const
 {
-	std::string listName = parent->GetDeclarationPtrName(cmdArg2);
+	std::string listName;
+	Globals::Instance->GetSegmentedPtrName(cmdArg2, parent, "ActorEntry", listName);
 	if (numActors != actors.size())
 	{
 		printf("%s: numActors(%i) ~ actors(%li)\n", parent->GetName().c_str(), numActors,
@@ -140,7 +137,7 @@ ActorSpawnEntry::ActorSpawnEntry(const std::vector<uint8_t>& rawData, uint32_t r
 
 std::string ActorSpawnEntry::GetBodySourceCode() const
 {
-	std::string body = "";
+	std::string body;
 
 	std::string actorNameFmt = StringHelper::Sprintf("%%-%zus ", largestActorName + 1);
 	body =

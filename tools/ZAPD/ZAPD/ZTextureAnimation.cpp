@@ -2,8 +2,8 @@
  * File: ZTextureAnimation.cpp
  * ZResources defined: ZTextureAnimation, ZTextureAnimationParams (XML declaration not supported for
  * the latter)
- * Purpose: extracting texture animating structures from asset files Note: data type is exclusive to
- * Majora's Mask
+ * Purpose: extracting texture animating structures from asset files
+ * Note: data type is exclusive to Majora's Mask
  *
  * Structure of data:
  * A texture animation consists of a main array of data of the form
@@ -75,11 +75,14 @@
  * Each of these will declare all its subsidiary arrays, using POD structs.
  */
 #include "ZTextureAnimation.h"
+
 #include <cassert>
 #include <memory>
 #include <vector>
+
 #include "Globals.h"
 #include "Utils/BitConverter.h"
+#include "WarningHandler.h"
 #include "ZFile.h"
 #include "ZResource.h"
 #include "tinyxml2.h"
@@ -113,7 +116,7 @@ void ZTextureAnimationParams::ExtractFromBinary(uint32_t nRawDataIndex)
 	ParseRawData();
 }
 
-// Implemented by TextureScrollingParams only[
+// Implemented by TextureScrollingParams only
 void ZTextureAnimationParams::ExtractFromBinary([[maybe_unused]] uint32_t nRawDataIndex,
                                                 [[maybe_unused]] int count)
 {
@@ -123,32 +126,6 @@ std::string
 ZTextureAnimationParams::GetDefaultName([[maybe_unused]] const std::string& prefix) const
 {
 	return "ShouldNotBeVIsible";
-}
-
-void ZTextureAnimationParams::DeclareVar(const std::string& prefix,
-                                         const std::string& bodyStr) const
-{
-	std::string auxName = name;
-
-	if (name == "")
-		auxName = GetDefaultName(prefix);
-
-	parent->AddDeclaration(rawDataIndex, DeclarationAlignment::Align4, GetRawDataSize(),
-	                       GetSourceTypeName(), auxName, bodyStr);
-}
-
-std::string ZTextureAnimationParams::GetSourceOutputCode(const std::string& prefix)
-{
-	std::string bodyStr = GetBodySourceCode();
-
-	Declaration* decl = parent->GetDeclaration(rawDataIndex);
-
-	if (decl == nullptr)
-		DeclareVar(prefix, bodyStr);
-	else
-		decl->text = bodyStr;
-
-	return "";
 }
 
 ZResourceType ZTextureAnimationParams::GetResourceType() const
@@ -197,24 +174,25 @@ size_t TextureScrollingParams::GetRawDataSize() const
 /**
  * Overrides the parent version to declare an array of the params rather than just one entry.
  */
-void TextureScrollingParams::DeclareVar(const std::string& prefix, const std::string& bodyStr) const
+Declaration* TextureScrollingParams::DeclareVar(const std::string& prefix,
+                                                const std::string& bodyStr)
 {
 	std::string auxName = name;
 
 	if (name == "")
 		auxName = GetDefaultName(prefix);
 
-	parent->AddDeclarationArray(rawDataIndex, DeclarationAlignment::Align4, GetRawDataSize(),
-	                            GetSourceTypeName(), auxName, count, bodyStr);
+	return parent->AddDeclarationArray(rawDataIndex, GetDeclarationAlignment(), GetRawDataSize(),
+	                                   GetSourceTypeName(), auxName, count, bodyStr);
 }
 
 std::string TextureScrollingParams::GetBodySourceCode() const
 {
-	std::string bodyStr = "";
+	std::string bodyStr;
 
 	for (int i = 0; i < count; i++)
 	{
-		bodyStr += StringHelper::Sprintf("    { %d, %d, 0x%02X, 0x%02X },\n", rows[i].xStep,
+		bodyStr += StringHelper::Sprintf("\t{ %d, %d, 0x%02X, 0x%02X },\n", rows[i].xStep,
 		                                 rows[i].yStep, rows[i].width, rows[i].height);
 	}
 
@@ -240,19 +218,8 @@ void TextureColorChangingParams::ParseRawData()
 		((type == TextureAnimationParamsType::ColorChange) ? animLength : colorListCount);
 
 	if (listLength == 0)
-		throw std::runtime_error(StringHelper::Sprintf(
-			"When processing file %s: in input binary file %s, offset 0x%06X:"
-			"\n\t"
-			"\033[97m"
-			"TextureColorChangingParams::ParseRawData:"
-			"\033[0m"
-			"\033[91m"
-			" error: "
-			"\033[0m"
-			"\033[97m"
-			"color list length cannot be 0\n"
-			"\033[0m",
-			Globals::Instance->inputPath.c_str(), parent->GetName().c_str(), rawDataIndex));
+		HANDLE_ERROR_RESOURCE(WarningType::Always, parent, this, rawDataIndex,
+		                      "color list length cannot be 0", "");
 
 	primColorListAddress = BitConverter::ToUInt32BE(rawData, rawDataIndex + 4);
 	envColorListAddress = BitConverter::ToUInt32BE(rawData, rawDataIndex + 8);
@@ -318,11 +285,11 @@ void TextureColorChangingParams::DeclareReferences([[maybe_unused]] const std::s
 {
 	if (primColorListAddress != 0)  // NULL
 	{
-		std::string primColorBodyStr = "";
+		std::string primColorBodyStr;
 
 		for (const auto& color : primColorList)
 		{
-			primColorBodyStr += StringHelper::Sprintf("    { %d, %d, %d, %d, %d },\n", color.r,
+			primColorBodyStr += StringHelper::Sprintf("\t{ %d, %d, %d, %d, %d },\n", color.r,
 			                                          color.g, color.b, color.a, color.lodFrac);
 		}
 
@@ -338,11 +305,11 @@ void TextureColorChangingParams::DeclareReferences([[maybe_unused]] const std::s
 
 	if (envColorListAddress != 0)  // NULL
 	{
-		std::string envColorBodyStr = "";
+		std::string envColorBodyStr;
 
 		for (const auto& color : envColorList)
 		{
-			envColorBodyStr += StringHelper::Sprintf("    { %d, %d, %d, %d },\n", color.r, color.g,
+			envColorBodyStr += StringHelper::Sprintf("\t{ %d, %d, %d, %d },\n", color.r, color.g,
 			                                         color.b, color.a);
 		}
 
@@ -358,7 +325,7 @@ void TextureColorChangingParams::DeclareReferences([[maybe_unused]] const std::s
 
 	if (frameDataListAddress != 0)  // NULL
 	{
-		std::string frameDataBodyStr = "    ";
+		std::string frameDataBodyStr = "\t";
 
 		for (const auto& frame : frameDataList)
 		{
@@ -378,11 +345,17 @@ void TextureColorChangingParams::DeclareReferences([[maybe_unused]] const std::s
 
 std::string TextureColorChangingParams::GetBodySourceCode() const
 {
-	std::string bodyStr =
-		StringHelper::Sprintf("\n    %d, %d, %s, %s, %s,\n", animLength, colorListCount,
-	                          parent->GetDeclarationPtrName(primColorListAddress).c_str(),
-	                          parent->GetDeclarationPtrName(envColorListAddress).c_str(),
-	                          parent->GetDeclarationPtrName(frameDataListAddress).c_str());
+	std::string primColorListName;
+	std::string envColorListName;
+	std::string frameDataListName;
+
+	Globals::Instance->GetSegmentedPtrName(primColorListAddress, parent, "", primColorListName);
+	Globals::Instance->GetSegmentedPtrName(envColorListAddress, parent, "", envColorListName);
+	Globals::Instance->GetSegmentedPtrName(frameDataListAddress, parent, "", frameDataListName);
+
+	std::string bodyStr = StringHelper::Sprintf(
+		"\n    %d, %d, %s, %s, %s,\n", animLength, colorListCount, primColorListName.c_str(),
+		envColorListName.c_str(), frameDataListName.c_str());
 
 	return bodyStr;
 }
@@ -395,20 +368,8 @@ void TextureCyclingParams::ParseRawData()
 
 	cycleLength = BitConverter::ToUInt16BE(rawData, rawDataIndex);
 	if (cycleLength == 0)
-		throw std::runtime_error(
-			StringHelper::Sprintf("When processing file %s: in input binary file %s, offset 0x%06X:"
-		                          "\n\t"
-		                          "\033[97m"
-		                          "TextureCyclingParams::ParseRawData:"
-		                          "\033[0m"
-		                          "\033[91m"
-		                          " error: "
-		                          "\033[0m"
-		                          "\033[97m"
-		                          "cycleLength cannot be 0\n"
-		                          "\033[0m",
-		                          Globals::Instance->inputPath.c_str(), parent->GetName().c_str(),
-		                          Seg2Filespace(rawDataIndex, 0)));
+		HANDLE_ERROR_RESOURCE(WarningType::Always, parent, this, rawDataIndex,
+		                      "cycle length cannot be 0", "");
 
 	textureListAddress = BitConverter::ToUInt32BE(rawData, rawDataIndex + 4);
 	textureIndexListAddress = BitConverter::ToUInt32BE(rawData, rawDataIndex + 8);
@@ -456,39 +417,29 @@ void TextureCyclingParams::DeclareReferences([[maybe_unused]] const std::string&
 {
 	if (textureListAddress != 0)  // NULL
 	{
-		std::string texturesBodyStr = "";
+		std::string texturesBodyStr;
 		std::string texName;
-		std::string comment = "";
+		std::string comment;
 
 		for (const auto& tex : textureList)
 		{
-			texName = parent->GetDeclarationPtrName(tex);
+			bool texFound = Globals::Instance->GetSegmentedPtrName(tex, parent, "", texName);
 
 			// texName is a raw segmented pointer. This occurs if the texture is not declared
 			// separately since we cannot read the format. In theory we could scan DLists for the
 			// format on the appropriate segments.
-			if (texName.length() == 10 && texName.substr(0, 2) == "0x")
+			if (!texFound)
 			{
 				comment = " // Raw pointer, declare texture in XML to use proper symbol";
 
-				fprintf(stderr,
-				        "When processing file %s: in input binary file %s, offset 0x%06X:"
-				        "\n\t"
-				        "\033[97m"
-				        "TextureCyclingParams::DeclareReferences:"
-				        "\033[0m"
-				        "\033[95m"
-				        " warning: "
-				        "\033[0m"
-				        "\033[97m"
-				        "TexCycle declared here points to unknown texture at address %s. "
-				        "Please declare the texture in the XML to use the proper symbol.\n"
-				        "\033[0m",
-				        Globals::Instance->inputPath.c_str(), parent->GetName().c_str(),
-				        Seg2Filespace(textureListAddress, parent->baseAddress), texName.c_str());
+				auto msgHeader = StringHelper::Sprintf(
+					"TexCycle texture array declared here points to unknown texture at address %s",
+					texName.c_str());
+				HANDLE_WARNING_RESOURCE(
+					WarningType::HardcodedPointer, parent, this, rawDataIndex, msgHeader,
+					"Please declare the texture in the XML to use the proper symbol.");
 			}
-			texturesBodyStr +=
-				StringHelper::Sprintf("    %s,%s\n", texName.c_str(), comment.c_str());
+			texturesBodyStr += StringHelper::Sprintf("\t%s,%s\n", texName.c_str(), comment.c_str());
 		}
 
 		texturesBodyStr.pop_back();
@@ -503,7 +454,7 @@ void TextureCyclingParams::DeclareReferences([[maybe_unused]] const std::string&
 
 	if (textureIndexListAddress != 0)  // NULL
 	{
-		std::string indicesBodyStr = "    ";
+		std::string indicesBodyStr = "\t";
 
 		for (uint8_t index : textureIndexList)
 		{
@@ -523,10 +474,15 @@ void TextureCyclingParams::DeclareReferences([[maybe_unused]] const std::string&
 
 std::string TextureCyclingParams::GetBodySourceCode() const
 {
-	std::string bodyStr =
-		StringHelper::Sprintf("\n    %d, %s, %s,\n", cycleLength,
-	                          parent->GetDeclarationPtrName(textureListAddress).c_str(),
-	                          parent->GetDeclarationPtrName(textureIndexListAddress).c_str());
+	std::string textureListName;
+	std::string textureIndexListName;
+
+	Globals::Instance->GetSegmentedPtrName(textureListAddress, parent, "", textureListName);
+	Globals::Instance->GetSegmentedPtrName(textureIndexListAddress, parent, "",
+	                                       textureIndexListName);
+
+	std::string bodyStr = StringHelper::Sprintf(
+		"\n    %d, %s, %s,\n", cycleLength, textureListName.c_str(), textureIndexListName.c_str());
 
 	return bodyStr;
 }
@@ -535,12 +491,6 @@ std::string TextureCyclingParams::GetBodySourceCode() const
 
 ZTextureAnimation::ZTextureAnimation(ZFile* nParent) : ZResource(nParent)
 {
-}
-
-void ZTextureAnimation::ExtractFromXML(tinyxml2::XMLElement* reader, uint32_t nRawDataIndex)
-{
-	ZResource::ExtractFromXML(reader, nRawDataIndex);
-	DeclareVar("", "");
 }
 
 /**
@@ -565,22 +515,14 @@ void ZTextureAnimation::ParseRawData()
 
 		if ((type < 0) || (type > 6))
 		{
-			throw std::runtime_error(StringHelper::Sprintf(
-				"When processing file %s: in input binary file %s, offset 0x%06X:"
-				"\n\t"
-				"\033[97m"
-				"ZTextureAnimation::ParseRawData:"
-				"\033[0m"
-				"\033[91m"
-				" error: "
-				"\033[0m"
-				"\033[97m"
-				"unknown TextureAnimationParams type 0x%02X in TextureAnimation: entry reads\n\t{ "
-				"0x%02X, 0x%02X, 0x%08X }\n(type should be between "
-				"0x00 and 0x06)\n"
-				"\033[0m",
-				Globals::Instance->inputPath.c_str(), parent->GetName().c_str(), rawDataIndex, type,
-				currentEntry.segment, type, currentEntry.paramsPtr));
+			HANDLE_ERROR_RESOURCE(
+				WarningType::Always, parent, this, rawDataIndex,
+				StringHelper::Sprintf(
+					"unknown TextureAnimationParams type 0x%02X in TextureAnimation", type),
+				StringHelper::Sprintf(
+					"Entry reads  { 0x%02X, 0x%02X, 0x%08X } , but type should be "
+					"between 0x00 and 0x06 inclusive.",
+					currentEntry.segment, type, currentEntry.paramsPtr));
 		}
 
 		if (currentEntry.segment <= 0)
@@ -608,13 +550,24 @@ void ZTextureAnimation::DeclareReferences(const std::string& prefix)
 			if (!parent->HasDeclaration(paramsOffset))
 			{
 				ZTextureAnimationParams* params;
-				int count = 2;
+				int count;
 				switch (entry.type)
 				{
 				case TextureAnimationParamsType::SingleScroll:
-					count = 1;
-					[[fallthrough]];
-				case TextureAnimationParamsType::DualScroll:
+					if (true)
+					{
+						count = 1;
+						// The else now allows SingleScroll to fall through to params = ... without
+						// touching the code in the else block
+					}
+					else
+					{
+						// The contents of this block can only be run by jumping into it with the
+						// case label
+						[[fallthrough]];
+					case TextureAnimationParamsType::DualScroll:
+						count = 2;
+					}
 					params = new TextureScrollingParams(parent);
 					params->ExtractFromBinary(paramsOffset, count);
 					break;
@@ -633,22 +586,12 @@ void ZTextureAnimation::DeclareReferences(const std::string& prefix)
 					break;
 
 				case TextureAnimationParamsType::Empty:
-					fprintf(stderr,
-					        "When processing file %s: in input binary file %s: offset 0x%06X:"
-					        "\n\t"
-					        "\033[97m"
-					        "ZTextureAnimation::DeclareReferences:"
-					        "\033[0m"
-					        "\033[95m"
-					        " warning: "
-					        "\033[0m"
-					        "\033[97m"
-					        "TextureAnimationParams entry has empty type (6), but params pointer "
-					        "is not NULL. Params read\n\t\t"
-					        "{ 0x%02X, 0x%02X, 0x%08X }\n"
-					        "\033[0m",
-					        Globals::Instance->inputPath.c_str(), parent->GetName().c_str(),
-					        rawDataIndex, entry.segment, (int)entry.type, entry.paramsPtr);
+					HANDLE_WARNING_RESOURCE(
+						WarningType::InvalidExtractedData, parent, this, rawDataIndex,
+						"TextureAnimationParams entry has empty type (6), but params pointer is "
+						"not NULL",
+						StringHelper::Sprintf("Params read { 0x%02X, 0x%02X, 0x%08X } .",
+					                          entry.segment, (int)entry.type, entry.paramsPtr));
 					return;
 				default:
 					// Because GCC is worried this could happen
@@ -688,42 +631,34 @@ std::string ZTextureAnimation::GetDefaultName(const std::string& prefix) const
 	return StringHelper::Sprintf("%sTexAnim_%06X", prefix.c_str(), rawDataIndex);
 }
 
-void ZTextureAnimation::DeclareVar(const std::string& prefix, const std::string& bodyStr) const
+Declaration* ZTextureAnimation::DeclareVar(const std::string& prefix, const std::string& bodyStr)
 {
 	std::string auxName = name;
 
 	if (name == "")
 		auxName = GetDefaultName(prefix);
 
-	parent->AddDeclarationArray(rawDataIndex, DeclarationAlignment::Align4, GetRawDataSize(),
-	                            GetSourceTypeName(), auxName, entries.size(), bodyStr);
+	Declaration* decl =
+		parent->AddDeclarationArray(rawDataIndex, GetDeclarationAlignment(), GetRawDataSize(),
+	                                GetSourceTypeName(), auxName, entries.size(), bodyStr);
+	decl->staticConf = staticConf;
+	return decl;
 }
 
 std::string ZTextureAnimation::GetBodySourceCode() const
 {
-	std::string bodyStr = "";
+	std::string bodyStr;
 
 	for (const auto& entry : entries)
 	{
-		bodyStr += StringHelper::Sprintf("    { %d, %d, %s },\n", entry.segment, entry.type,
-		                                 parent->GetDeclarationPtrName(entry.paramsPtr).c_str());
+		std::string paramName;
+		Globals::Instance->GetSegmentedPtrName(entry.paramsPtr, parent, "", paramName);
+
+		bodyStr += StringHelper::Sprintf("\t{ %d, %d, %s },\n", entry.segment, entry.type,
+		                                 paramName.c_str());
 	}
 
 	bodyStr.pop_back();
 
 	return bodyStr;
-}
-
-std::string ZTextureAnimation::GetSourceOutputCode(const std::string& prefix)
-{
-	std::string bodyStr = GetBodySourceCode();
-
-	Declaration* decl = parent->GetDeclaration(rawDataIndex);
-
-	if (decl == nullptr)
-		DeclareVar(prefix, bodyStr);
-	else
-		decl->text = bodyStr;
-
-	return "";
 }

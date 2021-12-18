@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_botihasira.c
+ * Overlay: ovl_Bg_Botihasira
+ * Description: Captain Keeta Race - Gatepost
+ */
+
 #include "z_bg_botihasira.h"
 
 #define FLAGS 0x00000000

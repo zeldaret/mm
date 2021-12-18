@@ -1,3 +1,12 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/epilinkhandle/osEPiLinkHandle.s")
+s32 osEPiLinkHandle(OSPiHandle* handle) {
+    u32 saveMask = __osDisableInt();
+
+    handle->next = __osPiTable;
+    __osPiTable = handle;
+
+    __osRestoreInt(saveMask);
+
+    return 0;
+}

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_fz.c
+ * Overlay: ovl_En_Fz
+ * Description: Freezard
+ */
+
 #include "z_en_fz.h"
 
 #define FLAGS 0x00000015

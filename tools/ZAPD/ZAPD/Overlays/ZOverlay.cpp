@@ -1,13 +1,13 @@
 #include "ZOverlay.h"
 
-#include <assert.h>
+#include <cassert>
 #include <unordered_set>
-
-#include <Utils/Directory.h>
-#include <Utils/File.h>
-#include <Utils/Path.h>
-#include <Utils/StringHelper.h>
 #include "Globals.h"
+#include "Utils/Directory.h"
+#include "Utils/File.h"
+#include "Utils/Path.h"
+#include "Utils/StringHelper.h"
+#include "WarningHandler.h"
 
 using namespace ELFIO;
 
@@ -51,7 +51,7 @@ ZOverlay::ZOverlay()
 	entries = std::vector<RelocationEntry*>();
 }
 
-ZOverlay::ZOverlay(std::string nName) : ZOverlay()
+ZOverlay::ZOverlay(const std::string& nName) : ZOverlay()
 {
 	name = nName;
 }
@@ -90,7 +90,7 @@ ZOverlay* ZOverlay::FromBuild(fs::path buildPath, fs::path cfgFolderPath)
 	std::vector<elfio*> readers;
 	for (size_t i = 1; i < cfgLines.size(); i++)
 	{
-		std::string elfPath = buildPath / (cfgLines[i].substr(0, cfgLines[i].size() - 2) + ".o");
+		std::string elfPath = (buildPath / (cfgLines[i].substr(0, cfgLines[i].size() - 2) + ".o")).string();
 		elfio* reader = new elfio();
 
 		if (!reader->load(elfPath))
@@ -128,7 +128,9 @@ ZOverlay* ZOverlay::FromBuild(fs::path buildPath, fs::path cfgFolderPath)
 			SectionType sectionType = GetSectionTypeFromStr(pSec->get_name());
 
 			if (sectionType == SectionType::ERROR)
-				fprintf(stderr, "WARNING: One of the section types returned ERROR\n");
+			{
+				HANDLE_WARNING(WarningType::Always, "one of the section types returned ERROR", "");
+			}
 
 			relocation_section_accessor relocs(*curReader, pSec);
 			for (Elf_Xword j = 0; j < relocs.get_entries_num(); j++)
@@ -251,7 +253,7 @@ ZOverlay* ZOverlay::FromBuild(fs::path buildPath, fs::path cfgFolderPath)
 
 std::string ZOverlay::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
-	std::string output = "";
+	std::string output;
 
 	output += ".section .ovl\n";
 
@@ -286,7 +288,7 @@ std::string ZOverlay::GetSourceOutputCode([[maybe_unused]] const std::string& pr
 	return output;
 }
 
-SectionType ZOverlay::GetSectionTypeFromStr(std::string sectionName)
+SectionType ZOverlay::GetSectionTypeFromStr(const std::string& sectionName)
 {
 	if (sectionName == ".rel.text" || sectionName == ".text")
 		return SectionType::Text;

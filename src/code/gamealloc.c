@@ -1,11 +1,59 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/gamealloc/func_80173BF0.s")
+void GameAlloc_Log(GameAlloc* this) {
+    GameAllocEntry* iter;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/gamealloc/Gamealloc_Alloc.s")
+    iter = this->base.next;
+    while (iter != &this->base) {
+        iter = iter->next;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/gamealloc/Gamealloc_Free.s")
+void* GameAlloc_Malloc(GameAlloc* this, size_t size) {
+    GameAllocEntry* ptr = SystemArena_Malloc(size + sizeof(GameAllocEntry));
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/gamealloc/Gamealloc_FreeAll.s")
+    if (ptr != NULL) {
+        ptr->size = size;
+        ptr->prev = this->head;
+        this->head->next = ptr;
+        this->head = ptr;
+        ptr->next = &this->base;
+        this->base.prev = this->head;
+        return ptr + 1;
+    } else {
+        return NULL;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/gamealloc/Gamealloc_Init.s")
+void GameAlloc_Free(GameAlloc* this, void* data) {
+    GameAllocEntry* ptr;
+
+    if (data != NULL) {
+        ptr = &((GameAllocEntry*)data)[-1];
+        ptr->prev->next = ptr->next;
+        ptr->next->prev = ptr->prev;
+        this->head = this->base.prev;
+        SystemArena_Free(ptr);
+    }
+}
+
+void GameAlloc_Cleanup(GameAlloc* this) {
+    GameAllocEntry* next = this->base.next;
+    GameAllocEntry* cur;
+
+    while (&this->base != next) {
+        cur = next;
+        next = next->next;
+        SystemArena_Free(cur);
+    }
+
+    this->head = &this->base;
+    this->base.next = &this->base;
+    this->base.prev = &this->base;
+}
+
+void GameAlloc_Init(GameAlloc* this) {
+    this->head = &this->base;
+    this->base.next = &this->base;
+    this->base.prev = &this->base;
+}

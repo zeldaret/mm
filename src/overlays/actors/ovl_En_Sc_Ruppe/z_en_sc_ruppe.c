@@ -1,3 +1,9 @@
+/*
+ * File: z_en_sc_ruppe.c
+ * Overlay: ovl_En_Sc_Ruppe
+ * Description: Giant Rupee
+ */
+
 #include "z_en_sc_ruppe.h"
 
 #define FLAGS 0x00000030

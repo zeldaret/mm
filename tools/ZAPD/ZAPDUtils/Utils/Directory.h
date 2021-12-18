@@ -23,7 +23,7 @@ public:
 
 	static void CreateDirectory(const std::string& path)
 	{
-		std::string curPath = "";
+		std::string curPath;
 		std::vector<std::string> split = StringHelper::Split(path, "/");
 
 		for (std::string s : split)

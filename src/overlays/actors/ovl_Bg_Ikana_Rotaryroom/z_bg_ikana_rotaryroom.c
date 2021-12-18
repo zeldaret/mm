@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_ikana_rotaryroom.c
+ * Overlay: ovl_Bg_Ikana_Rotaryroom
+ * Description: Stone Tower Temple - Rotating Room
+ */
+
 #include "z_bg_ikana_rotaryroom.h"
 
 #define FLAGS 0x00000030

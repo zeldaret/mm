@@ -1,3 +1,9 @@
+/*
+ * File: z_en_dnh.c
+ * Overlay: ovl_En_Dnh
+ * Description: Koume in boat house
+ */
+
 #include "z_en_dnh.h"
 
 #define FLAGS 0x00000009

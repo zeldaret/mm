@@ -1,3 +1,9 @@
+/*
+ * File: z_en_m_thunder.c
+ * Overlay: ovl_En_M_Thunder
+ * Description: Spin attack and sword beams
+ */
+
 #include "z_en_m_thunder.h"
 
 #define FLAGS 0x00000010

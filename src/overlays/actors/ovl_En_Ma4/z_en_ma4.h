@@ -15,9 +15,9 @@ typedef struct EnMa4 {
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
     /* 0x200 */ Vec3s* pathPoints;
-    /* 0x204 */ Vec3s limbDrawTable[MA1_LIMB_MAX];
+    /* 0x204 */ Vec3s jointTable[MA1_LIMB_MAX];
     /* 0x28E */ UNK_TYPE1 unk28E[0x6];
-    /* 0x294 */ Vec3s transitionDrawTable[MA1_LIMB_MAX];
+    /* 0x294 */ Vec3s morphTable[MA1_LIMB_MAX];
     /* 0x31E */ UNK_TYPE1 unk31E[0x6];
     /* 0x324 */ s16 pathIndex;
     /* 0x326 */ s16 pathPointsCount;

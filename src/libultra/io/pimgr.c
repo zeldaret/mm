@@ -14,7 +14,7 @@ void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgC
 
     if (!__osPiDevMgr.active) {
         osCreateMesgQueue(cmdQ, cmdBuf, cmdMsgCnt);
-        osCreateMesgQueue(&D_8009E3D0, D_8009E3E8, 1);
+        osCreateMesgQueue(&D_8009E3D0, D_8009E3E8, ARRAY_COUNT(D_8009E3E8));
         if (!__osPiAccessQueueEnabled) {
             __osPiCreateAccessQueue();
         }
@@ -31,9 +31,9 @@ void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgC
         __osPiDevMgr.cmdQueue = cmdQ;
         __osPiDevMgr.evtQueue = &D_8009E3D0;
         __osPiDevMgr.acsQueue = &__osPiAccessQueue;
-        __osPiDevMgr.piDmaCallback = osPiRawStartDma;
-        __osPiDevMgr.epiDmaCallback = osEPiRawStartDma;
-        osCreateThread(&D_8009D220, 0, __osDevMgrMain, &__osPiDevMgr, &piManagerStack[0x1000], pri);
+        __osPiDevMgr.piDmaCallback = __osPiRawStartDma;
+        __osPiDevMgr.epiDmaCallback = __osEPiRawStartDma;
+        osCreateThread(&D_8009D220, 0, __osDevMgrMain, (void*)&__osPiDevMgr, &piManagerStack[4096], pri);
         osStartThread(&D_8009D220);
         __osRestoreInt(savedMask);
         if (oldPri != -1) {

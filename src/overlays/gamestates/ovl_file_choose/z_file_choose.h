@@ -8,6 +8,7 @@ void FileChoose_Destroy(GameState* thisx);
 
 typedef struct {
     /* 0x00000 */ GameState state;
+    /* 0x000A4 */ Vtx* unk_A4;
     /* 0x000A8 */ u8* staticSegment;
     /* 0x000AC */ u8* parameterSegment;
     /* 0x000B0 */ u8* titleSegment;
@@ -16,6 +17,7 @@ typedef struct {
     /* 0x00248 */ SkyboxContext skyboxCtx;
     /* 0x00470 */ MessageContext msgCtx;
     /* 0x12550 */ Font font;
+    /* 0x242DC */ UNK_TYPE1 unk_242DC[4];
     /* 0x242E0 */ EnvironmentContext envCtx;
     /* 0x243E0 */ Vtx* unk_243E0;
     /* 0x243E4 */ Vtx* unk_243E4;

@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_nozoki.c
+ * Overlay: ovl_Obj_Nozoki
+ * Description: Sakon's Hideout Objects (Sun's Mask, doors, etc)
+ */
+
 #include "z_obj_nozoki.h"
 
 #define FLAGS 0x00000010

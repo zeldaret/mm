@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_visiblock.c
+ * Overlay: ovl_Obj_Visiblock
+ * Description: Lens of Truth Platform
+ */
+
 #include "z_obj_visiblock.h"
 
 #define FLAGS 0x00000080
@@ -34,14 +40,14 @@ void ObjVisiblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjVisiblock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000AD0);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000AD0);
 }
 
 void ObjVisiblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjVisiblock* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjVisiblock_Draw(Actor* thisx, GlobalContext* globalCtx) {

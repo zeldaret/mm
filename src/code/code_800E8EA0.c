@@ -54,7 +54,7 @@ s32 func_800E8FA4(Actor* actor, Vec3f* param_2, Vec3s* param_3, Vec3s* param_4) 
 }
 
 s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s* param_4, f32 param_5) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 sVar3;
     Vec3f local_14;
     s16 sVar3A;
@@ -83,7 +83,7 @@ s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s*
 }
 
 s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s* param_4, Vec3f param_5) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 sVar3;
     Vec3f local_14;
     s16 sVar3A;

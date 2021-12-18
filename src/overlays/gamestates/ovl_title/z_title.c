@@ -6,7 +6,7 @@
 
 #include "z_title.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "static/nintendo_rogo_static/nintendo_rogo_static.h"
+#include "misc/nintendo_rogo_static/nintendo_rogo_static.h"
 
 void Title_UpdateCounters(TitleContext* this) {
     if ((this->coverAlpha == 0) && (this->visibleDuration != 0)) {
@@ -80,9 +80,9 @@ void Title_Draw(GameState* thisx) {
 
     Title_RenderView(this, 0.0f, 150.0f, 300.0f);
     func_8012C28C(this->gameState.gfxCtx);
-    SysMatrix_InsertTranslation(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
+    Matrix_InsertTranslation(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-    SysMatrix_InsertRotation(0, titleRotation, 0, MTXMODE_APPLY);
+    Matrix_InsertRotation(0, titleRotation, 0, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->gameState.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(POLY_OPA_DISP++, gNintendo64LogoNDL);
@@ -127,7 +127,7 @@ void Title_Main(GameState* thisx) {
     Title_UpdateCounters(this);
     Title_Draw(&this->gameState);
     if (this->exit) {
-        gSaveContext.seqIndex = 0xFF;
+        gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
         gSaveContext.nightSeqIndex = 0xFF;
         gSaveContext.gameMode = 1;
 
@@ -158,7 +158,7 @@ void Title_Init(GameState* thisx) {
     DmaMgr_SendRequest0(this->staticSegment, (uintptr_t)_nintendo_rogo_staticSegmentRomStart, segmentSize);
 
     Game_SetFramerateDivisor(thisx, 1);
-    SysMatrix_StateAlloc(thisx);
+    Matrix_StateAlloc(thisx);
     ShrinkWindow_Init();
     View_Init(&this->view, thisx->gfxCtx);
 

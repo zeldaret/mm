@@ -1,3 +1,9 @@
+/*
+ * File: z_en_rz.c
+ * Overlay: ovl_En_Rz
+ * Description: Rosa Sisters, Judo (red) and Marilla (blue)
+ */
+
 #include "z_en_rz.h"
 
 #define FLAGS 0x00000009

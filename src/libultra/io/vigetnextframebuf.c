@@ -2,13 +2,13 @@
 
 void* osViGetNextFramebuffer(void) {
     register u32 saveMask;
-    void* framep;
+    void* buffer;
 
     saveMask = __osDisableInt();
 
-    framep = __osViNext->framep;
+    buffer = __osViNext->buffer;
 
     __osRestoreInt(saveMask);
 
-    return framep;
+    return buffer;
 }

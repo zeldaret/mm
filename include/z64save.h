@@ -175,8 +175,9 @@ typedef struct {
     /* 0x3F60 */ u8 unk_3F60;            // "framescale_flag"
     /* 0x3F64 */ f32 unk_3F64;           // "framescale_scale"
     /* 0x3F68 */ u32 unk_3F68[5][120];
-    /* 0x48C8 */ u16 unk_48C8; // "scene_id_mix"
-    /* 0x48CA */ u8 unk_48CA[27];
+    /* 0x48C8 */ u16 unk_48C8;           // "scene_id_mix"
+    /* 0x48CA */ u8 maskMaskBit[3];      // masks given away on the Moon
+    /* 0x48CD */ char unk_48CD[24];
 } SaveContext; // size = 0x48C8
 
 typedef enum {

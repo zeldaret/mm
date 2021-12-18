@@ -170,21 +170,21 @@ void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->dyna.actor.home.rot.x != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        SysMatrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 34.0f,
-                                    this->dyna.actor.world.pos.z, MTXMODE_NEW);
-        SysMatrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
-        SysMatrix_InsertTranslation(0.0f, 0.0f, 30.0f, MTXMODE_APPLY);
+        Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 34.0f,
+                                 this->dyna.actor.world.pos.z, MTXMODE_NEW);
+        Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
+        Matrix_InsertTranslation(0.0f, 0.0f, 30.0f, MTXMODE_APPLY);
         Matrix_Scale(this->dyna.actor.velocity.x, this->dyna.actor.velocity.x, this->dyna.actor.velocity.x,
                      MTXMODE_APPLY);
-        SysMatrix_StatePush();
+        Matrix_StatePush();
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 128, 128, 255, 255, 200, this->dyna.actor.home.rot.x);
         gDPSetEnvColor(POLY_XLU_DISP++, 100, 200, 0, 255);
-        SysMatrix_InsertZRotation_f((((globalCtx->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
+        Matrix_InsertZRotation_f((((globalCtx->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_04023210);
-        SysMatrix_StatePop();
-        SysMatrix_InsertZRotation_f((~((globalCtx->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
+        Matrix_StatePop();
+        Matrix_InsertZRotation_f((~((globalCtx->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_04023210);
         CLOSE_DISPS(globalCtx->state.gfxCtx);

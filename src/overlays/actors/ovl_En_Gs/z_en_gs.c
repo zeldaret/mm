@@ -1,3 +1,9 @@
+/*
+ * File: z_en_gs.c
+ * Overlay: ovl_En_Gs
+ * Description: Gossip stone
+ */
+
 #include "z_en_gs.h"
 
 #define FLAGS 0x02000019

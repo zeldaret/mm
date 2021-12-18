@@ -5,8 +5,8 @@
  */
 
 #include "z_daytelop.h"
-#include "static/daytelop_static/daytelop_static.h"
-#include "static/icon_item_gameover_static/icon_item_gameover_static.h"
+#include "misc/daytelop_static/daytelop_static.h"
+#include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 
 // unused
 UNK_TYPE D_808158E0[] = {
@@ -226,7 +226,7 @@ void Daytelop_Init(GameState* thisx) {
     DaytelopContext* this = (DaytelopContext*)thisx;
 
     Game_SetFramerateDivisor(thisx, 1);
-    SysMatrix_StateAlloc(thisx);
+    Matrix_StateAlloc(thisx);
     ShrinkWindow_Destroy();
     View_Init(&this->view, thisx->gfxCtx);
     thisx->main = Daytelop_Main;

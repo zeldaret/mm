@@ -1,3 +1,9 @@
+/*
+ * File: z_en_minideath.c
+ * Overlay: ovl_En_Minideath
+ * Description: Gomess's bats
+ */
+
 #include "z_en_minideath.h"
 
 #define FLAGS 0x00000015

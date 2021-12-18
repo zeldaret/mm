@@ -1,3 +1,9 @@
+/*
+ * File: z_door_spiral.c
+ * Overlay: ovl_Door_Spiral
+ * Description: Staircase
+ */
+
 #include "z_door_spiral.h"
 
 #define FLAGS 0x00000010
@@ -223,7 +229,7 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, GlobalContext* globalCtx) {
  */
 f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32 yOffset, f32 spiralWidth,
                                  f32 spiralHeight) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f target;
     Vec3f offset;
 
@@ -244,7 +250,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
  * Checks if the player should climb the stairs.
  */
 s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(func_801233E4(globalCtx))) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
@@ -277,7 +283,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
     if (this->shouldClimb) {
         DoorSpiral_SetupAction(this, DoorSpiral_PlayerClimb);
     } else if (DoorSpiral_PlayerShouldClimb(this, globalCtx)) {
-        player = PLAYER;
+        player = GET_PLAYER(globalCtx);
 
         player->doorType = 4;
         player->doorDirection = this->orientation;
@@ -293,7 +299,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
  * Player is climbing the stairs.
  */
 void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(player->stateFlags1 & 0x20000000)) {
         DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
@@ -304,7 +310,7 @@ void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
 void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
     DoorSpiral* this = (DoorSpiral*)thisx;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((!(player->stateFlags1 & 0x100004C0)) || (this->actionFunc == DoorSpiral_WaitForObject)) {
         this->actionFunc(this, globalCtx);

@@ -1,3 +1,9 @@
+/*
+ * File: z_arrow_light.c
+ * Overlay: ovl_Arrow_Light
+ * Description: Light Arrow
+ */
+
 #include "z_arrow_light.h"
 
 #define FLAGS 0x02000010
@@ -37,7 +43,8 @@ static InitChainEntry D_809260A0[] = {
 
 extern InitChainEntry D_809260A0[];
 
-extern UNK_TYPE D_0E0002E0;
+// there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
+extern GfxMasterList D_0E000000;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/D_809260B0.s")
 

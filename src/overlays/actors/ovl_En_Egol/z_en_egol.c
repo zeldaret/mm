@@ -1,3 +1,9 @@
+/*
+ * File: z_en_egol.c
+ * Overlay: ovl_En_Egol
+ * Description: Eyegore
+ */
+
 #include "z_en_egol.h"
 
 #define FLAGS 0x80000035

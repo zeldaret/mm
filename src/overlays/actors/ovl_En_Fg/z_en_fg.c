@@ -117,11 +117,11 @@ s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = SkelAnime_GetFrameCount(&sAnimations[animIndex].animationSeg->common);
+            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
         }
-        SkelAnime_ChangeAnim(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                             sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
-                             sAnimations[animIndex].transitionRate);
+        Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
+                         sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
+                         sAnimations[animIndex].transitionRate);
     }
     return ret;
 }
@@ -137,7 +137,7 @@ void func_80A2D348(EnFg* this, GlobalContext* globalCtx) {
 }
 
 void func_80A2D3D4(EnFg* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 }
 
 u8 EnFg_UpdateHealth(EnFg* this) {
@@ -185,7 +185,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
         case FG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~1;
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_1);
-            this->skelAnime.animPlaybackSpeed = 0.0f;
+            this->skelAnime.playSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
             this->actor.scale.x *= 1.5f;
             this->actor.scale.z *= 1.5f;
@@ -197,7 +197,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             break;
         case FG_DMGEFFECT_ARROW:
             this->actor.flags &= ~1;
-            this->skelAnime.animPlaybackSpeed = 0.0f;
+            this->skelAnime.playSpeed = 0.0f;
             rotY = this->collider.base.ac->world.rot.y;
             rotX = this->collider.base.ac->world.rot.x;
             this->actor.scale.x = fabsf(0.01f * Math_CosS(rotY));
@@ -213,7 +213,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_0);
             if (1) {}
             this->actor.params = FG_BLACK;
-            this->skelAnime.animPlaybackSpeed = 0.0f;
+            this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
             this->actor.shape.rot = this->actor.world.rot;
@@ -245,7 +245,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_ARROW:
             this->actor.flags &= ~1;
-            this->skelAnime.animPlaybackSpeed = 0.0f;
+            this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             rotY = ac->world.rot.y;
             rotX = ac->world.rot.x;
@@ -264,7 +264,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_0);
             EnFg_UpdateAnimation(&this->skelAnime, 0);
             this->actor.params = FG_BLACK;
-            this->skelAnime.animPlaybackSpeed = 0.0f;
+            this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
             this->actor.shape.rot = this->actor.world.rot;
@@ -276,9 +276,9 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
             this->actionFunc = EnFg_Knockback;
             break;
         default:
-            if (func_801378B8(&this->skelAnime, 8.0f)) {
-                this->skelAnime.animCurrentFrame = 8.0f;
-                this->skelAnime.animPlaybackSpeed = 0.0f;
+            if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
+                this->skelAnime.curFrame = 8.0f;
+                this->skelAnime.playSpeed = 0.0f;
             }
 
             if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
@@ -321,7 +321,7 @@ void EnFg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B538, NULL, this->limbDrawTbl, this->transitionDrawTbl, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B538, NULL, this->jointTable, this->morphTable, 24);
     EnFg_UpdateAnimation(&this->skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -360,8 +360,8 @@ void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A2D348(this, globalCtx);
 }
 
-s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnFg* this = THIS;
+s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg) {
+    EnFg* this = (EnFg*)arg;
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         *dList = NULL;
@@ -375,23 +375,23 @@ s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return 0;
 }
 
-void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnFg* this = THIS;
+void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
+    EnFg* this = (EnFg*)arg;
     s16 pad;
     Vec3f vec1 = { 0.0f, 0.0f, 0.0f };
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        SysMatrix_StatePush();
-        SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+        Matrix_StatePush();
+        Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
-        SysMatrix_StatePop();
+        Matrix_StatePop();
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
     if (limbIndex == 4) {
-        SysMatrix_MultiplyVector3fByState(&vec1, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&vec1, &this->actor.focus.pos);
     }
 }
 
@@ -403,9 +403,9 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         { 120, 130, 230, 255 }, { 190, 190, 190, 255 }, { 0, 0, 0, 255 },
     };
 
-    SysMatrix_StatePush();
+    Matrix_StatePush();
     EnFg_DrawDust(globalCtx, &this->dustEffect[0]);
-    SysMatrix_StatePop();
+    Matrix_StatePop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
@@ -414,8 +414,8 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
                    envColor[this->actor.params].b, envColor[this->actor.params].a);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_060059A0));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(&D_060059A0));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -476,8 +476,8 @@ void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect) {
             alpha = (255.0f / 16.0f) * dustEffect->timer;
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, alpha);
             gDPPipeSync(POLY_XLU_DISP++);
-            SysMatrix_InsertTranslation(dustEffect->pos.x, dustEffect->pos.y, dustEffect->pos.z, MTXMODE_NEW);
-            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_InsertTranslation(dustEffect->pos.x, dustEffect->pos.y, dustEffect->pos.z, MTXMODE_NEW);
+            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(dustEffect->xyScale, dustEffect->xyScale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

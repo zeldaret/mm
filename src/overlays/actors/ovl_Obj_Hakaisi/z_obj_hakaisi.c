@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_hakaisi.c
+ * Overlay: ovl_Obj_Hakaisi
+ * Description: Gravestone
+ */
+
 #include "z_obj_hakaisi.h"
 
 #define FLAGS 0x00000029

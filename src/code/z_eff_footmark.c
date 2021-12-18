@@ -106,8 +106,8 @@ void EffFootmark_Draw(GlobalContext* globalCtx) {
 
     for (footmark = globalCtx->footprintInfo, i = 0; i < 100; i++, footmark++) {
         if (footmark->actor != NULL) {
-            SysMatrix_SetCurrentState(&footmark->displayMatrix);
-            Matrix_Scale(footmark->size * 0.00390625f * 0.7f, 1, footmark->size * 0.00390625f, 1);
+            Matrix_SetCurrentState(&footmark->displayMatrix);
+            Matrix_Scale(footmark->size * (1.0f / 0x100) * 0.7f, 1, footmark->size * (1.0f / 0x100), MTXMODE_APPLY);
 
             gSPMatrix(gfxCtx->polyXlu.p++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD);
 

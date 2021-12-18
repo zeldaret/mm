@@ -11,8 +11,8 @@ typedef struct EnGinkoMan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnGinkoManActionFunc actionFunc;
-    /* 0x18C */ Vec3s limbDrawTbl[0x10];
-    /* 0x1EC */ Vec3s transitionDrawTbl[0x10];
+    /* 0x18C */ Vec3s jointTable[0x10];
+    /* 0x1EC */ Vec3s morphTable[0x10];
     /* 0x24C */ Vec3s limb15Rot;
     /* 0x252 */ Vec3s limb8Rot;
     /* 0x258 */ s16 curTextId;

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_tru.c
+ * Overlay: ovl_En_Tru
+ * Description: Koume in Woods of Mystery
+ */
+
 #include "z_en_tru.h"
 
 #define FLAGS 0x00000039
