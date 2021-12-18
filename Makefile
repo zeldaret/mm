@@ -102,6 +102,12 @@ else
   CC_CHECK += -m32
 endif
 
+# rom compression flags
+COMPFLAGS := --threads $(N_THREADS)
+ifneq ($(NON_MATCHING),1)
+	COMPFLAGS += --matching
+endif
+
 #### Files ####
 
 # ROM image
@@ -209,7 +215,7 @@ $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
 
 $(ROMC): uncompressed
-	python3 tools/z64compress_wrapper.py --matching --threads $(N_THREADS) $(ROM) $@ $(ELF) build/$(SPEC)
+	python3 tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
 
 $(ELF): $(TEXTURE_FILES_OUT) $(OVERLAY_RELOC_FILES) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
