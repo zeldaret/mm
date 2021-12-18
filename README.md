@@ -6,7 +6,7 @@
 [jenkins-badge]: https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.deco.mp%2Fjob%2FMM%2Fjob%2Fmaster
 
 [progress]: https://zelda64.dev/progress.html
-[progress-badge]: https://img.shields.io/endpoint?url=https://zelda64.dev/reports/progress_shield_mm.us.rev1.json
+[progress-badge]: https://img.shields.io/endpoint?url=https://zelda64.dev/reports/progress-mm-shield.json
 
 [contributors]: https://github.com/zeldaret/mm/graphs/contributors
 [contributors-badge]: https://img.shields.io/github/contributors/zeldaret/mm
