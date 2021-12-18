@@ -1,0 +1,12 @@
+﻿<Root>
+    <File Name="object_gi_mask09" Segment="6">
+        <DList Name="object_gi_mask09_DL_0007A0" Offset="0x7A0" />
+        <DList Name="object_gi_mask09_DL_0008F0" Offset="0x8F0" />
+        <Texture Name="object_gi_mask09_TLUT_000DA0" OutName="tlut_000DA0" Format="rgba16" Width="16" Height="16" Offset="0xDA0" />
+        <Texture Name="object_gi_mask09_Tex_000FA0" OutName="tex_000FA0" Format="i8" Width="16" Height="16" Offset="0xFA0" />
+        <Texture Name="object_gi_mask09_Tex_0010A0" OutName="tex_0010A0" Format="ci8" Width="16" Height="8" Offset="0x10A0" />
+        <Texture Name="object_gi_mask09_Tex_001120" OutName="tex_001120" Format="ci8" Width="16" Height="32" Offset="0x1120" />
+        <Texture Name="object_gi_mask09_Tex_001320" OutName="tex_001320" Format="ci8" Width="32" Height="32" Offset="0x1320" />
+        <Texture Name="object_gi_mask09_Tex_001720" OutName="tex_001720" Format="ci8" Width="8" Height="8" Offset="0x1720" />
+    </File>
+</Root>
