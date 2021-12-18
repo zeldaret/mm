@@ -117,7 +117,7 @@
  *   0000005A eeeeeeee
  *   size = 0x8
  */
-#define CS_CAMERA_LIST(entries) CS_CMD_CAMERA, CMD_W(entries)
+#define CS_CAMERA_LIST(entries) { CS_CMD_CAMERA }, { CMD_W(entries) }
 
 // TODO: Camera command macros. Requieres func_80161998 being decomped
 
@@ -313,9 +313,9 @@
  */
 #define CS_ACTOR_ACTION(npcAction, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ) \
     { CMD_HH(npcAction, startFrame) }, { CMD_HH(endFrame, rotX) }, { CMD_HH(rotY, rotZ) }, \
-    { CMD_W(startX), { CMD_W(startY) }, { CMD_W(startZ) }, \
-    { CMD_W(endX), { CMD_W(endY) }, { CMD_W(endZ) }, \
-    { CMD_F(normX), { CMD_F(normY) }, { CMD_F(normZ) }
+    { CMD_W(startX) }, { CMD_W(startY) }, { CMD_W(startZ) }, \
+    { CMD_W(endX) }, { CMD_W(endY) }, { CMD_W(endZ) }, \
+    { CMD_F(normX) }, { CMD_F(normY) }, { CMD_F(normZ) }
 
 
 /**
