@@ -874,7 +874,7 @@ Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, s32 param
         if (param8000 == 0) {
             params = func_800A7650(newParamFF);
         }
-        if ((s32)params != ITEM00_NO_DROP) {
+        if (params != ITEM00_NO_DROP) {
             spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y,
                                        spawnPos->z, 0, 0, 0, (s32)params | param8000 | param7F00);
             if ((spawnedActor != NULL) && (param8000 == 0)) {
@@ -928,7 +928,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, s32 para
         }
     } else {
         params = func_800A7650(params & 0xFF);
-        if ((s32)params != ITEM00_NO_DROP) {
+        if (params != ITEM00_NO_DROP) {
             spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y,
                                        spawnPos->z, 0, 0, 0, (s32)params | param8000 | param7F00);
             if (spawnedActor != NULL) {
