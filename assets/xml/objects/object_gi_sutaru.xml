@@ -1,0 +1,6 @@
+﻿<Root>
+    <File Name="object_gi_sutaru" Segment="6">
+        <DList Name="object_gi_sutaru_DL_000330" Offset="0x330" />
+        <DList Name="object_gi_sutaru_DL_000438" Offset="0x438" />
+    </File>
+</Root>

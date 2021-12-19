@@ -1,0 +1,6 @@
+﻿<Root>
+    <File Name="object_funen" Segment="6">
+        <DList Name="object_funen_DL_0000D0" Offset="0xD0" />
+        <Texture Name="object_funen_Tex_0001C0" OutName="tex_0001C0" Format="ia8" Width="32" Height="32" Offset="0x1C0" />
+    </File>
+</Root>
