@@ -5504,8 +5504,7 @@ beginseg
     name "ovl_En_Invisible_Ruppe"
     compress
     include "build/src/overlays/actors/ovl_En_Invisible_Ruppe/z_en_invisible_ruppe.o"
-    include "build/data/ovl_En_Invisible_Ruppe/ovl_En_Invisible_Ruppe.data.o"
-    include "build/data/ovl_En_Invisible_Ruppe/ovl_En_Invisible_Ruppe.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Invisible_Ruppe/ovl_En_Invisible_Ruppe_reloc.o"
 endseg
 
 beginseg
