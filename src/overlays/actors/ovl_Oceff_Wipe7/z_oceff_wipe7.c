@@ -1,7 +1,7 @@
 /*
  * File: z_oceff_wipe7.c
  * Overlay: ovl_Oceff_Wipe7
- * Description:
+ * Description: Song of Healing Ocarina Effect
  */
 
 #include "z_oceff_wipe7.h"
