@@ -5294,9 +5294,7 @@ beginseg
     name "ovl_Obj_Yado"
     compress
     include "build/src/overlays/actors/ovl_Obj_Yado/z_obj_yado.o"
-    include "build/data/ovl_Obj_Yado/ovl_Obj_Yado.data.o"
-    include "build/data/ovl_Obj_Yado/ovl_Obj_Yado.bss.o"
-    include "build/data/ovl_Obj_Yado/ovl_Obj_Yado.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Yado/ovl_Obj_Yado_reloc.o"
 endseg
 
 beginseg
