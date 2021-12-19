@@ -1,10 +1,10 @@
 #include "global.h"
 #include "initvars.h"
 
-#define EFFECT_SS_OVERLAY(name)                                                                         \
-    {                                                                                                   \
-        (u32) _ovl_##name##SegmentRomStart, (u32)_ovl_##name##SegmentRomEnd, _ovl_##name##SegmentStart, \
-            _ovl_##name##SegmentEnd, NULL, &name##_InitVars, 1,                                         \
+#define EFFECT_SS_OVERLAY(name)                                                                \
+    {                                                                                          \
+        SEGMENT_ROM_START(ovl_##name), SEGMENT_ROM_END(ovl_##name), SEGMENT_START(ovl_##name), \
+            SEGMENT_END(ovl_##name), NULL, &name##_InitVars, 1,                                \
     }
 
 #define EFFECT_SS_OVERLAY_INTERNAL(name) \
