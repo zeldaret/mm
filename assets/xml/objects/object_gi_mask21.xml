@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_gi_mask21" Segment="6">
+        <DList Name="object_gi_mask21_DL_000830" Offset="0x830" />
+        <DList Name="object_gi_mask21_DL_000AA8" Offset="0xAA8" />
+        <Texture Name="object_gi_mask21_Tex_000AB0" OutName="tex_000AB0" Format="i4" Width="64" Height="64" Offset="0xAB0" />
+        <Texture Name="object_gi_mask21_Tex_0012B0" OutName="tex_0012B0" Format="i4" Width="16" Height="32" Offset="0x12B0" />
+    </File>
+</Root>

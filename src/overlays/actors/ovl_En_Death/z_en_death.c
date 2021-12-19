@@ -1,5 +1,5 @@
 /*
- * File z_en_death.c
+ * File: z_en_death.c
  * Overlay: ovl_En_Death
  * Description: Gomess
  */

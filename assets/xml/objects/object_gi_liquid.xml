@@ -1,0 +1,19 @@
+﻿<Root>
+    <File Name="object_gi_liquid" Segment="6">
+        <Texture Name="object_gi_liquid_Tex_000000" OutName="tex_000000" Format="ia8" Width="16" Height="32" Offset="0x0" />
+        <Texture Name="object_gi_liquid_Tex_000200" OutName="tex_000200" Format="ia8" Width="16" Height="32" Offset="0x200" />
+        <Texture Name="object_gi_liquid_Tex_000400" OutName="tex_000400" Format="ia8" Width="16" Height="32" Offset="0x400" />
+        <DList Name="object_gi_liquid_DL_001270" Offset="0x1270" />
+        <DList Name="object_gi_liquid_DL_001290" Offset="0x1290" />
+        <DList Name="object_gi_liquid_DL_0012B0" Offset="0x12B0" />
+        <DList Name="object_gi_liquid_DL_0012D0" Offset="0x12D0" />
+        <DList Name="object_gi_liquid_DL_0012F0" Offset="0x12F0" />
+        <DList Name="object_gi_liquid_DL_001310" Offset="0x1310" />
+        <DList Name="object_gi_liquid_DL_001330" Offset="0x1330" />
+        <DList Name="object_gi_liquid_DL_001388" Offset="0x1388" />
+        <DList Name="object_gi_liquid_DL_0013E0" Offset="0x13E0" />
+        <DList Name="object_gi_liquid_DL_001438" Offset="0x1438" />
+        <DList Name="object_gi_liquid_DL_001790" Offset="0x1790" />
+        <DList Name="object_gi_liquid_DL_001848" Offset="0x1848" />
+    </File>
+</Root>

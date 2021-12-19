@@ -127,8 +127,8 @@ void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     this->switchFlag = this->dyna.actor.params & 0x7F;
     if ((this->unk1A4 == 7) && (this->switchFlag == 0)) {
-        BcCheck3_BgActorInit((DynaPolyActor*)this, 0);
-        BgCheck3_LoadMesh(globalCtx, (DynaPolyActor*)this, (CollisionHeader*)&D_04023100);
+        DynaPolyActor_Init((DynaPolyActor*)this, 0);
+        DynaPolyActor_LoadMesh(globalCtx, (DynaPolyActor*)this, (CollisionHeader*)&D_04023100);
     }
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_04022B28, &D_04020658, this->limbTable, this->limbTable, 5);
     if (this->unk1A4 == 5) {
@@ -182,7 +182,8 @@ void func_80866A5C(EnDoor* this, GlobalContext* globalCtx) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80866B20.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80866B20.s")
+#if 0
 void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
     Player* player;
     Vec3f sp58;
@@ -293,7 +294,7 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
         /* Duplicate return node #55. Try simplifying control flow for better match */
     }
 }
-
+#endif 
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80866F94.s")
 
