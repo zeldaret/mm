@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_gi_camera" Segment="6">
+        <DList Name="object_gi_camera_DL_000BC0" Offset="0xBC0" />
+        <DList Name="object_gi_camera_DL_000EC8" Offset="0xEC8" />
+        <Texture Name="object_gi_camera_Tex_001058" OutName="tex_001058" Format="i8" Width="32" Height="32" Offset="0x1058" />
+        <Texture Name="object_gi_camera_Tex_001458" OutName="tex_001458" Format="i8" Width="32" Height="16" Offset="0x1458" />
+        <Texture Name="object_gi_camera_Tex_001658" OutName="tex_001658" Format="i4" Width="32" Height="32" Offset="0x1658" />
+    </File>
+</Root>
