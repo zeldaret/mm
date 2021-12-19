@@ -828,7 +828,7 @@ s16 func_800A7650(s16 dropId) {
     return dropId;
 }
 
-Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params) {
+Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, s32 params) {
     s32 pad;
     Actor* spawnedActor = NULL;
     s32 newParamFF;
