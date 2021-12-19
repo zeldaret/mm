@@ -3371,7 +3371,7 @@ void Matrix_InsertRotationAroundUnitVector_f(f32 rotation, Vec3f* vector, s32 ap
 void Matrix_InsertRotationAroundUnitVector_s(s16 rotation, Vec3f* vector, s32 appendToState);
 
 u64* SysUcode_GetUCodeBoot(void);
-u32 SysUcode_GetUCodeBootSize(void);
+size_t SysUcode_GetUCodeBootSize(void);
 u64* SysUcode_GetUCode(void);
 u64* SysUcode_GetUCodeData(void);
 
