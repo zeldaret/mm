@@ -1,6 +1,6 @@
 #include "global.h"
 
-s32 __osContChannelReset(OSMesgQueue* mq, s32 count) {
+s32 __osContChannelReset(OSMesgQueue* mq, s32 channel) {
     s32 i;
     s32 ret;
     u8* bufptr = (u8*)&__osPfsPifRam;
@@ -9,7 +9,7 @@ s32 __osContChannelReset(OSMesgQueue* mq, s32 count) {
 
     __osPfsPifRam.pifstatus = 1;
 
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < channel; i++) {
         *bufptr++ = 0;
     }
 
