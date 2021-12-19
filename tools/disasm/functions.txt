@@ -11336,7 +11336,7 @@
     0x80A903B0:("EnTest5_SetupAction",),
     0x80A903BC:("EnTest5_Init",),
     0x80A90468:("EnTest5_Destroy",),
-    0x80A90478:("func_80A90478",),
+    0x80A90478:("EnTest5_HandleBottleAction",),
     0x80A905A4:("EnTest5_Update",),
     0x80A90730:("func_80A90730",),
     0x80A90C08:("func_80A90C08",),
