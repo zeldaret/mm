@@ -384,7 +384,7 @@ extern UNK_PTR D_801AE260[3];
 // extern UNK_TYPE4 D_801AE2DC;
 extern F3DVertex sEffectShieldParticleVertices[4];
 extern EffInfo sEffInfoTable[5];
-extern EffectSsInfo sEffectSsInfo;
+// extern EffectSsInfo sEffectSsInfo;
 // extern UNK_TYPE1 D_801AE3B0;
 // extern UNK_TYPE1 D_801AE3B4;
 // extern UNK_TYPE4 D_801AE3B8;
