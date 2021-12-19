@@ -163,7 +163,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
 static EnTalkGibudRequestedItem sRequestedItemTable[] = {
     { PLAYER_AP_BOTTLE_POTION_BLUE, ITEM_POTION_BLUE, 1, true },
-    { PLAYER_AP_BEAN, ITEM_BEAN, 5, false },
+    { PLAYER_AP_MAGIC_BEANS, ITEM_MAGIC_BEANS, 5, false },
     { PLAYER_AP_BOTTLE_SPRING_WATER, ITEM_SPRING_WATER, 1, true },
     { PLAYER_AP_BOTTLE_FISH, ITEM_FISH, 1, true },
     { PLAYER_AP_BOTTLE_BUG, ITEM_BUG, 1, true },
