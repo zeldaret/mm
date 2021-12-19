@@ -1,0 +1,6 @@
+﻿<Root>
+    <File Name="object_gi_soldout" Segment="6">
+        <Texture Name="object_gi_soldout_Tex_000000" OutName="tex_000000" Format="ia8" Width="32" Height="32" Offset="0x0" />
+        <DList Name="object_gi_soldout_DL_000440" Offset="0x440" />
+    </File>
+</Root>
