@@ -67,8 +67,8 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaShutter* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
     if (!((this->dyna.actor.params >> 8) & 1)) {
         if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx)) {
             func_80BD599C(this);
@@ -87,7 +87,7 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgIkanaShutter_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaShutter* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80BD5828(BgIkanaShutter* this) {

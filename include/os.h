@@ -1,6 +1,7 @@
 #ifndef _OS_H_
 #define _OS_H_
 
+#include "libc/stdint.h"
 #include "libc/stdlib.h"
 #include "ultra64/thread.h"
 #include "ultra64/message.h"
@@ -53,8 +54,8 @@ typedef struct {
 } __OSTranxInfo; // size = 0x60
 
 
-typedef struct OSPiHandle_s {
-    /* 0x00 */ struct OSPiHandle_s* next;
+typedef struct OSPiHandle {
+    /* 0x00 */ struct OSPiHandle* next;
     /* 0x04 */ u8 type;
     /* 0x05 */ u8 latency;
     /* 0x06 */ u8 pageSize;
@@ -84,7 +85,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ OSIoMesgHdr hdr;
     /* 0x08 */ void* dramAddr;
-    /* 0x0C */ u32 devAddr;
+    /* 0x0C */ uintptr_t devAddr;
     /* 0x10 */ size_t size;
     /* 0x14 */ OSPiHandle* piHandle;
 } OSIoMesg; // size = 0x88

@@ -18,7 +18,7 @@ typedef struct EnPm {
     /* 0x01DC */ ColliderSphere colliderSphere;
     /* 0x0234 */ Path* unk_234;
     /* 0x0238 */ Vec3f unk_238;
-    /* 0x0244 */ s32 unk_244;
+    /* 0x0244 */ f32 unk_244;
     /* 0x0248 */ s32 unk_248;
     /* 0x024C */ s32 unk_24C;
     /* 0x0250 */ s32 unk_250;

@@ -1,7 +1,7 @@
 /*
  * File: z_obj_y2lift.c
  * Overlay: ovl_Obj_Y2lift
- * Description:
+ * Description: Unused elevator platform
  */
 
 #include "z_obj_y2lift.h"

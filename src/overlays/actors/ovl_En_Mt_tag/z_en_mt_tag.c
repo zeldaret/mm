@@ -1,7 +1,7 @@
 /*
  * File: z_en_mt_tag.c
  * Overlay: ovl_En_Mt_tag
- * Description:
+ * Description: Controls the Goron Race minigame
  */
 
 #include "z_en_mt_tag.h"
