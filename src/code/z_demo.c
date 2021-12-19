@@ -1372,7 +1372,6 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case -2:
-                // Very useful and necessary case
                 break;
 
             default:
