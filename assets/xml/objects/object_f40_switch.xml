@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_f40_switch" Segment="6">
+        <Collision Name="object_f40_switch_Colheader_000118" Offset="0x118" />
+        <DList Name="object_f40_switch_DL_000390" Offset="0x390" />
+        <DList Name="object_f40_switch_DL_000438" Offset="0x438" />
+        <Texture Name="object_f40_switch_Tex_0004E8" OutName="tex_0004E8" Format="rgba16" Width="16" Height="64" Offset="0x4E8" />
+        <Texture Name="object_f40_switch_Tex_000CE8" OutName="tex_000CE8" Format="ia8" Width="16" Height="16" Offset="0xCE8" />
+    </File>
+</Root>

@@ -10,8 +10,16 @@
 #include "misc/locerrmsg/locerrmsg.h"
 #include "misc/memerrmsg/memerrmsg.h"
 
-#define SIZEOF_LOCERRMSG (sizeof(gNotDesignedForSystemErrorTex))
-#define SIZEOF_MEMERRMSG (sizeof(gExpansionPakNotInstalledErrorTex) + sizeof(gSeeInstructionBookletErrorTex))
+#define LOCERRMSG_WIDTH 208
+#define LOCERRMSG_HEIGHT 16
+#define NUMBEROF_LOCERRMSGS 1
+
+#define MEMERRMSG_WIDTH 128
+#define MEMERRMSG_HEIGHT 37
+#define NUMBEROF_MEMERRMSGS 2
+
+#define SIZEOF_LOCERRMSG (LOCERRMSG_WIDTH * LOCERRMSG_HEIGHT / 2 * NUMBEROF_LOCERRMSGS)
+#define SIZEOF_MEMERRMSG (MEMERRMSG_WIDTH * MEMERRMSG_HEIGHT / 2 * NUMBEROF_MEMERRMSGS)
 
 // Address with enough room after to load either of the error message image files before the fault screen buffer at the
 // end of RDRAM
@@ -64,9 +72,9 @@ void Check_ClearRGBA16(u16* buffer) {
 void Check_DrawExpansionPakErrorMessage(void) {
     DmaMgr_SendRequest0(CHECK_ERRMSG_STATIC_SEGMENT, SEGMENT_ROM_START(memerrmsg), SEGMENT_SIZE(memerrmsg));
     Check_ClearRGBA16((u16*)FAULT_FB_ADDRESS);
-    Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 96, 71, 128, 37, CHECK_ERRMSG_STATIC_SEGMENT);
-    Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 96, 127, 128, 37,
-                        CHECK_ERRMSG_STATIC_SEGMENT + sizeof(gExpansionPakNotInstalledErrorTex));
+    Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 96, 71, MEMERRMSG_WIDTH, MEMERRMSG_HEIGHT, CHECK_ERRMSG_STATIC_SEGMENT);
+    Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 96, 127, MEMERRMSG_WIDTH, MEMERRMSG_HEIGHT,
+                        CHECK_ERRMSG_STATIC_SEGMENT + MEMERRMSG_WIDTH * MEMERRMSG_HEIGHT / 2);
     osWritebackDCacheAll();
     osViSwapBuffer((u16*)FAULT_FB_ADDRESS);
     osViBlack(false);
@@ -78,7 +86,8 @@ void Check_DrawExpansionPakErrorMessage(void) {
 void Check_DrawRegionLockErrorMessage(void) {
     DmaMgr_SendRequest0(CHECK_ERRMSG_STATIC_SEGMENT, SEGMENT_ROM_START(locerrmsg), SEGMENT_SIZE(locerrmsg));
     Check_ClearRGBA16((u16*)FAULT_FB_ADDRESS);
-    Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 56, 112, 208, 16, CHECK_ERRMSG_STATIC_SEGMENT);
+    Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 56, 112, LOCERRMSG_WIDTH, LOCERRMSG_HEIGHT,
+                        CHECK_ERRMSG_STATIC_SEGMENT);
     osWritebackDCacheAll();
     osViSwapBuffer((u16*)FAULT_FB_ADDRESS);
     osViBlack(false);

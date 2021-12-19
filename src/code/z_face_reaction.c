@@ -3,7 +3,7 @@
 /**
  * Indices of the columns of this array:
  * - index 0x00: PLAYER_MASK_TRUTH
- * - index 0x01: PLAYER_MASK_KAFEI
+ * - index 0x01: PLAYER_MASK_KAFEIS_MASK
  * - index 0x02: PLAYER_MASK_ALL_NIGHT
  * - index 0x03: PLAYER_MASK_BUNNY
  * - index 0x04: PLAYER_MASK_KEATON
