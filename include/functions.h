@@ -2882,7 +2882,7 @@ void Play_Draw(GlobalContext* globalCtx);
 void func_80168DAC(GlobalContext* globalCtx);
 void Play_Update(GlobalContext* globalCtx);
 s32 func_801690CC(GlobalContext* globalCtx);
-f32 func_80169100(GlobalContext* globalCtx, MtxF* mtx, CollisionPoly ** arg2, s32* arg3, Vec3f* arg4);
+f32 func_80169100(GlobalContext* globalCtx, MtxF* mtx, CollisionPoly** arg2, s32* arg3, Vec3f* arg4);
 // void func_801691F0(void);
 void* Play_LoadScene(GlobalContext* globalCtx, RomFile* entry);
 void func_8016927C(GlobalContext* globalCtx, s16 sParm2);
