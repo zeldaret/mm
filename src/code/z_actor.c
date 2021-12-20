@@ -417,7 +417,7 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
 }
 
 void func_800B4EDC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, f32* arg3) {
-    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, arg1, arg2, arg3);
+    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, arg1, arg2, arg3);
     if (*arg3 < 1.0f) {
         *arg3 = 1.0f;
     } else {
@@ -2236,8 +2236,8 @@ void Actor_InitContext(GameState* gameState, ActorContext* actorCtx, ActorEntry*
 
     bzero(actorCtx, sizeof(ActorContext));
     ActorOverlayTable_Init();
-    Matrix_MtxFCopy(&globalCtx->mf_187FC, &D_801D1E20);
-    Matrix_MtxFCopy(&globalCtx->projectionMatrix, &D_801D1E20);
+    Matrix_MtxFCopy(&globalCtx->billboardMtxF, &D_801D1E20);
+    Matrix_MtxFCopy(&globalCtx->viewProjectionMtxF, &D_801D1E20);
 
     overlayEntry = gActorOverlayTable;
     for (i = 0; i < ARRAY_COUNT(gActorOverlayTable); i++) {
@@ -2866,7 +2866,7 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         actor = actorEntry->first;
 
         while (actor != NULL) {
-            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &actor->world.pos, &actor->projectedPos,
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &actor->world.pos, &actor->projectedPos,
                                          &actor->projectedW);
 
             if (actor->audioFlags & 0x7F) {
@@ -4530,7 +4530,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                                                 1, 0, 0, 0x20, 0x20));
 
                     Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
-                    Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+                    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
                     Matrix_Scale(sp118, sp118, 1.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4551,7 +4551,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     mode = 0xFF;
                 }
 
-                Matrix_SetCurrentState(&globalCtx->mf_187FC);
+                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
                 Matrix_Scale((arg4 * 0.005f) * 1.35f, (arg4 * 0.005f), (arg4 * 0.005f) * 1.35f, 1);
 
                 sp74 = arg6 * 255.0f;
@@ -4608,7 +4608,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 100, 128);
                 }
-                Matrix_SetCurrentState(&globalCtx->mf_187FC);
+                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
                 Matrix_Scale(sp120, sp120, 1.0f, MTXMODE_APPLY);
 
                 for (i = 0; i < arg3; i++) {
@@ -4647,7 +4647,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                 gDPSetEnvColor(POLY_XLU_DISP++, (u8)(sREG(20) + 0xFF), (u8)(sREG(21) + 0xFF), (u8)sREG(22),
                                (u8)sREG(23));
 
-                Matrix_SetCurrentState(&globalCtx->mf_187FC);
+                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
                 Matrix_Scale(sp11C, sp11C, sp11C, MTXMODE_APPLY);
 
                 for (i = 0; i < arg3; i++) {
