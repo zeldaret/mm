@@ -652,7 +652,7 @@ void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCt
 // Command 0x15F:
 // Related to credits?
 void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(0, 1) != 0xFF)) {
+    if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(0, true) != 0xFF)) {
         switch (cmd->base) {
             case 1:
                 Cutscene_TerminatorImpl(globalCtx, csCtx, cmd);
@@ -793,12 +793,12 @@ void Cutscene_Command_MotionBlur(GlobalContext* globalCtx, CutsceneContext* csCt
         }
 
         if (cmd->base == 2) {
-            f32 temp_f0 = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
+            f32 progress = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
 
-            if (temp_f0 >= 0.9f) {
+            if (progress >= 0.9f) {
                 func_80165690();
             } else {
-                func_80165658((1.0f - temp_f0) * 180.0f);
+                func_80165658((1.0f - progress) * 180.0f);
             }
         }
     }
@@ -1539,7 +1539,7 @@ void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorAc
     end.y = entry->endPos.y;
     end.z = entry->endPos.z;
 
-    t = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
     actor->world.pos.x = ((end.x - start.x) * t) + start.x;
     actor->world.pos.y = ((end.y - start.y) * t) + start.y;
