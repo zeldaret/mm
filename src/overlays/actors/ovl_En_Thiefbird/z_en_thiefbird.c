@@ -283,8 +283,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if (!((gSaveContext.save.roomInf[126][5] & 0xFF000000) >> 0x18)) {
-        gSaveContext.save.roomInf[126][5] =
-            (gSaveContext.save.roomInf[126][5] & 0xFFFFFF) | ((itemId1 & 0xFF) << 0x18);
+        gSaveContext.save.roomInf[126][5] = (gSaveContext.save.roomInf[126][5] & 0xFFFFFF) | ((itemId1 & 0xFF) << 0x18);
     } else {
         gSaveContext.save.roomInf[126][5] =
             (gSaveContext.save.roomInf[126][5] & 0xFF00FFFF) | ((itemId1 & 0xFF) << 0x10);

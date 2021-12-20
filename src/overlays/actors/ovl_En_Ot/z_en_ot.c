@@ -183,9 +183,9 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             switch (this->unk_344) {
                 case 0:
-                    this->actor.world.pos.y =
-                        BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor.world.pos) +
-                        50.0f;
+                    this->actor.world.pos.y = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &this->actor.floorPoly,
+                                                                          &bgId, &this->actor.world.pos) +
+                                              50.0f;
                     if (gSaveContext.save.weekEventReg[84] & 0x10) {
                         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
                         Matrix_GetStateTranslationAndScaledZ(52.519997f, &sp64);

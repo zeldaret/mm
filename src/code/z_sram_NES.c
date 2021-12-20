@@ -140,9 +140,9 @@ s32 D_801C6798[] = {
 
 // items?
 u8 D_801C67B0[24] = {
-    ITEM_NONE,  ITEM_BOW,  ITEM_NONE, ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
+    ITEM_NONE,  ITEM_BOW,  ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
     ITEM_STICK, ITEM_NUT,  ITEM_MAGIC_BEANS, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
-    ITEM_NONE,  ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_NONE, ITEM_NONE,
+    ITEM_NONE,  ITEM_NONE, ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_NONE, ITEM_NONE,
 };
 
 s32 D_801C67C8[] = { 0, 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280 };
@@ -1652,8 +1652,7 @@ void func_80146AA0(GameState* gameState, SramContext* sramCtx) {
         fileChooseCtx->unk_2440C[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.deaths;
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.playerName); i++) {
-            fileChooseCtx->unk_24414[fileChooseCtx->unk_24480][i] =
-                gSaveContext.save.playerData.playerName[i];
+            fileChooseCtx->unk_24414[fileChooseCtx->unk_24480][i] = gSaveContext.save.playerData.playerName[i];
         }
 
         fileChooseCtx->healthCapacity[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.healthCapacity;
