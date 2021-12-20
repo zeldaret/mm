@@ -353,6 +353,8 @@ animdict = {
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",
     "csCtx.unk_12": "csCtx.currentCsIndex",
+    "globalCtx->mf_187FC" : "globalCtx->billboardMtxF",
+    "globalCtx->projectionMatrix" : "globalCtx->viewProjectionMtxF",
 }
 
 def replace_anim(file):

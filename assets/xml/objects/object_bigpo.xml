@@ -1,0 +1,46 @@
+﻿<Root>
+    <File Name="object_bigpo" Segment="6">
+        <Animation Name="object_bigpo_Anim_000158" Offset="0x158" />
+        <Animation Name="object_bigpo_Anim_000454" Offset="0x454" />
+        <Animation Name="object_bigpo_Anim_000608" Offset="0x608" />
+        <Animation Name="object_bigpo_Anim_000924" Offset="0x924" />
+        <Animation Name="object_bigpo_Anim_000F9C" Offset="0xF9C" />
+        <Animation Name="object_bigpo_Anim_001360" Offset="0x1360" />
+        <Texture Name="object_bigpo_Tex_001370" OutName="tex_001370" Format="i8" Width="32" Height="64" Offset="0x1370" />
+        <DList Name="object_bigpo_DL_001BB0" Offset="0x1BB0" />
+        <Texture Name="object_bigpo_Tex_001C70" OutName="tex_001C70" Format="rgba16" Width="16" Height="16" Offset="0x1C70" />
+        <Texture Name="object_bigpo_Tex_001E70" OutName="tex_001E70" Format="rgba16" Width="16" Height="16" Offset="0x1E70" />
+        <Texture Name="object_bigpo_Tex_002070" OutName="tex_002070" Format="rgba16" Width="32" Height="32" Offset="0x2070" />
+        <Texture Name="object_bigpo_Tex_002870" OutName="tex_002870" Format="rgba16" Width="16" Height="16" Offset="0x2870" />
+        <Texture Name="object_bigpo_Tex_002A70" OutName="tex_002A70" Format="rgba16" Width="8" Height="8" Offset="0x2A70" />
+        <Texture Name="object_bigpo_Tex_002AF0" OutName="tex_002AF0" Format="rgba16" Width="16" Height="8" Offset="0x2AF0" />
+        <Texture Name="object_bigpo_Tex_002BF0" OutName="tex_002BF0" Format="rgba16" Width="16" Height="16" Offset="0x2BF0" />
+        <Texture Name="object_bigpo_Tex_002DF0" OutName="tex_002DF0" Format="rgba16" Width="16" Height="16" Offset="0x2DF0" />
+        <!-- <Blob Name="object_bigpo_Blob_003200" Size="0x350" Offset="0x3200" /> -->
+        <!-- <Blob Name="object_bigpo_Blob_003790" Size="0x370" Offset="0x3790" /> -->
+        <DList Name="object_bigpo_DL_0041A0" Offset="0x41A0" />
+        <DList Name="object_bigpo_DL_0042C8" Offset="0x42C8" />
+        <DList Name="object_bigpo_DL_0043F8" Offset="0x43F8" />
+        <DList Name="object_bigpo_DL_004488" Offset="0x4488" />
+        <DList Name="object_bigpo_DL_004538" Offset="0x4538" />
+        <DList Name="object_bigpo_DL_0045D8" Offset="0x45D8" />
+        <DList Name="object_bigpo_DL_004680" Offset="0x4680" />
+        <DList Name="object_bigpo_DL_004768" Offset="0x4768" />
+        <DList Name="object_bigpo_DL_004808" Offset="0x4808" />
+        <DList Name="object_bigpo_DL_004AE8" Offset="0x4AE8" />
+        <DList Name="object_bigpo_DL_004BD8" Offset="0x4BD8" />
+        <Texture Name="object_bigpo_Tex_004C98" OutName="tex_004C98" Format="rgba16" Width="16" Height="16" Offset="0x4C98" />
+        <Texture Name="object_bigpo_Tex_004E98" OutName="tex_004E98" Format="rgba16" Width="8" Height="8" Offset="0x4E98" />
+        <DList Name="object_bigpo_DL_0058B8" Offset="0x58B8" />
+        <Limb Name="object_bigpo_Standardlimb_005B88" Type="Standard" Offset="0x5B88" />
+        <Limb Name="object_bigpo_Standardlimb_005B94" Type="Standard" Offset="0x5B94" />
+        <Limb Name="object_bigpo_Standardlimb_005BA0" Type="Standard" Offset="0x5BA0" />
+        <Limb Name="object_bigpo_Standardlimb_005BAC" Type="Standard" Offset="0x5BAC" />
+        <Limb Name="object_bigpo_Standardlimb_005BB8" Type="Standard" Offset="0x5BB8" />
+        <Limb Name="object_bigpo_Standardlimb_005BC4" Type="Standard" Offset="0x5BC4" />
+        <Limb Name="object_bigpo_Standardlimb_005BD0" Type="Standard" Offset="0x5BD0" />
+        <Limb Name="object_bigpo_Standardlimb_005BDC" Type="Standard" Offset="0x5BDC" />
+        <Limb Name="object_bigpo_Standardlimb_005BE8" Type="Standard" Offset="0x5BE8" />
+        <Skeleton Name="object_bigpo_Skel_005C18" Type="Normal" LimbType="Standard" Offset="0x5C18" />
+    </File>
+</Root>
