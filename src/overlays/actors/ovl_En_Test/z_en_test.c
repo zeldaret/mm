@@ -1,3 +1,9 @@
+/*
+ * File: z_en_test.c
+ * Overlay: ovl_En_Test
+ * Description: Various crater marks (e.g., Goron Link punch/pound, Moon's Tear crash, etc.)
+ */
+
 #include "z_en_test.h"
 
 #define FLAGS 0x00000010

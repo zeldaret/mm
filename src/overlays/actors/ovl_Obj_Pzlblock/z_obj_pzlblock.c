@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_pzlblock.c
+ * Overlay: ovl_Obj_Pzlblock
+ * Description: Puzzle Block
+ */
+
 #include "z_obj_pzlblock.h"
 
 #define FLAGS 0x04000010

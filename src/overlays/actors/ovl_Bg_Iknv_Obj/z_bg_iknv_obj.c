@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_iknv_obj.c
+ * Overlay: ovl_Bg_Iknv_Obj
+ * Description: Ikana - waterwheel, stone tower door, sakon's hideout door
+ */
+
 #include "z_bg_iknv_obj.h"
 
 #define FLAGS 0x00000010
@@ -68,18 +74,18 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
         case IKNV_OBJ_RAISED_DOOR:
             this->displayListPtr = D_06011880;
-            BcCheck3_BgActorInit(&this->dyna, 0);
-            BgCheck_RelocateMeshHeader(&D_060119D4, &colHeader);
-            this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+            DynaPolyActor_Init(&this->dyna, 0);
+            CollisionHeader_GetVirtual(&D_060119D4, &colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             this->actionFunc = BgIknvObj_UpdateRaisedDoor;
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
             break;
         case IKNV_OBJ_SAKON_DOOR:
             this->displayListPtr = D_060129C8;
             this->actionFunc = BgIknvObj_UpdateSakonDoor;
-            BcCheck3_BgActorInit(&this->dyna, 0);
-            BgCheck_RelocateMeshHeader(&D_06012CA4, &colHeader);
-            this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+            DynaPolyActor_Init(&this->dyna, 0);
+            CollisionHeader_GetVirtual(&D_06012CA4, &colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
             this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -102,7 +108,7 @@ void BgIknvObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
             return;
         }
     }
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 s32 func_80BD7CEC(BgIknvObj* this) {

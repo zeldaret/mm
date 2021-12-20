@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_skateblock.c
+ * Overlay: ovl_Obj_Skateblock
+ * Description: Pushable block that slides on ice
+ */
+
 #include "z_obj_skateblock.h"
 
 #define FLAGS 0x00000010

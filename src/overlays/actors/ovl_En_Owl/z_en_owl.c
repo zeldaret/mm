@@ -168,14 +168,14 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENOWL_GET_TYPE_2:
-            if (gSaveContext.save.inventory.items[14] == 14) {
+            if (gSaveContext.save.inventory.items[ITEM_LENS] == ITEM_LENS) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             break;
 
         case ENOWL_GET_TYPE_3:
-            if (CHECK_QUEST_ITEM(15)) {
+            if (CHECK_QUEST_ITEM(QUEST_SONG_SOARING)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -367,7 +367,7 @@ void func_8095AE60(EnOwl* this, GlobalContext* globalCtx) {
 void func_8095AEC0(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
     if (func_8095A978(this, globalCtx, 0x7D0, 360.0f, 200.0f)) {
-        func_801A3098(0x45);
+        func_801A3098(NA_BGM_OWL);
         this->actionFunc = func_8095AE60;
     }
 }
@@ -396,7 +396,7 @@ void func_8095AF2C(EnOwl* this, GlobalContext* globalCtx) {
 void func_8095AFEC(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
     if (func_8095A978(this, globalCtx, 0xBF6, 200.0f, 100.0f)) {
-        func_801A3098(0x45);
+        func_801A3098(NA_BGM_OWL);
         this->actionFunc = func_8095AF2C;
         this->unk_406 = 0;
         this->actionFlags |= 0x40;
@@ -511,7 +511,7 @@ void func_8095B574(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = func_8095BA84;
-        func_801A3098(0x45);
+        func_801A3098(NA_BGM_OWL);
         this->actionFlags |= 0x40;
         this->unk_406 = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
@@ -545,7 +545,7 @@ void func_8095B6C8(EnOwl* this, GlobalContext* globalCtx) {
 void func_8095B76C(EnOwl* this, GlobalContext* globalCtx) {
     s32 pad;
     s16 sp4A;
-    f32 sp44 = func_80122524(&this->actor, this->path, this->unk_3F8, &sp4A);
+    f32 sp44 = Path_OrientAndGetDistSq(&this->actor, this->path, this->unk_3F8, &sp4A);
     Vec3s* points;
 
     Math_SmoothStepToS(&this->actor.world.rot.y, sp4A, 6, 0x800, 0x200);
@@ -721,7 +721,7 @@ void func_8095BE0C(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = func_8095BA84;
-        func_801A3098(0x45);
+        func_801A3098(NA_BGM_OWL);
         this->unk_406 = 1;
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
@@ -1172,9 +1172,9 @@ void func_8095D074(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, 500.0f, 0.0f, 1);
-    Matrix_InsertXRotation_s(this->unk_3D8 - 0x4000, 1);
-    Matrix_InsertTranslation(0.0f, 0.0f, -500.0f, 1);
+    Matrix_InsertTranslation(0.0f, 500.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_InsertXRotation_s(this->unk_3D8 - 0x4000, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, 0.0f, -500.0f, MTXMODE_APPLY);
     if (this->unk_3DC >= 0x20) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

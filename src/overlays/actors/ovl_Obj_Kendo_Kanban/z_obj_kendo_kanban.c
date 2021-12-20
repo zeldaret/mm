@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_kendo_kanban.c
+ * Overlay: ovl_Obj_Kendo_Kanban
+ * Description: Swordsman's School - Cuttable Board
+ */
+
 #include "z_obj_kendo_kanban.h"
 
 #define FLAGS 0x00000000

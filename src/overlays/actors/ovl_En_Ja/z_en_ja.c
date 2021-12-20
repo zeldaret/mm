@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ja.c
+ * Overlay: ovl_En_Ja
+ * Description: Juggler
+ */
+
 #include "z_en_ja.h"
 
 #define FLAGS 0x00000019

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ending_hero.c
+ * Overlay: ovl_En_Ending_Hero
+ * Description: Mayor Dotour at wedding during the credits
+ */
+
 #include "z_en_ending_hero.h"
 
 #define FLAGS 0x00000009

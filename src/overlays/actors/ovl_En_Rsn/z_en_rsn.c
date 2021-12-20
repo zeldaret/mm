@@ -1,3 +1,9 @@
+/*
+ * File: z_en_rsn.c
+ * Overlay: ovl_En_Rsn
+ * Description: Bomb Shop Man in the credits
+ */
+
 #include "z_en_rsn.h"
 
 #define FLAGS 0x02000019
@@ -66,7 +72,7 @@ s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     EnRsn* this = (EnRsn*)arg;
 
     if (limbIndex == 14) {
-        Matrix_InsertXRotation_s(this->unk1D8.y, 1);
+        Matrix_InsertXRotation_s(this->unk1D8.y, MTXMODE_APPLY);
     }
     return 0;
 }

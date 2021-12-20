@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_bal.c
+ * Overlay: ovl_Dm_Bal
+ * Description: Tingle (cutscene)
+ */
+
 #include "z_dm_bal.h"
 
 #define FLAGS 0x02000019

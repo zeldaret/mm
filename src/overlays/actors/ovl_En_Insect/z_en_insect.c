@@ -1,3 +1,9 @@
+/*
+ * File: z_en_insect.c
+ * Overlay: ovl_En_Insect
+ * Description: Single freestanding bug that doesn't burrow
+ */
+
 #include "z_en_insect.h"
 
 #define FLAGS 0x00000000

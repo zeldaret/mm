@@ -204,7 +204,7 @@ void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
         colHeader->waterBoxes = (WaterBox*)Lib_SegmentedToVirtual(colHeader->waterBoxes);
     }
 
-    BgCheck_Init(&globalCtx->colCtx, globalCtx, colHeader);
+    BgCheck_Allocate(&globalCtx->colCtx, globalCtx, colHeader);
 }
 
 // SceneTableEntry Header Command 0x04: Room List
@@ -393,7 +393,7 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
         globalCtx->envCtx.unk_2 = 0;
     }
 
-    if ((gSaveContext.save.inventory.items[0] == 0xFF) && (globalCtx->envCtx.unk_2 != 0)) {
+    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (globalCtx->envCtx.unk_2 != 0)) {
         globalCtx->envCtx.unk_2 = 5;
     }
 
@@ -449,7 +449,7 @@ void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
     globalCtx->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
 
-    if (gSaveContext.seqIndex == 0xFF || func_801A8A50(0) == 0x57) {
+    if (gSaveContext.seqIndex == (u8)NA_BGM_DISABLED || func_801A8A50(0) == NA_BGM_FINAL_HOURS) {
         audio_setBGM(cmd->soundSettings.bgmId);
     }
 }

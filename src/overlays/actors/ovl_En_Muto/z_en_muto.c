@@ -165,7 +165,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
         if (gSaveContext.save.weekEventReg[0x3C] & 8) {
             this->textIdIndex = 1;
         }
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_COUPLES_MASK) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_COUPLE) {
             this->textIdIndex = 4;
         }
 

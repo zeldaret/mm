@@ -1,9 +1,9 @@
 /*
- * File z_en_invadepoh.c
+ * File: z_en_invadepoh.c
  * Overlay: ovl_En_Invadepoh
  * Description: Ranch nighttime actors
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
@@ -907,7 +907,7 @@ s32 func_80B44234(EnInvadepoh* this, Vec3f* vec) {
 
     for (i = 0, arr = this->pathPoints; i < temp_s3; i++, arr++) {
         Math_Vec3s_ToVec3f(&sp48, arr);
-        distance = Math3D_DistanceSquared(&sp48, vec);
+        distance = Math3D_Vec3fDistSq(&sp48, vec);
         if (distance < min) {
             min = distance;
             ret = i;
@@ -1385,8 +1385,8 @@ s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 ar
     while (actorIterator != NULL) {
         if ((actorIterator->id == ACTOR_EN_DOOR) && (actorIterator->update != NULL) &&
             (actorIterator->room == this->actor.room) &&
-            Math3D_DistanceSquared(&actorIterator->world.pos, &this->actor.world.pos) < range) {
-            ((EnDoor*)actorIterator)->unk1A7 = arg3;
+            Math3D_Vec3fDistSq(&actorIterator->world.pos, &this->actor.world.pos) < range) {
+            ((EnDoor*)actorIterator)->unk_1A7 = arg3;
             retVal = true;
             break;
         }
@@ -1436,7 +1436,7 @@ void func_80B457A0(EnInvadepoh* this) {
 
     for (i = 0; i < this->unk379; i++) {
         if ((D_80B50320[i] != NULL) && D_80B50320[i]->drawAlien) {
-            distanceSquared = Math3D_DistanceSquared(&D_80B50320[i]->actor.world.pos, &this->actor.world.pos);
+            distanceSquared = Math3D_Vec3fDistSq(&D_80B50320[i]->actor.world.pos, &this->actor.world.pos);
             if (distanceSquared < phi_f20) {
                 phi_f20 = distanceSquared;
                 phi_s5 = i;
@@ -1700,7 +1700,7 @@ void func_80B4627C(EnInvadepoh* this, GlobalContext* globalCtx) {
         } else {
             func_80B454BC(this, globalCtx);
             func_80B452EC(this, globalCtx);
-            Audio_QueueSeqCmd(0x800D);
+            Audio_QueueSeqCmd(NA_BGM_ALIEN_INVASION | 0x8000);
             func_80B46F88(this);
         }
     } else if (D_80B4E940 == 3) {
@@ -1988,7 +1988,7 @@ void func_80B46EE8(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         ActorCutscene_Stop(D_80B50404[0]);
-        Audio_QueueSeqCmd(0x800D);
+        Audio_QueueSeqCmd(NA_BGM_ALIEN_INVASION | 0x8000);
         func_80B46F88(this);
     }
 }
@@ -2037,7 +2037,7 @@ void func_80B470E0(EnInvadepoh* this) {
 
 void func_80B47108(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (this->actionTimer == 100) {
-        func_801A3098(0x19);
+        func_801A3098(NA_BGM_CLEAR_EVENT);
     }
     this->actionTimer--;
     if (this->actionTimer <= 0) {
@@ -2881,7 +2881,7 @@ void func_80B49454(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 
     Math_Vec3f_Sum(&D_80B4EDD0[this->unk3AC], &this->actor.home.pos, &sp30);
-    if (Math3D_DistanceSquared(&this->actor.world.pos, &sp30) < SQ(400.0f)) {
+    if (Math3D_Vec3fDistSq(&this->actor.world.pos, &sp30) < SQ(400.0f)) {
         this->actor.speedXZ *= 0.8f;
     } else {
         Math_StepToF(&this->actor.speedXZ, 170.0f, 21.0f);
@@ -3615,7 +3615,7 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (this->unk3BC >= 0) {
         Math_Vec3s_ToVec3f(&sp28, &this->pathPoints[this->unk3BC]);
-        temp_f0 = Math3D_DistanceSquared(&this->actor.world.pos, &sp28);
+        temp_f0 = Math3D_Vec3fDistSq(&this->actor.world.pos, &sp28);
         if (temp_f0 < SQ(80.0f)) {
             this->actor.speedXZ *= 0.85f;
         } else if (temp_f0 < SQ(150.0f)) {
@@ -3809,7 +3809,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
         func_80B4516C(this);
         Math_StepToS(&this->behaviorInfo.unk4C, 0xBB8, 0x1F5);
-        if (Math3D_DistanceSquared(&this->actor.prevPos, &this->actor.world.pos) > SQ(0.01f)) {
+        if (Math3D_Vec3fDistSq(&this->actor.prevPos, &this->actor.world.pos) > SQ(0.01f)) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world.pos),
                                3, this->behaviorInfo.unk4C, 0x1F4);
         }
@@ -4481,7 +4481,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
-        Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_NEW);
+        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
         Matrix_GetStateTranslationAndScaledZ(60.0f, &sp80);
         sp74.x = thisx->world.pos.x + sp80.x;
         sp74.y = thisx->world.pos.y + sp80.y + 68.0f;
@@ -4573,14 +4573,14 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp5C;
 
     Matrix_StatePush();
-    Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_NEW);
+    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
     Matrix_GetStateTranslationAndScaledZ(200.0f, &sp5C);
     Matrix_StatePop();
     sp5C.x += thisx->world.pos.x;
     sp5C.y += thisx->world.pos.y;
     sp5C.z += thisx->world.pos.z;
     EnInvadepoh_SetSysMatrix(&sp5C);
-    Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
     Matrix_InsertZRotation_s(((EnInvadepoh*)thisx)->unk304, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);

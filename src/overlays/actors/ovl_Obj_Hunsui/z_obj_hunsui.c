@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_hunsui.c
+ * Overlay: ovl_Obj_Hunsui
+ * Description: Switch-Activated Geyser
+ */
+
 #include "z_obj_hunsui.h"
 
 #define FLAGS 0x00000030

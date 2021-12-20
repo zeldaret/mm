@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ginko_man.c
+ * Overlay: ovl_En_Ginko_Man
+ * Description: Bank Teller
+ */
+
 #include "z_en_ginko_man.h"
 
 #define FLAGS 0x00000009
@@ -512,16 +518,16 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, GlobalContext* globalCtx) {
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
         if (!(gSaveContext.save.weekEventReg[10] & 8)) {
-            func_800B8A1C(&this->actor, globalCtx, CUR_UPG_VALUE(UPG_WALLET) + 8, 500.0f, 100.0f);
+            func_800B8A1C(&this->actor, globalCtx, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
-            func_800B8A1C(&this->actor, globalCtx, 2, 500.0f, 100.0f);
+            func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }
     } else if (this->curTextId == 0x45C) { // "Whats this, you already saved up 5000?"
-        func_800B8A1C(&this->actor, globalCtx, 2, 500.0f, 100.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_BLUE, 500.0f, 100.0f);
     } else if (!(gSaveContext.save.weekEventReg[59] & 8)) {
-        func_800B8A1C(&this->actor, globalCtx, 12, 500.0f, 100.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 2, 500.0f, 100.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_BLUE, 500.0f, 100.0f);
     }
 }
 
@@ -637,12 +643,12 @@ s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
 
     if (limbIndex == 15) {
         Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->limb15Rot.y, 1);
-        Matrix_InsertZRotation_s(this->limb15Rot.x, 1);
+        Matrix_InsertXRotation_s(this->limb15Rot.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->limb15Rot.x, MTXMODE_APPLY);
         Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(-this->limb8Rot.y, 1);
-        Matrix_InsertZRotation_s(-this->limb8Rot.x, 1);
+        Matrix_InsertXRotation_s(-this->limb8Rot.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(-this->limb8Rot.x, MTXMODE_APPLY);
     }
 
     return 0;

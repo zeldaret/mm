@@ -439,7 +439,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, GlobalContext* globalCtx) {
                     func_8019F208();
                     func_801518B0(globalCtx, 0x334E, &this->actor);
                     this->textId = 0x334E;
-                    if (CHECK_QUEST_ITEM(14)) {
+                    if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
                         func_80151BB4(globalCtx, 0x1C);
                     }
                     func_80151BB4(globalCtx, 5);
@@ -611,7 +611,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
                 EnMa4_SetFaceExpression(this, 0, 0);
 
                 // Check if player has Epona's song
-                if (CHECK_QUEST_ITEM(14)) {
+                if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
                     func_801518B0(globalCtx, 0x334C, &this->actor);
                     this->textId = 0x334C;
                 } else {
@@ -623,7 +623,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x3358:
-                if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) || !(CHECK_QUEST_ITEM(14))) {
+                if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) || !(CHECK_QUEST_ITEM(QUEST_SONG_EPONA))) {
                     func_801518B0(globalCtx, 0x335C, &this->actor);
                     this->textId = 0x335C;
                     func_80151BB4(globalCtx, 5);
@@ -662,7 +662,7 @@ void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
 
         case 6: // End conversation
             if (func_80147624(globalCtx) != 0) {
-                if ((globalCtx->msgCtx.unk120B1 == 0) || !CHECK_QUEST_ITEM(18)) {
+                if ((globalCtx->msgCtx.unk120B1 == 0) || !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     EnMa4_SetupWait(this);
                 }
             }
@@ -751,7 +751,7 @@ void EnMa4_SetupHorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
     gSaveContext.save.weekEventReg[0x8] &= (u8)~0x01;
     this->actionFunc = EnMa4_HorsebackGameEnd;
     Audio_QueueSeqCmd(NA_BGM_STOP);
-    Audio_QueueSeqCmd(0x8041);
+    Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
 }
 
 void EnMa4_HorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {

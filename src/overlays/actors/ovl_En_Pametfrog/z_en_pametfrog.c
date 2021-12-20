@@ -1,6 +1,6 @@
 /*
  * File: z_en_pametfrog.c
- * Overlay: En_Pametfrog
+ * Overlay: ovl_En_Pametfrog
  * Description: Gekko & Snapper Miniboss: Gekko
  */
 
@@ -273,10 +273,10 @@ void EnPametfrog_ChangeColliderThaw(EnPametfrog* this, GlobalContext* globalCtx)
 void EnPametfrog_JumpWaterEffects(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f pos;
 
-    if (this->actor.yDistToWater > 0.0f) {
+    if (this->actor.depthInWater > 0.0f) {
         pos.x = this->actor.world.pos.x;
         pos.z = this->actor.world.pos.z;
-        pos.y = this->actor.world.pos.y + this->actor.yDistToWater;
+        pos.y = this->actor.world.pos.y + this->actor.depthInWater;
         EffectSsGRipple_Spawn(globalCtx, &pos, 150, 550, 0);
         pos.y += 8.0f;
         EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 550);
@@ -286,10 +286,10 @@ void EnPametfrog_JumpWaterEffects(EnPametfrog* this, GlobalContext* globalCtx) {
 void EnPametfrog_IdleWaterEffects(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f pos;
 
-    if ((this->actor.yDistToWater > 0.0f) && ((globalCtx->gameplayFrames % 14) == 0)) {
+    if ((this->actor.depthInWater > 0.0f) && ((globalCtx->gameplayFrames % 14) == 0)) {
         pos.x = this->actor.world.pos.x;
         pos.z = this->actor.world.pos.z;
-        pos.y = this->actor.world.pos.y + this->actor.yDistToWater;
+        pos.y = this->actor.world.pos.y + this->actor.depthInWater;
         EffectSsGRipple_Spawn(globalCtx, &pos, 150, 550, 0);
     }
 }
@@ -335,7 +335,7 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
 
     Math3D_CrossProduct(&this->unk_2DC, &floorNorm, &vec2);
     EnPametfrog_Vec3fNormalize(&vec2);
-    Matrix_InsertRotationAroundUnitVector_f(rotation, &vec2, 0);
+    Matrix_InsertRotationAroundUnitVector_f(rotation, &vec2, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&this->unk_2E8, &vec2);
     Math_Vec3f_Copy(&this->unk_2E8, &vec2);
     Math3D_CrossProduct(&this->unk_2E8, &floorNorm, &this->unk_2D0);
@@ -370,7 +370,7 @@ void EnPametfrog_StopCutscene(EnPametfrog* this, GlobalContext* globalCtx) {
 
 void EnPametfrog_PlaceSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     CollisionPoly* poly;
-    u32 bgId;
+    s32 bgId;
     Vec3f vec1;
     Vec3f vec2;
     Vec3f vec3;
@@ -386,7 +386,7 @@ void EnPametfrog_PlaceSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     vec3.x = this->actor.child->world.pos.x;
     vec3.y = this->actor.child->world.pos.y - 150.0f;
     vec3.z = this->actor.child->world.pos.z;
-    if (func_800C55C4(&globalCtx->colCtx, &vec2, &vec3, &vec1, &poly, 0, 1, 0, 1, &bgId) != 0) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &vec2, &vec3, &vec1, &poly, false, true, false, true, &bgId)) {
         this->actor.child->floorHeight = vec1.y;
     } else {
         this->actor.child->floorHeight = this->actor.home.pos.y;
@@ -615,8 +615,8 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f worldPos1;
     Vec3f worldPos2;
     f32 doubleSpeedXZ;
-    u32 bgId1;
-    u32 bgId2;
+    s32 bgId1;
+    s32 bgId2;
     s32 isSuccess = false;
 
     if (this->freezeTimer > 0) {
@@ -632,11 +632,13 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, GlobalContext* globalCtx) {
         vec2.x = this->actor.world.pos.x - this->unk_2DC.x * 25.0f;
         vec2.y = this->actor.world.pos.y - this->unk_2DC.y * 25.0f;
         vec2.z = this->actor.world.pos.z - this->unk_2DC.z * 25.0f;
-        if (func_800C55C4(&globalCtx->colCtx, &vec1, &vec2, &worldPos2, &poly2, 1, 1, 1, 1, &bgId2) != 0) {
+        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &vec1, &vec2, &worldPos2, &poly2, true, true, true, true,
+                                    &bgId2)) {
             vec2.x = this->unk_2D0.x * doubleSpeedXZ + vec1.x;
             vec2.y = this->unk_2D0.y * doubleSpeedXZ + vec1.y;
             vec2.z = this->unk_2D0.z * doubleSpeedXZ + vec1.z;
-            if (func_800C55C4(&globalCtx->colCtx, &vec1, &vec2, &worldPos1, &poly1, 1, 1, 1, 1, &bgId1) != 0) {
+            if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &vec1, &vec2, &worldPos1, &poly1, true, true, true, true,
+                                        &bgId1)) {
                 isSuccess = func_8086A2CC(this, poly1);
                 Math_Vec3f_Copy(&this->actor.world.pos, &worldPos1);
                 this->actor.floorBgId = bgId1;
@@ -742,7 +744,7 @@ void EnPametfrog_ClimbDownWall(EnPametfrog* this, GlobalContext* globalCtx) {
 
     if (this->actor.bgCheckFlags & 1) {
         EnPametfrog_SetupRunToSnapper(this);
-    } else if (this->actor.floorHeight == -32000.0f) {
+    } else if (this->actor.floorHeight == BGCHECK_Y_MIN) {
         yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
         this->actor.world.pos.x += 5.0f * Math_SinS(yaw);
         this->actor.world.pos.z += 5.0f * Math_CosS(yaw);
@@ -1054,7 +1056,7 @@ void EnPametfrog_LookAround(EnPametfrog* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (SkelAnime_Update(&this->skelAnime) && (func_801690CC(globalCtx) == 0)) {
         if (!this->unk_2AE) {
-            func_801A2E54(0x38);
+            func_801A2E54(NA_BGM_MINI_BOSS);
             this->unk_2AE = true;
         }
         EnPametfrog_SetupJumpToLink(this);
@@ -1274,7 +1276,7 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, GlobalContext* g
 
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     if (this->actor.params == GEKKO_INIT_SNAPPER) {
-        func_801A2E54(0x38);
+        func_801A2E54(NA_BGM_MINI_BOSS);
         EnPametfrog_SetupRunToSnapper(this);
     }
 }

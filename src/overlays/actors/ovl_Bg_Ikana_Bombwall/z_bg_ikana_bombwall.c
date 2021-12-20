@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_ikana_bombwall.c
+ * Overlay: ovl_Bg_Ikana_Bombwall
+ * Description: Stone Tower Temple - Bombable Tan Floor Tile
+ */
+
 #include "z_bg_ikana_bombwall.h"
 
 #define FLAGS 0x10000000

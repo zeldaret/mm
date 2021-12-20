@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_purify.c
+ * Overlay: ovl_Obj_Purify
+ * Description: Poisoned/Purified Water Elements
+ */
+
 #include "z_obj_purify.h"
 
 #define FLAGS 0x00000030

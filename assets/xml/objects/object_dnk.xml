@@ -1,0 +1,48 @@
+﻿<Root>
+    <File Name="object_dnk" Segment="6">
+        <Animation Name="object_dnk_Anim_00031C" Offset="0x31C" />
+        <Animation Name="object_dnk_Anim_000430" Offset="0x430" />
+        <Animation Name="object_dnk_Anim_0006CC" Offset="0x6CC" />
+        <Animation Name="object_dnk_Anim_000894" Offset="0x894" />
+        <Animation Name="object_dnk_Anim_000B70" Offset="0xB70" />
+        <Texture Name="object_dnk_Tex_000B80" OutName="tex_000B80" Format="rgba16" Width="32" Height="32" Offset="0xB80" />
+        <Texture Name="object_dnk_Tex_001380" OutName="tex_001380" Format="rgba16" Width="16" Height="16" Offset="0x1380" />
+        <Texture Name="object_dnk_Tex_001580" OutName="tex_001580" Format="rgba16" Width="8" Height="8" Offset="0x1580" />
+        <Texture Name="object_dnk_Tex_001600" OutName="tex_001600" Format="rgba16" Width="8" Height="8" Offset="0x1600" />
+        <!-- <Blob Name="object_dnk_Blob_001680" Size="0x180" Offset="0x1680" /> -->
+        <DList Name="object_dnk_DL_001DD0" Offset="0x1DD0" />
+        <DList Name="object_dnk_DL_001E58" Offset="0x1E58" />
+        <DList Name="object_dnk_DL_001E68" Offset="0x1E68" />
+        <DList Name="object_dnk_DL_001EF0" Offset="0x1EF0" />
+        <DList Name="object_dnk_DL_001F00" Offset="0x1F00" />
+        <DList Name="object_dnk_DL_001F90" Offset="0x1F90" />
+        <DList Name="object_dnk_DL_001FA0" Offset="0x1FA0" />
+        <DList Name="object_dnk_DL_002030" Offset="0x2030" />
+        <DList Name="object_dnk_DL_002040" Offset="0x2040" />
+        <DList Name="object_dnk_DL_0020F0" Offset="0x20F0" />
+        <DList Name="object_dnk_DL_002100" Offset="0x2100" />
+        <DList Name="object_dnk_DL_002188" Offset="0x2188" />
+        <DList Name="object_dnk_DL_002198" Offset="0x2198" />
+        <DList Name="object_dnk_DL_002240" Offset="0x2240" />
+        <DList Name="object_dnk_DL_002250" Offset="0x2250" />
+        <DList Name="object_dnk_DL_0022F8" Offset="0x22F8" />
+        <DList Name="object_dnk_DL_002308" Offset="0x2308" />
+        <DList Name="object_dnk_DL_002400" Offset="0x2400" />
+        <DList Name="object_dnk_DL_002410" Offset="0x2410" />
+        <DList Name="object_dnk_DL_002510" Offset="0x2510" />
+        <DList Name="object_dnk_DL_002700" Offset="0x2700" />
+        <Limb Name="object_dnk_Standardlimb_0027A8" Type="Standard" Offset="0x27A8" />
+        <Limb Name="object_dnk_Standardlimb_0027B4" Type="Standard" Offset="0x27B4" />
+        <Limb Name="object_dnk_Standardlimb_0027C0" Type="Standard" Offset="0x27C0" />
+        <Limb Name="object_dnk_Standardlimb_0027CC" Type="Standard" Offset="0x27CC" />
+        <Limb Name="object_dnk_Standardlimb_0027D8" Type="Standard" Offset="0x27D8" />
+        <Limb Name="object_dnk_Standardlimb_0027E4" Type="Standard" Offset="0x27E4" />
+        <Limb Name="object_dnk_Standardlimb_0027F0" Type="Standard" Offset="0x27F0" />
+        <Limb Name="object_dnk_Standardlimb_0027FC" Type="Standard" Offset="0x27FC" />
+        <Limb Name="object_dnk_Standardlimb_002808" Type="Standard" Offset="0x2808" />
+        <Limb Name="object_dnk_Standardlimb_002814" Type="Standard" Offset="0x2814" />
+        <Skeleton Name="object_dnk_Skel_002848" Type="Normal" LimbType="Standard" Offset="0x2848" />
+        <Animation Name="object_dnk_Anim_002A08" Offset="0x2A08" />
+        <Animation Name="object_dnk_Anim_002B6C" Offset="0x2B6C" />
+    </File>
+</Root>
