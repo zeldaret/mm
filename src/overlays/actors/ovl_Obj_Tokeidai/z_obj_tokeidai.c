@@ -428,7 +428,7 @@ void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, GlobalContext* glob
              (globalCtx->csCtx.unk_12 == 0)) ||
             ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
              (globalCtx->csCtx.unk_12 == 0))) {
-            func_801A3F54(0);
+            func_801A3F54(false);
             gSaveContext.cutscene = 0;
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.respawnFlag = 2;
