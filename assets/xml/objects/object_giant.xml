@@ -1,7 +1,17 @@
 ﻿<Root>
     <File Name="object_giant" Segment="6">
+        <!-- Giant Unused Animation -->
         <Animation Name="gGiantUnusedWalkAnim" Offset="0x2168" /> <!-- Named "kya_testwalk" in MM3D -->
-        <!-- <Blob Name="object_giant_Blob_003D40" Size="0x90" Offset="0x3D40" /> -->
+
+        <!-- Giant Body Vertices. Contains everything but the beard. -->
+        <Array Name="gGiantBodyVtx" Count="444" Offset="0x2180">
+            <Vtx/>
+        </Array>
+
+        <!-- Giant Unused Beard Vertices. An exact duplicate of the beard vertices that are actually used. -->
+        <Array Name="gGiantUnusedBeardVtx" Count="9" Offset="0x3D40">
+            <Vtx/>
+        </Array>
 
         <!-- Giant Limb DisplayLists -->
         <DList Name="gGiantHeadDL" Offset="0x3DD0" />
@@ -33,7 +43,10 @@
         <Texture Name="gGiantGroinTex" OutName="giant_groin" Format="ci8" Width="16" Height="16" Offset="0x7280" />
         <Texture Name="gGiantHairTex" OutName="giant_hair" Format="ci8" Width="16" Height="32" Offset="0x7380" />
 
-        <!-- Giant Beard DisplayList and Texture -->
+        <!-- Giant Beard Vertices, DisplayList, and Texture -->
+        <Array Name="gGiantBeardVtx" Count="9" Offset="0x7580">
+            <Vtx/>
+        </Array>
         <DList Name="gGiantBeardDL" Offset="0x7610" />
         <Texture Name="gGiantBeardTex" OutName="giant_beard" Format="rgba16" Width="16" Height="16" Offset="0x76C0" />
 
