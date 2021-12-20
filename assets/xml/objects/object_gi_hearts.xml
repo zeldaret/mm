@@ -1,0 +1,7 @@
+﻿<Root>
+    <File Name="object_gi_hearts" Segment="6">
+        <DList Name="object_gi_hearts_DL_001290" Offset="0x1290" />
+        <DList Name="object_gi_hearts_DL_001470" Offset="0x1470" />
+        <DList Name="object_gi_hearts_DL_001590" Offset="0x1590" />
+    </File>
+</Root>

@@ -1,0 +1,12 @@
+﻿<Root>
+    <File Name="object_taru" Segment="6">
+        <DList Name="object_taru_DL_000420" Offset="0x420" />
+        <Texture Name="object_taru_Tex_000670" OutName="tex_000670" Format="rgba16" Width="16" Height="32" Offset="0x670" />
+        <Texture Name="object_taru_Tex_000A70" OutName="tex_000A70" Format="rgba16" Width="32" Height="16" Offset="0xA70" />
+        <Collision Name="object_taru_Colheader_000FC8" Offset="0xFC8" />
+        <DList Name="object_taru_DL_001140" Offset="0x1140" />
+        <Texture Name="object_taru_Tex_001230" OutName="tex_001230" Format="rgba16" Width="32" Height="32" Offset="0x1230" />
+        <Texture Name="object_taru_Tex_001A30" OutName="tex_001A30" Format="i4" Width="32" Height="32" Offset="0x1A30" />
+        <Collision Name="object_taru_Colheader_001CB0" Offset="0x1CB0" />
+    </File>
+</Root>
