@@ -5,6 +5,7 @@
  */
 
 #include "z_en_giant.h"
+#include "objects/object_giant/object_giant.h"
 
 #define FLAGS 0x00000030
 
@@ -31,31 +32,11 @@ const ActorInit En_Giant_InitVars = {
     (ActorFunc)EnGiant_Draw,
 };
 
-extern AnimationHeader D_06002168;
-extern Gfx D_06005A80[];
-extern Gfx D_06006280[];
-extern Gfx D_06007610[];
-extern Gfx D_06006A80[];
-extern FlexSkeletonHeader D_060079B0;
-extern AnimationHeader D_06008394;
-extern AnimationHeader D_060096E4;
-extern AnimationHeader D_0600A1C4;
-extern AnimationHeader D_0600ACA4;
-extern AnimationHeader D_0600B784;
-extern AnimationHeader D_0600C5D4;
-extern AnimationHeader D_0600D040;
-extern AnimationHeader D_0600DE84;
-extern AnimationHeader D_060102A4;
-extern AnimationHeader D_060116E4;
-extern AnimationHeader D_06012A38;
-extern AnimationHeader D_06013004;
-extern AnimationHeader D_06013FE8;
-extern AnimationHeader D_06015334;
-extern AnimationHeader D_06017944;
-
 static AnimationHeader* sAnimationTable[] = {
-    &D_06008394, &D_060096E4, &D_060102A4, &D_060116E4, &D_06012A38, &D_06013004, &D_06013FE8, &D_06015334,
-    &D_06017944, &D_0600A1C4, &D_0600D040, &D_0600DE84, &D_0600ACA4, &D_0600B784, &D_0600C5D4,
+    &gGiantLookUpStartAnim,    &gGiantLookUpLoopAnim,    &gGiantFallingOverAnim,  &gGiantRaisedArmsStartAnim,
+    &gGiantRaisedArmsLoopAnim, &gGiantStruggleStartAnim, &gGiantStruggleLoopAnim, &gGiantIdleAnim,
+    &gGiantWalkingAnim,        &gGiantBigCallStartAnim,  &gGiantBigCallLoopAnim,  &gGiantBigCallEndAnim,
+    &gGiantSmallCallStartAnim, &gGiantSmallCallLoopAnim, &gGiantSmallCallEndAnim,
 };
 
 void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimationId) {
@@ -118,7 +99,8 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneScale = 2000.0f;
     this->actor.uncullZoneDownward = 2400.0f;
     Actor_SetScale(&this->actor, 0.32f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060079B0, &D_06002168, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGiantSkel, &gGiantUnusedWalkAnim, this->jointTable,
+                       this->morphTable, 16);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
     this->csAction = GIANT_CS_ACTION_NONE;
     this->actionFunc = EnGiant_PerformCutsceneActions;
@@ -156,8 +138,9 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_24A = 0x1C5;
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PerformClockTowerSuccessActions;
-        Animation_Change(&this->skelAnime, &D_060116E4, 0.0f, Animation_GetLastFrame(&D_060116E4) - 1.0f,
-                         Animation_GetLastFrame(&D_060116E4), 2, 0.0f);
+        Animation_Change(&this->skelAnime, &gGiantRaisedArmsStartAnim, 0.0f,
+                         Animation_GetLastFrame(&gGiantRaisedArmsStartAnim) - 1.0f,
+                         Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), 2, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
         this->actor.minVelocityY = 0.0f;
@@ -167,7 +150,8 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type)) {
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PlayClockTowerFailureAnimation;
-        Animation_Change(&this->skelAnime, &D_06013FE8, 1.0f, 0.0f, Animation_GetLastFrame(&D_06013004), 0, 0.0f);
+        Animation_Change(&this->skelAnime, &gGiantStruggleLoopAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gGiantStruggleStartAnim), 0, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
         this->actor.minVelocityY = 0.0f;
@@ -266,8 +250,9 @@ void EnGiant_ChangeAnimationBasedOnCsAction(EnGiant* this) {
             }
             break;
         case GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER:
-            Animation_Change(&this->skelAnime, &D_060116E4, 0.0f, Animation_GetLastFrame(&D_060116E4) - 1.0f,
-                             Animation_GetLastFrame(&D_060116E4), 2, 0.0f);
+            Animation_Change(&this->skelAnime, &gGiantRaisedArmsStartAnim, 0.0f,
+                             Animation_GetLastFrame(&gGiantRaisedArmsStartAnim) - 1.0f,
+                             Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), 2, 0.0f);
             break;
     }
 }
@@ -430,7 +415,7 @@ void EnGiant_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     if (limbIndex == 1) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        gSPDisplayList(POLY_OPA_DISP++, D_06007610);
+        gSPDisplayList(POLY_OPA_DISP++, gGiantBeardDL);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
@@ -449,12 +434,7 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnGiant* this = THIS;
 
-    /**
-     * 0 = eyes fully open face
-     * 1 = eyes half-closed face
-     * 2 = eyes fully closed face
-     */
-    static TexturePtr sFaceTextures[] = { D_06005A80, D_06006280, D_06006A80 };
+    static TexturePtr sFaceTextures[] = { gGiantFaceEyeOpenTex, gGiantFaceEyeHalfTex, gGiantFaceEyeClosedTex };
 
     if (this->alpha > 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -482,7 +462,7 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_InsertMatrix(&this->unk_254, MTXMODE_NEW);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_06007610);
+            gSPDisplayList(POLY_XLU_DISP++, gGiantBeardDL);
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
