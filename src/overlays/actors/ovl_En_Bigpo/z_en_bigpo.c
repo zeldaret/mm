@@ -5,6 +5,8 @@
  */
 
 #include "z_en_bigpo.h"
+#include "objects/object_bigpo/object_bigpo.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00001215
 
@@ -80,8 +82,8 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_RevealedFire(Actor* thisx, GlobalContext* globalCtx);
 
+extern SkeletonHeader  D_06005C18;
 extern AnimationHeader D_06001360;
-extern SkeletonHeader D_06005C18;
 extern AnimationHeader D_06000924;
 extern AnimationHeader D_06000924;
 extern AnimationHeader D_06000454;
@@ -254,6 +256,7 @@ void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
+// how did I not name this function???
 void func_80B61914(EnBigpo* this) {
     EnBigpoFireEffect* firePtr;
     s32 i;
@@ -274,8 +277,9 @@ void EnBigpo_UpdateSpin(EnBigpo* this) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_ROLL); // spinning sfx during spin attack
     }
 }
-
-// Lowers the position/eye of the camera during the Big Poe spawn cutscene
+/*
+ * Lowers the position/eye of the camera during the Big Poe spawn cutscene
+ */
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext) {
     Camera* subCam;
 

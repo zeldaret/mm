@@ -6,16 +6,16 @@
         <Animation Name="object_bigpo_Anim_000924" Offset="0x924" />
         <Animation Name="object_bigpo_Anim_000F9C" Offset="0xF9C" />
         <Animation Name="object_bigpo_Anim_001360" Offset="0x1360" />
-        <Texture Name="object_bigpo_Tex_001370" OutName="tex_001370" Format="i8" Width="32" Height="64" Offset="0x1370" />
+        <Texture Name="gBigpoSoulFace" OutName="bigpo_soul_face" Format="i8" Width="32" Height="64" Offset="0x1370" />
         <DList Name="object_bigpo_DL_001BB0" Offset="0x1BB0" />
-        <Texture Name="object_bigpo_Tex_001C70" OutName="tex_001C70" Format="rgba16" Width="16" Height="16" Offset="0x1C70" />
-        <Texture Name="object_bigpo_Tex_001E70" OutName="tex_001E70" Format="rgba16" Width="16" Height="16" Offset="0x1E70" />
-        <Texture Name="object_bigpo_Tex_002070" OutName="tex_002070" Format="rgba16" Width="32" Height="32" Offset="0x2070" />
+        <Texture Name="gBigpoNecklaceSkullHalf" OutName="bigpo_skull_necklace" Format="rgba16" Width="16" Height="16" Offset="0x1C70" />
+        <Texture Name="gBigpoLanternGlass" OutName="bigpo_lantern_glass" Format="rgba16" Width="16" Height="16" Offset="0x1E70" />
+        <Texture Name="gBigpoTornRobe" OutName="bigpo_torn_robe" Format="rgba16" Width="32" Height="32" Offset="0x2070" />
         <Texture Name="object_bigpo_Tex_002870" OutName="tex_002870" Format="rgba16" Width="16" Height="16" Offset="0x2870" />
         <Texture Name="object_bigpo_Tex_002A70" OutName="tex_002A70" Format="rgba16" Width="8" Height="8" Offset="0x2A70" />
         <Texture Name="object_bigpo_Tex_002AF0" OutName="tex_002AF0" Format="rgba16" Width="16" Height="8" Offset="0x2AF0" />
-        <Texture Name="object_bigpo_Tex_002BF0" OutName="tex_002BF0" Format="rgba16" Width="16" Height="16" Offset="0x2BF0" />
-        <Texture Name="object_bigpo_Tex_002DF0" OutName="tex_002DF0" Format="rgba16" Width="16" Height="16" Offset="0x2DF0" />
+        <Texture Name="gBigpoShawl" OutName="bigpo_shawl" Format="rgba16" Width="16" Height="16" Offset="0x2BF0" />
+        <Texture Name="gBigpoGlowingEye" OutName="bigpo_glowing_eye" Format="rgba16" Width="16" Height="16" Offset="0x2DF0" />
         <!-- <Blob Name="object_bigpo_Blob_003200" Size="0x350" Offset="0x3200" /> -->
         <!-- <Blob Name="object_bigpo_Blob_003790" Size="0x370" Offset="0x3790" /> -->
         <DList Name="object_bigpo_DL_0041A0" Offset="0x41A0" />
@@ -41,6 +41,6 @@
         <Limb Name="object_bigpo_Standardlimb_005BD0" Type="Standard" Offset="0x5BD0" />
         <Limb Name="object_bigpo_Standardlimb_005BDC" Type="Standard" Offset="0x5BDC" />
         <Limb Name="object_bigpo_Standardlimb_005BE8" Type="Standard" Offset="0x5BE8" />
-        <Skeleton Name="object_bigpo_Skel_005C18" Type="Normal" LimbType="Standard" Offset="0x5C18" />
+        <Skeleton Name="gBigpoSkeleton" Type="Normal" LimbType="Standard" Offset="0x5C18" />
     </File>
 </Root>
