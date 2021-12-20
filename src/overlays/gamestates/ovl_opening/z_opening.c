@@ -13,7 +13,7 @@ void Opening_SetupForTitleCutscene(OpeningContext* this) {
     gSaveContext.eventInf[1] &= (u8)~0x80;
     gSaveContext.gameMode = 1;
 
-    func_80144890();
+    Sram_InitNewSave();
 
     gSaveContext.save.entranceIndex = openingEntrances[D_801BB12C];
     gSaveContext.nextCutsceneIndex = gSaveContext.save.cutscene = openingCutscenes[D_801BB12C];

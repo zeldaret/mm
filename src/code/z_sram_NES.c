@@ -161,175 +161,9 @@ s32 D_801C6840[4] = { 0x100, 0x180, 0x200, 0x280 };
 
 s32 D_801C6850[8] = { 0x80, 0x80, 0x80, 0x80, 0x300, 0x380, 1, 1 };
 
-s32 D_801C6870[8] = { sizeof(Save), sizeof(Save), sizeof(Save), sizeof(Save), 0x3CA0, 0x3CA0, 0x3CA0, 0x3CA0 };
+s32 D_801C6870[8] = { sizeof(Save), sizeof(Save), sizeof(Save), sizeof(Save), offsetof(SaveContext, fileNum), offsetof(SaveContext, fileNum), offsetof(SaveContext, fileNum), offsetof(SaveContext, fileNum) };
 
 u8 D_801C6890[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 };
-
-SavePlayerData D_801C6898 = {
-    { '\0', '\0', '\0', '\0', '\0', '\0' },
-    0,
-    { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E },
-    0x0030,
-    0x0030,
-    0x00,
-    0x30,
-    0x0000,
-    0x0000,
-    0x0000,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0xFF,
-    0x0000,
-    0xFF,
-    0x0008,
-};
-
-ItemEquips D_801C68C0 = {
-    {
-        { 0x4D, 0xFF, 0xFF, 0xFF },
-        { 0x4D, 0xFF, 0xFF, 0xFF },
-        { 0x4D, 0xFF, 0xFF, 0xFF },
-        { 0xFD, 0xFF, 0xFF, 0xFF },
-    },
-    {
-        { 0x00, 0xFF, 0xFF, 0xFF },
-        { 0xFF, 0xFF, 0xFF, 0xFF },
-        { 0xFF, 0xFF, 0xFF, 0xFF },
-        { 0xFF, 0xFF, 0xFF, 0xFF },
-    },
-    0x11,
-};
-
-Inventory gSaveDefaultInventory = {
-    // items
-    {
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-    },
-    // masks
-    {
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-    },
-    // ammo
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    // upgrades
-    0x120000,
-    // questItems
-    0,
-    // dungeonItems
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    // dungeonKeys
-    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 },
-    // strayFairies
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    // unk_6E
-    {
-        { 0x15, 0x12, 0x17 },
-        { 0x14, 0x3E, 0x3E },
-        { 0x3E, 0x3E, 0x15 },
-        { 0x12, 0x17, 0x14 },
-        { 0x3E, 0x3E, 0x3E },
-        { 0x3E, 0x15, 0x12 },
-        { 0x17, 0x14, 0x3E },
-        { 0x3E, 0x3E, 0x3E },
-    },
-};
-
-u16 gSaveDefaultChecksum = 0;
-
-SavePlayerData D_801C6970 = {
-    { 'Z', 'E', 'L', 'D', 'A', '3' },
-    0x0000,
-    { 0x15, 0x12, 0x17, 0x14, 0x3E, 0x3E, 0x3E, 0x3E },
-    0x0080,
-    0x0080,
-    0x00,
-    0x30,
-    0x0032,
-    0x0064,
-    0x0000,
-    0x01,
-    0x00,
-    0x00,
-    0x00,
-    0xFF,
-    0x0000,
-    0xFF,
-    0x0008,
-};
-
-ItemEquips D_801C6998 = {
-    { { 0x4D, 0x01, 0x13, 0x00 }, { 0x4D, 0x01, 0x33, 0x00 }, { 0x4D, 0x01, 0x34, 0x00 }, { 0x09, 0x09, 0x32, 0x00 } },
-    { { 0x00, 0x01, 0x13, 0x00 }, { 0x00, 0x0A, 0x23, 0x07 }, { 0x00, 0x0C, 0x29, 0x07 }, { 0x00, 0x01, 0x1D, 0x07 } },
-    0x0011,
-};
-
-Inventory D_801C69BC = {
-    {
-        ITEM_OCARINA,
-        ITEM_BOW,
-        ITEM_ARROW_FIRE,
-        ITEM_ARROW_ICE,
-        ITEM_ARROW_LIGHT,
-        ITEM_MOON_TEAR,
-        ITEM_BOMB,
-        ITEM_BOMBCHU,
-        ITEM_STICK,
-        ITEM_NUT,
-        ITEM_MAGIC_BEANS,
-        ITEM_ROOM_KEY,
-        ITEM_POWDER_KEG,
-        ITEM_PICTO_BOX,
-        ITEM_LENS,
-        ITEM_HOOKSHOT,
-        ITEM_SWORD_GREAT_FAIRY,
-        ITEM_LETTER_TO_KAFEI,
-        ITEM_BOTTLE,
-        ITEM_POTION_RED,
-        ITEM_POTION_GREEN,
-        ITEM_POTION_BLUE,
-        ITEM_NONE,
-        ITEM_NONE,
-    },
-    {
-        0x3E, 0x38, 0x47, 0x45, 0x40, 0x32, 0x3A, 0x46, 0x39, 0x42, 0x48, 0x33,
-        0x3C, 0x3D, 0x37, 0x3F, 0x36, 0x34, 0x43, 0x41, 0x3B, 0x44, 0x49, 0x35,
-    },
-    {
-        1, 0x1E, 1, 1, 1, 1, 0x1E, 0x1E, 0x1E, 0x1E, 1, 1, 1, 1, 0x1E, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-    },
-    0x120009,
-    0x105F7C0,
-    { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },
-    { 8, 8, 8, 8, 8, 8, 8, 8, 8, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    {
-        { 0x15, 0x12, 0x17 },
-        { 0x14, 0x3E, 0x3E },
-        { 0x3E, 0x3E, 0x15 },
-        { 0x12, 0x17, 0x14 },
-        { 0x3E, 0x3E, 0x3E },
-        { 0x3E, 0x15, 0x12 },
-        { 0x17, 0x14, 0x3E },
-        { 0x3E, 0x3E, 0x3E },
-    },
-};
-
-u16 D_801C6A44 = 0;
-
-u8 D_801C6A48[] = {
-    0x35, 0x33, 0x34, 0x32, 0x35,
-};
-
-u8 D_801C6A50[] = {
-    0x2F, 0x23, 0x29, 0x1D, 0x2F,
-};
-
-u16 D_801C6A58[] = { 0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30 };
 
 u16 D_801F6AF0;
 u8 D_801F6AF2;
@@ -862,7 +696,7 @@ void func_80144628(void) {
 void Sram_GenerateRandomSaveFields(void) {
     s32 randBombers;
     s16 sp2A;
-    s16 phi_v1_2;
+    s16 pad;
     s16 i;
     s16 j;
     s32 k;
@@ -926,17 +760,98 @@ void Sram_GenerateRandomSaveFields(void) {
     }
 }
 
-void func_80144890(void) {
+
+SavePlayerData sSaveDefaultPlayerData = {
+    { '\0', '\0', '\0', '\0', '\0', '\0' }, // newf
+    0, // deaths
+    { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName
+    0x0030, // healthCapacity
+    0x0030, // health
+    0x00, // magicLevel
+    0x30, // magic
+    0x0000, // rupees
+    0x0000, // swordHealth
+    0x0000, // tatlTimer
+    0x00, // magicAcquired
+    0x00, // doubleMagic
+    0x00, // doubleDefense
+    0x00, // unk_1F
+    0xFF, // unk_20
+    0x0000, // owlActivationFlags
+    0xFF, // unk_24
+    0x0008, // savedSceneNum
+};
+
+ItemEquips sSaveDefaultItemEquips = {
+    {
+        { 0x4D, 0xFF, 0xFF, 0xFF },
+        { 0x4D, 0xFF, 0xFF, 0xFF },
+        { 0x4D, 0xFF, 0xFF, 0xFF },
+        { 0xFD, 0xFF, 0xFF, 0xFF },
+    },
+    {
+        { 0x00, 0xFF, 0xFF, 0xFF },
+        { 0xFF, 0xFF, 0xFF, 0xFF },
+        { 0xFF, 0xFF, 0xFF, 0xFF },
+        { 0xFF, 0xFF, 0xFF, 0xFF },
+    },
+    0x11,
+};
+
+Inventory sSaveDefaultInventory = {
+    // items
+    {
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+    },
+    // masks
+    {
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+    },
+    // ammo
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    // upgrades
+    0x120000,
+    // questItems
+    0,
+    // dungeonItems
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    // dungeonKeys
+    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 },
+    // strayFairies
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    // unk_6E
+    {
+        { 0x15, 0x12, 0x17 },
+        { 0x14, 0x3E, 0x3E },
+        { 0x3E, 0x3E, 0x15 },
+        { 0x12, 0x17, 0x14 },
+        { 0x3E, 0x3E, 0x3E },
+        { 0x3E, 0x15, 0x12 },
+        { 0x17, 0x14, 0x3E },
+        { 0x3E, 0x3E, 0x3E },
+    },
+};
+
+u16 sSaveDefaultChecksum = 0;
+
+/**
+ *  Initialize new save.
+ *  This save has an empty inventory with 3 hearts, sword and shield.
+ */
+void Sram_InitNewSave(void) {
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
     gSaveContext.save.daysElapsed = 0;
     gSaveContext.save.day = 0;
     gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
     func_80144628();
 
-    Lib_MemCpy(&gSaveContext.save.playerData, &D_801C6898, sizeof(SavePlayerData));
-    Lib_MemCpy(&gSaveContext.save.equips, &D_801C68C0, sizeof(ItemEquips));
-    Lib_MemCpy(&gSaveContext.save.inventory, &gSaveDefaultInventory, sizeof(Inventory));
-    Lib_MemCpy(&gSaveContext.save.checksum, &gSaveDefaultChecksum, sizeof(gSaveContext.save.checksum));
+    Lib_MemCpy(&gSaveContext.save.playerData, &sSaveDefaultPlayerData, sizeof(SavePlayerData));
+    Lib_MemCpy(&gSaveContext.save.equips, &sSaveDefaultItemEquips, sizeof(ItemEquips));
+    Lib_MemCpy(&gSaveContext.save.inventory, &sSaveDefaultInventory, sizeof(Inventory));
+    Lib_MemCpy(&gSaveContext.save.checksum, &sSaveDefaultChecksum, sizeof(gSaveContext.save.checksum));
 
     gSaveContext.save.horseData.scene = SCENE_F01;
     gSaveContext.save.horseData.pos.x = -1420;
@@ -949,13 +864,108 @@ void func_80144890(void) {
     Sram_GenerateRandomSaveFields();
 }
 
+SavePlayerData sSaveDebugPlayerData = {
+    { 'Z', 'E', 'L', 'D', 'A', '3' },
+    0x0000,
+    { 0x15, 0x12, 0x17, 0x14, 0x3E, 0x3E, 0x3E, 0x3E },
+    0x0080,
+    0x0080,
+    0x00,
+    0x30,
+    0x0032,
+    0x0064,
+    0x0000,
+    0x01,
+    0x00,
+    0x00,
+    0x00,
+    0xFF,
+    0x0000,
+    0xFF,
+    0x0008,
+};
+
+ItemEquips sSaveDebugItemEquips = {
+    { { 0x4D, 0x01, 0x13, 0x00 }, { 0x4D, 0x01, 0x33, 0x00 }, { 0x4D, 0x01, 0x34, 0x00 }, { 0x09, 0x09, 0x32, 0x00 } },
+    { { 0x00, 0x01, 0x13, 0x00 }, { 0x00, 0x0A, 0x23, 0x07 }, { 0x00, 0x0C, 0x29, 0x07 }, { 0x00, 0x01, 0x1D, 0x07 } },
+    0x0011,
+};
+
+Inventory sSaveDebugInventory = {
+    {
+        ITEM_OCARINA,
+        ITEM_BOW,
+        ITEM_ARROW_FIRE,
+        ITEM_ARROW_ICE,
+        ITEM_ARROW_LIGHT,
+        ITEM_MOON_TEAR,
+        ITEM_BOMB,
+        ITEM_BOMBCHU,
+        ITEM_STICK,
+        ITEM_NUT,
+        ITEM_MAGIC_BEANS,
+        ITEM_ROOM_KEY,
+        ITEM_POWDER_KEG,
+        ITEM_PICTO_BOX,
+        ITEM_LENS,
+        ITEM_HOOKSHOT,
+        ITEM_SWORD_GREAT_FAIRY,
+        ITEM_LETTER_TO_KAFEI,
+        ITEM_BOTTLE,
+        ITEM_POTION_RED,
+        ITEM_POTION_GREEN,
+        ITEM_POTION_BLUE,
+        ITEM_NONE,
+        ITEM_NONE,
+    },
+    {
+        0x3E, 0x38, 0x47, 0x45, 0x40, 0x32, 0x3A, 0x46, 0x39, 0x42, 0x48, 0x33,
+        0x3C, 0x3D, 0x37, 0x3F, 0x36, 0x34, 0x43, 0x41, 0x3B, 0x44, 0x49, 0x35,
+    },
+    {
+        1, 0x1E, 1, 1, 1, 1, 0x1E, 0x1E, 0x1E, 0x1E, 1, 1, 1, 1, 0x1E, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+    },
+    0x120009,
+    0x105F7C0,
+    { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },
+    { 8, 8, 8, 8, 8, 8, 8, 8, 8, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    {
+        { 0x15, 0x12, 0x17 },
+        { 0x14, 0x3E, 0x3E },
+        { 0x3E, 0x3E, 0x15 },
+        { 0x12, 0x17, 0x14 },
+        { 0x3E, 0x3E, 0x3E },
+        { 0x3E, 0x15, 0x12 },
+        { 0x17, 0x14, 0x3E },
+        { 0x3E, 0x3E, 0x3E },
+    },
+};
+
+u16 sSaveDebugChecksum = 0;
+
+u8 D_801C6A48[] = {
+    0x35, 0x33, 0x34, 0x32, 0x35,
+};
+
+u8 D_801C6A50[] = {
+    0x2F, 0x23, 0x29, 0x1D, 0x2F,
+};
+
+/**
+ *  Initialize debug save. This is also used on the Title Screen
+ *  This save has a mostly full inventory, every mask and 10 hearts.
+ *
+ *  Some noteable flags that are set:
+ *  TODO: Investigate the flags
+ */
 void Sram_InitDebugSave(void) {
     func_80144628();
 
-    Lib_MemCpy(&gSaveContext.save.playerData, &D_801C6970, sizeof(SavePlayerData));
-    Lib_MemCpy(&gSaveContext.save.equips, &D_801C6998, sizeof(ItemEquips));
-    Lib_MemCpy(&gSaveContext.save.inventory, &D_801C69BC, sizeof(Inventory));
-    Lib_MemCpy(&gSaveContext.save.checksum, &D_801C6A44, sizeof(gSaveContext.save.checksum));
+    Lib_MemCpy(&gSaveContext.save.playerData, &sSaveDebugPlayerData, sizeof(SavePlayerData));
+    Lib_MemCpy(&gSaveContext.save.equips, &sSaveDebugItemEquips, sizeof(ItemEquips));
+    Lib_MemCpy(&gSaveContext.save.inventory, &sSaveDebugInventory, sizeof(Inventory));
+    Lib_MemCpy(&gSaveContext.save.checksum, &sSaveDebugChecksum, sizeof(gSaveContext.save.checksum));
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
         gSaveContext.save.equips.buttonItems[0][2] = D_801C6A48[((void)0, gSaveContext.save.playerForm & 0xFF)];
@@ -1034,8 +1044,10 @@ void func_80144A94(SramContext* sramCtx) {
     gSaveContext.jinxTimer = 0;
 }
 
+u16 D_801C6A58[] = { 0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30 };
+
 #ifdef NON_EQUIVALENT
-void func_80144E78(GameState* gameState, SramContext* sramCtx) {
+void Sram_OpenSave(GameState* gameState, SramContext* sramCtx) {
     s32 i;
     FileChooseContext* fileChooseCtx = (FileChooseContext*)gameState;
     s32 phi_t1 = 0;
@@ -1130,7 +1142,7 @@ void func_80144E78(GameState* gameState, SramContext* sramCtx) {
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80144E78.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_OpenSave.s")
 #endif
 
 void func_8014546C(SramContext* sramCtx) {
@@ -1623,7 +1635,7 @@ void func_80146AA0(GameState* gameState, SramContext* sramCtx) {
     s16 phi_a0;
 
     if (gSaveContext.unk_3F3F) {
-        func_80144890();
+        Sram_InitNewSave();
         if (fileChooseCtx->unk_24480 == 0) {
             gSaveContext.save.cutscene = 0xFFF0;
         }
@@ -1695,7 +1707,7 @@ void func_80146E40(GameState* gameState, SramContext* sramCtx) {
 
 void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F != 0) {
-        sramCtx->saveBuf = THA_AllocEndAlign16(&gamestate->heap, 0x4000);
+        sramCtx->saveBuf = THA_AllocEndAlign16(&gamestate->heap, sizeof(*sramCtx->saveBuf));
         sramCtx->status = 0;
     }
 }
@@ -1866,5 +1878,5 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     func_80146EBC(sramCtx, D_801C6840[arg2 * 2 + 1], D_801C6850[arg2 * 2]);
 }
 
-void Sram_nop8014750C(s32 arg0) {
+void Sram_nop8014750C(UNK_TYPE4 arg0) {
 }
