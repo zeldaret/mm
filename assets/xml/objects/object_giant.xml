@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_giant" Segment="6">
         <!-- Giant Unused Animation -->
-        <Animation Name="gGiantUnusedWalkAnim" Offset="0x2168" /> <!-- Named "kya_testwalk" in MM3D -->
+        <Animation Name="gGiantLargeStrideAnim" Offset="0x2168" /> <!-- Original name is "kya_testwalk" -->
 
         <!-- Giant Body Vertices. Contains everything but the beard. -->
         <Array Name="gGiantBodyVtx" Count="444" Offset="0x2180">
@@ -37,9 +37,9 @@
         <Texture Name="gGiantForearmAndKneeTex" OutName="giant_forearm_and_knee" Format="ci8" Width="16" Height="16" Offset="0x5780" />
         <Texture Name="gGiantUpperArmAndThighTex" OutName="giant_upper_arm_and_thigh" Format="ci8" Width="16" Height="16" Offset="0x5880" />
         <Texture Name="gGiantHandTex" OutName="giant_hand" Format="ci8" Width="16" Height="16" Offset="0x5980" />
-        <Texture Name="gGiantFaceEyeOpenTex" OutName="giant_face_eye_open" Format="ci8" Width="32" Height="64" Offset="0x5A80" />
-        <Texture Name="gGiantFaceEyeHalfTex" OutName="giant_face_eye_half" Format="ci8" Width="32" Height="64" Offset="0x6280" />
-        <Texture Name="gGiantFaceEyeClosedTex" OutName="giant_face_eye_closed" Format="ci8" Width="32" Height="64" Offset="0x6A80" />
+        <Texture Name="gGiantFaceEyeOpenTex" OutName="giant_face_eye_open" Format="ci8" Width="32" Height="64" Offset="0x5A80" TlutOffset="0x5380" />
+        <Texture Name="gGiantFaceEyeHalfTex" OutName="giant_face_eye_half" Format="ci8" Width="32" Height="64" Offset="0x6280" TlutOffset="0x5380" />
+        <Texture Name="gGiantFaceEyeClosedTex" OutName="giant_face_eye_closed" Format="ci8" Width="32" Height="64" Offset="0x6A80" TlutOffset="0x5380" />
         <Texture Name="gGiantGroinTex" OutName="giant_groin" Format="ci8" Width="16" Height="16" Offset="0x7280" />
         <Texture Name="gGiantHairTex" OutName="giant_hair" Format="ci8" Width="16" Height="32" Offset="0x7380" />
 
@@ -71,20 +71,20 @@
         <Skeleton Name="gGiantSkel" Type="Flex" LimbType="Standard" Offset="0x79B0" />
 
         <!-- Giant Animations -->
-        <Animation Name="gGiantLookUpStartAnim" Offset="0x8394" /> <!-- Named "kyo_kaoage" ("raising face") in MM3D -->
-        <Animation Name="gGiantLookUpLoopAnim" Offset="0x96E4" /> <!-- Named "kyo_kaoage_loop" in MM3D -->
-        <Animation Name="gGiantBigCallStartAnim" Offset="0xA1C4" /> <!-- Named "kyo_sakebi" ("cry") in MM3D. Stretches his arms outward -->
-        <Animation Name="gGiantSmallCallStartAnim" Offset="0xACA4" /> <!-- Named "kyo_sakebi2" ("cry2") in MM3D. Places his hands over his mouth -->
-        <Animation Name="gGiantSmallCallLoopAnim" Offset="0xB784" /> <!-- Named "kyo_sakebi2_loop" in MM3D -->
-        <Animation Name="gGiantSmallCallEndAnim" Offset="0xC5D4" /> <!-- Named "kyo_sakebi2_modori" ("cry2 return") in MM3D -->
-        <Animation Name="gGiantBigCallLoopAnim" Offset="0xD040" /> <!-- Named "kyo_sakebi_loop" in MM3D -->
-        <Animation Name="gGiantBigCallEndAnim" Offset="0xDE84" /> <!-- Named "kyo_sakebi_modori" ("cry return") in MM3D -->
-        <Animation Name="gGiantFallingOverAnim" Offset="0x102A4" /> <!-- Named "kyo_taoreru" ("falling over") in MM3D -->
-        <Animation Name="gGiantRaisedArmsStartAnim" Offset="0x116E4" /> <!-- Named "kyo_teage" ("raising arm") in MM3D -->
-        <Animation Name="gGiantRaisedArmsLoopAnim" Offset="0x12A38" /> <!-- Named "kyo_teage_loop" in MM3D -->
-        <Animation Name="gGiantStruggleStartAnim" Offset="0x13004" /> <!-- Named "kyo_tukisasae" ("holding up the moon") in MM3D -->
-        <Animation Name="gGiantStruggleLoopAnim" Offset="0x13FE8" /> <!-- Named "kyo_tukisasae_loop" in MM3D -->
-        <Animation Name="gGiantIdleAnim" Offset="0x15334" /> <!-- Named "kyo_wait" in MM3D -->
-        <Animation Name="gGiantWalkingAnim" Offset="0x17944" /> <!-- Named "kyo_walk" in MM3D -->
+        <Animation Name="gGiantLookUpStartAnim" Offset="0x8394" /> <!-- Original name is "kyo_kaoage" ("raising face") -->
+        <Animation Name="gGiantLookUpLoopAnim" Offset="0x96E4" /> <!-- Original name is "kyo_kaoage_loop" -->
+        <Animation Name="gGiantBigCallStartAnim" Offset="0xA1C4" /> <!-- Original name is "kyo_sakebi" ("cry"). Stretches his arms outward -->
+        <Animation Name="gGiantSmallCallStartAnim" Offset="0xACA4" /> <!-- Original name is "kyo_sakebi2" ("cry2"). Places his hands over his mouth -->
+        <Animation Name="gGiantSmallCallLoopAnim" Offset="0xB784" /> <!-- Original name is "kyo_sakebi2_loop" -->
+        <Animation Name="gGiantSmallCallEndAnim" Offset="0xC5D4" /> <!-- Original name is "kyo_sakebi2_modori" ("cry2 return") -->
+        <Animation Name="gGiantBigCallLoopAnim" Offset="0xD040" /> <!-- Original name is "kyo_sakebi_loop" -->
+        <Animation Name="gGiantBigCallEndAnim" Offset="0xDE84" /> <!-- Original name is "kyo_sakebi_modori" ("cry return") -->
+        <Animation Name="gGiantFallingOverAnim" Offset="0x102A4" /> <!-- Original name is "kyo_taoreru" ("falling over") -->
+        <Animation Name="gGiantRaisedArmsStartAnim" Offset="0x116E4" /> <!-- Original name is "kyo_teage" ("raising arm") -->
+        <Animation Name="gGiantRaisedArmsLoopAnim" Offset="0x12A38" /> <!-- Original name is "kyo_teage_loop" -->
+        <Animation Name="gGiantStruggleStartAnim" Offset="0x13004" /> <!-- Original name is "kyo_tukisasae" ("holding up the moon") -->
+        <Animation Name="gGiantStruggleLoopAnim" Offset="0x13FE8" /> <!-- Original name is "kyo_tukisasae_loop" -->
+        <Animation Name="gGiantIdleAnim" Offset="0x15334" /> <!-- Original name is "kyo_wait" -->
+        <Animation Name="gGiantWalkingAnim" Offset="0x17944" /> <!-- Original name is "kyo_walk" -->
     </File>
 </Root>
