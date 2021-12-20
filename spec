@@ -473,8 +473,7 @@ beginseg
     include "build/data/code/z_eff_footmark.data.o"
     include "build/src/code/code_800F0390.o"
     include "build/src/code/z_elf_message.o"
-    include "build/src/code/code_800F07C0.o"
-    include "build/data/code/code_801BC2A0.data.o"
+    include "build/src/code/z_en_hy.o"
     include "build/src/code/z_face_reaction.o"
     include "build/src/code/z_env_flags.o"
     include "build/src/code/z_eventmgr.o"
@@ -670,7 +669,7 @@ beginseg
     include "build/src/code/audio/code_801A7B10.o"
     include "build/data/code/code_801A7B10.data.o"
     include "build/data/code/code_801A7B10.bss.o"
-    include "build/data/code/audio_init_params.rodata.o"
+    include "build/src/code/audio/audio_init_params.o"
     include "build/src/code/jpegutils.o"
     include "build/src/code/jpegdecoder.o"
     include_readonly "build/src/code/z_game_over.o"
@@ -2011,8 +2010,7 @@ beginseg
     name "ovl_Effect_Ss_Kakera"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.o"
-    include "build/data/ovl_Effect_Ss_Kakera/ovl_Effect_Ss_Kakera.data.o"
-    include "build/data/ovl_Effect_Ss_Kakera/ovl_Effect_Ss_Kakera.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Kakera/ovl_Effect_Ss_Kakera_reloc.o"
 endseg
 
 beginseg
@@ -3233,8 +3231,7 @@ beginseg
     name "ovl_En_Test5"
     compress
     include "build/src/overlays/actors/ovl_En_Test5/z_en_test5.o"
-    include "build/data/ovl_En_Test5/ovl_En_Test5.data.o"
-    include "build/data/ovl_En_Test5/ovl_En_Test5.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Test5/ovl_En_Test5_reloc.o"
 endseg
 
 beginseg
@@ -4131,8 +4128,7 @@ beginseg
     name "ovl_Bg_Goron_Oyu"
     compress
     include "build/src/overlays/actors/ovl_Bg_Goron_Oyu/z_bg_goron_oyu.o"
-    include "build/data/ovl_Bg_Goron_Oyu/ovl_Bg_Goron_Oyu.data.o"
-    include "build/data/ovl_Bg_Goron_Oyu/ovl_Bg_Goron_Oyu.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Goron_Oyu/ovl_Bg_Goron_Oyu_reloc.o"
 endseg
 
 beginseg
@@ -4632,8 +4628,7 @@ beginseg
     name "ovl_En_Tanron3"
     compress
     include "build/src/overlays/actors/ovl_En_Tanron3/z_en_tanron3.o"
-    include "build/data/ovl_En_Tanron3/ovl_En_Tanron3.data.o"
-    include "build/data/ovl_En_Tanron3/ovl_En_Tanron3.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Tanron3/ovl_En_Tanron3_reloc.o"
 endseg
 
 beginseg
@@ -5294,9 +5289,7 @@ beginseg
     name "ovl_Obj_Yado"
     compress
     include "build/src/overlays/actors/ovl_Obj_Yado/z_obj_yado.o"
-    include "build/data/ovl_Obj_Yado/ovl_Obj_Yado.data.o"
-    include "build/data/ovl_Obj_Yado/ovl_Obj_Yado.bss.o"
-    include "build/data/ovl_Obj_Yado/ovl_Obj_Yado.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Yado/ovl_Obj_Yado_reloc.o"
 endseg
 
 beginseg
@@ -5504,8 +5497,7 @@ beginseg
     name "ovl_En_Invisible_Ruppe"
     compress
     include "build/src/overlays/actors/ovl_En_Invisible_Ruppe/z_en_invisible_ruppe.o"
-    include "build/data/ovl_En_Invisible_Ruppe/ovl_En_Invisible_Ruppe.data.o"
-    include "build/data/ovl_En_Invisible_Ruppe/ovl_En_Invisible_Ruppe.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Invisible_Ruppe/ovl_En_Invisible_Ruppe_reloc.o"
 endseg
 
 beginseg
