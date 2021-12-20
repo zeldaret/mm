@@ -998,9 +998,6 @@ s32 Cutscene_CountNormalMasks(void) {
     return count;
 }
 
-#ifdef NON_MATCHING
-// likely meme
-// Command 0xA: Textbox
 void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
     static s32 D_801BB160 = CS_TEXTBOX_TYPE_DEFAULT;
     u8 dialogState; // sp27
@@ -1039,82 +1036,79 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
             } else {
                 Message_StartTextbox(globalCtx, cmd->base, NULL);
             }
-            return;
+        } else {
+            goto else_label;
         }
     } else if (D_801BB128 != cmd->base) {
         D_801BB160 = CS_TEXTBOX_TYPE_LEARN_SONG;
         D_801BB128 = cmd->base;
         func_80152434(globalCtx, cmd->base);
-        return;
-    }
+    } else {
+    else_label:
+        if (csCtx->frames >= cmd->endFrame) {
+            originalCsFrames = csCtx->frames;
+            dialogState = func_80152498(&globalCtx->msgCtx);
+            if (dialogState != 2 && dialogState != 0 && dialogState != 7 && dialogState != 8) {
+                csCtx->frames--;
+                if (dialogState == 4 && func_80147624(globalCtx)) {
+                    if (globalCtx->msgCtx.choiceIndex == 0) {
+                        if (cmd->base == 0x33BD) {
+                            func_8019F230();
+                        }
 
-    if (csCtx->frames >= cmd->endFrame) {
-        originalCsFrames = csCtx->frames;
-        dialogState = func_80152498(&globalCtx->msgCtx);
-        if (dialogState != 2 && dialogState != 0 && dialogState != 7 && dialogState != 8) {
-            csCtx->frames--;
-            if (dialogState == 4 && func_80147624(globalCtx)) {
-                if (globalCtx->msgCtx.choiceIndex == 0) {
-                    if (cmd->base == 0x33BD) {
-                        func_8019F230();
-                    }
-
-                    if (cmd->textId1 != 0xFFFF) {
-                        func_80151938(globalCtx, cmd->textId1);
-                        if (cmd->type == CS_TEXTBOX_TYPE_3) {
-                            D_801BB160 = CS_TEXTBOX_TYPE_3;
-                            if (cmd->textId2 != 0xFFFF) {
-                                csCtx->frames++;
+                        if (cmd->textId1 != 0xFFFF) {
+                            func_80151938(globalCtx, cmd->textId1);
+                            if (cmd->type == CS_TEXTBOX_TYPE_3) {
+                                D_801BB160 = CS_TEXTBOX_TYPE_3;
+                                if (cmd->textId2 != 0xFFFF) {
+                                    csCtx->frames++;
+                                }
                             }
+                        } else {
+                            func_801477B4(globalCtx);
+                            csCtx->frames++;
                         }
                     } else {
-                        func_801477B4(globalCtx);
-                        csCtx->frames++;
-                    }
-                } else {
-                    if (cmd->base == 0x33BD) {
-                        func_8019F208();
-                    }
-
-                    if (cmd->textId2 != 0xFFFF) {
-                        func_80151938(globalCtx, cmd->textId2);
-                        if (cmd->type == CS_TEXTBOX_TYPE_3) {
-                            D_801BB160 = CS_TEXTBOX_TYPE_3;
-                            if (cmd->textId1 != 0xFFFF) {
-                                csCtx->frames++;
-                            }
+                        if (cmd->base == 0x33BD) {
+                            func_8019F208();
                         }
-                    } else {
-                        func_801477B4(globalCtx);
-                        csCtx->frames++;
+
+                        if (cmd->textId2 != 0xFFFF) {
+                            func_80151938(globalCtx, cmd->textId2);
+                            if (cmd->type == CS_TEXTBOX_TYPE_3) {
+                                D_801BB160 = CS_TEXTBOX_TYPE_3;
+                                if (cmd->textId1 != 0xFFFF) {
+                                    csCtx->frames++;
+                                }
+                            }
+                        } else {
+                            func_801477B4(globalCtx);
+                            csCtx->frames++;
+                        }
                     }
+                }
+
+                if (dialogState == 5 && func_80147624(globalCtx) != 0) {
+                    func_80152434(globalCtx, cmd->base);
                 }
             }
 
-            if (dialogState == 5 && func_80147624(globalCtx) != 0) {
-                func_80152434(globalCtx, cmd->base);
+            if ((dialogState == 2) && (D_801BB160 == CS_TEXTBOX_TYPE_3)) {
+                csCtx->frames--;
+                D_801BB124++;
             }
-        }
 
-        if ((dialogState == 2) && (D_801BB160 == CS_TEXTBOX_TYPE_3)) {
-            csCtx->frames--;
-            D_801BB124++;
-        }
-
-        if (originalCsFrames == csCtx->frames) {
-            Interface_ChangeAlpha(1);
-            D_801BB124 = 0;
-            D_801BB128 = 0;
-            func_80161C0C();
-        } else {
-            func_80161BE0(1);
+            if (originalCsFrames == csCtx->frames) {
+                Interface_ChangeAlpha(1);
+                D_801BB124 = 0;
+                D_801BB128 = 0;
+                func_80161C0C();
+            } else {
+                func_80161BE0(1);
+            }
         }
     }
 }
-#else
-s32 D_801BB160 = 0;
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_Command_Textbox.s")
-#endif
 
 void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
     s32 i;
