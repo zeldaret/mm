@@ -141,7 +141,7 @@ s32 D_801C6798[] = {
 // items?
 u8 D_801C67B0[24] = {
     ITEM_NONE,  ITEM_BOW,  ITEM_NONE, ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
-    ITEM_STICK, ITEM_NUT,  ITEM_BEAN, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
+    ITEM_STICK, ITEM_NUT,  ITEM_MAGIC_BEANS, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
     ITEM_NONE,  ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_NONE, ITEM_NONE,
 };
 
@@ -280,14 +280,14 @@ Inventory D_801C69BC = {
         ITEM_BOMBCHU,
         ITEM_STICK,
         ITEM_NUT,
-        ITEM_BEAN,
+        ITEM_MAGIC_BEANS,
         ITEM_ROOM_KEY,
         ITEM_POWDER_KEG,
         ITEM_PICTO_BOX,
         ITEM_LENS,
         ITEM_HOOKSHOT,
         ITEM_SWORD_GREAT_FAIRY,
-        ITEM_LETTER_KAFEI,
+        ITEM_LETTER_TO_KAFEI,
         ITEM_BOTTLE,
         ITEM_POTION_RED,
         ITEM_POTION_GREEN,
@@ -856,7 +856,7 @@ void func_80144628(void) {
 
     // Instead of bloating all save context accesses with an extra sub-struct, the size of the would-be sub-struct
     // is calculated manually
-    bzero(&gSaveContext.save.playerData, sizeof(Save) - OFFSETOF(Save, playerData));
+    bzero(&gSaveContext.save.playerData, sizeof(Save) - offsetof(Save, playerData));
 }
 
 void Sram_GenerateRandomSaveFields(void) {
@@ -1146,9 +1146,9 @@ void func_8014546C(SramContext* sramCtx) {
         }
 
         gSaveContext.save.checksum = 0;
-        gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, OFFSETOF(SaveContext, fileNum));
+        gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, offsetof(SaveContext, fileNum));
 
-        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, OFFSETOF(SaveContext, fileNum));
+        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, offsetof(SaveContext, fileNum));
     } else {
         for (i = 0; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
             gSaveContext.save.roomInf[i][0] = gSaveContext.cycleSceneFlags[i].chest;

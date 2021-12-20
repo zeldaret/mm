@@ -185,14 +185,14 @@ void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->aboveGroundStatus) {
-        if (gSaveContext.weekEventReg[79] & 0x8) {
+        if (gSaveContext.save.weekEventReg[79] & 0x8) {
             this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
             this->songSummonDist = 80.0f;
             EnKakasi_SetupIdleUnderground(this);
         } else {
             Actor_SetHeight(&this->actor, 60.0f);
             this->unkFunc = EnKakasi_8096F88C;
-            if (gSaveContext.weekEventReg[83] & 0x1) {
+            if (gSaveContext.save.weekEventReg[83] & 0x1) {
                 EnKakasi_InitTimeSkipDialogue(this);
             } else {
                 EnKakasi_SetupIdleStanding(this);
@@ -311,13 +311,13 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (gSaveContext.respawnFlag != -4 && gSaveContext.respawnFlag != -8) {
-        if (gSaveContext.time != CLOCK_TIME(6, 0) && gSaveContext.time != CLOCK_TIME(18, 0) &&
+        if (gSaveContext.save.time != CLOCK_TIME(6, 0) && gSaveContext.save.time != CLOCK_TIME(18, 0) &&
             !(gSaveContext.eventInf[1] & 0x80)) {
 
             if (this->actor.textId == 0) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
                 this->actor.textId = 0x1653;
-                gSaveContext.weekEventReg[0x53] &= (u8)~1;
+                gSaveContext.save.weekEventReg[0x53] &= (u8)~1;
                 this->unkMsgState1AC = 5;
                 player->stateFlags1 |= 0x20;
                 this->actor.flags |= 0x10000;
@@ -341,7 +341,7 @@ void EnKakasi_SetupIdleStanding(EnKakasi* this) {
 }
 
 void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
-    u32 saveContextDay = gSaveContext.day;
+    u32 saveContextDay = gSaveContext.save.day;
     s16 passedValue1;
     s16 passedValue2;
 
@@ -370,7 +370,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
             EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelanime.playSpeed = 2.0f;
         }
-    } else if (saveContextDay == 3 && gSaveContext.isNight) {
+    } else if (saveContextDay == 3 && gSaveContext.save.isNight) {
         this->skelanime.playSpeed = 1.0f;
         if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
             EnKakasi_SetAnimation(this, 1);
@@ -397,7 +397,7 @@ void EnKakasi_SetupDialogue(EnKakasi* this) {
 }
 
 void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
-    u32 saveContextDay = gSaveContext.day;
+    u32 saveContextDay = gSaveContext.save.day;
     f32 currentAnimeFrame = this->skelanime.curFrame;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 2000, 0);
@@ -434,16 +434,16 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 
             // after timeskip
             if (this->actor.textId == 0x1653) {
-                u32 saveContextDay2 = gSaveContext.day;
+                u32 saveContextDay2 = gSaveContext.save.day;
 
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
 
-                if (saveContextDay2 == 3 && gSaveContext.isNight) {
+                if (saveContextDay2 == 3 && gSaveContext.save.isNight) {
                     // text: dangerous outside
                     this->actor.textId = 0x164F;
-                } else if (gSaveContext.isNight) {
+                } else if (gSaveContext.save.isNight) {
                     // text: would you like to skip time?
                     this->actor.textId = 0x164E;
                 } else {
@@ -484,7 +484,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
-                if (gSaveContext.isNight) {
+                if (gSaveContext.save.isNight) {
                     this->actor.textId = 0x164E;
                 } else {
                     this->actor.textId = 0x1645;
@@ -528,7 +528,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                     this->actor.textId = 0x1658;
                 } else if (this->actor.textId == 0x165C) {
                     this->actor.textId = 0x165E;
-                } else if (saveContextDay == 3 && gSaveContext.isNight) {
+                } else if (saveContextDay == 3 && gSaveContext.save.isNight) {
                     this->actor.textId = 0x164F;
                 } else {
                     this->actor.textId = 0x1652;
@@ -797,7 +797,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
  * talking before dancing the night away, and cutscene setup
  */
 void EnKakasi_DancingRemark(EnKakasi* this, GlobalContext* globalCtx) {
-    u32 currentDay = gSaveContext.day;
+    u32 currentDay = gSaveContext.save.day;
 
     this->unkState196 = 3;
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -808,7 +808,7 @@ void EnKakasi_DancingRemark(EnKakasi* this, GlobalContext* globalCtx) {
     } else {
         ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->actor);
         this->cutsceneCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
-        if (currentDay == 3 && gSaveContext.isNight) {
+        if (currentDay == 3 && gSaveContext.save.isNight) {
             EnKakasi_SetupDigAway(this);
         } else {
             func_801A2BB8(NA_BGM_SARIAS_SONG);
@@ -945,15 +945,15 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
                 func_80169EFC(globalCtx);
 
                 if (0) {}
-                if (gSaveContext.time > CLOCK_TIME(18, 0) || gSaveContext.time < CLOCK_TIME(6, 0)) {
-                    gSaveContext.time = CLOCK_TIME(6, 0);
+                if (gSaveContext.save.time > CLOCK_TIME(18, 0) || gSaveContext.save.time < CLOCK_TIME(6, 0)) {
+                    gSaveContext.save.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;
                     gSaveContext.eventInf[2] |= 0x80;
                 } else {
-                    gSaveContext.time = CLOCK_TIME(18, 0);
+                    gSaveContext.save.time = CLOCK_TIME(18, 0);
                     gSaveContext.respawnFlag = -8;
                 }
-                gSaveContext.weekEventReg[0x53] |= 1;
+                gSaveContext.save.weekEventReg[0x53] |= 1;
                 this->unk190 = 0;
                 this->actionFunc = EnKakasi_DoNothing;
             }
@@ -1022,7 +1022,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx) {
 
     Math_ApproachF(&this->actor.shape.yOffset, -6000.0f, 0.5f, 200.0f);
     if (fabsf(this->actor.shape.yOffset + 6000.0f) < 10.0f) {
-        gSaveContext.weekEventReg[79] |= 8;
+        gSaveContext.save.weekEventReg[79] |= 8;
         func_800B7298(globalCtx, &this->actor, 6);
         ActorCutscene_Stop(this->actorCutscenes[0]);
         this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
@@ -1040,7 +1040,7 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 }
 
 void EnKakasi_IdleUnderground(EnKakasi* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.weekEventReg[79] & 0x8) && this->actor.xzDistToPlayer < this->songSummonDist &&
+    if ((gSaveContext.save.weekEventReg[79] & 0x8) && this->actor.xzDistToPlayer < this->songSummonDist &&
         (BREG(1) != 0 || globalCtx->msgCtx.unk1202A == 0xD)) {
         this->actor.flags &= ~0x8000000;
         globalCtx->msgCtx.unk1202A = 4;

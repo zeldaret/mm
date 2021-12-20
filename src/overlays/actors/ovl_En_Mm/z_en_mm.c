@@ -73,8 +73,8 @@ void EnMm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMm* this = THIS;
     EnMmActionFunc action;
 
-    if ((this->actor.params >= 0) && ((!(gSaveContext.weekEventReg[37] & 0x10)) ||
-                                      (gSaveContext.weekEventReg[37] & 8) || (gSaveContext.unk_1014 != 0))) {
+    if ((this->actor.params >= 0) && ((!(gSaveContext.save.weekEventReg[37] & 0x10)) ||
+                                      (gSaveContext.save.weekEventReg[37] & 8) || (gSaveContext.unk_1014 != 0))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

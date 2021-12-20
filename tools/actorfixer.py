@@ -350,6 +350,11 @@ animdict = {
     "gSaveContext.health": "gSaveContext.save.playerData.health",
     "gSaveContext.inventory": "gSaveContext.save.inventory",
     "gSaveContext.equippedMask": "gSaveContext.save.equippedMask",
+    "gSaveContext.entranceIndex": "gSaveContext.save.entranceIndex",
+    "gSaveContext.time": "gSaveContext.save.time",
+    "gSaveContext.unk_14": "gSaveContext.save.daySpeed",
+    "gSaveContext.rupees": "gSaveContext.save.playerData.rupees",
+    "gSaveContext.magicAcquired": "gSaveContext.save.playerData.magicAcquired",
 }
 
 def replace_anim(file):

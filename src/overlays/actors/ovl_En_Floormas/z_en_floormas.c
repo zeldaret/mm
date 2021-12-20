@@ -730,7 +730,7 @@ void func_808D217C(EnFloormas* this, Player* player) {
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
     func_808D08D0(this);
-    playerForm = gSaveContext.playerForm;
+    playerForm = gSaveContext.save.playerForm;
     ptr = &D_808D3900[playerForm];
     this->actor.home.pos.x = ptr->z * Math_SinS(this->actor.shape.rot.y);
     this->actor.home.pos.y = CLAMP(-this->actor.playerHeightRel, ptr->x, ptr->y);

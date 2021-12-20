@@ -257,19 +257,19 @@ static ActorAnimationEntryS sAnimations[] = {
 };
 
 s32 func_80AF7B40(void) {
-    if (gSaveContext.weekEventReg[90] & 1) {
+    if (gSaveContext.save.weekEventReg[90] & 1) {
         return 4;
     }
 
-    if (gSaveContext.weekEventReg[89] & 0x40) {
+    if (gSaveContext.save.weekEventReg[89] & 0x40) {
         return 3;
     }
 
-    if (gSaveContext.weekEventReg[89] & 8) {
+    if (gSaveContext.save.weekEventReg[89] & 8) {
         return 2;
     }
 
-    if (gSaveContext.weekEventReg[86] & 1) {
+    if (gSaveContext.save.weekEventReg[86] & 1) {
         return 1;
     }
 
@@ -279,29 +279,29 @@ s32 func_80AF7B40(void) {
 s32 func_80AF7BAC(EnPm* this) {
     switch (this->unk_38C) {
         case 0:
-            if (gSaveContext.weekEventReg[86] & 1) {
-                D_801F4E78 = gSaveContext.time;
+            if (gSaveContext.save.weekEventReg[86] & 1) {
+                D_801F4E78 = gSaveContext.save.time;
                 this->unk_38C++;
             }
             break;
 
         case 1:
-            if (gSaveContext.weekEventReg[89] & 8) {
-                D_801F4E78 = gSaveContext.time;
+            if (gSaveContext.save.weekEventReg[89] & 8) {
+                D_801F4E78 = gSaveContext.save.time;
                 this->unk_38C++;
             }
             break;
 
         case 2:
-            if (gSaveContext.weekEventReg[89] & 0x40) {
+            if (gSaveContext.save.weekEventReg[89] & 0x40) {
                 D_801F4E78 = 0;
                 this->unk_38C++;
             }
             break;
 
         case 3:
-            if (gSaveContext.weekEventReg[90] & 1) {
-                D_801F4E78 = gSaveContext.time;
+            if (gSaveContext.save.weekEventReg[90] & 1) {
+                D_801F4E78 = gSaveContext.save.time;
                 this->unk_38C++;
             }
             break;
@@ -555,7 +555,7 @@ s32 func_80AF81E8(EnPm* this, GlobalContext* globalCtx) {
         case 1:
         case 3:
         case 5:
-            if ((gSaveContext.weekEventReg[86] & 8) && (this->unk_378 == 3)) {
+            if ((gSaveContext.save.weekEventReg[86] & 8) && (this->unk_378 == 3)) {
                 ActorCutscene_Stop(sp2A);
             } else {
                 func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
@@ -823,24 +823,24 @@ void func_80AF8BA8(s32 arg0) {
     };
     s32 temp;
 
-    if (!(gSaveContext.weekEventReg[88] & 2)) {
-        if (gSaveContext.weekEventReg[D_80AFB8D4[arg0] >> 8] & (D_80AFB8D4[arg0] & 0xFF)) {
-            switch (gSaveContext.day) {
+    if (!(gSaveContext.save.weekEventReg[88] & 2)) {
+        if (gSaveContext.save.weekEventReg[D_80AFB8D4[arg0] >> 8] & (D_80AFB8D4[arg0] & 0xFF)) {
+            switch (gSaveContext.save.day) {
                 case 2:
-                    gSaveContext.weekEventReg[28] |= 8;
+                    gSaveContext.save.weekEventReg[28] |= 8;
                     break;
 
                 case 3:
-                    gSaveContext.weekEventReg[28] |= 0x10;
+                    gSaveContext.save.weekEventReg[28] |= 0x10;
                     break;
             }
-            gSaveContext.weekEventReg[51] |= 2;
-            gSaveContext.weekEventReg[90] |= 8;
+            gSaveContext.save.weekEventReg[51] |= 2;
+            gSaveContext.save.weekEventReg[90] |= 8;
         }
     }
 
-    temp = gSaveContext.weekEventReg[D_80AFB8E0[arg0] >> 8];
-    gSaveContext.weekEventReg[D_80AFB8E0[arg0] >> 8] = temp | (D_80AFB8E0[arg0] & 0xFF);
+    temp = gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8];
+    gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8] = temp | (D_80AFB8E0[arg0] & 0xFF);
 }
 
 void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
@@ -940,7 +940,7 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp56 = gSaveContext.time - 0x3FFC;
+    u16 sp56 = gSaveContext.save.time - 0x3FFC;
     u8 sp55 = this->actor.params & 0xFF;
     Actor* sp50;
     Vec3s* sp4C;
@@ -974,7 +974,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             this->unk_36C = arg2->unk8 - arg2->unk4;
             this->unk_36E = sp56 - arg2->unk4;
             this->actor.flags &= ~1;
-            if (gSaveContext.weekEventReg[90] & 8) {
+            if (gSaveContext.save.weekEventReg[90] & 8) {
                 this->unk_356 |= 0x800;
             }
             this->unk_356 |= 0x9000;
@@ -988,7 +988,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp2E = (u16)(gSaveContext.time - 0x3FFC);
+    u16 sp2E = (u16)(gSaveContext.save.time - 0x3FFC);
     u16 phi_v1;
     u8 sp2B = this->actor.params & 0xFF;
     s32 pad;
@@ -1052,7 +1052,7 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             default:
                 func_8013AED4(&this->unk_356, 3, 7);
                 func_80AF7E98(this, 0);
-                if (gSaveContext.weekEventReg[90] & 8) {
+                if (gSaveContext.save.weekEventReg[90] & 8) {
                     this->unk_356 |= 0x800;
                 }
                 this->unk_356 |= 0x9000;
@@ -1168,10 +1168,10 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
                 break;
 
             case 23:
-                if (gSaveContext.weekEventReg[90] & 8) {
+                if (gSaveContext.save.weekEventReg[90] & 8) {
                     this->unk_356 |= 0x800;
                 }
-                gSaveContext.weekEventReg[60] |= 4;
+                gSaveContext.save.weekEventReg[60] |= 4;
 
             default:
                 if (arg2->unk0 == 0x1D) {
@@ -1489,11 +1489,11 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_356 & 0x10) && (this->unk_258 == 90)) {
-        u8 val = gSaveContext.weekEventReg[89] | 0x40;
+        u8 val = gSaveContext.save.weekEventReg[89] | 0x40;
 
-        gSaveContext.weekEventReg[89] = val;
+        gSaveContext.save.weekEventReg[89] = val;
         if (val == 0) {
-            gSaveContext.weekEventReg[89] |= 0x40;
+            gSaveContext.save.weekEventReg[89] |= 0x40;
         }
     }
 
@@ -1506,8 +1506,8 @@ s32 func_80AFA170(EnPm* this, GlobalContext* globalCtx) {
 
     switch (this->unk_258) {
         case 28:
-            if (gSaveContext.time >= CLOCK_TIME(1, 39)) {
-                gSaveContext.weekEventReg[89] |= 8;
+            if (gSaveContext.save.time >= CLOCK_TIME(1, 39)) {
+                gSaveContext.save.weekEventReg[89] |= 8;
             }
 
         case 16:
@@ -1696,16 +1696,16 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
     static UNK_PTR D_80AFB900[] = {
         D_80AFAD80, D_80AFB30C, D_80AFB3C0, D_80AFB3FC, D_80AFB41C,
     };
-    u16 time = gSaveContext.time;
+    u16 time = gSaveContext.save.time;
     u16 sp3C = 0;
-    u32* unk_14 = &gSaveContext.unk_14;
+    u32* unk_14 = &gSaveContext.save.daySpeed;
     struct_80133038_arg2 sp2C;
 
     this->unk_374 = REG(15) + *unk_14;
     if (this->unk_38C != 0) {
-        time = gSaveContext.time - D_801F4E78;
-        sp3C = gSaveContext.time;
-        gSaveContext.time = time;
+        time = gSaveContext.save.time - D_801F4E78;
+        sp3C = gSaveContext.save.time;
+        gSaveContext.save.time = time;
     }
 
     if (!func_80133038(globalCtx, D_80AFB900[this->unk_38C], &sp2C) ||
@@ -1722,7 +1722,7 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
     this->unk_268 = func_80AF8040(this, globalCtx);
     func_80AFA438(this, globalCtx);
     if (this->unk_38C != 0) {
-        gSaveContext.time = sp3C;
+        gSaveContext.save.time = sp3C;
     }
 }
 
@@ -1830,7 +1830,7 @@ void func_80AFAA44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
                 Matrix_MultiplyVector3fByState(&D_801D15B0, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }
-            if ((this->unk_356 & 0x8000) && !(gSaveContext.weekEventReg[90] & 4)) {
+            if ((this->unk_356 & 0x8000) && !(gSaveContext.save.weekEventReg[90] & 4)) {
                 func_80AF8890(this, gfx, 1);
             }
             break;

@@ -199,7 +199,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         if (this->actor.textId == 0x2AD9) {
             Actor_SetSwitchFlag(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
-            if ((gSaveContext.weekEventReg[63] & 0x80)) {
+            if ((gSaveContext.save.weekEventReg[63] & 0x80)) {
                 this->actor.textId = 0x2ADF;
             } else {
                 this->actor.textId = 0x2ADA;
@@ -522,7 +522,7 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
             Actor_SetSwitchFlag(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
-            if (gSaveContext.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
+            if (gSaveContext.save.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
                 this->actor.textId = 0x2ADF; // Mayor's office is on the left (meeting ended)
             } else {
                 this->actor.textId = 0x2ADA; // Mayor's office is on the left (meeting ongoing)

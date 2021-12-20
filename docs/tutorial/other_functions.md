@@ -378,7 +378,7 @@ There remains one thing we need to fix before trying to compile it, namely `*(&g
     /* 0x0EF8 */ u8 weekEventReg[100];       // "week_event_reg"
     /* 0x0F5C */ u32 mapsVisited;            // "area_arrival"
 ```
-so it's somewhere in `weekEventReg`. `0xF37 - 0xEF8 = 0x3F = 63`, and it's a byte array, so the access is actually `gSaveContext.weekEventReg[63] & 0x80`. Now it will compile. We also don't use `!= 0` for flag comparisons: just `if (gSaveContext.weekEventReg[63] & 0x80)` will do.
+so it's somewhere in `weekEventReg`. `0xF37 - 0xEF8 = 0x3F = 63`, and it's a byte array, so the access is actually `gSaveContext.save.weekEventReg[63] & 0x80`. Now it will compile. We also don't use `!= 0` for flag comparisons: just `if (gSaveContext.save.weekEventReg[63] & 0x80)` will do.
 
 Running `./diff.py -mwo3 func_80C102D4` and scrolling down, we discover that this doesn't match!
 
