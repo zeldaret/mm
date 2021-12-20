@@ -1,6 +1,6 @@
-<Root>
+﻿<Root>
     <File Name="object_gmo" Segment="6">
-        <Animation Name="gNejironUnusedAnim" Offset="0x18" />
+        <Animation Name="gNejironUnusedAnim" Offset="0x18" /> <!-- Original name might be "gm_default" -->
         <DList Name="gNejironBodyDL" Offset="0xB70" />
         <DList Name="gNejironEyesDL" Offset="0xE38" />
         <Texture Name="gNejironBodyTLUT" OutName="nejiron_body_palette" Format="rgba16" Width="16" Height="16" Offset="0xEC8" />
