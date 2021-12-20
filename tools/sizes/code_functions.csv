@@ -2509,7 +2509,7 @@ asm/non_matchings/code/z_play/func_80166B30.s,func_80166B30,0x80166B30,0x339
 asm/non_matchings/code/z_play/func_80167814.s,func_80167814,0x80167814,0x174
 asm/non_matchings/code/z_play/func_80167DE4.s,func_80167DE4,0x80167DE4,0x4A
 asm/non_matchings/code/z_play/func_80167F0C.s,func_80167F0C,0x80167F0C,0x61
-asm/non_matchings/code/z_play/func_80168090.s,func_80168090,0x80168090,0x347
+asm/non_matchings/code/z_play/Play_Draw.s,Play_Draw,0x80168090,0x347
 asm/non_matchings/code/z_play/func_80168DAC.s,func_80168DAC,0x80168DAC,0x6E
 asm/non_matchings/code/z_play/Play_Update.s,Play_Update,0x80168F64,0x5A
 asm/non_matchings/code/z_play/func_801690CC.s,func_801690CC,0x801690CC,0xD

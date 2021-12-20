@@ -1,0 +1,5 @@
+﻿<Root>
+    <File Name="object_sinkai_kabe" Segment="6">
+        <Collision Name="object_sinkai_kabe_Colheader_000048" Offset="0x48" />
+    </File>
+</Root>

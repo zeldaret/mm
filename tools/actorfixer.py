@@ -409,6 +409,9 @@ animdict = {
     "actor.minVelocityY": "actor.terminalVelocity",
     "actor.yDistToWater" : "actor.depthInWater",
     "actor.yDistToPlayer" : "actor.playerHeightRel",
+
+    "globalCtx->mf_187FC" : "globalCtx->billboardMtxF",
+    "globalCtx->projectionMatrix" : "globalCtx->viewProjectionMtxF",
 }
 
 def replace_anim(file):
