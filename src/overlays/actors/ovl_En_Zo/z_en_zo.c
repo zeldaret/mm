@@ -106,8 +106,8 @@ static ActorAnimationEntryS sAnimations[] = {
 };
 
 s8 D_8099F578[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
-s8 D_8099F58C[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13, 0 };
-u8 D_8099F59C[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+s8 D_8099F58C[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
+u8 D_8099F59C[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
     s16 frameCount;
@@ -288,9 +288,9 @@ void EnZo_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnZo_UpdateCollider(this, globalCtx);
 }
 
-s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor,
+s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                           Gfx** gfx) {
-    EnZo* this = (EnZo*)actor;
+    EnZo* this = THIS;
 
     if (limbIndex == 15) {
         Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
@@ -311,8 +311,8 @@ s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return 0;
 }
 
-void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
-    EnZo* this = (EnZo*)actor;
+void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+    EnZo* this = THIS;
     Vec3f sp30 = { 400.0f, 0.0f, 0.0f };
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
@@ -320,7 +320,7 @@ void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         Matrix_MultiplyVector3fByState(&zeroVec, &this->unk_364[D_8099F578[limbIndex]]);
     }
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&sp30, &actor->focus.pos);
+        Matrix_MultiplyVector3fByState(&sp30, &this->actor.focus.pos);
     }
     if (limbIndex == 4) {
         Matrix_MultiplyVector3fByState(&zeroVec, &this->leftFootPos);
@@ -342,8 +342,8 @@ Gfx D_8099F5E8[] = {
 void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnZo* this = THIS;
     s32 i;
-    u8* alloc = GRAPH_ALLOC(globalCtx->state.gfxCtx, 0x1000);
-    u8* allocHead;
+    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(u8) * SQ(64));
+    u8* shadowTexIter;
     TexturePtr eyeTextures[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -360,14 +360,14 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
                            EnZo_OverrideLimbDraw, EnZo_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     Matrix_InsertXRotation_s(0, 0);
 
-    for (i = 0, allocHead = alloc; i < 0x1000; i++) {
-        *allocHead = 0;
-        allocHead++;
+    for (i = 0, shadowTexIter = shadowTex; i < (s32)sizeof(u8) * SQ(64); i++) {
+        *shadowTexIter = 0;
+        shadowTexIter++;
     }
     for (i = 0; i < 5; i++) {
-        func_8013CD64(this->unk_364, &this->actor.world.pos, alloc, i / 5.0f, 15, D_8099F59C, D_8099F58C);
+        func_8013CD64(this->unk_364, &this->actor.world.pos, shadowTex, i / 5.0f, 15, D_8099F59C, D_8099F58C);
     }
 
-    func_8013CF04(&this->actor, &globalCtx->state.gfxCtx, alloc);
+    func_8013CF04(&this->actor, &globalCtx->state.gfxCtx, shadowTex);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
