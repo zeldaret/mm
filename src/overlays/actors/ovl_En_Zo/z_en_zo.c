@@ -41,6 +41,7 @@ const ActorInit En_Zo_InitVars = {
     (ActorFunc)EnZo_Update,
     (ActorFunc)EnZo_Draw,
 };
+
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT0,
@@ -60,7 +61,9 @@ static ColliderCylinderInit sCylinderInit = {
     },
     { 18, 64, 0, { 0, 0, 0 } },
 };
+
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
+
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(0, 0x0),
@@ -95,15 +98,16 @@ static DamageTable sDamageTable = {
     /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
+
 static ActorAnimationEntryS sAnimations[] = {
     { &D_06004248, 1.0f, 0, -1, 0, 0 },  { &D_06004248, 1.0f, 0, -1, 0, -4 }, { &D_06003610, 1.0f, 0, -1, 0, -4 },
     { &D_06000598, 1.0f, 0, -1, 0, -4 }, { &D_06000D48, 1.0f, 0, -1, 0, -4 }, { &D_0600219C, 1.0f, 0, -1, 0, -4 },
     { &D_06002898, 1.0f, 0, -1, 0, -4 },
 };
+
 s8 D_8099F578[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
 s8 D_8099F58C[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13, 0 };
 u8 D_8099F59C[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-u16 D_8099F5AC[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
 
 s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
     s16 frameCount;
@@ -131,6 +135,7 @@ s32 EnZo_PlayWalkingSound(EnZo* this, GlobalContext* globalCtx) {
 
     leftWasGrounded = this->isLeftFootGrounded;
     rightWasGrounded = this->isRightFootGrounded;
+
     if (this->actor.bgCheckFlags & 0x20) {
         if (this->actor.depthInWater < 20.0f) {
             waterSfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
@@ -141,14 +146,17 @@ s32 EnZo_PlayWalkingSound(EnZo* this, GlobalContext* globalCtx) {
     } else {
         sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
     }
+
     this->isLeftFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->leftFootPos, -6.0f);
     if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
         Audio_PlayActorSound2(&this->actor, sfxId);
     }
+
     this->isRightFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->rightFootPos, -6.0f);
     if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
         Audio_PlayActorSound2(&this->actor, sfxId);
     }
+
     return 0;
 }
 
@@ -157,7 +165,7 @@ void EnZo_Blink(EnZo* this, s32 maxEyeIndex) {
         this->eyeIndex++;
         if (this->eyeIndex >= maxEyeIndex) {
             this->eyeIndex = 0;
-            this->blinkTimer = Rand_S16Offset(0x1E, 0x1E);
+            this->blinkTimer = Rand_S16Offset(30, 30);
         }
     }
 }
@@ -166,11 +174,13 @@ void EnZo_UpdateCollider(EnZo* this, GlobalContext* globalCtx) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
+
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
+    static u16 D_8099F5AC[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
     Player* player = GET_PLAYER(globalCtx);
     Vec3f focus;
 
@@ -184,20 +194,24 @@ void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
     } else {
         Math_SmoothStepToS(&this->headRotTarget.x, 0, 4, 1000, 1);
         Math_SmoothStepToS(&this->headRotTarget.y, 0, 4, 1000, 1);
+
         Math_SmoothStepToS(&this->headRot.x, 0, 4, 1000, 1);
         Math_SmoothStepToS(&this->headRot.y, 0, 4, 1000, 1);
+
         Math_SmoothStepToS(&this->upperBodyRot.x, 0, 4, 1000, 1);
         Math_SmoothStepToS(&this->upperBodyRot.y, 0, 4, 1000, 1);
     }
+
     EnZo_Blink(this, 3);
     func_8013D9C8(globalCtx, this->limbRotY, this->limbRotZ, 20);
 }
 
 void EnZo_Walk(EnZo* this, GlobalContext* globalCtx) {
-    if (ENZO_GET_PATH(&this->actor) != 0x3F) {
+    if (ENZO_NO_PATH(&this->actor)) {
         EnZo_SetAnimation(&this->skelAnime, 6);
     }
-    if (ENZO_GET_PATH(&this->actor) != 0x3F) {
+
+    if (ENZO_NO_PATH(&this->actor)) {
         this->actionFunc = EnZo_FollowPath;
     } else {
         this->actionFunc = EnZo_DoNothing;
@@ -216,6 +230,7 @@ void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx) {
             this->waypoint = 0;
         }
     }
+
     if (this->actor.depthInWater > 60.0f) {
         EnZo_SetAnimation(&this->skelAnime, 1);
         this->actionFunc = EnZo_TreadWater;
@@ -240,16 +255,19 @@ void EnZo_DoNothing(EnZo* this, GlobalContext* globalCtx) {
 
 void EnZo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnZo* this = THIS;
-    SkelAnime* skelAnime = &this->skelAnime;
+    s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D208, NULL, this->jointTable, this->morphTable, 20);
-    EnZo_SetAnimation(skelAnime, 0);
+    EnZo_SetAnimation(&this->skelAnime, 0);
+
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+
     this->path = func_8013D648(globalCtx, ENZO_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.01f);
+
     this->actionFunc = EnZo_Walk;
     this->actor.gravity = -4.0f;
 }
@@ -280,10 +298,12 @@ s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         Matrix_InsertZRotation_s(-this->headRot.x, MTXMODE_APPLY);
         Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
+
     if (limbIndex == 8) {
         Matrix_InsertXRotation_s(-this->upperBodyRot.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(-this->upperBodyRot.x, MTXMODE_APPLY);
     }
+
     if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 12)) {
         rot->y += (s16)(Math_SinS(this->limbRotY[limbIndex]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->limbRotZ[limbIndex]) * 200.0f);
@@ -328,15 +348,18 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
+
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gDPPipeSync(POLY_OPA_DISP++);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[this->eyeIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x0C, &D_8099F5E8[2]);
+
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                            EnZo_OverrideLimbDraw, EnZo_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     Matrix_InsertXRotation_s(0, 0);
+
     for (i = 0, allocHead = alloc; i < 0x1000; i++) {
         *allocHead = 0;
         allocHead++;
@@ -344,6 +367,7 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     for (i = 0; i < 5; i++) {
         func_8013CD64(this->unk_364, &this->actor.world.pos, alloc, i / 5.0f, 15, D_8099F59C, D_8099F58C);
     }
+
     func_8013CF04(&this->actor, &globalCtx->state.gfxCtx, alloc);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
