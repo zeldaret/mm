@@ -1,5 +1,5 @@
 /*
- * File z_obj_ghaka.c
+ * File: z_obj_ghaka.c
  * Overlay: ovl_Obj_Ghaka
  * Description: Darmani's Gravestone
  */

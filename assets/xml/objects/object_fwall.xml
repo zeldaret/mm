@@ -1,0 +1,6 @@
+﻿<Root>
+    <File Name="object_fwall" Segment="6">
+        <DList Name="object_fwall_DL_000040" Offset="0x40" />
+        <!-- <Blob Name="object_fwall_Blob_0000A0" Size="0x5C00" Offset="0xA0" /> -->
+    </File>
+</Root>
