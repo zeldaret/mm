@@ -1508,7 +1508,7 @@ void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void func_800EDBE0(GlobalContext* globalCtx);
-void nop_800EDDB0(GlobalContext* globalCtx);
+void func_800EDDB0(GlobalContext* globalCtx);
 void Cutscene_LoadCutsceneData(GlobalContext* globalCtx, u8 csIndex);
 void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex);
 void Cutscene_ActorTranslateAndYaw(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex);

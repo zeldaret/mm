@@ -42,7 +42,7 @@ void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
     D_801F4DE0 = 0;
 
-    Audio_SetCutsceneFlag(0);
+    Audio_SetCutsceneFlag(false);
 }
 
 void Cutscene_Start(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -107,7 +107,7 @@ void func_800EA258(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     Interface_ChangeAlpha(1);
     ShrinkWindow_SetLetterboxTarget(0x20);
     if (func_800EA220(globalCtx, csCtx, 1.0f)) {
-        Audio_SetCutsceneFlag(1);
+        Audio_SetCutsceneFlag(true);
         csCtx->state++;
     }
 }
@@ -117,7 +117,7 @@ void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     Interface_ChangeAlpha(1);
     ShrinkWindow_SetLetterboxTarget(0x20);
     if (func_800EA220(globalCtx, csCtx, 1.0f)) {
-        Audio_SetCutsceneFlag(1);
+        Audio_SetCutsceneFlag(true);
         csCtx->state++;
     }
 }
@@ -562,7 +562,7 @@ void Cutscene_Command_SetTime(GlobalContext* globalCtx, CutsceneContext* csCtx, 
 void Cutscene_TerminatorImpl(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     csCtx->state = CS_STATE_4;
     func_80165690();
-    Audio_SetCutsceneFlag(0);
+    Audio_SetCutsceneFlag(false);
     gSaveContext.unk_3F48 = 1;
 
     if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
@@ -1397,7 +1397,7 @@ void func_800ED980(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
 void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (func_800EA220(globalCtx, csCtx, 0.0f)) {
-        Audio_SetCutsceneFlag(0);
+        Audio_SetCutsceneFlag(false);
         csCtx->state = CS_STATE_0;
     }
 }
@@ -1416,7 +1416,7 @@ void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx) {
         gSaveContext.cutscene = 0;
         gSaveContext.gameMode = 0;
         ActorCutscene_Stop(0x7F);
-        Audio_SetCutsceneFlag(0);
+        Audio_SetCutsceneFlag(false);
         csCtx->state = CS_STATE_0;
     }
 }
@@ -1439,7 +1439,7 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
         csCtx->state++;
         if (csCtx->state == CS_STATE_1) {
-            Audio_SetCutsceneFlag(1);
+            Audio_SetCutsceneFlag(true);
 
             csCtx->frames = 0xFFFF;
             csCtx->csCamId = ActorCutscene_GetCurrentCamera(0x7F);
@@ -1507,7 +1507,7 @@ void func_800EDBE0(GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDBE0.s")
 #endif
 
-void nop_800EDDB0(GlobalContext* globalCtx) {
+void func_800EDDB0(GlobalContext* globalCtx) {
 }
 
 void func_800EDDBC(UNK_TYPE arg0, UNK_TYPE arg1) {
@@ -1530,7 +1530,7 @@ void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorAc
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry = globalCtx->csCtx.actorActions[actorActionIndex];
-    f32 t;
+    f32 progress;
 
     start.x = entry->startPos.x;
     start.y = entry->startPos.y;
@@ -1541,9 +1541,9 @@ void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorAc
 
     progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
-    actor->world.pos.x = ((end.x - start.x) * t) + start.x;
-    actor->world.pos.y = ((end.y - start.y) * t) + start.y;
-    actor->world.pos.z = ((end.z - start.z) * t) + start.z;
+    actor->world.pos.x = F32_LERPIMP(start.x, end.x, progress);
+    actor->world.pos.y = F32_LERPIMP(start.y, end.y, progress);
+    actor->world.pos.z = F32_LERPIMP(start.z, end.z, progress);
 }
 
 /**
@@ -1565,7 +1565,7 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, GlobalContext* globalCtx,
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry;
-    f32 t;
+    f32 progress;
 
     start.x = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.x;
     start.y = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.y;
@@ -1575,11 +1575,11 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, GlobalContext* globalCtx,
     end.z = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.z;
 
     entry = globalCtx->csCtx.actorActions[actorActionIndex];
-    t = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
-    actor->world.pos.x = ((end.x - start.x) * t) + start.x;
-    actor->world.pos.y = ((end.y - start.y) * t) + start.y;
-    actor->world.pos.z = ((end.z - start.z) * t) + start.z;
+    actor->world.pos.x = F32_LERPIMP(start.x, end.x, progress);
+    actor->world.pos.y = F32_LERPIMP(start.y, end.y, progress);
+    actor->world.pos.z = F32_LERPIMP(start.z, end.z, progress);
 
     Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;
@@ -1593,7 +1593,7 @@ void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, GlobalContext* globalCt
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry;
-    f32 t;
+    f32 progress;
 
     start.x = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.x;
     start.z = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.z;
@@ -1601,10 +1601,10 @@ void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, GlobalContext* globalCt
     end.z = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.z;
 
     entry = globalCtx->csCtx.actorActions[actorActionIndex];
-    t = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
-    actor->world.pos.x = ((end.x - start.x) * t) + start.x;
-    actor->world.pos.z = ((end.z - start.z) * t) + start.z;
+    actor->world.pos.x = F32_LERPIMP(start.x, end.x, progress);
+    actor->world.pos.z = F32_LERPIMP(start.z, end.z, progress);
 
     Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;

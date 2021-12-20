@@ -1085,7 +1085,7 @@ asm/non_matchings/code/z_demo/func_800ED9C4.s,func_800ED9C4,0x800ED9C4,0x10
 asm/non_matchings/code/z_demo/func_800EDA04.s,func_800EDA04,0x800EDA04,0x20
 asm/non_matchings/code/z_demo/func_800EDA84.s,func_800EDA84,0x800EDA84,0x57
 asm/non_matchings/code/z_demo/func_800EDBE0.s,func_800EDBE0,0x800EDBE0,0x74
-asm/non_matchings/code/z_demo/nop_800EDDB0.s,nop_800EDDB0,0x800EDDB0,0x3
+asm/non_matchings/code/z_demo/func_800EDDB0.s,func_800EDDB0,0x800EDDB0,0x3
 asm/non_matchings/code/z_demo/func_800EDDBC.s,func_800EDDBC,0x800EDDBC,0x4
 asm/non_matchings/code/z_demo/Cutscene_LoadCutsceneData.s,Cutscene_LoadCutsceneData,0x800EDDCC,0x1A
 asm/non_matchings/code/z_demo/Cutscene_ActorTranslate.s,Cutscene_ActorTranslate,0x800EDE34,0x3C
