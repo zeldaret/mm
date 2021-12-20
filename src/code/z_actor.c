@@ -197,14 +197,14 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
         f32 alphaRatio;
 
         if ((actor->id == ACTOR_PLAYER) && (((Player*)actor)->stateFlags3 & 0x8000)) {
-            f32 temp_f20 = actor->scale.z;
+            f32 tmpScaleZ = actor->scale.z;
 
             actor->scale.z += 0.03f * fabsf(Math_CosS(((Player*)actor)->unk_AAA));
             actor->shape.shadowScale *= 0.2f;
             alphaRatio = distToFloor * 0.03f;
             actor->shape.shadowAlpha = actor->shape.shadowAlpha * CLAMP_MAX(alphaRatio, 1.0f);
             ActorShadow_Draw(actor, mapper, globalCtx, D_04076BC0, NULL);
-            actor->scale.z = temp_f20;
+            actor->scale.z = tmpScaleZ;
         } else {
             actor->shape.shadowScale *= 0.3f;
             alphaRatio = (distToFloor - 20.0f) * 0.02f;
@@ -2810,13 +2810,10 @@ s32 func_800BA2D8(GlobalContext* globalCtx, Actor* actor) {
 
 s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3) {
     if ((-actor->uncullZoneScale < arg2->z) && (arg2->z < (actor->uncullZoneForward + actor->uncullZoneScale))) {
-        f32 temp_f14;
         f32 phi_f12;
-        f32 phi_f2;
+        f32 phi_f2 = CLAMP_MIN(arg3, 1.0f);
         f32 phi_f14;
         f32 phi_f16;
-
-        phi_f2 = CLAMP_MIN(arg3, 1.0f);
 
         if (globalCtx->view.fovy != 60.0f) {
             phi_f12 = actor->uncullZoneScale * globalCtx->unk_187F0.x * 0.76980036f;
