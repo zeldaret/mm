@@ -86,6 +86,26 @@ typedef enum {
     /* 15 */ GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER
 } GiantCsActionIndex;
 
+typedef enum {
+    /*  0 */ EN_GIANT_LIMB_NONE,
+    /*  1 */ EN_GIANT_LIMB_HEAD,
+    /*  2 */ EN_GIANT_LIMB_LEFT_THIGH,
+    /*  3 */ EN_GIANT_LIMB_LEFT_LOWER_LEG,
+    /*  4 */ EN_GIANT_LIMB_LEFT_FOOT,
+    /*  5 */ EN_GIANT_LIMB_RIGHT_THIGH,
+    /*  6 */ EN_GIANT_LIMB_RIGHT_LOWER_LEG,
+    /*  7 */ EN_GIANT_LIMB_RIGHT_FOOT,
+    /*  8 */ EN_GIANT_LIMB_LEFT_SHOULDER,
+    /*  9 */ EN_GIANT_LIMB_LEFT_UPPER_ARM,
+    /* 10 */ EN_GIANT_LIMB_LEFT_FOREARM,
+    /* 11 */ EN_GIANT_LIMB_LEFT_HAND,
+    /* 12 */ EN_GIANT_LIMB_RIGHT_SHOULDER,
+    /* 13 */ EN_GIANT_LIMB_RIGHT_UPPER_ARM,
+    /* 14 */ EN_GIANT_LIMB_RIGHT_FOREARM,
+    /* 15 */ EN_GIANT_LIMB_RIGHT_HAND,
+    /* 16 */ EN_GIANT_LIMB_MAX,
+} EnGiantLimbs;
+
 struct EnGiant;
 
 typedef void (*EnGiantActionFunc)(struct EnGiant*, GlobalContext*);
@@ -93,14 +113,14 @@ typedef void (*EnGiantActionFunc)(struct EnGiant*, GlobalContext*);
 typedef struct EnGiant {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[16];
-    /* 0x1E8 */ Vec3s morphTable[16];
+    /* 0x188 */ Vec3s jointTable[EN_GIANT_LIMB_MAX];
+    /* 0x1E8 */ Vec3s morphTable[EN_GIANT_LIMB_MAX];
     /* 0x248 */ s16 animationId;
-    /* 0x24A */ u16 unk_24A;
+    /* 0x24A */ u16 actorActionCommand;
     /* 0x24C */ u16 csAction;
     /* 0x24E */ s16 alpha;
     /* 0x250 */ u16 sfxId;
-    /* 0x254 */ MtxF unk_254;
+    /* 0x254 */ MtxF headDrawMtxF;
     /* 0x294 */ s16 faceIndex;
     /* 0x296 */ s16 blinkTimer;
     /* 0x298 */ EnGiantActionFunc actionFunc;

@@ -113,20 +113,20 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
-            this->unk_24A = 0x1C6;
+            this->actorActionCommand = 0x1C6;
             break;
         case GIANT_TYPE_SWAMP_TERMINA_FIELD:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
-            this->unk_24A = 0x1C7;
+            this->actorActionCommand = 0x1C7;
             break;
         case GIANT_TYPE_OCEAN_TERMINA_FIELD:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
-            this->unk_24A = 0x1C8;
+            this->actorActionCommand = 0x1C8;
             break;
         default:
-            this->unk_24A = 0x1C5;
+            this->actorActionCommand = 0x1C5;
             break;
     }
 
@@ -135,7 +135,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-        this->unk_24A = 0x1C5;
+        this->actorActionCommand = 0x1C5;
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PerformClockTowerSuccessActions;
         Animation_Change(&this->skelAnime, &gGiantRaisedArmsStartAnim, 0.0f,
@@ -337,20 +337,20 @@ void EnGiant_PlaySound(EnGiant* this) {
 
 void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
     CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
-    f32 floatUnk10 = actorAction->unk10;
+    f32 startPosY = actorAction->unk10;
     s32 pad[2];
-    f32 floatUnk1C = actorAction->unk1C;
-    f32 functionTemp;
+    f32 endPosY = actorAction->unk1C;
+    f32 lerpScale;
 
-    functionTemp = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);
-    this->actor.world.pos.y = ((floatUnk1C - floatUnk10) * functionTemp) + floatUnk10;
+    lerpScale = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);
+    this->actor.world.pos.y = ((endPosY - startPosY) * lerpScale) + startPosY;
 }
 
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, this->unk_24A)) {
-        EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
+        EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->actorActionCommand));
+        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0) {
+            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -370,10 +370,10 @@ void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* global
 void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
     this->actor.draw = EnGiant_Draw;
 
-    if (func_800EE29C(globalCtx, this->unk_24A)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
+        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->actorActionCommand));
+        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0) {
+            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -412,7 +412,7 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnGiant_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 1) {
+    if (limbIndex == EN_GIANT_LIMB_HEAD) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gSPDisplayList(POLY_OPA_DISP++, gGiantBeardDL);
@@ -425,8 +425,8 @@ void EnGiant_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
                              Gfx** gfx) {
     EnGiant* this = THIS;
 
-    if (limbIndex == 1) {
-        Matrix_CopyCurrentState(&this->unk_254);
+    if (limbIndex == EN_GIANT_LIMB_HEAD) {
+        Matrix_CopyCurrentState(&this->headDrawMtxF);
     }
 }
 
@@ -459,7 +459,7 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
             POLY_XLU_DISP =
                 SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawXlu, thisx, POLY_XLU_DISP);
-            Matrix_InsertMatrix(&this->unk_254, MTXMODE_NEW);
+            Matrix_InsertMatrix(&this->headDrawMtxF, MTXMODE_NEW);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gGiantBeardDL);
