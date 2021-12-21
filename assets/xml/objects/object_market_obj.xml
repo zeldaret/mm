@@ -1,0 +1,65 @@
+﻿<Root>
+    <File Name="object_market_obj" Segment="6">
+        <Texture Name="object_market_obj_TLUT_000000" OutName="tlut_000000" Format="rgba16" Width="4" Height="4" Offset="0x0" />
+        <Texture Name="object_market_obj_TLUT_000020" OutName="tlut_000020" Format="rgba16" Width="4" Height="4" Offset="0x20" />
+        <Texture Name="object_market_obj_TLUT_000040" OutName="tlut_000040" Format="rgba16" Width="4" Height="4" Offset="0x40" />
+        <Texture Name="object_market_obj_TLUT_000060" OutName="tlut_000060" Format="rgba16" Width="4" Height="4" Offset="0x60" />
+        <Texture Name="object_market_obj_TLUT_000080" OutName="tlut_000080" Format="rgba16" Width="4" Height="4" Offset="0x80" />
+        <Texture Name="object_market_obj_TLUT_0000A0" OutName="tlut_0000A0" Format="rgba16" Width="4" Height="4" Offset="0xA0" />
+        <Texture Name="object_market_obj_TLUT_0000C0" OutName="tlut_0000C0" Format="rgba16" Width="4" Height="4" Offset="0xC0" />
+        <Texture Name="object_market_obj_TLUT_0000E0" OutName="tlut_0000E0" Format="rgba16" Width="4" Height="4" Offset="0xE0" />
+        <Texture Name="object_market_obj_TLUT_000100" OutName="tlut_000100" Format="rgba16" Width="4" Height="4" Offset="0x100" />
+        <Texture Name="object_market_obj_TLUT_000120" OutName="tlut_000120" Format="rgba16" Width="4" Height="4" Offset="0x120" />
+        <Texture Name="object_market_obj_TLUT_000140" OutName="tlut_000140" Format="rgba16" Width="4" Height="4" Offset="0x140" />
+        <Texture Name="object_market_obj_TLUT_000160" OutName="tlut_000160" Format="rgba16" Width="4" Height="4" Offset="0x160" />
+        <Texture Name="object_market_obj_TLUT_000180" OutName="tlut_000180" Format="rgba16" Width="4" Height="4" Offset="0x180" />
+        <Texture Name="object_market_obj_TLUT_0001A0" OutName="tlut_0001A0" Format="rgba16" Width="4" Height="4" Offset="0x1A0" />
+        <Texture Name="object_market_obj_TLUT_0001C0" OutName="tlut_0001C0" Format="rgba16" Width="4" Height="4" Offset="0x1C0" />
+        <Texture Name="object_market_obj_TLUT_0001E0" OutName="tlut_0001E0" Format="rgba16" Width="4" Height="4" Offset="0x1E0" />
+        <Texture Name="object_market_obj_TLUT_000200" OutName="tlut_000200" Format="rgba16" Width="4" Height="4" Offset="0x200" />
+        <Texture Name="object_market_obj_TLUT_000220" OutName="tlut_000220" Format="rgba16" Width="16" Height="16" Offset="0x220" />
+        <Texture Name="object_market_obj_Tex_000420" OutName="tex_000420" Format="rgba16" Width="32" Height="64" Offset="0x420" />
+        <Texture Name="object_market_obj_Tex_001420" OutName="tex_001420" Format="rgba16" Width="32" Height="64" Offset="0x1420" />
+        <Texture Name="object_market_obj_Tex_002420" OutName="tex_002420" Format="ci4" Width="64" Height="64" Offset="0x2420" />
+        <Texture Name="object_market_obj_Tex_002C20" OutName="tex_002C20" Format="rgba16" Width="32" Height="63" Offset="0x2C20" />
+        <Texture Name="object_market_obj_Tex_003BE0" OutName="tex_003BE0" Format="rgba16" Width="32" Height="64" Offset="0x3BE0" />
+        <Texture Name="object_market_obj_Tex_004BE0" OutName="tex_004BE0" Format="ci4" Width="64" Height="64" Offset="0x4BE0" />
+        <Texture Name="object_market_obj_Tex_0053E0" OutName="tex_0053E0" Format="ci4" Width="64" Height="64" Offset="0x53E0" />
+        <Texture Name="object_market_obj_Tex_005BE0" OutName="tex_005BE0" Format="rgba16" Width="32" Height="32" Offset="0x5BE0" />
+        <Texture Name="object_market_obj_Tex_0063E0" OutName="tex_0063E0" Format="rgba16" Width="32" Height="32" Offset="0x63E0" />
+        <Texture Name="object_market_obj_Tex_006BE0" OutName="tex_006BE0" Format="rgba16" Width="64" Height="32" Offset="0x6BE0" />
+        <Texture Name="object_market_obj_Tex_007BE0" OutName="tex_007BE0" Format="ci4" Width="64" Height="64" Offset="0x7BE0" />
+        <Texture Name="object_market_obj_Tex_0083E0" OutName="tex_0083E0" Format="rgba16" Width="64" Height="32" Offset="0x83E0" />
+        <Texture Name="object_market_obj_Tex_0093E0" OutName="tex_0093E0" Format="rgba16" Width="64" Height="32" Offset="0x93E0" />
+        <Texture Name="object_market_obj_Tex_00A3E0" OutName="tex_00A3E0" Format="ci4" Width="64" Height="32" Offset="0xA3E0" />
+        <Texture Name="object_market_obj_Tex_00A7E0" OutName="tex_00A7E0" Format="i4" Width="32" Height="32" Offset="0xA7E0" />
+        <Texture Name="object_market_obj_Tex_00A9E0" OutName="tex_00A9E0" Format="ci4" Width="32" Height="64" Offset="0xA9E0" />
+        <Texture Name="object_market_obj_Tex_00ADE0" OutName="tex_00ADE0" Format="ci4" Width="64" Height="64" Offset="0xADE0" />
+        <Texture Name="object_market_obj_Tex_00B5E0" OutName="tex_00B5E0" Format="ci4" Width="64" Height="64" Offset="0xB5E0" />
+        <Texture Name="object_market_obj_Tex_00BDE0" OutName="tex_00BDE0" Format="ci4" Width="64" Height="64" Offset="0xBDE0" />
+        <Texture Name="object_market_obj_Tex_00C5E0" OutName="tex_00C5E0" Format="ci4" Width="64" Height="64" Offset="0xC5E0" />
+        <Texture Name="object_market_obj_Tex_00CDE0" OutName="tex_00CDE0" Format="ci4" Width="64" Height="64" Offset="0xCDE0" />
+        <Texture Name="object_market_obj_Tex_00D5E0" OutName="tex_00D5E0" Format="ci4" Width="64" Height="64" Offset="0xD5E0" />
+        <Texture Name="object_market_obj_Tex_00DDE0" OutName="tex_00DDE0" Format="ci4" Width="64" Height="64" Offset="0xDDE0" />
+        <Texture Name="object_market_obj_Tex_00E5E0" OutName="tex_00E5E0" Format="ci4" Width="64" Height="64" Offset="0xE5E0" />
+        <Texture Name="object_market_obj_Tex_00EDE0" OutName="tex_00EDE0" Format="ci4" Width="64" Height="64" Offset="0xEDE0" />
+        <Texture Name="object_market_obj_Tex_00F5E0" OutName="tex_00F5E0" Format="ci4" Width="64" Height="64" Offset="0xF5E0" />
+        <Texture Name="object_market_obj_Tex_00FDE0" OutName="tex_00FDE0" Format="ci4" Width="64" Height="64" Offset="0xFDE0" />
+        <Texture Name="object_market_obj_Tex_0105E0" OutName="tex_0105E0" Format="rgba16" Width="32" Height="16" Offset="0x105E0" />
+        <Texture Name="object_market_obj_Tex_0109E0" OutName="tex_0109E0" Format="rgba16" Width="32" Height="64" Offset="0x109E0" />
+        <Texture Name="object_market_obj_Tex_0119E0" OutName="tex_0119E0" Format="rgba16" Width="32" Height="16" Offset="0x119E0" />
+        <Texture Name="object_market_obj_Tex_011DE0" OutName="tex_011DE0" Format="rgba16" Width="32" Height="32" Offset="0x11DE0" />
+        <Texture Name="object_market_obj_Tex_0125E0" OutName="tex_0125E0" Format="rgba16" Width="32" Height="32" Offset="0x125E0" />
+        <Texture Name="object_market_obj_Tex_012DE0" OutName="tex_012DE0" Format="rgba16" Width="32" Height="32" Offset="0x12DE0" />
+        <Texture Name="object_market_obj_Tex_0135E0" OutName="tex_0135E0" Format="rgba16" Width="64" Height="16" Offset="0x135E0" />
+        <Texture Name="object_market_obj_Tex_013DE0" OutName="tex_013DE0" Format="ia8" Width="32" Height="32" Offset="0x13DE0" />
+        <Texture Name="object_market_obj_Tex_0141E0" OutName="tex_0141E0" Format="ci8" Width="8" Height="8" Offset="0x141E0" />
+        <Texture Name="object_market_obj_Tex_014220" OutName="tex_014220" Format="i8" Width="8" Height="8" Offset="0x14220" />
+        <Texture Name="object_market_obj_Tex_014260" OutName="tex_014260" Format="i4" Width="64" Height="32" Offset="0x14260" />
+        <Texture Name="object_market_obj_Tex_014660" OutName="tex_014660" Format="rgba16" Width="16" Height="16" Offset="0x14660" />
+        <DList Name="object_market_obj_DL_018C60" Offset="0x18C60" />
+        <DList Name="object_market_obj_DL_018DA0" Offset="0x18DA0" />
+        <DList Name="object_market_obj_DL_01EF10" Offset="0x1EF10" />
+        <DList Name="object_market_obj_DL_01F050" Offset="0x1F050" />
+    </File>
+</Root>
