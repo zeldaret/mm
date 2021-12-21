@@ -104,7 +104,7 @@
 
         <!-- Reads vtx from segment 9 set by sBigslimeDynamicVtx -->
         <DList Name="gBigslimeVtxDL" Offset="0x105E8" />
-        <!-- Reads vtx from segment 9 set by gBigslimeFrozenVtxDL -->
+        <!-- Reads vtx from segment 9 set by sBigslimeTargetVtx -->
         <DList Name="gBigslimeFrozenVtxDL" Offset="0x10B80" />
 
         <TextureAnimation Name="gBigslimeFrozenTexAnim" Offset="0x10C48" />

@@ -187,7 +187,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 55.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInit);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGekkoSkel, &gGekkoBoxingStanceAnim, this->jointTable,
-                       this->morphTable, 24);
+                       this->morphTable, GEKKO_LIMB_MAX);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colElement);
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num)) {
