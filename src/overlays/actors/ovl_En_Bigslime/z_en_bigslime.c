@@ -3006,7 +3006,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.scale.x > 0.0f) {
-        Matrix_SetCurrentState(&globalCtx->mf_187FC);
+        Matrix_SetCurrentState(&globalCtx->billboardMtxF);
         Matrix_Scale(0.0050000003f, 0.0050000003f, 0.0050000003f, MTXMODE_APPLY);
         sysMatrix = Matrix_GetCurrentState();
 
@@ -3092,13 +3092,15 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     Math_Vec3f_Sum(&this->actor.world.pos, &this->gekkoPosOffset, &gekkoPos);
     Matrix_SetStateRotationAndTranslation(gekkoPos.x, gekkoPos.y, gekkoPos.z, &this->gekkoRot);
     Matrix_Scale(this->gekkoScale, this->gekkoScale, this->gekkoScale, MTXMODE_APPLY);
-    SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &gekkoPos, &this->gekkoProjectedPos);
+    SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->viewProjectionMtxF, &gekkoPos, &this->gekkoProjectedPos);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnBigslime_PostLimbDraw, &this->actor);
+                          
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if ((this->actionFunc == EnBigslime_DamageGekko) || (this->actionFunc == EnBigslime_CutsceneDefeat) ||
