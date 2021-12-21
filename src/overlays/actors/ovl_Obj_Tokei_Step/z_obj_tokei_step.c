@@ -142,15 +142,15 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
     ObjTokeiStepPanel* panel;
     f32 finalPosY;
     s32 isOpen = true;
-    s32 didPrevBounce = true;
+    s32 hasPrevBounced = true;
 
     for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
-        if (didPrevBounce && (panel->startFallingTimer > 0)) {
+        if (hasPrevBounced && (panel->startFallingTimer > 0)) {
             panel->startFallingTimer--;
             isOpen = false;
         }
-        if (didPrevBounce && (panel->numBounces < 3) && (panel->startFallingTimer <= 0)) {
+        if (hasPrevBounced && (panel->numBounces < 3) && (panel->startFallingTimer <= 0)) {
             finalPosY = sPanelXOffsets[i] + this->dyna.actor.world.pos.y;
             if (!panel->hasSoundPlayed) {
                 Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
@@ -182,7 +182,7 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
                 }
             }
         }
-        didPrevBounce = panel->numBounces > 0;
+        hasPrevBounced = panel->numBounces > 0;
     }
     return isOpen;
 }
