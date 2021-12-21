@@ -52,23 +52,21 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
-    MtxF* sysMatrix;
+    MtxF* mtx = Matrix_GetCurrentState();
 
-    sysMatrix = Matrix_GetCurrentState();
-    sysMatrix->wx = panel->pos.x;
-    sysMatrix->wy = panel->pos.y;
-    sysMatrix->wz = panel->pos.z;
+    mtx->wx = panel->pos.x;
+    mtx->wy = panel->pos.y;
+    mtx->wz = panel->pos.z;
 }
 
 void ObjTokeiStep_AddQuake(ObjTokeiStep* this, GlobalContext* globalCtx) {
     s32 pad[2];
-    s16 quake;
-
-    quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
-    Quake_SetSpeed(quake, 0x4E20);
+    s16 quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
+        
+    Quake_SetSpeed(quake, 20000);
     Quake_SetQuakeValues(quake, 1, 0, 0, 0);
     Quake_SetCountdown(quake, 7);
-    func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 0x78, 0x14, 0xA);
+    func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
 }
 
 void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, GlobalContext* globalCtx) {
@@ -273,7 +271,7 @@ void ObjTokeiStep_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 void ObjTokeiStep_DrawOpen(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
-    int i;
+    s32 i;
     ObjTokeiStepPanel* panel;
     Gfx* gfx;
 
