@@ -326,11 +326,11 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
     ActorShape_Init(&thisx->shape, 0.0f, NULL, 15.0f);
     thisx->shape.shadowAlpha = 255;
 
-    Lights_PointGlowSetInfo(&this->lightInfoGlow, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0xFF,
-                            0xFF, 0xFF, 0);
+    Lights_PointGlowSetInfo(&this->lightInfoGlow, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 255,
+                            255, 255, 0);
     this->lightNodeGlow = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfoGlow);
-    Lights_PointNoGlowSetInfo(&this->lightInfoNoGlow, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0xFF,
-                              0xFF, 0xFF, 0);
+    Lights_PointNoGlowSetInfo(&this->lightInfoNoGlow, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 255,
+                              255, 255, 0);
     this->lightNodeNoGlow = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfoNoGlow);
 
     this->fairyFlags = 0;
@@ -338,8 +338,8 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk_240 = 0.0f;
     colorConfig = 0;
 
-    this->unk_260 = (this->actor.params & 0xFE00) >> 9;
-    params = this->actor.params & 0xF;
+    this->unk_260 = ENELF_GET_FE00(&this->actor);
+    params = ENELF_GET_F(&this->actor);
     if (thisx->params & 0x100) {
         this->fairyFlags |= 0x400;
     }
@@ -355,10 +355,10 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->elfMsg = NULL;
             this->unk_234 = NULL;
             this->unk_269 = 20;
-            if ((gSaveContext.naviTimer >= 25800) || (gSaveContext.naviTimer < 3000)) {
-                gSaveContext.naviTimer = 0;
+            if ((gSaveContext.tatlTimer >= 25800) || (gSaveContext.tatlTimer < 3000)) {
+                gSaveContext.tatlTimer = 0;
             }
-            this->unk_266 = func_800F05C0(globalCtx);
+            this->unk_266 = ElfMessage_GetFirstCycleHint(globalCtx);
             break;
 
         case 1:
@@ -452,8 +452,8 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->outerColor.b = func_8088CD3C(sColorFlags[colorConfig].b);
         this->outerColor.a = 0;
     } else {
-        this->innerColor = sInnerColors[colorConfig * -1];
-        this->outerColor = sOuterColors[colorConfig * -1];
+        this->innerColor = sInnerColors[-colorConfig];
+        this->outerColor = sOuterColors[-colorConfig];
     }
 }
 
@@ -1268,7 +1268,7 @@ void func_8088F9E4(Actor* thisx, GlobalContext* globalCtx) {
     s32 bgId;
 
     thisx->floorHeight =
-        func_800C4188(globalCtx, &globalCtx->colCtx, &thisx->floorPoly, &bgId, &this->actor, &thisx->world.pos);
+        BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &thisx->floorPoly, &bgId, &this->actor, &thisx->world.pos);
     thisx->shape.shadowAlpha = 50;
 }
 
@@ -1392,18 +1392,18 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
                         func_80151938(globalCtx, 0x245);
                         break;
 
-                    case 541:
-                    case 542:
-                    case 543:
-                    case 544:
-                    case 545:
-                    case 546:
-                    case 547:
-                    case 575:
-                    case 577:
-                    case 578:
-                    case 579:
-                    case 580:
+                    case 0x21D:
+                    case 0x21E:
+                    case 0x21F:
+                    case 0x220:
+                    case 0x221:
+                    case 0x222:
+                    case 0x223:
+                    case 0x23F:
+                    case 0x241:
+                    case 0x242:
+                    case 0x243:
+                    case 0x244:
                         switch (CURRENT_DAY) {
                             case 1:
                                 func_80151938(globalCtx, 0x246);
@@ -1450,16 +1450,16 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnElf* this = THIS;
     Player* player = GET_PLAYER(globalCtx);
-    u16 temp_v0 = func_800F05C0(globalCtx);
+    u16 temp_v0 = ElfMessage_GetFirstCycleHint(globalCtx);
 
     if (temp_v0 != this->unk_266) {
         this->unk_266 = temp_v0;
-        gSaveContext.naviTimer = 0;
+        gSaveContext.tatlTimer = 0;
     }
 
     if ((player->tatlTextId == 0) && (player->unk_730 == NULL)) {
-        if ((gSaveContext.naviTimer >= 600) && (gSaveContext.naviTimer <= 3000)) {
-            player->tatlTextId = func_800F05C0(globalCtx);
+        if ((gSaveContext.tatlTimer >= 600) && (gSaveContext.tatlTimer <= 3000)) {
+            player->tatlTextId = ElfMessage_GetFirstCycleHint(globalCtx);
         }
     }
 
@@ -1471,9 +1471,9 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
         func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
-        if (thisx->textId == func_800F05C0(globalCtx)) {
+        if (thisx->textId == ElfMessage_GetFirstCycleHint(globalCtx)) {
             this->fairyFlags |= 0x80;
-            gSaveContext.naviTimer = 3001;
+            gSaveContext.tatlTimer = 3001;
         }
 
         this->fairyFlags |= 0x10;
@@ -1504,10 +1504,10 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
 
         if (!func_801690CC(globalCtx)) {
-            if (gSaveContext.naviTimer < 25800) {
-                gSaveContext.naviTimer++;
+            if (gSaveContext.tatlTimer < 25800) {
+                gSaveContext.tatlTimer++;
             } else if (!(this->fairyFlags & 0x80)) {
-                gSaveContext.naviTimer = 0;
+                gSaveContext.tatlTimer = 0;
             }
         }
     }
