@@ -366,9 +366,9 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
         }
 
-        this->minislimeFrozenTex = Lib_SegmentedToVirtual(&gMinislimeFrozenTexAnim);
-        this->bigslimeFrozenTex = Lib_SegmentedToVirtual(&gBigslimeFrozenTexAnim);
-        this->unknownTex = Lib_SegmentedToVirtual(&gBigslimeUnknownTexAnim);
+        this->minislimeFrozenTexAnim = Lib_SegmentedToVirtual(&gMinislimeFrozenTexAnim);
+        this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(&gBigslimeFrozenTexAnim);
+        this->iceShardTexAnim = Lib_SegmentedToVirtual(&gBigslimeIceShardTexAnim);
         this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
         this->actor.flags &= ~1;
         this->actor.shape.shadowAlpha = 255;
@@ -2948,7 +2948,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx) {
         if (minislime->frozenAlpha > 0) {
             Matrix_InsertTranslation(0.0f, (0.1f - minislime->frozenScale) * -4000.0f, 0.0f, 1);
             Matrix_Scale(0.1f, minislime->frozenScale, 0.1f, MTXMODE_APPLY);
-            AnimatedMat_Draw(globalCtx, this->minislimeFrozenTex);
+            AnimatedMat_Draw(globalCtx, this->minislimeFrozenTexAnim);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, minislime->frozenAlpha);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -2990,7 +2990,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
     // Draw frozen Bigslime
     if ((this->actionFunc == EnBigslime_Freeze) || (this->actionFunc == EnBigslime_FrozenGround) ||
         (this->actionFunc == EnBigslime_FrozenFall) || (this->actionFunc == EnBigslime_Melt)) {
-        AnimatedMat_Draw(globalCtx, this->bigslimeFrozenTex);
+        AnimatedMat_Draw(globalCtx, this->bigslimeFrozenTexAnim);
         gSPSegment(POLY_XLU_DISP++, 0x09, sBigslimeTargetVtx);
         gSPDisplayList(POLY_XLU_DISP++, &gBigslimeFrozenVtxDL);
         gSPDisplayList(POLY_XLU_DISP++, &gBigslimeVtxDL);
@@ -3136,10 +3136,10 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, GlobalContext* globalCtx
         gSPDisplayList(POLY_XLU_DISP++, &gBigslimeShockwaveDL);
     }
 
-    AnimatedMat_Draw(globalCtx, this->unknownTex);
-    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeUnknownDL);
-
     // Draw Ice Shards
+    AnimatedMat_Draw(globalCtx, this->iceShardTexAnim);
+    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeIceShardDL);
+
     for (i = 0; i < BIGSLIME_NUM_ICE_SHARD; i++) {
         iceShardEffect = &this->iceShardEffect[i];
         if (iceShardEffect->isActive > false) {
@@ -3148,7 +3148,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, GlobalContext* globalCtx
             Matrix_Scale(iceShardEffect->scale, iceShardEffect->scale, iceShardEffect->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, &gBigslimeIceShardDL);
+            gSPDisplayList(POLY_XLU_DISP++, &gBigslimeIceShardVtxDL);
         }
     }
 

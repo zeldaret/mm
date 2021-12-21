@@ -111,9 +111,10 @@
         <DList Name="gMinislimeFrozenDL" Offset="0x10DB0" />
         <TextureAnimation Name="gMinislimeFrozenTexAnim" Offset="0x10EC8" />
 
-        <DList Name="gBigslimeUnknownDL" Offset="0x10F20" />
-        <DList Name="gBigslimeIceShardDL" Offset="0x10FE0" />
-        <TextureAnimation Name="gBigslimeUnknownTexAnim" Offset="0x11008" />
+        <DList Name="gBigslimeIceShardDL" Offset="0x10F20" />
+        <DList Name="gBigslimeIceShardVtxDL" Offset="0x10FE0" />
+        <TextureAnimation Name="gBigslimeIceShardTexAnim" Offset="0x11008" />
+        
         <DList Name="gBigslimeShadowDL" Offset="0x11050" />
         <DList Name="gMinislimeNormalDL" Offset="0x113B0" />
 

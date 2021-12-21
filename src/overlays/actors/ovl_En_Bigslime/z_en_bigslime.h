@@ -119,9 +119,9 @@ typedef struct EnBigslime {
     /* 0x0678 */ ColliderCylinder bigslimeCollider[BIGSLIME_NUM_RING_FACES];
     /* 0x0A14 */ EnMinislime* minislime[MINISLIME_NUM_SPAWN];
     /* 0x0A44 */ EnMinislime* minislimeToThrow;
-    /* 0x0A48 */ AnimatedMaterial* bigslimeFrozenTex;
-    /* 0x0A4C */ AnimatedMaterial* minislimeFrozenTex;
-    /* 0x0A50 */ AnimatedMaterial* unknownTex;
+    /* 0x0A48 */ AnimatedMaterial* bigslimeFrozenTexAnim;
+    /* 0x0A4C */ AnimatedMaterial* minislimeFrozenTexAnim;
+    /* 0x0A50 */ AnimatedMaterial* iceShardTexAnim;
     /* 0x0A54 */ EnBigslimeIceShardEffect iceShardEffect[BIGSLIME_NUM_ICE_SHARD]; // 312 = 162 (bigslime) + 10 * 15 (minislime)
 } EnBigslime; // size = 0x3634
 
