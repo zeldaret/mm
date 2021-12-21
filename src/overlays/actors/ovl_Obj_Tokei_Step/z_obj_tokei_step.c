@@ -139,7 +139,7 @@ void ObjTokeiStep_InitTimers(ObjTokeiStep* this) {
 }
 
 s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
-    Actor* actor = &this->dyna.actor;
+    Actor* objTokeiStepActor = &this->dyna.actor;
     s32 i;
     ObjTokeiStepPanel* panel;
     f32 finalPosY;
@@ -178,8 +178,8 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
                         panel->pos.y += finalPosY;
                     }
                     if (panel->numBounces == 1) {
-                        ObjTokeiStep_SpawnDust(actor, panel, globalCtx);
-                        ObjTokeiStep_AddQuake(actor, globalCtx);
+                        ObjTokeiStep_SpawnDust(objTokeiStepActor, panel, globalCtx);
+                        ObjTokeiStep_AddQuake(objTokeiStepActor, globalCtx);
                     }
                 }
             }
