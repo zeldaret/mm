@@ -1,0 +1,11 @@
+﻿<Root>
+    <File Name="object_gi_mask16" Segment="6">
+        <DList Name="object_gi_mask16_DL_001040" Offset="0x1040" />
+        <DList Name="object_gi_mask16_DL_001438" Offset="0x1438" />
+        <Texture Name="object_gi_mask16_Tex_001590" OutName="tex_001590" Format="ia8" Width="16" Height="32" Offset="0x1590" />
+        <Texture Name="object_gi_mask16_Tex_001790" OutName="tex_001790" Format="ia8" Width="32" Height="16" Offset="0x1790" />
+        <Texture Name="object_gi_mask16_Tex_001990" OutName="tex_001990" Format="rgba16" Width="16" Height="16" Offset="0x1990" />
+        <Texture Name="object_gi_mask16_Tex_001B90" OutName="tex_001B90" Format="rgba16" Width="16" Height="32" Offset="0x1B90" />
+        <Texture Name="object_gi_mask16_Tex_001F90" OutName="tex_001F90" Format="i4" Width="16" Height="8" Offset="0x1F90" />
+    </File>
+</Root>
