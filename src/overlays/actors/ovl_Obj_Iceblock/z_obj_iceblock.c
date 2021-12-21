@@ -128,18 +128,8 @@ void func_80A2319C(ObjIceblock* this, f32 arg1) {
 }
 
 void func_80A232C4(ObjIceblock* this, s32 arg1) {
-    static s16 D_80A26E80[] = {
-        1,
-        -1,
-        0,
-        0,
-    };
-    static s16 D_80A26E88[] = {
-        0,
-        0,
-        1,
-        -1,
-    };
+    static s16 D_80A26E80[] = { 1, -1, 0, 0 };
+    static s16 D_80A26E88[] = { 0, 0, 1, -1 };
 
     this->unk_276 += D_80A26E80[arg1];
     this->unk_278 += D_80A26E88[arg1];
@@ -292,48 +282,29 @@ void func_80A23938(ObjIceblock* this2) {
     }
 }
 
-#ifdef NON_MATCHING
-// Crazy variable usage
 void func_80A23B88(ObjIceblock* this) {
-    f32 sp4;
-    f32 temp_f14;
-    f32 temp_f16;
-    s32 temp;
-    f32 tempx;
-    f32 tempy;
+    f32 f4;
+    f32 f2;
+    f32 f14;
+    f32 f16;
+    f32 f6;
 
-    temp = tempy + temp_f14;
-    temp_f16 = this->dyna.actor.home.pos.x;
-    temp_f14 = this->dyna.actor.world.pos.x - temp_f16;
-
-    tempy = (temp_f14 >= 0.0f) ? (0.5f) : (-0.5f);
-    temp = tempy + temp_f14;
-
-    // temp = ((temp_f14 >= 0.0f) ? 0.5f : -0.5f) + temp_f14;
-    tempx = (temp / 30) * 30;
-    sp4 = tempx;
-    temp_f14 -= sp4;
-    if (fabsf(temp_f14) < 3.0f) {
-        this->dyna.actor.world.pos.x = temp_f16 + tempx;
+    f14 = this->dyna.actor.world.pos.x - this->dyna.actor.home.pos.x;
+    f2 = (f14 >= 0.0f) ? (0.5f) : (-0.5f);
+    f4 = (((s32)(f2 + f14)) / 30) * 30;
+    f14 -= f4;
+    if (fabsf(f14) < 3.0f) {
+        this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + f4;
     }
 
-    if (sp4) {}
-
-    temp_f16 = this->dyna.actor.home.pos.z;
-    temp_f14 = this->dyna.actor.world.pos.z - temp_f16;
-
-    temp = ((temp_f14 >= 0.0f) ? 0.5f : -0.5f) + temp_f14;
-
-    tempx = (temp / 30) * 30;
-    sp4 = tempx;
-    temp_f14 -= sp4;
-    if (fabsf(temp_f14) < 3.0f) {
-        this->dyna.actor.world.pos.z = temp_f16 + tempx;
+    f16 = this->dyna.actor.world.pos.z - this->dyna.actor.home.pos.z;
+    f2 = (f16 >= 0.0f) ? (0.5f) : (-0.5f);
+    f6 = (((s32)(f2 + f16)) / 30) * 30;
+    f16 -= f6;
+    if (fabsf(f16) < 3.0f) {
+        this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + f6;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Iceblock/func_80A23B88.s")
-#endif
 
 s32 func_80A23D08(ObjIceblock* this, GlobalContext* globalCtx) {
     static ObjIceBlockUnkStruct3 D_80A26E90[] = {
@@ -363,7 +334,7 @@ s32 func_80A23D08(ObjIceblock* this, GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(this->unk_1F4); i++) {
         ptr = &this->unk_1F4[i];
 
-        ptr->unk_00 = 0;
+        ptr->unk_00 = NULL;
         ptr->unk_04 = BGCHECK_Y_MIN;
         ptr->unk_08 = 50;
 
@@ -374,7 +345,8 @@ s32 func_80A23D08(ObjIceblock* this, GlobalContext* globalCtx) {
         spA4.x += this->dyna.actor.world.pos.x;
         spA4.z += this->dyna.actor.world.pos.z;
 
-        ptr->unk_04 = func_800C4240(&globalCtx->colCtx, &ptr->unk_00, &ptr->unk_08, &this->dyna.actor, &spA4, 0.0f);
+        ptr->unk_04 =
+            BgCheck_EntityRaycastFloor6(&globalCtx->colCtx, &ptr->unk_00, &ptr->unk_08, &this->dyna.actor, &spA4, 0.0f);
         if (ptr->unk_04 > BGCHECK_Y_MIN + 1) {
             sp94 = 1;
             if (phi_f22 < ptr->unk_04) {
@@ -383,7 +355,7 @@ s32 func_80A23D08(ObjIceblock* this, GlobalContext* globalCtx) {
             }
         }
 
-        if (func_800CA1E8(globalCtx, &globalCtx->colCtx, spA4.x, spA4.z, &ptr->unk_0C, &spC4)) {
+        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, spA4.x, spA4.z, &ptr->unk_0C, &spC4)) {
             if (phi_f20 < ptr->unk_0C) {
                 spB8 = i;
                 phi_f20 = ptr->unk_0C;
@@ -493,8 +465,9 @@ s32 func_80A24118(ObjIceblock* this, GlobalContext* globalCtx, f32 arg2, Vec3f* 
         spD0.y = spDC.y;
         spD0.z = temp_f26 + spDC.z;
 
-        if (func_800C56E0(&globalCtx->colCtx, &spDC, &spD0, &spB8, &spA8, 1, 0, 0, 1, &spAC, &this->dyna.actor, 0.0f)) {
-            temp_f20 = Math3D_DistanceSquared(&spDC, &spB8);
+        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spDC, &spD0, &spB8, &spA8, 1, 0, 0, 1, &spAC,
+                                    &this->dyna.actor, 0.0f)) {
+            temp_f20 = Math3D_Vec3fDistSq(&spDC, &spB8);
             if (temp_f20 < phi_f20) {
                 phi_f20 = temp_f20;
                 ret = true;
@@ -517,14 +490,8 @@ s32 func_80A24384(ObjIceblock* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A243E0(ObjIceblock* this, GlobalContext* globalCtx, Vec3f* arg0) {
-    static f32 D_80A26F30[] = {
-        -300.0f,
-        300.0f,
-    };
-    static f32 D_80A26F38[] = {
-        1.0f,
-        -1.0f,
-    };
+    static f32 D_80A26F30[] = { -300.0f, 300.0f };
+    static f32 D_80A26F38[] = { 1.0f, -1.0f };
     s32 i;
     f32 sp100;
     f32 spFC;
@@ -574,8 +541,9 @@ s32 func_80A243E0(ObjIceblock* this, GlobalContext* globalCtx, Vec3f* arg0) {
         spE0.y = spEC.y;
         spE0.z = temp_f30 + spEC.z;
 
-        if (func_800C56E0(&globalCtx->colCtx, &spEC, &spE0, &spC8, &spB8, 1, 0, 0, 1, &spBC, &this->dyna.actor, 0.0f)) {
-            temp_f12 = Math3D_DistanceSquared(&spEC, &spC8);
+        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spEC, &spE0, &spC8, &spB8, 1, 0, 0, 1, &spBC,
+                                    &this->dyna.actor, 0.0f)) {
+            temp_f12 = Math3D_Vec3fDistSq(&spEC, &spC8);
             if (temp_f12 < phi_f22) {
                 phi_f22 = temp_f12;
                 ret = true;
@@ -637,10 +605,10 @@ s32 func_80A246D8(ObjIceblock* this, GlobalContext* globalCtx, Vec3f* arg2) {
             spB4.y = spC0.y;
             spB4.z = (Math_CosS(phi_s3) * temp_f20) + spC0.z;
 
-            if (func_800C56E0(&globalCtx->colCtx, &spC0, &spB4, &sp9C, &sp94, 1, 0, 0, 1, &sp98, &this->dyna.actor,
-                              0.0f)) {
+            if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spC0, &spB4, &sp9C, &sp94, 1, 0, 0, 1, &sp98,
+                                        &this->dyna.actor, 0.0f)) {
                 ret = true;
-                temp_v0 = (ObjIceblock*)BgCheck_GetActorOfMesh(&globalCtx->colCtx, sp98);
+                temp_v0 = (ObjIceblock*)DynaPoly_GetActor(&globalCtx->colCtx, sp98);
                 if ((temp_v0 != NULL) && (temp_v0->dyna.actor.id == ACTOR_OBJ_ICEBLOCK) && (temp_v0->unk_2B0 == 3)) {
                     temp_v0->unk_1B0 |= 0x80;
                 }
@@ -691,7 +659,7 @@ void func_80A24AA8(ObjIceblock* this, GlobalContext* globalCtx) {
 
     if (this->unk_1B0 & 4) {
         for (i = 0; i < ARRAY_COUNT(this->unk_1F4); i++) {
-            temp_v0 = (ObjIceblock*)BgCheck_GetActorOfMesh(&globalCtx->colCtx, ((void)0, this->unk_1F4[i]).unk_08);
+            temp_v0 = (ObjIceblock*)DynaPoly_GetActor(&globalCtx->colCtx, ((void)0, this->unk_1F4[i]).unk_08);
             if ((temp_v0 != NULL) && (temp_v0->dyna.actor.id == ACTOR_OBJ_ICEBLOCK)) {
                 x = this->dyna.actor.world.pos.y - this->unk_1F4[i].unk_04;
 
@@ -968,7 +936,7 @@ void ObjIceblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (D_80A26E7C == NULL) {
-        D_80A26E7C = (AnimatedMaterial*)Lib_SegmentedToVirtual(&D_06000328);
+        D_80A26E7C = Lib_SegmentedToVirtual(&D_06000328);
     }
 
     if (!(this->unk_1B0 & 8)) {
@@ -995,7 +963,7 @@ void ObjIceblock_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjIceblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjIceblock* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -1255,12 +1223,7 @@ void func_80A25FD4(ObjIceblock* this, GlobalContext* globalCtx) {
 }
 
 void func_80A260E8(ObjIceblock* this) {
-    static f32 D_80A26FC0[] = {
-        14.0,
-        -14.0,
-        14.0,
-        -14.0,
-    };
+    static f32 D_80A26FC0[] = { 14.0, -14.0, 14.0, -14.0 };
 
     this->unk_260 = D_80A26FC0[this->unk_26C];
     this->unk_25C = 0.0f;
@@ -1426,7 +1389,7 @@ void func_80A266E0(ObjIceblock* this, GlobalContext* globalCtx) {
     s32 sp20;
     Actor* actor = &this->dyna.actor;
 
-    Math_StepToF(&this->unk_2A8, (1.0f / 600.0f), 0.00016666666f);
+    Math_StepToF(&this->unk_2A8, (1.0f / 600.0f), (1.0f / 6000.0f));
     sp20 = Math_StepToF(&actor->scale.y, 0.0f, this->unk_2A8);
     temp = actor->scale.y * 10.0f * 300.0f;
     actor->shape.yOffset = temp;

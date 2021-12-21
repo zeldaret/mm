@@ -666,7 +666,7 @@ void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f*
 // void func_800B31BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
 void EffectSsIceSmoke_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale);
 void EffectSsIceBlock_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale);
-void FlagSet_Update(GameState* gamestate);
+void FlagSet_Update(GameState* gameState);
 void FlagSet_Draw(GameState* gameState);
 void Overlay_LoadGameState(GameStateOverlay* gameState);
 void Overlay_FreeGameState(GameStateOverlay* gameState);
