@@ -2,6 +2,7 @@
 #define Z_OBJ_AQUA_H
 
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define AQUA_HOT(thisx) ((thisx)->params & 1)
 

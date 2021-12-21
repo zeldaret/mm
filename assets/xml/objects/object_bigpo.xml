@@ -30,8 +30,7 @@
         <DList Name="gBigpoDrawFaceDL" Offset="0x4AE8" />
         <DList Name="gBigpoDrawLowerRobeDL" Offset="0x4BD8" />
         <Texture Name="gBigpoCrispyPiecesTex" OutName="bigpo_crispy_pieces" Format="rgba16" Width="16" Height="16" Offset="0x4C98" />
-        <!-- small white dot texture used in burned corpse but.. where?-->
-        <Texture Name="gBigpoCrispyEyesTex" OutName="tex_004E98" Format="rgba16" Width="8" Height="8" Offset="0x4E98" />
+        <Texture Name="gBigpoCrispyEyesTex" OutName="bigpo_crispy_eyes" Format="rgba16" Width="8" Height="8" Offset="0x4E98" />
         <DList Name="gBigpoDrawCrispyBodyDL" Offset="0x58B8" />
         <Limb Name="gBigpoFaceLimb" Type="Standard" Offset="0x5B88" />
         <Limb Name="gBigpoLeftArmUpperLimb" Type="Standard" Offset="0x5B94" />

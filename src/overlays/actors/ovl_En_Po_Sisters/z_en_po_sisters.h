@@ -2,6 +2,7 @@
 #define Z_EN_PO_SISTERS_H
 
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 struct EnPoSisters;
 
