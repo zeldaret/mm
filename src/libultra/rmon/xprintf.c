@@ -7,7 +7,7 @@
 #define _PROUT(fmt, _size)                 \
     if (_size > 0) {                       \
         arg = (void*)pfn(arg, fmt, _size); \
-        if (arg != 0)                      \
+        if (arg != NULL)                   \
             x.nchar += _size;              \
         else                               \
             return x.nchar;                \
