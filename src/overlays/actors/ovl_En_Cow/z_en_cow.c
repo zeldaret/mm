@@ -215,7 +215,7 @@ void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_GiveMilkEnd(EnCow* this, GlobalContext* globalCtx) {
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->actor.flags &= ~0x10000;
         this->actionFunc = EnCow_Idle;
     }

@@ -58,7 +58,7 @@ extern Actor* D_801ED920;             // 2 funcs. 1 out of z_actor
 
 // Internal forward declarations
 void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx);
-Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* gameState);
+Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GlobalContext* globalCtx);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
 void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player);
 s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3);
@@ -1878,9 +1878,7 @@ s32 func_800B863C(Actor* actor, GlobalContext* globalCtx) {
     return func_800B8614(actor, globalCtx, cylRadius);
 }
 
-s32 Actor_TextboxIsClosing(Actor* actor, GameState* gameState) {
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
-
+s32 Actor_TextboxIsClosing(Actor* actor, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 2) {
         actor->flags &= ~ACTOR_FLAG_100;
         return true;
@@ -1965,11 +1963,10 @@ void Actor_GetScreenPos(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y) 
     *y = (projectedPos.y * w * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
 }
 
-s32 func_800B8934(GameState* gameState, Actor* actor) {
+s32 func_800B8934(GlobalContext* globalCtx, Actor* actor) {
     Vec3f sp2C;
     f32 sp28;
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
-    s32 pad;
+    s32 pad[2];
 
     func_800B4EDC(globalCtx, &actor->focus.pos, &sp2C, &sp28);
 
@@ -2225,11 +2222,10 @@ void func_800B9120(ActorContext* actorCtx) {
     actorCtx->unkC = 0x200 >> phi_v0;
 }
 
-void Actor_InitContext(GameState* gameState, ActorContext* actorCtx, ActorEntry* actorEntry) {
+void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry* actorEntry) {
     ActorOverlay* overlayEntry;
     u32* cycleFlags;
     s32 i;
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
     gSaveContext.weekEventReg[92] |= 0x80;
     cycleFlags = gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
@@ -2255,16 +2251,16 @@ void Actor_InitContext(GameState* gameState, ActorContext* actorCtx, ActorEntry*
     actorCtx->flags.collectible[0] = cycleFlags[4];
     actorCtx->flags.clearedRoom = cycleFlags[3];
 
-    TitleCard_ContextInit(gameState, &actorCtx->titleCtxt);
+    TitleCard_ContextInit(&globalCtx->state, &actorCtx->titleCtxt);
     func_800B6468(globalCtx);
 
     actorCtx->absoluteSpace = NULL;
 
-    Actor_SpawnEntry(actorCtx, actorEntry, gameState);
+    Actor_SpawnEntry(actorCtx, actorEntry, globalCtx);
     Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorList[ACTORCAT_PLAYER].first, globalCtx);
     func_800B9120(actorCtx);
     Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
-    func_800B722C(gameState, (Player*)actorCtx->actorList[ACTORCAT_PLAYER].first);
+    func_800B722C(&globalCtx->state, (Player*)actorCtx->actorList[ACTORCAT_PLAYER].first);
 }
 
 /**
@@ -2292,7 +2288,7 @@ void Actor_SpawnSetupActors(GlobalContext* globalCtx, ActorContext* actorCtx) {
 
             if (!(phi_v0 & temp_fp) && (phi_v0 & actorCtx->unkC) &&
                 (!(gSaveContext.eventInf[1] & 0x80) || !(phi_v0 & temp_s1) || !(actorEntry->id & 0x800))) {
-                Actor_SpawnEntry(&globalCtx->actorCtx, actorEntry, &globalCtx->state);
+                Actor_SpawnEntry(&globalCtx->actorCtx, actorEntry, globalCtx);
             }
             actorEntry++;
         }
@@ -3285,7 +3281,7 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
     }
 }
 
-Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* gameState) {
+Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GlobalContext* globalCtx) {
     s16 rotX = (actorEntry->rot.x >> 7) & 0x1FF;
     s16 rotY = (actorEntry->rot.y >> 7) & 0x1FF;
     s16 rotZ = (actorEntry->rot.z >> 7) & 0x1FF;
@@ -3308,8 +3304,8 @@ Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GameStat
         rotZ -= 360;
     }
 
-    return Actor_SpawnAsChildAndCutscene(actorCtx, (GlobalContext*)gameState, actorEntry->id & 0x1FFF,
-                                         actorEntry->pos.x, actorEntry->pos.y, actorEntry->pos.z, rotX, rotY, rotZ,
+    return Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, actorEntry->id & 0x1FFF, actorEntry->pos.x,
+                                         actorEntry->pos.y, actorEntry->pos.z, rotX, rotY, rotZ,
                                          actorEntry->params & 0xFFFF, actorEntry->rot.y & 0x7F,
                                          ((actorEntry->rot.x & 7) << 7) | (actorEntry->rot.z & 0x7F), NULL);
 }
@@ -3779,33 +3775,29 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx) 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_800BC770(GameState* gameState, s16 arg1, s16 arg2) {
-    s16 idx;
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
+void func_800BC770(GlobalContext* globalCtx, s16 y, s16 countdown) {
+    s16 idx = Quake_Add(&globalCtx->mainCamera, 3);
 
-    idx = Quake_Add(&globalCtx->mainCamera, 3);
     Quake_SetSpeed(idx, 20000);
-    Quake_SetQuakeValues(idx, arg1, 0, 0, 0);
-    Quake_SetCountdown(idx, arg2);
+    Quake_SetQuakeValues(idx, y, 0, 0, 0);
+    Quake_SetCountdown(idx, countdown);
 }
 
-void func_800BC7D8(GameState* gameState, s16 arg1, s16 arg2, s16 speed) {
-    s16 idx;
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
+void func_800BC7D8(GlobalContext* globalCtx, s16 y, s16 countdown, s16 speed) {
+    s16 idx = Quake_Add(&globalCtx->mainCamera, 3);
 
-    idx = Quake_Add(&globalCtx->mainCamera, 3);
     Quake_SetSpeed(idx, speed);
-    Quake_SetQuakeValues(idx, arg1, 0, 0, 0);
-    Quake_SetCountdown(idx, arg2);
+    Quake_SetQuakeValues(idx, y, 0, 0, 0);
+    Quake_SetCountdown(idx, countdown);
 }
 
-void func_800BC848(Actor* actor, GameState* gameState, s16 arg2, s16 arg3) {
+void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
     if (arg2 >= 5) {
         func_8013ECE0(actor->xyzDistToPlayerSq, 0xFF, 0x14, 0x96);
     } else {
         func_8013ECE0(actor->xyzDistToPlayerSq, 0xB4, 0x14, 0x64);
     }
-    func_800BC770(gameState, arg2, arg3);
+    func_800BC770(globalCtx, arg2, arg3);
 }
 
 DoorLockInfo sDoorLocksInfo[DOORLOCK_MAX] = {
@@ -4008,7 +4000,7 @@ s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3,
     } else if (*arg2) {
         *arg2 = arg5(globalCtx, actor);
         return false;
-    } else if (!func_800B8934(&globalCtx->state, actor)) {
+    } else if (!func_800B8934(globalCtx, actor)) {
         return false;
     } else if (!func_800B8614(actor, globalCtx, arg3)) {
         return false;

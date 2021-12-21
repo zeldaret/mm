@@ -1284,7 +1284,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         }
         return 0;
     }
-    if (!func_800B8934(&globalCtx->state, &this->actor)) {
+    if (!func_800B8934(globalCtx, &this->actor)) {
         return 0;
     }
     yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;

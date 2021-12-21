@@ -702,7 +702,7 @@ void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, GlobalContext* glob
 }
 
 void EnMa4_HorsebackGameTalking(EnMa4* this, GlobalContext* globalCtx) {
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->actionFunc = EnMa4_HorsebackGameWait;
     }
 }

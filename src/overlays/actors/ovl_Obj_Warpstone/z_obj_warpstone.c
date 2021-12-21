@@ -138,7 +138,7 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->isTalking) {
-        if (Actor_TextboxIsClosing(&this->dyna.actor, &globalCtx->state) != 0) {
+        if (Actor_TextboxIsClosing(&this->dyna.actor, globalCtx) != 0) {
             this->isTalking = false;
         } else if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
             if (globalCtx->msgCtx.choiceIndex != 0) {

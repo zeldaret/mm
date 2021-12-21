@@ -39,7 +39,7 @@ void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx) {
 }
 
 void EnAObj_Update2(EnAObj* this, GlobalContext* globalCtx) {
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->actionFunc = EnAObj_Update1;
     }
 }

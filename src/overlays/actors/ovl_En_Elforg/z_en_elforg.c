@@ -401,7 +401,7 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, GlobalContext* globalCtx) 
     EnElforg_CirclePlayer(this, globalCtx);
     player->actor.freezeTimer = 100;
     player->stateFlags1 |= 0x20000000;
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         player->actor.freezeTimer = 0;
         player->stateFlags1 &= ~0x20000000;
         Actor_MarkForDeath(&this->actor);

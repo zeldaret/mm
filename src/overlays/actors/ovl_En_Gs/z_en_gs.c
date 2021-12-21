@@ -184,7 +184,7 @@ void func_80997D14(EnGs* this, GlobalContext* globalCtx) {
 void func_80997D38(EnGs* this, GlobalContext* globalCtx) {
     static f32 D_8099A408[] = { 40.0f, 60.0f, 40.0f, 40.0f };
 
-    if (!func_80152498(&globalCtx->msgCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 0) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
             func_8013E8F8(&this->actor, globalCtx, D_8099A408[this->actor.params], D_8099A408[this->actor.params], 0,
                           0x2000, 0x2000);
@@ -207,7 +207,7 @@ void func_80997DEC(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             func_801518B0(globalCtx, this->unk_210, &this->actor);
             break;
@@ -284,8 +284,8 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
                     if (!Flags_GetSwitch(globalCtx, this->unk_196)) {
                         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 2);
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
-                        Actor_SetSwitchFlag(globalCtx, this->unk_196);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                        Flags_SetSwitch(globalCtx, this->unk_196);
                     }
                     break;
 
@@ -293,8 +293,8 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
                     if (!Flags_GetSwitch(globalCtx, this->unk_196)) {
                         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 7);
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
-                        Actor_SetSwitchFlag(globalCtx, this->unk_196);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                        Flags_SetSwitch(globalCtx, this->unk_196);
                     }
                     break;
 
@@ -415,7 +415,7 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
 void func_80998704(EnGs* this, GlobalContext* globalCtx) {
     this->unk_19D = 0;
     this->unk_19A &= ~(0x100 | 0x4);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_G_STONE_CHANGE_COLOR);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_G_STONE_CHANGE_COLOR);
     this->actionFunc = func_8099874C;
 }
 
@@ -504,7 +504,7 @@ void func_8099874C(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_809989B4(EnGs* this, GlobalContext* globalCtx) {
-    func_800B8A1C(&this->actor, globalCtx, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_PickUp(&this->actor, globalCtx, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809989F4;
 }
 
@@ -513,7 +513,7 @@ void func_809989F4(EnGs* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         func_80997D14(this, globalCtx);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_PickUp(&this->actor, globalCtx, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
@@ -522,7 +522,7 @@ s32 func_80998A48(EnGs* this, GlobalContext* globalCtx) {
 
     if (this->unk_19D == 0) {
         this->unk_216 = 200;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
 
         this->unk_1D4 = 0;
         this->unk_19A |= 1;
@@ -537,9 +537,9 @@ s32 func_80998A48(EnGs* this, GlobalContext* globalCtx) {
     } else if (this->unk_19D == 1) {
         if (func_80998334(this, globalCtx, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.007f, 0.001f, 7,
                           0) == 0.0f) {
-            if ((this->actor.params != ENGS_0) && !func_801690CC(globalCtx) && !func_80152498(&globalCtx->msgCtx)) {
+            if ((this->actor.params != ENGS_0) && !func_801690CC(globalCtx) && !Message_GetState(&globalCtx->msgCtx)) {
                 this->unk_216 = 0;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
                 func_801518B0(globalCtx, 0x20D2, NULL);
             }
             this->unk_19A &= ~1;
@@ -554,7 +554,7 @@ s32 func_80998BBC(EnGs* this, GlobalContext* globalCtx) {
 
     if (this->unk_19D == 0) {
         this->unk_216 = 200;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
         this->unk_1DC = 0.3f;
         this->unk_1E0 = 0.0f;
 
@@ -585,7 +585,7 @@ s32 func_80998D44(EnGs* this, GlobalContext* globalCtx) {
         this->unk_216 = 200;
         this->unk_1DC = this->unk_1B0[0].y - 1.0f;
         this->unk_1E0 = -0.8f;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_G_STONE_CRUSH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_G_STONE_CRUSH);
         this->unk_19A |= 1;
         this->unk_21C = 40;
         this->unk_21E = 11;
@@ -616,7 +616,7 @@ s32 func_80998D44(EnGs* this, GlobalContext* globalCtx) {
             this->unk_21C = 10;
             this->unk_21E = 10;
             this->unk_1DC = 0.5f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
             this->unk_19D += 1;
         }
     } else if ((this->unk_19D == 4) && (func_80998334(this, globalCtx, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4,
@@ -665,7 +665,7 @@ s32 func_80998F9C(EnGs* this, GlobalContext* globalCtx) {
             this->unk_1E0 = 1.5f;
             this->unk_1E4 = this->unk_1B0[1].y - 1.0f;
             this->unk_1E8 = -0.3f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_STONE_GROW_UP);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_STONE_GROW_UP);
             this->unk_19D = 3;
         }
     }
@@ -715,7 +715,7 @@ s32 func_80998F9C(EnGs* this, GlobalContext* globalCtx) {
             this->unk_1E8 = 0.0f;
             this->unk_1F0 = 0.0f;
             this->unk_1EC = 0.5f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
             this->unk_21C = 20;
             this->unk_21E = 2;
             this->unk_19D = 6;
@@ -738,7 +738,7 @@ s32 func_80998F9C(EnGs* this, GlobalContext* globalCtx) {
     }
 
     if ((u16)this->unk_19E[0].y < sp3A) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_STONE_ROLLING);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_STONE_ROLLING);
     }
 
     return sp4C;
@@ -853,7 +853,7 @@ s32 func_809995A4(EnGs* this, GlobalContext* globalCtx) {
             sp54.x = this->actor.world.pos.x;
             sp54.y = this->actor.world.pos.y;
             sp54.z = this->actor.world.pos.z;
-            Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
             EffectSsBomb2_SpawnLayered(globalCtx, &sp54, &bomb2Velocity, &bomb2Accel, 100, 20);
             this->unk_1D4 = 10;
             this->unk_19A |= 8;
@@ -863,7 +863,7 @@ s32 func_809995A4(EnGs* this, GlobalContext* globalCtx) {
             func_800B9010(&this->actor, NA_SE_EV_STONE_LAUNCH - SFX_FLAG);
         }
 
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 0.5f, 364.0f, 0.0f);
 
         this->unk_19E[1].y += (s16)this->unk_1DC;
@@ -935,9 +935,9 @@ void func_80999BC8(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (this->actor.params == ENGS_1) {
-        Actor_SetHeight(&this->actor, 34.5f);
+        Actor_SetFocus(&this->actor, 34.5f);
     } else {
-        Actor_SetHeight(&this->actor, 23.0f);
+        Actor_SetFocus(&this->actor, 23.0f);
     }
 
     if (this->unk_21A > 0) {
@@ -1008,12 +1008,12 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnGs* this = THIS;
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         globalCtx->msgCtx.unk11F22 = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, globalCtx);
-    } else if (func_800B8718(&this->actor, globalCtx)) {
+    } else if (func_800B8718(&this->actor, &globalCtx->state)) {
         this->unk_19A |= 0x200;
         this->collider.base.acFlags &= ~AC_HIT;
         if (this->actor.cutscene != -1) {
@@ -1027,7 +1027,7 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         if ((this->actor.flags & 0x40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
             func_80999BC8(&this->actor, globalCtx);
-            func_800B8898(globalCtx, &this->actor, &sp2E, &sp2C);
+            Actor_GetScreenPos(globalCtx, &this->actor, &sp2E, &sp2C);
             if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > 320) || (sp2C < 0) ||
                 (sp2C > 240)) {
                 this->unk_216 = 0;

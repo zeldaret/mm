@@ -90,7 +90,7 @@ void func_80C088A4(EnNnh* this) {
 }
 
 void func_80C088B8(EnNnh* this, GlobalContext* globalCtx) {
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         func_80C08828(this);
     }
 }

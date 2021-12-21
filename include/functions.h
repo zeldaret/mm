@@ -745,7 +745,7 @@ s32 func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
 s32 func_800B85E0(Actor* actor, GlobalContext* globalCtx, f32 radius, s32 exchangeItemId);
 s32 func_800B8614(Actor* actor, GlobalContext* globalCtx, f32 radius);
 s32 func_800B863C(Actor* actor, GlobalContext* globalCtx);
-s32 Actor_TextboxIsClosing(Actor* actor, GameState* gameState);
+s32 Actor_TextboxIsClosing(Actor* actor, GlobalContext* globalCtx);
 s32 func_800B86C8(Actor* actor1, GlobalContext* globalCtx, Actor* actor2);
 s32 Player_GetExchangeItemId(GlobalContext* globalCtx);
 s32 func_800B8718(Actor* actor, GameState* gameState);
@@ -753,7 +753,7 @@ s32 func_800B874C(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
 s32 func_800B8804(Actor* actor, GlobalContext* globalCtx, f32 xzRange);
 s32 func_800B886C(Actor* actor, GlobalContext* globalCtx);
 void Actor_GetScreenPos(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y);
-s32 func_800B8934(GameState* gameState, Actor* actor);
+s32 func_800B8934(GlobalContext* globalCtx, Actor* actor);
 s32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx);
 s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange);
 s32 Actor_PickUpNearby(Actor* actor, GlobalContext* globalCtx, s32 getItemId);
@@ -783,7 +783,7 @@ void func_800B9098(Actor* actor);
 s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon, s32 index, s32 arg4);
 void func_800B90F4(GlobalContext* globalCtx);
 void func_800B9120(ActorContext* actorCtx);
-void Actor_InitContext(GameState* gameState, ActorContext* actorCtx, ActorEntry* actorEntry);
+void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry* actorEntry);
 void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx);
 s32 Actor_RecordUndrawnActor(GlobalContext* globalCtx, Actor* actor);
 void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx);
@@ -808,8 +808,9 @@ s16 Actor_TestFloorInDirection(Actor* actor, GlobalContext* globalCtx, f32 dista
 s32 Actor_IsTargeted(GlobalContext* globalCtx, Actor* actor);
 s32 Actor_OtherIsTargeted(GlobalContext* globalCtx, Actor* actor);
 void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx);
-void func_800BC770(GameState* gameState, s16 arg1, s16 arg2);
-void func_800BC848(Actor* actor, GameState* gameState, s16 arg2, s16 arg3);
+void func_800BC770(GlobalContext* globalCtx, s16 y, s16 countdown);
+void func_800BC7D8(GlobalContext* globalCtx, s16 y, s16 countdown, s16 speed);
+void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3);
 void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type);
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration);
 Hilite* func_800BCBF4(Vec3f* arg0, GlobalContext* globalCtx);

@@ -586,7 +586,7 @@ void func_80B41C30(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B41C54(EnKgy* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->actionFunc = func_80B41C30;
         this->actor.flags &= ~0x100;
     }

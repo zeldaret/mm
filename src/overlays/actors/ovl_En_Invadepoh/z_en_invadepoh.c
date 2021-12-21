@@ -2755,7 +2755,7 @@ void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff * 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         func_80B48948(this);
     }
 }
@@ -3103,7 +3103,7 @@ void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.weekEventReg[54] |= 0x10;
             this->actor.textId = 0x332E;
@@ -3330,7 +3330,7 @@ void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.weekEventReg[54] |= 0x10;
             this->actor.textId = 0x332E;
@@ -3869,7 +3869,7 @@ void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         func_80B4BBE0(this);
     }
 }
@@ -4091,7 +4091,7 @@ void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         func_80B4C6C8(this);
     }
 }

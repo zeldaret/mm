@@ -302,7 +302,7 @@ void func_8095ABA8(EnOwl* this) {
 }
 
 void func_8095ABF0(EnOwl* this, GlobalContext* globalCtx) {
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         Audio_QueueSeqCmd(0x110000FF);
         func_8095AAD0(this, globalCtx);
         this->actor.flags &= ~0x10000;
@@ -311,7 +311,7 @@ void func_8095ABF0(EnOwl* this, GlobalContext* globalCtx) {
 
 // Unused?
 void func_8095AC50(EnOwl* this, GlobalContext* globalCtx) {
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         Audio_QueueSeqCmd(0x110000FF);
         if ((this->unk_3DA % 64) == 0) {
             func_8095AAD0(this, globalCtx);

@@ -95,7 +95,7 @@ void func_80C066F8(ObjMoonStone* this) {
 }
 
 void func_80C0670C(ObjMoonStone* this, GlobalContext* globalCtx) {
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx) != 0) {
         this->actor.colChkInfo.health = 0;
         func_80C0662C(this);
     }

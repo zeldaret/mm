@@ -315,7 +315,7 @@ void func_80BA3C88(EnToto* this) {
 void func_80BA3CC4(EnToto* this, GlobalContext* globalCtx) {
     func_80BA383C(this, globalCtx);
     func_80BA3C88(this);
-    if (Actor_TextboxIsClosing(&this->actor, &globalCtx->state)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         func_80BA36C0(this, globalCtx, this->text->unk1);
     } else {
         func_80BA4C44(this, globalCtx);
