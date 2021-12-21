@@ -3102,7 +3102,7 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
 
     EnBigslime_SetSysMatrix(&gekkoPos, globalCtx, D_04076BC0, this->gekkoScale * (550.0f / 7.0f),
                             this->gekkoScale * (550.0f / 7.0f), 0.0f, 0, 255.0f);
-                            
+
     if (this->minislimeState != MINISLIME_INACTIVE_STATE) {
         EnBigslime_DrawMinislime(this, globalCtx);
     }
@@ -3120,7 +3120,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, GlobalContext* globalCtx
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    
+
     func_8012C2DC(globalCtx->state.gfxCtx);
 
     // Draw Shockwave
