@@ -52,7 +52,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167F0C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80168090.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Draw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80168DAC.s")
 
