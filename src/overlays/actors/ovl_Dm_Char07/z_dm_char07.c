@@ -73,7 +73,7 @@ void DmChar07_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DmChar07* this = THIS;
 
     if (this->isStage) {
-        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
 
