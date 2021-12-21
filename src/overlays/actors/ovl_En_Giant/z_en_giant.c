@@ -100,7 +100,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneDownward = 2400.0f;
     Actor_SetScale(&this->actor, 0.32f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGiantSkel, &gGiantLargeStrideAnim, this->jointTable,
-                       this->morphTable, EN_GIANT_LIMB_MAX);
+                       this->morphTable, GIANT_LIMB_MAX);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
     this->csAction = GIANT_CS_ACTION_NONE;
     this->actionFunc = EnGiant_PerformCutsceneActions;
@@ -411,7 +411,7 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnGiant_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == EN_GIANT_LIMB_HEAD) {
+    if (limbIndex == GIANT_LIMB_HEAD) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gSPDisplayList(POLY_OPA_DISP++, gGiantBeardDL);
@@ -424,7 +424,7 @@ void EnGiant_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
                              Gfx** gfx) {
     EnGiant* this = THIS;
 
-    if (limbIndex == EN_GIANT_LIMB_HEAD) {
+    if (limbIndex == GIANT_LIMB_HEAD) {
         Matrix_CopyCurrentState(&this->headDrawMtxF);
     }
 }
