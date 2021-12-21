@@ -32,7 +32,7 @@ const ActorInit En_Giant_InitVars = {
     (ActorFunc)EnGiant_Draw,
 };
 
-static AnimationHeader* sAnimationTable[] = {
+static AnimationHeader* sAnimations[] = {
     &gGiantLookUpStartAnim,    &gGiantLookUpLoopAnim,    &gGiantFallingOverAnim,  &gGiantRaisedArmsStartAnim,
     &gGiantRaisedArmsLoopAnim, &gGiantStruggleStartAnim, &gGiantStruggleLoopAnim, &gGiantIdleAnim,
     &gGiantWalkingAnim,        &gGiantBigCallStartAnim,  &gGiantBigCallLoopAnim,  &gGiantBigCallEndAnim,
@@ -43,10 +43,10 @@ void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimationId) {
     if (newAnimationId >= GIANT_ANIMATION_LOOK_UP_START && newAnimationId < GIANT_ANIMATION_MAX) {
         if ((this->animationId == GIANT_ANIMATION_WALKING_LOOP && newAnimationId != GIANT_ANIMATION_WALKING_LOOP) ||
             (newAnimationId == GIANT_ANIMATION_WALKING_LOOP && this->animationId != GIANT_ANIMATION_WALKING_LOOP)) {
-            Animation_Change(&this->skelAnime, sAnimationTable[newAnimationId], 1.0f, 0.0f,
-                             Animation_GetLastFrame(&sAnimationTable[newAnimationId]->common), 2, 10.0f);
+            Animation_Change(&this->skelAnime, sAnimations[newAnimationId], 1.0f, 0.0f,
+                             Animation_GetLastFrame(&sAnimations[newAnimationId]->common), 2, 10.0f);
         } else {
-            Animation_PlayOnce(&this->skelAnime, sAnimationTable[newAnimationId]);
+            Animation_PlayOnce(&this->skelAnime, sAnimations[newAnimationId]);
         }
         this->animationId = newAnimationId;
     }
@@ -100,7 +100,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneDownward = 2400.0f;
     Actor_SetScale(&this->actor, 0.32f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGiantSkel, &gGiantLargeStrideAnim, this->jointTable,
-                       this->morphTable, 16);
+                       this->morphTable, EN_GIANT_LIMB_MAX);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
     this->csAction = GIANT_CS_ACTION_NONE;
     this->actionFunc = EnGiant_PerformCutsceneActions;
@@ -188,7 +188,7 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 /**
- * The animations in sAnimationTable are organized such that looping animations
+ * The animations in sAnimations are organized such that looping animations
  * appear immediately after their respective starting animations. The point of
  * this function is to play the requested start animation if it has not been
  * played yet and play the respetive looping animation otherwise.
@@ -340,10 +340,9 @@ void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionI
     f32 startPosY = actorAction->unk10;
     s32 pad[2];
     f32 endPosY = actorAction->unk1C;
-    f32 lerpScale;
+    f32 scale = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);
 
-    lerpScale = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);
-    this->actor.world.pos.y = ((endPosY - startPosY) * lerpScale) + startPosY;
+    this->actor.world.pos.y = ((endPosY - startPosY) * scale) + startPosY;
 }
 
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
@@ -433,7 +432,6 @@ void EnGiant_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnGiant* this = THIS;
-
     static TexturePtr sFaceTextures[] = { gGiantFaceEyeOpenTex, gGiantFaceEyeHalfTex, gGiantFaceEyeClosedTex };
 
     if (this->alpha > 0) {
