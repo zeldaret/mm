@@ -1,7 +1,7 @@
 /*
  * File: z_en_zl4.c
  * Overlay: ovl_En_Zl4
- * Description:
+ * Description: Glitched early version of Skull Kid stuck in a T-pose
  */
 
 #include "z_en_zl4.h"
