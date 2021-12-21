@@ -45,9 +45,8 @@
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
-//#define LINK_IS_CHILD (gSaveContext.linkAge != 0)
-#define LINK_IS_ADULT (gSaveContext.linkAge == 0)
 #define LINK_IS_CHILD (gSaveContext.linkAge == 1)
+#define LINK_IS_ADULT (gSaveContext.linkAge == 0)
 
 #define CURRENT_DAY (((void)0, gSaveContext.day) % 5)
 
