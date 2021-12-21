@@ -101,7 +101,7 @@ static Color_RGBA8 D_80A8B25C[] = {
 static f32 D_80A8B274[] = { 60.0f, 255.0f, 60.0f };
 
 static UNK_TYPE D_80A8B280[] = {
-    0x0408F7E0, 0x0408F3E0, 0x0408EFE0, 0x0408EBE0, 0x0408E7E0, 0x0408E3E0, 0x0408DFE0, 0x0408DBE0,
+    &D_0408F7E0, &D_0408F3E0, &D_0408EFE0, &D_0408EBE0, &D_0408E7E0, &D_0408E3E0, &D_0408DFE0, &D_0408DBE0,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -187,7 +187,7 @@ void func_80A85788(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -arg0->unk_02 * 5, 32, 64, 1, 0, 0, 32, 32));
 
             Matrix_InsertTranslation(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
             Matrix_InsertTranslation(0.0f, 14.0f, 0.0f, MTXMODE_APPLY);
 
@@ -245,7 +245,7 @@ void func_80A85BCC(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)alpha);
 
             Matrix_InsertTranslation(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -315,7 +315,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
 
             Matrix_InsertTranslation(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
             Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -827,14 +827,15 @@ s32 func_80A8777C(Actor* thisx, GlobalContext* globalCtx) {
             if (temp_v0 != 0x10) {
                 break;
             }
-            goto label;
+            if (0) {
 
-        case 4:
-        case 5:
-            if (!func_80147624(globalCtx)) {
-                break;
+                case 4:
+                case 5:
+                    if (!func_80147624(globalCtx)) {
+                        break;
+                    }
             }
-        label:
+
             temp_v0 = func_80123810(globalCtx);
             if ((temp_v0 == 35) || (temp_v0 == 36)) {
                 ((EnTru*)thisx)->unk_34E |= 8;
