@@ -344,7 +344,8 @@ s32 func_80A5BA58(EnKusa2* this, GlobalContext* globalCtx) {
     sp24.x = this->actor.world.pos.x;
     sp24.y = this->actor.world.pos.y + 30.0f;
     sp24.z = this->actor.world.pos.z;
-    this->actor.floorHeight = func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &sp20, &this->actor, &sp24);
+    this->actor.floorHeight =
+        BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &sp20, &this->actor, &sp24);
     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
         this->actor.floorBgId = sp20;
         this->actor.world.pos.y = this->actor.floorHeight;
@@ -1151,7 +1152,8 @@ void func_80A5D9C8(EnKusa2* this, GlobalContext* globalCtx) {
             this->unk_1D0 = ((u32)Rand_Next() >> 0x1D) + 14;
         }
 
-        this->actor.floorHeight = func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
+        this->actor.floorHeight =
+            BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
     }
 }
 

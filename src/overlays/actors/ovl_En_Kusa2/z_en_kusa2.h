@@ -10,7 +10,7 @@ typedef void (*EnKusa2ActionFunc)(struct EnKusa2*, GlobalContext*);
 typedef void (*EnKusa2BssFunc)(struct EnKusa2UnkBssSubStruct*);
 
 #define ENKUSA2_GET_1(thisx) (((thisx)->params) & 1)
-#define ENKUSA2_GET_7F00(thisx) (((((thisx)->params) >> 8) & 0x7F) & 0xFF)
+#define ENKUSA2_GET_7F00(thisx) (u8)((((thisx)->params) >> 8) & 0x7F)
 
 typedef struct EnKusa2UnkBssSubStruct {
     /* 0x00 */ Vec3f unk_00;
