@@ -44,11 +44,9 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-static Gfx* bgCtowerRotDlists[] = { D_06012DA0, D_06017220, D_060174E0 };
-
 void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
-    BgCtowerRot* this = THIS;
     s32 pad;
+    BgCtowerRot* this = THIS;
     Player* player;
     Vec3f offset;
 
@@ -59,6 +57,7 @@ void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc = BgCtowerRot_CorridorRotate;
         return;
     }
+
     player = GET_PLAYER(globalCtx);
     if (this->dyna.actor.params == MAIN_DOOR) {
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06017410);
@@ -96,14 +95,12 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx) {
         rotZ = 0.0f;
     } else {
         offsetDiffZ = 1100.0f - offset.z;
-        rotZtmp = (offsetDiffZ > 1000.0f)
-                      ? 1000.0f
-                      : offsetDiffZ; // Removing rotZtmp just causes regalloc issues and a missing instruction
+        rotZtmp = (offsetDiffZ > 1000.0f) ? 1000.0f : offsetDiffZ;
         rotZ = rotZtmp;
     }
-    func_800DFAC8(globalCtx->cameraPtrs[0], 0x11);
+    func_800DFAC8(globalCtx->cameraPtrs[0], 17);
     this->dyna.actor.shape.rot.z = rotZ * 16.384f;
-    if (globalCtx->csCtx.frames == 0x84) {
+    if (globalCtx->csCtx.frames == 132) {
         play_sound(NA_SE_SY_SPIRAL_DASH);
     }
 }
@@ -118,7 +115,7 @@ void BgCtowerRot_DoorClose(BgCtowerRot* this, GlobalContext* globalCtx) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
         this->actionFunc = BgCtowerRot_DoorDoNothing;
-    } else if (this->dyna.actor.params == 1) {
+    } else if (this->dyna.actor.params == MAIN_DOOR) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_STONE_STATUE_OPEN - SFX_FLAG);
     }
     this->dyna.actor.world.pos.x =
@@ -157,9 +154,10 @@ void BgCtowerRot_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgCtowerRot_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    static Gfx* sDLists[] = { D_06012DA0, D_06017220, D_060174E0 };
     BgCtowerRot* this = THIS;
 
-    func_800BDFC0(globalCtx, bgCtowerRotDlists[this->dyna.actor.params]);
+    func_800BDFC0(globalCtx, sDLists[this->dyna.actor.params]);
     if (this->dyna.actor.params == CORRIDOR) {
         func_800BE03C(globalCtx, D_060129D0);
     }
