@@ -52,7 +52,7 @@ typedef struct EnGo {
     /* 0x018C */ EnGoActionFunc unk_18C;
     /* 0x0190 */ EnGoActionFunc unk_190;
     /* 0x0194 */ ColliderCylinder colliderCylinder;
-    /* 0x01E0 */ char unk1E0[0x4C];
+    /* 0x01E0 */ UNK_TYPE1 unk1E0[0x4C];
     /* 0x022C */ ColliderSphere colliderSphere;
     /* 0x0284 */ Path* unk_284;
     /* 0x0288 */ s8 unk_288;
@@ -73,7 +73,7 @@ typedef struct EnGo {
     /* 0x03A0 */ f32 unk_3A0;
     /* 0x03A4 */ f32 unk_3A4;
     /* 0x03A8 */ f32 unk_3A8;
-    /* 0x03AC */ char pad3AC[0x2];
+    /* 0x03AC */ UNK_TYPE1 unk3AC[0x2];
     /* 0x03AE */ s16 unk_3AE;
     /* 0x03B0 */ s16 unk_3B0;
     /* 0x03B2 */ s16 unk_3B2;
@@ -92,7 +92,7 @@ typedef struct EnGo {
     /* 0x03D4 */ s16 unk_3D4;
     /* 0x03D8 */ void* unk_3D8;
     /* 0x03DC */ s32 unk_3DC;
-    /* 0x03E0 */ char pad3E0[0x4];
+    /* 0x03E0 */ UNK_TYPE1 unk3E0[0x4];
     /* 0x03E4 */ s32 unk_3E4;
     /* 0x03E8 */ s32 unk_3E8;
     /* 0x03EC */ s32 unk_3EC;

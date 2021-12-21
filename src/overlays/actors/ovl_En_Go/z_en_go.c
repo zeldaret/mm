@@ -280,7 +280,7 @@ void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
                                         (ptr->unk_02 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
             Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -355,7 +355,7 @@ void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
 
             Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1288,9 +1288,7 @@ s32 func_80A13E80(EnGo* this, GlobalContext* globalCtx) {
 
 void func_80A14018(EnGo* this, GlobalContext* globalCtx) {
     static Vec3f D_80A166B0 = { 0.0f, 0.0f, 40.0f };
-    static s32 D_80A166BC[] = {
-        11, 10, 12, 13, 14, 17,
-    };
+    static s32 D_80A166BC[] = { 11, 10, 12, 13, 14, 17 };
     Vec3f sp2C;
     s32 phi_v0 = ENGO_GET_70(&this->actor) % 6;
 
@@ -1313,10 +1311,7 @@ void func_80A14018(EnGo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A14104(EnGo* this, GlobalContext* globalCtx) {
-    static s32 D_80A166D4[] = {
-        15,
-        16,
-    };
+    static s32 D_80A166D4[] = { 15, 16 };
     s16 temp;
 
     func_80A12C48(this, globalCtx, D_80A166D4[ENGO_GET_70(&this->actor) % 2]);
@@ -1534,23 +1529,21 @@ void func_80A149B0(EnGo* this, GlobalContext* globalCtx) {
             func_8013AED4(&this->unk_390, 0, 7);
             this->unk_3EC = 1;
             this->actionFunc = func_80A14B30;
-        } else {
-            if (ENGO_GET_F(&this->actor) == ENGO_F_4) {
-                switch (ENGO_GET_70(&this->actor)) {
-                    case ENGO_70_0:
-                        func_80A132C8(this, globalCtx);
-                        break;
+        } else if (ENGO_GET_F(&this->actor) == ENGO_F_4) {
+            switch (ENGO_GET_70(&this->actor)) {
+                case ENGO_70_0:
+                    func_80A132C8(this, globalCtx);
+                    break;
 
-                    case ENGO_70_1:
-                        func_80A133A8(this, globalCtx);
-                        break;
-                }
-            } else if (ENGO_GET_F(&this->actor) == ENGO_F_1) {
-                if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
-                    func_8013AED4(&this->unk_390, 3, 7);
-                } else {
-                    func_8013AED4(&this->unk_390, 0, 7);
-                }
+                case ENGO_70_1:
+                    func_80A133A8(this, globalCtx);
+                    break;
+            }
+        } else if (ENGO_GET_F(&this->actor) == ENGO_F_1) {
+            if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
+                func_8013AED4(&this->unk_390, 3, 7);
+            } else {
+                func_8013AED4(&this->unk_390, 0, 7);
             }
         }
     }
