@@ -96,9 +96,9 @@
         <DList Name="gBigslimeBubbleDL" Offset="0xF9D0" />
         <DList Name="gBigslimeShockwaveDL" Offset="0xFB40" />
         <Texture Name="gBigslimeShockwave1Tex" OutName="bigslime_shockwave_1" Format="i4" Width="32" Height="64" Offset="0xFC28" />
-        <!-- <Blob Name="object_bigslime_zeroes_unk_00010028" Size="0x400" Offset="0x10028" /> -->
+        <Blob Name="object_bigslime_zeroes_Blob_010028" Size="0x400" Offset="0x10028" />
         <Texture Name="gBigslimeShockwave2Tex" OutName="bigslime_shockwave_2" Format="i4" Width="16" Height="16" Offset="0x10428" />
-        <!-- <Blob Name="object_bigslime_zeroes_unk_000104A8" Size="0x88" Offset="0x104A8" /> -->
+        <Blob Name="object_bigslime_zeroes_Blob_0104A8" Size="0x88" Offset="0x104A8" />
         
         <DList Name="gBigslimeNormalDL" Offset="0x10530" />
 
@@ -111,7 +111,6 @@
         <DList Name="gMinislimeFrozenDL" Offset="0x10DB0" />
         <TextureAnimation Name="gMinislimeFrozenTexAnim" Offset="0x10EC8" />
 
-        <!-- May not be shockwave, need to confirm -->
         <DList Name="gBigslimeUnknownDL" Offset="0x10F20" />
         <DList Name="gBigslimeIceShardDL" Offset="0x10FE0" />
         <TextureAnimation Name="gBigslimeUnknownTexAnim" Offset="0x11008" />
