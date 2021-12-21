@@ -757,7 +757,7 @@ void EnBigpo_LanternFalling(EnBigpo* this, GlobalContext* globalCtx) {
         }
 
         EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_BIGPO, 10,
-                                 &gBigpoDrawLanternFallingDL);
+                                 gBigpoDrawLanternFallingDL);
         EnBigpo_SpawnScoopSoul(this);
     }
 }
