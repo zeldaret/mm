@@ -1,7 +1,7 @@
 /*
  * File: z_dm_char02.c
  * Overlay: ovl_Dm_Char02
- * Description:
+ * Description: Ocarina of Time (dropped from Skull Kid's hand)
  */
 
 #include "z_dm_char02.h"
