@@ -462,7 +462,47 @@ s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012364C.s")
 
+extern u16 D_801BFF34[4];
+
+#ifdef NON_EQUIVALENT
+s32 func_80123810(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s32 i;
+    Input* input = CONTROLLER1(globalCtx);
+
+    if (gSaveContext.unk_06 == 0) {
+        if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_B)) {
+            globalCtx->interfaceCtx.unk_222 = 0;
+            globalCtx->interfaceCtx.unk_224 = 0;
+            Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
+            return -1;
+        }
+    } else {
+        gSaveContext.unk_06--;
+    }
+
+    for (i = 0; i < ARRAY_COUNT(D_801BFF34); i++) {
+        if (CHECK_BTN_ALL(input->press.button, D_801BFF34[i])) {
+            s32 temp_v0;
+            s32 sp24 = func_8012364C(globalCtx, player, i + 1);
+
+            globalCtx->interfaceCtx.unk_222 = 0;
+            globalCtx->interfaceCtx.unk_224 = 0;
+            Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
+            if ((sp24 >= 0xFD) || ( temp_v0 = globalCtx->unk_18794(globalCtx, player, sp24, i + 1), (temp_v0 < 0))) {
+                play_sound(0x4806U);
+                return -1;
+            }
+            player->heldItemButton = i + 1;
+            return temp_v0;
+        }
+    }
+
+    return 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
+#endif
 
 extern u8 D_801BFF3C[];
 
@@ -832,7 +872,7 @@ void func_80124420(Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
 #endif
 
-void func_80124618(f32*, f32, Vec3f*);
+void func_80124618(u16*, f32 curFrame, Vec3f*);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124618.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801246F4.s")
@@ -906,7 +946,9 @@ void func_8012536C(void) {
 s32 func_80125580(GlobalContext* globalCtx, Vec3s* arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
 
-void func_80125CE0(Player* player, f32* arg1, Vec3f* arg2, Vec3s* arg3) {
+extern u16 D_801C0750[];
+
+void func_80125CE0(Player* player, u16* arg1, Vec3f* arg2, Vec3s* arg3) {
     Matrix_JointPosition(arg2, arg3);
     func_80125318(arg2, arg3);
     func_80124618(arg1, player->skelAnime.curFrame, player->unk_AF0);
@@ -1110,10 +1152,85 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128388.s")
 
+//Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
+extern Vec3f D_801C0C00;
+
+//Vec3f D_801C0C78[2] = { { 0.0f, 0.0f, 0.0f }, { 20.0f, 3.4350486e-27f, 30.0f } };
+extern Vec3f D_801C0C78[2];
+
+//Vec3f D_801C0C94 = { 0.0f, 0.0f, 0.0f };
+extern Vec3f D_801C0C94;
+
+/*
+Vec3f D_801C0C0C[3] = {
+    { 174.0f, -1269.0f, -1.0f },
+    { 401.0f, -729.0f, -701.0f },
+    { 401.0f, -729.0f, 699.0f },
+};
+*/
+extern Vec3f D_801C0C0C[3];
+
+/*
+Vec3f D_801C0C30[3] = {
+    { 74.0f, -1269.0f, -1.0f },
+    { 301.0f, -729.0f, -701.0f },
+    { 301.0f, -729.0f, 699.0f },
+};
+*/
+extern Vec3f D_801C0C30[3];
+
+extern UNK_TYPE D_801C0C54;
+extern struct_801F58B0 D_801F59AC[][3];
+
+#ifdef NON_EQUIVALENT
+// Not sure about equivalency
+void func_801284A0(GlobalContext* globalCtx, Player* player) {
+    Mtx* sp90;
+    Vec3f sp84;
+    Vec3f sp78;
+    u32 sp6C;
+    Mtx* temp_v0;
+    struct_801F58B0 (*phi_s0)[3];
+    s32 i;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    sp90 = GRAPH_ALLOC(globalCtx->state.gfxCtx, 6*sizeof(Mtx));
+
+    sp6C = globalCtx->gameplayFrames;
+
+    gSPSegment(POLY_OPA_DISP++, 0x0B, sp90);
+
+    Matrix_MultiplyVector3fByState(&D_801C0C00, D_801C0C78);
+    Math_Vec3f_Lerp(&player->bodyPartsPos[7], &player->bodyPartsPos[0], 0.2f, &D_801C0C94);
+
+    for (i = 0; i < 3; i++) {
+        Matrix_MultiplyVector3fByState(&D_801C0C0C[i], &sp84);
+        Matrix_MultiplyVector3fByState(&D_801C0C30[i], &sp78);
+
+        func_80127DA4(globalCtx, D_801F58B0[i], &D_801C0C54, 3, &sp84, &sp78, &sp6C);
+        sp6C += 11;
+
+        Matrix_StatePush();
+        Matrix_InsertTranslation(D_801C0C0C[i].x, D_801C0C0C[i].y, D_801C0C0C[i].z, 1);
+        func_80128388(D_801F58B0[i], &D_801C0C54, 3, &sp90);
+        Matrix_StatePop();
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801284A0.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128640.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128B74.s")
+extern Vec3f D_801C0D24[];
+
+void func_80128B74(GraphicsContext** gfxCtxPtr, Player* player, s32 limbIndex) {
+    Vec3f* footPos = &D_801C0D24[player->transformation];
+
+    func_800B4A98(&player->actor, limbIndex, 9, footPos, 6, footPos);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128BD0.s")

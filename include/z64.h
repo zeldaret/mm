@@ -873,7 +873,10 @@ typedef struct {
     /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
     /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
+    /* 0x120B2 */ UNK_TYPE1 pad120B2[0xA];
+    /* 0x120BC */ u16 unk_120BC;
+    /* 0x120BE */ UNK_TYPE1 unk_120BE[0x2];
+    /* 0x120C0 */ UNK_TYPE1 unk_120C0[0x14];
     /* 0x120D4 */ UNK_TYPE2 unk120D4;
     /* 0x120D6 */ UNK_TYPE2 unk120D6;
     /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
@@ -1398,7 +1401,7 @@ struct GlobalContext {
     /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
     /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
     /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
-    /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
+    /* 0x18794 */ s32 (*unk_18794)(GlobalContext*, Player*, s32, s32);
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 unk_1879C[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
