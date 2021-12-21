@@ -1,0 +1,10 @@
+﻿<Root>
+    <File Name="object_gi_reserve_b_01" Segment="6">
+        <DList Name="object_gi_reserve_b_01_DL_000820" Offset="0x820" />
+        <DList Name="object_gi_reserve_b_01_DL_000948" Offset="0x948" />
+        <Texture Name="object_gi_reserve_b_01_Tex_000CD8" OutName="tex_000CD8" Format="i4" Width="32" Height="16" Offset="0xCD8" />
+        <Texture Name="object_gi_reserve_b_01_Tex_000DD8" OutName="tex_000DD8" Format="ia16" Width="24" Height="32" Offset="0xDD8" />
+        <Texture Name="object_gi_reserve_b_01_Tex_0013D8" OutName="tex_0013D8" Format="i8" Width="16" Height="32" Offset="0x13D8" />
+        <Texture Name="object_gi_reserve_b_01_Tex_0015D8" OutName="tex_0015D8" Format="i4" Width="16" Height="32" Offset="0x15D8" />
+    </File>
+</Root>
