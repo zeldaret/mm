@@ -5,8 +5,6 @@
  */
 
 #include "z_en_bigpo.h"
-//#include "objects/object_bigpo/object_bigpo.h"
-//#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00001215
 
@@ -34,6 +32,7 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SpawnCutsceneStage7(EnBigpo* this);
 void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, GlobalContext* globalCtx);
 
+s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WellWaitForProximity(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, GlobalContext* globalCtx);
@@ -50,7 +49,6 @@ void EnBigpo_SpinAttack(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SetupSpinDown(EnBigpo* this);
 void EnBigpo_SpinningDown(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_CheckHealth(EnBigpo* this, GlobalContext* globalCtx);
-s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SetupDeath(EnBigpo* this);
 void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx);
@@ -758,7 +756,8 @@ void EnBigpo_LanternFalling(EnBigpo* this, GlobalContext* globalCtx) {
             Actor_SetSwitchFlag(globalCtx, this->switchFlags);
         }
 
-        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_BIGPO, 10, &gBigpoDrawLanternFallingDL);
+        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_BIGPO, 10,
+                                 &gBigpoDrawLanternFallingDL);
         EnBigpo_SpawnScoopSoul(this);
     }
 }
@@ -1299,7 +1298,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
         // fully visible OR fully transparent
         dispHead = POLY_OPA_DISP;
         gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
-        gSPSegment(&dispHead[1], 0x0C, &D_801AEFA0);
+        gSPSegment(&dispHead[1], 0x0C, &D_801AEFA0); // empty display list for no transparency
         gSPSegment(&dispHead[2], 0x08,
                    Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
@@ -1309,7 +1308,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         dispHead = POLY_XLU_DISP;
         gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
-        gSPSegment(&dispHead[1], 0x0C, &D_801AEF88);
+        gSPSegment(&dispHead[1], 0x0C, &D_801AEF88); // transparency display list
         gSPSegment(&dispHead[2], 0x08,
                    Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
@@ -1455,7 +1454,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, &D_0407D590); // flame displaylist
+        gSPDisplayList(POLY_XLU_DISP++, &gGameplayKeepDrawFlameDL);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -1482,7 +1481,7 @@ void EnBigpo_RevealedFire(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, &D_0407D590); // flame displaylist
+    gSPDisplayList(POLY_XLU_DISP++, &gGameplayKeepDrawFlameDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
