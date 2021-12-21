@@ -164,7 +164,7 @@ void func_80B708C0(EnRailSkb* this, GlobalContext* globalCtx) {
     Vec3f sp70;
     s32 phi_a3;
 
-    this->unk_230 = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    this->unk_230 = Lib_SegmentedToVirtual(path->points);
     this->unk_2E0 = D_80B7348C;
     this->unk_2E8 = path->count;
 
