@@ -177,7 +177,7 @@ s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
     if (idx == 0) {
         phi_f12 = sp5C[1].x - sp5C[0].x;
         phi_f14 = sp5C[1].z - sp5C[0].z;
-    } else if (((void)0, sp58) == (idx + 1)) {
+    } else if (idx == (sp58 - 1)) {
         phi_f12 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
         phi_f14 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
     } else {
@@ -199,7 +199,7 @@ f32 func_80BECEAC(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
     Vec3s* point;
 
     if (path != NULL) {
-        temp = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        temp = Lib_SegmentedToVirtual(path->points);
         point = &temp[arg1];
 
         sp20.x = point->x;
@@ -214,7 +214,7 @@ f32 func_80BECEAC(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
 }
 
 s16 func_80BECF6C(Path* path) {
-    Vec3s* sp34 = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    Vec3s* sp34 = Lib_SegmentedToVirtual(path->points);
     Vec3f sp28;
     Vec3f sp1C;
 
@@ -302,7 +302,7 @@ s32 func_80BED140(GlobalContext* globalCtx) {
 }
 
 s32 func_80BED208(EnAkindonuts* this) {
-    if (INV_CONTENT(ITEM_BEAN) != 10U) {
+    if (INV_CONTENT(ITEM_MAGIC_BEANS) != 10U) {
         return 0;
     }
 
@@ -310,7 +310,7 @@ s32 func_80BED208(EnAkindonuts* this) {
         return 1;
     }
 
-    if (AMMO(ITEM_BEAN) >= 20) {
+    if (AMMO(ITEM_MAGIC_BEANS) >= 20) {
         return 2;
     }
 
