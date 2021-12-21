@@ -13,7 +13,7 @@ typedef struct EnDoor {
     /* 0x1A0 */ u8 animIndex;
     /* 0x1A1 */ u8 unk1A1;
     /* 0x1A2 */ s8 requiredObjBankIndex;                          /* inferred */
-    /* 0x1A3 */ u8 dlIndex;                          /* inferred */
+    /* 0x1A3 */ s8 dlIndex;                          /* inferred */
     /* 0x1A4 */ u8 unk1A4;                          /* inferred */
     /* 0x1A5 */ u8 switchFlag;                          /* inferred */
     /* 0x1A6 */ u8 unk1A6;

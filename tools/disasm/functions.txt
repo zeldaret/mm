@@ -4960,7 +4960,7 @@
     0x808670F0:("func_808670F0",),
     0x80867144:("func_80867144",),
     0x8086732C:("EnDoor_Update",),
-    0x80867350:("func_80867350",),
+    0x80867350:("EnDoor_OverrideLimbDraw",),
     0x808674B0:("EnDoor_Draw",),
     0x80867BD0:("func_80867BD0",),
     0x80867BDC:("func_80867BDC",),
