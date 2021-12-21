@@ -103,7 +103,7 @@ void ObjTokeiStep_InitSteps(ObjTokeiStep* this) {
 
     panelOffset.x = 0.0f;
     panelOffset.y = 0.0f;
-    for (i = 0; i < ARRY_COUNT(this->panels); i++) {
+    for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
         panelOffset.z = i * -20.0f;
         Matrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
@@ -121,7 +121,7 @@ void ObjTokeiStep_InitStepsOpen(ObjTokeiStep* this) {
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     panelOffset.x = 0.0f;
-    for (i = 0; i < ARRY_COUNT(this->panels); i++) {
+    for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
         panelOffset.y = sPanelXOffsets[i];
         panelOffset.z = i * -20.0f;
@@ -133,20 +133,20 @@ void ObjTokeiStep_InitTimers(ObjTokeiStep* this) {
     s32 i;
 
     this->panels[0].startFallingTimer = 0;
-    for (i = 1; i < ARRY_COUNT(this->panels); i++) {
+    for (i = 1; i < ARRAY_COUNT(this->panels); i++) {
         this->panels[i].startFallingTimer = 10;
     }
 }
 
 s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
-    Actor* objTokeiStepActor = &this->dyna.actor;
+    ObjTokeiStep* this2 = this;
     s32 i;
     ObjTokeiStepPanel* panel;
     f32 finalPosY;
     s32 isOpen = true;
     s32 didPrevBounce = true;
 
-    for (i = 0; i < ARRY_COUNT(this->panels); i++) {
+    for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
         if (didPrevBounce && (panel->startFallingTimer > 0)) {
             panel->startFallingTimer--;
@@ -178,8 +178,8 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
                         panel->pos.y += finalPosY;
                     }
                     if (panel->numBounces == 1) {
-                        ObjTokeiStep_SpawnDust(objTokeiStepActor, panel, globalCtx);
-                        ObjTokeiStep_AddQuake(objTokeiStepActor, globalCtx);
+                        ObjTokeiStep_SpawnDust(this2, panel, globalCtx);
+                        ObjTokeiStep_AddQuake(this2, globalCtx);
                     }
                 }
             }
