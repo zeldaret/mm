@@ -1,0 +1,63 @@
+﻿<Root>
+    <File Name="object_ctower_rot" Segment="6">
+        <Texture Name="object_ctower_rot_TLUT_000000" OutName="tlut_000000" Format="rgba16" Width="4" Height="4" Offset="0x0" />
+        <Texture Name="object_ctower_rot_TLUT_000020" OutName="tlut_000020" Format="rgba16" Width="4" Height="4" Offset="0x20" />
+        <Texture Name="object_ctower_rot_TLUT_000040" OutName="tlut_000040" Format="rgba16" Width="16" Height="16" Offset="0x40" />
+        <Texture Name="object_ctower_rot_TLUT_000240" OutName="tlut_000240" Format="rgba16" Width="16" Height="16" Offset="0x240" />
+        <Texture Name="object_ctower_rot_TLUT_000440" OutName="tlut_000440" Format="rgba16" Width="4" Height="4" Offset="0x440" />
+        <Texture Name="object_ctower_rot_Tex_000460" OutName="tex_000460" Format="ci4" Width="64" Height="64" Offset="0x460" />
+        <Texture Name="object_ctower_rot_Tex_000C60" OutName="tex_000C60" Format="ci4" Width="64" Height="64" Offset="0xC60" />
+        <Texture Name="object_ctower_rot_Tex_001460" OutName="tex_001460" Format="ci8" Width="32" Height="32" Offset="0x1460" />
+        <Texture Name="object_ctower_rot_Tex_001860" OutName="tex_001860" Format="ci8" Width="32" Height="32" Offset="0x1860" />
+        <Texture Name="object_ctower_rot_Tex_001C60" OutName="tex_001C60" Format="ci8" Width="32" Height="64" Offset="0x1C60" />
+        <Texture Name="object_ctower_rot_Tex_002460" OutName="tex_002460" Format="ci8" Width="32" Height="64" Offset="0x2460" />
+        <Texture Name="object_ctower_rot_Tex_002C60" OutName="tex_002C60" Format="ci8" Width="32" Height="64" Offset="0x2C60" />
+        <Texture Name="object_ctower_rot_Tex_003460" OutName="tex_003460" Format="ci8" Width="32" Height="64" Offset="0x3460" />
+        <Texture Name="object_ctower_rot_Tex_003C60" OutName="tex_003C60" Format="ci8" Width="32" Height="32" Offset="0x3C60" />
+        <Texture Name="object_ctower_rot_Tex_004060" OutName="tex_004060" Format="rgba16" Width="32" Height="64" Offset="0x4060" />
+        <Texture Name="object_ctower_rot_Tex_005060" OutName="tex_005060" Format="ci8" Width="16" Height="64" Offset="0x5060" />
+        <Texture Name="object_ctower_rot_Tex_005460" OutName="tex_005460" Format="ci8" Width="64" Height="32" Offset="0x5460" />
+        <Texture Name="object_ctower_rot_Tex_005C60" OutName="tex_005C60" Format="ci8" Width="8" Height="64" Offset="0x5C60" />
+        <Texture Name="object_ctower_rot_Tex_005E60" OutName="tex_005E60" Format="ci8" Width="32" Height="32" Offset="0x5E60" />
+        <Texture Name="object_ctower_rot_Tex_006260" OutName="tex_006260" Format="ci8" Width="16" Height="128" Offset="0x6260" />
+        <Texture Name="object_ctower_rot_Tex_006A60" OutName="tex_006A60" Format="ia16" Width="32" Height="32" Offset="0x6A60" />
+        <Texture Name="object_ctower_rot_Tex_007260" OutName="tex_007260" Format="ci8" Width="16" Height="16" Offset="0x7260" />
+        <Texture Name="object_ctower_rot_Tex_007360" OutName="tex_007360" Format="ia16" Width="32" Height="64" Offset="0x7360" />
+        <Texture Name="object_ctower_rot_Tex_008360" OutName="tex_008360" Format="ia16" Width="16" Height="16" Offset="0x8360" />
+        <Texture Name="object_ctower_rot_Tex_008560" OutName="tex_008560" Format="i8" Width="32" Height="32" Offset="0x8560" />
+        <Texture Name="object_ctower_rot_Tex_008960" OutName="tex_008960" Format="ia8" Width="64" Height="64" Offset="0x8960" />
+        <Texture Name="object_ctower_rot_Tex_009960" OutName="tex_009960" Format="ia8" Width="64" Height="64" Offset="0x9960" />
+        <Texture Name="object_ctower_rot_Tex_00A960" OutName="tex_00A960" Format="ia16" Width="32" Height="32" Offset="0xA960" />
+        <Texture Name="object_ctower_rot_Tex_00B160" OutName="tex_00B160" Format="ia16" Width="32" Height="32" Offset="0xB160" />
+        <Texture Name="object_ctower_rot_Tex_00B960" OutName="tex_00B960" Format="ia16" Width="8" Height="64" Offset="0xB960" />
+        <Texture Name="object_ctower_rot_Tex_00BD60" OutName="tex_00BD60" Format="ia16" Width="32" Height="32" Offset="0xBD60" />
+        <Texture Name="object_ctower_rot_Tex_00C560" OutName="tex_00C560" Format="rgba16" Width="32" Height="32" Offset="0xC560" />
+        <Texture Name="object_ctower_rot_Tex_00CD60" OutName="tex_00CD60" Format="ia8" Width="64" Height="64" Offset="0xCD60" />
+        <Texture Name="object_ctower_rot_Tex_00DD60" OutName="tex_00DD60" Format="ci4" Width="64" Height="64" Offset="0xDD60" />
+        <Texture Name="object_ctower_rot_Tex_00E560" OutName="tex_00E560" Format="rgba16" Width="32" Height="32" Offset="0xE560" />
+        <Texture Name="object_ctower_rot_Tex_00ED60" OutName="tex_00ED60" Format="rgba16" Width="32" Height="32" Offset="0xED60" />
+        <Texture Name="object_ctower_rot_Tex_00F560" OutName="tex_00F560" Format="ia4" Width="32" Height="32" Offset="0xF560" />
+        <Texture Name="object_ctower_rot_Tex_00F760" OutName="tex_00F760" Format="ia4" Width="32" Height="32" Offset="0xF760" />
+        <Texture Name="object_ctower_rot_Tex_00F960" OutName="tex_00F960" Format="i4" Width="32" Height="16" Offset="0xF960" />
+        <Texture Name="object_ctower_rot_Tex_00FA60" OutName="tex_00FA60" Format="i4" Width="32" Height="16" Offset="0xFA60" />
+        <Texture Name="object_ctower_rot_Tex_00FB60" OutName="tex_00FB60" Format="i4" Width="32" Height="16" Offset="0xFB60" />
+        <Texture Name="object_ctower_rot_Tex_00FC60" OutName="tex_00FC60" Format="i4" Width="32" Height="16" Offset="0xFC60" />
+        <DList Name="object_ctower_rot_DL_010820" Offset="0x10820" />
+        <DList Name="object_ctower_rot_DL_010828" Offset="0x10828" />
+        <DList Name="object_ctower_rot_DL_0129D0" Offset="0x129D0" />
+        <DList Name="object_ctower_rot_DL_012DA0" Offset="0x12DA0" />
+        <Collision Name="object_ctower_rot_Colheader_0142E8" Offset="0x142E8" />
+        <DList Name="object_ctower_rot_DL_015F30" Offset="0x15F30" />
+        <DList Name="object_ctower_rot_DL_0160A0" Offset="0x160A0" />
+        <Collision Name="object_ctower_rot_Colheader_016E70" Offset="0x16E70" />
+        <DList Name="object_ctower_rot_DL_017010" Offset="0x17010" />
+        <DList Name="object_ctower_rot_DL_017018" Offset="0x17018" />
+        <DList Name="object_ctower_rot_DL_017220" Offset="0x17220" />
+        <Collision Name="object_ctower_rot_Colheader_017410" Offset="0x17410" />
+        <DList Name="object_ctower_rot_DL_0174E0" Offset="0x174E0" />
+        <Collision Name="object_ctower_rot_Colheader_017650" Offset="0x17650" />
+        <DList Name="object_ctower_rot_DL_018110" Offset="0x18110" />
+        <DList Name="object_ctower_rot_DL_018118" Offset="0x18118" />
+        <Collision Name="object_ctower_rot_Colheader_018588" Offset="0x18588" />
+    </File>
+</Root>
