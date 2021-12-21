@@ -1,7 +1,7 @@
 /*
  * File: z_en_fishing.c
  * Overlay: ovl_En_Fishing
- * Description: Fishing
+ * Description: Fishing Pond Elements (Owner, Fish, Props, Effects...)
  */
 
 #include "z_en_fishing.h"
@@ -12,7 +12,7 @@
 
 #define THIS ((EnFishing*)thisx)
 
-#define WATER_SURFACE_Y(globalCtx) globalCtx->colCtx.colHeader->waterBoxes->ySurface
+#define WATER_SURFACE_Y(globalCtx) globalCtx->colCtx.colHeader->waterBoxes->minPos.y
 
 void EnFishing_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFishing_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -1235,7 +1235,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 180, 180, 180, effect->alpha);
 
             Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_30, effect->unk_30, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1263,7 +1263,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                                         (effect->timer + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
             Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_30, effect->unk_30, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1286,7 +1286,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
             }
 
             Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_30, effect->unk_30, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1363,7 +1363,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
             }
 
             Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_InsertYRotation_f(rotY, MTXMODE_APPLY);
             Matrix_Scale(effect->unk_30, effect->unk_30, 1.0f, MTXMODE_APPLY);
 
@@ -1770,7 +1770,7 @@ void EnFishing_DrawSinkingLure(GlobalContext* globalCtx) {
                 Matrix_InsertTranslation(sSinkingLurePos[i].x, sSinkingLurePos[i].y, sSinkingLurePos[i].z, MTXMODE_NEW);
                 scale = sSinkingLureSizes[i + D_80911F20] * 0.04f;
                 Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-                Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1787,7 +1787,7 @@ void EnFishing_DrawSinkingLure(GlobalContext* globalCtx) {
                 Matrix_InsertTranslation(sSinkingLurePos[i].x, sSinkingLurePos[i].y, sSinkingLurePos[i].z, MTXMODE_NEW);
                 scale = sSinkingLureSizes[i + D_80911F20] * 0.04f;
                 Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-                Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -2200,7 +2200,7 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
         }
     }
 
-    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &sLurePos, &D_8090D614, &sProjectedW);
+    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &sLurePos, &D_8090D614, &sProjectedW);
 
     if (D_8090CD14 == 0) {
         Math_ApproachF(&D_80917258, -800.0f, 1.0f, 20.0f);
@@ -2966,7 +2966,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
 
     this->unk_154++;
 
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_172); i++) {
         if (this->unk_172[i] != 0) {
             this->unk_172[i]--;
         }
@@ -3002,7 +3002,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
         Math_ApproachF(&this->unk_194, this->unk_18C * phi_f0, 1.0f, 500.0f * phi_f2);
     }
 
-    Math_ApproachS(&this->unk_168, 0, 5, 0x1F4);
+    Math_ApproachS(&this->unk_168, 0, 5, 500);
 
     if (this->unk_148 == 0) {
         Actor_SetScale(&this->actor, this->unk_1A4 * 15.0f * 0.00001f);
@@ -4364,7 +4364,7 @@ void EnFishing_UpdatePondProps(GlobalContext* globalCtx) {
             prop->shouldDraw = false;
             prop->timer++;
 
-            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &prop->pos, &prop->projectedPos, &sProjectedW);
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &prop->pos, &prop->projectedPos, &sProjectedW);
 
             if ((prop->projectedPos.z < prop->drawDistance) &&
                 (fabsf(prop->projectedPos.x) < (100.0f + prop->projectedPos.z))) {
@@ -4612,7 +4612,7 @@ void EnFishing_UpdateGroupFishes(GlobalContext* globalCtx) {
         if (fish->type != FS_GROUP_FISH_NONE) {
             fish->timer++;
 
-            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &fish->pos, &fish->projectedPos, &sProjectedW);
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &fish->pos, &fish->projectedPos, &sProjectedW);
 
             if ((fish->projectedPos.z < 400.0f) && (fabsf(fish->projectedPos.x) < (100.0f + fish->projectedPos.z))) {
                 fish->shouldDraw = true;
@@ -5630,7 +5630,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             pos.z = randPlusMinusPoint5Scaled(700.0f) + globalCtx->view.eye.z;
 
             if (pos.z < 1160.0f) {
-                SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &pos, &projectedPos, &sProjectedW);
+                SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &pos, &projectedPos, &sProjectedW);
 
                 if (projectedPos.z < 0.0f) {
                     i--;
@@ -5641,7 +5641,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &sStreamSoundPos, &sStreamSoundProjectedPos,
+    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &sStreamSoundPos, &sStreamSoundProjectedPos,
                                  &sProjectedW);
 
     func_8019F1C0(&sStreamSoundProjectedPos, NA_SE_EV_WATER_WALL - SFX_FLAG);
