@@ -5,8 +5,8 @@
  */
 
 #include "z_en_bigpo.h"
-#include "objects/object_bigpo/object_bigpo.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+//#include "objects/object_bigpo/object_bigpo.h"
+//#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00001215
 
@@ -81,17 +81,6 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_RevealedFire(Actor* thisx, GlobalContext* globalCtx);
-
-extern SkeletonHeader  D_06005C18;
-extern AnimationHeader D_06001360;
-extern AnimationHeader D_06000924;
-extern AnimationHeader D_06000924;
-extern AnimationHeader D_06000454;
-extern Gfx D_060041A0;
-extern Gfx D_06001BB0;
-extern Gfx D_060058B8;
-extern Gfx D_060042C8;
-extern Gfx D_060043F8;
 
 extern const ActorInit En_Bigpo_InitVars;
 
@@ -205,7 +194,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
         return;
     }
 
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005C18, &D_06000924, this->jointTable, this->morphTable,
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gBigpoSkeleton, &gBigpoFloatAnim, this->jointTable, this->morphTable,
                    ENBIGPO_LIMBCOUNT);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -246,7 +235,7 @@ void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((this->actor.params != ENBIGPO_POSSIBLEFIRE) && (this->actor.params != ENBIGPO_CHOSENFIRE) &&
         (this->actor.params != ENBIGPO_REVEALEDFIRE) && (this->actor.params != ENBIGPO_UNK5)) {
-        // if NOT a fire type, *ENBIGPO_REGULAR and ENBIGPO_SUMMONED combat types only)
+        // if NOT a fire type, *ENBIGPO_REGULAR and ENBIGPO_SUMMONED (combat types only)
         if (1) {}
         globalCtx2 = globalCtx;
         for (fireCount = 0; fireCount < ARRAY_COUNT(this->fires); fireCount++) {
@@ -277,6 +266,7 @@ void EnBigpo_UpdateSpin(EnBigpo* this) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_ROLL); // spinning sfx during spin attack
     }
 }
+
 /*
  * Lowers the position/eye of the camera during the Big Poe spawn cutscene
  */
@@ -406,7 +396,7 @@ void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, GlobalContext* globalCtx) {
  *          big poe starts to visibly appear
  */
 void EnBigpo_SpawnCutsceneStage5(EnBigpo* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_06001360);
+    Animation_PlayLoop(&this->skelAnime, &gBigpoAwakenStretchAnim);
     this->actor.draw = EnBigpo_DrawMainBigpo;
     Actor_SetScale(&this->actor, 0.014f);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
@@ -520,7 +510,7 @@ void EnBigpo_SetupWarpIn(EnBigpo* this, GlobalContext* globalCtx) {
     s16 randomYaw = (Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
 
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
-    Animation_PlayLoop(&this->skelAnime, &D_06001360);
+    Animation_PlayLoop(&this->skelAnime, &gBigpoAwakenStretchAnim);
     this->rotVelocity = 0x2000;
     this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->actor.world.pos.x;
     this->actor.world.pos.z = (Math_CosS(randomYaw) * distance) + player->actor.world.pos.z;
@@ -547,7 +537,7 @@ void EnBigpo_WarpingIn(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_SetupIdleFlying(EnBigpo* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06000924, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gBigpoFloatAnim, -5.0f);
     // if poe missed attack, idle 4 seconds, otherwise its reappearing: attack immediately
     this->idleTimer = (this->actionFunc == EnBigpo_SpinningDown) ? 80 : 0;
     this->hoverHeightCycleTimer = 40;
@@ -658,7 +648,7 @@ void EnBigpo_SpinningDown(EnBigpo* this, GlobalContext* globalCtx) {
  * called by EnBigpo_ApplyDamage
  */
 void EnBigpo_HitStun(EnBigpo* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000454, -6.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gBigpoShockAnim, -6.0f);
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x10);
     this->collider.base.acFlags &= ~AC_ON;
     func_800BE504(&this->actor, &this->collider);
@@ -768,7 +758,7 @@ void EnBigpo_LanternFalling(EnBigpo* this, GlobalContext* globalCtx) {
             Actor_SetSwitchFlag(globalCtx, this->switchFlags);
         }
 
-        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_BIGPO, 10, &D_060041A0);
+        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_BIGPO, 10, &gBigpoDrawLanternFallingDL);
         EnBigpo_SpawnScoopSoul(this);
     }
 }
@@ -1256,7 +1246,7 @@ void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     if ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2) && (limbIndex == 8)) {
         gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList((*gfx)++, &D_060058B8);
+        gSPDisplayList((*gfx)++, &gBigpoDrawCrispyBodyDL);
     }
 
     if (limbIndex == 7) {
@@ -1364,7 +1354,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, &D_06001BB0);
+    gSPDisplayList(POLY_XLU_DISP++, &gBigpoDrawSoulDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1416,9 +1406,9 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPMatrix(&dispHead[3], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(&dispHead[4], &D_060042C8);
+        gSPDisplayList(&dispHead[4], &gBigpoDrawLanternMainDL);
 
-        gSPDisplayList(&dispHead[5], &D_060043F8);
+        gSPDisplayList(&dispHead[5], &gBigpoDrawLanternPurpleTopDL);
 
         // fully transparent OR fully invisible
         if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {

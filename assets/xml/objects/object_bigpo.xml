@@ -18,9 +18,9 @@
         <Texture Name="gBigpoGlowingEyeTex" OutName="bigpo_glowing_eye" Format="rgba16" Width="16" Height="16" Offset="0x2DF0" />
         <!-- <Blob Name="object_bigpo_Blob_003200" Size="0x350" Offset="0x3200" /> -->
         <!-- <Blob Name="object_bigpo_Blob_003790" Size="0x370" Offset="0x3790" /> -->
-        <DList Name="gBigpoDrawLanternExplosionDL" Offset="0x41A0" />
+        <DList Name="gBigpoDrawLanternFallingDL" Offset="0x41A0" />
         <DList Name="gBigpoDrawLanternMainDL" Offset="0x42C8" />
-        <DList Name="gBigpoDrawLanternTopDL" Offset="0x43F8" />
+        <DList Name="gBigpoDrawLanternPurpleTopDL" Offset="0x43F8" />
         <DList Name="gBigpoDrawHandDL" Offset="0x4488" />
         <DList Name="gBigpoDrawSmallArmDL" Offset="0x4538" />
         <DList Name="gBigpoDrawBigArmDL" Offset="0x45D8" />
@@ -29,9 +29,9 @@
         <DList Name="gBigpoDrawNecklaceHoodShawlDL" Offset="0x4808" />
         <DList Name="gBigpoDrawFaceDL" Offset="0x4AE8" />
         <DList Name="gBigpoDrawLowerRobeDL" Offset="0x4BD8" />
-        <!-- bookmark -->
         <Texture Name="gBigpoCrispyPiecesTex" OutName="bigpo_crispy_pieces" Format="rgba16" Width="16" Height="16" Offset="0x4C98" />
-        <Texture Name="object_bigpo_Tex_004E98" OutName="tex_004E98" Format="rgba16" Width="8" Height="8" Offset="0x4E98" />
+        <!-- small white dot texture used in burned corpse but.. where?-->
+        <Texture Name="gBigpoCrispyEyesTex" OutName="tex_004E98" Format="rgba16" Width="8" Height="8" Offset="0x4E98" />
         <DList Name="gBigpoDrawCrispyBodyDL" Offset="0x58B8" />
         <Limb Name="gBigpoFaceLimb" Type="Standard" Offset="0x5B88" />
         <Limb Name="gBigpoLeftArmUpperLimb" Type="Standard" Offset="0x5B94" />
