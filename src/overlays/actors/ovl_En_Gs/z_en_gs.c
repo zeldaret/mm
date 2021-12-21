@@ -182,12 +182,7 @@ void func_80997D14(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_80997D38(EnGs* this, GlobalContext* globalCtx) {
-    static f32 D_8099A408[] = {
-        40.0f,
-        60.0f,
-        40.0f,
-        40.0f,
-    };
+    static f32 D_8099A408[] = { 40.0f, 60.0f, 40.0f, 40.0f };
 
     if (!func_80152498(&globalCtx->msgCtx)) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
@@ -425,7 +420,7 @@ void func_80998704(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_8099874C(EnGs* this, GlobalContext* globalCtx) {
-    u32 phi_v0 = false;
+    s32 phi_v0 = 0;
 
     switch (this->unk_19C) {
         case 0:
@@ -450,21 +445,21 @@ void func_8099874C(EnGs* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if (!phi_v0) {
+    if (phi_v0 == 0) {
         this->unk_216 = 0;
         if ((this->unk_19C == 5) && (this->unk_194 != 0)) {
             s32 i;
 
             ActorCutscene_Stop(this->unk_212);
-            phi_v0 = true;
+            phi_v0 = 1;
 
             for (i = 0; i < 4; i++) {
                 if (((gSaveContext.roomInf[126][1] >> (i * 3)) & 7) != (u32)this->unk_194) {
-                    phi_v0 = false;
+                    phi_v0 = 0;
                 }
             }
 
-            if (phi_v0) {
+            if (phi_v0 != 0) {
                 this->unk_20C = -1;
                 switch (this->unk_194) {
                     case 1:
@@ -571,7 +566,7 @@ s32 func_80998BBC(EnGs* this, GlobalContext* globalCtx) {
         this->unk_197 &= 0xF;
         this->unk_19D = 1;
     } else if (this->unk_19D == 1) {
-        this->unk_19E[0].z = (this->unk_1D4 % 8) * 0.125f * 360.0f * 182.04445f;
+        this->unk_19E[0].z = (this->unk_1D4 % 8) * 0.125f * 360.0f * (0x10000 / 360.0f);
         this->unk_19E[1].z = -this->unk_19E[0].z;
         if (func_80998334(this, globalCtx, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.005f, 0.001f, 7,
                           0) == 0.0f) {
@@ -656,7 +651,7 @@ s32 func_80998F9C(EnGs* this, GlobalContext* globalCtx) {
     if (this->unk_19D == 1) {
         Math_SmoothStepToF(&this->unk_1E4, this->unk_1E8, 1.0f, 0.1f, 0.001f);
         sp48 = Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 1.0f, this->unk_1E4, 0.001f);
-        this->unk_19E[0].y += (s32)(this->unk_1DC * 182.04445f);
+        this->unk_19E[0].y += (s32)(this->unk_1DC * (0x10000 / 360.0f));
         if (sp48 == 0.0f) {
             this->unk_1D4 = 0;
             this->unk_19D = 2;
@@ -664,7 +659,7 @@ s32 func_80998F9C(EnGs* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_19D == 2) {
-        this->unk_19E[0].y += (s32)(this->unk_1DC * 182.04445f);
+        this->unk_19E[0].y += (s32)(this->unk_1DC * (0x10000 / 360.0f));
         if ((this->unk_1D4++ <= 40) ^ 1) {
             this->unk_1DC = this->unk_1B0[0].y - 1.0f;
             this->unk_1E0 = 1.5f;
@@ -953,9 +948,9 @@ void func_80999BC8(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (!(this->unk_19A & (0x200 | 0x10)) && (this->unk_21A == 0)) {
-        if (this->collider.base.acFlags & 2) {
+        if (this->collider.base.acFlags & AC_HIT) {
             this->unk_19D = 0;
-            this->collider.base.acFlags &= ~2;
+            this->collider.base.acFlags &= ~AC_HIT;
 
             switch (this->actor.colChkInfo.damageEffect) {
                 case 15:
@@ -1003,7 +998,7 @@ void func_80999BC8(Actor* thisx, GlobalContext* globalCtx2) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     } else {
-        this->collider.base.acFlags &= ~2;
+        this->collider.base.acFlags &= ~AC_HIT;
     }
 
     this->actionFunc(this, globalCtx);
@@ -1016,11 +1011,11 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0;
         globalCtx->msgCtx.unk11F10 = 0;
-        this->collider.base.acFlags &= ~2;
+        this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, globalCtx);
     } else if (func_800B8718(&this->actor, globalCtx)) {
         this->unk_19A |= 0x200;
-        this->collider.base.acFlags &= ~2;
+        this->collider.base.acFlags &= ~AC_HIT;
         if (this->actor.cutscene != -1) {
             this->actionFunc = func_80997FF0;
         } else {
@@ -1100,7 +1095,7 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_19A & 2) {
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
         Matrix_Scale(0.05f, -0.05f, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
