@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "prevent_bss_reordering.h"
 
 u8 D_80096B20 = 1;
 vu8 gViConfigUseDefault = 1;
@@ -63,7 +64,7 @@ void Idle_InitCodeAndMemory(void) {
                            SEGMENT_ROM_END(code) - SEGMENT_ROM_START(code), 0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
-    osRecvMesg(&queue, NULL, 1);
+    osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
 
     sDmaMgrDmaBuffSize = oldSize;
 

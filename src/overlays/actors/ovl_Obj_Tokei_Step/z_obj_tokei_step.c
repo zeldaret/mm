@@ -79,7 +79,7 @@ void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, Global
     Vec3f dustSpawnOffset;
     Vec3f dustSpawnPos;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, 0);
+    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     dustSpawnOffset.y = 115.0f;
     dustSpawnOffset.z = -10.0f;
@@ -214,7 +214,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjTokeiStep_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjTokeiStep_SetupBeginOpen(ObjTokeiStep* this) {

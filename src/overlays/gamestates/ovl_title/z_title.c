@@ -6,7 +6,7 @@
 
 #include "z_title.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "static/nintendo_rogo_static/nintendo_rogo_static.h"
+#include "misc/nintendo_rogo_static/nintendo_rogo_static.h"
 
 void Title_UpdateCounters(TitleContext* this) {
     if ((this->coverAlpha == 0) && (this->visibleDuration != 0)) {
@@ -127,7 +127,7 @@ void Title_Main(GameState* thisx) {
     Title_UpdateCounters(this);
     Title_Draw(&this->gameState);
     if (this->exit) {
-        gSaveContext.seqIndex = 0xFF;
+        gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
         gSaveContext.nightSeqIndex = 0xFF;
         gSaveContext.gameMode = 1;
 
