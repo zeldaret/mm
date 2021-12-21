@@ -1,0 +1,5 @@
+﻿<Root>
+    <File Name="object_gi_longsword" Segment="6">
+        <DList Name="object_gi_longsword_DL_000600" Offset="0x600" />
+    </File>
+</Root>

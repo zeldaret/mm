@@ -1,0 +1,7 @@
+﻿<Root>
+    <File Name="object_wdor04" Segment="6">
+        <DList Name="object_wdor04_DL_000500" Offset="0x500" />
+        <DList Name="object_wdor04_DL_000508" Offset="0x508" />
+        <Texture Name="object_wdor04_Tex_000670" OutName="tex_000670" Format="rgba16" Width="32" Height="64" Offset="0x670" />
+    </File>
+</Root>

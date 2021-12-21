@@ -26,8 +26,8 @@ typedef struct EnMushi2 {
     /* 0x0310 */ Vec3f unk_310;
     /* 0x031C */ Vec3f unk_31C;
     /* 0x0328 */ Vec3f unk_328;
-    /* 0x0334 */ CollisionPoly* unk_334;
-    /* 0x0338 */ u32 unk_338;
+    /* 0x0334 */ CollisionPoly* poly;
+    /* 0x0338 */ s32 polyBgId;
     /* 0x033C */ Vec3f unk_33C;
     /* 0x0348 */ f32 unk_348;
     /* 0x034C */ struct ObjBean* unk_34C;

@@ -45,7 +45,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
 
             gSaveContext.unk_3DC0 = 2000;
             gSaveContext.naviTimer = 0;
-            gSaveContext.seqIndex = 0xFF;
+            gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
             gSaveContext.nightSeqIndex = 0xFF;
             gSaveContext.eventInf[0] = 0;
             gSaveContext.eventInf[1] = 0;
@@ -66,7 +66,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
             break;
         case GAMEOVER_DEATH_FADE_OUT:
-            if (func_801A8A50(1) != 32) {
+            if (func_801A8A50(1) != NA_BGM_GAME_OVER) {
                 func_80169F78(globalCtx);
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
