@@ -326,8 +326,8 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
     ActorShape_Init(&thisx->shape, 0.0f, NULL, 15.0f);
     thisx->shape.shadowAlpha = 255;
 
-    Lights_PointGlowSetInfo(&this->lightInfoGlow, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 255,
-                            255, 255, 0);
+    Lights_PointGlowSetInfo(&this->lightInfoGlow, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 255, 255,
+                            255, 0);
     this->lightNodeGlow = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfoGlow);
     Lights_PointNoGlowSetInfo(&this->lightInfoNoGlow, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 255,
                               255, 255, 0);
@@ -1267,8 +1267,8 @@ void func_8088F9E4(Actor* thisx, GlobalContext* globalCtx) {
     EnElf* this = THIS;
     s32 bgId;
 
-    thisx->floorHeight =
-        BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &thisx->floorPoly, &bgId, &this->actor, &thisx->world.pos);
+    thisx->floorHeight = BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &thisx->floorPoly, &bgId,
+                                                       &this->actor, &thisx->world.pos);
     thisx->shape.shadowAlpha = 50;
 }
 
