@@ -264,7 +264,7 @@ void func_80961D7C(GlobalContext* globalCtx) {
             EnBom* bomb = (EnBom*)explosive;
 
             if (bomb->actor.floorBgId != BGCHECK_SCENE) {
-                DynaPolyActor* fuKago = BgCheck_GetActorOfMesh(&globalCtx->colCtx, bomb->actor.floorBgId);
+                DynaPolyActor* fuKago = DynaPoly_GetActor(&globalCtx->colCtx, bomb->actor.floorBgId);
 
                 if ((fuKago != NULL) && (fuKago->actor.id == ACTOR_EN_FU_KAGO)) {
                     Math_SmoothStepToF(&bomb->actor.world.pos.x, fuKago->actor.world.pos.x, 0.1f, 1.0f, 0.5f);
@@ -543,7 +543,7 @@ void func_80962660(EnFu* this, GlobalContext* globalCtx) {
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
                 func_800BDC5C(&this->skelAnime, sAnimations, 3);
-                func_801A2BB8(0x25);
+                func_801A2BB8(NA_BGM_MINI_GAME_2);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
                         func_80961EC8(globalCtx);
@@ -805,7 +805,7 @@ void func_80962F4C(EnFu* this, GlobalContext* globalCtx) {
             func_801A2C20();
             gSaveContext.unk_3DE0[4] = 0;
             gSaveContext.unk_3DD0[4] = 5;
-            func_801A3098(0x922);
+            func_801A3098(NA_BGM_GET_ITEM | 0x900);
             func_8011B4E0(globalCtx, 1);
             this->unk_54A = 3;
             func_809632D0(this);
@@ -1463,7 +1463,7 @@ void func_80964950(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
                 flag = true;
             }
             Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_00, ptr->unk_00, ptr->unk_00, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0405E6F0));

@@ -903,7 +903,7 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
     if (gSaveContext.weekEventReg[0x34] & 1) { // if (ProtectedCremia)
         EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
-        func_801A3098(9);
+        func_801A3098(NA_BGM_FAILURE_1);
         EnMaYto_SetFaceExpression(this, 5, 2);
     }
     this->actionFunc = EnMaYto_AfterMilkRunInit;
@@ -1140,7 +1140,7 @@ void EnMaYto_DefaultStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
                     this->textId = 0x235E;
                     break;
 
-                case PLAYER_MASK_KAFEI:
+                case PLAYER_MASK_KAFEIS_MASK:
                     EnMaYto_SetFaceExpression(this, 1, 2);
                     func_801518B0(globalCtx, 0x235F, &this->actor);
                     this->textId = 0x235F;
@@ -1198,7 +1198,7 @@ void EnMaYto_DinnerStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
                         this->textId = 0x235E;
                         break;
 
-                    case PLAYER_MASK_KAFEI:
+                    case PLAYER_MASK_KAFEIS_MASK:
                         func_801518B0(globalCtx, 0x235F, &this->actor);
                         this->textId = 0x235F;
                         break;

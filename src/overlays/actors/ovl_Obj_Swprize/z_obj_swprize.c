@@ -1,7 +1,7 @@
 /*
  * File: z_obj_swprize.c
  * Overlay: ovl_Obj_Swprize
- * Description: Spawner for dirt square prize?
+ * Description: Spawns item drop from soft soil
  */
 
 #include "z_obj_swprize.h"

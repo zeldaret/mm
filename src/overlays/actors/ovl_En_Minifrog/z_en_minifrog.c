@@ -462,7 +462,7 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
         this->timer = 5;
-        func_801A1F00(3, 0x5A);
+        func_801A1F00(3, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
         globalCtx->setPlayerTalkAnim(globalCtx, &D_0400E2A8, 0);
     } else {
@@ -622,7 +622,7 @@ void EnMinifrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
         CLOSE_DISPS(globalCtx->state.gfxCtx);

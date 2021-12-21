@@ -81,7 +81,7 @@ void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgCtowerRot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerRot* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx) {

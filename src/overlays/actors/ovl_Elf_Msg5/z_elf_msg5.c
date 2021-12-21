@@ -1,5 +1,5 @@
 /*
- * File z_elf_msg5.c
+ * File: z_elf_msg5.c
  * Overlay: ovl_Elf_Msg5
  * Description: Tatl Message (Another proximity-activated dialogue?)
  */

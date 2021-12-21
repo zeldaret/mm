@@ -1,0 +1,17 @@
+﻿<Root>
+    <File Name="object_gi_purse" Segment="6">
+        <Texture Name="object_gi_purse_Tex_000000" OutName="tex_000000" Format="i8" Width="64" Height="64" Offset="0x0" />
+        <DList Name="object_gi_purse_DL_001750" Offset="0x1750" />
+        <DList Name="object_gi_purse_DL_001770" Offset="0x1770" />
+        <DList Name="object_gi_purse_DL_001790" Offset="0x1790" />
+        <DList Name="object_gi_purse_DL_0017B0" Offset="0x17B0" />
+        <DList Name="object_gi_purse_DL_0017D0" Offset="0x17D0" />
+        <DList Name="object_gi_purse_DL_0017F0" Offset="0x17F0" />
+        <DList Name="object_gi_purse_DL_001810" Offset="0x1810" />
+        <DList Name="object_gi_purse_DL_001830" Offset="0x1830" />
+        <DList Name="object_gi_purse_DL_001850" Offset="0x1850" />
+        <DList Name="object_gi_purse_DL_0019A0" Offset="0x19A0" />
+        <DList Name="object_gi_purse_DL_001A28" Offset="0x1A28" />
+        <DList Name="object_gi_purse_DL_001AD8" Offset="0x1AD8" />
+    </File>
+</Root>

@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_gi_golonmask" Segment="6">
+        <DList Name="object_gi_golonmask_DL_000BA0" Offset="0xBA0" />
+        <DList Name="object_gi_golonmask_DL_0010D0" Offset="0x10D0" />
+        <Texture Name="object_gi_golonmask_Tex_0010D8" OutName="tex_0010D8" Format="ia8" Width="32" Height="32" Offset="0x10D8" />
+        <Texture Name="object_gi_golonmask_Tex_0014D8" OutName="tex_0014D8" Format="ia8" Width="64" Height="32" Offset="0x14D8" />
+        <Texture Name="object_gi_golonmask_Tex_001CD8" OutName="tex_001CD8" Format="ia8" Width="8" Height="8" Offset="0x1CD8" />
+    </File>
+</Root>
