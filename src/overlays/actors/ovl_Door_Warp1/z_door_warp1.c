@@ -4,7 +4,6 @@
  * Description: Blue Warp
  */
 
-#include "overlays/actors/ovl_Dm_Hina/z_dm_hina.h"
 #include "z_door_warp1.h"
 
 #define FLAGS 0x00000000
@@ -80,17 +79,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 4000, ICHAIN_STOP),
 };
 
-typedef struct {
-    Color_RGB8 unk_00[4];
-} EnDoorWarp1Colours;
-
-static EnDoorWarp1Colours D_808BBB50 = { {
-    { 50, 150, 0 },
-    { 100, 150, 200 },
-    { 0, 50, 200 },
-    { 120, 150, 0 },
-} };
-
 void DoorWarp1_SetupAction(DoorWarp1* this, DoorWarp1ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
@@ -98,13 +86,13 @@ void DoorWarp1_SetupAction(DoorWarp1* this, DoorWarp1ActionFunc actionFunc) {
 s32 func_808B849C(DoorWarp1* this, GlobalContext* globalCtx) {
     s32 ret = 0;
 
-    if ((globalCtx->sceneNum == SCENE_MITURIN_BS) && !CHECK_QUEST_ITEM(0)) {
+    if ((globalCtx->sceneNum == SCENE_MITURIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
         ret = 1;
-    } else if ((globalCtx->sceneNum == SCENE_HAKUGIN_BS) && !CHECK_QUEST_ITEM(1)) {
+    } else if ((globalCtx->sceneNum == SCENE_HAKUGIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
         ret = 2;
-    } else if ((globalCtx->sceneNum == SCENE_SEA_BS) && !CHECK_QUEST_ITEM(2)) {
+    } else if ((globalCtx->sceneNum == SCENE_SEA_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
         ret = 3;
-    } else if ((globalCtx->sceneNum == SCENE_INISIE_BS) && !CHECK_QUEST_ITEM(3)) {
+    } else if ((globalCtx->sceneNum == SCENE_INISIE_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
         ret = 4;
     }
     return ret;
@@ -207,7 +195,7 @@ void DoorWarp1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1D3 != 0) {
-        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
 
@@ -262,10 +250,10 @@ void func_808B8C48(DoorWarp1* this, GlobalContext* globalCtx) {
                               this->dyna.actor.world.pos.z, 200, 255, 255, 255);
     Lights_PointNoGlowSetInfo(&this->unk_1F4, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                               this->dyna.actor.world.pos.z, 200, 255, 255, 255);
-    if (((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_2) && CHECK_QUEST_ITEM(0)) ||
-        ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_3) && CHECK_QUEST_ITEM(1)) ||
-        ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_4) && CHECK_QUEST_ITEM(2)) ||
-        ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_5) && CHECK_QUEST_ITEM(3))) {
+    if (((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_2) && CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) ||
+        ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_3) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) ||
+        ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_4) && CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) ||
+        ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_5) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD))) {
         s16 params = DOORWARP1_GET_FF00_2(&this->dyna.actor);
 
         params |= 6;
@@ -562,49 +550,44 @@ void func_808B9BE8(DoorWarp1* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Extra & 0xFF on each branch
 void func_808B9CE8(DoorWarp1* this, GlobalContext* globalCtx) {
-    if (this->unk_203 == 0) {
-        if (Actor_HasParent(&this->dyna.actor, globalCtx) == 0) {
-            func_800B8A1C(&this->dyna.actor, globalCtx, func_808B849C(this, globalCtx) + 84, 30.0f, 80.0f);
-            return;
-        }
-
-        switch (globalCtx->sceneNum) {
-            case 0x1F:
-                gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][4]) & 0xFF) |
-                                               (((void)0, gSaveContext.roomInf[126][3]) & ~0xFF);
-                break;
-
-            case 0x44:
-                gSaveContext.roomInf[126][3] = ((((void)0, gSaveContext.roomInf[126][4]) & 0xFF) << 8) |
-                                               (((void)0, gSaveContext.roomInf[126][3]) & 0xFFFF00FF);
-                break;
-
-            case 0x36:
-                gSaveContext.roomInf[126][3] = ((((void)0, gSaveContext.roomInf[126][4]) & 0xFF) << 0x10) |
-                                               (((void)0, gSaveContext.roomInf[126][3]) & 0xFF00FFFF);
-                break;
-
-            case 0x5F:
-                gSaveContext.roomInf[126][3] = ((((void)0, gSaveContext.roomInf[126][4]) & 0xFF) << 0x18) |
-                                               (((void)0, gSaveContext.roomInf[126][3]) & 0xFFFFFF);
-                break;
-
-            default:
-                break;
-        }
+    if (this->unk_203 != 0) {
         if (1) {}
-        gSaveContext.roomInf[126][4] =
-            ((gSaveContext.roomInf[126][4] + 1) & 0xFF) | (((void)0, gSaveContext.roomInf[126][4]) & ~0xFF);
-        Item_Give(globalCtx, func_808B849C(this, globalCtx) + (ITEM_REMAINS_ODOLWA - 1));
-        DoorWarp1_SetupAction(this, func_808B9E94);
+        return;
     }
+
+    if (!Actor_HasParent(&this->dyna.actor, globalCtx)) {
+        func_800B8A1C(&this->dyna.actor, globalCtx, func_808B849C(this, globalCtx) + 84, 30.0f, 80.0f);
+        return;
+    }
+
+    switch (globalCtx->sceneNum) {
+        case SCENE_MITURIN_BS:
+            gSaveContext.roomInf[126][3] =
+                (((void)0, gSaveContext.roomInf[126][3]) & 0xFFFFFF00) | (((u8)gSaveContext.roomInf[126][4]) & 0xFF);
+            break;
+
+        case SCENE_HAKUGIN_BS:
+            gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0xFFFF00FF) |
+                                           ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 8);
+            break;
+
+        case SCENE_INISIE_BS:
+            gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0xFF00FFFF) |
+                                           ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 0x10);
+            break;
+
+        case SCENE_SEA_BS:
+            gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0x00FFFFFF) |
+                                           ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 0x18);
+            break;
+    }
+
+    gSaveContext.roomInf[126][4] =
+        (gSaveContext.roomInf[126][4] & 0xFFFFFF00) | ((((u8)gSaveContext.roomInf[126][4]) + 1) & 0xFF);
+    Item_Give(globalCtx, func_808B849C(this, globalCtx) + (ITEM_REMAINS_ODOLWA - 1));
+    DoorWarp1_SetupAction(this, func_808B9E94);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Warp1/func_808B9CE8.s")
-#endif
 
 void func_808B9E94(DoorWarp1* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 2) {
@@ -1050,7 +1033,12 @@ void func_808BB4C4(DoorWarp1* this, GlobalContext* globalCtx) {
 void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     GraphicsContext* gfxCtx;
-    EnDoorWarp1Colours sp64 = D_808BBB50;
+    Color_RGB8 sp64[] = {
+        { 50, 150, 0 },
+        { 100, 150, 200 },
+        { 0, 50, 200 },
+        { 120, 150, 0 },
+    };
     s32 sp60 = 0;
 
     if (this->unk_1D4 != 0) {
@@ -1082,7 +1070,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    gDPSetEnvColor(POLY_XLU_DISP++, sp64.unk_00[sp60].r, sp64.unk_00[sp60].g, sp64.unk_00[sp60].b, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, sp64[sp60].r, sp64[sp60].g, sp64[sp60].b, 255);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_06004690);
@@ -1100,7 +1088,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    gDPSetEnvColor(POLY_XLU_DISP++, sp64.unk_00[sp60].r, sp64.unk_00[sp60].g, sp64.unk_00[sp60].b, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, sp64[sp60].r, sp64[sp60].g, sp64[sp60].b, 255);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->unk_203);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_060058C8);
@@ -1108,6 +1096,12 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
+static Color_RGB8 D_808BBB50[] = {
+    { 50, 150, 0 },
+    { 100, 150, 200 },
+    { 0, 50, 200 },
+    { 120, 150, 0 },
+};
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Warp1/func_808BB4F4.s")
 #endif
 
