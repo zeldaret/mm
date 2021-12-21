@@ -62,7 +62,7 @@ void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
 void ObjTokeiStep_AddQuake(ObjTokeiStep* this, GlobalContext* globalCtx) {
     s32 pad[2];
     s16 quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
-        
+
     Quake_SetSpeed(quake, 20000);
     Quake_SetQuakeValues(quake, 1, 0, 0, 0);
     Quake_SetCountdown(quake, 7);
