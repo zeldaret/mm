@@ -13,9 +13,9 @@ typedef void (*EnGsActionFunc)(struct EnGs*, GlobalContext*);
 
 enum {
     /* 0 */ ENGS_0,
-    /* 0 */ ENGS_1,
-    /* 0 */ ENGS_2,
-    /* 0 */ ENGS_3,
+    /* 1 */ ENGS_1,
+    /* 2 */ ENGS_2,
+    /* 3 */ ENGS_3,
 };
 
 typedef struct EnGs {
