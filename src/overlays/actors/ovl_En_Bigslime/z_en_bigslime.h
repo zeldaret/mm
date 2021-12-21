@@ -63,7 +63,7 @@ typedef struct EnBigslime {
                     u8 minislimeCounter;
                     u8 numGekkoMeleeAttacks; // The Gekko will melee-attack link at 1-3 times at each position while engulfed in bigslime
                 };
-    /* 0x02B4 */ u8 iceShardAlpha;
+    /* 0x02B4 */ u8 shockwaveAlpha;
     /* 0x02B5 */ u8 gekkoDrawEffect;
     /* 0x02B6 */ s16 gekkoYaw;
     /* 0x02B8 */ s16 cutscene;
@@ -103,7 +103,7 @@ typedef struct EnBigslime {
     /* 0x02D4 */ Vec3f gekkoPosOffset; // Used when Bigslime grabs link
     /* 0x02E0 */ Vec3f gekkoProjectedPos;
     /* 0x02EC */ union {
-                    Vec3f iceShardRefPos;
+                    Vec3f frozenPos;
                     Vec3f subCamDistToFrog; // Used to zoom into frogs as Gekko despawns/Frog spawns
                 };
     /* 0x02F8 */ Vec3f limbPos[12];
@@ -114,14 +114,14 @@ typedef struct EnBigslime {
     /* 0x0398 */ f32 vtxSurfacePerturbation[BIGSLIME_NUM_VTX];
     /* 0x0620 */ f32 vtxScaleX;
     /* 0x0624 */ f32 vtxScaleZ;
-    /* 0x0628 */ f32 iceShardScale;
+    /* 0x0628 */ f32 shockwaveScale;
     /* 0x062C */ ColliderCylinder gekkoCollider;
     /* 0x0678 */ ColliderCylinder bigslimeCollider[BIGSLIME_NUM_RING_FACES];
     /* 0x0A14 */ EnMinislime* minislime[MINISLIME_NUM_SPAWN];
     /* 0x0A44 */ EnMinislime* minislimeToThrow;
     /* 0x0A48 */ AnimatedMaterial* bigslimeFrozenTex;
     /* 0x0A4C */ AnimatedMaterial* minislimeFrozenTex;
-    /* 0x0A50 */ AnimatedMaterial* iceShardTex;
+    /* 0x0A50 */ AnimatedMaterial* unknownTex;
     /* 0x0A54 */ EnBigslimeIceShardEffect iceShardEffect[BIGSLIME_NUM_ICE_SHARD]; // 312 = 162 (bigslime) + 10 * 15 (minislime)
 } EnBigslime; // size = 0x3634
 

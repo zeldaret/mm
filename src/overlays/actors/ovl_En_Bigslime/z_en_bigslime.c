@@ -74,7 +74,7 @@ void EnBigslime_PlayCutscene(EnBigslime* this, GlobalContext* globalCtx);
 void EnBigslime_AddIceShardEffect(EnBigslime* this, GlobalContext* globalCtx);
 void EnBigslime_UpdateBigslime(Actor* thisx, GlobalContext* globalCtx);
 void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx);
-void EnBigslime_DrawIceShardEffect(EnBigslime* this, GlobalContext* globalCtx);
+void EnBigslime_DrawShatteringEffects(EnBigslime* this, GlobalContext* globalCtx);
 
 /*
  * Bigslime Spherical Vtx Data:
@@ -368,7 +368,7 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         this->minislimeFrozenTex = Lib_SegmentedToVirtual(&gMinislimeFrozenTexAnim);
         this->bigslimeFrozenTex = Lib_SegmentedToVirtual(&gBigslimeFrozenTexAnim);
-        this->iceShardTex = Lib_SegmentedToVirtual(&gBigslimeIceShardTexAnim);
+        this->unknownTex = Lib_SegmentedToVirtual(&gBigslimeUnknownTexAnim);
         this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
         this->actor.flags &= ~1;
         this->actor.shape.shadowAlpha = 255;
@@ -858,12 +858,15 @@ void EnBigslime_Scale(EnBigslime* this, s16 pitch, f32 xzScale, f32 yScale) {
     this->actor.scale.z = 0.3f - this->actor.scale.x;                   // =  0.15f - 0.1f * xzScale * sin(pitch)
 }
 
-void EnBigslime_SetIceShardParams(EnBigslime* this, GlobalContext* globalCtx) {
+/**
+ * Set the params used by the floor shockwave when bigslime shatters into minislime
+ */
+void EnBigslime_InitShockwave(EnBigslime* this, GlobalContext* globalCtx) {
     globalCtx->envCtx.unk_C3 = 3;
-    Math_Vec3f_Copy(&this->iceShardRefPos, &this->actor.world.pos);
-    this->iceShardRefPos.y = GBT_ROOM_5_MIN_Y;
-    this->iceShardAlpha = 235;
-    this->iceShardScale = 0.025f;
+    Math_Vec3f_Copy(&this->frozenPos, &this->actor.world.pos);
+    this->frozenPos.y = GBT_ROOM_5_MIN_Y;
+    this->shockwaveAlpha = 235;
+    this->shockwaveScale = 0.025f;
 }
 
 /**
@@ -1927,19 +1930,19 @@ void EnBigslime_FrozenGround(EnBigslime* this, GlobalContext* globalCtx) {
         EnBigslime_AddIceShardEffect(this, globalCtx);
         EnBigslime_SetTargetVtxFromPreFrozen(this);
     } else if (this->freezeTimer == 40) {
-        Math_Vec3f_Copy(&this->iceShardRefPos, &this->actor.world.pos);
+        Math_Vec3f_Copy(&this->frozenPos, &this->actor.world.pos);
     } else if ((this->freezeTimer < 20) || ((this->freezeTimer < 40) && ((this->freezeTimer % 2) != 0))) {
         invFreezerTimer = 1.0f / this->freezeTimer;
 
         // clang-format off
         randFloat = Rand_ZeroFloat(4.0f * invFreezerTimer);
         randSign = Rand_ZeroOne() < 0.5f ? -1 : 1; \
-        this->actor.world.pos.x = randSign * (1.0f + invFreezerTimer + randFloat) + this->iceShardRefPos.x;
+        this->actor.world.pos.x = randSign * (1.0f + invFreezerTimer + randFloat) + this->frozenPos.x;
         // clang-format on
 
         randFloat = Rand_ZeroFloat(4.0f * invFreezerTimer);
         randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
-        this->actor.world.pos.z = randSign * (1.0f + invFreezerTimer + randFloat) + this->iceShardRefPos.z;
+        this->actor.world.pos.z = randSign * (1.0f + invFreezerTimer + randFloat) + this->frozenPos.z;
     }
 }
 
@@ -2387,7 +2390,7 @@ void EnBigslime_SetupGekkoDespawn(EnBigslime* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->subCamDistToFrog, &gZeroVec3f);
     }
 
-    this->iceShardAlpha = 0;
+    this->shockwaveAlpha = 0;
     this->despawnTimer = 20;
     this->actionFunc = EnBigslime_GekkoDespawn;
 }
@@ -2678,6 +2681,9 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
     }
 }
 
+/**
+ * Adds ice shard effects and calls EnBigslime_InitShockwave
+ */
 void EnBigslime_AddIceShardEffect(EnBigslime* this, GlobalContext* globalCtx) {
     Vtx* targetVtx = &sBigslimeTargetVtx[0];
     EnBigslimeIceShardEffect* iceShardEffect;
@@ -2717,13 +2723,17 @@ void EnBigslime_AddIceShardEffect(EnBigslime* this, GlobalContext* globalCtx) {
     }
 
     Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_BROKEN);
-    EnBigslime_SetIceShardParams(this, globalCtx);
+    EnBigslime_InitShockwave(this, globalCtx);
 }
 
-void EnBigslime_UpdateIceShardEffect(EnBigslime* this) {
+/**
+ * Updates ice shard effects, shockwave effects, and actor damage draw effects
+ */
+void EnBigslime_UpdateEffects(EnBigslime* this) {
     EnBigslimeIceShardEffect* iceShardEffect;
     s32 i;
 
+    // Update ice shards
     for (i = 0; i < BIGSLIME_NUM_ICE_SHARD; i++) {
         iceShardEffect = &this->iceShardEffect[i];
         if (iceShardEffect->isActive > false) {
@@ -2738,17 +2748,19 @@ void EnBigslime_UpdateIceShardEffect(EnBigslime* this) {
         }
     }
 
-    if (this->iceShardAlpha > 0) {
-        this->iceShardAlpha = (this->iceShardAlpha - 10 < 0) ? 0 : (this->iceShardAlpha - 10);
-        this->iceShardScale += 0.0013f;
+    // update shockwave
+    if (this->shockwaveAlpha > 0) {
+        this->shockwaveAlpha = (this->shockwaveAlpha - 10 < 0) ? 0 : (this->shockwaveAlpha - 10);
+        this->shockwaveScale += 0.0013f;
     }
 
+    // update actor damage draw effects
     if (this->unk_388 > 0.0f) {
         if ((this->gekkoDrawEffect != GEKKO_DRAW_EFFECT_FROZEN) && (this->actionFunc != EnBigslime_PlayCutscene)) {
             Math_StepToF(&this->unk_388, 0.0f, 0.05f);
             this->unk_38C = 0.375f * (this->unk_388 + 1.0f);
             this->unk_38C = CLAMP_MAX(this->unk_38C, 0.75f);
-        } else if (Math_StepToF(&this->unk_390, 0.75f, 0.01875f) == 0) {
+        } else if (!Math_StepToF(&this->unk_390, 0.75f, 0.01875f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -2777,6 +2789,7 @@ void EnBigslime_UpdateBigslime(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actionFunc(this, globalCtx);
+
     if (this->actionFunc != EnBigslime_FormBigslime) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     } else {
@@ -2791,7 +2804,8 @@ void EnBigslime_UpdateBigslime(Actor* thisx, GlobalContext* globalCtx) {
         EnBigslime_UpdateBigslimeCollider(this, globalCtx);
     }
 
-    EnBigslime_UpdateIceShardEffect(this);
+    EnBigslime_UpdateEffects(this);
+
     if (this->itemDropTimer > 0) {
         this->itemDropTimer--;
     }
@@ -2833,7 +2847,8 @@ void EnBigslime_UpdateGekko(Actor* thisx, GlobalContext* globalCtx) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->gekkoCollider.base);
     }
 
-    EnBigslime_UpdateIceShardEffect(this);
+    EnBigslime_UpdateEffects(this);
+
     if ((this->actionFunc != EnBigslime_StunGekko) &&
         (this->gekkoCollider.dim.pos.y < (s16)(3.0f + GBT_ROOM_5_MIN_Y))) {
         Vec3f vtxNorm;
@@ -2966,11 +2981,13 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
     func_800B8118(&this->actor, globalCtx, 0);
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
+    // Draw Bigslime
     gSPSegment(POLY_XLU_DISP++, 0x09, sBigslimeDynamicVtx[this->dynamicVtxState]);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, &gBigslimeNormalDL);
     gSPDisplayList(POLY_XLU_DISP++, &gBigslimeVtxDL);
 
+    // Draw frozen Bigslime
     if ((this->actionFunc == EnBigslime_Freeze) || (this->actionFunc == EnBigslime_FrozenGround) ||
         (this->actionFunc == EnBigslime_FrozenFall) || (this->actionFunc == EnBigslime_Melt)) {
         AnimatedMat_Draw(globalCtx, this->bigslimeFrozenTex);
@@ -2979,6 +2996,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, &gBigslimeVtxDL);
     }
 
+    // Draw bubbles inside Bigslime
     if (this->actor.scale.x > 0.0f) {
         Matrix_SetCurrentState(&globalCtx->billboardMtxF);
         Matrix_Scale(0.0050000003f, 0.0050000003f, 0.0050000003f, MTXMODE_APPLY);
@@ -3084,36 +3102,44 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
 
     EnBigslime_SetSysMatrix(&gekkoPos, globalCtx, D_04076BC0, this->gekkoScale * (550.0f / 7.0f),
                             this->gekkoScale * (550.0f / 7.0f), 0.0f, 0, 255.0f);
+                            
     if (this->minislimeState != MINISLIME_INACTIVE_STATE) {
         EnBigslime_DrawMinislime(this, globalCtx);
     }
 
-    EnBigslime_DrawIceShardEffect(this, globalCtx);
-    func_800BE680(globalCtx, &this->actor, this->limbPos, 12, this->gekkoScale * (999.99991f / 7.0f) * this->unk_38C,
-                  this->unk_390, this->unk_388, this->gekkoDrawEffect);
+    EnBigslime_DrawShatteringEffects(this, globalCtx);
+
+    // Draw actor damage effects
+    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                  this->gekkoScale * (999.99991f / 7.0f) * this->unk_38C, this->unk_390, this->unk_388,
+                  this->gekkoDrawEffect);
 }
 
-void EnBigslime_DrawIceShardEffect(EnBigslime* this, GlobalContext* globalCtx) {
+void EnBigslime_DrawShatteringEffects(EnBigslime* this, GlobalContext* globalCtx) {
     EnBigslimeIceShardEffect* iceShardEffect;
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+    
     func_8012C2DC(globalCtx->state.gfxCtx);
-    if (this->iceShardAlpha > 0) {
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, this->iceShardAlpha);
+
+    // Draw Shockwave
+    if (this->shockwaveAlpha > 0) {
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, this->shockwaveAlpha);
         gSPSegment(POLY_XLU_DISP++, 0x0D,
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->gameplayFrames % 128,
                                     (u8)(globalCtx->gameplayFrames * 8), 32, 64, 1,
                                     (-globalCtx->gameplayFrames * 2) % 64, 0, 16, 16));
-        Matrix_InsertTranslation(this->iceShardRefPos.x, this->iceShardRefPos.y, this->iceShardRefPos.z, MTXMODE_NEW);
-        Matrix_Scale(this->iceShardScale, this->iceShardScale, this->iceShardScale, MTXMODE_APPLY);
+        Matrix_InsertTranslation(this->frozenPos.x, this->frozenPos.y, this->frozenPos.z, MTXMODE_NEW);
+        Matrix_Scale(this->shockwaveScale, this->shockwaveScale, this->shockwaveScale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeShatteringShadowDL);
+        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeShockwaveDL);
     }
 
-    AnimatedMat_Draw(globalCtx, this->iceShardTex);
-    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeShockwaveDL);
+    AnimatedMat_Draw(globalCtx, this->unknownTex);
+    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeUnknownDL);
 
+    // Draw Ice Shards
     for (i = 0; i < BIGSLIME_NUM_ICE_SHARD; i++) {
         iceShardEffect = &this->iceShardEffect[i];
         if (iceShardEffect->isActive > false) {

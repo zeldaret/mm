@@ -94,10 +94,10 @@
         <Animation Name="gGekkoBoxingStanceAnim" Offset="0xF990" />
         
         <DList Name="gBigslimeBubbleDL" Offset="0xF9D0" />
-        <DList Name="gBigslimeShatteringShadowDL" Offset="0xFB40" />
-        <Texture Name="gBigslimeShatteringShadow1Tex" OutName="bigslime_shatter_shadow_1" Format="i4" Width="32" Height="64" Offset="0xFC28" />
+        <DList Name="gBigslimeShockwaveDL" Offset="0xFB40" />
+        <Texture Name="gBigslimeShockwave1Tex" OutName="bigslime_shatter_shadow_1" Format="i4" Width="32" Height="64" Offset="0xFC28" />
         <!-- <Blob Name="object_bigslime_zeroes_unk_00010028" Size="0x400" Offset="0x10028" /> -->
-        <Texture Name="gBigslimeShatteringShadow2Tex" OutName="bigslime_shatter_shadow_2" Format="i4" Width="16" Height="16" Offset="0x10428" />
+        <Texture Name="gBigslimeShockwave2Tex" OutName="bigslime_shatter_shadow_2" Format="i4" Width="16" Height="16" Offset="0x10428" />
         <!-- <Blob Name="object_bigslime_zeroes_unk_000104A8" Size="0x88" Offset="0x104A8" /> -->
         
         <DList Name="gBigslimeNormalDL" Offset="0x10530" />
@@ -112,9 +112,9 @@
         <TextureAnimation Name="gMinislimeFrozenTexAnim" Offset="0x10EC8" />
 
         <!-- May not be shockwave, need to confirm -->
-        <DList Name="gBigslimeShockwaveDL" Offset="0x10F20" />
+        <DList Name="gBigslimeUnknownDL" Offset="0x10F20" />
         <DList Name="gBigslimeIceShardDL" Offset="0x10FE0" />
-        <TextureAnimation Name="gBigslimeIceShardTexAnim" Offset="0x11008" />
+        <TextureAnimation Name="gBigslimeUnknownTexAnim" Offset="0x11008" />
         <DList Name="gBigslimeShadowDL" Offset="0x11050" />
         <DList Name="gMinislimeNormalDL" Offset="0x113B0" />
 
