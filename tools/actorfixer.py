@@ -301,6 +301,7 @@ animdict = {
     "func_8017F9C0": "Math3D_XZInSphere",
     "func_8017FA34": "Math3D_XYInSphere",
     "func_8017FAA8": "Math3D_YZInSphere",
+    "D_0407D590": "gGameplayKeepDrawFlameDL"
 
 
     "skelanime.unk03": "skelanime.taper",
