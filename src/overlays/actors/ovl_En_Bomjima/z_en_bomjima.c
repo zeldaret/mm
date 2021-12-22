@@ -6,6 +6,7 @@
 
 #include "overlays/actors/ovl_En_Bombal/z_en_bombal.h"
 #include "z_en_bomjima.h"
+#include "objects/object_cs/object_cs.h"
 
 #define FLAGS 0x00000019
 
@@ -37,36 +38,6 @@ void func_80BFFF54(EnBomjima* this, GlobalContext* globalCtx);
 void func_80C00168(EnBomjima* this, GlobalContext* globalCtx);
 void func_80C00234(EnBomjima* this);
 void func_80C00284(EnBomjima* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06001708;
-extern AnimationHeader D_06001A1C;
-extern AnimationHeader D_06002044;
-extern AnimationHeader D_060026B0;
-extern AnimationHeader D_060031C4;
-extern AnimationHeader D_0600349C;
-extern AnimationHeader D_060036B0;
-extern AnimationHeader D_06003EE4;
-extern AnimationHeader D_0600433C;
-extern AnimationHeader D_0600478C;
-extern AnimationHeader D_06004960;
-extern AnimationHeader D_06004C1C;
-extern AnimationHeader D_06005128;
-extern AnimationHeader D_060053F4;
-extern AnimationHeader D_060057C8;
-extern AnimationHeader D_06005DC4;
-extern AnimationHeader D_060060E8;
-extern AnimationHeader D_060064B8;
-extern UNK_PTR D_0600C520;
-extern UNK_PTR D_0600CD20;
-extern UNK_PTR D_0600D520;
-extern UNK_PTR D_0600DD20;
-extern UNK_PTR D_0600E620;
-extern UNK_PTR D_0600EA20;
-extern UNK_PTR D_0600EE20;
-extern UNK_PTR D_0600F220;
-extern FlexSkeletonHeader D_0600F82C;
-extern AnimationHeader D_0600FAF4;
-extern AnimationHeader D_0601007C;
 
 static s32 D_80C009F0 = 0;
 static s32 D_80C009F4 = 0;
@@ -118,10 +89,10 @@ static u16 D_80C00A4C[] = {
 };
 
 static u16 D_80C00A54[] = { 0x0739, 0x073A, 0x073B, 0x0714, 0x0709, 0x070A, 0x070B,
-                            0x070C, 0x070D, 0x070E, 0x070F, 0x0712, 0x0713, 0x0000 };
+                            0x070C, 0x070D, 0x070E, 0x070F, 0x0712, 0x0713 };
 
 static u16 D_80C00A70[] = { 0x0739, 0x073A, 0x073B, 0x0759, 0x0753, 0x0754, 0x0755,
-                            0x0756, 0x070D, 0x0757, 0x0758, 0x0712, 0x0713, 0x0000 };
+                            0x0756, 0x070D, 0x0757, 0x0758, 0x0712, 0x0713 };
 
 static u16 D_80C00A8C[] = {
     0x0736,
@@ -131,9 +102,11 @@ static u16 D_80C00A8C[] = {
 };
 
 static AnimationHeader* sAnimations[] = {
-    &D_060064B8, &D_0600FAF4, &D_060057C8, &D_060053F4, &D_06002044, &D_0601007C, &D_0600349C,
-    &D_06004960, &D_06005128, &D_06004C1C, &D_06001A1C, &D_06003EE4, &D_0600478C, &D_0600433C,
-    &D_060060E8, &D_06001708, &D_06005DC4, &D_060026B0, &D_060036B0, &D_060031C4,
+    &object_cs_Anim_0064B8, &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
+    &object_cs_Anim_002044, &object_cs_Anim_01007C, &object_cs_Anim_00349C, &object_cs_Anim_004960,
+    &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_001A1C, &object_cs_Anim_003EE4,
+    &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8, &object_cs_Anim_001708,
+    &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0, &object_cs_Anim_0031C4,
 };
 
 static u8 D_80C00AE4[] = {
@@ -149,7 +122,8 @@ void EnBomjima_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600F82C, &D_060064B8, this->jointTable, this->morphTable, 21);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &object_cs_Anim_0064B8, this->jointTable,
+                       this->morphTable, 21);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     gSaveContext.weekEventReg[83] &= (u8)~0x4;
     this->actor.targetMode = 0;
@@ -279,7 +253,7 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
     Vec3f sp60;
     Vec3f sp54;
     CollisionPoly* sp50;
-    u32 sp4C;
+    s32 sp4C;
 
     this->unk_2DC = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A4);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 5000, 0);
@@ -293,8 +267,8 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
                 sp54.z += randPlusMinusPoint5Scaled(150.0f);
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp54)));
-                if ((abs < 0x4000) && !func_800C55C4(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp6C, &sp50, 1,
-                                                     0, 0, 1, &sp4C)) {
+                if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp6C,
+                                                               &sp50, 1, 0, 0, 1, &sp4C)) {
                     func_80BFE494(this, 5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_2A4, &sp54);
                     this->unk_2BE = Rand_S16Offset(30, 50);
@@ -316,7 +290,8 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
                 sp60.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp60.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
 
-                if (func_800C55C4(&globalCtx->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, 1, 0, 0, 1, &sp4C)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, 1, 0, 0, 1,
+                                            &sp4C)) {
                     this->unk_2C0 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80BFE494(this, 19, 1.0f);
@@ -400,7 +375,7 @@ void func_80BFEB64(EnBomjima* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (Text_GetFaceReaction(globalCtx, 0x11)) {
+    if (Text_GetFaceReaction(globalCtx, 0x11) != 0) {
         this->actor.textId = Text_GetFaceReaction(globalCtx, 0x11);
     }
 
@@ -519,7 +494,7 @@ void func_80BFF174(EnBomjima* this, GlobalContext* globalCtx) {
         this->unk_2DE = 1;
     }
 
-    if (Text_GetFaceReaction(globalCtx, 0x11)) {
+    if (Text_GetFaceReaction(globalCtx, 0x11) != 0) {
         this->actor.textId = Text_GetFaceReaction(globalCtx, 0x11);
     }
 
@@ -926,7 +901,7 @@ void func_80C00168(EnBomjima* this, GlobalContext* globalCtx) {
     func_80BFE32C(this, globalCtx, 0);
     func_80BFE67C(this, globalCtx);
 
-    if (Text_GetFaceReaction(globalCtx, 0x11)) {
+    if (Text_GetFaceReaction(globalCtx, 0x11) != 0) {
         this->actor.textId = Text_GetFaceReaction(globalCtx, 0x11);
     }
 
@@ -1126,12 +1101,13 @@ void EnBomjima_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gEnBomjima_D_80C00B18, gEnBomjima_D_80C00B18,
     };
     static UNK_PTR D_80C00B3C[] = {
-        &D_0600C520,
-        &D_0600CD20,
-        &D_0600D520,
+        &object_cs_Tex_00C520,
+        &object_cs_Tex_00CD20,
+        &object_cs_Tex_00D520,
     };
     static UNK_PTR D_80C00B48[] = {
-        &D_0600E620, &D_0600EA20, &D_0600EE20, &D_0600DD20, &D_0600F220,
+        &object_cs_Tex_00E620, &object_cs_Tex_00EA20, &object_cs_Tex_00EE20,
+        &object_cs_Tex_00DD20, &object_cs_Tex_00F220,
     };
     EnBomjima* this = THIS;
 
