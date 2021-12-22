@@ -5,6 +5,7 @@
  */
 
 #include "z_en_trt2.h"
+#include "objects/object_trt/object_trt.h"
 
 #define FLAGS 0x00000009
 
@@ -25,26 +26,12 @@ void func_80AD4FE4(EnTrt2* this, GlobalContext* globalCtx);
 void func_80AD5234(EnTrt2* this, GlobalContext* globalCtx);
 void func_80AD56E8(Actor* thisx, GlobalContext* globalCtx);
 
-extern AnimationHeader D_06000A44;
-extern AnimationHeader D_06001EF4;
-extern AnimationHeader D_06002224;
-extern AnimationHeader D_06002CB0;
-extern AnimationHeader D_060030EC;
-extern AnimationHeader D_06003D78;
-extern UNK_PTR D_0600B0B8;
-extern UNK_PTR D_0600B8B8;
-extern UNK_PTR D_0600C0B8;
-extern AnimationHeader D_0600D52C;
-extern AnimationHeader D_0600DE68;
-extern AnimationHeader D_0600EE98;
-extern AnimationHeader D_0600FD34;
-extern FlexSkeletonHeader D_0600FEF0;
-
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_0600DE68, 1.0f, 0, -1, 2, 0 }, { &D_0600EE98, 1.0f, 0, -1, 2, 0 }, { &D_0600FD34, 1.0f, 0, -1, 0, 0 },
-    { &D_060030EC, 1.0f, 0, -1, 2, 0 }, { &D_06003D78, 1.0f, 0, -1, 2, 0 }, { &D_0600D52C, 1.0f, 0, -1, 0, 0 },
-    { &D_06000A44, 1.0f, 0, -1, 0, 0 }, { &D_06001EF4, 1.0f, 0, -1, 0, 0 }, { &D_06002224, 1.0f, 0, -1, 0, 0 },
-    { &D_06002CB0, 1.0f, 0, -1, 0, 0 },
+    { &object_trt_Anim_00DE68, 1.0f, 0, -1, 2, 0 }, { &object_trt_Anim_00EE98, 1.0f, 0, -1, 2, 0 },
+    { &object_trt_Anim_00FD34, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_0030EC, 1.0f, 0, -1, 2, 0 },
+    { &object_trt_Anim_003D78, 1.0f, 0, -1, 2, 0 }, { &object_trt_Anim_00D52C, 1.0f, 0, -1, 0, 0 },
+    { &object_trt_Anim_000A44, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_001EF4, 1.0f, 0, -1, 0, 0 },
+    { &object_trt_Anim_002224, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_002CB0, 1.0f, 0, -1, 0, 0 },
 };
 
 const ActorInit En_Trt2_InitVars = {
@@ -141,16 +128,12 @@ void func_80AD341C(EnTrt2* this, GlobalContext* globalCtx) {
 void func_80AD349C(EnTrt2* this) {
     if ((gSaveContext.weekEventReg[85] & 0x10) && !(gSaveContext.weekEventReg[84] & 0x40)) {
         this->unk_3A8 = 0x88F;
-        return;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
-        return;
     } else if (gSaveContext.weekEventReg[16] & 0x10) {
         this->unk_3A8 = 0x838;
-        return;
     } else if (gSaveContext.weekEventReg[17] & 1) {
         this->unk_3A8 = 0x84D;
-        return;
     } else {
         this->unk_3A8 = 0x849;
     }
@@ -341,9 +324,9 @@ void func_80AD3CEC(EnTrt2* this, GlobalContext* globalCtx) {
     u8 sp27 = func_80152498(&globalCtx->msgCtx);
 
     func_80AD46F8(this);
-    if (this->unk_3D8 != 0) {
+    if (this->unk_3D8) {
         func_801518B0(globalCtx, this->unk_3A8, &this->actor);
-        this->unk_3D8 = 0;
+        this->unk_3D8 = false;
     } else if ((sp27 == 5) && func_80147624(globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
@@ -489,7 +472,7 @@ void func_80AD434C(EnTrt2* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.velocity.y, 1.5f, 0.2f, 0.1f);
 
     if (this->actor.world.pos.y > 200.0f) {
-        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) {
+        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_3B2 = 0x13;
             ActorCutscene_Stop(this->unk_3DA);
         } else {
@@ -551,7 +534,7 @@ void func_80AD4608(EnTrt2* this) {
 }
 
 void func_80AD469C(EnTrt2* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600FEF0, &D_06000A44, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_trt_Skel_00FEF0, &object_trt_Anim_000A44, NULL, NULL, 0);
     this->actor.draw = func_80AD56E8;
 }
 
@@ -613,8 +596,8 @@ s16 func_80AD48F8(Path* path, s32 arg1, Vec3f* arg2, f32* arg3) {
         phi_f14 = 0.0f;
         phi_f12 = 0.0f;
     }
-    *arg3 = (phi_f14 * phi_f14) + (phi_f12 * phi_f12);
-    return Math_Acot2F(phi_f12, phi_f14) * 10430.378f;
+    *arg3 = SQ(phi_f14) + SQ(phi_f12);
+    return RADF_TO_BINANG(Math_Acot2F(phi_f12, phi_f14));
 }
 
 f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
@@ -648,7 +631,7 @@ s32 func_80AD4B08(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 ret;
 
-    if (func_800C99AC(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 0x15) {
+    if (SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 0x15) {
         ret = true;
     } else {
         ret = false;
@@ -660,7 +643,7 @@ s32 func_80AD4B4C(EnTrt2* this, GlobalContext* globalCtx) {
     s32 sp24 = false;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
         sp24 = true;
         this->actor.speedXZ = 0.0f;
         func_80AD349C(this);
@@ -676,7 +659,7 @@ s32 func_80AD4B4C(EnTrt2* this, GlobalContext* globalCtx) {
             this->actor.velocity.y = 1.5f;
         } else {
             this->unk_3A8 = 0x84F;
-            this->unk_3D8 = 1;
+            this->unk_3D8 = true;
             func_80AD3380(&this->skelAnime, sAnimations, 7);
             this->unk_3B2 = 7;
         }
@@ -707,7 +690,7 @@ s32 func_80AD4CCC(EnTrt2* this, GlobalContext* globalCtx) {
         return true;
     }
 
-    if (func_80AD4C4C(this) && this->actor.isTargeted && (sp1E < 0x4000) && (sp1E >= -0x3FFF)) {
+    if (func_80AD4C4C(this) && this->actor.isTargeted && (sp1E < 0x4000) && (sp1E > -0x4000)) {
         func_800B863C(&this->actor, globalCtx);
     }
 
@@ -735,7 +718,7 @@ void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
     this->actor.colChkInfo.cylRadius = 50;
 
     this->unk_3C0 = 0;
-    this->unk_3D8 = 0;
+    this->unk_3D8 = false;
     this->unk_3DA = this->actor.cutscene;
     this->unk_3B6 = 20;
     this->unk_3B8 = 0;
@@ -744,10 +727,14 @@ void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
     if (gSaveContext.weekEventReg[12] & 8) {
         Actor_MarkForDeath(&this->actor);
         return;
-    } else if (gSaveContext.weekEventReg[84] & 0x40) {
+    }
+
+    if (gSaveContext.weekEventReg[84] & 0x40) {
         Actor_MarkForDeath(&this->actor);
         return;
-    } else if ((globalCtx->sceneNum == SCENE_20SICHITAI) || (globalCtx->sceneNum == SCENE_20SICHITAI2)) {
+    }
+
+    if ((globalCtx->sceneNum == SCENE_20SICHITAI) || (globalCtx->sceneNum == SCENE_20SICHITAI2)) {
         if (gSaveContext.day == 2) {
             if (!(gSaveContext.weekEventReg[15] & 0x80)) {
                 gSaveContext.weekEventReg[15] |= 0x80;
@@ -868,7 +855,7 @@ void func_80AD5394(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 
     *arg2 = sp7C;
 
-    if (arg4 != 0) {
+    if (arg4) {
         sp68.x += arg0;
         sp68.y += arg1;
         Math_SmoothStepToS(&arg3->x, sp68.x, 4, 0x1FFE, 1);
@@ -895,10 +882,10 @@ s32 EnTrt2_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 void EnTrt2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTrt2* this = THIS;
     Vec3f sp30 = { 0.0f, -30.0f, 0.0f };
-    s32 phi_v0 = 0;
+    s32 phi_v0 = false;
 
     if (this->unk_3B2 >= 8) {
-        phi_v0 = 1;
+        phi_v0 = true;
     }
 
     if (limbIndex == 21) {
@@ -926,9 +913,9 @@ void EnTrt2_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
 void func_80AD56E8(Actor* thisx, GlobalContext* globalCtx) {
     static UNK_PTR D_80AD5978[] = {
-        &D_0600B0B8,
-        &D_0600B8B8,
-        &D_0600C0B8,
+        &object_trt_Tex_00B0B8,
+        &object_trt_Tex_00B8B8,
+        &object_trt_Tex_00C0B8,
     };
     s32 pad;
     EnTrt2* this = THIS;
