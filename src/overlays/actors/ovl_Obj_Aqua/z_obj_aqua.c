@@ -66,8 +66,6 @@ Vec3f D_80ACC308 = { 1.0f / 1000.0f, 7.0f / 10000.0f, 1.0f / 1000.0f };
 Vec3f D_80ACC314 = { 8.6f / 1000.0f, 8.0f / 10000.0f, 8.6f / 1000.0f };
 Vec3f D_80ACC320 = { 1.0f / 100.0f, 2.6f / 1000.0f, 1.0f / 100.0f };
 
-extern Gfx gGameplayKeepDrawFlameDL[];
-
 void func_80ACB6A0(ObjAqua* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f sp58;
