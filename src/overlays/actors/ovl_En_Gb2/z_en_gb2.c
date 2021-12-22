@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gb2.h"
+#include "objects/object_ps/object_ps.h"
 
 #define FLAGS 0x00000039
 
@@ -34,9 +35,6 @@ void func_80B110F8(EnGb2* this, GlobalContext* globalCtx);
 void func_80B111AC(EnGb2* this, GlobalContext* globalCtx);
 void func_80B11268(EnGb2* this, GlobalContext* globalCtx);
 void func_80B11344(EnGb2* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_0600049C;
-extern FlexSkeletonHeader D_06007230;
 
 const ActorInit En_Gb2_InitVars = {
     ACTOR_EN_GB2,
@@ -328,10 +326,10 @@ void func_80B0FBF0(EnGb2* this, GlobalContext* globalCtx) {
         { -60.0f, 0.0f, 800.0f },
     };
     Vec3s sp78[] = {
-        { 0x0000, 0x0000, 0x0000 },
-        { 0x0000, 0x0000, 0x0000 },
-        { 0x0000, 0x0000, 0x0000 },
-        { 0x0000, 0x0000, 0x0000 },
+        { 0, 0, 0 },
+        { 0, 0, 0 },
+        { 0, 0, 0 },
+        { 0, 0, 0 },
     };
     s32 sp68[] = {
         0x1000,
@@ -878,7 +876,8 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.room = -1;
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007230, &D_0600049C, this->jointTable, this->morphTable, 12);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ps_Skel_007230, &object_ps_Anim_00049C, this->jointTable,
+                       this->morphTable, 12);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -984,7 +983,7 @@ s32 EnGb2_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
     if (limbIndex == 7) {
         limbIndex = limbIndex;
-        Matrix_RotateY(this->unk_270.y, 1);
+        Matrix_RotateY(this->unk_270.y, MTXMODE_APPLY);
     }
 
     if (limbIndex == 1) {
