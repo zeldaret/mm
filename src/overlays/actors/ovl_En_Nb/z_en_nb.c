@@ -54,8 +54,28 @@ extern CollisionCheckInfoInit2 D_80BC161C;
 
 extern FlexSkeletonHeader D_06008C40;
 
-Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, u8 arg2, s16 arg3);
+#ifdef NON_MATCHING
+Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
+    Actor* actor;
+
+    actor = NULL;
+loop_1:
+    actor = func_ActorCategoryIterateById(globalCtx, actor, actorCategory, actorId);
+    if ((actor != 0) && ((&this->actor == actor) || (actor->update == 0))) {
+        if (actor->next == 0) {
+
+        } else {
+            actor = actor->next;
+            goto loop_1;
+        }
+    }
+
+    return actor;
+}
+#else
+Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, u8 actorCategory, s16 actorId);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFDB0.s")
+#endif
 
 void func_80BBFE60(EnNb* this) {
     this->skelAnime.playSpeed = this->unk_268;
@@ -100,7 +120,7 @@ Actor* func_80BBFF90(EnNb* this, GlobalContext* globalCtx) {
     Actor* phi_v1;
 
     if (this->unk_1DC == 2) {
-        phi_v1 = func_80BBFDB0(this, globalCtx, 4, 0x202);
+        phi_v1 = func_80BBFDB0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AN);
     } else {
         phi_v1 = &GET_PLAYER(globalCtx)->actor;
     }
@@ -437,7 +457,7 @@ s32 func_80BC0A18(EnNb* this, GlobalContext* globalCtx) {
 s32 func_80BC0B98(EnNb* this, GlobalContext* globalCtx, UNK_TYPE arg2) {
     s32 sp24 = 0;
 
-    if (func_80BBFDB0(this, globalCtx, 4, 0x202) != NULL) {
+    if (func_80BBFDB0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AN) != NULL) {
         func_8013AED4(&this->unk_262, 3, 7);
         this->unk_262 |= 0x20;
         func_80BBFE8C(this, 0);
