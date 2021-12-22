@@ -52,7 +52,7 @@ static CollisionCheckInfoInit2 D_80BC161C = { 0, 0, 0, 0, MASS_IMMOVABLE };
 extern ColliderCylinderInit D_80BC15F0;
 extern CollisionCheckInfoInit2 D_80BC161C;
 
-extern UNK_TYPE D_06008C40;
+extern FlexSkeletonHeader D_06008C40;
 
 Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, s32 arg2, s16 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFDB0.s")
@@ -120,7 +120,30 @@ void func_80BC0D1C(EnNb* this, GlobalContext* globalCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC0EAC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/EnNb_Init.s")
+void EnNb_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnNb* this = THIS;
+
+    ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008C40, NULL, this->jointTable, this->morphTable, 8);
+
+    this->unk_290 = -1;
+    func_80BBFE8C(this, 0);
+
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80BC15F0);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80BC161C);
+    Actor_SetScale(&this->actor, 0.01f);
+    this->unk_262 = 0;
+
+    if (gSaveContext.eventInf[4] & 8) {
+        func_8013AED4(&this->unk_262, 4, 7);
+    } else {
+        gSaveContext.eventInf[4] &= 0xFB;
+        gSaveContext.eventInf[4] &= 0xF7;
+    }
+
+    this->actionFunc = func_80BC0D84;
+    this->actionFunc(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/EnNb_Destroy.s")
 
