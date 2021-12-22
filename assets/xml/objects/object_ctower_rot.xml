@@ -42,22 +42,22 @@
         <Texture Name="object_ctower_rot_Tex_00FA60" OutName="tex_00FA60" Format="i4" Width="32" Height="16" Offset="0xFA60" />
         <Texture Name="object_ctower_rot_Tex_00FB60" OutName="tex_00FB60" Format="i4" Width="32" Height="16" Offset="0xFB60" />
         <Texture Name="object_ctower_rot_Tex_00FC60" OutName="tex_00FC60" Format="i4" Width="32" Height="16" Offset="0xFC60" />
-        <DList Name="object_ctower_rot_DL_010820" Offset="0x10820" />
-        <DList Name="object_ctower_rot_DL_010828" Offset="0x10828" />
-        <DList Name="object_ctower_rot_DL_0129D0" Offset="0x129D0" />
-        <DList Name="object_ctower_rot_DL_012DA0" Offset="0x12DA0" />
-        <Collision Name="object_ctower_rot_Colheader_0142E8" Offset="0x142E8" />
-        <DList Name="object_ctower_rot_DL_015F30" Offset="0x15F30" />
-        <DList Name="object_ctower_rot_DL_0160A0" Offset="0x160A0" />
-        <Collision Name="object_ctower_rot_Colheader_016E70" Offset="0x16E70" />
-        <DList Name="object_ctower_rot_DL_017010" Offset="0x17010" />
-        <DList Name="object_ctower_rot_DL_017018" Offset="0x17018" />
-        <DList Name="object_ctower_rot_DL_017220" Offset="0x17220" />
-        <Collision Name="object_ctower_rot_Colheader_017410" Offset="0x17410" />
-        <DList Name="object_ctower_rot_DL_0174E0" Offset="0x174E0" />
-        <Collision Name="object_ctower_rot_Colheader_017650" Offset="0x17650" />
-        <DList Name="object_ctower_rot_DL_018110" Offset="0x18110" />
-        <DList Name="object_ctower_rot_DL_018118" Offset="0x18118" />
-        <Collision Name="object_ctower_rot_Colheader_018588" Offset="0x18588" />
+        <DList Name="object_ctower_rot_DL_010820" Offset="0x10820" /> <!-- Empty DList -->
+        <DList Name="object_ctower_rot_DL_010828" Offset="0x10828" /> <!-- CeilingCog DList -->
+        <DList Name="object_ctower_rot_DL_0129D0" Offset="0x129D0" /> <!-- CorridorTransition? DList-->
+        <DList Name="object_ctower_rot_DL_012DA0" Offset="0x12DA0" /> <!-- Corridor DList -->
+        <Collision Name="object_ctower_rot_Colheader_0142E8" Offset="0x142E8" /> <!-- Corridor Collision -->
+        <DList Name="object_ctower_rot_DL_015F30" Offset="0x15F30" /> <!-- OrganPipes DList-->
+        <DList Name="object_ctower_rot_DL_0160A0" Offset="0x160A0" /> <!-- Organ DList-->
+        <Collision Name="object_ctower_rot_Colheader_016E70" Offset="0x16E70" /> <!-- Organ Collision-->
+        <DList Name="object_ctower_rot_DL_017010" Offset="0x17010" /> <!-- Empty DList-->
+        <DList Name="object_ctower_rot_DL_017018" Offset="0x17018" /> <!-- CenterCog DList-->
+        <DList Name="object_ctower_rot_DL_017220" Offset="0x17220" /> <!-- MainDoor DList-->
+        <Collision Name="object_ctower_rot_Colheader_017410" Offset="0x17410" /> <!-- MainDoor Collision-->
+        <DList Name="object_ctower_rot_DL_0174E0" Offset="0x174E0" /> <!-- Door DList-->
+        <Collision Name="object_ctower_rot_Colheader_017650" Offset="0x17650" /> <!-- Door Collision-->
+        <DList Name="object_ctower_rot_DL_018110" Offset="0x18110" /> <!-- Empty DList -->
+        <DList Name="object_ctower_rot_DL_018118" Offset="0x18118" /> <!-- WaterWheel Dlist-->
+        <Collision Name="object_ctower_rot_Colheader_018588" Offset="0x18588" /> <!-- WaterWheel Collision-->
     </File>
 </Root>
