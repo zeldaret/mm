@@ -403,19 +403,19 @@ void func_80AC35E8(EnBigokuta* this) {
     this->actionFunc = func_80AC3650;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/func_80AC3650.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/func_80AC3650.s")
 extern Vec3f D_80AC45A4;
 extern Color_RGBA8 D_80AC45B0;
 extern Color_RGBA8 D_80AC45B4;
 extern Color_RGBA8 D_80AC45B8;
-/*void func_80AC3650(EnBigokuta* this, GlobalContext* globalCtx) {
-    Player* temp_v0_2;
-
+void func_80AC3650(EnBigokuta* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->actor.world.pos.y -= 0.2f;
-        if (DECR(this->unk_192) > 0) {
+        if (this->unk_192 > 0) {
+            this->unk_192--;
             if (this->unk_192 == 6) {
                 Vec3f sp84;
+
                 sp84.x = this->actor.world.pos.x;
                 sp84.y = this->actor.world.pos.y + 150.0f;
                 sp84.z = this->actor.world.pos.z;
@@ -425,9 +425,10 @@ extern Color_RGBA8 D_80AC45B8;
         } else {
             this->actor.world.pos.y -= 0.2f;
             if (Math_StepToF(&this->actor.scale.y, 0.001f, 0.001f)) {
+                s32 temp_s0;
                 Vec3f sp74;
                 Vec3f sp68;
-                s32 temp_s0;
+
                 Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x32, NA_SE_EN_COMMON_WATER_MID);
                 sp68.y = this->actor.world.pos.y;
                 for (temp_s0 = 0; temp_s0 < 0x14; temp_s0++) {
@@ -439,16 +440,6 @@ extern Color_RGBA8 D_80AC45B8;
                     EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp68, &sp74, &D_80AC45A4, &D_80AC45B0, &D_80AC45B8,
                                                       Rand_S16Offset(0x96, 0x32), 0x19, 0);
                 }
-                // do {
-                //     sp74.x = randPlusMinusPoint5Scaled(10.0f);
-                //     sp74.y = Rand_ZeroFloat(5.5f) + 5.5f;
-                //     sp74.z = randPlusMinusPoint5Scaled(10.0f);
-                //     sp68.x = this->actor.world.pos.x + (2.0f * sp74.x);
-                //     sp68.z = this->actor.world.pos.z + (2.0f * sp74.z);
-                //     EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp68, &sp74, &D_80AC45A4, &D_80AC45B0, &D_80AC45B8,
-                //                                       Rand_S16Offset(0x96, 0x32), 0x19, 0);
-                //     temp_s0 = temp_s0 + 1;
-                // } while (temp_s0 != 0x14);
                 if (this->actor.params != 0xFF) {
                     Actor_SetSwitchFlag(globalCtx, this->actor.params);
                 }
@@ -457,8 +448,9 @@ extern Color_RGBA8 D_80AC45B8;
                 if ((!(gSaveContext.eventInf[4] & 2)) && (!(gSaveContext.eventInf[3] & 0x20))) {
                     func_800B724C(globalCtx, &this->actor, 6);
                 } else {
-                    temp_v0_2 = GET_PLAYER(globalCtx);
-                    temp_v0_2->stateFlags1 &= ~0x20;
+                    Player* player = GET_PLAYER(globalCtx);
+
+                    player->stateFlags1 &= ~0x20;
                 }
             }
             if (this->unk_288.x > 0.0f) {
@@ -469,12 +461,11 @@ extern Color_RGBA8 D_80AC45B8;
         Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y - 16.5f, 15.0f);
     }
 }
-*/
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/func_80AC3930.s")
 // near swamp boat
 s32 func_80AC3930(EnBigokuta* this, GlobalContext* globalCtx) {
-    this->actor.child = func_ActorCategoryIterateById(globalCtx, NULL, 1, ACTOR_BG_INGATE);
+    this->actor.child = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_BG, ACTOR_BG_INGATE);
     if ((this->actor.child != NULL) && (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) < 250.0f)) {
         return true;
     } else {
@@ -488,6 +479,7 @@ void func_80AC39A0(EnBigokuta* this, GlobalContext* globalCtx) {
         ((this->collider2.base.acFlags & 2) ||
          (((globalCtx->sceneNum == 0x45) || (globalCtx->sceneNum == 0)) && (func_80AC3930(this, globalCtx))))) {
         Enemy_StartFinishingBlow(globalCtx, &this->actor);
+
         if (this->collider2.base.acFlags & 2) {
             if (this->collider2.info.acHitInfo->toucher.dmgFlags & 0x1000) {
                 this->unk_190 = 0xA;
@@ -502,6 +494,7 @@ void func_80AC39A0(EnBigokuta* this, GlobalContext* globalCtx) {
                             this->collider2.info.bumper.hitPos.y, this->collider2.info.bumper.hitPos.z, 0, 0, 0, 4);
             }
         }
+
         this->collider2.base.acFlags &= ~2;
         func_800BCB70(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&D_06000A74));
         func_80AC2A7C(this, globalCtx);
@@ -518,23 +511,29 @@ void EnBigokuta_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
+
     if ((globalCtx->gameplayFrames % 7) == 0) {
         func_80AC2C30(this, globalCtx);
     }
+
     func_80AC39A0(this, globalCtx);
     this->actionFunc(this, globalCtx);
+
     if ((this->collider2.base.acFlags & 1) != 0) {
         this->collider1.dim.pos.x = Math_SinS(this->actor.shape.rot.y) * -20.0f + this->actor.world.pos.x;
         this->collider1.dim.pos.y = this->actor.world.pos.y;
         this->collider1.dim.pos.z = Math_CosS(this->actor.shape.rot.y) * -20.0f + this->actor.world.pos.z;
+
         this->collider2.dim.pos.x = this->collider1.dim.pos.x;
         this->collider2.dim.pos.y = this->collider1.dim.pos.y;
         this->collider2.dim.pos.z = this->collider1.dim.pos.z;
+
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
         Actor_SetHeight(&this->actor, 82.5f);
     }
+
     if (this->unk_288.x > 0.0f) {
         if (this->unk_190 != 0xA) {
             Math_StepToF(&this->unk_288.x, 0.0f, 0.05f);
@@ -561,8 +560,10 @@ s32 func_80AC3D48(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         } else {
             envColor = 255;
         }
+
         gDPPipeSync((*gfx)++);
         gDPSetEnvColor((*gfx)++, envColor, envColor, envColor, envColor);
+
         if (this->actionFunc == func_80AC31EC) {
             rotX = (s16)(this->unk_192 * 6144.0f * (1.0f / 9.0f));
             rot->x -= rotX;
@@ -578,6 +579,7 @@ s32 func_80AC3D48(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
             }
             rot->x -= rotX;
         }
+
     } else if (limbIndex == 0x11) {
         EnBigokuta* this = THIS;
         f32 temp;
@@ -613,30 +615,26 @@ s32 func_80AC3D48(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/func_80AC4204.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/func_80AC4204.s")
 extern s8 D_80AC45BC[];
 extern Vec3f D_80AC45D0[];
-// void func_80AC4204(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *actor, Gfx **gfx) {
-//     EnBigokuta* this = (EnBigokuta*)actor;
-//     s8 temp_v0 = D_80AC45BC[limbIndex];
-//     s32 temp_s0;
-//
-//     if (temp_v0 != -1) {
-//         if (temp_v0 < 6) {
-//             Matrix_GetStateTranslationAndScaledX(800.0f, &this->limbPos[temp_v0]);
-//         } else if (temp_v0 < 8) {
-//             Matrix_GetStateTranslation(&this->limbPos[temp_v0]);
-//         } else {
-//             for (temp_s0 = 0; temp_s0 < 5; temp_s0++) {
-//                 Matrix_MultiplyVector3fByState(&D_80AC45D0[temp_s0], &this->limbPos[temp_s0]);
-//             }
-//         }
-//     }
-// }
+void func_80AC4204(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+    EnBigokuta* this = THIS;
+    s32 temp_s0;
+    s8 temp_v0 = D_80AC45BC[limbIndex];
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/EnBigokuta_Draw.s")
-void func_80AC4204(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor,
-                   Gfx** gfx); /* extern */
+    if (temp_v0 != -1) {
+        if (temp_v0 < 6) {
+            Matrix_GetStateTranslationAndScaledX(800.0f, &this->limbPos[temp_v0]);
+        } else if (temp_v0 < 8) {
+            Matrix_GetStateTranslation(&this->limbPos[temp_v0]);
+        } else {
+            for (temp_s0 = 0; temp_s0 < 5; temp_s0++) {
+                Matrix_MultiplyVector3fByState(&D_80AC45D0[temp_s0], &this->limbPos[temp_v0 + temp_s0]);
+            }
+        }
+    }
+}
 
 void EnBigokuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnBigokuta* this = THIS;
@@ -644,6 +642,7 @@ void EnBigokuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     if ((this->actionFunc != func_80AC3650) || (this->unk_192 != 0)) {
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
         gfx = POLY_OPA_DISP;
@@ -660,6 +659,7 @@ void EnBigokuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
         POLY_XLU_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                            this->skelAnime.dListCount, NULL, func_80AC4204, &this->actor, &gfx[2]);
     }
+
     func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->unk_288.y, this->unk_288.z,
                   this->unk_288.x, this->unk_190);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
