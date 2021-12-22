@@ -1,0 +1,28 @@
+﻿<Root>
+    <File Name="object_bsmask" Segment="6">
+        <DList Name="object_bsmask_DL_000690" Offset="0x690" />
+        <DList Name="object_bsmask_DL_001D80" Offset="0x1D80" />
+        <DList Name="object_bsmask_DL_003AD0" Offset="0x3AD0" />
+        <DList Name="object_bsmask_DL_005020" Offset="0x5020" />
+        <Texture Name="object_bsmask_TLUT_005830" OutName="tlut_005830" Format="rgba16" Width="4" Height="4" Offset="0x5830" />
+        <Texture Name="object_bsmask_TLUT_005850" OutName="tlut_005850" Format="rgba16" Width="4" Height="4" Offset="0x5850" />
+        <Texture Name="object_bsmask_TLUT_005870" OutName="tlut_005870" Format="rgba16" Width="4" Height="4" Offset="0x5870" />
+        <Texture Name="object_bsmask_TLUT_005890" OutName="tlut_005890" Format="rgba16" Width="4" Height="4" Offset="0x5890" />
+        <Texture Name="object_bsmask_TLUT_0058B0" OutName="tlut_0058B0" Format="rgba16" Width="4" Height="4" Offset="0x58B0" />
+        <Texture Name="object_bsmask_TLUT_0058D0" OutName="tlut_0058D0" Format="rgba16" Width="4" Height="4" Offset="0x58D0" />
+        <Texture Name="object_bsmask_TLUT_0058F0" OutName="tlut_0058F0" Format="rgba16" Width="4" Height="4" Offset="0x58F0" />
+        <Texture Name="object_bsmask_Tex_005910" OutName="tex_005910" Format="rgba16" Width="16" Height="16" Offset="0x5910" />
+        <Texture Name="object_bsmask_Tex_005B10" OutName="tex_005B10" Format="ci4" Width="64" Height="64" Offset="0x5B10" />
+        <Texture Name="object_bsmask_Tex_006310" OutName="tex_006310" Format="ci4" Width="64" Height="64" Offset="0x6310" />
+        <Texture Name="object_bsmask_Tex_006B10" OutName="tex_006B10" Format="rgba16" Width="32" Height="32" Offset="0x6B10" />
+        <Texture Name="object_bsmask_Tex_007310" OutName="tex_007310" Format="ci4" Width="64" Height="64" Offset="0x7310" />
+        <Texture Name="object_bsmask_Tex_007B10" OutName="tex_007B10" Format="ci4" Width="64" Height="64" Offset="0x7B10" />
+        <Texture Name="object_bsmask_Tex_008310" OutName="tex_008310" Format="ci4" Width="16" Height="16" Offset="0x8310" />
+        <Texture Name="object_bsmask_Tex_008390" OutName="tex_008390" Format="rgba16" Width="32" Height="64" Offset="0x8390" />
+        <Texture Name="object_bsmask_Tex_009390" OutName="tex_009390" Format="rgba16" Width="32" Height="64" Offset="0x9390" />
+        <Texture Name="object_bsmask_Tex_00A390" OutName="tex_00A390" Format="rgba16" Width="32" Height="64" Offset="0xA390" />
+        <Texture Name="object_bsmask_Tex_00B390" OutName="tex_00B390" Format="rgba16" Width="32" Height="32" Offset="0xB390" />
+        <Texture Name="object_bsmask_Tex_00BB90" OutName="tex_00BB90" Format="ci4" Width="64" Height="64" Offset="0xBB90" />
+        <Texture Name="object_bsmask_Tex_00C390" OutName="tex_00C390" Format="ci4" Width="64" Height="64" Offset="0xC390" />
+    </File>
+</Root>
