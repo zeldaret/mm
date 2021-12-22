@@ -36,7 +36,7 @@ void Font_LoadOrderedFont(Font* font) {
         if (sFontOrdering[codePointIndex] == 0) {
             loadOffset = 0;
         }
-        // UB to convert pointer to u32
+
         DmaMgr_SendRequest0(writeLocation, (uintptr_t)SEGMENT_ROM_START(nes_font_static) + loadOffset,
                             FONT_CHAR_TEX_SIZE);
         if (sFontOrdering[codePointIndex] == 0x8C) {
