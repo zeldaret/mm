@@ -259,7 +259,7 @@ s32 func_80C013F0(EnBomjimb* this, GlobalContext* globalCtx) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         sp1C = this->collider.base.oc;
 
-        if ((sp1C->id == ACTOR_OBJ_KIBAKO) && (D_80C03170 == 0) && (sp1C->update != NULL) &&
+        if ((sp1C->id == ACTOR_OBJ_KIBAKO) && (D_80C03170 == NULL) && (sp1C->update != NULL) &&
             !Actor_HasParent(sp1C, globalCtx)) {
             D_80C03170 = sp1C;
             this->unk_2E4 = sp1C;
@@ -579,7 +579,7 @@ void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.speedXZ, 8.0f, 0.5f, 2.0f);
     Math_Vec3f_Copy(&sp74, &this->actor.world.pos);
 
-    sp74.x += (Math_SinS(this->actor.world.rot.y) * 50.0f);
+    sp74.x += Math_SinS(this->actor.world.rot.y) * 50.0f;
     sp74.y += 20.0f;
     sp74.z += Math_CosS(this->actor.world.rot.y) * 50.0f;
 
@@ -616,7 +616,7 @@ void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx) {
         s16 temp = BINANG_SUB(this->actor.world.rot.y, this->actor.yawTowardsPlayer - 0x8000);
 
         if (temp < 0) {
-            this->unk_2D4 += -0x1000;
+            this->unk_2D4 -= 0x1000;
         } else {
             this->unk_2D4 += 0x1000;
         }
