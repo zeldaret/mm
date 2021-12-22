@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_iceblock.h"
+#include "objects/object_ice_block/object_ice_block.h"
 
 #define FLAGS 0x00000010
 
@@ -43,12 +44,6 @@ void func_80A266E0(ObjIceblock* this, GlobalContext* globalCtx);
 void func_80A26B64(ObjIceblock* this, GlobalContext* globalCtx);
 void func_80A26B74(ObjIceblock* this, GlobalContext* globalCtx);
 void func_80A26BF8(ObjIceblock* this, GlobalContext* globalCtx);
-
-extern Gfx D_060001A0[];
-extern UNK_TYPE D_06000328;
-extern Gfx D_060007F0[];
-extern UNK_TYPE D_060009D0;
-extern CollisionHeader D_06000438;
 
 const ActorInit Obj_Iceblock_InitVars = {
     ACTOR_OBJ_ICEBLOCK,
@@ -924,7 +919,7 @@ void ObjIceblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000438);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ice_block_Colheader_000438);
     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
@@ -936,7 +931,7 @@ void ObjIceblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (D_80A26E7C == NULL) {
-        D_80A26E7C = Lib_SegmentedToVirtual(&D_06000328);
+        D_80A26E7C = Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_000328);
     }
 
     if (!(this->unk_1B0 & 8)) {
@@ -1510,10 +1505,10 @@ void func_80A26B64(ObjIceblock* this, GlobalContext* globalCtx) {
 }
 
 void func_80A26B74(ObjIceblock* this, GlobalContext* globalCtx) {
-    func_800BE03C(globalCtx, D_060001A0);
+    func_800BE03C(globalCtx, object_ice_block_DL_0001A0);
     if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060009D0));
-        func_800BE03C(globalCtx, D_060007F0);
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_0009D0));
+        func_800BE03C(globalCtx, object_ice_block_DL_0007F0);
     }
 }
 
@@ -1537,17 +1532,17 @@ void func_80A26BF8(ObjIceblock* this, GlobalContext* globalCtx) {
         Matrix_Scale(ptr->unk_04, ptr->unk_08, ptr->unk_0C, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_060001A0);
+        gSPDisplayList(POLY_XLU_DISP++, object_ice_block_DL_0001A0);
     }
 
     if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060009D0));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_0009D0));
         Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 20.0f,
                                               this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_2B4, this->unk_2B4, this->unk_2B4, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_060007F0);
+        gSPDisplayList(POLY_XLU_DISP++, object_ice_block_DL_0007F0);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
