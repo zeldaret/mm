@@ -130,7 +130,7 @@ u16 EnFsn_GetWelcome(GlobalContext* globalCtx) {
         case PLAYER_MASK_GORON:
         case PLAYER_MASK_ZORA:
             return 0x29FD;
-        case PLAYER_MASK_KAFEI:
+        case PLAYER_MASK_KAFEIS_MASK:
             return 0x2364;
         default:
             return 0x29FE;

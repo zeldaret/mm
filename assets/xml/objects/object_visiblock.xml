@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_visiblock" Segment="6">
+        <DList Name="object_visiblock_DL_000140" Offset="0x140" />
+        <DList Name="object_visiblock_DL_0001E8" Offset="0x1E8" />
+        <Texture Name="object_visiblock_Tex_0001F0" OutName="tex_0001F0" Format="rgba16" Width="32" Height="32" Offset="0x1F0" />
+        <Collision Name="object_visiblock_Colheader_000AD0" Offset="0xAD0" />
+    </File>
+</Root>

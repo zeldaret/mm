@@ -1,0 +1,14 @@
+﻿<Root>
+    <File Name="object_tro" Segment="6">
+        <Animation Name="object_tro_Anim_0000A0" Offset="0xA0" />
+        <DList Name="object_tro_DL_0006B0" Offset="0x6B0" />
+        <Texture Name="object_tro_TLUT_000AE0" OutName="tlut_000AE0" Format="rgba16" Width="16" Height="16" Offset="0xAE0" />
+        <Texture Name="object_tro_TLUT_000CE0" OutName="tlut_000CE0" Format="rgba16" Width="16" Height="16" Offset="0xCE0" />
+        <Texture Name="object_tro_Tex_000EE0" OutName="tex_000EE0" Format="rgba16" Width="2" Height="8" Offset="0xEE0" />
+        <Texture Name="object_tro_Tex_000F00" OutName="tex_000F00" Format="ci8" Width="16" Height="8" Offset="0xF00" />
+        <Texture Name="object_tro_Tex_000F80" OutName="tex_000F80" Format="rgba16" Width="16" Height="8" Offset="0xF80" />
+        <Texture Name="object_tro_Tex_001080" OutName="tex_001080" Format="rgba16" Width="8" Height="8" Offset="0x1080" />
+        <Texture Name="object_tro_Tex_001100" OutName="tex_001100" Format="ci8" Width="8" Height="8" Offset="0x1100" />
+        <!-- <Blob Name="object_tro_Blob_001140" Size="0x1820" Offset="0x1140" /> -->
+    </File>
+</Root>

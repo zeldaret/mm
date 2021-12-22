@@ -14,7 +14,7 @@ void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgC
 
     if (!__osPiDevMgr.active) {
         osCreateMesgQueue(cmdQ, cmdBuf, cmdMsgCnt);
-        osCreateMesgQueue(&D_8009E3D0, D_8009E3E8, 1);
+        osCreateMesgQueue(&D_8009E3D0, D_8009E3E8, ARRAY_COUNT(D_8009E3E8));
         if (!__osPiAccessQueueEnabled) {
             __osPiCreateAccessQueue();
         }
