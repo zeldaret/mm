@@ -6,6 +6,7 @@
 
 #include "z_en_wiz_fire.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
+#include "objects/object_wiz/object_wiz.h"
 
 #define FLAGS 0x08000015
 
@@ -26,16 +27,6 @@ void func_80A4BAB4(Actor* thisx, GlobalContext* globalCtx);
 void func_80A4BC74(EnWizFire* this, Vec3f* arg1, Vec3f* arg2);
 void func_80A4BDDC(EnWizFire* this, GlobalContext* globalCtx);
 void func_80A4BF78(EnWizFire* this, GlobalContext* globalCtx);
-
-extern Gfx D_06000E70[];
-extern Gfx D_06000FD8[];
-extern Gfx D_06002630[];
-extern Gfx D_06002B40[];
-extern Gfx D_06003120[];
-extern Gfx D_06003640[];
-extern Gfx D_06003FC0[];
-extern Gfx D_06005190[];
-extern Gfx D_06005750[];
 
 static s32 D_80A4C1C0 = 0;
 
@@ -646,7 +637,7 @@ void func_80A4B0C8(EnWizFire* this, GlobalContext* globalCtx) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)this->unk_1FC);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 40, 30, 80);
-        gSPDisplayList(POLY_XLU_DISP++, D_06005190);
+        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_005190);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 215, 215, 215, (s8)this->unk_1FC);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 128);
         gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -657,7 +648,7 @@ void func_80A4B0C8(EnWizFire* this, GlobalContext* globalCtx) {
         Matrix_RotateY(0, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_06005750);
+        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_005750);
     }
 
     func_80A4BF78(this, globalCtx);
@@ -685,7 +676,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 100, 40, 0, (s8)this->unk_1FC);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 245, 255, 128);
-        gSPDisplayList(POLY_XLU_DISP++, D_06003120);
+        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003120);
 
         Matrix_StatePop();
         Matrix_StatePush();
@@ -705,7 +696,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         Matrix_Scale(this->unk_1F8, this->unk_1F8, this->unk_1F8, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_06003640);
+        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003640);
 
         Matrix_StatePop();
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, 0);
@@ -721,7 +712,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         Matrix_Scale(this->unk_1F4, this->unk_1F4, this->unk_1F4, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_06003FC0);
+        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003FC0);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -758,7 +749,7 @@ void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_06002B40);
+            gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_002B40);
         }
     }
 
@@ -793,7 +784,7 @@ void func_80A4BAB4(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06002630);
+    gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_002630);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -864,7 +855,7 @@ void func_80A4BF78(EnWizFire* this, GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(this->unk_254); i++, ptr++) {
         if (ptr->unk_00 != 0) {
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, D_06000E70);
+                gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_000E70);
                 flag++;
             }
 
@@ -880,7 +871,7 @@ void func_80A4BF78(EnWizFire* this, GlobalContext* globalCtx) {
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BACK | G_FOG);
-            gSPDisplayList(POLY_XLU_DISP++, D_06000FD8);
+            gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_000FD8);
         }
     }
 
