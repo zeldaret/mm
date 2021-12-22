@@ -79,7 +79,7 @@ void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, Global
     Vec3f dustSpawnOffset;
     Vec3f dustSpawnPos;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, 0);
+    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     dustSpawnOffset.y = 115.0f;
     dustSpawnOffset.z = -10.0f;
@@ -195,9 +195,9 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    DynaPolyActor_Init(&this->dyna, 0);
     if ((globalCtx->sceneNum == 0x6F) && (gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.unk_12 == 0)) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000968);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
     } else if (!((CURRENT_DAY != 3) || (gSaveContext.time >= 0x4000)) || gSaveContext.day >= 4) {
@@ -205,7 +205,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
         ObjTokeiStep_InitStepsOpen(this);
         ObjTokeiStep_SetupDoNothingOpen(this);
     } else {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000968);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupDoNothing(this);
     }
@@ -214,7 +214,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjTokeiStep_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjTokeiStep_SetupBeginOpen(ObjTokeiStep* this) {

@@ -1,5 +1,5 @@
 /*
- * File z_en_bom_chu.c
+ * File: z_en_bom_chu.c
  * Overlay: ovl_En_Bom_Chu
  * Description: Bombchus
  */
