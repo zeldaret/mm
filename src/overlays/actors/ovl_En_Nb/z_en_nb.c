@@ -21,8 +21,8 @@ void func_80BC0EAC(EnNb* this, GlobalContext* globalCtx);
 void func_80BC08E0(EnNb* this, GlobalContext* globalCtx);
 void func_80BC0978(EnNb* this, GlobalContext* globalCtx);
 
-s32 func_80BC00AC(Actor* this, GlobalContext* globalCtx);
-s32 func_80BC01DC(Actor* this, GlobalContext* globalCtx);
+s32 func_80BC00AC(EnNb* this, GlobalContext* globalCtx);
+s32 func_80BC01DC(EnNb* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Nb_InitVars = {
@@ -85,22 +85,162 @@ s32 func_80BBFE8C(EnNb* this, s32 arg1) {
     return phi_t0;
 }
 
+void func_80BBFF24(EnNb* this, GlobalContext* globalCtx) {
+    f32 diff;
+    s32 pad;
 
-void func_80BBFF24(EnNb* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFF24.s")
+    Collider_UpdateCylinder(&this->actor, &this->collider);
 
-Actor* func_80BBFF90(EnNb* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFF90.s")
+    diff = this->actor.focus.pos.y - this->actor.world.pos.y;
+    this->collider.dim.height = diff;
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+}
 
-s32 func_80BBFFD4(EnNb* this, s16 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFFD4.s")
+Actor* func_80BBFF90(EnNb* this, GlobalContext* globalCtx) {
+    Actor* phi_v1;
 
-s8 func_80BC0050(EnNb* this, s32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC0050.s")
+    if (this->unk_1DC == 2) {
+        phi_v1 = func_80BBFDB0(this, globalCtx, 4, 0x202);
+    } else {
+        phi_v1 = &GET_PLAYER(globalCtx)->actor;
+    }
+    return phi_v1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC00AC.s")
+s32 func_80BBFFD4(EnNb* this, s16 arg1) {
+    s32 sp1C = false;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC01DC.s")
+    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+        ActorCutscene_Stop(0x7C);
+        ActorCutscene_SetIntentToPlay(arg1);
+    } else if (ActorCutscene_GetCanPlayNext(arg1)) {
+        ActorCutscene_StartAndSetUnkLinkFields(arg1, &this->actor);
+        sp1C = true;
+    } else {
+        ActorCutscene_SetIntentToPlay(arg1);
+    }
+
+    return sp1C;
+}
+
+s16 func_80BC0050(EnNb* this, s32 arg1) {
+    s16 cutscene = this->actor.cutscene;
+    s32 i;
+
+    for (i = 0; i < arg1; i++) {
+        cutscene = ActorCutscene_GetAdditionalCutscene(cutscene);
+    }
+
+    return cutscene;
+}
+
+s32 func_80BC00AC(EnNb* this, GlobalContext* globalCtx) {
+    s32 pad;
+    s16 sp2A = func_80BC0050(this, 0);
+    s32 phi_v1 = 0;
+
+    switch (this->unk_288) {
+        case 0x0:
+            if (func_80BBFFD4(this, sp2A) != 0) {
+            case 0x2:
+            case 0x4:
+            case 0x6:
+            case 0x8:
+                func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), this);
+                this->unk_288++;
+                phi_v1 = 1;
+            }
+            break;
+
+        case 0x1:
+        case 0x3:
+        case 0x5:
+        case 0x7:
+            if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
+                func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+            }
+            this->unk_288++;
+            phi_v1 = 1;
+            break;
+
+        case 0x9:
+            ActorCutscene_Stop(sp2A);
+            this->unk_288++;
+            phi_v1 = 1;
+            break;
+    }
+
+    return phi_v1;
+}
+
+s32 func_80BC01DC(EnNb* this, GlobalContext* globalCtx) {
+    s32 pad[2];
+    s32 sp2C = 0;
+
+    switch ( this->unk_288) {
+        case 0x0:
+            if (Player_GetMask(globalCtx) == PLAYER_MASK_ALL_NIGHT) {
+                this->unk_288 = 1;
+            } else {
+                this->unk_288 = 5;
+            }
+            break;
+
+        case 0x1:
+            func_8016A268(globalCtx, 1, 0, 0, 0, 0);
+            this->unk_286 = 0x28;
+            this->unk_288 = (u16) ((s16) this->unk_288 + 1);
+            break;
+
+        case 0x2:
+            gGameInfo->data[0x224] = (s16) (s32) (255.0f - (((f32) ABS_ALT(20 - this->unk_286) / 20.0f) * 255.0f));
+
+            if (this->unk_286 == 0x14) {
+                if ((gSaveContext.eventInf[4] & 4) != 0) {
+                    globalCtx->interfaceCtx.unk_31B = 0;
+                } else {
+                    globalCtx->interfaceCtx.unk_31B = 1;
+                }
+                globalCtx->interfaceCtx.unk_31A = 6;
+                gGameInfo->data[0x59B] = 0xFF;
+            }
+
+            if (DECR(this->unk_286) == 0) {
+                this->unk_288++;
+            }
+            break;
+
+        case 0x3:
+            globalCtx->interfaceCtx.unk_31A = 4;
+            this->unk_288++;
+            sp2C = 1;
+            break;
+
+        case 0x4:
+            globalCtx->interfaceCtx.unk_31A = 5;
+            this->unk_288++;
+            /* fallthrough */
+        case 0x5:
+            if (!(gSaveContext.eventInf[4] & 4)) {
+                gSaveContext.time = CLOCK_TIME(8, 0);
+                Sram_IncrementDay();
+            } else {
+                func_800FE658(120.0f);
+            }
+
+            this->unk_288++;
+            globalCtx->nextEntranceIndex = 0xBC20;
+            gSaveContext.nextCutsceneIndex = 0;
+            globalCtx->sceneLoadFlag = 0x14;
+            globalCtx->unk_1887F = 2;
+            gSaveContext.nextTransition = 6;
+            gSaveContext.eventInf[4] |= 8;
+            break;
+    }
+
+    return sp2C;
+}
+
 
 UNK_PTR func_80BC045C(EnNb* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC045C.s")
@@ -146,7 +286,7 @@ void func_80BC0D84(EnNb* this, GlobalContext* globalCtx) {
     s32 pad;
     struct_80133038_arg2 sp20;
 
-    this->unk_280 = gSaveContext.unk_14 + gGameInfo->data[0xF];
+    this->unk_280 =  gGameInfo->data[0xF] + ((void)0, gSaveContext.unk_14);
 
     if (gSaveContext.eventInf[4] & 8) {
         sp20.unk0 = 1;

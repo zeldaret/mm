@@ -36,8 +36,9 @@ typedef struct EnNb {
     /* 0x280 */ s16 unk_280;
     /* 0x282 */ s16 unk_282;
     /* 0x284 */ s16 unk_284;
-    /* 0x286 */ char unk_286[0x02];
-    /* 0x288 */ char unk_288[0x04];
+    /* 0x286 */ s16 unk_286;
+    /* 0x288 */ s16 unk_288;
+    /* 0x28A */ char unk_28A[0x02];
     /* 0x28C */ EnNbActionFunc2 unk_28C;
     /* 0x290 */ s32 unk_290;
     /* 0x294 */ char unk_294[0x8];
