@@ -6,6 +6,7 @@
 
 #include "overlays/actors/ovl_Obj_Hakaisi/z_obj_hakaisi.h"
 #include "z_en_rail_skb.h"
+#include "objects/object_skb/object_skb.h"
 
 #define FLAGS 0x00000015
 
@@ -49,18 +50,6 @@ void func_80B726B4(EnRailSkb* this, GlobalContext* globalCtx);
 void func_80B72830(EnRailSkb* this, s16 arg1);
 s32 func_80B7285C(EnRailSkb* this);
 
-extern AnimationHeader D_060009E4;
-extern AnimationHeader D_060015EC;
-extern AnimationHeader D_06001D1C;
-extern AnimationHeader D_06002190;
-extern AnimationHeader D_0600270C;
-extern AnimationHeader D_06002AC8;
-extern AnimationHeader D_06003584;
-extern SkeletonHeader D_06005EF8;
-extern AnimationHeader D_060064E0;
-extern AnimationHeader D_0600697C;
-extern AnimationHeader D_06006D90;
-
 const ActorInit En_Rail_Skb_InitVars = {
     ACTOR_EN_RAIL_SKB,
     ACTORCAT_ENEMY,
@@ -74,13 +63,13 @@ const ActorInit En_Rail_Skb_InitVars = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &D_060064E0, 0.96f, 0.0f, 0.0f, 0, -4.0f }, { &D_06003584, 1.0f, 0.0f, 0.0f, 2, -1.0f },
-    { &D_06002190, 0.6f, 0.0f, 0.0f, 3, 4.0f },   { &D_06002AC8, 1.0f, 0.0f, 0.0f, 2, -4.0f },
-    { &D_0600270C, 1.0f, 0.0f, 0.0f, 2, -4.0f },  { &D_0600697C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_06006D90, 1.0f, 0.0f, 0.0f, 0, -4.0f },  { &D_06001D1C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_06003584, 1.0f, 0.0f, 0.0f, 2, -8.0f },  { &D_06003584, 1.0f, 0.0f, 0.0f, 2, -16.0f },
-    { &D_06002AC8, 1.0f, 0.0f, 0.0f, 2, -8.0f },  { &D_060015EC, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &D_060009E4, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_skb_Anim_0064E0, 0.96f, 0.0f, 0.0f, 0, -4.0f }, { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, 2, -1.0f },
+    { &object_skb_Anim_002190, 0.6f, 0.0f, 0.0f, 3, 4.0f },   { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, 2, -4.0f },
+    { &object_skb_Anim_00270C, 1.0f, 0.0f, 0.0f, 2, -4.0f },  { &object_skb_Anim_00697C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_skb_Anim_006D90, 1.0f, 0.0f, 0.0f, 0, -4.0f },  { &object_skb_Anim_001D1C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, 2, -8.0f },  { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, 2, -16.0f },
+    { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, 2, -8.0f },  { &object_skb_Anim_0015EC, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &object_skb_Anim_0009E4, 1.0f, 0.0f, 0.0f, 0, -8.0f },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -275,7 +264,8 @@ void EnRailSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80B708C0(this, globalCtx);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005EF8, &D_060064E0, this->jointTable, this->morphTable, 20);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_0064E0, this->jointTable,
+                   this->morphTable, 20);
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
