@@ -19,12 +19,11 @@ typedef struct {
 } EnWaterEffectStruct; // size = 0x40
 
 enum {
-    /*     1 */ ENWATEREFFECT_1 = 1,
+    /* 0x  1 */ ENWATEREFFECT_1 = 1,
     /* 0x309 */ ENWATEREFFECT_777 = 777,
     /* 0x30A */ ENWATEREFFECT_778,
     /* 0x30B */ ENWATEREFFECT_779,
     /* 0x30C */ ENWATEREFFECT_780,
-
 };
 
 typedef struct EnWaterEffect {
@@ -33,10 +32,10 @@ typedef struct EnWaterEffect {
     /* 0xDC4 */ s16 unk_DC4;
     /* 0xDC6 */ s16 unk_DC6;
     /* 0xDC8 */ Vec3f unk_DC8[5];
-    /* 0xE04 */ UNK_TYPE1 unkE04[4];
+    /* 0xE04 */ UNK_TYPE1 unk_E04[4];
     /* 0xE04 */ f32 unk_E08[4];
     /* 0xE18 */ f32 unk_E18[4];
-    /* 0xE28 */ UNK_TYPE1 unkE28[4];
+    /* 0xE28 */ UNK_TYPE1 unk_E28[4];
     /* 0xE2C */ f32 unk_E2C;
     /* 0xE30 */ f32 unk_E30;
     /* 0xE34 */ f32 unk_E34;

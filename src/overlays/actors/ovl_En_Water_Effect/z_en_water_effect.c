@@ -5,6 +5,7 @@
  */
 
 #include "z_en_water_effect.h"
+#include "objects/object_water_effect/object_water_effect.h"
 
 #define FLAGS 0x00000035
 
@@ -19,20 +20,6 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2);
 void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2);
 void func_80A5A534(Actor* thisx, GlobalContext* globalCtx);
 void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2);
-
-extern Gfx D_06000420[];
-extern Gfx D_06000730[];
-extern Gfx D_06000A48[];
-extern Gfx D_06000CD8[];
-extern Gfx D_06000DE0[];
-extern Gfx D_06000E0C[];
-extern Gfx D_06000E40[];
-extern Gfx D_06000E58[];
-extern Gfx D_06004260[];
-extern Gfx D_060042B0[];
-extern Gfx D_060042F8[];
-extern Gfx D_06004340[];
-extern Gfx D_060043E8[];
 
 const ActorInit En_Water_Effect_InitVars = {
     ACTOR_EN_WATER_EFFECT,
@@ -298,7 +285,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_0408DBE0));
-                gSPDisplayList(POLY_XLU_DISP++, D_06004260);
+                gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                 phi_s4++;
             }
@@ -310,14 +297,14 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             if (ptr->unk_00 == 1) {
                 Matrix_RotateY(func_800DFC68(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
             } else {
-                Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             }
 
             Matrix_Scale(ptr->unk_2C.x, ptr->unk_2C.y, 1.0f, MTXMODE_APPLY);
             Matrix_InsertZRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_060042B0);
+            gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042B0);
         }
     }
 
@@ -331,7 +318,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_0408DBE0));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
-                gSPDisplayList(POLY_XLU_DISP++, D_06004260);
+                gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 phi_s4++;
             }
 
@@ -343,7 +330,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             Matrix_InsertYRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_060042F8);
+            gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
         }
     }
 
@@ -490,7 +477,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
                     Math_Vec3f_Copy(&sp90, &ptr->unk_04);
                     sp90.y += 30.0f;
 
-                    temp_f0_2 = func_800C3FA0(&globalCtx->colCtx, &sp88, &sp90);
+                    temp_f0_2 = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp88, &sp90);
                     if (fabsf(temp_f0_2 - this->actor.floorHeight) > 200.0f) {
                         phi_s5 = true;
                     }
@@ -531,7 +518,7 @@ void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
     for (i = 0; i < ARRAY_COUNT(this->unk_144); i++, ptr++) {
         if (ptr->unk_00 == 4) {
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, D_06004340);
+                gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004340);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
                 POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 500, 3600);
                 flag++;
@@ -545,7 +532,7 @@ void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
             Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
 
             if (ptr->unk_2A >= 2) {
-                Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             } else {
                 Matrix_RotateY(func_800DFC68(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
             }
@@ -558,7 +545,7 @@ void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_060043E8);
+            gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0043E8);
 
             if ((ptr->unk_2A & 1) == 0) {
                 Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y + 5.0f, ptr->unk_04.z, MTXMODE_NEW);
@@ -636,26 +623,26 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
     if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_778)) {
         if (this->unk_E2C > 1.0f) {
             func_8012C2DC(globalCtx->state.gfxCtx);
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000DE0));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_water_effect_Matanimheader_000DE0));
             Matrix_Scale(this->unk_DC8[1].y, this->unk_DC8[1].z, this->unk_DC8[1].y, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E2C);
-            gSPDisplayList(POLY_XLU_DISP++, D_06000420);
+            gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000420);
         }
 
         Matrix_StatePop();
 
         if (this->unk_E30 > 1.0f) {
             func_8012C2DC(globalCtx->state.gfxCtx);
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000E0C));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_water_effect_Matanimheader_000E0C));
             Matrix_Scale(this->unk_DC8[2].y, this->unk_DC8[2].z, this->unk_DC8[2].y, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E30);
-            gSPDisplayList(POLY_XLU_DISP++, D_06000730);
+            gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000730);
         }
         Matrix_StatePop();
     } else {
@@ -665,24 +652,24 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
 
     if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_780)) {
         func_8012C2DC(globalCtx->state.gfxCtx);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000E40));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_water_effect_Matanimheader_000E40));
         Matrix_Scale(this->unk_DC8[3].y, this->unk_DC8[3].z, this->unk_DC8[3].y, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E34);
-        gSPDisplayList(POLY_XLU_DISP++, D_06000A48);
+        gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000A48);
     }
 
     Matrix_StatePop();
 
     if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_780)) {
         func_8012C2DC(globalCtx->state.gfxCtx);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000E58));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_water_effect_Matanimheader_000E58));
         Matrix_Scale(this->unk_DC8[4].y, this->unk_DC8[4].z, this->unk_DC8[4].y, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E38);
-        gSPDisplayList(POLY_XLU_DISP++, D_06000CD8);
+        gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000CD8);
     }
 
     if (this->actor.params == ENWATEREFFECT_777) {
@@ -695,7 +682,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
 
                     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_0408DBE0));
                     gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
-                    gSPDisplayList(POLY_XLU_DISP++, D_06004260);
+                    gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                     phi_s4++;
                 }
 
@@ -708,7 +695,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_060042F8);
+                gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
             }
         }
     }
