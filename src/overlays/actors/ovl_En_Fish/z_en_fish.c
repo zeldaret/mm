@@ -143,20 +143,20 @@ void func_8091D904(EnFish* this) {
 }
 
 Actor* func_8091D944(EnFish* this, GlobalContext* globalCtx) {
-    f32 dist;
+    f32 distSq;
     Actor* retActor = NULL;
-    f32 minDist = FLT_MAX;
+    f32 minDistSq = FLT_MAX;
     Actor* foundActor = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
 
     while (foundActor != NULL) {
         if ((foundActor->id == ACTOR_EN_FISH) && (foundActor->params == ENFISH_2) &&
             (foundActor->room == this->actor.room)) {
-            dist = Math3D_DistanceSquared(&foundActor->world.pos, &this->actor.world.pos);
+            distSq = Math3D_Vec3fDistSq(&foundActor->world.pos, &this->actor.world.pos);
             if (retActor == NULL) {
                 retActor = foundActor;
-                minDist = dist;
-            } else if (dist < minDist) {
-                minDist = dist;
+                minDistSq = distSq;
+            } else if (distSq < minDistSq) {
+                minDistSq = distSq;
             }
         }
         foundActor = foundActor->next;
@@ -249,7 +249,7 @@ s32 func_8091DDF4(EnFish* this, GlobalContext* globalCtx) {
         sp1C.y = player->actor.world.pos.y;
         sp1C.z = (Math_CosS(BINANG_ROT180(this->actor.yawTowardsPlayer)) * 30.0f) + player->actor.world.pos.z;
 
-        if (func_8091D630(&sp1C, &this->actor.world.pos) <= 900.0f) {
+        if (func_8091D630(&sp1C, &this->actor.world.pos) <= SQ(30.0f)) {
             return true;
         }
     }
@@ -296,11 +296,7 @@ void func_8091DF68(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_8091E070(EnFish* this) {
-    static s16 D_8091FAD4[] = {
-        20,
-        30,
-        40,
-    };
+    static s16 D_8091FAD4[] = { 20, 30, 40 };
     s16 phi_a1;
 
     this->actor.gravity = 0.0f;
@@ -331,7 +327,7 @@ void func_8091E128(Actor* thisx, GlobalContext* globalCtx) {
     func_8091DD48(this);
     Math_SmoothStepToF(&thisx->speedXZ, 1.8f, 0.08f, 0.4f, 0.0f);
 
-    if ((func_8091D630(&thisx->world.pos, &thisx->home.pos) > 6400.0f) || (this->unk_240 < 4)) {
+    if ((func_8091D630(&thisx->world.pos, &thisx->home.pos) > SQ(80.0f)) || (this->unk_240 < 4)) {
         this->unk_270 = this->unk_264;
         this->unk_26A = Math_Vec3f_Yaw(&thisx->world.pos, &thisx->home.pos);
         this->unk_24C = 1.0f;
@@ -382,7 +378,7 @@ void func_8091E34C(Actor* thisx, GlobalContext* globalCtx2) {
     func_8091DD48(this);
     Math_SmoothStepToF(&thisx->speedXZ, 4.2f, 0.08f, 1.4f, 0.0f);
 
-    if (func_8091D630(&thisx->world.pos, &thisx->home.pos) > 25600.0f) {
+    if (func_8091D630(&thisx->world.pos, &thisx->home.pos) > SQ(160.0f)) {
         this->unk_270 = this->unk_264;
         this->unk_26A = Math_Vec3f_Yaw(&thisx->world.pos, &thisx->home.pos);
         this->unk_24C = 0.8f;
@@ -457,7 +453,7 @@ void func_8091E658(Actor* thisx, GlobalContext* globalCtx) {
     func_8091DD48(this);
     Math_SmoothStepToF(&thisx->speedXZ, 1.8f, 0.1f, 0.5f, 0.0f);
 
-    if (func_8091D630(&thisx->world.pos, &thisx->home.pos) > 6400.0f) {
+    if (func_8091D630(&thisx->world.pos, &thisx->home.pos) > SQ(80.0f)) {
         this->unk_270 = this->unk_264;
         this->unk_26A = Math_Vec3f_Yaw(&thisx->world.pos, &thisx->home.pos);
         this->unk_24C = 1.0f;
@@ -806,7 +802,7 @@ void func_8091F3BC(Actor* thisx, GlobalContext* globalCtx) {
     Math_SmoothStepToF(&this->actor.speedXZ, sp3C->x, sp3C->y, sp3C->z, 0.0f);
     this->unk_24C = 0.0f;
 
-    if (func_8091D630(&this->actor.world.pos, &this->actor.home.pos) > 225.0f) {
+    if (func_8091D630(&this->actor.world.pos, &this->actor.home.pos) > SQ(15.0f)) {
         this->unk_26A = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos);
         this->unk_270 = 0x85;
         phi_f0 = 0.4f;
