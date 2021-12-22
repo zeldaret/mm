@@ -159,7 +159,7 @@ void func_80BE887C(EnBaisen* this, GlobalContext* globalCtx) {
             if (gSaveContext.weekEventReg[60] & 8) {
                 this->textIdIndex = 1;
             }
-            if (Player_GetMask(globalCtx) == PLAYER_MASK_COUPLES_MASK) {
+            if (Player_GetMask(globalCtx) == PLAYER_MASK_COUPLE) {
                 this->textIdIndex = 6;
             }
             if (this->unk2AC == 1) {

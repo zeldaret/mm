@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #define ANIM_INTERP 1
@@ -473,7 +474,7 @@ void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* joi
 }
 
 void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDraw unkDraw,
+                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw,
                    Actor* actor, Mtx** mtx) {
     StandardLimb* limb;
     Gfx* newDList;
@@ -537,7 +538,7 @@ void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec
 }
 
 void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDraw unkDraw,
+                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw,
                    Actor* actor) {
     StandardLimb* rootLimb;
     s32 pad;

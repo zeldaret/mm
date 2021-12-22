@@ -1,0 +1,7 @@
+﻿<Root>
+    <File Name="object_gi_ki_tan_mask" Segment="6">
+        <Texture Name="object_gi_ki_tan_mask_Tex_000000" OutName="tex_000000" Format="ia8" Width="8" Height="32" Offset="0x0" />
+        <DList Name="object_gi_ki_tan_mask_DL_000AC0" Offset="0xAC0" />
+        <DList Name="object_gi_ki_tan_mask_DL_000D50" Offset="0xD50" />
+    </File>
+</Root>

@@ -1,7 +1,7 @@
 /*
- * File z_en_akindonuts.c
+ * File: z_en_akindonuts.c
  * Overlay: ovl_En_Akindonuts
- * Description: Woodfall - Business Scrub
+ * Description: Trade quest Business Scrubs
  */
 
 #include "z_en_akindonuts.h"

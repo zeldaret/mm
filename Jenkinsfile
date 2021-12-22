@@ -52,9 +52,9 @@ pipeline {
             }
             steps {
                 sh 'mkdir reports'
-                sh 'python3 ./tools/progress.py csv >> reports/progress_mm.us.rev1.csv'
-                sh 'python3 ./tools/progress.py csv -m >> reports/progress_matching_mm.us.rev1.csv'
-                sh 'python3 ./tools/progress.py shield-json > reports/progress_shield_mm.us.rev1.json'
+                sh 'python3 ./tools/progress.py csv >> reports/progress-mm-nonmatching.csv'
+                sh 'python3 ./tools/progress.py csv -m >> reports/progress-mm-matching.csv'
+                sh 'python3 ./tools/progress.py shield-json > reports/progress-mm-shield.json'
                 stash includes: 'reports/*', name: 'reports'
             }
         }
@@ -67,9 +67,9 @@ pipeline {
             }
             steps {
                 unstash 'reports'
-                sh 'cat reports/progress_mm.us.rev1.csv >> /var/www/html/reports/progress_mm.us.rev1.csv'
-                sh 'cat reports/progress_matching_mm.us.rev1.csv >> /var/www/html/reports/progress_matching_mm.us.rev1.csv'
-                sh 'cat reports/progress_shield_mm.us.rev1.json > /var/www/html/reports/progress_shield_mm.us.rev1.json'
+                sh 'cat reports/progress-mm-nonmatching.csv >> /var/www/zelda64.dev/assets/csv/progress-mm-nonmatching.csv'
+                sh 'cat reports/progress-mm-matching.csv >> /var/www/zelda64.dev/assets/csv/progress-mm-matching.csv'
+                sh 'cat reports/progress-mm-shield.json > /var/www/zelda64.dev/assets/csv/progress-mm-shield.json'
             }
         }
     }
