@@ -5,6 +5,7 @@
  */
 
 #include "z_en_zog.h"
+#include "objects/object_zog/object_zog.h"
 
 #define FLAGS 0x00000009
 
@@ -29,45 +30,6 @@ void func_80B94D0C(EnZog* this, GlobalContext* globalCtx);
 void func_80B94E34(EnZog* this, GlobalContext* globalCtx);
 void func_80B95128(EnZog* this, GlobalContext* globalCtx);
 void func_80B95240(EnZog* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06001000;
-extern AnimationHeader D_06001970;
-extern AnimationHeader D_06002344;
-extern AnimationHeader D_06002894;
-extern AnimationHeader D_060030E0;
-extern AnimationHeader D_060037F8;
-extern AnimationHeader D_060041D0;
-extern AnimationHeader D_06004BDC;
-extern AnimationHeader D_060055B4;
-extern AnimationHeader D_06008EB8;
-extern AnimationHeader D_0600931C;
-extern AnimationHeader D_060099A4;
-extern AnimationHeader D_06009EC4;
-extern AnimationHeader D_0600B01C;
-extern AnimationHeader D_0600BF38;
-extern AnimationHeader D_0600CA94;
-extern AnimationHeader D_0600ECBC;
-extern AnimationHeader D_0600F110;
-extern AnimationHeader D_0600FC0C;
-extern AnimationHeader D_060106B0;
-extern AnimationHeader D_06014B10;
-extern AnimationHeader D_0601579C;
-extern AnimationHeader D_06015B80;
-extern AnimationHeader D_060166F4;
-extern AnimationHeader D_06017170;
-extern AnimationHeader D_06018600;
-extern AnimationHeader D_0601A06C;
-extern AnimationHeader D_0601A990;
-extern AnimationHeader D_0601AD58;
-extern AnimationHeader D_0601B72C;
-extern AnimationHeader D_0601BC88;
-extern UNK_TYPE D_06024750;
-extern UNK_TYPE D_06024F50;
-extern UNK_TYPE D_06025750;
-extern UNK_TYPE D_06025F50;
-extern UNK_TYPE D_06026750;
-extern Gfx D_060280A8[];
-extern FlexSkeletonHeader D_06029170;
 
 static u8 D_80B95E10;
 
@@ -103,66 +65,33 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-static UNK_PTR D_80B958AC[3] = { &D_06024750, &D_06024F50, &D_06025750 };
-static UNK_PTR D_80B958B8[2] = { &D_06025F50, &D_06026750 };
-
+static TexturePtr D_80B958AC[] = { &object_zog_Tex_024750, &object_zog_Tex_024F50, &object_zog_Tex_025750 };
+static TexturePtr D_80B958B8[] = { &object_zog_Tex_025F50, &object_zog_Tex_026750 };
 static AnimationHeader* D_80B958C0[] = {
-    &D_0600FC0C, &D_060106B0, &D_060166F4, &D_06017170, &D_06014B10, &D_06018600, &D_0601A06C,
+    &object_zog_Anim_00FC0C, &object_zog_Anim_0106B0, &object_zog_Anim_0166F4, &object_zog_Anim_017170,
+    &object_zog_Anim_014B10, &object_zog_Anim_018600, &object_zog_Anim_01A06C,
 };
-
-static AnimationHeader* D_80B958DC[2] = { &D_0600CA94, &D_0600F110 };
-
-static AnimationHeader* D_80B958E4[] = { &D_0601579C, &D_06015B80, &D_0600ECBC };
-static AnimationHeader* D_80B958F0[] = { &D_06008EB8, &D_060099A4 };
-static AnimationHeader* D_80B958F8[] = { &D_0600931C, &D_06009EC4, &D_0600B01C };
-static AnimationHeader* D_80B95904[] = { &D_0600BF38, &D_0601A990, &D_0601AD58, &D_0601B72C, &D_0601BC88 };
-static AnimationHeader* D_80B95918 = &D_06001000;
-static AnimationHeader* D_80B9591C = &D_06001970;
-static AnimationHeader* D_80B95920 = &D_06002344;
-static AnimationHeader* D_80B95924 = &D_06002894;
-static AnimationHeader* D_80B95928 = &D_060030E0;
-static AnimationHeader* D_80B9592C = &D_060037F8;
-static AnimationHeader* D_80B95930 = &D_060041D0;
-static AnimationHeader* D_80B95934 = &D_06004BDC;
-static AnimationHeader* D_80B95938 = &D_060055B4;
-
-static s16 D_80B9593C[] = {
-    0,
-    1,
-    2,
-    3,
-};
-
-static s16 D_80B95944[] = {
-    4,
-    5,
-};
-
-static s16 D_80B95948[] = {
-    5,
-    6,
-    7,
-    0,
-};
-
-static s16 D_80B95950[] = {
-    7, 8, 9, 10, 7, 11, 12, 13, 14, 15, 12, 13, 14, 15, 12, 16, 17, 0,
-};
-
-static s16* D_80B95974[] = {
-    D_80B9593C,
-    D_80B95944,
-    D_80B95948,
-    D_80B95950,
-};
-
-static s16 D_80B95984[] = {
-    4,
-    2,
-    3,
-    17,
-};
-
+static AnimationHeader* D_80B958DC[] = { &object_zog_Anim_00CA94, &object_zog_Anim_00F110 };
+static AnimationHeader* D_80B958E4[] = { &object_zog_Anim_01579C, &object_zog_Anim_015B80, &object_zog_Anim_00ECBC };
+static AnimationHeader* D_80B958F0[] = { &object_zog_Anim_008EB8, &object_zog_Anim_0099A4 };
+static AnimationHeader* D_80B958F8[] = { &object_zog_Anim_00931C, &object_zog_Anim_009EC4, &object_zog_Anim_00B01C };
+static AnimationHeader* D_80B95904[] = { &object_zog_Anim_00BF38, &object_zog_Anim_01A990, &object_zog_Anim_01AD58,
+                                         &object_zog_Anim_01B72C, &object_zog_Anim_01BC88 };
+static AnimationHeader* D_80B95918 = &object_zog_Anim_001000;
+static AnimationHeader* D_80B9591C = &object_zog_Anim_001970;
+static AnimationHeader* D_80B95920 = &object_zog_Anim_002344;
+static AnimationHeader* D_80B95924 = &object_zog_Anim_002894;
+static AnimationHeader* D_80B95928 = &object_zog_Anim_0030E0;
+static AnimationHeader* D_80B9592C = &object_zog_Anim_0037F8;
+static AnimationHeader* D_80B95930 = &object_zog_Anim_0041D0;
+static AnimationHeader* D_80B95934 = &object_zog_Anim_004BDC;
+static AnimationHeader* D_80B95938 = &object_zog_Anim_0055B4;
+static s16 D_80B9593C[] = { 0, 1, 2, 3 };
+static s16 D_80B95944[] = { 4, 5 };
+static s16 D_80B95948[] = { 5, 6, 7, 0 };
+static s16 D_80B95950[] = { 7, 8, 9, 10, 7, 11, 12, 13, 14, 15, 12, 13, 14, 15, 12, 16, 17, 0 };
+static s16* D_80B95974[] = { D_80B9593C, D_80B95944, D_80B95948, D_80B95950 };
+static s16 D_80B95984[] = { 4, 2, 3, 17 };
 static Vec3f D_80B9598C = { 0.0f, -0.05f, 0.0f };
 static Vec3f D_80B95998 = { 0.0f, -0.025f, 0.0f };
 static Color_RGBA8 D_80B959A4 = { 220, 220, 255, 255 };
@@ -241,8 +170,9 @@ void EnZog_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80B95128;
     this->actor.textId = 0x1004;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06029170, &D_0600FC0C, this->jointTable, this->morphTable, 23);
-    Animation_PlayOnce(&this->skelAnime, &D_0600FC0C);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zog_Skel_029170, &object_zog_Anim_00FC0C, this->jointTable,
+                       this->morphTable, 23);
+    Animation_PlayOnce(&this->skelAnime, &object_zog_Anim_00FC0C);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
@@ -908,7 +838,7 @@ void func_80B94E34(EnZog* this, GlobalContext* globalCtx) {
             sp38.x += randPlusMinusPoint5Scaled(30.0f);
             sp38.y += 20.0f;
             sp38.z += randPlusMinusPoint5Scaled(30.0f);
-            if (func_800CA1AC(globalCtx, &globalCtx->colCtx, sp38.x, sp38.z, &sp38.y, &sp44) &&
+            if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, sp38.x, sp38.z, &sp38.y, &sp44) &&
                 (this->actor.world.pos.y < sp38.y)) {
                 EffectSsGSplash_Spawn(globalCtx, &sp38, NULL, NULL, 1,
                                       Rand_ZeroFloat(this->actor.speedXZ * 40.0f) + (this->actor.speedXZ * 60.0f));
@@ -1055,7 +985,7 @@ void func_80B954C4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     if ((this->unk_30A & 2) && (limbIndex == 17)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        gSPDisplayList(POLY_OPA_DISP++, D_060280A8);
+        gSPDisplayList(POLY_OPA_DISP++, object_zog_DL_0280A8);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
@@ -1076,7 +1006,7 @@ void func_80B95598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 
     if ((this->unk_30A & 2) && (limbIndex == 17)) {
-        gSPDisplayList((*gfx)++, D_060280A8);
+        gSPDisplayList((*gfx)++, object_zog_DL_0280A8);
     }
 }
 
