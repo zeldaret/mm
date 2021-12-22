@@ -1,5 +1,5 @@
 /*
- * File z_elf_msg6.c
+ * File: z_elf_msg6.c
  * Overlay: ovl_Elf_Msg6
  * Description: Tatl Hint (another proximity-activated C-up hint?)
  */

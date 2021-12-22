@@ -34,7 +34,7 @@ typedef struct EnFirefly {
     /* 0x2F4 */ u32 unk_2F4;
     /* 0x2F8 */ Vec3f unk_2F8;
     /* 0x304 */ Vec3f unk_304;
-    /* 0x304 */ Vec3f unk_310;
+    /* 0x310 */ Vec3f unk_310;
     /* 0x31C */ ColliderSphere collider;
 } EnFirefly; // size = 0x374
 

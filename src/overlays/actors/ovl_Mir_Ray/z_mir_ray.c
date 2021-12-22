@@ -1,7 +1,7 @@
 /*
  * File: z_mir_ray.c
  * Overlay: ovl_Mir_Ray
- * Description: Mirror Shield Face & Light Ray
+ * Description: Reflectible light ray (unused, somewhat broken)
  */
 
 #include "z_mir_ray.h"

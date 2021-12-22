@@ -264,7 +264,7 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
                 return 0x688;
             case PLAYER_MASK_BLAST:
                 return 0x689;
-            case PLAYER_MASK_KAFEI:
+            case PLAYER_MASK_KAFEIS_MASK:
                 return 0x68A;
         }
     } else if (this->shopType == ZORA_SHOP) {
@@ -1695,7 +1695,7 @@ void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1_DrawStickDirectionPrompt(globalCtx, this);
     frames = globalCtx->gameplayFrames;
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08,
