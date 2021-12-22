@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kanban.h"
+#include "objects/object_kanban/object_kanban.h"
 
 #define FLAGS 0x00000019
 
@@ -16,19 +17,6 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 extern Gfx D_0405AED0[];
-extern Gfx D_06000C30[];
-extern Gfx D_06000CB0[];
-extern Gfx D_06000DB8[];
-extern Gfx D_06000E78[];
-extern Gfx D_06000F38[];
-extern Gfx D_06000FF8[];
-extern Gfx D_060010B8[];
-extern Gfx D_060011C0[];
-extern Gfx D_060012C8[];
-extern Gfx D_060013D0[];
-extern Gfx D_06001488[];
-extern Gfx D_06001540[];
-extern Gfx D_06001630[];
 
 const ActorInit En_Kanban_InitVars = {
     ACTOR_EN_KANBAN,
@@ -904,11 +892,12 @@ static Color_RGBA8 D_8095754C = { 255, 255, 255, 255 };
 #endif
 
 static Gfx* sDisplayLists[] = {
-    D_06000CB0, D_06000DB8, D_06000E78, D_06000F38, D_06000FF8, D_060010B8,
-    D_060011C0, D_060012C8, D_060013D0, D_06001488, D_06001540,
+    object_kanban_DL_000CB0, object_kanban_DL_000DB8, object_kanban_DL_000E78, object_kanban_DL_000F38,
+    object_kanban_DL_000FF8, object_kanban_DL_0010B8, object_kanban_DL_0011C0, object_kanban_DL_0012C8,
+    object_kanban_DL_0013D0, object_kanban_DL_001488, object_kanban_DL_001540,
 };
 
-#include "z_en_kanban_gfx.h"
+#include "z_en_kanban_gfx.c"
 
 static f32 sCutAngles[] = {
     /* CUT_POST   */ 0.50f * M_PI,
@@ -936,7 +925,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    gSPDisplayList(POLY_OPA_DISP++, D_06000C30);
+    gSPDisplayList(POLY_OPA_DISP++, object_kanban_DL_000C30);
 
     if (this->actionState != ENKANBAN_SIGN) {
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
@@ -997,7 +986,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 150, 0);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_06001630);
+            gSPDisplayList(POLY_XLU_DISP++, object_kanban_DL_001630);
         }
     }
 
