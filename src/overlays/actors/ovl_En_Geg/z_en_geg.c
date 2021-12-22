@@ -6,6 +6,9 @@
 
 #include "z_en_geg.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "objects/object_oF1d_map/object_oF1d_map.h"
+#include "objects/object_taisou/object_taisou.h"
+#include "objects/object_hakugin_demo/object_hakugin_demo.h"
 
 #define FLAGS 0x00000019
 
@@ -31,31 +34,6 @@ void func_80BB31B8(EnGeg* this, GlobalContext* globalCtx);
 void func_80BB32AC(EnGeg* this, GlobalContext* globalCtx);
 void func_80BB3318(EnGeg* this, GlobalContext* globalCtx);
 void func_80BB347C(EnGeg* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060016C8;
-extern AnimationHeader D_06002704;
-extern AnimationHeader D_0600283C;
-extern AnimationHeader D_06002C48;
-extern AnimationHeader D_060031D8;
-extern AnimationHeader D_06003378;
-extern AnimationHeader D_06003650;
-extern AnimationHeader D_060039D8;
-extern AnimationHeader D_06003E28;
-extern Gfx D_06004DB0[];
-extern AnimationHeader D_06004DD4;
-extern AnimationHeader D_06005790;
-extern AnimationHeader D_06005EE0;
-extern AnimationHeader D_06007764;
-extern Gfx D_060091A8[];
-extern UNK_TYPE D_06010438;
-extern UNK_TYPE D_06010838;
-extern UNK_TYPE D_06010C38;
-extern UNK_TYPE D_06011038;
-extern FlexSkeletonHeader D_06011AC8;
-extern AnimationHeader D_06011D98;
-extern AnimationHeader D_06012DE0;
-extern AnimationHeader D_060135E8;
-extern AnimationHeader D_06014CE0;
 
 const ActorInit En_Geg_InitVars = {
     ACTOR_EN_GEG,
@@ -147,13 +125,17 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06011D98, 1.0f, 0, -1, 0, 0 },  { &D_06011D98, 1.0f, 0, -1, 0, -4 },  { &D_06012DE0, 2.0f, 0, -1, 2, 0 },
-    { &D_06012DE0, 2.0f, 0, -1, 2, -4 }, { &D_06012DE0, -2.0f, 0, -1, 2, -4 }, { &D_06003E28, 1.0f, 0, -1, 0, 0 },
-    { &D_06003E28, 1.0f, 0, -1, 0, -4 }, { &D_060039D8, 1.0f, 0, -1, 2, -4 },  { &D_060016C8, 1.0f, 0, -1, 0, 0 },
-    { &D_06004DD4, 1.0f, 0, -1, 0, 0 },  { &D_0600283C, 1.0f, 0, -1, 0, 0 },   { &D_06007764, 1.0f, 0, -1, 0, 0 },
-    { &D_06005EE0, 1.0f, 0, -1, 0, 0 },  { &D_06002C48, 1.0f, 0, -1, 0, 0 },   { &D_060031D8, 1.0f, 0, -1, 0, 0 },
-    { &D_06005790, 1.0f, 0, -1, 0, 0 },  { &D_06003650, 1.0f, 0, -1, 0, 0 },   { &D_06002704, 1.0f, 0, -1, 2, 0 },
-    { &D_06003378, 1.0f, 0, -1, 0, -4 }, { &D_060135E8, 1.0f, 0, -1, 2, 0 },   { &D_06014CE0, 1.0f, 0, -1, 0, 0 },
+    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, 0, 0 },      { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, 0, -4 },
+    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, 0 },      { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, -4 },
+    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, 2, -4 },    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, 0, 0 },
+    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, 0, -4 },     { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, 2, -4 },
+    { &object_taisou_Anim_0016C8, 1.0f, 0, -1, 0, 0 },        { &object_taisou_Anim_004DD4, 1.0f, 0, -1, 0, 0 },
+    { &object_taisou_Anim_00283C, 1.0f, 0, -1, 0, 0 },        { &object_taisou_Anim_007764, 1.0f, 0, -1, 0, 0 },
+    { &object_taisou_Anim_005EE0, 1.0f, 0, -1, 0, 0 },        { &object_taisou_Anim_002C48, 1.0f, 0, -1, 0, 0 },
+    { &object_taisou_Anim_0031D8, 1.0f, 0, -1, 0, 0 },        { &object_taisou_Anim_005790, 1.0f, 0, -1, 0, 0 },
+    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, 0, 0 },      { &object_hakugin_demo_Anim_002704, 1.0f, 0, -1, 2, 0 },
+    { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, 0, -4 }, { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, 2, 0 },
+    { &object_oF1d_map_Anim_014CE0, 1.0f, 0, -1, 0, 0 },
 };
 
 u16 func_80BB16D0(EnGeg* this) {
@@ -875,7 +857,8 @@ void EnGeg_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011AC8, &D_06012DE0, this->jointTable, this->morphTable, 18);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, &object_oF1d_map_Anim_012DE0,
+                       this->jointTable, this->morphTable, 18);
 
     Collider_InitCylinder(globalCtx, &this->colliderCylinder);
     Collider_SetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -962,7 +945,7 @@ void EnGeg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            gSPDisplayList(POLY_OPA_DISP++, D_06004DB0);
+            gSPDisplayList(POLY_OPA_DISP++, object_oF1d_map_DL_004DB0);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
@@ -1042,11 +1025,11 @@ void EnGeg_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void func_80BB3BE0(EnGeg* this, GlobalContext* globalCtx) {
-    static UNK_PTR D_80BB4088[] = {
-        &D_06010438,
-        &D_06010C38,
-        &D_06011038,
-        &D_06010838,
+    static TexturePtr D_80BB4088[] = {
+        &object_oF1d_map_Tex_010438,
+        &object_oF1d_map_Tex_010C38,
+        &object_oF1d_map_Tex_011038,
+        &object_oF1d_map_Tex_010838,
     };
     s32 pad;
 
@@ -1079,7 +1062,7 @@ void func_80BB3CB4(EnGeg* this, GlobalContext* globalCtx) {
     Matrix_InsertXRotation_s(sp24, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_060091A8);
+    gSPDisplayList(POLY_OPA_DISP++, object_oF1d_map_DL_0091A8);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
