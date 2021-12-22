@@ -137,7 +137,36 @@ UNK_TYPE func_80BC0C80(EnNb* this, GlobalContext* globalCtx, u8* arg2);
 void func_80BC0D1C(EnNb* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC0D1C.s")
 
+extern UNK_TYPE D_80BC13F0[];
+
+#ifdef NON_MATCHING
+void func_80BC0D84(EnNb* this, GlobalContext* globalCtx) {
+    s32 pad;
+    struct_80133038_arg2 sp20;
+
+    this->unk_280 = gSaveContext.unk_14 + gGameInfo->data[0xF];
+
+    if (gSaveContext.eventInf[4] & 8) {
+        sp20.unk0 = 1;
+        func_80BC0C80(this, globalCtx, &sp20);
+        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.flags |= 1;
+    } else if ((func_80133038(globalCtx, D_80BC13F0, &sp20) == 0) || ((sp20.unk0 != this->unk_1DC) && (func_80BC0C80(this, globalCtx, &sp20) == 0))) {
+        this->actor.shape.shadowDraw = NULL;
+        this->actor.flags &= ~1;
+        sp20.unk0 = 0;
+    } else {
+        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.flags |= 1;
+    }
+
+    this->unk_1DC = sp20.unk0;
+    this->unk_1E8 = func_80BBFF90(this, globalCtx);
+    func_80BC0D1C(this, globalCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC0D84.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC0EAC.s")
 
