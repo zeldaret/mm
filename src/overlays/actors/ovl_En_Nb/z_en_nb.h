@@ -23,7 +23,12 @@ typedef struct EnNb {
     /* 0x202 */ Vec3s jointTable[8];
     /* 0x232 */ Vec3s morphTable[8];
     /* 0x262 */ u16 unk_262;
-    /* 0x264 */ char unk_264[0x28];
+    /* 0x264 */ char unk_264[0x04];
+    /* 0x268 */ f32 unk_268;
+    /* 0x26C */ f32 unk_26C;
+    /* 0x270 */ f32 unk_270;
+    /* 0x274 */ f32 unk_274;
+    /* 0x278 */ char unk_278[0x14];
     /* 0x28C */ EnNbActionFunc2 unk_28C;
     /* 0x290 */ s32 unk_290;
     /* 0x294 */ char unk_294[0x8];

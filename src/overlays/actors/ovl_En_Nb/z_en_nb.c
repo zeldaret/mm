@@ -152,7 +152,22 @@ void EnNb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     globalCtx->interfaceCtx.unk_31A = 3;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/EnNb_Update.s")
+void EnNb_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnNb* this = THIS;
+
+    func_80BC04FC(this, globalCtx);
+    this->actionFunc(this, globalCtx);
+    func_80BC0A18(this, globalCtx);
+
+    if (this->unk_1DC != 0) {
+        func_80BBFE60(this);
+        func_80BC0800(this);
+        if (Actor_IsActorFacingLink(&this->actor, 0x38E0)) {
+            func_8013C964(&this->actor, globalCtx, this->unk_274, 30.0f, 0, this->unk_262 & 7);
+        }
+        func_80BBFF24(this, globalCtx);
+    }
+}
 
 // OverrideLimbDraw
 s32 func_80BC1174(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
