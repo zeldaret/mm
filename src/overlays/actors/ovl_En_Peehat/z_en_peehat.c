@@ -790,7 +790,7 @@ void EnPeehat_Update(Actor* thisx, GlobalContext* globalCtx2) {
         if (thisx->params == 0) {
             Vec3f sp74;
             CollisionPoly* sp70;
-            u32 sp6C;
+            s32 sp6C;
             s32 i;
 
             sp70 = NULL;
