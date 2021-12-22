@@ -16,7 +16,7 @@ typedef struct EnNb {
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ u8 unk_1DC;
     /* 0x1DD */ char unk_1DD[0x3];
-    /* 0x1E0 */ void* unk_1E0;
+    /* 0x1E0 */ UNK_PTR unk_1E0;
     /* 0x1E4 */ s32 unk_1E4;
     /* 0x1E8 */ Actor* unk_1E8;
     /* 0x1EC */ char unk_1EC[0x04];

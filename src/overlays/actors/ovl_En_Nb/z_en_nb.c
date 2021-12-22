@@ -24,7 +24,141 @@ void func_80BC0978(EnNb* this, GlobalContext* globalCtx);
 s32 func_80BC00AC(EnNb* this, GlobalContext* globalCtx);
 s32 func_80BC01DC(EnNb* this, GlobalContext* globalCtx);
 
-#if 0
+
+s32 D_80BC13F0 [] = {
+    0x0C00031D,
+    0x0A00610A,
+    0x02060012,
+    0x00010504,
+    0x00030A00,
+    0x100A0212,
+    0x00060001,
+    0x05040004,
+    0x050A0061,
+    0x4D0C0001,
+    0x1E020800,
+    0x0C001502,
+    0x0C000C0F,
+    0x0C020C0F,
+    0x12000304,
+    0x00030400,
+    0x01040002,
+    0x04000100,
+    0x32200C02,
+    0x08001200,
+    0x03040003,
+    0x04000102,
+    0x08000C00,
+    0x13020C00,
+    0x0C0F0B02,
+    0x0C0F1200,
+    0x03040003,
+    0x09010902,
+    0x09010500,
+};
+
+s32 D_80BC1464[] = {
+    0x1B040800,
+    0x6A0A0010,
+    0x00080010,
+    0x00080000,
+    0x00080E29,
+    0x122D000E,
+    0x0C100E29,
+    0x012D000E,
+    0x0C100E29,
+    0x020C0F29,
+    0x030C0500,
+    0x00000600,
+    0x22312D00,
+    0x0E121030,
+    0x1C04040E,
+    0x29040C20,
+    0x00030004,
+    0x150900C4,
+    0x0900000F,
+    0x29050C15,
+    0x0900B930,
+    0x1D04040E,
+    0x290B0C20,
+    0x00030004,
+    0x150900A8,
+    0x0900000F,
+    0x290C0C15,
+    0x09009D20,
+    0x00030017,
+    0x1B040400,
+    0x090E2911,
+    0x2D000E0C,
+    0x16100E29,
+    0x0A2D000E,
+    0x0C16101B,
+    0x0404003B,
+    0x0E290D0C,
+    0x05000000,
+    0x0A00000E,
+    0x29102D00,
+    0x0E0C1216,
+    0x100E290E,
+    0x00320400,
+    0x590C0F29,
+    0x0F0C1206,
+    0x000C0000,
+    0x13000C2F,
+    0x00002E2D,
+    0x002A2D00,
+    0x0E113204,
+    0x0C16100E,
+    0x29060C05,
+    0x000A0000,
+    0x00000E29,
+    0x072D000E,
+    0x0C121610,
+    0x0E290800,
+    0x3202001E,
+    0x0C0F2909,
+    0x0C120600,
+    0x0C000013,
+    0x000C2F00,
+    0x002E2D00,
+    0x292D000E,
+    0x1132020C,
+    0x16102D00,
+    0x0E0C1216,
+    0x10000000,
+};
+
+
+s32 D_80BC1574[] = {
+    0x0900000E,
+    0x28C70C09,
+    0x0000170E,
+    0x28C80C09,
+    0x0000180E,
+    0x28C90C09,
+    0x0000170E,
+    0x28CA0C09,
+    0x0000180E,
+    0x28CB0C09,
+    0x0000170E,
+    0x28CC0C09,
+    0x0000180E,
+    0x28CD0C09,
+    0x0000170E,
+    0x28CE0C09,
+    0x0000180E,
+    0x28CF2D00,
+    0x012D000E,
+    0x0C090000,
+    0x10000000,
+};
+
+
+s32 D_80BC15C8[] = {
+    0x0E23622D,
+    0x000E0C10,
+};
+
 const ActorInit En_Nb_InitVars = {
     ACTOR_EN_NB,
     ACTORCAT_NPC,
@@ -37,20 +171,24 @@ const ActorInit En_Nb_InitVars = {
     (ActorFunc)EnNb_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80BC15F0 = {
+
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_HIT1, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
     { 10, 68, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80BC161C = { 0, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-#endif
+ActorAnimationEntryS D_80BC1628[] = {
+    { (AnimationHeader* )0x6000990, 1.0f, 0, -1, 0, 0 },
+    { (AnimationHeader* )0x6000990, 1.0f, 0, -1, 0, -4 },
+    { (AnimationHeader* )0x6000290, 1.0f, 0, -1, 2, 0 },
+    { (AnimationHeader* )0x6000290, 1.0f, 0, -1, 0, -4 },
+    { (AnimationHeader* )0x600052C, 1.0f, 0, -1, 0, -4 },
+    { (AnimationHeader* )0x60006D4, 1.0f, 0, -1, 2, -4 },
+};
 
-extern ColliderCylinderInit D_80BC15F0;
-extern CollisionCheckInfoInit2 D_80BC161C;
 
 extern FlexSkeletonHeader D_06008C40;
 
@@ -81,8 +219,6 @@ void func_80BBFE60(EnNb* this) {
     this->skelAnime.playSpeed = this->unk_268;
     SkelAnime_Update(&this->skelAnime);
 }
-
-extern ActorAnimationEntryS D_80BC1628[];
 
 s32 func_80BBFE8C(EnNb* this, s32 arg1) {
     s32 phi_v1 = false;
@@ -261,10 +397,6 @@ s32 func_80BC01DC(EnNb* this, GlobalContext* globalCtx) {
     return sp2C;
 }
 
-extern UNK_TYPE D_80BC1574;
-extern UNK_TYPE D_80BC15C8;
-extern UNK_TYPE D_80BC1464;
-
 UNK_PTR func_80BC045C(EnNb* this, GlobalContext* globalCtx) {
     if (gSaveContext.eventInf[4] & 8) {
         this->unk_28C = func_80BC01DC;
@@ -340,7 +472,7 @@ void func_80BC06C4(EnNb* this) {
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
 
     if (this->unk_1E8->id == 0) {
-        player = this->unk_1E8;
+        player = (Player*)this->unk_1E8;
 
         sp40.y = player->bodyPartsPos[7].y + 3.0f;
     } else {
@@ -542,6 +674,7 @@ void func_80BC0D84(EnNb* this, GlobalContext* globalCtx) {
     func_80BC0D1C(this, globalCtx);
 }
 #else
+void func_80BC0D84(EnNb* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC0D84.s")
 #endif
 
@@ -572,8 +705,8 @@ void EnNb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_290 = -1;
     func_80BBFE8C(this, 0);
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80BC15F0);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80BC161C);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_262 = 0;
 
