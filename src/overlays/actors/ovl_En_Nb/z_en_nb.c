@@ -170,15 +170,64 @@ void EnNb_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // OverrideLimbDraw
-s32 func_80BC1174(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC1174.s")
+s32 func_80BC1174(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    if (limbIndex == 5) {
+        func_80BC05A8((EnNb* ) thisx, globalCtx);
+    }
+    return 0;
+}
 
 // PostLimbDraw
-void func_80BC11B4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC11B4.s")
+void func_80BC11B4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnNb* this = THIS;
+    Vec3f sp18;
+
+    if ((ActorCutscene_GetCurrentIndex() == -1) && (limbIndex == 5)) {
+        Matrix_MultiplyVector3fByState(&D_801D15B0, (Vec3f* ) &sp18);
+        Math_ApproachF(&thisx->focus.pos.x, sp18.x, 0.6f, 10000.0f);
+        Math_ApproachF(&thisx->focus.pos.y, sp18.y, 0.6f, 10000.0f);
+        Math_ApproachF(&thisx->focus.pos.z, sp18.z, 0.6f, 10000.0f);
+        Math_Vec3s_Copy(&thisx->focus.rot, &thisx->world.rot);
+    }
+}
 
 // UnkActorDraw
-void func_80BC1278(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC1278.s")
+void func_80BC1278(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+    EnNb* this = THIS;
+    s32 phi_v0;
+    s32 phi_v1;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/EnNb_Draw.s")
+    if (!(this->unk_262 & 0x400)) {
+        phi_v1 = false;
+        if (this->unk_262 & 0x100) {
+            phi_v1 = true;
+            phi_v0 = true;
+        } else {
+            phi_v0 = true;
+        }
+    } else {
+        phi_v1 = false;
+        phi_v0 = false;
+    }
+
+    if (limbIndex == 5) {
+        func_8013AD9C(this->unk_27C + 0x4000, this->unk_27E + this->actor.shape.rot.y + 0x4000, &this->unk_1F0, &this->unk_1FC, phi_v0, phi_v1);
+        Matrix_StatePop();
+        Matrix_InsertTranslation(this->unk_1F0, this->unk_1F4, this->unk_1F8, 0);
+        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
+        Matrix_RotateY(this->unk_1FC.y, 1);
+        Matrix_InsertXRotation_s(this->unk_1FC.x, 1);
+        Matrix_InsertZRotation_s(this->unk_1FC.z, 1);
+        Matrix_StatePush();
+    }
+}
+
+void EnNb_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnNb* this = THIS;
+
+    if (this->unk_1DC != 0) {
+        func_8012C5B0(globalCtx->state.gfxCtx);
+        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80BC1174, func_80BC11B4, func_80BC1278, &this->actor);
+    }
+}
+
