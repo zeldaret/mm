@@ -264,8 +264,8 @@ void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
 void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06001BA8);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06001BA8);
     Actor_SetScale(&this->dyna.actor, 0.08f);
     Collider_InitAndSetSphere(globalCtx, &this->collider1, &this->dyna.actor, &sCylinderInit1);
     Collider_InitAndSetSphere(globalCtx, &this->collider2, &this->dyna.actor, &sCylinderInit2);
@@ -275,7 +275,7 @@ void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjBell_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroySphere(globalCtx, &this->collider1);
     Collider_DestroySphere(globalCtx, &this->collider2);
 }

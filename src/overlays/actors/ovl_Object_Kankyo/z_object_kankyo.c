@@ -1,7 +1,7 @@
 /*
  * File: z_object_kankyo.c
  * Overlay: ovl_Object_Kankyo
- * Description:
+ * Description: Snow, rain in Skull Kid backstory cutscene, and bubbles deep in Pinnacle Rock
  */
 
 #include "z_object_kankyo.h"

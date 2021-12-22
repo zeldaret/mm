@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_gi_bottle_21" Segment="6">
+        <DList Name="object_gi_bottle_21_DL_000A50" Offset="0xA50" />
+        <DList Name="object_gi_bottle_21_DL_000E90" Offset="0xE90" />
+        <Texture Name="object_gi_bottle_21_Tex_000E98" OutName="tex_000E98" Format="i8" Width="16" Height="16" Offset="0xE98" />
+        <Texture Name="object_gi_bottle_21_Tex_000F98" OutName="tex_000F98" Format="i4" Width="96" Height="64" Offset="0xF98" />
+        <Texture Name="object_gi_bottle_21_Tex_001B98" OutName="tex_001B98" Format="i4" Width="16" Height="32" Offset="0x1B98" />
+    </File>
+</Root>

@@ -1,0 +1,13 @@
+﻿<Root>
+    <File Name="object_obj_chan" Segment="6">
+        <DList Name="object_obj_chan_DL_000A10" Offset="0xA10" />
+        <DList Name="object_obj_chan_DL_000AF0" Offset="0xAF0" />
+        <Texture Name="object_obj_chan_Tex_000D80" OutName="tex_000D80" Format="rgba16" Width="32" Height="32" Offset="0xD80" />
+        <Texture Name="object_obj_chan_Tex_001580" OutName="tex_001580" Format="rgba16" Width="32" Height="32" Offset="0x1580" />
+        <Texture Name="object_obj_chan_Tex_001D80" OutName="tex_001D80" Format="ia4" Width="16" Height="32" Offset="0x1D80" />
+        <Texture Name="object_obj_chan_Tex_001E80" OutName="tex_001E80" Format="i8" Width="32" Height="8" Offset="0x1E80" />
+        <DList Name="object_obj_chan_DL_002350" Offset="0x2350" />
+        <DList Name="object_obj_chan_DL_002358" Offset="0x2358" />
+        <Texture Name="object_obj_chan_Tex_0024F0" OutName="tex_0024F0" Format="rgba16" Width="32" Height="64" Offset="0x24F0" />
+    </File>
+</Root>
