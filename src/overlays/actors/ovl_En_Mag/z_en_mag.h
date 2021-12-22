@@ -5,11 +5,6 @@
 
 struct EnMag;
 
-// typedef struct EnMag {
-//     /* 0x00000 */ Actor actor;
-//     /* 0x00144 */ char unk_00144[0x11E34];
-// } EnMag; // size = 0x11F78
-
 typedef struct EnMag {
     /* 0x00000 */ Actor actor;
     /* 0x00144 */ char pad144[0x2C];
@@ -18,22 +13,20 @@ typedef struct EnMag {
     /* 0x11F00 */ s16 unk11F00;
     /* 0x11F02 */ s16 unk11F02;
     /* 0x11F04 */ s16 unk11F04;
-    /* 0x11F06 */ s16 unk11F06; // effectPrimLodFrac in OoT
-    /* 0x11F08 */ s16 unk11F08[3]; // This may be two arrays of 3: it is prim/env for effects
-    /* 0x11F08 */ s16 unk11F0E[3]; // This may be two arrays of 3: it is prim/env for effects
-    /* 0x11F14 */ s16 unk11F14; // effectAlpha in OoT
-    /* 0x11F16 */ s16 unk11F16;
-    /* 0x11F18 */ s16 unk11F18[3]; // Might be 2 arrays of 3: anothre prim/env
-    /* 0x11F18 */ s16 unk11F1E[3]; // Might be 2 arrays of 3: anothre prim/env
-    /* 0x11F24 */ s16 unk11F24;
-    /* 0x11F26 */ s16 unk11F26; // mainAlpha in OoT?
-    /* 0x11F28 */ s16 unk11F28[3]; // mmAlpha
-    // /* 0x11F2A */ s16 unk11F2A;
-    // /* 0x11F2C */ s16 unk11F2C;
-    /* 0x11F2E */ s16 unk11F2E; // mainAlpha in OoT?
-    /* 0x11F30 */ s16 unk11F30; // Alpha of flame effect mask
-    /* 0x11F32 */ s16 unk11F32;
-    /* 0x11F34 */ s16 unk11F34; // Copyright alpha etc.
+    /* 0x11F06 */ s16 majorasMaskEffectPrimLodFrac;
+    /* 0x11F08 */ s16 majorasMaskEffectPrimColor[3];
+    /* 0x11F08 */ s16 majorasMaskEffectEnvColor[3];
+    /* 0x11F14 */ s16 majorasMaskEffectAlpha;
+    /* 0x11F16 */ s16 zeldaEffectPrimLodFrac;
+    /* 0x11F18 */ s16 zeldaEffectPrimColor[3];
+    /* 0x11F18 */ s16 zeldaEffectEnvColor[3];
+    /* 0x11F24 */ s16 zeldaEffectAlpha;
+    /* 0x11F26 */ s16 majorasMaskAlpha;
+    /* 0x11F28 */ s16 majorasMaskEnvColor[3];
+    /* 0x11F2E */ s16 mainTitleAlpha;
+    /* 0x11F30 */ s16 subtitleAlpha;
+    /* 0x11F32 */ s16 unk11F32; // Set but not used, likely a spare alpha
+    /* 0x11F34 */ s16 copyrightAlpha;
     /* 0x11F36 */ s16 unk11F36[6];
     /* 0x11F42 */ char pad11F42[2];
     /* 0x11F44 */ s16 unk11F44[6];

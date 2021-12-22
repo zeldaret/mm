@@ -46,12 +46,6 @@ static s16 D_8096E958[] = { 255, 155 };
 static s16 D_8096E95C[] = { 255, 0 };
 static s16 D_8096E960[] = { 0, 155 };
 
-typedef struct {
-    /* 0 */ s16 r;
-    /* 2 */ s16 g;
-    /* 4 */ s16 b;
-} Color_RGB16; // size = 0x6
-
 void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMag* this = (EnMag*)thisx;
     u16 i;
@@ -64,28 +58,29 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk11F44[i] = 0;
     }
 
-    this->unk11F08[0] = 255;
-    this->unk11F08[1] = 155;
-    this->unk11F08[2] = 255;
-    this->unk11F0E[0] = 0;
-    this->unk11F0E[1] = 255;
-    this->unk11F0E[2] = 155;
+    this->majorasMaskEffectPrimColor[0] = 255;
+    this->majorasMaskEffectPrimColor[1] = 155;
+    this->majorasMaskEffectPrimColor[2] = 255;
+    this->majorasMaskEffectEnvColor[0] = 0;
+    this->majorasMaskEffectEnvColor[1] = 255;
+    this->majorasMaskEffectEnvColor[2] = 155;
 
-    this->unk11F06 = 20;
-    this->unk11F14 = 0;
+    this->majorasMaskEffectPrimLodFrac = 20;
+    this->majorasMaskEffectAlpha = 0;
 
-    this->unk11F18[0] = 255;
-    this->unk11F18[1] = 155;
-    this->unk11F18[2] = 255;
-    this->unk11F1E[0] = 0;
-    this->unk11F1E[1] = 255;
-    this->unk11F1E[2] = 155;
+    this->zeldaEffectPrimColor[0] = 255;
+    this->zeldaEffectPrimColor[1] = 155;
+    this->zeldaEffectPrimColor[2] = 255;
+    this->zeldaEffectEnvColor[0] = 0;
+    this->zeldaEffectEnvColor[1] = 255;
+    this->zeldaEffectEnvColor[2] = 155;
 
-    this->unk11F16 = 55;
+    this->zeldaEffectPrimLodFrac = 55;
 
-    this->unk11F24 = 0;
-    this->unk11F26 = 0;
-    this->unk11F28[0] = this->unk11F28[1] = this->unk11F28[2] = 255;
+    this->zeldaEffectAlpha = 0;
+    this->majorasMaskAlpha = 0;
+
+    this->majorasMaskEnvColor[0] = this->majorasMaskEnvColor[1] = this->majorasMaskEnvColor[2] = 255;
 
     this->mainTitleAlpha = this->subtitleAlpha = this->unk11F32 = this->copyrightAlpha = 0;
 
@@ -96,22 +91,26 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->mainTitleAlpha = 210;
         this->unk11F32 = 255;
         this->copyrightAlpha = 255;
-        this->unk11F06 = 100;
-        this->unk11F14 = 255;
-        this->unk11F08[0] = 255;
-        this->unk11F08[1] = 255;
-        this->unk11F08[2] = 255;
-        this->unk11F0E[0] = 0;
-        this->unk11F0E[1] = 255;
-        this->unk11F0E[2] = 155;
-        this->unk11F16 = 100;
-        this->unk11F24 = 255;
-        this->unk11F18[0] = 255;
-        this->unk11F18[1] = 255;
-        this->unk11F18[2] = 255;
-        this->unk11F1E[0] = 0;
-        this->unk11F1E[1] = 255;
-        this->unk11F1E[2] = 155;
+        this->majorasMaskEffectPrimLodFrac = 100;
+        this->majorasMaskEffectAlpha = 255;
+
+        this->majorasMaskEffectPrimColor[0] = 255;
+        this->majorasMaskEffectPrimColor[1] = 255;
+        this->majorasMaskEffectPrimColor[2] = 255;
+        this->majorasMaskEffectEnvColor[0] = 0;
+        this->majorasMaskEffectEnvColor[1] = 255;
+        this->majorasMaskEffectEnvColor[2] = 155;
+
+        this->zeldaEffectPrimLodFrac = 100;
+        this->zeldaEffectAlpha = 255;
+
+        this->zeldaEffectPrimColor[0] = 255;
+        this->zeldaEffectPrimColor[1] = 255;
+        this->zeldaEffectPrimColor[2] = 255;
+        this->zeldaEffectEnvColor[0] = 0;
+        this->zeldaEffectEnvColor[1] = 255;
+        this->zeldaEffectEnvColor[2] = 155;
+
         gSaveContext.unk_3F1E = 0;
         this->unk11F04 = 2;
         D_8096E910 = 20;
@@ -142,51 +141,51 @@ void func_8096B604(Actor* thisx) {
     EnMag* this = THIS;
     s16 temp_lo;
 
-    temp_lo = ABS_ALT(this->unk11F18[0] - D_8096E944[D_8096E918]) / D_8096E914;
-    if (this->unk11F18[0] >= D_8096E944[D_8096E918]) {
-        this->unk11F18[0] -= temp_lo;
+    temp_lo = ABS_ALT(this->zeldaEffectPrimColor[0] - D_8096E944[D_8096E918]) / D_8096E914;
+    if (this->zeldaEffectPrimColor[0] >= D_8096E944[D_8096E918]) {
+        this->zeldaEffectPrimColor[0] -= temp_lo;
     } else {
-        this->unk11F18[0] += temp_lo;
+        this->zeldaEffectPrimColor[0] += temp_lo;
     }
 
-    temp_lo = ABS_ALT(this->unk11F18[1] - D_8096E948[D_8096E918]) / D_8096E914;
-    if (this->unk11F18[1] >= D_8096E948[D_8096E918]) {
-        this->unk11F18[1] -= temp_lo;
+    temp_lo = ABS_ALT(this->zeldaEffectPrimColor[1] - D_8096E948[D_8096E918]) / D_8096E914;
+    if (this->zeldaEffectPrimColor[1] >= D_8096E948[D_8096E918]) {
+        this->zeldaEffectPrimColor[1] -= temp_lo;
     } else {
-        this->unk11F18[1] += temp_lo;
+        this->zeldaEffectPrimColor[1] += temp_lo;
     }
 
-    temp_lo = ABS_ALT(this->unk11F18[2] - D_8096E94C[D_8096E918]) / D_8096E914;
-    if (this->unk11F18[2] >= D_8096E94C[D_8096E918]) {
-        this->unk11F18[2] -= temp_lo;
+    temp_lo = ABS_ALT(this->zeldaEffectPrimColor[2] - D_8096E94C[D_8096E918]) / D_8096E914;
+    if (this->zeldaEffectPrimColor[2] >= D_8096E94C[D_8096E918]) {
+        this->zeldaEffectPrimColor[2] -= temp_lo;
     } else {
-        this->unk11F18[2] += temp_lo;
+        this->zeldaEffectPrimColor[2] += temp_lo;
     }
 
-    temp_lo = ABS_ALT(this->unk11F1E[0] - D_8096E950[D_8096E918]) / D_8096E914;
-    if (this->unk11F1E[0] >= D_8096E950[D_8096E918]) {
-        this->unk11F1E[0] -= temp_lo;
+    temp_lo = ABS_ALT(this->zeldaEffectEnvColor[0] - D_8096E950[D_8096E918]) / D_8096E914;
+    if (this->zeldaEffectEnvColor[0] >= D_8096E950[D_8096E918]) {
+        this->zeldaEffectEnvColor[0] -= temp_lo;
     } else {
-        this->unk11F1E[0] += temp_lo;
+        this->zeldaEffectEnvColor[0] += temp_lo;
     }
 
     // Skips 4
 
-    temp_lo = ABS_ALT(this->unk11F1E[2] - D_8096E954[D_8096E918]) / D_8096E914;
-    if (this->unk11F1E[2] >= D_8096E954[D_8096E918]) {
-        this->unk11F1E[2] -= temp_lo;
+    temp_lo = ABS_ALT(this->zeldaEffectEnvColor[2] - D_8096E954[D_8096E918]) / D_8096E914;
+    if (this->zeldaEffectEnvColor[2] >= D_8096E954[D_8096E918]) {
+        this->zeldaEffectEnvColor[2] -= temp_lo;
     } else {
-        this->unk11F1E[2] += temp_lo;
+        this->zeldaEffectEnvColor[2] += temp_lo;
     }
 
     D_8096E914--;
     if (D_8096E914 == 0) {
-        this->unk11F18[0] = D_8096E944[D_8096E918];
-        this->unk11F18[1] = D_8096E948[D_8096E918];
-        this->unk11F18[2] = D_8096E94C[D_8096E918];
-        this->unk11F1E[0] = D_8096E950[D_8096E918];
+        this->zeldaEffectPrimColor[0] = D_8096E944[D_8096E918];
+        this->zeldaEffectPrimColor[1] = D_8096E948[D_8096E918];
+        this->zeldaEffectPrimColor[2] = D_8096E94C[D_8096E918];
+        this->zeldaEffectEnvColor[0] = D_8096E950[D_8096E918];
         // Skips 4
-        this->unk11F1E[2] = D_8096E954[D_8096E918];
+        this->zeldaEffectEnvColor[2] = D_8096E954[D_8096E918];
         D_8096E914 = 30;
         D_8096E918 ^= 1;
     }
@@ -216,39 +215,39 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             switch (this->unk11F04) {
                 case 1:
-                    temp_lo = ABS_ALT(this->unk11F08[1] - D_8096E958[0]) / this->unk11F64;
-                    if (this->unk11F08[1] >= D_8096E958[0]) {
-                        this->unk11F08[1] -= temp_lo;
+                    temp_lo = ABS_ALT(this->majorasMaskEffectPrimColor[1] - D_8096E958[0]) / this->unk11F64;
+                    if (this->majorasMaskEffectPrimColor[1] >= D_8096E958[0]) {
+                        this->majorasMaskEffectPrimColor[1] -= temp_lo;
                     } else {
-                        this->unk11F08[1] += temp_lo;
+                        this->majorasMaskEffectPrimColor[1] += temp_lo;
                     }
 
-                    temp_lo = ABS_ALT(this->unk11F0E[0] - D_8096E95C[0]) / this->unk11F64;
-                    if (this->unk11F0E[0] >= D_8096E95C[0]) {
-                        this->unk11F0E[0] -= temp_lo;
+                    temp_lo = ABS_ALT(this->majorasMaskEffectEnvColor[0] - D_8096E95C[0]) / this->unk11F64;
+                    if (this->majorasMaskEffectEnvColor[0] >= D_8096E95C[0]) {
+                        this->majorasMaskEffectEnvColor[0] -= temp_lo;
                     } else {
-                        this->unk11F0E[0] += temp_lo;
+                        this->majorasMaskEffectEnvColor[0] += temp_lo;
                     }
 
-                    temp_lo = ABS_ALT(this->unk11F0E[2] - D_8096E960[0]) / this->unk11F64;
-                    if (this->unk11F0E[2] >= D_8096E960[0]) {
-                        this->unk11F0E[2] -= temp_lo;
+                    temp_lo = ABS_ALT(this->majorasMaskEffectEnvColor[2] - D_8096E960[0]) / this->unk11F64;
+                    if (this->majorasMaskEffectEnvColor[2] >= D_8096E960[0]) {
+                        this->majorasMaskEffectEnvColor[2] -= temp_lo;
                     } else {
-                        this->unk11F0E[2] += temp_lo;
+                        this->majorasMaskEffectEnvColor[2] += temp_lo;
                     }
 
-                    temp_lo = ABS_ALT(this->unk11F14 - 255) / this->unk11F64;
-                    this->unk11F14 += temp_lo;
+                    temp_lo = ABS_ALT(this->majorasMaskEffectAlpha - 255) / this->unk11F64;
+                    this->majorasMaskEffectAlpha += temp_lo;
 
-                    temp_lo = ABS_ALT(this->unk11F06 - 32) / this->unk11F64;
-                    this->unk11F06 += temp_lo;
+                    temp_lo = ABS_ALT(this->majorasMaskEffectPrimLodFrac - 32) / this->unk11F64;
+                    this->majorasMaskEffectPrimLodFrac += temp_lo;
 
                     this->unk11F64--;
                     if (this->unk11F64 == 0) {
-                        this->unk11F08[1] = D_8096E958[0];
-                        this->unk11F0E[0] = D_8096E95C[0];
-                        this->unk11F0E[2] = D_8096E960[0];
-                        this->unk11F14 = 255;
+                        this->majorasMaskEffectPrimColor[1] = D_8096E958[0];
+                        this->majorasMaskEffectEnvColor[0] = D_8096E95C[0];
+                        this->majorasMaskEffectEnvColor[2] = D_8096E960[0];
+                        this->majorasMaskEffectAlpha = 255;
                         this->unk11F04 = 2;
                         this->unk11F72 = 5;
                     }
@@ -256,40 +255,40 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
 
                 case 2:
                     if (this->unk11F72 == 0) {
-                        temp_lo = ABS_ALT(this->unk11F08[1] - D_8096E958[1]) / this->unk11F66;
-                        if (this->unk11F08[1] >= D_8096E958[1]) {
-                            this->unk11F08[1] -= temp_lo;
+                        temp_lo = ABS_ALT(this->majorasMaskEffectPrimColor[1] - D_8096E958[1]) / this->unk11F66;
+                        if (this->majorasMaskEffectPrimColor[1] >= D_8096E958[1]) {
+                            this->majorasMaskEffectPrimColor[1] -= temp_lo;
                         } else {
-                            this->unk11F08[1] += temp_lo;
+                            this->majorasMaskEffectPrimColor[1] += temp_lo;
                         }
 
-                        temp_lo = ABS_ALT(this->unk11F0E[0] - D_8096E95C[1]) / this->unk11F66;
-                        if (this->unk11F0E[0] >= D_8096E95C[1]) {
-                            this->unk11F0E[0] -= temp_lo;
+                        temp_lo = ABS_ALT(this->majorasMaskEffectEnvColor[0] - D_8096E95C[1]) / this->unk11F66;
+                        if (this->majorasMaskEffectEnvColor[0] >= D_8096E95C[1]) {
+                            this->majorasMaskEffectEnvColor[0] -= temp_lo;
                         } else {
-                            this->unk11F0E[0] += temp_lo;
+                            this->majorasMaskEffectEnvColor[0] += temp_lo;
                         }
 
-                        temp_lo = ABS_ALT(this->unk11F0E[2] - D_8096E960[1]) / this->unk11F66;
-                        if (this->unk11F0E[2] >= D_8096E960[1]) {
-                            this->unk11F0E[2] -= temp_lo;
+                        temp_lo = ABS_ALT(this->majorasMaskEffectEnvColor[2] - D_8096E960[1]) / this->unk11F66;
+                        if (this->majorasMaskEffectEnvColor[2] >= D_8096E960[1]) {
+                            this->majorasMaskEffectEnvColor[2] -= temp_lo;
                         } else {
-                            this->unk11F0E[2] += temp_lo;
+                            this->majorasMaskEffectEnvColor[2] += temp_lo;
                         }
 
-                        temp_lo = ABS_ALT(this->unk11F06 - 128) / this->unk11F66;
-                        this->unk11F06 += temp_lo;
+                        temp_lo = ABS_ALT(this->majorasMaskEffectPrimLodFrac - 128) / this->unk11F66;
+                        this->majorasMaskEffectPrimLodFrac += temp_lo;
 
-                        temp_lo = ABS_ALT(this->unk11F26 - 255) / this->unk11F66;
-                        this->unk11F26 += temp_lo;
+                        temp_lo = ABS_ALT(this->majorasMaskAlpha - 255) / this->unk11F66;
+                        this->majorasMaskAlpha += temp_lo;
 
                         this->unk11F66--;
                         if (this->unk11F66 == 0) {
-                            this->unk11F08[1] = D_8096E958[1];
-                            this->unk11F0E[0] = D_8096E95C[1];
-                            this->unk11F0E[2] = D_8096E960[1];
-                            this->unk11F06 = 128;
-                            this->unk11F26 = 255;
+                            this->majorasMaskEffectPrimColor[1] = D_8096E958[1];
+                            this->majorasMaskEffectEnvColor[0] = D_8096E95C[1];
+                            this->majorasMaskEffectEnvColor[2] = D_8096E960[1];
+                            this->majorasMaskEffectPrimLodFrac = 128;
+                            this->majorasMaskAlpha = 255;
                             this->unk11F04 = 3;
                             this->unk11F72 = 5;
                         }
@@ -309,21 +308,21 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                             this->mainTitleAlpha = 255;
                         }
 
-                        temp_lo = ABS_ALT(this->unk11F14 - 60) / this->unk11F6A;
-                        this->unk11F14 -= temp_lo;
+                        temp_lo = ABS_ALT(this->majorasMaskEffectAlpha - 60) / this->unk11F6A;
+                        this->majorasMaskEffectAlpha -= temp_lo;
 
-                        temp_lo = ABS_ALT(this->unk11F24 - 255) / this->unk11F6A;
-                        this->unk11F24 += temp_lo;
+                        temp_lo = ABS_ALT(this->zeldaEffectAlpha - 255) / this->unk11F6A;
+                        this->zeldaEffectAlpha += temp_lo;
 
-                        temp_lo = ABS_ALT(this->unk11F16 - 128) / this->unk11F6A;
-                        this->unk11F16 += temp_lo;
+                        temp_lo = ABS_ALT(this->zeldaEffectPrimLodFrac - 128) / this->unk11F6A;
+                        this->zeldaEffectPrimLodFrac += temp_lo;
 
                         this->unk11F6A--;
                         // Reset everything?
                         if (this->unk11F6A == 0) {
-                            this->unk11F14 = 60;
-                            this->unk11F24 = 255;
-                            this->unk11F16 = 128;
+                            this->majorasMaskEffectAlpha = 60;
+                            this->zeldaEffectAlpha = 255;
+                            this->zeldaEffectPrimLodFrac = 128;
                             this->unk11F04 = 5;
                             this->unk11F72 = 20;
                         }
@@ -341,7 +340,7 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
 
                         this->unk11F6C--;
                         if (this->unk11F6C == 0) {
-                            this->unk11F24 = 255;
+                            this->zeldaEffectAlpha = 255;
                             this->unk11F04 = 6;
                             this->unk11F72 = 20;
                         }
@@ -368,15 +367,15 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                     break;
 
                 case 10:
-                    this->unk11F08[1] = D_8096E958[0];
-                    this->unk11F0E[0] = D_8096E95C[0];
-                    this->unk11F0E[2] = D_8096E960[0];
-                    this->unk11F14 = 60;
-                    this->unk11F06 = 128;
-                    this->unk11F26 = 255;
+                    this->majorasMaskEffectPrimColor[1] = D_8096E958[0];
+                    this->majorasMaskEffectEnvColor[0] = D_8096E95C[0];
+                    this->majorasMaskEffectEnvColor[2] = D_8096E960[0];
+                    this->majorasMaskEffectAlpha = 60;
+                    this->majorasMaskEffectPrimLodFrac = 128;
+                    this->majorasMaskAlpha = 255;
                     this->mainTitleAlpha = 255;
-                    this->unk11F24 = 255;
-                    this->unk11F16 = 128;
+                    this->zeldaEffectAlpha = 255;
+                    this->zeldaEffectPrimLodFrac = 128;
                     this->subtitleAlpha = 255;
                     this->copyrightAlpha = 255;
                     this->unk11F04 = 13;
@@ -413,14 +412,14 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                     break;
 
                 case 20:
-                    temp_lo = ABS_ALT(this->unk11F14) / this->unk11F70;
-                    this->unk11F14 -= temp_lo;
+                    temp_lo = ABS_ALT(this->majorasMaskEffectAlpha) / this->unk11F70;
+                    this->majorasMaskEffectAlpha -= temp_lo;
 
-                    temp_lo = ABS_ALT(this->unk11F26) / this->unk11F70;
-                    this->unk11F26 -= temp_lo;
+                    temp_lo = ABS_ALT(this->majorasMaskAlpha) / this->unk11F70;
+                    this->majorasMaskAlpha -= temp_lo;
 
-                    temp_lo = ABS_ALT(this->unk11F24) / this->unk11F70;
-                    this->unk11F24 -= temp_lo;
+                    temp_lo = ABS_ALT(this->zeldaEffectAlpha) / this->unk11F70;
+                    this->zeldaEffectAlpha -= temp_lo;
 
                     temp_lo = ABS_ALT(this->mainTitleAlpha) / this->unk11F70;
                     this->mainTitleAlpha -= temp_lo;
@@ -433,11 +432,11 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
 
                     this->unk11F70--;
                     if (this->unk11F70 == 0) {
-                        this->unk11F14 = 0;
-                        this->unk11F26 = 0;
+                        this->majorasMaskEffectAlpha = 0;
+                        this->majorasMaskAlpha = 0;
                         this->mainTitleAlpha = 0;
                         this->subtitleAlpha = 0;
-                        this->unk11F24 = 0;
+                        this->zeldaEffectAlpha = 0;
                         this->copyrightAlpha = 0;
                         this->unk11F04 = 21;
                     }
@@ -650,6 +649,7 @@ void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, void* source, u
  * @param rectLeft X coordinate of the top-left of the draw position.
  * @param rectTop Y coordinate of the top-left of the draw position.
  */
+// Should this actually use FONT_CHAR_TEX_WIDTH/FONT_CHAR_TEX_HEIGHT?
 void EnMag_DrawCharTexture(Gfx** gfxp, void* texture, s32 rectLeft, s32 rectTop) {
     Gfx* gfx = *gfxp;
 
@@ -662,10 +662,46 @@ void EnMag_DrawCharTexture(Gfx** gfxp, void* texture, s32 rectLeft, s32 rectTop)
     *gfxp = gfx;
 }
 
-#define MAJORA_MASK_TEX_CENTER_X
-#define MAJORAS_MASK_TEX_CENTER_Y
-#define ZELDA_TEX_CENTER_X
-#define ZELDA_TEX_CENTER_Y
+#define MAJORAS_MASK_TEX_WIDTH 128
+#define MAJORAS_MASK_TEX_HEIGHT 112
+#define MAJORAS_MASK_TEX_CENTER_X 124
+#define MAJORAS_MASK_TEX_CENTER_Y 103
+
+#define ZELDA_TEX_WIDTH 144
+#define ZELDA_TEX_HEIGHT 64
+#define ZELDA_TEX_CENTER_X 177
+#define ZELDA_TEX_CENTER_Y 105
+
+#define SUBTITLE_TEX_WIDTH 104
+#define SUBTITLE_TEX_HEIGHT 16
+#define SUBTITLE_TEX_LEFT 151
+#define SUBTITLE_TEX_TOP 124
+
+#define THE_LEGEND_OF_TEX_WIDTH 72
+#define THE_LEGEND_OF_TEX_HEIGHT 8
+#define THE_LEGEND_OF_TEX_LEFT 158
+#define THE_LEGEND_OF_TEX_TOP 71
+
+#define COPYRIGHT_TEX_WIDTH 128
+#define COPYRIGHT_TEX_HEIGHT 16
+#define COPYRIGHT_TEX_LEFT 94
+#define COPYRIGHT_TEX_TOP 198
+
+#define NO_CONTROLLER_FIRST_TEX_WIDTH 256
+#define NO_CONTROLLER_FIRST_TEX_HEIGHT 9
+#define NO_CONTROLLER_FIRST_TEX_LEFT 35
+#define NO_CONTROLLER_FIRST_TEX_TOP 175
+
+#define NO_CONTROLLER_SECOND_TEX_WIDTH 144
+#define NO_CONTROLLER_SECOND_TEX_HEIGHT 9
+#define NO_CONTROLLER_SECOND_TEX_LEFT 91
+#define NO_CONTROLLER_SECOND_TEX_TOP 188
+
+// Top-left of the text itself, not the shadow
+#define PRESS_START_LEFT 119
+#define PRESS_START_TOP 174
+#define PRESS_START_CHAR_SPACING 7 // Amount of rightward shift before printing next char
+#define PRESS_START_SPACE 5        // Extra space between the words
 
 // EnMag_DrawInner
 /**
@@ -684,7 +720,7 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     static s16 D_8096E9B8[] = { -1, 1, 1, -1, 1, 1 };
     static s16 D_8096E9C4[] = { -2, -2, -2, 2, 2, 2 };
     static s16 D_8096E9D0 = 0;
-    static s16 D_8096E9D4[] = { 0xFF, 0, 0, 0, 0, 0 };
+    static s16 D_8096E9D4[] = { 255, 0 };
     s32 pad;
     EnMag* this = THIS;
     Font* font = &this->font;
@@ -692,11 +728,11 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     u16 i;
     u16 j;
     u16 k;
-    s32 phi_s2;
-    s32 sp1B8;
+    s32 rectLeft;
+    s32 rectTop;
     s16 temp_lo;
 
-    // Set segment 6 to the object, since this will be read by OVERLAY_DISP which does not have that set.
+    // Set segment 6 to the object, since this will be read by OVERLAY_DISP where it is not set by default.
     gSPSegment(gfx++, 0x06, globalCtx->objectCtx.status[this->actor.objBankIndex].segment);
 
     func_8012C680(&gfx);
@@ -708,16 +744,19 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     gDPSetCombineLERP(gfx++, TEXEL1, PRIMITIVE, PRIM_LOD_FRAC, TEXEL0, TEXEL1, 1, PRIM_LOD_FRAC, TEXEL0, PRIMITIVE,
                       ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 
-    gDPSetPrimColor(gfx++, 0, this->unk11F06, this->unk11F08[0], this->unk11F08[1], this->unk11F08[2], this->unk11F14);
-    gDPSetEnvColor(gfx++, this->unk11F0E[0], this->unk11F0E[1], this->unk11F0E[2], 255);
+    gDPSetPrimColor(gfx++, 0, this->majorasMaskEffectPrimLodFrac, this->majorasMaskEffectPrimColor[0],
+                    this->majorasMaskEffectPrimColor[1], this->majorasMaskEffectPrimColor[2],
+                    this->majorasMaskEffectAlpha);
+    gDPSetEnvColor(gfx++, this->majorasMaskEffectEnvColor[0], this->majorasMaskEffectEnvColor[1],
+                   this->majorasMaskEffectEnvColor[2], 255);
 
     // Glowy effects behind Mask
-    if (this->unk11F06 != 0) { // majorasMaskEffectPrimLodFrac
-        for (k = 0, i = 0, sp1B8 = 38; i < 2; i++, sp1B8 += 64) {
-            for (j = 0, phi_s2 = 57; j < 3; j++, k++, phi_s2 += 64) {
+    if (this->majorasMaskEffectPrimLodFrac != 0) {
+        for (k = 0, i = 0, rectTop = 38; i < 2; i++, rectTop += 64) {
+            for (j = 0, rectLeft = 57; j < 3; j++, k++, rectLeft += 64) {
                 this->unk11F36[k] += D_8096E9B8[k];
                 this->unk11F44[k] += D_8096E9C4[k];
-                EnMag_DrawEffectTextures(&gfx, D_8096E970[k], D_8096E9A0[k], 64, 64, 32, 32, phi_s2, sp1B8, 1, 1, k,
+                EnMag_DrawEffectTextures(&gfx, D_8096E970[k], D_8096E9A0[k], 64, 64, 32, 32, rectLeft, rectTop, 1, 1, k,
                                          this);
             }
         }
@@ -725,14 +764,16 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
 
     func_8012C680(&gfx);
 
-    if (this->unk11F26 != 0) { // majorasMaskAlpha
+    if (this->majorasMaskAlpha != 0) {
         gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
                           ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
 
-        gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, this->unk11F26);
-        gDPSetEnvColor(gfx++, this->unk11F28[0], this->unk11F28[1], this->unk11F28[2], 255);
+        gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, this->majorasMaskAlpha);
+        gDPSetEnvColor(gfx++, this->majorasMaskEnvColor[0], this->majorasMaskEnvColor[1], this->majorasMaskEnvColor[2],
+                       255);
 
-        EnMag_DrawImageRGBA32(&gfx, 124, 103, gTitleScreenMajorasMaskTex, 128, 112); // Majora's Mask image
+        EnMag_DrawImageRGBA32(&gfx, MAJORAS_MASK_TEX_CENTER_X, MAJORAS_MASK_TEX_CENTER_Y, gTitleScreenMajorasMaskTex,
+                              MAJORAS_MASK_TEX_WIDTH, MAJORAS_MASK_TEX_HEIGHT);
     }
 
     gDPPipeSync(gfx++);
@@ -743,14 +784,16 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     gDPSetCombineLERP(gfx++, TEXEL1, PRIMITIVE, PRIM_LOD_FRAC, TEXEL0, TEXEL1, 1, PRIM_LOD_FRAC, TEXEL0, PRIMITIVE,
                       ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 
-    gDPSetPrimColor(gfx++, 0, this->unk11F16, this->unk11F18[0], this->unk11F18[1], this->unk11F18[2], this->unk11F24);
-    gDPSetEnvColor(gfx++, this->unk11F1E[0], this->unk11F1E[1], this->unk11F1E[2], 255);
+    gDPSetPrimColor(gfx++, 0, this->zeldaEffectPrimLodFrac, this->zeldaEffectPrimColor[0],
+                    this->zeldaEffectPrimColor[1], this->zeldaEffectPrimColor[2], this->zeldaEffectAlpha);
+    gDPSetEnvColor(gfx++, this->zeldaEffectEnvColor[0], this->zeldaEffectEnvColor[1], this->zeldaEffectEnvColor[2],
+                   255);
 
     // Glowy effects behind "ZELDA"
-    if (this->unk11F16 != 0) {
-        for (k = 0, i = 0, sp1B8 = 38; i < 2; i++, sp1B8 += 64) {
-            for (j = 0, phi_s2 = 57; j < 3; j++, k++, phi_s2 += 64) {
-                EnMag_DrawEffectTextures(&gfx, D_8096E988[k], D_8096E9A0[k], 64, 64, 32, 32, phi_s2, sp1B8, 1, 1, k,
+    if (this->zeldaEffectPrimLodFrac != 0) {
+        for (k = 0, i = 0, rectTop = 38; i < 2; i++, rectTop += 64) {
+            for (j = 0, rectLeft = 57; j < 3; j++, k++, rectLeft += 64) {
+                EnMag_DrawEffectTextures(&gfx, D_8096E988[k], D_8096E9A0[k], 64, 64, 32, 32, rectLeft, rectTop, 1, 1, k,
                                          this);
             }
         }
@@ -771,7 +814,8 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, this->subtitleAlpha);
         gDPSetEnvColor(gfx++, 100, 0, 100, 255);
 
-        EnMag_DrawTextureI8(&gfx, gTitleScreenMajorasMaskSubtitleMaskTex, 104, 16, 151, 124);
+        EnMag_DrawTextureI8(&gfx, gTitleScreenMajorasMaskSubtitleMaskTex, SUBTITLE_TEX_WIDTH, SUBTITLE_TEX_HEIGHT,
+                            SUBTITLE_TEX_LEFT, SUBTITLE_TEX_TOP);
     }
 
     func_8012C680(&gfx);
@@ -787,17 +831,19 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
 
     gDPSetPrimColor(gfx++, 0, 120, 208, 102, 222, this->subtitleAlpha);
 
-    EnMag_DrawTextureI8(&gfx, gTitleScreenMajorasMaskSubtitleTex, 104, 16, 151, 124); // Subtitle
+    EnMag_DrawTextureI8(&gfx, gTitleScreenMajorasMaskSubtitleTex, SUBTITLE_TEX_WIDTH, SUBTITLE_TEX_HEIGHT,
+                        SUBTITLE_TEX_LEFT, SUBTITLE_TEX_TOP);
 
     func_8012C680(&gfx);
 
     gDPSetAlphaCompare(gfx++, G_AC_NONE);
     gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
-    if (this->mainTitleAlpha != 0) { // zeldaAlpha
+    if (this->mainTitleAlpha != 0) {
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, this->mainTitleAlpha);
 
-        EnMag_DrawImageRGBA32(&gfx, 177, 105, gTitleScreenZeldaLogoTex, 144, 64); // ZELDA
+        EnMag_DrawImageRGBA32(&gfx, ZELDA_TEX_CENTER_X, ZELDA_TEX_CENTER_Y, gTitleScreenZeldaLogoTex, ZELDA_TEX_WIDTH,
+                              ZELDA_TEX_HEIGHT);
 
         gDPPipeSync(gfx++);
 
@@ -809,18 +855,20 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
 
         gDPSetPrimColor(gfx++, 0, 0, 208, 102, 222, this->mainTitleAlpha);
 
-        EnMag_DrawTextureI8(&gfx, gTitleScreenTheLegendOfTextTex, 72, 8, 158, 71); // "The Legend of"
+        EnMag_DrawTextureI8(&gfx, gTitleScreenTheLegendOfTextTex, THE_LEGEND_OF_TEX_WIDTH, THE_LEGEND_OF_TEX_HEIGHT,
+                            THE_LEGEND_OF_TEX_LEFT, THE_LEGEND_OF_TEX_TOP);
     }
 
     func_8012C680(&gfx);
 
-    if (this->copyrightAlpha != 0) { // copyrightAlpha
+    if (this->copyrightAlpha != 0) {
         gDPSetAlphaCompare(gfx++, G_AC_NONE);
         gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetPrimColor(gfx++, 0, 0, this->copyrightAlpha, this->copyrightAlpha, this->copyrightAlpha,
                         this->copyrightAlpha);
 
-        EnMag_DrawTextureIA8(&gfx, gTitleScreenCopyright2000NintendoTex, 128, 16, 94, 198); // Copyright
+        EnMag_DrawTextureIA8(&gfx, gTitleScreenCopyright2000NintendoTex, COPYRIGHT_TEX_WIDTH, COPYRIGHT_TEX_HEIGHT,
+                             COPYRIGHT_TEX_LEFT, COPYRIGHT_TEX_TOP);
     }
 
     if (gSaveContext.fileNum == 0xFEDC) {
@@ -838,31 +886,37 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, D_8096E9D0);
-        gDPLoadTextureBlock_4b(gfx++, gTitleScreenControllerNotConnectedTextTex, G_IM_FMT_I, 256, 9, 0,
+        gDPLoadTextureBlock_4b(gfx++, gTitleScreenControllerNotConnectedTextTex, G_IM_FMT_I,
+                               NO_CONTROLLER_FIRST_TEX_WIDTH, NO_CONTROLLER_FIRST_TEX_HEIGHT, 0,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                G_TX_NOLOD, G_TX_NOLOD);
         // Texture shadow
-        gSPTextureRectangle(gfx++, 36 << 2, 176 << 2, (36 + 256) << 2, (176 + 9) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10,
-                            1 << 10);
-
+        gSPTextureRectangle(gfx++, (NO_CONTROLLER_FIRST_TEX_LEFT + 1) << 2, (NO_CONTROLLER_FIRST_TEX_TOP + 1) << 2,
+                            (NO_CONTROLLER_FIRST_TEX_LEFT + 1 + NO_CONTROLLER_FIRST_TEX_WIDTH) << 2,
+                            (NO_CONTROLLER_FIRST_TEX_TOP + 1 + NO_CONTROLLER_FIRST_TEX_HEIGHT) << 2, G_TX_RENDERTILE, 0,
+                            0, 1 << 10, 1 << 10);
         // Actual texture
         gDPSetPrimColor(gfx++, 0, 0, 205, 255, 255, D_8096E9D0);
-        gSPTextureRectangle(gfx++, 35 << 2, 175 << 2, (35 + 256) << 2, (175 + 9) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10,
-                            1 << 10);
+        gSPTextureRectangle(gfx++, NO_CONTROLLER_FIRST_TEX_LEFT << 2, NO_CONTROLLER_FIRST_TEX_TOP << 2,
+                            (NO_CONTROLLER_FIRST_TEX_LEFT + NO_CONTROLLER_FIRST_TEX_WIDTH) << 2,
+                            (NO_CONTROLLER_FIRST_TEX_TOP + NO_CONTROLLER_FIRST_TEX_HEIGHT) << 2, G_TX_RENDERTILE, 0, 0,
+                            1 << 10, 1 << 10);
 
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, D_8096E9D0);
-        gDPLoadTextureBlock_4b(gfx++, gTitleScreenInsertControllerTextTex, G_IM_FMT_I, 144, 9, 0,
-                               G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                               G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(gfx++, gTitleScreenInsertControllerTextTex, G_IM_FMT_I, NO_CONTROLLER_SECOND_TEX_WIDTH,
+                               NO_CONTROLLER_SECOND_TEX_HEIGHT, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
+                               G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         // Texture shadow
-        gSPTextureRectangle(gfx++, 92 << 2, 189 << 2, (92 + 144) << 2, (189 + 9) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10,
-                            1 << 10);
-
+        gSPTextureRectangle(gfx++, (NO_CONTROLLER_SECOND_TEX_LEFT + 1) << 2, (NO_CONTROLLER_SECOND_TEX_TOP + 1) << 2,
+                            (NO_CONTROLLER_SECOND_TEX_LEFT + 1 + NO_CONTROLLER_SECOND_TEX_WIDTH) << 2,
+                            (NO_CONTROLLER_SECOND_TEX_TOP + 1 + NO_CONTROLLER_SECOND_TEX_HEIGHT) << 2, G_TX_RENDERTILE,
+                            0, 0, 1 << 10, 1 << 10);
         // Actual texture
         gDPSetPrimColor(gfx++, 0, 0, 205, 255, 255, D_8096E9D0);
-        gSPTextureRectangle(gfx++, 91 << 2, 188 << 2, (91 + 144) << 2, (188 + 9) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10,
-                            1 << 10);
-
+        gSPTextureRectangle(gfx++, NO_CONTROLLER_SECOND_TEX_LEFT << 2, NO_CONTROLLER_SECOND_TEX_TOP << 2,
+                            (NO_CONTROLLER_SECOND_TEX_LEFT + NO_CONTROLLER_SECOND_TEX_WIDTH) << 2,
+                            (NO_CONTROLLER_SECOND_TEX_TOP + NO_CONTROLLER_SECOND_TEX_HEIGHT) << 2, G_TX_RENDERTILE, 0,
+                            0, 1 << 10, 1 << 10);
         D_8096E920--;
         if (D_8096E920 == 0) {
             D_8096E9D0 = D_8096E9D4[D_8096E91C];
@@ -889,13 +943,14 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
                           0);
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, D_8096E9D0);
 
-        phi_s2 = 120;
-        for (i = 0; i < 10; i++) {
-            EnMag_DrawCharTexture(&gfx, font->fontBuf + pressStartFontIndices[i] * FONT_CHAR_TEX_SIZE, phi_s2, 175);
+        rectLeft = PRESS_START_LEFT + 1;
+        for (i = 0; i < ARRAY_COUNT(pressStartFontIndices); i++) {
+            EnMag_DrawCharTexture(&gfx, font->fontBuf + pressStartFontIndices[i] * FONT_CHAR_TEX_SIZE, rectLeft,
+                                  PRESS_START_TOP + 1);
 
-            phi_s2 += 7;
+            rectLeft += PRESS_START_CHAR_SPACING;
             if (i == 4) {
-                phi_s2 += 5;
+                rectLeft += PRESS_START_SPACE;
             }
         }
 
@@ -903,12 +958,13 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
         gDPPipeSync(gfx++);
         gDPSetPrimColor(gfx++, 0, 0, 255, 30, 30, D_8096E9D0);
 
-        phi_s2 = 120 - 1;
-        for (i = 0; i < 10; i++) {
-            EnMag_DrawCharTexture(&gfx, font->fontBuf + pressStartFontIndices[i] * FONT_CHAR_TEX_SIZE, phi_s2, 175 - 1);
-            phi_s2 += 7;
+        rectLeft = PRESS_START_LEFT;
+        for (i = 0; i < ARRAY_COUNT(pressStartFontIndices); i++) {
+            EnMag_DrawCharTexture(&gfx, font->fontBuf + pressStartFontIndices[i] * FONT_CHAR_TEX_SIZE, rectLeft,
+                                  PRESS_START_TOP);
+            rectLeft += PRESS_START_CHAR_SPACING;
             if (i == 4) {
-                phi_s2 += 5;
+                rectLeft += PRESS_START_SPACE;
             }
         }
 
