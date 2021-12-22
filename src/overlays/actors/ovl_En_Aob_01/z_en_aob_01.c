@@ -980,9 +980,9 @@ s32 EnAob01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
                              Actor* thisx) {
     EnAob01* this = THIS;
     UNK_TYPE sp38[] = {
-        &object_aob_TEx_000658,
-        &object_aob_TEx_000E58,
-        &object_aob_TEx_001658,
+        &object_aob_Tex_000658,
+        &object_aob_Tex_000E58,
+        &object_aob_Tex_001658,
     };
 
     if (limbIndex == 15) {
