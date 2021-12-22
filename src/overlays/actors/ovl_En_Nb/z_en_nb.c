@@ -511,6 +511,7 @@ s32 func_80BC0C0C(EnNb* this, GlobalContext* globalCtx, UNK_TYPE arg2) {
         func_8013AED4(&this->unk_262, 4, 7);
     }
     func_80BBFE8C(this, 0);
+
     return 1;
 }
 
