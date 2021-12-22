@@ -21,9 +21,7 @@ struct FileChooseContext{
     /* 0x242E0 */ EnvironmentContext envCtx;
     /* 0x243E0 */ Vtx* unk_243E0;
     /* 0x243E4 */ Vtx* unk_243E4;
-    /* 0x243E8 */ Vtx* unk_243E8;
-    /* 0x243EC */ Vtx* unk_243EC;
-    /* 0x243F0 */ Vtx* unk_243F0;
+    /* 0x243E8 */ u8   newf2[2][6];
     /* 0x243F4 */ u8   newf[2][6];
     /* 0x24400 */ UNK_TYPE1 unk_24400[0xC];
     /* 0x2440C */ u16 unk_2440C[2];
