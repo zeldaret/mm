@@ -5,6 +5,9 @@
  */
 
 #include "z_en_go.h"
+#include "objects/object_oF1d_map/object_oF1d_map.h"
+#include "objects/object_hakugin_demo/object_hakugin_demo.h"
+#include "objects/object_taisou/object_taisou.h"
 
 #define FLAGS 0x02000019
 
@@ -24,42 +27,6 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx);
 void func_80A153FC(EnGo* this, GlobalContext* globalCtx);
 void func_80A157C4(EnGo* this, GlobalContext* globalCtx);
 void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_060003D0[];
-extern Gfx D_06000458[];
-extern Gfx D_060008C0[];
-extern Gfx D_06000948[];
-extern Gfx D_06000D50[];
-extern Gfx D_06000DD8[];
-extern AnimationHeader D_06001420;
-extern Gfx D_06001560[];
-extern AnimationHeader D_060016C8;
-extern AnimationHeader D_06001A4C;
-extern AnimationHeader D_06002704;
-extern AnimationHeader D_0600283C;
-extern AnimationHeader D_06002C48;
-extern Gfx D_060031A0[];
-extern AnimationHeader D_060031D8;
-extern Gfx D_06003258[];
-extern AnimationHeader D_06003378;
-extern AnimationHeader D_06003650;
-extern AnimationHeader D_060039D8;
-extern AnimationHeader D_06003E28;
-extern AnimationHeader D_06004DD4;
-extern AnimationHeader D_06005790;
-extern AnimationHeader D_06005EE0;
-extern AnimationHeader D_06007764;
-extern Gfx D_060091A8[];
-extern UNK_TYPE D_06010438;
-extern UNK_TYPE D_06010838;
-extern UNK_TYPE D_06010C38;
-extern UNK_TYPE D_06011038;
-extern FlexSkeletonHeader D_06011AC8;
-extern AnimationHeader D_06011D98;
-extern AnimationHeader D_06012DE0;
-extern AnimationHeader D_060135E8;
-extern Gfx D_06014CF0[];
-extern Gfx D_06014D00[];
 
 static s32 D_80A16100[] = {
     0x00150800, 0x40010022, 0x00150200, 0x180E0E10, 0x0C0F0E11, 0x0C0F0E12, 0x0C0F0E13, 0x0C0F0E14, 0x0C111502,
@@ -219,14 +186,19 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06011D98, 1.0f, 0, -1, 0, 0 },  { &D_06011D98, 1.0f, 0, -1, 0, -4 }, { &D_06012DE0, 2.0f, 0, -1, 2, 0 },
-    { &D_06012DE0, 2.0f, 0, -1, 2, -4 }, { &D_06012DE0, -2.0f, 0, -1, 2, 0 }, { &D_06003E28, 1.0f, 0, -1, 0, 0 },
-    { &D_06003E28, 1.0f, 0, -1, 0, -4 }, { &D_060039D8, 1.0f, 0, -1, 2, -4 }, { &D_06003650, 1.0f, 0, -1, 0, 0 },
-    { &D_060135E8, 1.0f, 0, -1, 2, -4 }, { &D_06004DD4, 1.0f, 0, -1, 0, 0 },  { &D_060016C8, 1.0f, 0, -1, 0, 0 },
-    { &D_0600283C, 1.0f, 0, -1, 0, 0 },  { &D_06007764, 1.0f, 0, -1, 0, 0 },  { &D_06005EE0, 1.0f, 0, -1, 0, 0 },
-    { &D_06002C48, 1.0f, 0, -1, 0, 0 },  { &D_060031D8, 1.0f, 0, -1, 0, 0 },  { &D_06005790, 1.0f, 0, -1, 0, 0 },
-    { &D_06001420, 1.0f, 0, -1, 2, 0 },  { &D_06001A4C, 1.0f, 0, -1, 0, -4 }, { &D_06002704, 1.0f, 0, -1, 2, 0 },
-    { &D_06003378, 1.0f, 0, -1, 0, -4 },
+    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, 0, 0 },     { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, 0, -4 },
+    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, 0 },     { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, -4 },
+    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, 2, 0 },    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, 0, 0 },
+    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, 0, -4 },    { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, 2, -4 },
+    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, 0, 0 },     { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, 2, -4 },
+
+    { &object_taisou_Anim_004DD4, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_0016C8, 1.0f, 0, -1, 0, 0 },
+    { &object_taisou_Anim_00283C, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_007764, 1.0f, 0, -1, 0, 0 },
+    { &object_taisou_Anim_005EE0, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_002C48, 1.0f, 0, -1, 0, 0 },
+    { &object_taisou_Anim_0031D8, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_005790, 1.0f, 0, -1, 0, 0 },
+
+    { &object_hakugin_demo_Anim_001420, 1.0f, 0, -1, 2, 0 }, { &object_hakugin_demo_Anim_001A4C, 1.0f, 0, -1, 0, -4 },
+    { &object_hakugin_demo_Anim_002704, 1.0f, 0, -1, 2, 0 }, { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, 0, -4 },
 };
 
 EnGoStruct* func_80A10FD0(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {
@@ -265,7 +237,7 @@ void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, D_060031A0);
+                gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_0031A0);
                 flag = true;
             }
 
@@ -285,7 +257,7 @@ void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_06003258);
+            gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_003258);
 
             Matrix_StatePop();
             if (globalCtx->state.gfxCtx) {}
@@ -341,7 +313,7 @@ void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
         if ((ptr->unk_00 >= 4) && (ptr->unk_00 < 7)) {
             if (!flag) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
-                gSPDisplayList(POLY_XLU_DISP++, D_06014CF0);
+                gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014CF0);
                 flag = true;
             }
             Matrix_StatePush();
@@ -360,7 +332,7 @@ void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
-            gSPDisplayList(POLY_XLU_DISP++, D_06014D00);
+            gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014D00);
 
             Matrix_StatePop();
         }
@@ -530,9 +502,9 @@ void func_80A1203C(EnGo* this) {
 }
 
 void func_80A1213C(EnGo* this, GlobalContext* globalCtx) {
-    func_80A11EC0(this->unk_3F8, globalCtx, D_060003D0, D_06000458, 1);
-    func_80A11EC0(this->unk_3F8, globalCtx, D_060008C0, D_06000948, 2);
-    func_80A11EC0(this->unk_3F8, globalCtx, D_06000D50, D_06000DD8, 3);
+    func_80A11EC0(this->unk_3F8, globalCtx, object_oF1d_map_DL_0003D0, object_oF1d_map_DL_000458, 1);
+    func_80A11EC0(this->unk_3F8, globalCtx, object_oF1d_map_DL_0008C0, object_oF1d_map_DL_000948, 2);
+    func_80A11EC0(this->unk_3F8, globalCtx, object_oF1d_map_DL_000D50, object_oF1d_map_DL_000DD8, 3);
     func_80A11144(this->unk_3F8, globalCtx);
     func_80A115B4(this->unk_3F8, globalCtx);
 }
@@ -1470,7 +1442,8 @@ void func_80A14798(EnGo* this, GlobalContext* globalCtx) {
     if ((this->unk_288 < 0) || func_8013D8DC(this->unk_288, globalCtx) || (this->unk_289 < 0) ||
         func_8013D8DC(this->unk_289, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011AC8, NULL, this->jointTable, this->morphTable, 18);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
+                           this->morphTable, 18);
 
         this->unk_3DC = -1;
         func_80A12C48(this, globalCtx, 2);
@@ -1976,7 +1949,7 @@ void func_80A15B80(EnGo* this, GlobalContext* globalCtx) {
     Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, (this->unk_390 & 0x100) ? D_06001560 : D_060091A8);
+    gSPDisplayList(POLY_OPA_DISP++, (this->unk_390 & 0x100) ? object_oF1d_map_DL_001560 : object_oF1d_map_DL_0091A8);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -2070,7 +2043,8 @@ void EnGo_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
 void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx) {
     static UNK_TYPE D_80A1670C[] = {
-        &D_06010438, &D_06010C38, &D_06011038, &D_06010C38, &D_06010838,
+        &object_oF1d_map_Tex_010438, &object_oF1d_map_Tex_010C38, &object_oF1d_map_Tex_011038,
+        &object_oF1d_map_Tex_010C38, &object_oF1d_map_Tex_010838,
     };
     EnGo* this = THIS;
 

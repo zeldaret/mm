@@ -7,9 +7,9 @@
         <DList Name="object_oF1d_map_DL_000D50" Offset="0xD50" />
         <DList Name="object_oF1d_map_DL_000DD8" Offset="0xDD8" />
         <DList Name="object_oF1d_map_DL_001560" Offset="0x1560" />
-        <!-- <Blob Name="object_oF1d_map_Blob_001750" Size="0x20" Offset="0x1750" /> -->
+        <Blob Name="object_oF1d_map_Blob_001750" Size="0x20" Offset="0x1750" />
         <Texture Name="object_oF1d_map_Tex_001770" OutName="tex_001770" Format="rgba16" Width="32" Height="64" Offset="0x1770" />
-        <!-- <Blob Name="object_oF1d_map_Blob_002770" Size="0x800" Offset="0x2770" /> -->
+        <Blob Name="object_oF1d_map_Blob_002770" Size="0x800" Offset="0x2770" />
         <Texture Name="object_oF1d_map_Tex_002F70" OutName="tex_002F70" Format="i4" Width="32" Height="32" Offset="0x2F70" />
         <DList Name="object_oF1d_map_DL_0031A0" Offset="0x31A0" />
         <DList Name="object_oF1d_map_DL_003258" Offset="0x3258" />
@@ -71,7 +71,10 @@
         <Texture Name="object_oF1d_map_Tex_00FAB8" OutName="tex_00FAB8" Format="ci8" Width="8" Height="16" Offset="0xFAB8" />
         <Texture Name="object_oF1d_map_Tex_00FB38" OutName="tex_00FB38" Format="ci8" Width="32" Height="64" Offset="0xFB38" />
         <Texture Name="object_oF1d_map_Tex_010338" OutName="tex_010338" Format="ci8" Width="16" Height="16" Offset="0x10338" />
-        <!-- <Blob Name="object_oF1d_map_Blob_010438" Size="0x1000" Offset="0x10438" /> -->
+        <Texture Name="object_oF1d_map_Tex_010438" OutName="tex_010438" Format="ci8" Width="32" Height="32" Offset="0x10438" />
+        <Texture Name="object_oF1d_map_Tex_010838" OutName="tex_010838" Format="ci8" Width="32" Height="32" Offset="0x10838" />
+        <Texture Name="object_oF1d_map_Tex_010C38" OutName="tex_010C38" Format="ci8" Width="32" Height="32" Offset="0x10C38" />
+        <Texture Name="object_oF1d_map_Tex_011038" OutName="tex_011038" Format="ci8" Width="32" Height="32" Offset="0x11038" />
         <Texture Name="object_oF1d_map_Tex_011438" OutName="tex_011438" Format="rgba16" Width="8" Height="8" Offset="0x11438" />
         <Texture Name="object_oF1d_map_Tex_0114B8" OutName="tex_0114B8" Format="ci8" Width="16" Height="16" Offset="0x114B8" />
         <Texture Name="object_oF1d_map_Tex_0115B8" OutName="tex_0115B8" Format="rgba16" Width="32" Height="16" Offset="0x115B8" />
