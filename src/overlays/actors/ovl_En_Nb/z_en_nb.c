@@ -646,9 +646,6 @@ void func_80BC0D1C(EnNb* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
 }
 
-extern UNK_TYPE D_80BC13F0[];
-
-#ifdef NON_MATCHING
 void func_80BC0D84(EnNb* this, GlobalContext* globalCtx) {
     s32 pad;
     struct_80133038_arg2 sp20;
@@ -660,7 +657,7 @@ void func_80BC0D84(EnNb* this, GlobalContext* globalCtx) {
         func_80BC0C80(this, globalCtx, &sp20.unk0);
         this->actor.shape.shadowDraw = func_800B3FC0;
         this->actor.flags |= 1;
-    } else if ((func_80133038(globalCtx, D_80BC13F0, &sp20) == 0) || ((sp20.unk0 != this->unk_1DC) && (func_80BC0C80(this, globalCtx, &sp20.unk0) == 0))) {
+    } else if ((func_80133038(globalCtx, D_80BC13F0, &sp20) == 0) || ((this->unk_1DC != sp20.unk0) && (func_80BC0C80(this, globalCtx, &sp20.unk0) == 0))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~1;
         sp20.unk0 = 0;
@@ -673,10 +670,6 @@ void func_80BC0D84(EnNb* this, GlobalContext* globalCtx) {
     this->unk_1E8 = func_80BBFF90(this, globalCtx);
     func_80BC0D1C(this, globalCtx);
 }
-#else
-void func_80BC0D84(EnNb* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BC0D84.s")
-#endif
 
 void func_80BC0EAC(EnNb* this, GlobalContext* globalCtx) {
     if (func_8010BF58(&this->actor, globalCtx, (s32* ) this->unk_1E0, this->unk_28C, &this->unk_1E4) != 0) {
