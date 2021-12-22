@@ -10,7 +10,7 @@ typedef void (*ObjChanActionFunc)(struct ObjChan*, GlobalContext*);
 typedef struct ObjChan {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ ObjChanActionFunc actionFunc;
-    /* 0x0148 */ char unk_144[0x9C];
+    /* 0x0148 */ char unk_148[0x9C];
 } ObjChan; // size = 0x1E4
 
 extern const ActorInit Obj_Chan_InitVars;
