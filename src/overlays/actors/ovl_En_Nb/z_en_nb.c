@@ -145,7 +145,12 @@ void EnNb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/EnNb_Destroy.s")
+void EnNb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnNb* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+    globalCtx->interfaceCtx.unk_31A = 3;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/EnNb_Update.s")
 
