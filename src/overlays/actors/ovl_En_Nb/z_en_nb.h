@@ -28,7 +28,7 @@ typedef struct EnNb {
     /* 0x232 */ Vec3s morphTable[8];
     /* 0x262 */ u16 unk_262;
     /* 0x264 */ char unk_264[0x04];
-    /* 0x268 */ f32 unk_268;
+    /* 0x268 */ f32 unk_268; // playSpeed
     /* 0x26C */ f32 unk_26C;
     /* 0x270 */ f32 unk_270;
     /* 0x274 */ f32 unk_274;

@@ -60,8 +60,29 @@ Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, s32 arg2, s16 arg3);
 void func_80BBFE60(EnNb* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFE60.s")
 
-UNK_TYPE func_80BBFE8C(EnNb* this, s32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFE8C.s")
+extern ActorAnimationEntryS D_80BC1628[];
+
+s32 func_80BBFE8C(EnNb* this, s32 arg1) {
+    s32 phi_v1 = false;
+    s32 phi_t0 = 0;
+
+    if ((arg1 == 0) || (arg1 == 1)) {
+        if ((this->unk_290 != 0) && (this->unk_290 != 1)) {
+            phi_v1 = true;
+        }
+    } else if (arg1 != this->unk_290) {
+        phi_v1 = true;
+    }
+
+    if (phi_v1) {
+        this->unk_290 = arg1;
+        phi_t0 = func_8013BC6C(&this->skelAnime, D_80BC1628, arg1);
+        this->unk_268 = this->skelAnime.playSpeed;
+    }
+
+    return phi_t0;
+}
+
 
 void func_80BBFF24(EnNb* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFF24.s")
