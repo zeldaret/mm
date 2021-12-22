@@ -6,6 +6,7 @@
 
 #include "z_en_peehat.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "objects/object_ph/object_ph.h"
 
 #define FLAGS 0x00000015
 
@@ -35,12 +36,6 @@ void func_808984E0(EnPeehat* this);
 void func_80898594(EnPeehat* this, GlobalContext* globalCtx);
 void func_80898654(EnPeehat* this);
 void func_808986A4(EnPeehat* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000350;
-extern AnimationHeader D_060005C4;
-extern AnimationHeader D_06000844;
-extern AnimationHeader D_060009C4;
-extern SkeletonHeader D_06001C80;
 
 const ActorInit En_Peehat_InitVars = {
     ACTOR_EN_PEEHAT,
@@ -182,7 +177,8 @@ void EnPeehat_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPeehat* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06001C80, &D_060009C4, this->jointTable, this->morphTable, 24);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_ph_Skel_001C80, &object_ph_Anim_0009C4, this->jointTable,
+                   this->morphTable, 24);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 27.0f);
     this->unk_2B0 = 0;
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->actor.world.pos);
@@ -215,12 +211,6 @@ void EnPeehat_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-typedef struct {
-    Actor actor;
-    char unk_144[0x168];
-    u8 unk_2AC;
-} EnPeehatUnkParent;
-
 void EnPeehat_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnPeehat* this = THIS;
 
@@ -228,7 +218,7 @@ void EnPeehat_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroySphere(globalCtx, &this->colliderSphere);
     Collider_DestroyTris(globalCtx, &this->colliderTris);
     if (this->actor.params != 0) {
-        EnPeehatUnkParent* parent = (EnPeehatUnkParent*)this->actor.parent;
+        EnPeehat* parent = (EnPeehat*)this->actor.parent;
 
         if ((parent != NULL) && (parent->actor.update != NULL)) {
             parent->unk_2AC--;
@@ -297,7 +287,8 @@ void func_80897390(EnPeehat* this, GlobalContext* globalCtx) {
 }
 
 void func_80897498(EnPeehat* this) {
-    Animation_Change(&this->skelAnime, &D_060009C4, 0.0f, 3.0f, Animation_GetLastFrame(&D_060009C4), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_ph_Anim_0009C4, 0.0f, 3.0f,
+                     Animation_GetLastFrame(&object_ph_Anim_0009C4), 2, 0.0f);
     this->unk_2B0 = 0;
     this->unk_2AD = 1;
     this->colliderCylinder.base.acFlags &= ~AC_HIT;
@@ -332,7 +323,8 @@ void func_80897520(EnPeehat* this, GlobalContext* globalCtx) {
 
 void func_80897648(EnPeehat* this) {
     if (this->actionFunc != func_80898454) {
-        Animation_Change(&this->skelAnime, &D_060009C4, 0.0f, 3.0f, Animation_GetLastFrame(&D_060009C4), 2, 0.0f);
+        Animation_Change(&this->skelAnime, &object_ph_Anim_0009C4, 0.0f, 3.0f,
+                         Animation_GetLastFrame(&object_ph_Anim_0009C4), 2, 0.0f);
     }
     this->unk_2B0 = 16;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIHAT_UP);
@@ -372,7 +364,7 @@ void func_808976DC(EnPeehat* this, GlobalContext* globalCtx) {
 }
 
 void func_80897864(EnPeehat* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_060005C4);
+    Animation_PlayLoop(&this->skelAnime, &object_ph_Anim_0005C4);
     this->unk_2B8 = 0.0f;
     if (this->actionFunc == func_80898338) {
         this->unk_2AD = -this->unk_2AD;
@@ -402,7 +394,7 @@ void func_80897910(EnPeehat* this, GlobalContext* globalCtx) {
 }
 
 void func_80897A34(EnPeehat* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_060005C4);
+    Animation_PlayLoop(&this->skelAnime, &object_ph_Anim_0005C4);
     this->unk_2B0 = 30;
     this->actor.speedXZ = 5.3f;
     this->colliderTris.base.atFlags |= AT_ON;
@@ -468,7 +460,7 @@ void func_80897A94(EnPeehat* this, GlobalContext* globalCtx) {
 }
 
 void func_80897D00(EnPeehat* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_06000350);
+    Animation_PlayOnce(&this->skelAnime, &object_ph_Anim_000350);
     this->colliderTris.base.atFlags &= ~AT_ON;
     this->actionFunc = func_80897D48;
 }
@@ -497,7 +489,7 @@ void func_80897D48(EnPeehat* this, GlobalContext* globalCtx) {
 }
 
 void func_80897EAC(EnPeehat* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_060005C4);
+    Animation_PlayLoop(&this->skelAnime, &object_ph_Anim_0005C4);
     this->actor.speedXZ = Rand_ZeroFloat(0.5f) + 2.5f;
     this->unk_2B0 = Rand_ZeroFloat(10.0f) + 10.0f;
     this->colliderTris.base.atFlags |= AT_ON;
@@ -581,7 +573,7 @@ void func_80898144(EnPeehat* this, GlobalContext* globalCtx) {
 }
 
 void func_808982E0(EnPeehat* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000844, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_ph_Anim_000844, -4.0f);
     this->actor.speedXZ = -9.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actionFunc = func_80898338;
@@ -629,7 +621,7 @@ void func_80898454(EnPeehat* this, GlobalContext* globalCtx) {
 }
 
 void func_808984E0(EnPeehat* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000844, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_ph_Anim_000844, -4.0f);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIHAT_DAMAGE);
     this->unk_2B2 = 4000;
     this->unk_2B0 = 14;
@@ -660,7 +652,7 @@ void func_80898594(EnPeehat* this, GlobalContext* globalCtx) {
 }
 
 void func_80898654(EnPeehat* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_060005C4);
+    Animation_PlayLoop(&this->skelAnime, &object_ph_Anim_0005C4);
     this->unk_2B0 = 5;
     this->unk_2B8 = 0.0f;
     this->actionFunc = func_808986A4;
@@ -805,8 +797,8 @@ void EnPeehat_Update(Actor* thisx, GlobalContext* globalCtx2) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
 
             for (i = 1; i >= 0; i--) {
-                if (func_800C55C4(&globalCtx->colCtx, &thisx->world.pos, &this->unk_2D4[i], &sp74, &sp70, 1, 1, 0, 1,
-                                  &sp6C)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &thisx->world.pos, &this->unk_2D4[i], &sp74, &sp70, 1,
+                                            1, 0, 1, &sp6C)) {
                     func_800BBFB0(globalCtx, &sp74, 0.0f, 1, 300, 150, 1);
                     func_80897258(globalCtx, this, &sp74, 0.0f, 1.5f);
                 }
@@ -894,38 +886,33 @@ void EnPeehat_PostLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Gfx** dList
     if (limbIndex == 4) {
         Matrix_GetStateTranslationAndScaledZ(5500.0f, &this->unk_2D4[0]);
         Matrix_GetStateTranslationAndScaledZ(-5500.0f, &this->unk_2D4[1]);
-        return;
-    }
+    } else if ((limbIndex == 3) && (thisx->params == 0)) {
+        Vec3f* vec = &D_80899570[0];
+        Vec3f* vec2 = &this->unk_2EC[12];
 
-    if (limbIndex == 3) {
-        if (thisx->params == 0) {
-            Vec3f* vec = &D_80899570[0];
-            Vec3f* vec2 = &this->unk_2EC[12];
-
-            for (i = 0; i < ARRAY_COUNT(D_80899570); i++, vec++, vec2++) {
-                Matrix_MultiplyVector3fByState(vec, vec2);
-            }
-
-            Matrix_GetStateTranslationAndScaledX(3000.0f, vec2++);
-            Matrix_GetStateTranslationAndScaledX(-400.0f, vec2);
-
-            OPEN_DISPS(globalCtx->state.gfxCtx);
-            gfx = POLY_OPA_DISP;
-
-            Matrix_InsertTranslation(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-            Collider_UpdateSphere(0, &this->colliderSphere);
-            Matrix_InsertTranslation(500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-            Matrix_InsertYRotation_f(3.2f, MTXMODE_APPLY);
-            Matrix_Scale(0.3f, 0.2f, 0.2f, MTXMODE_APPLY);
-
-            gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(&gfx[1], *dList);
-
-            POLY_OPA_DISP = &gfx[2];
-            Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->colliderSphere.dim.worldSphere.center);
-
-            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        for (i = 0; i < ARRAY_COUNT(D_80899570); i++, vec++, vec2++) {
+            Matrix_MultiplyVector3fByState(vec, vec2);
         }
+
+        Matrix_GetStateTranslationAndScaledX(3000.0f, vec2++);
+        Matrix_GetStateTranslationAndScaledX(-400.0f, vec2);
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        gfx = POLY_OPA_DISP;
+
+        Matrix_InsertTranslation(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Collider_UpdateSphere(0, &this->colliderSphere);
+        Matrix_InsertTranslation(500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertYRotation_f(3.2f, MTXMODE_APPLY);
+        Matrix_Scale(0.3f, 0.2f, 0.2f, MTXMODE_APPLY);
+
+        gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(&gfx[1], *dList);
+
+        POLY_OPA_DISP = &gfx[2];
+        Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->colliderSphere.dim.worldSphere.center);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
 
