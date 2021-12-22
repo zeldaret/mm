@@ -190,28 +190,31 @@ ActorAnimationEntryS D_80BC1628[] = {
     { &object_nb_Anim_0006D4, 1.0f, 0, -1, 2, -4 },
 };
 
-#ifdef NON_MATCHING
 Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
-    Actor* actor;
+    Actor *thisx;
+    Actor* actor = NULL;
 
-    actor = NULL;
-loop_1:
-    actor = func_ActorCategoryIterateById(globalCtx, actor, actorCategory, actorId);
-    if ((actor != 0) && ((&this->actor == actor) || (actor->update == 0))) {
-        if (actor->next == 0) {
-
-        } else {
-            actor = actor->next;
-            goto loop_1;
+    while (true) {
+        actor = func_ActorCategoryIterateById(globalCtx, actor, actorCategory, actorId);
+        if (actor == NULL) {
+            break;
         }
+
+        thisx = &this->actor;
+        if ((actor != thisx) && (actor->update != NULL)) {
+            break;
+        }
+
+        if (actor->next == NULL) {
+            actor = NULL;
+            break;
+        }
+
+        actor = actor->next;
     }
 
     return actor;
 }
-#else
-Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, u8 actorCategory, s16 actorId);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFDB0.s")
-#endif
 
 void func_80BBFE60(EnNb* this) {
     this->skelAnime.playSpeed = this->unk_268;
