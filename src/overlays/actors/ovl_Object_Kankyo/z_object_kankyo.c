@@ -1,7 +1,7 @@
 /*
  * File: z_object_kankyo.c
  * Overlay: ovl_Object_Kankyo
- * Description: Snow, rain in Skull Kid backstory cutscene, and bubbles deep in Pinnacle Rock
+ * Description:
  */
 
 #include "z_object_kankyo.h"
@@ -131,7 +131,7 @@ void func_808DC18C(ObjectKankyo* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 pad2;
     s32 pad3;
-    f32 sqrt;
+    f32 magnitude;
     f32 y;
     f32 z;
     f32 temp_f18;
@@ -142,11 +142,11 @@ void func_808DC18C(ObjectKankyo* this, GlobalContext* globalCtx) {
     x = globalCtx->view.at.x - globalCtx->view.eye.x;
     y = globalCtx->view.at.y - globalCtx->view.eye.y;
     z = globalCtx->view.at.z - globalCtx->view.eye.z;
-    sqrt = sqrtf(SQ(x) + SQ(y) + SQ(z));
+    magnitude = sqrtf(SQ(x) + SQ(y) + SQ(z));
 
-    temp_f18 = x / sqrt;
-    x = z / sqrt;
-    sp1C = (y / sqrt) * 120.0f;
+    temp_f18 = x / magnitude;
+    x = z / magnitude;
+    sp1C = (y / magnitude) * 120.0f;
 
     this->unk_14C[0].unk_00 = globalCtx->view.eye.x + (temp_f18 * 50.0f);
     this->unk_14C[0].unk_04 = globalCtx->view.eye.y + sp1C;
@@ -176,12 +176,12 @@ void func_808DC18C(ObjectKankyo* this, GlobalContext* globalCtx) {
         }
     }
 
-    sqrt = globalCtx->envCtx.windSpeed / 60.0f;
-    sqrt = CLAMP(sqrt, 0.0f, 1.0f);
+    magnitude = globalCtx->envCtx.windSpeed / 60.0f;
+    magnitude = CLAMP(magnitude, 0.0f, 1.0f);
 
-    sp30.x = globalCtx->envCtx.windDir.x * sqrt;
+    sp30.x = globalCtx->envCtx.windDir.x * magnitude;
     sp30.y = globalCtx->envCtx.windDir.y + 100.0f;
-    sp30.z = globalCtx->envCtx.windDir.z * sqrt;
+    sp30.z = globalCtx->envCtx.windDir.z * magnitude;
     this->unk_14C[2].unk_00 = 0x4000 - Math_Vec3f_Pitch(&D_801D15B0, &sp30);
     this->unk_14C[2].unk_04 = Math_Vec3f_Yaw(&D_801D15B0, &sp30) + 0x8000;
 }
@@ -203,15 +203,15 @@ void func_808DC454(ObjectKankyo* this, GlobalContext* globalCtx) {
     f32 x = globalCtx->view.at.x - globalCtx->view.eye.x;
     f32 y = globalCtx->view.at.y - globalCtx->view.eye.y;
     f32 z = globalCtx->view.at.z - globalCtx->view.eye.z;
-    f32 sqrt = sqrtf(SQ(x) + SQ(y) + SQ(z));
+    f32 magnitude = sqrtf(SQ(x) + SQ(y) + SQ(z));
     f32 temp_120 = 120.0f;
     f32 temp_f30;
     Vec3f sp88;
     s32 pad;
 
-    spD0 = x / sqrt;
-    spCC = y / sqrt;
-    spC8 = z / sqrt;
+    spD0 = x / magnitude;
+    spCC = y / magnitude;
+    spC8 = z / magnitude;
 
     for (i = 0; i < globalCtx->envCtx.unk_F2[2]; i++) {
         switch (this->unk_14C[i].unk_1C) {
@@ -250,14 +250,14 @@ void func_808DC454(ObjectKankyo* this, GlobalContext* globalCtx) {
                 temp_f28 = globalCtx->view.eye.y + (spCC * 120.0f);
                 temp_f30 = globalCtx->view.eye.z + (spC8 * 120.0f);
 
-                sqrt = sqrtf((f32)SQ(globalCtx->envCtx.windDir.x) + SQ(globalCtx->envCtx.windDir.y) +
-                             SQ(globalCtx->envCtx.windDir.z));
-                if (sqrt == 0.0f) {
-                    sqrt = 0.001f;
+                magnitude = sqrtf((f32)SQ(globalCtx->envCtx.windDir.x) + SQ(globalCtx->envCtx.windDir.y) +
+                                  SQ(globalCtx->envCtx.windDir.z));
+                if (magnitude == 0.0f) {
+                    magnitude = 0.001f;
                 }
-                spC4 = -globalCtx->envCtx.windDir.x / sqrt;
-                spC0 = -globalCtx->envCtx.windDir.y / sqrt;
-                spBC = -globalCtx->envCtx.windDir.z / sqrt;
+                spC4 = -globalCtx->envCtx.windDir.x / magnitude;
+                spC0 = -globalCtx->envCtx.windDir.y / magnitude;
+                spBC = -globalCtx->envCtx.windDir.z / magnitude;
 
                 if (i == 0) {
                     this->unk_144 += 0.049999997f * Rand_ZeroOne();
@@ -323,8 +323,10 @@ void func_808DCB7C(ObjectKankyo* this, GlobalContext* globalCtx) {
         if ((globalCtx->state.frames % 16) == 0) {
             globalCtx->envCtx.unk_F2[2] += 2;
         }
-    } else if ((globalCtx->envCtx.unk_F2[3] < globalCtx->envCtx.unk_F2[2]) && ((globalCtx->state.frames % 16) == 0)) {
-        globalCtx->envCtx.unk_F2[2] -= 2;
+    } else if (globalCtx->envCtx.unk_F2[3] < globalCtx->envCtx.unk_F2[2]) {
+        if ((globalCtx->state.frames % 16) == 0) {
+            globalCtx->envCtx.unk_F2[2] -= 2;
+        }
     }
     func_808DC454(this, globalCtx);
 }
@@ -356,7 +358,7 @@ void func_808DCBF8(ObjectKankyo* this, GlobalContext* globalCtx) {
 
 void func_808DCDB4(ObjectKankyo* this, GlobalContext* globalCtx) {
     s16 i;
-    f32 sqrt;
+    f32 magnitude;
     f32 temp_80;
     f32 temp_120;
     f32 spAC;
@@ -380,11 +382,11 @@ void func_808DCDB4(ObjectKankyo* this, GlobalContext* globalCtx) {
     y = globalCtx->view.at.y - globalCtx->view.eye.y;
     z = globalCtx->view.at.z - globalCtx->view.eye.z;
 
-    sqrt = sqrtf(SQ(x) + SQ(y) + SQ(z));
+    magnitude = sqrtf(SQ(x) + SQ(y) + SQ(z));
 
-    spAC = x / sqrt;
-    spA8 = y / sqrt;
-    spA4 = z / sqrt;
+    spAC = x / magnitude;
+    spA8 = y / magnitude;
+    spA4 = z / magnitude;
 
     temp_80 = 80.0f;
     temp_120 = 120.0f;
@@ -396,7 +398,7 @@ void func_808DCDB4(ObjectKankyo* this, GlobalContext* globalCtx) {
                 this->unk_14C[i].unk_04 = globalCtx->view.eye.y + (spA8 * 120.0f);
                 this->unk_14C[i].unk_08 = globalCtx->view.eye.z + (spA4 * 120.0f);
                 this->unk_14C[i].unk_0C = (Rand_ZeroOne() - 0.5f) * (temp_120 * 2.0f);
-                if ((i & 1) == 0) {
+                if ((i % 2) == 0) {
                     this->unk_14C[i].unk_10 = -100.0f;
                 } else {
                     this->unk_14C[i].unk_10 = 100.0f;
@@ -412,14 +414,14 @@ void func_808DCDB4(ObjectKankyo* this, GlobalContext* globalCtx) {
                 temp_f28 = globalCtx->view.eye.y + (spA8 * 120.0f);
                 temp_f18 = globalCtx->view.eye.z + (spA4 * 120.0f);
 
-                sqrt = sqrtf((f32)SQ(globalCtx->envCtx.windDir.x) + SQ(globalCtx->envCtx.windDir.y) +
-                             SQ(globalCtx->envCtx.windDir.z));
-                if (sqrt == 0.0f) {
-                    sqrt = 0.001f;
+                magnitude = sqrtf((f32)SQ(globalCtx->envCtx.windDir.x) + SQ(globalCtx->envCtx.windDir.y) +
+                                  SQ(globalCtx->envCtx.windDir.z));
+                if (magnitude == 0.0f) {
+                    magnitude = 0.001f;
                 }
 
-                spA0 = -globalCtx->envCtx.windDir.x / sqrt;
-                sp9C = -globalCtx->envCtx.windDir.z / sqrt;
+                spA0 = -globalCtx->envCtx.windDir.x / magnitude;
+                sp9C = -globalCtx->envCtx.windDir.z / magnitude;
 
                 if (i == 0) {
                     this->unk_144 += 0.049999997f * Rand_ZeroOne();
@@ -431,7 +433,7 @@ void func_808DCDB4(ObjectKankyo* this, GlobalContext* globalCtx) {
                 this->unk_14C[i].unk_0C += __sinf((this->unk_144 + i) * 0.01f) + (spA0 * 10.0f * temp_f20);
                 this->unk_14C[i].unk_14 += __cosf((this->unk_148 + i) * 0.01f) + (sp9C * 10.0f * temp_f20);
 
-                if ((i & 1) == 0) {
+                if ((i % 2) == 0) {
                     this->unk_14C[i].unk_10 += this->unk_14C[i].unk_18;
                     if ((this->unk_14C[i].unk_04 + this->unk_14C[i].unk_10) > (globalCtx->view.eye.y + 100.0f)) {
                         this->unk_14C[i].unk_1C = 0;
@@ -511,7 +513,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
     f32 temp_f2;
     f32 tempf;
 
-    if ((globalCtx->cameraPtrs[0]->flags2 & 0x100) || ((u8)globalCtx->envCtx.unk_E2 == 0)) {
+    if ((globalCtx->cameraPtrs[MAIN_CAM]->flags2 & 0x100) || ((u8)globalCtx->envCtx.unk_E2 == 0)) {
         return;
     }
 
@@ -563,7 +565,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(160.0f * temp_f2));
 
-            Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
+            Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -586,7 +588,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
     ObjectKankyo* this = THIS;
     f32 tempA;
 
-    if (globalCtx->sceneNum == SCENE_KYOJINNOMA) { // Nice
+    if (globalCtx->sceneNum == SCENE_KYOJINNOMA) {
         phi_f26 = 1.0f;
     } else {
         tempA = func_800E031C(GET_ACTIVE_CAM(globalCtx));
@@ -599,7 +601,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
 
         phi_f26 = CLAMP_MAX(phi_f26, 1.0f);
 
-        if (!(globalCtx->cameraPtrs[0]->flags2 & 0x100) || (phi_f26 == 0.0f)) {
+        if (!(globalCtx->cameraPtrs[MAIN_CAM]->flags2 & 0x100) || (phi_f26 == 0.0f)) {
             return;
         }
     }
@@ -612,7 +614,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
         spBC.z = this->unk_14C[i].unk_08 + this->unk_14C[i].unk_14;
         func_80169474(globalCtx, &spBC, &spB0);
 
-        if ((0.0f <= spB0.x) && (spB0.x < 320.0f) && (0.0f <= spB0.y) && (spB0.y < 240.0f)) {
+        if ((spB0.x >= 0.0f) && (spB0.x < 320.0f) && (spB0.y >= 0.0f) && (spB0.y < 240.0f)) {
             Matrix_InsertTranslation(spBC.x, spBC.y, spBC.z, MTXMODE_NEW);
             Matrix_Scale(0.03f, 0.03f, 0.03f, MTXMODE_APPLY);
             temp_f0 = Math_Vec3f_DistXYZ(&spBC, &globalCtx->view.eye);
@@ -622,7 +624,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 55, temp_f0);
             gDPSetEnvColor(POLY_XLU_DISP++, 55, 50, 255, temp_f0);
 
-            Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
+            Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -672,24 +674,25 @@ void func_808DDE9C(Actor* thisx, GlobalContext* globalCtx2) {
         temp_f22 = this->unk_14C[0].unk_04 + ((Rand_ZeroOne() - 0.7f) * this->unk_144);
         temp_f2 = this->unk_14C[0].unk_08 + ((Rand_ZeroOne() - 0.7f) * this->unk_144);
 
-        if (!(temp_f20 < -252.0f) || !(temp_f20 > -500.0f) || !(temp_f2 > 3820.0f) || !(temp_f2 < 4150.0f)) {
-            Matrix_InsertTranslation(temp_f20, temp_f22, temp_f2, 0);
-
-            gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-
-            Matrix_RotateY((s16)this->unk_14C[2].unk_04 + (s16)(i << 5), MTXMODE_APPLY);
-            Matrix_InsertXRotation_s((s16)this->unk_14C[2].unk_00 + (s16)(i << 5), MTXMODE_APPLY);
-
-            if (this->unk_114C == 0) {
-                Matrix_Scale(0.5f, 1.0f, 0.5f, 1);
-            } else {
-                Matrix_Scale(2.0f, 4.0f, 2.0f, 1);
-            }
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_040706E0);
+        if ((temp_f20 < -252.0f) && (temp_f20 > -500.0f) && (temp_f2 > 3820.0f) && (temp_f2 < 4150.0f)) {
+            continue;
         }
+
+        Matrix_InsertTranslation(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
+
+        gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+
+        Matrix_RotateY((s16)this->unk_14C[2].unk_04 + (s16)(i << 5), MTXMODE_APPLY);
+        Matrix_InsertXRotation_s((s16)this->unk_14C[2].unk_00 + (s16)(i << 5), MTXMODE_APPLY);
+
+        if (this->unk_114C == 0) {
+            Matrix_Scale(0.5f, 1.0f, 0.5f, MTXMODE_APPLY);
+        } else {
+            Matrix_Scale(2.0f, 4.0f, 2.0f, MTXMODE_APPLY);
+        }
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, D_040706E0);
     }
 
     phi_s5 = false;
@@ -718,7 +721,6 @@ void func_808DDE9C(Actor* thisx, GlobalContext* globalCtx2) {
             }
         }
     }
-
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
