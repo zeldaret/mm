@@ -25,7 +25,8 @@ typedef struct EnNb {
     /* 0x202 */ Vec3s jointTable[8];
     /* 0x232 */ Vec3s morphTable[8];
     /* 0x262 */ u16 unk_262;
-    /* 0x264 */ char unk_264[0x04];
+    /* 0x264 */ u16 unk_264;
+    /* 0x266 */ char unk_266[0x02];
     /* 0x268 */ f32 unk_268; // playSpeed
     /* 0x26C */ f32 unk_26C;
     /* 0x270 */ f32 unk_270;
@@ -41,7 +42,8 @@ typedef struct EnNb {
     /* 0x28A */ char unk_28A[0x02];
     /* 0x28C */ EnNbActionFunc2 unk_28C;
     /* 0x290 */ s32 unk_290;
-    /* 0x294 */ char unk_294[0x8];
+    /* 0x294 */ char unk_294[0x4];
+    /* 0x294 */ s32 unk_298;
 } EnNb; // size = 0x29C
 
 extern const ActorInit En_Nb_InitVars;
