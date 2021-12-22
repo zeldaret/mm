@@ -1,7 +1,7 @@
 /*
  * File: z_en_sth2.c
  * Overlay: ovl_En_Sth2
- * Description:
+ * Description: Guy waving at the telescope in Termina Field
  */
 
 #include "z_en_sth2.h"

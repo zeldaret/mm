@@ -1,7 +1,7 @@
 /*
  * File: z_en_dnb.c
  * Overlay: ovl_En_Dnb
- * Description:
+ * Description: Unused invisible snowy mountain that explodes?
  */
 
 #include "z_en_dnb.h"
@@ -122,7 +122,7 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnDnb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnDnb* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -288,7 +288,7 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
 
             Matrix_InsertTranslation(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
             Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
