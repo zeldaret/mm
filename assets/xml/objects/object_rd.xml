@@ -1,0 +1,114 @@
+﻿<Root>
+    <File Name="object_rd" Segment="6">
+        <Animation Name="object_rd_Anim_0009C4" Offset="0x9C4" />
+        <Animation Name="object_rd_Anim_000F1C" Offset="0xF1C" />
+        <Animation Name="object_rd_Anim_001600" Offset="0x1600" />
+        <Texture Name="object_rd_Tex_001610" OutName="tex_001610" Format="rgba16" Width="64" Height="32" Offset="0x1610" />
+        <Texture Name="object_rd_Tex_002610" OutName="tex_002610" Format="rgba16" Width="32" Height="16" Offset="0x2610" />
+        <DList Name="object_rd_DL_004270" Offset="0x4270" />
+        <DList Name="object_rd_DL_004350" Offset="0x4350" />
+        <DList Name="object_rd_DL_0044C0" Offset="0x44C0" />
+        <DList Name="object_rd_DL_004628" Offset="0x4628" />
+        <DList Name="object_rd_DL_004730" Offset="0x4730" />
+        <DList Name="object_rd_DL_004830" Offset="0x4830" />
+        <DList Name="object_rd_DL_004930" Offset="0x4930" />
+        <DList Name="object_rd_DL_004A38" Offset="0x4A38" />
+        <DList Name="object_rd_DL_004B38" Offset="0x4B38" />
+        <DList Name="object_rd_DL_004C38" Offset="0x4C38" />
+        <DList Name="object_rd_DL_004D48" Offset="0x4D48" />
+        <DList Name="object_rd_DL_004E40" Offset="0x4E40" />
+        <DList Name="object_rd_DL_004F58" Offset="0x4F58" />
+        <DList Name="object_rd_DL_005068" Offset="0x5068" />
+        <DList Name="object_rd_DL_005160" Offset="0x5160" />
+        <Limb Name="object_rd_Standardlimb_005258" Type="Standard" Offset="0x5258" />
+        <Limb Name="object_rd_Standardlimb_005264" Type="Standard" Offset="0x5264" />
+        <Limb Name="object_rd_Standardlimb_005270" Type="Standard" Offset="0x5270" />
+        <Limb Name="object_rd_Standardlimb_00527C" Type="Standard" Offset="0x527C" />
+        <Limb Name="object_rd_Standardlimb_005288" Type="Standard" Offset="0x5288" />
+        <Limb Name="object_rd_Standardlimb_005294" Type="Standard" Offset="0x5294" />
+        <Limb Name="object_rd_Standardlimb_0052A0" Type="Standard" Offset="0x52A0" />
+        <Limb Name="object_rd_Standardlimb_0052AC" Type="Standard" Offset="0x52AC" />
+        <Limb Name="object_rd_Standardlimb_0052B8" Type="Standard" Offset="0x52B8" />
+        <Limb Name="object_rd_Standardlimb_0052C4" Type="Standard" Offset="0x52C4" />
+        <Limb Name="object_rd_Standardlimb_0052D0" Type="Standard" Offset="0x52D0" />
+        <Limb Name="object_rd_Standardlimb_0052DC" Type="Standard" Offset="0x52DC" />
+        <Limb Name="object_rd_Standardlimb_0052E8" Type="Standard" Offset="0x52E8" />
+        <Limb Name="object_rd_Standardlimb_0052F4" Type="Standard" Offset="0x52F4" />
+        <Limb Name="object_rd_Standardlimb_005300" Type="Standard" Offset="0x5300" />
+        <Limb Name="object_rd_Standardlimb_00530C" Type="Standard" Offset="0x530C" />
+        <Limb Name="object_rd_Standardlimb_005318" Type="Standard" Offset="0x5318" />
+        <Limb Name="object_rd_Standardlimb_005324" Type="Standard" Offset="0x5324" />
+        <Limb Name="object_rd_Standardlimb_005330" Type="Standard" Offset="0x5330" />
+        <Limb Name="object_rd_Standardlimb_00533C" Type="Standard" Offset="0x533C" />
+        <Limb Name="object_rd_Standardlimb_005348" Type="Standard" Offset="0x5348" />
+        <Limb Name="object_rd_Standardlimb_005354" Type="Standard" Offset="0x5354" />
+        <Limb Name="object_rd_Standardlimb_005360" Type="Standard" Offset="0x5360" />
+        <Limb Name="object_rd_Standardlimb_00536C" Type="Standard" Offset="0x536C" />
+        <Limb Name="object_rd_Standardlimb_005378" Type="Standard" Offset="0x5378" />
+        <Skeleton Name="object_rd_Skel_0053E8" Type="Flex" LimbType="Standard" Offset="0x53E8" />
+        <Animation Name="object_rd_Anim_005DF4" Offset="0x5DF4" />
+        <Animation Name="object_rd_Anim_0061E4" Offset="0x61E4" />
+        <Animation Name="object_rd_Anim_006678" Offset="0x6678" />
+        <Animation Name="object_rd_Anim_006B08" Offset="0x6B08" />
+        <Animation Name="object_rd_Anim_006EEC" Offset="0x6EEC" />
+        <Animation Name="object_rd_Anim_0073A4" Offset="0x73A4" />
+        <Animation Name="object_rd_Anim_007BBC" Offset="0x7BBC" />
+        <Animation Name="object_rd_Anim_0081A8" Offset="0x81A8" />
+        <Animation Name="object_rd_Anim_009298" Offset="0x9298" />
+        <Animation Name="object_rd_Anim_009900" Offset="0x9900" />
+        <Animation Name="object_rd_Anim_00A450" Offset="0xA450" />
+        <Animation Name="object_rd_Anim_00ABE0" Offset="0xABE0" />
+        <Texture Name="object_rd_Tex_00ABF0" OutName="tex_00ABF0" Format="rgba16" Width="32" Height="64" Offset="0xABF0" />
+        <Texture Name="object_rd_Tex_00BBF0" OutName="tex_00BBF0" Format="rgba16" Width="32" Height="64" Offset="0xBBF0" />
+        <Texture Name="object_rd_Tex_00CBF0" OutName="tex_00CBF0" Format="rgba16" Width="16" Height="32" Offset="0xCBF0" />
+        <Texture Name="object_rd_Tex_00CFF0" OutName="tex_00CFF0" Format="rgba16" Width="16" Height="32" Offset="0xCFF0" />
+        <Texture Name="object_rd_Tex_00D3F0" OutName="tex_00D3F0" Format="i8" Width="32" Height="32" Offset="0xD3F0" />
+        <Texture Name="object_rd_Tex_00D7F0" OutName="tex_00D7F0" Format="rgba16" Width="32" Height="64" Offset="0xD7F0" />
+        <Texture Name="object_rd_Tex_00E7F0" OutName="tex_00E7F0" Format="rgba16" Width="32" Height="16" Offset="0xE7F0" />
+        <DList Name="object_rd_DL_00FAB0" Offset="0xFAB0" />
+        <DList Name="object_rd_DL_00FBD8" Offset="0xFBD8" />
+        <DList Name="object_rd_DL_00FED0" Offset="0xFED0" />
+        <DList Name="object_rd_DL_00FFB0" Offset="0xFFB0" />
+        <DList Name="object_rd_DL_010070" Offset="0x10070" />
+        <DList Name="object_rd_DL_010140" Offset="0x10140" />
+        <DList Name="object_rd_DL_010218" Offset="0x10218" />
+        <DList Name="object_rd_DL_0102E8" Offset="0x102E8" />
+        <DList Name="object_rd_DL_0103B8" Offset="0x103B8" />
+        <DList Name="object_rd_DL_0104F8" Offset="0x104F8" />
+        <DList Name="object_rd_DL_0105D8" Offset="0x105D8" />
+        <DList Name="object_rd_DL_0106A0" Offset="0x106A0" />
+        <DList Name="object_rd_DL_010768" Offset="0x10768" />
+        <DList Name="object_rd_DL_010848" Offset="0x10848" />
+        <DList Name="object_rd_DL_010910" Offset="0x10910" />
+        <Limb Name="object_rd_Standardlimb_0109F8" Type="Standard" Offset="0x109F8" />
+        <Limb Name="object_rd_Standardlimb_010A04" Type="Standard" Offset="0x10A04" />
+        <Limb Name="object_rd_Standardlimb_010A10" Type="Standard" Offset="0x10A10" />
+        <Limb Name="object_rd_Standardlimb_010A1C" Type="Standard" Offset="0x10A1C" />
+        <Limb Name="object_rd_Standardlimb_010A28" Type="Standard" Offset="0x10A28" />
+        <Limb Name="object_rd_Standardlimb_010A34" Type="Standard" Offset="0x10A34" />
+        <Limb Name="object_rd_Standardlimb_010A40" Type="Standard" Offset="0x10A40" />
+        <Limb Name="object_rd_Standardlimb_010A4C" Type="Standard" Offset="0x10A4C" />
+        <Limb Name="object_rd_Standardlimb_010A58" Type="Standard" Offset="0x10A58" />
+        <Limb Name="object_rd_Standardlimb_010A64" Type="Standard" Offset="0x10A64" />
+        <Limb Name="object_rd_Standardlimb_010A70" Type="Standard" Offset="0x10A70" />
+        <Limb Name="object_rd_Standardlimb_010A7C" Type="Standard" Offset="0x10A7C" />
+        <Limb Name="object_rd_Standardlimb_010A88" Type="Standard" Offset="0x10A88" />
+        <Limb Name="object_rd_Standardlimb_010A94" Type="Standard" Offset="0x10A94" />
+        <Limb Name="object_rd_Standardlimb_010AA0" Type="Standard" Offset="0x10AA0" />
+        <Limb Name="object_rd_Standardlimb_010AAC" Type="Standard" Offset="0x10AAC" />
+        <Limb Name="object_rd_Standardlimb_010AB8" Type="Standard" Offset="0x10AB8" />
+        <Limb Name="object_rd_Standardlimb_010AC4" Type="Standard" Offset="0x10AC4" />
+        <Limb Name="object_rd_Standardlimb_010AD0" Type="Standard" Offset="0x10AD0" />
+        <Limb Name="object_rd_Standardlimb_010ADC" Type="Standard" Offset="0x10ADC" />
+        <Limb Name="object_rd_Standardlimb_010AE8" Type="Standard" Offset="0x10AE8" />
+        <Limb Name="object_rd_Standardlimb_010AF4" Type="Standard" Offset="0x10AF4" />
+        <Limb Name="object_rd_Standardlimb_010B00" Type="Standard" Offset="0x10B00" />
+        <Limb Name="object_rd_Standardlimb_010B0C" Type="Standard" Offset="0x10B0C" />
+        <Limb Name="object_rd_Standardlimb_010B18" Type="Standard" Offset="0x10B18" />
+        <Skeleton Name="object_rd_Skel_010B88" Type="Flex" LimbType="Standard" Offset="0x10B88" />
+        <Animation Name="object_rd_Anim_0113EC" Offset="0x113EC" />
+        <Animation Name="object_rd_Anim_0118D8" Offset="0x118D8" />
+        <Animation Name="object_rd_Anim_011DB8" Offset="0x11DB8" />
+        <Animation Name="object_rd_Anim_01216C" Offset="0x1216C" />
+    </File>
+</Root>
