@@ -54,11 +54,13 @@ extern CollisionCheckInfoInit2 D_80BC161C;
 
 extern FlexSkeletonHeader D_06008C40;
 
-Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, s32 arg2, s16 arg3);
+Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, u8 arg2, s16 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFDB0.s")
 
-void func_80BBFE60(EnNb* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nb/func_80BBFE60.s")
+void func_80BBFE60(EnNb* this) {
+    this->skelAnime.playSpeed = this->unk_268;
+    SkelAnime_Update(&this->skelAnime);
+}
 
 extern ActorAnimationEntryS D_80BC1628[];
 
@@ -148,10 +150,10 @@ void func_80BC0D84(EnNb* this, GlobalContext* globalCtx) {
 
     if (gSaveContext.eventInf[4] & 8) {
         sp20.unk0 = 1;
-        func_80BC0C80(this, globalCtx, &sp20);
+        func_80BC0C80(this, globalCtx, &sp20.unk0);
         this->actor.shape.shadowDraw = func_800B3FC0;
         this->actor.flags |= 1;
-    } else if ((func_80133038(globalCtx, D_80BC13F0, &sp20) == 0) || ((sp20.unk0 != this->unk_1DC) && (func_80BC0C80(this, globalCtx, &sp20) == 0))) {
+    } else if ((func_80133038(globalCtx, D_80BC13F0, &sp20) == 0) || ((sp20.unk0 != this->unk_1DC) && (func_80BC0C80(this, globalCtx, &sp20.unk0) == 0))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~1;
         sp20.unk0 = 0;
@@ -263,7 +265,7 @@ void func_80BC1278(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     if (limbIndex == 5) {
         func_8013AD9C(this->unk_27C + 0x4000, this->unk_27E + this->actor.shape.rot.y + 0x4000, &this->unk_1F0, &this->unk_1FC, phi_v0, phi_v1);
         Matrix_StatePop();
-        Matrix_InsertTranslation(this->unk_1F0, this->unk_1F4, this->unk_1F8, 0);
+        Matrix_InsertTranslation(this->unk_1F0.x, this->unk_1F0.y, this->unk_1F0.z, 0);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
         Matrix_RotateY(this->unk_1FC.y, 1);
         Matrix_InsertXRotation_s(this->unk_1FC.x, 1);

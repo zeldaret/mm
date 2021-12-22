@@ -20,9 +20,7 @@ typedef struct EnNb {
     /* 0x1E4 */ s32 unk_1E4;
     /* 0x1E8 */ Actor* unk_1E8;
     /* 0x1EC */ char unk_1EC[0x04];
-    /* 0x1F0 */ f32 unk_1F0;
-    /* 0x1F4 */ f32 unk_1F4;
-    /* 0x1F8 */ f32 unk_1F8;
+    /* 0x1F0 */ Vec3f unk_1F0;
     /* 0x1FC */ Vec3s unk_1FC;
     /* 0x202 */ Vec3s jointTable[8];
     /* 0x232 */ Vec3s morphTable[8];
