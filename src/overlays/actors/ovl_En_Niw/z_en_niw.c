@@ -810,7 +810,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
 
-    if ((this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= 32000.0f)) {
+    if (this->actor.floorHeight <= BGCHECK_Y_MIN || this->actor.floorHeight >= BGCHECK_Y_MAX) {
         // if cucco is off the map?
         Vec3f camera;
         camera.x = globalCtx->view.at.x - globalCtx->view.eye.x;
@@ -1007,7 +1007,7 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
             }
 
             Matrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(feather->scale, feather->scale, 1.0f, MTXMODE_APPLY);
             Matrix_InsertZRotation_f(feather->zRot, MTXMODE_APPLY);
             Matrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);

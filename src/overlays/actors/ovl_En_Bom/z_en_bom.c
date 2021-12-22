@@ -1,5 +1,5 @@
 /*
- * File z_en_bom.c
+ * File: z_en_bom.c
  * Overlay: ovl_En_Bom
  * Description: Bomb / Powder Keg
  */
