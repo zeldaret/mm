@@ -1,0 +1,20 @@
+﻿<Root>
+    <File Name="object_drs" Segment="6">
+        <Animation Name="object_drs_Anim_00001C" Offset="0x1C" />
+        <DList Name="object_drs_DL_003120" Offset="0x3120" />
+        <DList Name="object_drs_DL_003EA8" Offset="0x3EA8" />
+        <DList Name="object_drs_DL_003F80" Offset="0x3F80" />
+        <Texture Name="object_drs_Tex_004008" OutName="tex_004008" Format="rgba16" Width="16" Height="16" Offset="0x4008" />
+        <Texture Name="object_drs_Tex_004208" OutName="tex_004208" Format="rgba16" Width="16" Height="16" Offset="0x4208" />
+        <Texture Name="object_drs_Tex_004408" OutName="tex_004408" Format="i8" Width="8" Height="8" Offset="0x4408" />
+        <Texture Name="object_drs_Tex_004448" OutName="tex_004448" Format="i8" Width="32" Height="32" Offset="0x4448" />
+        <Texture Name="object_drs_Tex_004848" OutName="tex_004848" Format="rgba16" Width="32" Height="16" Offset="0x4848" />
+        <Texture Name="object_drs_Tex_004C48" OutName="tex_004C48" Format="rgba16" Width="16" Height="16" Offset="0x4C48" />
+        <Texture Name="object_drs_Tex_004E48" OutName="tex_004E48" Format="i8" Width="32" Height="64" Offset="0x4E48" />
+        <Texture Name="object_drs_Tex_005648" OutName="tex_005648" Format="i8" Width="32" Height="32" Offset="0x5648" />
+        <Limb Name="object_drs_Standardlimb_005A48" Type="Standard" Offset="0x5A48" />
+        <Limb Name="object_drs_Standardlimb_005A54" Type="Standard" Offset="0x5A54" />
+        <Limb Name="object_drs_Standardlimb_005A60" Type="Standard" Offset="0x5A60" />
+        <Skeleton Name="object_drs_Skel_005A78" Type="Flex" LimbType="Standard" Offset="0x5A78" />
+    </File>
+</Root>

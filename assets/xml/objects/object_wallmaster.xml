@@ -1,0 +1,63 @@
+﻿<Root>
+    <File Name="object_wallmaster" Segment="6">
+        <Animation Name="object_wallmaster_Anim_000590" Offset="0x590" />
+        <Animation Name="object_wallmaster_Anim_000EA4" Offset="0xEA4" />
+        <Animation Name="object_wallmaster_Anim_0019CC" Offset="0x19CC" />
+        <Animation Name="object_wallmaster_Anim_002158" Offset="0x2158" />
+        <Animation Name="object_wallmaster_Anim_00299C" Offset="0x299C" />
+        <Animation Name="object_wallmaster_Anim_003120" Offset="0x3120" />
+        <Animation Name="object_wallmaster_Anim_0039B0" Offset="0x39B0" />
+        <Animation Name="object_wallmaster_Anim_0041F4" Offset="0x41F4" />
+        <DList Name="object_wallmaster_DL_006660" Offset="0x6660" />
+        <DList Name="object_wallmaster_DL_006800" Offset="0x6800" />
+        <DList Name="object_wallmaster_DL_006A20" Offset="0x6A20" />
+        <DList Name="object_wallmaster_DL_006C58" Offset="0x6C58" />
+        <DList Name="object_wallmaster_DL_006E98" Offset="0x6E98" />
+        <DList Name="object_wallmaster_DL_007038" Offset="0x7038" />
+        <DList Name="object_wallmaster_DL_007258" Offset="0x7258" />
+        <DList Name="object_wallmaster_DL_007408" Offset="0x7408" />
+        <DList Name="object_wallmaster_DL_0075A8" Offset="0x75A8" />
+        <DList Name="object_wallmaster_DL_0077C8" Offset="0x77C8" />
+        <DList Name="object_wallmaster_DL_007978" Offset="0x7978" />
+        <DList Name="object_wallmaster_DL_007B18" Offset="0x7B18" />
+        <DList Name="object_wallmaster_DL_007CE8" Offset="0x7CE8" />
+        <DList Name="object_wallmaster_DL_007E98" Offset="0x7E98" />
+        <DList Name="object_wallmaster_DL_008688" Offset="0x8688" />
+        <Texture Name="object_wallmaster_Tex_0088F0" OutName="tex_0088F0" Format="rgba16" Width="8" Height="16" Offset="0x88F0" />
+        <Texture Name="object_wallmaster_Tex_0089F0" OutName="tex_0089F0" Format="rgba16" Width="8" Height="16" Offset="0x89F0" />
+        <Texture Name="object_wallmaster_Tex_008AF0" OutName="tex_008AF0" Format="rgba16" Width="8" Height="8" Offset="0x8AF0" />
+        <Texture Name="object_wallmaster_Tex_008B70" OutName="tex_008B70" Format="rgba16" Width="4" Height="16" Offset="0x8B70" />
+        <Texture Name="object_wallmaster_Tex_008BF0" OutName="tex_008BF0" Format="rgba16" Width="4" Height="8" Offset="0x8BF0" />
+        <Texture Name="object_wallmaster_Tex_008C30" OutName="tex_008C30" Format="rgba16" Width="8" Height="16" Offset="0x8C30" />
+        <Texture Name="object_wallmaster_Tex_008D30" OutName="tex_008D30" Format="rgba16" Width="8" Height="16" Offset="0x8D30" />
+        <Limb Name="object_wallmaster_Standardlimb_008E30" Type="Standard" Offset="0x8E30" />
+        <Limb Name="object_wallmaster_Standardlimb_008E3C" Type="Standard" Offset="0x8E3C" />
+        <Limb Name="object_wallmaster_Standardlimb_008E48" Type="Standard" Offset="0x8E48" />
+        <Limb Name="object_wallmaster_Standardlimb_008E54" Type="Standard" Offset="0x8E54" />
+        <Limb Name="object_wallmaster_Standardlimb_008E60" Type="Standard" Offset="0x8E60" />
+        <Limb Name="object_wallmaster_Standardlimb_008E6C" Type="Standard" Offset="0x8E6C" />
+        <Limb Name="object_wallmaster_Standardlimb_008E78" Type="Standard" Offset="0x8E78" />
+        <Limb Name="object_wallmaster_Standardlimb_008E84" Type="Standard" Offset="0x8E84" />
+        <Limb Name="object_wallmaster_Standardlimb_008E90" Type="Standard" Offset="0x8E90" />
+        <Limb Name="object_wallmaster_Standardlimb_008E9C" Type="Standard" Offset="0x8E9C" />
+        <Limb Name="object_wallmaster_Standardlimb_008EA8" Type="Standard" Offset="0x8EA8" />
+        <Limb Name="object_wallmaster_Standardlimb_008EB4" Type="Standard" Offset="0x8EB4" />
+        <Limb Name="object_wallmaster_Standardlimb_008EC0" Type="Standard" Offset="0x8EC0" />
+        <Limb Name="object_wallmaster_Standardlimb_008ECC" Type="Standard" Offset="0x8ECC" />
+        <Limb Name="object_wallmaster_Standardlimb_008ED8" Type="Standard" Offset="0x8ED8" />
+        <Limb Name="object_wallmaster_Standardlimb_008EE4" Type="Standard" Offset="0x8EE4" />
+        <Limb Name="object_wallmaster_Standardlimb_008EF0" Type="Standard" Offset="0x8EF0" />
+        <Limb Name="object_wallmaster_Standardlimb_008EFC" Type="Standard" Offset="0x8EFC" />
+        <Limb Name="object_wallmaster_Standardlimb_008F08" Type="Standard" Offset="0x8F08" />
+        <Limb Name="object_wallmaster_Standardlimb_008F14" Type="Standard" Offset="0x8F14" />
+        <Limb Name="object_wallmaster_Standardlimb_008F20" Type="Standard" Offset="0x8F20" />
+        <Limb Name="object_wallmaster_Standardlimb_008F2C" Type="Standard" Offset="0x8F2C" />
+        <Limb Name="object_wallmaster_Standardlimb_008F38" Type="Standard" Offset="0x8F38" />
+        <Limb Name="object_wallmaster_Standardlimb_008F44" Type="Standard" Offset="0x8F44" />
+        <Skeleton Name="object_wallmaster_Skel_008FB0" Type="Flex" LimbType="Standard" Offset="0x8FB0" />
+        <Animation Name="object_wallmaster_Anim_009244" Offset="0x9244" />
+        <Animation Name="object_wallmaster_Anim_009520" Offset="0x9520" />
+        <Animation Name="object_wallmaster_Anim_009DB0" Offset="0x9DB0" />
+        <Animation Name="object_wallmaster_Anim_00A054" Offset="0xA054" />
+    </File>
+</Root>

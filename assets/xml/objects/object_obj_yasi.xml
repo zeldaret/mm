@@ -1,0 +1,11 @@
+﻿<Root>
+    <File Name="object_obj_yasi" Segment="6">
+        <DList Name="object_obj_yasi_DL_000360" Offset="0x360" />
+        <Texture Name="object_obj_yasi_TLUT_000630" OutName="tlut_000630" Format="rgba16" Width="4" Height="4" Offset="0x630" />
+        <Texture Name="object_obj_yasi_Tex_000650" OutName="tex_000650" Format="ci4" Width="32" Height="128" Offset="0x650" />
+        <Texture Name="object_obj_yasi_Tex_000E50" OutName="tex_000E50" Format="rgba16" Width="16" Height="16" Offset="0xE50" />
+        <Texture Name="object_obj_yasi_Tex_001050" OutName="tex_001050" Format="rgba16" Width="16" Height="16" Offset="0x1050" />
+        <Texture Name="object_obj_yasi_Tex_001250" OutName="tex_001250" Format="rgba16" Width="8" Height="8" Offset="0x1250" />
+        <Collision Name="object_obj_yasi_Colheader_001428" Offset="0x1428" />
+    </File>
+</Root>

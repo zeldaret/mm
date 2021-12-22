@@ -1,0 +1,66 @@
+﻿<Root>
+    <File Name="object_sdn" Segment="6">
+        <DList Name="object_sdn_DL_000630" Offset="0x630" />
+        <DList Name="object_sdn_DL_000768" Offset="0x768" />
+        <DList Name="object_sdn_DL_000800" Offset="0x800" />
+        <Texture Name="object_sdn_Tex_000808" OutName="tex_000808" Format="i4" Width="16" Height="16" Offset="0x808" />
+        <Animation Name="object_sdn_Anim_000A54" Offset="0xA54" />
+        <Animation Name="object_sdn_Anim_0020D8" Offset="0x20D8" />
+        <Animation Name="object_sdn_Anim_002A84" Offset="0x2A84" />
+        <Animation Name="object_sdn_Anim_003380" Offset="0x3380" />
+        <Animation Name="object_sdn_Anim_003BFC" Offset="0x3BFC" />
+        <Animation Name="object_sdn_Anim_004770" Offset="0x4770" />
+        <Animation Name="object_sdn_Anim_004AC0" Offset="0x4AC0" />
+        <Animation Name="object_sdn_Anim_005320" Offset="0x5320" />
+        <Animation Name="object_sdn_Anim_0057BC" Offset="0x57BC" />
+        <Animation Name="object_sdn_Anim_005D28" Offset="0x5D28" />
+        <Animation Name="object_sdn_Anim_0064C0" Offset="0x64C0" />
+        <Animation Name="object_sdn_Anim_006C18" Offset="0x6C18" />
+        <DList Name="object_sdn_DL_009EB0" Offset="0x9EB0" />
+        <DList Name="object_sdn_DL_00A1A8" Offset="0xA1A8" />
+        <DList Name="object_sdn_DL_00A678" Offset="0xA678" />
+        <DList Name="object_sdn_DL_00A768" Offset="0xA768" />
+        <DList Name="object_sdn_DL_00A9A8" Offset="0xA9A8" />
+        <DList Name="object_sdn_DL_00ADE0" Offset="0xADE0" />
+        <DList Name="object_sdn_DL_00AED0" Offset="0xAED0" />
+        <DList Name="object_sdn_DL_00B120" Offset="0xB120" />
+        <DList Name="object_sdn_DL_00B438" Offset="0xB438" />
+        <DList Name="object_sdn_DL_00B5B0" Offset="0xB5B0" />
+        <DList Name="object_sdn_DL_00B698" Offset="0xB698" />
+        <DList Name="object_sdn_DL_00B988" Offset="0xB988" />
+        <DList Name="object_sdn_DL_00BAD0" Offset="0xBAD0" />
+        <DList Name="object_sdn_DL_00BBB8" Offset="0xBBB8" />
+        <DList Name="object_sdn_DL_00BEB8" Offset="0xBEB8" />
+        <Texture Name="object_sdn_TLUT_00C000" OutName="tlut_00C000" Format="rgba16" Width="16" Height="16" Offset="0xC000" />
+        <Texture Name="object_sdn_TLUT_00C200" OutName="tlut_00C200" Format="rgba16" Width="16" Height="16" Offset="0xC200" />
+        <Texture Name="object_sdn_Tex_00C400" OutName="tex_00C400" Format="ci8" Width="32" Height="32" Offset="0xC400" />
+        <Texture Name="object_sdn_Tex_00C800" OutName="tex_00C800" Format="i8" Width="16" Height="16" Offset="0xC800" />
+        <Texture Name="object_sdn_Tex_00C900" OutName="tex_00C900" Format="i8" Width="32" Height="32" Offset="0xC900" />
+        <Texture Name="object_sdn_Tex_00CD00" OutName="tex_00CD00" Format="ci8" Width="8" Height="8" Offset="0xCD00" />
+        <Texture Name="object_sdn_Tex_00CD40" OutName="tex_00CD40" Format="ci8" Width="16" Height="16" Offset="0xCD40" />
+        <Texture Name="object_sdn_Tex_00CE40" OutName="tex_00CE40" Format="ci8" Width="8" Height="8" Offset="0xCE40" />
+        <Texture Name="object_sdn_Tex_00CE80" OutName="tex_00CE80" Format="ci8" Width="8" Height="8" Offset="0xCE80" />
+        <Texture Name="object_sdn_Tex_00CEC0" OutName="tex_00CEC0" Format="ci8" Width="16" Height="16" Offset="0xCEC0" />
+        <Texture Name="object_sdn_Tex_00CFC0" OutName="tex_00CFC0" Format="ci8" Width="32" Height="32" Offset="0xCFC0" />
+        <Texture Name="object_sdn_Tex_00D3C0" OutName="tex_00D3C0" Format="i8" Width="16" Height="8" Offset="0xD3C0" />
+        <Texture Name="object_sdn_Tex_00D440" OutName="tex_00D440" Format="ci8" Width="16" Height="16" Offset="0xD440" />
+        <Limb Name="object_sdn_Standardlimb_00D540" Type="Standard" Offset="0xD540" />
+        <Limb Name="object_sdn_Standardlimb_00D54C" Type="Standard" Offset="0xD54C" />
+        <Limb Name="object_sdn_Standardlimb_00D558" Type="Standard" Offset="0xD558" />
+        <Limb Name="object_sdn_Standardlimb_00D564" Type="Standard" Offset="0xD564" />
+        <Limb Name="object_sdn_Standardlimb_00D570" Type="Standard" Offset="0xD570" />
+        <Limb Name="object_sdn_Standardlimb_00D57C" Type="Standard" Offset="0xD57C" />
+        <Limb Name="object_sdn_Standardlimb_00D588" Type="Standard" Offset="0xD588" />
+        <Limb Name="object_sdn_Standardlimb_00D594" Type="Standard" Offset="0xD594" />
+        <Limb Name="object_sdn_Standardlimb_00D5A0" Type="Standard" Offset="0xD5A0" />
+        <Limb Name="object_sdn_Standardlimb_00D5AC" Type="Standard" Offset="0xD5AC" />
+        <Limb Name="object_sdn_Standardlimb_00D5B8" Type="Standard" Offset="0xD5B8" />
+        <Limb Name="object_sdn_Standardlimb_00D5C4" Type="Standard" Offset="0xD5C4" />
+        <Limb Name="object_sdn_Standardlimb_00D5D0" Type="Standard" Offset="0xD5D0" />
+        <Limb Name="object_sdn_Standardlimb_00D5DC" Type="Standard" Offset="0xD5DC" />
+        <Limb Name="object_sdn_Standardlimb_00D5E8" Type="Standard" Offset="0xD5E8" />
+        <Limb Name="object_sdn_Standardlimb_00D5F4" Type="Standard" Offset="0xD5F4" />
+        <Skeleton Name="object_sdn_Skel_00D640" Type="Flex" LimbType="Standard" Offset="0xD640" />
+        <Animation Name="object_sdn_Anim_00DC7C" Offset="0xDC7C" />
+    </File>
+</Root>

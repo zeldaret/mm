@@ -1,0 +1,10 @@
+﻿<Root>
+    <File Name="object_gi_mssa" Segment="6">
+        <DList Name="object_gi_mssa_DL_000C00" Offset="0xC00" />
+        <DList Name="object_gi_mssa_DL_000DF0" Offset="0xDF0" />
+        <Texture Name="object_gi_mssa_Tex_0010F0" OutName="tex_0010F0" Format="i4" Width="16" Height="16" Offset="0x10F0" />
+        <Texture Name="object_gi_mssa_Tex_001170" OutName="tex_001170" Format="i4" Width="16" Height="16" Offset="0x1170" />
+        <Texture Name="object_gi_mssa_Tex_0011F0" OutName="tex_0011F0" Format="i4" Width="16" Height="16" Offset="0x11F0" />
+        <Texture Name="object_gi_mssa_Tex_001270" OutName="tex_001270" Format="i4" Width="32" Height="32" Offset="0x1270" />
+    </File>
+</Root>
