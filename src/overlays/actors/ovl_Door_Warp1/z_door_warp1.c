@@ -5,6 +5,7 @@
  */
 
 #include "z_door_warp1.h"
+#include "objects/object_warp1/object_warp1.h"
 
 #define FLAGS 0x00000000
 
@@ -44,18 +45,6 @@ void func_808BA550(DoorWarp1* this, GlobalContext* globalCtx);
 void func_808BAAF4(DoorWarp1* this, GlobalContext* globalCtx);
 void func_808BABF4(DoorWarp1* this, GlobalContext* globalCtx);
 void func_808BB8D4(DoorWarp1* this, GlobalContext* globalCtx, s32 arg2);
-
-extern Gfx D_060001A0[];
-extern AnimationHeader D_06001374;
-extern SkeletonHeader D_06002CA8;
-extern Gfx D_06003230[];
-extern UNK_TYPE D_060044D8;
-extern Gfx D_06004690[];
-extern UNK_TYPE D_060057D8;
-extern Gfx D_060058C8[];
-extern UNK_TYPE D_06007238;
-extern Gfx D_060076C0[];
-extern CollisionHeader D_06008BD4;
 
 static s16 D_808BC000;
 static f32 D_808BC004;
@@ -163,7 +152,7 @@ void DoorWarp1_Init(Actor* thisx, GlobalContext* globalCtx) {
         case ENDOORWARP1_FF_5:
             this->unk_1D3 = 1;
             DynaPolyActor_Init(&this->dyna, 0);
-            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06008BD4);
+            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_warp1_Colheader_008BD4);
             func_808B8C48(this, globalCtx);
             break;
 
@@ -221,8 +210,8 @@ void func_808B8924(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B8A7C(DoorWarp1* this, GlobalContext* globalCtx) {
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002CA8, &D_06001374, NULL, NULL, 0);
-    Animation_ChangeImpl(&this->skelAnime, &D_06001374, 1.0f, 1.0f, 1.0f, 2, 40.0f, 1);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_warp1_Skel_002CA8, &object_warp1_Anim_001374, NULL, NULL, 0);
+    Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f, 1.0f, 1.0f, 2, 40.0f, 1);
     this->unk_1C4 = 0;
     this->unk_1C6 = -140;
     this->unk_1C8 = -80;
@@ -631,8 +620,8 @@ void func_808B9FD0(DoorWarp1* this, GlobalContext* globalCtx) {
     } else {
         ActorCutscene_Start(globalCtx->unk_1879C[9], NULL);
         func_801A5CFC(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
-        Animation_ChangeImpl(&this->skelAnime, &D_06001374, 1.0f, Animation_GetLastFrame(&D_06001374.common),
-                             Animation_GetLastFrame(&D_06001374.common), 2, 40.0f, 1);
+        Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f, Animation_GetLastFrame(&object_warp1_Anim_001374.common),
+                             Animation_GetLastFrame(&object_warp1_Anim_001374.common), 2, 40.0f, 1);
         this->unk_1CA = 50;
         D_808BC004 = player2->actor.world.pos.y;
         DoorWarp1_SetupAction(this, func_808BA550);
@@ -1000,7 +989,7 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
                  MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x09, Matrix_NewMtx(globalCtx->state.gfxCtx));
-    gSPDisplayList(POLY_XLU_DISP++, D_060001A0);
+    gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0001A0);
 
     Matrix_StatePop();
 
@@ -1018,14 +1007,14 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
                      MTXMODE_APPLY);
 
         gSPSegment(POLY_XLU_DISP++, 0x09, Matrix_NewMtx(globalCtx->state.gfxCtx));
-        gSPDisplayList(POLY_XLU_DISP++, D_060001A0);
+        gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0001A0);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void func_808BB4C4(DoorWarp1* this, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060076C0);
+    func_800BDFC0(globalCtx, object_warp1_DL_0076C0);
 }
 
 #ifdef NON_MATCHING
@@ -1045,8 +1034,8 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
         Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
                                  this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(4.0f, this->unk_1AC, 4.0f, MTXMODE_APPLY);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060044D8));
-        func_800BE03C(globalCtx, D_06003230);
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_0044D8));
+        func_800BE03C(globalCtx, object_warp1_DL_003230);
         return;
     }
 
@@ -1064,7 +1053,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
                              MTXMODE_NEW);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060057D8));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_0057D8));
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1073,10 +1062,10 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     gDPSetEnvColor(POLY_XLU_DISP++, sp64[sp60].r, sp64[sp60].g, sp64[sp60].b, 255);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06004690);
+    gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_004690);
     gfxCtx = globalCtx->state.gfxCtx;
 
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06007238));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_007238));
     Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                              MTXMODE_NEW);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
@@ -1091,7 +1080,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     gDPSetEnvColor(POLY_XLU_DISP++, sp64[sp60].r, sp64[sp60].g, sp64[sp60].b, 255);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->unk_203);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_060058C8);
+    gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0058C8);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
