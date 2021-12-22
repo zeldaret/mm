@@ -5,7 +5,7 @@
  */
 
 #include "z_en_fishing.h"
-
+#include "objects/object_fish/object_fish.h"
 #include "overlays/actors/ovl_En_Kanban/z_en_kanban.h"
 
 #define FLAGS 0x00000010
@@ -198,52 +198,6 @@ static u8 D_80917270;
 static s16 D_80917272;
 static u8 D_80917274;
 static Vec3f D_80917278;
-
-extern FlexSkeletonHeader gFishingOwnerSkel;
-extern FlexSkeletonHeader gFishingFishSkel;
-extern FlexSkeletonHeader gFishingLoachSkel;
-extern AnimationHeader gFishingOwnerAnim;
-extern AnimationHeader gFishingFishAnim;
-extern AnimationHeader gFishingLoachAnim;
-extern UNK_TYPE gFishingOwnerEyeOpenTex;
-extern UNK_TYPE gFishingOwnerEyeHalfTex;
-extern UNK_TYPE gFishingOwnerEyeClosedTex;
-extern UNK_TYPE gFishingRodSegmentBlackTex;
-extern UNK_TYPE gFishingRodSegmentWhiteTex;
-extern UNK_TYPE gFishingRodSegmentStripTex;
-extern Gfx gFishingAquariumBottomDL[];
-extern Gfx gFishingAquariumContainerDL[];
-extern Gfx gFishingOwnerHatDL[];
-extern Gfx gFishingOwnerHairDL[];
-extern Gfx gFishingReedSetupDL[];
-extern Gfx gFishingReedVtxDL[];
-extern Gfx gFishingWoodPostSetupDL[];
-extern Gfx gFishingWoodPostVtxDL[];
-extern Gfx gFishingLilyPadSetupDL[];
-extern Gfx gFishingLilyPadVtxDL[];
-extern Gfx gFishingRockSetupDL[];
-extern Gfx gFishingRockVtxDL[];
-extern Gfx gFishingRippleSetupDL[];
-extern Gfx gFishingDustSplashSetupDL[];
-extern Gfx gFishingDustSplashVtxDL[];
-extern Gfx gFishingWaterDustSetupDL[];
-extern Gfx gFishingWaterDustVtxDL[];
-extern Gfx gFishingBubbleSetupDL[];
-extern Gfx gFishingBubbleVtxDL[];
-extern Gfx gFishingRippleVtxDL[];
-extern Gfx gFishingRainSplashSetupDL[];
-extern Gfx gFishingRainSplashVtxDL[];
-extern Gfx gFishingRainDropVtxDL[];
-extern Gfx gFishingGroupFishSetupDL[];
-extern Gfx gFishingGroupFishVtxDL[];
-extern Gfx gFishingStreamSplashDL[];
-extern Gfx gFishingRodSegmentDL[];
-extern Gfx gFishingRodSetupDL[];
-extern Gfx gFishingLureFloatDL[];
-extern Gfx gFishingLineVtxDL[];
-extern Gfx gFishingLureHookDL[];
-extern Gfx gFishingSinkingLureSegmentSetupDL[];
-extern Gfx gFishingSinkingLureSegmentVtxDL[];
 
 const ActorInit En_Fishing_InitVars = {
     ACTOR_EN_FISHING,
