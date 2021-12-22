@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tru.h"
+#include "objects/object_tru/object_tru.h"
 
 #define FLAGS 0x00000039
 
@@ -22,28 +23,6 @@ s32 func_80A87B48(Actor* thisx, GlobalContext* globalCtx);
 s32 func_80A87DC0(Actor* thisx, GlobalContext* globalCtx);
 void func_80A87FD0(EnTru* this, GlobalContext* globalCtx);
 void func_80A881E0(EnTru* this, GlobalContext* globalCtx);
-
-extern Gfx D_06001F90[];
-extern Gfx D_060020C8[];
-extern AnimationHeader D_06002BD8;
-extern AnimationHeader D_06003698;
-extern AnimationHeader D_0600446C;
-extern AnimationHeader D_06007FA0;
-extern AnimationHeader D_06009348;
-extern AnimationHeader D_0600EEDC;
-extern AnimationHeader D_0600F9A0;
-extern AnimationHeader D_060108AC;
-extern AnimationHeader D_06011F88;
-extern AnimationHeader D_06014728;
-extern AnimationHeader D_06015CA0;
-extern AnimationHeader D_06016B4C;
-extern UNK_PTR D_06018FA0;
-extern UNK_PTR D_060197A0;
-extern UNK_PTR D_06019FA0;
-extern Gfx D_0601A820[];
-extern Gfx D_0601A830[];
-extern FlexSkeletonHeader D_0601AA60;
-extern AnimationHeader D_0601B5C4;
 
 static UNK_TYPE D_80A88910[] = {
     0x0E08520C,
@@ -127,12 +106,14 @@ static ColliderSphereInit sSphereInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 20, 0, 0, MASS_IMMOVABLE };
 
 static ActorAnimationEntryS D_80A8B2D8[] = {
-    { &D_0600F9A0, 1.0f, 0, -1, 0, 0 },  { &D_0600F9A0, 1.0f, 0, -1, 0, -4 }, { &D_060108AC, 1.0f, 0, -1, 2, -4 },
-    { &D_06009348, 1.0f, 0, -1, 2, 0 },  { &D_0600EEDC, 1.0f, 0, -1, 0, -4 }, { &D_06015CA0, 1.0f, 0, -1, 0, 0 },
-    { &D_06015CA0, 1.0f, 0, -1, 0, -4 }, { &D_06014728, 1.0f, 0, -1, 2, 0 },  { &D_0601B5C4, 1.0f, 0, -1, 2, 0 },
-    { &D_06007FA0, 1.0f, 0, -1, 2, -4 }, { &D_06016B4C, 1.0f, 0, -1, 0, -4 }, { &D_06011F88, 1.0f, 0, -1, 2, -4 },
-    { &D_0600446C, 1.0f, 0, -1, 0, 0 },  { &D_06003698, 1.0f, 0, -1, 2, -4 }, { &D_06002BD8, 1.0f, 0, -1, 0, 0 },
-    { &D_0600446C, 1.0f, 0, -1, 0, 0 },
+    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, -4 },
+    { &object_tru_Anim_0108AC, 1.0f, 0, -1, 2, -4 }, { &object_tru_Anim_009348, 1.0f, 0, -1, 2, 0 },
+    { &object_tru_Anim_00EEDC, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, 0 },
+    { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_014728, 1.0f, 0, -1, 2, 0 },
+    { &object_tru_Anim_01B5C4, 1.0f, 0, -1, 2, 0 },  { &object_tru_Anim_007FA0, 1.0f, 0, -1, 2, -4 },
+    { &object_tru_Anim_016B4C, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_011F88, 1.0f, 0, -1, 2, -4 },
+    { &object_tru_Anim_00446C, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_003698, 1.0f, 0, -1, 2, -4 },
+    { &object_tru_Anim_002BD8, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00446C, 1.0f, 0, -1, 0, 0 },
 };
 
 static Vec3f D_80A8B3D8 = { 0.0f, 24.0f, 16.0f };
@@ -292,7 +273,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
         if ((arg0->unk_00 == 3) || (arg0->unk_00 == 4) || (arg0->unk_00 == 5)) {
             if (!flag) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, sizeof(Gfx) * 0);
-                gSPDisplayList(POLY_XLU_DISP++, D_0601A820);
+                gSPDisplayList(POLY_XLU_DISP++, object_tru_DL_01A820);
                 flag = true;
             }
 
@@ -321,7 +302,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             idx = ((f32)arg0->unk_02 / arg0->unk_01) * 8.0f;
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A8B280[idx]));
-            gSPDisplayList(POLY_XLU_DISP++, D_0601A830);
+            gSPDisplayList(POLY_XLU_DISP++, object_tru_DL_01A830);
 
             Matrix_StatePop();
         }
@@ -509,7 +490,7 @@ s32 func_80A86BAC(EnTru* this, GlobalContext* globalCtx) {
         Matrix_InsertXRotation_s(-0x4000, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_060020C8);
+        gSPDisplayList(POLY_OPA_DISP++, object_tru_DL_0020C8);
 
         Matrix_StatePop();
 
@@ -527,7 +508,7 @@ s32 func_80A86BAC(EnTru* this, GlobalContext* globalCtx) {
         Matrix_InsertXRotation_s(-0x4000, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_06001F90);
+        gSPDisplayList(POLY_XLU_DISP++, object_tru_DL_001F90);
 
         Matrix_StatePop();
 
@@ -1131,7 +1112,8 @@ void EnTru_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0601AA60, NULL, this->jointTable, this->morphTable, 27);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_tru_Skel_01AA60, NULL, this->jointTable, this->morphTable,
+                       27);
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->unk_37C = -1;
@@ -1253,10 +1235,10 @@ void func_80A886D4(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
 void EnTru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static UNK_PTR D_80A8B408[] = {
-        &D_06018FA0,
-        &D_060197A0,
-        &D_06019FA0,
-        &D_060197A0,
+        &object_tru_Tex_018FA0,
+        &object_tru_Tex_0197A0,
+        &object_tru_Tex_019FA0,
+        &object_tru_Tex_0197A0,
     };
     s32 pad;
     EnTru* this = THIS;
