@@ -620,7 +620,8 @@ void func_808B9FD0(DoorWarp1* this, GlobalContext* globalCtx) {
     } else {
         ActorCutscene_Start(globalCtx->unk_1879C[9], NULL);
         func_801A5CFC(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
-        Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f, Animation_GetLastFrame(&object_warp1_Anim_001374.common),
+        Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f,
+                             Animation_GetLastFrame(&object_warp1_Anim_001374.common),
                              Animation_GetLastFrame(&object_warp1_Anim_001374.common), 2, 40.0f, 1);
         this->unk_1CA = 50;
         D_808BC004 = player2->actor.world.pos.y;
