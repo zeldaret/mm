@@ -427,15 +427,15 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
-    s32 temp_v0_2;
+    s32 itemActionParam;
 
     if (temp_v0 == 0x10) {
-        temp_v0_2 = func_80123810(globalCtx);
-        if (temp_v0_2 > 0) {
-            if (temp_v0_2 == 0x2A) {
+        itemActionParam = func_80123810(globalCtx);
+        if (itemActionParam > PLAYER_AP_NONE) {
+            if (itemActionParam == PLAYER_AP_MOON_TEAR) {
                 player->actor.textId = D_80ADD928[this->unk_33A];
                 this->unk_340 = player->actor.textId;
-                player->unk_A87 = temp_v0_2;
+                player->unk_A87 = itemActionParam;
                 this->actionFunc = func_80ADBAB8;
             } else {
                 player->actor.textId = D_80ADD920[this->unk_33A];
@@ -443,7 +443,7 @@ void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_80ADB0D8;
             }
             func_801477B4(globalCtx);
-        } else if (temp_v0_2 < 0) {
+        } else if (itemActionParam < PLAYER_AP_NONE) {
             this->unk_340 = D_80ADD920[this->unk_33A];
             func_80151938(globalCtx, this->unk_340);
             this->actionFunc = func_80ADB0D8;
@@ -492,7 +492,7 @@ void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
         gSaveContext.weekEventReg[17] |= 0x80;
         this->actionFunc = func_80ADBCE4;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x97, 300.0f, 300.0f);
+        func_800B8A1C(&this->actor, globalCtx, GI_DEED_LAND, 300.0f, 300.0f);
     }
 }
 

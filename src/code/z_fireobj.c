@@ -94,7 +94,7 @@ void FireObj_StepSize(FireObj* fire) {
 void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
     Player* player = GET_PLAYER(globalCtx);
     WaterBox* waterBox;
-    f32 sp44;
+    f32 waterY;
     s32 sp40 = 0;
     u8 nextState;
     Vec3f dist;
@@ -113,11 +113,11 @@ void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
         FireObj_SetState(fire, fire->dynamicSizeStep, nextState);
     }
     if ((fire->flags & 1) && (fire->state != FIRE_STATE_3) &&
-        (func_800CA1E8(globalCtx, &globalCtx->colCtx, fire->position.x, fire->position.z, &sp44, &waterBox) != 0) &&
-        ((fire->yScale * ((void)0, 6500.0f)) < (sp44 - fire->position.y))) { // Fake but IDK what else
+        WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, fire->position.x, fire->position.z, &waterY, &waterBox) &&
+        ((fire->yScale * ((void)0, 6500.0f)) < (waterY - fire->position.y))) { // Fake but IDK what else
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_3);
     }
-    if ((fire->flags & 2) && (player->itemActionParam == 7)) {
+    if ((fire->flags & 2) && (player->itemActionParam == PLAYER_AP_STICK)) {
         Math_Vec3f_Diff(&player->swordInfo[0].tip, &fire->position, &dist);
         if (Math3D_LengthSquared(&dist) < 400.0f) {
             sp40 = 1;
