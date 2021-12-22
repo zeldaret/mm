@@ -7,6 +7,7 @@
 #include "z_en_aob_01.h"
 #include "overlays/actors/ovl_En_Racedog/z_en_racedog.h"
 #include "overlays/actors/ovl_En_Dg/z_en_dg.h"
+#include "objects/object_aob/object_aob.h"
 
 #define FLAGS 0x00000019
 
@@ -32,18 +33,6 @@ void func_809C2C9C(EnAob01* this, GlobalContext* globalCtx);
 void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx);
 s32 func_809C2EC4(EnAob01* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_06000180;
-extern UNK_TYPE D_06000658;
-extern UNK_TYPE D_06000E58;
-extern UNK_TYPE D_06001658;
-extern Gfx D_06003D18[];
-extern AnimationHeader D_06007758;
-extern AnimationHeader D_060068B4;
-extern AnimationHeader D_0600700C;
-extern AnimationHeader D_060058EC;
-extern AnimationHeader D_06006040;
-extern AnimationHeader D_06007758;
-
 const ActorInit En_Aob_01_InitVars = {
     ACTOR_EN_AOB_01,
     ACTORCAT_NPC,
@@ -57,9 +46,9 @@ const ActorInit En_Aob_01_InitVars = {
 };
 
 static ActorAnimationEntry D_809C3790[6] = {
-    { &D_06007758, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_060068B4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &D_0600700C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_060058EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &D_06006040, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_06007758, 1.0f, 0.0f, 0.0f, 0, -6.0f },
+    { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_aob_Anim_0068B4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_aob_Anim_00700C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_aob_Anim_0058EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_aob_Anim_006040, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, 0, -6.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -933,7 +922,8 @@ void EnAob01_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnAob01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06000180, NULL, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_aob_Skel_000180, NULL, this->jointTable, this->morphTable,
+                       16);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_43C = 0;
@@ -990,15 +980,15 @@ s32 EnAob01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
                              Actor* thisx) {
     EnAob01* this = THIS;
     UNK_TYPE sp38[] = {
-        &D_06000658,
-        &D_06000E58,
-        &D_06001658,
+        &object_aob_TEx_000658,
+        &object_aob_TEx_000E58,
+        &object_aob_TEx_001658,
     };
 
     if (limbIndex == 15) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        *dList = D_06003D18;
+        *dList = object_aob_DL_003D18;
 
         gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sp38[this->unk_3EE]));
 
