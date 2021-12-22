@@ -5,7 +5,20 @@
  */
 
 #include "z_en_door.h"
+#include "objects/object_mkk/object_mkk.h"
+#include "objects/object_dor01/object_dor01.h"
+#include "objects/object_dor02/object_dor02.h"
+#include "objects/object_dor03/object_dor03.h"
+#include "objects/object_dor04/object_dor04.h"
+#include "objects/object_wdor01/object_wdor01.h"
+#include "objects/object_wdor02/object_wdor02.h"
+#include "objects/object_wdor03/object_wdor03.h"
+#include "objects/object_wdor04/object_wdor04.h"
+#include "objects/object_wdor05/object_wdor05.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_numa_obj/object_numa_obj.h"
+#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -16,105 +29,105 @@ void EnDoor_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDoor_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80866B20(EnDoor*, GlobalContext*); /* extern */
-void func_8086704C(EnDoor*, GlobalContext*); /* extern */
-void func_80866F94(EnDoor*, GlobalContext*); /* extern */
-void func_80867080(EnDoor*, GlobalContext*); /* extern */
-void func_80867144(EnDoor*, GlobalContext*); /* extern */
-void func_808670F0(EnDoor*, GlobalContext*); /* extern */
+void func_80866B20(EnDoor*, GlobalContext*);
+void func_8086704C(EnDoor*, GlobalContext*);
+void func_80866F94(EnDoor*, GlobalContext*);
+void func_80867080(EnDoor*, GlobalContext*);
+void func_80867144(EnDoor*, GlobalContext*);
+void func_808670F0(EnDoor*, GlobalContext*);
+void func_80866A5C(EnDoor*, GlobalContext*);
 
-// Unused
-s32 D_808675D0[] = {
+static s32 D_808675D0[] = {
     0x0C00030E, 0x02060017, 0x00080200, 0x00060002, 0x09070500,
 };
 
-s32 D_808675E4[] = {
+static s32 D_808675E4[] = {
     0x0F090047, 0x0F0C0015, 0x0C000113, 0x11000F0D, 0x000A0F0F, 0x00070F00, 0x00020909,
     0x0509080C, 0x00021900, 0x1C08070F, 0x0D000209, 0x09050F0D, 0x00EA0F11, 0x00E70F00,
     0x00E20909, 0x0F0D00DC, 0x0F0D00D9, 0x0F120001, 0x05090909, 0x09000000,
 };
 
-s32 D_80867634[] = { 0x02060017, 0x0002091C, 0x05000000 };
+static s32 D_80867634[] = { 0x02060017, 0x0002091C, 0x05000000 };
 
-s32 D_80867640[] = { 0x02150016, 0x00010509, 0x0B000000 };
-s32 D_8086764C[] = { 0x02160005, 0x0002090A, 0x05000000 };
-s32 D_80867658[] = { 0x0C00020F, 0x001C0802, 0x090C020F, 0x0A160002, 0x090C050C, 0x0003110F,
-                     0x0D000D00, 0x33080209, 0x0C0F1600, 0x02090C05, 0x090C0000 };
-s32 D_80867684 = 0x05000000;
+static s32 D_80867640[] = { 0x02150016, 0x00010509, 0x0B000000 };
+static s32 D_8086764C[] = { 0x02160005, 0x0002090A, 0x05000000 };
+static s32 D_80867658[] = { 0x0C00020F, 0x001C0802, 0x090C020F, 0x0A160002, 0x090C050C, 0x0003110F,
+                            0x0D000D00, 0x33080209, 0x0C0F1600, 0x02090C05, 0x090C0000 };
+static s32 D_80867684 = 0x05000000;
 
-s32 D_80867688[] = { 0x0F160002, 0x090F0500 };
+static s32 D_80867688[] = { 0x0F160002, 0x090F0500 };
 
-s32 D_80867690[] = { 0x0F160002, 0x09100500 };
+static s32 D_80867690[] = { 0x0F160002, 0x09100500 };
 
-s32 D_80867698[] = { 0x0F160002, 0x09110500 };
+static s32 D_80867698[] = { 0x0F160002, 0x09110500 };
 
-s32 D_808676A0[] = {
+static s32 D_808676A0[] = {
     0x020A0015, 0x000F0216, 0x00050002, 0x09120802, 0x02092209, 0x21050000,
 };
 
-s32 D_808676B8[] = {
+static s32 D_808676B8[] = {
     0x0800140C, 0x0003070F, 0x08000105, 0x09130208, 0x00141E02, 0x09130505,
 };
 
-s32 D_808676D0 = 0x05000000;
+static s32 D_808676D0 = 0x05000000;
 
-s32 D_808676D4 = 0x05000000;
+static s32 D_808676D4 = 0x05000000;
 
-s32 D_808676D8[] = {
+static s32 D_808676D8[] = {
     0x0C000305,
     0x0F120001,
     0x05091400,
 };
 
-s32 D_808676E4[] = {
+static s32 D_808676E4[] = {
     0x08000209,
     0x16050000,
 };
 
-s32 D_808676EC = 0x05000000;
+static s32 D_808676EC = 0x05000000;
 
-s32 D_808676F0[] = {
+static s32 D_808676F0[] = {
     0x0C000305, 0x0F0A0007, 0x05020A00, 0x1400F909, 0x15000000,
 };
 
-s32 D_80867704 = 0x05000000;
-s32 D_80867708 = 0x05000000;
-s32 D_8086770C = 0x05000000;
-s32 D_80867710 = 0x05000000;
+static s32 D_80867704 = 0x05000000;
+static s32 D_80867708 = 0x05000000;
+static s32 D_8086770C = 0x05000000;
+static s32 D_80867710 = 0x05000000;
 
-s32 D_80867714[] = {
+static s32 D_80867714[] = {
     0x0F140002,
     0x09170500,
 };
 
-s32 D_8086771C[] = {
+static s32 D_8086771C[] = {
     0x0C000107, 0x0F021E02, 0x0918050C, 0x0003FB0F, 0x1400F709, 0x0C000000,
 };
 
-s32 D_80867734[] = {
+static s32 D_80867734[] = {
     0x0F140002,
     0x09190500,
 };
 
-s32 D_8086773C[] = {
+static s32 D_8086773C[] = {
     0x0F140002,
     0x091A0500,
 };
 
-s32 D_80867744[] = {
+static s32 D_80867744[] = {
     0x0C000204, 0x00638006, 0x0F140008, 0x091B0F12, 0x0002091B, 0x05000000,
 };
 
-s32 D_8086775C[] = {
+static s32 D_8086775C[] = {
     0x00342017, 0x004B2013, 0x000E0402, 0x091D003B, 0x0108003D, 0x0202091E, 0x091F0505,
 };
 
-s32 D_80867778 = 0x09200000;
-s32 D_8086777C = 0x05000000;
-s32 D_80867780 = 0x05000000;
-s32 D_80867784[] = { 0x0F160002, 0x09230500 };
+static s32 D_80867778 = 0x09200000;
+static s32 D_8086777C = 0x05000000;
+static s32 D_80867780 = 0x05000000;
+static s32 D_80867784[] = { 0x0F160002, 0x09230500 };
 
-s32* D_8086778C[] = {
+static s32 D_8086778C[] = {
     &D_808675D0, &D_808675E4, &D_80867634, &D_80867640, &D_8086764C, &D_80867658, &D_80867684, &D_80867688,
     &D_80867690, &D_80867698, &D_808676A0, &D_808676B8, &D_808676D0, &D_808676D4, &D_808676D8, &D_808676E4,
     &D_808676EC, &D_808676F0, &D_80867704, &D_80867708, &D_8086770C, &D_80867710, &D_80867714, &D_8086771C,
@@ -139,7 +152,7 @@ typedef struct {
     /* 0x04 */ s16 objectId;
 } EnDoorInfo;
 
-EnDoorInfo sObjInfo[] = {
+static EnDoorInfo sObjInfo[] = {
     { SCENE_MITURIN, 0x01, OBJECT_NUMA_OBJ },
     { SCENE_TENMON_DAI, 0x02, OBJECT_DOR01 },
     { SCENE_00KEIKOKU, 0x02, OBJECT_DOR01 },
@@ -155,7 +168,7 @@ EnDoorInfo sObjInfo[] = {
     { SCENE_PIRATE, 0x0B, OBJECT_KAIZOKU_OBJ },
     { SCENE_TORIDE, 0x0B, OBJECT_KAIZOKU_OBJ },
     { SCENE_KINDAN2, 0x0C, OBJECT_KINSTA2_OBJ },
-    { -1, 0x00, GAMEPLAY_KEEP }, // Split here?
+    { -1, 0x00, GAMEPLAY_KEEP },
     { -1, 0x0D, GAMEPLAY_FIELD_KEEP },
     { -1, 0x08, OBJECT_WDOR03 },
     { -1, 0x07, OBJECT_WDOR02 },
@@ -191,41 +204,52 @@ EnDoorInfo sObjInfo[] = {
     { -1, 0x04, OBJECT_DOR03 },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80867954[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.x, 0, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
 };
-void func_80866A5C(EnDoor*, GlobalContext*); /* extern */
 
-AnimationHeader* D_80867964[] = {
-    0x04020658, 0x04022CA8, 0x04020658, 0x04022E68, 0x040204B4,
-    0x04022BE8, 0x04022D90, 0x04022BE8, 0x04022FF0, 0x040205A0,
+static AnimationHeader* sAnimations[] = {
+    &gameplay_keep_Anim_020658, &gameplay_keep_Anim_022CA8, &gameplay_keep_Anim_020658, &gameplay_keep_Anim_022E68,
+    &gameplay_keep_Anim_0204B4, &gameplay_keep_Anim_022BE8, &gameplay_keep_Anim_022D90, &gameplay_keep_Anim_022BE8,
+    &gameplay_keep_Anim_022FF0, &gameplay_keep_Anim_0205A0,
 };
-u8 D_8086798C[10] = {
+static u8 sAnimOpenFrames[10] = {
     25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
 };
 
-u8 D_80867998[10] = { 0x3C, 0x3C, 0x3C, 0x46, 0x46, 0x3C, 0x3C, 0x3C, 0x3C, 0x46 };
+static u8 sAnimCloseFrames[10] = {
+    60, 60, 60, 70, 70, 60, 60, 60, 60, 70,
+};
 
-Gfx* D_808679A4[14][2] = {
-    { 0x04020BB8, 0x04020D00 }, { 0x06005DF0, 0x06005DF0 }, { 0x06000448, 0x06000448 }, { 0x06000428, 0x06000428 },
-    { 0x060003C0, 0x060003C0 }, { 0x06000468, 0x06000468 }, { 0x06000548, 0x06000548 }, { 0x06000548, 0x06000548 },
-    { 0x06000548, 0x06000548 }, { 0x06000508, 0x06000508 }, { 0x06000508, 0x06000508 }, { 0x06009F20, 0x06009F20 },
-    { 0x06000310, 0x06000310 }, { 0x05004050, 0x05004228 },
+static Gfx* D_808679A4[14][2] = {
+    { gameplay_keep_DL_020BB8, gameplay_keep_DL_020D00 },
+    { object_numa_obj_DL_005DF0, object_numa_obj_DL_005DF0 },
+    { object_dor01_DL_000448, object_dor01_DL_000448 },
+    { object_dor02_DL_000428, object_dor02_DL_000428 },
+    { object_dor03_DL_0003C0, object_dor03_DL_0003C0 },
+    { object_dor04_DL_000468, object_dor04_DL_000468 },
+    { object_wdor01_DL_000548, object_wdor01_DL_000548 },//Mayor's house
+    { object_wdor02_DL_000548, object_wdor02_DL_000548 },
+    { object_wdor03_DL_000548, object_wdor03_DL_000548 },
+    { object_wdor04_DL_000508, object_wdor04_DL_000508 }, // Milk bar
+    { object_wdor05_DL_000508, object_wdor05_DL_000508 }, // Music box house
+    { object_kaizoku_obj_DL_009F20, object_kaizoku_obj_DL_009F20 },
+    { object_mkk_DL_000310, object_mkk_DL_000310 },
+    { gameplay_field_keep_DL_004050, gameplay_field_keep_DL_004228 },
 };
 
 void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     s32 objectBankIndex;
     EnDoorInfo* objectInfo;
-    EnDoor* this = (EnDoor*)thisx;
+    EnDoor* this = THIS;
     s32 i;
 
     objectInfo = sObjInfo;
-    Actor_ProcessInitChain(&this->dyna.actor, D_80867954);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
     this->unk1A4 = (thisx->params >> 7) & 7;
 
@@ -234,7 +258,8 @@ void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gameplay_keep_Colheader_023100);
     }
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_022B28, &gameplay_keep_Anim_020658, this->limbTable, this->limbTable, 5);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_022B28, &gameplay_keep_Anim_020658, this->limbTable,
+                   this->limbTable, 5);
     if (this->unk1A4 == 5) {
         objectInfo = &sObjInfo[17 + this->switchFlag];
     } else {
@@ -259,7 +284,7 @@ void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
     this->requiredObjBankIndex = objectBankIndex;
-    this->dlIndex = objectInfo->dListIndex;
+    this->dlIndex = objectInfo->dListIndex; // Set twice?
     if (this->dyna.actor.objBankIndex == this->requiredObjBankIndex) {
         func_80866A5C(this, globalCtx);
     } else {
@@ -320,7 +345,7 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
     }
     if (this->unk1A1 != 0) {
         this->actionFunc = func_80867144;
-        Animation_PlayOnceSetSpeed(&this->skelAnime, D_80867964[this->animIndex],
+        Animation_PlayOnceSetSpeed(&this->skelAnime, sAnimations[this->animIndex],
                                    (player->stateFlags1 & 0x8000000) ? 0.75f : 1.5f);
         if (this->unk1A6 != 0) {
             gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex]--;
@@ -438,7 +463,7 @@ void func_80867144(EnDoor* this, GlobalContext* globalCtx) {
         if (SkelAnime_Update(&this->skelAnime) != 0) {
             this->actionFunc = func_80866B20;
             this->unk1A1 = 0;
-        } else if (Animation_OnFrame(&this->skelAnime, D_8086798C[this->animIndex])) {
+        } else if (Animation_OnFrame(&this->skelAnime, sAnimOpenFrames[this->animIndex])) {
             Audio_PlayActorSound2(&this->dyna.actor, NA_SE_OC_DOOR_OPEN);
             if (this->skelAnime.playSpeed < 1.5f) {
                 numEffects = (s32)(Rand_ZeroOne() * 30.0f) + 50;
@@ -447,7 +472,7 @@ void func_80867144(EnDoor* this, GlobalContext* globalCtx) {
                 }
             }
         } else {
-            if (Animation_OnFrame(&this->skelAnime, D_80867998[this->animIndex])) {
+            if (Animation_OnFrame(&this->skelAnime, sAnimCloseFrames[this->animIndex])) {
                 Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
             }
         }
