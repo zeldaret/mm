@@ -37,7 +37,6 @@ void func_80AC35E8(EnBigokuta* this);
 void func_80AC3650(EnBigokuta* this, GlobalContext* globalCtx);
 void func_80AC39A0(EnBigokuta* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Bigokuta_InitVars = {
     ACTOR_EN_BIGOKUTA,
     ACTORCAT_BOSS,
@@ -50,38 +49,27 @@ const ActorInit En_Bigokuta_InitVars = {
     (ActorFunc)EnBigokuta_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80AC4530 = {
+static ColliderCylinderInit sCylinder1Init = {
     { COLTYPE_HARD, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFC74F, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 75, 125, 0, { 0, 0, 0 } },
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80AC455C = {
+static ColliderCylinderInit sCylinder2Init = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x000038B0, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 70, 125, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_80AC4588 = { 4, 130, 120, MASS_HEAVY };
+static CollisionCheckInfoInit sColChkInfoInit = { 4, 130, 120, MASS_HEAVY };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80AC4590[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2500, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, 89, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 33, ICHAIN_STOP),
 };
-
-#endif
-
-extern ColliderCylinderInit D_80AC4530;
-extern ColliderCylinderInit D_80AC455C;
-extern CollisionCheckInfoInit D_80AC4588;
-extern InitChainEntry D_80AC4590[];
 
 extern AnimationHeader D_06000444;
 extern AnimationHeader D_06000A74;
@@ -92,11 +80,11 @@ extern FlexSkeletonHeader D_06006BC0;
 void EnBigokuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBigokuta* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, D_80AC4590);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06006BC0, &D_060014B8, this->jointTable, this->morphTable, 0x14);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &D_80AC4530);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &D_80AC455C);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &D_80AC4588);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinder1Init);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinder2Init);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
     if ((gSaveContext.weekEventReg[20] & 2) ||
         ((this->actor.params != 0xFF) && (Flags_GetSwitch(globalCtx, this->actor.params)))) {
@@ -404,10 +392,14 @@ void func_80AC35E8(EnBigokuta* this) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/func_80AC3650.s")
-extern Vec3f D_80AC45A4;
-extern Color_RGBA8 D_80AC45B0;
-extern Color_RGBA8 D_80AC45B4;
-extern Color_RGBA8 D_80AC45B8;
+// extern Vec3f D_80AC45A4;
+// extern Color_RGBA8 D_80AC45B0;
+// extern Color_RGBA8 D_80AC45B4;
+// extern Color_RGBA8 D_80AC45B8;
+static Vec3f D_80AC45A4 = { 0.0f, -0.5f, 0.0f };
+static Color_RGBA8 D_80AC45B0 = { 255, 255, 255, 255 };
+static Color_RGBA8 D_80AC45B4 = { 100, 255, 255, 255 };
+static Color_RGBA8 D_80AC45B8 = { 150, 150, 150, 0 };
 void func_80AC3650(EnBigokuta* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->actor.world.pos.y -= 0.2f;
@@ -616,8 +608,13 @@ s32 func_80AC3D48(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/func_80AC4204.s")
-extern s8 D_80AC45BC[];
-extern Vec3f D_80AC45D0[];
+// extern s8 D_80AC45BC[];
+// extern Vec3f D_80AC45D0[];
+static s8 D_80AC45BC[] = { -1, -1, -1, 0, -1, 1, -1, 2, -1, 3, 8, 4, -1, 5, -1, -1, -1, -1, 6, 7 };
+static Vec3f D_80AC45D0[] = {
+    { 0.0f, 2000.0f, 1000.0f },    { 0.0f, 2000.0f, -2000.0f }, { 1700.0f, 700.0f, -600.0f },
+    { -1700.0f, 700.0f, -600.0f }, { 0.0f, 500.0f, -2500.0f },
+};
 void func_80AC4204(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnBigokuta* this = THIS;
     s32 temp_s0;
