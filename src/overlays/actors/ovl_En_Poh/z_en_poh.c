@@ -672,7 +672,7 @@ void func_80B2E230(EnPoh* this, GlobalContext* globalCtx) {
         return;
     }
 
-    func_800B8A1C(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
+    func_800B8A1C(&this->actor, globalCtx, GI_MAX, 35.0f, 60.0f);
     this->actor.world.pos.y = (Math_SinS(this->unk_18D * 0x800) * 5.0f) + this->actor.home.pos.y;
     if (this->unk_18D) {
         this->unk_18D--;
@@ -893,7 +893,8 @@ void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
     if (limbIndex == 18) {
         if ((this->actionFunc == func_80B2D300) && (this->unk_18E >= 19) && (this->actor.scale.x != 0.0f)) {
-            Matrix_Scale(0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, 1);
+            Matrix_Scale(0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x,
+                         MTXMODE_APPLY);
         }
         Matrix_CopyCurrentState(&this->unk_3D8);
         func_80B2C910(&sp60, globalCtx);
