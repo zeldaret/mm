@@ -5,6 +5,7 @@
  */
 
 #include "z_en_st.h"
+#include "objects/object_st/object_st.h"
 
 #define FLAGS 0x01004035
 
@@ -20,11 +21,6 @@ void func_808A6D84(EnSt* this, GlobalContext* globalCtx);
 void func_808A6E24(EnSt* this, GlobalContext* globalCtx);
 void func_808A701C(EnSt* this, GlobalContext* globalCtx);
 void func_808A7478(Actor* thisx, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000304;
-extern SkeletonHeader D_06005298;
-extern AnimationHeader D_060055A8;
-extern AnimationHeader D_06005B98;
 
 const ActorInit En_St_InitVars = {
     ACTOR_EN_ST,
@@ -156,9 +152,10 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06000304, 1.0f, 0, -1, 0, 0 },  { &D_06005B98, 1.0f, 0, -1, 2, -4 }, { &D_06000304, 4.0f, 0, -1, 2, -4 },
-    { &D_06000304, 1.0f, 0, -1, 0, -4 }, { &D_060055A8, 1.0f, 0, -1, 2, -4 }, { &D_06000304, 8.0f, 0, -1, 0, -4 },
-    { &D_06000304, 6.0f, 0, -1, 2, -4 }, { &D_06005B98, 2.0f, 0, -1, 0, -4 },
+    { &object_st_Anim_000304, 1.0f, 0, -1, 0, 0 },  { &object_st_Anim_005B98, 1.0f, 0, -1, 2, -4 },
+    { &object_st_Anim_000304, 4.0f, 0, -1, 2, -4 }, { &object_st_Anim_000304, 1.0f, 0, -1, 0, -4 },
+    { &object_st_Anim_0055A8, 1.0f, 0, -1, 2, -4 }, { &object_st_Anim_000304, 8.0f, 0, -1, 0, -4 },
+    { &object_st_Anim_000304, 6.0f, 0, -1, 2, -4 }, { &object_st_Anim_005B98, 2.0f, 0, -1, 0, -4 },
 };
 
 void func_808A5050(EnSt* this, GlobalContext* globalCtx) {
@@ -207,7 +204,7 @@ void func_808A52A8(EnSt* this, GlobalContext* globalCtx) {
     Vec3f spA0;
     Vec3f sp94;
     s32 i;
-    s16 temp_s0 = (Rand_ZeroOne() - 0.5f) * 65536.0f;
+    s16 temp_s0 = (Rand_ZeroOne() - 0.5f) * 0x10000;
     s32 rand;
 
     spA0.y = this->actor.floorHeight;
@@ -414,7 +411,7 @@ s32 func_808A5F28(EnSt* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 ret = false;
 
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) {
         if (this->unk_2C8 <= 0.0f) {
             return false;
         }
@@ -688,7 +685,8 @@ void func_808A6A78(EnSt* this, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_2C0)) {
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 8.0f);
-        SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005298, NULL, this->jointTable, this->morphTable, 30);
+        SkelAnime_Init(globalCtx, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable,
+                       30);
         func_8013BC6C(&this->skelAnime, sAnimations, 0);
 
         Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
@@ -835,7 +833,7 @@ void func_808A701C(EnSt* this, GlobalContext* globalCtx) {
 void EnSt_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnSt* this = THIS;
 
-    this->unk_2C0 = Object_GetIndex(&globalCtx->objectCtx, 1);
+    this->unk_2C0 = Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_KEEP);
     if (((ENST_GET_3F(&this->actor) != ENST_3F_63) && Flags_GetSwitch(globalCtx, ENST_GET_3F(&this->actor))) ||
         (this->unk_2C0 < 0)) {
         Actor_MarkForDeath(&this->actor);

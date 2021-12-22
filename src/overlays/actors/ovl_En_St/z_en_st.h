@@ -10,13 +10,8 @@ typedef void (*EnStActionFunc)(struct EnSt*, GlobalContext*);
 #define ENST_GET_3F(thisx) (((thisx)->params & 0x3F) & 0xFF)
 #define ENST_GET_1C0(thisx) ((((thisx)->params & 0x1C0) >> 6) & 0xFF)
 
-enum {
-    /* 63 */ ENST_3F_63 = 63,
-};
-
-enum {
-    /* 1 */ ENST_1C0_1 = 1,
-};
+#define ENST_3F_63 63
+#define ENST_1C0_1 1
 
 typedef struct EnSt {
     /* 0x000 */ Actor actor;
@@ -47,7 +42,7 @@ typedef struct EnSt {
     /* 0x31C */ s16 unk_31C[12];
     /* 0x334 */ s16 unk_334[12];
     /* 0x34C */ f32 unk_34C;
-    /* 0x350 */ char unk_350[0x8];
+    /* 0x350 */ UNK_TYPE1 unk_350[0x8];
     /* 0x358 */ Vec3f unk_358[12];
     /* 0x3E8 */ Vec3s jointTable[30];
     /* 0x49C */ Vec3s morphTable[30];
