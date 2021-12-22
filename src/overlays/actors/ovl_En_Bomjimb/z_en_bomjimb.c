@@ -6,6 +6,7 @@
 
 #include "z_en_bomjimb.h"
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
+#include "objects/object_cs/object_cs.h"
 
 #define FLAGS 0x00000009
 
@@ -36,38 +37,6 @@ void func_80C02A14(EnBomjimb* this, GlobalContext* globalCtx);
 void func_80C02BCC(EnBomjimb* this, GlobalContext* globalCtx);
 void func_80C02CA4(EnBomjimb* this, GlobalContext* globalCtx);
 void func_80C02DAC(EnBomjimb* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06001708;
-extern AnimationHeader D_06001A1C;
-extern AnimationHeader D_06002044;
-extern AnimationHeader D_060026B0;
-extern AnimationHeader D_06002930;
-extern AnimationHeader D_060031C4;
-extern AnimationHeader D_0600349C;
-extern AnimationHeader D_060036B0;
-extern AnimationHeader D_06003EE4;
-extern AnimationHeader D_0600433C;
-extern AnimationHeader D_0600478C;
-extern AnimationHeader D_06004960;
-extern AnimationHeader D_06004C1C;
-extern AnimationHeader D_06005128;
-extern AnimationHeader D_060053F4;
-extern AnimationHeader D_060057C8;
-extern AnimationHeader D_06005DC4;
-extern AnimationHeader D_060060E8;
-extern AnimationHeader D_060064B8;
-extern UNK_TYPE D_0600C520;
-extern UNK_TYPE D_0600CD20;
-extern UNK_TYPE D_0600D520;
-extern UNK_TYPE D_0600DD20;
-extern UNK_TYPE D_0600E620;
-extern UNK_TYPE D_0600EA20;
-extern UNK_TYPE D_0600EE20;
-extern UNK_TYPE D_0600F220;
-extern FlexSkeletonHeader D_0600F82C;
-extern AnimationHeader D_0600FAF4;
-extern AnimationHeader D_0601007C;
-extern AnimationHeader D_06010B68;
 
 static Actor* D_80C03170 = NULL;
 
@@ -109,7 +78,8 @@ void EnBomjimb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
     this->actor.gravity = -2.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600F82C, &D_060064B8, this->jointTable, this->morphTable, 21);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &object_cs_Anim_0064B8, this->jointTable,
+                       this->morphTable, 21);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.targetMode = 6;
     Actor_SetScale(&this->actor, 0.01f);
@@ -190,9 +160,12 @@ void EnBomjimb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80C0113C(EnBomjimb* this, s32 arg1, f32 arg2) {
     static AnimationHeader* sAnimations[] = {
-        &D_060064B8, &D_0600FAF4, &D_060057C8, &D_060053F4, &D_06002044, &D_0601007C, &D_0600349C, &D_06004960,
-        &D_06005128, &D_06004C1C, &D_06002930, &D_06001A1C, &D_06003EE4, &D_0600478C, &D_0600433C, &D_060060E8,
-        &D_06001708, &D_06005DC4, &D_060026B0, &D_060036B0, &D_060031C4, &D_06010B68,
+        &object_cs_Anim_0064B8, &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
+        &object_cs_Anim_002044, &object_cs_Anim_01007C, &object_cs_Anim_00349C, &object_cs_Anim_004960,
+        &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_002930, &object_cs_Anim_001A1C,
+        &object_cs_Anim_003EE4, &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8,
+        &object_cs_Anim_001708, &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0,
+        &object_cs_Anim_0031C4, &object_cs_Anim_010B68,
     };
     static u8 D_80C03218[] = {
         0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 0,
@@ -288,7 +261,7 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
     Vec3f sp60;
     Vec3f sp54;
     Vec3f sp48;
-    u32 sp44;
+    s32 sp44;
 
     if (func_80C012FC(this, globalCtx) || func_80C013B4(this) || func_80C013F0(this, globalCtx)) {
         return;
@@ -302,8 +275,8 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
                 sp48.z += randPlusMinusPoint5Scaled(150.0f);
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
-                if ((abs < 0x4000) && !func_800C55C4(&globalCtx->colCtx, &this->actor.world.pos, &sp48, &sp60, &colPoly,
-                                                     1, 0, 0, 1, &sp44)) {
+                if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp48, &sp60,
+                                                               &colPoly, 1, 0, 0, 1, &sp44)) {
                     func_80C0113C(this, 5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp48);
                     this->unk_2B0 = Rand_S16Offset(30, 50);
@@ -322,8 +295,8 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
                 Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
                 sp54.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
-                if (func_800C55C4(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, 1, 0, 0, 1,
-                                  &sp44)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, 1, 0, 0,
+                                            1, &sp44)) {
                     this->unk_2AE = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80C0113C(this, 20, 1.0f);
@@ -551,7 +524,7 @@ void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx) {
     Vec3f sp74;
     CollisionPoly* sp70;
     Vec3f sp64;
-    u32 sp60;
+    s32 sp60;
     s32 sp5C = this->actor.floorBgId;
     CollisionPoly* sp58 = this->actor.floorPoly;
     Player* player = GET_PLAYER(globalCtx);
@@ -583,7 +556,7 @@ void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx) {
     sp74.y += 20.0f;
     sp74.z += Math_CosS(this->actor.world.rot.y) * 50.0f;
 
-    if (func_800C55C4(&globalCtx->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, 1, 0, 0, 1, &sp60)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, 1, 0, 0, 1, &sp60)) {
         s16 temp = BINANG_SUB((this->actor.world.rot.y - this->actor.yawTowardsPlayer), 0x8000);
         this->unk_2D6 = temp;
 
@@ -612,7 +585,7 @@ void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx) {
 
     this->actor.world.rot.y = this->unk_2D6 + this->unk_2D4;
 
-    if (func_800C99AC(&globalCtx->colCtx, sp58, sp5C)) {
+    if (SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, sp58, sp5C)) {
         s16 temp = BINANG_SUB(this->actor.world.rot.y, this->actor.yawTowardsPlayer - 0x8000);
 
         if (temp < 0) {
@@ -923,13 +896,14 @@ void EnBomjimb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gEnBomjimb_D_80C03240, gEnBomjimb_D_80C03250, gEnBomjimb_D_80C03250,
         gEnBomjimb_D_80C03250, gEnBomjimb_D_80C03250,
     };
-    static UNK_PTR D_80C03274[] = {
-        &D_0600C520,
-        &D_0600CD20,
-        &D_0600D520,
+    static TexturePtr D_80C03274[] = {
+        &object_cs_Tex_00C520,
+        &object_cs_Tex_00CD20,
+        &object_cs_Tex_00D520,
     };
-    static UNK_PTR D_80C03280[] = {
-        &D_0600E620, &D_0600EA20, &D_0600EE20, &D_0600DD20, &D_0600F220,
+    static TexturePtr D_80C03280[] = {
+        &object_cs_Tex_00E620, &object_cs_Tex_00EA20, &object_cs_Tex_00EE20,
+        &object_cs_Tex_00DD20, &object_cs_Tex_00F220,
     };
     EnBomjimb* this = THIS;
 
