@@ -5,6 +5,7 @@
  */
 
 #include "z_en_nb.h"
+#include "objects/object_nb/object_nb.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -181,16 +182,13 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 ActorAnimationEntryS D_80BC1628[] = {
-    { (AnimationHeader* )0x6000990, 1.0f, 0, -1, 0, 0 },
-    { (AnimationHeader* )0x6000990, 1.0f, 0, -1, 0, -4 },
-    { (AnimationHeader* )0x6000290, 1.0f, 0, -1, 2, 0 },
-    { (AnimationHeader* )0x6000290, 1.0f, 0, -1, 0, -4 },
-    { (AnimationHeader* )0x600052C, 1.0f, 0, -1, 0, -4 },
-    { (AnimationHeader* )0x60006D4, 1.0f, 0, -1, 2, -4 },
+    { &object_nb_Anim_000990, 1.0f, 0, -1, 0, 0 },
+    { &object_nb_Anim_000990, 1.0f, 0, -1, 0, -4 },
+    { &object_nb_Anim_000290, 1.0f, 0, -1, 2, 0 },
+    { &object_nb_Anim_000290, 1.0f, 0, -1, 0, -4 },
+    { &object_nb_Anim_00052C, 1.0f, 0, -1, 0, -4 },
+    { &object_nb_Anim_0006D4, 1.0f, 0, -1, 2, -4 },
 };
-
-
-extern FlexSkeletonHeader D_06008C40;
 
 #ifdef NON_MATCHING
 Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
@@ -693,7 +691,7 @@ void EnNb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNb* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008C40, NULL, this->jointTable, this->morphTable, 8);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_nb_Skel_008C40, NULL, this->jointTable, this->morphTable, 8);
 
     this->unk_290 = -1;
     func_80BBFE8C(this, 0);
