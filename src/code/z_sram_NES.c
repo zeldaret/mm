@@ -138,7 +138,6 @@ s32 D_801C6798[] = {
     0x00000020, 0x00001470, 0x000028C0, 0x00003D10, 0x00005160, 0x000065B0,
 };
 
-// items?
 u8 D_801C67B0[24] = {
     ITEM_NONE,  ITEM_BOW,  ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
     ITEM_STICK, ITEM_NUT,  ITEM_MAGIC_BEANS, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
@@ -161,7 +160,16 @@ s32 D_801C6840[4] = { 0x100, 0x180, 0x200, 0x280 };
 
 s32 D_801C6850[8] = { 0x80, 0x80, 0x80, 0x80, 0x300, 0x380, 1, 1 };
 
-s32 D_801C6870[8] = { sizeof(Save), sizeof(Save), sizeof(Save), sizeof(Save), offsetof(SaveContext, fileNum), offsetof(SaveContext, fileNum), offsetof(SaveContext, fileNum), offsetof(SaveContext, fileNum) };
+s32 D_801C6870[8] = {
+    sizeof(Save),
+    sizeof(Save),
+    sizeof(Save),
+    sizeof(Save),
+    offsetof(SaveContext, fileNum),
+    offsetof(SaveContext, fileNum),
+    offsetof(SaveContext, fileNum),
+    offsetof(SaveContext, fileNum),
+};
 
 u8 D_801C6890[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 };
 
@@ -760,26 +768,25 @@ void Sram_GenerateRandomSaveFields(void) {
     }
 }
 
-
 SavePlayerData sSaveDefaultPlayerData = {
-    { '\0', '\0', '\0', '\0', '\0', '\0' }, // newf
-    0, // deaths
+    { '\0', '\0', '\0', '\0', '\0', '\0' },             // newf
+    0,                                                  // deaths
     { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName
-    0x0030, // healthCapacity
-    0x0030, // health
-    0x00, // magicLevel
-    0x30, // magic
-    0x0000, // rupees
-    0x0000, // swordHealth
-    0x0000, // tatlTimer
-    0x00, // magicAcquired
-    0x00, // doubleMagic
-    0x00, // doubleDefense
-    0x00, // unk_1F
-    0xFF, // unk_20
-    0x0000, // owlActivationFlags
-    0xFF, // unk_24
-    0x0008, // savedSceneNum
+    0x0030,                                             // healthCapacity
+    0x0030,                                             // health
+    0x00,                                               // magicLevel
+    0x30,                                               // magic
+    0x0000,                                             // rupees
+    0x0000,                                             // swordHealth
+    0x0000,                                             // tatlTimer
+    0x00,                                               // magicAcquired
+    0x00,                                               // doubleMagic
+    0x00,                                               // doubleDefense
+    0x00,                                               // unk_1F
+    0xFF,                                               // unk_20
+    0x0000,                                             // owlActivationFlags
+    0xFF,                                               // unk_24
+    0x0008,                                             // savedSceneNum
 };
 
 ItemEquips sSaveDefaultItemEquips = {
@@ -807,8 +814,9 @@ Inventory sSaveDefaultInventory = {
     },
     // masks
     {
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
     },
     // ammo
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
