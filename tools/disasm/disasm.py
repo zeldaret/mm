@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse, ast, math, os, re, struct
+import bisect
 from mips_isa import *
 from multiprocessing import Pool, Manager
 from pathlib import Path
@@ -199,11 +200,11 @@ multiply_referenced_rodata = set()
 files = set()  # vram start of file
 
 vrom_variables = list()  # (name,addr)
+vrom_addrs = set()     # set of addrs from vrom_variables, for faster lookup
 
 functions_ast = None
 variables_ast = None
-
-vars_cache = {}  # (address: variable + addend)
+variable_addrs = None
 
 files_text = {}
 
@@ -235,7 +236,7 @@ def proper_name(symbol, in_data=False, is_symbol=True):
         return functions_ast[symbol][0]
     elif symbol in variables_ast.keys():
         return variables_ast[symbol][0]
-    elif symbol in [addr for _, addr in vrom_variables]:
+    elif symbol in vrom_addrs:
         # prefer "start" vrom symbols
         filteredVromSymbols = {
             addr: name
@@ -248,8 +249,14 @@ def proper_name(symbol, in_data=False, is_symbol=True):
             return [name for name, addr in vrom_variables if addr == symbol][0]
 
     # addends
-    if is_symbol and symbol in vars_cache.keys():
-        return vars_cache[symbol]
+    if is_symbol:
+        symbol_index = bisect.bisect(variable_addrs, symbol)
+        if symbol_index:
+            vram_addr = variable_addrs[symbol_index-1]
+            symbol_name, _, _, symbol_size = variables_ast[vram_addr]
+
+            if vram_addr < symbol < vram_addr + symbol_size:
+                return f"{symbol_name} + 0x{symbol-vram_addr:X}"
 
     # generated names
     if symbol in functions and not in_data:
@@ -267,7 +274,7 @@ def proper_name(symbol, in_data=False, is_symbol=True):
 
 def lookup_name(symbol, word):
     # hacks for vrom variables in data
-    if word in [addr for _, addr in vrom_variables]:
+    if word in vrom_addrs:
         if word == 0:  # no makerom segment start
             return "0x00000000"
         if symbol in [
@@ -2195,15 +2202,8 @@ else:
     pruned = old_file_count - new_file_count
     print(f"Pruned {pruned}/{old_file_count} files ({pruned / old_file_count:.02%})")
 
-# Precompute variable addends for all variables, this uses a lot of memory but the lookups later are fast
+# Find floats, doubles, and strings
 for var in sorted(variables_ast.keys()):
-    for i in range(var, var + variables_ast[var][3], 1):
-        addend = i - var
-        assert addend >= 0
-        vars_cache.update(
-            {i: f"{variables_ast[var][0]}" + (f" + 0x{addend:X}" if addend > 0 else "")}
-        )
-    # also add to floats, doubles & strings
     var_type = variables_ast[var][1]
 
     if var_type == "f64":
@@ -2256,6 +2256,9 @@ for segment in files_spec:
         variables_ast.update(
             {segment[3][-2][1]: (f"_{segment[0]}SegmentEnd", "u8", "[]", 0x1)}
         )
+
+# Construct variable_addrs, now that variable_addrs is fully constructed
+variable_addrs = sorted(variables_ast.keys())
 
 # Flatten out files_spec so we can process everything evenly
 # Otherwise the entire code and boot sections are done by a single thread
@@ -2375,6 +2378,9 @@ for section in all_sections:
     elif section[-1]["name"] == "dmadata":
         print(f"Disassembling dmadata")
         disassemble_dmadata(section)
+
+# Construct vrom_addrs, now that vrom_variables is fully constructed
+vrom_addrs = {addr for _, addr in vrom_variables}
 
 # Textual disassembly for each segment
 with Pool(jobs) as p:
