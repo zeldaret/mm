@@ -41,7 +41,6 @@ typedef struct ObjBean {
     /* 0x1DE */ s8 unk_1DE;
     /* 0x1DF */ s8 unk_1DF;
     /* 0x1E0 */ s8 unk_1E0;
-    /* 0x1E1 */ char unk1E1[3];
     /* 0x1E4 */ s32 unk_1E4;
     /* 0x1E8 */ ObjBeanUnkFunc unk_1E8;
     /* 0x1EC */ s16 unk_1EC;

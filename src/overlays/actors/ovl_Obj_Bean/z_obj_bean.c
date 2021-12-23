@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_bean.h"
+#include "objects/object_mamenoki/object_mamenoki.h"
 
 #define FLAGS 0x00400000
 
@@ -57,12 +58,6 @@ void func_80938AD8(ObjBean* this, GlobalContext* globalCtx);
 void func_80938C1C(Actor* thisx, GlobalContext* globalCtx);
 void func_80938E00(Actor* thisx, GlobalContext* globalCtx);
 void func_80938F50(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_06000090[];
-extern Gfx D_060002D0[];
-extern CollisionHeader D_060004BC;
-extern Gfx D_06000530[];
-extern Gfx D_06002208[];
 
 const ActorInit Obj_Bean_InitVars = {
     ACTOR_OBJ_BEAN,
@@ -126,7 +121,7 @@ void func_80936CF0(ObjBean* this, GlobalContext* globalCtx) {
     sp24.y = this->dyna.actor.world.pos.y + 29.999998f;
     sp24.z = this->dyna.actor.world.pos.z;
     this->dyna.actor.floorHeight =
-        func_800C411C(&globalCtx->colCtx, &this->dyna.actor.floorPoly, &sp20, &this->dyna.actor, &sp24);
+        BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->dyna.actor.floorPoly, &sp20, &this->dyna.actor, &sp24);
 }
 
 s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
@@ -146,7 +141,7 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
     Math_Vec3f_Sum(&this->dyna.actor.world.pos, &spAC, &spA0);
     Math_Vec3f_Diff(&this->dyna.actor.world.pos, &spAC, &sp94);
 
-    if (func_800C5650(&globalCtx->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, 1, 1, 1, 1, &spB8,
+    if (BgCheck_EntityLineTest2(&globalCtx->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, 1, 1, 1, 1, &spB8,
                       &this->dyna.actor)) {
         this->dyna.actor.world.pos.x = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.x) * 1.9f) + sp88.x;
         this->dyna.actor.world.pos.y = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.y) * 1.9f) + sp88.y;
@@ -263,7 +258,7 @@ s32 func_80937468(ObjBean* this, GlobalContext* globalCtx) {
 
     while (bgActor != NULL) {
         if ((bgActor->id == ACTOR_EN_HORSE) &&
-            (Math3D_DistanceSquared(&bgActor->world.pos, &this->dyna.actor.world.pos) < 10000.0f)) {
+            (Math3D_Vec3fDistSq(&bgActor->world.pos, &this->dyna.actor.world.pos) < 10000.0f)) {
             return true;
         }
         bgActor = bgActor->next;
@@ -282,7 +277,7 @@ Actor* func_809374F8(ObjBean* this, GlobalContext* globalCtx) {
 
             if (!params2 && (bgActor->room == this->dyna.actor.room) && !OBJBEAN_GET_80(bgActor) &&
                 (params == OBJBEAN_GET_7F(bgActor, 0)) &&
-                (Math3D_DistanceSquared(&bgActor->world.pos, &this->dyna.actor.world.pos) < 100.0f)) {
+                (Math3D_Vec3fDistSq(&bgActor->world.pos, &this->dyna.actor.world.pos) < 100.0f)) {
                 break;
             }
         }
@@ -392,7 +387,7 @@ void ObjBean_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.shape.rot.z = 0;
         this->unk_1FE |= 2;
 
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060004BC);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_mamenoki_Colheader_0004BC);
         Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit1);
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
 
@@ -421,7 +416,7 @@ void ObjBean_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjBean_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjBean* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -939,11 +934,11 @@ void func_80938E00(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (this->unk_1FE & 4) {
-        gSPDisplayList(POLY_OPA_DISP++, D_06000090);
+        gSPDisplayList(POLY_OPA_DISP++, object_mamenoki_DL_000090);
     }
 
     if (this->unk_1FE & 2) {
-        gSPDisplayList(POLY_OPA_DISP++, D_060002D0);
+        gSPDisplayList(POLY_OPA_DISP++, object_mamenoki_DL_0002D0);
     }
 
     if (this->unk_1FE & 1) {
@@ -952,7 +947,7 @@ void func_80938E00(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Scale(this->unk_1B8, this->unk_1B8, this->unk_1B8, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_06000530);
+        gSPDisplayList(POLY_OPA_DISP++, object_mamenoki_DL_000530);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -961,5 +956,5 @@ void func_80938E00(Actor* thisx, GlobalContext* globalCtx) {
 void func_80938F50(Actor* thisx, GlobalContext* globalCtx) {
     ObjBean* this = THIS;
 
-    func_800BE03C(globalCtx, D_06002208);
+    func_800BE03C(globalCtx, object_mamenoki_DL_002208);
 }

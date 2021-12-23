@@ -1179,12 +1179,12 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk_34C != NULL) {
             sp4C = 0.0f;
 
-            this->unk_354 = Math3D_Vec3fDistSq(&this->actor.world.pos, &this->unk_34C->actor.world.pos);
+            this->unk_354 = Math3D_Vec3fDistSq(&this->actor.world.pos, &this->unk_34C->dyna.actor.world.pos);
             if (this->unk_354 < this->unk_350) {
-                f32 dist = Math3D_DistPlaneToPos(COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.x),
-                                                 COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.y),
-                                                 COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.z),
-                                                 this->unk_34C->actor.floorPoly->dist, &this->actor.world.pos);
+                f32 dist = Math3D_DistPlaneToPos(COLPOLY_GET_NORMAL(this->unk_34C->dyna.actor.floorPoly->normal.x),
+                                                 COLPOLY_GET_NORMAL(this->unk_34C->dyna.actor.floorPoly->normal.y),
+                                                 COLPOLY_GET_NORMAL(this->unk_34C->dyna.actor.floorPoly->normal.z),
+                                                 this->unk_34C->dyna.actor.floorPoly->dist, &this->actor.world.pos);
 
                 if (fabsf(dist) < 3.0f) {
                     sp4C = 1.9f;
