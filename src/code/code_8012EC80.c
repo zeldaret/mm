@@ -429,14 +429,36 @@ s32 func_8012EC80(GlobalContext* globalCtx) {
     }
 }
 
-void func_8012ED34(s16 equipment);
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8012EC80/func_8012ED34.s")
+/**
+ * Only changes shield
+ */
+void Inventory_ChangeEquipment(s16 value) {
+    TAKE_EQUIPPED_ITEM(EQUIP_SHIELD, value);
+}
 
-u8 func_8012ED78(GlobalContext* globalCtx, s16 equipment);
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8012EC80/func_8012ED78.s")
+/**
+ * Only deletes shield
+ */
+u8 Inventory_DeleteEquipment(GlobalContext* globalCtx, s16 equipment) {
+    Player* player = GET_PLAYER(globalCtx);
+    if (CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD) != 0) {
+        TAKE_EQUIPPED_ITEM(EQUIP_SHIELD, 0);
+        Player_SetEquipmentData(globalCtx, player);
+        return true;
+    }
+    
+    return false;
+}
 
-void func_8012EDE8(s16 arg0, u32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8012EC80/func_8012EDE8.s")
+
+void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
+    u32 upgrades = gSaveContext.inventory.upgrades;
+
+    upgrades &= gUpgradeNegMasks[upgrade];
+    upgrades |= value << gUpgradeShifts[upgrade];
+
+    gSaveContext.inventory.upgrades = upgrades;
+}
 
 s32 func_8012EE34(s16 arg0) {
     s16 num = 0;
@@ -526,24 +548,32 @@ void func_8012EF0C(s16 arg0) {
     XREG(95) = 0;
 }
 
-void func_8012F0EC(s16 arg0);
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8012EC80/func_8012F0EC.s")
+/**
+ * Related to Deku Scrub Playground
+ */
+void func_8012F0EC(s16 arg0) {
+    s16 i;
 
-#ifdef NON_MATCHING
-// regalloc
-void func_8012F1BC(s16 sceneIndex) {
-    if (sceneIndex == SCENE_KINSTA1) {
-        gSaveContext.roomInf[126][0] = ((((gSaveContext.roomInf[126][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
-                                       (gSaveContext.roomInf[126][0] & 0xFFFF);
-    } else {
-        gSaveContext.roomInf[126][0] =
-            ((gSaveContext.roomInf[126][0] + 1) & 0xFFFF) | (gSaveContext.roomInf[126][0] & 0xFFFF0000);
+    gSaveContext.roomInf[123][CURRENT_DAY - 1] = gSaveContext.unk_3DE0[arg0];
+
+    for (i = 0; i < 8; i++) {
+        // Suppose to be unk_6E instead
+        gSaveContext.inventory.strayFairies[8 * CURRENT_DAY + 2 + i] = gSaveContext.playerName[i];
     }
 }
-#else
-void func_8012F1BC(s16 arg0);
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8012EC80/func_8012F1BC.s")
-#endif
+
+
+void func_8012F1BC(s16 sceneIndex) {
+    u32 roomInf;
+
+    if (sceneIndex == SCENE_KINSTA1) {
+        gSaveContext.roomInf[126][0] = (gSaveContext.roomInf[126][0] & 0xFFFF) | ((u16)(((gSaveContext.roomInf[126][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10);
+    } else {
+        roomInf = gSaveContext.roomInf[126][0];
+        gSaveContext.roomInf[126][0] =
+            (((u16)roomInf + 1) & 0xFFFF) | (roomInf & 0xFFFF0000);
+    }
+}
 
 s16 func_8012F22C(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
@@ -553,5 +583,11 @@ s16 func_8012F22C(s16 sceneIndex) {
     }
 }
 
-void func_8012F278(GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8012EC80/func_8012F278.s")
+void func_8012F278(GlobalContext* globalCtx) {
+    u16 new_var;
+
+    new_var = ((globalCtx->msgCtx.unk12054 & 0xF) << 8);
+    new_var |= ((globalCtx->msgCtx.unk12056 & 0xF) * 0x10);
+    new_var |= (globalCtx->msgCtx.unk12058 & 0xF);
+    gSaveContext.roomInf[0x7F][5] = (new_var & 0xFFFF) | (gSaveContext.roomInf[0x7F][5] & 0xFFFF0000);
+}

@@ -1720,7 +1720,7 @@ asm/non_matchings/code/z_player_lib/func_801239AC.s,func_801239AC,0x801239AC,0x3
 asm/non_matchings/code/z_player_lib/func_80123AA4.s,func_80123AA4,0x80123AA4,0x4C
 asm/non_matchings/code/z_player_lib/func_80123BD4.s,func_80123BD4,0x80123BD4,0x21
 asm/non_matchings/code/z_player_lib/func_80123C58.s,func_80123C58,0x80123C58,0xE
-asm/non_matchings/code/z_player_lib/func_80123C90.s,func_80123C90,0x80123C90,0x30
+asm/non_matchings/code/z_player_lib/Player_SetEquipmentData.s,Player_SetEquipmentData,0x80123C90,0x30
 asm/non_matchings/code/z_player_lib/func_80123D50.s,func_80123D50,0x80123D50,0x15
 asm/non_matchings/code/z_player_lib/func_80123DA4.s,func_80123DA4,0x80123DA4,0x7
 asm/non_matchings/code/z_player_lib/func_80123DC0.s,func_80123DC0,0x80123DC0,0x34
@@ -1920,9 +1920,9 @@ asm/non_matchings/code/z_room/Room_HandleLoadCallbacks.s,Room_HandleLoadCallback
 asm/non_matchings/code/z_room/Room_Draw.s,Room_Draw,0x8012EBA8,0x14
 asm/non_matchings/code/z_room/func_8012EBF8.s,func_8012EBF8,0x8012EBF8,0x22
 asm/non_matchings/code/code_8012EC80/func_8012EC80.s,func_8012EC80,0x8012EC80,0x2D
-asm/non_matchings/code/code_8012EC80/func_8012ED34.s,func_8012ED34,0x8012ED34,0x11
-asm/non_matchings/code/code_8012EC80/func_8012ED78.s,func_8012ED78,0x8012ED78,0x1C
-asm/non_matchings/code/code_8012EC80/func_8012EDE8.s,func_8012EDE8,0x8012EDE8,0x13
+asm/non_matchings/code/code_8012EC80/Inventory_ChangeEquipment.s,Inventory_ChangeEquipment,0x8012ED34,0x11
+asm/non_matchings/code/code_8012EC80/Inventory_DeleteEquipment.s,Inventory_DeleteEquipment,0x8012ED78,0x1C
+asm/non_matchings/code/code_8012EC80/Inventory_ChangeUpgrade.s,Inventory_ChangeUpgrade,0x8012EDE8,0x13
 asm/non_matchings/code/code_8012EC80/func_8012EE34.s,func_8012EE34,0x8012EE34,0x36
 asm/non_matchings/code/code_8012EC80/func_8012EF0C.s,func_8012EF0C,0x8012EF0C,0x78
 asm/non_matchings/code/code_8012EC80/func_8012F0EC.s,func_8012F0EC,0x8012F0EC,0x34
