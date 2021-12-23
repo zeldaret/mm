@@ -12,7 +12,7 @@ typedef struct EnMag {
     /* 0x11EFC */ char pad11EFC[4];
     /* 0x11F00 */ s16 unk11F00; // Set and not used.
     /* 0x11F02 */ s16 unk11F02; // Set and not used.
-    /* 0x11F04 */ s16 unk11F04; // globalState (?)
+    /* 0x11F04 */ s16 state; // State of whole actor, uses EnMagState enum
     /* 0x11F06 */ s16 majorasMaskEffectPrimLodFrac;
     /* 0x11F08 */ s16 majorasMaskEffectPrimColor[3];
     /* 0x11F08 */ s16 majorasMaskEffectEnvColor[3];
@@ -37,29 +37,16 @@ typedef struct EnMag {
     /* 0x11F5A */ s16 unk11F5A; // Set but not used.
     /* 0x11F5C */ s32 unk11F5C; // Set but not used.
     /* 0x11F60 */ s32 unk11F60; // Set but not used.
-    /* 0x11F64 */ s16 unk11F64; // The rest of these are used in Update, all in the same way
-    /* 0x11F66 */ s16 unk11F66;
-    /* 0x11F68 */ s16 unk11F68;
-    /* 0x11F6A */ s16 unk11F6A;
-    /* 0x11F6C */ s16 unk11F6C;
-    /* 0x11F6E */ s16 unk11F6E;
-    /* 0x11F70 */ s16 unk11F70;
-    /* 0x11F72 */ s16 unk11F72;
+    /* 0x11F64 */ s16 majorasMaskEffectsFadeInTimer;
+    /* 0x11F66 */ s16 majorasMaskFadeInTimer;
+    /* 0x11F68 */ s16 mainTitleAlphaFadeInTimer;
+    /* 0x11F6A */ s16 effectAlphaFadeInTimer;
+    /* 0x11F6C */ s16 subtitleFadeInTimer;
+    /* 0x11F6E */ s16 copyrightFadeInTimer;
+    /* 0x11F70 */ s16 fadeOutTimer;
+    /* 0x11F72 */ s16 delayTimer; // Delays start of next action in Update.
     /* 0x11F74 */ char pad11F74[4];
 } EnMag; // size = 0x11F78
-
-typedef enum {
-    /*  0 */ EN_MAG_STATE_0,
-    /*  1 */ EN_MAG_STATE_1,
-    /*  2 */ EN_MAG_STATE_2,
-    /*  3 */ EN_MAG_STATE_3,
-    /*  5 */ EN_MAG_STATE_5 = 5,
-    /*  6 */ EN_MAG_STATE_6,
-    /* 10 */ EN_MAG_STATE_10 = 10,
-    /* 13 */ EN_MAG_STATE_13 = 13,
-    /* 20 */ EN_MAG_STATE_20 = 20,
-    /* 21 */ EN_MAG_STATE_21
-} EnMagState;
 
 extern const ActorInit En_Mag_InitVars;
 

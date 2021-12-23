@@ -9020,7 +9020,7 @@
     0x8096AD3C:("jtbl_8096AD3C","UNK_PTR","",0x4),
     0x8096B290:("En_Okarina_Effect_InitVars","UNK_TYPE1","",0x1),
     0x8096B2B0:("D_8096B2B0","f32","",0x4),
-    0x8096E910:("D_8096E910","s16","",0x2),
+    0x8096E910:("sInputDelayTimer","s16","",0x2),
     0x8096E914:("sZeldaEffectColorTimer","s16","",0x2),
     0x8096E918:("sZeldaEffectColorTargetIndex","s16","",0x2),
     0x8096E91C:("sTextAlphaTargetIndex","s16","",0x2),

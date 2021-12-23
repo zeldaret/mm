@@ -16,7 +16,20 @@ void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMag_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-static s16 D_8096E910 = 0; // case 13 timer
+typedef enum {
+    /*  0 */ MAG_STATE_INITIAL,
+    /*  1 */ MAG_STATE_FADE_IN_MASK_EFFECTS,
+    /*  2 */ MAG_STATE_FADE_IN_MASK,
+    /*  3 */ MAG_STATE_FADE_IN_MAIN_TITLE,
+    /*  5 */ MAG_STATE_FADE_IN_SUBTITLE = 5,
+    /*  6 */ MAG_STATE_FADE_IN_COPYRIGHT, // And PRESS START
+    /* 10 */ MAG_STATE_CALLED = 10,       // by a button press
+    /* 13 */ MAG_STATE_DISPLAY = 13,      // Buttons will trigger File Select state
+    /* 20 */ MAG_STATE_FADE_OUT = 20,
+    /* 21 */ MAG_STATE_POST_DISPLAY // Go to next scene
+} EnMagState;
+
+static s16 sInputDelayTimer = 0;
 
 static s16 sZeldaEffectColorTimer = 30;
 static s16 sZeldaEffectColorTargetIndex = 0;
@@ -72,7 +85,7 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->mainTitleAlpha = this->subtitleAlpha = this->unk11F32 = this->copyrightAlpha = 0;
 
     this->unk11F02 = 30;
-    this->unk11F00 = this->unk11F04 = 0;
+    this->unk11F00 = this->state = MAG_STATE_INITIAL;
 
     if (gSaveContext.unk_3F1E != 0) {
         this->mainTitleAlpha = 210;
@@ -98,8 +111,8 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->zeldaEffectEnvColor[2] = 155;
 
         gSaveContext.unk_3F1E = 0;
-        this->unk11F04 = 2;
-        D_8096E910 = 20;
+        this->state = MAG_STATE_FADE_IN_MASK;
+        sInputDelayTimer = 20;
         gSaveContext.fadeDuration = 1;
         gSaveContext.unk_3F51 = 255;
     }
@@ -111,13 +124,13 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk11F5C = 0;
     this->unk11F60 = 0;
 
-    this->unk11F64 = 25;
-    this->unk11F66 = 25;
-    this->unk11F68 = 20;
-    this->unk11F6A = 40;
-    this->unk11F6C = 10;
-    this->unk11F6E = 10;
-    this->unk11F70 = 15;
+    this->majorasMaskEffectsFadeInTimer = 25;
+    this->majorasMaskFadeInTimer = 25;
+    this->mainTitleAlphaFadeInTimer = 20;
+    this->effectAlphaFadeInTimer = 40;
+    this->subtitleFadeInTimer = 10;
+    this->copyrightFadeInTimer = 10;
+    this->fadeOutTimer = 15;
 
     sZeldaEffectColorTimer = 30;
     sZeldaEffectColorTargetIndex = 0;
@@ -196,48 +209,6 @@ void func_8096B604(Actor* thisx) {
     TIMED_STEP_TO(this->zeldaEffectEnvColor[2], sZeldaEffectEnvBlueTargets[sZeldaEffectColorTargetIndex],
                   sZeldaEffectColorTimer, colorStep);
 
-    // colorStep = ABS_ALT(this->zeldaEffectPrimColor[0] - sZeldaEffectPrimRedTargets[sZeldaEffectColorTargetIndex]) /
-    // sZeldaEffectColorTimer; if (this->zeldaEffectPrimColor[0] >=
-    // sZeldaEffectPrimRedTargets[sZeldaEffectColorTargetIndex]) {
-    //     this->zeldaEffectPrimColor[0] -= colorStep;
-    // } else {
-    //     this->zeldaEffectPrimColor[0] += colorStep;
-    // }
-
-    // colorStep = ABS_ALT(this->zeldaEffectPrimColor[1] - sZeldaEffectPrimGreenTargets[sZeldaEffectColorTargetIndex]) /
-    // sZeldaEffectColorTimer; if (this->zeldaEffectPrimColor[1] >=
-    // sZeldaEffectPrimGreenTargets[sZeldaEffectColorTargetIndex]) {
-    //     this->zeldaEffectPrimColor[1] -= colorStep;
-    // } else {
-    //     this->zeldaEffectPrimColor[1] += colorStep;
-    // }
-
-    // colorStep = ABS_ALT(this->zeldaEffectPrimColor[2] - sZeldaEffectPrimBlueTargets[sZeldaEffectColorTargetIndex]) /
-    // sZeldaEffectColorTimer; if (this->zeldaEffectPrimColor[2] >=
-    // sZeldaEffectPrimBlueTargets[sZeldaEffectColorTargetIndex]) {
-    //     this->zeldaEffectPrimColor[2] -= colorStep;
-    // } else {
-    //     this->zeldaEffectPrimColor[2] += colorStep;
-    // }
-
-    // colorStep = ABS_ALT(this->zeldaEffectEnvColor[0] - sZeldaEffectEnvRedTargets[sZeldaEffectColorTargetIndex]) /
-    // sZeldaEffectColorTimer; if (this->zeldaEffectEnvColor[0] >=
-    // sZeldaEffectEnvRedTargets[sZeldaEffectColorTargetIndex]) {
-    //     this->zeldaEffectEnvColor[0] -= colorStep;
-    // } else {
-    //     this->zeldaEffectEnvColor[0] += colorStep;
-    // }
-
-    // // Skips 1, i.e. green.
-
-    // colorStep = ABS_ALT(this->zeldaEffectEnvColor[2] - sZeldaEffectEnvBlueTargets[sZeldaEffectColorTargetIndex]) /
-    // sZeldaEffectColorTimer; if (this->zeldaEffectEnvColor[2] >=
-    // sZeldaEffectEnvBlueTargets[sZeldaEffectColorTargetIndex]) {
-    //     this->zeldaEffectEnvColor[2] -= colorStep;
-    // } else {
-    //     this->zeldaEffectEnvColor[2] += colorStep;
-    // }
-
     sZeldaEffectColorTimer--;
     if (sZeldaEffectColorTimer == 0) {
         this->zeldaEffectPrimColor[0] = sZeldaEffectPrimRedTargets[sZeldaEffectColorTargetIndex];
@@ -251,6 +222,10 @@ void func_8096B604(Actor* thisx) {
     }
 }
 
+/**
+ * Controls the actions performed using a switch and the `state` struct variable rather than action functions. Most of
+ * these are to do with fading various parts in and out.
+ */
 void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
     static s16 sMajorasMaskEffectPrimGreenTargets[] = { 255, 155 };
     static s16 sMajorasMaskEffectEnvRedTargets[] = { 255, 0 };
@@ -260,176 +235,140 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnMag* this = (EnMag*)thisx;
 
     if (gSaveContext.fileNum != 0xFEDC) {
-        if (this->unk11F04 == 0) {
+        if (this->state == MAG_STATE_INITIAL) {
             if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_START) ||
                 CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
                 CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B)) {
 
                 if (!EnvFlags_Get(globalCtx, 4)) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
-                    this->unk11F04 = 10;
+                    this->state = MAG_STATE_CALLED;
                     this->unk11F00 = 0;
                     this->unk11F02 = 30;
-                    D_8096E910 = 20;
+                    sInputDelayTimer = 20;
                     gSaveContext.fadeDuration = 1;
                     gSaveContext.unk_3F51 = 255;
                 }
             }
         } else {
-            switch (this->unk11F04) {
-                case 1:
-                    step = ABS_ALT(this->majorasMaskEffectPrimColor[1] - sMajorasMaskEffectPrimGreenTargets[0]) / this->unk11F64;
-                    if (this->majorasMaskEffectPrimColor[1] >= sMajorasMaskEffectPrimGreenTargets[0]) {
-                        this->majorasMaskEffectPrimColor[1] -= step;
-                    } else {
-                        this->majorasMaskEffectPrimColor[1] += step;
-                    }
+            switch (this->state) {
+                case MAG_STATE_FADE_IN_MASK_EFFECTS:
+                    TIMED_STEP_TO(this->majorasMaskEffectPrimColor[1], sMajorasMaskEffectPrimGreenTargets[0],
+                                  this->majorasMaskEffectsFadeInTimer, step);
 
-                    step = ABS_ALT(this->majorasMaskEffectEnvColor[0] - sMajorasMaskEffectEnvRedTargets[0]) / this->unk11F64;
-                    if (this->majorasMaskEffectEnvColor[0] >= sMajorasMaskEffectEnvRedTargets[0]) {
-                        this->majorasMaskEffectEnvColor[0] -= step;
-                    } else {
-                        this->majorasMaskEffectEnvColor[0] += step;
-                    }
+                    TIMED_STEP_TO(this->majorasMaskEffectEnvColor[0], sMajorasMaskEffectEnvRedTargets[0],
+                                  this->majorasMaskEffectsFadeInTimer, step);
+                    TIMED_STEP_TO(this->majorasMaskEffectEnvColor[2], sMajorasMaskEffectEnvBlueTargets[0],
+                                  this->majorasMaskEffectsFadeInTimer, step);
 
-                    step = ABS_ALT(this->majorasMaskEffectEnvColor[2] - sMajorasMaskEffectEnvBlueTargets[0]) / this->unk11F64;
-                    if (this->majorasMaskEffectEnvColor[2] >= sMajorasMaskEffectEnvBlueTargets[0]) {
-                        this->majorasMaskEffectEnvColor[2] -= step;
-                    } else {
-                        this->majorasMaskEffectEnvColor[2] += step;
-                    }
+                    TIMED_STEP_UP_TO(this->majorasMaskEffectAlpha, 255, this->majorasMaskEffectsFadeInTimer, step);
 
-                    step = ABS_ALT(this->majorasMaskEffectAlpha - 255) / this->unk11F64;
-                    this->majorasMaskEffectAlpha += step;
+                    TIMED_STEP_UP_TO(this->majorasMaskEffectPrimLodFrac, 32, this->majorasMaskEffectsFadeInTimer, step);
 
-                    step = ABS_ALT(this->majorasMaskEffectPrimLodFrac - 32) / this->unk11F64;
-                    this->majorasMaskEffectPrimLodFrac += step;
-
-                    this->unk11F64--;
-                    if (this->unk11F64 == 0) {
+                    this->majorasMaskEffectsFadeInTimer--;
+                    if (this->majorasMaskEffectsFadeInTimer == 0) {
                         this->majorasMaskEffectPrimColor[1] = sMajorasMaskEffectPrimGreenTargets[0];
                         this->majorasMaskEffectEnvColor[0] = sMajorasMaskEffectEnvRedTargets[0];
                         this->majorasMaskEffectEnvColor[2] = sMajorasMaskEffectEnvBlueTargets[0];
                         this->majorasMaskEffectAlpha = 255;
-                        this->unk11F04 = 2;
-                        this->unk11F72 = 5;
+                        this->state = MAG_STATE_FADE_IN_MASK;
+                        this->delayTimer = 5;
                     }
                     break;
 
-                case 2:
-                    if (this->unk11F72 == 0) {
-                        step = ABS_ALT(this->majorasMaskEffectPrimColor[1] - sMajorasMaskEffectPrimGreenTargets[1]) / this->unk11F66;
-                        if (this->majorasMaskEffectPrimColor[1] >= sMajorasMaskEffectPrimGreenTargets[1]) {
-                            this->majorasMaskEffectPrimColor[1] -= step;
-                        } else {
-                            this->majorasMaskEffectPrimColor[1] += step;
-                        }
+                case MAG_STATE_FADE_IN_MASK:
+                    if (this->delayTimer == 0) {
+                        TIMED_STEP_TO(this->majorasMaskEffectPrimColor[1], sMajorasMaskEffectPrimGreenTargets[1],
+                                      this->majorasMaskFadeInTimer, step);
 
-                        step = ABS_ALT(this->majorasMaskEffectEnvColor[0] - sMajorasMaskEffectEnvRedTargets[1]) / this->unk11F66;
-                        if (this->majorasMaskEffectEnvColor[0] >= sMajorasMaskEffectEnvRedTargets[1]) {
-                            this->majorasMaskEffectEnvColor[0] -= step;
-                        } else {
-                            this->majorasMaskEffectEnvColor[0] += step;
-                        }
+                        TIMED_STEP_TO(this->majorasMaskEffectEnvColor[0], sMajorasMaskEffectEnvRedTargets[1],
+                                      this->majorasMaskFadeInTimer, step);
 
-                        step = ABS_ALT(this->majorasMaskEffectEnvColor[2] - sMajorasMaskEffectEnvBlueTargets[1]) / this->unk11F66;
-                        if (this->majorasMaskEffectEnvColor[2] >= sMajorasMaskEffectEnvBlueTargets[1]) {
-                            this->majorasMaskEffectEnvColor[2] -= step;
-                        } else {
-                            this->majorasMaskEffectEnvColor[2] += step;
-                        }
+                        TIMED_STEP_TO(this->majorasMaskEffectEnvColor[2], sMajorasMaskEffectEnvBlueTargets[1],
+                                      this->majorasMaskFadeInTimer, step);
 
-                        step = ABS_ALT(this->majorasMaskEffectPrimLodFrac - 128) / this->unk11F66;
-                        this->majorasMaskEffectPrimLodFrac += step;
+                        TIMED_STEP_UP_TO(this->majorasMaskEffectPrimLodFrac, 128, this->majorasMaskFadeInTimer, step);
 
-                        step = ABS_ALT(this->majorasMaskAlpha - 255) / this->unk11F66;
-                        this->majorasMaskAlpha += step;
+                        TIMED_STEP_UP_TO(this->majorasMaskAlpha, 255, this->majorasMaskFadeInTimer, step);
 
-                        this->unk11F66--;
-                        if (this->unk11F66 == 0) {
+                        this->majorasMaskFadeInTimer--;
+                        if (this->majorasMaskFadeInTimer == 0) {
                             this->majorasMaskEffectPrimColor[1] = sMajorasMaskEffectPrimGreenTargets[1];
                             this->majorasMaskEffectEnvColor[0] = sMajorasMaskEffectEnvRedTargets[1];
                             this->majorasMaskEffectEnvColor[2] = sMajorasMaskEffectEnvBlueTargets[1];
                             this->majorasMaskEffectPrimLodFrac = 128;
                             this->majorasMaskAlpha = 255;
-                            this->unk11F04 = 3;
-                            this->unk11F72 = 5;
+                            this->state = MAG_STATE_FADE_IN_MAIN_TITLE;
+                            this->delayTimer = 5;
                         }
                     } else {
-                        this->unk11F72--;
+                        this->delayTimer--;
                     }
                     break;
 
-                case 3:
-                    if (this->unk11F72 == 0) {
-                        step = ABS_ALT(this->mainTitleAlpha - 255) / this->unk11F68;
-                        this->mainTitleAlpha += step;
+                case MAG_STATE_FADE_IN_MAIN_TITLE:
+                    if (this->delayTimer == 0) {
+                        TIMED_STEP_UP_TO(this->mainTitleAlpha, 255, this->mainTitleAlphaFadeInTimer, step);
 
-                        this->unk11F68--;
-                        if (this->unk11F68 == 0) {
-                            this->unk11F68 = 1;
+                        this->mainTitleAlphaFadeInTimer--;
+                        if (this->mainTitleAlphaFadeInTimer == 0) {
+                            this->mainTitleAlphaFadeInTimer = 1;
                             this->mainTitleAlpha = 255;
                         }
 
-                        step = ABS_ALT(this->majorasMaskEffectAlpha - 60) / this->unk11F6A;
-                        this->majorasMaskEffectAlpha -= step;
+                        TIMED_STEP_DOWN_TO(this->majorasMaskEffectAlpha, 60, this->effectAlphaFadeInTimer, step);
 
-                        step = ABS_ALT(this->zeldaEffectAlpha - 255) / this->unk11F6A;
-                        this->zeldaEffectAlpha += step;
+                        TIMED_STEP_UP_TO(this->zeldaEffectAlpha, 255, this->effectAlphaFadeInTimer, step);
+                        TIMED_STEP_UP_TO(this->zeldaEffectPrimLodFrac, 128, this->effectAlphaFadeInTimer, step);
 
-                        step = ABS_ALT(this->zeldaEffectPrimLodFrac - 128) / this->unk11F6A;
-                        this->zeldaEffectPrimLodFrac += step;
+                        this->effectAlphaFadeInTimer--;
 
-                        this->unk11F6A--;
-
-                        if (this->unk11F6A == 0) {
+                        if (this->effectAlphaFadeInTimer == 0) {
                             this->majorasMaskEffectAlpha = 60;
                             this->zeldaEffectAlpha = 255;
                             this->zeldaEffectPrimLodFrac = 128;
-                            this->unk11F04 = 5;
-                            this->unk11F72 = 20;
+                            this->state = MAG_STATE_FADE_IN_SUBTITLE;
+                            this->delayTimer = 20;
                         }
                     } else {
-                        this->unk11F72--;
+                        this->delayTimer--;
                     }
                     break;
 
-                case 5:
+                case MAG_STATE_FADE_IN_SUBTITLE:
                     func_8096B604(&this->actor);
 
-                    if (this->unk11F72 == 0) {
-                        step = ABS_ALT(this->subtitleAlpha - 255) / this->unk11F6C;
-                        this->subtitleAlpha += step;
+                    if (this->delayTimer == 0) {
+                        TIMED_STEP_UP_TO(this->subtitleAlpha, 255, this->subtitleFadeInTimer, step);
 
-                        this->unk11F6C--;
-                        if (this->unk11F6C == 0) {
+                        this->subtitleFadeInTimer--;
+                        if (this->subtitleFadeInTimer == 0) {
                             this->zeldaEffectAlpha = 255;
-                            this->unk11F04 = 6;
-                            this->unk11F72 = 20;
+                            this->state = MAG_STATE_FADE_IN_COPYRIGHT;
+                            this->delayTimer = 20;
                         }
                     } else {
-                        this->unk11F72--;
+                        this->delayTimer--;
                     }
                     break;
 
-                case 6:
+                case MAG_STATE_FADE_IN_COPYRIGHT:
                     func_8096B604(&this->actor);
 
-                    if (this->unk11F72 == 0) {
-                        step = ABS_ALT(this->copyrightAlpha - 255) / this->unk11F6E;
-                        this->copyrightAlpha += step;
+                    if (this->delayTimer == 0) {
+                        TIMED_STEP_UP_TO(this->copyrightAlpha, 255, this->copyrightFadeInTimer, step);
 
-                        this->unk11F6E--;
-                        if (this->unk11F6E == 0) {
+                        this->copyrightFadeInTimer--;
+                        if (this->copyrightFadeInTimer == 0) {
                             this->copyrightAlpha = 255;
-                            this->unk11F04 = 13;
+                            this->state = MAG_STATE_DISPLAY;
                         }
                     } else {
-                        this->unk11F72--;
+                        this->delayTimer--;
                     }
                     break;
 
-                case 10:
+                case MAG_STATE_CALLED:
                     this->majorasMaskEffectPrimColor[1] = sMajorasMaskEffectPrimGreenTargets[0];
                     this->majorasMaskEffectEnvColor[0] = sMajorasMaskEffectEnvRedTargets[0];
                     this->majorasMaskEffectEnvColor[2] = sMajorasMaskEffectEnvBlueTargets[0];
@@ -441,13 +380,13 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                     this->zeldaEffectPrimLodFrac = 128;
                     this->subtitleAlpha = 255;
                     this->copyrightAlpha = 255;
-                    this->unk11F04 = 13;
+                    this->state = MAG_STATE_DISPLAY;
                     break;
 
-                case 13:
+                case MAG_STATE_DISPLAY:
                     func_8096B604(&this->actor);
 
-                    if (D_8096E910 == 0) {
+                    if (sInputDelayTimer == 0) {
                         if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_START) ||
                             CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
                             CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B)) {
@@ -467,64 +406,54 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                             }
                             this->unk11F54 = 15;
                             this->unk11F56 = 25;
-                            this->unk11F04 = 20;
+                            this->state = MAG_STATE_FADE_OUT;
                         }
                     } else {
-                        D_8096E910--;
+                        sInputDelayTimer--;
                     }
                     break;
 
-                case 20:
-                    step = ABS_ALT(this->majorasMaskEffectAlpha) / this->unk11F70;
-                    this->majorasMaskEffectAlpha -= step;
+                case MAG_STATE_FADE_OUT:
+                    TIMED_STEP_DOWN_TO(this->majorasMaskEffectAlpha, 0, this->fadeOutTimer, step);
+                    TIMED_STEP_DOWN_TO(this->majorasMaskAlpha, 0, this->fadeOutTimer, step);
+                    TIMED_STEP_DOWN_TO(this->zeldaEffectAlpha, 0, this->fadeOutTimer, step);
+                    TIMED_STEP_DOWN_TO(this->mainTitleAlpha, 0, this->fadeOutTimer, step);
+                    TIMED_STEP_DOWN_TO(this->subtitleAlpha, 0, this->fadeOutTimer, step);
+                    TIMED_STEP_DOWN_TO(this->copyrightAlpha, 0, this->fadeOutTimer, step);
 
-                    step = ABS_ALT(this->majorasMaskAlpha) / this->unk11F70;
-                    this->majorasMaskAlpha -= step;
-
-                    step = ABS_ALT(this->zeldaEffectAlpha) / this->unk11F70;
-                    this->zeldaEffectAlpha -= step;
-
-                    step = ABS_ALT(this->mainTitleAlpha) / this->unk11F70;
-                    this->mainTitleAlpha -= step;
-
-                    step = ABS_ALT(this->subtitleAlpha) / this->unk11F70;
-                    this->subtitleAlpha -= step;
-
-                    step = ABS_ALT(this->copyrightAlpha) / this->unk11F70;
-                    this->copyrightAlpha -= step;
-
-                    this->unk11F70--;
-                    if (this->unk11F70 == 0) {
+                    this->fadeOutTimer--;
+                    if (this->fadeOutTimer == 0) {
                         this->majorasMaskEffectAlpha = 0;
                         this->majorasMaskAlpha = 0;
                         this->mainTitleAlpha = 0;
                         this->subtitleAlpha = 0;
                         this->zeldaEffectAlpha = 0;
                         this->copyrightAlpha = 0;
-                        this->unk11F04 = 21;
+                        this->state = MAG_STATE_POST_DISPLAY;
                     }
                     break;
             }
 
-            if ((this->unk11F04 > 0) && (this->unk11F04 < 10)) {
+            // Appear fully immediately if called during fade-in states.
+            if ((this->state > MAG_STATE_INITIAL) && (this->state < MAG_STATE_CALLED)) {
                 if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_START) ||
                     CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
                     CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B)) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
-                    this->unk11F04 = 10;
+                    this->state = MAG_STATE_CALLED;
                 }
             }
         }
     }
 
-    if (this->unk11F04 == 0) {
+    if (this->state == MAG_STATE_INITIAL) {
         if (EnvFlags_Get(globalCtx, 3)) {
             this->unk11F02 = 40;
-            this->unk11F04 = 1;
+            this->state = MAG_STATE_FADE_IN_MASK_EFFECTS;
         }
-    } else if (this->unk11F04 < 20) {
+    } else if (this->state < MAG_STATE_FADE_OUT) {
         if (EnvFlags_Get(globalCtx, 4)) {
-            this->unk11F04 = 20;
+            this->state = MAG_STATE_FADE_OUT;
         }
     }
 }
@@ -724,6 +653,38 @@ void EnMag_DrawCharTexture(Gfx** gfxp, void* texture, s32 rectLeft, s32 rectTop)
 
     *gfxp = gfx;
 }
+
+// #define PRINT_TEXT_OFFSET(x, y, var)           \
+//     GfxPrint_SetPos(&printer, x, y); \
+//     GfxPrint_Printf(&printer, "%s: %d", #var , this->var)
+
+// void PrintStuffInner(EnMag* this, GlobalContext* globalCtx, Gfx** gfxp) {
+//     GfxPrint printer;
+//     Gfx* gfx = *gfxp;
+//     int i = 0;
+
+//     // initialize GfxPrint struct
+//     GfxPrint_Init(&printer);
+//     GfxPrint_Open(&printer, gfx);
+
+//     // set color to opaque pink
+//     GfxPrint_SetColor(&printer, 255, 255, 255, 255);
+
+//     PRINT_TEXT_OFFSET(1, i++, state);
+//     PRINT_TEXT_OFFSET(1, i++, majorasMaskFadeInTimer);
+//     PRINT_TEXT_OFFSET(1, i++, mainTitleAlphaFadeInTimer);
+//     PRINT_TEXT_OFFSET(1, i++, effectAlphaFadeInTimer);
+//     PRINT_TEXT_OFFSET(1, i++, subtitleFadeInTimer);
+//     PRINT_TEXT_OFFSET(1, i++, copyrightFadeInTimer);
+//     PRINT_TEXT_OFFSET(1, i++, fadeOutTimer);
+//     PRINT_TEXT_OFFSET(1, i++, delayTimer);
+
+//     // end of text printing
+//     gfx = GfxPrint_Close(&printer);
+//     GfxPrint_Destroy(&printer);
+
+//     *gfxp = gfx;
+// }
 
 #define MAJORAS_MASK_TEX_WIDTH 128
 #define MAJORAS_MASK_TEX_HEIGHT 112
@@ -937,12 +898,7 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
 
     if (gSaveContext.fileNum == 0xFEDC) {
         // Draw No controller message
-        step = ABS_ALT(sTextAlpha - sTextAlphaTargets[sTextAlphaTargetIndex]) / sTextAlphaTimer;
-        if (sTextAlpha >= sTextAlphaTargets[sTextAlphaTargetIndex]) {
-            sTextAlpha -= step;
-        } else {
-            sTextAlpha += step;
-        }
+        TIMED_STEP_TO(sTextAlpha, sTextAlphaTargets[sTextAlphaTargetIndex], sTextAlphaTimer, step);
 
         gDPPipeSync(gfx++);
         gDPSetAlphaCompare(gfx++, G_AC_THRESHOLD);
@@ -994,13 +950,7 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
         }
     } else if (this->copyrightAlpha != 0) {
         // Draw "PRESS START" characters
-
-        step = ABS_ALT(sTextAlpha - sTextAlphaTargets[sTextAlphaTargetIndex]) / sTextAlphaTimer;
-        if (sTextAlpha >= sTextAlphaTargets[sTextAlphaTargetIndex]) {
-            sTextAlpha -= step;
-        } else {
-            sTextAlpha += step;
-        }
+        TIMED_STEP_TO(sTextAlpha, sTextAlphaTargets[sTextAlphaTargetIndex], sTextAlphaTimer, step);
 
         // Text shadow
         gDPPipeSync(gfx++);
@@ -1044,9 +994,15 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
             sTextAlphaTargetIndex ^= 1;
         }
     }
+
+    // PrintStuffInner(this, globalCtx, &gfx);
+
     *gfxp = gfx;
 }
 
+/**
+ * Jumps drawing to POLY_OPA_DISP to take advantage of the extra space available, but actually draws using OVERLAY_DISP.
+ */
 void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     Gfx* gfx;
