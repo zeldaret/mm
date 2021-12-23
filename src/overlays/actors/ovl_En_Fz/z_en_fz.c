@@ -406,8 +406,8 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.0f;
             this->unk_BCA = 10;
             func_809330D4(this);
-        } else if (this->collider2.base.acFlags & 0x80) {
-            this->collider2.base.acFlags &= ~0x80;
+        } else if (this->collider2.base.acFlags & AC_BOUNCED) {
+            this->collider2.base.acFlags &= ~AC_BOUNCED;
             this->collider1.base.acFlags &= ~AC_HIT;
         } else if (this->collider1.base.acFlags & AC_HIT) {
             this->collider1.base.acFlags &= ~AC_HIT;
