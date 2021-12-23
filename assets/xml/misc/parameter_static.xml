@@ -109,6 +109,8 @@
         <Texture Name="gUnknownDigit8Tex" OutName="unknown_digit_8" Format="i8" Width="8" Height="8" Offset="0x6A60"/>
         <Texture Name="gUnknownDigit9Tex" OutName="unknown_digit_9" Format="i8" Width="8" Height="8" Offset="0x6AA0"/>
         <Texture Name="gUnknownColonTex" OutName="unknown_colon" Format="i8" Width="8" Height="8" Offset="0x6AE0"/>
+
+        <!-- Unknown source, possibly wrong tex type -->
         <Texture Name="gUnknownBarTex" OutName="unknown_bar" Format="i8" Width="40" Height="13" Offset="0x6B20"/>
 
         <Texture Name="gGoronRaceGoTex" OutName="goron_race_go" Format="ia8" Width="40" Height="32" Offset="0x6D28"/>
@@ -129,7 +131,7 @@
         <Texture Name="gStrayFairyGreatBayTex" OutName="stray_fairy_great_bay" Format="rgba32" Width="32" Height="24" Offset="0xA198"/>
         <Texture Name="gStrayFairyStoneTowerTex" OutName="stray_fairy_stone_tower" Format="rgba32" Width="32" Height="24" Offset="0xAD98"/>
 
-        <!-- Unknown source -->
+        <!-- Unknown source, possibly wrong tex type -->
         <Texture Name="gUnknownCirclePatternTex" OutName="unknown_circle_pattern" Format="ia4" Width="32" Height="24" Offset="0xB998"/>
     </File>
 </Root>

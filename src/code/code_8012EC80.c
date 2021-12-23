@@ -462,30 +462,30 @@ void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
 }
 
 s32 Inventory_IsMapVisible(s16 sceneNum) {
-    s16 sceneFlagIndex = 0;
+    s16 roomInfIdx = 0;
 
     /**
      * a single roomInf flag can only hold 32 bits. So for every 32 scenes in the scene enum,
-     * increment to the next roomInf flag so that every seen gets a unique flag in roomInf[5]
+     * increment to the next roomInf flag so that every scene gets a unique flag in roomInf[5],
      * 224 bits were allocated to this although there are only 112 scenes
      */
     if (sceneNum >= 0x20) {
         if (sceneNum < 0x40) {
-            sceneFlagIndex = 1;
+            roomInfIdx = 1;
         } else if (sceneNum < 0x60) {
-            sceneFlagIndex = 2;
+            roomInfIdx = 2;
         } else if (sceneNum < 0x80) {
-            sceneFlagIndex = 3;
+            roomInfIdx = 3;
         } else if (sceneNum < 0xA0) {
-            sceneFlagIndex = 4;
+            roomInfIdx = 4;
         } else if (sceneNum < 0xC0) {
-            sceneFlagIndex = 5;
+            roomInfIdx = 5;
         } else if (sceneNum < 0xE0) {
-            sceneFlagIndex = 6;
+            roomInfIdx = 6;
         }
     }
 
-    if (gSaveContext.roomInf[5][sceneFlagIndex] & gBitFlags[sceneNum - (sceneFlagIndex << 5)]) {
+    if (gSaveContext.roomInf[5][roomInfIdx] & gBitFlags[sceneNum - (roomInfIdx << 5)]) {
         return true;
     }
 
@@ -563,9 +563,12 @@ static u16 gScenesPerTingleMap[6][12] = {
     },
 };
 
+/**
+ * Map visibility is achieved by purchasing a tingle map
+ */
 void Inventory_SetMapVisibility(s16 tingleIndex) {
     s16 i = 0;
-    s16 sceneFlagIndex = 0;
+    s16 roomInfIdx = 0;
     u16(*tingleMapSceneIndices)[] = &gScenesPerTingleMap[tingleIndex];
 
     if ((tingleIndex >= 0) && (tingleIndex < 6)) {
@@ -576,28 +579,27 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
 
             /**
              * a single roomInf flag can only hold 32 bits. So for every 32 scenes in the scene enum,
-             * increment to the next roomInf flag so that every seen gets a unique flag in roomInf[5]
+             * increment to the next roomInf flag so that every scene gets a unique flag in roomInf[5],
              * 224 bits were allocated to this although there are only 112 scenes
              */
             if (((s16)(*tingleMapSceneIndices)[i]) < 0x20) {
-                sceneFlagIndex = 0;
+                roomInfIdx = 0;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x40) {
-                sceneFlagIndex = 1;
+                roomInfIdx = 1;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x60) {
-                sceneFlagIndex = 2;
+                roomInfIdx = 2;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x80) {
-                sceneFlagIndex = 3;
+                roomInfIdx = 3;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xA0) {
-                sceneFlagIndex = 4;
+                roomInfIdx = 4;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xC0) {
-                sceneFlagIndex = 5;
+                roomInfIdx = 5;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xE0) {
-                sceneFlagIndex = 6;
+                roomInfIdx = 6;
             }
 
-            gSaveContext.roomInf[5][sceneFlagIndex] =
-                gSaveContext.roomInf[5][sceneFlagIndex] |
-                gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (sceneFlagIndex << 5)];
+            gSaveContext.roomInf[5][roomInfIdx] =
+                gSaveContext.roomInf[5][roomInfIdx] | gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (roomInfIdx << 5)];
             i++;
         }
 
@@ -620,8 +622,8 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
 }
 
 /**
- * Stores the players filename into unk_6E. Used to Deku Scrub Playground Employee.
- * Likely unused as deku scrub playground does not use player's filename in practice.
+ * Stores the players filename into unk_6E. Used by Deku Scrub Playground Employee.
+ * Likely unused as deku scrub playground does not appear to use player's filename.
  */
 void func_8012F0EC(s16 arg0) {
     s16 i;
@@ -637,12 +639,12 @@ void Inventory_IncrementSkullTokenCount(s16 sceneIndex) {
     u32 numSkullTokens;
 
     if (sceneIndex == SCENE_KINSTA1) {
-        // Swamp Spider House
+        // Swamp Spider House (increment high bits of roomInf[6][0])
         numSkullTokens = gSaveContext.roomInf[6][0];
         gSaveContext.roomInf[6][0] =
             (numSkullTokens & 0xFFFF) | ((u16)(((gSaveContext.roomInf[6][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10);
     } else {
-        // Ocean Spider House
+        // Ocean Spider House (increment low bits of roomInf[6][0])
         numSkullTokens = gSaveContext.roomInf[6][0];
         gSaveContext.roomInf[6][0] = (((u16)numSkullTokens + 1) & 0xFFFF) | (numSkullTokens & 0xFFFF0000);
     }
