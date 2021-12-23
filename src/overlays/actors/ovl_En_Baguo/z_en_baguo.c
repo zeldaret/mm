@@ -5,6 +5,8 @@
  */
 
 #include "z_en_baguo.h"
+#include "objects/object_gmo/object_gmo.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000005
 
@@ -106,16 +108,11 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
 };
 
-extern Gfx D_060014C8;
-extern Gfx D_060018C8;
-extern Gfx D_06001CC8;
-extern SkeletonHeader D_060020E8;
-
 void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_060020E8, NULL, this->jointTable, this->morphTable, 3);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gNejironSkel, NULL, this->jointTable, this->morphTable, 3);
     this->actor.hintId = 0xB;
     this->maxDistanceFromHome = 240.0f;
     this->maxDistanceFromHome += this->actor.world.rot.z * 40.0f;
@@ -390,7 +387,7 @@ void EnBaguo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { &D_060014C8, &D_060018C8, &D_06001CC8 };
+    static TexturePtr sEyeTextures[] = { &gNejironEyeOpenTex, &gNejironEyeHalfTex, &gNejironEyeClosedTex };
     EnBaguo* this = THIS;
     Gfx* gfx;
     s32 eyeIndex;
@@ -483,7 +480,7 @@ void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
             Matrix_Scale(particle->scale, particle->scale, particle->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 1, 255, 255, 255, 255);
-            gSPDisplayList(POLY_OPA_DISP++, &D_0401FA40);
+            gSPDisplayList(POLY_OPA_DISP++, &gameplay_keep_DL_01FA40);
         }
     }
     CLOSE_DISPS(gfxCtx);
