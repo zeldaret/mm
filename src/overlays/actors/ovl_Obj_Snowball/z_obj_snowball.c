@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_snowball.h"
+#include "objects/object_goroiwa/object_goroiwa.h"
 
 #define FLAGS 0x00000000
 
@@ -30,12 +31,6 @@ void func_80B047C0(ObjSnowball* this, GlobalContext* globalCtx);
 void func_80B04B48(ObjSnowball* this, GlobalContext* globalCtx);
 void func_80B04B60(ObjSnowball* this, GlobalContext* globalCtx);
 void func_80B04D34(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_060072F0;
-extern Gfx D_060077D0;
-extern Gfx D_06007C60;
-extern Gfx D_060082D0;
-extern Gfx D_06008B90;
 
 const ActorInit Obj_Snowball_InitVars = {
     ACTOR_OBJ_SNOWBALL,
@@ -96,9 +91,9 @@ static Color_RGBA8 D_80B04FB8 = { 180, 180, 180, 255 };
 static Vec3f D_80B04FBC = { 0.0f, 0.3f, 0.0f };
 
 static Gfx* D_80B04FC8[] = {
-    &D_060072F0,
-    &D_060077D0,
-    &D_06007C60,
+    object_goroiwa_DL_0072F0,
+    object_goroiwa_DL_0077D0,
+    object_goroiwa_DL_007C60,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -337,7 +332,6 @@ void func_80B03688(ObjSnowball* this, GlobalContext* globalCtx) {
     }
 }
 
-#define NON_MATCHING
 #ifdef NON_MATCHING
 void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
     f32 temp_f30 = sqrtf(arg1);
@@ -508,7 +502,8 @@ void ObjSnowball_Init(Actor* thisx, GlobalContext* globalCtx) {
     sp48.y = this->actor.home.pos.y + 30.0f;
     sp48.z = this->actor.home.pos.z;
 
-    this->actor.floorHeight = func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &sp44, &this->actor, &sp48);
+    this->actor.floorHeight =
+        BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &sp44, &this->actor, &sp48);
     if (this->actor.floorHeight < (this->actor.home.pos.y - 10.0f)) {
         this->actor.floorPoly = NULL;
     } else {
@@ -691,7 +686,7 @@ void func_80B047C0(ObjSnowball* this, GlobalContext* globalCtx) {
             sp9C.y = ptr->unk_00.y + 25.0f;
             sp9C.z = ptr->unk_00.z;
 
-            ptr->unk_18 = func_800C411C(&globalCtx->colCtx, &ptr->unk_28, &sp98, &this->actor, &sp9C);
+            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &ptr->unk_28, &sp98, &this->actor, &sp9C);
 
             if (ptr->unk_10 <= 0.0f) {
                 Matrix_InsertRotation(ptr->unk_1C.x, ptr->unk_1C.y, ptr->unk_1C.z, MTXMODE_NEW);
@@ -800,7 +795,7 @@ void ObjSnowball_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjSnowball_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjSnowball* this = THIS;
 
-    func_800BDFC0(globalCtx, &D_06008B90);
+    func_800BDFC0(globalCtx, object_goroiwa_DL_008B90);
 }
 
 void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
@@ -821,7 +816,7 @@ void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
 
             Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            func_800BDFC0(globalCtx, &D_060082D0);
+            func_800BDFC0(globalCtx, object_goroiwa_DL_0082D0);
 
             if ((ptr->unk_28 != NULL) && (ptr->unk_2C > 0)) {
                 OPEN_DISPS(globalCtx->state.gfxCtx);
