@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_syokudai.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
 #define FLAGS 0x00000410

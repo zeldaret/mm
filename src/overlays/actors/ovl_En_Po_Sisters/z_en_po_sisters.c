@@ -5,6 +5,7 @@
  */
 
 #include "z_en_po_sisters.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00005015
 

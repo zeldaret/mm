@@ -2,7 +2,6 @@
 #define Z_OBJ_SYOKUDAI_H
 
 #include "global.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 struct ObjSyokudai;
 

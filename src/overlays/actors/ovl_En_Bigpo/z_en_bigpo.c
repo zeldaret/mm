@@ -5,6 +5,8 @@
  */
 
 #include "z_en_bigpo.h"
+#include "objects/object_bigpo/object_bigpo.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00001215
 
@@ -243,8 +245,7 @@ void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-// how did I not name this function???
-void func_80B61914(EnBigpo* this) {
+void EnBigpo_RotateSpawnCutsceneFires(EnBigpo* this) {
     EnBigpoFireEffect* firePtr;
     s32 i;
 
@@ -322,7 +323,7 @@ void EnBigpo_SpawnCutsceneStage1(EnBigpo* this, GlobalContext* globalCtx) {
 
     this->actor.draw = EnBigpo_DrawCircleFlames;
     this->actor.shape.rot.y = BINANG_ROT180(this->actor.yawTowardsPlayer);
-    func_80B61914(this);
+    EnBigpo_RotateSpawnCutsceneFires(this);
 
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
         this->fires[i].pos.y = this->actor.world.pos.y;
@@ -375,7 +376,7 @@ void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, GlobalContext* globalCtx) {
         this->actor.velocity.y += 0.25f;
     }
     this->actor.shape.rot.y += this->rotVelocity;
-    func_80B61914(this);
+    EnBigpo_RotateSpawnCutsceneFires(this);
 
     if (1) {}
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
@@ -412,7 +413,7 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.y += this->rotVelocity;
     alphaPlus = this->mainColor.a + 10; // decrease transparency
-    func_80B61914(this);
+    EnBigpo_RotateSpawnCutsceneFires(this);
     if (alphaPlus >= 90) {
         this->rotVelocity -= 0x80;
         this->actor.velocity.y -= 0.25f;

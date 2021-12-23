@@ -2,7 +2,6 @@
 #define Z_EN_DNO_H
 
 #include "global.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 struct EnDno;
 

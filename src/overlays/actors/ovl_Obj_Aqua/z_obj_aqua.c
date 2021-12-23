@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_aqua.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
 

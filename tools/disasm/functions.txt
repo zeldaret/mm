@@ -14161,7 +14161,7 @@
     0x80B610B8:("ObjDora_Draw",),
     0x80B615E0:("EnBigpo_Init",),
     0x80B6186C:("EnBigpo_Destroy",),
-    0x80B61914:("func_80B61914",),
+    0x80B61914:("EnBigpo_RotateSpawnCutsceneFires",),
     0x80B619B4:("func_80B619B4",),
     0x80B619FC:("func_80B619FC",),
     0x80B61AC8:("EnBigPo_InitWellBigPo",),
