@@ -10,9 +10,9 @@ typedef struct EnMag {
     /* 0x00144 */ char pad144[0x2C];
     /* 0x00170 */ Font font;
     /* 0x11EFC */ char pad11EFC[4];
-    /* 0x11F00 */ s16 unk11F00;
-    /* 0x11F02 */ s16 unk11F02;
-    /* 0x11F04 */ s16 unk11F04;
+    /* 0x11F00 */ s16 unk11F00; // Set and not used.
+    /* 0x11F02 */ s16 unk11F02; // Set and not used.
+    /* 0x11F04 */ s16 unk11F04; // globalState (?)
     /* 0x11F06 */ s16 majorasMaskEffectPrimLodFrac;
     /* 0x11F08 */ s16 majorasMaskEffectPrimColor[3];
     /* 0x11F08 */ s16 majorasMaskEffectEnvColor[3];
@@ -25,19 +25,19 @@ typedef struct EnMag {
     /* 0x11F28 */ s16 majorasMaskEnvColor[3];
     /* 0x11F2E */ s16 mainTitleAlpha;
     /* 0x11F30 */ s16 subtitleAlpha;
-    /* 0x11F32 */ s16 unk11F32; // Set but not used, likely a spare alpha
+    /* 0x11F32 */ s16 unk11F32; // Set but not used, likely a spare alpha.
     /* 0x11F34 */ s16 copyrightAlpha;
     /* 0x11F36 */ s16 unk11F36[6];
     /* 0x11F42 */ char pad11F42[2];
     /* 0x11F44 */ s16 unk11F44[6];
     /* 0x11F50 */ char pad11F50[4];
-    /* 0x11F54 */ s16 unk11F54;
-    /* 0x11F56 */ s16 unk11F56;
-    /* 0x11F58 */ s16 unk11F58;
-    /* 0x11F5A */ s16 unk11F5A;
-    /* 0x11F5C */ s32 unk11F5C;
-    /* 0x11F60 */ s32 unk11F60;
-    /* 0x11F64 */ s16 unk11F64;
+    /* 0x11F54 */ s16 unk11F54; // Set but not used.
+    /* 0x11F56 */ s16 unk11F56; // Set but not used.
+    /* 0x11F58 */ s16 unk11F58; // Set but not used.
+    /* 0x11F5A */ s16 unk11F5A; // Set but not used.
+    /* 0x11F5C */ s32 unk11F5C; // Set but not used.
+    /* 0x11F60 */ s32 unk11F60; // Set but not used.
+    /* 0x11F64 */ s16 unk11F64; // The rest of these are used in Update, all in the same way
     /* 0x11F66 */ s16 unk11F66;
     /* 0x11F68 */ s16 unk11F68;
     /* 0x11F6A */ s16 unk11F6A;
@@ -46,7 +46,20 @@ typedef struct EnMag {
     /* 0x11F70 */ s16 unk11F70;
     /* 0x11F72 */ s16 unk11F72;
     /* 0x11F74 */ char pad11F74[4];
-} EnMag;                                            /* size = 0x11F78 */
+} EnMag; // size = 0x11F78
+
+typedef enum {
+    /*  0 */ EN_MAG_STATE_0,
+    /*  1 */ EN_MAG_STATE_1,
+    /*  2 */ EN_MAG_STATE_2,
+    /*  3 */ EN_MAG_STATE_3,
+    /*  5 */ EN_MAG_STATE_5 = 5,
+    /*  6 */ EN_MAG_STATE_6,
+    /* 10 */ EN_MAG_STATE_10 = 10,
+    /* 13 */ EN_MAG_STATE_13 = 13,
+    /* 20 */ EN_MAG_STATE_20 = 20,
+    /* 21 */ EN_MAG_STATE_21
+} EnMagState;
 
 extern const ActorInit En_Mag_InitVars;
 
