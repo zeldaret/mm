@@ -1,4 +1,5 @@
 #include "global.h"
+#include "misc/parameter_static/parameter_static.h"
 
 static s16 sHeartsPrimColors[3][3] = { { 255, 70, 50 }, { 255, 190, 0 }, { 100, 100, 255 } };
 static s16 sHeartsEnvColors[3][3] = { { 50, 40, 60 }, { 255, 0, 0 }, { 0, 0, 255 } };
@@ -14,24 +15,21 @@ s16 sBeatingHeartsDDEnv[3];
 s16 sHeartsDDPrim[2][3];
 s16 sHeartsDDEnv[2][3];
 
-extern TexturePtr D_02000000; // Empty heart texture
-extern TexturePtr D_02000100; // Quarter Heart Texture
-extern TexturePtr D_02000200; // Half Heart Texture
-extern TexturePtr D_02000300; // Three Quarter Heart Texture
-extern TexturePtr D_02000400; // Full heart texture
-extern TexturePtr D_02000500; // Empty Double Defense Heart texture
-extern TexturePtr D_02000600; // Quarter Double Defense Heart Texture
-extern TexturePtr D_02000700; // Half Double Defense Heart Texture
-extern TexturePtr D_02000800; // Three Quarter Double Defense Heart Texture
-extern TexturePtr D_02000900; // Full Double Defense Heart texture
+TexturePtr HeartTextures[] = {
+    gHeartFullTex,         gHeartQuarterTex,      gHeartQuarterTex,      gHeartQuarterTex,
+    gHeartQuarterTex,      gHeartQuarterTex,      gHeartHalfTex,         gHeartHalfTex,
+    gHeartHalfTex,         gHeartHalfTex,         gHeartHalfTex,         gHeartThreeQuarterTex,
+    gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex,
+};
 
-TexturePtr HeartTextures[] = { &D_02000400, &D_02000100, &D_02000100, &D_02000100, &D_02000100, &D_02000100,
-                               &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000300,
-                               &D_02000300, &D_02000300, &D_02000300, &D_02000300 };
-
-TexturePtr HeartDDTextures[] = { &D_02000900, &D_02000600, &D_02000600, &D_02000600, &D_02000600, &D_02000600,
-                                 &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000800,
-                                 &D_02000800, &D_02000800, &D_02000800, &D_02000800 };
+TexturePtr HeartDDTextures[] = {
+    gDefenseHeartFullTex,         gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
+    gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
+    gDefenseHeartHalfTex,         gDefenseHeartHalfTex,         gDefenseHeartHalfTex,
+    gDefenseHeartHalfTex,         gDefenseHeartHalfTex,         gDefenseHeartThreeQuarterTex,
+    gDefenseHeartThreeQuarterTex, gDefenseHeartThreeQuarterTex, gDefenseHeartThreeQuarterTex,
+    gDefenseHeartThreeQuarterTex,
+};
 
 void LifeMeter_Init(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
@@ -276,11 +274,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
             }
 
             if (i < fullHeartCount) {
-                heartTex = &D_02000400;
+                heartTex = gHeartFullTex;
             } else if (i == fullHeartCount) {
                 heartTex = HeartTextures[fractionHeartCount];
             } else {
-                heartTex = &D_02000000;
+                heartTex = gHeartEmptyTex;
             }
         } else {
             if (i < fullHeartCount) {
@@ -316,11 +314,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                 gDPSetEnvColor(OVERLAY_DISP++, sHeartsDDEnv[1][0], sHeartsDDEnv[1][1], sHeartsDDEnv[1][2], 255);
             }
             if (i < fullHeartCount) {
-                heartTex = &D_02000900;
+                heartTex = gDefenseHeartFullTex;
             } else if (i == fullHeartCount) {
                 heartTex = HeartDDTextures[fractionHeartCount];
             } else {
-                heartTex = &D_02000500;
+                heartTex = gDefenseHeartEmptyTex;
             }
         }
 

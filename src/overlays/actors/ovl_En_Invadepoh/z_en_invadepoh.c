@@ -673,10 +673,9 @@ void func_80B439B0(s32 arg0, s32 arg1) {
     }
 
     if (!(arg0 & 1)) {
-        gSaveContext.roomInf[124][arg0 >> 1] = (gSaveContext.roomInf[124][arg0 >> 1] & 0xFFFF0000) | (arg1 & 0xFFFF);
+        gSaveContext.roomInf[4][arg0 >> 1] = (gSaveContext.roomInf[4][arg0 >> 1] & 0xFFFF0000) | (arg1 & 0xFFFF);
     } else {
-        gSaveContext.roomInf[124][arg0 >> 1] =
-            (gSaveContext.roomInf[124][arg0 >> 1] & 0xFFFF) | ((arg1 & 0xFFFF) << 0x10);
+        gSaveContext.roomInf[4][arg0 >> 1] = (gSaveContext.roomInf[4][arg0 >> 1] & 0xFFFF) | ((arg1 & 0xFFFF) << 0x10);
     }
 }
 
@@ -684,19 +683,19 @@ s32 func_80B43A24(s32 arg0) {
     u32 phi_v1;
 
     if ((arg0 & 1) == 0) {
-        phi_v1 = gSaveContext.roomInf[124][arg0 >> 1] & 0xFFFF;
+        phi_v1 = gSaveContext.roomInf[4][arg0 >> 1] & 0xFFFF;
     } else {
-        phi_v1 = (gSaveContext.roomInf[124][arg0 >> 1] & 0xFFFF0000) >> 0x10;
+        phi_v1 = (gSaveContext.roomInf[4][arg0 >> 1] & 0xFFFF0000) >> 0x10;
     }
     return phi_v1 + 0x1AAA;
 }
 
 void func_80B43A74(s32 arg0) {
-    gSaveContext.roomInf[124][4] = (gSaveContext.roomInf[124][4] & ~0xFF) | (arg0 & 0xFF);
+    gSaveContext.roomInf[4][4] = (gSaveContext.roomInf[4][4] & ~0xFF) | (arg0 & 0xFF);
 }
 
 s32 func_80B43A9C(void) {
-    return (gSaveContext.roomInf[124][4] >> 0) & 0xFF;
+    return (gSaveContext.roomInf[4][4] >> 0) & 0xFF;
 }
 
 s32 func_80B43AB0(void) {

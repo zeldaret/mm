@@ -36,137 +36,137 @@ u32 gGsFlagsShift[] = { 0, 8, 16, 24 };
 
 // TODO: use symbols for these icon textures once textures are properly in C
 void* gItemIcons[] = {
-    0x08000000, // ITEM_OCARINA
-    0x08001000, // ITEM_BOW
-    0x08002000, // ITEM_ARROW_FIRE
-    0x08003000, // ITEM_ARROW_ICE
-    0x08004000, // ITEM_ARROW_LIGHT
-    0x08005000, // ITEM_OCARINA_FAIRY
-    0x08006000, // ITEM_BOMB
-    0x08007000, // ITEM_BOMBCHU
-    0x08008000, // ITEM_STICK
-    0x08009000, // ITEM_NUT
-    0x0800A000, // ITEM_MAGIC_BEANS
-    0x0800B000, // ITEM_SLINGSHOT
-    0x0800C000, // ITEM_POWDER_KEG
-    0x0800D000, // ITEM_PICTO_BOX
-    0x0800E000, // ITEM_LENS
-    0x0800F000, // ITEM_HOOKSHOT
-    0x08010000, // ITEM_SWORD_GREAT_FAIRY
-    0x08011000, // ITEM_LONGSHOT
-    0x08012000, // ITEM_BOTTLE
-    0x08013000, // ITEM_POTION_RED
-    0x08014000, // ITEM_POTION_GREEN
-    0x08015000, // ITEM_POTION_BLUE
-    0x08016000, // ITEM_FAIRY
-    0x08017000, // ITEM_DEKU_PRINCESS
-    0x08018000, // ITEM_MILK_BOTTLE
-    0x08019000, // ITEM_MILK_HALF
-    0x0801A000, // ITEM_FISH
-    0x0801B000, // ITEM_BUG
-    0x0801C000, // ITEM_BLUE_FIRE
-    0x0801D000, // ITEM_POE
-    0x0801E000, // ITEM_BIG_POE
-    0x0801F000, // ITEM_SPRING_WATER
-    0x08020000, // ITEM_HOT_SPRING_WATER
-    0x08021000, // ITEM_ZORA_EGG
-    0x08022000, // ITEM_GOLD_DUST
-    0x08023000, // ITEM_MUSHROOM
-    0x08024000, // ITEM_SEA_HORSE
-    0x08025000, // ITEM_CHATEAU
-    0x08026000, // ITEM_HYLIAN_LOACH
-    0x08027000, // ITEM_OBABA_DRINK
-    0x08028000, // ITEM_MOON_TEAR
-    0x08029000, // ITEM_DEED_LAND
-    0x0802A000, // ITEM_DEED_SWAMP
-    0x0802B000, // ITEM_DEED_MOUNTAIN
-    0x0802C000, // ITEM_DEED_OCEAN
-    0x0802D000, // ITEM_ROOM_KEY
-    0x0802E000, // ITEM_LETTER_MAMA
-    0x0802F000, // ITEM_LETTER_TO_KAFEI
-    0x08030000, // ITEM_PENDANT_MEMORIES
-    0x08031000, // ITEM_TINGLE_MAP
-    0x08032000, // ITEM_MASK_DEKU
-    0x08033000, // ITEM_MASK_GORON
-    0x08034000, // ITEM_MASK_ZORA
-    0x08035000, // ITEM_MASK_FIERCE_DEITY
-    0x08036000, // ITEM_MASK_TRUTH
-    0x08037000, // ITEM_MASK_KAFEIS_MASK
-    0x08038000, // ITEM_MASK_ALL_NIGHT
-    0x08039000, // ITEM_MASK_BUNNY
-    0x0803A000, // ITEM_MASK_KEATON
-    0x0803B000, // ITEM_MASK_GARO
-    0x0803C000, // ITEM_MASK_ROMANI
-    0x0803D000, // ITEM_MASK_CIRCUS_LEADER
-    0x0803E000, // ITEM_MASK_POSTMAN
-    0x0803F000, // ITEM_MASK_COUPLE
-    0x08040000, // ITEM_MASK_GREAT_FAIRY
-    0x08041000, // ITEM_MASK_GIBDO
-    0x08042000, // ITEM_MASK_DON_GERO
-    0x08043000, // ITEM_MASK_KAMARO
-    0x08044000, // ITEM_MASK_CAPTAIN
-    0x08045000, // ITEM_MASK_STONE
-    0x08046000, // ITEM_MASK_BREMEN
-    0x08047000, // ITEM_MASK_BLAST
-    0x08048000, // ITEM_MASK_SCENTS
-    0x08049000, // ITEM_MASK_GIANT
-    0x0804A000, // ITEM_BOW_ARROW_FIRE
-    0x0804B000, // ITEM_BOW_ARROW_ICE
-    0x0804C000, // ITEM_BOW_ARROW_LIGHT
-    0x0804D000, // ITEM_SWORD_KOKIRI
-    0x0804E000, // ITEM_SWORD_RAZOR
-    0x0804F000, // ITEM_SWORD_GILDED
-    0x08050000, // ITEM_SWORD_DEITY
-    0x08051000, // ITEM_SHIELD_HERO
-    0x08052000, // ITEM_SHIELD_MIRROR
-    0x08053000, // ITEM_QUIVER_30
-    0x08054000, // ITEM_QUIVER_40
-    0x08055000, // ITEM_QUIVER_50
-    0x08056000, // ITEM_BOMB_BAG_20
-    0x08057000, // ITEM_BOMB_BAG_30
-    0x08058000, // ITEM_BOMB_BAG_40
-    0x08059000, // ITEM_WALLET_DEFAULT
-    0x0805A000, // ITEM_WALLET_ADULT
-    0x0805B000, // ITEM_WALLET_GIANT
-    0x0805C000, // ITEM_FISHING_POLE
-    0x0805D000, // ITEM_REMAINS_ODOLWA
-    0x0805E000, // ITEM_REMAINS_GOHT
-    0x0805F000, // ITEM_REMAINS_GYORG
-    0x08060000, // ITEM_REMAINS_TWINMOLD
-    0x08062000, // ITEM_SONG_SONATA
-    0x08062000, // ITEM_SONG_LULLABY
-    0x08062000, // ITEM_SONG_NOVA
-    0x08062000, // ITEM_SONG_ELEGY
-    0x08062000, // ITEM_SONG_OATH
-    0x08062000, // ITEM_SONG_SARIA
-    0x08062000, // ITEM_SONG_TIME
-    0x08062000, // ITEM_SONG_HEALING
-    0x08062000, // ITEM_SONG_EPONA
-    0x08062000, // ITEM_SONG_SOARING
-    0x08062000, // ITEM_SONG_STORMS
-    0x08062000, // ITEM_SONG_SUN
-    0x08061000, // ITEM_BOMBERS_NOTEBOOK
-    0x09000000, // ITEM_SKULL_TOKEN
-    0x09000900, // ITEM_HEART_CONTAINER
-    0x09001200, // ITEM_HEART_PIECE
-    0x08062000, //
-    0x08062000, //
-    0x08062000, // ITEM_SONG_LULLABY_INTRO
-    0x09003600, // ITEM_KEY_BOSS
-    0x09004800, // ITEM_COMPASS
-    0x09003F00, // ITEM_DUNGEON_MAP
-    0x09005100, // ITEM_STRAY_FAIRIES
-    0x09005A00, // ITEM_KEY_SMALL
-    0x09006300, // ITEM_MAGIC_SMALL
-    0x09006C00, // ITEM_MAGIC_LARGE
-    0x08062180, // ITEM_HEART_PIECE_2
-    0x08062A80, // ITEM_INVALID_1
-    0x08063380, // ITEM_INVALID_2
-    gOcarinaCUpTex, // ITEM_INVALID_3
-    gOcarinaCDownTex, // ITEM_INVALID_4
-    gOcarinaCLeftTex, // ITEM_INVALID_5
+    0x08000000,        // ITEM_OCARINA
+    0x08001000,        // ITEM_BOW
+    0x08002000,        // ITEM_ARROW_FIRE
+    0x08003000,        // ITEM_ARROW_ICE
+    0x08004000,        // ITEM_ARROW_LIGHT
+    0x08005000,        // ITEM_OCARINA_FAIRY
+    0x08006000,        // ITEM_BOMB
+    0x08007000,        // ITEM_BOMBCHU
+    0x08008000,        // ITEM_STICK
+    0x08009000,        // ITEM_NUT
+    0x0800A000,        // ITEM_MAGIC_BEANS
+    0x0800B000,        // ITEM_SLINGSHOT
+    0x0800C000,        // ITEM_POWDER_KEG
+    0x0800D000,        // ITEM_PICTO_BOX
+    0x0800E000,        // ITEM_LENS
+    0x0800F000,        // ITEM_HOOKSHOT
+    0x08010000,        // ITEM_SWORD_GREAT_FAIRY
+    0x08011000,        // ITEM_LONGSHOT
+    0x08012000,        // ITEM_BOTTLE
+    0x08013000,        // ITEM_POTION_RED
+    0x08014000,        // ITEM_POTION_GREEN
+    0x08015000,        // ITEM_POTION_BLUE
+    0x08016000,        // ITEM_FAIRY
+    0x08017000,        // ITEM_DEKU_PRINCESS
+    0x08018000,        // ITEM_MILK_BOTTLE
+    0x08019000,        // ITEM_MILK_HALF
+    0x0801A000,        // ITEM_FISH
+    0x0801B000,        // ITEM_BUG
+    0x0801C000,        // ITEM_BLUE_FIRE
+    0x0801D000,        // ITEM_POE
+    0x0801E000,        // ITEM_BIG_POE
+    0x0801F000,        // ITEM_SPRING_WATER
+    0x08020000,        // ITEM_HOT_SPRING_WATER
+    0x08021000,        // ITEM_ZORA_EGG
+    0x08022000,        // ITEM_GOLD_DUST
+    0x08023000,        // ITEM_MUSHROOM
+    0x08024000,        // ITEM_SEA_HORSE
+    0x08025000,        // ITEM_CHATEAU
+    0x08026000,        // ITEM_HYLIAN_LOACH
+    0x08027000,        // ITEM_OBABA_DRINK
+    0x08028000,        // ITEM_MOON_TEAR
+    0x08029000,        // ITEM_DEED_LAND
+    0x0802A000,        // ITEM_DEED_SWAMP
+    0x0802B000,        // ITEM_DEED_MOUNTAIN
+    0x0802C000,        // ITEM_DEED_OCEAN
+    0x0802D000,        // ITEM_ROOM_KEY
+    0x0802E000,        // ITEM_LETTER_MAMA
+    0x0802F000,        // ITEM_LETTER_TO_KAFEI
+    0x08030000,        // ITEM_PENDANT_MEMORIES
+    0x08031000,        // ITEM_TINGLE_MAP
+    0x08032000,        // ITEM_MASK_DEKU
+    0x08033000,        // ITEM_MASK_GORON
+    0x08034000,        // ITEM_MASK_ZORA
+    0x08035000,        // ITEM_MASK_FIERCE_DEITY
+    0x08036000,        // ITEM_MASK_TRUTH
+    0x08037000,        // ITEM_MASK_KAFEIS_MASK
+    0x08038000,        // ITEM_MASK_ALL_NIGHT
+    0x08039000,        // ITEM_MASK_BUNNY
+    0x0803A000,        // ITEM_MASK_KEATON
+    0x0803B000,        // ITEM_MASK_GARO
+    0x0803C000,        // ITEM_MASK_ROMANI
+    0x0803D000,        // ITEM_MASK_CIRCUS_LEADER
+    0x0803E000,        // ITEM_MASK_POSTMAN
+    0x0803F000,        // ITEM_MASK_COUPLE
+    0x08040000,        // ITEM_MASK_GREAT_FAIRY
+    0x08041000,        // ITEM_MASK_GIBDO
+    0x08042000,        // ITEM_MASK_DON_GERO
+    0x08043000,        // ITEM_MASK_KAMARO
+    0x08044000,        // ITEM_MASK_CAPTAIN
+    0x08045000,        // ITEM_MASK_STONE
+    0x08046000,        // ITEM_MASK_BREMEN
+    0x08047000,        // ITEM_MASK_BLAST
+    0x08048000,        // ITEM_MASK_SCENTS
+    0x08049000,        // ITEM_MASK_GIANT
+    0x0804A000,        // ITEM_BOW_ARROW_FIRE
+    0x0804B000,        // ITEM_BOW_ARROW_ICE
+    0x0804C000,        // ITEM_BOW_ARROW_LIGHT
+    0x0804D000,        // ITEM_SWORD_KOKIRI
+    0x0804E000,        // ITEM_SWORD_RAZOR
+    0x0804F000,        // ITEM_SWORD_GILDED
+    0x08050000,        // ITEM_SWORD_DEITY
+    0x08051000,        // ITEM_SHIELD_HERO
+    0x08052000,        // ITEM_SHIELD_MIRROR
+    0x08053000,        // ITEM_QUIVER_30
+    0x08054000,        // ITEM_QUIVER_40
+    0x08055000,        // ITEM_QUIVER_50
+    0x08056000,        // ITEM_BOMB_BAG_20
+    0x08057000,        // ITEM_BOMB_BAG_30
+    0x08058000,        // ITEM_BOMB_BAG_40
+    0x08059000,        // ITEM_WALLET_DEFAULT
+    0x0805A000,        // ITEM_WALLET_ADULT
+    0x0805B000,        // ITEM_WALLET_GIANT
+    0x0805C000,        // ITEM_FISHING_POLE
+    0x0805D000,        // ITEM_REMAINS_ODOLWA
+    0x0805E000,        // ITEM_REMAINS_GOHT
+    0x0805F000,        // ITEM_REMAINS_GYORG
+    0x08060000,        // ITEM_REMAINS_TWINMOLD
+    0x08062000,        // ITEM_SONG_SONATA
+    0x08062000,        // ITEM_SONG_LULLABY
+    0x08062000,        // ITEM_SONG_NOVA
+    0x08062000,        // ITEM_SONG_ELEGY
+    0x08062000,        // ITEM_SONG_OATH
+    0x08062000,        // ITEM_SONG_SARIA
+    0x08062000,        // ITEM_SONG_TIME
+    0x08062000,        // ITEM_SONG_HEALING
+    0x08062000,        // ITEM_SONG_EPONA
+    0x08062000,        // ITEM_SONG_SOARING
+    0x08062000,        // ITEM_SONG_STORMS
+    0x08062000,        // ITEM_SONG_SUN
+    0x08061000,        // ITEM_BOMBERS_NOTEBOOK
+    0x09000000,        // ITEM_SKULL_TOKEN
+    0x09000900,        // ITEM_HEART_CONTAINER
+    0x09001200,        // ITEM_HEART_PIECE
+    0x08062000,        //
+    0x08062000,        //
+    0x08062000,        // ITEM_SONG_LULLABY_INTRO
+    0x09003600,        // ITEM_KEY_BOSS
+    0x09004800,        // ITEM_COMPASS
+    0x09003F00,        // ITEM_DUNGEON_MAP
+    0x09005100,        // ITEM_STRAY_FAIRIES
+    0x09005A00,        // ITEM_KEY_SMALL
+    0x09006300,        // ITEM_MAGIC_SMALL
+    0x09006C00,        // ITEM_MAGIC_LARGE
+    0x08062180,        // ITEM_HEART_PIECE_2
+    0x08062A80,        // ITEM_INVALID_1
+    0x08063380,        // ITEM_INVALID_2
+    gOcarinaCUpTex,    // ITEM_INVALID_3
+    gOcarinaCDownTex,  // ITEM_INVALID_4
+    gOcarinaCLeftTex,  // ITEM_INVALID_5
     gOcarinaCRightTex, // ITEM_INVALID_6
-    gOcarinaATex, // ITEM_INVALID_7
+    gOcarinaATex,      // ITEM_INVALID_7
 };
 
 // Used to map item IDs to inventory slots
@@ -413,7 +413,7 @@ u16 gScenesPerRegion[11][27] = {
     },
 };
 
-s32 func_8012EC80(GlobalContext* globalCtx) {
+s32 Inventory_GetSlotBEquip(GlobalContext* globalCtx) {
     if (gSaveContext.buttonStatus[0] == BTN_DISABLED) {
         return ITEM_NONE;
     } else if (gSaveContext.unk_1015 == ITEM_NONE) {
@@ -442,15 +442,15 @@ void Inventory_ChangeEquipment(s16 value) {
  */
 u8 Inventory_DeleteEquipment(GlobalContext* globalCtx, s16 equipment) {
     Player* player = GET_PLAYER(globalCtx);
+
     if (CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD) != 0) {
         TAKE_EQUIPPED_ITEM(EQUIP_SHIELD, 0);
         Player_SetEquipmentData(globalCtx, player);
         return true;
     }
-    
+
     return false;
 }
-
 
 void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
     u32 upgrades = gSaveContext.inventory.upgrades;
@@ -461,7 +461,7 @@ void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
     gSaveContext.inventory.upgrades = upgrades;
 }
 
-s32 func_8012EE34(s16 arg0) {
+s32 Inventory_IsMapVisible(s16 arg0) {
     s16 num = 0;
 
     if (arg0 >= 0x20) {
@@ -480,69 +480,134 @@ s32 func_8012EE34(s16 arg0) {
         }
     }
 
-    if (gSaveContext.roomInf[125][num] & gBitFlags[arg0 - (num << 5)]) {
+    if (gSaveContext.roomInf[5][num] & gBitFlags[arg0 - (num << 5)]) {
         return true;
     }
 
     return false;
 }
 
-static u16 D_801C2380[6][12] = {
-    { SCENE_00KEIKOKU, SCENE_BOTI, SCENE_13HUBUKINOMITI, SCENE_24KEMONOMITI, SCENE_IKANAMAE, SCENE_TOWN, SCENE_ICHIBA,
-      SCENE_BACKTOWN, SCENE_CLOCKTOWER, SCENE_ALLEY, -1 },
-    { SCENE_20SICHITAI, SCENE_20SICHITAI2, SCENE_21MITURINMAE, SCENE_22DEKUCITY, SCENE_DEKU_KING, SCENE_KINSTA1, -1 },
-    { SCENE_10YUKIYAMANOMURA, SCENE_10YUKIYAMANOMURA2, SCENE_11GORONNOSATO, SCENE_11GORONNOSATO2, SCENE_16GORON_HOUSE,
-      SCENE_12HAKUGINMAE, SCENE_14YUKIDAMANOMITI, SCENE_GORONRACE, SCENE_17SETUGEN, SCENE_17SETUGEN2, -1 },
-    { SCENE_F01, SCENE_ROMANYMAE, SCENE_OMOYA, SCENE_F01C, SCENE_F01_B, SCENE_KOEPONARACE, -1 },
-    { SCENE_30GYOSON, SCENE_SINKAI, SCENE_31MISAKI, SCENE_TORIDE, SCENE_KAIZOKU, SCENE_33ZORACITY, SCENE_35TAKI, -1 },
-    { SCENE_F40, SCENE_F41, SCENE_CASTLE, SCENE_IKANA, SCENE_REDEAD, -1 },
+static u16 gScenesPerTingleMap[6][12] = {
+    {
+        // Clock Town Tingle Map
+        SCENE_00KEIKOKU,
+        SCENE_BOTI,
+        SCENE_13HUBUKINOMITI,
+        SCENE_24KEMONOMITI,
+        SCENE_IKANAMAE,
+        SCENE_TOWN,
+        SCENE_ICHIBA,
+        SCENE_BACKTOWN,
+        SCENE_CLOCKTOWER,
+        SCENE_ALLEY,
+        -1,
+    },
+    {
+        // Woodfall Tingle Map
+        SCENE_20SICHITAI,
+        SCENE_20SICHITAI2,
+        SCENE_21MITURINMAE,
+        SCENE_22DEKUCITY,
+        SCENE_DEKU_KING,
+        SCENE_KINSTA1,
+        -1,
+    },
+    {
+        // Snowhead Tingle Map
+        SCENE_10YUKIYAMANOMURA,
+        SCENE_10YUKIYAMANOMURA2,
+        SCENE_11GORONNOSATO,
+        SCENE_11GORONNOSATO2,
+        SCENE_16GORON_HOUSE,
+        SCENE_12HAKUGINMAE,
+        SCENE_14YUKIDAMANOMITI,
+        SCENE_GORONRACE,
+        SCENE_17SETUGEN,
+        SCENE_17SETUGEN2,
+        -1,
+    },
+    {
+        // Romani Ranch Tingle Map
+        SCENE_F01,
+        SCENE_ROMANYMAE,
+        SCENE_OMOYA,
+        SCENE_F01C,
+        SCENE_F01_B,
+        SCENE_KOEPONARACE,
+        -1,
+    },
+    {
+        // Great Bay Tingle Map
+        SCENE_30GYOSON,
+        SCENE_SINKAI,
+        SCENE_31MISAKI,
+        SCENE_TORIDE,
+        SCENE_KAIZOKU,
+        SCENE_33ZORACITY,
+        SCENE_35TAKI,
+        -1,
+    },
+    {
+        // Stone Tower Tingle Map
+        SCENE_F40,
+        SCENE_F41,
+        SCENE_CASTLE,
+        SCENE_IKANA,
+        SCENE_REDEAD,
+        -1,
+    },
 };
 
-void func_8012EF0C(s16 arg0) {
-    s16 phi_v0 = 0;
-    s16 phi_v1 = 0;
-    u16(*new_var)[] = &D_801C2380[arg0];
+void Inventory_SetMapVisibility(s16 tingleIndex) {
+    s16 i = 0;
+    s16 sceneFlagIndex = 0;
+    u16(*tingleMapSceneIndices)[] = &gScenesPerTingleMap[tingleIndex];
 
-    if ((arg0 >= 0) && (arg0 < 6)) {
+    if ((tingleIndex >= 0) && (tingleIndex < 6)) {
         while (true) {
-            if ((*new_var)[phi_v0] == 0xFFFF) {
+            if ((*tingleMapSceneIndices)[i] == 0xFFFF) {
                 break;
             }
 
-            if (((s16)(*new_var)[phi_v0]) < 0x20) {
-                phi_v1 = 0;
-            } else if (((s16)(*new_var)[phi_v0]) < 0x40) {
-                phi_v1 = 1;
-            } else if (((s16)(*new_var)[phi_v0]) < 0x60) {
-                phi_v1 = 2;
-            } else if (((s16)(*new_var)[phi_v0]) < 0x80) {
-                phi_v1 = 3;
-            } else if (((s16)(*new_var)[phi_v0]) < 0xA0) {
-                phi_v1 = 4;
-            } else if (((s16)(*new_var)[phi_v0]) < 0xC0) {
-                phi_v1 = 5;
-            } else if (((s16)(*new_var)[phi_v0]) < 0xE0) {
-                phi_v1 = 6;
+            if (((s16)(*tingleMapSceneIndices)[i]) < 0x20) {
+                sceneFlagIndex = 0;
+            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x40) {
+                sceneFlagIndex = 1;
+            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x60) {
+                sceneFlagIndex = 2;
+            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x80) {
+                // remaining scenes (max scene number is 0x70)
+                sceneFlagIndex = 3;
+            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xA0) {
+                // never taken
+                sceneFlagIndex = 4;
+            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xC0) {
+                // never taken
+                sceneFlagIndex = 5;
+            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xE0) {
+                // never taken
+                sceneFlagIndex = 6;
             }
 
             // Required to match
-            gSaveContext.roomInf[125][phi_v1] =
-                gSaveContext.roomInf[125][phi_v1] | gBitFlags[(s16)(*new_var)[phi_v0] - (phi_v1 << 5)];
-            phi_v0++;
+            gSaveContext.roomInf[5][sceneFlagIndex] =
+                gSaveContext.roomInf[5][sceneFlagIndex] |
+                gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (sceneFlagIndex << 5)];
+            i++;
         }
 
-        if ((*new_var) == D_801C2380[0]) {
-            gSaveContext.unk_F60 |= 3;
-        } else if ((*new_var) == D_801C2380[1]) {
-            gSaveContext.unk_F60 |= 0x1C;
-        } else if ((*new_var) == D_801C2380[2]) {
-            gSaveContext.unk_F60 |= 0xE0;
-        } else if ((*new_var) == D_801C2380[3]) {
-            gSaveContext.unk_F60 |= 0x100;
-        } else if ((*new_var) == D_801C2380[4]) {
-            gSaveContext.unk_F60 |= 0x1E00;
-        } else if ((*new_var) == D_801C2380[5]) {
-            gSaveContext.unk_F60 |= 0x6000;
+        if ((*tingleMapSceneIndices) == gScenesPerTingleMap[0]) {
+            gSaveContext.mapsVisible |= 3;
+        } else if ((*tingleMapSceneIndices) == gScenesPerTingleMap[1]) {
+            gSaveContext.mapsVisible |= 0x1C;
+        } else if ((*tingleMapSceneIndices) == gScenesPerTingleMap[2]) {
+            gSaveContext.mapsVisible |= 0xE0;
+        } else if ((*tingleMapSceneIndices) == gScenesPerTingleMap[3]) {
+            gSaveContext.mapsVisible |= 0x100;
+        } else if ((*tingleMapSceneIndices) == gScenesPerTingleMap[4]) {
+            gSaveContext.mapsVisible |= 0x1E00;
+        } else if ((*tingleMapSceneIndices) == gScenesPerTingleMap[5]) {
+            gSaveContext.mapsVisible |= 0x6000;
         }
     }
 
@@ -550,45 +615,49 @@ void func_8012EF0C(s16 arg0) {
 }
 
 /**
- * Related to Deku Scrub Playground
+ * Stores the players filename into unk_6E. Used to Deku Scrub Playground Employee.
+ * Likely unused as deku scrub playground does not use player's filename in practice.
  */
 void func_8012F0EC(s16 arg0) {
     s16 i;
 
-    gSaveContext.roomInf[123][CURRENT_DAY - 1] = gSaveContext.unk_3DE0[arg0];
+    gSaveContext.roomInf[3][CURRENT_DAY - 1] = gSaveContext.unk_3DE0[arg0];
 
     for (i = 0; i < 8; i++) {
-        // Suppose to be unk_6E instead
-        gSaveContext.inventory.strayFairies[8 * CURRENT_DAY + 2 + i] = gSaveContext.playerName[i];
+        gSaveContext.inventory.unk_6E[CURRENT_DAY - 1][i] = gSaveContext.playerName[i];
     }
 }
 
-
-void func_8012F1BC(s16 sceneIndex) {
-    u32 roomInf;
+void Inventory_IncrementSkullTokenCount(s16 sceneIndex) {
+    u32 numSkullTokens;
 
     if (sceneIndex == SCENE_KINSTA1) {
-        gSaveContext.roomInf[126][0] = (gSaveContext.roomInf[126][0] & 0xFFFF) | ((u16)(((gSaveContext.roomInf[126][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10);
+        // Swamp Spider House
+        numSkullTokens = gSaveContext.roomInf[6][0];
+        gSaveContext.roomInf[6][0] =
+            (numSkullTokens & 0xFFFF) | ((u16)(((gSaveContext.roomInf[6][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10);
     } else {
-        roomInf = gSaveContext.roomInf[126][0];
-        gSaveContext.roomInf[126][0] =
-            (((u16)roomInf + 1) & 0xFFFF) | (roomInf & 0xFFFF0000);
+        // Ocean Spider House
+        numSkullTokens = gSaveContext.roomInf[6][0];
+        gSaveContext.roomInf[6][0] = (((u16)numSkullTokens + 1) & 0xFFFF) | (numSkullTokens & 0xFFFF0000);
     }
 }
 
-s16 func_8012F22C(s16 sceneIndex) {
+s16 Inventory_GetSkullTokenCount(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
-        return (gSaveContext.roomInf[126][0] & 0xFFFF0000) >> 0x10;
+        // Swamp Spider House
+        return (gSaveContext.roomInf[6][0] & 0xFFFF0000) >> 0x10;
     } else {
-        return gSaveContext.roomInf[126][0] & 0xFFFF;
+        // Ocean Spider House
+        return gSaveContext.roomInf[6][0] & 0xFFFF;
     }
 }
 
 void func_8012F278(GlobalContext* globalCtx) {
-    u16 new_var;
+    u16 roomInfFlag;
 
-    new_var = ((globalCtx->msgCtx.unk12054 & 0xF) << 8);
-    new_var |= ((globalCtx->msgCtx.unk12056 & 0xF) * 0x10);
-    new_var |= (globalCtx->msgCtx.unk12058 & 0xF);
-    gSaveContext.roomInf[0x7F][5] = (new_var & 0xFFFF) | (gSaveContext.roomInf[0x7F][5] & 0xFFFF0000);
+    roomInfFlag = ((globalCtx->msgCtx.unk12054 & 0xF) << 8);
+    roomInfFlag |= ((globalCtx->msgCtx.unk12056 & 0xF) * 0x10);
+    roomInfFlag |= (globalCtx->msgCtx.unk12058 & 0xF);
+    gSaveContext.roomInf[7][5] = (roomInfFlag & 0xFFFF) | (gSaveContext.roomInf[7][5] & 0xFFFF0000);
 }
