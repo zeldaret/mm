@@ -109,9 +109,7 @@ typedef struct {
     /* 0x0 */ u16 unk0;
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
-    /* 0x6 */ u8 r;
-    /* 0x7 */ u8 g;
-    /* 0x8 */ u8 b;
+    /* 0x6 */ Color_RGB8 color;
     /* 0x9 */ UNK_TYPE1 pad9[0x3];
 } CsCmdFadeScreen; // size = 0xC
 

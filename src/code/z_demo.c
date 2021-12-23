@@ -1,12 +1,12 @@
 #include "global.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
-void Cutscene_DoNothing(GlobalContext* globalCtx, CutsceneContext* cCtxt);
-void func_800EA258(GlobalContext* globalCtx, CutsceneContext* cCtxt);
-void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* cCtxt);
-void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* cCtxt);
-void func_800ED980(GlobalContext* globalCtx, CutsceneContext* cCtxt);
-void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+void Cutscene_DoNothing(GlobalContext* globalCtx, CutsceneContext* csCtx);
+void func_800EA258(GlobalContext* globalCtx, CutsceneContext* csCtx);
+void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* csCtx);
+void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx);
+void func_800ED980(GlobalContext* globalCtx, CutsceneContext* csCtx);
+void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx);
 void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx);
 
 // Unused
@@ -56,7 +56,7 @@ void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
-typedef void (*CutsceneStateHandler)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+typedef void (*CutsceneStateHandler)(GlobalContext* globalCtx, CutsceneContext* csCtx);
 
 CutsceneStateHandler sCsStateHandlers1[] = {
     /* CS_STATE_0 */ Cutscene_DoNothing,
@@ -428,9 +428,10 @@ void func_800EAD7C(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 }
 
 #ifdef NON_MATCHING
-// Matches, but I don't want to deal with bss reordering yet
+// needs in-function static bss
+// audio related
 void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    static u16 activeSequence; // activeSequence
+    static u16 activeSequence;
     u8 dayMinusOne;
 
     if (csCtx->frames == cmd->startFrame) {
@@ -524,9 +525,9 @@ void Cutscene_Command_FadeColorScreen(GlobalContext* globalCtx, CutsceneContext*
         alpha = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
 
         if (((cmd->unk0 == 1)) || (cmd->unk0 == 2)) {
-            globalCtx->envCtx.screenFillColor[0] = cmd->r;
-            globalCtx->envCtx.screenFillColor[1] = cmd->g;
-            globalCtx->envCtx.screenFillColor[2] = cmd->b;
+            globalCtx->envCtx.screenFillColor[0] = cmd->color.r;
+            globalCtx->envCtx.screenFillColor[1] = cmd->color.g;
+            globalCtx->envCtx.screenFillColor[2] = cmd->color.b;
 
             if (cmd->unk0 == 2) {
                 globalCtx->envCtx.screenFillColor[3] = (1.0f - alpha) * 255.0f;
@@ -582,7 +583,7 @@ void Cutscene_TerminatorImpl(GlobalContext* globalCtx, CutsceneContext* csCtx, C
             gSaveContext.nextCutsceneIndex = (globalCtx->nextEntranceIndex & 0xF) + 0xFFEF;
         }
 
-        globalCtx->nextEntranceIndex &= 0xFFF0;
+        globalCtx->nextEntranceIndex &= ~0xF;
     }
 }
 
@@ -1379,7 +1380,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
 void func_800ED980(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (gSaveContext.cutscene >= 0xFFF0) {
         csCtx->frames++;
-        Cutscene_ProcessCommands(globalCtx, csCtx, (void*)globalCtx->csCtx.csData);
+        Cutscene_ProcessCommands(globalCtx, csCtx, (u8*)globalCtx->csCtx.csData);
     }
 }
 
@@ -1529,9 +1530,7 @@ void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorAc
 
     progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
-    actor->world.pos.x = F32_LERPIMP(start.x, end.x, progress);
-    actor->world.pos.y = F32_LERPIMP(start.y, end.y, progress);
-    actor->world.pos.z = F32_LERPIMP(start.z, end.z, progress);
+    VEC3F_LERPIMPDST(&actor->world.pos, &start, &end, progress);
 }
 
 /**
@@ -1565,9 +1564,7 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, GlobalContext* globalCtx,
     entry = globalCtx->csCtx.actorActions[actorActionIndex];
     progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
-    actor->world.pos.x = F32_LERPIMP(start.x, end.x, progress);
-    actor->world.pos.y = F32_LERPIMP(start.y, end.y, progress);
-    actor->world.pos.z = F32_LERPIMP(start.z, end.z, progress);
+    VEC3F_LERPIMPDST(&actor->world.pos, &start, &end, progress);
 
     Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;
