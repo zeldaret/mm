@@ -545,8 +545,8 @@ void Cutscene_Command_SetTime(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     u16 minutes;
 
     if (csCtx->frames == cmd->startFrame) {
-        hourAsMinutes = (cmd->hour * 60.0f) / (60.0f * 24 / 0x10000);
-        minutes = ((cmd->minute + 1) / (60.0f * 24 / 0x10000));
+        hourAsMinutes = CLOCK_TIME_ALT_F(cmd->hour, 0);
+        minutes = CLOCK_TIME_ALT_F(0, cmd->minute + 1);
 
         nextTime = hourAsMinutes + minutes;
         gSaveContext.time = nextTime;

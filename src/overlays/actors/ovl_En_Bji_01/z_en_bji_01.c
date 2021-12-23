@@ -190,7 +190,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                             tempDay = gSaveContext.day;
                             tempTimeBeforeMoonCrash =
                                 ((-(tempDay % 5 << 0x10) - ((u16)(gSaveContext.time - 0x4000))) + 0x40000);
-                            if (tempTimeBeforeMoonCrash < 2730.6667f) { /* 1 hr */
+                            if (tempTimeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) { /* 1 hr */
                                 this->textId = 0x5E8;
                             } else {
                                 this->textId = 0x5EB;
