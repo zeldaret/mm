@@ -1,4 +1,5 @@
 #include "global.h"
+#include "misc/parameter_static/parameter_static.h"
 
 // Bit Flag array in which gBitFlags[n] is literally (1 << n)
 u32 gBitFlags[] = {
@@ -161,11 +162,11 @@ void* gItemIcons[] = {
     0x08062180, // ITEM_HEART_PIECE_2
     0x08062A80, // ITEM_INVALID_1
     0x08063380, // ITEM_INVALID_2
-    0x020028A0, // ITEM_INVALID_3
-    0x020025A0, // ITEM_INVALID_4
-    0x020027A0, // ITEM_INVALID_5
-    0x020026A0, // ITEM_INVALID_6
-    0x020024A0, // ITEM_INVALID_7
+    gOcarinaCUpTex, // ITEM_INVALID_3
+    gOcarinaCDownTex, // ITEM_INVALID_4
+    gOcarinaCLeftTex, // ITEM_INVALID_5
+    gOcarinaCRightTex, // ITEM_INVALID_6
+    gOcarinaATex, // ITEM_INVALID_7
 };
 
 // Used to map item IDs to inventory slots
@@ -480,10 +481,10 @@ s32 func_8012EE34(s16 arg0) {
     }
 
     if (gSaveContext.roomInf[125][num] & gBitFlags[arg0 - (num << 5)]) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 static u16 D_801C2380[6][12] = {
