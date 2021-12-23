@@ -870,7 +870,7 @@ void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* acto
 // void func_800BC1B4(void);
 Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, UNK_TYPE4 arg3);
 Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2);
-// void func_800BC4EC(void);
+s16 func_800BC4EC(Actor* actor, GlobalContext* globalCtx, f32 distance, s16 angle); 
 s32 func_800BC5B8(GlobalContext* globalCtx, Actor* actor);
 s32 func_800BC5EC(GlobalContext* globalCtx, Actor* actor);
 void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx);
