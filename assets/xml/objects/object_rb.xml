@@ -1,0 +1,44 @@
+﻿<Root>
+    <File Name="object_rb" Segment="6">
+        <Animation Name="object_rb_Anim_0001E4" Offset="0x1E4" />
+        <DList Name="object_rb_DL_000200" Offset="0x200" />
+        <DList Name="object_rb_DL_0002D0" Offset="0x2D0" />
+        <DList Name="object_rb_DL_0002E0" Offset="0x2E0" />
+        <DList Name="object_rb_DL_000430" Offset="0x430" />
+        <DList Name="object_rb_DL_000570" Offset="0x570" />
+        <DList Name="object_rb_DL_000580" Offset="0x580" />
+        <DList Name="object_rb_DL_000760" Offset="0x760" />
+        <DList Name="object_rb_DL_0007F8" Offset="0x7F8" />
+        <DList Name="object_rb_DL_000808" Offset="0x808" />
+        <DList Name="object_rb_DL_0008B8" Offset="0x8B8" />
+        <DList Name="object_rb_DL_000950" Offset="0x950" />
+        <DList Name="object_rb_DL_000960" Offset="0x960" />
+        <DList Name="object_rb_DL_000A10" Offset="0xA10" />
+        <DList Name="object_rb_DL_000AB0" Offset="0xAB0" />
+        <DList Name="object_rb_DL_000AC0" Offset="0xAC0" />
+        <DList Name="object_rb_DL_000B80" Offset="0xB80" />
+        <DList Name="object_rb_DL_000C18" Offset="0xC18" />
+        <DList Name="object_rb_DL_000C28" Offset="0xC28" />
+        <Texture Name="object_rb_Tex_000CD8" OutName="tex_000CD8" Format="rgba16" Width="8" Height="16" Offset="0xCD8" />
+        <Texture Name="object_rb_Tex_000DD8" OutName="tex_000DD8" Format="rgba16" Width="32" Height="32" Offset="0xDD8" />
+        <Texture Name="object_rb_Tex_0015D8" OutName="tex_0015D8" Format="rgba16" Width="32" Height="32" Offset="0x15D8" />
+        <Limb Name="object_rb_Standardlimb_001DD8" Type="Standard" Offset="0x1DD8" />
+        <Limb Name="object_rb_Standardlimb_001DE4" Type="Standard" Offset="0x1DE4" />
+        <Limb Name="object_rb_Standardlimb_001DF0" Type="Standard" Offset="0x1DF0" />
+        <Limb Name="object_rb_Standardlimb_001DFC" Type="Standard" Offset="0x1DFC" />
+        <Limb Name="object_rb_Standardlimb_001E08" Type="Standard" Offset="0x1E08" />
+        <Limb Name="object_rb_Standardlimb_001E14" Type="Standard" Offset="0x1E14" />
+        <Limb Name="object_rb_Standardlimb_001E20" Type="Standard" Offset="0x1E20" />
+        <Limb Name="object_rb_Standardlimb_001E2C" Type="Standard" Offset="0x1E2C" />
+        <Limb Name="object_rb_Standardlimb_001E38" Type="Standard" Offset="0x1E38" />
+        <Limb Name="object_rb_Standardlimb_001E44" Type="Standard" Offset="0x1E44" />
+        <Limb Name="object_rb_Standardlimb_001E50" Type="Standard" Offset="0x1E50" />
+        <Limb Name="object_rb_Standardlimb_001E5C" Type="Standard" Offset="0x1E5C" />
+        <Limb Name="object_rb_Standardlimb_001E68" Type="Standard" Offset="0x1E68" />
+        <Limb Name="object_rb_Standardlimb_001E74" Type="Standard" Offset="0x1E74" />
+        <Limb Name="object_rb_Standardlimb_001E80" Type="Standard" Offset="0x1E80" />
+        <Limb Name="object_rb_Standardlimb_001E8C" Type="Standard" Offset="0x1E8C" />
+        <Limb Name="object_rb_Standardlimb_001E98" Type="Standard" Offset="0x1E98" />
+        <Skeleton Name="object_rb_Skel_001EE8" Type="Normal" LimbType="Standard" Offset="0x1EE8" />
+    </File>
+</Root>

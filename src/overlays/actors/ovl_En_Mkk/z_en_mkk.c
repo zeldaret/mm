@@ -1,7 +1,7 @@
 /*
  * File: z_en_mkk.c
  * Overlay: ovl_En_Mkk
- * Description: Makkurokurosuke / Black and White Boe
+ * Description: Black and White Boe (Name origin: Makkurokurosuke)
  */
 
 #include "z_en_mkk.h"

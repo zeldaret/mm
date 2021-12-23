@@ -24,6 +24,7 @@
 
 #include "z64actor.h"
 #include "z64animation.h"
+#include "z64audio.h"
 #include "z64bgcheck.h"
 #include "z64collision_check.h"
 #include "z64cutscene.h"
@@ -76,13 +77,6 @@ typedef struct {
 } ActorCutscene; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ s16 polyStartIndex;
-    /* 0x2 */ s16 ceilingNodeHead;
-    /* 0x4 */ s16 wallNodeHead;
-    /* 0x6 */ s16 floorNodeHead;
-} ActorMeshPolyLists; // size = 0x8
-
-typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;
     /* 0x4 */ void* params;
@@ -101,49 +95,6 @@ typedef struct {
     /* 0x04 */ void* start;
     /* 0x08 */ void* end;
 } PolygonType2; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ u16 floorHead;
-    /* 0x2 */ u16 wallHead;
-    /* 0x4 */ u16 ceilingHead;
-} BgMeshSubdivision; // size = 0x6
-
-typedef struct {
-    /* 0x0 */ u32 attributes[2];
-} BgPolygonAttributes; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 polyIndex;
-    /* 0x2 */ u16 next;
-} BgPolygonLinkedListNode; // size = 0x4
-
-typedef struct {
-    /* 0x0 */ u16 maxNodes;
-    /* 0x2 */ u16 reservedNodes;
-    /* 0x4 */ BgPolygonLinkedListNode* nodes;
-    /* 0x8 */ u8* unk8;
-} BgScenePolygonLists; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ s16 sceneNumber;
-    /* 0x2 */ UNK_TYPE1 pad2[0x2];
-    /* 0x4 */ u32 maxMemory;
-} BgSpecialSceneMaxMemory; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 sceneId;
-    /* 0x2 */ s16 maxNodes;
-    /* 0x4 */ s16 maxPolygons;
-    /* 0x6 */ s16 maxVertices;
-} BgSpecialSceneMaxObjects; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 sceneNumber;
-    /* 0x2 */ s16 xSubdivisions;
-    /* 0x4 */ s16 ySubdivisions;
-    /* 0x6 */ s16 zSubdivisions;
-    /* 0x8 */ s32 unk8;
-} BgSpecialSceneMeshSubdivision; // size = 0xC
 
 typedef struct {
     /* 0x0 */ s16 func;
@@ -441,29 +392,6 @@ typedef struct {
 } s80185D40; // size = 0x2C
 
 typedef struct {
-    /* 0x00 */ u32 unk0;
-    /* 0x04 */ u8 unk4;
-    /* 0x05 */ u8 unk5;
-    /* 0x06 */ u8 unk6;
-    /* 0x07 */ UNK_TYPE1 pad7[0x2];
-    /* 0x09 */ u8 unk9;
-    /* 0x0A */ UNK_TYPE1 padA[0x2];
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ u16 unk10;
-    /* 0x12 */ u16 unk12;
-    /* 0x14 */ u16 unk14;
-    /* 0x16 */ UNK_TYPE1 pad16[0x2];
-    /* 0x18 */ u32 unk18;
-    /* 0x1C */ u32 unk1C;
-    /* 0x20 */ u32 unk20;
-    /* 0x24 */ u32 unk24;
-    /* 0x28 */ u32 unk28;
-    /* 0x2C */ u32 unk2C;
-    /* 0x30 */ u32 unk30;
-    /* 0x34 */ u32 unk34;
-} s8018CFAC; // size = 0x38
-
-typedef struct {
     /* 0x0 */ u8 unk0;
     /* 0x1 */ u8 unk1;
     /* 0x2 */ u8 unk2;
@@ -475,10 +403,6 @@ typedef struct {
 } s801AEC84; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x14];
-} s801FE7C0; // size = 0x14
-
-typedef struct {
     /* 0x00 */ Vec3f unk0;
     /* 0x0C */ Vec3f unkC;
     /* 0x18 */ s16 unk18;
@@ -486,27 +410,11 @@ typedef struct {
 } s80874650; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ Vec3f scale;
-    /* 0x0C */ Vec3s rotation;
-    /* 0x14 */ Vec3f pos;
-} ActorMeshParams; // size = 0x20
-
-typedef struct {
-    /* 0x0 */ BgPolygonLinkedListNode* nodes;
-    /* 0x4 */ u32 nextFreeNode;
-    /* 0x8 */ s32 maxNodes;
-} BgPolygonLinkedList; // size = 0xC
-
-typedef struct {
     /* 0x00 */ f32 x[4];
     /* 0x10 */ f32 y[4];
     /* 0x20 */ f32 z[4];
     /* 0x30 */ f32 w[4];
 } z_Matrix; // size = 0x40
-
-typedef struct {
-    /* 0x0 */ Vec3s pos;
-} BgVertex; // size = 0x6
 
 typedef union {
     F3DVertexColor color;
@@ -520,6 +428,8 @@ typedef union {
 // Address at the end of normal RDRAM after which is room for a screen buffer
 #define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
 
+typedef void (*FaultDrawerCallback)(void);
+
 typedef struct {
     /* 0x00 */ u16* fb;
     /* 0x04 */ u16 w;
@@ -532,7 +442,7 @@ typedef struct {
     /* 0x12 */ u16 backColor;
     /* 0x14 */ u16 cursorX;
     /* 0x16 */ u16 cursorY;
-    /* 0x18 */ u32* font;
+    /* 0x18 */ const u32* font;
     /* 0x1C */ u8 charW;
     /* 0x1D */ u8 charH;
     /* 0x1E */ s8 charWPad;
@@ -540,7 +450,7 @@ typedef struct {
     /* 0x20 */ u16 printColors[10];
     /* 0x34 */ u8 escCode;
     /* 0x35 */ u8 osSyncPrintfEnabled;
-    /* 0x38 */ void* inputCallback;
+    /* 0x38 */ FaultDrawerCallback inputCallback;
 } FaultDrawer; // size = 0x3C
 
 typedef struct GfxPrint {
@@ -607,12 +517,6 @@ typedef struct {
 } View; // size = 0x168
 
 typedef void(*fault_update_input_func)(Input* input);
-
-typedef struct {
-    /* 0x00 */ u8 noteIdx;
-    /* 0x01 */ u8 state;
-    /* 0x02 */ u8 pos;
-} OcarinaStaff; // size = 0x3;
 
 typedef struct {
     /* 0x000 */ View view;
@@ -862,11 +766,10 @@ typedef struct {
 
 typedef struct {
     /* 0x00000 */ View view;
-    /* 0x00168 */ void* skyboxStaticSegment[2];
-    /* 0x00170 */ char unk170[8]; // more static segments?
+    /* 0x00168 */ void* skyboxStaticSegment[4];
     /* 0x00178 */ void* skyboxPaletteStaticSegment;
-    /* 0x0017C */ Gfx* unk17C;
-    /* 0x00180 */ Gfx* unk180;
+    /* 0x0017C */ Gfx* dListBuf;
+    /* 0x00180 */ Gfx* roomDL;
     /* 0x00184 */ Vtx* roomVtx;
     /* 0x00188 */ DmaRequest unk188;
     /* 0x001A8 */ DmaRequest unk1A8;
@@ -886,6 +789,10 @@ typedef struct {
     /* 0x00226 */ u8 envG;
     /* 0x00227 */ u8 envB;
 } SkyboxContext; // size = 0x228
+
+typedef enum {
+    /* 0x05 */ SKYBOX_CUTSCENE_MAP = 5
+} SkyboxId;
 
 typedef struct ListAlloc {
     /* 0x00 */ struct ListAlloc* prev;
@@ -948,7 +855,7 @@ typedef struct {
     /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
-    /* 0x12022 */ UNK_TYPE1 unk12022;
+    /* 0x12022 */ u8 unk12022;
     /* 0x12023 */ u8 unk12023;
     /* 0x12024 */ UNK_TYPE1 unk12024[0x6];
     /* 0x1202A */ u16 unk1202A;
@@ -956,7 +863,9 @@ typedef struct {
     /* 0x1202E */ u16 unk1202E;
     /* 0x12030 */ UNK_TYPE1 pad12030[0x14];
     /* 0x12044 */ s16 unk12044;
-    /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
+    /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
+    /* 0x12048 */ u8 unk12048; // EnKakasi
+    /* 0x12049 */ UNK_TYPE1 pad12049[0x21];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
@@ -1296,12 +1205,6 @@ typedef struct ActorListEntry {
 #define OS_SC_PRE_NMI_MSG       4
 
 typedef struct {
-    /* 0x0000 */ OSTask task;
-    /* 0x0040 */ OSMesgQueue* taskQueue;
-    /* 0x0044 */ char unk_44[0xC];
-} AudioTask; // size = 0x50
-
-typedef struct {
     /* 0x000 */ IrqMgr* irqMgr;
     /* 0x004 */ SchedContext* sched;
     /* 0x008 */ OSScTask audioTask;
@@ -1375,7 +1278,7 @@ struct TargetContext {
     /* 0x50 */ TargetContextEntry unk50[3];
     /* 0x8C */ Actor* unk8C;
     /* 0x90 */ Actor* unk90;
-    /* 0x94 */ UNK_TYPE1 pad94[0x4];
+    /* 0x94 */ Actor* unk_94;
 }; // size = 0x98
 
 struct s800B948C {
@@ -1498,9 +1401,9 @@ struct GlobalContext {
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 unk_1879C[10];
-    /* 0x187B0 */ MtxF projectionMatrix;
+    /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
-    /* 0x187FC */ MtxF mf_187FC;
+    /* 0x187FC */ MtxF billboardMtxF;
     /* 0x1883C */ Mtx* unk_1883C;
     /* 0x18840 */ u32 gameplayFrames;
     /* 0x18844 */ u8 unk_18844;
@@ -1559,11 +1462,67 @@ typedef struct {
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
 
+typedef struct EnHy {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ UNK_TYPE1 unk_144[0x8];
+    /* 0x14C */ SkelAnime skelAnime;
+    /* 0x190 */ s8 unk190;
+    /* 0x191 */ s8 unk191;
+    /* 0x192 */ s8 unk192;
+    /* 0x193 */ s8 animObjIndex;
+    /* 0x194 */ ColliderCylinder collider;
+    /* 0x1E0 */ UNK_TYPE1 unk_1E0[0x4];
+    /* 0x1E4 */ Path* path;
+    /* 0x1E8 */ s16 curPoint;
+    /* 0x1EA */ UNK_TYPE1 unk_1EA[0x2];
+    /* 0x1EC */ Vec3f leftFootPos;
+    /* 0x1F8 */ Vec3f rightFootPos;
+    /* 0x204 */ u8 isLeftFootOnGround;
+    /* 0x205 */ u8 isRightFootOnGround;
+    /* 0x206 */ Vec3s jointTable[16];
+    /* 0x266 */ Vec3s morphTable[16];
+    /* 0x2C6 */ UNK_TYPE1 unk_2C6[0x120];
+    /* 0x3E6 */ s16 eyeTexIndex;
+    /* 0x3E8 */ s16 blinkTimer;
+} EnHy;
+
 typedef struct {
     /* 0x0 */ u8 unk0;
     /* 0x4 */ s32 unk4;
     /* 0x8 */ s32 unk8;
 } struct_80133038_arg2; // size = 0xC
+
+typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
+
+typedef s32 (*func_8013E640_arg6)(struct GlobalContext*, Actor*, Actor*, void*);
+
+struct struct_8013DF3C_arg1;
+typedef void (*struct_8013DF3C_arg1_unk_func1)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+typedef s32 (*struct_8013DF3C_arg1_unk_func2)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+
+typedef struct struct_8013DF3C_arg1 {
+    /* 0x00 */ Path* setupPathList;
+    /* 0x04 */ s32 pathIndex;
+    /* 0x08 */ Vec3s* points;
+    /* 0x0C */ s32 count;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ u8 unk_1C;
+    /* 0x1D */ u8 unk_1D;
+    /* 0x20 */ Vec3f unk_20;
+    /* 0x2C */ Vec3f unk_2C;
+    /* 0x38 */ Vec3f unk_38;
+    /* 0x44 */ Vec3f* unk_44;
+    /* 0x48 */ Actor* actor;
+    /* 0x4C */ f32 unk_4C;
+    /* 0x50 */ f32 unk_50;
+    /* 0x54 */ Vec3s unk_54;
+    /* 0x5C */ struct_8013DF3C_arg1_unk_func1 unk_5C;
+    /* 0x60 */ struct_8013DF3C_arg1_unk_func2 unk_60;
+    /* 0x64 */ struct_8013DF3C_arg1_unk_func2 unk_64;
+    /* 0x68 */ struct_8013DF3C_arg1_unk_func2 unk_68;
+} struct_8013DF3C_arg1; // size = 0x6C
 
 typedef struct {
     /* 0x00 */ u32 type;

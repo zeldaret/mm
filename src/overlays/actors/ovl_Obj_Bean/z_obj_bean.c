@@ -1,7 +1,7 @@
 /*
  * File: z_obj_bean.c
  * Overlay: ovl_Obj_Bean
- * Description: Floating Bean Plant / Dirt Patch
+ * Description: Floating Bean Plant / Soft Soil
  */
 
 #include "z_obj_bean.h"
