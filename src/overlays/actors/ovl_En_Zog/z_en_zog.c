@@ -66,36 +66,65 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static TexturePtr D_80B958AC[] = { &object_zog_Tex_024750, &object_zog_Tex_024F50, &object_zog_Tex_025750 };
+
 static TexturePtr D_80B958B8[] = { &object_zog_Tex_025F50, &object_zog_Tex_026750 };
+
 static AnimationHeader* D_80B958C0[] = {
     &object_zog_Anim_00FC0C, &object_zog_Anim_0106B0, &object_zog_Anim_0166F4, &object_zog_Anim_017170,
     &object_zog_Anim_014B10, &object_zog_Anim_018600, &object_zog_Anim_01A06C,
 };
+
 static AnimationHeader* D_80B958DC[] = { &object_zog_Anim_00CA94, &object_zog_Anim_00F110 };
+
 static AnimationHeader* D_80B958E4[] = { &object_zog_Anim_01579C, &object_zog_Anim_015B80, &object_zog_Anim_00ECBC };
+
 static AnimationHeader* D_80B958F0[] = { &object_zog_Anim_008EB8, &object_zog_Anim_0099A4 };
+
 static AnimationHeader* D_80B958F8[] = { &object_zog_Anim_00931C, &object_zog_Anim_009EC4, &object_zog_Anim_00B01C };
-static AnimationHeader* D_80B95904[] = { &object_zog_Anim_00BF38, &object_zog_Anim_01A990, &object_zog_Anim_01AD58,
-                                         &object_zog_Anim_01B72C, &object_zog_Anim_01BC88 };
+
+static AnimationHeader* D_80B95904[] = {
+    &object_zog_Anim_00BF38, &object_zog_Anim_01A990, &object_zog_Anim_01AD58,
+    &object_zog_Anim_01B72C, &object_zog_Anim_01BC88,
+};
+
 static AnimationHeader* D_80B95918 = &object_zog_Anim_001000;
+
 static AnimationHeader* D_80B9591C = &object_zog_Anim_001970;
+
 static AnimationHeader* D_80B95920 = &object_zog_Anim_002344;
+
 static AnimationHeader* D_80B95924 = &object_zog_Anim_002894;
+
 static AnimationHeader* D_80B95928 = &object_zog_Anim_0030E0;
+
 static AnimationHeader* D_80B9592C = &object_zog_Anim_0037F8;
+
 static AnimationHeader* D_80B95930 = &object_zog_Anim_0041D0;
+
 static AnimationHeader* D_80B95934 = &object_zog_Anim_004BDC;
+
 static AnimationHeader* D_80B95938 = &object_zog_Anim_0055B4;
+
 static s16 D_80B9593C[] = { 0, 1, 2, 3 };
+
 static s16 D_80B95944[] = { 4, 5 };
+
 static s16 D_80B95948[] = { 5, 6, 7, 0 };
+
 static s16 D_80B95950[] = { 7, 8, 9, 10, 7, 11, 12, 13, 14, 15, 12, 13, 14, 15, 12, 16, 17, 0 };
+
 static s16* D_80B95974[] = { D_80B9593C, D_80B95944, D_80B95948, D_80B95950 };
+
 static s16 D_80B95984[] = { 4, 2, 3, 17 };
+
 static Vec3f D_80B9598C = { 0.0f, -0.05f, 0.0f };
+
 static Vec3f D_80B95998 = { 0.0f, -0.025f, 0.0f };
+
 static Color_RGBA8 D_80B959A4 = { 220, 220, 255, 255 };
+
 static Color_RGBA8 D_80B959A8 = { 80, 80, 220, 255 };
+
 static Vec3f D_80B959AC = { 0.0f, 0.0f, 15.0f };
 
 void func_80B93310(Actor* thisx, Lights* mapper, GlobalContext* globalCtx) {
