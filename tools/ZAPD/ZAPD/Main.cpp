@@ -48,7 +48,7 @@ void ErrorHandler(int sig)
 	const char* crashEasterEgg[] = {
 		"\tYou've met with a terrible fate, haven't you?",
 		"\tSEA BEARS FOAM. SLEEP BEARS DREAMS. \n\tBOTH END IN THE SAME WAY: CRASSSH!",
-		"ZAPD has fallen and cannot get up."
+		"\tZAPD has fallen and cannot get up.",
 	};
 
 	srand(time(nullptr));
