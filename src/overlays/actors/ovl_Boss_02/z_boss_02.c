@@ -680,8 +680,6 @@ void func_809DAAA8(Boss02* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y = -500.0f;
 }
 
-#ifdef NON_MATCHING
-// Saving to spC8 rather than spC4 at line 18dc
 void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
     static Color_RGBA8 D_809DFA98 = { 185, 140, 70, 255 };
     s32 pad;
@@ -992,15 +990,15 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                     this->actor.minVelocityY = -1000.0f * D_809DF5B0;
                     this->unk_0164 = randPlusMinusPoint5Scaled(0.05f);
 
-                    spC4 = player->actor.world.pos.x - this->actor.world.pos.x;
-                    spC8 = player->actor.world.pos.z - this->actor.world.pos.z;
-                    if (sqrtf(SQ(spC4) + SQ(spC8)) < (400.0f * D_809DF5B0)) {
+                    spCC = player->actor.world.pos.x - this->actor.world.pos.x;
+                    spC4 = player->actor.world.pos.z - this->actor.world.pos.z;
+                    if (sqrtf(SQ(spCC) + SQ(spC4)) < (400.0f * D_809DF5B0)) {
                         this->actor.speedXZ = 15.0f * D_809DF5B0;
                     }
 
-                    spC4 = this->actor.world.pos.x;
-                    spC8 = this->actor.world.pos.z;
-                    if (sqrtf(SQ(spC4) + SQ(spC8)) < (400.0f * D_809DF5B0)) {
+                    spCC = this->actor.world.pos.x;
+                    spC4 = this->actor.world.pos.z;
+                    if (sqrtf(SQ(spCC) + SQ(spC4)) < (400.0f * D_809DF5B0)) {
                         this->actor.speedXZ = 15.0f * D_809DF5B0;
                     }
 
@@ -1051,7 +1049,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                 sp9C = Rand_ZeroFloat(M_PI);
 
                 for (i = 0; i < 15; i++) {
-                    Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + sp9C, 0);
+                    Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + sp9C, MTXMODE_NEW);
                     Matrix_GetStateTranslationAndScaledZ((10 - this->unk_0146[0]) * (D_809DF5B0 * 300.0f) * 0.1f,
                                                          &sp90);
                     spD0.x = this->unk_0170.x + sp90.x;
@@ -1081,10 +1079,6 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
     CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
 }
-#else
-static Color_RGBA8 D_809DFA98 = { 185, 140, 70, 255 };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/func_809DAB78.s")
-#endif
 
 void func_809DBFB4(Boss02* this, GlobalContext* globalCtx) {
     Boss02* temp_s6 = this->unk_1674;
@@ -1477,7 +1471,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             }
 
             func_809DA50C(1, &this->colliderSphere2, &this->unk_147C[i + 1]);
-            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &this->unk_147C[i + 1], &this->unk_167C,
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &this->unk_147C[i + 1], &this->unk_167C,
                                          &this->actor.projectedW);
         } else {
             func_809DA50C(i, &this->colliderSphere1, &this->unk_147C[i + 1]);
@@ -1584,7 +1578,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                                         (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
             Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1625,7 +1619,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)effect->unk_2C);
 
             Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1649,7 +1643,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                                         (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
             Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, 0);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

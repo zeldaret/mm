@@ -1,0 +1,13 @@
+﻿<Root>
+    <File Name="object_gmo" Segment="6">
+        <Animation Name="object_gmo_Anim_000018" Offset="0x18" />
+        <DList Name="object_gmo_DL_000B70" Offset="0xB70" />
+        <DList Name="object_gmo_DL_000E38" Offset="0xE38" />
+        <Texture Name="object_gmo_TLUT_000EC8" OutName="tlut_000EC8" Format="rgba16" Width="16" Height="16" Offset="0xEC8" />
+        <Texture Name="object_gmo_Tex_0010C8" OutName="tex_0010C8" Format="ci8" Width="32" Height="32" Offset="0x10C8" />
+        <!-- <Blob Name="object_gmo_Blob_0014C8" Size="0xC00" Offset="0x14C8" /> -->
+        <Limb Name="object_gmo_Standardlimb_0020C8" Type="Standard" Offset="0x20C8" />
+        <Limb Name="object_gmo_Standardlimb_0020D4" Type="Standard" Offset="0x20D4" />
+        <Skeleton Name="object_gmo_Skel_0020E8" Type="Normal" LimbType="Standard" Offset="0x20E8" />
+    </File>
+</Root>

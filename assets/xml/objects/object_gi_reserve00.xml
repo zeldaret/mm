@@ -1,0 +1,11 @@
+﻿<Root>
+    <File Name="object_gi_reserve00" Segment="6">
+        <!-- <Blob Name="object_gi_reserve00_Blob_000C40" Size="0x40" Offset="0xC40" /> -->
+        <DList Name="object_gi_reserve00_DL_000C80" Offset="0xC80" />
+        <DList Name="object_gi_reserve00_DL_000D78" Offset="0xD78" />
+        <Texture Name="object_gi_reserve00_Tex_001048" OutName="tex_001048" Format="i8" Width="32" Height="32" Offset="0x1048" />
+        <Texture Name="object_gi_reserve00_Tex_001448" OutName="tex_001448" Format="i8" Width="32" Height="32" Offset="0x1448" />
+        <Texture Name="object_gi_reserve00_Tex_001848" OutName="tex_001848" Format="i8" Width="32" Height="32" Offset="0x1848" />
+        <TextureAnimation Name="object_gi_reserve00_Matanimheader_001C60" Offset="0x1C60" />
+    </File>
+</Root>
