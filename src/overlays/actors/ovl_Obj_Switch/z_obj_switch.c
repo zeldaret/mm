@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_switch.h"
+#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -70,17 +71,12 @@ void ObjSwitch_DrawInvisibleEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx)
 void ObjSwitch_DrawEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx);
 void ObjSwitch_DrawCrystalSwitch(ObjSwitch* this, GlobalContext* globalCtx);
 
-extern CollisionHeader D_05008018;
-extern Gfx D_0501BEE0[];
-extern Gfx D_0501BFB8[];
-extern AnimatedMaterial D_0501C118;
-
-static Gfx* sEyeSwitchTextures[2][4] = {
-    { 0x0500AEC0, 0x05009EC0, 0x0500A6C0, 0x050096C0 },
-    { 0x0500B6C0, 0x0500BEC0, 0x0500C6C0, 0x0500C6C0 },
+static void* sEyeSwitchTextures[][4] = {
+    { gEyeSwitchGoldOpenTex, gEyeSwitchGoldOpeningTex, gEyeSwitchGoldClosingTex, gEyeSwitchGoldClosedTex },
+    { gEyeSwitchSilverOpenTex, gEyeSwitchSilverHalfTex, gEyeSwitchSilverClosedTex, gEyeSwitchSilverClosedTex },
 };
 
-s32 sIsSegmentTableInit = false;
+static s32 sIsSegmentTableInit = false;
 
 const ActorInit Obj_Switch_InitVars = {
     ACTOR_OBJ_SWITCH,
@@ -94,9 +90,9 @@ const ActorInit Obj_Switch_InitVars = {
     (ActorFunc)ObjSwitch_Draw,
 };
 
-f32 D_8093CCA4[] = { 10.0f, 10.0f, 0.0f, 30.0f, 30.0f, 15.0f };
+static f32 sHeights[] = { 10.0f, 10.0f, 0.0f, 30.0f, 30.0f, 15.0f };
 
-f32 D_8093CCBC[] = { 0.123f, 0.123f, 0.1f, 0.118f, 0.118f, 0.248f };
+static f32 sScale[] = { 0.123f, 0.123f, 0.1f, 0.118f, 0.118f, 0.248f };
 
 static ColliderTrisElementInit sRustyFloorTrisElementsInit[2] = {
     {
@@ -207,13 +203,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-Color_RGB8 sSakonHideoutColor[2] = { { 250, 90, 60 }, { 255, 255, 255 } };
+static Color_RGB8 sSakonHideoutColor[2] = { { 250, 90, 60 }, { 255, 255, 255 } };
 
-Gfx* D_8093CE2C[] = { 0x0501B508, 0x0501B9F8, 0x0501B788, 0x0501B788, 0x0501B508 };
+static Gfx* sFloorSwitchDL[] = { gFloorSwitch1DL, gFloorSwitch3DL, gFloorSwitch2DL, gFloorSwitch2DL, gFloorSwitch1DL };
 
-Gfx* D_8093CE40[] = { 0x050083F0, 0x050085F0 };
+static Gfx* sEyeSwitchDL[] = { gEyeSwitchGoldDL, gEyeSwitchSilverDL };
 
-AnimatedMaterial* sAnimatedMat;
+static AnimatedMaterial* sCrystalSwitchAnimatedMat;
 
 void ObjSwitch_InitJntSphCollider(ObjSwitch* this, GlobalContext* globalCtx, ColliderJntSphInit* init) {
     s32 pad;
@@ -337,7 +333,7 @@ void ObjSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     isSwitchFlagSet = Flags_GetSwitch(globalCtx, OBJ_SWITCH_GET_SWITCH_FLAG(this->dyna.actor.params));
     type = OBJ_SWITCH_GET_TYPE(this->dyna.actor.params);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    Actor_SetScale(&this->dyna.actor, D_8093CCBC[type]);
+    Actor_SetScale(&this->dyna.actor, sScale[type]);
 
     if (type == OBJSWITCH_TYPE_FLOOR || type == OBJSWITCH_TYPE_FLOOR_RUSTY || type == OBJSWITCH_TYPE_FLOOR_LARGE) {
         if (type == OBJSWITCH_TYPE_FLOOR_LARGE) {
@@ -346,7 +342,7 @@ void ObjSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 1.0f;
         }
         DynaPolyActor_Init(&this->dyna, 1);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_05008018);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gFloorSwitchCol);
     }
     if (type == OBJSWITCH_TYPE_FLOOR) {
         if (globalCtx->sceneNum == SCENE_SECOM) {
@@ -372,7 +368,7 @@ void ObjSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->color.b = 255;
         }
     }
-    Actor_SetHeight(&this->dyna.actor, D_8093CCA4[type]);
+    Actor_SetHeight(&this->dyna.actor, sHeights[type]);
 
     if (type == OBJSWITCH_TYPE_FLOOR_RUSTY) {
         ObjSwitch_InitTrisCollider(this, globalCtx, &sRustyFloorTrisInit);
@@ -410,7 +406,7 @@ void ObjSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     if (type == OBJSWITCH_TYPE_CRYSTAL) {
-        sAnimatedMat = Lib_SegmentedToVirtual(&D_0501C118);
+        sCrystalSwitchAnimatedMat = Lib_SegmentedToVirtual(&gCrystalSwitchAnimatedMat);
     }
     if (OBJ_SWITCH_IS_FROZEN(this->dyna.actor.params)) {
         ObjSwitch_EyeSwitchFrozenInit(this);
@@ -862,7 +858,7 @@ void ObjSwitch_LargeFloorSwitchPushDownInit(ObjSwitch* this) {
 }
 
 void ObjSwitch_LargeFloorSwitchPushDown(ObjSwitch* this, GlobalContext* globalCtx) {
-    this->dyna.actor.scale.y -= 0.074250005f; // 0.0165 * 9/2
+    this->dyna.actor.scale.y -= 0.074250005f;
     if (this->dyna.actor.scale.y <= 33.0f / 2000.0f) {
         ObjSwitch_PlayFootSwitchSfx(this);
         func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
@@ -971,16 +967,16 @@ void ObjSwitch_DrawFloorSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
         gSPDisplayList(opa++, &sSetupDL[6 * 25]);
         gSPMatrix(opa++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(opa++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
-        gSPDisplayList(opa++, D_0501B508);
+        gSPDisplayList(opa++, gFloorSwitch1DL);
         POLY_OPA_DISP = opa;
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else {
-        func_800BDFC0(globalCtx, D_8093CE2C[OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params)]);
+        func_800BDFC0(globalCtx, sFloorSwitchDL[OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params)]);
     }
 }
 
 void ObjSwitch_DrawRustyFloorSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_05007E00);
+    func_800BDFC0(globalCtx, gRustyFloorSwitchDL);
 }
 
 void ObjSwitch_DrawVisibleEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
@@ -992,7 +988,7 @@ void ObjSwitch_DrawVisibleEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, sEyeSwitchTextures[subType][this->eyeTexIndex]);
-    gSPDisplayList(POLY_OPA_DISP++, D_8093CE40[subType]);
+    gSPDisplayList(POLY_OPA_DISP++, sEyeSwitchDL[subType]);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1006,7 +1002,7 @@ void ObjSwitch_DrawInvisibleEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx)
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08, sEyeSwitchTextures[subType][this->eyeTexIndex]);
-    gSPDisplayList(POLY_XLU_DISP++, D_8093CE40[subType]);
+    gSPDisplayList(POLY_XLU_DISP++, sEyeSwitchDL[subType]);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1025,16 +1021,16 @@ void ObjSwitch_DrawCrystalSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_800B8118(&this->dyna.actor, globalCtx, 0);
-    AnimatedMat_DrawStep(globalCtx, sAnimatedMat, this->crystalAnimTimer);
+    AnimatedMat_DrawStep(globalCtx, sCrystalSwitchAnimatedMat, this->crystalAnimTimer);
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_0501C058);
+    gSPDisplayList(POLY_OPA_DISP++, gCrystalSwitchBaseDL);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
-    gSPDisplayList(POLY_OPA_DISP++, D_0501BEE0);
+    gSPDisplayList(POLY_OPA_DISP++, gCrystalSwitchCoreDL);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_0501BFB8);
+    gSPDisplayList(POLY_XLU_DISP++, gCrystalSwitchDiamondDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
