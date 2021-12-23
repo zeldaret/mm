@@ -661,16 +661,16 @@ s32 func_80A872AC(EnTru* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if (this->unk_34E & 7) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             if (player->transformation == PLAYER_FORM_HUMAN) {
                 this->unk_34E &= ~0x80;
             }
             this->unk_34E &= ~(0x4000 | 0x2000);
 
-            if ((player->unk_A87 == 35) || (player->unk_A87 == 36)) {
+            if ((player->exchangeItemId == 35) || (player->exchangeItemId == 36)) {
                 this->unk_34E |= 0x2000;
-                this->unk_38C = player->unk_A87;
-            } else if (player->unk_A87 != 0) {
+                this->unk_38C = player->exchangeItemId;
+            } else if (player->exchangeItemId != 0) {
                 this->unk_34E |= 0x4000;
             }
 
@@ -730,7 +730,7 @@ s32 func_80A87400(EnTru* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->actor.world.rot.y, phi_a1, 4, 3640);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if ((s32)(this->actor.floorHeight + 80.0f) >= (s32)this->actor.world.pos.y) {
         func_80A86770(this);
     }
@@ -801,7 +801,7 @@ s32 func_80A8777C(Actor* thisx, GlobalContext* globalCtx) {
     s32 temp_v0;
     s32 ret = 0;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     switch (temp_v0) {
         default:
@@ -894,9 +894,9 @@ s32 func_80A87880(Actor* thisx, GlobalContext* globalCtx) {
                     this->unk_34E &= ~0x400;
                     func_80123D50(globalCtx, player, 18, 21);
                 }
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOUME_DRINK);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DRINK);
             } else if (Animation_OnFrame(&this->skelAnime, 90.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOUME_REGAIN);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_REGAIN);
             }
 
             if ((this->skelAnime.curFrame > 90.0f) && (this->skelAnime.curFrame < 95.0f)) {
@@ -940,7 +940,7 @@ s32 func_80A87B48(Actor* thisx, GlobalContext* globalCtx) {
                 this->unk_372 = 10;
                 this->unk_364++;
             } else if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOUME_MAGIC);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_MAGIC);
                 func_80A85AA4(this->unk_394, &this->unk_1F8, 1.0f, 0.1f, 40.0f);
             }
             break;
@@ -952,8 +952,8 @@ s32 func_80A87B48(Actor* thisx, GlobalContext* globalCtx) {
                     this->actor.shape.shadowDraw = NULL;
                     this->unk_34E |= (0x200 | 0x8);
                     this->unk_34E &= ~0x800;
-                    if (player->unk_A87 != 0) {
-                        player->unk_A87 = 0;
+                    if (player->exchangeItemId != 0) {
+                        player->exchangeItemId = 0;
                     }
                     func_80A86924(this, 12);
                 }
@@ -996,8 +996,8 @@ s32 func_80A87DC0(Actor* thisx, GlobalContext* globalCtx) {
 
         case 2:
             func_801A75E8(NA_SE_EN_KOUME_MAGIC);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOUME_AWAY);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOUME_LAUGH);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_AWAY);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_LAUGH);
             func_80A86924(this, 13);
             this->skelAnime.baseTransl.y = 0;
             this->skelAnime.moveFlags = 2;
@@ -1111,7 +1111,7 @@ void EnTru_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_tru_Skel_01AA60, NULL, this->jointTable, this->morphTable,
                        27);
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);

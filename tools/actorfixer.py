@@ -409,9 +409,17 @@ animdict = {
     "actor.minVelocityY": "actor.terminalVelocity",
     "actor.yDistToWater" : "actor.depthInWater",
     "actor.yDistToPlayer" : "actor.playerHeightRel",
-
     "globalCtx->mf_187FC" : "globalCtx->billboardMtxF",
     "globalCtx->projectionMatrix" : "globalCtx->viewProjectionMtxF",
+    "player->unk_A87": "player->exchangeItemId",
+    "player->leftHandActor": "player->heldActor",
+
+    "player->unk_384": "player->getItemId",
+    "player->unk_386": "player->getItemDirection",
+    "player->unk_388": "player->interactRangeActor",
+    "player->unk_38C": "player->mountSide",
+    "player->unk_394": "player->csMode",
+    "player->unk_A87": "player->exchangeItemId",
 }
 
 def replace_anim(file):
