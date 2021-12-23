@@ -26,7 +26,7 @@ typedef struct {
     /* 0x04 */ Vec3f unk_04;
     /* 0x10 */ Vec3f unk_10;
     /* 0x1C */ Vec3f unk_1C;
-    /* 0x28 */ char unk_28[0x4];
+    /* 0x28 */ UNK_TYPE1 unk_28[0x4];
     /* 0x2C */ s16 unk_2C;
     /* 0x2E */ s16 unk_2E;
     /* 0x30 */ f32 unk_30;
@@ -63,7 +63,7 @@ typedef struct EnFz {
     /* 0xBCF */ u8 unk_BCF;
     /* 0xBD0 */ s16 unk_BD0;
     /* 0xBD2 */ s16 unk_BD2;
-    /* 0xBD4 */ char unkBD4[2];
+    /* 0xBD4 */ UNK_TYPE1 unkBD4[2];
     /* 0xBD6 */ u8 unk_BD6;
     /* 0xBD7 */ u8 unk_BD7;
     /* 0xBD8 */ u8 unk_BD8;
