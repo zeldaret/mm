@@ -17,7 +17,7 @@
 #define OBJ_SWITCH_GET_SWITCH_FLAG(p) ((p) >> 8 & 0x7F)
 #define OBJ_SWITCH_IS_FROZEN(p) ((p) >> 7 & 1)
 #define OBJ_SWITCH_UNSET_FROZEN(p) ((p) &= ~(1 << 7))
-#define OBJ_SWITCH_IS_3(p) ((p) >> 3 & 1)
+#define OBJ_SWITCH_IS_INVISIBLE(p) ((p) >> 3 & 1)
 #define OBJ_SWITCH_GET_COLOR_ID(z) ((z)&1)
 
 void ObjSwitch_Init(Actor* thisx, GlobalContext* globalCtx);
@@ -25,57 +25,57 @@ void ObjSwitch_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwitch_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwitch_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_8093B6F4(ObjSwitch* this);
-void func_8093B92C(ObjSwitch* this);
-void func_8093B9C0(ObjSwitch* this);
-void func_8093BB5C(ObjSwitch* this);
-void func_8093BCC8(ObjSwitch* this);
-void func_8093BD34(ObjSwitch* this);
-void func_8093BDAC(ObjSwitch* this);
-void func_8093BE10(ObjSwitch* this);
-void func_8093BEF0(ObjSwitch* this);
-void func_8093BF50(ObjSwitch* this);
-void func_8093C0A4(ObjSwitch* this);
-void func_8093C138(ObjSwitch* this);
-void func_8093C23C(ObjSwitch* this);
-void func_8093C2B4(ObjSwitch* this);
-void func_8093C3C8(ObjSwitch* this);
-void func_8093C460(ObjSwitch* this);
-void func_8093C584(ObjSwitch* this);
+void ObjSwitch_FloorSwitchUpInit(ObjSwitch* this);
+void ObjSwitch_FloorSwitchPushDownInit(ObjSwitch* this);
+void ObjSwitch_FloorSwitchDownInit(ObjSwitch* this);
+void ObjSwitch_FloorSwitchRiseUpInit(ObjSwitch* this);
+void ObjSwitch_EyeSwitchFrozenInit(ObjSwitch* this);
+void ObjSwitch_EyeSwitchOpenInit(ObjSwitch* this);
+void ObjSwitch_EyeSwitchClosingInit(ObjSwitch* this);
+void ObjSwitch_EyeSwitchClosedInit(ObjSwitch* this);
+void ObjSwitch_EyeSwitchOpeningInit(ObjSwitch* this);
+void ObjSwitch_CrystalSwitchOffInit(ObjSwitch* this);
+void ObjSwitch_CrystalSwitchTurnOnInit(ObjSwitch* this);
+void ObjSwitch_CrystalSwitchOnInit(ObjSwitch* this);
+void ObjSwitch_CrystalSwitchTurnOffInit(ObjSwitch* this);
+void ObjSwitch_LargeFloorSwitchUpInit(ObjSwitch* this);
+void ObjSwitch_LargeFloorSwitchPushDownInit(ObjSwitch* this);
+void ObjSwitch_LargeFloorSwitchDownInit(ObjSwitch* this);
+void ObjSwitch_LargeFloorSwitchRiseUpInit(ObjSwitch* this);
 
 void func_8093AF54(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093B668(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093B710(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093B940(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093B9E4(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093BB70(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093BCDC(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093BD4C(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093BDC0(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093BE2C(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093BF04(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093BF70(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093C0B8(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093C15C(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093C250(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093C2D4(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093C3DC(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093C488(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093C598(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_TryPlayCutscene(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_FloorSwitchUp(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_FloorSwitchPushDown(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_FloorSwitchDown(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_FloorSwitchRiseUp(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_EyeSwitchUnfrozen(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_EyeSwitchOpen(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_EyeSwitchClosing(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_EyeSwitchClosed(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_EyeSwitchOpening(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_CrystalSwitchOff(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_CrystalSwitchTurnOn(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_CrystalSwitchOn(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_CrystalSwitchTurnOff(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_LargeFloorSwitchUp(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_LargeFloorSwitchPushDown(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_LargeFloorSwitchDown(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_LargeFloorSwitchRiseUp(ObjSwitch* this, GlobalContext* globalCtx);
 
-void func_8093C778(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093C888(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093C8B8(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093C99C(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093CA80(ObjSwitch* this, GlobalContext* globalCtx);
-void func_8093CAC4(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_DrawFloorSwitch(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_DrawRustyFloorSwitch(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_DrawVisibleEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_DrawInvisibleEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_DrawEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx);
+void ObjSwitch_DrawCrystalSwitch(ObjSwitch* this, GlobalContext* globalCtx);
 
 extern CollisionHeader D_05008018;
 extern Gfx D_0501BEE0[];
 extern Gfx D_0501BFB8[];
 extern AnimatedMaterial D_0501C118;
 
-Gfx* D_8093CC60[2][4] = {
+static Gfx* sEyeSwitchTextures[2][4] = {
     { 0x0500AEC0, 0x05009EC0, 0x0500A6C0, 0x050096C0 },
     { 0x0500B6C0, 0x0500BEC0, 0x0500C6C0, 0x0500C6C0 },
 };
@@ -98,7 +98,7 @@ f32 D_8093CCA4[] = { 10.0f, 10.0f, 0.0f, 30.0f, 30.0f, 15.0f };
 
 f32 D_8093CCBC[] = { 0.123f, 0.123f, 0.1f, 0.118f, 0.118f, 0.248f };
 
-static ColliderTrisElementInit sTrisElementsInit1[2] = {
+static ColliderTrisElementInit sRustyFloorTrisElementsInit[2] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -123,7 +123,7 @@ static ColliderTrisElementInit sTrisElementsInit1[2] = {
     },
 };
 
-static ColliderTrisInit sTrisInit1 = {
+static ColliderTrisInit sRustyFloorTrisInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -132,11 +132,11 @@ static ColliderTrisInit sTrisInit1 = {
         OC2_NONE,
         COLSHAPE_TRIS,
     },
-    ARRAY_COUNT(sTrisElementsInit1),
-    sTrisElementsInit1,
+    ARRAY_COUNT(sRustyFloorTrisElementsInit),
+    sRustyFloorTrisElementsInit,
 };
 
-static ColliderTrisElementInit sTrisElementsInit2[2] = {
+static ColliderTrisElementInit sEyeSwitchTrisElementsInit[2] = {
     {
         {
             ELEMTYPE_UNK4,
@@ -161,7 +161,7 @@ static ColliderTrisElementInit sTrisElementsInit2[2] = {
     },
 };
 
-static ColliderTrisInit sTrisInit2 = {
+static ColliderTrisInit sEyeSwitchTrisInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -170,8 +170,8 @@ static ColliderTrisInit sTrisInit2 = {
         OC2_NONE,
         COLSHAPE_TRIS,
     },
-    ARRAY_COUNT(sTrisElementsInit2),
-    sTrisElementsInit2,
+    ARRAY_COUNT(sEyeSwitchTrisElementsInit),
+    sEyeSwitchTrisElementsInit,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -207,7 +207,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-Color_RGB8 D_8093CE24[2] = { { 250, 90, 60 }, { 255, 255, 255 } };
+Color_RGB8 sSakonHideoutColor[2] = { { 250, 90, 60 }, { 255, 255, 255 } };
 
 Gfx* D_8093CE2C[] = { 0x0501B508, 0x0501B9F8, 0x0501B788, 0x0501B788, 0x0501B508 };
 
@@ -215,7 +215,7 @@ Gfx* D_8093CE40[] = { 0x050083F0, 0x050085F0 };
 
 AnimatedMaterial* sAnimatedMat;
 
-void func_8093ABD0(ObjSwitch* this, GlobalContext* globalCtx, ColliderJntSphInit* init) {
+void ObjSwitch_InitJntSphCollider(ObjSwitch* this, GlobalContext* globalCtx, ColliderJntSphInit* init) {
     s32 pad;
 
     Collider_InitJntSph(globalCtx, &this->colliderJntSph);
@@ -228,10 +228,10 @@ void func_8093ABD0(ObjSwitch* this, GlobalContext* globalCtx, ColliderJntSphInit
     Collider_UpdateSpheres(0, &this->colliderJntSph);
 }
 
-void func_8093AC6C(ObjSwitch* this, GlobalContext* globalCtx, ColliderTrisInit* init) {
+void ObjSwitch_InitTrisCollider(ObjSwitch* this, GlobalContext* globalCtx, ColliderTrisInit* init) {
     s32 pad;
-    s32 s1;
-    s32 s2;
+    s32 i;
+    s32 j;
     Vec3f vtx[3];
 
     Collider_InitTris(globalCtx, &this->colliderTris);
@@ -242,17 +242,17 @@ void func_8093AC6C(ObjSwitch* this, GlobalContext* globalCtx, ColliderTrisInit* 
                                               this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y,
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
-    for (s2 = 0; s2 < ARRAY_COUNT(this->colliderTrisElements); s2++) {
+    for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
         if (this) {}
-        for (s1 = 0; s1 < ARRAY_COUNT(vtx); s1++) {
-            Matrix_MultiplyVector3fByState(&init->elements[s2].dim.vtx[s1], &vtx[s1]);
+        for (j = 0; j < ARRAY_COUNT(vtx); j++) {
+            Matrix_MultiplyVector3fByState(&init->elements[i].dim.vtx[j], &vtx[j]);
         }
-        Collider_SetTrisVertices(&this->colliderTris, s2, &vtx[0], &vtx[1], &vtx[2]);
+        Collider_SetTrisVertices(&this->colliderTris, i, &vtx[0], &vtx[1], &vtx[2]);
     }
     Matrix_StatePop();
 }
 
-Actor* func_8093ADA8(ObjSwitch* this, GlobalContext* globalCtx) {
+Actor* ObjSwitch_SpawnIce(ObjSwitch* this, GlobalContext* globalCtx) {
     Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_OBJ_ICE_POLY,
                        this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 25.0f, this->dyna.actor.world.pos.z,
                        this->dyna.actor.world.rot.x, this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
@@ -269,8 +269,8 @@ void ObjSwitch_SetSwitchFlagState(ObjSwitch* this, GlobalContext* globalCtx, s32
     }
 }
 
-void func_8093AE74(ObjSwitch* this) {
-    this->unk_168++;
+void ObjSwitch_CrystalUpdateTimer(ObjSwitch* this) {
+    this->crystalAnimTimer++;
 }
 
 void func_8093AE88(ObjSwitch* this) {
@@ -280,13 +280,13 @@ void func_8093AE88(ObjSwitch* this) {
     }
 }
 
-void func_8093AEC4(ObjSwitch* this) {
+void ObjSwitch_PlayFootSwitchSfx(ObjSwitch* this) {
     if (this->unk_165 <= 0) {
         Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
-void func_8093AEF0(ObjSwitch* this) {
+void ObjSwitch_PlayDiamondSwitchSfx(ObjSwitch* this) {
     if (this->unk_165 <= 0) {
         Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DIAMOND_SWITCH);
     }
@@ -311,7 +311,7 @@ void func_8093AF54(ObjSwitch* this, GlobalContext* globalCtx) {
         angle += 0x2000;
         angle &= 0x3FFF;
         angle -= 0x2000;
-        sp24 = OBJ_SWITCH_GET_TYPE(this->dyna.actor.params) == 0 ? 24.0f : 48.0f;
+        sp24 = OBJ_SWITCH_GET_TYPE(this->dyna.actor.params) == OBJSWITCH_TYPE_FLOOR ? 24.0f : 48.0f;
 
         cos = Math_CosS(angle);
         if (fabsf(cos) > 0.01f) {
@@ -339,8 +339,8 @@ void ObjSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetScale(&this->dyna.actor, D_8093CCBC[type]);
 
-    if (type == 0 || type == 1 || type == 5) {
-        if (type == 5) {
+    if (type == OBJSWITCH_TYPE_FLOOR || type == OBJSWITCH_TYPE_FLOOR_RUSTY || type == OBJSWITCH_TYPE_FLOOR_LARGE) {
+        if (type == OBJSWITCH_TYPE_FLOOR_LARGE) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 1.9f;
         } else {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 1.0f;
@@ -348,107 +348,111 @@ void ObjSwitch_Init(Actor* thisx, GlobalContext* globalCtx) {
         DynaPolyActor_Init(&this->dyna, 1);
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_05008018);
     }
-    if (type == 0) {
+    if (type == OBJSWITCH_TYPE_FLOOR) {
         if (globalCtx->sceneNum == SCENE_SECOM) {
-            this->unk_250 = 0.055000003f;
-            this->unk_254 = 0.0055f;
+            this->floorSwitchUpScale = 33.0f / 200.0f / 3.0f;
+            this->floorSwitchDownScale = 33.0f / 2000.0f / 3.0f;
         } else {
-            this->unk_250 = 0.165f;
-            this->unk_254 = 0.0165f;
+            this->floorSwitchUpScale = 33.0f / 200.0f;
+            this->floorSwitchDownScale = 33.0f / 2000.0f;
         }
     }
-    if (type == 0 || type == 5) {
+    if (type == OBJSWITCH_TYPE_FLOOR || type == OBJSWITCH_TYPE_FLOOR_LARGE) {
         if (globalCtx->sceneNum == SCENE_SECOM) {
-            Color_RGB8* color = &D_8093CE24[OBJ_SWITCH_GET_COLOR_ID(this->dyna.actor.home.rot.z)];
+            Color_RGB8* color = &sSakonHideoutColor[OBJ_SWITCH_GET_COLOR_ID(this->dyna.actor.home.rot.z)];
 
-            this->unk_16C = color->r;
-            this->unk_16D = color->g;
-            this->unk_16E = color->b;
+            this->color.r = color->r;
+            this->color.g = color->g;
+            this->color.b = color->b;
             this->dyna.actor.shape.rot.z = 0;
             this->dyna.actor.world.rot.z = 0;
         } else {
-            this->unk_16C = 255;
-            this->unk_16D = 255;
-            this->unk_16E = 255;
+            this->color.r = 255;
+            this->color.g = 255;
+            this->color.b = 255;
         }
     }
     Actor_SetHeight(&this->dyna.actor, D_8093CCA4[type]);
 
-    if (type == 1) {
-        func_8093AC6C(this, globalCtx, &sTrisInit1);
-    } else if (type == 2) {
-        func_8093AC6C(this, globalCtx, &sTrisInit2);
-    } else if (type == 3 || type == 4) {
-        func_8093ABD0(this, globalCtx, &sJntSphInit);
+    if (type == OBJSWITCH_TYPE_FLOOR_RUSTY) {
+        ObjSwitch_InitTrisCollider(this, globalCtx, &sRustyFloorTrisInit);
+    } else if (type == OBJSWITCH_TYPE_EYE) {
+        ObjSwitch_InitTrisCollider(this, globalCtx, &sEyeSwitchTrisInit);
+    } else if (type == OBJSWITCH_TYPE_CRYSTAL || type == OBJSWITCH_TYPE_CRYSTAL_TARGETABLE) {
+        ObjSwitch_InitJntSphCollider(this, globalCtx, &sJntSphInit);
     }
-    if (type == 4) {
+    if (type == OBJSWITCH_TYPE_CRYSTAL_TARGETABLE) {
         this->dyna.actor.targetMode = 4;
         this->dyna.actor.flags |= 1;
     }
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     if (OBJ_SWITCH_IS_FROZEN(this->dyna.actor.params)) {
-        if (func_8093ADA8(this, globalCtx) == NULL) {
+        if (ObjSwitch_SpawnIce(this, globalCtx) == NULL) {
             OBJ_SWITCH_UNSET_FROZEN(this->dyna.actor.params);
         }
         this->unk_165 = 0;
     } else {
         this->unk_165 = 10;
     }
-    if (OBJ_SWITCH_IS_3(this->dyna.actor.params)) {
+    if (OBJ_SWITCH_IS_INVISIBLE(this->dyna.actor.params)) {
         this->dyna.actor.flags |= 0x80;
     }
-    if (type == 2) {
+    if (type == OBJSWITCH_TYPE_EYE) {
         if (sIsSegmentTableInit == false) {
             s32 i, j;
             sIsSegmentTableInit = true;
 
             for (i = 0; i < 2; i++) {
                 for (j = 0; j < 4; j++) {
-                    D_8093CC60[i][j] = Lib_SegmentedToVirtual(D_8093CC60[i][j]);
+                    sEyeSwitchTextures[i][j] = Lib_SegmentedToVirtual(sEyeSwitchTextures[i][j]);
                 }
             }
         }
     }
-    if (type == 3) {
+    if (type == OBJSWITCH_TYPE_CRYSTAL) {
         sAnimatedMat = Lib_SegmentedToVirtual(&D_0501C118);
     }
     if (OBJ_SWITCH_IS_FROZEN(this->dyna.actor.params)) {
-        func_8093BCC8(this);
-    } else if (type == 0 || type == 1) {
-        if (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params) == 3) {
+        ObjSwitch_EyeSwitchFrozenInit(this);
+    } else if (type == OBJSWITCH_TYPE_FLOOR || type == OBJSWITCH_TYPE_FLOOR_RUSTY) {
+        if (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params) == OBJSWITCH_SUBTYPE_RESET_INVERTED) {
             if (isSwitchFlagSet) {
-                func_8093B6F4(this);
+                ObjSwitch_FloorSwitchUpInit(this);
             } else {
-                func_8093B9C0(this);
+                ObjSwitch_FloorSwitchDownInit(this);
             }
-        } else if (isSwitchFlagSet) {
-            func_8093B9C0(this);
         } else {
-            func_8093B6F4(this);
-        }
-    } else if (type == 2) {
-        if (isSwitchFlagSet) {
-            func_8093BE10(this);
-        } else {
-            func_8093BD34(this);
-        }
-    } else if (type == 3 || type == 4) {
-        if (isSwitchFlagSet) {
-            func_8093C138(this);
-        } else {
-            func_8093BF50(this);
-        }
-    } else if (type == 5) {
-        if (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params) == 3) {
             if (isSwitchFlagSet) {
-                func_8093C2B4(this);
+                ObjSwitch_FloorSwitchDownInit(this);
             } else {
-                func_8093C460(this);
+                ObjSwitch_FloorSwitchUpInit(this);
             }
-        } else if (isSwitchFlagSet) {
-            func_8093C460(this);
+        }
+    } else if (type == OBJSWITCH_TYPE_EYE) {
+        if (isSwitchFlagSet) {
+            ObjSwitch_EyeSwitchClosedInit(this);
         } else {
-            func_8093C2B4(this);
+            ObjSwitch_EyeSwitchOpenInit(this);
+        }
+    } else if (type == OBJSWITCH_TYPE_CRYSTAL || type == OBJSWITCH_TYPE_CRYSTAL_TARGETABLE) {
+        if (isSwitchFlagSet) {
+            ObjSwitch_CrystalSwitchOnInit(this);
+        } else {
+            ObjSwitch_CrystalSwitchOffInit(this);
+        }
+    } else if (type == OBJSWITCH_TYPE_FLOOR_LARGE) {
+        if (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params) == OBJSWITCH_SUBTYPE_RESET_INVERTED) {
+            if (isSwitchFlagSet) {
+                ObjSwitch_LargeFloorSwitchUpInit(this);
+            } else {
+                ObjSwitch_LargeFloorSwitchDownInit(this);
+            }
+        } else {
+            if (isSwitchFlagSet) {
+                ObjSwitch_LargeFloorSwitchDownInit(this);
+            } else {
+                ObjSwitch_LargeFloorSwitchUpInit(this);
+            }
         }
     }
 }
@@ -458,31 +462,32 @@ void ObjSwitch_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjSwitch* this = (ObjSwitch*)thisx;
     s32 type = OBJ_SWITCH_GET_TYPE(this->dyna.actor.params);
 
-    if (type == 0 || type == 1 || type == 5) {
+    if (type == OBJSWITCH_TYPE_FLOOR || type == OBJSWITCH_TYPE_FLOOR_RUSTY || type == OBJSWITCH_TYPE_FLOOR_LARGE) {
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
     switch (type) {
-        case 1:
-        case 2:
+        case OBJSWITCH_TYPE_FLOOR_RUSTY:
+        case OBJSWITCH_TYPE_EYE:
             Collider_DestroyTris(globalCtx, &this->colliderTris);
             break;
-        case 3:
-        case 4:
+        case OBJSWITCH_TYPE_CRYSTAL:
+        case OBJSWITCH_TYPE_CRYSTAL_TARGETABLE:
             Collider_DestroyJntSph(globalCtx, &this->colliderJntSph);
             break;
     }
 }
 
-void func_8093B648(ObjSwitch* this, GlobalContext* globalCtx, ObjSwitchSetupActionFunc actionFunc, s32 arg3) {
+void ObjSwitch_TryPlayCutsceneInit(ObjSwitch* this, GlobalContext* globalCtx, ObjSwitchSetupActionFunc actionFunc,
+                                   s32 nextSwitchFlagState) {
     this->setupFunc = actionFunc;
-    this->unk_171 = arg3;
-    this->actionFunc = func_8093B668;
+    this->nextSwitchFlagState = nextSwitchFlagState;
+    this->actionFunc = ObjSwitch_TryPlayCutscene;
 }
 
-void func_8093B668(ObjSwitch* this, GlobalContext* globalCtx) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene) != 0) {
+void ObjSwitch_TryPlayCutscene(ObjSwitch* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        ObjSwitch_SetSwitchFlagState(this, globalCtx, this->unk_171);
+        ObjSwitch_SetSwitchFlagState(this, globalCtx, this->nextSwitchFlagState);
         if (this->unk_170 == 1) {
             this->unk_170 = 2;
         }
@@ -493,143 +498,143 @@ void func_8093B668(ObjSwitch* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_8093B6F4(ObjSwitch* this) {
-    this->actionFunc = func_8093B710;
-    this->dyna.actor.scale.y = this->unk_250;
+void ObjSwitch_FloorSwitchUpInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_FloorSwitchUp;
+    this->dyna.actor.scale.y = this->floorSwitchUpScale;
 }
 
-void func_8093B710(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_FloorSwitchUp(ObjSwitch* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    if (OBJ_SWITCH_GET_TYPE(this->dyna.actor.params) == 1) {
-        if (this->colliderTris.base.acFlags & 2) {
+    if (OBJ_SWITCH_GET_TYPE(this->dyna.actor.params) == OBJSWITCH_TYPE_FLOOR_RUSTY) {
+        if (this->colliderTris.base.acFlags & AC_HIT) {
             this->colliderTris.base.acFlags &= ~AT_HIT;
-            func_8093B648(this, globalCtx, func_8093B92C, true);
+            ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_FloorSwitchPushDownInit, true);
         } else {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
         }
     } else {
         switch (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params)) {
-            case 0:
+            case OBJSWITCH_SUBTYPE_ONCE:
                 if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
                     func_8093AF1C(this, 1);
-                    func_8093B648(this, globalCtx, func_8093B92C, true);
+                    ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_FloorSwitchPushDownInit, true);
                 }
                 break;
-            case 4:
+            case OBJSWITCH_SUBTYPE_SYNC:
                 if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
                     func_8093AF1C(this, 1);
-                    func_8093B648(this, globalCtx, func_8093B92C, true);
+                    ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_FloorSwitchPushDownInit, true);
                 } else if (Flags_GetSwitch(globalCtx, OBJ_SWITCH_GET_SWITCH_FLAG(this->dyna.actor.params))) {
-                    func_8093B92C(this);
+                    ObjSwitch_FloorSwitchPushDownInit(this);
                 }
                 break;
-            case 1:
+            case OBJSWITCH_SUBTYPE_TOGGLE:
                 if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
                     s32 isSwitchFlagNotSet =
                         Flags_GetSwitch(globalCtx, OBJ_SWITCH_GET_SWITCH_FLAG(this->dyna.actor.params)) ? false : true;
 
                     func_8093AF1C(this, 1);
-                    func_8093B648(this, globalCtx, func_8093B92C, isSwitchFlagNotSet);
+                    ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_FloorSwitchPushDownInit,
+                                                  isSwitchFlagNotSet);
                 }
                 break;
-            case 2:
+            case OBJSWITCH_SUBTYPE_RESET:
                 if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
                     func_8093AF1C(this, 1);
-                    func_8093B648(this, globalCtx, func_8093B92C, true);
+                    ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_FloorSwitchPushDownInit, true);
                 }
                 break;
-            case 3:
+            case OBJSWITCH_SUBTYPE_RESET_INVERTED:
                 if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
                     func_8093AF1C(this, 2);
                     ObjSwitch_SetSwitchFlagState(this, globalCtx, false);
-                    func_8093B92C(this);
+                    ObjSwitch_FloorSwitchPushDownInit(this);
                 }
                 break;
         }
     }
 }
 
-void func_8093B92C(ObjSwitch* this) {
-    this->actionFunc = func_8093B940;
+void ObjSwitch_FloorSwitchPushDownInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_FloorSwitchPushDown;
 }
 
-void func_8093B940(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_FloorSwitchPushDown(ObjSwitch* this, GlobalContext* globalCtx) {
     this->dyna.actor.scale.y -= 0.0495f;
-    if (this->dyna.actor.scale.y <= this->unk_254) {
-        func_8093AEC4(this);
+    if (this->dyna.actor.scale.y <= this->floorSwitchDownScale) {
+        ObjSwitch_PlayFootSwitchSfx(this);
         func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         func_8093AE88(this);
-        func_8093B9C0(this);
+        ObjSwitch_FloorSwitchDownInit(this);
     }
 }
 
-void func_8093B9C0(ObjSwitch* this) {
-    this->unk_160 = 6;
-    this->actionFunc = func_8093B9E4;
-    this->dyna.actor.scale.y = this->unk_254;
+void ObjSwitch_FloorSwitchDownInit(ObjSwitch* this) {
+    this->floorSwitchReleaseTimer = 6;
+    this->actionFunc = ObjSwitch_FloorSwitchDown;
+    this->dyna.actor.scale.y = this->floorSwitchDownScale;
 }
 
-void func_8093B9E4(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_FloorSwitchDown(ObjSwitch* this, GlobalContext* globalCtx) {
     s32 pad;
     u32 subType = OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params);
 
     switch (subType) {
-        case 0:
-        case 4:
+        case OBJSWITCH_SUBTYPE_ONCE:
+        case OBJSWITCH_SUBTYPE_SYNC:
             if (!Flags_GetSwitch(globalCtx, OBJ_SWITCH_GET_SWITCH_FLAG(this->dyna.actor.params))) {
                 if (globalCtx->sceneNum == SCENE_SECOM && DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
                     ObjSwitch_SetSwitchFlagState(this, globalCtx, true);
                 } else {
-                    func_8093BB5C(this);
+                    ObjSwitch_FloorSwitchRiseUpInit(this);
                 }
             }
             break;
-        case 1:
-        case 2:
-        case 3:
+        case OBJSWITCH_SUBTYPE_TOGGLE:
+        case OBJSWITCH_SUBTYPE_RESET:
+        case OBJSWITCH_SUBTYPE_RESET_INVERTED:
             if (!DynaPolyActor_IsInSwitchPressedState(&this->dyna) &&
                 (func_801233E4(globalCtx) == 0 || globalCtx->sceneNum == SCENE_SECOM)) {
-                if (this->unk_160 <= 0) {
-                    if (subType == 2) {
+                if (this->floorSwitchReleaseTimer <= 0) {
+                    if (subType == OBJSWITCH_SUBTYPE_RESET) {
                         ObjSwitch_SetSwitchFlagState(this, globalCtx, false);
-                        func_8093BB5C(this);
-                    } else if (subType == 3) {
-                        func_8093B648(this, globalCtx, func_8093BB5C, true);
+                        ObjSwitch_FloorSwitchRiseUpInit(this);
+                    } else if (subType == OBJSWITCH_SUBTYPE_RESET_INVERTED) {
+                        ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_FloorSwitchRiseUpInit, true);
                     } else {
-                        func_8093BB5C(this);
+                        ObjSwitch_FloorSwitchRiseUpInit(this);
                     }
                 }
             } else {
                 if (globalCtx->sceneNum == SCENE_SECOM) {
-                    this->unk_160 = 2;
+                    this->floorSwitchReleaseTimer = 2;
                 } else {
-                    this->unk_160 = 6;
+                    this->floorSwitchReleaseTimer = 6;
                 }
             }
             break;
     }
 }
 
-void func_8093BB5C(ObjSwitch* this) {
-    this->actionFunc = func_8093BB70;
+void ObjSwitch_FloorSwitchRiseUpInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_FloorSwitchRiseUp;
 }
 
-void func_8093BB70(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_FloorSwitchRiseUp(ObjSwitch* this, GlobalContext* globalCtx) {
     this->dyna.actor.scale.y += 0.0495f;
-    if (this->unk_250 <= this->dyna.actor.scale.y) {
-        func_8093AEC4(this);
+    if (this->floorSwitchUpScale <= this->dyna.actor.scale.y) {
+        ObjSwitch_PlayFootSwitchSfx(this);
         func_8093AE88(this);
-        func_8093B6F4(this);
+        ObjSwitch_FloorSwitchUpInit(this);
     }
 }
 
-// OoT ObjSwitch_EyeIsHit
-s32 func_8093BBD0(ObjSwitch* this) {
+s32 ObjSwitch_IsEyeSwitchHit(ObjSwitch* this) {
     Actor* acActor;
     Actor* actor = &this->dyna.actor;
 
-    if ((this->colliderTris.base.acFlags & 2) && !(this->unk_16F & 2)) {
+    if ((this->colliderTris.base.acFlags & AC_HIT) && !(this->unk_16F & AC_HIT)) {
         acActor = this->colliderTris.base.ac;
         if (acActor != NULL) {
             Vec3f sp2C;
@@ -652,273 +657,267 @@ s32 func_8093BBD0(ObjSwitch* this) {
     return false;
 }
 
-void func_8093BCC8(ObjSwitch* this) {
-    this->actionFunc = func_8093BCDC;
+void ObjSwitch_EyeSwitchFrozenInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_EyeSwitchUnfrozen;
 }
 
-void func_8093BCDC(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_EyeSwitchUnfrozen(ObjSwitch* this, GlobalContext* globalCtx) {
     if (Flags_GetSwitch(globalCtx, OBJ_SWITCH_GET_SWITCH_FLAG(this->dyna.actor.params))) {
-        func_8093BE10(this);
+        ObjSwitch_EyeSwitchClosedInit(this);
     } else {
-        func_8093BD34(this);
+        ObjSwitch_EyeSwitchOpenInit(this);
     }
 }
 
-void func_8093BD34(ObjSwitch* this) {
-    this->actionFunc = func_8093BD4C;
-    this->unk_164 = 0;
+void ObjSwitch_EyeSwitchOpenInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_EyeSwitchOpen;
+    this->eyeTexIndex = 0;
 }
 
-void func_8093BD4C(ObjSwitch* this, GlobalContext* globalCtx) {
-    if (func_8093BBD0(this) || OBJ_SWITCH_IS_FROZEN(this->dyna.actor.params)) {
+void ObjSwitch_EyeSwitchOpen(ObjSwitch* this, GlobalContext* globalCtx) {
+    if (ObjSwitch_IsEyeSwitchHit(this) || OBJ_SWITCH_IS_FROZEN(this->dyna.actor.params)) {
         OBJ_SWITCH_UNSET_FROZEN(this->dyna.actor.params);
-        func_8093B648(this, globalCtx, func_8093BDAC, true);
+        ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_EyeSwitchClosingInit, true);
     }
 }
 
-void func_8093BDAC(ObjSwitch* this) {
-    this->actionFunc = func_8093BDC0;
+void ObjSwitch_EyeSwitchClosingInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_EyeSwitchClosing;
 }
 
-void func_8093BDC0(ObjSwitch* this, GlobalContext* globalCtx) {
-    this->unk_164 += 1;
-    if (this->unk_164 >= 3) {
+void ObjSwitch_EyeSwitchClosing(ObjSwitch* this, GlobalContext* globalCtx) {
+    this->eyeTexIndex++;
+    if (this->eyeTexIndex >= 3) {
         func_8093AE88(this);
-        func_8093AEC4(this);
-        func_8093BE10(this);
+        ObjSwitch_PlayFootSwitchSfx(this);
+        ObjSwitch_EyeSwitchClosedInit(this);
     }
 }
 
-void func_8093BE10(ObjSwitch* this) {
-    this->actionFunc = func_8093BE2C;
-    this->unk_164 = 3;
+void ObjSwitch_EyeSwitchClosedInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_EyeSwitchClosed;
+    this->eyeTexIndex = 3;
 }
 
-void func_8093BE2C(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_EyeSwitchClosed(ObjSwitch* this, GlobalContext* globalCtx) {
     switch (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params)) {
-        case 0:
+        case OBJSWITCH_SUBTYPE_ONCE:
             if (!Flags_GetSwitch(globalCtx, OBJ_SWITCH_GET_SWITCH_FLAG(this->dyna.actor.params))) {
                 OBJ_SWITCH_UNSET_FROZEN(this->dyna.actor.params);
-                func_8093BEF0(this);
+                ObjSwitch_EyeSwitchOpeningInit(this);
             }
             break;
-        case 1:
-            if (func_8093BBD0(this) || OBJ_SWITCH_IS_FROZEN(this->dyna.actor.params)) {
+        case OBJSWITCH_SUBTYPE_TOGGLE:
+            if (ObjSwitch_IsEyeSwitchHit(this) || OBJ_SWITCH_IS_FROZEN(this->dyna.actor.params)) {
                 OBJ_SWITCH_UNSET_FROZEN(this->dyna.actor.params);
-                func_8093B648(this, globalCtx, func_8093BEF0, false);
+                ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_EyeSwitchOpeningInit, false);
             }
             break;
     }
 }
 
-void func_8093BEF0(ObjSwitch* this) {
-    this->actionFunc = func_8093BF04;
+void ObjSwitch_EyeSwitchOpeningInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_EyeSwitchOpening;
 }
 
-void func_8093BF04(ObjSwitch* this, GlobalContext* globalCtx) {
-    this->unk_164 += -1;
-    if (this->unk_164 <= 0) {
+void ObjSwitch_EyeSwitchOpening(ObjSwitch* this, GlobalContext* globalCtx) {
+    this->eyeTexIndex--;
+    if (this->eyeTexIndex <= 0) {
         func_8093AE88(this);
-        func_8093AEC4(this);
-        func_8093BD34(this);
+        ObjSwitch_PlayFootSwitchSfx(this);
+        ObjSwitch_EyeSwitchOpenInit(this);
     }
 }
 
-void func_8093BF50(ObjSwitch* this) {
-    this->unk_16C = 0;
-    this->unk_16D = 0;
-    this->unk_16E = 0;
-    this->actionFunc = func_8093BF70;
+void ObjSwitch_CrystalSwitchOffInit(ObjSwitch* this) {
+    this->color.r = 0;
+    this->color.g = 0;
+    this->color.b = 0;
+    this->actionFunc = ObjSwitch_CrystalSwitchOff;
 }
 
-void func_8093BF70(ObjSwitch* this, GlobalContext* globalCtx) {
-    s32 v0;
-    s32 a2;
+void ObjSwitch_CrystalSwitchOff(ObjSwitch* this, GlobalContext* globalCtx) {
+    s32 switchHit = (this->colliderJntSph.base.acFlags & AC_HIT) != 0;
+    s32 canActivate = switchHit && !(this->unk_16F & AC_HIT) && (this->disableCrystalSwitchTimer <= 0);
 
-    a2 = (this->colliderJntSph.base.acFlags & 2) != 0;
-    v0 = a2 && !(this->unk_16F & 2) && (this->unk_162 < 1);
-    if (a2) {
-        this->unk_162 = 10;
+    if (switchHit) {
+        this->disableCrystalSwitchTimer = 10;
     }
     switch (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params)) {
-        case 0:
-            if (v0) {
-                func_8093B648(this, globalCtx, func_8093C0A4, true);
+        case OBJSWITCH_SUBTYPE_ONCE:
+            if (canActivate) {
+                ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_CrystalSwitchTurnOnInit, true);
             }
             break;
-        case 4:
-            if (v0) {
-                func_8093B648(this, globalCtx, func_8093C0A4, true);
+        case OBJSWITCH_SUBTYPE_SYNC:
+            if (canActivate) {
+                ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_CrystalSwitchTurnOnInit, true);
 
             } else if (Flags_GetSwitch(globalCtx, OBJ_SWITCH_GET_SWITCH_FLAG(this->dyna.actor.params))) {
-                this->unk_162 = 10;
-                func_8093C0A4(this);
+                this->disableCrystalSwitchTimer = 10;
+                ObjSwitch_CrystalSwitchTurnOnInit(this);
             }
             break;
-        case 1:
-            if (v0) {
-                func_8093B648(this, globalCtx, func_8093C0A4, true);
+        case OBJSWITCH_SUBTYPE_TOGGLE:
+            if (canActivate) {
+                ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_CrystalSwitchTurnOnInit, true);
             }
-            func_8093AE74(this);
+            ObjSwitch_CrystalUpdateTimer(this);
             break;
     }
 }
 
-void func_8093C0A4(ObjSwitch* this) {
-    this->actionFunc = func_8093C0B8;
+void ObjSwitch_CrystalSwitchTurnOnInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_CrystalSwitchTurnOn;
 }
 
-void func_8093C0B8(ObjSwitch* this, GlobalContext* globalCtx) {
-    s32 test;
-    s32 subType;
+void ObjSwitch_CrystalSwitchTurnOn(ObjSwitch* this, GlobalContext* globalCtx) {
+    s32 switchHit = (this->colliderJntSph.base.acFlags & AC_HIT) != 0;
+    s32 subType = OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params);
 
-    test = (this->colliderJntSph.base.acFlags & 2) != 0;
-    subType = OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params);
-    if (test) {
-        this->unk_162 = 10;
+    if (switchHit) {
+        this->disableCrystalSwitchTimer = 10;
     }
     func_8093AE88(this);
-    if (subType == 1) {
-        func_8093AE74(this);
+    if (subType == OBJSWITCH_SUBTYPE_TOGGLE) {
+        ObjSwitch_CrystalUpdateTimer(this);
     }
-    func_8093AEF0(this);
-    func_8093C138(this);
+    ObjSwitch_PlayDiamondSwitchSfx(this);
+    ObjSwitch_CrystalSwitchOnInit(this);
 }
 
-void func_8093C138(ObjSwitch* this) {
-    this->unk_16C = 255;
-    this->unk_16D = 255;
-    this->unk_16E = 255;
-    this->actionFunc = func_8093C15C;
+void ObjSwitch_CrystalSwitchOnInit(ObjSwitch* this) {
+    this->color.r = 255;
+    this->color.g = 255;
+    this->color.b = 255;
+    this->actionFunc = ObjSwitch_CrystalSwitchOn;
 }
 
-void func_8093C15C(ObjSwitch* this, GlobalContext* globalCtx) {
-    s32 a2;
-    s32 v0;
+void ObjSwitch_CrystalSwitchOn(ObjSwitch* this, GlobalContext* globalCtx) {
+    s32 switchHit = (this->colliderJntSph.base.acFlags & AC_HIT) != 0;
+    s32 canActivate = switchHit && !(this->unk_16F & AC_HIT) && (this->disableCrystalSwitchTimer <= 0);
 
-    a2 = (this->colliderJntSph.base.acFlags & 2) != 0;
-    v0 = a2 && !(this->unk_16F & 2) && (this->unk_162 < 1);
-    if (a2 != 0) {
-        this->unk_162 = 10;
+    if (switchHit) {
+        this->disableCrystalSwitchTimer = 10;
     }
     switch (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params)) {
-        case 0:
-        case 4:
+        case OBJSWITCH_SUBTYPE_ONCE:
+        case OBJSWITCH_SUBTYPE_SYNC:
             if (!Flags_GetSwitch(globalCtx, OBJ_SWITCH_GET_SWITCH_FLAG(this->dyna.actor.params))) {
-                this->unk_162 = 10;
-                func_8093C23C(this);
+                this->disableCrystalSwitchTimer = 10;
+                ObjSwitch_CrystalSwitchTurnOffInit(this);
             }
             break;
-        case 1:
-            if (v0 != 0) {
-                func_8093B648(this, globalCtx, func_8093C23C, false);
+        case OBJSWITCH_SUBTYPE_TOGGLE:
+            if (canActivate) {
+                ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_CrystalSwitchTurnOffInit, false);
             }
     }
-    func_8093AE74(this);
+    ObjSwitch_CrystalUpdateTimer(this);
 }
 
-void func_8093C23C(ObjSwitch* this) {
-    this->actionFunc = func_8093C250;
+void ObjSwitch_CrystalSwitchTurnOffInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_CrystalSwitchTurnOff;
 }
 
-void func_8093C250(ObjSwitch* this, GlobalContext* globalCtx) {
-    s32 test = (this->colliderJntSph.base.acFlags & 2) != 0;
+void ObjSwitch_CrystalSwitchTurnOff(ObjSwitch* this, GlobalContext* globalCtx) {
+    s32 switchHit = (this->colliderJntSph.base.acFlags & AC_HIT) != 0;
 
-    if (test) {
-        this->unk_162 = 10;
+    if (switchHit) {
+        this->disableCrystalSwitchTimer = 10;
     }
     func_8093AE88(this);
-    func_8093AE74(this);
-    func_8093AEF0(this);
-    func_8093BF50(this);
+    ObjSwitch_CrystalUpdateTimer(this);
+    ObjSwitch_PlayDiamondSwitchSfx(this);
+    ObjSwitch_CrystalSwitchOffInit(this);
 }
 
-void func_8093C2B4(ObjSwitch* this) {
+void ObjSwitch_LargeFloorSwitchUpInit(ObjSwitch* this) {
     this->dyna.actor.scale.y = 0.2475f;
-    this->actionFunc = func_8093C2D4;
+    this->actionFunc = ObjSwitch_LargeFloorSwitchUp;
 }
 
-void func_8093C2D4(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_LargeFloorSwitchUp(ObjSwitch* this, GlobalContext* globalCtx) {
     s32 subType = OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params);
 
-    if (subType == 0) {
+    if (subType == OBJSWITCH_SUBTYPE_ONCE) {
         if (DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna)) {
             func_8093AF1C(this, 1);
-            func_8093B648(this, globalCtx, func_8093C3C8, true);
+            ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_LargeFloorSwitchPushDownInit, true);
         }
-    } else if (subType == 2) {
+    } else if (subType == OBJSWITCH_SUBTYPE_RESET) {
         if (DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna)) {
             func_8093AF1C(this, 1);
-            func_8093B648(this, globalCtx, func_8093C3C8, true);
+            ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_LargeFloorSwitchPushDownInit, true);
         }
-    } else if ((subType == 3) && DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna)) {
+    } else if (subType == OBJSWITCH_SUBTYPE_RESET_INVERTED && DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna)) {
         func_8093AF1C(this, 2);
         ObjSwitch_SetSwitchFlagState(this, globalCtx, false);
-        func_8093C3C8(this);
+        ObjSwitch_LargeFloorSwitchPushDownInit(this);
     }
 }
 
-void func_8093C3C8(ObjSwitch* this) {
-    this->actionFunc = func_8093C3DC;
+void ObjSwitch_LargeFloorSwitchPushDownInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_LargeFloorSwitchPushDown;
 }
 
-void func_8093C3DC(ObjSwitch* this, GlobalContext* globalCtx) {
-    this->dyna.actor.scale.y -= 0.074250005f;
-    if (this->dyna.actor.scale.y <= 0.0165f) {
-        func_8093AEC4(this);
+void ObjSwitch_LargeFloorSwitchPushDown(ObjSwitch* this, GlobalContext* globalCtx) {
+    this->dyna.actor.scale.y -= 0.074250005f; // 0.0165 * 9/2
+    if (this->dyna.actor.scale.y <= 33.0f / 2000.0f) {
+        ObjSwitch_PlayFootSwitchSfx(this);
         func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         func_8093AE88(this);
-        func_8093C460(this);
+        ObjSwitch_LargeFloorSwitchDownInit(this);
     }
 }
 
-void func_8093C460(ObjSwitch* this) {
-    this->dyna.actor.scale.y = 0.0165f;
-    this->unk_160 = 6;
-    this->actionFunc = func_8093C488;
+void ObjSwitch_LargeFloorSwitchDownInit(ObjSwitch* this) {
+    this->dyna.actor.scale.y = 33.0f / 2000.0f;
+    this->floorSwitchReleaseTimer = 6;
+    this->actionFunc = ObjSwitch_LargeFloorSwitchDown;
 }
 
-void func_8093C488(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_LargeFloorSwitchDown(ObjSwitch* this, GlobalContext* globalCtx) {
     s32 subType = OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params);
 
-    if (subType == 0) {
+    if (subType == OBJSWITCH_SUBTYPE_ONCE) {
         if (!Flags_GetSwitch(globalCtx, OBJ_SWITCH_GET_SWITCH_FLAG(this->dyna.actor.params))) {
-            func_8093C584(this);
+            ObjSwitch_LargeFloorSwitchRiseUpInit(this);
         }
-    } else if (subType == 2 || subType == 3) {
+    } else if (subType == OBJSWITCH_SUBTYPE_RESET || subType == OBJSWITCH_SUBTYPE_RESET_INVERTED) {
         if (!DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna) && !func_801233E4(globalCtx)) {
-            if (this->unk_160 <= 0) {
-                if (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params) == 2) {
+            if (this->floorSwitchReleaseTimer <= 0) {
+                if (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params) == OBJSWITCH_SUBTYPE_RESET) {
                     ObjSwitch_SetSwitchFlagState(this, globalCtx, false);
-                    func_8093C584(this);
+                    ObjSwitch_LargeFloorSwitchRiseUpInit(this);
                 } else {
-                    func_8093B648(this, globalCtx, func_8093C584, true);
+                    ObjSwitch_TryPlayCutsceneInit(this, globalCtx, ObjSwitch_LargeFloorSwitchRiseUpInit, true);
                 }
             }
         } else {
-            this->unk_160 = 6;
+            this->floorSwitchReleaseTimer = 6;
         }
     }
 }
 
-void func_8093C584(ObjSwitch* this) {
-    this->actionFunc = func_8093C598;
+void ObjSwitch_LargeFloorSwitchRiseUpInit(ObjSwitch* this) {
+    this->actionFunc = ObjSwitch_LargeFloorSwitchRiseUp;
 }
 
-void func_8093C598(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_LargeFloorSwitchRiseUp(ObjSwitch* this, GlobalContext* globalCtx) {
     this->dyna.actor.scale.y += 0.074250005f;
     if (this->dyna.actor.scale.y >= 0.2475f) {
-        func_8093AEC4(this);
+        ObjSwitch_PlayFootSwitchSfx(this);
         func_8093AE88(this);
-        func_8093C2B4(this);
+        ObjSwitch_LargeFloorSwitchUpInit(this);
     }
 }
 
 void ObjSwitch_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjSwitch* this = (ObjSwitch*)thisx;
 
-    if (this->unk_160 > 0) {
-        this->unk_160--;
+    if (this->floorSwitchReleaseTimer > 0) {
+        this->floorSwitchReleaseTimer--;
     }
     if (this->unk_165 > 0) {
         this->unk_165--;
@@ -934,24 +933,24 @@ void ObjSwitch_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     switch (OBJ_SWITCH_GET_TYPE(this->dyna.actor.params)) {
-        case 0:
-        case 1:
-        case 5:
+        case OBJSWITCH_TYPE_FLOOR:
+        case OBJSWITCH_TYPE_FLOOR_RUSTY:
+        case OBJSWITCH_TYPE_FLOOR_LARGE:
             this->unk_16F = this->dyna.stateFlags;
             break;
-        case 2:
+        case OBJSWITCH_TYPE_EYE:
             this->unk_16F = this->colliderTris.base.acFlags;
-            this->colliderTris.base.acFlags &= ~2;
+            this->colliderTris.base.acFlags &= ~AC_HIT;
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
             break;
-        case 3:
-        case 4:
+        case OBJSWITCH_TYPE_CRYSTAL:
+        case OBJSWITCH_TYPE_CRYSTAL_TARGETABLE:
             if (!func_801233E4(globalCtx)) {
-                if (this->unk_162 > 0) {
-                    this->unk_162--;
+                if (this->disableCrystalSwitchTimer > 0) {
+                    this->disableCrystalSwitchTimer--;
                 }
             }
-            if (this->unk_162 == 0) {
+            if (this->disableCrystalSwitchTimer == 0) {
                 this->colliderJntSph.base.colType = sJntSphInit.base.colType;
             } else {
                 this->colliderJntSph.base.colType = COLTYPE_NONE;
@@ -962,16 +961,16 @@ void ObjSwitch_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_8093C778(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_DrawFloorSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
     s32 pad[2];
 
-    if (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params) == 0) {
+    if (OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params) == OBJSWITCH_SUBTYPE_ONCE) {
         Gfx* opa;
         OPEN_DISPS(globalCtx->state.gfxCtx);
         opa = POLY_OPA_DISP;
         gSPDisplayList(opa++, &sSetupDL[6 * 25]);
         gSPMatrix(opa++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(opa++, 0, 0x80, this->unk_16C, this->unk_16D, this->unk_16E, 255);
+        gDPSetPrimColor(opa++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
         gSPDisplayList(opa++, D_0501B508);
         POLY_OPA_DISP = opa;
         CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -980,11 +979,11 @@ void func_8093C778(ObjSwitch* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_8093C888(ObjSwitch* thisx, GlobalContext* globalCtx) {
+void ObjSwitch_DrawRustyFloorSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
     func_800BDFC0(globalCtx, D_05007E00);
 }
 
-void func_8093C8B8(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_DrawVisibleEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 subType = OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params);
 
@@ -992,13 +991,13 @@ void func_8093C8B8(ObjSwitch* this, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPSegment(POLY_OPA_DISP++, 0x08, D_8093CC60[subType][this->unk_164]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, sEyeSwitchTextures[subType][this->eyeTexIndex]);
     gSPDisplayList(POLY_OPA_DISP++, D_8093CE40[subType]);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_8093C99C(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_DrawInvisibleEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 subType = OBJ_SWITCH_GET_SUBTYPE(this->dyna.actor.params);
 
@@ -1006,33 +1005,33 @@ void func_8093C99C(ObjSwitch* this, GlobalContext* globalCtx) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPSegment(POLY_XLU_DISP++, 0x08, D_8093CC60[subType][this->unk_164]);
+    gSPSegment(POLY_XLU_DISP++, 0x08, sEyeSwitchTextures[subType][this->eyeTexIndex]);
     gSPDisplayList(POLY_XLU_DISP++, D_8093CE40[subType]);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_8093CA80(ObjSwitch* this, GlobalContext* globalCtx) {
-    if (OBJ_SWITCH_IS_3(this->dyna.actor.params)) {
-        func_8093C99C(this, globalCtx);
+void ObjSwitch_DrawEyeSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
+    if (OBJ_SWITCH_IS_INVISIBLE(this->dyna.actor.params)) {
+        ObjSwitch_DrawInvisibleEyeSwitch(this, globalCtx);
     } else {
-        func_8093C8B8(this, globalCtx);
+        ObjSwitch_DrawVisibleEyeSwitch(this, globalCtx);
     }
 }
 
-void func_8093CAC4(ObjSwitch* this, GlobalContext* globalCtx) {
+void ObjSwitch_DrawCrystalSwitch(ObjSwitch* this, GlobalContext* globalCtx) {
     s32 pad[2];
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_800B8118(&this->dyna.actor, globalCtx, 0);
-    AnimatedMat_DrawStep(globalCtx, sAnimatedMat, this->unk_168);
+    AnimatedMat_DrawStep(globalCtx, sAnimatedMat, this->crystalAnimTimer);
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_0501C058);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, this->unk_16C, this->unk_16D, this->unk_16E, 255);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
     gSPDisplayList(POLY_OPA_DISP++, D_0501BEE0);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_0501BFB8);
@@ -1041,8 +1040,10 @@ void func_8093CAC4(ObjSwitch* this, GlobalContext* globalCtx) {
 }
 
 void ObjSwitch_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static ObjSwitchDrawFunc drawFunc[] = { func_8093C778, func_8093C888, func_8093CA80,
-                                            func_8093CAC4, func_8093CAC4, func_8093C778 };
+    static ObjSwitchDrawFunc drawFunc[] = {
+        ObjSwitch_DrawFloorSwitch,   ObjSwitch_DrawRustyFloorSwitch, ObjSwitch_DrawEyeSwitch,
+        ObjSwitch_DrawCrystalSwitch, ObjSwitch_DrawCrystalSwitch,    ObjSwitch_DrawFloorSwitch,
+    };
     ObjSwitch* this = (ObjSwitch*)thisx;
 
     drawFunc[OBJ_SWITCH_GET_TYPE(this->dyna.actor.params)](this, globalCtx);
