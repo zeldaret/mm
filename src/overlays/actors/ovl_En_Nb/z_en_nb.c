@@ -125,6 +125,7 @@ void func_80BBFE60(EnNb* this) {
     SkelAnime_Update(&this->skelAnime);
 }
 
+// EnNb_ChangeAnim
 s32 func_80BBFE8C(EnNb* this, s32 arg1) {
     s32 phi_v1 = false;
     s32 phi_t0 = 0;
@@ -254,7 +255,7 @@ s32 func_80BC01DC(EnNb* this, GlobalContext* globalCtx) {
             break;
 
         case 0x2:
-            gGameInfo->data[0x224] = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->unk_286) / 20.0f) * 255.0f));
+            MREG(68) = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->unk_286) / 20.0f) * 255.0f));
 
             if (this->unk_286 == 0x14) {
                 if ((gSaveContext.eventInf[4] & 4) != 0) {
@@ -263,7 +264,7 @@ s32 func_80BC01DC(EnNb* this, GlobalContext* globalCtx) {
                     globalCtx->interfaceCtx.unk_31B = 1;
                 }
                 globalCtx->interfaceCtx.unk_31A = 6;
-                gGameInfo->data[0x59B] = 0xFF;
+                XREG(91) = 0xFF;
             }
 
             if (DECR(this->unk_286) == 0) {
@@ -556,7 +557,7 @@ void func_80BC0D84(EnNb* this, GlobalContext* globalCtx) {
     s32 pad;
     struct_80133038_arg2 sp20;
 
-    this->unk_280 = gGameInfo->data[0xF] + ((void)0, gSaveContext.unk_14);
+    this->unk_280 = REG(15) + ((void)0, gSaveContext.unk_14);
 
     if (gSaveContext.eventInf[4] & 8) {
         sp20.unk0 = 1;
@@ -612,7 +613,7 @@ void EnNb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_262 = 0;
 
     if (gSaveContext.eventInf[4] & 8) {
-        func_8013AED4(&this->unk_262, 4, 7);
+        func_8013AED4(&this->unk_262, 4, 1 | 2 | 4);
     } else {
         gSaveContext.eventInf[4] &= 0xFB;
         gSaveContext.eventInf[4] &= 0xF7;
@@ -646,16 +647,15 @@ void EnNb_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-// OverrideLimbDraw
-s32 func_80BC1174(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnNb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 5) {
         func_80BC05A8((EnNb*)thisx, globalCtx);
     }
-    return 0;
+
+    return false;
 }
 
-// PostLimbDraw
-void func_80BC11B4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnNb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnNb* this = THIS;
     Vec3f sp18;
 
@@ -668,8 +668,7 @@ void func_80BC11B4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-// UnkActorDraw
-void func_80BC1278(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnNb* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
@@ -706,6 +705,6 @@ void EnNb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_1DC != 0) {
         func_8012C5B0(globalCtx->state.gfxCtx);
         func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      func_80BC1174, func_80BC11B4, func_80BC1278, &this->actor);
+                      EnNb_OverrideLimbDraw, EnNb_PostLimbDraw, EnNb_UnkActorDraw, &this->actor);
     }
 }
