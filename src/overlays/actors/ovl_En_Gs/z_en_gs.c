@@ -396,8 +396,7 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
         gossipStone = NULL;
 
         do {
-            gossipStone =
-                (EnGs*)SubS_ActorFind(globalCtx, &gossipStone->actor, ACTORCAT_PROP, ACTOR_EN_GS);
+            gossipStone = (EnGs*)SubS_ActorFind(globalCtx, &gossipStone->actor, ACTORCAT_PROP, ACTOR_EN_GS);
             if (gossipStone != NULL) {
                 if ((gossipStone != this) && (gossipStone->actor.params == ENGS_2) &&
                     (gossipStone->unk_198 == this->unk_198)) {
