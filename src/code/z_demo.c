@@ -122,8 +122,6 @@ void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Command 0x96: Misc. Actions
 void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase* cmd) {
     static u16 D_801BB15C = 0xFFFF;
     Player* player = GET_PLAYER(globalCtx2);
@@ -327,8 +325,9 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
 
                 if (REG(15) != 0) {
                     time = gSaveContext.time;
-                    gSaveContext.time = time + REG(15);
-                    gSaveContext.time += (u16)gSaveContext.unk_14;
+                    gSaveContext.time = (u16)REG(15) + time;
+                    time = gSaveContext.time;
+                    gSaveContext.time = (u16)gSaveContext.unk_14 + time;
                 }
             }
             break;
@@ -363,11 +362,6 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
     }
 }
-#else
-static u16 D_801BB15C = 0xFFFF;
-void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase* cmd);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_Command_Misc.s")
-#endif
 
 // Command 0x97: Set Environment Lighting
 void Cutscene_Command_SetLighting(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdEnvLighting* cmd) {
