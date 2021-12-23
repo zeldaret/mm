@@ -10,7 +10,7 @@ NON_MATCHING ?= 0
 ORIG_COMPILER ?= 0
 # Keep .mdebug section in build
 KEEP_MDEBUG ?= 0
-# Disassembles the full ROM instead of a subset
+# Disassembles all asm from the ROM instead of skipping files which are entirely in C
 FULL_DISASM ?= 0
 
 ifeq ($(NON_MATCHING),1)

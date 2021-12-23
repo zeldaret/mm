@@ -5,7 +5,6 @@ import bisect
 from mips_isa import *
 from multiprocessing import Pool, Manager
 from pathlib import Path
-import copy
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -46,7 +45,7 @@ def discard_decomped_files(files_spec):
                 break
             i += 1
 
-        # For every fil;e within this segment, look through the seg for lines with this file's name
+        # For every file within this segment, look through the seg for lines with this file's name
         # if found, check whether it's still in build/asm/ or build/data/, in which case it's not decomped
         # if all references to it are in build/src/ then it should be ok to skip, some code/boot files are a bit different
 
@@ -58,7 +57,7 @@ def discard_decomped_files(files_spec):
             if file == "[PADDING]":
                 continue
 
-            # why are these not named?
+            # some files aren't named
             if file == "":
                 file = f"{type}_{offset:08X}"
                 include = True
@@ -82,7 +81,7 @@ def discard_decomped_files(files_spec):
                     # In that case it will be inside build/src/ and pragma in the asm
                     # For these files, open the source and look for the pragmas to be sure
                     # Overlays always have at least a data section we can check in the spec, so it's not needed for them
-                    if type != "overlay":
+                    if type != "overlay" and last_line != "":
                         assert last_line.count(".") == 1
                         last_line = (
                             last_line.strip()
@@ -200,7 +199,7 @@ multiply_referenced_rodata = set()
 files = set()  # vram start of file
 
 vrom_variables = list()  # (name,addr)
-vrom_addrs = set()     # set of addrs from vrom_variables, for faster lookup
+vrom_addrs = set()  # set of addrs from vrom_variables, for faster lookup
 
 functions_ast = None
 variables_ast = None
@@ -252,7 +251,7 @@ def proper_name(symbol, in_data=False, is_symbol=True):
     if is_symbol:
         symbol_index = bisect.bisect(variable_addrs, symbol)
         if symbol_index:
-            vram_addr = variable_addrs[symbol_index-1]
+            vram_addr = variable_addrs[symbol_index - 1]
             symbol_name, _, _, symbol_size = variables_ast[vram_addr]
 
             if vram_addr < symbol < vram_addr + symbol_size:
