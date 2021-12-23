@@ -13,7 +13,7 @@ typedef struct EnAm {
     /* 0x0188 */ Vec3s jointTable[14];
     /* 0x01DC */ Vec3s morphTable[14];
     /* 0x0230 */ EnAmActionFunc actionFunc;
-    /* 0x0234 */ u8 unk_234;
+    /* 0x0234 */ u8 textureBlend; // 0 = statue textures; 255 = enemy textures
     /* 0x0235 */ s8 unk_235;
     /* 0x0236 */ s16 unk_236;
     /* 0x0238 */ s16 returnHomeTimer;

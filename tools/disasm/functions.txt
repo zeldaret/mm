@@ -5873,7 +5873,7 @@
     0x808AF8F8:("EnBombf_Draw",),
     0x808AFCD0:("EnAm_Init",),
     0x808AFDF8:("EnAm_Destroy",),
-    0x808AFE38:("func_808AFE38",),
+    0x808AFE38:("EnAm_SpawnEffects",),
     0x808AFF9C:("func_808AFF9C",),
     0x808B0040:("func_808B0040",),
     0x808B00D8:("func_808B00D8",),
