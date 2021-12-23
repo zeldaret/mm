@@ -1,0 +1,6 @@
+﻿<Root>
+    <File Name="object_dor03" Segment="6">
+        <DList Name="object_dor03_DL_0003C0" Offset="0x3C0" />
+        <Texture Name="object_dor03_Tex_0004D0" OutName="tex_0004D0" Format="rgba16" Width="32" Height="64" Offset="0x4D0" />
+    </File>
+</Root>

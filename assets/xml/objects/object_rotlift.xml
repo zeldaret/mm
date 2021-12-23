@@ -1,0 +1,16 @@
+﻿<Root>
+    <File Name="object_rotlift" Segment="6">
+        <DList Name="object_rotlift_DL_000400" Offset="0x400" />
+        <Texture Name="object_rotlift_TLUT_000590" OutName="tlut_000590" Format="rgba16" Width="16" Height="16" Offset="0x590" />
+        <Texture Name="object_rotlift_Tex_000790" OutName="tex_000790" Format="ci8" Width="32" Height="64" Offset="0x790" />
+        <Texture Name="object_rotlift_Tex_000F90" OutName="tex_000F90" Format="rgba16" Width="32" Height="64" Offset="0xF90" />
+        <TextureAnimation Name="object_rotlift_Matanimheader_001F98" Offset="0x1F98" />
+        <Collision Name="object_rotlift_Colheader_002190" Offset="0x2190" />
+        <DList Name="object_rotlift_DL_002CE0" Offset="0x2CE0" />
+        <Texture Name="object_rotlift_TLUT_002FF8" OutName="tlut_002FF8" Format="rgba16" Width="16" Height="16" Offset="0x2FF8" />
+        <Texture Name="object_rotlift_Tex_0031F8" OutName="tex_0031F8" Format="ci8" Width="32" Height="64" Offset="0x31F8" />
+        <Texture Name="object_rotlift_Tex_0039F8" OutName="tex_0039F8" Format="rgba16" Width="32" Height="64" Offset="0x39F8" />
+        <TextureAnimation Name="object_rotlift_Matanimheader_004A08" Offset="0x4A08" />
+        <Collision Name="object_rotlift_Colheader_004DF0" Offset="0x4DF0" />
+    </File>
+</Root>

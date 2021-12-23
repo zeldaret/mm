@@ -10,7 +10,7 @@ typedef void (*EnBba01ActionFunc)(struct EnBba01*, GlobalContext*);
 typedef struct EnBba01 {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ EnBba01ActionFunc actionFunc;
-    /* 0x0148 */ char unk_144[0x4D4];
+    /* 0x0148 */ char unk_148[0x4D4];
 } EnBba01; // size = 0x61C
 
 extern const ActorInit En_Bba_01_InitVars;
