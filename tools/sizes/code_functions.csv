@@ -1919,7 +1919,7 @@ asm/non_matchings/code/z_room/Room_StartRoomTransition.s,Room_StartRoomTransitio
 asm/non_matchings/code/z_room/Room_HandleLoadCallbacks.s,Room_HandleLoadCallbacks,0x8012EAA8,0x40
 asm/non_matchings/code/z_room/Room_Draw.s,Room_Draw,0x8012EBA8,0x14
 asm/non_matchings/code/z_room/func_8012EBF8.s,func_8012EBF8,0x8012EBF8,0x22
-asm/non_matchings/code/code_8012EC80/Inventory_GetSlotBEquip.s,Inventory_GetSlotBEquip,0x8012EC80,0x2D
+asm/non_matchings/code/code_8012EC80/Inventory_GetBtnBItem.s,Inventory_GetBtnBItem,0x8012EC80,0x2D
 asm/non_matchings/code/code_8012EC80/Inventory_ChangeEquipment.s,Inventory_ChangeEquipment,0x8012ED34,0x11
 asm/non_matchings/code/code_8012EC80/Inventory_DeleteEquipment.s,Inventory_DeleteEquipment,0x8012ED78,0x1C
 asm/non_matchings/code/code_8012EC80/Inventory_ChangeUpgrade.s,Inventory_ChangeUpgrade,0x8012EDE8,0x13

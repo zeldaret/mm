@@ -2363,7 +2363,7 @@ s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32
 s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx);
 void Room_Draw(GlobalContext* globalCtx, Room* room, u32 flags);
 void func_8012EBF8(GlobalContext* globalCtx, RoomContext* roomCtx);
-s32 Inventory_GetSlotBEquip(GlobalContext* globalCtx);
+s32 Inventory_GetBtnBItem(GlobalContext* globalCtx);
 void Inventory_ChangeEquipment(s16 equipment);
 u8 Inventory_DeleteEquipment(GlobalContext* globalCtx, s16 equipment);
 void Inventory_ChangeUpgrade(s16 upgrade, u32 value);

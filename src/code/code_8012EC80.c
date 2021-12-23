@@ -413,7 +413,7 @@ u16 gScenesPerRegion[11][27] = {
     },
 };
 
-s32 Inventory_GetSlotBEquip(GlobalContext* globalCtx) {
+s32 Inventory_GetBtnBItem(GlobalContext* globalCtx) {
     if (gSaveContext.buttonStatus[0] == BTN_DISABLED) {
         return ITEM_NONE;
     } else if (gSaveContext.unk_1015 == ITEM_NONE) {
@@ -434,7 +434,7 @@ s32 Inventory_GetSlotBEquip(GlobalContext* globalCtx) {
  * Only changes shield
  */
 void Inventory_ChangeEquipment(s16 value) {
-    TAKE_EQUIPPED_ITEM(EQUIP_SHIELD, value);
+    SET_EQUIP_VALUE(EQUIP_SHIELD, value);
 }
 
 /**
@@ -444,7 +444,7 @@ u8 Inventory_DeleteEquipment(GlobalContext* globalCtx, s16 equipment) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD) != 0) {
-        TAKE_EQUIPPED_ITEM(EQUIP_SHIELD, 0);
+        SET_EQUIP_VALUE(EQUIP_SHIELD, 0);
         Player_SetEquipmentData(globalCtx, player);
         return true;
     }
@@ -461,26 +461,31 @@ void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
     gSaveContext.inventory.upgrades = upgrades;
 }
 
-s32 Inventory_IsMapVisible(s16 arg0) {
-    s16 num = 0;
+s32 Inventory_IsMapVisible(s16 sceneNum) {
+    s16 sceneFlagIndex = 0;
 
-    if (arg0 >= 0x20) {
-        if (arg0 < 0x40) {
-            num = 1;
-        } else if (arg0 < 0x60) {
-            num = 2;
-        } else if (arg0 < 0x80) {
-            num = 3;
-        } else if (arg0 < 0xA0) {
-            num = 4;
-        } else if (arg0 < 0xC0) {
-            num = 5;
-        } else if (arg0 < 0xE0) {
-            num = 6;
+    /**
+     * a single roomInf flag can only hold 32 bits. So for every 32 scenes in the scene enum,
+     * increment to the next roomInf flag so that every seen gets a unique flag in roomInf[5]
+     * 224 bits were allocated to this although there are only 112 scenes
+     */
+    if (sceneNum >= 0x20) {
+        if (sceneNum < 0x40) {
+            sceneFlagIndex = 1;
+        } else if (sceneNum < 0x60) {
+            sceneFlagIndex = 2;
+        } else if (sceneNum < 0x80) {
+            sceneFlagIndex = 3;
+        } else if (sceneNum < 0xA0) {
+            sceneFlagIndex = 4;
+        } else if (sceneNum < 0xC0) {
+            sceneFlagIndex = 5;
+        } else if (sceneNum < 0xE0) {
+            sceneFlagIndex = 6;
         }
     }
 
-    if (gSaveContext.roomInf[5][num] & gBitFlags[arg0 - (num << 5)]) {
+    if (gSaveContext.roomInf[5][sceneFlagIndex] & gBitFlags[sceneNum - (sceneFlagIndex << 5)]) {
         return true;
     }
 
@@ -569,6 +574,11 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
                 break;
             }
 
+            /**
+             * a single roomInf flag can only hold 32 bits. So for every 32 scenes in the scene enum,
+             * increment to the next roomInf flag so that every seen gets a unique flag in roomInf[5]
+             * 224 bits were allocated to this although there are only 112 scenes
+             */
             if (((s16)(*tingleMapSceneIndices)[i]) < 0x20) {
                 sceneFlagIndex = 0;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x40) {
@@ -576,20 +586,15 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x60) {
                 sceneFlagIndex = 2;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x80) {
-                // remaining scenes (max scene number is 0x70)
                 sceneFlagIndex = 3;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xA0) {
-                // never taken
                 sceneFlagIndex = 4;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xC0) {
-                // never taken
                 sceneFlagIndex = 5;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xE0) {
-                // never taken
                 sceneFlagIndex = 6;
             }
 
-            // Required to match
             gSaveContext.roomInf[5][sceneFlagIndex] =
                 gSaveContext.roomInf[5][sceneFlagIndex] |
                 gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (sceneFlagIndex << 5)];

@@ -2405,7 +2405,7 @@
     0x8012EAA8:("Room_HandleLoadCallbacks",),
     0x8012EBA8:("Room_Draw",),
     0x8012EBF8:("func_8012EBF8",),
-    0x8012EC80:("Inventory_GetSlotBEquip",),
+    0x8012EC80:("Inventory_GetBtnBItem",),
     0x8012ED34:("Inventory_ChangeEquipment",),
     0x8012ED78:("Inventory_DeleteEquipment",),
     0x8012EDE8:("Inventory_ChangeUpgrade",),

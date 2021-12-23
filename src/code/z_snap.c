@@ -96,10 +96,10 @@ u32 func_8013A4C4(s32 flag) {
     SaveContext* saveCtx = &gSaveContext;
 
     if (flag < 0x20) {
-        return saveCtx->permanentSceneFlags[123].clearedRoom & (1 << flag);
+        return saveCtx->roomInf[3][3] & (1 << flag);
     } else {
         flag &= 0x1F;
-        return saveCtx->permanentSceneFlags[123].collectible & (1 << flag);
+        return saveCtx->roomInf[3][4] & (1 << flag);
     }
 }
 
