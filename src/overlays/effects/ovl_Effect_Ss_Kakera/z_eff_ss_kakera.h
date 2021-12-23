@@ -12,6 +12,11 @@ typedef enum {
 } KakeraColorIndex;
 
 typedef struct {
+    /* 0x0 */ u8 lod;
+    /* 0x1 */ Color_RGB8 color;
+} KakeraColorStruct; // size = 0x4
+
+typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;
     /* 0x18 */ Vec3f unk_18;
@@ -29,6 +34,5 @@ typedef struct {
     /* 0x3C */ Gfx* dList;
 } EffectSsKakeraInitParams; // size = 0x40
 
-extern const EffectSsInit Effect_Ss_Kakera_InitVars;
 
 #endif

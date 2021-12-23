@@ -115,8 +115,8 @@ void BgIkninSusceil_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600CBAC);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_0600CBAC);
     this->animatedTexture = Lib_SegmentedToVirtual(&D_0600C670);
     func_80C0AC74(this);
 }
@@ -124,7 +124,7 @@ void BgIkninSusceil_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgIkninSusceil_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80C0AB14(BgIkninSusceil* this) {

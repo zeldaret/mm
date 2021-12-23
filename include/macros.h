@@ -5,6 +5,12 @@
 #include "convert.h"
 #include "z64.h"
 
+#define SCREEN_WIDTH  320
+#define SCREEN_HEIGHT 240
+
+#define SCREEN_WIDTH_HIGH_RES  576
+#define SCREEN_HEIGHT_HIGH_RES 454
+
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
@@ -124,7 +130,7 @@ extern GraphicsContext* __gfxCtx;
 #define SQ(x) ((x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
 #define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
-#define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
+#define DECR(x) ((x) == 0 ? 0 : --(x))
 
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : (x) > (max) ? (max) : (x))
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
