@@ -9,9 +9,9 @@ typedef void (*BgCtowerRotActionFunc)(struct BgCtowerRot*, GlobalContext*);
 
 typedef enum {
     /* 0 */ CORRIDOR,
-    /* 1 */ MAIN_DOOR, // Main door controls cutscene flow (updating Link fields and playing sounds). It is the one on
-                       // the left when entering from the Lost Woods
-    /* 2 */ DOOR,
+    /* 1 */ STONE_DOOR_MAIN, // Main door controls cutscene flow (updating Link fields and playing sounds). 
+                            // It is the one on the left when entering from the Lost Woods
+    /* 2 */ STONE_DOOR,
 } BgCtowerRotType;
 
 typedef struct BgCtowerRot {

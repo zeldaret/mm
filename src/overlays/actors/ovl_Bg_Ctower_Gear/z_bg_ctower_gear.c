@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_ctower_gear.h"
+#include "objects/object_ctower_rot/object_ctower_rot.h"
 
 #define FLAGS 0x00000010
 
@@ -29,14 +30,6 @@ const ActorInit Bg_Ctower_Gear_InitVars = {
     (ActorFunc)BgCtowerGear_Update,
     (ActorFunc)BgCtowerGear_Draw,
 };
-
-extern Gfx D_06010828[];
-extern Gfx D_06015F30[];
-extern Gfx D_060160A0[];
-extern CollisionHeader D_06016E70;
-extern Gfx D_06017018[];
-extern Gfx D_06018118[];
-extern CollisionHeader D_06018588;
 
 static Vec3f sExitSplashOffsets[] = {
     { -70.0f, -60.0f, 8.0f },
@@ -70,12 +63,12 @@ static InitChainEntry sInitChainOrgan[] = {
 };
 
 void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
-    int i;
+    s32 i;
     s32 flag40 = this->dyna.actor.flags & 0x40;
     Vec3f splashSpawnPos;
     Vec3f splashOffset;
     s32 pad;
-    int j;
+    s32 j;
     s16 rotZ = this->dyna.actor.shape.rot.z & 0x1FFF;
 
     if (flag40 && (rotZ < 0x1B58) && (rotZ >= 0x1388)) {
@@ -133,10 +126,10 @@ void BgCtowerGear_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     if (type == BGCTOWERGEAR_WATER_WHEEL) {
         DynaPolyActor_Init(&this->dyna, 3);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06018588);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClockTowerWaterWheelCol);
     } else if (type == BGCTOWERGEAR_ORGAN) {
         DynaPolyActor_Init(&this->dyna, 0);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06016E70);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClockTowerOrganCol);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -186,7 +179,7 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgCtowerGear_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Gfx* sDLists[] = { D_06010828, D_06017018, D_06018118 };
+    static Gfx* sDLists[] = { gClockTowerCeilingCogDL, gClockTowerCenterCogDL, gClockTowerWaterWheelDL };
 
     func_800BDFC0(globalCtx, sDLists[BGCTOWERGEAR_GET_TYPE(thisx)]);
 }
@@ -195,9 +188,9 @@ void BgCtowerGear_DrawOrgan(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_060160A0);
+    gSPDisplayList(POLY_OPA_DISP++, gClockTowerOrganDL);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06015F30);
+    gSPDisplayList(POLY_XLU_DISP++, gClockTowerOrganPipesDL);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

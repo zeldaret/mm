@@ -1,10 +1,11 @@
 /*
  * File: z_bg_ctower_rot.c
  * Overlay: ovl_Bg_CtowerRot
- * Description: Twisting path along with the Doors to Clock Tower
+ * Description: Twisting path along with the Stone Doors to Clock Tower
  */
 
 #include "z_bg_ctower_rot.h"
+#include "objects/object_ctower_rot/object_ctower_rot.h"
 
 #define FLAGS 0x00000030
 
@@ -32,14 +33,6 @@ const ActorInit Bg_Ctower_Rot_InitVars = {
     (ActorFunc)BgCtowerRot_Draw,
 };
 
-extern Gfx D_060129D0[];
-extern Gfx D_06012DA0[];
-extern CollisionHeader D_060142E8;
-extern Gfx D_06017220[];
-extern CollisionHeader D_06017410;
-extern Gfx D_060174E0[];
-extern CollisionHeader D_06017650;
-
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
@@ -53,17 +46,17 @@ void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
     if (this->dyna.actor.params == CORRIDOR) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060142E8);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClockTowerCorridorCol);
         this->actionFunc = BgCtowerRot_CorridorRotate;
         return;
     }
 
     player = GET_PLAYER(globalCtx);
-    if (this->dyna.actor.params == MAIN_DOOR) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06017410);
+    if (this->dyna.actor.params == STONE_DOOR_MAIN) {
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClockTowerStoneDoorMainCol);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y + 0x4000;
     } else {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06017650);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClockTowerStoneDoorCol);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y - 0x4000;
     }
     Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
@@ -87,15 +80,13 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f offset;
     f32 rotZ;
-    f32 offsetDiffZ;
     f32 rotZtmp;
 
     Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
     if (offset.z > 1100.0f) {
         rotZ = 0.0f;
     } else {
-        offsetDiffZ = 1100.0f - offset.z;
-        rotZtmp = (offsetDiffZ > 1000.0f) ? 1000.0f : offsetDiffZ;
+        rotZtmp = CLAMP_MAX(1100.0f - offset.z, 1000.0f);
         rotZ = rotZtmp;
     }
     func_800DFAC8(globalCtx->cameraPtrs[MAIN_CAM], 17);
@@ -110,12 +101,12 @@ void BgCtowerRot_DoorDoNothing(BgCtowerRot* this, GlobalContext* globalCtx) {
 
 void BgCtowerRot_DoorClose(BgCtowerRot* this, GlobalContext* globalCtx) {
     if (!Math_SmoothStepToF(&this->timer, 0.0f, 0.1f, 15.0f, 0.1f)) {
-        if (this->dyna.actor.params == MAIN_DOOR) {
+        if (this->dyna.actor.params == STONE_DOOR_MAIN) {
             Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
         this->actionFunc = BgCtowerRot_DoorDoNothing;
-    } else if (this->dyna.actor.params == MAIN_DOOR) {
+    } else if (this->dyna.actor.params == STONE_DOOR_MAIN) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_STONE_STATUE_OPEN - SFX_FLAG);
     }
     this->dyna.actor.world.pos.x =
@@ -138,7 +129,7 @@ void BgCtowerRot_DoorIdle(BgCtowerRot* this, GlobalContext* globalCtx) {
 
 void BgCtowerRot_SetupDoorClose(BgCtowerRot* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        if (this->dyna.actor.params == MAIN_DOOR) {
+        if (this->dyna.actor.params == STONE_DOOR_MAIN) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         }
         this->actionFunc = BgCtowerRot_DoorClose;
@@ -154,11 +145,11 @@ void BgCtowerRot_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgCtowerRot_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Gfx* sDLists[] = { D_06012DA0, D_06017220, D_060174E0 };
+    static Gfx* sDLists[] = { gClockTowerCorridorDL, gClockTowerStoneDoorMainDL, gClockTowerStoneDoorDL };
     BgCtowerRot* this = THIS;
 
     func_800BDFC0(globalCtx, sDLists[this->dyna.actor.params]);
     if (this->dyna.actor.params == CORRIDOR) {
-        func_800BE03C(globalCtx, D_060129D0);
+        func_800BE03C(globalCtx, gClockTowerCorridorFoliageDL);
     }
 }
