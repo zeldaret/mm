@@ -167,32 +167,33 @@ ObjIcePoly* EnKgy_FindIceBlock(GlobalContext* globalCtx) {
 }
 
 void func_80B40C74(GlobalContext* globalCtx) {
-    gSaveContext.save.roomInf[globalCtx->sceneNum][5] |= 1;
+    gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 |= 1;
     if (CURRENT_DAY == 1) {
-        gSaveContext.save.roomInf[globalCtx->sceneNum][5] |= 2;
+        gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 |= 2;
     } else {
-        gSaveContext.save.roomInf[globalCtx->sceneNum][5] &= ~2;
+        gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 &= ~2;
     }
 }
 
 void func_80B40D00(GlobalContext* globalCtx) {
-    gSaveContext.save.roomInf[globalCtx->sceneNum][5] |= 4;
+    gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 |= 4;
 }
 
 void func_80B40D30(GlobalContext* globalCtx) {
-    gSaveContext.save.roomInf[globalCtx->sceneNum][5] &= ~7;
+    gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 &= ~7;
 }
 
 s32 func_80B40D64(GlobalContext* globalCtx) {
-    return gSaveContext.save.roomInf[globalCtx->sceneNum][5] & 1;
+    return gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 1;
 }
 
 s32 func_80B40D8C(GlobalContext* globalCtx) {
-    return gSaveContext.save.roomInf[globalCtx->sceneNum][5] & 4;
+    return gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 4;
 }
 
 s32 func_80B40DB4(GlobalContext* globalCtx) {
-    if ((CURRENT_DAY == 3) || ((CURRENT_DAY == 2) && (gSaveContext.save.roomInf[globalCtx->sceneNum][5] & 2))) {
+    if ((CURRENT_DAY == 3) ||
+        ((CURRENT_DAY == 2) && (gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 2))) {
         return true;
     }
     return false;

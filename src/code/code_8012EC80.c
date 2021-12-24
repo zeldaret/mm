@@ -457,7 +457,7 @@ s32 func_8012EE34(s16 arg0) {
         }
     }
 
-    if (gSaveContext.save.roomInf[125][num] & gBitFlags[arg0 - (num << 5)]) {
+    if (gSaveContext.save.scenesVisible[num] & gBitFlags[arg0 - (num << 5)]) {
         return 1;
     }
 
@@ -503,8 +503,8 @@ void func_8012EF0C(s16 arg0) {
             }
 
             // Required to match
-            gSaveContext.save.roomInf[125][phi_v1] =
-                gSaveContext.save.roomInf[125][phi_v1] | gBitFlags[(s16)(*new_var)[phi_v0] - (phi_v1 << 5)];
+            gSaveContext.save.scenesVisible[phi_v1] =
+                gSaveContext.save.scenesVisible[phi_v1] | gBitFlags[(s16)(*new_var)[phi_v0] - (phi_v1 << 5)];
             phi_v0++;
         }
 
@@ -533,11 +533,11 @@ void func_8012F0EC(s16 arg0);
 // regalloc
 void func_8012F1BC(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
-        gSaveContext.save.roomInf[126][0] = ((((gSaveContext.save.roomInf[126][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
-                                            (gSaveContext.save.roomInf[126][0] & 0xFFFF);
+        gSaveContext.save.skullTokenCount = ((((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
+                                            (gSaveContext.save.skullTokenCount & 0xFFFF);
     } else {
-        gSaveContext.save.roomInf[126][0] =
-            ((gSaveContext.save.roomInf[126][0] + 1) & 0xFFFF) | (gSaveContext.save.roomInf[126][0] & 0xFFFF0000);
+        gSaveContext.save.skullTokenCount =
+            ((gSaveContext.save.skullTokenCount + 1) & 0xFFFF) | (gSaveContext.save.skullTokenCount & 0xFFFF0000);
     }
 }
 #else
@@ -547,9 +547,9 @@ void func_8012F1BC(s16 arg0);
 
 s16 func_8012F22C(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
-        return (gSaveContext.save.roomInf[126][0] & 0xFFFF0000) >> 0x10;
+        return (gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10;
     } else {
-        return gSaveContext.save.roomInf[126][0] & 0xFFFF;
+        return gSaveContext.save.skullTokenCount & 0xFFFF;
     }
 }
 
