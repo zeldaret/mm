@@ -21,7 +21,7 @@ typedef struct {
     /* 0x5A */ s8 dungeonKeys[10];
     /* 0x64 */ s8 strayFairies[10]; // original name: orange_fairy
     /* 0x6E */ char unk_6E[3][8];   // Stores playerName (8 char) over (3 days) original name: degnuts_memory_name
-} Inventory;                        // size = 0x88
+} Inventory; // size = 0x88 
 
 typedef struct {
     /* 0x00 */ s16 scene;
