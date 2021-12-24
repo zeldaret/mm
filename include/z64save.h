@@ -15,13 +15,13 @@ typedef struct {
     /* 0x00 */ u8 items[24];
     /* 0x18 */ u8 masks[24];
     /* 0x30 */ s8 ammo[24];
-    /* 0x48 */ u32 upgrades;                     // some bits are wallet upgrades
+    /* 0x48 */ u32 upgrades;        // some bits are wallet upgrades
     /* 0x4C */ u32 questItems;
     /* 0x50 */ u8 dungeonItems[10];
     /* 0x5A */ s8 dungeonKeys[10];
-    /* 0x64 */ s8 strayFairies[10];              // original name: orange_fairy
-    /* 0x6E */ u8 unk_6E[8][3];                  // original name: degnuts_memory_name
-} Inventory; // size = 0x88
+    /* 0x64 */ s8 strayFairies[10]; // original name: orange_fairy
+    /* 0x6E */ char unk_6E[3][8];   // Stores playerName (8 char) over (3 days) original name: degnuts_memory_name
+} Inventory;                        // size = 0x88
 
 typedef struct {
     /* 0x00 */ s16 scene;
@@ -40,6 +40,16 @@ typedef struct {
     /* 0x18 */ u32 unk_18;
     /* 0x1C */ u32 tempCollectFlags;
 } RespawnData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ u32 chest;
+    /* 0x04 */ u32 swch0;
+    /* 0x08 */ u32 swch1;
+    /* 0x0C */ u32 clearedRoom;
+    /* 0x10 */ u32 collectible;
+    /* 0x14 */ u32 unk_14;
+    /* 0x18 */ u32 unk_18;
+} PermanentSceneFlags; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ u32 chest;
@@ -98,7 +108,8 @@ typedef struct {
     /* 0x0024 */ SavePlayerData playerData;
     /* 0x004C */ ItemEquips equips;
     /* 0x0070 */ Inventory inventory;
-    /* 0x00F8 */ u32 roomInf[128][7];
+    /* 0x00F8 */ PermanentSceneFlags permanentSceneFlags[120];
+    /* 0x0E18 */ u32 roomInf[8][7];
     /* 0x0EF8 */ u8 weekEventReg[100];           // original name: week_event_reg
     /* 0x0F5C */ u32 mapsVisited;                // original name: area_arrival
     /* 0x0F60 */ u32 mapsVisible;                // original name: cloud_clear
@@ -194,11 +205,22 @@ typedef struct {
     /* 0x3F5C */ s32 unk_3F5C;                   // original name: bet_rupees
     /* 0x3F60 */ u8 screenScaleFlag;             // original name: framescale_flag
     /* 0x3F64 */ f32 screenScale;                // original name: framescale_scale
-    /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120];
+    /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120]; // Scene flags that are temporarily stored over the duration of a single 3-day cycle
     /* 0x48C8 */ u16 unk_48C8;                   // original name: scene_id_mix
     /* 0x48CA */ u8 maskMaskBit[3];              // original name: mask_mask_bit
     /* 0x48CD */ u8 unk_48CD[24];
 } SaveContext; // size = 0x48C8
+
+/**
+ * roomInf Flags:
+ * 
+ * roomInf[3][0-2]; deku playground related (3 entries for the 3 days)
+ * roomInf[3][3]; pictoFlags0
+ * roomInf[3][4]; pictoFlags1
+ * roomInf[5] (all): tingle maps and clouded regions on pause map
+ * roomInf[6][0]; skull token count
+ * roomInf[7][0]; bank rupees
+ */
 
 typedef enum {
     /* 0x00 */ RESPAWN_MODE_VOID_OUT,
