@@ -201,6 +201,7 @@ typedef struct {
 
 /**
  * roomInf Flags:
+ * roomInf[3][0-2]; deku playground (3 entries for the 3 days)
  * roomInf[3][3]; pictoFlags0
  * roomInf[3][4]; pictoFlags1
  * roomInf[5] (all): tingle maps and clouded regions on pause map

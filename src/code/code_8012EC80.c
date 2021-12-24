@@ -623,7 +623,6 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
 
 /**
  * Stores the players filename into unk_6E. Used by Deku Scrub Playground Employee.
- * Likely unused as deku scrub playground does not appear to use player's filename.
  */
 void func_8012F0EC(s16 arg0) {
     s16 i;
