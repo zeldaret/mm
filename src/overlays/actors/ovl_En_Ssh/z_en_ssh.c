@@ -916,7 +916,7 @@ void EnSsh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnSsh_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_80976178[] = { &object_ssh_Tex_001970, &object_ssh_Tex_001DF0, &object_ssh_Tex_0021F0 };
+    static TexturePtr D_80976178[] = { object_ssh_Tex_001970, object_ssh_Tex_001DF0, object_ssh_Tex_0021F0 };
     s32 pad;
     EnSsh* this = THIS;
 
