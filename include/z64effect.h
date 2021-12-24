@@ -83,11 +83,13 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ UNK_TYPE1 pad0[0x184];
-    /* 0x184 */ Color_RGBA8 unk184;
-    /* 0x188 */ Color_RGBA8 unk188;
-    /* 0x18C */ Color_RGBA8 unk18C;
-    /* 0x190 */ Color_RGBA8 unk190;
-    /* 0x194 */ UNK_TYPE1 pad194[0xC];
+    /* 0x184 */ u8 p1StartColor[4];
+    /* 0x188 */ u8 p2StartColor[4];
+    /* 0x18C */ u8 p1EndColor[4];
+    /* 0x190 */ u8 p2EndColor[4];
+    /* 0x194 */ s32 elemDuration;
+    /* 0x198 */ s32 unkFlag;
+    /* 0x19C */ s32 calcMode;
 } EffBlureInit1; // size = 0x1A0
 
 typedef struct {
