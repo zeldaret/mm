@@ -22,9 +22,9 @@ typedef struct Boss04 {
     /* 0x0200 */ s16 unk_200;
     /* 0x0204 */ Boss04ActionFunc actionFunc;
     /* 0x0208 */ ColliderJntSph collider1;
-    /* 0x0228 */ ColliderJntSphElement collider1Elements;
+    /* 0x0228 */ ColliderJntSphElement collider1Elements[1];
     /* 0x0268 */ ColliderJntSph collider2;
-    /* 0x0288 */ ColliderJntSphElement collider2Elements;
+    /* 0x0288 */ ColliderJntSphElement collider2Elements[1];
     /* 0x02C8 */ s16 unk_2C8;
     /* 0x02CC */ f32 unk_2CC;
     /* 0x02D0 */ f32 unk_2D0;

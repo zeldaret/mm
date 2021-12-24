@@ -170,8 +170,8 @@ void Boss04_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk_700 = 1.0f;
     this->unk_6FC = 1.0f;
     this->unk_6F8 = 1.0f;
-    Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &sJntSphInit1, &this->collider1Elements);
-    Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, &this->collider2Elements);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boss04_Skel_0045E8, &object_boss04_Anim_00004C,
                        this->jointTable, this->morphtable, 9);
     spA8.y = this->actor.world.pos.y + 200.0f;
@@ -398,6 +398,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
     if (this->unk_70A != 0) {
         Vec3f sp50;
+
         ShrinkWindow_SetLetterboxTarget(0x1B);
         if (this->unk_748 != 0) {
             this->unk_748--;
@@ -565,8 +566,8 @@ void func_809ED45C(Boss04* this, GlobalContext* globalCtx) {
     ColliderJntSphElement* temp_v0;
     u8 damage;
 
-    if ((this->unk_1FE == 0) && (this->collider1.elements->info.bumperFlags & 2)) {
-        this->collider1.elements->info.bumperFlags &= ~2;
+    if ((this->unk_1FE == 0) && (this->collider1.elements[0].info.bumperFlags & BUMP_HIT)) {
+        this->collider1.elements[0].info.bumperFlags &= ~BUMP_HIT;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
         this->actor.colChkInfo.health = this->actor.colChkInfo.health - damage;
