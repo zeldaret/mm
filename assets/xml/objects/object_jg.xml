@@ -1,29 +1,29 @@
 ﻿<Root>
     <File Name="object_jg" Segment="6">
-        <DList Name="object_jg_DL_003C50" Offset="0x3C50" />
-        <DList Name="object_jg_DL_003DC8" Offset="0x3DC8" />
-        <DList Name="object_jg_DL_004068" Offset="0x4068" />
-        <DList Name="object_jg_DL_004410" Offset="0x4410" />
-        <DList Name="object_jg_DL_004688" Offset="0x4688" />
-        <DList Name="object_jg_DL_004928" Offset="0x4928" />
-        <DList Name="object_jg_DL_004CD0" Offset="0x4CD0" />
-        <DList Name="object_jg_DL_004F50" Offset="0x4F50" />
-        <DList Name="object_jg_DL_005440" Offset="0x5440" />
-        <DList Name="object_jg_DL_0054F0" Offset="0x54F0" />
-        <DList Name="object_jg_DL_0055A8" Offset="0x55A8" />
-        <DList Name="object_jg_DL_005770" Offset="0x5770" />
-        <DList Name="object_jg_DL_005968" Offset="0x5968" />
-        <DList Name="object_jg_DL_005A48" Offset="0x5A48" />
-        <DList Name="object_jg_DL_005B28" Offset="0x5B28" />
-        <DList Name="object_jg_DL_005EE8" Offset="0x5EE8" />
-        <DList Name="object_jg_DL_006018" Offset="0x6018" />
-        <DList Name="object_jg_DL_006130" Offset="0x6130" />
-        <DList Name="object_jg_DL_006378" Offset="0x6378" />
-        <DList Name="object_jg_DL_006678" Offset="0x6678" />
-        <DList Name="object_jg_DL_0067A8" Offset="0x67A8" />
-        <DList Name="object_jg_DL_0068C0" Offset="0x68C0" />
-        <DList Name="object_jg_DL_006B08" Offset="0x6B08" />
-        <DList Name="object_jg_DL_006E08" Offset="0x6E08" />
+        <DList Name="gGoronElderPelvisDL" Offset="0x3C50" />
+        <DList Name="gGoronElderRightShinDL" Offset="0x3DC8" />
+        <DList Name="gGoronElderRightFootDL" Offset="0x4068" />
+        <DList Name="gGoronElderRightThighDL" Offset="0x4410" />
+        <DList Name="gGoronElderLeftShinDL" Offset="0x4688" />
+        <DList Name="gGoronElderLeftFootDL" Offset="0x4928" />
+        <DList Name="gGoronElderLeftThighDL" Offset="0x4CD0" />
+        <DList Name="gGoronElderHeadDL" Offset="0x4F50" />
+        <DList Name="gGoronElderLowerBeardDL" Offset="0x5440" />
+        <DList Name="gGoronElderUpperBeardDL" Offset="0x54F0" />
+        <DList Name="gGoronElderLowerLipDL" Offset="0x55A8" />
+        <DList Name="gGoronElderHairBackDL" Offset="0x5770" />
+        <DList Name="gGoronElderRightHairEndDL" Offset="0x5968" />
+        <DList Name="gGoronElderLeftHairEndDL" Offset="0x5A48" />
+        <DList Name="gGoronElderUpperBackDL" Offset="0x5B28" />
+        <DList Name="gGoronElderRightForearmDL" Offset="0x5EE8" />
+        <DList Name="gGoronElderRightFingersDL" Offset="0x6018" />
+        <DList Name="gGoronElderRightHandAndThumbDL" Offset="0x6130" />
+        <DList Name="gGoronElderRightShoulderAndUpperArmDL" Offset="0x6378" />
+        <DList Name="gGoronElderLeftForearmDL" Offset="0x6678" />
+        <DList Name="gGoronElderLeftFingersDL" Offset="0x67A8" />
+        <DList Name="gGoronElderLeftHandAndThumbDL" Offset="0x68C0" />
+        <DList Name="gGoronElderLeftShoulderAndUpperArmDL" Offset="0x6B08" />
+        <DList Name="gGoronElderLowerBackDL" Offset="0x6E08" />
         <Animation Name="object_jg_Anim_0077CC" Offset="0x77CC" />
         <Animation Name="object_jg_Anim_009440" Offset="0x9440" />
         <Animation Name="object_jg_Anim_00A07C" Offset="0xA07C" />
