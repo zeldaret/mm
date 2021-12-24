@@ -116,7 +116,7 @@ typedef struct {
     /* 0x0E80 */ u32 unk_E80;
     /* 0x0E84 */ u32 unk_E84;
     /* 0x0E88 */ u32 unk_E88[7]; // Invadepoh flags
-    /* 0x0EA4 */ u32 scenesVisible[7]; // tingle maps and clouded regions on pause map
+    /* 0x0EA4 */ u32 scenesVisible[7]; // tingle maps and clouded regions on pause map. Stores scenes bitwise for up to 224 scenes even though there are not that many scenes
     /* 0x0EC0 */ u32 skullTokenCount; // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
     /* 0x0EC4 */ u32 unk_EC4;
     /* 0x0EC8 */ u32 unk_EC8;
