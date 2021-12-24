@@ -62,6 +62,8 @@ static InitChainEntry sInitChainOrgan[] = {
     ICHAIN_F32(uncullZoneDownward, 570, ICHAIN_STOP),
 };
 
+static Gfx* sDLists[] = { gClockTowerCeilingCogDL, gClockTowerCenterCogDL, gClockTowerWaterWheelDL };
+
 void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     s32 i;
     s32 flag40 = this->dyna.actor.flags & 0x40;
@@ -179,8 +181,6 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgCtowerGear_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Gfx* sDLists[] = { gClockTowerCeilingCogDL, gClockTowerCenterCogDL, gClockTowerWaterWheelDL };
-
     func_800BDFC0(globalCtx, sDLists[BGCTOWERGEAR_GET_TYPE(thisx)]);
 }
 
