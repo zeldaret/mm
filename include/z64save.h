@@ -232,17 +232,6 @@ typedef struct {
     /* 0x48CD */ u8 unk_48CD[24];
 } SaveContext; // size = 0x48C8
 
-/**
- * roomInf Flags:
- * 
- * roomInf[3][0-2]; deku playground related (3 entries for the 3 days)
- * roomInf[3][3]; pictoFlags0
- * roomInf[3][4]; pictoFlags1
- * roomInf[5] (all): tingle maps and clouded regions on pause map
- * roomInf[6][0]; skull token count
- * roomInf[7][0]; bank rupees
- */
-
 typedef enum {
     /* 0x00 */ RESPAWN_MODE_VOID_OUT,
     /* 0x01 */ RESPAWN_MODE_GROTTO,       // Exiting a grotto
