@@ -1043,7 +1043,48 @@ void func_8012536C(void) {
     }
 }
 
+extern AnimatedMaterial D_06012A80;
+
+extern UNK_TYPE D_06011210;
+extern UNK_TYPE D_06011710;
+
+extern Gfx D_06011760[];
+
+#ifdef NON_MATCHING
+void func_801253A4(GlobalContext* globalCtx, Player* player) {
+    Vtx* sp30;
+    Gfx* dl;
+    s32 i;
+    f32 sp28; // scale
+    u8* phi_a0;
+
+    sp28 = player->unk_B62 * 0.19607843f;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&D_06012A80));
+    Matrix_Scale(sp28, sp28, sp28, 1);
+
+    // clang-format off
+    sp30 = Lib_SegmentedToVirtual(&D_06011210); phi_a0 = Lib_SegmentedToVirtual(&D_06011710);
+    // clang-format on
+
+    for (i = 0; i < 0x50; i++) {
+        sp30[i].v.cn[3] = (phi_a0[i] * player->unk_B62) >> 8;
+    }
+
+    dl = POLY_XLU_DISP;
+
+    gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&dl[1], D_06011760);
+
+    POLY_XLU_DISP = &dl[2];
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801253A4.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125500.s")
 
