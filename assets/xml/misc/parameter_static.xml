@@ -27,14 +27,14 @@
         <Texture Name="gOcarinaCLeftTex" OutName="ocarina_c_left" Format="ia8" Width="16" Height="16" Offset="0x27A0"/>
         <Texture Name="gOcarinaCUpTex" OutName="ocarina_c_up" Format="ia8" Width="16" Height="16" Offset="0x28A0"/>
         <Texture Name="gOcarinaTrebleClefTex" OutName="ocarina_treble_clef" Format="i4" Width="16" Height="32" Offset="0x29A0"/>
+        <Texture Name="gSceneTitleCardGradientTex" OutName="scene_title_card_gradient" Format="i8" Width="1" Height="64" Offset="0x2AA0"/>
 
-        <!-- Unknown texture -->
-        <Texture Name="gUnknown2AA0Tex" OutName="unknown_2AA0" Format="ia8" Width="2" Height="32" Offset="0x2AA0"/>
-
+        <!-- For the 4 different languages -->
         <Texture Name="gTatlCUp1Tex" OutName="tatl_c_up_1" Format="ia4" Width="32" Height="12" Offset="0x2AE0"/>
         <Texture Name="gTatlCUp2Tex" OutName="tatl_c_up_2" Format="ia4" Width="32" Height="12" Offset="0x2BA0"/>
         <Texture Name="gTatlCUp3Tex" OutName="tatl_c_up_3" Format="ia4" Width="32" Height="12" Offset="0x2C60"/>
         <Texture Name="gTatlCUp4Tex" OutName="tatl_c_up_4" Format="ia4" Width="32" Height="12" Offset="0x2D20"/>
+
         <Texture Name="gCarrotIconTex" OutName="carrot_icon" Format="rgba32" Width="16" Height="16" Offset="0x2DE0"/>
         <Texture Name="gGoldSkulltulaCounterIconTex" OutName="gold_skulltula_counter_icon" Format="rgba32" Width="24" Height="18" Offset="0x31E0"/>
         <Texture Name="gBeaverRingIconTex" OutName="beaver_ring_icon" Format="rgba32" Width="24" Height="16" Offset="0x38A0"/>
@@ -55,10 +55,7 @@
         <Texture Name="gCounterDigit8Tex" OutName="counter_digit_8" Format="i8" Width="8" Height="16" Offset="0x48A0"/>
         <Texture Name="gCounterDigit9Tex" OutName="counter_digit_9" Format="i8" Width="8" Height="16" Offset="0x4920"/>
         <Texture Name="gCounterColonTex" OutName="counter_colon" Format="i8" Width="8" Height="16" Offset="0x49A0"/>
-
-        <!-- Unknown texture -->
-        <Texture Name="gUnknown4A20Tex" OutName="unknown_4A20" Format="i8" Width="8" Height="16" Offset="0x4A20"/>
-
+        <Texture Name="gStrayFairyMapCounterSlash" OutName="stray_fairy_map_counter_slash" Format="i8" Width="8" Height="16" Offset="0x4A20"/>
         <Texture Name="gAmmoDigit0Tex" OutName="ammo_digit_0" Format="ia8" Width="8" Height="8" Offset="0x4AA0"/>
         <Texture Name="gAmmoDigit1Tex" OutName="ammo_digit_1" Format="ia8" Width="8" Height="8" Offset="0x4AE0"/>
         <Texture Name="gAmmoDigit2Tex" OutName="ammo_digit_2" Format="ia8" Width="8" Height="8" Offset="0x4B20"/>
@@ -94,26 +91,23 @@
         <Texture Name="gDayTimerHour10Tex" OutName="day_timer_hour_10" Format="i4" Width="16" Height="11" Offset="0x67B0"/>
         <Texture Name="gDayTimerHour11Tex" OutName="day_timer_hour_11" Format="i4" Width="16" Height="11" Offset="0x6808"/>
 
-        <!-- Unknown source -->
-        <Texture Name="gUnknownDigit0Tex" OutName="unknown_digit_0" Format="i8" Width="8" Height="8" Offset="0x6860"/>
-        <Texture Name="gUnknownDigit1Tex" OutName="unknown_digit_1" Format="i8" Width="8" Height="8" Offset="0x68A0"/>
-        <Texture Name="gUnknownDigit2Tex" OutName="unknown_digit_2" Format="i8" Width="8" Height="8" Offset="0x68E0"/>
-        <Texture Name="gUnknownDigit3Tex" OutName="unknown_digit_3" Format="i8" Width="8" Height="8" Offset="0x6920"/>
-        <Texture Name="gUnknownDigit4Tex" OutName="unknown_digit_4" Format="i8" Width="8" Height="8" Offset="0x6960"/>
-        <Texture Name="gUnknownDigit5Tex" OutName="unknown_digit_5" Format="i8" Width="8" Height="8" Offset="0x69A0"/>
-        <Texture Name="gUnknownDigit6Tex" OutName="unknown_digit_6" Format="i8" Width="8" Height="8" Offset="0x69E0"/>
-        <Texture Name="gUnknownDigit7Tex" OutName="unknown_digit_7" Format="i8" Width="8" Height="8" Offset="0x6A20"/>
-        <Texture Name="gUnknownDigit8Tex" OutName="unknown_digit_8" Format="i8" Width="8" Height="8" Offset="0x6A60"/>
-        <Texture Name="gUnknownDigit9Tex" OutName="unknown_digit_9" Format="i8" Width="8" Height="8" Offset="0x6AA0"/>
-        <Texture Name="gUnknownColonTex" OutName="unknown_colon" Format="i8" Width="8" Height="8" Offset="0x6AE0"/>
+        <Texture Name="gFinalHoursTimerDigit0Tex" OutName="final_hours_timer_digit_0" Format="i8" Width="8" Height="8" Offset="0x6860"/>
+        <Texture Name="gFinalHoursTimerDigit1Tex" OutName="final_hours_timer_digit_1" Format="i8" Width="8" Height="8" Offset="0x68A0"/>
+        <Texture Name="gFinalHoursTimerDigit2Tex" OutName="final_hours_timer_digit_2" Format="i8" Width="8" Height="8" Offset="0x68E0"/>
+        <Texture Name="gFinalHoursTimerDigit3Tex" OutName="final_hours_timer_digit_3" Format="i8" Width="8" Height="8" Offset="0x6920"/>
+        <Texture Name="gFinalHoursTimerDigit4Tex" OutName="final_hours_timer_digit_4" Format="i8" Width="8" Height="8" Offset="0x6960"/>
+        <Texture Name="gFinalHoursTimerDigit5Tex" OutName="final_hours_timer_digit_5" Format="i8" Width="8" Height="8" Offset="0x69A0"/>
+        <Texture Name="gFinalHoursTimerDigit6Tex" OutName="final_hours_timer_digit_6" Format="i8" Width="8" Height="8" Offset="0x69E0"/>
+        <Texture Name="gFinalHoursTimerDigit7Tex" OutName="final_hours_timer_digit_7" Format="i8" Width="8" Height="8" Offset="0x6A20"/>
+        <Texture Name="gFinalHoursTimerDigit8Tex" OutName="final_hours_timer_digit_8" Format="i8" Width="8" Height="8" Offset="0x6A60"/>
+        <Texture Name="gFinalHoursTimerDigit9Tex" OutName="final_hours_timer_digit_9" Format="i8" Width="8" Height="8" Offset="0x6AA0"/>
+        <Texture Name="gFinalHoursTimerColonTex" OutName="final_hours_timer_colon" Format="i8" Width="8" Height="8" Offset="0x6AE0"/>
+        <Texture Name="gFinalHoursTimerFrameTex" OutName="final_hours_timer_frame" Format="ia4" Width="80" Height="13" Offset="0x6B20"/>
 
-        <!-- Unknown source, possibly wrong tex type -->
-        <Texture Name="gUnknownBarTex" OutName="unknown_bar" Format="i8" Width="40" Height="13" Offset="0x6B20"/>
-
-        <Texture Name="gGoronRaceGoTex" OutName="goron_race_go" Format="ia8" Width="40" Height="32" Offset="0x6D28"/>
-        <Texture Name="gGoronRaceCountdown1Tex" OutName="goron_race_countdown_1" Format="ia8" Width="24" Height="32" Offset="0x7228"/> 
-        <Texture Name="gGoronRaceCountdown2Tex" OutName="goron_race_countdown_2" Format="ia8" Width="24" Height="32" Offset="0x7528"/>
-        <Texture Name="gGoronRaceCountdown3Tex" OutName="goron_race_countdown_3" Format="ia8" Width="24" Height="32" Offset="0x7828"/>
+        <Texture Name="gMinigameGoTex" OutName="minigame_go" Format="ia8" Width="40" Height="32" Offset="0x6D28"/>
+        <Texture Name="gMinigameCountdown1Tex" OutName="minigame_countdown_1" Format="ia8" Width="24" Height="32" Offset="0x7228"/> 
+        <Texture Name="gMinigameCountdown2Tex" OutName="minigame_countdown_2" Format="ia8" Width="24" Height="32" Offset="0x7528"/>
+        <Texture Name="gMinigameCountdown3Tex" OutName="minigame_countdown_3" Format="ia8" Width="24" Height="32" Offset="0x7828"/>
 
         <Texture Name="gPerfectMinigamePTex" OutName="perfect_minigame_p" Format="i4" Width="32" Height="33" Offset="0x7B28"/>
         <Texture Name="gPerfectMinigameETex" OutName="perfect_minigame_e" Format="i4" Width="32" Height="33" Offset="0x7D38"/>
@@ -127,8 +121,6 @@
         <Texture Name="gStrayFairySnowheadTex" OutName="stray_fairy_snowhead" Format="rgba32" Width="32" Height="24" Offset="0x9598"/>
         <Texture Name="gStrayFairyGreatBayTex" OutName="stray_fairy_great_bay" Format="rgba32" Width="32" Height="24" Offset="0xA198"/>
         <Texture Name="gStrayFairyStoneTowerTex" OutName="stray_fairy_stone_tower" Format="rgba32" Width="32" Height="24" Offset="0xAD98"/>
-
-        <!-- Unknown source, possibly wrong tex type -->
-        <Texture Name="gUnknownCirclePatternTex" OutName="unknown_circle_pattern" Format="ia4" Width="32" Height="24" Offset="0xB998"/>
+        <Texture Name="gStrayFairyGlowingCircleTex" OutName="stray_fairy_glowing_circle" Format="i4" Width="32" Height="24" Offset="0xB998"/>
     </File>
 </Root>
