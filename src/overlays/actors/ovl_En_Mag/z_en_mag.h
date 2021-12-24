@@ -27,9 +27,9 @@ typedef struct EnMag {
     /* 0x11F30 */ s16 subtitleAlpha;
     /* 0x11F32 */ s16 unk11F32; // Set but not used, likely a spare alpha.
     /* 0x11F34 */ s16 copyrightAlpha;
-    /* 0x11F36 */ s16 unk11F36[6];
+    /* 0x11F36 */ s16 effectScrollSs[6];
     /* 0x11F42 */ char pad11F42[2];
-    /* 0x11F44 */ s16 unk11F44[6];
+    /* 0x11F44 */ s16 effectScrollTs[6];
     /* 0x11F50 */ char pad11F50[4];
     /* 0x11F54 */ s16 unk11F54; // Set but not used.
     /* 0x11F56 */ s16 unk11F56; // Set but not used.

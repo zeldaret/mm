@@ -57,8 +57,8 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk11F56 = 10;
 
     for (i = 0; i < 6; i++) {
-        this->unk11F36[i] = 0;
-        this->unk11F44[i] = 0;
+        this->effectScrollSs[i] = 0;
+        this->effectScrollTs[i] = 0;
     }
 
     this->majorasMaskEffectPrimColor[0] = 255;
@@ -511,8 +511,8 @@ void EnMag_DrawTextureIA8(Gfx** gfxp, void* texture, s16 texWidth, s16 texHeight
  * Draws an i8 effect texture, masking it with an i4 mask, with shifting
  *
  * @param gfxp Pointer to current displaylist.
- * @param maskTex Texture with which to mask.
- * @param effectTex Effect texture to draw.
+ * @param maskTex Texture with which to mask, i4.
+ * @param effectTex Effect texture to draw, i8.
  * @param maskWidth Width of masking texture.
  * @param maskHeight Height of masking texture.
  * @param effectWidth Width of effect texture.
@@ -536,8 +536,8 @@ void EnMag_DrawEffectTextures(Gfx** gfxp, void* maskTex, void* effectTex, s16 ma
     gDPLoadMultiBlock(gfx++, effectTex, 0x0100, 1, G_IM_FMT_I, G_IM_SIZ_8b, effectWidth, effectHeight, 0,
                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, shifts, shiftt);
 
-    gDPSetTileSize(gfx++, 1, this->unk11F36[index] & 0x7F, this->unk11F44[index] & 0x7F,
-                   (this->unk11F36[index] & 0x7F) + 0xF, (this->unk11F44[index] & 0x7F) + 0xF);
+    gDPSetTileSize(gfx++, 1, this->effectScrollSs[index] & 0x7F, this->effectScrollTs[index] & 0x7F,
+                   (this->effectScrollSs[index] & 0x7F) + 0xF, (this->effectScrollTs[index] & 0x7F) + 0xF);
 
     gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + maskWidth) << 2, (rectTop + maskHeight) << 2,
                         G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
@@ -736,14 +736,14 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     static u8 pressStartFontIndices[] = {
         0x19, 0x1B, 0x0E, 0x1C, 0x1C, 0x1C, 0x1D, 0x0A, 0x1B, 0x1D,
     }; // TODO: understand what's going on here
-    static TexturePtr D_8096E970[] = { 0x600CF40, 0x600D740, 0x600EF40, 0x600DF40, 0x600E740, 0x600F740 };
-    static TexturePtr D_8096E988[] = { 0x6009F40, 0x600A740, 0x600BF40, 0x600AF40, 0x600B740, 0x600C740 };
+    static TexturePtr D_8096E970[] = { 0x600CF40, 0x600D740, 0x600EF40, 0x600DF40, 0x600E740, 0x600F740 }; // Mask masks
+    static TexturePtr D_8096E988[] = { 0x6009F40, 0x600A740, 0x600BF40, 0x600AF40, 0x600B740, 0x600C740 }; // ZELDA masks
     static TexturePtr D_8096E9A0[] = {
         gTitleScreenFlame0Tex, gTitleScreenFlame1Tex, gTitleScreenFlame1Tex,
         gTitleScreenFlame2Tex, gTitleScreenFlame3Tex, gTitleScreenFlame3Tex,
-    };
-    static s16 D_8096E9B8[] = { -1, 1, 1, -1, 1, 1 };
-    static s16 D_8096E9C4[] = { -2, -2, -2, 2, 2, 2 };
+    }; // Effect textures
+    static s16 sEffectScrollVelocitySs[] = { -1, 1, 1, -1, 1, 1 };
+    static s16 sEffectScrollVelocityTs[] = { -2, -2, -2, 2, 2, 2 };
     static s16 sTextAlpha = 0; // For drawing both the No Controller message and "PRESS START"
     static s16 sTextAlphaTargets[] = { 255, 0 };
     s32 pad;
@@ -779,8 +779,8 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     if (this->majorasMaskEffectPrimLodFrac != 0) {
         for (k = 0, i = 0, rectTop = 38; i < 2; i++, rectTop += 64) {
             for (j = 0, rectLeft = 57; j < 3; j++, k++, rectLeft += 64) {
-                this->unk11F36[k] += D_8096E9B8[k];
-                this->unk11F44[k] += D_8096E9C4[k];
+                this->effectScrollSs[k] += sEffectScrollVelocitySs[k];
+                this->effectScrollTs[k] += sEffectScrollVelocityTs[k];
                 EnMag_DrawEffectTextures(&gfx, D_8096E970[k], D_8096E9A0[k], 64, 64, 32, 32, rectLeft, rectTop, 1, 1, k,
                                          this);
             }
