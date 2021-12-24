@@ -59,41 +59,41 @@
         <Texture Name="object_jg_Tex_016E00" OutName="tex_016E00" Format="ci8" Width="32" Height="64" Offset="0x16E00" />
         <Animation Name="object_jg_Anim_018CE4" Offset="0x18CE4" />
         <Animation Name="object_jg_Anim_01ADC0" Offset="0x1ADC0" />
-        <Limb Name="object_jg_Standardlimb_01ADD0" Type="Standard" Offset="0x1ADD0" />
-        <Limb Name="object_jg_Standardlimb_01ADDC" Type="Standard" Offset="0x1ADDC" />
-        <Limb Name="object_jg_Standardlimb_01ADE8" Type="Standard" Offset="0x1ADE8" />
-        <Limb Name="object_jg_Standardlimb_01ADF4" Type="Standard" Offset="0x1ADF4" />
-        <Limb Name="object_jg_Standardlimb_01AE00" Type="Standard" Offset="0x1AE00" />
-        <Limb Name="object_jg_Standardlimb_01AE0C" Type="Standard" Offset="0x1AE0C" />
-        <Limb Name="object_jg_Standardlimb_01AE18" Type="Standard" Offset="0x1AE18" />
-        <Limb Name="object_jg_Standardlimb_01AE24" Type="Standard" Offset="0x1AE24" />
-        <Limb Name="object_jg_Standardlimb_01AE30" Type="Standard" Offset="0x1AE30" />
-        <Limb Name="object_jg_Standardlimb_01AE3C" Type="Standard" Offset="0x1AE3C" />
-        <Limb Name="object_jg_Standardlimb_01AE48" Type="Standard" Offset="0x1AE48" />
-        <Limb Name="object_jg_Standardlimb_01AE54" Type="Standard" Offset="0x1AE54" />
-        <Limb Name="object_jg_Standardlimb_01AE60" Type="Standard" Offset="0x1AE60" />
-        <Limb Name="object_jg_Standardlimb_01AE6C" Type="Standard" Offset="0x1AE6C" />
-        <Limb Name="object_jg_Standardlimb_01AE78" Type="Standard" Offset="0x1AE78" />
-        <Limb Name="object_jg_Standardlimb_01AE84" Type="Standard" Offset="0x1AE84" />
-        <Limb Name="object_jg_Standardlimb_01AE90" Type="Standard" Offset="0x1AE90" />
-        <Limb Name="object_jg_Standardlimb_01AE9C" Type="Standard" Offset="0x1AE9C" />
-        <Limb Name="object_jg_Standardlimb_01AEA8" Type="Standard" Offset="0x1AEA8" />
-        <Limb Name="object_jg_Standardlimb_01AEB4" Type="Standard" Offset="0x1AEB4" />
-        <Limb Name="object_jg_Standardlimb_01AEC0" Type="Standard" Offset="0x1AEC0" />
-        <Limb Name="object_jg_Standardlimb_01AECC" Type="Standard" Offset="0x1AECC" />
-        <Limb Name="object_jg_Standardlimb_01AED8" Type="Standard" Offset="0x1AED8" />
-        <Limb Name="object_jg_Standardlimb_01AEE4" Type="Standard" Offset="0x1AEE4" />
-        <Limb Name="object_jg_Standardlimb_01AEF0" Type="Standard" Offset="0x1AEF0" />
-        <Limb Name="object_jg_Standardlimb_01AEFC" Type="Standard" Offset="0x1AEFC" />
-        <Limb Name="object_jg_Standardlimb_01AF08" Type="Standard" Offset="0x1AF08" />
-        <Limb Name="object_jg_Standardlimb_01AF14" Type="Standard" Offset="0x1AF14" />
-        <Limb Name="object_jg_Standardlimb_01AF20" Type="Standard" Offset="0x1AF20" />
-        <Limb Name="object_jg_Standardlimb_01AF2C" Type="Standard" Offset="0x1AF2C" />
-        <Limb Name="object_jg_Standardlimb_01AF38" Type="Standard" Offset="0x1AF38" />
-        <Limb Name="object_jg_Standardlimb_01AF44" Type="Standard" Offset="0x1AF44" />
-        <Limb Name="object_jg_Standardlimb_01AF50" Type="Standard" Offset="0x1AF50" />
-        <Limb Name="object_jg_Standardlimb_01AF5C" Type="Standard" Offset="0x1AF5C" />
-        <Skeleton Name="object_jg_Skel_01AFF0" Type="Flex" LimbType="Standard" Offset="0x1AFF0" />
+        <Limb Name="gGoronElderRootLimb" Type="Standard" Offset="0x1ADD0" />
+        <Limb Name="gGoronElderUpperBodyRootLimb" Type="Standard" Offset="0x1ADDC" />
+        <Limb Name="gGoronElderLowerBackLimb" Type="Standard" Offset="0x1ADE8" />
+        <Limb Name="gGoronElderUpperBackLimb" Type="Standard" Offset="0x1ADF4" />
+        <Limb Name="gGoronElderLeftArmRootLimb" Type="Standard" Offset="0x1AE00" />
+        <Limb Name="gGoronElderLeftShoulderAndUpperArmLimb" Type="Standard" Offset="0x1AE0C" />
+        <Limb Name="gGoronElderLeftForearmLimb" Type="Standard" Offset="0x1AE18" />
+        <Limb Name="gGoronElderLeftWristLimb" Type="Standard" Offset="0x1AE24" />
+        <Limb Name="gGoronElderLeftHandAndThumbLimb" Type="Standard" Offset="0x1AE30" />
+        <Limb Name="gGoronElderLeftFingersLimb" Type="Standard" Offset="0x1AE3C" />
+        <Limb Name="gGoronElderRightArmRootLimb" Type="Standard" Offset="0x1AE48" />
+        <Limb Name="gGoronElderRightShoulderAndUpperArmLimb" Type="Standard" Offset="0x1AE54" />
+        <Limb Name="gGoronElderRightForearmLimb" Type="Standard" Offset="0x1AE60" />
+        <Limb Name="gGoronElderRightWristLimb" Type="Standard" Offset="0x1AE6C" />
+        <Limb Name="gGoronElderRightHandAndThumbLimb" Type="Standard" Offset="0x1AE78" />
+        <Limb Name="gGoronElderRightFingersLimb" Type="Standard" Offset="0x1AE84" />
+        <Limb Name="gGoronElderNeckLimb" Type="Standard" Offset="0x1AE90" />
+        <Limb Name="gGoronElderLeftHairEndLimb" Type="Standard" Offset="0x1AE9C" />
+        <Limb Name="gGoronElderRightHairEndLimb" Type="Standard" Offset="0x1AEA8" />
+        <Limb Name="gGoronElderHairBackLimb" Type="Standard" Offset="0x1AEB4" />
+        <Limb Name="gGoronElderHeadLimb" Type="Standard" Offset="0x1AEC0" />
+        <Limb Name="gGoronElderLowerLipLimb" Type="Standard" Offset="0x1AECC" />
+        <Limb Name="gGoronElderBeardRootLimb" Type="Standard" Offset="0x1AED8" />
+        <Limb Name="gGoronElderUpperBeardLimb" Type="Standard" Offset="0x1AEE4" />
+        <Limb Name="gGoronElderLowerBeardLimb" Type="Standard" Offset="0x1AEF0" />
+        <Limb Name="gGoronElderPelvisLimb" Type="Standard" Offset="0x1AEFC" />
+        <Limb Name="gGoronElderLeftLegRootLimb" Type="Standard" Offset="0x1AF08" />
+        <Limb Name="gGoronElderLeftThighLimb" Type="Standard" Offset="0x1AF14" />
+        <Limb Name="gGoronElderLeftShinLimb" Type="Standard" Offset="0x1AF20" />
+        <Limb Name="gGoronElderLeftFootLimb" Type="Standard" Offset="0x1AF2C" />
+        <Limb Name="gGoronElderRightLegRootLimb" Type="Standard" Offset="0x1AF38" />
+        <Limb Name="gGoronElderRightThighLimb" Type="Standard" Offset="0x1AF44" />
+        <Limb Name="gGoronElderRightShinLimb" Type="Standard" Offset="0x1AF50" />
+        <Limb Name="gGoronElderRightFootLimb" Type="Standard" Offset="0x1AF5C" />
+        <Skeleton Name="gGoronElderSkel" Type="Flex" LimbType="Standard" Offset="0x1AFF0" />
         <Animation Name="object_jg_Anim_01B1E8" Offset="0x1B1E8" />
         <!-- <Blob Name="object_jg_Blob_01B1F8" Size="0x28" Offset="0x1B1F8" /> -->
     </File>

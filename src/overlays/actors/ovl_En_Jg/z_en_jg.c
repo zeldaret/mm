@@ -784,7 +784,8 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnJg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0601AFF0, &D_0601ADC0, this->jointTable, this->morphTable, 35);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0601AFF0, &D_0601ADC0, this->jointTable, this->morphTable,
+                       EN_JG_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -852,10 +853,10 @@ s32 func_80B75658(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 void func_80B75708(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnJg* this = THIS;
 
-    if (limbIndex == 21) {
+    if (limbIndex == EN_JG_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_80B759B4, &this->actor.focus.pos);
     }
-    if (limbIndex == 22) {
+    if (limbIndex == EN_JG_LIMB_LOWER_LIP) {
         Matrix_MultiplyVector3fByState(&D_80B759C0, &this->unk_3A4);
         Matrix_RotateY(this->actor.shape.rot.y, 0);
         Matrix_MultiplyVector3fByState(&D_80B759CC, &this->unk_3B0);
