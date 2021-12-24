@@ -367,8 +367,68 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
     }
 }
 
+
+extern s16 D_801BFE14[][18];
+
 // OoT's Player_SetBootData?
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123140.s")
+void func_80123140(GlobalContext* globalCtx, Player* player) {
+    s16* bootRegs;
+    s32 currentBoots;
+    f32 scale;
+
+    if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
+        gGameInfo->data[0x1B] = 0x4B0;
+    } else {
+        gGameInfo->data[0x1B] = 0x7D0;
+    }
+
+    gGameInfo->data[0x30] = 0x172;
+
+    currentBoots = player->currentBoots;
+    if (currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) {
+        if (player->stateFlags1 & 0x8000000) {
+            currentBoots++;
+        }
+        if (player->transformation == PLAYER_FORM_GORON) {
+            gGameInfo->data[0x30] = 0xC8;
+        }
+    } else if (currentBoots == PLAYER_BOOTS_GIANT) {
+        gGameInfo->data[0x30] = 0xAA;
+    }
+
+    bootRegs = D_801BFE14[currentBoots];
+    gGameInfo->data[0x13] = bootRegs[0];
+    gGameInfo->data[0x1E] = bootRegs[1];
+    gGameInfo->data[0x20] = bootRegs[2];
+    gGameInfo->data[0x22] = bootRegs[3];
+    gGameInfo->data[0x23] = bootRegs[4];
+    gGameInfo->data[0x24] = bootRegs[5];
+    gGameInfo->data[0x25] = bootRegs[6];
+    gGameInfo->data[0x26] = bootRegs[7];
+    gGameInfo->data[0x27] = bootRegs[8];
+    gGameInfo->data[0x2B] = bootRegs[9];
+    gGameInfo->data[0x2D] = bootRegs[10];
+    gGameInfo->data[0x44] = bootRegs[11];
+    gGameInfo->data[0x45] = bootRegs[12];
+    gGameInfo->data[0x3A2] = bootRegs[13];
+    gGameInfo->data[0x3A3] = bootRegs[14];
+    gGameInfo->data[0x3A4] = bootRegs[15];
+    gGameInfo->data[0x3A5] = bootRegs[16];
+    gGameInfo->data[0x23F] = bootRegs[17];
+
+    if (globalCtx->roomCtx.currRoom.unk3 == 2) {
+        gGameInfo->data[0x2D] = 0x1F4;
+    }
+
+    if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
+        scale = 0.015f;
+    } else {
+        scale = 0.01f;
+    }
+
+    Actor_SetScale(&player->actor, scale);
+}
+
 
 s32 Player_InBlockingCsMode(GameState* gameState, Player* player) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
