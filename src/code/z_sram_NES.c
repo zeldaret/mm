@@ -187,7 +187,7 @@ void Sram_ActivateOwl(u8 owlId) {
 void func_80143A54(void) {
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF) | 0x130000;
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF0000) | 0xA;
-    gSaveContext.save.horseBackBalloonHighScore = 6000;
+    gSaveContext.save.horseBackBalloonHighScore = 6000; // 60 seconds
     gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF0000) | 0x27;
     gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF) | 0xA0000;
     gSaveContext.save.dekuPlaygroundHighScores[0] = 7500; // 75 seconds
