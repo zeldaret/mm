@@ -1369,7 +1369,51 @@ void func_8012754C(GlobalContext* globalCtx, Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")
 
+extern AnimatedMaterial D_0A0011F8;
+
+extern Gfx D_0A000440[];
+
+extern UNK_TYPE D_801C0BD0;
+extern UNK_TYPE D_801C0BC0;
+
+#if NON_MATCHING
+// regalloc
+void func_801278F8(GlobalContext* globalCtx, Player* player) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    if (player->unk_B60 != 0) {
+        u8 new_var;
+        s32 phi_a0;
+
+        gSegments[0xA] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
+
+        AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&D_0A0011F8));
+
+        if ((player->unk_B60 < 0xB) != 0)
+        {
+            phi_a0 = ((player->unk_B60 / 10.0f) * 255.0f);
+        } else {
+            phi_a0 = 0xFF;
+        }
+
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, phi_a0);
+
+        new_var = phi_a0;
+
+        gSPDisplayList(POLY_OPA_DISP++, D_0A000440);
+
+        gSPSegment(POLY_OPA_DISP++, 0x09, &D_801C0BD0);
+
+        gDPSetEnvColor(__gfxCtx->polyOpa.p++, 0, 0, 0, 0xFF - new_var);
+    } else {
+        gSPSegment(POLY_OPA_DISP++, 0x09, &D_801C0BC0);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801278F8.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127A60.s")
 
