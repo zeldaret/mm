@@ -25,6 +25,9 @@ void func_80B747C8(EnJg* this, GlobalContext* globalCtx);
 void func_80B74B54(EnJg* this, GlobalContext* globalCtx);
 s32 func_80B74E5C(EnJg* this);
 void func_80B74BC8(EnJg* this, GlobalContext* globalCtx);
+void func_80B74440(EnJg* this, GlobalContext* globalCtx);
+void func_80B741F8(EnJg* this, GlobalContext* globalCtx);
+void func_80B749D0(EnJg* this, GlobalContext* globalCtx);
 
 extern AnimationHeader D_060077CC;
 extern AnimationHeader D_06009440;
@@ -135,7 +138,18 @@ static Vec3f D_80B759CC = { 0.0f, 0.0f, 0.75f };
 
 static Vec3f D_80B759D8 = { 0.0f, 0.0f, -0.070000000298f };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73A90.s")
+Actor* func_80B73A90(GlobalContext* globalCtx, u8 arg1) {
+    Actor* actorIterator;
+
+    actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    while (actorIterator != NULL) {
+        if ((actorIterator->id == ACTOR_EN_S_GORO) && ((actorIterator->params & 0xF) == arg1)) {
+            return actorIterator;
+        }
+        actorIterator = actorIterator->next;
+    }
+    return NULL;
+}
 
 void func_80B73AE4(EnJg* this, GlobalContext* globalCtx) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
@@ -146,14 +160,96 @@ void func_80B73AE4(EnJg* this, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 30.0f, 30.0f, 7U);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73B98.s")
+s16 func_80B73B98(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
+    Vec3s* points;
+    f32 diffX;
+    f32 diffZ;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73C58.s")
+    if (path != NULL) {
+        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        points = &points[idx];
+        diffX = points->x - pos->x;
+        diffZ = points->z - pos->z;
+    } else {
+        diffX = 0.0f;
+        diffZ = 0.0f;
+    }
 
-s8 func_80B73DF4(EnJg* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73DF4.s")
+    *distSQ = SQ(diffX) + SQ(diffZ);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73E3C.s")
+    return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
+}
+
+s32 func_80B73C58(EnJg* this, Path* path, s32 arg2) {
+    Vec3s* sp5C = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    s32 count = path->count;
+    s32 idx = arg2;
+    s32 sp50 = false;
+    f32 phi_f12;
+    f32 phi_f14;
+    f32 sp44;
+    f32 sp40;
+    f32 sp3C;
+    Vec3f sp30;
+
+    Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
+    if (idx == 0) {
+        phi_f12 = sp5C[1].x - sp5C[0].x;
+        phi_f14 = sp5C[1].z - sp5C[0].z;
+    } else if ((idx + 1) == ((void)0, count)) {
+        phi_f12 = sp5C[count - 1].x - sp5C[count - 2].x;
+        phi_f14 = sp5C[count - 1].z - sp5C[count - 2].z;
+    } else {
+        phi_f12 = sp5C[idx + 1].x - sp5C[idx - 1].x;
+        phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
+    }
+
+    func_8017B7F8(&sp30, func_80086B30(phi_f12, phi_f14) * 10430.378f, &sp44, &sp40, &sp3C);
+    if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
+        sp50 = true;
+    }
+
+    return sp50;
+}
+
+s16 func_80B73DF4(EnJg* this) {
+    s16 temp = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+
+    if (temp > 0) {
+        return this->actor.cutscene;
+    }
+    return ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+}
+
+void func_80B73E3C(EnJg* this) {
+    ActorCutscene_Stop(this->unk_3C8);
+    if (this->unk_3D0 == 0xA) {
+        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+            this->actionFunc = func_80B74134;
+        } else {
+            this->unk_3C8 = 0x7C;
+        }
+    } else {
+        this->unk_3C8 = ActorCutscene_GetAdditionalCutscene(this->unk_3C8);
+        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+            ActorCutscene_Stop(0x7C);
+        }
+    }
+    ActorCutscene_SetIntentToPlay(this->unk_3C8);
+    this->actionFunc = func_80B741F8;
+    switch (this->unk_3CE) {
+        case 0xDD0:
+        case 0xDD2:
+        case 0xDD3:
+        case 0xDD4:
+        case 0xDD6:
+            this->unk_3CC |= 1;
+            break;
+        default:
+            this->unk_3CC &= 0xFFFE;
+            break;
+    }
+}
 
 void func_80B73F1C(EnJg* this, GlobalContext* globalCtx) {
     switch (this->unk_3CE) {
@@ -214,14 +310,106 @@ void func_80B7408C(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74134.s")
+void func_80B74134(EnJg* this, GlobalContext* globalCtx) {
+    if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx) != 0)) {
+        if ((this->unk_3CE == 0xDCC) || (this->unk_3CE == 0xDDD) || (this->unk_3CE == 0xDE0)) {
+            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.unk12023 = 4;
+            this->unk_3CC &= 0xFFFB;
+            this->actionFunc = func_80B7408C;
+        } else {
+            this->unk_3CE = func_80B74E5C(this);
+            func_801518B0(globalCtx, this->unk_3CE, &this->actor);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B741F8.s")
+void func_80B741F8(EnJg* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->unk_3C8) != 0) {
+        switch (this->unk_3CE) {
+            case 0xDD0:
+            case 0xDD2:
+            case 0xDD3:
+            case 0xDD4:
+            case 0xDD6:
+                this->unk_144 = func_80B73A90(globalCtx, this->unk_3D0);
+                ActorCutscene_Start(this->unk_3C8, this->unk_144);
+                func_800E0308(globalCtx->cameraPtrs[0], this->unk_144);
+                break;
+            default:
+                ActorCutscene_Start(this->unk_3C8, &this->actor);
+                func_800E0308(globalCtx->cameraPtrs[0], this->unk_144);
+                break;
+        }
+        this->actionFunc = func_80B74134;
+    } else {
+        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+            if (this->unk_3D0 == 0xA) {
+                this->actionFunc = func_80B74134;
+            } else {
+                ActorCutscene_Stop(0x7C);
+            }
+        }
+        ActorCutscene_SetIntentToPlay(this->unk_3C8);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B742F8.s")
+void func_80B742F8(EnJg* this, GlobalContext* globalCtx) {
+    u8 sp27;
+    s16 currentFrame;
+    s16 lastFrame;
 
-void func_80B74440(EnJg* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74440.s")
+    sp27 = func_80152498(&globalCtx->msgCtx);
+    currentFrame = this->skelAnime.curFrame;
+    lastFrame = Animation_GetLastFrame(D_80B75878[this->unk_39E].animationSeg);
+    if (this->unk_39E == 4) {
+        if (currentFrame == lastFrame) {
+            this->unk_39E = 5;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+        }
+    } else if (this->unk_39E == 5) {
+        if ((sp27 == 5) && (func_80147624(globalCtx) != 0)) {
+            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.unk12023 = 4;
+            this->unk_3CC &= 0xFFFB;
+            this->unk_39E = 1;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->actionFunc = func_80B74440;
+        }
+    } else if (this->unk_39E == 1) {
+        Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
+        func_80B751F8(this, globalCtx);
+    }
+}
+
+void func_80B74440(EnJg* this, GlobalContext* globalCtx) {
+    s16 phi_a1;
+    f32 sp30;
+
+    if (this->unk_1E0 != NULL) {
+        phi_a1 = func_80B73B98(this->unk_1E0, this->unk_1E4, &this->actor.world.pos, &sp30);
+        if (this->actor.bgCheckFlags & 8) {
+            phi_a1 = this->actor.wallYaw;
+        }
+
+        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+
+        if (func_80B73C58(this, this->unk_1E0, this->unk_1E4)) {
+            if (this->unk_1E4 >= (this->unk_1E0->count - 1)) {
+                this->unk_39E = 1;
+                this->actionFunc = func_80B742F8;
+            } else {
+                this->unk_1E4++;
+                Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
+            }
+        } else {
+            Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
+        }
+    }
+
+    func_80B751F8(this, globalCtx);
+}
 
 void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
     u8 sp27;
@@ -273,10 +461,47 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B747C8.s")
+void func_80B747C8(EnJg* this, GlobalContext* globalCtx) {
+    if (this->unk_39E != 1) {
+        this->unk_39E = 1;
+        this->unk_3A2 = 0x3E8;
+        func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+        this->actionFunc = func_80B74440;
+    } else {
+        this->unk_3A2 = 0x3E8;
+        this->actionFunc = func_80B74440;
+    }
+}
 
-void func_80B74840(EnJg* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74840.s")
+void func_80B74840(EnJg* this, GlobalContext* globalCtx) {
+    s16 currentFrame;
+    s16 lastFrame;
+
+    currentFrame = this->skelAnime.curFrame;
+    lastFrame = Animation_GetLastFrame(D_80B75878[this->unk_39E].animationSeg);
+    if (this->unk_3A0 == 1) {
+        this->unk_3A0 = 2;
+        this->unk_3A2 = 0x3E8;
+        this->skelAnime.curFrame = lastFrame;
+        this->unk_148 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
+                                    this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
+                                    this->actor.world.rot.y, this->actor.world.rot.z, 0xFF50);
+        this->unk_39E = 8;
+        func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+        this->actionFunc = func_80B749D0;
+    } else if (this->unk_39E == 7) {
+        this->unk_3A0 = 2;
+        if (currentFrame == lastFrame) {
+            this->unk_3A2 = 0x3E8;
+            this->unk_148 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
+                                        this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
+                                        this->actor.world.rot.y, this->actor.world.rot.z, 0xFF50);
+            this->unk_39E = 8;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->actionFunc = func_80B749D0;
+        }
+    }
+}
 
 void func_80B749D0(EnJg* this, GlobalContext* globalCtx) {
     if (this->unk_148->update == NULL) {
@@ -394,7 +619,100 @@ void func_80B74BC8(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B74E5C.s")
+s32 func_80B74E5C(EnJg* this) {
+    switch (this->unk_3CE) {
+        case 0xDAC:
+            return 0xDAD;
+        case 0xDAE:
+            return 0xDB0;
+        case 0xDB0:
+            return 0xDB3;
+        case 0xDB3:
+            return 0xDB4;
+        case 0xDB6:
+            return 0xDB7;
+        case 0xDB7:
+            return 0xDBA;
+        case 0xDBA:
+            return 0xDBB;
+        case 0xDBB:
+        case 0xDBC:
+            return 0xDC6;
+        case 0xDCB:
+            return 0xDCC;
+        case 0xDDE:
+            return 0xDDF;
+        case 0xDDF:
+            return 0xDE0;
+        case 0xDCD:
+            return 0xDCE;
+        case 0xDCE:
+            return 0xDCF;
+        case 0xDCF:
+            this->unk_3D0 = 3;
+            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+                ActorCutscene_Stop(0x7C);
+            }
+            ActorCutscene_SetIntentToPlay(this->unk_3C8);
+            this->actionFunc = func_80B741F8;
+            return 0xDD0;
+        case 0xDD0:
+            func_80B73E3C(this);
+            return 0xDD1;
+        case 0xDD1:
+            switch (this->unk_3D0) {
+                case 3:
+                    this->unk_3D0 = 4;
+                    func_80B73E3C(this);
+                    return 0xDD2;
+                case 4:
+                    this->unk_3D0 = 5;
+                    func_80B73E3C(this);
+                    return 0xDD3;
+                case 5:
+                    this->unk_3D0 = 6;
+                    func_80B73E3C(this);
+                    return 0xDD4;
+                default:
+                    return 0xDD4;
+            }
+            break;
+        case 0xDD2:
+            func_80B73E3C(this);
+            return 0xDD1;
+        case 0xDD3:
+            func_80B73E3C(this);
+            return 0xDD1;
+        case 0xDD4:
+            func_80B73E3C(this);
+            return 0xDD5;
+        case 0xDD5:
+            this->unk_3D0 = 7;
+            func_80B73E3C(this);
+            return 0xDD6;
+        case 0xDD6:
+            func_80B73E3C(this);
+            return 0xDD7;
+        case 0xDD7:
+            this->unk_3D0 = 0xA;
+            func_80B73E3C(this);
+            this->unk_3CC &= 0xFFFE;
+            return 0xDD8;
+        case 0xDD8:
+            return 0xDD9;
+        case 0xDD9:
+            return 0xDDA;
+        case 0xDDA:
+            return 0xDDB;
+        case 0xDDB:
+            return 0xDDC;
+        case 0xDDC:
+            gSaveContext.weekEventReg[0x4D] |= 0x80;
+            return 0xDDD;
+        default:
+            return 0;
+    }
+}
 
 s32 func_80B750A0(EnJg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);

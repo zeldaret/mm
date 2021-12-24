@@ -9,13 +9,13 @@ typedef void (*EnJgActionFunc)(struct EnJg*, GlobalContext*);
 
 typedef struct EnJg {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x4];
+    /* 0x144 */ Actor* unk_144;
     /* 0x148 */ Actor* unk_148;
     /* 0x14C */ ColliderCylinder collider;
     /* 0x198 */ SkelAnime skelAnime;
     /* 0x1DC */ EnJgActionFunc actionFunc;
     /* 0x1E0 */ Path* unk_1E0;
-    /* 0x1E4 */ char unk_1E4[0x4];
+    /* 0x1E4 */ s32 unk_1E4;
     /* 0x1E8 */ Actor* unk_1E8;
     /* 0x1EC */ Vec3s unk_1EC;
     /* 0x1F2 */ Vec3s unk_1F2;
@@ -33,7 +33,8 @@ typedef struct EnJg {
     /* 0x3CB */ u8 unk_3CB;
     /* 0x3CC */ u16 unk_3CC;
     /* 0x3CE */ u16 unk_3CE;
-    /* 0x3D0 */ char unk_3D0[0x4];
+    /* 0x3D0 */ u8 unk_3D0;
+    /* 0x3D1 */ char unk_3D1[0x3];
 } EnJg; // size = 0x3D4
 
 extern const ActorInit En_Jg_InitVars;

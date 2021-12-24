@@ -4260,7 +4260,7 @@ beginseg
     name "ovl_En_Jg"
     compress
     include "build/src/overlays/actors/ovl_En_Jg/z_en_jg.o"
-    include "build/data/ovl_En_Jg/ovl_En_Jg.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Jg/ovl_En_Jg_reloc.o"
 endseg
 
 beginseg
