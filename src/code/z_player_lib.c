@@ -1088,7 +1088,7 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125500.s")
 
-s32 func_80125580(GlobalContext* globalCtx, Vec3s* arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
+s32 func_80125580(GlobalContext* globalCtx, s32 arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
 
 extern u16 D_801C0750[];
@@ -1102,7 +1102,43 @@ void func_80125CE0(Player* player, u16* arg1, Vec3f* arg2, Vec3s* arg3) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125D4C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801262C8.s")
+#if 0
+static s32 D_801C0294[5] = { 0x6006C38, 0x600A220, 0x600C020, 0x6003AB8, 0x600D3D8 };
+static s32 D_801C02A8[5] = { 0x6006EB8, 0x600A500, 0x600C270, 0x6003BC0, 0x600E1C8 };
+static s32 D_801C02BC[5] = { 0x6006410, 0x6009A98, 0x600B820, 0x60036B0, 0x600CCE0 };
+static s32 D_801C02D0[5] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6018490 };
+static s32 D_801C02E4[5] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6017B40 };
+#endif
+extern Gfx* D_801C0294[PLAYER_FORM_MAX];
+extern Gfx* D_801C02A8[PLAYER_FORM_MAX];
+extern Gfx* D_801C02BC[PLAYER_FORM_MAX];
+extern Gfx* D_801C02D0[PLAYER_FORM_MAX];
+extern Gfx* D_801C02E4[PLAYER_FORM_MAX];
+
+
+s32 func_801262C8(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Player* player) {
+    if (func_80125580(globalCtx, arg1, arg2, arg3, arg4, player) == 0) {
+        if (player->unk_AA5 != 3) {
+            *arg2 = NULL;
+        } else if (arg1 == 0xF) {
+            *arg2 = D_801C0294[player->transformation];
+        } else if (arg1 == 0x10) {
+            *arg2 = D_801C02A8[player->transformation];
+        } else if (arg1 == 0x11) {
+            *arg2 = D_801C02BC[player->transformation];
+        } else if (arg1 == 0x13) {
+            if (func_801240C8(player) != 0) {
+                *arg2 = D_801C02E4[player->transformation];
+            } else {
+                *arg2 = D_801C02D0[player->transformation];
+            }
+        } else {
+            *arg2 = NULL;
+        }
+    }
+
+    return 0;
+}
 
 s32 func_801263FC(GlobalContext* globalCtx, Vec3s* arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player) {
     if (func_80125580(globalCtx, arg1, arg2, arg3, arg4, player) == 0) {
