@@ -1088,7 +1088,7 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125500.s")
 
-s32 func_80125580(GlobalContext* globalCtx, s32 arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
+s32 func_80125580(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
 
 extern u16 D_801C0750[];
@@ -1115,7 +1115,6 @@ extern Gfx* D_801C02BC[PLAYER_FORM_MAX];
 extern Gfx* D_801C02D0[PLAYER_FORM_MAX];
 extern Gfx* D_801C02E4[PLAYER_FORM_MAX];
 
-
 s32 func_801262C8(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Player* player) {
     if (func_80125580(globalCtx, arg1, arg2, arg3, arg4, player) == 0) {
         if (player->unk_AA5 != 3) {
@@ -1140,7 +1139,7 @@ s32 func_801262C8(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Vec3f* arg3, V
     return 0;
 }
 
-s32 func_801263FC(GlobalContext* globalCtx, Vec3s* arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player) {
+s32 func_801263FC(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Player* player) {
     if (func_80125580(globalCtx, arg1, arg2, arg3, arg4, player) == 0) {
         *arg2 = 0;
     }
@@ -1276,7 +1275,44 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126AB4.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126AB4.s")
+
+#if 0
+
+static Vec3f D_801C0994[3] = {
+    { 5000.0f, 400.0f, 0.0f },
+    { 5000.0f, -400.0f, 1000.0f },
+    { 5000.0f, 1400.0f, -1000.0f },
+};
+
+Vec3f D_801C09B8[3] = {
+    { 0.0f, 750.0f, 750.0f },
+    { 1500.0f, 1500.0f, 1500.0f },
+    { -2500.0f, -2000.0f, -3000.0f },
+};
+#endif
+extern Vec3f D_801C0994[];
+extern Vec3f D_801C09B8[];
+
+void func_80126AB4(Player* player, Vec3f** arg1) {
+    if ((player->transformation == PLAYER_FORM_GORON) || (player->actor.id == ACTOR_EN_TEST3)) {
+        Math_Vec3f_Copy(&player->unk_AF0[1], &player->swordInfo[0].base);
+        *arg1 = D_801C09B8;
+        return;
+    }
+
+    D_801C0994[1].x = D_801C0994[0].x;
+
+    if (player->unk_ADD >= 3) {
+        player->unk_ADD++;
+        D_801C0994[1].x *= 1.0f + ((9 - player->unk_ADD) * 0.1f);
+    }
+
+    D_801C0994[1].x += 1200.0f;
+    D_801C0994[2].x = D_801C0994[1].x;
+    *arg1 = D_801C0994;
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126B8C.s")
 
