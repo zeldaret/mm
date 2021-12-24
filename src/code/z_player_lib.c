@@ -935,7 +935,51 @@ void func_80124420(Player* player);
 void func_80124618(u16*, f32 curFrame, Vec3f*);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124618.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801246F4.s")
+extern u8 D_801C08A0[][2];
+extern u16 D_801C08A1[];
+extern void* D_801C0890[];
+
+extern s32 D_801F59E4;
+
+// OoT's func_8008F470
+void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
+    s32 phi_v1 = (jointTable[0x16].x & 0xF) - 1; // eyeIndex
+    s32 phi_t1 = (((s32) jointTable[0x16].x >> 4) & 0xF) - 1; // mouthIndex
+    Gfx* dl;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    dl = POLY_OPA_DISP;
+
+    if (phi_v1 < 0) {
+        phi_v1 = D_801C08A0[face][0];
+    }
+
+    if (tunic == 1) {
+        if ((phi_v1 >= 3) && (phi_v1 < 7)) {
+            phi_v1 = 0;
+        } else if (phi_v1 == 7) {
+            phi_v1 = 3;
+        }
+    }
+
+    gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual((&D_801C0870)[phi_v1]));
+
+    if (phi_t1 < 0) {
+        phi_t1 = D_801C08A0[face][1];
+    }
+
+    gSPSegment(&dl[1], 0x09, Lib_SegmentedToVirtual(D_801C0890[phi_t1]));
+
+    POLY_OPA_DISP = &dl[2];
+
+    D_801F59E0 = tunic * 2;
+    D_801F59E4 = lod;
+    SkelAnime_DrawFlexLod(globalCtx, skeleton, jointTable, dListCount, overrideLimbDraw, postLimbDraw, actor, lod);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124870.s")
 
