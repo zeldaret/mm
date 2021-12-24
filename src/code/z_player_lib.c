@@ -1334,7 +1334,17 @@ void func_80126B8C(GlobalContext* globalCtx, Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801271B0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127438.s")
+s32 func_80127438(GraphicsContext** gfxCtxPtr, Player* player, s32 maskId) {
+    if (!player->maskObjectLoading && (maskId == (u8)player->maskId)) {
+        OPEN_DISPS(*gfxCtxPtr);
+        gSPSegment(POLY_OPA_DISP++, 0x0A, player->maskObjectSegment);
+        CLOSE_DISPS(*gfxCtxPtr);
+
+        return true;
+    }
+
+    return false;
+}
 
 extern Gfx D_06011AB8[];
 
