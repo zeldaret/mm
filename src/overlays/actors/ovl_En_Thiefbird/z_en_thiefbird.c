@@ -179,7 +179,7 @@ void EnThiefbird_Init(Actor* thisx, GlobalContext* globalCtx) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
         Actor_MarkForDeath(&this->actor);
-    } else if ((gSaveContext.roomInf[6][5] & 0xFF000000) >> 0x18) {
+    } else if ((gSaveContext.stolenItems & 0xFF000000) >> 0x18) {
         Actor_MarkForDeath(&this->actor);
     } else {
         func_80C11538(this);
@@ -282,10 +282,10 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
         return false;
     }
 
-    if (!((gSaveContext.roomInf[6][5] & 0xFF000000) >> 0x18)) {
-        gSaveContext.roomInf[6][5] = (gSaveContext.roomInf[6][5] & 0xFFFFFF) | ((itemId1 & 0xFF) << 0x18);
+    if (!((gSaveContext.stolenItems & 0xFF000000) >> 0x18)) {
+        gSaveContext.stolenItems = (gSaveContext.stolenItems & 0xFFFFFF) | ((itemId1 & 0xFF) << 0x18);
     } else {
-        gSaveContext.roomInf[6][5] = (gSaveContext.roomInf[6][5] & 0xFF00FFFF) | ((itemId1 & 0xFF) << 0x10);
+        gSaveContext.stolenItems = (gSaveContext.stolenItems & 0xFF00FFFF) | ((itemId1 & 0xFF) << 0x10);
     }
 
     return true;
@@ -581,8 +581,8 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
             if (!(this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((D_80C1392C != 0) && CUR_UPG_VALUE(UPG_QUIVER) &&
-                    (!((gSaveContext.roomInf[6][5] & 0xFF000000) >> 0x18) ||
-                     !((gSaveContext.roomInf[6][5] & 0xFF0000) >> 0x10)) &&
+                    (!((gSaveContext.stolenItems & 0xFF000000) >> 0x18) ||
+                     !((gSaveContext.stolenItems & 0xFF0000) >> 0x10)) &&
                     (Rand_ZeroOne() < 0.5f) && func_80C10B0C(this, globalCtx)) {
                     func_80C1242C(this);
                 } else if (func_80C10E98(globalCtx)) {

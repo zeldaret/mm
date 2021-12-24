@@ -2369,7 +2369,7 @@ u8 Inventory_DeleteEquipment(GlobalContext* globalCtx, s16 equipment);
 void Inventory_ChangeUpgrade(s16 upgrade, u32 value);
 s32 Inventory_IsMapVisible(s16 arg0);
 void Inventory_SetMapVisibility(s16 arg0);
-void func_8012F0EC(s16 arg0);
+void Inventory_SaveDekuPlaygroundHighScore(s16 arg0);
 void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
 void func_8012F278(GlobalContext* globalCtx);

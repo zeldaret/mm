@@ -983,8 +983,8 @@ void func_809C8488(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_274 = 0;
         this->unk_276 = 0;
         if (this->unk_270 <= 0) {
-            if ((s32)((gSaveContext.roomInf[7][6] & 0xFFFF0000) >> 0x10) < this->unk_280) {
-                gSaveContext.roomInf[7][6] = ((gSaveContext.roomInf[7][6]) & 0xFFFF) | ((u16)this->unk_280 << 0x10);
+            if ((s32)((gSaveContext.unk_EF4 & 0xFFFF0000) >> 0x10) < this->unk_280) {
+                gSaveContext.unk_EF4 = ((gSaveContext.unk_EF4) & 0xFFFF) | ((u16)this->unk_280 << 0x10);
             }
             this->unk_270 = 15;
             if (this->unk_280 >= 0x848) {
@@ -1173,8 +1173,8 @@ void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx) {
         if ((this->unk_270 <= 0) && (globalCtx->interfaceCtx.unk_286 == 0)) {
             Actor_SetAllChestFlag(globalCtx, this->unk_280);
             this->unk_270 = 15;
-            if (((s32)(gSaveContext.roomInf[7][6] & 0xFFFF) < this->unk_280) || (this->unk_280 == 50)) {
-                if ((s32)(gSaveContext.roomInf[7][6] & 0xFFFF) < this->unk_280) {
+            if (((s32)(gSaveContext.unk_EF4 & 0xFFFF) < this->unk_280) || (this->unk_280 == 50)) {
+                if ((s32)(gSaveContext.unk_EF4 & 0xFFFF) < this->unk_280) {
                     if (!(gSaveContext.weekEventReg[59] & 0x20)) {
                         func_801518B0(globalCtx, 0x407, &this->actor);
                         this->unk_284 = 0x407;
@@ -1189,7 +1189,7 @@ void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx) {
                     func_801518B0(globalCtx, 0x406, &this->actor);
                     this->unk_284 = 0x406;
                 }
-                gSaveContext.roomInf[7][6] = (gSaveContext.roomInf[7][6] & 0xFFFF0000) | (this->unk_280 & 0xFFFF);
+                gSaveContext.unk_EF4 = (gSaveContext.unk_EF4 & 0xFFFF0000) | (this->unk_280 & 0xFFFF);
                 this->unk_26A = 6;
             } else {
                 if (CURRENT_DAY != 3) {

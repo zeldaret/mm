@@ -314,12 +314,12 @@ s16 EnFsn_GetStolenItemId(u32 stolenItem) {
 
 s32 EnFsn_HasItemsToSell(void) {
     if (CURRENT_DAY != 3) {
-        if (((gSaveContext.roomInf[6][5] & 0xFF000000) >> 0x18) || ((gSaveContext.roomInf[6][5] & 0xFF0000) >> 0x10)) {
+        if (((gSaveContext.stolenItems & 0xFF000000) >> 0x18) || ((gSaveContext.stolenItems & 0xFF0000) >> 0x10)) {
             return true;
         }
         return false;
     } else {
-        if (((gSaveContext.roomInf[6][5] & 0xFF000000) >> 0x18) || ((gSaveContext.roomInf[6][5] & 0xFF0000) >> 0x10) ||
+        if (((gSaveContext.stolenItems & 0xFF000000) >> 0x18) || ((gSaveContext.stolenItems & 0xFF0000) >> 0x10) ||
             !(gSaveContext.weekEventReg[0x21] & 4)) {
             return true;
         }
@@ -328,8 +328,8 @@ s32 EnFsn_HasItemsToSell(void) {
 }
 
 void EnFsn_GetShopItemIds(EnFsn* this) {
-    u32 stolenItem1 = (gSaveContext.roomInf[6][5] & 0xFF000000) >> 0x18;
-    u32 stolenItem2 = (gSaveContext.roomInf[6][5] & 0xFF0000) >> 0x10;
+    u32 stolenItem1 = (gSaveContext.stolenItems & 0xFF000000) >> 0x18;
+    u32 stolenItem2 = (gSaveContext.stolenItems & 0xFF0000) >> 0x10;
     s16 itemId;
 
     this->stolenItem1 = this->stolenItem2 = 0;
@@ -1155,9 +1155,9 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
             item = this->items[this->cursorIdx];
             item->boughtFunc(globalCtx, item);
             if (this->stolenItem1 == this->cursorIdx) {
-                gSaveContext.roomInf[6][5] &= ~0xFF000000;
+                gSaveContext.stolenItems &= ~0xFF000000;
             } else if (this->stolenItem2 == this->cursorIdx) {
-                gSaveContext.roomInf[6][5] &= ~0xFF0000;
+                gSaveContext.stolenItems &= ~0xFF0000;
             }
             this->numSellingItems--;
             this->itemIds[this->cursorIdx] = -1;

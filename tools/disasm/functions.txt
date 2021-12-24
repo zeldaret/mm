@@ -2411,7 +2411,7 @@
     0x8012EDE8:("Inventory_ChangeUpgrade",),
     0x8012EE34:("Inventory_IsMapVisible",),
     0x8012EF0C:("Inventory_SetMapVisibility",),
-    0x8012F0EC:("func_8012F0EC",),
+    0x8012F0EC:("Inventory_SaveDekuPlaygroundHighScore",),
     0x8012F1BC:("Inventory_IncrementSkullTokenCount",),
     0x8012F22C:("Inventory_GetSkullTokenCount",),
     0x8012F278:("func_8012F278",),

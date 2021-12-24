@@ -1925,7 +1925,7 @@ asm/non_matchings/code/code_8012EC80/Inventory_DeleteEquipment.s,Inventory_Delet
 asm/non_matchings/code/code_8012EC80/Inventory_ChangeUpgrade.s,Inventory_ChangeUpgrade,0x8012EDE8,0x13
 asm/non_matchings/code/code_8012EC80/Inventory_IsMapVisible.s,Inventory_IsMapVisible,0x8012EE34,0x36
 asm/non_matchings/code/code_8012EC80/Inventory_SetMapVisibility.s,Inventory_SetMapVisibility,0x8012EF0C,0x78
-asm/non_matchings/code/code_8012EC80/func_8012F0EC.s,func_8012F0EC,0x8012F0EC,0x34
+asm/non_matchings/code/code_8012EC80/Inventory_SaveDekuPlaygroundHighScore.s,Inventory_SaveDekuPlaygroundHighScore,0x8012F0EC,0x34
 asm/non_matchings/code/code_8012EC80/Inventory_IncrementSkullTokenCount.s,Inventory_IncrementSkullTokenCount,0x8012F1BC,0x1C
 asm/non_matchings/code/code_8012EC80/Inventory_GetSkullTokenCount.s,Inventory_GetSkullTokenCount,0x8012F22C,0x13
 asm/non_matchings/code/code_8012EC80/func_8012F278.s,func_8012F278,0x8012F278,0x16

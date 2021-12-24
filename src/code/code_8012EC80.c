@@ -462,30 +462,30 @@ void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
 }
 
 s32 Inventory_IsMapVisible(s16 sceneNum) {
-    s16 roomInfIdx = 0;
+    s16 index = 0;
 
     /**
-     * a single roomInf flag can only hold 32 bits. So for every 32 scenes in the scene enum,
-     * increment to the next roomInf flag so that every scene gets a unique flag in roomInf[5],
+     * a single index of scenesVisible can only hold 32 bits. So for every 32 scenes in the scene enum,
+     * increment to the next index of scenesVisible so that every scene gets a unique flag in scenesVisible,
      * 224 bits were allocated to this although there are only 112 scenes
      */
     if (sceneNum >= 0x20) {
         if (sceneNum < 0x40) {
-            roomInfIdx = 1;
+            index = 1;
         } else if (sceneNum < 0x60) {
-            roomInfIdx = 2;
+            index = 2;
         } else if (sceneNum < 0x80) {
-            roomInfIdx = 3;
+            index = 3;
         } else if (sceneNum < 0xA0) {
-            roomInfIdx = 4;
+            index = 4;
         } else if (sceneNum < 0xC0) {
-            roomInfIdx = 5;
+            index = 5;
         } else if (sceneNum < 0xE0) {
-            roomInfIdx = 6;
+            index = 6;
         }
     }
 
-    if (gSaveContext.roomInf[5][roomInfIdx] & gBitFlags[sceneNum - (roomInfIdx << 5)]) {
+    if (gSaveContext.scenesVisible[index] & gBitFlags[sceneNum - (index << 5)]) {
         return true;
     }
 
@@ -568,7 +568,7 @@ static u16 gScenesPerTingleMap[6][12] = {
  */
 void Inventory_SetMapVisibility(s16 tingleIndex) {
     s16 i = 0;
-    s16 roomInfIdx = 0;
+    s16 index = 0;
     u16(*tingleMapSceneIndices)[] = &gScenesPerTingleMap[tingleIndex];
 
     if ((tingleIndex >= 0) && (tingleIndex < 6)) {
@@ -578,28 +578,28 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
             }
 
             /**
-             * a single roomInf flag can only hold 32 bits. So for every 32 scenes in the scene enum,
-             * increment to the next roomInf flag so that every scene gets a unique flag in roomInf[5],
+             * a single index of scenesVisible can only hold 32 bits. So for every 32 scenes in the scene enum,
+             * increment to the next index of scenesVisible so that every scene gets a unique flag in scenesVisible,
              * 224 bits were allocated to this although there are only 112 scenes
              */
             if (((s16)(*tingleMapSceneIndices)[i]) < 0x20) {
-                roomInfIdx = 0;
+                index = 0;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x40) {
-                roomInfIdx = 1;
+                index = 1;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x60) {
-                roomInfIdx = 2;
+                index = 2;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x80) {
-                roomInfIdx = 3;
+                index = 3;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xA0) {
-                roomInfIdx = 4;
+                index = 4;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xC0) {
-                roomInfIdx = 5;
+                index = 5;
             } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xE0) {
-                roomInfIdx = 6;
+                index = 6;
             }
 
-            gSaveContext.roomInf[5][roomInfIdx] =
-                gSaveContext.roomInf[5][roomInfIdx] | gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (roomInfIdx << 5)];
+            gSaveContext.scenesVisible[index] =
+                gSaveContext.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (index << 5)];
             i++;
         }
 
@@ -622,15 +622,15 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
 }
 
 /**
- * Stores the players filename into unk_6E. Used by Deku Scrub Playground Employee.
+ * Stores the players filename into dekuPlaygroundPlayerName. Used by Deku Scrub Playground Employee.
  */
-void func_8012F0EC(s16 arg0) {
+void Inventory_SaveDekuPlaygroundHighScore(s16 arg0) {
     s16 i;
 
-    gSaveContext.roomInf[3][CURRENT_DAY - 1] = gSaveContext.unk_3DE0[arg0];
+    gSaveContext.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.unk_3DE0[arg0];
 
     for (i = 0; i < 8; i++) {
-        gSaveContext.inventory.unk_6E[CURRENT_DAY - 1][i] = gSaveContext.playerName[i];
+        gSaveContext.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] = gSaveContext.playerName[i];
     }
 }
 
@@ -638,32 +638,34 @@ void Inventory_IncrementSkullTokenCount(s16 sceneIndex) {
     u32 numSkullTokens;
 
     if (sceneIndex == SCENE_KINSTA1) {
-        // Swamp Spider House (increment high bits of roomInf[6][0])
-        numSkullTokens = gSaveContext.roomInf[6][0];
-        gSaveContext.roomInf[6][0] =
-            (numSkullTokens & 0xFFFF) | ((u16)(((gSaveContext.roomInf[6][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10);
+        // Swamp Spider House (increment high bits of skullTokenCount)
+        gSaveContext.skullTokenCount = ((u16)(((gSaveContext.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
+                                       (gSaveContext.skullTokenCount & 0xFFFF);
     } else {
-        // Ocean Spider House (increment low bits of roomInf[6][0])
-        numSkullTokens = gSaveContext.roomInf[6][0];
-        gSaveContext.roomInf[6][0] = (((u16)numSkullTokens + 1) & 0xFFFF) | (numSkullTokens & 0xFFFF0000);
+        // Ocean Spider House (increment low bits of skullTokenCount)
+        gSaveContext.skullTokenCount =
+            (((u16)gSaveContext.skullTokenCount + 1) & 0xFFFF) | (gSaveContext.skullTokenCount & 0xFFFF0000);
     }
 }
 
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         // Swamp Spider House
-        return (gSaveContext.roomInf[6][0] & 0xFFFF0000) >> 0x10;
+        return (gSaveContext.skullTokenCount & 0xFFFF0000) >> 0x10;
     } else {
         // Ocean Spider House
-        return gSaveContext.roomInf[6][0] & 0xFFFF;
+        return gSaveContext.skullTokenCount & 0xFFFF;
     }
 }
 
+/**
+ * Related to Clock Town - Lottery Shop
+ */
 void func_8012F278(GlobalContext* globalCtx) {
-    u16 roomInfFlag;
+    u16 unk_EF0;
 
-    roomInfFlag = ((globalCtx->msgCtx.unk12054 & 0xF) << 8);
-    roomInfFlag |= ((globalCtx->msgCtx.unk12056 & 0xF) * 0x10);
-    roomInfFlag |= (globalCtx->msgCtx.unk12058 & 0xF);
-    gSaveContext.roomInf[7][5] = (roomInfFlag & 0xFFFF) | (gSaveContext.roomInf[7][5] & 0xFFFF0000);
+    unk_EF0 = ((globalCtx->msgCtx.unk12054 & 0xF) << 8);
+    unk_EF0 |= ((globalCtx->msgCtx.unk12056 & 0xF) << 4);
+    unk_EF0 |= (globalCtx->msgCtx.unk12058 & 0xF);
+    gSaveContext.unk_EF0 = (gSaveContext.unk_EF0 & 0xFFFF0000) | (unk_EF0 & 0xFFFF);
 }
