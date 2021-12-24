@@ -254,18 +254,18 @@ void func_80B73E3C(EnJg* this) {
 void func_80B73F1C(EnJg* this, GlobalContext* globalCtx) {
     switch (this->unk_3CE) {
         case 0xDAC:
-            this->unk_39E = 3;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->animationIndex = 3;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             this->actionFunc = func_80B74550;
             break;
         case 0xDAD:
-            this->unk_39E = 4;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->animationIndex = 4;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             this->actionFunc = func_80B742F8;
             break;
         case 0xDB7:
-            this->unk_39E = 4;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->animationIndex = 4;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             this->actionFunc = func_80B74550;
             break;
         case 0xDAE:
@@ -274,22 +274,22 @@ void func_80B73F1C(EnJg* this, GlobalContext* globalCtx) {
         case 0xDBA:
         case 0xDBD:
         case 0xDC4:
-            this->unk_39E = 0;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->animationIndex = 0;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             this->actionFunc = func_80B74550;
             break;
         case 0xDB0:
         case 0xDBB:
         case 0xDBC:
         case 0xDC6:
-            this->unk_39E = 6;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->animationIndex = 6;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             this->actionFunc = func_80B74550;
             break;
         case 0xDB4:
         case 0xDB5:
-            this->unk_39E = 2;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->animationIndex = 2;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             this->actionFunc = func_80B74550;
             break;
     }
@@ -361,22 +361,22 @@ void func_80B742F8(EnJg* this, GlobalContext* globalCtx) {
 
     sp27 = func_80152498(&globalCtx->msgCtx);
     currentFrame = this->skelAnime.curFrame;
-    lastFrame = Animation_GetLastFrame(D_80B75878[this->unk_39E].animationSeg);
-    if (this->unk_39E == 4) {
+    lastFrame = Animation_GetLastFrame(D_80B75878[this->animationIndex].animationSeg);
+    if (this->animationIndex == 4) {
         if (currentFrame == lastFrame) {
-            this->unk_39E = 5;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->animationIndex = 5;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
         }
-    } else if (this->unk_39E == 5) {
+    } else if (this->animationIndex == 5) {
         if ((sp27 == 5) && (func_80147624(globalCtx) != 0)) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->unk_3CC &= 0xFFFB;
-            this->unk_39E = 1;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->animationIndex = 1;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             this->actionFunc = func_80B74440;
         }
-    } else if (this->unk_39E == 1) {
+    } else if (this->animationIndex == 1) {
         Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
         func_80B751F8(this, globalCtx);
     }
@@ -386,8 +386,8 @@ void func_80B74440(EnJg* this, GlobalContext* globalCtx) {
     s16 phi_a1;
     f32 sp30;
 
-    if (this->unk_1E0 != NULL) {
-        phi_a1 = func_80B73B98(this->unk_1E0, this->unk_1E4, &this->actor.world.pos, &sp30);
+    if (this->path != NULL) {
+        phi_a1 = func_80B73B98(this->path, this->unk_1E4, &this->actor.world.pos, &sp30);
         if (this->actor.bgCheckFlags & 8) {
             phi_a1 = this->actor.wallYaw;
         }
@@ -395,9 +395,9 @@ void func_80B74440(EnJg* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
 
-        if (func_80B73C58(this, this->unk_1E0, this->unk_1E4)) {
-            if (this->unk_1E4 >= (this->unk_1E0->count - 1)) {
-                this->unk_39E = 1;
+        if (func_80B73C58(this, this->path, this->unk_1E4)) {
+            if (this->unk_1E4 >= (this->path->count - 1)) {
+                this->animationIndex = 1;
                 this->actionFunc = func_80B742F8;
             } else {
                 this->unk_1E4++;
@@ -419,10 +419,10 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
 
     sp27 = func_80152498(&globalCtx->msgCtx);
     currentFrame = this->skelAnime.curFrame;
-    lastFrame = Animation_GetLastFrame(D_80B75878[this->unk_39E].animationSeg);
-    if ((this->unk_39E == 4) && (currentFrame == lastFrame)) {
-        this->unk_39E = 5;
-        func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+    lastFrame = Animation_GetLastFrame(D_80B75878[this->animationIndex].animationSeg);
+    if ((this->animationIndex == 4) && (currentFrame == lastFrame)) {
+        this->animationIndex = 5;
+        func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
     }
     if ((sp27 == 5) && (func_80147624(globalCtx))) {
         temp = this->unk_3CE;
@@ -462,10 +462,10 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void func_80B747C8(EnJg* this, GlobalContext* globalCtx) {
-    if (this->unk_39E != 1) {
-        this->unk_39E = 1;
+    if (this->animationIndex != 1) {
+        this->animationIndex = 1;
         this->unk_3A2 = 0x3E8;
-        func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+        func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
         this->actionFunc = func_80B74440;
     } else {
         this->unk_3A2 = 0x3E8;
@@ -478,43 +478,43 @@ void func_80B74840(EnJg* this, GlobalContext* globalCtx) {
     s16 lastFrame;
 
     currentFrame = this->skelAnime.curFrame;
-    lastFrame = Animation_GetLastFrame(D_80B75878[this->unk_39E].animationSeg);
+    lastFrame = Animation_GetLastFrame(D_80B75878[this->animationIndex].animationSeg);
     if (this->unk_3A0 == 1) {
         this->unk_3A0 = 2;
         this->unk_3A2 = 0x3E8;
         this->skelAnime.curFrame = lastFrame;
-        this->unk_148 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
+        this->icePoly = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
                                     this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
                                     this->actor.world.rot.y, this->actor.world.rot.z, 0xFF50);
-        this->unk_39E = 8;
-        func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+        this->animationIndex = 8;
+        func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
         this->actionFunc = func_80B749D0;
-    } else if (this->unk_39E == 7) {
+    } else if (this->animationIndex == 7) {
         this->unk_3A0 = 2;
         if (currentFrame == lastFrame) {
             this->unk_3A2 = 0x3E8;
-            this->unk_148 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
+            this->icePoly = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
                                         this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
                                         this->actor.world.rot.y, this->actor.world.rot.z, 0xFF50);
-            this->unk_39E = 8;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->animationIndex = 8;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             this->actionFunc = func_80B749D0;
         }
     }
 }
 
 void func_80B749D0(EnJg* this, GlobalContext* globalCtx) {
-    if (this->unk_148->update == NULL) {
-        this->unk_148 = NULL;
-        if (this->unk_39E == 8) {
+    if (this->icePoly->update == NULL) {
+        this->icePoly = NULL;
+        if (this->animationIndex == 8) {
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                this->unk_39E = 0;
+                this->animationIndex = 0;
                 if (this->unk_3CE == 0xDAC) {
-                    func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+                    func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
                     this->actionFunc = func_80B7406C;
                 } else {
                     this->unk_3A2 = 0x3E8;
-                    func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+                    func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
                     this->actionFunc = func_80B74440;
                 }
             }
@@ -560,9 +560,9 @@ void func_80B74BC8(EnJg* this, GlobalContext* globalCtx) {
             switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
                 case 1:
                     this->unk_3CA = 0x11;
-                    if (this->unk_1E8 != NULL) {
-                        Actor_MarkForDeath(this->unk_1E8);
-                        this->unk_1E8 = NULL;
+                    if (this->drum != NULL) {
+                        Actor_MarkForDeath(this->drum);
+                        this->drum = NULL;
                     }
                     break;
                 case 2:
@@ -599,7 +599,7 @@ void func_80B74BC8(EnJg* this, GlobalContext* globalCtx) {
             (((this->unk_3CA == 0xA) && (Animation_OnFrame(&this->skelAnime, 14.0f)) && (this->unk_3A0 != 3)) ||
              (((this->unk_3CA == 0xB) || (this->unk_3CA == 0xC)) && (this->unk_3A0 == 3)))) {
             this->unk_3CC |= 8;
-            this->unk_1E8 = Actor_SpawnAsChildAndCutscene(
+            this->drum = Actor_SpawnAsChildAndCutscene(
                 &globalCtx->actorCtx, globalCtx, ACTOR_OBJ_JG_GAKKI, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z,
                 this->actor.params, this->actor.cutscene, this->actor.unk20, NULL);
@@ -752,7 +752,7 @@ void func_80B751F8(EnJg* this, GlobalContext* globalCtx) {
     s16 lastFrame;
 
     currentFrame = this->skelAnime.curFrame;
-    lastFrame = Animation_GetLastFrame(D_80B75878[this->unk_39E].animationSeg);
+    lastFrame = Animation_GetLastFrame(D_80B75878[this->animationIndex].animationSeg);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->unk_3CC |= 4;
         this->actor.speedXZ = 0.0f;
@@ -774,8 +774,8 @@ void func_80B751F8(EnJg* this, GlobalContext* globalCtx) {
         }
         this->unk_3A2--;
         if ((this->unk_3A2 <= 0) && (currentFrame == lastFrame)) {
-            this->unk_39E = 7;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            this->animationIndex = 7;
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             func_8019F1C0(&D_80B759A8, 0x295C);
             this->actionFunc = func_80B74840;
         }
@@ -794,23 +794,23 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     if ((thisx->params & 1) == 0) {
         if (globalCtx->sceneNum == SCENE_SPOT00 && gSaveContext.sceneSetupIndex == 7 && globalCtx->csCtx.unk_12 == 0) {
-            this->unk_39E = 0;
+            this->animationIndex = 0;
             this->unk_3A0 = 3;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             this->actionFunc = func_80B74BC8;
         } else {
-            this->unk_1E0 = func_8013D648(globalCtx, ((thisx->params & 0xFC00) >> 0xA), 0x3F);
-            this->unk_39E = 4;
+            this->path = func_8013D648(globalCtx, ((thisx->params & 0xFC00) >> 0xA), 0x3F);
+            this->animationIndex = 4;
             this->unk_3A0 = 1;
             this->unk_3A2 = 1000;
             this->unk_3CE = 3500;
-            func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+            func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
             this->actionFunc = func_80B74840;
         }
     } else {
-        this->unk_39E = 0;
+        this->animationIndex = 0;
         this->unk_3C8 = this->actor.cutscene;
-        func_8013BC6C(&this->skelAnime, D_80B75878, this->unk_39E);
+        func_8013BC6C(&this->skelAnime, D_80B75878, this->animationIndex);
         this->actionFunc = func_80B7408C;
     }
 }
