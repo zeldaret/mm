@@ -10,11 +10,8 @@
         <Texture Name="gDefenseHeartHalfTex" OutName="defense_heart_half" Format="ia8" Width="16" Height="16" Offset="0x700"/>
         <Texture Name="gDefenseHeartThreeQuarterTex" OutName="defense_heart_three_quarter" Format="ia8" Width="16" Height="16" Offset="0x800"/>
         <Texture Name="gDefenseHeartFullTex" OutName="defense_heart_full" Format="ia8" Width="16" Height="16" Offset="0x900"/>
-
-        <!-- Unknown source -->
-        <Texture Name="gUnknownTorchTex" OutName="unknown_torch" Format="ia8" Width="16" Height="30" Offset="0xA00"/>
-        <Texture Name="gUnknownLogTex" OutName="unknown_log" Format="ia8" Width="24" Height="16" Offset="0xBE0"/>
-
+        <Texture Name="gFishermanMinigameTorchIconTex" OutName="fisherman_minigame_torch_icon" Format="ia8" Width="16" Height="30" Offset="0xA00"/>
+        <Texture Name="gSwordTrainingLogIconTex" OutName="sword_training_log_icon" Format="ia8" Width="24" Height="16" Offset="0xBE0"/>
         <Texture Name="gSmallKeyCounterIconTex" OutName="small_key_counter_icon" Format="ia8" Width="16" Height="16" Offset="0xD60"/>
         <Texture Name="gRupeeCounterIconTex" OutName="rupee_counter_icon" Format="ia8" Width="16" Height="16" Offset="0xE60"/>
         <Texture Name="gButtonBackgroundTex" OutName="button_background" Format="ia8" Width="32" Height="32" Offset="0xF60"/>
