@@ -44,6 +44,7 @@ typedef struct {
 } SkinAnimatedLimbData; // size = 0xC
 
 // ZAPD compatibility typedefs
+// TODO: Remove when ZAPD adds support for them
 typedef SkinVtx Struct_800A57C0;
 typedef SkinLimbModif Struct_800A598C_2;
 typedef SkinAnimatedLimbData Struct_800A5E28;
