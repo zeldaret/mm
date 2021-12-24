@@ -1313,8 +1313,22 @@ void func_80126AB4(Player* player, Vec3f** arg1) {
     *arg1 = D_801C0994;
 }
 
+#if 0
+Vec3f D_801C0970[3] = {
+    { 0.0f, 400.0f, 0.0f },
+    { 0.0f, 1400.0f, -1000.0f },
+    { 0.0f, -400.0f, 1000.0f },
+};
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126B8C.s")
+extern Vec3f D_801C0970[3];
+
+void func_80126B8C(GlobalContext* globalCtx, Player* player) {
+    Vec3f* sp1C;
+
+    func_80126AB4(player, &sp1C);
+    func_8012669C(globalCtx, player, sp1C, D_801C0970);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126BD0.s")
 
