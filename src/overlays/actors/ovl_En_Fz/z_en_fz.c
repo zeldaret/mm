@@ -7,6 +7,7 @@
 #include "z_en_fz.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "objects/object_fz/object_fz.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000015
 
@@ -1001,7 +1002,7 @@ void func_80934464(EnFz* this, GlobalContext* globalCtx) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, &D_04051180);
+                gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_051180);
                 flag++;
             }
 
@@ -1015,7 +1016,7 @@ void func_80934464(EnFz* this, GlobalContext* globalCtx) {
             Matrix_Scale(ptr->unk_30, ptr->unk_30, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, &D_04051238);
+            gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_051238);
         }
     }
 
