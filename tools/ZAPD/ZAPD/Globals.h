@@ -58,6 +58,7 @@ public:
 	bool verboseUnaccounted = false;
 	bool gccCompat = false;
 	bool forceStatic = false;
+	bool forceUnaccountedStatic = false;
 
 	std::vector<ZFile*> files;
 	std::vector<ZFile*> externalFiles;

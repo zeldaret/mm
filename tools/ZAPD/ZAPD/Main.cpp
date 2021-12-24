@@ -216,6 +216,10 @@ int main(int argc, char* argv[])
 		{
 			Globals::Instance->forceStatic = true;
 		}
+		else if (arg == "-us" || arg == "--unaccounted-static")
+		{
+			Globals::Instance->forceUnaccountedStatic = true;
+		}
 	}
 
 	// Parse File Mode
