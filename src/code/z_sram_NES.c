@@ -185,14 +185,14 @@ void Sram_ActivateOwl(u8 owlId) {
 }
 
 void func_80143A54(void) {
-    gSaveContext.save.roomInf[7][3] = (gSaveContext.save.roomInf[7][3] & 0xFFFF) | 0x130000;
-    gSaveContext.save.roomInf[7][3] = (gSaveContext.save.roomInf[7][3] & 0xFFFF0000) | 0xA;
-    gSaveContext.save.roomInf[7][4] = 0x1770;
-    gSaveContext.save.roomInf[7][6] = (gSaveContext.save.roomInf[7][6] & 0xFFFF0000) | 0x27;
-    gSaveContext.save.roomInf[7][6] = (gSaveContext.save.roomInf[7][6] & 0xFFFF) | 0xA0000;
-    gSaveContext.save.roomInf[3][0] = 0x1D4C;
-    gSaveContext.save.roomInf[3][1] = 0x1D4C;
-    gSaveContext.save.roomInf[3][2] = 0x1DB0;
+    gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF) | 0x130000;
+    gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF0000) | 0xA;
+    gSaveContext.save.horseBackBalloonHighScore = 6000;
+    gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF0000) | 0x27;
+    gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF) | 0xA0000;
+    gSaveContext.save.dekuPlaygroundHighScores[0] = 7500; // 75 seconds
+    gSaveContext.save.dekuPlaygroundHighScores[1] = 7500; // 75 seconds
+    gSaveContext.save.dekuPlaygroundHighScores[2] = 7600; // 76 seconds
 }
 
 void func_80143AC4(void) {
@@ -309,15 +309,16 @@ void func_80143B0C(GameState* gameState) {
 
     for (i = 0; i < ARRAY_COUNT(D_801C67B0); i++) {
         if (D_801C67B0[i] != 0xFF) {
-            if ((gSaveContext.save.inventory.items[i] != 0xFF) && (i != 0xD)) {
+            if ((gSaveContext.save.inventory.items[i] != ITEM_NONE) && (i != 0xD)) {
                 AMMO(gSaveContext.save.inventory.items[i]) = 0;
             }
         }
     }
 
     for (i = 0; i < 6; i++) {
-        if (gSaveContext.save.inventory.items[i] >= 0x13) {
-            if (gSaveContext.save.inventory.items[i] < 0x28) {
+        // Check for all bottled items
+        if (gSaveContext.save.inventory.items[i] > ITEM_BOTTLE) {
+            if (gSaveContext.save.inventory.items[i] <= ITEM_OBABA_DRINK) {
 
                 for (phi_s1_2 = 1; phi_s1_2 != 4; phi_s1_2++) {
                     if (phi_s1_2 == 0) {
@@ -328,14 +329,14 @@ void func_80143B0C(GameState* gameState) {
 
                     if ((phi_v0 & 0xFF) == gSaveContext.save.inventory.items[i]) {
                         if (phi_s1_2 == 0) {
-                            gSaveContext.save.equips.buttonItems[CUR_FORM][phi_s1_2] = 0x12;
+                            gSaveContext.save.equips.buttonItems[CUR_FORM][phi_s1_2] = ITEM_BOTTLE;
                         } else {
-                            gSaveContext.save.equips.buttonItems[0][phi_s1_2] = 0x12;
+                            gSaveContext.save.equips.buttonItems[0][phi_s1_2] = ITEM_BOTTLE;
                         }
                         func_80112B40(globalCtx, phi_s1_2 & 0xFF);
                     }
                 }
-                gSaveContext.save.inventory.items[i] = 0x12;
+                gSaveContext.save.inventory.items[i] = ITEM_BOTTLE;
             }
         }
     }
@@ -351,52 +352,52 @@ void func_80143B0C(GameState* gameState) {
             (1 << gEquipShifts[0]) | (gSaveContext.save.equips.equipment & gEquipNegMasks[0]);
 
         if (CUR_FORM == 0) {
-            if ((((gSaveContext.save.roomInf[6][5] & 0xFF000000) >> 0x18) >= 0x4F) ||
-                (((gSaveContext.save.roomInf[6][5] & 0xFF0000) >> 0x10) >= 0x4F)) {
+            if ((((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) >= ITEM_SWORD_GILDED) ||
+                (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) >= ITEM_SWORD_GILDED)) {
 
-                gSaveContext.save.equips.buttonItems[CUR_FORM][0] = 0x4F;
+                gSaveContext.save.equips.buttonItems[CUR_FORM][0] = ITEM_SWORD_GILDED;
                 gSaveContext.save.equips.equipment =
                     (3 << gEquipShifts[0]) | (gSaveContext.save.equips.equipment & gEquipNegMasks[0]);
             } else {
                 gSaveContext.save.equips.buttonItems[CUR_FORM][0] = 0x4D;
             }
         } else {
-            if ((((gSaveContext.save.roomInf[6][5] & 0xFF000000) >> 0x18) >= 0x4F) ||
-                (((gSaveContext.save.roomInf[6][5] & 0xFF0000) >> 0x10) >= 0x4F)) {
-                gSaveContext.save.equips.buttonItems[0][0] = 0x4F;
+            if ((((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) >= ITEM_SWORD_GILDED) ||
+                (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) >= ITEM_SWORD_GILDED)) {
+                gSaveContext.save.equips.buttonItems[0][0] = ITEM_SWORD_GILDED;
                 gSaveContext.save.equips.equipment =
                     (3 << gEquipShifts[0]) | (gSaveContext.save.equips.equipment & gEquipNegMasks[0]);
             } else {
-                gSaveContext.save.equips.buttonItems[0][0] = 0x4D;
+                gSaveContext.save.equips.buttonItems[0][0] = ITEM_SWORD_KOKIRI;
             }
         }
     }
 
-    if ((((gSaveContext.save.roomInf[6][5] & 0xFF000000) >> 0x18) == 0x10) ||
-        (((gSaveContext.save.roomInf[6][5] & 0xFF0000) >> 0x10) == 0x10)) {
-        gSaveContext.save.inventory.items[gItemSlots[0x10]] = 0x10;
+    if ((((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) == ITEM_SWORD_GREAT_FAIRY) ||
+        (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) == ITEM_SWORD_GREAT_FAIRY)) {
+        gSaveContext.save.inventory.items[gItemSlots[0x10]] = ITEM_SWORD_GREAT_FAIRY;
     }
 
-    if (((gSaveContext.save.roomInf[6][5] & 0xFF000000) >> 0x18) == 0x12) {
+    if (((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) == ITEM_BOTTLE) {
         for (i = 0; i < 6; i++) {
-            if (gSaveContext.save.inventory.items[gItemSlots[0x12] + i] == 0xFF) {
-                gSaveContext.save.inventory.items[gItemSlots[0x12] + i] = 0x12;
+            if (gSaveContext.save.inventory.items[gItemSlots[ITEM_BOTTLE] + i] == ITEM_NONE) {
+                gSaveContext.save.inventory.items[gItemSlots[ITEM_BOTTLE] + i] = ITEM_BOTTLE;
                 break;
             }
         }
     }
 
-    if (((gSaveContext.save.roomInf[6][5] & 0xFF0000) >> 0x10) == 0x12) {
+    if (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) == ITEM_BOTTLE) {
         for (i = 0; i < 6; i++) {
-            if (gSaveContext.save.inventory.items[gItemSlots[0x12] + i] == 0xFF) {
-                gSaveContext.save.inventory.items[gItemSlots[0x12] + i] = 0x12;
+            if (gSaveContext.save.inventory.items[gItemSlots[ITEM_BOTTLE] + i] == ITEM_NONE) {
+                gSaveContext.save.inventory.items[gItemSlots[ITEM_BOTTLE] + i] = ITEM_BOTTLE;
                 break;
             }
         }
     }
 
-    gSaveContext.save.roomInf[6][5] &= 0xFFFFFF;
-    gSaveContext.save.roomInf[6][5] &= 0xFF00FFFF;
+    gSaveContext.save.stolenItems &= 0xFFFFFF;
+    gSaveContext.save.stolenItems &= 0xFF00FFFF;
 
     func_801149A0(5, 5);
     func_801149A0(0xB, 0xB);
@@ -419,26 +420,26 @@ void func_80143B0C(GameState* gameState) {
 
             if ((phi_v0 & 0xFF) < 49) {
                 if (i == 0) {
-                    gSaveContext.save.equips.buttonItems[CUR_FORM][i] = 0xFF;
+                    gSaveContext.save.equips.buttonItems[CUR_FORM][i] = ITEM_NONE;
                 } else {
-                    gSaveContext.save.equips.buttonItems[0][i] = 0xFF;
+                    gSaveContext.save.equips.buttonItems[0][i] = ITEM_NONE;
                 }
                 func_80112B40(globalCtx, i & 0xFF);
             }
         }
     }
 
-    gSaveContext.save.roomInf[6][0] &= 0xFFFF;
-    gSaveContext.save.roomInf[6][0] &= 0xFFFF0000;
-    gSaveContext.save.roomInf[6][1] = 0;
+    gSaveContext.save.skullTokenCount &= 0xFFFF;
+    gSaveContext.save.skullTokenCount &= 0xFFFF0000;
+    gSaveContext.save.unk_EC4 = 0;
 
-    gSaveContext.save.roomInf[4][0] = 0;
-    gSaveContext.save.roomInf[4][1] = 0;
-    gSaveContext.save.roomInf[4][2] = 0;
-    gSaveContext.save.roomInf[4][3] = 0;
-    gSaveContext.save.roomInf[4][4] = 0;
-    gSaveContext.save.roomInf[4][5] = 0;
-    gSaveContext.save.roomInf[4][6] = 0;
+    gSaveContext.save.unk_E88[0] = 0;
+    gSaveContext.save.unk_E88[1] = 0;
+    gSaveContext.save.unk_E88[2] = 0;
+    gSaveContext.save.unk_E88[3] = 0;
+    gSaveContext.save.unk_E88[4] = 0;
+    gSaveContext.save.unk_E88[5] = 0;
+    gSaveContext.save.unk_E88[6] = 0;
 
     func_80143A54();
 

@@ -109,7 +109,28 @@ typedef struct {
     /* 0x004C */ ItemEquips equips;
     /* 0x0070 */ Inventory inventory;
     /* 0x00F8 */ PermanentSceneFlags permanentSceneFlags[120];
-    /* 0x0E18 */ u32 roomInf[8][7];
+    /* 0x0E18 */ u8 unk_E18[0x54];
+    /* 0x0E6C */ u32 dekuPlaygroundHighScores[3];
+    /* 0x0E78 */ u32 pictoFlags0;
+    /* 0x0E7C */ u32 pictoFlags1;
+    /* 0x0E80 */ u32 unk_E80;
+    /* 0x0E84 */ u32 unk_E84;
+    /* 0x0E88 */ u32 unk_E88[7]; // Invadepoh flags
+    /* 0x0EA4 */ u32 scenesVisible[7]; // tingle maps and clouded regions on pause map
+    /* 0x0EC0 */ u32 skullTokenCount; // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
+    /* 0x0EC4 */ u32 unk_EC4;
+    /* 0x0EC8 */ u32 unk_EC8;
+    /* 0x0ECC */ u32 unk_ECC;
+    /* 0x0ED0 */ u32 unk_ED0;
+    /* 0x0ED4 */ u32 stolenItems; // Items stolen by Takkuri and given to Curiosity Shop Man
+    /* 0x0ED8 */ u32 unk_DD8;
+    /* 0x0EDC */ u32 bankRupees;
+    /* 0x0EE0 */ u32 unk_EE0;
+    /* 0x0EE4 */ u32 unk_EE4;
+    /* 0x0EE8 */ u32 unk_EE8;
+    /* 0x0EEC */ u32 horseBackBalloonHighScore;
+    /* 0x0EF0 */ u32 unk_EF0;
+    /* 0x0EF4 */ u32 unk_EF4; // Shooting Gallery Man Flags
     /* 0x0EF8 */ u8 weekEventReg[100];           // original name: week_event_reg
     /* 0x0F5C */ u32 mapsVisited;                // original name: area_arrival
     /* 0x0F60 */ u32 mapsVisible;                // original name: cloud_clear
