@@ -33,17 +33,19 @@ const ActorInit Obj_Roomtimer_InitVars = {
 void ObjRoomtimer_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjRoomtimer* this = THIS;
 
-    this->flag = ROOMTIMER_GET_SWITCHFLAG(thisx);
+    this->switchFlag = ROOMTIMER_GET_SWITCHFLAG(thisx);
     this->actor.params &= 0x1FF;
 
     if (this->actor.params != 0x1FF) {
-        this->actor.params = CLAMP_MAX(this->actor.params, 0x1F4);
+        this->actor.params = CLAMP_MAX(this->actor.params, 600);
     }
     this->actionFunc = func_80973CD8;
 }
 
 void ObjRoomtimer_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    if (thisx->params != 0x1FF && gSaveContext.unk_3DD0[4] > 0) {
+    ObjRoomtimer* this = THIS;
+
+    if (this->actor.params != 0x1FF && gSaveContext.unk_3DD0[4] > 0) {
         gSaveContext.unk_3DD0[4] = 5;
     }
 }
@@ -74,7 +76,7 @@ void func_80973D3C(ObjRoomtimer* this, GlobalContext* globalCtx) {
 void func_80973DE0(ObjRoomtimer* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         Actor_SetRoomCleared(globalCtx, this->actor.room);
-        Actor_SetSwitchFlag(globalCtx, this->flag);
+        Actor_SetSwitchFlag(globalCtx, this->switchFlag);
         if (ActorCutscene_GetLength(this->actor.cutscene) != -1) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }
