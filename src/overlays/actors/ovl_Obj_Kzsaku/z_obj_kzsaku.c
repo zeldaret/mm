@@ -38,8 +38,8 @@ extern Gfx D_06000040[];
 extern CollisionHeader D_06001118;
 
 void ObjKzsaku_Init(Actor* thisx, GlobalContext* globalCtx) {
-    ObjKzsaku* this = THIS;
     s32 pad;
+    ObjKzsaku* this = THIS;
     CollisionHeader* col = NULL;
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
