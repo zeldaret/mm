@@ -29,19 +29,19 @@ typedef struct EnIg {
     /* 0x0298 */ struct_80133038_arg2 unk_298;
     /* 0x02A4 */ s8 unk_2A4;
     /* 0x02A8 */ Actor* unk_2A8;
-    /* 0x02AC */ char unk2AC[0x4];
+    /* 0x02AC */ UNK_TYPE1 unk2AC[0x4];
     /* 0x02B0 */ Vec3f unk_2B0;
     /* 0x02BC */ Vec3f unk_2BC;
-    /* 0x02C8 */ char unk2C8[0xC];
+    /* 0x02C8 */ UNK_TYPE1 unk2C8[0xC];
     /* 0x02D4 */ Vec3f unk_2D4;
-    /* 0x02E0 */ char unk2E0[0x6];
+    /* 0x02E0 */ UNK_TYPE1 unk2E0[0x6];
     /* 0x02E6 */ Vec3s unk_2E6;
     /* 0x02EC */ Vec3s jointTable[19];
     /* 0x035E */ Vec3s morphTable[19];
     /* 0x03D0 */ u16 unk_3D0;
     /* 0x03D2 */ u16 unk_3D2;
     /* 0x03D4 */ f32 unk_3D4;
-    /* 0x03D8 */ char unk3D8[0x8];
+    /* 0x03D8 */ UNK_TYPE1 unk3D8[0x8];
     /* 0x03E0 */ s16 unk_3E0;
     /* 0x03E2 */ s16 unk_3E2;
     /* 0x03E4 */ s16 unk_3E4;
@@ -56,7 +56,7 @@ typedef struct EnIg {
     /* 0x03F6 */ s16 unk_3F6;
     /* 0x03F8 */ EnIgUnkFunc unk_3F8;
     /* 0x03FC */ s32 unk_3FC;
-    /* 0x0400 */ char unk400[0x8];
+    /* 0x0400 */ UNK_TYPE1 unk400[0x8];
     /* 0x0408 */ s32 unk_408;
 } EnIg; // size = 0x40C
 
