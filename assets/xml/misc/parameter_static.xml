@@ -30,7 +30,6 @@
         <Texture Name="gOcarinaCUpTex" OutName="ocarina_c_up" Format="ia8" Width="16" Height="16" Offset="0x28A0"/>
         <Texture Name="gOcarinaTrebleClefTex" OutName="ocarina_treble_clef" Format="i4" Width="16" Height="32" Offset="0x29A0"/>
         
-        <!-- May be Width="1" Height="64" -->
         <Texture Name="gSceneTitleCardGradientTex" OutName="scene_title_card_gradient" Format="i8" Width="64" Height="1" Offset="0x2AA0"/>
 
         <Texture Name="gTatlCUpENGTex" OutName="tatl_c_up_eng" Format="ia4" Width="32" Height="12" Offset="0x2AE0"/>
