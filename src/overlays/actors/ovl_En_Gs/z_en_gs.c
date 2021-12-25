@@ -1009,7 +1009,7 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnGs* this = THIS;
 
     if (func_800B84D0(&this->actor, globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, globalCtx);

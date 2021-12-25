@@ -214,7 +214,7 @@ void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
     func_800B84D0(&this->actor, globalCtx);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
@@ -357,7 +357,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_PayForMushroom;
                 break;
@@ -402,7 +402,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
@@ -647,7 +647,7 @@ void EnTrt_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnTrt* this) {
     Player* player = GET_PLAYER(globalCtx);
 
     func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
@@ -965,7 +965,7 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {

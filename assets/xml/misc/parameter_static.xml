@@ -15,7 +15,6 @@
         <Texture Name="gSwordTrainingLogIconTex" OutName="sword_training_log_icon" Format="ia8" Width="24" Height="16" Offset="0xBE0"/>
         <Texture Name="gSmallKeyCounterIconTex" OutName="small_key_counter_icon" Format="ia8" Width="16" Height="16" Offset="0xD60"/>
         <Texture Name="gRupeeCounterIconTex" OutName="rupee_counter_icon" Format="ia8" Width="16" Height="16" Offset="0xE60"/>
-       
         <Texture Name="gButtonBackgroundTex" OutName="button_background" Format="ia8" Width="32" Height="32" Offset="0xF60"/>
         <Texture Name="gEquippedItemOutlineTex" OutName="equipped_item_outline" Format="ia8" Width="32" Height="32" Offset="0x1360"/>
         <Texture Name="gEmptyCLeftArrowTex" OutName="empty_c_left_arrow" Format="ia8" Width="32" Height="32" Offset="0x1760"/>
@@ -23,6 +22,7 @@
         <Texture Name="gEmptyCRightArrowTex" OutName="empty_c_right_arrow" Format="ia8" Width="32" Height="32" Offset="0x1F60"/>
         <Texture Name="gClockIconTex" OutName="clock_icon" Format="ia8" Width="16" Height="16" Offset="0x2360"/>
         <Texture Name="gMapBossIconTex" OutName="map_boss_icon" Format="ia8" Width="8" Height="8" Offset="0x2460"/>
+        
         <Texture Name="gOcarinaATex" OutName="ocarina_a" Format="ia8" Width="16" Height="16" Offset="0x24A0"/>
         <Texture Name="gOcarinaCDownTex" OutName="ocarina_c_down" Format="ia8" Width="16" Height="16" Offset="0x25A0"/>
         <Texture Name="gOcarinaCRightTex" OutName="ocarina_c_right" Format="ia8" Width="16" Height="16" Offset="0x26A0"/>
@@ -125,10 +125,10 @@
         <Texture Name="gMinigameLetterTTex" OutName="minigame_letter_t" Format="i4" Width="32" Height="33" Offset="0x8578"/>
         <Texture Name="gMinigameExclamationTex" OutName="minigame_exclamation" Format="i4" Width="32" Height="33" Offset="0x8788"/>
 
-        <Texture Name="gStrayFairyWoodfallTex" OutName="stray_fairy_woodfall" Format="rgba32" Width="32" Height="24" Offset="0x8998"/>
-        <Texture Name="gStrayFairySnowheadTex" OutName="stray_fairy_snowhead" Format="rgba32" Width="32" Height="24" Offset="0x9598"/>
-        <Texture Name="gStrayFairyGreatBayTex" OutName="stray_fairy_great_bay" Format="rgba32" Width="32" Height="24" Offset="0xA198"/>
-        <Texture Name="gStrayFairyStoneTowerTex" OutName="stray_fairy_stone_tower" Format="rgba32" Width="32" Height="24" Offset="0xAD98"/>
-        <Texture Name="gStrayFairyGlowingCircleTex" OutName="stray_fairy_glowing_circle" Format="i4" Width="32" Height="24" Offset="0xB998"/>
+        <Texture Name="gStrayFairyWoodfallIconTex" OutName="stray_fairy_woodfall_icon" Format="rgba32" Width="32" Height="24" Offset="0x8998"/>
+        <Texture Name="gStrayFairySnowheadIconTex" OutName="stray_fairy_snowhead_icon" Format="rgba32" Width="32" Height="24" Offset="0x9598"/>
+        <Texture Name="gStrayFairyGreatBayIconTex" OutName="stray_fairy_great_bay_icon" Format="rgba32" Width="32" Height="24" Offset="0xA198"/>
+        <Texture Name="gStrayFairyStoneTowerIconTex" OutName="stray_fairy_stone_tower_icon" Format="rgba32" Width="32" Height="24" Offset="0xAD98"/>
+        <Texture Name="gStrayFairyGlowingCircleIconTex" OutName="stray_fairy_glowing_circle_icon" Format="i4" Width="32" Height="24" Offset="0xB998"/>
     </File>
 </Root>

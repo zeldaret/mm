@@ -300,7 +300,7 @@ void func_80AECA3C(EnTk* this, GlobalContext* globalCtx) {
 
 void func_80AECA90(EnTk* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80AEDE10(this, globalCtx);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
@@ -327,7 +327,7 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
 
     this->actor.textId = 0;
     if (func_800B84D0(&this->actor, globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80AED4F8(this, globalCtx);
         return;
@@ -699,7 +699,7 @@ void func_80AED940(EnTk* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->unk_2CA &= ~0x80;
         this->actor.flags &= ~0x10000;
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80AEDE10(this, globalCtx);
     } else if (!(this->unk_2CA & 0x80)) {
@@ -880,7 +880,7 @@ void func_80AEDF5C(EnTk* this, GlobalContext* globalCtx) {
                         this->unk_2CA |= 2;
                         if (globalCtx->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            globalCtx->msgCtx.unk11F22 = 0x44;
+                            globalCtx->msgCtx.msgMode = 0x44;
                             func_80AEE2A8(this, globalCtx);
                         } else {
                             func_8019F230();

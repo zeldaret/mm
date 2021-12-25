@@ -340,7 +340,7 @@ void func_80A71C3C(EnDno* this, GlobalContext* globalCtx) {
     }
 
     if (func_800B84D0(&this->actor, globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80A71E54(this, globalCtx);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
@@ -436,7 +436,7 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                         case 9:
                             if (func_80147624(globalCtx)) {
                                 func_8013E1C8(&this->skelAnime, sAnimations, 10, &this->unk_32C);
-                                globalCtx->msgCtx.unk11F22 = 0x44;
+                                globalCtx->msgCtx.msgMode = 0x44;
                             }
                             break;
 
@@ -619,7 +619,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                 case 0x800:
                 case 0x801:
                     if (func_80147624(globalCtx)) {
-                        globalCtx->msgCtx.unk11F22 = 0x44;
+                        globalCtx->msgCtx.msgMode = 0x44;
                         this->unk_452 = 1;
                         this->unk_454 = 0.0f;
                         func_8013E1C8(&this->skelAnime, sAnimations, 8, &this->unk_32C);

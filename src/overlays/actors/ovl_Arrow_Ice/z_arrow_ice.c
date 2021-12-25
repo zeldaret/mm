@@ -178,7 +178,7 @@ void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx) {
 void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx) {
     ArrowIce* this = THIS;
 
-    if ((globalCtx->msgCtx.unk11F22 == 0xE) || (globalCtx->msgCtx.unk11F22 == 0x12)) {
+    if ((globalCtx->msgCtx.msgMode == 0xE) || (globalCtx->msgCtx.msgMode == 0x12)) {
         Actor_MarkForDeath(&this->actor);
         return;
     } else {

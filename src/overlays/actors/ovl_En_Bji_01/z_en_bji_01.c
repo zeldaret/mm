@@ -106,7 +106,7 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
         }
     }
     if (func_800B84D0(&this->actor, globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_809CD028(this, globalCtx);
     } else {

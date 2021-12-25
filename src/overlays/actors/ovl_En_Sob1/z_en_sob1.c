@@ -450,7 +450,7 @@ void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     func_800B84D0(&this->actor, globalCtx);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
@@ -941,7 +941,7 @@ void EnSob1_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnSob1* this) {
     Player* player = GET_PLAYER(globalCtx);
 
     func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
@@ -1081,7 +1081,7 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, GlobalContext* globalCtx) {
 
 void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {

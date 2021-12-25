@@ -1117,7 +1117,7 @@ void func_80BAD130(EnSuttari* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
 
     if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (this->flags1 & 8) {
             this->actionFunc = func_80BAD004;
@@ -1154,7 +1154,7 @@ void func_80BAD2B4(EnSuttari* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80BAD230;
         } else {
             ActorCutscene_Stop(this->cutscenes[1]);
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags1 |= 0x40;
             this->actionFunc = func_80BAD380;
@@ -1178,7 +1178,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
             player->stateFlags1 &= ~0x10000000;
             this->flags1 &= ~0x4000;
             ActorCutscene_Stop(this->cutscenes[1]);
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags1 |= 0x40;
         }
@@ -1321,7 +1321,7 @@ void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
                     ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk264 |= 0x10;
                     this->flags2 &= ~1;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->textId = 0;
                 if (this->flags1 & 1) {
