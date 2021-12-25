@@ -438,7 +438,7 @@ void Inventory_ChangeEquipment(s16 value) {
 }
 
 /**
- * Only deletes shield
+ * Only deletes shield, equipment argument unused and is a remnant of OoT
  */
 u8 Inventory_DeleteEquipment(GlobalContext* globalCtx, s16 equipment) {
     Player* player = GET_PLAYER(globalCtx);
@@ -635,8 +635,6 @@ void Inventory_SaveDekuPlaygroundHighScore(s16 timerId) {
 }
 
 void Inventory_IncrementSkullTokenCount(s16 sceneIndex) {
-    u32 numSkullTokens;
-
     if (sceneIndex == SCENE_KINSTA1) {
         // Swamp Spider House (increment high bits of skullTokenCount)
         gSaveContext.skullTokenCount = ((u16)(((gSaveContext.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |

@@ -866,9 +866,9 @@ typedef struct {
     /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
     /* 0x12048 */ u8 unk12048; // EnKakasi
     /* 0x12049 */ UNK_TYPE1 pad12049[0xB];
-    /* 0x12054 */ s16 unk12054;
-    /* 0x12056 */ s16 unk12056;
-    /* 0x12058 */ s16 unk12058;
+    /* 0x12054 */ s16 unk12054; // First digit in lottery code guess
+    /* 0x12056 */ s16 unk12056; // Second digit lottery code guess
+    /* 0x12058 */ s16 unk12058; // Third digit lottery code guess
     /* 0x1205A */ UNK_TYPE1 pad1205A[0x10];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
