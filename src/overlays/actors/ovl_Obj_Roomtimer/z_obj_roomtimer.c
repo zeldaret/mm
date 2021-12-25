@@ -37,7 +37,7 @@ void ObjRoomtimer_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.params &= 0x1FF;
 
     if (this->actor.params != 0x1FF) {
-        this->actor.params = CLAMP_MAX(this->actor.params, 600);
+        this->actor.params = CLAMP_MAX(this->actor.params, 500);
     }
     this->actionFunc = func_80973CD8;
 }
