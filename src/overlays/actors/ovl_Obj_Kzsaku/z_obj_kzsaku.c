@@ -42,14 +42,14 @@ void ObjKzsaku_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     CollisionHeader* col = NULL;
 
-    Actor_SetScale(thisx, 1.0f);
+    Actor_SetScale(&this->dyna.actor, 1.0f);
     DynaPolyActor_Init(&this->dyna, 1);
     CollisionHeader_GetVirtual(&D_06001118, &col);
 
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, col);
 
     this->switchFlag = KZSAKU_GET_SWITCHFLAG(thisx);
-    this->unk_160 = 0.0f;
+    this->raisedAmount = 0.0f;
 
     if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
         func_80C08C84(this);
@@ -87,13 +87,13 @@ void func_80C08BD0(ObjKzsaku* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
         }
     }
-    if (this->unk_160 < 450.0f) {
+    if (this->raisedAmount < 450.0f) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_METALDOOR_SLIDE - SFX_FLAG);
-        this->unk_160 += 15.0f;
+        this->raisedAmount += 15.0f;
     } else {
         func_80C08C84(this);
     }
-    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + this->unk_160;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + this->raisedAmount;
 }
 
 void func_80C08C84(ObjKzsaku* this) {
@@ -109,9 +109,9 @@ void func_80C08CB0(ObjKzsaku* this, GlobalContext* globalCtx) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
             }
             this->timer = 21;
-            return;
+        } else {
+            this->timer++;
         }
-        this->timer++;
     }
 }
 
