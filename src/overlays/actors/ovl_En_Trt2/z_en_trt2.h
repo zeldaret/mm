@@ -10,7 +10,7 @@ typedef void (*EnTrt2ActionFunc)(struct EnTrt2*, GlobalContext*);
 typedef struct EnTrt2 {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ EnTrt2ActionFunc actionFunc;
-    /* 0x0148 */ char unk_144[0x294];
+    /* 0x0148 */ char unk_148[0x294];
 } EnTrt2; // size = 0x3DC
 
 extern const ActorInit En_Trt2_InitVars;
