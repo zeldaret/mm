@@ -10,11 +10,12 @@
 
 #define THIS ((ObjDowsing*)thisx)
 
-s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx);
-s32 func_80B23DD0(ObjDowsing* this, GlobalContext* globalCtx);
 void ObjDowsing_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx);
+
+s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx);
+s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Dowsing_InitVars = {
     ACTOR_OBJ_DOWSING,
@@ -29,8 +30,8 @@ const ActorInit Obj_Dowsing_InitVars = {
 };
 
 s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx) {
-    s32 type = DOWSING_GET_TYPE(this);
-    s32 flag = DOWSING_GET_FLAG(this);
+    s32 type = DOWSING_GET_TYPE(&this->actor);
+    s32 flag = DOWSING_GET_FLAG(&this->actor);
 
     if (type == DOWSING_COLLECTIBLE) {
         return Actor_GetCollectibleFlag(globalCtx, flag);
@@ -43,18 +44,18 @@ s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B23DD0(ObjDowsing* this, GlobalContext* globalCtx) {
+s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, GlobalContext* globalCtx) {
     if (ObjDowsing_GetFlag(this, globalCtx)) {
         Actor_MarkForDeath(&this->actor);
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 void ObjDowsing_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjDowsing* this = THIS;
 
-    func_80B23DD0(this, globalCtx);
+    ObjDowsing_CheckValidSpawn(this, globalCtx);
 }
 
 void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -63,7 +64,7 @@ void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjDowsing* this = THIS;
 
-    if (!func_80B23DD0(this, globalCtx)) {
+    if (!ObjDowsing_CheckValidSpawn(this, globalCtx)) {
         func_800B8C50(thisx, globalCtx);
     }
 }
