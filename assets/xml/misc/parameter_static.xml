@@ -71,7 +71,7 @@
         <Texture Name="gAmmoDigit7Tex" OutName="ammo_digit_7" Format="ia8" Width="8" Height="8" Offset="0x4C60"/>
         <Texture Name="gAmmoDigit8Tex" OutName="ammo_digit_8" Format="ia8" Width="8" Height="8" Offset="0x4CA0"/>
         <Texture Name="gAmmoDigit9Tex" OutName="ammo_digit_9" Format="ia8" Width="8" Height="8" Offset="0x4CE0"/>
-        <Texture Name="gUnusedAmmoDigitHalfTex" OutName="unused_ammo_digit_half" Format="ia8" Width="16" Height="8" Offset="0x4D20"/>
+        <Texture Name="gAmmoDigitHalfTex" OutName="ammo_digit_half" Format="ia8" Width="16" Height="8" Offset="0x4D20"/>
             
         <Texture Name="gMagicBarEndTex" OutName="magic_bar_end" Format="ia8" Width="8" Height="16" Offset="0x4DA0"/>
         <Texture Name="gMagicBarMidTex" OutName="magic_bar_mid" Format="ia8" Width="24" Height="16" Offset="0x4E20"/>
