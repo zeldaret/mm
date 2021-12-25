@@ -82,7 +82,7 @@
         <Texture Name="gThreeDayTimerSunHourTex" OutName="three_day_timer_sun_hour" Format="ia8" Width="24" Height="24" Offset="0x5720"/>
         <!-- May be Height="48" vs. Height="50" -->
         <Texture Name="gThreeDayTimerDialBoarderTex" OutName="three_day_timer_dial_boarder" Format="i4" Width="64" Height="48" Offset="0x5960"/>
-        <Texture Name="gThreeDayTimerDialLinesTex" OutName="three_day_timer_dial_lines" Format="i4" Width="64" Height="35" Offset="0x5F60"/>
+        <Texture Name="gThreeDayTimerHourLinesTex" OutName="three_day_timer_hour_lines" Format="i4" Width="64" Height="35" Offset="0x5F60"/>
         <Texture Name="gThreeDayTimerStarMinuteTex" OutName="three_day_timer_star_minute" Format="i4" Width="16" Height="16" Offset="0x63C0"/>
         <Texture Name="gThreeDayTimerHour12Tex" OutName="three_day_timer_hour_12" Format="i4" Width="16" Height="11" Offset="0x6440"/>
         <Texture Name="gThreeDayTimerHour1Tex" OutName="three_day_timer_hour_1" Format="i4" Width="16" Height="11" Offset="0x6498"/>
