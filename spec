@@ -3026,8 +3026,7 @@ beginseg
     name "ovl_Obj_Hugebombiwa"
     compress
     include "build/src/overlays/actors/ovl_Obj_Hugebombiwa/z_obj_hugebombiwa.o"
-    include "build/data/ovl_Obj_Hugebombiwa/ovl_Obj_Hugebombiwa.data.o"
-    include "build/data/ovl_Obj_Hugebombiwa/ovl_Obj_Hugebombiwa.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Hugebombiwa/ovl_Obj_Hugebombiwa_reloc.o"
 endseg
 
 beginseg
