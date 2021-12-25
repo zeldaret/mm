@@ -1,9 +1,9 @@
 #include "global.h"
 
-#define KALEIDO_OVERLAY(name)                                                                                \
-    {                                                                                                        \
-        NULL, (u32)_ovl_##name##SegmentRomStart, (u32)_ovl_##name##SegmentRomEnd, _ovl_##name##SegmentStart, \
-            _ovl_##name##SegmentEnd, 0, #name,                                                               \
+#define KALEIDO_OVERLAY(name)                                                                        \
+    {                                                                                                \
+        NULL, SEGMENT_ROM_START(ovl_##name), SEGMENT_ROM_END(ovl_##name), SEGMENT_START(ovl_##name), \
+            SEGMENT_END(ovl_##name), 0, #name,                                                       \
     }
 
 KaleidoMgrOverlay gKaleidoMgrOverlayTable[] = {
