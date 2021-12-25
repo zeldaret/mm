@@ -1,0 +1,12 @@
+﻿<Root>
+    <File Name="object_gi_bottle_04" Segment="6">
+        <!-- <Blob Name="object_gi_bottle_04_Blob_0007B0" Size="0x40" Offset="0x7B0" /> -->
+        <DList Name="object_gi_bottle_04_DL_0007F0" Offset="0x7F0" />
+        <DList Name="object_gi_bottle_04_DL_0008B8" Offset="0x8B8" />
+        <DList Name="object_gi_bottle_04_DL_000B10" Offset="0xB10" />
+        <Texture Name="object_gi_bottle_04_Tex_000B18" OutName="tex_000B18" Format="i8" Width="16" Height="16" Offset="0xB18" />
+        <Texture Name="object_gi_bottle_04_Tex_000C18" OutName="tex_000C18" Format="ia8" Width="32" Height="32" Offset="0xC18" />
+        <Texture Name="object_gi_bottle_04_Tex_001018" OutName="tex_001018" Format="i4" Width="32" Height="32" Offset="0x1018" />
+        <TextureAnimation Name="object_gi_bottle_04_Matanimheader_001254" Offset="0x1254" />
+    </File>
+</Root>

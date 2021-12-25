@@ -1417,9 +1417,9 @@ struct GlobalContext {
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 unk_1879C[10];
-    /* 0x187B0 */ MtxF projectionMatrix;
+    /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
-    /* 0x187FC */ MtxF mf_187FC;
+    /* 0x187FC */ MtxF billboardMtxF;
     /* 0x1883C */ Mtx* unk_1883C;
     /* 0x18840 */ u32 gameplayFrames;
     /* 0x18844 */ u8 unk_18844;
@@ -1477,6 +1477,30 @@ typedef struct {
     /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
+
+typedef struct EnHy {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ UNK_TYPE1 unk_144[0x8];
+    /* 0x14C */ SkelAnime skelAnime;
+    /* 0x190 */ s8 unk190;
+    /* 0x191 */ s8 unk191;
+    /* 0x192 */ s8 unk192;
+    /* 0x193 */ s8 animObjIndex;
+    /* 0x194 */ ColliderCylinder collider;
+    /* 0x1E0 */ UNK_TYPE1 unk_1E0[0x4];
+    /* 0x1E4 */ Path* path;
+    /* 0x1E8 */ s16 curPoint;
+    /* 0x1EA */ UNK_TYPE1 unk_1EA[0x2];
+    /* 0x1EC */ Vec3f leftFootPos;
+    /* 0x1F8 */ Vec3f rightFootPos;
+    /* 0x204 */ u8 isLeftFootOnGround;
+    /* 0x205 */ u8 isRightFootOnGround;
+    /* 0x206 */ Vec3s jointTable[16];
+    /* 0x266 */ Vec3s morphTable[16];
+    /* 0x2C6 */ UNK_TYPE1 unk_2C6[0x120];
+    /* 0x3E6 */ s16 eyeTexIndex;
+    /* 0x3E8 */ s16 blinkTimer;
+} EnHy;
 
 typedef struct {
     /* 0x0 */ u8 unk0;
