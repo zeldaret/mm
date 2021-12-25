@@ -622,12 +622,12 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
 }
 
 /**
- * Stores the players filename into dekuPlaygroundPlayerName. Used by Deku Scrub Playground Employee.
+ * Also stores the players filename into dekuPlaygroundPlayerName
  */
-void Inventory_SaveDekuPlaygroundHighScore(s16 arg0) {
+void Inventory_SaveDekuPlaygroundHighScore(s16 timerId) {
     s16 i;
 
-    gSaveContext.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.unk_3DE0[arg0];
+    gSaveContext.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.unk_3DE0[timerId];
 
     for (i = 0; i < 8; i++) {
         gSaveContext.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] = gSaveContext.playerName[i];
@@ -658,14 +658,11 @@ s16 Inventory_GetSkullTokenCount(s16 sceneIndex) {
     }
 }
 
-/**
- * Related to Clock Town - Lottery Shop
- */
-void func_8012F278(GlobalContext* globalCtx) {
-    u16 unk_EF0;
+void Inventory_SaveLotteryCodeGuess(GlobalContext* globalCtx) {
+    u16 lotteryCodeGuess;
 
-    unk_EF0 = ((globalCtx->msgCtx.unk12054 & 0xF) << 8);
-    unk_EF0 |= ((globalCtx->msgCtx.unk12056 & 0xF) << 4);
-    unk_EF0 |= (globalCtx->msgCtx.unk12058 & 0xF);
-    gSaveContext.unk_EF0 = (gSaveContext.unk_EF0 & 0xFFFF0000) | (unk_EF0 & 0xFFFF);
+    lotteryCodeGuess = ((globalCtx->msgCtx.unk12054 & 0xF) << 8);  // First Digit
+    lotteryCodeGuess |= ((globalCtx->msgCtx.unk12056 & 0xF) << 4); // Second Digit
+    lotteryCodeGuess |= (globalCtx->msgCtx.unk12058 & 0xF);        // Third Digit
+    gSaveContext.lotteryCodeGuess = (gSaveContext.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
 }

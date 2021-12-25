@@ -2372,7 +2372,7 @@ void Inventory_SetMapVisibility(s16 arg0);
 void Inventory_SaveDekuPlaygroundHighScore(s16 arg0);
 void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
-void func_8012F278(GlobalContext* globalCtx);
+void Inventory_SaveLotteryCodeGuess(GlobalContext* globalCtx);
 s32 Object_Spawn(ObjectContext* objectCtx, s16 id);
 void Object_InitBank(GameState* gameState, ObjectContext* objectCtx);
 void Object_UpdateBank(ObjectContext* objectCtx);

@@ -106,7 +106,7 @@ typedef struct {
     /* 0x0E88 */ u32 unk_E88[7]; // Invadepoh flags
     /* 0x0EA4 */ u32 scenesVisible[7]; // tingle maps and clouded regions on pause map. Stores scenes bitwise for up to 224 scenes even though there are not that many scenes
     /* 0x0EC0 */ u32 skullTokenCount; // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
-    /* 0x0EC4 */ u32 unk_EC4; // Gossic stone flags
+    /* 0x0EC4 */ u32 unk_EC4; // Gossic stone heart piece flags
     /* 0x0EC8 */ u32 unk_EC8;
     /* 0x0ECC */ u32 unk_ECC;
     /* 0x0ED0 */ u32 unk_ED0;
@@ -117,17 +117,17 @@ typedef struct {
     /* 0x0EE4 */ u32 unk_EE4;
     /* 0x0EE8 */ u32 unk_EE8;
     /* 0x0EEC */ u32 horseBackBalloonHighScore;
-    /* 0x0EF0 */ u32 unk_EF0;
-    /* 0x0EF4 */ u32 unk_EF4; // Shooting Gallery Man Flags
+    /* 0x0EF0 */ u32 lotteryCodeGuess;       // Lottery code chosen by player (only uses lower three hex digits)
+    /* 0x0EF4 */ u32 unk_EF4;                // Shooting Gallery Man Flags
     /* 0x0EF8 */ u8 weekEventReg[100];       // "week_event_reg"
     /* 0x0F5C */ u32 mapsVisited;            // "area_arrival"
-    /* 0x0F60 */ u32 mapsVisible;                // "cloud_clear"
+    /* 0x0F60 */ u32 mapsVisible;            // "cloud_clear"
     /* 0x0F64 */ u8 unk_F64;                 // "oca_rec_flag"
     /* 0x0F65 */ u8 unk_F65;                 // "oca_rec_flag8"
     /* 0x0F66 */ u8 unk_F66[128];            // "oca_rec_buff8"
     /* 0x0FE6 */ s8 unk_FE6;                 // "aikotoba_index"
     /* 0x0FE7 */ s8 unk_FE7[5];              // "aikotoba_table"
-    /* 0x0FEC */ s8 lotteryCodes[3][3];      // "numbers_table"
+    /* 0x0FEC */ s8 lotteryCodes[3][3];      // Preset lottery codes "numbers_table"
     /* 0x0FF5 */ s8 spiderHouseMaskOrder[6]; // "kinsta_color_table"
     /* 0x0FFB */ s8 bomberCode[5];           // "bombers_aikotoba_table"
     /* 0x1000 */ HorseData horseData;
