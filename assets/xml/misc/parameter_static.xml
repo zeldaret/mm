@@ -116,7 +116,7 @@
         <Texture Name="gMinigameCountdown2Tex" OutName="minigame_countdown_2" Format="ia8" Width="24" Height="32" Offset="0x7528"/>
         <Texture Name="gMinigameCountdown3Tex" OutName="minigame_countdown_3" Format="ia8" Width="24" Height="32" Offset="0x7828"/>
 
-        <!-- The letters of PERFECT -->
+        <!-- The letters of "PERFECT!" -->
         <Texture Name="gMinigameLetterPTex" OutName="minigame_letter_p" Format="i4" Width="32" Height="33" Offset="0x7B28"/>
         <Texture Name="gMinigameLetterETex" OutName="minigame_letter_e" Format="i4" Width="32" Height="33" Offset="0x7D38"/>
         <Texture Name="gMinigameLetterRTex" OutName="minigame_letter_r" Format="i4" Width="32" Height="33" Offset="0x7F48"/>
