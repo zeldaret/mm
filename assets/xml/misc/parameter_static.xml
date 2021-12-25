@@ -44,9 +44,9 @@
         <Texture Name="gMapDungeonEntranceIconTex" OutName="map_dungeon_entrance_icon" Format="rgba16" Width="8" Height="8" Offset="0x3EA0"/>
         <Texture Name="gMapChestIconTex" OutName="map_chest_icon" Format="rgba16" Width="8" Height="8" Offset="0x3F20"/>
         <Texture Name="gArcheryScoreIconTex" OutName="archery_score_icon" Format="rgba16" Width="24" Height="16" Offset="0x3FA0"/>
-        <Texture Name="gPictographFocusIconTex" OutName="pictograph_focus_icon" Format="i4" Width="32" Height="16" Offset="0x42A0"/>
-        <Texture Name="gPictographFocusBorderTex" OutName="pictograph_focus_border" Format="ia4" Width="16" Height="16" Offset="0x43A0"/>
-        <Texture Name="gPictographFocusTextTex" OutName="pictograph_focus_text" Format="i4" Width="32" Height="8" Offset="0x4420"/>
+        <Texture Name="gPictoBoxFocusIconTex" OutName="picto_box_focus_icon" Format="i4" Width="32" Height="16" Offset="0x42A0"/>
+        <Texture Name="gPictoBoxFocusBorderTex" OutName="picto_box_focus_border" Format="ia4" Width="16" Height="16" Offset="0x43A0"/>
+        <Texture Name="gPictoBoxFocusTextTex" OutName="picto_box_focus_text" Format="i4" Width="32" Height="8" Offset="0x4420"/>
 
         <Texture Name="gCounterDigit0Tex" OutName="counter_digit_0" Format="i8" Width="8" Height="16" Offset="0x44A0"/>
         <Texture Name="gCounterDigit1Tex" OutName="counter_digit_1" Format="i8" Width="8" Height="16" Offset="0x4520"/>
