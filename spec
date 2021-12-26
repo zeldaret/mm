@@ -1682,8 +1682,7 @@ beginseg
     name "ovl_En_Ishi"
     compress
     include "build/src/overlays/actors/ovl_En_Ishi/z_en_ishi.o"
-    include "build/data/ovl_En_Ishi/ovl_En_Ishi.data.o"
-    include "build/data/ovl_En_Ishi/ovl_En_Ishi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ishi/ovl_En_Ishi_reloc.o"
 endseg
 
 beginseg
