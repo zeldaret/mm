@@ -1384,7 +1384,7 @@ void func_80146628(GameState* gameState, SramContext* sramCtx) {
             (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
 
         for (maskCount = i = 0; i < ARRAY_COUNT(gSaveContext.save.inventory.masks); i++) {
-            if (gSaveContext.save.inventory.masks[(s32)i] != 0xFF) {
+            if (gSaveContext.save.inventory.masks[(s32)i] != ITEM_NONE) {
                 maskCount++;
             }
         }
