@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse, json, os, signal, time, colorama
-from multiprocessing import Pool, Event, Manager
+from multiprocessing import *
 
 colorama.init();
 
@@ -71,8 +71,8 @@ def initializeWorker(abort, unaccounted: bool, extractedAssetsTracker: dict, man
 def main():
     parser = argparse.ArgumentParser(description="baserom asset extractor")
     parser.add_argument("-s", "--single", help="asset path relative to assets/, e.g. objects/gameplay_keep")
-    parser.add_argument("-t", "--threads", help="Number of cpu cores to extract with.")
     parser.add_argument("-f", "--force", help="Force the extraction of every xml instead of checking the touched ones.", action="store_true")
+    parser.add_argument("-j", "--jobs", help="Number of cpu cores to extract with.")
     parser.add_argument("-u", "--unaccounted", help="Enables ZAPD unaccounted detector warning system.", action="store_true")
     parser.add_argument("-Z", help="Pass the argument on to ZAPD, e.g. `-ZWunaccounted` to warn about unaccounted blocks in XMLs. Each argument should be passed separately, *without* the leading dash.", metavar="ZAPD_ARG", action="append")
     args = parser.parse_args()
@@ -125,12 +125,20 @@ def main():
                 if file.endswith(".xml"):
                     xmlFiles.append(fullPath)
 
-        numCores = int(args.threads or 0)
-        if numCores <= 0:
-            numCores = 1
-        print("Extracting assets with " + str(numCores) + " CPU core" + ("s" if numCores > 1 else "") + ".")
-        with Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
-            p.map(ExtractFunc, xmlFiles)
+        try:
+            numCores = int(args.jobs or 0)
+            if numCores <= 0:
+                numCores = 1
+            print("Extracting assets with " + str(numCores) + " CPU core" + ("s" if numCores > 1 else "") + ".")
+            with get_context("fork").Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
+                p.map(ExtractFunc, xmlFiles)
+        except (ProcessError, TypeError):
+            print("Warning: Multiprocessing exception ocurred.", file=os.sys.stderr)
+            print("Disabling mutliprocessing.", file=os.sys.stderr)
+
+            initializeWorker(mainAbort, args.unaccounted, extractedAssetsTracker, manager)
+            for singlePath in xmlFiles:
+                ExtractFunc(singlePath)
 
     with open(EXTRACTED_ASSETS_NAMEFILE, 'w', encoding='utf-8') as f:
         serializableDict = dict()

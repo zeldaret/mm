@@ -23,12 +23,14 @@ in an experimental and research phase and cannot currently be used traditionally
 source code base for general changes.
 ```
 
-**This repo does not include any assets or code necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.**
+This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The purpose of the project is to recreate a source code base for the game from scratch, using information found inside the game along with static and/or dynamic analysis. **It is not producing a PC port.** For more information you can get in touch with the team on our [Discord server](https://discord.zelda64.dev).
 
-This is a decompilation of Legend of Zelda: Majora's Mask (US) 1.0
+The only build currently supported is N64 US, but other versions are planned to be supported.
 
-It builds the following ROM:
+It currently builds the following ROM:
 * mm.us.rev1.rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`
+
+**This repo does not include any assets or assembly code necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.**
 
 Please refer to the following for more information:
 
@@ -36,13 +38,40 @@ Please refer to the following for more information:
 - [Discord](https://discord.zelda64.dev/)
 - [How to Contribute](CONTRIBUTING.md)
 
+
 ## Installation
 
 ### Windows
 
 For Windows 10, install WSL and a distribution by following this
 [Windows Subsystem for Linux Installation Guide](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
-We recommend using Debian or Ubuntu 18.04 Linux distributions.
+We recommend using Debian or Ubuntu 20.04 Linux distributions.
+
+
+### MacOS
+
+For macOS, use Homebrew to install the following dependencies:
+
+* coreutils
+* make
+* python3
+* libpng
+
+You can install them with the following commands:
+
+```bash
+brew update
+brew install coreutils make python3 libpng
+```
+
+(The repository expects Homebrew-installed programs to be either linked correctly in `$PATH` etc. or in their default locations.)
+
+You'll also need to [build and install mips-linux-binutils](docs/BUILDING_BINUTILS_MACOS.md).
+
+Apple's version of `make` is very out-of-date, so you should use the brew-installed `gmake` in place of `make` from now on.
+
+You should now be able to continue from [step 2](#2-clone-the-repository) of the Linux instructions.
+
 
 ### Linux (Native or under WSL / VM)
 
@@ -110,29 +139,22 @@ This means that something is wrong with the ROM's contents. Either the baserom f
 
 Running `make init` will also make the `./expected` directory and copy all of the files there, which will be useful when running the diff script. The diff script is useful in decompiling functions and can be ran with this command: `./tools/asm-differ/diff.py -wmo3 <insert_function_here>`
 
-**Note**: to speed up the build, you can either:
-* Pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has.
-* Pass `-j` to `make setup` and `make`, to use as many threads as possible, but beware that this can use too much memory on lower-end systems.
-Both of these have the disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-j` or `-jN`).
+**Note**: to speed up the build, you can pass `-jN` to `make setup` and `make`, where N is the number of threads to use in the build, e.g. `make -j4`. The generally-accepted wisdom is to use the number of virtual cores your computer has, which is the output of `nproc` (which should be installed as part of `coreutils`). 
+The disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-jN`).
+(`-j` also exists, which uses unlimited jobs, but is generally slower.)
 
-**Note**: if you rename symbols, it is recommended that you use the `tools/rename_sym.sh` to ensure that you cover all instances, including the tables which are used to generate the `asm/` directory.
-
-Usage: `tools/rename_sym.sh old_name new_name`. Example:
-
-```bash
-tools/rename_sym.sh func_808A3428 EnTorch2_UpdateIdle
-```
 
 ## Contributing
 
 All contributions are welcome. This is a group effort, and even small contributions can make a difference.
 Some tasks also don't require much knowledge to get started.
 
-Anyone who wishes to contribute to the OOT or MM projects **must not have accessed leaked source code at any point in time** for Nintendo 64 SDK, iQue player SDK, libultra, Ocarina of Time, Majora's Mask, Animal Crossing/Animal Forest, or any other game that shares the same game engine or significant portions of code to a Zelda 64 game or any other console similar to the Nintendo 64.
+Please note that is is our strict policy that *Anyone who wishes to contribute to the OOT or MM projects **must not have accessed leaked source code at any point in time** for Nintendo 64 SDK, iQue player SDK, libultra, Ocarina of Time, Majora's Mask, Animal Crossing/Animal Forest, or any other game that shares the same game engine or significant portions of code to a Zelda 64 game or any other console similar to the Nintendo 64.*
 
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev), where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
 
 For more information on getting started, see our [Contributing Guide](CONTRIBUTING.md) and our [Code Review Guidelines](REVIEWING.md) to see what code quality guidelines we follow.
+
 
 ## FAQ
 
