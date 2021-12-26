@@ -6,9 +6,9 @@
 typedef enum {
     /*  0 */ EN_JG_LIMB_NONE,
     /*  1 */ EN_JG_LIMB_ROOT, // Root of Upper Body Root and Pelvis
-    /*  2 */ EN_JG_LIMB_UPPER_BODY_ROOT, // Root of Lower Back and Upper Back
-    /*  3 */ EN_JG_LIMB_LOWER_BACK,
-    /*  4 */ EN_JG_LIMB_UPPER_BACK, // Root of Left Arm Root, Right Arm Root, and Neck
+    /*  2 */ EN_JG_LIMB_UPPER_BODY_ROOT, // Root of Lower Torso and Upper Torso
+    /*  3 */ EN_JG_LIMB_LOWER_TORSO,
+    /*  4 */ EN_JG_LIMB_UPPER_TORSO, // Root of Left Arm Root, Right Arm Root, and Neck
     /*  5 */ EN_JG_LIMB_LEFT_ARM_ROOT,
     /*  6 */ EN_JG_LIMB_LEFT_SHOULDER_AND_UPPER_ARM,
     /*  7 */ EN_JG_LIMB_LEFT_FOREARM,

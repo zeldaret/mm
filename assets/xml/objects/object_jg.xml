@@ -14,7 +14,7 @@
         <DList Name="gGoronElderHairBackDL" Offset="0x5770" />
         <DList Name="gGoronElderRightHairEndDL" Offset="0x5968" />
         <DList Name="gGoronElderLeftHairEndDL" Offset="0x5A48" />
-        <DList Name="gGoronElderUpperBackDL" Offset="0x5B28" />
+        <DList Name="gGoronElderUpperTorsoDL" Offset="0x5B28" />
         <DList Name="gGoronElderRightForearmDL" Offset="0x5EE8" />
         <DList Name="gGoronElderRightFingersDL" Offset="0x6018" />
         <DList Name="gGoronElderRightHandAndThumbDL" Offset="0x6130" />
@@ -23,7 +23,7 @@
         <DList Name="gGoronElderLeftFingersDL" Offset="0x67A8" />
         <DList Name="gGoronElderLeftHandAndThumbDL" Offset="0x68C0" />
         <DList Name="gGoronElderLeftShoulderAndUpperArmDL" Offset="0x6B08" />
-        <DList Name="gGoronElderLowerBackDL" Offset="0x6E08" />
+        <DList Name="gGoronElderLowerTorsoDL" Offset="0x6E08" />
         <Animation Name="object_jg_Anim_0077CC" Offset="0x77CC" />
         <Animation Name="object_jg_Anim_009440" Offset="0x9440" />
         <Animation Name="object_jg_Anim_00A07C" Offset="0xA07C" />
@@ -41,17 +41,17 @@
         <Animation Name="object_jg_Anim_013DD8" Offset="0x13DD8" />
         <Animation Name="object_jg_Anim_01436C" Offset="0x1436C" />
         <Texture Name="gGoronElderTLUT" OutName="goron_elder_palette" Format="rgba16" Width="16" Height="16" Offset="0x14380" />
-        <Texture Name="object_jg_Tex_014580" OutName="tex_014580" Format="ci8" Width="8" Height="8" Offset="0x14580" />
+        <Texture Name="gGoronElderSkinTex" OutName="goron_elder_skin" Format="ci8" Width="8" Height="8" Offset="0x14580" />
         <Texture Name="gGoronElderToesTex" OutName="goron_elder_toes" Format="ci8" Width="32" Height="16" Offset="0x145C0" />
         <Texture Name="gGoronElderFootBottomTex" OutName="goron_elder_foot_bottom" Format="ci8" Width="32" Height="32" Offset="0x147C0" />
         <Texture Name="gGoronElderVeinsTex" OutName="goron_elder_veins" Format="ci8" Width="32" Height="32" Offset="0x14BC0" />
-        <Texture Name="object_jg_Tex_014FC0" OutName="tex_014FC0" Format="ci8" Width="16" Height="16" Offset="0x14FC0" />
-        <Texture Name="object_jg_Tex_0150C0" OutName="tex_0150C0" Format="rgba16" Width="8" Height="16" Offset="0x150C0" />
-        <Texture Name="object_jg_Tex_0151C0" OutName="tex_0151C0" Format="rgba16" Width="8" Height="8" Offset="0x151C0" />
-        <Texture Name="object_jg_Tex_015240" OutName="tex_015240" Format="rgba16" Width="16" Height="32" Offset="0x15240" />
-        <Texture Name="object_jg_Tex_015640" OutName="tex_015640" Format="ci8" Width="8" Height="8" Offset="0x15640" />
-        <Texture Name="object_jg_Tex_015680" OutName="tex_015680" Format="ci8" Width="8" Height="8" Offset="0x15680" />
-        <Texture Name="object_jg_Tex_0156C0" OutName="tex_0156C0" Format="ci8" Width="8" Height="8" Offset="0x156C0" />
+        <Texture Name="gGoronElderSpotsTex" OutName="goron_elder_spots" Format="ci8" Width="16" Height="16" Offset="0x14FC0" />
+        <Texture Name="gGoronElderLowerLipTex" OutName="goron_elder_lower_lip" Format="rgba16" Width="8" Height="16" Offset="0x150C0" />
+        <Texture Name="gGoronElderLipTex" OutName="goron_elder_lip" Format="rgba16" Width="8" Height="8" Offset="0x151C0" />
+        <Texture Name="gGoronElderHairTex" OutName="goron_elder_hair" Format="rgba16" Width="16" Height="32" Offset="0x15240" />
+        <Texture Name="gGoronElderNostrilAndBellyButtonTex" OutName="goron_elder_nostril_and_belly_button" Format="ci8" Width="8" Height="8" Offset="0x15640" />
+        <Texture Name="gGoronElderCheekTex" OutName="goron_elder_cheek" Format="ci8" Width="8" Height="8" Offset="0x15680" />
+        <Texture Name="gGoronElderBrowTex" OutName="goron_elder_brow" Format="ci8" Width="8" Height="8" Offset="0x156C0" />
         <Texture Name="gGoronElderHairEndTex" OutName="goron_elder_hair_end" Format="rgba16" Width="32" Height="64" Offset="0x15700" />
         <Texture Name="gGoronElderFingersTex" OutName="goron_elder_fingers" Format="ci8" Width="16" Height="16" Offset="0x16700" />
         <Texture Name="gGoronElderGoronRubyTattooTex" OutName="goron_elder_goron_ruby_tattoo" Format="ci8" Width="16" Height="32" Offset="0x16800" />
@@ -61,8 +61,8 @@
         <Animation Name="object_jg_Anim_01ADC0" Offset="0x1ADC0" />
         <Limb Name="gGoronElderRootLimb" Type="Standard" Offset="0x1ADD0" />
         <Limb Name="gGoronElderUpperBodyRootLimb" Type="Standard" Offset="0x1ADDC" />
-        <Limb Name="gGoronElderLowerBackLimb" Type="Standard" Offset="0x1ADE8" />
-        <Limb Name="gGoronElderUpperBackLimb" Type="Standard" Offset="0x1ADF4" />
+        <Limb Name="gGoronElderLowerTorsoLimb" Type="Standard" Offset="0x1ADE8" />
+        <Limb Name="gGoronElderUpperTorsoLimb" Type="Standard" Offset="0x1ADF4" />
         <Limb Name="gGoronElderLeftArmRootLimb" Type="Standard" Offset="0x1AE00" />
         <Limb Name="gGoronElderLeftShoulderAndUpperArmLimb" Type="Standard" Offset="0x1AE0C" />
         <Limb Name="gGoronElderLeftForearmLimb" Type="Standard" Offset="0x1AE18" />
