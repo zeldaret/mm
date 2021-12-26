@@ -1,16 +1,40 @@
 #include "global.h"
 
+extern s16 D_801BFDA0[];
+
+struct _struct_D_801BFDD0_0x8 {
+    /* 0x0 */ u8 unk_0;                             /* inferred */
+    /* 0x1 */ u8 unk_1;                             /* inferred */
+    /* 0x2 */ u8 unk_2;                             /* inferred */
+    ///* 0x3 */ char pad_3[1];
+    /* 0x4 */ Gfx* unk_4;                            /* inferred */
+};
+extern struct _struct_D_801BFDD0_0x8 D_801BFDD0[3];/* = {
+    { 0xB4, 0xC8, 0xFF, 0x600BDD8 },
+    { 0x9B, 0, 0, 0x6014690 },
+    { 0xFF, 0, 0, 0x6011AB8 },
+};*/
+
+extern u8 D_801BFDE8[];
+
+extern UNK_PTR D_801BFE00[];
+
+extern s16 D_801BFE14[][18];
+
+extern u16 D_801BFF34[4];
+
+extern u8 D_801BFF3C[];
+
+extern u8 D_801BFF90[];
+
+extern u8 D_801BFF98[];
+
 typedef struct {
-    /* 0x00 */ s16 unk_0;
-    /* 0x02 */ s16 unk_2;
-    /* 0x04 */ s16 unk_4;
-    /* 0x06 */ s16 unk_6;
-    /* 0x08 */ s16 unk_8;
-} struct_801F59D0;
+    /* 0x00 */ u8 unk_00;
+    /* 0x02 */ u16 unk_02;
+} struct_801BFFA0;
 
-extern struct_801F59D0 D_801F59D0;
-
-
+extern struct_801BFFA0 D_801BFFA0[];
 
 struct _struct_D_801BFFB0_0x5 {
     /* 0x0 */ u8 unk_0;                             /* inferred */
@@ -39,11 +63,334 @@ extern u8 D_801BFFB0[0xF][5];/* = {
     { 0, 1, 7, 0xE, 0x10 },
 };*/
 
+#if 0
+glabel D_801BFFFC
 
-extern s32 D_801F59E0;
+glabel D_801C0000
+
+glabel D_801C0001
+
+glabel D_801C0002
+
+glabel D_801C0008
+
+glabel D_801C0010
+#endif
+
+#if 0
+glabel D_801C0024
+glabel D_801C0034
+glabel D_801C0040
+glabel D_801C005C
+glabel D_801C0060
+glabel D_801C0070
+#endif
+#if 0
+glabel D_801C0084
+#endif
+#if 0
+glabel D_801C00A0
+#endif
+
+#if 0
+glabel D_801C00AC
+glabel D_801C00BC
+glabel D_801C00D4
+#endif
+
+#if 0
+glabel D_801C00EC
+glabel D_801C0114
+glabel D_801C013C
+glabel D_801C0164
+glabel D_801C018C
+glabel D_801C01A4
+glabel D_801C01CC
+glabel D_801C01F4
+glabel D_801C021C
+glabel D_801C0244
+glabel D_801C026C
+#endif
+
+
+#if 0
+static s32 D_801C0294[5] = { 0x6006C38, 0x600A220, 0x600C020, 0x6003AB8, 0x600D3D8 };
+static s32 D_801C02A8[5] = { 0x6006EB8, 0x600A500, 0x600C270, 0x6003BC0, 0x600E1C8 };
+static s32 D_801C02BC[5] = { 0x6006410, 0x6009A98, 0x600B820, 0x60036B0, 0x600CCE0 };
+static s32 D_801C02D0[5] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6018490 };
+static s32 D_801C02E4[5] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6017B40 };
+#endif
+extern Gfx* D_801C0294[PLAYER_FORM_MAX];
+extern Gfx* D_801C02A8[PLAYER_FORM_MAX];
+extern Gfx* D_801C02BC[PLAYER_FORM_MAX];
+extern Gfx* D_801C02D0[PLAYER_FORM_MAX];
+extern Gfx* D_801C02E4[PLAYER_FORM_MAX];
 
 // sPlayerDListGroups
 extern Gfx** D_801C02F8[];
+
+
+#if 0
+glabel D_801C0340
+glabel D_801C0368
+glabel D_801C03A0
+glabel D_801C03C0
+glabel D_801C03E0
+glabel D_801C0410
+glabel D_801C0428
+glabel D_801C0460
+glabel D_801C0490
+glabel D_801C0510
+glabel D_801C0538
+glabel D_801C0560
+glabel D_801C0580
+glabel D_801C05A8
+glabel D_801C05C8
+glabel D_801C05D8
+glabel D_801C05F0
+glabel D_801C05F2
+glabel D_801C05FA
+glabel D_801C0608
+glabel D_801C0628
+glabel D_801C0678
+glabel D_801C0698
+glabel D_801C06B8
+glabel D_801C06E0
+glabel D_801C06F8
+glabel D_801C0718
+glabel D_801C0730
+glabel D_801C0740
+glabel D_801C0750
+glabel D_801C0778
+glabel D_801C0784
+glabel D_801C07AC
+glabel D_801C07C0
+glabel D_801C07F0
+glabel D_801C0820
+glabel D_801C0838
+glabel D_801C0850
+glabel D_801C0860
+#endif
+
+extern UNK_PTR D_801C0870[];
+extern void* D_801C0890[];
+extern u8 D_801C08A0[][2];
+
+#if 0
+glabel D_801C08C0
+#endif
+
+extern f32 D_801C08FC[];
+extern f32 D_801C0910[];
+extern f32 D_801C0924[];
+extern f32 D_801C0938[];
+
+#if 0
+glabel D_801C094C
+glabel D_801C0954
+#endif
+
+extern s32 D_801C0958 /* = false */;
+
+#if 0
+glabel D_801C095C
+glabel D_801C0964
+#endif
+extern u8 D_801C096C[];
+
+#if 0
+Vec3f D_801C0970[3] = {
+    { 0.0f, 400.0f, 0.0f },
+    { 0.0f, 1400.0f, -1000.0f },
+    { 0.0f, -400.0f, 1000.0f },
+};
+#endif
+
+extern Vec3f D_801C0970[3];
+
+#if 0
+static Vec3f D_801C0994[3] = {
+    { 5000.0f, 400.0f, 0.0f },
+    { 5000.0f, -400.0f, 1000.0f },
+    { 5000.0f, 1400.0f, -1000.0f },
+};
+#endif
+extern Vec3f D_801C0994[];
+
+#if 0
+Vec3f D_801C09B8[3] = {
+    { 0.0f, 750.0f, 750.0f },
+    { 1500.0f, 1500.0f, 1500.0f },
+    { -2500.0f, -2000.0f, -3000.0f },
+};
+#endif
+extern Vec3f D_801C09B8[];
+
+#if 0
+glabel D_801C09DC
+glabel D_801C0A00
+glabel D_801C0A24
+glabel D_801C0A48
+glabel D_801C0A6C
+glabel D_801C0A90
+glabel D_801C0AB4
+glabel D_801C0ABC
+glabel D_801C0ADC
+glabel D_801C0AF4
+glabel D_801C0AFC
+glabel D_801C0B04
+glabel D_801C0B0C
+glabel D_801C0B14
+glabel D_801C0B1C
+glabel D_801C0B20
+glabel D_801C0B90
+glabel D_801C0BA8
+glabel D_801C0BAC
+glabel D_801C0BB0
+glabel D_801C0BB4
+glabel D_801C0BB8
+#endif
+
+// Gfx?
+extern UNK_TYPE D_801C0BC0;
+
+// Gfx?
+extern UNK_TYPE D_801C0BD0;
+
+#if 0
+glabel D_801C0BE0
+glabel D_801C0BE4
+glabel D_801C0BE8
+glabel D_801C0BEC
+glabel D_801C0BF0
+glabel D_801C0BF4
+glabel D_801C0BF8
+glabel D_801C0BFC
+#endif
+
+//Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
+extern Vec3f D_801C0C00;
+
+/*
+Vec3f D_801C0C0C[3] = {
+    { 174.0f, -1269.0f, -1.0f },
+    { 401.0f, -729.0f, -701.0f },
+    { 401.0f, -729.0f, 699.0f },
+};
+*/
+extern Vec3f D_801C0C0C[3];
+
+/*
+Vec3f D_801C0C30[3] = {
+    { 74.0f, -1269.0f, -1.0f },
+    { 301.0f, -729.0f, -701.0f },
+    { 301.0f, -729.0f, 699.0f },
+};
+*/
+extern Vec3f D_801C0C30[3];
+
+extern UNK_TYPE D_801C0C54;
+
+//Vec3f D_801C0C78[2] = { { 0.0f, 0.0f, 0.0f }, { 20.0f, 3.4350486e-27f, 30.0f } };
+extern Vec3f D_801C0C78[2];
+
+//Vec3f D_801C0C94 = { 0.0f, 0.0f, 0.0f };
+extern Vec3f D_801C0C94;
+
+#if 0
+glabel D_801C0CA8
+glabel D_801C0CE8
+#endif
+
+extern Vec3f D_801C0D24[];
+
+#if 0
+glabel D_801C0D60
+glabel D_801C0D6C
+glabel D_801C0D78
+glabel D_801C0D94
+glabel D_801C0D98
+glabel D_801C0D9C
+glabel D_801C0DA0
+glabel D_801C0DA8
+glabel D_801C0DD8
+glabel D_801C0DE4
+glabel D_801C0DF0
+glabel D_801C0E04
+glabel D_801C0E2C
+glabel D_801C0E40
+glabel D_801C0E7C
+glabel D_801C0E94
+glabel D_801C0EA0
+glabel D_801C0EAC
+glabel D_801C0EB8
+#endif
+
+
+
+
+
+
+// bss
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} struct_801F58B0; // size = 0x1C
+
+extern struct_801F58B0 D_801F58B0[3][3];
+
+extern struct_801F58B0 D_801F59AC[][3];
+
+#if 0
+glabel D_801F59B0
+#endif
+
+extern s32 D_801F59C8[2];
+
+typedef struct {
+    /* 0x00 */ s16 unk_0;
+    /* 0x02 */ s16 unk_2;
+    /* 0x04 */ s16 unk_4;
+    /* 0x06 */ s16 unk_6;
+    /* 0x08 */ s16 unk_8;
+} struct_801F59D0;
+
+extern struct_801F59D0 D_801F59D0;
+
+extern s32 D_801F59E0;
+
+extern s32 D_801F59E4;
+
+extern Vec3f D_801F59E8;
+
+#if 0
+glabel D_801F59F4
+glabel D_801F59F8
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
+
+
+
 
 
 s32 func_801241B4(Player* player);
@@ -122,19 +469,6 @@ void func_801229A0(GlobalContext* globalCtx, Player* player) {
 
 void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
-
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-} struct_801F58B0; // size = 0x1C
-
-extern s16 D_801BFDA0[];
-extern struct_801F58B0 D_801F58B0[3][3];
-extern s32 D_801F59C8[2];
-
-void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
 
 // Load mask?
 void func_801229FC(Player* player) {
@@ -247,18 +581,6 @@ void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122C20.s")
 #endif
 
-struct _struct_D_801BFDD0_0x8 {
-    /* 0x0 */ u8 unk_0;                             /* inferred */
-    /* 0x1 */ u8 unk_1;                             /* inferred */
-    /* 0x2 */ u8 unk_2;                             /* inferred */
-    ///* 0x3 */ char pad_3[1];
-    /* 0x4 */ Gfx* unk_4;                            /* inferred */
-};
-extern struct _struct_D_801BFDD0_0x8 D_801BFDD0[3];/* = {
-    { 0xB4, 0xC8, 0xFF, 0x600BDD8 },
-    { 0x9B, 0, 0, 0x6014690 },
-    { 0xFF, 0, 0, 0x6011AB8 },
-};*/
 
 extern AnimatedMaterial D_06013138;
 
@@ -296,15 +618,12 @@ void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-extern u8 D_801BFDE8[];
-
 u8 func_80122ED8(s32 index) {
     return D_801BFDE8[index];
 }
 
 u8 func_80122EEC(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u8 temp_v1;
 
     if (player->currentMask != PLAYER_MASK_NONE) {
         return func_80122ED8(player->currentMask - 1);
@@ -367,8 +686,6 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
     }
 }
 
-
-extern s16 D_801BFE14[][18];
 
 // OoT's Player_SetBootData?
 void func_80123140(GlobalContext* globalCtx, Player* player) {
@@ -522,8 +839,6 @@ s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012364C.s")
 
-extern u16 D_801BFF34[4];
-
 #ifdef NON_EQUIVALENT
 s32 func_80123810(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -563,8 +878,6 @@ s32 func_80123810(GlobalContext* globalCtx) {
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
 #endif
-
-extern u8 D_801BFF3C[];
 
 s32 func_80123960(Player* player, s32 actionParam) {
     s32 temp_v1_2;
@@ -649,8 +962,6 @@ void func_80123C58(Player* player) {
     player->unk_AA5 = 0;
 }
 
-extern u8 D_801BFF90[];
-
 void func_80123C90(GlobalContext* globalCtx, Player* player) {
     if (player->unk_394 != 0x86) {
         player->currentShield = CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD);
@@ -725,8 +1036,6 @@ s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRan
         return false;
     }
 }
-
-extern u8 D_801BFF98[];
 
 u8 func_80124020(void) {
     return D_801BFF98[(void)0, gSaveContext.playerForm];
@@ -846,13 +1155,6 @@ s32 func_801242B4(Player* player) {
     return (player->stateFlags1 & 0x8000000) && player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER;
 }
 
-typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x02 */ u16 unk_02;
-} struct_801BFFA0;
-
-extern struct_801BFFA0 D_801BFFA0[];
-
 s32 func_801242DC(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     struct_801BFFA0* sp18;
@@ -935,11 +1237,8 @@ void func_80124420(Player* player);
 void func_80124618(u16*, f32 curFrame, Vec3f*);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124618.s")
 
-extern u8 D_801C08A0[][2];
 extern u16 D_801C08A1[];
-extern void* D_801C0890[];
 
-extern s32 D_801F59E4;
 
 // OoT's func_8008F470
 void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
@@ -963,7 +1262,7 @@ void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
         }
     }
 
-    gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual((&D_801C0870)[phi_v1]));
+    gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual(D_801C0870[phi_v1]));
 
     if (phi_t1 < 0) {
         phi_t1 = D_801C08A0[face][1];
@@ -1028,8 +1327,6 @@ void func_80125318(Vec3f* arg0, Vec3s* arg1) {
     arg1->y = 0;
     arg1->z = 0;
 }
-
-extern s32 D_801C0958 /* = false */;
 
 void func_80125340(void) {
     Matrix_StatePush();
@@ -1102,18 +1399,6 @@ void func_80125CE0(Player* player, u16* arg1, Vec3f* arg2, Vec3s* arg3) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125D4C.s")
 
-#if 0
-static s32 D_801C0294[5] = { 0x6006C38, 0x600A220, 0x600C020, 0x6003AB8, 0x600D3D8 };
-static s32 D_801C02A8[5] = { 0x6006EB8, 0x600A500, 0x600C270, 0x6003BC0, 0x600E1C8 };
-static s32 D_801C02BC[5] = { 0x6006410, 0x6009A98, 0x600B820, 0x60036B0, 0x600CCE0 };
-static s32 D_801C02D0[5] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6018490 };
-static s32 D_801C02E4[5] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6017B40 };
-#endif
-extern Gfx* D_801C0294[PLAYER_FORM_MAX];
-extern Gfx* D_801C02A8[PLAYER_FORM_MAX];
-extern Gfx* D_801C02BC[PLAYER_FORM_MAX];
-extern Gfx* D_801C02D0[PLAYER_FORM_MAX];
-extern Gfx* D_801C02E4[PLAYER_FORM_MAX];
 
 s32 func_801262C8(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Player* player) {
     if (func_80125580(globalCtx, arg1, arg2, arg3, arg4, player) == 0) {
@@ -1175,7 +1460,6 @@ s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, WeaponInfo* 
     }
 }
 
-extern u8 D_801C096C[];
 
 void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* arg2, Vec3f* arg3) {
     if (player->stateFlags1 & 0x400000) {
@@ -1244,8 +1528,6 @@ void Player_DrawGetItemImpl(GlobalContext* globalCtx, Player* player, Vec3f* ref
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-extern Vec3f D_801F59E8;
-
 void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
     if (!player->giObjectLoading || (osRecvMesg(&player->giObjectLoadQueue, NULL, 0) == 0)) {
         Vec3f refPos;
@@ -1275,25 +1557,6 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126AB4.s")
-
-#if 0
-
-static Vec3f D_801C0994[3] = {
-    { 5000.0f, 400.0f, 0.0f },
-    { 5000.0f, -400.0f, 1000.0f },
-    { 5000.0f, 1400.0f, -1000.0f },
-};
-
-Vec3f D_801C09B8[3] = {
-    { 0.0f, 750.0f, 750.0f },
-    { 1500.0f, 1500.0f, 1500.0f },
-    { -2500.0f, -2000.0f, -3000.0f },
-};
-#endif
-extern Vec3f D_801C0994[];
-extern Vec3f D_801C09B8[];
-
 void func_80126AB4(Player* player, Vec3f** arg1) {
     if ((player->transformation == PLAYER_FORM_GORON) || (player->actor.id == ACTOR_EN_TEST3)) {
         Math_Vec3f_Copy(&player->unk_AF0[1], &player->swordInfo[0].base);
@@ -1312,16 +1575,6 @@ void func_80126AB4(Player* player, Vec3f** arg1) {
     D_801C0994[2].x = D_801C0994[1].x;
     *arg1 = D_801C0994;
 }
-
-#if 0
-Vec3f D_801C0970[3] = {
-    { 0.0f, 400.0f, 0.0f },
-    { 0.0f, 1400.0f, -1000.0f },
-    { 0.0f, -400.0f, 1000.0f },
-};
-#endif
-
-extern Vec3f D_801C0970[3];
 
 void func_80126B8C(GlobalContext* globalCtx, Player* player) {
     Vec3f* sp1C;
@@ -1372,9 +1625,6 @@ void func_8012754C(GlobalContext* globalCtx, Player* player) {
 extern AnimatedMaterial D_0A0011F8;
 
 extern Gfx D_0A000440[];
-
-extern UNK_TYPE D_801C0BD0;
-extern UNK_TYPE D_801C0BC0;
 
 #if NON_MATCHING
 // regalloc
@@ -1437,36 +1687,6 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128388.s")
 
-//Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
-extern Vec3f D_801C0C00;
-
-//Vec3f D_801C0C78[2] = { { 0.0f, 0.0f, 0.0f }, { 20.0f, 3.4350486e-27f, 30.0f } };
-extern Vec3f D_801C0C78[2];
-
-//Vec3f D_801C0C94 = { 0.0f, 0.0f, 0.0f };
-extern Vec3f D_801C0C94;
-
-/*
-Vec3f D_801C0C0C[3] = {
-    { 174.0f, -1269.0f, -1.0f },
-    { 401.0f, -729.0f, -701.0f },
-    { 401.0f, -729.0f, 699.0f },
-};
-*/
-extern Vec3f D_801C0C0C[3];
-
-/*
-Vec3f D_801C0C30[3] = {
-    { 74.0f, -1269.0f, -1.0f },
-    { 301.0f, -729.0f, -701.0f },
-    { 301.0f, -729.0f, 699.0f },
-};
-*/
-extern Vec3f D_801C0C30[3];
-
-extern UNK_TYPE D_801C0C54;
-extern struct_801F58B0 D_801F59AC[][3];
-
 #ifdef NON_EQUIVALENT
 // Not sure about equivalency
 void func_801284A0(GlobalContext* globalCtx, Player* player) {
@@ -1509,8 +1729,6 @@ void func_801284A0(GlobalContext* globalCtx, Player* player) {
 #endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128640.s")
-
-extern Vec3f D_801C0D24[];
 
 void func_80128B74(GraphicsContext** gfxCtxPtr, Player* player, s32 limbIndex) {
     Vec3f* footPos = &D_801C0D24[player->transformation];
