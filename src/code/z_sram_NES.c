@@ -1599,7 +1599,7 @@ void func_80147198(SramContext* sramCtx) {
         gSaveContext.save.checksum = 0;
         // flash read to buffer then copy to save context
         func_80185968(*sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
-        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, 0x3CA0);
+        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, offsetof(SaveContext, fileNum));
     }
 }
 
@@ -1616,9 +1616,9 @@ void func_80147314(SramContext* sramCtx, s32 fileNum) {
     gSaveContext.save.playerData.newf[5] = '\0';
 
     gSaveContext.save.checksum = 0;
-    gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, 0x3CA0);
+    gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, offsetof(SaveContext, fileNum));
 
-    Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, 0x3CA0);
+    Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, offsetof(SaveContext, fileNum));
     func_80146EBC(sramCtx, D_801C6840[fileNum * 2], D_801C6850[fileNum * 2]);
     func_80146EBC(sramCtx, D_801C6840[fileNum * 2 + 1], D_801C6850[fileNum * 2]);
 
@@ -1645,7 +1645,7 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     }
 
     // Copy buffer to save context
-    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, 0x3CA0);
+    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, offsetof(SaveContext, fileNum));
 
     func_80146EBC(sramCtx, D_801C6840[arg2 * 2], D_801C6850[arg2 * 2]);
     func_80146EBC(sramCtx, D_801C6840[arg2 * 2 + 1], D_801C6850[arg2 * 2]);
