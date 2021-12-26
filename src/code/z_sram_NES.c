@@ -682,6 +682,7 @@ void Sram_InitNewSave(void) {
 SavePlayerData sSaveDebugPlayerData = {
     { 'Z', 'E', 'L', 'D', 'A', '3' },
     0x0000,
+    // "LINK    "
     { 0x15, 0x12, 0x17, 0x14, 0x3E, 0x3E, 0x3E, 0x3E },
     0x0080,
     0x0080,
