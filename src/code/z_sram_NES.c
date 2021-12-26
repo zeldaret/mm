@@ -698,7 +698,7 @@ SavePlayerData sSaveDebugPlayerData = {
     0xFF,
     0x0000,
     0xFF,
-    0x0008,
+    SCENE_SPOT00,
 };
 
 ItemEquips sSaveDebugItemEquips = {
