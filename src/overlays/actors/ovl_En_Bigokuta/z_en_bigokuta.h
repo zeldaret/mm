@@ -6,16 +6,15 @@
 struct EnBigokuta;
 
 typedef void (*EnBigokutaActionFunc)(struct EnBigokuta*, GlobalContext*);
-typedef void (*UnkFunc)(GlobalContext*, struct EnBigokuta*);
+typedef void (*EnBigokutaUnkFunc)(GlobalContext*, struct EnBigokuta*);
 
 typedef struct EnBigokuta {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ UnkFunc unkFunc;
+    /* 0x0144 */ EnBigokutaUnkFunc unkFunc;
     /* 0x0148 */ SkelAnime skelAnime;
     /* 0x018C */ EnBigokutaActionFunc actionFunc;
-    /* 0x0190 */ u8 unk_190;
-    /* 0x0191 */ u8 unk_191;
-    /* 0x0192 */ s16 unk_192; // transparent or not,scale?
+    /* 0x0190 */ u8 unk_190; // death... type?
+    /* 0x0192 */ s16 timer; // transparent or not,scale?,timer?
     /* 0x0194 */ s16 camId;
     /* 0x0196 */ s16 cutscene;
     /* 0x0198 */ Vec3s jointTable[20];
@@ -26,8 +25,8 @@ typedef struct EnBigokuta {
     /* 0x02AC */ Vec3f camAt;
     /* 0x02B8 */ Vec3f camEye;
     /* 0x02C4 */ Vec3f limbPos[13];
-    /* 0x0360 */ ColliderCylinder collider1;
-    /* 0x03AC */ ColliderCylinder collider2;
+    /* 0x0360 */ ColliderCylinder shellCollider;
+    /* 0x03AC */ ColliderCylinder bodyCollider;
 } EnBigokuta; // size = 0x3F8
 
 extern const ActorInit En_Bigokuta_InitVars;
