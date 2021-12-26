@@ -580,7 +580,7 @@ void Sram_GenerateRandomSaveFields(void) {
 SavePlayerData sSaveDefaultPlayerData = {
     { '\0', '\0', '\0', '\0', '\0', '\0' },             // newf
     0,                                                  // deaths
-    { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName
+    { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "LINK    "
     0x0030,                                             // healthCapacity
     0x0030,                                             // health
     0x00,                                               // magicLevel
