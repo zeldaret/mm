@@ -595,7 +595,7 @@ SavePlayerData sSaveDefaultPlayerData = {
     0xFF,                                               // unk_20
     0x0000,                                             // owlActivationFlags
     0xFF,                                               // unk_24
-    0x0008,                                             // savedSceneNum
+    SCENE_SPOT00,                                     // savedSceneNum
 };
 
 ItemEquips sSaveDefaultItemEquips = {
