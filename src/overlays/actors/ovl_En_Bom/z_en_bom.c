@@ -45,43 +45,81 @@ const ActorInit En_Bom_InitVars = {
 
 static f32 enBomScales[] = { 0.01f, 0.03f };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80872DC8 = {
-    { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK2, { 0x00000000, 0x00, 0x00 }, { 0x00013828, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_HIT0,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00013828, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 6, 11, 14, { 0, 0, 0 } },
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_80872DF4[1] = {
+static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
     {
-        { ELEMTYPE_UNK0, { 0x00000008, 0x00, 0x02 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x00000008, 0x00, 0x02 },
+            { 0x00000000, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NONE,
+            BUMP_NONE,
+            OCELEM_NONE,
+        },
         { 0, { { 0, 0, 0 }, 0 }, 100 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80872E18 = {
-    { COLTYPE_HIT0, AT_ON | AT_TYPE_ALL, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_JNTSPH, },
-    1, D_80872DF4, // sJntSphElementsInit,
+static ColliderJntSphInit sJntSphInit1 = {
+    {
+        COLTYPE_HIT0,
+        AT_ON | AT_TYPE_ALL,
+        AC_NONE,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_JNTSPH,
+    },
+    1,
+    sJntSphElementsInit1,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_80872E28[1] = {
+static ColliderJntSphElementInit sJntSphElementsInit2[1] = {
     {
-        { ELEMTYPE_UNK0, { 0x80000008, 0x00, 0x04 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x80000008, 0x00, 0x04 },
+            { 0x00000000, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NONE,
+            BUMP_NONE,
+            OCELEM_NONE,
+        },
         { 0, { { 0, 0, 0 }, 0 }, 100 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80872E4C = {
-    { COLTYPE_HIT0, AT_ON | AT_TYPE_ALL, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_JNTSPH, },
-    1, D_80872E28, // sJntSphElementsInit,
+static ColliderJntSphInit sJntSphInit2 = {
+    {
+        COLTYPE_HIT0,
+        AT_ON | AT_TYPE_ALL,
+        AC_NONE,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_JNTSPH,
+    },
+    1,
+    sJntSphElementsInit2,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80872E5C[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -4000, ICHAIN_STOP),
@@ -91,14 +129,15 @@ void EnBom_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBom* this = THIS;
     s32 params;
 
-    Actor_ProcessInitChain(&this->actor, D_80872E5C);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 700.0f, func_800B3FC0, 16.0f);
     this->actor.colChkInfo.mass = 200;
     this->actor.colChkInfo.cylRadius = 5;
     this->actor.colChkInfo.cylHeight = 10;
-    this->unk_1F2 = 7;
-    this->unk_1F9 = this->actor.shape.rot.x & 1;
-    if (this->unk_1F9 != 0) {
+
+    this->flashSpeedScale = 7;
+    this->isPowderKeg = this->actor.shape.rot.x & 1;
+    if (this->isPowderKeg) {
         globalCtx->actorCtx.unk5 |= 1;
         this->timer = gSaveContext.powderKegTimer;
     } else {
@@ -107,14 +146,14 @@ void EnBom_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_InitCylinder(globalCtx, &this->collider1);
     Collider_InitJntSph(globalCtx, &this->collider2);
-    Collider_SetCylinder(globalCtx, &this->collider1, &this->actor, &D_80872DC8);
-    
-    if (this->unk_1F9 == 0) {
-        Collider_SetJntSph(globalCtx, &this->collider2, &this->actor, &D_80872E18, &this->collider3);
+    Collider_SetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit);
+
+    if (!this->isPowderKeg) {
+        Collider_SetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit1, &this->collider3);
         this->collider1.dim.radius = 6;
         this->collider1.dim.height = 11;
     } else {
-        Collider_SetJntSph(globalCtx, &this->collider2, &this->actor, &D_80872E4C, &this->collider3);
+        Collider_SetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, &this->collider3);
         this->collider1.dim.radius = 20;
         this->collider1.dim.height = 36;
         func_80872648(globalCtx, &this->actor.world.pos);
@@ -135,7 +174,7 @@ void EnBom_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actionFunc = func_808714D4;
         this->actor.room = -1;
-        Actor_SetScale(&this->actor, enBomScales[this->unk_1F9]);
+        Actor_SetScale(&this->actor, enBomScales[this->isPowderKeg]);
     } else {
         this->actionFunc = func_80871058;
         gSaveContext.powderKegTimer = 0;
@@ -147,16 +186,16 @@ void EnBom_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_DestroyJntSph(globalCtx, &this->collider2);
     Collider_DestroyCylinder(globalCtx, &this->collider1);
-    if (this->unk_1F9 != 0) {
+    if (this->isPowderKeg) {
         globalCtx->actorCtx.unk5 &= ~1;
     }
 }
 
 void func_80871058(EnBom* this, GlobalContext* globalCtx) {
-    static Vec3f D_80872E68[] = { 
-        { 2.0f, -6.0f, -0.3f }, 
+    static Vec3f D_80872E68[] = {
+        { 2.0f, -6.0f, -0.3f },
         { 1.5f, -5.0f, -0.6f },
-        { 0.2f, -6.0f, -0.1f }
+        { 0.2f, -6.0f, -0.1f },
     };
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
@@ -173,10 +212,11 @@ void func_80871058(EnBom* this, GlobalContext* globalCtx) {
         s16 yDiff = BINANG_SUB(this->actor.wallYaw, this->actor.world.rot.y);
 
         if (ABS_ALT(yDiff) > 0x4000) {
-            this->actor.world.rot.y = BINANG_SUB(this->actor.wallYaw - this->actor.world.rot.y + this->actor.wallYaw, 0x8000);
+            this->actor.world.rot.y =
+                BINANG_SUB(this->actor.wallYaw - this->actor.world.rot.y + this->actor.wallYaw, 0x8000);
         }
 
-        Audio_PlayActorSound2(&this->actor, (this->unk_1F9 != 0) ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
+        Audio_PlayActorSound2(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         this->actor.speedXZ *= 0.7f;
         this->actor.bgCheckFlags &= ~8;
@@ -193,7 +233,7 @@ void func_80871058(EnBom* this, GlobalContext* globalCtx) {
         f32 sp3C;
         f32 sp38;
 
-        sp58 = &D_80872E68[this->unk_1F9];
+        sp58 = &D_80872E68[this->isPowderKeg];
 
         if (sp54 == 5) {
             sp58 = &D_80872E68[2];
@@ -218,7 +258,8 @@ void func_80871058(EnBom* this, GlobalContext* globalCtx) {
         sp3C += 3.0f * sp48.z;
         sp38 = sqrtf(SQ(sp40) + SQ(sp3C));
 
-        if ((sp38 < this->actor.speedXZ) || (SurfaceType_GetSlope(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
+        if ((sp38 < this->actor.speedXZ) ||
+            (SurfaceType_GetSlope(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
             if (sp38 > 16.0f) {
                 this->actor.speedXZ = 16.0f;
             } else {
@@ -239,7 +280,7 @@ void func_80871058(EnBom* this, GlobalContext* globalCtx) {
         }
 
         if (this->actor.bgCheckFlags & 2) {
-            Audio_PlayActorSound2(&this->actor, (this->unk_1F9 != 0) ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
+            Audio_PlayActorSound2(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
             if (this->actor.velocity.y < sp58->y) {
                 if ((sp54 == 4) || (sp54 == 14) || (sp54 == 15)) {
                     this->actor.velocity.y = 0.0f;
@@ -263,13 +304,13 @@ void func_808714D4(EnBom* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~0x100000;
         this->actor.bgCheckFlags &= ~1;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
-        if (this->unk_1F9 != 0) {
+        if (this->isPowderKeg) {
             gSaveContext.powderKegTimer = 0;
         }
         func_80871058(this, globalCtx);
     } else {
         Math_Vec3f_ToVec3s(&this->actor.home.rot, &this->actor.parent->world.pos);
-        if (this->unk_1F9 != 0) {
+        if (this->isPowderKeg) {
             gSaveContext.powderKegTimer = this->timer;
         }
     }
@@ -300,9 +341,9 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
         func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
-    this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->unk_1F9];
+    this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
     if (this->timer == 7) {
-        this->collider2.base.atFlags &= ~0x10;
+        this->collider2.base.atFlags &= ~OC1_TYPE_1;
     }
 
     if (this->actor.params == 1) {
@@ -369,7 +410,8 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
                     spA0.z = spB4.z;
 
                     temp_f20 = Rand_ZeroFloat(250.0f);
-                    func_800B0F18(globalCtx, &spA0, &sp94, &sp88, &sp84, &sp80, temp_f20 + 950.0f, 10, Rand_ZeroFloat(5.0f) + 14.0f);
+                    func_800B0F18(globalCtx, &spA0, &sp94, &sp88, &sp84, &sp80, temp_f20 + 950.0f, 10,
+                                  Rand_ZeroFloat(5.0f) + 14.0f);
                 }
             }
         }
@@ -378,154 +420,167 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
 
 static s16 D_80872E98[] = { 3, 5 };
 static s16 D_80872E9C[] = { 10, 15 };
-    
+
 void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f spA4 = { 0.0f, 0.0f, 0.0f };
-    Vec3f sp98 = { 0.0f, 0.10000000149f, 0.0f };
+    Vec3f sp98 = { 0.0f, 0.1f, 0.0f };
     Vec3f sp8C = { 0.0f, 0.0f, 0.0f };
     Vec3f sp80;
-    Vec3f sp74 = { 0.0f, 0.600000023842f, 0.0f };
+    Vec3f sp74 = { 0.0f, 0.6f, 0.0f };
     Color_RGBA8 sp70 = { 255, 255, 255, 255 };
     EnBom* this = THIS;
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!(player->stateFlags1 & 2)) {
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_GIANT) {
+    if (player->stateFlags1 & 2) {
+        return;
+    }
+
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_GIANT) {
+        Actor_MarkForDeath(thisx);
+        return;
+    }
+
+    if (this->unk_1FC != 0) {
+        this->unk_1FC--;
+        Math_ApproachZeroF(&thisx->speedXZ, 1.0f, 1.0f);
+        Actor_SetVelocityAndMoveYRotationAndGravity(thisx);
+        Actor_UpdateBgCheckInfo(globalCtx, thisx, 35.0f, 10.0f, 36.0f, 4);
+        if (this->unk_1FC == 0) {
+            if (this->isPowderKeg) {
+                gSaveContext.powderKegTimer = 0;
+            }
             Actor_MarkForDeath(thisx);
-            return;
+        }
+    } else {
+        thisx->gravity = -1.2f;
+        if (this->timer != 0) {
+            if (!this->isPowderKeg || (func_808715B8 == this->actionFunc) || !func_801690CC(globalCtx)) {
+                this->timer--;
+            }
         }
 
-        if (this->unk_1FC != 0) {
-            this->unk_1FC--;
-            Math_ApproachZeroF(&thisx->speedXZ, 1.0f, 1.0f);
-            Actor_SetVelocityAndMoveYRotationAndGravity(thisx);
-            Actor_UpdateBgCheckInfo(globalCtx, thisx, 35.0f, 10.0f, 36.0f, 4);
-            if (this->unk_1FC == 0) {
-                if (this->unk_1F9 != 0) {
-                    gSaveContext.powderKegTimer = 0;
-                }
-                Actor_MarkForDeath(thisx);
+        if ((!this->isPowderKeg && (this->timer == 67)) || (this->isPowderKeg && (this->timer <= 2400))) {
+            Audio_PlayActorSound2(thisx, NA_SE_PL_TAKE_OUT_SHIELD);
+            Actor_SetScale(thisx, enBomScales[this->isPowderKeg]);
+        }
+
+        if ((thisx->xzDistToPlayer >= 20.0f) || (fabsf(thisx->playerHeightRel) >= 80.0f)) {
+            this->unk_1F8 = 1;
+        }
+
+        this->actionFunc(this, globalCtx);
+
+        Actor_UpdateBgCheckInfo(globalCtx, thisx, 35.0f, 10.0f, 36.0f, 0x1F);
+        if (thisx->params == 0) {
+            static Vec3us D_80872ED4[] = {
+                { 40, 20, 100 },
+                { 300, 60, 600 },
+            };
+            Vec3us* sp60 = &D_80872ED4[this->isPowderKeg];
+
+            sp74.y = 0.2f;
+            Math_Vec3f_Copy(&sp80, &thisx->home.pos);
+            if ((globalCtx->gameplayFrames % 2) == 0) {
+                EffectSsGSpk_SpawnFuse(globalCtx, thisx, &sp80, &spA4, &sp8C);
             }
-        } else {
-            thisx->gravity = -1.2f;
-            if (this->timer != 0) {
-                if ((this->unk_1F9 == 0) || (func_808715B8 == this->actionFunc) || !func_801690CC(globalCtx)) {
-                    this->timer--;
-                }
+            if (this->isPowderKeg) {
+                func_801A0810(&thisx->projectedPos, NA_SE_IT_BIG_BOMB_IGNIT - SFX_FLAG,
+                              (this->flashSpeedScale == 7)   ? 0
+                              : (this->flashSpeedScale == 3) ? 1
+                                                             : 2);
+            } else {
+                Audio_PlayActorSound2(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
             }
 
-            if (((this->unk_1F9 == 0) && (this->timer == 67)) || ((this->unk_1F9 != 0) && (this->timer <= 2400))) {
-                Audio_PlayActorSound2(thisx, NA_SE_PL_TAKE_OUT_SHIELD);
-                Actor_SetScale(thisx, enBomScales[this->unk_1F9]);
+            sp80.y += 3.0f;
+            func_800B0DE0(globalCtx, &sp80, &spA4, &sp74, &sp70, &sp70, 50, 5);
+
+            if ((this->collider1.base.acFlags & AC_HIT) ||
+                ((this->collider1.base.ocFlags1 & OC1_HIT) && ((this->collider1.base.oc->category == ACTORCAT_ENEMY) ||
+                                                               (this->collider1.base.oc->category == ACTORCAT_BOSS)))) {
+                this->timer = 0;
+                thisx->shape.rot.z = 0;
+            } else if ((this->timer > 100) && (func_80123F48(globalCtx, &thisx->world.pos, 30.0f, 50.0f))) {
+                this->timer = 100;
             }
 
-            if ((thisx->xzDistToPlayer >= 20.0f) || (fabsf(thisx->playerHeightRel) >= 80.0f)) {
-                this->unk_1F8 = 1;
+            sp74.y = 0.2f;
+            sp80 = thisx->world.pos;
+            sp80.y += 10.0f;
+
+            if ((this->timer == sp60->x) || (this->timer == sp60->y) || (this->timer == 3)) {
+                thisx->shape.rot.z = 0;
+                this->flashSpeedScale >>= 1;
             }
 
-            this->actionFunc(this, globalCtx);
+            if ((this->timer < sp60->z) && (this->timer & (this->flashSpeedScale + 1))) {
+                Math_ApproachF(&this->unk_1F4, 140.0f, 1.0f, 140.0f / this->flashSpeedScale);
+            } else {
+                Math_ApproachZeroF(&this->unk_1F4, 1.0f, 140.0f / this->flashSpeedScale);
+            }
 
-            Actor_UpdateBgCheckInfo(globalCtx, thisx, 35.0f, 10.0f, 36.0f, 0x1F);
-            if (thisx->params == 0) {
-                static Vec3us D_80872ED4[] = { 
-                    { 40, 20, 100 }, 
-                    { 300, 60, 600 } 
-                };
-                Vec3us* sp60 = &D_80872ED4[this->unk_1F9];
+            if (this->timer < 3) {
+                Actor_SetScale(thisx, thisx->scale.x + 0.002f);
+            }
 
-                sp74.y = 0.2f;
-                Math_Vec3f_Copy(&sp80, &thisx->home.pos);
-                if ((globalCtx->gameplayFrames % 2) == 0) {
-                    EffectSsGSpk_SpawnFuse(globalCtx, thisx, &sp80, &spA4, &sp8C);
-                }
-                if (this->unk_1F9 != 0) {
-                    func_801A0810(&thisx->projectedPos, NA_SE_IT_BIG_BOMB_IGNIT - SFX_FLAG, (this->unk_1F2 == 7) ? 0 : (this->unk_1F2 == 3) ? 1 : 2);
-                } else {
-                    Audio_PlayActorSound2(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
-                }
-                sp80.y += 3.0f;
-                func_800B0DE0(globalCtx, &sp80, &spA4, &sp74, &sp70, &sp70, 50, 5);
-                if ((this->collider1.base.acFlags & 2) || ((this->collider1.base.ocFlags1 & 2) && ((this->collider1.base.oc->category == 5) || (this->collider1.base.oc->category == 9)))) {
-                    this->timer = 0;
-                    thisx->shape.rot.z = 0;
-                } else if ((this->timer > 100) && (func_80123F48(globalCtx, &thisx->world.pos, 30.0f, 50.0f))) {
-                    this->timer = 100;
-                }
-                sp74.y = 0.2f;
+            if (this->timer == 0) {
                 sp80 = thisx->world.pos;
                 sp80.y += 10.0f;
-
-                if ((this->timer == sp60->x) || (this->timer == sp60->y) || (this->timer == 3)) {
-                    thisx->shape.rot.z = 0;
-                    this->unk_1F2 >>= 1;
+                if (Actor_HasParent(thisx, globalCtx)) {
+                    sp80.y += 30.0f;
                 }
-
-                if ((this->timer < sp60->z) && (this->timer & (this->unk_1F2 + 1))) {
-                    Math_ApproachF(&this->unk_1F4, 140.0f, 1.0f, 140.0f / this->unk_1F2);
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sp80.x, sp80.y - 10.0f, sp80.z, 0, 0,
+                            0, this->isPowderKeg);
+                func_800BC848(thisx, globalCtx, D_80872E98[this->isPowderKeg], D_80872E9C[this->isPowderKeg]);
+                globalCtx->envCtx.unk_8C.diffuseColor1[0] = globalCtx->envCtx.unk_8C.diffuseColor1[1] =
+                    globalCtx->envCtx.unk_8C.diffuseColor1[2] = 250;
+                globalCtx->envCtx.unk_8C.ambientColor[0] = globalCtx->envCtx.unk_8C.ambientColor[1] =
+                    globalCtx->envCtx.unk_8C.ambientColor[2] = 250;
+                func_800DFD04(&globalCtx->mainCamera, 2, 11, 8);
+                thisx->params = 1;
+                this->timer = 10;
+                thisx->flags |= (0x100000 | 0x20);
+                this->actionFunc = func_808715B8;
+                if (this->isPowderKeg) {
+                    gSaveContext.powderKegTimer = 0;
+                    Audio_PlayActorSound2(thisx, NA_SE_IT_BIG_BOMB_EXPLOSION);
                 } else {
-                    Math_ApproachZeroF(&this->unk_1F4, 1.0f, 140.0f / this->unk_1F2);
-                }
-
-                if (this->timer < 3) {
-                    Actor_SetScale(thisx, thisx->scale.x + 0.002f);
-                }
-
-                if (this->timer == 0) {
-                    sp80 = thisx->world.pos;
-                    sp80.y += 10.0f;
-                    if (Actor_HasParent(thisx, globalCtx)) {
-                        sp80.y += 30.0f;
-                    }
-                    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sp80.x, sp80.y - 10.0f, sp80.z, 0, 0, 0, this->unk_1F9);
-                    func_800BC848(thisx, globalCtx, D_80872E98[this->unk_1F9], D_80872E9C[this->unk_1F9]);
-                    globalCtx->envCtx.unk_8C.diffuseColor1[0] = globalCtx->envCtx.unk_8C.diffuseColor1[1] = globalCtx->envCtx.unk_8C.diffuseColor1[2] = 250;
-                    globalCtx->envCtx.unk_8C.ambientColor[0] = globalCtx->envCtx.unk_8C.ambientColor[1] = globalCtx->envCtx.unk_8C.ambientColor[2] = 250;
-                    func_800DFD04(&globalCtx->mainCamera, 2, 11, 8);
-                    thisx->params = 1;
-                    this->timer = 10;
-                    thisx->flags |= (0x100000 | 0x20);
-                    this->actionFunc = func_808715B8;
-                    if (this->unk_1F9 != 0) {
-                        gSaveContext.powderKegTimer = 0;
-                        Audio_PlayActorSound2(thisx, NA_SE_IT_BIG_BOMB_EXPLOSION);
-                    } else {
-                        Audio_PlayActorSound2(thisx, NA_SE_IT_BOMB_EXPLOSION);
-                    }
+                    Audio_PlayActorSound2(thisx, NA_SE_IT_BOMB_EXPLOSION);
                 }
             }
+        }
 
-            Actor_SetHeight(thisx, 20.0f);
+        Actor_SetHeight(thisx, 20.0f);
 
-            if (thisx->params <= 0) {
-                Collider_UpdateCylinder(thisx, &this->collider1);
-                if ((Actor_HasParent(thisx, globalCtx) == 0) && (this->unk_1F8 != 0)) {
-                    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-                }
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+        if (thisx->params <= 0) {
+            Collider_UpdateCylinder(thisx, &this->collider1);
+            if (!Actor_HasParent(thisx, globalCtx) && (this->unk_1F8 != 0)) {
+                CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
             }
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+        }
 
-            if ((enBomScales[this->unk_1F9] <= thisx->scale.x) && (thisx->params != 1)) {
-                if (thisx->depthInWater >= 20.0f) {
-                    Vec3f sp54;
+        if ((enBomScales[this->isPowderKeg] <= thisx->scale.x) && (thisx->params != 1)) {
+            if (thisx->depthInWater >= 20.0f) {
+                Vec3f sp54;
 
-                    sp54.x = thisx->world.pos.x;
-                    sp54.y = thisx->world.pos.y + thisx->depthInWater;
-                    sp54.z = thisx->world.pos.z;
-                    EffectSsGRipple_Spawn(globalCtx, &sp54, 70, 500, 0);
-                    EffectSsGRipple_Spawn(globalCtx, &sp54, 70, 500, 10);
-                    sp54.y += 10.0f;
-                    EffectSsGSplash_Spawn(globalCtx, &sp54, NULL, NULL, 1, 500);
-                    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sp54.x, sp54.y, sp54.z, 0, 0, 1, 200);
-                    Audio_PlaySoundAtPosition(globalCtx, &thisx->world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
-                    this->unk_1F4 = 0.0f;
-                    thisx->velocity.y = (KREG(83) * 0.1f) + -2.0f;
-                    thisx->gravity = (KREG(84) * 0.1f) + -0.5f;
-                    this->unk_1FC = KREG(81) + 10;
-                } else if (thisx->bgCheckFlags & 0x40) {
-                    thisx->bgCheckFlags &= ~0x40;
-                    Audio_PlayActorSound2(thisx, NA_SE_EV_BOMB_DROP_WATER);
-                }
+                sp54.x = thisx->world.pos.x;
+                sp54.y = thisx->world.pos.y + thisx->depthInWater;
+                sp54.z = thisx->world.pos.z;
+                EffectSsGRipple_Spawn(globalCtx, &sp54, 70, 500, 0);
+                EffectSsGRipple_Spawn(globalCtx, &sp54, 70, 500, 10);
+                sp54.y += 10.0f;
+                EffectSsGSplash_Spawn(globalCtx, &sp54, NULL, NULL, 1, 500);
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sp54.x, sp54.y, sp54.z, 0, 0, 1, 200);
+                Audio_PlaySoundAtPosition(globalCtx, &thisx->world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
+                this->unk_1F4 = 0.0f;
+                thisx->velocity.y = (KREG(83) * 0.1f) + -2.0f;
+                thisx->gravity = (KREG(84) * 0.1f) + -0.5f;
+                this->unk_1FC = KREG(81) + 10;
+            } else if (thisx->bgCheckFlags & 0x40) {
+                thisx->bgCheckFlags &= ~0x40;
+                Audio_PlayActorSound2(thisx, NA_SE_EV_BOMB_DROP_WATER);
             }
         }
     }
@@ -541,7 +596,7 @@ static Vec3f D_80872F04 = { 0.0f, 0.0f, 0.0f };
 void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnBom* this = THIS;
-    
+
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     if (this->actor.params == 0) {
@@ -549,17 +604,19 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         Collider_UpdateSpheres(0, &this->collider2);
 
-        if (this->unk_1F9 == 0) {
+        if (!this->isPowderKeg) {
             func_800B8050(&this->actor, globalCtx, 0);
             Matrix_MultiplyVector3fByState(&D_80872EE0, &this->actor.home.pos);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015FA0);
 
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetEnvColor(POLY_OPA_DISP++, (s8)this->unk_1F4, 0, 40, 255);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, (s8)this->unk_1F4, 0, 40, 255);
@@ -571,7 +628,7 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
             if (this->unk_1FA != 0) {
                 s16 sp4A = this->actor.world.rot.y - this->actor.shape.rot.y;
                 f32 sp44 = (1000.0f / Math_CosS(ABS_ALT((s16)(this->unk_1FA % 10922)) - 0x1555)) + -1000.0f;
-                
+
                 Matrix_RotateY(sp4A, MTXMODE_APPLY);
                 Matrix_InsertTranslation(0.0f, sp44, 0.0f, MTXMODE_APPLY);
                 Matrix_InsertXRotation_s(this->unk_1FA, MTXMODE_APPLY);
@@ -583,7 +640,8 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_MultiplyVector3fByState(&D_80872F04, &sp4C);
 
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, ovl_En_Bom_DL_80873CA0);
             gSPDisplayList(POLY_OPA_DISP++, ovl_En_Bom_DL_808742F8);
 
@@ -628,16 +686,16 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
 
     spB0 = (arg4 / 240) + 1;
 
-    for (i = 0; i < spB0; i++, ptr++, ptr2++, arg4 -= 0xF0) {
+    for (i = 0; i < spB0; i++, ptr++, ptr2++, arg4 -= 240) {
         f32 phi_f22;
         CollisionPoly* spA0;
         s32 sp9C;
         Vec3f sp90;
 
-        if (arg4 >= 0xF0) {
+        if (arg4 >= 240) {
             phi_f22 = 8.0f;
         } else {
-            phi_f22 = (arg4 % 240) * 0.004166667f * 8.0f;
+            phi_f22 = (arg4 % 240) * (1.0f / 240) * 8.0f;
         }
 
         Math_Vec3f_Sum(&ptr2->unk_00, &ptr2->unk_0C, &ptr2->unk_00);
@@ -666,8 +724,8 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
         sqrt = sqrtf(SQ(spCC.x) + SQ(spCC.z));
         ptr2->unk_1A = Math_FAtan2F(sqrt, spCC.y);
 
-        ptr2->unk_18 = (s16)CLAMP(BINANG_SUB(ptr2->unk_18, ptr->unk_18), -0x1F40, 0x1F40) + ptr->unk_18;
-        ptr2->unk_1A = (s16)CLAMP(BINANG_SUB(ptr2->unk_1A, ptr->unk_1A), -0x1F40, 0x1F40) + ptr->unk_1A;
+        ptr2->unk_18 = (s16)CLAMP(BINANG_SUB(ptr2->unk_18, ptr->unk_18), -8000, 8000) + ptr->unk_18;
+        ptr2->unk_1A = (s16)CLAMP(BINANG_SUB(ptr2->unk_1A, ptr->unk_1A), -8000, 8000) + ptr->unk_1A;
 
         temp_f20 = Math_CosS(ptr2->unk_1A) * phi_f22;
         spC0.x = Math_SinS(ptr2->unk_18) * temp_f20;
@@ -719,7 +777,7 @@ void func_80872BC0(GlobalContext* globalCtx, s32 arg1) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-    Matrix_InsertRotation(ptr->unk_18, ptr->unk_1A, 0, MTXMODE_APPLY);
+    Matrix_InsertRotation(ptr->unk_1A, ptr->unk_18, 0, MTXMODE_APPLY);
     Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
