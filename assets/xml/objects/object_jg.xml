@@ -24,22 +24,22 @@
         <DList Name="gGoronElderLeftHandAndThumbDL" Offset="0x68C0" />
         <DList Name="gGoronElderLeftShoulderAndUpperArmDL" Offset="0x6B08" />
         <DList Name="gGoronElderLowerTorsoDL" Offset="0x6E08" />
-        <Animation Name="object_jg_Anim_0077CC" Offset="0x77CC" />
-        <Animation Name="object_jg_Anim_009440" Offset="0x9440" />
-        <Animation Name="object_jg_Anim_00A07C" Offset="0xA07C" />
+        <Animation Name="gGoronElderThinkingAnim" Offset="0x77CC" /> <!-- Original name is "jg_are_loop" (maybe "huh?") -->
+        <Animation Name="gGoronElderWalkAnim" Offset="0x9440" /> <!-- Original name is "jg_aruku" ("walk") -->
+        <Animation Name="gGoronElderCradleAnim" Offset="0xA07C" /> <!-- Original name is "jg_dakko" ("hug") -->
         <DList Name="gGoronElderDrumDL" Offset="0xA3B0" />
         <Texture Name="gGoronElderDrumSidesTex" OutName="goron_elder_drum_sides" Format="rgba16" Width="32" Height="32" Offset="0xA530" />
         <Texture Name="gGoronElderDrumTopTex" OutName="goron_elder_drum_top" Format="rgba16" Width="16" Height="16" Offset="0xAD30" />
-        <Animation Name="object_jg_Anim_00BDD8" Offset="0xBDD8" />
-        <Animation Name="object_jg_Anim_00C7A8" Offset="0xC7A8" />
-        <Animation Name="object_jg_Anim_00D630" Offset="0xD630" />
-        <Animation Name="object_jg_Anim_00DB54" Offset="0xDB54" />
-        <Animation Name="object_jg_Anim_00E8FC" Offset="0xE8FC" />
-        <Animation Name="object_jg_Anim_00FE48" Offset="0xFE48" />
-        <Animation Name="object_jg_Anim_011F50" Offset="0x11F50" />
-        <Animation Name="object_jg_Anim_0129F4" Offset="0x129F4" />
-        <Animation Name="object_jg_Anim_013DD8" Offset="0x13DD8" />
-        <Animation Name="object_jg_Anim_01436C" Offset="0x1436C" />
+        <Animation Name="gGoronElderWavingAnim" Offset="0xBDD8" /> <!-- Original name is "jg_iran" -->
+        <Animation Name="gGoronElderHeadShakeAnim" Offset="0xC7A8" /> <!-- Original name is "jg_kubifuri" ("head shake") -->
+        <Animation Name="gGoronElderRememberingAnim" Offset="0xD630" /> <!-- Original name is "jg_moichido" -->
+        <Animation Name="gGoronElderSurpriseStartAnim" Offset="0xDB54" /> <!-- Original name is "jg_odoroki" ("surprise") -->
+        <Animation Name="gGoronElderSurpriseLoopAnim" Offset="0xE8FC" /> <!-- Original name is "jg_odorokiLoop" -->
+        <Animation Name="gGoronElderStrongRememberingAnim" Offset="0xFE48" /> <!-- Original name might be "jg_soujyatta"? -->
+        <Animation Name="gGoronElderTakeOutDrumAnim" Offset="0x11F50" /> <!-- Original name is "jg_taiko_dasu" ("get out drum") -->
+        <Animation Name="gGoronElderDrumIdleAnim" Offset="0x129F4" /> <!-- Original name is "jg_taiko_loop" ("drum loop") -->
+        <Animation Name="gGoronElderPlayingDrumAnim" Offset="0x13DD8" /> <!-- Original name is "jg_taiko_tataku" ("playing the drum") -->
+        <Animation Name="gGoronElderAngryAnim" Offset="0x1436C" /> <!-- Original name is "jg_takaburu" ("to become worked up"?) -->
         <Texture Name="gGoronElderTLUT" OutName="goron_elder_palette" Format="rgba16" Width="16" Height="16" Offset="0x14380" />
         <Texture Name="gGoronElderSkinTex" OutName="goron_elder_skin" Format="ci8" Width="8" Height="8" Offset="0x14580" />
         <Texture Name="gGoronElderToesTex" OutName="goron_elder_toes" Format="ci8" Width="32" Height="16" Offset="0x145C0" />
@@ -57,8 +57,8 @@
         <Texture Name="gGoronElderGoronRubyTattooTex" OutName="goron_elder_goron_ruby_tattoo" Format="ci8" Width="16" Height="32" Offset="0x16800" />
         <Texture Name="gGoronElderChestTex" OutName="goron_elder_chest" Format="ci8" Width="32" Height="32" Offset="0x16A00" />
         <Texture Name="gGoronElderBackTex" OutName="goron_elder_back" Format="ci8" Width="32" Height="64" Offset="0x16E00" />
-        <Animation Name="object_jg_Anim_018CE4" Offset="0x18CE4" />
-        <Animation Name="object_jg_Anim_01ADC0" Offset="0x1ADC0" />
+        <Animation Name="gGoronElderDepressedAnim" Offset="0x18CE4" /> <!-- Original name is "jg_u_m_loop" -->
+        <Animation Name="gGoronElderIdleAnim" Offset="0x1ADC0" /> <!-- Original name is "jg_wait" -->
         <Limb Name="gGoronElderRootLimb" Type="Standard" Offset="0x1ADD0" />
         <Limb Name="gGoronElderUpperBodyRootLimb" Type="Standard" Offset="0x1ADDC" />
         <Limb Name="gGoronElderLowerTorsoLimb" Type="Standard" Offset="0x1ADE8" />
@@ -94,7 +94,7 @@
         <Limb Name="gGoronElderRightShinLimb" Type="Standard" Offset="0x1AF50" />
         <Limb Name="gGoronElderRightFootLimb" Type="Standard" Offset="0x1AF5C" />
         <Skeleton Name="gGoronElderSkel" Type="Flex" LimbType="Standard" Offset="0x1AFF0" />
-        <Animation Name="object_jg_Anim_01B1E8" Offset="0x1B1E8" />
+        <Animation Name="object_jg_Anim_01B1E8" Offset="0x1B1E8" /> <!-- Original name might be "jggakki_dasu"? -->
         <!-- <Blob Name="object_jg_Blob_01B1F8" Size="0x28" Offset="0x1B1F8" /> -->
     </File>
 </Root>

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_jg.h"
+#include "objects/object_jg/object_jg.h"
 
 #define FLAGS 0x00000019
 
@@ -28,23 +29,6 @@ void func_80B74BC8(EnJg* this, GlobalContext* globalCtx);
 void func_80B74440(EnJg* this, GlobalContext* globalCtx);
 void func_80B741F8(EnJg* this, GlobalContext* globalCtx);
 void func_80B749D0(EnJg* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060077CC;
-extern AnimationHeader D_06009440;
-extern AnimationHeader D_0600A07C;
-extern AnimationHeader D_0600BDD8;
-extern AnimationHeader D_0600C7A8;
-extern AnimationHeader D_0600D630;
-extern AnimationHeader D_0600DB54;
-extern AnimationHeader D_0600E8FC;
-extern AnimationHeader D_0600FE48;
-extern AnimationHeader D_06011F50;
-extern AnimationHeader D_060129F4;
-extern AnimationHeader D_06013DD8;
-extern AnimationHeader D_0601436C;
-extern AnimationHeader D_06018CE4;
-extern AnimationHeader D_0601ADC0;
-extern FlexSkeletonHeader D_0601AFF0;
 
 const ActorInit En_Jg_InitVars = {
     ACTOR_EN_JG,
@@ -116,13 +100,16 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_0601ADC0, 1.0f, 0, -1, 0, -10 },  { &D_06009440, 1.0f, 0, -1, 0, -10 }, { &D_0600BDD8, 1.0f, 0, -1, 0, -10 },
-    { &D_0600C7A8, 1.0f, 0, -1, 0, -10 },  { &D_0600DB54, 1.0f, 0, -1, 2, -10 }, { &D_0600E8FC, 1.0f, 0, -1, 0, -10 },
-    { &D_0601436C, 1.0f, 0, -1, 0, -10 },  { &D_0600DB54, 2.0f, 0, -1, 2, 0 },   { &D_0600DB54, -2.0f, 0, -1, 2, 0 },
-    { &D_06009440, -1.0f, 0, -1, 0, -10 }, { &D_06011F50, 1.0f, 0, -1, 2, 0 },   { &D_060129F4, 1.0f, 0, -1, 0, 0 },
-    { &D_06013DD8, 1.0f, 1, 44, 2, 0 },    { &D_060077CC, 1.0f, 0, -1, 0, 0 },   { &D_0600D630, 1.0f, 0, -1, 2, 0 },
-    { &D_0600FE48, 1.0f, 0, -1, 2, 0 },    { &D_06018CE4, 1.0f, 0, -1, 0, 0 },   { &D_0601ADC0, 1.0f, 0, -1, 0, 0 },
-    { &D_0600A07C, 1.0f, 0, -1, 0, 0 },
+    { &gGoronElderIdleAnim, 1.0f, 0, -1, 0, -10 },          { &gGoronElderWalkAnim, 1.0f, 0, -1, 0, -10 },
+    { &gGoronElderWavingAnim, 1.0f, 0, -1, 0, -10 },        { &gGoronElderHeadShakeAnim, 1.0f, 0, -1, 0, -10 },
+    { &gGoronElderSurpriseStartAnim, 1.0f, 0, -1, 2, -10 }, { &gGoronElderSurpriseLoopAnim, 1.0f, 0, -1, 0, -10 },
+    { &gGoronElderAngryAnim, 1.0f, 0, -1, 0, -10 },         { &gGoronElderSurpriseStartAnim, 2.0f, 0, -1, 2, 0 },
+    { &gGoronElderSurpriseStartAnim, -2.0f, 0, -1, 2, 0 },  { &gGoronElderWalkAnim, -1.0f, 0, -1, 0, -10 },
+    { &gGoronElderTakeOutDrumAnim, 1.0f, 0, -1, 2, 0 },     { &gGoronElderDrumIdleAnim, 1.0f, 0, -1, 0, 0 },
+    { &gGoronElderPlayingDrumAnim, 1.0f, 1, 44, 2, 0 },     { &gGoronElderThinkingAnim, 1.0f, 0, -1, 0, 0 },
+    { &gGoronElderRememberingAnim, 1.0f, 0, -1, 2, 0 },     { &gGoronElderStrongRememberingAnim, 1.0f, 0, -1, 2, 0 },
+    { &gGoronElderDepressedAnim, 1.0f, 0, -1, 0, 0 },       { &gGoronElderIdleAnim, 1.0f, 0, -1, 0, 0 },
+    { &gGoronElderCradleAnim, 1.0f, 0, -1, 0, 0 },
 };
 
 static Vec3f D_80B759A8 = { 0.0f, 0.0f, 0.0f };
@@ -784,8 +771,8 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnJg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0601AFF0, &D_0601ADC0, this->jointTable, this->morphTable,
-                       EN_JG_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronElderSkel, &gGoronElderIdleAnim, this->jointTable,
+                       this->morphTable, EN_JG_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
