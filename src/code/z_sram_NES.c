@@ -702,9 +702,19 @@ SavePlayerData sSaveDebugPlayerData = {
 };
 
 ItemEquips sSaveDebugItemEquips = {
-    { { 0x4D, 0x01, 0x13, 0x00 }, { 0x4D, 0x01, 0x33, 0x00 }, { 0x4D, 0x01, 0x34, 0x00 }, { 0x09, 0x09, 0x32, 0x00 } },
-    { { 0x00, 0x01, 0x13, 0x00 }, { 0x00, 0x0A, 0x23, 0x07 }, { 0x00, 0x0C, 0x29, 0x07 }, { 0x00, 0x01, 0x1D, 0x07 } },
-    0x0011,
+    { 
+        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_POTION_RED, ITEM_OCARINA }, 
+        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_MASK_GORON, ITEM_OCARINA }, 
+        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_MASK_ZORA, ITEM_OCARINA }, 
+        { ITEM_NUT, ITEM_NUT, ITEM_MASK_DEKU, ITEM_OCARINA }, 
+    },
+    { 
+        { SLOT_OCARINA, SLOT_BOW, SLOT_BOTTLE_2, SLOT_OCARINA }, 
+        { SLOT_OCARINA, SLOT_MAGIC_BEANS, SLOT_MASK_GORON, SLOT_BOMBCHU }, 
+        { SLOT_OCARINA, SLOT_POWDER_KEG, SLOT_MASK_ZORA, SLOT_BOMBCHU }, 
+        { SLOT_OCARINA, SLOT_BOW, SLOT_MASK_DEKU, SLOT_BOMBCHU },
+    },
+    0x11,
 };
 
 Inventory sSaveDebugInventory = {
