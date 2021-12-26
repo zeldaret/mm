@@ -30,7 +30,7 @@
         <Texture Name="gBigOctoShellTex" OutName="big_octo_shell" Format="rgba16" Width="16" Height="16" Offset="0x6090" />
         <Texture Name="gBigOctoHeadBaseTex" OutName="big_octo_head_base" Format="rgba16" Width="8" Height="8" Offset="0x6290" />
         <Texture Name="gBigOctoBetweenEyesTex" OutName="big_octo_between_eyes" Format="rgba16" Width="8" Height="8" Offset="0x6310" />
-        <Texture Name="gBigOctoSnoutCenterTex" OutName="big_octo_snout_center" Format="rgba16" Width="16" Height="16" Offset="0x6390" />
+        <Texture Name="gBigOctoHeadUndersideTex" OutName="big_octo_head_underside" Format="rgba16" Width="16" Height="16" Offset="0x6390" />
         <Texture Name="gBigOctoEyeShellTex" OutName="big_octo_eye_shell" Format="rgba16" Width="16" Height="16" Offset="0x6590" />
         <Texture Name="gBigOctoSnoutEdgeTex" OutName="big_octo_snout_edge" Format="rgba16" Width="8" Height="16" Offset="0x6790" />
         <Texture Name="gBigOctoArmBottomTex" OutName="big_octo_arm_bottom" Format="rgba16" Width="16" Height="16" Offset="0x6890" />
