@@ -1378,7 +1378,7 @@ void EnInvadepoh_SetSysMatrix(Vec3f* vec) {
 
 s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 arg3) {
     s32 pad;
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_DOOR].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_DOOR].first;
     s32 retVal = false;
 
     while (actorIterator != NULL) {

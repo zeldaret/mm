@@ -173,7 +173,7 @@ void EnSuttari_UpdateCollider(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 Actor* EnSuttari_GetActorById(GlobalContext* globalCtx, s16 actorId) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actor != NULL) {
         if (actor->id == actorId) {

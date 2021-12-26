@@ -219,7 +219,7 @@ void func_80ADAFC0(EnSellnuts* this) {
 }
 
 Actor* func_80ADB040(GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actor != NULL) {
         if ((actor->id == ACTOR_EN_SELLNUTS) && !ENSELLNUTS_GET_1(actor)) {

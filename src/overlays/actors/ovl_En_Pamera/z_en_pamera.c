@@ -196,7 +196,7 @@ void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_80BD84F0(EnPamera* this, GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_DOOR].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_DOOR].first;
 
     while (actor != NULL) {
         if ((actor->id == ACTOR_EN_DOOR) && (Math_Vec3f_DistXZ(&this->actor.world.pos, &actor->world.pos) < 200.0f)) {
@@ -454,7 +454,7 @@ void func_80BD90AC(EnPamera* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BD9234(EnPamera* this, GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (actor != NULL) {
         if ((actor->id == ACTOR_EN_BOM) && (Math_Vec3f_DistXZ(&this->actor.world.pos, &actor->world.pos) < 500.0f) &&

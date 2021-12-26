@@ -122,7 +122,7 @@ void func_80C06CD8(ObjMuPict* this, GlobalContext* globalCtx) {
 }
 
 void func_80C06D90(ObjMuPict* this, GlobalContext* globalCtx) {
-    Actor* actorPtr = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* actorPtr = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actorPtr != NULL) {
         if (actorPtr->id == ACTOR_EN_HGO) {

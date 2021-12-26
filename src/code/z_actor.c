@@ -66,7 +66,7 @@ void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory)
 Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actorToRemove);
 
 void Actor_PrintLists(ActorContext* actorCtx) {
-    ActorListEntry* actorList = &actorCtx->actorList[0];
+    ActorListEntry* actorList = &actorCtx->actorLists[0];
     Actor* actor;
     s32 i;
 
@@ -74,7 +74,7 @@ void Actor_PrintLists(ActorContext* actorCtx) {
     FaultDrawer_Printf("actor\n", gMaxActorId);
     FaultDrawer_Printf("No. Actor   Name Part SegName\n");
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
+    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
         actor = actorList[i].first;
 
         while (actor != NULL) {
@@ -2257,10 +2257,10 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
     actorCtx->absoluteSpace = NULL;
 
     Actor_SpawnEntry(actorCtx, actorEntry, globalCtx);
-    Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorList[ACTORCAT_PLAYER].first, globalCtx);
+    Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorLists[ACTORCAT_PLAYER].first, globalCtx);
     func_800B9120(actorCtx);
     Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
-    func_800B722C(&globalCtx->state, (Player*)actorCtx->actorList[ACTORCAT_PLAYER].first);
+    func_800B722C(&globalCtx->state, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
 }
 
 /**
@@ -2430,7 +2430,7 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         params.unk10 = NULL;
     }
 
-    for (i = 0, entry = actorCtx->actorList; i < ARRAY_COUNT(actorCtx->actorList); entry++, tmp++, i++) {
+    for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists); entry++, tmp++, i++) {
         params.unkC = *tmp & player->stateFlags1;
         params.actor = entry->first;
 
@@ -2443,7 +2443,7 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         }
     }
 
-    for (i = 0, entry = actorCtx->actorList; i < ARRAY_COUNT(actorCtx->actorList); entry++, i++) {
+    for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists); entry++, i++) {
         if (entry->unk_08 != 0) {
             actor = entry->first;
 
@@ -2855,7 +2855,7 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     sp58 = POLY_XLU_DISP;
     POLY_XLU_DISP = &sp58[1];
 
-    for (i = 0, actorEntry = actorCtx->actorList; i < ARRAY_COUNT(actorCtx->actorList); i++, actorEntry++) {
+    for (i = 0, actorEntry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists); i++, actorEntry++) {
         actor = actorEntry->first;
 
         while (actor != NULL) {
@@ -2929,8 +2929,8 @@ void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx) {
     Actor* actor;
     s32 i;
 
-    for (i = 0; i != ARRAY_COUNT(actorCtx->actorList); i++) {
-        actor = actorCtx->actorList[i].first;
+    for (i = 0; i != ARRAY_COUNT(actorCtx->actorLists); i++) {
+        actor = actorCtx->actorLists[i].first;
 
         while (actor != NULL) {
             if (!Object_IsLoaded(&globalCtx->objectCtx, actor->objBankIndex)) {
@@ -2949,8 +2949,8 @@ void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx) {
     Actor* actor;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
-        actor = actorCtx->actorList[i].first;
+    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
+        actor = actorCtx->actorLists[i].first;
 
         while (actor != NULL) {
             if ((actor->room >= 0) && (actor->room != globalCtx->roomCtx.currRoom.num) &&
@@ -2978,8 +2978,8 @@ void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx) {
 void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
-        Actor* actor = actorCtx->actorList[i].first;
+    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
+        Actor* actor = actorCtx->actorLists[i].first;
 
         while (actor != NULL) {
             if (!(actor->unk20 & actorCtx->unkC)) {
@@ -3006,19 +3006,19 @@ void Actor_CleanupContext(ActorContext* actorCtx, GlobalContext* globalCtx) {
 
     Fault_RemoveClient(&sActorFaultClient);
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
+    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
         if (i != ACTORCAT_PLAYER) {
-            Actor* actor = actorCtx->actorList[i].first;
+            Actor* actor = actorCtx->actorLists[i].first;
 
             while (actor != NULL) {
                 Actor_Delete(actorCtx, actor, globalCtx);
-                actor = actorCtx->actorList[i].first;
+                actor = actorCtx->actorLists[i].first;
             }
         }
     }
 
-    while (actorCtx->actorList[ACTORCAT_PLAYER].first != NULL) {
-        Actor_Delete(actorCtx, actorCtx->actorList[ACTORCAT_PLAYER].first, globalCtx);
+    while (actorCtx->actorLists[ACTORCAT_PLAYER].first != NULL) {
+        Actor_Delete(actorCtx, actorCtx->actorLists[ACTORCAT_PLAYER].first, globalCtx);
     }
 
     if (actorCtx->absoluteSpace != NULL) {
@@ -3041,11 +3041,11 @@ void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory)
     actor->category = actorCategory;
 
     actorCtx->totalLoadedActors++;
-    actorCtx->actorList[actorCategory].length++;
-    lastActor = actorCtx->actorList[actorCategory].first;
+    actorCtx->actorLists[actorCategory].length++;
+    lastActor = actorCtx->actorLists[actorCategory].first;
 
     if (lastActor == NULL) {
-        actorCtx->actorList[actorCategory].first = actor;
+        actorCtx->actorLists[actorCategory].first = actor;
         return;
     }
 
@@ -3067,12 +3067,12 @@ Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx
     Actor* newHead;
 
     actorCtx->totalLoadedActors--;
-    actorCtx->actorList[actorToRemove->category].length--;
+    actorCtx->actorLists[actorToRemove->category].length--;
 
     if (actorToRemove->prev != NULL) {
         actorToRemove->prev->next = actorToRemove->next;
     } else {
-        actorCtx->actorList[actorToRemove->category].first = actorToRemove->next;
+        actorCtx->actorLists[actorToRemove->category].first = actorToRemove->next;
     }
 
     newHead = actorToRemove->next;
@@ -3085,7 +3085,7 @@ Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx
     actorToRemove->prev = NULL;
 
     if ((actorToRemove->room == globalCtx->roomCtx.currRoom.num) && (actorToRemove->category == ACTORCAT_ENEMY) &&
-        (actorCtx->actorList[ACTORCAT_ENEMY].length == 0)) {
+        (actorCtx->actorLists[ACTORCAT_ENEMY].length == 0)) {
         Flags_SetClearTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
     }
 
@@ -3367,7 +3367,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
     Vec3f sp70;
     s32 phi_s2_2;
 
-    actor = actorCtx->actorList[actorCategory].first;
+    actor = actorCtx->actorLists[actorCategory].first;
     sp8C = player->unk_730;
     while (actor != NULL) {
         if ((actor->update != NULL) && ((Player*)actor != player)) {
@@ -3601,7 +3601,7 @@ void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 arg2, s32 arg3
 }
 
 void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
-    actorCtx->actorList[actor->category].unk_08 = 1;
+    actorCtx->actorLists[actor->category].unk_08 = 1;
     actor->category = actorCategory;
 }
 
@@ -3631,7 +3631,7 @@ s32 func_800BC1B4(Actor* actor, Actor* arg1, f32 arg2, f32 arg3) {
 }
 
 Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, s32 arg3) {
-    Actor* itemAction = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* itemAction = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (itemAction != NULL) {
         if (((itemAction->id == ACTOR_ARMS_HOOK) && (arg3 & 0x80)) ||
@@ -3671,7 +3671,7 @@ Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, s32 arg3)
 }
 
 Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
         if (((explosive->id == ACTOR_EN_BOM) || (explosive->id == ACTOR_EN_BOM_CHU) ||
@@ -4255,7 +4255,7 @@ void Actor_Noop(Actor* actor, GlobalContext* globalCtx) {
  * specified category rather than a specific Id.
  */
 Actor* Actor_FindNearby(GlobalContext* globalCtx, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance) {
-    Actor* actor = globalCtx->actorCtx.actorList[actorCategory].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[actorCategory].first;
 
     while (actor != NULL) {
         if (actor == inActor || ((actorId != -1) && (actorId != actor->id))) {

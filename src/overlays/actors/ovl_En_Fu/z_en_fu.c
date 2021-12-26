@@ -188,7 +188,7 @@ void func_809619D0(EnFu* this, GlobalContext* globalCtx) {
 void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFu* this = THIS;
-    Actor* fuKaiten = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* fuKaiten = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (fuKaiten != NULL) {
         if (fuKaiten->id == ACTOR_BG_FU_KAITEN) {
@@ -257,7 +257,7 @@ s32 func_80961D10(EnFu* this) {
 }
 
 void func_80961D7C(GlobalContext* globalCtx) {
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
         if ((explosive->id == ACTOR_EN_BOM) && (explosive->bgCheckFlags & 1)) {
@@ -277,7 +277,7 @@ void func_80961D7C(GlobalContext* globalCtx) {
 }
 
 void func_80961E88(GlobalContext* globalCtx) {
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
         Actor_MarkForDeath(explosive);
@@ -286,7 +286,7 @@ void func_80961E88(GlobalContext* globalCtx) {
 }
 
 void func_80961EC8(GlobalContext* globalCtx) {
-    Actor* fuMato = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* fuMato = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (fuMato != NULL) {
         if (fuMato->id == ACTOR_EN_FU_MATO) {
@@ -297,7 +297,7 @@ void func_80961EC8(GlobalContext* globalCtx) {
 }
 
 void func_80961F00(GlobalContext* globalCtx) {
-    Actor* fuKago = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* fuKago = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (fuKago != NULL) {
         if (fuKago->id == ACTOR_EN_FU_KAGO) {

@@ -328,7 +328,7 @@ void func_80B28B5C(EnFish2* this) {
 }
 
 void func_80B28C14(EnFish2* this, GlobalContext* globalCtx) {
-    Actor* itemAction = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* itemAction = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     WaterBox* waterbox;
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
@@ -747,7 +747,7 @@ void func_80B297FC(EnFish2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B29E5C(EnFish2* this, GlobalContext* globalCtx) {
-    Actor* prop = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* prop = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (prop != NULL) {
         if (prop->id != ACTOR_EN_FISH2) {

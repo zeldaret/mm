@@ -124,7 +124,7 @@ void func_80BE871C(EnBaisen* this) {
 }
 
 void func_80BE87B0(EnBaisen* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actorIterator != NULL) {
         if (actorIterator->id == ACTOR_EN_HEISHI) {

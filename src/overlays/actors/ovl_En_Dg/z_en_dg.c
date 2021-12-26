@@ -427,7 +427,7 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80989FC8(GlobalContext* globalCtx) {
-    EnDg* enemy = (EnDg*)globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first;
+    EnDg* enemy = (EnDg*)globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
     f32 minDist = 9999.0f;
     f32 dist;
 

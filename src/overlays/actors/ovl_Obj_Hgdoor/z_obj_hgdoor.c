@@ -49,7 +49,7 @@ static s32 unused = 0;
 static s32 unused2 = 0;
 
 void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actorIterator) {
         if ((actorIterator->id == ACTOR_OBJ_HGDOOR) && (&this->dyna.actor != actorIterator)) {
@@ -61,7 +61,7 @@ void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
 }
 
 void ObjHgdoor_SetParent(ObjHgdoor* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actorIterator) {
         if (actorIterator->id == ACTOR_EN_HG) {

@@ -1316,7 +1316,7 @@ struct ActorContext {
     /* 0x00C */ s16 unkC;
     /* 0x00E */ u8 totalLoadedActors;
     /* 0x00F */ u8 undrawnActorCount;
-    /* 0x010 */ ActorListEntry actorList[ACTORCAT_MAX];
+    /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
     /* 0x0A0 */ Actor* undrawnActors[32]; // Records the first 32 actors drawn each frame
     /* 0x120 */ TargetContext targetContext;
     /* 0x1B8 */ ActorContextFlags flags;

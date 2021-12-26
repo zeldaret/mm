@@ -491,7 +491,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
 Actor* EnElforg_GetHoldingEnemy(EnElforg* this, GlobalContext* globalCtx) {
     Actor* enemy;
 
-    for (enemy = globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first; enemy != NULL; enemy = enemy->next) {
+    for (enemy = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first; enemy != NULL; enemy = enemy->next) {
         if ((enemy->home.pos.x == this->actor.home.pos.x) && (enemy->home.pos.y == this->actor.home.pos.y) &&
             (enemy->home.pos.z == this->actor.home.pos.z)) {
             return enemy;

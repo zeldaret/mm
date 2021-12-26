@@ -143,7 +143,7 @@ void func_80B40BC0(EnKgy* this, s16 arg1) {
 }
 
 EnKbt* EnKgy_FindZubora(GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actor != NULL) {
         if (actor->id == ACTOR_EN_KBT) {
@@ -155,7 +155,7 @@ EnKbt* EnKgy_FindZubora(GlobalContext* globalCtx) {
 }
 
 ObjIcePoly* EnKgy_FindIceBlock(GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (actor != NULL) {
         if (actor->id == ACTOR_OBJ_ICE_POLY) {

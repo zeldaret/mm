@@ -90,7 +90,7 @@ void ItemBHeart_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    blueWarpActor = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    blueWarpActor = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (blueWarpActor != NULL) {
         if ((blueWarpActor->id == ACTOR_DOOR_WARP1) && (blueWarpActor->projectedPos.z > this->actor.projectedPos.z)) {

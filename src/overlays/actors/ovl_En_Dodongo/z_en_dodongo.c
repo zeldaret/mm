@@ -523,7 +523,7 @@ s32 func_8087721C(EnDodongo* this) {
 
 s32 func_80877278(EnDodongo* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
     Vec3f sp44;
 
     // Bugfix from OoT
@@ -714,7 +714,7 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
     Vec3f sp84;
     Vec3f sp78;
     s16 i;
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
     Vec3f sp64;
     s32 pad;
     s16 sp5E;

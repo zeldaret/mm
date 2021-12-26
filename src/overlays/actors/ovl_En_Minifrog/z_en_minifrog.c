@@ -164,7 +164,7 @@ void EnMinifrog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 EnMinifrog* EnMinifrog_GetFrog(GlobalContext* globalCtx) {
-    EnMinifrog* frog = (EnMinifrog*)globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    EnMinifrog* frog = (EnMinifrog*)globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (frog != NULL) {
         if ((frog->actor.id != ACTOR_EN_MINIFROG) || (frog->actor.params & 0xF)) {

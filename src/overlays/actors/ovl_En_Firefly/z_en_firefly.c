@@ -223,7 +223,7 @@ s32 EnFirefly_ReturnToPerch(EnFirefly* this, GlobalContext* globalCtx) {
 }
 
 s32 EnFirefly_SeekTorch(EnFirefly* this, GlobalContext* globalCtx) {
-    ObjSyokudai* findTorch = (ObjSyokudai*)globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    ObjSyokudai* findTorch = (ObjSyokudai*)globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
     ObjSyokudai* closestTorch = NULL;
     f32 currentMinDist = 35000.0f;
     f32 currentDist;

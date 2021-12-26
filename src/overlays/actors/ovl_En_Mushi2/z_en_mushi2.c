@@ -138,7 +138,7 @@ s32 func_80A68860(EnMushi2* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A68910(EnMushi2* this, GlobalContext* globalCtx) {
-    Actor* bean = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* bean = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     f32 minDistSq = SQ(100.0f);
     s32 ret = false;
     f32 temp_f0;

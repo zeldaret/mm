@@ -321,7 +321,7 @@ void EnMaYto_ChooseAction(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 s32 EnMaYto_SearchRomani(EnMaYto* this, GlobalContext* globalCtx) {
-    Actor* npcActor = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* npcActor = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npcActor != NULL) {
         if (npcActor->id == ACTOR_EN_MA_YTS) {

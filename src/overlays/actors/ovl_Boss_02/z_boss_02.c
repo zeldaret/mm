@@ -1959,7 +1959,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         player->actor.home.pos = player->actor.world.pos;
         player->actor.prevPos = player->actor.world.pos;
 
-        temp_a0_5 = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+        temp_a0_5 = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
         while (temp_a0_5 != NULL) {
             if (temp_a0_5->id == ACTOR_BG_INIBS_MOVEBG) {
                 Actor_MarkForDeath(temp_a0_5);
@@ -1971,7 +1971,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_INIBS_MOVEBG, 0, D_809E0422 ? 3150.0f : 0.0f, 0, 0, 0, 0,
                     D_809E0422);
 
-        temp_a0_5 = globalCtx->actorCtx.actorList[ACTORCAT_BOSS].first;
+        temp_a0_5 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
         while (temp_a0_5 != NULL) {
             if ((temp_a0_5->id == ACTOR_EN_TANRON5) || (temp_a0_5->id == ACTOR_ITEM_B_HEART)) {
                 if (D_809E0422 == 0) {

@@ -150,7 +150,7 @@ void EnPoFusen_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 u16 EnPoFusen_CheckParent(EnPoFusen* this, GlobalContext* globalCtx) {
     struct Actor* actorPtr;
 
-    actorPtr = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    actorPtr = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
     if (GET_IS_FUSE_TYPE_PARAM(this)) {
         return 1;
     }

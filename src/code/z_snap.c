@@ -20,7 +20,7 @@ s32 func_8013A240(GlobalContext* globalCtx) {
     }
 
     for (; type < 12; type++) {
-        for (actor = globalCtx->actorCtx.actorList[type].first; actor != NULL; actor = actor->next) {
+        for (actor = globalCtx->actorCtx.actorLists[type].first; actor != NULL; actor = actor->next) {
             seen = 0;
 
             switch (globalCtx->sceneNum) {
