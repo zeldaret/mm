@@ -2230,7 +2230,7 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player);
 // void func_801284A0(void);
 s32 func_80128640(GraphicsContext** gfxCtxPtr, Player* player, Gfx* dlist);
 void func_80128B74(GraphicsContext** gfxCtxPtr, Player* player, s32 arg2);
-void func_80128BD0(GraphicsContext** gfxCtxPtr, s32 arg1, Gfx** arg2, Gfx** arg3, Player* player);
+//void func_80128BD0(GraphicsContext** gfxCtxPtr, s32 arg1, Gfx** arg2, Gfx** arg3, Player* player);
 
 void PreNMI_Stop(PreNMIContext* prenmiCtx);
 void PreNMI_Update(PreNMIContext* prenmiCtx);
