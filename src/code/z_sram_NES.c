@@ -600,16 +600,16 @@ SavePlayerData sSaveDefaultPlayerData = {
 
 ItemEquips sSaveDefaultItemEquips = {
     {
-        { 0x4D, 0xFF, 0xFF, 0xFF },
-        { 0x4D, 0xFF, 0xFF, 0xFF },
-        { 0x4D, 0xFF, 0xFF, 0xFF },
-        { 0xFD, 0xFF, 0xFF, 0xFF },
+        { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
+        { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
+        { ITEM_SWORD_KOKIRI, ITEM_NONE, ITEM_NONE, ITEM_NONE },
+        { 0xFD, ITEM_NONE, ITEM_NONE, ITEM_NONE },
     },
     {
-        { 0x00, 0xFF, 0xFF, 0xFF },
-        { 0xFF, 0xFF, 0xFF, 0xFF },
-        { 0xFF, 0xFF, 0xFF, 0xFF },
-        { 0xFF, 0xFF, 0xFF, 0xFF },
+        { SLOT_OCARINA, SLOT_NONE, SLOT_NONE, SLOT_NONE },
+        { SLOT_NONE, SLOT_NONE, SLOT_NONE , SLOT_NONE },
+        { SLOT_NONE, SLOT_NONE, SLOT_NONE , SLOT_NONE },
+        { SLOT_NONE, SLOT_NONE, SLOT_NONE , SLOT_NONE },
     },
     0x11,
 };
