@@ -1,5 +1,6 @@
 ﻿<Root>
     <File Name="object_jg" Segment="6">
+        <!-- Goron Elder Limb DisplayLists -->
         <DList Name="gGoronElderPelvisDL" Offset="0x3C50" />
         <DList Name="gGoronElderRightShinDL" Offset="0x3DC8" />
         <DList Name="gGoronElderRightFootDL" Offset="0x4068" />
@@ -24,12 +25,18 @@
         <DList Name="gGoronElderLeftHandAndThumbDL" Offset="0x68C0" />
         <DList Name="gGoronElderLeftShoulderAndUpperArmDL" Offset="0x6B08" />
         <DList Name="gGoronElderLowerTorsoDL" Offset="0x6E08" />
+
+        <!-- Goron Elder Animations -->
         <Animation Name="gGoronElderThinkingAnim" Offset="0x77CC" /> <!-- Original name is "jg_are_loop" (maybe "huh?") -->
         <Animation Name="gGoronElderWalkAnim" Offset="0x9440" /> <!-- Original name is "jg_aruku" ("walk") -->
         <Animation Name="gGoronElderCradleAnim" Offset="0xA07C" /> <!-- Original name is "jg_dakko" ("hug") -->
+
+        <!-- Drum DisplayList and Textures -->
         <DList Name="gGoronElderDrumDL" Offset="0xA3B0" />
         <Texture Name="gGoronElderDrumSidesTex" OutName="goron_elder_drum_sides" Format="rgba16" Width="32" Height="32" Offset="0xA530" />
         <Texture Name="gGoronElderDrumTopTex" OutName="goron_elder_drum_top" Format="rgba16" Width="16" Height="16" Offset="0xAD30" />
+        
+        <!-- Goron Elder Animations -->
         <Animation Name="gGoronElderWavingAnim" Offset="0xBDD8" /> <!-- Original name is "jg_iran" -->
         <Animation Name="gGoronElderHeadShakeAnim" Offset="0xC7A8" /> <!-- Original name is "jg_kubifuri" ("head shake") -->
         <Animation Name="gGoronElderRememberingAnim" Offset="0xD630" /> <!-- Original name is "jg_moichido" -->
@@ -40,6 +47,8 @@
         <Animation Name="gGoronElderDrumIdleAnim" Offset="0x129F4" /> <!-- Original name is "jg_taiko_loop" ("drum loop") -->
         <Animation Name="gGoronElderPlayingDrumAnim" Offset="0x13DD8" /> <!-- Original name is "jg_taiko_tataku" ("playing the drum") -->
         <Animation Name="gGoronElderAngryAnim" Offset="0x1436C" /> <!-- Original name is "jg_takaburu" ("to become worked up"?) -->
+
+        <!-- Goron Elder Textures -->
         <Texture Name="gGoronElderTLUT" OutName="goron_elder_palette" Format="rgba16" Width="16" Height="16" Offset="0x14380" />
         <Texture Name="gGoronElderSkinTex" OutName="goron_elder_skin" Format="ci8" Width="8" Height="8" Offset="0x14580" />
         <Texture Name="gGoronElderToesTex" OutName="goron_elder_toes" Format="ci8" Width="32" Height="16" Offset="0x145C0" />
@@ -57,8 +66,12 @@
         <Texture Name="gGoronElderGoronRubyTattooTex" OutName="goron_elder_goron_ruby_tattoo" Format="ci8" Width="16" Height="32" Offset="0x16800" />
         <Texture Name="gGoronElderChestTex" OutName="goron_elder_chest" Format="ci8" Width="32" Height="32" Offset="0x16A00" />
         <Texture Name="gGoronElderBackTex" OutName="goron_elder_back" Format="ci8" Width="32" Height="64" Offset="0x16E00" />
+
+        <!-- Goron Elder Animations -->
         <Animation Name="gGoronElderDepressedAnim" Offset="0x18CE4" /> <!-- Original name is "jg_u_m_loop" -->
         <Animation Name="gGoronElderIdleAnim" Offset="0x1ADC0" /> <!-- Original name is "jg_wait" -->
+
+        <!-- Goron Elder Limbs -->
         <Limb Name="gGoronElderRootLimb" Type="Standard" Offset="0x1ADD0" />
         <Limb Name="gGoronElderUpperBodyRootLimb" Type="Standard" Offset="0x1ADDC" />
         <Limb Name="gGoronElderLowerTorsoLimb" Type="Standard" Offset="0x1ADE8" />
@@ -93,8 +106,13 @@
         <Limb Name="gGoronElderRightThighLimb" Type="Standard" Offset="0x1AF44" />
         <Limb Name="gGoronElderRightShinLimb" Type="Standard" Offset="0x1AF50" />
         <Limb Name="gGoronElderRightFootLimb" Type="Standard" Offset="0x1AF5C" />
+
+        <!-- Goron Elder Skeleton -->
         <Skeleton Name="gGoronElderSkel" Type="Flex" LimbType="Standard" Offset="0x1AFF0" />
-        <Animation Name="object_jg_Anim_01B1E8" Offset="0x1B1E8" /> <!-- Original name might be "jggakki_dasu"? -->
-        <!-- <Blob Name="object_jg_Blob_01B1F8" Size="0x28" Offset="0x1B1F8" /> -->
+
+        <!-- Drum Animation, Limb, and Skeleton -->
+        <Animation Name="gGoronElderDrumTakeOutAnim" Offset="0x1B1E8" /> <!-- Original name is "jggakki_dasu" ("get out") -->
+        <Limb Name="gGoronElderDrumLimb" Type="Standard" Offset="0x1B200" />
+        <Skeleton Name="gGoronElderDrumSkel" Type="Normal" LimbType="Standard" Offset="0x1B210" />
     </File>
 </Root>
