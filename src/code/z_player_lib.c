@@ -130,7 +130,7 @@ typedef struct {
     /* 0x1A */ s16 unk_1A;
 } struct_801F58B0; // size = 0x1C
 
-extern s16 D_801BFD9E[];
+extern s16 D_801BFDA0[];
 extern struct_801F58B0 D_801F58B0[3][3];
 extern s32 D_801F59C8[2];
 
@@ -140,7 +140,7 @@ void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
 void func_801229FC(Player* player) {
     if (player->maskObjectLoading == 1) {
         // TODO: check if player->maskId is unsigned
-        s16 temp_s1 = D_801BFD9E[(u8)player->maskId];
+        s16 temp_s1 = D_801BFDA0[(u8)player->maskId-1];
 
         osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
         DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, objectFileTable[temp_s1].vromStart, objectFileTable[temp_s1].vromEnd - objectFileTable[temp_s1].vromStart, 0, &player->maskObjectLoadQueue, NULL);
