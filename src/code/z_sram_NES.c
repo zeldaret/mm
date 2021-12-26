@@ -752,7 +752,7 @@ Inventory sSaveDebugInventory = {
         1, 0x1E, 1, 1, 1, 1, 0x1E, 0x1E, 0x1E, 0x1E, 1, 1, 1, 1, 0x1E, 1, 1, 1, 1, 1, 1, 1, 0, 0,
     },
     0x120009,
-    0x105F7C0,
+    (1 << QUEST_SONG_SONATA) | (1 << QUEST_SONG_LULLABY) | (1 << QUEST_SONG_NOVA) | (1 << QUEST_SONG_ELEGY) | (1 << QUEST_SONG_OATH) | (1 << QUEST_SONG_TIME) | (1 << QUEST_SONG_HEALING) | (1 << QUEST_SONG_EPONA) | (1 << QUEST_SONG_SOARING) | (1 << QUEST_SONG_STORMS) | (1 << QUEST_BOMBERS_NOTEBOOK) | (1 << QUEST_SONG_LULLABY_INTRO),
     { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },
     { 8, 8, 8, 8, 8, 8, 8, 8, 8, 0 },
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
