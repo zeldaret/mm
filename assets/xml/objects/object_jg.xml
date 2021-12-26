@@ -27,7 +27,7 @@
         <DList Name="gGoronElderLowerTorsoDL" Offset="0x6E08" />
 
         <!-- Goron Elder Animations -->
-        <Animation Name="gGoronElderThinkingAnim" Offset="0x77CC" /> <!-- Original name is "jg_are_loop" (maybe "huh?") -->
+        <Animation Name="gGoronElderThinkingAnim" Offset="0x77CC" /> <!-- Original name is "jg_are_loop" ("huh?") -->
         <Animation Name="gGoronElderWalkAnim" Offset="0x9440" /> <!-- Original name is "jg_aruku" ("walk") -->
         <Animation Name="gGoronElderCradleAnim" Offset="0xA07C" /> <!-- Original name is "jg_dakko" ("hug") -->
 
@@ -37,16 +37,16 @@
         <Texture Name="gGoronElderDrumTopTex" OutName="goron_elder_drum_top" Format="rgba16" Width="16" Height="16" Offset="0xAD30" />
         
         <!-- Goron Elder Animations -->
-        <Animation Name="gGoronElderWavingAnim" Offset="0xBDD8" /> <!-- Original name is "jg_iran" -->
+        <Animation Name="gGoronElderWavingAnim" Offset="0xBDD8" /> <!-- Original name is "jg_iran" ("refuse") -->
         <Animation Name="gGoronElderHeadShakeAnim" Offset="0xC7A8" /> <!-- Original name is "jg_kubifuri" ("head shake") -->
-        <Animation Name="gGoronElderRememberingAnim" Offset="0xD630" /> <!-- Original name is "jg_moichido" -->
+        <Animation Name="gGoronElderRememberingAnim" Offset="0xD630" /> <!-- Original name is "jg_mouichido" ("once more time") -->
         <Animation Name="gGoronElderSurpriseStartAnim" Offset="0xDB54" /> <!-- Original name is "jg_odoroki" ("surprise") -->
         <Animation Name="gGoronElderSurpriseLoopAnim" Offset="0xE8FC" /> <!-- Original name is "jg_odorokiLoop" -->
-        <Animation Name="gGoronElderStrongRememberingAnim" Offset="0xFE48" /> <!-- Original name might be "jg_soujyatta"? -->
+        <Animation Name="gGoronElderStrongRememberingAnim" Offset="0xFE48" /> <!-- Original name is "jg_soujyatta" (something like "it was this way") -->
         <Animation Name="gGoronElderTakeOutDrumAnim" Offset="0x11F50" /> <!-- Original name is "jg_taiko_dasu" ("get out drum") -->
         <Animation Name="gGoronElderDrumIdleAnim" Offset="0x129F4" /> <!-- Original name is "jg_taiko_loop" ("drum loop") -->
         <Animation Name="gGoronElderPlayingDrumAnim" Offset="0x13DD8" /> <!-- Original name is "jg_taiko_tataku" ("playing the drum") -->
-        <Animation Name="gGoronElderAngryAnim" Offset="0x1436C" /> <!-- Original name is "jg_takaburu" ("to become worked up"?) -->
+        <Animation Name="gGoronElderAngryAnim" Offset="0x1436C" /> <!-- Original name is "jg_takaburu" ("to become worked up") -->
 
         <!-- Goron Elder Textures -->
         <Texture Name="gGoronElderTLUT" OutName="goron_elder_palette" Format="rgba16" Width="16" Height="16" Offset="0x14380" />
