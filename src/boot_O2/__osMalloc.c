@@ -244,7 +244,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
     } else {
         size_t diff;
         void* newPtr;
-        // Gets the start of the ArenaNode pointer embedded 
+        // Gets the start of the ArenaNode pointer embedded
         ArenaNode* node = (uintptr_t)ptr - sizeof(ArenaNode);
 
         newSize = ALIGN16(newSize);
