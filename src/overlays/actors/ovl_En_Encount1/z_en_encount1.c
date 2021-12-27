@@ -1,7 +1,7 @@
 /*
  * File: z_en_encount1.c
  * Overlay: ovl_En_Encount1
- * Description:
+ * Description: Spawner for Dragonflies, Skullfish, and Wallmasters
  */
 
 #include "z_en_encount1.h"

@@ -1,5 +1,5 @@
 /*
- * File z_en_arrow.c
+ * File: z_en_arrow.c
  * Overlay: ovl_En_Arrow
  * Description: Arrows and other projectiles
  */
