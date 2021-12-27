@@ -6,6 +6,7 @@
 
 #include "z_obj_bean.h"
 #include "objects/object_mamenoki/object_mamenoki.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00400000
 
@@ -297,8 +298,8 @@ void func_809375C8(ObjBean* this, GlobalContext* globalCtx) {
 
 void func_809375F4(ObjBean* this, GlobalContext* globalCtx) {
     static Gfx* D_80939024[] = {
-        D_040527F0,
-        D_040528B0,
+        gameplay_keep_DL_0527F0,
+        gameplay_keep_DL_0528B0,
     };
     Vec3f spC4;
     Vec3f spB8;
