@@ -62,7 +62,6 @@ public:
 	std::vector<ZFile*> files;
 	std::vector<ZFile*> externalFiles;
 	std::vector<int32_t> segments;
-	std::map<uint32_t, std::string> symbolMap;
 
 	std::string currentExporter;
 	static std::map<std::string, ExporterSet*>& GetExporterMap();
