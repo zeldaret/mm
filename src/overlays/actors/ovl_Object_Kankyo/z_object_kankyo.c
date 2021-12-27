@@ -5,6 +5,7 @@
  */
 
 #include "z_object_kankyo.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x02000030
 
@@ -182,8 +183,8 @@ void func_808DC18C(ObjectKankyo* this, GlobalContext* globalCtx) {
     sp30.x = globalCtx->envCtx.windDir.x * magnitude;
     sp30.y = globalCtx->envCtx.windDir.y + 100.0f;
     sp30.z = globalCtx->envCtx.windDir.z * magnitude;
-    this->unk_14C[2].unk_00 = 0x4000 - Math_Vec3f_Pitch(&D_801D15B0, &sp30);
-    this->unk_14C[2].unk_04 = Math_Vec3f_Yaw(&D_801D15B0, &sp30) + 0x8000;
+    this->unk_14C[2].unk_00 = 0x4000 - Math_Vec3f_Pitch(&gZeroVec3f, &sp30);
+    this->unk_14C[2].unk_04 = Math_Vec3f_Yaw(&gZeroVec3f, &sp30) + 0x8000;
 }
 
 void func_808DC454(ObjectKankyo* this, GlobalContext* globalCtx) {
@@ -553,7 +554,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
 
                 gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
                 gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_0408EBE0));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_08EBE0));
             }
 
             Matrix_InsertTranslation(spC4.x, spC4.y, spC4.z, MTXMODE_NEW);
@@ -569,7 +570,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, &D_04023130);
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
         }
     }
 
@@ -628,14 +629,14 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_0408EBE0));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_08EBE0));
             gSPClearGeometryMode(POLY_XLU_DISP++, G_LIGHTING);
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
             gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
-            gSPDisplayList(POLY_XLU_DISP++, &D_04023130);
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
         }
     }
 
@@ -692,7 +693,7 @@ void func_808DDE9C(Actor* thisx, GlobalContext* globalCtx2) {
         }
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_040706E0);
+        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0706E0);
     }
 
     phi_s5 = false;
@@ -710,17 +711,20 @@ void func_808DDE9C(Actor* thisx, GlobalContext* globalCtx2) {
             temp_f22 = player->actor.floorHeight + 2.0f;
             temp_f2 = this->unk_14C[1].unk_08 + (func_808DDE74() * 220.0f);
 
-            if (!(temp_f20 < -252.0f) || !(temp_f20 > -500.0f) || !(temp_f2 > 3820.0f) || !(temp_f2 < 4150.0f)) {
-                Matrix_InsertTranslation(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
-                temp_f12 = (Rand_ZeroOne() * 0.05f) + 0.05f;
-                Matrix_Scale(temp_f12, temp_f12, temp_f12, MTXMODE_APPLY);
-
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_04030100);
+            if ((temp_f20 < -252.0f) && (temp_f20 > -500.0f) && (temp_f2 > 3820.0f) && (temp_f2 < 4150.0f)) {
+                continue;
             }
+
+            Matrix_InsertTranslation(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
+            temp_f12 = (Rand_ZeroOne() * 0.05f) + 0.05f;
+            Matrix_Scale(temp_f12, temp_f12, temp_f12, MTXMODE_APPLY);
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_030100);
         }
     }
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
