@@ -64,7 +64,7 @@ const ActorInit En_Col_Man_InitVars = {
 static Color_RGBA8 primColor = { 60, 50, 20, 255 };
 static Color_RGBA8 envColor = { 40, 30, 30, 255 };
 
-extern Gfx D_0405AAB0[];
+extern Gfx D_0405AAB0[]; // heart piece
 extern Gfx D_0405F6F0[];
 extern Gfx D_0406AB30[];
 
@@ -106,7 +106,7 @@ void func_80AFDD60(EnColMan* this) {
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
             this->actor.gravity = -2.0f;
         }
-        this->unk148 = 0;
+        this->type = EN_COL_MAN_HEART_PIECE;
     } else {
         this->actor.draw = func_80AFE4AC;
         this->actor.shape.yOffset = 300.0f;
@@ -114,7 +114,7 @@ void func_80AFDD60(EnColMan* this) {
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
             this->actor.gravity = -2.0f;
         }
-        this->unk148 = 1;
+        this->type = EN_COL_MAN_RECOVERY_HEART;
     }
     this->actionFunc = func_80AFDE00;
 }
@@ -154,7 +154,7 @@ void func_80AFDF60(EnColMan* this) {
     this->actor.draw = func_80AFE584;
     this->actor.flags |= 0x10;
     this->actor.flags |= 0x20;
-    this->unk148 = 2;
+    this->type = EN_COL_MAN_FALLING_ROCK;
     this->actionFunc = func_80AFDFB4;
     this->actor.shape.shadowScale = 5.0f;
     this->actor.gravity = -3.0f;
@@ -195,7 +195,7 @@ void func_80AFDFB4(EnColMan* this, GlobalContext* globalCtx) {
 
 void func_80AFE234(EnColMan* this) {
     this->actor.draw = func_80AFE650;
-    this->unk148 = 3;
+    this->type = EN_COL_MAN_CUTSCENE_BOMB;
     this->actionFunc = func_80AFE25C;
 }
 
@@ -205,7 +205,7 @@ void func_80AFE25C(EnColMan* this, GlobalContext* globalCtx) {
     if (BREG(60) || (this->actor.world.rot.z != 0)) {
         if (this->actor.params == EN_COL_MAN_CUTSCENE_BOMB) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.parent->world.pos.x,
-                        this->actor.parent->world.pos.y, this->actor.parent->world.pos.z, 0, 0, 0, 0);
+                        this->actor.parent->world.pos.y, this->actor.parent->world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
         } else {
             EnBom* bomb = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);

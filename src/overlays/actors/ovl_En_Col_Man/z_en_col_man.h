@@ -10,8 +10,7 @@ typedef void (*EnColManActionFunc)(struct EnColMan*, GlobalContext*);
 typedef struct EnColMan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnColManActionFunc actionFunc;
-    /* 0x148 */ s16 unk148; // never used, only set
-    /* 0x14A */ char unk14A[0x2];
+    /* 0x148 */ s16 type; // never used, only set
     /* 0x14C */ s32 hasSetRandomValues;
     /* 0x150 */ f32 scale;
     /* 0x154 */ ColliderCylinder collider;
