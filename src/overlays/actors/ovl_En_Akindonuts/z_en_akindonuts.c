@@ -246,17 +246,17 @@ void func_80BED090(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        gSaveContext.weekEventReg[63] |= 0x8;
-        gSaveContext.weekEventReg[63] &= (u8)~0x10;
+        gSaveContext.save.weekEventReg[63] |= 0x8;
+        gSaveContext.save.weekEventReg[63] &= (u8)~0x10;
     } else if (player->transformation == PLAYER_FORM_ZORA) {
-        gSaveContext.weekEventReg[63] &= (u8)~0x8;
-        gSaveContext.weekEventReg[63] |= 0x10;
+        gSaveContext.save.weekEventReg[63] &= (u8)~0x8;
+        gSaveContext.save.weekEventReg[63] |= 0x10;
     } else if (player->transformation == PLAYER_FORM_GORON) {
-        gSaveContext.weekEventReg[63] |= 0x8;
-        gSaveContext.weekEventReg[63] |= 0x10;
+        gSaveContext.save.weekEventReg[63] |= 0x8;
+        gSaveContext.save.weekEventReg[63] |= 0x10;
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        gSaveContext.weekEventReg[63] &= (u8)~0x8;
-        gSaveContext.weekEventReg[63] &= (u8)~0x10;
+        gSaveContext.save.weekEventReg[63] &= (u8)~0x8;
+        gSaveContext.save.weekEventReg[63] &= (u8)~0x10;
     }
 }
 
@@ -264,19 +264,19 @@ s32 func_80BED140(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if ((gSaveContext.weekEventReg[63] & 0x8) && !(gSaveContext.weekEventReg[63] & 0x10)) {
+        if ((gSaveContext.save.weekEventReg[63] & 0x8) && !(gSaveContext.save.weekEventReg[63] & 0x10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_ZORA) {
-        if (!(gSaveContext.weekEventReg[63] & 0x8) && (gSaveContext.weekEventReg[63] & 0x10)) {
+        if (!(gSaveContext.save.weekEventReg[63] & 0x8) && (gSaveContext.save.weekEventReg[63] & 0x10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_GORON) {
-        if ((gSaveContext.weekEventReg[63] & 0x8) && (gSaveContext.weekEventReg[63] & 0x10)) {
+        if ((gSaveContext.save.weekEventReg[63] & 0x8) && (gSaveContext.save.weekEventReg[63] & 0x10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (!(gSaveContext.weekEventReg[63] & 0x8) && !(gSaveContext.weekEventReg[63] & 0x10)) {
+        if (!(gSaveContext.save.weekEventReg[63] & 0x8) && !(gSaveContext.save.weekEventReg[63] & 0x10)) {
             return true;
         }
     }
@@ -289,7 +289,7 @@ s32 func_80BED208(EnAkindonuts* this) {
         return 0;
     }
 
-    if (gSaveContext.rupees < 10) {
+    if (gSaveContext.save.playerData.rupees < 10) {
         return 1;
     }
 
@@ -311,7 +311,7 @@ s32 func_80BED27C(EnAkindonuts* this) {
         return 0;
     }
 
-    if (gSaveContext.rupees < 200) {
+    if (gSaveContext.save.playerData.rupees < 200) {
         return 1;
     }
 
@@ -325,7 +325,7 @@ s32 func_80BED2FC(EnAkindonuts* this) {
         return 2;
     }
 
-    if (gSaveContext.rupees < 40) {
+    if (gSaveContext.save.playerData.rupees < 40) {
         return 1;
     }
 
@@ -339,7 +339,7 @@ s32 func_80BED35C(EnAkindonuts* this) {
         return 2;
     }
 
-    if (gSaveContext.rupees < 100) {
+    if (gSaveContext.save.playerData.rupees < 100) {
         return 1;
     }
 
@@ -373,8 +373,8 @@ void func_80BED3BC(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 0x15E7:
-            if (!(gSaveContext.weekEventReg[61] & 0x20)) {
-                gSaveContext.weekEventReg[61] |= 0x20;
+            if (!(gSaveContext.save.weekEventReg[61] & 0x20)) {
+                gSaveContext.save.weekEventReg[61] |= 0x20;
                 this->unk_33C = 0x15E8;
                 break;
             }
@@ -435,7 +435,7 @@ void func_80BED3BC(EnAkindonuts* this, GlobalContext* globalCtx) {
         case 0x15E5:
             this->unk_33C = 0x15E6;
             func_80BED090(globalCtx);
-            gSaveContext.weekEventReg[61] |= 0x10;
+            gSaveContext.save.weekEventReg[61] |= 0x10;
             this->unk_32C |= 0x20;
             break;
 
@@ -450,8 +450,8 @@ void func_80BED3BC(EnAkindonuts* this, GlobalContext* globalCtx) {
 void func_80BED680(EnAkindonuts* this, GlobalContext* globalCtx) {
     switch (this->unk_33C) {
         case 0:
-            if (func_80BED140(globalCtx) && !(gSaveContext.weekEventReg[61] & 0x40)) {
-                gSaveContext.weekEventReg[61] |= 0x40;
+            if (func_80BED140(globalCtx) && !(gSaveContext.save.weekEventReg[61] & 0x40)) {
+                gSaveContext.save.weekEventReg[61] |= 0x40;
                 this->unk_33C = 0x15F0;
                 break;
             }
@@ -551,8 +551,8 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 0x15FE:
-            if (!(gSaveContext.weekEventReg[62] & 1)) {
-                gSaveContext.weekEventReg[62] |= 1;
+            if (!(gSaveContext.save.weekEventReg[62] & 1)) {
+                gSaveContext.save.weekEventReg[62] |= 1;
                 this->unk_33C = 0x15FF;
                 break;
             }
@@ -612,7 +612,7 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
 
         case 0x15FA:
             this->unk_33C = 0x15FB;
-            gSaveContext.weekEventReg[61] |= 0x80;
+            gSaveContext.save.weekEventReg[61] |= 0x80;
             this->unk_32C |= 0x20;
             break;
 
@@ -629,8 +629,8 @@ void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.weekEventReg[62] & 2)) {
-                gSaveContext.weekEventReg[62] |= 0x2;
+            if ((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.save.weekEventReg[62] & 2)) {
+                gSaveContext.save.weekEventReg[62] |= 0x2;
                 this->unk_33C = 0x15F0;
                 break;
             }
@@ -729,8 +729,8 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 0x1610:
-            if (!(gSaveContext.weekEventReg[62] & 8)) {
-                gSaveContext.weekEventReg[62] |= 8;
+            if (!(gSaveContext.save.weekEventReg[62] & 8)) {
+                gSaveContext.save.weekEventReg[62] |= 8;
                 this->unk_33C = 0x1611;
                 break;
             }
@@ -785,7 +785,7 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
 
         case 0x15FA:
             this->unk_33C = 0x160D;
-            gSaveContext.weekEventReg[62] |= 0x4;
+            gSaveContext.save.weekEventReg[62] |= 0x4;
             this->unk_32C |= 0x20;
             break;
 
@@ -802,8 +802,8 @@ void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_GORON) && !(gSaveContext.weekEventReg[62] & 0x10)) {
-                gSaveContext.weekEventReg[62] |= 0x10;
+            if ((player->transformation == PLAYER_FORM_GORON) && !(gSaveContext.save.weekEventReg[62] & 0x10)) {
+                gSaveContext.save.weekEventReg[62] |= 0x10;
                 this->unk_33C = 0x1614;
                 break;
             }
@@ -889,8 +889,8 @@ void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 0x1624:
-            if (!(gSaveContext.weekEventReg[62] & 0x40)) {
-                gSaveContext.weekEventReg[62] |= 0x40;
+            if (!(gSaveContext.save.weekEventReg[62] & 0x40)) {
+                gSaveContext.save.weekEventReg[62] |= 0x40;
                 this->unk_33C = 0x1625;
                 break;
             }
@@ -946,7 +946,7 @@ void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
 
         case 0x1622:
             this->unk_33C = 0x1623;
-            gSaveContext.weekEventReg[62] |= 0x20;
+            gSaveContext.save.weekEventReg[62] |= 0x20;
             this->unk_32C |= 0x20;
             break;
 
@@ -963,8 +963,8 @@ void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_ZORA) && !(gSaveContext.weekEventReg[62] & 0x80)) {
-                gSaveContext.weekEventReg[62] |= 0x80;
+            if ((player->transformation == PLAYER_FORM_ZORA) && !(gSaveContext.save.weekEventReg[62] & 0x80)) {
+                gSaveContext.save.weekEventReg[62] |= 0x80;
                 this->unk_33C = 0x162A;
                 break;
             }
@@ -1084,7 +1084,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
 void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
     switch (ENAKINDONUTS_GET_3(&this->actor)) {
         case 0:
-            if (gSaveContext.weekEventReg[61] & 0x10) {
+            if (gSaveContext.save.weekEventReg[61] & 0x10) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BED680;
                 } else {
@@ -1098,7 +1098,7 @@ void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 1:
-            if (gSaveContext.weekEventReg[61] & 0x80) {
+            if (gSaveContext.save.weekEventReg[61] & 0x80) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEDB88;
                 } else {
@@ -1112,7 +1112,7 @@ void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 2:
-            if (gSaveContext.weekEventReg[62] & 4) {
+            if (gSaveContext.save.weekEventReg[62] & 4) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEE070;
                 } else {
@@ -1126,7 +1126,7 @@ void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 3:
-            if (gSaveContext.weekEventReg[62] & 0x20) {
+            if (gSaveContext.save.weekEventReg[62] & 0x20) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEE530;
                 } else {

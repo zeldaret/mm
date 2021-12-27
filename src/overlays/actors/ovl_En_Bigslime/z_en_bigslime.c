@@ -308,7 +308,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
-    // gSaveContext.weekEventReg[KEY] = VALUE
+    // gSaveContext.save.weekEventReg[KEY] = VALUE
     // KEY | VALUE
     static s32 isFrogReturnedFlags[] = {
         (32 << 8) | 0x40, // Woodfall Temple Frog Returned
@@ -339,7 +339,7 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
-        if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
+        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&globalCtx2->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
@@ -1613,7 +1613,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, GlobalContext* globalCt
         if (this->numGekkoMeleeAttacks == 0) {
             this->numGekkoPosGrabPlayer--;
 
-            if ((gSaveContext.health < 5) || (this->numGekkoPosGrabPlayer == 0)) {
+            if ((gSaveContext.save.playerData.health < 5) || (this->numGekkoPosGrabPlayer == 0)) {
                 this->numGekkoPosGrabPlayer = 0;
                 this->gekkoRot.y = this->actor.world.rot.y;
                 this->gekkoPosOffset.x = Math_SinS(this->gekkoRot.y) * -50.0f;

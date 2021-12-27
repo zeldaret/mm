@@ -356,7 +356,8 @@ animdict = {
     "gSaveContext.day": "gSaveContext.save.day",
     "gSaveContext.isNight": "gSaveContext.save.isNight",
     "gSaveContext.naviTimer": "gSaveContext.save.playerData.tatlTimer",
-    "gSaveContext.health": "gSaveContext.save.playerData.health",
+    "gSaveContext.tatlTimer": "gSaveContext.save.playerData.tatlTimer",
+    # "gSaveContext.health": "gSaveContext.save.playerData.health",
     "gSaveContext.inventory": "gSaveContext.save.inventory",
     "gSaveContext.equippedMask": "gSaveContext.save.equippedMask",
     "gSaveContext.entranceIndex": "gSaveContext.save.entranceIndex",
@@ -364,6 +365,10 @@ animdict = {
     "gSaveContext.unk_14": "gSaveContext.save.daySpeed",
     "gSaveContext.rupees": "gSaveContext.save.playerData.rupees",
     "gSaveContext.magicAcquired": "gSaveContext.save.playerData.magicAcquired",
+    "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
+    "gSaveContext.doubleMagic": "gSaveContext.save.playerData.doubleMagic",
+    "gSaveContext.unk_FE6": "gSaveContext.save.bombersCaughtNum",
+    "gSaveContext.unk_FE7": "gSaveContext.save.bombersCaughtOrder",
 }
 
 def replace_anim(file):

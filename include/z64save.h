@@ -120,8 +120,7 @@ typedef struct {
     /* 0x0EC0 */ u32 skullTokenCount; // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
     /* 0x0EC4 */ u32 unk_EC4;
     /* 0x0EC8 */ u32 unk_EC8;
-    /* 0x0ECC */ u32 unk_ECC;
-    /* 0x0ED0 */ u32 unk_ED0;
+    /* 0x0ECC */ u32 unk_ECC[2];
     /* 0x0ED4 */ u32 stolenItems; // Items stolen by Takkuri and given to Curiosity Shop Man
     /* 0x0ED8 */ u32 unk_DD8;
     /* 0x0EDC */ u32 bankRupees;

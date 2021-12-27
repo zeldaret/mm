@@ -98,11 +98,11 @@ void func_809C10B0(EnAob01* this, s32 arg1) {
 }
 
 void func_809C1124(void) {
-    u16 time = gSaveContext.time;
+    u16 time = gSaveContext.save.time;
 
-    gSaveContext.time = (u16)REG(15) + time;
-    time = gSaveContext.time;
-    gSaveContext.time = (u16)gSaveContext.unk_14 + time;
+    gSaveContext.save.time = (u16)REG(15) + time;
+    time = gSaveContext.save.time;
+    gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + time;
 }
 
 void func_809C1158(EnAob01* this, GlobalContext* globalCtx) {
@@ -216,18 +216,18 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
         case 0x3548:
         case 0x3549:
         case 0x354A:
-            switch (gSaveContext.day) {
+            switch (gSaveContext.save.day) {
                 case 1:
-                    if (!gSaveContext.isNight) {
-                        if (!(gSaveContext.weekEventReg[64] & 0x80)) {
-                            gSaveContext.weekEventReg[64] |= 0x80;
+                    if (!gSaveContext.save.isNight) {
+                        if (!(gSaveContext.save.weekEventReg[64] & 0x80)) {
+                            gSaveContext.save.weekEventReg[64] |= 0x80;
                             this->unk_210 = 0x3520;
                         } else {
                             this->unk_210 = 0x352F;
                         }
                     } else {
-                        if (!(gSaveContext.weekEventReg[65] & 1)) {
-                            gSaveContext.weekEventReg[65] |= 1;
+                        if (!(gSaveContext.save.weekEventReg[65] & 1)) {
+                            gSaveContext.save.weekEventReg[65] |= 1;
                             this->unk_210 = 0x3530;
                         } else {
                             this->unk_210 = 0x352F;
@@ -236,16 +236,16 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    if (!gSaveContext.isNight) {
-                        if (!(gSaveContext.weekEventReg[65] & 2)) {
-                            gSaveContext.weekEventReg[65] |= 2;
+                    if (!gSaveContext.save.isNight) {
+                        if (!(gSaveContext.save.weekEventReg[65] & 2)) {
+                            gSaveContext.save.weekEventReg[65] |= 2;
                             this->unk_210 = 0x3531;
                         } else {
                             this->unk_210 = 0x352F;
                         }
                     } else {
-                        if (!(gSaveContext.weekEventReg[65] & 4)) {
-                            gSaveContext.weekEventReg[65] |= 4;
+                        if (!(gSaveContext.save.weekEventReg[65] & 4)) {
+                            gSaveContext.save.weekEventReg[65] |= 4;
                             this->unk_210 = 0x3532;
                         } else {
                             this->unk_210 = 0x352F;
@@ -254,16 +254,16 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                     break;
 
                 case 3:
-                    if (!gSaveContext.isNight) {
-                        if (!(gSaveContext.weekEventReg[65] & 8)) {
-                            gSaveContext.weekEventReg[65] |= 8;
+                    if (!gSaveContext.save.isNight) {
+                        if (!(gSaveContext.save.weekEventReg[65] & 8)) {
+                            gSaveContext.save.weekEventReg[65] |= 8;
                             this->unk_210 = 0x3533;
                         } else {
                             this->unk_210 = 0x352F;
                         }
                     } else {
-                        if (!(gSaveContext.weekEventReg[65] & 0x10)) {
-                            gSaveContext.weekEventReg[65] |= 0x10;
+                        if (!(gSaveContext.save.weekEventReg[65] & 0x10)) {
+                            gSaveContext.save.weekEventReg[65] |= 0x10;
                             this->unk_210 = 0x3534;
                         } else {
                             this->unk_210 = 0x352F;
@@ -304,7 +304,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                         break;
 
                     case PLAYER_FORM_HUMAN:
-                        if (gSaveContext.rupees < 10) {
+                        if (gSaveContext.save.playerData.rupees < 10) {
                             this->unk_210 = 0x3524;
                             this->unk_2D2 |= 0x10;
                         } else {
@@ -368,7 +368,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
             break;
 
         case 0x3528:
-            if (gSaveContext.rupees < this->unk_434) {
+            if (gSaveContext.save.playerData.rupees < this->unk_434) {
                 this->unk_210 = 0x3536;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
@@ -413,8 +413,8 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
 
 void func_809C1C9C(EnAob01* this, GlobalContext* globalCtx) {
     if (gSaveContext.rupeeAccumulator == 0) {
-        gSaveContext.weekEventReg[63] |= 1;
-        gSaveContext.weekEventReg[63] &= (u8)~2;
+        gSaveContext.save.weekEventReg[63] |= 1;
+        gSaveContext.save.weekEventReg[63] &= (u8)~2;
         this->unk_2D2 |= 0x20;
         func_800FD750(0x40);
         globalCtx->nextEntranceIndex = 0x7C10;
@@ -433,7 +433,7 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
         if (func_80147624(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
-                    if (gSaveContext.rupees < 10) {
+                    if (gSaveContext.save.playerData.rupees < 10) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_210 = 0x3524;
                         func_801518B0(globalCtx, this->unk_210, &this->actor);
@@ -758,13 +758,13 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2E0 = this->unk_2F2;
             this->actor.parent = NULL;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            if (gSaveContext.weekEventReg[8] & 0x20) {
+            if (gSaveContext.save.weekEventReg[8] & 0x20) {
                 this->actionFunc = func_809C2BE4;
             } else {
-                gSaveContext.weekEventReg[8] |= 0x20;
+                gSaveContext.save.weekEventReg[8] |= 0x20;
                 this->actionFunc = func_809C2BE4;
             }
-        } else if (gSaveContext.weekEventReg[8] & 0x20) {
+        } else if (gSaveContext.save.weekEventReg[8] & 0x20) {
             func_800B8A1C(&this->actor, globalCtx, 4, 300.0f, 300.0f);
         } else {
             func_800B8A1C(&this->actor, globalCtx, 12, 300.0f, 300.0f);
@@ -776,12 +776,12 @@ void func_809C2BE4(EnAob01* this, GlobalContext* globalCtx) {
     u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
 
     if (((temp_v0 == 5) || (temp_v0 == 6)) && func_80147624(globalCtx)) {
-        if (gSaveContext.weekEventReg[63] & 2) {
-            gSaveContext.weekEventReg[63] &= (u8)~2;
+        if (gSaveContext.save.weekEventReg[63] & 2) {
+            gSaveContext.save.weekEventReg[63] &= (u8)~2;
         }
 
-        if (gSaveContext.weekEventReg[63] & 1) {
-            gSaveContext.weekEventReg[63] &= (u8)~1;
+        if (gSaveContext.save.weekEventReg[63] & 1) {
+            gSaveContext.save.weekEventReg[63] &= (u8)~1;
         }
 
         this->unk_210 = 0;
@@ -830,12 +830,12 @@ void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx) {
 
             this->unk_434 = 0;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            if (gSaveContext.weekEventReg[63] & 2) {
-                gSaveContext.weekEventReg[63] &= (u8)~2;
+            if (gSaveContext.save.weekEventReg[63] & 2) {
+                gSaveContext.save.weekEventReg[63] &= (u8)~2;
             }
 
-            if (gSaveContext.weekEventReg[63] & 1) {
-                gSaveContext.weekEventReg[63] &= (u8)~1;
+            if (gSaveContext.save.weekEventReg[63] & 1) {
+                gSaveContext.save.weekEventReg[63] &= (u8)~1;
             }
 
             this->unk_210 = 0x354C;
@@ -899,7 +899,7 @@ void func_809C2FA0(void) {
     }
 
     for (i = 0; i < ARRAY_COUNT(sp44); i++) {
-        gSaveContext.weekEventReg[42 + i] = 0;
+        gSaveContext.save.weekEventReg[42 + i] = 0;
         sp44[i] = 0;
     }
 
@@ -909,8 +909,8 @@ void func_809C2FA0(void) {
 
         if (i % 2) {
             sp44[idx2] |= orig2 << 0x4;
-            idx = gSaveContext.weekEventReg[42 + idx2];
-            gSaveContext.weekEventReg[42 + idx2] = idx | sp44[idx2];
+            idx = gSaveContext.save.weekEventReg[42 + idx2];
+            gSaveContext.save.weekEventReg[42 + idx2] = idx | sp44[idx2];
         } else {
             sp44[idx2] |= orig2;
         }
@@ -964,7 +964,7 @@ void EnAob01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnAob01* this = THIS;
 
     if (!(this->unk_2D2 & 0x20)) {
-        gSaveContext.weekEventReg[63] &= (u8)~1;
+        gSaveContext.save.weekEventReg[63] &= (u8)~1;
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
