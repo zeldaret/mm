@@ -493,7 +493,7 @@ void* __osMemcpy(void* dst, void* src, size_t size);
 // void EnItem00_DrawHeartContainer(EnItem00* this, GlobalContext* globalCtx);
 // void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx);
 // s16 func_800A7650(s16 dropId);
-Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, s32 params);
+Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 params);
 Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, s32 params);
 void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3f* spawnPos, s16 params);
 s32 func_800A8150(s32 index);

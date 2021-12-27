@@ -401,7 +401,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
             sp64.y = player->actor.world.pos.y + 20.0f;
             sp64.z = (Math_CosS(phi_s3) * 40.0f) + player->actor.world.pos.z;
             if (dropItem00Ids[i] != ITEM00_NO_DROP) {
-                Actor* temp_s1_5 = Item_DropCollectible(globalCtx, &sp64, (u32)dropItem00Ids[i]);
+                Actor* temp_s1_5 = Item_DropCollectible(globalCtx, &sp64, dropItem00Ids[i]);
 
                 if (temp_s1_5 != NULL) {
                     temp_s1_5->velocity.y = Rand_ZeroFloat(3.0f) + 6.0f;
