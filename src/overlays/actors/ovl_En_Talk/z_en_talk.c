@@ -13,11 +13,9 @@
 void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx);
-
 void func_80BDE058(EnTalk* this, GlobalContext* globalCtx);
 void func_80BDE090(EnTalk* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Talk_InitVars = {
     ACTOR_EN_TALK,
     ACTORCAT_ITEMACTION,
@@ -30,14 +28,42 @@ const ActorInit En_Talk_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
+void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnTalk* this = THIS;
+    s8 targetMode = this->actor.home.rot.x - 0x1;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/EnTalk_Init.s")
+    if (targetMode >= 0 && targetMode < 7) {
+        this->actor.targetMode = targetMode;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/EnTalk_Destroy.s")
+    Actor_SetScale(&this->actor, 1.0f);
+    this->actionFunc = func_80BDE090;
+    this->actor.textId = ENTALK_GET_TEXT_ID(&this->actor);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/func_80BDE058.s")
+void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/func_80BDE090.s")
+void func_80BDE058(EnTalk* this, GlobalContext* globalCtx) {
+    if (func_800B867C(&this->actor, globalCtx)) {
+        this->actionFunc = func_80BDE090;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/EnTalk_Update.s")
+void func_80BDE090(EnTalk* this, GlobalContext* globalCtx) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        this->actionFunc = func_80BDE058;
+        return;
+    }
+
+    if ((this->actor.xzDistToPlayer < 40.0f && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx)) ||
+        this->actor.isTargeted) {
+        func_800B8614(&this->actor, globalCtx, 120.0f);
+    }
+}
+
+void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnTalk* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+}
