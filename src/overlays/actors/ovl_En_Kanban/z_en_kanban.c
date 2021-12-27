@@ -6,6 +6,7 @@
 
 #include "z_en_kanban.h"
 #include "objects/object_kanban/object_kanban.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000019
 
@@ -15,8 +16,6 @@ void EnKanban_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKanban_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_0405AED0[];
 
 const ActorInit En_Kanban_InitVars = {
     ACTOR_EN_KANBAN,
@@ -965,7 +964,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (this->partFlags == 0xFFFF) {
-            gSPDisplayList(POLY_OPA_DISP++, D_0405AED0);
+            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05AED0);
         } else {
             for (i = 0; i < ARRAY_COUNT(sPartFlags); i++) {
                 if (sPartFlags[i] & this->partFlags) {
