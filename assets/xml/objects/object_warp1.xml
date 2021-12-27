@@ -54,6 +54,6 @@
         <Texture Name="object_warp1_TLUT_0078C0" OutName="tlut_0078C0" Format="rgba16" Width="4" Height="4" Offset="0x78C0" />
         <Texture Name="object_warp1_Tex_0078E0" OutName="tex_0078E0" Format="ci4" Width="64" Height="64" Offset="0x78E0" />
         <Texture Name="object_warp1_Tex_0080E0" OutName="tex_0080E0" Format="ci4" Width="64" Height="64" Offset="0x80E0" />
-        <!-- <Blob Name="object_warp1_Blob_0088E0" Size="0x320" Offset="0x88E0" /> -->
+        <Collision Name="object_warp1_Colheader_008BD4" Offset="0x8BD4" />
     </File>
 </Root>
