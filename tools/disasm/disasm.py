@@ -176,6 +176,10 @@ MIPS_LOAD_STORE_INSNS = [
     *MIPS_FP_LOAD_STORE_INSNS,
 ]
 
+VRAM_BASE = {
+    "code": {"data": 0x801AAAB0, "rodata": 0x801DBDF0, "bss": 0x801E3FA0},
+    "boot": {"data": 0x800969C0, "rodata": 0x80098190, "bss": 0x80099500},
+}
 functions = set()  # vram of functions
 # vram of data labels, TODO this + functions can merge into something more general eventually
 data_labels = set()
@@ -1481,6 +1485,10 @@ def disassemble_data(data, vram, end, info):
             data_offset = symbol - vram
             data_size = next_symbol - symbol
 
+            data_base = data_offset
+            if info["type"] in ("boot", "code"):
+                data_base = vram - VRAM_BASE[info["type"]]["data"]
+
             if data_offset == len(data):
                 continue
 
@@ -1490,7 +1498,7 @@ def disassemble_data(data, vram, end, info):
                 r += (
                     "\n".join(
                         [
-                            f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}"
+                            f"/* {data_base + data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}"
                             for j, dbl_dwd in enumerate(
                                 as_dword_list(
                                     data[data_offset : data_offset + data_size]
@@ -1505,7 +1513,7 @@ def disassemble_data(data, vram, end, info):
                 r += (
                     "\n".join(
                         [
-                            f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} */ .quad 0x{dword:08X}"
+                            f"/* {data_base + data_offset + j * 8:06X} {symbol + j * 8:08X} */ .quad 0x{dword:08X}"
                             for j, dword in enumerate(
                                 as_dword_list(
                                     data[data_offset : data_offset + data_size]
@@ -1521,7 +1529,7 @@ def disassemble_data(data, vram, end, info):
                     r += (
                         "\n".join(
                             [
-                                f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}"
+                                f"/* {data_base + data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}"
                                 for j, flt_wd in enumerate(
                                     as_word_list(
                                         data[data_offset : data_offset + data_size]
@@ -1536,7 +1544,7 @@ def disassemble_data(data, vram, end, info):
                     r += (
                         "\n".join(
                             [
-                                f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}"
+                                f"/* {data_base + data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}"
                                 for j, word in enumerate(
                                     as_word_list(
                                         data[data_offset : data_offset + data_size]
@@ -1551,7 +1559,7 @@ def disassemble_data(data, vram, end, info):
                 r += (
                     "\n".join(
                         [
-                            f"/* {data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}"
+                            f"/* {data_base + data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}"
                             for j, hword in enumerate(
                                 as_hword_list(
                                     data[data_offset : data_offset + data_size]
@@ -1566,7 +1574,7 @@ def disassemble_data(data, vram, end, info):
                 r += (
                     "\n".join(
                         [
-                            f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}"
+                            f"/* {data_base + data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}"
                             for j, byte in enumerate(
                                 data[data_offset : data_offset + data_size], 0
                             )
@@ -1662,6 +1670,10 @@ def disassemble_rodata(data, vram, end, info):
 
             data_offset = symbol - vram
             data_size = next_symbol - symbol
+            
+            data_base = data_offset
+            if info["type"] in ("boot", "code"):
+                data_base = vram - VRAM_BASE[info["type"]]["rodata"]
 
             if data_offset == len(data):
                 continue
@@ -1682,7 +1694,7 @@ def disassemble_rodata(data, vram, end, info):
                 r += (
                     "\n".join(
                         [
-                            f"/* {data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}"
+                            f"/* {data_base + data_offset + j * 8:06X} {symbol + j * 8:08X} {dbl_dwd:016X} */ {format_f64(dbl_dwd)}"
                             for j, dbl_dwd in enumerate(
                                 as_dword_list(
                                     data[data_offset : data_offset + data_size]
@@ -1698,7 +1710,7 @@ def disassemble_rodata(data, vram, end, info):
                     r += (
                         "\n".join(
                             [
-                                f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}"
+                                f"/* {data_base + data_offset + j * 4:06X} {symbol + j * 4:08X} {flt_wd:08X} */ {format_f32(flt_wd)}"
                                 for j, flt_wd in enumerate(
                                     as_word_list(
                                         data[data_offset : data_offset + data_size]
@@ -1713,7 +1725,7 @@ def disassemble_rodata(data, vram, end, info):
                     r += (
                         "\n".join(
                             [
-                                f"/* {data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}"
+                                f"/* {data_base + data_offset + j * 4:06X} {symbol + j * 4:08X} */ .word {lookup_name(symbol, word)}"
                                 for j, word in enumerate(
                                     as_word_list(
                                         data[data_offset : data_offset + data_size]
@@ -1728,7 +1740,7 @@ def disassemble_rodata(data, vram, end, info):
                 r += (
                     "\n".join(
                         [
-                            f"/* {data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}"
+                            f"/* {data_base + data_offset + j * 2:06X} {symbol + j * 2:08X} */ .half 0x{hword:04X}"
                             for j, hword in enumerate(
                                 as_hword_list(
                                     data[data_offset : data_offset + data_size]
@@ -1743,7 +1755,7 @@ def disassemble_rodata(data, vram, end, info):
                 r += (
                     "\n".join(
                         [
-                            f"/* {data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}"
+                            f"/* {data_base + data_offset + j:06X} {symbol + j:08X} */ .byte 0x{byte:02X}"
                             for j, byte in enumerate(
                                 data[data_offset : data_offset + data_size], 0
                             )
