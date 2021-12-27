@@ -2213,8 +2213,8 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player);
 // void func_80127DA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_80128388(void);
 // void func_801284A0(void);
-s32 func_80128640(GraphicsContext** gfxCtxPtr, Player* player, Gfx* dlist);
-void func_80128B74(GraphicsContext** gfxCtxPtr, Player* player, s32 arg2);
+s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist);
+void func_80128B74(GlobalContext* globalCtx, Player* player, s32 arg2);
 //void func_80128BD0(GraphicsContext** gfxCtxPtr, s32 arg1, Gfx** arg2, Gfx** arg3, Player* player);
 
 void PreNMI_Stop(PreNMIContext* prenmiCtx);
