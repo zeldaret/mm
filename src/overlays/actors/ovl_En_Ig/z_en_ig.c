@@ -21,12 +21,12 @@ void func_80BF2AF8(EnIg* this, GlobalContext* globalCtx);
 void func_80BF2BD4(EnIg* this, GlobalContext* globalCtx);
 
 static s32 D_80BF3260[] = {
-    0xD000100,  0xB10A006C, 0x4E020F19, 0xF2D4202,  0xF2D0F32,  0x36004B10, 0x1050210,  0x32103725,
-    0x2103711,  0xF190211,  0xF12000D,  0x2120006,  0x1050E,    0x12000600, 0x40E110F,  0x600020E,
-    0x1037110F, 0xB0E1032,  0x1037060E, 0xF2D0F32,  0x50E0F19,  0xF2D0A0A,  0x615A02,   0xF2D0F32,
-    0x4E020F32, 0x100A4202, 0x100A101E, 0x36004B10, 0x1902101E, 0x10320D02, 0x10321037, 0x1050E10,
-    0x32103708, 0xE101E10,  0x320D0210, 0x1E10320D, 0x2103210,  0x3701050E, 0x10321037, 0x90E101E,
-    0x10320E0E, 0x100A101E, 0x30E0F32,  0x100A0C0E, 0xF2D0F32,  0x7050500,
+    0x0D000100, 0xB10A006C, 0x4E020F19, 0x0F2D4202, 0x0F2D0F32, 0x36004B10, 0x1050210,  0x32103725,
+    0x02103711, 0x0F190211, 0x0F12000D, 0x02120006, 0x0001050E, 0x12000600, 0x040E110F, 0x0600020E,
+    0x1037110F, 0x0B0E1032, 0x1037060E, 0x0F2D0F32, 0x050E0F19, 0x0F2D0A0A, 0x00615A02, 0x0F2D0F32,
+    0x4E020F32, 0x100A4202, 0x100A101E, 0x36004B10, 0x1902101E, 0x10320D02, 0x10321037, 0x01050E10,
+    0x32103708, 0x0E101E10, 0x320D0210, 0x1E10320D, 0x02103210, 0x3701050E, 0x10321037, 0x090E101E,
+    0x10320E0E, 0x100A101E, 0x030E0F32, 0x100A0C0E, 0x0F2D0F32, 0x07050500,
 };
 
 static s32 D_80BF3318[] = { -1, -1, 3, 1, 3, 1, 2, 0, 3, 5, 0, 3, 1, 2, 4 };
@@ -730,7 +730,7 @@ s32 func_80BF25E8(EnIg* this, GlobalContext* globalCtx) {
 
     func_8013AF00(sp7C, 3, this->unk_274->count + 3);
     if (!(this->unk_3D0 & 8)) {
-        sp58 = D_801D15B0;
+        sp58 = gZeroVec3f;
         func_8013B6B0(this->unk_274, &this->unk_284, &this->unk_294, this->unk_28C, this->unk_288, &this->unk_290, sp7C,
                       &sp58, this->unk_3EC);
         func_8013B878(globalCtx, this->unk_274, this->unk_290, &sp58);
@@ -749,7 +749,7 @@ s32 func_80BF25E8(EnIg* this, GlobalContext* globalCtx) {
         sp58 = this->actor.world.pos;
     }
 
-    this->unk_278 = D_801D15B0;
+    this->unk_278 = gZeroVec3f;
 
     if (func_8013B6B0(this->unk_274, &this->unk_284, &this->unk_294, this->unk_28C, this->unk_288, &this->unk_290, sp7C,
                       &this->unk_278, this->unk_3EC)) {
