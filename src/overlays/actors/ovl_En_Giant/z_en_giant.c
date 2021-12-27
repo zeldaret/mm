@@ -337,9 +337,9 @@ void EnGiant_PlaySound(EnGiant* this) {
 
 void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
     CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
-    f32 startPosY = actorAction->unk10;
+    f32 startPosY = actorAction->unk0C.y;
     s32 pad[2];
-    f32 endPosY = actorAction->unk1C;
+    f32 endPosY = actorAction->unk18.y;
     f32 scale = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);
 
     this->actor.world.pos.y = ((endPosY - startPosY) * scale) + startPosY;
