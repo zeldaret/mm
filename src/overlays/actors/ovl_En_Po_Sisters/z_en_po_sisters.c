@@ -726,7 +726,7 @@ void func_80B1BE4C(EnPoSisters* this, s32 arg1) {
         sp34.x = this->actor.world.pos.x;
         sp34.y = this->actor.world.pos.y + 45.0f;
         sp34.z = this->actor.world.pos.z;
-        func_800B3030(arg1, &sp34, &D_801D15B0, &D_801D15B0, 150, 0, 3);
+        func_800B3030(arg1, &sp34, &gZeroVec3f, &gZeroVec3f, 150, 0, 3);
     }
     Lights_PointSetColorAndRadius(&this->lightInfo, 0, 0, 0, 0);
     this->actionFunc = func_80B1BF2C;

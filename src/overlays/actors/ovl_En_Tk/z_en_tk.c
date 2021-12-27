@@ -405,7 +405,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
 
     func_8013AF00(spA0, 3, this->unk_3C8->count + 3);
     if (!(this->unk_3CE & 4)) {
-        sp7C = D_801D15B0;
+        sp7C = gZeroVec3f;
         func_8013B6B0(this->unk_3C8, &this->unk_3E0, &this->unk_3F0, this->unk_3E8, this->unk_3E4, &this->unk_3EC, spA0,
                       &sp7C, this->unk_3D0);
         func_8013B878(globalCtx, this->unk_3C8, this->unk_3EC, &sp7C);
@@ -428,7 +428,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
         sp7C = this->actor.world.pos;
     }
 
-    this->unk_3D4 = D_801D15B0;
+    this->unk_3D4 = gZeroVec3f;
 
     if (func_8013B6B0(this->unk_3C8, &this->unk_3E0, &this->unk_3F0, this->unk_3E8, this->unk_3E4, &this->unk_3EC, spA0,
                       &this->unk_3D4, this->unk_3D0)) {

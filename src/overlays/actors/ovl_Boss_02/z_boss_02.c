@@ -555,8 +555,8 @@ void func_809DA460(Boss02Effects* effects, Vec3f* vec) {
         if ((effects->unk_24 == 0) || (effects->unk_24 == 3)) {
             effects->unk_24 = 4;
             effects->unk_00 = *vec;
-            Math_Vec3f_Copy(&effects->unk_0C, &D_801D15B0);
-            Math_Vec3f_Copy(&effects->unk_18, &D_801D15B0);
+            Math_Vec3f_Copy(&effects->unk_0C, &gZeroVec3f);
+            Math_Vec3f_Copy(&effects->unk_18, &gZeroVec3f);
             effects->unk_2C = 0xFF;
             effects->unk_34 = 0.0f;
             break;
