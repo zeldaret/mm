@@ -987,7 +987,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
             this->unk3F2 = this->unk2DC.y;
             this->actionFunc = func_80BACBB0;
         }
-    } else if ((player->transformation == PLAYER_FORM_HUMAN) && CUR_EQUIP_VALUE_VOID(EQUIP_SWORD) != 0) {
+    } else if ((player->transformation == PLAYER_FORM_HUMAN) && GET_CUR_EQUIP_VALUE(EQUIP_SWORD) != 0) {
         if (func_800B84D0(&this->actor, globalCtx)) {
             this->unk3F2 = this->unk2DC.y;
             func_80BAAB78(this, globalCtx);

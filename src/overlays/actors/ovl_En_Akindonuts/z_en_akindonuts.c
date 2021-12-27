@@ -303,11 +303,11 @@ s32 func_80BED208(EnAkindonuts* this) {
 }
 
 s32 func_80BED27C(EnAkindonuts* this) {
-    if (CUR_UPG_VALUE_VOID(UPG_BOMB_BAG) == 3) {
+    if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) == 3) {
         return 2;
     }
 
-    if (CUR_UPG_VALUE_VOID(UPG_BOMB_BAG) < 2) {
+    if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) < 2) {
         return 0;
     }
 

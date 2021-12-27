@@ -347,7 +347,7 @@ void func_80143B0C(GameState* gameState) {
         gSaveContext.save.playerData.health = 0x30;
     }
 
-    if (CUR_EQUIP_VALUE_VOID(0) < 3) {
+    if (GET_CUR_EQUIP_VALUE(0) < 3) {
         gSaveContext.save.equips.equipment =
             (1 << gEquipShifts[0]) | (gSaveContext.save.equips.equipment & gEquipNegMasks[0]);
 

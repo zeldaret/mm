@@ -56,24 +56,23 @@
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.save.inventory.ammo[SLOT(item)]
 #define INV_CONTENT(item) gSaveContext.save.inventory.items[SLOT(item)]
-
-#define ALL_EQUIP_VALUE_VOID(equip) \
-    ((((void)0, gSaveContext.save.inventory.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
-#define CUR_EQUIP_VALUE_VOID(equip) \
-    ((((void)0, gSaveContext.save.equips.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
-#define CUR_UPG_VALUE_VOID(upg) \
-    ((((void)0, gSaveContext.save.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
-#define INV_CONTENT_VOID(item) ((void)0, gSaveContext.save.inventory.items)[SLOT(item)]
+#define GET_INV_CONTENT(item) ((void)0, gSaveContext.save.inventory.items)[SLOT(item)]
 
 #define CUR_FORM ((gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.save.playerForm)
 
-#define ALL_EQUIP_VALUE(equip) ((gSaveContext.save.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
-#define CUR_EQUIP_VALUE(equip) ((gSaveContext.save.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
+#define GET_SAVE_EQUIPS_EQUIPMENT ((void)0, gSaveContext.save.equips.equipment)
+#define GET_SAVE_INVENTORY_UPGRADES ((void)0, gSaveContext.save.inventory.upgrades)
+#define GET_SAVE_INVENTORY_QUEST_ITEMS ((void)0, gSaveContext.save.inventory.questItems)
+
+#define GET_CUR_EQUIP_VALUE(equip) ((GET_SAVE_EQUIPS_EQUIPMENT & gEquipMasks[equip]) >> gEquipShifts[equip])
+
 #define CUR_UPG_VALUE(upg) ((gSaveContext.save.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
-#define TAKE_EQUIPPED_ITEM(equip) (gSaveContext.save.equips.equipment = ((((void)0, gSaveContext.save.equips.equipment) & (gEquipNegMasks[equip])) | (u16)(0 << gEquipShifts[equip])))
+#define GET_CUR_UPG_VALUE(upg) ((GET_SAVE_INVENTORY_UPGRADES & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+
+#define TAKE_EQUIPPED_ITEM(equip) (gSaveContext.save.equips.equipment = ((GET_SAVE_EQUIPS_EQUIPMENT & gEquipNegMasks[equip]) | (u16)(0 << gEquipShifts[equip])))
 #define CUR_FORM_EQUIP(button) (gSaveContext.save.equips.buttonItems[CUR_FORM][button])
-#define CHECK_QUEST_ITEM(item) (((void)0, gSaveContext.save.inventory.questItems) & gBitFlags[item])
-#define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (((void)0, gSaveContext.save.inventory.questItems) & (-1 - gBitFlags[item])))
+#define CHECK_QUEST_ITEM(item) (GET_SAVE_INVENTORY_QUEST_ITEMS & gBitFlags[item])
+#define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
