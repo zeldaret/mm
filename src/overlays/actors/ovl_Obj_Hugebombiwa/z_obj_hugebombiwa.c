@@ -172,7 +172,7 @@ void func_80A53E60(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3) {
 
         phi_s0 = (Rand_ZeroOne() * 160.0f) + 140.0f;
         phi_s1 = (Rand_ZeroOne() * 180.0f) + 120.0f;
-        func_800B0E48(globalCtx, &spDC, &D_801D15B0, &D_80A55D2C, &D_80A55D38, &D_80A55D3C, phi_s0, phi_s1);
+        func_800B0E48(globalCtx, &spDC, &gZeroVec3f, &D_80A55D2C, &D_80A55D38, &D_80A55D3C, phi_s0, phi_s1);
     }
 }
 
@@ -287,7 +287,7 @@ void func_80A54600(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3) {
 
         temp_s0 = (Rand_ZeroOne() * 160.0f) + 140.0f;
         temp_s1 = (Rand_ZeroOne() * 180.0f) + 120.0f;
-        func_800B1210(globalCtx, &spCC, &D_801D15B0, &D_80A55D2C, temp_s0, temp_s1);
+        func_800B1210(globalCtx, &spCC, &gZeroVec3f, &D_80A55D2C, temp_s0, temp_s1);
     }
 }
 
