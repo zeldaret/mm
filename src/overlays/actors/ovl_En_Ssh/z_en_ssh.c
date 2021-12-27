@@ -121,7 +121,7 @@ void EnSsh_SpawnShockwave(EnSsh* this, GlobalContext* globalCtx) {
 }
 
 s32 EnSsh_CreateBlureEffect(GlobalContext* globalCtx) {
-    EffBlureInit1 blureInit;
+    EffectBlureInit1 blureInit;
     u8 sP1StartColor[4] = { 255, 255, 255, 75 };
     u8 sP2StartColor[4] = { 255, 255, 255, 75 };
     u8 sP1EndColor[4] = { 255, 255, 255, 0 };
@@ -176,11 +176,11 @@ void EnSsh_AddBlureVertex(EnSsh* this) {
     Matrix_MultiplyVector3fByState(&p1Base, &p1);
     Matrix_MultiplyVector3fByState(&p2Base, &p2);
     Matrix_StatePop();
-    func_800A81F0(Effect_GetParams(this->blureIdx), &p1, &p2);
+    EffectBlure_AddVertex(Effect_GetByIndex(this->blureIdx), &p1, &p2);
 }
 
 void EnSsh_AddBlureSpace(EnSsh* this) {
-    func_800A8514(Effect_GetParams(this->blureIdx));
+    EffectBlure_AddSpace(Effect_GetByIndex(this->blureIdx));
 }
 
 void EnSsh_InitColliders(EnSsh* this, GlobalContext* globalCtx) {
