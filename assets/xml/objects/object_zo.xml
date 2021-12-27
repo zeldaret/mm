@@ -21,46 +21,46 @@
         <Texture Name="gZoraEyeHalfTex" OutName="eye_half" Format="rgba16" Width="32" Height="32" Offset="0x58A0" />
         <Texture Name="gZoraEyeClosedTex" OutName="eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x60A0" />
         <Texture Name="gZoraMouthTex" OutName="mouth" Format="rgba16" Width="32" Height="32" Offset="0x68A0" />
-        <Texture Name="object_zo_Tex_0070A0" OutName="tex_0070A0" Format="ci8" Width="16" Height="16" Offset="0x70A0" />
-        <Texture Name="object_zo_Tex_0071A0" OutName="tex_0071A0" Format="ci8" Width="8" Height="8" Offset="0x71A0" />
-        <DList Name="object_zo_DL_00A2A0" Offset="0xA2A0" />
-        <DList Name="object_zo_DL_00A448" Offset="0xA448" />
-        <DList Name="object_zo_DL_00A7C0" Offset="0xA7C0" />
-        <DList Name="object_zo_DL_00AA38" Offset="0xAA38" />
-        <DList Name="object_zo_DL_00ABD8" Offset="0xABD8" />
-        <DList Name="object_zo_DL_00AD70" Offset="0xAD70" />
-        <DList Name="object_zo_DL_00AF08" Offset="0xAF08" />
-        <DList Name="object_zo_DL_00B148" Offset="0xB148" />
-        <DList Name="object_zo_DL_00B3A8" Offset="0xB3A8" />
-        <DList Name="object_zo_DL_00B688" Offset="0xB688" />
-        <DList Name="object_zo_DL_00B890" Offset="0xB890" />
-        <DList Name="object_zo_DL_00BAF0" Offset="0xBAF0" />
-        <DList Name="object_zo_DL_00BDD0" Offset="0xBDD0" />
-        <DList Name="object_zo_DL_00BFD8" Offset="0xBFD8" />
-        <DList Name="object_zo_DL_00C2B8" Offset="0xC2B8" />
-        <DList Name="object_zo_DL_00C590" Offset="0xC590" />
-        <DList Name="object_zo_DL_00C858" Offset="0xC858" />
-        <DList Name="object_zo_DL_00CB38" Offset="0xCB38" />
-        <DList Name="object_zo_DL_00CE10" Offset="0xCE10" />
-        <Limb Name="object_zo_Standardlimb_00D0D8" Type="Standard" Offset="0xD0D8" />
-        <Limb Name="object_zo_Standardlimb_00D0E4" Type="Standard" Offset="0xD0E4" />
-        <Limb Name="object_zo_Standardlimb_00D0F0" Type="Standard" Offset="0xD0F0" />
-        <Limb Name="object_zo_Standardlimb_00D0FC" Type="Standard" Offset="0xD0FC" />
-        <Limb Name="object_zo_Standardlimb_00D108" Type="Standard" Offset="0xD108" />
-        <Limb Name="object_zo_Standardlimb_00D114" Type="Standard" Offset="0xD114" />
-        <Limb Name="object_zo_Standardlimb_00D120" Type="Standard" Offset="0xD120" />
-        <Limb Name="object_zo_Standardlimb_00D12C" Type="Standard" Offset="0xD12C" />
-        <Limb Name="object_zo_Standardlimb_00D138" Type="Standard" Offset="0xD138" />
-        <Limb Name="object_zo_Standardlimb_00D144" Type="Standard" Offset="0xD144" />
-        <Limb Name="object_zo_Standardlimb_00D150" Type="Standard" Offset="0xD150" />
-        <Limb Name="object_zo_Standardlimb_00D15C" Type="Standard" Offset="0xD15C" />
-        <Limb Name="object_zo_Standardlimb_00D168" Type="Standard" Offset="0xD168" />
-        <Limb Name="object_zo_Standardlimb_00D174" Type="Standard" Offset="0xD174" />
-        <Limb Name="object_zo_Standardlimb_00D180" Type="Standard" Offset="0xD180" />
-        <Limb Name="object_zo_Standardlimb_00D18C" Type="Standard" Offset="0xD18C" />
-        <Limb Name="object_zo_Standardlimb_00D198" Type="Standard" Offset="0xD198" />
-        <Limb Name="object_zo_Standardlimb_00D1A4" Type="Standard" Offset="0xD1A4" />
-        <Limb Name="object_zo_Standardlimb_00D1B0" Type="Standard" Offset="0xD1B0" />
+        <Texture Name="gZoraHandTex" OutName="hand" Format="ci8" Width="16" Height="16" Offset="0x70A0" />
+        <Texture Name="gZoraKneeTex" OutName="knee" Format="ci8" Width="8" Height="8" Offset="0x71A0" />
+        <DList Name="gZoraPelvisDL" Offset="0xA2A0" />
+        <DList Name="gZoraTorsoDL" Offset="0xA448" />
+        <DList Name="gZoraHeadDL" Offset="0xA7C0" />
+        <DList Name="gZoraHeadTail1DL" Offset="0xAA38" />
+        <DList Name="gZoraHeadTail2DL" Offset="0xABD8" />
+        <DList Name="gZoraHeadTail3DL" Offset="0xAD70" />
+        <DList Name="gZoraHeadTailFinDL" Offset="0xAF08" />
+        <DList Name="gZoraRightUpperArmDL" Offset="0xB148" />
+        <DList Name="gZoraRightForearmDL" Offset="0xB3A8" />
+        <DList Name="gZoraRightHandDL" Offset="0xB688" />
+        <DList Name="gZoraLeftUpperArmDL" Offset="0xB890" />
+        <DList Name="gZoraLeftForearmDL" Offset="0xBAF0" />
+        <DList Name="gZoraLeftHandDL" Offset="0xBDD0" />
+        <DList Name="gZoraRightThighDL" Offset="0xBFD8" />
+        <DList Name="gZoraRightShinDL" Offset="0xC2B8" />
+        <DList Name="gZoraRightFootDL" Offset="0xC590" />
+        <DList Name="gZoraLeftThighDL" Offset="0xC858" />
+        <DList Name="gZoraLeftShinDL" Offset="0xCB38" />
+        <DList Name="gZoraLeftFootDL" Offset="0xCE10" />
+        <Limb Name="gZoraPelvisLimb" Type="Standard" Offset="0xD0D8" />
+        <Limb Name="gZoraLeftThighLimb" Type="Standard" Offset="0xD0E4" />
+        <Limb Name="gZoraLeftShinLimb" Type="Standard" Offset="0xD0F0" />
+        <Limb Name="gZoraLeftFootLimb" Type="Standard" Offset="0xD0FC" />
+        <Limb Name="gZoraRightThighLimb" Type="Standard" Offset="0xD108" />
+        <Limb Name="gZoraRightShinLimb" Type="Standard" Offset="0xD114" />
+        <Limb Name="gZoraRightFootLimb" Type="Standard" Offset="0xD120" />
+        <Limb Name="gZoraTorsoLimb" Type="Standard" Offset="0xD12C" />
+        <Limb Name="gZoraLeftUpperArmLimb" Type="Standard" Offset="0xD138" />
+        <Limb Name="gZoraLeftForearmLimb" Type="Standard" Offset="0xD144" />
+        <Limb Name="gZoraLeftHandLimb" Type="Standard" Offset="0xD150" />
+        <Limb Name="gZoraRightUpperArmLimb" Type="Standard" Offset="0xD15C" />
+        <Limb Name="gZoraRightForearmLimb" Type="Standard" Offset="0xD168" />
+        <Limb Name="gZoraRightHandLimb" Type="Standard" Offset="0xD174" />
+        <Limb Name="gZoraHeadLimb" Type="Standard" Offset="0xD180" />
+        <Limb Name="gZoraHeadTail1Limb" Type="Standard" Offset="0xD18C" />
+        <Limb Name="gZoraHeadTail2Limb" Type="Standard" Offset="0xD198" />
+        <Limb Name="gZoraHeadTail3Limb" Type="Standard" Offset="0xD1A4" />
+        <Limb Name="gZoraHeadTailFinLimb" Type="Standard" Offset="0xD1B0" />
         <Skeleton Name="gZoraSkel" Type="Flex" LimbType="Standard" Offset="0xD208" />
         <DList Name="object_zo_DL_00D220" Offset="0xD220" />
         <DList Name="object_zo_DL_00D288" Offset="0xD288" />
