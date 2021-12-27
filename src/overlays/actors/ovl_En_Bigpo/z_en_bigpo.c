@@ -1,7 +1,7 @@
 /*
- * File z_en_bigpo.c
- * Overlay: ovl_En_Bigpi
- * Description: Big Poe. Leader of the Poes, found under Dampe's house and in Beneath the Well
+ * File: z_en_bigpo.c
+ * Overlay: ovl_En_Bigpo
+ * Description: Big Poe. Found under Dampe's house and in Beneath the Well
  */
 
 #include "z_en_bigpo.h"

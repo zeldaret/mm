@@ -1,5 +1,5 @@
 /*
- * File z_en_invadepoh.c
+ * File: z_en_invadepoh.c
  * Overlay: ovl_En_Invadepoh
  * Description: Ranch nighttime actors
  */
@@ -4480,7 +4480,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
-        Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_NEW);
+        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
         Matrix_GetStateTranslationAndScaledZ(60.0f, &sp80);
         sp74.x = thisx->world.pos.x + sp80.x;
         sp74.y = thisx->world.pos.y + sp80.y + 68.0f;
@@ -4572,14 +4572,14 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp5C;
 
     Matrix_StatePush();
-    Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_NEW);
+    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
     Matrix_GetStateTranslationAndScaledZ(200.0f, &sp5C);
     Matrix_StatePop();
     sp5C.x += thisx->world.pos.x;
     sp5C.y += thisx->world.pos.y;
     sp5C.z += thisx->world.pos.z;
     EnInvadepoh_SetSysMatrix(&sp5C);
-    Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
     Matrix_InsertZRotation_s(((EnInvadepoh*)thisx)->unk304, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
