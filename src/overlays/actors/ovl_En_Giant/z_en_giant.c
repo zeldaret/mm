@@ -352,13 +352,13 @@ void EnGiant_PlaySound(EnGiant* this) {
 
 void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
     CsCmdActorAction* actorAction = globalCtx->csCtx.actorActions[actionIndex];
-    f32 floatUnk10 = actorAction->startPos.y;
+    f32 startPosY = actorAction->startPos.y;
     s32 pad[2];
-    f32 floatUnk1C = actorAction->endPos.y;
-    f32 functionTemp;
+    f32 endPosY = actorAction->endPos.y;
+    f32 progress;
 
-    functionTemp = Environment_LerpWeight(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames);
-    this->actor.world.pos.y = ((floatUnk1C - floatUnk10) * functionTemp) + floatUnk10;
+    progress = Environment_LerpWeight(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames);
+    this->actor.world.pos.y = ((endPosY - startPosY) * progress) + startPosY;
 }
 
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {

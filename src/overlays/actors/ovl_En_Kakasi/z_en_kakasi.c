@@ -1157,8 +1157,7 @@ void EnKakasi_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnKakasi* this = (EnKakasi*)actor;
 
     if (limbIndex == 4) {
-        // what is D_801D15B0 ? we didn't have to define it, we store the output though
-        Matrix_MultiplyVector3fByState(&D_801D15B0, &this->unk1BC);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk1BC);
     }
 }
 
