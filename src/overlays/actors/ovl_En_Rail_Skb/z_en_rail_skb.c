@@ -290,7 +290,7 @@ void EnRailSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_3F8 = 0;
     }
 
-    if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 0)) {
+    if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.currentCsIndex == 0)) {
         this->actor.flags |= 0x100000;
     }
 
@@ -483,11 +483,11 @@ void func_80B716A8(EnRailSkb* this, GlobalContext* globalCtx) {
         this->unk_3FE = 1;
         func_80B71D8C(this, globalCtx, func_80B723F8);
         if (!func_80B7285C(this)) {
-            func_801518B0(globalCtx, 0x13EC, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13EC, &this->actor);
             this->unk_400 = 0x13EC;
             func_80B72830(this, 1);
         } else {
-            func_801518B0(globalCtx, 0x13F5, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F5, &this->actor);
             this->unk_400 = 0x13F5;
         }
         func_800BDC5C(&this->skelAnime, sAnimations, 12);
@@ -696,34 +696,34 @@ void func_80B71F3C(EnRailSkb* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx)) {
         switch (this->unk_400) {
             case 0x13EC:
-                func_801518B0(globalCtx, 0x13ED, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13ED, &this->actor);
                 this->unk_400 = 0x13ED;
                 break;
 
             case 0x13ED:
-                func_801518B0(globalCtx, 0x13EE, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13EE, &this->actor);
                 this->unk_400 = 0x13EE;
                 break;
 
             case 0x13EE:
-                func_801518B0(globalCtx, 0x13EF, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13EF, &this->actor);
                 this->unk_400 = 0x13EF;
                 break;
 
             case 0x13EF:
             case 0x13F5:
-                func_801518B0(globalCtx, 0x13F0, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13F0, &this->actor);
                 this->unk_400 = 0x13F0;
                 break;
 
             case 0x13F1:
-                func_801518B0(globalCtx, 0x13F2, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13F2, &this->actor);
                 this->unk_400 = 0x13F2;
                 break;
 
             case 0x13F2:
                 if (this->unk_3FC == 1) {
-                    func_801518B0(globalCtx, 0x13F4, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x13F4, &this->actor);
                     this->unk_400 = 0x13F4;
                 } else {
                     func_801477B4(globalCtx);
@@ -732,7 +732,7 @@ void func_80B71F3C(EnRailSkb* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x13F3:
-                func_801518B0(globalCtx, 0x13F2, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13F2, &this->actor);
                 this->unk_400 = 0x13F2;
                 this->unk_3FC = 1;
                 break;
@@ -749,11 +749,11 @@ void func_80B72100(EnRailSkb* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
-            func_801518B0(globalCtx, 0x13F1, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F1, &this->actor);
             this->unk_400 = 0x13F1;
         } else {
             func_8019F208();
-            func_801518B0(globalCtx, 0x13F3, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F3, &this->actor);
             this->unk_400 = 0x13F3;
         }
     }

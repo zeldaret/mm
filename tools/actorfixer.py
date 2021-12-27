@@ -362,6 +362,9 @@ animdict = {
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",
     "csCtx.unk_12": "csCtx.currentCsIndex",
+    "globalCtx->envCtx.unk_8C": "globalCtx->envCtx.lightAdjustments",
+    "globalCtx->envCtx.unk_E5": "globalCtx->envCtx.fillScreen",
+    "globalCtx->envCtx.unk_E6": "globalCtx->envCtx.screenFillColor",
     "globalCtx->mf_187FC" : "globalCtx->billboardMtxF",
     "globalCtx->projectionMatrix" : "globalCtx->viewProjectionMtxF",
 }

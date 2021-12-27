@@ -444,7 +444,7 @@ void func_80BED3BC(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BED680(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -515,7 +515,7 @@ void func_80BED680(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -621,7 +621,7 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -693,7 +693,7 @@ void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -794,7 +794,7 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -861,7 +861,7 @@ void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -955,7 +955,7 @@ void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -1022,7 +1022,7 @@ void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {

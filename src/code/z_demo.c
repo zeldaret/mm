@@ -1588,8 +1588,8 @@ void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, GlobalContext* globalCt
     entry = globalCtx->csCtx.actorActions[actorActionIndex];
     progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
 
-    actor->world.pos.x = F32_LERPIMP(start.x, end.x, progress);
-    actor->world.pos.z = F32_LERPIMP(start.z, end.z, progress);
+    actor->world.pos.x = start.x + (end.x - start.x) * progress;
+    actor->world.pos.z = start.z + (end.z - start.z) * progress;
 
     Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;

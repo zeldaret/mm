@@ -206,7 +206,7 @@ void EnZog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA) &&
-        ((globalCtx->csCtx.unk_12 != 2) || (gSaveContext.sceneSetupIndex != 0) ||
+        ((globalCtx->csCtx.currentCsIndex != 2) || (gSaveContext.sceneSetupIndex != 0) ||
          (globalCtx->sceneNum != SCENE_30GYOSON))) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -459,9 +459,9 @@ s32 func_80B93EA0(EnZog* this, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    if (func_800EE29C(globalCtx, 0x1D7)) {
-        sp3E = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1D7)]->unk0;
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x1D7));
+    if (Cutscene_CheckActorAction(globalCtx, 0x1D7)) {
+        sp3E = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1D7)]->action;
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 0x1D7));
 
         switch (this->unk_306) {
             case 2:
@@ -956,7 +956,7 @@ void EnZog_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 10.0f, 5);
-    if (func_800EE29C(globalCtx, 0x1D7) && (ENZOG_GET_F(&this->actor) != ENZOG_F_2)) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1D7) && (ENZOG_GET_F(&this->actor) != ENZOG_F_2)) {
         this->actionFunc = func_80B9461C;
         this->actor.shape.yOffset = 0.0f;
     }

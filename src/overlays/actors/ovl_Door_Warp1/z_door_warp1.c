@@ -177,10 +177,10 @@ void DoorWarp1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->unk_1DC);
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->unk_1F0);
 
-    for (i = 0; i < ARRAY_COUNT(globalCtx->envCtx.unk_8C.diffuseColor1); i++) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[i] = 0;
-        globalCtx->envCtx.unk_8C.fogColor[i] = globalCtx->envCtx.unk_8C.diffuseColor1[i];
-        globalCtx->envCtx.unk_8C.ambientColor[i] = globalCtx->envCtx.unk_8C.diffuseColor1[i];
+    for (i = 0; i < ARRAY_COUNT(globalCtx->envCtx.lightAdjustments.diffuseColor1); i++) {
+        globalCtx->envCtx.lightAdjustments.diffuseColor1[i] = 0;
+        globalCtx->envCtx.lightAdjustments.fogColor[i] = globalCtx->envCtx.lightAdjustments.diffuseColor1[i];
+        globalCtx->envCtx.lightAdjustments.ambientColor[i] = globalCtx->envCtx.lightAdjustments.diffuseColor1[i];
     }
 
     if (this->unk_1D3 != 0) {
@@ -279,14 +279,15 @@ void func_808B8E78(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808B900C(DoorWarp1* this, GlobalContext* globalCtx) {
-    u32 index;
+    s32 index;
     u8 ret = false;
 
-    if (func_800EE29C(globalCtx, 0x239)) {
-        index = func_800EE200(globalCtx, 0x239);
-        if (this->unk_208 != globalCtx->csCtx.npcActions[index]->unk0) {
-            this->unk_208 = globalCtx->csCtx.npcActions[index]->unk0;
-            if (globalCtx->csCtx.npcActions[index]->unk0 == 2) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x239)) {
+        index = Cutscene_GetActorActionIndex(globalCtx, 0x239);
+
+        if (this->unk_208 != globalCtx->csCtx.actorActions[index]->action) {
+            this->unk_208 = globalCtx->csCtx.actorActions[index]->action;
+            if (globalCtx->csCtx.actorActions[index]->action == 2) {
                 ret = true;
             }
         }
@@ -344,7 +345,7 @@ void func_808B921C(DoorWarp1* this, GlobalContext* globalCtx) {
 
     if (func_808B866C(this, globalCtx) && !func_801690CC(globalCtx)) {
         func_800B7298(globalCtx, &this->dyna.actor, 7);
-        func_801518B0(globalCtx, 0xF2, &this->dyna.actor);
+        Message_StartTextbox(globalCtx, 0xF2, &this->dyna.actor);
         DoorWarp1_SetupAction(this, func_808B93A0);
     }
 
@@ -832,15 +833,15 @@ void func_808BA550(DoorWarp1* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1D0 > 140) {
-        globalCtx->envCtx.unk_E5 = 1;
+        globalCtx->envCtx.fillScreen = 1;
         temp_f0 = (this->unk_1D0 - 140) / 20.0f;
         if (temp_f0 > 1.0f) {
             temp_f0 = 1.0f;
         }
-        globalCtx->envCtx.unk_E6[0] = 160;
-        globalCtx->envCtx.unk_E6[1] = 160;
-        globalCtx->envCtx.unk_E6[2] = 160;
-        globalCtx->envCtx.unk_E6[3] = 255.0f * temp_f0;
+        globalCtx->envCtx.screenFillColor[0] = 160;
+        globalCtx->envCtx.screenFillColor[1] = 160;
+        globalCtx->envCtx.screenFillColor[2] = 160;
+        globalCtx->envCtx.screenFillColor[3] = 255.0f * temp_f0;
     }
 
     Lights_PointNoGlowSetInfo(&this->unk_1E0, player->actor.world.pos.x + 10.0f, player->actor.world.pos.y + 10.0f,
@@ -863,13 +864,13 @@ void func_808BA550(DoorWarp1* this, GlobalContext* globalCtx) {
         temp_f16 = -255.0f * temp_f0;
 
         for (i = 0; i < 3; i++) {
-            globalCtx->envCtx.unk_8C.diffuseColor1[i] = temp_f16;
-            globalCtx->envCtx.unk_8C.fogColor[i] = temp_f16;
-            globalCtx->envCtx.unk_8C.ambientColor[i] = temp_f16;
+            globalCtx->envCtx.lightAdjustments.diffuseColor1[i] = temp_f16;
+            globalCtx->envCtx.lightAdjustments.fogColor[i] = temp_f16;
+            globalCtx->envCtx.lightAdjustments.ambientColor[i] = temp_f16;
         }
 
-        globalCtx->envCtx.unk_8C.fogNear = -500.0f * temp_f0;
-        if (globalCtx->envCtx.unk_8C.fogNear < -300) {
+        globalCtx->envCtx.lightAdjustments.fogNear = -500.0f * temp_f0;
+        if (globalCtx->envCtx.lightAdjustments.fogNear < -300) {
             globalCtx->roomCtx.currRoom.segment = NULL;
         }
     }
