@@ -44,7 +44,7 @@ FILE_NAMES = [
     'ovl_file_choose',
     'ovl_daytelop',
     'ovl_kaleido_scope',
-    'ovl_Player_Actor',
+    'ovl_player_actor',
     'ovl_En_Test',
     'ovl_En_GirlA',
     'ovl_En_Part',
