@@ -304,6 +304,7 @@ animdict = {
     "func_800A81F0": "EffectBlure_AddVertex",
     "func_800A8514": "EffectBlure_AddSpace",
     "Effect_GetParams": "Effect_GetByIndex",
+    "D_0407D590": "gGameplayKeepDrawFlameDL"
 
 
     "skelanime.unk03": "skelanime.taper",
