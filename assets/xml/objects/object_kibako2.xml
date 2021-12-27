@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_kibako2" Segment="6">
-        <Texture Name="gLargeCrate1TLUT" OutName="large_crate_palette" Format="rgba16" Width="4" Height="4" Offset="0x0" />
+        <Texture Name="gLargeCrateTLUT" OutName="large_crate_palette" Format="rgba16" Width="4" Height="4" Offset="0x0" />
         <Texture Name="gLargeCrateTopTex" OutName="large_crate_top" Format="ci4" Width="32" Height="64" Offset="0x20" />
         <Texture Name="gLargeCrateSidesTex" OutName="large_crate_sides" Format="ci4" Width="32" Height="64" Offset="0x420" />
         <DList Name="gLargeCrateDL" Offset="0x960" />
