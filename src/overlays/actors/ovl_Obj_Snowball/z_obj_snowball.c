@@ -6,6 +6,7 @@
 
 #include "z_obj_snowball.h"
 #include "objects/object_goroiwa/object_goroiwa.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000000
 
@@ -236,7 +237,7 @@ void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
 
             temp_s0 = (s32)(Rand_ZeroOne() * 50.0f * temp_f28) + 40;
             temp_s1 = (s32)(Rand_ZeroOne() * 60.0f * temp_f28) + 50;
-            func_800B0E48(globalCtx, &spFC, &D_801D15B0, &D_80B04FBC, &D_80B04FB4, &D_80B04FB8, temp_s0, temp_s1);
+            func_800B0E48(globalCtx, &spFC, &gZeroVec3f, &D_80B04FBC, &D_80B04FB4, &D_80B04FB8, temp_s0, temp_s1);
         }
     }
 
@@ -396,7 +397,7 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
 
         phi_s0 = (s32)(Rand_ZeroOne() * 60.0f * temp_f30) + 60;
 
-        func_800B0E48(globalCtx, &spD8, &D_801D15B0, &D_80B04FBC, &D_80B04FB4, &D_80B04FB8, phi_s0,
+        func_800B0E48(globalCtx, &spD8, &gZeroVec3f, &D_80B04FBC, &D_80B04FB4, &D_80B04FB8, phi_s0,
                       (s32)(Rand_ZeroOne() * 30.0f * temp_f30) + 60);
     }
 }
@@ -833,7 +834,7 @@ void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_04076BC0);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_076BC0);
 
                 CLOSE_DISPS(globalCtx->state.gfxCtx);
             }
