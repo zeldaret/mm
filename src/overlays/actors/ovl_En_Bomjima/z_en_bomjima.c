@@ -1100,12 +1100,12 @@ void EnBomjima_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gEnBomjima_D_80C00B08, gEnBomjima_D_80C00B18, gEnBomjima_D_80C00B18,
         gEnBomjima_D_80C00B18, gEnBomjima_D_80C00B18,
     };
-    static UNK_PTR D_80C00B3C[] = {
+    static TexturePtr D_80C00B3C[] = {
         &object_cs_Tex_00C520,
         &object_cs_Tex_00CD20,
         &object_cs_Tex_00D520,
     };
-    static UNK_PTR D_80C00B48[] = {
+    static TexturePtr D_80C00B48[] = {
         &object_cs_Tex_00E620, &object_cs_Tex_00EA20, &object_cs_Tex_00EE20,
         &object_cs_Tex_00DD20, &object_cs_Tex_00F220,
     };
