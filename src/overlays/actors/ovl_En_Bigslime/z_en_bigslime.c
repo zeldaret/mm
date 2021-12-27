@@ -2585,7 +2585,7 @@ void EnBigslime_ApplyDamageEffectBigslime(EnBigslime* this, GlobalContext* globa
                     EnBigslime_SetPlayerParams(this, globalCtx);
                     this->rotation = 0;
                     EnBigslime_SetupFreeze(this);
-                    minislime = (EnMinislime*)func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_ITEMACTION,
+                    minislime = (EnMinislime*)SubS_ActorFind(globalCtx, NULL, ACTORCAT_ITEMACTION,
                                                                             ACTOR_ARROW_ICE);
                     if (minislime != NULL) {
                         minislime->shakeRefPos.z = -100.0f;
