@@ -48,7 +48,7 @@ void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* textur
     scale = this->rgScale * 0.0025f;
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_187FC, &mfTrans11DA0);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
     gSegments[0x06] = PHYSICAL_TO_VIRTUAL(object);
     gSPSegment(POLY_XLU_DISP++, 0x06, object);
@@ -590,7 +590,7 @@ extern Vec3f D_801AE3E0;
 void func_800B2364(GlobalContext* globalCtx, Vec3f* pos, Gfx* dList) {
     Vec3f posVec = D_801AE3E0;
 
-    EffectSsHahen_Spawn(globalCtx, pos, &D_801D15B0, &posVec, 1, 5, 1, 10, dList);
+    EffectSsHahen_Spawn(globalCtx, pos, &gZeroVec3f, &posVec, 1, 5, 1, 10, dList);
 }
 
 // EffectSsStick Spawn Functions
@@ -1032,7 +1032,7 @@ void EffectSsDeadDs_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
 }
 
 void func_800B31BC(GlobalContext* globalCtx, Vec3f* pos, s16 scale, s16 scaleStep, s16 alpha, s32 life) {
-    EffectSsDeadDs_Spawn(globalCtx, pos, &D_801D15B0, &D_801D15B0, scale, scaleStep, alpha, life);
+    EffectSsDeadDs_Spawn(globalCtx, pos, &gZeroVec3f, &gZeroVec3f, scale, scaleStep, alpha, life);
 }
 
 // EffectSsIceSmoke Spawn Functions
