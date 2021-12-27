@@ -15,6 +15,10 @@
  */
 
 #include "z_en_fall.h"
+#include "objects/object_fall/object_fall.h"
+#include "objects/object_fall2/object_fall2.h"
+#include "objects/object_lodmoon/object_lodmoon.h"
+#include "objects/object_moonston/object_moonston.h"
 
 #define FLAGS 0x00000030
 
@@ -63,29 +67,6 @@ const ActorInit En_Fall_InitVars = {
     (ActorFunc)EnFall_Update,
     (ActorFunc)NULL,
 };
-
-// object_lodmoon
-extern Gfx D_060010E0[]; // LodMoon eyes
-extern Gfx D_06001158[]; // LodMoon moon
-
-// object_moonston
-extern Gfx D_06000400[]; // Falling moon's tear
-extern Gfx D_060004C8[]; // Falling moon's tear flame trail
-extern AnimatedMaterial D_06001220;
-
-// object_fall2
-extern Gfx D_06002970[]; // Open-mouthed moon
-
-// object_fall
-extern Gfx D_06000198[]; // Sets up textures for debris
-extern Gfx D_06000220[]; // Debris 1
-extern Gfx D_06000428[]; // Debris 2
-extern Gfx D_06000498[]; // Debris 3
-extern Vtx D_060004C0[]; // Fire ball vertices
-extern Gfx D_060011D0[]; // Fire ball
-extern Gfx D_06003C30[]; // Fire ring
-extern AnimatedMaterial D_06004E38;
-extern Gfx D_060077F0[]; // Moon
 
 /**
  * Sets the scale of the moon depending on the current day. On the Final Day,
@@ -535,7 +516,7 @@ void EnFall_FireBall_SetPerVertexAlpha(f32 fireBallAlpha) {
 
     s32 pad;
     u8 perVertexAlphaTable[5];
-    Vtx* vertices = Lib_SegmentedToVirtual(&D_060004C0);
+    Vtx* vertices = Lib_SegmentedToVirtual(&object_fall_Vtx_0004C0);
     s32 i;
 
     if (fireBallAlpha > 1.0f) {
@@ -712,7 +693,7 @@ void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_MultiplyVector3fByState(sFocusOffset, &this->actor.focus.pos);
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
-    gSPDisplayList(POLY_OPA_DISP++, D_060077F0);
+    gSPDisplayList(POLY_OPA_DISP++, object_fall_DL_0077F0);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -727,7 +708,7 @@ void EnFall_OpenMouthMoon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
-    gSPDisplayList(POLY_OPA_DISP++, D_06002970);
+    gSPDisplayList(POLY_OPA_DISP++, object_fall2_DL_002970);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -746,9 +727,9 @@ void EnFall_LodMoon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH);
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
-    gSPDisplayList(POLY_OPA_DISP++, D_060010E0);
+    gSPDisplayList(POLY_OPA_DISP++, object_lodmoon_DL_0010E0);
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH);
-    gSPDisplayList(POLY_OPA_DISP++, D_06001158);
+    gSPDisplayList(POLY_OPA_DISP++, object_lodmoon_DL_001158);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -811,20 +792,20 @@ void EnFall_FireBall_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
-    gSPDisplayList(POLY_XLU_DISP++, D_060011D0);
+    gSPDisplayList(POLY_XLU_DISP++, object_fall_DL_0011D0);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Gfx* sDebrisDLists[] = { D_06000220, D_06000428, D_06000498 };
+    static Gfx* sDebrisDLists[] = { object_fall_DL_000220, object_fall_DL_000428, object_fall_DL_000498 };
     EnFall* this = THIS;
     f32 scale = this->scale * 0.06f;
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000198);
+    gSPDisplayList(POLY_OPA_DISP++, object_fall_DL_000198);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
@@ -851,13 +832,13 @@ void EnFall_FireRing_Draw(Actor* thisx, GlobalContext* globalCtx) {
             this->fireRingAlpha = 1.0f;
         }
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&D_06004E38));
+        AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_fall_Matanimheader_004E38));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_8012C2DC(globalCtx->state.gfxCtx);
         gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
         gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(this->fireRingAlpha * 255.0f));
-        gSPDisplayList(POLY_XLU_DISP++, D_06003C30);
+        gSPDisplayList(POLY_XLU_DISP++, object_fall_DL_003C30);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
@@ -866,13 +847,13 @@ void EnFall_MoonsTear_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06001220));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_moonston_Matanimheader_001220));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000400);
+    gSPDisplayList(POLY_OPA_DISP++, object_moonston_DL_000400);
     Matrix_Scale(3.0f, 3.0f, 6.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_XLU_DISP++, D_060004C8);
+    gSPDisplayList(POLY_XLU_DISP++, object_moonston_DL_0004C8);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
