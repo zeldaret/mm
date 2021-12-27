@@ -21,7 +21,7 @@ typedef enum {
 } EnPametfrogState;
 
 typedef enum {
-    /* 00 */ GEKKO_DRAW_EFFECT_NONE, // May be GEKKO_DRAW_EFFECT_THAW
+    /* 00 */ GEKKO_DRAW_EFFECT_THAW,
     /* 10 */ GEKKO_DRAW_EFFECT_FROZEN = 10,
     /* 20 */ GEKKO_DRAW_EFFECT_LIGHT_ORBS = 20,
     /* 30 */ GEKKO_DRAW_EFFECT_ELECTRIC_STUN = 30,

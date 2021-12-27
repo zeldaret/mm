@@ -145,7 +145,7 @@ void EffectSpark_Draw(void* thisx, GraphicsContext* gfxCtx) {
     OPEN_DISPS(gfxCtx);
 
     if (this != NULL) {
-        gSPMatrix(POLY_XLU_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x26);
         gDPSetCycleType(POLY_XLU_DISP++, G_CYC_2CYCLE);
