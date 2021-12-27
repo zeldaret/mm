@@ -2898,7 +2898,8 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
         sp118 = (player->actor.speedXZ * 0.3f) + 0.25f;
     }
 
-    if ((D_80917200 != 0) || (sCameraId != MAIN_CAM) || ((player->actor.world.pos.z > 1150.0f) && (this->unk_150 != 100))) {
+    if ((D_80917200 != 0) || (sCameraId != MAIN_CAM) ||
+        ((player->actor.world.pos.z > 1150.0f) && (this->unk_150 != 100))) {
         this->actor.flags &= ~1;
     } else {
         this->actor.flags |= 1;
