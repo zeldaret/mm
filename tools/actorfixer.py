@@ -7,7 +7,6 @@ import argparse, os
 
 # "old": "new"
 animdict = {
-    # Functions
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
@@ -306,8 +305,12 @@ animdict = {
     "func_8013E640": "SubS_ActorFindCustom",
     "func_ActorCategoryIterateById": "SubS_ActorFind",
     "func_8013BB7C": "SubS_ActorFindNearest",
+    "func_800A81F0": "EffectBlure_AddVertex",
+    "func_800A8514": "EffectBlure_AddSpace",
+    "Effect_GetParams": "Effect_GetByIndex",
+
+    "D_0407D590": "gGameplayKeepDrawFlameDL",
     
-    # Struct Members
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",
     "skelAnime.initialFrame": "skelAnime.startFrame",
@@ -324,9 +327,8 @@ animdict = {
     "skelAnime.prevFrameRot": "skelAnime.prevRot",
     "skelAnime.prevFramePos": "skelAnime.prevTransl",
     "skelAnime.unk3E": "skelAnime.baseTransl",
-    "actor.yDistToWater" : "actor.depthInWater",
-    "actor.yDistToPlayer" : "actor.playerHeightRel",
-
+    "actor.yDistToWater": "actor.depthInWater",
+    "actor.yDistToPlayer": "actor.playerHeightRel",
     "globalCtx->mf_187FC" : "globalCtx->billboardMtxF",
     "globalCtx->projectionMatrix" : "globalCtx->viewProjectionMtxF",
 }

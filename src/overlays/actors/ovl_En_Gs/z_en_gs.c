@@ -35,7 +35,7 @@ s32 func_809995A4(EnGs* this, GlobalContext* globalCtx);
 void func_80999A8C(EnGs* this, GlobalContext* globalCtx);
 void func_80999AC0(EnGs* this);
 
-extern Gfx D_0407D590[];
+extern Gfx gGameplayKeepDrawFlameDL[];
 extern Gfx D_06000950[];
 extern Gfx D_060009D0[];
 extern Gfx D_06000A60[];
@@ -1102,7 +1102,7 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-        gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
