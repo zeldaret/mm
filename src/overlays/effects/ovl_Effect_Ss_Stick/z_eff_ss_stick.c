@@ -5,6 +5,7 @@
  */
 
 #include "z_eff_ss_stick.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define PARAMS ((EffectSsStickInitParams*)initParamsx)
 
@@ -48,7 +49,7 @@ void EffectSsStick_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     func_8012C28C(gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->regs[0]].segment);
     gSPSegment(POLY_OPA_DISP++, 0x0C, D_801C0850);
-    gSPDisplayList(POLY_OPA_DISP++, D_040032B0);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0032B0);
     CLOSE_DISPS(gfxCtx);
 }
 
