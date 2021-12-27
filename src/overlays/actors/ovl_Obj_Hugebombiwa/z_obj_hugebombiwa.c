@@ -359,7 +359,7 @@ void ObjHugebombiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyCylinder(globalCtx, &((ObjHugebombiwa*)thisx)->collider);
+    Collider_DestroyCylinder(globalCtx, &THIS->collider);
 }
 
 void func_80A54BF0(ObjHugebombiwa* this) {
