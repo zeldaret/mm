@@ -6,6 +6,7 @@
 
 #include "z_en_st.h"
 #include "objects/object_st/object_st.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x01004035
 
@@ -177,11 +178,11 @@ void func_808A5050(EnSt* this, GlobalContext* globalCtx) {
         sp94.x = 0.0f;
         sp94.y = (Rand_ZeroOne() * 0.2f) + 0.1f;
         sp94.z = Rand_ZeroOne() + 1.0f;
-        Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, temp_s0, &sp94, &spAC);
+        Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, temp_s0, &sp94, &spAC);
         sp94.x = 0.0f;
         sp94.y = 1.0f;
         sp94.z = 5.0f;
-        Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, temp_s0, &sp94, &spB8);
+        Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, temp_s0, &sp94, &spB8);
 
         spA0.x = this->actor.world.pos.x + (2.0f * spB8.x);
         spA0.z = this->actor.world.pos.z + (2.0f * spB8.z);
@@ -192,7 +193,7 @@ void func_808A5050(EnSt* this, GlobalContext* globalCtx) {
     spA0.x = this->actor.world.pos.x;
     spA0.z = this->actor.world.pos.z;
     spA0.y = this->actor.floorHeight;
-    EffectSsBlast_SpawnWhiteCustomScale(globalCtx, &spA0, &D_801D15B0, &D_801D15B0, 100, 220, 8);
+    EffectSsBlast_SpawnWhiteCustomScale(globalCtx, &spA0, &gZeroVec3f, &gZeroVec3f, 100, 220, 8);
 }
 
 void func_808A52A8(EnSt* this, GlobalContext* globalCtx) {
@@ -216,13 +217,13 @@ void func_808A52A8(EnSt* this, GlobalContext* globalCtx) {
         sp94.y = (Rand_ZeroOne() * 0.2f) + 0.1f;
         sp94.z = Rand_ZeroOne() + 1.0f;
 
-        Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, temp_s0, &sp94, &spAC);
+        Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, temp_s0, &sp94, &spAC);
 
         sp94.x = 0.0f;
         sp94.y = 1.0f;
         sp94.z = 4.0f;
 
-        Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, temp_s0, &sp94, &spB8);
+        Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, temp_s0, &sp94, &spB8);
 
         spA0.x = this->actor.world.pos.x + (2.0f * spB8.x);
         spA0.z = this->actor.world.pos.z + (2.0f * spB8.z);
@@ -257,8 +258,8 @@ void func_808A54B0(EnSt* this, GlobalContext* globalCtx) {
         }
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u8)(255 * temp_f0));
-        gSPDisplayList(POLY_XLU_DISP++, D_04025850);
-        gSPDisplayList(POLY_XLU_DISP++, D_04025970);
+        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025850);
+        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025970);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
