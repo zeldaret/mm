@@ -3,6 +3,13 @@
 
 #include "global.h"
 
+#define EN_JG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
+
+#define EN_JG_FLAG_1 (1 << 0)
+#define EN_JG_FLAG_2 (1 << 1)
+#define EN_JG_FLAG_4 (1 << 2)
+#define EN_JG_FLAG_DRUM_SPAWNED (1 << 3)
+
 typedef enum {
     /*  0 */ EN_JG_LIMB_NONE,
     /*  1 */ EN_JG_LIMB_ROOT, // Root of Upper Body Root and Pelvis
@@ -42,13 +49,44 @@ typedef enum {
     /* 35 */ EN_JG_LIMB_MAX,
 } EnJgLimbs;
 
+typedef enum {
+    /*  0 */ EN_JG_ANIMATION_IDLE,
+    /*  1 */ EN_JG_ANIMATION_WALK,
+    /*  2 */ EN_JG_ANIMATION_WAVING,
+    /*  3 */ EN_JG_ANIMATION_SHAKING_HEAD,
+    /*  4 */ EN_JG_ANIMATION_SURPRISE_START,
+    /*  5 */ EN_JG_ANIMATION_SURPRISE_LOOP,
+    /*  6 */ EN_JG_ANIMATION_ANGRY,
+    /*  7 */ EN_JG_ANIMATION_FROZEN_START,
+    /*  8 */ EN_JG_ANIMATION_FROZEN_LOOP,
+    /*  9 */ EN_JG_ANIMATION_WALK_2,
+    /* 10 */ EN_JG_ANIMATION_TAKING_OUT_DRUM,
+    /* 11 */ EN_JG_ANIMATION_DRUM_IDLE,
+    /* 12 */ EN_JG_ANIMATION_PLAYING_DRUM,
+    /* 13 */ EN_JG_ANIMATION_THINKING,
+    /* 14 */ EN_JG_ANIMATION_REMEMBERING,
+    /* 15 */ EN_JG_ANIMATION_STRONG_REMEMBERING,
+    /* 16 */ EN_JG_ANIMATION_DEPRESSED,
+    /* 17 */ EN_JG_ANIMATION_IDLE_2,
+    /* 18 */ EN_JG_ANIMATION_CRADLE,
+    /* 19 */ EN_JG_ANIMATION_MAX,
+} EnJgAnimationIndex;
+
+typedef enum {
+    /* 0x0 */ EN_JG_ACTION_UNK0,
+    /* 0x1 */ EN_JG_ACTION_SPAWNING,
+    /* 0x2 */ EN_JG_ACTION_UNK2,
+    /* 0x3 */ EN_JG_ACTION_LULLABY_INTRO_CS,
+} EnJgAction;
+
+
 struct EnJg;
 
 typedef void (*EnJgActionFunc)(struct EnJg*, GlobalContext*);
 
 typedef struct EnJg {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ Actor* unk_144;
+    /* 0x144 */ Actor* shrineGoron;
     /* 0x148 */ Actor* icePoly;
     /* 0x14C */ ColliderCylinder collider;
     /* 0x198 */ SkelAnime skelAnime;
@@ -56,24 +94,23 @@ typedef struct EnJg {
     /* 0x1E0 */ Path* path;
     /* 0x1E4 */ s32 unk_1E4;
     /* 0x1E8 */ Actor* drum;
-    /* 0x1EC */ Vec3s unk_1EC;
-    /* 0x1F2 */ Vec3s unk_1F2;
+    /* 0x1EC */ Vec3s unusedRotation1; // probably meant to be a head rotation to look at the player
+    /* 0x1F2 */ Vec3s unusedRotation2; // probably meant to be a body rotation to look at the player
     /* 0x1F8 */ Vec3s jointTable[EN_JG_LIMB_MAX];
     /* 0x2CA */ Vec3s morphTable[EN_JG_LIMB_MAX];
-    /* 0x39C */ s16 unk_39C;
+    /* 0x39C */ s16 rootRotationWhenTalking;
     /* 0x39E */ s16 animationIndex;
-    /* 0x3A0 */ s16 unk_3A0;
-    /* 0x3A2 */ s16 unk_3A2;
-    /* 0x3A4 */ Vec3f unk_3A4;
-    /* 0x3B0 */ Vec3f unk_3B0;
-    /* 0x3BC */ Vec3f unk_3BC;
-    /* 0x3C8 */ s16 unk_3C8;
-    /* 0x3CA */ u8 unk_3CA;
-    /* 0x3CB */ u8 unk_3CB;
-    /* 0x3CC */ u16 unk_3CC;
-    /* 0x3CE */ u16 unk_3CE;
+    /* 0x3A0 */ s16 action;
+    /* 0x3A2 */ s16 freezeTimer;
+    /* 0x3A4 */ Vec3f breathPos;
+    /* 0x3B0 */ Vec3f breathVelocity;
+    /* 0x3BC */ Vec3f breathAccel;
+    /* 0x3C8 */ s16 cutscene;
+    /* 0x3CA */ u8 cutsceneAnimationIndex;
+    /* 0x3CB */ u8 csAction;
+    /* 0x3CC */ u16 flags;
+    /* 0x3CE */ u16 textId;
     /* 0x3D0 */ u8 unk_3D0;
-    /* 0x3D1 */ char unk_3D1[0x3];
 } EnJg; // size = 0x3D4
 
 extern const ActorInit En_Jg_InitVars;
