@@ -3053,11 +3053,7 @@ beginseg
     name "ovl_En_Kusa2"
     compress
     include "build/src/overlays/actors/ovl_En_Kusa2/z_en_kusa2.o"
-#ifdef NON_EQUIVALENT
     include "build/src/overlays/actors/ovl_En_Kusa2/ovl_En_Kusa2_reloc.o"
-#else
-    include "build/data/ovl_En_Kusa2/ovl_En_Kusa2.reloc.o"
-#endif
 endseg
 
 beginseg
