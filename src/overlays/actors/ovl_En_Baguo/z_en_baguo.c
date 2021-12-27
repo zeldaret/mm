@@ -200,8 +200,8 @@ void EnBaguo_Idle(EnBaguo* this, GlobalContext* globalCtx) {
 
     yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absoluteYaw = ABS_ALT(yaw);
-    Math_Vec3f_Copy(&this->targetRotation, &D_801D15B0);
-    Math_Vec3f_Copy(&this->currentRotation, &D_801D15B0);
+    Math_Vec3f_Copy(&this->targetRotation, &gZeroVec3f);
+    Math_Vec3f_Copy(&this->currentRotation, &gZeroVec3f);
     if (absoluteYaw < 0x2000) {
         this->targetRotation.x = 2000.0f;
     } else {

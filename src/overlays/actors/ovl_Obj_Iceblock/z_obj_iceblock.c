@@ -751,7 +751,7 @@ void func_80A24DD0(ObjIceblock* this, GlobalContext* globalCtx) {
             spA8.z += this->dyna.actor.world.pos.z;
 
             temp_f20 = ((Rand_ZeroOne() * 800.0f) + (1600.0f * this->dyna.actor.scale.x)) * phi_f22;
-            func_800B0E48(globalCtx, &spA8, &D_801D15B0, &D_80A26F90, &D_80A26F9C, &D_80A26FA0, temp_f20,
+            func_800B0E48(globalCtx, &spA8, &gZeroVec3f, &D_80A26F90, &D_80A26F9C, &D_80A26FA0, temp_f20,
                           (Rand_ZeroOne() * 20.0f) + 30.0f);
         }
     }
@@ -786,7 +786,7 @@ void func_80A2508C(ObjIceblock* this, GlobalContext* globalCtx) {
             sp34.z = (this->dyna.actor.scale.z * sp34.z) + this->dyna.actor.world.pos.z;
 
             if ((this->unk_244 - 3.0f) < sp34.y) {
-                EffectSsIceSmoke_Spawn(globalCtx, &sp34, &sp40, &D_801D15B0,
+                EffectSsIceSmoke_Spawn(globalCtx, &sp34, &sp40, &gZeroVec3f,
                                        (s32)(this->dyna.actor.scale.y * 1300.0f) + 60);
             }
         }

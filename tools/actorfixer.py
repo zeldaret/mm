@@ -331,6 +331,11 @@ animdict = {
     "actor.yDistToPlayer": "actor.playerHeightRel",
     "globalCtx->mf_187FC" : "globalCtx->billboardMtxF",
     "globalCtx->projectionMatrix" : "globalCtx->viewProjectionMtxF",
+
+    "D_801D15B0" : "gZeroVec3f",
+    "D_801D15BC" : "gZeroVec3s",
+    "D_801D1DE0" : "gIdentityMtx",
+    "D_801D1E20" : "gIdentityMtxF",
 }
 
 def replace_anim(file):
