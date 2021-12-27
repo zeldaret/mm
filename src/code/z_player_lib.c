@@ -964,10 +964,10 @@ void func_80123C58(Player* player) {
     player->unk_AA5 = 0;
 }
 
-void func_80123C90(GlobalContext* globalCtx, Player* player) {
+void Player_SetEquipmentData(GlobalContext* globalCtx, Player* player) {
     if (player->unk_394 != 0x86) {
         player->currentShield = CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD);
-        if ((player->transformation != 2) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) && (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
+        if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) && (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
             player->currentBoots = D_801BFF90[player->transformation];
         }
         func_80123BD4(player, func_80123960(player, player->itemActionParam));

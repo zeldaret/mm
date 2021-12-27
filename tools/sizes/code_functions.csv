@@ -1720,7 +1720,7 @@ asm/non_matchings/code/z_player_lib/func_801239AC.s,func_801239AC,0x801239AC,0x3
 asm/non_matchings/code/z_player_lib/func_80123AA4.s,func_80123AA4,0x80123AA4,0x4C
 asm/non_matchings/code/z_player_lib/func_80123BD4.s,func_80123BD4,0x80123BD4,0x21
 asm/non_matchings/code/z_player_lib/func_80123C58.s,func_80123C58,0x80123C58,0xE
-asm/non_matchings/code/z_player_lib/func_80123C90.s,func_80123C90,0x80123C90,0x30
+asm/non_matchings/code/z_player_lib/Player_SetEquipmentData.s,Player_SetEquipmentData,0x80123C90,0x30
 asm/non_matchings/code/z_player_lib/func_80123D50.s,func_80123D50,0x80123D50,0x15
 asm/non_matchings/code/z_player_lib/func_80123DA4.s,func_80123DA4,0x80123DA4,0x7
 asm/non_matchings/code/z_player_lib/func_80123DC0.s,func_80123DC0,0x80123DC0,0x34

@@ -2167,7 +2167,7 @@ s32 func_80123960(Player* player, s32 arg1);
 // void func_80123AA4(void);
 // void func_80123BD4(void);
 // void func_80123C58(void);
-// void func_80123C90(void);
+// void Player_SetEquipmentData(void);
 void func_80123D50(GlobalContext* globalCtx, Player* player, UNK_TYPE arg2, UNK_TYPE arg3);
 void func_80123DA4(Player* player);
 // void func_80123DC0(void);
