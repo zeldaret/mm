@@ -659,7 +659,7 @@ void func_80872648(GlobalContext* globalCtx, Vec3f* arg1) {
 
     for (i = 0; i < ARRAY_COUNT(D_80874650); i++, ptr++) {
         Math_Vec3f_Copy(&ptr->unk_00, arg1);
-        Math_Vec3f_Copy(&ptr->unk_0C, &D_801D15B0);
+        Math_Vec3f_Copy(&ptr->unk_0C, &gZeroVec3f);
         ptr->unk_18 = 0;
         ptr->unk_1A = 0x4000;
     }
@@ -756,7 +756,7 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
             }
 
             Math_Vec3f_Sum(&ptr->unk_00, &spC0, &ptr2->unk_00);
-            Math_Vec3f_Copy(&ptr2->unk_0C, &D_801D15B0);
+            Math_Vec3f_Copy(&ptr2->unk_0C, &gZeroVec3f);
         }
 
         ptr2->unk_0C.y += -1.0f;
