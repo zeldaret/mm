@@ -237,8 +237,8 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnRd_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnRd* this = THIS;
 
-    if (gSaveContext.unk_3F58 != 0) {
-        gSaveContext.unk_3F58 = 0;
+    if (gSaveContext.sunsSongState != SUNSSONG_INACTIVE) {
+        gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
@@ -994,7 +994,7 @@ void func_808D64D0(EnRd* this) {
     this->unk_3D6 = 0xA;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (gSaveContext.unk_3F58 != 0) {
+    if (gSaveContext.sunsSongState != SUNSSONG_INACTIVE) {
         this->unk_3E9 = 1;
         this->unk_3E0 = 600;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
@@ -1021,7 +1021,7 @@ void func_808D65BC(EnRd* this, GlobalContext* globalCtx) {
 
             if (this->unk_3E0 == 0) {
                 this->unk_3E9 = 0;
-                gSaveContext.unk_3F58 = 0;
+                gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
             }
         }
     }
@@ -1060,7 +1060,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((gSaveContext.unk_3F58 != 0) && (this->actor.shape.rot.x == 0) && (this->unk_3E9 == 0) &&
+    if ((gSaveContext.sunsSongState != SUNSSONG_INACTIVE) && (this->actor.shape.rot.x == 0) && (this->unk_3E9 == 0) &&
         (this->unk_3EF != 11) && (this->unk_3EF != 12) && (this->unk_3EF != 1)) {
         func_808D64D0(this);
         return;
@@ -1171,8 +1171,8 @@ void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRd* this = THIS;
 
     func_808D6814(this, globalCtx);
-    if ((gSaveContext.unk_3F58 != 0) && (this->unk_3E9 == 0)) {
-        gSaveContext.unk_3F58 = 0;
+    if ((gSaveContext.sunsSongState != SUNSSONG_INACTIVE) && (this->unk_3E9 == 0)) {
+        gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
     }
 
     if ((this->unk_3F0 != 6) && ((this->unk_3EF != 13) || (this->unk_3F0 != 2))) {

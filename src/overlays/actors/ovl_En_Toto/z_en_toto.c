@@ -561,7 +561,7 @@ s32 func_80BA46D8(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA4740(EnToto* this, GlobalContext* globalCtx) {
-    if (globalCtx->msgCtx.unk1202A == 4) {
+    if (globalCtx->msgCtx.ocarinaMode == 4) {
         if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
             gSaveContext.weekEventReg[56] |= 0x10;
         }

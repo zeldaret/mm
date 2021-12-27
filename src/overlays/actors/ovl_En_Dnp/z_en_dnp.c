@@ -375,7 +375,7 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.world.rot.x = this->actor.shape.rot.x;
         this->actor.cutscene = 0x10;
         this->actionFunc = func_80B3D47C;
-    } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !func_80114F2C(0x17) &&
+    } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) &&
                 !(gSaveContext.weekEventReg[23] & 0x20)) ||
                ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.weekEventReg[23] & 0x20))) {
         Actor_SetScale(&this->actor, 0.0085f);

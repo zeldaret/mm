@@ -1633,8 +1633,8 @@ asm/non_matchings/code/z_parameter/func_801149A0.s,func_801149A0,0x801149A0,0x3F
 asm/non_matchings/code/z_parameter/func_80114A9C.s,func_80114A9C,0x80114A9C,0x3A
 asm/non_matchings/code/z_parameter/func_80114B84.s,func_80114B84,0x80114B84,0x47
 asm/non_matchings/code/z_parameter/func_80114CA0.s,func_80114CA0,0x80114CA0,0x7C
-asm/non_matchings/code/z_parameter/func_80114E90.s,func_80114E90,0x80114E90,0x27
-asm/non_matchings/code/z_parameter/func_80114F2C.s,func_80114F2C,0x80114F2C,0x29
+asm/non_matchings/code/z_parameter/Interface_HasEmptyBottle.s,Interface_HasEmptyBottle,0x80114E90,0x27
+asm/non_matchings/code/z_parameter/Interface_HasItemInBottle.s,Interface_HasItemInBottle,0x80114F2C,0x29
 asm/non_matchings/code/z_parameter/func_80114FD0.s,func_80114FD0,0x80114FD0,0x58
 asm/non_matchings/code/z_parameter/func_80115130.s,func_80115130,0x80115130,0x62
 asm/non_matchings/code/z_parameter/func_801152B8.s,func_801152B8,0x801152B8,0x44

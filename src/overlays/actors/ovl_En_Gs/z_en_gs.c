@@ -276,7 +276,7 @@ void func_80998040(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
-    switch (globalCtx->msgCtx.unk1202A) {
+    switch (globalCtx->msgCtx.ocarinaMode) {
         case 3:
             switch (globalCtx->msgCtx.unk1202E) {
                 case 7:

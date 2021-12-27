@@ -557,23 +557,22 @@ void func_808B9CE8(DoorWarp1* this, GlobalContext* globalCtx) {
             break;
 
         case SCENE_HAKUGIN_BS:
-            gSaveContext.unk_ECC[0] = (((void)0, gSaveContext.unk_ECC[0]) & 0xFFFF00FF) |
-                                           ((((u8)gSaveContext.unk_ECC[1]) & 0xFF) << 8);
+            gSaveContext.unk_ECC[0] =
+                (((void)0, gSaveContext.unk_ECC[0]) & 0xFFFF00FF) | ((((u8)gSaveContext.unk_ECC[1]) & 0xFF) << 8);
             break;
 
         case SCENE_INISIE_BS:
-            gSaveContext.unk_ECC[0] = (((void)0, gSaveContext.unk_ECC[0]) & 0xFF00FFFF) |
-                                           ((((u8)gSaveContext.unk_ECC[1]) & 0xFF) << 0x10);
+            gSaveContext.unk_ECC[0] =
+                (((void)0, gSaveContext.unk_ECC[0]) & 0xFF00FFFF) | ((((u8)gSaveContext.unk_ECC[1]) & 0xFF) << 0x10);
             break;
 
         case SCENE_SEA_BS:
-            gSaveContext.unk_ECC[0] = (((void)0, gSaveContext.unk_ECC[0]) & 0x00FFFFFF) |
-                                           ((((u8)gSaveContext.unk_ECC[1]) & 0xFF) << 0x18);
+            gSaveContext.unk_ECC[0] =
+                (((void)0, gSaveContext.unk_ECC[0]) & 0x00FFFFFF) | ((((u8)gSaveContext.unk_ECC[1]) & 0xFF) << 0x18);
             break;
     }
 
-    gSaveContext.unk_ECC[1] =
-        (gSaveContext.unk_ECC[1] & 0xFFFFFF00) | ((((u8)gSaveContext.unk_ECC[1]) + 1) & 0xFF);
+    gSaveContext.unk_ECC[1] = (gSaveContext.unk_ECC[1] & 0xFFFFFF00) | ((((u8)gSaveContext.unk_ECC[1]) + 1) & 0xFF);
     Item_Give(globalCtx, func_808B849C(this, globalCtx) + (ITEM_REMAINS_ODOLWA - 1));
     DoorWarp1_SetupAction(this, func_808B9E94);
 }

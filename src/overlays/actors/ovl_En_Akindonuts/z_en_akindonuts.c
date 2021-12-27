@@ -321,7 +321,7 @@ s32 func_80BED27C(EnAkindonuts* this) {
 }
 
 s32 func_80BED2FC(EnAkindonuts* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return 2;
     }
 
@@ -335,7 +335,7 @@ s32 func_80BED2FC(EnAkindonuts* this) {
 }
 
 s32 func_80BED35C(EnAkindonuts* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return 2;
     }
 
