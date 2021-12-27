@@ -146,9 +146,10 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS),$(wildcard $(dir)/*.c))
 S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
+BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(C_FILES:.c=.o),build/$f) \
-                 $(foreach f,$(wildcard baserom/*),build/$f.o)
+                 $(foreach f,$(BASEROM_FILES),build/$f.o)
 
 # Automatic dependency files
 # (Only asm_processor dependencies are handled for now)
@@ -171,6 +172,8 @@ build/src/libultra/flash/%.o: OPTFLAGS := -g
 build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 build/src/code/audio/%.o: OPTFLAGS := -O2
+
+build/assets/%.o: OPTFLAGS := 
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
@@ -289,7 +292,7 @@ build/baserom/%.o: baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
 build/data/%.o: data/%.s
-	iconv --from UTF-8 --to EUC-JP $< | $(AS) $(ASFLAGS) -o $@
+	$(AS) $(ASFLAGS) $< -o $@
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<

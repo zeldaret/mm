@@ -67,7 +67,7 @@ typedef struct {
     /* 0x0039 */ s8 magic;                   // "magic_now"
     /* 0x003A */ s16 rupees;                 // "lupy_count"
     /* 0x003C */ u16 swordHealth;            // "long_sword_hp"
-    /* 0x003E */ u16 naviTimer;              // "navi_timer"
+    /* 0x003E */ u16 tatlTimer;              // "navi_timer"
     /* 0x0040 */ u8 magicAcquired;           // "magic_mode"
     /* 0x0041 */ u8 doubleMagic;             // "magic_ability"
     /* 0x0042 */ u8 doubleDefense;           // "life_ability"

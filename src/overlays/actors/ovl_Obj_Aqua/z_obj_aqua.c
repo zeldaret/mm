@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_aqua.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -66,8 +67,6 @@ Vec3f D_80ACC308 = { 1.0f / 1000.0f, 7.0f / 10000.0f, 1.0f / 1000.0f };
 Vec3f D_80ACC314 = { 8.6f / 1000.0f, 8.0f / 10000.0f, 8.6f / 1000.0f };
 Vec3f D_80ACC320 = { 1.0f / 100.0f, 2.6f / 1000.0f, 1.0f / 100.0f };
 
-extern Gfx D_0407D590[];
-
 void func_80ACB6A0(ObjAqua* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f sp58;
@@ -115,7 +114,7 @@ void func_80ACB940(ObjAqua* this, GlobalContext* globalCtx) {
     effectPos.x = this->actor.world.pos.x + (effectVel.x * 40.0f);
     effectPos.y = this->actor.world.pos.y;
     effectPos.z = this->actor.world.pos.z + (effectVel.z * 40.0f);
-    EffectSsIceSmoke_Spawn(globalCtx, &effectPos, &effectVel, &D_801D15B0, (s32)(Rand_ZeroOne() * 24.0f) + 70);
+    EffectSsIceSmoke_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, (s32)(Rand_ZeroOne() * 24.0f) + 70);
 }
 
 void func_80ACBA10(ObjAqua* this) {
@@ -292,6 +291,6 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
     Matrix_RotateY(yaw, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

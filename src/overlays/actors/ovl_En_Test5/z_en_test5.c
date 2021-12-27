@@ -102,7 +102,7 @@ void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx2) {
             steamVel.x = 0.0f;
             steamVel.z = 0.0f;
 
-            EffectSsIceSmoke_Spawn(globalCtx, &steamPos, &steamVel, &D_801D15B0,
+            EffectSsIceSmoke_Spawn(globalCtx, &steamPos, &steamVel, &gZeroVec3f,
                                    (s16)((-200) - (s32)(Rand_ZeroOne() * 50.0f)));
         }
     }

@@ -371,9 +371,18 @@ animdict = {
     "func_8017F9C0": "Math3D_XZInSphere",
     "func_8017FA34": "Math3D_XYInSphere",
     "func_8017FAA8": "Math3D_YZInSphere",
+    "func_800A81F0": "EffectBlure_AddVertex",
+    "func_800A8514": "EffectBlure_AddSpace",
+    "Effect_GetParams": "Effect_GetByIndex",
 
+    # Variables
+    "D_0407D590": "gGameplayKeepDrawFlameDL",
+    "D_801D15B0" : "gZeroVec3f",
+    "D_801D15BC" : "gZeroVec3s",
+    "D_801D1DE0" : "gIdentityMtx",
+    "D_801D1E20" : "gIdentityMtxF",
 
-    # structs members
+    # Structs members
     "skelanime.unk03": "skelanime.taper",
     "skelanime.animCurrentSeg": "skelanime.animation",
     "skelanime.initialFrame": "skelanime.startFrame",
