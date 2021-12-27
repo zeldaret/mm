@@ -292,9 +292,9 @@ void func_80AD75A8(EnKame* this, GlobalContext* globalCtx) {
             u32 temp_v0 = func_800C9BB8(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
             if ((temp_v0 == 0) || (temp_v0 == 1)) {
-                func_800B1210(globalCtx, &this->actor.world.pos, &D_80AD8E5C, &D_801D15B0, 550, 100);
+                func_800B1210(globalCtx, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, 550, 100);
             } else if (temp_v0 == 14) {
-                func_800B0DE0(globalCtx, &this->actor.world.pos, &D_80AD8E5C, &D_801D15B0, &D_80AD8E54, &D_80AD8E58,
+                func_800B0DE0(globalCtx, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, &D_80AD8E54, &D_80AD8E58,
                               550, 100);
             }
         }
@@ -607,7 +607,7 @@ void func_80AD8388(EnKame* this, GlobalContext* globalCtx) {
         sp34.x = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.x;
         sp34.y = this->actor.world.pos.y + 15.0f;
         sp34.z = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.z;
-        func_800B3030(globalCtx, &sp34, &D_801D15B0, &D_801D15B0, 100, 0, 2);
+        func_800B3030(globalCtx, &sp34, &gZeroVec3f, &gZeroVec3f, 100, 0, 2);
     }
 }
 
