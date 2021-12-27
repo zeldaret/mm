@@ -1,7 +1,7 @@
 /*
  * File: z_en_test4.c
  * Overlay: ovl_En_Test4
- * Description: Day transition effects
+ * Description: Three-Day Timer
  */
 
 #include "z_en_test4.h"

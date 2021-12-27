@@ -1,7 +1,7 @@
 /*
  * File: z_obj_funen.c
  * Overlay: ovl_Obj_Funen
- * Description:
+ * Description: Unused(?) Stone Tower smoke
  */
 
 #include "z_obj_funen.h"
