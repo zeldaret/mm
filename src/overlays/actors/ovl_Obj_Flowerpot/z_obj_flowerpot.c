@@ -583,10 +583,10 @@ void func_80A1CD10(ObjFlowerpot* this) {
 
 void func_80A1CEF4(ObjFlowerpot* this2, GlobalContext* globalCtx) {
     ObjFlowerpot* this = this2;
-    s32 sp28 = this->collider.elements[0].info.toucherFlags & 2;
+    s32 sp28 = this->collider.elements[0].info.toucherFlags & TOUCH_HIT;
 
     if (sp28) {
-        this->collider.elements[0].info.toucherFlags &= ~1;
+        this->collider.elements[0].info.toucherFlags &= ~TOUCH_ON;
     }
 
     if (this->unk_1E8 > 0) {
