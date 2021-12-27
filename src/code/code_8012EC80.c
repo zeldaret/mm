@@ -25,8 +25,8 @@ u16 gEquipNegMasks[] = {
     (u16) ~(0xF << 12), // Unused (Boots)
 };
 
-// 3 = two bits
-// 7 = three bits
+// 3 = two bit masks
+// 7 = three bit masks
 u32 gUpgradeMasks[] = {
     7 << 0,  // Quivers
     7 << 3,  // Bomb Bags
