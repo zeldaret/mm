@@ -234,16 +234,22 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
     (void)"__osRealloc(%08x, %d)\n";
 
     if (ptr == NULL) {
+        // if the `ptr` is NULL, then allocate a new pointer with the specified size
+        // if newSize is 0, then __osMalloc would return a NULL pointer
         ptr = __osMalloc(arena, newSize);
     } else if (newSize == 0) {
+        // if the requested size is zero, then free the pointer
         __osFree(arena, ptr);
         ptr = NULL;
     } else {
         size_t diff;
         void* newPtr;
+        // Gets the start of the ArenaNode pointer embedded 
         ArenaNode* node = (uintptr_t)ptr - sizeof(ArenaNode);
 
         newSize = ALIGN16(newSize);
+
+        // Only reallocate the memory if the new size isn't smaller than the actual node size
         if ((newSize != node->size) && (node->size < newSize)) {
             ArenaNode* next = node->next;
 
@@ -256,6 +262,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
 
                 next->size = (next->size - diff);
                 if (next2 != NULL) {
+                    // Update the previous element of the linked list
                     next2->prev = (void*)((uintptr_t)next + diff);
                 }
 
@@ -264,6 +271,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
                 node->size = newSize;
                 __osMemcpy(next2, next, sizeof(ArenaNode));
             } else {
+                // Create a new pointer and manually copy the data from the old pointer to the new one
                 newPtr = __osMalloc(arena, newSize);
                 if (newPtr != NULL) {
                     bcopy(newPtr, ptr, node->size);
