@@ -3005,7 +3005,7 @@ void func_80169E6C(GlobalContext* globalCtx, s32 param_1, s32 param_2);
 // void func_80169ECC(void);
 void func_80169EFC(GlobalContext* globalCtx);
 void func_80169F78(GlobalContext* globalCtx);
-// void func_80169FDC(void);
+void func_80169FDC(GlobalContext* globalCtx);
 // void func_80169FFC(void);
 s32 FrameAdvance_IsEnabled(GlobalContext* globalCtx);
 // UNK_TYPE4 func_8016A02C(s32 param_1, s32 param_2, s16* param_3);

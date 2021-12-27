@@ -3227,7 +3227,7 @@ extern GameInfo* gGameInfo;
 // extern UNK_TYPE2 D_801F4DCC[8];
 // extern UNK_TYPE1 D_801F4DDC;
 // extern UNK_TYPE1 D_801F4DE0;
-// extern UNK_TYPE2 D_801F4DE2;
+extern s16 D_801F4DE2;
 extern ActorCutscene* actorCutscenes;
 extern s16 actorCutsceneCount;
 extern u8 actorCutsceneWaiting[16];
