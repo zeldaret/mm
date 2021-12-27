@@ -845,7 +845,7 @@ void func_80AD5234(EnTrt2* this, GlobalContext* globalCtx) {
 
 void func_80AD5394(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     Vec3f sp7C;
-    Vec3f sp70 = D_801D15B0;
+    Vec3f sp70 = gZeroVec3f;
     Vec3s sp68;
     MtxF sp28;
 
