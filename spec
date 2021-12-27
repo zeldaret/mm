@@ -4441,8 +4441,7 @@ beginseg
     name "ovl_Bg_Inibs_Movebg"
     compress
     include "build/src/overlays/actors/ovl_Bg_Inibs_Movebg/z_bg_inibs_movebg.o"
-    include "build/data/ovl_Bg_Inibs_Movebg/ovl_Bg_Inibs_Movebg.data.o"
-    include "build/data/ovl_Bg_Inibs_Movebg/ovl_Bg_Inibs_Movebg.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Inibs_Movebg/ovl_Bg_Inibs_Movebg_reloc.o"
 endseg
 
 beginseg
