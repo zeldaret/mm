@@ -44,8 +44,7 @@ void func_80A5EA48(Actor* thisx, GlobalContext* globalCtx);
 
 static EnKusa2UnkBssStruct D_80A5F1C0;
 static u32 D_80A60900;
-// f32 D_80A60908[2][4][16];
-static MtxF D_80A60908[2][4];
+static MtxF D_80A60908[8];
 static s16 D_80A60B08;
 static s16 D_80A60B0A;
 static s16 D_80A60B0C;
@@ -160,51 +159,32 @@ void func_80A5B490(EnKusa2* this, GlobalContext* globalCtx) {
                                   ENKUSA2_GET_7F00(&this->actor) << 9, this->actor.cutscene, this->actor.unk20, NULL);
 }
 
-#ifdef NON_EQUIVALENT
-// Possibly MtxF memes? Need to figure out the type for D_80A60908
 void func_80A5B508(void) {
     s32 i;
-    s32 idx;
+    s32 pad;
     f32 spB4;
+    f32* ptr;
     f32 spAC;
     f32 spA8;
-    f32 sp74[8];
-    f32 sp50;
-    f32 sp4C;
-
-    f32 temp_f10;
-    f32 temp_f12;
-    f32 temp_f14;
-    f32 temp_f16;
-    f32 temp_f18;
-    f32 temp_f20;
-    f32 temp_f22;
-    f32 temp_f22_2;
-    f32 temp_f24;
-    f32 temp_f26;
-    f32 temp_f26_2;
-    f32 temp_f28;
-    f32 temp_f2;
-    f32 temp_f2_2;
-    f32 temp_f30;
-    f32 temp_f30_2;
-    f32* temp_v1;
-    s32 temp_a1;
-
     f32 tempf1;
     f32 tempf2;
     f32 tempf3;
     f32 tempf4;
     f32 tempf5;
-    f32 tempf6;
-    f32 tempf7;
-    f32 tempf8;
+    f32 sp74[8];
+    f32 temp_f20;
+    f32 temp_f22;
+    f32 temp_f24;
+    f32 temp_f26;
+    f32 temp_f28;
+    f32 temp_f2;
+    f32 temp_f30;
 
-    D_80A60B08 += 0x46;
-    D_80A60B0A += 0x12C;
-    D_80A60B0C += 0x2BC;
-    D_80A60B0E += 0x514;
-    D_80A60B10 += 0x22C4;
+    D_80A60B08 += 70;
+    D_80A60B0A += 300;
+    D_80A60B0C += 700;
+    D_80A60B0E += 1300;
+    D_80A60B10 += 8900;
     temp_f28 = Math_SinS(D_80A60B08);
     spB4 = Math_SinS(D_80A60B0A);
     temp_f30 = Math_SinS(D_80A60B0C);
@@ -216,126 +196,56 @@ void func_80A5B508(void) {
     temp_f24 = Math_CosS(D_80A60B0E) * 1.3f;
     temp_f2 = Math_CosS(D_80A60B10) * 1.7f;
 
-    tempf1 = temp_f28 - temp_f20;
-    tempf2 = spB4 - temp_f22;
-    tempf3 = temp_f30 - temp_f24;
-    tempf4 = spAC - temp_f20;
-    tempf5 = temp_f28 - temp_f22;
-    tempf6 = spB4 - temp_f24;
-    tempf7 = temp_f30 - temp_f26;
-    tempf8 = spAC - temp_f20;
+    sp74[0] = (temp_f28 - temp_f20) * temp_f30 * temp_f26 * temp_f28;
+    sp74[1] = (spB4 - temp_f22) * spAC * temp_f20 * temp_f28;
+    sp74[2] = (temp_f30 - temp_f24) * temp_f22 * temp_f28 * temp_f26;
+    sp74[3] = (spAC - temp_f20) * temp_f24 * spB4 * temp_f26;
+    sp74[4] = (temp_f28 - temp_f22) * temp_f28 * spB4 * spA8;
+    sp74[5] = (spB4 - temp_f24) * temp_f30 * spAC * spA8;
+    sp74[6] = (temp_f30 - temp_f26) * temp_f26 * temp_f20 * temp_f2;
+    sp74[7] = (spAC - temp_f20) * temp_f22 * temp_f24 * temp_f2;
 
-    sp74[0] = tempf1 * temp_f30 * temp_f26 * temp_f28;
-    sp74[1] = tempf2 * spAC * temp_f20 * temp_f28;
-    sp74[2] = tempf3 * temp_f22 * temp_f28 * temp_f26;
-    sp74[3] = tempf4 * temp_f24 * spB4 * temp_f26;
-    sp74[4] = tempf5 * temp_f28 * spB4 * spA8;
-    sp74[5] = tempf6 * temp_f30 * spAC * spA8;
-    sp74[6] = tempf7 * temp_f26 * temp_f20 * temp_f2;
-    sp74[7] = tempf8 * temp_f22 * temp_f24 * temp_f2;
+    for (i = 0; i < ARRAY_COUNT(D_80A60908); i++) {
+        ptr = (f32*)&D_80A60908[i].mf[0];
 
-    sp50 = sp74[1] * 0.2f;
-    sp4C = sp74[3] * 0.2f;
+        tempf1 = sp74[(i + 0) & 7];
+        tempf2 = sp74[(i + 1) & 7];
+        tempf3 = sp74[(i + 2) & 7];
+        tempf4 = sp74[(i + 3) & 7];
+        tempf5 = sp74[(i + 4) & 7];
 
-    for (i = 0, idx = 0; i < 2; i++, idx += 4) {
-        tempf1 = sp74[(idx + 0) & 7];
-        tempf2 = sp74[(idx + 1) & 7];
-        tempf3 = sp74[(idx + 2) & 7];
-        tempf4 = sp74[(idx + 3) & 7];
-        tempf5 = sp74[(idx + 4) & 7];
-        tempf6 = sp74[(idx + 5) & 7];
-        tempf7 = sp74[(idx + 6) & 7];
-        tempf8 = sp74[(idx + 7) & 7];
+        ptr[0] = sp74[1] * 0.2f;
+        ptr[1] = tempf1;
+        ptr[2] = tempf2;
+        ptr[3] = 0.0f;
 
-        D_80A60908[i][0] = sp50;
-        D_80A60908[i][1] = tempf1;
-        D_80A60908[i][2] = tempf2;
-        D_80A60908[i][3] = 0.0f;
-        D_80A60908[i][4] = tempf3;
-        D_80A60908[i][5] = sp74[0];
-        D_80A60908[i][6] = tempf3;
-        D_80A60908[i][7] = 0.0f;
-        D_80A60908[i][8] = tempf4;
-        D_80A60908[i][9] = tempf5;
-        D_80A60908[i][10] = sp4C;
-        D_80A60908[i][11] = 0.0f;
-        D_80A60908[i][12] = 0.0f;
-        D_80A60908[i][13] = 0.0f;
-        D_80A60908[i][14] = 0.0f;
-        D_80A60908[i][15] = 0.0f;
-        D_80A60908[i][16] = sp50;
-        D_80A60908[i][17] = tempf2;
-        D_80A60908[i][18] = tempf3;
-        D_80A60908[i][19] = 0.0f;
-        D_80A60908[i][20] = tempf4;
-        D_80A60908[i][21] = sp74[0];
-        D_80A60908[i][22] = tempf4;
-        D_80A60908[i][23] = 0.0f;
-        D_80A60908[i][24] = tempf5;
-        D_80A60908[i][25] = tempf6;
-        D_80A60908[i][26] = sp4C;
-        D_80A60908[i][27] = 0.0f;
-        D_80A60908[i][28] = 0.0f;
-        D_80A60908[i][29] = 0.0f;
-        D_80A60908[i][30] = 0.0f;
-        D_80A60908[i][31] = 0.0f;
+        ptr[4] = tempf3;
+        ptr[5] = sp74[0];
+        ptr[6] = tempf3;
+        ptr[7] = 0.0f;
 
-        D_80A60908[i][32] = sp50;
-        D_80A60908[i][33] = tempf3;
-        D_80A60908[i][34] = tempf4;
-        D_80A60908[i][35] = 0.0f;
-        D_80A60908[i][36] = tempf5;
-        D_80A60908[i][37] = sp74[0];
-        D_80A60908[i][38] = tempf5;
-        D_80A60908[i][39] = 0.0f;
-        D_80A60908[i][40] = tempf6;
-        D_80A60908[i][41] = tempf7;
-        D_80A60908[i][42] = sp4C;
-        D_80A60908[i][43] = 0.0f;
-        D_80A60908[i][44] = 0.0f;
-        D_80A60908[i][45] = 0.0f;
-        D_80A60908[i][46] = 0.0f;
-        D_80A60908[i][47] = 0.0f;
-        D_80A60908[i][48] = sp50;
-        D_80A60908[i][49] = tempf4;
-        D_80A60908[i][50] = tempf5;
-        D_80A60908[i][51] = 0.0f;
-        D_80A60908[i][52] = tempf6;
-        D_80A60908[i][53] = sp74[0];
-        D_80A60908[i][54] = tempf6;
-        D_80A60908[i][55] = 0.0f;
-        D_80A60908[i][56] = tempf7;
-        D_80A60908[i][57] = tempf8;
-        D_80A60908[i][58] = sp4C;
-        D_80A60908[i][59] = 0.0f;
-        D_80A60908[i][60] = 0.0f;
-        D_80A60908[i][61] = 0.0f;
-        D_80A60908[i][62] = 0.0f;
-        D_80A60908[i][63] = 0.0f;
+        ptr[8] = tempf4;
+        ptr[9] = tempf5;
+        ptr[10] = sp74[3] * 0.2f;
+        ptr[11] = 0.0f;
+
+        ptr[12] = 0.0f;
+        ptr[13] = 0.0f;
+        ptr[14] = 0.0f;
+        ptr[15] = 0.0f;
     }
 }
-#else
-void func_80A5B508(void);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kusa2/func_80A5B508.s")
-#endif
 
-#ifdef NON_EQUIVALENT
-// Meant to be a MtxF?, but using a2 instead of v0 for the end value
-void func_80A5B954(f32 arg0[2][16], f32 arg1) {
+void func_80A5B954(MtxF* matrix, f32 arg1) {
     s32 i;
-    MtxF* matrix = Matrix_GetCurrentState();
+    MtxF* temp = Matrix_GetCurrentState();
+    f32* tmp = (f32*)&temp->mf[0];
+    f32* tmp2 = (f32*)&matrix->mf[0];
 
-    for (i = 0; i < ARRAY_COUNT(arg0[0]); i++) {
-        matrix->mf[0][i] += arg0[0][i] * arg1;
-        // matrix->mf[i][1] += arg0->mf[i][1] * arg1;
-        // matrix->mf[i][2] += arg0->mf[i][2] * arg1;
-        // matrix->mf[i][3] += arg0->mf[i][3] * arg1;
+    for (i = 0; i < 16; i++) {
+        *tmp++ += *tmp2++ * arg1;
     }
 }
-#else
-void func_80A5B954(f32* arg0, f32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kusa2/func_80A5B954.s")
-#endif
 
 s32 func_80A5BA58(EnKusa2* this, GlobalContext* globalCtx) {
     Vec3f sp24;
@@ -359,7 +269,6 @@ void func_80A5BAFC(EnKusa2* this, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 35.0f, 0.0f, 0x45);
 }
 
-#ifdef NON_EQUIVALENT
 void func_80A5BB40(EnKusa2* this, GlobalContext* globalCtx, s32 arg2) {
     static Vec3f D_80A5EB0C = { 0.0f, 0.3f, 0.0f };
     static Vec3f D_80A5EB18 = { 0.0f, 0.0f, 0.0f };
@@ -392,12 +301,6 @@ void func_80A5BB40(EnKusa2* this, GlobalContext* globalCtx, s32 arg2) {
         }
     }
 }
-#else
-static Vec3f D_80A5EB0C = { 0.0f, 0.3f, 0.0f };
-static Vec3f D_80A5EB18 = { 0.0f, 0.0f, 0.0f };
-void func_80A5BB40(EnKusa2* this, GlobalContext* globalCtx, s32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kusa2/func_80A5BB40.s")
-#endif
 
 void func_80A5BD14(EnKusa2* this, GlobalContext* globalCtx, s32 arg2) {
     static s32 D_80A5EB24[] = {
@@ -515,52 +418,52 @@ EnKusa2UnkBssSubStruct2* func_80A5C0B8(EnKusa2UnkBssStruct* arg0) {
 
 EnKusa2UnkBssSubStruct* func_80A5C104(EnKusa2UnkBssStruct* arg0, Vec3f* arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
     static s32 D_80A5EB48 = 0;
-    EnKusa2UnkBssSubStruct* temp_s0 = func_80A5C074(arg0);
+    EnKusa2UnkBssSubStruct* ptr = func_80A5C074(arg0);
     f32 sp20;
     f32 temp_f6;
 
-    Math_Vec3f_Copy(&temp_s0->unk_00, arg1);
-    Math_Vec3f_Copy(&temp_s0->unk_0C, &D_801D15B0);
+    Math_Vec3f_Copy(&ptr->unk_00, arg1);
+    Math_Vec3f_Copy(&ptr->unk_0C, &gZeroVec3f);
 
-    temp_s0->unk_18 = arg2;
-    temp_s0->unk_1C = arg3;
-    temp_s0->unk_20 = arg4;
-    temp_s0->unk_22 = arg5;
+    ptr->unk_18 = arg2;
+    ptr->unk_1C = arg3;
+    ptr->unk_20 = arg4;
+    ptr->unk_22 = arg5;
 
     D_80A5EB48++;
     if (D_80A5EB48 >= 3) {
         D_80A5EB48 = 0;
-        temp_s0->unk_26 = Rand_S16Offset(40, 40);
+        ptr->unk_26 = Rand_S16Offset(40, 40);
     } else {
-        temp_s0->unk_26 = Rand_S16Offset(30, 20);
+        ptr->unk_26 = Rand_S16Offset(30, 20);
     }
 
-    temp_s0->unk_24 = temp_s0->unk_26 - 20;
-    sp20 = 1.0f / temp_s0->unk_24;
-    temp_s0->unk_28 = func_80A5C70C;
-    temp_s0->unk_2C = 0.0f;
-    temp_s0->unk_30 = 0.0f;
+    ptr->unk_24 = ptr->unk_26 - 20;
+    sp20 = 1.0f / ptr->unk_24;
+    ptr->unk_28 = func_80A5C70C;
+    ptr->unk_2C = 0.0f;
+    ptr->unk_30 = 0.0f;
     temp_f6 = Rand_ZeroOne() * 60.0f;
-    temp_s0->unk_34 = (temp_f6 + 20.0f) * 0.05f;
-    temp_s0->unk_38 = (temp_f6 + 20.0f) * sp20;
-    temp_s0->unk_3C = 40.0f;
-    temp_s0->unk_40 = -1.5f;
-    temp_s0->unk_44 = -50.0f * sp20;
-    temp_s0->unk_48 = 140.0f;
-    temp_s0->unk_4C = SQ(140.0f);
-    temp_s0->unk_50 = 819.2f;
-    temp_s0->unk_54 = 327.68f;
-    temp_s0->unk_58 = 2.5f;
-    temp_s0->unk_5C = 0.05f;
-    temp_s0->unk_60 = 3.5f * sp20;
-    temp_s0->unk_64 = 0.35f;
-    temp_s0->unk_68 = 0.0875f;
-    temp_s0->unk_6C = 160.0f;
-    temp_s0->unk_70 = SQ(160.0f);
-    temp_s0->unk_74 = 204.8f;
-    temp_s0->unk_78 = 100.0f;
-    temp_s0->unk_7C = 327.68f;
-    return temp_s0;
+    ptr->unk_34 = (temp_f6 + 20.0f) * 0.05f;
+    ptr->unk_38 = (temp_f6 + 20.0f) * sp20;
+    ptr->unk_3C = 40.0f;
+    ptr->unk_40 = -1.5f;
+    ptr->unk_44 = -50.0f * sp20;
+    ptr->unk_48 = 140.0f;
+    ptr->unk_4C = SQ(140.0f);
+    ptr->unk_50 = 819.2f;
+    ptr->unk_54 = 327.68f;
+    ptr->unk_58 = 2.5f;
+    ptr->unk_5C = 0.05f;
+    ptr->unk_60 = 3.5f * sp20;
+    ptr->unk_64 = 0.35f;
+    ptr->unk_68 = 0.0875f;
+    ptr->unk_6C = 160.0f;
+    ptr->unk_70 = SQ(160.0f);
+    ptr->unk_74 = 204.8f;
+    ptr->unk_78 = 100.0f;
+    ptr->unk_7C = 327.68f;
+    return ptr;
 }
 
 EnKusa2UnkBssSubStruct2* func_80A5C2FC(EnKusa2UnkBssStruct* arg0, f32 arg1, Vec3f* arg2, Vec3f* arg3, Vec3s* arg4,
@@ -595,7 +498,7 @@ void func_80A5C410(EnKusa2UnkBssStruct* arg0, EnKusa2UnkBssSubStruct2* arg1, Vec
     EnKusa2UnkBssSubStruct* s;
     s32 pad;
 
-    Math_Vec3f_Copy(arg2, &D_801D15B0);
+    Math_Vec3f_Copy(arg2, &gZeroVec3f);
 
     for (i = 0; i < ARRAY_COUNT(D_80A5F1C0.unk_0000); i++) {
         s = &arg0->unk_0000[i];
@@ -1449,7 +1352,7 @@ void EnKusa2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.projectedPos.z <= 1200.0f) {
         if ((globalCtx->roomCtx.currRoom.unk3 == 0) && (this->actor.projectedPos.z > -150.0f) &&
             (this->actor.projectedPos.z < 400.0f)) {
-            func_80A5B954((void*)&D_80A60908[0][this->unk_1CE], 0.0015f);
+            func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }
         func_800BDFC0(globalCtx, D_050078A0);
     } else if (this->actor.projectedPos.z < 1300.0f) {
