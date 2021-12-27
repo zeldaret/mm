@@ -662,7 +662,7 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (func_801233E4(globalCtx)) {
+    if (Player_InCsMode(globalCtx)) {
         if ((this->fairyFlags & 0x4000) && (this->fairyFlags & 0x100) && func_8088DCA4(this)) {
             return;
         }

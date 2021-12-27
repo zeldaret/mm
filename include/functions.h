@@ -1,5 +1,5 @@
-#ifndef _FUNCTIONS_H_
-#define _FUNCTIONS_H_
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 
 #include "z64.h"
 
@@ -2137,14 +2137,14 @@ void func_80122F28(Player* player);
 // void func_8012300C(void);
 void func_8012301C(Player* player, GlobalContext* globalCtx);
 void func_80123140(GlobalContext* globalCtx, Player* player);
-s32 Player_InBlockingCsMode(GameState* gameState, Player* player);
-s32 Player_InCsMode(GameState* gameState);
+s32 Player_InBlockingCsMode(GlobalContext* globalCtx, Player* player);
+s32 Player_InCsMode(GlobalContext* globalCtx);
 // void func_80123420(void);
 // void func_80123434(void);
 // void func_80123448(void);
 // void func_801234B0(void);
 s32 func_801234D4(GlobalContext* globalCtx);
-s32 func_80123590(GameState* globalCtx, Actor* player);
+s32 func_80123590(GlobalContext* globalCtx, Actor* player);
 s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2);
 s32 func_80123810(GlobalContext* globalCtx);
 s32 func_80123960(Player* player, s32 arg1);
@@ -2162,8 +2162,8 @@ s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRan
 u8 func_80124020(void);
 u8 Player_GetMask(GlobalContext* globalCtx);
 void Player_RemoveMask(GlobalContext* globalCtx);
-s32 func_8012405C(GameState* gameState);
-s32 func_80124088(GameState* gameState);
+s32 func_8012405C(GlobalContext* globalCtx);
+s32 func_80124088(GlobalContext* globalCtx);
 s32 func_801240C8(Player* player);
 s32 func_801240DC(Player* player);
 // void func_80124110(void);

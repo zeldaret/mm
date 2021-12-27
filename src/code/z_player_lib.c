@@ -749,18 +749,16 @@ void func_80123140(GlobalContext* globalCtx, Player* player) {
 }
 
 
-s32 Player_InBlockingCsMode(GameState* gameState, Player* player) {
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
-
+s32 Player_InBlockingCsMode(GlobalContext* globalCtx, Player* player) {
     return (player->stateFlags1 & 0x20000280) || player->unk_394 != 0 || globalCtx->sceneLoadFlag == 0x14 ||
            globalCtx->unk_18B4A != 0 || (player->stateFlags1 & 1) || (player->stateFlags3 & 0x80) ||
            globalCtx->actorCtx.unk268 != 0;
 }
 
-s32 Player_InCsMode(GameState* gameState) {
-    Player* player = GET_PLAYER(gameState);
+s32 Player_InCsMode(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-    return Player_InBlockingCsMode(gameState, player) || player->unk_AA5 == 5;
+    return Player_InBlockingCsMode(globalCtx, player) || player->unk_AA5 == 5;
 }
 
 s32 func_80123420(Player* player) {
@@ -808,8 +806,8 @@ s32 func_801234D4(GlobalContext* globalCtx) {
         );
 }
 
-s32 func_80123590(GameState* gameState, Actor* actor) {
-    Player* player = GET_PLAYER(gameState);
+s32 func_80123590(GlobalContext* globalCtx, Actor* actor) {
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags1 & 0x800) && (player->leftHandActor == actor)) {
         player->unk_388 = NULL;
@@ -1055,14 +1053,14 @@ void Player_RemoveMask(GlobalContext* globalCtx) {
     player->currentMask = PLAYER_MASK_NONE;
 }
 
-s32 func_8012405C(GameState* gameState) {
-    Player* player = GET_PLAYER(gameState);
+s32 func_8012405C(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
     return player->transformation == PLAYER_FORM_HUMAN && player->currentShield == 2;
 }
 
-s32 func_80124088(GameState* gameState) {
-    Player* player = GET_PLAYER(gameState);
+s32 func_80124088(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
     return player->transformation == PLAYER_FORM_HUMAN && player->rightHandType == 8 && player->currentShield == 2;
 }
@@ -1177,7 +1175,7 @@ s32 func_801242DC(GlobalContext* globalCtx) {
     }
 
     sp18 = &D_801BFFA0[sp1C];
-    if (!Player_InCsMode(&globalCtx->state)) {
+    if (!Player_InCsMode(globalCtx)) {
         if ((sp18->unk_00 != 0) && !(gSaveContext.textTriggerFlags & sp18->unk_00) && (sp1C == 0)) {
             func_801518B0(globalCtx, sp18->unk_02, NULL);
             gSaveContext.textTriggerFlags |= sp18->unk_00;
@@ -1490,7 +1488,7 @@ void func_8012669C(GlobalContext* globalCtx, Player* player, Vec3f* arg2, Vec3f*
 
     if (player->swordState != 0) {
         if ((func_80126440(globalCtx, NULL, &player->swordInfo[0], &sp3C, &sp30) != 0) && (player->transformation != PLAYER_FORM_GORON) && (!(player->stateFlags1 & 0x400000))) {
-            func_800A81F0(Effect_GetParams(player->blureEffectIndex[0]), &player->swordInfo[0].tip, &player->swordInfo[0].base);
+            EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[0]), &player->swordInfo[0].tip, &player->swordInfo[0].base);
         }
         if ((player->swordState > 0) && ((player->swordAnimation < 0x1E) || (player->stateFlags2 & 0x20000))) {
             Matrix_MultiplyVector3fByState(&arg2[1], &sp3C);
@@ -1674,7 +1672,7 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2) {
 
     for (i = 0; i < count; i++) {
         Math_Vec3f_Copy(&arg0->unk_00, arg2);
-        Math_Vec3f_Copy(&arg0->unk_0C, &D_801D15B0);
+        Math_Vec3f_Copy(&arg0->unk_0C, &gZeroVec3f);
         // maybe fake match?
         arg0++;
         arg0[-1].unk_18 = 0;
@@ -2298,7 +2296,7 @@ void func_80128BD0(GraphicsContext** gfxCtxPtr, s32 arg1, Gfx** arg2, Gfx** arg3
         Matrix_GetStateTranslationAndScaledX(3000.0f, (Vec3f* ) &sp5C);
         Matrix_GetStateTranslationAndScaledX(2300.0f, (Vec3f* ) &sp50);
         if (func_80126440((GlobalContext* ) gfxCtxPtr, NULL, arg5->swordInfo, (Vec3f* ) &sp5C, (Vec3f* ) &sp50) != 0) {
-            func_800A81F0(Effect_GetParams(arg5->blureEffectIndex[0]), &arg5->swordInfo[0].tip, &arg5->swordInfo[0].base);
+            EffectBlure_AddVertex(Effect_GetByIndex(arg5->blureEffectIndex[0]), &arg5->swordInfo[0].tip, &arg5->swordInfo[0].base);
         }
     } else if (arg1 == 5) {
         if ((arg5->swordState != 0) && ((temp_v0_26 = arg5->swordAnimation, (temp_v0_26 == 0x1D)) || (temp_v0_26 == 0x12) || (temp_v0_26 == 0x15))) {
