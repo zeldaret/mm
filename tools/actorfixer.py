@@ -301,6 +301,9 @@ animdict = {
     "func_8017F9C0": "Math3D_XZInSphere",
     "func_8017FA34": "Math3D_XYInSphere",
     "func_8017FAA8": "Math3D_YZInSphere",
+    "func_800A81F0": "EffectBlure_AddVertex",
+    "func_800A8514": "EffectBlure_AddSpace",
+    "Effect_GetParams": "Effect_GetByIndex",
     "D_0407D590": "gGameplayKeepDrawFlameDL"
 
 
