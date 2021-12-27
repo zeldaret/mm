@@ -2656,9 +2656,7 @@ beginseg
     name "ovl_Obj_Flowerpot"
     compress
     include "build/src/overlays/actors/ovl_Obj_Flowerpot/z_obj_flowerpot.o"
-    include "build/data/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot.data.o"
-    include "build/data/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot.bss.o"
-    include "build/data/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot_reloc.o"
 endseg
 
 beginseg
