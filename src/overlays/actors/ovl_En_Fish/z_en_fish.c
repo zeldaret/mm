@@ -5,6 +5,7 @@
  */
 
 #include "z_en_fish.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000000
 
@@ -33,8 +34,6 @@ void func_8091EFE8(Actor* thisx, GlobalContext* globalCtx);
 void func_8091F344(EnFish* this);
 void func_8091F3BC(Actor* thisx, GlobalContext* globalCtx);
 void func_8091F994(Actor* thisx, GlobalContext* globalCtx);
-
-extern FlexSkeletonHeader D_0402F028;
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
@@ -92,11 +91,13 @@ f32 func_8091D630(Vec3f* arg0, Vec3f* arg1) {
 }
 
 void func_8091D660(EnFish* this) {
-    Animation_Change(&this->skelAnime, &D_0402F0EC, 1.0f, 0.0f, Animation_GetLastFrame(&D_0402F0EC), 1, 2.0f);
+    Animation_Change(&this->skelAnime, &gameplay_keep_Anim_02F0EC, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&gameplay_keep_Anim_02F0EC), 1, 2.0f);
 }
 
 void func_8091D6C4(EnFish* this) {
-    Animation_Change(&this->skelAnime, &D_0402E65C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0402E65C), 1, 2.0f);
+    Animation_Change(&this->skelAnime, &gameplay_keep_Anim_02E65C, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&gameplay_keep_Anim_02E65C), 1, 2.0f);
 }
 
 void func_8091D728(EnFish* this) {
@@ -204,7 +205,8 @@ void EnFish_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_278 = 0;
     }
 
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0402F028, &D_0402F0EC, this->jointTable, this->morphTable, 7);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gameplay_keep_Skel_02F028, &gameplay_keep_Anim_02F0EC,
+                       this->jointTable, this->morphTable, 7);
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     this->actor.colChkInfo.mass = this->unk_25C * 30.0f;
