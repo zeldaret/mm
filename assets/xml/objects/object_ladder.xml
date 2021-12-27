@@ -1,0 +1,13 @@
+﻿<Root>
+    <File Name="object_ladder" Segment="6">
+        <DList Name="object_ladder_DL_0000A0" Offset="0xA0" />
+        <Collision Name="object_ladder_Colheader_0001D8" Offset="0x1D8" />
+        <DList Name="object_ladder_DL_0002D0" Offset="0x2D0" />
+        <Collision Name="object_ladder_Colheader_000408" Offset="0x408" />
+        <DList Name="object_ladder_DL_000500" Offset="0x500" />
+        <Collision Name="object_ladder_Colheader_000638" Offset="0x638" />
+        <DList Name="object_ladder_DL_000730" Offset="0x730" />
+        <Collision Name="object_ladder_Colheader_000868" Offset="0x868" />
+        <Texture Name="object_ladder_Tex_0008A0" OutName="tex_0008A0" Format="rgba16" Width="32" Height="32" Offset="0x8A0" />
+    </File>
+</Root>

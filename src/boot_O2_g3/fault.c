@@ -796,7 +796,7 @@ void Fault_ThreadEntry(void* arg) {
     osSetEventMesg(12, &sFaultContext->queue, (OSMesg)2);
     while (1) {
         do {
-            osRecvMesg(&sFaultContext->queue, &msg, 1);
+            osRecvMesg(&sFaultContext->queue, &msg, OS_MESG_BLOCK);
 
             if (msg == (OSMesg)1) {
                 sFaultContext->msgId = 1;
@@ -887,7 +887,7 @@ void Fault_Start(void) {
     sFaultContext->clients = NULL;
     sFaultContext->faultActive = 0;
     gFaultStruct.faultHandlerEnabled = 1;
-    osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, 1);
+    osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, ARRAY_COUNT(sFaultContext->msg));
     StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
     osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, sFaultStack + sizeof(sFaultStack), 0x7F);
     osStartThread(&sFaultContext->thread);
