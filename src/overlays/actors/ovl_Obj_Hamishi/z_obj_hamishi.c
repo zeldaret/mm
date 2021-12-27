@@ -1,7 +1,7 @@
 /*
  * File: z_obj_hamishi.c
  * Overlay: ovl_Obj_Hamishi
- * Description: Hammer Stone
+ * Description: Bronze boulder
  */
 
 #include "z_obj_hamishi.h"

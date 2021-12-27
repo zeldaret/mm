@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_syokudai.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
 #define FLAGS 0x00000410
@@ -155,8 +156,8 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_NONE;
         }
     } else {
-        if (func_800CA1E8(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &waterSurface,
-                          &waterBox) &&
+        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &waterSurface,
+                                   &waterBox) &&
             ((waterSurface - thisx->world.pos.y) > OBJ_SYOKUDAI_FLAME_HEIGHT)) {
 
             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_OUT;
@@ -194,7 +195,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 if (this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
-            } else if (player->itemActionParam == 7) {
+            } else if (player->itemActionParam == PLAYER_AP_STICK) {
                 Vec3f stickTipSeparationVec;
 
                 Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
@@ -314,7 +315,7 @@ void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) - thisx->shape.rot.y), MTXMODE_APPLY);
         Matrix_Scale(flameScale, flameScale, flameScale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -555,8 +555,8 @@ void func_809DA460(Boss02Effects* effects, Vec3f* vec) {
         if ((effects->unk_24 == 0) || (effects->unk_24 == 3)) {
             effects->unk_24 = 4;
             effects->unk_00 = *vec;
-            Math_Vec3f_Copy(&effects->unk_0C, &D_801D15B0);
-            Math_Vec3f_Copy(&effects->unk_18, &D_801D15B0);
+            Math_Vec3f_Copy(&effects->unk_0C, &gZeroVec3f);
+            Math_Vec3f_Copy(&effects->unk_18, &gZeroVec3f);
             effects->unk_2C = 0xFF;
             effects->unk_34 = 0.0f;
             break;
@@ -680,8 +680,6 @@ void func_809DAAA8(Boss02* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y = -500.0f;
 }
 
-#ifdef NON_MATCHING
-// Saving to spC8 rather than spC4 at line 18dc
 void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
     static Color_RGBA8 D_809DFA98 = { 185, 140, 70, 255 };
     s32 pad;
@@ -752,7 +750,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
             spD0.y = 2000.0f;
         }
 
-        temp_f0 = func_800C3FA0(&globalCtx->colCtx, &spDC, &spD0);
+        temp_f0 = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &spDC, &spD0);
         if (((this->unk_017C.y < temp_f0) && (temp_f0 <= this->unk_0188.y)) ||
             ((temp_f0 < this->unk_017C.y) && (this->unk_0188.y <= temp_f0))) {
             this->unk_0170 = this->unk_017C;
@@ -992,20 +990,20 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                     this->actor.minVelocityY = -1000.0f * D_809DF5B0;
                     this->unk_0164 = randPlusMinusPoint5Scaled(0.05f);
 
-                    spC4 = player->actor.world.pos.x - this->actor.world.pos.x;
-                    spC8 = player->actor.world.pos.z - this->actor.world.pos.z;
-                    if (sqrtf(SQ(spC4) + SQ(spC8)) < (400.0f * D_809DF5B0)) {
+                    spCC = player->actor.world.pos.x - this->actor.world.pos.x;
+                    spC4 = player->actor.world.pos.z - this->actor.world.pos.z;
+                    if (sqrtf(SQ(spCC) + SQ(spC4)) < (400.0f * D_809DF5B0)) {
                         this->actor.speedXZ = 15.0f * D_809DF5B0;
                     }
 
-                    spC4 = this->actor.world.pos.x;
-                    spC8 = this->actor.world.pos.z;
-                    if (sqrtf(SQ(spC4) + SQ(spC8)) < (400.0f * D_809DF5B0)) {
+                    spCC = this->actor.world.pos.x;
+                    spC4 = this->actor.world.pos.z;
+                    if (sqrtf(SQ(spCC) + SQ(spC4)) < (400.0f * D_809DF5B0)) {
                         this->actor.speedXZ = 15.0f * D_809DF5B0;
                     }
 
                     if (spB0->unk_0144 >= 10) {
-                        Audio_QueueSeqCmd(0x8021);
+                        Audio_QueueSeqCmd(NA_BGM_CLEAR_BOSS | 0x8000);
                     }
 
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_INBOSS_DEAD_OLD);
@@ -1051,14 +1049,14 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                 sp9C = Rand_ZeroFloat(M_PI);
 
                 for (i = 0; i < 15; i++) {
-                    Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + sp9C, 0);
+                    Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + sp9C, MTXMODE_NEW);
                     Matrix_GetStateTranslationAndScaledZ((10 - this->unk_0146[0]) * (D_809DF5B0 * 300.0f) * 0.1f,
                                                          &sp90);
                     spD0.x = this->unk_0170.x + sp90.x;
                     spD0.y = this->unk_0170.y + (1000.0f * D_809DF5B0);
                     spD0.z = this->unk_0170.z + sp90.z;
-                    if (func_800C40B4(&globalCtx->colCtx, &sp8C, &sp88, &spD0) != BGCHECK_Y_MIN) {
-                        spA0 = func_800C3FA0(&globalCtx->colCtx, &sp8C, &spD0);
+                    if (BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &sp8C, &sp88, &spD0) != BGCHECK_Y_MIN) {
+                        spA0 = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp8C, &spD0);
                         Matrix_GetStateTranslationAndScaledZ(5.0f * D_809DF5B0, &sp70);
                         sp70.y = 2.0f * D_809DF5B0;
                         sp64.y = 0.3f * D_809DF5B0;
@@ -1081,10 +1079,6 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
     CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
 }
-#else
-static Color_RGBA8 D_809DFA98 = { 185, 140, 70, 255 };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/func_809DAB78.s")
-#endif
 
 void func_809DBFB4(Boss02* this, GlobalContext* globalCtx) {
     Boss02* temp_s6 = this->unk_1674;
@@ -1183,7 +1177,8 @@ void func_809DC218(Actor* thisx, GlobalContext* globalCtx) {
             sp24.y = 2000.0f;
         }
 
-        if ((this->actor.focus.pos.y < func_800C3FA0(&globalCtx->colCtx, &sp20, &sp24)) || (D_809E0422 != 0)) {
+        if ((this->actor.focus.pos.y < BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp20, &sp24)) ||
+            (D_809E0422 != 0)) {
             this->actor.flags &= ~1;
         } else {
             this->actor.flags |= 1;
@@ -1342,7 +1337,7 @@ void func_809DC78C(Actor* thisx, GlobalContext* globalCtx) {
         if (D_809E0430 != 0) {
             D_809E0430--;
             if (D_809E0430 == 0) {
-                Audio_QueueSeqCmd(0x801B);
+                Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
             }
         }
     }
@@ -1476,7 +1471,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             }
 
             func_809DA50C(1, &this->colliderSphere2, &this->unk_147C[i + 1]);
-            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &this->unk_147C[i + 1], &this->unk_167C,
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &this->unk_147C[i + 1], &this->unk_167C,
                                          &this->actor.projectedW);
         } else {
             func_809DA50C(i, &this->colliderSphere1, &this->unk_147C[i + 1]);
@@ -1583,7 +1578,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                                         (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
             Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1624,7 +1619,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)effect->unk_2C);
 
             Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1648,7 +1643,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                                         (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
             Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, 0);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1825,7 +1820,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             if (D_809E0434 != NULL) {
                 D_809E0434->unk_203 = 0;
                 D_809E0434->unk_204 = 1.0f;
-                D_809E0434->actor.world.pos.y = 60.0f;
+                D_809E0434->dyna.actor.world.pos.y = 60.0f;
             }
 
             player->actor.world.pos.x *= 10.0f;
@@ -1897,7 +1892,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             if (D_809E0434 != 0) {
                 D_809E0434->unk_203 = 1;
                 D_809E0434->unk_204 = 0.1f;
-                D_809E0434->actor.world.pos.y = 3155.0f;
+                D_809E0434->dyna.actor.world.pos.y = 3155.0f;
             }
 
             player->actor.world.pos.x *= 0.1f;

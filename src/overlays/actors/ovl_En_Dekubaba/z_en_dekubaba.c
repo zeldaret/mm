@@ -1,5 +1,5 @@
 /*
- * File z_en_dekubaba.c
+ * File: z_en_dekubaba.c
  * Overlay: ovl_En_Dekubaba
  * Description: Deku Baba
  */

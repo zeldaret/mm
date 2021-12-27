@@ -77,7 +77,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(0)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
                 return true;
             }
             break;
@@ -85,7 +85,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(1)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
                 return true;
             }
             break;
@@ -93,7 +93,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(2)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
                 return true;
             }
             break;
@@ -101,7 +101,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(3)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                 return true;
             }
             break;
@@ -352,9 +352,9 @@ void EnGiant_PlaySound(EnGiant* this) {
 
 void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
     CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
-    f32 floatUnk10 = actorAction->unk10;
+    f32 floatUnk10 = actorAction->unk0C.y;
     s32 pad[2];
-    f32 floatUnk1C = actorAction->unk1C;
+    f32 floatUnk1C = actorAction->unk18.y;
     f32 functionTemp;
 
     functionTemp = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);

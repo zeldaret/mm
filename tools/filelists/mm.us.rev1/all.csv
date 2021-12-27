@@ -36,7 +36,7 @@
 35,ovl_file_choose
 36,ovl_daytelop
 37,ovl_kaleido_scope
-38,ovl_Player_Actor
+38,ovl_player_actor
 39,ovl_En_Test
 40,ovl_En_GirlA
 41,ovl_En_Part
@@ -1537,3 +1537,16 @@
 1536,KAKUSIANA_room_13
 1537,KAKUSIANA_room_14
 1538,bump_texture_static
+1539,anime_model_1_static
+1540,anime_model_2_static
+1541,anime_model_3_static
+1542,anime_model_4_static
+1543,anime_model_5_static
+1544,anime_model_6_static
+1545,anime_texture_1_static
+1546,anime_texture_2_static
+1547,anime_texture_3_static
+1548,anime_texture_4_static
+1549,anime_texture_5_static
+1550,anime_texture_6_static
+1551,softsprite_matrix_static

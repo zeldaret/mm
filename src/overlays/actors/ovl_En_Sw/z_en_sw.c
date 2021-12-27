@@ -174,11 +174,11 @@ void func_808D8940(EnSw* this, GlobalContext* globalCtx) {
         sp94.x = 0.0f;
         sp94.y = (Rand_ZeroOne() * 0.2f) + 0.1f;
         sp94.z = Rand_ZeroOne() + 1.0f;
-        Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, temp_s0, &sp94, &spAC);
+        Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, temp_s0, &sp94, &spAC);
         sp94.x = 0.0f;
         sp94.y = 0.7f;
         sp94.z = 2.0f;
-        Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, temp_s0, &sp94, &spB8);
+        Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, temp_s0, &sp94, &spB8);
         spA0.x = this->actor.world.pos.x + (2.0f * spB8.x);
         spA0.z = this->actor.world.pos.z + (2.0f * spB8.z);
         func_800B0EB0(globalCtx, &spA0, &spB8, &spAC, &D_808DBAA4, &D_808DBAA8, 60, 30, temp_f4);
@@ -360,11 +360,12 @@ void func_808D93BC(EnSw* this) {
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
-s32 func_808D9440(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, CollisionPoly** arg4, u32* arg5) {
+s32 func_808D9440(GlobalContext* globalCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly,
+                  s32* bgId) {
     s32 ret = false;
 
-    if (func_800C55C4(&globalCtx->colCtx, arg1, arg2, arg3, arg4, 1, 1, 1, 1, arg5) &&
-        !(func_800C9A4C(&globalCtx->colCtx, *arg4, *arg5) & 0x30)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, posA, posB, posResult, outPoly, true, true, true, true, bgId) &&
+        !(func_800C9A4C(&globalCtx->colCtx, *outPoly, *bgId) & 0x30)) {
         ret = true;
     }
     return ret;
@@ -379,16 +380,16 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     Vec3f sp84;
     Vec3f sp78;
     Vec3f sp6C;
-    u32 sp68;
-    u32 sp64;
+    s32 sp68;
+    s32 sp64;
     Actor* thisx = &this->actor;
     f32 temp_f20;
     s32 i;
 
     spA4 = NULL;
     spA0 = NULL;
-    sp68 = 50;
-    sp64 = 50;
+    sp68 = BGCHECK_SCENE;
+    sp64 = BGCHECK_SCENE;
     func_808D90F0(this, arg3, arg4);
     this->actor.speedXZ = this->unk_44C;
     temp_f20 = thisx->speedXZ * 2.0f;
@@ -934,7 +935,7 @@ void func_808DAA60(EnSw* this, GlobalContext* globalCtx) {
     Vec3f sp34;
     f32 temp_f16;
 
-    sp44 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_1E4->unk_04);
+    sp44 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_1E4->points);
     sp40 = 0;
 
     if (DECR(this->unk_454) == 0) {
@@ -1009,7 +1010,7 @@ void func_808DACF4(EnSw* this, GlobalContext* globalCtx) {
     if ((temp_f6 != 0) && (temp_f6 < (s32)sp4C)) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_374);
         this->unk_4A0 += this->unk_49C;
-        if ((this->unk_4A0 >= this->unk_1E4->unk_00) || (this->unk_4A0 < 0)) {
+        if ((this->unk_4A0 >= this->unk_1E4->count) || (this->unk_4A0 < 0)) {
             this->unk_49C = -this->unk_49C;
             this->unk_4A0 += this->unk_49C * 2;
         }
@@ -1147,7 +1148,7 @@ void func_808DB2E0(EnSw* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTURA_BOUND);
         } else {
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 5);
-            Math_Vec3f_Copy(&this->actor.velocity, &D_801D15B0);
+            Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
             this->unk_410 &= ~(0x10 | 0x1);
             this->actionFunc = func_808DB100;
         }
