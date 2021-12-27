@@ -359,7 +359,8 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
     Vec3f sp3C;
 
     if (this->unk_BCD != 0) {
-        if ((this->actor.bgCheckFlags & 8) || !Actor_TestFloorInDirection(&this->actor, globalCtx, 60.0f, this->actor.world.rot.y)) {
+        if ((this->actor.bgCheckFlags & 8) ||
+            !Actor_TestFloorInDirection(&this->actor, globalCtx, 60.0f, this->actor.world.rot.y)) {
             this->actor.bgCheckFlags &= ~0x8;
             this->unk_BCD = 0;
             this->unk_BBC = 0.0f;
