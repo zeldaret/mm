@@ -6,6 +6,7 @@
 
 #include "z_en_col_man.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00100000
 
@@ -14,16 +15,13 @@
 void EnColMan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnColMan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnColMan_Update(Actor* thisx, GlobalContext* globalCtx);
-
 void func_80AFDD60(EnColMan* this);
-
 void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx);
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, GlobalContext* globalCtx);
 void func_80AFDF60(EnColMan* this);
 void func_80AFDFB4(EnColMan* this, GlobalContext* globalCtx);
 void func_80AFE234(EnColMan* this);
 void func_80AFE25C(EnColMan* this, GlobalContext* globalCtx);
-
 void func_80AFE414(Actor* thisx, GlobalContext* globalCtx);
 void func_80AFE4AC(Actor* thisx, GlobalContext* globalCtx);
 void func_80AFE584(Actor* thisx, GlobalContext* globalCtx);
@@ -63,10 +61,6 @@ const ActorInit En_Col_Man_InitVars = {
 
 static Color_RGBA8 primColor = { 60, 50, 20, 255 };
 static Color_RGBA8 envColor = { 40, 30, 30, 255 };
-
-extern Gfx D_0405AAB0[]; // heart piece
-extern Gfx D_0405F6F0[];
-extern Gfx D_0406AB30[];
 
 void EnColMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnColMan* this = THIS;
@@ -240,7 +234,7 @@ void func_80AFE414(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     func_800B8118(&this->actor, globalCtx, 0);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_0405AAB0);
+    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_05AAB0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -252,9 +246,9 @@ void func_80AFE4AC(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0405E6F0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&gameplay_keep_Tex_05E6F0));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_0405F6F0);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -265,7 +259,7 @@ void func_80AFE584(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
-    gSPDisplayList(POLY_OPA_DISP++, D_0406AB30);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -274,8 +268,8 @@ void func_80AFE650(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0405CEF0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&gameplay_keep_Tex_05CEF0));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_0405F6F0);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
