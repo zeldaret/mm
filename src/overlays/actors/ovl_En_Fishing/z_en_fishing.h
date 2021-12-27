@@ -9,7 +9,7 @@ typedef void (*EnFishingActionFunc)(struct EnFishing*, GlobalContext*);
 
 typedef struct EnFishing {
     /* 0x000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x004];
+    /* 0x0144 */ UNK_TYPE1 unk_144[0x004];
     /* 0x0148 */ u8 unk_148;
     /* 0x0149 */ u8 unk_149;
     /* 0x014A */ u8 unk_14A;
