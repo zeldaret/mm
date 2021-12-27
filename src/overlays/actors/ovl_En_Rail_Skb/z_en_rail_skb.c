@@ -237,7 +237,7 @@ s32 func_80B70B04(EnRailSkb* this, Vec3f pos) {
 }
 
 void func_80B70D24(EnRailSkb* this, GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actor != NULL) {
         if ((actor->id == ACTOR_OBJ_HAKAISI) && func_80B70B04(this, actor->world.pos)) {
@@ -263,7 +263,7 @@ void EnRailSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRailSkb* this = THIS;
 
     func_80B708C0(this, globalCtx);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_0064E0, this->jointTable,
                    this->morphTable, 20);
     Collider_InitJntSph(globalCtx, &this->collider);
@@ -328,7 +328,7 @@ void func_80B70FF8(EnRailSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80B710AC(EnRailSkb* this) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_80B710E4;
 }
 
@@ -339,7 +339,7 @@ void func_80B710E4(EnRailSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80B71114(EnRailSkb* this) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_80B7114C;
 }
 
@@ -349,9 +349,9 @@ void func_80B7114C(EnRailSkb* this, GlobalContext* globalCtx) {
         this->unk_2F0 = 0.0f;
         this->unk_2EC = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
-            func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
             func_800BDC5C(&this->skelAnime, sAnimations, 3);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_402 |= 1;
             func_80B712FC(this);
         } else {
@@ -373,9 +373,9 @@ void func_80B7123C(EnRailSkb* this, GlobalContext* globalCtx) {
         this->unk_2F0 = 0.0f;
         this->unk_2EC = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
-            func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
             func_800BDC5C(&this->skelAnime, sAnimations, 3);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_402 |= 1;
             func_80B712FC(this);
         } else {
@@ -399,7 +399,7 @@ void func_80B71314(EnRailSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80B71354(EnRailSkb* this) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
     func_800BDC5C(&this->skelAnime, sAnimations, 2);
     this->actionFunc = func_80B713A4;
 }
@@ -446,7 +446,7 @@ void func_80B7151C(EnRailSkb* this) {
     this->actor.colChkInfo.health = 2;
     this->unk_402 = 0;
     this->actor.flags |= 1;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_APPEAR);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_APPEAR);
     this->actor.draw = EnRailSkb_Draw;
     this->actor.shape.shadowAlpha = 0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -479,7 +479,7 @@ void func_80B71650(EnRailSkb* this) {
 }
 
 void func_80B716A8(EnRailSkb* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_3FE = 1;
         func_80B71D8C(this, globalCtx, func_80B723F8);
         if (!func_80B7285C(this)) {
@@ -506,7 +506,7 @@ void func_80B717C8(EnRailSkb* this) {
 void func_80B717E0(EnRailSkb* this, GlobalContext* globalCtx) {
     this->unk_3FA = 0;
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
         case 1:
         case 2:
@@ -565,11 +565,11 @@ void func_80B71954(EnRailSkb* this, GlobalContext* globalCtx) {
     if (sp30 < 80.0f) {
         func_80B71A08(this);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80B71A08(EnRailSkb* this) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
     func_800BDC5C(&this->skelAnime, sAnimations, 2);
     this->actionFunc = func_80B71A58;
 }
@@ -578,7 +578,7 @@ void func_80B71A58(EnRailSkb* this, GlobalContext* globalCtx) {
     s16 sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->actor.world.pos);
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
         func_800BDC5C(&this->skelAnime, sAnimations, 2);
         if (this->unk_2E8 < this->unk_22C->actor.colChkInfo.health) {
             this->unk_22C->actor.colChkInfo.health--;
@@ -620,7 +620,7 @@ void func_80B71BB8(EnRailSkb* this, GlobalContext* globalCtx) {
                        Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->actor.world.pos), 1, 0x71C, 0xB6);
 
     if ((this->actor.bgCheckFlags & 1) && (this->unk_22C->actor.colChkInfo.health == 0)) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     } else {
         this->actor.velocity.y += this->actor.gravity;
         this->actor.world.pos.y += this->actor.velocity.y;
@@ -634,7 +634,7 @@ void func_80B71BB8(EnRailSkb* this, GlobalContext* globalCtx) {
     }
 
     if ((sp34 < 50.0f) && (this->actor.bgCheckFlags & 1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
         func_800BDC5C(&this->skelAnime, sAnimations, 9);
         this->actor.velocity.y = 10.0f;
 
@@ -645,7 +645,7 @@ void func_80B71BB8(EnRailSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80B71D8C(EnRailSkb* this, GlobalContext* globalCtx, EnRailSkbUnkFunc unkFunc) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
 
     while (actor != NULL) {
         if (actor->id == ACTOR_EN_RAIL_SKB) {
@@ -767,7 +767,7 @@ void func_80B72190(EnRailSkb* this, GlobalContext* globalCtx) {
 
     if ((this->actionFunc != func_80B714D8) &&
         (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 15.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_WALK);
     }
 
     if (this->actor.parent == NULL) {
@@ -811,7 +811,7 @@ void func_80B72190(EnRailSkb* this, GlobalContext* globalCtx) {
         } else {
             this->unk_2E0 = 0;
         }
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 
@@ -978,12 +978,12 @@ void func_80B72970(EnRailSkb* this, GlobalContext* globalCtx) {
                 this->unk_403 = 30;
                 this->unk_2EC = 1.0f;
                 this->unk_2F0 = 0.0f;
-                func_800BCB70(&this->actor, 0, 120, 0, 40);
+                Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
                 func_80B710AC(this);
                 break;
 
             case 1:
-                func_800BCB70(&this->actor, 0, 120, 0, 40);
+                Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
                 func_80B710AC(this);
                 break;
 
@@ -992,8 +992,8 @@ void func_80B72970(EnRailSkb* this, GlobalContext* globalCtx) {
                 this->unk_403 = 0;
                 this->unk_2EC = 1.0f;
                 this->unk_2F0 = 0.0f;
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                 func_800BDC5C(&this->skelAnime, sAnimations, 3);
                 this->unk_402 |= 1;
                 func_80B712FC(this);
@@ -1001,7 +1001,7 @@ void func_80B72970(EnRailSkb* this, GlobalContext* globalCtx) {
 
             case 3:
                 if (this->actor.colChkInfo.health != 0) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                     this->unk_3F0 = 80;
                 } else {
                     this->unk_3F0 = 3;
@@ -1009,7 +1009,7 @@ void func_80B72970(EnRailSkb* this, GlobalContext* globalCtx) {
                 this->unk_403 = 11;
                 this->unk_2EC = 1.0f;
                 this->unk_2F0 = 0.5f;
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 func_80B71114(this);
                 break;
 
@@ -1018,8 +1018,8 @@ void func_80B72970(EnRailSkb* this, GlobalContext* globalCtx) {
                 this->unk_403 = 20;
                 this->unk_2EC = 1.0f;
                 this->unk_2F0 = 0.5f;
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                 func_800BDC5C(&this->skelAnime, sAnimations, 3);
                 func_80B71228(this);
                 break;
@@ -1035,8 +1035,8 @@ void func_80B72970(EnRailSkb* this, GlobalContext* globalCtx) {
                 }
 
             case 13:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                 func_800BDC5C(&this->skelAnime, sAnimations, 3);
                 func_80B712FC(this);
                 break;

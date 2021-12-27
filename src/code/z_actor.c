@@ -2232,8 +2232,8 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
 
     bzero(actorCtx, sizeof(ActorContext));
     ActorOverlayTable_Init();
-    Matrix_MtxFCopy(&globalCtx->billboardMtxF, &D_801D1E20);
-    Matrix_MtxFCopy(&globalCtx->viewProjectionMtxF, &D_801D1E20);
+    Matrix_MtxFCopy(&globalCtx->billboardMtxF, &gIdentityMtxF);
+    Matrix_MtxFCopy(&globalCtx->viewProjectionMtxF, &gIdentityMtxF);
 
     overlayEntry = gActorOverlayTable;
     for (i = 0; i < ARRAY_COUNT(gActorOverlayTable); i++) {
@@ -3567,11 +3567,11 @@ void Actor_SpawnFloorDustRing(GlobalContext* globalCtx, Actor* actor, Vec3f* pos
         accel.z = (Rand_ZeroOne() - 0.5f) * randAccelWeight;
 
         if (scale == 0) {
-            func_800B10C0(globalCtx, &pos, &D_801D15B0, &accel);
+            func_800B10C0(globalCtx, &pos, &gZeroVec3f, &accel);
         } else if (useLighting) {
-            func_800B1210(globalCtx, &pos, &D_801D15B0, &accel, scale, scaleStep);
+            func_800B1210(globalCtx, &pos, &gZeroVec3f, &accel, scale, scaleStep);
         } else {
-            func_800B11A0(globalCtx, &pos, &D_801D15B0, &accel, scale, scaleStep);
+            func_800B11A0(globalCtx, &pos, &gZeroVec3f, &accel, scale, scaleStep);
         }
         angle += (2.0f * 3.14f) / (amountMinusOne + 1.0f);
     }
@@ -3593,9 +3593,9 @@ void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 arg2, s32 arg3
         scale += arg4;
 
         if (arg6) {
-            func_800B1210(globalCtx, &pos, &D_801D15B0, &accel, scale, scaleStep);
+            func_800B1210(globalCtx, &pos, &gZeroVec3f, &accel, scale, scaleStep);
         } else {
-            func_800B11A0(globalCtx, &pos, &D_801D15B0, &accel, scale, scaleStep);
+            func_800B11A0(globalCtx, &pos, &gZeroVec3f, &accel, scale, scaleStep);
         }
     }
 }
@@ -4570,7 +4570,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+                    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
 
                     limbPos++;
                 }

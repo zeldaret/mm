@@ -168,7 +168,7 @@ void func_80C1019C(EnRecepgirl *this, GlobalContext *globalCtx) {
             Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         func_80C10290(this);
         return;
     }
@@ -203,7 +203,7 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         func_80C10290(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 60.0f);

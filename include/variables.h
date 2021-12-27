@@ -374,7 +374,6 @@ extern u8 D_801AE214[32];
 // extern UNK_TYPE4 D_801AE240;
 // extern UNK_TYPE4 D_801AE250;
 extern UNK_PTR D_801AE260[3];
-extern s16 D_801AE26C[8];
 // extern UNK_TYPE4 D_801AE27C;
 // extern UNK_TYPE4 D_801AE28C;
 // extern UNK_TYPE4 D_801AE29C;

@@ -87,7 +87,7 @@ void func_80952734(EnMs* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x932;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         this->actionFunc = func_809527F8;
         return;
     }
@@ -112,7 +112,7 @@ void func_809529AC(EnMs *this, GlobalContext *globalCtx) {
 }
 
 void func_80952A1C(EnMs *this, GlobalContext *globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80151938(globalCtx, 0x936U);
         this->actionFunc = func_809527F8;
     } else {
