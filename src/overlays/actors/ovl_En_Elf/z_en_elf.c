@@ -675,7 +675,8 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
         !func_8088C804(&this->actor.world.pos, &refActor->actor.world.pos, 10.0f)) {
         func_80115908(globalCtx, 0x80);
         if (this->fairyFlags & 0x200) {
-            Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+            Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) +
+                                              (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
         }
         gSaveContext.jinxTimer = 0;
         this->unk_254 = 50.0f;
