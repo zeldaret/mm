@@ -8,6 +8,7 @@
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/object_taisou/object_taisou.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x02000019
 
@@ -288,8 +289,9 @@ void func_80A1143C(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg
 }
 
 void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
-    static UNK_TYPE D_80A16644[] = {
-        &D_0408F7E0, &D_0408F3E0, &D_0408EFE0, &D_0408EBE0, &D_0408E7E0, &D_0408E3E0, &D_0408DFE0, &D_0408DBE0,
+    static TexturePtr D_80A16644[] = {
+        &gameplay_keep_Tex_08F7E0, &gameplay_keep_Tex_08F3E0, &gameplay_keep_Tex_08EFE0, &gameplay_keep_Tex_08EBE0,
+        &gameplay_keep_Tex_08E7E0, &gameplay_keep_Tex_08E3E0, &gameplay_keep_Tex_08DFE0, &gameplay_keep_Tex_08DBE0,
     };
     static Color_RGBA8 D_80A16664[] = {
         { 255, 255, 255, 0 },
@@ -367,7 +369,7 @@ void func_80A118F8(EnGoStruct ptr[32], Vec3f arg1) {
             ptr->unk_28.z = Math_CosS(i * 0x1000) * temp_f20;
             ptr->unk_28.y = (Rand_ZeroOne() * 3.0f) + 6.0f;
 
-            ptr->unk_1C = D_801D15B0;
+            ptr->unk_1C = gZeroVec3f;
             ptr->unk_1C.y = -0.8f;
 
             ptr->unk_01 = ptr->unk_02 = 1;
@@ -377,10 +379,10 @@ void func_80A118F8(EnGoStruct ptr[32], Vec3f arg1) {
             spB4.y = ((Rand_ZeroOne() - 0.5f) * 40.0f) + ptr->unk_10.y;
             spB4.z = ((Rand_ZeroOne() - 0.5f) * 80.0f) + ptr->unk_10.z;
 
-            spA8 = D_801D15B0;
+            spA8 = gZeroVec3f;
             spA8.y = (Rand_ZeroOne() * 3.0f) + 1.0f;
 
-            func_80A1143C(ptr2, spB4, D_801D15B0, spA8, 0.6f, 0.2f, 16, 0);
+            func_80A1143C(ptr2, spB4, gZeroVec3f, spA8, 0.6f, 0.2f, 16, 0);
         }
     }
 }
@@ -411,7 +413,7 @@ void func_80A11BF8(EnGoStruct ptr[], f32 arg1) {
         ptr->unk_01 = (Rand_ZeroOne() * 8.0f) + 4.0f;
         ptr->unk_02 = ptr->unk_01;
 
-        ptr->unk_28 = D_801D15B0;
+        ptr->unk_28 = gZeroVec3f;
         ptr->unk_28.y = (Rand_ZeroOne() * 3.0f) + 1.0f;
 
         ptr->unk_34 = 0.4f;
@@ -1045,7 +1047,7 @@ void func_80A13728(EnGo* this, GlobalContext* globalCtx) {
     globalCtx->actorCtx.unk2 = 4;
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_TEST, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 0);
-    EffectSsBlast_SpawnWhiteShockwave(globalCtx, &this->actor.world.pos, &D_801D15B0, &D_801D15B0);
+    EffectSsBlast_SpawnWhiteShockwave(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f);
 }
 
 void func_80A137C0(EnGo* this, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
@@ -1070,7 +1072,7 @@ void func_80A137C0(EnGo* this, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, frames1, 0x20, 0x10, 1, 0, frames2, 0x40, 0x20));
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (u8)arg3);
-        gSPDisplayList(POLY_XLU_DISP++, &D_04050D10);
+        gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_050D10);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
@@ -1084,12 +1086,12 @@ void func_80A139E4(EnGo* this) {
     Vec3f sp48;
     s16 sp46 = Rand_ZeroOne() * 360.0f * 182.0f;
 
-    Math_Vec3f_Copy(&sp54, &D_801D15B0);
+    Math_Vec3f_Copy(&sp54, &gZeroVec3f);
     sp54.z = 28.0f;
     Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, sp46, &sp54, &sp48);
     sp48.y = (Rand_ZeroOne() * 10.0f) + 4.0f;
     sp48.y += this->actor.floorHeight;
-    func_80A10FD0(&this->unk_3F8[16], sp48, D_80A16698, D_801D15B0, 0.01f, 0.002f, 16);
+    func_80A10FD0(&this->unk_3F8[16], sp48, D_80A16698, gZeroVec3f, 0.01f, 0.002f, 16);
 }
 
 s32 func_80A13B1C(EnGo* this, GlobalContext* globalCtx) {
@@ -1784,10 +1786,10 @@ void func_80A153FC(EnGo* this, GlobalContext* globalCtx) {
 
         if (this->actor.bgCheckFlags & 1) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_BIGBALL_ROLL - SFX_FLAG);
-            func_800AE930(&globalCtx->colCtx, Effect_GetParams(this->unk_3E8), &this->actor.world.pos, 18.0f,
+            func_800AE930(&globalCtx->colCtx, Effect_GetByIndex(this->unk_3E8), &this->actor.world.pos, 18.0f,
                           this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
         } else {
-            func_800AEF44(Effect_GetParams(this->unk_3E8));
+            func_800AEF44(Effect_GetByIndex(this->unk_3E8));
         }
 
         this->actor.speedXZ = 4.0f;
