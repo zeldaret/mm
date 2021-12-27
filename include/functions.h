@@ -1709,7 +1709,7 @@ void Kankyo_FadeOutGameOverLights(GlobalContext* globalCtx);
 // void func_800FC3DC(void);
 void func_800FC444(GraphicsContext* gfxCtx, u8 arg1, u8 arg2, u8 arg3, u8 arg4, UNK_TYPE arg5);
 // void func_800FC64C(void);
-// void func_800FD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+s32 func_800FD2B4(GlobalContext* globalCtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4);
 void func_800FD538(Color_RGB8* param_1, Color_RGB8* param_2, f32 param_3, Vec3s* param_4);
 void func_800FD59C(GlobalContext* globalCtx, Color_RGB8* pzParm2, f32 fParm3);
 void func_800FD5E0(GlobalContext* globalCtx, Color_RGB8* pzParm2, f32 fParm3);
