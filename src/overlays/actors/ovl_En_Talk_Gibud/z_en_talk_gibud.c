@@ -197,7 +197,7 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->effectScale = 0.0f;
 
     for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-        this->limbPos[i] = D_801D15B0;
+        this->limbPos[i] = gZeroVec3f;
     }
 
     if (this->requestedItemIndex < EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BLUE_POTION) {
