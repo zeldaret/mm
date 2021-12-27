@@ -565,10 +565,7 @@ beginseg
     include "build/data/code/db_camera.bss.o"
     include "build/data/code/code_801D0B50.data.o"
     include "build/src/code/z_kaleido_manager.o"
-    include "build/data/code/z_kaleido_manager.data.o"
-    include "build/data/code/z_kaleido_manager.bss.o"
     include "build/src/code/z_kaleido_scope_call.o"
-    include "build/data/code/z_kaleido_scope_call.bss.o"
     include "build/src/code/z_fbdemo_dlftbls.o"
     include "build/data/code/code_801D0BB0.data.o"
     include "build/src/code/z_fbdemo.o"
@@ -739,12 +736,12 @@ beginseg
 endseg
 
 beginseg
-    name "ovl_Player_Actor"
+    name "ovl_player_actor"
     compress
-    include "build/src/overlays/actors/ovl_Player_Actor/z_player.o"
-    include "build/data/ovl_Player_Actor/ovl_Player_Actor.data.o"
-    include "build/data/ovl_Player_Actor/ovl_Player_Actor.bss.o"
-    include "build/data/ovl_Player_Actor/ovl_Player_Actor.reloc.o"
+    include "build/src/overlays/actors/ovl_player_actor/z_player.o"
+    include "build/data/ovl_player_actor/ovl_player_actor.data.o"
+    include "build/data/ovl_player_actor/ovl_player_actor.bss.o"
+    include "build/data/ovl_player_actor/ovl_player_actor.reloc.o"
 endseg
 
 beginseg
