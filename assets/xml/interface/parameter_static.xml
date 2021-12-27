@@ -113,7 +113,7 @@
         <Texture Name="gFinalHoursClockColonTex" OutName="final_hours_clock_colon" Format="i8" Width="8" Height="8" Offset="0x6AE0"/>
         <Texture Name="gFinalHoursClockFrameTex" OutName="final_hours_clock_frame" Format="ia4" Width="80" Height="13" Offset="0x6B20"/>
 
-        <Texture Name="gMinigameCountdownGoTex" OutName="minigame__countdown_go" Format="ia8" Width="40" Height="32" Offset="0x6D28"/>
+        <Texture Name="gMinigameCountdownGoTex" OutName="minigame_countdown_go" Format="ia8" Width="40" Height="32" Offset="0x6D28"/>
         <Texture Name="gMinigameCountdown1Tex" OutName="minigame_countdown_1" Format="ia8" Width="24" Height="32" Offset="0x7228"/> 
         <Texture Name="gMinigameCountdown2Tex" OutName="minigame_countdown_2" Format="ia8" Width="24" Height="32" Offset="0x7528"/>
         <Texture Name="gMinigameCountdown3Tex" OutName="minigame_countdown_3" Format="ia8" Width="24" Height="32" Offset="0x7828"/>
