@@ -5,6 +5,7 @@
  */
 
 #include "z_en_zo.h"
+#include "objects/object_zo/object_zo.h"
 
 #define FLAGS 0x00000019
 
@@ -18,17 +19,6 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx);
 void EnZo_TreadWater(EnZo* this, GlobalContext* globalCtx);
 void EnZo_DoNothing(EnZo* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06004248; // standing
-extern AnimationHeader D_06003610;
-extern AnimationHeader D_06000598;
-extern AnimationHeader D_06000D48;
-extern AnimationHeader D_0600219C;
-extern AnimationHeader D_06002898; // walking
-extern FlexSkeletonHeader D_0600D208;
-extern TexturePtr D_060050A0;
-extern TexturePtr D_060058A0;
-extern TexturePtr D_060060A0;
 
 const ActorInit En_Zo_InitVars = {
     ACTOR_EN_ZO,
@@ -100,9 +90,10 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06004248, 1.0f, 0, -1, 0, 0 },  { &D_06004248, 1.0f, 0, -1, 0, -4 }, { &D_06003610, 1.0f, 0, -1, 0, -4 },
-    { &D_06000598, 1.0f, 0, -1, 0, -4 }, { &D_06000D48, 1.0f, 0, -1, 0, -4 }, { &D_0600219C, 1.0f, 0, -1, 0, -4 },
-    { &D_06002898, 1.0f, 0, -1, 0, -4 },
+    { &gZoraIdleAnim, 1.0f, 0, -1, 0, 0 },       { &gZoraIdleAnim, 1.0f, 0, -1, 0, -4 },
+    { &gZoraSurfacingAnim, 1.0f, 0, -1, 0, -4 }, { &gZoraHandsOnHipsTappingFootAnim, 1.0f, 0, -1, 0, -4 },
+    { &gZoraArmsOpenAnim, 1.0f, 0, -1, 0, -4 },  { &gZoraThrowRupeeAnim, 1.0f, 0, -1, 0, -4 },
+    { &gZoraWalkAnim, 1.0f, 0, -1, 0, -4 },
 };
 
 s8 D_8099F578[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
@@ -258,7 +249,7 @@ void EnZo_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D208, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, 20);
     EnZo_SetAnimation(&this->skelAnime, 0);
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -344,7 +335,7 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(u8) * SQ(64));
     u8* shadowTexIter;
-    TexturePtr eyeTextures[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
+    TexturePtr eyeTextures[] = { &gZoraEyeOpenTex, &gZoraEyeHalfTex, &gZoraEyeClosedTex };
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);

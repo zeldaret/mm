@@ -1,23 +1,25 @@
 ﻿<Root>
     <File Name="object_zo" Segment="6">
-        <Animation Name="object_zo_Anim_000598" Offset="0x598" />
-        <Animation Name="object_zo_Anim_000D48" Offset="0xD48" />
-        <Animation Name="object_zo_Anim_00219C" Offset="0x219C" />
-        <Animation Name="object_zo_Anim_002898" Offset="0x2898" />
+        <Animation Name="gZoraHandsOnHipsTappingFootAnim" Offset="0x598" />
+        <Animation Name="gZoraArmsOpenAnim" Offset="0xD48" />
+        <Animation Name="gZoraThrowRupeeAnim" Offset="0x219C" />
+        <Animation Name="gZoraWalkAnim" Offset="0x2898" />
         <Texture Name="object_zo_Tex_0028B0" OutName="tex_0028B0" Format="ia8" Width="16" Height="16" Offset="0x28B0" />
         <DList Name="object_zo_DL_0029F0" Offset="0x29F0" />
         <DList Name="object_zo_DL_002A50" Offset="0x2A50" />
         <Texture Name="object_zo_Tex_002A70" OutName="tex_002A70" Format="i8" Width="16" Height="16" Offset="0x2A70" />
         <DList Name="object_zo_DL_002BA0" Offset="0x2BA0" />
         <DList Name="object_zo_DL_002C10" Offset="0x2C10" />
-        <Animation Name="object_zo_Anim_003610" Offset="0x3610" />
+        <Animation Name="gZoraSurfacingAnim" Offset="0x3610" />
         <Animation Name="object_zo_Anim_004168" Offset="0x4168" />
-        <Animation Name="object_zo_Anim_004248" Offset="0x4248" />
+        <Animation Name="gZoraIdleAnim" Offset="0x4248" />
         <Texture Name="object_zo_TLUT_004260" OutName="tlut_004260" Format="rgba16" Width="16" Height="16" Offset="0x4260" />
         <Texture Name="object_zo_Tex_004460" OutName="tex_004460" Format="ci8" Width="32" Height="32" Offset="0x4460" />
         <Texture Name="object_zo_Tex_004860" OutName="tex_004860" Format="ci8" Width="32" Height="64" Offset="0x4860" />
         <Texture Name="object_zo_Tex_005060" OutName="tex_005060" Format="ci8" Width="8" Height="8" Offset="0x5060" />
-        <!-- <Blob Name="object_zo_Blob_0050A0" Size="0x1800" Offset="0x50A0" /> -->
+        <Texture Name="gZoraEyeOpenTex" OutName="zora_eye_open" Format="rgba16" Width="32" Height="32" Offset="0x50A0" />
+        <Texture Name="gZoraEyeHalfTex" OutName="zora_eye_half" Format="rgba16" Width="32" Height="32" Offset="0x58A0" />
+        <Texture Name="gZoraEyeClosedTex" OutName="zora_eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x60A0" />
         <Texture Name="object_zo_Tex_0068A0" OutName="tex_0068A0" Format="rgba16" Width="32" Height="32" Offset="0x68A0" />
         <Texture Name="object_zo_Tex_0070A0" OutName="tex_0070A0" Format="ci8" Width="16" Height="16" Offset="0x70A0" />
         <Texture Name="object_zo_Tex_0071A0" OutName="tex_0071A0" Format="ci8" Width="8" Height="8" Offset="0x71A0" />
@@ -59,7 +61,7 @@
         <Limb Name="object_zo_Standardlimb_00D198" Type="Standard" Offset="0xD198" />
         <Limb Name="object_zo_Standardlimb_00D1A4" Type="Standard" Offset="0xD1A4" />
         <Limb Name="object_zo_Standardlimb_00D1B0" Type="Standard" Offset="0xD1B0" />
-        <Skeleton Name="object_zo_Skel_00D208" Type="Flex" LimbType="Standard" Offset="0xD208" />
+        <Skeleton Name="gZoraSkel" Type="Flex" LimbType="Standard" Offset="0xD208" />
         <DList Name="object_zo_DL_00D220" Offset="0xD220" />
         <DList Name="object_zo_DL_00D288" Offset="0xD288" />
         <DList Name="object_zo_DL_00D2A0" Offset="0xD2A0" />
