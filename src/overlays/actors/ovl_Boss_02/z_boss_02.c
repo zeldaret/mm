@@ -555,8 +555,8 @@ void func_809DA460(Boss02Effects* effects, Vec3f* vec) {
         if ((effects->unk_24 == 0) || (effects->unk_24 == 3)) {
             effects->unk_24 = 4;
             effects->unk_00 = *vec;
-            Math_Vec3f_Copy(&effects->unk_0C, &D_801D15B0);
-            Math_Vec3f_Copy(&effects->unk_18, &D_801D15B0);
+            Math_Vec3f_Copy(&effects->unk_0C, &gZeroVec3f);
+            Math_Vec3f_Copy(&effects->unk_18, &gZeroVec3f);
             effects->unk_2C = 0xFF;
             effects->unk_34 = 0.0f;
             break;
@@ -1820,7 +1820,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             if (D_809E0434 != NULL) {
                 D_809E0434->unk_203 = 0;
                 D_809E0434->unk_204 = 1.0f;
-                D_809E0434->actor.world.pos.y = 60.0f;
+                D_809E0434->dyna.actor.world.pos.y = 60.0f;
             }
 
             player->actor.world.pos.x *= 10.0f;
@@ -1892,7 +1892,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             if (D_809E0434 != 0) {
                 D_809E0434->unk_203 = 1;
                 D_809E0434->unk_204 = 0.1f;
-                D_809E0434->actor.world.pos.y = 3155.0f;
+                D_809E0434->dyna.actor.world.pos.y = 3155.0f;
             }
 
             player->actor.world.pos.x *= 0.1f;

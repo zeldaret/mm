@@ -63,6 +63,7 @@
     ((((void)0, gSaveContext.save.equips.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_UPG_VALUE_VOID(upg) \
     ((((void)0, gSaveContext.save.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+#define INV_CONTENT_VOID(item) ((void)0, gSaveContext.save.inventory.items)[SLOT(item)]
 
 #define CUR_FORM ((gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.save.playerForm)
 
@@ -101,6 +102,7 @@ extern GraphicsContext* __gfxCtx;
         s32 __dispPad
 
 #define CLOSE_DISPS(gfxCtx) \
+    (void)0;                \
     }                       \
     (void)0
 

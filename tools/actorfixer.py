@@ -303,6 +303,15 @@ animdict = {
     "func_8017FAA8": "Math3D_YZInSphere",
     "BcCheck3_BgActorInit": "DynaPolyActor_Init",
     "BgCheck3_LoadMesh": "DynaPolyActor_LoadMesh",
+    "func_800A81F0": "EffectBlure_AddVertex",
+    "func_800A8514": "EffectBlure_AddSpace",
+    "Effect_GetParams": "Effect_GetByIndex",
+
+    "D_801D15B0" : "gZeroVec3f",
+    "D_801D15BC" : "gZeroVec3s",
+    "D_801D1DE0" : "gIdentityMtx",
+    "D_801D1E20" : "gIdentityMtxF",
+    "D_0407D590": "gGameplayKeepDrawFlameDL",
 
     "skelanime.unk03": "skelanime.taper",
     "skelanime.animCurrentSeg": "skelanime.animation",

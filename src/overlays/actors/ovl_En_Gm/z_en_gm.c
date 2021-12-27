@@ -1408,7 +1408,7 @@ s32 func_8095097C(EnGm* this, GlobalContext* globalCtx) {
     func_8013AF00(sp7C, 3, this->unk_234->count + 3);
 
     if (!(this->unk_3A4 & 8)) {
-        sp58 = D_801D15B0;
+        sp58 = gZeroVec3f;
         func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250, sp7C,
                       &sp58, this->unk_3C4);
         func_8013B878(globalCtx, this->unk_234, this->unk_250, &sp58);
@@ -1427,7 +1427,7 @@ s32 func_8095097C(EnGm* this, GlobalContext* globalCtx) {
         sp58 = this->actor.world.pos;
     }
 
-    this->unk_238 = D_801D15B0;
+    this->unk_238 = gZeroVec3f;
 
     if (func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250, sp7C,
                       &this->unk_238, this->unk_3C4)) {
@@ -1705,7 +1705,7 @@ void func_809514BC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if (limbIndex == 9) {
-        Matrix_MultiplyVector3fByState(&D_801D15B0, &sp30);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp30);
         Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp30);
     }
 }
