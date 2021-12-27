@@ -1,7 +1,7 @@
 #include "global.h"
 #include "interface/parameter_static/parameter_static.h"
 
-// Bit Flag array in which gBitFlags[n] is literally (1 << n)
+// Bit Flag array in which gBitFlags[n] is (1 << n)
 u32 gBitFlags[] = {
     (1 << 0),  (1 << 1),  (1 << 2),  (1 << 3),  (1 << 4),  (1 << 5),  (1 << 6),  (1 << 7),
     (1 << 8),  (1 << 9),  (1 << 10), (1 << 11), (1 << 12), (1 << 13), (1 << 14), (1 << 15),
@@ -9,30 +9,91 @@ u32 gBitFlags[] = {
     (1 << 24), (1 << 25), (1 << 26), (1 << 27), (1 << 28), (1 << 29), (1 << 30), (1 << 31),
 };
 
-u16 gEquipMasks[] = { 0x000F, 0x00F0, 0x0F00, 0xF000 };
-u16 gEquipNegMasks[] = { 0xFFF0, 0xFF0F, 0xF0FF, 0x0FFF };
+// four-bit masks
+u16 gEquipMasks[] = {
+    0xF << 0,  // Sword
+    0xF << 4,  // Shield
+    0xF << 8,  // Unused (Tunic)
+    0xF << 12, // Unused (Boots)
+};
+
+// four-bit masks
+u16 gEquipNegMasks[] = {
+    ~(0xF << 0),        // Sword
+    ~(0xF << 4),        // Shield
+    ~(0xF << 8),        // Unused (Tunic)
+    (u16) ~(0xF << 12), // Unused (Boots)
+};
+
+// 3 = two bits
+// 7 = three bits
 u32 gUpgradeMasks[] = {
-    0x00000007, 0x00000038, 0x000001C0, 0x00000E00, 0x00003000, 0x0001C000, 0x000E0000, 0x00700000,
+    7 << 0,  // Quivers
+    7 << 3,  // Bomb Bags
+    7 << 6,  // Unused (Strength)
+    7 << 9,  // Unused (Scale)
+    3 << 12, // Wallets
+    7 << 14, // Unused (Deku Seed Bullet Bags)
+    7 << 17, // Unused (Deku Stick)
+    7 << 20, // Unused (Deku Nut)
 };
+
+// 3 = two-bit masks
+// 7 = three-bit masks
 u32 gUpgradeNegMasks[] = {
-    0xFFFFFFF8, 0xFFFFFFC7, 0xFFFFFE3F, 0xFFFFF1FF, 0xFFFFCFFF, 0xFFFE3FFF, 0xFFF1FFFF, 0xFF8FFFFF,
+    ~(7 << 0),  // Quivers
+    ~(7 << 3),  // Bomb Bags
+    ~(7 << 6),  // Unused (Strength)
+    ~(7 << 9),  // Unused (Scale)
+    ~(3 << 12), // Wallets
+    ~(7 << 14), // Unused (Deku Seed Bullet Bags)
+    ~(7 << 17), // Unused (Deku Stick)
+    ~(7 << 20), // Unused (Deku Nut)
 };
-u8 gEquipShifts[] = { 0, 4, 8, 12 };
-u8 gUpgradeShifts[] = { 0, 3, 6, 9, 12, 14, 17, 20 };
+
+u8 gEquipShifts[] = {
+    0,  // Sword
+    4,  // Shield
+    8,  // Unused (Tunic)
+    12, // Unused (Boots)
+};
+
+u8 gUpgradeShifts[] = {
+    0,  // Quivers
+    3,  // Bomb Bags
+    6,  // Unused (Strength)
+    9,  // Unused (Scale)
+    12, // Wallets
+    14, // Unused (Deku Seed Bullet Bags)
+    17, // Unused (Deku Stick)
+    20, // Unused (Deku Nut)
+};
 
 u16 gUpgradeCapacities[][4] = {
     { 0, 30, 40, 50 },     // Quivers
     { 0, 20, 30, 40 },     // Bomb Bags
-    { 0, 0, 0, 0 },        // Unused (Scale)
     { 0, 0, 0, 0 },        // Unused (Strength)
+    { 0, 0, 0, 0 },        // Unused (Scale)
     { 99, 200, 500, 500 }, // Wallets
     { 0, 30, 40, 50 },     // Unused (Deku Seed Bullet Bags)
     { 0, 10, 20, 30 },     // Unused (Deku Stick)
     { 0, 20, 30, 40 },     // Unused (Deku Nut)
 };
 
-u32 gGsFlagsMask[] = { 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000 };
-u32 gGsFlagsShift[] = { 0, 8, 16, 24 };
+// eight-bit masks
+u32 gGsFlagsMask[] = {
+    0xFF << 0,
+    0xFF << 8,
+    0xFF << 16,
+    0xFF << 24,
+};
+
+u32 gGsFlagsShift[] = {
+    0,
+    8,
+    16,
+    24,
+};
 
 // TODO: use symbols for these icon textures once textures are properly in C
 void* gItemIcons[] = {
