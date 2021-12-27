@@ -308,8 +308,6 @@ animdict = {
     "func_800A81F0": "EffectBlure_AddVertex",
     "func_800A8514": "EffectBlure_AddSpace",
     "Effect_GetParams": "Effect_GetByIndex",
-
-    "D_0407D590": "gGameplayKeepDrawFlameDL",
     
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",
@@ -332,6 +330,7 @@ animdict = {
     "globalCtx->mf_187FC" : "globalCtx->billboardMtxF",
     "globalCtx->projectionMatrix" : "globalCtx->viewProjectionMtxF",
 
+    "D_0407D590": "gGameplayKeepDrawFlameDL",
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",
     "D_801D1DE0" : "gIdentityMtx",
