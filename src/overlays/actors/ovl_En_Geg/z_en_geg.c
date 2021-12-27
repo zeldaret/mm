@@ -9,6 +9,7 @@
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/object_taisou/object_taisou.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000019
 
@@ -681,7 +682,8 @@ void func_80BB2B1C(EnGeg* this, GlobalContext* globalCtx) {
                 this->unk_4C0[i].x *= temp_f20;
                 this->unk_4C0[i].y *= temp_f20;
                 this->unk_4C0[i].z *= temp_f20;
-                EffectSsHahen_Spawn(globalCtx, &this->unk_4B4, &this->unk_4C0[i], &sp74, 1, sp68, 1, 15, D_0406AB30);
+                EffectSsHahen_Spawn(globalCtx, &this->unk_4B4, &this->unk_4C0[i], &sp74, 1, sp68, 1, 15,
+                                    gameplay_keep_DL_06AB30);
             }
         }
         this->unk_4E0--;
@@ -820,12 +822,12 @@ void func_80BB3318(EnGeg* this, GlobalContext* globalCtx) {
             this->unk_4D8++;
         }
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        func_800AE930(&globalCtx->colCtx, Effect_GetParams(this->unk_4DC), &this->actor.world.pos, 18.0f,
+        func_800AE930(&globalCtx->colCtx, Effect_GetByIndex(this->unk_4DC), &this->actor.world.pos, 18.0f,
                       this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
     }
 
     if (ActorCutscene_GetCurrentIndex() != this->unk_49C[7]) {
-        func_800AEF44(Effect_GetParams(this->unk_4DC));
+        func_800AEF44(Effect_GetByIndex(this->unk_4DC));
         Actor_MarkForDeath(&this->actor);
     } else {
         Math_ApproachF(&this->actor.speedXZ, 10.0f, 0.2f, 1.0f);
@@ -846,10 +848,7 @@ void EnGeg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnGeg* this = THIS;
     s32 pad2;
-    s32 sp34[] = {
-        0x3E,
-        0xF64,
-    };
+    s32 sp34[] = { 0x3E, 0xF64 };
 
     if (gSaveContext.weekEventReg[61] & 1) {
         Actor_MarkForDeath(&this->actor);
@@ -902,7 +901,7 @@ void EnGeg_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 s32 func_80BB3728(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 arg5) {
     Vec3f sp7C;
-    Vec3f sp70 = D_801D15B0;
+    Vec3f sp70 = gZeroVec3f;
     Vec3s sp68;
     MtxF sp28;
 
