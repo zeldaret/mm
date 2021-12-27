@@ -172,7 +172,7 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_168 == 0) && (this->unk_14C < 0.001f)) {
-        Math_Vec3f_Copy(&this->actor.velocity, &D_801D15B0);
+        Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
         this->unk_160 = 3;
         this->unk_16A = 0;
         this->actionFunc = func_80A4A608;
@@ -219,7 +219,7 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
 
             this->unk_168 = 0;
             this->unk_14C = 0.0f;
-            Math_Vec3f_Copy(&this->actor.velocity, &D_801D15B0);
+            Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
             this->unk_160 = 3;
             this->unk_16A = 0;
             this->actionFunc = func_80A4A608;
@@ -246,7 +246,7 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
                 } else if (this->unk_16A != 0) {
                     Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
                 }
-                Math_Vec3f_Copy(&this->actor.velocity, &D_801D15B0);
+                Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
                 this->unk_168 = 0;
                 this->unk_160 = 2;
                 this->unk_14C = 0.0f;
@@ -471,9 +471,9 @@ void EnWizFire_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk_204 = this->unk_200 / 60.0f;
 
     if (this->unk_162 == 0) {
-        EnWiz* wiz = (EnWiz*)this->actor.parent;
+        Actor* wiz = this->actor.parent;
 
-        if ((wiz != NULL) && (wiz->actor.id == ACTOR_EN_WIZ) && (wiz->actor.update != NULL) && (wiz->unk_74A != 2)) {
+        if ((wiz != NULL) && (wiz->id == ACTOR_EN_WIZ) && (wiz->update != NULL) && (((EnWiz*)wiz)->unk_74A != 2)) {
             f32 phi_f0;
 
             idx = this->unk_166 * 4;
@@ -796,7 +796,7 @@ void func_80A4BC74(EnWizFire* this, Vec3f* arg1, Vec3f* arg2) {
     for (i = 0; i < ARRAY_COUNT(this->unk_254); i++, ptr++) {
         if (ptr->unk_00 == 0) {
             ptr->unk_00 = 1;
-            Math_Vec3f_Copy(&ptr->unk_1C, &D_801D15B0);
+            Math_Vec3f_Copy(&ptr->unk_1C, &gZeroVec3f);
             ptr->unk_01 = Rand_ZeroFloat(100.0f);
             ptr->unk_10 = *arg1;
             ptr->unk_28 = *arg2;
