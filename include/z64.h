@@ -703,6 +703,22 @@ typedef struct {
 } InterfaceContext; // size = 0x348
 
 typedef struct {
+    /* 0x00 */ void* loadedRamAddr;
+    /* 0x04 */ uintptr_t vromStart;
+    /* 0x08 */ uintptr_t vromEnd;
+    /* 0x0C */ void* vramStart;
+    /* 0x10 */ void* vramEnd;
+    /* 0x14 */ uintptr_t offset; // loadedRamAddr - vramStart
+    /* 0x18 */ const char* name;
+} KaleidoMgrOverlay; // size = 0x1C
+
+typedef enum {
+    /* 0x00 */ KALEIDO_OVL_KALEIDO_SCOPE,
+    /* 0x01 */ KALEIDO_OVL_PLAYER_ACTOR,
+    /* 0x02 */ KALEID_OVL_MAX
+} KaleidoMgrOverlayType;
+
+typedef struct {
     /* 0x00 */ u16 unk_0;
     /* 0x02 */ u16 unk_2;
     /* 0x04 */ f32 unk_4;
@@ -1261,14 +1277,8 @@ struct FireObj {
 struct TargetContext {
     /* 0x00 */ Vec3f unk0;
     /* 0x0C */ Vec3f unkC;
-    /* 0x18 */ f32 unk18;
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ f32 unk20;
-    /* 0x24 */ f32 unk24;
-    /* 0x28 */ f32 unk28;
-    /* 0x2C */ f32 unk2C;
-    /* 0x30 */ f32 unk30;
-    /* 0x34 */ f32 unk34;
+    /* 0x18 */ Color_RGBAf unk18;
+    /* 0x28 */ Color_RGBAf unk28;
     /* 0x38 */ Actor* unk38;
     /* 0x3C */ Actor* unk3C;
     /* 0x40 */ f32 unk40;
