@@ -205,7 +205,8 @@ void func_80AFE25C(EnColMan* this, GlobalContext* globalCtx) {
     if (BREG(60) || (this->actor.world.rot.z != 0)) {
         if (this->actor.params == EN_COL_MAN_CUTSCENE_BOMB) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.parent->world.pos.x,
-                        this->actor.parent->world.pos.y, this->actor.parent->world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
+                        this->actor.parent->world.pos.y, this->actor.parent->world.pos.z, 0, 0, 0,
+                        CLEAR_TAG_SMALL_EXPLOSION);
         } else {
             EnBom* bomb = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
