@@ -176,7 +176,7 @@ void func_8095D804(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f spB8;
 
     if (!(ENISHI_GET_8(&this->actor))) {
-        phi_s4 = D_050066B0;
+        phi_s4 = gameplay_field_keep_DL_0066B0;
     } else {
         phi_s4 = object_ishi_DL_0009B0;
     }
@@ -255,7 +255,7 @@ void func_8095DABC(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         EffectSsKakera_Spawn(globalCtx, &spCC, &spD8, &this->actor.world.pos, phi_v1, phi_v0, 30, 5, 0, D_8095F758[i],
-                             5, 2, 70, 0, 2, D_05006420);
+                             5, 2, 70, 0, 2, gameplay_field_keep_DL_006420);
     }
 }
 
@@ -694,7 +694,7 @@ void func_8095F210(EnIshi* this, GlobalContext* globalCtx) {
 
     if ((this->actor.projectedPos.z <= 1200.0f) ||
         (((this->unk_197 & 1) != 0) && (this->actor.projectedPos.z < 1300.0f))) {
-        func_800BDFC0(globalCtx, D_050066B0);
+        func_800BDFC0(globalCtx, gameplay_field_keep_DL_0066B0);
         return;
     }
 
