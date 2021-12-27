@@ -22,7 +22,7 @@ const ActorInit Obj_Milk_Bin_InitVars = {
     ACTOR_OBJ_MILK_BIN,
     ACTORCAT_PROP,
     FLAGS,
-    OBJECT_OBJECT_UNSET_MILK_BIN,
+    OBJECT_OBJ_MILK_BIN,
     sizeof(ObjMilkBin),
     (ActorFunc)ObjMilkBin_Init,
     (ActorFunc)ObjMilkBin_Destroy,

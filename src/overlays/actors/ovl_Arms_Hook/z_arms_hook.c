@@ -5,6 +5,7 @@
  */
 
 #include "z_arms_hook.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000030
 
@@ -334,7 +335,7 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
         f0 = sqrtf(SQ(sp68.y) + sp48);
         Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_040008D0);
+        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0008D0);
         func_801229A0(globalCtx, player);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);

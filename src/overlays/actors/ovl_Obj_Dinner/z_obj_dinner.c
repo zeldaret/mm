@@ -19,7 +19,7 @@ const ActorInit Obj_Dinner_InitVars = {
     ACTOR_OBJ_DINNER,
     ACTORCAT_PROP,
     FLAGS,
-    OBJECT_OBJECT_UNSET_DINNER,
+    OBJECT_OBJ_DINNER,
     sizeof(ObjDinner),
     (ActorFunc)ObjDinner_Init,
     (ActorFunc)ObjDinner_Destroy,
