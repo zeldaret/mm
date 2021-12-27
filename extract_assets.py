@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse, json, os, signal, time, colorama
-from multiprocessing import *
+import argparse, json, os, signal, time, colorama, multiprocessing
 
 colorama.init();
 
@@ -96,8 +95,8 @@ def main():
         print("Using extra ZAPD arguments: " + ZAPDArgs);
 
     global mainAbort
-    mainAbort = Event()
-    manager = Manager()
+    mainAbort = multiprocessing.Event()
+    manager = multiprocessing.Manager()
     signal.signal(signal.SIGINT, SignalHandler)
 
     extractedAssetsTracker = manager.dict()
@@ -130,9 +129,9 @@ def main():
             if numCores <= 0:
                 numCores = 1
             print("Extracting assets with " + str(numCores) + " CPU core" + ("s" if numCores > 1 else "") + ".")
-            with get_context("fork").Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
+            with multiprocessing.get_context("fork").Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
                 p.map(ExtractFunc, xmlFiles)
-        except (ProcessError, TypeError):
+        except (multiprocessing.ProcessError, TypeError):
             print("Warning: Multiprocessing exception ocurred.", file=os.sys.stderr)
             print("Disabling mutliprocessing.", file=os.sys.stderr)
 
