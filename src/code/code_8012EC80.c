@@ -1,5 +1,5 @@
 #include "global.h"
-#include "misc/parameter_static/parameter_static.h"
+#include "interface/parameter_static/parameter_static.h"
 
 // Bit Flag array in which gBitFlags[n] is literally (1 << n)
 u32 gBitFlags[] = {

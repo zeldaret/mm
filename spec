@@ -9315,7 +9315,7 @@ beginseg
     name "parameter_static"
     compress
     romalign 0x1000
-    include "build/assets/misc/parameter_static/parameter_static.o"
+    include "build/assets/interface/parameter_static/parameter_static.o"
     number 2
 endseg
 
