@@ -1324,11 +1324,11 @@
         <DList Name="gameplay_keep_DL_07D260" Offset="0x7D260" />
         <DList Name="gameplay_keep_DL_07D348" Offset="0x7D348" />
         <Texture Name="gameplay_keep_Tex_07D350" OutName="tex_07D350" Format="i8" Width="16" Height="32" Offset="0x7D350" />
-        <DList Name="gameplay_keep_DL_07D590" Offset="0x7D590" />
+        <DList Name="gGameplayKeepDrawFlameDL" Offset="0x7D590" />
         <DList Name="gameplay_keep_DL_07D650" Offset="0x7D650" />
-        <Texture Name="gameplay_keep_Tex_07D710" OutName="tex_07D710" Format="i4" Width="32" Height="64" Offset="0x7D710" />
+        <Texture Name="gGameplayKeepFlameRippleTex" OutName="gameplay_keep_flame_ripple" Format="i4" Width="32" Height="64" Offset="0x7D710" />
         <Texture Name="gameplay_keep_Tex_07DB10" OutName="tex_07DB10" Format="i4" Width="32" Height="64" Offset="0x7DB10" />
-        <Texture Name="gameplay_keep_Tex_07DF10" OutName="tex_07DF10" Format="i8" Width="32" Height="64" Offset="0x7DF10" />
+        <Texture Name="gGameplayKeepFlameOutlineTex" OutName="gameplay_keep_flame_outline" Format="i8" Width="32" Height="64" Offset="0x7DF10" />
         <DList Name="gameplay_keep_DL_07E8C0" Offset="0x7E8C0" />
         <Texture Name="gameplay_keep_Tex_07EA08" OutName="tex_07EA08" Format="i8" Width="32" Height="64" Offset="0x7EA08" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_07F218" Offset="0x7F218" />
