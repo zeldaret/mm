@@ -290,7 +290,8 @@ void EnRailSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_3F8 = 0;
     }
 
-    if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.currentCsIndex == 0)) {
+    if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) &&
+        (globalCtx->csCtx.currentCsIndex == 0)) {
         this->actor.flags |= 0x100000;
     }
 
