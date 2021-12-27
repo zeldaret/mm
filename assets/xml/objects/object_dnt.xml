@@ -13,7 +13,7 @@
         <Animation Name="object_dnt_Anim_003438" Offset="0x3438" />
         <Animation Name="object_dnt_Anim_0038CC" Offset="0x38CC" />
         <Animation Name="object_dnt_Anim_003CC0" Offset="0x3CC0" />
-        <!-- <Blob Name="object_dnt_Blob_003CD0" Size="0x10" Offset="0x3CD0" /> -->
+        <Blob Name="object_dnt_Blob_003CD0" Size="0x10" Offset="0x3CD0" />
         <Animation Name="object_dnt_Anim_004700" Offset="0x4700" />
         <Animation Name="object_dnt_Anim_004AA0" Offset="0x4AA0" />
         <Animation Name="object_dnt_Anim_004E38" Offset="0x4E38" />
