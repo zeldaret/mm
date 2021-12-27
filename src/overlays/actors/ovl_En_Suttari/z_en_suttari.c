@@ -331,7 +331,7 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
             case 0:
                 if (gSaveContext.weekEventReg[0x51] & 1) {
                     this->textId = 0x1455;
-                    ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk264 |= 8;
+                    ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 8;
                     this->flags2 |= 1;
                 } else {
                     this->textId = 0x1450;
@@ -353,7 +353,7 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
             case 0x1453:
                 this->flags1 |= 0x400;
                 gSaveContext.weekEventReg[0x51] |= 1;
-                ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk264 |= 8;
+                ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 8;
                 this->flags2 |= 1;
                 this->textId = 0x1454;
                 break;
@@ -1318,7 +1318,7 @@ void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
                 }
                 this->flags1 &= ~0x400;
                 if (this->flags2 & 1) {
-                    ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk264 |= 0x10;
+                    ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 0x10;
                     this->flags2 &= ~1;
                 }
                 globalCtx->msgCtx.msgMode = 0x43;
