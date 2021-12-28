@@ -93,8 +93,8 @@ void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06012A58, &D_0600B644, this->jointTable,
-                       this->morphTable, HGO_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06012A58, &D_0600B644, this->jointTable, this->morphTable,
+                       HGO_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
@@ -349,13 +349,12 @@ void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (func_80BD0898(this, globalCtx)) {
         func_800E8F08(&this->unk_300, &this->unk_306);
     } else if (this->actionFunc != func_80BD0410) {
-            if (this->actionFunc != func_80BD0434) {
-                Collider_UpdateCylinder(&this->actor, &this->collider);
-                CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-                func_80BD0B8C(this, globalCtx);
-            }
+        if (this->actionFunc != func_80BD0434) {
+            Collider_UpdateCylinder(&this->actor, &this->collider);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            func_80BD0B8C(this, globalCtx);
         }
-    
+    }
 }
 
 s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
