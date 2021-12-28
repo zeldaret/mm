@@ -431,8 +431,8 @@ void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx) {
 void EnTalkGibud_SetupGrabFail(EnTalkGibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
-    this->actionFunc = EnTalkGibud_GrabFail;
     this->actor.speedXZ = -2.0f;
+    this->actionFunc = EnTalkGibud_GrabFail;
 }
 
 void EnTalkGibud_GrabFail(EnTalkGibud* this, GlobalContext* globalCtx) {
@@ -532,8 +532,8 @@ void EnTalkGibud_SetupDamage(EnTalkGibud* this) {
     this->stunTimer = 0;
     this->grabWaitTimer = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->actionFunc = EnTalkGibud_Damage;
     this->actor.speedXZ = -2.0f;
+    this->actionFunc = EnTalkGibud_Damage;
 }
 
 void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx) {

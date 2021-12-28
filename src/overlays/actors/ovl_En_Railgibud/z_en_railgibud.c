@@ -429,8 +429,8 @@ void EnRailgibud_Grab(EnRailgibud* this, GlobalContext* globalCtx) {
 void EnRailgibud_SetupGrabFail(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 7);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
-    this->actionFunc = EnRailgibud_GrabFail;
     this->actor.speedXZ = -2.0f;
+    this->actionFunc = EnRailgibud_GrabFail;
 }
 
 void EnRailgibud_GrabFail(EnRailgibud* this, GlobalContext* globalCtx) {
@@ -504,8 +504,8 @@ void EnRailgibud_SetupDamage(EnRailgibud* this) {
     this->stunTimer = 0;
     this->grabWaitTimer = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->actionFunc = EnRailgibud_Damage;
     this->actor.speedXZ = -2.0f;
+    this->actionFunc = EnRailgibud_Damage;
 }
 
 void EnRailgibud_Damage(EnRailgibud* this, GlobalContext* globalCtx) {
