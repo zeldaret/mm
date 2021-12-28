@@ -33,7 +33,6 @@ void func_8088F5F4(EnElf* this, GlobalContext* globalCtx, s32 arg2);
 void func_8089010C(Actor* thisx, GlobalContext* globalCtx);
 void func_808908D0(Vec3f* arg0, GlobalContext* globalCtx, u32 arg2);
 
-
 const ActorInit En_Elf_InitVars = {
     ACTOR_EN_ELF,
     ACTORCAT_ITEMACTION,
@@ -322,7 +321,8 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
     s32 params;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_02AF58, &gameplay_keep_Anim_029140, this->jointTable, this->morphTable, 7);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_02AF58, &gameplay_keep_Anim_029140,
+                   this->jointTable, this->morphTable, 7);
     ActorShape_Init(&thisx->shape, 0.0f, NULL, 15.0f);
     thisx->shape.shadowAlpha = 255;
 

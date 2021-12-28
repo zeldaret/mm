@@ -61,7 +61,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-
 void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgIcicle* this = THIS;

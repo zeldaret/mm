@@ -20,7 +20,6 @@ void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80950CDC(EnGm* this, GlobalContext* globalCtx);
 void func_80950DB8(EnGm* this, GlobalContext* globalCtx);
 
-
 static u32 D_80951820[] = {
     0x0D000101, 0x360A0061, 0x25020600, 0x09001902, 0x0900090A, 0x0D02090A, 0x090F0105, 0x0E090A09, 0x0F0F0E09,
     0x00090A18, 0x0E060009, 0x00060A00, 0x6C490209, 0x0A090F3D, 0x02090F0A, 0x0031020A, 0x000A0525, 0x020C0F0C,
@@ -130,10 +129,12 @@ static ColliderSphereInit sSphereInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static ActorAnimationEntryS D_80951CC0[13] = {
-    { &object_in2_Anim_009CDC, 1.0f, 0, -1, 0, 0 },  { &object_in2_Anim_009CDC, 1.0f, 0, -1, 0, -4 }, { &object_in2_Anim_00A5E0, 1.0f, 0, -1, 0, 0 },
-    { &object_in2_Anim_00A70C, 1.0f, 0, 1, 0, 0 },   { &object_in2_Anim_008090, 1.0f, 0, -1, 0, 0 },  { &object_in2_Anim_00898C, 1.0f, 0, -1, 2, -4 },
-    { &object_in2_Anim_009450, 1.0f, 0, -1, 2, -4 }, { &object_in2_Anim_00AD18, 1.0f, 0, -1, 0, 0 },  { &object_in2_Anim_00AD18, 1.0f, 0, -1, 0, -4 },
-    { &object_in2_Anim_00B8B0, 1.0f, 0, -1, 2, 0 },  { &object_in2_Anim_00BA80, 1.0f, 0, -1, 0, -4 }, { &object_in2_Anim_00C03C, 1.0f, 0, -1, 0, -4 },
+    { &object_in2_Anim_009CDC, 1.0f, 0, -1, 0, 0 },  { &object_in2_Anim_009CDC, 1.0f, 0, -1, 0, -4 },
+    { &object_in2_Anim_00A5E0, 1.0f, 0, -1, 0, 0 },  { &object_in2_Anim_00A70C, 1.0f, 0, 1, 0, 0 },
+    { &object_in2_Anim_008090, 1.0f, 0, -1, 0, 0 },  { &object_in2_Anim_00898C, 1.0f, 0, -1, 2, -4 },
+    { &object_in2_Anim_009450, 1.0f, 0, -1, 2, -4 }, { &object_in2_Anim_00AD18, 1.0f, 0, -1, 0, 0 },
+    { &object_in2_Anim_00AD18, 1.0f, 0, -1, 0, -4 }, { &object_in2_Anim_00B8B0, 1.0f, 0, -1, 2, 0 },
+    { &object_in2_Anim_00BA80, 1.0f, 0, -1, 0, -4 }, { &object_in2_Anim_00C03C, 1.0f, 0, -1, 0, -4 },
     { &object_in2_Anim_00B990, 1.0f, 0, -1, 0, -4 },
 };
 
@@ -1581,7 +1582,8 @@ void EnGm_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 22.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_in2_Skel_0078B0, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_in2_Skel_0078B0, NULL, this->jointTable, this->morphTable,
+                       20);
     this->unk_3E8 = -1;
     func_8094E054(this, globalCtx, 0);
     Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -1735,10 +1737,8 @@ void func_80951594(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_80951E30[] = { 
-        object_in2_Tex_0054A8, object_in2_Tex_005028, 
-        object_in2_Tex_006828, object_in2_Tex_005028, 
-        object_in2_Tex_005CE8, object_in2_Tex_006C68 };
+    static TexturePtr D_80951E30[] = { object_in2_Tex_0054A8, object_in2_Tex_005028, object_in2_Tex_006828,
+                                       object_in2_Tex_005028, object_in2_Tex_005CE8, object_in2_Tex_006C68 };
     EnGm* this = THIS;
 
     if ((this->unk_258 != 0) && (this->unk_262 >= 0)) {

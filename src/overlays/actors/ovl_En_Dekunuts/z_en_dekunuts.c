@@ -39,7 +39,6 @@ void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx);
 void func_808BE680(EnDekunuts* this);
 void func_808BE6C4(EnDekunuts* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Dekunuts_InitVars = {
     ACTOR_EN_DEKUNUTS,
     ACTORCAT_ENEMY,
@@ -120,7 +119,8 @@ void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, &object_dekunuts_Anim_00326C, this->jointTable, this->morphTable, 10);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, &object_dekunuts_Anim_00326C,
+                   this->jointTable, this->morphTable, 10);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_194 = ENDEKUNUTS_GET_FF00(&this->actor);
@@ -542,7 +542,8 @@ void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx) {
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0xE0);
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ETCETERA, this->actor.home.pos.x, this->actor.home.pos.y,
                     this->actor.home.pos.z, 0, this->actor.home.rot.y, 0, 0x80);
-        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, 64, 10, object_dekunuts_DL_001F50);
+        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, 64, 10,
+                                 object_dekunuts_DL_001F50);
         Actor_MarkForDeath(&this->actor);
     }
 }

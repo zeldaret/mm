@@ -113,16 +113,26 @@ void EnMa4_UpdateEyes(EnMa4* this) {
 }
 
 static struct_80B8E1A8 sAnimationInfo[] = {
-    { &object_ma1_Anim_009E58, 1.0f, 0, 0.0f }, { &object_ma1_Anim_009E58, 1.0f, 0, -6.0f }, // Idle anim
-    { &object_ma1_Anim_002A8C, 1.0f, 0, 0.0f }, { &object_ma1_Anim_002A8C, 1.0f, 0, -6.0f }, // Looking around anim
-    { &object_ma1_Anim_018948, 1.0f, 2, 0.0f }, { &object_ma1_Anim_018948, 1.0f, 2, -6.0f }, // Starts holding hands anim
-    { &object_ma1_Anim_01B76C, 1.0f, 0, 0.0f }, { &object_ma1_Anim_01B76C, 1.0f, 0, -6.0f }, // Holnding hands anim
-    { &object_ma1_Anim_007328, 1.0f, 0, 0.0f }, { &object_ma1_Anim_007328, 1.0f, 0, -6.0f }, // Walking anim
-    { &object_ma1_Anim_014088, 1.0f, 0, 0.0f }, { &object_ma1_Anim_014088, 1.0f, 0, -6.0f }, //
-    { &object_ma1_Anim_015B7C, 1.0f, 2, 0.0f }, { &object_ma1_Anim_015B7C, 1.0f, 2, -6.0f }, // Shoot arrow anim
-    { &object_ma1_Anim_007D98, 1.0f, 0, 0.0f }, { &object_ma1_Anim_007D98, 1.0f, 0, -6.0f }, // Sitting anim
-    { &object_ma1_Anim_00852C, 1.0f, 0, 0.0f }, { &object_ma1_Anim_00852C, 1.0f, 0, -6.0f }, // Sitting traumatized anim
-    { &object_ma1_Anim_008F6C, 1.0f, 0, 0.0f }, { &object_ma1_Anim_008F6C, 1.0f, 0, -6.0f }, // Sitting sad anim
+    { &object_ma1_Anim_009E58, 1.0f, 0, 0.0f },
+    { &object_ma1_Anim_009E58, 1.0f, 0, -6.0f }, // Idle anim
+    { &object_ma1_Anim_002A8C, 1.0f, 0, 0.0f },
+    { &object_ma1_Anim_002A8C, 1.0f, 0, -6.0f }, // Looking around anim
+    { &object_ma1_Anim_018948, 1.0f, 2, 0.0f },
+    { &object_ma1_Anim_018948, 1.0f, 2, -6.0f }, // Starts holding hands anim
+    { &object_ma1_Anim_01B76C, 1.0f, 0, 0.0f },
+    { &object_ma1_Anim_01B76C, 1.0f, 0, -6.0f }, // Holnding hands anim
+    { &object_ma1_Anim_007328, 1.0f, 0, 0.0f },
+    { &object_ma1_Anim_007328, 1.0f, 0, -6.0f }, // Walking anim
+    { &object_ma1_Anim_014088, 1.0f, 0, 0.0f },
+    { &object_ma1_Anim_014088, 1.0f, 0, -6.0f }, //
+    { &object_ma1_Anim_015B7C, 1.0f, 2, 0.0f },
+    { &object_ma1_Anim_015B7C, 1.0f, 2, -6.0f }, // Shoot arrow anim
+    { &object_ma1_Anim_007D98, 1.0f, 0, 0.0f },
+    { &object_ma1_Anim_007D98, 1.0f, 0, -6.0f }, // Sitting anim
+    { &object_ma1_Anim_00852C, 1.0f, 0, 0.0f },
+    { &object_ma1_Anim_00852C, 1.0f, 0, -6.0f }, // Sitting traumatized anim
+    { &object_ma1_Anim_008F6C, 1.0f, 0, 0.0f },
+    { &object_ma1_Anim_008F6C, 1.0f, 0, -6.0f }, // Sitting sad anim
 };
 
 void EnMa4_ChangeAnim(EnMa4* this, s32 index) {
@@ -135,9 +145,9 @@ void func_80ABDD9C(EnMa4* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 flag;
 
-    if (this->unk_1D8.unk_00 == 0 &&
-        ((this->skelAnime.animation == &object_ma1_Anim_007328) || (this->skelAnime.animation == &object_ma1_Anim_002A8C) ||
-         (this->skelAnime.animation == &object_ma1_Anim_015B7C))) {
+    if (this->unk_1D8.unk_00 == 0 && ((this->skelAnime.animation == &object_ma1_Anim_007328) ||
+                                      (this->skelAnime.animation == &object_ma1_Anim_002A8C) ||
+                                      (this->skelAnime.animation == &object_ma1_Anim_015B7C))) {
         flag = 1;
     } else {
         flag = (this->type == MA4_TYPE_ALIENS_WON && this->actionFunc != EnMa4_DialogueHandler) ? 1 : 0;

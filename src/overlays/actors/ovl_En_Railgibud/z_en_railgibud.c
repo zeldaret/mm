@@ -48,7 +48,6 @@ void func_80BA7D04(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7D30(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA8050(Actor* thisx, GlobalContext* globalCtx);
 
-
 const ActorInit En_Railgibud_InitVars = {
     ACTOR_EN_RAILGIBUD,
     ACTORCAT_ENEMY,
@@ -200,7 +199,8 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0, this->jointTable,
+                       this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -501,7 +501,8 @@ void func_80BA64AC(EnRailgibud* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if ((this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
             this->actor.hintId = 0x2A;
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable, this->morphTable, 26);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
+                               this->morphTable, 26);
             this->unk_3F8 = 1;
         }
         func_80BA6284(this);
@@ -564,7 +565,8 @@ void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_3F2 == 20) && (this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable, this->morphTable, 26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
+                           this->morphTable, 26);
         this->unk_3F8 = 1;
     }
 }
@@ -976,7 +978,8 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
     this->actor.flags |= 0x100000;
     this->actor.flags |= 0x10;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0, this->jointTable,
+                       this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);

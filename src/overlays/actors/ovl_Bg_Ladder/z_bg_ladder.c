@@ -20,8 +20,6 @@ void BgLadder_ActionStartCutscene(BgLadder* this, GlobalContext* globalCtx);
 void BgLadder_ActionFadeIn(BgLadder* this, GlobalContext* globalCtx);
 void BgLadder_ActionIdle(BgLadder* this, GlobalContext* globalCtx);
 
-
-
 const ActorInit Bg_Ladder_InitVars = {
     ACTOR_BG_LADDER,
     ACTORCAT_PROP,

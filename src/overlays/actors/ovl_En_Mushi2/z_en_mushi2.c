@@ -32,7 +32,6 @@ void func_80A6AE7C(EnMushi2* this, GlobalContext* globalCtx);
 void func_80A6B078(EnMushi2* this);
 void func_80A6B0D8(EnMushi2* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
     ACTORCAT_ITEMACTION,
@@ -751,7 +750,8 @@ void EnMushi2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.home.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_80A68F24(this);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_0527A0, &gameplay_keep_Anim_05140C, this->jointTable, this->morphTable, 24);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_0527A0, &gameplay_keep_Anim_05140C,
+                   this->jointTable, this->morphTable, 24);
     Animation_Change(&this->skelAnime, &gameplay_keep_Anim_05140C, 1.0f, 0.0f, 0.0f, 1, 0.0f);
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);

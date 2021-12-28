@@ -43,7 +43,6 @@ static InitChainEntry D_80B3C96C[] = {
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
-
 void func_80B3C260(ObjGhaka* this) {
     if (gSaveContext.weekEventReg[20] & 0x20) {
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + 100.0f;

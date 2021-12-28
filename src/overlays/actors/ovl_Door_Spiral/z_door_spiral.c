@@ -83,24 +83,21 @@ const ActorInit Door_Spiral_InitVars = {
 
 // Parameters for each staircase, indexed with SpiralType
 static SpiralInfo sSpiralInfo[] = {
-    { { NULL, NULL }, 0, 130, 12, 50, 15 },             // SPIRAL_OVERWORLD
+    { { NULL, NULL }, 0, 130, 12, 50, 15 },                                                       // SPIRAL_OVERWORLD
     { { gameplay_dangeon_keep_DL_0219E0, gameplay_dangeon_keep_DL_01D980 }, 0, 130, 12, 50, 15 }, // SPIRAL_DUNGEON
     { { object_numa_obj_DL_004448, object_numa_obj_DL_0007A8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE
     { { object_numa_obj_DL_0051B8, object_numa_obj_DL_0014C8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE_ALT
     { { object_hakugin_obj_DL_009278, object_hakugin_obj_DL_006128 }, 0, 130, 12, 50, 15 }, // SPIRAL_SNOWHEAD_TEMPLE
-    { { object_ikana_obj_DL_013EA8, object_ikana_obj_DL_012B70 }, 0, 130, 12, 50, 15 }, // SPIRAL_STONE_TOWER
+    { { object_ikana_obj_DL_013EA8, object_ikana_obj_DL_012B70 }, 0, 130, 12, 50, 15 },     // SPIRAL_STONE_TOWER
     { { object_ikninside_obj_DL_000EA0, object_ikninside_obj_DL_000590 }, 0, 130, 12, 50, 15 }, // SPIRAL_IKANA_CASTLE
     { { object_danpei_object_DL_002110, object_danpei_object_DL_0012C0 }, 0, 130, 12, 50, 15 }, // SPIRAL_DAMPES_HOUSE
 };
 
 // Defines which object bank a staircase should use, and its index to `sSpiralInfo`
 static SpiralObjectInfo sSpiralObjectInfo[] = {
-    { GAMEPLAY_KEEP, SPIRAL_OVERWORLD },           
-    { GAMEPLAY_DANGEON_KEEP, SPIRAL_DUNGEON },
-    { OBJECT_NUMA_OBJ, SPIRAL_WOODFALL_TEMPLE },   
-    { OBJECT_HAKUGIN_OBJ, SPIRAL_SNOWHEAD_TEMPLE },
-    { OBJECT_IKANA_OBJ, SPIRAL_STONE_TOWER },      
-    { OBJECT_DANPEI_OBJECT, SPIRAL_DAMPES_HOUSE },
+    { GAMEPLAY_KEEP, SPIRAL_OVERWORLD },           { GAMEPLAY_DANGEON_KEEP, SPIRAL_DUNGEON },
+    { OBJECT_NUMA_OBJ, SPIRAL_WOODFALL_TEMPLE },   { OBJECT_HAKUGIN_OBJ, SPIRAL_SNOWHEAD_TEMPLE },
+    { OBJECT_IKANA_OBJ, SPIRAL_STONE_TOWER },      { OBJECT_DANPEI_OBJECT, SPIRAL_DAMPES_HOUSE },
     { OBJECT_IKNINSIDE_OBJ, SPIRAL_IKANA_CASTLE },
 };
 

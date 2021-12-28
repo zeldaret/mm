@@ -132,7 +132,8 @@ static TexturePtr sMouthTextures[] = {
 };
 
 static TexturePtr sEyesTextures[] = {
-    object_ma2_Tex_011AD8, object_ma2_Tex_0122D8, object_ma2_Tex_012AD8, object_ma2_Tex_0132D8, object_ma2_Tex_013AD8, object_ma2_Tex_0142D8,
+    object_ma2_Tex_011AD8, object_ma2_Tex_0122D8, object_ma2_Tex_012AD8,
+    object_ma2_Tex_0132D8, object_ma2_Tex_013AD8, object_ma2_Tex_0142D8,
 };
 
 void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -1435,11 +1436,13 @@ s32 EnMaYto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         rot->x += sp4.y;
         rot->z += sp4.x;
     } else if (limbIndex == MA2_LIMB_TORSO) {
-        if (this->skelAnime.animation != &object_ma2_Anim_007E28 && this->skelAnime.animation != &object_ma2_Anim_003D54) {
+        if (this->skelAnime.animation != &object_ma2_Anim_007E28 &&
+            this->skelAnime.animation != &object_ma2_Anim_003D54) {
             sp4 = this->unk_1D8.unk_0E;
 
             rot->x += sp4.y;
-            if (this->skelAnime.animation == &object_ma2_Anim_00A174 || this->skelAnime.animation == &object_ma2_Anim_0070EC ||
+            if (this->skelAnime.animation == &object_ma2_Anim_00A174 ||
+                this->skelAnime.animation == &object_ma2_Anim_0070EC ||
                 this->skelAnime.animation == &object_ma2_Anim_003D54) {
                 rot->z += sp4.x;
             }

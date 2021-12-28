@@ -33,7 +33,6 @@ void func_80C126D8(EnThiefbird* this, GlobalContext* globalCtx);
 void func_80C12744(EnThiefbird* this);
 void func_80C127F4(EnThiefbird* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Thiefbird_InitVars = {
     ACTOR_EN_THIEFBIRD,
     ACTORCAT_ENEMY,
@@ -151,7 +150,8 @@ void EnThiefbird_Init(Actor* thisx, GlobalContext* globalCtx) {
     ColliderJntSphElementDim* dim;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_thiefbird_Skel_0061A0, &object_thiefbird_Anim_000604, this->jointTable, this->morphTable, 17);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_thiefbird_Skel_0061A0, &object_thiefbird_Anim_000604,
+                       this->jointTable, this->morphTable, 17);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {

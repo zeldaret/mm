@@ -19,7 +19,6 @@ void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80B3F00C(EnDai* this, GlobalContext* globalCtx);
 void func_80B3EF90(EnDai* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Dai_InitVars = {
     ACTOR_EN_DAI,
     ACTORCAT_NPC,
@@ -132,9 +131,11 @@ s32 func_80B3E5B4(EnDai* this, GlobalContext* globalCtx) {
 
 s32 func_80B3E5DC(EnDai* this, s32 arg1) {
     static ActorAnimationEntryS D_80B3FBFC[] = {
-        { &object_dai_Anim_0079E4, 1.0f, 0, -1, 0, 0 },  { &object_dai_Anim_0079E4, 1.0f, 0, -1, 0, -4 }, { &object_dai_Anim_007354, 1.0f, 0, -1, 2, -4 },
-        { &object_dai_Anim_000CEC, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_0069DC, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_00563C, 1.0f, 0, -1, 2, 0 },
-        { &object_dai_Anim_00563C, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_002E58, 1.0f, 0, -1, 0, -4 }, { &object_dai_Anim_006590, 1.0f, 0, -1, 2, -4 },
+        { &object_dai_Anim_0079E4, 1.0f, 0, -1, 0, 0 },  { &object_dai_Anim_0079E4, 1.0f, 0, -1, 0, -4 },
+        { &object_dai_Anim_007354, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_000CEC, 1.0f, 0, -1, 2, -4 },
+        { &object_dai_Anim_0069DC, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_00563C, 1.0f, 0, -1, 2, 0 },
+        { &object_dai_Anim_00563C, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_002E58, 1.0f, 0, -1, 0, -4 },
+        { &object_dai_Anim_006590, 1.0f, 0, -1, 2, -4 },
     };
 
     s32 phi_v1 = false;
@@ -510,7 +511,8 @@ void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDai* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable,
+                       19);
     this->unk_A70 = -1;
     func_80B3E5DC(this, 0);
     Actor_SetScale(&this->actor, 0.2f);
@@ -632,7 +634,8 @@ void func_80B3F6EC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) 
 
 void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
     static TexturePtr D_80B3FE58[] = {
-        object_dai_Tex_0107B0, object_dai_Tex_010FB0, object_dai_Tex_0117B0, object_dai_Tex_010FB0, object_dai_Tex_011FB0, object_dai_Tex_0127B0,
+        object_dai_Tex_0107B0, object_dai_Tex_010FB0, object_dai_Tex_0117B0,
+        object_dai_Tex_010FB0, object_dai_Tex_011FB0, object_dai_Tex_0127B0,
     };
     s32 pad;
 
@@ -669,7 +672,7 @@ void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
 
 void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
     static TexturePtr D_80B3FE70[] = {
-        object_dai_Tex_0107B0, object_dai_Tex_010FB0, object_dai_Tex_0117B0, 
+        object_dai_Tex_0107B0, object_dai_Tex_010FB0, object_dai_Tex_0117B0,
         object_dai_Tex_010FB0, object_dai_Tex_011FB0, object_dai_Tex_0127B0,
     };
 

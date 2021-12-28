@@ -35,7 +35,6 @@ void func_80ADCA64(EnSellnuts* this, GlobalContext* globalCtx);
 s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2);
 f32 func_80ADCFE8(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3);
 
-
 static u16 D_80ADD910[] = {
     0x0614,
     0x060E,
@@ -86,14 +85,18 @@ static ColliderCylinderInitType1 sCylinderInit = {
 };
 
 static ActorAnimationEntryS D_80ADD990[] = {
-    { &object_dnt_Anim_005488, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_00B0B4, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_004AA0, 1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_004E38, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_0029E8, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_005CA8, 1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_0038CC, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_003CC0, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_0012F4, 1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_004700, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_001BC8, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_003438, 1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_001E2C, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_000994, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_002268, 1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_002F08, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_00577C, 1.0f, 0, -1, 0, -4 }, { &object_dnt_Anim_0029E8, 1.0f, 8, -1, 2, 0 },
-    { &object_dnt_Anim_0029E8, 1.0f, 4, -1, 2, -4 }, { &object_dnt_Anim_0029E8, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_001BC8, 1.0f, 0, -1, 0, 0 },
-    { &object_dnt_Anim_0012F4, -1.0f, 0, -1, 2, 0 }, { &object_dnt_Anim_002670, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_005488, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_00B0B4, 1.0f, 0, -1, 0, 0 },
+    { &object_dnt_Anim_004AA0, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_004E38, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_0029E8, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_005CA8, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_0038CC, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_003CC0, 1.0f, 0, -1, 0, 0 },
+    { &object_dnt_Anim_0012F4, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_004700, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_003438, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_001E2C, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_000994, 1.0f, 0, -1, 0, 0 },
+    { &object_dnt_Anim_002268, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_002F08, 1.0f, 0, -1, 0, 0 },
+    { &object_dnt_Anim_00577C, 1.0f, 0, -1, 0, -4 }, { &object_dnt_Anim_0029E8, 1.0f, 8, -1, 2, 0 },
+    { &object_dnt_Anim_0029E8, 1.0f, 4, -1, 2, -4 }, { &object_dnt_Anim_0029E8, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_0012F4, -1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_002670, 1.0f, 0, -1, 2, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -942,7 +945,8 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dnt_Skel_00AC70, &object_dnt_Anim_005488, this->jointTable, this->morphTable, 28);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dnt_Skel_00AC70, &object_dnt_Anim_005488, this->jointTable,
+                       this->morphTable, 28);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);

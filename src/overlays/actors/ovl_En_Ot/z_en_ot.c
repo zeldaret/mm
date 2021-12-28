@@ -59,7 +59,6 @@ EnOtUnkStruct* func_80B5DF58(EnOtUnkStruct* arg0, u8 arg1, Vec3f* arg2, Vec3s* a
 void func_80B5E078(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2);
 void func_80B5E1D8(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2);
 
-
 static EnOt* D_80B5E880;
 static EnOt* D_80B5E884;
 static EnOt* D_80B5E888;
@@ -150,7 +149,8 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ot_Skel_004800, &object_ot_Anim_0008D8, this->jointTable, this->morphTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ot_Skel_004800, &object_ot_Anim_0008D8, this->jointTable,
+                       this->morphTable, 19);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Animation_Change(&this->skelAnime, sAnimations[0].animationSeg, 1.0f,
                      Animation_GetLastFrame(&sAnimations[0].animationSeg->common) * Rand_ZeroOne(),

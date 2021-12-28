@@ -50,7 +50,6 @@ void func_808D6200(EnRd* this, GlobalContext* globalCtx);
 void func_808D6388(EnRd* this, GlobalContext* globalCtx);
 void func_808D65BC(EnRd* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Rd_InitVars = {
     ACTOR_EN_RD,
     ACTORCAT_ENEMY,
@@ -148,11 +147,11 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.params >= ENRD_GET_MINUS_1) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, &object_rd_Anim_00ABE0, this->jointTable, this->morphTable,
-                           26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, &object_rd_Anim_00ABE0,
+                           this->jointTable, this->morphTable, 26);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0, this->jointTable, this->morphTable,
-                           26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0,
+                           this->jointTable, this->morphTable, 26);
     }
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -503,7 +502,8 @@ void func_808D4CA8(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D4DC4(EnRd* this) {
-    Animation_Change(&this->skelAnime, &object_rd_Anim_00ABE0, 0.0f, 0.0f, Animation_GetLastFrame(&object_rd_Anim_00ABE0), 0, -6.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_00ABE0, 0.0f, 0.0f,
+                     Animation_GetLastFrame(&object_rd_Anim_00ABE0), 0, -6.0f);
     this->unk_3EF = 13;
     this->unk_3D6 = 6;
     this->actor.shape.rot.x = -0x4000;
@@ -612,7 +612,8 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D53C0(EnRd* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &object_rd_Anim_0113EC, 0.5f, 0.0f, Animation_GetLastFrame(&object_rd_Anim_0113EC), 1, -4.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_0113EC, 0.5f, 0.0f,
+                     Animation_GetLastFrame(&object_rd_Anim_0113EC), 1, -4.0f);
     this->unk_3EF = 2;
     this->actionFunc = func_808D5440;
 }
@@ -742,8 +743,8 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
                     player->stateFlags2 &= ~0x80;
                     player->unk_AE8 = 100;
                 }
-                Animation_Change(&this->skelAnime, &object_rd_Anim_006B08, 0.5f, 0.0f, Animation_GetLastFrame(&object_rd_Anim_006B08), 3,
-                                 0.0f);
+                Animation_Change(&this->skelAnime, &object_rd_Anim_006B08, 0.5f, 0.0f,
+                                 Animation_GetLastFrame(&object_rd_Anim_006B08), 3, 0.0f);
                 this->unk_3EB++;
                 this->unk_3EF = 4;
                 break;
@@ -803,7 +804,8 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D5C54(EnRd* this) {
-    Animation_Change(&this->skelAnime, &object_rd_Anim_0073A4, 0.0f, 0.0f, Animation_GetLastFrame(&object_rd_Anim_0073A4), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_0073A4, 0.0f, 0.0f,
+                     Animation_GetLastFrame(&object_rd_Anim_0073A4), 2, 0.0f);
     this->unk_3EF = 7;
     this->actionFunc = func_808D5CCC;
 }
@@ -885,7 +887,8 @@ void func_808D6054(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D60B0(EnRd* this) {
-    Animation_Change(&this->skelAnime, &object_rd_Anim_00A450, -1.0f, Animation_GetLastFrame(&object_rd_Anim_00A450), 0.0f, 2, -4.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_00A450, -1.0f, Animation_GetLastFrame(&object_rd_Anim_00A450),
+                     0.0f, 2, -4.0f);
     this->unk_3EF = 6;
     this->actionFunc = func_808D6130;
 }

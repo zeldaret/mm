@@ -22,7 +22,6 @@ void func_80B3D338(EnDnp* this, GlobalContext* globalCtx);
 void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx);
 void func_80B3D558(EnDnp* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
     ACTORCAT_NPC,
@@ -58,14 +57,18 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &object_dnp_Anim_0007D8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, 0 },  { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_0026B8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_004D08, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0071F4, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_007960, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_008588, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_00A900, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_00AEB8, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00B754, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_00674C, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_00BAD8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_006B74, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_012428, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, 0 },  { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, 0 },  { &object_dnp_Anim_00923C, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_009AA0, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_00125C, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0017F8, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_001C1C, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_0007D8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, 0 },
+    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0026B8, 1.0f, 0, -1, 2, -4 },
+    { &object_dnp_Anim_004D08, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0071F4, 1.0f, 0, -1, 2, -4 },
+    { &object_dnp_Anim_007960, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_008588, 1.0f, 0, -1, 2, 0 },
+    { &object_dnp_Anim_00A900, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00AEB8, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_00B754, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_00674C, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_00BAD8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_006B74, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_012428, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, 0 },
+    { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, 0 },  { &object_dnp_Anim_00923C, 1.0f, 0, -1, 2, -4 },
+    { &object_dnp_Anim_009AA0, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00125C, 1.0f, 0, -1, 2, -4 },
+    { &object_dnp_Anim_0017F8, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_001C1C, 1.0f, 0, -1, 0, -4 },
     { &object_dnp_Anim_0057AC, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_00625C, 1.0f, 0, -1, 0, -4 },
 };
 
@@ -331,7 +334,8 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDnp* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 16.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dnp_Skel_010D60, NULL, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dnp_Skel_010D60, NULL, this->jointTable, this->morphTable,
+                       26);
     this->unk_340 = -1;
     func_80B3CC38(this, 15);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);

@@ -30,7 +30,6 @@ const ActorInit En_Rsn_InitVars = {
     (ActorFunc)EnRsn_Draw,
 };
 
-
 static ActorAnimationEntry animations[] = { { &object_rs_Anim_00788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f } };
 
 void func_80C25D40(EnRsn* this) {

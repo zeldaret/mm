@@ -26,7 +26,6 @@ void func_80BD4460(ObjHgdoor* this);
 void func_80BD4478(ObjHgdoor* this, GlobalContext* globalCtx);
 s32 func_80BD44D0(ObjHgdoor* this, GlobalContext* globalCtx);
 
-
 const ActorInit Obj_Hgdoor_InitVars = {
     ACTOR_OBJ_HGDOOR,
     ACTORCAT_PROP,

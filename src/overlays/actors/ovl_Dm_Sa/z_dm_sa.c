@@ -30,7 +30,6 @@ const ActorInit Dm_Sa_InitVars = {
     (ActorFunc)DmSa_Draw,
 };
 
-
 static ActorAnimationEntry D_80A2ED00[] = { { &object_stk_Anim_00CC94, 1.0f, 0, -1.0f, 0, 0 } };
 
 void func_80A2E960(SkelAnime* arg0, ActorAnimationEntry* animations, u16 index) {

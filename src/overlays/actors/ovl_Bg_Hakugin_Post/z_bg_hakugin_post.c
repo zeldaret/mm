@@ -33,7 +33,6 @@ void func_80A9D3E4(BgHakuginPost* this);
 void func_80A9D434(BgHakuginPost* this, GlobalContext* globalCtx);
 void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx);
 
-
 BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
 
@@ -991,7 +990,8 @@ void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
     static Gfx* D_80A9D900[] = {
-        object_hakugin_obj_DL_00C1A8, object_hakugin_obj_DL_00C568, NULL, NULL, object_hakugin_obj_DL_00CA38, object_hakugin_obj_DL_00CEC8, NULL,
+        object_hakugin_obj_DL_00C1A8, object_hakugin_obj_DL_00C568, NULL, NULL,
+        object_hakugin_obj_DL_00CA38, object_hakugin_obj_DL_00CEC8, NULL,
     };
     static Gfx* D_80A9D91C[] = {
         object_hakugin_obj_DL_00D098,

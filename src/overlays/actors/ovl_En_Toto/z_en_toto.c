@@ -62,7 +62,6 @@ const ActorInit En_Toto_InitVars = {
     (ActorFunc)EnToto_Draw,
 };
 
-
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_METAL,
@@ -127,7 +126,8 @@ static EnTotoText D_80BA5074[] = {
     { 4, 0, 0x2AE4 },
 };
 
-static AnimationHeader* D_80BA5078[] = { &object_zm_Anim_0028B8, &object_zm_Anim_00B894, &object_zm_Anim_002F20, &object_zm_Anim_00BC08 };
+static AnimationHeader* D_80BA5078[] = { &object_zm_Anim_0028B8, &object_zm_Anim_00B894, &object_zm_Anim_002F20,
+                                         &object_zm_Anim_00BC08 };
 
 static EnTotoText D_80BA5088[] = {
     { 5, 0, 0 },  { 6, 20, 0 }, { 7, 0, 0 },  { 8, 9, 0 },  { 9, 10, 0 }, { 1, 0, 0 },  { 10, 0, 0 },
@@ -191,8 +191,8 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
     this->actor.bgCheckFlags |= 0x400;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zm_Skel_00A978,
-                       ((globalCtx->sceneNum == 0x12) ? &object_zm_Anim_003AA8 : &object_zm_Anim_00C880), this->jointTable, this->morphTable,
-                       18);
+                       ((globalCtx->sceneNum == 0x12) ? &object_zm_Anim_003AA8 : &object_zm_Anim_00C880),
+                       this->jointTable, this->morphTable, 18);
     func_80BA36C0(this, globalCtx, 0);
     this->actor.shape.rot.x = 0;
 }
@@ -204,7 +204,8 @@ void EnToto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BA383C(EnToto* this, GlobalContext* globalCtx) {
-    if (SkelAnime_Update(&this->skelAnime) && this->actionFuncIndex == 1 && this->skelAnime.animation != &object_zm_Anim_000C80) {
+    if (SkelAnime_Update(&this->skelAnime) && this->actionFuncIndex == 1 &&
+        this->skelAnime.animation != &object_zm_Anim_000C80) {
         if (globalCtx->msgCtx.unk11F04 != 0x2A98 && globalCtx->msgCtx.unk11F04 != 0x2A99) {
             if (this->unk2B4 & 1 || Rand_ZeroOne() > 0.5f) {
                 this->unk2B4 = (this->unk2B4 + 1) & 3;
@@ -682,7 +683,8 @@ void func_80BA4CB4(EnToto* this, GlobalContext* globalCtx) {
             if (this->unk2B5 == 3) {
                 Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_001DF0, -4.0f);
             } else {
-                Animation_PlayOnce(&this->skelAnime, this->unk2B5 == 1 ? &object_zm_Anim_0016A4 : &object_zm_Anim_0022C8);
+                Animation_PlayOnce(&this->skelAnime,
+                                   this->unk2B5 == 1 ? &object_zm_Anim_0016A4 : &object_zm_Anim_0022C8);
                 if (this->unk2B5 == 2 && this->unk2B3 != 0xF) {
                     func_80151BB4(globalCtx, 9);
                     func_80151BB4(globalCtx, 10);

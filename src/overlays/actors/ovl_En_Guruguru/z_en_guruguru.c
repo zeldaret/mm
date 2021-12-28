@@ -27,7 +27,6 @@ void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx);
 
 extern ColliderCylinderInit D_80BC79A0;
 
-
 const ActorInit En_Guruguru_InitVars = {
     ACTOR_EN_GURUGURU,
     ACTORCAT_NPC,
@@ -74,7 +73,8 @@ void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fu_Skel_006C90, &object_fu_Anim_000B04, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fu_Skel_006C90, &object_fu_Anim_000B04, this->jointTable,
+                       this->morphTable, 16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);

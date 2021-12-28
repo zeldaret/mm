@@ -28,7 +28,6 @@ const ActorInit Dm_Statue_InitVars = {
     (ActorFunc)DmStatue_Draw,
 };
 
-
 void DmStatue_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmStatue* this = THIS;
 

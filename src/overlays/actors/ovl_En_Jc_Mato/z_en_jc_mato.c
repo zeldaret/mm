@@ -87,7 +87,6 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.center.x = this->pos.x;
     this->collider.dim.worldSphere.center.y = this->pos.y;

@@ -20,7 +20,6 @@ void func_8092D330(EnDns* this, GlobalContext* globalCtx);
 void EnDns_DoNothing(EnDns* this, GlobalContext* globalCtx);
 void func_8092D4D8(EnDns* this, GlobalContext* globalCtx);
 
-
 static s32 D_8092DCB0[] = {
     0x00172000, 0x050E082F, 0x0C100E08, 0x200C1000, 0x00172000, 0x050E0830, 0x0C100E08, 0x210C1000,
     0x00172000, 0x050E0831, 0x0C100E08, 0x220C1000, 0x00172000, 0x050E0832, 0x0C100E08, 0x230C1000,
@@ -62,10 +61,11 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &object_dns_Anim_003310, 1.0f, 0, -1, 0, 0 },  { &object_dns_Anim_003310, 1.0f, 0, -1, 0, -4 }, { &object_dns_Anim_0034EC, 1.0f, 0, -1, 0, 0 },
-    { &object_dns_Anim_0034EC, 1.0f, 0, -1, 0, -4 }, { &object_dns_Anim_0008F4, 1.0f, 0, -1, 2, 0 },  { &object_dns_Anim_000BD8, 1.0f, 0, -1, 0, 0 },
-    { &object_dns_Anim_000D58, 1.0f, 0, -1, 2, 0 },  { &object_dns_Anim_000FEC, 1.0f, 0, -1, 0, 0 },  { &object_dns_Anim_0002A8, 1.0f, 0, -1, 2, 0 },
-    { &object_dns_Anim_000734, 1.0f, 0, -1, 2, 0 },
+    { &object_dns_Anim_003310, 1.0f, 0, -1, 0, 0 }, { &object_dns_Anim_003310, 1.0f, 0, -1, 0, -4 },
+    { &object_dns_Anim_0034EC, 1.0f, 0, -1, 0, 0 }, { &object_dns_Anim_0034EC, 1.0f, 0, -1, 0, -4 },
+    { &object_dns_Anim_0008F4, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000BD8, 1.0f, 0, -1, 0, 0 },
+    { &object_dns_Anim_000D58, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000FEC, 1.0f, 0, -1, 0, 0 },
+    { &object_dns_Anim_0002A8, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000734, 1.0f, 0, -1, 2, 0 },
 };
 
 void func_8092C5C0(EnDns* this) {
@@ -604,7 +604,8 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_8092DE1C[] = { object_dns_Tex_0028E8, object_dns_Tex_002968, object_dns_Tex_0029E8, object_dns_Tex_002968 };
+    static TexturePtr D_8092DE1C[] = { object_dns_Tex_0028E8, object_dns_Tex_002968, object_dns_Tex_0029E8,
+                                       object_dns_Tex_002968 };
     EnDns* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

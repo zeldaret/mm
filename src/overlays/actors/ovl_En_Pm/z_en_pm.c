@@ -20,7 +20,6 @@ void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx);
 void func_80AFA5FC(EnPm* this, GlobalContext* globalCtx);
 
-
 // Game scripts
 static UNK_TYPE D_80AFAD80[] = {
     0x0D000102, 0x3B030900, 0x0C00010B, 0x030C000D, 0x0100F902, 0x0D010F00, 0x12020F00, 0x00050105, 0x0A002E06,
@@ -232,10 +231,12 @@ static ColliderSphereInit sSphereInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &object_mm_Anim_002238, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_002238, 1.0f, 0, -1, 0, -4 }, { &object_mm_Anim_00A4E0, 1.0f, 0, -1, 2, 0 },
-    { &object_mm_Anim_00B09C, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_00B09C, 1.0f, 0, -1, 0, -4 }, { &object_mm_Anim_00BA78, 1.0f, 0, -1, 2, 0 },
-    { &object_mm_Anim_00C32C, 1.0f, 0, -1, 0, -4 }, { &object_mm_Anim_0099B4, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_000FC4, 1.0f, 0, -1, 0, 0 },
-    { &object_mm_Anim_00A8D8, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_00099C, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_001F84, 1.0f, 0, -1, 2, 0 },
+    { &object_mm_Anim_002238, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_002238, 1.0f, 0, -1, 0, -4 },
+    { &object_mm_Anim_00A4E0, 1.0f, 0, -1, 2, 0 },  { &object_mm_Anim_00B09C, 1.0f, 0, -1, 0, 0 },
+    { &object_mm_Anim_00B09C, 1.0f, 0, -1, 0, -4 }, { &object_mm_Anim_00BA78, 1.0f, 0, -1, 2, 0 },
+    { &object_mm_Anim_00C32C, 1.0f, 0, -1, 0, -4 }, { &object_mm_Anim_0099B4, 1.0f, 0, -1, 0, 0 },
+    { &object_mm_Anim_000FC4, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_00A8D8, 1.0f, 0, -1, 0, 0 },
+    { &object_mm_Anim_00099C, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_001F84, 1.0f, 0, -1, 2, 0 },
     { &object_mm_Anim_000468, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_00C640, 1.0f, 0, -1, 0, 0 },
 };
 
@@ -1749,7 +1750,8 @@ void EnPm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPm* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable,
+                       16);
     this->unk_384 = -1;
     func_80AF7E98(this, 0);
     Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);

@@ -28,7 +28,6 @@ const ActorInit Obj_Dinner_InitVars = {
     (ActorFunc)ObjDinner_Draw,
 };
 
-
 void ObjDinner_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjDinner* this = THIS;
 

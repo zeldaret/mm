@@ -89,7 +89,6 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit2 sColchkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
-
 void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjTree* this = THIS;

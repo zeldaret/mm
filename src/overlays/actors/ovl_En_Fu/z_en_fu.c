@@ -56,7 +56,6 @@ void func_80964694(EnFu* this, EnFuUnkStruct* ptr, Vec3f* arg2, s32 len);
 void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len);
 void func_80964950(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len);
 
-
 const ActorInit En_Fu_InitVars = {
     ACTOR_EN_FU,
     ACTORCAT_NPC,
@@ -193,8 +192,8 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (fuKaiten != NULL) {
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mu_Skel_00B2B0, &object_mu_Anim_001F74, this->jointTable, this->morphTable,
-                           21);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mu_Skel_00B2B0, &object_mu_Anim_001F74,
+                           this->jointTable, this->morphTable, 21);
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;

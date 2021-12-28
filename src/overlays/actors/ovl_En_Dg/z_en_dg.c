@@ -37,7 +37,6 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx);
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx);
 void func_8098BC54(EnDg* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
     ACTORCAT_ENEMY,
@@ -131,12 +130,14 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &object_dog_Anim_0021C8, 1.0f, 0, -1, 0, 0 },   { &object_dog_Anim_0021C8, 1.0f, 0, -1, 0, -6 },  { &object_dog_Anim_001BD8, 1.0f, 0, -1, 0, 0 },
-    { &object_dog_Anim_000998, 1.0f, 0, -1, 0, -6 },  { &object_dog_Anim_001FB0, 1.0f, 0, -1, 2, -6 },  { &object_dog_Anim_001FB0, 1.0f, 0, -1, 4, -6 },
-    { &object_dog_Anim_001048, 1.0f, 0, -1, 2, -6 },  { &object_dog_Anim_001348, 1.0f, 0, -1, 0, -6 },  { &object_dog_Anim_001048, 1.0f, 0, 27, 2, -6 },
-    { &object_dog_Anim_001048, 1.0f, 28, -1, 2, -6 }, { &object_dog_Anim_001048, 1.0f, 54, 54, 2, -6 }, { &object_dog_Anim_0021C8, -1.5f, -1, 0, 0, -6 },
-    { &object_dog_Anim_001560, 1.0f, 0, -1, 2, 0 },   { &object_dog_Anim_001A84, 1.2f, 0, -1, 2, 0 },   { &object_dog_Anim_0017C0, 1.2f, 0, -1, 2, 0 },
-    { &object_dog_Anim_0021C8, 0.5f, 0, -1, 0, 0 },
+    { &object_dog_Anim_0021C8, 1.0f, 0, -1, 0, 0 },   { &object_dog_Anim_0021C8, 1.0f, 0, -1, 0, -6 },
+    { &object_dog_Anim_001BD8, 1.0f, 0, -1, 0, 0 },   { &object_dog_Anim_000998, 1.0f, 0, -1, 0, -6 },
+    { &object_dog_Anim_001FB0, 1.0f, 0, -1, 2, -6 },  { &object_dog_Anim_001FB0, 1.0f, 0, -1, 4, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, -1, 2, -6 },  { &object_dog_Anim_001348, 1.0f, 0, -1, 0, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, 27, 2, -6 },  { &object_dog_Anim_001048, 1.0f, 28, -1, 2, -6 },
+    { &object_dog_Anim_001048, 1.0f, 54, 54, 2, -6 }, { &object_dog_Anim_0021C8, -1.5f, -1, 0, 0, -6 },
+    { &object_dog_Anim_001560, 1.0f, 0, -1, 2, 0 },   { &object_dog_Anim_001A84, 1.2f, 0, -1, 2, 0 },
+    { &object_dog_Anim_0017C0, 1.2f, 0, -1, 2, 0 },   { &object_dog_Anim_0021C8, 0.5f, 0, -1, 0, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -1107,7 +1108,8 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, NULL, this->jointTable, this->morphTable, 13);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, NULL, this->jointTable, this->morphTable,
+                       13);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);

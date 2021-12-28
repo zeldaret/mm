@@ -56,7 +56,6 @@ void func_80993524(EnWf* this);
 void func_8099357C(EnWf* this, GlobalContext* globalCtx);
 s32 func_8099408C(GlobalContext* globalCtx, EnWf* this);
 
-
 const ActorInit En_Wf_InitVars = {
     ACTOR_EN_WF,
     ACTORCAT_PROP,
@@ -319,16 +318,16 @@ void EnWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.0075f);
 
     if (this->actor.params == 0) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wf_Skel_0095D0, &object_wf_Anim_00A3CC, this->jointTable, this->morphTable,
-                           22);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wf_Skel_0095D0, &object_wf_Anim_00A3CC,
+                           this->jointTable, this->morphTable, 22);
         this->actor.hintId = 0x4C;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit);
         this->collider1.elements[0].info.toucher.damage = 8;
         this->collider1.elements[1].info.toucher.damage = 8;
         this->actor.colChkInfo.health = 6;
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wf_Skel_003BC0, &object_wf_Anim_00A3CC, this->jointTable, this->morphTable,
-                           22);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wf_Skel_003BC0, &object_wf_Anim_00A3CC,
+                           this->jointTable, this->morphTable, 22);
         this->actor.hintId = 0x57;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable1, &sColChkInfoInit);
     }
@@ -1022,7 +1021,8 @@ void func_809924EC(EnWf* this, GlobalContext* globalCtx) {
 
 void func_809926D0(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
-    Animation_Change(&this->skelAnime, &object_wf_Anim_004A90, -1.0f, Animation_GetLastFrame(&object_wf_Anim_004A90.common), 0.0f, 2, -3.0f);
+    Animation_Change(&this->skelAnime, &object_wf_Anim_004A90, -1.0f,
+                     Animation_GetLastFrame(&object_wf_Anim_004A90.common), 0.0f, 2, -3.0f);
     this->unk_2A0 = 0;
     this->actor.speedXZ = 6.5f;
     this->actor.velocity.y = 15.0f;
@@ -1053,7 +1053,8 @@ void func_8099282C(EnWf* this) {
     this->collider1.base.atFlags &= ~AT_ON;
     this->unk_2A0 = 10;
     this->actor.speedXZ = 0.0f;
-    Animation_Change(&this->skelAnime, &object_wf_Anim_004C44, -1.0f, Animation_GetLastFrame(&object_wf_Anim_004C44.common), 0.0f, 2, -2.0f);
+    Animation_Change(&this->skelAnime, &object_wf_Anim_004C44, -1.0f,
+                     Animation_GetLastFrame(&object_wf_Anim_004C44.common), 0.0f, 2, -2.0f);
     this->actionFunc = func_809928CC;
 }
 

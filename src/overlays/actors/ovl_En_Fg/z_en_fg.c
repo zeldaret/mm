@@ -24,7 +24,6 @@ void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
 void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
 void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect);
 
-
 const ActorInit En_Fg_InitVars = {
     ACTOR_EN_FG,
     ACTORCAT_NPC,
@@ -316,7 +315,8 @@ void EnFg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fr_Skel_00B538, NULL, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fr_Skel_00B538, NULL, this->jointTable, this->morphTable,
+                       24);
     EnFg_UpdateAnimation(&this->skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -446,7 +446,8 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
 }
 
 TexturePtr sDustTex[] = {
-    gameplay_keep_Tex_08F7E0, gameplay_keep_Tex_08F3E0, gameplay_keep_Tex_08EFE0, gameplay_keep_Tex_08EBE0, gameplay_keep_Tex_08E7E0, gameplay_keep_Tex_08E3E0, gameplay_keep_Tex_08DFE0, gameplay_keep_Tex_08DBE0,
+    gameplay_keep_Tex_08F7E0, gameplay_keep_Tex_08F3E0, gameplay_keep_Tex_08EFE0, gameplay_keep_Tex_08EBE0,
+    gameplay_keep_Tex_08E7E0, gameplay_keep_Tex_08E3E0, gameplay_keep_Tex_08DFE0, gameplay_keep_Tex_08DBE0,
 };
 
 void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect) {

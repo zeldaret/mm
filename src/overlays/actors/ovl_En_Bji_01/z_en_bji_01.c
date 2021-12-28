@@ -30,7 +30,6 @@ void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
 s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg);
 void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg);
 
-
 const ActorInit En_Bji_01_InitVars = {
     ACTOR_EN_BJI_01,
     ACTORCAT_NPC,
@@ -331,8 +330,8 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBji01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bji_Skel_00578C, &object_bji_Anim_000FDC, this->jointTable, this->morphTable,
-                       BJI_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bji_Skel_00578C, &object_bji_Anim_000FDC, this->jointTable,
+                       this->morphTable, BJI_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;

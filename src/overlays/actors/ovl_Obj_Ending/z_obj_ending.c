@@ -27,7 +27,6 @@ const ActorInit Obj_Ending_InitVars = {
     (ActorFunc)ObjEnding_Draw,
 };
 
-
 static ObjEndingModelInfo sModelInfo[] = {
     { { object_ending_obj_DL_003440, object_ending_obj_DL_0031A0 }, NULL },
     { { NULL, object_ending_obj_DL_0003D0 }, object_ending_obj_Matanimheader_001FF8 },

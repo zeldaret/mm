@@ -268,7 +268,8 @@ static TexturePtr D_80B4E958[] = {
 static s8 D_80B4E968 = 0;
 
 static TexturePtr D_80B4E96C[] = {
-    object_ma2_Tex_011AD8, object_ma2_Tex_0122D8, object_ma2_Tex_012AD8, object_ma2_Tex_0132D8, object_ma2_Tex_013AD8, object_ma2_Tex_0142D8,
+    object_ma2_Tex_011AD8, object_ma2_Tex_0122D8, object_ma2_Tex_012AD8,
+    object_ma2_Tex_0132D8, object_ma2_Tex_013AD8, object_ma2_Tex_0142D8,
 };
 
 static TexturePtr D_80B4E984[] = {
@@ -2282,8 +2283,8 @@ void func_80B47BAC(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B45080();
         this->actor.update = func_80B47D30;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_uch_Skel_004E50, &object_uch_Anim_001D80, this->jointTable, this->morphTable,
-                           14);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_uch_Skel_004E50, &object_uch_Anim_001D80,
+                           this->jointTable, this->morphTable, 14);
         this->skelAnime.curFrame = (this->actor.params & 7) * this->skelAnime.endFrame * 0.125f;
         func_80B444BC(this, globalCtx);
         func_80B442E4(this);
@@ -2365,7 +2366,8 @@ void func_80B47FA8(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectSegment(globalCtx, thisx);
         this->actor.update = func_80B48060;
         this->actor.draw = func_80B4E158;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cow_Skel_004010, NULL, this->jointTable, this->morphTable, 6);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cow_Skel_004010, NULL, this->jointTable,
+                           this->morphTable, 6);
         Animation_PlayLoop(&this->skelAnime, &object_cow_Anim_004264);
     }
 }
@@ -2408,7 +2410,8 @@ void func_80B481C4(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectSegment(globalCtx, &this->actor);
         this->actor.update = func_80B4827C;
         this->actor.draw = func_80B4E1B0;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cow_Skel_004C30, NULL, this->jointTable, this->morphTable, 6);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cow_Skel_004C30, NULL, this->jointTable,
+                           this->morphTable, 6);
         Animation_PlayLoop(&this->skelAnime, &object_cow_Anim_004E98);
     }
 }
@@ -2521,8 +2524,8 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4873C;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58,
+                           this->jointTable, this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 5000, 0.05f, 0.3f, 0.12f);
         Animation_PlayLoop(&this->skelAnime, &object_ma1_Anim_009E58);
         func_80B482D4(this);
@@ -2725,8 +2728,8 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.update = func_80B490F0;
         this->actor.draw = func_80B4E324;
         this->actor.textId = 0x3330;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58,
+                           this->jointTable, this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B444F4(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
@@ -3077,8 +3080,8 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
+                           this->jointTable, this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B44540(this, globalCtx);
         func_80B44570(this);
@@ -3308,8 +3311,8 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
+                           this->jointTable, this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B44620(this, globalCtx);
         if ((sp38 < CLOCK_TIME(2, 15)) || (sp38 >= CLOCK_TIME(6, 0))) {
@@ -3483,8 +3486,8 @@ void func_80B4B0C4(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4B218;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
+                           this->jointTable, this->morphTable, 23);
         Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, 0.0f);
         substruct = &this->behaviorInfo;
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 2000, 0.08f, 0.3f, 0.03f);
@@ -3638,8 +3641,8 @@ void func_80B4B8BC(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, &object_dog_Anim_0021C8, this->jointTable, this->morphTable,
-                           13);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, &object_dog_Anim_0021C8,
+                           this->jointTable, this->morphTable, 13);
         func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &gZeroVec3s, 3000, 0.1f, 0.0f, 0.0f);
         func_80B44664(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
@@ -3872,8 +3875,8 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44FEC();
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma2_Skel_015C28, &object_ma2_Anim_016720, this->jointTable, this->morphTable,
-                           22);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma2_Skel_015C28, &object_ma2_Anim_016720,
+                           this->jointTable, this->morphTable, 22);
         func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
         if (currentTime < 0xD5A0) {
@@ -4093,8 +4096,8 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
+                           this->jointTable, this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B446D0(this, globalCtx);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -4282,8 +4285,8 @@ void func_80B4D670(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B45080();
         this->actor.update = func_80B4D760;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_uch_Skel_004E50, &object_uch_Anim_001674, this->jointTable, this->morphTable,
-                           14);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_uch_Skel_004E50, &object_uch_Anim_001674,
+                           this->jointTable, this->morphTable, 14);
         if (invadepohType < 3) {
             func_80B453F4(this, globalCtx, invadepohType);
             func_80B4D15C(this);

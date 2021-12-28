@@ -46,7 +46,6 @@ void func_80B2E3F8(EnPoh* this, GlobalContext* globalCtx);
 void func_80B2F328(Actor* thisx, GlobalContext* globalCtx);
 void func_80B2F37C(Actor* thisx, GlobalContext* globalCtx);
 
-
 const ActorInit En_Poh_InitVars = {
     ACTOR_EN_POH,
     ACTORCAT_ENEMY,
@@ -166,7 +165,8 @@ void EnPoh_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
     Lights_PointGlowSetInfo(&this->lightInfo, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
                             255, 255, 255, 0);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_po_Skel_0050D0, &object_po_Anim_000A60, this->jointTable, this->morphTable, 21);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_po_Skel_0050D0, &object_po_Anim_000A60, this->jointTable,
+                   this->morphTable, 21);
     this->actor.bgCheckFlags |= 0x400;
     func_80B2D0E8(this);
 }
@@ -583,7 +583,8 @@ void func_80B2DC50(EnPoh* this, GlobalContext* globalCtx) {
 
 void func_80B2DD2C(EnPoh* this, GlobalContext* globalCtx) {
     if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight <= BGCHECK_Y_MIN)) {
-        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_PO, 10, object_po_DL_002D28);
+        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_PO, 10,
+                                 object_po_DL_002D28);
         func_80B2E0B0(this);
     }
 

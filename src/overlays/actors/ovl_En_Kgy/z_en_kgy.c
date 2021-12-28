@@ -33,7 +33,6 @@ void func_80B425A0(EnKgy* this, GlobalContext* globalCtx);
 void func_80B42714(EnKgy* this, GlobalContext* globalCtx);
 void func_80B42D28(EnKgy* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Kgy_InitVars = {
     ACTOR_EN_KGY,
     ACTORCAT_NPC,
@@ -52,7 +51,8 @@ void EnKgy_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_kgy_Skel_00F910, &object_kgy_Anim_004B98, this->jointTable, this->morphTable, 23);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_kgy_Skel_00F910, &object_kgy_Anim_004B98, this->jointTable,
+                       this->morphTable, 23);
     this->unk_2D2 = -1;
     this->unk_29C = 0;
     this->unk_2E4 = 0;
@@ -112,8 +112,9 @@ void EnKgy_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 transitionRate) {
     static AnimationHeader* sAnimations[] = {
-        &object_kgy_Anim_004B98, &object_kgy_Anim_0008FC, &object_kgy_Anim_00292C, &object_kgy_Anim_0042E4, &object_kgy_Anim_0101F0,
-        &object_kgy_Anim_001764, &object_kgy_Anim_003334, &object_kgy_Anim_010B84, &object_kgy_Anim_001EA4, &object_kgy_Anim_003D88,
+        &object_kgy_Anim_004B98, &object_kgy_Anim_0008FC, &object_kgy_Anim_00292C, &object_kgy_Anim_0042E4,
+        &object_kgy_Anim_0101F0, &object_kgy_Anim_001764, &object_kgy_Anim_003334, &object_kgy_Anim_010B84,
+        &object_kgy_Anim_001EA4, &object_kgy_Anim_003D88,
     };
 
     Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,

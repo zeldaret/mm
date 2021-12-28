@@ -79,7 +79,6 @@ static ColliderCylinderInit sUnusedCylinderInit = {
     { 20, 20, -10, { 0, 0, 0 } },
 };
 
-
 void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
     UnkTanron3Effect* effectPtr = (UnkTanron3Effect*)globalCtx->specialEffects;
     s16 i;
@@ -108,7 +107,8 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
     Collider_InitAndSetCylinder(globalCtx, &this->atCollider, &this->actor, &sCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boss03_Skel_00DA20, &object_boss03_Anim_00DAAC, this->jointTable, this->morphTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boss03_Skel_00DA20, &object_boss03_Anim_00DAAC,
+                       this->jointTable, this->morphTable, 10);
     Actor_SetScale(&this->actor, 0.02f);
     EnTanron3_SetupLive(this, globalCtx);
     this->actor.flags &= ~1;

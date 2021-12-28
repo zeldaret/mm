@@ -14,15 +14,9 @@
 void ObjFunen_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-const ActorInit Obj_Funen_InitVars = {
-    ACTOR_OBJ_FUNEN,       
-    ACTORCAT_PROP,         
-    FLAGS,
-    OBJECT_FUNEN,          
-    sizeof(ObjFunen),      (ActorFunc)ObjFunen_Init,
-    (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)ObjFunen_Draw
-};
-
+const ActorInit Obj_Funen_InitVars = { ACTOR_OBJ_FUNEN,       ACTORCAT_PROP,         FLAGS,
+                                       OBJECT_FUNEN,          sizeof(ObjFunen),      (ActorFunc)ObjFunen_Init,
+                                       (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)ObjFunen_Draw };
 
 f32 D_80A198D0[] = { 0.1f, 0.024390244f };
 

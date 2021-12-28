@@ -36,11 +36,17 @@ const ActorInit En_Ending_Hero6_InitVars = {
     (ActorFunc)EnEndingHero6_Draw,
 };
 
-static FlexSkeletonHeader* sSkeletons[] = { &object_dt_Skel_00B0CC, &object_bai_Skel_007908, &object_toryo_Skel_007150, &object_sdn_Skel_00D640, &object_daiku_Skel_00A850,
-                                            &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, };
+static FlexSkeletonHeader* sSkeletons[] = {
+    &object_dt_Skel_00B0CC,    &object_bai_Skel_007908,   &object_toryo_Skel_007150,
+    &object_sdn_Skel_00D640,   &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
+    &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
+};
 
-static AnimationHeader* sAnimations[] = { &object_dt_Anim_000BE0, &object_bai_Anim_0011C0, &object_toryo_Anim_000E50, &object_sdn_Anim_002A84, &object_daiku_Anim_002FA0,
-                                          &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0, };
+static AnimationHeader* sAnimations[] = {
+    &object_dt_Anim_000BE0,    &object_bai_Anim_0011C0,   &object_toryo_Anim_000E50,
+    &object_sdn_Anim_002A84,   &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0,
+    &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0,
+};
 
 static s32 sLimbCounts[] = { 15, 20, 17, 17, 17, 17, 17, 17, 17 };
 
@@ -99,7 +105,8 @@ void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnEndingHero6_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Gfx* D_80C2426C[] = { object_daiku_DL_0070C0, object_daiku_DL_006FB0, object_daiku_DL_006E80, object_daiku_DL_006D70, object_daiku_DL_00A390 };
+    static Gfx* D_80C2426C[] = { object_daiku_DL_0070C0, object_daiku_DL_006FB0, object_daiku_DL_006E80,
+                                 object_daiku_DL_006D70, object_daiku_DL_00A390 };
     EnEndingHero6* this = THIS;
     s32 index;
 
@@ -114,7 +121,8 @@ void EnEndingHero6_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
 }
 
 void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_80C24280[] = { object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90, object_dt_Tex_00A790, object_dt_Tex_00AB90 };
+    static TexturePtr D_80C24280[] = { object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90,
+                                       object_dt_Tex_00A790, object_dt_Tex_00AB90 };
     static TexturePtr D_80C24294[] = { object_dt_Tex_007750, object_dt_Tex_00A390, object_dt_Tex_00A490 };
     s32 pad;
     EnEndingHero6* this = THIS;

@@ -112,7 +112,6 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-
 s32 func_80A35510(ObjBell* this, s32 arg1) {
     Vec3f bumperPos;
     Vec3f worldPos;

@@ -33,7 +33,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
 
-
 void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjKepnKoya* this = THIS;
 

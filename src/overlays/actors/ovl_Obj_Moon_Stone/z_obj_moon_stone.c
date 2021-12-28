@@ -37,7 +37,6 @@ const ActorInit Obj_Moon_Stone_InitVars = {
     (ActorFunc)ObjMoonStone_Draw,
 };
 
-
 void ObjMoonStone_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMoonStone* this = THIS;
 

@@ -52,7 +52,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-
 void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnElfbub* this = THIS;
     Actor* childActor;

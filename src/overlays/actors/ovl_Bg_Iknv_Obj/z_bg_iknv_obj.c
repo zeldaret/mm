@@ -21,7 +21,6 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx);
 void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, GlobalContext* globalCtx);
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx);
 
-
 const ActorInit Bg_Iknv_Obj_InitVars = {
     ACTOR_BG_IKNV_OBJ,
     ACTORCAT_BG,

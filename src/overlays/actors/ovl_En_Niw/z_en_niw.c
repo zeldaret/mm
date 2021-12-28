@@ -33,7 +33,6 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx);
 void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
-
 // turned on during cucco storm, but not read by anything?
 // maybe read by En_Attack_Niw
 s16 D_80893460 = false;
@@ -123,8 +122,8 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 25.0f);
 
-    SkelAnime_InitFlex(globalCtx, &this->skelanime, &object_niw_Skel_002530, &object_niw_Anim_0000E8, this->jointTable, this->morphTable,
-                       ENNIW_LIMBCOUNT);
+    SkelAnime_InitFlex(globalCtx, &this->skelanime, &object_niw_Skel_002530, &object_niw_Anim_0000E8, this->jointTable,
+                       this->morphTable, ENNIW_LIMBCOUNT);
     Math_Vec3f_Copy(&this->unk2A4, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk2B0, &this->actor.world.pos);
 
@@ -324,7 +323,8 @@ void func_808917F8(EnNiw* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 void EnNiw_SetupIdle(EnNiw* this) {
-    Animation_Change(&this->skelanime, &object_niw_Anim_0000E8, 1.0f, 0.0f, Animation_GetLastFrame(&object_niw_Anim_0000E8), 0, -10.0f);
+    Animation_Change(&this->skelanime, &object_niw_Anim_0000E8, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&object_niw_Anim_0000E8), 0, -10.0f);
     this->unknownState28E = 0;
     this->actionFunc = EnNiw_Idle;
 }
@@ -626,7 +626,8 @@ void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
 }
 
 void EnNiw_SetupRunAway(EnNiw* this) {
-    Animation_Change(&this->skelanime, &object_niw_Anim_0000E8, 1.0f, 0.0f, Animation_GetLastFrame(&object_niw_Anim_0000E8), 0, -10.0f);
+    Animation_Change(&this->skelanime, &object_niw_Anim_0000E8, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&object_niw_Anim_0000E8), 0, -10.0f);
     this->unk29A = Rand_ZeroFloat(1.99f);
     this->unknownState28E = 7;
     this->actionFunc = EnNiw_RunAway;

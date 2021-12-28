@@ -39,7 +39,6 @@ static InitChainEntry sInitChain[] = {
 
 static Vec3f iceSmokeAccel = { 0.0f, 0.0f, 0.0f };
 
-
 void ObjHsStump_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjHsStump* this = THIS;
 

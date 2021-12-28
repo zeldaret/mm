@@ -24,7 +24,6 @@ void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx);
 void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx);
 s32 EnMuto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
-
 const ActorInit En_Muto_InitVars = {
     ACTOR_EN_MUTO,
     ACTORCAT_NPC,
@@ -64,7 +63,8 @@ void EnMuto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 40.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_toryo_Skel_007150, &object_toryo_Anim_000E50, this->jointTable, this->morphTable, 17);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_toryo_Skel_007150, &object_toryo_Anim_000E50,
+                       this->jointTable, this->morphTable, 17);
 
     this->isInMayorsRoom = this->actor.params;
     if (!this->isInMayorsRoom) {

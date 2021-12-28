@@ -28,7 +28,6 @@ const ActorInit Bg_Tobira01_InitVars = {
     (ActorFunc)BgTobira01_Draw,
 };
 
-
 void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 cutsceneId = this->dyna.actor.cutscene;

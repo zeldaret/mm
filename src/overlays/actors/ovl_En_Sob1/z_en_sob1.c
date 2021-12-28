@@ -1320,23 +1320,28 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zo_Skel_00D208, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zo_Skel_00D208, NULL, this->jointTable, this->morphTable,
+                       20);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
-    Animation_Change(&this->skelAnime, &object_masterzoora_Anim_00078C, 1.0f, 0.0f, Animation_GetLastFrame(&object_masterzoora_Anim_00078C), 0, 0.0f);
+    Animation_Change(&this->skelAnime, &object_masterzoora_Anim_00078C, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&object_masterzoora_Anim_00078C), 0, 0.0f);
     this->actor.draw = EnSob1_DrawZoraShopkeeper;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
 
 void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable, this->morphTable, 18);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
+                       this->morphTable, 18);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
-    Animation_Change(&this->skelAnime, &object_mastergolon_Anim_0000FC, 1.0f, 0.0f, Animation_GetLastFrame(&object_mastergolon_Anim_0000FC), 0, 0.0f);
+    Animation_Change(&this->skelAnime, &object_mastergolon_Anim_0000FC, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&object_mastergolon_Anim_0000FC), 0, 0.0f);
     this->actor.draw = EnSob1_DrawGoronShopkeeper;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
 
 void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rs_Skel_009220, &object_rs_Anim_009120, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rs_Skel_009220, &object_rs_Anim_009120, this->jointTable,
+                       this->morphTable, 16);
     this->actor.draw = EnSob1_DrawBombShopkeeper;
     this->changeObjectFunc = NULL;
     this->skelAnime.playSpeed = 2.0f;
@@ -1481,8 +1486,8 @@ void EnSob1_DrawCursor(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
-        gDPLoadTextureBlock_4b(OVERLAY_DISP++, &gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
-                               G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, &gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0,
+                               G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
         ulx = (x - w) * 4.0f;
         uly = (y - w + -12.0f) * 4.0f;
@@ -1618,7 +1623,8 @@ Gfx* EnSob1_EndDList(GraphicsContext* gfxCtx) {
 }
 
 void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sZoraShopkeeperEyeTextures[] = { object_zo_Tex_0050A0, object_zo_Tex_0058A0, object_zo_Tex_0060A0 };
+    static TexturePtr sZoraShopkeeperEyeTextures[] = { object_zo_Tex_0050A0, object_zo_Tex_0058A0,
+                                                       object_zo_Tex_0060A0 };
     EnSob1* this = THIS;
     s32 pad;
     s32 i;
@@ -1641,7 +1647,8 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sGoronShopkeeperEyeTextures[] = { object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_011038 };
+    static TexturePtr sGoronShopkeeperEyeTextures[] = { object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38,
+                                                        object_oF1d_map_Tex_011038 };
     EnSob1* this = THIS;
     s32 pad;
     s32 i;

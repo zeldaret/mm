@@ -35,7 +35,6 @@ void func_809C8808(EnSyatekiMan* this, GlobalContext* globalCtx);
 void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx);
 void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
     ACTORCAT_NPC,
@@ -133,11 +132,11 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_shn_Skel_00E7D0, &object_shn_Anim_00DFEC, this->jointTable, this->morphTable,
-                           16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_shn_Skel_00E7D0, &object_shn_Anim_00DFEC,
+                           this->jointTable, this->morphTable, 16);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_shn_Skel_00E7D0, &object_shn_Anim_00D9D0, this->jointTable, this->morphTable,
-                           16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_shn_Skel_00E7D0, &object_shn_Anim_00D9D0,
+                           this->jointTable, this->morphTable, 16);
     }
 
     this->actor.colChkInfo.cylRadius = 100;

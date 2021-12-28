@@ -83,7 +83,17 @@ static f32 sLightRayMaxScale[] = {
 };
 
 static TexturePtr sSplashTex[] = {
-    gameplay_keep_Tex_0378F0, gameplay_keep_Tex_037DF0, gameplay_keep_Tex_0382F0, gameplay_keep_Tex_0387F0, gameplay_keep_Tex_038CF0, gameplay_keep_Tex_0391F0, gameplay_keep_Tex_0396F0, gameplay_keep_Tex_039BF0, NULL, NULL, NULL,
+    gameplay_keep_Tex_0378F0,
+    gameplay_keep_Tex_037DF0,
+    gameplay_keep_Tex_0382F0,
+    gameplay_keep_Tex_0387F0,
+    gameplay_keep_Tex_038CF0,
+    gameplay_keep_Tex_0391F0,
+    gameplay_keep_Tex_0396F0,
+    gameplay_keep_Tex_039BF0,
+    NULL,
+    NULL,
+    NULL,
 };
 
 #include "overlays/ovl_En_Clear_Tag/ovl_En_Clear_Tag.c"

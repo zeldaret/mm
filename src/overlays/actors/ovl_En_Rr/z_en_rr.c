@@ -27,7 +27,6 @@ void func_808FB710(EnRr* this, GlobalContext* globalCtx);
 void func_808FAD1C(EnRr* this, GlobalContext* globalCtx);
 void func_808FB398(EnRr* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
     ACTORCAT_ENEMY,

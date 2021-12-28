@@ -40,7 +40,6 @@ const ActorInit Bg_Ctower_Gear_InitVars = {
     (ActorFunc)BgCtowerGear_Draw,
 };
 
-
 static Vec3f D_80AD3270[] = {
     { -70.0f, -60.0f, 8.0f }, { -60.0f, -60.0f, -9.1f }, { -75.0f, -60.0f, -9.1f }, { -70.0f, -60.0f, -26.2f }
 };

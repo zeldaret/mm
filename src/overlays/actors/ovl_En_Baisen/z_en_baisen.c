@@ -23,7 +23,6 @@ void func_80BE895C(EnBaisen* this, GlobalContext* globalCtx);
 void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx);
 void func_80BE89D8(EnBaisen* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Baisen_InitVars = {
     ACTOR_EN_BAISEN,
     ACTORCAT_NPC,
@@ -66,7 +65,8 @@ void EnBaisen_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBaisen* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bai_Skel_007908, &object_bai_Anim_0011C0, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bai_Skel_007908, &object_bai_Anim_0011C0, this->jointTable,
+                       this->morphTable, 20);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {

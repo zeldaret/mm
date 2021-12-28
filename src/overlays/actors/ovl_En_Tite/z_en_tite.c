@@ -46,7 +46,6 @@ void func_80895CB0(EnTite* this);
 void func_80895D08(EnTite* this, GlobalContext* globalCtx);
 void func_80895E28(EnTite* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Tite_InitVars = {
     ACTOR_EN_TITE,
     ACTORCAT_ENEMY,
@@ -141,7 +140,8 @@ void EnTite_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 j;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_tite_Skel_003A20, &object_tite_Anim_0012E4, this->jointTable, this->morphTable, 25);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_tite_Skel_003A20, &object_tite_Anim_0012E4, this->jointTable,
+                   this->morphTable, 25);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 60.0f);
     Actor_SetHeight(&this->actor, 20.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);

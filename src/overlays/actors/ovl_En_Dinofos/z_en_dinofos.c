@@ -57,7 +57,6 @@ void func_8089C398(EnDinofos* this);
 void func_8089C164(EnDinofos* this);
 void func_8089C244(EnDinofos* this);
 
-
 const ActorInit En_Dinofos_InitVars = {
     ACTOR_EN_DINOFOS,
     ACTORCAT_ENEMY,
@@ -276,7 +275,8 @@ void EnDinofos_Init(Actor* thisx, GlobalContext* globalCtx) {
                               this->colliderJntSphElement);
     Collider_InitAndSetQuad(globalCtx, &this->colliderQuad, &this->actor, &sQuadInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dinofos_Skel_009570, &object_dinofos_Anim_002E40, this->jointTable, this->morphTable, 21);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dinofos_Skel_009570, &object_dinofos_Anim_002E40,
+                       this->jointTable, this->morphTable, 21);
 
     if (D_8089E364 == 0) {
         for (i = 0; i < ARRAY_COUNT(D_8089E33C); i++) {
@@ -466,7 +466,8 @@ void func_8089B100(EnDinofos* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp3C;
 
-    Animation_Change(&this->skelAnime, &object_dinofos_Anim_001CCC, 1.0f, Animation_GetLastFrame(&object_dinofos_Anim_001CCC),
+    Animation_Change(&this->skelAnime, &object_dinofos_Anim_001CCC, 1.0f,
+                     Animation_GetLastFrame(&object_dinofos_Anim_001CCC),
                      Animation_GetLastFrame(&object_dinofos_Anim_001CCC), 2, 0.0f);
     func_800BE33C(&camera->eye, &camera->at, &this->unk_29A, 1);
     Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &sp3C);
@@ -714,8 +715,8 @@ void func_8089BBB4(EnDinofos* this, GlobalContext* globalCtx) {
         if (this->actionFunc == func_8089D1E0) {
             this->skelAnime.playSpeed = this->actor.speedXZ * 0.166666671634f;
         } else {
-            Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speedXZ * 0.166666671634f, 0.0f, 0.0f, 0,
-                             -4.0f);
+            Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speedXZ * 0.166666671634f, 0.0f,
+                             0.0f, 0, -4.0f);
         }
 
         this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
@@ -1166,7 +1167,8 @@ void func_8089D11C(EnDinofos* this, s16 arg1) {
     } else {
         this->actor.speedXZ = 15.0f;
     }
-    Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speedXZ * (1.0f / 7.5f), 0.0f, 0.0f, 0, -4.0f);
+    Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speedXZ * (1.0f / 7.5f), 0.0f, 0.0f, 0,
+                     -4.0f);
     this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
     this->unk_292 = 10;
     this->unk_2A4 = 0.0f;

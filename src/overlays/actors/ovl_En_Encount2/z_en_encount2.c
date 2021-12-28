@@ -99,7 +99,6 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-
 void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     s32 pad;

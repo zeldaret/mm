@@ -66,7 +66,6 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 0, 60, 60, MASS_IMMOVABLE };
 
-
 // Stalactite
 
 void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {

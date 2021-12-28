@@ -66,18 +66,22 @@ const ActorInit En_Ossan_InitVars = {
 };
 
 static ActorAnimationEntryS sAnimationsCuriosityShopMan[] = {
-    { &object_fsn_Anim_012C34, 1.0f, 0, -1, 0, 0 },  { &object_fsn_Anim_0131FC, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_00C58C, 1.0f, 0, -1, 2, 0 },
-    { &object_fsn_Anim_00C58C, -1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00F00C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, 2, 0 },  { &object_fsn_Anim_00D354, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_0138B0, 1.0f, 0, -1, 2, 0 },
-    { &object_fsn_Anim_01430C, 1.0f, 0, -1, 0, 0 },  { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C26C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_012C34, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_0131FC, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C58C, -1.0f, 0, -1, 2, 0 },
+    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00F00C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00D354, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_01430C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C26C, 1.0f, 0, -1, 0, 0 },
     { &object_fsn_Anim_00DE34, 1.0f, 0, -1, 2, 0 },
 };
 
 static ActorAnimationEntryS sAnimationsPartTimeWorker[] = {
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, -10 }, { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, -10 }, { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },
-    { &object_ani_Anim_009D34, -1.0f, 0, -1, 2, 0 },  { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },   { &object_ani_Anim_00A460, 1.0f, 0, -1, 2, -5 },
-    { &object_ani_Anim_00A460, 1.0f, 0, -1, 0, -5 },  { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, -10 }, { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, -10 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, -1.0f, 0, -1, 2, 0 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
+    { &object_ani_Anim_00A460, 1.0f, 0, -1, 2, -5 },  { &object_ani_Anim_00A460, 1.0f, 0, -1, 0, -5 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
 };
 
 static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };
@@ -1309,12 +1313,14 @@ void EnOssan_Blink(EnOssan* this) {
 }
 
 void EnOssan_InitCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fsn_Skel_013320, &object_fsn_Anim_012C34, this->jointTable, this->morphTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fsn_Skel_013320, &object_fsn_Anim_012C34, this->jointTable,
+                       this->morphTable, 19);
     this->actor.draw = EnOssan_DrawCuriosityShopMan;
 }
 
 void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ani_Skel_0028A0, &object_ani_Anim_009D34, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ani_Skel_0028A0, &object_ani_Anim_009D34, this->jointTable,
+                       this->morphTable, 16);
     this->actor.draw = EnOssan_DrawPartTimeWorker;
 }
 
@@ -1517,8 +1523,8 @@ void EnOssan_DrawCursor(GlobalContext* globalCtx, EnOssan* this, f32 x, f32 y, f
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
-        gDPLoadTextureBlock_4b(OVERLAY_DISP++, &gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
-                               G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, &gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0,
+                               G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
         ulx = (x - w) * 4.0f;
         uly = (y - w) * 4.0f;

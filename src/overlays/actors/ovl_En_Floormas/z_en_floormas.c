@@ -60,7 +60,6 @@ void func_808D2D30(EnFloormas* this, GlobalContext* globalCtx);
 void func_808D2DC0(EnFloormas* this, GlobalContext* globalCtx);
 void func_808D3754(Actor* thisx, GlobalContext* globalCtx);
 
-
 const ActorInit En_Floormas_InitVars = {
     ACTOR_EN_FLOORMAS,
     ACTORCAT_ENEMY,
@@ -155,7 +154,8 @@ void EnFloormas_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 50.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wallmaster_Skel_008FB0, &object_wallmaster_Anim_009DB0, this->jointTable, this->morphTable, 25);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wallmaster_Skel_008FB0, &object_wallmaster_Anim_009DB0,
+                       this->jointTable, this->morphTable, 25);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
@@ -375,8 +375,8 @@ void func_808D108C(EnFloormas* this) {
     if (sp36 > 0) {
         Animation_MorphToPlayOnce(&this->skelAnime, &object_wallmaster_Anim_002158, -3.0f);
     } else {
-        Animation_Change(&this->skelAnime, &object_wallmaster_Anim_002158, -1.0f, Animation_GetLastFrame(&object_wallmaster_Anim_002158.common), 0.0f, 2,
-                         -3.0f);
+        Animation_Change(&this->skelAnime, &object_wallmaster_Anim_002158, -1.0f,
+                         Animation_GetLastFrame(&object_wallmaster_Anim_002158.common), 0.0f, 2, -3.0f);
     }
 
     if (this->actor.scale.x > 0.009f) {
@@ -418,7 +418,8 @@ void func_808D11BC(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D1380(EnFloormas* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_009520, 3.0f, 0.0f, Animation_GetLastFrame(&object_wallmaster_Anim_009520.common), 2, -3.0f);
+    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_009520, 3.0f, 0.0f,
+                     Animation_GetLastFrame(&object_wallmaster_Anim_009520.common), 2, -3.0f);
     this->actor.speedXZ = 0.0f;
     this->actor.gravity = 0.0f;
     func_808D08D0(this);
@@ -568,7 +569,8 @@ void func_808D19D4(EnFloormas* this) {
     this->actor.shape.rot.y = parent->shape.rot.y + 0x5555;
     this->actor.world.pos = parent->world.pos;
     this->actor.params = ENFLOORMAS_GET_7FFF_10;
-    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_0019CC, 1.0f, 41.0f, Animation_GetLastFrame(&object_wallmaster_Anim_0019CC.common), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_0019CC, 1.0f, 41.0f,
+                     Animation_GetLastFrame(&object_wallmaster_Anim_0019CC.common), 2, 0.0f);
     this->collider.dim.radius = sCylinderInit.dim.radius * 0.6f;
     this->collider.dim.height = sCylinderInit.dim.height * 0.6f;
     this->actor.flags &= ~0x400;

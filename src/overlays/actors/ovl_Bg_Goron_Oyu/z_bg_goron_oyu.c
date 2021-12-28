@@ -35,7 +35,6 @@ const ActorInit Bg_Goron_Oyu_InitVars = {
     (ActorFunc)BgGoronOyu_Draw,
 };
 
-
 void func_80B40080(BgGoronOyu* this) {
     this->unk_17E = 1;
     this->actionFunc = func_80B400C8;

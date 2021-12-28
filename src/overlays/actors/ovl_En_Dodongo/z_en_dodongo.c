@@ -35,7 +35,6 @@ void func_808786C8(EnDodongo* this, GlobalContext* globalCtx);
 void func_80878724(EnDodongo* this);
 void func_808787B0(EnDodongo* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Dodongo_InitVars = {
     ACTOR_EN_DODONGO,
     ACTORCAT_ENEMY,
@@ -296,7 +295,8 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_330.a = 200;
     Math_Vec3f_Copy(&this->unk_314, &D_801C5DB0);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 48.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dodongo_Skel_008318, &object_dodongo_Anim_004C20, this->jointTable, this->morphTable, 31);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dodongo_Skel_008318, &object_dodongo_Anim_004C20,
+                   this->jointTable, this->morphTable, 31);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
     Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);

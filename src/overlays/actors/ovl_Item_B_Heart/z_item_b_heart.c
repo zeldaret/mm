@@ -37,7 +37,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-
 void ItemBHeart_Init(Actor* thisx, GlobalContext* globalCtx) {
     ItemBHeart* this = THIS;
 

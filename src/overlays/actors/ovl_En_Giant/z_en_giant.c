@@ -32,10 +32,11 @@ const ActorInit En_Giant_InitVars = {
     (ActorFunc)EnGiant_Draw,
 };
 
-
 static AnimationHeader* sAnimationTable[] = {
-    &object_giant_Anim_008394, &object_giant_Anim_0096E4, &object_giant_Anim_0102A4, &object_giant_Anim_0116E4, &object_giant_Anim_012A38, &object_giant_Anim_013004, &object_giant_Anim_013FE8, &object_giant_Anim_015334,
-    &object_giant_Anim_017944, &object_giant_Anim_00A1C4, &object_giant_Anim_00D040, &object_giant_Anim_00DE84, &object_giant_Anim_00ACA4, &object_giant_Anim_00B784, &object_giant_Anim_00C5D4,
+    &object_giant_Anim_008394, &object_giant_Anim_0096E4, &object_giant_Anim_0102A4, &object_giant_Anim_0116E4,
+    &object_giant_Anim_012A38, &object_giant_Anim_013004, &object_giant_Anim_013FE8, &object_giant_Anim_015334,
+    &object_giant_Anim_017944, &object_giant_Anim_00A1C4, &object_giant_Anim_00D040, &object_giant_Anim_00DE84,
+    &object_giant_Anim_00ACA4, &object_giant_Anim_00B784, &object_giant_Anim_00C5D4,
 };
 
 void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimationId) {
@@ -98,7 +99,8 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneScale = 2000.0f;
     this->actor.uncullZoneDownward = 2400.0f;
     Actor_SetScale(&this->actor, 0.32f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_giant_Skel_0079B0, &object_giant_Anim_002168, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_giant_Skel_0079B0, &object_giant_Anim_002168,
+                       this->jointTable, this->morphTable, 16);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
     this->csAction = GIANT_CS_ACTION_NONE;
     this->actionFunc = EnGiant_PerformCutsceneActions;
@@ -136,7 +138,8 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_24A = 0x1C5;
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PerformClockTowerSuccessActions;
-        Animation_Change(&this->skelAnime, &object_giant_Anim_0116E4, 0.0f, Animation_GetLastFrame(&object_giant_Anim_0116E4) - 1.0f,
+        Animation_Change(&this->skelAnime, &object_giant_Anim_0116E4, 0.0f,
+                         Animation_GetLastFrame(&object_giant_Anim_0116E4) - 1.0f,
                          Animation_GetLastFrame(&object_giant_Anim_0116E4), 2, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
@@ -147,7 +150,8 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type)) {
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PlayClockTowerFailureAnimation;
-        Animation_Change(&this->skelAnime, &object_giant_Anim_013FE8, 1.0f, 0.0f, Animation_GetLastFrame(&object_giant_Anim_013004), 0, 0.0f);
+        Animation_Change(&this->skelAnime, &object_giant_Anim_013FE8, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&object_giant_Anim_013004), 0, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
         this->actor.minVelocityY = 0.0f;
@@ -246,7 +250,8 @@ void EnGiant_ChangeAnimationBasedOnCsAction(EnGiant* this) {
             }
             break;
         case GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER:
-            Animation_Change(&this->skelAnime, &object_giant_Anim_0116E4, 0.0f, Animation_GetLastFrame(&object_giant_Anim_0116E4) - 1.0f,
+            Animation_Change(&this->skelAnime, &object_giant_Anim_0116E4, 0.0f,
+                             Animation_GetLastFrame(&object_giant_Anim_0116E4) - 1.0f,
                              Animation_GetLastFrame(&object_giant_Anim_0116E4), 2, 0.0f);
             break;
     }

@@ -31,7 +31,6 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx);
 s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg);
 void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg);
 
-
 const ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
     ACTORCAT_PROP,
@@ -104,10 +103,14 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &object_harfgibud_Anim_00260C, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_harfgibud_Anim_009D44, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_harfgibud_Anim_00A164, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_harfgibud_Anim_000370, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_harfgibud_Anim_001138, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_harfgibud_Anim_0015D4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_harfgibud_Anim_001960, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_harfgibud_Anim_00AE1C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_harfgibud_Anim_00260C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_harfgibud_Anim_009D44, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_harfgibud_Anim_00A164, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_harfgibud_Anim_000370, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_harfgibud_Anim_001138, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_harfgibud_Anim_0015D4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_harfgibud_Anim_001960, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_harfgibud_Anim_00AE1C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
 };
 
 static u32 D_80BD00C8 = false;
@@ -118,8 +121,8 @@ void EnHg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_harfgibud_Skel_008580, &object_harfgibud_Anim_00260C, this->jointTable, this->morphTable,
-                       HG_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_harfgibud_Skel_008580, &object_harfgibud_Anim_00260C,
+                       this->jointTable, this->morphTable, HG_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);

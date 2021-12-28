@@ -27,7 +27,6 @@ void ObjRaillift_Teleport(ObjRaillift* this, GlobalContext* globalCtx);
 void ObjRaillift_Wait(ObjRaillift* this, GlobalContext* globalCtx);
 void ObjRaillift_Move(ObjRaillift* this, GlobalContext* globalCtx);
 
-
 const ActorInit Obj_Raillift_InitVars = {
     ACTOR_OBJ_RAILLIFT,
     ACTORCAT_BG,

@@ -28,7 +28,6 @@ const ActorInit Bg_Fu_Kaiten_InitVars = {
     (ActorFunc)BgFuKaiten_Draw,
 };
 
-
 void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     UNK_TYPE pad0;
     UNK_TYPE pad1;

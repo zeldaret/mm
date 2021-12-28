@@ -33,12 +33,12 @@ const ActorInit Bg_Ctower_Rot_InitVars = {
     (ActorFunc)BgCtowerRot_Draw,
 };
 
-
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-static Gfx* bgCtowerRotDlists[] = { object_ctower_rot_DL_012DA0, object_ctower_rot_DL_017220, object_ctower_rot_DL_0174E0 };
+static Gfx* bgCtowerRotDlists[] = { object_ctower_rot_DL_012DA0, object_ctower_rot_DL_017220,
+                                    object_ctower_rot_DL_0174E0 };
 
 void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerRot* this = THIS;

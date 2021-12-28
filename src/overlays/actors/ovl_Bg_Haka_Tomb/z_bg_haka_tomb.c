@@ -23,7 +23,6 @@ void func_80BD6768(BgHakaTomb* this, GlobalContext* globalCtx);
 void BgHakaTomb_SetupDoNothing(BgHakaTomb* this);
 void BgHakaTomb_DoNothing(BgHakaTomb* this, GlobalContext* globalCtx);
 
-
 const ActorInit Bg_Haka_Tomb_InitVars = {
     ACTOR_BG_HAKA_TOMB,
     ACTORCAT_BG,

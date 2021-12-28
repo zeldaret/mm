@@ -62,7 +62,6 @@ static ColliderCylinderInit sCylinderInit = {
 
 Vec3f D_8099D63C = { 0.0f, -1300.0f, 1100.0f };
 
-
 void EnCow_RotatePoint(Vec3f* vec, s16 angle) {
     f32 x = (Math_CosS(angle) * vec->x) + (Math_SinS(angle) * vec->z);
 
@@ -108,8 +107,8 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
     switch (EN_COW_TYPE(thisx)) {
         case EN_COW_TYPE_DEFAULT:
         case EN_COW_TYPE_ABDUCTED:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cow_Skel_004010, NULL, this->jointTable, this->morphTable,
-                               COW_LIMB_MAX);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cow_Skel_004010, NULL, this->jointTable,
+                               this->morphTable, COW_LIMB_MAX);
             Animation_PlayLoop(&this->skelAnime, &object_cow_Anim_0001CC);
 
             Collider_InitAndSetCylinder(globalCtx, &this->colliders[0], &this->actor, &sCylinderInit);
@@ -136,8 +135,8 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_801A5080(4);
             break;
         case EN_COW_TYPE_TAIL:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cow_Skel_004C30, NULL, this->jointTable, this->morphTable,
-                               COW_LIMB_MAX);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cow_Skel_004C30, NULL, this->jointTable,
+                               this->morphTable, COW_LIMB_MAX);
             Animation_PlayLoop(&this->skelAnime, &object_cow_Anim_004348);
 
             this->actor.update = EnCow_UpdateTail;
@@ -347,11 +346,11 @@ void EnCow_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &object_cow_Anim_0001CC) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_COW_CRY);
-            Animation_Change(&this->skelAnime, &object_cow_Anim_004264, 1.0f, 0.0f, Animation_GetLastFrame(&object_cow_Anim_004264),
-                             ANIMMODE_ONCE, 1.0f);
+            Animation_Change(&this->skelAnime, &object_cow_Anim_004264, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&object_cow_Anim_004264), ANIMMODE_ONCE, 1.0f);
         } else {
-            Animation_Change(&this->skelAnime, &object_cow_Anim_0001CC, 1.0f, 0.0f, Animation_GetLastFrame(&object_cow_Anim_0001CC),
-                             ANIMMODE_LOOP, 1.0f);
+            Animation_Change(&this->skelAnime, &object_cow_Anim_0001CC, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&object_cow_Anim_0001CC), ANIMMODE_LOOP, 1.0f);
         }
     }
 
@@ -387,11 +386,11 @@ void EnCow_UpdateTail(Actor* thisx, GlobalContext* globalCtx) {
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &object_cow_Anim_004348) {
-            Animation_Change(&this->skelAnime, &object_cow_Anim_004E98, 1.0f, 0.0f, Animation_GetLastFrame(&object_cow_Anim_004E98),
-                             ANIMMODE_ONCE, 1.0f);
+            Animation_Change(&this->skelAnime, &object_cow_Anim_004E98, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&object_cow_Anim_004E98), ANIMMODE_ONCE, 1.0f);
         } else {
-            Animation_Change(&this->skelAnime, &object_cow_Anim_004348, 1.0f, 0.0f, Animation_GetLastFrame(&object_cow_Anim_004348),
-                             ANIMMODE_LOOP, 1.0f);
+            Animation_Change(&this->skelAnime, &object_cow_Anim_004348, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&object_cow_Anim_004348), ANIMMODE_LOOP, 1.0f);
         }
     }
 

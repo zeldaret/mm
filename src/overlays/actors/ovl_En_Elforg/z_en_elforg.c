@@ -73,7 +73,8 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->flags = 0;
     this->direction = 0;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gameplay_keep_Skel_02CA98, &gameplay_keep_Anim_02B494, this->jointTable, this->jointTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gameplay_keep_Skel_02CA98, &gameplay_keep_Anim_02B494,
+                       this->jointTable, this->jointTable, 10);
     this->skelAnime.playSpeed = 1.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     this->actor.shape.shadowAlpha = 255;

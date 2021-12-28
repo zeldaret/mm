@@ -33,8 +33,8 @@ const ActorInit En_Recepgirl_InitVars = {
     (ActorFunc)EnRecepgirl_Draw,
 };
 
-
-static TexturePtr sEyeTextures[] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };
+static TexturePtr sEyeTextures[] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0,
+                                     object_bg_Tex_00FCF0 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
@@ -43,14 +43,14 @@ static InitChainEntry sInitChain[] = {
 
 static s32 texturesDesegmented = false;
 
-
 void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRecepgirl* this = THIS;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bg_Skel_011B60, &object_bg_Anim_009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bg_Skel_011B60, &object_bg_Anim_009890, this->jointTable,
+                       this->morphTable, 24);
 
     if (!texturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {

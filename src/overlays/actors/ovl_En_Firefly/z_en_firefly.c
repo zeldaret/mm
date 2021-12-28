@@ -120,13 +120,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 4000, ICHAIN_STOP),
 };
 
-
 void EnFirefly_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFirefly* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_firefly_Skel_0018B8, &object_firefly_Anim_00017C, this->jointTable, this->morphTable, 28);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_firefly_Skel_0018B8, &object_firefly_Anim_00017C,
+                   this->jointTable, this->morphTable, 28);
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 

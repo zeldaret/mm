@@ -34,7 +34,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 20, ICHAIN_STOP),
 };
 
-
 void EnStream_SetupAction(EnStream* this, EnStreamActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }

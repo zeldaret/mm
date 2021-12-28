@@ -31,7 +31,6 @@ void func_809DD2F8(GlobalContext* globalCtx);
 void func_809DD934(Boss02* this, GlobalContext* globalCtx);
 void func_809DEAC4(Boss02* this, GlobalContext* globalCtx);
 
-
 static u8 D_809E0420;
 static u8 D_809E0421;
 static u8 D_809E0422;
@@ -597,7 +596,8 @@ void Boss02_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.colChkInfo.health = 20;
         Actor_SetScale(&this->actor, 0.01f);
-        SkelAnime_Init(globalCtx, &this->skelAnime, &object_boss02_Skel_009B10, &object_boss02_Anim_009C78, this->jointTable, this->morphTable, 13);
+        SkelAnime_Init(globalCtx, &this->skelAnime, &object_boss02_Skel_009B10, &object_boss02_Anim_009C78,
+                       this->jointTable, this->morphTable, 13);
         Collider_InitAndSetJntSph(globalCtx, &this->colliderSphere1, &this->actor, &sJntSphInit1,
                                   this->colliderSphere1Elements);
         Collider_InitAndSetJntSph(globalCtx, &this->colliderSphere2, &this->actor, &sJntSphInit2,
@@ -1324,9 +1324,12 @@ void func_809DC78C(Actor* thisx, GlobalContext* globalCtx) {
 // matrix stuff at the start?
 void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     static Gfx* D_809DFA9C[] = {
-        object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690, object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
-        object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290, object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
-        object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90, object_boss02_DL_013210, object_boss02_DL_013590,
+        object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690,
+        object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
+        object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290,
+        object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
+        object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90,
+        object_boss02_DL_013210, object_boss02_DL_013590,
     };
     static Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
     Boss02* this = THIS;
@@ -1463,9 +1466,12 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 }
 #else
 static Gfx* D_809DFA9C[] = {
-    object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690, object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
-    object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290, object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
-    object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90, object_boss02_DL_013210, object_boss02_DL_013590,
+    object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690,
+    object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
+    object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290,
+    object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
+    object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90,
+    object_boss02_DL_013210, object_boss02_DL_013590,
 };
 static Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/Boss02_Draw.s")
@@ -2150,8 +2156,8 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_1D1C == (u32)(KREG(92) + 125)) {
-                Actor_TitleCardCreate(globalCtx, &globalCtx->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&object_boss02_Tex_008650),
-                                      160, 180, 128, 40);
+                Actor_TitleCardCreate(globalCtx, &globalCtx->actorCtx.titleCtxt,
+                                      Lib_SegmentedToVirtual(&object_boss02_Tex_008650), 160, 180, 128, 40);
             }
 
             if (this->unk_1D1C == (u32)(BREG(27) + 335)) {

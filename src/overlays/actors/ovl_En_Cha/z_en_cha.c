@@ -50,7 +50,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 40, 0, { 0, 0, 0 } },
 };
 
-
 void EnCha_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
     s32 pad;

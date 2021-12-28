@@ -53,7 +53,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 50, 0, { 0, 0, 0 } },
 };
 
-
 void EnNnh_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNnh* this = THIS;
 

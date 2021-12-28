@@ -29,7 +29,6 @@ void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx);
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                Actor* arg);
 
-
 const ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
     ACTORCAT_PROP,
@@ -110,7 +109,8 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitFlex(globalCtx, &this->anime, &object_po_fusen_Skel_0024F0, &object_po_fusen_Anim_000040, this->jointTable, this->morphTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->anime, &object_po_fusen_Skel_0024F0, &object_po_fusen_Anim_000040,
+                       this->jointTable, this->morphTable, 10);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 

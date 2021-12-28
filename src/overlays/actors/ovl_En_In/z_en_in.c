@@ -47,7 +47,6 @@ const ActorInit En_In_InitVars = {
     (ActorFunc)EnIn_Draw,
 };
 
-
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT0,
@@ -133,12 +132,15 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &object_in_Anim_001D10, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_001D10, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_014F8C, 1.0f, 0, -1, 0, 0 },
-    { &object_in_Anim_014F8C, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_000CB0, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_0003B4, 1.0f, 0, -1, 0, -4 },
-    { &object_in_Anim_001BE0, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_015918, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_01C0B0, 1.0f, 0, -1, 0, 0 },
-    { &object_in_Anim_01C0B0, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_01A140, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_01A140, 1.0f, 0, -1, 0, -4 },
-    { &object_in_Anim_01B904, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_01B904, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_01B3C4, 1.0f, 0, -1, 0, 0 },
-    { &object_in_Anim_01B3C4, 0.0f, 0, -1, 2, 0 },  { &object_in_Anim_01B3C4, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_019EB4, 1.0f, 0, -1, 2, -4 },
+    { &object_in_Anim_001D10, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_001D10, 1.0f, 0, -1, 0, -4 },
+    { &object_in_Anim_014F8C, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_014F8C, 1.0f, 0, -1, 0, -4 },
+    { &object_in_Anim_000CB0, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_0003B4, 1.0f, 0, -1, 0, -4 },
+    { &object_in_Anim_001BE0, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_015918, 1.0f, 0, -1, 0, -4 },
+    { &object_in_Anim_01C0B0, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_01C0B0, 1.0f, 0, -1, 0, -4 },
+    { &object_in_Anim_01A140, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_01A140, 1.0f, 0, -1, 0, -4 },
+    { &object_in_Anim_01B904, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_01B904, 1.0f, 0, -1, 0, -4 },
+    { &object_in_Anim_01B3C4, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_01B3C4, 0.0f, 0, -1, 2, 0 },
+    { &object_in_Anim_01B3C4, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_019EB4, 1.0f, 0, -1, 2, -4 },
 };
 
 static u16 D_808F6C0C[] = {
@@ -297,8 +299,9 @@ void func_808F3690(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
-    AnimationHeader* animations[] = { &object_in_Anim_015E38, &object_in_Anim_016A60, &object_in_Anim_0177AC, &object_in_Anim_016484,
-                                      &object_in_Anim_0170DC, &object_in_Anim_018240, &object_in_Anim_0187C8, &object_in_Anim_0198A8 };
+    AnimationHeader* animations[] = { &object_in_Anim_015E38, &object_in_Anim_016A60, &object_in_Anim_0177AC,
+                                      &object_in_Anim_016484, &object_in_Anim_0170DC, &object_in_Anim_018240,
+                                      &object_in_Anim_0187C8, &object_in_Anim_0198A8 };
 
     if (this->skelAnime.animation == &object_in_Anim_016484 || this->skelAnime.animation == &object_in_Anim_0170DC) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
@@ -1355,7 +1358,8 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_in_Skel_014EA8, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_in_Skel_014EA8, NULL, this->jointTable, this->morphTable,
+                       20);
     func_808F30B0(&this->skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->colliderCylinder);
     Collider_SetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -1371,7 +1375,8 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (type == ENIN_HORSE_RIDER_YELLOW_SHIRT || type == ENIN_HORSE_RIDER_BLUE_SHIRT) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
-        Animation_Change(&this->skelAnime, &object_in_Anim_016A60, 1.0f, 0.0f, Animation_GetLastFrame(&object_in_Anim_016A60), 2, 0.0f);
+        Animation_Change(&this->skelAnime, &object_in_Anim_016A60, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&object_in_Anim_016A60), 2, 0.0f);
         Actor_SetScale(&this->actor, 0.01f);
         this->unk23C = 0;
         this->unk23D = 1;
@@ -1494,9 +1499,26 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnIn* this = (EnIn*)arg;
     s32 pad;
     Gfx* sp50[] = {
-        NULL,       NULL,       object_in_DL_0149A8, object_in_DL_014AE0, object_in_DL_014C30, object_in_DL_0145D8, object_in_DL_014710,
-        object_in_DL_014860, object_in_DL_014420, object_in_DL_012A78, object_in_DL_013DE0, object_in_DL_013F10, object_in_DL_014040, object_in_DL_0137A0,
-        object_in_DL_0138D0, object_in_DL_013A00, object_in_DL_012DF8, object_in_DL_013670, object_in_DL_013540, object_in_DL_013440,
+        NULL,
+        NULL,
+        object_in_DL_0149A8,
+        object_in_DL_014AE0,
+        object_in_DL_014C30,
+        object_in_DL_0145D8,
+        object_in_DL_014710,
+        object_in_DL_014860,
+        object_in_DL_014420,
+        object_in_DL_012A78,
+        object_in_DL_013DE0,
+        object_in_DL_013F10,
+        object_in_DL_014040,
+        object_in_DL_0137A0,
+        object_in_DL_0138D0,
+        object_in_DL_013A00,
+        object_in_DL_012DF8,
+        object_in_DL_013670,
+        object_in_DL_013540,
+        object_in_DL_013440,
     };
 
     if (this->unk23C != 0 && limbIndex != 16) {
@@ -1511,11 +1533,12 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (limbIndex == 16) {
         TexturePtr sp38[] = { object_in_Tex_0035E0, object_in_Tex_004820, object_in_Tex_004C20, object_in_Tex_0043E0 };
-        
+
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp38[this->unk482]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(&object_in_Tex_003520));
     } else {
-        AnimatedMat_DrawStep(globalCtx, Lib_SegmentedToVirtual(&object_in_Matanimheader_001C30), this->unk4AC & 8 ? 1 : 0);
+        AnimatedMat_DrawStep(globalCtx, Lib_SegmentedToVirtual(&object_in_Matanimheader_001C30),
+                             this->unk4AC & 8 ? 1 : 0);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 

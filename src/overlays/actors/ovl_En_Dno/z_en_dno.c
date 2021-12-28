@@ -43,12 +43,15 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 extern u8 D_801C20C0;
 
 static struct_80B8E1A8 sAnimations[] = {
-    { &object_dno_Anim_000470, 1.0f, 2, 0.0f }, { &object_dno_Anim_0008F0, 1.0f, 2, 0.0f }, { &object_dno_Anim_000F6C, 1.0f, 0, 0.0f },
-    { &object_dno_Anim_001A50, 1.0f, 2, 0.0f }, { &object_dno_Anim_002530, 1.0f, 2, 0.0f }, { &object_dno_Anim_003320, 1.0f, 2, 0.0f },
-    { &object_dno_Anim_0036D0, 1.0f, 0, 0.0f }, { &object_dno_Anim_0041CC, 1.0f, 2, 0.0f }, { &object_dno_Anim_004DD8, 1.0f, 2, 0.0f },
-    { &object_dno_Anim_005F98, 1.0f, 0, 0.0f }, { &object_dno_Anim_006488, 1.0f, 2, 0.0f }, { &object_dno_Anim_0073E4, 1.0f, 0, 0.0f },
-    { &object_dno_Anim_0077A8, 1.0f, 0, 0.0f }, { &object_dno_Anim_007CA4, 1.0f, 0, 0.0f }, { &object_dno_Anim_008324, 1.0f, 0, 0.0f },
-    { &object_dno_Anim_008AE4, 1.0f, 2, 0.0f }, { &object_dno_Anim_009100, 1.0f, 2, 0.0f }, { &object_dno_Anim_0051E4, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_000470, 1.0f, 2, 0.0f }, { &object_dno_Anim_0008F0, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_000F6C, 1.0f, 0, 0.0f }, { &object_dno_Anim_001A50, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_002530, 1.0f, 2, 0.0f }, { &object_dno_Anim_003320, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_0036D0, 1.0f, 0, 0.0f }, { &object_dno_Anim_0041CC, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_004DD8, 1.0f, 2, 0.0f }, { &object_dno_Anim_005F98, 1.0f, 0, 0.0f },
+    { &object_dno_Anim_006488, 1.0f, 2, 0.0f }, { &object_dno_Anim_0073E4, 1.0f, 0, 0.0f },
+    { &object_dno_Anim_0077A8, 1.0f, 0, 0.0f }, { &object_dno_Anim_007CA4, 1.0f, 0, 0.0f },
+    { &object_dno_Anim_008324, 1.0f, 0, 0.0f }, { &object_dno_Anim_008AE4, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_009100, 1.0f, 2, 0.0f }, { &object_dno_Anim_0051E4, 1.0f, 2, 0.0f },
     { &object_dno_Anim_005E20, 1.0f, 0, 0.0f }, { &object_dno_Anim_006F84, 1.0f, 0, 0.0f },
 };
 
@@ -194,8 +197,8 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (actor == NULL) {
             Actor_ProcessInitChain(thisx, sInitChain);
             ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 21.0f);
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dno_Skel_00E1F8, &object_dno_Anim_007CA4, this->jointTable,
-                               this->morphTable, 28);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dno_Skel_00E1F8, &object_dno_Anim_007CA4,
+                               this->jointTable, this->morphTable, 28);
             Collider_InitCylinder(globalCtx, &this->collider);
             Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
             Actor_UpdateBgCheckInfo(globalCtx, thisx, 0.0f, 0.0f, 0.0f, 4);

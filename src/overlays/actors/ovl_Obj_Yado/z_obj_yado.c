@@ -34,7 +34,6 @@ static InitChainEntry sInitChain[] = {
 
 AnimatedMaterial* D_80C16470;
 
-
 void ObjYado_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjYado* this = THIS;
 

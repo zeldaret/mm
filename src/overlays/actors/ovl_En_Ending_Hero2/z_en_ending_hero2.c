@@ -31,7 +31,6 @@ const ActorInit En_Ending_Hero2_InitVars = {
     (ActorFunc)EnEndingHero2_Draw,
 };
 
-
 void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero2* this = THIS;
 
@@ -39,7 +38,8 @@ void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bai_Skel_007908, &object_bai_Anim_0011C0, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bai_Skel_007908, &object_bai_Anim_0011C0, this->jointTable,
+                       this->morphTable, 20);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_80C232E8(this);
 }

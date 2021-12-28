@@ -125,9 +125,10 @@ typedef enum {
     /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
 } EnKakasi_Animations;
 
-
 static AnimationHeader* kakasiAnimations[] = {
-    &object_ka_Anim_007444, &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_007B90, &object_ka_Anim_0071EC, &object_ka_Anim_007444, &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
+    &object_ka_Anim_007444, &object_ka_Anim_00686C, &object_ka_Anim_0081A4,
+    &object_ka_Anim_007B90, &object_ka_Anim_0071EC, &object_ka_Anim_007444,
+    &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
 };
 
 static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
@@ -138,7 +139,6 @@ void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
-
 
 void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;

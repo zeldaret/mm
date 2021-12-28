@@ -31,7 +31,6 @@ const ActorInit En_Ending_Hero_InitVars = {
     (ActorFunc)EnEndingHero_Draw,
 };
 
-
 void EnEndingHero_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero* this = THIS;
 
@@ -39,7 +38,8 @@ void EnEndingHero_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dt_Skel_00B0CC, &object_dt_Anim_000BE0, this->jointTable, this->morphTable, 15);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dt_Skel_00B0CC, &object_dt_Anim_000BE0, this->jointTable,
+                       this->morphTable, 15);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_80C1E748(this);
 }
@@ -71,7 +71,8 @@ void EnEndingHero_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-static UNK_PTR D_80C1E970[] = { object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90, object_dt_Tex_00A790, object_dt_Tex_00AB90 };
+static UNK_PTR D_80C1E970[] = { object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90, object_dt_Tex_00A790,
+                                object_dt_Tex_00AB90 };
 static UNK_PTR D_80C1E984[] = { object_dt_Tex_007750, object_dt_Tex_00A390, object_dt_Tex_00A490 };
 
 void EnEndingHero_Draw(Actor* thisx, GlobalContext* globalCtx) {

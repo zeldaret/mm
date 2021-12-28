@@ -33,7 +33,6 @@ void func_80AA1C64(DmStk* this, GlobalContext* globalCtx);
 void func_80AA2720(DmStk* this, GlobalContext* globalCtx);
 void func_80AA27EC(DmStk* this, GlobalContext* globalCtx);
 
-
 const ActorInit Dm_Stk_InitVars = {
     ACTOR_DM_STK,
     ACTORCAT_ITEMACTION,
@@ -104,9 +103,9 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &object_stk_Anim_01C21C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk_Anim_01D3D0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_001030, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk_Anim_015C14, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_01C21C, 1.0f, 0.0f, -1.0f, 0, 0.0f },  { &object_stk_Anim_01D3D0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_001030, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },  { &object_stk_Anim_015C14, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_0070DC, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_00D830, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_00055C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00130C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_00C270, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00CBB8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
@@ -120,11 +119,11 @@ static ActorAnimationEntry sAnimations[] = {
     { &object_stk2_Anim_026CF4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01C114, 1.0f, 0.0f, -1.0f, 2, 0.0f },
     { &object_stk2_Anim_004580, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_020CAC, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_02200C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02336C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_002774, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk_Anim_003068, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_002774, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_003068, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_0101A4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_010B60, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_02A2D8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01F9E4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
     { &object_stk2_Anim_029A04, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_02AD54, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk_Anim_00BB2C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk_Anim_00C964, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_00BB2C, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_00C964, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_0110B4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_011FB0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_012A58, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_0141E4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_00E6EC, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00EEC0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
@@ -132,8 +131,8 @@ static ActorAnimationEntry sAnimations[] = {
     { &object_stk2_Anim_03323C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_031210, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_0322FC, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_032AE0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_03021C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_036964, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk_Anim_016508, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk_Anim_015028, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_014920, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02FA70, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_016508, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_015028, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_014920, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk2_Anim_02FA70, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_037B94, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, 2, 0.0f },
     { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_03A8F8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_stk2_Anim_034FD8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_005F44, 1.0f, 0.0f, -1.0f, 0, 0.0f },

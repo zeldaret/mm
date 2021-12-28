@@ -49,7 +49,6 @@ void func_809964A0(EnSkb* this, GlobalContext* globalCtx);
 s32 func_80996594(EnSkb* this, GlobalContext* globalCtx);
 void func_80996BEC(EnSkb* this, GlobalContext* globalCtx);
 
-
 static ActorAnimationEntry sAnimations[] = {
     { &object_skb_Anim_0064E0, 1.0f, 0.0f, 0.0f, 0, -4.0 },  { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, 2, -1.0f },
     { &object_skb_Anim_002190, 0.6f, 0.0f, 0.0f, 3, 4.0f },  { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, 2, -4.0 },
@@ -171,25 +170,29 @@ void func_809947B0(GlobalContext* globalCtx, EnSkb* this, Vec3f* inPos) {
 }
 
 void func_8099495C(EnSkb* this, GlobalContext* globalCtx) {
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_003584, this->jointTable, this->morphTable, 20);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_003584, this->jointTable,
+                   this->morphTable, 20);
     this->unk_3DC = 0;
     func_80994E2C(this);
 }
 
 void func_809949C4(EnSkb* this, GlobalContext* globalCtx) {
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_00697C, this->jointTable, this->morphTable, 20);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_00697C, this->jointTable,
+                   this->morphTable, 20);
     this->unk_3DC = 1;
     func_809952D8(this);
 }
 
 void func_80994A30(EnSkb* this, GlobalContext* globalCtx) {
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_006D90, this->jointTable, this->morphTable, 20);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_006D90, this->jointTable,
+                   this->morphTable, 20);
     this->unk_3DC = 1;
     func_809953E8(this);
 }
 
 void func_80994A9C(EnSkb* this, GlobalContext* globalCtx) {
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_001D1C, this->jointTable, this->morphTable, 20);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_001D1C, this->jointTable,
+                   this->morphTable, 20);
     this->unk_3DC = 1;
     func_809954F8(this);
 }
@@ -526,7 +529,8 @@ void func_80995818(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_809958F4(EnSkb* this) {
-    Animation_Change(&this->skelAnime, &object_skb_Anim_003584, -1.0f, Animation_GetLastFrame(&object_skb_Anim_003584), 0.0f, 2, -4.0f);
+    Animation_Change(&this->skelAnime, &object_skb_Anim_003584, -1.0f, Animation_GetLastFrame(&object_skb_Anim_003584),
+                     0.0f, 2, -4.0f);
     this->unk_3E4 = 0;
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;

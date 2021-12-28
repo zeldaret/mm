@@ -37,7 +37,6 @@ void func_80BADE14(EnSuttari* this, GlobalContext* globalCtx);
 void func_80BADE8C(EnSuttari* this, GlobalContext* globalCtx);
 void func_80BADF3C(EnSuttari* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Suttari_InitVars = {
     ACTOR_EN_SUTTARI,
     ACTORCAT_NPC,
@@ -899,7 +898,8 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boj_Skel_00C240, &object_boj_Anim_00071C, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boj_Skel_00C240, &object_boj_Anim_00071C, this->jointTable,
+                       this->morphTable, 16);
     this->actor.draw = EnSuttari_Draw;
     this->actor.flags |= 1;
     if (globalCtx->sceneNum == SCENE_IKANA) {

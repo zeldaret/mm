@@ -30,7 +30,6 @@ const ActorInit Dm_Char07_InitVars = {
     (ActorFunc)DmChar07_Draw,
 };
 
-
 void DmChar07_SetupAction(DmChar07* this, DmChar07ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }

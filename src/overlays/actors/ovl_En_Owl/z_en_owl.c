@@ -48,7 +48,6 @@ typedef enum {
     /* 0x01 */ OWL_OK
 } EnOwlMessageChoice;
 
-
 const ActorInit En_Owl_InitVars = {
     ACTOR_EN_OWL,
     ACTORCAT_NPC,
@@ -129,10 +128,10 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime1, &object_owl_Skel_00C5F8, &object_owl_Anim_001ADC, this->jointTable1, this->morphTable1,
-                       21);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime2, &object_owl_Skel_0105C0, &object_owl_Anim_00CDB0, this->jointTable2, this->morphTable2,
-                       16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime1, &object_owl_Skel_00C5F8, &object_owl_Anim_001ADC,
+                       this->jointTable1, this->morphTable1, 21);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime2, &object_owl_Skel_0105C0, &object_owl_Anim_00CDB0,
+                       this->jointTable2, this->morphTable2, 16);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.minVelocityY = -10.0f;
@@ -524,7 +523,8 @@ void func_8095B650(EnOwl* this, GlobalContext* globalCtx) {
 
 void func_8095B6C8(EnOwl* this, GlobalContext* globalCtx) {
     if (this->actionFlags & 1) {
-        Animation_Change(this->skelAnime3, &object_owl_Anim_00CB94, -1.0f, Animation_GetLastFrame(&object_owl_Anim_00CB94), 0.0f, 2, 0.0f);
+        Animation_Change(this->skelAnime3, &object_owl_Anim_00CB94, -1.0f,
+                         Animation_GetLastFrame(&object_owl_Anim_00CB94), 0.0f, 2, 0.0f);
         this->unk_414 = func_8095C484;
         this->actionFunc = func_8095B650;
     }
@@ -666,7 +666,8 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
                     case 0xBEE:
                         func_801477B4(globalCtx);
                         Audio_QueueSeqCmd(0x110000FF);
-                        EnOwl_ChangeMode(this, func_8095B9FC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94, 0.0f);
+                        EnOwl_ChangeMode(this, func_8095B9FC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
+                                         0.0f);
                         this->eyeTexIndex = 0;
                         this->blinkTimer = Rand_S16Offset(60, 60);
                         this->actionFlags |= 8;
@@ -695,7 +696,8 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
                         func_801477B4(globalCtx);
                         Audio_QueueSeqCmd(0x110000FF);
                         this->actor.flags &= ~0x10000;
-                        EnOwl_ChangeMode(this, func_8095B3DC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94, 0.0f);
+                        EnOwl_ChangeMode(this, func_8095B3DC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
+                                         0.0f);
                         this->eyeTexIndex = 0;
                         this->blinkTimer = Rand_S16Offset(60, 60);
                         this->actionFlags |= 8;
@@ -800,7 +802,8 @@ void func_8095C258(EnOwl* this) {
     } else {
         this->unk_414 = func_8095C328;
         this->unk_3EA = 6;
-        Animation_Change(this->skelAnime3, &object_owl_Anim_001ADC, 1.0f, 0.0f, Animation_GetLastFrame(&object_owl_Anim_001ADC), 2, 5.0f);
+        Animation_Change(this->skelAnime3, &object_owl_Anim_001ADC, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&object_owl_Anim_001ADC), 2, 5.0f);
     }
 }
 
@@ -813,7 +816,8 @@ void func_8095C328(EnOwl* this) {
         } else {
             this->unk_3EA = 160;
             this->unk_414 = func_8095C258;
-            Animation_Change(this->skelAnime3, &object_owl_Anim_00C6D4, 1.0f, 0.0f, Animation_GetLastFrame(&object_owl_Anim_00C6D4), 0, 5.0f);
+            Animation_Change(this->skelAnime3, &object_owl_Anim_00C6D4, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&object_owl_Anim_00C6D4), 0, 5.0f);
         }
     }
 }

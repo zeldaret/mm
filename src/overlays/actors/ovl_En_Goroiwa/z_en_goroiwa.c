@@ -32,7 +32,6 @@ void func_80941FA4(EnGoroiwa* this, GlobalContext* globalCtx);
 void func_80942084(EnGoroiwa* this);
 void func_809420F0(EnGoroiwa* this, GlobalContext* globalCtx);
 
-
 const ActorInit En_Goroiwa_InitVars = {
     ACTOR_EN_GOROIWA,
     ACTORCAT_PROP,
