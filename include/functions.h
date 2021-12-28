@@ -3791,9 +3791,9 @@ void func_8019F230(void); // cancel
 // void func_8019F258(void);
 // void func_8019F300(void);
 void func_8019F420(Vec3f* pos, u16 sfxId);
-// void func_8019F4AC(void);
+void func_8019F4AC(Vec3f* pos, u16 sfxId);
 void func_8019F540(u8 arg0);
-// void func_8019F570(void);
+void func_8019F570(Vec3f* pos, s8 arg1);
 // void func_8019F5AC(void);
 // void func_8019F638(void);
 // void func_8019F780(void);
