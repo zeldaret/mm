@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_statue.c
+ * Overlay: ovl_Dm_Statue
+ * Description: Pillars of water in Giant's Chamber
+ */
+
 #include "z_dm_statue.h"
 
 #define FLAGS 0x04000030

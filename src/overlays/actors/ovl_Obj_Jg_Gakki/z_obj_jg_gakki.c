@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_jg_gakki.c
+ * Overlay: ovl_Obj_Jg_Gakki
+ * Description: Goron Elder's Drum
+ */
+
 #include "z_obj_jg_gakki.h"
 
 #define FLAGS 0x00000020

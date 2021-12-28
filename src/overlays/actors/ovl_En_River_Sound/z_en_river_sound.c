@@ -1,3 +1,9 @@
+/*
+ * File: z_en_river_sound.c
+ * Overlay: ovl_En_River_Sound
+ * Description: Various environment Sfx (e.g., ocean waves, gulls, waterfall, lava, etc)
+ */
+
 #include "z_en_river_sound.h"
 
 #define FLAGS 0x00000030

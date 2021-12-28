@@ -1,3 +1,9 @@
+/*
+ * File: z_en_slime.c
+ * Overlay: ovl_En_Slime
+ * Description: Chuchu
+ */
+
 #include "z_en_slime.h"
 
 #define FLAGS 0x00000215

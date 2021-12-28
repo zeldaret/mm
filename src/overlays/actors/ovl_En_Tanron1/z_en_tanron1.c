@@ -1,3 +1,9 @@
+/*
+ * File: z_en_tanron1.c
+ * Overlay: ovl_En_Tanron1
+ * Description: Swarm of Moths in Woodfall Temple
+ */
+
 #include "z_en_tanron1.h"
 
 #define FLAGS 0x00000035

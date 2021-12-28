@@ -1,3 +1,9 @@
+/*
+ * File: z_en_kaizoku.c
+ * Overlay: ovl_En_Kaizoku
+ * Description: Fighter pirate
+ */
+
 #include "z_en_kaizoku.h"
 
 #define FLAGS 0x00100015

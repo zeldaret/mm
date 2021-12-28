@@ -1,3 +1,9 @@
+/*
+ * File: z_en_okarina_tag.c
+ * Overlay: ovl_En_Okarina_Tag
+ * Description:
+ */
+
 #include "z_en_okarina_tag.h"
 
 #define FLAGS 0x0A000010

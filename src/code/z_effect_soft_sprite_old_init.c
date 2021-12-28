@@ -48,9 +48,9 @@ void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* textur
     scale = this->rgScale * 0.0025f;
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_187FC, &mfTrans11DA0);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(object);
+    gSegments[0x06] = PHYSICAL_TO_VIRTUAL(object);
     gSPSegment(POLY_XLU_DISP++, 0x06, object);
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);
@@ -403,7 +403,7 @@ void EffectSsGSpk_SpawnSmall(GlobalContext* globalCtx, Actor* actor, Vec3f* pos,
 
 // EffectSsDFire Spawn Functions
 void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                         s16 alpha, s16 fadeDelay, s16 life, s32 arg9) {
+                         s16 alpha, s16 fadeDelay, s16 arg8, s32 life) {
     EffectSsDFireInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -413,8 +413,8 @@ void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
     initParams.scaleStep = scaleStep;
     initParams.alpha = alpha;
     initParams.fadeDelay = fadeDelay;
+    initParams.unk_2C = arg8;
     initParams.life = life;
-    initParams.unk_30 = arg9;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_D_FIRE, 128, &initParams);
 }
@@ -535,8 +535,8 @@ void EffectSsDtBubble_SpawnCustomColor(GlobalContext* globalCtx, Vec3f* pos, Vec
 /**
  * Spawn a single fragment
  *
- * Notes:
- *     - if a display list is not provided, D_0400C0D0 (wilted deku fragment) will be used as default
+ *  * Notes:
+ *     - if a display list is not provided, an unknown default will be used as default
  *     - the unused arg does not do anything, any value can be passed here
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
@@ -590,7 +590,7 @@ extern Vec3f D_801AE3E0;
 void func_800B2364(GlobalContext* globalCtx, Vec3f* pos, Gfx* dList) {
     Vec3f posVec = D_801AE3E0;
 
-    EffectSsHahen_Spawn(globalCtx, pos, &D_801D15B0, &posVec, 1, 5, 1, 10, dList);
+    EffectSsHahen_Spawn(globalCtx, pos, &gZeroVec3f, &posVec, 1, 5, 1, 10, dList);
 }
 
 // EffectSsStick Spawn Functions
@@ -899,7 +899,7 @@ void EffectSsFireTail_SpawnFlame(GlobalContext* globalCtx, Actor* actor, Vec3f* 
 #endif
 
 void EffectSsFireTail_SpawnFlameOnPlayer(GlobalContext* globalCtx, f32 scale, s16 bodyPart, f32 colorIntensity) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     EffectSsFireTail_SpawnFlame(globalCtx, &player->actor, &player->bodyPartsPos[bodyPart], scale, bodyPart,
                                 colorIntensity);
@@ -960,6 +960,7 @@ void EffectSsExtra_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
 }
 
 // EffectSsDeadDb Spawn Functions
+
 void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim,
                           Color_RGBA8* env, s16 scale, s16 scaleStep, s32 unk) {
     EffectSsDeadDbInitParams initParams;
@@ -1031,7 +1032,7 @@ void EffectSsDeadDs_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
 }
 
 void func_800B31BC(GlobalContext* globalCtx, Vec3f* pos, s16 scale, s16 scaleStep, s16 alpha, s32 life) {
-    EffectSsDeadDs_Spawn(globalCtx, pos, &D_801D15B0, &D_801D15B0, scale, scaleStep, alpha, life);
+    EffectSsDeadDs_Spawn(globalCtx, pos, &gZeroVec3f, &gZeroVec3f, scale, scaleStep, alpha, life);
 }
 
 // EffectSsIceSmoke Spawn Functions

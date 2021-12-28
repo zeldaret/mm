@@ -1,3 +1,9 @@
+/*
+ * File: z_demo_getitem.c
+ * Overlay: ovl_Demo_Getitem
+ * Description: Cutscene object for Great Fairy's Mask and Great Fairy's Sword
+ */
+
 #include "z_demo_getitem.h"
 
 #define FLAGS 0x00000030

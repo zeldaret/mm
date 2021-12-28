@@ -1,3 +1,9 @@
+/*
+ * File: z_en_shn.c
+ * Overlay: ovl_En_Shn
+ * Description: Swamp Tourist Center Guide
+ */
+
 #include "z_en_shn.h"
 
 #define FLAGS 0x00000009

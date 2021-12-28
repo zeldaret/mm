@@ -1,0 +1,17 @@
+﻿<Root>
+    <File Name="object_bat" Segment="6">
+        <DList Name="object_bat_DL_0000A0" Offset="0xA0" />
+        <DList Name="object_bat_DL_0000C8" Offset="0xC8" />
+        <DList Name="object_bat_DL_0001B0" Offset="0x1B0" />
+        <DList Name="object_bat_DL_0002A0" Offset="0x2A0" />
+        <DList Name="object_bat_DL_000390" Offset="0x390" />
+        <DList Name="object_bat_DL_000480" Offset="0x480" />
+        <DList Name="object_bat_DL_000570" Offset="0x570" />
+        <DList Name="object_bat_DL_000660" Offset="0x660" />
+        <DList Name="object_bat_DL_000750" Offset="0x750" />
+        <DList Name="object_bat_DL_000840" Offset="0x840" />
+        <DList Name="object_bat_DL_000930" Offset="0x930" />
+        <Texture Name="object_bat_Tex_0009A0" OutName="tex_0009A0" Format="rgba16" Width="8" Height="16" Offset="0x9A0" />
+        <Texture Name="object_bat_Tex_000AA0" OutName="tex_000AA0" Format="rgba16" Width="16" Height="16" Offset="0xAA0" />
+    </File>
+</Root>

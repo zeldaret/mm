@@ -1,3 +1,9 @@
+/*
+ * File: z_demo_effect.c
+ * Overlay: ovl_Demo_Effect
+ * Description: Various cutscene effects (blue warp in, Great Fairy vanish, etc.)
+ */
+
 #include "z_demo_effect.h"
 
 #define FLAGS 0x00000030

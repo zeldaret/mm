@@ -9,12 +9,12 @@ OSMesg sDmaMgrMsgs[32];
 OSThread sDmaMgrThread;
 u8 sDmaMgrStack[0x500];
 
-s32 DmaMgr_DMARomToRam(u32 rom, void* ram, u32 size) {
+s32 DmaMgr_DMARomToRam(uintptr_t rom, void* ram, size_t size) {
     OSIoMesg ioMsg;
     OSMesgQueue queue;
     OSMesg msg[1];
     s32 ret;
-    u32 buffSize = sDmaMgrDmaBuffSize;
+    size_t buffSize = sDmaMgrDmaBuffSize;
 
     osInvalDCache(ram, size);
     osCreateMesgQueue(&queue, msg, ARRAY_COUNT(msg));
@@ -23,7 +23,7 @@ s32 DmaMgr_DMARomToRam(u32 rom, void* ram, u32 size) {
         while (buffSize < size) {
             ioMsg.hdr.pri = 0;
             ioMsg.hdr.retQueue = &queue;
-            ioMsg.devAddr = (u32)rom;
+            ioMsg.devAddr = rom;
             ioMsg.dramAddr = ram;
             ioMsg.size = buffSize;
             ret = osEPiStartDma(gCartHandle, &ioMsg, 0);
@@ -31,7 +31,7 @@ s32 DmaMgr_DMARomToRam(u32 rom, void* ram, u32 size) {
                 goto END;
             }
 
-            osRecvMesg(&queue, NULL, 1);
+            osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
             size -= buffSize;
             rom = rom + buffSize;
             ram = (u8*)ram + buffSize;
@@ -39,15 +39,15 @@ s32 DmaMgr_DMARomToRam(u32 rom, void* ram, u32 size) {
     }
     ioMsg.hdr.pri = 0;
     ioMsg.hdr.retQueue = &queue;
-    ioMsg.devAddr = (u32)rom;
+    ioMsg.devAddr = rom;
     ioMsg.dramAddr = ram;
-    ioMsg.size = (u32)size;
+    ioMsg.size = size;
     ret = osEPiStartDma(gCartHandle, &ioMsg, 0);
     if (ret) {
         goto END;
     }
 
-    osRecvMesg(&queue, NULL, 1);
+    osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
 
     osInvalDCache(ram, size);
 
@@ -109,11 +109,11 @@ const char* func_800809F4(u32 a0) {
 }
 
 void DmaMgr_ProcessMsg(DmaRequest* req) {
-    u32 vrom;
+    uintptr_t vrom;
     void* ram;
-    u32 size;
-    u32 romStart;
-    u32 romSize;
+    size_t size;
+    uintptr_t romStart;
+    size_t romSize;
     DmaEntry* dmaEntry;
     s32 index;
 
@@ -172,7 +172,7 @@ void DmaMgr_ThreadEntry(void* a0) {
     }
 }
 
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused,
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused,
                            OSMesgQueue* queue, OSMesg msg) {
     if (gIrqMgrResetStatus >= 2) {
         return -2;
@@ -190,7 +190,7 @@ s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, 
     return 0;
 }
 
-s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
+s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size) {
     DmaRequest req;
     OSMesgQueue queue;
     OSMesg msg[1];
@@ -213,8 +213,7 @@ void DmaMgr_Start(void) {
     DmaEntry* iter;
     u32 idx;
 
-    DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, (u32)dmadata,
-                       (u32)_dmadataSegmentRomEnd - (u32)_dmadataSegmentRomStart);
+    DmaMgr_DMARomToRam(SEGMENT_ROM_START(dmadata), dmadata, SEGMENT_ROM_SIZE(dmadata));
 
 dummy_label:;
 

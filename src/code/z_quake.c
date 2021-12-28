@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 QuakeRequest sQuakeRequest[4];
@@ -417,8 +416,9 @@ void Quake2_ClearType(s32 type) {
 }
 
 s32 Quake2_GetFloorQuake(Player* player) {
-    if (func_800C9D8C(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 0) {
-        return func_800C9E18(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId);
+    if (!SurfaceType_IsConveyor(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
+        return SurfaceType_GetConveyorSpeed(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly,
+                                            player->actor.floorBgId);
     }
     return 0;
 }
@@ -444,7 +444,7 @@ void Quake2_Update(void) {
     Player* player;
     GlobalContext* globalCtx = sQuake2Context.globalCtx;
     PosRot playerPosRot;
-    Camera* camera = globalCtx->cameraPtrs[globalCtx->activeCamera];
+    Camera* camera = GET_ACTIVE_CAM(globalCtx);
     f32 speedRatio = CLAMP_MAX(camera->speedRatio, 1.0f);
 
     if (sQuake2Context.type != 0) {
@@ -605,7 +605,7 @@ void Quake2_Update(void) {
             angle1 = 0x3F0;
             angle2 = 0x156;
             sQuake2Context.countdown = 2;
-            player = PLAYER;
+            player = GET_PLAYER(globalCtx);
 
             if (&player->actor != NULL) {
                 func_800B8248(&playerPosRot, player);
@@ -654,7 +654,7 @@ void Quake2_Update(void) {
             angle1 = 0x3F0;
             angle2 = 0x156;
             sQuake2Context.countdown = 2;
-            player = PLAYER;
+            player = GET_PLAYER(globalCtx);
             angle1Speed = 359.2f;
             angle2Speed = -18.5f;
             rotX = 0.0f;

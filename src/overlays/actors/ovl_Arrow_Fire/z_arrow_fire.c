@@ -1,3 +1,9 @@
+/*
+ * File: z_arrow_fire.c
+ * Overlay: ovl_Arrow_Fire
+ * Description: Fire Arrow
+ */
+
 #include "z_arrow_fire.h"
 
 #define FLAGS 0x02000010
@@ -39,7 +45,8 @@ const ActorInit Arrow_Fire_InitVars = {
 
 extern ColliderQuadInit D_80922230;
 
-extern UNK_TYPE D_0E0002E0;
+// there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
+extern GfxMasterList D_0E000000;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_SetupAction.s")
 

@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_toudai.c
+ * Overlay: ovl_Obj_Toudai
+ * Description: Unused early Clock Tower Spotlight
+ */
+
 #include "z_obj_toudai.h"
 
 #define FLAGS 0x00000030

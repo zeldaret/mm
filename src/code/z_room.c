@@ -18,14 +18,14 @@ void Room_DrawType0Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
         func_800BCBF4(&D_801C1D10, globalCtx);
         gSPSegment(gfxCtx->polyOpa.p++, 0x03, room->segment);
         func_8012C268(globalCtx);
-        gSPMatrix(gfxCtx->polyOpa.p++, &D_801D1DE0, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(gfxCtx->polyOpa.p++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
     if (flags & 2) {
         func_800BCC68(&D_801C1D10, globalCtx);
         gSPSegment(gfxCtx->polyXlu.p++, 0x03, room->segment);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        gSPMatrix(gfxCtx->polyXlu.p++, &D_801D1DE0, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(gfxCtx->polyXlu.p++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
     mesh = &room->mesh->type0;
@@ -77,7 +77,7 @@ void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtx) {
 
 #ifdef NON_MATCHING
 s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32 index) {
-    u32 size;
+    size_t size;
 
     // XXX: this should use a branch-likely
     if (roomCtx->unk31 == 0) {
@@ -111,10 +111,10 @@ s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
             roomCtx->unk31 = 0;
             roomCtx->currRoom.segment = roomCtx->activeRoomVram;
             // TODO: Segment number enum
-            gSegments[3] = PHYSICAL_TO_VIRTUAL(roomCtx->activeRoomVram);
+            gSegments[0x03] = PHYSICAL_TO_VIRTUAL(roomCtx->activeRoomVram);
 
             Scene_ProcessHeader(globalCtx, (SceneCmd*)roomCtx->currRoom.segment);
-            func_80123140(globalCtx, PLAYER);
+            func_80123140(globalCtx, GET_PLAYER(globalCtx));
             Actor_SpawnTransitionActors(globalCtx, &globalCtx->actorCtx);
 
             if (((globalCtx->sceneNum != SCENE_IKANA) || (roomCtx->currRoom.num != 1)) &&
@@ -137,7 +137,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
 void Room_Draw(GlobalContext* globalCtx, Room* room, u32 flags) {
     if (room->segment != NULL) {
         // TODO: Segment number enum
-        gSegments[3] = PHYSICAL_TO_VIRTUAL(room->segment);
+        gSegments[0x03] = PHYSICAL_TO_VIRTUAL(room->segment);
         roomDrawFuncs[room->mesh->type0.type](globalCtx, room, flags);
     }
     return;

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_haka_curtain.c
+ * Overlay: ovl_Bg_Haka_Curtain
+ * Description: Curtain That Lifts to Reveal Flat's Tomb
+ */
+
 #include "z_bg_haka_curtain.h"
 
 #define FLAGS 0x00000010
@@ -45,8 +51,8 @@ void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaCurtain* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06001588);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06001588);
     if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
         func_80B6DE80(this);
         return;
@@ -57,7 +63,7 @@ void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgHakaCurtain_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaCurtain* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80B6DC98(BgHakaCurtain* this) {

@@ -1,7 +1,7 @@
 /*
  * File: z_en_dnb.c
  * Overlay: ovl_En_Dnb
- * Description:
+ * Description: Unused invisible snowy mountain that explodes?
  */
 
 #include "z_en_dnb.h"
@@ -47,7 +47,7 @@ void func_80A4FDD0(EnDnbParticle* particle, EnDnb* this, s16* alloc, s32 idx) {
     particle->unk_00 = sp1C;
     particle->unk_0C = sp1C;
     particle->unk_24 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp1C);
-    particle->unk_18 = D_801D15BC;
+    particle->unk_18 = gZeroVec3s;
 }
 
 s32 func_80A4FEBC(EnDnbParticle* particle, f32 arg1) {
@@ -76,7 +76,7 @@ void func_80A4FFE8(EnDnbParticle* particle, s16 arg1) {
     particle->unk_1E.x = (Rand_ZeroOne() - 0.5f) * 400.0f;
     particle->unk_1E.y = (Rand_ZeroOne() - 0.5f) * 400.0f;
     particle->unk_1E.z = (Rand_ZeroOne() - 0.5f) * 400.0f;
-    particle->unk_18 = D_801D15BC;
+    particle->unk_18 = gZeroVec3s;
     particle->unk_30 = 40.0f;
     particle->unk_2C = 0.0f;
     particle->unk_26 = arg1;
@@ -86,7 +86,7 @@ void func_80A4FFE8(EnDnbParticle* particle, s16 arg1) {
 s32 func_80A500F8(EnDnb* this) {
     static Vec3f D_80A50CB0 = { 0.0f, 0.0f, 1000.0f };
     Actor* actor = &this->dyna.actor;
-    Vec3f spA8 = D_801D15B0;
+    Vec3f spA8 = gZeroVec3f;
     Vec3f sp9C;
     s32 i;
     f32 temp_f20;
@@ -108,8 +108,8 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     s16* alloc;
 
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06004D8C);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06004D8C);
 
     alloc = (s16*)Lib_SegmentedToVirtual(D_06004710);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
@@ -122,7 +122,7 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnDnb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnDnb* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -163,17 +163,17 @@ void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
-        SysMatrix_StatePush();
-        SysMatrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y,
-                                    this->particles[i].unk_0C.z, MTXMODE_NEW);
-        SysMatrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
+        Matrix_StatePush();
+        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
+                                 MTXMODE_NEW);
+        Matrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
         Matrix_RotateY(this->particles[i].unk_18.y, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->particles[i].unk_18.z, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->particles[i].unk_18.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gfx[i]);
 
-        SysMatrix_StatePop();
+        Matrix_StatePop();
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -188,17 +188,17 @@ void func_80A5063C(EnDnb* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
-        SysMatrix_StatePush();
-        SysMatrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y,
-                                    this->particles[i].unk_0C.z, MTXMODE_NEW);
-        SysMatrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
+        Matrix_StatePush();
+        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
+                                 MTXMODE_NEW);
+        Matrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
         Matrix_RotateY(this->particles[i].unk_18.y, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->particles[i].unk_18.z, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->particles[i].unk_18.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gfx[i]);
 
-        SysMatrix_StatePop();
+        Matrix_StatePop();
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -279,16 +279,16 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
                 isGfxSetup = true;
             }
-            SysMatrix_StatePush();
+            Matrix_StatePush();
 
             if (1) {};
             arg0->unk_24 = (arg0->unk_01 / (f32)arg0->unk_02) * 255.0f;
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)arg0->unk_24);
 
-            SysMatrix_InsertTranslation(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
+            Matrix_InsertTranslation(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
             Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
-            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -296,7 +296,7 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A50CBC[idx]));
             gSPDisplayList(POLY_XLU_DISP++, D_06000020);
 
-            SysMatrix_StatePop();
+            Matrix_StatePop();
             sp5C += 1;
         }
     }

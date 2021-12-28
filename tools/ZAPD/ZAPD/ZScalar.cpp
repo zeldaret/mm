@@ -1,8 +1,10 @@
 #include "ZScalar.h"
-#include "BitConverter.h"
-#include "File.h"
+
 #include "Globals.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/File.h"
+#include "Utils/StringHelper.h"
+#include "WarningHandler.h"
 #include "ZFile.h"
 
 REGISTER_ZFILENODE(Scalar, ZScalar);
@@ -14,9 +16,16 @@ ZScalar::ZScalar(ZFile* nParent) : ZResource(nParent)
 	RegisterRequiredAttribute("Type");
 }
 
-ZScalar::ZScalar(const ZScalarType scalarType, ZFile* nParent) : ZScalar(nParent)
+void ZScalar::ExtractFromBinary(uint32_t nRawDataIndex, ZScalarType nScalarType)
 {
-	this->scalarType = scalarType;
+	rawDataIndex = nRawDataIndex;
+	scalarType = nScalarType;
+
+	// Don't parse raw data of external files
+	if (parent->GetMode() == ZFileMode::ExternalFile)
+		return;
+
+	ParseRawData();
 }
 
 void ZScalar::ParseXML(tinyxml2::XMLElement* reader)
@@ -199,8 +208,8 @@ void ZScalar::ParseRawData()
 		scalarData.f64 = BitConverter::ToDoubleBE(rawData, rawDataIndex);
 		break;
 	case ZScalarType::ZSCALAR_NONE:
-		fprintf(stderr, "Warning in ZScalar: Invalid type. %d %s %d\n", (int32_t)scalarType,
-		        __FILE__, __LINE__);
+		HANDLE_ERROR_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
+		                      "invalid value found for 'Type' attribute", "Defaulting to ''");
 		break;
 	}
 }
@@ -247,15 +256,6 @@ std::string ZScalar::GetBodySourceCode() const
 	}
 }
 
-std::string ZScalar::GetSourceOutputCode(const std::string& prefix)
-{
-	if (parent != nullptr)
-		parent->AddDeclaration(rawDataIndex, DeclarationAlignment::None, GetRawDataSize(),
-		                       GetSourceTypeName(), GetName(), GetBodySourceCode());
-
-	return "";
-}
-
 ZResourceType ZScalar::GetResourceType() const
 {
 	return ZResourceType::Scalar;
@@ -264,4 +264,17 @@ ZResourceType ZScalar::GetResourceType() const
 bool ZScalar::DoesSupportArray() const
 {
 	return true;
+}
+
+DeclarationAlignment ZScalar::GetDeclarationAlignment() const
+{
+	switch (scalarType)
+	{
+	case ZScalarType::ZSCALAR_S64:
+	case ZScalarType::ZSCALAR_U64:
+	case ZScalarType::ZSCALAR_F64:
+		return DeclarationAlignment::Align8;
+	default:
+		return DeclarationAlignment::Align4;
+	}
 }

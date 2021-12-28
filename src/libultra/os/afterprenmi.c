@@ -1,3 +1,6 @@
+#include "ultra64.h"
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/afterprenmi/osAfterPreNMI.s")
+s32 osAfterPreNMI(void) {
+    return __osSpSetPc(0);
+}

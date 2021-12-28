@@ -1,3 +1,9 @@
+/*
+ * File: z_en_pr2.c
+ * Overlay: ovl_En_Pr2
+ * Description: Skullfish
+ */
+
 #include "z_en_pr2.h"
 
 #define FLAGS 0x00000015

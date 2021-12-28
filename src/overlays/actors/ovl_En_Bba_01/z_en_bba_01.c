@@ -1,3 +1,9 @@
+/*
+ * File: z_en_bba_01.c
+ * Overlay: ovl_En_Bba_01
+ * Description: Unused Bomb Shop Lady NPC
+ */
+
 #include "z_en_bba_01.h"
 
 #define FLAGS 0x00000019

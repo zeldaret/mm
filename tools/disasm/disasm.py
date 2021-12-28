@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 
-import ast, math, os, re, struct
+import argparse, ast, math, os, re, struct
+import bisect
 from mips_isa import *
+from multiprocessing import *
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-j', dest='jobs', type=int, default=1, help='number of processes to run at once')
+
+args = parser.parse_args()
+jobs = args.jobs
 
 ASM_OUT = "asm/"
 DATA_OUT = "data/"
@@ -81,11 +89,11 @@ multiply_referenced_rodata = set() # rodata with more than 1 reference outside o
 files = set()          # vram start of file
 
 vrom_variables = list() # (name,addr)
+vrom_addrs = set()     # set of addrs from vrom_variables, for faster lookup
 
 functions_ast = None
 variables_ast = None
-
-vars_cache = {} # (address: variable + addend)
+variable_addrs = None
 
 def proper_name(symbol, in_data=False, is_symbol=True):
     # hacks
@@ -109,7 +117,7 @@ def proper_name(symbol, in_data=False, is_symbol=True):
         return functions_ast[symbol][0]
     elif symbol in variables_ast.keys():
         return variables_ast[symbol][0]
-    elif symbol in [addr for _,addr in vrom_variables]:
+    elif symbol in vrom_addrs:
         # prefer "start" vrom symbols
         if symbol in [addr for name,addr in vrom_variables if "SegmentRomStart" in name]:
             return [name for name,addr in vrom_variables if "SegmentRomStart" in name and addr == symbol][0]
@@ -117,8 +125,15 @@ def proper_name(symbol, in_data=False, is_symbol=True):
             return [name for name,addr in vrom_variables if addr == symbol][0]
 
     # addends
-    if is_symbol and symbol in vars_cache.keys():
-        return vars_cache[symbol]
+    if is_symbol:
+        symbol_index = bisect.bisect(variable_addrs, symbol)
+        if symbol_index:
+            vram_addr = variable_addrs[symbol_index-1]
+            symbol_name, _, _, symbol_size = variables_ast[vram_addr]
+
+            if vram_addr < symbol < vram_addr + symbol_size:
+                return f"{symbol_name} + 0x{symbol-vram_addr:X}"
+
 
     # generated names
     if symbol in functions and not in_data:
@@ -135,7 +150,7 @@ def proper_name(symbol, in_data=False, is_symbol=True):
 
 def lookup_name(symbol, word):
     # hacks for vrom variables in data
-    if word in [addr for _,addr in vrom_variables]:
+    if word in vrom_addrs:
         if word == 0: # no makerom segment start
             return "0x00000000"
         if symbol in [0x801AE4A0, # effect table
@@ -304,7 +319,52 @@ def format_f32(f_wd):
         return f".word 0x{f_wd:08X}"
     return f".float {reduce_float(repr(f))}"
 
-def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
+def put_symbol(symbols_dict, setname, symbol):
+    if setname in symbols_dict:
+        symbols_dict[setname].add(symbol)
+    else:
+        symbols_dict[setname] = {symbol}
+
+def put_symbols(symbols_dict, setname, symbols):
+    if setname in symbols_dict:
+        symbols_dict[setname].update(symbols)
+    else:
+        symbols_dict[setname] = symbols.copy()
+
+def update_symbols_from_dict(symbols_dict):
+    for setname, symbol in symbols_dict.items():
+        if setname == "functions":
+            functions.update(symbol)
+        elif setname == "data_labels":
+            data_labels.update(symbol)
+        elif setname == "branch_labels":
+            branch_labels.update(symbol)
+        elif setname == "jtbls":
+            jtbls.update(symbol)
+        elif setname == "jtbl_labels":
+            jtbl_labels.update(symbol)
+        elif setname == "floats":
+            floats.update(symbol)
+        elif setname == "doubles":
+            doubles.update(symbol)
+        elif setname == "prospective_strings":
+            prospective_strings.update(symbol)
+        elif setname == "strings":
+            strings.update(symbol)
+        elif setname == "symbols":
+            symbols.update(symbol)
+        elif setname == "constants":
+            constants.update(symbol)
+        elif setname == "dwords":
+            dwords.update(symbol)
+        elif setname == "files":
+            files.update(symbol)
+
+def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs, segment_name):
+    symbols_dict = dict()
+
+    print(f"Finding symbols from .text in {segment_name}")
+
     if rodata is not None:
         rodata_words = as_word_list(rodata)
 
@@ -312,8 +372,8 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
 
     assert vram % 0x10 == 0
 
-    functions.add(vram)
-    files.add(vram)
+    put_symbol(symbols_dict, "functions", vram)
+    put_symbol(symbols_dict, "files", vram)
 
     # lui trackers are saved at branches to be restored when the branch target is reached
     saved_lui_trackers = {} # vram: tracker list
@@ -356,9 +416,9 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
 
     for region in data_regions:
         assert region[1] != 0
-        functions.add(region[1])
+        put_symbol(symbols_dict, "functions", region[1])
         if region[1] % 0x10 == 0:
-            files.add(region[1])
+            put_symbol(symbols_dict, "files", region[1])
 
     if relocs is not None:
         """
@@ -376,7 +436,7 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
                 Relocated jump targets give us functions in this section
                 """
                 assert insn.id == MIPS_INS_JAL , f"R_MIPS_26 applied to {insn.mnemonic} when it should be JAL"
-                functions.add(insn.target)
+                put_symbol(symbols_dict, "functions", insn.target)
             elif reloc[1] == 5: # R_MIPS_HI16
                 """
                 Relocated %hi gives us %hi values to match with associated %lo
@@ -390,8 +450,8 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
                 """
                 assert insn.id == MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS , f"R_MIPS_HI16 applied to {insn.mnemonic} when it should be ADDIU or a load/store"
                 symbol_value = (prev_hi << 0x10) + insn.imm
-                symbols.update({hi_vram : symbol_value})
-                symbols.update({vram + reloc[2] : symbol_value})
+                put_symbols(symbols_dict, "symbols", {hi_vram : symbol_value})
+                put_symbols(symbols_dict, "symbols", {vram + reloc[2] : symbol_value})
             else:
                 assert False , "Invalid relocation type encountered"
 
@@ -430,12 +490,12 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
         if in_data:
             continue
 
-        if vaddr in functions:
+        if vaddr in functions or vaddr in symbols_dict["functions"]:
             # add func branch labels to all branch labels
-            branch_labels.update(func_branch_labels)
+            put_symbols(symbols_dict, "branch_labels", func_branch_labels)
             func_branch_labels.clear()
             # add func jtbl labels to all jtbl labels
-            jtbl_labels.update(func_jtbl_labels)
+            put_symbols(symbols_dict, "jtbl_labels", func_jtbl_labels)
             func_jtbl_labels.clear()
             # clear individual jtbl labels
             individual_jtbl_labels.clear()
@@ -455,11 +515,11 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
             func_branch_labels.add(insn.offset)
             delayed_insn = insn
         elif insn.id == MIPS_INS_ERET:
-            functions.add(vaddr + 4)
+            put_symbol(symbols_dict, "functions", vaddr + 4)
         elif insn.id in MIPS_JUMP_INSNS:
             if insn.id == MIPS_INS_JAL:
                 # mark function at target
-                functions.add(insn.target)
+                put_symbol(symbols_dict, "functions", insn.target)
             elif insn.id == MIPS_INS_J:
                 # mark label at target
                 func_branch_labels.add(insn.target)
@@ -478,8 +538,8 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
                         if not end:
                             if n_padding > 0:
                                 assert (vaddr + 8 + n_padding * 4) % 0x10 == 0 , f"padding to non-0x10 alignment?, 0x{vaddr + 8 + n_padding * 4:08X}"
-                                files.add(vaddr + 8 + n_padding * 4)
-                            functions.add(vaddr + 8 + n_padding * 4)
+                                put_symbol(symbols_dict, "functions", vaddr + 8 + n_padding * 4)
+                            put_symbol(symbols_dict, "functions", vaddr + 8 + n_padding * 4)
             delayed_insn = insn
         elif insn.id == MIPS_INS_LUI:
             """
@@ -503,8 +563,8 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
                 (imm_value >= 0xA400 and imm_value < 0xA480) or (imm_value < 0x0400 and insn.id == MIPS_INS_ADDIU)):
                 lo_vram = vaddr
                 symbol_value = (imm_value << 0x10) + insn.imm
-                symbols.update({hi_vram : symbol_value})
-                symbols.update({lo_vram : symbol_value})
+                put_symbols(symbols_dict, "symbols", {hi_vram : symbol_value})
+                put_symbols(symbols_dict, "symbols", {lo_vram : symbol_value})
                 if insn.id == MIPS_INS_LW:
                     # try find jr within the same block
                     cur_idx = i//4
@@ -530,7 +590,7 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
                                         break
                                     label = rodata_words[offset]
 
-                                jtbls.add(symbol_value)
+                                put_symbol(symbols_dict, "jtbls", symbol_value)
                                 # found a jr that matches, no need to keep searching
                                 break
                         elif (insn.ft if insn.id in MIPS_FP_LOAD_STORE_INSNS else insn.rt) in [lookahead_insn.value_forname(field) for field in lookahead_insn.fields[1:]]:
@@ -542,16 +602,16 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
                             break
                         lookahead_insn = decode_insn(raw_insns[cur_idx], vram + cur_idx * 4) # TODO fix vaddr here
                 elif insn.id == MIPS_INS_LD: # doubleword loads
-                    dwords.add(symbol_value)
+                    put_symbol(symbols_dict, "dwords", symbol_value)
                 elif insn.id in [MIPS_INS_LWC1, MIPS_INS_SWC1]: # float load/stores
                     # add float
-                    floats.add(symbol_value)
+                    put_symbol(symbols_dict, "floats", symbol_value)
                 elif insn.id in [MIPS_INS_LDC1, MIPS_INS_SDC1]: # double load/stores
                     # add double
-                    doubles.add(symbol_value)
+                    put_symbol(symbols_dict, "doubles", symbol_value)
                 elif insn.id == MIPS_INS_ADDIU and vaddr % 4 == 0: # strings seem to only ever be 4-byte aligned
                     # add possible string
-                    prospective_strings.add(symbol_value)
+                    put_symbol(symbols_dict, "prospective_strings", symbol_value)
             # clear lui tracking state if register is clobbered by the addiu/load instruction itself
             # insn.rt == (insn.rs if insn.id == MIPS_INS_ADDIU else insn.base) and 
             if insn.id not in MIPS_STORE_INSNS and insn.id not in MIPS_FP_LOAD_INSNS:
@@ -562,8 +622,8 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
             if hi_vram != None: # found match
                 lo_vram = vaddr
                 const_value = (imm_value << 0x10) | insn.imm
-                constants.update({hi_vram : const_value})
-                constants.update({lo_vram : const_value})
+                put_symbols(symbols_dict, "constants", {hi_vram : const_value})
+                put_symbols(symbols_dict, "constants", {lo_vram : const_value})
             # clear lui tracking state if register is clobbered by the ori instruction itself
             # insn.rt == insn.rs or 
             if insn.rt in lui_tracker.keys():
@@ -613,16 +673,21 @@ def find_symbols_in_text(data, rodata, vram, vram_rodata, data_regions, relocs):
 
         delay_slot = delayed_insn is not None
 
-    branch_labels.update(func_branch_labels)
-    jtbl_labels.update(func_jtbl_labels)
+    put_symbols(symbols_dict, "branch_labels", func_branch_labels)
+    put_symbols(symbols_dict, "jtbl_labels", func_jtbl_labels)
 
-def find_symbols_in_data(data, vram, end, relocs):
+    return symbols_dict
+
+def find_symbols_in_data(data, vram, end, relocs, segment_name):
+    symbols_dict = dict()
+
+    print(f"Finding symbols from .data in {segment_name}")
 
     # read relocations for symbols
     if relocs is not None:
         for reloc in relocs:
             if reloc[1] == 2: # R_MIPS_32
-                data_labels.add(as_word(data[reloc[2] : reloc[2] + 4]))
+                put_symbol(symbols_dict, "data_labels", as_word(data[reloc[2] : reloc[2] + 4]))
             elif reloc[1] == 4: # R_MIPS_26
                 assert False , "R_MIPS_26 in .data section?"
             elif reloc[1] == 5: # R_MIPS_HI16
@@ -632,6 +697,7 @@ def find_symbols_in_data(data, vram, end, relocs):
             else:
                 assert False , "Invalid relocation type encountered"
 
+    return symbols_dict
     # TODO more
 
 # matches several codepoint regions of EUC-JP
@@ -753,7 +819,7 @@ def disassemble_text(data, vram, data_regions, segment):
         if vaddr in segment[4].keys():
             if cur_file != "":
                 os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
-                with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.{section[2]}.s", "w") as outfile:
+                with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
                     outfile.write(result)
                 result = asm_header(".text")
             cur_file = segment[4][vaddr]
@@ -832,7 +898,7 @@ def disassemble_text(data, vram, data_regions, segment):
         result += f"/* {i:06X} {vaddr:08X} {raw_insn:08X} */  {mnemonic:12}{op_str}\n"
 
     os.makedirs(f"{ASM_OUT}/{segment_dirname}/", exist_ok=True)
-    with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.{section[2]}.s", "w") as outfile:
+    with open(f"{ASM_OUT}/{segment_dirname}/{cur_file}.text.s", "w") as outfile:
         outfile.write(result)
 
 def disassemble_data(data, vram, end, segment):
@@ -1054,13 +1120,8 @@ with open("tools/disasm/functions.txt", "r") as infile:
 with open("tools/disasm/variables.txt", "r") as infile:
     variables_ast = ast.literal_eval(infile.read())
 
-# Precompute variable addends for all variables, this uses a lot of memory but the lookups later are fast
+# Find floats, doubles, and strings
 for var in sorted(variables_ast.keys()):
-    for i in range(var, var + variables_ast[var][3], 1):
-        addend = i - var
-        assert addend >= 0
-        vars_cache.update({i : f"{variables_ast[var][0]}" + (f" + 0x{addend:X}" if addend > 0 else "")})
-    # also add to floats, doubles & strings
     var_type = variables_ast[var][1]
 
     if var_type == "f64":
@@ -1093,12 +1154,11 @@ for segment in files_spec:
 
 print(f"Finding Symbols")
 
-# Find symbols for each segment
 for segment in files_spec:
     if segment[2] == 'makerom':
         continue
 
-    print(f"Finding symbols in {segment[0]}")
+    print(f"Finding segment positions in {segment[0]}")
 
     # vram segment start
     if segment[3][0][0] not in variables_ast:
@@ -1106,6 +1166,17 @@ for segment in files_spec:
     # vram segment end
     if segment[3][-1][1] not in variables_ast:
         variables_ast.update({segment[3][-1][1] : (f"_{segment[0]}SegmentEnd","u8","[]",0x1)})
+
+# Construct variable_addrs, now that variable_addrs is fully constructed
+variable_addrs = sorted(variables_ast.keys())
+
+pool = get_context("fork").Pool(jobs)
+# Find symbols for each segment
+for segment in files_spec:
+    if segment[2] == 'makerom':
+        continue
+
+    #print(f"Finding symbols from .text and .data in {segment[0]}")
 
     for section in segment[3]:
         if section[2] == 'text':
@@ -1121,11 +1192,22 @@ for segment in files_spec:
                     break
             else:
                 rodata_section = None
-            find_symbols_in_text(section[4], rodata_section[4] if rodata_section is not None else None, 
-                    section[0], rodata_section[0] if rodata_section is not None else None, data_regions, section[5])
+            pool.apply_async(find_symbols_in_text, args=(section[4], rodata_section[4] if rodata_section is not None else None,
+                    section[0], rodata_section[0] if rodata_section is not None else None, data_regions, section[5], segment[0]), callback=update_symbols_from_dict)
         elif section[2] == 'data':
-            find_symbols_in_data(section[4], section[0], section[1], section[5])
-        elif section[2] == 'rodata':
+            pool.apply_async(find_symbols_in_data, args=(section[4], section[0], section[1], section[5], segment[0]), callback=update_symbols_from_dict)
+
+pool.close()
+pool.join()
+
+for segment in files_spec:
+    if segment[2] == 'makerom':
+        continue
+
+    print(f"Finding symbols from .rodata and .dmadata in {segment[0]}")
+
+    for section in segment[3]:
+        if section[2] == 'rodata':
             find_symbols_in_rodata(section[4], section[0], section[1], section[5], segment)
         elif section[2] == 'dmadata':
             filenames = []
@@ -1143,22 +1225,21 @@ for segment in files_spec:
                 i += 1
                 dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
 
-print("Disassembling Segments")
+# Construct vrom_addrs, now that vrom_variables is fully constructed
+vrom_addrs = {addr for _, addr in vrom_variables}
 
-# Textual disassembly for each segment
-for segment in files_spec:
-    if segment[2] == 'makerom':
-        os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
-        rom_header = segment[3][0][4]
-        ipl3 = segment[3][1][4]
-        entry = segment[3][2][4]
-        
-        pi_dom1_reg, clockrate, entrypoint, revision, \
-            chksum1, chksum2, pad1, pad2, \
-                rom_name, pad3, cart, cart_id, \
-                    region, version = struct.unpack(">IIIIIIII20sII2s1sB", rom_header)
+def disassemble_makerom(segment):
+    os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
+    rom_header = segment[3][0][4]
+    ipl3 = segment[3][1][4]
+    entry = segment[3][2][4]
 
-        out = f"""/*
+    pi_dom1_reg, clockrate, entrypoint, revision, \
+        chksum1, chksum2, pad1, pad2, \
+            rom_name, pad3, cart, cart_id, \
+                region, version = struct.unpack(">IIIIIIII20sII2s1sB", rom_header)
+
+    out = f"""/*
  * The Legend of Zelda: Majora's Mask ROM header
  */
 
@@ -1177,47 +1258,47 @@ for segment in files_spec:
 .ascii "{region.decode('ascii')}"                    /* Region */
 .byte  0x{version:02X}                   /* Version */
 """
-        with open(ASM_OUT + "/makerom/rom_header.s", "w") as outfile:
-            outfile.write(out)
+    with open(ASM_OUT + "/makerom/rom_header.s", "w") as outfile:
+        outfile.write(out)
 
-        # TODO disassemble this eventually, low priority
-        out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x40, 0xFC0\n"
+    # TODO disassemble this eventually, low priority
+    out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x40, 0xFC0\n"
 
-        with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
-            outfile.write(out)
+    with open(ASM_OUT + "/makerom/ipl3.s", "w") as outfile:
+        outfile.write(out)
 
-        # hack: add symbol relocations manually
-        entry_addr = 0x80080000
+    # hack: add symbol relocations manually
+    entry_addr = 0x80080000
 
-        functions.add(entry_addr)
-        symbols.update({entry_addr + 0x00 : 0x80099500, 
-                        entry_addr + 0x04 : 0x80099500, 
-                        entry_addr + 0x20 : 0x80080060,
-                        entry_addr + 0x24 : 0x80099EF0,
-                        entry_addr + 0x28 : 0x80080060,
-                        entry_addr + 0x30 : 0x80099EF0})
-        branch_labels.add(entry_addr + 0xC)
+    functions.add(entry_addr)
+    symbols.update({entry_addr + 0x00 : 0x80099500,
+                    entry_addr + 0x04 : 0x80099500,
+                    entry_addr + 0x20 : 0x80080060,
+                    entry_addr + 0x24 : 0x80099EF0,
+                    entry_addr + 0x28 : 0x80080060,
+                    entry_addr + 0x30 : 0x80099EF0})
+    branch_labels.add(entry_addr + 0xC)
 
-        disassemble_text(entry, entry_addr, [], segment)
+    disassemble_text(entry, entry_addr, [], segment)
 
-        # manually set boot bss size...
-        entry_asm = ""
-        with open(f"{ASM_OUT}/makerom/entry.reloc.s") as infile: # TODO why is this written out as .reloc.s
-            entry_asm = infile.read()
+    # manually set boot bss size...
+    entry_asm = ""
+    with open(f"{ASM_OUT}/makerom/entry.text.s") as infile:
+        entry_asm = infile.read()
 
-        entry_asm = entry_asm.replace("0x63b0", "%lo(_bootSegmentBssSize)")
-        with open(f"{ASM_OUT}/makerom/entry.s", "w") as outfile:
-            outfile.write(entry_asm)
+    entry_asm = entry_asm.replace("0x63b0", "%lo(_bootSegmentBssSize)")
+    with open(f"{ASM_OUT}/makerom/entry.s", "w") as outfile:
+        outfile.write(entry_asm)
 
-        os.remove(f"{ASM_OUT}/makerom/entry.reloc.s")
+    os.remove(f"{ASM_OUT}/makerom/entry.text.s")
 
-        #out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x1000, 0x60\n"
+    #out = f"{asm_header('.text')}\n.incbin \"baserom/makerom\", 0x1000, 0x60\n"
 
-        #with open(ASM_OUT + "/makerom/entry.s", "w") as outfile:
-        #    outfile.write(out)
+    #with open(ASM_OUT + "/makerom/entry.s", "w") as outfile:
+    #    outfile.write(out)
 
-        continue
-    elif segment[2] == 'dmadata':
+def disassemble_segment(segment):
+    if segment[2] == 'dmadata':
         os.makedirs(f"{ASM_OUT}/dmadata/", exist_ok=True)
         out = f""".include "macro.inc"
 
@@ -1262,7 +1343,7 @@ glabel {variables_ast[0x8009F8B0][0]}
 """
         with open(ASM_OUT + "/dmadata/dmadata.s", "w") as outfile:
             outfile.write(out)
-        continue
+        return
 
     for section in segment[3]:
         if (section[0] == section[1] and section[2] != 'reloc') or (section[2] != 'bss' and len(section[4]) == 0):
@@ -1298,6 +1379,14 @@ glabel {variables_ast[0x8009F8B0][0]}
             os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
             with open(f"{DATA_OUT}/{segment_dirname}/{segment[0]}.reloc.s", "w") as outfile:
                 outfile.write(result)
+
+print("Disassembling Segments")
+
+disassemble_makerom(next(segment for segment in files_spec if segment[2] == 'makerom'))
+
+# Textual disassembly for each segment
+with get_context("fork").Pool(jobs) as p:
+    p.map(disassemble_segment, (segment for segment in files_spec if segment[2] != 'makerom'))
 
 print("Splitting text and migrating rodata")
 
