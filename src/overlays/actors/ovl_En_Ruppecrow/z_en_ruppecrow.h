@@ -9,12 +9,6 @@
 #define ENRUPPECROW_LIMB_COUNT 9
 #define ENRUPPECROW_LIMB_POS_COUNT 4
 
-enum {
-    ENRUPPECROW_EFFECT_NONE = 0,
-    ENRUPPECROW_EFFECT_ICE = 10,
-    ENRUPPECROW_EFFECT_LIGHT = 20,
-};
-
 struct EnRuppecrow;
 
 typedef void (*EnRuppecrowActionFunc)(struct EnRuppecrow*, GlobalContext*);
@@ -39,7 +33,7 @@ typedef struct EnRuppecrow {
     /* 0x2C4 */ u8 currentEffect; 
     /* 0x2C8 */ f32 unk_2C8; // set but not used
     /* 0x2CC */ f32 unk_2CC; // set but not used
-    /* 0x2D0 */ f32 unk_2D0;
+    /* 0x2D0 */ f32 iceSfxTimer;
     /* 0x2D4 */ Vec3f limbPos[ENRUPPECROW_LIMB_POS_COUNT];
 } EnRuppecrow; // size = 0x304
 

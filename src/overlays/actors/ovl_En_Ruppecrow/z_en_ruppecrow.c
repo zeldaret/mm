@@ -10,6 +10,12 @@
 
 #define THIS ((EnRuppecrow*)thisx)
 
+enum {
+    ENRUPPECROW_EFFECT_NONE = 0,
+    ENRUPPECROW_EFFECT_ICE = 10,
+    ENRUPPECROW_EFFECT_LIGHT = 20,
+};
+
 void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -20,7 +26,7 @@ void EnRuppecrow_UpdateRupees(EnRuppecrow*);
 void EnRuppecrow_UpdateDamage(EnRuppecrow*, GlobalContext*);
 void EnRuppecrow_HandleDeath(EnRuppecrow*);
 void EnRuppecrow_FallToDespawn(EnRuppecrow*, GlobalContext*);
-void func_80BE2728(EnRuppecrow*, GlobalContext*);
+void EnRuppecrow_ShatterIce(EnRuppecrow*, GlobalContext*);
 void EnRuppecrow_UpdatePosition(EnRuppecrow*, GlobalContext*);
 s32 EnRuppecrow_CheckPlayedMatchingSong(GlobalContext*);
 void EnRuppecrow_HandleSongCutscene(EnRuppecrow*, GlobalContext*);
@@ -217,7 +223,7 @@ f32 EnRuppecrow_GetPointDirection(Path* path, s32 pointIndex, PosRot* world, Vec
     return point.y - world->pos.y;
 }
 
-void func_80BE2728(EnRuppecrow* this, GlobalContext* globalCtx) {
+void EnRuppecrow_ShatterIce(EnRuppecrow* this, GlobalContext* globalCtx) {
     if (this->currentEffect == ENRUPPECROW_EFFECT_ICE) {
         this->currentEffect = ENRUPPECROW_EFFECT_NONE;
         this->unk_2C8 = 0.0f;
@@ -451,7 +457,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
     if (this->actor.colChkInfo.damageEffect == 0x3) {
         this->currentEffect = ENRUPPECROW_EFFECT_ICE;
         this->unk_2C8 = 1.0f;
-        this->unk_2D0 = 0.75f;
+        this->iceSfxTimer = 0.75f;
     } else if (this->actor.colChkInfo.damageEffect == 0x4) {
         this->currentEffect = ENRUPPECROW_EFFECT_LIGHT;
         this->unk_2C8 = 5.0f;
@@ -593,7 +599,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, GlobalContext* globalCtx) {
         Math_StepToF(&this->unk_2C8, 0.0f, 0.05f);
         this->unk_2CC = (this->unk_2C8 + 1.0f) * 0.25f;
         this->unk_2CC = CLAMP_MAX(this->unk_2CC, 0.5f);
-    } else if (Math_StepToF(&this->unk_2D0, 0.5f, 0.0125f) == 0) {
+    } else if (!Math_StepToF(&this->iceSfxTimer, 0.5f, 0.0125f)) {
         func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
     }
 
@@ -605,7 +611,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, GlobalContext* globalCtx) {
         }
 
         if (this->actor.bgCheckFlags & 0x1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
-            func_80BE2728(this, globalCtx);
+            EnRuppecrow_ShatterIce(this, globalCtx);
             func_800B3030(globalCtx, &this->actor.world.pos, &D_801D15B0, &D_801D15B0, (this->actor.scale.x * 10000.0f),
                           0x0, 0x0);
 
