@@ -4,10 +4,6 @@
 #include "global.h"
 
 #define OBJ_TOKEIDAI_TYPE(thisx) (((thisx)->params & 0xF000) >> 12)
-#define OBJ_TOKEIDAI_GET_CURRENT_HOUR(this) ((s32)((this)->currentTime * (24.0f / 0x10000)))
-#define OBJ_TOKEIDAI_GET_CURRENT_MINUTE(this) ((s32)((this)->currentTime * (360 * 2.0f / 0x10000)) % 30)
-#define OBJ_TOKEIDAI_GET_CLOCK_FACE_ROTATION(currentHour) ((s16)(currentHour * (0x10000 / 24.0f)))
-#define OBJ_TOKEIDAI_GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute) ((s16)(currentMinute * (0x10000 * 12.0f / 360)))
 
 typedef enum {
     /*  0 */ OBJ_TOKEIDAI_TYPE_TOWER_GEAR_CLOCK_TOWN,

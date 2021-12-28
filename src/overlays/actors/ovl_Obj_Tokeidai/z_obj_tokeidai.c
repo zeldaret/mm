@@ -21,6 +21,11 @@
 
 #define THIS ((ObjTokeidai*)thisx)
 
+#define GET_CURRENT_HOUR(this) ((s32)((this)->currentTime * (24.0f / 0x10000)))
+#define GET_CURRENT_MINUTE(this) ((s32)((this)->currentTime * (360 * 2.0f / 0x10000)) % 30)
+#define GET_CLOCK_FACE_ROTATION(currentHour) ((s16)(currentHour * (0x10000 / 24.0f)))
+#define GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute) ((s16)(currentMinute * (0x10000 * 12.0f / 360)))
+
 void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -74,10 +79,10 @@ s32 ObjTokeidai_GetTargetSunMoonDiskRotation() {
 }
 
 void ObjTokeidai_SetupClockOrGear(ObjTokeidai* this) {
-    s32 currentMinute = OBJ_TOKEIDAI_GET_CURRENT_MINUTE(this);
+    s32 currentMinute = GET_CURRENT_MINUTE(this);
 
     this->clockMinute = currentMinute;
-    this->outerRingOrGearRotation = OBJ_TOKEIDAI_GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute);
+    this->outerRingOrGearRotation = GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute);
     this->outerRingOrGearRotationalVelocity = 0x3C;
     this->outerRingOrGearRotationTimer = 0;
 }
@@ -86,9 +91,9 @@ void ObjTokeidai_Clock_Init(ObjTokeidai* this) {
     s32 currentHour;
 
     ObjTokeidai_SetupClockOrGear(this);
-    currentHour = OBJ_TOKEIDAI_GET_CURRENT_HOUR(this);
+    currentHour = GET_CURRENT_HOUR(this);
     this->clockHour = currentHour;
-    this->clockFaceRotation = OBJ_TOKEIDAI_GET_CLOCK_FACE_ROTATION(currentHour);
+    this->clockFaceRotation = GET_CLOCK_FACE_ROTATION(currentHour);
     this->clockFaceRotationalVelocity = 0;
     this->clockFaceRotationTimer = 0;
     this->sunMoonDiskRotationalVelocity = 0;
@@ -252,7 +257,7 @@ void ObjTokeidai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
-    s32 currentMinute = OBJ_TOKEIDAI_GET_CURRENT_MINUTE(this);
+    s32 currentMinute = GET_CURRENT_MINUTE(this);
 
     if (currentMinute != this->clockMinute) {
         if (this->outerRingOrGearRotationTimer == 8 && playSfx) {
@@ -277,9 +282,8 @@ void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
 
         this->outerRingOrGearRotationTimer++;
         if ((currentMinute == 15 && this->outerRingOrGearRotation < 0) ||
-            (currentMinute != 15 &&
-             this->outerRingOrGearRotation > OBJ_TOKEIDAI_GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute))) {
-            this->outerRingOrGearRotation = OBJ_TOKEIDAI_GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute);
+            (currentMinute != 15 && this->outerRingOrGearRotation > GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute))) {
+            this->outerRingOrGearRotation = GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute);
             this->clockMinute = currentMinute;
             this->outerRingOrGearRotationalVelocity = 0x5A;
             this->outerRingOrGearRotationTimer = 0;
@@ -597,7 +601,7 @@ s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, GlobalContext* glo
 }
 
 void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, GlobalContext* globalCtx) {
-    s32 currentHour = OBJ_TOKEIDAI_GET_CURRENT_HOUR(this);
+    s32 currentHour = GET_CURRENT_HOUR(this);
 
     if (currentHour != this->clockHour) {
         if (this->clockFaceRotationTimer > 12) {
@@ -618,8 +622,8 @@ void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, GlobalContext* globalCtx)
 
         this->clockFaceRotationTimer++;
         if ((currentHour == 12 && this->clockFaceRotation < 0) ||
-            (currentHour != 12 && this->clockFaceRotation > OBJ_TOKEIDAI_GET_CLOCK_FACE_ROTATION(currentHour))) {
-            this->clockFaceRotation = OBJ_TOKEIDAI_GET_CLOCK_FACE_ROTATION(currentHour);
+            (currentHour != 12 && this->clockFaceRotation > GET_CLOCK_FACE_ROTATION(currentHour))) {
+            this->clockFaceRotation = GET_CLOCK_FACE_ROTATION(currentHour);
             this->clockHour = currentHour;
             this->clockFaceRotationalVelocity = 0;
             this->clockFaceRotationTimer = 0;
