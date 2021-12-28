@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dy_extra.h"
+#include "objects/object_dy_obj/object_dy_obj.h"
 
 #define FLAGS 0x00000030
 
@@ -30,8 +31,6 @@ const ActorInit En_Dy_Extra_InitVars = {
     (ActorFunc)EnDyExtra_Draw,
 };
 
-extern Vtx D_0600DD40[];
-extern Gfx D_0600DEF0[];
 
 void EnDyExtra_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
@@ -101,7 +100,7 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDyExtra* this = THIS;
     s32 pad;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    Vtx* vertices = Lib_SegmentedToVirtual(D_0600DD40);
+    Vtx* vertices = Lib_SegmentedToVirtual(object_dy_obj_Vtx_00DD40);
     s32 i;
     u8 unk[3];
 
@@ -126,7 +125,7 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, D_80A61740[this->type].r, D_80A61740[this->type].g,
                     D_80A61740[this->type].b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, D_80A61754[this->type].r, D_80A61754[this->type].g, D_80A61754[this->type].b, 128);
-    gSPDisplayList(POLY_XLU_DISP++, D_0600DEF0);
+    gSPDisplayList(POLY_XLU_DISP++, object_dy_obj_DL_00DEF0);
 
     CLOSE_DISPS(gfxCtx);
 }

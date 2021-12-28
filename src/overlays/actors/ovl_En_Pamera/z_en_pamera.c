@@ -7,6 +7,7 @@
 #include "z_en_pamera.h"
 #include "../ovl_En_Bom/z_en_bom.h"
 #include "../ovl_En_Door/z_en_door.h"
+#include "objects/object_pamera/object_pamera.h"
 
 #define FLAGS 0x00000019
 
@@ -69,28 +70,7 @@ void func_80BDA288(EnPamera* this);
 void func_80BDA2E0(EnPamera* this, GlobalContext* globalCtx);
 void func_80BDA344(Actor* thisx, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_06008448;
-extern AnimationHeader D_060005BC;
-extern AnimationHeader D_06008AE0; // Pamela Walking
-extern AnimationHeader D_06008E38;
-extern AnimationHeader D_0600A844; // Pamela Looking down the well
-extern AnimationHeader D_0600B0C4;
-extern AnimationHeader D_06009870;
-extern AnimationHeader D_06009F54; // HoldBack En_Hgo
-extern AnimationHeader D_0600B5B0; // PushBack En_Hgo
-extern AnimationHeader D_0600BCC4; // Defend En_Hgo
-extern AnimationHeader D_0600D9DC;
-extern AnimationHeader D_0600E16C; // Hugging En_Hg
-extern AnimationHeader D_0600C9F4;
-extern AnimationHeader D_0600D0F0;
 
-extern TexturePtr D_060074E8;
-extern TexturePtr D_060078E8;
-extern TexturePtr D_060066E8;
-extern TexturePtr D_06006AE8;
-extern TexturePtr D_06006EE8;
-extern TexturePtr D_060072E8;
-extern TexturePtr D_060073E8;
 
 const ActorInit En_Pamera_InitVars = {
     ACTOR_EN_PAMERA,
@@ -129,22 +109,22 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &D_060005BC, 1.0f, 0, 0.0f, 0, -4.0f }, { &D_06008AE0, 1.0f, 0, 0.0f, 0, -4.0f },
-    { &D_06008E38, 1.0f, 0, 0.0f, 0, -4.0f }, { &D_0600A844, 1.0f, 0, 0.0f, 0, -4.0f },
-    { &D_0600B0C4, 1.0f, 0, 0.0f, 0, -4.0f }, { &D_06009870, 1.0f, 0, 0.0f, 0, 0.0f },
-    { &D_06009F54, 1.0f, 0, 0.0f, 0, 0.0f },  { &D_0600B5B0, 1.0f, 0, 0.0f, 0, 0.0f },
-    { &D_0600BCC4, 1.0f, 0, 0.0f, 0, 0.0f },  { &D_0600D9DC, 1.0f, 0, 0.0f, 0, 0.0f },
-    { &D_0600E16C, 1.0f, 0, 0.0f, 0, 0.0f },  { &D_0600C9F4, 1.0f, 0, 0.0f, 2, 0.0f },
-    { &D_0600D0F0, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &object_pamera_Anim_0005BC, 1.0f, 0, 0.0f, 0, -4.0f }, { &object_pamera_Anim_008AE0, 1.0f, 0, 0.0f, 0, -4.0f },
+    { &object_pamera_Anim_008E38, 1.0f, 0, 0.0f, 0, -4.0f }, { &object_pamera_Anim_00A844, 1.0f, 0, 0.0f, 0, -4.0f },
+    { &object_pamera_Anim_00B0C4, 1.0f, 0, 0.0f, 0, -4.0f }, { &object_pamera_Anim_009870, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &object_pamera_Anim_009F54, 1.0f, 0, 0.0f, 0, 0.0f },  { &object_pamera_Anim_00B5B0, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &object_pamera_Anim_00BCC4, 1.0f, 0, 0.0f, 0, 0.0f },  { &object_pamera_Anim_00D9DC, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &object_pamera_Anim_00E16C, 1.0f, 0, 0.0f, 0, 0.0f },  { &object_pamera_Anim_00C9F4, 1.0f, 0, 0.0f, 2, 0.0f },
+    { &object_pamera_Anim_00D0F0, 1.0f, 0, 0.0f, 0, 0.0f },
 };
 
 static Vec3f D_80BDA5F0 = { 1000.0f, 0.0f, 0.0f };
 
-static TexturePtr D_80BDA5FC[] = { &D_060074E8, &D_060078E8 };
+static TexturePtr D_80BDA5FC[] = { &object_pamera_Tex_0074E8, &object_pamera_Tex_0078E8 };
 
-static TexturePtr D_80BDA604[] = { &D_060066E8, &D_06006AE8, &D_06006EE8 };
+static TexturePtr D_80BDA604[] = { &object_pamera_Tex_0066E8, &object_pamera_Tex_006AE8, &object_pamera_Tex_006EE8 };
 
-static TexturePtr D_80BDA610[] = { &D_060072E8, &D_060073E8 };
+static TexturePtr D_80BDA610[] = { &object_pamera_Tex_0072E8, &object_pamera_Tex_0073E8 };
 
 void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -152,7 +132,7 @@ void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp44;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 15.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008448, &D_060005BC, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_pamera_Skel_008448, &object_pamera_Anim_0005BC, this->jointTable, this->morphTable,
                        PAMERA_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -510,11 +490,11 @@ void func_80BD93CC(EnPamera* this, s16 arg1, s16 arg2) {
 void func_80BD93F4(EnPamera* this, GlobalContext* globalCtx) {
     if ((this->actionFunc == func_80BD8B70) || (this->actionFunc == func_80BD8DB0) ||
         (this->actionFunc == func_80BD8964) || (this->actionFunc == func_80BD8A7C)) {
-        if (this->skelAnime.animation == &D_06008AE0) {
+        if (this->skelAnime.animation == &object_pamera_Anim_008AE0) {
             if (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
-        } else if ((this->skelAnime.animation == &D_06008E38) &&
+        } else if ((this->skelAnime.animation == &object_pamera_Anim_008E38) &&
                    (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
         }

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_baisen.h"
+#include "objects/object_bai/object_bai.h"
 
 #define FLAGS 0x00000009
 
@@ -22,10 +23,6 @@ void func_80BE895C(EnBaisen* this, GlobalContext* globalCtx);
 void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx);
 void func_80BE89D8(EnBaisen* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_06007908;
-extern AnimationHeader D_060011C0;
-extern AnimationHeader D_060008B4;
-extern AnimationHeader D_06008198;
 
 const ActorInit En_Baisen_InitVars = {
     ACTOR_EN_BAISEN,
@@ -61,7 +58,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6 };
 
-static AnimationHeader* D_80BE8E4C[] = { &D_060011C0, &D_060008B4, &D_06008198 };
+static AnimationHeader* D_80BE8E4C[] = { &object_bai_Anim_0011C0, &object_bai_Anim_0008B4, &object_bai_Anim_008198 };
 
 static u8 animModes[] = { 0, 0 };
 
@@ -69,7 +66,7 @@ void EnBaisen_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBaisen* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007908, &D_060011C0, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bai_Skel_007908, &object_bai_Anim_0011C0, this->jointTable, this->morphTable, 20);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {

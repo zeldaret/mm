@@ -52,8 +52,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 14, 0, { 0, 0, 0 } },
 };
 
-extern ColliderCylinderInit D_80A7C790;
-
 static s16 objectIds[] = {
     GAMEPLAY_KEEP,
     GAMEPLAY_KEEP,
@@ -120,7 +118,7 @@ void ObjEtcetera_DoNormalOscillation(ObjEtcetera* this, GlobalContext* globalCtx
 }
 
 void ObjEtcetera_StartSmallFlutterAnimation(ObjEtcetera* this) {
-    Animation_Change(&this->skelAnime, &D_040117A8, 1.0f, 0.0f, Animation_GetLastFrame(&D_040117A8), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gameplay_keep_Anim_0117A8, 1.0f, 0.0f, Animation_GetLastFrame(&gameplay_keep_Anim_0117A8), 2, 0.0f);
     this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
     this->actionFunc = ObjEtcetera_PlaySmallFlutterAnimation;
 }
@@ -131,7 +129,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
 
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
         // Player is launching out of the Deku Flower
-        Animation_Change(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0400EB7C), 2, 0.0f);
+        Animation_Change(&this->skelAnime, &gameplay_keep_Anim_00EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&gameplay_keep_Anim_00EB7C), 2, 0.0f);
         this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
         this->actionFunc = ObjEtcetera_DoIntenseOscillation;
         Actor_SetScale(&this->dyna.actor, 0.01f);
@@ -221,7 +219,7 @@ void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCt
 void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
     s32 type;
-    CollisionHeader* collisionHeaders[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8 };
+    CollisionHeader* collisionHeaders[] = { &gameplay_keep_Colheader_00E710, &gameplay_keep_Colheader_00E710, &gameplay_keep_Colheader_0118D8, &gameplay_keep_Colheader_0118D8 };
     s32 pad;
     CollisionHeader* thisCollisionHeader;
 
@@ -244,14 +242,14 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
         switch (type) {
             case DEKU_FLOWER_TYPE_PINK:
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_04011518, &D_0400EB7C, this->jointTable,
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_011518, &gameplay_keep_Anim_00EB7C, this->jointTable,
                                this->morphTable, 11);
-                this->dList = &D_0400ED80;
+                this->dList = &gameplay_keep_DL_00ED80;
                 break;
             case DEKU_FLOWER_TYPE_GOLD:
             case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
-                this->dList = &D_04011BD0;
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_040127E8, &D_0400EB7C, this->jointTable,
+                this->dList = &gameplay_keep_DL_011BD0;
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_0127E8, &gameplay_keep_Anim_00EB7C, this->jointTable,
                                this->morphTable, 11);
                 this->collider.dim.height = 20;
                 break;
@@ -270,7 +268,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 break;
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
             case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
-                Animation_Change(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0400EB7C), 2,
+                Animation_Change(&this->skelAnime, &gameplay_keep_Anim_00EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&gameplay_keep_Anim_00EB7C), 2,
                                  0.0f);
                 this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
                 this->actionFunc = ObjEtcetera_DoIntenseOscillation;

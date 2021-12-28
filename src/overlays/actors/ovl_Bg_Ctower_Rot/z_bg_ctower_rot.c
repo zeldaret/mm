@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_ctower_rot.h"
+#include "objects/object_ctower_rot/object_ctower_rot.h"
 
 #define FLAGS 0x00000030
 
@@ -32,19 +33,12 @@ const ActorInit Bg_Ctower_Rot_InitVars = {
     (ActorFunc)BgCtowerRot_Draw,
 };
 
-extern Gfx D_060129D0[];
-extern Gfx D_06012DA0[];
-extern CollisionHeader D_060142E8;
-extern Gfx D_06017220[];
-extern CollisionHeader D_06017410;
-extern Gfx D_060174E0[];
-extern CollisionHeader D_06017650;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-static Gfx* bgCtowerRotDlists[] = { D_06012DA0, D_06017220, D_060174E0 };
+static Gfx* bgCtowerRotDlists[] = { object_ctower_rot_DL_012DA0, object_ctower_rot_DL_017220, object_ctower_rot_DL_0174E0 };
 
 void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerRot* this = THIS;
@@ -55,16 +49,16 @@ void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
     if (this->dyna.actor.params == CORRIDOR) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060142E8);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ctower_rot_Colheader_0142E8);
         this->actionFunc = BgCtowerRot_CorridorRotate;
         return;
     }
     player = GET_PLAYER(globalCtx);
     if (this->dyna.actor.params == MAIN_DOOR) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06017410);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ctower_rot_Colheader_017410);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y + 0x4000;
     } else {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06017650);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ctower_rot_Colheader_017650);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y - 0x4000;
     }
     Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
@@ -161,6 +155,6 @@ void BgCtowerRot_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_800BDFC0(globalCtx, bgCtowerRotDlists[this->dyna.actor.params]);
     if (this->dyna.actor.params == CORRIDOR) {
-        func_800BE03C(globalCtx, D_060129D0);
+        func_800BE03C(globalCtx, object_ctower_rot_DL_0129D0);
     }
 }

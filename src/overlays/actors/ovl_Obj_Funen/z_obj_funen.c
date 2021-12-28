@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_funen.h"
+#include "objects/object_funen/object_funen.h"
 
 #define FLAGS 0x00000030
 
@@ -22,7 +23,6 @@ const ActorInit Obj_Funen_InitVars = {
     (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)ObjFunen_Draw
 };
 
-extern Gfx D_060000D0[];
 
 f32 D_80A198D0[] = { 0.1f, 0.024390244f };
 
@@ -47,6 +47,6 @@ void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, temp, 0x20, 0x20, 1, 0, temp, 0x20, 0x20));
-    gSPDisplayList(POLY_XLU_DISP++, D_060000D0);
+    gSPDisplayList(POLY_XLU_DISP++, object_funen_DL_0000D0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

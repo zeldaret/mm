@@ -7,6 +7,7 @@
 #include "z_obj_syokudai.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+#include "objects/object_syokudai/object_syokudai.h"
 
 #define FLAGS 0x00000410
 
@@ -17,9 +18,6 @@ void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-extern Gfx D_060003A0[]; // sObjectSyokudaiTypeSwitchCausesFlameDL
-extern Gfx D_06000870[]; // sObjectSyokudaiTypeNoSwitchDL
-extern Gfx D_06000B90[]; // sObjectSyokudaiTypeFlameCausesSwitchDL
 
 const ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
@@ -82,7 +80,7 @@ static InitChainEntry sInitChain[] = {
 
 static u8 sColTypes[] = { COLTYPE_METAL, COLTYPE_WOOD, COLTYPE_WOOD };
 
-static Gfx* sDLists[] = { D_060003A0, D_06000B90, D_06000870 };
+static Gfx* sDLists[] = { object_syokudai_DL_0003A0, object_syokudai_DL_000B90, object_syokudai_DL_000870 };
 
 static s32 sNumLitTorchesInGroup;
 

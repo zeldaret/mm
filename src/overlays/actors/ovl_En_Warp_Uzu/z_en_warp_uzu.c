@@ -5,6 +5,7 @@
  */
 
 #include "z_en_warp_uzu.h"
+#include "objects/object_warp_uzu/object_warp_uzu.h"
 
 #define FLAGS 0x00000019
 
@@ -59,7 +60,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern Gfx D_06000EC0[];
 
 void EnWarpUzu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWarpUzu* this = THIS;
@@ -133,5 +133,5 @@ void EnWarpUzu_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000EC0);
+    func_800BDFC0(globalCtx, object_warp_uzu_DL_000EC0);
 }

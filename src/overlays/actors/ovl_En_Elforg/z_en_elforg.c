@@ -5,6 +5,7 @@
  */
 
 #include "z_en_elforg.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -72,7 +73,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->flags = 0;
     this->direction = 0;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0402CA98, &D_0402B494, this->jointTable, this->jointTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gameplay_keep_Skel_02CA98, &gameplay_keep_Anim_02B494, this->jointTable, this->jointTable, 10);
     this->skelAnime.playSpeed = 1.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     this->actor.shape.shadowAlpha = 255;
@@ -592,19 +593,19 @@ void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     switch (this->area) {
         case STRAY_FAIRY_AREA_WOODFALL:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C908));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_02C908));
             break;
         case STRAY_FAIRY_AREA_SNOWHEAD:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C890));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_02C890));
             break;
         case STRAY_FAIRY_AREA_GREAT_BAY:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C980));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_02C980));
             break;
         case STRAY_FAIRY_AREA_STONE_TOWER:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C9F8));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_02C9F8));
             break;
         default:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C818));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_02C818));
             break;
     }
     Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);

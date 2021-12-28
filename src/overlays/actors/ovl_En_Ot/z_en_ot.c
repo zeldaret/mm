@@ -6,6 +6,8 @@
 
 #include "z_en_ot.h"
 #include "prevent_bss_reordering.h"
+#include "objects/object_ot/object_ot.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000019
 
@@ -57,14 +59,6 @@ EnOtUnkStruct* func_80B5DF58(EnOtUnkStruct* arg0, u8 arg1, Vec3f* arg2, Vec3s* a
 void func_80B5E078(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2);
 void func_80B5E1D8(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2);
 
-extern Gfx D_06000040[];
-extern Gfx D_06000078[];
-extern AnimationHeader D_06000420;
-extern Gfx D_060004A0[];
-extern AnimatedMaterial D_060005F8;
-extern AnimationHeader D_060008D8;
-extern FlexSkeletonHeader D_06004800;
-extern AnimationHeader D_06004B30;
 
 static EnOt* D_80B5E880;
 static EnOt* D_80B5E884;
@@ -103,9 +97,9 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static struct_80B8E1A8 sAnimations[] = {
-    { &D_06004B30, 1.0f, 0, -5.0f },
-    { &D_060008D8, 1.0f, 0, -5.0f },
-    { &D_06000420, 1.0f, 0, 0.0f },
+    { &object_ot_Anim_004B30, 1.0f, 0, -5.0f },
+    { &object_ot_Anim_0008D8, 1.0f, 0, -5.0f },
+    { &object_ot_Anim_000420, 1.0f, 0, 0.0f },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -156,7 +150,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004800, &D_060008D8, this->jointTable, this->morphTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ot_Skel_004800, &object_ot_Anim_0008D8, this->jointTable, this->morphTable, 19);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Animation_Change(&this->skelAnime, sAnimations[0].animationSeg, 1.0f,
                      Animation_GetLastFrame(&sAnimations[0].animationSeg->common) * Rand_ZeroOne(),
@@ -1044,7 +1038,7 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    AnimatedMat_Draw(globalCtx, (AnimatedMaterial*)Lib_SegmentedToVirtual(&D_060005F8));
+    AnimatedMat_Draw(globalCtx, (AnimatedMaterial*)Lib_SegmentedToVirtual(&object_ot_Matanimheader_0005F8));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnOt_PostLimbDraw, &this->actor);
     Matrix_InsertTranslation(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);
@@ -1057,10 +1051,10 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSetOtherMode(&gfx[0], G_SETOTHERMODE_H, 4, 4, 0x00000080);
     gDPSetCombineLERP(&gfx[1], 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                       0);
-    gSPDisplayList(&gfx[2], D_04029CB0);
+    gSPDisplayList(&gfx[2], gameplay_keep_DL_029CB0);
     gDPSetPrimColor(&gfx[3], 0, 0, this->unk_747.r, this->unk_747.g, this->unk_747.b, 50);
     gSPMatrix(&gfx[4], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[5], D_04029CF0);
+    gSPDisplayList(&gfx[5], gameplay_keep_DL_029CF0);
 
     POLY_XLU_DISP = &gfx[6];
 
@@ -1075,7 +1069,7 @@ void EnOt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         OPEN_DISPS(globalCtx->state.gfxCtx);
         Gfx* gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], D_060004A0);
+        gSPDisplayList(&gfx[0], object_ot_DL_0004A0);
         POLY_OPA_DISP = &gfx[1];
         Matrix_MultiplyVector3fByState(&D_80B5E410, &this->unk_74C);
 
@@ -1152,7 +1146,7 @@ void func_80B5E1D8(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
     for (i = 0; i < arg2; i++, arg1++) {
         if (arg1->unk_00) {
             if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, D_06000040);
+                gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000040);
                 flag = true;
                 if (globalCtx) {}
             }
@@ -1161,10 +1155,10 @@ void func_80B5E1D8(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
             Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
             Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
 
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0405E6F0));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&gameplay_keep_Tex_05E6F0));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_06000078);
+            gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000078);
         }
     }
 

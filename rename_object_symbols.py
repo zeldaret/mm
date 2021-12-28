@@ -112,11 +112,92 @@ def find_xml_entry(xml_entries, symbol_name, symbol_lookup, symbol_type, object_
 
 sym_regex = re.compile(r"D_(0[^8][0-9a-fA-F]{6})[^_]?")
 
+dm_stk = {
+        f"0601C21C" : "object_stk",
+        f"0601D3D0" : "object_stk",
+        f"06001030" : "object_stk",
+        f"0601D008" : "object_stk",
+        f"0601D008" : "object_stk",
+        f"06015C14" : "object_stk",
+        f"0600BB2C" : "object_stk",
+        f"0600C964" : "object_stk",
+        f"06002774" : "object_stk",
+        f"06003068" : "object_stk",
+
+        f"060070DC" : "object_stk2",
+        f"0600D830" : "object_stk2",
+        f"0600055C" : "object_stk2",
+        f"0600130C" : "object_stk2",
+        f"0600C270" : "object_stk2",
+        f"0600CBB8" : "object_stk2",
+        f"0601AA80" : "object_stk2",
+        f"0601D07C" : "object_stk2",
+        f"06016910" : "object_stk2",
+        f"06018ED0" : "object_stk2",
+        f"0601DDE0" : "object_stk2",
+        f"0601EF50" : "object_stk2",
+        f"0602DC64" : "object_stk2",
+        f"0602E9A0" : "object_stk2",
+        f"0602DC64" : "object_stk2",
+        f"0602E9A0" : "object_stk2",
+        f"060035C8" : "object_stk2",
+        f"060049C8" : "object_stk2",
+        f"060259F4" : "object_stk2",
+        f"060266C8" : "object_stk2",
+        f"06026CF4" : "object_stk2",
+        f"0601C114" : "object_stk2",
+        f"06004580" : "object_stk2",
+        f"06020CAC" : "object_stk2",
+        f"0602200C" : "object_stk2",
+        f"0602336C" : "object_stk2",
+        f"060101A4" : "object_stk2",
+        f"06010B60" : "object_stk2",
+        f"0602A2D8" : "object_stk2",
+        f"0601F9E4" : "object_stk2",
+        f"06029A04" : "object_stk2",
+        f"0602AD54" : "object_stk2",
+        f"060110B4" : "object_stk2",
+        f"06011FB0" : "object_stk2",
+        f"06012A58" : "object_stk2",
+        f"060141E4" : "object_stk2",
+        f"0600E6EC" : "object_stk2",
+        f"0600EEC0" : "object_stk2",
+        f"06027CF4" : "object_stk2",
+        f"06028F28" : "object_stk2",
+        f"0603323C" : "object_stk2",
+        f"06031210" : "object_stk2",
+        f"060322FC" : "object_stk2",
+        f"06032AE0" : "object_stk2",
+        f"0603021C" : "object_stk2",
+        f"06036964" : "object_stk2",
+        f"06016508" : "object_stk2",
+        f"06015028" : "object_stk2",
+        f"06014920" : "object_stk2",
+        f"0602FA70" : "object_stk2",
+        f"06037B94" : "object_stk2",
+        f"0603967C" : "object_stk2",
+        f"0603967C" : "object_stk2",
+        f"0603A8F8" : "object_stk2",
+        f"06034FD8" : "object_stk2",
+
+        f"06005F44" : "object_stk3",
+        f"06002CD8" : "object_stk3",
+        f"060039F0" : "object_stk3",
+        f"06004554" : "object_stk3",
+        f"060051C0" : "object_stk3",
+        f"06001374" : "object_stk3",
+        f"06001EDC" : "object_stk3",
+}
+
+XML_DATA[f"object_stk"] = get_object_file(f"object_stk")
+XML_DATA[f"object_stk2"] = get_object_file(f"object_stk2")
+XML_DATA[f"object_stk3"] = get_object_file(f"object_stk3")
+
 for file in glob.iglob("src/overlays/actors/**/*.c", recursive=True):
     if "/effects/" in file:
         continue
-    #if "en_wf" not in file:
-    #    continue
+    if "dm_stk." not in file:
+        continue
     #print(file)
 
     with open(file, "r") as f:
@@ -138,22 +219,19 @@ for file in glob.iglob("src/overlays/actors/**/*.c", recursive=True):
             break
 
     skip_object_syms = False
-    if fd_.find("Object_GetIndex") >= 0 or fd_.find("Object_IsLoaded") >= 0:
-        print(file, object_name)
-        print(f"HANDLE OBJECTS HERE MANUALLY!")
-        print()
-        skip_object_syms = True
-        continue
+    #if fd_.find("Object_GetIndex") >= 0 or fd_.find("Object_IsLoaded") >= 0:
+    #    print(file, object_name)
+    #    print(f"HANDLE OBJECTS HERE MANUALLY!")
+    #    print()
+    #    skip_object_syms = True
+    #    continue
 
-    #else:
-    #    print(f"Failed to find object name in a \"const ActorInit\" struct.")
-    #    exit()
     if object_name:
         print(file, object_name)
     else:
         print(f"No object found: {file}")
 
-    xml_entries = get_object_file(object_name)
+    XML_DATA[object_name] = get_object_file(f"object_stk") + get_object_file(f"object_stk2") + get_object_file(f"object_stk3")
 
     to_replace = []
     to_replace_set = set()
@@ -204,7 +282,10 @@ for file in glob.iglob("src/overlays/actors/**/*.c", recursive=True):
                     continue
                 elif skip_object_syms:
                     continue
-                xml_entries = get_object_file(object_name)
+                if sym in dm_stk:
+                    xml_entries = XML_DATA[dm_stk[sym]]
+                else:
+                    xml_entries = XML_DATA[object_name]
                 symbol_lookup -= 0x06000000
                 includes_needed.add(object_name)
             else:
@@ -230,11 +311,13 @@ for file in glob.iglob("src/overlays/actors/**/*.c", recursive=True):
                     else:
                         name, offset = get_new_name(object_name, symbol_type, symbol_lookup)
                         to_add.append(make_element_string(symbol_type, name, offset))
-                        #to_replace.append((symbol_name, name))
+                        to_replace.append((symbol_name, name))
                     to_replace_set.add(symbol_name)
 
         if add_line:
             new_fd.append(line)
+
+    del XML_DATA[object_name]
 
     if len(to_replace) > 0:
         need_include = True
@@ -257,8 +340,8 @@ for file in glob.iglob("src/overlays/actors/**/*.c", recursive=True):
     for replace in to_replace:
         new_fd = new_fd.replace(replace[0], replace[1])
 
-    #with open(file, "w") as f:
-    #    f.write(new_fd)
+    with open(file, "w") as f:
+        f.write(new_fd)
 
     if len(to_add) > 0:
         to_add.sort(key=lambda x: int(x.split("Offset=\"", 1)[1].split("\"")[0], 16))

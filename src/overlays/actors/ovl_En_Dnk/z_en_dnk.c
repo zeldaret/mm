@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dnk.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000009
 
@@ -19,38 +20,6 @@ void EnDnk_DoNothing(EnDnk* this, GlobalContext* globalCtx);
 void func_80A52018(Actor* thisx, GlobalContext* globalCtx);
 void func_80A52134(EnDnk* this, GlobalContext* globalCtx);
 
-extern AnimationHeader D_06000168;
-extern AnimationHeader D_0600031C;
-extern AnimationHeader D_06000430;
-extern AnimationHeader D_060006CC;
-extern AnimationHeader D_06000894;
-extern AnimationHeader D_06000B70;
-extern TexturePtr D_06001680;
-extern TexturePtr D_06001700;
-extern TexturePtr D_06001780;
-extern SkeletonHeader D_060023B8;
-extern SkeletonHeader D_06002468;
-extern AnimationHeader D_060024CC;
-extern AnimationHeader D_0600259C;
-extern AnimationHeader D_060026C4;
-extern SkeletonHeader D_06002848;
-extern AnimationHeader D_06002894;
-extern AnimationHeader D_06002950;
-extern AnimationHeader D_060029BC;
-extern AnimationHeader D_06002A08;
-extern AnimationHeader D_06002A5C;
-extern AnimationHeader D_06002B6C;
-extern AnimationHeader D_06002B90;
-extern AnimationHeader D_06002BD4;
-extern AnimationHeader D_06002DD4;
-extern AnimationHeader D_06002E84;
-extern AnimationHeader D_06002F7C;
-extern AnimationHeader D_06002FA4;
-extern AnimationHeader D_06003128;
-extern AnimationHeader D_06003180;
-extern AnimationHeader D_0600326C;
-extern AnimationHeader D_060033E4;
-extern AnimationHeader D_06003780;
 
 static s16 D_80A521A0 = 0;
 
@@ -124,18 +93,18 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06000B70, 1.0f, 0, -1, 2, 0 },  { &D_06000B70, 1.0f, 0, -1, 2, -4 }, { &D_06002A08, 1.0f, 0, -1, 0, -4 },
-    { &D_0600031C, 1.0f, 0, -1, 0, -4 }, { &D_06000430, 1.0f, -1, -1, 2, 0 }, { &D_06000430, 1.0f, 0, -1, 2, -4 },
-    { &D_06000894, 1.0f, 0, -1, 2, -4 }, { &D_06002B6C, 1.0f, 0, -1, 0, 0 },  { &D_06002B6C, 1.0f, 0, -1, 0, -4 },
-    { &D_060006CC, 1.0f, 0, -1, 0, -4 }, { &D_06000168, 1.0f, 0, -1, 2, -4 }, { &D_060024CC, 1.0f, -1, -1, 2, 0 },
-    { &D_060024CC, 1.0f, 0, -1, 2, -4 }, { &D_060026C4, 1.0f, 0, -1, 2, -4 }, { &D_06002894, 1.0f, 0, -1, 2, -4 },
-    { &D_06002B90, 1.0f, 0, -1, 2, -4 }, { &D_06002F7C, 1.0f, 0, -1, 0, 0 },  { &D_06002F7C, 1.0f, 0, -1, 0, -4 },
-    { &D_06003128, 1.0f, 0, -1, 0, 0 },  { &D_06003128, 1.0f, 0, -1, 0, -4 }, { &D_060029BC, 1.0f, 0, -1, 0, -4 },
-    { &D_06002E84, 1.0f, 0, -1, 0, -4 }, { &D_06000168, 1.0f, 0, -1, 0, -4 }, { &D_0600259C, 1.0f, 0, -1, 2, -4 },
-    { &D_06002A5C, 1.0f, 0, -1, 2, 0 },  { &D_06002A5C, 1.0f, 0, -1, 2, -4 }, { &D_06002BD4, 1.0f, 0, -1, 2, -4 },
-    { &D_06002DD4, 1.0f, 0, -1, 2, -4 }, { &D_06002FA4, 1.0f, 0, -1, 0, -4 }, { &D_06003180, 1.0f, 0, -1, 2, -4 },
-    { &D_0600326C, 1.0f, 0, -1, 0, 0 },  { &D_0600326C, 1.0f, 0, -1, 0, -4 }, { &D_060033E4, 1.0f, 0, -1, 0, -4 },
-    { &D_06003780, 1.0f, 0, -1, 0, 0 },  { &D_06003780, 1.0f, 0, -1, 0, -4 }, { &D_06002950, 1.0f, 0, -1, 0, 0 },
+    { &gameplay_keep_Anim_000B70, 1.0f, 0, -1, 2, 0 },  { &gameplay_keep_Anim_000B70, 1.0f, 0, -1, 2, -4 }, { &gameplay_keep_Anim_002A08, 1.0f, 0, -1, 0, -4 },
+    { &gameplay_keep_Anim_00031C, 1.0f, 0, -1, 0, -4 }, { &gameplay_keep_Anim_000430, 1.0f, -1, -1, 2, 0 }, { &gameplay_keep_Anim_000430, 1.0f, 0, -1, 2, -4 },
+    { &gameplay_keep_Anim_000894, 1.0f, 0, -1, 2, -4 }, { &gameplay_keep_Anim_002B6C, 1.0f, 0, -1, 0, 0 },  { &gameplay_keep_Anim_002B6C, 1.0f, 0, -1, 0, -4 },
+    { &gameplay_keep_Anim_0006CC, 1.0f, 0, -1, 0, -4 }, { &gameplay_keep_Anim_000168, 1.0f, 0, -1, 2, -4 }, { &gameplay_keep_Anim_0024CC, 1.0f, -1, -1, 2, 0 },
+    { &gameplay_keep_Anim_0024CC, 1.0f, 0, -1, 2, -4 }, { &gameplay_keep_Anim_0026C4, 1.0f, 0, -1, 2, -4 }, { &gameplay_keep_Anim_002894, 1.0f, 0, -1, 2, -4 },
+    { &gameplay_keep_Anim_002B90, 1.0f, 0, -1, 2, -4 }, { &gameplay_keep_Anim_002F7C, 1.0f, 0, -1, 0, 0 },  { &gameplay_keep_Anim_002F7C, 1.0f, 0, -1, 0, -4 },
+    { &gameplay_keep_Anim_003128, 1.0f, 0, -1, 0, 0 },  { &gameplay_keep_Anim_003128, 1.0f, 0, -1, 0, -4 }, { &gameplay_keep_Anim_0029BC, 1.0f, 0, -1, 0, -4 },
+    { &gameplay_keep_Anim_002E84, 1.0f, 0, -1, 0, -4 }, { &gameplay_keep_Anim_000168, 1.0f, 0, -1, 0, -4 }, { &gameplay_keep_Anim_00259C, 1.0f, 0, -1, 2, -4 },
+    { &gameplay_keep_Anim_002A5C, 1.0f, 0, -1, 2, 0 },  { &gameplay_keep_Anim_002A5C, 1.0f, 0, -1, 2, -4 }, { &gameplay_keep_Anim_002BD4, 1.0f, 0, -1, 2, -4 },
+    { &gameplay_keep_Anim_002DD4, 1.0f, 0, -1, 2, -4 }, { &gameplay_keep_Anim_002FA4, 1.0f, 0, -1, 0, -4 }, { &gameplay_keep_Anim_003180, 1.0f, 0, -1, 2, -4 },
+    { &gameplay_keep_Anim_00326C, 1.0f, 0, -1, 0, 0 },  { &gameplay_keep_Anim_00326C, 1.0f, 0, -1, 0, -4 }, { &gameplay_keep_Anim_0033E4, 1.0f, 0, -1, 0, -4 },
+    { &gameplay_keep_Anim_003780, 1.0f, 0, -1, 0, 0 },  { &gameplay_keep_Anim_003780, 1.0f, 0, -1, 0, -4 }, { &gameplay_keep_Anim_002950, 1.0f, 0, -1, 0, 0 },
 };
 
 s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
@@ -184,17 +153,17 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
 
         switch (ENDNK_GET_3(&this->actor)) {
             case ENDNK_GET_3_0:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002848, NULL, this->jointTable, this->morphTable, 11);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_002848, NULL, this->jointTable, this->morphTable, 11);
                 func_80A514F0(&this->skelAnime, 7);
                 break;
 
             case ENDNK_GET_3_1:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_060023B8, NULL, this->jointTable, this->morphTable, 10);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_0023B8, NULL, this->jointTable, this->morphTable, 10);
                 func_80A514F0(&this->skelAnime, 18);
                 break;
 
             case ENDNK_GET_3_2:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, NULL, this->jointTable, this->morphTable, 10);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_002468, NULL, this->jointTable, this->morphTable, 10);
                 func_80A514F0(&this->skelAnime, 35);
                 break;
         }
@@ -329,9 +298,9 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
     static TexturePtr D_80A5245C[] = {
-        D_06001680,
-        D_06001700,
-        D_06001780,
+        gameplay_keep_Tex_001680,
+        gameplay_keep_Tex_001700,
+        gameplay_keep_Tex_001780,
     };
     s32 pad;
 

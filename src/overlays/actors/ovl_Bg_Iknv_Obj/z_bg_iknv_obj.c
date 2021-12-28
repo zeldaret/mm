@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_iknv_obj.h"
+#include "objects/object_iknv_obj/object_iknv_obj.h"
 
 #define FLAGS 0x00000010
 
@@ -20,11 +21,6 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx);
 void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, GlobalContext* globalCtx);
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx);
 
-extern CollisionHeader D_060119D4;
-extern CollisionHeader D_06012CA4;
-extern Gfx D_06011880[];
-extern Gfx D_060129C8[];
-extern Gfx D_06013058[];
 
 const ActorInit Bg_Iknv_Obj_InitVars = {
     ACTOR_BG_IKNV_OBJ,
@@ -67,24 +63,24 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = BgIknvObj_DoNothing;
     switch (IKNV_OBJ_TYPE(this)) {
         case IKNV_OBJ_WATERWHEEL:
-            this->displayListPtr = D_06013058;
+            this->displayListPtr = object_iknv_obj_DL_013058;
             this->actionFunc = BgIknvObj_UpdateWaterwheel;
             this->dyna.actor.flags |= 0x100000;
             this->dyna.actor.flags |= 0x10;
             break;
         case IKNV_OBJ_RAISED_DOOR:
-            this->displayListPtr = D_06011880;
+            this->displayListPtr = object_iknv_obj_DL_011880;
             DynaPolyActor_Init(&this->dyna, 0);
-            CollisionHeader_GetVirtual(&D_060119D4, &colHeader);
+            CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_0119D4, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             this->actionFunc = BgIknvObj_UpdateRaisedDoor;
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
             break;
         case IKNV_OBJ_SAKON_DOOR:
-            this->displayListPtr = D_060129C8;
+            this->displayListPtr = object_iknv_obj_DL_0129C8;
             this->actionFunc = BgIknvObj_UpdateSakonDoor;
             DynaPolyActor_Init(&this->dyna, 0);
-            CollisionHeader_GetVirtual(&D_06012CA4, &colHeader);
+            CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_012CA4, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);

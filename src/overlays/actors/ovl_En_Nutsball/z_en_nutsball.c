@@ -6,6 +6,7 @@
 
 #include "z_en_nutsball.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -174,6 +175,6 @@ void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
     Matrix_InsertZRotation_s(this->actor.home.rot.z, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_04058BA0);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_058BA0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

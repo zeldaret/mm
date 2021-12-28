@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_milk_bin.h"
+#include "objects/object_obj_milk_bin/object_obj_milk_bin.h"
 
 #define FLAGS 0x00000000
 
@@ -16,7 +17,6 @@ void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 // gMilkBinMilkJarDL
-extern Gfx D_060004B0[];
 
 const ActorInit Obj_Milk_Bin_InitVars = {
     ACTOR_OBJ_MILK_BIN,
@@ -100,6 +100,6 @@ void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
 
     if (!(this->disableDraw & 1)) {
-        func_800BDFC0(globalCtx, D_060004B0);
+        func_800BDFC0(globalCtx, object_obj_milk_bin_DL_0004B0);
     }
 }

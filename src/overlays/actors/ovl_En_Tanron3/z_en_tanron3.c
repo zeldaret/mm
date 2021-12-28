@@ -6,6 +6,7 @@
 
 #include "z_en_tanron3.h"
 #include "overlays/actors/ovl_Boss_03/z_boss_03.h"
+#include "objects/object_boss03/object_boss03.h"
 
 #define FLAGS 0x00000035
 
@@ -78,8 +79,6 @@ static ColliderCylinderInit sUnusedCylinderInit = {
     { 20, 20, -10, { 0, 0, 0 } },
 };
 
-extern FlexSkeletonHeader D_0600DA20;
-extern AnimationHeader D_0600DAAC;
 
 void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
     UnkTanron3Effect* effectPtr = (UnkTanron3Effect*)globalCtx->specialEffects;
@@ -109,7 +108,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
     Collider_InitAndSetCylinder(globalCtx, &this->atCollider, &this->actor, &sCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DA20, &D_0600DAAC, this->jointTable, this->morphTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boss03_Skel_00DA20, &object_boss03_Anim_00DAAC, this->jointTable, this->morphTable, 10);
     Actor_SetScale(&this->actor, 0.02f);
     EnTanron3_SetupLive(this, globalCtx);
     this->actor.flags &= ~1;
@@ -143,7 +142,7 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
 
 void EnTanron3_SetupLive(EnTanron3* this, GlobalContext* globalCtx) {
     this->actionFunc = EnTanron3_Live;
-    Animation_MorphToLoop(&this->skelAnime, &D_0600DAAC, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss03_Anim_00DAAC, -10.0f);
     this->rotationStep = 0;
     this->rotationScale = 5;
     this->workTimer[TANRON3_WORK_TIMER_PICK_NEW_DEVIATION] = 50;

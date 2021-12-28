@@ -1,7 +1,6 @@
 ﻿<Root>
     <File Name="object_hanareyama_obj" Segment="6">
-        <!-- <Blob Name="object_hanareyama_obj_Blob_000000" Size="0x8" Offset="0x0" /> -->
-        <DList Name="object_hanareyama_obj_DL_000008" Offset="0x8" />
+        <DList Name="object_hanareyama_obj_DL_000000" Offset="0x0" />
         <DList Name="object_hanareyama_obj_DL_000020" Offset="0x20" />
         <DList Name="object_hanareyama_obj_DL_000D70" Offset="0xD70" />
         <DList Name="object_hanareyama_obj_DL_000E30" Offset="0xE30" />
@@ -59,7 +58,7 @@
         <DList Name="object_hanareyama_obj_DL_003578" Offset="0x3578" />
         <Texture Name="object_hanareyama_obj_Tex_003638" OutName="tex_003638" Format="i4" Width="64" Height="64" Offset="0x3638" />
         <Texture Name="object_hanareyama_obj_Tex_003E38" OutName="tex_003E38" Format="rgba16" Width="32" Height="32" Offset="0x3E38" />
-        <!-- <Blob Name="object_hanareyama_obj_Blob_004638" Size="0x228" Offset="0x4638" /> -->
+        <Blob Name="object_hanareyama_obj_Blob_004638" Size="0xD8" Offset="0x4638" /> <!-- array of 54 displaylist pointers --> 
         <Collision Name="object_hanareyama_obj_Colheader_004D8C" Offset="0x4D8C" />
     </File>
 </Root>

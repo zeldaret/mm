@@ -5,6 +5,7 @@
  */
 
 #include "z_en_guruguru.h"
+#include "objects/object_fu/object_fu.h"
 
 #define FLAGS 0x00000019
 
@@ -24,15 +25,8 @@ void func_80BC73F4(EnGuruguru* this);
 void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx);
 void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_06006C90;
 extern ColliderCylinderInit D_80BC79A0;
-extern AnimationHeader D_06000B04;
-extern AnimationHeader D_0600057C;
 
-extern TexturePtr D_06005F20;
-extern TexturePtr D_06006320;
-extern TexturePtr D_06006720;
-extern TexturePtr D_06006920;
 
 const ActorInit En_Guruguru_InitVars = {
     ACTOR_EN_GURUGURU,
@@ -69,18 +63,18 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 20, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BC79CC[] = { &D_06000B04, &D_0600057C };
+static AnimationHeader* D_80BC79CC[] = { &object_fu_Anim_000B04, &object_fu_Anim_00057C };
 static u8 D_80BC79D4[] = { 0 };
 static f32 D_80BC79D8[] = { 1.0f, 1.0f };
-static TexturePtr sEyeTextures[] = { D_06005F20, D_06006320 };
-static TexturePtr sMouthTextures[] = { D_06006720, D_06006920 };
+static TexturePtr sEyeTextures[] = { object_fu_Tex_005F20, object_fu_Tex_006320 };
+static TexturePtr sMouthTextures[] = { object_fu_Tex_006720, object_fu_Tex_006920 };
 
 void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGuruguru* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06006C90, &D_06000B04, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fu_Skel_006C90, &object_fu_Anim_000B04, this->jointTable, this->morphTable, 16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);

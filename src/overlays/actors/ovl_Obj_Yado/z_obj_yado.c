@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_yado.h"
+#include "objects/object_yado_obj/object_yado_obj.h"
 
 #define FLAGS 0x00000030
 
@@ -33,15 +34,12 @@ static InitChainEntry sInitChain[] = {
 
 AnimatedMaterial* D_80C16470;
 
-extern Gfx D_06000320[];
-extern Gfx D_06000430[];
-extern AnimatedMaterial D_060012E8;
 
 void ObjYado_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjYado* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    D_80C16470 = (AnimatedMaterial*)Lib_SegmentedToVirtual(&D_060012E8);
+    D_80C16470 = (AnimatedMaterial*)Lib_SegmentedToVirtual(&object_yado_obj_Matanimheader_0012E8);
     this->isNight = gSaveContext.isNight;
 }
 
@@ -69,8 +67,8 @@ void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     AnimatedMat_Draw(globalCtx, D_80C16470);
-    func_800BDFC0(globalCtx, D_06000430);
-    func_800BE03C(globalCtx, D_06000320);
+    func_800BDFC0(globalCtx, object_yado_obj_DL_000430);
+    func_800BE03C(globalCtx, object_yado_obj_DL_000320);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

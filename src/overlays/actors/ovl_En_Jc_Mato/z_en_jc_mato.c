@@ -5,6 +5,7 @@
  */
 
 #include "z_en_jc_mato.h"
+#include "objects/object_tru/object_tru.h"
 
 #define FLAGS 0x00004030
 
@@ -86,7 +87,6 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-extern Gfx D_06000390[];
 
 s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.center.x = this->pos.x;
@@ -162,7 +162,7 @@ void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000390);
+    gSPDisplayList(POLY_OPA_DISP++, object_tru_DL_000390);
     Matrix_MultiplyVector3fByState(&movement, &this->pos);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

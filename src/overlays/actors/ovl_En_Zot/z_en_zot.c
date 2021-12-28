@@ -5,6 +5,7 @@
  */
 
 #include "z_en_zot.h"
+#include "objects/object_zo/object_zo.h"
 
 #define FLAGS 0x00000019
 
@@ -30,20 +31,6 @@ void func_80B990A4(EnZot* this, GlobalContext* globalCtx);
 void func_80B992C0(EnZot* this, GlobalContext* globalCtx);
 void func_80B99384(EnZot* this, GlobalContext* globalCtx);
 
-extern AnimationHeader D_06002898;
-extern AnimationHeader D_06004248;
-extern TexturePtr D_060050A0;
-extern TexturePtr D_060058A0;
-extern TexturePtr D_060060A0;
-extern FlexSkeletonHeader D_0600D208;
-extern AnimationHeader D_0600DE20;
-extern AnimationHeader D_0600DF54;
-extern AnimationHeader D_0600E400;
-extern AnimationHeader D_0600EDF0;
-extern AnimationHeader D_0600F4E8;
-extern AnimationHeader D_0600FDF0;
-extern AnimationHeader D_06010B18;
-extern AnimationHeader D_06011424;
 
 const ActorInit En_Zot_InitVars = {
     ACTOR_EN_ZOT,
@@ -100,8 +87,8 @@ void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80B97100;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D208, &D_06004248, this->jointTable, this->morphTable, 20);
-    Animation_PlayLoop(&this->skelAnime, &D_0600DE20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zo_Skel_00D208, &object_zo_Anim_004248, this->jointTable, this->morphTable, 20);
+    Animation_PlayLoop(&this->skelAnime, &object_zo_Anim_00DE20);
     this->unk_2F0 = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -249,8 +236,8 @@ void EnZot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80B96BEC(EnZot* this, s16 arg1, u8 arg2) {
     static AnimationHeader* sAnimations[] = {
-        &D_0600DE20, &D_06002898, &D_0600F4E8, &D_0600E400, &D_0600FDF0,
-        &D_06010B18, &D_06011424, &D_0600EDF0, &D_0600DF54, &D_0600DF54,
+        &object_zo_Anim_00DE20, &object_zo_Anim_002898, &object_zo_Anim_00F4E8, &object_zo_Anim_00E400, &object_zo_Anim_00FDF0,
+        &object_zo_Anim_010B18, &object_zo_Anim_011424, &object_zo_Anim_00EDF0, &object_zo_Anim_00DF54, &object_zo_Anim_00DF54,
     };
 
     if ((arg1 >= 0) && (arg1 < 10)) {
@@ -1398,9 +1385,9 @@ void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
 void EnZot_Draw(Actor* thisx, GlobalContext* globalCtx) {
     TexturePtr sp4C[] = {
-        &D_060050A0,
-        &D_060058A0,
-        &D_060060A0,
+        &object_zo_Tex_0050A0,
+        &object_zo_Tex_0058A0,
+        &object_zo_Tex_0060A0,
     };
     EnZot* this = THIS;
 

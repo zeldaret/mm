@@ -6,6 +6,7 @@
 
 #include "z_obj_kibako2.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
+#include "objects/object_kibako2/object_kibako2.h"
 
 #define FLAGS 0x00000000
 
@@ -57,9 +58,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-extern Gfx D_06000960[];
-extern CollisionHeader D_06000B70;
-extern Gfx D_06001040[];
 
 s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
@@ -103,7 +101,7 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
             phi_s0 = 0x20;
         }
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -200, phi_s0, 28, 2, 0, (Rand_ZeroOne() * 30.0f) + 5.0f,
-                             0, 0, 70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, D_06001040);
+                             0, 0, 70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, object_kibako2_DL_001040);
     }
     func_800BBFB0(globalCtx, thisPos, 90.0f, 6, 100, 160, 1);
 }
@@ -152,7 +150,7 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000B70);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kibako2_Colheader_000B70);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     this->dyna.actor.home.rot.z = 0;
@@ -250,5 +248,5 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000960);
+    func_800BDFC0(globalCtx, object_kibako2_DL_000960);
 }

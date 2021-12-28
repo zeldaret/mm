@@ -54,7 +54,15 @@
         <Texture Name="object_ma1_Tex_00FA48" OutName="tex_00FA48" Format="ci8" Width="16" Height="16" Offset="0xFA48" />
         <Texture Name="object_ma1_Tex_00FB48" OutName="tex_00FB48" Format="ci8" Width="64" Height="16" Offset="0xFB48" />
         <Texture Name="object_ma1_Tex_00FF48" OutName="tex_00FF48" Format="ci8" Width="8" Height="16" Offset="0xFF48" />
-        <!-- <Blob Name="object_ma1_Blob_00FFC8" Size="0x3800" Offset="0xFFC8" /> -->
+        <Texture Name="object_ma1_Tex_00FFC8" OutName="tex_00FFC8" Format="rgba16" Width="32" Height="32" Offset="0xFFC8" />
+        <Texture Name="object_ma1_Tex_0107C8" OutName="tex_0107C8" Format="rgba16" Width="32" Height="32" Offset="0x107C8" />
+        <Texture Name="object_ma1_Tex_010FC8" OutName="tex_010FC8" Format="rgba16" Width="32" Height="32" Offset="0x10FC8" />
+        <Texture Name="object_ma1_Tex_0117C8" OutName="tex_0117C8" Format="rgba16" Width="32" Height="32" Offset="0x117C8" />
+        <Texture Name="object_ma1_Tex_011FC8" OutName="tex_011FC8" Format="rgba16" Width="32" Height="32" Offset="0x11FC8" />
+        <Texture Name="object_ma1_Tex_0127C8" OutName="tex_0127C8" Format="rgba16" Width="32" Height="16" Offset="0x127C8" />
+        <Texture Name="object_ma1_Tex_012BC8" OutName="tex_012BC8" Format="rgba16" Width="32" Height="16" Offset="0x12BC8" />
+        <Texture Name="object_ma1_Tex_012FC8" OutName="tex_012FC8" Format="rgba16" Width="32" Height="16" Offset="0x12FC8" />
+        <Texture Name="object_ma1_Tex_0133C8" OutName="tex_0133C8" Format="rgba16" Width="32" Height="16" Offset="0x133C8" />
         <Limb Name="object_ma1_Standardlimb_0137C8" Type="Standard" Offset="0x137C8" />
         <Limb Name="object_ma1_Standardlimb_0137D4" Type="Standard" Offset="0x137D4" />
         <Limb Name="object_ma1_Standardlimb_0137E0" Type="Standard" Offset="0x137E0" />

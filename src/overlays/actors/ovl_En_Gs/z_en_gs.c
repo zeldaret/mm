@@ -5,6 +5,8 @@
  */
 
 #include "z_en_gs.h"
+#include "objects/object_gs/object_gs.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x02000019
 
@@ -35,10 +37,6 @@ s32 func_809995A4(EnGs* this, GlobalContext* globalCtx);
 void func_80999A8C(EnGs* this, GlobalContext* globalCtx);
 void func_80999AC0(EnGs* this);
 
-extern Gfx D_0407D590[];
-extern Gfx D_06000950[];
-extern Gfx D_060009D0[];
-extern Gfx D_06000A60[];
 
 const ActorInit En_Gs_InitVars = {
     ACTOR_EN_GS,
@@ -1086,10 +1084,10 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000950);
+    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000950);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_1FA.r, this->unk_1FA.g, this->unk_1FA.b, 255);
-    gSPDisplayList(POLY_OPA_DISP++, D_060009D0);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000A60);
+    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_0009D0);
+    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000A60);
 
     Matrix_StatePop();
 
@@ -1103,7 +1101,7 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-        gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -6,6 +6,7 @@
 
 #include "z_en_dekunuts.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
+#include "objects/object_dekunuts/object_dekunuts.h"
 
 #define FLAGS 0x00000005
 
@@ -38,19 +39,6 @@ void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx);
 void func_808BE680(EnDekunuts* this);
 void func_808BE6C4(EnDekunuts* this, GlobalContext* globalCtx);
 
-extern AnimationHeader D_06000168;
-extern Gfx D_06001E50[];
-extern Gfx D_06001F50[];
-extern SkeletonHeader D_06002468;
-extern AnimationHeader D_0600259C;
-extern AnimationHeader D_06002A5C;
-extern AnimationHeader D_06002BD4;
-extern AnimationHeader D_06002DD4;
-extern AnimationHeader D_06002FA4;
-extern AnimationHeader D_06003180;
-extern AnimationHeader D_0600326C;
-extern AnimationHeader D_060033E4;
-extern AnimationHeader D_06003780;
 
 const ActorInit En_Dekunuts_InitVars = {
     ACTOR_EN_DEKUNUTS,
@@ -132,7 +120,7 @@ void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, &D_0600326C, this->jointTable, this->morphTable, 10);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, &object_dekunuts_Anim_00326C, this->jointTable, this->morphTable, 10);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_194 = ENDEKUNUTS_GET_FF00(&this->actor);
@@ -178,7 +166,7 @@ void func_808BD3B4(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BD428(EnDekunuts* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &D_06003180, 0.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_dekunuts_Anim_003180, 0.0f);
     this->unk_190 = Rand_S16Offset(100, 50);
     this->collider.dim.height = 5;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
@@ -233,7 +221,7 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BD78C(EnDekunuts* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_06002FA4);
+    Animation_PlayLoop(&this->skelAnime, &object_dekunuts_Anim_002FA4);
     this->unk_190 = 2;
     this->actionFunc = func_808BD7D4;
 }
@@ -253,7 +241,7 @@ void func_808BD7D4(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BD870(EnDekunuts* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_0600326C, -3.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_dekunuts_Anim_00326C, -3.0f);
     if (this->actionFunc == func_808BDA4C) {
         this->unk_190 = 4098;
     } else {
@@ -292,7 +280,7 @@ void func_808BD8D8(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BDA08(EnDekunuts* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_06000168);
+    Animation_PlayOnce(&this->skelAnime, &object_dekunuts_Anim_000168);
     this->unk_190 = this->unk_194;
     this->actionFunc = func_808BDA4C;
 }
@@ -336,7 +324,7 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_THROW);
         }
     } else if ((this->unk_190 >= 2) && Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_06000168, -3.0f);
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_dekunuts_Anim_000168, -3.0f);
         if (this->unk_190 != 0) {
             this->unk_190--;
         }
@@ -344,14 +332,14 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BDC9C(EnDekunuts* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06002A5C, -5.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dekunuts_Anim_002A5C, -5.0f);
     this->unk_190 = 0;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
     this->actionFunc = func_808BDD54;
 }
 
 void func_808BDCF0(EnDekunuts* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06002A5C, -5.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dekunuts_Anim_002A5C, -5.0f);
     this->collider.base.acFlags &= ~AC_ON;
     this->unk_190 = 80;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
@@ -379,7 +367,7 @@ void func_808BDD54(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BDE7C(EnDekunuts* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06002DD4, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dekunuts_Anim_002DD4, -3.0f);
     this->collider.dim.height = 37;
     this->actor.colChkInfo.mass = 50;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
@@ -399,7 +387,7 @@ void func_808BDEF8(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BDF60(EnDekunuts* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_06003780);
+    Animation_PlayLoop(&this->skelAnime, &object_dekunuts_Anim_003780);
     this->unk_190 = 2;
     this->unk_18C = 0;
     this->collider.base.acFlags |= AC_ON;
@@ -456,7 +444,7 @@ void func_808BDFB8(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BE1CC(EnDekunuts* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_060033E4);
+    Animation_PlayLoop(&this->skelAnime, &object_dekunuts_Anim_0033E4);
     this->unk_190 = 3;
     this->actor.speedXZ = 0.0f;
     if (this->unk_18D != 0) {
@@ -479,7 +467,7 @@ void func_808BE22C(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BE294(EnDekunuts* this, s32 arg1) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600259C, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dekunuts_Anim_00259C, -3.0f);
     if (this->actor.params == ENDEKUNUTS_GET_FF00_0) {
         this->actor.speedXZ = 10.0f;
         if (arg1 != 0) {
@@ -492,7 +480,7 @@ void func_808BE294(EnDekunuts* this, s32 arg1) {
     this->actionFunc = func_808BE358;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_CUTBODY);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&D_0600259C));
+    func_800BCB70(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&object_dekunuts_Anim_00259C));
 }
 
 void func_808BE358(EnDekunuts* this, GlobalContext* globalCtx) {
@@ -531,7 +519,7 @@ void func_808BE3FC(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BE484(EnDekunuts* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_06002BD4);
+    Animation_PlayOnce(&this->skelAnime, &object_dekunuts_Anim_002BD4);
     this->actionFunc = func_808BE4D4;
     this->actor.speedXZ = 0.0f;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DEAD);
@@ -554,13 +542,13 @@ void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx) {
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0xE0);
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ETCETERA, this->actor.home.pos.x, this->actor.home.pos.y,
                     this->actor.home.pos.z, 0, this->actor.home.rot.y, 0, 0x80);
-        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, 64, 10, D_06001F50);
+        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, 64, 10, object_dekunuts_DL_001F50);
         Actor_MarkForDeath(&this->actor);
     }
 }
 
 void func_808BE680(EnDekunuts* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_0600326C, -3.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_dekunuts_Anim_00326C, -3.0f);
     this->actionFunc = func_808BE6C4;
 }
 
@@ -747,7 +735,7 @@ void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(globalCtx);
     }
-    func_800BDFC0(globalCtx, D_06001E50);
+    func_800BDFC0(globalCtx, object_dekunuts_DL_001E50);
     func_800BE680(globalCtx, &this->actor, this->unk_21C, 8, this->unk_214, this->unk_218, this->unk_210,
                   this->unk_18E);
 }

@@ -82,10 +82,11 @@ static f32 sLightRayMaxScale[] = {
 };
 
 static Gfx* sSplashTex[] = {
-    D_040378F0, D_04037DF0, D_040382F0, D_040387F0, D_04038CF0, D_040391F0, D_040396F0, D_04039BF0, NULL, NULL, NULL,
+    gameplay_keep_Tex_0378F0, gameplay_keep_Tex_037DF0, gameplay_keep_Tex_0382F0, gameplay_keep_Tex_0387F0, gameplay_keep_Tex_038CF0, gameplay_keep_Tex_0391F0, gameplay_keep_Tex_0396F0, gameplay_keep_Tex_039BF0, NULL, NULL, NULL,
 };
 
 #include "overlays/ovl_En_Clear_Tag/ovl_En_Clear_Tag.c"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 /**
  * Creates a debris effect.
@@ -820,7 +821,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 Matrix_SetCurrentState(&mtxF);
                 Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_04030100);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_030100);
             }
         }
     }
@@ -986,7 +987,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                         Matrix_RotateStateAroundXAxis(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
                         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        gSPDisplayList(POLY_XLU_DISP++, D_0403A0F0);
+                        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_03A0F0);
                     }
                 }
             }

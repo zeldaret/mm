@@ -5,6 +5,7 @@
  */
 
 #include "z_en_cow.h"
+#include "objects/object_cow/object_cow.h"
 
 #define FLAGS 0x00000009
 
@@ -61,12 +62,6 @@ static ColliderCylinderInit sCylinderInit = {
 
 Vec3f D_8099D63C = { 0.0f, -1300.0f, 1100.0f };
 
-extern AnimationHeader D_060001CC;    // gCowBodyChewAnim
-extern FlexSkeletonHeader D_06004010; // gCowBodySkel
-extern AnimationHeader D_06004264;    // gCowBodyMoveHeadAnim
-extern AnimationHeader D_06004348;    // gCowTailIdleAnim
-extern FlexSkeletonHeader D_06004C30; // gCowTailSkel
-extern AnimationHeader D_06004E98;    // gCowTailSwishAnim
 
 void EnCow_RotatePoint(Vec3f* vec, s16 angle) {
     f32 x = (Math_CosS(angle) * vec->x) + (Math_SinS(angle) * vec->z);
@@ -113,9 +108,9 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
     switch (EN_COW_TYPE(thisx)) {
         case EN_COW_TYPE_DEFAULT:
         case EN_COW_TYPE_ABDUCTED:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004010, NULL, this->jointTable, this->morphTable,
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cow_Skel_004010, NULL, this->jointTable, this->morphTable,
                                COW_LIMB_MAX);
-            Animation_PlayLoop(&this->skelAnime, &D_060001CC);
+            Animation_PlayLoop(&this->skelAnime, &object_cow_Anim_0001CC);
 
             Collider_InitAndSetCylinder(globalCtx, &this->colliders[0], &this->actor, &sCylinderInit);
             Collider_InitAndSetCylinder(globalCtx, &this->colliders[1], &this->actor, &sCylinderInit);
@@ -141,9 +136,9 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_801A5080(4);
             break;
         case EN_COW_TYPE_TAIL:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004C30, NULL, this->jointTable, this->morphTable,
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cow_Skel_004C30, NULL, this->jointTable, this->morphTable,
                                COW_LIMB_MAX);
-            Animation_PlayLoop(&this->skelAnime, &D_06004348);
+            Animation_PlayLoop(&this->skelAnime, &object_cow_Anim_004348);
 
             this->actor.update = EnCow_UpdateTail;
             this->actor.draw = EnCow_DrawTail;
@@ -177,13 +172,13 @@ void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
         this->animationTimer--;
     } else {
         this->animationTimer = Rand_ZeroFloat(500.0f) + 40.0f;
-        Animation_Change(&this->skelAnime, &D_060001CC, 1.0f, this->skelAnime.curFrame,
-                         Animation_GetLastFrame(&D_060001CC), ANIMMODE_ONCE, 1.0f);
+        Animation_Change(&this->skelAnime, &object_cow_Anim_0001CC, 1.0f, this->skelAnime.curFrame,
+                         Animation_GetLastFrame(&object_cow_Anim_0001CC), ANIMMODE_ONCE, 1.0f);
     }
     if (this->actor.xzDistToPlayer < 150.0f) {
         if (!(this->flags & EN_COW_FLAG_PLAYER_HAS_APPROACHED)) {
             this->flags |= EN_COW_FLAG_PLAYER_HAS_APPROACHED;
-            if (this->skelAnime.animation == &D_060001CC) {
+            if (this->skelAnime.animation == &object_cow_Anim_0001CC) {
                 this->animationTimer = 0;
             }
         }
@@ -320,15 +315,15 @@ void EnCow_DoTail(EnCow* this, GlobalContext* globalCtx) {
         this->animationTimer--;
     } else {
         this->animationTimer = Rand_ZeroFloat(200.0f) + 40.0f;
-        Animation_Change(&this->skelAnime, &D_06004348, 1.0f, this->skelAnime.curFrame,
-                         Animation_GetLastFrame(&D_06004348), ANIMMODE_ONCE, 1.0f);
+        Animation_Change(&this->skelAnime, &object_cow_Anim_004348, 1.0f, this->skelAnime.curFrame,
+                         Animation_GetLastFrame(&object_cow_Anim_004348), ANIMMODE_ONCE, 1.0f);
     }
 
     if (this->actor.xzDistToPlayer < 150.0f &&
         ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) > 25000) {
         if (!(this->flags & EN_COW_FLAG_PLAYER_HAS_APPROACHED)) {
             this->flags |= EN_COW_FLAG_PLAYER_HAS_APPROACHED;
-            if (this->skelAnime.animation == &D_06004348) {
+            if (this->skelAnime.animation == &object_cow_Anim_004348) {
                 this->animationTimer = 0;
             }
         }
@@ -350,12 +345,12 @@ void EnCow_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->skelAnime.animation == &D_060001CC) {
+        if (this->skelAnime.animation == &object_cow_Anim_0001CC) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_COW_CRY);
-            Animation_Change(&this->skelAnime, &D_06004264, 1.0f, 0.0f, Animation_GetLastFrame(&D_06004264),
+            Animation_Change(&this->skelAnime, &object_cow_Anim_004264, 1.0f, 0.0f, Animation_GetLastFrame(&object_cow_Anim_004264),
                              ANIMMODE_ONCE, 1.0f);
         } else {
-            Animation_Change(&this->skelAnime, &D_060001CC, 1.0f, 0.0f, Animation_GetLastFrame(&D_060001CC),
+            Animation_Change(&this->skelAnime, &object_cow_Anim_0001CC, 1.0f, 0.0f, Animation_GetLastFrame(&object_cow_Anim_0001CC),
                              ANIMMODE_LOOP, 1.0f);
         }
     }
@@ -391,11 +386,11 @@ void EnCow_UpdateTail(Actor* thisx, GlobalContext* globalCtx) {
     EnCow* this = THIS;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->skelAnime.animation == &D_06004348) {
-            Animation_Change(&this->skelAnime, &D_06004E98, 1.0f, 0.0f, Animation_GetLastFrame(&D_06004E98),
+        if (this->skelAnime.animation == &object_cow_Anim_004348) {
+            Animation_Change(&this->skelAnime, &object_cow_Anim_004E98, 1.0f, 0.0f, Animation_GetLastFrame(&object_cow_Anim_004E98),
                              ANIMMODE_ONCE, 1.0f);
         } else {
-            Animation_Change(&this->skelAnime, &D_06004348, 1.0f, 0.0f, Animation_GetLastFrame(&D_06004348),
+            Animation_Change(&this->skelAnime, &object_cow_Anim_004348, 1.0f, 0.0f, Animation_GetLastFrame(&object_cow_Anim_004348),
                              ANIMMODE_LOOP, 1.0f);
         }
     }
