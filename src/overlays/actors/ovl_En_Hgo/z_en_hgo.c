@@ -258,7 +258,7 @@ void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
 s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
     u32 actionIndex;
 
-    if (func_800EE29C(globalCtx, 0x1E6) != 0) {
+    if (func_800EE29C(globalCtx, 0x1E6)) {
         actionIndex = func_800EE200(globalCtx, 0x1E6);
         if (this->unk_316 != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
             this->unk_316 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
@@ -311,7 +311,7 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
         }
 
         func_800EDF24(&this->actor, globalCtx, actionIndex);
-        return 1;
+        return true;
     }
     if ((globalCtx->csCtx.state == 0) && (((gSaveContext.weekEventReg[75]) & 0x20)) &&
         (this->actionFunc == func_80BD0410)) {
@@ -321,12 +321,12 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
         func_80BD0420(this);
     }
     this->unk_316 = 0x63;
-    return 0;
+    return false;
 }
 
 void func_80BD0B8C(EnHgo* this, GlobalContext* globalCtx) {
     func_800E9250(globalCtx, &this->actor, &this->unk_300, &this->unk_306, this->actor.focus.pos);
-    if (this->unk_30E >= 3) {
+    if (this->unk_30E > 2) {
         this->unk_30E--;
     } else if (this->unk_30E == 2) {
         this->unk_30C = 1;
