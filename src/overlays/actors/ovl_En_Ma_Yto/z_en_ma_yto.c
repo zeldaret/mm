@@ -109,12 +109,6 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-
-
-
-
-// gCremiaWoodenBox
-
 static struct_80B8E1A8 sAnimationInfo[] = {
     { &object_ma2_Anim_00A174, 1.0f, 0, 0.0f }, { &object_ma2_Anim_00A174, 1.0f, 0, -6.0f },  //
     { &object_ma2_Anim_00AF7C, 1.0f, 2, 0.0f }, { &object_ma2_Anim_00AF7C, 1.0f, 2, -6.0f },  //

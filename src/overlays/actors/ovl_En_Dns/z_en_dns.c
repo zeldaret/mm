@@ -604,7 +604,7 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_8092DE1C[] = { &object_dns_Tex_0028E8, &object_dns_Tex_002968, &object_dns_Tex_0029E8, &object_dns_Tex_002968 };
+    static TexturePtr D_8092DE1C[] = { object_dns_Tex_0028E8, object_dns_Tex_002968, object_dns_Tex_0029E8, object_dns_Tex_002968 };
     EnDns* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

@@ -1735,7 +1735,10 @@ void func_80951594(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_80951E30[] = { &object_in2_Tex_0054A8, &object_in2_Tex_005028, &object_in2_Tex_006828, &object_in2_Tex_005028, &object_in2_Tex_005CE8, &object_in2_Tex_006C68 };
+    static TexturePtr D_80951E30[] = { 
+        object_in2_Tex_0054A8, object_in2_Tex_005028, 
+        object_in2_Tex_006828, object_in2_Tex_005028, 
+        object_in2_Tex_005CE8, object_in2_Tex_006C68 };
     EnGm* this = THIS;
 
     if ((this->unk_258 != 0) && (this->unk_262 >= 0)) {

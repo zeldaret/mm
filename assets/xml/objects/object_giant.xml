@@ -23,7 +23,9 @@
         <Texture Name="object_giant_Tex_005780" OutName="tex_005780" Format="ci8" Width="16" Height="16" Offset="0x5780" />
         <Texture Name="object_giant_Tex_005880" OutName="tex_005880" Format="ci8" Width="16" Height="16" Offset="0x5880" />
         <Texture Name="object_giant_Tex_005980" OutName="tex_005980" Format="ci8" Width="16" Height="16" Offset="0x5980" />
-        <!-- <Blob Name="object_giant_Blob_005A80" Size="0x1800" Offset="0x5A80" /> -->
+        <Texture Name="object_giant_Tex_005A80" OutName="tex_005A80" Format="ci8" Width="32" Height="64" Offset="0x5A80" />
+        <Texture Name="object_giant_Tex_006280" OutName="tex_006280" Format="ci8" Width="32" Height="64" Offset="0x6280" />
+        <Texture Name="object_giant_Tex_006A80" OutName="tex_006A80" Format="ci8" Width="32" Height="64" Offset="0x6A80" />
         <Texture Name="object_giant_Tex_007280" OutName="tex_007280" Format="ci8" Width="16" Height="16" Offset="0x7280" />
         <Texture Name="object_giant_Tex_007380" OutName="tex_007380" Format="ci8" Width="16" Height="32" Offset="0x7380" />
         <DList Name="object_giant_DL_007610" Offset="0x7610" />

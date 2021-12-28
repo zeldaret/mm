@@ -719,7 +719,7 @@ void EnToto_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnToto_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    TexturePtr sp4C[] = { &object_zm_Tex_008AE8, &object_zm_Tex_00A068, &object_zm_Tex_00A468 };
+    TexturePtr sp4C[] = { object_zm_Tex_008AE8, object_zm_Tex_00A068, object_zm_Tex_00A468 };
     EnToto* this = THIS;
     s32 pad;
 

@@ -1269,21 +1269,21 @@ void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
 
 void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr D_809C94B8[] = {
-        &object_shn_Tex_005AC8,
-        &object_shn_Tex_0062C8,
-        &object_shn_Tex_0062C8,
+        object_shn_Tex_005AC8,
+        object_shn_Tex_0062C8,
+        object_shn_Tex_0062C8,
     };
     EnSyatekiMan* this = THIS;
     s32 pad;
 
     if (globalCtx->sceneNum == SCENE_SYATEKI_MIZU) {
-        D_809C94B8[0] = &object_shn_Tex_00FB90;
-        D_809C94B8[1] = &object_shn_Tex_010390;
-        D_809C94B8[2] = &object_shn_Tex_010390;
+        D_809C94B8[0] = object_shn_Tex_00FB90;
+        D_809C94B8[1] = object_shn_Tex_010390;
+        D_809C94B8[2] = object_shn_Tex_010390;
     } else {
-        D_809C94B8[0] = &object_shn_Tex_005AC8;
-        D_809C94B8[1] = &object_shn_Tex_0062C8;
-        D_809C94B8[2] = &object_shn_Tex_0062C8;
+        D_809C94B8[0] = object_shn_Tex_005AC8;
+        D_809C94B8[1] = object_shn_Tex_0062C8;
+        D_809C94B8[2] = object_shn_Tex_0062C8;
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

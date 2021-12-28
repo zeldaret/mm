@@ -30,15 +30,6 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 
 void EnMaYts_DrawSleeping(Actor* thisx, GlobalContext* globalCtx);
 
-
-
-
-
-
-// Bow
-
-// Sleeping
-
 const ActorInit En_Ma_Yts_InitVars = {
     ACTOR_EN_MA_YTS,
     ACTORCAT_NPC,

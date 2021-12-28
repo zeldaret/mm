@@ -434,7 +434,7 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
      * 1 = eyes half-closed face
      * 2 = eyes fully closed face
      */
-    static TexturePtr sFaceTextures[] = { object_giant_DL_005A80, object_giant_DL_006280, object_giant_DL_006A80 };
+    static TexturePtr sFaceTextures[] = { object_giant_Tex_005A80, object_giant_Tex_006280, object_giant_Tex_006A80 };
 
     if (this->alpha > 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);

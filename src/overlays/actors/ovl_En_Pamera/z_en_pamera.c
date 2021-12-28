@@ -70,8 +70,6 @@ void func_80BDA288(EnPamera* this);
 void func_80BDA2E0(EnPamera* this, GlobalContext* globalCtx);
 void func_80BDA344(Actor* thisx, GlobalContext* globalCtx);
 
-
-
 const ActorInit En_Pamera_InitVars = {
     ACTOR_EN_PAMERA,
     ACTORCAT_NPC,
@@ -120,11 +118,11 @@ static ActorAnimationEntry sAnimations[] = {
 
 static Vec3f D_80BDA5F0 = { 1000.0f, 0.0f, 0.0f };
 
-static TexturePtr D_80BDA5FC[] = { &object_pamera_Tex_0074E8, &object_pamera_Tex_0078E8 };
+static TexturePtr D_80BDA5FC[] = { object_pamera_Tex_0074E8, object_pamera_Tex_0078E8 };
 
-static TexturePtr D_80BDA604[] = { &object_pamera_Tex_0066E8, &object_pamera_Tex_006AE8, &object_pamera_Tex_006EE8 };
+static TexturePtr D_80BDA604[] = { object_pamera_Tex_0066E8, object_pamera_Tex_006AE8, object_pamera_Tex_006EE8 };
 
-static TexturePtr D_80BDA610[] = { &object_pamera_Tex_0072E8, &object_pamera_Tex_0073E8 };
+static TexturePtr D_80BDA610[] = { object_pamera_Tex_0072E8, object_pamera_Tex_0073E8 };
 
 void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;

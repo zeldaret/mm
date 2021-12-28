@@ -1869,8 +1869,8 @@ void func_80AFABAC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) 
 
 void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr D_80AFB914[] = {
-        &object_mm_Tex_002950,
-        &object_mm_Tex_002750,
+        object_mm_Tex_002950,
+        object_mm_Tex_002750,
     };
     EnPm* this = THIS;
     s32 pad;

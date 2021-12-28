@@ -31,13 +31,15 @@
         <Texture Name="object_fsn_Tex_0056C0" OutName="tex_0056C0" Format="rgba16" Width="16" Height="16" Offset="0x56C0" />
         <Texture Name="object_fsn_Tex_0058C0" OutName="tex_0058C0" Format="rgba16" Width="16" Height="16" Offset="0x58C0" />
         <Texture Name="object_fsn_Tex_005AC0" OutName="tex_005AC0" Format="ci8" Width="16" Height="16" Offset="0x5AC0" />
-        <!-- <Blob Name="object_fsn_Blob_005BC0" Size="0x400" Offset="0x5BC0" /> -->
+        <Texture Name="object_fsn_Tex_005BC0" OutName="tex_005BC0" Format="ci8" Width="32" Height="32" Offset="0x5BC0" />
         <Texture Name="object_fsn_Tex_005FC0" OutName="tex_005FC0" Format="ci8" Width="8" Height="8" Offset="0x5FC0" />
         <Texture Name="object_fsn_Tex_006000" OutName="tex_006000" Format="ci8" Width="16" Height="16" Offset="0x6000" />
         <Texture Name="object_fsn_Tex_006100" OutName="tex_006100" Format="ci8" Width="32" Height="32" Offset="0x6100" />
         <Texture Name="object_fsn_Tex_006500" OutName="tex_006500" Format="ci8" Width="8" Height="8" Offset="0x6500" />
         <Texture Name="object_fsn_Tex_006540" OutName="tex_006540" Format="rgba16" Width="32" Height="32" Offset="0x6540" />
-        <!-- <Blob Name="object_fsn_Blob_006D40" Size="0x4C98" Offset="0x6D40" /> -->
+        <Texture Name="object_fsn_Tex_006D40" OutName="tex_006D40" Format="ci8" Width="32" Height="32" Offset="0x6D40" />
+        <Texture Name="object_fsn_Tex_007140" OutName="tex_007140" Format="ci8" Width="32" Height="32" Offset="0x7140" />
+        <!-- <Blob Name="object_fsn_Blob_007540" Size="0x4498" Offset="0x7540" /> -->
         <Animation Name="object_fsn_Anim_00B9D8" Offset="0xB9D8" />
         <Animation Name="object_fsn_Anim_00C26C" Offset="0xC26C" />
         <Animation Name="object_fsn_Anim_00C58C" Offset="0xC58C" />
@@ -53,7 +55,7 @@
         <!-- <Blob Name="object_fsn_Blob_00FB30" Size="0x3040" Offset="0xFB30" /> -->
         <Animation Name="object_fsn_Anim_012C34" Offset="0x12C34" />
         <Animation Name="object_fsn_Anim_0131FC" Offset="0x131FC" />
-        <!-- <Blob Name="object_fsn_Blob_01320C" Size="0x124" Offset="0x1320C" /> -->
+        <Skeleton Name="object_fsn_Skel_013320" Type="Flex"  LimbType="Standard" Offset="0x13320" />
         <Animation Name="object_fsn_Anim_0138B0" Offset="0x138B0" />
         <Animation Name="object_fsn_Anim_01430C" Offset="0x1430C" />
     </File>

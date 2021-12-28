@@ -1385,9 +1385,9 @@ void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
 void EnZot_Draw(Actor* thisx, GlobalContext* globalCtx) {
     TexturePtr sp4C[] = {
-        &object_zo_Tex_0050A0,
-        &object_zo_Tex_0058A0,
-        &object_zo_Tex_0060A0,
+        object_zo_Tex_0050A0,
+        object_zo_Tex_0058A0,
+        object_zo_Tex_0060A0,
     };
     EnZot* this = THIS;
 

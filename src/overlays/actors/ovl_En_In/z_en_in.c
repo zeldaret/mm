@@ -1510,7 +1510,7 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (limbIndex == 16) {
-        TexturePtr sp38[] = { &object_in_Tex_0035E0, &object_in_Tex_004820, &object_in_Tex_004C20, &object_in_Tex_0043E0 };
+        TexturePtr sp38[] = { object_in_Tex_0035E0, object_in_Tex_004820, object_in_Tex_004C20, object_in_Tex_0043E0 };
         
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp38[this->unk482]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(&object_in_Tex_003520));

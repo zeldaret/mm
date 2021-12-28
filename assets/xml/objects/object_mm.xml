@@ -12,7 +12,8 @@
         <Texture Name="object_mm_Tex_002510" OutName="tex_002510" Format="ci8" Width="8" Height="8" Offset="0x2510" />
         <Texture Name="object_mm_Tex_002550" OutName="tex_002550" Format="ci8" Width="16" Height="16" Offset="0x2550" />
         <Texture Name="object_mm_Tex_002650" OutName="tex_002650" Format="ci8" Width="16" Height="16" Offset="0x2650" />
-        <!-- <Blob Name="object_mm_Blob_002750" Size="0x400" Offset="0x2750" /> -->
+        <Texture Name="object_mm_Tex_002750" OutName="tex_002750" Format="ci8" Width="32" Height="16" Offset="0x2750" />
+        <Texture Name="object_mm_Tex_002950" OutName="tex_002950" Format="ci8" Width="32" Height="16" Offset="0x2950" />
         <Texture Name="object_mm_Tex_002B50" OutName="tex_002B50" Format="ci8" Width="16" Height="16" Offset="0x2B50" />
         <Texture Name="object_mm_Tex_002C50" OutName="tex_002C50" Format="ci8" Width="32" Height="16" Offset="0x2C50" />
         <Texture Name="object_mm_Tex_002E50" OutName="tex_002E50" Format="ci8" Width="16" Height="16" Offset="0x2E50" />

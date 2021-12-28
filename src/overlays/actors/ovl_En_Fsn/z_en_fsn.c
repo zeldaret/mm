@@ -1589,7 +1589,7 @@ void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { &object_fsn_Tex_005BC0, &object_fsn_Tex_006D40, &object_fsn_Tex_007140 };
+    static TexturePtr sEyeTextures[] = { object_fsn_Tex_005BC0, object_fsn_Tex_006D40, object_fsn_Tex_007140 };
     EnFsn* this = THIS;
     s32 pad;
     s16 i;
