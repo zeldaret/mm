@@ -1002,7 +1002,7 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
     s32 pad[2];
 
     func_80BA7C78(this);
-    this->unk_3FE = 99;
+    this->csAction = 99;
     this->actor.flags |= 0x100000;
     this->actor.flags |= 0x10;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
@@ -1021,27 +1021,27 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
 void func_80BA7C78(EnRailgibud* this) {
     switch (ENRAILGIBUD_GET_7F(&this->actor)) {
         case 1:
-            this->unk_3FC = 0x207;
+            this->actorActionCommand = 0x207;
             break;
 
         case 2:
-            this->unk_3FC = 0x208;
+            this->actorActionCommand = 0x208;
             break;
 
         case 3:
-            this->unk_3FC = 0x209;
+            this->actorActionCommand = 0x209;
             break;
 
         case 4:
-            this->unk_3FC = 0x20A;
+            this->actorActionCommand = 0x20A;
             break;
 
         case 5:
-            this->unk_3FC = 0x20B;
+            this->actorActionCommand = 0x20B;
             break;
 
         default:
-            this->unk_3FC = 0x207;
+            this->actorActionCommand = 0x207;
             break;
     }
 }
@@ -1071,10 +1071,10 @@ void func_80BA7D30(EnRailgibud* this, GlobalContext* globalCtx) {
 s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
     u32 sp2C;
 
-    if (func_800EE29C(globalCtx, this->unk_3FC)) {
-        sp2C = func_800EE200(globalCtx, this->unk_3FC);
-        if (this->unk_3FE != globalCtx->csCtx.npcActions[sp2C]->unk0) {
-            this->unk_3FE = globalCtx->csCtx.npcActions[sp2C]->unk0;
+    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
+        sp2C = func_800EE200(globalCtx, this->actorActionCommand);
+        if (this->csAction != globalCtx->csCtx.npcActions[sp2C]->unk0) {
+            this->csAction = globalCtx->csCtx.npcActions[sp2C]->unk0;
             switch (globalCtx->csCtx.npcActions[sp2C]->unk0) {
                 case 1:
                     this->unk_3F0 = 9;
@@ -1113,7 +1113,7 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
             }
         }
 
-        switch (this->unk_3FE) {
+        switch (this->csAction) {
             case 3:
             case 4:
                 if (this->actionFunc == func_80BA7D30) {
@@ -1138,7 +1138,7 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
         return true;
     }
 
-    this->unk_3FE = 99;
+    this->csAction = 99;
     return false;
 }
 

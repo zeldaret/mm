@@ -47,8 +47,8 @@ typedef struct EnRailgibud {
     /* 0x03F6 */ s16 effectTimer;
     /* 0x03F8 */ s16 type;
     /* 0x03FA */ s16 isInvincible;
-    /* 0x03FC */ u16 unk_3FC;
-    /* 0x03FE */ u16 unk_3FE;
+    /* 0x03FC */ u16 actorActionCommand;
+    /* 0x03FE */ u16 csAction;
     /* 0x0400 */ u16 textId;
     /* 0x0402 */ s16 timeInitialized; // unused other than setting it
     /* 0x0404 */ u8 effectType;
