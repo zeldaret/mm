@@ -41,20 +41,6 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Counterweight_Draw(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_TowerGear_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-typedef enum {
-    /*  0 */ OBJ_TOKEIDAI_TYPE_TOWER_GEAR_CLOCK_TOWN,
-    /*  1 */ OBJ_TOKEIDAI_TYPE_UNUSED_WALL,
-    /*  2 */ OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN,
-    /*  3 */ OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_CLOCK_TOWN,
-    /*  4 */ OBJ_TOKEIDAI_TYPE_TOWER_GEAR_TERMINA_FIELD,
-    /*  5 */ OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD,
-    /*  6 */ OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_TERMINA_FIELD,
-    /*  8 */ OBJ_TOKEIDAI_TYPE_TOWER_WALLS_TERMINA_FIELD = 8,
-    /*  9 */ OBJ_TOKEIDAI_TYPE_WALL_CLOCK,
-    /* 10 */ OBJ_TOKEIDAI_TYPE_SMALL_WALL_CLOCK,
-    /* 11 */ OBJ_TOKEIDAI_TYPE_STAIRCASE_INTO_TOWER,
-} ObjTokeidaiType;
-
 const ActorInit Obj_Tokeidai_InitVars = {
     ACTOR_OBJ_TOKEIDAI,
     ACTORCAT_PROP,
