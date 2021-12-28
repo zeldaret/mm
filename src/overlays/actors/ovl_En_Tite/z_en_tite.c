@@ -116,7 +116,7 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 40, 40, MASS_HEAVY };
 
-static TexturePtr D_80896B24[2][] = {
+static TexturePtr D_80896B24[2][3] = {
     { object_tite_Tex_001300, object_tite_Tex_001700, object_tite_Tex_001900 },
     { object_tite_Tex_001B00, object_tite_Tex_001F00, object_tite_Tex_002100 },
 };

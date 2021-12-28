@@ -7,6 +7,7 @@
 #include "z_en_bigslime.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000235
 
@@ -142,7 +143,6 @@ static Vtx sBigslimeDynamicVtx[2][BIGSLIME_NUM_VTX] = {
 // Target data: used to define the shape the dynamic vertices morph to
 static Vtx sBigslimeTargetVtx[BIGSLIME_NUM_VTX] = {
 #include "overlays/ovl_En_Bigslime/sBigslimeTargetVtx.vtx.inc"
-#include "objects/gameplay_keep/gameplay_keep.h"
 };
 
 /*

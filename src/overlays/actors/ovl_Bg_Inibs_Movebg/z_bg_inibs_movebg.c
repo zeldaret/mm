@@ -29,7 +29,7 @@ const ActorInit Bg_Inibs_Movebg_InitVars = {
 
 Gfx* D_80B96560[] = { object_inibs_object_DL_0062D8, object_inibs_object_DL_001DC0 };
 Gfx* D_80B96568[] = { object_inibs_object_DL_006140, object_inibs_object_DL_001C10 };
-AnimatedMaterial* D_80B96570[] = { &object_inibs_object_Matanimheader_006858, &object_inibs_object_Matanimheader_002598 };
+AnimatedMaterial* D_80B96570[] = { object_inibs_object_Matanimheader_006858, object_inibs_object_Matanimheader_002598 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),

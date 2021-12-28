@@ -2,6 +2,7 @@
 #include "vt.h"
 
 #include "assets/code/eff_shield_particle/eff_shield_particle.c"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 void EffectShieldParticle_Init(void* thisx, void* initParamsx) {
     EffectShieldParticle* this = (EffectShieldParticle*)thisx;
@@ -154,7 +155,7 @@ void EffectShieldParticle_Draw(void* thisx, GraphicsContext* gfxCtx) {
         gDPPipeSync(POLY_XLU_DISP++);
         gSPTexture(POLY_XLU_DISP++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
 
-        gDPLoadTextureBlock(POLY_XLU_DISP++, D_04054F20, G_IM_FMT_I, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+        gDPLoadTextureBlock(POLY_XLU_DISP++, gameplay_keep_Tex_054F20, G_IM_FMT_I, G_IM_SIZ_8b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
         gDPSetCombineLERP(POLY_XLU_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0, 0, 0,

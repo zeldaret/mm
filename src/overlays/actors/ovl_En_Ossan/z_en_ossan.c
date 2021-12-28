@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ossan.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_fsn/object_fsn.h"
 #include "objects/object_ani/object_ani.h"
 
@@ -65,18 +66,18 @@ const ActorInit En_Ossan_InitVars = {
 };
 
 static ActorAnimationEntryS sAnimationsCuriosityShopMan[] = {
-    { object_fsn_Anim_012C34, 1.0f, 0, -1, 0, 0 },  { object_fsn_Anim_0131FC, 1.0f, 0, -1, 0, 0 }, { object_fsn_Anim_00C58C, 1.0f, 0, -1, 2, 0 },
-    { object_fsn_Anim_00C58C, -1.0f, 0, -1, 2, 0 }, { object_fsn_Anim_00E3EC, 1.0f, 0, -1, 2, 0 }, { object_fsn_Anim_00F00C, 1.0f, 0, -1, 0, 0 },
-    { object_fsn_Anim_00CB3C, 1.0f, 0, -1, 2, 0 },  { object_fsn_Anim_00D354, 1.0f, 0, -1, 0, 0 }, { object_fsn_Anim_0138B0, 1.0f, 0, -1, 2, 0 },
-    { object_fsn_Anim_01430C, 1.0f, 0, -1, 0, 0 },  { object_fsn_Anim_00B9D8, 1.0f, 0, -1, 2, 0 }, { object_fsn_Anim_00C26C, 1.0f, 0, -1, 0, 0 },
-    { object_fsn_Anim_00DE34, 1.0f, 0, -1, 2, 0 },
+    { &object_fsn_Anim_012C34, 1.0f, 0, -1, 0, 0 },  { &object_fsn_Anim_0131FC, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_00C58C, 1.0f, 0, -1, 2, 0 },
+    { &object_fsn_Anim_00C58C, -1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00F00C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, 2, 0 },  { &object_fsn_Anim_00D354, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_0138B0, 1.0f, 0, -1, 2, 0 },
+    { &object_fsn_Anim_01430C, 1.0f, 0, -1, 0, 0 },  { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C26C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, 2, 0 },
 };
 
 static ActorAnimationEntryS sAnimationsPartTimeWorker[] = {
-    { object_ani_Anim_009D34, 1.0f, 0, -1, 0, -10 }, { object_ani_Anim_009D34, 1.0f, 0, -1, 0, -10 }, { object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },
-    { object_ani_Anim_009D34, -1.0f, 0, -1, 2, 0 },  { object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
-    { object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },   { object_ani_Anim_00A460, 1.0f, 0, -1, 2, -5 },
-    { object_ani_Anim_00A460, 1.0f, 0, -1, 0, -5 },  { object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, -10 }, { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, -10 }, { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },
+    { &object_ani_Anim_009D34, -1.0f, 0, -1, 2, 0 },  { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },   { &object_ani_Anim_00A460, 1.0f, 0, -1, 2, -5 },
+    { &object_ani_Anim_00A460, 1.0f, 0, -1, 0, -5 },  { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
 };
 
 static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };

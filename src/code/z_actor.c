@@ -1,4 +1,5 @@
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
@@ -55,7 +56,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
             Matrix_SetCurrentState(&mtx);
 
-            if (dlist != D_04076BC0) {
+            if (dlist != gameplay_keep_DL_076BC0) {
                 Matrix_RotateY((f32)actor->shape.rot.y * (M_PI / 32768), MTXMODE_APPLY);
             }
 
@@ -80,7 +81,7 @@ void func_800B3FC0(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
         func_800B4AEC(globalCtx, actor, 50.0f);
     }
 
-    ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, NULL);
+    ActorShadow_Draw(actor, lights, globalCtx, gameplay_keep_DL_076BC0, NULL);
 }
 
 /* ActorShadow_DrawSquare */
@@ -89,17 +90,17 @@ void func_800B4024(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
         func_800B4AEC(globalCtx, actor, 50.0f);
     }
 
-    ActorShadow_Draw(actor, lights, globalCtx, D_04075A40, NULL);
+    ActorShadow_Draw(actor, lights, globalCtx, gameplay_keep_DL_075A40, NULL);
 }
 
 /* ActorShadow_DrawWhiteCircle */
 void func_800B4088(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
-    ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, &D_801AEC80);
+    ActorShadow_Draw(actor, lights, globalCtx, gameplay_keep_DL_076BC0, &D_801AEC80);
 }
 
 /* ActorShadow_DrawHorse */
 void func_800B40B8(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
-    ActorShadow_Draw(actor, lights, globalCtx, D_04077480, NULL);
+    ActorShadow_Draw(actor, lights, globalCtx, gameplay_keep_DL_077480, NULL);
 }
 
 /* ActorShadow_DrawFoot */
@@ -122,7 +123,7 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
     Matrix_Scale(arg5, 1.0f, arg5 * arg6, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-    gSPDisplayList(POLY_OPA_DISP++, D_04075B30);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_075B30);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -631,10 +631,9 @@ void func_80B3F6EC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) 
 }
 
 void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
-    static AnimationHeader* D_80B3FE58[] = {
-        &object_dai_Tex_0107B0, &object_dai_Tex_010FB0, &object_dai_Tex_0117B0, &object_dai_Tex_010FB0, &object_dai_Tex_011FB0, &object_dai_Tex_0127B0,
+    static TexturePtr D_80B3FE58[] = {
+        object_dai_Tex_0107B0, object_dai_Tex_010FB0, object_dai_Tex_0117B0, object_dai_Tex_010FB0, object_dai_Tex_011FB0, object_dai_Tex_0127B0,
     };
-
     s32 pad;
 
     if (globalCtx->actorCtx.unkB != 0) {
@@ -669,8 +668,9 @@ void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
-    static AnimationHeader* D_80B3FE70[] = {
-        &object_dai_Tex_0107B0, &object_dai_Tex_010FB0, &object_dai_Tex_0117B0, &object_dai_Tex_010FB0, &object_dai_Tex_011FB0, &object_dai_Tex_0127B0,
+    static TexturePtr D_80B3FE70[] = {
+        object_dai_Tex_0107B0, object_dai_Tex_010FB0, object_dai_Tex_0117B0, 
+        object_dai_Tex_010FB0, object_dai_Tex_011FB0, object_dai_Tex_0127B0,
     };
 
     s32 pad;

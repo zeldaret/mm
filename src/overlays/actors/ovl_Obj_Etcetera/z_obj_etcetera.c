@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_etcetera.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -244,11 +245,11 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_011518, &gameplay_keep_Anim_00EB7C, this->jointTable,
                                this->morphTable, 11);
-                this->dList = &gameplay_keep_DL_00ED80;
+                this->dList = gameplay_keep_DL_00ED80;
                 break;
             case DEKU_FLOWER_TYPE_GOLD:
             case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
-                this->dList = &gameplay_keep_DL_011BD0;
+                this->dList = gameplay_keep_DL_011BD0;
                 SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_0127E8, &gameplay_keep_Anim_00EB7C, this->jointTable,
                                this->morphTable, 11);
                 this->collider.dim.height = 20;

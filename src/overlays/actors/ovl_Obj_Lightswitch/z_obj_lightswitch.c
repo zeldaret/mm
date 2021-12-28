@@ -68,10 +68,10 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 // different face addresses for (sleep -> waking -> awake) of light switch face
-static Gfx* sLightswitchFaceGfx[] = {
-    object_lightswitch_DL_000C20,
-    object_lightswitch_DL_000420,
-    object_lightswitch_DL_001420,
+static TexturePtr sLightswitchFaceGfx[] = {
+    object_lightswitch_Tex_000C20,
+    object_lightswitch_Tex_000420,
+    object_lightswitch_Tex_001420,
 };
 
 static Color_RGBA8 sLightswitchEffectPrimColor = { 255, 255, 160, 160 };

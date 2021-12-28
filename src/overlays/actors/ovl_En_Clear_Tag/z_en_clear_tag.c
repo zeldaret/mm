@@ -5,6 +5,7 @@
  */
 
 #include "z_en_clear_tag.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000035
 
@@ -81,12 +82,11 @@ static f32 sLightRayMaxScale[] = {
     25.0f, 100.0f, 48.0f, 20.0f, 32.0f,
 };
 
-static Gfx* sSplashTex[] = {
+static TexturePtr sSplashTex[] = {
     gameplay_keep_Tex_0378F0, gameplay_keep_Tex_037DF0, gameplay_keep_Tex_0382F0, gameplay_keep_Tex_0387F0, gameplay_keep_Tex_038CF0, gameplay_keep_Tex_0391F0, gameplay_keep_Tex_0396F0, gameplay_keep_Tex_039BF0, NULL, NULL, NULL,
 };
 
 #include "overlays/ovl_En_Clear_Tag/ovl_En_Clear_Tag.c"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 /**
  * Creates a debris effect.

@@ -6,6 +6,12 @@
 #include "prevent_bss_reordering.h"
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_ma1/object_ma1.h"
+#include "objects/object_ma2/object_ma2.h"
+#include "objects/object_dog/object_dog.h"
+#include "objects/object_cow/object_cow.h"
+#include "objects/object_uch/object_uch.h"
 
 #define FLAGS 0x00000010
 
@@ -1187,7 +1193,7 @@ void func_80B44EFC(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 void func_80B44F58(void) {
     s32 i;
-    Gfx** iter;
+    TexturePtr* iter;
 
     if (!D_80B4E968) {
         D_80B4E968 = true;
@@ -1203,7 +1209,7 @@ void func_80B44F58(void) {
 
 void func_80B44FEC(void) {
     s32 i;
-    Gfx** iter;
+    TexturePtr* iter;
 
     if (!D_80B4E994) {
         D_80B4E994 = true;

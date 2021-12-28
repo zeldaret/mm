@@ -9,7 +9,7 @@
 #include "objects/object_zo/object_zo.h"
 #include "objects/object_mastergolon/object_mastergolon.h"
 #include "objects/object_masterzoora/object_masterzoora.h"
-#include "objects/object_oF1d/object_oF1d.h"
+#include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000019

@@ -47,7 +47,7 @@ void BgHakaTomb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, object_haka_obj_Colheader_000EE8);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_haka_obj_Colheader_000EE8);
     func_8013E3B8(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     func_80BD6624(this);
 }

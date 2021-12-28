@@ -121,8 +121,8 @@ void EnDaiku2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80BE6408(EnDaiku2* this, s32 arg1) {
     static AnimationHeader* sAnimations[] = {
-        object_daiku_Anim_002FA0, object_daiku_Anim_00ACD0, object_daiku_Anim_00C92C, object_daiku_Anim_000C44, object_daiku_Anim_00C234, object_daiku_Anim_000600,
-        object_daiku_Anim_001114, object_daiku_Anim_00B690, object_daiku_Anim_001A24, object_daiku_Anim_002134, object_daiku_Anim_00D328,
+        &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C, &object_daiku_Anim_000C44, &object_daiku_Anim_00C234, &object_daiku_Anim_000600,
+        &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_001A24, &object_daiku_Anim_002134, &object_daiku_Anim_00D328,
     };
     static u8 D_80BE7958[] = {
         0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0,

@@ -818,7 +818,7 @@
         <Limb Name="gameplay_keep_Standardlimb_01279C" Type="Standard" Offset="0x1279C" />
         <Limb Name="gameplay_keep_Standardlimb_0127A8" Type="Standard" Offset="0x127A8" />
         <Limb Name="gameplay_keep_Standardlimb_0127B4" Type="Standard" Offset="0x127B4" />
-        <Skeleton Name="gameplay_keep_Skel_0127E8" Type="Flex" LimbType="Standard" Offset="0x127E8" />
+        <Skeleton Name="gameplay_keep_Skel_0127E8" Type="Normal" LimbType="Standard" Offset="0x127E8" />
         <Animation Name="gameplay_keep_Anim_012860" Offset="0x12860" />
         <Animation Name="gameplay_keep_Anim_0128BC" Offset="0x128BC" />
         <Texture Name="gameplay_keep_Tex_0128D0" OutName="tex_0128D0" Format="rgba16" Width="16" Height="128" Offset="0x128D0" />
@@ -937,7 +937,7 @@
         <Limb Name="gameplay_keep_Standardlimb_02AF1C" Type="Standard" Offset="0x2AF1C" />
         <Limb Name="gameplay_keep_Standardlimb_02AF28" Type="Standard" Offset="0x2AF28" />
         <Limb Name="gameplay_keep_Standardlimb_02AF34" Type="Standard" Offset="0x2AF34" />
-        <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Flex" LimbType="Standard" Offset="0x2AF58" />
+        <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Normal" LimbType="Standard" Offset="0x2AF58" />
         <Animation Name="gameplay_keep_Anim_02B2E8" Offset="0x2B2E8" />
         <Animation Name="gameplay_keep_Anim_02B494" Offset="0x2B494" />
         <DList Name="gameplay_keep_DL_02B6B0" Offset="0x2B6B0" />

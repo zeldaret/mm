@@ -242,7 +242,7 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 4, 40, 100, 80 };
 
-static Gfx* D_8089E33C[] = {
+static TexturePtr D_8089E33C[] = {
     object_dinofos_Tex_008E30,
     object_dinofos_Tex_009030,
     object_dinofos_Tex_009230,

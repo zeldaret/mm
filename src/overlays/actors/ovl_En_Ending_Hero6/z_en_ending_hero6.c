@@ -5,6 +5,11 @@
  */
 
 #include "z_en_ending_hero6.h"
+#include "objects/object_dt/object_dt.h"
+#include "objects/object_daiku/object_daiku.h"
+#include "objects/object_bai/object_bai.h"
+#include "objects/object_toryo/object_toryo.h"
+#include "objects/object_sdn/object_sdn.h"
 
 #define FLAGS 0x00000009
 
@@ -31,11 +36,11 @@ const ActorInit En_Ending_Hero6_InitVars = {
     (ActorFunc)EnEndingHero6_Draw,
 };
 
-static FlexSkeletonHeader* sSkeletons[] = { object_dt_Skel_00B0CC, object_bai_Skel_007908, object_toryo_Skel_007150, object_sdn_Skel_00D640, object_daiku_Skel_00A850,
-                                            object_daiku_Skel_00A850, object_daiku_Skel_00A850, object_daiku_Skel_00A850, object_daiku_Skel_00A850 };
+static FlexSkeletonHeader* sSkeletons[] = { &object_dt_Skel_00B0CC, &object_bai_Skel_007908, &object_toryo_Skel_007150, &object_sdn_Skel_00D640, &object_daiku_Skel_00A850,
+                                            &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, };
 
-static AnimationHeader* sAnimations[] = { object_dt_Anim_000BE0, object_bai_Anim_0011C0, object_toryo_Anim_000E50, object_sdn_Anim_002A84, object_daiku_Anim_002FA0,
-                                          object_daiku_Anim_002FA0, object_daiku_Anim_002FA0, object_daiku_Anim_002FA0, object_daiku_Anim_002FA0 };
+static AnimationHeader* sAnimations[] = { &object_dt_Anim_000BE0, &object_bai_Anim_0011C0, &object_toryo_Anim_000E50, &object_sdn_Anim_002A84, &object_daiku_Anim_002FA0,
+                                          &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0, };
 
 static s32 sLimbCounts[] = { 15, 20, 17, 17, 17, 17, 17, 17, 17 };
 
