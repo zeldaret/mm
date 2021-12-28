@@ -31,15 +31,25 @@ typedef struct EnRailgibud {
     /* 0x03E6 */ Vec3s upperBodyRotation;
     /* 0x03EC */ s16 unk_3EC;
     /* 0x03EE */ s16 unk_3EE;
-    /* 0x03F0 */ s16 unk_3F0;
-    /* 0x03F2 */ s16 unk_3F2;
-    /* 0x03F4 */ s16 unk_3F4;
+    /* 0x03F0 */ union {
+                    s16 grabState;
+                    s16 unk_3F0;
+                };
+    /* 0x03F2 */ union {
+                    s16 playerStunWaitTimer; // Cannot stun the player if this is non-zero
+                    s16 grabDamageTimer;
+                    s16 headShakeTimer;
+                    s16 stunTimer;
+                    s16 deathTimer;
+                    s16 unk_3F2;
+                };
+    /* 0x03F4 */ s16 grabWaitTimer; // Cannot grab the player if this is non-zero
     /* 0x03F6 */ s16 effectTimer;
-    /* 0x03F8 */ s16 unk_3F8;
+    /* 0x03F8 */ s16 type;
     /* 0x03FA */ s16 unk_3FA;
     /* 0x03FC */ u16 unk_3FC;
     /* 0x03FE */ u16 unk_3FE;
-    /* 0x0400 */ u16 unk_400;
+    /* 0x0400 */ u16 textId;
     /* 0x0402 */ s16 unk_402;
     /* 0x0404 */ u8 effectType;
     /* 0x0405 */ s8 unk_405;

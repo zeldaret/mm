@@ -18,27 +18,27 @@ void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80BA57A8(EnRailgibud* this);
 void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA59F0(EnRailgibud* this);
-void func_80BA5A34(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA5AF0(EnRailgibud* this);
-void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA5DBC(EnRailgibud* this);
-void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA6054(EnRailgibud* this);
-void func_80BA60B0(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA6158(EnRailgibud* this);
-void func_80BA61A0(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA6284(EnRailgibud* this);
-void func_80BA62D4(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA64AC(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA6604(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA6664(EnRailgibud* this);
-void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_SetupAttemptPlayerStun(EnRailgibud* this);
+void EnRailgibud_AttemptPlayerStun(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_SetupWalkToPlayer(EnRailgibud* this);
+void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_SetupGrab(EnRailgibud* this);
+void EnRailgibud_Grab(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_SetupGrabFail(EnRailgibud* this);
+void EnRailgibud_GrabFail(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_SetupTurnAwayAndShakeHead(EnRailgibud* this);
+void EnRailgibud_TurnAwayAndShakeHead(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_SetupWalkToHome(EnRailgibud* this);
+void EnRailgibud_WalkToHome(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_Damage(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_Stunned(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_SetupDead(EnRailgibud* this);
+void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA6974(GlobalContext* globalCtx, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5);
-void func_80BA6B9C(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, GlobalContext* globalCtx);
 s32 func_80BA6D10(EnRailgibud* this, GlobalContext* globalCtx);
 s32 func_80BA6DAC(EnRailgibud* this, GlobalContext* globalCtx);
-s32 func_80BA7088(EnRailgibud* this, GlobalContext* globalCtx);
+s32 EnRailgibud_MoveToIdealGrabPositionAndRotation(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7878(Actor* thisx, GlobalContext* globalCtx);
 void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx);
@@ -197,11 +197,11 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     func_80BA5400(this, globalCtx);
-    this->unk_3F2 = 0;
+    this->playerStunWaitTimer = 0;
     this->unk_402 = gSaveContext.time;
     this->effectType = 0;
-    this->unk_3F8 = 0;
-    this->unk_400 = 0;
+    this->type = 0;
+    this->textId = 0;
     this->unk_3FA = 0;
     if (this->actor.parent == NULL) {
         this->unk_3EC = 1;
@@ -245,7 +245,7 @@ void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->actor.xzDistToPlayer <= 100.0f) && func_800B715C(globalCtx) &&
         (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO)) {
         this->actor.home = this->actor.world;
-        func_80BA59F0(this);
+        EnRailgibud_SetupAttemptPlayerStun(this);
     }
 
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
@@ -276,12 +276,12 @@ void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
 
-void func_80BA59F0(EnRailgibud* this) {
+void EnRailgibud_SetupAttemptPlayerStun(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 9);
-    this->actionFunc = func_80BA5A34;
+    this->actionFunc = EnRailgibud_AttemptPlayerStun;
 }
 
-void func_80BA5A34(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_AttemptPlayerStun(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 rot = this->actor.shape.rot.y + this->headRotation.y + this->upperBodyRotation.y;
     s16 yaw = BINANG_SUB(this->actor.yawTowardsPlayer, rot);
@@ -291,23 +291,23 @@ void func_80BA5A34(EnRailgibud* this, GlobalContext* globalCtx) {
         func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
         func_80123E90(globalCtx, &this->actor);
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
-        func_80BA5AF0(this);
+        EnRailgibud_SetupWalkToPlayer(this);
     }
-    func_80BA6B9C(this, globalCtx);
+    EnRailgibud_TurnTowardsPlayer(this, globalCtx);
 }
 
-void func_80BA5AF0(EnRailgibud* this) {
+void EnRailgibud_SetupWalkToPlayer(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 10);
     this->actor.speedXZ = 0.4f;
-    if (this->actionFunc == func_80BA5A34) {
-        this->unk_3F2 = 80;
+    if (this->actionFunc == EnRailgibud_AttemptPlayerStun) {
+        this->playerStunWaitTimer = 80;
     } else {
-        this->unk_3F2 = 20;
+        this->playerStunWaitTimer = 20;
     }
-    this->actionFunc = func_80BA5B64;
+    this->actionFunc = EnRailgibud_WalkToPlayer;
 }
 
-void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
 
@@ -316,32 +316,34 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
     if (func_80BA6D10(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
-        if ((this->unk_3F4 == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
+        if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
             if ((gSaveContext.playerForm == PLAYER_FORM_GORON) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
-                func_80BA6054(this);
+                // If the Gibdo/Redead tries to grab Goron or Deku Link, it will fail to
+                // do so. It will appear to take damage and shake its head side-to-side.
+                EnRailgibud_SetupGrabFail(this);
             } else if (globalCtx->grabPlayer(globalCtx, player)) {
-                func_80BA5DBC(this);
+                EnRailgibud_SetupGrab(this);
             }
         } else {
-            if (this->unk_3F2 == 0) {
+            if (this->playerStunWaitTimer == 0) {
                 player->actor.freezeTimer = 40;
-                this->unk_3F2 = 60;
+                this->playerStunWaitTimer = 60;
                 func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
                 func_80123E90(globalCtx, &this->actor);
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
             } else {
-                this->unk_3F2--;
+                this->playerStunWaitTimer--;
             }
         }
-    } else if ((this->unk_3F4 == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
-        func_80BA6284(this);
+    } else if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
+        EnRailgibud_SetupWalkToHome(this);
     } else if (func_80BA6DAC(this, globalCtx)) {
-        func_80BA6284(this);
+        EnRailgibud_SetupWalkToHome(this);
     }
 
-    if (this->unk_3F4 > 0) {
-        this->unk_3F4--;
+    if (this->grabWaitTimer > 0) {
+        this->grabWaitTimer--;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
@@ -351,45 +353,49 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BA5DBC(EnRailgibud* this) {
+void EnRailgibud_SetupGrab(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 2);
+    this->grabDamageTimer = 0;
     this->actor.flags &= ~1;
-    this->unk_3F2 = 0;
-    this->unk_3F0 = 0;
-    this->actionFunc = func_80BA5E18;
+    this->grabState = 0;
+    this->actionFunc = EnRailgibud_Grab;
 }
 
-void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
-    Player* player2 = GET_PLAYER(globalCtx);
-    Player* player = player2;
-    s32 sp34;
-    u16 sp32;
+void EnRailgibud_Grab(EnRailgibud* this, GlobalContext* globalCtx) {
+    // This function needs to have two different temps for Player to match,
+    // but you don't have to necessarily use them both. This is just the most
+    // likely scenario; they got an Actor* pointer in the first temp, then
+    // casted it to Player* in the second temp.
+    Actor* playerActor = &GET_PLAYER(globalCtx)->actor;
+    Player* player = (Player*)playerActor;
+    s32 inPositionToAttack;
+    u16 damageSfxId;
 
-    switch (this->unk_3F0) {
+    switch (this->grabState) {
         case 0:
-            sp34 = func_80BA7088(this, globalCtx);
-            if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (sp34 == 1)) {
-                this->unk_3F0 = 1;
+            inPositionToAttack = EnRailgibud_MoveToIdealGrabPositionAndRotation(this, globalCtx);
+            if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (inPositionToAttack == true)) {
+                this->grabState = 1;
                 func_800BDC5C(&this->skelAnime, sAnimations, 0);
             } else if (!(player->stateFlags2 & 0x80)) {
                 func_800BDC5C(&this->skelAnime, sAnimations, 1);
                 this->actor.flags |= 1;
-                this->unk_3F0 = 2;
-                this->unk_3F2 = 0;
+                this->grabState = 2;
+                this->grabDamageTimer = 0;
             }
             break;
 
         case 1:
-            if (this->unk_3F2 == 20) {
+            if (this->grabDamageTimer == 20) {
                 s16 requiredScopeTemp;
 
-                sp32 = player->ageProperties->unk_92 + 0x6805;
+                damageSfxId = player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S;
                 globalCtx->damagePlayer(globalCtx, -8);
-                func_800B8E58(&player->actor, sp32);
+                func_800B8E58(playerActor, damageSfxId);
                 func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
-                this->unk_3F2 = 0;
+                this->grabDamageTimer = 0;
             } else {
-                this->unk_3F2++;
+                this->grabDamageTimer++;
             }
 
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
@@ -403,16 +409,16 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
                 }
                 func_800BDC5C(&this->skelAnime, sAnimations, 1);
                 this->actor.flags |= 1;
-                this->unk_3F0 = 2;
-                this->unk_3F2 = 0;
+                this->grabState = 2;
+                this->grabDamageTimer = 0;
             }
             break;
 
         case 2:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                this->unk_3F4 = 40;
+                this->grabWaitTimer = 40;
                 this->actor.shape.yOffset = 0.0f;
-                func_80BA5AF0(this);
+                EnRailgibud_SetupWalkToPlayer(this);
             } else {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
@@ -420,14 +426,14 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BA6054(EnRailgibud* this) {
+void EnRailgibud_SetupGrabFail(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 7);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    this->actionFunc = EnRailgibud_GrabFail;
     this->actor.speedXZ = -2.0f;
-    this->actionFunc = func_80BA60B0;
 }
 
-void func_80BA60B0(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_GrabFail(EnRailgibud* this, GlobalContext* globalCtx) {
     if (this->actor.speedXZ < 0.0f) {
         this->actor.speedXZ += 0.15f;
     }
@@ -437,35 +443,36 @@ void func_80BA60B0(EnRailgibud* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x12C, 0);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        func_80BA6158(this);
+        EnRailgibud_SetupTurnAwayAndShakeHead(this);
     }
 }
 
-void func_80BA6158(EnRailgibud* this) {
-    this->unk_3F2 = 0;
+void EnRailgibud_SetupTurnAwayAndShakeHead(EnRailgibud* this) {
+    this->headShakeTimer = 0;
     func_800BDC5C(&this->skelAnime, sAnimations, 10);
-    this->actionFunc = func_80BA61A0;
+    this->actionFunc = EnRailgibud_TurnAwayAndShakeHead;
 }
 
-void func_80BA61A0(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_TurnAwayAndShakeHead(EnRailgibud* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 5, 3500, 200);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (this->unk_3F2 > 60) {
-        func_80BA6284(this);
-        this->unk_3F2 = 0;
+    if (this->headShakeTimer > 60) {
+        EnRailgibud_SetupWalkToHome(this);
+        this->playerStunWaitTimer = 0;
     } else {
-        this->headRotation.y = Math_SinS(this->unk_3F2 * 0xFA0) * (0x256F * ((60 - this->unk_3F2) / 60.0f));
-        this->unk_3F2++;
+        this->headRotation.y =
+            Math_SinS(this->headShakeTimer * 4000) * (0x256F * ((60 - this->headShakeTimer) / 60.0f));
+        this->headShakeTimer++;
     }
 }
 
-void func_80BA6284(EnRailgibud* this) {
+void EnRailgibud_SetupWalkToHome(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 10);
     this->actor.speedXZ = 0.4f;
-    this->actionFunc = func_80BA62D4;
+    this->actionFunc = EnRailgibud_WalkToHome;
 }
 
-void func_80BA62D4(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_WalkToHome(EnRailgibud* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 5.0f) {
@@ -486,22 +493,22 @@ void func_80BA62D4(EnRailgibud* this, GlobalContext* globalCtx) {
     if (func_80BA6D10(this, globalCtx)) {
         if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
             Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
-            func_80BA5AF0(this);
+            EnRailgibud_SetupWalkToPlayer(this);
         }
     }
 }
 
-void func_80BA6440(EnRailgibud* this) {
+void EnRailgibud_SetupDamage(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 7);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
-    this->unk_3F2 = 0;
-    this->unk_3F4 = 0;
+    this->stunTimer = 0;
+    this->grabWaitTimer = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+    this->actionFunc = EnRailgibud_Damage;
     this->actor.speedXZ = -2.0f;
-    this->actionFunc = func_80BA64AC;
 }
 
-void func_80BA64AC(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_Damage(EnRailgibud* this, GlobalContext* globalCtx) {
     if (this->actor.speedXZ < 0.0f) {
         this->actor.speedXZ += 0.15f;
     }
@@ -509,51 +516,51 @@ void func_80BA64AC(EnRailgibud* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_405 = -1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if ((this->effectTimer > 0) && (this->effectType == 0) && (this->unk_3F8 == 0)) {
+        if ((this->effectTimer > 0) && (this->effectType == 0) && (this->type == 0)) {
             this->actor.hintId = 0x2A;
             SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                                REDEAD_GIBDO_LIMB_MAX);
-            this->unk_3F8 = 1;
+            this->type = 1;
         }
-        func_80BA6284(this);
+        EnRailgibud_SetupWalkToHome(this);
     }
 }
 
-void func_80BA6584(EnRailgibud* this) {
+void EnRailgibud_SetupStunned(EnRailgibud* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->unk_3F2 = 10;
+    this->stunTimer = 10;
     if (this->effectTimer != 0) {
         func_800BCB70(&this->actor, 0, 0xC8, 0, 0x28);
     } else {
         func_800BCB70(&this->actor, 0, 0xC8, 0, 0x28);
     }
-    this->actionFunc = func_80BA6604;
+    this->actionFunc = EnRailgibud_Stunned;
 }
 
-void func_80BA6604(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_Stunned(EnRailgibud* this, GlobalContext* globalCtx) {
     if (this->actor.colorFilterTimer == 0) {
         if (this->actor.colChkInfo.health == 0) {
-            func_80BA6664(this);
+            EnRailgibud_SetupDead(this);
         } else {
-            func_80BA6440(this);
+            EnRailgibud_SetupDamage(this);
         }
     }
 
-    if (this->unk_3F2 != 0) {
-        this->unk_3F2--;
+    if (this->stunTimer != 0) {
+        this->stunTimer--;
     }
 }
 
-void func_80BA6664(EnRailgibud* this) {
+void EnRailgibud_SetupDead(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 6);
     this->actor.flags &= ~1;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DEAD);
-    this->unk_3F2 = 0;
-    this->actionFunc = func_80BA66C8;
+    this->deathTimer = 0;
+    this->actionFunc = EnRailgibud_Dead;
 }
 
-void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx) {
-    if (this->unk_3F2 > 300) {
+void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx) {
+    if (this->deathTimer > 300) {
         if (this->actor.shape.shadowAlpha == 0) {
             if (this->actor.parent != NULL) {
                 Actor_MarkForDeath(&this->actor);
@@ -571,13 +578,13 @@ void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx) {
     } else {
         Math_SmoothStepToS(&this->headRotation.y, 0, 1, 250, 0);
         Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 250, 0);
-        this->unk_3F2++;
+        this->deathTimer++;
     }
 
-    if ((this->unk_3F2 == 20) && (this->effectTimer > 0) && (this->effectType == 0) && (this->unk_3F8 == 0)) {
+    if ((this->deathTimer == 20) && (this->effectTimer > 0) && (this->effectType == 0) && (this->type == 0)) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                            REDEAD_GIBDO_LIMB_MAX);
-        this->unk_3F8 = 1;
+        this->type = 1;
     }
 }
 
@@ -627,27 +634,27 @@ void func_80BA6B30(EnRailgibud* this) {
     if (this->actor.parent == NULL) {
         this->unk_3EC = this->unk_3EE;
         this->unk_3EE = 1;
-        if ((this->actionFunc != func_80BA57F8) && (this->actionFunc != func_80BA66C8)) {
+        if ((this->actionFunc != func_80BA57F8) && (this->actionFunc != EnRailgibud_Dead)) {
             this->unk_3EE = 0;
         }
-    } else if ((this->actionFunc != func_80BA57F8) && (this->actionFunc != func_80BA66C8)) {
+    } else if ((this->actionFunc != func_80BA57F8) && (this->actionFunc != EnRailgibud_Dead)) {
         ((EnRailgibud*)this->actor.parent)->unk_3EE = 0;
     }
 }
 
-void func_80BA6B9C(EnRailgibud* this, GlobalContext* globalCtx) {
-    s16 temp_v0 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->upperBodyRotation.y;
-    s16 phi_a2 = CLAMP(temp_v0, -500, 500);
+void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
+    s16 headAngle = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->upperBodyRotation.y;
+    s16 upperBodyAngle = CLAMP(headAngle, -500, 500);
 
-    temp_v0 -= this->headRotation.y;
-    temp_v0 = CLAMP(temp_v0, -500, 500);
+    headAngle -= this->headRotation.y;
+    headAngle = CLAMP(headAngle, -500, 500);
 
     if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
-        this->upperBodyRotation.y += ABS_ALT(phi_a2);
-        this->headRotation.y += ABS_ALT(temp_v0);
+        this->upperBodyRotation.y += ABS_ALT(upperBodyAngle);
+        this->headRotation.y += ABS_ALT(headAngle);
     } else {
-        this->upperBodyRotation.y -= ABS_ALT(phi_a2);
-        this->headRotation.y -= ABS_ALT(temp_v0);
+        this->upperBodyRotation.y -= ABS_ALT(upperBodyAngle);
+        this->headRotation.y -= ABS_ALT(headAngle);
     }
 
     this->upperBodyRotation.y = CLAMP(this->upperBodyRotation.y, -0x495F, 0x495F);
@@ -679,7 +686,7 @@ s32 func_80BA6DAC(EnRailgibud* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_CheckDamageEffect(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((this->unk_3FA != 1) && (this->collider.base.acFlags & AC_HIT)) {
@@ -697,26 +704,26 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
                 }
                 this->actor.shape.yOffset = 0.0f;
                 if (this->actor.colChkInfo.health == 0) {
-                    func_80BA6664(this);
+                    EnRailgibud_SetupDead(this);
                 } else {
-                    func_80BA6440(this);
+                    EnRailgibud_SetupDamage(this);
                 }
                 break;
 
             case 14:
-                if (this->unk_3F8 == 1) {
+                if (this->type == 1) {
                     this->actor.colChkInfo.health = 0;
                     this->actor.shape.yOffset = 0.0f;
-                    func_80BA6664(this);
+                    EnRailgibud_SetupDead(this);
                 }
                 break;
 
             case 2:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
-                    func_80BA6664(this);
+                    EnRailgibud_SetupDead(this);
                 } else {
-                    func_80BA6440(this);
+                    EnRailgibud_SetupDamage(this);
                 }
                 this->effectType = 0;
                 this->effectTimer = 180;
@@ -726,9 +733,9 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
             case 4:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
-                    func_80BA6664(this);
+                    EnRailgibud_SetupDead(this);
                 } else {
-                    func_80BA6440(this);
+                    EnRailgibud_SetupDamage(this);
                 }
                 this->effectType = 20;
                 this->effectTimer = 60;
@@ -736,52 +743,57 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
                 break;
 
             case 12:
-                if ((this->actionFunc != func_80BA5E18) &&
-                    ((this->actionFunc != func_80BA6604) || (this->unk_3F2 == 0))) {
+                if ((this->actionFunc != EnRailgibud_Grab) &&
+                    ((this->actionFunc != EnRailgibud_Stunned) || (this->stunTimer == 0))) {
                     this->effectType = 30;
                     this->effectTimer = 40;
                     this->effectAlpha = 1.0f;
-                    func_80BA6584(this);
+                    EnRailgibud_SetupStunned(this);
                 }
                 break;
 
             case 1:
-                if ((this->actionFunc != func_80BA6604) || (this->unk_3F2 == 0)) {
-                    func_80BA6584(this);
+                if ((this->actionFunc != EnRailgibud_Stunned) || (this->stunTimer == 0)) {
+                    EnRailgibud_SetupStunned(this);
                 }
                 break;
         }
     }
 }
 
-s32 func_80BA7088(EnRailgibud* this, GlobalContext* globalCtx) {
+/**
+ * Returns true if the Gibdo is in the correct position and rotation to start
+ * performing its grab attack. Regardless of what this returns, the Gibdo is
+ * moved closer to this ideal position and rotation.
+ */
+s32 EnRailgibud_MoveToIdealGrabPositionAndRotation(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp40;
-    f32 sp3C;
-    f32 sp38 = 0.0f;
-    s16 temp_s0_2;
+    Vec3f targetPos;
+    f32 distanceFromTargetPos;
+    f32 distanceFromTargetYOffset = 0.0f;
+    s16 distanceFromTargetAngle;
 
-    sp40 = player->actor.world.pos;
-
-    sp40.x -= 25.0f * Math_SinS(player->actor.shape.rot.y);
-    sp40.z -= 25.0f * Math_CosS(player->actor.shape.rot.y);
-    sp3C = Math_Vec3f_StepTo(&this->actor.world.pos, &sp40, 10.0f);
-    temp_s0_2 = Math_SmoothStepToS(&this->actor.shape.rot.y, player->actor.shape.rot.y, 1, 0x1770, 0x64);
+    targetPos = player->actor.world.pos;
+    targetPos.x -= 25.0f * Math_SinS(player->actor.shape.rot.y);
+    targetPos.z -= 25.0f * Math_CosS(player->actor.shape.rot.y);
+    distanceFromTargetPos = Math_Vec3f_StepTo(&this->actor.world.pos, &targetPos, 10.0f);
+    distanceFromTargetAngle = Math_SmoothStepToS(&this->actor.shape.rot.y, player->actor.shape.rot.y, 1, 0x1770, 0x64);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
-        sp38 = Math_SmoothStepToF(&this->actor.shape.yOffset, -1500.0f, 1.0f, 150.0f, 0.0f);
+        distanceFromTargetYOffset = Math_SmoothStepToF(&this->actor.shape.yOffset, -1500.0f, 1.0f, 150.0f, 0.0f);
     }
 
-    if ((sp3C == 0.0f) && (ABS_ALT(temp_s0_2) < 100) && (sp38 == 0.0f)) {
+    if ((distanceFromTargetPos == 0.0f) && (ABS_ALT(distanceFromTargetAngle) < 100) &&
+        (distanceFromTargetYOffset == 0.0f)) {
         return true;
     }
 
     return false;
 }
 
-void func_80BA71E4(EnRailgibud* this, GlobalContext* globalCtx) {
-    if ((this->actionFunc == func_80BA5B64) || (this->actionFunc == func_80BA62D4) ||
-        (this->actionFunc == func_80BA64AC)) {
+void EnRailgibud_MoveWithGravity(EnRailgibud* this, GlobalContext* globalCtx) {
+    if ((this->actionFunc == EnRailgibud_WalkToPlayer) || (this->actionFunc == EnRailgibud_WalkToHome) ||
+        (this->actionFunc == EnRailgibud_Damage)) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     }
 }
@@ -790,13 +802,13 @@ void func_80BA7234(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp30;
 
-    if ((this->actionFunc == func_80BA5E18) && (this->unk_3F0 != 2)) {
+    if ((this->actionFunc == EnRailgibud_Grab) && (this->grabState != 2)) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 35.0f, 1);
     } else {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 35.0f, 0x1D);
     }
 
-    if ((this->actionFunc == func_80BA5E18) && (this->unk_3F0 == 0) && (this->actor.bgCheckFlags & 8)) {
+    if ((this->actionFunc == EnRailgibud_Grab) && (this->grabState == 0) && (this->actor.bgCheckFlags & 8)) {
         sp30 = player->actor.world.pos;
         sp30.x += 10.0f * Math_SinS(this->actor.wallYaw);
         sp30.z += 10.0f * Math_CosS(this->actor.wallYaw);
@@ -804,7 +816,7 @@ void func_80BA7234(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BA7388(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_UpdateEffect(EnRailgibud* this, GlobalContext* globalCtx) {
     if (this->effectTimer > 0) {
         this->effectTimer--;
     }
@@ -818,23 +830,23 @@ void func_80BA7388(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
-    if ((this->actionFunc != func_80BA5E18) && (this->actionFunc != func_80BA64AC) &&
-        (this->actionFunc != func_80BA60B0) && (this->actionFunc != func_80BA61A0) &&
-        (this->actionFunc != func_80BA66C8)) {
+    if ((this->actionFunc != EnRailgibud_Grab) && (this->actionFunc != EnRailgibud_Damage) &&
+        (this->actionFunc != EnRailgibud_GrabFail) && (this->actionFunc != EnRailgibud_TurnAwayAndShakeHead) &&
+        (this->actionFunc != EnRailgibud_Dead)) {
         if ((this->actor.flags & 5) == 5) {
             if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
                 this->actor.flags &= ~5;
                 this->actor.flags |= 9;
                 this->actor.hintId = 0xFF;
                 this->actor.textId = 0;
-                if ((this->actionFunc != func_80BA57F8) && (this->actionFunc != func_80BA62D4)) {
-                    func_80BA6284(this);
+                if ((this->actionFunc != func_80BA57F8) && (this->actionFunc != EnRailgibud_WalkToHome)) {
+                    EnRailgibud_SetupWalkToHome(this);
                 }
             }
         } else if (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO) {
             this->actor.flags &= ~(0x8 | 0x1);
             this->actor.flags |= (0x4 | 0x1);
-            if (this->unk_3F8 == 1) {
+            if (this->type == 1) {
                 this->actor.hintId = 0x2A;
             } else {
                 this->actor.hintId = 0x2D;
@@ -846,11 +858,11 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
-    if ((this->unk_400 == 0) && (this->unk_3F8 == 0)) {
+    if ((this->textId == 0) && (this->type == 0)) {
         if (func_800B84D0(&this->actor, globalCtx)) {
             this->unk_3FA = 1;
             func_801518B0(globalCtx, 0x13B2, &this->actor);
-            this->unk_400 = 0x13B2;
+            this->textId = 0x13B2;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
         } else if (((this->actor.flags & 9) == 9) && !(this->collider.base.acFlags & AC_HIT)) {
@@ -861,13 +873,13 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
             case 5:
                 if (func_80147624(globalCtx)) {
                     func_801518B0(globalCtx, 0x13B3, &this->actor);
-                    this->unk_400 = 0x13B3;
+                    this->textId = 0x13B3;
                 }
                 break;
 
             case 6:
                 if (func_80147624(globalCtx)) {
-                    this->unk_400 = 0;
+                    this->textId = 0;
                     this->unk_3FA = 0;
                     this->actor.speedXZ = 0.6f;
                 }
@@ -883,14 +895,15 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BA76C4(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_CheckCollision(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((this->actionFunc != func_80BA66C8) && ((this->actionFunc != func_80BA5E18) || (this->unk_3F0 == 2))) {
+    if ((this->actionFunc != EnRailgibud_Dead) && ((this->actionFunc != EnRailgibud_Grab) || (this->grabState == 2))) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        if (((this->actionFunc != func_80BA64AC) || ((player->unk_ADC != 0) && (player->unk_ADD != this->unk_405))) &&
-            ((this->actionFunc != func_80BA6604) || (this->unk_3F2 == 0))) {
+        if (((this->actionFunc != EnRailgibud_Damage) ||
+             ((player->unk_ADC != 0) && (player->unk_ADD != this->unk_405))) &&
+            ((this->actionFunc != EnRailgibud_Stunned) || (this->stunTimer == 0))) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
     }
@@ -901,15 +914,15 @@ void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80BA6B30(this);
     func_80BA7434(this, globalCtx);
-    func_80BA6DF8(this, globalCtx);
+    EnRailgibud_CheckDamageEffect(this, globalCtx);
     this->actionFunc(this, globalCtx);
-    if (this->actionFunc != func_80BA6604) {
+    if (this->actionFunc != EnRailgibud_Stunned) {
         SkelAnime_Update(&this->skelAnime);
     }
-    func_80BA71E4(this, globalCtx);
-    func_80BA76C4(this, globalCtx);
+    EnRailgibud_MoveWithGravity(this, globalCtx);
+    EnRailgibud_CheckCollision(this, globalCtx);
     func_80BA7234(this, globalCtx);
-    func_80BA7388(this, globalCtx);
+    EnRailgibud_UpdateEffect(this, globalCtx);
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
 }
