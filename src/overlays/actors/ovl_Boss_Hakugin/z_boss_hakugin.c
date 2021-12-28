@@ -1,3 +1,9 @@
+/*
+ * File: z_boss_hakugin.c
+ * Overlay: ovl_Boss_Hakugin
+ * Description: Goht
+ */
+
 #include "z_boss_hakugin.h"
 
 #define FLAGS 0x00000035

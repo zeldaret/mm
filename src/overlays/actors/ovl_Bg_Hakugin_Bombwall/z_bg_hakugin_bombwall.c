@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_hakugin_bombwall.c
+ * Overlay: ovl_Bg_Hakugin_Bombwall
+ * Description: Snowhead Temple - Bombable Wall
+ */
+
 #include "z_bg_hakugin_bombwall.h"
 
 #define FLAGS 0x00000000

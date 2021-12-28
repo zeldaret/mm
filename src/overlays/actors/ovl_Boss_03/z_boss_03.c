@@ -1,3 +1,9 @@
+/*
+ * File: z_boss_03.c
+ * Overlay: ovl_Boss_03
+ * Description: Gyorg
+ */
+
 #include "z_boss_03.h"
 
 #define FLAGS 0x00000035

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_horse.c
+ * Overlay: ovl_En_Horse
+ * Description: Epona
+ */
+
 #include "z_en_horse.h"
 
 #define FLAGS 0x00000010

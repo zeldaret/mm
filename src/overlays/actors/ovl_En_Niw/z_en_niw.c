@@ -523,13 +523,13 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 0x20) {
         // still touching water
         this->actor.gravity = 0.0f;
-        if (this->actor.yDistToWater > 15.0f) {
+        if (this->actor.depthInWater > 15.0f) {
             this->actor.world.pos.y += 2.0f;
         }
         if (this->unkTimer250 == 0) {
             this->unkTimer250 = 30;
             Math_Vec3f_Copy(&ripplePos, &this->actor.world.pos);
-            ripplePos.y += this->actor.yDistToWater;
+            ripplePos.y += this->actor.depthInWater;
 
             EffectSsGRipple_Spawn(globalCtx, &ripplePos, 100, 500, 30);
         }
@@ -810,7 +810,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
 
-    if ((this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= 32000.0f)) {
+    if (this->actor.floorHeight <= BGCHECK_Y_MIN || this->actor.floorHeight >= BGCHECK_Y_MAX) {
         // if cucco is off the map?
         Vec3f camera;
         camera.x = globalCtx->view.at.x - globalCtx->view.eye.x;
@@ -858,12 +858,12 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc = EnNiw_LandBeforeIdle;
         return;
 
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 15.0f) &&
+    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 15.0f) &&
                (this->unknownState28E != 6)) {
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
-        pos.y += this->actor.yDistToWater;
+        pos.y += this->actor.depthInWater;
         this->unkTimer250 = 30;
         EffectSsGSplash_Spawn(globalCtx, &pos, 0, 0, 0, 400);
         this->unkTimer252 = 0;
@@ -1007,7 +1007,7 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
             }
 
             Matrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(feather->scale, feather->scale, 1.0f, MTXMODE_APPLY);
             Matrix_InsertZRotation_f(feather->zRot, MTXMODE_APPLY);
             Matrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);

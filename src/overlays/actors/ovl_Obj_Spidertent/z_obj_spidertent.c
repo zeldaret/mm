@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_spidertent.c
+ * Overlay: ovl_Obj_Spidertent
+ * Description: Tent-Shaped Spider Web
+ */
+
 #include "z_obj_spidertent.h"
 
 #define FLAGS 0x10000000

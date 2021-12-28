@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_fire_wall.c
+ * Overlay: ovl_Bg_Fire_Wall
+ * Description: Wall of fire spawned by ovl_Bg_Spout_Fire
+ */
+
 #include "z_bg_fire_wall.h"
 
 #define FLAGS 0x00000000

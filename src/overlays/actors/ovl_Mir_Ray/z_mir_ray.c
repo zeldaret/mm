@@ -1,3 +1,9 @@
+/*
+ * File: z_mir_ray.c
+ * Overlay: ovl_Mir_Ray
+ * Description: Reflectible light ray (unused, somewhat broken)
+ */
+
 #include "z_mir_ray.h"
 
 #define FLAGS 0x00000030

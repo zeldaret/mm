@@ -1,3 +1,9 @@
+/*
+ * File: z_en_takaraya.c
+ * Overlay: ovl_En_Takaraya
+ * Description: Treasure Chest Shop Gal
+ */
+
 #include "z_en_takaraya.h"
 
 #define FLAGS 0x00000039

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_mkk.c
+ * Overlay: ovl_En_Mkk
+ * Description: Black and White Boe (Name origin: Makkurokurosuke)
+ */
+
 #include "z_en_mkk.h"
 
 #define FLAGS 0x00000005

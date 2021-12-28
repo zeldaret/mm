@@ -136,7 +136,7 @@ void func_80A714B4(EnDno* this, GlobalContext* globalCtx) {
     do {
         actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
-            if (ENDNO_GET_F(actor) == ENDNO_GET_F_1) {
+            if ((s32)ENDNO_GET_F(actor) == ENDNO_GET_F_1) {
                 Actor_SetSwitchFlag(globalCtx, ENDNO_GET_7F0(actor));
             }
             actor = actor->next;
@@ -171,7 +171,7 @@ void func_80A715DC(EnDno* this, GlobalContext* globalCtx) {
                 if (func_8013E5CC(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C, &this->actor.prevPos,
                                   &this->actor.world.pos, &sp88)) {
                     Math_Vec3f_Diff(&this->actor.world.pos, &crace->actor.home.pos, &sp7C);
-                    Matrix_RotateY(-crace->actor.home.rot.y, 0);
+                    Matrix_RotateY(-crace->actor.home.rot.y, MTXMODE_NEW);
                     Matrix_MultiplyVector3fByState(&sp7C, &sp70);
                     if ((fabsf(sp70.x) < 100.0f) && (sp70.y >= -10.0f) && (sp70.y <= 180.0f) && (sp70.z < 0.0f)) {
                         crace->unk_170 |= 1;
@@ -285,7 +285,7 @@ void EnDno_DoNothing(EnDno* this, GlobalContext* globalCtx) {
 void func_80A71B68(EnDno* this, GlobalContext* globalCtx) {
     this->unk_452 = 0;
     this->actor.textId = 0;
-    if (CHECK_QUEST_ITEM(6)) {
+    if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
         if (gSaveContext.weekEventReg[27] & 1) {
             if (!(this->unk_3B0 & 0x20)) {
                 func_8013E1C8(&this->skelAnime, sAnimations, 6, &this->unk_32C);
@@ -349,7 +349,7 @@ void func_80A71C3C(EnDno* this, GlobalContext* globalCtx) {
 }
 
 void func_80A71E54(EnDno* this, GlobalContext* globalCtx) {
-    if (CHECK_QUEST_ITEM(6)) {
+    if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
         if (gSaveContext.weekEventReg[27] & 1) {
             this->unk_464 = 0x811;
         } else {
@@ -536,7 +536,7 @@ void func_80A724B8(EnDno* this, GlobalContext* globalCtx) {
 }
 
 void func_80A7256C(EnDno* this, GlobalContext* globalCtx) {
-    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, -1);
+    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
 }
 
 void func_80A72598(EnDno* this, GlobalContext* globalCtx) {
@@ -566,7 +566,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                     } else if ((this->unk_32C == 5) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         if (Flags_GetSwitch(globalCtx, ENDNO_GET_3F80(&this->actor))) {
                             func_801518B0(globalCtx, 0x801, &this->actor);
-                        } else if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_SCENTS) {
+                        } else if (Player_GetMask(globalCtx) == PLAYER_MASK_SCENTS) {
                             func_801518B0(globalCtx, 0x806, &this->actor);
                         } else {
                             func_801518B0(globalCtx, 0x800, &this->actor);
@@ -629,9 +629,9 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                 case 0x802:
                     if (func_80147624(globalCtx)) {
                         if (gSaveContext.inventory.items[D_801C20C0] == ITEM_MASK_SCENTS) {
-                            this->unk_458 = 4;
+                            this->unk_458 = GI_RUPEE_RED;
                         } else {
-                            this->unk_458 = 142;
+                            this->unk_458 = GI_MASK_SCENTS;
                         }
                         func_800B8A1C(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
                         func_801477B4(globalCtx);
@@ -709,8 +709,8 @@ void func_80A72C04(EnDno* this, GlobalContext* globalCtx) {
     func_8013DCE0(globalCtx, &this->unk_334, &this->actor, &this->unk_340, globalCtx->setupPathList,
                   ENDNO_GET_7F(&this->actor), 1, 0, 1, 0);
     func_8013DF3C(globalCtx, &this->unk_340);
-    this->actor.world.rot.y = this->unk_340.unk_56;
-    this->actor.world.rot.x = this->unk_340.unk_54;
+    this->actor.world.rot.y = this->unk_340.unk_54.y;
+    this->actor.world.rot.x = this->unk_340.unk_54.x;
     Actor_SetSwitchFlag(globalCtx, ENDNO_GET_3F80(&this->actor));
     this->actionFunc = func_80A730A0;
 }
@@ -721,8 +721,8 @@ void func_80A72CF8(EnDno* this, GlobalContext* globalCtx) {
                        this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x201);
 }
 
-s32 func_80A72D8C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    Actor* actor = arg1->unk_48;
+s32 func_80A72D8C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
+    Actor* actor = arg1->actor;
     s32 pad;
     s32 ret = false;
     f32 sp38;
@@ -748,21 +748,21 @@ s32 func_80A72D8C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
         ret = true;
     } else {
         sp38 = actor->speedXZ / sqrtf(arg1->unk_4C);
-        sp2C = ABS(arg1->unk_54 - actor->world.rot.x);
+        sp2C = ABS(arg1->unk_54.x - actor->world.rot.x);
         temp_v0_2 = sp2C;
         temp_v0_2 *= sp38;
         temp_v0_2 += 0x71C;
-        sp2C = ABS(arg1->unk_56 - actor->world.rot.y);
+        sp2C = ABS(arg1->unk_54.y - actor->world.rot.y);
 
-        Math_ScaledStepToS(&actor->world.rot.x, arg1->unk_54, temp_v0_2);
-        Math_ScaledStepToS(&actor->world.rot.y, arg1->unk_56, (s32)(sp2C * sp38) + 0x71C);
+        Math_ScaledStepToS(&actor->world.rot.x, arg1->unk_54.x, temp_v0_2);
+        Math_ScaledStepToS(&actor->world.rot.y, arg1->unk_54.y, (s32)(sp2C * sp38) + 0x71C);
     }
 
     return ret;
 }
 
-s32 func_80A72FAC(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1) {
-    Actor* actor = arg1->unk_48;
+s32 func_80A72FAC(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
+    Actor* actor = arg1->actor;
     EnDno* dno = (EnDno*)actor;
     f32 sp24 = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
     f32 sp20 = gFramerateDivisorHalf;
@@ -985,7 +985,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         func_8012C28C(globalCtx->state.gfxCtx);
         if (limbIndex == 13) {
             Matrix_Scale(this->unk_454, this->unk_454, this->unk_454, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_45C, 1);
+            Matrix_InsertXRotation_s(this->unk_45C, MTXMODE_APPLY);
         }
 
         gfxOpa = POLY_OPA_DISP;
@@ -1005,7 +1005,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         frames = globalCtx->gameplayFrames;
         Matrix_MultiplyVector3fByState(&D_80A73B40, &sp84);
         func_80A711D0(this, globalCtx, &sp84);
-        Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
         Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY);
         Matrix_InsertTranslation(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
         gfxXlu = func_8012C2B4(POLY_XLU_DISP);

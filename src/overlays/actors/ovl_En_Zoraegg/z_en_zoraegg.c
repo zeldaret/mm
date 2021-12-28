@@ -1,3 +1,9 @@
+/*
+ * File: z_en_zoraegg.c
+ * Overlay: ovl_En_Zoraegg
+ * Description: Zora Egg
+ */
+
 #include "z_en_zoraegg.h"
 
 #define FLAGS 0x00000010

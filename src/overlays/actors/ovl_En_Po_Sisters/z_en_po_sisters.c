@@ -351,9 +351,12 @@ void func_80B1ACB8(EnPoSisters* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->actor.xzDistToPlayer < 600.0f) && (fabsf(this->actor.yDistToPlayer + 5.0f) < 30.0f)) {
+    //if ((this->actor.xzDistToPlayer < 600.0f) && (fabsf(this->actor.yDistToPlayer + 5.0f) < 30.0f)) {
+        //EnPoSisters_SetupIdleFlying(this);
+    //} else if ((this->stateTimer == 0) && Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f)) {
+    if ((this->actor.xzDistToPlayer < 600.0f) && (fabsf(this->actor.playerHeightRel + 5.0f) < 30.0f)) {
         EnPoSisters_SetupIdleFlying(this);
-    } else if ((this->stateTimer == 0) && Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f)) {
+    } else if ((this->stateTimer== 0) && Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f)) {
         func_80B1AB5C(this);
     }
 
@@ -385,7 +388,7 @@ void EnPoSisters_IdleFlying(EnPoSisters* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x71C);
     }
 
-    if ((this->actor.xzDistToPlayer < 320.0f) && (fabsf(this->actor.yDistToPlayer + 5.0f) < 30.0f)) {
+    if ((this->actor.xzDistToPlayer < 320.0f) && (fabsf(this->actor.playerHeightRel + 5.0f) < 30.0f)) {
         func_80B1AF8C(this);
     } else if (this->actor.xzDistToPlayer > 720.0f) {
         func_80B1AC40(this);
@@ -930,8 +933,8 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnPoSisters* this = THIS;
     f32 alpha;
-    Vec3f pos;
-    s32 unusedArg; // func needs a pointer to value, but posister ignores it
+    Vec3f checkPos; // unused by us
+    s32 bgId; // unused by us
 
     if (this->collider.base.atFlags & AT_HIT) { // collided with player
         this->collider.base.atFlags &= ~AT_HIT;
@@ -954,10 +957,11 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->flags191 & 0x10) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 0.0f, 5);
     } else {
-        pos.x = this->actor.world.pos.x;
-        pos.y = this->actor.world.pos.y + 10.0f;
-        pos.z = this->actor.world.pos.z;
-        this->actor.floorHeight = func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &unusedArg, &this->actor, &pos);
+        checkPos.x = this->actor.world.pos.x;
+        checkPos.y = this->actor.world.pos.y + 10.0f;
+        checkPos.z = this->actor.world.pos.z;
+        this->actor.floorHeight =
+            BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &checkPos);
     }
 
     this->actor.shape.shadowAlpha = this->color.a;

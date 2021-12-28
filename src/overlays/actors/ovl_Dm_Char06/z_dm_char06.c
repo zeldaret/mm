@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_char06.c
+ * Overlay: ovl_Dm_Char06
+ * Description: Mountain Village Snowy landscape fadeout in post-Snowhead thawing cutscene
+ */
+
 #include "z_dm_char06.h"
 
 #define FLAGS 0x00000030

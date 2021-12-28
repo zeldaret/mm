@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_tokei_turret.c
+ * Overlay: ovl_Obj_Tokei_Turret
+ * Description: South Clock Town - Flags & Carnival Platform
+ */
+
 #include "z_obj_tokei_turret.h"
 
 #define FLAGS 0x00000000
