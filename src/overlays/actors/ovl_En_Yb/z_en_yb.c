@@ -91,11 +91,11 @@ void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_80BFA350, 20.0f);
 
     // ???
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06005F48, &D_06000200,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06005F48, &D_06000200,
         (void*)(((s32)&this->limbDrawTbl) & ~0xF), 
         (void*)((s32)&this->transitionDrawTable & ~0xF), ENYB_LIMBCOUNT);
 
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06000200);
+    Animation_PlayLoop(&this->skelAnime, &D_06000200);
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80BFB2B0);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -194,18 +194,18 @@ void func_80BFA444(GlobalContext *globalCtx, EnYb *this, s16 arg3, s16 arg4, f32
             if ( arg3 > 0) {
                 if (temp_a3 == 0) {
                     temp_v1 = &D_80BFB2E0[arg3];
-                    SkelAnime_ChangeLinkAnim(globalCtx, &this->skelAnime,
-                         temp_v1->unk-4, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(temp_v1->unk-4), 0, arg5);
+                    LinkAnimation_Change(globalCtx, &this->skelAnime,
+                         temp_v1->unk-4, 1.0f, 0.0f, (f32) Animation_GetLastFrame(temp_v1->unk-4), 0, arg5);
                 } else {
                     temp_v1 = &(&D_80BFB2E0)[arg3];
                     //sp34 = temp_v1_2;
-                    SkelAnime_ChangeLinkAnim(globalCtx, &this->skelAnime, (LinkAnimationHeader *) temp_v1->unk-4, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(temp_v1->unk-4), 0, arg5);
+                    LinkAnimation_Change(globalCtx, &this->skelAnime, (LinkAnimationHeader *) temp_v1->unk-4, 1.0f, 0.0f, (f32) Animation_GetLastFrame(temp_v1->unk-4), 0, arg5);
                 }
             } else {
                 temp_v1_3 = &(&D_80BFB2DC)[arg3];
                 //sp34 = temp_v1;
                 arg4 = temp_a3;
-                SkelAnime_ChangeAnim(&this->skelAnime, (AnimationHeader *) *temp_v1, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(*temp_v1), (f32) arg4, arg5);
+                Animation_Change(&this->skelAnime, (AnimationHeader *) *temp_v1, 1.0f, 0.0f, (f32) Animation_GetLastFrame(*temp_v1), (f32) arg4, arg5);
             }
             this->unk412 = arg3;
         }
@@ -226,9 +226,9 @@ s32 func_80BFA5CC(EnYb *this, GlobalContext *globalCtx) {
 
 void func_80BFA634(EnYb *this, GlobalContext *globalCtx) {
     if (this->unk412 <= 0) {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     } else {
-        func_801360E0(globalCtx, &this->skelAnime);
+        LinkAnimation_Update(globalCtx, &this->skelAnime);
     }
 }
 
@@ -383,10 +383,10 @@ void func_80BFABF0(EnYb *this, GlobalContext *globalCtx) {
 // EnYb_Idle
 void func_80BFAC88(EnYb *this, GlobalContext *globalCtx) {
     s32 pad;
-    Player *player = PLAYER;
+    Player *player = GET_PLAYER(globalCtx);
 
     func_80BFA634(this, globalCtx); // update skeleton?
-    if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.yDistToPlayer) < 50.0f) 
+    if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.playerHeightRel) < 50.0f) 
       && (globalCtx->msgCtx.unk1202A == 3) && (globalCtx->msgCtx.unk1202E == 7) 
       && (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
         this->actionFunc = func_80BFABF0;
@@ -414,7 +414,7 @@ void func_80BFAC88(EnYb *this, GlobalContext *globalCtx) {
         }
     } else if ((player->stateFlags2 & 0x08000000) && 
       (this->actor.xzDistToPlayer < 180.0f) && 
-      (fabsf(this->actor.yDistToPlayer) < 50.0f)) {
+      (fabsf(this->actor.playerHeightRel) < 50.0f)) {
         this->unk410 |= 1;
         Audio_PlayActorSound2((Actor *) this, NA_SE_SY_TRE_BOX_APPEAR);
     }
@@ -470,20 +470,20 @@ void EnYb_Update(Actor *thisx, GlobalContext *globalCtx) {
 void func_80BFB074(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor) {
     EnYb* this = (EnYb*) actor;
     if (limbIndex == 0xB) {
-        SysMatrix_MultiplyVector3fByState(&D_80BFB2F4, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&D_80BFB2F4, &this->actor.focus.pos);
     }
     if (limbIndex == 3) {
-        SysMatrix_MultiplyVector3fByState(&D_801D15B0, &this->unk404);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk404);
     }
 }
 
 void func_80BFB0E0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx){
     EnYb* this = (EnYb*) actor;
     if (limbIndex == 0xB) {
-        SysMatrix_MultiplyVector3fByState(&D_80BFB300, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&D_80BFB300, &this->actor.focus.pos);
     }
     if (limbIndex == 3) {
-        SysMatrix_MultiplyVector3fByState(&D_801D15B0, &this->unk404);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk404);
     }
 }
 
@@ -504,11 +504,11 @@ void EnYb_Draw(EnYb *this, GlobalContext *globalCtx) {
 
             if (!(&globalCtx->state)){}
 
-            POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, 0, func_80BFB0E0, &this->actor, POLY_XLU_DISP);
+            POLY_XLU_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, 0, func_80BFB0E0, &this->actor, POLY_XLU_DISP);
         } else {
             func_8012C28C(globalCtx->state.gfxCtx);
             Scene_SetRenderModeXlu(globalCtx, 0, 1);
-            SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, 0, func_80BFB074, &this->actor);
+            SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, 0, func_80BFB074, &this->actor);
         }
     }
 
