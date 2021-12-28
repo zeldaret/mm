@@ -36,9 +36,9 @@ extern AnimationHeader D_060165F0;
 extern AnimationHeader D_06014220;
 extern AnimationHeader D_06014A9C;
 extern Gfx D_0600F248[];
-extern UNK_TYPE4 D_06011138;
-extern UNK_TYPE4 D_06011938;
-extern UNK_TYPE4 D_06012138;
+extern TexturePtr D_06011138;
+extern TexturePtr D_06011938;
+extern TexturePtr D_06012138;
 
 const ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
