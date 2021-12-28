@@ -612,7 +612,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, GlobalContext* globalCtx) {
 
         if (this->actor.bgCheckFlags & 0x1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
             EnRuppecrow_ShatterIce(this, globalCtx);
-            func_800B3030(globalCtx, &this->actor.world.pos, &D_801D15B0, &D_801D15B0, (this->actor.scale.x * 10000.0f),
+            func_800B3030(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, (this->actor.scale.x * 10000.0f),
                           0x0, 0x0);
 
             Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0xB, NA_SE_EN_EXTINCT);
