@@ -202,7 +202,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->effectType = 0;
     this->type = 0;
     this->textId = 0;
-    this->unk_3FA = 0;
+    this->isInvincible = false;
     if (this->actor.parent == NULL) {
         this->unk_3EC = 1;
         this->unk_3EE = 1;
@@ -689,7 +689,7 @@ s32 func_80BA6DAC(EnRailgibud* this, GlobalContext* globalCtx) {
 void EnRailgibud_CheckDamageEffect(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((this->unk_3FA != 1) && (this->collider.base.acFlags & AC_HIT)) {
+    if ((this->isInvincible != true) && (this->collider.base.acFlags & AC_HIT)) {
         if (this->actionFunc == func_80BA57F8) {
             this->actor.home = this->actor.world;
         }
@@ -860,7 +860,7 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->textId == 0) && (this->type == 0)) {
         if (func_800B84D0(&this->actor, globalCtx)) {
-            this->unk_3FA = 1;
+            this->isInvincible = true;
             func_801518B0(globalCtx, 0x13B2, &this->actor);
             this->textId = 0x13B2;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
@@ -880,7 +880,7 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
             case 6:
                 if (func_80147624(globalCtx)) {
                     this->textId = 0;
-                    this->unk_3FA = 0;
+                    this->isInvincible = false;
                     this->actor.speedXZ = 0.6f;
                 }
                 break;
