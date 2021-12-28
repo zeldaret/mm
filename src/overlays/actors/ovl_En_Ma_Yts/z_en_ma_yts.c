@@ -41,16 +41,16 @@ extern AnimationHeader D_0600852C;
 extern AnimationHeader D_06008F6C;
 extern AnimationHeader D_060180DC;
 
-extern u64 D_060127C8[];
-extern u64 D_06012BC8[];
-extern u64 D_06012FC8[];
-extern u64 D_060133C8[];
+extern TexturePtr D_060127C8;
+extern TexturePtr D_06012BC8;
+extern TexturePtr D_06012FC8;
+extern TexturePtr D_060133C8;
 
-extern u64 D_0600FFC8[];
-extern u64 D_060107C8[];
-extern u64 D_06010FC8[];
-extern u64 D_060117C8[];
-extern u64 D_06011FC8[];
+extern TexturePtr D_0600FFC8;
+extern TexturePtr D_060107C8;
+extern TexturePtr D_06010FC8;
+extern TexturePtr D_060117C8;
+extern TexturePtr D_06011FC8;
 
 extern FlexSkeletonHeader D_06013928;
 
@@ -125,14 +125,14 @@ static struct_80B8E1A8 sAnimationInfo[] = {
     { &D_060180DC, 1.0f, 2, 0.0f }, { &D_060180DC, 1.0f, 2, -6.0f }, // Turns around anim
 };
 
-static void* sMouthTextures[] = {
+static TexturePtr sMouthTextures[] = {
     D_060127C8,
     D_06012BC8,
     D_06012FC8,
     D_060133C8,
 };
 
-static void* sEyeTextures[] = {
+static TexturePtr sEyeTextures[] = {
     D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8,
 };
 

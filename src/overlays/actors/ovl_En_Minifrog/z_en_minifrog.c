@@ -27,8 +27,8 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
 extern AnimationHeader D_060007BC;
 extern AnimationHeader D_06001534;
 extern FlexSkeletonHeader D_0600B538;
-extern UNK_TYPE4 D_060059A0;
-extern UNK_TYPE4 D_06005BA0;
+extern TexturePtr D_060059A0;
+extern TexturePtr D_06005BA0;
 
 const ActorInit En_Minifrog_InitVars = {
     ACTOR_EN_MINIFROG,
@@ -65,7 +65,7 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 12, 14, MASS_IMMOVABLE };
 
 // sEyeTextures???
-static UNK_TYPE4* D_808A4D74[] = {
+static TexturePtr D_808A4D74[] = {
     &D_060059A0,
     &D_06005BA0,
 };

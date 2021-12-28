@@ -34,15 +34,15 @@ void func_809C8808(EnSyatekiMan* this, GlobalContext* globalCtx);
 void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx);
 void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx);
 
-extern UNK_PTR D_06005AC8;
-extern UNK_PTR D_060062C8;
+extern TexturePtr D_06005AC8;
+extern TexturePtr D_060062C8;
 extern AnimationHeader D_0600D2F8;
 extern AnimationHeader D_0600D9D0;
 extern AnimationHeader D_0600DFEC;
 extern FlexSkeletonHeader D_0600E7D0;
 extern Gfx D_0600F2D0[];
-extern UNK_PTR D_0600FB90;
-extern UNK_PTR D_06010390;
+extern TexturePtr D_0600FB90;
+extern TexturePtr D_06010390;
 
 const ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
@@ -1276,7 +1276,7 @@ void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
 }
 
 void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_809C94B8[] = {
+    static TexturePtr D_809C94B8[] = {
         &D_06005AC8,
         &D_060062C8,
         &D_060062C8,

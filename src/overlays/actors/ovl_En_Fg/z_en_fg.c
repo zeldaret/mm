@@ -25,9 +25,9 @@ void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect);
 extern AnimationHeader D_06001534;
 extern AnimationHeader D_060011C0;
 extern AnimationHeader D_060007BC;
-extern Gfx* D_060059A0[];
-extern Gfx* D_0600B328[];
-extern Gfx* D_0600B338[];
+extern Gfx D_060059A0[];
+extern Gfx D_0600B328[];
+extern Gfx D_0600B338[];
 extern FlexSkeletonHeader D_0600B538;
 
 const ActorInit En_Fg_InitVars = {

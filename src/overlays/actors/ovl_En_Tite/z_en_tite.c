@@ -52,12 +52,12 @@ extern AnimationHeader D_06000A14;
 extern AnimationHeader D_06000C70;
 extern AnimationHeader D_060012E4;
 extern SkeletonHeader D_06003A20;
-extern UNK_PTR D_06001300;
-extern UNK_PTR D_06001700;
-extern UNK_PTR D_06001900;
-extern UNK_PTR D_06001B00;
-extern UNK_PTR D_06001F00;
-extern UNK_PTR D_06002100;
+extern TexturePtr D_06001300;
+extern TexturePtr D_06001700;
+extern TexturePtr D_06001900;
+extern TexturePtr D_06001B00;
+extern TexturePtr D_06001F00;
+extern TexturePtr D_06002100;
 
 const ActorInit En_Tite_InitVars = {
     ACTOR_EN_TITE,
@@ -128,7 +128,7 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 40, 40, MASS_HEAVY };
 
-static UNK_PTR D_80896B24[2][3] = {
+static TexturePtr D_80896B24[2][3] = {
     { &D_06001300, &D_06001700, &D_06001900 },
     { &D_06001B00, &D_06001F00, &D_06002100 },
 };

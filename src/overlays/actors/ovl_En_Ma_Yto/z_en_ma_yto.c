@@ -123,17 +123,17 @@ extern AnimationHeader D_06001FD0;
 extern AnimationHeader D_060030B4;
 extern AnimationHeader D_06004370;
 
-extern void* D_06014AD8[];
-extern void* D_06014ED8[];
-extern void* D_060152D8[];
-extern void* D_060156D8[];
+extern TexturePtr D_06014AD8;
+extern TexturePtr D_06014ED8;
+extern TexturePtr D_060152D8;
+extern TexturePtr D_060156D8;
 
-extern void* D_06011AD8[];
-extern void* D_060122D8[];
-extern void* D_06012AD8[];
-extern void* D_060132D8[];
-extern void* D_06013AD8[];
-extern void* D_060142D8[];
+extern TexturePtr D_06011AD8;
+extern TexturePtr D_060122D8;
+extern TexturePtr D_06012AD8;
+extern TexturePtr D_060132D8;
+extern TexturePtr D_06013AD8;
+extern TexturePtr D_060142D8;
 
 // gCremiaWoodenBox
 extern Gfx D_06005430[];
@@ -153,14 +153,14 @@ static struct_80B8E1A8 sAnimationInfo[] = {
     { &D_06004370, 1.0f, 0, 0.0f }, { &D_06004370, 1.0f, 0, -8.0f },  //
 };
 
-static void* sMouthTextures[] = {
+static TexturePtr sMouthTextures[] = {
     D_06014AD8,
     D_06014ED8,
     D_060152D8,
     D_060156D8,
 };
 
-static void* sEyesTextures[] = {
+static TexturePtr sEyesTextures[] = {
     D_06011AD8, D_060122D8, D_06012AD8, D_060132D8, D_06013AD8, D_060142D8,
 };
 

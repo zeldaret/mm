@@ -55,18 +55,18 @@ void func_80993524(EnWf* this);
 void func_8099357C(EnWf* this, GlobalContext* globalCtx);
 s32 func_8099408C(GlobalContext* globalCtx, EnWf* this);
 
-extern UNK_TYPE D_06000300;
-extern UNK_TYPE D_060027D8;
-extern UNK_TYPE D_060029D8;
+extern TexturePtr D_06000300;
+extern TexturePtr D_060027D8;
+extern TexturePtr D_060029D8;
 extern FlexSkeletonHeader D_06003BC0;
 extern AnimationHeader D_06004638;
 extern AnimationHeader D_06004A90;
 extern AnimationHeader D_06004C44;
 extern AnimationHeader D_060053D0;
 extern AnimationHeader D_06005700;
-extern UNK_TYPE D_06007AA8;
-extern UNK_TYPE D_060082A8;
-extern UNK_TYPE D_060084A8;
+extern TexturePtr D_06007AA8;
+extern TexturePtr D_060082A8;
+extern TexturePtr D_060084A8;
 extern FlexSkeletonHeader D_060095D0;
 extern AnimationHeader D_06009808;
 extern AnimationHeader D_06009A50;
@@ -256,14 +256,14 @@ static DamageTable sDamageTable2 = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 8, 50, 100, MASS_HEAVY };
 
-static UNK_TYPE D_809942B0[] = {
+static TexturePtr D_809942B0[] = {
     &D_06007AA8,
     &D_060082A8,
     &D_060084A8,
     &D_060082A8,
 };
 
-static UNK_TYPE D_809942C0[] = {
+static TexturePtr D_809942C0[] = {
     &D_06000300,
     &D_060027D8,
     &D_060029D8,

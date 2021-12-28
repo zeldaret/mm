@@ -24,8 +24,8 @@ extern AnimationHeader D_0600099C;
 extern AnimationHeader D_06000FC4;
 extern AnimationHeader D_06001F84;
 extern AnimationHeader D_06002238;
-extern UNK_PTR D_06002750;
-extern UNK_PTR D_06002950;
+extern TexturePtr D_06002750;
+extern TexturePtr D_06002950;
 extern Gfx D_06008348[];
 extern Gfx D_060083E0[];
 extern Gfx D_060085C8[];
@@ -1885,7 +1885,7 @@ void func_80AFABAC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) 
 }
 
 void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_80AFB914[] = {
+    static TexturePtr D_80AFB914[] = {
         &D_06002950,
         &D_06002750,
     };

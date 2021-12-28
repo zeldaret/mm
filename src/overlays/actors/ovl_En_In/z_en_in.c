@@ -59,11 +59,11 @@ extern Gfx D_06007A70[];
 extern Gfx D_06007C48[];
 extern Gfx D_0601C528[];
 extern AnimatedMaterial D_06001C30;
-extern UNK_TYPE D_06003520;
-extern UNK_TYPE D_060035E0;
-extern UNK_TYPE D_06004820;
-extern UNK_TYPE D_06004C20;
-extern UNK_TYPE D_060043E0;
+extern TexturePtr D_06003520;
+extern TexturePtr D_060035E0;
+extern TexturePtr D_06004820;
+extern TexturePtr D_06004C20;
+extern TexturePtr D_060043E0;
 extern AnimationHeader D_06001D10;
 extern AnimationHeader D_06014F8C;
 extern AnimationHeader D_06000CB0;
@@ -1556,7 +1556,8 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (limbIndex == 16) {
-        void* sp38[] = { &D_060035E0, &D_06004820, &D_06004C20, &D_060043E0 };
+        TexturePtr sp38[] = { &D_060035E0, &D_06004820, &D_06004C20, &D_060043E0 };
+        
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp38[this->unk482]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(&D_06003520));
     } else {

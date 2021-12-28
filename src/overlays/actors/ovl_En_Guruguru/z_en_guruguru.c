@@ -29,10 +29,10 @@ extern ColliderCylinderInit D_80BC79A0;
 extern AnimationHeader D_06000B04;
 extern AnimationHeader D_0600057C;
 
-extern u64 D_06005F20[];
-extern u64 D_06006320[];
-extern u64 D_06006720[];
-extern u64 D_06006920[];
+extern TexturePtr D_06005F20;
+extern TexturePtr D_06006320;
+extern TexturePtr D_06006720;
+extern TexturePtr D_06006920;
 
 const ActorInit En_Guruguru_InitVars = {
     ACTOR_EN_GURUGURU,
@@ -72,8 +72,8 @@ static ColliderCylinderInit sCylinderInit = {
 static AnimationHeader* D_80BC79CC[] = { &D_06000B04, &D_0600057C };
 static u8 D_80BC79D4[] = { 0 };
 static f32 D_80BC79D8[] = { 1.0f, 1.0f };
-static void* sEyeTextures[] = { D_06005F20, D_06006320 };
-static void* sMouthTextures[] = { D_06006720, D_06006920 };
+static TexturePtr sEyeTextures[] = { D_06005F20, D_06006320 };
+static TexturePtr sMouthTextures[] = { D_06006720, D_06006920 };
 
 void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGuruguru* this = THIS;

@@ -31,9 +31,9 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx);
 
 extern Gfx D_06000230[];
 extern Gfx D_060002E0[];
-extern UNK_TYPE D_060003A0;
-extern UNK_TYPE D_060041A0;
-extern UNK_TYPE D_06008650;
+extern TexturePtr D_060003A0;
+extern TexturePtr D_060041A0;
+extern TexturePtr D_06008650;
 extern SkeletonHeader D_06009B10;
 extern AnimationHeader D_06009C78;
 extern Gfx D_0600ECF0[];

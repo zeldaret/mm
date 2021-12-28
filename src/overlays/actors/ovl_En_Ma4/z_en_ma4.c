@@ -67,16 +67,16 @@ extern AnimationHeader D_06007D98;
 extern AnimationHeader D_0600852C;
 extern AnimationHeader D_06008F6C;
 
-extern u64 D_0600FFC8[];
-extern u64 D_060107C8[];
-extern u64 D_06010FC8[];
-extern u64 D_060117C8[];
-extern u64 D_06011FC8[];
+extern TexturePtr D_0600FFC8;
+extern TexturePtr D_060107C8;
+extern TexturePtr D_06010FC8;
+extern TexturePtr D_060117C8;
+extern TexturePtr D_06011FC8;
 
-extern u64 D_060127C8[];
-extern u64 D_06012BC8[];
-extern u64 D_06012FC8[];
-extern u64 D_060133C8[];
+extern TexturePtr D_060127C8;
+extern TexturePtr D_06012BC8;
+extern TexturePtr D_06012FC8;
+extern TexturePtr D_060133C8;
 
 extern Gfx D_060003B0[];
 
@@ -117,11 +117,11 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 D_80AC00DC = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static void* sEyeTextures[] = {
+static TexturePtr sEyeTextures[] = {
     D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8,
 };
 
-static void* sMouthTextures[] = {
+static TexturePtr sMouthTextures[] = {
     D_060127C8,
     D_06012BC8,
     D_06012FC8,

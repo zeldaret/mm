@@ -25,9 +25,9 @@ extern AnimationHeader D_06000430;
 extern AnimationHeader D_060006CC;
 extern AnimationHeader D_06000894;
 extern AnimationHeader D_06000B70;
-extern UNK_PTR D_06001680[];
-extern UNK_PTR D_06001700[];
-extern UNK_PTR D_06001780[];
+extern TexturePtr D_06001680;
+extern TexturePtr D_06001700;
+extern TexturePtr D_06001780;
 extern SkeletonHeader D_060023B8;
 extern SkeletonHeader D_06002468;
 extern AnimationHeader D_060024CC;
@@ -328,7 +328,7 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
-    static UNK_PTR D_80A5245C[] = {
+    static TexturePtr D_80A5245C[] = {
         D_06001680,
         D_06001700,
         D_06001780,

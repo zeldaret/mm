@@ -66,9 +66,9 @@ extern AnimationHeader D_060030A4;
 extern AnimationHeader D_06003724;
 extern AnimationHeader D_06003B10;
 extern AnimationHeader D_06003FB8;
-extern UNK_PTR D_06004390;
-extern UNK_PTR D_06004B90;
-extern UNK_PTR D_06005390;
+extern TexturePtr D_06004390;
+extern TexturePtr D_06004B90;
+extern TexturePtr D_06005390;
 extern Gfx D_0600B530[];
 extern FlexSkeletonHeader D_0600B9E8;
 
@@ -1378,7 +1378,7 @@ void func_80AEF6A4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnTk_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_80AEFA90[] = {
+    static TexturePtr D_80AEFA90[] = {
         &D_06004390,
         &D_06004B90,
         &D_06005390,

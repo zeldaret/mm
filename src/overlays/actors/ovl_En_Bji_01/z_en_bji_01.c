@@ -33,9 +33,9 @@ extern AnimationHeader D_06000FDC;
 extern AnimationHeader D_06005B58;
 extern AnimationHeader D_06000AB0;
 extern AnimationHeader D_0600066C;
-extern void* D_060049F0[];
-extern void* D_06004E70[];
-extern void* D_06005270[];
+extern TexturePtr D_060049F0;
+extern TexturePtr D_06004E70;
+extern TexturePtr D_06005270;
 extern FlexSkeletonHeader D_0600578C;
 
 const ActorInit En_Bji_01_InitVars = {
@@ -442,7 +442,7 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static void* sEyeTextures[] = { D_060049F0, D_06004E70, D_06005270 };
+    static TexturePtr sEyeTextures[] = { D_060049F0, D_06004E70, D_06005270 };
     EnBji01* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

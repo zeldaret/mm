@@ -58,9 +58,9 @@ extern AnimationHeader D_0600B9D8;
 extern AnimationHeader D_0600C26C;
 extern AnimationHeader D_0600DE34;
 extern FlexSkeletonHeader D_06013320;
-extern UNK_TYPE D_06005BC0;
-extern UNK_TYPE D_06006D40;
-extern UNK_TYPE D_06007140;
+extern TexturePtr D_06005BC0;
+extern TexturePtr D_06006D40;
+extern TexturePtr D_06007140;
 extern Gfx D_0600F180[];
 extern Gfx D_0600F218[];
 
@@ -1605,7 +1605,7 @@ void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static void* sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
+    static TexturePtr sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
     EnFsn* this = THIS;
     s32 pad;
     s16 i;

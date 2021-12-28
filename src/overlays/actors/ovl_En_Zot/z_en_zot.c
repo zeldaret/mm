@@ -32,9 +32,9 @@ void func_80B99384(EnZot* this, GlobalContext* globalCtx);
 
 extern AnimationHeader D_06002898;
 extern AnimationHeader D_06004248;
-extern UNK_PTR D_060050A0;
-extern UNK_PTR D_060058A0;
-extern UNK_PTR D_060060A0;
+extern TexturePtr D_060050A0;
+extern TexturePtr D_060058A0;
+extern TexturePtr D_060060A0;
 extern FlexSkeletonHeader D_0600D208;
 extern AnimationHeader D_0600DE20;
 extern AnimationHeader D_0600DF54;
@@ -1397,7 +1397,7 @@ void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnZot_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    UNK_PTR sp4C[] = {
+    TexturePtr sp4C[] = {
         &D_060050A0,
         &D_060058A0,
         &D_060060A0,

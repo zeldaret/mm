@@ -16,6 +16,10 @@ def get_new_name(object_name, symbol_type, symbol_lookup):
             return (f"{object_name}_DL_{symbol_lookup:06X}", f"0x{symbol_lookup:X}")
         case "SkeletonHeader" | "FlexSkeletonHeader":
             return (f"{object_name}_Skel_{symbol_lookup:06X}", f"0x{symbol_lookup:X}")
+        case "CollisionHeader":
+            return (f"{object_name}_Colheader_{symbol_lookup:06X}", f"0x{symbol_lookup:X}")
+        case "Vtx":
+            return (f"{object_name}_Vtx_{symbol_lookup:06X}", f"0x{symbol_lookup:X}")
         case _:
             return (f"{object_name}_Blob_{symbol_lookup:06X}", f"0x{symbol_lookup:X}")
 
@@ -31,6 +35,13 @@ def make_element_string(symbol_type, name, offset):
             return f"<Skeleton Name=\"{name}\" Type=\"Normal\" LimbType=\"Standard\" Offset=\"{offset}\" />"
         case "FlexSkeletonHeader":
             return f"<Skeleton Name=\"{name}\" Type=\"Flex\" LimbType=\"Standard\" Offset=\"{offset}\" />"
+        case "CollisionHeader":
+            return f"<Collision Name=\"{name}\" Offset=\"{offset}\" />"
+        case "Vtx":
+            out = f"<Array Name=\"{name}\" Count=\"0\" Offset=\"{offset}\" />\n"
+            out += f"        <Vtx/>\n"
+            out += f"    </Array>"
+            return out
         case _:
             return f"<Blob Name=\"{name}\" Size=\"0\" Offset=\"{offset}\" />"
     return f"<Blob Name=\"{name}\" Size=\"0\" Offset=\"{offset}\" />"
@@ -60,10 +71,13 @@ def get_object_file(object_name):
 XML_DATA = {
     "gameplay_keep":get_object_file("gameplay_keep"),
     "gameplay_field_keep":get_object_file("gameplay_field_keep"),
-    "gameplay_dangeon_keep":get_object_file("gameplay_field_keep"),
+    "gameplay_dangeon_keep":get_object_file("gameplay_dangeon_keep"),
 }
 
-def find_xml_entry(xml_entries, symbol_name, symbol_lookup, symbol_type, object_name, to_replace, to_replace_set, includes_needed):
+def find_xml_entry(xml_entries, symbol_name, symbol_lookup, symbol_type, object_name, to_replace, to_replace_set):
+    if symbol_name.startswith ("0"):
+        symbol_name = f"D_{symbol_name}"
+
     for entry in xml_entries:
         if len(entry.attrib.keys()) == 0:
             # comments
@@ -84,26 +98,24 @@ def find_xml_entry(xml_entries, symbol_name, symbol_lookup, symbol_type, object_
                     else:
                         name, offset = get_new_name(object_name, symbol_type, symbol_lookup)
                         to_add.append(make_element_string(symbol_type, name, offset))
-                        #to_replace.append((symbol_name, name))
+                        to_replace.append((symbol_name, name))
                     to_replace_set.add(symbol_name)
             else:
                 if symbol_name not in to_replace_set:
                     to_replace.append((symbol_name, entry.attrib["Name"]))
                     to_replace_set.add(symbol_name)
-            
-            includes_needed.add("gameplay_field_keep")
             break
     else:
-        return False, to_replace, to_replace_set, includes_needed
+        return False, to_replace, to_replace_set
 
-    return True, to_replace, to_replace_set, includes_needed
+    return True, to_replace, to_replace_set
 
 sym_regex = re.compile(r"D_(0[^8][0-9a-fA-F]{6})[^_]?")
 
 for file in glob.iglob("src/overlays/actors/**/*.c", recursive=True):
     if "/effects/" in file:
         continue
-    #if "syokudai" not in file:
+    #if "en_wf" not in file:
     #    continue
     #print(file)
 
@@ -155,23 +167,25 @@ for file in glob.iglob("src/overlays/actors/**/*.c", recursive=True):
         syms = re.findall(sym_regex, line)
 
         for sym in syms:
-            symbol_type = ""
+            symbol_type = "UNK_PTR"
             if line.startswith("extern ") and ";" in line:
                 _, symbol_type, symbol_name = line.split(";",1)[0].split(" ")
                 symbol_name = re.findall(sym_regex, symbol_name)[0]
 
-                new_lookup = -1
-                if "//" in line:
-                    new_lookup = int(symbol_name, 16)
-                    symbol_name = line.split(" // ")[1]
+                #new_lookup = -1
+                #if " // " in line and line.split(" // ",1)[1].find(" ") == -1:
+                #    new_lookup = int(symbol_name, 16)
+                #    symbol_name = line.split(" // ")[1]
                 add_line = False
             else:
                 symbol_name = sym
 
-            if new_lookup >= 0:
-                symbol_lookup = new_lookup
-            else:
-                symbol_lookup = int(symbol_name, 16)
+            #print(symbol_name, symbol_type)
+            #if new_lookup >= 0:
+            #    symbol_lookup = new_lookup
+            #else:
+            #    symbol_lookup = int(symbol_name, 16)
+            symbol_lookup = int(symbol_name, 16)
 
             is_type_5 = False
             if symbol_lookup >= 0x04000000 and symbol_lookup < 0x05000000:
@@ -181,7 +195,7 @@ for file in glob.iglob("src/overlays/actors/**/*.c", recursive=True):
                 includes_needed.add("gameplay_keep")
             elif symbol_lookup >= 0x05000000 and symbol_lookup < 0x06000000:
                 # gameplay_field_keep or gamepaly_dangeon_keep
-                xml_entries = XML_DATA["gameplay_field_keep"] + XML_DATA["gameplay_dangeon_keep"]
+                xml_entries = XML_DATA["gameplay_field_keep"]
                 symbol_lookup -= 0x05000000
                 is_type_5 = True
             elif symbol_lookup >= 0x06000000 and symbol_lookup < 0x07000000:
@@ -192,16 +206,24 @@ for file in glob.iglob("src/overlays/actors/**/*.c", recursive=True):
                     continue
                 xml_entries = get_object_file(object_name)
                 symbol_lookup -= 0x06000000
+                includes_needed.add(object_name)
             else:
                 print(f"Skipping {symbol_name}")
                 continue
 
-            found, to_replace, to_replace_set, includes_needed = find_xml_entry(xml_entries, symbol_name, symbol_lookup, symbol_type, object_name, to_replace, to_replace_set, includes_needed)
+            found, to_replace, to_replace_set = find_xml_entry(xml_entries, symbol_name, symbol_lookup, symbol_type, object_name, to_replace, to_replace_set)
+            if found and is_type_5:
+                includes_needed.add("gameplay_field_keep")
+
             if not found and is_type_5:
                 xml_entries = XML_DATA["gameplay_dangeon_keep"]
-                found, to_replace, to_replace_set, includes_needed = find_xml_entry(xml_entries, symbol_name, symbol_lookup, symbol_type, object_name, to_replace, to_replace_set, includes_needed)
+                found, to_replace, to_replace_set = find_xml_entry(xml_entries, symbol_name, symbol_lookup, symbol_type, object_name, to_replace, to_replace_set)
+                
+                if found and is_type_5:
+                    includes_needed.add("gameplay_dangeon_keep")
 
             if not found:
+                symbol_name = f"D_{symbol_name}"
                 if symbol_name not in to_replace_set:
                     if symbol_type.startswith("UNK_"):
                         print(f"\tUNK {symbol_name}")
@@ -220,24 +242,28 @@ for file in glob.iglob("src/overlays/actors/**/*.c", recursive=True):
         last_include = -1
 
         for i,line in enumerate(fd):
-            if not include_set and line.startswith("#include"):
+            if line.startswith("#include"):
                 last_include = i
-                if f"objects/{object_name}" in line:
-                    need_include = False
-            elif last_include >= 0:
-                include_set = True
+                new_inc = includes_needed
+                for include in includes_needed:
+                    if f"objects/{include}" in line:
+                        new_inc.remove(include)
+                includes_needed = new_inc
 
-        if need_include:
-            new_fd.insert(last_include + 1, f"#include \"objects/{object_name}/{object_name}.h\"")
-        new_fd = "\n".join(new_fd)
-        for replace in to_replace:
-            new_fd = new_fd.replace(replace[0], replace[1])
+        for include in includes_needed:
+            new_fd.insert(last_include + 1, f"#include \"objects/{include}/{include}.h\"")
 
-        #with open(args.file, "w") as f:
-        #    f.write(new_fd)
+    new_fd = "\n".join(new_fd)
+    for replace in to_replace:
+        new_fd = new_fd.replace(replace[0], replace[1])
+
+    #with open(file, "w") as f:
+    #    f.write(new_fd)
 
     if len(to_add) > 0:
         to_add.sort(key=lambda x: int(x.split("Offset=\"", 1)[1].split("\"")[0], 16))
         print(f"New entries to the XML:")
         [print(f"\t{entry}") for entry in to_add]
     print()
+
+    #print(new_fd)

@@ -69,9 +69,9 @@ extern AnimationHeader D_060022C8;
 extern AnimationHeader D_060028B8;
 extern AnimationHeader D_06002F20;
 extern AnimationHeader D_06003AA8;
-extern UNK_TYPE D_06008AE8;
-extern UNK_TYPE D_0600A068;
-extern UNK_TYPE D_0600A468;
+extern TexturePtr D_06008AE8;
+extern TexturePtr D_0600A068;
+extern TexturePtr D_0600A468;
 extern FlexSkeletonHeader D_0600A978;
 extern AnimationHeader D_0600B3E0;
 extern AnimationHeader D_0600B894;
@@ -734,7 +734,7 @@ void EnToto_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnToto_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    void* sp4C[] = { &D_06008AE8, &D_0600A068, &D_0600A468 };
+    TexturePtr sp4C[] = { &D_06008AE8, &D_0600A068, &D_0600A468 };
     EnToto* this = THIS;
     s32 pad;
 

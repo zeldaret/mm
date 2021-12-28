@@ -19,11 +19,11 @@ void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80950CDC(EnGm* this, GlobalContext* globalCtx);
 void func_80950DB8(EnGm* this, GlobalContext* globalCtx);
 
-extern UNK_PTR D_06005028;
-extern UNK_PTR D_060054A8;
-extern UNK_PTR D_06005CE8;
-extern UNK_PTR D_06006828;
-extern UNK_PTR D_06006C68;
+extern TexturePtr D_06005028;
+extern TexturePtr D_060054A8;
+extern TexturePtr D_06005CE8;
+extern TexturePtr D_06006828;
+extern TexturePtr D_06006C68;
 extern Gfx D_06007528[];
 extern FlexSkeletonHeader D_060078B0;
 extern AnimationHeader D_06008090;
@@ -1752,7 +1752,7 @@ void func_80951594(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_80951E30[] = { &D_060054A8, &D_06005028, &D_06006828, &D_06005028, &D_06005CE8, &D_06006C68 };
+    static TexturePtr D_80951E30[] = { &D_060054A8, &D_06005028, &D_06006828, &D_06005028, &D_06005CE8, &D_06006C68 };
     EnGm* this = THIS;
 
     if ((this->unk_258 != 0) && (this->unk_262 >= 0)) {

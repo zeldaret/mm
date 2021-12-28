@@ -6,6 +6,7 @@
 
 #include "z_arms_hook.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_link_child/object_link_child.h"
 
 #define FLAGS 0x00000030
 
@@ -50,8 +51,6 @@ static ColliderQuadInit D_808C1BC0 = {
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
-
-extern Gfx D_0601D960[];
 
 void ArmsHook_SetupAction(ArmsHook* this, ArmsHookActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -324,7 +323,7 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_80122868(globalCtx, player);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_0601D960);
+        gSPDisplayList(POLY_OPA_DISP++, object_link_child_DL_01D960);
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Math_Vec3f_Diff(&player->rightHandWorld.pos, &this->actor.world.pos, &sp68);
