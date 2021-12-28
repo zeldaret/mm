@@ -348,6 +348,7 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, GlobalContext* globalCtx) {
     } else if (EnTalkGibud_PlayerOutOfRange(this, globalCtx)) {
         EnTalkGibud_SetupWalkToHome(this);
     }
+
     if (this->grabWaitTimer > 0) {
         this->grabWaitTimer--;
     }
@@ -438,6 +439,7 @@ void EnTalkGibud_GrabFail(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (this->actor.speedXZ < 0.0f) {
         this->actor.speedXZ += 0.15f;
     }
+
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x12C, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x12C, 0);
@@ -518,6 +520,7 @@ void EnTalkGibud_Stunned(EnTalkGibud* this, GlobalContext* globalCtx) {
             EnTalkGibud_SetupDamage(this);
         }
     }
+
     if (this->stunTimer != 0) {
         this->stunTimer--;
     }
@@ -537,6 +540,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (this->actor.speedXZ < 0.0f) {
         this->actor.speedXZ += 0.15f;
     }
+    
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_3F7 = -1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -548,6 +552,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx) {
                                REDEAD_GIBDO_LIMB_MAX);
             this->type = EN_TALK_GIBUD_TYPE_REDEAD;
         }
+        
         if (EnTalkGibud_PlayerOutOfRange(this, globalCtx)) {
             EnTalkGibud_SetupWalkToHome(this);
         } else {
@@ -1156,6 +1161,7 @@ void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                            this->skelAnime.dListCount, EnTalkGibud_OverrideLimbDraw,
                                            EnTalkGibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
+
     if (this->effectTimer > 0) {
         func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->effectScale, 0.5f,
                       this->effectAlpha, this->effectType);

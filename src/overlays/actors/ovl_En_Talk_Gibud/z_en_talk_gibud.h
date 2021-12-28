@@ -40,13 +40,13 @@ typedef struct EnTalkGibud {
     /* 0x3DE */ Vec3s headRotation;
     /* 0x3E4 */ Vec3s upperBodyRotation;
     /* 0x3EA */ union {
-        s16 playerStunWaitTimer; // Cannot stun the player if this is non-zero
-        s16 grabDamageTimer;
-        s16 headShakeTimer;
-        s16 stunTimer;
-        s16 deathTimer;
-        s16 disappearanceTimer;
-    };
+                    s16 playerStunWaitTimer; // Cannot stun the player if this is non-zero
+                    s16 grabDamageTimer;
+                    s16 headShakeTimer;
+                    s16 stunTimer;
+                    s16 deathTimer;
+                    s16 disappearanceTimer;
+                };
     /* 0x3EC */ s16 grabState;
     /* 0x3EE */ s16 grabWaitTimer; // Cannot grab the player if this is non-zero
     /* 0x3F0 */ s16 effectTimer;
