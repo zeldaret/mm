@@ -59,7 +59,7 @@ typedef enum {
     /*  0 */ EN_TALK_GIBUD_ANIMATION_GRAB_ATTACK,
     /*  1 */ EN_TALK_GIBUD_ANIMATION_GRAB_END,
     /*  2 */ EN_TALK_GIBUD_ANIMATION_GRAB_START,
-    /*  3 */ EN_TALK_GIBUD_ANIMATION_LOOK_AWAY,
+    /*  3 */ EN_TALK_GIBUD_ANIMATION_LOOK_BACK,
     /*  4 */ EN_TALK_GIBUD_ANIMATION_CROUCH_WIPING_TEARS,
     /*  5 */ EN_TALK_GIBUD_ANIMATION_CROUCH_CRYING,
     /*  6 */ EN_TALK_GIBUD_ANIMATION_DEATH,
@@ -104,13 +104,20 @@ const ActorInit En_Talk_Gibud_InitVars = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &object_rd_Anim_006678, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_006B08, 0.5f, 0.0f, 0.0f, 3, 0.0f },
-    { &object_rd_Anim_006EEC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_0073A4, 0.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &object_rd_Anim_007BBC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_0081A8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_rd_Anim_009298, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_009900, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &object_rd_Anim_00A450, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_00ABE0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_rd_Anim_0113EC, 0.4f, 0.0f, 0.0f, 1, -8.0f }, { &object_rd_Anim_01216C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_rd_Anim_0118D8, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_011DB8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &gGibdoRedeadGrabAttackAnim, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f, 0.0f, 3, 0.0f },
+    { &gGibdoRedeadGrabStartAnim, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &gGibdoRedeadWipingTearsAnim, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &gGibdoRedeadSobbingAnim, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &gGibdoRedeadDeathAnim, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &gGibdoRedeadDamageAnim, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &gGibdoRedeadStandUpAnim, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &gGibdoRedeadIdleAnim, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &gGibdoRedeadWalkAnim, 0.4f, 0.0f, 0.0f, 1, -8.0f },
+    { &gGibdoRedeadSquattingDanceAnim, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &gGibdoRedeadPirouetteAnim, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &gGibdoRedeadClappingDanceAnim, 1.0f, 0.0f, 0.0f, 0, -8.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -214,7 +221,7 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.hintId = 0x2D;
     this->actor.textId = 0;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0, this->jointTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGibdoSkel, &gGibdoRedeadIdleAnim, this->jointTable,
                        this->morphTable, EN_TALK_GIBUD_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -537,8 +544,8 @@ void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx) {
             this->actor.hintId = 0x2A;
             this->actor.flags &= ~(0x8 | 0x1);
             this->actor.flags |= (0x4 | 0x1);
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
-                               this->morphTable, EN_TALK_GIBUD_LIMB_MAX);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
+                               EN_TALK_GIBUD_LIMB_MAX);
             this->type = EN_TALK_GIBUD_TYPE_REDEAD;
         }
         if (EnTalkGibud_PlayerOutOfRange(this, globalCtx)) {
@@ -567,14 +574,14 @@ void EnTalkGibud_Dead(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
     if (this->deathTimer == 20 && this->effectTimer > 0 && this->effectType == 0 &&
         this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
-                           this->morphTable, EN_TALK_GIBUD_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
+                           EN_TALK_GIBUD_LIMB_MAX);
         this->type = EN_TALK_GIBUD_TYPE_REDEAD;
     }
 }
 
 void EnTalkGibud_SetupRevive(EnTalkGibud* this) {
-    Animation_Change(&this->skelAnime, &object_rd_Anim_009298, -1.0f, Animation_GetLastFrame(&object_rd_Anim_009298),
+    Animation_Change(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f, Animation_GetLastFrame(&gGibdoRedeadDeathAnim),
                      0.0f, 2, -8.0f);
     this->actor.flags |= 1;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_REVERSE);
