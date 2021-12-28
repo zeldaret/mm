@@ -428,6 +428,8 @@ typedef union {
 // Address at the end of normal RDRAM after which is room for a screen buffer
 #define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
 
+typedef void (*FaultDrawerCallback)(void);
+
 typedef struct {
     /* 0x00 */ u16* fb;
     /* 0x04 */ u16 w;
@@ -440,7 +442,7 @@ typedef struct {
     /* 0x12 */ u16 backColor;
     /* 0x14 */ u16 cursorX;
     /* 0x16 */ u16 cursorY;
-    /* 0x18 */ u32* font;
+    /* 0x18 */ const u32* font;
     /* 0x1C */ u8 charW;
     /* 0x1D */ u8 charH;
     /* 0x1E */ s8 charWPad;
@@ -448,7 +450,7 @@ typedef struct {
     /* 0x20 */ u16 printColors[10];
     /* 0x34 */ u8 escCode;
     /* 0x35 */ u8 osSyncPrintfEnabled;
-    /* 0x38 */ void* inputCallback;
+    /* 0x38 */ FaultDrawerCallback inputCallback;
 } FaultDrawer; // size = 0x3C
 
 typedef struct GfxPrint {
@@ -701,6 +703,22 @@ typedef struct {
 } InterfaceContext; // size = 0x348
 
 typedef struct {
+    /* 0x00 */ void* loadedRamAddr;
+    /* 0x04 */ uintptr_t vromStart;
+    /* 0x08 */ uintptr_t vromEnd;
+    /* 0x0C */ void* vramStart;
+    /* 0x10 */ void* vramEnd;
+    /* 0x14 */ uintptr_t offset; // loadedRamAddr - vramStart
+    /* 0x18 */ const char* name;
+} KaleidoMgrOverlay; // size = 0x1C
+
+typedef enum {
+    /* 0x00 */ KALEIDO_OVL_KALEIDO_SCOPE,
+    /* 0x01 */ KALEIDO_OVL_PLAYER_ACTOR,
+    /* 0x02 */ KALEID_OVL_MAX
+} KaleidoMgrOverlayType;
+
+typedef struct {
     /* 0x00 */ u16 unk_0;
     /* 0x02 */ u16 unk_2;
     /* 0x04 */ f32 unk_4;
@@ -764,11 +782,10 @@ typedef struct {
 
 typedef struct {
     /* 0x00000 */ View view;
-    /* 0x00168 */ void* skyboxStaticSegment[2];
-    /* 0x00170 */ char unk170[8]; // more static segments?
+    /* 0x00168 */ void* skyboxStaticSegment[4];
     /* 0x00178 */ void* skyboxPaletteStaticSegment;
-    /* 0x0017C */ Gfx* unk17C;
-    /* 0x00180 */ Gfx* unk180;
+    /* 0x0017C */ Gfx* dListBuf;
+    /* 0x00180 */ Gfx* roomDL;
     /* 0x00184 */ Vtx* roomVtx;
     /* 0x00188 */ DmaRequest unk188;
     /* 0x001A8 */ DmaRequest unk1A8;
@@ -788,6 +805,10 @@ typedef struct {
     /* 0x00226 */ u8 envG;
     /* 0x00227 */ u8 envB;
 } SkyboxContext; // size = 0x228
+
+typedef enum {
+    /* 0x05 */ SKYBOX_CUTSCENE_MAP = 5
+} SkyboxId;
 
 typedef struct ListAlloc {
     /* 0x00 */ struct ListAlloc* prev;
@@ -1253,14 +1274,8 @@ struct FireObj {
 struct TargetContext {
     /* 0x00 */ Vec3f unk0;
     /* 0x0C */ Vec3f unkC;
-    /* 0x18 */ f32 unk18;
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ f32 unk20;
-    /* 0x24 */ f32 unk24;
-    /* 0x28 */ f32 unk28;
-    /* 0x2C */ f32 unk2C;
-    /* 0x30 */ f32 unk30;
-    /* 0x34 */ f32 unk34;
+    /* 0x18 */ Color_RGBAf unk18;
+    /* 0x28 */ Color_RGBAf unk28;
     /* 0x38 */ Actor* unk38;
     /* 0x3C */ Actor* unk3C;
     /* 0x40 */ f32 unk40;
@@ -1396,9 +1411,9 @@ struct GlobalContext {
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 unk_1879C[10];
-    /* 0x187B0 */ MtxF projectionMatrix;
+    /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
-    /* 0x187FC */ MtxF mf_187FC;
+    /* 0x187FC */ MtxF billboardMtxF;
     /* 0x1883C */ Mtx* unk_1883C;
     /* 0x18840 */ u32 gameplayFrames;
     /* 0x18844 */ u8 unk_18844;
@@ -1456,6 +1471,30 @@ typedef struct {
     /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
+
+typedef struct EnHy {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ UNK_TYPE1 unk_144[0x8];
+    /* 0x14C */ SkelAnime skelAnime;
+    /* 0x190 */ s8 unk190;
+    /* 0x191 */ s8 unk191;
+    /* 0x192 */ s8 unk192;
+    /* 0x193 */ s8 animObjIndex;
+    /* 0x194 */ ColliderCylinder collider;
+    /* 0x1E0 */ UNK_TYPE1 unk_1E0[0x4];
+    /* 0x1E4 */ Path* path;
+    /* 0x1E8 */ s16 curPoint;
+    /* 0x1EA */ UNK_TYPE1 unk_1EA[0x2];
+    /* 0x1EC */ Vec3f leftFootPos;
+    /* 0x1F8 */ Vec3f rightFootPos;
+    /* 0x204 */ u8 isLeftFootOnGround;
+    /* 0x205 */ u8 isRightFootOnGround;
+    /* 0x206 */ Vec3s jointTable[16];
+    /* 0x266 */ Vec3s morphTable[16];
+    /* 0x2C6 */ UNK_TYPE1 unk_2C6[0x120];
+    /* 0x3E6 */ s16 eyeTexIndex;
+    /* 0x3E8 */ s16 blinkTimer;
+} EnHy;
 
 typedef struct {
     /* 0x0 */ u8 unk0;
