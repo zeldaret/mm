@@ -131,7 +131,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 0;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    this->unk_3DA = this->unk_3D8 = 0;
+    this->upperBodyYRotation = this->headYRotation = 0;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
     this->actor.colChkInfo.mass = MASS_HEAVY;
@@ -278,8 +278,8 @@ void func_808D4308(EnRd* this) {
 
 void func_808D43AC(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    Math_SmoothStepToS(&this->unk_3D8, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->unk_3DA, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     if ((this->actor.params == ENRD_GET_2) && Animation_OnFrame(&this->skelAnime, 0.0f)) {
         if (Rand_ZeroOne() >= 0.5f) {
             Animation_PlayLoop(&this->skelAnime, &gGibdoRedeadSobbingAnim);
@@ -338,8 +338,8 @@ void func_808D45D4(EnRd* this) {
 
 void func_808D4660(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    Math_SmoothStepToS(&this->unk_3D8, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->unk_3DA, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     if (this->unk_3EC != 0) {
         func_808D5C54(this);
     }
@@ -381,8 +381,8 @@ void func_808D47DC(EnRd* this) {
 
 void func_808D4868(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    Math_SmoothStepToS(&this->unk_3D8, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->unk_3DA, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     if (this->unk_3EC != 0) {
         func_808D5C54(this);
     }
@@ -441,8 +441,8 @@ void func_808D4A90(EnRd* this) {
 
 void func_808D4B20(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    Math_SmoothStepToS(&this->unk_3D8, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->unk_3DA, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     if (this->unk_3EC != 0) {
         func_808D5C54(this);
     }
@@ -548,12 +548,13 @@ void func_808D4FE0(EnRd* this, GlobalContext* globalCtx) {
 void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
-    s16 sp36 = ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->unk_3D8) - this->unk_3DA;
+    s16 sp36 =
+        ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->headYRotation) - this->upperBodyYRotation;
 
     this->skelAnime.playSpeed = this->actor.speedXZ;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 250, 0);
-    Math_SmoothStepToS(&this->unk_3D8, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->unk_3DA, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     SkelAnime_Update(&this->skelAnime);
 
@@ -636,8 +637,8 @@ void func_808D5440(EnRd* this, GlobalContext* globalCtx) {
         }
     }
 
-    Math_SmoothStepToS(&this->unk_3D8, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->unk_3DA, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     SkelAnime_Update(&this->skelAnime);
 
@@ -691,8 +692,8 @@ void func_808D56E4(EnRd* this, GlobalContext* globalCtx) {
                 func_808D60B0(this);
             }
         }
-        Math_SmoothStepToS(&this->unk_3D8, 0, 1, 100, 0);
-        Math_SmoothStepToS(&this->unk_3DA, 0, 1, 100, 0);
+        Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
+        Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     } else {
         func_808D4FE0(this, globalCtx);
     }
@@ -734,8 +735,8 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
             this->unk_3EA = 20;
 
         case 0:
-            Math_SmoothStepToS(&this->unk_3D8, 0, 1, 1500, 0);
-            Math_SmoothStepToS(&this->unk_3DA, 0, 1, 1500, 0);
+            Math_SmoothStepToS(&this->headYRotation, 0, 1, 1500, 0);
+            Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 1500, 0);
 
         case 2:
             if (!(player->stateFlags2 & 0x80) || (player->unk_B62 != 0)) {
@@ -812,7 +813,8 @@ void func_808D5C54(EnRd* this) {
 
 void func_808D5CCC(EnRd* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 temp_v0 = ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->unk_3D8) - this->unk_3DA;
+    s16 temp_v0 =
+        ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->headYRotation) - this->upperBodyYRotation;
 
     if (ABS_ALT(temp_v0) < 0x2008) {
         if (!(this->unk_3DC & 0x80)) {
@@ -840,8 +842,8 @@ void func_808D5DF4(EnRd* this, GlobalContext* globalCtx) {
     }
 
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Math_SmoothStepToS(&this->unk_3D8, 0, 1, 300, 0);
-    Math_SmoothStepToS(&this->unk_3DA, 0, 1, 300, 0);
+    Math_SmoothStepToS(&this->headYRotation, 0, 1, 300, 0);
+    Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 300, 0);
     if (SkelAnime_Update(&this->skelAnime)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_808D5E98(this);
@@ -864,7 +866,7 @@ void func_808D5F18(EnRd* this, GlobalContext* globalCtx) {
         func_808D53C0(this, globalCtx);
         this->unk_3D4 = 0;
     } else {
-        this->unk_3D8 = Math_SinS(this->unk_3D4 * 4000) * (9583.0f * ((60 - this->unk_3D4) / 60.0f));
+        this->headYRotation = Math_SinS(this->unk_3D4 * 4000) * (9583.0f * ((60 - this->unk_3D4) / 60.0f));
         SkelAnime_Update(&this->skelAnime);
         this->unk_3D4++;
     }
@@ -920,8 +922,8 @@ void func_808D6200(EnRd* this, GlobalContext* globalCtx) {
     }
 
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Math_SmoothStepToS(&this->unk_3D8, 0, 1, 300, 0);
-    Math_SmoothStepToS(&this->unk_3DA, 0, 1, 300, 0);
+    Math_SmoothStepToS(&this->headYRotation, 0, 1, 300, 0);
+    Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 300, 0);
 
     if (SkelAnime_Update(&this->skelAnime)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -951,8 +953,8 @@ void func_808D6388(EnRd* this, GlobalContext* globalCtx) {
         func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 6);
     }
 
-    Math_SmoothStepToS(&this->unk_3D8, 0, 1, 2000, 0);
-    Math_SmoothStepToS(&this->unk_3DA, 0, 1, 2000, 0);
+    Math_SmoothStepToS(&this->headYRotation, 0, 1, 2000, 0);
+    Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 2000, 0);
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_3D6 == 0) {
@@ -1026,22 +1028,22 @@ void func_808D65BC(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D66A0(EnRd* this, GlobalContext* globalCtx) {
-    s16 phi_v0 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->unk_3DA;
+    s16 phi_v0 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->upperBodyYRotation;
     s16 temp_v0 = CLAMP(phi_v0, -0x1F4, 0x1F4);
 
-    phi_v0 -= this->unk_3D8;
+    phi_v0 -= this->headYRotation;
     phi_v0 = CLAMP(phi_v0, -0x1F4, 0x1F4);
 
     if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
-        this->unk_3DA += ABS_ALT(temp_v0);
-        this->unk_3D8 += ABS_ALT(phi_v0);
+        this->upperBodyYRotation += ABS_ALT(temp_v0);
+        this->headYRotation += ABS_ALT(phi_v0);
     } else {
-        this->unk_3DA -= ABS_ALT(temp_v0);
-        this->unk_3D8 -= ABS_ALT(phi_v0);
+        this->upperBodyYRotation -= ABS_ALT(temp_v0);
+        this->headYRotation -= ABS_ALT(phi_v0);
     }
 
-    this->unk_3DA = CLAMP(this->unk_3DA, -0x495F, 0x495F);
-    this->unk_3D8 = CLAMP(this->unk_3D8, -0x256F, 0x256F);
+    this->upperBodyYRotation = CLAMP(this->upperBodyYRotation, -0x495F, 0x495F);
+    this->headYRotation = CLAMP(this->headYRotation, -0x256F, 0x256F);
 }
 
 void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
@@ -1072,9 +1074,9 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
             case 12:
                 if ((this->actionFunc != func_808D58CC) &&
                     ((this->actionFunc != func_808D65BC) || (this->unk_3D6 == 0))) {
-                    this->unk_3E6 = 40;
-                    this->unk_3E8 = 30;
-                    this->unk_294 = 1.0f;
+                    this->effectTimer = 40;
+                    this->effectType = 30;
+                    this->effectAlpha = 1.0f;
                     func_808D64D0(this);
                 }
                 return;
@@ -1085,20 +1087,20 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
 
             case 2:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
-                this->unk_3E6 = 180;
-                this->unk_3E8 = 0;
+                this->effectTimer = 180;
+                this->effectType = 0;
                 this->unk_3E9 = 0;
                 this->unk_3E0 = 0;
-                this->unk_294 = 1.0f;
+                this->effectAlpha = 1.0f;
                 break;
 
             case 4:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
-                this->unk_3E6 = 60;
-                this->unk_3E8 = 20;
+                this->effectTimer = 60;
+                this->effectType = 20;
                 this->unk_3E9 = 0;
                 this->unk_3E0 = 0;
-                this->unk_294 = 1.0f;
+                this->effectAlpha = 1.0f;
                 break;
 
             case 15:
@@ -1143,15 +1145,15 @@ void func_808D6A94(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D6B64(EnRd* this, GlobalContext* globalCtx) {
-    if (this->unk_3E6 > 0) {
-        this->unk_3E6--;
+    if (this->effectTimer > 0) {
+        this->effectTimer--;
     }
 
-    if (this->unk_3E6 < 20) {
-        Math_SmoothStepToF(&this->unk_298, 0.0f, 0.5f, 0.03f, 0.0f);
-        this->unk_294 = this->unk_3E6 * 0.05f;
+    if (this->effectTimer < 20) {
+        Math_SmoothStepToF(&this->effectScale, 0.0f, 0.5f, 0.03f, 0.0f);
+        this->effectAlpha = this->effectTimer * 0.05f;
     } else {
-        Math_SmoothStepToF(&this->unk_298, 0.5f, 0.1f, 0.02f, 0.0f);
+        Math_SmoothStepToF(&this->effectScale, 0.5f, 0.1f, 0.02f, 0.0f);
     }
 }
 
@@ -1195,9 +1197,9 @@ s32 EnRd_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnRd* this = THIS;
 
     if (limbIndex == REDEAD_GIBDO_LIMB_HEAD_ROOT) {
-        rot->y += this->unk_3D8;
+        rot->y += this->headYRotation;
     } else if (limbIndex == REDEAD_GIBDO_LIMB_UPPER_BODY_ROOT) {
-        rot->y += this->unk_3DA;
+        rot->y += this->upperBodyYRotation;
     }
     return false;
 }
@@ -1205,7 +1207,7 @@ s32 EnRd_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnRd_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnRd* this = THIS;
 
-    if ((this->unk_3E6 != 0) &&
+    if ((this->effectTimer != 0) &&
         ((limbIndex == REDEAD_GIBDO_LIMB_LEFT_THIGH) || (limbIndex == REDEAD_GIBDO_LIMB_LEFT_LOWER_LEG) ||
          (limbIndex == REDEAD_GIBDO_LIMB_LEFT_FOOT) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_THIGH) ||
          (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_LOWER_LEG) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_FOOT) ||
@@ -1214,8 +1216,8 @@ void EnRd_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
          (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) ||
          (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_FOREARM) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_HAND) ||
          (limbIndex == REDEAD_GIBDO_LIMB_HEAD) || (limbIndex == REDEAD_GIBDO_LIMB_PELVIS))) {
-        Matrix_GetStateTranslation(&this->unk_1DC[this->unk_290]);
-        this->unk_290++;
+        Matrix_GetStateTranslation(&this->limbPos[this->limbIndex]);
+        this->limbIndex++;
     }
 }
 
@@ -1227,7 +1229,7 @@ void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    this->unk_290 = 0;
+    this->limbIndex = 0;
 
     if (this->unk_3DE == 255) {
         func_8012C28C(globalCtx->state.gfxCtx);
@@ -1254,8 +1256,8 @@ void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    if (this->unk_3E6 > 0) {
-        func_800BE680(globalCtx, &this->actor, this->unk_1DC, ARRAY_COUNT(this->unk_1DC), this->unk_298, 0.5f,
-                      this->unk_294, this->unk_3E8);
+    if (this->effectTimer > 0) {
+        func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->effectScale, 0.5f,
+                      this->effectAlpha, this->effectType);
     }
 }
