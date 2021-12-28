@@ -198,7 +198,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80BA5400(this, globalCtx);
     this->playerStunWaitTimer = 0;
-    this->unk_402 = gSaveContext.time;
+    this->timeInitialized = gSaveContext.time;
     this->effectType = 0;
     this->type = 0;
     this->textId = 0;
