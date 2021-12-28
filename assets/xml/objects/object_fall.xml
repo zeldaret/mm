@@ -8,6 +8,9 @@
         <DList Name="object_fall_DL_000428" Offset="0x428" />
         <DList Name="object_fall_DL_000490" Offset="0x490" />
         <DList Name="object_fall_DL_000498" Offset="0x498" />
+        <Array Name="object_fall_Vtx_0004C0" Count="209" Offset="0x4C0">
+            <Vtx/>
+        </Array>
         <DList Name="object_fall_DL_0011D0" Offset="0x11D0" />
         <Texture Name="object_fall_Tex_001688" OutName="tex_001688" Format="i8" Width="64" Height="64" Offset="0x1688" />
         <Texture Name="object_fall_Tex_002688" OutName="tex_002688" Format="i4" Width="64" Height="64" Offset="0x2688" />
