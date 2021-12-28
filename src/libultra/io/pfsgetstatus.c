@@ -34,7 +34,7 @@ void __osPfsRequestOneChannel(s32 channel, u8 poll) {
     __OSContRequestHeaderAligned req;
     s32 idx;
 
-    __osContLastCmd = CONT_CMD_END;
+    __osContLastPoll = CONT_CMD_END;
     __osPfsPifRam.status = CONT_CMD_READ_BUTTON;
 
     bufptr = (u8*)&__osPfsPifRam;

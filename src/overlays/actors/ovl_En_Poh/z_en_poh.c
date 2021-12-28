@@ -203,7 +203,7 @@ void func_80B2C910(Vec3f* vec, GlobalContext* globalCtx) {
         }
         Math_Vec3f_ScaleAndStore(&sp20, temp_f0, vec);
     } else {
-        Math_Vec3f_Copy(vec, &D_801D15B0);
+        Math_Vec3f_Copy(vec, &gZeroVec3f);
     }
 }
 
@@ -426,13 +426,13 @@ void func_80B2D300(EnPoh* this, GlobalContext* globalCtx) {
             sp44.z = (Math_CosS(sp38) * 23.0f) + this->actor.world.pos.z;
         }
         sp36 = (this->unk_18E * 10) + 80;
-        func_800B3030(globalCtx, &sp44, &D_80B2F710, &D_801D15B0, sp36, 0, 2);
+        func_800B3030(globalCtx, &sp44, &D_80B2F710, &gZeroVec3f, sp36, 0, 2);
         sp44.x = (2.0f * this->actor.world.pos.x) - sp44.x;
         sp44.z = (2.0f * this->actor.world.pos.z) - sp44.z;
-        func_800B3030(globalCtx, &sp44, &D_80B2F710, &D_801D15B0, sp36, 0, 2);
+        func_800B3030(globalCtx, &sp44, &D_80B2F710, &gZeroVec3f, sp36, 0, 2);
         sp44.x = this->actor.world.pos.x;
         sp44.z = this->actor.world.pos.z;
-        func_800B3030(globalCtx, &sp44, &D_80B2F710, &D_801D15B0, sp36, 0, 2);
+        func_800B3030(globalCtx, &sp44, &D_80B2F710, &gZeroVec3f, sp36, 0, 2);
     } else if (this->unk_18E == 28) {
         func_80B2DC50(this, globalCtx);
     } else if (this->unk_18E > 18) {
@@ -672,7 +672,7 @@ void func_80B2E230(EnPoh* this, GlobalContext* globalCtx) {
         return;
     }
 
-    func_800B8A1C(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
+    func_800B8A1C(&this->actor, globalCtx, GI_MAX, 35.0f, 60.0f);
     this->actor.world.pos.y = (Math_SinS(this->unk_18D * 0x800) * 5.0f) + this->actor.home.pos.y;
     if (this->unk_18D) {
         this->unk_18D--;
@@ -893,7 +893,8 @@ void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
     if (limbIndex == 18) {
         if ((this->actionFunc == func_80B2D300) && (this->unk_18E >= 19) && (this->actor.scale.x != 0.0f)) {
-            Matrix_Scale(0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, 1);
+            Matrix_Scale(0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x,
+                         MTXMODE_APPLY);
         }
         Matrix_CopyCurrentState(&this->unk_3D8);
         func_80B2C910(&sp60, globalCtx);

@@ -253,7 +253,7 @@ void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
     sp3C.z = this->unk_294[this->unk_298].z;
 
     if ((this->actor.xzDistToPlayer <= 100.0f) && func_800B715C(globalCtx) &&
-        (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO_MASK)) {
+        (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO)) {
         this->actor.home = this->actor.world;
         func_80BA59F0(this);
     }
@@ -611,7 +611,7 @@ void func_80BA6800(EnRailgibud* this, GlobalContext* globalCtx, s32 arg2) {
 void func_80BA6974(GlobalContext* globalCtx, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5) {
     Vec3f sp8C;
     Vec3f sp80 = { 0.0f, 0.3f, 0.0f };
-    Vec3f sp74 = D_801D15B0;
+    Vec3f sp74 = gZeroVec3f;
     s32 i;
     s32 pad;
 
@@ -665,7 +665,7 @@ void func_80BA6B9C(EnRailgibud* this, GlobalContext* globalCtx) {
 s32 func_80BA6D10(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO_MASK) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
         return false;
     }
 
@@ -830,7 +830,7 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
         (this->actionFunc != func_80BA60B0) && (this->actionFunc != func_80BA61A0) &&
         (this->actionFunc != func_80BA66C8)) {
         if ((this->actor.flags & 5) == 5) {
-            if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO_MASK) {
+            if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
                 this->actor.flags &= ~5;
                 this->actor.flags |= 9;
                 this->actor.hintId = 0xFF;
@@ -839,7 +839,7 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
                     func_80BA6284(this);
                 }
             }
-        } else if (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO_MASK) {
+        } else if (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO) {
             this->actor.flags &= ~(0x8 | 0x1);
             this->actor.flags |= (0x4 | 0x1);
             if (this->unk_3F8 == 1) {

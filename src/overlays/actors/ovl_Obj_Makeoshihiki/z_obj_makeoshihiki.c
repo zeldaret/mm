@@ -85,7 +85,7 @@ void ObjMakeoshihiki_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             for (loopPathIndex = 0; loopPathIndex < this->pathCount; loopPathIndex++) {
                 Math_Vec3s_ToVec3f(&pathPointF, &this->pathPoints[loopPathIndex]);
-                if (Math3D_DistanceSquared(&this->actor.child->world.pos, &pathPointF) < SQ(0.5f)) {
+                if (Math3D_Vec3fDistSq(&this->actor.child->world.pos, &pathPointF) < SQ(0.5f)) {
                     ObjMakeoshihiki_SetSwitchFlags(this, globalCtx, loopPathIndex);
                     return;
                 }

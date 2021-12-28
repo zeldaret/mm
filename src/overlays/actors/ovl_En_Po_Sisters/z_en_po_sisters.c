@@ -5,6 +5,7 @@
  */
 
 #include "z_en_po_sisters.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00005015
 
@@ -725,7 +726,7 @@ void func_80B1BE4C(EnPoSisters* this, s32 arg1) {
         sp34.x = this->actor.world.pos.x;
         sp34.y = this->actor.world.pos.y + 45.0f;
         sp34.z = this->actor.world.pos.z;
-        func_800B3030(arg1, &sp34, &D_801D15B0, &D_801D15B0, 150, 0, 3);
+        func_800B3030(arg1, &sp34, &gZeroVec3f, &gZeroVec3f, 150, 0, 3);
     }
     Lights_PointSetColorAndRadius(&this->lightInfo, 0, 0, 0, 0);
     this->actionFunc = func_80B1BF2C;
@@ -901,8 +902,8 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnPoSisters* this = THIS;
     f32 temp_f2;
-    Vec3f sp40;
-    s32 sp3C;
+    Vec3f checkPos;
+    s32 bgId;
 
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
@@ -925,10 +926,11 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_191 & 0x10) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 0.0f, 5);
     } else {
-        sp40.x = this->actor.world.pos.x;
-        sp40.y = this->actor.world.pos.y + 10.0f;
-        sp40.z = this->actor.world.pos.z;
-        this->actor.floorHeight = func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &sp3C, &this->actor, &sp40);
+        checkPos.x = this->actor.world.pos.x;
+        checkPos.y = this->actor.world.pos.y + 10.0f;
+        checkPos.z = this->actor.world.pos.z;
+        this->actor.floorHeight =
+            BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &checkPos);
     }
 
     this->actor.shape.shadowAlpha = this->unk_229;
@@ -1188,7 +1190,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Scale(phi_f20, phi_f20, phi_f20, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
 
     func_800BE680(globalCtx, &this->actor, this->unk_28C, ARRAY_COUNT(this->unk_28C),

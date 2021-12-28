@@ -1,0 +1,13 @@
+﻿<Root>
+    <File Name="object_kibako2" Segment="6">
+        <Texture Name="object_kibako2_TLUT_000000" OutName="tlut_000000" Format="rgba16" Width="4" Height="4" Offset="0x0" />
+        <Texture Name="object_kibako2_Tex_000020" OutName="tex_000020" Format="ci4" Width="32" Height="64" Offset="0x20" />
+        <Texture Name="object_kibako2_Tex_000420" OutName="tex_000420" Format="ci4" Width="32" Height="64" Offset="0x420" />
+        <DList Name="object_kibako2_DL_000960" Offset="0x960" />
+        <Collision Name="object_kibako2_Colheader_000B70" Offset="0xB70" />
+        <Texture Name="object_kibako2_TLUT_000BA0" OutName="tlut_000BA0" Format="rgba16" Width="4" Height="4" Offset="0xBA0" />
+        <Texture Name="object_kibako2_Tex_000BC0" OutName="tex_000BC0" Format="ci4" Width="32" Height="64" Offset="0xBC0" />
+        <DList Name="object_kibako2_DL_001040" Offset="0x1040" />
+        <DList Name="object_kibako2_DL_001100" Offset="0x1100" />
+    </File>
+</Root>
