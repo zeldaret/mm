@@ -260,11 +260,11 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &gPinkDekuFlowerSkel, &gDekuFlowerBounceAnim,
                                this->jointTable, this->morphTable, DEKU_FLOWER_LIMB_MAX);
-                this->dList = &gPinkDekuFlowerStaticDL;
+                this->dList = gPinkDekuFlowerStaticDL;
                 break;
             case DEKU_FLOWER_TYPE_GOLD:
             case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
-                this->dList = &gGoldDekuFlowerStaticDL;
+                this->dList = gGoldDekuFlowerStaticDL;
                 SkelAnime_Init(globalCtx, &this->skelAnime, &gGoldDekuFlowerSkel.sh, &gDekuFlowerBounceAnim,
                                this->jointTable, this->morphTable, DEKU_FLOWER_LIMB_MAX);
                 this->collider.dim.height = 20;
