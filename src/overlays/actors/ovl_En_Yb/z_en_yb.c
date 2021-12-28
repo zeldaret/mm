@@ -143,44 +143,32 @@ void func_80BFA2FC(GlobalContext *globalCtx) {
     func_80151BB4(globalCtx, 0xF);
 }
 
-// custom shadow draw function
-// non-matching: just stack offset
-#ifdef NON_MATCHING
+// custom shadow draw function of type ActorShadowFunc
 void func_80BFA350(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
+    Vec3f oldPos;
     EnYb* this = (EnYb*) actor;
-    Vec3f sp34; // currently 30
-    f32 tempValue;
-    //s32 pad;
-    //s32 pad[2];
 
     if (this->unk414 > 0) {
         if (this->unk412 == 2) {
-            // this solves all regalloc
-            // todo try removing .4
-            //actor->scale.x = (((27.0f - this->unk404.y) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
-            tempValue = (((27.0f - this->unk404.y) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
-            actor->scale.x = tempValue;
+            // regalloc without temp
+            f32 tempScale = (((27.0f - this->unk404.y) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
+            actor->scale.x = tempScale;
         }
-        Math_Vec3f_Copy(&sp34, &actor->world.pos);
+        Math_Vec3f_Copy(&oldPos, &actor->world.pos);
         Math_Vec3f_Copy(&actor->world.pos, &this->unk404);
-        func_800B4AEC(globalCtx, (Actor *) actor, 50.0f);
+        func_800B4AEC(globalCtx, actor, 50.0f);
 
-        if (sp34.y < this->actor.floorHeight) {
+        if (oldPos.y < this->actor.floorHeight) {
             actor->world.pos.y = this->actor.floorHeight;
         } else {
-            actor->world.pos.y = sp34.y;
+            actor->world.pos.y = oldPos.y;
         }
 
         func_800B3FC0((Actor *) actor, mapper, globalCtx);
-        //Math_Vec3f_Copy(&actor->world.pos,  &sp34);
-        Math_Vec3f_Copy(&actor->world.pos,  &sp34);
+        Math_Vec3f_Copy(&actor->world.pos,  &oldPos);
         actor->scale.x = 0.01f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Yb/func_80BFA350.s")
-#endif
-
 
 // this weird animation function is called from init
 /*
