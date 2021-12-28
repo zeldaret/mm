@@ -210,7 +210,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGibdoSkel, &gGibdoRedeadIdleAnim, this->jointTable,
-                       this->morphTable, 26);
+                       this->morphTable, REDEAD_GIBDO_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -511,7 +511,8 @@ void func_80BA64AC(EnRailgibud* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if ((this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
             this->actor.hintId = 0x2A;
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable, 26);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
+                               REDEAD_GIBDO_LIMB_MAX);
             this->unk_3F8 = 1;
         }
         func_80BA6284(this);
@@ -574,7 +575,8 @@ void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_3F2 == 20) && (this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable, 26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
+                           REDEAD_GIBDO_LIMB_MAX);
         this->unk_3F8 = 1;
     }
 }
@@ -922,9 +924,9 @@ s32 EnRailgibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
                                  Actor* thisx, Gfx** gfx) {
     EnRailgibud* this = THIS;
 
-    if (limbIndex == 12) {
+    if (limbIndex == REDEAD_GIBDO_LIMB_UPPER_BODY_ROOT) {
         rot->y += this->unk_3E8;
-    } else if (limbIndex == 23) {
+    } else if (limbIndex == REDEAD_GIBDO_LIMB_HEAD_ROOT) {
         rot->y += this->unk_3E2;
     }
 
@@ -936,9 +938,14 @@ void EnRailgibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     EnRailgibud* this = THIS;
 
     if ((this->unk_3F6 != 0) &&
-        ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8) || (limbIndex == 9) ||
-         (limbIndex == 11) || (limbIndex == 14) || (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18) ||
-         (limbIndex == 20) || (limbIndex == 21) || (limbIndex == 22) || (limbIndex == 24) || (limbIndex == 25))) {
+        ((limbIndex == REDEAD_GIBDO_LIMB_LEFT_THIGH) || (limbIndex == REDEAD_GIBDO_LIMB_LEFT_LOWER_LEG) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_LEFT_FOOT) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_THIGH) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_LOWER_LEG) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_FOOT) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_TORSO) || (limbIndex == REDEAD_GIBDO_LIMB_LEFT_SHOULDER_AND_UPPER_ARM) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_LEFT_FOREARM) || (limbIndex == REDEAD_GIBDO_LIMB_LEFT_HAND) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_FOREARM) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_HAND) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_HEAD) || (limbIndex == REDEAD_GIBDO_LIMB_PELVIS))) {
         Matrix_GetStateTranslation(&this->unk_1D8[this->unk_28C]);
         this->unk_28C++;
     }
@@ -987,7 +994,7 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
     this->actor.flags |= 0x10;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGibdoSkel, &gGibdoRedeadIdleAnim, this->jointTable,
-                       this->morphTable, 26);
+                       this->morphTable, REDEAD_GIBDO_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);

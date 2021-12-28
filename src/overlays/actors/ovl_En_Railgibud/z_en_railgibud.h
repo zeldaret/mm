@@ -2,6 +2,7 @@
 #define Z_EN_RAILGIBUD_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Rd/z_en_rd.h"
 
 struct EnRailgibud;
 
@@ -24,8 +25,8 @@ typedef struct EnRailgibud {
     /* 0x029C */ s32 unk_29C;
     /* 0x02A0 */ f32 unk_2A0;
     /* 0x02A4 */ f32 unk_2A4;
-    /* 0x02A8 */ Vec3s jointTable[26];
-    /* 0x0344 */ Vec3s morphTable[26];
+    /* 0x02A8 */ Vec3s jointTable[REDEAD_GIBDO_LIMB_MAX];
+    /* 0x0344 */ Vec3s morphTable[REDEAD_GIBDO_LIMB_MAX];
     /* 0x03E0 */ UNK_TYPE1 unk3E0[0x2];
     /* 0x03E2 */ s16 unk_3E2;
     /* 0x03E4 */ UNK_TYPE1 unk3E4[0x4];

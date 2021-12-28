@@ -148,10 +148,10 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.params >= ENRD_GET_MINUS_1) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, &gGibdoRedeadIdleAnim, this->jointTable,
-                           this->morphTable, 26);
+                           this->morphTable, REDEAD_GIBDO_LIMB_MAX);
     } else {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGibdoSkel, &gGibdoRedeadIdleAnim, this->jointTable,
-                           this->morphTable, 26);
+                           this->morphTable, REDEAD_GIBDO_LIMB_MAX);
     }
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -1194,9 +1194,9 @@ s32 EnRd_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
                           Gfx** gfx) {
     EnRd* this = THIS;
 
-    if (limbIndex == 23) {
+    if (limbIndex == REDEAD_GIBDO_LIMB_HEAD_ROOT) {
         rot->y += this->unk_3D8;
-    } else if (limbIndex == 12) {
+    } else if (limbIndex == REDEAD_GIBDO_LIMB_UPPER_BODY_ROOT) {
         rot->y += this->unk_3DA;
     }
     return false;
@@ -1206,9 +1206,14 @@ void EnRd_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnRd* this = THIS;
 
     if ((this->unk_3E6 != 0) &&
-        ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8) || (limbIndex == 9) ||
-         (limbIndex == 11) || (limbIndex == 14) || (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18) ||
-         (limbIndex == 20) || (limbIndex == 21) || (limbIndex == 22) || (limbIndex == 24) || (limbIndex == 25))) {
+        ((limbIndex == REDEAD_GIBDO_LIMB_LEFT_THIGH) || (limbIndex == REDEAD_GIBDO_LIMB_LEFT_LOWER_LEG) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_LEFT_FOOT) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_THIGH) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_LOWER_LEG) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_FOOT) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_TORSO) || (limbIndex == REDEAD_GIBDO_LIMB_LEFT_SHOULDER_AND_UPPER_ARM) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_LEFT_FOREARM) || (limbIndex == REDEAD_GIBDO_LIMB_LEFT_HAND) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_FOREARM) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_HAND) ||
+         (limbIndex == REDEAD_GIBDO_LIMB_HEAD) || (limbIndex == REDEAD_GIBDO_LIMB_PELVIS))) {
         Matrix_GetStateTranslation(&this->unk_1DC[this->unk_290]);
         this->unk_290++;
     }
