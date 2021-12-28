@@ -766,9 +766,11 @@
         <PlayerAnimation Name="gameplay_keep_Linkanim_00E4E8" Offset="0xE4E8" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00E4F0" Offset="0xE4F0" />
         <DList Name="gameplay_keep_DL_00E5C0" Offset="0xE5C0" />
+
+        <!-- Deku Flower -->
         <Collision Name="gPinkDekuFlowerCol" Offset="0xE710" />
         <Animation Name="gDekuFlowerBounceAnim" Offset="0xEB7C" /> <!-- Original name is "dnp_boyoyon" ("bounce") -->
-        <DList Name="gPinkDekuFlowerStaticDL" Offset="0xED80" />
+        <DList Name="gPinkDekuFlowerIdleDL" Offset="0xED80" />
         <DList Name="gPinkDekuFlowerBaseDL" Offset="0xF2B8" />
         <DList Name="gPinkDekuFlowerCenterDL" Offset="0xF350" />
         <DList Name="gPinkDekuFlowerBackLeftPetalDL" Offset="0xF438" />
@@ -797,7 +799,7 @@
         <Skeleton Name="gPinkDekuFlowerSkel" Type="Normal" LimbType="Standard" Offset="0x11518" />
         <Animation Name="gDekuFlowerRustleAnim" Offset="0x117A8" /> <!-- Original name is "dnp_zawa" ("rustling") -->
         <Collision Name="gGoldDekuFlowerCol" Offset="0x118D8" />
-        <DList Name="gGoldDekuFlowerStaticDL" Offset="0x11BD0" />
+        <DList Name="gGoldDekuFlowerIdleDL" Offset="0x11BD0" />
         <DList Name="gGoldDekuFlowerBaseDL" Offset="0x121B0" />
         <DList Name="gGoldDekuFlowerCenterDL" Offset="0x12260" />
         <DList Name="gGoldDekuFlowerBackLeftPetalDL" Offset="0x12308" />
@@ -819,6 +821,7 @@
         <Limb Name="gGoldDekuFlowerLeftPetalLimb" Type="Standard" Offset="0x127A8" />
         <Limb Name="gGoldDekuFlowerBackLeftPetalLimb" Type="Standard" Offset="0x127B4" />
         <Skeleton Name="gGoldDekuFlowerSkel" Type="Flex" LimbType="Standard" Offset="0x127E8" />
+
         <Animation Name="gameplay_keep_Anim_012860" Offset="0x12860" />
         <Animation Name="gameplay_keep_Anim_0128BC" Offset="0x128BC" />
         <Texture Name="gameplay_keep_Tex_0128D0" OutName="tex_0128D0" Format="rgba16" Width="16" Height="128" Offset="0x128D0" />

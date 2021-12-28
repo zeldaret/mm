@@ -109,7 +109,7 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 /**
  * This function will make the flower oscillate on the X and Z axes in most situations
  * where something interacts with it. When the player launches out of the flower, the
- * oscillation is handled by ObjEtcetera_DoBounceOscillation instead
+ * oscillation is handled by ObjEtcetera_DoBounceOscillation instead.
  */
 void ObjEtcetera_DoNormalOscillation(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (this->oscillationTimer > 0) {
@@ -260,11 +260,11 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &gPinkDekuFlowerSkel, &gDekuFlowerBounceAnim,
                                this->jointTable, this->morphTable, DEKU_FLOWER_LIMB_MAX);
-                this->dList = gPinkDekuFlowerStaticDL;
+                this->dList = gPinkDekuFlowerIdleDL;
                 break;
             case DEKU_FLOWER_TYPE_GOLD:
             case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
-                this->dList = gGoldDekuFlowerStaticDL;
+                this->dList = gGoldDekuFlowerIdleDL;
                 SkelAnime_Init(globalCtx, &this->skelAnime, &gGoldDekuFlowerSkel.sh, &gDekuFlowerBounceAnim,
                                this->jointTable, this->morphTable, DEKU_FLOWER_LIMB_MAX);
                 this->collider.dim.height = 20;
@@ -313,6 +313,11 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
+/**
+ * When the flower isn't animating, this function is used to draw it.
+ * It draws the flower as a single, non-moving display list that encompasses the whole flower.
+ * When an animation is finished, functions are expected to set the actor's draw function to this.
+ */
 void ObjEtcetera_DrawIdle(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 
@@ -325,6 +330,11 @@ void ObjEtcetera_DrawIdle(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+/**
+ * When the flower is animating, this function is used to animate it.
+ * It draws the flower as an animated bunch of limbs using the SkelAnime system.
+ * When a function wants to play an animation, it is expected to set the actor's draw function to this.
+ */
 void ObjEtcetera_DrawAnimated(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 
