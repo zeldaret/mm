@@ -16,129 +16,6 @@ void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMag_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-typedef enum {
-    /*  0 */ MAG_STATE_INITIAL,
-    /*  1 */ MAG_STATE_FADE_IN_MASK_EFFECTS,
-    /*  2 */ MAG_STATE_FADE_IN_MASK,
-    /*  3 */ MAG_STATE_FADE_IN_MAIN_TITLE,
-    /*  5 */ MAG_STATE_FADE_IN_SUBTITLE = 5,
-    /*  6 */ MAG_STATE_FADE_IN_COPYRIGHT, // And PRESS START
-    /* 10 */ MAG_STATE_CALLED = 10,       // by a button press
-    /* 13 */ MAG_STATE_DISPLAY = 13,      // Buttons will trigger File Select state
-    /* 20 */ MAG_STATE_FADE_OUT = 20,
-    /* 21 */ MAG_STATE_POST_DISPLAY // Go to next scene
-} EnMagState;
-
-static s16 sInputDelayTimer = 0;
-
-static s16 sZeldaEffectColorTimer = 30;
-static s16 sZeldaEffectColorTargetIndex = 0;
-
-static s16 sTextAlphaTargetIndex = 0;
-static s16 sTextAlphaTimer = 20;
-
-const ActorInit En_Mag_InitVars = {
-    ACTOR_EN_MAG,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_MAG,
-    sizeof(EnMag),
-    (ActorFunc)EnMag_Init,
-    (ActorFunc)EnMag_Destroy,
-    (ActorFunc)EnMag_Update,
-    (ActorFunc)EnMag_Draw,
-};
-
-void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnMag* this = (EnMag*)thisx;
-    u16 i;
-
-    this->unk11F54 = 6;
-    this->unk11F56 = 10;
-
-    for (i = 0; i < 6; i++) {
-        this->effectScrollSs[i] = 0;
-        this->effectScrollTs[i] = 0;
-    }
-
-    this->majorasMaskEffectPrimColor[0] = 255;
-    this->majorasMaskEffectPrimColor[1] = 155;
-    this->majorasMaskEffectPrimColor[2] = 255;
-    this->majorasMaskEffectEnvColor[0] = 0;
-    this->majorasMaskEffectEnvColor[1] = 255;
-    this->majorasMaskEffectEnvColor[2] = 155;
-    this->majorasMaskEffectPrimLodFrac = 20;
-    this->majorasMaskEffectAlpha = 0;
-
-    this->zeldaEffectPrimColor[0] = 255;
-    this->zeldaEffectPrimColor[1] = 155;
-    this->zeldaEffectPrimColor[2] = 255;
-    this->zeldaEffectEnvColor[0] = 0;
-    this->zeldaEffectEnvColor[1] = 255;
-    this->zeldaEffectEnvColor[2] = 155;
-    this->zeldaEffectPrimLodFrac = 55;
-    this->zeldaEffectAlpha = 0;
-
-    this->majorasMaskAlpha = 0;
-    this->majorasMaskEnvColor[0] = this->majorasMaskEnvColor[1] = this->majorasMaskEnvColor[2] = 255;
-
-    this->mainTitleAlpha = this->subtitleAlpha = this->unk11F32 = this->copyrightAlpha = 0;
-
-    this->unk11F02 = 30;
-    this->unk11F00 = this->state = MAG_STATE_INITIAL;
-
-    if (gSaveContext.unk_3F1E != 0) {
-        this->mainTitleAlpha = 210;
-        this->unk11F32 = 255;
-        this->copyrightAlpha = 255;
-
-        this->majorasMaskEffectPrimLodFrac = 100;
-        this->majorasMaskEffectAlpha = 255;
-        this->majorasMaskEffectPrimColor[0] = 255;
-        this->majorasMaskEffectPrimColor[1] = 255;
-        this->majorasMaskEffectPrimColor[2] = 255;
-        this->majorasMaskEffectEnvColor[0] = 0;
-        this->majorasMaskEffectEnvColor[1] = 255;
-        this->majorasMaskEffectEnvColor[2] = 155;
-
-        this->zeldaEffectPrimLodFrac = 100;
-        this->zeldaEffectAlpha = 255;
-        this->zeldaEffectPrimColor[0] = 255;
-        this->zeldaEffectPrimColor[1] = 255;
-        this->zeldaEffectPrimColor[2] = 255;
-        this->zeldaEffectEnvColor[0] = 0;
-        this->zeldaEffectEnvColor[1] = 255;
-        this->zeldaEffectEnvColor[2] = 155;
-
-        gSaveContext.unk_3F1E = 0;
-        this->state = MAG_STATE_FADE_IN_MASK;
-        sInputDelayTimer = 20;
-        gSaveContext.fadeDuration = 1;
-        gSaveContext.unk_3F51 = 255;
-    }
-
-    Font_LoadOrderedFont(&this->font);
-
-    this->unk11F58 = 0;
-    this->unk11F5A = 0;
-    this->unk11F5C = 0;
-    this->unk11F60 = 0;
-
-    this->majorasMaskEffectsFadeInTimer = 25;
-    this->majorasMaskFadeInTimer = 25;
-    this->mainTitleAlphaFadeInTimer = 20;
-    this->effectAlphaFadeInTimer = 40;
-    this->subtitleFadeInTimer = 10;
-    this->copyrightFadeInTimer = 10;
-    this->fadeOutTimer = 15;
-
-    sZeldaEffectColorTimer = 30;
-    sZeldaEffectColorTargetIndex = 0;
-}
-
-void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-}
-
 /**
  * Steps `var` towards `target` linearly, so that it will arrive in `timeRemaining` seconds. Can be used from either
  * direction. `timeRemaining` must be decremented separately for this to work properly, and obviously timeRemaining = 0
@@ -187,36 +64,158 @@ void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }                                                           \
     (void)0
 
-// EnMag_UpdateZeldaEffectColors ?
-void func_8096B604(Actor* thisx) {
-    static s16 sZeldaEffectPrimRedTargets[] = { 155, 255 };
-    static s16 sZeldaEffectPrimGreenTargets[] = { 255, 155 };
-    static s16 sZeldaEffectPrimBlueTargets[] = { 55, 255 };
-    static s16 sZeldaEffectEnvRedTargets[] = { 255, 0 };
-    static s16 sZeldaEffectEnvBlueTargets[] = { 255, 155 };
+typedef enum {
+    /*  0 */ MAG_STATE_INITIAL,
+    /*  1 */ MAG_STATE_FADE_IN_MASK_EFFECTS,
+    /*  2 */ MAG_STATE_FADE_IN_MASK,
+    /*  3 */ MAG_STATE_FADE_IN_MAIN_TITLE,
+    /*  5 */ MAG_STATE_FADE_IN_SUBTITLE = 5,
+    /*  6 */ MAG_STATE_FADE_IN_COPYRIGHT, // And PRESS START
+    /* 10 */ MAG_STATE_CALLED = 10,       // by a button press
+    /* 13 */ MAG_STATE_DISPLAY = 13,      // Buttons will trigger File Select state
+    /* 20 */ MAG_STATE_FADE_OUT = 20,
+    /* 21 */ MAG_STATE_POST_DISPLAY // Go to next scene
+} EnMagState;
+
+static s16 sInputDelayTimer = 0;
+
+static s16 sZeldaEffectColorTimer = 30;
+static s16 sZeldaEffectColorTargetIndex = 0;
+
+static s16 sTextAlphaTargetIndex = 0;
+static s16 sTextAlphaTimer = 20;
+
+const ActorInit En_Mag_InitVars = {
+    ACTOR_EN_MAG,
+    ACTORCAT_PROP,
+    FLAGS,
+    OBJECT_MAG,
+    sizeof(EnMag),
+    (ActorFunc)EnMag_Init,
+    (ActorFunc)EnMag_Destroy,
+    (ActorFunc)EnMag_Update,
+    (ActorFunc)EnMag_Draw,
+};
+
+void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnMag* this = (EnMag*)thisx;
+    u16 i;
+
+    this->unk11F54 = 6;
+    this->unk11F56 = 10;
+
+    for (i = 0; i < 6; i++) {
+        this->effectScrollSs[i] = 0;
+        this->effectScrollTs[i] = 0;
+    }
+
+    this->appearEffectPrimColor[0] = 255;
+    this->appearEffectPrimColor[1] = 155;
+    this->appearEffectPrimColor[2] = 255;
+    this->appearEffectEnvColor[0] = 0;
+    this->appearEffectEnvColor[1] = 255;
+    this->appearEffectEnvColor[2] = 155;
+    this->appearEffectPrimLodFrac = 20;
+    this->appearEffectAlpha = 0;
+
+    this->displayEffectPrimColor[0] = 255;
+    this->displayEffectPrimColor[1] = 155;
+    this->displayEffectPrimColor[2] = 255;
+    this->displayEffectEnvColor[0] = 0;
+    this->displayEffectEnvColor[1] = 255;
+    this->displayEffectEnvColor[2] = 155;
+    this->displayEffectPrimLodFrac = 55;
+    this->displayEffectAlpha = 0;
+
+    this->majorasMaskAlpha = 0;
+    this->majorasMaskEnvColor[0] = this->majorasMaskEnvColor[1] = this->majorasMaskEnvColor[2] = 255;
+
+    this->mainTitleAlpha = this->subtitleAlpha = this->unk11F32 = this->copyrightAlpha = 0;
+
+    this->unk11F02 = 30;
+    this->unk11F00 = this->state = MAG_STATE_INITIAL;
+
+    if (gSaveContext.unk_3F1E != 0) {
+        this->mainTitleAlpha = 210;
+        this->unk11F32 = 255;
+        this->copyrightAlpha = 255;
+
+        this->appearEffectPrimLodFrac = 100;
+        this->appearEffectAlpha = 255;
+        this->appearEffectPrimColor[0] = 255;
+        this->appearEffectPrimColor[1] = 255;
+        this->appearEffectPrimColor[2] = 255;
+        this->appearEffectEnvColor[0] = 0;
+        this->appearEffectEnvColor[1] = 255;
+        this->appearEffectEnvColor[2] = 155;
+
+        this->displayEffectPrimLodFrac = 100;
+        this->displayEffectAlpha = 255;
+        this->displayEffectPrimColor[0] = 255;
+        this->displayEffectPrimColor[1] = 255;
+        this->displayEffectPrimColor[2] = 255;
+        this->displayEffectEnvColor[0] = 0;
+        this->displayEffectEnvColor[1] = 255;
+        this->displayEffectEnvColor[2] = 155;
+
+        gSaveContext.unk_3F1E = 0;
+        this->state = MAG_STATE_FADE_IN_MASK;
+        sInputDelayTimer = 20;
+        gSaveContext.fadeDuration = 1;
+        gSaveContext.unk_3F51 = 255;
+    }
+
+    Font_LoadOrderedFont(&this->font);
+
+    this->unk11F58 = 0;
+    this->unk11F5A = 0;
+    this->unk11F5C = 0;
+    this->unk11F60 = 0;
+
+    this->majorasMaskEffectsFadeInTimer = 25;
+    this->majorasMaskFadeInTimer = 25;
+    this->mainTitleAlphaFadeInTimer = 20;
+    this->effectAlphaFadeInTimer = 40;
+    this->subtitleFadeInTimer = 10;
+    this->copyrightFadeInTimer = 10;
+    this->fadeOutTimer = 15;
+
+    sZeldaEffectColorTimer = 30;
+    sZeldaEffectColorTargetIndex = 0;
+}
+
+void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void EnMag_UpdateDisplayEffectColors(Actor* thisx) {
+    static s16 sDisplayEffectPrimRedTargets[] = { 155, 255 };
+    static s16 sDisplayEffectPrimGreenTargets[] = { 255, 155 };
+    static s16 sDisplayEffectPrimBlueTargets[] = { 55, 255 };
+    static s16 sDisplayEffectEnvRedTargets[] = { 255, 0 };
+    static s16 sDisplayEffectEnvBlueTargets[] = { 255, 155 };
     EnMag* this = THIS;
     s16 colorStep;
 
-    TIMED_STEP_TO(this->zeldaEffectPrimColor[0], sZeldaEffectPrimRedTargets[sZeldaEffectColorTargetIndex],
+    TIMED_STEP_TO(this->displayEffectPrimColor[0], sDisplayEffectPrimRedTargets[sZeldaEffectColorTargetIndex],
                   sZeldaEffectColorTimer, colorStep);
-    TIMED_STEP_TO(this->zeldaEffectPrimColor[1], sZeldaEffectPrimGreenTargets[sZeldaEffectColorTargetIndex],
+    TIMED_STEP_TO(this->displayEffectPrimColor[1], sDisplayEffectPrimGreenTargets[sZeldaEffectColorTargetIndex],
                   sZeldaEffectColorTimer, colorStep);
-    TIMED_STEP_TO(this->zeldaEffectPrimColor[2], sZeldaEffectPrimBlueTargets[sZeldaEffectColorTargetIndex],
+    TIMED_STEP_TO(this->displayEffectPrimColor[2], sDisplayEffectPrimBlueTargets[sZeldaEffectColorTargetIndex],
                   sZeldaEffectColorTimer, colorStep);
-    TIMED_STEP_TO(this->zeldaEffectEnvColor[0], sZeldaEffectEnvRedTargets[sZeldaEffectColorTargetIndex],
+    TIMED_STEP_TO(this->displayEffectEnvColor[0], sDisplayEffectEnvRedTargets[sZeldaEffectColorTargetIndex],
                   sZeldaEffectColorTimer, colorStep);
     // Skips 1, i.e. green.
-    TIMED_STEP_TO(this->zeldaEffectEnvColor[2], sZeldaEffectEnvBlueTargets[sZeldaEffectColorTargetIndex],
+    TIMED_STEP_TO(this->displayEffectEnvColor[2], sDisplayEffectEnvBlueTargets[sZeldaEffectColorTargetIndex],
                   sZeldaEffectColorTimer, colorStep);
 
     sZeldaEffectColorTimer--;
     if (sZeldaEffectColorTimer == 0) {
-        this->zeldaEffectPrimColor[0] = sZeldaEffectPrimRedTargets[sZeldaEffectColorTargetIndex];
-        this->zeldaEffectPrimColor[1] = sZeldaEffectPrimGreenTargets[sZeldaEffectColorTargetIndex];
-        this->zeldaEffectPrimColor[2] = sZeldaEffectPrimBlueTargets[sZeldaEffectColorTargetIndex];
-        this->zeldaEffectEnvColor[0] = sZeldaEffectEnvRedTargets[sZeldaEffectColorTargetIndex];
+        this->displayEffectPrimColor[0] = sDisplayEffectPrimRedTargets[sZeldaEffectColorTargetIndex];
+        this->displayEffectPrimColor[1] = sDisplayEffectPrimGreenTargets[sZeldaEffectColorTargetIndex];
+        this->displayEffectPrimColor[2] = sDisplayEffectPrimBlueTargets[sZeldaEffectColorTargetIndex];
+        this->displayEffectEnvColor[0] = sDisplayEffectEnvRedTargets[sZeldaEffectColorTargetIndex];
         // Skips 1, i.e. green.
-        this->zeldaEffectEnvColor[2] = sZeldaEffectEnvBlueTargets[sZeldaEffectColorTargetIndex];
+        this->displayEffectEnvColor[2] = sDisplayEffectEnvBlueTargets[sZeldaEffectColorTargetIndex];
         sZeldaEffectColorTimer = 30;
         sZeldaEffectColorTargetIndex ^= 1;
     }
@@ -227,9 +226,9 @@ void func_8096B604(Actor* thisx) {
  * these are to do with fading various parts in and out.
  */
 void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
-    static s16 sMajorasMaskEffectPrimGreenTargets[] = { 255, 155 };
-    static s16 sMajorasMaskEffectEnvRedTargets[] = { 255, 0 };
-    static s16 sMajorasMaskEffectEnvBlueTargets[] = { 0, 155 };
+    static s16 sAppearEffectPrimGreenTargets[] = { 255, 155 };
+    static s16 sAppearEffectEnvRedTargets[] = { 255, 0 };
+    static s16 sAppearEffectEnvBlueTargets[] = { 0, 155 };
     s16 step;
     s32 pad[2];
     EnMag* this = (EnMag*)thisx;
@@ -253,24 +252,21 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             switch (this->state) {
                 case MAG_STATE_FADE_IN_MASK_EFFECTS:
-                    TIMED_STEP_TO(this->majorasMaskEffectPrimColor[1], sMajorasMaskEffectPrimGreenTargets[0],
+                    TIMED_STEP_TO(this->appearEffectPrimColor[1], sAppearEffectPrimGreenTargets[0],
                                   this->majorasMaskEffectsFadeInTimer, step);
-
-                    TIMED_STEP_TO(this->majorasMaskEffectEnvColor[0], sMajorasMaskEffectEnvRedTargets[0],
+                    TIMED_STEP_TO(this->appearEffectEnvColor[0], sAppearEffectEnvRedTargets[0],
                                   this->majorasMaskEffectsFadeInTimer, step);
-                    TIMED_STEP_TO(this->majorasMaskEffectEnvColor[2], sMajorasMaskEffectEnvBlueTargets[0],
+                    TIMED_STEP_TO(this->appearEffectEnvColor[2], sAppearEffectEnvBlueTargets[0],
                                   this->majorasMaskEffectsFadeInTimer, step);
-
-                    TIMED_STEP_UP_TO(this->majorasMaskEffectAlpha, 255, this->majorasMaskEffectsFadeInTimer, step);
-
-                    TIMED_STEP_UP_TO(this->majorasMaskEffectPrimLodFrac, 32, this->majorasMaskEffectsFadeInTimer, step);
+                    TIMED_STEP_UP_TO(this->appearEffectAlpha, 255, this->majorasMaskEffectsFadeInTimer, step);
+                    TIMED_STEP_UP_TO(this->appearEffectPrimLodFrac, 32, this->majorasMaskEffectsFadeInTimer, step);
 
                     this->majorasMaskEffectsFadeInTimer--;
                     if (this->majorasMaskEffectsFadeInTimer == 0) {
-                        this->majorasMaskEffectPrimColor[1] = sMajorasMaskEffectPrimGreenTargets[0];
-                        this->majorasMaskEffectEnvColor[0] = sMajorasMaskEffectEnvRedTargets[0];
-                        this->majorasMaskEffectEnvColor[2] = sMajorasMaskEffectEnvBlueTargets[0];
-                        this->majorasMaskEffectAlpha = 255;
+                        this->appearEffectPrimColor[1] = sAppearEffectPrimGreenTargets[0];
+                        this->appearEffectEnvColor[0] = sAppearEffectEnvRedTargets[0];
+                        this->appearEffectEnvColor[2] = sAppearEffectEnvBlueTargets[0];
+                        this->appearEffectAlpha = 255;
                         this->state = MAG_STATE_FADE_IN_MASK;
                         this->delayTimer = 5;
                     }
@@ -278,25 +274,21 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
 
                 case MAG_STATE_FADE_IN_MASK:
                     if (this->delayTimer == 0) {
-                        TIMED_STEP_TO(this->majorasMaskEffectPrimColor[1], sMajorasMaskEffectPrimGreenTargets[1],
+                        TIMED_STEP_TO(this->appearEffectPrimColor[1], sAppearEffectPrimGreenTargets[1],
                                       this->majorasMaskFadeInTimer, step);
-
-                        TIMED_STEP_TO(this->majorasMaskEffectEnvColor[0], sMajorasMaskEffectEnvRedTargets[1],
+                        TIMED_STEP_TO(this->appearEffectEnvColor[0], sAppearEffectEnvRedTargets[1],
                                       this->majorasMaskFadeInTimer, step);
-
-                        TIMED_STEP_TO(this->majorasMaskEffectEnvColor[2], sMajorasMaskEffectEnvBlueTargets[1],
+                        TIMED_STEP_TO(this->appearEffectEnvColor[2], sAppearEffectEnvBlueTargets[1],
                                       this->majorasMaskFadeInTimer, step);
-
-                        TIMED_STEP_UP_TO(this->majorasMaskEffectPrimLodFrac, 128, this->majorasMaskFadeInTimer, step);
-
+                        TIMED_STEP_UP_TO(this->appearEffectPrimLodFrac, 128, this->majorasMaskFadeInTimer, step);
                         TIMED_STEP_UP_TO(this->majorasMaskAlpha, 255, this->majorasMaskFadeInTimer, step);
 
                         this->majorasMaskFadeInTimer--;
                         if (this->majorasMaskFadeInTimer == 0) {
-                            this->majorasMaskEffectPrimColor[1] = sMajorasMaskEffectPrimGreenTargets[1];
-                            this->majorasMaskEffectEnvColor[0] = sMajorasMaskEffectEnvRedTargets[1];
-                            this->majorasMaskEffectEnvColor[2] = sMajorasMaskEffectEnvBlueTargets[1];
-                            this->majorasMaskEffectPrimLodFrac = 128;
+                            this->appearEffectPrimColor[1] = sAppearEffectPrimGreenTargets[1];
+                            this->appearEffectEnvColor[0] = sAppearEffectEnvRedTargets[1];
+                            this->appearEffectEnvColor[2] = sAppearEffectEnvBlueTargets[1];
+                            this->appearEffectPrimLodFrac = 128;
                             this->majorasMaskAlpha = 255;
                             this->state = MAG_STATE_FADE_IN_MAIN_TITLE;
                             this->delayTimer = 5;
@@ -316,17 +308,16 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                             this->mainTitleAlpha = 255;
                         }
 
-                        TIMED_STEP_DOWN_TO(this->majorasMaskEffectAlpha, 60, this->effectAlphaFadeInTimer, step);
-
-                        TIMED_STEP_UP_TO(this->zeldaEffectAlpha, 255, this->effectAlphaFadeInTimer, step);
-                        TIMED_STEP_UP_TO(this->zeldaEffectPrimLodFrac, 128, this->effectAlphaFadeInTimer, step);
+                        TIMED_STEP_DOWN_TO(this->appearEffectAlpha, 60, this->effectAlphaFadeInTimer, step);
+                        TIMED_STEP_UP_TO(this->displayEffectAlpha, 255, this->effectAlphaFadeInTimer, step);
+                        TIMED_STEP_UP_TO(this->displayEffectPrimLodFrac, 128, this->effectAlphaFadeInTimer, step);
 
                         this->effectAlphaFadeInTimer--;
 
                         if (this->effectAlphaFadeInTimer == 0) {
-                            this->majorasMaskEffectAlpha = 60;
-                            this->zeldaEffectAlpha = 255;
-                            this->zeldaEffectPrimLodFrac = 128;
+                            this->appearEffectAlpha = 60;
+                            this->displayEffectAlpha = 255;
+                            this->displayEffectPrimLodFrac = 128;
                             this->state = MAG_STATE_FADE_IN_SUBTITLE;
                             this->delayTimer = 20;
                         }
@@ -336,14 +327,14 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                     break;
 
                 case MAG_STATE_FADE_IN_SUBTITLE:
-                    func_8096B604(&this->actor);
+                    EnMag_UpdateDisplayEffectColors(&this->actor);
 
                     if (this->delayTimer == 0) {
                         TIMED_STEP_UP_TO(this->subtitleAlpha, 255, this->subtitleFadeInTimer, step);
 
                         this->subtitleFadeInTimer--;
                         if (this->subtitleFadeInTimer == 0) {
-                            this->zeldaEffectAlpha = 255;
+                            this->displayEffectAlpha = 255;
                             this->state = MAG_STATE_FADE_IN_COPYRIGHT;
                             this->delayTimer = 20;
                         }
@@ -353,7 +344,7 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                     break;
 
                 case MAG_STATE_FADE_IN_COPYRIGHT:
-                    func_8096B604(&this->actor);
+                    EnMag_UpdateDisplayEffectColors(&this->actor);
 
                     if (this->delayTimer == 0) {
                         TIMED_STEP_UP_TO(this->copyrightAlpha, 255, this->copyrightFadeInTimer, step);
@@ -369,22 +360,22 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                     break;
 
                 case MAG_STATE_CALLED:
-                    this->majorasMaskEffectPrimColor[1] = sMajorasMaskEffectPrimGreenTargets[0];
-                    this->majorasMaskEffectEnvColor[0] = sMajorasMaskEffectEnvRedTargets[0];
-                    this->majorasMaskEffectEnvColor[2] = sMajorasMaskEffectEnvBlueTargets[0];
-                    this->majorasMaskEffectAlpha = 60;
-                    this->majorasMaskEffectPrimLodFrac = 128;
+                    this->appearEffectPrimColor[1] = sAppearEffectPrimGreenTargets[0];
+                    this->appearEffectEnvColor[0] = sAppearEffectEnvRedTargets[0];
+                    this->appearEffectEnvColor[2] = sAppearEffectEnvBlueTargets[0];
+                    this->appearEffectAlpha = 60;
+                    this->appearEffectPrimLodFrac = 128;
                     this->majorasMaskAlpha = 255;
                     this->mainTitleAlpha = 255;
-                    this->zeldaEffectAlpha = 255;
-                    this->zeldaEffectPrimLodFrac = 128;
+                    this->displayEffectAlpha = 255;
+                    this->displayEffectPrimLodFrac = 128;
                     this->subtitleAlpha = 255;
                     this->copyrightAlpha = 255;
                     this->state = MAG_STATE_DISPLAY;
                     break;
 
                 case MAG_STATE_DISPLAY:
-                    func_8096B604(&this->actor);
+                    EnMag_UpdateDisplayEffectColors(&this->actor);
 
                     if (sInputDelayTimer == 0) {
                         if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_START) ||
@@ -414,20 +405,20 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                     break;
 
                 case MAG_STATE_FADE_OUT:
-                    TIMED_STEP_DOWN_TO(this->majorasMaskEffectAlpha, 0, this->fadeOutTimer, step);
+                    TIMED_STEP_DOWN_TO(this->appearEffectAlpha, 0, this->fadeOutTimer, step);
                     TIMED_STEP_DOWN_TO(this->majorasMaskAlpha, 0, this->fadeOutTimer, step);
-                    TIMED_STEP_DOWN_TO(this->zeldaEffectAlpha, 0, this->fadeOutTimer, step);
+                    TIMED_STEP_DOWN_TO(this->displayEffectAlpha, 0, this->fadeOutTimer, step);
                     TIMED_STEP_DOWN_TO(this->mainTitleAlpha, 0, this->fadeOutTimer, step);
                     TIMED_STEP_DOWN_TO(this->subtitleAlpha, 0, this->fadeOutTimer, step);
                     TIMED_STEP_DOWN_TO(this->copyrightAlpha, 0, this->fadeOutTimer, step);
 
                     this->fadeOutTimer--;
                     if (this->fadeOutTimer == 0) {
-                        this->majorasMaskEffectAlpha = 0;
+                        this->appearEffectAlpha = 0;
                         this->majorasMaskAlpha = 0;
                         this->mainTitleAlpha = 0;
                         this->subtitleAlpha = 0;
-                        this->zeldaEffectAlpha = 0;
+                        this->displayEffectAlpha = 0;
                         this->copyrightAlpha = 0;
                         this->state = MAG_STATE_POST_DISPLAY;
                     }
@@ -458,7 +449,6 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#define EnMag_DrawTextureI8 func_8096C998
 /**
  * Draws an i8 texture.
  *
@@ -481,7 +471,6 @@ void EnMag_DrawTextureI8(Gfx** gfxp, void* texture, s16 texWidth, s16 texHeight,
     *gfxp = gfx;
 }
 
-#define EnMag_DrawTextureIA8 func_8096CBB0
 /**
  * Draws an ia8 texture.
  *
@@ -504,9 +493,6 @@ void EnMag_DrawTextureIA8(Gfx** gfxp, void* texture, s16 texWidth, s16 texHeight
     *gfxp = gfx;
 }
 
-// index is an index into the scrolling arrays
-#define EnMag_DrawEffectTextures func_8096CDC8
-
 /**
  * Draws an i8 effect texture, masking it with an i4 mask, with shifting
  *
@@ -519,9 +505,9 @@ void EnMag_DrawTextureIA8(Gfx** gfxp, void* texture, s16 texWidth, s16 texHeight
  * @param effectHeight Height of effect texture.
  * @param rectLeft X coordinate of the top-left of the draw position.
  * @param rectTop Y coordinate of the top-left of the draw position.
- * @param shifts
- * @param shiftt
- * @param index Index into the ??? arrays to use for tile size.
+ * @param shifts Shift to apply to effect texture's S coordinate to control LOD.
+ * @param shiftt Shift to apply to effect texture's T coordinate to control LOD.
+ * @param index Index into the scrolling arrays to use for gDPSetTileSize.
  * @param this Pointer to EnMag instance.
  */
 void EnMag_DrawEffectTextures(Gfx** gfxp, void* maskTex, void* effectTex, s16 maskWidth, s16 maskHeight,
@@ -537,7 +523,7 @@ void EnMag_DrawEffectTextures(Gfx** gfxp, void* maskTex, void* effectTex, s16 ma
                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, shifts, shiftt);
 
     gDPSetTileSize(gfx++, 1, this->effectScrollSs[index] & 0x7F, this->effectScrollTs[index] & 0x7F,
-                   (this->effectScrollSs[index] & 0x7F) + 0xF, (this->effectScrollTs[index] & 0x7F) + 0xF);
+                   (this->effectScrollSs[index] & 0x7F) + 15, (this->effectScrollTs[index] & 0x7F) + 15);
 
     gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + maskWidth) << 2, (rectTop + maskHeight) << 2,
                         G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
@@ -545,23 +531,6 @@ void EnMag_DrawEffectTextures(Gfx** gfxp, void* maskTex, void* effectTex, s16 ma
     *gfxp = gfx;
 }
 
-#define gDPSetTileCustom(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt)                    \
-    {                                                                                                                  \
-        gDPPipeSync(pkt);                                                                                              \
-        gDPTileSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_LOADTILE, 0, cmt, maskt, shiftt, cms, \
-                   masks, shifts);                                                                                     \
-        gDPTileSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt,  \
-                   cms, masks, shifts);                                                                                \
-        gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC,                                \
-                       ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                          \
-    }
-
-#define TMEM_SIZE (1 << 12)
-
-// EnMag_DrawImageRGBA32
-#define EnMag_DrawImageRGBA32 func_8096D230
 /**
  * Draws an rgba32 texture. Because these are so large, this will draw the texture in horizontal stripes, each narrow
  * enough that that part of the texture will fit into TMEM's 4kB.
@@ -632,59 +601,34 @@ void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, void* source, u
     *gfxp = gfx;
 }
 
-#define EnMag_DrawCharTexture func_8096D60C
 /**
- * Draws one character, expected to be a 16 by 16 i4 texture.
+ * Draws one character, expected to be a 16 by 16 i4 texture. It will draw shrunk to 10 by 10.
  *
  * @param gfxp Pointer to current displaylist.
  * @param texture Texture to draw.
  * @param rectLeft X coordinate of the top-left of the draw position.
  * @param rectTop Y coordinate of the top-left of the draw position.
  */
-// Should this actually use FONT_CHAR_TEX_WIDTH/FONT_CHAR_TEX_HEIGHT?
 void EnMag_DrawCharTexture(Gfx** gfxp, void* texture, s32 rectLeft, s32 rectTop) {
     Gfx* gfx = *gfxp;
 
     gDPLoadTextureBlock_4b(gfx++, texture, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
+    // The dsdx and dtdy are roughly 1.587 * 0x400, to fit the texture into 10 by 10 pixels. It is not the more
+    // obvious 1.6 * 0x400 = 1656.
     gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + 10) << 2, (rectTop + 10) << 2, G_TX_RENDERTILE,
                         0, 0, 1625, 1625);
 
     *gfxp = gfx;
 }
 
-// #define PRINT_TEXT_OFFSET(x, y, var)           \
-//     GfxPrint_SetPos(&printer, x, y); \
-//     GfxPrint_Printf(&printer, "%s: %d", #var , this->var)
-
-// void PrintStuffInner(EnMag* this, GlobalContext* globalCtx, Gfx** gfxp) {
-//     GfxPrint printer;
-//     Gfx* gfx = *gfxp;
-//     int i = 0;
-
-//     // initialize GfxPrint struct
-//     GfxPrint_Init(&printer);
-//     GfxPrint_Open(&printer, gfx);
-
-//     // set color to opaque pink
-//     GfxPrint_SetColor(&printer, 255, 255, 255, 255);
-
-//     PRINT_TEXT_OFFSET(1, i++, state);
-//     PRINT_TEXT_OFFSET(1, i++, majorasMaskFadeInTimer);
-//     PRINT_TEXT_OFFSET(1, i++, mainTitleAlphaFadeInTimer);
-//     PRINT_TEXT_OFFSET(1, i++, effectAlphaFadeInTimer);
-//     PRINT_TEXT_OFFSET(1, i++, subtitleFadeInTimer);
-//     PRINT_TEXT_OFFSET(1, i++, copyrightFadeInTimer);
-//     PRINT_TEXT_OFFSET(1, i++, fadeOutTimer);
-//     PRINT_TEXT_OFFSET(1, i++, delayTimer);
-
-//     // end of text printing
-//     gfx = GfxPrint_Close(&printer);
-//     GfxPrint_Destroy(&printer);
-
-//     *gfxp = gfx;
-// }
+#define EFFECT_MASK_TEX_WIDTH 64
+#define EFFECT_MASK_TEX_HEIGHT 64
+#define EFFECT_TEX_WIDTH 32
+#define EFFECT_TEX_HEIGHT 32
+#define EFFECT_TEX_LEFT 38
+#define EFFECT_TEX_TOP 57
 
 #define MAJORAS_MASK_TEX_WIDTH 128
 #define MAJORAS_MASK_TEX_HEIGHT 112
@@ -727,21 +671,26 @@ void EnMag_DrawCharTexture(Gfx** gfxp, void* texture, s32 rectLeft, s32 rectTop)
 #define PRESS_START_CHAR_SPACING 7 // Amount of rightward shift before printing next char
 #define PRESS_START_SPACE 5        // Extra space between the words
 
-// EnMag_DrawInner
 /**
- * Loads title, PRESS START text, etc. graphics into the displaylist array specified by gfxp, which lives on
+ * Loads title, PRESS START text, etc. graphics to gfxp, which is made to live on
  * POLY_OPA_DISP, but is used by OVERLAY_DISP.
  */
-void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
+void EnMag_DrawInner(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     static u8 pressStartFontIndices[] = {
         0x19, 0x1B, 0x0E, 0x1C, 0x1C, 0x1C, 0x1D, 0x0A, 0x1B, 0x1D,
-    }; // TODO: understand what's going on here
-    static TexturePtr D_8096E970[] = { 0x600CF40, 0x600D740, 0x600EF40, 0x600DF40, 0x600E740, 0x600F740 }; // Mask masks
-    static TexturePtr D_8096E988[] = { 0x6009F40, 0x600A740, 0x600BF40, 0x600AF40, 0x600B740, 0x600C740 }; // ZELDA masks
-    static TexturePtr D_8096E9A0[] = {
+    }; // Indices into this->font.fontBuf
+    static TexturePtr sAppearEffectMaskTextures[] = {
+        gTitleScreenAppearEffectMask00Tex, gTitleScreenAppearEffectMask01Tex, gTitleScreenAppearEffectMask02Tex,
+        gTitleScreenAppearEffectMask10Tex, gTitleScreenAppearEffectMask11Tex, gTitleScreenAppearEffectMask12Tex,
+    }; // Visible when mask appearing
+    static TexturePtr sDisplayEffectMaskTextures[] = {
+        gTitleScreenDisplayEffectMask00Tex, gTitleScreenDisplayEffectMask01Tex, gTitleScreenDisplayEffectMask02Tex,
+        gTitleScreenDisplayEffectMask10Tex, gTitleScreenDisplayEffectMask11Tex, gTitleScreenDisplayEffectMask12Tex,
+    }; // Visible when full game logo displayed
+    static TexturePtr sEffectTextures[] = {
         gTitleScreenFlame0Tex, gTitleScreenFlame1Tex, gTitleScreenFlame1Tex,
         gTitleScreenFlame2Tex, gTitleScreenFlame3Tex, gTitleScreenFlame3Tex,
-    }; // Effect textures
+    };
     static s16 sEffectScrollVelocitySs[] = { -1, 1, 1, -1, 1, 1 };
     static s16 sEffectScrollVelocityTs[] = { -2, -2, -2, 2, 2, 2 };
     static s16 sTextAlpha = 0; // For drawing both the No Controller message and "PRESS START"
@@ -762,6 +711,7 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
 
     func_8012C680(&gfx);
 
+    // Mask appearing effects
     gDPPipeSync(gfx++);
     gDPSetCycleType(gfx++, G_CYC_2CYCLE);
     gDPSetAlphaCompare(gfx++, G_AC_THRESHOLD);
@@ -769,20 +719,19 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     gDPSetCombineLERP(gfx++, TEXEL1, PRIMITIVE, PRIM_LOD_FRAC, TEXEL0, TEXEL1, 1, PRIM_LOD_FRAC, TEXEL0, PRIMITIVE,
                       ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 
-    gDPSetPrimColor(gfx++, 0, this->majorasMaskEffectPrimLodFrac, this->majorasMaskEffectPrimColor[0],
-                    this->majorasMaskEffectPrimColor[1], this->majorasMaskEffectPrimColor[2],
-                    this->majorasMaskEffectAlpha);
-    gDPSetEnvColor(gfx++, this->majorasMaskEffectEnvColor[0], this->majorasMaskEffectEnvColor[1],
-                   this->majorasMaskEffectEnvColor[2], 255);
+    gDPSetPrimColor(gfx++, 0, this->appearEffectPrimLodFrac, this->appearEffectPrimColor[0],
+                    this->appearEffectPrimColor[1], this->appearEffectPrimColor[2], this->appearEffectAlpha);
+    gDPSetEnvColor(gfx++, this->appearEffectEnvColor[0], this->appearEffectEnvColor[1], this->appearEffectEnvColor[2],
+                   255);
 
-    // Glowy effects behind Mask
-    if (this->majorasMaskEffectPrimLodFrac != 0) {
-        for (k = 0, i = 0, rectTop = 38; i < 2; i++, rectTop += 64) {
-            for (j = 0, rectLeft = 57; j < 3; j++, k++, rectLeft += 64) {
+    if (this->appearEffectPrimLodFrac != 0) {
+        for (k = 0, i = 0, rectTop = EFFECT_TEX_LEFT; i < 2; i++, rectTop += EFFECT_MASK_TEX_HEIGHT) {
+            for (j = 0, rectLeft = EFFECT_TEX_TOP; j < 3; j++, k++, rectLeft += EFFECT_MASK_TEX_WIDTH) {
                 this->effectScrollSs[k] += sEffectScrollVelocitySs[k];
                 this->effectScrollTs[k] += sEffectScrollVelocityTs[k];
-                EnMag_DrawEffectTextures(&gfx, D_8096E970[k], D_8096E9A0[k], 64, 64, 32, 32, rectLeft, rectTop, 1, 1, k,
-                                         this);
+                EnMag_DrawEffectTextures(&gfx, sAppearEffectMaskTextures[k], sEffectTextures[k], EFFECT_MASK_TEX_WIDTH,
+                                         EFFECT_MASK_TEX_HEIGHT, EFFECT_TEX_WIDTH, EFFECT_TEX_HEIGHT, rectLeft, rectTop,
+                                         1, 1, k, this);
             }
         }
     }
@@ -801,25 +750,25 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
                               MAJORAS_MASK_TEX_WIDTH, MAJORAS_MASK_TEX_HEIGHT);
     }
 
+    // Flame glow effects on full game logo when displayed
     gDPPipeSync(gfx++);
-
     gDPSetCycleType(gfx++, G_CYC_2CYCLE);
     gDPSetAlphaCompare(gfx++, G_AC_THRESHOLD);
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_CLD_SURF2);
     gDPSetCombineLERP(gfx++, TEXEL1, PRIMITIVE, PRIM_LOD_FRAC, TEXEL0, TEXEL1, 1, PRIM_LOD_FRAC, TEXEL0, PRIMITIVE,
                       ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 
-    gDPSetPrimColor(gfx++, 0, this->zeldaEffectPrimLodFrac, this->zeldaEffectPrimColor[0],
-                    this->zeldaEffectPrimColor[1], this->zeldaEffectPrimColor[2], this->zeldaEffectAlpha);
-    gDPSetEnvColor(gfx++, this->zeldaEffectEnvColor[0], this->zeldaEffectEnvColor[1], this->zeldaEffectEnvColor[2],
-                   255);
+    gDPSetPrimColor(gfx++, 0, this->displayEffectPrimLodFrac, this->displayEffectPrimColor[0],
+                    this->displayEffectPrimColor[1], this->displayEffectPrimColor[2], this->displayEffectAlpha);
+    gDPSetEnvColor(gfx++, this->displayEffectEnvColor[0], this->displayEffectEnvColor[1],
+                   this->displayEffectEnvColor[2], 255);
 
-    // Glowy effects behind "ZELDA"
-    if (this->zeldaEffectPrimLodFrac != 0) {
-        for (k = 0, i = 0, rectTop = 38; i < 2; i++, rectTop += 64) {
-            for (j = 0, rectLeft = 57; j < 3; j++, k++, rectLeft += 64) {
-                EnMag_DrawEffectTextures(&gfx, D_8096E988[k], D_8096E9A0[k], 64, 64, 32, 32, rectLeft, rectTop, 1, 1, k,
-                                         this);
+    if (this->displayEffectPrimLodFrac != 0) {
+        for (k = 0, i = 0, rectTop = EFFECT_TEX_LEFT; i < 2; i++, rectTop += EFFECT_MASK_TEX_HEIGHT) {
+            for (j = 0, rectLeft = EFFECT_TEX_TOP; j < 3; j++, k++, rectLeft += EFFECT_MASK_TEX_WIDTH) {
+                EnMag_DrawEffectTextures(&gfx, sDisplayEffectMaskTextures[k], sEffectTextures[k], EFFECT_MASK_TEX_WIDTH,
+                                         EFFECT_MASK_TEX_HEIGHT, EFFECT_TEX_WIDTH, EFFECT_TEX_HEIGHT, rectLeft, rectTop,
+                                         1, 1, k, this);
             }
         }
     }
@@ -898,6 +847,7 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
 
     if (gSaveContext.fileNum == 0xFEDC) {
         // Draw No controller message
+
         TIMED_STEP_TO(sTextAlpha, sTextAlphaTargets[sTextAlphaTargetIndex], sTextAlphaTimer, step);
 
         gDPPipeSync(gfx++);
@@ -950,6 +900,7 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
         }
     } else if (this->copyrightAlpha != 0) {
         // Draw "PRESS START" characters
+
         TIMED_STEP_TO(sTextAlpha, sTextAlphaTargets[sTextAlphaTargetIndex], sTextAlphaTimer, step);
 
         // Text shadow
@@ -995,13 +946,12 @@ void func_8096D74C(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
         }
     }
 
-    // PrintStuffInner(this, globalCtx, &gfx);
-
     *gfxp = gfx;
 }
 
 /**
- * Jumps drawing to POLY_OPA_DISP to take advantage of the extra space available, but actually draws using OVERLAY_DISP.
+ * Jumps drawing to POLY_OPA_DISP to take advantage of the extra space available, but jmups back and actually draws
+ * using OVERLAY_DISP.
  */
 void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -1014,7 +964,7 @@ void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gfx = Graph_GfxPlusOne(gfxRef);
     gSPDisplayList(OVERLAY_DISP++, gfx);
 
-    func_8096D74C(thisx, globalCtx, &gfx);
+    EnMag_DrawInner(thisx, globalCtx, &gfx);
 
     gSPEndDisplayList(gfx++);
     Graph_BranchDlist(gfxRef, gfx);

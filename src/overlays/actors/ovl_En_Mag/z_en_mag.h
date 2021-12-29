@@ -7,20 +7,20 @@ struct EnMag;
 
 typedef struct EnMag {
     /* 0x00000 */ Actor actor;
-    /* 0x00144 */ char pad144[0x2C];
+    /* 0x00144 */ UNK_TYPE1 unk144[0x2C];
     /* 0x00170 */ Font font;
-    /* 0x11EFC */ char pad11EFC[4];
+    /* 0x11EFC */ UNK_TYPE1 unk11EFC[4];
     /* 0x11F00 */ s16 unk11F00; // Set and not used.
     /* 0x11F02 */ s16 unk11F02; // Set and not used.
     /* 0x11F04 */ s16 state; // State of whole actor, uses EnMagState enum
-    /* 0x11F06 */ s16 majorasMaskEffectPrimLodFrac;
-    /* 0x11F08 */ s16 majorasMaskEffectPrimColor[3];
-    /* 0x11F08 */ s16 majorasMaskEffectEnvColor[3];
-    /* 0x11F14 */ s16 majorasMaskEffectAlpha;
-    /* 0x11F16 */ s16 zeldaEffectPrimLodFrac;
-    /* 0x11F18 */ s16 zeldaEffectPrimColor[3];
-    /* 0x11F18 */ s16 zeldaEffectEnvColor[3];
-    /* 0x11F24 */ s16 zeldaEffectAlpha;
+    /* 0x11F06 */ s16 appearEffectPrimLodFrac;
+    /* 0x11F08 */ s16 appearEffectPrimColor[3];
+    /* 0x11F08 */ s16 appearEffectEnvColor[3];
+    /* 0x11F14 */ s16 appearEffectAlpha;
+    /* 0x11F16 */ s16 displayEffectPrimLodFrac;
+    /* 0x11F18 */ s16 displayEffectPrimColor[3];
+    /* 0x11F18 */ s16 displayEffectEnvColor[3];
+    /* 0x11F24 */ s16 displayEffectAlpha;
     /* 0x11F26 */ s16 majorasMaskAlpha;
     /* 0x11F28 */ s16 majorasMaskEnvColor[3];
     /* 0x11F2E */ s16 mainTitleAlpha;
@@ -28,9 +28,9 @@ typedef struct EnMag {
     /* 0x11F32 */ s16 unk11F32; // Set but not used, likely a spare alpha.
     /* 0x11F34 */ s16 copyrightAlpha;
     /* 0x11F36 */ s16 effectScrollSs[6];
-    /* 0x11F42 */ char pad11F42[2];
+    /* 0x11F42 */ UNK_TYPE1 unk11F42[2];
     /* 0x11F44 */ s16 effectScrollTs[6];
-    /* 0x11F50 */ char pad11F50[4];
+    /* 0x11F50 */ UNK_TYPE1 unk11F50[4];
     /* 0x11F54 */ s16 unk11F54; // Set but not used.
     /* 0x11F56 */ s16 unk11F56; // Set but not used.
     /* 0x11F58 */ s16 unk11F58; // Set but not used.
@@ -45,7 +45,7 @@ typedef struct EnMag {
     /* 0x11F6E */ s16 copyrightFadeInTimer;
     /* 0x11F70 */ s16 fadeOutTimer;
     /* 0x11F72 */ s16 delayTimer; // Delays start of next action in Update.
-    /* 0x11F74 */ char pad11F74[4];
+    /* 0x11F74 */ UNK_TYPE1 unk11F74[4];
 } EnMag; // size = 0x11F78
 
 extern const ActorInit En_Mag_InitVars;
