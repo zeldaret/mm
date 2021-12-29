@@ -67,8 +67,7 @@ static ColliderCylinderInit D_80BFB2B0 = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BFB2DC = &gYbUnkAnim;
-
+static AnimationHeader* D_80BFB2DC[] = { &gYbUnkAnim };
 
 // WARNINGS
 //AnimationHeaderCommon* D_80BFB2E0[] = { &D_0400DF28, &D_0400CF98 };
@@ -169,40 +168,36 @@ void func_80BFA350(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     }
 }
 
-// this weird animation function is called from init
-/*
-// the only way it gets used in this actor: func_80BFA444(globalCtx, this, 2, 0, 0.0f);
+// weird player animation changing function
+// only gets called from init with static variables though: (globalCtx, this, 2, 0, 0.0f);
+
 void func_80BFA444(GlobalContext *globalCtx, EnYb *this, s16 animIndex, u8 animMode, f32 transitionRate) {
-    //AnimationHeaderCommon **temp_v1;
-    //LinkAnimationHeader **temp_v1;
-    //u8 temp_a3 = animMode & 0xFF;
 
     if ((animIndex >= 0) && (animIndex < 3)) {
         if ((animIndex != this->currentAnimIndex) || (animMode != 0)) {
             if ( animIndex > 0) {
                 if (animMode == 0) {
-                    //temp_v1 = &D_80BFB2E0[animIndex];
-                    //LinkAnimation_Change(globalCtx, &this->skelAnime,
-                         //temp_v1->unk-4, 1.0f, 0.0f, (f32) Animation_GetLastFrame(temp_v1->unk-4), 0, transitionRate);
                     LinkAnimation_Change(globalCtx, &this->skelAnime,
-                         &D_80BFB2E0[animIndex]->common, 1.0f, 0.0f, (f32) Animation_GetLastFrame(&D_80BFB2E0[animIndex]->common), 0, transitionRate);
+                         &D_80BFB2E0[animIndex-1]->common, 1.0f, 0.0f,
+                         (f32) Animation_GetLastFrame(&D_80BFB2E0[animIndex-1]->common), 0, transitionRate);
                 } else {
-                    //temp_v1 = &(&D_80BFB2E0)[animIndex];
-                    //sp34 = temp_v1_2;
-                    //LinkAnimation_Change(globalCtx, &this->skelAnime, (LinkAnimationHeader *) temp_v1->unk-4, 1.0f, 0.0f, (f32) Animation_GetLastFrame(temp_v1->unk-4), 0, transitionRate);
-                    LinkAnimation_Change(globalCtx, &this->skelAnime, &D_80BFB2E0[animIndex]->common, 1.0f, 0.0f, (f32) Animation_GetLastFrame(&D_80BFB2E0[animIndex]->common), 0, transitionRate);
+                    LinkAnimation_Change(globalCtx, &this->skelAnime, 
+                        &D_80BFB2E0[animIndex-1]->common, 1.0f, 0.0f, 
+                        (f32) Animation_GetLastFrame(&D_80BFB2E0[animIndex-1]->common), 0, transitionRate);
                 }
             } else {
-                //temp_v1_3 = &(&D_80BFB2DC)[animIndex];
-                //sp34 = temp_v1;
-                //animMode = &D_80BFB2DC;
-                Animation_Change(&this->skelAnime, &D_80BFB2DC, 1.0f, 0.0f, (f32) Animation_GetLastFrame(&D_80BFB2DC), animMode, transitionRate);
+                AnimationHeader* animationPtr = D_80BFB2DC[animIndex];
+
+                if(1) {}
+
+                Animation_Change(&this->skelAnime, D_80BFB2DC[animIndex], 1.0f, 0.0f, 
+                   Animation_GetLastFrame(animationPtr), 
+                   animMode, transitionRate);
             }
             this->currentAnimIndex = animIndex;
         }
     }
-} // */
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Yb/func_80BFA444.s")
+}
 
 // check if dialogue is possible to start?
 s32 func_80BFA5CC(EnYb *this, GlobalContext *globalCtx) {
@@ -387,15 +382,13 @@ void func_80BFAC88(EnYb *this, GlobalContext *globalCtx) {
         func_80BFA2FC(globalCtx);
         this->actionFunc = func_80BFA9D4;
         if (Player_GetMask(globalCtx) == 0xE) {
-            // Spread my dance across the world...  Train its followers...
-            //(Translation) I have taught it to you, now make it into a popular dance craze!
+            //(Translation) I have taught you go use it
             func_801518B0(globalCtx, 0x147C, (Actor *) this);
         } else {
-            // "[sound 6954] I am no longer part of the living...My sadness to the moon...
             // regular talk to him first dialogue
             func_801518B0(globalCtx, 0x147B, (Actor *) this);
         }
-    } else if (func_80BFA5CC(this, globalCtx) != 0) { // check if player can start dialogue
+    } else if (func_80BFA5CC(this, globalCtx)) { // check if player can start dialogue
         func_800B8614((Actor *) this, globalCtx, 120.0f);
     }
 
