@@ -303,7 +303,8 @@ void ObjTokeidai_TowerGear_Collapse(ObjTokeidai* this, GlobalContext* globalCtx)
 }
 
 void ObjTokeidai_TowerGear_OpenedIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x84) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 2) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x84) &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 2) {
         this->actionFunc = ObjTokeidai_TowerGear_Collapse;
         this->actor.speedXZ = this->actor.scale.y * 5.0f;
         this->actor.velocity.y = 0.0f;
@@ -370,7 +371,8 @@ void ObjTokeidai_TowerClock_SlideOff(ObjTokeidai* this, GlobalContext* globalCtx
 }
 
 void ObjTokeidai_TowerClock_OpenedIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x84) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 1) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x84) &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 1) {
         this->actionFunc = ObjTokeidai_TowerClock_SlideOff;
         this->slidingClockFaceAngle = 0;
         this->aerialClockFaceSpeed = -0xD;
@@ -387,7 +389,8 @@ void ObjTokeidai_Counterweight_Collapse(ObjTokeidai* this, GlobalContext* global
 }
 
 void ObjTokeidai_Counterweight_OpenedIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x84) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 3) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x84) &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 3) {
         this->actionFunc = ObjTokeidai_Counterweight_Collapse;
         this->xRotation = 0;
         this->actor.velocity.y = 0.0f;
@@ -408,13 +411,15 @@ void ObjTokeidai_Walls_Collapse(ObjTokeidai* this, GlobalContext* globalCtx) {
 }
 
 void ObjTokeidai_Walls_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x84) != 0 && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 1) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x84) != 0 &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 1) {
         this->actionFunc = ObjTokeidai_Walls_Collapse;
     }
 }
 
 void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x84) != 0 && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 5) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x84) != 0 &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 5) {
         gSaveContext.weekEventReg[8] |= 0x40;
         if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
              (globalCtx->csCtx.currentCsIndex == 0)) ||
@@ -558,7 +563,8 @@ void ObjTokeidai_TowerOpening_RaiseTower(ObjTokeidai* this, GlobalContext* globa
 }
 
 void ObjTokeidai_TowerOpening_Start(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if ((Cutscene_CheckActorAction(globalCtx, 0x84) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 4) ||
+    if ((Cutscene_CheckActorAction(globalCtx, 0x84) &&
+         globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 4) ||
         (gSaveContext.weekEventReg[8] & 0x40)) {
         this->actionFunc = ObjTokeidai_TowerOpening_RaiseTower;
     }

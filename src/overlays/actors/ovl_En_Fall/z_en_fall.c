@@ -287,7 +287,8 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
 void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globalCtx) {
     static s32 sGiantsCutsceneState = 0;
 
-    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 1 && globalCtx->csCtx.currentCsIndex == 0) {
+    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 1 &&
+        globalCtx->csCtx.currentCsIndex == 0) {
         switch (sGiantsCutsceneState) {
             case 0:
                 if (globalCtx->csCtx.state != 0) {
@@ -330,7 +331,8 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globa
 void EnFall_CrashingMoon_PerformCutsceneActions(EnFall* this, GlobalContext* globalCtx) {
     EnFall_CrashingMoon_HandleGiantsCutscene(this, globalCtx);
     if (Cutscene_CheckActorAction(globalCtx, 0x85)) {
-        if (Cutscene_CheckActorAction(globalCtx, 0x85) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x85)]->action == 1) {
+        if (Cutscene_CheckActorAction(globalCtx, 0x85) &&
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x85)]->action == 1) {
             this->actor.draw = NULL;
         } else {
             this->actor.draw = EnFall_Moon_Draw;
@@ -428,7 +430,8 @@ void EnFall_Moon_PerformDefaultActions(EnFall* this, GlobalContext* globalCtx) {
     u16 currentDay;
 
     if (Cutscene_CheckActorAction(globalCtx, 0x85)) {
-        if (Cutscene_CheckActorAction(globalCtx, 0x85) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x85)]->action == 1) {
+        if (Cutscene_CheckActorAction(globalCtx, 0x85) &&
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x85)]->action == 1) {
             this->actor.draw = NULL;
         } else {
             Actor_SetScale(&this->actor, this->scale * 3.6f);
@@ -473,7 +476,8 @@ void EnFall_DoNothing(EnFall* this, GlobalContext* globalCtx) {
 void EnFall_MoonsTear_Fall(EnFall* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x205) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x205)]->action == 2 &&
+    if (Cutscene_CheckActorAction(globalCtx, 0x205) &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x205)]->action == 2 &&
         this->actor.draw == NULL) {
         EnFall_MoonsTear_Initialize(this);
     }
@@ -536,7 +540,8 @@ void EnFall_FireBall_SetPerVertexAlpha(f32 fireBallAlpha) {
 void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
-    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.currentCsIndex == 2) {
+    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 &&
+        globalCtx->csCtx.currentCsIndex == 2) {
         globalCtx->skyboxCtx.rotY -= 0.05f;
     }
 
@@ -657,7 +662,8 @@ void EnFall_RisingDebris_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1C2) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1C2)]->action == 5) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1C2) &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1C2)]->action == 5) {
         if (!(this->flags & EN_FALL_FLAG_FIRE_RING_APPEARS)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
         }
