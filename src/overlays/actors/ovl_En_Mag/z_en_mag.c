@@ -382,7 +382,7 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                             CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
                             CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B)) {
                             if (globalCtx->sceneLoadFlag != 0x14) {
-                                func_801A3F54(0);
+                                func_801A3F54(false);
                                 D_801BB12C++;
                                 if (D_801BB12C >= 2) {
                                     D_801BB12C = 0;
