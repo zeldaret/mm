@@ -1,5 +1,4 @@
 ﻿<Root>
-    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="objects/gameplay_keep/"/>
     <File Name="object_stream" Segment="6">
         <Texture Name="gWaterVortexTex" OutName="water_vortex" Format="i4" Width="64" Height="64" Offset="0x0" />
         <DList Name="gWaterVortexDL" Offset="0x950" />
