@@ -5,6 +5,8 @@
  */
 
 #include "z_en_yb.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_yb/object_yb.h"
 
 #define FLAGS 0x02000019
 
@@ -34,7 +36,8 @@ void func_80BFA67C(EnYb* this);
 // custom shadow function
 void func_80BFA350(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 
-void func_80BFA444(GlobalContext* globalCtx, EnYb* this, s16 arg3, s16 arg4, f32 arg5);
+//void func_80BFA444(GlobalContext* globalCtx, EnYb* this, s16 arg3, s16 arg4, f32 arg5);
+void func_80BFA444(GlobalContext* globalCtx, EnYb* this, s16 arg3, u8 arg4, f32 arg5);
 
 void func_80BFA730(EnYb* this, GlobalContext* globalCtx);
 void func_80BFA868(EnYb* this, GlobalContext* globalCtx);
@@ -64,22 +67,18 @@ static ColliderCylinderInit D_80BFB2B0 = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-UNK_TYPE D_80BFB2DC = 0x06000200;
+static AnimationHeader* D_80BFB2DC = &gYbUnkAnim;
 
-extern AnimationHeaderCommon D_0400DF28;
 
+// WARNINGS
 //AnimationHeaderCommon* D_80BFB2E0[] = { &D_0400DF28, &D_0400CF98 };
-LinkAnimationHeader* D_80BFB2E0[] = { &D_0400DF28, &D_0400CF98 };
+static LinkAnimationHeader* D_80BFB2E0[] = { &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00CF98};
 
-Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f};
+static Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f};
 
-Vec3f D_80BFB2F4 = { 500.0f, -500.0, 0.0f};
+static Vec3f D_80BFB2F4 = { 500.0f, -500.0, 0.0f};
 
-Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f};
-
-
-extern FlexSkeletonHeader D_06005F48;
-extern AnimationHeader D_06000200;
+static Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f};
 
 extern u8 D_801C20BB; // item location for something
 
@@ -91,16 +90,16 @@ void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_80BFA350, 20.0f);
 
     // ???
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06005F48, &D_06000200,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gYbSkeleton, &gYbUnkAnim,
         (void*)(((s32)&this->limbDrawTbl) & ~0xF), 
         (void*)((s32)&this->transitionDrawTable & ~0xF), ENYB_LIMBCOUNT);
 
-    Animation_PlayLoop(&this->skelAnime, &D_06000200);
+    Animation_PlayLoop(&this->skelAnime, &gYbUnkAnim);
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80BFB2B0);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actionFunc = func_80BFAC88;
-    this->unk412 = 3;
+    this->currentAnimIndex = 3; // gets overwritten in the next function...?
     this->actor.minVelocityY = -9.0f;
     this->actor.gravity = -1.0f;
 
@@ -118,9 +117,9 @@ void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
     this->unk41A = -1;
     this->actor.cutscene = (s8) this->unk416[0];
     if ((s32) gSaveContext.time < 0x4000) {
-        this->unk414 = 0xFF;
+        this->alpha = 0xFF;
     } else {
-        this->unk414 = 0;
+        this->alpha = 0;
         this->actionFunc = func_80BFAE80;
         this->actor.flags &= -2;
     }
@@ -148,14 +147,14 @@ void func_80BFA350(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     Vec3f oldPos;
     EnYb* this = (EnYb*) actor;
 
-    if (this->unk414 > 0) {
-        if (this->unk412 == 2) {
+    if (this->alpha > 0) {
+        if (this->currentAnimIndex == 2) {
             // regalloc without temp
-            f32 tempScale = (((27.0f - this->unk404.y) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
+            f32 tempScale = (((27.0f - this->zeroVec.y) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
             actor->scale.x = tempScale;
         }
         Math_Vec3f_Copy(&oldPos, &actor->world.pos);
-        Math_Vec3f_Copy(&actor->world.pos, &this->unk404);
+        Math_Vec3f_Copy(&actor->world.pos, &this->zeroVec);
         func_800B4AEC(globalCtx, actor, 50.0f);
 
         if (oldPos.y < this->actor.floorHeight) {
@@ -172,30 +171,34 @@ void func_80BFA350(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
 
 // this weird animation function is called from init
 /*
-void func_80BFA444(GlobalContext *globalCtx, EnYb *this, s16 arg3, s16 arg4, f32 arg5) {
+// the only way it gets used in this actor: func_80BFA444(globalCtx, this, 2, 0, 0.0f);
+void func_80BFA444(GlobalContext *globalCtx, EnYb *this, s16 animIndex, u8 animMode, f32 transitionRate) {
     //AnimationHeaderCommon **temp_v1;
-    LinkAnimationHeader **temp_v1;
-    u8 temp_a3 = arg4 & 0xFF;
+    //LinkAnimationHeader **temp_v1;
+    //u8 temp_a3 = animMode & 0xFF;
 
-    if ((arg3 >= 0) && (arg3 < 3)) {
-        if ((arg3 != this->unk412) || (arg4 != 0)) {
-            if ( arg3 > 0) {
-                if (temp_a3 == 0) {
-                    temp_v1 = &D_80BFB2E0[arg3];
+    if ((animIndex >= 0) && (animIndex < 3)) {
+        if ((animIndex != this->currentAnimIndex) || (animMode != 0)) {
+            if ( animIndex > 0) {
+                if (animMode == 0) {
+                    //temp_v1 = &D_80BFB2E0[animIndex];
+                    //LinkAnimation_Change(globalCtx, &this->skelAnime,
+                         //temp_v1->unk-4, 1.0f, 0.0f, (f32) Animation_GetLastFrame(temp_v1->unk-4), 0, transitionRate);
                     LinkAnimation_Change(globalCtx, &this->skelAnime,
-                         temp_v1->unk-4, 1.0f, 0.0f, (f32) Animation_GetLastFrame(temp_v1->unk-4), 0, arg5);
+                         &D_80BFB2E0[animIndex]->common, 1.0f, 0.0f, (f32) Animation_GetLastFrame(&D_80BFB2E0[animIndex]->common), 0, transitionRate);
                 } else {
-                    temp_v1 = &(&D_80BFB2E0)[arg3];
+                    //temp_v1 = &(&D_80BFB2E0)[animIndex];
                     //sp34 = temp_v1_2;
-                    LinkAnimation_Change(globalCtx, &this->skelAnime, (LinkAnimationHeader *) temp_v1->unk-4, 1.0f, 0.0f, (f32) Animation_GetLastFrame(temp_v1->unk-4), 0, arg5);
+                    //LinkAnimation_Change(globalCtx, &this->skelAnime, (LinkAnimationHeader *) temp_v1->unk-4, 1.0f, 0.0f, (f32) Animation_GetLastFrame(temp_v1->unk-4), 0, transitionRate);
+                    LinkAnimation_Change(globalCtx, &this->skelAnime, &D_80BFB2E0[animIndex]->common, 1.0f, 0.0f, (f32) Animation_GetLastFrame(&D_80BFB2E0[animIndex]->common), 0, transitionRate);
                 }
             } else {
-                temp_v1_3 = &(&D_80BFB2DC)[arg3];
+                //temp_v1_3 = &(&D_80BFB2DC)[animIndex];
                 //sp34 = temp_v1;
-                arg4 = temp_a3;
-                Animation_Change(&this->skelAnime, (AnimationHeader *) *temp_v1, 1.0f, 0.0f, (f32) Animation_GetLastFrame(*temp_v1), (f32) arg4, arg5);
+                //animMode = &D_80BFB2DC;
+                Animation_Change(&this->skelAnime, &D_80BFB2DC, 1.0f, 0.0f, (f32) Animation_GetLastFrame(&D_80BFB2DC), animMode, transitionRate);
             }
-            this->unk412 = arg3;
+            this->currentAnimIndex = animIndex;
         }
     }
 } // */
@@ -206,14 +209,14 @@ s32 func_80BFA5CC(EnYb *this, GlobalContext *globalCtx) {
     if ((this->actor.xzDistToPlayer < 100.0f) 
       && (Actor_IsLinkFacingActor((Actor *) this, 0x3000, globalCtx))     
       && (Actor_IsActorFacingLink((Actor *) this, 0x3000))) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
 void func_80BFA634(EnYb *this, GlobalContext *globalCtx) {
-    if (this->unk412 <= 0) {
+    if (this->currentAnimIndex <= 0) {
         SkelAnime_Update(&this->skelAnime);
     } else {
         LinkAnimation_Update(globalCtx, &this->skelAnime);
@@ -256,8 +259,8 @@ void func_80BFA730(EnYb *this, GlobalContext *globalCtx) {
     }
 
     Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x14, 0x3878);
-    if (this->unk414 >= 0xB) {
-        this->unk414 -= 10;
+    if (this->alpha >= 0xB) {
+        this->alpha -= 10;
     } else {
         Actor_MarkForDeath((Actor *) this);
     }
@@ -413,9 +416,9 @@ void func_80BFAC88(EnYb *this, GlobalContext *globalCtx) {
 void func_80BFAE80(EnYb *this, GlobalContext *globalCtx) {
     if (gSaveContext.time < 0x4000) {
         func_80BFA634(this, globalCtx);
-        this->unk414 += 5;
-        if (this->unk414 >= 0xFB) {
-            this->unk414 = 0xFF;
+        this->alpha += 5;
+        if (this->alpha >= 0xFB) {
+            this->alpha = 0xFF;
             this->actor.flags |= 1;
             this->actionFunc = func_80BFAC88;
         }
@@ -461,7 +464,7 @@ void func_80BFB074(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
         Matrix_MultiplyVector3fByState(&D_80BFB2F4, &this->actor.focus.pos);
     }
     if (limbIndex == 3) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk404);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->zeroVec);
     }
 }
 
@@ -471,7 +474,7 @@ void func_80BFB0E0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultiplyVector3fByState(&D_80BFB300, &this->actor.focus.pos);
     }
     if (limbIndex == 3) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk404);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->zeroVec);
     }
 }
 
@@ -479,16 +482,16 @@ void EnYb_Draw(EnYb *this, GlobalContext *globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    if (this->unk414 != 0) {
-        if (this->unk414 < 0xFF) {
-            if (this->unk414 >= 0x81) {
+    if (this->alpha != 0) {
+        if (this->alpha < 0xFF) {
+            if (this->alpha >= 0x81) {
                 func_8012C2B4(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(globalCtx, 2, 2);
             } else {
                 func_8012C304(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(globalCtx, 1, 2);
             }
-            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk414);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
 
             if (!(&globalCtx->state)){}
 

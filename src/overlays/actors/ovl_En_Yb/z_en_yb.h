@@ -17,16 +17,16 @@ typedef struct EnYb {
     /* 0x2A0 */ Vec3s transitionDrawTable[ENYB_LIMBCOUNT];
     /* 0x??? */ char weirdPadding2[0x94];
     /* 0x3B8 */ ColliderCylinder collider;
-    /* 0x404 */ Vec3f unk404;
+    /* 0x404 */ Vec3f zeroVec;
     /* 0x410 */ u16 unk410;
-    /* 0x412 */ s16 unk412;
-    /* 0x414 */ s16 unk414;
+    /* 0x412 */ s16 currentAnimIndex;
+    /* 0x414 */ s16 alpha;
     ///* 0x412 */ Color_RGBA8 envcolor; //not a color store/load half
     /* 0x416 */ s16 unk416[2];
     ///* 0x41A */ s16 unk41A[3]; // might not be
     /* 0x41A */ s16 unk41A; // cutscene choice
     /* 0x41C */ s16 unk41C; // timer of some sort
-    /* 0x41E */ s16 unk41E;
+    ///* 0x41E */ s16 unk41E; // padding I think
     /* 0x420 */ EnYbActionFunc actionFunc;
 } EnYb; // size = 0x424
 
