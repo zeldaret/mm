@@ -334,8 +334,9 @@ void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx) {
     Vec3f sp54;
     s32 sp50;
 
-    if ((DECR(this->unk_260) == 0) || ((this->actor.params == ENARROW_7) &&
-                                       ((this->unk_262 != 0) || (phi_a2 = (this->collider.base.atFlags & AT_HIT))))) {
+    if ((DECR(this->unk_260) == 0) ||
+        ((this->actor.params == ENARROW_7) &&
+         ((this->unk_262 != 0) || (phi_a2 = (this->collider.base.atFlags & AT_HIT) != 0)))) {
         if (this->actor.params == ENARROW_7) {
             if (phi_a2 && (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4) &&
                 (this->collider.base.atFlags & AT_BOUNCED)) {
