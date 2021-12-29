@@ -287,7 +287,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
 void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globalCtx) {
     static s32 sGiantsCutsceneState = 0;
 
-    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 1 && globalCtx->csCtx.unk_12 == 0) {
+    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 1 && globalCtx->csCtx.currentCsIndex == 0) {
         switch (sGiantsCutsceneState) {
             case 0:
                 if (globalCtx->csCtx.state != 0) {
@@ -329,14 +329,14 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globa
 
 void EnFall_CrashingMoon_PerformCutsceneActions(EnFall* this, GlobalContext* globalCtx) {
     EnFall_CrashingMoon_HandleGiantsCutscene(this, globalCtx);
-    if (func_800EE29C(globalCtx, 0x85)) {
-        if (func_800EE29C(globalCtx, 0x85) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0 == 1) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x85)) {
+        if (Cutscene_CheckActorAction(globalCtx, 0x85) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x85)]->action == 1) {
             this->actor.draw = NULL;
         } else {
             this->actor.draw = EnFall_Moon_Draw;
-            if (func_800EE29C(globalCtx, 0x85) &&
-                globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0 == 2) {
-                func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x85));
+            if (Cutscene_CheckActorAction(globalCtx, 0x85) &&
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x85)]->action == 2) {
+                Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 0x85));
             }
         }
     } else {
@@ -345,8 +345,8 @@ void EnFall_CrashingMoon_PerformCutsceneActions(EnFall* this, GlobalContext* glo
 }
 
 void EnFall_StoppedOpenMouthMoon_PerformCutsceneActions(EnFall* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x85)) {
-        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x85)) {
+        switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x85)]->action) {
             case 3:
                 if (this->eyeGlowIntensity == 0.0f) {
                     Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_EYE_FLASH);
@@ -364,10 +364,10 @@ void EnFall_StoppedOpenMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCont
 }
 
 void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x85)) {
-        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x85)) {
+        switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x85)]->action) {
             case 2:
-                func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x85));
+                Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 0x85));
                 break;
             case 4:
                 this->actor.draw = NULL;
@@ -376,7 +376,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
     }
 
     if (globalCtx->sceneNum == SCENE_OKUJOU && gSaveContext.sceneSetupIndex == 2) {
-        switch (globalCtx->csCtx.unk_12) {
+        switch (globalCtx->csCtx.currentCsIndex) {
             case 0:
                 switch (globalCtx->csCtx.frames) {
                     case 1060:
@@ -427,15 +427,15 @@ void EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions(EnFall* this, Glo
 void EnFall_Moon_PerformDefaultActions(EnFall* this, GlobalContext* globalCtx) {
     u16 currentDay;
 
-    if (func_800EE29C(globalCtx, 0x85)) {
-        if (func_800EE29C(globalCtx, 0x85) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0 == 1) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x85)) {
+        if (Cutscene_CheckActorAction(globalCtx, 0x85) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x85)]->action == 1) {
             this->actor.draw = NULL;
         } else {
             Actor_SetScale(&this->actor, this->scale * 3.6f);
             this->actor.draw = EnFall_Moon_Draw;
-            if (func_800EE29C(globalCtx, 0x85) &&
-                globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0 == 2) {
-                func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x85));
+            if (Cutscene_CheckActorAction(globalCtx, 0x85) &&
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x85)]->action == 2) {
+                Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 0x85));
             }
         }
     } else {
@@ -473,7 +473,7 @@ void EnFall_DoNothing(EnFall* this, GlobalContext* globalCtx) {
 void EnFall_MoonsTear_Fall(EnFall* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    if (func_800EE29C(globalCtx, 0x205) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x205)]->unk0 == 2 &&
+    if (Cutscene_CheckActorAction(globalCtx, 0x205) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x205)]->action == 2 &&
         this->actor.draw == NULL) {
         EnFall_MoonsTear_Initialize(this);
     }
@@ -536,11 +536,11 @@ void EnFall_FireBall_SetPerVertexAlpha(f32 fireBallAlpha) {
 void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
-    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 2) {
+    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.currentCsIndex == 2) {
         globalCtx->skyboxCtx.rotY -= 0.05f;
     }
 
-    if (func_800EE29C(globalCtx, 0x1C2)) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1C2)) {
         this->actor.draw = EnFall_FireBall_Draw;
         if (this->flags & EN_FALL_FLAG_FIRE_BALL_INTENSIFIES) {
             this->fireBallIntensity += 0.01f;
@@ -548,9 +548,9 @@ void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
                 this->fireBallIntensity = 1.0f;
             }
         }
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x1C2));
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 0x1C2));
 
-        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C2)]->unk0) {
+        switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1C2)]->action) {
             default:
                 this->actor.draw = NULL;
                 this->fireBallAlpha = 0;
@@ -583,7 +583,7 @@ void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.draw = NULL;
     }
 
-    if (func_800EE29C(globalCtx, 0x1C2) && this->fireBallAlpha > 0) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1C2) && this->fireBallAlpha > 0) {
         func_8019F128(NA_SE_EV_MOON_FALL_LAST - SFX_FLAG);
     }
     Actor_SetScale(&this->actor, this->scale * 1.74f);
@@ -640,9 +640,9 @@ s32 EnFall_RisingDebris_InitializeParticles(EnFall* this) {
 void EnFall_RisingDebris_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
-    if (func_800EE29C(globalCtx, 0x1C3)) {
-        if (func_800EE29C(globalCtx, 0x1C3) &&
-            globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C3)]->unk0 == 2) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1C3)) {
+        if (Cutscene_CheckActorAction(globalCtx, 0x1C3) &&
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1C3)]->action == 2) {
             EnFall_RisingDebris_UpdateParticles(this);
             EnFall_RisingDebris_InitializeParticles(this);
         } else if (this->activeDebrisParticleCount != 0) {
@@ -657,7 +657,7 @@ void EnFall_RisingDebris_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
-    if (func_800EE29C(globalCtx, 0x1C2) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C2)]->unk0 == 5) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1C2) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1C2)]->action == 5) {
         if (!(this->flags & EN_FALL_FLAG_FIRE_RING_APPEARS)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
         }
