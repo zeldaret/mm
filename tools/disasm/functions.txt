@@ -6384,7 +6384,7 @@
     0x808D64D0:("func_808D64D0",),
     0x808D65BC:("func_808D65BC",),
     0x808D66A0:("func_808D66A0",),
-    0x808D6814:("func_808D6814",),
+    0x808D6814:("EnRd_CheckDamageEffect",),
     0x808D6A94:("func_808D6A94",),
     0x808D6B64:("func_808D6B64",),
     0x808D6C10:("EnRd_Update",),

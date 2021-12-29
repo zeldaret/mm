@@ -82,39 +82,50 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 70, 0, { 0, 0, 0 } },
 };
 
+typedef enum {
+    /* 0x0 */ EN_RD_DMGEFF_NONE,              // Does not interact with the Gibdo/Redead at all
+    /* 0x1 */ EN_RD_DMGEFF_STUN,              // Stuns without applying any effect
+    /* 0x2 */ EN_RD_DMGEFF_FIRE_ARROW,        // Damages and applies a fire effect
+    /* 0x4 */ EN_RD_DMGEFF_LIGHT_ARROW = 0x4, // Damages and applies a light effect
+    /* 0xC */ EN_RD_DMGEFF_ZORA_MAGIC = 0xC,  // Stuns and applies an electric effect
+    /* 0xD */ EN_RD_DMGEFF_RECOIL,            // Deals no damage, but displays hit mark and recoil animation
+    /* 0xE */ EN_RD_DMGEFF_LIGHT_RAY,         // Instantly kills on contact
+    /* 0xF */ EN_RD_DMGEFF_DAMAGE,            // Deals damage and plays the damage animation
+} EnRdDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(2, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(0, 0xD),
-    /* Normal arrow   */ DMG_ENTRY(0, 0xD),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(2, 0xF),
-    /* Hookshot       */ DMG_ENTRY(0, 0xD),
-    /* Goron punch    */ DMG_ENTRY(1, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0xF),
-    /* Goron pound    */ DMG_ENTRY(1, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(0, 0xD),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(0, 0x1),
-    /* Deku bubble    */ DMG_ENTRY(0, 0xD),
-    /* Deku launch    */ DMG_ENTRY(2, 0xF),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(0, 0xC),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0xE),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+    /* Deku Nut       */ DMG_ENTRY(0, EN_RD_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(2, EN_RD_DMGEFF_DAMAGE),
+    /* Horse trample  */ DMG_ENTRY(0, EN_RD_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, EN_RD_DMGEFF_DAMAGE),
+    /* Zora boomerang */ DMG_ENTRY(0, EN_RD_DMGEFF_RECOIL),
+    /* Normal arrow   */ DMG_ENTRY(0, EN_RD_DMGEFF_RECOIL),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(2, EN_RD_DMGEFF_DAMAGE),
+    /* Hookshot       */ DMG_ENTRY(0, EN_RD_DMGEFF_RECOIL),
+    /* Goron punch    */ DMG_ENTRY(1, EN_RD_DMGEFF_DAMAGE),
+    /* Sword          */ DMG_ENTRY(1, EN_RD_DMGEFF_DAMAGE),
+    /* Goron pound    */ DMG_ENTRY(1, EN_RD_DMGEFF_DAMAGE),
+    /* Fire arrow     */ DMG_ENTRY(1, EN_RD_DMGEFF_FIRE_ARROW),
+    /* Ice arrow      */ DMG_ENTRY(0, EN_RD_DMGEFF_RECOIL),
+    /* Light arrow    */ DMG_ENTRY(2, EN_RD_DMGEFF_LIGHT_ARROW),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_RD_DMGEFF_DAMAGE),
+    /* Deku spin      */ DMG_ENTRY(0, EN_RD_DMGEFF_STUN),
+    /* Deku bubble    */ DMG_ENTRY(0, EN_RD_DMGEFF_RECOIL),
+    /* Deku launch    */ DMG_ENTRY(2, EN_RD_DMGEFF_DAMAGE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_RD_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(0, EN_RD_DMGEFF_ZORA_MAGIC),
+    /* Normal shield  */ DMG_ENTRY(0, EN_RD_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, EN_RD_DMGEFF_LIGHT_RAY),
+    /* Thrown object  */ DMG_ENTRY(1, EN_RD_DMGEFF_DAMAGE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_RD_DMGEFF_DAMAGE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_RD_DMGEFF_DAMAGE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_RD_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_RD_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_RD_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_RD_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_RD_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_RD_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_RD_DMGEFF_DAMAGE),
 };
 
 static InitChainEntry sInitChain[] = {
@@ -1046,7 +1057,7 @@ void func_808D66A0(EnRd* this, GlobalContext* globalCtx) {
     this->headYRotation = CLAMP(this->headYRotation, -0x256F, 0x256F);
 }
 
-void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_CheckDamageEffect(EnRd* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
@@ -1071,7 +1082,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
         }
 
         switch (this->unk_3F0) {
-            case 12:
+            case EN_RD_DMGEFF_ZORA_MAGIC:
                 if ((this->actionFunc != func_808D58CC) &&
                     ((this->actionFunc != func_808D65BC) || (this->unk_3D6 == 0))) {
                     this->effectTimer = 40;
@@ -1081,11 +1092,11 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 }
                 return;
 
-            case 1:
+            case EN_RD_DMGEFF_STUN:
                 func_808D64D0(this);
                 return;
 
-            case 2:
+            case EN_RD_DMGEFF_FIRE_ARROW:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
                 this->effectTimer = 180;
                 this->effectType = 0;
@@ -1094,7 +1105,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 this->effectAlpha = 1.0f;
                 break;
 
-            case 4:
+            case EN_RD_DMGEFF_LIGHT_ARROW:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
                 this->effectTimer = 60;
                 this->effectType = 20;
@@ -1103,13 +1114,13 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 this->effectAlpha = 1.0f;
                 break;
 
-            case 15:
+            case EN_RD_DMGEFF_DAMAGE:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 this->unk_3E9 = 0;
                 this->unk_3E0 = 0;
                 break;
 
-            case 14:
+            case EN_RD_DMGEFF_LIGHT_RAY:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 this->unk_3E9 = 0;
                 this->unk_3E0 = 0;
@@ -1160,7 +1171,7 @@ void func_808D6B64(EnRd* this, GlobalContext* globalCtx) {
 void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRd* this = THIS;
 
-    func_808D6814(this, globalCtx);
+    EnRd_CheckDamageEffect(this, globalCtx);
     if ((gSaveContext.unk_3F58 != 0) && (this->unk_3E9 == 0)) {
         gSaveContext.unk_3F58 = 0;
     }
