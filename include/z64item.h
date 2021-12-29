@@ -275,6 +275,7 @@ typedef enum {
     /* 0x07 */ GI_RUPEE_HUGE,
     /* 0x08 */ GI_WALLET_ADULT,
     /* 0x09 */ GI_WALLET_GIANT,
+    /* 0x0A */ GI_0A, //Recovery Heart / Blue Rupee?
     /* 0x0C */ GI_HEART_PIECE = 0x0C,
     /* 0x0D */ GI_HEART_CONTAINER,
     /* 0x16 */ GI_BOMBS_10 = 0x16,
@@ -299,6 +300,7 @@ typedef enum {
     /* 0x3E */ GI_MAP = 0x3E,
     /* 0x3F */ GI_COMPASS,
     /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
+    /* 0x5A */ GI_5A,
     /* 0x5B */ GI_POTION_RED = 0x5B,
     /* 0x5C */ GI_POTION_GREEN,
     /* 0x5D */ GI_POTION_BLUE,

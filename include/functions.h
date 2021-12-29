@@ -802,7 +802,7 @@ void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* arg2, s16* arg3)
 s32 func_800B8934(GlobalContext* globalCtx, Actor* actor);
 u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx);
 UNK_TYPE4 func_800B8A1C(Actor* actor, GlobalContext* globalCtx, s32 iParm3, f32 fParm4, f32 param_5);
-// void func_800B8B84(void);
+s32 func_800B8B84(Actor* actor, GlobalContext* globalCtx, s32 getItemId);
 void func_800B8BB0(Actor* actor, GlobalContext* globalCtx);
 // void func_800B8BD0(void);
 s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx);
@@ -906,7 +906,7 @@ void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2);
 void func_800BE504(Actor* actor, ColliderCylinder* collider);
 void func_800BE568(Actor* actor, ColliderSphere* collider);
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2);
-// void func_800BE63C(void);
+s32 func_800BE63C(struct EnBox* chest);
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 arg4, f32 arg5, f32 arg6, u8 mode);
 void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, s32 arg4, f32 arg5, f32 arg6);
 void ActorOverlayTable_FaultPrint(void* arg0, void* arg1); // ActorOverlayTable_FaultPrint
@@ -1625,7 +1625,7 @@ ActorCutscene* ActorCutscene_GetCutscene(s16 index);
 s16 ActorCutscene_GetAdditionalCutscene(s16 index);
 s16 ActorCutscene_GetLength(s16 index);
 // void func_800F2138(void);
-// void func_800F2178(void);
+s32 func_800F2178(s16 arg0);
 s16 ActorCutscene_GetCurrentCamera(s16 index);
 // void func_800F21CC(void);
 s32 func_800F22C4(s16 param_1, Actor* actor);
