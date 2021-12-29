@@ -641,7 +641,6 @@ beginseg
     include "build/data/code/code_80194790.data.o"
     include "build/src/code/audio/audio_playback.o"
     include "build/src/code/audio/audio_effects.o"
-    include "build/data/code/audio_effects.data.o"
     include "build/src/code/audio/audio_seqplayer.o"
     include "build/data/code/audio_seqplayer.data.o"
     include "build/data/code/audio_dramStack.data.o"
