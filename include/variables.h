@@ -3874,8 +3874,8 @@ extern AnimationHeader D_040117A8; // Deku Flower small flutter animation
 extern CollisionHeader D_040118D8; // Gold Deku Flower collision
 extern Gfx D_04011BD0; // Gold Deku Flower display list
 extern SkeletonHeader D_040127E8; // Gold Deku Flower skeleton
-extern UNK_TYPE D_04012860;
-extern UNK_TYPE D_040128BC;
+extern AnimationHeader D_04012860;
+extern AnimationHeader D_040128BC;
 extern u64 D_04014570[];
 extern UNK_TYPE D_04015FA0;
 extern UNK_TYPE D_04016360;
@@ -3979,7 +3979,7 @@ extern Gfx D_040622C0[];
 extern Gfx D_0406AB30[];
 extern UNK_TYPE D_0406B730;
 extern UNK_TYPE D_0406BB0C;
-extern UNK_TYPE D_0406F380;
+extern Gfx D_0406F380[];
 extern UNK_TYPE D_04073F00;
 extern UNK_TYPE D_04075400;
 extern Gfx D_04075A40[];
@@ -4024,6 +4024,7 @@ extern UNK_TYPE D_0502324C;
 
 // other segments
 extern GfxMasterList D_0E000000;
+extern MtxF D_01000000;
 
 extern UNK_TYPE D_0F000000;
 

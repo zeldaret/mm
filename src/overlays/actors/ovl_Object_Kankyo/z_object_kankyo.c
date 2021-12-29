@@ -35,8 +35,6 @@ const ActorInit Object_Kankyo_InitVars = {
 
 #endif
 
-extern UNK_TYPE D_01000000;
-
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Object_Kankyo/ObjectKankyo_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Object_Kankyo/func_808DBE8C.s")

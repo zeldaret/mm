@@ -4,7 +4,9 @@
 #include "global.h"
 
 typedef struct {
-    char unk_0[UNK_SIZE];
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ CollisionPoly* unk_0C;
+    /* 0x10 */ f32 unk_10;
 } EffectSsSbnInitParams; // size = ?
 
 extern const EffectSsInit Effect_Ss_Sbn_InitVars;
