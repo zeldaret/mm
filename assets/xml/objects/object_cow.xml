@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_cow" Segment="6">
-        <Animation Name="object_cow_Anim_0001CC" Offset="0x1CC" />
+        <Animation Name="gCowBodyChewAnim" Offset="0x1CC" />
         <DList Name="object_cow_DL_001A80" Offset="0x1A80" />
         <DList Name="object_cow_DL_001FE8" Offset="0x1FE8" />
         <DList Name="object_cow_DL_002368" Offset="0x2368" />
@@ -19,9 +19,9 @@
         <Limb Name="object_cow_Standardlimb_003FD8" Type="Standard" Offset="0x3FD8" />
         <Limb Name="object_cow_Standardlimb_003FE4" Type="Standard" Offset="0x3FE4" />
         <Limb Name="object_cow_Standardlimb_003FF0" Type="Standard" Offset="0x3FF0" />
-        <Skeleton Name="object_cow_Skel_004010" Type="Flex" LimbType="Standard" Offset="0x4010" />
-        <Animation Name="object_cow_Anim_004264" Offset="0x4264" />
-        <Animation Name="object_cow_Anim_004348" Offset="0x4348" />
+        <Skeleton Name="gCowBodySkel" Type="Flex" LimbType="Standard" Offset="0x4010" />
+        <Animation Name="gCowBodyMoveHeadAnim" Offset="0x4264" />
+        <Animation Name="gCowTailIdleAnim" Offset="0x4348" />
         <DList Name="object_cow_DL_0046F0" Offset="0x46F0" />
         <DList Name="object_cow_DL_0047D0" Offset="0x47D0" />
         <DList Name="object_cow_DL_0048D0" Offset="0x48D0" />
@@ -32,7 +32,7 @@
         <Limb Name="object_cow_Standardlimb_004BF8" Type="Standard" Offset="0x4BF8" />
         <Limb Name="object_cow_Standardlimb_004C04" Type="Standard" Offset="0x4C04" />
         <Limb Name="object_cow_Standardlimb_004C10" Type="Standard" Offset="0x4C10" />
-        <Skeleton Name="object_cow_Skel_004C30" Type="Flex" LimbType="Standard" Offset="0x4C30" />
-        <Animation Name="object_cow_Anim_004E98" Offset="0x4E98" />
+        <Skeleton Name="gCowTailSkel" Type="Flex" LimbType="Standard" Offset="0x4C30" />
+        <Animation Name="gCowTailSwishAnim" Offset="0x4E98" />
     </File>
 </Root>

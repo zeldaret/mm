@@ -1765,7 +1765,7 @@ void EnTrt_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { &object_trt_Tex_00B0B8, &object_trt_Tex_00B8B8, &object_trt_Tex_00C0B8 };
+    static TexturePtr sEyeTextures[] = { object_trt_Tex_00B0B8, object_trt_Tex_00B8B8, object_trt_Tex_00C0B8 };
     EnTrt* this = THIS;
     s32 pad;
 

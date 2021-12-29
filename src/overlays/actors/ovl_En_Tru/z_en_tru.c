@@ -80,9 +80,8 @@ static Color_RGBA8 D_80A8B25C[] = {
 
 static f32 D_80A8B274[] = { 60.0f, 255.0f, 60.0f };
 
-static UNK_TYPE D_80A8B280[] = {
-    &gameplay_keep_Tex_08F7E0, &gameplay_keep_Tex_08F3E0, &gameplay_keep_Tex_08EFE0, &gameplay_keep_Tex_08EBE0,
-    &gameplay_keep_Tex_08E7E0, &gameplay_keep_Tex_08E3E0, &gameplay_keep_Tex_08DFE0, &gameplay_keep_Tex_08DBE0,
+static TexturePtr D_80A8B280[] = {
+    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
 };
 
 static ColliderSphereInit sSphereInit = {

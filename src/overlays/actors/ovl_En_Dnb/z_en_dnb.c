@@ -255,8 +255,7 @@ s32 func_80A5086C(EnDnbUnkStruct* arg0) {
 
 s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
     static TexturePtr D_80A50CBC[] = {
-        gameplay_keep_Tex_08F7E0, gameplay_keep_Tex_08F3E0, gameplay_keep_Tex_08EFE0, gameplay_keep_Tex_08EBE0,
-        gameplay_keep_Tex_08E7E0, gameplay_keep_Tex_08E3E0, gameplay_keep_Tex_08DFE0, gameplay_keep_Tex_08DBE0,
+        gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
     };
     GlobalContext* globalCtx = globalCtx2;
     s32 isGfxSetup = false;

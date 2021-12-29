@@ -1000,7 +1000,7 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
         if (feather->isEnabled == true) {
             // Apply the feather material if it has not already been applied.
             if (!isMaterialApplied) {
-                gSPDisplayList(POLY_XLU_DISP++, object_niw_DL_0023B0);
+                gSPDisplayList(POLY_XLU_DISP++, gNiwFeatherMaterialDL);
                 isMaterialApplied++;
             }
 
@@ -1012,7 +1012,7 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_XLU_DISP++, object_niw_DL_002428);
+            gSPDisplayList(POLY_XLU_DISP++, gNiwFeatherDL);
         }
     }
 

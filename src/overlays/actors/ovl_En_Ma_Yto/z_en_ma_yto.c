@@ -1466,7 +1466,7 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (this->type == MA_YTO_TYPE_BARN && (gSaveContext.weekEventReg[0x16] & 1)) { // Alieans defeated
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_ma2_DL_005430);
+        gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBox);
     }
     func_8012C28C(globalCtx->state.gfxCtx);
 

@@ -58,7 +58,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
 };
 
-static Gfx* sOwlStatueDLs[] = { object_sek_DL_0001D0, object_sek_DL_003770 };
+static Gfx* sOwlStatueDLs[] = { gOwlStatueClosedDL, gOwlStatueOpenedDL };
 
 void ObjWarpstone_SetupAction(ObjWarpstone* this, ObjWarpstoneActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -180,11 +180,11 @@ void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         gDPSetEnvColor(POLY_XLU_DISP++, 100, 200, 0, 255);
         Matrix_InsertZRotation_f((((globalCtx->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023210);
+        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
         Matrix_StatePop();
         Matrix_InsertZRotation_f((~((globalCtx->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023210);
+        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }

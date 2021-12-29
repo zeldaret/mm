@@ -1142,9 +1142,9 @@ void EnOwl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
 void EnOwl_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr eyeTextures[] = {
-        &object_owl_Tex_008EB8,
-        &object_owl_Tex_0092B8,
-        &object_owl_Tex_0096B8,
+        object_owl_Tex_008EB8,
+        object_owl_Tex_0092B8,
+        object_owl_Tex_0096B8,
     };
     s32 pad;
     EnOwl* this = THIS;

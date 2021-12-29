@@ -1,13 +1,13 @@
 ﻿<Root>
     <File Name="object_ma1" Segment="6">
-        <DList Name="object_ma1_DL_0003B0" Offset="0x3B0" />
+        <DList Name="object_ma1_DL_0003B0" Offset="0x3B0" /> <!-- Bow -->
         <Texture Name="object_ma1_TLUT_0005E0" OutName="tlut_0005E0" Format="rgba16" Width="16" Height="16" Offset="0x5E0" />
         <Texture Name="object_ma1_Tex_0007E0" OutName="tex_0007E0" Format="ci8" Width="16" Height="16" Offset="0x7E0" />
         <Texture Name="object_ma1_Tex_0008E0" OutName="tex_0008E0" Format="ci8" Width="8" Height="8" Offset="0x8E0" />
-        <DList Name="object_ma1_DL_000A20" Offset="0xA20" />
+        <DList Name="object_ma1_DL_000A20" Offset="0xA20" /> <!-- Box -->
         <Texture Name="object_ma1_Tex_000AD0" OutName="tex_000AD0" Format="rgba16" Width="32" Height="64" Offset="0xAD0" />
         <Animation Name="object_ma1_Anim_002A8C" Offset="0x2A8C" />
-        <DList Name="object_ma1_DL_0043A0" Offset="0x43A0" />
+        <DList Name="object_ma1_DL_0043A0" Offset="0x43A0" /> <!-- Sleeping -->
         <Texture Name="object_ma1_TLUT_004CF8" OutName="tlut_004CF8" Format="rgba16" Width="16" Height="16" Offset="0x4CF8" />
         <Texture Name="object_ma1_Tex_004EF8" OutName="tex_004EF8" Format="ci8" Width="16" Height="16" Offset="0x4EF8" />
         <Texture Name="object_ma1_Tex_004FF8" OutName="tex_004FF8" Format="ci8" Width="8" Height="8" Offset="0x4FF8" />

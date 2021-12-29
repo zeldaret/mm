@@ -55,7 +55,7 @@
         <!-- <Blob Name="object_fsn_Blob_00FB30" Size="0x3040" Offset="0xFB30" /> -->
         <Animation Name="object_fsn_Anim_012C34" Offset="0x12C34" />
         <Animation Name="object_fsn_Anim_0131FC" Offset="0x131FC" />
-        <LimbTable Name="object_fsn_LimbTable_0132DC" LimbType="Standard" Count="17" Offset="0x132DC"/>
+        <LimbTable Name="object_fsn_LimbTable_0132DC" LimbType="Standard" Count="17" Offset="0x132DC"/> <!-- object_fsn_Skel_013320 specifies 18 limbs but only 17 exist, ZAPD breaks if this is not specified manually -->
         <Skeleton Name="object_fsn_Skel_013320" Type="Flex" LimbType="Standard" Offset="0x13320" />
         <Animation Name="object_fsn_Anim_0138B0" Offset="0x138B0" />
         <Animation Name="object_fsn_Anim_01430C" Offset="0x1430C" />

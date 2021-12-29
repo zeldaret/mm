@@ -61,17 +61,17 @@
         <Limb Name="object_pamera_Standardlimb_0083D8" Type="Standard" Offset="0x83D8" />
         <Limb Name="object_pamera_Standardlimb_0083E4" Type="Standard" Offset="0x83E4" />
         <Skeleton Name="object_pamera_Skel_008448" Type="Flex" LimbType="Standard" Offset="0x8448" />
-        <Animation Name="object_pamera_Anim_008AE0" Offset="0x8AE0" />
+        <Animation Name="object_pamera_Anim_008AE0" Offset="0x8AE0" /> <!-- Pamela Walking -->
         <Animation Name="object_pamera_Anim_008E38" Offset="0x8E38" />
         <Animation Name="object_pamera_Anim_009870" Offset="0x9870" />
-        <Animation Name="object_pamera_Anim_009F54" Offset="0x9F54" />
-        <Animation Name="object_pamera_Anim_00A844" Offset="0xA844" />
+        <Animation Name="object_pamera_Anim_009F54" Offset="0x9F54" /> <!-- HoldBack En_Hgo -->
+        <Animation Name="object_pamera_Anim_00A844" Offset="0xA844" /> <!-- Pamela Looking down the well -->
         <Animation Name="object_pamera_Anim_00B0C4" Offset="0xB0C4" />
-        <Animation Name="object_pamera_Anim_00B5B0" Offset="0xB5B0" />
-        <Animation Name="object_pamera_Anim_00BCC4" Offset="0xBCC4" />
+        <Animation Name="object_pamera_Anim_00B5B0" Offset="0xB5B0" /> <!-- PushBack En_Hgo -->
+        <Animation Name="object_pamera_Anim_00BCC4" Offset="0xBCC4" /> <!-- Defend En_Hgo -->
         <Animation Name="object_pamera_Anim_00C9F4" Offset="0xC9F4" />
         <Animation Name="object_pamera_Anim_00D0F0" Offset="0xD0F0" />
         <Animation Name="object_pamera_Anim_00D9DC" Offset="0xD9DC" />
-        <Animation Name="object_pamera_Anim_00E16C" Offset="0xE16C" />
+        <Animation Name="object_pamera_Anim_00E16C" Offset="0xE16C" /> <!-- Hugging En_Hg -->
     </File>
 </Root>

@@ -446,8 +446,7 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
 }
 
 TexturePtr sDustTex[] = {
-    gameplay_keep_Tex_08F7E0, gameplay_keep_Tex_08F3E0, gameplay_keep_Tex_08EFE0, gameplay_keep_Tex_08EBE0,
-    gameplay_keep_Tex_08E7E0, gameplay_keep_Tex_08E3E0, gameplay_keep_Tex_08DFE0, gameplay_keep_Tex_08DBE0,
+    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
 };
 
 void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect) {

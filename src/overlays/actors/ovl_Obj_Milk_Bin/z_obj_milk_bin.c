@@ -100,6 +100,6 @@ void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
 
     if (!(this->disableDraw & 1)) {
-        func_800BDFC0(globalCtx, object_obj_milk_bin_DL_0004B0);
+        func_800BDFC0(globalCtx, gMilkBinMilkJarDL);
     }
 }

@@ -83,14 +83,14 @@ static f32 sLightRayMaxScale[] = {
 };
 
 static TexturePtr sSplashTex[] = {
-    gameplay_keep_Tex_0378F0,
-    gameplay_keep_Tex_037DF0,
-    gameplay_keep_Tex_0382F0,
-    gameplay_keep_Tex_0387F0,
-    gameplay_keep_Tex_038CF0,
-    gameplay_keep_Tex_0391F0,
-    gameplay_keep_Tex_0396F0,
-    gameplay_keep_Tex_039BF0,
+    gExplosionSplashTex1,
+    gExplosionSplashTex2,
+    gExplosionSplashTex3,
+    gExplosionSplashTex4,
+    gExplosionSplashTex5,
+    gExplosionSplashTex6,
+    gExplosionSplashTex7,
+    gExplosionSplashTex8,
     NULL,
     NULL,
     NULL,
@@ -997,7 +997,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                         Matrix_RotateStateAroundXAxis(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
                         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_03A0F0);
+                        gSPDisplayList(POLY_XLU_DISP++, gExplosionSplashDL);
                     }
                 }
             }
