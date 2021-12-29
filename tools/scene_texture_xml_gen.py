@@ -55,6 +55,12 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
                         height = int(result["height"])
 
                         texFmt = TEXTURES_FORMATS[fmt][size]
+                        if offset in texturesPerOffset:
+                            if texturesPerOffset[offset] != (texFmt, width, height):
+                                print(f"Warning: Texture with different format at offset 0x{offset:06X}", file=os.sys.stderr)
+                                print(texturesPerOffset[offset], file=os.sys.stderr)
+                                print((texFmt, width, height), file=os.sys.stderr)
+                                print(file=os.sys.stderr)
                         texturesPerOffset[offset] = (texFmt, width, height)
 
     return texturesPerOffset

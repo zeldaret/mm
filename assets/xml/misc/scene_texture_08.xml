@@ -5,7 +5,9 @@
         <Texture Name="scene_texture_08_Tex_001000" OutName="tex_001000" Format="rgba16" Width="32" Height="32" Offset="0x1000"/>
         <Texture Name="scene_texture_08_Tex_001800" OutName="tex_001800" Format="rgba16" Width="32" Height="32" Offset="0x1800"/>
         <Texture Name="scene_texture_08_Tex_002000" OutName="tex_002000" Format="rgba16" Width="32" Height="32" Offset="0x2000"/>
+        <!-- <Blob Name="scene_texture_08_Tex_002800" Size="0x3000" Offset="0x002800"/> -->
         <Texture Name="scene_texture_08_Tex_005800" OutName="tex_005800" Format="rgba16" Width="32" Height="32" Offset="0x5800"/>
+        <!-- <Blob Name="scene_texture_08_Tex_006000" Size="0x1000" Offset="0x006000"/> -->
         <Texture Name="scene_texture_08_Tex_007000" OutName="tex_007000" Format="rgba16" Width="32" Height="32" Offset="0x7000"/>
         <Texture Name="scene_texture_08_Tex_007800" OutName="tex_007800" Format="rgba16" Width="32" Height="32" Offset="0x7800"/>
     </File>
