@@ -8,7 +8,7 @@ struct EnArrow;
 typedef void (*EnArrowActionFunc)(struct EnArrow*, GlobalContext*);
 
 enum {
-    /* -8  */ ENARROW_MINUS8 = -8, // cutscene deku nuts are allowed to update in blocking mode
+    /* -8  */ ENARROW_MINUS8 = -8,
     /*  0  */ ENARROW_0 = 0,
     /*  1  */ ENARROW_1,
     /*  2  */ ENARROW_2,
