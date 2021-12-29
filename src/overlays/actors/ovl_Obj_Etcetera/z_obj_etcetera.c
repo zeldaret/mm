@@ -234,8 +234,12 @@ void ObjEtcetera_DoBounceOscillation(ObjEtcetera* this, GlobalContext* globalCtx
 void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
     s32 type;
-    CollisionHeader* collisionHeaders[] = { &gPinkDekuFlowerCol, &gPinkDekuFlowerCol, &gGoldDekuFlowerCol,
-                                            &gGoldDekuFlowerCol };
+    CollisionHeader* collisionHeaders[] = {
+        &gPinkDekuFlowerCol,
+        &gPinkDekuFlowerCol,
+        &gGoldDekuFlowerCol,
+        &gGoldDekuFlowerCol,
+    };
     s32 pad;
     CollisionHeader* thisCollisionHeader;
 
