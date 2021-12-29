@@ -12,41 +12,38 @@
 
 #define THIS ((EnYb*)thisx)
 
-//void EnYb_Init(Actor* thisx, GlobalContext* globalCtx);
+void EnYb_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnYb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnYb_Update(Actor* thisx, GlobalContext* globalCtx);
-//void EnYb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnYb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnYb_Init(EnYb* this, GlobalContext* globalCtx);
-void EnYb_Draw(EnYb* this, GlobalContext* globalCtx);
 
-void func_80BFAC88(EnYb* this, GlobalContext* globalCtx);
-void func_80BFAE80(EnYb* this, GlobalContext* globalCtx);
-void func_80BFA730(EnYb* this, GlobalContext* globalCtx);
+void EnYb_Idle(EnYb* this, GlobalContext* globalCtx);
+void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx);
+void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx);
 void func_80BFA91C(EnYb* this, GlobalContext* globalCtx);
 void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx);
-void func_80BFAB4C(EnYb* this, GlobalContext* globalCtx);
-void func_80BFABF0(EnYb* this, GlobalContext* globalCtx);
+void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx);
+void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx);
 void func_80BFA868(EnYb* this, GlobalContext* globalCtx);
 
 void func_80BFA634(EnYb* this, GlobalContext* globalCtx);
-s32 func_80BFA5CC(EnYb* this, GlobalContext* globalCtx); 
+s32 EnYb_IsDialoguePossible(EnYb* this, GlobalContext* globalCtx); 
 void func_80BFA67C(EnYb* this);
 
 // custom shadow function
-void func_80BFA350(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
+void EnYb_ActorShadowFunc(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 
-//void func_80BFA444(GlobalContext* globalCtx, EnYb* this, s16 arg3, s16 arg4, f32 arg5);
-void func_80BFA444(GlobalContext* globalCtx, EnYb* this, s16 arg3, u8 arg4, f32 arg5);
+void func_80BFA444(GlobalContext*, EnYb*, s16, u8, f32);
 
-void func_80BFA730(EnYb* this, GlobalContext* globalCtx);
+void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx);
 void func_80BFA868(EnYb* this, GlobalContext* globalCtx);
 void func_80BFA91C(EnYb* this, GlobalContext* globalCtx);
 void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx);
-void func_80BFAB4C(EnYb* this, GlobalContext* globalCtx);
-void func_80BFABF0(EnYb* this, GlobalContext* globalCtx);
-void func_80BFAC88(EnYb* this, GlobalContext* globalCtx);
-void func_80BFAE80(EnYb* this, GlobalContext* globalCtx);
+void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx);
+void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx);
+void EnYb_Idle(EnYb* this, GlobalContext* globalCtx);
+void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx);
 
 const ActorInit En_Yb_InitVars = {
     ACTOR_EN_YB,
@@ -67,10 +64,8 @@ static ColliderCylinderInit D_80BFB2B0 = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BFB2DC[] = { &gYbUnkAnim };
+static AnimationHeader* gYbUnusedAnimations[] = { &gYbUnkAnim };
 
-// WARNINGS
-//AnimationHeaderCommon* D_80BFB2E0[] = { &D_0400DF28, &D_0400CF98 };
 static LinkAnimationHeader* D_80BFB2E0[] = { &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00CF98};
 
 static Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f};
@@ -81,14 +76,15 @@ static Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f};
 
 extern u8 D_801C20BB; // item location for something
 
-void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
+void EnYb_Init(Actor *thisx, GlobalContext *globalCtx) {
+    EnYb* this = THIS;
     s16 tempCutscene;
     s32 i;
 
-    Actor_SetScale((Actor *) this, 0.01f);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_80BFA350, 20.0f);
+    Actor_SetScale(&this->actor, 0.01f);
+    ActorShape_Init(&this->actor.shape, 0.0f, EnYb_ActorShadowFunc, 20.0f);
 
-    // ???
+    // dont know why
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gYbSkeleton, &gYbUnkAnim,
         (void*)(((s32)&this->limbDrawTbl) & ~0xF), 
         (void*)((s32)&this->transitionDrawTable & ~0xF), ENYB_LIMBCOUNT);
@@ -97,7 +93,7 @@ void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80BFB2B0);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actionFunc = func_80BFAC88;
+    this->actionFunc = EnYb_Idle;
     this->currentAnimIndex = 3; // gets overwritten in the next function...?
     this->actor.minVelocityY = -9.0f;
     this->actor.gravity = -1.0f;
@@ -106,31 +102,33 @@ void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
 
     tempCutscene = this->actor.cutscene;
     for (i = 0; i < 2; ++i) {
-        this->unk416[i] = tempCutscene;
+        this->cutscenes[i] = tempCutscene;
         if (tempCutscene != -1) {
             this->actor.cutscene = tempCutscene;
             tempCutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         }
     }
 
-    this->unk41A = -1;
-    this->actor.cutscene = (s8) this->unk416[0];
-    if ((s32) gSaveContext.time < 0x4000) {
+    this->cutsceneIndex = -1;
+    this->actor.cutscene = (s8) this->cutscenes[0];
+
+    // check for midnight
+    if (gSaveContext.time < CLOCK_TIME(6, 0)) {
         this->alpha = 0xFF;
     } else {
         this->alpha = 0;
-        this->actionFunc = func_80BFAE80;
+        this->actionFunc = EnYb_WaitForMidnight;
         this->actor.flags &= -2;
     }
 
-    // already healed?
-    if ((gSaveContext.weekEventReg[0x52] & 4)) {
-        Actor_MarkForDeath((Actor *) this);
+    // check if already healed
+    if (gSaveContext.weekEventReg[0x52] & 4) {
+        Actor_MarkForDeath(&this->actor);
     }
 }
 
 void EnYb_Destroy(Actor *thisx, GlobalContext *globalCtx) {
-    EnYb* this = (EnYb*) thisx;
+    EnYb* this = THIS;
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -142,18 +140,18 @@ void func_80BFA2FC(GlobalContext *globalCtx) {
 }
 
 // custom shadow draw function of type ActorShadowFunc
-void func_80BFA350(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
+void EnYb_ActorShadowFunc(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     Vec3f oldPos;
     EnYb* this = (EnYb*) actor;
 
     if (this->alpha > 0) {
         if (this->currentAnimIndex == 2) {
             // regalloc without temp
-            f32 tempScale = (((27.0f - this->zeroVec.y) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
+            f32 tempScale = (((27.0f - this->shadowPos.y) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
             actor->scale.x = tempScale;
         }
         Math_Vec3f_Copy(&oldPos, &actor->world.pos);
-        Math_Vec3f_Copy(&actor->world.pos, &this->zeroVec);
+        Math_Vec3f_Copy(&actor->world.pos, &this->shadowPos);
         func_800B4AEC(globalCtx, actor, 50.0f);
 
         if (oldPos.y < this->actor.floorHeight) {
@@ -168,29 +166,31 @@ void func_80BFA350(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     }
 }
 
-// weird player animation changing function
-// only gets called from init with static variables though: (globalCtx, this, 2, 0, 0.0f);
-
+/*
+ * weird animation changing function
+ * only gets called from init with static variables though: (globalCtx, this, 2, 0, 0.0f);
+ */
 void func_80BFA444(GlobalContext *globalCtx, EnYb *this, s16 animIndex, u8 animMode, f32 transitionRate) {
-
-    if ((animIndex >= 0) && (animIndex < 3)) {
-        if ((animIndex != this->currentAnimIndex) || (animMode != 0)) {
+    if (animIndex >= 0 && animIndex < 3) {
+        if (animIndex != this->currentAnimIndex || animMode != 0) {
             if ( animIndex > 0) {
                 if (animMode == 0) {
                     LinkAnimation_Change(globalCtx, &this->skelAnime,
-                         &D_80BFB2E0[animIndex-1]->common, 1.0f, 0.0f,
-                         (f32) Animation_GetLastFrame(&D_80BFB2E0[animIndex-1]->common), 0, transitionRate);
+                         D_80BFB2E0[animIndex-1], 1.0f, 0.0f,
+                         Animation_GetLastFrame(&D_80BFB2E0[animIndex-1]->common), 0, transitionRate);
                 } else {
+                    // unused case, called once with animMode = 0
                     LinkAnimation_Change(globalCtx, &this->skelAnime, 
-                        &D_80BFB2E0[animIndex-1]->common, 1.0f, 0.0f, 
-                        (f32) Animation_GetLastFrame(&D_80BFB2E0[animIndex-1]->common), 0, transitionRate);
+                        D_80BFB2E0[animIndex-1], 1.0f, 0.0f, 
+                        Animation_GetLastFrame(&D_80BFB2E0[animIndex-1]->common), 0, transitionRate);
                 }
             } else {
-                AnimationHeader* animationPtr = D_80BFB2DC[animIndex];
+                // unused case, called once with animIndex = 2
+                AnimationHeader* animationPtr = gYbUnusedAnimations[animIndex];
 
                 if(1) {}
 
-                Animation_Change(&this->skelAnime, D_80BFB2DC[animIndex], 1.0f, 0.0f, 
+                Animation_Change(&this->skelAnime, gYbUnusedAnimations[animIndex], 1.0f, 0.0f, 
                    Animation_GetLastFrame(animationPtr), 
                    animMode, transitionRate);
             }
@@ -200,10 +200,10 @@ void func_80BFA444(GlobalContext *globalCtx, EnYb *this, s16 animIndex, u8 animM
 }
 
 // check if dialogue is possible to start?
-s32 func_80BFA5CC(EnYb *this, GlobalContext *globalCtx) {
+s32 EnYb_IsDialoguePossible(EnYb *this, GlobalContext *globalCtx) {
     if ((this->actor.xzDistToPlayer < 100.0f) 
-      && (Actor_IsLinkFacingActor((Actor *) this, 0x3000, globalCtx))     
-      && (Actor_IsActorFacingLink((Actor *) this, 0x3000))) {
+      && (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx))     
+      && (Actor_IsActorFacingLink(&this->actor, 0x3000))) {
         return true;
     } else {
         return false;
@@ -218,29 +218,26 @@ void func_80BFA634(EnYb *this, GlobalContext *globalCtx) {
     }
 }
 
-// this would suggest the cutscenes array is not that big
-// cutscene related
 void func_80BFA67C(EnYb *this) {
-    if (this->unk41A != -1) {
-        if (ActorCutscene_GetCurrentIndex() == this->unk416[this->unk41A]) {
-            ActorCutscene_Stop(this->unk416[this->unk41A]);
+    if (this->cutsceneIndex != -1) {
+        if (ActorCutscene_GetCurrentIndex() == this->cutscenes[this->cutsceneIndex]) {
+            ActorCutscene_Stop(this->cutscenes[this->cutsceneIndex]);
         }
-        this->unk41A = -1;
+        this->cutsceneIndex = -1;
     }
 }
 
 // zero is the only input...? only called from Idle?
 void func_80BFA6E0(EnYb *this, s16 arg1) {
     func_80BFA67C(this);
-    this->unk41A = arg1;
+    this->cutsceneIndex = arg1;
 }
 
-void func_80BFA710(EnYb* this) { 
+void EnYb_EnableProximityMusic(EnYb* this) { 
     func_800B9084(&this->actor); // sets flag 20 of unk39 in actor
 }
 
-// dissapearing? we come here after he says "I'm counting on you" and leaves
-void func_80BFA730(EnYb *this, GlobalContext *globalCtx) {
+void EnYb_Leaving(EnYb *this, GlobalContext *globalCtx) {
     s32 pad;
     Vec3f sp60;
     s32 i;
@@ -257,42 +254,40 @@ void func_80BFA730(EnYb *this, GlobalContext *globalCtx) {
     if (this->alpha >= 0xB) {
         this->alpha -= 10;
     } else {
-        Actor_MarkForDeath((Actor *) this);
+        Actor_MarkForDeath(&this->actor);
     }
 }
 
 void func_80BFA868(EnYb *this, GlobalContext *globalCtx) {
     func_80BFA634(this, globalCtx);
-    if (func_800B84D0((Actor *) this, globalCtx) != 0) { // is talking?
+    if (func_800B84D0(&this->actor, globalCtx)) { // is talking?
         this->actor.flags &= ~0x10000;
         this->actionFunc = func_80BFA9D4;
-        //[sound 6954] I am counting on you.
-        //[sound 6955](Translation) I am counting on you.
-        func_801518B0(globalCtx, 0x147D, (Actor *) this);
+        // I am counting on you
+        func_801518B0(globalCtx, 0x147D, &this->actor);
         func_80BFA2FC(globalCtx);
     } else {
-        func_800B8500((Actor *) this, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     }
-    func_80BFA710(this);
+    EnYb_EnableProximityMusic(this);
 }
 
 void func_80BFA91C(EnYb *this, GlobalContext *globalCtx) {
     func_80BFA634(this, globalCtx);
     // what parent? when would kamaro be spawned by another actor?
-    if (Actor_HasParent((Actor *) this, globalCtx)) {
+    if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BFA868;
         this->actor.flags |= 0x10000;
-        func_800B8500((Actor *) this, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     } else {
-        func_800B8A1C((Actor *) this, globalCtx, 0x89, 10000.0f, 100.0f);
+        func_800B8A1C(&this->actor, globalCtx, 0x89, 10000.0f, 100.0f);
     }
-    func_80BFA710(this);
+    EnYb_EnableProximityMusic(this);
 }
 
 
 void func_80BFA9D4(EnYb *this, GlobalContext *globalCtx) {
-    //u16 temp_v0;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -301,22 +296,19 @@ void func_80BFA9D4(EnYb *this, GlobalContext *globalCtx) {
     if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx) != 0)) {
         switch (globalCtx->msgCtx.unk11F04) {
           case 0x147D:
-              //[sound 6954] I am counting on you.
-              //[sound 6955](Translation) I am counting on you.
+              //I am counting on you
               func_801477B4(globalCtx);
-              this->actionFunc = func_80BFA730;
+              this->actionFunc = EnYb_Leaving;
               gSaveContext.weekEventReg[0x52] |= 0x4;
               break;
           case 0x147C:
-              // Spread my dance across the world...  Train its followers...
-              //(Translation) I have taught it to you, now make it into a popular dance craze!
+              // Spread my dance across the world
               if (Player_GetMask(globalCtx) == 0xE) { // wearing mask of type?
                   func_801477B4(globalCtx);
-                  this->actionFunc = func_80BFAC88;
+                  this->actionFunc = EnYb_Idle;
 
               } else if (gSaveContext.inventory.items[D_801C20BB] == 0x43) {
-                  //[sound 6954] I am counting on you.
-                  //[sound 6955](Translation) I am counting on you.
+                  //I am counting on you
                   func_80151938(globalCtx, 0x147D);
                   func_80BFA2FC(globalCtx);
 
@@ -328,46 +320,43 @@ void func_80BFA9D4(EnYb *this, GlobalContext *globalCtx) {
               break;
           default:     
               func_801477B4(globalCtx);
-              this->actionFunc = func_80BFAC88;
+              this->actionFunc = EnYb_Idle;
               break;
       }
     }
-    func_80BFA710(this);
+    EnYb_EnableProximityMusic(this);
 }
 
 // finish dancing
-void func_80BFAB4C(EnYb *this, GlobalContext *globalCtx) {
+void EnYb_TeachingDanceFinish(EnYb *this, GlobalContext *globalCtx) {
     func_80BFA634(this, globalCtx);
-    if (func_800B84D0((Actor *) this, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx) != 0) {
         this->actionFunc = func_80BFA9D4;
-        // Spread my dance across the world...  Train its followers...
-        //(Translation) I have taught it to you, now make it into a popular dance craze!
-        func_801518B0(globalCtx, 0x147C, (Actor *) this);
+        // Spread my dance across the world
+        func_801518B0(globalCtx, 0x147C, &this->actor);
         this->actor.flags &= ~ 0x10000;
     } else {
-        func_800B8500((Actor *) this, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     }
-    func_80BFA710(this);
+    EnYb_EnableProximityMusic(this);
 }
 
 // dancing countdown
-void func_80BFABF0(EnYb *this, GlobalContext *globalCtx) {
+void EnYb_TeachingDance(EnYb *this, GlobalContext *globalCtx) {
     func_80BFA634(this, globalCtx);
 
     if (this->unk41C > 0) {
         this->unk41C--;
     } else {
         func_80BFA67C(this);
-        this->actionFunc = func_80BFAB4C;
+        this->actionFunc = EnYb_TeachingDanceFinish;
         this->actor.flags |= 0x10000;
-        func_800B8500((Actor *) this, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     }
-    func_80BFA710(this);
+    EnYb_EnableProximityMusic(this);
 }
 
-// default auctionfunc
-// EnYb_Idle
-void func_80BFAC88(EnYb *this, GlobalContext *globalCtx) {
+void EnYb_Idle(EnYb *this, GlobalContext *globalCtx) {
     s32 pad;
     Player *player = GET_PLAYER(globalCtx);
 
@@ -375,21 +364,21 @@ void func_80BFAC88(EnYb *this, GlobalContext *globalCtx) {
     if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.playerHeightRel) < 50.0f) 
       && (globalCtx->msgCtx.unk1202A == 3) && (globalCtx->msgCtx.unk1202E == 7) 
       && (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
-        this->actionFunc = func_80BFABF0;
+        this->actionFunc = EnYb_TeachingDance;
         this->unk41C = 0xC8;
         func_80BFA6E0(this, 0);
-    } else if (func_800B84D0((Actor *) this, globalCtx)) { // acotr is talking
+    } else if (func_800B84D0(&this->actor, globalCtx)) { // actor is talking
         func_80BFA2FC(globalCtx);
         this->actionFunc = func_80BFA9D4;
         if (Player_GetMask(globalCtx) == 0xE) {
             //(Translation) I have taught you go use it
-            func_801518B0(globalCtx, 0x147C, (Actor *) this);
+            func_801518B0(globalCtx, 0x147C, &this->actor);
         } else {
             // regular talk to him first dialogue
-            func_801518B0(globalCtx, 0x147B, (Actor *) this);
+            func_801518B0(globalCtx, 0x147B, &this->actor);
         }
-    } else if (func_80BFA5CC(this, globalCtx)) { // check if player can start dialogue
-        func_800B8614((Actor *) this, globalCtx, 120.0f);
+    } else if (EnYb_IsDialoguePossible(this, globalCtx)) {
+        func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 
     if (this->unk410 & 1) {
@@ -400,64 +389,64 @@ void func_80BFAC88(EnYb *this, GlobalContext *globalCtx) {
       (this->actor.xzDistToPlayer < 180.0f) && 
       (fabsf(this->actor.playerHeightRel) < 50.0f)) {
         this->unk410 |= 1;
-        Audio_PlayActorSound2((Actor *) this, NA_SE_SY_TRE_BOX_APPEAR);
+        Audio_PlayActorSound2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
     }
 
-    func_80BFA710(this); // sets a single actor flag in player
+    EnYb_EnableProximityMusic(this);
 }
 
-void func_80BFAE80(EnYb *this, GlobalContext *globalCtx) {
-    if (gSaveContext.time < 0x4000) {
+void EnYb_WaitForMidnight(EnYb *this, GlobalContext *globalCtx) {
+    if (gSaveContext.time < CLOCK_TIME(6, 0)) {
         func_80BFA634(this, globalCtx);
         this->alpha += 5;
         if (this->alpha >= 0xFB) {
             this->alpha = 0xFF;
             this->actor.flags |= 1;
-            this->actionFunc = func_80BFAC88;
+            this->actionFunc = EnYb_Idle;
         }
-        func_80BFA710(this);
+        EnYb_EnableProximityMusic(this);
     }
 }
 
 void EnYb_Update(Actor *thisx, GlobalContext *globalCtx) {
-    EnYb* this = (EnYb*) thisx;
+    EnYb* this = THIS;
     s32 pad;
 
+    // Two!?
     if ((this->actor.flags & 1) == 1) {
-        Collider_UpdateCylinder((Actor *) this, &this->collider);
+        Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
     if ((this->actor.flags & 1) == 1) {
-        Actor_SetVelocityAndMoveYRotationAndGravity((Actor *) this);
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 40.0f, 25.0f, 40.0f, 5);
     }
 
     this->actionFunc(this, globalCtx);
 
-    if ((this->unk41A != -1) && (ActorCutscene_GetCurrentIndex() != this->unk416[this->unk41A])) {
+    if (this->cutsceneIndex != -1 && (ActorCutscene_GetCurrentIndex() != this->cutscenes[this->cutsceneIndex])) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->unk416[this->unk41A]);
-        } else if (ActorCutscene_GetCanPlayNext(this->unk416[this->unk41A]) != 0) {
-            if (this->unk41A == 0) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->unk416[this->unk41A], (Actor *) this);
-                return;
+            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
+        } else if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIndex]) != 0) {
+            if (this->cutsceneIndex == 0) {
+                ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[this->cutsceneIndex], &this->actor);
             }
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk416[this->unk41A]);
+            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
         }
     }
 }
 
 
 // two separate post limb draw functions reasons unknown
-void func_80BFB074(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor) {
+void func_80BFB074(GlobalContext* globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *actor) {
     EnYb* this = (EnYb*) actor;
     if (limbIndex == 0xB) {
         Matrix_MultiplyVector3fByState(&D_80BFB2F4, &this->actor.focus.pos);
     }
     if (limbIndex == 3) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->zeroVec);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->shadowPos);
     }
 }
 
@@ -467,12 +456,12 @@ void func_80BFB0E0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultiplyVector3fByState(&D_80BFB300, &this->actor.focus.pos);
     }
     if (limbIndex == 3) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->zeroVec);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->shadowPos);
     }
 }
 
-void EnYb_Draw(EnYb *this, GlobalContext *globalCtx) {
-
+void EnYb_Draw(Actor* thisx, GlobalContext *globalCtx) {
+    EnYb* this = THIS;
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     if (this->alpha != 0) {
@@ -486,7 +475,7 @@ void EnYb_Draw(EnYb *this, GlobalContext *globalCtx) {
             }
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
 
-            if (!(&globalCtx->state)){}
+            if (1){}
 
             POLY_XLU_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, 0, func_80BFB0E0, &this->actor, POLY_XLU_DISP);
         } else {
