@@ -356,6 +356,7 @@ animdict = {
     "gSaveContext.weekEventReg": "gSaveContext.save.weekEventReg",
     "gSaveContext.playerForm": "gSaveContext.save.playerForm",
     "gSaveContext.day": "gSaveContext.save.day",
+    "gSaveContext.cutscene": "gSaveContext.save.cutscene",
     "gSaveContext.isNight": "gSaveContext.save.isNight",
     "gSaveContext.naviTimer": "gSaveContext.save.playerData.tatlTimer",
     "gSaveContext.tatlTimer": "gSaveContext.save.playerData.tatlTimer",

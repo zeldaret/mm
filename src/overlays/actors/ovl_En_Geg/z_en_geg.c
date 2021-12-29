@@ -442,7 +442,7 @@ void func_80BB221C(EnGeg* this, GlobalContext* globalCtx) {
         }
     } else {
         this->unk_230 &= ~4;
-        if (gSaveContext.weekEventReg[35] & 0x40) {
+        if (gSaveContext.save.weekEventReg[35] & 0x40) {
             if (func_800B84D0(&this->actor, globalCtx) && (this->unk_230 & 8)) {
                 this->unk_496 = 0xD62;
                 func_801518B0(globalCtx, this->unk_496, &this->actor);
@@ -453,7 +453,7 @@ void func_80BB221C(EnGeg* this, GlobalContext* globalCtx) {
                 this->unk_230 |= 8;
             }
         } else if (func_800B84D0(&this->actor, globalCtx) && (this->unk_230 & 8)) {
-            gSaveContext.weekEventReg[35] |= 0x40;
+            gSaveContext.save.weekEventReg[35] |= 0x40;
             this->unk_496 = 0xD5E;
             this->unk_49A = this->unk_49C[0];
             func_801518B0(globalCtx, this->unk_496, &this->actor);
@@ -645,7 +645,7 @@ void func_80BB2B1C(EnGeg* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCurrentIndex() != this->unk_49C[4]) {
         if (ActorCutscene_GetCanPlayNext(this->unk_498)) {
-            gSaveContext.weekEventReg[37] |= 8;
+            gSaveContext.save.weekEventReg[37] |= 8;
             if (this->actor.child != NULL) {
                 Actor_MarkForDeath(this->actor.child);
             }
@@ -787,7 +787,7 @@ void func_80BB31B8(EnGeg* this, GlobalContext* globalCtx) {
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        gSaveContext.weekEventReg[61] |= 1;
+        gSaveContext.save.weekEventReg[61] |= 1;
         if (getItemId == GI_MASK_DON_GERO) {
             this->unk_230 |= 0x40;
         }
@@ -850,7 +850,7 @@ void EnGeg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad2;
     s32 sp34[] = { 0x3E, 0xF64 };
 
-    if (gSaveContext.weekEventReg[61] & 1) {
+    if (gSaveContext.save.weekEventReg[61] & 1) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

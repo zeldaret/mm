@@ -72,7 +72,7 @@ static InitChainEntry sInitChain[] = {
  * the middle of rotating.
  */
 s32 ObjTokeidai_GetTargetSunMoonDiskRotation() {
-    if (gSaveContext.isNight) {
+    if (gSaveContext.save.isNight) {
         return 0x8000;
     }
     return 0;
@@ -110,11 +110,11 @@ void ObjTokeidai_TowerGear_Init(ObjTokeidai* this, GlobalContext* globalCtx) {
         ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
          (globalCtx->csCtx.unk_12 == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
-    } else if ((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
+    } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
         this->actionFunc = ObjTokeidai_TowerGear_OpenedIdle;
         this->actor.world.pos.y += this->actor.scale.y * 1900.0f;
         this->actor.shape.yOffset = 1500.0f;
-        gSaveContext.weekEventReg[8] |= 0x40;
+        gSaveContext.save.weekEventReg[8] |= 0x40;
     } else {
         this->actionFunc = ObjTokeidai_TowerGear_Idle;
     }
@@ -129,7 +129,7 @@ void ObjTokeidai_TowerClock_Init(ObjTokeidai* this, GlobalContext* globalCtx) {
         ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
          (globalCtx->csCtx.unk_12 == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
-    } else if ((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
+    } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
         this->actor.world.pos.y += (this->actor.scale.y * 5191.0f) - 50.0f;
         this->actor.world.pos.x += Math_SinS(this->actor.world.rot.y) * this->actor.scale.z * 1791.0f;
         this->actor.world.pos.z += -Math_CosS(this->actor.world.rot.y) * this->actor.scale.z * 1791.0f;
@@ -150,7 +150,7 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, GlobalContext* globalCtx)
     this->actor.draw = ObjTokeidai_Counterweight_Draw;
     this->opaDList = object_obj_tokeidai_DL_00B208;
     this->xluDList = object_obj_tokeidai_DL_00B0C0;
-    if (gSaveContext.isNight) {
+    if (gSaveContext.save.isNight) {
         this->spotlightIntensity = 100;
     } else {
         this->spotlightIntensity = 0;
@@ -178,7 +178,7 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, GlobalContext* globalCtx)
                 this->actor.child->home.rot.x = 0x12C;
             }
         }
-    } else if ((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
+    } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
         this->spotlightIntensity = 0;
         this->actor.world.pos.y += this->actor.scale.y * -2160.0f;
         this->actor.world.pos.x += Math_SinS(this->actor.world.rot.y) * this->actor.scale.z * 5400.0f;
@@ -200,7 +200,7 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->xRotation = 0;
     this->yTranslation = 0;
     this->clockFaceZTranslation = 0;
-    this->currentTime = gSaveContext.time;
+    this->currentTime = gSaveContext.save.time;
     this->actor.home.rot.x = 0;
 
     switch (OBJ_TOKEIDAI_TYPE(&this->actor)) {
@@ -415,13 +415,13 @@ void ObjTokeidai_Walls_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 5) {
-        gSaveContext.weekEventReg[8] |= 0x40;
+        gSaveContext.save.weekEventReg[8] |= 0x40;
         if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
              (globalCtx->csCtx.unk_12 == 0)) ||
             ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
              (globalCtx->csCtx.unk_12 == 0))) {
             func_801A3F54(false);
-            gSaveContext.cutscene = 0;
+            gSaveContext.save.cutscene = 0;
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.respawnFlag = 2;
             globalCtx->sceneLoadFlag = 0x14;
@@ -559,7 +559,7 @@ void ObjTokeidai_TowerOpening_RaiseTower(ObjTokeidai* this, GlobalContext* globa
 
 void ObjTokeidai_TowerOpening_Start(ObjTokeidai* this, GlobalContext* globalCtx) {
     if ((func_800EE29C(globalCtx, 0x84) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 4) ||
-        (gSaveContext.weekEventReg[8] & 0x40)) {
+        (gSaveContext.save.weekEventReg[8] & 0x40)) {
         this->actionFunc = ObjTokeidai_TowerOpening_RaiseTower;
     }
 }
@@ -581,8 +581,8 @@ void ObjTokeidai_DoNothing(ObjTokeidai* this, GlobalContext* globalCtx) {
 }
 
 void ObjTokeidai_StaircaseIntoTower_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) ||
-        (gSaveContext.weekEventReg[8] & 0x40)) {
+    if (((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) ||
+        (gSaveContext.save.weekEventReg[8] & 0x40)) {
         this->actor.draw = ObjTokeidai_Draw;
     } else {
         this->actor.draw = NULL;
@@ -590,10 +590,10 @@ void ObjTokeidai_StaircaseIntoTower_Idle(ObjTokeidai* this, GlobalContext* globa
 }
 
 s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+    if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         return false;
     }
-    if (CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) {
         ObjTokeidai_SetupTowerOpening(this);
         return true;
     }
@@ -653,10 +653,10 @@ void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, GlobalContext* globalCtx)
 }
 
 void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (CURRENT_DAY == 3 && this->clockHour < 6 && gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_DAY == 3 && this->clockHour < 6 && gSaveContext.save.time < CLOCK_TIME(6, 0)) {
         this->actor.draw = ObjTokeidai_Clock_Draw;
         ObjTokeidai_SetupTowerOpening(this);
-        gSaveContext.weekEventReg[8] |= 0x40;
+        gSaveContext.save.weekEventReg[8] |= 0x40;
         return;
     }
 
@@ -670,21 +670,21 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
             ActorCutscene_GetCurrentIndex() == -1) {
             this->actor.draw = NULL;
         }
-        this->currentTime = gSaveContext.time;
+        this->currentTime = gSaveContext.save.time;
         if (this->actor.home.rot.x != 0) {
             ObjTokeidai_Clock_Init(this);
             this->actor.home.rot.x = 0;
         }
     }
 
-    if (CURRENT_DAY != 3 || gSaveContext.time >= CLOCK_TIME(6, 0)) {
+    if (CURRENT_DAY != 3 || gSaveContext.save.time >= CLOCK_TIME(6, 0)) {
         ObjTokeidai_RotateOnMinuteChange(this, true);
     }
     ObjTokeidai_RotateOnHourChange(this, globalCtx);
 }
 
 void ObjTokeidai_WallClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    this->currentTime = gSaveContext.time;
+    this->currentTime = gSaveContext.save.time;
     ObjTokeidai_RotateOnMinuteChange(this, true);
     ObjTokeidai_RotateOnHourChange(this, globalCtx);
 }
@@ -703,7 +703,7 @@ void ObjTokeidai_TowerGear_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
                 ActorCutscene_GetCurrentIndex() == -1) {
                 this->actor.draw = NULL;
             }
-            this->currentTime = gSaveContext.time;
+            this->currentTime = gSaveContext.save.time;
             if (this->actor.home.rot.x != 0) {
                 ObjTokeidai_SetupClockOrGear(this);
                 this->actor.home.rot.x = 0;
@@ -736,7 +736,7 @@ void ObjTokeidai_Counterweight_Idle(ObjTokeidai* this, GlobalContext* globalCtx)
         }
     } else {
         this->actor.shape.rot.y -= 0x40;
-        if (gSaveContext.isNight) {
+        if (gSaveContext.save.isNight) {
             if (this->spotlightIntensity < 100) {
                 this->spotlightIntensity += 4;
             }

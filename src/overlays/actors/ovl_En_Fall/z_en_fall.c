@@ -73,7 +73,7 @@ const ActorInit En_Fall_InitVars = {
  * it also moves the moon closer to the ground depending on the current time.
  */
 void EnFall_Moon_AdjustScaleAndPosition(EnFall* this, GlobalContext* globalCtx) {
-    u16 currentTime = gSaveContext.time;
+    u16 currentTime = gSaveContext.save.time;
     u16 dayStartTime = this->dayStartTime;
     f32 finalDayRelativeHeight;
 
@@ -203,7 +203,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 this->actor.draw = EnFall_Moon_Draw;
                 this->actionFunc = EnFall_StoppedClosedMouthMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
-                if (!(gSaveContext.weekEventReg[0x19] & 2)) {
+                if (!(gSaveContext.save.weekEventReg[0x19] & 2)) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 break;
@@ -211,7 +211,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
                 this->actor.draw = EnFall_Moon_Draw;
-                if (gSaveContext.weekEventReg[0x19] & 2) {
+                if (gSaveContext.save.weekEventReg[0x19] & 2) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 break;
@@ -297,7 +297,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globa
             case 2:
                 if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
-                    if (gSaveContext.weekEventReg[0x5D] & 4) {
+                    if (gSaveContext.save.weekEventReg[0x5D] & 4) {
                         if (ActorCutscene_GetCanPlayNext(0xC)) {
                             ActorCutscene_Start(0xC, &this->actor);
                             sGiantsCutsceneState++;
@@ -306,7 +306,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globa
                         }
                     } else if (ActorCutscene_GetCanPlayNext(0xB)) {
                         ActorCutscene_Start(0xB, &this->actor);
-                        gSaveContext.weekEventReg[0x5D] |= 4;
+                        gSaveContext.save.weekEventReg[0x5D] |= 4;
                         sGiantsCutsceneState++;
                     } else {
                         ActorCutscene_SetIntentToPlay(0xB);
@@ -445,7 +445,7 @@ void EnFall_Moon_PerformDefaultActions(EnFall* this, GlobalContext* globalCtx) {
         currentDay = CURRENT_DAY;
         if ((u16)this->currentDay != (u32)currentDay) {
             this->currentDay = currentDay;
-            this->dayStartTime = gSaveContext.time;
+            this->dayStartTime = gSaveContext.save.time;
         }
         EnFall_Moon_AdjustScaleAndPosition(this, globalCtx);
     }
@@ -481,8 +481,8 @@ void EnFall_MoonsTear_Fall(EnFall* this, GlobalContext* globalCtx) {
     if (this->actor.draw != NULL) {
         if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, this->actor.speedXZ) <= 0.0f) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_GORON_BOUND_1);
-            gSaveContext.weekEventReg[0x4A] |= 0x80;
-            gSaveContext.weekEventReg[0x4A] |= 0x20;
+            gSaveContext.save.weekEventReg[0x4A] |= 0x80;
+            gSaveContext.save.weekEventReg[0x4A] |= 0x20;
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TEST, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, -2);
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
