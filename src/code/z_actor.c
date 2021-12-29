@@ -7,6 +7,9 @@
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "objects/object_bdoor/object_bdoor.h"
 
 typedef struct {
     /* 0x00 */ s16 unk_00;
@@ -23,11 +26,6 @@ typedef struct {
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ s16 unk_14;
 } struct_801AEE38; // size = 0x18
-
-extern Gfx D_05000140[];
-extern Gfx D_05000230[];
-extern Gfx D_06000530[];
-extern Gfx D_06000400[];
 
 typedef struct {
     /* 0x00 */ f32 chainAngle;
@@ -122,7 +120,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
             Matrix_SetCurrentState(&mtx);
 
-            if ((dlist != D_04076BC0) || (actor->scale.x != actor->scale.z)) {
+            if ((dlist != gCircleShadowDL) || (actor->scale.x != actor->scale.z)) {
                 Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
             }
 
@@ -142,7 +140,7 @@ void ActorShadow_DrawCircle(Actor* actor, Lights* lights, GlobalContext* globalC
         func_800B4AEC(globalCtx, actor, 50.0f);
     }
 
-    ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, NULL);
+    ActorShadow_Draw(actor, lights, globalCtx, gCircleShadowDL, NULL);
 }
 
 void ActorShadow_DrawSquare(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
@@ -150,17 +148,17 @@ void ActorShadow_DrawSquare(Actor* actor, Lights* lights, GlobalContext* globalC
         func_800B4AEC(globalCtx, actor, 50.0f);
     }
 
-    ActorShadow_Draw(actor, lights, globalCtx, D_04075A40, NULL);
+    ActorShadow_Draw(actor, lights, globalCtx, gSquareShadowDL, NULL);
 }
 
 void ActorShadow_DrawWhiteCircle(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
     static Color_RGBA8 color = { 255, 255, 255, 255 };
 
-    ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, &color);
+    ActorShadow_Draw(actor, lights, globalCtx, gCircleShadowDL, &color);
 }
 
 void ActorShadow_DrawHorse(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
-    ActorShadow_Draw(actor, lights, globalCtx, D_04077480, NULL);
+    ActorShadow_Draw(actor, lights, globalCtx, gHorseShadowDL, NULL);
 }
 
 void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3, f32 arg4, f32 arg5, f32 arg6) {
@@ -183,7 +181,7 @@ void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s3
     Matrix_Scale(arg5, 1.0f, arg5 * arg6, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-    gSPDisplayList(POLY_OPA_DISP++, D_04075B30);
+    gSPDisplayList(POLY_OPA_DISP++, gFootShadowDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -203,7 +201,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
             actor->shape.shadowScale *= 0.2f;
             alphaRatio = distToFloor * 0.03f;
             actor->shape.shadowAlpha = actor->shape.shadowAlpha * CLAMP_MAX(alphaRatio, 1.0f);
-            ActorShadow_Draw(actor, mapper, globalCtx, D_04076BC0, NULL);
+            ActorShadow_Draw(actor, mapper, globalCtx, gCircleShadowDL, NULL);
             actor->scale.z = tmpScaleZ;
         } else {
             actor->shape.shadowScale *= 0.3f;
@@ -568,7 +566,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
                             Matrix_InsertTranslation(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
                             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                                       G_MTX_MODELVIEW | G_MTX_LOAD);
-                            gSPDisplayList(OVERLAY_DISP++, D_0407AE00);
+                            gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
                             Matrix_StatePop();
                         }
                     }
@@ -596,7 +594,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->inner.r, color->inner.g, color->inner.b, 255);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-            gSPDisplayList(POLY_XLU_DISP++, D_0401F0F0);
+            gSPDisplayList(POLY_XLU_DISP++, gZTargetArrowDL);
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -3770,7 +3768,7 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx) 
     Matrix_Scale(arg1->x, 1.0f, arg1->z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_04076BC0);
+    gSPDisplayList(POLY_OPA_DISP++, gCircleShadowDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -3801,9 +3799,9 @@ void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
 }
 
 DoorLockInfo sDoorLocksInfo[DOORLOCK_MAX] = {
-    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0, 1.0f, 0.0f, D_05000230, D_05000140 },
-    /* DOORLOCK_BOSS */ { 0.644f, 12000.0f, 8000.0f, 1.0f, 0.0f, D_06000530, D_06000400 },
-    /* DOORLOCK_2 */ { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, D_05000230, D_05000140 },
+    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0, 1.0f, 0.0f, gDoorChainsDL, gDoorLockDL },
+    /* DOORLOCK_BOSS */ { 0.644f, 12000.0f, 8000.0f, 1.0f, 0.0f, object_bdoor_DL_000530, object_bdoor_DL_000400 },
+    /* DOORLOCK_2 */ { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, gDoorChainsDL, gDoorLockDL },
 };
 
 /**
@@ -4412,11 +4410,11 @@ s32 func_800BE63C(struct EnBox* chest) {
     return false;
 }
 
-TexturePtr* D_801AEFA8[] = {
-    D_04091DE0,
-    D_04091FE0,
-    D_040921E0,
-    D_040923E0,
+TexturePtr D_801AEFA8[] = {
+    gameplay_keep_Tex_091DE0,
+    gameplay_keep_Tex_091FE0,
+    gameplay_keep_Tex_0921E0,
+    gameplay_keep_Tex_0923E0,
 };
 
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 arg4, f32 arg5, f32 arg6,
@@ -4465,7 +4463,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
 
-                gSPDisplayList(POLY_XLU_DISP++, D_04050648);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_050648);
 
                 sp74 = arg6 * 255.0f;
                 for (i = 0; i < arg3; i++) {
@@ -4492,7 +4490,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, D_040506E0);
+                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0506E0);
 
                     limbPos++;
                 }
@@ -4503,7 +4501,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_PATTERN);
 
-                gSPDisplayList(POLY_XLU_DISP++, D_04051180);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_051180);
 
                 phi_f2 = arg6 * 100.0f;
                 if (phi_f2 > 100.0f) {
@@ -4525,7 +4523,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, D_04051238);
+                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_051238);
 
                     limbPos++;
                 }
@@ -4580,7 +4578,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
             case 0x15:
                 sp120 = ((KREG(19) * 0.01f) + 4.0f) * arg4;
 
-                gSPDisplayList(POLY_XLU_DISP++, D_04023348);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
 
                 phi_f2 = arg6 * 255.0f;
                 if (phi_f2 > 255.0f) {
@@ -4609,7 +4607,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, D_04023428);
+                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
 
                     limbPos++;
                 }
@@ -4628,7 +4626,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_801AEFA8[globalCtx->gameplayFrames & 3]));
 
-                gSPDisplayList(POLY_XLU_DISP++, D_04023480);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023480);
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 0xFF), (u8)(sREG(17) + 0xFF),
                                 (u8)(sREG(18) + 0x96), (u8)(sREG(19) + 0xFF));
@@ -4649,7 +4647,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, D_040234F0);
+                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0234F0);
 
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                     Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
@@ -4660,7 +4658,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, D_040234F0);
+                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0234F0);
 
                     limbPos++;
                 }
