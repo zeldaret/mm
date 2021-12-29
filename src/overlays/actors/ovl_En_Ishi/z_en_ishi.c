@@ -175,7 +175,7 @@ void func_8095D804(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f spC4;
     Vec3f spB8;
 
-    if (!(ENISHI_GET_8(&this->actor))) {
+    if (!ENISHI_GET_8(&this->actor)) {
         phi_s4 = gameplay_field_keep_DL_0066B0;
     } else {
         phi_s4 = object_ishi_DL_0009B0;
@@ -292,7 +292,7 @@ void func_8095DE9C(EnIshi* this, GlobalContext* globalCtx) {
 }
 
 void func_8095DF90(EnIshi* this, GlobalContext* globalCtx) {
-    if (!(ENISHI_GET_1(&this->actor)) && !ENISHI_GET_100(&this->actor)) {
+    if (!ENISHI_GET_1(&this->actor) && !ENISHI_GET_100(&this->actor)) {
         Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, ENISHI_GET_F0(&this->actor) * 0x10);
     }
 }
@@ -388,7 +388,7 @@ void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.uncullZoneForward += 1000.0f;
     }
 
-    if ((this->actor.shape.rot.y == 0) && ((this->unk_197 & 2) == 0)) {
+    if ((this->actor.shape.rot.y == 0) && !(this->unk_197 & 2)) {
         this->actor.shape.rot.y = this->actor.world.rot.y = (u32)Rand_Next() >> 0x10;
     }
 
@@ -442,7 +442,7 @@ void func_8095E5C0(EnIshi* this, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_196)) {
         this->actor.objBankIndex = this->unk_196;
         this->actor.flags &= ~0x10;
-        if (!(ENISHI_GET_8(&this->actor))) {
+        if (!ENISHI_GET_8(&this->actor)) {
             this->actor.draw = func_8095F61C;
         } else {
             this->actor.draw = func_8095F654;
@@ -529,7 +529,7 @@ void func_8095E95C(EnIshi* this, GlobalContext* globalCtx) {
 
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->actor.room = globalCtx->roomCtx.currRoom.num;
-        if ((ENISHI_GET_1(&this->actor)) == 1) {
+        if (ENISHI_GET_1(&this->actor) == 1) {
             Actor_SetSwitchFlag(globalCtx, ENISHI_GET_FE00(&this->actor));
         }
         func_8095EA70(this);
@@ -551,7 +551,7 @@ void func_8095EA70(EnIshi* this) {
 
     this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
     this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
-    if (!(ENISHI_GET_1(&this->actor))) {
+    if (!ENISHI_GET_1(&this->actor)) {
         sp24 = Rand_ZeroOne() - 0.9f;
         D_8095F690 = sp24 * 11000.0f;
         D_8095F694 = ((Rand_ZeroOne() - 0.5f) * 3000.0f) * (fabsf(sp24) + 0.1f);
@@ -692,8 +692,7 @@ void func_8095F210(EnIshi* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 sp28;
 
-    if ((this->actor.projectedPos.z <= 1200.0f) ||
-        (((this->unk_197 & 1) != 0) && (this->actor.projectedPos.z < 1300.0f))) {
+    if ((this->actor.projectedPos.z <= 1200.0f) || ((this->unk_197 & 1) && (this->actor.projectedPos.z < 1300.0f))) {
         func_800BDFC0(globalCtx, gameplay_field_keep_DL_0066B0);
         return;
     }
