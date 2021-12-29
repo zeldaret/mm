@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse, re
+import argparse, re, os
 from typing import List
 
 import shlex
@@ -8,17 +8,23 @@ from subprocess import Popen, PIPE
 from pathlib import Path
 
 SEGMENTED_TEXTURE_06 = re.compile(r"gsDPLoadTextureBlock\((?P<pointer>0x06[0-9A-Fa-f]{6}), (?P<fmt>[^,]+), (?P<size>[^,]+), (?P<width>[^,]+), (?P<height>[^,]+)")
+SEGMENTED_TEXTURE_06_4B = re.compile(r"gsDPLoadTextureBlock_4b\((?P<pointer>0x06[0-9A-Fa-f]{6}), (?P<fmt>[^,]+), (?P<width>[^,]+), (?P<height>[^,]+)")
 
 TEXTURES_FORMATS = {
     "G_IM_FMT_CI": {
         "G_IM_SIZ_8b": "ci8",
+        "G_IM_SIZ_4b": "ci4",
     },
     "G_IM_FMT_I": {
         "G_IM_SIZ_8b": "i8",
+        "G_IM_SIZ_4b": "i4",
     },
     "G_IM_FMT_RGBA": {
         "G_IM_SIZ_16b": "rgba16",
     },
+    "G_IM_FMT_IA": {
+        "G_IM_SIZ_4b": "ia4",
+    }
 }
 
 def getScenePaths(sceneTextureId: int) -> List[Path]:
@@ -32,7 +38,8 @@ def getScenePaths(sceneTextureId: int) -> List[Path]:
     pathList = []
     for line in output.decode("utf-8").splitlines():
         p = Path(line.split(":")[0])
-        pathList.append(p.parent)
+        if p.parent not in pathList:
+            pathList.append(p.parent)
 
     return pathList
 
@@ -40,6 +47,8 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
     texturesPerOffset = dict()
 
     for p in pathList:
+        print(p, file=os.sys.stderr)
+
         for filePath in p.iterdir():
             if filePath.suffix != ".c":
                 continue
@@ -54,6 +63,7 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
                         width = int(result["width"])
                         height = int(result["height"])
 
+                        # print(fmt, file=os.sys.stderr)
                         texFmt = TEXTURES_FORMATS[fmt][size]
                         if offset in texturesPerOffset:
                             if texturesPerOffset[offset] != (texFmt, width, height):
@@ -62,6 +72,25 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
                                 print((texFmt, width, height), file=os.sys.stderr)
                                 print(file=os.sys.stderr)
                         texturesPerOffset[offset] = (texFmt, width, height)
+
+                    else:
+                        result_4b = SEGMENTED_TEXTURE_06_4B.search(line)
+                        if result_4b is not None:
+                            offset = int(result_4b["pointer"], 16) & 0xFFFFFF
+                            fmt = result_4b["fmt"]
+                            size = "G_IM_SIZ_4b"
+                            width = int(result_4b["width"])
+                            height = int(result_4b["height"])
+
+                            # print(fmt, file=os.sys.stderr)
+                            texFmt = TEXTURES_FORMATS[fmt][size]
+                            if offset in texturesPerOffset:
+                                if texturesPerOffset[offset] != (texFmt, width, height):
+                                    print(f"Warning: Texture with different format at offset 0x{offset:06X}", file=os.sys.stderr)
+                                    print(texturesPerOffset[offset], file=os.sys.stderr)
+                                    print((texFmt, width, height), file=os.sys.stderr)
+                                    print(file=os.sys.stderr)
+                            texturesPerOffset[offset] = (texFmt, width, height)
 
     return texturesPerOffset
 
