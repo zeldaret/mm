@@ -141,9 +141,9 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef enum {
-    /* 0x0 */ EN_TALK_GIBUD_DMGEFF_NONE,              // Does not interact with the Gibdo/Redead at all
-    /* 0x1 */ EN_TALK_GIBUD_DMGEFF_STUN,              // Stuns without applying any effect
-    /* 0x2 */ EN_TALK_GIBUD_DMGEFF_FIRE_ARROW,        // Damages and changes a Gibdo into a Redead
+    /* 0x0 */ EN_TALK_GIBUD_DMGEFF_NONE,       // Does not interact with the Gibdo/Redead at all
+    /* 0x1 */ EN_TALK_GIBUD_DMGEFF_STUN,       // Stuns without applying any effect
+    /* 0x2 */ EN_TALK_GIBUD_DMGEFF_FIRE_ARROW, // Damages, applies a fire effect, and changes a Gibdo into a Redead
     /* 0x4 */ EN_TALK_GIBUD_DMGEFF_LIGHT_ARROW = 0x4, // Damages and applies a light effect
     /* 0xC */ EN_TALK_GIBUD_DMGEFF_ZORA_MAGIC = 0xC,  // Stuns and applies an electric effect
     /* 0xD */ EN_TALK_GIBUD_DMGEFF_RECOIL,            // Deals no damage, but displays hit mark and recoil animation

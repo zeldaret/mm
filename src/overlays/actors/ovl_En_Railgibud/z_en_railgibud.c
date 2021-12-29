@@ -103,39 +103,50 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 70, 0, { 0, 0, 0 } },
 };
 
+typedef enum {
+    /* 0x0 */ EN_RAILGIBUD_DMGEFF_NONE,       // Does not interact with the Gibdo/Redead at all
+    /* 0x1 */ EN_RAILGIBUD_DMGEFF_STUN,       // Stuns without applying any effect
+    /* 0x2 */ EN_RAILGIBUD_DMGEFF_FIRE_ARROW, // Damages, applies a fire effect, and changes a Gibdo into a Redead
+    /* 0x4 */ EN_RAILGIBUD_DMGEFF_LIGHT_ARROW = 0x4, // Damages and applies a light effect
+    /* 0xC */ EN_RAILGIBUD_DMGEFF_ZORA_MAGIC = 0xC,  // Stuns and applies an electric effect
+    /* 0xD */ EN_RAILGIBUD_DMGEFF_RECOIL,            // Deals no damage, but displays hit mark and recoil animation
+    /* 0xE */ EN_RAILGIBUD_DMGEFF_LIGHT_RAY,         // Instantly kills a Redead on contact
+    /* 0xF */ EN_RAILGIBUD_DMGEFF_DAMAGE,            // Deals damage and plays the damage animation
+} EnRailgibudDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(2, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(0, 0xD),
-    /* Normal arrow   */ DMG_ENTRY(0, 0xD),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(2, 0xF),
-    /* Hookshot       */ DMG_ENTRY(0, 0xD),
-    /* Goron punch    */ DMG_ENTRY(1, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0xF),
-    /* Goron pound    */ DMG_ENTRY(1, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(0, 0xD),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(0, 0x1),
-    /* Deku bubble    */ DMG_ENTRY(0, 0xD),
-    /* Deku launch    */ DMG_ENTRY(2, 0xF),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(0, 0xC),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0xE),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+    /* Deku Nut       */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(2, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* Horse trample  */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* Zora boomerang */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_RECOIL),
+    /* Normal arrow   */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_RECOIL),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(2, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* Hookshot       */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_RECOIL),
+    /* Goron punch    */ DMG_ENTRY(1, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* Sword          */ DMG_ENTRY(1, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* Goron pound    */ DMG_ENTRY(1, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* Fire arrow     */ DMG_ENTRY(1, EN_RAILGIBUD_DMGEFF_FIRE_ARROW),
+    /* Ice arrow      */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_RECOIL),
+    /* Light arrow    */ DMG_ENTRY(2, EN_RAILGIBUD_DMGEFF_LIGHT_ARROW),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* Deku spin      */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_STUN),
+    /* Deku bubble    */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_RECOIL),
+    /* Deku launch    */ DMG_ENTRY(2, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_ZORA_MAGIC),
+    /* Normal shield  */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_LIGHT_RAY),
+    /* Thrown object  */ DMG_ENTRY(1, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_RAILGIBUD_DMGEFF_DAMAGE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_RAILGIBUD_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_RAILGIBUD_DMGEFF_DAMAGE),
 };
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_IMMOVABLE };
@@ -697,7 +708,7 @@ void EnRailgibud_CheckDamageEffect(EnRailgibud* this, GlobalContext* globalCtx) 
         Actor_ApplyDamage(&this->actor);
 
         switch (this->actor.colChkInfo.damageEffect) {
-            case 15:
+            case EN_RAILGIBUD_DMGEFF_DAMAGE:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 if (player->unk_ADC != 0) {
                     this->unk_405 = player->unk_ADD;
@@ -710,7 +721,7 @@ void EnRailgibud_CheckDamageEffect(EnRailgibud* this, GlobalContext* globalCtx) 
                 }
                 break;
 
-            case 14:
+            case EN_RAILGIBUD_DMGEFF_LIGHT_RAY:
                 if (this->type == 1) {
                     this->actor.colChkInfo.health = 0;
                     this->actor.shape.yOffset = 0.0f;
@@ -718,7 +729,7 @@ void EnRailgibud_CheckDamageEffect(EnRailgibud* this, GlobalContext* globalCtx) 
                 }
                 break;
 
-            case 2:
+            case EN_RAILGIBUD_DMGEFF_FIRE_ARROW:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     EnRailgibud_SetupDead(this);
@@ -730,7 +741,7 @@ void EnRailgibud_CheckDamageEffect(EnRailgibud* this, GlobalContext* globalCtx) 
                 this->effectAlpha = 1.0f;
                 break;
 
-            case 4:
+            case EN_RAILGIBUD_DMGEFF_LIGHT_ARROW:
                 func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     EnRailgibud_SetupDead(this);
@@ -742,7 +753,7 @@ void EnRailgibud_CheckDamageEffect(EnRailgibud* this, GlobalContext* globalCtx) 
                 this->effectAlpha = 1.0f;
                 break;
 
-            case 12:
+            case EN_RAILGIBUD_DMGEFF_ZORA_MAGIC:
                 if ((this->actionFunc != EnRailgibud_Grab) &&
                     ((this->actionFunc != EnRailgibud_Stunned) || (this->stunTimer == 0))) {
                     this->effectType = 30;
@@ -752,7 +763,7 @@ void EnRailgibud_CheckDamageEffect(EnRailgibud* this, GlobalContext* globalCtx) 
                 }
                 break;
 
-            case 1:
+            case EN_RAILGIBUD_DMGEFF_STUN:
                 if ((this->actionFunc != EnRailgibud_Stunned) || (this->stunTimer == 0)) {
                     EnRailgibud_SetupStunned(this);
                 }
