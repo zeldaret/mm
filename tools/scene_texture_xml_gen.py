@@ -9,6 +9,7 @@ from pathlib import Path
 
 SEGMENTED_TEXTURE_06 = re.compile(r"gsDPLoadTextureBlock\((?P<pointer>0x06[0-9A-Fa-f]{6}), (?P<fmt>[^,]+), (?P<size>[^,]+), (?P<width>[^,]+), (?P<height>[^,]+)")
 SEGMENTED_TEXTURE_06_4B = re.compile(r"gsDPLoadTextureBlock_4b\((?P<pointer>0x06[0-9A-Fa-f]{6}), (?P<fmt>[^,]+), (?P<width>[^,]+), (?P<height>[^,]+)")
+SEGMENTED_TEXTURE_06_MULTI = re.compile(r"gsDPLoadMultiBlock\((?P<pointer>0x06[0-9A-Fa-f]{6}), [^,]+, [^,]+, (?P<fmt>[^,]+), (?P<size>[^,]+), (?P<width>[^,]+), (?P<height>[^,]+)")
 
 TEXTURES_FORMATS = {
     "G_IM_FMT_CI": {
@@ -23,6 +24,7 @@ TEXTURES_FORMATS = {
         "G_IM_SIZ_16b": "rgba16",
     },
     "G_IM_FMT_IA": {
+        "G_IM_SIZ_8b": "ia8",
         "G_IM_SIZ_4b": "ia4",
     }
 }
@@ -56,6 +58,9 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
             with open(filePath) as f:
                 for line in f:
                     result = SEGMENTED_TEXTURE_06.search(line)
+                    result_4b = SEGMENTED_TEXTURE_06_4B.search(line)
+                    result_multi = SEGMENTED_TEXTURE_06_MULTI.search(line)
+
                     if result is not None:
                         offset = int(result["pointer"], 16) & 0xFFFFFF
                         fmt = result["fmt"]
@@ -73,24 +78,39 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
                                 print(file=os.sys.stderr)
                         texturesPerOffset[offset] = (texFmt, width, height)
 
-                    else:
-                        result_4b = SEGMENTED_TEXTURE_06_4B.search(line)
-                        if result_4b is not None:
-                            offset = int(result_4b["pointer"], 16) & 0xFFFFFF
-                            fmt = result_4b["fmt"]
-                            size = "G_IM_SIZ_4b"
-                            width = int(result_4b["width"])
-                            height = int(result_4b["height"])
+                    elif result_4b is not None:
+                        offset = int(result_4b["pointer"], 16) & 0xFFFFFF
+                        fmt = result_4b["fmt"]
+                        size = "G_IM_SIZ_4b"
+                        width = int(result_4b["width"])
+                        height = int(result_4b["height"])
 
-                            # print(fmt, file=os.sys.stderr)
-                            texFmt = TEXTURES_FORMATS[fmt][size]
-                            if offset in texturesPerOffset:
-                                if texturesPerOffset[offset] != (texFmt, width, height):
-                                    print(f"Warning: Texture with different format at offset 0x{offset:06X}", file=os.sys.stderr)
-                                    print(texturesPerOffset[offset], file=os.sys.stderr)
-                                    print((texFmt, width, height), file=os.sys.stderr)
-                                    print(file=os.sys.stderr)
-                            texturesPerOffset[offset] = (texFmt, width, height)
+                        # print(fmt, file=os.sys.stderr)
+                        texFmt = TEXTURES_FORMATS[fmt][size]
+                        if offset in texturesPerOffset:
+                            if texturesPerOffset[offset] != (texFmt, width, height):
+                                print(f"Warning: Texture with different format at offset 0x{offset:06X}", file=os.sys.stderr)
+                                print(texturesPerOffset[offset], file=os.sys.stderr)
+                                print((texFmt, width, height), file=os.sys.stderr)
+                                print(file=os.sys.stderr)
+                        texturesPerOffset[offset] = (texFmt, width, height)
+
+                    elif result_multi is not None:
+                        offset = int(result_multi["pointer"], 16) & 0xFFFFFF
+                        fmt = result_multi["fmt"]
+                        size = result_multi["size"]
+                        width = int(result_multi["width"])
+                        height = int(result_multi["height"])
+
+                        # print(fmt, file=os.sys.stderr)
+                        texFmt = TEXTURES_FORMATS[fmt][size]
+                        if offset in texturesPerOffset:
+                            if texturesPerOffset[offset] != (texFmt, width, height):
+                                print(f"Warning: Texture with different format at offset 0x{offset:06X}", file=os.sys.stderr)
+                                print(texturesPerOffset[offset], file=os.sys.stderr)
+                                print((texFmt, width, height), file=os.sys.stderr)
+                                print(file=os.sys.stderr)
+                        texturesPerOffset[offset] = (texFmt, width, height)
 
     return texturesPerOffset
 
