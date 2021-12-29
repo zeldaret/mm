@@ -381,6 +381,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
             if (this->unk_704 > 140) {
                 Camera* sp5C = Play_GetCamera(globalCtx, MAIN_CAM);
+
                 this->unk_708 = 0;
                 func_809ECD00(this, globalCtx);
                 sp5C->eye = this->unk_70C;
@@ -413,7 +414,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
     x = player->actor.world.pos.x - this->actor.world.pos.x;
     y = player->actor.world.pos.y - this->actor.world.pos.y;
     z = player->actor.world.pos.z - this->actor.world.pos.z;
-    this->actor.shape.rot.x = Math_Atan2S(-(y), sqrtf(SQ(x) + SQ(z)));
+    this->actor.shape.rot.x = Math_Atan2S(-y, sqrtf(SQ(x) + SQ(z)));
 }
 
 void func_809ECD00(Boss04* this, GlobalContext* globalCtx) {
@@ -447,7 +448,7 @@ void func_809ECD18(Boss04* this, GlobalContext* globalCtx) {
                    Math_Atan2S(this->unk_6C8.x - this->actor.world.pos.x, this->unk_6C8.z - this->actor.world.pos.z), 5,
                    0x200);
 
-    if (((s8)this->actor.colChkInfo.health < 11) || (KREG(88) != 0)) {
+    if (((s8)this->actor.colChkInfo.health <= 10) || (KREG(88) != 0)) {
         KREG(88) = 0;
         func_809ECEF4(this);
     }
