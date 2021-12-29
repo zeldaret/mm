@@ -61,11 +61,11 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
 
 def printXml(sceneTextureId: int, texturesPerOffset: dict):
     print(f'<Root>')
-    print(f'    <File Name="scene_texture_{sceneTextureId}" Segment="6">')
+    print(f'    <File Name="scene_texture_{sceneTextureId:02}" Segment="6">')
 
     sortedTextures = sorted(texturesPerOffset.items())
     for offset, (texFmt, width, height) in sortedTextures:
-        print(f'        <Texture Name="scene_texture_{sceneTextureId}_Tex_{offset:06X}" OutName="tex_{offset:06X}" Format="{texFmt}" Width="{width}" Height="{height}" Offset="0x{offset:X}"/>')
+        print(f'        <Texture Name="scene_texture_{sceneTextureId:02}_Tex_{offset:06X}" OutName="tex_{offset:06X}" Format="{texFmt}" Width="{width}" Height="{height}" Offset="0x{offset:X}"/>')
 
     print(f'    </File>')
     print(f'</Root>')

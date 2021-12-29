@@ -1,0 +1,11 @@
+<Root>
+    <File Name="scene_texture_06" Segment="6">
+        <Texture Name="scene_texture_06_Tex_000000" OutName="tex_000000" Format="rgba16" Width="32" Height="16" Offset="0x0"/>
+        <Texture Name="scene_texture_06_Tex_001C60" OutName="tex_001C60" Format="rgba16" Width="32" Height="32" Offset="0x1C60"/>
+        <Texture Name="scene_texture_06_Tex_002460" OutName="tex_002460" Format="rgba16" Width="32" Height="32" Offset="0x2460"/>
+        <Texture Name="scene_texture_06_Tex_002C60" OutName="tex_002C60" Format="rgba16" Width="32" Height="32" Offset="0x2C60"/>
+        <Texture Name="scene_texture_06_Tex_003460" OutName="tex_003460" Format="rgba16" Width="32" Height="32" Offset="0x3460"/>
+        <Texture Name="scene_texture_06_Tex_004460" OutName="tex_004460" Format="rgba16" Width="32" Height="32" Offset="0x4460"/>
+        <Texture Name="scene_texture_06_Tex_004C60" OutName="tex_004C60" Format="rgba16" Width="32" Height="32" Offset="0x4C60"/>
+    </File>
+</Root>
