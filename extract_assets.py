@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-import argparse, json, os, signal, time, colorama
-from multiprocessing import Pool, Event, Manager
+import argparse, json, os, signal, time, colorama, multiprocessing
 
-colorama.init();
+colorama.init()
 
 EXTRACTED_ASSETS_NAMEFILE = ".extracted-assets.json"
 
@@ -71,33 +70,33 @@ def initializeWorker(abort, unaccounted: bool, extractedAssetsTracker: dict, man
 def main():
     parser = argparse.ArgumentParser(description="baserom asset extractor")
     parser.add_argument("-s", "--single", help="asset path relative to assets/, e.g. objects/gameplay_keep")
-    parser.add_argument("-t", "--threads", help="Number of cpu cores to extract with.")
     parser.add_argument("-f", "--force", help="Force the extraction of every xml instead of checking the touched ones.", action="store_true")
+    parser.add_argument("-j", "--jobs", help="Number of cpu cores to extract with.")
     parser.add_argument("-u", "--unaccounted", help="Enables ZAPD unaccounted detector warning system.", action="store_true")
     parser.add_argument("-Z", help="Pass the argument on to ZAPD, e.g. `-ZWunaccounted` to warn about unaccounted blocks in XMLs. Each argument should be passed separately, *without* the leading dash.", metavar="ZAPD_ARG", action="append")
     args = parser.parse_args()
 
-    global ZAPDArgs;
-    ZAPDArgs = "";
+    global ZAPDArgs
+    ZAPDArgs = ""
     if args.Z is not None:
-        badZAPDArg = False;
+        badZAPDArg = False
         for i in range(len(args.Z)):
             z = args.Z[i]
             if z[0] == '-':
-                print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: argument \"{z}\" starts with \"-\", which is not supported.", file=os.sys.stderr);
-                badZAPDArg = True;
+                print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: argument \"{z}\" starts with \"-\", which is not supported.", file=os.sys.stderr)
+                badZAPDArg = True
             else:
-                args.Z[i] = "-" + z;
+                args.Z[i] = "-" + z
 
         if badZAPDArg:
-            exit(1);
+            exit(1)
 
-        ZAPDArgs = " ".join(args.Z);
-        print("Using extra ZAPD arguments: " + ZAPDArgs);
+        ZAPDArgs = " ".join(args.Z)
+        print("Using extra ZAPD arguments: " + ZAPDArgs)
 
     global mainAbort
-    mainAbort = Event()
-    manager = Manager()
+    mainAbort = multiprocessing.Event()
+    manager = multiprocessing.Manager()
     signal.signal(signal.SIGINT, SignalHandler)
 
     extractedAssetsTracker = manager.dict()
@@ -125,12 +124,20 @@ def main():
                 if file.endswith(".xml"):
                     xmlFiles.append(fullPath)
 
-        numCores = int(args.threads or 0)
-        if numCores <= 0:
-            numCores = 1
-        print("Extracting assets with " + str(numCores) + " CPU core" + ("s" if numCores > 1 else "") + ".")
-        with Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
-            p.map(ExtractFunc, xmlFiles)
+        try:
+            numCores = int(args.jobs or 0)
+            if numCores <= 0:
+                numCores = 1
+            print("Extracting assets with " + str(numCores) + " CPU core" + ("s" if numCores > 1 else "") + ".")
+            with multiprocessing.get_context("fork").Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
+                p.map(ExtractFunc, xmlFiles)
+        except (multiprocessing.ProcessError, TypeError):
+            print("Warning: Multiprocessing exception ocurred.", file=os.sys.stderr)
+            print("Disabling mutliprocessing.", file=os.sys.stderr)
+
+            initializeWorker(mainAbort, args.unaccounted, extractedAssetsTracker, manager)
+            for singlePath in xmlFiles:
+                ExtractFunc(singlePath)
 
     with open(EXTRACTED_ASSETS_NAMEFILE, 'w', encoding='utf-8') as f:
         serializableDict = dict()
