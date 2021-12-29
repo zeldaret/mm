@@ -1651,7 +1651,6 @@ extern s16* gWaveSamples[9];
 extern UNK_PTR D_801D4D98;
 extern UNK_PTR D_801D4DB0;
 extern f32 gBendPitchOneOctaveFrequencies[256];
-// extern UNK_TYPE1 gBendPitchOneOctaveFrequencies;
 // extern UNK_TYPE1 D_801D4FB4;
 // extern UNK_TYPE4 D_801D51B4;
 // extern UNK_TYPE4 D_801D53B4;
