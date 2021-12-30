@@ -246,8 +246,9 @@ glabel D_801C0AF4
 glabel D_801C0AFC
 glabel D_801C0B04
 glabel D_801C0B0C
-glabel D_801C0B14
 #endif
+
+extern Gfx* D_801C0B14[];
 
 extern Gfx* D_801C0B1C[];
 
@@ -255,98 +256,6 @@ extern Gfx* D_801C0B1C[];
 glabel D_801C0B20
 #endif
 extern Vec3f D_801C0B90[2];
-
-extern Vec3f D_801C0BA8;
-#if 0
-glabel D_801C0BAC
-glabel D_801C0BB0
-#endif
-extern Vec3f D_801C0BB4;
-#if 0
-glabel D_801C0BB8
-#endif
-
-
-// Gfx?
-extern UNK_TYPE D_801C0BC0;
-
-// Gfx?
-extern UNK_TYPE D_801C0BD0;
-
-extern Vec3f D_801C0BE0;
-#if 0
-glabel D_801C0BE4
-glabel D_801C0BE8
-#endif
-
-extern Vec3f D_801C0BEC;
-
-#if 0
-glabel D_801C0BF0
-glabel D_801C0BF4
-#endif
-
-extern Color_RGBA8 D_801C0BF8;
-
-extern Color_RGBA8 D_801C0BFC;
-
-//Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
-extern Vec3f D_801C0C00;
-
-/*
-Vec3f D_801C0C0C[3] = {
-    { 174.0f, -1269.0f, -1.0f },
-    { 401.0f, -729.0f, -701.0f },
-    { 401.0f, -729.0f, 699.0f },
-};
-*/
-extern Vec3f D_801C0C0C[3];
-
-/*
-Vec3f D_801C0C30[3] = {
-    { 74.0f, -1269.0f, -1.0f },
-    { 301.0f, -729.0f, -701.0f },
-    { 301.0f, -729.0f, 699.0f },
-};
-*/
-extern Vec3f D_801C0C30[3];
-
-extern UNK_TYPE D_801C0C54;
-
-//Vec3f D_801C0C78[2] = { { 0.0f, 0.0f, 0.0f }, { 20.0f, 3.4350486e-27f, 30.0f } };
-extern Vec3f D_801C0C78[2];
-
-//Vec3f D_801C0C94 = { 0.0f, 0.0f, 0.0f };
-extern Vec3f D_801C0C94;
-
-extern Color_RGB8 D_801C0CA8[];
-
-extern Vec3f D_801C0CE8[];
-
-extern Vec3f D_801C0D24[];
-
-#if 0
-glabel D_801C0D60
-glabel D_801C0D6C
-glabel D_801C0D78
-glabel D_801C0D94
-glabel D_801C0D98
-glabel D_801C0D9C
-glabel D_801C0DA0
-glabel D_801C0DA8
-glabel D_801C0DD8
-glabel D_801C0DE4
-glabel D_801C0DF0
-glabel D_801C0E04
-glabel D_801C0E2C
-glabel D_801C0E40
-glabel D_801C0E7C
-glabel D_801C0E94
-glabel D_801C0EA0
-glabel D_801C0EAC
-glabel D_801C0EB8
-#endif
-
 
 
 
@@ -365,7 +274,7 @@ extern struct_801F58B0 D_801F58B0[3][3];
 
 extern struct_801F58B0 D_801F59AC[][3];
 
-extern Vec3f D_801F59B0;
+extern Vec3f D_801F59B0[2];
 
 extern s32 D_801F59C8[2];
 
@@ -1251,7 +1160,7 @@ void func_80124420(Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
 #endif
 
-void func_80124618(u16*, f32 curFrame, Vec3f*);
+void func_80124618(UNK_PTR, f32 curFrame, Vec3f*);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124618.s")
 
 extern u16 D_801C08A1[];
@@ -1602,7 +1511,53 @@ void func_80126B8C(GlobalContext* globalCtx, Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126BD0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801271B0.s")
+extern LinkAnimationHeader gameplay_keep_Linkanim_00E278;
+extern Gfx D_06008AA0[];
+extern Gfx D_06008C50[];
+
+
+s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
+    if ((player->transformation == PLAYER_FORM_DEKU) && (((player->skelAnime.animation == &D_0400E2D0)) || (player->skelAnime.animation == &D_0400E2D8) || (player->skelAnime.animation == &D_0400E2E8) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278))) {
+        void** sp3C = &D_801C0AF4;
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        if (player->skelAnime.animation == &D_0400E2D8) {
+            sp3C = &D_801C0AFC;
+        } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278) {
+            sp3C = &D_801C0B0C;
+        } else if (player->skelAnime.animation == &D_0400E2E8) {
+            sp3C = &D_801C0B04;
+        }
+
+        Matrix_StatePush();
+        Matrix_InsertTranslation(0.0f, 150.0f, 0.0f, 1);
+        func_80124618(sp3C[0], player->skelAnime.curFrame, &player->unk_AF0[1]);
+        Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, 1);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        gSPDisplayList(POLY_OPA_DISP++, D_801C0B14[arg2]);
+
+        Matrix_InsertTranslation(2150.0f, 0.0f, 0.0f, 1);
+        Matrix_InsertXRotation_s(player->unk_B8A, 1);
+        func_80124618(sp3C[1], player->skelAnime.curFrame, &player->unk_AF0[1]);
+        Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, 1);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        gSPDisplayList(POLY_OPA_DISP++, player->actor.velocity.y < -6.0f ? &D_06008AA0 : &D_06008C50);
+
+        Matrix_GetStateTranslation(&player->bodyPartsPos[*((u8*)D_801C0B1C + arg2)]);
+        Matrix_StatePop();
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+
+        return 1;
+    }
+    return 0;
+}
+
 
 s32 func_80127438(GlobalContext* globalCtx, Player* player, s32 maskId) {
     if (!player->maskObjectLoading && (maskId == (u8)player->maskId)) {
@@ -1637,8 +1592,10 @@ void func_8012754C(GlobalContext* globalCtx, Player* player) {
     AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&D_0A001CD8));
 }
 
-#if 0
+#ifdef NON_EQUIVALENT
 void func_80127594(GlobalContext* globalCtx, Player* player) {
+    static Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
+    static Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
     f32 temp_f0;
     f32 temp_f20;
     f32 temp_f22;
@@ -1657,9 +1614,10 @@ void func_80127594(GlobalContext* globalCtx, Player* player) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     phi_s6 = D_801C0B90;
-    phi_s2 = &D_801F59B0;
+    phi_s2 = D_801F59B0;
     phi_s3 = D_801F59C8;
     phi_s1 = POLY_XLU_DISP;
+    i = 0;
     do {
         temp_f22 = ((f32) *phi_s3 / 400.0f) * 0.1f;
         Matrix_MultiplyVector3fByState(phi_s6, phi_s2);
@@ -1717,7 +1675,7 @@ void func_80127594(GlobalContext* globalCtx, Player* player) {
 
             //phi_s0 = CLAMP_MIN(temp_v0, 0x3E80);
 
-            if (phi_s2 != &D_801F59B0) {
+            if (phi_s2 != D_801F59B0) {
                 phi_v0 = phi_s0;
             } else {
                 phi_v0 = -phi_s0;
@@ -1744,9 +1702,97 @@ void func_80127594(GlobalContext* globalCtx, Player* player) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
+
+extern Vec3f D_801C0BA8;
+extern Vec3f D_801C0BB4;
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")
 void func_80127594(GlobalContext* globalCtx, Player* player);
 #endif
+
+
+
+// Gfx?
+extern UNK_TYPE D_801C0BC0;
+
+// Gfx?
+extern UNK_TYPE D_801C0BD0;
+
+extern Vec3f D_801C0BE0;
+#if 0
+glabel D_801C0BE4
+glabel D_801C0BE8
+#endif
+
+extern Vec3f D_801C0BEC;
+
+#if 0
+glabel D_801C0BF0
+glabel D_801C0BF4
+#endif
+
+extern Color_RGBA8 D_801C0BF8;
+
+extern Color_RGBA8 D_801C0BFC;
+
+//Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
+extern Vec3f D_801C0C00;
+
+/*
+Vec3f D_801C0C0C[3] = {
+    { 174.0f, -1269.0f, -1.0f },
+    { 401.0f, -729.0f, -701.0f },
+    { 401.0f, -729.0f, 699.0f },
+};
+*/
+extern Vec3f D_801C0C0C[3];
+
+/*
+Vec3f D_801C0C30[3] = {
+    { 74.0f, -1269.0f, -1.0f },
+    { 301.0f, -729.0f, -701.0f },
+    { 301.0f, -729.0f, 699.0f },
+};
+*/
+extern Vec3f D_801C0C30[3];
+
+extern UNK_TYPE D_801C0C54;
+
+//Vec3f D_801C0C78[2] = { { 0.0f, 0.0f, 0.0f }, { 20.0f, 3.4350486e-27f, 30.0f } };
+extern Vec3f D_801C0C78[2];
+
+//Vec3f D_801C0C94 = { 0.0f, 0.0f, 0.0f };
+extern Vec3f D_801C0C94;
+
+extern Color_RGB8 D_801C0CA8[];
+
+extern Vec3f D_801C0CE8[];
+
+extern Vec3f D_801C0D24[];
+
+#if 0
+glabel D_801C0D60
+glabel D_801C0D6C
+glabel D_801C0D78
+glabel D_801C0D94
+glabel D_801C0D98
+glabel D_801C0D9C
+glabel D_801C0DA0
+glabel D_801C0DA8
+glabel D_801C0DD8
+glabel D_801C0DE4
+glabel D_801C0DF0
+glabel D_801C0E04
+glabel D_801C0E2C
+glabel D_801C0E40
+glabel D_801C0E7C
+glabel D_801C0E94
+glabel D_801C0EA0
+glabel D_801C0EAC
+glabel D_801C0EB8
+#endif
+
+
 
 extern AnimatedMaterial D_0A0011F8;
 
