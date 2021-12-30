@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ruppecrow.h"
+#include "objects/object_crow/object_crow.h"
 
 #define FLAGS 0x00004030
 
@@ -38,9 +39,6 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow*, GlobalContext*);
 void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow*, GlobalContext*);
 void EnRuppecrow_UpdateSpeed(EnRuppecrow*, GlobalContext*);
 void EnRuppecrow_FlyToDespawn(EnRuppecrow*, GlobalContext*);
-
-extern AnimationHeader D_060000F0;
-extern FlexSkeletonHeader D_060010C0;
 
 const ActorInit En_Ruppecrow_InitVars = {
     ACTOR_EN_RUPPECROW,
@@ -442,7 +440,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
 
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &D_060000F0, 0.4f, 0.0f, 0.0f, 0x1, -3.0f);
+    Animation_Change(&this->skelAnime, &object_crow_Anim_0000F0, 0.4f, 0.0f, 0.0f, 0x1, -3.0f);
 
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;
@@ -629,8 +627,8 @@ void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060010C0, &D_060000F0, this->joinTable, this->morphTable,
-                       ENRUPPECROW_LIMB_COUNT);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_crow_Skel_0010C0, &object_crow_Anim_0000F0, this->joinTable,
+                       this->morphTable, ENRUPPECROW_LIMB_COUNT);
     ActorShape_Init(&this->actor.shape, 2000.0f, func_800B3FC0, 20.0f);
 
     Collider_InitJntSph(globalCtx, &this->collider);
