@@ -13,13 +13,13 @@ void AudioPlayback_InitNoteSub(Note* note, NoteSubEu* sub, NoteSubAttributes* at
     f32 vel;
     u8 pan;
     u8 reverbVol;
-    StereoData sp24;
+    StereoData stereoData;
     s32 stereoHeadsetEffects = note->playbackState.stereoHeadsetEffects;
 
     vel = attrs->velocity;
     pan = attrs->pan;
     reverbVol = attrs->reverbVol;
-    sp24 = attrs->stereo.s;
+    stereoData = attrs->stereo.s;
 
     sub->bitField0 = note->noteSubEu.bitField0;
     sub->bitField1 = note->noteSubEu.bitField1;
@@ -32,8 +32,8 @@ void AudioPlayback_InitNoteSub(Note* note, NoteSubEu* sub, NoteSubAttributes* at
 
     sub->bitField0.stereoStrongRight = false;
     sub->bitField0.stereoStrongLeft = false;
-    sub->bitField0.stereoHeadsetEffects = sp24.stereoHeadsetEffects;
-    sub->bitField0.usesHeadsetPanEffects = sp24.usesHeadsetPanEffects;
+    sub->bitField0.stereoHeadsetEffects = stereoData.stereoHeadsetEffects;
+    sub->bitField0.usesHeadsetPanEffects = stereoData.usesHeadsetPanEffects;
     if (stereoHeadsetEffects && gAudioContext.soundMode == AUDIO_MODE_HEADSET) {
         smallPanIndex = pan >> 1;
         if (smallPanIndex > 0x3F) {
@@ -63,20 +63,20 @@ void AudioPlayback_InitNoteSub(Note* note, NoteSubEu* sub, NoteSubAttributes* at
         sub->bitField0.stereoStrongRight = strongRight;
         sub->bitField0.stereoStrongLeft = strongLeft;
 
-        switch (sp24.bit2) {
+        switch (stereoData.bit2) {
             case 0:
                 break;
             case 1:
-                sub->bitField0.stereoStrongRight = sp24.strongRight;
-                sub->bitField0.stereoStrongLeft = sp24.strongLeft;
+                sub->bitField0.stereoStrongRight = stereoData.strongRight;
+                sub->bitField0.stereoStrongLeft = stereoData.strongLeft;
                 break;
             case 2:
-                sub->bitField0.stereoStrongRight = sp24.strongRight | strongRight;
-                sub->bitField0.stereoStrongLeft = sp24.strongLeft | strongLeft;
+                sub->bitField0.stereoStrongRight = stereoData.strongRight | strongRight;
+                sub->bitField0.stereoStrongLeft = stereoData.strongLeft | strongLeft;
                 break;
             case 3:
-                sub->bitField0.stereoStrongRight = sp24.strongRight ^ strongRight;
-                sub->bitField0.stereoStrongLeft = sp24.strongLeft ^ strongLeft;
+                sub->bitField0.stereoStrongRight = stereoData.strongRight ^ strongRight;
+                sub->bitField0.stereoStrongLeft = stereoData.strongLeft ^ strongLeft;
                 break;
         }
 
@@ -86,8 +86,8 @@ void AudioPlayback_InitNoteSub(Note* note, NoteSubEu* sub, NoteSubAttributes* at
         volLeft = 0.707f; // approx 1/sqrt(2)
         volRight = 0.707f;
     } else {
-        sub->bitField0.stereoStrongRight = sp24.strongRight;
-        sub->bitField0.stereoStrongLeft = sp24.strongLeft;
+        sub->bitField0.stereoStrongRight = stereoData.strongRight;
+        sub->bitField0.stereoStrongLeft = stereoData.strongLeft;
         volLeft = gDefaultPanVolume[pan];
         volRight = gDefaultPanVolume[0x7F - pan];
     }
