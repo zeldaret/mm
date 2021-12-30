@@ -267,16 +267,22 @@ extern UNK_TYPE D_801C0BC0;
 // Gfx?
 extern UNK_TYPE D_801C0BD0;
 
+extern Vec3f D_801C0BE0;
 #if 0
-glabel D_801C0BE0
 glabel D_801C0BE4
 glabel D_801C0BE8
-glabel D_801C0BEC
+#endif
+
+extern Vec3f D_801C0BEC;
+
+#if 0
 glabel D_801C0BF0
 glabel D_801C0BF4
-glabel D_801C0BF8
-glabel D_801C0BFC
 #endif
+
+extern Color_RGBA8 D_801C0BF8;
+
+extern Color_RGBA8 D_801C0BFC;
 
 //Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
 extern Vec3f D_801C0C00;
@@ -1687,8 +1693,34 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2) {
     }
 }
 
+void func_80127BE8(GlobalContext* arg0, Vec3f* arg1) {
+    Vec3f sp2C;
+    f32 sp28;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127BE8.s")
+    D_801C0BE0.y = Rand_ZeroFloat(0.07f) + -0.1f;
+    D_801C0BEC.y = Rand_ZeroFloat(0.1f) + 0.04f;
+    if (Rand_ZeroOne() < 0.5f) {
+        sp28 = -1.0f;
+    } else {
+        sp28 = 1.0f;
+    }
+
+    D_801C0BE0.x = (Rand_ZeroFloat(0.2f) + 0.1f) * sp28;
+    D_801C0BEC.x = 0.1f * sp28;
+    if (Rand_ZeroOne() < 0.5f) {
+        sp28 = -1.0f;
+    } else {
+        sp28 = 1.0f;
+    }
+
+    D_801C0BE0.z = (Rand_ZeroFloat(0.2f) + 0.1f) * sp28;
+    D_801C0BEC.z = 0.1f * sp28;
+    sp2C.x = arg1->x;
+    sp2C.y = Rand_ZeroFloat(15.0f) + arg1->y;
+    sp2C.z = arg1->z;
+    EffectSsKiraKira_SpawnDispersed(arg0, &sp2C, &D_801C0BE0, &D_801C0BEC, &D_801C0BF8, &D_801C0BFC, -0x32, 0xB);
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127DA4.s")
 
