@@ -5407,8 +5407,7 @@ beginseg
     name "ovl_En_Hint_Skb"
     compress
     include "build/src/overlays/actors/ovl_En_Hint_Skb/z_en_hint_skb.o"
-    include "build/data/ovl_En_Hint_Skb/ovl_En_Hint_Skb.data.o"
-    include "build/data/ovl_En_Hint_Skb/ovl_En_Hint_Skb.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hint_Skb/ovl_En_Hint_Skb_reloc.o"
 endseg
 
 beginseg
