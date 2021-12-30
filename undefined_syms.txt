@@ -125,6 +125,7 @@ D_A4800018 = 0xA4800018; // SI_STATUS_REG
 // buffers
 
 gFramebuffer1 = 0x80000500;
+gFramebuffer1_2 = 0x80000500;
 D_80025D00 = 0x80025D00;
 
 // Segmented Addresses

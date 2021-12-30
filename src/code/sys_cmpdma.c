@@ -69,19 +69,13 @@ void func_80178818(void) {
     D_801FBBD4 = 1;
 }
 
-#ifdef NON_MATCHING
-// need to reload gFramebuffer1, volatile not working?
 void func_80178978(void) {
-    D_801FBB9C = (u16*)gFramebuffer1;
-    D_801FBBA0 = (u16*)gFramebuffer0;
-    D_801FBBB4 = (u16*)gFramebuffer1;
+    D_801FBB9C = gFramebuffer1;
+    D_801FBBA0 = gFramebuffer0;
+    D_801FBBB4 = gFramebuffer1_2;
     D_801FBBB8 = D_80780000;
     func_80178750();
 }
-#else
-void func_80178978(void);
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_cmpdma/func_80178978.s")
-#endif
 
 void func_801789D4(void) {
     gFramebuffers[0] = NULL;

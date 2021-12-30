@@ -15,6 +15,7 @@ extern u32 osVersion;
 extern size_t osMemSize;
 extern s32 osAppNmiBuffer[0x10];
 extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
+extern u16 gFramebuffer1_2[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];
 
 // data
