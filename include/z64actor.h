@@ -7,6 +7,7 @@
 #include "z64collision_check.h"
 #include "unk.h"
 
+// This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
 #define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
@@ -313,6 +314,96 @@ typedef struct {
     /* 0x0C */ u8 mode;
     /* 0x0E */ s16 transitionRate;
 } ActorAnimationEntryS; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ f32 unkC;
+    /* 0x10 */ Color_RGBA8 color;
+} TargetContextEntry; // size = 0x14
+
+typedef struct TargetContext {
+    /* 0x00 */ Vec3f unk0;
+    /* 0x0C */ Vec3f targetCenterPos;
+    /* 0x18 */ Color_RGBAf fairyInner;
+    /* 0x28 */ Color_RGBAf fairyOuter;
+    /* 0x38 */ Actor* arrowPointedActor;
+    /* 0x3C */ Actor* targetedActor;
+    /* 0x40 */ f32 unk40;
+    /* 0x44 */ f32 unk44;
+    /* 0x48 */ s16 unk48; // alpha
+    /* 0x4A */ u8 unk4A;
+    /* 0x4B */ u8 unk4B;
+    /* 0x4C */ s8 unk4C;
+    /* 0x4D */ UNK_TYPE1 pad4D[0x3];
+    /* 0x50 */ TargetContextEntry unk50[3];
+    /* 0x8C */ Actor* unk8C;
+    /* 0x90 */ Actor* bgmEnemy;
+    /* 0x94 */ Actor* unk_94;
+} TargetContext; // size = 0x98
+
+typedef struct {
+    /* 0x0 */ TexturePtr texture;
+    /* 0x4 */ s16 x;
+    /* 0x6 */ s16 y;
+    /* 0x8 */ u8 width;
+    /* 0x9 */ u8 height;
+    /* 0xA */ u8 durationTimer; // how long the title card appears for before fading
+    /* 0xB */ u8 delayTimer; // how long the title card waits to appear
+    /* 0xC */ s16 alpha;
+    /* 0xE */ s16 intensity;
+} TitleCardContext; // size = 0x10
+
+typedef struct ActorContext_unk_20C {
+    /* 0x0 */ s16 id;
+    /* 0x2 */ s8 isDynamicallyInitialised;
+    /* 0x4 */ void* ptr;
+} ActorContext_unk_20C; // size = 0x8
+
+typedef struct ActorContextFlags {
+    /* 0x00 */ u32 switches[4]; // First 0x40 are permanent, second 0x40 are temporary
+    /* 0x10 */ u32 chest;
+    /* 0x14 */ u32 clearedRoom;
+    /* 0x18 */ u32 clearedRoomTemp;
+    /* 0x1C */ u32 collectible[4]; // bitfield of 128 bits
+} ActorContextFlags; // size = 0x2C
+
+typedef struct ActorListEntry {
+    /* 0x0 */ s32 length; // number of actors loaded of this type
+    /* 0x4 */ Actor* first; // pointer to first actor of this type
+    /* 0x8 */ s32 unk_08;
+} ActorListEntry; // size = 0xC
+
+typedef struct ActorContext {
+    /* 0x000 */ u8 freezeFlashTimer;
+    /* 0x001 */ UNK_TYPE1 pad1;
+    /* 0x002 */ u8 unk2;
+    /* 0x003 */ u8 unk3;
+    /* 0x004 */ s8 unk4;
+    /* 0x005 */ u8 unk5;
+    /* 0x006 */ UNK_TYPE1 pad6[0x5];
+    /* 0x00B */ s8 unkB;
+    /* 0x00C */ s16 unkC;
+    /* 0x00E */ u8 totalLoadedActors;
+    /* 0x00F */ u8 undrawnActorCount;
+    /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
+    /* 0x0A0 */ Actor* undrawnActors[32]; // Records the first 32 actors drawn each frame
+    /* 0x120 */ TargetContext targetContext;
+    /* 0x1B8 */ ActorContextFlags flags;
+    /* 0x1E4 */ TitleCardContext titleCtxt;
+    /* 0x1F4 */ u8 unk1F4;
+    /* 0x1F5 */ u8 unk1F5;
+    /* 0x1F6 */ UNK_TYPE1 pad1F6[0x2];
+    /* 0x1F8 */ f32 unk1F8;
+    /* 0x1FC */ Vec3f unk1FC;
+    /* 0x208 */ UNK_TYPE1 unk_208[0x4];
+    /* 0x20C */ ActorContext_unk_20C unk_20C[8];
+    /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
+    /* 0x250 */ void* absoluteSpace; // Space used to allocate actor overlays of alloc type ALLOCTYPE_ABSOLUTE
+    /* 0x254 */ u32 unk254[5];
+    /* 0x268 */ u8 unk268;
+    /* 0x269 */ UNK_TYPE1 pad269[0x3];
+    /* 0x26C */ Input unk_26C;
+} ActorContext; // size = 0x284
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,

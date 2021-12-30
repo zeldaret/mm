@@ -253,7 +253,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     func_80BA383C(this, globalCtx);
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BA36C0(this, globalCtx, 1);
         if (globalCtx->sceneNum != 0x12) {
             Flags_SetSwitch(globalCtx, this->actor.params & 0x7F);

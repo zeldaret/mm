@@ -426,16 +426,16 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
-    s32 temp_v0_2;
+    u8 msgState = Message_GetState(&globalCtx->msgCtx);
+    s32 item;
 
-    if (temp_v0 == 0x10) {
-        temp_v0_2 = func_80123810(globalCtx);
-        if (temp_v0_2 > EXCH_ITEM_NONE) {
-            if (temp_v0_2 == EXCH_ITEM_2A) {
+    if (msgState == 0x10) {
+        item = func_80123810(globalCtx);
+        if (item > EXCH_ITEM_NONE) {
+            if (item == EXCH_ITEM_2A) {
                 player->actor.textId = D_80ADD928[this->unk_33A];
                 this->unk_340 = player->actor.textId;
-                player->exchangeItemId = temp_v0_2;
+                player->exchangeItemId = item;
                 this->actionFunc = func_80ADBAB8;
             } else {
                 player->actor.textId = D_80ADD920[this->unk_33A];
@@ -443,12 +443,12 @@ void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_80ADB0D8;
             }
             func_801477B4(globalCtx);
-        } else if (temp_v0_2 < EXCH_ITEM_NONE) {
+        } else if (item < EXCH_ITEM_NONE) {
             this->unk_340 = D_80ADD920[this->unk_33A];
             func_80151938(globalCtx, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         }
-    } else if ((temp_v0 == 5) && func_80147624(globalCtx)) {
+    } else if ((msgState == 5) && func_80147624(globalCtx)) {
         if (this->unk_340 == D_80ADD910[this->unk_33A]) {
             this->unk_340 = D_80ADD938[this->unk_33A];
             func_80151938(globalCtx, this->unk_340);

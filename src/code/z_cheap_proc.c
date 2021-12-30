@@ -1,5 +1,8 @@
 #include "global.h"
 
+/**
+ * Draws a display list to the opaque display buffer
+ */
 void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist) {
     Gfx* dl;
 
@@ -16,6 +19,9 @@ void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+/**
+ * Draws a display list to the translucent display buffer
+ */
 void Gfx_DrawDListXlu(GlobalContext* globalCtx, Gfx* dlist) {
     Gfx* dl;
 

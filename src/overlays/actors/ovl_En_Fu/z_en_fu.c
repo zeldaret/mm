@@ -377,7 +377,7 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_809622FC(EnFu* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
     this->actionFunc = func_80962340;
 }
 
@@ -542,7 +542,7 @@ void func_80962660(EnFu* this, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
-                func_800BDC5C(&this->skelAnime, sAnimations, 3);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
                 func_801A2BB8(NA_BGM_MINI_GAME_2);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
@@ -1219,7 +1219,7 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
             case 0x2842:
             case 0x2844:
             case 0x2848:
-                func_800BDC5C(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
                 break;
 
             case 0x2840:
@@ -1245,21 +1245,21 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
             case 0x286B:
             case 0x286D:
             case 0x2871:
-                func_800BDC5C(&this->skelAnime, sAnimations, 4);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
                 break;
 
             case 0x2860:
-                func_800BDC5C(&this->skelAnime, sAnimations, 5);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
                 break;
 
             case 0x285F:
-                func_800BDC5C(&this->skelAnime, sAnimations, 6);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
                 break;
 
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                func_800BDC5C(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
                 break;
         }
     }

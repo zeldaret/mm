@@ -1488,7 +1488,7 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
             }
             if (this->elfMsg->home.rot.x == -0x961) {
                 this->unk_234 = this->elfMsg;
-                func_800B86C8(thisx, globalCtx, this->elfMsg);
+                Actor_ChangeFocus(thisx, globalCtx, this->elfMsg);
             }
         } else {
             thisx->cutscene = -1;

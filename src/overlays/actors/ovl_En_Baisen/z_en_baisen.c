@@ -176,7 +176,7 @@ void func_80BE895C(EnBaisen* this, GlobalContext* globalCtx) {
     if (this->unk2A4 != NULL) {
         this->unk290 = true;
         this->unk2AC = 1;
-        func_800B86C8(this->unk2A4, globalCtx, this->unk2A4);
+        Actor_ChangeFocus(this->unk2A4, globalCtx, this->unk2A4);
     }
     this->unk29C = 1;
     if (this->paramCopy == 0) {
@@ -233,7 +233,7 @@ void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx) {
             } else {
                 this->unk2A4 = &this->actor;
             }
-            func_800B86C8(this->unk2A4, globalCtx, this->unk2A4);
+            Actor_ChangeFocus(this->unk2A4, globalCtx, this->unk2A4);
         } else {
             func_80BE87FC(this);
         }

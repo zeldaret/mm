@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tubo_trap.h"
+#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS 0x00000000
 
@@ -311,6 +312,5 @@ void EnTuboTrap_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTuboTrap_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    //  Gfx_DrawDListOpa with a display list
-    Gfx_DrawDListOpa(globalCtx, D_05017EA0);
+    Gfx_DrawDListOpa(globalCtx, gameplay_dangeon_keep_DL_017EA0);
 }

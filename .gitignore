@@ -42,7 +42,6 @@ tools/mips_to_c/
 *.jpg
 !*_custom*
 .extracted-assets.json
-ctx.c.m2c
 
 # Docs
 !docs/**/*.png

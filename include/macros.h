@@ -149,9 +149,6 @@ extern GraphicsContext* __gfxCtx;
         (b) = _temp;      \
     }
 
-#define TARGET_RANGE(range, leash) \
-    { SQ(range), (f32)range / leash }
-
 #define OVERLAY_RELOCATION_OFFSET(overlayEntry) (intptr_t)((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
 
 #ifdef __GNUC__

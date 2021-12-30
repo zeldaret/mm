@@ -394,7 +394,7 @@ void EnSb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (this->isDrawn != false) {
         if (limbIndex < 7) {
             phi_a2 = (this->actor.depthInWater > 0) ? 4 : 1;
-            func_800BBCEC(thisx, globalCtx, phi_a2, dList);
+            Actor_SpawnBodyParts(thisx, globalCtx, phi_a2, dList);
         }
         if (limbIndex == 6) {
             this->isDrawn = false;

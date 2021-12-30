@@ -150,7 +150,7 @@ s32 func_809C1424(EnAob01* this) {
     if (this->unk_43C == 1) {
         if (curFrame == lastFrame) {
             this->unk_43C = 2;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 2);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 2);
             return true;
         }
     } else if (this->unk_43C == 2) {
@@ -166,13 +166,13 @@ s32 func_809C14D0(EnAob01* this) {
     if ((this->unk_43C == 0) || (this->unk_43C == 5)) {
         if (curFrame == lastFrame) {
             this->unk_43C = 3;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 3);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 3);
             return true;
         }
     } else if (this->unk_43C == 3) {
         if (curFrame == lastFrame) {
             this->unk_43C = 4;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 4);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 4);
             return true;
         }
     } else if (this->unk_43C == 4) {
@@ -188,7 +188,7 @@ s32 func_809C15BC(EnAob01* this) {
     if ((this->unk_43C != 0) && (this->unk_43C != 5)) {
         if (curFrame == lastFrame) {
             this->unk_43C = 5;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 5);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 5);
             return true;
         }
     } else {
@@ -330,7 +330,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2D2 |= 0x40;
             this->unk_2D2 |= 0x10;
             this->unk_43C = 1;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
             break;
 
         case 0x3525:
@@ -345,7 +345,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 |= 0x40;
                 this->unk_2D2 |= 0x10;
                 this->unk_43C = 1;
-                func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
                 break;
             }
 
@@ -360,7 +360,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2D2 |= 4;
             this->unk_2D2 |= 0x10;
             this->unk_43C = 1;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
             break;
 
         case 0x3527:
@@ -372,7 +372,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_210 = 0x3536;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
                 break;
             }
 
@@ -380,7 +380,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_210 = 0x3537;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
                 break;
             }
 
@@ -552,7 +552,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 |= 0x10;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
                 func_801518B0(globalCtx, 0x354B, &this->actor);
             }
             this->unk_2D2 &= ~8;
@@ -731,7 +731,7 @@ void func_809C28B8(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_210 = 0x352D;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
                 break;
         }
 
@@ -927,7 +927,7 @@ void EnAob01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_43C = 0;
-    func_800BDC5C(&this->skelAnime, D_809C3790, 0);
+    Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 0);
     Actor_SetScale(&this->actor, 0.01f);
 
     switch (gSaveContext.eventInf[0] & 7) {

@@ -4,7 +4,6 @@
 #include "PR/ultratypes.h"
 #include "PR/sched.h"
 #include "ultra64/message.h"
-#include "os.h"
 
 typedef struct IrqMgrClient {
     /* 0x0 */ struct IrqMgrClient* next;

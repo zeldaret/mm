@@ -607,7 +607,7 @@ void func_808F4054(GlobalContext* globalCtx, EnIn* this, s32 arg2, u16 textId) {
 }
 
 void func_808F4108(EnIn* this, GlobalContext* globalCtx, u16 textId) {
-    func_800B86C8(&this->actor, globalCtx, &this->unk4A4->actor);
+    Actor_ChangeFocus(&this->actor, globalCtx, &this->unk4A4->actor);
     this->actor.textId = 0;
     this->unk4A4->actor.textId = textId;
     this->unk4A4->unk48C = 2;

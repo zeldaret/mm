@@ -258,7 +258,7 @@ void func_80B40EE8(EnKgy* this, GlobalContext* globalCtx) {
         f32 sp34;
         f32 temp_f0;
 
-        func_800B4EDC(globalCtx, &this->unk_2B4, &sp38, &sp34);
+        Actor_GetProjectedPos(globalCtx, &this->unk_2B4, &sp38, &sp34);
         temp_f0 = sp38.x * sp34;
         if (this->unk_2E6 > 0) {
             this->unk_2E6--;

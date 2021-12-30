@@ -415,7 +415,7 @@ extern EffectSsOverlay particleOverlayTable[39];
 // extern u32 sCurrentBit;
 // extern s32 sTimer;
 extern f32 actorMovementScale;
-extern TargetRangeParams D_801AECF0[];
+extern TargetRangeParams gTargetRanges[];
 extern s16 D_801AED48[8];
 // extern UNK_TYPE4 D_801AED58;
 extern Color_RGBA8 actorDefaultHitColor;
@@ -3986,7 +3986,6 @@ extern UNK_TYPE D_04079B10;
 extern Gfx D_0407AB10[]; // sun (sparkles when small) displaylist
 extern Gfx D_0407AB58[];
 extern UNK_TYPE D_0407AFB0;
-extern Gfx gGameplayKeepDrawFlameDL[];
 extern UNK_TYPE D_0407D650;
 extern UNK_TYPE D_0407F218;
 extern UNK_TYPE D_040815D0;

@@ -186,7 +186,7 @@ void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx) {
     if (this->targetActor != NULL) {
         this->shouldSetHeadRotation = true;
         this->cutsceneState = 1;
-        func_800B86C8(this->targetActor, globalCtx, this->targetActor);
+        Actor_ChangeFocus(this->targetActor, globalCtx, this->targetActor);
     }
 
     this->isInDialogue = true;

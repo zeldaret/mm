@@ -1412,7 +1412,7 @@ s32 func_80B456A8(GlobalContext* globalCtx, Vec3f* vec) {
     Vec3f multDest;
     f32 wDest;
 
-    func_800B4EDC(globalCtx, vec, &multDest, &wDest);
+    Actor_GetProjectedPos(globalCtx, vec, &multDest, &wDest);
     if (((multDest.z > 1.0f) && (fabsf(multDest.x * wDest) < 1.0f)) && (fabsf(multDest.y * wDest) < 1.0f)) {
         s32 wX = (multDest.x * wDest * 160.0f) + 160.0f;
         s32 wY = (multDest.y * wDest * -120.0f) + 120.0f;

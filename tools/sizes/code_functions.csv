@@ -182,10 +182,10 @@ asm/non_matchings/code/z_actor/ActorShadow_DrawFeet.s,ActorShadow_DrawFeet,0x800
 asm/non_matchings/code/z_actor/Actor_SetFeetPos.s,Actor_SetFeetPos,0x800B4A98,0x15
 asm/non_matchings/code/z_actor/func_800B4AEC.s,func_800B4AEC,0x800B4AEC,0x19
 asm/non_matchings/code/z_actor/func_800B4B50.s,func_800B4B50,0x800B4B50,0xE3
-asm/non_matchings/code/z_actor/func_800B4EDC.s,func_800B4EDC,0x800B4EDC,0x19
-asm/non_matchings/code/z_actor/func_800B4F40.s,func_800B4F40,0x800B4F40,0xE
+asm/non_matchings/code/z_actor/Actor_GetProjectedPos.s,Actor_GetProjectedPos,0x800B4EDC,0x19
+asm/non_matchings/code/z_actor/Target_SetPos.s,Target_SetPos,0x800B4F40,0xE
 asm/non_matchings/code/z_actor/func_800B4F78.s,func_800B4F78,0x800B4F78,0x32
-asm/non_matchings/code/z_actor/func_800B5040.s,func_800B5040,0x800B5040,0x59
+asm/non_matchings/code/z_actor/Target_SetColors.s,Target_SetColors,0x800B5040,0x59
 asm/non_matchings/code/z_actor/Actor_TargetContextInit.s,Actor_TargetContextInit,0x800B51A4,0x19
 asm/non_matchings/code/z_actor/Actor_DrawZTarget.s,Actor_DrawZTarget,0x800B5208,0x183
 asm/non_matchings/code/z_actor/func_800B5814.s,func_800B5814,0x800B5814,0xE7
@@ -235,7 +235,7 @@ asm/non_matchings/code/z_actor/Actor_MoveWithoutGravity.s,Actor_MoveWithoutGravi
 asm/non_matchings/code/z_actor/Actor_UpdateVelocityWithoutGravityReverse.s,Actor_UpdateVelocityWithoutGravityReverse,0x800B6B50,0x22
 asm/non_matchings/code/z_actor/Actor_MoveWithoutGravityReverse.s,Actor_MoveWithoutGravityReverse,0x800B6BD8,0xB
 asm/non_matchings/code/z_actor/Actor_SetSpeeds.s,Actor_SetSpeeds,0x800B6C04,0x15
-asm/non_matchings/code/z_actor/func_800B6C58.s,func_800B6C58,0x800B6C58,0x1F
+asm/non_matchings/code/z_actor/Actor_UpdatePosFromSkelAnime.s,Actor_UpdatePosFromSkelAnime,0x800B6C58,0x1F
 asm/non_matchings/code/z_actor/Actor_YawBetweenActors.s,Actor_YawBetweenActors,0x800B6CD4,0xB
 asm/non_matchings/code/z_actor/Actor_YawBetweenActorsTop.s,Actor_YawBetweenActorsTop,0x800B6D00,0xB
 asm/non_matchings/code/z_actor/Actor_YawToPoint.s,Actor_YawToPoint,0x800B6D2C,0x9
@@ -254,7 +254,7 @@ asm/non_matchings/code/z_actor/Player_GetRunSpeedLimit.s,Player_GetRunSpeedLimit
 asm/non_matchings/code/z_actor/func_800B7118.s,func_800B7118,0x800B7118,0x4
 asm/non_matchings/code/z_actor/func_800B7128.s,func_800B7128,0x800B7128,0xD
 asm/non_matchings/code/z_actor/func_800B715C.s,func_800B715C,0x800B715C,0x5
-asm/non_matchings/code/z_actor/func_800B7170.s,func_800B7170,0x800B7170,0x1B
+asm/non_matchings/code/z_actor/Actor_SetCameraHorseSetting.s,Actor_SetCameraHorseSetting,0x800B7170,0x1B
 asm/non_matchings/code/z_actor/Actor_MountHorse.s,Actor_MountHorse,0x800B71DC,0x9
 asm/non_matchings/code/z_actor/func_800B7200.s,func_800B7200,0x800B7200,0xB
 asm/non_matchings/code/z_actor/func_800B722C.s,func_800B722C,0x800B722C,0x8
@@ -272,9 +272,9 @@ asm/non_matchings/code/z_actor/func_800B75A0.s,func_800B75A0,0x800B75A0,0x1F
 asm/non_matchings/code/z_actor/func_800B761C.s,func_800B761C,0x800B761C,0x17
 asm/non_matchings/code/z_actor/func_800B7678.s,func_800B7678,0x800B7678,0x90
 asm/non_matchings/code/z_actor/Actor_UpdateBgCheckInfo.s,Actor_UpdateBgCheckInfo,0x800B78B8,0x153
-asm/non_matchings/code/z_actor/func_800B7E04.s,func_800B7E04,0x800B7E04,0x77
-asm/non_matchings/code/z_actor/func_800B7FE0.s,func_800B7FE0,0x800B7FE0,0xE
-asm/non_matchings/code/z_actor/func_800B8018.s,func_800B8018,0x800B8018,0xE
+asm/non_matchings/code/z_actor/Hilite_Draw.s,Hilite_Draw,0x800B7E04,0x77
+asm/non_matchings/code/z_actor/Hilite_DrawOpa.s,Hilite_DrawOpa,0x800B7FE0,0xE
+asm/non_matchings/code/z_actor/Hilite_DrawXlu.s,Hilite_DrawXlu,0x800B8018,0xE
 asm/non_matchings/code/z_actor/func_800B8050.s,func_800B8050,0x800B8050,0x32
 asm/non_matchings/code/z_actor/func_800B8118.s,func_800B8118,0x800B8118,0x32
 asm/non_matchings/code/z_actor/Actor_GetFocus.s,Actor_GetFocus,0x800B81E0,0xD
@@ -289,7 +289,7 @@ asm/non_matchings/code/z_actor/func_800B85E0.s,func_800B85E0,0x800B85E0,0xD
 asm/non_matchings/code/z_actor/func_800B8614.s,func_800B8614,0x800B8614,0xA
 asm/non_matchings/code/z_actor/func_800B863C.s,func_800B863C,0x800B863C,0x10
 asm/non_matchings/code/z_actor/Actor_TextboxIsClosing.s,Actor_TextboxIsClosing,0x800B867C,0x13
-asm/non_matchings/code/z_actor/func_800B86C8.s,func_800B86C8,0x800B86C8,0x10
+asm/non_matchings/code/z_actor/Actor_ChangeFocus.s,Actor_ChangeFocus,0x800B86C8,0x10
 asm/non_matchings/code/z_actor/Player_GetExchangeItemId.s,Player_GetExchangeItemId,0x800B8708,0x4
 asm/non_matchings/code/z_actor/func_800B8718.s,func_800B8718,0x800B8718,0xD
 asm/non_matchings/code/z_actor/func_800B874C.s,func_800B874C,0x800B874C,0x2E
@@ -306,9 +306,9 @@ asm/non_matchings/code/z_actor/Actor_PickUpFar.s,Actor_PickUpFar,0x800B8BD0,0xB
 asm/non_matchings/code/z_actor/Actor_HasNoParent.s,Actor_HasNoParent,0x800B8BFC,0x9
 asm/non_matchings/code/z_actor/func_800B8C20.s,func_800B8C20,0x800B8C20,0xC
 asm/non_matchings/code/z_actor/func_800B8C50.s,func_800B8C50,0x800B8C50,0xA
-asm/non_matchings/code/z_actor/Actor_IsMounted.s,Actor_IsMounted,0x800B8C78,0x9
+asm/non_matchings/code/z_actor/Actor_HasRider.s,Actor_HasRider,0x800B8C78,0x9
 asm/non_matchings/code/z_actor/Actor_SetRideActor.s,Actor_SetRideActor,0x800B8C9C,0x14
-asm/non_matchings/code/z_actor/Actor_NotMounted.s,Actor_NotMounted,0x800B8CEC,0x9
+asm/non_matchings/code/z_actor/Actor_HasNoRider.s,Actor_HasNoRider,0x800B8CEC,0x9
 asm/non_matchings/code/z_actor/func_800B8D10.s,func_800B8D10,0x800B8D10,0x10
 asm/non_matchings/code/z_actor/func_800B8D50.s,func_800B8D50,0x800B8D50,0x12
 asm/non_matchings/code/z_actor/func_800B8D98.s,func_800B8D98,0x800B8D98,0xF
@@ -361,7 +361,7 @@ asm/non_matchings/code/z_actor/Enemy_StartFinishingBlow.s,Enemy_StartFinishingBl
 asm/non_matchings/code/z_actor/func_800BBAC0.s,func_800BBAC0,0x800BBAC0,0x2D
 asm/non_matchings/code/z_actor/func_800BBB74.s,func_800BBB74,0x800BBB74,0x2B
 asm/non_matchings/code/z_actor/func_800BBC20.s,func_800BBC20,0x800BBC20,0x33
-asm/non_matchings/code/z_actor/func_800BBCEC.s,func_800BBCEC,0x800BBCEC,0x30
+asm/non_matchings/code/z_actor/Actor_SpawnBodyParts.s,Actor_SpawnBodyParts,0x800BBCEC,0x30
 asm/non_matchings/code/z_actor/Actor_SpawnFloorDustRing.s,Actor_SpawnFloorDustRing,0x800BBDAC,0x81
 asm/non_matchings/code/z_actor/func_800BBFB0.s,func_800BBFB0,0x800BBFB0,0x69
 asm/non_matchings/code/z_actor/func_800BC154.s,func_800BC154,0x800BC154,0xD
@@ -391,7 +391,7 @@ asm/non_matchings/code/z_actor/func_800BD9A0.s,func_800BD9A0,0x800BD9A0,0x10
 asm/non_matchings/code/z_actor/func_800BD9E0.s,func_800BD9E0,0x800BD9E0,0x30
 asm/non_matchings/code/z_actor/func_800BDAA0.s,func_800BDAA0,0x800BDAA0,0x33
 asm/non_matchings/code/z_actor/func_800BDB6C.s,func_800BDB6C,0x800BDB6C,0x3C
-asm/non_matchings/code/z_actor/func_800BDC5C.s,func_800BDC5C,0x800BDC5C,0x26
+asm/non_matchings/code/z_actor/Actor_ChangeAnimation.s,Actor_ChangeAnimation,0x800BDC5C,0x26
 asm/non_matchings/code/z_actor/func_800BDCF4.s,func_800BDCF4,0x800BDCF4,0xAF
 asm/non_matchings/code/z_actor/Actor_Noop.s,Actor_Noop,0x800BDFB0,0x4
 asm/non_matchings/code/z_actor/Gfx_DrawDListOpa.s,Gfx_DrawDListOpa,0x800BDFC0,0x1F
