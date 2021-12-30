@@ -847,13 +847,13 @@ void EnFall_MoonsTear_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_moonston_Matanimheader_001220));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&gFallingMoonsTearTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_OPA_DISP++, object_moonston_DL_000400);
+    gSPDisplayList(POLY_OPA_DISP++, gFallingMoonsTearDL);
     Matrix_Scale(3.0f, 3.0f, 6.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_XLU_DISP++, object_moonston_DL_0004C8);
+    gSPDisplayList(POLY_XLU_DISP++, gFallingMoonsTearFireDL);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
