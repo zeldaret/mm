@@ -727,9 +727,9 @@ void EnFall_LodMoon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH);
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
-    gSPDisplayList(POLY_OPA_DISP++, object_lodmoon_DL_0010E0);
+    gSPDisplayList(POLY_OPA_DISP++, gLodmoonEyesDL);
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH);
-    gSPDisplayList(POLY_OPA_DISP++, object_lodmoon_DL_001158);
+    gSPDisplayList(POLY_OPA_DISP++, gLodmoonMoonDL);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
