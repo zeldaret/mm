@@ -2617,7 +2617,7 @@ void func_8013A46C(s32 flag);
 u32 func_8013A4C4(s32 flag);
 s16 func_8013A504(s16 val);
 s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError);
-Actor* SubS_DoorFind(GlobalContext* globalCtx, s32 unk_1A5);
+struct EnDoor* SubS_DoorFind(GlobalContext* globalCtx, s32 unk_1A5);
 Gfx* func_8013A860(GlobalContext* globalCtx, s32 idx, void** skeleton, Vec3s* jointTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkActorDraw, Actor* actor, Mtx** mtx, Gfx* gfx);
 Gfx* func_8013AB00(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkActorDraw, Actor* actor, Gfx* gfx);
 s32 func_8013AD6C(GlobalContext* globalCtx);

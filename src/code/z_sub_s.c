@@ -6,11 +6,10 @@
 #include "global.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-//! @TODO: Should just return `EnDoor` instance after c and h file split
 /**
  * Finds the first EnDoor instance with unk_1A4 == 5 and the specified unk_1A5.
  */
-Actor* SubS_DoorFind(GlobalContext* globalCtx, s32 unk_1A5) {
+EnDoor* SubS_DoorFind(GlobalContext* globalCtx, s32 unk_1A5) {
     Actor* actor = NULL;
     EnDoor* door;
 
@@ -34,7 +33,7 @@ Actor* SubS_DoorFind(GlobalContext* globalCtx, s32 unk_1A5) {
         actor = actor->next;
     }
 
-    return &door->actor;
+    return door;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013A860.s")

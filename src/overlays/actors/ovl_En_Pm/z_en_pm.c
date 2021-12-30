@@ -338,7 +338,7 @@ Actor* func_80AF7CB0(EnPm* this, GlobalContext* globalCtx, u8 actorCat, s16 acto
     return phi_s0;
 }
 
-Actor* func_80AF7D60(GlobalContext* globalCtx, s32 arg1) {
+EnDoor* func_80AF7D60(GlobalContext* globalCtx, s32 arg1) {
     s32 phi_a1;
 
     switch (arg1) {
@@ -942,7 +942,7 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
     u16 sp56 = gSaveContext.time - 0x3FFC;
     u8 sp55 = this->actor.params & 0xFF;
-    Actor* sp50;
+    EnDoor* sp50;
     Vec3s* sp4C;
     Vec3f sp40;
     Vec3f sp34;
@@ -955,7 +955,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         this->unk_234 = func_8013BB34(globalCtx, sp55, D_80AFB430[arg2->unk0]);
     }
 
-    if ((sp50 != NULL) && (sp50->update != NULL)) {
+    if ((sp50 != NULL) && (sp50->actor.update != NULL)) {
         if (this->unk_234 != 0) {
             sp4C = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
             Math_Vec3s_ToVec3f(&sp40, &sp4C[0]);
@@ -964,7 +964,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             Math_Vec3f_Copy(&this->unk_278, &sp34);
             this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
-            temp = this->actor.world.rot.y - sp50->shape.rot.y;
+            temp = this->actor.world.rot.y - sp50->actor.shape.rot.y;
             if (ABS_ALT(temp) <= 0x4000) {
                 this->unk_260 = -0x4B;
             } else {
@@ -1409,7 +1409,7 @@ s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
-    EnDoor* sp44 = (EnDoor*)func_80AF7D60(globalCtx, this->unk_258);
+    EnDoor* sp44 = func_80AF7D60(globalCtx, this->unk_258);
     Vec3f sp38;
     Vec3f* sp28;
     f32 temp;

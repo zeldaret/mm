@@ -212,7 +212,7 @@ EnDoor* func_8094DF90(GlobalContext* globalCtx, s32 arg1) {
             phi_a1 = -1;
     }
 
-    return (EnDoor*)SubS_DoorFind(globalCtx, phi_a1);
+    return SubS_DoorFind(globalCtx, phi_a1);
 }
 
 s32 func_8094DFF8(EnGm* this, GlobalContext* globalCtx) {
