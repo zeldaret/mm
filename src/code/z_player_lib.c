@@ -1678,7 +1678,34 @@ void func_801278F8(GlobalContext* globalCtx, Player* player) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801278F8.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127A60.s")
+void func_80127A60(GlobalContext* globalCtx) {
+    Mtx* temp_a1 = GRAPH_ALLOC(globalCtx->state.gfxCtx, 2*sizeof(Mtx));
+    Vec3s sp2C;
+
+    OPEN_DISPS( globalCtx->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x0B, temp_a1);
+
+    Matrix_StatePush();
+
+    sp2C.x = D_801F59D0.unk_2 + 0x3E2;
+    sp2C.y = D_801F59D0.unk_4 + 0xDBE;
+    sp2C.z = D_801F59D0.unk_0 - 0x348A;
+    Matrix_SetStateRotationAndTranslation(97.0f, -1203.0f, -240.0f, &sp2C);
+
+    Matrix_ToMtx(temp_a1++);
+
+    sp2C.x = D_801F59D0.unk_2 - 0x3E2;
+    sp2C.y = -D_801F59D0.unk_4 -0xDBE;
+    sp2C.z = D_801F59D0.unk_0 - 0x348A;
+    Matrix_SetStateRotationAndTranslation(97.0f, -1203.0f, 240.0f,&sp2C);
+
+    Matrix_ToMtx(temp_a1);
+
+    Matrix_StatePop();
+
+    CLOSE_DISPS( globalCtx->state.gfxCtx);
+}
 
 void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2) {
     s32 i;
