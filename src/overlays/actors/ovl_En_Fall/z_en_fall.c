@@ -708,7 +708,7 @@ void EnFall_OpenMouthMoon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
-    gSPDisplayList(POLY_OPA_DISP++, object_fall2_DL_002970);
+    gSPDisplayList(POLY_OPA_DISP++, gOpenMouthMoonDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -847,7 +847,7 @@ void EnFall_MoonsTear_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&gFallingMoonsTearTexAnim));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gFallingMoonsTearTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gFallingMoonsTearDL);
