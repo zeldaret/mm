@@ -11,32 +11,6 @@
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "objects/object_bdoor/object_bdoor.h"
 
-typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ u8 unk_0C;
-} struct_801AEE38_0; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ struct_801AEE38_0 sub_00;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ s16 unk_14;
-} struct_801AEE38; // size = 0x18
-
-typedef struct {
-    /* 0x00 */ f32 chainAngle;
-    /* 0x04 */ f32 chainLength;
-    /* 0x08 */ f32 yShift;
-    /* 0x0C */ f32 chainsScale;
-    /* 0x10 */ f32 chainsRotZInit;
-    /* 0x14 */ Gfx* chainDL;
-    /* 0x18 */ Gfx* lockDL;
-} DoorLockInfo; // size = 0x1C
-
 // bss
 extern FaultClient sActorFaultClient; // 2 funcs
 extern CollisionPoly* D_801ED8B0;     // 1 func
@@ -3833,6 +3807,16 @@ void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
     func_800BC770(globalCtx, arg2, arg3);
 }
 
+typedef struct {
+    /* 0x00 */ f32 chainAngle;
+    /* 0x04 */ f32 chainLength;
+    /* 0x08 */ f32 yShift;
+    /* 0x0C */ f32 chainsScale;
+    /* 0x10 */ f32 chainsRotZInit;
+    /* 0x14 */ Gfx* chainDL;
+    /* 0x18 */ Gfx* lockDL;
+} DoorLockInfo; // size = 0x1C
+
 DoorLockInfo sDoorLocksInfo[DOORLOCK_MAX] = {
     /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0, 1.0f, 0.0f, gDoorChainsDL, gDoorLockDL },
     /* DOORLOCK_BOSS */ { 0.644f, 12000.0f, 8000.0f, 1.0f, 0.0f, object_bdoor_DL_000530, object_bdoor_DL_000400 },
@@ -4042,6 +4026,22 @@ s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3,
         return false;
     }
 }
+
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ u8 unk_0C;
+} struct_801AEE38_0; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ struct_801AEE38_0 sub_00;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ s16 unk_14;
+} struct_801AEE38; // size = 0x18
 
 struct_801AEE38 D_801AEE38[] = {
     { { 0x1C20, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, 0x0000 }, 170.0f, 0x3FFC },
