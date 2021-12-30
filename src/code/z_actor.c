@@ -161,7 +161,8 @@ void ActorShadow_DrawHorse(Actor* actor, Lights* lights, GlobalContext* globalCt
     ActorShadow_Draw(actor, lights, globalCtx, gHorseShadowDL, NULL);
 }
 
-void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 lightNum, f32 shadowAlpha, f32 shadowScaleX, f32 shadowScaleZ) {
+void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 lightNum, f32 shadowAlpha,
+                          f32 shadowScaleX, f32 shadowScaleZ) {
     s32 pad;
     s16 sp58;
     f32 dir2;
@@ -273,7 +274,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                     distToFloor = 30.0f;
                 }
 
-                shadowAlpha = actor->shape.shadowAlpha * (1.0f - (distToFloor * (1/30.0f)));
+                shadowAlpha = actor->shape.shadowAlpha * (1.0f - (distToFloor * (1 / 30.0f)));
                 shadowScaleZ = 1.0f - (distToFloor * (1.0f / 70.0f));
                 shadowScaleX = actor->shape.shadowScale * shadowScaleZ * actor->scale.x;
 
@@ -561,7 +562,8 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
                         Matrix_InsertTranslation(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
                         Matrix_Scale(var2, 0.15f, 1.0f, MTXMODE_APPLY);
 
-                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b, (u8)alpha);
+                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b,
+                                        (u8)alpha);
 
                         Matrix_InsertZRotation_s((targetCtx->unk4B * 512), MTXMODE_APPLY);
 
@@ -972,7 +974,7 @@ f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3) {
  * In failure (There's no space left in `globalCtx->actorCtx.unk_20C` or an allocation error happened) returns NULL
  *
  * Note there are no duplicated id checks.
- * 
+ *
  * Used only by EnLiftNuts.
  */
 void* func_800B6584(GlobalContext* globalCtx, s16 id, void* arg2, size_t size) {
@@ -1005,7 +1007,7 @@ void* func_800B6584(GlobalContext* globalCtx, s16 id, void* arg2, size_t size) {
  *
  * If success, the free'd pointer is returned.
  * If failure, NULL is returned.
- * 
+ *
  * Used only by EnLiftNuts.
  */
 void* func_800B6608(GlobalContext* globalCtx, s16 id) {
@@ -1031,7 +1033,7 @@ void* func_800B6608(GlobalContext* globalCtx, s16 id) {
 /**
  * Retrieves the first pointer stored with the id `id`.
  * If there's no pointer stored with that id, NULL is returned.
- * 
+ *
  * Used only by EnLiftNuts.
  */
 void* func_800B6680(GlobalContext* globalCtx, s16 id) {
@@ -1600,10 +1602,10 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
         actor->bgCheckFlags &= ~0x1000;
         if ((!(flags & 0x80) &&
              (BgCheck_EntitySphVsWall3(&globalCtx->colCtx, &pos, &actor->world.pos, &actor->prevPos, wallCheckRadius,
-                                        &actor->wallPoly, &bgId, actor, wallCheckHeight))) ||
+                                       &actor->wallPoly, &bgId, actor, wallCheckHeight))) ||
             ((flags & 0x80) &&
              (BgCheck_EntitySphVsWall4(&globalCtx->colCtx, &pos, &actor->world.pos, &actor->prevPos, wallCheckRadius,
-                                        &actor->wallPoly, &bgId, actor, wallCheckHeight)))) {
+                                       &actor->wallPoly, &bgId, actor, wallCheckHeight)))) {
             CollisionPoly* sp7C = actor->wallPoly;
 
             actor->bgCheckFlags |= 8;
@@ -2339,8 +2341,8 @@ typedef struct {
     /* 0x10 */ Actor* unk10;
     /* 0x14 */ Player* player;
     /* 0x18 */ u32 unk_18; // Bitmask of actor flags. The actor will only have main called if it has at least 1
-                                 // flag set that matches this bitmask
-} UpdateActor_Params;            // size = 0x1C
+                           // flag set that matches this bitmask
+} UpdateActor_Params;      // size = 0x1C
 
 Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     GlobalContext* globalCtx = params->globalCtx;
@@ -2839,7 +2841,8 @@ s32 func_800BA2D8(GlobalContext* globalCtx, Actor* actor) {
 }
 
 s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* projectedPos, f32 projectedW) {
-    if ((-actor->uncullZoneScale < projectedPos->z) && (projectedPos->z < (actor->uncullZoneForward + actor->uncullZoneScale))) {
+    if ((-actor->uncullZoneScale < projectedPos->z) &&
+        (projectedPos->z < (actor->uncullZoneForward + actor->uncullZoneScale))) {
         f32 phi_f12;
         f32 phi_f2 = CLAMP_MIN(projectedW, 1.0f);
         f32 phi_f14;
@@ -3565,8 +3568,9 @@ void Actor_SpawnBodyParts(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx*
 
     if (*dList != NULL) {
         currentMatrix = Matrix_GetCurrentState();
-        spawnedPart = Actor_SpawnAsChild(&globalCtx->actorCtx, actor, globalCtx, ACTOR_EN_PART, currentMatrix->mf[3][0],
-                                       currentMatrix->mf[3][1], currentMatrix->mf[3][2], 0, 0, actor->objBankIndex, arg2);
+        spawnedPart =
+            Actor_SpawnAsChild(&globalCtx->actorCtx, actor, globalCtx, ACTOR_EN_PART, currentMatrix->mf[3][0],
+                               currentMatrix->mf[3][1], currentMatrix->mf[3][2], 0, 0, actor->objBankIndex, arg2);
         if (spawnedPart != NULL) {
             part = (EnPart*)spawnedPart;
 
@@ -4699,8 +4703,8 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
     }
 }
 
-void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 limbPosCount, s32 effectsPerLimb, f32 scale,
-                           f32 scaleRange) {
+void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 limbPosCount,
+                           s32 effectsPerLimb, f32 scale, f32 scaleRange) {
     static Color_RGBA8 primColor = { 170, 255, 255, 255 };
     static Color_RGBA8 envColor = { 200, 200, 255, 255 };
     static Vec3f accel = { 0.0f, -1.0f, 0.0f };
