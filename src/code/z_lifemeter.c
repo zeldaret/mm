@@ -399,7 +399,7 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
         if (interfaceCtx->lifeSizeChange <= 0) {
             interfaceCtx->lifeSizeChange = 0;
             interfaceCtx->lifeSizeChangeDirection = 0;
-            if (!Player_InCsMode(&globalCtx->state) && (globalCtx->pauseCtx.state == 0) &&
+            if (!Player_InCsMode(globalCtx) && (globalCtx->pauseCtx.state == 0) &&
                 (globalCtx->pauseCtx.debugState == 0) && LifeMeter_IsCritical() && func_801690CC(globalCtx) == 0) {
                 // Player_InCsMode and func_801690CC : Check if in Cutscene
                 play_sound(NA_SE_SY_HITPOINT_ALARM);

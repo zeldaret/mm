@@ -2,6 +2,10 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 
+
+extern Gfx D_0600E2A0[];
+extern Gfx D_0600E088[];
+
 extern s16 D_801BFDA0[];
 
 struct _struct_D_801BFDD0_0x8 {
@@ -243,7 +247,11 @@ glabel D_801C0AFC
 glabel D_801C0B04
 glabel D_801C0B0C
 glabel D_801C0B14
-glabel D_801C0B1C
+#endif
+
+extern Gfx* D_801C0B1C[];
+
+#if 0
 glabel D_801C0B20
 glabel D_801C0B90
 glabel D_801C0BA8
@@ -299,10 +307,9 @@ extern Vec3f D_801C0C78[2];
 //Vec3f D_801C0C94 = { 0.0f, 0.0f, 0.0f };
 extern Vec3f D_801C0C94;
 
-#if 0
-glabel D_801C0CA8
-glabel D_801C0CE8
-#endif
+extern Color_RGB8 D_801C0CA8[];
+
+extern Vec3f D_801C0CE8[];
 
 extern Vec3f D_801C0D24[];
 
@@ -1728,7 +1735,183 @@ void func_801284A0(GlobalContext* globalCtx, Player* player) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801284A0.s")
 #endif
 
+#ifdef NON_EQUIVALENT
+// Looks equivalent
+s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
+    s32 sp6C;
+    //Gfx* sp50;
+    s32 sp48;
+    //Gfx* sp38;
+    s16 sp26;
+    s16 sp24;
+    f32 temp_f0;
+    //s16 temp_a0_2;
+    //s16 temp_v0_10;
+    //s16 temp_v0_11;
+    s32 temp_v1;
+    Color_RGB8* temp_v1_3;
+    Vec3f* temp_v1_2;
+
+    temp_v1 = &D_0400D0A8 == player->skelAnime.animation;
+    if ((temp_v1 != 0) || ((player->currentMask != 0) && (&D_0400D0C8 == player->skelAnime.animation) && (temp_f0 = player->skelAnime.curFrame - 8.0f, (temp_f0 >= 0.0f)) && (temp_f0 < 4.0f)) || (player->stateFlags2 & 0x01000000)) {
+        if (temp_v1 != 0) {
+            sp6C = player->prevMask;
+        } else {
+            sp6C = player->currentMask;
+        }
+        if (func_80127438(globalCtx, player, sp6C) != 0) {
+            OPEN_DISPS(globalCtx->state.gfxCtx);
+            //sp68 = globalCtx->state.gfxCtx;
+
+            Matrix_StatePush();
+            Matrix_InsertTranslation(-323.67f, 412.15f, -969.96f, 1);
+            Matrix_InsertRotation(-0x32BE, -0x50DE, -0x7717, 1);
+            //temp_v0_2 = sp68->polyOpa.p;
+            //sp68->polyOpa.p = temp_v0_2 + 8;
+            //temp_v0_2->words.w0 = 0xDA380003;
+            //sp60 = temp_v0_2;
+            //sp60->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            // temp_v0_3 = sp68->polyOpa.p;
+            // sp68->polyOpa.p = temp_v0_3 + 8;
+            // temp_v0_3->words.w0 = 0xDE000000;
+            // temp_v0_3->words.w1 = D_801C0B1C[sp6C];
+            gSPDisplayList(POLY_OPA_DISP++, D_801C0B1C[sp6C]);
+
+            Matrix_StatePop();
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+        return 1;
+    }
+    if (player->heldItemActionParam == 7) {
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        //sp58 = globalCtx->state.gfxCtx;
+
+        Matrix_StatePush();
+        Matrix_InsertTranslation(-428.26f, 267.2f, -33.82f, 1);
+        Matrix_InsertRotation(-0x8000, 0, 0x4000, 1);
+        Matrix_Scale(1.0f, player->unk_B08[1], 1.0f, 1);
+
+        //temp_v0_4 = sp58->polyOpa.p;
+        //sp58->polyOpa.p = temp_v0_4 + 8;
+        //temp_v0_4->words.w0 = 0xDA380003;
+        //sp50 = temp_v0_4;
+        //sp50->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        //temp_v0_5 = sp58->polyOpa.p;
+        //sp58->polyOpa.p = temp_v0_5 + 8;
+        //temp_v0_5->words.w1 = (u32) &D_040032B0;
+        //temp_v0_5->words.w0 = 0xDE000000;
+        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0032B0); 
+
+        Matrix_StatePop();
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+
+        return 1;
+    }
+    if (player->leftHandType == 5) {
+        sp48 = Player_ActionToBottle(player, player->heldItemActionParam);
+        temp_v1_2 = &D_801C0CE8[player->transformation];
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        //temp_a1_2 = globalCtx->state.gfxCtx;
+
+        Matrix_StatePush();
+        Matrix_InsertTranslation(temp_v1_2->x, temp_v1_2->y, temp_v1_2->z, 1);
+
+        //temp_v0_6 = temp_a1_2->polyXlu.p;
+        //temp_a1_2->polyXlu.p = temp_v0_6 + 8;
+        //temp_v0_6->words.w0 = 0xDA380003;
+        //sp40 = temp_a1_2;
+        //sp38 = temp_v0_6;
+        //sp38->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        if (sp48 != 0) {
+            //temp_v0_7 = temp_a1_2->polyXlu.p;
+            //temp_a1_2->polyXlu.p = temp_v0_7 + 8;
+            temp_v1_3 = &D_801C0CA8[sp48];
+            //temp_v0_7->words.w0 = 0xFB000000;
+            //temp_v0_7->words.w1 = (temp_v1_3->r << 0x18) | (temp_v1_3->g << 0x10) | (temp_v1_3->b << 8);
+            gDPSetEnvColor(POLY_OPA_DISP++, temp_v1_3->r, temp_v1_3->g, temp_v1_3->b, 0);
+
+            //temp_v0_8 = temp_a1_2->polyXlu.p;
+            //temp_a1_2->polyXlu.p = temp_v0_8 + 8;
+            //temp_v0_8->words.w0 = 0xDE000000;
+            //temp_v0_8->words.w1 = gameplay_keep_DL_000320;
+            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_000320);
+
+        }
+        //temp_v0_9 = temp_a1_2->polyXlu.p;
+        //temp_a1_2->polyXlu.p = temp_v0_9 + 8;
+        //temp_v0_9->words.w0 = 0xDE000000;
+        //temp_v0_9->words.w1 = gameplay_keep_DL_0003E0;
+        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0003E0);
+
+        Matrix_StatePop();
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+
+        return 1;
+    }
+    if (dlist == D_0600E2A0) {
+        f32 sins_1 = Math_SinS(player->unk_B86);
+        f32 sins_2;
+
+        //temp_v0_10 = player->unk_AB2.x;
+        //if ((s32) temp_v0_10 < 0) {
+        //    phi_v1 = -(s32) temp_v0_10;
+        //} else {
+        //    phi_v1 = (s32) temp_v0_10;
+        //}
+        //sp26 = (s16) (s32) ((((f32) (gGameInfo->data[0x394] + 0x14) * (f32) phi_v1) / 100.0f) * Math_SinS(temp_a0_2));
+        sp26 = (s16) (s32) ((((f32) (gGameInfo->data[0x394] + 0x14) * ABS_ALT(player->unk_AB2.x)) / 100.0f) * sins_1);
+
+
+        sins_2 = Math_SinS(player->unk_B88);
+        //temp_v0_11 = player->unk_AB2.y;
+        //phi_v1_2 = temp_v0_11;
+        //if ((s32) temp_v0_11 < 0) {
+        //    phi_v1_2 = (s16) -(s32) temp_v0_11;
+        //}
+        //sp24 = (s16) (s32) ((((f32) (gGameInfo->data[0x395] + 0xF) * (f32) phi_v1_2) / 100.0f) * Math_SinS(player->unk_B88));
+        sp24 = (s16) (s32) ((((f32) (gGameInfo->data[0x395] + 0xF) * ABS_ALT(player->unk_AB2.y)) / 100.0f) * sins_2);
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        //sp20 = globalCtx->state.gfxCtx;
+
+        Matrix_StatePush();
+        Matrix_InsertXRotation_s(sp26, 1);
+        Matrix_RotateY(sp24, 1);
+        //temp_v0_12 = sp20->polyOpa.p;
+        //sp20->polyOpa.p = temp_v0_12 + 8;
+        //temp_v0_12->words.w0 = 0xDA380003;
+        //sp18 = temp_v0_12;
+        //sp18->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        //temp_v0_13 = sp20->polyOpa.p;
+        //sp20->polyOpa.p = temp_v0_13 + 8;
+        //temp_v0_13->words.w1 = D_0600E088;
+        //temp_v0_13->words.w0 = 0xDE000000;
+        gSPDisplayList(POLY_OPA_DISP++, D_0600E088);
+
+        Matrix_StatePop();
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+
+        return 1;
+        //if (((!__gfxCtx) && (!__gfxCtx)) && (!__gfxCtx)) {}
+    }
+    return 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128640.s")
+#endif
 
 void func_80128B74(GlobalContext* globalCtx, Player* player, s32 limbIndex) {
     Vec3f* footPos = &D_801C0D24[player->transformation];
