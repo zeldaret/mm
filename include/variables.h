@@ -3996,7 +3996,7 @@ extern UNK_TYPE D_0407F218;
 extern UNK_TYPE D_040815D0;
 extern UNK_TYPE D_04081628;
 extern UNK_TYPE D_04083534;
-extern UNK_TYPE D_04091BE0;
+extern TexturePtr D_04091BE0[];
 extern UNK_TYPE D_04091CE0;
 
 extern Gfx D_05000C40[];

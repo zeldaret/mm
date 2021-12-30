@@ -253,13 +253,19 @@ extern Gfx* D_801C0B1C[];
 
 #if 0
 glabel D_801C0B20
-glabel D_801C0B90
-glabel D_801C0BA8
+#endif
+extern Vec3f D_801C0B90[2];
+
+extern Vec3f D_801C0BA8;
+#if 0
 glabel D_801C0BAC
 glabel D_801C0BB0
-glabel D_801C0BB4
+#endif
+extern Vec3f D_801C0BB4;
+#if 0
 glabel D_801C0BB8
 #endif
+
 
 // Gfx?
 extern UNK_TYPE D_801C0BC0;
@@ -359,9 +365,7 @@ extern struct_801F58B0 D_801F58B0[3][3];
 
 extern struct_801F58B0 D_801F59AC[][3];
 
-#if 0
-glabel D_801F59B0
-#endif
+extern Vec3f D_801F59B0;
 
 extern s32 D_801F59C8[2];
 
@@ -1633,7 +1637,116 @@ void func_8012754C(GlobalContext* globalCtx, Player* player) {
     AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&D_0A001CD8));
 }
 
+#if 0
+void func_80127594(GlobalContext* globalCtx, Player* player) {
+    f32 temp_f0;
+    f32 temp_f20;
+    f32 temp_f22;
+    s16 temp_s0_2;
+    s32 temp_v0;
+    u32* temp_s0;
+    Vec3f* phi_s6;
+    Vec3f* phi_s2;
+    s32* phi_s3;
+    f32 phi_f20;
+    Gfx* phi_s1;
+    s32 phi_v0;
+    //f32 phi_f20_2;
+    s16 phi_s0;
+    s32 i;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    phi_s6 = D_801C0B90;
+    phi_s2 = &D_801F59B0;
+    phi_s3 = D_801F59C8;
+    phi_s1 = POLY_XLU_DISP;
+    do {
+        temp_f22 = ((f32) *phi_s3 / 400.0f) * 0.1f;
+        Matrix_MultiplyVector3fByState(phi_s6, phi_s2);
+        phi_s2->y += -10.0f * temp_f22;
+        if (*phi_s3 < 0x190) {
+            //temp_s0 = &gSegments[(u32) ((s32) D_04091BE0 * 0x10) >> 0x1C];
+            temp_s0 = &gSegments[(u32) ((s32) D_04091BE0 * 0x10) >> 0x1C];
+            if (temp_f22 > 0.05f) {
+                phi_f20 = 0.05f;
+            } else {
+                phi_f20 = temp_f22;
+            }
+            Matrix_StatePush();
+            Matrix_InsertTranslation(phi_s2->x, phi_s2->y, phi_s2->z, 0);
+            Matrix_Scale(phi_f20, temp_f22, phi_f20, 1);
+            //phi_s1->words.w0 = 0xDA380002;
+            //phi_s1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+            gSPMatrix(&phi_s1[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            //TODO
+            //phi_s1->unk_8 = 0xDB060020;
+            //phi_s1->unk_C = (s32) (*temp_s0 + ((s32) &D_04091BE0 & 0xFFFFFF));
+            //gSPSegment(&phi_s1[1], 0x08, (*temp_s0 + ((s32) D_04091BE0 & 0xFFFFFF)));
+            //gSPSegment(&phi_s1[1], 0x08, (*temp_s0 + ((s32) D_04091BE0 & 0xFFFFFF)));
+            gSPSegment(&phi_s1[1], 0x08, (*temp_s0 + ((s32) D_04091BE0 & 0xFFFFFF)));
+
+
+            //phi_s1->unk_10 = 0xFA000000;
+            //phi_s1->unk_14 = -1;
+            gDPSetPrimColor(&phi_s1[2], 0, 0, 255, 255, 255, 255);
+
+            //phi_s1->unk_18 = 0xFB000000;
+            //phi_s1->unk_1C = 0x96969600;
+            gDPSetEnvColor(&phi_s1[3], 150, 150, 150, 0);
+
+            //phi_s1->unk_20 = 0xDE000000;
+            //phi_s1->unk_24 = D_040301B0;
+            gSPDisplayList(&phi_s1[4], D_040301B0);
+
+            //phi_s1->unk_2C = 0x40;
+            //phi_s1->unk_28 = 0xD8380002;
+            gSPPopMatrix(&phi_s1[5], G_MTX_MODELVIEW);
+
+            Matrix_StatePop();
+            //phi_s1 = phi_s1 + 0x30;
+            phi_s1 = &phi_s1[6];
+        } else {
+            temp_f0 = sqrtf(SQ(player->actor.velocity.x) + SQ(player->actor.velocity.z));
+            temp_v0 = (temp_f0 * 2000.0f);
+            D_801C0BA8.y = temp_f0 * 0.4f;
+            D_801C0BB4.y = -0.3f;
+            phi_s0 = temp_v0;
+            if ((s16)temp_v0 > 0x3E80) {
+                phi_s0 = 0x3E80;
+            }
+
+            //phi_s0 = CLAMP_MIN(temp_v0, 0x3E80);
+
+            if (phi_s2 != &D_801F59B0) {
+                phi_v0 = phi_s0;
+            } else {
+                phi_v0 = -phi_s0;
+            }
+            temp_f20 = temp_f0 * 0.2f;
+            temp_s0_2 = phi_v0 + player->actor.focus.rot.y;
+            //phi_f20_2 = temp_f20;
+            //if (temp_f20 > 4.0f) {
+            //    phi_f20_2 = 4.0f;
+            //}
+            //phi_f20_2 = CLAMP_MIN(temp_f20, 4.0f);
+            D_801C0BA8.x = -Math_SinS(temp_s0_2) * CLAMP_MIN(temp_f20, 4.0f);
+            D_801C0BA8.z = -Math_CosS(temp_s0_2) * CLAMP_MIN(temp_f20, 4.0f);
+            EffectSsDtBubble_SpawnColorProfile(globalCtx, phi_s2, &D_801C0BA8, &D_801C0BB4, 0x14, 0x14, 3, 0);
+            *phi_s3 += -0x190;
+        }
+
+        phi_s2 = phi_s2 + 1;
+        phi_s6 += 1;
+        phi_s3 += 1;
+    } while (phi_s2 != (Vec3f*)D_801F59C8);
+    POLY_XLU_DISP = phi_s1;
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")
+void func_80127594(GlobalContext* globalCtx, Player* player);
+#endif
 
 extern AnimatedMaterial D_0A0011F8;
 
