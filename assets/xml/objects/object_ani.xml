@@ -42,6 +42,7 @@
         <Texture Name="object_ani_Tex_0060D8" OutName="tex_0060D8" Format="i8" Width="8" Height="8" Offset="0x60D8" />
         <Texture Name="object_ani_Tex_006118" OutName="tex_006118" Format="ci8" Width="16" Height="16" Offset="0x6118" />
         <Texture Name="object_ani_Tex_006218" OutName="tex_006218" Format="ci8" Width="16" Height="16" Offset="0x6218" />
+        <Texture Name="object_ani_Tex_006318" OutName="tlut_006318" Format="rgba16" Width="192" Height="1" Offset="0x6318" />
         <Texture Name="object_ani_Tex_006498" OutName="tex_006498" Format="ci8" TlutOffset="0x6318" Width="32" Height="32" Offset="0x6498" />
         <Texture Name="object_ani_Tex_006898" OutName="tex_006898" Format="ci8" Width="16" Height="16" Offset="0x6898" />
         <Texture Name="object_ani_Tex_006998" OutName="tex_006998" Format="ci8" Width="8" Height="8" Offset="0x6998" />

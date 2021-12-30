@@ -23,6 +23,8 @@ void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, GlobalContext* globalCtx);
 void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx);
 void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx);
 
+extern CollisionHeader D_06000988;
+
 const ActorInit Bg_Goron_Oyu_InitVars = {
     ACTOR_BG_GORON_OYU,
     ACTORCAT_BG,
@@ -153,7 +155,7 @@ void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
     DynaPolyActor_Init(&this->dyna, 1);
-    CollisionHeader_GetVirtual((CollisionHeader*)&object_oyu_Blob_000988, &colHeader);
+    CollisionHeader_GetVirtual(&D_06000988, &colHeader);
 
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
 
