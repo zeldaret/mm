@@ -473,7 +473,7 @@ void Boss06_Update(Actor* thisx, GlobalContext* globalCtx) {
             phi_f26 += (M_PI / 64);
             phi_f24 += 0.030679617f;
 
-            Matrix_InsertZRotation_f(i * (M_PI / 512), 0);
+            Matrix_InsertZRotation_f(i * (M_PI / 512), MTXMODE_NEW);
             Matrix_GetStateTranslationAndScaledY(temp_f22, &sp7C);
 
             sp7C.x += 32.0f + this->unk_1BC;
@@ -575,8 +575,8 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_knight_Matanimheader_019360));
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y - 234.0f,
                                  this->actor.world.pos.z + 30.0f, 0);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
-        Matrix_InsertTranslation(0.0f, 0.0f, -1112.0f, 1);
+        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+        Matrix_InsertTranslation(0.0f, 0.0f, -1112.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x9B, 255, 255, (u8)((140.0f * sp68) + 115.0f), spD3);
@@ -586,21 +586,20 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (this->unk_144 & 1) {
-
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&this->unk_200));
 
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + this->unk_1A8,
-                                 this->actor.world.pos.z, 0);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, 0.0f, 1);
-        Matrix_RotateY(this->actor.shape.rot.y, 1);
+                                 this->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_knight_DL_0193B0);
 
         if (this->unk_1D8 > 0.0f) {
             Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 84.0f,
-                                     this->actor.world.pos.z - 2.0f, 0);
-            Matrix_RotateY(this->actor.shape.rot.y, 1);
+                                     this->actor.world.pos.z - 2.0f, MTXMODE_NEW);
+            Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
             func_809F2120(1, 0x71A5, 0x263A);
 
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
@@ -615,14 +614,14 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                                                 ((globalCtx->gameplayFrames + (i * 10)) * -20) % 512, 0x20, 0x80));
 
                     Matrix_InsertTranslation((D_809F4370[i].x - 32.0f) * -2.4f, (D_809F4370[i].y - 32.0f) * -2.4f, 0.0f,
-                                             1);
-                    Matrix_InsertZRotation_f(i * (M_PI / 64), 1);
+                                             MTXMODE_APPLY);
+                    Matrix_InsertZRotation_f(i * (M_PI / 64), MTXMODE_APPLY);
 
                     if (func_809F2140() < 0.5f) {
-                        Matrix_InsertYRotation_f(M_PI, 1);
+                        Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
                     }
 
-                    Matrix_Scale(-0.002f, -this->unk_1D8, 1.0f, 1);
+                    Matrix_Scale(-0.002f, -this->unk_1D8, 1.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -641,14 +640,14 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
         Matrix_InsertTranslation(this->actor.world.pos.x + this->unk_1B0,
                                  this->actor.world.pos.y + 84.0f + this->unk_1B4,
-                                 (this->actor.world.pos.z - 2.0f) + spE0, 0);
+                                 (this->actor.world.pos.z - 2.0f) + spE0, MTXMODE_NEW);
 
         gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)((140.0f * sp68) + 115.0f), temp_s2);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 205, (u8)((100.0f * sp68) + 65.0f), 128);
 
-        Matrix_Scale(this->unk_1DC, this->unk_1DC, 1.0f, 1);
-        Matrix_InsertZRotation_s(globalCtx->gameplayFrames * 64, 1);
+        Matrix_Scale(this->unk_1DC, this->unk_1DC, 1.0f, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(globalCtx->gameplayFrames * 64, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
