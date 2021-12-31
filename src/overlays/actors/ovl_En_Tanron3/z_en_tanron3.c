@@ -113,7 +113,8 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
     Collider_InitAndSetCylinder(globalCtx, &this->atCollider, &this->actor, &sCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSmallFishSkel, &gGyorgSmallFishSwimAnim, this->jointTable, this->morphTable, EN_TANRON3_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSmallFishSkel, &gGyorgSmallFishSwimAnim, this->jointTable,
+                       this->morphTable, EN_TANRON3_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.02f);
     EnTanron3_SetupLive(this, globalCtx);
     this->actor.flags &= ~1;
@@ -450,7 +451,7 @@ void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron3* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    
+
     func_8012C28C(globalCtx->state.gfxCtx);
     if ((this->fogTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
