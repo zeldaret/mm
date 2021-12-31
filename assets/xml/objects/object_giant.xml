@@ -1,4 +1,7 @@
 ﻿<Root>
+    <!--
+        Object for the Four Giants
+    -->
     <File Name="object_giant" Segment="6">
         <!-- Giant Unused Animation -->
         <Animation Name="gGiantLargeStrideAnim" Offset="0x2168" /> <!-- Original name is "kya_testwalk" -->
