@@ -1,4 +1,8 @@
 ﻿<Root>
+    <!--
+        Open-mouth version of the moon and the "warp beam" that emerges from the
+        moon's mouth, both used in the cutscene before warping to the moon.
+    -->
     <File Name="object_fall2" Segment="6">
         <DList Name="gOpenMouthMoonDL" Offset="0x2970" />
         <Texture Name="gOpenMouthMoonFarSideTLUT" OutName="open_mouth_moon_far_side_tlut" Format="rgba16" Width="4" Height="4" Offset="0x34A8" />

@@ -1,4 +1,8 @@
 ﻿<Root>
+    <!--
+        The Moon's Tear that can be seen falling from the telescope,
+        along with its associated fire trail.
+    -->
     <File Name="object_moonston" Segment="6">
         <DList Name="gFallingMoonsTearDL" Offset="0x400" />
         <DList Name="gFallingMoonsTearFireDL" Offset="0x4C8" />
