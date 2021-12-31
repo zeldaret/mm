@@ -31,7 +31,7 @@
         <DList Name="gGiantLeftHandDL" Offset="0x5218" />
 
         <!-- Giant Textures -->
-        <Texture Name="gGiantTLUT" OutName="giant_palette" Format="rgba16" Width="16" Height="16" Offset="0x5380" />
+        <Texture Name="gGiantTLUT" OutName="giant_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5380" />
         <Texture Name="gGiantFootTex" OutName="giant_foot" Format="ci8" Width="16" Height="16" Offset="0x5580" />
         <Texture Name="gGiantShinTex" OutName="giant_shin" Format="ci8" Width="16" Height="16" Offset="0x5680" />
         <Texture Name="gGiantForearmAndKneeTex" OutName="giant_forearm_and_knee" Format="ci8" Width="16" Height="16" Offset="0x5780" />
