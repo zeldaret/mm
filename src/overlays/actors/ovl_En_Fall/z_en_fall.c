@@ -6,7 +6,7 @@
  * This actor handles mutliple types of moon as well as a variety of effects. Specifically, it handles:
  * - Moon: A high-detail moon, used in Termina Field, the Clock Tower, and a few cutscenes.
  * - StoppedClosedMouthMoon: A high-detail moon, used in the Clock Tower after the Giants stop the moon from crashing.
- * - StoppedOpenMouthMoon: A high-detail open-mouthed moon, used in the cutscene prior to warping to the moon's interior.
+ * - StoppedOpenMouthMoon: A high-detail open-mouthed moon, used in the cutscene prior to warping to the moon.
  * - CrashingMoon: An enlarged high-detail moon, used for when the moon is crashing.
  * - LodMoon: A low-detail moon, used everywhere else.
  * - MoonsTear: The Moon's Tear that can be seen falling from the telescope, along with its associated fire trail.
@@ -379,7 +379,7 @@ void EnFall_StoppedOpenMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCont
                 if (this->eyeGlowIntensity == 0.0f) {
                     Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_EYE_FLASH);
                 }
-                this->eyeGlowIntensity += 0.033333335f;
+                this->eyeGlowIntensity += 1 / 30.0f;
                 if (this->eyeGlowIntensity > 1.0f) {
                     this->eyeGlowIntensity = 1.0f;
                 }
@@ -500,7 +500,7 @@ void EnFall_MoonsTear_Initialize(EnFall* this) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
-void EnFall_DoNothing(EnFall* this, GlobalContext* globalCtx) {
+void EnFall_MoonsTear_DoNothing(EnFall* this, GlobalContext* globalCtx) {
 }
 
 void EnFall_MoonsTear_Fall(EnFall* this, GlobalContext* globalCtx) {
@@ -521,7 +521,7 @@ void EnFall_MoonsTear_Fall(EnFall* this, GlobalContext* globalCtx) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
             this->actor.draw = NULL;
-            this->actionFunc = EnFall_DoNothing;
+            this->actionFunc = EnFall_MoonsTear_DoNothing;
         } else {
             func_800B9010(&this->actor, NA_SE_EV_MOONSTONE_FALL - SFX_FLAG);
         }
@@ -701,7 +701,7 @@ void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->flags |= FLAG_FIRE_RING_APPEARS;
     }
     if (this->flags & FLAG_FIRE_RING_APPEARS) {
-        this->fireRingAlpha += 0.033333335f;
+        this->fireRingAlpha += 1 / 30.0f;
         if (this->fireRingAlpha > 1.0f) {
             this->fireRingAlpha = 1.0f;
         }
@@ -774,7 +774,7 @@ void EnFall_LodMoon_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
-    
+
     gSPDisplayList(POLY_OPA_DISP++, gLodmoonEyesDL);
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH);
     gSPDisplayList(POLY_OPA_DISP++, gLodmoonMoonDL);

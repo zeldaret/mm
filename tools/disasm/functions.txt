@@ -10920,7 +10920,7 @@
     0x80A6CD38:("EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions",),
     0x80A6CD74:("EnFall_Moon_PerformDefaultActions",),
     0x80A6CECC:("EnFall_MoonsTear_Initialize",),
-    0x80A6CF60:("EnFall_DoNothing",),
+    0x80A6CF60:("EnFall_MoonsTear_DoNothing",),
     0x80A6CF70:("EnFall_MoonsTear_Fall",),
     0x80A6D0DC:("EnFall_Update",),
     0x80A6D100:("EnFall_FireBall_SetPerVertexAlpha",),
