@@ -7,11 +7,6 @@ struct EnTanron3;
 
 typedef void (*EnTanron3ActionFunc)(struct EnTanron3*, GlobalContext*);
 
-#define TANRON3_WORK_TIMER_PICK_NEW_DEVIATION 0
-#define TANRON3_WORK_TIMER_DIE 0
-#define TANRON3_WORK_TIMER_OUT_OF_WATER 1
-#define TANRON3_WORK_TIMER_ATTACK 2
-#define TANRON3_WORK_TIMER_WAIT 2
 #define TANRON3_WORK_TIMER_MAX 3
 
 typedef struct {
@@ -25,11 +20,25 @@ typedef struct {
     /* 0x40 */ char unk_40[0x4];
 } UnkTanron3Effect;
 
+typedef enum {
+    /*  0 */ EN_TANRON3_LIMB_NONE,
+    /*  1 */ EN_TANRON3_LIMB_ROOT, // Root of Body Root and Head
+    /*  2 */ EN_TANRON3_LIMB_BODY_ROOT, // Root of Trunk Root
+    /*  3 */ EN_TANRON3_LIMB_TRUNK_ROOT, // Root of Tail Fin and Trunk
+    /*  4 */ EN_TANRON3_LIMB_TAIL_FIN,
+    /*  5 */ EN_TANRON3_LIMB_TRUNK,
+    /*  6 */ EN_TANRON3_LIMB_LEFT_FIN,
+    /*  7 */ EN_TANRON3_LIMB_DORSAL_FIN,
+    /*  8 */ EN_TANRON3_LIMB_RIGHT_FIN,
+    /*  9 */ EN_TANRON3_LIMB_HEAD,
+    /* 10 */ EN_TANRON3_LIMB_MAX
+} Tanron3Limbs;
+
 typedef struct EnTanron3 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[10];
-    /* 0x1C4 */ Vec3s morphTable[10];
+    /* 0x188 */ Vec3s jointTable[EN_TANRON3_LIMB_MAX];
+    /* 0x1C4 */ Vec3s morphTable[EN_TANRON3_LIMB_MAX];
     /* 0x200 */ s16 timer;
     /* 0x202 */ u8 isNonHostile; // If true, the fish will not move towards the player to attack them
     /* 0x203 */ u8 isBeached; // If true, the fish is on the central platform flopping around
@@ -48,8 +57,8 @@ typedef struct EnTanron3 {
     /* 0x248 */ Vec3s targetShapeRotation;
     /* 0x250 */ s32 currentRotationAngle;
     /* 0x254 */ s32 nextRotationAngle;
-    /* 0x258 */ s16 tailRotation;
-    /* 0x25A */ s16 trunkRotation;
+    /* 0x258 */ s16 trunkRotation;
+    /* 0x25A */ s16 tailRotation;
     /* 0x25C */ s16 bodyRotation;
     /* 0x260 */ ColliderCylinder atCollider;
     /* 0x2AC */ ColliderCylinder acCollider;
