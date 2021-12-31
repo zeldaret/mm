@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Interior clocktower objects including the ceiling cog, rotating corridor, organ, center cog, stone doors, and water wheel  -->
     <File Name="object_ctower_rot" Segment="6">
         <!-- TLUTs -->
         <Texture Name="gClockTowerCeilingCogWoodTLUT" OutName="clocktower_ceiling_cog_wood_tlut" Format="rgba16" Width="4" Height="4" Offset="0x0" />
