@@ -1,11 +1,11 @@
 ﻿<Root>
     <File Name="object_ctower_rot" Segment="6">
         <!-- TLUTs -->
-        <Texture Name="gClockTowerCeilingCogWoodTLUT" OutName="clocktower_ceiling_cog_wood_palette" Format="rgba16" Width="4" Height="4" Offset="0x0" />
-        <Texture Name="gClockTowerCeilingCogWoodMetalTLUT" OutName="clocktower_ceiling_cog_wood_metal_palette" Format="rgba16" Width="4" Height="4" Offset="0x20" />
-        <Texture Name="gClockTowerCooridorTLUT" OutName="clocktower_cooridor_palette" Format="rgba16" Width="16" Height="16" Offset="0x40" />
-        <Texture Name="gClockTowerOrganTLUT" OutName="clocktower_organ_palette" Format="rgba16" Width="16" Height="16" Offset="0x240" />
-        <Texture Name="gClockTowerStoneDoorTLUT" OutName="clocktower_stone_door_palette" Format="rgba16" Width="4" Height="4" Offset="0x440" />
+        <Texture Name="gClockTowerCeilingCogWoodTLUT" OutName="clocktower_ceiling_cog_wood_tlut" Format="rgba16" Width="4" Height="4" Offset="0x0" />
+        <Texture Name="gClockTowerCeilingCogWoodMetalTLUT" OutName="clocktower_ceiling_cog_wood_metal_tlut" Format="rgba16" Width="4" Height="4" Offset="0x20" />
+        <Texture Name="gClockTowerCooridorTLUT" OutName="clocktower_cooridor_tlut" Format="rgba16" Width="16" Height="16" Offset="0x40" />
+        <Texture Name="gClockTowerOrganTLUT" OutName="clocktower_organ_tlut" Format="rgba16" Width="16" Height="16" Offset="0x240" />
+        <Texture Name="gClockTowerStoneDoorTLUT" OutName="clocktower_stone_door_tlut" Format="rgba16" Width="4" Height="4" Offset="0x440" />
 
         <!-- Textures -->
 
