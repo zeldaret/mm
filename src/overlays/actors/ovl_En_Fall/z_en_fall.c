@@ -4,14 +4,15 @@
  * Description: The moon and related effects, along with the Moon's Tear that falls from its eye.
  *
  * This actor handles mutliple types of moon as well as a variety of effects. Specifically, it handles:
- * - A high-detail moon, used in Termina Field, the Clock Tower, and a few cutscenes
- * - A high-detail open-mouthed moon, used in the cutscene prior to warping to the moon's interior.
- * - An enlarged high-detail moon, used for when the moon is crashing.
- * - A low-detail moon, used everywhere else. Its object file is named "Lodmoon".
- * - The Moon's Tear that can be seen falling from the telescope, along with its associated fire trail.
- * - The ball of fire that surrounds the moon when it is crashing.
- * - The debris that rises from the ground as the moon is crashing.
- * - The ring of fire that expands outward when the moon is almost done crashing.
+ * - Moon: A high-detail moon, used in Termina Field, the Clock Tower, and a few cutscenes.
+ * - StoppedClosedMouthMoon: A high-detail moon, used in the Clock Tower after the Giants stop the moon from crashing.
+ * - StoppedOpenMouthMoon: A high-detail open-mouthed moon, used in the cutscene prior to warping to the moon's interior.
+ * - CrashingMoon: An enlarged high-detail moon, used for when the moon is crashing.
+ * - LodMoon: A low-detail moon, used everywhere else.
+ * - MoonsTear: The Moon's Tear that can be seen falling from the telescope, along with its associated fire trail.
+ * - Fireball: The ball of fire that surrounds the moon when it is crashing.
+ * - RisingDebris: The debris that rises from the ground as the moon is crashing.
+ * - FireRing: The ring of fire that expands outward when the moon is almost done crashing.
  */
 
 #include "z_en_fall.h"
@@ -299,6 +300,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 break;
 
             default:
+                // used for EN_FALL_TYPE_TERMINA_FIELD_MOON and anything else that isn't in the enum
                 this->actor.draw = EnFall_Moon_Draw;
                 this->dayStartTime = CLOCK_TIME(6, 0);
                 this->currentDay = CURRENT_DAY;
@@ -453,9 +455,7 @@ void EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions(EnFall* this, Glo
 }
 
 /**
- * This is rarely used in the final game. One example of where it *is* used
- * is when the moon is crashing; there is a second, smaller moon hidden within
- * the larger moon that uses this action function.
+ * Used by the Moon in Termina Field, as well as all LodMoons.
  */
 void EnFall_Moon_PerformDefaultActions(EnFall* this, GlobalContext* globalCtx) {
     u16 currentDay;
@@ -716,6 +716,10 @@ void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Used for all closed-mouth high-detail moons, including
+ * StoppedClosedMouthMoon and CrashingMoon.
+ */
 void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     // This offsets the moon's focus so that the Moon's Tear actually falls
     // out of its eye when looking at it through the telescope.
