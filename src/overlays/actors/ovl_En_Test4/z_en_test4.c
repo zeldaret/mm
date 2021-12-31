@@ -399,9 +399,9 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     func_80A41FA4(this, globalCtx);
                 } else {
                     gSaveContext.unk_3F64 = 0.0f;
-                    func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF,
+                    Play_SetRespawnData(&globalCtx->state, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF,
                                   &player->unk_3C0, player->unk_3CC);
-                    func_80169EFC(globalCtx);
+                    func_80169EFC(&globalCtx->state);
                     if (player->stateFlags1 & 0x800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
@@ -448,7 +448,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     } else {
                         phi_v0 = 0xBFF;
                     }
-                    func_80169DCC(globalCtx, 1, entranceIndex, player->unk_3CE, phi_v0, &player->unk_3C0,
+                    Play_SetRespawnData(&globalCtx->state, 1, entranceIndex, player->unk_3CE, phi_v0, &player->unk_3C0,
                                   player->unk_3CC);
 
                     if ((globalCtx->sceneNum == SCENE_TENMON_DAI) || (globalCtx->sceneNum == SCENE_00KEIKOKU)) {

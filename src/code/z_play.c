@@ -110,25 +110,139 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169C84.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/convert_scene_number_among_shared_scenes.s")
+/**
+ * Converts the number of a scene to its "original" equivalent, the scene with the default version which the player
+ * first enters.
+ */
+s16 Play_GetOriginalSceneNumber(s16 sceneNum) {
+    // Inverted Stone Tower Temple  -> Stone Tower Temple
+    if (sceneNum == SCENE_INISIE_R) {
+        return SCENE_INISIE_N;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169D40.s")
+    // Purified Southern Swamp      -> Poisoned Sothern Swamp
+    if (sceneNum == SCENE_20SICHITAI2) {
+        return SCENE_20SICHITAI;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169DCC.s")
+    // Spring Mountain Village      -> Winter Mountain Village
+    if (sceneNum == SCENE_10YUKIYAMANOMURA2) {
+        return SCENE_10YUKIYAMANOMURA;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169E6C.s")
+    // Spring Goron Village         -> Winter Goron Village
+    if (sceneNum == SCENE_11GORONNOSATO2) {
+        return SCENE_11GORONNOSATO;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169ECC.s")
+    // Spring Path to Goron Village -> Winter Path to Goron Village
+    if (sceneNum == SCENE_17SETUGEN2) {
+        return SCENE_17SETUGEN;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169EFC.s")
+    // Inverted Stone Tower         -> Stone Tower
+    if (sceneNum == SCENE_F41) {
+        return SCENE_F40;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169F78.s")
+    return sceneNum;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169FDC.s")
+/**
+ * Copies the flags set in ActorContext over to the current scene's CycleSceneFlags. Special case for Inverted Stone
+ * Tower Temple
+ */
+void Play_SaveCycleSceneFlags(GameState* state) {
+    GlobalContext* globalCtx = (GlobalContext*)state;
+    CycleSceneFlags* cycleSceneFlags;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169FFC.s")
+    cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(globalCtx->sceneNum)];
+    cycleSceneFlags->chest = globalCtx->actorCtx.chestFlags;
+    cycleSceneFlags->swch0 = globalCtx->actorCtx.switchFlags[0];
+    cycleSceneFlags->swch1 = globalCtx->actorCtx.switchFlags[1];
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/FrameAdvance_IsEnabled.s")
+    if (globalCtx->sceneNum == SCENE_INISIE_R) { // Inverted Stone Tower Temple
+        cycleSceneFlags = &gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
+    }
+
+    cycleSceneFlags->collectible = globalCtx->actorCtx.collectibleFlags[0];
+    cycleSceneFlags->clearedRoom = globalCtx->actorCtx.clearedRooms;
+}
+
+void Play_SetRespawnData(GameState* state, s32 respawnMode, u16 sceneSetup, s32 roomIndex, s32 playerParams, Vec3f* pos,
+                         s16 yaw) {
+    GlobalContext* globalCtx = (GlobalContext*)state;
+
+    gSaveContext.respawn[respawnMode].entranceIndex = Entrance_CreateIndex(sceneSetup >> 9, 0, sceneSetup & 0xF);
+    gSaveContext.respawn[respawnMode].roomIndex = roomIndex;
+    gSaveContext.respawn[respawnMode].pos = *pos;
+    gSaveContext.respawn[respawnMode].yaw = yaw;
+    gSaveContext.respawn[respawnMode].playerParams = playerParams;
+    gSaveContext.respawn[respawnMode].tempSwchFlags = globalCtx->actorCtx.switchFlags[2];
+    gSaveContext.respawn[respawnMode].unk_18 = globalCtx->actorCtx.collectibleFlags[1];
+    gSaveContext.respawn[respawnMode].tempCollectFlags = globalCtx->actorCtx.collectibleFlags[2];
+}
+
+void Play_SetupRespawnPoint(GameState* state, s32 respawnMode, s32 playerParams) {
+    GlobalContext* globalCtx = (GlobalContext*)state;
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (globalCtx->sceneNum != SCENE_KAKUSIANA) { // Grottos
+        Play_SetRespawnData(&globalCtx->state, respawnMode, (u16)((void)0, gSaveContext.entranceIndex),
+                            globalCtx->roomCtx.currRoom.num, playerParams, &player->actor.world.pos,
+                            player->actor.shape.rot.y);
+    }
+}
+
+// Override respawn data in Sakon's Hideout
+void func_80169ECC(GlobalContext* globalCtx) {
+    if (globalCtx->sceneNum == SCENE_SECOM) {
+        globalCtx->nextEntranceIndex = 0x2060;
+        gSaveContext.respawnFlag = -7;
+    }
+}
+
+// Gameplay_TriggerVoidOut
+void func_80169EFC(GameState* state) {
+    GlobalContext* globalCtx = (GlobalContext*)state;
+
+    gSaveContext.respawn[0].tempSwchFlags = globalCtx->actorCtx.switchFlags[2];
+    gSaveContext.respawn[0].unk_18 = globalCtx->actorCtx.collectibleFlags[1];
+    gSaveContext.respawn[0].tempCollectFlags = globalCtx->actorCtx.collectibleFlags[2];
+    globalCtx->nextEntranceIndex = gSaveContext.respawn[0].entranceIndex;
+    gSaveContext.respawnFlag = 1;
+    func_80169ECC(globalCtx);
+    globalCtx->sceneLoadFlag = 0x14;
+    globalCtx->unk_1887F = 2;
+}
+
+// Gameplay_LoadToLastEntrance ?
+void func_80169F78(GameState* state) {
+    GlobalContext* globalCtx = (GlobalContext*)state;
+
+    globalCtx->nextEntranceIndex = gSaveContext.respawn[2].entranceIndex;
+    gSaveContext.respawnFlag = -1;
+    func_80169ECC(globalCtx);
+    globalCtx->sceneLoadFlag = 0x14;
+    globalCtx->unk_1887F = 2;
+}
+
+// Gameplay_TriggerRespawn ?
+void func_80169FDC(GameState* state) {
+    func_80169F78(state);
+}
+
+s32 func_80169FFC(GameState* state) {
+    GlobalContext* globalCtx = (GlobalContext*)state;
+
+    return globalCtx->roomCtx.currRoom.mesh->type0.type != 1;
+}
+
+s32 FrameAdvance_IsEnabled(GameState* state) {
+    GlobalContext* globalCtx = (GlobalContext*)state;
+
+    return globalCtx->frameAdvCtx.enabled != 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016A02C.s")
 

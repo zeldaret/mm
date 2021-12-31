@@ -41,6 +41,15 @@ typedef struct {
     /* 0x1C */ u32 tempCollectFlags;
 } RespawnData; // size = 0x20
 
+
+typedef struct {
+    /* 0x00 */ u32 chest;
+    /* 0x04 */ u32 swch0;
+    /* 0x08 */ u32 swch1;
+    /* 0x0C */ u32 clearedRoom;
+    /* 0x10 */ u32 collectible;
+} CycleSceneFlags; // size = 0x14
+
 typedef struct {
     /* 0x0000 */ u32 entranceIndex;          // "scene_no"
     /* 0x0004 */ u8 equippedMask;            // "player_mask"
@@ -174,7 +183,7 @@ typedef struct {
     /* 0x3F5C */ s32 unk_3F5C;           // "bet_rupees"
     /* 0x3F60 */ u8 unk_3F60;            // "framescale_flag"
     /* 0x3F64 */ f32 unk_3F64;           // "framescale_scale"
-    /* 0x3F68 */ u32 unk_3F68[5][120];
+    /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120]; // Scene flags that are temporarily stored over the duration of a single 3-day cycle
     /* 0x48C8 */ u16 unk_48C8;           // "scene_id_mix"
     /* 0x48CA */ u8 maskMaskBit[3];      // masks given away on the Moon
     /* 0x48CD */ char unk_48CD[24];

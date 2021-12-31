@@ -2538,10 +2538,10 @@ asm/non_matchings/code/z_play/func_80169BC4.s,func_80169BC4,0x80169BC4,0xD
 asm/non_matchings/code/z_play/func_80169BF8.s,func_80169BF8,0x80169BF8,0x1B
 asm/non_matchings/code/z_play/func_80169C64.s,func_80169C64,0x80169C64,0x8
 asm/non_matchings/code/z_play/func_80169C84.s,func_80169C84,0x80169C84,0xE
-asm/non_matchings/code/z_play/convert_scene_number_among_shared_scenes.s,convert_scene_number_among_shared_scenes,0x80169CBC,0x21
-asm/non_matchings/code/z_play/func_80169D40.s,func_80169D40,0x80169D40,0x23
-asm/non_matchings/code/z_play/func_80169DCC.s,func_80169DCC,0x80169DCC,0x28
-asm/non_matchings/code/z_play/func_80169E6C.s,func_80169E6C,0x80169E6C,0x18
+asm/non_matchings/code/z_play/Play_GetOriginalSceneNumber.s,Play_GetOriginalSceneNumber,0x80169CBC,0x21
+asm/non_matchings/code/z_play/Play_SaveCycleSceneFlags.s,Play_SaveCycleSceneFlags,0x80169D40,0x23
+asm/non_matchings/code/z_play/Play_SetRespawnData.s,Play_SetRespawnData,0x80169DCC,0x28
+asm/non_matchings/code/z_play/Play_SetupRespawnPoint.s,Play_SetupRespawnPoint,0x80169E6C,0x18
 asm/non_matchings/code/z_play/func_80169ECC.s,func_80169ECC,0x80169ECC,0xC
 asm/non_matchings/code/z_play/func_80169EFC.s,func_80169EFC,0x80169EFC,0x1F
 asm/non_matchings/code/z_play/func_80169F78.s,func_80169F78,0x80169F78,0x19

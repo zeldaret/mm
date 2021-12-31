@@ -487,7 +487,7 @@ void func_808B98A8(DoorWarp1* this, GlobalContext* globalCtx) {
                 Scene_SetExitFade(globalCtx);
                 globalCtx->sceneLoadFlag = 0x14;
             } else {
-                func_80169FDC(globalCtx);
+                func_80169FDC(&globalCtx->state);
             }
         }
     }
@@ -767,7 +767,7 @@ void func_808BA10C(DoorWarp1* this, GlobalContext* globalCtx) {
         Scene_SetExitFade(globalCtx);
         globalCtx->sceneLoadFlag = 0x14;
     } else {
-        func_80169FDC(globalCtx);
+        func_80169FDC(&globalCtx->state);
     }
 }
 
