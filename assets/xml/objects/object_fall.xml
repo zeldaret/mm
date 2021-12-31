@@ -21,8 +21,8 @@
         <TextureAnimation Name="gMoonFireRingTexAnim" Offset="0x4E38" />
         <TextureAnimation Name="gMoonUnusedFireballTexAnim" Offset="0x4E58" /> <!-- Almost certainly scrapped for just doing the TwoTexScrolls manually in EnFall_Fireball_Draw -->
         <DList Name="gMoonDL" Offset="0x77F0" />
-        <Texture Name="gMoonFarSideTLUT" OutName="moon_far_side_palette" Format="rgba16" Width="4" Height="4" Offset="0x82F8" />
-        <Texture Name="gMoonFaceTLUT" OutName="moon_face_palette" Format="rgba16" Width="4" Height="4" Offset="0x8318" />
+        <Texture Name="gMoonFarSideTLUT" OutName="moon_far_side_tlut" Format="rgba16" Width="4" Height="4" Offset="0x82F8" />
+        <Texture Name="gMoonFaceTLUT" OutName="moon_face_tlut" Format="rgba16" Width="4" Height="4" Offset="0x8318" />
         <Texture Name="gMoonEyeTex" OutName="moon_eye" Format="rgba16" Width="32" Height="32" Offset="0x8338" />
         <Texture Name="gMoonTeethTex" OutName="moon_teeth" Format="rgba16" Width="64" Height="32" Offset="0x8B38" />
         <Texture Name="gMoonFarSideTex" OutName="moon_far_side" Format="ci4" Width="64" Height="64" Offset="0x9B38" />
