@@ -24,6 +24,9 @@
 
 #define THIS ((EnFall*)thisx)
 
+#define FLAG_FIRE_BALL_INTENSIFIES (1 << 0)
+#define FLAG_FIRE_RING_APPEARS (1 << 1)
+
 void EnFall_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -542,7 +545,7 @@ void EnFall_Fireball_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (func_800EE29C(globalCtx, 0x1C2)) {
         this->actor.draw = EnFall_Fireball_Draw;
-        if (this->flags & EN_FALL_FLAG_FIRE_BALL_INTENSIFIES) {
+        if (this->flags & FLAG_FIRE_BALL_INTENSIFIES) {
             this->fireballIntensity += 0.01f;
             if (this->fireballIntensity > 1.0f) {
                 this->fireballIntensity = 1.0f;
@@ -574,7 +577,7 @@ void EnFall_Fireball_Update(Actor* thisx, GlobalContext* globalCtx) {
                 EnFall_Fireball_SetPerVertexAlpha(this->fireballAlpha * 0.01f);
                 break;
             case 4:
-                this->flags |= EN_FALL_FLAG_FIRE_BALL_INTENSIFIES;
+                this->flags |= FLAG_FIRE_BALL_INTENSIFIES;
                 break;
             case 5:
                 break;
@@ -658,12 +661,12 @@ void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
     if (func_800EE29C(globalCtx, 0x1C2) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C2)]->unk0 == 5) {
-        if (!(this->flags & EN_FALL_FLAG_FIRE_RING_APPEARS)) {
+        if (!(this->flags & FLAG_FIRE_RING_APPEARS)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
         }
-        this->flags |= EN_FALL_FLAG_FIRE_RING_APPEARS;
+        this->flags |= FLAG_FIRE_RING_APPEARS;
     }
-    if (this->flags & EN_FALL_FLAG_FIRE_RING_APPEARS) {
+    if (this->flags & FLAG_FIRE_RING_APPEARS) {
         this->fireRingAlpha += 0.033333335f;
         if (this->fireRingAlpha > 1.0f) {
             this->fireRingAlpha = 1.0f;

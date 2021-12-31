@@ -6,9 +6,6 @@
 #define EN_FALL_SCALE(thisx) ((thisx)->params & 0x7F)
 #define EN_FALL_TYPE(thisx) (((thisx)->params & 0xF80) >> 7)
 
-#define EN_FALL_FLAG_FIRE_BALL_INTENSIFIES (1 << 0)
-#define EN_FALL_FLAG_FIRE_RING_APPEARS (1 << 1)
-
 typedef enum {
     /*  0 */ EN_FALL_TYPE_TERMINA_FIELD_MOON,
     /*  1 */ EN_FALL_TYPE_TITLE_SCREEN_MOON,
