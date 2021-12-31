@@ -771,6 +771,7 @@ void EnFall_Fireball_Draw(Actor* thisx, GlobalContext* globalCtx) {
     u32 gameplayFrames = globalCtx->gameplayFrames;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+    
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C2DC(globalCtx->state.gfxCtx);
     this->fireballYTexScroll1 += (s32)(4.0f + (this->fireballIntensity * 12.0f));
@@ -807,6 +808,7 @@ void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gMoonDebrisMaterialDL);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -823,6 +825,7 @@ void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_OPA_DISP++, sDebrisModelDLists[debrisParticles[i].modelIndex]);
         }
     }
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -835,6 +838,7 @@ void EnFall_FireRing_Draw(Actor* thisx, GlobalContext* globalCtx) {
             this->fireRingAlpha = 1.0f;
         }
         OPEN_DISPS(globalCtx->state.gfxCtx);
+
         AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(gMoonFireRingTexAnim));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_8012C2DC(globalCtx->state.gfxCtx);
@@ -842,6 +846,7 @@ void EnFall_FireRing_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(this->fireRingAlpha * 255.0f));
         gSPDisplayList(POLY_XLU_DISP++, gMoonFireRingDL);
+
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
@@ -850,6 +855,7 @@ void EnFall_MoonsTear_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gFallingMoonsTearTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
@@ -858,5 +864,6 @@ void EnFall_MoonsTear_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gFallingMoonsTearFireDL);
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
