@@ -37,19 +37,19 @@ typedef struct EnFall {
     /* 0x14C */ f32 scale;
     /* 0x150 */ union {
                     f32 eyeGlowIntensity;
-                    f32 fireBallIntensity;
+                    f32 fireballIntensity;
                     f32 fireRingAlpha;
                 };
     /* 0x154 */ u16 flags;
     /* 0x158 */ union {
-                    s32 fireBallAlpha;
+                    s32 fireballAlpha;
                     s32 activeDebrisParticleCount;
                 };
     /* 0x15C */ union {
-                    s16 fireBallYTexScroll1;
+                    s16 fireballYTexScroll1;
                     s16 fireWallYScale;
                 };
-    /* 0x15E */ s16 fireBallYTexScroll2;
+    /* 0x15E */ s16 fireballYTexScroll2;
     /* 0x160 */ EnFallActionFunc actionFunc;
 } EnFall; // size = 0x164
 
