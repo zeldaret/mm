@@ -335,7 +335,7 @@ void ObjEtcetera_DrawIdle(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 /**
- * When the flower is animating, this function is used to animate it.
+ * When the flower is animating, this function is used to draw it.
  * It draws the flower as an animated bunch of limbs using the SkelAnime system.
  * When a function wants to play an animation, it is expected to set the actor's draw function to this.
  */
