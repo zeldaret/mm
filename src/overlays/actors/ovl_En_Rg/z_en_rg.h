@@ -13,7 +13,7 @@ typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ u8 unk_02;
-    /* 0x03 */ char unk_03[0xD];
+    /* 0x03 */ UNK_TYPE1 unk_03[0xD];
     /* 0x10 */ Vec3f unk_10;
     /* 0x1C */ Vec3f unk_1C;
     /* 0x28 */ Vec3f unk_28;
@@ -34,7 +34,7 @@ typedef struct EnRg {
     /* 0x0310 */ u16 unk_310;
     /* 0x0314 */ f32 unk_314;
     /* 0x0318 */ s16 unk_318;
-    /* 0x031A */ char unk31A[2];
+    /* 0x031A */ UNK_TYPE1 unk31A[2];
     /* 0x031C */ s16 unk_31C;
     /* 0x031E */ s16 unk_31E;
     /* 0x0320 */ s16 unk_320;
@@ -44,7 +44,7 @@ typedef struct EnRg {
     /* 0x0328 */ s16 unk_328[3];
     /* 0x032E */ s16 unk_32E[3];
     /* 0x0334 */ s32 unk_334;
-    /* 0x0338 */ char unk338[4];
+    /* 0x0338 */ UNK_TYPE1 unk338[4];
     /* 0x033C */ s32 unk_33C;
     /* 0x0340 */ s32 unk_340;
     /* 0x0344 */ s32 unk_344;
