@@ -1734,7 +1734,6 @@ beginseg
     name "ovl_En_Ani"
     compress
     include "build/src/overlays/actors/ovl_En_Ani/z_en_ani.o"
-    include "build/data/ovl_En_Ani/ovl_En_Ani.data.o"
     include "build/data/ovl_En_Ani/ovl_En_Ani.reloc.o"
 endseg
 
