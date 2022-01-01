@@ -832,12 +832,12 @@ void EnFall_Fireball_Draw(Actor* thisx, GlobalContext* globalCtx) {
         POLY_XLU_DISP++, (s32)(((1.0f - this->fireballIntensity) * 50.0f) + (200.0f * this->fireballIntensity)),
         (s32)(20.0f * (1.0f - this->fireballIntensity)), (s32)(20.0f * (1.0f - this->fireballIntensity)), 255);
 
-    // Glowing sphere of fire
+    // Handles the texture scrolling for the glowing sphere of fire
     gSPSegment(POLY_XLU_DISP++, 0x09,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames, -this->fireballYTexScroll2, 64, 64, 1,
                                 -gameplayFrames, -this->fireballYTexScroll1, 64, 64));
 
-    // "Flecks" of fire
+    // Handles the texture scrolling for the "flecks" of fire around the fireball
     gSPSegment(POLY_XLU_DISP++, 0x0A,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames * 2, -this->fireballYTexScroll1, 64, 64, 1,
                                 -gameplayFrames * 2, -this->fireballYTexScroll1, 64, 64));
