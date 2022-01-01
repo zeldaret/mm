@@ -28,8 +28,6 @@ const ActorInit Obj_Wturn_InitVars = {
     (ActorFunc)Actor_Noop, (ActorFunc)ObjWturn_Update, (ActorFunc)NULL,
 };
 
-static Vec3f D_808A7DC0 = { 0.0f, -1.0f, 0.0f };
-
 void ObjWturn_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjWturn* this = THIS;
 
@@ -44,8 +42,8 @@ void func_808A7968(ObjWturn* this, GlobalContext* globalCtx) {
     if (globalCtx->msgCtx.unk1202A >= 28 && globalCtx->msgCtx.unk1202A < 39) {
         Actor_UnsetSwitchFlag(globalCtx, this->actor.params);
         Actor_MarkForDeath(&this->actor);
-    } else if ((Flags_GetSwitch(globalCtx, this->actor.params) && (globalCtx->sceneNum == 88)) ||
-               (!Flags_GetSwitch(globalCtx, this->actor.params) && (globalCtx->sceneNum == 89))) {
+    } else if ((Flags_GetSwitch(globalCtx, this->actor.params) && (globalCtx->sceneNum == SCENE_F40)) ||
+               (!Flags_GetSwitch(globalCtx, this->actor.params) && (globalCtx->sceneNum == SCENE_F41))) {
         func_808A7A24(this);
     }
 }
@@ -103,6 +101,7 @@ void func_808A7C04(ObjWturn* this, GlobalContext* globalCtx) {
 }
 
 void func_808A7C78(ObjWturn* this, GlobalContext* globalCtx) {
+    static Vec3f D_808A7DC0 = { 0.0f, -1.0f, 0.0f };
     Camera* camera = Play_GetCamera(globalCtx, this->camId);
     Player* player = GET_PLAYER(globalCtx);
 
