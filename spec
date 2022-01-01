@@ -971,8 +971,7 @@ beginseg
     name "ovl_Obj_Wturn"
     compress
     include "build/src/overlays/actors/ovl_Obj_Wturn/z_obj_wturn.o"
-    include "build/data/ovl_Obj_Wturn/ovl_Obj_Wturn.data.o"
-    include "build/data/ovl_Obj_Wturn/ovl_Obj_Wturn.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Wturn/ovl_Obj_Wturn_reloc.o"
 endseg
 
 beginseg

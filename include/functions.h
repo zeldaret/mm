@@ -2976,7 +2976,7 @@ Camera* Play_GetCamera(GlobalContext* globalCtx, s16 index);
 s32 Play_CameraSetAtEye(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f* eye);
 void func_8016981C(GlobalContext* globalCtx, s16 arg1, Vec3f* arg2, Vec3f* arg3, Vec3f* arg4);
 void func_80169940(GlobalContext* globalCtx, s16 camId, f32 arg2);
-// void func_80169988(void);
+void func_80169988(GlobalContext* globalCtx, s16 arg1, s16 arg2);
 void func_801699D4(GlobalContext* globalCtx, s16 arg1, s16 arg2);
 // void func_80169A50(void);
 // void func_80169AC0(void);
