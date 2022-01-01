@@ -1,7 +1,7 @@
 /*
  * File: z_demo_syoten.c
  * Overlay: ovl_Demo_Syoten
- * Description:
+ * Description: Ikana Canyon Cleansing Cutscene Effects
  */
 
 #include "z_demo_syoten.h"

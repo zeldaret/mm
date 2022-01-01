@@ -116,7 +116,7 @@ void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
                 offsetAngle = i * angleBinary;
                 Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, offsetAngle, &iceSmokePosOffset,
                                               &iceSmokePos);
-                Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
+                Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
                 EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &iceSmokeVel, &iceSmokeAccel, 100);
             }
         }
@@ -136,7 +136,7 @@ void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
 void ObjHsStump_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjHsStump* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjHsStump_Update(Actor* thisx, GlobalContext* globalCtx) {

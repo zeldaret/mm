@@ -1,7 +1,7 @@
 /*
  * File: z_demo_getitem.c
  * Overlay: ovl_Demo_Getitem
- * Description:
+ * Description: Cutscene object for Great Fairy's Mask and Great Fairy's Sword
  */
 
 #include "z_demo_getitem.h"

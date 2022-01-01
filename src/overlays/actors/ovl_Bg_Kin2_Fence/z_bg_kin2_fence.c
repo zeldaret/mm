@@ -149,7 +149,7 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, GlobalContext* globalCtx, s
 
     for (i = 0; i < 2; i++) {
         Matrix_MultiplyVector3fByState(&eyeSparkleSpawnPositions[mask][i], &sp58);
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp58, &D_801D15B0, &D_801D15B0, &primColor, &envColor, 6000, -10);
+        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp58, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 6000, -10);
     }
 }
 
@@ -180,7 +180,7 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgKin2Fence_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Fence* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 

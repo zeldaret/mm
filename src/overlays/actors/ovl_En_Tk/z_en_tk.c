@@ -405,7 +405,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
 
     func_8013AF00(spA0, 3, this->unk_3C8->count + 3);
     if (!(this->unk_3CE & 4)) {
-        sp7C = D_801D15B0;
+        sp7C = gZeroVec3f;
         func_8013B6B0(this->unk_3C8, &this->unk_3E0, &this->unk_3F0, this->unk_3E8, this->unk_3E4, &this->unk_3EC, spA0,
                       &sp7C, this->unk_3D0);
         func_8013B878(globalCtx, this->unk_3C8, this->unk_3EC, &sp7C);
@@ -428,7 +428,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
         sp7C = this->actor.world.pos;
     }
 
-    this->unk_3D4 = D_801D15B0;
+    this->unk_3D4 = gZeroVec3f;
 
     if (func_8013B6B0(this->unk_3C8, &this->unk_3E0, &this->unk_3F0, this->unk_3E8, this->unk_3E4, &this->unk_3EC, spA0,
                       &this->unk_3D4, this->unk_3D0)) {
@@ -1046,8 +1046,8 @@ s32 func_80AEE86C(EnTk* this, GlobalContext* globalCtx) {
     Vec3f sp28;
 
     Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80AEFA78, &sp28);
-    if ((func_800C40B4(&globalCtx->colCtx, &sp38, &sp34, &sp28) != BGCHECK_Y_MIN) &&
-        (func_800C9BB8(&globalCtx->colCtx, sp38, sp34) == 1) && (this->unk_2D0 == 1) &&
+    if ((BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &sp38, &sp34, &sp28) != BGCHECK_Y_MIN) &&
+        (func_800C9BB8(&globalCtx->colCtx, sp38, sp34) == 1) && (this->unk_2D0 == (u32)1) &&
         (this->actor.xyzDistToPlayerSq <= SQ(115.0f)) &&
         func_80AEE7E0(&this->actor.world.pos, 100.0f, this->unk_324, this->unk_36C) &&
         (((this->unk_2CA & 2) && (Math_Vec3f_DistXZ(&this->unk_300, &sp28) >= 100.0f)) || !(this->unk_2CA & 2)) &&
@@ -1131,7 +1131,8 @@ void func_80AEEB88(EnTk* this, GlobalContext* globalCtx) {
         sp68.y = this->actor.world.pos.y + 50.0f;
         sp68.z += this->actor.world.pos.z;
 
-        temp = func_800C40B4(&globalCtx->colCtx, &this->actor.floorPoly, &sp74, &sp68) - this->actor.world.pos.y;
+        temp = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &this->actor.floorPoly, &sp74, &sp68) -
+               this->actor.world.pos.y;
         if (temp <= -80.0f) {
             break;
         }
@@ -1160,7 +1161,7 @@ void func_80AEED38(EnTk* this, GlobalContext* globalCtx) {
     sp58.y += 30.0f;
     sp58.z += Math_CosS(sp56) * 20.0f;
 
-    if (func_800C5A64(&globalCtx->colCtx, &sp58, 20.0f)) {
+    if (BgCheck_SphVsFirstWall(&globalCtx->colCtx, &sp58, 20.0f)) {
         Math_Vec3f_Copy(&sp48, &this->actor.world.pos);
         sp56 = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
         sp48.x += (Math_SinS(sp56) * 20.0f);
@@ -1173,8 +1174,8 @@ void func_80AEED38(EnTk* this, GlobalContext* globalCtx) {
         sp3C.y += 30.0f;
         sp3C.z += Math_CosS(sp56) * 20.0f;
 
-        if (func_800C5A64(&globalCtx->colCtx, &sp48, 20.0f)) {
-            if (func_800C5A64(&globalCtx->colCtx, &sp3C, 20.0f)) {
+        if (BgCheck_SphVsFirstWall(&globalCtx->colCtx, &sp48, 20.0f)) {
+            if (BgCheck_SphVsFirstWall(&globalCtx->colCtx, &sp3C, 20.0f)) {
                 this->unk_2CC = this->actor.shape.rot.y - 0x4000;
             } else {
                 this->unk_2CC = this->actor.shape.rot.y - 0x4000;
@@ -1297,7 +1298,7 @@ void EnTk_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2CA &= ~1;
 
     if (this->actor.floorBgId != BGCHECK_SCENE) {
-        BgDanpeiMovebg* platform = (BgDanpeiMovebg*)BgCheck_GetActorOfMesh(&globalCtx->colCtx, this->actor.floorBgId);
+        BgDanpeiMovebg* platform = (BgDanpeiMovebg*)DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId);
 
         if (platform != NULL) {
             if (platform->dyna.actor.id == ACTOR_BG_DANPEI_MOVEBG) {

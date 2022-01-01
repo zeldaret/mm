@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse, ast, math, os, re, struct
+import bisect
 from mips_isa import *
-from multiprocessing import Pool
+from multiprocessing import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-j', dest='jobs', type=int, default=1, help='number of processes to run at once')
@@ -88,11 +89,11 @@ multiply_referenced_rodata = set() # rodata with more than 1 reference outside o
 files = set()          # vram start of file
 
 vrom_variables = list() # (name,addr)
+vrom_addrs = set()     # set of addrs from vrom_variables, for faster lookup
 
 functions_ast = None
 variables_ast = None
-
-vars_cache = {} # (address: variable + addend)
+variable_addrs = None
 
 def proper_name(symbol, in_data=False, is_symbol=True):
     # hacks
@@ -116,7 +117,7 @@ def proper_name(symbol, in_data=False, is_symbol=True):
         return functions_ast[symbol][0]
     elif symbol in variables_ast.keys():
         return variables_ast[symbol][0]
-    elif symbol in [addr for _,addr in vrom_variables]:
+    elif symbol in vrom_addrs:
         # prefer "start" vrom symbols
         if symbol in [addr for name,addr in vrom_variables if "SegmentRomStart" in name]:
             return [name for name,addr in vrom_variables if "SegmentRomStart" in name and addr == symbol][0]
@@ -124,8 +125,15 @@ def proper_name(symbol, in_data=False, is_symbol=True):
             return [name for name,addr in vrom_variables if addr == symbol][0]
 
     # addends
-    if is_symbol and symbol in vars_cache.keys():
-        return vars_cache[symbol]
+    if is_symbol:
+        symbol_index = bisect.bisect(variable_addrs, symbol)
+        if symbol_index:
+            vram_addr = variable_addrs[symbol_index-1]
+            symbol_name, _, _, symbol_size = variables_ast[vram_addr]
+
+            if vram_addr < symbol < vram_addr + symbol_size:
+                return f"{symbol_name} + 0x{symbol-vram_addr:X}"
+
 
     # generated names
     if symbol in functions and not in_data:
@@ -142,7 +150,7 @@ def proper_name(symbol, in_data=False, is_symbol=True):
 
 def lookup_name(symbol, word):
     # hacks for vrom variables in data
-    if word in [addr for _,addr in vrom_variables]:
+    if word in vrom_addrs:
         if word == 0: # no makerom segment start
             return "0x00000000"
         if symbol in [0x801AE4A0, # effect table
@@ -1112,13 +1120,8 @@ with open("tools/disasm/functions.txt", "r") as infile:
 with open("tools/disasm/variables.txt", "r") as infile:
     variables_ast = ast.literal_eval(infile.read())
 
-# Precompute variable addends for all variables, this uses a lot of memory but the lookups later are fast
+# Find floats, doubles, and strings
 for var in sorted(variables_ast.keys()):
-    for i in range(var, var + variables_ast[var][3], 1):
-        addend = i - var
-        assert addend >= 0
-        vars_cache.update({i : f"{variables_ast[var][0]}" + (f" + 0x{addend:X}" if addend > 0 else "")})
-    # also add to floats, doubles & strings
     var_type = variables_ast[var][1]
 
     if var_type == "f64":
@@ -1164,7 +1167,10 @@ for segment in files_spec:
     if segment[3][-1][1] not in variables_ast:
         variables_ast.update({segment[3][-1][1] : (f"_{segment[0]}SegmentEnd","u8","[]",0x1)})
 
-pool = Pool(jobs)
+# Construct variable_addrs, now that variable_addrs is fully constructed
+variable_addrs = sorted(variables_ast.keys())
+
+pool = get_context("fork").Pool(jobs)
 # Find symbols for each segment
 for segment in files_spec:
     if segment[2] == 'makerom':
@@ -1218,6 +1224,9 @@ for segment in files_spec:
                 vrom_variables.append(("_" + filenames[i] + "SegmentRomEnd", vrom_end))
                 i += 1
                 dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
+
+# Construct vrom_addrs, now that vrom_variables is fully constructed
+vrom_addrs = {addr for _, addr in vrom_variables}
 
 def disassemble_makerom(segment):
     os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
@@ -1376,7 +1385,7 @@ print("Disassembling Segments")
 disassemble_makerom(next(segment for segment in files_spec if segment[2] == 'makerom'))
 
 # Textual disassembly for each segment
-with Pool(jobs) as p:
+with get_context("fork").Pool(jobs) as p:
     p.map(disassemble_segment, (segment for segment in files_spec if segment[2] != 'makerom'))
 
 print("Splitting text and migrating rodata")

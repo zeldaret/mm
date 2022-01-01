@@ -1,9 +1,9 @@
 /*
- * File z_en_invadepoh.c
+ * File: z_en_invadepoh.c
  * Overlay: ovl_En_Invadepoh
  * Description: Ranch nighttime actors
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
@@ -221,7 +221,6 @@ extern Gfx D_06000720[];
 extern Gfx D_06000080[];
 
 extern s32 D_801BDA9C;
-extern Vec3s D_801D15BC;
 
 const ActorInit En_Invadepoh_InitVars = {
     ACTOR_EN_INVADEPOH,
@@ -906,7 +905,7 @@ s32 func_80B44234(EnInvadepoh* this, Vec3f* vec) {
 
     for (i = 0, arr = this->pathPoints; i < temp_s3; i++, arr++) {
         Math_Vec3s_ToVec3f(&sp48, arr);
-        distance = Math3D_DistanceSquared(&sp48, vec);
+        distance = Math3D_Vec3fDistSq(&sp48, vec);
         if (distance < min) {
             min = distance;
             ret = i;
@@ -1384,7 +1383,7 @@ s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 ar
     while (actorIterator != NULL) {
         if ((actorIterator->id == ACTOR_EN_DOOR) && (actorIterator->update != NULL) &&
             (actorIterator->room == this->actor.room) &&
-            Math3D_DistanceSquared(&actorIterator->world.pos, &this->actor.world.pos) < range) {
+            Math3D_Vec3fDistSq(&actorIterator->world.pos, &this->actor.world.pos) < range) {
             ((EnDoor*)actorIterator)->unk_1A7 = arg3;
             retVal = true;
             break;
@@ -1435,7 +1434,7 @@ void func_80B457A0(EnInvadepoh* this) {
 
     for (i = 0; i < this->unk379; i++) {
         if ((D_80B50320[i] != NULL) && D_80B50320[i]->drawAlien) {
-            distanceSquared = Math3D_DistanceSquared(&D_80B50320[i]->actor.world.pos, &this->actor.world.pos);
+            distanceSquared = Math3D_Vec3fDistSq(&D_80B50320[i]->actor.world.pos, &this->actor.world.pos);
             if (distanceSquared < phi_f20) {
                 phi_f20 = distanceSquared;
                 phi_s5 = i;
@@ -2568,7 +2567,7 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.update = func_80B4873C;
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->jointTable, this->morphTable,
                            23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 5000, 0.05f, 0.3f, 0.12f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 5000, 0.05f, 0.3f, 0.12f);
         Animation_PlayLoop(&this->skelAnime, &D_06009E58);
         func_80B482D4(this);
     }
@@ -2636,7 +2635,7 @@ void func_80B48948(EnInvadepoh* this) {
     this->actionTimer = Rand_S16Offset(150, 150);
     if (rand < 0.5f) {
         this->rand = 0;
-        Math_Vec3s_Copy(&substruct->unk26, &D_801D15BC);
+        Math_Vec3s_Copy(&substruct->unk26, &gZeroVec3s);
         substruct->unk30 = 0.1f;
         substruct->unk2C = 1000;
     } else if (rand < 0.75f) {
@@ -2702,7 +2701,7 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
             if (temp_v1_3 != this->rand) {
                 this->rand = temp_v1_3;
                 if (this->rand == 0) {
-                    Math_Vec3s_Copy(&substruct->unk26, &D_801D15BC);
+                    Math_Vec3s_Copy(&substruct->unk26, &gZeroVec3s);
                     substruct->unk30 = 0.07f;
                 } else if (this->rand == 1) {
                     substruct->unk26.x = Rand_S16Offset(1000, 1000);
@@ -2772,7 +2771,7 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.textId = 0x3330;
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->jointTable, this->morphTable,
                            23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 100, 0.03, 0.3, 0.03);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B444F4(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -2880,7 +2879,7 @@ void func_80B49454(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 
     Math_Vec3f_Sum(&D_80B4EDD0[this->unk3AC], &this->actor.home.pos, &sp30);
-    if (Math3D_DistanceSquared(&this->actor.world.pos, &sp30) < SQ(400.0f)) {
+    if (Math3D_Vec3fDistSq(&this->actor.world.pos, &sp30) < SQ(400.0f)) {
         this->actor.speedXZ *= 0.8f;
     } else {
         Math_StepToF(&this->actor.speedXZ, 170.0f, 21.0f);
@@ -3124,7 +3123,7 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
                            23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 100, 0.03, 0.3, 0.03);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B44540(this, globalCtx);
         func_80B44570(this);
         func_80B44C24(this, globalCtx);
@@ -3355,7 +3354,7 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
                            23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B44620(this, globalCtx);
         if ((sp38 < CLOCK_TIME(2, 15)) || (sp38 >= CLOCK_TIME(6, 0))) {
             this->pathIndex = 0;
@@ -3532,7 +3531,7 @@ void func_80B4B0C4(Actor* thisx, GlobalContext* globalCtx) {
                            23);
         Animation_MorphToLoop(&this->skelAnime, &D_06009E58, 0.0f);
         substruct = &this->behaviorInfo;
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &D_801D15BC, 2000, 0.08f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 2000, 0.08f, 0.3f, 0.03f);
         substruct->unk30 = 0.08f;
         substruct->unk2C = 0x7D0;
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -3614,7 +3613,7 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (this->unk3BC >= 0) {
         Math_Vec3s_ToVec3f(&sp28, &this->pathPoints[this->unk3BC]);
-        temp_f0 = Math3D_DistanceSquared(&this->actor.world.pos, &sp28);
+        temp_f0 = Math3D_Vec3fDistSq(&this->actor.world.pos, &sp28);
         if (temp_f0 < SQ(80.0f)) {
             this->actor.speedXZ *= 0.85f;
         } else if (temp_f0 < SQ(150.0f)) {
@@ -3685,7 +3684,7 @@ void func_80B4B8BC(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectSegment(globalCtx, &this->actor);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, &D_060021C8, this->jointTable, this->morphTable,
                            13);
-        func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &D_801D15BC, 3000, 0.1f, 0.0f, 0.0f);
+        func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &gZeroVec3s, 3000, 0.1f, 0.0f, 0.0f);
         func_80B44664(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -3808,7 +3807,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
         func_80B4516C(this);
         Math_StepToS(&this->behaviorInfo.unk4C, 0xBB8, 0x1F5);
-        if (Math3D_DistanceSquared(&this->actor.prevPos, &this->actor.world.pos) > SQ(0.01f)) {
+        if (Math3D_Vec3fDistSq(&this->actor.prevPos, &this->actor.world.pos) > SQ(0.01f)) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.prevPos, &this->actor.world.pos),
                                3, this->behaviorInfo.unk4C, 0x1F4);
         }
@@ -3919,7 +3918,7 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44FEC();
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06015C28, &D_06016720, this->jointTable, this->morphTable,
                            22);
-        func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
         if (currentTime < 0xD5A0) {
             this->unk304 = -0x8000;
@@ -4140,7 +4139,7 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
                            23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B446D0(this, globalCtx);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80B44700(this);
@@ -4480,7 +4479,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
-        Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_NEW);
+        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
         Matrix_GetStateTranslationAndScaledZ(60.0f, &sp80);
         sp74.x = thisx->world.pos.x + sp80.x;
         sp74.y = thisx->world.pos.y + sp80.y + 68.0f;
@@ -4572,14 +4571,14 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp5C;
 
     Matrix_StatePush();
-    Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_NEW);
+    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
     Matrix_GetStateTranslationAndScaledZ(200.0f, &sp5C);
     Matrix_StatePop();
     sp5C.x += thisx->world.pos.x;
     sp5C.y += thisx->world.pos.y;
     sp5C.z += thisx->world.pos.z;
     EnInvadepoh_SetSysMatrix(&sp5C);
-    Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
     Matrix_InsertZRotation_s(((EnInvadepoh*)thisx)->unk304, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);

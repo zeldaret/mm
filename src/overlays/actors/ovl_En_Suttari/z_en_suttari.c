@@ -201,14 +201,14 @@ void EnSuttari_UpdateTime(void) {
 }
 
 s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
-    Vec3f sp2C;
+    Vec3f pos;
     s32 pad;
-    s32 sp24;
+    CollisionPoly* poly;
 
-    sp2C.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
-    sp2C.y = this->actor.world.pos.y + 100.0f;
-    sp2C.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
-    if (func_800C4000(globalCtx, &globalCtx->colCtx, &sp24, &sp2C) > -500.0f) {
+    pos.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
+    pos.y = this->actor.world.pos.y + 100.0f;
+    pos.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
+    if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &pos) > -500.0f) {
         return false;
     }
     return true;
@@ -331,7 +331,7 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
             case 0:
                 if (gSaveContext.weekEventReg[0x51] & 1) {
                     this->textId = 0x1455;
-                    ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk264 |= 8;
+                    ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 8;
                     this->flags2 |= 1;
                 } else {
                     this->textId = 0x1450;
@@ -353,7 +353,7 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
             case 0x1453:
                 this->flags1 |= 0x400;
                 gSaveContext.weekEventReg[0x51] |= 1;
-                ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk264 |= 8;
+                ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 8;
                 this->flags2 |= 1;
                 this->textId = 0x1454;
                 break;
@@ -411,7 +411,7 @@ void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
         Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
         Matrix_StatePop();
         if (this->unk3F0 == 0) {
-            EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &D_801D15B0, 50, &this->unk3F0, 1);
+            EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
         }
         if (this->unk3F0 == 1) {
             play_sound(NA_SE_SY_FOUND);
@@ -443,7 +443,7 @@ void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
         Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
         Matrix_StatePop();
         if (this->unk3F0 == 0) {
-            EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &D_801D15B0, 50, &this->unk3F0, 1);
+            EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
         }
         if (this->unk3F0 == 1) {
             play_sound(NA_SE_SY_FOUND);
@@ -755,7 +755,7 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
 
     func_8013AF00(sp7C, 3, this->unk404->count + 3);
     if (this->unk42C == 0) {
-        sp58 = D_801D15B0;
+        sp58 = gZeroVec3f;
         func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, sp7C,
                       &sp58, this->unk42A);
         func_8013B878(globalCtx, this->unk404, this->unk420, &sp58);
@@ -771,7 +771,7 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
         sp50 = this->unk420;
         sp58 = this->actor.world.pos;
     }
-    this->unk408 = D_801D15B0;
+    this->unk408 = gZeroVec3f;
     if (func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, sp7C,
                       &this->unk408, this->unk42A)) {
         this->unk430 = 1;
@@ -1318,7 +1318,7 @@ void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
                 }
                 this->flags1 &= ~0x400;
                 if (this->flags2 & 1) {
-                    ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk264 |= 0x10;
+                    ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 0x10;
                     this->flags2 &= ~1;
                 }
                 globalCtx->msgCtx.unk11F22 = 0x43;

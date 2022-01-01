@@ -1,5 +1,5 @@
 /*
- * File z_en_boom.c
+ * File: z_en_boom.c
  * Overlay: ovl_En_Boom
  * Description: Zora boomerangs
  */

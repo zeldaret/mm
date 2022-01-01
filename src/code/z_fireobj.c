@@ -1,5 +1,6 @@
 #include "global.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 typedef enum {
     FIRE_STATE_0,
@@ -94,7 +95,7 @@ void FireObj_StepSize(FireObj* fire) {
 void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
     Player* player = GET_PLAYER(globalCtx);
     WaterBox* waterBox;
-    f32 sp44;
+    f32 waterY;
     s32 sp40 = 0;
     u8 nextState;
     Vec3f dist;
@@ -113,8 +114,8 @@ void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
         FireObj_SetState(fire, fire->dynamicSizeStep, nextState);
     }
     if ((fire->flags & 1) && (fire->state != FIRE_STATE_3) &&
-        (func_800CA1E8(globalCtx, &globalCtx->colCtx, fire->position.x, fire->position.z, &sp44, &waterBox) != 0) &&
-        ((fire->yScale * ((void)0, 6500.0f)) < (sp44 - fire->position.y))) { // Fake but IDK what else
+        WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, fire->position.x, fire->position.z, &waterY, &waterBox) &&
+        ((fire->yScale * ((void)0, 6500.0f)) < (waterY - fire->position.y))) { // Fake but IDK what else
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_3);
     }
     if ((fire->flags & 2) && (player->itemActionParam == PLAYER_AP_STICK)) {
@@ -162,7 +163,7 @@ void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire) {
         Matrix_Scale(fire->xScale, fire->yScale, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }

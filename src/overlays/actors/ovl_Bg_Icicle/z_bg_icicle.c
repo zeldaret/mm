@@ -94,7 +94,7 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgIcicle_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIcicle* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 

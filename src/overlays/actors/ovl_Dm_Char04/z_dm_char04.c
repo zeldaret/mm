@@ -1,7 +1,7 @@
 /*
  * File: z_dm_char04.c
  * Overlay: ovl_Dm_Char04
- * Description:
+ * Description: Unused(?) Tatl and Tael actors
  */
 
 #include "z_dm_char04.h"

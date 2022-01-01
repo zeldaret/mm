@@ -1,7 +1,7 @@
 /*
  * File: z_eff_change.c
  * Overlay: ovl_Eff_Change
- * Description:
+ * Description: Elegy of Emptiness - Beam of Light When Creating Statue
  */
 
 #include "z_eff_change.h"

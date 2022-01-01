@@ -1,7 +1,7 @@
 /*
  * File: z_dm_char00.c
  * Overlay: ovl_Dm_Char00
- * Description: Tatl (cutscene)
+ * Description: Tatl and Tael (cutscene)
  */
 
 #include "z_dm_char00.h"
