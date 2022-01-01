@@ -111,8 +111,8 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169C84.s")
 
 /**
- * Converts the number of a scene to its "original" equivalent, the scene with the default version which the player
- * first enters.
+ * Converts the number of a scene to its "original" equivalent, the default version of the area which the player first
+ * enters.
  */
 s16 Play_GetOriginalSceneNumber(s16 sceneNum) {
     // Inverted Stone Tower Temple  -> Stone Tower Temple
@@ -152,8 +152,8 @@ s16 Play_GetOriginalSceneNumber(s16 sceneNum) {
  * Copies the flags set in ActorContext over to the current scene's CycleSceneFlags. Special case for Inverted Stone
  * Tower Temple
  */
-void Play_SaveCycleSceneFlags(GameState* state) {
-    GlobalContext* globalCtx = (GlobalContext*)state;
+void Play_SaveCycleSceneFlags(GameState* gameState) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
     CycleSceneFlags* cycleSceneFlags;
 
     cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(globalCtx->sceneNum)];
@@ -169,11 +169,11 @@ void Play_SaveCycleSceneFlags(GameState* state) {
     cycleSceneFlags->clearedRoom = globalCtx->actorCtx.clearedRooms;
 }
 
-void Play_SetRespawnData(GameState* state, s32 respawnMode, u16 sceneSetup, s32 roomIndex, s32 playerParams, Vec3f* pos,
-                         s16 yaw) {
-    GlobalContext* globalCtx = (GlobalContext*)state;
+void Play_SetRespawnData(GameState* gameState, s32 respawnMode, u16 entranceIndex, s32 roomIndex, s32 playerParams,
+                         Vec3f* pos, s16 yaw) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-    gSaveContext.respawn[respawnMode].entranceIndex = Entrance_CreateIndex(sceneSetup >> 9, 0, sceneSetup & 0xF);
+    gSaveContext.respawn[respawnMode].entranceIndex = Entrance_CreateIndex(entranceIndex >> 9, 0, entranceIndex & 0xF);
     gSaveContext.respawn[respawnMode].roomIndex = roomIndex;
     gSaveContext.respawn[respawnMode].pos = *pos;
     gSaveContext.respawn[respawnMode].yaw = yaw;
@@ -183,8 +183,8 @@ void Play_SetRespawnData(GameState* state, s32 respawnMode, u16 sceneSetup, s32 
     gSaveContext.respawn[respawnMode].tempCollectFlags = globalCtx->actorCtx.collectibleFlags[2];
 }
 
-void Play_SetupRespawnPoint(GameState* state, s32 respawnMode, s32 playerParams) {
-    GlobalContext* globalCtx = (GlobalContext*)state;
+void Play_SetupRespawnPoint(GameState* gameState, s32 respawnMode, s32 playerParams) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
     Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->sceneNum != SCENE_KAKUSIANA) { // Grottos
@@ -202,9 +202,9 @@ void func_80169ECC(GlobalContext* globalCtx) {
     }
 }
 
-// Gameplay_TriggerVoidOut
-void func_80169EFC(GameState* state) {
-    GlobalContext* globalCtx = (GlobalContext*)state;
+// Gameplay_TriggerVoidOut ?
+void func_80169EFC(GameState* gameState) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
     gSaveContext.respawn[0].tempSwchFlags = globalCtx->actorCtx.switchFlags[2];
     gSaveContext.respawn[0].unk_18 = globalCtx->actorCtx.collectibleFlags[1];
@@ -217,8 +217,8 @@ void func_80169EFC(GameState* state) {
 }
 
 // Gameplay_LoadToLastEntrance ?
-void func_80169F78(GameState* state) {
-    GlobalContext* globalCtx = (GlobalContext*)state;
+void func_80169F78(GameState* gameState) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
     globalCtx->nextEntranceIndex = gSaveContext.respawn[2].entranceIndex;
     gSaveContext.respawnFlag = -1;
@@ -228,30 +228,111 @@ void func_80169F78(GameState* state) {
 }
 
 // Gameplay_TriggerRespawn ?
-void func_80169FDC(GameState* state) {
-    func_80169F78(state);
+// Used for void by Wallmaster, Deku Shrine doors. Also used by Player, Kaleido, DoorWarp1
+void func_80169FDC(GameState* gameState) {
+    func_80169F78(gameState);
 }
 
-s32 func_80169FFC(GameState* state) {
-    GlobalContext* globalCtx = (GlobalContext*)state;
+s32 func_80169FFC(GameState* gameState) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
     return globalCtx->roomCtx.currRoom.mesh->type0.type != 1;
 }
 
-s32 FrameAdvance_IsEnabled(GameState* state) {
-    GlobalContext* globalCtx = (GlobalContext*)state;
+s32 FrameAdvance_IsEnabled(GameState* gameState) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
     return globalCtx->frameAdvCtx.enabled != 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016A02C.s")
+// Unused, unchanged from OoT, which uses it only in one Camera function.
+s32 func_8016A02C(GameState* gameState, Actor* actor, s16* yaw) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
+    TransitionActorEntry* transitionActor;
+    s8 frontRoom;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016A0AC.s")
+    if (actor->category != ACTORCAT_DOOR) {
+        return false;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016A168.s")
+    transitionActor = &globalCtx->doorCtx.transitionActorList[(u16)actor->params >> 10];
+    frontRoom = transitionActor->sides[0].room;
+    if (frontRoom == transitionActor->sides[1].room) {
+        return false;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016A178.s")
+    if (frontRoom == actor->room) {
+        *yaw = actor->shape.rot.y;
+    } else {
+        *yaw = actor->shape.rot.y + 0x8000;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016A268.s")
+    return true;
+}
+
+// Unused, unchanged from OoT, which uses it only in EnDivingGame.
+s32 func_8016A0AC(GlobalContext* globalCtx, Vec3f* pos) {
+    WaterBox* waterBox;
+    CollisionPoly* poly;
+    Vec3f waterSurfacePos;
+    s32 bgId;
+
+    waterSurfacePos = *pos;
+
+    // == true required to match.
+    if ((WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, waterSurfacePos.x, waterSurfacePos.z, &waterSurfacePos.y,
+                              &waterBox) == true) &&
+        (pos->y < waterSurfacePos.y) &&
+        (BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &poly, &bgId, &waterSurfacePos) != BGCHECK_Y_MIN)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// z_demo and EnTest4
+s32 func_8016A168(void) {
+    return D_801D0D50;
+}
+
+extern s16 D_801D0D64[];
+// s16 D_801D0D64[] = { 0xFFFD, 0xFFFE, 0xFFFC, 0xFFFB, 0xFFF9, 0xFFF5, 0xFFF8, 0xFFF7, 0xFFFA, 0xFFF0 };
+// s16 D_801D0D64[] = { -3, -2, -4, -5, -7, -11, -8, -9, -6, -16 };
+
+// Used by Player
+void func_8016A178(GameState* gameState, s32 cutscene) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
+    s32 i;
+    s16* phi_s3 = globalCtx->unk_1879C;
+    s16* phi_s1 = D_801D0D64;
+
+    for (i = 0; i < ARRAY_COUNT(globalCtx->unk_1879C); i++, phi_s3++, phi_s1++) {
+        ActorCutscene* actorCutscene;
+        s32 currCutscene;
+
+        *phi_s3 = -1;
+
+        for (currCutscene = cutscene; currCutscene != -1; currCutscene = actorCutscene->additionalCutscene) {
+            actorCutscene = ActorCutscene_GetCutscene(currCutscene);
+
+            if (actorCutscene->unk4 == *phi_s1) {
+                if ((actorCutscene->unk4 == -3) && (actorCutscene->priority == 0x2BC)) {
+                    actorCutscene->priority = 0x226;
+                }
+                *phi_s3 = currCutscene;
+                break;
+            }
+        }
+    }
+}
+
+// These regs are used by Gameplay_Draw, and several actors, purpose as yet unclear.
+void func_8016A268(GameState* gameState, s16 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5) {
+    MREG(64) = arg1;
+    MREG(65) = arg2;
+    MREG(66) = arg3;
+    MREG(67) = arg4;
+    MREG(68) = arg5;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Init.s")
