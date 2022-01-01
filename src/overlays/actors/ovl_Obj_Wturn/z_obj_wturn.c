@@ -23,15 +23,9 @@ void func_808A7C04(ObjWturn* this, GlobalContext* globalCtx);
 void func_808A7C78(ObjWturn* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Wturn_InitVars = {
-    ACTOR_OBJ_WTURN,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjWturn),
-    (ActorFunc)ObjWturn_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)ObjWturn_Update,
-    (ActorFunc)NULL,
+    ACTOR_OBJ_WTURN,       ACTORCAT_ITEMACTION,        FLAGS,
+    GAMEPLAY_KEEP,         sizeof(ObjWturn),           (ActorFunc)ObjWturn_Init,
+    (ActorFunc)Actor_Noop, (ActorFunc)ObjWturn_Update, (ActorFunc)NULL,
 };
 
 static Vec3f D_808A7DC0 = { 0.0f, -1.0f, 0.0f };
