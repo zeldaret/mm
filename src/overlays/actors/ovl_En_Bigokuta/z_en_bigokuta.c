@@ -415,7 +415,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, GlobalContext* globalCtx) {
                 dustPos.y = this->actor.world.pos.y + 150.0f;
                 dustPos.z = this->actor.world.pos.z;
 
-                func_800B0DE0(globalCtx, &dustPos, &D_801D15B0, &D_801D15B0, &D_80AC45B0, &D_80AC45B4, 1200, 20);
+                func_800B0DE0(globalCtx, &dustPos, &gZeroVec3f, &gZeroVec3f, &D_80AC45B0, &D_80AC45B4, 1200, 20);
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
             }
         } else {
