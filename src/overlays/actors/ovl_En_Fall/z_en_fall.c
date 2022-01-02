@@ -435,7 +435,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
                     case 590:
                         Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_CRY);
                         break;
-                        
+
                     case 737:
                         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
