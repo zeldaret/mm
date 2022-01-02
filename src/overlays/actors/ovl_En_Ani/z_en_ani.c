@@ -71,13 +71,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 850, ICHAIN_STOP),
 };
 
-enum EnAniStateFlags {
+typedef enum {
     /* 0 */ ANI_STATE_STANDING = 0,
     /* 1 */ ANI_STATE_UNK = 1, // checked for but never set
     /* 2 */ ANI_STATE_SUFFERING = 2,
     /* 4 */ ANI_STATE_CLIMBING = 4,
     /* 8 */ ANI_STATE_FALLING = 8,
-};
+} EnAniStateFlags;
 
 void EnAni_DefaultBlink(EnAni* this) {
     if (DECR(this->blinkTimer) == 0) {
