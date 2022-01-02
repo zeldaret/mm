@@ -3776,7 +3776,7 @@ extern Gfx D_040008D0[];
 extern Gfx D_040032B0[];
 extern UNK_TYPE D_0400CF58;
 extern UNK_TYPE D_0400CF88;
-extern AnimationHeaderCommon D_0400CF98; // used in kamaro, dance animation?
+extern LinkAnimationHeader D_0400CF98; // used in kamaro, dance animation?
 extern UNK_TYPE D_0400D0A8;
 extern UNK_TYPE D_0400D0B0;
 extern UNK_TYPE D_0400D0C8;

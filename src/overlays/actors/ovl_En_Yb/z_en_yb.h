@@ -13,9 +13,9 @@ typedef struct EnYb {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s limbDrawTbl[ENYB_LIMBCOUNT];
-    /* 0x??? */ char weirdPadding[0x94]; // this is too much padding what
+    /* 0x??? */ UNK_TYPE1 unkPadding[0x94];
     /* 0x2A0 */ Vec3s transitionDrawTable[ENYB_LIMBCOUNT];
-    /* 0x??? */ char weirdPadding2[0x94];
+    /* 0x??? */ UNK_TYPE1 unkPadding2[0x94];
     /* 0x3B8 */ ColliderCylinder collider;
     /* 0x404 */ Vec3f shadowPos;
     /* 0x410 */ u16 unkFlag410;
