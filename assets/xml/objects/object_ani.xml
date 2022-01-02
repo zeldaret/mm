@@ -51,7 +51,7 @@
         <Texture Name="gAniHairTex" OutName="ani_hair" Format="ci8" Width="16" Height="16" Offset="0x6A18" />
         <Texture Name="gAniClosingEyeTex" OutName="ani_closing_eye" Format="ci8" Width="32" Height="32" Offset="0x6B18" TlutOffset="0x6318"/>
         <Texture Name="gAniClosedEyeTex" OutName="ani_closed_eye" Format="ci8" Width="32" Height="32" Offset="0x6F18" TlutOffset="0x6318"/>
-        <DList Name="gAnHeadDL" Offset="0x7B58" />
+        <DList Name="gAniHeadDL" Offset="0x7B58" />
         <Animation Name="gAniLandingThenStandingUpAnim" Offset="0x9220" />
         <Animation Name="gAniHoldUpHandAnim" Offset="0x9734" />
         <Animation Name="gAniStandingNormalAnim" Offset="0x9D34" />

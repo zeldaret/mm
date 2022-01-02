@@ -72,7 +72,7 @@ static InitChainEntry sInitChain[] = {
 
 static Vec3f D_809686A4 = { 800.0f, 500.0f, 0.0f };
 
-static TexturePtr gEyeTextures[] = { gAniOpenEyeTex, gAniClosingEyeTex, gAniClosedEyeTex };
+static TexturePtr sEyeTextures[] = { gAniOpenEyeTex, gAniClosingEyeTex, gAniClosedEyeTex };
 
 void EnAni_DefaultBlink(EnAni* this) {
     if (DECR(this->blinkTimer) == 0) {
@@ -107,8 +107,8 @@ void EnAni_WaitForEyeOpen(EnAni* this) {
 }
 
 void EnAni_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnAni* this = THIS;
     s32 pad;
+    EnAni* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
@@ -156,7 +156,7 @@ void EnAni_SetText(EnAni* this, GlobalContext* globalCtx, u16 textId) {
     s16 diffAngle = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     this->actor.textId = textId;
-    if ((this->stateFlags & ANI_STATE_SUFFERING) != 0 || ABS_ALT(diffAngle) < 0x4301) {
+    if ((this->stateFlags & ANI_STATE_SUFFERING) || ABS_ALT(diffAngle) <= 0x4300) {
         if (this->actor.xzDistToPlayer < 100.0f) {
             func_800B8614(&this->actor, globalCtx, 120.0f);
         }
@@ -219,7 +219,7 @@ void EnAni_FallingToGround(EnAni* this, GlobalContext* globalCtx) {
     s16 quakeValue;
 
     // if hit the ground
-    if ((this->actor.bgCheckFlags & 1) != 0) {
+    if (this->actor.bgCheckFlags & 1) {
         this->actor.flags &= ~0x10;
         this->actionFunc = EnAni_WaitingForFootPain;
         this->actor.velocity.x = 0.0f;
@@ -254,7 +254,7 @@ void EnAni_LosingBalance(EnAni* this, GlobalContext* globalCtx) {
 }
 
 void EnAni_TreeHanging(EnAni* this, GlobalContext* globalCtx) {
-    if (SkelAnime_Update(&this->skelAnime) != 0) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         if (this->treeReachTimer > 0) {
             this->treeReachTimer--;
             if (this->treeReachTimer > 0) {
@@ -286,7 +286,7 @@ void EnAni_Update(Actor* thisx, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider1);
     Collider_UpdateCylinder(&this->actor, &this->collider2);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-    if ((this->stateFlags & ANI_STATE_UNUSED) == 0) {
+    if (!(this->stateFlags & ANI_STATE_UNUSED)) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
     }
 
@@ -299,7 +299,7 @@ void EnAni_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ApplyMovement(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     this->actionFunc(this, globalCtx);
-    if (this->actor.xzDistToPlayer < 100.0f && (this->stateFlags & ANI_STATE_CLIMBING) == 0) {
+    if (this->actor.xzDistToPlayer < 100.0f && !(this->stateFlags & ANI_STATE_CLIMBING)) {
         func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk2E6, this->actor.focus.pos);
         this->unk2E6.x = this->unk2E6.y = this->unk2E6.z = 0;
     } else {
@@ -310,7 +310,7 @@ void EnAni_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->blinkFunc(this);
-    if ((this->stateFlags & ANI_STATE_FALLING) != 0) {
+    if (this->stateFlags & ANI_STATE_FALLING) {
         if (this->actor.cutscene == -1) {
             this->stateFlags &= ~ANI_STATE_FALLING;
         } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
@@ -330,7 +330,7 @@ s32 EnAni_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         rot->x += this->headRot.y;
         rot->z += this->headRot.x;
     }
-    return 0;
+    return false;
 }
 
 void EnAni_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
