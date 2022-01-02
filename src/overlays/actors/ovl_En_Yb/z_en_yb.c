@@ -240,7 +240,6 @@ void EnYb_FinishTeachingCutscene(EnYb* this) {
     }
 }
 
-// zero is the only input...? only called from Idle?
 void EnYb_ChangeCutscene(EnYb* this, s16 cutsceneId) {
     EnYb_FinishTeachingCutscene(this);
     this->cutsceneIndex = cutsceneId;
