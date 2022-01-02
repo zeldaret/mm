@@ -435,7 +435,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
                     case 590:
                         Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_CRY);
                         break;
-
+                        
                     case 737:
                         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
@@ -832,12 +832,12 @@ void EnFall_Fireball_Draw(Actor* thisx, GlobalContext* globalCtx) {
         POLY_XLU_DISP++, (s32)(((1.0f - this->fireballIntensity) * 50.0f) + (200.0f * this->fireballIntensity)),
         (s32)(20.0f * (1.0f - this->fireballIntensity)), (s32)(20.0f * (1.0f - this->fireballIntensity)), 255);
 
-    // Handles the texture scrolling for the glowing sphere of fire
+    // For the glowing sphere of fire
     gSPSegment(POLY_XLU_DISP++, 0x09,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames, -this->fireballYTexScroll2, 64, 64, 1,
                                 -gameplayFrames, -this->fireballYTexScroll1, 64, 64));
 
-    // Handles the texture scrolling for the "flecks" of fire around the fireball
+    // For the "flecks" of fire around the fireball
     gSPSegment(POLY_XLU_DISP++, 0x0A,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames * 2, -this->fireballYTexScroll1, 64, 64, 1,
                                 -gameplayFrames * 2, -this->fireballYTexScroll1, 64, 64));
