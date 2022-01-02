@@ -577,9 +577,9 @@ void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstSca
 }
 
 void func_800B2364(GlobalContext* globalCtx, Vec3f* pos, Gfx* dList) {
-    Vec3f posVec = { 0.0f, -2.0f, 0.0f };
+    Vec3f accel = { 0.0f, -2.0f, 0.0f };
 
-    EffectSsHahen_Spawn(globalCtx, pos, &gZeroVec3f, &posVec, 1, 5, 1, 10, dList);
+    EffectSsHahen_Spawn(globalCtx, pos, &gZeroVec3f, &accel, 1, 5, 1, 10, dList);
 }
 
 // EffectSsStick Spawn Functions
@@ -785,7 +785,6 @@ void EffectSsIcePiece_SpawnBurst(GlobalContext* globalCtx, Vec3f* refPos, f32 sc
 
 void EffectSsEnIce_SpawnFlyingVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, Color_RGBA8* prim,
                                     Color_RGBA8* env, f32 scale) {
-
     EffectSsEnIceInitParams initParams;
 
     initParams.actor = actor;
@@ -954,7 +953,6 @@ void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
 
 void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
                    s32 colorIndex) {
-
     static Color_RGBA8 primColor = { 255, 255, 255, 255 };
     static Color_RGBA8 envColors[] = {
         { 255, 0, 0, 255 },

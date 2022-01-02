@@ -34,7 +34,8 @@ void EffectSS_Clear(GlobalContext* globalCtx) {
     sEffectSsInfo.size = 0;
 
     //! @bug: This code is completely useless, as data_table was just set to NULL and size to 0
-    for (effectsSs = sEffectSsInfo.data_table; effectsSs < sEffectSsInfo.data_table + sEffectSsInfo.size; effectsSs++) {
+    for (effectsSs = &sEffectSsInfo.data_table[0]; effectsSs < &sEffectSsInfo.data_table[sEffectSsInfo.size];
+         effectsSs++) {
         EffectSS_Delete(effectsSs);
     }
 
@@ -46,7 +47,7 @@ void EffectSS_Clear(GlobalContext* globalCtx) {
             ZeldaArena_Free(addr);
         }
 
-        overlay->loadedRamAddr = 0;
+        overlay->loadedRamAddr = NULL;
         overlay++;
     }
 }
