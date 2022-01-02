@@ -146,10 +146,13 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
 s32 DoorSpiral_GetObjectType(GlobalContext* globalCtx) {
     // Defines which object type should be used for specific scenes
     static SpiralSceneInfo spiralSceneInfo[] = {
-        { SCENE_MITURIN, SPIRAL_OBJECT_WOODFALL },         { SCENE_HAKUGIN, SPIRAL_OBJECT_SNOWHEAD },
-        { SCENE_INISIE_N, SPIRAL_OBJECT_STONE_TOWER },     { SCENE_INISIE_R, SPIRAL_OBJECT_STONE_TOWER },
-        { SCENE_DANPEI2TEST, SPIRAL_OBJECT_DAMPES_HOUSE }, { SCENE_IKNINSIDE, SPIRAL_OBJECT_IKANA_CASTLE },
-        { SCENE_CASTLE, SPIRAL_OBJECT_IKANA_CASTLE },
+        { SCENE_WOODFALL_TEMPLE, SPIRAL_OBJECT_WOODFALL },
+        { SCENE_SNOWHEAD_TEMPLE, SPIRAL_OBJECT_SNOWHEAD },
+        { SCENE_STONE_TOWER_TEMPLE, SPIRAL_OBJECT_STONE_TOWER },
+        { SCENE_INVERTED_STONE_TOWER_TEMPLE, SPIRAL_OBJECT_STONE_TOWER },
+        { SCENE_DAMPES_HOUSE, SPIRAL_OBJECT_DAMPES_HOUSE },
+        { SCENE_IGOS_DU_IKANAS_LAIR, SPIRAL_OBJECT_IKANA_CASTLE },
+        { SCENE_IKANA_CASTLE, SPIRAL_OBJECT_IKANA_CASTLE },
     };
     SpiralSceneInfo* sceneInfo = spiralSceneInfo;
     s32 i;

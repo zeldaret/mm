@@ -29,12 +29,12 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     u32 spaceSize;
     s32 i;
 
-    if (globalCtx->sceneNum == SCENE_CLOCKTOWER || globalCtx->sceneNum == SCENE_TOWN ||
-        globalCtx->sceneNum == SCENE_BACKTOWN || globalCtx->sceneNum == SCENE_ICHIBA) {
+    if (globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN || globalCtx->sceneNum == SCENE_EAST_CLOCK_TOWN ||
+        globalCtx->sceneNum == SCENE_NORTH_CLOCK_TOWN || globalCtx->sceneNum == SCENE_WEST_CLOCK_TOWN) {
         spaceSize = OBJECT_SPACE_SIZE_CLOCK_TOWN;
     } else if (globalCtx->sceneNum == SCENE_MILK_BAR) {
         spaceSize = OBJECT_SPACE_SIZE_MILK_BAR;
-    } else if (globalCtx->sceneNum == SCENE_00KEIKOKU) {
+    } else if (globalCtx->sceneNum == SCENE_TERMINA_FIELD) {
         spaceSize = OBJECT_SPACE_SIZE_TERMINA_FIELD;
     } else {
         spaceSize = OBJECT_SPACE_SIZE_DEFAULT;

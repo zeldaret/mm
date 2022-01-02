@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_13HUBUKINOMITI" -->
+    <File Name="path_to_mountain_village_scene" Segment="2" Game="MM">
+        <Scene Name="path_to_mountain_village_scene" Offset="0x0"/>
+    </File>
+    <File Name="path_to_mountain_village_room_00" Segment="3" Game="MM">
+        <Room Name="path_to_mountain_village_room_00" Offset="0x0"/>
+    </File>
+</Root>

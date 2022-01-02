@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_HAKUGIN_BS" -->
+    <File Name="gohts_lair_scene" Segment="2" Game="MM">
+        <Scene Name="gohts_lair_scene" Offset="0x0"/>
+    </File>
+    <File Name="gohts_lair_room_00" Segment="3" Game="MM">
+        <Room Name="gohts_lair_room_00" Offset="0x0"/>
+    </File>
+</Root>

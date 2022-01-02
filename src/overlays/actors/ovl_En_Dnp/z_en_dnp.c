@@ -258,7 +258,7 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
     u32 temp_v0;
     s32 val;
 
-    if (!(gSaveContext.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
+    if (!(gSaveContext.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_WOODFALL_TEMPLE) &&
         (globalCtx->csCtx.unk_12 == 0)) {
         this->unk_322 |= 0x20;
         gSaveContext.weekEventReg[29] |= 0x40;
@@ -381,7 +381,7 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetScale(&this->actor, 0.0085f);
         func_8013AED4(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
-        if ((globalCtx->sceneNum == SCENE_MITURIN) && (gSaveContext.weekEventReg[29] & 0x40)) {
+        if ((globalCtx->sceneNum == SCENE_WOODFALL_TEMPLE) && (gSaveContext.weekEventReg[29] & 0x40)) {
             this->unk_322 |= 0x20;
             func_80B3CC38(this, 1);
         }

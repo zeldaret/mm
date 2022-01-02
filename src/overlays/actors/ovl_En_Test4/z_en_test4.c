@@ -439,7 +439,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
             if (CURRENT_DAY == 3) {
                 if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
                     ((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
-                     (globalCtx->sceneNum == SCENE_CLOCKTOWER))) {
+                     (globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN))) {
                     s32 phi_v0;
                     u32 entranceIndex = gSaveContext.entranceIndex;
 
@@ -451,7 +451,8 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     func_80169DCC(globalCtx, 1, entranceIndex, player->unk_3CE, phi_v0, &player->unk_3C0,
                                   player->unk_3CC);
 
-                    if ((globalCtx->sceneNum == SCENE_TENMON_DAI) || (globalCtx->sceneNum == SCENE_00KEIKOKU)) {
+                    if ((globalCtx->sceneNum == SCENE_ASTRAL_OBSERVATORY) ||
+                        (globalCtx->sceneNum == SCENE_TERMINA_FIELD)) {
                         globalCtx->nextEntranceIndex = 0x5400;
                     } else {
                         globalCtx->nextEntranceIndex = 0xD800;

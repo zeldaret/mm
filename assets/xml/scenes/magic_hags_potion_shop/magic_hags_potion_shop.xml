@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_WITCH_SHOP" -->
+    <File Name="magic_hags_potion_shop_scene" Segment="2" Game="MM">
+        <Scene Name="magic_hags_potion_shop_scene" Offset="0x0"/>
+    </File>
+    <File Name="magic_hags_potion_shop_room_00" Segment="3" Game="MM">
+        <Room Name="magic_hags_potion_shop_room_00" Offset="0x0"/>
+    </File>
+</Root>

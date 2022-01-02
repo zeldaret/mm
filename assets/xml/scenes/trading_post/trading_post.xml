@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_8ITEMSHOP" -->
+    <File Name="trading_post_scene" Segment="2" Game="MM">
+        <Scene Name="trading_post_scene" Offset="0x0"/>
+    </File>
+    <File Name="trading_post_room_00" Segment="3" Game="MM">
+        <Room Name="trading_post_room_00" Offset="0x0"/>
+    </File>
+</Root>

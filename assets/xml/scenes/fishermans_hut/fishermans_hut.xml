@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_FISHERMAN" -->
+    <File Name="fishermans_hut_scene" Segment="2" Game="MM">
+        <Scene Name="fishermans_hut_scene" Offset="0x0"/>
+    </File>
+    <File Name="fishermans_hut_room_00" Segment="3" Game="MM">
+        <Room Name="fishermans_hut_room_00" Offset="0x0"/>
+    </File>
+</Root>

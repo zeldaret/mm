@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_21MITURINMAE" -->
+    <File Name="woodfall_scene" Segment="2" Game="MM">
+        <Scene Name="woodfall_scene" Offset="0x0"/>
+    </File>
+    <File Name="woodfall_room_00" Segment="3" Game="MM">
+        <Room Name="woodfall_room_00" Offset="0x0"/>
+    </File>
+</Root>

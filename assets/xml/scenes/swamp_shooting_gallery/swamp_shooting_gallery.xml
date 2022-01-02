@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_SYATEKI_MORI" -->
+    <File Name="swamp_shooting_gallery_scene" Segment="2" Game="MM">
+        <Scene Name="swamp_shooting_gallery_scene" Offset="0x0"/>
+    </File>
+    <File Name="swamp_shooting_gallery_room_00" Segment="3" Game="MM">
+        <Room Name="swamp_shooting_gallery_room_00" Offset="0x0"/>
+    </File>
+</Root>

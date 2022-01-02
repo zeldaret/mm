@@ -117,8 +117,8 @@ s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
             func_80123140(globalCtx, GET_PLAYER(globalCtx));
             Actor_SpawnTransitionActors(globalCtx, &globalCtx->actorCtx);
 
-            if (((globalCtx->sceneNum != SCENE_IKANA) || (roomCtx->currRoom.num != 1)) &&
-                (globalCtx->sceneNum != SCENE_IKNINSIDE)) {
+            if (((globalCtx->sceneNum != SCENE_IKANA_CANYON) || (roomCtx->currRoom.num != 1)) &&
+                (globalCtx->sceneNum != SCENE_IGOS_DU_IKANAS_LAIR)) {
                 globalCtx->envCtx.unk_C3 = 0xff;
                 globalCtx->envCtx.unk_E0 = 0;
             }

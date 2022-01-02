@@ -207,7 +207,7 @@ void EnZog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA) &&
         ((globalCtx->csCtx.unk_12 != 2) || (gSaveContext.sceneSetupIndex != 0) ||
-         (globalCtx->sceneNum != SCENE_30GYOSON))) {
+         (globalCtx->sceneNum != SCENE_GREAT_BAY_COAST))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

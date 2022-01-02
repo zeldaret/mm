@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_33ZORACITY" -->
+    <File Name="zora_hall_scene" Segment="2" Game="MM">
+        <Scene Name="zora_hall_scene" Offset="0x0"/>
+    </File>
+    <File Name="zora_hall_room_00" Segment="3" Game="MM">
+        <Room Name="zora_hall_room_00" Offset="0x0"/>
+    </File>
+</Root>

@@ -105,9 +105,9 @@ void ObjTokeidai_TowerGear_Init(ObjTokeidai* this, GlobalContext* globalCtx) {
     this->opaDList = object_obj_tokeidai_DL_00BA78;
     ObjTokeidai_SetupClockOrGear(this);
 
-    if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+    if (((globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN) && (gSaveContext.sceneSetupIndex == 2) &&
          (globalCtx->csCtx.unk_12 == 0)) ||
-        ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
+        ((globalCtx->sceneNum == SCENE_TERMINA_FIELD) && (gSaveContext.sceneSetupIndex == 2) &&
          (globalCtx->csCtx.unk_12 == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
     } else if ((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
@@ -124,9 +124,9 @@ void ObjTokeidai_TowerClock_Init(ObjTokeidai* this, GlobalContext* globalCtx) {
     this->actor.draw = ObjTokeidai_Clock_Draw;
     ObjTokeidai_Clock_Init(this);
 
-    if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+    if (((globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN) && (gSaveContext.sceneSetupIndex == 2) &&
          (globalCtx->csCtx.unk_12 == 0)) ||
-        ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
+        ((globalCtx->sceneNum == SCENE_TERMINA_FIELD) && (gSaveContext.sceneSetupIndex == 2) &&
          (globalCtx->csCtx.unk_12 == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
     } else if ((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
@@ -156,9 +156,9 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, GlobalContext* globalCtx)
         this->spotlightIntensity = 0;
     }
 
-    if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+    if (((globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN) && (gSaveContext.sceneSetupIndex == 2) &&
          (globalCtx->csCtx.unk_12 == 0)) ||
-        ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
+        ((globalCtx->sceneNum == SCENE_TERMINA_FIELD) && (gSaveContext.sceneSetupIndex == 2) &&
          (globalCtx->csCtx.unk_12 == 0))) {
         this->spotlightIntensity = 0;
         ObjTokeidai_SetupTowerOpening(this);
@@ -416,9 +416,9 @@ void ObjTokeidai_Walls_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
 void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 5) {
         gSaveContext.weekEventReg[8] |= 0x40;
-        if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+        if (((globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN) && (gSaveContext.sceneSetupIndex == 2) &&
              (globalCtx->csCtx.unk_12 == 0)) ||
-            ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
+            ((globalCtx->sceneNum == SCENE_TERMINA_FIELD) && (gSaveContext.sceneSetupIndex == 2) &&
              (globalCtx->csCtx.unk_12 == 0))) {
             func_801A3F54(false);
             gSaveContext.cutscene = 0;

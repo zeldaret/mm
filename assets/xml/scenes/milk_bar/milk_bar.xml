@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_MILK_BAR" -->
+    <File Name="milk_bar_scene" Segment="2" Game="MM">
+        <Scene Name="milk_bar_scene" Offset="0x0"/>
+    </File>
+    <File Name="milk_bar_room_00" Segment="3" Game="MM">
+        <Room Name="milk_bar_room_00" Offset="0x0"/>
+    </File>
+</Root>

@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_F40" -->
+    <File Name="stone_tower_scene" Segment="2" Game="MM">
+        <Scene Name="stone_tower_scene" Offset="0x0"/>
+    </File>
+    <File Name="stone_tower_room_00" Segment="3" Game="MM">
+        <Room Name="stone_tower_room_00" Offset="0x0"/>
+    </File>
+</Root>

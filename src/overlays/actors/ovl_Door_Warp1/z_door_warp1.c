@@ -75,13 +75,13 @@ void DoorWarp1_SetupAction(DoorWarp1* this, DoorWarp1ActionFunc actionFunc) {
 s32 func_808B849C(DoorWarp1* this, GlobalContext* globalCtx) {
     s32 ret = 0;
 
-    if ((globalCtx->sceneNum == SCENE_MITURIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
+    if ((globalCtx->sceneNum == SCENE_ODOLWAS_LAIR) && !CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
         ret = 1;
-    } else if ((globalCtx->sceneNum == SCENE_HAKUGIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
+    } else if ((globalCtx->sceneNum == SCENE_GOHTS_LAIR) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
         ret = 2;
-    } else if ((globalCtx->sceneNum == SCENE_SEA_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
+    } else if ((globalCtx->sceneNum == SCENE_GYORGS_LAIR) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
         ret = 3;
-    } else if ((globalCtx->sceneNum == SCENE_INISIE_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
+    } else if ((globalCtx->sceneNum == SCENE_TWINMOLDS_LAIR) && !CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
         ret = 4;
     }
     return ret;
@@ -161,8 +161,8 @@ void DoorWarp1_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((globalCtx->sceneNum == SCENE_MITURIN_BS) || (globalCtx->sceneNum == SCENE_HAKUGIN_BS) ||
-        (globalCtx->sceneNum == SCENE_INISIE_BS) || (globalCtx->sceneNum == SCENE_SEA_BS)) {
+    if ((globalCtx->sceneNum == SCENE_ODOLWAS_LAIR) || (globalCtx->sceneNum == SCENE_GOHTS_LAIR) ||
+        (globalCtx->sceneNum == SCENE_TWINMOLDS_LAIR) || (globalCtx->sceneNum == SCENE_GYORGS_LAIR)) {
         func_800FE484();
         globalCtx->interfaceCtx.restrictions.unk_312 = 1;
         globalCtx->interfaceCtx.restrictions.songOfSoaring = 1;
@@ -268,7 +268,7 @@ void func_808B8E78(DoorWarp1* this, GlobalContext* globalCtx) {
     this->unk_1A8 = 0.0f;
     this->unk_1AC = 0.0f;
     this->unk_1A4 = 700.0f;
-    if (globalCtx->sceneNum == SCENE_INISIE_N) {
+    if (globalCtx->sceneNum == SCENE_STONE_TOWER_TEMPLE) {
         DoorWarp1_SetupAction(this, func_808B96A0);
     } else if (gSaveContext.weekEventReg[86] & 0x80) {
         this->unk_1D4 = 0;
@@ -306,12 +306,12 @@ void func_808B90CC(DoorWarp1* this, GlobalContext* globalCtx) {
     s16 sp2E = 0;
     f32 phi_f0 = 0.0f;
 
-    if (globalCtx->sceneNum == SCENE_MITURIN) {
+    if (globalCtx->sceneNum == SCENE_WOODFALL_TEMPLE) {
         sp2E = -10;
         phi_f0 = -5.0f;
-    } else if (globalCtx->sceneNum == SCENE_HAKUGIN) {
+    } else if (globalCtx->sceneNum == SCENE_SNOWHEAD_TEMPLE) {
         sp2E = -20;
-    } else if (globalCtx->sceneNum == SCENE_SEA) {
+    } else if (globalCtx->sceneNum == SCENE_GREAT_BAY_TEMPLE) {
         sp2E = -20;
     }
 
@@ -551,22 +551,22 @@ void func_808B9CE8(DoorWarp1* this, GlobalContext* globalCtx) {
     }
 
     switch (globalCtx->sceneNum) {
-        case SCENE_MITURIN_BS:
+        case SCENE_ODOLWAS_LAIR:
             gSaveContext.roomInf[126][3] =
                 (((void)0, gSaveContext.roomInf[126][3]) & 0xFFFFFF00) | (((u8)gSaveContext.roomInf[126][4]) & 0xFF);
             break;
 
-        case SCENE_HAKUGIN_BS:
+        case SCENE_GOHTS_LAIR:
             gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0xFFFF00FF) |
                                            ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 8);
             break;
 
-        case SCENE_INISIE_BS:
+        case SCENE_TWINMOLDS_LAIR:
             gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0xFF00FFFF) |
                                            ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 0x10);
             break;
 
-        case SCENE_SEA_BS:
+        case SCENE_GYORGS_LAIR:
             gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0x00FFFFFF) |
                                            ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 0x18);
             break;
@@ -634,16 +634,16 @@ void func_808BA10C(DoorWarp1* this, GlobalContext* globalCtx) {
     u8 phi_a0;
     s32 phi_v0_3;
 
-    if ((globalCtx->sceneNum == SCENE_MITURIN_BS) || (globalCtx->sceneNum == SCENE_HAKUGIN_BS) ||
-        (globalCtx->sceneNum == SCENE_INISIE_BS) || (globalCtx->sceneNum == SCENE_SEA_BS)) {
+    if ((globalCtx->sceneNum == SCENE_ODOLWAS_LAIR) || (globalCtx->sceneNum == SCENE_GOHTS_LAIR) ||
+        (globalCtx->sceneNum == SCENE_TWINMOLDS_LAIR) || (globalCtx->sceneNum == SCENE_GYORGS_LAIR)) {
         D_801F4DE2 = globalCtx->sceneNum;
-        if (globalCtx->sceneNum == SCENE_MITURIN_BS) {
+        if (globalCtx->sceneNum == SCENE_ODOLWAS_LAIR) {
             phi_v0_2 = 0;
-        } else if (globalCtx->sceneNum == SCENE_HAKUGIN_BS) {
+        } else if (globalCtx->sceneNum == SCENE_GOHTS_LAIR) {
             phi_v0_2 = 1;
-        } else if (globalCtx->sceneNum == SCENE_INISIE_BS) {
+        } else if (globalCtx->sceneNum == SCENE_TWINMOLDS_LAIR) {
             phi_v0_2 = 2;
-        } else if (globalCtx->sceneNum == SCENE_SEA_BS) {
+        } else if (globalCtx->sceneNum == SCENE_GYORGS_LAIR) {
             phi_v0_2 = 3;
         } else {
             phi_v0_2 = 0;
@@ -881,7 +881,7 @@ void func_808BAAF4(DoorWarp1* this, GlobalContext* globalCtx) {
     f32 phi_f2;
 
     phi_f2 = 200.0f;
-    if (globalCtx->sceneNum == SCENE_SEA) {
+    if (globalCtx->sceneNum == SCENE_GREAT_BAY_TEMPLE) {
         phi_f2 = 85.0f;
     }
 
@@ -1040,12 +1040,12 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
         return;
     }
 
-    if (globalCtx->sceneNum != SCENE_MITURIN) {
-        if (globalCtx->sceneNum == SCENE_HAKUGIN) {
+    if (globalCtx->sceneNum != SCENE_WOODFALL_TEMPLE) {
+        if (globalCtx->sceneNum == SCENE_SNOWHEAD_TEMPLE) {
             sp60 = 1;
-        } else if (globalCtx->sceneNum == SCENE_SEA) {
+        } else if (globalCtx->sceneNum == SCENE_GREAT_BAY_TEMPLE) {
             sp60 = 2;
-        } else if (globalCtx->sceneNum == SCENE_INISIE_R) {
+        } else if (globalCtx->sceneNum == SCENE_INVERTED_STONE_TOWER_TEMPLE) {
             sp60 = 3;
         }
     }

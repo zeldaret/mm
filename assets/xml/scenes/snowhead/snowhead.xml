@@ -1,0 +1,8 @@
+<Root>
+    <File Name="snowhead_scene" Segment="2" Game="MM">
+        <Scene Name="snowhead_scene" Offset="0x0"/>
+    </File>
+    <File Name="snowhead_room_00" Segment="3" Game="MM">
+        <Room Name="snowhead_room_00" Offset="0x0"/>
+    </File>
+</Root>

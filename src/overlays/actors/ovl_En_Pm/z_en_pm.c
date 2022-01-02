@@ -730,7 +730,7 @@ s32 func_80AF86F0(EnPm* this, GlobalContext* globalCtx) {
 s32 func_80AF87C4(EnPm* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_00KEIKOKU) &&
+    if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_TERMINA_FIELD) &&
         (gSaveContext.sceneSetupIndex == 9) && (globalCtx->curSpawn == 1)) {
         if (!this->unk_380) {
             func_80AF7E98(this, 0);

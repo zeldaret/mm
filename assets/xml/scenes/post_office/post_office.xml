@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_POSTHOUSE" -->
+    <File Name="post_office_scene" Segment="2" Game="MM">
+        <Scene Name="post_office_scene" Offset="0x0"/>
+    </File>
+    <File Name="post_office_room_00" Segment="3" Game="MM">
+        <Room Name="post_office_room_00" Offset="0x0"/>
+    </File>
+</Root>

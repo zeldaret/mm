@@ -192,7 +192,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    if ((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+    if ((globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN) && (gSaveContext.sceneSetupIndex == 2) &&
         (globalCtx->csCtx.unk_12 == 0)) {
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClocktowerPanelCol);
         ObjTokeiStep_InitSteps(this);

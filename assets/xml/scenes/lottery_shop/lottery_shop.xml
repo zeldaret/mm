@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_TAKARAKUJI" -->
+    <File Name="lottery_shop_scene" Segment="2" Game="MM">
+        <Scene Name="lottery_shop_scene" Offset="0x0"/>
+    </File>
+    <File Name="lottery_shop_room_00" Segment="3" Game="MM">
+        <Room Name="lottery_shop_room_00" Offset="0x0"/>
+    </File>
+</Root>

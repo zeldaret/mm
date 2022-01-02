@@ -189,8 +189,8 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
 s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_12HAKUGINMAE) &&
-        (globalCtx->csCtx.unk_12 == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
+    if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_SNOWHEAD) && (globalCtx->csCtx.unk_12 == 0) &&
+        !(gSaveContext.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
             Actor_SetSwitchFlag(globalCtx, 20);
             this->unk_1CE |= (0x80 | 0x10);

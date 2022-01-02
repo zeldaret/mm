@@ -277,11 +277,11 @@ void func_80989674(EnDg* this, GlobalContext* globalCtx) {
             }
         }
 
-        if ((this->unk_286 == 21) || ((this->unk_286 == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
+        if ((this->unk_286 == 21) || ((this->unk_286 == 20) && (globalCtx->sceneNum == SCENE_ROMANI_RANCH_BUILDINGS))) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
         } else if (this->unk_286 == 20) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
-        } else if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
+        } else if (globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         } else if (D_8098C2A8[this->unk_286].unk_04 & 0x11) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
@@ -338,11 +338,11 @@ void func_80989A9C(EnDg* this, f32 arg1) {
 
 void func_80989ADC(EnDg* this, GlobalContext* globalCtx) {
     if (!(this->actor.bgCheckFlags & 0x20)) {
-        if ((this->unk_286 == 21) || ((this->unk_286 == 20) && (globalCtx->sceneNum == SCENE_OMOYA))) {
+        if ((this->unk_286 == 21) || ((this->unk_286 == 20) && (globalCtx->sceneNum == SCENE_ROMANI_RANCH_BUILDINGS))) {
             func_80989140(&this->skelAnime, sAnimations, 1);
         } else if (this->unk_286 == 20) {
             func_80989140(&this->skelAnime, sAnimations, 2);
-        } else if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
+        } else if (globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN) {
             func_80989140(&this->skelAnime, sAnimations, 2);
         } else if (D_8098C2A8[this->unk_286].unk_04 & 0x11) {
             func_80989140(&this->skelAnime, sAnimations, 1);
@@ -1132,7 +1132,7 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_286 = ENDG_GET_3E0(&this->actor);
     this->unk_28C = 0;
     this->unk_290 = 0;
-    if (globalCtx->sceneNum == SCENE_F01_B) {
+    if (globalCtx->sceneNum == SCENE_DOGGY_RACETRACK) {
         this->unk_28A = 100;
         func_80989BF8(this);
     }
@@ -1152,7 +1152,7 @@ void EnDg_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp28 = { 0.0f, 0.0f, 0.0f };
 
     this->unk_288 = D_8098C2FC.unk_02;
-    if (!(player->stateFlags1 & 0x20) || (globalCtx->sceneNum != SCENE_CLOCKTOWER)) {
+    if (!(player->stateFlags1 & 0x20) || (globalCtx->sceneNum != SCENE_SOUTH_CLOCK_TOWN)) {
         if (func_8098A1B4(this, globalCtx)) {
             func_8098A234(this, globalCtx);
         } else if (this->unk_28C != 8) {

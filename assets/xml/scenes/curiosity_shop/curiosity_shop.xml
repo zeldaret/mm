@@ -1,0 +1,12 @@
+<Root>
+    <!-- "Z2_AYASHIISHOP" -->
+    <File Name="curiosity_shop_scene" Segment="2" Game="MM">
+        <Scene Name="curiosity_shop_scene" Offset="0x0"/>
+    </File>
+    <File Name="curiosity_shop_room_00" Segment="3" Game="MM">
+        <Room Name="curiosity_shop_room_00" Offset="0x0"/>
+    </File>
+    <File Name="curiosity_shop_room_01" Segment="3" Game="MM">
+        <Room Name="curiosity_shop_room_01" Offset="0x0"/>
+    </File>
+</Root>

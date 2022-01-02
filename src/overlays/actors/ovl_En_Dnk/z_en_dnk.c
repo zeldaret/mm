@@ -450,8 +450,8 @@ void func_80A52074(EnDnk* this, GlobalContext* globalCtx) {
 }
 
 void func_80A52134(EnDnk* this, GlobalContext* globalCtx) {
-    if ((globalCtx->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (globalCtx->sceneNum == SCENE_SPOT00) &&
-        (gSaveContext.sceneSetupIndex == 2)) {
+    if ((globalCtx->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) &&
+        (globalCtx->sceneNum == SCENE_CUTSCENE_MAP) && (gSaveContext.sceneSetupIndex == 2)) {
         func_80A52074(this, globalCtx);
     }
 }

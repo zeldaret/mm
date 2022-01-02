@@ -1,0 +1,12 @@
+<Root>
+    <!-- "Z2_11GORONNOSATO" -->
+    <File Name="goron_village_winter_scene" Segment="2" Game="MM">
+        <Scene Name="goron_village_winter_scene" Offset="0x0"/>
+    </File>
+    <File Name="goron_village_winter_room_00" Segment="3" Game="MM">
+        <Room Name="goron_village_winter_room_00" Offset="0x0"/>
+    </File>
+    <File Name="goron_village_winter_room_01" Segment="3" Game="MM">
+        <Room Name="goron_village_winter_room_01" Offset="0x0"/>
+    </File>
+</Root>

@@ -1,0 +1,12 @@
+<Root>
+    <!-- "Z2_BOTI" -->
+    <File Name="ikana_graveyard_scene" Segment="2" Game="MM">
+        <Scene Name="ikana_graveyard_scene" Offset="0x0"/>
+    </File>
+    <File Name="ikana_graveyard_room_00" Segment="3" Game="MM">
+        <Room Name="ikana_graveyard_room_00" Offset="0x0"/>
+    </File>
+    <File Name="ikana_graveyard_room_01" Segment="3" Game="MM">
+        <Room Name="ikana_graveyard_room_01" Offset="0x0"/>
+    </File>
+</Root>

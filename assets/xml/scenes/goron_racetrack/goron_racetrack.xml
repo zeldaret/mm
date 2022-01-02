@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_GORONRACE" -->
+    <File Name="goron_racetrack_scene" Segment="2" Game="MM">
+        <Scene Name="goron_racetrack_scene" Offset="0x0"/>
+    </File>
+    <File Name="goron_racetrack_room_00" Segment="3" Game="MM">
+        <Room Name="goron_racetrack_room_00" Offset="0x0"/>
+    </File>
+</Root>

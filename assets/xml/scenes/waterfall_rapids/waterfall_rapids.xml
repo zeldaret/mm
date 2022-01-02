@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_35TAKI" -->
+    <File Name="waterfall_rapids_scene" Segment="2" Game="MM">
+        <Scene Name="waterfall_rapids_scene" Offset="0x0"/>
+    </File>
+    <File Name="waterfall_rapids_room_00" Segment="3" Game="MM">
+        <Room Name="waterfall_rapids_room_00" Offset="0x0"/>
+    </File>
+</Root>

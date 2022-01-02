@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_17SETUGEN" -->
+    <File Name="path_to_goron_village_winter_scene" Segment="2" Game="MM">
+        <Scene Name="path_to_goron_village_winter_scene" Offset="0x0"/>
+    </File>
+    <File Name="path_to_goron_village_winter_room_00" Segment="3" Game="MM">
+        <Room Name="path_to_goron_village_winter_room_00" Offset="0x0"/>
+    </File>
+</Root>

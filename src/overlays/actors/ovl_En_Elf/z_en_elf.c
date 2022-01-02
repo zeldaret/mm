@@ -903,14 +903,14 @@ void func_8088E850(EnElf* this, GlobalContext* globalCtx) {
             func_8088D660(this, &nextPos, 0.2f);
         }
 
-        if ((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 0) &&
+        if ((globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN) && (gSaveContext.sceneSetupIndex == 0) &&
             (globalCtx->csCtx.unk_12 == 0) &&
             ((globalCtx->csCtx.frames == 0x95) || (globalCtx->csCtx.frames == 0x17D) ||
              (globalCtx->csCtx.frames == 0x24F))) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
 
-        if ((globalCtx->sceneNum == SCENE_SECOM) && (gSaveContext.sceneSetupIndex == 0) &&
+        if ((globalCtx->sceneNum == SCENE_SAKONS_HIDEOUT) && (gSaveContext.sceneSetupIndex == 0) &&
             (globalCtx->csCtx.unk_12 == 4) && (globalCtx->csCtx.frames == 0x5F)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }

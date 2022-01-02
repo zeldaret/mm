@@ -170,7 +170,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
 
         EnHoll_SetPlayerSide(globalCtx, this, &transformedPlayerPos);
         playerDistFromCentralPlane = fabsf(transformedPlayerPos.z);
-        if (globalCtx->sceneNum == SCENE_IKANA) {
+        if (globalCtx->sceneNum == SCENE_IKANA_CANYON) {
             enHollBottom = EN_HOLL_BOTTOM_IKANA;
             enHollHalfwidth = EN_HOLL_HALFWIDTH_IKANA;
         }
@@ -209,7 +209,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
                     }
                 }
             }
-        } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (globalCtx->sceneNum == SCENE_26SARUNOMORI) &&
+        } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (globalCtx->sceneNum == SCENE_WOODS_OF_MYSTERY) &&
                    (sInstancePlayingSound == NULL)) {
             sInstancePlayingSound = this;
         }
@@ -225,7 +225,7 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
 
     Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &transformedPlayerPos,
                                            useViewEye ? &globalCtx->view.eye : &player->actor.world.pos);
-    enHollTop = (globalCtx->sceneNum == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
+    enHollTop = (globalCtx->sceneNum == SCENE_PIRATES_FORTRESS_INTERIOR) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
 
     if ((transformedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (transformedPlayerPos.y < enHollTop) &&
         (fabsf(transformedPlayerPos.x) < EN_HOLL_HALFWIDTH_TRANSPARENT)) {

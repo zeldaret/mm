@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_SOUGEN" -->
+    <File Name="moon_field_scene" Segment="2" Game="MM">
+        <Scene Name="moon_field_scene" Offset="0x0"/>
+    </File>
+    <File Name="moon_field_room_00" Segment="3" Game="MM">
+        <Room Name="moon_field_room_00" Offset="0x0"/>
+    </File>
+</Root>

@@ -15,7 +15,7 @@ s32 func_8013A240(GlobalContext* globalCtx) {
     gSaveContext.roomInf[123][3] = 0;
     gSaveContext.roomInf[123][4] = 0;
 
-    if (globalCtx->sceneNum == SCENE_20SICHITAI) {
+    if (globalCtx->sceneNum == SCENE_SOUTHERN_SWAMP_POISONED) {
         func_8013A41C(1);
     }
 
@@ -24,7 +24,7 @@ s32 func_8013A240(GlobalContext* globalCtx) {
             seen = 0;
 
             switch (globalCtx->sceneNum) {
-                case SCENE_20SICHITAI:
+                case SCENE_SOUTHERN_SWAMP_POISONED:
                     if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
                         seen = 1;
                     }

@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_GORON_HAKA" -->
+    <File Name="goron_graveyard_scene" Segment="2" Game="MM">
+        <Scene Name="goron_graveyard_scene" Offset="0x0"/>
+    </File>
+    <File Name="goron_graveyard_room_00" Segment="3" Game="MM">
+        <Room Name="goron_graveyard_room_00" Offset="0x0"/>
+    </File>
+</Root>

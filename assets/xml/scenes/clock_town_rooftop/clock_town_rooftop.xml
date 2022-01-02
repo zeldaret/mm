@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_OKUJOU" -->
+    <File Name="clock_town_rooftop_scene" Segment="2" Game="MM">
+        <Scene Name="clock_town_rooftop_scene" Offset="0x0"/>
+    </File>
+    <File Name="clock_town_rooftop_room_00" Segment="3" Game="MM">
+        <Room Name="clock_town_rooftop_room_00" Offset="0x0"/>
+    </File>
+</Root>

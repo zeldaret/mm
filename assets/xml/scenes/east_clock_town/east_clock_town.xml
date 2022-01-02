@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_TOWN" -->
+    <File Name="east_clock_town_scene" Segment="2" Game="MM">
+        <Scene Name="east_clock_town_scene" Offset="0x0"/>
+    </File>
+    <File Name="east_clock_town_room_00" Segment="3" Game="MM">
+        <Room Name="east_clock_town_room_00" Offset="0x0"/>
+    </File>
+</Root>

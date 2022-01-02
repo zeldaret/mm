@@ -287,7 +287,8 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
 void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globalCtx) {
     static s32 sGiantsCutsceneState = 0;
 
-    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 1 && globalCtx->csCtx.unk_12 == 0) {
+    if (globalCtx->sceneNum == SCENE_TERMINA_FIELD && gSaveContext.sceneSetupIndex == 1 &&
+        globalCtx->csCtx.unk_12 == 0) {
         switch (sGiantsCutsceneState) {
             case 0:
                 if (globalCtx->csCtx.state != 0) {
@@ -375,7 +376,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
         }
     }
 
-    if (globalCtx->sceneNum == SCENE_OKUJOU && gSaveContext.sceneSetupIndex == 2) {
+    if (globalCtx->sceneNum == SCENE_CLOCK_TOWN_ROOFTOP && gSaveContext.sceneSetupIndex == 2) {
         switch (globalCtx->csCtx.unk_12) {
             case 0:
                 switch (globalCtx->csCtx.frames) {
@@ -414,7 +415,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
 }
 
 void EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions(EnFall* this, GlobalContext* globalCtx) {
-    if (globalCtx->csCtx.state != 0 && globalCtx->sceneNum == SCENE_OKUJOU) {
+    if (globalCtx->csCtx.state != 0 && globalCtx->sceneNum == SCENE_CLOCK_TOWN_ROOFTOP) {
         func_800B9010(&this->actor, NA_SE_EV_MOON_FALL - SFX_FLAG);
     }
 }
@@ -536,7 +537,8 @@ void EnFall_FireBall_SetPerVertexAlpha(f32 fireBallAlpha) {
 void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
-    if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 2) {
+    if (globalCtx->sceneNum == SCENE_TERMINA_FIELD && gSaveContext.sceneSetupIndex == 0 &&
+        globalCtx->csCtx.unk_12 == 2) {
         globalCtx->skyboxCtx.rotY -= 0.05f;
     }
 

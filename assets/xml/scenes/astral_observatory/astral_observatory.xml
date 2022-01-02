@@ -1,0 +1,12 @@
+<Root>
+    <!-- "Z2_TENMON_DAI" -->
+    <File Name="astral_observatory_scene" Segment="2" Game="MM">
+        <Scene Name="astral_observatory_scene" Offset="0x0"/>
+    </File>
+    <File Name="astral_observatory_room_00" Segment="3" Game="MM">
+        <Room Name="astral_observatory_room_00" Offset="0x0"/>
+    </File>
+    <File Name="astral_observatory_room_01" Segment="3" Game="MM">
+        <Room Name="astral_observatory_room_01" Offset="0x0"/>
+    </File>
+</Root>

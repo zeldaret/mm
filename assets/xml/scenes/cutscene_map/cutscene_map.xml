@@ -1,0 +1,9 @@
+<Root>
+    <!-- "SPOT00" -->
+    <File Name="cutscene_map_scene" Segment="2" Game="MM">
+        <Scene Name="cutscene_map_scene" Offset="0x0"/>
+    </File>
+    <File Name="cutscene_map_room_00" Segment="3" Game="MM">
+        <Room Name="cutscene_map_room_00" Offset="0x0"/>
+    </File>
+</Root>

@@ -911,7 +911,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600C240, &D_0600071C, this->jointTable, this->morphTable, 16);
     this->actor.draw = EnSuttari_Draw;
     this->actor.flags |= 1;
-    if (globalCtx->sceneNum == SCENE_IKANA) {
+    if (globalCtx->sceneNum == SCENE_IKANA_CANYON) {
         this->flags1 |= 1;
         if (gSaveContext.day == 1 || gSaveContext.day == 2) {
             this->animationIdx = 2;
@@ -927,7 +927,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80BACEE0;
             return;
         }
-    } else if (globalCtx->sceneNum == SCENE_BACKTOWN) {
+    } else if (globalCtx->sceneNum == SCENE_NORTH_CLOCK_TOWN) {
         if (gSaveContext.time >= CLOCK_TIME(0, 20) && gSaveContext.time < CLOCK_TIME(6, 00)) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -942,7 +942,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
         func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
         this->actionFunc = func_80BAD004;
         return;
-    } else if (globalCtx->sceneNum == SCENE_ICHIBA) {
+    } else if (globalCtx->sceneNum == SCENE_WEST_CLOCK_TOWN) {
         if (gSaveContext.weekEventReg[0x21] & 8) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -952,7 +952,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
         this->flags1 |= 2;
         this->actionFunc = func_80BAD5F8;
         return;
-    } else if (globalCtx->sceneNum == SCENE_AYASHIISHOP) {
+    } else if (globalCtx->sceneNum == SCENE_CURIOSITY_SHOP) {
         if (gSaveContext.weekEventReg[0x21] & 8) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -1432,7 +1432,7 @@ void EnSuttari_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnSuttari_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnSuttari* this = THIS;
 
-    if ((globalCtx->sceneNum == SCENE_BACKTOWN) && !(this->flags2 & 4)) {
+    if ((globalCtx->sceneNum == SCENE_NORTH_CLOCK_TOWN) && !(this->flags2 & 4)) {
         Audio_QueueSeqCmd(0x101400FF);
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);

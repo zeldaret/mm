@@ -355,7 +355,7 @@ void func_80966FEC(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 
     // unique pirates fortress behavior?
-    if ((globalCtx->sceneNum == SCENE_KAIZOKU) && (globalCtx->actorCtx.unk5 & 2)) {
+    if ((globalCtx->sceneNum == SCENE_PIRATES_FORTRESS) && (globalCtx->actorCtx.unk5 & 2)) {
         EnWeatherTag_SetupAction(this, func_80967060);
     }
 }

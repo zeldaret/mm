@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_IKANAMAE" -->
+    <File Name="road_to_ikana_scene" Segment="2" Game="MM">
+        <Scene Name="road_to_ikana_scene" Offset="0x0"/>
+    </File>
+    <File Name="road_to_ikana_room_00" Segment="3" Game="MM">
+        <Room Name="road_to_ikana_room_00" Offset="0x0"/>
+    </File>
+</Root>

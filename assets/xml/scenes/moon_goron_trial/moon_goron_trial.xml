@@ -1,0 +1,12 @@
+<Root>
+    <!-- "Z2_LAST_GORON" -->
+    <File Name="moon_goron_trial_scene" Segment="2" Game="MM">
+        <Scene Name="moon_goron_trial_scene" Offset="0x0"/>
+    </File>
+    <File Name="moon_goron_trial_room_00" Segment="3" Game="MM">
+        <Room Name="moon_goron_trial_room_00" Offset="0x0"/>
+    </File>
+    <File Name="moon_goron_trial_room_01" Segment="3" Game="MM">
+        <Room Name="moon_goron_trial_room_01" Offset="0x0"/>
+    </File>
+</Root>

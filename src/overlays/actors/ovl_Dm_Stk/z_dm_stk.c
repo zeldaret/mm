@@ -778,13 +778,13 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case SCENE_CLOCKTOWER:
+            case SCENE_SOUTH_CLOCK_TOWN:
                 if (gSaveContext.sceneSetupIndex == 1) {
                     func_80AA00CC(this, globalCtx);
                 }
                 break;
 
-            case SCENE_OPENINGDAN:
+            case SCENE_BEFORE_CLOCK_TOWN:
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (globalCtx->csCtx.unk_12 == 0) {
                         func_80AA01C0(this, globalCtx);
@@ -794,7 +794,7 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case SCENE_OKUJOU:
+            case SCENE_CLOCK_TOWN_ROOFTOP:
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (globalCtx->csCtx.unk_12 == 0) {
                         func_80AA0420(this, globalCtx);
@@ -814,7 +814,7 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case SCENE_00KEIKOKU:
+            case SCENE_TERMINA_FIELD:
                 if (gSaveContext.sceneSetupIndex == 3) {
                     if (globalCtx->csCtx.unk_12 == 0) {
                         func_80AA0634(this, globalCtx);
@@ -884,7 +884,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_2FC = 1000;
             this->unk_300 = 1.0f;
             this->actionFunc = func_80AA1704;
-        } else if (globalCtx->sceneNum == SCENE_OKUJOU) {
+        } else if (globalCtx->sceneNum == SCENE_CLOCK_TOWN_ROOFTOP) {
             this->unk_2E4 = 255;
             this->unk_2F8 = 996;
             this->unk_2FC = 1000;
@@ -934,7 +934,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-        } else if ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 0)) {
+        } else if ((globalCtx->sceneNum == SCENE_TERMINA_FIELD) && (gSaveContext.sceneSetupIndex == 0)) {
             if (!(globalCtx->actorCtx.unk5 & 2)) {
                 Actor_MarkForDeath(&this->actor);
             }
@@ -971,7 +971,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    if ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 3) &&
+    if ((globalCtx->sceneNum == SCENE_TERMINA_FIELD) && (gSaveContext.sceneSetupIndex == 3) &&
         (globalCtx->csCtx.unk_12 > 0)) {
         globalCtx->envCtx.unk_17 = 15;
         globalCtx->envCtx.unk_18 = 15;
@@ -1136,7 +1136,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
         if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[temp_v0]->startFrame) {
             if (this->unk_334 != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
                 this->unk_334 = globalCtx->csCtx.npcActions[temp_v0]->unk0;
-                if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
+                if (globalCtx->sceneNum == SCENE_SOUTH_CLOCK_TOWN) {
                     this->unk_32D = 6;
                 } else {
                     this->unk_32D = 9;
@@ -1504,7 +1504,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
         this->unk_32C = 9;
         this->unk_32D = 2;
     } else if (((this->unk_2E0 >= 50) && (this->unk_2E0 < 56)) || ((this->unk_2E0 > 58) && (this->unk_2E0 <= 60)) ||
-               ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7))) {
+               ((globalCtx->sceneNum == SCENE_TERMINA_FIELD) && (gSaveContext.sceneSetupIndex == 7))) {
         this->unk_32C = 0;
         if ((this->unk_2E0 == 52) || (this->unk_2E0 == 53)) {
             this->unk_32D = 5;
@@ -1583,7 +1583,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         this->actionFunc(this, globalCtx);
 
-        if (globalCtx->sceneNum == SCENE_OKUJOU) {
+        if (globalCtx->sceneNum == SCENE_CLOCK_TOWN_ROOFTOP) {
             func_80AA26CC(this, globalCtx);
         }
 
@@ -1630,7 +1630,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 3) &&
+    if ((globalCtx->sceneNum == SCENE_TERMINA_FIELD) && (gSaveContext.sceneSetupIndex == 3) &&
         (globalCtx->csCtx.unk_12 > 0)) {
         globalCtx->envCtx.unk_17 = 15;
         globalCtx->envCtx.unk_18 = 15;

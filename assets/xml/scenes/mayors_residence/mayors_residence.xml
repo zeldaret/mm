@@ -1,0 +1,18 @@
+<Root>
+    <!-- "Z2_SONCHONOIE" -->
+    <File Name="mayors_residence_scene" Segment="2" Game="MM">
+        <Scene Name="mayors_residence_scene" Offset="0x0"/>
+    </File>
+    <File Name="mayors_residence_room_00" Segment="3" Game="MM">
+        <Room Name="mayors_residence_room_00" Offset="0x0"/>
+    </File>
+    <File Name="mayors_residence_room_01" Segment="3" Game="MM">
+        <Room Name="mayors_residence_room_01" Offset="0x0"/>
+    </File>
+    <File Name="mayors_residence_room_02" Segment="3" Game="MM">
+        <Room Name="mayors_residence_room_02" Offset="0x0"/>
+    </File>
+    <File Name="mayors_residence_room_03" Segment="3" Game="MM">
+        <Room Name="mayors_residence_room_03" Offset="0x0"/>
+    </File>
+</Root>

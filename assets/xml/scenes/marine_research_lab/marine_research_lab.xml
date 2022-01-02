@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_LABO" -->
+    <File Name="marine_research_lab_scene" Segment="2" Game="MM">
+        <Scene Name="marine_research_lab_scene" Offset="0x0"/>
+    </File>
+    <File Name="marine_research_lab_room_00" Segment="3" Game="MM">
+        <Room Name="marine_research_lab_room_00" Offset="0x0"/>
+    </File>
+</Root>

@@ -1,0 +1,23 @@
+<Root>
+    <!-- "Z2_BANDROOM" -->
+    <File Name="zora_hall_rooms_scene" Segment="2" Game="MM">
+        <Scene Name="zora_hall_rooms_scene" Offset="0x0"/>
+    </File>
+    <File Name="zora_hall_rooms_room_00" Segment="3" Game="MM">
+        <Room Name="zora_hall_rooms_room_00" Offset="0x0"/>
+    </File>
+    <File Name="zora_hall_rooms_room_01" Segment="3" Game="MM">
+        <Room Name="zora_hall_rooms_room_01" Offset="0x0"/>
+    </File>
+    <File Name="zora_hall_rooms_room_02" Segment="3" Game="MM">
+        <Room Name="zora_hall_rooms_room_02" Offset="0x0"/>
+    </File>
+    <File Name="zora_hall_rooms_room_03" Segment="3" Game="MM">
+        <Room Name="zora_hall_rooms_room_03" Offset="0x0"/>
+    </File>
+    <File Name="zora_hall_rooms_room_04" Segment="3" Game="MM">
+        <Texture Name="zora_hall_rooms_room_04Tex_005A38" Format="rgba16" Width="64" Height="64" Offset="0x5A38"/>
+
+        <Room Name="zora_hall_rooms_room_04" Offset="0x0"/>
+    </File>
+</Root>

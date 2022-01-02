@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_10YUKIYAMANOMURA" -->
+    <File Name="mountain_village_winter_scene" Segment="2" Game="MM">
+        <Scene Name="mountain_village_winter_scene" Offset="0x0"/>
+    </File>
+    <File Name="mountain_village_winter_room_00" Segment="3" Game="MM">
+        <Room Name="mountain_village_winter_room_00" Offset="0x0"/>
+    </File>
+</Root>

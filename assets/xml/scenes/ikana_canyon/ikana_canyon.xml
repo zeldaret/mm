@@ -1,0 +1,23 @@
+<Root>
+    <!-- "Z2_IKANA" -->
+    <File Name="ikana_canyon_scene" Segment="2" Game="MM">
+        <Scene Name="ikana_canyon_scene" Offset="0x0"/>
+    </File>
+    <File Name="ikana_canyon_room_00" Segment="3" Game="MM">
+        <Texture Name="ikana_canyon_room_00Tex_020A40" Format="rgba16" Width="64" Height="64" Offset="0x20A40"/>
+
+        <Room Name="ikana_canyon_room_00" Offset="0x0"/>
+    </File>
+    <File Name="ikana_canyon_room_01" Segment="3" Game="MM">
+        <Room Name="ikana_canyon_room_01" Offset="0x0"/>
+    </File>
+    <File Name="ikana_canyon_room_02" Segment="3" Game="MM">
+        <Room Name="ikana_canyon_room_02" Offset="0x0"/>
+    </File>
+    <File Name="ikana_canyon_room_03" Segment="3" Game="MM">
+        <Room Name="ikana_canyon_room_03" Offset="0x0"/>
+    </File>
+    <File Name="ikana_canyon_room_04" Segment="3" Game="MM">
+        <Room Name="ikana_canyon_room_04" Offset="0x0"/>
+    </File>
+</Root>

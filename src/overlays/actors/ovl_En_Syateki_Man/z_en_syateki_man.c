@@ -140,7 +140,7 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
-    if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
+    if (globalCtx->sceneNum == SCENE_SWAMP_SHOOTING_GALLERY) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600DFEC, this->jointTable, this->morphTable,
                            16);
     } else {
@@ -166,7 +166,7 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_264 = 0;
     this->unk_266 = 0;
 
-    if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
+    if (globalCtx->sceneNum == SCENE_SWAMP_SHOOTING_GALLERY) {
         this->path = sp34;
         func_809C64C0(this, globalCtx, D_809C9464[this->unk_194], sp30);
     }
@@ -203,9 +203,9 @@ s32 func_809C6720(GlobalContext* globalCtx, Vec3f arg1) {
 }
 
 void func_809C6810(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
+    if (globalCtx->sceneNum == SCENE_SWAMP_SHOOTING_GALLERY) {
         this->actionFunc = func_809C6848;
-    } else if (globalCtx->sceneNum == SCENE_SYATEKI_MIZU) {
+    } else if (globalCtx->sceneNum == SCENE_TOWN_SHOOTING_GALLERY) {
         this->actionFunc = func_809C72D8;
     }
 }
@@ -1250,7 +1250,7 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
                                   Actor* thisx) {
     EnSyatekiMan* this = THIS;
 
-    if ((globalCtx->sceneNum == SCENE_SYATEKI_MIZU) && (limbIndex == 15)) {
+    if ((globalCtx->sceneNum == SCENE_TOWN_SHOOTING_GALLERY) && (limbIndex == 15)) {
         *dList = D_0600F2D0;
     }
 
@@ -1284,7 +1284,7 @@ void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSyatekiMan* this = THIS;
     s32 pad;
 
-    if (globalCtx->sceneNum == SCENE_SYATEKI_MIZU) {
+    if (globalCtx->sceneNum == SCENE_TOWN_SHOOTING_GALLERY) {
         D_809C94B8[0] = &D_0600FB90;
         D_809C94B8[1] = &D_06010390;
         D_809C94B8[2] = &D_06010390;

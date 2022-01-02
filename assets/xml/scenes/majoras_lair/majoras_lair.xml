@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_LAST_BS" -->
+    <File Name="majoras_lair_scene" Segment="2" Game="MM">
+        <Scene Name="majoras_lair_scene" Offset="0x0"/>
+    </File>
+    <File Name="majoras_lair_room_00" Segment="3" Game="MM">
+        <Room Name="majoras_lair_room_00" Offset="0x0"/>
+    </File>
+</Root>

@@ -20,7 +20,7 @@ u16 ElfMessage_GetFirstCycleHint(GlobalContext* globalCtx) {
         if (gSaveContext.weekEventReg[9] & 1) {
             return 0x21E;
         }
-        if (globalCtx->sceneNum == SCENE_YOUSEI_IZUMI) {
+        if (globalCtx->sceneNum == SCENE_FAIRYS_FOUNTAIN) {
             return 0;
         }
         return 0x21D;
@@ -29,7 +29,7 @@ u16 ElfMessage_GetFirstCycleHint(GlobalContext* globalCtx) {
         return 0x21F;
     }
     if (INV_CONTENT(ITEM_DEED_LAND) == ITEM_DEED_LAND) {
-        if (globalCtx->sceneNum != SCENE_OKUJOU) {
+        if (globalCtx->sceneNum != SCENE_CLOCK_TOWN_ROOFTOP) {
             return 0x244;
         }
         return 0;

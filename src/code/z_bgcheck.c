@@ -46,7 +46,7 @@ static u8 D_801B46C0[] = {
 };
 
 static s16 sSmallMemScenes[] = {
-    SCENE_F01,
+    SCENE_ROMANI_RANCH,
 };
 
 typedef struct {
@@ -55,17 +55,17 @@ typedef struct {
 } BgCheckSceneMemEntry;
 
 static BgCheckSceneMemEntry sSceneMemList[] = {
-    { SCENE_00KEIKOKU, 0xC800 },
+    { SCENE_TERMINA_FIELD, 0xC800 },
 };
 
 BgCheckSceneSubdivisionEntry sSceneSubdivisionList[] = {
-    { SCENE_00KEIKOKU, { 36, 1, 36 }, -1 },
-    { SCENE_30GYOSON, { 40, 1, 40 }, -1 },
-    { SCENE_31MISAKI, { 40, 1, 40 }, -1 },
+    { SCENE_TERMINA_FIELD, { 36, 1, 36 }, -1 },
+    { SCENE_GREAT_BAY_COAST, { 40, 1, 40 }, -1 },
+    { SCENE_ZORA_CAPE, { 40, 1, 40 }, -1 },
 };
 
 BgSpecialSceneMaxObjects sCustomDynapolyMem[] = {
-    { SCENE_21MITURINMAE, 1000, 600, 512 },
+    { SCENE_WOODFALL, 1000, 600, 512 },
 };
 
 // TODO: All these bss variables are localized to one function and can

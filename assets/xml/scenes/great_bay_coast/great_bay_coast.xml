@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_30GYOSON" -->
+    <File Name="great_bay_coast_scene" Segment="2" Game="MM">
+        <Scene Name="great_bay_coast_scene" Offset="0x0"/>
+    </File>
+    <File Name="great_bay_coast_room_00" Segment="3" Game="MM">
+        <Room Name="great_bay_coast_room_00" Offset="0x0"/>
+    </File>
+</Root>

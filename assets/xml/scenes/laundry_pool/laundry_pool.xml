@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_ALLEY" -->
+    <File Name="laundry_pool_scene" Segment="2" Game="MM">
+        <Scene Name="laundry_pool_scene" Offset="0x0"/>
+    </File>
+    <File Name="laundry_pool_room_00" Segment="3" Game="MM">
+        <Room Name="laundry_pool_room_00" Offset="0x0"/>
+    </File>
+</Root>

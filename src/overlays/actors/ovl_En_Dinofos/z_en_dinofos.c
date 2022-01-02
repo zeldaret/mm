@@ -568,7 +568,7 @@ void func_8089B580(EnDinofos* this, GlobalContext* globalCtx) {
     }
 
     if (this->skelAnime.curFrame > 35.0f) {
-        if ((globalCtx->sceneNum == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 38.0f)) {
+        if ((globalCtx->sceneNum == SCENE_WOODFALL_TEMPLE) && Animation_OnFrame(&this->skelAnime, 38.0f)) {
             globalCtx->envCtx.unk_C3 = 11;
         }
 
@@ -579,7 +579,7 @@ void func_8089B580(EnDinofos* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((globalCtx->sceneNum == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 55.0f)) {
+    if ((globalCtx->sceneNum == SCENE_WOODFALL_TEMPLE) && Animation_OnFrame(&this->skelAnime, 55.0f)) {
         globalCtx->envCtx.unk_C3 = 0xFF;
     }
 
@@ -1069,7 +1069,7 @@ void func_8089CB10(EnDinofos* this, GlobalContext* globalCtx) {
         worldSphere->center.z = this->unk_34C.z;
     }
 
-    if (globalCtx->sceneNum == SCENE_MITURIN) {
+    if (globalCtx->sceneNum == SCENE_WOODFALL_TEMPLE) {
         globalCtx->envCtx.unk_C3 = 11;
     }
 
@@ -1130,7 +1130,7 @@ void func_8089CBEC(EnDinofos* this, GlobalContext* globalCtx) {
 void func_8089CF00(EnDinofos* this, GlobalContext* globalCtx) {
     Animation_PlayOnce(&this->skelAnime, &D_060017B8);
     this->colliderJntSph.base.atFlags &= ~AT_ON;
-    if (globalCtx->sceneNum == SCENE_MITURIN) {
+    if (globalCtx->sceneNum == SCENE_WOODFALL_TEMPLE) {
         globalCtx->envCtx.unk_C3 = 255;
     }
     this->actionFunc = func_8089CF70;
@@ -1299,7 +1299,7 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
 
         func_8089ACEC(this, globalCtx);
         func_8089AD70(this);
-        if (globalCtx->sceneNum == SCENE_MITURIN) {
+        if (globalCtx->sceneNum == SCENE_WOODFALL_TEMPLE) {
             globalCtx->envCtx.unk_C3 = 255;
         }
 

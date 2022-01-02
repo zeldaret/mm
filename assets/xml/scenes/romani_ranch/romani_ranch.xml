@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_F01" -->
+    <File Name="romani_ranch_scene" Segment="2" Game="MM">
+        <Scene Name="romani_ranch_scene" Offset="0x0"/>
+    </File>
+    <File Name="romani_ranch_room_00" Segment="3" Game="MM">
+        <Room Name="romani_ranch_room_00" Offset="0x0"/>
+    </File>
+</Root>

@@ -9384,3210 +9384,3210 @@ beginseg
 endseg
 
 beginseg
-    name "Z2_20SICHITAI2"
+    name "southern_swamp_clear_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_20SICHITAI2/Z2_20SICHITAI2.o"
+    include "build/assets/scenes/southern_swamp_clear/southern_swamp_clear_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_20SICHITAI2_room_00"
+    name "southern_swamp_clear_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_20SICHITAI2/Z2_20SICHITAI2_room_00.o"
+    include "build/assets/scenes/southern_swamp_clear/southern_swamp_clear_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_20SICHITAI2_room_01"
+    name "southern_swamp_clear_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_20SICHITAI2/Z2_20SICHITAI2_room_01.o"
+    include "build/assets/scenes/southern_swamp_clear/southern_swamp_clear_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_20SICHITAI2_room_02"
+    name "southern_swamp_clear_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_20SICHITAI2/Z2_20SICHITAI2_room_02.o"
+    include "build/assets/scenes/southern_swamp_clear/southern_swamp_clear_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_WITCH_SHOP"
+    name "magic_hags_potion_shop_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_WITCH_SHOP/Z2_WITCH_SHOP.o"
+    include "build/assets/scenes/magic_hags_potion_shop/magic_hags_potion_shop_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_WITCH_SHOP_room_00"
+    name "magic_hags_potion_shop_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_WITCH_SHOP/Z2_WITCH_SHOP_room_00.o"
+    include "build/assets/scenes/magic_hags_potion_shop/magic_hags_potion_shop_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_BS"
+    name "majoras_lair_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_BS/Z2_LAST_BS.o"
+    include "build/assets/scenes/majoras_lair/majoras_lair_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_LAST_BS_room_00"
+    name "majoras_lair_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_BS/Z2_LAST_BS_room_00.o"
+    include "build/assets/scenes/majoras_lair/majoras_lair_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKASHITA"
+    name "beneath_the_graveyard_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA.o"
+    include "build/assets/scenes/beneath_the_graveyard/beneath_the_graveyard_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_HAKASHITA_room_00"
+    name "beneath_the_graveyard_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA_room_00.o"
+    include "build/assets/scenes/beneath_the_graveyard/beneath_the_graveyard_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKASHITA_room_01"
+    name "beneath_the_graveyard_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA_room_01.o"
+    include "build/assets/scenes/beneath_the_graveyard/beneath_the_graveyard_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKASHITA_room_02"
+    name "beneath_the_graveyard_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA_room_02.o"
+    include "build/assets/scenes/beneath_the_graveyard/beneath_the_graveyard_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKASHITA_room_03"
+    name "beneath_the_graveyard_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA_room_03.o"
+    include "build/assets/scenes/beneath_the_graveyard/beneath_the_graveyard_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKASHITA_room_04"
+    name "beneath_the_graveyard_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKASHITA/Z2_HAKASHITA_room_04.o"
+    include "build/assets/scenes/beneath_the_graveyard/beneath_the_graveyard_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_AYASHIISHOP"
+    name "curiosity_shop_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_AYASHIISHOP/Z2_AYASHIISHOP.o"
+    include "build/assets/scenes/curiosity_shop/curiosity_shop_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_AYASHIISHOP_room_00"
+    name "curiosity_shop_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_AYASHIISHOP/Z2_AYASHIISHOP_room_00.o"
+    include "build/assets/scenes/curiosity_shop/curiosity_shop_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_AYASHIISHOP_room_01"
+    name "curiosity_shop_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_AYASHIISHOP/Z2_AYASHIISHOP_room_01.o"
+    include "build/assets/scenes/curiosity_shop/curiosity_shop_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_OMOYA"
+    name "romani_ranch_buildings_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_OMOYA/Z2_OMOYA.o"
+    include "build/assets/scenes/romani_ranch_buildings/romani_ranch_buildings_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_OMOYA_room_00"
+    name "romani_ranch_buildings_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_OMOYA/Z2_OMOYA_room_00.o"
+    include "build/assets/scenes/romani_ranch_buildings/romani_ranch_buildings_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_OMOYA_room_01"
+    name "romani_ranch_buildings_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_OMOYA/Z2_OMOYA_room_01.o"
+    include "build/assets/scenes/romani_ranch_buildings/romani_ranch_buildings_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_OMOYA_room_02"
+    name "romani_ranch_buildings_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_OMOYA/Z2_OMOYA_room_02.o"
+    include "build/assets/scenes/romani_ranch_buildings/romani_ranch_buildings_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_BOWLING"
+    name "honey_and_darling_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BOWLING/Z2_BOWLING.o"
+    include "build/assets/scenes/honey_and_darling/honey_and_darling_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_BOWLING_room_00"
+    name "honey_and_darling_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BOWLING/Z2_BOWLING_room_00.o"
+    include "build/assets/scenes/honey_and_darling/honey_and_darling_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SONCHONOIE"
+    name "mayors_residence_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE.o"
+    include "build/assets/scenes/mayors_residence/mayors_residence_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_SONCHONOIE_room_00"
+    name "mayors_residence_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE_room_00.o"
+    include "build/assets/scenes/mayors_residence/mayors_residence_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SONCHONOIE_room_01"
+    name "mayors_residence_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE_room_01.o"
+    include "build/assets/scenes/mayors_residence/mayors_residence_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SONCHONOIE_room_02"
+    name "mayors_residence_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE_room_02.o"
+    include "build/assets/scenes/mayors_residence/mayors_residence_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SONCHONOIE_room_03"
+    name "mayors_residence_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE_room_03.o"
+    include "build/assets/scenes/mayors_residence/mayors_residence_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_IKANA"
+    name "ikana_canyon_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKANA/Z2_IKANA.o"
+    include "build/assets/scenes/ikana_canyon/ikana_canyon_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_IKANA_room_00"
+    name "ikana_canyon_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKANA/Z2_IKANA_room_00.o"
+    include "build/assets/scenes/ikana_canyon/ikana_canyon_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_IKANA_room_01"
+    name "ikana_canyon_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKANA/Z2_IKANA_room_01.o"
+    include "build/assets/scenes/ikana_canyon/ikana_canyon_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_IKANA_room_02"
+    name "ikana_canyon_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKANA/Z2_IKANA_room_02.o"
+    include "build/assets/scenes/ikana_canyon/ikana_canyon_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_IKANA_room_03"
+    name "ikana_canyon_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKANA/Z2_IKANA_room_03.o"
+    include "build/assets/scenes/ikana_canyon/ikana_canyon_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_IKANA_room_04"
+    name "ikana_canyon_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKANA/Z2_IKANA_room_04.o"
+    include "build/assets/scenes/ikana_canyon/ikana_canyon_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KAIZOKU"
+    name "pirates_fortress_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KAIZOKU/Z2_KAIZOKU.o"
+    include "build/assets/scenes/pirates_fortress/pirates_fortress_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_KAIZOKU_room_00"
+    name "pirates_fortress_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KAIZOKU/Z2_KAIZOKU_room_00.o"
+    include "build/assets/scenes/pirates_fortress/pirates_fortress_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MILK_BAR"
+    name "milk_bar_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MILK_BAR/Z2_MILK_BAR.o"
+    include "build/assets/scenes/milk_bar/milk_bar_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_MILK_BAR_room_00"
+    name "milk_bar_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MILK_BAR/Z2_MILK_BAR_room_00.o"
+    include "build/assets/scenes/milk_bar/milk_bar_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N"
+    name "stone_tower_temple_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_00"
+    name "stone_tower_temple_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_00.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_01"
+    name "stone_tower_temple_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_01.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_02"
+    name "stone_tower_temple_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_02.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_03"
+    name "stone_tower_temple_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_03.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_04"
+    name "stone_tower_temple_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_04.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_05"
+    name "stone_tower_temple_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_05.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_06"
+    name "stone_tower_temple_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_06.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_07"
+    name "stone_tower_temple_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_07.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_08"
+    name "stone_tower_temple_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_08.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_09"
+    name "stone_tower_temple_room_09"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_09.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_09.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_10"
+    name "stone_tower_temple_room_10"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_10.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_10.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_N_room_11"
+    name "stone_tower_temple_room_11"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_N/Z2_INISIE_N_room_11.o"
+    include "build/assets/scenes/stone_tower_temple/stone_tower_temple_room_11.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_TAKARAYA"
+    name "treasure_chest_shop_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TAKARAYA/Z2_TAKARAYA.o"
+    include "build/assets/scenes/treasure_chest_shop/treasure_chest_shop_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_TAKARAYA_room_00"
+    name "treasure_chest_shop_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TAKARAYA/Z2_TAKARAYA_room_00.o"
+    include "build/assets/scenes/treasure_chest_shop/treasure_chest_shop_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R"
+    name "inverted_stone_tower_temple_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_00"
+    name "inverted_stone_tower_temple_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_00.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_01"
+    name "inverted_stone_tower_temple_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_01.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_02"
+    name "inverted_stone_tower_temple_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_02.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_03"
+    name "inverted_stone_tower_temple_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_03.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_04"
+    name "inverted_stone_tower_temple_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_04.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_05"
+    name "inverted_stone_tower_temple_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_05.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_06"
+    name "inverted_stone_tower_temple_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_06.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_07"
+    name "inverted_stone_tower_temple_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_07.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_08"
+    name "inverted_stone_tower_temple_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_08.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_09"
+    name "inverted_stone_tower_temple_room_09"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_09.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_09.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_10"
+    name "inverted_stone_tower_temple_room_10"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_10.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_10.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_R_room_11"
+    name "inverted_stone_tower_temple_room_11"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_R/Z2_INISIE_R_room_11.o"
+    include "build/assets/scenes/inverted_stone_tower_temple/inverted_stone_tower_temple_room_11.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_OKUJOU"
+    name "clock_town_rooftop_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_OKUJOU/Z2_OKUJOU.o"
+    include "build/assets/scenes/clock_town_rooftop/clock_town_rooftop_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_OKUJOU_room_00"
+    name "clock_town_rooftop_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_OKUJOU/Z2_OKUJOU_room_00.o"
+    include "build/assets/scenes/clock_town_rooftop/clock_town_rooftop_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_OPENINGDAN"
+    name "before_clock_town_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_OPENINGDAN/Z2_OPENINGDAN.o"
+    include "build/assets/scenes/before_clock_town/before_clock_town_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_OPENINGDAN_room_00"
+    name "before_clock_town_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_OPENINGDAN/Z2_OPENINGDAN_room_00.o"
+    include "build/assets/scenes/before_clock_town/before_clock_town_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_OPENINGDAN_room_01"
+    name "before_clock_town_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_OPENINGDAN/Z2_OPENINGDAN_room_01.o"
+    include "build/assets/scenes/before_clock_town/before_clock_town_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN"
+    name "woodfall_temple_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_00"
+    name "woodfall_temple_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_00.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_01"
+    name "woodfall_temple_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_01.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_02"
+    name "woodfall_temple_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_02.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_03"
+    name "woodfall_temple_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_03.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_04"
+    name "woodfall_temple_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_04.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_05"
+    name "woodfall_temple_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_05.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_06"
+    name "woodfall_temple_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_06.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_07"
+    name "woodfall_temple_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_07.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_08"
+    name "woodfall_temple_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_08.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_09"
+    name "woodfall_temple_room_09"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_09.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_09.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_10"
+    name "woodfall_temple_room_10"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_10.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_10.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_11"
+    name "woodfall_temple_room_11"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_11.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_11.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_room_12"
+    name "woodfall_temple_room_12"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN/Z2_MITURIN_room_12.o"
+    include "build/assets/scenes/woodfall_temple/woodfall_temple_room_12.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_13HUBUKINOMITI"
+    name "path_to_mountain_village_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_13HUBUKINOMITI/Z2_13HUBUKINOMITI.o"
+    include "build/assets/scenes/path_to_mountain_village/path_to_mountain_village_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_13HUBUKINOMITI_room_00"
+    name "path_to_mountain_village_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_13HUBUKINOMITI/Z2_13HUBUKINOMITI_room_00.o"
+    include "build/assets/scenes/path_to_mountain_village/path_to_mountain_village_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CASTLE"
+    name "ikana_castle_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_CASTLE_room_00"
+    name "ikana_castle_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_00.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CASTLE_room_01"
+    name "ikana_castle_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_01.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CASTLE_room_02"
+    name "ikana_castle_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_02.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CASTLE_room_03"
+    name "ikana_castle_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_03.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CASTLE_room_04"
+    name "ikana_castle_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_04.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CASTLE_room_05"
+    name "ikana_castle_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_05.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CASTLE_room_06"
+    name "ikana_castle_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_06.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CASTLE_room_07"
+    name "ikana_castle_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_07.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CASTLE_room_08"
+    name "ikana_castle_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_08.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CASTLE_room_09"
+    name "ikana_castle_room_09"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CASTLE/Z2_CASTLE_room_09.o"
+    include "build/assets/scenes/ikana_castle/ikana_castle_room_09.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DEKUTES"
+    name "deku_scrub_playground_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DEKUTES/Z2_DEKUTES.o"
+    include "build/assets/scenes/deku_scrub_playground/deku_scrub_playground_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_DEKUTES_room_00"
+    name "deku_scrub_playground_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DEKUTES/Z2_DEKUTES_room_00.o"
+    include "build/assets/scenes/deku_scrub_playground/deku_scrub_playground_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MITURIN_BS"
+    name "odolwas_lair_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN_BS/Z2_MITURIN_BS.o"
+    include "build/assets/scenes/odolwas_lair/odolwas_lair_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_MITURIN_BS_room_00"
+    name "odolwas_lair_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MITURIN_BS/Z2_MITURIN_BS_room_00.o"
+    include "build/assets/scenes/odolwas_lair/odolwas_lair_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SYATEKI_MIZU"
+    name "town_shooting_gallery_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SYATEKI_MIZU/Z2_SYATEKI_MIZU.o"
+    include "build/assets/scenes/town_shooting_gallery/town_shooting_gallery_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_SYATEKI_MIZU_room_00"
+    name "town_shooting_gallery_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SYATEKI_MIZU/Z2_SYATEKI_MIZU_room_00.o"
+    include "build/assets/scenes/town_shooting_gallery/town_shooting_gallery_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN"
+    name "snowhead_temple_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_00"
+    name "snowhead_temple_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_00.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_01"
+    name "snowhead_temple_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_01.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_02"
+    name "snowhead_temple_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_02.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_03"
+    name "snowhead_temple_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_03.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_04"
+    name "snowhead_temple_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_04.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_05"
+    name "snowhead_temple_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_05.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_06"
+    name "snowhead_temple_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_06.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_07"
+    name "snowhead_temple_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_07.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_08"
+    name "snowhead_temple_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_08.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_09"
+    name "snowhead_temple_room_09"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_09.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_09.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_10"
+    name "snowhead_temple_room_10"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_10.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_10.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_11"
+    name "snowhead_temple_room_11"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_11.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_11.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_12"
+    name "snowhead_temple_room_12"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_12.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_12.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_room_13"
+    name "snowhead_temple_room_13"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN/Z2_HAKUGIN_room_13.o"
+    include "build/assets/scenes/snowhead_temple/snowhead_temple_room_13.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_ROMANYMAE"
+    name "milk_road_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_ROMANYMAE/Z2_ROMANYMAE.o"
+    include "build/assets/scenes/milk_road/milk_road_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_ROMANYMAE_room_00"
+    name "milk_road_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_ROMANYMAE/Z2_ROMANYMAE_room_00.o"
+    include "build/assets/scenes/milk_road/milk_road_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE"
+    name "pirates_fortress_interior_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_00"
+    name "pirates_fortress_interior_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_00.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_01"
+    name "pirates_fortress_interior_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_01.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_02"
+    name "pirates_fortress_interior_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_02.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_03"
+    name "pirates_fortress_interior_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_03.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_04"
+    name "pirates_fortress_interior_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_04.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_05"
+    name "pirates_fortress_interior_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_05.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_06"
+    name "pirates_fortress_interior_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_06.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_07"
+    name "pirates_fortress_interior_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_07.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_08"
+    name "pirates_fortress_interior_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_08.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_09"
+    name "pirates_fortress_interior_room_09"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_09.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_09.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_10"
+    name "pirates_fortress_interior_room_10"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_10.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_10.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_11"
+    name "pirates_fortress_interior_room_11"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_11.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_11.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_12"
+    name "pirates_fortress_interior_room_12"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_12.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_12.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_13"
+    name "pirates_fortress_interior_room_13"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_13.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_13.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_PIRATE_room_14"
+    name "pirates_fortress_interior_room_14"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_PIRATE/Z2_PIRATE_room_14.o"
+    include "build/assets/scenes/pirates_fortress_interior/pirates_fortress_interior_room_14.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SYATEKI_MORI"
+    name "swamp_shooting_gallery_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SYATEKI_MORI/Z2_SYATEKI_MORI.o"
+    include "build/assets/scenes/swamp_shooting_gallery/swamp_shooting_gallery_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_SYATEKI_MORI_room_00"
+    name "swamp_shooting_gallery_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SYATEKI_MORI/Z2_SYATEKI_MORI_room_00.o"
+    include "build/assets/scenes/swamp_shooting_gallery/swamp_shooting_gallery_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SINKAI"
+    name "pinnacle_rock_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SINKAI/Z2_SINKAI.o"
+    include "build/assets/scenes/pinnacle_rock/pinnacle_rock_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_SINKAI_room_00"
+    name "pinnacle_rock_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SINKAI/Z2_SINKAI_room_00.o"
+    include "build/assets/scenes/pinnacle_rock/pinnacle_rock_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_YOUSEI_IZUMI"
+    name "fairys_fountain_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI.o"
+    include "build/assets/scenes/fairys_fountain/fairys_fountain_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_YOUSEI_IZUMI_room_00"
+    name "fairys_fountain_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI_room_00.o"
+    include "build/assets/scenes/fairys_fountain/fairys_fountain_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_YOUSEI_IZUMI_room_01"
+    name "fairys_fountain_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI_room_01.o"
+    include "build/assets/scenes/fairys_fountain/fairys_fountain_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_YOUSEI_IZUMI_room_02"
+    name "fairys_fountain_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI_room_02.o"
+    include "build/assets/scenes/fairys_fountain/fairys_fountain_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_YOUSEI_IZUMI_room_03"
+    name "fairys_fountain_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI_room_03.o"
+    include "build/assets/scenes/fairys_fountain/fairys_fountain_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_YOUSEI_IZUMI_room_04"
+    name "fairys_fountain_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI_room_04.o"
+    include "build/assets/scenes/fairys_fountain/fairys_fountain_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINSTA1"
+    name "swamp_spider_house_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1.o"
+    include "build/assets/scenes/swamp_spider_house/swamp_spider_house_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_KINSTA1_room_00"
+    name "swamp_spider_house_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_00.o"
+    include "build/assets/scenes/swamp_spider_house/swamp_spider_house_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINSTA1_room_01"
+    name "swamp_spider_house_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_01.o"
+    include "build/assets/scenes/swamp_spider_house/swamp_spider_house_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINSTA1_room_02"
+    name "swamp_spider_house_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_02.o"
+    include "build/assets/scenes/swamp_spider_house/swamp_spider_house_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINSTA1_room_03"
+    name "swamp_spider_house_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_03.o"
+    include "build/assets/scenes/swamp_spider_house/swamp_spider_house_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINSTA1_room_04"
+    name "swamp_spider_house_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_04.o"
+    include "build/assets/scenes/swamp_spider_house/swamp_spider_house_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINSTA1_room_05"
+    name "swamp_spider_house_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINSTA1/Z2_KINSTA1_room_05.o"
+    include "build/assets/scenes/swamp_spider_house/swamp_spider_house_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINDAN2"
+    name "ocean_spider_house_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2.o"
+    include "build/assets/scenes/ocean_spider_house/ocean_spider_house_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_KINDAN2_room_00"
+    name "ocean_spider_house_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_00.o"
+    include "build/assets/scenes/ocean_spider_house/ocean_spider_house_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINDAN2_room_01"
+    name "ocean_spider_house_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_01.o"
+    include "build/assets/scenes/ocean_spider_house/ocean_spider_house_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINDAN2_room_02"
+    name "ocean_spider_house_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_02.o"
+    include "build/assets/scenes/ocean_spider_house/ocean_spider_house_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINDAN2_room_03"
+    name "ocean_spider_house_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_03.o"
+    include "build/assets/scenes/ocean_spider_house/ocean_spider_house_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINDAN2_room_04"
+    name "ocean_spider_house_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_04.o"
+    include "build/assets/scenes/ocean_spider_house/ocean_spider_house_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KINDAN2_room_05"
+    name "ocean_spider_house_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KINDAN2/Z2_KINDAN2_room_05.o"
+    include "build/assets/scenes/ocean_spider_house/ocean_spider_house_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_TENMON_DAI"
+    name "astral_observatory_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TENMON_DAI/Z2_TENMON_DAI.o"
+    include "build/assets/scenes/astral_observatory/astral_observatory_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_TENMON_DAI_room_00"
+    name "astral_observatory_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TENMON_DAI/Z2_TENMON_DAI_room_00.o"
+    include "build/assets/scenes/astral_observatory/astral_observatory_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_TENMON_DAI_room_01"
+    name "astral_observatory_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TENMON_DAI/Z2_TENMON_DAI_room_01.o"
+    include "build/assets/scenes/astral_observatory/astral_observatory_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_DEKU"
+    name "moon_deku_trial_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_DEKU/Z2_LAST_DEKU.o"
+    include "build/assets/scenes/moon_deku_trial/moon_deku_trial_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_LAST_DEKU_room_00"
+    name "moon_deku_trial_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_DEKU/Z2_LAST_DEKU_room_00.o"
+    include "build/assets/scenes/moon_deku_trial/moon_deku_trial_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_DEKU_room_01"
+    name "moon_deku_trial_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_DEKU/Z2_LAST_DEKU_room_01.o"
+    include "build/assets/scenes/moon_deku_trial/moon_deku_trial_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_22DEKUCITY"
+    name "deku_palace_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_22DEKUCITY/Z2_22DEKUCITY.o"
+    include "build/assets/scenes/deku_palace/deku_palace_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_22DEKUCITY_room_00"
+    name "deku_palace_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_22DEKUCITY/Z2_22DEKUCITY_room_00.o"
+    include "build/assets/scenes/deku_palace/deku_palace_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_22DEKUCITY_room_01"
+    name "deku_palace_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_22DEKUCITY/Z2_22DEKUCITY_room_01.o"
+    include "build/assets/scenes/deku_palace/deku_palace_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_22DEKUCITY_room_02"
+    name "deku_palace_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_22DEKUCITY/Z2_22DEKUCITY_room_02.o"
+    include "build/assets/scenes/deku_palace/deku_palace_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KAJIYA"
+    name "mountain_smithy_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KAJIYA/Z2_KAJIYA.o"
+    include "build/assets/scenes/mountain_smithy/mountain_smithy_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_KAJIYA_room_00"
+    name "mountain_smithy_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KAJIYA/Z2_KAJIYA_room_00.o"
+    include "build/assets/scenes/mountain_smithy/mountain_smithy_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_00KEIKOKU"
+    name "termina_field_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_00KEIKOKU/Z2_00KEIKOKU.o"
+    include "build/assets/scenes/termina_field/termina_field_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_00KEIKOKU_room_00"
+    name "termina_field_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_00KEIKOKU/Z2_00KEIKOKU_room_00.o"
+    include "build/assets/scenes/termina_field/termina_field_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_POSTHOUSE"
+    name "post_office_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_POSTHOUSE/Z2_POSTHOUSE.o"
+    include "build/assets/scenes/post_office/post_office_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_POSTHOUSE_room_00"
+    name "post_office_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_POSTHOUSE/Z2_POSTHOUSE_room_00.o"
+    include "build/assets/scenes/post_office/post_office_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LABO"
+    name "marine_research_lab_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LABO/Z2_LABO.o"
+    include "build/assets/scenes/marine_research_lab/marine_research_lab_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_LABO_room_00"
+    name "marine_research_lab_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LABO/Z2_LABO_room_00.o"
+    include "build/assets/scenes/marine_research_lab/marine_research_lab_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI2TEST"
+    name "dampes_house_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI2TEST/Z2_DANPEI2TEST.o"
+    include "build/assets/scenes/dampes_house/dampes_house_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_DANPEI2TEST_room_00"
+    name "dampes_house_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI2TEST/Z2_DANPEI2TEST_room_00.o"
+    include "build/assets/scenes/dampes_house/dampes_house_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI2TEST_room_01"
+    name "dampes_house_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI2TEST/Z2_DANPEI2TEST_room_01.o"
+    include "build/assets/scenes/dampes_house/dampes_house_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_16GORON_HOUSE"
+    name "goron_shrine_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_16GORON_HOUSE/Z2_16GORON_HOUSE.o"
+    include "build/assets/scenes/goron_shrine/goron_shrine_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_16GORON_HOUSE_room_00"
+    name "goron_shrine_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_16GORON_HOUSE/Z2_16GORON_HOUSE_room_00.o"
+    include "build/assets/scenes/goron_shrine/goron_shrine_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_16GORON_HOUSE_room_01"
+    name "goron_shrine_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_16GORON_HOUSE/Z2_16GORON_HOUSE_room_01.o"
+    include "build/assets/scenes/goron_shrine/goron_shrine_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_33ZORACITY"
+    name "zora_hall_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_33ZORACITY/Z2_33ZORACITY.o"
+    include "build/assets/scenes/zora_hall/zora_hall_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_33ZORACITY_room_00"
+    name "zora_hall_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_33ZORACITY/Z2_33ZORACITY_room_00.o"
+    include "build/assets/scenes/zora_hall/zora_hall_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_8ITEMSHOP"
+    name "trading_post_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_8ITEMSHOP/Z2_8ITEMSHOP.o"
+    include "build/assets/scenes/trading_post/trading_post_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_8ITEMSHOP_room_00"
+    name "trading_post_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_8ITEMSHOP/Z2_8ITEMSHOP_room_00.o"
+    include "build/assets/scenes/trading_post/trading_post_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_F01"
+    name "romani_ranch_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_F01/Z2_F01.o"
+    include "build/assets/scenes/romani_ranch/romani_ranch_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_F01_room_00"
+    name "romani_ranch_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_F01/Z2_F01_room_00.o"
+    include "build/assets/scenes/romani_ranch/romani_ranch_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INISIE_BS"
+    name "twinmolds_lair_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_BS/Z2_INISIE_BS.o"
+    include "build/assets/scenes/twinmolds_lair/twinmolds_lair_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_INISIE_BS_room_00"
+    name "twinmolds_lair_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INISIE_BS/Z2_INISIE_BS_room_00.o"
+    include "build/assets/scenes/twinmolds_lair/twinmolds_lair_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_30GYOSON"
+    name "great_bay_coast_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_30GYOSON/Z2_30GYOSON.o"
+    include "build/assets/scenes/great_bay_coast/great_bay_coast_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_30GYOSON_room_00"
+    name "great_bay_coast_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_30GYOSON/Z2_30GYOSON_room_00.o"
+    include "build/assets/scenes/great_bay_coast/great_bay_coast_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_31MISAKI"
+    name "zora_cape_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_31MISAKI/Z2_31MISAKI.o"
+    include "build/assets/scenes/zora_cape/zora_cape_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_31MISAKI_room_00"
+    name "zora_cape_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_31MISAKI/Z2_31MISAKI_room_00.o"
+    include "build/assets/scenes/zora_cape/zora_cape_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_TAKARAKUJI"
+    name "lottery_shop_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TAKARAKUJI/Z2_TAKARAKUJI.o"
+    include "build/assets/scenes/lottery_shop/lottery_shop_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_TAKARAKUJI_room_00"
+    name "lottery_shop_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TAKARAKUJI/Z2_TAKARAKUJI_room_00.o"
+    include "build/assets/scenes/lottery_shop/lottery_shop_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_TORIDE"
+    name "pirates_fortress_exterior_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TORIDE/Z2_TORIDE.o"
+    include "build/assets/scenes/pirates_fortress_exterior/pirates_fortress_exterior_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_TORIDE_room_00"
+    name "pirates_fortress_exterior_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TORIDE/Z2_TORIDE_room_00.o"
+    include "build/assets/scenes/pirates_fortress_exterior/pirates_fortress_exterior_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_FISHERMAN"
+    name "fishermans_hut_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_FISHERMAN/Z2_FISHERMAN.o"
+    include "build/assets/scenes/fishermans_hut/fishermans_hut_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_FISHERMAN_room_00"
+    name "fishermans_hut_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_FISHERMAN/Z2_FISHERMAN_room_00.o"
+    include "build/assets/scenes/fishermans_hut/fishermans_hut_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_GORONSHOP"
+    name "goron_shop_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_GORONSHOP/Z2_GORONSHOP.o"
+    include "build/assets/scenes/goron_shop/goron_shop_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_GORONSHOP_room_00"
+    name "goron_shop_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_GORONSHOP/Z2_GORONSHOP_room_00.o"
+    include "build/assets/scenes/goron_shop/goron_shop_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DEKU_KING"
+    name "deku_kings_chamber_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DEKU_KING/Z2_DEKU_KING.o"
+    include "build/assets/scenes/deku_kings_chamber/deku_kings_chamber_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_DEKU_KING_room_00"
+    name "deku_kings_chamber_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DEKU_KING/Z2_DEKU_KING_room_00.o"
+    include "build/assets/scenes/deku_kings_chamber/deku_kings_chamber_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_GORON"
+    name "moon_goron_trial_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_GORON/Z2_LAST_GORON.o"
+    include "build/assets/scenes/moon_goron_trial/moon_goron_trial_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_LAST_GORON_room_00"
+    name "moon_goron_trial_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_GORON/Z2_LAST_GORON_room_00.o"
+    include "build/assets/scenes/moon_goron_trial/moon_goron_trial_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_GORON_room_01"
+    name "moon_goron_trial_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_GORON/Z2_LAST_GORON_room_01.o"
+    include "build/assets/scenes/moon_goron_trial/moon_goron_trial_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_24KEMONOMITI"
+    name "road_to_southern_swamp_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_24KEMONOMITI/Z2_24KEMONOMITI.o"
+    include "build/assets/scenes/road_to_southern_swamp/road_to_southern_swamp_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_24KEMONOMITI_room_00"
+    name "road_to_southern_swamp_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_24KEMONOMITI/Z2_24KEMONOMITI_room_00.o"
+    include "build/assets/scenes/road_to_southern_swamp/road_to_southern_swamp_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_F01_B"
+    name "doggy_racetrack_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_F01_B/Z2_F01_B.o"
+    include "build/assets/scenes/doggy_racetrack/doggy_racetrack_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_F01_B_room_00"
+    name "doggy_racetrack_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_F01_B/Z2_F01_B_room_00.o"
+    include "build/assets/scenes/doggy_racetrack/doggy_racetrack_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_F01C"
+    name "cucco_shack_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_F01C/Z2_F01C.o"
+    include "build/assets/scenes/cucco_shack/cucco_shack_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_F01C_room_00"
+    name "cucco_shack_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_F01C/Z2_F01C_room_00.o"
+    include "build/assets/scenes/cucco_shack/cucco_shack_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_BOTI"
+    name "ikana_graveyard_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BOTI/Z2_BOTI.o"
+    include "build/assets/scenes/ikana_graveyard/ikana_graveyard_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_BOTI_room_00"
+    name "ikana_graveyard_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BOTI/Z2_BOTI_room_00.o"
+    include "build/assets/scenes/ikana_graveyard/ikana_graveyard_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_BOTI_room_01"
+    name "ikana_graveyard_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BOTI/Z2_BOTI_room_01.o"
+    include "build/assets/scenes/ikana_graveyard/ikana_graveyard_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_BS"
+    name "gohts_lair_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN_BS/Z2_HAKUGIN_BS.o"
+    include "build/assets/scenes/gohts_lair/gohts_lair_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_HAKUGIN_BS_room_00"
+    name "gohts_lair_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_HAKUGIN_BS/Z2_HAKUGIN_BS_room_00.o"
+    include "build/assets/scenes/gohts_lair/gohts_lair_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_20SICHITAI"
+    name "southern_swamp_poisoned_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_20SICHITAI/Z2_20SICHITAI.o"
+    include "build/assets/scenes/southern_swamp_poisoned/southern_swamp_poisoned_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_20SICHITAI_room_00"
+    name "southern_swamp_poisoned_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_20SICHITAI/Z2_20SICHITAI_room_00.o"
+    include "build/assets/scenes/southern_swamp_poisoned/southern_swamp_poisoned_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_20SICHITAI_room_01"
+    name "southern_swamp_poisoned_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_20SICHITAI/Z2_20SICHITAI_room_01.o"
+    include "build/assets/scenes/southern_swamp_poisoned/southern_swamp_poisoned_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_20SICHITAI_room_02"
+    name "southern_swamp_poisoned_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_20SICHITAI/Z2_20SICHITAI_room_02.o"
+    include "build/assets/scenes/southern_swamp_poisoned/southern_swamp_poisoned_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_21MITURINMAE"
+    name "woodfall_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_21MITURINMAE/Z2_21MITURINMAE.o"
+    include "build/assets/scenes/woodfall/woodfall_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_21MITURINMAE_room_00"
+    name "woodfall_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_21MITURINMAE/Z2_21MITURINMAE_room_00.o"
+    include "build/assets/scenes/woodfall/woodfall_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_ZORA"
+    name "moon_zora_trial_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_ZORA/Z2_LAST_ZORA.o"
+    include "build/assets/scenes/moon_zora_trial/moon_zora_trial_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_LAST_ZORA_room_00"
+    name "moon_zora_trial_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_ZORA/Z2_LAST_ZORA_room_00.o"
+    include "build/assets/scenes/moon_zora_trial/moon_zora_trial_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_11GORONNOSATO2"
+    name "goron_village_spring_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_11GORONNOSATO2/Z2_11GORONNOSATO2.o"
+    include "build/assets/scenes/goron_village_spring/goron_village_spring_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_11GORONNOSATO2_room_00"
+    name "goron_village_spring_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_11GORONNOSATO2/Z2_11GORONNOSATO2_room_00.o"
+    include "build/assets/scenes/goron_village_spring/goron_village_spring_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_11GORONNOSATO2_room_01"
+    name "goron_village_spring_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_11GORONNOSATO2/Z2_11GORONNOSATO2_room_01.o"
+    include "build/assets/scenes/goron_village_spring/goron_village_spring_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA"
+    name "great_bay_temple_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_SEA_room_00"
+    name "great_bay_temple_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_00.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_01"
+    name "great_bay_temple_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_01.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_02"
+    name "great_bay_temple_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_02.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_03"
+    name "great_bay_temple_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_03.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_04"
+    name "great_bay_temple_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_04.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_05"
+    name "great_bay_temple_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_05.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_06"
+    name "great_bay_temple_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_06.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_07"
+    name "great_bay_temple_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_07.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_08"
+    name "great_bay_temple_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_08.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_09"
+    name "great_bay_temple_room_09"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_09.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_09.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_10"
+    name "great_bay_temple_room_10"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_10.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_10.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_11"
+    name "great_bay_temple_room_11"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_11.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_11.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_12"
+    name "great_bay_temple_room_12"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_12.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_12.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_13"
+    name "great_bay_temple_room_13"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_13.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_13.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_14"
+    name "great_bay_temple_room_14"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_14.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_14.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_room_15"
+    name "great_bay_temple_room_15"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA/Z2_SEA_room_15.o"
+    include "build/assets/scenes/great_bay_temple/great_bay_temple_room_15.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_35TAKI"
+    name "waterfall_rapids_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_35TAKI/Z2_35TAKI.o"
+    include "build/assets/scenes/waterfall_rapids/waterfall_rapids_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_35TAKI_room_00"
+    name "waterfall_rapids_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_35TAKI/Z2_35TAKI_room_00.o"
+    include "build/assets/scenes/waterfall_rapids/waterfall_rapids_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD"
+    name "beneath_the_well_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_00"
+    name "beneath_the_well_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_00.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_01"
+    name "beneath_the_well_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_01.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_02"
+    name "beneath_the_well_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_02.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_03"
+    name "beneath_the_well_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_03.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_04"
+    name "beneath_the_well_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_04.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_05"
+    name "beneath_the_well_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_05.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_06"
+    name "beneath_the_well_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_06.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_07"
+    name "beneath_the_well_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_07.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_08"
+    name "beneath_the_well_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_08.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_09"
+    name "beneath_the_well_room_09"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_09.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_09.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_10"
+    name "beneath_the_well_room_10"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_10.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_10.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_11"
+    name "beneath_the_well_room_11"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_11.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_11.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_12"
+    name "beneath_the_well_room_12"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_12.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_12.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_REDEAD_room_13"
+    name "beneath_the_well_room_13"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_REDEAD/Z2_REDEAD_room_13.o"
+    include "build/assets/scenes/beneath_the_well/beneath_the_well_room_13.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_BANDROOM"
+    name "zora_hall_rooms_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM.o"
+    include "build/assets/scenes/zora_hall_rooms/zora_hall_rooms_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_BANDROOM_room_00"
+    name "zora_hall_rooms_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM_room_00.o"
+    include "build/assets/scenes/zora_hall_rooms/zora_hall_rooms_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_BANDROOM_room_01"
+    name "zora_hall_rooms_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM_room_01.o"
+    include "build/assets/scenes/zora_hall_rooms/zora_hall_rooms_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_BANDROOM_room_02"
+    name "zora_hall_rooms_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM_room_02.o"
+    include "build/assets/scenes/zora_hall_rooms/zora_hall_rooms_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_BANDROOM_room_03"
+    name "zora_hall_rooms_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM_room_03.o"
+    include "build/assets/scenes/zora_hall_rooms/zora_hall_rooms_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_BANDROOM_room_04"
+    name "zora_hall_rooms_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BANDROOM/Z2_BANDROOM_room_04.o"
+    include "build/assets/scenes/zora_hall_rooms/zora_hall_rooms_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_11GORONNOSATO"
+    name "goron_village_winter_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_11GORONNOSATO/Z2_11GORONNOSATO.o"
+    include "build/assets/scenes/goron_village_winter/goron_village_winter_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_11GORONNOSATO_room_00"
+    name "goron_village_winter_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_11GORONNOSATO/Z2_11GORONNOSATO_room_00.o"
+    include "build/assets/scenes/goron_village_winter/goron_village_winter_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_11GORONNOSATO_room_01"
+    name "goron_village_winter_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_11GORONNOSATO/Z2_11GORONNOSATO_room_01.o"
+    include "build/assets/scenes/goron_village_winter/goron_village_winter_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_GORON_HAKA"
+    name "goron_graveyard_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_GORON_HAKA/Z2_GORON_HAKA.o"
+    include "build/assets/scenes/goron_graveyard/goron_graveyard_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_GORON_HAKA_room_00"
+    name "goron_graveyard_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_GORON_HAKA/Z2_GORON_HAKA_room_00.o"
+    include "build/assets/scenes/goron_graveyard/goron_graveyard_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SECOM"
+    name "sakons_hideout_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SECOM/Z2_SECOM.o"
+    include "build/assets/scenes/sakons_hideout/sakons_hideout_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_SECOM_room_00"
+    name "sakons_hideout_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SECOM/Z2_SECOM_room_00.o"
+    include "build/assets/scenes/sakons_hideout/sakons_hideout_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SECOM_room_01"
+    name "sakons_hideout_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SECOM/Z2_SECOM_room_01.o"
+    include "build/assets/scenes/sakons_hideout/sakons_hideout_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_10YUKIYAMANOMURA"
+    name "mountain_village_winter_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_10YUKIYAMANOMURA/Z2_10YUKIYAMANOMURA.o"
+    include "build/assets/scenes/mountain_village_winter/mountain_village_winter_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_10YUKIYAMANOMURA_room_00"
+    name "mountain_village_winter_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_10YUKIYAMANOMURA/Z2_10YUKIYAMANOMURA_room_00.o"
+    include "build/assets/scenes/mountain_village_winter/mountain_village_winter_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_TOUGITES"
+    name "ghost_hut_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TOUGITES/Z2_TOUGITES.o"
+    include "build/assets/scenes/ghost_hut/ghost_hut_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_TOUGITES_room_00"
+    name "ghost_hut_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TOUGITES/Z2_TOUGITES_room_00.o"
+    include "build/assets/scenes/ghost_hut/ghost_hut_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI"
+    name "deku_shrine_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI.o"
+    include "build/assets/scenes/deku_shrine/deku_shrine_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_DANPEI_room_00"
+    name "deku_shrine_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_00.o"
+    include "build/assets/scenes/deku_shrine/deku_shrine_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI_room_01"
+    name "deku_shrine_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_01.o"
+    include "build/assets/scenes/deku_shrine/deku_shrine_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI_room_02"
+    name "deku_shrine_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_02.o"
+    include "build/assets/scenes/deku_shrine/deku_shrine_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI_room_03"
+    name "deku_shrine_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_03.o"
+    include "build/assets/scenes/deku_shrine/deku_shrine_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI_room_04"
+    name "deku_shrine_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_04.o"
+    include "build/assets/scenes/deku_shrine/deku_shrine_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI_room_05"
+    name "deku_shrine_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_05.o"
+    include "build/assets/scenes/deku_shrine/deku_shrine_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI_room_06"
+    name "deku_shrine_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_06.o"
+    include "build/assets/scenes/deku_shrine/deku_shrine_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI_room_07"
+    name "deku_shrine_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_07.o"
+    include "build/assets/scenes/deku_shrine/deku_shrine_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DANPEI_room_08"
+    name "deku_shrine_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DANPEI/Z2_DANPEI_room_08.o"
+    include "build/assets/scenes/deku_shrine/deku_shrine_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_IKANAMAE"
+    name "road_to_ikana_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKANAMAE/Z2_IKANAMAE.o"
+    include "build/assets/scenes/road_to_ikana/road_to_ikana_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_IKANAMAE_room_00"
+    name "road_to_ikana_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKANAMAE/Z2_IKANAMAE_room_00.o"
+    include "build/assets/scenes/road_to_ikana/road_to_ikana_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_DOUJOU"
+    name "swordmans_school_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DOUJOU/Z2_DOUJOU.o"
+    include "build/assets/scenes/swordmans_school/swordmans_school_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_DOUJOU_room_00"
+    name "swordmans_school_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_DOUJOU/Z2_DOUJOU_room_00.o"
+    include "build/assets/scenes/swordmans_school/swordmans_school_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MUSICHOUSE"
+    name "music_box_house_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MUSICHOUSE/Z2_MUSICHOUSE.o"
+    include "build/assets/scenes/music_box_house/music_box_house_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_MUSICHOUSE_room_00"
+    name "music_box_house_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MUSICHOUSE/Z2_MUSICHOUSE_room_00.o"
+    include "build/assets/scenes/music_box_house/music_box_house_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_IKNINSIDE"
+    name "igos_du_ikanas_lair_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKNINSIDE/Z2_IKNINSIDE.o"
+    include "build/assets/scenes/igos_du_ikanas_lair/igos_du_ikanas_lair_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_IKNINSIDE_room_00"
+    name "igos_du_ikanas_lair_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKNINSIDE/Z2_IKNINSIDE_room_00.o"
+    include "build/assets/scenes/igos_du_ikanas_lair/igos_du_ikanas_lair_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_IKNINSIDE_room_01"
+    name "igos_du_ikanas_lair_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_IKNINSIDE/Z2_IKNINSIDE_room_01.o"
+    include "build/assets/scenes/igos_du_ikanas_lair/igos_du_ikanas_lair_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_MAP_SHOP"
+    name "tourist_information_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MAP_SHOP/Z2_MAP_SHOP.o"
+    include "build/assets/scenes/tourist_information/tourist_information_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_MAP_SHOP_room_00"
+    name "tourist_information_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_MAP_SHOP/Z2_MAP_SHOP_room_00.o"
+    include "build/assets/scenes/tourist_information/tourist_information_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_F40"
+    name "stone_tower_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_F40/Z2_F40.o"
+    include "build/assets/scenes/stone_tower/stone_tower_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_F40_room_00"
+    name "stone_tower_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_F40/Z2_F40_room_00.o"
+    include "build/assets/scenes/stone_tower/stone_tower_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_F41"
+    name "inverted_stone_tower_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_F41/Z2_F41.o"
+    include "build/assets/scenes/inverted_stone_tower/inverted_stone_tower_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_F41_room_00"
+    name "inverted_stone_tower_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_F41/Z2_F41_room_00.o"
+    include "build/assets/scenes/inverted_stone_tower/inverted_stone_tower_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_10YUKIYAMANOMURA2"
+    name "mountain_village_spring_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_10YUKIYAMANOMURA2/Z2_10YUKIYAMANOMURA2.o"
+    include "build/assets/scenes/mountain_village_spring/mountain_village_spring_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_10YUKIYAMANOMURA2_room_00"
+    name "mountain_village_spring_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_10YUKIYAMANOMURA2/Z2_10YUKIYAMANOMURA2_room_00.o"
+    include "build/assets/scenes/mountain_village_spring/mountain_village_spring_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_10YUKIYAMANOMURA2_room_01"
+    name "mountain_village_spring_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_10YUKIYAMANOMURA2/Z2_10YUKIYAMANOMURA2_room_01.o"
+    include "build/assets/scenes/mountain_village_spring/mountain_village_spring_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_14YUKIDAMANOMITI"
+    name "path_to_snowhead_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_14YUKIDAMANOMITI/Z2_14YUKIDAMANOMITI.o"
+    include "build/assets/scenes/path_to_snowhead/path_to_snowhead_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_14YUKIDAMANOMITI_room_00"
+    name "path_to_snowhead_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_14YUKIDAMANOMITI/Z2_14YUKIDAMANOMITI_room_00.o"
+    include "build/assets/scenes/path_to_snowhead/path_to_snowhead_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_12HAKUGINMAE"
+    name "snowhead_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_12HAKUGINMAE/Z2_12HAKUGINMAE.o"
+    include "build/assets/scenes/snowhead/snowhead_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_12HAKUGINMAE_room_00"
+    name "snowhead_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_12HAKUGINMAE/Z2_12HAKUGINMAE_room_00.o"
+    include "build/assets/scenes/snowhead/snowhead_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_17SETUGEN"
+    name "path_to_goron_village_winter_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_17SETUGEN/Z2_17SETUGEN.o"
+    include "build/assets/scenes/path_to_goron_village_winter/path_to_goron_village_winter_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_17SETUGEN_room_00"
+    name "path_to_goron_village_winter_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_17SETUGEN/Z2_17SETUGEN_room_00.o"
+    include "build/assets/scenes/path_to_goron_village_winter/path_to_goron_village_winter_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_17SETUGEN2"
+    name "path_to_goron_village_spring_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_17SETUGEN2/Z2_17SETUGEN2.o"
+    include "build/assets/scenes/path_to_goron_village_spring/path_to_goron_village_spring_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_17SETUGEN2_room_00"
+    name "path_to_goron_village_spring_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_17SETUGEN2/Z2_17SETUGEN2_room_00.o"
+    include "build/assets/scenes/path_to_goron_village_spring/path_to_goron_village_spring_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SEA_BS"
+    name "gyorgs_lair_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA_BS/Z2_SEA_BS.o"
+    include "build/assets/scenes/gyorgs_lair/gyorgs_lair_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_SEA_BS_room_00"
+    name "gyorgs_lair_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SEA_BS/Z2_SEA_BS_room_00.o"
+    include "build/assets/scenes/gyorgs_lair/gyorgs_lair_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_RANDOM"
+    name "secret_shrine_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM.o"
+    include "build/assets/scenes/secret_shrine/secret_shrine_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_RANDOM_room_00"
+    name "secret_shrine_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_00.o"
+    include "build/assets/scenes/secret_shrine/secret_shrine_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_RANDOM_room_01"
+    name "secret_shrine_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_01.o"
+    include "build/assets/scenes/secret_shrine/secret_shrine_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_RANDOM_room_02"
+    name "secret_shrine_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_02.o"
+    include "build/assets/scenes/secret_shrine/secret_shrine_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_RANDOM_room_03"
+    name "secret_shrine_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_03.o"
+    include "build/assets/scenes/secret_shrine/secret_shrine_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_RANDOM_room_04"
+    name "secret_shrine_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_04.o"
+    include "build/assets/scenes/secret_shrine/secret_shrine_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_RANDOM_room_05"
+    name "secret_shrine_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_RANDOM/Z2_RANDOM_room_05.o"
+    include "build/assets/scenes/secret_shrine/secret_shrine_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_YADOYA"
+    name "stock_pot_inn_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA.o"
+    include "build/assets/scenes/stock_pot_inn/stock_pot_inn_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_YADOYA_room_00"
+    name "stock_pot_inn_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA_room_00.o"
+    include "build/assets/scenes/stock_pot_inn/stock_pot_inn_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_YADOYA_room_01"
+    name "stock_pot_inn_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA_room_01.o"
+    include "build/assets/scenes/stock_pot_inn/stock_pot_inn_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_YADOYA_room_02"
+    name "stock_pot_inn_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA_room_02.o"
+    include "build/assets/scenes/stock_pot_inn/stock_pot_inn_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_YADOYA_room_03"
+    name "stock_pot_inn_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA_room_03.o"
+    include "build/assets/scenes/stock_pot_inn/stock_pot_inn_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_YADOYA_room_04"
+    name "stock_pot_inn_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_YADOYA/Z2_YADOYA_room_04.o"
+    include "build/assets/scenes/stock_pot_inn/stock_pot_inn_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KONPEKI_ENT"
+    name "great_bay_cutscene_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KONPEKI_ENT/Z2_KONPEKI_ENT.o"
+    include "build/assets/scenes/great_bay_cutscene/great_bay_cutscene_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_KONPEKI_ENT_room_00"
+    name "great_bay_cutscene_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KONPEKI_ENT/Z2_KONPEKI_ENT_room_00.o"
+    include "build/assets/scenes/great_bay_cutscene/great_bay_cutscene_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INSIDETOWER"
+    name "clock_tower_interior_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INSIDETOWER/Z2_INSIDETOWER.o"
+    include "build/assets/scenes/clock_tower_interior/clock_tower_interior_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_INSIDETOWER_room_00"
+    name "clock_tower_interior_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INSIDETOWER/Z2_INSIDETOWER_room_00.o"
+    include "build/assets/scenes/clock_tower_interior/clock_tower_interior_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_INSIDETOWER_room_01"
+    name "clock_tower_interior_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_INSIDETOWER/Z2_INSIDETOWER_room_01.o"
+    include "build/assets/scenes/clock_tower_interior/clock_tower_interior_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_26SARUNOMORI"
+    name "woods_of_mystery_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI.o"
+    include "build/assets/scenes/woods_of_mystery/woods_of_mystery_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_26SARUNOMORI_room_00"
+    name "woods_of_mystery_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_00.o"
+    include "build/assets/scenes/woods_of_mystery/woods_of_mystery_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_26SARUNOMORI_room_01"
+    name "woods_of_mystery_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_01.o"
+    include "build/assets/scenes/woods_of_mystery/woods_of_mystery_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_26SARUNOMORI_room_02"
+    name "woods_of_mystery_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_02.o"
+    include "build/assets/scenes/woods_of_mystery/woods_of_mystery_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_26SARUNOMORI_room_03"
+    name "woods_of_mystery_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_03.o"
+    include "build/assets/scenes/woods_of_mystery/woods_of_mystery_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_26SARUNOMORI_room_04"
+    name "woods_of_mystery_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_04.o"
+    include "build/assets/scenes/woods_of_mystery/woods_of_mystery_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_26SARUNOMORI_room_05"
+    name "woods_of_mystery_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_05.o"
+    include "build/assets/scenes/woods_of_mystery/woods_of_mystery_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_26SARUNOMORI_room_06"
+    name "woods_of_mystery_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_06.o"
+    include "build/assets/scenes/woods_of_mystery/woods_of_mystery_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_26SARUNOMORI_room_07"
+    name "woods_of_mystery_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_07.o"
+    include "build/assets/scenes/woods_of_mystery/woods_of_mystery_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_26SARUNOMORI_room_08"
+    name "woods_of_mystery_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI_room_08.o"
+    include "build/assets/scenes/woods_of_mystery/woods_of_mystery_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LOST_WOODS"
+    name "lost_woods_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LOST_WOODS/Z2_LOST_WOODS.o"
+    include "build/assets/scenes/lost_woods/lost_woods_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_LOST_WOODS_room_00"
+    name "lost_woods_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LOST_WOODS/Z2_LOST_WOODS_room_00.o"
+    include "build/assets/scenes/lost_woods/lost_woods_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LOST_WOODS_room_01"
+    name "lost_woods_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LOST_WOODS/Z2_LOST_WOODS_room_01.o"
+    include "build/assets/scenes/lost_woods/lost_woods_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LOST_WOODS_room_02"
+    name "lost_woods_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LOST_WOODS/Z2_LOST_WOODS_room_02.o"
+    include "build/assets/scenes/lost_woods/lost_woods_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_LINK"
+    name "moon_human_trial_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK.o"
+    include "build/assets/scenes/moon_human_trial/moon_human_trial_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_LAST_LINK_room_00"
+    name "moon_human_trial_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_00.o"
+    include "build/assets/scenes/moon_human_trial/moon_human_trial_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_LINK_room_01"
+    name "moon_human_trial_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_01.o"
+    include "build/assets/scenes/moon_human_trial/moon_human_trial_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_LINK_room_02"
+    name "moon_human_trial_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_02.o"
+    include "build/assets/scenes/moon_human_trial/moon_human_trial_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_LINK_room_03"
+    name "moon_human_trial_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_03.o"
+    include "build/assets/scenes/moon_human_trial/moon_human_trial_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_LINK_room_04"
+    name "moon_human_trial_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_04.o"
+    include "build/assets/scenes/moon_human_trial/moon_human_trial_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_LINK_room_05"
+    name "moon_human_trial_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_05.o"
+    include "build/assets/scenes/moon_human_trial/moon_human_trial_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_LINK_room_06"
+    name "moon_human_trial_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_06.o"
+    include "build/assets/scenes/moon_human_trial/moon_human_trial_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_LAST_LINK_room_07"
+    name "moon_human_trial_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_LAST_LINK/Z2_LAST_LINK_room_07.o"
+    include "build/assets/scenes/moon_human_trial/moon_human_trial_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_SOUGEN"
+    name "moon_field_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SOUGEN/Z2_SOUGEN.o"
+    include "build/assets/scenes/moon_field/moon_field_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_SOUGEN_room_00"
+    name "moon_field_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_SOUGEN/Z2_SOUGEN_room_00.o"
+    include "build/assets/scenes/moon_field/moon_field_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_BOMYA"
+    name "bomb_shop_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BOMYA/Z2_BOMYA.o"
+    include "build/assets/scenes/bomb_shop/bomb_shop_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_BOMYA_room_00"
+    name "bomb_shop_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BOMYA/Z2_BOMYA_room_00.o"
+    include "build/assets/scenes/bomb_shop/bomb_shop_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KYOJINNOMA"
+    name "giants_chamber_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KYOJINNOMA/Z2_KYOJINNOMA.o"
+    include "build/assets/scenes/giants_chamber/giants_chamber_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_KYOJINNOMA_room_00"
+    name "giants_chamber_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KYOJINNOMA/Z2_KYOJINNOMA_room_00.o"
+    include "build/assets/scenes/giants_chamber/giants_chamber_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_KOEPONARACE"
+    name "gorman_track_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KOEPONARACE/Z2_KOEPONARACE.o"
+    include "build/assets/scenes/gorman_track/gorman_track_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_KOEPONARACE_room_00"
+    name "gorman_track_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_KOEPONARACE/Z2_KOEPONARACE_room_00.o"
+    include "build/assets/scenes/gorman_track/gorman_track_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_GORONRACE"
+    name "goron_racetrack_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_GORONRACE/Z2_GORONRACE.o"
+    include "build/assets/scenes/goron_racetrack/goron_racetrack_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_GORONRACE_room_00"
+    name "goron_racetrack_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_GORONRACE/Z2_GORONRACE_room_00.o"
+    include "build/assets/scenes/goron_racetrack/goron_racetrack_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_TOWN"
+    name "east_clock_town_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TOWN/Z2_TOWN.o"
+    include "build/assets/scenes/east_clock_town/east_clock_town_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_TOWN_room_00"
+    name "east_clock_town_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_TOWN/Z2_TOWN_room_00.o"
+    include "build/assets/scenes/east_clock_town/east_clock_town_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_ICHIBA"
+    name "west_clock_town_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_ICHIBA/Z2_ICHIBA.o"
+    include "build/assets/scenes/west_clock_town/west_clock_town_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_ICHIBA_room_00"
+    name "west_clock_town_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_ICHIBA/Z2_ICHIBA_room_00.o"
+    include "build/assets/scenes/west_clock_town/west_clock_town_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_BACKTOWN"
+    name "north_clock_town_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BACKTOWN/Z2_BACKTOWN.o"
+    include "build/assets/scenes/north_clock_town/north_clock_town_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_BACKTOWN_room_00"
+    name "north_clock_town_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_BACKTOWN/Z2_BACKTOWN_room_00.o"
+    include "build/assets/scenes/north_clock_town/north_clock_town_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_CLOCKTOWER"
+    name "south_clock_town_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CLOCKTOWER/Z2_CLOCKTOWER.o"
+    include "build/assets/scenes/south_clock_town/south_clock_town_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_CLOCKTOWER_room_00"
+    name "south_clock_town_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_CLOCKTOWER/Z2_CLOCKTOWER_room_00.o"
+    include "build/assets/scenes/south_clock_town/south_clock_town_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "Z2_ALLEY"
+    name "laundry_pool_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_ALLEY/Z2_ALLEY.o"
+    include "build/assets/scenes/laundry_pool/laundry_pool_scene.o"
     number 2
 endseg
 
 beginseg
-    name "Z2_ALLEY_room_00"
+    name "laundry_pool_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/Z2_ALLEY/Z2_ALLEY_room_00.o"
+    include "build/assets/scenes/laundry_pool/laundry_pool_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "SPOT00"
+    name "cutscene_map_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/SPOT00/SPOT00.o"
+    include "build/assets/scenes/cutscene_map/cutscene_map_scene.o"
     number 2
 endseg
 
 beginseg
-    name "SPOT00_room_00"
+    name "cutscene_map_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/SPOT00/SPOT00_room_00.o"
+    include "build/assets/scenes/cutscene_map/cutscene_map_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA"
+    name "grottos_scene"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA.o"
+    include "build/assets/scenes/grottos/grottos_scene.o"
     number 2
 endseg
 
 beginseg
-    name "KAKUSIANA_room_00"
+    name "grottos_room_00"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_00.o"
+    include "build/assets/scenes/grottos/grottos_room_00.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_01"
+    name "grottos_room_01"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_01.o"
+    include "build/assets/scenes/grottos/grottos_room_01.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_02"
+    name "grottos_room_02"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_02.o"
+    include "build/assets/scenes/grottos/grottos_room_02.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_03"
+    name "grottos_room_03"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_03.o"
+    include "build/assets/scenes/grottos/grottos_room_03.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_04"
+    name "grottos_room_04"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_04.o"
+    include "build/assets/scenes/grottos/grottos_room_04.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_05"
+    name "grottos_room_05"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_05.o"
+    include "build/assets/scenes/grottos/grottos_room_05.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_06"
+    name "grottos_room_06"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_06.o"
+    include "build/assets/scenes/grottos/grottos_room_06.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_07"
+    name "grottos_room_07"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_07.o"
+    include "build/assets/scenes/grottos/grottos_room_07.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_08"
+    name "grottos_room_08"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_08.o"
+    include "build/assets/scenes/grottos/grottos_room_08.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_09"
+    name "grottos_room_09"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_09.o"
+    include "build/assets/scenes/grottos/grottos_room_09.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_10"
+    name "grottos_room_10"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_10.o"
+    include "build/assets/scenes/grottos/grottos_room_10.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_11"
+    name "grottos_room_11"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_11.o"
+    include "build/assets/scenes/grottos/grottos_room_11.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_12"
+    name "grottos_room_12"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_12.o"
+    include "build/assets/scenes/grottos/grottos_room_12.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_13"
+    name "grottos_room_13"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_13.o"
+    include "build/assets/scenes/grottos/grottos_room_13.o"
     number 3
 endseg
 
 beginseg
-    name "KAKUSIANA_room_14"
+    name "grottos_room_14"
     compress
     romalign 0x1000
-    include "build/assets/scenes/KAKUSIANA/KAKUSIANA_room_14.o"
+    include "build/assets/scenes/grottos/grottos_room_14.o"
     number 3
 endseg
 

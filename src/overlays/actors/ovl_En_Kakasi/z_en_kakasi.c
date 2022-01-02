@@ -249,10 +249,10 @@ void EnKakasi_CheckAnimationSfx(EnKakasi* this) {
 void EnKakasi_CheckPlayerPosition(EnKakasi* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (globalCtx->sceneNum == SCENE_8ITEMSHOP) {
+    if (globalCtx->sceneNum == SCENE_TRADING_POST) {
         player->actor.world.pos.x = -50.0f;
         player->actor.world.pos.z = 155.0f;
-    } else if (globalCtx->sceneNum == SCENE_TENMON_DAI) {
+    } else if (globalCtx->sceneNum == SCENE_ASTRAL_OBSERVATORY) {
         player->actor.world.pos.x = 60.0f;
         player->actor.world.pos.z = -190.0f;
     }
@@ -1009,7 +1009,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx) {
         tempWorldPos.x += randPlusMinusPoint5Scaled(2.0f);
         tempWorldPos.z += randPlusMinusPoint5Scaled(2.0f);
 
-        if (globalCtx->sceneNum == SCENE_8ITEMSHOP) {
+        if (globalCtx->sceneNum == SCENE_TRADING_POST) {
             EffectSsGSplash_Spawn(globalCtx, &tempWorldPos, 0, 0, 0, randPlusMinusPoint5Scaled(100.0f) + 200.0f);
             Audio_PlaySoundAtPosition(globalCtx, &tempWorldPos, 0x32, NA_SE_EV_BOMB_DROP_WATER);
 

@@ -1,0 +1,15 @@
+<Root>
+    <!-- "20SICHITAI2" -->
+    <File Name="southern_swamp_clear_scene" Segment="2" Game="MM">
+        <Scene Name="southern_swamp_clear_scene" Offset="0x0"/>
+    </File>
+    <File Name="southern_swamp_clear_room_00" Segment="3" Game="MM">
+        <Room Name="southern_swamp_clear_room_00" Offset="0x0"/>
+    </File>
+    <File Name="southern_swamp_clear_room_01" Segment="3" Game="MM">
+        <Room Name="southern_swamp_clear_room_01" Offset="0x0"/>
+    </File>
+    <File Name="southern_swamp_clear_room_02" Segment="3" Game="MM">
+        <Room Name="southern_swamp_clear_room_02" Offset="0x0"/>
+    </File>
+</Root>

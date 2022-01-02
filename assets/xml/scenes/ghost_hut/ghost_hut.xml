@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_TOUGITES" -->
+    <File Name="ghost_hut_scene" Segment="2" Game="MM">
+        <Scene Name="ghost_hut_scene" Offset="0x0"/>
+    </File>
+    <File Name="ghost_hut_room_00" Segment="3" Game="MM">
+        <Room Name="ghost_hut_room_00" Offset="0x0"/>
+    </File>
+</Root>

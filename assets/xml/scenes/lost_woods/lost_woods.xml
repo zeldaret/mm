@@ -1,0 +1,17 @@
+<Root>
+    <!-- "Z2_LOST_WOODS" -->
+    <File Name="lost_woods_scene" Segment="3" Game="MM">
+        <Texture Name="lost_woods_Tex_00B9D0" Format="ia16" Width="64" Height="64" Offset="0xB9D0"/>
+
+        <Scene Name="lost_woods_scene" Offset="0x0"/>
+    </File>
+    <File Name="lost_woods_room_00" Segment="3" Game="MM">
+        <Room Name="lost_woods_room_00" Offset="0x0"/>
+    </File>
+    <File Name="lost_woods_room_01" Segment="3" Game="MM">
+        <Room Name="lost_woods_room_01" Offset="0x0"/>
+    </File>
+    <File Name="lost_woods_room_02" Segment="3" Game="MM">
+        <Room Name="lost_woods_room_02" Offset="0x0"/>
+    </File>
+</Root>

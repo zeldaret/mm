@@ -1,0 +1,9 @@
+<Root>
+    <!-- "Z2_MAP_SHOP" -->
+    <File Name="tourist_information_scene" Segment="2" Game="MM">
+        <Scene Name="tourist_information_scene" Offset="0x0"/>
+    </File>
+    <File Name="tourist_information_room_00" Segment="3" Game="MM">
+        <Room Name="tourist_information_room_00" Offset="0x0"/>
+    </File>
+</Root>

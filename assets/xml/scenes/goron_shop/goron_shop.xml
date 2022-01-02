@@ -1,0 +1,12 @@
+<Root>
+    <!-- "Z2_GORONSHOP" -->
+    <File Name="goron_shop_scene" Segment="2" Game="MM">
+        <Texture Name="goron_shop_Tex_004630" Format="i8" Width="128" Height="64" Offset="0x4630"/>
+        <Texture Name="goron_shop_Tex_009230" Format="rgba16" Width="64" Height="64" Offset="0x9230"/>
+
+        <Scene Name="goron_shop_scene" Offset="0x0"/>
+    </File>
+    <File Name="goron_shop_room_00" Segment="3" Game="MM">
+        <Room Name="goron_shop_room_00" Offset="0x0"/>
+    </File>
+</Root>
