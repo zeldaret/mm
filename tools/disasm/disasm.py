@@ -3,7 +3,7 @@
 import argparse, ast, math, os, re, struct
 import bisect
 from mips_isa import *
-from multiprocessing import Pool
+from multiprocessing import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-j', dest='jobs', type=int, default=1, help='number of processes to run at once')
@@ -1170,7 +1170,7 @@ for segment in files_spec:
 # Construct variable_addrs, now that variable_addrs is fully constructed
 variable_addrs = sorted(variables_ast.keys())
 
-pool = Pool(jobs)
+pool = get_context("fork").Pool(jobs)
 # Find symbols for each segment
 for segment in files_spec:
     if segment[2] == 'makerom':
@@ -1385,7 +1385,7 @@ print("Disassembling Segments")
 disassemble_makerom(next(segment for segment in files_spec if segment[2] == 'makerom'))
 
 # Textual disassembly for each segment
-with Pool(jobs) as p:
+with get_context("fork").Pool(jobs) as p:
     p.map(disassemble_segment, (segment for segment in files_spec if segment[2] != 'makerom'))
 
 print("Splitting text and migrating rodata")
