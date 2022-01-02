@@ -36,13 +36,13 @@
         <DList Name="object_ani_DL_005928" Offset="0x5928" />
         <DList Name="object_ani_DL_005C50" Offset="0x5C50" />
         <DList Name="object_ani_DL_005D60" Offset="0x5D60" />
-        <Texture Name="object_ani_TLUT_005E58" OutName="ani_tlut_005E58" Format="rgba16" Width="16" Height="16" Offset="0x5E58" />
+        <Texture Name="gAniGeneralTlut" OutName="ani_general_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5E58" />
         <Texture Name="gAniUnkGradientTex" OutName="ani_unk_gradient1" Format="ci8" Width="8" Height="8" Offset="0x6058" />
         <Texture Name="gAniFingersTex" OutName="ani_fingers" Format="ci8" Width="8" Height="8" Offset="0x6098" />
         <Texture Name="gAniShirtEdgeTex" OutName="ani_shirt_edge" Format="i8" Width="8" Height="8" Offset="0x60D8" />
         <Texture Name="gAniSandleBuckleTex" OutName="ani_sandle_buckle" Format="ci8" Width="16" Height="16" Offset="0x6118" />
         <Texture Name="gAniPantsTex" OutName="ani_pants" Format="ci8" Width="16" Height="16" Offset="0x6218" />
-        <Texture Name="object_ani_TLUT_006318" OutName="ani_tlut_006318" Format="rgba16" Width="16" Height="12" Offset="0x6318" />
+        <Texture Name="gAniEyeTlut" OutName="ani_eye_tlut" Format="rgba16" Width="16" Height="12" Offset="0x6318" />
         <Texture Name="gAniOpenEyeTex" OutName="ani_open_eye" Format="ci8" Width="32" Height="32" Offset="0x6498" TlutOffset="0x6318" />
         <Texture Name="gAniMouthTex" OutName="ani_mouth" Format="ci8" Width="16" Height="16" Offset="0x6898" />
         <Texture Name="gAniUnkGradient2Tex" OutName="ani_unk_gradient2" Format="ci8" Width="8" Height="8" Offset="0x6998" />
@@ -51,7 +51,7 @@
         <Texture Name="gAniClosingEyeTex" OutName="ani_closing_eye" Format="ci8" Width="32" Height="32" Offset="0x6B18" TlutOffset="0x6318"/>
         <Texture Name="gAniClosedEyeTex" OutName="ani_closed_eye" Format="ci8" Width="32" Height="32" Offset="0x6F18" TlutOffset="0x6318"/>
         <DList Name="object_ani_DL_007B58" Offset="0x7B58" />
-        <Animation Name="gAniUnusedLandingThenStandingUpAnim" Offset="0x9220" />
+        <Animation Name="gAniLandingThenStandingUpAnim" Offset="0x9220" />
         <Animation Name="gAniHoldUpHandAnim" Offset="0x9734" />
         <Animation Name="gAniStandingNormalAnim" Offset="0x9D34" />
         <Animation Name="gAniHandBehindHeadApologyAnim" Offset="0xA460" />
