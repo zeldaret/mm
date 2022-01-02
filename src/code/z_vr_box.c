@@ -74,7 +74,6 @@ void func_801431E8(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType) 
         skyboxCtx->envG = 0;
         skyboxCtx->envB = 40;
 
-        // Inverted Stone Tower Temple and Inverted Stone Tower
         if ((globalCtx->sceneNum == SCENE_INVERTED_STONE_TOWER) ||
             (globalCtx->sceneNum == SCENE_INVERTED_STONE_TOWER_TEMPLE)) {
             skyboxCtx->rotZ = 3.15000009537f;
