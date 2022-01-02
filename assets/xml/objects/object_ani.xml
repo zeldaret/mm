@@ -22,20 +22,21 @@
         <Limb Name="gAniRightHandLimb" Type="Standard" Offset="0x284C" />
         <Limb Name="gAniHeadLimb" Type="Standard" Offset="0x2858" />
         <Skeleton Name="gAniSkeleton" Type="Flex" LimbType="Standard" Offset="0x28A0" />
-        <DList Name="object_ani_DL_004860" Offset="0x4860" />
-        <DList Name="object_ani_DL_004A50" Offset="0x4A50" />
-        <DList Name="object_ani_DL_004B38" Offset="0x4B38" />
-        <DList Name="object_ani_DL_004C30" Offset="0x4C30" />
-        <DList Name="object_ani_DL_004E20" Offset="0x4E20" />
-        <DList Name="object_ani_DL_004F08" Offset="0x4F08" />
-        <DList Name="object_ani_DL_005000" Offset="0x5000" />
-        <DList Name="object_ani_DL_005270" Offset="0x5270" />
-        <DList Name="object_ani_DL_005420" Offset="0x5420" />
-        <DList Name="object_ani_DL_005668" Offset="0x5668" />
-        <DList Name="object_ani_DL_005778" Offset="0x5778" />
-        <DList Name="object_ani_DL_005928" Offset="0x5928" />
-        <DList Name="object_ani_DL_005C50" Offset="0x5C50" />
-        <DList Name="object_ani_DL_005D60" Offset="0x5D60" />
+        <!--- most of these did not load n z64Utils, naming by matchng aganist limbs -->
+        <DList Name="gAniRightHandDL" Offset="0x4860" />
+        <DList Name="gAniRightForArmDL" Offset="0x4A50" />
+        <DList Name="gAniRightUpperArmDL" Offset="0x4B38" />
+        <DList Name="gAniLeftHandDL" Offset="0x4C30" />
+        <DList Name="gAniLeftForArmDL" Offset="0x4E20" />
+        <DList Name="gAniLeftUpperArmDL" Offset="0x4F08" />
+        <DList Name="gAniTorsoDL" Offset="0x5000" />
+        <DList Name="gAniRightFootDL" Offset="0x5270" />
+        <DList Name="gAniRightCalfDL" Offset="0x5420" />
+        <DList Name="gAniRightThighDL" Offset="0x5668" />
+        <DList Name="gAniLeftFootDL" Offset="0x5778" />
+        <DList Name="gAniLeftCalfDL" Offset="0x5928" />
+        <DList Name="gAniLeftThighDL" Offset="0x5C50" />
+        <DList Name="gAniPelvisDL" Offset="0x5D60" />
         <Texture Name="gAniGeneralTlut" OutName="ani_general_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5E58" />
         <Texture Name="gAniUnkGradientTex" OutName="ani_unk_gradient1" Format="ci8" Width="8" Height="8" Offset="0x6058" />
         <Texture Name="gAniFingersTex" OutName="ani_fingers" Format="ci8" Width="8" Height="8" Offset="0x6098" />
@@ -50,7 +51,7 @@
         <Texture Name="gAniHairTex" OutName="ani_hair" Format="ci8" Width="16" Height="16" Offset="0x6A18" />
         <Texture Name="gAniClosingEyeTex" OutName="ani_closing_eye" Format="ci8" Width="32" Height="32" Offset="0x6B18" TlutOffset="0x6318"/>
         <Texture Name="gAniClosedEyeTex" OutName="ani_closed_eye" Format="ci8" Width="32" Height="32" Offset="0x6F18" TlutOffset="0x6318"/>
-        <DList Name="object_ani_DL_007B58" Offset="0x7B58" />
+        <DList Name="gAnHeadDL" Offset="0x7B58" />
         <Animation Name="gAniLandingThenStandingUpAnim" Offset="0x9220" />
         <Animation Name="gAniHoldUpHandAnim" Offset="0x9734" />
         <Animation Name="gAniStandingNormalAnim" Offset="0x9D34" />
