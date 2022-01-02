@@ -4452,9 +4452,10 @@ TexturePtr D_801AEFA8[] = {
     gameplay_keep_Tex_0923E0,
 };
 
-void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 arg4, f32 arg5, f32 arg6,
-                   u8 mode) {
-    if (arg6 > 0.001f) {
+// Draw common damageEffects
+void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 effectScale, f32 steamScale,
+                   f32 effectAlpha, u8 mode) {
+    if (effectAlpha > 0.001f) {
         s32 temp_v1_3;
         s16 i;
         MtxF* temp_s3;
@@ -4469,7 +4470,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
         temp_s3 = Matrix_GetCurrentState();
 
-        if ((actor != NULL) && (arg6 > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
+        if ((actor != NULL) && (effectAlpha > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
             if (mode == 0) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else if (mode == 1) {
@@ -4488,8 +4489,8 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
         switch (mode) {
             case 0xA:
             case 0xB:
-                sp124 = ((KREG(19) * 0.01f) + 2.3f) * arg4;
-                sp118 = ((KREG(28) * 0.0001f) + 0.035f) * arg5;
+                sp124 = ((KREG(19) * 0.01f) + 2.3f) * effectScale;
+                sp118 = ((KREG(28) * 0.0001f) + 0.035f) * steamScale;
                 func_800BCC68(limbPos, globalCtx);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -4500,7 +4501,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_050648);
 
-                sp74 = arg6 * 255.0f;
+                sp74 = effectAlpha * 255.0f;
                 for (i = 0; i < arg3; i++) {
                     alpha = i & 3;
                     alpha = sp74 - (30.0f * alpha);
@@ -4538,7 +4539,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_051180);
 
-                alpha = arg6 * 100.0f;
+                alpha = effectAlpha * 100.0f;
                 if (alpha > 100.0f) {
                     alpha = 100.0f;
                 }
@@ -4574,9 +4575,9 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                 }
 
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
-                Matrix_Scale((arg4 * 0.005f) * 1.35f, (arg4 * 0.005f), (arg4 * 0.005f) * 1.35f, 1);
+                Matrix_Scale((effectScale * 0.005f) * 1.35f, (effectScale * 0.005f), (effectScale * 0.005f) * 1.35f, 1);
 
-                sp74 = arg6 * 255.0f;
+                sp74 = effectAlpha * 255.0f;
 
                 for (i = 0; i < arg3; i++) {
                     alpha = i & 3;
@@ -4610,11 +4611,11 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
             case 0x14:
             case 0x15:
-                sp120 = ((KREG(19) * 0.01f) + 4.0f) * arg4;
+                sp120 = ((KREG(19) * 0.01f) + 4.0f) * effectScale;
 
                 gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
 
-                alpha = arg6 * 255.0f;
+                alpha = effectAlpha * 255.0f;
                 if (alpha > 255.0f) {
                     alpha = 255.0f;
                 }
@@ -4651,11 +4652,11 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
             case 0x1F:
             case 0x20:
                 if (mode == 0x1E) {
-                    sp11C = (KREG(19) * 0.01f + 1.0f) * arg4;
+                    sp11C = (KREG(19) * 0.01f + 1.0f) * effectScale;
                 } else if (mode == 0x1F) {
-                    sp11C = (KREG(19) * 0.01f + 1.5f) * arg4;
+                    sp11C = (KREG(19) * 0.01f + 1.5f) * effectScale;
                 } else {
-                    sp11C = (KREG(19) * 0.01f + 2.0f) * arg4;
+                    sp11C = (KREG(19) * 0.01f + 2.0f) * effectScale;
                 }
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_801AEFA8[globalCtx->gameplayFrames & 3]));

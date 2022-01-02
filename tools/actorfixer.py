@@ -216,6 +216,7 @@ animdict = {
     "Audio_PlayActorSound2": "Actor_PlaySfxAtPos",
     "func_800BF7CC": "Actor_SpawnIceEffects",
     "Actor_IsFacingPlayerAndWithinRange": "Actor_IsFacingAndNearPlayer",
+    "func_800BC8B8": "Actor_DrawDoorLock",
     "zelda_malloc(": "ZeldaArena_Malloc(",
     "zelda_mallocR(": "ZeldaArena_MallocR(",
     "zelda_realloc": "ZeldaArena_Realloc",

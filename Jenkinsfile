@@ -38,7 +38,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'bash -c "make -j all WERROR=1 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
+                sh 'bash -c "make -j all 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
             }
         }
         stage('Check build warnings') {
