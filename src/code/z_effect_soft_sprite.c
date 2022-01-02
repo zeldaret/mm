@@ -33,7 +33,7 @@ void EffectSS_Clear(GlobalContext* globalCtx) {
     sEffectSsInfo.searchIndex = 0;
     sEffectSsInfo.size = 0;
 
-    //! @bug: This code is completely useless, as data_table was just set to NULL and size to 0
+    //! @bug: Effects left in the table are not properly deleted, as data_table was just set to NULL and size to 0
     for (effectsSs = &sEffectSsInfo.data_table[0]; effectsSs < &sEffectSsInfo.data_table[sEffectSsInfo.size];
          effectsSs++) {
         EffectSS_Delete(effectsSs);
