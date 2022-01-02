@@ -71,7 +71,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 850, ICHAIN_STOP),
 };
 
-typedef enum EnAniStateFlags {
+enum EnAniStateFlags {
     /* 0 */ ANI_STATE_STANDING = 0,
     /* 1 */ ANI_STATE_UNK = 1, // checked for but never set
     /* 2 */ ANI_STATE_SUFFERING = 2,
