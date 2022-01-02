@@ -66,7 +66,7 @@ Actor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
     f32 minDist = 0.0f;
 
     do {
-        doorIter = SubS_ActorFind(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        doorIter = SubS_FindActor(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = doorIter;
         dist = Actor_DistanceBetweenActors(actor, door);
         if (!isSetup || (dist < minDist)) {

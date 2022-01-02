@@ -9,12 +9,12 @@
 /**
  * Finds the first EnDoor instance with unk_1A4 == 5 and the specified unk_1A5.
  */
-EnDoor* SubS_DoorFind(GlobalContext* globalCtx, s32 unk_1A5) {
+EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 unk_1A5) {
     Actor* actor = NULL;
     EnDoor* door;
 
     while (true) {
-        actor = SubS_ActorFind(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)actor;
 
         if (actor == NULL) {
@@ -63,7 +63,7 @@ EnDoor* SubS_DoorFind(GlobalContext* globalCtx, s32 unk_1A5) {
 /**
  * Finds the nearest actor instance of a specified Id and category to an actor.
  */
-Actor* SubS_ActorFindNearest(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
+Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
     Actor* actorTmp;
     f32 dist;
@@ -72,7 +72,7 @@ Actor* SubS_ActorFindNearest(Actor* actor, GlobalContext* globalCtx, u8 actorCat
     s32 isSetup = false;
 
     do {
-        actorIter = SubS_ActorFind(globalCtx, actorIter, actorCategory, actorId);
+        actorIter = SubS_FindActor(globalCtx, actorIter, actorCategory, actorId);
 
         actorTmp = actorIter;
         if (actorTmp == NULL) {
@@ -138,7 +138,7 @@ Actor* SubS_ActorFindNearest(Actor* actor, GlobalContext* globalCtx, u8 actorCat
 /**
  * Finds the first actor instance of a specified Id and category.
  */
-Actor* SubS_ActorFind(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
+Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
     Actor* actor = actorListStart;
 
     if (actor == NULL) {
@@ -186,7 +186,7 @@ Actor* SubS_ActorFind(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
  * Finds the first actor instance of a specified Id and category verified with a custom callback.
  * The callback should return `true` when the actor is succesfully verified.
  */
-Actor* SubS_ActorFindCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
+Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
                             s16 actorId, void* verifyData, VerifyActor verifyActor) {
     Actor* actorIter = actorListStart;
 

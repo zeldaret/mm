@@ -259,7 +259,7 @@ Vec3f* func_80BB19C0(Vec3f* arg0, EnGeg* this, GlobalContext* globalCtx) {
 
 u8 func_80BB1B14(EnGeg* this, GlobalContext* globalCtx) {
     Actor* explosive;
-    Actor* mm = SubS_ActorFind(globalCtx, NULL, ACTORCAT_ITEMACTION, ACTOR_EN_MM);
+    Actor* mm = SubS_FindActor(globalCtx, NULL, ACTORCAT_ITEMACTION, ACTOR_EN_MM);
 
     if (mm != NULL) {
         this->unk_4B0 = Math_Vec3f_Yaw(&this->actor.world.pos, &mm->world.pos);
