@@ -2,7 +2,7 @@
  * File: z_en_ani.c
  * Overlay: ovl_En_Ani
  * Description: Man in Tree in South Termina Field
- *    while his character is the same as the part time worker, 
+ *    while his character is the same as the part time worker,
  *    that is just the EnOssan actor using object_ani
  */
 
@@ -72,11 +72,11 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef enum EnAniStateFlags {
-  /* 0 */ ANI_STATE_STANDING  = 0,
-  /* 1 */ ANI_STATE_UNK    = 1, // checked for but never set
-  /* 2 */ ANI_STATE_SUFFERING = 2,
-  /* 4 */ ANI_STATE_CLIMBING  = 4,
-  /* 8 */ ANI_STATE_FALLING   = 8,
+    /* 0 */ ANI_STATE_STANDING = 0,
+    /* 1 */ ANI_STATE_UNK = 1, // checked for but never set
+    /* 2 */ ANI_STATE_SUFFERING = 2,
+    /* 4 */ ANI_STATE_CLIMBING = 4,
+    /* 8 */ ANI_STATE_FALLING = 8,
 };
 
 void EnAni_DefaultBlink(EnAni* this) {
