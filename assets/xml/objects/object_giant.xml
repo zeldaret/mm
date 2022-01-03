@@ -1,8 +1,15 @@
 ﻿<Root>
     <!-- Object for the Four Giants -->
     <File Name="object_giant" Segment="6">
+        <Animation Name="gGiantLargeStrideAnim" Offset="0x2168" /> <!-- Original name is "kya_testwalk" -->
+
         <!-- Giant Body Vertices. Contains everything but the beard. -->
         <Array Name="gGiantBodyVtx" Count="444" Offset="0x2180">
+            <Vtx/>
+        </Array>
+        
+        <!-- Giant Unused Beard Vertices. An exact duplicate of the beard vertices that are actually used. -->
+        <Array Name="gGiantUnusedBeardVtx" Count="9" Offset="0x3D40">
             <Vtx/>
         </Array>
 
@@ -42,11 +49,6 @@
         </Array>
         <DList Name="gGiantBeardDL" Offset="0x7610" />
         <Texture Name="gGiantBeardTex" OutName="giant_beard" Format="rgba16" Width="16" Height="16" Offset="0x76C0" />
-        
-        <!-- Giant Unused Beard Vertices. An exact duplicate of the beard vertices that are actually used. -->
-        <Array Name="gGiantUnusedBeardVtx" Count="9" Offset="0x3D40">
-            <Vtx/>
-        </Array>
 
         <!-- Giant Limbs -->
         <Limb Name="gGiantHeadLimb" Type="Standard" Offset="0x78C0" />
@@ -69,7 +71,6 @@
         <Skeleton Name="gGiantSkel" Type="Flex" LimbType="Standard" Offset="0x79B0" />
 
         <!-- Giant Animations -->
-        <Animation Name="gGiantLargeStrideAnim" Offset="0x2168" /> <!-- Original name is "kya_testwalk" -->
         <Animation Name="gGiantLookUpStartAnim" Offset="0x8394" /> <!-- Original name is "kyo_kaoage" ("raising face") -->
         <Animation Name="gGiantLookUpLoopAnim" Offset="0x96E4" /> <!-- Original name is "kyo_kaoage_loop" -->
         <Animation Name="gGiantBigCallStartAnim" Offset="0xA1C4" /> <!-- Original name is "kyo_sakebi" ("cry"). Stretches his arms outward -->
