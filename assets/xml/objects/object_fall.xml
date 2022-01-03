@@ -6,17 +6,15 @@
         of fire that expands outward when the moon is almost done crashing.
     -->
     <File Name="object_fall" Segment="6">
-        <!-- Debris DisplayLists -->
+        <!-- Debris -->
         <DList Name="gMoonEmptyDL1" Offset="0x190" /> <!-- Was likely going to be used with gMoonDebrisModel1DL before they made all debris use the same material -->
         <DList Name="gMoonDebrisMaterialDL" Offset="0x198" />
         <DList Name="gMoonDebrisModel1DL" Offset="0x220" />
+        <Texture Name="gMoonDebrisTex" OutName="moon_debris" Format="i8" Width="16" Height="16" Offset="0x260" />
         <DList Name="gMoonEmptyDL2" Offset="0x420" /> <!-- Was likely going to be used with gMoonDebrisModel2DL before they made all debris use the same material -->
         <DList Name="gMoonDebrisModel2DL" Offset="0x428" />
         <DList Name="gMoonEmptyDL3" Offset="0x490" /> <!-- Was likely going to be used with gMoonDebrisModel3DL before they made all debris use the same material -->
         <DList Name="gMoonDebrisModel3DL" Offset="0x498" />\
-
-        <!-- Debris Textures -->
-        <Texture Name="gMoonDebrisTex" OutName="moon_debris" Format="i8" Width="16" Height="16" Offset="0x260" />
 
         <!-- Fireball Vertices -->
         <Array Name="gMoonFireballVtx" Count="209" Offset="0x4C0">
