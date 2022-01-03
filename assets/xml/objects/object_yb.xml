@@ -41,7 +41,7 @@
         <Limb Name="gYbRightFootLimb" Type="Standard" Offset="0x5E34" />
         <Limb Name="gYbLeftThighLimb" Type="Standard" Offset="0x5E40" />
         <Limb Name="gYbLeftCalfLimb" Type="Standard" Offset="0x5E4C" />
-        <Limb Name="gYbRightFootLimb" Type="Standard" Offset="0x5E58" />
+        <Limb Name="gYbLeftFootLimb" Type="Standard" Offset="0x5E58" />
         <Limb Name="gYbUnk5E58Limb" Type="Standard" Offset="0x5E64" />
         <Limb Name="gYbHeadLimb" Type="Standard" Offset="0x5E70" />
         <Limb Name="gYbPonyTailLimb" Type="Standard" Offset="0x5E7C" />
