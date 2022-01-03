@@ -5895,7 +5895,7 @@
     0x808B0894:("func_808B0894",),
     0x808B0AD0:("func_808B0AD0",),
     0x808B0B4C:("func_808B0B4C",),
-    0x808B0B9C:("func_808B0B9C",),
+    0x808B0B9C:("EnAm_UpdateDamage",),
     0x808B0CC8:("EnAm_Update",),
     0x808B0EA4:("EnAm_PostLimbDraw",),
     0x808B0F98:("EnAm_Draw",),

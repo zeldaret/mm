@@ -23,7 +23,7 @@ typedef struct EnAm {
     /* 0x023C */ f32 unk_240;
     /* 0x0244 */ f32 unk_244;
     /* 0x0248 */ f32 unk_248;
-    /* 0x024C */ Vec3f unk_24C[13];
+    /* 0x024C */ Vec3f limbPos[13];
     /* 0x02E8 */ ColliderCylinder enemyCollider;
     /* 0x0334 */ ColliderCylinder interactCollider;
 } EnAm; // size = 0x380

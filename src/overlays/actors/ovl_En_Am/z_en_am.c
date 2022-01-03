@@ -178,7 +178,7 @@ void EnAm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnAm* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 42.857143f);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 300.0f/7.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005948, &D_0600033C, this->jointTable, this->morphTable, 14);
     Collider_InitAndSetCylinder(globalCtx, &this->enemyCollider, &this->actor, &sEnemyCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->interactCollider, &this->actor, &sCylinderInit);
@@ -197,7 +197,6 @@ void EnAm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->interactCollider);
 }
 
-// EnAm_SpawnEffects
 void EnAm_SpawnEffects(EnAm* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f effectPos;
@@ -233,9 +232,8 @@ void func_808B0040(EnAm* this, GlobalContext* globalCtx) {
         if (this->textureBlend == 0) {
             func_808B00D8(this);
         }
-        return;
     }
-    if (this->textureBlend >= 11) {
+    else if (this->textureBlend >= 11) {
         this->textureBlend -= 10;
     } else {
         this->textureBlend = 0;
@@ -244,7 +242,6 @@ void func_808B0040(EnAm* this, GlobalContext* globalCtx) {
     }
 }
 
-// EnAm_WakeUp
 void func_808B00D8(EnAm* this) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_AMOS_WAVE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_AMOS_VOICE);
@@ -253,10 +250,10 @@ void func_808B00D8(EnAm* this) {
 }
 
 void func_808B0124(EnAm* this, GlobalContext* globalCtx) {
-    s32 sp2C;
-    f32 sp28;
+    s32 tempTextureBlend;
+    f32 cos;
     u8 pad;
-    f32 sp20;
+    f32 rand;
     f32 sin;
 
     if (this->textureBlend + 20 >= 255) {
@@ -268,13 +265,13 @@ void func_808B0124(EnAm* this, GlobalContext* globalCtx) {
         this->actor.shape.yOffset = 0.0f;
         func_808B0358(this);
     } else {
-        sp2C = this->textureBlend + 20;
-        sp20 = randPlusMinusPoint5Scaled(10.0f);
-        sp28 = Math_CosS(this->actor.shape.rot.y) * sp20;
-        sin = Math_SinS(this->actor.shape.rot.y);
-        this->actor.world.pos.x = this->actor.home.pos.x + sp28;
-        this->actor.world.pos.z = this->actor.home.pos.z + (sin * sp20);
-        this->textureBlend = sp2C;
+        tempTextureBlend = this->textureBlend + 20;
+        rand = randPlusMinusPoint5Scaled(10.0f);
+        cos = Math_CosS(this->actor.shape.rot.y) * rand;
+        sin = Math_SinS(this->actor.shape.rot.y) * rand;
+        this->actor.world.pos.x = this->actor.home.pos.x + cos;
+        this->actor.world.pos.z = this->actor.home.pos.z + sin;
+        this->textureBlend = tempTextureBlend;
     }
 }
 
@@ -431,7 +428,7 @@ void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
     Vec3f dustPos;
     s32 pad;
 
-    this->unk_236 -= 1;
+    this->unk_236--;
     this->unk_23C = this->actor.yawTowardsPlayer;
     func_808B0208(this, globalCtx);
     if (this->unk_236 == 1) {
@@ -476,8 +473,7 @@ void func_808B0B4C(EnAm* this, GlobalContext* globalCtx) {
     }
 }
 
-// EnAm_UpdateDamage
-s32 func_808B0B9C(EnAm* this, GlobalContext* globalCtx) {
+s32 EnAm_UpdateDamage(EnAm* this, GlobalContext* globalCtx) {
     if (this->enemyCollider.base.acFlags & AC_HIT) {
         this->enemyCollider.base.acFlags &= ~AC_HIT;
         func_800BE258(&this->actor, &this->enemyCollider.info);
@@ -508,7 +504,7 @@ void EnAm_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnAm* this = THIS;
     s32 pad;
 
-    if (func_808B0B9C(this, globalCtx) == 0) {
+    if (EnAm_UpdateDamage(this, globalCtx) == false) {
         if (this->enemyCollider.base.atFlags & 4) {
             this->enemyCollider.base.atFlags &= ~6;
             if (this->actor.colChkInfo.health == 0) {
@@ -551,15 +547,15 @@ void EnAm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     phi_s2 = 0;
     phi_s1 = 0;
     if (limbIndex == 4) {
-        phi_s2 = &this->unk_24C[0];
+        phi_s2 = &this->limbPos[0];
         phi_s1 = D_808B1128;
         phi_s3 = 5;
     } else if (limbIndex == 13) {
-        phi_s2 = &this->unk_24C[9];
+        phi_s2 = &this->limbPos[9];
         phi_s1 = D_808B117C;
         phi_s3 = 4;
     } else if ((limbIndex == 7) || (limbIndex == 10)) {
-        phi_s2 = (limbIndex == 7) ? &this->unk_24C[5] : &this->unk_24C[7];
+        phi_s2 = (limbIndex == 7) ? &this->limbPos[5] : &this->limbPos[7];
         phi_s1 = D_808B1164;
         phi_s3 = 2;
     } else {
@@ -581,6 +577,6 @@ void EnAm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     POLY_OPA_DISP = &gfx[2];
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnAm_PostLimbDraw,
                       &this->actor);
-    func_800BE680(globalCtx, &this->actor, this->unk_24C, 13, this->unk_248, 0.0f, this->unk_244, 20);
+    func_800BE680(globalCtx, &this->actor, this->limbPos, 13, this->unk_248, 0.0f, this->unk_244, 20);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
