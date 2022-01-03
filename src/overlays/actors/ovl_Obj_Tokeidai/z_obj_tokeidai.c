@@ -67,11 +67,11 @@ static InitChainEntry sInitChain[] = {
 
 /**
  * Returns the angle necessary to show the correct side of
- * the sun and moon disk based on the time of day. The actual
- * angle can differ from the target angle if the disk is in
+ * the sun and moon panel based on the time of day. The actual
+ * angle can differ from the target angle if the panel is in
  * the middle of rotating.
  */
-s32 ObjTokeidai_GetTargetSunMoonDiskRotation() {
+s32 ObjTokeidai_GetTargetSunMoonPanelRotation() {
     if (gSaveContext.isNight) {
         return 0x8000;
     }
@@ -96,8 +96,8 @@ void ObjTokeidai_Clock_Init(ObjTokeidai* this) {
     this->clockFaceRotation = GET_CLOCK_FACE_ROTATION(currentHour);
     this->clockFaceRotationalVelocity = 0;
     this->clockFaceRotationTimer = 0;
-    this->sunMoonDiskRotationalVelocity = 0;
-    this->sunMoonDiskRotation = ObjTokeidai_GetTargetSunMoonDiskRotation();
+    this->sunMoonPanelRotationalVelocity = 0;
+    this->sunMoonPanelRotation = ObjTokeidai_GetTargetSunMoonPanelRotation();
 }
 
 void ObjTokeidai_TowerGear_Init(ObjTokeidai* this, GlobalContext* globalCtx) {
@@ -630,23 +630,23 @@ void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, GlobalContext* globalCtx)
         }
     }
 
-    // If the sun and moon disk doesn't have the target rotation (e.g., the time of day
+    // If the sun and moon panel doesn't have the target rotation (e.g., the time of day
     // just changed), rotate it until it matches the target.
-    if (this->sunMoonDiskRotation != ObjTokeidai_GetTargetSunMoonDiskRotation()) {
+    if (this->sunMoonPanelRotation != ObjTokeidai_GetTargetSunMoonPanelRotation()) {
         if (this->clockHour == 6) {
-            this->sunMoonDiskRotationalVelocity += 0x222;
-            this->sunMoonDiskRotation += this->sunMoonDiskRotationalVelocity;
-            if (this->sunMoonDiskRotation > 0x10000) {
-                this->sunMoonDiskRotation = ObjTokeidai_GetTargetSunMoonDiskRotation();
-                this->sunMoonDiskRotationalVelocity = 0;
+            this->sunMoonPanelRotationalVelocity += 0x222;
+            this->sunMoonPanelRotation += this->sunMoonPanelRotationalVelocity;
+            if (this->sunMoonPanelRotation > 0x10000) {
+                this->sunMoonPanelRotation = ObjTokeidai_GetTargetSunMoonPanelRotation();
+                this->sunMoonPanelRotationalVelocity = 0;
             }
         }
         if (this->clockHour == 18) {
-            this->sunMoonDiskRotationalVelocity += 0x222;
-            this->sunMoonDiskRotation += this->sunMoonDiskRotationalVelocity;
-            if (this->sunMoonDiskRotation > 0x8000) {
-                this->sunMoonDiskRotation = ObjTokeidai_GetTargetSunMoonDiskRotation();
-                this->sunMoonDiskRotationalVelocity = 0;
+            this->sunMoonPanelRotationalVelocity += 0x222;
+            this->sunMoonPanelRotation += this->sunMoonPanelRotationalVelocity;
+            if (this->sunMoonPanelRotation > 0x8000) {
+                this->sunMoonPanelRotation = ObjTokeidai_GetTargetSunMoonPanelRotation();
+                this->sunMoonPanelRotationalVelocity = 0;
             }
         }
     }
@@ -797,7 +797,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockFace);
     }
     Matrix_InsertTranslation(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);
-    Matrix_RotateY((s16)this->sunMoonDiskRotation, MTXMODE_APPLY);
+    Matrix_RotateY((s16)this->sunMoonPanelRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerSunAndMoonPanelDL);
 

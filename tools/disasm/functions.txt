@@ -11667,7 +11667,7 @@
     0x80AB2544:("DmChar09_Update",),
     0x80AB25D8:("func_80AB25D8",),
     0x80AB261C:("DmChar09_Draw",),
-    0x80AB2790:("ObjTokeidai_GetTargetSunMoonDiskRotation",),
+    0x80AB2790:("ObjTokeidai_GetTargetSunMoonPanelRotation",),
     0x80AB27B4:("ObjTokeidai_SetupClockOrGear",),
     0x80AB2834:("ObjTokeidai_Clock_Init",),
     0x80AB28C8:("ObjTokeidai_TowerGear_Init",),
