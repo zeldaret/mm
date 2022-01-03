@@ -14,7 +14,7 @@
 #define THIS ((EnAni*)thisx)
 
 // clang-format off
-#define ANI_STATE_STANDING  (1 << -1)
+#define ANI_STATE_STANDING  (0)
 #define ANI_STATE_UNK       (1 <<  0)
 #define ANI_STATE_SUFFERING (1 <<  1)
 #define ANI_STATE_CLIMBING  (1 <<  2)
