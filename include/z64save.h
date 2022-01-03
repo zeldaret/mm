@@ -36,15 +36,15 @@ typedef struct {
     /* 0x10 */ u16 entranceIndex;
     /* 0x12 */ u8 roomIndex;
     /* 0x13 */ s8 data;
-    /* 0x14 */ u32 tempSwchFlags;
+    /* 0x14 */ u32 tempSwitchFlags;
     /* 0x18 */ u32 unk_18;
     /* 0x1C */ u32 tempCollectFlags;
 } RespawnData; // size = 0x20
 
 typedef struct {
     /* 0x00 */ u32 chest;
-    /* 0x04 */ u32 swch0;
-    /* 0x08 */ u32 swch1;
+    /* 0x04 */ u32 switch0;
+    /* 0x08 */ u32 switch1;
     /* 0x0C */ u32 clearedRoom;
     /* 0x10 */ u32 collectible;
     /* 0x14 */ u32 unk_14;
@@ -53,8 +53,8 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u32 chest;
-    /* 0x04 */ u32 swch0;
-    /* 0x08 */ u32 swch1;
+    /* 0x04 */ u32 switch0;
+    /* 0x08 */ u32 switch1;
     /* 0x0C */ u32 clearedRoom;
     /* 0x10 */ u32 collectible;
 } CycleSceneFlags; // size = 0x14
@@ -248,6 +248,6 @@ typedef enum {
     /* 0xFF */ BTN_DISABLED = 0xFF
 } ButtonStatus;
 
-typedef struct FileChooseContext FileChooseContext;
+//typedef struct FileChooseContext FileChooseContext;
 
 #endif

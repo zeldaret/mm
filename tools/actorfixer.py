@@ -298,8 +298,6 @@ animdict = {
     "func_8017D020": "Math3D_TriChkLineSegParaZIntersect",
     "Math3D_ColSphereLineSeg": "Math3D_LineVsSph",
     "Math3D_ColSphereSphere(": "Math3D_SphVsSph(",
-    "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",
-    "CUR_UPG_VALUE_VOID": "GET_CUR_UPG_VALUE",
     "func_8017F9C0": "Math3D_XZInSphere",
     "func_8017FA34": "Math3D_XYInSphere",
     "func_8017FAA8": "Math3D_YZInSphere",
@@ -372,6 +370,9 @@ animdict = {
     "gSaveContext.doubleMagic": "gSaveContext.save.playerData.doubleMagic",
     "gSaveContext.unk_FE6": "gSaveContext.save.bombersCaughtNum",
     "gSaveContext.unk_FE7": "gSaveContext.save.bombersCaughtOrder",
+
+    "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",
+    "CUR_UPG_VALUE_VOID": "GET_CUR_UPG_VALUE",
 }
 
 def replace_anim(file):

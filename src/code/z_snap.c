@@ -137,7 +137,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     func_800B4EDC(globalCtx, pos, &screenSpace, &distance);
     x = (s16)(screenSpace.x * distance * 160.0f + 160.0f) - 85;
     y = (s16)(screenSpace.y * distance * -120.0f + 120.0f) - 67;
-    if ((x < 0) || (0x96 < x) || (y < 0) || (0x69 < y)) {
+    if ((x < 0) || (150 < x) || (y < 0) || (105 < y)) {
         func_8013A41C(0x3D);
         ret |= 0x3D;
     }

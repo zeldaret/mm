@@ -3989,7 +3989,6 @@ extern UNK_TYPE D_04079B10;
 extern Gfx D_0407AB10[]; // sun (sparkles when small) displaylist
 extern Gfx D_0407AB58[];
 extern UNK_TYPE D_0407AFB0;
-extern Gfx gGameplayKeepDrawFlameDL[];
 extern UNK_TYPE D_0407D650;
 extern UNK_TYPE D_0407F218;
 extern UNK_TYPE D_040815D0;

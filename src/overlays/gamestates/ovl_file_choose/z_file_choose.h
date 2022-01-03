@@ -1,12 +1,12 @@
-#ifndef _Z64_FILE_CHOOSE_H_
-#define _Z64_FILE_CHOOSE_H_
+#ifndef Z64_FILE_CHOOSE_H
+#define Z64_FILE_CHOOSE_H
 
 #include "global.h"
 
 void FileChoose_Init(GameState* thisx);
 void FileChoose_Destroy(GameState* thisx);
 
-struct FileChooseContext{
+typedef struct FileChooseContext {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ Vtx* unk_A4;
     /* 0x000A8 */ u8* staticSegment;
@@ -46,9 +46,9 @@ struct FileChooseContext{
     /* 0x24470 */ s16 unk_24470[2];
     /* 0x24474 */ s8 unk_24474[2];
     /* 0x24476 */ s8 unk_24476[2];
-    /* 0x24478 */ s8 unk_24478[2];
+    /* 0x24478 */ s8 maskCount[2];
     /* 0x2447A */ s8 unk_2447A[2];
-    /* 0x2447C */ s8 unk_2447C[2];
+    /* 0x2447C */ s8 heartPieceCount[2];
     /* 0x2447E */ s8 unk_2447E[2];
     /* 0x24480 */ s16  unk_24480;
     /* 0x24482 */ s16  unk_24482;
@@ -62,7 +62,7 @@ struct FileChooseContext{
     /* 0x24492 */ s16  unk_24492[3];
     /* 0x24498 */ s16  unk_24498;
     /* 0x2449A */ s16  unk_2449A[6];
-    /* 0x244A6 */ s16  unk_244A6;
+    /* 0x244A6 */ s16  fileNum;
     /* 0x244A8 */ s16  unk_244A8;
     /* 0x244AA */ s16  unk_244AA;
     /* 0x244AC */ s16  unk_244AC;
@@ -111,6 +111,6 @@ struct FileChooseContext{
     /* 0x2454C */ s16  unk_2454C;
     /* 0x2454E */ s16  unk_2454E;
     /* 0x24550 */ s16  unk_24550;
-}; // size = 0x24558
+} FileChooseContext; // size = 0x24558
 
 #endif

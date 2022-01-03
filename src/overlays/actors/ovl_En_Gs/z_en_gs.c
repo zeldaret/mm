@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gs.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x02000019
 
@@ -35,7 +36,6 @@ s32 func_809995A4(EnGs* this, GlobalContext* globalCtx);
 void func_80999A8C(EnGs* this, GlobalContext* globalCtx);
 void func_80999AC0(EnGs* this);
 
-extern Gfx gGameplayKeepDrawFlameDL[];
 extern Gfx D_06000950[];
 extern Gfx D_060009D0[];
 extern Gfx D_06000A60[];

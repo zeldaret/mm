@@ -265,13 +265,11 @@ s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808F33B8(void) {
-    s32 ret;
+    s32 ret = (((gSaveContext.save.day == 1) &&
+                ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= CLOCK_TIME(6, 0)))) ||
+               (gSaveContext.save.day >= 2)) &&
+              !(gSaveContext.save.weekEventReg[22] & 1);
 
-    if (((ret = gSaveContext.save.day == 1) && (ret = gSaveContext.save.time >= 0x3AAA) &&
-         (ret = gSaveContext.save.time <= 0x4000)) ||
-        (ret = gSaveContext.save.day >= 2)) {
-        ret = (gSaveContext.save.weekEventReg[22] & 1) == 0;
-    }
     return ret;
 }
 
