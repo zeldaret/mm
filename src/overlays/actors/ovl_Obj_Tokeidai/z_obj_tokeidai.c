@@ -102,7 +102,7 @@ void ObjTokeidai_Clock_Init(ObjTokeidai* this) {
 
 void ObjTokeidai_TowerGear_Init(ObjTokeidai* this, GlobalContext* globalCtx) {
     this->actor.draw = ObjTokeidai_TowerGear_Draw;
-    this->opaDList = object_obj_tokeidai_DL_00BA78;
+    this->opaDList = gClockTowerExteriorGearDL;
     ObjTokeidai_SetupClockOrGear(this);
 
     if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
@@ -148,8 +148,8 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, GlobalContext* globalCtx)
     s32 type;
 
     this->actor.draw = ObjTokeidai_Counterweight_Draw;
-    this->opaDList = object_obj_tokeidai_DL_00B208;
-    this->xluDList = object_obj_tokeidai_DL_00B0C0;
+    this->opaDList = gClockTowerCounterweightDL;
+    this->xluDList = gClockTowerSpotlightDL;
     if (gSaveContext.isNight) {
         this->spotlightIntensity = 100;
     } else {
@@ -212,11 +212,11 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
             ObjTokeidai_TowerGear_Init(this, globalCtx);
             break;
         case OBJ_TOKEIDAI_TYPE_UNUSED_WALL:
-            this->opaDList = object_obj_tokeidai_DL_00D388;
+            this->opaDList = gClockTowerUnusedTowerWallDL;
             break;
         case OBJ_TOKEIDAI_TYPE_TOWER_WALLS_TERMINA_FIELD:
             Actor_SetScale(&this->actor, 1.0f);
-            this->opaDList = object_obj_tokeidai_DL_009A08;
+            this->opaDList = gClockTowerTerminaFieldWallsDL;
             this->actionFunc = ObjTokeidai_Walls_Idle;
             break;
         case OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD:
@@ -246,8 +246,8 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
             ObjTokeidai_Counterweight_Init(this, globalCtx);
             break;
         case OBJ_TOKEIDAI_TYPE_STAIRCASE_INTO_TOWER:
-            this->opaDList = object_obj_tokeidai_DL_00D8E8;
-            this->xluDList = object_obj_tokeidai_DL_00D8E0;
+            this->opaDList = gClockTowerStaircaseToInteriorDL;
+            this->xluDList = gClockTowerEmptyDL;
             this->actionFunc = ObjTokeidai_StaircaseIntoTower_Idle;
             break;
     }
@@ -783,23 +783,23 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_StatePush();
     Matrix_InsertZRotation_s(-this->outerRingOrGearRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_obj_tokeidai_DL_00CF28);
+    gSPDisplayList(POLY_OPA_DISP++, gClockTowerOuterRingDL);
     Matrix_StatePop();
     Matrix_InsertTranslation(0.0f, 0.0f, this->clockFaceZTranslation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_obj_tokeidai_DL_00BEE8);
+    gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockCenterAndHandDL);
     Matrix_InsertZRotation_s(-this->clockFaceRotation * 2, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     if (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_WALL_CLOCK ||
         OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_SMALL_WALL_CLOCK) {
-        gSPDisplayList(POLY_OPA_DISP++, object_obj_tokeidai_DL_00F518);
+        gSPDisplayList(POLY_OPA_DISP++, gWallClockClockFace);
     } else {
-        gSPDisplayList(POLY_OPA_DISP++, object_obj_tokeidai_DL_00E818);
+        gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockFace);
     }
     Matrix_InsertTranslation(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);
     Matrix_RotateY((s16)this->sunMoonDiskRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_obj_tokeidai_DL_00C368);
+    gSPDisplayList(POLY_OPA_DISP++, gClockTowerSunAndMoonPanelDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -845,7 +845,7 @@ void ObjTokeidai_TowerGear_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_InsertZRotation_s(this->outerRingOrGearRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_OPA_DISP++, object_obj_tokeidai_DL_00BA78);
+    gSPDisplayList(POLY_OPA_DISP++, gClockTowerExteriorGearDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
