@@ -3297,7 +3297,6 @@ extern Arena sZeldaArena;
 // extern UNK_TYPE1 D_801F59F0;
 // extern UNK_TYPE1 D_801F59F4;
 // extern UNK_TYPE1 D_801F59F8;
-// extern UNK_TYPE1 D_801F5AC0;
 // extern UNK_TYPE1 D_801F69D0;
 // extern UNK_TYPE1 D_801F6A10;
 // extern UNK_TYPE1 D_801F6AD4;

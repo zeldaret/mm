@@ -154,6 +154,8 @@ animdict = {
     "MainHeap_Init": "ZeldaArena_Init",
     "MainHeap_Cleanup": "ZeldaArena_Cleanup",
     "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
+    "func_80138300": "Skin_GetLimbPos",
+    "func_8013835C": "Skin_GetVertexPos",
     # "BgCheck_RelocateMeshHeader": "CollisionHeader_GetVirtual",
     # "BgCheck_AddActorMesh": "DynaPoly_SetBgActor",
     # "BgCheck_RemoveActorMesh": "DynaPoly_DeleteBgActor",
