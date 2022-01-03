@@ -8,16 +8,16 @@ static s32 sUnused;
 void Skin_UpdateVertices(MtxF* mtx, SkinVertex* skinVertices, SkinLimbModif* modifEntry, Vtx* vtxBuf, Vec3f* pos) {
     SkinVertex* vertexEntry;
     Vtx* vtx;
-    Vec3f sp5C; // wTemp?
+    Vec3f wTemp;
     Vec3f normal;
     Vec3f sp44;
 
-    sp5C.x = mtx->mf[3][0];
-    sp5C.y = mtx->mf[3][1];
-    sp5C.z = mtx->mf[3][2];
-    mtx->mf[3][0] = 0.0f;
-    mtx->mf[3][1] = 0.0f;
-    mtx->mf[3][2] = 0.0f;
+    wTemp.x = mtx->wx;
+    wTemp.y = mtx->wy;
+    wTemp.z = mtx->wz;
+    mtx->wx = 0.0f;
+    mtx->wy = 0.0f;
+    mtx->wz = 0.0f;
 
     for (vertexEntry = skinVertices; vertexEntry < &skinVertices[modifEntry->vtxCount]; vertexEntry++) {
         vtx = &vtxBuf[vertexEntry->index];
@@ -37,9 +37,9 @@ void Skin_UpdateVertices(MtxF* mtx, SkinVertex* skinVertices, SkinLimbModif* mod
         vtx->n.n[2] = normal.z;
     }
 
-    mtx->mf[3][0] = sp5C.x;
-    mtx->mf[3][1] = sp5C.y;
-    mtx->mf[3][2] = sp5C.z;
+    mtx->wx = wTemp.x;
+    mtx->wy = wTemp.y;
+    mtx->wz = wTemp.z;
 }
 
 void Skin_ApplyLimbModifications(GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s32 arg3) {
@@ -90,7 +90,7 @@ void Skin_ApplyLimbModifications(GraphicsContext* gfxCtx, Skin* skin, s32 limbIn
 
             SkinMatrix_Vec3fMtxFMultXYZ(&gSkinLimbMatrices[limbTransformations[0].limbIndex], &spAC, &spDC);
         } else if (arg3) {
-            transformationEntry = &limbTransformations[modif->unk_4];
+            transformationEntry = &limbTransformations[modif->transformIndex];
 
             spA0.x = transformationEntry->x;
             spA0.y = transformationEntry->y;
@@ -117,7 +117,8 @@ void Skin_ApplyLimbModifications(GraphicsContext* gfxCtx, Skin* skin, s32 limbIn
             }
         }
 
-        Skin_UpdateVertices(&gSkinLimbMatrices[limbTransformations[modif->unk_4].limbIndex], skinVertices, modif, vtxBuf, &spDC);
+        Skin_UpdateVertices(&gSkinLimbMatrices[limbTransformations[modif->transformIndex].limbIndex], skinVertices, modif,
+                            vtxBuf, &spDC);
     }
 
     gSPSegment(POLY_OPA_DISP++, 0x08, vtxEntry->buf[vtxEntry->index]);

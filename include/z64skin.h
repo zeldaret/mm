@@ -31,7 +31,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ u16 vtxCount; // number of vertices in this modif entry
     /* 0x02 */ u16 transformCount;
-    /* 0x04 */ u16 unk_4; // index of limbTransformations?
+    /* 0x04 */ u16 transformIndex; // index of limbTransformations
     /* 0x08 */ SkinVertex* skinVertices;
     /* 0x0C */ SkinTransformation* limbTransformations;
 } SkinLimbModif; // size = 0x10
