@@ -1,6 +1,10 @@
 #include "global.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
+void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages);
+void func_80147314(SramContext* sramCtx, s32 fileNum);
+void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2);
+
 #define CHECK_NEWF(newf)                                                                                 \
     ((newf)[0] != 'Z' || (newf)[1] != 'E' || (newf)[2] != 'L' || (newf)[3] != 'D' || (newf)[4] != 'A' || \
      (newf)[5] != '3')
@@ -121,7 +125,7 @@ u32 D_801C5FC0[][4] = {
     { 0, 0, 1, 0 },
 };
 
-// gDefaultWeekEventReg?
+// Related to weekEventReg
 u16 D_801C66D0[100] = {
     0xFFFC, 0xFFFF, 0xFFFF, 0xFFFF, 0,      0,      0,      0xC000, 0xC00,  0,      0xC0,   0,      0x300,
     0x3000, 0xC000, 0xC00,  0,      0,      0,      0,      0,      0,      0xC00C, 0xC00C, 0xC008, 3,
@@ -208,11 +212,9 @@ void func_80143AC4(void) {
     gSaveContext.save.weekEventReg[85] &= (u8)~0x80;
 }
 
-extern s32 fake_D_801C5FD0[][5];
-
 #ifdef NON_EQUIVALENT
-void func_80143B0C(GameState* gameState) {
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
+void func_80143B0C(GlobalContext* globalCtx) {
+    s32 pad;
     s16 temp_s0;
     u16 phi_v1_3;
     s32 j;
@@ -459,7 +461,6 @@ void func_80143B0C(GameState* gameState) {
     func_800F3B2C(globalCtx);
 }
 #else
-void func_80143B0C(GameState* gameState);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80143B0C.s")
 #endif
 
@@ -826,6 +827,7 @@ void Sram_InitDebugSave(void) {
     Sram_GenerateRandomSaveFields();
 }
 
+// Unused
 void func_80144A94(SramContext* sramCtx) {
     s32 i;
     s32 cutscene = gSaveContext.save.cutscene;
@@ -877,9 +879,9 @@ u16 D_801C6A58[] = { 0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x8
 
 #ifdef NON_MATCHING
 // Small regalloc between v0/t6/t7
-void Sram_OpenSave(GameState* gameState, SramContext* sramCtx) {
+void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
     s32 i;
-    FileChooseContext* fileChooseCtx = (FileChooseContext*)gameState;
+    s32 pad;
     s32 phi_t1;
     s32 pad1[2];
     s32 fileNum;
@@ -1039,8 +1041,8 @@ void func_80145698(SramContext* sramCtx) {
 
 // Verifies save and use backup if corrupted?
 #ifdef NON_EQUIVALENT
-void func_801457CC(GameState* gameState, SramContext* sramCtx) {
-    FileChooseContext* fileChooseCtx = (FileChooseContext*)gameState;
+void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
+    s32 pad;
     u16 sp7A;
     // u16 sp78;
     u16 sp76;
@@ -1306,8 +1308,8 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
 #endif
 
-void func_80146580(GameState* gameState, SramContext* sramCtx, s32 fileNum) {
-    FileChooseContext* fileChooseCtx = (FileChooseContext*)gameState;
+void func_80146580(FileChooseContext* fileChooseCtx2, SramContext* sramCtx, s32 fileNum) {
+    FileChooseContext* fileChooseCtx = fileChooseCtx2;
     s32 pad;
 
     if (gSaveContext.unk_3F3F) {
@@ -1324,8 +1326,8 @@ void func_80146580(GameState* gameState, SramContext* sramCtx, s32 fileNum) {
 
 #ifdef NON_MATCHING
 // v0/v1
-void func_80146628(GameState* gameState, SramContext* sramCtx) {
-    FileChooseContext* fileChooseCtx = (FileChooseContext*)gameState;
+void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
+    FileChooseContext* fileChooseCtx = fileChooseCtx2;
     u16 i;
     s16 maskCount;
 
@@ -1409,10 +1411,10 @@ void func_80146628(GameState* gameState, SramContext* sramCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146628.s")
 #endif
 
-void func_80146AA0(GameState* gameState, SramContext* sramCtx) {
+void func_80146AA0(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
     s32 phi_v0;
     u16 i;
-    FileChooseContext* fileChooseCtx = (FileChooseContext*)gameState;
+    FileChooseContext* fileChooseCtx = fileChooseCtx2;
     s16 phi_a0;
 
     if (gSaveContext.unk_3F3F) {
@@ -1502,9 +1504,8 @@ void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
     func_80185F64(*sramCtx->saveBuf, curPage, numPages);
 }
 
-void func_80146EE8(GameState* gameState) {
-    s32 pad;
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
+void func_80146EE8(GlobalContext* globalCtx) {
+    s32 pad[2];
     SramContext* sramCtx = &globalCtx->sramCtx;
 
     gSaveContext.save.isFirstCycle = true;
@@ -1516,11 +1517,10 @@ void func_80146EE8(GameState* gameState) {
 /**
  * Save the game
  */
-void func_80146F5C(GameState* gameState) {
+void func_80146F5C(GlobalContext* globalCtx) {
     s32 cutscene;
     s32 day;
     u16 time;
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
     cutscene = gSaveContext.save.cutscene;
     time = gSaveContext.save.time;
@@ -1528,7 +1528,7 @@ void func_80146F5C(GameState* gameState) {
     // Unconfirmed: "Obtained Fierce Deity Mask?"
     gSaveContext.save.weekEventReg[0x54] &= (u8)~0x20;
 
-    func_80143B0C(gameState);
+    func_80143B0C(globalCtx);
     func_8014546C(&globalCtx->sramCtx);
 
     gSaveContext.save.day = day;

@@ -1384,35 +1384,7 @@ extern s32 D_801C5E9C[]; // D_801C5E9C
 extern s32 D_801C5EB0[]; // D_801C5EB0
 extern s16 D_801C5EC4[]; // D_801C5EC4
 extern struct_801C5F44 D_801C5F44[]; // D_801C5F44
-// extern UNK_TYPE4 D_801C5FC0;
-// extern UNK_TYPE4 D_801C5FC4;
-// extern UNK_TYPE4 D_801C5FC8;
-// extern UNK_TYPE4 D_801C5FCC;
-// extern UNK_TYPE4 D_801C5FD0;
-// extern UNK_TYPE2 D_801C66D0;
-// extern UNK_TYPE4 D_801C6798;
-// extern UNK_TYPE1 D_801C67B0;
-// extern UNK_TYPE4 D_801C67C8;
-// extern UNK_TYPE4 D_801C67CC;
-// extern UNK_TYPE4 D_801C67E8;
-// extern UNK_TYPE4 D_801C67F0;
-// extern UNK_TYPE1 D_801C6818;
-// extern UNK_TYPE4 D_801C6838;
-// extern UNK_TYPE1 D_801C6840;
-// extern UNK_TYPE1 D_801C6850;
-// extern UNK_TYPE1 D_801C6870;
-// extern UNK_TYPE1 D_801C6890;
-// extern UNK_TYPE1 sSaveDefaultPlayerData;
-// extern UNK_TYPE1 sSaveDefaultItemEquips;
-extern Inventory sSaveDefaultInventory;
-extern u16 sSaveDefaultChecksum;
-// extern UNK_TYPE1 sSaveDebugPlayerData;
-// extern UNK_TYPE1 sSaveDebugItemEquips;
-extern Inventory sSaveDebugInventory;
-extern u16 sSaveDebugChecksum;
-// extern UNK_TYPE1 D_801C6A48;
-// extern UNK_TYPE1 D_801C6A50;
-// extern UNK_TYPE1 D_801C6A58;
+
 // extern UNK_TYPE1 D_801C6A70;
 // extern UNK_TYPE2 D_801C6A74;
 // extern UNK_TYPE2 D_801C6A78;

@@ -5,6 +5,23 @@
 #include "z64math.h"
 #include "os.h"
 
+struct GameState;
+struct GlobalContext;
+struct FileChooseContext;
+
+typedef struct {
+    /* 0x00 */ u8* readBuff;
+    /* 0x04 */ u8 (*saveBuf)[0x4000];
+    /* 0x08 */ char unk_08[4];
+    /* 0x0C */ s16 status;
+    /* 0x10 */ u32 curPage;
+    /* 0x14 */ u32 numPages;
+    /* 0x18 */ OSTime unk_18;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ s16 unk_24;
+} SramContext; // size = 0x28
+
 typedef struct {
     /* 0x00 */ u8 buttonItems[4][4];
     /* 0x10 */ u8 cButtonSlots[4][4];
@@ -248,6 +265,40 @@ typedef enum {
     /* 0xFF */ BTN_DISABLED = 0xFF
 } ButtonStatus;
 
-//typedef struct FileChooseContext FileChooseContext;
+void Sram_ActivateOwl(u8 owlId);
+void func_80143AC4(void);
+void func_80143B0C(struct GlobalContext* globalCtx);
+void Sram_IncrementDay(void);
+u16 Sram_CalcChecksum(void* data, size_t count);
+void Sram_InitNewSave(void);
+void Sram_InitDebugSave(void);
+void func_80144A94(SramContext* sramCtx);
+void Sram_OpenSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void func_8014546C(SramContext* sramCtx);
+void func_801457CC(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void func_80146580(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx, s32 fileNum);
+void func_80146628(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void func_80146AA0(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void func_80146DF8(SramContext* sramCtx);
+void func_80146E40(struct GameState* gameState, SramContext* sramCtx);
+void Sram_Alloc(struct GameState* gamestate, SramContext* sramCtx);
+void func_80146EE8(struct GlobalContext* globalCtx);
+void func_80146F5C(struct GlobalContext* globalCtx);
+void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);
+void func_80147020(SramContext* sramCtx);
+void func_80147068(SramContext* sramCtx);
+void func_80147138(SramContext* sramCtx, s32 curPage, s32 numPages);
+void func_80147150(SramContext* sramCtx);
+void func_80147198(SramContext* sramCtx);
+
+extern s32 D_801C6798[];
+extern u8 D_801C67B0[24];
+extern s32 D_801C67C8[];
+extern s32 D_801C67E8[];
+extern s32 D_801C67F0[];
+extern s32 D_801C6818[];
+extern s32 D_801C6838[];
+extern s32 D_801C6840[];
+extern s32 D_801C6850[];
 
 #endif

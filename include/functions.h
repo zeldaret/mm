@@ -2750,37 +2750,6 @@ void SkyboxDraw_SetColors(SkyboxContext* skyboxCtx, u8 primR, u8 primG, u8 primB
 void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyboxId, s16 blend, f32 x, f32 y, f32 z);
 void SkyboxDraw_Noop(SkyboxContext* skyboxCtx);
 
-void Sram_ActivateOwl(u8 owlId);
-void func_80143A54(void);
-void func_80143AC4(void);
-//void func_80143B0C(GameState* gameState);
-void Sram_IncrementDay(void);
-u16 Sram_CalcChecksum(void* data, size_t count);
-void Sram_InitNewSave(void);
-void Sram_InitDebugSave(void);
-// void func_80144A94(void);
-void Sram_OpenSave(GameState* gameState, SramContext* sramCtx);
-void func_8014546C(SramContext* sramCtx);
-void func_80145698(SramContext* sramCtx);
-void func_801457CC(GameState* gamestate, SramContext* sramCtx);
-void func_80146580(GameState* gameState, SramContext* sramCtx, s32 fileNum);
-// void func_80146628(void);
-// void func_80146AA0(void);
-// void func_80146DF8(void);
-void func_80146E40(GameState* gameState, SramContext* sramCtx);
-void Sram_Alloc(GameState* gamestate, SramContext* sramCtx);
-void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages);
-// void func_80146EE8(void);
-// void func_80146F5C(void);
-// void func_80147008(void);
-void func_80147020(SramContext* param_1);
-void func_80147068(SramContext* param_1);
-// void func_80147138(SramContext* param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3);
-void func_80147150(SramContext* param_1);
-void func_80147198(SramContext* param_1);
-void func_80147314(SramContext* sramCtx, s32 fileNum);
-void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2);
-
 // void func_80147520(void);
 void func_80147564(GlobalContext* globalCtx);
 u32 func_80147624(GlobalContext* globalCtx);
