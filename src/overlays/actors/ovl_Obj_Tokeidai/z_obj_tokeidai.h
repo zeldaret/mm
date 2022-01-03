@@ -6,11 +6,11 @@
 #define OBJ_TOKEIDAI_TYPE(thisx) (((thisx)->params & 0xF000) >> 12)
 
 typedef enum {
-    /*  0 */ OBJ_TOKEIDAI_TYPE_TOWER_GEAR_CLOCK_TOWN,
+    /*  0 */ OBJ_TOKEIDAI_TYPE_EXTERIOR_GEAR_CLOCK_TOWN,
     /*  1 */ OBJ_TOKEIDAI_TYPE_UNUSED_WALL,
     /*  2 */ OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN,
     /*  3 */ OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_CLOCK_TOWN,
-    /*  4 */ OBJ_TOKEIDAI_TYPE_TOWER_GEAR_TERMINA_FIELD,
+    /*  4 */ OBJ_TOKEIDAI_TYPE_EXTERIOR_GEAR_TERMINA_FIELD,
     /*  5 */ OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD,
     /*  6 */ OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_TERMINA_FIELD,
     /*  8 */ OBJ_TOKEIDAI_TYPE_TOWER_WALLS_TERMINA_FIELD = 8,
@@ -27,9 +27,9 @@ typedef struct ObjTokeidai {
     /* 0x000 */ Actor actor;
     /* 0x144 */ Gfx* opaDList;
     /* 0x148 */ Gfx* xluDList;
-    /* 0x14C */ s16 minuteRingOrGearRotation;
-    /* 0x14E */ s16 minuteRingOrGearRotationalVelocity;
-    /* 0x150 */ s16 minuteRingOrGearRotationTimer;
+    /* 0x14C */ s16 minuteRingOrExteriorGearRotation;
+    /* 0x14E */ s16 minuteRingOrExteriorGearRotationalVelocity;
+    /* 0x150 */ s16 minuteRingOrExteriorGearRotationTimer;
     /* 0x152 */ s16 clockFaceRotation;
     /* 0x154 */ union {
                     s16 clockFaceRotationalVelocity;
