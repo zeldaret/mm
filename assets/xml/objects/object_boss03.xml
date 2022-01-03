@@ -5,6 +5,16 @@
         whip assets, along with an unused duplicate of the small fishes.
     -->
     <File Name="object_boss03" Segment="6">
+        <Animation Name="gGyorgIdleAnim" Offset="0x88" /> <!-- Original name is "bus_base". Maybe unused? -->
+
+        <!-- Unused Majora's Wrath Whip Texture -->
+        <Texture Name="gGyorgUnusedMajorasWrathWhipTex" OutName="unused_majoras_wrath_whip" Format="rgba16" Width="8" Height="16" Offset="0xA0" />
+
+        <!-- Unused Majora's Wrath Whip DisplayLists -->
+        <DList Name="gGyorgUnusedMajorasWrathWhipDL1" Offset="0x200" />
+        <DList Name="gGyorgUnusedMajorasWrathWhipDL2" Offset="0x278" />
+        <DList Name="gGyorgUnusedMajorasWrathWhipDL3" Offset="0x2A8" />
+
         <!--Gyorg Limb DisplayLists -->
         <DList Name="gGyorgHeadDL" Offset="0x3398" />
         <DList Name="gGyorgJawDL" Offset="0x3A78" />
@@ -15,6 +25,28 @@
         <DList Name="gGyorgUpperTrunkDL" Offset="0x4768" />
         <DList Name="gGyorgLowerTrunkDL" Offset="0x4AC0" />
         <DList Name="gGyorgTailDL" Offset="0x5010" />
+
+        <!-- Unused Empty Texture Animation -->
+        <TextureAnimation Name="gGyorgUnused5388TexAnim" Offset="0x5388" />
+
+        <!-- Gyorg Textures -->
+        <Texture Name="gGyorgFinsSpikesAndJawTLUT" OutName="gyorg_fins_spikes_and_jaw_tlut" Format="rgba16" Width="4" Height="4" Offset="0x5390" />
+        <Texture Name="gGyorgSidesTLUT" OutName="gyorg_sides_tlut" Format="rgba16" Width="4" Height="4" Offset="0x53B0" />
+        <Texture Name="gGyorgMouthAndSpikeBacksideTLUT" OutName="gyorg_mouth_and_spike_backside_tlut" Format="rgba16" Width="4" Height="4" Offset="0x53D0" />
+        <Texture Name="gGyorgBellyAndFinFleshTLUT" OutName="gyorg_belly_and_fin_flesh_tlut" Format="rgba16" Width="4" Height="4" Offset="0x53F0" />
+        <Texture Name="gGyorgEyeTex" OutName="gyorg_eye" Format="rgba16" Width="32" Height="32" Offset="0x5410" />
+        <Texture Name="gGyorgFinsSpikesAndJawTex" OutName="gyorg_fins_spikes_and_jaw" Format="ci4" Width="64" Height="64" Offset="0x5C10" />
+        <Texture Name="gGyorgSidesTex" OutName="gyorg_sides" Format="ci4" Width="64" Height="64" Offset="0x6410" />
+        <Texture Name="gGyorgMouthAndSpikeBacksideTex" OutName="gyorg_mouth_and_spike_backside" Format="ci4" Width="64" Height="64" Offset="0x6C10" />
+        <Texture Name="gGyorgBellyAndFinFleshTex" OutName="gyorg_belly_and_fin_flesh" Format="ci4" Width="64" Height="64" Offset="0x7410" />
+        <Texture Name="gGyorgHornsTeethAndClawsTex" OutName="gyorg_horns_teeth_claws" Format="rgba16" Width="16" Height="16" Offset="0x7C10" />
+
+        <!-- Bubble DisplayLists (texture comes from gameplay_keep) -->
+        <DList Name="gGyorgBubbleMaterialDL" Offset="0x7E50" />
+        <DList Name="gGyorgBubbleModelDL" Offset="0x7EB0" />
+
+        <!-- Gyorg Title Card -->
+        <Texture Name="gGyorgTitleCardTex" OutName="gyorg_title_card" Format="i8" Width="128" Height="40" Offset="0x7EC8" />
 
         <!-- Gyorg Limbs -->
         <Limb Name="gGyorgRootLimb" Type="Standard" Offset="0x92C8" />
@@ -35,20 +67,7 @@
         <!-- Gyorg Skeleton-->
         <Skeleton Name="gGyorgSkel" Type="Flex" LimbType="Standard" Offset="0x93A8" />
 
-        <!-- Gyorg Textures -->
-        <Texture Name="gGyorgFinsSpikesAndJawTLUT" OutName="gyorg_fins_spikes_and_jaw_tlut" Format="rgba16" Width="4" Height="4" Offset="0x5390" />
-        <Texture Name="gGyorgSidesTLUT" OutName="gyorg_sides_tlut" Format="rgba16" Width="4" Height="4" Offset="0x53B0" />
-        <Texture Name="gGyorgMouthAndSpikeBacksideTLUT" OutName="gyorg_mouth_and_spike_backside_tlut" Format="rgba16" Width="4" Height="4" Offset="0x53D0" />
-        <Texture Name="gGyorgBellyAndFinFleshTLUT" OutName="gyorg_belly_and_fin_flesh_tlut" Format="rgba16" Width="4" Height="4" Offset="0x53F0" />
-        <Texture Name="gGyorgEyeTex" OutName="gyorg_eye" Format="rgba16" Width="32" Height="32" Offset="0x5410" />
-        <Texture Name="gGyorgFinsSpikesAndJawTex" OutName="gyorg_fins_spikes_and_jaw" Format="ci4" Width="64" Height="64" Offset="0x5C10" />
-        <Texture Name="gGyorgSidesTex" OutName="gyorg_sides" Format="ci4" Width="64" Height="64" Offset="0x6410" />
-        <Texture Name="gGyorgMouthAndSpikeBacksideTex" OutName="gyorg_mouth_and_spike_backside" Format="ci4" Width="64" Height="64" Offset="0x6C10" />
-        <Texture Name="gGyorgBellyAndFinFleshTex" OutName="gyorg_belly_and_fin_flesh" Format="ci4" Width="64" Height="64" Offset="0x7410" />
-        <Texture Name="gGyorgHornsTeethAndClawsTex" OutName="gyorg_horns_teeth_claws" Format="rgba16" Width="16" Height="16" Offset="0x7C10" />
-
         <!-- Gyorg Animations -->
-        <Animation Name="gGyorgIdleAnim" Offset="0x88" /> <!-- Original name is "bus_base". Maybe unused? -->
         <Animation Name="gGyorgFloppingAnim" Offset="0x9554" /> <!-- Original name is "bus_dead" -->
         <Animation Name="gGyorgJumpingAnim" Offset="0x98F0" /> <!-- Original name is "bus_jump". Maybe unused? -->
         <Animation Name="gGyorgStunnedAnim" Offset="0x99D0" /> <!-- Original name is "bus_sibire" ("paralyzed") -->
@@ -57,38 +76,6 @@
         <Animation Name="gGyorgGentleSwimmingAnim" Offset="0xA020" /> <!-- Maybe unused? -->
         <Animation Name="gGyorgTailSweepAnim" Offset="0xA134" /> <!-- Maybe unused? -->
         <Animation Name="gGyorgCrawlingAnim" Offset="0xA6C8" />
-
-        <!-- Gyorg Title Card -->
-        <Texture Name="gGyorgTitleCardTex" OutName="gyorg_title_card" Format="i8" Width="128" Height="40" Offset="0x7EC8" />
-
-        <!-- Small Fishes Limb DisplayLists -->
-        <DList Name="gGyorgSmallFishHeadDL" Offset="0xCCC0" />
-        <DList Name="gGyorgSmallFishTrunkDL" Offset="0xCD80" />
-        <DList Name="gGyorgSmallFishRightFinDL" Offset="0xCE60" />
-        <DList Name="gGyorgSmallFishDorsalFinDL" Offset="0xCF18" />
-        <DList Name="gGyorgSmallFishLeftFinDL" Offset="0xCFE8" />
-        <DList Name="gGyorgSmallFishTailFinDL" Offset="0xD0A0" />
-
-        <!-- Small Fishes Limbs -->
-        <Limb Name="gGyorgSmallFishRootLimb" Type="Standard" Offset="0xD990" />
-        <Limb Name="gGyorgSmallFishBodyRootLimb" Type="Standard" Offset="0xD99C" />
-        <Limb Name="gGyorgSmallFishTrunkRootLimb" Type="Standard" Offset="0xD9A8" />
-        <Limb Name="gGyorgSmallFishTailFinLimb" Type="Standard" Offset="0xD9B4" />
-        <Limb Name="gGyorgSmallFishTrunkLimb" Type="Standard" Offset="0xD9C0" />
-        <Limb Name="gGyorgSmallFishLeftFinLimb" Type="Standard" Offset="0xD9CC" />
-        <Limb Name="gGyorgSmallFishDorsalFinLimb" Type="Standard" Offset="0xD9D8" />
-        <Limb Name="gGyorgSmallFishRightFinLimb" Type="Standard" Offset="0xD9E4" />
-        <Limb Name="gGyorgSmallFishHeadLimb" Type="Standard" Offset="0xD9F0" />
-
-        <!-- Small Fishes Skeleton -->
-        <Skeleton Name="gGyorgSmallFishSkel" Type="Flex" LimbType="Standard" Offset="0xDA20" />
-
-        <!-- Small Fishes Textures -->
-        <Texture Name="gGyorgSmallFishTLUT" OutName="small_fish_tlut" Format="rgba16" Width="4" Height="4" Offset="0xD170" />
-        <Texture Name="gGyorgSmallFishTex" OutName="small_fish" Format="ci4" Width="64" Height="64" Offset="0xD190" />
-
-        <!-- Small Fishes Animation -->
-        <Animation Name="gGyorgSmallFishSwimAnim" Offset="0xDAAC" /> <!-- Original name is "minibus_b_swim" -->
 
         <!-- Seaweed DisplayLists -->
         <DList Name="gGyorgSeaweedPiece1DL" Offset="0xA8B0" />
@@ -104,21 +91,8 @@
         <Texture Name="gGyorgSeaweedTopTex" OutName="gyorg_seaweed_top" Format="ci4" Width="64" Height="64" Offset="0xAB00" />
         <Texture Name="gGyorgSeaweedTex" OutName="gyorg_seaweed" Format="ci4" Width="64" Height="64" Offset="0xB300" />
 
-        <!-- Bubble DisplayLists (texture comes from gameplay_keep) -->
-        <DList Name="gGyorgBubbleMaterialDL" Offset="0x7E50" />
-        <DList Name="gGyorgBubbleModelDL" Offset="0x7EB0" />
-
-        <!-- Unused Empty Texture Animations -->
-        <TextureAnimation Name="gGyorgUnused5388TexAnim" Offset="0x5388" />
+        <!-- Unused Empty Texture Animation -->
         <TextureAnimation Name="gGyorgUnusedBB00TexAnim" Offset="0xBB00" />
-
-        <!-- Unused Majora's Wrath Whip DisplayLists -->
-        <DList Name="gGyorgUnusedMajorasWrathWhipDL1" Offset="0x200" />
-        <DList Name="gGyorgUnusedMajorasWrathWhipDL2" Offset="0x278" />
-        <DList Name="gGyorgUnusedMajorasWrathWhipDL3" Offset="0x2A8" />
-
-        <!-- Unused Majora's Wrath Whip Texture -->
-        <Texture Name="gGyorgUnusedMajorasWrathWhipTex" OutName="unused_majoras_wrath_whip" Format="rgba16" Width="8" Height="16" Offset="0xA0" />
 
         <!-- Unused Duplicate of Small Fish Limb DisplayLists -->
         <DList Name="gUnusedGyorgSmallFishHeadDL" Offset="0xBD80" />
@@ -131,5 +105,34 @@
         <!-- Unused Duplicate of Small Fish Textures -->
         <Texture Name="gUnusedGyorgSmallFishTLUT" OutName="unused_small_fish_tlut" Format="rgba16" Width="4" Height="4" Offset="0xC230" />
         <Texture Name="gUnusedGyorgSmallFishTex" OutName="unused_small_fish" Format="ci4" Width="64" Height="64" Offset="0xC250" />
+
+        <!-- Small Fishes Limb DisplayLists -->
+        <DList Name="gGyorgSmallFishHeadDL" Offset="0xCCC0" />
+        <DList Name="gGyorgSmallFishTrunkDL" Offset="0xCD80" />
+        <DList Name="gGyorgSmallFishRightFinDL" Offset="0xCE60" />
+        <DList Name="gGyorgSmallFishDorsalFinDL" Offset="0xCF18" />
+        <DList Name="gGyorgSmallFishLeftFinDL" Offset="0xCFE8" />
+        <DList Name="gGyorgSmallFishTailFinDL" Offset="0xD0A0" />
+
+        <!-- Small Fishes Textures -->
+        <Texture Name="gGyorgSmallFishTLUT" OutName="small_fish_tlut" Format="rgba16" Width="4" Height="4" Offset="0xD170" />
+        <Texture Name="gGyorgSmallFishTex" OutName="small_fish" Format="ci4" Width="64" Height="64" Offset="0xD190" />
+
+        <!-- Small Fishes Limbs -->
+        <Limb Name="gGyorgSmallFishRootLimb" Type="Standard" Offset="0xD990" />
+        <Limb Name="gGyorgSmallFishBodyRootLimb" Type="Standard" Offset="0xD99C" />
+        <Limb Name="gGyorgSmallFishTrunkRootLimb" Type="Standard" Offset="0xD9A8" />
+        <Limb Name="gGyorgSmallFishTailFinLimb" Type="Standard" Offset="0xD9B4" />
+        <Limb Name="gGyorgSmallFishTrunkLimb" Type="Standard" Offset="0xD9C0" />
+        <Limb Name="gGyorgSmallFishLeftFinLimb" Type="Standard" Offset="0xD9CC" />
+        <Limb Name="gGyorgSmallFishDorsalFinLimb" Type="Standard" Offset="0xD9D8" />
+        <Limb Name="gGyorgSmallFishRightFinLimb" Type="Standard" Offset="0xD9E4" />
+        <Limb Name="gGyorgSmallFishHeadLimb" Type="Standard" Offset="0xD9F0" />
+
+        <!-- Small Fishes Skeleton -->
+        <Skeleton Name="gGyorgSmallFishSkel" Type="Flex" LimbType="Standard" Offset="0xDA20" />
+
+        <!-- Small Fishes Animation -->
+        <Animation Name="gGyorgSmallFishSwimAnim" Offset="0xDAAC" /> <!-- Original name is "minibus_b_swim" -->
     </File>
 </Root>
