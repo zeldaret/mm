@@ -12,21 +12,21 @@
         <!-- Clock Tower Clock Face DisplayList -->
         <DList Name="gClockTowerClockFace" Offset="0xE818" />
 
-        <!-- Clock Tower Exterior Gear Textures (one is also reused for the outer ring) -->
+        <!-- Clock Tower Exterior Gear Textures (one is also reused for the minute ring) -->
         <Texture Name="gClockTowerExteriorGearFaceTex" OutName="clock_tower_exterior_gear_face" Format="rgba16" Width="32" Height="32" Offset="0x2840" />
-        <Texture Name="gClockTowerExteriorGearSidesAndOuterRingBackTex" OutName="clock_tower_exterior_gear_sides_and_outer_ring_back" Format="rgba16" Width="16" Height="32" Offset="0x3040" />
+        <Texture Name="gClockTowerExteriorGearSidesAndMinuteRingBackTex" OutName="clock_tower_exterior_gear_sides_and_minute_ring_back" Format="rgba16" Width="16" Height="32" Offset="0x3040" />
 
         <!-- Clock Tower Exterior Gear DisplayList -->
         <DList Name="gClockTowerExteriorGearDL" Offset="0xBA78" />
 
-        <!-- Clock Tower Outer Ring Textures -->
-        <Texture Name="gClockTowerOuterRingFace1Tex" OutName="clock_tower_outer_ring_face_1" Format="rgba16" Width="32" Height="16" Offset="0x4240" />
-        <Texture Name="gClockTowerOuterRingFace2Tex" OutName="clock_tower_outer_ring_face_2" Format="rgba16" Width="32" Height="16" Offset="0x4640" />
-        <Texture Name="gClockTowerOuterRingFace3Tex" OutName="clock_tower_outer_ring_face_3" Format="rgba16" Width="32" Height="16" Offset="0x4A40" />
-        <Texture Name="gClockTowerOuterRingSidesTex" OutName="clock_tower_outer_ring_sides" Format="rgba16" Width="32" Height="16" Offset="0x4E40" />
+        <!-- Clock Tower Minute Ring Textures -->
+        <Texture Name="gClockTowerMinuteRingFace1Tex" OutName="clock_tower_minute_ring_face_1" Format="rgba16" Width="32" Height="16" Offset="0x4240" />
+        <Texture Name="gClockTowerMinuteRingFace2Tex" OutName="clock_tower_minute_ring_face_2" Format="rgba16" Width="32" Height="16" Offset="0x4640" />
+        <Texture Name="gClockTowerMinuteRingFace3Tex" OutName="clock_tower_minute_ring_face_3" Format="rgba16" Width="32" Height="16" Offset="0x4A40" />
+        <Texture Name="gClockTowerMinuteRingSidesTex" OutName="clock_tower_minute_ring_sides" Format="rgba16" Width="32" Height="16" Offset="0x4E40" />
 
-        <!-- Clock Tower Outer Ring DisplayList -->
-        <DList Name="gClockTowerOuterRingDL" Offset="0xCF28" />
+        <!-- Clock Tower Minute Ring DisplayList -->
+        <DList Name="gClockTowerMinuteRingDL" Offset="0xCF28" />
 
         <!-- Clock Tower Sun and Moon Panel Textures -->
         <Texture Name="gClockTowerSunAndMoonPanelSidesTex" OutName="clock_tower_sun_and_moon_panel_sides" Format="rgba16" Width="16" Height="16" Offset="0x3A40" />

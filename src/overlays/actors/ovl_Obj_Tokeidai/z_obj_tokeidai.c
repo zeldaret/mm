@@ -24,7 +24,7 @@
 #define GET_CURRENT_HOUR(this) ((s32)((this)->currentTime * (24.0f / 0x10000)))
 #define GET_CURRENT_MINUTE(this) ((s32)((this)->currentTime * (360 * 2.0f / 0x10000)) % 30)
 #define GET_CLOCK_FACE_ROTATION(currentHour) ((s16)(currentHour * (0x10000 / 24.0f)))
-#define GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute) ((s16)(currentMinute * (0x10000 * 12.0f / 360)))
+#define GET_MINUTE_RING_OR_GEAR_ROTATION(currentMinute) ((s16)(currentMinute * (0x10000 * 12.0f / 360)))
 
 void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -82,9 +82,9 @@ void ObjTokeidai_SetupClockOrGear(ObjTokeidai* this) {
     s32 currentMinute = GET_CURRENT_MINUTE(this);
 
     this->clockMinute = currentMinute;
-    this->outerRingOrGearRotation = GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute);
-    this->outerRingOrGearRotationalVelocity = 0x3C;
-    this->outerRingOrGearRotationTimer = 0;
+    this->minuteRingOrGearRotation = GET_MINUTE_RING_OR_GEAR_ROTATION(currentMinute);
+    this->minuteRingOrGearRotationalVelocity = 0x3C;
+    this->minuteRingOrGearRotationTimer = 0;
 }
 
 void ObjTokeidai_Clock_Init(ObjTokeidai* this) {
@@ -260,33 +260,33 @@ void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
     s32 currentMinute = GET_CURRENT_MINUTE(this);
 
     if (currentMinute != this->clockMinute) {
-        if (this->outerRingOrGearRotationTimer == 8 && playSfx) {
+        if (this->minuteRingOrGearRotationTimer == 8 && playSfx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_SECOND_HAND);
         }
 
-        if (this->outerRingOrGearRotationTimer > 8) {
+        if (this->minuteRingOrGearRotationTimer > 8) {
             // This actually performs the rotation to the next minute
-            // for the outer ring or gear.
-            this->outerRingOrGearRotationalVelocity += 0x3C;
-            this->outerRingOrGearRotation += this->outerRingOrGearRotationalVelocity;
+            // for the minute ring or gear.
+            this->minuteRingOrGearRotationalVelocity += 0x3C;
+            this->minuteRingOrGearRotation += this->minuteRingOrGearRotationalVelocity;
         } else {
-            // This makes the outer ring or gear wiggle in place for a bit
+            // This makes the minute ring or gear wiggle in place for a bit
             // before rotating to the next position.
-            if ((this->outerRingOrGearRotationTimer & 3) == 0) {
-                this->outerRingOrGearRotation += 0x5A;
+            if ((this->minuteRingOrGearRotationTimer & 3) == 0) {
+                this->minuteRingOrGearRotation += 0x5A;
             }
-            if ((this->outerRingOrGearRotationTimer & 3) == 1) {
-                this->outerRingOrGearRotation -= 0x5A;
+            if ((this->minuteRingOrGearRotationTimer & 3) == 1) {
+                this->minuteRingOrGearRotation -= 0x5A;
             }
         }
 
-        this->outerRingOrGearRotationTimer++;
-        if ((currentMinute == 15 && this->outerRingOrGearRotation < 0) ||
-            (currentMinute != 15 && this->outerRingOrGearRotation > GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute))) {
-            this->outerRingOrGearRotation = GET_OUTER_RING_OR_GEAR_ROTATION(currentMinute);
+        this->minuteRingOrGearRotationTimer++;
+        if ((currentMinute == 15 && this->minuteRingOrGearRotation < 0) ||
+            (currentMinute != 15 && this->minuteRingOrGearRotation > GET_MINUTE_RING_OR_GEAR_ROTATION(currentMinute))) {
+            this->minuteRingOrGearRotation = GET_MINUTE_RING_OR_GEAR_ROTATION(currentMinute);
             this->clockMinute = currentMinute;
-            this->outerRingOrGearRotationalVelocity = 0x5A;
-            this->outerRingOrGearRotationTimer = 0;
+            this->minuteRingOrGearRotationalVelocity = 0x5A;
+            this->minuteRingOrGearRotationTimer = 0;
         }
     }
 }
@@ -781,9 +781,9 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_InsertXRotation_s(-this->xRotation, MTXMODE_APPLY);
     Matrix_InsertTranslation(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
     Matrix_StatePush();
-    Matrix_InsertZRotation_s(-this->outerRingOrGearRotation, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(-this->minuteRingOrGearRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gClockTowerOuterRingDL);
+    gSPDisplayList(POLY_OPA_DISP++, gClockTowerMinuteRingDL);
     Matrix_StatePop();
     Matrix_InsertTranslation(0.0f, 0.0f, this->clockFaceZTranslation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -842,7 +842,7 @@ void ObjTokeidai_TowerGear_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_InsertXRotation_s(-this->xRotation, MTXMODE_APPLY);
     Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
     Matrix_InsertTranslation(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->outerRingOrGearRotation, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->minuteRingOrGearRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerExteriorGearDL);

@@ -27,9 +27,9 @@ typedef struct ObjTokeidai {
     /* 0x000 */ Actor actor;
     /* 0x144 */ Gfx* opaDList;
     /* 0x148 */ Gfx* xluDList;
-    /* 0x14C */ s16 outerRingOrGearRotation;
-    /* 0x14E */ s16 outerRingOrGearRotationalVelocity;
-    /* 0x150 */ s16 outerRingOrGearRotationTimer;
+    /* 0x14C */ s16 minuteRingOrGearRotation;
+    /* 0x14E */ s16 minuteRingOrGearRotationalVelocity;
+    /* 0x150 */ s16 minuteRingOrGearRotationTimer;
     /* 0x152 */ s16 clockFaceRotation;
     /* 0x154 */ union {
                     s16 clockFaceRotationalVelocity;
