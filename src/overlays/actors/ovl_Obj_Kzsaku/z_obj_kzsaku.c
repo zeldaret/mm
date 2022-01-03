@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_kzsaku.h"
+#include "objects/object_kzsaku/object_kzsaku.h"
 
 #define FLAGS 0x00000030
 
@@ -15,11 +16,11 @@ void ObjKzsaku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80C08B60(ObjKzsaku* this);
+void ObjKzsaku_SetupIdle(ObjKzsaku* this);
 void func_80C08BBC(ObjKzsaku* this);
 void func_80C08C84(ObjKzsaku* this);
-void func_80C08B7C(ObjKzsaku* this, GlobalContext* globalCtx);
-void func_80C08BD0(ObjKzsaku* this, GlobalContext* globalCtx);
+void ObjKzsaku_Idle(ObjKzsaku* this, GlobalContext* globalCtx);
+void ObjKzsaku_Rise(ObjKzsaku* this, GlobalContext* globalCtx);
 void func_80C08CB0(ObjKzsaku* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Kzsaku_InitVars = {
@@ -34,9 +35,6 @@ const ActorInit Obj_Kzsaku_InitVars = {
     (ActorFunc)ObjKzsaku_Draw,
 };
 
-extern Gfx D_06000040[];
-extern CollisionHeader D_06001118;
-
 void ObjKzsaku_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjKzsaku* this = THIS;
@@ -44,7 +42,7 @@ void ObjKzsaku_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
     DynaPolyActor_Init(&this->dyna, 1);
-    CollisionHeader_GetVirtual(&D_06001118, &col);
+    CollisionHeader_GetVirtual(&object_kzsaku_Colheader_001118, &col);
 
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, thisx, col);
 
@@ -54,7 +52,7 @@ void ObjKzsaku_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
         func_80C08C84(this);
     } else {
-        func_80C08B60(this);
+        ObjKzsaku_SetupIdle(this);
     }
 }
 
@@ -64,22 +62,22 @@ void ObjKzsaku_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80C08B60(ObjKzsaku* this) {
+void ObjKzsaku_SetupIdle(ObjKzsaku* this) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
-    this->actionFunc = func_80C08B7C;
+    this->actionFunc = ObjKzsaku_Idle;
 }
 
-void func_80C08B7C(ObjKzsaku* this, GlobalContext* globalCtx) {
+void ObjKzsaku_Idle(ObjKzsaku* this, GlobalContext* globalCtx) {
     if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
         func_80C08BBC(this);
     }
 }
 
 void func_80C08BBC(ObjKzsaku* this) {
-    this->actionFunc = func_80C08BD0;
+    this->actionFunc = ObjKzsaku_Rise;
 }
 
-void func_80C08BD0(ObjKzsaku* this, GlobalContext* globalCtx) {
+void ObjKzsaku_Rise(ObjKzsaku* this, GlobalContext* globalCtx) {
     if (this->dyna.actor.cutscene != -1) {
         if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -126,7 +124,7 @@ void ObjKzsaku_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000040);
+    gSPDisplayList(POLY_OPA_DISP++, object_kzsaku_DL_000040);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
