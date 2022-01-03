@@ -117,8 +117,8 @@ void Skin_ApplyLimbModifications(GraphicsContext* gfxCtx, Skin* skin, s32 limbIn
             }
         }
 
-        Skin_UpdateVertices(&gSkinLimbMatrices[limbTransformations[modif->transformIndex].limbIndex], skinVertices, modif,
-                            vtxBuf, &spDC);
+        Skin_UpdateVertices(&gSkinLimbMatrices[limbTransformations[modif->transformIndex].limbIndex], skinVertices,
+                            modif, vtxBuf, &spDC);
     }
 
     gSPSegment(POLY_OPA_DISP++, 0x08, vtxEntry->buf[vtxEntry->index]);
