@@ -245,7 +245,7 @@ typedef struct {
     /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120]; // Scene flags that are temporarily stored over the duration of a single 3-day cycle
     /* 0x48C8 */ u16 unk_48C8;                   // "scene_id_mix"
     /* 0x48CA */ u8 maskMaskBit[3];              // "mask_mask_bit"
-    /* 0x48CD */ u8 unk_48CD[24];
+    /* 0x48CD */ UNK_TYPE1 unk_48CD[24];
 } SaveContext; // size = 0x48C8
 
 typedef enum {
