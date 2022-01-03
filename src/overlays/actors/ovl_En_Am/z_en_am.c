@@ -448,7 +448,7 @@ void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
             dustPos.y = (randPlusMinusPoint5Scaled(10.0f) * 6.0f) + (this->actor.world.pos.y + 40.0f);
             dustPos.z = (Math_CosS(0) * 7.0f) + this->actor.world.pos.z;
 
-            func_800B0EB0(globalCtx, &dustPos, &D_801D15B0, &D_801D15B0, &D_808B1120, &D_808B1124, 200, 45, 12);
+            func_800B0EB0(globalCtx, &dustPos, &gZeroVec3f, &gZeroVec3f, &D_808B1120, &D_808B1124, 200, 45, 12);
         }
     } else if (this->unk_236 == 0) {
         Actor_MarkForDeath(&this->actor);
