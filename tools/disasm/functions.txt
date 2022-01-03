@@ -11694,7 +11694,7 @@
     0x80AB3B34:("ObjTokeidai_TowerOpening_Start",),
     0x80AB3BB0:("ObjTokeidai_SetupTowerOpening",),
     0x80AB3BD8:("ObjTokeidai_DoNothing",),
-    0x80AB3BE8:("ObjTokeidai_StaircaseIntoTower_Idle",),
+    0x80AB3BE8:("ObjTokeidai_StaircaseToRooftop_Idle",),
     0x80AB3C50:("ObjTokeidai_IsPostFirstCycleFinalHours",),
     0x80AB3CCC:("ObjTokeidai_RotateOnHourChange",),
     0x80AB3ED0:("ObjTokeidai_TowerClock_Idle",),

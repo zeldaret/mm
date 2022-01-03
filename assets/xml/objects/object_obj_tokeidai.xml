@@ -8,7 +8,7 @@
         <!-- Clock Tower Spotlight Shine Texture -->
         <Texture Name="gClockTowerSpotlightShineTex" OutName="clock_tower_spotlight_shine" Format="i8" Width="64" Height="64" Offset="0x40" />
 
-        <!-- Generic brick texture used for multiple pieces of the Clock Tower (counterweight, unused tower wall, staircase to interior) -->
+        <!-- Generic brick texture used for multiple pieces of the Clock Tower (counterweight, unused tower wall, staircase to rooftop) -->
         <Texture Name="gClockTowerBrickTex" OutName="clock_tower_bricks" Format="rgba16" Width="32" Height="32" Offset="0x1040" />
 
         <!-- Clock Tower Counterweight Textures -->
@@ -54,8 +54,8 @@
         <!-- Clock Tower Unused Tower Wall Texture -->
         <Texture Name="gClockTowerUnusedTowerWallMaskTex" OutName="clock_tower_unused_tower_wall_mask" Format="i4" Width="64" Height="64" Offset="0x86C0" />
 
-        <!-- Clock Tower Staircase to Interior Texture -->
-        <Texture Name="gClockTowerStaircaseToInteriorMaskTex" OutName="clock_tower_staircase_to_interior_mask" Format="i4" Width="64" Height="64" Offset="0x8EC0" />
+        <!-- Clock Tower Staircase to Rooftop Texture -->
+        <Texture Name="gClockTowerStaircaseToRooftopMaskTex" OutName="clock_tower_staircase_to_rooftop_mask" Format="i4" Width="64" Height="64" Offset="0x8EC0" />
 
         <!-- Empty DisplayList, probably intended to be used as the xluDList for Clock Tower Termina Field Walls -->
         <DList Name="gClockTowerUnusedEmptyDL1" Offset="0x9A00" />
@@ -106,11 +106,11 @@
         <!-- Clock Tower Unused Tower Wall DisplayList -->
         <DList Name="gClockTowerUnusedTowerWallDL" Offset="0xD388" />
 
-        <!-- Empty DisplayList used as the xluDList for Staircase to Interior -->
+        <!-- Empty DisplayList used as the xluDList for Staircase to Rooftop -->
         <DList Name="gClockTowerEmptyDL" Offset="0xD8E0" />
 
-        <!-- Clock Tower Staircase to Interior DisplayList -->
-        <DList Name="gClockTowerStaircaseToInteriorDL" Offset="0xD8E8" />
+        <!-- Clock Tower Staircase to Rooftop DisplayList -->
+        <DList Name="gClockTowerStaircaseToRooftopDL" Offset="0xD8E8" />
 
         <!-- Clock Tower Clock Face Back Texture -->
         <Texture Name="gClockTowerClockFaceBackTex" OutName="clock_tower_clock_face_back" Format="rgba16" Width="16" Height="32" Offset="0xDAC0" />

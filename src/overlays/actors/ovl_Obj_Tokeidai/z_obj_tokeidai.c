@@ -40,7 +40,7 @@ void ObjTokeidai_WallClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_TowerGear_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_Counterweight_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_Walls_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
-void ObjTokeidai_StaircaseIntoTower_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
+void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_SetupTowerOpening(ObjTokeidai* this);
 void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Counterweight_Draw(Actor* thisx, GlobalContext* globalCtx);
@@ -245,10 +245,10 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
         case OBJ_TOKEIDAI_TYPE_COUNTERWEIGHT_CLOCK_TOWN:
             ObjTokeidai_Counterweight_Init(this, globalCtx);
             break;
-        case OBJ_TOKEIDAI_TYPE_STAIRCASE_INTO_TOWER:
-            this->opaDList = gClockTowerStaircaseToInteriorDL;
+        case OBJ_TOKEIDAI_TYPE_STAIRCASE_TO_ROOFTOP:
+            this->opaDList = gClockTowerStaircaseToRooftopDL;
             this->xluDList = gClockTowerEmptyDL;
-            this->actionFunc = ObjTokeidai_StaircaseIntoTower_Idle;
+            this->actionFunc = ObjTokeidai_StaircaseToRooftop_Idle;
             break;
     }
 }
@@ -580,7 +580,7 @@ void ObjTokeidai_SetupTowerOpening(ObjTokeidai* this) {
 void ObjTokeidai_DoNothing(ObjTokeidai* this, GlobalContext* globalCtx) {
 }
 
-void ObjTokeidai_StaircaseIntoTower_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
+void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (((CURRENT_DAY == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) ||
         (gSaveContext.weekEventReg[8] & 0x40)) {
         this->actor.draw = ObjTokeidai_Draw;
