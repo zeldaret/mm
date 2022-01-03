@@ -44,7 +44,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
             }
 
             gSaveContext.unk_3DC0 = 2000;
-            gSaveContext.naviTimer = 0;
+            gSaveContext.tatlTimer = 0;
             gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
             gSaveContext.nightSeqIndex = 0xFF;
             gSaveContext.eventInf[0] = 0;

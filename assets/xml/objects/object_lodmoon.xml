@@ -1,0 +1,12 @@
+﻿<Root>
+    <File Name="object_lodmoon" Segment="6">
+        <DList Name="object_lodmoon_DL_0010E0" Offset="0x10E0" />
+        <DList Name="object_lodmoon_DL_001158" Offset="0x1158" />
+        <Texture Name="object_lodmoon_TLUT_0015D8" OutName="tlut_0015D8" Format="rgba16" Width="4" Height="4" Offset="0x15D8" />
+        <Texture Name="object_lodmoon_TLUT_0015F8" OutName="tlut_0015F8" Format="rgba16" Width="4" Height="4" Offset="0x15F8" />
+        <Texture Name="object_lodmoon_Tex_001618" OutName="tex_001618" Format="rgba16" Width="32" Height="32" Offset="0x1618" />
+        <Texture Name="object_lodmoon_Tex_001E18" OutName="tex_001E18" Format="rgba16" Width="64" Height="32" Offset="0x1E18" />
+        <Texture Name="object_lodmoon_Tex_002E18" OutName="tex_002E18" Format="ci4" Width="64" Height="64" Offset="0x2E18" />
+        <Texture Name="object_lodmoon_Tex_003618" OutName="tex_003618" Format="ci4" Width="64" Height="64" Offset="0x3618" />
+    </File>
+</Root>

@@ -1,7 +1,7 @@
 /*
  * File: z_obj_shutter.c
  * Overlay: ovl_Obj_Shutter
- * Description:
+ * Description: Unused West Clock Town bank closing shutter
  */
 
 #include "z_obj_shutter.h"

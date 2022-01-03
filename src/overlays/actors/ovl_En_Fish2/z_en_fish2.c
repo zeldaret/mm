@@ -1058,7 +1058,7 @@ void EnFish2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         Matrix_StatePush();
-        Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
@@ -1069,11 +1069,11 @@ void EnFish2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 
     if (limbIndex == 14) {
-        Matrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_318);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_318);
     }
 
     if (limbIndex == 17) {
-        Matrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_300);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_300);
     }
 
     Collider_UpdateSpheres(limbIndex, &this->collider);

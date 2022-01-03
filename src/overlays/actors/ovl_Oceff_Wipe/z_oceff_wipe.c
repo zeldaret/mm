@@ -1,7 +1,7 @@
 /*
  * File: z_oceff_wipe.c
  * Overlay: ovl_Oceff_Wipe
- * Description:
+ * Description: Song of Time Ocarina Effect
  */
 
 #include "z_oceff_wipe.h"

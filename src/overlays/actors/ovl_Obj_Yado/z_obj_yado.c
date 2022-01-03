@@ -15,7 +15,6 @@ void ObjYado_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjYado_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Obj_Yado_InitVars = {
     ACTOR_OBJ_YADO,
     ACTORCAT_BG,
@@ -28,22 +27,50 @@ const ActorInit Obj_Yado_InitVars = {
     (ActorFunc)ObjYado_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80C16420[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-#endif
+AnimatedMaterial* D_80C16470;
 
-extern InitChainEntry D_80C16420[];
+extern Gfx D_06000320[];
+extern Gfx D_06000430[];
+extern AnimatedMaterial D_060012E8;
 
-extern UNK_TYPE D_06000430;
-extern UNK_TYPE D_060012E8;
+void ObjYado_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjYado* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Init.s")
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    D_80C16470 = (AnimatedMaterial*)Lib_SegmentedToVirtual(&D_060012E8);
+    this->isNight = gSaveContext.isNight;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Destroy.s")
+void ObjYado_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Update.s")
+void ObjYado_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjYado* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Draw.s")
+    this->isNight = gSaveContext.isNight;
+}
+
+void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    ObjYado* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    if (this->isNight) {
+        gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(globalCtx->state.gfxCtx, 128, 95, 95, 70, 155));
+        gSPSegment(POLY_OPA_DISP++, 0x0A, Gfx_PrimColor(globalCtx->state.gfxCtx, 128, 0, 40, 40, 255));
+    } else {
+        gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(globalCtx->state.gfxCtx, 128, 255, 255, 215, 110));
+        gSPSegment(POLY_OPA_DISP++, 0x0A, Gfx_PrimColor(globalCtx->state.gfxCtx, 128, 255, 255, 215, 255));
+    }
+
+    AnimatedMat_Draw(globalCtx, D_80C16470);
+    func_800BDFC0(globalCtx, D_06000430);
+    func_800BE03C(globalCtx, D_06000320);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
