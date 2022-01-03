@@ -1,17 +1,31 @@
 /*
  * File: z_obj_tokeidai.c
  * Overlay: ovl_Obj_Tokeidai
- * Description: Components of the Clock Tower (gears, clock face, counterweight, etc). Also used for wall clocks.
+ * Description: Components of the Clock Tower. Also used for wall clocks. The specific components are:
+ * - ClockFace: The decorated face of the clock that spins every hour.
+ * - MinuteRing: The ring around the clock face that spins every two minutes.
+ * - ExteriorGear: The two gears on the side of the tower that spin every two minutes.
+ * - SunAndMoonPanel: A panel with a sun and moon image that tells whether it is day or night.
+ * - Counterweight: The spinning weight on top of the tower that emits a spotlight at night.
+ * - StaircaseToRooftop: The staircase to tower's rooftop that opens after midnight on the Final Day.
+ * - TerminaFieldWalls: The walls of the Clock Tower visible from Termina Field.
  *
- * This actor handles most of the functionality related to the Clock Tower and the various
- * wall clocks around Clock Town. Among its responsibilities are making the clocks correctly
- * tell the time by spinning the various pieces and gears and controlling the spotlight that
- * is emitted from the Clock Tower at night.
+ * Sometimes, the ClockFace, MinuteRing, and SunAndMoonPanel are treated as a single clock entity.
+ * This is called Clock if it applies to both the Clock Tower clock and wall clocks, and
+ * TowerClock/WallClock, respectively, if it only applies to one of them.
  *
  * On the midnight of the Final Day, the Clock Tower opens up, and the various pieces of it
- * are moved around. This actor is responsible for managing all of this movement. Additionally,
- * if the moon crashes into Termina, this actor is responsible for making the pieces of the
- * Clock Tower collapse.
+ * are moved around. This actor is responsible for managing all of this movement, which is handled
+ * via the series of action functions labeled with TowerOpening.
+ *
+ * All components have at least one of these three actions:
+ * - Idle: The "default" action, and for some components the only action.
+ *       The component is either completely still, or it's telling the time, depending on the component.
+ * - OpenedIdle: The action for certain Clock Tower components after midnight on the Final Day.
+ *       The TowerClock, ExteriorGears, and Counterweight no longer tell time and are moved to a different position.
+ *       Called "opened" because it corresponds to when the staircase to the tower's rooftop is opened up.
+ * - Collapse: The action for certain Clock Tower components when the moon crashes into Termina.
+ *       This action is responsible for making the component fall during the moon crash cutscene.
  */
 
 #include "z_obj_tokeidai.h"
@@ -39,7 +53,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_WallClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_Counterweight_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
-void ObjTokeidai_Walls_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
+void ObjTokeidai_TerminaFieldWalls_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, GlobalContext* globalCtx);
 void ObjTokeidai_SetupTowerOpening(ObjTokeidai* this);
 void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx);
@@ -217,7 +231,7 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
         case OBJ_TOKEIDAI_TYPE_TOWER_WALLS_TERMINA_FIELD:
             Actor_SetScale(&this->actor, 1.0f);
             this->opaDList = gClockTowerTerminaFieldWallsDL;
-            this->actionFunc = ObjTokeidai_Walls_Idle;
+            this->actionFunc = ObjTokeidai_TerminaFieldWalls_Idle;
             break;
         case OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD:
             Actor_SetScale(&this->actor, 0.15f);
@@ -402,15 +416,15 @@ void ObjTokeidai_Counterweight_OpenedIdle(ObjTokeidai* this, GlobalContext* glob
  * the clock tower tip over as the moon crashes into it, but the
  * giant moon mostly obscures it.
  */
-void ObjTokeidai_Walls_Collapse(ObjTokeidai* this, GlobalContext* globalCtx) {
+void ObjTokeidai_TerminaFieldWalls_Collapse(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (this->actor.shape.rot.x < 0x4000) {
         this->actor.shape.rot.x += 0x28;
     }
 }
 
-void ObjTokeidai_Walls_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
+void ObjTokeidai_TerminaFieldWalls_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 1) {
-        this->actionFunc = ObjTokeidai_Walls_Collapse;
+        this->actionFunc = ObjTokeidai_TerminaFieldWalls_Collapse;
     }
 }
 
