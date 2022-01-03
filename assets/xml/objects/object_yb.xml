@@ -6,23 +6,23 @@
         <!-- <Blob Name="object_yb_Blob_002D50" Size="0x30" Offset="0x2D50" /> -->
         <DList Name="gYbPantsAndBellyButtonDL" Offset="0x3400" />
         <!-- the rest of these wont draw in z64Utils  -->
-        <DList Name="object_yb_DL_003610" Offset="0x3610" />
-        <DList Name="object_yb_DL_0037B0" Offset="0x37B0" />
-        <DList Name="object_yb_DL_003900" Offset="0x3900" />
-        <DList Name="object_yb_DL_003BC8" Offset="0x3BC8" />
-        <DList Name="object_yb_DL_003D68" Offset="0x3D68" />
-        <DList Name="object_yb_DL_003EB8" Offset="0x3EB8" />
+        <DList Name="gYbRightThighDL" Offset="0x3610" />
+        <DList Name="gYbRightCalfDL" Offset="0x37B0" />
+        <DList Name="gYbRightFoodDL" Offset="0x3900" />
+        <DList Name="gYbLeftThighDL" Offset="0x3BC8" />
+        <DList Name="gYbLeftCalfDL" Offset="0x3D68" />
+        <DList Name="gYbLeftFootDL" Offset="0x3EB8" />
         <DList Name="object_yb_DL_004108" Offset="0x4108" />
-        <DList Name="object_yb_DL_004110" Offset="0x4110" />
-        <DList Name="object_yb_DL_004310" Offset="0x4310" />
+        <DList Name="gYbUpperTorsoDL" Offset="0x4110" />
+        <DList Name="gYbHeadDL" Offset="0x4310" />
         <DList Name="gYbPonyTailDL" Offset="0x47F8" />
         <DList Name="object_yb_DL_004970" Offset="0x4970" />
-        <DList Name="object_yb_DL_004978" Offset="0x4978" />
-        <DList Name="object_yb_DL_004AA0" Offset="0x4AA0" />
-        <DList Name="object_yb_DL_004BC0" Offset="0x4BC0" />
-        <DList Name="object_yb_DL_004D98" Offset="0x4D98" />
-        <DList Name="object_yb_DL_004EC0" Offset="0x4EC0" />
-        <DList Name="object_yb_DL_004FE0" Offset="0x4FE0" />
+        <DList Name="gYbRightUpperArmDL" Offset="0x4978" />
+        <DList Name="gYbRightForArmDL" Offset="0x4AA0" />
+        <DList Name="gYbRightHandDL" Offset="0x4BC0" />
+        <DList Name="gYbLeftUpperArmDL" Offset="0x4D98" />
+        <DList Name="gYbLeftForArmDL" Offset="0x4EC0" />
+        <DList Name="gYbLeftHandDL" Offset="0x4FE0" />
         <Texture Name="gYbTLUT" OutName="yb_tlut" Format="rgba16" Width="16" Height="16" Offset="0x51B8" />
         <Texture Name="gYbForheadBlotchTex" OutName="yb_forhead_blotch" Format="ci8" Width="8" Height="8" Offset="0x53B8" />
         <Texture Name="gYbPonyTailTex" OutName="yb_ponytail" Format="ci8" Width="8" Height="16" Offset="0x53F8" />
@@ -41,11 +41,11 @@
         <Limb Name="gYbRightFootLimb" Type="Standard" Offset="0x5E34" />
         <Limb Name="gYbLeftThighLimb" Type="Standard" Offset="0x5E40" />
         <Limb Name="gYbLeftCalfLimb" Type="Standard" Offset="0x5E4C" />
-        <Limb Name="gYbRightFoodLimb" Type="Standard" Offset="0x5E58" />
-        <!-- some dont draw -->
+        <Limb Name="gYbRightFootLimb" Type="Standard" Offset="0x5E58" />
         <Limb Name="gYbUnk5E58Limb" Type="Standard" Offset="0x5E64" />
         <Limb Name="gYbHeadLimb" Type="Standard" Offset="0x5E70" />
         <Limb Name="gYbPonyTailLimb" Type="Standard" Offset="0x5E7C" />
+        <!-- DL 0x4108-->
         <Limb Name="object_yb_Standardlimb_005E88" Type="Standard" Offset="0x5E88" />
         <Limb Name="gYbLeftUpperArmLimb" Type="Standard" Offset="0x5E94" />
         <Limb Name="gYbLeftForArmLimb" Type="Standard" Offset="0x5EA0" />
@@ -53,6 +53,7 @@
         <Limb Name="gYbRightUpperArmLimb" Type="Standard" Offset="0x5EB8" />
         <Limb Name="gYbRightForArmLimb" Type="Standard" Offset="0x5EC4" />
         <Limb Name="gYbRightHandLimb" Type="Standard" Offset="0x5ED0" />
+        <!-- DL 0x4970-->
         <Limb Name="object_yb_Standardlimb_005EDC" Type="Standard" Offset="0x5EDC" />
         <Limb Name="gYbUpperTorsoLimb" Type="Standard" Offset="0x5EE8" />
         <Skeleton Name="gYbSkeleton" Type="Flex" LimbType="Standard" Offset="0x5F48" />
