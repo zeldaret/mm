@@ -20,8 +20,8 @@ void func_80BD0410(EnHgo* this, GlobalContext* globalCtx);
 void func_80BD0434(EnHgo* this, GlobalContext* globalCtx);
 void func_80BD049C(EnHgo* this);
 void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx);
-void func_80BD064C(EnHgo* this);
-void func_80BD0660(EnHgo* this, GlobalContext* globalCtx);
+void EnHgo_SetupDialogueHandler(EnHgo* this);
+void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx);
 void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx);
 s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx);
 s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
@@ -81,8 +81,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-// Eye Textures
-static TexturePtr* sEyeTextures[] = {
+static TexturePtr sEyeTextures[] = {
     &D_06011138,
     &D_06011938,
     &D_06012138,
@@ -120,7 +119,7 @@ void EnHgo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80BD03EC(EnHgo* this) {
     this->actor.flags &= ~1;
-    this->actionFunc = &func_80BD0410;
+    this->actionFunc = func_80BD0410;
 }
 
 void func_80BD0410(EnHgo* this, GlobalContext* globalCtx) {
@@ -148,42 +147,42 @@ void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx) {
             if (!(this->unk_310 & 4)) {
                 this->unk_310 |= 4;
                 func_801518B0(globalCtx, 0x15A5, &this->actor);
-                this->unk_314 = 0x15A5;
+                this->unk_314 = 0x15A5; // That mask is a gibdo
 
             } else {
                 func_801518B0(globalCtx, 0x15A7, &this->actor);
-                this->unk_314 = 0x15A7;
+                this->unk_314 = 0x15A7; // can I research that mask
             }
         } else if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
             if (!(this->unk_310 & 1)) {
                 this->unk_310 |= 1;
                 func_801518B0(globalCtx, 0x158F, &this->actor);
-                this->unk_314 = 0x158F;
+                this->unk_314 = 0x158F; // Isn't this a fairy
             } else {
                 func_801518B0(globalCtx, 0x1593, &this->actor);
-                this->unk_314 = 0x1593;
+                this->unk_314 = 0x1593; // Never seen a fairy this lively
             }
         } else {
             if (!(this->unk_310 & 2)) {
                 this->unk_310 |= 2;
                 func_801518B0(globalCtx, 0x1595, &this->actor);
-                this->unk_314 = 0x1595;
+                this->unk_314 = 0x1595; // ghost radar is reacting
             } else {
                 func_801518B0(globalCtx, 0x1598, &this->actor);
-                this->unk_314 = 0x1598;
+                this->unk_314 = 0x1598; // you seem to be similar to a ghost
             }
         }
-        func_80BD064C(this);
+        EnHgo_SetupDialogueHandler(this);
     } else {
         func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
 
-void func_80BD064C(EnHgo* this) {
-    this->actionFunc = func_80BD0660;
+void EnHgo_SetupDialogueHandler(EnHgo* this) {
+    this->actionFunc = EnHgo_DefaultDialogueHandler;
 }
 
-void func_80BD0660(EnHgo* this, GlobalContext* globalCtx) {
+void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx) {
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 0:
         case 1:
@@ -336,7 +335,7 @@ void func_80BD0B8C(EnHgo* this, GlobalContext* globalCtx) {
         this->unk_30E = 0;
     } else {
         this->unk_30C = 0;
-        this->unk_30E = 0x3C;
+        this->unk_30E = 60;
     }
 }
 
