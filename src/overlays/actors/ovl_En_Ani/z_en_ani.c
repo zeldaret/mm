@@ -13,11 +13,13 @@
 
 #define THIS ((EnAni*)thisx)
 
+// clang-format off
 #define ANI_STATE_STANDING  (1 << -1)
-#define ANI_STATE_UNK       (1 << 0)
-#define ANI_STATE_SUFFERING (1 << 1)
-#define ANI_STATE_CLIMBING  (1 << 2)
-#define ANI_STATE_FALLING   (1 << 3)
+#define ANI_STATE_UNK       (1 <<  0)
+#define ANI_STATE_SUFFERING (1 <<  1)
+#define ANI_STATE_CLIMBING  (1 <<  2)
+#define ANI_STATE_FALLING   (1 <<  3)
+// clang-format on
 
 void EnAni_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Destroy(Actor* thisx, GlobalContext* globalCtx);
