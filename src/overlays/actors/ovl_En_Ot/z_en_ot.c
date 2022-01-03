@@ -443,7 +443,7 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
     Vec3f sp38;
 
     this->unk_3A0 += 0x2D8;
-    Matrix_RotateY(this->unk_3A0, 0);
+    Matrix_RotateY(this->unk_3A0, MTXMODE_NEW);
     Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp5C);
     Matrix_GetStateTranslationAndScaledZ(-26.259998f, &sp50);
     this->unk_348.x = this->unk_394.x + sp5C.x;
@@ -467,7 +467,7 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        Matrix_RotateY(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)), 0);
+        Matrix_RotateY(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)), MTXMODE_NEW);
         sp38.x = 1.0f;
         sp38.y = 8.1f;
         sp38.z = 0.0f;
