@@ -1,7 +1,5 @@
 ﻿<Root>
-    <!--
-        Low detail version of the moon used during gameplay (except in Termina Field)
-    -->
+    <!-- Low detail version of the moon used during gameplay (except in Termina Field) -->
     <File Name="object_lodmoon" Segment="6">
         <DList Name="gLodmoonEyesDL" Offset="0x10E0" />
         <DList Name="gLodmoonMoonDL" Offset="0x1158" />
