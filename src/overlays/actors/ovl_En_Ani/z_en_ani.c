@@ -13,6 +13,12 @@
 
 #define THIS ((EnAni*)thisx)
 
+#define ANI_STATE_STANDING  (1 << -1)
+#define ANI_STATE_UNK       (1 << 0)
+#define ANI_STATE_SUFFERING (1 << 1)
+#define ANI_STATE_CLIMBING  (1 << 2)
+#define ANI_STATE_FALLING   (1 << 3)
+
 void EnAni_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -70,14 +76,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 850, ICHAIN_STOP),
 };
-
-typedef enum {
-    /* 0 */ ANI_STATE_STANDING = 0,
-    /* 1 */ ANI_STATE_UNK = 1, // checked for but never set
-    /* 2 */ ANI_STATE_SUFFERING = 2,
-    /* 4 */ ANI_STATE_CLIMBING = 4,
-    /* 8 */ ANI_STATE_FALLING = 8,
-} EnAniStateFlags;
 
 void EnAni_DefaultBlink(EnAni* this) {
     if (DECR(this->blinkTimer) == 0) {
