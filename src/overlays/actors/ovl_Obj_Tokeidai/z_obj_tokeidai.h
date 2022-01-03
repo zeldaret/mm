@@ -58,7 +58,7 @@ typedef struct ObjTokeidai {
                     s32 clockHour;
                     s32 spotlightIntensity;
                 };
-    /* 0x170 */ u16 currentTime;
+    /* 0x170 */ u16 clockTime; // can differ from the actual time, e.g., in cutscenes
     /* 0x174 */ ObjTokeidaiActionFunc actionFunc;
 } ObjTokeidai; // size = 0x178
 

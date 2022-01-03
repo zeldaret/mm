@@ -35,10 +35,11 @@
 
 #define THIS ((ObjTokeidai*)thisx)
 
-#define GET_CURRENT_HOUR(this) ((s32)((this)->currentTime * (24.0f / 0x10000)))
-#define GET_CURRENT_MINUTE(this) ((s32)((this)->currentTime * (360 * 2.0f / 0x10000)) % 30)
-#define GET_CLOCK_FACE_ROTATION(currentHour) ((s16)(currentHour * (0x10000 / 24.0f)))
-#define GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentMinute) ((s16)(currentMinute * (0x10000 * 12.0f / 360)))
+#define GET_CURRENT_CLOCK_HOUR(this) ((s32)((this)->clockTime * (24.0f / 0x10000)))
+#define GET_CURRENT_CLOCK_MINUTE(this) ((s32)((this)->clockTime * (360 * 2.0f / 0x10000)) % 30)
+#define GET_CLOCK_FACE_ROTATION(currentClockHour) ((s16)(currentClockHour * (0x10000 / 24.0f)))
+#define GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentClockMinute) \
+    ((s16)(currentClockMinute * (0x10000 * 12.0f / 360)))
 
 void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -93,21 +94,21 @@ s32 ObjTokeidai_GetTargetSunMoonPanelRotation() {
 }
 
 void ObjTokeidai_SetupClockOrExteriorGear(ObjTokeidai* this) {
-    s32 currentMinute = GET_CURRENT_MINUTE(this);
+    s32 currentClockMinute = GET_CURRENT_CLOCK_MINUTE(this);
 
-    this->clockMinute = currentMinute;
-    this->minuteRingOrExteriorGearRotation = GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentMinute);
+    this->clockMinute = currentClockMinute;
+    this->minuteRingOrExteriorGearRotation = GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentClockMinute);
     this->minuteRingOrExteriorGearRotationalVelocity = 0x3C;
     this->minuteRingOrExteriorGearRotationTimer = 0;
 }
 
 void ObjTokeidai_Clock_Init(ObjTokeidai* this) {
-    s32 currentHour;
+    s32 currentClockHour;
 
     ObjTokeidai_SetupClockOrExteriorGear(this);
-    currentHour = GET_CURRENT_HOUR(this);
-    this->clockHour = currentHour;
-    this->clockFaceRotation = GET_CLOCK_FACE_ROTATION(currentHour);
+    currentClockHour = GET_CURRENT_CLOCK_HOUR(this);
+    this->clockHour = currentClockHour;
+    this->clockFaceRotation = GET_CLOCK_FACE_ROTATION(currentClockHour);
     this->clockFaceRotationalVelocity = 0;
     this->clockFaceRotationTimer = 0;
     this->sunMoonPanelRotationalVelocity = 0;
@@ -214,7 +215,7 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->xRotation = 0;
     this->yTranslation = 0;
     this->clockFaceZTranslation = 0;
-    this->currentTime = gSaveContext.time;
+    this->clockTime = gSaveContext.time;
     this->actor.home.rot.x = 0;
 
     switch (OBJ_TOKEIDAI_TYPE(&this->actor)) {
@@ -271,9 +272,9 @@ void ObjTokeidai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
-    s32 currentMinute = GET_CURRENT_MINUTE(this);
+    s32 currentClockMinute = GET_CURRENT_CLOCK_MINUTE(this);
 
-    if (currentMinute != this->clockMinute) {
+    if (currentClockMinute != this->clockMinute) {
         if (this->minuteRingOrExteriorGearRotationTimer == 8 && playSfx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_SECOND_HAND);
         }
@@ -295,11 +296,11 @@ void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
         }
 
         this->minuteRingOrExteriorGearRotationTimer++;
-        if ((currentMinute == 15 && this->minuteRingOrExteriorGearRotation < 0) ||
-            (currentMinute != 15 &&
-             this->minuteRingOrExteriorGearRotation > GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentMinute))) {
-            this->minuteRingOrExteriorGearRotation = GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentMinute);
-            this->clockMinute = currentMinute;
+        if ((currentClockMinute == 15 && this->minuteRingOrExteriorGearRotation < 0) ||
+            (currentClockMinute != 15 &&
+             this->minuteRingOrExteriorGearRotation > GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentClockMinute))) {
+            this->minuteRingOrExteriorGearRotation = GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentClockMinute);
+            this->clockMinute = currentClockMinute;
             this->minuteRingOrExteriorGearRotationalVelocity = 0x5A;
             this->minuteRingOrExteriorGearRotationTimer = 0;
         }
@@ -616,9 +617,9 @@ s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, GlobalContext* glo
 }
 
 void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, GlobalContext* globalCtx) {
-    s32 currentHour = GET_CURRENT_HOUR(this);
+    s32 currentClockHour = GET_CURRENT_CLOCK_HOUR(this);
 
-    if (currentHour != this->clockHour) {
+    if (currentClockHour != this->clockHour) {
         if (this->clockFaceRotationTimer > 12) {
             // This actually performs the rotation to the next hour
             // for the clock face.
@@ -636,10 +637,10 @@ void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, GlobalContext* globalCtx)
         }
 
         this->clockFaceRotationTimer++;
-        if ((currentHour == 12 && this->clockFaceRotation < 0) ||
-            (currentHour != 12 && this->clockFaceRotation > GET_CLOCK_FACE_ROTATION(currentHour))) {
-            this->clockFaceRotation = GET_CLOCK_FACE_ROTATION(currentHour);
-            this->clockHour = currentHour;
+        if ((currentClockHour == 12 && this->clockFaceRotation < 0) ||
+            (currentClockHour != 12 && this->clockFaceRotation > GET_CLOCK_FACE_ROTATION(currentClockHour))) {
+            this->clockFaceRotation = GET_CLOCK_FACE_ROTATION(currentClockHour);
+            this->clockHour = currentClockHour;
             this->clockFaceRotationalVelocity = 0;
             this->clockFaceRotationTimer = 0;
         }
@@ -677,7 +678,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
 
     if (globalCtx->csCtx.state != 0) {
         this->actor.home.rot.x = 1;
-        this->currentTime += 3;
+        this->clockTime += 3;
         this->actor.draw = ObjTokeidai_Clock_Draw;
     } else {
         if (!(globalCtx->actorCtx.unk5 & 2) &&
@@ -685,7 +686,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
             ActorCutscene_GetCurrentIndex() == -1) {
             this->actor.draw = NULL;
         }
-        this->currentTime = gSaveContext.time;
+        this->clockTime = gSaveContext.time;
         if (this->actor.home.rot.x != 0) {
             ObjTokeidai_Clock_Init(this);
             this->actor.home.rot.x = 0;
@@ -699,7 +700,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
 }
 
 void ObjTokeidai_WallClock_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    this->currentTime = gSaveContext.time;
+    this->clockTime = gSaveContext.time;
     ObjTokeidai_RotateOnMinuteChange(this, true);
     ObjTokeidai_RotateOnHourChange(this, globalCtx);
 }
@@ -710,7 +711,7 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, GlobalContext* globalCtx) 
     } else {
         if (globalCtx->csCtx.state != 0) {
             this->actor.home.rot.x = 1;
-            this->currentTime += 3;
+            this->clockTime += 3;
             this->actor.draw = ObjTokeidai_ExteriorGear_Draw;
         } else {
             if ((globalCtx->actorCtx.unk5 & 2) == 0 &&
@@ -718,7 +719,7 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, GlobalContext* globalCtx) 
                 ActorCutscene_GetCurrentIndex() == -1) {
                 this->actor.draw = NULL;
             }
-            this->currentTime = gSaveContext.time;
+            this->clockTime = gSaveContext.time;
             if (this->actor.home.rot.x != 0) {
                 ObjTokeidai_SetupClockOrExteriorGear(this);
                 this->actor.home.rot.x = 0;
