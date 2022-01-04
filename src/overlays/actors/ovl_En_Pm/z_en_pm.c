@@ -1901,9 +1901,9 @@ void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AFB914[0]));
 
-        POLY_OPA_DISP =
-            SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80AFAA04, func_80AFAA44, func_80AFABAC, &this->actor, POLY_OPA_DISP);
+        POLY_OPA_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                               this->skelAnime.dListCount, func_80AFAA04, func_80AFAA44, func_80AFABAC,
+                                               &this->actor, POLY_OPA_DISP);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

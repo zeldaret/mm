@@ -1762,8 +1762,9 @@ void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80951E30[this->unk_3CE]));
 
-        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      func_809513AC, func_809514BC, func_80951594, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, func_809513AC, func_809514BC, func_80951594,
+                                       &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

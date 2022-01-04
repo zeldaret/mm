@@ -1039,8 +1039,9 @@ void func_80BB3BE0(EnGeg* this, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BB4088[this->unk_23E]));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnGeg_OverrideLimbDraw, EnGeg_PostLimbDraw, EnGeg_UnkDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnGeg_OverrideLimbDraw, EnGeg_PostLimbDraw,
+                                   EnGeg_UnkDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

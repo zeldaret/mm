@@ -98,6 +98,6 @@ void DmNb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmNb* this = THIS;
 
     func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                  NULL, DmNb_UnkActorDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, NULL, NULL, DmNb_UnkActorDraw, &this->actor);
 }

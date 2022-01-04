@@ -37,8 +37,8 @@ EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 unk_1A5) {
 }
 
 Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw,
-                   Actor* actor, Mtx** mtx, Gfx* gfx) {
+                                OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
+                                TransformLimbDraw transformLimbDraw, Actor* actor, Mtx** mtx, Gfx* gfx) {
     StandardLimb* limb;
     Gfx* newDList;
     Gfx* limbDList;
@@ -77,19 +77,19 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
     }
     if (limb->child != LIMB_DONE) {
         gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
-                            transformLimbDraw, actor, mtx, gfx);
+                                         transformLimbDraw, actor, mtx, gfx);
     }
     Matrix_StatePop();
     if (limb->sibling != LIMB_DONE) {
         gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
-                            transformLimbDraw, actor, mtx, gfx);
+                                         transformLimbDraw, actor, mtx, gfx);
     }
     return gfx;
 }
 
 Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw,
-                   Actor* actor, Gfx* gfx) {
+                            OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
+                            TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx) {
     StandardLimb* limb;
     s32 pad;
     Gfx* newDlist;
@@ -137,7 +137,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
 
     if (limb->child != LIMB_DONE) {
         gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
-                            transformLimbDraw, actor, &mtx, gfx);
+                                         transformLimbDraw, actor, &mtx, gfx);
     }
     Matrix_StatePop();
     return gfx;

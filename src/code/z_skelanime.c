@@ -474,8 +474,8 @@ void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* joi
 }
 
 void SkelAnime_DrawTransformFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw,
-                   TransformLimbDrawOpa transformLimbDraw, Actor* actor, Mtx** mtx) {
+                                        OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw,
+                                        TransformLimbDrawOpa transformLimbDraw, Actor* actor, Mtx** mtx) {
     StandardLimb* limb;
     Gfx* newDList;
     Gfx* limbDList;
@@ -523,23 +523,23 @@ void SkelAnime_DrawTransformFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex,
     }
 
     if (limb->child != LIMB_DONE) {
-        SkelAnime_DrawTransformFlexLimbOpa(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw, transformLimbDraw,
-                      actor, mtx);
+        SkelAnime_DrawTransformFlexLimbOpa(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                                           transformLimbDraw, actor, mtx);
     }
 
     Matrix_StatePop();
 
     if (limb->sibling != LIMB_DONE) {
-        SkelAnime_DrawTransformFlexLimbOpa(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw, transformLimbDraw,
-                      actor, mtx);
+        SkelAnime_DrawTransformFlexLimbOpa(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw,
+                                           postLimbDraw, transformLimbDraw, actor, mtx);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void SkelAnime_DrawTransformFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw,
-                   TransformLimbDrawOpa transformLimbDraw, Actor* actor) {
+                                    OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw,
+                                    TransformLimbDrawOpa transformLimbDraw, Actor* actor) {
     StandardLimb* rootLimb;
     s32 pad;
     Gfx* newDList;
@@ -596,8 +596,8 @@ void SkelAnime_DrawTransformFlexOpa(GlobalContext* globalCtx, void** skeleton, V
     }
 
     if (rootLimb->child != LIMB_DONE) {
-        SkelAnime_DrawTransformFlexLimbOpa(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
-                      transformLimbDraw, actor, &mtx);
+        SkelAnime_DrawTransformFlexLimbOpa(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw,
+                                           postLimbDraw, transformLimbDraw, actor, &mtx);
     }
 
     Matrix_StatePop();

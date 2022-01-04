@@ -2060,8 +2060,9 @@ void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk_3DC == 14) {
             Matrix_InsertTranslation(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
         }
-        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      EnGo_OverrideLimbDraw, NULL, EnGo_UnkDraw, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, EnGo_OverrideLimbDraw, NULL, EnGo_UnkDraw,
+                                       &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else {
