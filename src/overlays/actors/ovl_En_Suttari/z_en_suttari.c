@@ -689,7 +689,7 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     if (this->unk428 == 10 || this->unk428 == 11 || this->unk428 == 2) {
         return 0;
     }
-    sp48 = (EnDoor*)func_8013BB7C(&this->actor, globalCtx, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+    sp48 = (EnDoor*)SubS_FindNearestActor(&this->actor, globalCtx, ACTORCAT_DOOR, ACTOR_EN_DOOR);
     sp24 = D_80BAE8F8[unkStruct->unk0];
     if ((sp48 != NULL) && (sp24 >= 0)) {
         this->unk404 = func_8013BB34(globalCtx, sp47, sp24);
