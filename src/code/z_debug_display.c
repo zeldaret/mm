@@ -70,7 +70,7 @@ void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, GlobalCo
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, dispObj->color.r, dispObj->color.g, dispObj->color.b, dispObj->color.a);
     Matrix_InsertTranslation(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, MTXMODE_NEW);
     Matrix_Scale(dispObj->scale.x, dispObj->scale.y, dispObj->scale.z, MTXMODE_APPLY);
-    Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
+    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
     Matrix_InsertRotation(dispObj->rot.x, dispObj->rot.y, dispObj->rot.z, MTXMODE_APPLY);
 
     gDPLoadTextureBlock(POLY_XLU_DISP++, texture, G_IM_FMT_I, G_IM_SIZ_8b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -116,7 +116,7 @@ void func_800E992C(GlobalContext* globalCtx, s32 arg1) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C560(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(globalCtx->state.gfxCtx, arg1));
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

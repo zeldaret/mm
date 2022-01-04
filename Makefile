@@ -10,11 +10,17 @@ NON_MATCHING ?= 0
 ORIG_COMPILER ?= 0
 # Keep .mdebug section in build
 KEEP_MDEBUG ?= 0
+# Disassembles all asm from the ROM instead of skipping files which are entirely in C
+FULL_DISASM ?= 0
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
   CPPFLAGS := -DNON_MATCHING
   COMPARE := 0
+endif
+
+ifneq ($(FULL_DISASM), 0)
+  DISASM_FLAGS += --full
 endif
 
 PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -36,12 +42,7 @@ else
   endif
 endif
 
-# Threads to compress and extract assets with, TODO improve later
-ifeq ($(DETECTED_OS),linux)
-  N_THREADS ?= $(shell nproc)
-else
-  N_THREADS ?= 1
-endif
+N_THREADS ?= $(shell nproc)
 
 #### Tools ####
 ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
@@ -103,6 +104,12 @@ else
   CC_CHECK += -m32
 endif
 
+# rom compression flags
+COMPFLAGS := --threads $(N_THREADS)
+ifneq ($(NON_MATCHING),1)
+	COMPFLAGS += --matching
+endif
+
 #### Files ####
 
 # ROM image
@@ -134,9 +141,10 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS),$(wildcard $(dir)/*.c))
 S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
+BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(C_FILES:.c=.o),build/$f) \
-                 $(foreach f,$(wildcard baserom/*),build/$f.o)
+                 $(foreach f,$(BASEROM_FILES),build/$f.o)
 
 # Automatic dependency files
 # (Only asm_processor dependencies are handled for now)
@@ -159,6 +167,8 @@ build/src/libultra/flash/%.o: OPTFLAGS := -g
 build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 build/src/code/audio/%.o: OPTFLAGS := -O2
+
+build/assets/%.o: OPTFLAGS := 
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
@@ -211,7 +221,7 @@ $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
 
 $(ROMC): uncompressed
-	python3 tools/z64compress_wrapper.py --mb 32 --matching --threads $(N_THREADS) $(ROM) $@ $(ELF) build/$(SPEC)
+	python3 tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
 
 $(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
@@ -237,12 +247,12 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
-	python3 extract_assets.py -t $(N_THREADS)
+	python3 extract_assets.py -j $(N_THREADS)
 
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py -j $(N_THREADS)
+	python3 tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
 
 diff-init: uncompressed
 	$(RM) -rf expected/
@@ -277,7 +287,7 @@ build/baserom/%.o: baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
 build/data/%.o: data/%.s
-	iconv --from UTF-8 --to EUC-JP $< | $(AS) $(ASFLAGS) -o $@
+	$(AS) $(ASFLAGS) $< -o $@
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<

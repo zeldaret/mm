@@ -70,7 +70,9 @@
         <Texture Name="object_tru_Tex_018E20" OutName="tex_018E20" Format="rgba16" Width="16" Height="8" Offset="0x18E20" />
         <Texture Name="object_tru_Tex_018F20" OutName="tex_018F20" Format="ci8" Width="8" Height="8" Offset="0x18F20" />
         <Texture Name="object_tru_Tex_018F60" OutName="tex_018F60" Format="ci8" Width="8" Height="8" Offset="0x18F60" />
-        <!-- <Blob Name="object_tru_Blob_018FA0" Size="0x1800" Offset="0x18FA0" /> -->
+        <Texture Name="object_tru_Tex_018FA0" OutName="tex_018FA0" Format="rgba16" Width="32" Height="32" Offset="0x18FA0" />
+        <Texture Name="object_tru_Tex_0197A0" OutName="tex_0197A0" Format="rgba16" Width="32" Height="32" Offset="0x197A0" />
+        <Texture Name="object_tru_Tex_019FA0" OutName="tex_019FA0" Format="rgba16" Width="32" Height="32" Offset="0x19FA0" />
         <Texture Name="object_tru_Tex_01A7A0" OutName="tex_01A7A0" Format="rgba16" Width="8" Height="8" Offset="0x1A7A0" />
         <DList Name="object_tru_DL_01A820" Offset="0x1A820" />
         <DList Name="object_tru_DL_01A830" Offset="0x1A830" />

@@ -6,6 +6,7 @@
 
 #include "z_en_dno.h"
 #include "overlays/actors/ovl_Bg_Crace_Movebg/z_bg_crace_movebg.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000039
 
@@ -1005,7 +1006,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         frames = globalCtx->gameplayFrames;
         Matrix_MultiplyVector3fByState(&D_80A73B40, &sp84);
         func_80A711D0(this, globalCtx, &sp84);
-        Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
         Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY);
         Matrix_InsertTranslation(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
         gfxXlu = func_8012C2B4(POLY_XLU_DISP);
@@ -1015,7 +1016,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(&gfxXlu[2], 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(&gfxXlu[3], 255, 0, 0, 0);
-        gSPDisplayList(&gfxXlu[4], D_0407D590);
+        gSPDisplayList(&gfxXlu[4], gGameplayKeepDrawFlameDL);
 
         POLY_XLU_DISP = gfxXlu + 5;
 
