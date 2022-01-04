@@ -38,97 +38,97 @@ void func_808670F0(EnDoor*, GlobalContext*);
 void func_80866A5C(EnDoor*, GlobalContext*);
 
 // I have no idea what this is
-static s32 D_808675D0[] = {
+s32 D_808675D0[] = {
     0x0C00030E, 0x02060017, 0x00080200, 0x00060002, 0x09070500,
 };
 
-static s32 D_808675E4[] = {
+s32 D_808675E4[] = {
     0x0F090047, 0x0F0C0015, 0x0C000113, 0x11000F0D, 0x000A0F0F, 0x00070F00, 0x00020909,
     0x0509080C, 0x00021900, 0x1C08070F, 0x0D000209, 0x09050F0D, 0x00EA0F11, 0x00E70F00,
     0x00E20909, 0x0F0D00DC, 0x0F0D00D9, 0x0F120001, 0x05090909, 0x09000000,
 };
 
-static s32 D_80867634[] = { 0x02060017, 0x0002091C, 0x05000000 };
+s32 D_80867634[] = { 0x02060017, 0x0002091C, 0x05000000 };
 
-static s32 D_80867640[] = { 0x02150016, 0x00010509, 0x0B000000 };
-static s32 D_8086764C[] = { 0x02160005, 0x0002090A, 0x05000000 };
-static s32 D_80867658[] = { 0x0C00020F, 0x001C0802, 0x090C020F, 0x0A160002, 0x090C050C, 0x0003110F,
+s32 D_80867640[] = { 0x02150016, 0x00010509, 0x0B000000 };
+s32 D_8086764C[] = { 0x02160005, 0x0002090A, 0x05000000 };
+s32 D_80867658[] = { 0x0C00020F, 0x001C0802, 0x090C020F, 0x0A160002, 0x090C050C, 0x0003110F,
                             0x0D000D00, 0x33080209, 0x0C0F1600, 0x02090C05, 0x090C0000 };
-static s32 D_80867684 = 0x05000000;
+s32 D_80867684 = 0x05000000;
 
-static s32 D_80867688[] = { 0x0F160002, 0x090F0500 };
+s32 D_80867688[] = { 0x0F160002, 0x090F0500 };
 
-static s32 D_80867690[] = { 0x0F160002, 0x09100500 };
+s32 D_80867690[] = { 0x0F160002, 0x09100500 };
 
-static s32 D_80867698[] = { 0x0F160002, 0x09110500 };
+s32 D_80867698[] = { 0x0F160002, 0x09110500 };
 
-static s32 D_808676A0[] = {
+s32 D_808676A0[] = {
     0x020A0015, 0x000F0216, 0x00050002, 0x09120802, 0x02092209, 0x21050000,
 };
 
-static s32 D_808676B8[] = {
+s32 D_808676B8[] = {
     0x0800140C, 0x0003070F, 0x08000105, 0x09130208, 0x00141E02, 0x09130505,
 };
 
-static s32 D_808676D0 = 0x05000000;
+s32 D_808676D0 = 0x05000000;
 
-static s32 D_808676D4 = 0x05000000;
+s32 D_808676D4 = 0x05000000;
 
-static s32 D_808676D8[] = {
+s32 D_808676D8[] = {
     0x0C000305,
     0x0F120001,
     0x05091400,
 };
 
-static s32 D_808676E4[] = {
+s32 D_808676E4[] = {
     0x08000209,
     0x16050000,
 };
 
-static s32 D_808676EC = 0x05000000;
+s32 D_808676EC = 0x05000000;
 
-static s32 D_808676F0[] = {
+s32 D_808676F0[] = {
     0x0C000305, 0x0F0A0007, 0x05020A00, 0x1400F909, 0x15000000,
 };
 
-static s32 D_80867704 = 0x05000000;
-static s32 D_80867708 = 0x05000000;
-static s32 D_8086770C = 0x05000000;
-static s32 D_80867710 = 0x05000000;
+s32 D_80867704 = 0x05000000;
+s32 D_80867708 = 0x05000000;
+s32 D_8086770C = 0x05000000;
+s32 D_80867710 = 0x05000000;
 
-static s32 D_80867714[] = {
+s32 D_80867714[] = {
     0x0F140002,
     0x09170500,
 };
 
-static s32 D_8086771C[] = {
+s32 D_8086771C[] = {
     0x0C000107, 0x0F021E02, 0x0918050C, 0x0003FB0F, 0x1400F709, 0x0C000000,
 };
 
-static s32 D_80867734[] = {
+s32 D_80867734[] = {
     0x0F140002,
     0x09190500,
 };
 
-static s32 D_8086773C[] = {
+s32 D_8086773C[] = {
     0x0F140002,
     0x091A0500,
 };
 
-static s32 D_80867744[] = {
+s32 D_80867744[] = {
     0x0C000204, 0x00638006, 0x0F140008, 0x091B0F12, 0x0002091B, 0x05000000,
 };
 
-static s32 D_8086775C[] = {
+s32 D_8086775C[] = {
     0x00342017, 0x004B2013, 0x000E0402, 0x091D003B, 0x0108003D, 0x0202091E, 0x091F0505,
 };
 
-static s32 D_80867778 = 0x09200000;
-static s32 D_8086777C = 0x05000000;
-static s32 D_80867780 = 0x05000000;
-static s32 D_80867784[] = { 0x0F160002, 0x09230500 };
+s32 D_80867778 = 0x09200000;
+s32 D_8086777C = 0x05000000;
+s32 D_80867780 = 0x05000000;
+s32 D_80867784[] = { 0x0F160002, 0x09230500 };
 
-static s32 D_8086778C[] = {
+s32 D_8086778C[] = {
     &D_808675D0, &D_808675E4, &D_80867634, &D_80867640, &D_8086764C, &D_80867658, &D_80867684, &D_80867688,
     &D_80867690, &D_80867698, &D_808676A0, &D_808676B8, &D_808676D0, &D_808676D4, &D_808676D8, &D_808676E4,
     &D_808676EC, &D_808676F0, &D_80867704, &D_80867708, &D_8086770C, &D_80867710, &D_80867714, &D_8086771C,
@@ -245,16 +245,15 @@ static Gfx* D_808679A4[14][2] = {
 void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     s32 objectBankIndex;
-    EnDoorInfo* objectInfo;
+    EnDoorInfo* objectInfo = sObjInfo;
     EnDoor* this = THIS;
     s32 i;
 
-    objectInfo = sObjInfo;
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
-    this->unk_1A4 = (thisx->params >> 7) & 7;
+    this->unk_1A4 = ENDOOR_GET_PARAMS_7(thisx);
 
-    this->switchFlag = this->dyna.actor.params & 0x7F;
+    this->switchFlag = ENDOOR_GET_PARAMS_7F(thisx);
     if ((this->unk_1A4 == 7) && (this->switchFlag == 0)) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gDoorCol);
@@ -269,7 +268,7 @@ void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 break;
             }
         }
-        if ((i >= ARRAY_COUNT(sObjInfo) - 34) && (Object_GetIndex(&globalCtx->objectCtx, 2) >= 0)) {
+        if ((i >= ARRAY_COUNT(sObjInfo) - 34) && (Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
             objectInfo++;
         }
     }
@@ -309,7 +308,7 @@ void EnDoor_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80866A5C(EnDoor* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->requiredObjBankIndex) != 0) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->requiredObjBankIndex)) {
         this->dyna.actor.objBankIndex = this->requiredObjBankIndex;
         this->actionFunc = func_80866B20;
         this->dyna.actor.world.rot.y = 0;
@@ -317,8 +316,8 @@ void func_80866A5C(EnDoor* this, GlobalContext* globalCtx) {
             if (!Flags_GetSwitch(globalCtx, this->switchFlag)) {
                 this->unk_1A6 = 10;
             }
-        } else if ((this->unk_1A4 == 4) && (Actor_XZDistanceBetweenActors(
-                                                &this->dyna.actor, globalCtx->actorCtx.actorList[2].first) > 120.0f)) {
+        } else if ((this->unk_1A4 == 4) &&
+                   (Actor_XZDistanceBetweenActors(&this->dyna.actor, &GET_PLAYER(globalCtx)->actor) > 120.0f)) {
             this->actionFunc = func_8086704C;
             this->dyna.actor.world.rot.y = -0x1800;
         }
@@ -332,7 +331,6 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
     Player* player;
     Vec3f playerPosRelToDoor;
     struct_80133038_arg2 sp30;
-
     s16 temp_a2;
     s16 yawDiff;
     s32 temp_a1_2;
@@ -424,11 +422,11 @@ void func_80866F94(EnDoor* this, GlobalContext* globalCtx) {
         } else {
             direction = -1;
         }
-        if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, direction * 0x3E80, 0x7D0) != 0) {
+        if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, direction * 0x3E80, 0x7D0)) {
             Math_StepToC(&this->unk_1A7, 0, 1);
         }
     } else {
-        if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, 0, 0x7D0) != 0) {
+        if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, 0, 0x7D0)) {
             this->actionFunc = func_80866B20;
             Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_AUTO_DOOR_CLOSE);
         }
@@ -444,13 +442,13 @@ void func_8086704C(EnDoor* this, GlobalContext* globalCtx) {
 void func_80867080(EnDoor* this, GlobalContext* globalCtx) {
     if (this->dyna.actor.xzDistToPlayer < 120.0f) {
         this->actionFunc = func_808670F0;
-    } else if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, -0x1800, 0x100) != 0) {
+    } else if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, -0x1800, 0x100)) {
         this->actionFunc = func_8086704C;
     }
 }
 
 void func_808670F0(EnDoor* this, GlobalContext* globalCtx) {
-    if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, 0, 0x700) != 0) {
+    if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, 0, 0x700)) {
         Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
         this->actionFunc = func_80866B20;
     }
@@ -472,10 +470,8 @@ void func_80867144(EnDoor* this, GlobalContext* globalCtx) {
                     EffectSsBubble_Spawn(globalCtx, &this->dyna.actor.world.pos, 60.0, 100.0f, 50.0f, 0.15f);
                 }
             }
-        } else {
-            if (Animation_OnFrame(&this->skelAnime, sAnimCloseFrames[this->animIndex])) {
-                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
-            }
+        } else if (Animation_OnFrame(&this->skelAnime, sAnimCloseFrames[this->animIndex])) {
+            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
         }
     }
 }
@@ -488,17 +484,16 @@ void EnDoor_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 s32 EnDoor_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                             Actor* thisx) {
-
     TransitionActorEntry* transitionEntry;
-
     EnDoor* this = THIS;
 
     if (limbIndex == 4) {
-        Gfx** dl;
+        Gfx** dl = D_808679A4[this->dlIndex];
         s16 temp;
         s32 dlIndex;
-        dl = D_808679A4[this->dlIndex];
+        
         transitionEntry = NULL;
+
         if (this->unk_1A4 != 7) {
             transitionEntry = &globalCtx->doorCtx.transitionActorList[(u16)this->dyna.actor.params >> 0xA];
         }
@@ -506,6 +501,7 @@ s32 EnDoor_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         if ((this->unk_1A4 == 7) || (globalCtx->roomCtx.prevRoom.num >= 0) ||
             (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
             s32 pad;
+            
             temp = (this->dyna.actor.shape.rot.y + this->skelAnime.jointTable[3].z + rot->z) -
                    Math_Vec3f_Yaw(&globalCtx->view.eye, &this->dyna.actor.world.pos);
             *dList = (ABS_ALT(temp) < 0x4000) ? dl[0] : dl[1];

@@ -7,6 +7,10 @@ struct EnDoor;
 
 typedef void (*EnDoorActionFunc)(struct EnDoor*, GlobalContext*);
 
+#define ENDOOR_GET_PARAMS_7(thisx) (((thisx)->params >> 7) & 7)
+#define ENDOOR_GET_PARAMS_7F(thisx) (((thisx)->params) & 0x7F)
+
+
 typedef struct EnDoor {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ SkelAnime skelAnime;

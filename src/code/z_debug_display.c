@@ -53,11 +53,11 @@ DebugDispObjectInfo sDebugObjectInfoTable[] = {
 
 void DebugDisplay_DrawObjects(GlobalContext* globalCtx) {
     DebugDispObject* dispObj = sDebugObjectListHead;
-    DebugDispObjectInfo* sObjInfo;
+    DebugDispObjectInfo* objInfo;
 
     while (dispObj != NULL) {
-        sObjInfo = &sDebugObjectInfoTable[dispObj->type];
-        sDebugObjectDrawFuncTable[sObjInfo->drawType](dispObj, sObjInfo->drawArg, globalCtx);
+        objInfo = &sDebugObjectInfoTable[dispObj->type];
+        sDebugObjectDrawFuncTable[objInfo->drawType](dispObj, objInfo->drawArg, globalCtx);
         dispObj = dispObj->next;
     }
 }
