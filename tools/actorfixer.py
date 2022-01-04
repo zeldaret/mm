@@ -312,6 +312,7 @@ animdict = {
     "func_800F5A8C": "Environment_LerpWeight",
     "func_801A3F54": "Audio_SetCutsceneFlag",
     "func_801518B0": "Message_StartTextbox",
+    "func_800EA0D4": "Cutscene_Start",
     "func_800EA0EC": "Cutscene_End",
     "func_800EDE34": "Cutscene_ActorTranslate",
     "func_800EDF24": "Cutscene_ActorTranslateAndYaw",

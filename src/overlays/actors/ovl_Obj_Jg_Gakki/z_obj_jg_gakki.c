@@ -39,7 +39,7 @@ void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_0601B210, NULL, NULL, NULL, 0);
 
     if (((globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7)) &&
-        (globalCtx->csCtx.unk_12 == 0)) {
+        (globalCtx->csCtx.currentCsIndex == 0)) {
         Animation_Change(&this->skelAnime, &D_0601B1E8, 1.0f, frameCount, frameCount, 2, 0.0f);
     } else if ((globalCtx->sceneNum == SCENE_17SETUGEN) || (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA)) {
         Animation_Change(&this->skelAnime, &D_0601B1E8, 1.0f, 0.0f, frameCount, 2, 0.0f);

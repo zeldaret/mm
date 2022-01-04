@@ -336,20 +336,20 @@ void EnGiant_PlaySound(EnGiant* this) {
 }
 
 void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
-    CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
+    CsCmdActorAction* actorAction = globalCtx->csCtx.actorActions[actionIndex];
     f32 startPosY = actorAction->startPos.y;
     s32 pad[2];
-    f32 endPosY = actorAction->unk18.y;
-    f32 scale = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);
+    f32 endPosY = actorAction->endPos.y;
+    f32 scale = Environment_LerpWeight(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames);
 
     this->actor.world.pos.y = ((endPosY - startPosY) * scale) + startPosY;
 }
 
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
-        EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->actorActionCommand));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->action) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->action;
+    if (Cutscene_CheckActorAction(globalCtx, this->actorActionCommand)) {
+        EnGiant_UpdatePosition(this, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand));
+        if (this->csAction != globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action) {
+            this->csAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -369,10 +369,10 @@ void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* global
 void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
     this->actor.draw = EnGiant_Draw;
 
-    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->actorActionCommand));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->action) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->action;
+    if (Cutscene_CheckActorAction(globalCtx, this->actorActionCommand)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand));
+        if (this->csAction != globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action) {
+            this->csAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);

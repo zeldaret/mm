@@ -259,7 +259,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
                     this->unk_708 = 10;
                     this->unk_704 = 0;
-                    func_800EA0D4(globalCtx, &globalCtx->csCtx);
+                    Cutscene_Start(globalCtx, &globalCtx->csCtx);
                     this->unk_70A = func_801694DC(globalCtx);
                     func_80169590(globalCtx, 0, 1);
                     func_80169590(globalCtx, this->unk_70A, 7);
@@ -389,7 +389,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
                 sp5C->at = this->unk_718;
                 func_80169AFC(globalCtx, this->unk_70A, 0);
                 this->unk_70A = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 func_80165690();
                 gSaveContext.eventInf[6] |= 1;

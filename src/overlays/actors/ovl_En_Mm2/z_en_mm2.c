@@ -64,7 +64,7 @@ void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx) {
  */
 void EnMm2_WaitForRead(EnMm2* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
-        func_801518B0(globalCtx, 0x277B, &this->actor);
+        Message_StartTextbox(globalCtx, 0x277B, &this->actor);
         this->actionFunc = EnMm2_Reading;
     } else if ((this->actor.xzDistToPlayer < 60.0f) && (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx))) {
         func_800B8614(&this->actor, globalCtx, 110.0f);
