@@ -401,12 +401,12 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
             sp64.y = player->actor.world.pos.y + 20.0f;
             sp64.z = (Math_CosS(phi_s3) * 40.0f) + player->actor.world.pos.z;
             if (dropItem00Ids[i] != ITEM00_NO_DROP) {
-                EnItem00* temp_s1_5 = Item_DropCollectible(globalCtx, &sp64, dropItem00Ids[i]);
+                Actor* temp_s1_5 = Item_DropCollectible(globalCtx, &sp64, dropItem00Ids[i]);
 
                 if (temp_s1_5 != NULL) {
-                    temp_s1_5->actor.velocity.y = Rand_ZeroFloat(3.0f) + 6.0f;
-                    temp_s1_5->actor.speedXZ = Rand_ZeroFloat(3.0f) + 3.0f;
-                    temp_s1_5->actor.world.rot.y = phi_s3;
+                    temp_s1_5->velocity.y = Rand_ZeroFloat(3.0f) + 6.0f;
+                    temp_s1_5->speedXZ = Rand_ZeroFloat(3.0f) + 3.0f;
+                    temp_s1_5->world.rot.y = phi_s3;
                 }
                 phi_s3 += (s16)(0x10000 / (spB0 + spAC + phi_s0_2 + spA0 + phi_s2 + spA8));
             }

@@ -382,7 +382,7 @@ extern UNK_PTR D_801AE260[3];
 // extern UNK_TYPE4 D_801AE2BC;
 // extern UNK_TYPE4 D_801AE2CC;
 // extern UNK_TYPE4 D_801AE2DC;
-extern EffectSsInfo EffectSS2Info;
+// extern EffectSsInfo sEffectSsInfo;
 // extern UNK_TYPE1 D_801AE3B0;
 // extern UNK_TYPE1 D_801AE3B4;
 // extern UNK_TYPE4 D_801AE3B8;
@@ -410,7 +410,7 @@ extern EffectSsInfo EffectSS2Info;
 // extern UNK_TYPE1 D_801AE48A;
 // extern UNK_TYPE1 D_801AE48C;
 // extern UNK_TYPE1 D_801AE490;
-extern EffectSsOverlay particleOverlayTable[39];
+extern EffectSsOverlay gParticleOverlayTable[39];
 // extern FlagSetEntry sFlagEntries[];
 // extern s32 sEntryIndex;
 // extern u32 sCurrentBit;
@@ -3895,7 +3895,8 @@ extern Gfx D_04023210[];
 extern UNK_TYPE D_04023288;
 extern Gfx D_04023348[];
 extern Gfx D_04023428[];
-extern UNK_TYPE D_04025850;
+extern Gfx D_04025850[];
+extern Gfx D_04025970[];
 extern UNK_TYPE D_04025DD0;
 extern UNK_TYPE D_040281DC;
 extern UNK_TYPE D_04028FEC;
@@ -3911,8 +3912,8 @@ extern AnimatedMaterial D_0402C980;
 extern AnimatedMaterial D_0402C9F8;
 extern FlexSkeletonHeader D_0402CA98;
 extern Gfx D_0402E510[];
-extern UNK_TYPE D_0402E65C;
-extern UNK_TYPE D_0402F0EC;
+extern AnimationHeader D_0402E65C;
+extern AnimationHeader D_0402F0EC;
 extern Gfx D_04030100[]; // Floor shockwave ring
 extern Gfx D_040301B0[];
 extern UNK_TYPE D_04032270;
@@ -3980,6 +3981,7 @@ extern Gfx D_0406AB30[];
 extern UNK_TYPE D_0406B730;
 extern UNK_TYPE D_0406BB0C;
 extern UNK_TYPE D_0406F380;
+extern Gfx D_040706E0[];
 extern UNK_TYPE D_04073F00;
 extern UNK_TYPE D_04075400;
 extern Gfx D_04075A40[];
@@ -4024,7 +4026,7 @@ extern UNK_TYPE D_0502324C;
 
 // other segments
 extern GfxMasterList D_0E000000;
-
+extern Mtx D_01000000;
 extern UNK_TYPE D_0F000000;
 
 

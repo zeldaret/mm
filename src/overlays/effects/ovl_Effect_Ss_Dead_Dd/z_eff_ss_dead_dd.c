@@ -20,8 +20,6 @@ const EffectSsInit Effect_Ss_Dead_Dd_InitVars = {
 
 #endif
 
-extern UNK_TYPE D_01000000;
-
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Dead_Dd/EffectSsDeadDd_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Dead_Dd/EffectSsDeadDd_Draw.s")
