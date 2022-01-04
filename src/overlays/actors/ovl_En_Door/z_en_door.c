@@ -252,16 +252,16 @@ void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
     objectInfo = sObjInfo;
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
-    this->unk1A4 = (thisx->params >> 7) & 7;
+    this->unk_1A4 = (thisx->params >> 7) & 7;
 
     this->switchFlag = this->dyna.actor.params & 0x7F;
-    if ((this->unk1A4 == 7) && (this->switchFlag == 0)) {
+    if ((this->unk_1A4 == 7) && (this->switchFlag == 0)) {
         DynaPolyActor_Init(&this->dyna, 0);
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gDoorCol);
     }
     SkelAnime_Init(globalCtx, &this->skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable,
                    this->limbTable, 5);
-    if (this->unk1A4 == 5) {
+    if (this->unk_1A4 == 5) {
         objectInfo = &sObjInfo[17 + this->switchFlag];
     } else {
         for (i = 0; i < ARRAY_COUNT(sObjInfo) - 34; i++, objectInfo++) {
@@ -297,7 +297,7 @@ void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
 void EnDoor_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnDoor* this = (EnDoor*)thisx;
 
-    if (this->unk1A4 != 7) {
+    if (this->unk_1A4 != 7) {
         TransitionActorEntry* transitionEntry =
             &globalCtx->doorCtx.transitionActorList[(u16)this->dyna.actor.params >> 0xA];
         if (transitionEntry->id < 0) {
@@ -313,11 +313,11 @@ void func_80866A5C(EnDoor* this, GlobalContext* globalCtx) {
         this->dyna.actor.objBankIndex = this->requiredObjBankIndex;
         this->actionFunc = func_80866B20;
         this->dyna.actor.world.rot.y = 0;
-        if (this->unk1A4 == 1) {
+        if (this->unk_1A4 == 1) {
             if (!Flags_GetSwitch(globalCtx, this->switchFlag)) {
-                this->unk1A6 = 10;
+                this->unk_1A6 = 10;
             }
-        } else if ((this->unk1A4 == 4) && (Actor_XZDistanceBetweenActors(
+        } else if ((this->unk_1A4 == 4) && (Actor_XZDistanceBetweenActors(
                                                &this->dyna.actor, globalCtx->actorCtx.actorList[2].first) > 120.0f)) {
             this->actionFunc = func_8086704C;
             this->dyna.actor.world.rot.y = -0x1800;
@@ -344,11 +344,11 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
     if ((func_800B84D0(&this->dyna.actor, globalCtx) != 0) && (this->dyna.actor.textId == 0x1821)) {
         D_80867BC0[0] = 1;
     }
-    if (this->unk1A1 != 0) {
+    if (this->unk_1A1 != 0) {
         this->actionFunc = func_80867144;
         Animation_PlayOnceSetSpeed(&this->skelAnime, sAnimations[this->animIndex],
                                    (player->stateFlags1 & 0x8000000) ? 0.75f : 1.5f);
-        if (this->unk1A6 != 0) {
+        if (this->unk_1A6 != 0) {
             gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex]--;
             Actor_SetSwitchFlag(globalCtx, this->switchFlag);
             Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
@@ -368,7 +368,7 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
                 player->doorType = 1;
                 player->doorDirection = playerPosRelToDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->dyna.actor;
-                if (this->unk1A6 != 0) {
+                if (this->unk_1A6 != 0) {
                     if (gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex] <= 0) {
                         player->doorType = -1;
                         this->dyna.actor.textId = 0x1802;
@@ -376,26 +376,26 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
                         player->doorTimer = 10;
                     }
                 } else {
-                    if (this->unk1A4 == 4) {
+                    if (this->unk_1A4 == 4) {
                         player->doorType = -1;
                         this->dyna.actor.textId = 0x1800;
-                    } else if ((this->unk1A4 == 0) || (this->unk1A4 == 2) || (this->unk1A4 == 3)) {
+                    } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
                         temp_t0 = (globalCtx->actorCtx.unkC & 0x2AA) >> 1;
                         temp_a2 = D_801AED48[this->switchFlag & 7];
                         temp_a1_2 = globalCtx->actorCtx.unkC & 0x155;
-                        if (((this->unk1A4 == 0) && (((temp_t0 | temp_a1_2) & temp_a2) == 0)) ||
-                            ((this->unk1A4 == 2) && ((temp_a2 & temp_a1_2) == 0)) ||
-                            ((this->unk1A4 == 3) && ((temp_a2 & temp_t0) == 0))) {
+                        if (((this->unk_1A4 == 0) && (((temp_t0 | temp_a1_2) & temp_a2) == 0)) ||
+                            ((this->unk_1A4 == 2) && ((temp_a2 & temp_a1_2) == 0)) ||
+                            ((this->unk_1A4 == 3) && ((temp_a2 & temp_t0) == 0))) {
                             s16 baseTextId = 0x182D;
-                            if (this->unk1A4 == 3) {
+                            if (this->unk_1A4 == 3) {
                                 baseTextId = 0x180D;
-                            } else if (this->unk1A4 == 2) {
+                            } else if (this->unk_1A4 == 2) {
                                 baseTextId = 0x181D;
                             }
                             player->doorType = -1;
                             this->dyna.actor.textId = baseTextId + ((this->switchFlag >> 3) & 0xF);
                         }
-                    } else if ((this->unk1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
+                    } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
                         if (func_80133038(globalCtx, D_8086778C[this->switchFlag], &sp30) != 0) {
                             this->dyna.actor.textId = sp30.unk0 + 0x1800;
 
@@ -405,7 +405,7 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
                 }
                 func_80122F28(player);
             }
-        } else if ((this->unk1A4 == 4) && (this->dyna.actor.xzDistToPlayer > 240.0f)) {
+        } else if ((this->unk_1A4 == 4) && (this->dyna.actor.xzDistToPlayer > 240.0f)) {
             Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
             this->actionFunc = func_80867080;
         }
@@ -460,10 +460,10 @@ void func_80867144(EnDoor* this, GlobalContext* globalCtx) {
     s32 numEffects;
     s32 i;
 
-    if (DECR(this->unk1A6) == 0) {
+    if (DECR(this->unk_1A6) == 0) {
         if (SkelAnime_Update(&this->skelAnime) != 0) {
             this->actionFunc = func_80866B20;
-            this->unk1A1 = 0;
+            this->unk_1A1 = 0;
         } else if (Animation_OnFrame(&this->skelAnime, sAnimOpenFrames[this->animIndex])) {
             Audio_PlayActorSound2(&this->dyna.actor, NA_SE_OC_DOOR_OPEN);
             if (this->skelAnime.playSpeed < 1.5f) {
@@ -499,11 +499,11 @@ s32 EnDoor_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         s32 dlIndex;
         dl = D_808679A4[this->dlIndex];
         transitionEntry = NULL;
-        if (this->unk1A4 != 7) {
+        if (this->unk_1A4 != 7) {
             transitionEntry = &globalCtx->doorCtx.transitionActorList[(u16)this->dyna.actor.params >> 0xA];
         }
         rot->z += this->dyna.actor.world.rot.y;
-        if ((this->unk1A4 == 7) || (globalCtx->roomCtx.prevRoom.num >= 0) ||
+        if ((this->unk_1A4 == 7) || (globalCtx->roomCtx.prevRoom.num >= 0) ||
             (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
             s32 pad;
             temp = (this->dyna.actor.shape.rot.y + this->skelAnime.jointTable[3].z + rot->z) -
@@ -526,7 +526,7 @@ void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->dyna.actor.objBankIndex == this->requiredObjBankIndex) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        if ((this->unk1A4 == 7) && (this->switchFlag == 0)) {
+        if ((this->unk_1A4 == 7) && (this->switchFlag == 0)) {
             func_800BDFC0(globalCtx, gameplay_keep_DL_0221B8);
         } else {
             func_8012C28C(globalCtx->state.gfxCtx);
@@ -540,8 +540,8 @@ void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 gSPDisplayList(POLY_OPA_DISP++, gDoorLeftDL);
             }
         }
-        if (this->unk1A6) {
-            func_800BC8B8(globalCtx, this->unk1A6, 0);
+        if (this->unk_1A6) {
+            func_800BC8B8(globalCtx, this->unk_1A6, 0);
         }
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
