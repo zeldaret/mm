@@ -2933,8 +2933,7 @@ beginseg
     name "ovl_En_Wiz_Fire"
     compress
     include "build/src/overlays/actors/ovl_En_Wiz_Fire/z_en_wiz_fire.o"
-    include "build/data/ovl_En_Wiz_Fire/ovl_En_Wiz_Fire.data.o"
-    include "build/data/ovl_En_Wiz_Fire/ovl_En_Wiz_Fire.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Wiz_Fire/ovl_En_Wiz_Fire_reloc.o"
 endseg
 
 beginseg
