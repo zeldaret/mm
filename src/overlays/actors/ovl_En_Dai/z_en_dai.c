@@ -582,8 +582,8 @@ void EnDai_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B3F598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                  Gfx** gfx) {
+s32 EnDai_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                           Gfx** gfx) {
     EnDai* this = THIS;
 
     if (!(this->unk_1CE & 0x40)) {
@@ -598,10 +598,10 @@ s32 func_80B3F598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         *dList = NULL;
     }
 
-    return 0;
+    return false;
 }
 
-void func_80B3F614(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnDai_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Vec3f D_80B3FE4C = { 0.0f, 0.0f, 0.0f };
 
     EnDai* this = THIS;
@@ -626,10 +626,10 @@ void func_80B3F614(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-void func_80B3F6EC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) {
+void EnDai_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx, Gfx** gfx) {
     EnDai* this = THIS;
 
-    switch (arg1) {
+    switch (limbIndex) {
         case 9:
             if (this->unk_1CE & 0x100) {
                 func_80B3EC84(this);
@@ -670,8 +670,8 @@ void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE58[this->unk_1D6]));
 
     POLY_XLU_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                           this->skelAnime.dListCount, func_80B3F598, func_80B3F614, func_80B3F6EC,
-                                           &this->actor, POLY_XLU_DISP);
+                                           this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
+                                           EnDai_TransformLimbDraw, &this->actor, POLY_XLU_DISP);
     if (this->unk_1CE & 0x40) {
         Matrix_SetCurrentState(&this->unk_18C);
 
@@ -702,8 +702,8 @@ void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE70[this->unk_1D6]));
 
         POLY_OPA_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                               this->skelAnime.dListCount, func_80B3F598, func_80B3F614, func_80B3F6EC,
-                                               &this->actor, POLY_OPA_DISP);
+                                               this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
+                                               EnDai_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
         Matrix_SetCurrentState(&this->unk_18C);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -721,8 +721,8 @@ void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE70[this->unk_1D6]));
 
         POLY_XLU_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                               this->skelAnime.dListCount, func_80B3F598, func_80B3F614, func_80B3F6EC,
-                                               &this->actor, POLY_XLU_DISP);
+                                               this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
+                                               EnDai_TransformLimbDraw, &this->actor, POLY_XLU_DISP);
         Matrix_SetCurrentState(&this->unk_18C);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

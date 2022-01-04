@@ -1525,7 +1525,7 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     }
 }
 
-void EnSuttari_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnSuttari_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnSuttari_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -1542,7 +1542,7 @@ void EnSuttari_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPPipeSync(POLY_OPA_DISP++);
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnSuttari_OverrideLimbDraw, EnSuttari_PostLimbDraw,
-                                       EnSuttari_UnkDraw, &this->actor);
+                                       EnSuttari_TransformLimbDraw, &this->actor);
         if (this->flags1 & 0x80) {
             func_8012C2DC(globalCtx->state.gfxCtx);
             sp5C = this->actor.world.pos;

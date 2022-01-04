@@ -440,7 +440,7 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static void* sEyeTextures[] = { D_060049F0, D_06004E70, D_06005270 };
+    static TexturePtr sEyeTextures[] = { D_060049F0, D_06004E70, D_06005270 };
     EnBji01* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

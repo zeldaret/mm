@@ -401,7 +401,7 @@ void EnHg_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    return 0;
+    return false;
 }
 
 void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {

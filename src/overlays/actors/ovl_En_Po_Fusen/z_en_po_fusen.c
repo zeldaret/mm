@@ -26,7 +26,7 @@ void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx);
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* arg);
+                               Actor* thisx);
 
 extern AnimationHeader D_06000040;
 extern FlexSkeletonHeader D_060024F0;
@@ -271,8 +271,8 @@ void EnPoFusen_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* arg) {
-    EnPoFusen* this = (EnPoFusen*)arg;
+                               Actor* thisx) {
+    EnPoFusen* this = THIS;
     f32 zScale;
     f32 yScale;
     f32 xScale;
@@ -307,19 +307,19 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         rot->y += (s16)(this->limb9Rot * Math_SinS(this->randBaseRotChange));
         rot->z += (s16)(this->limb9Rot * Math_CosS(this->randBaseRotChange));
     }
-    return 0;
+    return false;
 }
 
-void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
+void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-void EnPoFusen_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnPoFusen_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnPoFusen* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
-                                   EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw,
+                                   EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_TransformLimbDraw,
                                    &this->actor);
 }

@@ -1670,13 +1670,13 @@ s32 EnAkindonuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
             *dList = object_dnt_DL_008290;
         }
     }
-    return 0;
+    return false;
 }
 
 void EnAkindonuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-void EnAkindonuts_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnAkindonuts_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnAkindonuts* this = THIS;
 
     if (((this->unk_33E == 1) || (this->unk_33E == 2)) && ((limbIndex == 23) || (limbIndex == 24))) {
@@ -1698,5 +1698,5 @@ void EnAkindonuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnAkindonuts_OverrideLimbDraw, EnAkindonuts_PostLimbDraw,
-                                   EnAkindonuts_UnkActorDraw, &this->actor);
+                                   EnAkindonuts_TransformLimbDraw, &this->actor);
 }

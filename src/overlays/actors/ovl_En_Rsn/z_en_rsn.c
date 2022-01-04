@@ -68,19 +68,19 @@ void EnRsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_800E9250(globalCtx, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.focus.pos);
 }
 
-s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg) {
-    EnRsn* this = (EnRsn*)arg;
+s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnRsn* this = THIS;
 
     if (limbIndex == 14) {
         Matrix_InsertXRotation_s(this->unk1D8.y, MTXMODE_APPLY);
     }
-    return 0;
+    return false;
 }
 
 static Vec3f D_80C26028 = { 0.0f, 0.0f, 0.0f };
 
-void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
-    EnRsn* this = (EnRsn*)arg;
+void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnRsn* this = THIS;
     Vec3f sp18 = D_80C26028;
 
     if (limbIndex == 14) {

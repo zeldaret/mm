@@ -966,7 +966,7 @@ void EnGeg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
 }
 
-void EnGeg_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnGeg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnGeg* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
@@ -1041,7 +1041,7 @@ void func_80BB3BE0(EnGeg* this, GlobalContext* globalCtx) {
 
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnGeg_OverrideLimbDraw, EnGeg_PostLimbDraw,
-                                   EnGeg_UnkDraw, &this->actor);
+                                   EnGeg_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
