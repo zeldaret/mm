@@ -12805,7 +12805,7 @@
     0x80AFDD34:("EnColMan_Destroy",),
     0x80AFDD60:("func_80AFDD60",),
     0x80AFDE00:("func_80AFDE00",),
-    0x80AFDF00:("func_80AFDF00",),
+    0x80AFDF00:("EnColMan_SetHeartPieceCollectedAndKill",),
     0x80AFDF60:("func_80AFDF60",),
     0x80AFDFB4:("func_80AFDFB4",),
     0x80AFE234:("func_80AFE234",),
