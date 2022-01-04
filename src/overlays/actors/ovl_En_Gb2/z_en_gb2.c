@@ -840,8 +840,8 @@ void func_80B11268(EnGb2* this, GlobalContext* globalCtx) {
     if (globalCtx->roomCtx.currRoom.num == 1) {
         this->unk_290 = 0;
         this->unk_282[0] = this->actor.cutscene;
-        if (Flags_GetClear(globalCtx, 2) && Flags_GetClear(globalCtx, 3) &&
-            Flags_GetClear(globalCtx, 4) && Flags_GetClear(globalCtx, 5)) {
+        if (Flags_GetClear(globalCtx, 2) && Flags_GetClear(globalCtx, 3) && Flags_GetClear(globalCtx, 4) &&
+            Flags_GetClear(globalCtx, 5)) {
             this->unk_28A = 0xFF;
             this->unk_26C &= ~0x100;
             this->actor.flags |= 1;
@@ -934,8 +934,8 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
                 return;
             }
 
-            if (Flags_GetClear(globalCtx, 2) && Flags_GetClear(globalCtx, 3) &&
-                Flags_GetClear(globalCtx, 4) && Flags_GetClear(globalCtx, 5)) {
+            if (Flags_GetClear(globalCtx, 2) && Flags_GetClear(globalCtx, 3) && Flags_GetClear(globalCtx, 4) &&
+                Flags_GetClear(globalCtx, 5)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }

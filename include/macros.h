@@ -149,7 +149,8 @@ extern GraphicsContext* __gfxCtx;
         (b) = _temp;      \
     }
 
-#define OVERLAY_RELOCATION_OFFSET(overlayEntry) (intptr_t)((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
+#define OVERLAY_RELOCATION_OFFSET(overlayEntry) ((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
+#define VRAM_PTR_SIZE(entry) ((uintptr_t)((entry)->vramEnd) - (uintptr_t)((entry)->vramStart))
 
 #ifdef __GNUC__
 #define ALIGNED8 __attribute__ ((aligned (8)))

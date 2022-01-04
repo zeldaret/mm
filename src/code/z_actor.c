@@ -3131,7 +3131,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
     ActorOverlay* overlayEntry = &gActorOverlayTable[index];
     ActorInit* actorInit;
 
-    overlaySize = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
+    overlaySize = VRAM_PTR_SIZE(overlayEntry);
 
     if (overlayEntry->vramStart == NULL) {
         actorInit = overlayEntry->initInfo;
@@ -3157,10 +3157,10 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
             overlayEntry->numLoaded = 0;
         }
 
-        actorInit = (void*)(uintptr_t)(
-            (overlayEntry->initInfo != NULL)
-                ? (void*)((uintptr_t)overlayEntry->initInfo - OVERLAY_RELOCATION_OFFSET(overlayEntry))
-                : NULL);
+        actorInit =
+            (uintptr_t)((overlayEntry->initInfo != NULL)
+                            ? (void*)(-OVERLAY_RELOCATION_OFFSET(overlayEntry) + (uintptr_t)overlayEntry->initInfo)
+                            : NULL);
     }
 
     return actorInit;

@@ -172,7 +172,7 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
     }
 
     sEffectSsInfo.searchIndex = index + 1;
-    overlaySize = (uintptr_t)entry->vramEnd - (uintptr_t)entry->vramStart;
+    overlaySize = VRAM_PTR_SIZE(entry);
 
     if (entry->vramStart == NULL) {
         initInfo = entry->initInfo;
@@ -187,12 +187,8 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
             Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
         }
 
-        // initInfo = (void*)(uintptr_t)(
-        //     entry->initInfo != NULL ? (void*)((uintptr_t)entry->initInfo - OVERLAY_RELOCATION_OFFSET(entry)) : NULL);
-        initInfo = (u32)((entry->initInfo != NULL)
-                             ? (EffectSsInit*)(-((uintptr_t)entry->vramStart - (uintptr_t)entry->loadedRamAddr) +
-                                               (uintptr_t)entry->initInfo)
-                             : NULL);
+        initInfo = (uintptr_t)(
+            (entry->initInfo != NULL) ? (void*)(-OVERLAY_RELOCATION_OFFSET(entry) + (uintptr_t)entry->initInfo) : NULL);
     }
 
     if (initInfo->init != NULL) {
