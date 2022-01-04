@@ -370,7 +370,7 @@ void func_808F38F8(EnIn* this, GlobalContext* globalCtx) {
     this->unk4A4 = NULL;
     while (true) {
         //! @bug: Infinite loop if there is only one ACTOR_EN_IN
-        this->unk4A4 = (EnIn*)func_ActorCategoryIterateById(globalCtx, &this->unk4A4->actor, ACTORCAT_NPC, ACTOR_EN_IN);
+        this->unk4A4 = (EnIn*)SubS_FindActor(globalCtx, &this->unk4A4->actor, ACTORCAT_NPC, ACTOR_EN_IN);
         if (this->unk4A4 != NULL && this->unk4A4 != this) {
             break;
         }

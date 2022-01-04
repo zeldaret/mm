@@ -18,6 +18,7 @@ struct Lights;
 struct CollisionPoly;
 
 struct EnBox;
+struct EnDoor;
 
 typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* globalCtx);
 

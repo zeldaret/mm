@@ -12,11 +12,17 @@ ORIG_COMPILER ?= 0
 WERROR ?= 0
 # Keep .mdebug section in build
 KEEP_MDEBUG ?= 0
+# Disassembles all asm from the ROM instead of skipping files which are entirely in C
+FULL_DISASM ?= 0
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
   CPPFLAGS := -DNON_MATCHING
   COMPARE := 0
+endif
+
+ifneq ($(FULL_DISASM), 0)
+  DISASM_FLAGS += --full
 endif
 
 PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -252,7 +258,7 @@ setup:
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py -j $(N_THREADS)
+	python3 tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
 
 diff-init: uncompressed
 	$(RM) -rf expected/

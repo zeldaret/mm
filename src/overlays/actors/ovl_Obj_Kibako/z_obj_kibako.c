@@ -5,6 +5,8 @@
  */
 
 #include "z_obj_kibako.h"
+#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "objects/object_kibako/object_kibako.h"
 
 #define FLAGS 0x04000010
 
@@ -66,14 +68,11 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 30, 0, { 0, 0, 0 } },
 };
 
-extern Gfx D_06001A70[];
-extern Gfx D_06001180[];
-
 static s16 sObjectIdList[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
 
-static Gfx* sKakeraDisplayLists[] = { D_05007980, D_06001A70 };
+static Gfx* sKakeraDisplayLists[] = { gameplay_dangeon_keep_DL_007980, gSmallCrateFragmentDL };
 
-static Gfx* sDisplayLists[] = { D_05007890, D_06001180 };
+static Gfx* sDisplayLists[] = { gameplay_dangeon_keep_DL_007890, gSmallCrateDL };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_CONTINUE),
