@@ -36,9 +36,112 @@ EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 unk_1A5) {
     return door;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013A860.s")
+Gfx* func_8013A860(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
+                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkActorDraw,
+                   Actor* actor, Mtx** mtx, Gfx* gfx) {
+    StandardLimb* limb;
+    Gfx* newDList;
+    Gfx* limbDList;
+    Vec3f pos;
+    Vec3s rot;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AB00.s")
+    Matrix_StatePush();
+    limb = (StandardLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]);
+    limbIndex++;
+    rot = jointTable[limbIndex];
+    pos.x = limb->jointPos.x;
+    pos.y = limb->jointPos.y;
+    pos.z = limb->jointPos.z;
+    newDList = limbDList = limb->dList;
+
+    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, limbIndex, &newDList, &pos, &rot, actor, &gfx)) {
+        Matrix_JointPosition(&pos, &rot);
+        Matrix_StatePush();
+
+        //! @bug Does not check unkDraw is not NULL before calling it.
+        unkActorDraw(globalCtx, limbIndex, actor, &gfx);
+
+        if (newDList != NULL) {
+            Matrix_ToMtx(*mtx);
+            gSPMatrix(gfx++, *mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(gfx++, newDList);
+            (*mtx)++;
+        } else if (limbDList != NULL) {
+            Matrix_ToMtx(*mtx);
+            (*mtx)++;
+        }
+        Matrix_StatePop();
+    }
+    if (postLimbDraw != NULL) {
+        postLimbDraw(globalCtx, limbIndex, &limbDList, &rot, actor, &gfx);
+    }
+    if (limb->child != LIMB_DONE) {
+        gfx = func_8013A860(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw, unkActorDraw,
+                            actor, mtx, gfx);
+    }
+    Matrix_StatePop();
+    if (limb->sibling != LIMB_DONE) {
+        gfx = func_8013A860(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                            unkActorDraw, actor, mtx, gfx);
+    }
+    return gfx;
+}
+
+Gfx* func_8013AB00(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
+                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkActorDraw,
+                   Actor* actor, Gfx* gfx) {
+    StandardLimb* limb;
+    s32 pad;
+    Gfx* newDlist;
+    Gfx* limbDList;
+    Vec3f pos;
+    Vec3s rot;
+    Mtx* mtx = (Mtx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(dListCount * sizeof(Mtx)));
+
+    if (skeleton == NULL) {
+        return NULL;
+    }
+
+    gSPSegment(gfx++, 0x0D, mtx);
+    Matrix_StatePush();
+    limb = (StandardLimb*)Lib_SegmentedToVirtual(skeleton[0]);
+    pos.x = jointTable->x;
+    pos.y = jointTable->y;
+    pos.z = jointTable->z;
+    rot = jointTable[1];
+    newDlist = limb->dList;
+    limbDList = limb->dList;
+
+    if (overrideLimbDraw == NULL || !overrideLimbDraw(globalCtx, 1, &newDlist, &pos, &rot, actor, &gfx)) {
+        Matrix_JointPosition(&pos, &rot);
+        Matrix_StatePush();
+
+        //! @bug Does not check unkDraw is not NULL before calling it.
+        unkActorDraw(globalCtx, 1, actor, &gfx);
+
+        if (newDlist != NULL) {
+            Matrix_ToMtx(mtx);
+            gSPMatrix(gfx++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(gfx++, newDlist);
+            mtx++;
+        } else if (limbDList != NULL) {
+            Matrix_ToMtx(mtx);
+            mtx++;
+        }
+        Matrix_StatePop();
+    }
+
+    if (postLimbDraw != NULL) {
+        postLimbDraw(globalCtx, 1, &limbDList, &rot, actor, &gfx);
+    }
+
+    if (limb->child != LIMB_DONE) {
+        gfx = func_8013A860(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw, unkActorDraw,
+                            actor, &mtx, gfx);
+    }
+    Matrix_StatePop();
+    return gfx;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AD6C.s")
 
