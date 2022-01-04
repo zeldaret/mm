@@ -3,7 +3,7 @@
 import argparse, ast, math, os, re, struct
 import bisect
 from mips_isa import *
-from multiprocessing import Pool, Manager
+from multiprocessing import *
 from pathlib import Path
 
 parser = argparse.ArgumentParser()
@@ -2335,7 +2335,7 @@ for segment in files_spec:
 
 del files_spec[:]
 
-pool = Pool(jobs)
+pool = get_context("fork").Pool(jobs)
 # Find symbols for each segment
 for section in all_sections:
     if section[-1]["name"] == "makerom":
@@ -2371,7 +2371,7 @@ for section in all_sections:
 pool.close()
 pool.join()
 
-pool = Pool(jobs)
+pool = get_context("fork").Pool(jobs)
 for section in all_sections:
     if section[-1]["type"] == "makerom":
         continue
@@ -2396,7 +2396,7 @@ for section in all_sections:
 vrom_addrs = {addr for _, addr in vrom_variables}
 
 # Textual disassembly for each segment
-with Pool(jobs) as p:
+with get_context("fork").Pool(jobs) as p:
     p.map(
         disassemble_segment,
         [
