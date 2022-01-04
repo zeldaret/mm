@@ -12276,7 +12276,7 @@
     0x80AD8A48:("func_80AD8A48",),
     0x80AD8AF8:("func_80AD8AF8",),
     0x80AD8BC0:("EnKame_Draw",),
-    0x80AD8CEC:("func_80AD8CEC",),
+    0x80AD8CEC:("Enkame_OverrideLimbDraw",),
     0x80AD8D64:("func_80AD8D64",),
     0x80AD9240:("func_80AD9240",),
     0x80AD92FC:("func_80AD92FC",),
