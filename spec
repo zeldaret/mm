@@ -5107,7 +5107,6 @@ beginseg
     name "ovl_En_Bomjima"
     compress
     include "build/src/overlays/actors/ovl_En_Bomjima/z_en_bomjima.o"
-    include "build/data/ovl_En_Bomjima/ovl_En_Bomjima.data.o"
     include "build/data/ovl_En_Bomjima/ovl_En_Bomjima.reloc.o"
 endseg
 
