@@ -537,6 +537,14 @@ void SkelAnime_DrawTransformFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex,
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+/**
+ * Draw all limbs of type `StandardLimb` in a given flexible skeleton to the polyOpa buffer
+ * Limbs in a flexible skeleton have meshes that can stretch to line up with other limbs.
+ * An array of matrices is dynamically allocated so each limb can access any transform to ensure its meshes line up.
+ *
+ * Also makes use of a `TransformLimbDraw`, which transforms limbs based on world coordinates, as opposed to local limb
+ * coordinates.
+ */
 void SkelAnime_DrawTransformFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
                                     OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw,
                                     TransformLimbDrawOpa transformLimbDraw, Actor* actor) {
