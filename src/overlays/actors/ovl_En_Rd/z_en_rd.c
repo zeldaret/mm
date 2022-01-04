@@ -1,7 +1,7 @@
 /*
  * File: z_en_rd.c
  * Overlay: ovl_En_Rd
- * Description: Dancing Redead/Gibdo
+ * Description: Redead/Gibdo (able to dance)
  */
 
 #include "z_en_rd.h"

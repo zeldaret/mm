@@ -20,7 +20,7 @@ typedef struct EnDinofos {
     /* 0x28C */ s16 unk_28C;
     /* 0x28E */ s16 unk_28E;
     /* 0x290 */ s16 unk_290;
-    /* 0x290 */ s16 unk_292;
+    /* 0x292 */ s16 unk_292;
     /* 0x294 */ UNK_TYPE1 unk_294[4];
     /* 0x298 */ s16 subCamId;
     /* 0x29A */ Vec3s unk_29A;

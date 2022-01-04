@@ -506,7 +506,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
     Vec3f sp30;
 
     sp3E = Actor_YawToPoint(&player->actor, &this->unk_394);
-    Matrix_RotateY(ADD16(sp3E, 0x4000), 0);
+    Matrix_RotateY(ADD16(sp3E, 0x4000), MTXMODE_NEW);
     if (this->unk_33C == 2) {
         Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp30);
     } else {
@@ -1132,7 +1132,7 @@ void func_80B5E078(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
             sp54.x = arg1->unk_30;
             sp54.y = arg1->unk_34;
             sp54.z = 0.0f;
-            Matrix_RotateY(temp, 0);
+            Matrix_RotateY(temp, MTXMODE_NEW);
             Matrix_MultiplyVector3fByState(&sp54, &arg1->unk_0C);
             Math_Vec3f_Sum(&arg1->unk_0C, &arg1->unk_50, &arg1->unk_0C);
             arg1->unk_4C--;

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_elforg.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -72,7 +73,8 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->flags = 0;
     this->direction = 0;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0402CA98, &D_0402B494, this->jointTable, this->jointTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gStrayFairySkel, &gStrayFairyFlyingAnim, this->jointTable,
+                       this->jointTable, STRAY_FAIRY_LIMB_MAX);
     this->skelAnime.playSpeed = 1.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     this->actor.shape.shadowAlpha = 255;
@@ -575,13 +577,14 @@ s32 EnElforg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     EnElforg* this = THIS;
 
     if (this->direction < 0) {
-        if (limbIndex == 9) {
+        if (limbIndex == STRAY_FAIRY_LIMB_LEFT_FACING_HEAD) {
             *dList = NULL;
         }
-    } else if (limbIndex == 1) {
+    } else if (limbIndex == STRAY_FAIRY_LIMB_RIGHT_FACING_HEAD) {
         *dList = NULL;
     }
-    return 0;
+
+    return false;
 }
 
 void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -589,25 +592,26 @@ void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnElforg* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     func_8012C2DC(globalCtx->state.gfxCtx);
     switch (this->area) {
         case STRAY_FAIRY_AREA_WOODFALL:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C908));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gStrayFairyWoodfallTexAnim));
             break;
         case STRAY_FAIRY_AREA_SNOWHEAD:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C890));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gStrayFairySnowheadTexAnim));
             break;
         case STRAY_FAIRY_AREA_GREAT_BAY:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C980));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gStrayFairyGreatBayTexAnim));
             break;
         case STRAY_FAIRY_AREA_STONE_TOWER:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C9F8));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gStrayFairyStoneTowerTexAnim));
             break;
         default:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C818));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gStrayFairyClockTownTexAnim));
             break;
     }
-    Matrix_InsertMatrix(&globalCtx->mf_187FC, 1);
+    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
     POLY_XLU_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

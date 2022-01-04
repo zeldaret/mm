@@ -12,7 +12,6 @@
 #define NUM_CAMS 4
 #define CAM_ID_MAIN 0
 #define CAM_ID_SUB_FIRST 1
-#define CAM_ID_MAIN 0
 #define CAM_ID_NONE -1
 #define CAM_ID_ACTIVE -1
 

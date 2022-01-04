@@ -1726,7 +1726,7 @@ s16 Camera_CalcDefaultYaw(Camera* camera, s16 yaw, s16 target, f32 attenuationYa
 
     // Attenuation 1 based on YawDiffToTarget.
     attenuationYawDiff = Camera_QuadraticAttenuation(attenuationYawDiffRange, attenuationYawDiffParam);
-    attenuationYawDiffAdj = F32_LERPIMP(attenuationYawDiff, 1.0f, attenuationYawDiffInterpParam);
+    attenuationYawDiffAdj = LERPIMP(attenuationYawDiff, 1.0f, attenuationYawDiffInterpParam);
     attenuationYawDiffAdj = CLAMP_MIN(attenuationYawDiffAdj, 0.0f);
 
     // attenuation 2 based on SpeedRatio
@@ -4302,9 +4302,9 @@ s32 Camera_KeepOn3(Camera* camera) {
             spA0.pitch = 0;
         }
 
-        swingAngle = F32_LERPIMP(keep3->unk_14, keep3->unk_18, phi_f14);
+        swingAngle = LERPIMP(keep3->unk_14, keep3->unk_18, phi_f14);
         sp98.pitch = DEGF_TO_BINANG(swingAngle) + ((s16) - (spA0.pitch * keep3->unk_1C));
-        swingAngle = F32_LERPIMP(keep3->unk_0C, keep3->unk_10, phi_f14);
+        swingAngle = LERPIMP(keep3->unk_0C, keep3->unk_10, phi_f14);
 
         phi_a3 = DEGF_TO_BINANG(swingAngle);
 
@@ -5790,7 +5790,7 @@ s32 Camera_Demo2(Camera* camera) {
             atOffset.yaw = (atOffset.yaw * anim->yawDir) + playerPosRot->rot.y;
             OLib_VecSphAddToVec3f(at, &anim->initialAt, &atOffset);
 
-            atOffset.r = F32_LERPIMP(sp4C[0].r, sp4C[1].r, sp60);
+            atOffset.r = LERPIMP(sp4C[0].r, sp4C[1].r, sp60);
             atOffset.pitch = BINANG_LERPIMP(sp4C[0].pitch, sp4C[1].pitch, sp60);
             atOffset.yaw = BINANG_LERPIMP(sp4C[0].yaw, sp4C[1].yaw, sp60);
 
@@ -5803,16 +5803,16 @@ s32 Camera_Demo2(Camera* camera) {
         case 2:
             sp60 = (anim->animFrame - 148) * 0.1f;
 
-            sp64.x = F32_LERPIMP(sp48[1].x, sp48[2].x, sp60);
-            sp64.y = F32_LERPIMP((sp48[1].y - playerHeight), sp48[2].y, sp60);
+            sp64.x = LERPIMP(sp48[1].x, sp48[2].x, sp60);
+            sp64.y = LERPIMP((sp48[1].y - playerHeight), sp48[2].y, sp60);
             sp64.y += playerHeight;
-            sp64.z = F32_LERPIMP(sp48[1].z, sp48[2].z, sp60);
+            sp64.z = LERPIMP(sp48[1].z, sp48[2].z, sp60);
 
             OLib_Vec3fToVecSphGeo(&atOffset, &sp64);
             atOffset.yaw = (atOffset.yaw * anim->yawDir) + playerPosRot->rot.y;
             OLib_VecSphAddToVec3f(at, &anim->initialAt, &atOffset);
 
-            atOffset.r = F32_LERPIMP(sp4C[1].r, sp4C[2].r, sp60);
+            atOffset.r = LERPIMP(sp4C[1].r, sp4C[2].r, sp60);
             atOffset.pitch = BINANG_LERPIMP(sp4C[1].pitch, sp4C[2].pitch, sp60);
             atOffset.yaw = BINANG_LERPIMP(sp4C[1].yaw, sp4C[2].yaw, sp60);
 
@@ -5825,16 +5825,16 @@ s32 Camera_Demo2(Camera* camera) {
         case 3:
             sp60 = (anim->animFrame - 159) * (1.0f / 9.0f);
 
-            sp64.x = F32_LERPIMP(sp48[2].x, sp48[3].x, sp60);
-            sp64.y = F32_LERPIMP(sp48[2].y, sp48[3].y, sp60);
+            sp64.x = LERPIMP(sp48[2].x, sp48[3].x, sp60);
+            sp64.y = LERPIMP(sp48[2].y, sp48[3].y, sp60);
             sp64.y += playerHeight;
-            sp64.z = F32_LERPIMP(sp48[2].z, sp48[3].z, sp60);
+            sp64.z = LERPIMP(sp48[2].z, sp48[3].z, sp60);
 
             OLib_Vec3fToVecSphGeo(&atOffset, &sp64);
             atOffset.yaw = (atOffset.yaw * anim->yawDir) + playerPosRot->rot.y;
             OLib_VecSphAddToVec3f(at, &anim->initialAt, &atOffset);
 
-            atOffset.r = F32_LERPIMP(sp4C[2].r, sp4C[3].r, sp60);
+            atOffset.r = LERPIMP(sp4C[2].r, sp4C[3].r, sp60);
             atOffset.pitch = BINANG_LERPIMP(sp4C[2].pitch, sp4C[3].pitch, sp60);
             atOffset.yaw = BINANG_LERPIMP(sp4C[2].yaw, sp4C[3].yaw, sp60);
 
