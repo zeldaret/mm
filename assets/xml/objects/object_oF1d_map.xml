@@ -7,9 +7,9 @@
         <DList Name="object_oF1d_map_DL_000D50" Offset="0xD50" />
         <DList Name="object_oF1d_map_DL_000DD8" Offset="0xDD8" />
         <DList Name="object_oF1d_map_DL_001560" Offset="0x1560" />
-        <!-- <Blob Name="object_oF1d_map_Blob_001750" Size="0x20" Offset="0x1750" /> -->
+        <Blob Name="object_oF1d_map_Blob_001750" Size="0x20" Offset="0x1750" />
         <Texture Name="object_oF1d_map_Tex_001770" OutName="tex_001770" Format="rgba16" Width="32" Height="64" Offset="0x1770" />
-        <!-- <Blob Name="object_oF1d_map_Blob_002770" Size="0x800" Offset="0x2770" /> -->
+        <Blob Name="object_oF1d_map_Blob_002770" Size="0x800" Offset="0x2770" />
         <Texture Name="object_oF1d_map_Tex_002F70" OutName="tex_002F70" Format="i4" Width="32" Height="32" Offset="0x2F70" />
         <DList Name="object_oF1d_map_DL_0031A0" Offset="0x31A0" />
         <DList Name="object_oF1d_map_DL_003258" Offset="0x3258" />
