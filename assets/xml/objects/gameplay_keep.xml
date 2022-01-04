@@ -942,36 +942,39 @@
         <Limb Name="gameplay_keep_Standardlimb_02AF34" Type="Standard" Offset="0x2AF34" />
         <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Flex" LimbType="Standard" Offset="0x2AF58" />
         <Animation Name="gameplay_keep_Anim_02B2E8" Offset="0x2B2E8" />
-        <Animation Name="gameplay_keep_Anim_02B494" Offset="0x2B494" />
-        <DList Name="gameplay_keep_DL_02B6B0" Offset="0x2B6B0" />
-        <DList Name="gameplay_keep_DL_02B748" Offset="0x2B748" />
-        <DList Name="gameplay_keep_DL_02B7E0" Offset="0x2B7E0" />
-        <DList Name="gameplay_keep_DL_02B888" Offset="0x2B888" />
-        <DList Name="gameplay_keep_DL_02B920" Offset="0x2B920" />
-        <DList Name="gameplay_keep_DL_02B9B8" Offset="0x2B9B8" />
-        <DList Name="gameplay_keep_DL_02BA68" Offset="0x2BA68" />
-        <DList Name="gameplay_keep_DL_02BB00" Offset="0x2BB00" />
-        <DList Name="gameplay_keep_DL_02BB98" Offset="0x2BB98" />
-        <Texture Name="gameplay_keep_Tex_02BC30" OutName="tex_02BC30" Format="ia8" Width="32" Height="32" Offset="0x2BC30" />
-        <Texture Name="gameplay_keep_Tex_02C030" OutName="tex_02C030" Format="ia8" Width="16" Height="32" Offset="0x2C030" />
-        <Texture Name="gameplay_keep_Tex_02C230" OutName="tex_02C230" Format="ia8" Width="32" Height="32" Offset="0x2C230" />
-        <Texture Name="gameplay_keep_Tex_02C630" OutName="tex_02C630" Format="ia8" Width="16" Height="16" Offset="0x2C630" />
-        <Texture Name="gameplay_keep_Tex_02C730" OutName="tex_02C730" Format="i4" Width="16" Height="16" Offset="0x2C730" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_02C818" Offset="0x2C818" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_02C890" Offset="0x2C890" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_02C908" Offset="0x2C908" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_02C980" Offset="0x2C980" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_02C9F8" Offset="0x2C9F8" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA08" Type="Standard" Offset="0x2CA08" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA14" Type="Standard" Offset="0x2CA14" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA20" Type="Standard" Offset="0x2CA20" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA2C" Type="Standard" Offset="0x2CA2C" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA38" Type="Standard" Offset="0x2CA38" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA44" Type="Standard" Offset="0x2CA44" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA50" Type="Standard" Offset="0x2CA50" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA5C" Type="Standard" Offset="0x2CA5C" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA68" Type="Standard" Offset="0x2CA68" />
-        <Skeleton Name="gameplay_keep_Skel_02CA98" Type="Flex" LimbType="Standard" Offset="0x2CA98" />
+
+        <!-- Stray Fairy -->
+        <Animation Name="gStrayFairyFlyingAnim" Offset="0x2B494" /> <!-- Original name is "ys_fly01" -->
+        <DList Name="gStrayFairyRightFacingHeadDL" Offset="0x2B6B0" />
+        <DList Name="gStrayFairyLeftFacingHeadDL" Offset="0x2B748" />
+        <DList Name="gStrayFairyGlowDL" Offset="0x2B7E0" />
+        <DList Name="gStrayFairyTorsoDL" Offset="0x2B888" />
+        <DList Name="gStrayFairyLeftArmDL" Offset="0x2B920" />
+        <DList Name="gStrayFairyPelvisAndLegsDL" Offset="0x2B9B8" />
+        <DList Name="gStrayFairyRightArmDL" Offset="0x2BA68" />
+        <DList Name="gStrayFairyRightWingDL" Offset="0x2BB00" />
+        <DList Name="gStrayFairyLeftWingDL" Offset="0x2BB98" />
+        <Texture Name="gStrayFairyRightFacingHeadTex" OutName="stray_fairy_right_facing_head" Format="ia8" Width="32" Height="32" Offset="0x2BC30" />
+        <Texture Name="gStrayFairyBodyTex" OutName="stray_fairy_body" Format="ia8" Width="16" Height="32" Offset="0x2C030" />
+        <Texture Name="gStrayFairyLeftFacingHeadTex" OutName="stray_fairy_left_facing_head" Format="ia8" Width="32" Height="32" Offset="0x2C230" />
+        <Texture Name="gStrayFairyWingTex" OutName="stray_fairy_wing" Format="ia8" Width="16" Height="16" Offset="0x2C630" />
+        <Texture Name="gStrayFairyGlowTex" OutName="stray_fairy_glow" Format="i4" Width="16" Height="16" Offset="0x2C730" />
+        <TextureAnimation Name="gStrayFairyClockTownTexAnim" Offset="0x2C818" />
+        <TextureAnimation Name="gStrayFairySnowheadTexAnim" Offset="0x2C890" />
+        <TextureAnimation Name="gStrayFairyWoodfallTexAnim" Offset="0x2C908" />
+        <TextureAnimation Name="gStrayFairyGreatBayTexAnim" Offset="0x2C980" />
+        <TextureAnimation Name="gStrayFairyStoneTowerTexAnim" Offset="0x2C9F8" />
+        <Limb Name="gStrayFairyRightFacingHeadLimb" Type="Standard" Offset="0x2CA08" />
+        <Limb Name="gStrayFairyLeftWingLimb" Type="Standard" Offset="0x2CA14" />
+        <Limb Name="gStrayFairyRightWingLimb" Type="Standard" Offset="0x2CA20" />
+        <Limb Name="gStrayFairyGlowLimb" Type="Standard" Offset="0x2CA2C" />
+        <Limb Name="gStrayFairyTorsoLimb" Type="Standard" Offset="0x2CA38" />
+        <Limb Name="gStrayFairyRightArmLimb" Type="Standard" Offset="0x2CA44" />
+        <Limb Name="gStrayFairyPelvisAndLegsLimb" Type="Standard" Offset="0x2CA50" />
+        <Limb Name="gStrayFairyLeftArmLimb" Type="Standard" Offset="0x2CA5C" />
+        <Limb Name="gStrayFairyLeftFacingHeadLimb" Type="Standard" Offset="0x2CA68" />
+        <Skeleton Name="gStrayFairySkel" Type="Flex" LimbType="Standard" Offset="0x2CA98" />
+
         <Texture Name="gameplay_keep_Tex_02CAA8" OutName="tex_02CAA8" Format="i4" Width="16" Height="16" Offset="0x2CAA8" />
         <Texture Name="gameplay_keep_Tex_02CB30" OutName="tex_02CB30" Format="i8" Width="16" Height="16" Offset="0x2CB30" />
         <Texture Name="gameplay_keep_Tex_02CC30" OutName="tex_02CC30" Format="rgba16" Width="32" Height="32" Offset="0x2CC30" />
