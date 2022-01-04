@@ -118,25 +118,25 @@ And this matches.
 The last two functions in the actor are used as arguments in `SkelAnime_DrawTransformFlexOpa`. This is a `SkelAnime` function, except unlike the OoT ones, it has three function callback arguments instead of two: in `functions.h` or `z_skelanime.c`, we find
 ```C
 void SkelAnime_DrawTransformFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor)
+                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw, Actor* actor)
 ```
 The typedefs of the callbacks it uses are in `z64animation.h`:
 ```C
 typedef s32 (*OverrideLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                struct Actor* actor);
+                                struct Actor* thisx);
 
 typedef void (*PostLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                             struct Actor* actor);
+                             struct Actor* thisx);
 
 [...]
 
-typedef void (*TransformLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
+typedef void (*TransformLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* thisx);
 ```
 which is where mips2c got them from.
 
 In this case, only two of them are used, and it is these that are the last functions standing between us and a decompiled actor.
 
-## OverrideLimbDraw, PostLimbDraw, UnkActorDraw
+## OverrideLimbDraw, PostLimbDraw, TransformLimbDraw
 
 Well, we don't have a PostLimbDraw here, but as we see from the prototype, it's much the same as the OverrideLimbDraw but without the `pos` argument and no return value.
 ```C
@@ -159,7 +159,7 @@ s32 func_80C10558(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
 }
 ```
 
-As for the UnkActorDraw, it has a much simpler prototype. mips2c gives
+As for the TransformLimbDraw, it has a much simpler prototype. mips2c gives
 ```C
 void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *actor) {
     if (limbIndex == 5) {
