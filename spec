@@ -434,9 +434,8 @@ beginseg
     include "build/src/code/z_eff_tire_mark.o"
     include "build/src/code/z_effect.o"
     include "build/src/code/z_effect_soft_sprite.o"
-    include "build/data/code/z_effect_soft_sprite.data.o"
     include "build/src/code/z_effect_soft_sprite_old_init.o"
-    include "build/data/code/z_effect_soft_sprite_old_init.data.o"
+    include "build/src/code/z_effect_soft_sprite_dlftbls.o"
     include "build/src/code/flg_set.o"
     include "build/data/code/flg_set.bss.o"
     include "build/src/code/pad_801DC9C0.o"
@@ -1673,8 +1672,7 @@ beginseg
     name "ovl_En_Ishi"
     compress
     include "build/src/overlays/actors/ovl_En_Ishi/z_en_ishi.o"
-    include "build/data/ovl_En_Ishi/ovl_En_Ishi.data.o"
-    include "build/data/ovl_En_Ishi/ovl_En_Ishi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ishi/ovl_En_Ishi_reloc.o"
 endseg
 
 beginseg
@@ -1816,16 +1814,14 @@ beginseg
     name "ovl_Obj_Roomtimer"
     compress
     include "build/src/overlays/actors/ovl_Obj_Roomtimer/z_obj_roomtimer.o"
-    include "build/data/ovl_Obj_Roomtimer/ovl_Obj_Roomtimer.data.o"
-    include "build/data/ovl_Obj_Roomtimer/ovl_Obj_Roomtimer.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Roomtimer/ovl_Obj_Roomtimer_reloc.o"
 endseg
 
 beginseg
     name "ovl_En_Ssh"
     compress
     include "build/src/overlays/actors/ovl_En_Ssh/z_en_ssh.o"
-    include "build/data/ovl_En_Ssh/ovl_En_Ssh.data.o"
-    include "build/data/ovl_En_Ssh/ovl_En_Ssh.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ssh/ovl_En_Ssh_reloc.o"
 endseg
 
 beginseg
@@ -2548,9 +2544,7 @@ beginseg
     name "ovl_Boss_04"
     compress
     include "build/src/overlays/actors/ovl_Boss_04/z_boss_04.o"
-    include "build/data/ovl_Boss_04/ovl_Boss_04.data.o"
-    include "build/data/ovl_Boss_04/ovl_Boss_04.bss.o"
-    include "build/data/ovl_Boss_04/ovl_Boss_04.reloc.o"
+    include "build/src/overlays/actors/ovl_Boss_04/ovl_Boss_04_reloc.o"
 endseg
 
 beginseg
@@ -2647,9 +2641,7 @@ beginseg
     name "ovl_Obj_Flowerpot"
     compress
     include "build/src/overlays/actors/ovl_Obj_Flowerpot/z_obj_flowerpot.o"
-    include "build/data/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot.data.o"
-    include "build/data/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot.bss.o"
-    include "build/data/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot_reloc.o"
 endseg
 
 beginseg
@@ -3019,8 +3011,7 @@ beginseg
     name "ovl_Obj_Hugebombiwa"
     compress
     include "build/src/overlays/actors/ovl_Obj_Hugebombiwa/z_obj_hugebombiwa.o"
-    include "build/data/ovl_Obj_Hugebombiwa/ovl_Obj_Hugebombiwa.data.o"
-    include "build/data/ovl_Obj_Hugebombiwa/ovl_Obj_Hugebombiwa.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Hugebombiwa/ovl_Obj_Hugebombiwa_reloc.o"
 endseg
 
 beginseg
@@ -3620,8 +3611,7 @@ beginseg
     name "ovl_En_Kame"
     compress
     include "build/src/overlays/actors/ovl_En_Kame/z_en_kame.o"
-    include "build/data/ovl_En_Kame/ovl_En_Kame.data.o"
-    include "build/data/ovl_En_Kame/ovl_En_Kame.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kame/ovl_En_Kame_reloc.o"
 endseg
 
 beginseg
@@ -4416,8 +4406,7 @@ beginseg
     name "ovl_Obj_Jg_Gakki"
     compress
     include "build/src/overlays/actors/ovl_Obj_Jg_Gakki/z_obj_jg_gakki.o"
-    include "build/data/ovl_Obj_Jg_Gakki/ovl_Obj_Jg_Gakki.data.o"
-    include "build/data/ovl_Obj_Jg_Gakki/ovl_Obj_Jg_Gakki.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Jg_Gakki/ovl_Obj_Jg_Gakki_reloc.o"
 endseg
 
 beginseg
