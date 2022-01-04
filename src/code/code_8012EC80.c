@@ -545,9 +545,6 @@ void func_8012F1BC(s16 arg0);
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8012EC80/func_8012F1BC.s")
 #endif
 
-/**
- * Returns the skullTokenCount for the corresponding scene
- */
 s16 func_8012F22C(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         return (gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10;
