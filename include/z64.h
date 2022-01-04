@@ -1484,7 +1484,7 @@ typedef struct {
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 
-typedef s32 (*func_8013E640_arg6)(struct GlobalContext*, Actor*, Actor*, void*);
+typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
 
 struct struct_8013DF3C_arg1;
 typedef void (*struct_8013DF3C_arg1_unk_func1)(struct GlobalContext*, struct struct_8013DF3C_arg1*);

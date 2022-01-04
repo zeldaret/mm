@@ -116,8 +116,7 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
                 return;
             }
         } else {
-            this->moonsTear =
-                (ObjMoonStone*)func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
+            this->moonsTear = (ObjMoonStone*)SubS_FindActor(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
         }
         func_800B8500(&this->actor, globalCtx, 60.0f, 10.0f, 0);
     }
@@ -350,8 +349,7 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     func_8013E3B8(&this->actor, this->cutscenes,
                   ARRAY_COUNT(this->cutscenes)); /* initializes all elements of cutscenes to -1 */
-    this->moonsTear =
-        (ObjMoonStone*)func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
+    this->moonsTear = (ObjMoonStone*)SubS_FindActor(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
     switch (gSaveContext.entranceIndex) {
         case 0x4C00: /* Observatory from ECT */
