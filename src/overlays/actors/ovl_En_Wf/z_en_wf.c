@@ -1,7 +1,7 @@
 /*
  * File: z_en_wf.c
  * Overlay: ovl_En_Wf
- * Description: Wolfos
+ * Description: Wolfos and White Wolfos
  */
 
 #include "z_en_wf.h"
@@ -508,7 +508,7 @@ void func_80990C6C(EnWf* this, GlobalContext* globalCtx, s32 arg2) {
                 sp88.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
                 sp88.y = Rand_ZeroFloat(5.0f) + this->actor.world.pos.y;
                 sp88.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
-                func_800B0F18(globalCtx, &sp88, &D_801D15B0, &D_809942DC, phi_s1, phi_s1, phi_s6, 5,
+                func_800B0F18(globalCtx, &sp88, &gZeroVec3f, &D_809942DC, phi_s1, phi_s1, phi_s6, 5,
                               Rand_ZeroFloat(5.0f) + 14.0f);
             }
         }
@@ -1202,7 +1202,7 @@ void func_80992E0C(EnWf* this, GlobalContext* globalCtx) {
 
         if (this->unk_2A0 == 25) {
             SoundSource_PlaySfxEachFrameAtFixedWorldPos(globalCtx, &this->actor.world.pos, 36,
-                                                     NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+                                                        NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         }
 
         this->unk_2A0--;

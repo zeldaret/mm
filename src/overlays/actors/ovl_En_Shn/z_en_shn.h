@@ -10,7 +10,7 @@ typedef void (*EnShnActionFunc)(struct EnShn*, GlobalContext*);
 typedef struct EnShn {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ EnShnActionFunc actionFunc;
-    /* 0x0148 */ char unk_144[0x1A8];
+    /* 0x0148 */ char unk_148[0x1A8];
 } EnShn; // size = 0x2F0
 
 extern const ActorInit En_Shn_InitVars;

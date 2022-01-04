@@ -5,6 +5,12 @@
 #include "convert.h"
 #include "z64.h"
 
+#define SCREEN_WIDTH  320
+#define SCREEN_HEIGHT 240
+
+#define SCREEN_WIDTH_HIGH_RES  576
+#define SCREEN_HEIGHT_HIGH_RES 454
+
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
@@ -57,6 +63,7 @@
     ((((void)0, gSaveContext.equips.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_UPG_VALUE_VOID(upg) \
     ((((void)0, gSaveContext.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+#define INV_CONTENT_VOID(item) ((void)0, gSaveContext.inventory.items)[SLOT(item)]
 
 #define CUR_FORM ((gSaveContext.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.playerForm)
 
@@ -69,7 +76,7 @@
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.inventory.questItems = (((void)0, gSaveContext.inventory.questItems) & (-1 - gBitFlags[item])))
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
-#define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg) - 4)
+#define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
 
 #define CONTROLLER1(globalCtx) (&(globalCtx)->state.input[0])
 #define CONTROLLER2(globalCtx) (&(globalCtx)->state.input[1])
@@ -95,6 +102,7 @@ extern GraphicsContext* __gfxCtx;
         s32 __dispPad
 
 #define CLOSE_DISPS(gfxCtx) \
+    (void)0;                \
     }                       \
     (void)0
 
@@ -124,7 +132,7 @@ extern GraphicsContext* __gfxCtx;
 #define SQ(x) ((x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
 #define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
-#define DECR(x) ((x) == 0 ? 0 : ((x) -= 1))
+#define DECR(x) ((x) == 0 ? 0 : --(x))
 
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : (x) > (max) ? (max) : (x))
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))

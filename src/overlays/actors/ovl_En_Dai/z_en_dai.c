@@ -103,7 +103,7 @@ void func_80B3E168(EnDaiParticle* particle, GlobalContext* globalCtx2) {
                                         (particle->unk_02 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
             Matrix_InsertTranslation(particle->unk_10.x, particle->unk_10.y, particle->unk_10.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(particle->unk_34, particle->unk_34, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -591,7 +591,7 @@ s32 func_80B3F598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     }
 
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_1E4);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_1E4);
     }
 
     if (limbIndex == 10) {

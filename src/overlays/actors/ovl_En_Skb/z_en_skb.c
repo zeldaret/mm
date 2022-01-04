@@ -280,7 +280,7 @@ void EnSkb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80994DA8(EnSkb* this, GlobalContext* globalCtx) {
     if (Actor_IsActorFacingLink(&this->actor, 0x11C7) && (this->actor.xzDistToPlayer < 60.0f) &&
-        (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAINS_HAT)) {
+        (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAIN)) {
         func_80995C24(this);
     } else {
         func_80995A30(this);
@@ -351,7 +351,7 @@ void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
         }
         this->actionFunc = func_80995190;
         this->actor.speedXZ = 0.0f;
-    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAINS_HAT) {
+    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAIN) {
         this->actor.flags |= (0x4 | 0x1);
         this->actor.flags &= ~(0x8 | 0x1);
         this->actor.hintId = 0x55;
@@ -423,7 +423,7 @@ void func_809952D8(EnSkb* this) {
 }
 
 void func_8099533C(EnSkb* this, GlobalContext* globalCtx) {
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
         this->actor.flags &= ~(0x4 | 0x1);
         this->actor.flags |= (0x8 | 0x1);
         func_80994F7C(this, globalCtx);
@@ -445,7 +445,7 @@ void func_809953E8(EnSkb* this) {
 }
 
 void func_8099544C(EnSkb* this, GlobalContext* globalCtx) {
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
         this->actor.flags &= ~(0x4 | 0x1);
         this->actor.flags |= (0x8 | 0x1);
         func_80994F7C(this, globalCtx);
@@ -482,7 +482,7 @@ void func_8099556C(EnSkb* this, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.rot.x = Math_SinS(this->unk_3D4 * sp26) * 20000.0f;
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
         this->actor.flags &= ~(0x4 | 0x1);
         this->actor.flags |= (0x8 | 0x1);
         func_80994F7C(this, globalCtx);
@@ -568,7 +568,7 @@ void func_80995A30(EnSkb* this) {
 }
 
 void func_80995A8C(EnSkb* this, GlobalContext* globalCtx) {
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
         this->actor.flags &= ~(0x4 | 0x1);
         this->actor.flags |= (0x8 | 0x1);
         this->actor.hintId = 0xFF;

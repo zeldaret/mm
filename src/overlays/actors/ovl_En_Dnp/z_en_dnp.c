@@ -418,7 +418,7 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx) {
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
         if ((this->unk_322 & 0x400) && !(gSaveContext.weekEventReg[23] & 0x20)) {
-            func_800B8A1C(&this->actor, globalCtx, 0xBA, sp2C, sp28);
+            func_800B8A1C(&this->actor, globalCtx, GI_MAX, sp2C, sp28);
         }
         func_8013C964(&this->actor, globalCtx, sp2C, sp28, 0, this->unk_322 & 7);
         Actor_SetHeight(&this->actor, 30.0f);
@@ -435,7 +435,7 @@ s32 func_80B3D974(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp6C;
     MtxF sp2C;
 
-    Matrix_MultiplyVector3fByState(&D_801D15B0, &sp74);
+    Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp74);
     Matrix_CopyCurrentState(&sp2C);
     func_8018219C(&sp2C, &sp6C, 0);
     *arg2 = sp74;

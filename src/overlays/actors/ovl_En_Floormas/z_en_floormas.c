@@ -461,10 +461,10 @@ void func_808D14DC(EnFloormas* this, GlobalContext* globalCtx) {
     sp28.x = Math_SinS(this->actor.shape.rot.y + 0x6000) * 7.0f;
     sp28.z = Math_CosS(this->actor.shape.rot.y + 0x6000) * 7.0f;
 
-    func_800B1210(globalCtx, &sp34, &sp28, &D_801D15B0, 0x1C2, 0x64);
+    func_800B1210(globalCtx, &sp34, &sp28, &gZeroVec3f, 0x1C2, 0x64);
     sp28.x = Math_SinS(this->actor.shape.rot.y - 0x6000) * 7.0f;
     sp28.z = Math_CosS(this->actor.shape.rot.y - 0x6000) * 7.0f;
-    func_800B1210(globalCtx, &sp34, &sp28, &D_801D15B0, 0x1C2, 0x64);
+    func_800B1210(globalCtx, &sp34, &sp28, &gZeroVec3f, 0x1C2, 0x64);
     func_800B9010(&this->actor, NA_SE_EN_FLOORMASTER_SLIDING - SFX_FLAG);
 }
 
@@ -682,7 +682,7 @@ void func_808D1ED4(EnFloormas* this, GlobalContext* globalCtx) {
     sp34.x = this->actor.world.pos.x;
     sp34.y = this->actor.world.pos.y + 15.0f;
     sp34.z = this->actor.world.pos.z;
-    func_800B3030(globalCtx, &sp34, &D_801D15B0, &D_801D15B0, 150, -10, 2);
+    func_800B3030(globalCtx, &sp34, &gZeroVec3f, &gZeroVec3f, 150, -10, 2);
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
     this->actionFunc = func_808D1F7C;
 }
