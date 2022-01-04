@@ -21,7 +21,7 @@ EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 unk_1A5) {
             break;
         }
 
-        if ((door->unk_1A4 == 5) && (door->unk_1A5 == (u8)unk_1A5)) {
+        if ((door->unk_1A4 == 5) && (door->switchFlag == (u8)unk_1A5)) {
             break;
         }
 
