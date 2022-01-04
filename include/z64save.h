@@ -113,7 +113,7 @@ typedef struct {
     /* 0x0ED8 */ u32 unk_DD8;
     /* 0x0EDC */ u32 bankRupees;
     /* 0x0EE0 */ u32 unk_EE0;
-    /* 0x0EE4 */ u32 unk_EE4;
+    /* 0x0EE4 */ u32 unk_EE4; // Fishing flags
     /* 0x0EE8 */ u32 unk_EE8;
     /* 0x0EEC */ u32 horseBackBalloonHighScore;
     /* 0x0EF0 */ u32 lotteryCodeGuess;       // Lottery code chosen by player (only uses lower three hex digits)
