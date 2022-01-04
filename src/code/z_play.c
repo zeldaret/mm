@@ -149,8 +149,8 @@ s16 Play_GetOriginalSceneNumber(s16 sceneNum) {
 }
 
 /**
- * Copies the flags set in ActorContext over to the current scene's CycleSceneFlags. Special case for Inverted Stone
- * Tower Temple
+ * Copies the flags set in ActorContext over to the current scene's CycleSceneFlags, usually using the original scene
+ * number. Exception for Inverted Stone Tower Temple, which uses its own.
  */
 void Play_SaveCycleSceneFlags(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
@@ -203,6 +203,7 @@ void func_80169ECC(GlobalContext* globalCtx) {
 }
 
 // Gameplay_TriggerVoidOut ?
+// Used by Player, Ikana_Rotaryroom, Bji01, Kakasi, LiftNuts, Test4, Warptag, WarpUzu, Roomtimer
 void func_80169EFC(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
@@ -217,6 +218,7 @@ void func_80169EFC(GameState* gameState) {
 }
 
 // Gameplay_LoadToLastEntrance ?
+// Used by game_over and Test7
 void func_80169F78(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
@@ -233,6 +235,7 @@ void func_80169FDC(GameState* gameState) {
     func_80169F78(gameState);
 }
 
+// Used by Kankyo to determine how to change the lighting, e.g. for game over.
 s32 func_80169FFC(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
@@ -246,6 +249,13 @@ s32 FrameAdvance_IsEnabled(GameState* gameState) {
 }
 
 // Unused, unchanged from OoT, which uses it only in one Camera function.
+/**
+ * Tests if actor is a door and the sides are different rooms.
+ * @param[in] gameState GameState, promoted to globalCtx inside.
+ * @param[in] actor Actor to test.
+ * @param[out] yaw Facing angle of the actor, or reverse if in the back room.
+ * @return true if actor is a door and the sides are in different rooms, false otherwise
+ */
 s32 func_8016A02C(GameState* gameState, Actor* actor, s16* yaw) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
     TransitionActorEntry* transitionActor;
@@ -270,8 +280,11 @@ s32 func_8016A02C(GameState* gameState, Actor* actor, s16* yaw) {
     return true;
 }
 
-// Unused, unchanged from OoT, which uses it only in EnDivingGame.
-s32 func_8016A0AC(GlobalContext* globalCtx, Vec3f* pos) {
+/**
+ * Tests if underwater.
+ * @return True if inside a waterbox and not above a void.
+ */
+s32 Play_IsUnderwater(GlobalContext* globalCtx, Vec3f* pos) {
     WaterBox* waterBox;
     CollisionPoly* poly;
     Vec3f waterSurfacePos;
@@ -291,15 +304,22 @@ s32 func_8016A0AC(GlobalContext* globalCtx, Vec3f* pos) {
 }
 
 // z_demo and EnTest4
+// This data appears to be a boolean. It is only set by Play_Init.
 s32 func_8016A168(void) {
     return D_801D0D50;
 }
 
+// List of cutscene numbers.
 extern s16 D_801D0D64[];
 // s16 D_801D0D64[] = { 0xFFFD, 0xFFFE, 0xFFFC, 0xFFFB, 0xFFF9, 0xFFF5, 0xFFF8, 0xFFF7, 0xFFFA, 0xFFF0 };
 // s16 D_801D0D64[] = { -3, -2, -4, -5, -7, -11, -8, -9, -6, -16 };
 
 // Used by Player
+/**
+ * Sets the cutscene numbers in globalCtx->unk_1879C.
+ * Set to -1 by default. If there is an ActorCutscene where unk4 matches the appropriate element of  (and possibly
+ * change its priority for the zeroth one)
+ */
 void func_8016A178(GameState* gameState, s32 cutscene) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
     s32 i;

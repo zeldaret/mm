@@ -440,15 +440,15 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                 if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
                     ((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
                      (globalCtx->sceneNum == SCENE_CLOCKTOWER))) {
-                    s32 phi_v0;
+                    s32 playerParams;
                     u32 entranceIndex = gSaveContext.entranceIndex;
 
                     if ((globalCtx->actorCtx.unk5 & 2)) {
-                        phi_v0 = 0xCFF;
+                        playerParams = 0xCFF;
                     } else {
-                        phi_v0 = 0xBFF;
+                        playerParams = 0xBFF;
                     }
-                    Play_SetRespawnData(&globalCtx->state, 1, entranceIndex, player->unk_3CE, phi_v0, &player->unk_3C0,
+                    Play_SetRespawnData(&globalCtx->state, 1, entranceIndex, player->unk_3CE, playerParams, &player->unk_3C0,
                                   player->unk_3CC);
 
                     if ((globalCtx->sceneNum == SCENE_TENMON_DAI) || (globalCtx->sceneNum == SCENE_00KEIKOKU)) {
