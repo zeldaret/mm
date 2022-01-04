@@ -876,7 +876,7 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx);
 // void func_800BC770(void);
 // void func_800BC7D8(void);
 // void func_800BC848(void);
- void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type);
+void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type);
 // void func_800BCB50(void);
 void func_800BCB70(Actor* actor, u16 arg1, u16 arg2, s16 arg3, s16 arg4);
 void func_800BCBF4(Vec3f* uParm1, GlobalContext* globalCtx);

@@ -37,6 +37,7 @@ void func_80867144(EnDoor*, GlobalContext*);
 void func_808670F0(EnDoor*, GlobalContext*);
 void func_80866A5C(EnDoor*, GlobalContext*);
 
+// I have no idea what this is
 static s32 D_808675D0[] = {
     0x0C00030E, 0x02060017, 0x00080200, 0x00060002, 0x09070500,
 };
@@ -225,20 +226,20 @@ static u8 sAnimCloseFrames[10] = {
 };
 
 static Gfx* D_808679A4[14][2] = {
-    { gameplay_keep_DL_020BB8, gameplay_keep_DL_020D00 },
-    { object_numa_obj_DL_005DF0, object_numa_obj_DL_005DF0 },
+    { gDoorLeftDL, gDoorRightDL },
+    { gWoodfallDoorDL, gWoodfallDoorDL },
     { object_dor01_DL_000448, object_dor01_DL_000448 },
-    { object_dor02_DL_000428, object_dor02_DL_000428 },
-    { object_dor03_DL_0003C0, object_dor03_DL_0003C0 },
-    { object_dor04_DL_000468, object_dor04_DL_000468 },
-    { object_wdor01_DL_000548, object_wdor01_DL_000548 },//Mayor's house
-    { object_wdor02_DL_000548, object_wdor02_DL_000548 },
-    { object_wdor03_DL_000548, object_wdor03_DL_000548 },
-    { object_wdor04_DL_000508, object_wdor04_DL_000508 }, // Milk bar
-    { object_wdor05_DL_000508, object_wdor05_DL_000508 }, // Music box house
-    { object_kaizoku_obj_DL_009F20, object_kaizoku_obj_DL_009F20 },
+    { gZoraHallDoorDL, gZoraHallDoorDL },
+    { gSwampDoorDL, gSwampDoorDL },
+    { gMagicHagPotionShopDoorDL, gMagicHagPotionShopDoorDL },
+    { object_wdor01_DL_000548, object_wdor01_DL_000548 }, // Lottery Shop / Curiosity Shop / Mayor's House Door
+    { object_wdor02_DL_000548, object_wdor02_DL_000548 }, // Trading Post / Post Office Door
+    { object_wdor03_DL_000548, object_wdor03_DL_000548 }, // Stockpot Inn & Swordsman's School Door
+    { gMilkBarDoorDL, gMilkBarDoorDL },
+    { gMusicBoxHouseDoorDL, gMusicBoxHouseDoorDL },
+    { gPiratesFortressDoorDL, gPiratesFortressDoorDL },
     { object_mkk_DL_000310, object_mkk_DL_000310 },
-    { gameplay_field_keep_DL_004050, gameplay_field_keep_DL_004228 },
+    { gFieldWoodDoorLeftDL, gFieldWoodDoorRightDL },
 };
 
 void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
@@ -256,9 +257,9 @@ void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->switchFlag = this->dyna.actor.params & 0x7F;
     if ((this->unk1A4 == 7) && (this->switchFlag == 0)) {
         DynaPolyActor_Init(&this->dyna, 0);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gameplay_keep_Colheader_023100);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gDoorCol);
     }
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_022B28, &gameplay_keep_Anim_020658, this->limbTable,
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable,
                    this->limbTable, 5);
     if (this->unk1A4 == 5) {
         objectInfo = &sObjInfo[17 + this->switchFlag];
@@ -313,8 +314,8 @@ void func_80866A5C(EnDoor* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80866B20;
         this->dyna.actor.world.rot.y = 0;
         if (this->unk1A4 == 1) {
-            if (Flags_GetSwitch(globalCtx, this->switchFlag) == 0) {
-                this->unk1A6 = 0xA;
+            if (!Flags_GetSwitch(globalCtx, this->switchFlag)) {
+                this->unk1A6 = 10;
             }
         } else if ((this->unk1A4 == 4) && (Actor_XZDistanceBetweenActors(
                                                &this->dyna.actor, globalCtx->actorCtx.actorList[2].first) > 120.0f)) {
@@ -326,7 +327,7 @@ void func_80866A5C(EnDoor* this, GlobalContext* globalCtx) {
 
 #ifdef NON_EQUIVALENT
 void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
-    static s32 D_80867BC0[4]; // BSS
+    static s32 D_80867BC0[4];
 
     Player* player;
     Vec3f playerPosRelToDoor;
@@ -411,7 +412,7 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
     }
 }
 #endif
-static s32 D_80867BC0[4]; // BSS
+static s32 D_80867BC0[4];
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80866B20.s")
 
 void func_80866F94(EnDoor* this, GlobalContext* globalCtx) {
@@ -490,7 +491,7 @@ s32 EnDoor_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
     TransitionActorEntry* transitionEntry;
 
-    EnDoor* this = (EnDoor*)thisx;
+    EnDoor* this = THIS;
 
     if (limbIndex == 4) {
         Gfx** dl;
@@ -534,9 +535,9 @@ void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx) {
                           NULL, &this->dyna.actor);
         if (this->dyna.actor.world.rot.y != 0) {
             if (this->dyna.actor.world.rot.y > 0) {
-                gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_020D00);
+                gSPDisplayList(POLY_OPA_DISP++, gDoorRightDL);
             } else {
-                gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_020BB8);
+                gSPDisplayList(POLY_OPA_DISP++, gDoorLeftDL);
             }
         }
         if (this->unk1A6) {
