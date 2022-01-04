@@ -46,7 +46,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx);
 void EnKakasi_SetupDialogue(EnKakasi* this);
 
 void EnKakasi_PostLimbDraw(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                           struct Actor* actor);
+                           struct Actor* thisx);
 
 static ColliderCylinderInit D_80971D80 = {
     {
