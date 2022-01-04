@@ -777,7 +777,7 @@ beginseg
     name "ovl_En_Door"
     compress
     include "build/src/overlays/actors/ovl_En_Door/z_en_door.o"
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
     include "build/src/overlays/actors/ovl_En_Door/ovl_En_Door_reloc.o"
 #else
     include "build/data/ovl_En_Door/ovl_En_Door.reloc.o"
