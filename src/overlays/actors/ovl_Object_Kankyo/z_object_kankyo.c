@@ -589,7 +589,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
     ObjectKankyo* this = THIS;
     f32 tempA;
 
-    if (globalCtx->sceneNum == SCENE_KYOJINNOMA) {
+    if (globalCtx->sceneNum == SCENE_GIANTS_CHAMBER) {
         phi_f26 = 1.0f;
     } else {
         tempA = func_800E031C(GET_ACTIVE_CAM(globalCtx));

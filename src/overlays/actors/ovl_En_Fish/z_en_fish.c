@@ -167,7 +167,7 @@ Actor* func_8091D944(EnFish* this, GlobalContext* globalCtx) {
 }
 
 s32 func_8091DA14(EnFish* this, GlobalContext* globalCtx) {
-    return globalCtx->sceneNum == SCENE_LABO && func_8091D944(this, globalCtx);
+    return globalCtx->sceneNum == SCENE_MARINE_RESEARCH_LAB && func_8091D944(this, globalCtx);
 }
 
 void EnFish_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -853,7 +853,7 @@ void func_8091F5A4(Actor* thisx, GlobalContext* globalCtx) {
         func_8091D7C4(this);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         if (this->unk_248 != 0) {
-            u32 temp = (globalCtx->sceneNum ^ SCENE_LABO) != 0;
+            u32 temp = (globalCtx->sceneNum ^ SCENE_MARINE_RESEARCH_LAB) != 0;
             phi_f0 = BREG(1) + 10.0f;
 
             if (temp) {

@@ -404,8 +404,8 @@ void func_80A54CEC(ObjHugebombiwa* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         Actor_SetSwitchFlag(globalCtx, ENHUGEBOMBIWA_GET_7F(&this->actor));
-        if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
-            ((globalCtx->sceneNum == SCENE_17SETUGEN) || (globalCtx->sceneNum == SCENE_17SETUGEN2))) {
+        if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) && ((globalCtx->sceneNum == SCENE_PATH_TO_GORON_VILLAGE_WINTER) ||
+                                                       (globalCtx->sceneNum == SCENE_PATH_TO_GORON_VILLAGE_SPRING))) {
             gSaveContext.weekEventReg[19] |= 2;
         }
 

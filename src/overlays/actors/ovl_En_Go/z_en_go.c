@@ -526,7 +526,7 @@ s32 func_80A1222C(EnGo* this, GlobalContext* globalCtx) {
 
     if (((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.unk1202A == 3) &&
          (globalCtx->msgCtx.unk1202E == 1) && (this->unk_3EC == 0) && (this->actor.xzDistToPlayer < 400.0f)) ||
-        (!(gSaveContext.weekEventReg[22] & 4) && (globalCtx->sceneNum == SCENE_16GORON_HOUSE) &&
+        (!(gSaveContext.weekEventReg[22] & 4) && (globalCtx->sceneNum == SCENE_GORON_SHRINE) &&
          (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (globalCtx->csCtx.unk_12 == 1))) {
         ret = true;
     }
@@ -699,7 +699,7 @@ s32 func_80A12868(EnGo* this, GlobalContext* globalCtx) {
 
 s32 func_80A12954(EnGo* this, GlobalContext* globalCtx) {
     if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (globalCtx->csCtx.state != 0) && (this->actor.draw != NULL) &&
-        (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
+        (globalCtx->sceneNum == SCENE_MOUNTAIN_VILLAGE_SPRING) && (gSaveContext.sceneSetupIndex == 1) &&
         (globalCtx->csCtx.unk_12 == 0)) {
         if (this->unk_3F0 == 0) {
             this->actor.flags &= ~1;
@@ -1399,7 +1399,7 @@ void func_80A144F4(EnGo* this, GlobalContext* globalCtx) {
 
 void func_80A145AC(EnGo* this, GlobalContext* globalCtx) {
     if ((ENGO_GET_70(&this->actor) == ENGO_70_1) &&
-        (((globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
+        (((globalCtx->sceneNum == SCENE_MOUNTAIN_VILLAGE_SPRING) && (gSaveContext.sceneSetupIndex == 1) &&
           (globalCtx->csCtx.unk_12 == 0)) ||
          !(gSaveContext.weekEventReg[21] & 8))) {
         this->actor.child = func_80A13400(this, globalCtx);
