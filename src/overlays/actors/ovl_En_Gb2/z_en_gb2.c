@@ -100,7 +100,7 @@ s32 func_80B0F660(EnGb2* this, GlobalContext* globalCtx) {
     Actor* phi_s0 = NULL;
 
     while (true) {
-        temp_v0 = func_ActorCategoryIterateById(globalCtx, phi_s0, ACTORCAT_NPC, ACTOR_EN_GB2);
+        temp_v0 = SubS_FindActor(globalCtx, phi_s0, ACTORCAT_NPC, ACTOR_EN_GB2);
         if (temp_v0 == NULL) {
             break;
         }
