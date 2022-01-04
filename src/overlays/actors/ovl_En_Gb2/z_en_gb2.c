@@ -377,7 +377,7 @@ void func_80B0FEBC(EnGb2* this, GlobalContext* globalCtx) {
         this->unk_288 = 10;
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, this->unk_26E, &this->actor);
         this->actionFunc = func_80B0FFA8;
     } else if ((this->actor.xzDistToPlayer < 300.0f) || this->actor.isTargeted) {
@@ -386,7 +386,7 @@ void func_80B0FEBC(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
-    u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
         if (func_80147624(globalCtx)) {
@@ -537,7 +537,7 @@ void func_80B10344(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B10584(EnGb2* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, this->unk_26E, &this->actor);
         this->actor.flags &= ~0x10000;
         this->actionFunc = func_80B10634;
@@ -548,7 +548,7 @@ void func_80B10584(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
-    u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
         if (func_80147624(globalCtx)) {
@@ -632,12 +632,12 @@ void func_80B10924(EnGb2* this, GlobalContext* globalCtx) {
         }
         this->actionFunc = func_80B109DC;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, sp24, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, sp24, 300.0f, 300.0f);
     }
 }
 
 void func_80B109DC(EnGb2* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10634;
     } else {
@@ -663,7 +663,7 @@ void func_80B10A48(EnGb2* this, GlobalContext* globalCtx) {
             case ENGB2_7_2:
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
                 if (this->unk_26E == 0x14FB) {
-                    Actor_SetSwitchFlag(globalCtx, ENGB2_GET_7F8(&this->actor));
+                    Flags_SetSwitch(globalCtx, ENGB2_GET_7F8(&this->actor));
                     Actor_MarkForDeath(&this->actor);
                 } else {
                     this->actor.draw = NULL;
@@ -688,7 +688,7 @@ void func_80B10B5C(EnGb2* this, GlobalContext* globalCtx) {
 
     if (func_80B0FA48(this, globalCtx)) {
         this->unk_26C &= ~0x20;
-        if (func_800B84D0(&this->actor, globalCtx) && (this->unk_26C & 0x40)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) && (this->unk_26C & 0x40)) {
             if ((this->unk_26E == 0x14EE) || (this->unk_26E == 0x14F4)) {
                 this->unk_26C |= 2;
             }
@@ -702,7 +702,7 @@ void func_80B10B5C(EnGb2* this, GlobalContext* globalCtx) {
         }
     } else {
         this->unk_26C &= ~0x40;
-        if (func_800B84D0(&this->actor, globalCtx) && (this->unk_26C & 0x20)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) && (this->unk_26C & 0x20)) {
             this->actor.flags &= ~0x10000;
             func_801518B0(globalCtx, this->unk_26E, &this->actor);
             if (this->unk_26E == 0x14EB) {
@@ -730,7 +730,7 @@ void func_80B10DAC(EnGb2* this, GlobalContext* globalCtx) {
             if (this->unk_290 != 2) {
                 this->actionFunc = func_80B10E98;
             } else {
-                Actor_SetSwitchFlag(globalCtx, ENGB2_GET_7F8(&this->actor));
+                Flags_SetSwitch(globalCtx, ENGB2_GET_7F8(&this->actor));
                 this->actionFunc = func_80B10868;
             }
         } else {
@@ -746,7 +746,7 @@ void func_80B10DAC(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B10E98(EnGb2* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
             globalCtx->msgCtx.unk11F22 = 0x43;
@@ -779,7 +779,7 @@ void func_80B10E98(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B11048(EnGb2* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_801518B0(globalCtx, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10DAC;
@@ -790,7 +790,7 @@ void func_80B11048(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B110F8(EnGb2* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (this->unk_26C & 2) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
@@ -840,8 +840,8 @@ void func_80B11268(EnGb2* this, GlobalContext* globalCtx) {
     if (globalCtx->roomCtx.currRoom.num == 1) {
         this->unk_290 = 0;
         this->unk_282[0] = this->actor.cutscene;
-        if (Actor_GetRoomCleared(globalCtx, 2) && Actor_GetRoomCleared(globalCtx, 3) &&
-            Actor_GetRoomCleared(globalCtx, 4) && Actor_GetRoomCleared(globalCtx, 5)) {
+        if (Flags_GetClear(globalCtx, 2) && Flags_GetClear(globalCtx, 3) &&
+            Flags_GetClear(globalCtx, 4) && Flags_GetClear(globalCtx, 5)) {
             this->unk_28A = 0xFF;
             this->unk_26C &= ~0x100;
             this->actor.flags |= 1;
@@ -878,7 +878,7 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ps_Skel_007230, &object_ps_Anim_00049C, this->jointTable,
                        this->morphTable, 12);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.01f);
@@ -934,8 +934,8 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
                 return;
             }
 
-            if (Actor_GetRoomCleared(globalCtx, 2) && Actor_GetRoomCleared(globalCtx, 3) &&
-                Actor_GetRoomCleared(globalCtx, 4) && Actor_GetRoomCleared(globalCtx, 5)) {
+            if (Flags_GetClear(globalCtx, 2) && Flags_GetClear(globalCtx, 3) &&
+                Flags_GetClear(globalCtx, 4) && Flags_GetClear(globalCtx, 5)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
