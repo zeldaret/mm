@@ -4328,8 +4328,7 @@ beginseg
     name "ovl_Bg_Ikana_Rotaryroom"
     compress
     include "build/src/overlays/actors/ovl_Bg_Ikana_Rotaryroom/z_bg_ikana_rotaryroom.o"
-    include "build/data/ovl_Bg_Ikana_Rotaryroom/ovl_Bg_Ikana_Rotaryroom.data.o"
-    include "build/data/ovl_Bg_Ikana_Rotaryroom/ovl_Bg_Ikana_Rotaryroom.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Ikana_Rotaryroom/ovl_Bg_Ikana_Rotaryroom_reloc.o"
 endseg
 
 beginseg
