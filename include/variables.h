@@ -382,7 +382,7 @@ extern UNK_PTR D_801AE260[3];
 // extern UNK_TYPE4 D_801AE2BC;
 // extern UNK_TYPE4 D_801AE2CC;
 // extern UNK_TYPE4 D_801AE2DC;
-extern EffectSsInfo EffectSS2Info;
+// extern EffectSsInfo sEffectSsInfo;
 // extern UNK_TYPE1 D_801AE3B0;
 // extern UNK_TYPE1 D_801AE3B4;
 // extern UNK_TYPE4 D_801AE3B8;
@@ -410,7 +410,7 @@ extern EffectSsInfo EffectSS2Info;
 // extern UNK_TYPE1 D_801AE48A;
 // extern UNK_TYPE1 D_801AE48C;
 // extern UNK_TYPE1 D_801AE490;
-extern EffectSsOverlay particleOverlayTable[39];
+extern EffectSsOverlay gParticleOverlayTable[39];
 // extern FlagSetEntry sFlagEntries[];
 // extern s32 sEntryIndex;
 // extern u32 sCurrentBit;
@@ -3866,14 +3866,6 @@ extern UNK_TYPE D_0400E3D8;
 extern UNK_TYPE D_0400E408;
 extern UNK_TYPE D_0400E410;
 extern UNK_TYPE D_0400E418;
-extern CollisionHeader D_0400E710; // Pink Deku Flower collision
-extern AnimationHeader D_0400EB7C; // Deku Flower intense flutter animation
-extern Gfx D_0400ED80; // Pink Deku Flower display list
-extern SkeletonHeader D_04011518; // Pink Deku Flower skeleton
-extern AnimationHeader D_040117A8; // Deku Flower small flutter animation
-extern CollisionHeader D_040118D8; // Gold Deku Flower collision
-extern Gfx D_04011BD0; // Gold Deku Flower display list
-extern SkeletonHeader D_040127E8; // Gold Deku Flower skeleton
 extern UNK_TYPE D_04012860;
 extern UNK_TYPE D_040128BC;
 extern u64 D_04014570[];
@@ -3902,13 +3894,6 @@ extern AnimationHeader D_04029140;
 extern Gfx D_04029CB0[];
 extern Gfx D_04029CF0[];
 extern UNK_TYPE D_04029D20;
-extern AnimationHeader D_0402B494;
-extern AnimatedMaterial D_0402C818;
-extern AnimatedMaterial D_0402C890;
-extern AnimatedMaterial D_0402C908;
-extern AnimatedMaterial D_0402C980;
-extern AnimatedMaterial D_0402C9F8;
-extern FlexSkeletonHeader D_0402CA98;
 extern Gfx D_0402E510[];
 extern AnimationHeader D_0402E65C;
 extern AnimationHeader D_0402F0EC;
@@ -4001,9 +3986,9 @@ extern UNK_TYPE D_04091CE0;
 
 extern Gfx D_05000C40[];
 extern UNK_TYPE D_05001D20;
-extern UNK_TYPE D_050061E8;
-extern UNK_TYPE D_05006420;
-extern UNK_TYPE D_050066B0;
+extern Gfx D_050061E8[];
+extern Gfx D_05006420[];
+extern Gfx D_050066B0[];
 extern UNK_TYPE D_05007498;
 extern Gfx D_05007890[];
 extern Gfx D_050078A0[];
