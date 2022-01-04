@@ -300,7 +300,7 @@ void func_8095DF90(EnIshi* this, GlobalContext* globalCtx) {
 void func_8095DFF0(EnIshi* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 temp = D_8095F76C[ENISHI_GET_70(&this->actor)];
-    EnItem00* sp3C;
+    Actor* sp3C;
     Vec3f sp30;
     f32 sp2C;
     f32 temp_f2;
@@ -316,15 +316,15 @@ void func_8095DFF0(EnIshi* this, GlobalContext* globalCtx) {
             Matrix_GetStateTranslationAndScaledY(1.0f, &sp30);
             sp2C = Math3D_Parallel(&sp30, &D_8095F778);
             if (sp2C < 0.707f) {
-                temp_v1_2 = Math_FAtan2F(sp30.z, sp30.x) - sp3C->actor.world.rot.y;
+                temp_v1_2 = Math_FAtan2F(sp30.z, sp30.x) - sp3C->world.rot.y;
                 if (ABS_ALT(temp_v1_2) > 0x4000) {
-                    sp3C->actor.world.rot.y = BINANG_ROT180(sp3C->actor.world.rot.y);
+                    sp3C->world.rot.y = BINANG_ROT180(sp3C->world.rot.y);
                 }
                 temp_f2 = sp2C + 0.5f;
                 if (temp_f2 < 0.5f) {
                     temp_f2 = 0.5f;
                 }
-                sp3C->actor.velocity.y *= temp_f2;
+                sp3C->velocity.y *= temp_f2;
             }
             Matrix_StatePop();
         }
