@@ -21,7 +21,7 @@ s32 __osVoiceContRead2(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[2]) {
                 ;
             }
 
-            __osPfsPifRam.pifstatus = CONT_CMD_READ_BUTTON;
+            __osPfsPifRam.status = CONT_CMD_READ_BUTTON;
 
             ptr[0] = 0xFF;
             ptr[1] = 3;

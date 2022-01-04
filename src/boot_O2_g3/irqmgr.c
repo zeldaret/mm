@@ -159,7 +159,7 @@ void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount) {
     irqmgr->prenmiStage = 0;
     irqmgr->lastPrenmiTime = 0;
 
-    osCreateMesgQueue(&irqmgr->irqQueue, (OSMesg*)irqmgr->irqBuffer, 8);
+    osCreateMesgQueue(&irqmgr->irqQueue, (OSMesg*)irqmgr->irqBuffer, ARRAY_COUNT(irqmgr->irqBuffer));
     osSetEventMesg(0xE, &irqmgr->irqQueue, (OSMesg)0x29D);
     osViSetEvent(&irqmgr->irqQueue, (OSMesg)0x29A, retraceCount);
 

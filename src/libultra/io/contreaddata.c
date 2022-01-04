@@ -47,7 +47,7 @@ void __osPackReadData() {
         __osContPifRam.ramarray[i] = 0;
     }
 
-    __osContPifRam.pifstatus = CONT_CMD_READ_BUTTON;
+    __osContPifRam.status = CONT_CMD_READ_BUTTON;
     readformat.dummy = 255;
     readformat.txsize = 1;
     readformat.rxsize = 4;

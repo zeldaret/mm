@@ -1,5 +1,5 @@
 /*
- * File z_en_in.c
+ * File: z_en_in.c
  * Overlay: ovl_En_In
  * Description: Gorman Bros
  */
@@ -214,11 +214,11 @@ s32 func_808F3178(EnIn* this, GlobalContext* globalCtx) {
     u8 tmp;
 
     this->unk260 = tmp = func_8013DB90(globalCtx, &this->unk248, -6.0f);
-    if (this->unk260 != 0 && prevUnk260 == 0 && tmp & 0xFF) {
+    if (this->unk260 != 0 && prevUnk260 == 0 && tmp) {
         Audio_PlayActorSound2(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     this->unk261 = tmp = func_8013DB90(globalCtx, &this->unk254, -6.0f);
-    if (this->unk261 != 0 && prevUnk261 == 0 && tmp & 0xFF) {
+    if (this->unk261 != 0 && prevUnk261 == 0 && tmp) {
         Audio_PlayActorSound2(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     return 0;
@@ -369,7 +369,7 @@ void func_808F38F8(EnIn* this, GlobalContext* globalCtx) {
     this->unk4A4 = NULL;
     while (true) {
         //! @bug: Infinite loop if there is only one ACTOR_EN_IN
-        this->unk4A4 = (EnIn*)func_ActorCategoryIterateById(globalCtx, &this->unk4A4->actor, ACTORCAT_NPC, ACTOR_EN_IN);
+        this->unk4A4 = (EnIn*)SubS_FindActor(globalCtx, &this->unk4A4->actor, ACTORCAT_NPC, ACTOR_EN_IN);
         if (this->unk4A4 != NULL && this->unk4A4 != this) {
             break;
         }

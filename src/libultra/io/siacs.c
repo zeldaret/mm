@@ -7,7 +7,7 @@ OSMesgQueue __osSiAccessQueue;
 
 void __osSiCreateAccessQueue() {
     __osSiAccessQueueEnabled = 1;
-    osCreateMesgQueue(&__osSiAccessQueue, siAccessBuf, 1);
+    osCreateMesgQueue(&__osSiAccessQueue, siAccessBuf, ARRAY_COUNT(siAccessBuf));
     osSendMesg(&__osSiAccessQueue, NULL, OS_MESG_NOBLOCK);
 }
 

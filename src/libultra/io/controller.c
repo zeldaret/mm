@@ -43,7 +43,7 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     __osContGetInitData(bitpattern, data);
     __osContLastPoll = 0;
     __osSiCreateAccessQueue();
-    osCreateMesgQueue(&D_8009CF38, D_8009CF50, 1);
+    osCreateMesgQueue(&D_8009CF38, D_8009CF50, ARRAY_COUNT(D_8009CF50));
 
     return ret;
 }
@@ -78,7 +78,7 @@ void __osPackRequestData(u8 poll) {
         __osContPifRam.ramarray[i] = 0;
     }
 
-    __osContPifRam.pifstatus = CONT_CMD_READ_BUTTON;
+    __osContPifRam.status = CONT_CMD_READ_BUTTON;
     ptr = (u8*)__osContPifRam.ramarray;
     requestHeader.align = 255;
     requestHeader.txsize = 1;
