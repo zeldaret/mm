@@ -4003,9 +4003,9 @@ extern UNK_TYPE D_04091CE0;
 
 extern Gfx D_05000C40[];
 extern UNK_TYPE D_05001D20;
-extern UNK_TYPE D_050061E8;
-extern UNK_TYPE D_05006420;
-extern UNK_TYPE D_050066B0;
+extern Gfx D_050061E8[];
+extern Gfx D_05006420[];
+extern Gfx D_050066B0[];
 extern UNK_TYPE D_05007498;
 extern Gfx D_05007890[];
 extern Gfx D_050078A0[];
