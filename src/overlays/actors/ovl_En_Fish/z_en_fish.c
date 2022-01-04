@@ -899,7 +899,7 @@ void func_8091F830(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.child = NULL;
     }
 
-    if ((this->unkFunc == NULL) || (this->unkFunc(&this->actor, globalCtx), (this->actor.update != 0))) {
+    if ((this->unkFunc == NULL) || (this->unkFunc(&this->actor, globalCtx), (this->actor.update != NULL))) {
         func_8091D7C4(this);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 
