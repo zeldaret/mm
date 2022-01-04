@@ -34,7 +34,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30->polyOpa.p = temp_v1 + 8;
     temp_v1->words.w0 = 0xDB060020;
     temp_v1->words.w1 = (u32) D_80C106B0[this->unk_2AC];
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, (Actor *) this);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, (Actor *) this);
 }
 ```
 
@@ -107,7 +107,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -115,9 +115,9 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
 And this matches.
 
-The last two functions in the actor are used as arguments in `func_801343C0`. This is a `SkelAnime` function, except unlike the OoT ones, it has three function callback arguments instead of two: in `functions.h` or `z_skelanime.c`, we find
+The last two functions in the actor are used as arguments in `SkelAnime_DrawTransformFlexOpa`. This is a `SkelAnime` function, except unlike the OoT ones, it has three function callback arguments instead of two: in `functions.h` or `z_skelanime.c`, we find
 ```C
-void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
+void SkelAnime_DrawTransformFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
                    OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor)
 ```
 The typedefs of the callbacks it uses are in `z64animation.h`:
@@ -130,7 +130,7 @@ typedef void (*PostLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx
 
 [...]
 
-typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
+typedef void (*TransformLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
 ```
 which is where mips2c got them from.
 

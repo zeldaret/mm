@@ -1040,7 +1040,7 @@ void EnAob01_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 50, 80, 0, 0));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                   EnAob01_OverrideLimbDraw, EnAob01_PostLimbDraw, EnAob01_UnkDraw, &this->actor);
 
     if (this->actor.draw != NULL) {

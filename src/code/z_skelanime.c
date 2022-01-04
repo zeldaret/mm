@@ -473,9 +473,9 @@ void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* joi
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw,
-                   Actor* actor, Mtx** mtx) {
+void SkelAnime_DrawTransformFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
+                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw,
+                   TransformLimbDrawOpa transformLimbDraw, Actor* actor, Mtx** mtx) {
     StandardLimb* limb;
     Gfx* newDList;
     Gfx* limbDList;
@@ -500,8 +500,8 @@ void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec
         Matrix_JointPosition(&pos, &rot);
         Matrix_StatePush();
 
-        //! @bug Does not check unkDraw is not NULL before calling it.
-        unkDraw(globalCtx, limbIndex, actor);
+        //! @bug Does not check transformLimbDraw is not NULL before calling it.
+        transformLimbDraw(globalCtx, limbIndex, actor);
         if (newDList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
@@ -523,23 +523,23 @@ void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec
     }
 
     if (limb->child != LIMB_DONE) {
-        func_80134148(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw, unkDraw, actor,
-                      mtx);
+        SkelAnime_DrawTransformFlexLimbOpa(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw, transformLimbDraw,
+                      actor, mtx);
     }
 
     Matrix_StatePop();
 
     if (limb->sibling != LIMB_DONE) {
-        func_80134148(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw, unkDraw, actor,
-                      mtx);
+        SkelAnime_DrawTransformFlexLimbOpa(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw, transformLimbDraw,
+                      actor, mtx);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw,
-                   Actor* actor) {
+void SkelAnime_DrawTransformFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
+                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw,
+                   TransformLimbDrawOpa transformLimbDraw, Actor* actor) {
     StandardLimb* rootLimb;
     s32 pad;
     Gfx* newDList;
@@ -573,8 +573,8 @@ void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
         Matrix_JointPosition(&pos, &rot);
         Matrix_StatePush();
 
-        //! @bug Does not check unkDraw is not NULL before calling it.
-        unkDraw(globalCtx, 1, actor);
+        //! @bug Does not check transformLimbDraw is not NULL before calling it.
+        transformLimbDraw(globalCtx, 1, actor);
 
         if (newDList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
@@ -596,8 +596,8 @@ void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
     }
 
     if (rootLimb->child != LIMB_DONE) {
-        func_80134148(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw, unkDraw, actor,
-                      &mtx);
+        SkelAnime_DrawTransformFlexLimbOpa(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                      transformLimbDraw, actor, &mtx);
     }
 
     Matrix_StatePop();

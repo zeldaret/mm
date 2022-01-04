@@ -2042,7 +2042,7 @@ asm/non_matchings/code/z_skelanime/SkelAnime_Draw.s,SkelAnime_Draw,0x80133B3C,0x
 asm/non_matchings/code/z_skelanime/SkelAnime_DrawLimbSV.s,SkelAnime_DrawLimbSV,0x80133CDC,0x93
 asm/non_matchings/code/z_skelanime/SkelAnime_DrawFlexOpa.s,SkelAnime_DrawFlexOpa,0x80133F28,0x88
 asm/non_matchings/code/z_skelanime/func_80134148.s,func_80134148,0x80134148,0x9E
-asm/non_matchings/code/z_skelanime/func_801343C0.s,func_801343C0,0x801343C0,0x90
+asm/non_matchings/code/z_skelanime/SkelAnime_DrawTransformFlexOpa.s,SkelAnime_DrawTransformFlexOpa,0x801343C0,0x90
 asm/non_matchings/code/z_skelanime/SkelAnime_AnimateFrame.s,SkelAnime_AnimateFrame,0x80134600,0x49
 asm/non_matchings/code/z_skelanime/SkelAnime_GetTotalFrames.s,SkelAnime_GetTotalFrames,0x80134724,0x9
 asm/non_matchings/code/z_skelanime/Animation_GetLastFrame.s,Animation_GetLastFrame,0x80134748,0xB

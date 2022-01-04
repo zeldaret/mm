@@ -120,7 +120,7 @@ void DmSa_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, func_80A2EBB0(globalCtx->state.gfxCtx, this->alpha));
     }
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                   func_80A2EB10, func_80A2EB2C, func_80A2EB44, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

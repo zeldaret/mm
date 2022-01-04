@@ -308,6 +308,12 @@ animdict = {
     "func_800A81F0": "EffectBlure_AddVertex",
     "func_800A8514": "EffectBlure_AddSpace",
     "Effect_GetParams": "Effect_GetByIndex",
+    "func_801343C0": "SkelAnime_DrawTransformFlexOpa",
+    "func_80134148": "SkelAnime_DrawTransformFlexLimbOpa",
+    "func_8013AB00": "SubS_DrawTransformFlex",
+    "func_8013A860": "SubS_DrawTransformFlexLimb",
+
+
     
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",

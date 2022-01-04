@@ -319,6 +319,6 @@ void EnPoFusen_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
 void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnPoFusen* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
                   EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw, &this->actor);
 }

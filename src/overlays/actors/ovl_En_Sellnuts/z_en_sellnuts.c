@@ -1148,6 +1148,6 @@ void EnSellnuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSellnuts* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                   EnSellnuts_OverrideLimbDraw, EnSellnuts_PostLimbDraw, func_80ADD7CC, &this->actor);
 }

@@ -36,8 +36,8 @@ EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 unk_1A5) {
     return door;
 }
 
-Gfx* func_8013A860(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkActorDraw,
+Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
+                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw,
                    Actor* actor, Mtx** mtx, Gfx* gfx) {
     StandardLimb* limb;
     Gfx* newDList;
@@ -58,8 +58,8 @@ Gfx* func_8013A860(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec
         Matrix_JointPosition(&pos, &rot);
         Matrix_StatePush();
 
-        //! @bug Does not check unkDraw is not NULL before calling it.
-        unkActorDraw(globalCtx, limbIndex, actor, &gfx);
+        //! @bug Does not check transformLimbDraw is not NULL before calling it.
+        transformLimbDraw(globalCtx, limbIndex, actor, &gfx);
 
         if (newDList != NULL) {
             Matrix_ToMtx(*mtx);
@@ -76,19 +76,19 @@ Gfx* func_8013A860(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec
         postLimbDraw(globalCtx, limbIndex, &limbDList, &rot, actor, &gfx);
     }
     if (limb->child != LIMB_DONE) {
-        gfx = func_8013A860(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw, unkActorDraw,
-                            actor, mtx, gfx);
+        gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                            transformLimbDraw, actor, mtx, gfx);
     }
     Matrix_StatePop();
     if (limb->sibling != LIMB_DONE) {
-        gfx = func_8013A860(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
-                            unkActorDraw, actor, mtx, gfx);
+        gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                            transformLimbDraw, actor, mtx, gfx);
     }
     return gfx;
 }
 
-Gfx* func_8013AB00(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkActorDraw,
+Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
+                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw,
                    Actor* actor, Gfx* gfx) {
     StandardLimb* limb;
     s32 pad;
@@ -116,8 +116,8 @@ Gfx* func_8013AB00(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
         Matrix_JointPosition(&pos, &rot);
         Matrix_StatePush();
 
-        //! @bug Does not check unkDraw is not NULL before calling it.
-        unkActorDraw(globalCtx, 1, actor, &gfx);
+        //! @bug Does not check transformLimbDraw is not NULL before calling it.
+        transformLimbDraw(globalCtx, 1, actor, &gfx);
 
         if (newDlist != NULL) {
             Matrix_ToMtx(mtx);
@@ -136,8 +136,8 @@ Gfx* func_8013AB00(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
     }
 
     if (limb->child != LIMB_DONE) {
-        gfx = func_8013A860(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw, unkActorDraw,
-                            actor, &mtx, gfx);
+        gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                            transformLimbDraw, actor, &mtx, gfx);
     }
     Matrix_StatePop();
     return gfx;

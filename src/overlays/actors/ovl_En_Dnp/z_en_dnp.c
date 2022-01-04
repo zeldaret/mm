@@ -504,7 +504,7 @@ void EnDnp_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3DEAC[this->unk_336]));
 
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                       func_80B3DA88, func_80B3DAA0, &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -670,7 +670,7 @@ void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE58[this->unk_1D6]));
 
     POLY_XLU_DISP =
-        func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+        SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                       func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_XLU_DISP);
     if (this->unk_1CE & 0x40) {
         Matrix_SetCurrentState(&this->unk_18C);
@@ -702,7 +702,7 @@ void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE70[this->unk_1D6]));
 
         POLY_OPA_DISP =
-            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+            SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_OPA_DISP);
         Matrix_SetCurrentState(&this->unk_18C);
 
@@ -721,7 +721,7 @@ void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE70[this->unk_1D6]));
 
         POLY_XLU_DISP =
-            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+            SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_XLU_DISP);
         Matrix_SetCurrentState(&this->unk_18C);
 
