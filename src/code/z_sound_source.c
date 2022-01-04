@@ -16,11 +16,11 @@ void SoundSource_UpdateAll(GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(globalCtx->soundSources); i++) {
         if (source->countdown != 0) {
             if (DECR(source->countdown) == 0) {
-                Audio_StopSfxByPos(&source->relativePos);
+                Audio_StopSfxByPos(&source->projectedPos);
             } else {
-                SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &source->originPos, &source->relativePos);
-                if (source->isSfxPlayedEachFrame) {
-                    Audio_PlaySfxByPos(&source->relativePos, source->sfxId);
+                SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &source->worldPos, &source->projectedPos);
+                if (source->playSfxEachFrame) {
+                    Audio_PlaySfxByPos(&source->projectedPos, source->sfxId);
                 }
             }
         }
@@ -29,7 +29,7 @@ void SoundSource_UpdateAll(GlobalContext* globalCtx) {
     }
 }
 
-void SoundSource_Add(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfxId, u32 isSfxPlayedEachFrame) {
+void SoundSource_Add(GlobalContext* globalCtx, Vec3f* worldPos, u32 duration, u16 sfxId, u32 playSfxEachFrame) {
     s32 countdown;
     SoundSource* source;
     s32 smallestCountdown = 0xFFFF;
@@ -42,6 +42,7 @@ void SoundSource_Add(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfx
             break;
         }
 
+        // Store the sound source with the smallest remaining countdown
         countdown = source->countdown;
         if (countdown < smallestCountdown) {
             smallestCountdown = countdown;
@@ -50,24 +51,25 @@ void SoundSource_Add(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfx
         source++;
     }
 
+    // If no sound source is available, replace the sound source with the smallest remaining countdown
     if (i >= ARRAY_COUNT(globalCtx->soundSources)) {
         source = backupSource;
-        Audio_StopSfxByPos(&source->relativePos);
+        Audio_StopSfxByPos(&source->projectedPos);
     }
 
-    source->originPos = *pos;
+    source->worldPos = *worldPos;
     source->countdown = duration;
-    source->isSfxPlayedEachFrame = isSfxPlayedEachFrame;
+    source->playSfxEachFrame = playSfxEachFrame;
     source->sfxId = sfxId;
 
-    SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &source->originPos, &source->relativePos);
-    Audio_PlaySfxByPos(&source->relativePos, sfxId);
+    SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &source->worldPos, &source->projectedPos);
+    Audio_PlaySfxByPos(&source->projectedPos, sfxId);
 }
 
-void SoundSource_PlaySfxFollowingPos(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfxId) {
-    SoundSource_Add(globalCtx, pos, duration, sfxId, false);
+void SoundSource_PlaySfxAtFixedWorldPos(GlobalContext* globalCtx, Vec3f* worldPos, u32 duration, u16 sfxId) {
+    SoundSource_Add(globalCtx, worldPos, duration, sfxId, false);
 }
 
-void SoundSource_PlaySfxEachFrameFollowingPos(GlobalContext* globalCtx, Vec3f* pos, u32 duration, u16 sfxId) {
-    SoundSource_Add(globalCtx, pos, duration, sfxId, true);
+void SoundSource_PlaySfxEachFrameAtFixedWorldPos(GlobalContext* globalCtx, Vec3f* worldPos, u32 duration, u16 sfxId) {
+    SoundSource_Add(globalCtx, worldPos, duration, sfxId, true);
 }
