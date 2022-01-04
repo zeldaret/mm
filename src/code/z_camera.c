@@ -6879,7 +6879,7 @@ s32 Camera_CheckWater(Camera* camera) {
     if (camera->flags2 & 0x200) {
         if (func_800CB8C8(camera) != 0) {
             if (!Camera_IsPlayerFormZora(camera)) {
-                Camera_ChangeSettingFlags(camera, CAM_SET_CIRCLE5, 0x4 | 0x2);
+                Camera_ChangeSettingFlags(camera, CAM_SET_PIVOT_WATER_SURFACE, 0x4 | 0x2);
             } else {
                 Camera_ChangeSettingFlags(camera, CAM_SET_ZORA, 0x4 | 0x2);
             }

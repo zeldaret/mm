@@ -7753,7 +7753,7 @@ CameraSetting sCameraSettings[] = {
     { 0x00000000, 0x00000000, NULL },                     // CAM_SET_NONE
     { 0x3FFFFFFF, 0x00000005, sCamSetNorm0Modes },        // CAM_SET_NORMAL0
     { 0x05FFEFF7, 0x00000005, sCamSetNorm3Modes },        // CAM_SET_NORMAL3
-    { 0x00000401, 0x00000005, sCamSetCirc5Modes },        // CAM_SET_CIRCLE5
+    { 0x00000401, 0x00000005, sCamSetCirc5Modes },        // CAM_SET_PIVOT_WATER_SURFACE
     { 0x00017E13, 0x80000005, sCamSetHorse0Modes },       // CAM_SET_HORSE
     { 0x00000001, 0x80000005, sCamSetZora0Modes },        // CAM_SET_ZORA
     { 0x00000001, 0x8000000C, sCamSetPreRend0Modes },     // CAM_SET_PREREND0
@@ -7776,7 +7776,7 @@ CameraSetting sCameraSettings[] = {
     { 0x0000002F, 0x00000005, sCamSetWarp0Modes },        // CAM_SET_WARP0
     { 0x0000002F, 0x00000005, sCamSetDeathModes },        // CAM_SET_DEATH
     { 0x0000002F, 0x00000005, sCamSetRebirthModes },      // CAM_SET_REBIRTH
-    { 0x00000001, 0x40000005, sCamSetTreasureModes },     // CAM_SET_TREASURE
+    { 0x00000001, 0x40000005, sCamSetTreasureModes },     // CAM_SET_TREASURE_MINIGAME
     { 0x00000003, 0x00000005, sCamSetTransformModes },    // CAM_SET_TRANSFORM
     { 0x00000001, 0x00000005, sCamSetAttentionModes },    // CAM_SET_ATTENTION
     { 0x00000001, 0x00000005, sCamSetWarp1Modes },        // CAM_SET_WARP1
@@ -7847,7 +7847,7 @@ CameraSetting sCameraSettings[] = {
 static s16 D_801B9CB0[26] = { CAM_SET_ELEGY_SHELL, CAM_SET_SIDED,   CAM_SET_JCRUISING, CAM_SET_NONE,
                               CAM_SET_SUBJECTD,    CAM_SET_NORMALD, CAM_SET_NONE,      CAM_SET_NONE,
                               CAM_SET_NONE,        CAM_SET_WARP1,   CAM_SET_ATTENTION, CAM_SET_CONNECT0,
-                              CAM_SET_REMOTEBOMB,  CAM_SET_NONE,    CAM_SET_TRANSFORM, CAM_SET_TREASURE,
+                              CAM_SET_REMOTEBOMB,  CAM_SET_NONE,    CAM_SET_TRANSFORM, CAM_SET_TREASURE_MINIGAME,
                               CAM_SET_REBIRTH,     CAM_SET_DEATH,   CAM_SET_WARP0,     CAM_SET_NAVI,
                               CAM_SET_ITEM3,       CAM_SET_ITEM2,   CAM_SET_ITEM1,     CAM_SET_ITEM0,
                               CAM_SET_STOP0,       CAM_SET_NONE };

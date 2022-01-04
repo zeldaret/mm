@@ -63,12 +63,12 @@ typedef enum {
     /* 0x00 */ CAM_SET_NONE,
     /* 0x01 */ CAM_SET_NORMAL0,
     /* 0x02 */ CAM_SET_NORMAL3,
-    /* 0x03 */ CAM_SET_CIRCLE5, // "Diving into the water from the surface, not as zora"
+    /* 0x03 */ CAM_SET_PIVOT_WATER_SURFACE, // Player diving from the surface of the water to underwater not as zora "CIRCLE5"
     /* 0x04 */ CAM_SET_HORSE, // "HORSE0"
     /* 0x05 */ CAM_SET_ZORA, // "ZORA0"
-    /* 0x06 */ CAM_SET_PREREND0,
-    /* 0x07 */ CAM_SET_PREREND1,
-    /* 0x08 */ CAM_SET_DOORC,
+    /* 0x06 */ CAM_SET_PREREND0, // Unused remnant of OoT: camera is fixed in position and rotation "PREREND0"
+    /* 0x07 */ CAM_SET_PREREND1, // Unused remnant of OoT: Camera is fixed in position with fixed pitch, but is free to rotate in the yaw direction 360 degrees "PREREND1"
+    /* 0x08 */ CAM_SET_DOORC, // Generic room door transitions, camera moves and follows player as the door is open and closed
     /* 0x09 */ CAM_SET_DEMO0,
     /* 0x0A */ CAM_SET_FREE0,
     /* 0x0B */ CAM_SET_FUKAN0,
@@ -86,7 +86,7 @@ typedef enum {
     /* 0x17 */ CAM_SET_WARP0,
     /* 0x18 */ CAM_SET_DEATH,
     /* 0x19 */ CAM_SET_REBIRTH,
-    /* 0x1A */ CAM_SET_TREASURE, // Treasure Chest Shop in East Clock Town, minigame location
+    /* 0x1A */ CAM_SET_TREASURE_MINIGAME, // Treasure Chest Shop in East Clock Town, minigame location "TREASURE"
     /* 0x1B */ CAM_SET_TRANSFORM,
     /* 0x1C */ CAM_SET_ATTENTION,
     /* 0x1D */ CAM_SET_WARP1,
