@@ -318,7 +318,7 @@ void func_80866A5C(EnDoor* this, GlobalContext* globalCtx) {
                 this->unk_1A6 = 10;
             }
         } else if ((this->unk_1A4 == 4) && (Actor_XZDistanceBetweenActors(
-                                               &this->dyna.actor, globalCtx->actorCtx.actorList[2].first) > 120.0f)) {
+                                                &this->dyna.actor, globalCtx->actorCtx.actorList[2].first) > 120.0f)) {
             this->actionFunc = func_8086704C;
             this->dyna.actor.world.rot.y = -0x1800;
         }
