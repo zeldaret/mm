@@ -352,6 +352,10 @@ animdict = {
     "D_801D15BC" : "gZeroVec3s",
     "D_801D1DE0" : "gIdentityMtx",
     "D_801D1E20" : "gIdentityMtxF",
+    "D_04020658" : "gameplay_keep_Anim_020658",
+    "D_04022B28" : "gDoorSkel",
+    "D_04023100" : "gDoorCol"
+
 }
 
 def replace_anim(file):

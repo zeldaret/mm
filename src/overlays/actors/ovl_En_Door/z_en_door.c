@@ -53,7 +53,7 @@ s32 D_80867634[] = { 0x02060017, 0x0002091C, 0x05000000 };
 s32 D_80867640[] = { 0x02150016, 0x00010509, 0x0B000000 };
 s32 D_8086764C[] = { 0x02160005, 0x0002090A, 0x05000000 };
 s32 D_80867658[] = { 0x0C00020F, 0x001C0802, 0x090C020F, 0x0A160002, 0x090C050C, 0x0003110F,
-                            0x0D000D00, 0x33080209, 0x0C0F1600, 0x02090C05, 0x090C0000 };
+                     0x0D000D00, 0x33080209, 0x0C0F1600, 0x02090C05, 0x090C0000 };
 s32 D_80867684 = 0x05000000;
 
 s32 D_80867688[] = { 0x0F160002, 0x090F0500 };
@@ -491,7 +491,7 @@ s32 EnDoor_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         Gfx** dl = D_808679A4[this->dlIndex];
         s16 temp;
         s32 dlIndex;
-        
+
         transitionEntry = NULL;
 
         if (this->unk_1A4 != 7) {
@@ -501,7 +501,7 @@ s32 EnDoor_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         if ((this->unk_1A4 == 7) || (globalCtx->roomCtx.prevRoom.num >= 0) ||
             (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
             s32 pad;
-            
+
             temp = (this->dyna.actor.shape.rot.y + this->skelAnime.jointTable[3].z + rot->z) -
                    Math_Vec3f_Yaw(&globalCtx->view.eye, &this->dyna.actor.world.pos);
             *dList = (ABS_ALT(temp) < 0x4000) ? dl[0] : dl[1];
