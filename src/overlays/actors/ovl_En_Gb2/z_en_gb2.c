@@ -843,7 +843,7 @@ void func_80B11268(EnGb2* this, GlobalContext* globalCtx) {
         if (Actor_GetRoomCleared(globalCtx, 2) && Actor_GetRoomCleared(globalCtx, 3) &&
             Actor_GetRoomCleared(globalCtx, 4) && Actor_GetRoomCleared(globalCtx, 5)) {
             this->unk_28A = 0xFF;
-            this->unk_26C &= 0xFEFF;
+            this->unk_26C &= ~0x100;
             this->actor.flags |= 1;
             this->actor.draw = EnGb2_Draw;
             this->unk_26E = 0x14F9;
