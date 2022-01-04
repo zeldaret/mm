@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for the Gekko and Mad Jelly minibosses -->
     <File Name="object_bigslime" Segment="6">
         <Animation Name="gGekkoFullFistPumpAnim" Offset="0x994" />
         <Animation Name="gGekkoSurpriseJumpAnim" Offset="0x10F4" />
