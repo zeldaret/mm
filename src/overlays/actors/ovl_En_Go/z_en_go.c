@@ -953,7 +953,7 @@ Actor* func_80A13400(EnGo* this, GlobalContext* globalCtx) {
     Actor* retActor = NULL;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, retActor, ACTORCAT_NPC, ACTOR_EN_GO);
+        actor = SubS_FindActor(globalCtx, retActor, ACTORCAT_NPC, ACTOR_EN_GO);
         retActor = actor;
 
         if ((actor != NULL) && ((EnGo*)actor != this) && (ENGO_GET_F(actor) == ENGO_F_4) &&
