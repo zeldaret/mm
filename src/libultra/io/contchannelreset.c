@@ -7,7 +7,7 @@ s32 __osContChannelReset(OSMesgQueue* mq, s32 channel) {
 
     __osSiGetAccess();
 
-    __osPfsPifRam.pifstatus = 1;
+    __osPfsPifRam.status = 1;
 
     for (i = 0; i < channel; i++) {
         *bufptr++ = 0;
