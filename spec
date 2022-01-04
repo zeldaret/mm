@@ -3046,8 +3046,7 @@ beginseg
     name "ovl_En_Water_Effect"
     compress
     include "build/src/overlays/actors/ovl_En_Water_Effect/z_en_water_effect.o"
-    include "build/data/ovl_En_Water_Effect/ovl_En_Water_Effect.data.o"
-    include "build/data/ovl_En_Water_Effect/ovl_En_Water_Effect.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Water_Effect/ovl_En_Water_Effect_reloc.o"
 endseg
 
 beginseg
