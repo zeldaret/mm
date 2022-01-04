@@ -125,7 +125,7 @@ void EnBomjima_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &object_cs_Anim_0064B8, this->jointTable,
                        this->morphTable, 21);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    gSaveContext.weekEventReg[83] &= (u8)~0x4;
+    gSaveContext.save.weekEventReg[83] &= (u8)~0x4;
     this->actor.targetMode = 0;
     this->unk_2E6 = ENBOMJIMA_GET_F0(&this->actor);
     this->unk_2E4 = ENBOMJIMA_GET_F(&this->actor);
@@ -147,8 +147,8 @@ void EnBomjima_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_80BFFCFC(this);
     }
 
-    if ((gSaveContext.weekEventReg[75] & 0x40) || (gSaveContext.weekEventReg[73] & 0x10) ||
-        (gSaveContext.weekEventReg[85] & 2)) {
+    if ((gSaveContext.save.weekEventReg[75] & 0x40) || (gSaveContext.save.weekEventReg[73] & 0x10) ||
+        (gSaveContext.save.weekEventReg[85] & 2)) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -174,12 +174,12 @@ void func_80BFE32C(EnBomjima* this, GlobalContext* globalCtx, s32 arg2) {
         case 0:
             if (player->transformation == PLAYER_FORM_DEKU) {
                 this->actor.textId = 0x759;
-                if (!(gSaveContext.weekEventReg[73] & 0x20)) {
+                if (!(gSaveContext.save.weekEventReg[73] & 0x20)) {
                     this->actor.textId = 0x708;
                 }
             } else if (player->transformation == PLAYER_FORM_HUMAN) {
                 this->actor.textId = 0x75A;
-                if (!(gSaveContext.weekEventReg[84] & 0x80)) {
+                if (!(gSaveContext.save.weekEventReg[84] & 0x80)) {
                     this->actor.textId = 0x719;
                 }
             } else if ((this->unk_2C8 == 1) || (this->unk_2C8 == 2)) {
@@ -358,18 +358,18 @@ void func_80BFEB64(EnBomjima* this, GlobalContext* globalCtx) {
 
     func_80BFE32C(this, globalCtx, 0);
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if (gSaveContext.weekEventReg[73] & 0x20) {
+        if (gSaveContext.save.weekEventReg[73] & 0x20) {
             this->unk_2C8 = 3;
             func_80BFE32C(this, globalCtx, 3);
-        } else if (gSaveContext.weekEventReg[77] & 2) {
+        } else if (gSaveContext.save.weekEventReg[77] & 2) {
             this->unk_2C8 = 11;
             func_80BFE32C(this, globalCtx, 2);
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (gSaveContext.weekEventReg[84] & 0x80) {
+        if (gSaveContext.save.weekEventReg[84] & 0x80) {
             this->unk_2C8 = 0;
             func_80BFE32C(this, globalCtx, 3);
-        } else if (gSaveContext.weekEventReg[85] & 1) {
+        } else if (gSaveContext.save.weekEventReg[85] & 1) {
             this->unk_2C8 = 11;
             func_80BFE32C(this, globalCtx, 2);
         }
@@ -468,7 +468,7 @@ void func_80BFF03C(EnBomjima* this, GlobalContext* globalCtx) {
         ActorCutscene_SetIntentToPlay(this->unk_2D4[0]);
     } else {
         player->stateFlags1 &= ~0x20;
-        gSaveContext.weekEventReg[83] &= (u8)~4;
+        gSaveContext.save.weekEventReg[83] &= (u8)~4;
         this->actor.world.rot.y = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
         this->unk_2DC = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D4[0], &this->actor);
@@ -514,11 +514,11 @@ void func_80BFF174(EnBomjima* this, GlobalContext* globalCtx) {
     }
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if (gSaveContext.weekEventReg[73] & 0x20) {
+        if (gSaveContext.save.weekEventReg[73] & 0x20) {
             this->unk_2C8 = 3;
             func_80BFE32C(this, globalCtx, 3);
         } else {
-            if (!(gSaveContext.weekEventReg[77] & 2)) {
+            if (!(gSaveContext.save.weekEventReg[77] & 2)) {
                 if (this->unk_2E8 == 0) {
                     this->unk_2C8 = 4;
                 } else {
@@ -530,11 +530,11 @@ void func_80BFF174(EnBomjima* this, GlobalContext* globalCtx) {
             func_80BFE32C(this, globalCtx, 2);
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (gSaveContext.weekEventReg[84] & 0x80) {
+        if (gSaveContext.save.weekEventReg[84] & 0x80) {
             this->unk_2C8 = 0;
             func_80BFE32C(this, globalCtx, 3);
         } else {
-            if (!(gSaveContext.weekEventReg[85] & 1)) {
+            if (!(gSaveContext.save.weekEventReg[85] & 1)) {
                 if (this->unk_2EA == 0) {
                     this->unk_2C8 = 4;
                 } else {
@@ -574,7 +574,7 @@ void func_80BFF430(EnBomjima* this, GlobalContext* globalCtx) {
             bombal->unk_150 = 0.0f;
             bombal->unk_14C = this->unk_2F4;
             func_800B86C8(&this->actor, globalCtx, &bombal->actor);
-            gSaveContext.weekEventReg[83] &= (u8)~4;
+            gSaveContext.save.weekEventReg[83] &= (u8)~4;
             func_80BFE65C(this);
             func_801477B4(globalCtx);
             this->actionFunc = func_80BFEA94;
@@ -721,31 +721,31 @@ void func_80BFF9B0(EnBomjima* this, GlobalContext* globalCtx) {
         D_80C009F0 = 0;
         this->unk_2C8 = 9;
         if (player->transformation == PLAYER_FORM_DEKU) {
-            gSaveContext.weekEventReg[73] |= 0x10;
-            gSaveContext.weekEventReg[77] |= 2;
+            gSaveContext.save.weekEventReg[73] |= 0x10;
+            gSaveContext.save.weekEventReg[77] |= 2;
         } else {
-            gSaveContext.weekEventReg[85] |= 2;
-            gSaveContext.weekEventReg[85] |= 1;
+            gSaveContext.save.weekEventReg[85] |= 2;
+            gSaveContext.save.weekEventReg[85] |= 1;
         }
 
-        gSaveContext.weekEventReg[11] &= (u8)~1;
-        gSaveContext.weekEventReg[11] &= (u8)~2;
-        gSaveContext.weekEventReg[11] &= (u8)~4;
-        gSaveContext.weekEventReg[11] &= (u8)~8;
-        gSaveContext.weekEventReg[11] &= (u8)~0x10;
+        gSaveContext.save.weekEventReg[11] &= (u8)~1;
+        gSaveContext.save.weekEventReg[11] &= (u8)~2;
+        gSaveContext.save.weekEventReg[11] &= (u8)~4;
+        gSaveContext.save.weekEventReg[11] &= (u8)~8;
+        gSaveContext.save.weekEventReg[11] &= (u8)~0x10;
 
-        gSaveContext.weekEventReg[76] &= (u8)~1;
-        gSaveContext.weekEventReg[76] &= (u8)~2;
-        gSaveContext.weekEventReg[76] &= (u8)~4;
-        gSaveContext.weekEventReg[76] &= (u8)~8;
-        gSaveContext.weekEventReg[76] &= (u8)~0x10;
+        gSaveContext.save.weekEventReg[76] &= (u8)~1;
+        gSaveContext.save.weekEventReg[76] &= (u8)~2;
+        gSaveContext.save.weekEventReg[76] &= (u8)~4;
+        gSaveContext.save.weekEventReg[76] &= (u8)~8;
+        gSaveContext.save.weekEventReg[76] &= (u8)~0x10;
 
-        gSaveContext.unk_FE6 = 0;
-        gSaveContext.unk_FE7[0] = 0;
-        gSaveContext.unk_FE7[1] = 0;
-        gSaveContext.unk_FE7[2] = 0;
-        gSaveContext.unk_FE7[3] = 0;
-        gSaveContext.unk_FE7[4] = 0;
+        gSaveContext.save.bombersCaughtNum = 0;
+        gSaveContext.save.bombersCaughtOrder[0] = 0;
+        gSaveContext.save.bombersCaughtOrder[1] = 0;
+        gSaveContext.save.bombersCaughtOrder[2] = 0;
+        gSaveContext.save.bombersCaughtOrder[3] = 0;
+        gSaveContext.save.bombersCaughtOrder[4] = 0;
 
         func_80BFE494(this, 3, 1.0f);
         this->unk_2C8 = 9;

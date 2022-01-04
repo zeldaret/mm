@@ -94,7 +94,7 @@ void EnColMan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80AFDD60(EnColMan* this) {
-    if (!(gSaveContext.weekEventReg[56] & 2)) {
+    if (!(gSaveContext.save.weekEventReg[56] & 2)) {
         this->actor.draw = func_80AFE414;
         this->actor.shape.yOffset = 700.0f;
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
@@ -123,14 +123,14 @@ void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.0f;
         }
     }
-    if (!(gSaveContext.weekEventReg[56] & 2)) {
+    if (!(gSaveContext.save.weekEventReg[56] & 2)) {
         this->actor.shape.rot.y += 0x3E8;
     }
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actor.draw = NULL;
         this->actionFunc = EnColMan_SetHeartPieceCollectedAndKill;
-    } else if (!(gSaveContext.weekEventReg[56] & 2)) {
+    } else if (!(gSaveContext.save.weekEventReg[56] & 2)) {
         func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 40.0f, 40.0f);
     } else {
         func_800B8A1C(&this->actor, globalCtx, GI_RECOVERY_HEART, 40.0f, 40.0f);
@@ -139,7 +139,7 @@ void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx) {
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
-        gSaveContext.weekEventReg[56] |= 2;
+        gSaveContext.save.weekEventReg[56] |= 2;
         Actor_MarkForDeath(&this->actor);
     }
 }

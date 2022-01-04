@@ -334,7 +334,7 @@ animdict = {
     "gSaveContext.weekEventReg": "gSaveContext.save.weekEventReg",
     "gSaveContext.playerForm": "gSaveContext.save.playerForm",
     "gSaveContext.day": "gSaveContext.save.day",
-    "gSaveContext.cutscene": "gSaveContext.save.cutscene",
+    # "gSaveContext.cutscene": "gSaveContext.save.cutscene",
     "gSaveContext.isNight": "gSaveContext.save.isNight",
     "gSaveContext.naviTimer": "gSaveContext.save.playerData.tatlTimer",
     "gSaveContext.tatlTimer": "gSaveContext.save.playerData.tatlTimer",
@@ -350,6 +350,7 @@ animdict = {
     "gSaveContext.doubleMagic": "gSaveContext.save.playerData.doubleMagic",
     "gSaveContext.unk_FE6": "gSaveContext.save.bombersCaughtNum",
     "gSaveContext.unk_FE7": "gSaveContext.save.bombersCaughtOrder",
+    "gSaveContext.linkAge": "gSaveContext.save.linkAge",
 
     "D_0407D590": "gGameplayKeepDrawFlameDL",
     "D_801D15B0": "gZeroVec3f",

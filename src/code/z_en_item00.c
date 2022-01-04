@@ -1042,7 +1042,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
         dropQuantity = sDropTableAmounts[params + dropTableIndex];
 
         if (dropId == ITEM00_MASK) {
-            switch (gSaveContext.playerForm) {
+            switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_HUMAN:
                     dropId = ITEM00_ARROWS_10;
                     break;

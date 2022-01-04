@@ -19,6 +19,7 @@ ifeq ($(NON_MATCHING),1)
   COMPARE := 0
 endif
 
+DISASM_FLAGS ?= 
 ifneq ($(FULL_DISASM), 0)
   DISASM_FLAGS += --full
 endif
