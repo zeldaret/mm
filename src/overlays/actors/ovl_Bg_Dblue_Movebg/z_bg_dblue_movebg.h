@@ -23,7 +23,7 @@ typedef struct BgDblueMovebg {
     /* 0x0172 */ u16 unk_172;
     /* 0x0174 */ u16 unk_174;
     /* 0x0178 */ s32 unk_178;
-    /* 0x017C */ char unk17C[2];
+    /* 0x017C */ UNK_TYPE1 unk17C[2];
     /* 0x017E */ s16 unk_17E;
     /* 0x0180 */ s16 unk_180;
     /* 0x0184 */ f32 unk_184;
@@ -34,7 +34,7 @@ typedef struct BgDblueMovebg {
     /* 0x0190 */ Vec3f unk_190;
     /* 0x019C */ Vec3f unk_19C;
     /* 0x01A8 */ Vec3f unk_1A8;
-    /* 0x01B4 */ char unk1B4[2];
+    /* 0x01B4 */ UNK_TYPE1 unk1B4[2];
     /* 0x01B6 */ s16 unk_1B6[2];
     /* 0x01BC */ s32 unk_1BC;
     /* 0x01C0 */ s32 unk_1C0;
@@ -50,7 +50,7 @@ typedef struct BgDblueMovebg {
     /* 0x0238 */ Vec3f unk_238[2][8];
     /* 0x02F8 */ Actor* unk_2F8[2];
     /* 0x0300 */ u8 unk_300[2][8];
-    /* 0x0310 */ char unk310[0x60];
+    /* 0x0310 */ UNK_TYPE1 unk310[0x60];
 } BgDblueMovebg; // size = 0x370
 
 extern const ActorInit Bg_Dblue_Movebg_InitVars;

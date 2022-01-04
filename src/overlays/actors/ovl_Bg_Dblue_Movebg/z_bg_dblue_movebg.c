@@ -789,7 +789,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     if ((this->unk_160 == 9) || (this->unk_160 == 8) || (this->dyna.actor.flags & 0x40)) {
-        if (this->unk_16C != 0) {
+        if (this->unk_16C != NULL) {
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(this->unk_16C));
         }
 
