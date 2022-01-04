@@ -1792,7 +1792,7 @@ void Math_ApproachS(s16* pValue, s16 target, s16 scale, s16 maxStep);
 void Color_RGBA8_Copy(Color_RGBA8* dst, Color_RGBA8* src);
 void func_801000A4(u16 sfxId);
 void func_801000CC(u16 sfxId);
-void Lib_PlaySfxByPos(s32 a0, u16 a1);
+void Lib_PlaySfxByPos(Vec3f* pos, u16 sfxId);
 void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 a, Vec3f* src, Vec3f* dst);
 void Lib_LerpRGB(Color_RGB8* a, Color_RGB8* b, f32 t, Color_RGB8* dst);
 f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed);
@@ -3784,10 +3784,10 @@ void func_8019E014(void);
 // void func_8019F05C(void);
 void play_sound(u16 sfxId);
 void func_8019F128(u16 sfxId);
-// void func_8019F170(void);
+void func_8019F170(Vec3f* pos, u16 sfxId);
 void Audio_PlaySfxByPos(Vec3f* pos, u16 sfxId);
-void func_8019F208(void);
-void func_8019F230(void); // Plays "No" sound
+void func_8019F208(void); // decide sfx
+void func_8019F230(void); // cancel sfx
 // void func_8019F258(void);
 // void func_8019F300(void);
 void func_8019F420(Vec3f* pos, u16 sfxId);

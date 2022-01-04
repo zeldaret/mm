@@ -59,7 +59,7 @@ animdict = {
     "ShrinkWindow_Step": "ShrinkWindow_Update",
     "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
     "func_801A89A8": "Audio_QueueSeqCmd",
-    "Audio_PlaySfxByPos": "Audio_PlaySfxByPos",
+    "func_8019F1C0": "Audio_PlaySfxByPos",
     "func_801A72CC": "Audio_StopSfxByPos",
     "SkelAnime_LodDrawLimb(": "SkelAnime_DrawLimbLod(",
     "SkelAnime_LodDraw(": "SkelAnime_DrawLod(",
