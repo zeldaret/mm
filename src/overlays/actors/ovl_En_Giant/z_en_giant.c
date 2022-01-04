@@ -348,8 +348,11 @@ void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionI
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
     if (Cutscene_CheckActorAction(globalCtx, this->actorActionCommand)) {
         EnGiant_UpdatePosition(this, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand));
-        if (this->csAction != globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action) {
-            this->csAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action;
+        if (this->csAction !=
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action) {
+            this->csAction =
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]
+                    ->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -370,9 +373,13 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
     this->actor.draw = EnGiant_Draw;
 
     if (Cutscene_CheckActorAction(globalCtx, this->actorActionCommand)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand));
-        if (this->csAction != globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action) {
-            this->csAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action;
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx,
+                                      Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand));
+        if (this->csAction !=
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action) {
+            this->csAction =
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]
+                    ->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
