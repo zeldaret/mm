@@ -1328,9 +1328,11 @@ beginseg
     name "ovl_En_Fishing"
     compress
     include "build/src/overlays/actors/ovl_En_Fishing/z_en_fishing.o"
-    include "build/data/ovl_En_Fishing/ovl_En_Fishing.data.o"
-    include "build/data/ovl_En_Fishing/ovl_En_Fishing.bss.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Fishing/ovl_En_Fishing_reloc.o"
+#else
     include "build/data/ovl_En_Fishing/ovl_En_Fishing.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -1948,8 +1950,7 @@ beginseg
     name "ovl_Effect_Ss_Stick"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Stick/z_eff_ss_stick.o"
-    include "build/data/ovl_Effect_Ss_Stick/ovl_Effect_Ss_Stick.data.o"
-    include "build/data/ovl_Effect_Ss_Stick/ovl_Effect_Ss_Stick.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Stick/ovl_Effect_Ss_Stick_reloc.o"
 endseg
 
 beginseg
@@ -3053,9 +3054,7 @@ beginseg
     name "ovl_En_Kusa2"
     compress
     include "build/src/overlays/actors/ovl_En_Kusa2/z_en_kusa2.o"
-    include "build/data/ovl_En_Kusa2/ovl_En_Kusa2.data.o"
-    include "build/data/ovl_En_Kusa2/ovl_En_Kusa2.bss.o"
-    include "build/data/ovl_En_Kusa2/ovl_En_Kusa2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kusa2/ovl_En_Kusa2_reloc.o"
 endseg
 
 beginseg
@@ -3122,9 +3121,7 @@ beginseg
     name "ovl_En_Fall"
     compress
     include "build/src/overlays/actors/ovl_En_Fall/z_en_fall.o"
-    include "build/data/ovl_En_Fall/ovl_En_Fall.data.o"
-    include "build/data/ovl_En_Fall/ovl_En_Fall.bss.o"
-    include "build/data/ovl_En_Fall/ovl_En_Fall.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fall/ovl_En_Fall_reloc.o"
 endseg
 
 beginseg
@@ -3364,8 +3361,7 @@ beginseg
     name "ovl_Obj_Tokeidai"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tokeidai/z_obj_tokeidai.o"
-    include "build/data/ovl_Obj_Tokeidai/ovl_Obj_Tokeidai.data.o"
-    include "build/data/ovl_Obj_Tokeidai/ovl_Obj_Tokeidai.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Tokeidai/ovl_Obj_Tokeidai_reloc.o"
 endseg
 
 beginseg
@@ -3856,8 +3852,7 @@ beginseg
     name "ovl_En_Talk_Gibud"
     compress
     include "build/src/overlays/actors/ovl_En_Talk_Gibud/z_en_talk_gibud.o"
-    include "build/data/ovl_En_Talk_Gibud/ovl_En_Talk_Gibud.data.o"
-    include "build/data/ovl_En_Talk_Gibud/ovl_En_Talk_Gibud.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Talk_Gibud/ovl_En_Talk_Gibud_reloc.o"
 endseg
 
 beginseg
@@ -4581,8 +4576,7 @@ beginseg
     name "ovl_En_Geg"
     compress
     include "build/src/overlays/actors/ovl_En_Geg/z_en_geg.o"
-    include "build/data/ovl_En_Geg/ovl_En_Geg.data.o"
-    include "build/data/ovl_En_Geg/ovl_En_Geg.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Geg/ovl_En_Geg_reloc.o"
 endseg
 
 beginseg
