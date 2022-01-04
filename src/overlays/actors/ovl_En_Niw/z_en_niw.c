@@ -813,12 +813,12 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     // if cucco is off the map
     if ((this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= BGCHECK_Y_MAX)) {
         Vec3f viewAtToEye;
-        
+
         // Direction vector for the direction the camera is facing
         viewAtToEye.x = globalCtx->view.at.x - globalCtx->view.eye.x;
         viewAtToEye.y = globalCtx->view.at.y - globalCtx->view.eye.y;
         viewAtToEye.z = globalCtx->view.at.z - globalCtx->view.eye.z;
-        viewNormY = viewAtToEye.y / sqrtf(SQXYZ(&viewAtToEye));
+        viewNormY = viewAtToEye.y / sqrtf(SQXYZ(viewAtToEye));
 
         this->actor.world.pos.x = this->actor.home.pos.x;
         this->actor.world.pos.z = this->actor.home.pos.z;

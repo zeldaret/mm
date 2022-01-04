@@ -78,7 +78,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
         eyeToAt.x = globalCtx->view.at.x - globalCtx->view.eye.x;
         eyeToAt.y = globalCtx->view.at.y - globalCtx->view.eye.y;
         eyeToAt.z = globalCtx->view.at.z - globalCtx->view.eye.z;
-        eyeToAtMag = sqrtf(SQXYZ(&eyeToAt));
+        eyeToAtMag = sqrtf(SQXYZ(eyeToAt));
         eyeToAtNormX = eyeToAt.x / eyeToAtMag;
         eyeToAtNormY = eyeToAt.y / eyeToAtMag;
         eyeToAtNormZ = eyeToAt.z / eyeToAtMag;
@@ -329,7 +329,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
     eyeToAt.x = globalCtx->view.at.x - globalCtx->view.eye.x;
     eyeToAt.y = globalCtx->view.at.y - globalCtx->view.eye.y;
     eyeToAt.z = globalCtx->view.at.z - globalCtx->view.eye.z;
-    eyeToAtMag = sqrtf(SQXYZ(&eyeToAt));
+    eyeToAtMag = sqrtf(SQXYZ(eyeToAt));
     eyeToAtNormX = eyeToAt.x / eyeToAtMag;
     eyeToAtNormY = eyeToAt.y / eyeToAtMag;
     eyeToAtNormZ = eyeToAt.z / eyeToAtMag;

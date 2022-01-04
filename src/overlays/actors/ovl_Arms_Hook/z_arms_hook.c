@@ -170,7 +170,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
             } else {
                 if (this->actor.child != NULL) {
                     f32 sp94 = Actor_DistanceBetweenActors(&this->actor, grabbed);
-                    f32 sp90 = sqrtf(SQXYZ(&this->unk1FC));
+                    f32 sp90 = sqrtf(SQXYZ(this->unk1FC));
                     Math_Vec3f_Diff(&grabbed->world.pos, &this->unk1FC, &this->actor.world.pos);
                     if (50.0f < (sp94 - sp90)) {
                         ArmsHook_DetachHookFromActor(this);
@@ -217,8 +217,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
             }
         } else {
             Math_Vec3f_Diff(&bodyDistDiffVec, &newPos, &player->actor.velocity);
-            player->actor.world.rot.x =
-                Math_FAtan2F(sqrtf(SQXZ(&bodyDistDiffVec)), -bodyDistDiffVec.y);
+            player->actor.world.rot.x = Math_FAtan2F(sqrtf(SQXZ(bodyDistDiffVec)), -bodyDistDiffVec.y);
         }
         if (phi_f16 < 50.0f) {
             ArmsHook_DetachHookFromActor(this);
@@ -327,8 +326,8 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Math_Vec3f_Diff(&player->rightHandWorld.pos, &this->actor.world.pos, &sp68);
-        sp48 = SQXZ(&sp68);
-        sp4C = sqrtf(SQXZ(&sp68));
+        sp48 = SQXZ(sp68);
+        sp4C = sqrtf(SQXZ(sp68));
         Matrix_RotateY(Math_Atan2S(sp68.x, sp68.z), MTXMODE_APPLY);
         Matrix_InsertXRotation_s(Math_Atan2S(-sp68.y, sp4C), MTXMODE_APPLY);
         f0 = sqrtf(SQ(sp68.y) + sp48);

@@ -199,7 +199,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
                 Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
                 stickTipSeparationVec.y -= OBJ_SYOKUDAI_STICK_IGNITION_HEIGHT;
-                if (SQXYZ(&stickTipSeparationVec) < SQ(OBJ_SYOKUDAI_STICK_IGNITION_RADIUS)) {
+                if (SQXYZ(stickTipSeparationVec) < SQ(OBJ_SYOKUDAI_STICK_IGNITION_RADIUS)) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_STICK;
                 }
             }
@@ -311,7 +311,8 @@ void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
         Matrix_InsertTranslation(0.0f, OBJ_SYOKUDAI_FLAME_HEIGHT, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - thisx->shape.rot.y), MTXMODE_APPLY);
+        Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - thisx->shape.rot.y),
+                       MTXMODE_APPLY);
         Matrix_Scale(flameScale, flameScale, flameScale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_0407D590);

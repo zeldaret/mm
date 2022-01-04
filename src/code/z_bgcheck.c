@@ -3053,7 +3053,7 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
                     newPoly->normal.z = COLPOLY_SNORMAL(newNormal.z);
                 }
 
-                newPoly->dist = -DOTXYZ(&newNormal, &dVtxList[vIA]);
+                newPoly->dist = -DOTXYZ(newNormal, dVtxList[vIA]);
                 if (newNormal.y > 0.5f) {
                     s16 polyId = *polyStartIndex + i;
 
@@ -3355,7 +3355,7 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
                 polyNorm.x *= 1.0f / magnitude;
                 polyNorm.y *= 1.0f / magnitude;
                 polyNorm.z *= 1.0f / magnitude;
-                polyDist = -DOTXYZ(&polyNorm, &polyVtx[0]);
+                polyDist = -DOTXYZ(polyNorm, polyVtx[0]);
                 if (Math3D_TriChkPointParaYIntersectInsideTri(
                         &polyVtx[0], &polyVtx[1], &polyVtx[2], polyNorm.x, polyNorm.y, polyNorm.z, polyDist,
                         dynaRaycast->pos->z, dynaRaycast->pos->x, &intersect, dynaRaycast->checkDist)) {

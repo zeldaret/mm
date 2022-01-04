@@ -651,8 +651,8 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
 
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 0:
-            temp = Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))),
-                                      3, 0xE38, 0x38E);
+            temp = Math_SmoothStepToS(&this->actor.shape.rot.y,
+                                      BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), 3, 0xE38, 0x38E);
             this->actor.world.rot.y = this->actor.shape.rot.y;
             if (1) {}
             if (!temp) {

@@ -323,7 +323,7 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
     floorNorm.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
     floorNorm.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
     floorNorm.z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
-    arg0 = DOTXYZ(&floorNorm, &this->unk_2DC);
+    arg0 = DOTXYZ(floorNorm, this->unk_2DC);
     if (fabsf(arg0) >= 1.0f) {
         return false;
     }
@@ -847,7 +847,7 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x += 30.0f * Math_SinS(yaw);
     this->actor.world.pos.z += 30.0f * Math_CosS(yaw);
     if (this->subCamId != CAM_ID_MAIN) {
-        xzDist = sqrtf(SQXZ(&this->unk_2DC));
+        xzDist = sqrtf(SQXZ(this->unk_2DC));
         if (xzDist > 0.001f) {
             xzDist = 200.0f / xzDist;
         } else {
@@ -877,7 +877,8 @@ void EnPametfrog_FallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
     } else {
         this->spinYaw += 0xF00;
         if (this->subCamId != CAM_ID_MAIN) {
-            Play_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.world.pos, &Play_GetCamera(globalCtx, this->subCamId)->eye);
+            Play_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.world.pos,
+                                &Play_GetCamera(globalCtx, this->subCamId)->eye);
         }
 
         if (this->actor.bgCheckFlags & 1) {
