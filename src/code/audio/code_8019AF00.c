@@ -66,87 +66,87 @@ typedef struct {
 } FreqLerp; // size = 0x10
 
 // Sfx bss
-// SfxSettings sSfxSettings[8];
-// u8 sSfxSettingsFlags;
-// f32 sTwoSemitonesLoweredFreq;
-// s8 sSfxIncreasedReverb;
-// f32 sSfxSyncedVolume;
-// f32 sSfxSyncedVolumeForMetalEffects;
-// f32 sSfxSyncedFreq;
-// FreqLerp sRiverFreqScaleLerp;
-// FreqLerp sWaterfallFreqScaleLerp;
-// f32 sSfxAdjustedFreq;
-// s8 sSfxCustomReverb;
-// u8 sRiverSoundMainBgmVol;
-// u8 sRiverSoundMainBgmCurrentVol;
-// u8 sRiverSoundMainBgmLower;
-// u8 sRiverSoundMainBgmRestore;
-// u8 sGanonsTowerVol;
-// f32* sSfxVolumeCur;
-// f32 sSfxVolumeTarget;
-// f32 sSfxVolumeRate;
-// u16 sSceneSeqId1;
-// SfxPlayerState sSfxChannelState[16];
+SfxSettings sSfxSettings[8];
+u8 sSfxSettingsFlags;
+f32 sTwoSemitonesLoweredFreq;
+s8 sSfxIncreasedReverb;
+f32 sSfxSyncedVolume;
+f32 sSfxSyncedVolumeForMetalEffects;
+f32 sSfxSyncedFreq;
+FreqLerp sRiverFreqScaleLerp;
+FreqLerp sWaterfallFreqScaleLerp;
+f32 sSfxAdjustedFreq;
+s8 sSfxCustomReverb;
+u8 sRiverSoundMainBgmVol;
+u8 sRiverSoundMainBgmCurrentVol;
+u8 sRiverSoundMainBgmLower;
+u8 sRiverSoundMainBgmRestore;
+u8 sGanonsTowerVol;
+f32* sSfxVolumeCur;
+f32 sSfxVolumeTarget;
+f32 sSfxVolumeRate;
+u16 sSceneSeqId1;
+SfxPlayerState sSfxChannelState[16];
 
-// // Sequence bss
-// u8 D_801FD3A8;
-// u8 D_801FD3A9;
-// u8 sRiverSoundBgmTimer;
-// u8 sFanfareState;
-// u16 sFanfareSeqId;
-// u8 sMuteOnlySfxAndNatureSeq;
-// u8 sAllPlayersMutedExceptOcaAndSys;
-// u8 sAudioPauseState;
-// u8 sSpatialSeqIsActive[4];
-// u8 sSequenceFilter[8 * 4];
-// u8 sIsFinalHoursOrSoaring;
-// u8 sObjSoundFanfareSeqId;
-// u8 sObjSoundFanfareRequested;
-// Vec3f sObjSoundFanfarePos;
-// u8 sObjSoundPlayerIdx;
-// Vec3f sObjSoundPos;
-// s16 sObjSoundFlags;
-// f32 sObjSoundMinDist;
-// f32 sObjSoundMaxDist;
-// f32 sObjSoundMaxVol;
-// f32 sObjSoundMinVol;
-// Vec3f sSpatialSeqNoFilterPos;
-// Vec3f sSpatialSeqFilterPos;
-// f32 sSpatialSeqMaxDist;
-// u8 sSpatialSeqSeqId;
-// u8 sSpatialSeqFlags;
-// u8 D_801FD432;
-// u8 sSpatialSubBgmFadeTimer;
-// u8 D_801FD434;
-// u8 sSpatialSeqPlayerIdx;
-// u8 sSpatialSeqFadeTimer;
-// u16 D_801FD438;
+// Sequence bss
+u8 D_801FD3A8;
+u8 D_801FD3A9;
+u8 sRiverSoundBgmTimer;
+u8 sFanfareState;
+u16 sFanfareSeqId;
+u8 sMuteOnlySfxAndNatureSeq;
+u8 sAllPlayersMutedExceptOcaAndSys;
+u8 sAudioPauseState;
+u8 sSpatialSeqIsActive[4];
+u8 sSequenceFilter[8 * 4];
+u8 sIsFinalHoursOrSoaring;
+u8 sObjSoundFanfareSeqId;
+u8 sObjSoundFanfareRequested;
+Vec3f sObjSoundFanfarePos;
+u8 sObjSoundPlayerIdx;
+Vec3f sObjSoundPos;
+s16 sObjSoundFlags;
+f32 sObjSoundMinDist;
+f32 sObjSoundMaxDist;
+f32 sObjSoundMaxVol;
+f32 sObjSoundMinVol;
+Vec3f sSpatialSeqNoFilterPos;
+Vec3f sSpatialSeqFilterPos;
+f32 sSpatialSeqMaxDist;
+u8 sSpatialSeqSeqId;
+u8 sSpatialSeqFlags;
+u8 D_801FD432;
+u8 sSpatialSubBgmFadeTimer;
+u8 D_801FD434;
+u8 sSpatialSeqPlayerIdx;
+u8 sSpatialSeqFadeTimer;
+u16 D_801FD438;
 
-// // AudioOcarina bss
-// OcarinaStaff sPlayingStaff;
-// OcarinaStaff sDisplayedStaff;
-// OcarinaStaff sRecordingStaff;
-// u32 sOcarinaUpdateTaskCurrent;
-// OcarinaControlStick sOcarinaInputStickRel;
-// u32 sOcarinaInputButtonCur;  // TODO: Not Oca Btn Idx, but Controller Btn Idx!
-// u32 sOcarinaInputButtonStart;                 // Controller Btn Idx
-// u32 sOcarinaInputButtonPrev; // TODO: Not Oca Btn Idx, but Controller Btn Idx!
-// s32 sOcaInputBtnPress;
-// u8 sOcarinaResetDelay;
-// u8 sOcarinaResetUnused;
-// u8 sOcarinaHasStartedSong;
-// u8 sFirstOcarinaSongIdx;
-// u8 sLastOcarinaSongIdx;
-// u32 sOcarinaAvailSongs;
-// u8 sOcarinaStaffPlayingPos;
-// u16 sMusicStaffPos[OCARINA_SONG_MAX];
-// u16 sMusicStaffCurHeldLength[OCARINA_SONG_MAX];
-// u16 sMusicStaffExpectedLength[OCARINA_SONG_MAX];
-// u8 sMusicStaffExpectedNoteIdx[OCARINA_SONG_MAX]; // Next required noteIdx in song playback
-// u8 D_801FD518[OCARINA_SONG_MAX];
-// u32 D_801FD530[OCARINA_SONG_MAX];
-// OcarinaNote sRecordingSongNote;
-// u16 sCustomSequencePc;
+// AudioOcarina bss
+OcarinaStaff sPlayingStaff;
+OcarinaStaff sDisplayedStaff;
+OcarinaStaff sRecordingStaff;
+u32 sOcarinaUpdateTaskCurrent;
+OcarinaControlStick sOcarinaInputStickRel;
+u32 sOcarinaInputButtonCur;
+u32 sOcarinaInputButtonStart;
+u32 sOcarinaInputButtonPrev;
+s32 sOcaInputBtnPress;
+u8 sOcarinaResetDelay;
+u8 sOcarinaResetUnused;
+u8 sOcarinaHasStartedSong;
+u8 sFirstOcarinaSongIdx;
+u8 sLastOcarinaSongIdx;
+u32 sOcarinaAvailSongs;
+u8 sOcarinaStaffPlayingPos;
+u16 sMusicStaffPos[OCARINA_SONG_MAX];
+u16 sMusicStaffCurHeldLength[OCARINA_SONG_MAX];
+u16 sMusicStaffExpectedLength[OCARINA_SONG_MAX];
+u8 sMusicStaffExpectedNoteIdx[OCARINA_SONG_MAX]; // Next required noteIdx in song playback
+u8 D_801FD518[OCARINA_SONG_MAX];
+u32 D_801FD530[OCARINA_SONG_MAX];
+OcarinaNote sRecordingSongNote;
+u16 sCustomSequencePc;
 
 // Sfx Data
 u8 D_801D6600[] = {
