@@ -14,6 +14,8 @@ typedef void (*ObjBeanUnkFunc)(struct ObjBean*);
 #define OBJBEAN_GET_3F80(thisx, x) ((((thisx)->params >> 7) + (x)) & 0x7F)
 #define OBJBEAN_GET_C000(thisx) (((thisx)->params >> 0xE) & 3)
 
+#define OBJBEAN_GET_3(thisx) ((thisx)->home.rot.z & 3)
+
 enum {
     /* 0x00 */ ENOBJBEAN_GET_C000_0,
     /* 0x01 */ ENOBJBEAN_GET_C000_1,

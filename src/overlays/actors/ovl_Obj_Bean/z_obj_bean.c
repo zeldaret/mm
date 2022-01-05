@@ -112,7 +112,12 @@ static ColliderCylinderInit sCylinderInit2 = {
     { 10, 10, 0, { 0, 0, 0 } },
 };
 
-static Vec2f D_80938FF8[4] = { { 3.0f, 0.3f }, { 10.0f, 0.5f }, { 30.0f, 0.5f }, { 3.0f, 0.3f } };
+static Vec2f D_80938FF8[4] = {
+    { 3.0f, 0.3f },
+    { 10.0f, 0.5f },
+    { 30.0f, 0.5f },
+    { 3.0f, 0.3f },
+};
 
 void func_80936CF0(ObjBean* this, GlobalContext* globalCtx) {
     Vec3f sp24;
@@ -382,7 +387,7 @@ void ObjBean_Init(Actor* thisx, GlobalContext* globalCtx) {
         s32 params2 = OBJBEAN_GET_3F00(&this->dyna.actor);
         Path* path = &globalCtx->setupPathList[params2];
 
-        this->unk_1DE = this->dyna.actor.home.rot.z & 3;
+        this->unk_1DE = OBJBEAN_GET_3(&this->dyna.actor);
         this->dyna.actor.world.rot.z = 0;
         this->dyna.actor.home.rot.z = 0;
         this->dyna.actor.shape.rot.z = 0;
