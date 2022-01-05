@@ -558,7 +558,7 @@ s32 func_80AD475C(EnTrt2* this, Path* path, s32 arg2) {
     f32 sp3C;
     Vec3f sp30;
 
-    points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    points = Lib_SegmentedToVirtual(path->points);
     count = path->count;
     ret = false;
     Math_Vec3s_ToVec3f(&sp30, &points[arg]);
@@ -566,7 +566,7 @@ s32 func_80AD475C(EnTrt2* this, Path* path, s32 arg2) {
     if (arg == 0) {
         phi_f12 = points[1].x - points[0].x;
         phi_f14 = points[1].z - points[0].z;
-    } else if ((u32)count == (u32)(arg + 1)) {
+    } else if ((count - 1) == arg) {
         phi_f12 = points[count - 1].x - points[count - 2].x;
         phi_f14 = points[count - 1].z - points[count - 2].z;
     } else {
@@ -574,7 +574,7 @@ s32 func_80AD475C(EnTrt2* this, Path* path, s32 arg2) {
         phi_f14 = points[arg + 1].z - points[arg - 1].z;
     }
 
-    func_8017B7F8(&sp30, func_80086B30(phi_f12, phi_f14) * 10430.378f, &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
@@ -588,7 +588,7 @@ s16 func_80AD48F8(Path* path, s32 arg1, Vec3f* arg2, f32* arg3) {
     f32 phi_f12;
 
     if (path != NULL) {
-        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        points = Lib_SegmentedToVirtual(path->points);
         points = &points[arg1];
         phi_f14 = points->x - arg2->x;
         phi_f12 = points->z - arg2->z;
@@ -606,7 +606,7 @@ f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
     Vec3s* temp_v1;
 
     if (path != NULL) {
-        temp_v1 = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        temp_v1 = Lib_SegmentedToVirtual(path->points);
         temp_v1 = &temp_v1[arg1];
 
         sp20.x = temp_v1->x;
@@ -912,10 +912,10 @@ void EnTrt2_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void func_80AD56E8(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_80AD5978[] = {
-        &object_trt_Tex_00B0B8,
-        &object_trt_Tex_00B8B8,
-        &object_trt_Tex_00C0B8,
+    static TexturePtr D_80AD5978[] = {
+        object_trt_Tex_00B0B8,
+        object_trt_Tex_00B8B8,
+        object_trt_Tex_00C0B8,
     };
     s32 pad;
     EnTrt2* this = THIS;
