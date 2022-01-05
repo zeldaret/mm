@@ -20,13 +20,13 @@ s32 __osMotorAccess(OSPfs* pfs, u32 vibrate) {
     }
 
     __osSiGetAccess();
-    osPifBuffers[pfs->channel].pifstatus = 1;
+    osPifBuffers[pfs->channel].status = 1;
     buf += pfs->channel;
     for (i = 0; i < BLOCKSIZE; i++) {
         ((__OSContRamReadFormat*)buf)->data[i] = vibrate;
     }
 
-    __osContLastCmd = CONT_CMD_END;
+    __osContLastPoll = CONT_CMD_END;
     __osSiRawStartDma(OS_WRITE, &osPifBuffers[pfs->channel]);
     osRecvMesg(pfs->queue, NULL, OS_MESG_BLOCK);
     __osSiRawStartDma(OS_READ, &osPifBuffers[pfs->channel]);

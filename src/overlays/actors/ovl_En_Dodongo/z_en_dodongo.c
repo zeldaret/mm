@@ -288,7 +288,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static EffBlureInit2 D_80879308 = {
+    static EffectBlureInit2 D_80879308 = {
         2, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 8,
         0, 0, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
     };
@@ -315,7 +315,7 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider2.elements[i].info.bumper.dmgFlags = 0x77C34FE6;
     }
 
-    Effect_Add(globalCtx, &this->unk_338, 2, 0, 0, &D_80879308);
+    Effect_Add(globalCtx, &this->unk_338, EFFECT_BLURE2, 0, 0, &D_80879308);
     if (this->actor.params == 0) {
         Actor_SetScale(&this->actor, 3.0f / 160.0f);
         this->unk_334 = 1.0f;
@@ -366,7 +366,7 @@ void func_80876930(EnDodongo* this, GlobalContext* globalCtx, Vec3f* arg2) {
     s16 temp2;
     f32 temp3;
 
-    if (func_800C9BB8(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 14) {
+    if (func_800C9BB8(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) == COLPOLY_SURFACE_SNOW) {
         sp80 = &D_8087932C;
         sp7C = &D_80879330;
     } else {
@@ -384,7 +384,7 @@ void func_80876930(EnDodongo* this, GlobalContext* globalCtx, Vec3f* arg2) {
         sp88.z = randPlusMinusPoint5Scaled(temp3) + arg2->z;
         D_8087933C.x = randPlusMinusPoint5Scaled(2.0f);
         D_8087933C.z = randPlusMinusPoint5Scaled(2.0f);
-        func_800B0DE0(globalCtx, &sp88, &D_801D15B0, &D_8087933C, sp80, sp7C, temp1, temp2);
+        func_800B0DE0(globalCtx, &sp88, &gZeroVec3f, &D_8087933C, sp80, sp7C, temp1, temp2);
     }
 }
 
@@ -393,12 +393,12 @@ void func_80876B08(EnDodongo* this, GlobalContext* globalCtx) {
     s16 yDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     if (ABS_ALT(yDiff) < 0x4000) {
-        if (!(player->stateFlags1 & 0x00800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+        if (!(player->stateFlags1 & 0x00800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
             func_808777A8(this);
         } else {
             func_80877494(this);
         }
-    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) {
+    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
         func_80878354(this);
     } else {
         func_80877494(this);
@@ -591,7 +591,7 @@ void func_80877500(EnDodongo* this, GlobalContext* globalCtx) {
     }
 
     if ((Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 400.0f) &&
-        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x1F4);
         if (this->actor.xzDistToPlayer < (100.0f * this->unk_334)) {
@@ -602,7 +602,7 @@ void func_80877500(EnDodongo* this, GlobalContext* globalCtx) {
         }
     } else {
         if ((Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 150.0f) ||
-            (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK)) {
+            (Player_GetMask(globalCtx) == PLAYER_MASK_STONE)) {
             Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x1F4);
         }
 
@@ -780,13 +780,13 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
             sp5E = this->unk_334 * 50.0f;
             sp5C = this->unk_334 * 5.0f;
             Math_Vec3f_Copy(&sp64, &this->unk_348[0]);
-            func_800B0DE0(globalCtx, &sp64, &D_801D15B0, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
+            func_800B0DE0(globalCtx, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
             sp64.x -= Math_CosS(this->actor.shape.rot.y) * 6.0f * this->unk_334;
             sp64.z += Math_SinS(this->actor.shape.rot.y) * 6.0f * this->unk_334;
-            func_800B0DE0(globalCtx, &sp64, &D_801D15B0, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
+            func_800B0DE0(globalCtx, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
             sp64.x = (2.0f * this->unk_348[0].x) - sp64.x;
             sp64.z = (2.0f * this->unk_348[0].z) - sp64.z;
-            func_800B0DE0(globalCtx, &sp64, &D_801D15B0, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
+            func_800B0DE0(globalCtx, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
         }
     }
 
@@ -832,7 +832,7 @@ void func_80878424(EnDodongo* this, GlobalContext* globalCtx) {
 
     this->timer++;
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+        if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
             this->collider1.base.atFlags &= ~AT_ON;
             func_808777A8(this);
         } else {
@@ -1099,7 +1099,7 @@ void EnDodongo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     }
 
     if ((limbIndex == 30) && (this->actionFunc == func_80878424) && (this->timer != this->unk_304)) {
-        func_800A81F0(Effect_GetParams(this->unk_338), &this->unk_320, &this->unk_348[4]);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->unk_338), &this->unk_320, &this->unk_348[4]);
         this->unk_304 = this->timer;
     }
 }

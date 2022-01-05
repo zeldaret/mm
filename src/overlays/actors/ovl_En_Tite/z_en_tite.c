@@ -251,13 +251,13 @@ void func_80893BCC(EnTite* this, GlobalContext* globalCtx) {
     s32 j;
 
     if (this->actor.bgCheckFlags & 2) {
-        u32 temp_v0 = func_800C9BB8(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        u32 surface = func_800C9BB8(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if ((temp_v0 == 0) || (temp_v0 == 1)) {
+        if ((surface == COLPOLY_SURFACE_GROUND) || (surface == COLPOLY_SURFACE_SAND)) {
             for (i = 5; i < ARRAY_COUNT(this->unk_2D0); i++) {
                 func_800BBFB0(globalCtx, &this->unk_2D0[i], 1.0f, 2, 80, 15, 1);
             }
-        } else if (temp_v0 == 14) {
+        } else if (surface == COLPOLY_SURFACE_SNOW) {
             Vec3f* ptr;
 
             for (i = 5; i < ARRAY_COUNT(this->unk_2D0); i++) {
@@ -266,7 +266,7 @@ void func_80893BCC(EnTite* this, GlobalContext* globalCtx) {
                     sp7C.x = ptr->x + randPlusMinusPoint5Scaled(1.0f);
                     sp7C.y = ptr->y + randPlusMinusPoint5Scaled(1.0f);
                     sp7C.z = ptr->z + randPlusMinusPoint5Scaled(1.0f);
-                    func_800B0DE0(globalCtx, &sp7C, &D_801D15B0, &D_80896B64, &D_80896B3C, &D_80896B40,
+                    func_800B0DE0(globalCtx, &sp7C, &gZeroVec3f, &D_80896B64, &D_80896B3C, &D_80896B40,
                                   (s32)Rand_ZeroFloat(16.0f) + 80, 15);
                 }
             }
@@ -308,7 +308,7 @@ void func_80893F30(EnTite* this, GlobalContext* globalCtx) {
     func_80893B70(this);
     if (this->unk_2BC > 0) {
         this->unk_2BC--;
-    } else if ((Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) && (this->actor.xzDistToPlayer < 300.0f) &&
+    } else if ((Player_GetMask(globalCtx) != PLAYER_MASK_STONE) && (this->actor.xzDistToPlayer < 300.0f) &&
                (this->actor.playerHeightRel < 80.0f)) {
         func_808945EC(this);
     }
@@ -409,7 +409,7 @@ void func_80894414(EnTite* this) {
 
 void func_80894454(EnTite* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (this->actor.xzDistToPlayer > 450.0f) ||
+        if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (this->actor.xzDistToPlayer > 450.0f) ||
             (this->actor.playerHeightRel > 80.0f)) {
             func_80893ED4(this);
         } else if (!Actor_IsActorFacingLink(&this->actor, 0x2328)) {
@@ -472,7 +472,7 @@ void func_80894638(EnTite* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (this->actor.xzDistToPlayer > 450.0f) ||
+    if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (this->actor.xzDistToPlayer > 450.0f) ||
         (this->actor.playerHeightRel > 80.0f)) {
         func_80893ED4(this);
     } else if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.depthInWater < 10.0f))) &&
@@ -533,7 +533,7 @@ void func_80894910(EnTite* this, GlobalContext* globalCtx) {
             }
         }
 
-        if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (this->actor.xzDistToPlayer > 450.0f) ||
+        if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (this->actor.xzDistToPlayer > 450.0f) ||
             (this->actor.playerHeightRel > 80.0f)) {
             func_80893ED4(this);
         } else if ((this->actor.xzDistToPlayer <= 180.0f) && (this->actor.playerHeightRel <= 80.0f)) {
@@ -577,7 +577,7 @@ void func_80894BC8(EnTite* this, GlobalContext* globalCtx) {
     if ((this->actor.speedXZ == 0.0f) && ((this->actor.bgCheckFlags & 1) || func_80893ADC(this))) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->collider.base.acFlags |= AC_ON;
-        if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) ||
+        if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) ||
             (((this->actor.xzDistToPlayer > 450.0f) || (this->actor.playerHeightRel > 80.0f)) &&
              (ABS_ALT(this->actor.shape.rot.x) < 4000) && (ABS_ALT(this->actor.shape.rot.z) < 4000))) {
             func_80893ED4(this);
@@ -622,7 +622,7 @@ void func_80894E0C(EnTite* this, GlobalContext* globalCtx) {
             func_80895020(this, globalCtx);
         } else if (this->unk_2B9 != 0) {
             func_808955E4(this);
-        } else if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) ||
+        } else if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) ||
                    (((this->actor.xzDistToPlayer > 450.0f) || (this->actor.playerHeightRel > 80.0f)) &&
                     (ABS_ALT(this->actor.shape.rot.x) < 4000) && (ABS_ALT(this->actor.shape.rot.z) < 4000))) {
             func_80893ED4(this);
@@ -677,7 +677,7 @@ void func_808951B8(EnTite* this, GlobalContext* globalCtx) {
 
     if (this->unk_2BC == 0) {
         for (i = 0; i < ARRAY_COUNT(this->unk_2D0); i++) {
-            func_800B3030(globalCtx, &this->unk_2D0[i], &D_801D15B0, &D_801D15B0, 40, 7, 1);
+            func_800B3030(globalCtx, &this->unk_2D0[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 1);
             Audio_PlaySoundAtPosition(globalCtx, &this->unk_2D0[i], 11, NA_SE_EN_EXTINCT);
         }
         Actor_MarkForDeath(&this->actor);
@@ -798,7 +798,7 @@ void func_80895738(EnTite* this, GlobalContext* globalCtx) {
     } else if ((this->unk_2BC == 0) && Math_StepToF(&this->actor.speedXZ, 0.0f, 0.3f)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80893A18(this);
-        if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (this->actor.xzDistToPlayer > 450.0f) ||
+        if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (this->actor.xzDistToPlayer > 450.0f) ||
             (this->actor.playerHeightRel > 80.0f)) {
             func_80893ED4(this);
         } else if (!Actor_IsActorFacingLink(&this->actor, 0x2328)) {
@@ -816,7 +816,7 @@ void func_8089595C(EnTite* this, GlobalContext* globalCtx) {
     sp2C.x = randPlusMinusPoint5Scaled(20.0f) + this->actor.world.pos.x;
     sp2C.y = this->actor.world.pos.y + 15.0f;
     sp2C.z = randPlusMinusPoint5Scaled(20.0f) + this->actor.world.pos.z;
-    func_800B0DE0(globalCtx, &sp2C, &D_801D15B0, &D_80896B44, &D_80896B3C, &D_80896B40, 500, 50);
+    func_800B0DE0(globalCtx, &sp2C, &gZeroVec3f, &D_80896B44, &D_80896B3C, &D_80896B40, 500, 50);
 }
 
 void func_80895A10(EnTite* this) {
@@ -858,7 +858,7 @@ void func_80895AC0(EnTite* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->actor.xzDistToPlayer < 240.0f) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+    if ((this->actor.xzDistToPlayer < 240.0f) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         func_8089408C(this, globalCtx);
     } else if (this->unk_2BC > 0) {
         this->unk_2BC--;
@@ -887,7 +887,7 @@ void func_80895D08(EnTite* this, GlobalContext* globalCtx) {
         }
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_WALK);
     }
-    if ((this->actor.xzDistToPlayer < 240.0f) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+    if ((this->actor.xzDistToPlayer < 240.0f) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         func_8089408C(this, globalCtx);
     } else {
         this->unk_2BC--;

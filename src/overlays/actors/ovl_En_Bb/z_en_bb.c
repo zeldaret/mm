@@ -1,5 +1,5 @@
 /*
- * File z_en_bb.c
+ * File: z_en_bb.c
  * Overlay: ovl_En_Bb
  * Description: Blue Bubble
  */
