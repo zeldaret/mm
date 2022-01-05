@@ -17,9 +17,9 @@
 #include "scheduler.h"
 #include "xstdio.h"
 
-#include "sequence.h"
 #include "color.h"
 #include "ichain.h"
+#include "sequence.h"
 #include "sfx.h"
 
 #include "z64actor.h"

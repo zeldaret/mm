@@ -29,7 +29,7 @@ typedef enum {
     /* 22 */ OCARINA_SONG_SCARECROW,
     /* 23 */ OCARINA_SONG_TERMINA_WALL,
     /* 24 */ OCARINA_SONG_MAX,
-    /* 24 */ OCARINA_SONG_SCARECROW_LONG = OCARINA_SONG_MAX // anything larger than 13 is considered the long scarecrow's song
+    /* 24 */ OCARINA_SONG_SCARECROW_LONG = OCARINA_SONG_MAX
 } OcarinaSongId;
 
 typedef enum {

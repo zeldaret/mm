@@ -47,16 +47,17 @@ typedef enum {
     /* 0xF */ SFX_CHANNEL_VOICE1
 } SfxChannelIdx; // playerIdx = 2
 
+// Global IO ports for sequences, 8 global ports per seqPlayer
 typedef enum {
-    /* 0x0 */ PLAYER_IO_PORT_0,
-    /* 0x1 */ PLAYER_IO_PORT_1,
-    /* 0x2 */ PLAYER_IO_PORT_2,
-    /* 0x3 */ PLAYER_IO_PORT_3,
-    /* 0x4 */ PLAYER_IO_PORT_4,
-    /* 0x5 */ PLAYER_IO_PORT_5,
-    /* 0x6 */ PLAYER_IO_PORT_6,
-    /* 0x7 */ PLAYER_IO_PORT_7,
-} PlayerIOPort;
+    /* 0x0 */ SEQ_PLAYER_IO_PORT_0,
+    /* 0x1 */ SEQ_PLAYER_IO_PORT_1,
+    /* 0x2 */ SEQ_PLAYER_IO_PORT_2,
+    /* 0x3 */ SEQ_PLAYER_IO_PORT_3,
+    /* 0x4 */ SEQ_PLAYER_IO_PORT_4,
+    /* 0x5 */ SEQ_PLAYER_IO_PORT_5,
+    /* 0x6 */ SEQ_PLAYER_IO_PORT_6,
+    /* 0x7 */ SEQ_PLAYER_IO_PORT_7,
+} SeqPlayerIOPort;
 
 typedef struct {
     /* 0x0 */ f32 value;
@@ -1815,7 +1816,7 @@ OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX] = {
 
 // Static In-Function Data
 u8 sScarecrowAfterCreditsState = 0;
-u8 sScarecrowAfterCreditsIntrumentId = 1;
+u8 sScarecrowAfterCreditsIntrumentId = OCARINA_INSTRUMENT_DEFAULT;
 u16 sScarecrowAfterCreditsTimer = 1200;
 u8 sRequestCustomSequence = false;
 s8 D_801D8B30[] = {
