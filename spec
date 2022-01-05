@@ -646,7 +646,6 @@ beginseg
     pad_text
     include "build/asm/code/code_8019AEC0.text.o" // handwritten
     include "build/src/code/audio/code_8019AF00.o"
-    include "build/data/code/code_8019AF00.data.o"
     include "build/data/code/code_8019AF00.bss.o"
     include "build/src/code/audio/code_801A4EB0.o"
     include "build/data/code/code_801A4EB0.data.o"

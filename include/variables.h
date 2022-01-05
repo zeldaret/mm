@@ -1700,7 +1700,7 @@ extern UNK_PTR D_801D618C;
 // extern UNK_TYPE1 D_801D6648;
 // extern UNK_TYPE1 D_801D664C;
 // extern UNK_TYPE1 D_801D6650;
-extern f32 D_801D6654;
+extern f32 gSfxVolume;
 // extern UNK_TYPE1 D_801D6658;
 // extern UNK_TYPE1 D_801D665C;
 // extern UNK_TYPE1 D_801D6660;

@@ -401,7 +401,7 @@ void func_80AA01C0(DmStk* this, GlobalContext* globalCtx) {
 
         case 785:
             func_8019F128(NA_SE_SY_STALKIDS_PSYCHO);
-            func_8019FE74(&D_801D6654, 0.0f, 150);
+            func_8019FE74(&gSfxVolume, 0.0f, 150);
             break;
 
         case 560:
@@ -431,7 +431,7 @@ void func_80AA0264(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 650:
-            func_8019FE74(&D_801D6654, 0.0f, 80);
+            func_8019FE74(&gSfxVolume, 0.0f, 80);
             break;
 
         case 265:
