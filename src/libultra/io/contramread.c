@@ -4,7 +4,7 @@
 
 s32 __osPfsLastChannel = -1;
 
-s32 __osContRamRead(OSMesgQueue* ctrlrqueue, s32 channel, u16 addr, u8* data) {
+s32 __osContRamRead(OSMesgQueue* ctrlrqueue, s32 channel, u16 addr, u8* buffer) {
     s32 ret;
     s32 i;
     u8* bufptr;
@@ -48,7 +48,7 @@ s32 __osContRamRead(OSMesgQueue* ctrlrqueue, s32 channel, u16 addr, u8* data) {
                 }
                 ret = 4; // Retry
             } else {
-                bcopy(bufptr + 6, data, BLOCKSIZE);
+                bcopy(bufptr + 6, buffer, BLOCKSIZE);
             }
         } else {
             ret = 1; // Error
