@@ -11,28 +11,28 @@
 
 #define FLAGS 0x00000000
 
- /*
- set on init unless treasure flag is set
- if clear, chest moves (Actor_MoveForward) (falls, likely)
- ends up cleared from SWITCH_FLAG_FALL types when switch flag is set
- */
+/*
+set on init unless treasure flag is set
+if clear, chest moves (Actor_MoveForward) (falls, likely)
+ends up cleared from SWITCH_FLAG_FALL types when switch flag is set
+*/
 #define ENBOX_MOVE_IMMOBILE (1 << 0)
- /*
- set in the logic for SWITCH_FLAG_FALL types
- otherwise unused
- */
+/*
+set in the logic for SWITCH_FLAG_FALL types
+otherwise unused
+*/
 #define ENBOX_MOVE_UNUSED (1 << 1)
- /*
- set with 50% chance on init for SWITCH_FLAG_FALL types
- only used for SWITCH_FLAG_FALL types
- ends up "blinking" (set/clear every frame) once switch flag is set,
- if some collision-related condition (?) is met
- only used for signum of z rotation
- */
+/*
+set with 50% chance on init for SWITCH_FLAG_FALL types
+only used for SWITCH_FLAG_FALL types
+ends up "blinking" (set/clear every frame) once switch flag is set,
+if some collision-related condition (?) is met
+only used for signum of z rotation
+*/
 #define ENBOX_MOVE_FALL_ANGLE_SIDE (1 << 2)
- /*
- when set, gets cleared next EnBox_Update call and clip to the floor
- */
+/*
+when set, gets cleared next EnBox_Update call and clip to the floor
+*/
 #define ENBOX_MOVE_STICK_TO_GROUND (1 << 4)
 #define ENBOX_MOVE_0x20 (1 << 5)
 #define ENBOX_MOVE_0x40 (1 << 6)
@@ -76,22 +76,11 @@ typedef struct {
     f32 data[5];
 } EnBox_PlaybackSpeed; // 0x14
 
-EnBox_PlaybackSpeed sPlaybackSpeed = {
-    {
-        1.5f,
-        1.0f,
-        1.5f,
-        1.0f,
-        1.5f
-    }
-};
+EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };
 
 AnimationHeader* sAnimations[5] = {
-    &object_box_Anim_00024C,
-    &object_box_Anim_007E54,
-    &object_box_Anim_00024C,
-    &object_box_Anim_007F30,
-    &object_box_Anim_000128
+    &object_box_Anim_00024C, &object_box_Anim_007E54, &object_box_Anim_00024C,
+    &object_box_Anim_007F30, &object_box_Anim_000128,
 };
 
 void EnBox_SetupAction(EnBox* this, EnBoxActionFunc func) {
@@ -238,8 +227,8 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
         EnBox_SetupAction(this, EnBox_Open);
         this->movementFlags |= ENBOX_MOVE_STICK_TO_GROUND;
         animFrame = animFrameEnd;
-    } else if ((this->type == ENBOX_TYPE_SWITCH_FLAG_FALL_BIG || this->type == ENBOX_TYPE_SWITCH_FLAG_FALL_SMALL) 
-        && !Flags_GetSwitch(globalCtx, this->switchFlag)) {
+    } else if ((this->type == ENBOX_TYPE_SWITCH_FLAG_FALL_BIG || this->type == ENBOX_TYPE_SWITCH_FLAG_FALL_SMALL) &&
+               !Flags_GetSwitch(globalCtx, this->switchFlag)) {
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         if (Rand_ZeroOne() < 0.5f) {
             this->movementFlags |= ENBOX_MOVE_FALL_ANGLE_SIDE;
@@ -263,8 +252,8 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.flags |= 0x10;
     } else if (this->type == ENBOX_TYPE_9 || this->type == ENBOX_TYPE_10) {
 
-    } else if ((this->type == ENBOX_TYPE_SWITCH_FLAG_BIG || this->type == ENBOX_TYPE_12)
-        && !Flags_GetSwitch(globalCtx, this->switchFlag)) {
+    } else if ((this->type == ENBOX_TYPE_SWITCH_FLAG_BIG || this->type == ENBOX_TYPE_12) &&
+               !Flags_GetSwitch(globalCtx, this->switchFlag)) {
         EnBox_SetupAction(this, EnBox_AppearSwitchFlag);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         if (this->movementFlags & ENBOX_MOVE_0x80) {
@@ -291,7 +280,8 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.shape.rot.y += 0x8000;
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z = 0;
 
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_box_Skel_0066A0, &object_box_Anim_00043C, &this->jointTable, &this->morphTable, 5);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_box_Skel_0066A0, &object_box_Anim_00043C, &this->jointTable,
+                   &this->morphTable, 5);
     Animation_Change(&this->skelAnime, &object_box_Anim_00043C, 1.5f, animFrame, animFrameEnd, 2, 0.0f);
     if (func_800BE63C(this) != 0) {
         Actor_SetScale(&this->dyna.actor, 0.0075f);
@@ -575,7 +565,7 @@ void EnBox_Open(EnBox* this, GlobalContext* globalCtx) {
             }
         }
         if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x,
-                                     this->dyna.actor.world.pos.z, &waterSurface, &waterBox, &bgId) &&
+                                    this->dyna.actor.world.pos.z, &waterSurface, &waterBox, &bgId) &&
             this->dyna.actor.floorHeight < waterSurface) {
             EffectSsBubble_Spawn(globalCtx, &this->dyna.actor.world.pos, 5.0f, 2.0f, 20.0f, 0.3f);
         }
@@ -585,7 +575,7 @@ void EnBox_Open(EnBox* this, GlobalContext* globalCtx) {
 void EnBox_SpawnIceSmoke(EnBox* this, GlobalContext* globalCtx) {
     Vec3f pos;
     Vec3f velocity = { 0, 1.0f, 0 };
-    Vec3f accel =  { 0, 0, 0 };
+    Vec3f accel = { 0, 0, 0 };
     f32 randomf;
 
     this->iceSmokeTimer++;
