@@ -125,7 +125,7 @@ Actor* func_80BF1150(EnIg* this, GlobalContext* globalCtx, u8 actorCat, s16 acto
     Actor* temp_v0;
 
     while (true) {
-        foundActor = func_ActorCategoryIterateById(globalCtx, foundActor, actorCat, actorId);
+        foundActor = SubS_FindActor(globalCtx, foundActor, actorCat, actorId);
 
         if (foundActor == NULL) {
             break;
@@ -165,7 +165,7 @@ EnDoor* func_80BF1200(GlobalContext* globalCtx, s32 arg1) {
             phi_a1 = -1;
             break;
     }
-    return (EnDoor*)func_8013A7C0(globalCtx, phi_a1);
+    return (EnDoor*)SubS_FindDoor(globalCtx, phi_a1);
 }
 
 void func_80BF1258(EnIg* this) {
@@ -530,7 +530,7 @@ s32 func_80BF1DF4(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
 
-            if (ABS_ALT((s16)(this->actor.world.rot.y - sp50->actor.shape.rot.y)) <= 0x4000) {
+            if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, sp50->actor.shape.rot.y)) <= 0x4000) {
                 this->unk_2A4 = -75;
             } else {
                 this->unk_2A4 = 75;
