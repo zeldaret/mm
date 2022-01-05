@@ -10,11 +10,17 @@ NON_MATCHING ?= 0
 ORIG_COMPILER ?= 0
 # Keep .mdebug section in build
 KEEP_MDEBUG ?= 0
+# Disassembles all asm from the ROM instead of skipping files which are entirely in C
+FULL_DISASM ?= 0
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
   CPPFLAGS := -DNON_MATCHING
   COMPARE := 0
+endif
+
+ifneq ($(FULL_DISASM), 0)
+  DISASM_FLAGS += --full
 endif
 
 PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -36,12 +42,7 @@ else
   endif
 endif
 
-# Threads to compress and extract assets with, TODO improve later
-ifeq ($(DETECTED_OS),linux)
-  N_THREADS ?= $(shell nproc)
-else
-  N_THREADS ?= 1
-endif
+N_THREADS ?= $(shell nproc)
 
 #### Tools ####
 ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
@@ -246,12 +247,12 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
-	python3 extract_assets.py -t $(N_THREADS)
+	python3 extract_assets.py -j $(N_THREADS)
 
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py -j $(N_THREADS)
+	python3 tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
 
 diff-init: uncompressed
 	$(RM) -rf expected/
