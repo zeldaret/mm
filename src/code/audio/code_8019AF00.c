@@ -1455,22 +1455,22 @@ u8* gScarecrowSpawnSongPtr = (u8*)&sOcarinaSongNotes[OCARINA_SONG_SCARECROW];
 OcarinaNote* sTerminaWallSongPtr = sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL];
 
 u8 sNoteToButtonMap[16] = {
-    OCARINA_BTN_A,       // NOTE_C4
-    OCARINA_BTN_A,       // NOTE_DFLAT4
-    OCARINA_BTN_A,       // NOTE_D4
-    OCARINA_BTN_A,       // NOTE_EFLAT4
-    OCARINA_BTN_C_DOWN,  // NOTE_E4
-    OCARINA_BTN_C_DOWN,  // NOTE_F4
-    OCARINA_BTN_C_DOWN,  // NOTE_GFLAT4
-    OCARINA_BTN_C_RIGHT, // NOTE_G4
-    OCARINA_BTN_C_RIGHT, // NOTE_AFLAT4
-    OCARINA_BTN_C_RIGHT, // NOTE_A4
+    OCARINA_BTN_A,                            // NOTE_C4
+    OCARINA_BTN_A,                            // NOTE_DFLAT4
+    OCARINA_BTN_A,                            // NOTE_D4
+    OCARINA_BTN_A,                            // NOTE_EFLAT4
+    OCARINA_BTN_C_DOWN,                       // NOTE_E4
+    OCARINA_BTN_C_DOWN,                       // NOTE_F4
+    OCARINA_BTN_C_DOWN,                       // NOTE_GFLAT4
+    OCARINA_BTN_C_RIGHT,                      // NOTE_G4
+    OCARINA_BTN_C_RIGHT,                      // NOTE_AFLAT4
+    OCARINA_BTN_C_RIGHT,                      // NOTE_A4
     OCARINA_BTN_C_RIGHT + OCARINA_BTN_C_LEFT, // NOTE_BFLAT4: Interface/Overlap between C_RIGHT and C_LEFT
-    OCARINA_BTN_C_LEFT, // NOTE_B4
-    OCARINA_BTN_C_LEFT, // NOTE_C5
-    OCARINA_BTN_C_UP,   // NOTE_DFLAT5
-    OCARINA_BTN_C_UP,   // NOTE_D5
-    OCARINA_BTN_C_UP,   // NOTE_EFLAT5
+    OCARINA_BTN_C_LEFT,                       // NOTE_B4
+    OCARINA_BTN_C_LEFT,                       // NOTE_C5
+    OCARINA_BTN_C_UP,                         // NOTE_DFLAT5
+    OCARINA_BTN_C_UP,                         // NOTE_D5
+    OCARINA_BTN_C_UP,                         // NOTE_EFLAT5
 };
 
 // New to MM
@@ -1829,31 +1829,19 @@ f32 sBigBellsVolume[8] = {
 u8 sBgmPlayers[2] = { SEQ_PLAYER_BGM_MAIN, SEQ_PLAYER_BGM_SUB };
 f32 sSfxOriginalPos[] = { 0.0f, 0.0f, 0.0f };
 
-
 // OoT's soundEffects from EnRiverSound
 const u16 gAudioEnvironmentalSfx[] = {
-    NA_SE_EV_RIVER_STREAM - SFX_FLAG,
-    NA_SE_EV_WAVE - SFX_FLAG,
-    NA_SE_EV_WATER_WALL_BIG - SFX_FLAG,
-    NA_SE_EV_WATER_WALL - SFX_FLAG,
-    NA_SE_EV_MAGMA_LEVEL - SFX_FLAG,
-    NA_SE_EV_MAGMA_LEVEL_M - SFX_FLAG,
-    NA_SE_EV_MAGMA_LEVEL_L - SFX_FLAG,
-    NA_SE_EV_TORCH - SFX_FLAG,
-    NA_SE_EV_FOUNTAIN - SFX_FLAG,
-    NA_SE_EV_DRAIN - SFX_FLAG,
-    NA_SE_EV_CROWD - SFX_FLAG,
-    NA_SE_EV_WATER_CONVECTION - SFX_FLAG,
-    NA_SE_EV_GORON_CHEER - SFX_FLAG,
-    NA_SE_EV_WATER_WALL_BIG_SILENT - SFX_FLAG,
-    NA_SE_EV_WATER_BUBBLE - SFX_FLAG,
-    NA_SE_EV_COW_CRY_LV - SFX_FLAG,
-    NA_SE_EV_MAKE_TURRET - SFX_FLAG,
-    NA_SE_EV_BOILED_WATER_S - SFX_FLAG,
-    NA_SE_EV_BOILED_WATER_L - SFX_FLAG,
-    NA_SE_EV_WAVE_S - SFX_FLAG,
-    NA_SE_EV_WAVE_S - SFX_FLAG,
-    NA_SE_EV_WAVE_S - SFX_FLAG,
+    NA_SE_EV_RIVER_STREAM - SFX_FLAG,   NA_SE_EV_WAVE - SFX_FLAG,
+    NA_SE_EV_WATER_WALL_BIG - SFX_FLAG, NA_SE_EV_WATER_WALL - SFX_FLAG,
+    NA_SE_EV_MAGMA_LEVEL - SFX_FLAG,    NA_SE_EV_MAGMA_LEVEL_M - SFX_FLAG,
+    NA_SE_EV_MAGMA_LEVEL_L - SFX_FLAG,  NA_SE_EV_TORCH - SFX_FLAG,
+    NA_SE_EV_FOUNTAIN - SFX_FLAG,       NA_SE_EV_DRAIN - SFX_FLAG,
+    NA_SE_EV_CROWD - SFX_FLAG,          NA_SE_EV_WATER_CONVECTION - SFX_FLAG,
+    NA_SE_EV_GORON_CHEER - SFX_FLAG,    NA_SE_EV_WATER_WALL_BIG_SILENT - SFX_FLAG,
+    NA_SE_EV_WATER_BUBBLE - SFX_FLAG,   NA_SE_EV_COW_CRY_LV - SFX_FLAG,
+    NA_SE_EV_MAKE_TURRET - SFX_FLAG,    NA_SE_EV_BOILED_WATER_S - SFX_FLAG,
+    NA_SE_EV_BOILED_WATER_L - SFX_FLAG, NA_SE_EV_WAVE_S - SFX_FLAG,
+    NA_SE_EV_WAVE_S - SFX_FLAG,         NA_SE_EV_WAVE_S - SFX_FLAG,
 };
 
 /**
