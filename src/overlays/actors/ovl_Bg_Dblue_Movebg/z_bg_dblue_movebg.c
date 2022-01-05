@@ -779,14 +779,13 @@ void func_80A2B308(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
-// s regs
 void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     BgDblueMovebg* this = THIS;
     s32 i;
     s32 j;
     Gfx* gfx;
+    Gfx* gfx2;
 
     Matrix_StatePush();
 
@@ -798,21 +797,21 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         }
 
         if ((this->unk_164 != 0) || (this->unk_160 == 6)) {
-            gfx = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
+            gfx2 = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(&gfx2[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             if (this->unk_160 == 6) {
-                gSPDisplayList(&gfx[1], object_dblue_object_DL_0052B8);
+                gSPDisplayList(&gfx2[1], object_dblue_object_DL_0052B8);
                 if (this->unk_164 != 0) {
-                    gSPDisplayList(&gfx[2], this->unk_164);
-                    POLY_OPA_DISP = &gfx[3];
+                    gSPDisplayList(&gfx2[2], this->unk_164);
+                    POLY_OPA_DISP = &gfx2[3];
                 } else {
-                    POLY_OPA_DISP = &gfx[2];
+                    POLY_OPA_DISP = &gfx2[2];
                 }
             } else {
-                gSPDisplayList(&gfx[1], this->unk_164);
-                POLY_OPA_DISP = &gfx[2];
+                gSPDisplayList(&gfx2[1], this->unk_164);
+                POLY_OPA_DISP = &gfx2[2];
             }
         }
 
@@ -831,8 +830,6 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if ((this->unk_160 == 8) && (this->unk_172 & 0x20)) {
-        s32 pad;
-
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_dblue_object_Matanimheader_00CE00));
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -886,6 +883,3 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dblue_Movebg/BgDblueMovebg_Draw.s")
-#endif
