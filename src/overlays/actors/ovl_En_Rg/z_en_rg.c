@@ -637,7 +637,7 @@ s32 func_80BF4DA8(EnRg* this) {
             this->unk_324 = 20;
             this->unk_310 &= ~0x800;
 
-            if ((this->unk_18C != ACTOR_PLAYER) && (this->unk_18C->id == ACTOR_PLAYER)) {
+            if ((this->unk_18C != NULL) && (this->unk_18C->id == ACTOR_PLAYER)) {
                 D_80BF5C10 = 0;
             }
 
