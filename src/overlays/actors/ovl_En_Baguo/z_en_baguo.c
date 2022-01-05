@@ -304,7 +304,7 @@ void EnBaguo_PostDetonation(EnBaguo* this, GlobalContext* globalCtx) {
     if (this->timer == 0) {
         Actor_MarkForDeath(&this->actor);
     }
-    
+
     if (this->timer >= 26) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
