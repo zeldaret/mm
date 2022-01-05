@@ -500,8 +500,8 @@ void SkelAnime_DrawTransformFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex,
         Matrix_JointPosition(&pos, &rot);
         Matrix_StatePush();
 
-        //! @bug Does not check transformLimbDraw is not NULL before calling it.
         transformLimbDraw(globalCtx, limbIndex, actor);
+
         if (newDList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
@@ -544,6 +544,7 @@ void SkelAnime_DrawTransformFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex,
  *
  * Also makes use of a `TransformLimbDraw`, which transforms limbs based on world coordinates, as opposed to local limb
  * coordinates.
+ * Note that the `TransformLimbDraw` does not have a NULL check, so must be provided even if empty.
  */
 void SkelAnime_DrawTransformFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
                                     OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw,
@@ -581,7 +582,6 @@ void SkelAnime_DrawTransformFlexOpa(GlobalContext* globalCtx, void** skeleton, V
         Matrix_JointPosition(&pos, &rot);
         Matrix_StatePush();
 
-        //! @bug Does not check transformLimbDraw is not NULL before calling it.
         transformLimbDraw(globalCtx, 1, actor);
 
         if (newDList != NULL) {

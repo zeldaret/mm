@@ -58,7 +58,6 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
         Matrix_JointPosition(&pos, &rot);
         Matrix_StatePush();
 
-        //! @bug Does not check transformLimbDraw is not NULL before calling it.
         transformLimbDraw(globalCtx, limbIndex, actor, &gfx);
 
         if (newDList != NULL) {
@@ -94,6 +93,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
  *
  * Also makes use of a `TransformLimbDraw`, which transforms limbs based on world coordinates, as opposed to local limb
  * coordinates.
+ * Note that the `TransformLimbDraw` does not have a NULL check, so must be provided even if empty.
  */
 Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
                             OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
@@ -124,7 +124,6 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
         Matrix_JointPosition(&pos, &rot);
         Matrix_StatePush();
 
-        //! @bug Does not check transformLimbDraw is not NULL before calling it.
         transformLimbDraw(globalCtx, 1, actor, &gfx);
 
         if (newDlist != NULL) {
