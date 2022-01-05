@@ -50,7 +50,7 @@ ArenaNode* ArenaImpl_GetLastBlock(Arena* arena) {
 }
 
 /**
- * @brief Initializes \p arena using \p heap \p heap.
+ * @brief Initializes \p arena using \p heap.
  * 
  * @param arena  The Arena to initialize.
  * @param heap   The heap to use.
