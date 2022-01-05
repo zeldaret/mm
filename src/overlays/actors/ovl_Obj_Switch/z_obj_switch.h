@@ -56,4 +56,12 @@ typedef struct ObjSwitch {
 
 extern const ActorInit Obj_Switch_InitVars;
 
+#define OBJ_SWITCH_GET_TYPE(thisx) ((thisx)->params&7)
+#define OBJ_SWITCH_GET_SUBTYPE(thisx) ((thisx)->params >> 4 & 7)
+#define OBJ_SWITCH_GET_SWITCH_FLAG(thisx) ((thisx)->params >> 8 & 0x7F)
+#define OBJ_SWITCH_IS_FROZEN(thisx) ((thisx)->params >> 7 & 1)
+#define OBJ_SWITCH_UNSET_FROZEN(thisx) ((thisx)->params &= ~(1 << 7))
+#define OBJ_SWITCH_IS_INVISIBLE(thisx) ((thisx)->params >> 3 & 1)
+#define OBJ_SWITCH_GET_COLOR_ID(thisx) ((thisx)->home.rot.z&1)
+
 #endif // Z_OBJ_SWITCH_H
