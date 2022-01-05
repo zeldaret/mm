@@ -163,7 +163,6 @@ beginseg
     include "build/src/libultra/voice/voicesetadconverter.o"
     include "build/src/libultra/io/aisetfreq.o"
     include "build/src/libultra/io/contramread.o"
-    include "build/data/boot/contramread.data.o"
     include "build/src/libultra/voice/voicecontwrite20.o"
     include "build/src/libultra/io/crc.o"
     include "build/src/libultra/os/getactivequeue.o"
