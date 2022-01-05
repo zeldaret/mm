@@ -99,8 +99,8 @@
 
 typedef struct {
     /* 0x00 */ u32 ramarray[15];
-    /* 0x3C */ u32 pifstatus;
-} OSPifRam;
+    /* 0x3C */ u32 status;
+} OSPifRam; // size = 0x40
 
 
 typedef struct {
