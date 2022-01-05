@@ -72,6 +72,7 @@ void __osMallocAddBlock(Arena* arena, void* start, size_t size) {
     diff = (uintptr_t)firstNode - (uintptr_t)start;
     alignedSize = ((s32)size - diff) & ~0xF;
 
+    // If the size of the heap is smaller than sizeof(ArenaNode), then the initialization will silently fail
     if (alignedSize > (s32)sizeof(ArenaNode)) {
         firstNode->next = NULL;
         firstNode->prev = NULL;

@@ -195,16 +195,7 @@ s32 func_80086D40(f64 param_1);
 f64 func_80086D6C(f64 param_1);
 s32 func_80086D8C(f32 param_1);
 s32 func_80086DAC(f64 param_1);
-void* SystemArena_Malloc(size_t size);
-void* SystemArena_MallocR(size_t size);
-void* SystemArena_Realloc(void* oldPtr, size_t newSize);
-void SystemArena_Free(void* ptr);
-void* SystemArena_Calloc(u32 elements, size_t size);
-void SystemArena_GetSizes(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated);
-u32 SystemArena_CheckArena(void);
-void SystemArena_InitArena(void* start, size_t size);
-void SystemArena_Cleanup(void);
-u8 SystemArena_IsInitialized(void);
+
 s32 Rand_Next(void);
 void Rand_Seed(u32 seed);
 f32 Rand_ZeroOne(void);
