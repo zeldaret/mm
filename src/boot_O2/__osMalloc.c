@@ -51,7 +51,9 @@ ArenaNode* ArenaImpl_GetLastBlock(Arena* arena) {
 
 void __osMallocInit(Arena* arena, void* start, size_t size) {
     bzero(arena, sizeof(Arena));
+
     ArenaImpl_LockInit(arena);
+
     __osMallocAddBlock(arena, start, size);
     arena->isInit = true;
 }
@@ -62,30 +64,32 @@ void __osMallocAddBlock(Arena* arena, void* start, size_t size) {
     ArenaNode* firstNode;
     ArenaNode* lastNode;
 
-    if (start != NULL) {
-        firstNode = (ArenaNode*)ALIGN16((uintptr_t)start);
-        diff = (uintptr_t)firstNode - (uintptr_t)start;
-        alignedSize = ((s32)size - diff) & ~0xF;
+    if (start == NULL) {
+        return;
+    }
 
-        if (alignedSize > (s32)sizeof(ArenaNode)) {
-            firstNode->next = NULL;
-            firstNode->prev = NULL;
-            firstNode->size = alignedSize - sizeof(ArenaNode);
-            firstNode->isFree = true;
-            firstNode->magic = NODE_MAGIC;
-            ArenaImpl_Lock(arena);
-            lastNode = ArenaImpl_GetLastBlock(arena);
+    firstNode = (ArenaNode*)ALIGN16((uintptr_t)start);
+    diff = (uintptr_t)firstNode - (uintptr_t)start;
+    alignedSize = ((s32)size - diff) & ~0xF;
 
-            if (lastNode == NULL) {
-                arena->head = firstNode;
-                arena->start = start;
-            } else {
-                firstNode->prev = lastNode;
-                lastNode->next = firstNode;
-            }
+    if (alignedSize > (s32)sizeof(ArenaNode)) {
+        firstNode->next = NULL;
+        firstNode->prev = NULL;
+        firstNode->size = alignedSize - sizeof(ArenaNode);
+        firstNode->isFree = true;
+        firstNode->magic = NODE_MAGIC;
+        ArenaImpl_Lock(arena);
+        lastNode = ArenaImpl_GetLastBlock(arena);
 
-            ArenaImpl_Unlock(arena);
+        if (lastNode == NULL) {
+            arena->head = firstNode;
+            arena->start = start;
+        } else {
+            firstNode->prev = lastNode;
+            lastNode->next = firstNode;
         }
+
+        ArenaImpl_Unlock(arena);
     }
 }
 
@@ -245,7 +249,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
         size_t diff;
         void* newPtr;
         // Gets the start of the ArenaNode pointer embedded
-        ArenaNode* node = (uintptr_t)ptr - sizeof(ArenaNode);
+        ArenaNode* node = (void*)((uintptr_t)ptr - sizeof(ArenaNode));
 
         newSize = ALIGN16(newSize);
 
@@ -266,7 +270,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
                     next2->prev = (void*)((uintptr_t)next + diff);
                 }
 
-                next2 = (uintptr_t)next + diff;
+                next2 = (void*)((uintptr_t)next + diff);
                 node->next = next2;
                 node->size = newSize;
                 __osMemcpy(next2, next, sizeof(ArenaNode));
