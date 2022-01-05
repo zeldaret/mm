@@ -128,7 +128,6 @@ u8 __osMallocIsInitalized(Arena* arena) {
  *
  *  - If there's not enough space in the given \p arena, this function will fail, returning `NULL`.
  *  - If \p size is zero, then an empty region of memory is returned.
- *  - This region of memory must be freed to avoid memory leaks.
  *
  * To avoid memory leaks, the returned pointer should be eventually deallocated using either `__osFree` or
  * `__osRealloc`.
