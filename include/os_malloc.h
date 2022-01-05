@@ -22,7 +22,7 @@ typedef struct {
     /* 0x22 */ u8 flag;
 } Arena; // size = 0x24
 
-void __osMallocInit(Arena* arena, void* start, size_t size);
+void __osMallocInit(Arena* arena, void* heap, size_t size);
 void __osMallocCleanup(Arena* arena);
 u8 __osMallocIsInitalized(Arena* arena);
 void* __osMalloc(Arena* arena, size_t size);
