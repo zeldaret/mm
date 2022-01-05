@@ -46,7 +46,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
     Vec3s rot;
 
     Matrix_StatePush();
-    limb = (StandardLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]);
+    limb = Lib_SegmentedToVirtual(skeleton[limbIndex]);
     limbIndex++;
     rot = jointTable[limbIndex];
     pos.x = limb->jointPos.x;
@@ -112,7 +112,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
 
     gSPSegment(gfx++, 0x0D, mtx);
     Matrix_StatePush();
-    limb = (StandardLimb*)Lib_SegmentedToVirtual(skeleton[0]);
+    limb = Lib_SegmentedToVirtual(skeleton[0]);
     pos.x = jointTable->x;
     pos.y = jointTable->y;
     pos.z = jointTable->z;
