@@ -7,6 +7,8 @@ struct EnSGoro;
 
 typedef void (*EnSGoroActionFunc)(struct EnSGoro*, GlobalContext*);
 
+#define ENSGORO_GET_F(thisx) ((thisx)->params & 0xF)
+
 typedef struct EnSGoro {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ char unk_144[0x48];
