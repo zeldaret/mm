@@ -2388,7 +2388,7 @@
     0x801D7F44:("sOoTOcarinaSongNotes","OcarinaNote","[9][20]",0x5A0),
     0x801D84E4:("sOoTOcarinaSongsNumNotes","UNK_TYPE1","",0x1),
     0x801D84F0:("sDisplayedSong","UNK_PTR","",0x4),
-    0x801D84F4:("D_801D84F4","u8","[14]",0xE),
+    0x801D84F4:("sFrogsSongNotes","u8","[14]",0xE),
     0x801D8504:("gFrogsSongPtr","u8*","",0x4),
     0x801D8508:("sRecordingState","UNK_TYPE1","",0x1),
     0x801D850C:("sRecordSongPos","UNK_TYPE1","",0x1),

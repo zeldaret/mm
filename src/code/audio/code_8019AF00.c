@@ -1429,8 +1429,12 @@ u8 sOoTOcarinaSongsNumNotes[] = {
 };
 
 OcarinaNote* sDisplayedSong = sOcarinaSongNotes[OCARINA_SONG_SONATA];
-u8 D_801D84F4[14] = { 0, 3, 2, 1, 3, 2, 1, 0, 1, 0, 1, 2, 3, 0 };
-u8* gFrogsSongPtr = D_801D84F4;
+u8 sFrogsSongNotes[14] = {
+    OCARINA_BTN_A,       OCARINA_BTN_C_LEFT,  OCARINA_BTN_C_RIGHT, OCARINA_BTN_C_DOWN, OCARINA_BTN_C_LEFT,
+    OCARINA_BTN_C_RIGHT, OCARINA_BTN_C_DOWN,  OCARINA_BTN_A,       OCARINA_BTN_C_DOWN, OCARINA_BTN_A,
+    OCARINA_BTN_C_DOWN,  OCARINA_BTN_C_RIGHT, OCARINA_BTN_C_LEFT,  OCARINA_BTN_A,
+};
+u8* gFrogsSongPtr = sFrogsSongNotes;
 u8 sRecordingState = OCARINA_RECORD_OFF;
 u8 sRecordSongPos = 0;
 u32 sOcarinaRecordTaskStart = 0;
