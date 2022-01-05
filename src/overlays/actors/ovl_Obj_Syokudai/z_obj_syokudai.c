@@ -79,8 +79,11 @@ static InitChainEntry sInitChain[] = {
 
 static u8 sColTypes[] = { COLTYPE_METAL, COLTYPE_WOOD, COLTYPE_WOOD };
 
-static Gfx* sDLists[] = { sObjectSyokudaiTypeSwitchCausesFlameDL, sObjectSyokudaiTypeFlameCausesSwitchDL,
-                          sObjectSyokudaiTypeNoSwitchDL };
+static Gfx* sDLists[] = {
+    sObjectSyokudaiTypeSwitchCausesFlameDL,
+    sObjectSyokudaiTypeFlameCausesSwitchDL,
+    sObjectSyokudaiTypeNoSwitchDL,
+};
 
 static s32 sNumLitTorchesInGroup;
 
