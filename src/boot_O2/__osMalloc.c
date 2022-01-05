@@ -325,7 +325,7 @@ void __osFree(Arena* arena, void* ptr) {
  * @param[in, out] ptr    The allocated memory block to deallocate.
  * @param[in] newSize     The new requested size.
  * @return void*          On success, the pointer to the reallocated area of memory. On failure, `NULL` is returned,
- * also the original parameter \p ptr remains valid.
+ * and the original parameter \p ptr remains valid.
  */
 void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
     ArenaImpl_Lock(arena);
@@ -387,10 +387,10 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
 }
 
 /**
- * @brief Gets the size of the bigger block which isn't allocated, the total free space and the total allocated space.
+ * @brief Gets the size of the biggest block which isn't allocated, the total free space and the total allocated space.
  *
  * @param[in, out] arena   The Arena which will be used to get the values from.
- * @param[out] outMaxFree  The value of the bigger block which is not allocated.
+ * @param[out] outMaxFree  The value of the biggest block which is not allocated.
  * @param[out] outFree     The accumulated free space.
  * @param[out] outAlloc    The accumulated allocated space.
  */
