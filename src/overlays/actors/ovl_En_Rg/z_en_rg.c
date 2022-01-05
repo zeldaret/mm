@@ -546,7 +546,7 @@ void func_80BF4AB8(EnRg* this, GlobalContext* globalCtx) {
     if (!(this->unk_310 & 0x800)) {
         if (this->unk_320 == 0) {
             do {
-                phi_s0 = func_ActorCategoryIterateById(globalCtx, phi_s0, 6, ACTOR_OBJ_TSUBO);
+                phi_s0 = SubS_FindActor(globalCtx, phi_s0, 6, ACTOR_OBJ_TSUBO);
                 if (phi_s0 != NULL) {
                     if (func_80BF4220(this, globalCtx, phi_s0) && (phi_s0->update != NULL)) {
                         this->unk_18C = phi_s0;
