@@ -940,7 +940,7 @@
         <Limb Name="gameplay_keep_Standardlimb_02AF1C" Type="Standard" Offset="0x2AF1C" />
         <Limb Name="gameplay_keep_Standardlimb_02AF28" Type="Standard" Offset="0x2AF28" />
         <Limb Name="gameplay_keep_Standardlimb_02AF34" Type="Standard" Offset="0x2AF34" />
-        <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Normal" LimbType="Standard" Offset="0x2AF58" />
+        <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Flex" LimbType="Standard" Offset="0x2AF58" />
         <Animation Name="gameplay_keep_Anim_02B2E8" Offset="0x2B2E8" />
 
         <!-- Stray Fairy -->

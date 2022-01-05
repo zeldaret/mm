@@ -166,7 +166,7 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
                 break;
 
             case ENDNK_GET_3_1:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &object_hintnuts_Skel_0023B8, NULL, this->jointTable,
+                SkelAnime_Init(globalCtx, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, NULL, this->jointTable,
                                this->morphTable, 10);
                 func_80A514F0(&this->skelAnime, 18);
                 break;
