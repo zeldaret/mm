@@ -293,13 +293,13 @@ void EnAni_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     this->actionFunc(this, globalCtx);
     if (this->actor.xzDistToPlayer < 100.0f && !(this->stateFlags & ANI_STATE_CLIMBING)) {
-        func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk2E6, this->actor.focus.pos);
-        this->unk2E6.x = this->unk2E6.y = this->unk2E6.z = 0;
+        func_800E9250(globalCtx, &this->actor, &this->headRot, &this->chestRot, this->actor.focus.pos);
+        this->chestRot.x = this->chestRot.y = this->chestRot.z = 0;
     } else {
         Math_SmoothStepToS(&this->headRot.x, 0, 0x6, 0x1838, 0x64);
         Math_SmoothStepToS(&this->headRot.y, 0, 0x6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk2E6.x, 0, 0x6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk2E6.y, 0, 0x6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->chestRot.x, 0, 0x6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->chestRot.y, 0, 0x6, 0x1838, 0x64);
     }
 
     this->blinkFunc(this);
