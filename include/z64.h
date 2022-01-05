@@ -17,7 +17,7 @@
 #include "scheduler.h"
 #include "xstdio.h"
 
-#include "bgm.h"
+#include "sequence.h"
 #include "color.h"
 #include "ichain.h"
 #include "sfx.h"

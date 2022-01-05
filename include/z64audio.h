@@ -68,16 +68,6 @@ typedef enum {
     /* 3 */ CACHE_PERMANENT
 } AudioCacheType;
 
-typedef enum {
-    /* 0 */ SEQ_PLAYER_BGM_MAIN,
-    /* 1 */ SEQ_PLAYER_FANFARE,
-    /* 2 */ SEQ_PLAYER_SFX,
-    /* 3 */ SEQ_PLAYER_BGM_SUB,
-    /* 4 */ SEQ_PLAYER_NATURE,
-    /* 5 */ SEQ_PLAYER_MAX,
-    /*-1 */ SEQ_PLAYER_INVALID = 0xFF
-} AudioPlayer;
-
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
 
 struct Note;

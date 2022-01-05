@@ -1,5 +1,5 @@
-#ifndef BGM_H
-#define BGM_H
+#ifndef SEQUENCE_H
+#define SEQUENCE_H
 
 #define NA_BGM_STOP 0x100000FF
 
@@ -132,6 +132,21 @@
 #define NA_BGM_NO_MUSIC 0x7F                //
 #define NA_BGM_END_CREDITS_2 0x82           // The End/Credits II "STAFFROLL2"
 #define NA_BGM_DISABLED 0xFFFF
+
+typedef enum {
+    /* 0 */ SEQ_PLAYER_BGM_MAIN,
+    /* 1 */ SEQ_PLAYER_FANFARE,
+    /* 2 */ SEQ_PLAYER_SFX,
+    /* 3 */ SEQ_PLAYER_BGM_SUB,
+    /* 4 */ SEQ_PLAYER_NATURE
+} SequencePlayerId;
+
+typedef enum {
+    /* 0 */ SEQ_MODE_DEFAULT,
+    /* 1 */ SEQ_MODE_ENEMY,
+    /* 2 */ SEQ_MODE_STILL, // Not moving or first-person view
+    /* 3 */ SEQ_MODE_IGNORE
+} SequenceMode;
 
 typedef enum {
     /* 0x0 */ CHANNEL_IO_PORT_0,
