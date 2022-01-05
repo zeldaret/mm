@@ -250,11 +250,12 @@ s32 FrameAdvance_IsEnabled(GameState* gameState) {
 
 // Unused, unchanged from OoT, which uses it only in one Camera function.
 /**
- * Tests if actor is a door and the sides are different rooms.
+ * @brief Tests if \p actor is a door and the sides are different rooms.
+ *
  * @param[in] gameState GameState, promoted to globalCtx inside.
  * @param[in] actor Actor to test.
  * @param[out] yaw Facing angle of the actor, or reverse if in the back room.
- * @return true if actor is a door and the sides are in different rooms, false otherwise
+ * @return true if \p actor is a door and the sides are in different rooms, false otherwise
  */
 s32 func_8016A02C(GameState* gameState, Actor* actor, s16* yaw) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
@@ -281,7 +282,10 @@ s32 func_8016A02C(GameState* gameState, Actor* actor, s16* yaw) {
 }
 
 /**
- * Tests if underwater.
+ * @brief Tests if \p pos is underwater.
+ *
+ * @param[in] globalCtx GlobalContext
+ * @param[in] pos position to test
  * @return True if inside a waterbox and not above a void.
  */
 s32 Play_IsUnderwater(GlobalContext* globalCtx, Vec3f* pos) {
@@ -317,8 +321,8 @@ extern s16 D_801D0D64[];
 // Used by Player
 /**
  * Sets the cutscene numbers in globalCtx->unk_1879C.
- * Set to -1 by default. If there is an ActorCutscene where unk4 matches the appropriate element of  (and possibly
- * change its priority for the zeroth one)
+ * Set to -1 by default. If there is an ActorCutscene where unk4 matches the appropriate element of D_801D0D64 (and
+ * possibly change its priority for the zeroth one)
  */
 void func_8016A178(GameState* gameState, s32 cutscene) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
