@@ -143,7 +143,7 @@ Actor* func_8094DEE0(EnGm* this, GlobalContext* globalCtx, u8 arg2, s16 arg3) {
     Actor* actor;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, foundActor, arg2, arg3);
+        actor = SubS_FindActor(globalCtx, foundActor, arg2, arg3);
         foundActor = actor;
         if (actor == NULL) {
             break;
@@ -196,7 +196,7 @@ EnDoor* func_8094DF90(GlobalContext* globalCtx, s32 arg1) {
             phi_a1 = -1;
     }
 
-    return (EnDoor*)func_8013A7C0(globalCtx, phi_a1);
+    return SubS_FindDoor(globalCtx, phi_a1);
 }
 
 s32 func_8094DFF8(EnGm* this, GlobalContext* globalCtx) {

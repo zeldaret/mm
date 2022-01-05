@@ -549,7 +549,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             func_80169590(globalCtx, 0, 1);
             func_80169590(globalCtx, this->camId, 7);
             func_800B7298(globalCtx, &this->actor, 4);
-            camera = Play_GetCamera(globalCtx, 0);
+            camera = Play_GetCamera(globalCtx, MAIN_CAM);
             this->eye.x = camera->eye.x;
             this->eye.y = camera->eye.y;
             this->eye.z = camera->eye.z;
@@ -568,7 +568,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
 
             player->actor.speedXZ = 0.0f;
             if (func_80152498(&globalCtx->msgCtx) == 0) {
-                camera = Play_GetCamera(globalCtx, 0);
+                camera = Play_GetCamera(globalCtx, MAIN_CAM);
                 camera->eye = this->eye;
                 camera->eyeNext = this->eye;
                 camera->at = this->at;

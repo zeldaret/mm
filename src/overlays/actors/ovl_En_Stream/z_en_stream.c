@@ -143,7 +143,7 @@ void EnStream_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(&gfx[1], 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, frames * 30, -multipliedFrames, 64, 64, 1, multipliedFrames,
                                 -multipliedFrames, 64, 64));
-    gSPDisplayList(&gfx[2], object_stream_DL_000950);
+    gSPDisplayList(&gfx[2], gWaterVortexDL);
     POLY_XLU_DISP = &gfx[3];
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

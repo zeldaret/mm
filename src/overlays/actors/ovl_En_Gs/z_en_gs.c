@@ -360,7 +360,7 @@ void func_809984F4(EnGs* this, GlobalContext* globalCtx) {
     EnGs* gossipStone = NULL;
 
     do {
-        gossipStone = (EnGs*)func_ActorCategoryIterateById(globalCtx, &gossipStone->actor, ACTORCAT_PROP, ACTOR_EN_GS);
+        gossipStone = (EnGs*)SubS_FindActor(globalCtx, &gossipStone->actor, ACTORCAT_PROP, ACTOR_EN_GS);
         if (gossipStone != NULL) {
             if ((this != gossipStone) && (this->unk_194 == gossipStone->unk_194)) {
                 gossipStone->unk_19A |= 1;
@@ -393,8 +393,7 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
         gossipStone = NULL;
 
         do {
-            gossipStone =
-                (EnGs*)func_ActorCategoryIterateById(globalCtx, &gossipStone->actor, ACTORCAT_PROP, ACTOR_EN_GS);
+            gossipStone = (EnGs*)SubS_FindActor(globalCtx, &gossipStone->actor, ACTORCAT_PROP, ACTOR_EN_GS);
             if (gossipStone != NULL) {
                 if ((gossipStone != this) && (gossipStone->actor.params == ENGS_2) &&
                     (gossipStone->unk_198 == this->unk_198)) {

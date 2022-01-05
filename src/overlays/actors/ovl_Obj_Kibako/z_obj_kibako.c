@@ -70,9 +70,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static s16 sObjectIdList[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
 
-static Gfx* sKakeraDisplayLists[] = { gameplay_dangeon_keep_DL_007980, object_kibako_DL_001A70 };
+static Gfx* sKakeraDisplayLists[] = { gameplay_dangeon_keep_DL_007980, gSmallCrateFragmentDL };
 
-static Gfx* sDisplayLists[] = { gameplay_dangeon_keep_DL_007890, object_kibako_DL_001180 };
+static Gfx* sDisplayLists[] = { gameplay_dangeon_keep_DL_007890, gSmallCrateDL };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_CONTINUE),

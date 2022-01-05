@@ -382,7 +382,7 @@ extern UNK_PTR D_801AE260[3];
 // extern UNK_TYPE4 D_801AE2BC;
 // extern UNK_TYPE4 D_801AE2CC;
 // extern UNK_TYPE4 D_801AE2DC;
-extern EffectSsInfo EffectSS2Info;
+// extern EffectSsInfo sEffectSsInfo;
 // extern UNK_TYPE1 D_801AE3B0;
 // extern UNK_TYPE1 D_801AE3B4;
 // extern UNK_TYPE4 D_801AE3B8;
@@ -410,7 +410,7 @@ extern EffectSsInfo EffectSS2Info;
 // extern UNK_TYPE1 D_801AE48A;
 // extern UNK_TYPE1 D_801AE48C;
 // extern UNK_TYPE1 D_801AE490;
-extern EffectSsOverlay particleOverlayTable[39];
+extern EffectSsOverlay gParticleOverlayTable[39];
 // extern FlagSetEntry sFlagEntries[];
 // extern s32 sEntryIndex;
 // extern u32 sCurrentBit;
@@ -3772,7 +3772,7 @@ extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 // other segments
 extern GfxMasterList D_0E000000;
-
+extern Mtx D_01000000;
 extern UNK_TYPE D_0F000000;
 
 
