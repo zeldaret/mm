@@ -1473,7 +1473,6 @@ u8 sNoteToButtonMap[16] = {
     OCARINA_BTN_C_UP,                         // NOTE_EFLAT5
 };
 
-// New to MM
 // seqData written in the music macro language
 // Only used in unused functions
 u8 sCustomSequenceScript[400] = {
