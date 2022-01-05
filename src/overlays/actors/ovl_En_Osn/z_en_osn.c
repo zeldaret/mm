@@ -122,7 +122,7 @@ s32 func_80AD08B0(GlobalContext* globalCtx) {
         return 0x1FDA;
     case PLAYER_MASK_GIANT:
         return 0x1FDC;
-    case PLAYER_MASK_KAFEI:
+    case PLAYER_MASK_KAFEIS_MASK:
         return 0x1FDE;
     case PLAYER_MASK_DON_GERO:
         return 0x1FE0;
