@@ -113,7 +113,7 @@ void __osMallocCleanup(Arena* arena) {
 }
 
 /**
- * @brief Returns if the \p arena has been initialized.
+ * @brief Returns whether or not the \p arena has been initialized.
  *
  * @param arena  The Arena to check.
  * @return u8    `true` if the \p arena has been initialized. `false` otherwise.
@@ -324,8 +324,8 @@ void __osFree(Arena* arena, void* ptr) {
  * @param[in, out] arena  The specific Arena to be used for the allocation.
  * @param[in, out] ptr    The allocated memory block to deallocate.
  * @param[in] newSize     The new requested size.
- * @return void*          On success, the pointer to the reallocated area of memory. On failure, `NULL` and the original
- * parameter \p ptr remains valid.
+ * @return void*          On success, the pointer to the reallocated area of memory. On failure, `NULL` is returned,
+ * also the original parameter \p ptr remains valid.
  */
 void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
     ArenaImpl_Lock(arena);
