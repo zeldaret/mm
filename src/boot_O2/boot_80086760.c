@@ -24,30 +24,30 @@ f32 func_80086760(f32 x) {
 // Unused
 // Math_FFloorF
 f32 func_80086794(f32 x) {
-    func_80086C70(x);
+    return func_80086C70(x);
 }
 
 // Unused
 // Math_FCeilF
 f32 func_800867B4(f32 x) {
-    func_80086CA8(x);
+    return func_80086CA8(x);
 }
 
 // Unused
 // Math_FRoundF
 f32 func_800867D4(f32 x) {
-    func_80086D50(x);
+    return func_80086D50(x);
 }
 
 // Unused
 // Math_FTruncF
 f32 func_800867F4(f32 x) {
-    func_80086CE0(x);
+    return func_80086CE0(x);
 }
 
 // Math_FNearbyIntF
 f32 func_80086814(f32 x) {
-    func_80086D18(x);
+    return func_80086D18(x);
 }
 
 /**
