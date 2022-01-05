@@ -16,7 +16,7 @@ typedef struct BgDblueMovebg {
     /* 0x015C */ BgDblueMovebgActionFunc actionFunc;
     /* 0x0160 */ s32 unk_160;
     /* 0x0164 */ Gfx* unk_164;
-    /* 0x0168 */ s32 unk_168;
+    /* 0x0168 */ Gfx* unk_168;
     /* 0x016C */ TexturePtr unk_16C;
     /* 0x0170 */ s8 unk_170;
     /* 0x0171 */ s8 unk_171;

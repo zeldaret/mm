@@ -74,7 +74,9 @@ static Gfx* D_80A2B8AC[] = {
     NULL,
 };
 
-static s32 D_80A2B8DC[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x0600CAA0, 0 };
+static Gfx* D_80A2B8DC[] = {
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, object_dblue_object_DL_00CAA0, NULL,
+};
 
 static CollisionHeader* D_80A2B90C[] = {
     NULL,
@@ -91,15 +93,15 @@ static CollisionHeader* D_80A2B90C[] = {
     NULL,
 };
 
-static TexturePtr D_80A2B93C[] = {
-    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &object_dblue_object_Matanimheader_00CC18, NULL,
+static AnimatedMaterial* D_80A2B93C[] = {
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, object_dblue_object_Matanimheader_00CC18, NULL,
 };
 
 static s16 D_80A2B96C[] = { 0, 0x16C, -0x16C, 0 };
 
 static s16 D_80A2B974[] = { -1, -1 };
 
-static InitChainEntry D_80A2B978[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_CONTINUE),
@@ -173,7 +175,7 @@ void BgDblueMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgDblueMovebg* this = THIS;
     s32 i;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80A2B978);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_160 = BGDBLUEMOVEBG_GET_F(thisx);
     this->unk_1BC = BGDBLUEMOVEBG_GET_F000(thisx);
     this->unk_1C0 = BGDBLUEMOVEBG_GET_FF0(thisx);
@@ -233,7 +235,7 @@ void BgDblueMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
             } else {
                 this->unk_18C = 0;
             }
-            this->dyna.actor.shape.rot.y += (s16)((this->unk_18C / 10.0f) * 182.04445f);
+            this->dyna.actor.shape.rot.y += (s16)((this->unk_18C / 10.0f) * (0x10000 / 360.0f));
             this->actionFunc = func_80A2A714;
             break;
 
@@ -259,7 +261,7 @@ void BgDblueMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->dyna.actor.draw = func_80A2B308;
             this->unk_17E = 0;
             this->unk_184 = 0.0f;
-            this->dyna.actor.shape.rot.y += (s16)((this->unk_18C / 10.0f) * 182.04445f);
+            this->dyna.actor.shape.rot.y += (s16)((this->unk_18C / 10.0f) * (0x10000 / 360.0f));
             this->actionFunc = func_80A2A32C;
             break;
 
@@ -311,7 +313,7 @@ void func_80A2A128(BgDblueMovebg* this, GlobalContext* globalCtx) {
     Actor* phi_s0 = NULL;
 
     while (true) {
-        phi_s0 = func_ActorCategoryIterateById(globalCtx, phi_s0, ACTORCAT_BG, ACTOR_OBJ_HUNSUI);
+        phi_s0 = SubS_FindActor(globalCtx, phi_s0, ACTORCAT_BG, ACTOR_OBJ_HUNSUI);
         if (phi_s0 != NULL) {
             if ((OBJHUNSUI_GET_F000(phi_s0) == 5) && (phi_s0->update != NULL)) {
                 this->unk_2F8[1] = phi_s0;
@@ -422,7 +424,8 @@ void func_80A2A444(BgDblueMovebg* this, GlobalContext* globalCtx) {
 
     sp20 = Math_StepToS(&this->unk_18A, 900, this->unk_188);
     temp_v0 = this->unk_18A * this->unk_17E;
-    this->dyna.actor.shape.rot.y = (s32)((this->unk_18C + (temp_v0)) * 0.1f * 182.04445f) + this->dyna.actor.home.rot.y;
+    this->dyna.actor.shape.rot.y =
+        (s32)((this->unk_18C + (temp_v0)) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
 
     if ((player->stateFlags2 & 0x10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =
@@ -509,7 +512,8 @@ void func_80A2A7F8(BgDblueMovebg* this, GlobalContext* globalCtx) {
 
     sp28 = Math_StepToS(&this->unk_18A, 900, this->unk_188);
     sp26 = this->unk_18A * this->unk_17E;
-    this->dyna.actor.shape.rot.y = (s32)((this->unk_18C + sp26) * 0.1f * 182.04445f) + this->dyna.actor.home.rot.y;
+    this->dyna.actor.shape.rot.y =
+        (s32)((this->unk_18C + sp26) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
 
     if ((player->stateFlags2 & 0x10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =
@@ -812,7 +816,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             }
         }
 
-        if (this->unk_168 != 0) {
+        if (this->unk_168 != NULL) {
             gfx = func_8012C2B4(POLY_XLU_DISP);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
