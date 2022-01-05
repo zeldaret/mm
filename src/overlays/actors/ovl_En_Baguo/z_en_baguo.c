@@ -28,6 +28,21 @@ void EnBaguo_InitializeParticle(EnBaguo* this, Vec3f* position, Vec3f* velocity,
 void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx);
 
+typedef enum {
+    /* 0x0 */ NEJIRON_ACTION_INACTIVE,   // The Nejiron is either underground or emerging from underground
+    /* 0x1 */ NEJIRON_ACTION_ACTIVE,     // The Nejiron is above ground and actively chasing the player
+    /* 0x2 */ NEJIRON_ACTION_RETREATING, // The Nejiron is burrowing back underground
+    /* 0x3 */ NEJIRON_ACTION_EXPLODING   // The Nejiron has detonated
+} NejironAction;
+
+/**
+ * These directions are relative to the Nejiron.
+ */
+typedef enum {
+    /* 0x0 */ NEJIRON_DIRECTION_RIGHT,
+    /* 0x1 */ NEJIRON_DIRECTION_LEFT
+} NejironRollDirection;
+
 const ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
     ACTORCAT_ENEMY,
@@ -112,7 +127,8 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gNejironSkel, NULL, this->jointTable, this->morphTable, 3);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gNejironSkel, NULL, this->jointTable, this->morphTable,
+                   NEJIRON_LIMB_MAX);
     this->actor.hintId = 0xB;
     this->maxDistanceFromHome = 240.0f;
     this->maxDistanceFromHome += this->actor.world.rot.z * 40.0f;
@@ -120,12 +136,14 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 2;
+
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     this->collider.elements[0].dim.modelSphere.radius = 30;
     this->collider.elements[0].dim.scale = 1.0f;
     this->collider.elements[0].dim.modelSphere.center.x = 80;
     this->collider.elements[0].dim.modelSphere.center.y = 80;
     this->collider.elements[0].dim.modelSphere.center.z = 0;
+
     this->actor.shape.yOffset = -3000.0f;
     this->actor.gravity = -3.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -195,26 +213,27 @@ void EnBaguo_Idle(EnBaguo* this, GlobalContext* globalCtx) {
             }
         }
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        return;
-    }
-
-    yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
-    absoluteYaw = ABS_ALT(yaw);
-    Math_Vec3f_Copy(&this->targetRotation, &gZeroVec3f);
-    Math_Vec3f_Copy(&this->currentRotation, &gZeroVec3f);
-    if (absoluteYaw < 0x2000) {
-        this->targetRotation.x = 2000.0f;
     } else {
-        this->zRollDirection = NEJIRON_DIRECTION_RIGHT;
-        this->targetRotation.z = 2000.0f;
-        if ((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0) {
-            this->zRollDirection = NEJIRON_DIRECTION_LEFT;
+        yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+        absoluteYaw = ABS_ALT(yaw);
+        Math_Vec3f_Copy(&this->targetRotation, &gZeroVec3f);
+        Math_Vec3f_Copy(&this->currentRotation, &gZeroVec3f);
+
+        if (absoluteYaw < 0x2000) {
+            this->targetRotation.x = 2000.0f;
+        } else {
+            this->zRollDirection = NEJIRON_DIRECTION_RIGHT;
+            this->targetRotation.z = 2000.0f;
+            if ((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0) {
+                this->zRollDirection = NEJIRON_DIRECTION_LEFT;
+            }
         }
+
+        this->timer = 38;
+        this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+        this->bouncedFlag = 0;
+        this->actionFunc = EnBaguo_Roll;
     }
-    this->timer = 38;
-    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->hardHitFlag = 0;
-    this->actionFunc = EnBaguo_Roll;
 }
 
 void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
@@ -224,35 +243,33 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
     if ((sqrtf(SQ(xDistanceFromHome) + SQ(zDistanceFromHome)) > this->maxDistanceFromHome) ||
         (Player_GetMask(globalCtx) == PLAYER_MASK_STONE)) {
         EnBaguo_SetupRetreatUnderground(this);
-        return;
-    }
-
-    if (this->timer == 0) {
+    } else if (this->timer == 0) {
         this->timer = 100;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->actionFunc = EnBaguo_Idle;
         this->actor.speedXZ = 0.0f;
-        return;
-    }
-
-    if (!this->hardHitFlag && this->collider.base.atFlags & AC_HARD) {
-        this->zRollDirection ^= 1;
-        this->hardHitFlag = 1;
-        this->actor.speedXZ = -7.0f;
-    }
-
-    Math_ApproachF(&this->currentRotation.x, this->targetRotation.x, 0.2f, 1000.0f);
-    Math_ApproachF(&this->currentRotation.z, this->targetRotation.z, 0.2f, 1000.0f);
-    Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 0.5f);
-    this->actor.world.rot.x += (s16)this->currentRotation.x;
-    if (this->currentRotation.z != 0.0f) {
-        if (this->zRollDirection == NEJIRON_DIRECTION_RIGHT) {
-            this->actor.world.rot.z += (s16)this->currentRotation.z;
-        } else {
-            this->actor.world.rot.z -= (s16)this->currentRotation.z;
+    } else {
+        if (!this->bouncedFlag && this->collider.base.atFlags & AT_BOUNCED) {
+            this->zRollDirection ^= 1;
+            this->bouncedFlag = 1;
+            this->actor.speedXZ = -7.0f;
         }
+
+        Math_ApproachF(&this->currentRotation.x, this->targetRotation.x, 0.2f, 1000.0f);
+        Math_ApproachF(&this->currentRotation.z, this->targetRotation.z, 0.2f, 1000.0f);
+        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 0.5f);
+        this->actor.world.rot.x += (s16)this->currentRotation.x;
+
+        if (this->currentRotation.z != 0.0f) {
+            if (this->zRollDirection == NEJIRON_DIRECTION_RIGHT) {
+                this->actor.world.rot.z += (s16)this->currentRotation.z;
+            } else {
+                this->actor.world.rot.z -= (s16)this->currentRotation.z;
+            }
+        }
+
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
     }
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
 }
 
 void EnBaguo_SetupRetreatUnderground(EnBaguo* this) {
@@ -268,8 +285,10 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx) {
         func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10, 8.0f,
                       500, 10, 1);
     }
+
     Math_ApproachF(&this->actor.shape.yOffset, -3000.0f, 100.0f, 500.0f);
     Math_ApproachZeroF(&this->actor.shape.shadowScale, 0.3f, 5.0f);
+
     if (this->actor.shape.yOffset < -2970.0f) {
         this->actor.shape.yOffset = -3000.0f;
         this->actor.draw = EnBaguo_DrawBody;
@@ -285,6 +304,7 @@ void EnBaguo_PostDetonation(EnBaguo* this, GlobalContext* globalCtx) {
     if (this->timer == 0) {
         Actor_MarkForDeath(&this->actor);
     }
+    
     if (this->timer >= 26) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
@@ -331,6 +351,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
                             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_POP);
                 Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_DEAD);
+
                 this->timer = 30;
                 this->actor.flags |= 0x8000000;
                 this->actor.flags &= ~1;
@@ -362,6 +383,7 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->action != NEJIRON_ACTION_EXPLODING) {
         this->actor.shape.rot.x = this->actor.world.rot.x;
         this->actor.shape.rot.z = this->actor.world.rot.z;
+
         if (this->blinkTimer == 0) {
             this->eyeIndex++;
             if (this->eyeIndex >= 3) {
@@ -369,6 +391,7 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
                 this->blinkTimer = Rand_ZeroFloat(60.0f) + 20.0f;
             }
         }
+
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
         if (this->action != NEJIRON_ACTION_INACTIVE) {
@@ -449,12 +472,14 @@ void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx) {
             particle->velocity.x += particle->acceleration.x;
             particle->velocity.y += particle->acceleration.y;
             particle->velocity.z += particle->acceleration.z;
+
             if (particle->position.y < (this->actor.world.pos.y - 10.0f)) {
                 Math_ApproachZeroF(&particle->scale, 0.2f, 0.001f);
                 if (particle->scale <= 0.0001f) {
                     particle->timer = 0;
                 }
             }
+
             if (particle->timer != 0) {
                 particle->timer--;
             } else {
@@ -470,6 +495,7 @@ void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
+
     func_8012C28C(globalCtx->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
         if (particle->isVisible) {
@@ -478,10 +504,12 @@ void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
             Matrix_RotateY(particle->rotation.y, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(particle->rotation.z, MTXMODE_APPLY);
             Matrix_Scale(particle->scale, particle->scale, particle->scale, MTXMODE_APPLY);
+
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 1, 255, 255, 255, 255);
-            gSPDisplayList(POLY_OPA_DISP++, &gameplay_keep_DL_01FA40);
+            gSPDisplayList(POLY_OPA_DISP++, gBoulderFragmentsDL);
         }
     }
+
     CLOSE_DISPS(gfxCtx);
 }
