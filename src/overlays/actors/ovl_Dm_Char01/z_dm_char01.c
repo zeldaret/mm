@@ -1,7 +1,7 @@
 /*
  * File: z_dm_char01.c
  * Overlay: ovl_Dm_Char01
- * Description: Tatl and Tael (cutscene)
+ * Description: Woodfall scene objects (temple, water, walls, etc)
  */
 
 #include "z_dm_char01.h"
