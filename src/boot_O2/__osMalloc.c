@@ -127,10 +127,11 @@ u8 __osMallocIsInitalized(Arena* arena) {
  * The block of memory will be allocated from the beginning of \p arena.
  *
  *  - If there's not enough space in the given \p arena, this function will fail, returning `NULL`.
- *  - If \p size is zero, then an empty region of memory is returned. 
+ *  - If \p size is zero, then an empty region of memory is returned.
  *  - This region of memory must be freed to avoid memory leaks.
  *
- * To avoid memory leaks, the returned pointer should be eventually deallocated using either `__osFree` or `__osRealloc`.
+ * To avoid memory leaks, the returned pointer should be eventually deallocated using either `__osFree` or
+ * `__osRealloc`.
  *
  * @param[in, out] arena  The specific Arena to be used for the allocation.
  * @param[in] size        The size in bytes that will be allocated.
@@ -192,7 +193,7 @@ void* __osMalloc(Arena* arena, size_t size) {
  * Unlike __osMalloc, the block of memory will be allocated at the end of the \p arena.
  *
  * - If there's not enough space in the given \p arena, this function will fail, returning `NULL`.
- * - If \p size is zero, then an empty region of memory is returned. 
+ * - If \p size is zero, then an empty region of memory is returned.
  *
  * To avoid memory leaks, the returned pointer should be eventually deallocated using `__osFree` or `__osRealloc`.
  *
@@ -256,8 +257,8 @@ void* __osMallocR(Arena* arena, size_t size) {
  * If the pointer \p ptr is `NULL` or it has been already been freed, then this function does nothing.
  *
  * - The behaviour is undefined if the pointer \p ptr is not a memory region returned by one of the cited allocating
- * functions. 
- * - The behaviour is undefined if the pointer \p ptr doesn't correspond to the given \p arena. 
+ * functions.
+ * - The behaviour is undefined if the pointer \p ptr doesn't correspond to the given \p arena.
  * - Any access to the freed pointer is undefined behaviour.
  *
  * @param[in, out] arena  The specific Arena to be used for the allocation.
@@ -314,12 +315,12 @@ void __osFree(Arena* arena, void* ptr) {
  *
  * - If \p ptr is `NULL` a new pointer is allocated. See `__osMalloc` for more details.
  * - If \p newSize is 0, then the given pointer is freed and `NULL` is returned. See `__osFree` for more details.
- * - If \p newSize is bigger than the currently allocated allocated pointer, then the area of memory is expanded to a size
- * big enough to fit the requested size.
+ * - If \p newSize is bigger than the currently allocated allocated pointer, then the area of memory is expanded to a
+ * size big enough to fit the requested size.
  *
  * - The behaviour is undefined if the pointer \p ptr is not a memory region returned by one of the cited allocating
- * functions. 
- * - The behaviour is undefined if the pointer \p ptr doesn't correspond to the given \p arena. 
+ * functions.
+ * - The behaviour is undefined if the pointer \p ptr doesn't correspond to the given \p arena.
  * - If the pointer is freed, then any access to the original freed pointer is undefined behaviour.
  *
  * @param[in, out] arena  The specific Arena to be used for the allocation.
