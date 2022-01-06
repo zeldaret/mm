@@ -3903,7 +3903,7 @@ void Audio_PreNMI(void);
 // void func_801A44C4(void);
 // void func_801A44D4(void);
 s32 func_801A46F8(void);
-// void func_801A4748(void);
+void func_801A4748(Vec3f* pos, u16 sfxId);
 void func_801A479C(Vec3f* arg0, u16 sfxId, s32 arg2);
 // void func_801A47DC(void);
 // void func_801A48E0(void);
