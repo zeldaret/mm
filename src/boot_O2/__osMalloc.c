@@ -253,11 +253,11 @@ void* __osMallocR(Arena* arena, size_t size) {
 
 /**
  * @brief Deallocates the pointer \p ptr previously allocated by `__osMalloc`, `__osMallocR` or `__osRealloc`.
- * If the pointer \p ptr is `NULL` or it has been already been freed, then this function does nothing.
+ * If \p ptr is `NULL` or it has been already been freed, then this function does nothing.
  *
- * - The behaviour is undefined if the pointer \p ptr is not a memory region returned by one of the cited allocating
+ * - The behaviour is undefined if \p ptr is not a memory region returned by one of the cited allocating
  * functions.
- * - The behaviour is undefined if the pointer \p ptr doesn't correspond to the given \p arena.
+ * - The behaviour is undefined if \p ptr doesn't correspond to the given \p arena.
  * - Any access to the freed pointer is undefined behaviour.
  *
  * @param[in, out] arena  The specific Arena to be used for the allocation.
@@ -309,7 +309,7 @@ void __osFree(Arena* arena, void* ptr) {
 
 /**
  * @brief Reallocates the pointer \p ptr.
- * The pointer \p ptr must be either a pointer previously allocated by `__osMalloc`, `__osMallocR` or `__osRealloc` and
+ * \p ptr must be either a pointer previously allocated by `__osMalloc`, `__osMallocR` or `__osRealloc` and
  * not freed yet, or a `NULL` pointer.
  *
  * - If \p ptr is `NULL` a new pointer is allocated. See `__osMalloc` for more details.
@@ -317,9 +317,9 @@ void __osFree(Arena* arena, void* ptr) {
  * - If \p newSize is bigger than the currently allocated allocated pointer, then the area of memory is expanded to a
  * size big enough to fit the requested size.
  *
- * - The behaviour is undefined if the pointer \p ptr is not a memory region returned by one of the cited allocating
+ * - The behaviour is undefined if \p ptr is not a memory region returned by one of the cited allocating
  * functions.
- * - The behaviour is undefined if the pointer \p ptr doesn't correspond to the given \p arena.
+ * - The behaviour is undefined if \p ptr doesn't correspond to the given \p arena.
  * - If the pointer is freed, then any access to the original freed pointer is undefined behaviour.
  *
  * @param[in, out] arena  The specific Arena to be used for the allocation.
