@@ -58,11 +58,12 @@ void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer) {
         if (seqPlayer->fadeVolume > 1.0f) {
             seqPlayer->fadeVolume = 1.0f;
         }
-        if (seqPlayer->fadeVolume < 0) {
-            seqPlayer->fadeVolume = 0;
+        if (seqPlayer->fadeVolume < 0.0f) {
+            seqPlayer->fadeVolume = 0.0f;
         }
 
-        if (--seqPlayer->fadeTimer == 0 && seqPlayer->state == 2) {
+        seqPlayer->fadeTimer--;
+        if (seqPlayer->fadeTimer == 0 && seqPlayer->state == 2) {
             AudioSeq_SequencePlayerDisable(seqPlayer);
             return;
         }
