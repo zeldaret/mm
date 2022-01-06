@@ -680,7 +680,7 @@ asm/non_matchings/code/z_camera/Camera_CalcUpFromPitchYawRoll.s,Camera_CalcUpFro
 asm/non_matchings/code/z_camera/Camera_ClampLERPScale.s,Camera_ClampLERPScale,0x800CD288,0x16
 asm/non_matchings/code/z_camera/Camera_ResetAnim.s,Camera_ResetAnim,0x800CD2E0,0x4
 asm/non_matchings/code/z_camera/Camera_UpdateInterface.s,Camera_UpdateInterface,0x800CD2F0,0x3D
-asm/non_matchings/code/z_camera/Camera_BGCheckCorner.s,Camera_BGCheckCorner,0x800CD3E4,0x1A
+asm/non_matchings/code/z_camera/Camera_BgCheckCorner.s,Camera_BgCheckCorner,0x800CD3E4,0x1A
 asm/non_matchings/code/z_camera/func_800CD44C.s,func_800CD44C,0x800CD44C,0x7A
 asm/non_matchings/code/z_camera/Camera_CalcSlopeYAdj.s,Camera_CalcSlopeYAdj,0x800CD634,0x26
 asm/non_matchings/code/z_camera/func_800CD6CC.s,func_800CD6CC,0x800CD6CC,0xB
@@ -778,7 +778,7 @@ asm/non_matchings/code/z_camera/Camera_CheckWater.s,Camera_CheckWater,0x800DE324
 asm/non_matchings/code/z_camera/Camera_EarthquakeDay3.s,Camera_EarthquakeDay3,0x800DE62C,0x85
 asm/non_matchings/code/z_camera/Camera_SetRoomHotFlag.s,Camera_SetRoomHotFlag,0x800DE840,0x14
 asm/non_matchings/code/z_camera/func_800DE890.s,func_800DE890,0x800DE890,0x31
-asm/non_matchings/code/z_camera/func_800DE954.s,func_800DE954,0x800DE954,0x17
+asm/non_matchings/code/z_camera/Camera_IsWearingGiantsMask.s,Camera_IsWearingGiantsMask,0x800DE954,0x17
 asm/non_matchings/code/z_camera/Camera_Update.s,Camera_Update,0x800DE9B0,0x2BA
 asm/non_matchings/code/z_camera/func_800DF498.s,func_800DF498,0x800DF498,0xE
 asm/non_matchings/code/z_camera/Camera_ChangeModeFlags.s,Camera_ChangeModeFlags,0x800DF4D0,0xDC
@@ -798,7 +798,7 @@ asm/non_matchings/code/z_camera/Camera_SetParam.s,Camera_SetParam,0x800DFD78,0x5
 asm/non_matchings/code/z_camera/Camera_UnsetParam.s,Camera_UnsetParam,0x800DFEF0,0xA
 asm/non_matchings/code/z_camera/Camera_OverwriteFlags.s,Camera_OverwriteFlags,0x800DFF18,0x7
 asm/non_matchings/code/z_camera/Camera_ResetAnimUnused.s,Camera_ResetAnimUnused,0x800DFF34,0x4
-asm/non_matchings/code/z_camera/Camera_SetCSParams.s,Camera_SetCSParams,0x800DFF44,0x7
+asm/non_matchings/code/z_camera/Camera_SetCsParams.s,Camera_SetCsParams,0x800DFF44,0x7
 asm/non_matchings/code/z_camera/Camera_SetFlags.s,Camera_SetFlags,0x800DFF60,0x9
 asm/non_matchings/code/z_camera/Camera_UnsetFlags.s,Camera_UnsetFlags,0x800DFF84,0xA
 asm/non_matchings/code/z_camera/Camera_ChangeDoorCam.s,Camera_ChangeDoorCam,0x800DFFAC,0x34
@@ -809,8 +809,8 @@ asm/non_matchings/code/z_camera/Camera_SetCameraData.s,Camera_SetCameraData,0x80
 asm/non_matchings/code/z_camera/Camera_GetNegOne.s,Camera_GetNegOne,0x800E0228,0x4
 asm/non_matchings/code/z_camera/func_800E0238.s,func_800E0238,0x800E0238,0x1D
 asm/non_matchings/code/z_camera/Camera_SetToTrackActor.s,Camera_SetToTrackActor,0x800E02AC,0x17
-asm/non_matchings/code/z_camera/func_800E0308.s,func_800E0308,0x800E0308,0x5
-asm/non_matchings/code/z_camera/func_800E031C.s,func_800E031C,0x800E031C,0xB
+asm/non_matchings/code/z_camera/Camera_SetTargetActor.s,Camera_SetTargetActor,0x800E0308,0x5
+asm/non_matchings/code/z_camera/Camera_GetWaterYPos.s,Camera_GetWaterYPos,0x800E031C,0xB
 asm/non_matchings/code/z_camera/func_800E0348.s,func_800E0348,0x800E0348,0x16
 asm/non_matchings/code/z_collision_btltbls/DamageTable_Get.s,DamageTable_Get,0x800E03A0,0xB
 asm/non_matchings/code/z_collision_btltbls/DamageTable_Clear.s,DamageTable_Clear,0x800E03CC,0xD

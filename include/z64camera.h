@@ -59,6 +59,15 @@
 #define NORM0_FLG_10 (1 << 4)
 #define NORM0_FLG_80 (1 << 7)
 
+#define PARA1_FLG_1 (1 << 0)
+#define PARA1_FLG_2 (1 << 1)
+#define PARA1_FLG_4 (1 << 2)
+#define PARA1_FLG_8 (1 << 3)
+#define PARA1_FLG_10 (1 << 4)
+#define PARA1_FLG_20 (1 << 5)
+#define PARA1_FLG_40 (1 << 6)
+#define PARA1_FLG_80 (1 << 7)
+
 // Camera flags1
 // Setting 
 #define CAM_FLAG1_SET_1 (1 << 0)

@@ -592,7 +592,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
     if (globalCtx->sceneNum == SCENE_KYOJINNOMA) {
         phi_f26 = 1.0f;
     } else {
-        tempA = func_800E031C(GET_ACTIVE_CAM(globalCtx));
+        tempA = Camera_GetWaterYPos(GET_ACTIVE_CAM(globalCtx));
         if (tempA != BGCHECK_Y_MIN) {
             tempA -= globalCtx->view.eye.y;
             phi_f26 = tempA / 4000.0f;
