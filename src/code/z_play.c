@@ -281,6 +281,7 @@ s32 func_8016A02C(GameState* gameState, Actor* actor, s16* yaw) {
     return true;
 }
 
+// Unused
 /**
  * @brief Tests if \p pos is underwater.
  *

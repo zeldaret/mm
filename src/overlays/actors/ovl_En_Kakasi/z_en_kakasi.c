@@ -940,8 +940,8 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
             if (this->unk204 == 0) {
                 player = GET_PLAYER(globalCtx);
 
-                Play_SetRespawnData(&globalCtx->state, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF, &player->unk_3C0,
-                              player->unk_3CC);
+                Play_SetRespawnData(&globalCtx->state, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF,
+                                    &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(&globalCtx->state);
 
                 if (0) {}
