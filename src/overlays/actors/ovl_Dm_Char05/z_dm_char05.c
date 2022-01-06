@@ -53,7 +53,7 @@ const ActorInit Dm_Char05_InitVars = {
     (ActorFunc)DmChar05_Draw,
 };
 
-static ActorAnimationEntry D_80AAE260[] = {
+static ActorAnimationEntry sAnimations[] = {
     { &object_dmask_Anim_001090, 1.0f, 0.0f, -1.0f, 2, 0.0f },
     { &object_dmask_Anim_004288, 1.0f, 0.0f, -1.0f, 2, 0.0f },
     { &object_dmask_Anim_0001A8, 1.0f, 0.0f, -1.0f, 2, 0.0f },
@@ -81,10 +81,10 @@ void func_80AAC63C(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_060010B0, NULL, NULL, NULL, 0);
-    if (this->actor.params == 0) {
-        func_80AAC5A0(&this->skelAnime, &D_80AAE260[0], 0);
+    if (DMCHAR05_GET(&this->actor) == DMCHAR05_0) {
+        func_80AAC5A0(&this->skelAnime, &sAnimations[0], 0);
     } else {
-        func_80AAC5A0(&this->skelAnime, &D_80AAE260[1], 0);
+        func_80AAC5A0(&this->skelAnime, &sAnimations[1], 0);
     }
     this->actionFunc = func_80AACC48;
 }
@@ -94,7 +94,7 @@ void func_80AAC6E4(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_060042B0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &D_80AAE260[1], 0);
+    func_80AAC5A0(&this->skelAnime, &sAnimations[1], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -103,7 +103,7 @@ void func_80AAC770(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060001D0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &D_80AAE260[3], 0);
+    func_80AAC5A0(&this->skelAnime, &sAnimations[3], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -112,7 +112,7 @@ void func_80AAC7FC(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_060013D0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &D_80AAE260[4], 0);
+    func_80AAC5A0(&this->skelAnime, &sAnimations[4], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -135,35 +135,35 @@ void DmChar05_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1B0 = 1000;
     this->unk_1B4 = 0;
 
-    switch (this->actor.params) {
-        case 0:
+    switch (DMCHAR05_GET(&this->actor)) {
+        case DMCHAR05_0:
             func_80AAC63C(thisx, globalCtx);
             break;
 
-        case 1:
+        case DMCHAR05_1:
             func_80AAC6E4(thisx, globalCtx);
             break;
 
-        case 2:
+        case DMCHAR05_2:
             func_80AAC770(thisx, globalCtx);
             break;
 
-        case 3:
+        case DMCHAR05_3:
             func_80AAC7FC(thisx, globalCtx);
             break;
 
-        case 4:
+        case DMCHAR05_4:
             func_80AAC888(thisx, globalCtx);
             break;
 
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
+        case DMCHAR05_5:
+        case DMCHAR05_6:
+        case DMCHAR05_7:
+        case DMCHAR05_8:
+        case DMCHAR05_9:
+        case DMCHAR05_10:
+        case DMCHAR05_11:
+        case DMCHAR05_12:
             this->actionFunc = func_80AACBE4;
             break;
     }
@@ -225,9 +225,11 @@ void func_80AACAE4(DmChar05* this, GlobalContext* globalCtx) {
 }
 
 void func_80AACBE4(DmChar05* this, GlobalContext* globalCtx) {
-    static s16 D_80AAE2F0[] = { OBJECT_GI_MASK17, OBJECT_GI_MASK14, OBJECT_GI_MASK10,     OBJECT_GI_MASK21,
-                                OBJECT_GI_MASK11, OBJECT_GI_MASK20, OBJECT_GI_RABIT_MASK, OBJECT_GI_MASK12 };
-    s32 params = this->actor.params - 5;
+    static s16 D_80AAE2F0[] = {
+        OBJECT_GI_MASK17, OBJECT_GI_MASK14, OBJECT_GI_MASK10,     OBJECT_GI_MASK21,
+        OBJECT_GI_MASK11, OBJECT_GI_MASK20, OBJECT_GI_RABIT_MASK, OBJECT_GI_MASK12,
+    };
+    s32 params = DMCHAR05_GET(&this->actor) - DMCHAR05_5;
     s32 objectIdx = Object_GetIndex(&globalCtx->objectCtx, D_80AAE2F0[params]);
 
     if (objectIdx >= 0) {
@@ -319,8 +321,8 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
     u8 sp2F = true;
     u32 temp_v0;
 
-    switch (this->actor.params) {
-        case 0:
+    switch (DMCHAR05_GET(&this->actor)) {
+        case DMCHAR05_0:
             if (func_800EE29C(globalCtx, 0x6D)) {
                 temp_v0 = func_800EE200(globalCtx, 0x6D);
 
@@ -355,7 +357,7 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &D_80AAE260[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
                     }
                 }
 
@@ -363,7 +365,7 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 1:
+        case DMCHAR05_1:
             if (func_800EE29C(globalCtx, 0x1D9)) {
                 temp_v0 = func_800EE200(globalCtx, 0x1D9);
 
@@ -399,7 +401,7 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &D_80AAE260[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
                     }
                 }
 
@@ -407,7 +409,7 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 2:
+        case DMCHAR05_2:
             if (func_800EE29C(globalCtx, 0x206)) {
                 temp_v0 = func_800EE200(globalCtx, 0x206);
 
@@ -442,7 +444,7 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &D_80AAE260[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
                     }
                 }
 
@@ -450,7 +452,7 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 3:
+        case DMCHAR05_3:
             if (func_800EE29C(globalCtx, 0x22F)) {
                 temp_v0 = func_800EE200(globalCtx, 0x22F);
 
@@ -478,7 +480,7 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &D_80AAE260[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
                     }
                 }
 
@@ -492,7 +494,7 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 if (this->unk_18C == 4) {
                     this->unk_18C++;
-                    func_80AAC5A0(&this->skelAnime, &D_80AAE260[this->unk_18C], 0);
+                    func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
                 }
             }
             break;
@@ -520,7 +522,7 @@ void func_80AAD450(DmChar05* this, GlobalContext* globalCtx) {
 }
 
 void func_80AAD4A8(DmChar05* this, GlobalContext* globalCtx) {
-    if (this->actor.params == 0) {
+    if (DMCHAR05_GET(&this->actor) == DMCHAR05_0) {
         if (func_800EE29C(globalCtx, 0x6D) &&
             (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x6D)]->unk0 == 3)) {
             if (Animation_OnFrame(&this->skelAnime, 14.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
@@ -529,14 +531,14 @@ void func_80AAD4A8(DmChar05* this, GlobalContext* globalCtx) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_IT_MASK_BOUND_1);
             }
         }
-    } else if (this->actor.params == 1) {
+    } else if (DMCHAR05_GET(&this->actor) == DMCHAR05_1) {
         if (func_800EE29C(globalCtx, 0x1D9)) {
             if ((globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1D9)]->unk0 == 3) &&
                 Animation_OnFrame(&this->skelAnime, 5.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_IT_MASK_BOUND_SAND);
             }
         }
-    } else if (this->actor.params == 2) {
+    } else if (DMCHAR05_GET(&this->actor) == DMCHAR05_2) {
         if (func_800EE29C(globalCtx, 0x206) &&
             (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x206)]->unk0 == 2)) {
             if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
@@ -551,7 +553,7 @@ void func_80AAD4A8(DmChar05* this, GlobalContext* globalCtx) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_IT_MASK_BOUND_1);
             }
         }
-    } else if (this->actor.params == 3) {
+    } else if (DMCHAR05_GET(&this->actor) == DMCHAR05_3) {
         if (globalCtx->sceneNum == SCENE_OKUJOU) {
             if (gSaveContext.sceneSetupIndex == 2) {
                 if (globalCtx->csCtx.unk_12 == 0) {
@@ -687,35 +689,35 @@ void func_80AADC00(Actor* thisx, GlobalContext* globalCtx) {
 void DmChar05_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
-    switch (this->actor.params) {
-        case 0:
+    switch (DMCHAR05_GET(&this->actor)) {
+        case DMCHAR05_0:
             func_80AAD998(thisx, globalCtx);
             break;
 
-        case 1:
+        case DMCHAR05_1:
             func_80AADA90(thisx, globalCtx);
             break;
 
-        case 2:
+        case DMCHAR05_2:
             func_80AADB4C(thisx, globalCtx);
             break;
 
-        case 3:
+        case DMCHAR05_3:
             func_80AADC00(thisx, globalCtx);
             break;
 
-        case 4:
+        case DMCHAR05_4:
             func_80AAE030(globalCtx, this);
             break;
 
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
+        case DMCHAR05_5:
+        case DMCHAR05_6:
+        case DMCHAR05_7:
+        case DMCHAR05_8:
+        case DMCHAR05_9:
+        case DMCHAR05_10:
+        case DMCHAR05_11:
+        case DMCHAR05_12:
             func_80AAE114(globalCtx, this);
             break;
     }
@@ -781,7 +783,7 @@ void func_80AAE114(GlobalContext* globalCtx, DmChar05* this) {
         GID_02, GID_6A, GID_70, GID_3A, GID_0E, GID_0F, GID_3E, GID_71,
     };
 
-    sp34 = this->actor.params - 5;
+    sp34 = DMCHAR05_GET(&this->actor) - DMCHAR05_5;
     if (this->actor.objBankIndex == this->unk_18F) {
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);

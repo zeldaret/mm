@@ -7,6 +7,24 @@ struct DmChar05;
 
 typedef void (*DmChar05ActionFunc)(struct DmChar05*, GlobalContext*);
 
+#define DMCHAR05_GET(thisx) ((thisx)->params)
+
+enum {
+    /* 0 */ DMCHAR05_0,
+    /* 1 */ DMCHAR05_1,
+    /* 2 */ DMCHAR05_2,
+    /* 3 */ DMCHAR05_3,
+    /* 4 */ DMCHAR05_4,
+    /* 5 */ DMCHAR05_5,
+    /* 6 */ DMCHAR05_6,
+    /* 7 */ DMCHAR05_7,
+    /* 8 */ DMCHAR05_8,
+    /* 9 */ DMCHAR05_9,
+    /* 10 */ DMCHAR05_10,
+    /* 11 */ DMCHAR05_11,
+    /* 12 */ DMCHAR05_12,
+};
+
 typedef struct DmChar05 {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
