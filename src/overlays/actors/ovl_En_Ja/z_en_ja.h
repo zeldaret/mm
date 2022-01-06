@@ -15,12 +15,18 @@ typedef struct {
     /* 0x0E */ s16 unk_0E;
 } EnJaStruct; // size = 0x10
 
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ Player* player;
+} EnJaStruct2; // size = 0x10
+
 typedef struct EnJa {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
     /* 0x0188 */ EnJaActionFunc actionFunc;
     /* 0x018C */ ColliderCylinder collider;
-    /* 0x01D8 */ struct_80133038_arg2 unk_1D8;
+    /* 0x01D8 */ EnJaStruct2 unk_1D8;
     /* 0x01E4 */ Vec3s unk_1E4;
     /* 0x01EC */ Vec3f unk_1EC;
     /* 0x01F8 */ Vec3f unk_1F8;

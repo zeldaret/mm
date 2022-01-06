@@ -159,7 +159,7 @@ s32 func_80BC1B60(EnJa* this, GlobalContext* globalCtx) {
     Vec3f sp34;
     s16 sp32;
 
-    Math_Vec3f_Copy(&sp40, &this->unk_1D8.unk8->actor.world.pos);
+    Math_Vec3f_Copy(&sp40, &this->unk_1D8.player->actor.world.pos);
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
     sp32 = Math_Vec3f_Yaw(&sp34, &sp40);
     Math_ApproachS(&this->unk_356, (sp32 - this->unk_35A) - this->actor.shape.rot.y, 4, 0x2AA8);
@@ -168,10 +168,10 @@ s32 func_80BC1B60(EnJa* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->unk_35A, (sp32 - this->unk_356) - this->actor.shape.rot.y, 4, 0x2AA8);
     this->unk_35A = CLAMP(this->unk_35A, -0x1C70, 0x1C70);
 
-    if (this->unk_1D8.unk8->actor.id == ACTOR_PLAYER) {
-        sp40.y = this->unk_1D8.unk8->bodyPartsPos[7].y + 3.0f;
+    if (this->unk_1D8.player->actor.id == ACTOR_PLAYER) {
+        sp40.y = this->unk_1D8.player->bodyPartsPos[7].y + 3.0f;
     } else {
-        Math_Vec3f_Copy(&sp40, &this->unk_1D8.unk8->actor.focus.pos);
+        Math_Vec3f_Copy(&sp40, &this->unk_1D8.player->actor.focus.pos);
     }
 
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
@@ -186,8 +186,8 @@ s32 func_80BC1B60(EnJa* this, GlobalContext* globalCtx) {
 
 s32 func_80BC1D70(EnJa* this, GlobalContext* globalCtx) {
     if (this->unk_340 & 8) {
-        this->unk_1D8.unk8 = func_80BC1B50(this, globalCtx);
-        if (this->unk_1D8.unk8 != NULL) {
+        this->unk_1D8.player = func_80BC1B50(this, globalCtx);
+        if (this->unk_1D8.player != NULL) {
             func_80BC1B60(this, globalCtx);
         }
         this->unk_340 &= ~0x10;
@@ -284,7 +284,7 @@ s32 func_80BC213C(EnJa* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC2150(EnJa* this, GlobalContext* globalCtx) {
-    if ((this->unk_1D8.unk0 == 1) || (this->unk_1D8.unk0 == 2)) {
+    if ((this->unk_1D8.unk_00 == 1) || (this->unk_1D8.unk_00 == 2)) {
         func_80BC213C(this, globalCtx);
     }
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 4, 0x1554);
@@ -296,7 +296,7 @@ void func_80BC21A8(EnJa* this, GlobalContext* globalCtx) {
 
     this->unk_35C = REG(15) + *unk_14;
     if (!func_80133038(globalCtx, D_80BC35F0, &sp18) ||
-        ((this->unk_1D8.unk0 != sp18.unk0) && !func_80BC20D0(this, globalCtx, &sp18))) {
+        ((this->unk_1D8.unk_00 != sp18.unk0) && !func_80BC20D0(this, globalCtx, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~1;
         sp18.unk0 = 0;
@@ -304,12 +304,12 @@ void func_80BC21A8(EnJa* this, GlobalContext* globalCtx) {
         this->actor.shape.shadowDraw = func_800B3FC0;
         this->actor.flags |= 1;
     }
-    this->unk_1D8.unk0 = sp18.unk0;
+    this->unk_1D8.unk_00 = sp18.unk0;
     func_80BC2150(this, globalCtx);
 }
 
 s32* func_80BC2274(EnJa* this, GlobalContext* globalCtx) {
-    switch (this->unk_1D8.unk0) {
+    switch (this->unk_1D8.unk_00) {
         case 1:
             if (ENJA_GET_3(&this->actor) == 0) {
                 return D_80BC360C;
@@ -326,10 +326,10 @@ s32* func_80BC2274(EnJa* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC22F4(EnJa* this, GlobalContext* globalCtx) {
-    if (func_8010BF58(&this->actor, globalCtx, func_80BC2274(this, globalCtx), this->unk_368, &this->unk_1D8.unk4)) {
+    if (func_8010BF58(&this->actor, globalCtx, func_80BC2274(this, globalCtx), this->unk_368, &this->unk_1D8.unk_04)) {
         this->unk_340 &= ~8;
         func_8013AED4(&this->unk_340, 3, 7);
-        this->unk_1D8.unk4 = 0;
+        this->unk_1D8.unk_04 = 0;
         this->unk_340 |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actionFunc = func_80BC21A8;
@@ -352,7 +352,7 @@ void EnJa_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = 0.0f;
     func_8013AED4(&this->unk_340, 0, 7);
     this->unk_340 |= 0x10;
-    this->unk_1D8.unk0 = 0;
+    this->unk_1D8.unk_00 = 0;
     this->unk_368 = NULL;
     this->actionFunc = func_80BC21A8;
 }
@@ -372,7 +372,7 @@ void EnJa_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    if (this->unk_1D8.unk0 != 0) {
+    if (this->unk_1D8.unk_00 != 0) {
         func_80BC1900(this);
         func_80BC1A68(this);
         func_80BC1D70(this, globalCtx);
@@ -381,14 +381,14 @@ void EnJa_Update(Actor* thisx, GlobalContext* globalCtx) {
         height = this->collider.dim.height + 10;
         func_8013C964(&this->actor, globalCtx, radius, height, 0, this->unk_340 & 7);
 
-        if (this->unk_1D8.unk0 != 2) {
+        if (this->unk_1D8.unk_00 != 2) {
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         }
         func_80BC1984(this, globalCtx);
     }
 
-    if (this->unk_1D8.unk0 == 1) {
+    if (this->unk_1D8.unk_00 == 1) {
         func_80BC32D8(this, globalCtx);
     }
 }
@@ -429,7 +429,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
-    if (this->unk_1D8.unk0 == 1) {
+    if (this->unk_1D8.unk_00 == 1) {
         if ((limbIndex == 11) && (((this->skelAnime.curFrame >= 0.0f) && (this->skelAnime.curFrame <= 6.0f)) ||
                                   ((this->skelAnime.curFrame >= 35.0f) && (this->skelAnime.curFrame <= 47.0f)))) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -586,7 +586,7 @@ void EnJa_Draw(Actor* thisx, GlobalContext* globalCtx) {
         phi_t2 = 1;
     }
 
-    if (this->unk_1D8.unk0 != 0) {
+    if (this->unk_1D8.unk_00 != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C28C(globalCtx->state.gfxCtx);
@@ -606,7 +606,7 @@ void EnJa_Draw(Actor* thisx, GlobalContext* globalCtx) {
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
-    if (this->unk_1D8.unk0 == 1) {
+    if (this->unk_1D8.unk_00 == 1) {
         func_80BC3594(this, globalCtx);
     }
 }

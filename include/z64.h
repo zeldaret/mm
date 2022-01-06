@@ -1499,7 +1499,7 @@ typedef struct EnHy {
 typedef struct {
     /* 0x0 */ u8 unk0;
     /* 0x4 */ s32 unk4;
-    /* 0x8 */ Player* unk8;
+    /* 0x8 */ s32 unk8;
 } struct_80133038_arg2; // size = 0xC
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
