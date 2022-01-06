@@ -21,10 +21,10 @@ void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx);
  * direction. `timeRemaining` must be decremented separately for this to work properly, and obviously timeRemaining = 0
  * must be handled separately.
  *
- * @param var Variable to step.
- * @param target Target to step towards.
+ * @param var           Variable to step.
+ * @param target        Target to step towards.
  * @param timeRemaining Number of times this function should be run for `var` to reach `target`
- * @param stepVar Variable to use for the step (required to match).
+ * @param stepVar       Variable to use for the step (required to match).
  *
  * The progression is not quite linear because of truncation in the division, but the variable will always reach
  * `target` at the appropriate time since the last step is always the full difference.
@@ -98,7 +98,7 @@ const ActorInit En_Mag_InitVars = {
 };
 
 void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnMag* this = (EnMag*)thisx;
+    EnMag* this = THIS;
     u16 i;
 
     this->unk11F54 = 6;
@@ -231,7 +231,7 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
     static s16 sAppearEffectEnvBlueTargets[] = { 0, 155 };
     s16 step;
     s32 pad[2];
-    EnMag* this = (EnMag*)thisx;
+    EnMag* this = THIS;
 
     if (gSaveContext.fileNum != 0xFEDC) {
         if (this->state == MAG_STATE_INITIAL) {
@@ -452,14 +452,14 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
 /**
  * Draws an i8 texture.
  *
- * @param gfxp Pointer to current displaylist.
- * @param texture Texture to draw.
- * @param texWidth Width of the texture.
- * @param texHeight Height of the texture.
- * @param rectLeft X coordinate of the top-left of the draw position.
- * @param rectTop Y coordinate of the top-left of the draw position.
+ * @param[in,out] gfxp      Pointer to current displaylist.
+ * @param[in]     texture   Texture to draw.
+ * @param[in]     texWidth  Width of the texture.
+ * @param[in]     texHeight Height of the texture.
+ * @param[in]     rectLeft  X coordinate of the top-left of the draw position.
+ * @param[in]     rectTop   Y coordinate of the top-left of the draw position.
  */
-void EnMag_DrawTextureI8(Gfx** gfxp, void* texture, s16 texWidth, s16 texHeight, s16 rectLeft, s16 rectTop) {
+void EnMag_DrawTextureI8(Gfx** gfxp, TexturePtr texture, s16 texWidth, s16 texHeight, s16 rectLeft, s16 rectTop) {
     Gfx* gfx = *gfxp;
 
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_I, G_IM_SIZ_8b, texWidth, texHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -474,14 +474,14 @@ void EnMag_DrawTextureI8(Gfx** gfxp, void* texture, s16 texWidth, s16 texHeight,
 /**
  * Draws an ia8 texture.
  *
- * @param gfxp Pointer to current displaylist.
- * @param texture Texture to draw.
- * @param texWidth Width of the texture.
- * @param texHeight Height of the texture.
- * @param rectLeft X coordinate of the top-left of the draw position.
- * @param rectTop Y coordinate of the top-left of the draw position.
+ * @param[in,out] gfxp      Pointer to current displaylist.
+ * @param[in]     texture   Texture to draw.
+ * @param[in]     texWidth  Width of the texture.
+ * @param[in]     texHeight Height of the texture.
+ * @param[in]     rectLeft  X coordinate of the top-left of the draw position.
+ * @param[in]     rectTop   Y coordinate of the top-left of the draw position.
  */
-void EnMag_DrawTextureIA8(Gfx** gfxp, void* texture, s16 texWidth, s16 texHeight, s16 rectLeft, s16 rectTop) {
+void EnMag_DrawTextureIA8(Gfx** gfxp, TexturePtr texture, s16 texWidth, s16 texHeight, s16 rectLeft, s16 rectTop) {
     Gfx* gfx = *gfxp;
 
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, texWidth, texHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -496,21 +496,21 @@ void EnMag_DrawTextureIA8(Gfx** gfxp, void* texture, s16 texWidth, s16 texHeight
 /**
  * Draws an i8 effect texture, masking it with an i4 mask, with shifting
  *
- * @param gfxp Pointer to current displaylist.
- * @param maskTex Texture with which to mask, i4.
- * @param effectTex Effect texture to draw, i8.
- * @param maskWidth Width of masking texture.
- * @param maskHeight Height of masking texture.
- * @param effectWidth Width of effect texture.
- * @param effectHeight Height of effect texture.
- * @param rectLeft X coordinate of the top-left of the draw position.
- * @param rectTop Y coordinate of the top-left of the draw position.
- * @param shifts Shift to apply to effect texture's S coordinate to control LOD.
- * @param shiftt Shift to apply to effect texture's T coordinate to control LOD.
- * @param index Index into the scrolling arrays to use for gDPSetTileSize.
- * @param this Pointer to EnMag instance.
+ * @param[in,out] gfxp         Pointer to current displaylist.
+ * @param[in]     maskTex      Texture with which to mask, i4.
+ * @param[in]     effectTex    Effect texture to draw, i8.
+ * @param[in]     maskWidth    Width of masking texture.
+ * @param[in]     maskHeight   Height of masking texture.
+ * @param[in]     effectWidth  Width of effect texture.
+ * @param[in]     effectHeight Height of effect texture.
+ * @param[in]     rectLeft     X coordinate of the top-left of the draw position.
+ * @param[in]     rectTop      Y coordinate of the top-left of the draw position.
+ * @param[in]     shifts       Shift to apply to effect texture's S coordinate to control LOD.
+ * @param[in]     shiftt       Shift to apply to effect texture's T coordinate to control LOD.
+ * @param[in]     index        Index into the scrolling arrays to use for gDPSetTileSize.
+ * @param[in]     this         Pointer to EnMag instance.
  */
-void EnMag_DrawEffectTextures(Gfx** gfxp, void* maskTex, void* effectTex, s16 maskWidth, s16 maskHeight,
+void EnMag_DrawEffectTextures(Gfx** gfxp, TexturePtr maskTex, TexturePtr effectTex, s16 maskWidth, s16 maskHeight,
                               s16 effectWidth, s16 effectHeight, s16 rectLeft, s16 rectTop, u16 shifts, u16 shiftt,
                               u16 index, EnMag* this) {
     Gfx* gfx = *gfxp;
@@ -535,14 +535,14 @@ void EnMag_DrawEffectTextures(Gfx** gfxp, void* maskTex, void* effectTex, s16 ma
  * Draws an rgba32 texture. Because these are so large, this will draw the texture in horizontal stripes, each narrow
  * enough that that part of the texture will fit into TMEM's 4kB.
  *
- * @param gfxp Pointer to current displaylist.
- * @param centerX X coordinate of the center of the draw position.
- * @param centerY Y coordinate of the center of the draw position.
- * @param source Texture to draw.
- * @param width Width of the texture.
- * @param height Height of the texture.
+ * @param[in,out] gfxp    Pointer to current displaylist.
+ * @param[in]     centerX X coordinate of the center of the draw position.
+ * @param[in]     centerY Y coordinate of the center of the draw position.
+ * @param[in]     source  Texture to draw.
+ * @param[in]     width   Width of the texture.
+ * @param[in]     height  Height of the texture.
  */
-void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, void* source, u32 width, u32 height) {
+void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, TexturePtr source, u32 width, u32 height) {
     Gfx* gfx = *gfxp;
     uintptr_t curTexture;
     s32 textureCount;
@@ -604,12 +604,12 @@ void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, void* source, u
 /**
  * Draws one character, expected to be a 16 by 16 i4 texture. It will draw shrunk to 10 by 10.
  *
- * @param gfxp Pointer to current displaylist.
- * @param texture Texture to draw.
- * @param rectLeft X coordinate of the top-left of the draw position.
- * @param rectTop Y coordinate of the top-left of the draw position.
+ * @param[in,out] gfxp     Pointer to current displaylist.
+ * @param[in]     texture  Texture to draw.
+ * @param[in]     rectLeft X coordinate of the top-left of the draw position.
+ * @param[in]     rectTop  Y coordinate of the top-left of the draw position.
  */
-void EnMag_DrawCharTexture(Gfx** gfxp, void* texture, s32 rectLeft, s32 rectTop) {
+void EnMag_DrawCharTexture(Gfx** gfxp, TexturePtr texture, s32 rectLeft, s32 rectTop) {
     Gfx* gfx = *gfxp;
 
     gDPLoadTextureBlock_4b(gfx++, texture, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP,
