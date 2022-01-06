@@ -450,7 +450,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
         door1 = NULL;
     label:
         do {
-            door1 = func_ActorCategoryIterateById(globalCtx, door1, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+            door1 = SubS_FindActor(globalCtx, door1, ACTORCAT_DOOR, ACTOR_EN_DOOR);
             if (door1 != NULL) {
                 if (Actor_XZDistanceBetweenActors(&this->actor, door1) <= 120.0f) {
                     if (ABS(BINANG_SUB(Actor_YawToPoint(&this->actor, &door1->world.pos), this->actor.shape.rot.y)) <=
@@ -466,7 +466,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
     } else {
         door2 = NULL;
         do {
-            door2 = func_ActorCategoryIterateById(globalCtx, door2, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+            door2 = SubS_FindActor(globalCtx, door2, ACTORCAT_DOOR, ACTOR_EN_DOOR);
             if (door2 != NULL) {
                 if (Actor_XZDistanceBetweenActors(&this->actor, door2) <= 160.0f) {
                     sp4C4 = (EnDoor*)door2;
@@ -682,7 +682,7 @@ void func_80AED940(EnTk* this, GlobalContext* globalCtx) {
         actor = NULL;
 
         do {
-            actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_TK);
+            actor = SubS_FindActor(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_TK);
             if (actor != NULL) {
                 if (ENTK_GET_F(actor) == 1) {
                     Math_Vec3f_Copy(&this->unk_2EC, &actor->world.pos);
@@ -933,7 +933,7 @@ void func_80AEE374(EnTk* this, GlobalContext* globalCtx) {
     sp30.unk_00 = NULL;
     sp30.unk_04 = FLT_MAX;
 
-    func_8013E640(globalCtx, &this->actor, NULL, ACTORCAT_NPC, ACTOR_EN_TK, &sp30, func_80AEE300);
+    SubS_FindActorCustom(globalCtx, &this->actor, NULL, ACTORCAT_NPC, ACTOR_EN_TK, &sp30, func_80AEE300);
     if (sp30.unk_00 == 0) {
         Actor_MarkForDeath(&this->actor);
     } else {
@@ -971,7 +971,7 @@ void func_80AEE4D0(EnTk* this, GlobalContext* globalCtx) {
         if (Animation_OnFrame(&this->skelAnime, 37.0f)) {
             bigPoe = NULL;
             do {
-                bigPoe = func_ActorCategoryIterateById(globalCtx, bigPoe, ACTORCAT_PROP, ACTOR_EN_BIGPO);
+                bigPoe = SubS_FindActor(globalCtx, bigPoe, ACTORCAT_PROP, ACTOR_EN_BIGPO);
 
                 if (bigPoe != NULL) {
                     if ((bigPoe->params == 3) && (Actor_DistanceBetweenActors(&this->actor, bigPoe) < 80.0f)) {

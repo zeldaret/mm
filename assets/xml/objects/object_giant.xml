@@ -1,63 +1,90 @@
 ﻿<Root>
+    <!-- Object for the Four Giants -->
     <File Name="object_giant" Segment="6">
-        <Animation Name="object_giant_Anim_002168" Offset="0x2168" />
-        <!-- <Blob Name="object_giant_Blob_003D40" Size="0x90" Offset="0x3D40" /> -->
-        <DList Name="object_giant_DL_003DD0" Offset="0x3DD0" />
-        <DList Name="object_giant_DL_0040C0" Offset="0x40C0" />
-        <DList Name="object_giant_DL_004200" Offset="0x4200" />
-        <DList Name="object_giant_DL_004438" Offset="0x4438" />
-        <DList Name="object_giant_DL_004560" Offset="0x4560" />
-        <DList Name="object_giant_DL_0046A0" Offset="0x46A0" />
-        <DList Name="object_giant_DL_0048D8" Offset="0x48D8" />
-        <DList Name="object_giant_DL_004A00" Offset="0x4A00" />
-        <DList Name="object_giant_DL_004B10" Offset="0x4B10" />
-        <DList Name="object_giant_DL_004C38" Offset="0x4C38" />
-        <DList Name="object_giant_DL_004D58" Offset="0x4D58" />
-        <DList Name="object_giant_DL_004EC0" Offset="0x4EC0" />
-        <DList Name="object_giant_DL_004FD0" Offset="0x4FD0" />
-        <DList Name="object_giant_DL_0050F8" Offset="0x50F8" />
-        <DList Name="object_giant_DL_005218" Offset="0x5218" />
-        <Texture Name="object_giant_TLUT_005380" OutName="tlut_005380" Format="rgba16" Width="16" Height="16" Offset="0x5380" />
-        <Texture Name="object_giant_Tex_005580" OutName="tex_005580" Format="ci8" Width="16" Height="16" Offset="0x5580" />
-        <Texture Name="object_giant_Tex_005680" OutName="tex_005680" Format="ci8" Width="16" Height="16" Offset="0x5680" />
-        <Texture Name="object_giant_Tex_005780" OutName="tex_005780" Format="ci8" Width="16" Height="16" Offset="0x5780" />
-        <Texture Name="object_giant_Tex_005880" OutName="tex_005880" Format="ci8" Width="16" Height="16" Offset="0x5880" />
-        <Texture Name="object_giant_Tex_005980" OutName="tex_005980" Format="ci8" Width="16" Height="16" Offset="0x5980" />
-        <!-- <Blob Name="object_giant_Blob_005A80" Size="0x1800" Offset="0x5A80" /> -->
-        <Texture Name="object_giant_Tex_007280" OutName="tex_007280" Format="ci8" Width="16" Height="16" Offset="0x7280" />
-        <Texture Name="object_giant_Tex_007380" OutName="tex_007380" Format="ci8" Width="16" Height="32" Offset="0x7380" />
-        <DList Name="object_giant_DL_007610" Offset="0x7610" />
-        <Texture Name="object_giant_Tex_0076C0" OutName="tex_0076C0" Format="rgba16" Width="16" Height="16" Offset="0x76C0" />
-        <Limb Name="object_giant_Standardlimb_0078C0" Type="Standard" Offset="0x78C0" />
-        <Limb Name="object_giant_Standardlimb_0078CC" Type="Standard" Offset="0x78CC" />
-        <Limb Name="object_giant_Standardlimb_0078D8" Type="Standard" Offset="0x78D8" />
-        <Limb Name="object_giant_Standardlimb_0078E4" Type="Standard" Offset="0x78E4" />
-        <Limb Name="object_giant_Standardlimb_0078F0" Type="Standard" Offset="0x78F0" />
-        <Limb Name="object_giant_Standardlimb_0078FC" Type="Standard" Offset="0x78FC" />
-        <Limb Name="object_giant_Standardlimb_007908" Type="Standard" Offset="0x7908" />
-        <Limb Name="object_giant_Standardlimb_007914" Type="Standard" Offset="0x7914" />
-        <Limb Name="object_giant_Standardlimb_007920" Type="Standard" Offset="0x7920" />
-        <Limb Name="object_giant_Standardlimb_00792C" Type="Standard" Offset="0x792C" />
-        <Limb Name="object_giant_Standardlimb_007938" Type="Standard" Offset="0x7938" />
-        <Limb Name="object_giant_Standardlimb_007944" Type="Standard" Offset="0x7944" />
-        <Limb Name="object_giant_Standardlimb_007950" Type="Standard" Offset="0x7950" />
-        <Limb Name="object_giant_Standardlimb_00795C" Type="Standard" Offset="0x795C" />
-        <Limb Name="object_giant_Standardlimb_007968" Type="Standard" Offset="0x7968" />
-        <Skeleton Name="object_giant_Skel_0079B0" Type="Flex" LimbType="Standard" Offset="0x79B0" />
-        <Animation Name="object_giant_Anim_008394" Offset="0x8394" />
-        <Animation Name="object_giant_Anim_0096E4" Offset="0x96E4" />
-        <Animation Name="object_giant_Anim_00A1C4" Offset="0xA1C4" />
-        <Animation Name="object_giant_Anim_00ACA4" Offset="0xACA4" />
-        <Animation Name="object_giant_Anim_00B784" Offset="0xB784" />
-        <Animation Name="object_giant_Anim_00C5D4" Offset="0xC5D4" />
-        <Animation Name="object_giant_Anim_00D040" Offset="0xD040" />
-        <Animation Name="object_giant_Anim_00DE84" Offset="0xDE84" />
-        <Animation Name="object_giant_Anim_0102A4" Offset="0x102A4" />
-        <Animation Name="object_giant_Anim_0116E4" Offset="0x116E4" />
-        <Animation Name="object_giant_Anim_012A38" Offset="0x12A38" />
-        <Animation Name="object_giant_Anim_013004" Offset="0x13004" />
-        <Animation Name="object_giant_Anim_013FE8" Offset="0x13FE8" />
-        <Animation Name="object_giant_Anim_015334" Offset="0x15334" />
-        <Animation Name="object_giant_Anim_017944" Offset="0x17944" />
+        <Animation Name="gGiantLargeStrideAnim" Offset="0x2168" /> <!-- Original name is "kya_testwalk" -->
+
+        <!-- Giant Body Vertices. Contains everything but the beard. -->
+        <Array Name="gGiantBodyVtx" Count="444" Offset="0x2180">
+            <Vtx/>
+        </Array>
+        
+        <!-- Giant Unused Beard Vertices. An exact duplicate of the beard vertices that are actually used. -->
+        <Array Name="gGiantUnusedBeardVtx" Count="9" Offset="0x3D40">
+            <Vtx/>
+        </Array>
+
+        <!-- Giant Limb DisplayLists -->
+        <DList Name="gGiantHeadDL" Offset="0x3DD0" />
+        <DList Name="gGiantRightThighDL" Offset="0x40C0" />
+        <DList Name="gGiantRightShinDL" Offset="0x4200" />
+        <DList Name="gGiantRightFootDL" Offset="0x4438" />
+        <DList Name="gGiantLeftThighDL" Offset="0x4560" />
+        <DList Name="gGiantLeftShinDL" Offset="0x46A0" />
+        <DList Name="gGiantLeftFootDL" Offset="0x48D8" />
+        <DList Name="gGiantRightShoulderDL" Offset="0x4A00" />
+        <DList Name="gGiantRightUpperArmDL" Offset="0x4B10" />
+        <DList Name="gGiantRightForearmDL" Offset="0x4C38" />
+        <DList Name="gGiantRightHandDL" Offset="0x4D58" />
+        <DList Name="gGiantLeftShoulderDL" Offset="0x4EC0" />
+        <DList Name="gGiantLeftUpperArmDL" Offset="0x4FD0" />
+        <DList Name="gGiantLeftForearmDL" Offset="0x50F8" />
+        <DList Name="gGiantLeftHandDL" Offset="0x5218" />
+
+        <!-- Giant Textures -->
+        <Texture Name="gGiantTLUT" OutName="giant_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5380" />
+        <Texture Name="gGiantFootTex" OutName="giant_foot" Format="ci8" Width="16" Height="16" Offset="0x5580" />
+        <Texture Name="gGiantShinTex" OutName="giant_shin" Format="ci8" Width="16" Height="16" Offset="0x5680" />
+        <Texture Name="gGiantForearmAndKneeTex" OutName="giant_forearm_and_knee" Format="ci8" Width="16" Height="16" Offset="0x5780" />
+        <Texture Name="gGiantUpperArmAndThighTex" OutName="giant_upper_arm_and_thigh" Format="ci8" Width="16" Height="16" Offset="0x5880" />
+        <Texture Name="gGiantHandTex" OutName="giant_hand" Format="ci8" Width="16" Height="16" Offset="0x5980" />
+        <Texture Name="gGiantFaceEyeOpenTex" OutName="giant_face_eye_open" Format="ci8" Width="32" Height="64" Offset="0x5A80" TlutOffset="0x5380" />
+        <Texture Name="gGiantFaceEyeHalfTex" OutName="giant_face_eye_half" Format="ci8" Width="32" Height="64" Offset="0x6280" TlutOffset="0x5380" />
+        <Texture Name="gGiantFaceEyeClosedTex" OutName="giant_face_eye_closed" Format="ci8" Width="32" Height="64" Offset="0x6A80" TlutOffset="0x5380" />
+        <Texture Name="gGiantGroinTex" OutName="giant_groin" Format="ci8" Width="16" Height="16" Offset="0x7280" />
+        <Texture Name="gGiantHairTex" OutName="giant_hair" Format="ci8" Width="16" Height="32" Offset="0x7380" />
+
+        <!-- Giant Beard Vertices, DisplayList, and Texture -->
+        <Array Name="gGiantBeardVtx" Count="9" Offset="0x7580">
+            <Vtx/>
+        </Array>
+        <DList Name="gGiantBeardDL" Offset="0x7610" />
+        <Texture Name="gGiantBeardTex" OutName="giant_beard" Format="rgba16" Width="16" Height="16" Offset="0x76C0" />
+
+        <!-- Giant Limbs -->
+        <Limb Name="gGiantHeadLimb" Type="Standard" Offset="0x78C0" />
+        <Limb Name="gGiantLeftThighLimb" Type="Standard" Offset="0x78CC" />
+        <Limb Name="gGiantLeftShinLimb" Type="Standard" Offset="0x78D8" />
+        <Limb Name="gGiantLeftFootLimb" Type="Standard" Offset="0x78E4" />
+        <Limb Name="gGiantRightThighLimb" Type="Standard" Offset="0x78F0" />
+        <Limb Name="gGiantRightShinLimb" Type="Standard" Offset="0x78FC" />
+        <Limb Name="gGiantRightFootLimb" Type="Standard" Offset="0x7908" />
+        <Limb Name="gGiantLeftShoulderLimb" Type="Standard" Offset="0x7914" />
+        <Limb Name="gGiantLeftUpperArmLimb" Type="Standard" Offset="0x7920" />
+        <Limb Name="gGiantLeftForearmLimb" Type="Standard" Offset="0x792C" />
+        <Limb Name="gGiantLeftHandLimb" Type="Standard" Offset="0x7938" />
+        <Limb Name="gGiantRightShoulderLimb" Type="Standard" Offset="0x7944" />
+        <Limb Name="gGiantRightUpperArmLimb" Type="Standard" Offset="0x7950" />
+        <Limb Name="gGiantRightForearmLimb" Type="Standard" Offset="0x795C" />
+        <Limb Name="gGiantRightHandLimb" Type="Standard" Offset="0x7968" />
+
+        <!-- Giant Skeleton -->
+        <Skeleton Name="gGiantSkel" Type="Flex" LimbType="Standard" Offset="0x79B0" />
+
+        <!-- Giant Animations -->
+        <Animation Name="gGiantLookUpStartAnim" Offset="0x8394" /> <!-- Original name is "kyo_kaoage" ("raising face") -->
+        <Animation Name="gGiantLookUpLoopAnim" Offset="0x96E4" /> <!-- Original name is "kyo_kaoage_loop" -->
+        <Animation Name="gGiantBigCallStartAnim" Offset="0xA1C4" /> <!-- Original name is "kyo_sakebi" ("cry"). Stretches his arms outward -->
+        <Animation Name="gGiantSmallCallStartAnim" Offset="0xACA4" /> <!-- Original name is "kyo_sakebi2" ("cry2"). Places his hands over his mouth -->
+        <Animation Name="gGiantSmallCallLoopAnim" Offset="0xB784" /> <!-- Original name is "kyo_sakebi2_loop" -->
+        <Animation Name="gGiantSmallCallEndAnim" Offset="0xC5D4" /> <!-- Original name is "kyo_sakebi2_modori" ("cry2 return") -->
+        <Animation Name="gGiantBigCallLoopAnim" Offset="0xD040" /> <!-- Original name is "kyo_sakebi_loop" -->
+        <Animation Name="gGiantBigCallEndAnim" Offset="0xDE84" /> <!-- Original name is "kyo_sakebi_modori" ("cry return") -->
+        <Animation Name="gGiantFallingOverAnim" Offset="0x102A4" /> <!-- Original name is "kyo_taoreru" ("falling over") -->
+        <Animation Name="gGiantRaisedArmsStartAnim" Offset="0x116E4" /> <!-- Original name is "kyo_teage" ("raising arm") -->
+        <Animation Name="gGiantRaisedArmsLoopAnim" Offset="0x12A38" /> <!-- Original name is "kyo_teage_loop" -->
+        <Animation Name="gGiantStruggleStartAnim" Offset="0x13004" /> <!-- Original name is "kyo_tukisasae" ("holding up the moon") -->
+        <Animation Name="gGiantStruggleLoopAnim" Offset="0x13FE8" /> <!-- Original name is "kyo_tukisasae_loop" -->
+        <Animation Name="gGiantIdleAnim" Offset="0x15334" /> <!-- Original name is "kyo_wait" -->
+        <Animation Name="gGiantWalkingAnim" Offset="0x17944" /> <!-- Original name is "kyo_walk" -->
     </File>
 </Root>
