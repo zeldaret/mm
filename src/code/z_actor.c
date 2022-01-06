@@ -918,14 +918,15 @@ void func_800B6474(GlobalContext* globalCtx) {
 
 s32 func_800B648C(GlobalContext* globalCtx, s32 arg1, s32 arg2, f32 arg3, Vec3f* arg4) {
     if ((globalCtx->actorCtx.unk1F5 != 0) && (arg3 < globalCtx->actorCtx.unk1F8)) {
-        return 0;
+        return false;
     }
 
     globalCtx->actorCtx.unk1F4 = arg1;
     globalCtx->actorCtx.unk1F5 = arg2;
     globalCtx->actorCtx.unk1F8 = arg3;
     Math_Vec3f_Copy(&globalCtx->actorCtx.unk1FC, arg4);
-    return 1;
+
+    return true;
 }
 
 f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3) {
@@ -4626,7 +4627,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                     gDPSetEnvColor(POLY_XLU_DISP++, (u8)sREG(19), (u8)(sREG(20) + 0xFF), (u8)(sREG(21) + 0xFF), 0x80);
                 } else {
-                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF, 0xC8, (u8)alpha);
+                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)alpha);
 
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 100, 128);
                 }

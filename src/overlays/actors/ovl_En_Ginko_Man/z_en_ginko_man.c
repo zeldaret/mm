@@ -477,7 +477,7 @@ void EnGinkoMan_SetupDialogue(EnGinkoMan* this) {
 }
 
 void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
-    switch (Message_GetState(&globalCtx->msgCtx)) { // get dialogue state?
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 2:
             EnGinkoMan_SetupIdle(this);
             break;
