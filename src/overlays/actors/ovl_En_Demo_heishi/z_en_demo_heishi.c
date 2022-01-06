@@ -15,10 +15,18 @@ void EnDemoheishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDemoheishi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDemoheishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BE975C(EnDemoheishi* this, GlobalContext* globalCtx);
-void func_80BE980C(EnDemoheishi* this, GlobalContext* globalCtx);
+void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex);
+void EnDemoheishi_SetupIdle(EnDemoheishi* this);
+void EnDemoheishi_Idle(EnDemoheishi* this, GlobalContext* globalCtx);
+void EnDemoheishi_SetupTalk(EnDemoheishi* this);
+void EnDemoheishi_Talk(EnDemoheishi* this, GlobalContext* globalCtx);
+s32 EnDemoheishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                  Actor* thisx);
 
-#if 0
+extern AnimationHeader D_06003BFC;
+
+extern FlexSkeletonHeader D_0600D640;
+
 const ActorInit En_Demo_heishi_InitVars = {
     ACTOR_EN_DEMO_HEISHI,
     ACTORCAT_NPC,
@@ -31,37 +39,150 @@ const ActorInit En_Demo_heishi_InitVars = {
     (ActorFunc)EnDemoheishi_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80BE9A50 = {
-    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 40, 40, 0, { 0, 0, 0 } },
 };
 
-#endif
+static u16 sTextIds[] = { 0x1473 };
 
-extern ColliderCylinderInit D_80BE9A50;
+void EnDemoheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnDemoheishi* this = THIS;
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D640, &D_06003BFC, this->jointTable, this->morphTable, 17);
+    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.targetMode = 6;
+    this->actor.gravity = -3.0f;
+    Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
+    EnDemoheishi_SetupIdle(this);
+}
 
-extern UNK_TYPE D_06003BFC;
+void EnDemoheishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnDemoheishi* this = THIS;
+    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/EnDemoheishi_Init.s")
+void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex) {
+    static AnimationHeader* sAnimations[] = {
+        (AnimationHeader*)0x06006C18, (AnimationHeader*)0x06002A84, (AnimationHeader*)0x06003BFC,
+        (AnimationHeader*)0x06003380, (AnimationHeader*)0x06004770,
+    };
+    static u8 sAnimModes[] = { 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/EnDemoheishi_Destroy.s")
+    this->animIndex = animIndex;
+    this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
+                     (u8)(s32)sAnimModes[this->animIndex], -10.0f);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/func_80BE95EC.s")
+void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
+    s16 yawTemp = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    s32 yaw = ABS_ALT(yawTemp);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/func_80BE9678.s")
+    this->headRotXTarget = 0;
+    if ((this->actor.xzDistToPlayer < 200.0f) && (yaw < 20000)) {
+        this->headRotXTarget = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+        if (this->headRotXTarget > 10000) {
+            this->headRotXTarget = 10000;
+        } else if (this->headRotXTarget < -10000) {
+            this->headRotXTarget = -10000;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/func_80BE970C.s")
+void EnDemoheishi_SetupIdle(EnDemoheishi* this) {
+    EnDemoheishi_ChangeAnimation(this, 0);
+    this->actor.textId = sTextIds[this->unk272 = 0];
+    this->unk270 = 0;
+    this->actionFunc = EnDemoheishi_Idle;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/func_80BE975C.s")
+void EnDemoheishi_Idle(EnDemoheishi* this, GlobalContext* globalCtx) {
+    s32 absYawDiff;
+    s16 yawDiff;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/func_80BE97F0.s")
+    this->actor.flags &= 0xF7FFFFFF;
+    yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    if (yawDiff < 0) {
+        absYawDiff = -yawDiff;
+    } else {
+        absYawDiff = yawDiff;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/func_80BE980C.s")
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        EnDemoheishi_SetupTalk(this);
+    } else if (absYawDiff <= 0x4BB8) {
+        func_800B8614(&this->actor, globalCtx, 70.0f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/EnDemoheishi_Update.s")
+void EnDemoheishi_SetupTalk(EnDemoheishi* this) {
+    this->unk270 = 1;
+    this->actionFunc = EnDemoheishi_Talk;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/func_80BE9974.s")
+void EnDemoheishi_Talk(EnDemoheishi* this, GlobalContext* globalCtx) {
+    if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx) != 0)) {
+        func_801477B4(globalCtx);
+        EnDemoheishi_SetupIdle(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/EnDemoheishi_Draw.s")
+void EnDemoheishi_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ColliderCylinder* collider;
+    EnDemoheishi* this = (EnDemoheishi*)thisx;
+
+    SkelAnime_Update(&this->skelAnime);
+    if (this->unk268 != 0) {
+        this->unk268--;
+    }
+
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    this->actionFunc(this, globalCtx);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1DU);
+    Actor_SetScale(&this->actor, 0.01f);
+    EnDemoheishi_SetHeadRotation(this);
+
+    Actor_SetHeight(&this->actor, 60.0f);
+    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 0xBB8, (s16)0);
+    Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 0x3E8, (s16)0);
+    collider = &this->colliderCylinder;
+    Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
+}
+
+s32 EnDemoheishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                  Actor* thisx) {
+    EnDemoheishi* this = THIS;
+
+    if (limbIndex == 16) {
+        rot->x += this->headRotX;
+        rot->y += this->headRotY;
+        rot->z += this->headRotZ;
+    }
+
+    return false;
+}
+
+void EnDemoheishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnDemoheishi* this = (EnDemoheishi*)thisx;
+    func_8012C28C(globalCtx->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                          (s32)this->skelAnime.dListCount, EnDemoheishi_OverrideLimbDraw, NULL, &this->actor);
+}
