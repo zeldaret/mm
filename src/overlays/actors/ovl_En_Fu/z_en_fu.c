@@ -736,7 +736,7 @@ void func_80962EBC(EnFu* this, GlobalContext* globalCtx) {
     if (this->unk_542 != 0) {
         if (this->actor.cutscene != -1) {
             Camera_ChangeDataIdx(globalCtx->cameraPtrs[CAM_ID_MAIN],
-                                 ActorCutscene_GetCutscene(this->actor.cutscene)->csCamDataId);
+                                 ActorCutscene_GetCutscene(this->actor.cutscene)->csCamSceneDataId);
         }
     }
 }

@@ -514,7 +514,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
     f32 temp_f2;
     f32 tempf;
 
-    if ((globalCtx->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100) || ((u8)globalCtx->envCtx.unk_E2 == 0)) {
+    if ((globalCtx->cameraPtrs[CAM_ID_MAIN]->flags2 & CAM_FLAG2_100) || ((u8)globalCtx->envCtx.unk_E2 == 0)) {
         return;
     }
 
@@ -602,7 +602,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
 
         phi_f26 = CLAMP_MAX(phi_f26, 1.0f);
 
-        if (!(globalCtx->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100) || (phi_f26 == 0.0f)) {
+        if (!(globalCtx->cameraPtrs[CAM_ID_MAIN]->flags2 & CAM_FLAG2_100) || (phi_f26 == 0.0f)) {
             return;
         }
     }

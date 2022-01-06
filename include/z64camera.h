@@ -59,6 +59,44 @@
 #define NORM0_FLG_10 (1 << 4)
 #define NORM0_FLG_80 (1 << 7)
 
+// Camera flags1
+// Setting 
+#define CAM_FLAG1_SET_1 (1 << 0)
+#define CAM_FLAG1_SET_2 (1 << 4)
+// Mode
+#define CAM_FLAG1_MODE_1 (1 << 1)
+#define CAM_FLAG1_MODE_2 (1 << 5)
+// Data
+#define CAM_FLAG1_SCENE_DATA_1 (1 << 2)
+#define CAM_FLAG1_SCENE_DATA_2 (1 << 6)
+
+// Camera flags2
+#define CAM_FLAG2_1 (1 << 0)
+#define CAM_FLAG2_2 (1 << 1)
+#define CAM_FLAG2_4 (1 << 2)
+#define CAM_FLAG2_8 (1 << 3)
+#define CAM_FLAG2_10 (1 << 4)
+#define CAM_FLAG2_20 (1 << 5)
+#define CAM_FLAG2_40 (1 << 6)
+#define CAM_FLAG2_80 (1 << 7)
+#define CAM_FLAG2_100 (1 << 8)
+#define CAM_FLAG2_200 (1 << 9)
+#define CAM_FLAG2_400 (1 << 10)
+#define CAM_FLAG2_800 (1 << 11)
+#define CAM_FLAG2_1000 (1 << 12)
+#define CAM_FLAG2_2000 (1 << 13)
+#define CAM_FLAG2_4000 (1 << 14)
+#define CAM_FLAG2_8000 (1 << 15)
+
+// Camera paramFlags
+#define CAM_PARAM_FLAG_1 (1 << 0)
+#define CAM_PARAM_FLAG_2 (1 << 1)
+#define CAM_PARAM_FLAG_4 (1 << 2)
+#define CAM_PARAM_FLAG_8 (1 << 3)
+#define CAM_PARAM_FLAG_10 (1 << 4)
+#define CAM_PARAM_FLAG_20 (1 << 5)
+#define CAM_PARAM_FLAG_40 (1 << 6)
+
 typedef enum {
     /* 0x00 */ CAM_SET_NONE,
     /* 0x01 */ CAM_SET_NORMAL0,
@@ -158,11 +196,11 @@ typedef enum {
     /* 0x00 */ CAM_MODE_NORMAL,
     /* 0x01 */ CAM_MODE_JUMP,
     /* 0x02 */ CAM_MODE_GORONDASH,
-    /* 0x03 */ CAM_MODE_DEKUSHOT, // "CAM_MODE_NUTSSHOT"
+    /* 0x03 */ CAM_MODE_DEKUSHOOT, // "CAM_MODE_NUTSSHOT"
     /* 0x04 */ CAM_MODE_BOWARROWZ,
     /* 0x05 */ CAM_MODE_DEKUFLY, // "CAM_MODE_NUTSFLY"
     /* 0x06 */ CAM_MODE_FIRSTPERSON, // "SUBJECT"
-    /* 0x07 */ CAM_MODE_BOOMFOLLLOW, // "BOOKEEPON"
+    /* 0x07 */ CAM_MODE_FOLLOWBOOMERANG, // "BOOKEEPON"
     /* 0x08 */ CAM_MODE_ZORAFIN,
     /* 0x09 */ CAM_MODE_FOLLOWTARGET, // "KEEPON"
     /* 0x0A */ CAM_MODE_TARGET, // "PARALLEL"
@@ -313,7 +351,7 @@ typedef struct {
     /* 0x0C */ s16 unk_0C; // flags (May be s32)
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ f32 unk_10; // set to float
-} Normal1Anim;
+} Normal1Anim; // size = 0x14
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // yOffset
@@ -327,7 +365,19 @@ typedef struct {
     /* 0x20 */ s16 unk_20; // pitchTarget
     /* 0x22 */ s16 unk_22; // interfaceFlags
     /* 0x24 */ Normal1Anim anim;
-} Normal1; // 10
+} Normal1; // size = 0x38
+
+#define CAM_FUNCDATA_NORM1(yOffset, data01, data02, pitchTarget, data04, data05, yawDiffRange, fov, data08, flags) \
+    { yOffset, CAM_DATA_YOFFSET }, \
+    { data01, CAM_DATA_01 }, \
+    { data02, CAM_DATA_02 }, \
+    { pitchTarget, CAM_DATA_PITCHTARGET }, \
+    { data04, CAM_DATA_04 }, \
+    { data05, CAM_DATA_05 }, \
+    { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
+    { fov, CAM_DATA_FOV }, \
+    { data08, CAM_DATA_08 }, \
+    { flags, CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 isZero; // set but unused
@@ -338,7 +388,7 @@ typedef struct {
     /* 0x0E */ s16 distTimer;
     /* 0x10 */ s16 flag;
     /* 0x12 */ s16 is1200; // set but unused
-} Normal3Anim;
+} Normal3Anim; // size = 0x14
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
@@ -351,7 +401,7 @@ typedef struct {
     /* 0x1C */ s16 pitchTarget;
     /* 0x1E */ s16 interfaceFlags;
     /* 0x20 */ Normal3Anim anim;
-} Normal3; // 9
+} Normal3; // size = 0x34
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
@@ -363,7 +413,7 @@ typedef struct {
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ s16 unk_2C;
-} Normal0Anim;
+} Normal0Anim; // size = 0x2E
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -376,7 +426,7 @@ typedef struct {
     /* 0x1C */ s16 unk_1C;
     /* 0x1E */ s16 unk_1E;
     /* 0x20 */ Normal0Anim anim;
-} Normal0; // 9
+} Normal0; // size = 0x4E
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -390,7 +440,7 @@ typedef struct {
     /* 0x22 */ s16 unk_22;
     /* 0x24 */ s16 unk_24;
     /* 0x26 */ s16 unk_26;
-} Parallel1Anim;
+} Parallel1Anim; // size = 0x28
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -406,7 +456,7 @@ typedef struct {
     /* 0x24 */ s16 unk_24;
     /* 0x26 */ s16 unk_26;
     /* 0x28 */ Parallel1Anim anim;
-} Parallel1; // 12
+} Parallel1; // size = 0x50
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -835,12 +885,6 @@ typedef struct {
     s16 unk_66; // startSwingTimer
 } SwingAnimation; // size = 0x68
 
-typedef struct {
-    s32 unk_00;
-    char unk_04[0x20];
-    Vec3f unk_24;
-} UnkStruct_D801ED920; // size >= 0x30
-
 typedef struct Camera {
     /* 0x000 */ char paramData[0x50];
     /* 0x050 */ Vec3f at;
@@ -892,7 +936,7 @@ typedef struct Camera {
     /* 0x150 */ s16 unk150;
     /* 0x152 */ s16 unk152;
     /* 0x154 */ s16 prevSetting;
-    /* 0x156 */ s16 nextBgCamDataId;
+    /* 0x156 */ s16 nextCamSceneDataId;
     /* 0x158 */ s16 nextBgId;
     /* 0x15A */ s16 roll;
     /* 0x15C */ s16 paramFlags;
