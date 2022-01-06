@@ -169,11 +169,19 @@ extern Gfx** D_801C02F8[]; /* = {
 glabel D_801C0340
 glabel D_801C0368
 glabel D_801C03A0
-glabel D_801C03C0
-glabel D_801C03E0
+#endif
+
+extern struct_80124618 D_801C03C0[];
+extern struct_80124618 D_801C03E0[];
+
+#if 0
 glabel D_801C0410
 glabel D_801C0428
-glabel D_801C0460
+#endif
+
+extern struct_80124618 D_801C0460[];
+
+#if 0
 glabel D_801C0490
 glabel D_801C0510
 glabel D_801C0538
@@ -185,9 +193,9 @@ glabel D_801C05D8
 glabel D_801C05F0
 glabel D_801C05F2
 glabel D_801C05FA
-glabel D_801C0608
-glabel D_801C0628
 #endif
+extern struct_80124618 D_801C0608[];
+extern struct_80124618 D_801C0628[];
 
 extern struct_80124618 D_801C0678[];
 extern struct_80124618 D_801C0698[];
@@ -1411,22 +1419,22 @@ void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124F18.s")
 #endif
 
-#if 0
-void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9) {
+#ifdef NON_EQUIVALENT
+// This is weird...
+void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9, s16* arg10, f32* arg11, UNK_TYPE arg12) {
     Vec3f sp44;
     f32 sp40;
     volatile s16 sp3C;
     f32 sp34;
     f32 sp30;
-    s32 sp28;
-    s32 sp24;
+    //s32 sp28;
+    //s32 sp24;
     f32 temp_f14;
-    s16 temp_v1;
     s32 temp_v0_2;
     s16 phi_a1;
     //s32 phi_v1;
     s32 phi_v0;
-    s32 phi_a2;
+    s16 phi_a2;
 
     sp34 = Math_CosS(arg1) * arg0;
     sp30 = Math_SinS(arg1) * -arg0;
@@ -1444,8 +1452,8 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
     }
 
     phi_v0 = phi_a1 - arg3;
-    sp24 = (s32) phi_v0;
-    sp28 = (s32) phi_v0;
+    //sp24 = (s32) phi_v0;
+    //sp28 = (s32) phi_v0;
     temp_f14 = (Math_CosS(phi_v0) * sp40) + arg8;
 
     if (ABS_ALT(phi_v0) > 0x4000) {
@@ -1454,14 +1462,14 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
     sp3C = phi_v0;
 
     temp_v0_2 = Math_FAtan2F(sp44.y, temp_f14);
-    temp_v1 = (s32) arg9 * -1;
-    phi_a2 = temp_v1;
-    if ((temp_v0_2 >= (s32) temp_v1)) {
+    phi_a2 = (s32) arg9 * -1;
+    phi_a2 = phi_a2;
+    if ((temp_v0_2 >= (s32) phi_a2)) {
 
         phi_a2 = CLAMP_MAX(temp_v0_2, arg9);
     }
 
-    func_80124F18(arg6, arg7, (s16) phi_a2, 20.0f, 2000.0f);
+    func_80124F18(arg6, arg7, phi_a2, 20.0f, 2000.0f);
 }
 #else
 void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9, s16* arg10, f32* arg11, UNK_TYPE arg12);
@@ -1547,10 +1555,174 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801253A4.s")
 #endif
 
+void func_80125500(GlobalContext* globalCtx, Player* player, UNK_PTR arg2, UNK_TYPE arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125500.s")
 
+extern Vec3f* D_801F59DC;
+
+typedef struct {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ f32 unk_144;
+} ActorUnknown;
+
+
+#ifdef NON_EQUIVALENT
+// maybe equivalent?
+s32 func_80125580(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Player* player) {
+    Vec3f sp54;
+    Actor* sp50;
+    s32 pad[4];
+    f32 temp_f6;
+    Actor* phi_v0;
+    struct_80124618* phi_a0;
+    s16 phi_a0_2;
+    struct_80124618* phi_v0_2;
+    struct_80124618* phi_v1_2;
+
+    if (arg1 == 1) {
+        D_801F59F4 = (s32) player->leftHandType;
+
+        if (1) { }
+
+        D_801F59F8 = (s32) player->rightHandType;
+        D_801F59DC = &player->swordInfo[2].base;
+        if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
+            if (!(player->skelAnime.moveFlags & 4) || (player->skelAnime.moveFlags & 1)) {
+                arg3->x *= player->ageProperties->unk_08;
+                arg3->z *= player->ageProperties->unk_08;
+            }
+            if (!(player->skelAnime.moveFlags & 4) || (player->skelAnime.moveFlags & 2)) {
+                arg3->y *= player->ageProperties->unk_08;
+            }
+        }
+
+        arg3->y -= player->unk_AB8;
+        if ((player->transformation == PLAYER_FORM_ZORA) && ((player->stateFlags3 & 0x8000) != 0)) {
+            Matrix_InsertTranslation(arg3->x, ((Math_CosS(player->unk_AAA) - 1.0f) * 200.0f) + arg3->y, arg3->z, 1);
+            Matrix_InsertXRotation_s(player->unk_AAA, 1);
+            if (player->unk_B62 != 0) {
+                Matrix_StatePush();
+                Matrix_InsertZRotation_s(player->unk_B8E, 1);
+                Matrix_InsertRotation(arg4->x, arg4->y, arg4->z, 1);
+                Matrix_InsertXRotation_s(-0x8000, 1);
+                Matrix_InsertTranslation(0.0f, 0.0f, -4000.0f, 1);
+                func_801253A4(globalCtx, player);
+                Matrix_StatePop();
+            }
+            Matrix_InsertZRotation_s(player->unk_B88, 1);
+            Matrix_InsertRotation(arg4->x, arg4->y, arg4->z, 1);
+            func_80125318(arg3, arg4);
+        } else if ((player->stateFlags3 & 0x2000) != 0) {
+            func_801251C4(player, &sp54);
+            sp54.x -= player->actor.world.pos.x;
+            sp54.y -= player->actor.world.pos.y;
+            sp54.z -= player->actor.world.pos.z;
+            Matrix_InsertTranslation(arg3->x + sp54.x, arg3->y + sp54.y, arg3->z + sp54.z, 1);
+            Matrix_InsertXRotation_s(player->unk_B94, 1);
+            Matrix_InsertZRotation_s(player->unk_B8E, 1);
+            player->unk_AB2.x = player->unk_B90 - player->unk_B94;
+            Matrix_InsertRotation(arg4->x, arg4->y, arg4->z, 1);
+            func_80125318(arg3, arg4);
+        } else {
+            if (player->unk_AAA != 0) {
+                Matrix_InsertTranslation(arg3->x, ((Math_CosS(player->unk_AAA) - 1.0f) * 200.0f) + arg3->y, arg3->z, 1);
+                Matrix_InsertXRotation_s(player->unk_AAA, 1);
+                Matrix_InsertRotation(arg4->x, arg4->y, arg4->z, 1);
+                func_80125318(arg3, arg4);
+            }
+        }
+    } else {
+        if (*arg2 != 0) {
+            D_801F59DC++;
+        }
+        if (arg1 == 0xB) {
+            arg4->x += player->unk_AAC.z;
+            arg4->y -= player->unk_AAC.y;
+            arg4->z += player->unk_AAC.x;
+            if (player->transformation == PLAYER_FORM_DEKU) {
+                phi_v0 = NULL;
+
+                if (((&gameplay_keep_Linkanim_00E298 == player->skelAnime.animation)) || (&gameplay_keep_Linkanim_00E2F0 == player->unk_284.animation) || (((player->stateFlags3 & 0x40) != 0) && (phi_v0 = player->leftHandActor, (phi_v0 != 0)))) {
+                    sp50 = phi_v0;
+                    Matrix_JointPosition(arg3, arg4);
+                    func_80125340();
+                    func_80125318(arg3, arg4);
+                    if (phi_v0 != 0) {
+                        player->unk_AF0[0].x = 1.0f - (((ActorUnknown*)phi_v0)->unk_144 * 0.03f);
+                        player->unk_AF0[0].y = 1.0f - (((ActorUnknown*)phi_v0)->unk_144 * 0.01f);
+                        player->unk_AF0[0].z = 1.0f - (((ActorUnknown*)phi_v0)->unk_144 * 0.04f);
+                        arg4->z = (s16) (s32) (((ActorUnknown*)phi_v0)->unk_144 * 320.0f);
+                    } else if (&gameplay_keep_Linkanim_00E298 == player->skelAnime.animation) {
+                        func_80124618(D_801C03E0, player->skelAnime.curFrame, player->unk_AF0);
+                    } else {
+                        func_80124618(D_801C03C0, player->unk_284.curFrame, player->unk_AF0);
+                    }
+                    Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
+                }
+            }
+        } else if (arg1 == 0x15) {
+            if ((&gameplay_keep_Linkanim_00E1F8 == player->skelAnime.animation) || (&gameplay_keep_Linkanim_00E260 == player->skelAnime.animation) || (&gameplay_keep_Linkanim_00E248 == player->skelAnime.animation) || (player->transformation == 2)) {
+                Matrix_JointPosition(arg3, arg4);
+                if (player->transformation == PLAYER_FORM_GORON) {
+                    func_80125340();
+                }
+                func_80125318(arg3, arg4);
+                if ((player->transformation != PLAYER_FORM_ZORA) || (&D_0400E410 == player->skelAnime.animation)) {
+                    if (&D_0400E410 == player->skelAnime.animation) {
+                        phi_a0 = D_801C0608;
+                    } else {
+                        if (&gameplay_keep_Linkanim_00E260 == player->skelAnime.animation) {
+                            phi_v0_2 = D_801C0628;
+                        } else {
+                            if (&gameplay_keep_Linkanim_00E248 == player->skelAnime.animation) {
+                                phi_v1_2 = D_801C07C0;
+                            } else {
+                                phi_v1_2 = D_801C0460;
+                            }
+                            phi_v0_2 = phi_v1_2;
+                        }
+                        phi_a0 = phi_v0_2;
+                    }
+                    func_80124618(phi_a0, player->skelAnime.curFrame, player->unk_AF0);
+                } else {
+                    player->unk_AF0[0].y = 1.0f;
+                }
+                if (player->transformation == PLAYER_FORM_ZORA) {
+                    player->unk_AF0[0].x = 1.0f;
+                    player->unk_AF0[0].z = 1.0f;
+                    player->unk_AF0[0].y *= 1.0f + (0.29999995f * player->unk_B08[2]);
+                }
+                Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
+            }
+        } else if (arg1 == 0xA) {
+            if (player->unk_AA8 != 0) {
+                Matrix_InsertZRotation_s(0x44C, 1);
+                Matrix_RotateY(player->unk_AA8, 1);
+            }
+            if (player->unk_AB2.y != 0) {
+                Matrix_RotateY(player->unk_AB2.y, 1);
+            }
+            phi_a0_2 = player->unk_AB2.x;
+            if ((player->transformation == PLAYER_FORM_DEKU) && ((player->stateFlags3 & 0x40) != 0)) {
+                if (player->leftHandActor != 0) {
+                    phi_a0_2 = (s16) (player->unk_AB2.x + (s32) (((ActorUnknown*)player->leftHandActor)->unk_144 * -470.0f));
+                }
+            }
+            Matrix_InsertXRotation_s(phi_a0_2, 1);
+            if (player->unk_AB2.z != 0) {
+                Matrix_InsertZRotation_s(player->unk_AB2.z, 1);
+            }
+        } else {
+            func_80125500(globalCtx, player, arg1, arg4);
+        }
+    }
+
+    return 0;
+}
+#else
 s32 func_80125580(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
+#endif
 
 void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* arg2, Vec3s* arg3) {
     Matrix_JointPosition(arg2, arg3);
