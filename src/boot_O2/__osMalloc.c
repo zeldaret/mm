@@ -50,10 +50,10 @@ ArenaNode* ArenaImpl_GetLastBlock(Arena* arena) {
 }
 
 /**
- * @brief Initializes \p arena using \p heap.
+ * @brief Initializes \p arena to manage the memory region \p heap.
  *
  * @param arena  The Arena to initialize.
- * @param heap   The heap to use.
+ * @param heap   The memory region to use as heap space.
  * @param size   The size of the heap.
  */
 void __osMallocInit(Arena* arena, void* heap, size_t size) {
@@ -124,7 +124,7 @@ u8 __osMallocIsInitalized(Arena* arena) {
 
 /**
  * @brief Allocates at least \p size bytes of memory using the given \p arena.
- * The block of memory will be allocated from the beginning of \p arena.
+ * The block of memory will be allocated at the start of the first sufficiently large free block.
  *
  *  - If there's not enough space in the given \p arena, this function will fail, returning `NULL`.
  *  - If \p size is zero, then an empty region of memory is returned.
@@ -189,7 +189,7 @@ void* __osMalloc(Arena* arena, size_t size) {
 
 /**
  * @brief Allocates at least \p size bytes of memory using the given \p arena.
- * Unlike __osMalloc, the block of memory will be allocated at the end of the \p arena.
+ * Unlike __osMalloc, the block of memory will be allocated from the end of the \p arena.
  *
  * - If there's not enough space in the given \p arena, this function will fail, returning `NULL`.
  * - If \p size is zero, then an empty region of memory is returned.
@@ -388,10 +388,10 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
 }
 
 /**
- * @brief Gets the size of the biggest block which isn't allocated, the total free space and the total allocated space.
+ * @brief Gets the size of the largest free block, the total free space and the total allocated space.
  *
  * @param[in, out] arena   The Arena which will be used to get the values from.
- * @param[out] outMaxFree  The value of the biggest block which is not allocated.
+ * @param[out] outMaxFree  The size of the largest free block.
  * @param[out] outFree     The total free space.
  * @param[out] outAlloc    The total allocated space.
  */
