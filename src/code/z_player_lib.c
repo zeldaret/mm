@@ -2317,7 +2317,41 @@ void func_80127BE8(GlobalContext* arg0, Vec3f* arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127DA4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128388.s")
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ char unk_08[0x14];
+} struct_80128388_arg1; // size = 0x1C
+
+void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2, Mtx** arg3) {
+    struct_801F58B0* phi_s1;
+    Vec3f sp58;
+    Vec3s sp50;
+    s32 i;
+
+    phi_s1 = &arg0[1];
+    sp58.y = 0.0f;
+    sp58.z = 0.0f;
+    sp50.x = 0;
+    i = 1;
+
+    if (arg2 >= 2) {
+        do {
+            sp58.x = arg1->unk_00 * 100.0f;
+            sp50.z = arg1->unk_06 + (s16)(phi_s1->unk_1A - arg0->unk_1A);
+            sp50.y = arg1->unk_04 + (s16)(phi_s1->unk_18 - arg0->unk_18);
+            Matrix_JointPosition(&sp58, &sp50);
+            Matrix_ToMtx(*arg3);
+            (*arg3)++;
+            arg0++;
+            phi_s1++;
+            arg1++;
+            i++;
+        } while (i < arg2);
+    }
+}
 
 #ifdef NON_EQUIVALENT
 // Not sure about equivalency
