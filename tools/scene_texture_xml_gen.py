@@ -75,12 +75,12 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
                         # print(fmt, file=os.sys.stderr)
                         texFmt = TEXTURES_FORMATS[fmt][size]
                         if offset in texturesPerOffset:
-                            if texturesPerOffset[offset] != (texFmt, width, height):
+                            if texturesPerOffset[offset] != (texFmt, width, height, False):
                                 print(f"Warning: Texture with different format at offset 0x{offset:06X}", file=os.sys.stderr)
                                 print(texturesPerOffset[offset], file=os.sys.stderr)
                                 print((texFmt, width, height), file=os.sys.stderr)
                                 print(file=os.sys.stderr)
-                        texturesPerOffset[offset] = (texFmt, width, height)
+                        texturesPerOffset[offset] = (texFmt, width, height, False)
 
                     elif result_4b is not None:
                         offset = int(result_4b["pointer"], 16) & 0xFFFFFF
@@ -92,12 +92,12 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
                         # print(fmt, file=os.sys.stderr)
                         texFmt = TEXTURES_FORMATS[fmt][size]
                         if offset in texturesPerOffset:
-                            if texturesPerOffset[offset] != (texFmt, width, height):
+                            if texturesPerOffset[offset] != (texFmt, width, height, False):
                                 print(f"Warning: Texture with different format at offset 0x{offset:06X}", file=os.sys.stderr)
                                 print(texturesPerOffset[offset], file=os.sys.stderr)
                                 print((texFmt, width, height), file=os.sys.stderr)
                                 print(file=os.sys.stderr)
-                        texturesPerOffset[offset] = (texFmt, width, height)
+                        texturesPerOffset[offset] = (texFmt, width, height, False)
 
                     elif result_multi is not None:
                         offset = int(result_multi["pointer"], 16) & 0xFFFFFF
@@ -109,12 +109,12 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
                         # print(fmt, file=os.sys.stderr)
                         texFmt = TEXTURES_FORMATS[fmt][size]
                         if offset in texturesPerOffset:
-                            if texturesPerOffset[offset] != (texFmt, width, height):
+                            if texturesPerOffset[offset] != (texFmt, width, height, False):
                                 print(f"Warning: Texture with different format at offset 0x{offset:06X}", file=os.sys.stderr)
                                 print(texturesPerOffset[offset], file=os.sys.stderr)
                                 print((texFmt, width, height), file=os.sys.stderr)
                                 print(file=os.sys.stderr)
-                        texturesPerOffset[offset] = (texFmt, width, height)
+                        texturesPerOffset[offset] = (texFmt, width, height, False)
 
                     elif result_multi_4b is not None:
                         offset = int(result_multi_4b["pointer"], 16) & 0xFFFFFF
@@ -126,12 +126,12 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
                         # print(fmt, file=os.sys.stderr)
                         texFmt = TEXTURES_FORMATS[fmt][size]
                         if offset in texturesPerOffset:
-                            if texturesPerOffset[offset] != (texFmt, width, height):
+                            if texturesPerOffset[offset] != (texFmt, width, height, False):
                                 print(f"Warning: Texture with different format at offset 0x{offset:06X}", file=os.sys.stderr)
                                 print(texturesPerOffset[offset], file=os.sys.stderr)
                                 print((texFmt, width, height), file=os.sys.stderr)
                                 print(file=os.sys.stderr)
-                        texturesPerOffset[offset] = (texFmt, width, height)
+                        texturesPerOffset[offset] = (texFmt, width, height, False)
 
                     elif result_tlut_16 is not None:
                         offset = int(result_tlut_16["pointer"], 16) & 0xFFFFFF
@@ -143,12 +143,12 @@ def getTexturesFromScenes(pathList: List[Path]) -> dict:
                         # print(fmt, file=os.sys.stderr)
                         texFmt = TEXTURES_FORMATS[fmt][size]
                         if offset in texturesPerOffset:
-                            if texturesPerOffset[offset] != (texFmt, width, height):
+                            if texturesPerOffset[offset] != (texFmt, width, height, True):
                                 print(f"Warning: Texture with different format at offset 0x{offset:06X}", file=os.sys.stderr)
                                 print(texturesPerOffset[offset], file=os.sys.stderr)
                                 print((texFmt, width, height), file=os.sys.stderr)
                                 print(file=os.sys.stderr)
-                        texturesPerOffset[offset] = (texFmt, width, height)
+                        texturesPerOffset[offset] = (texFmt, width, height, True)
 
     return texturesPerOffset
 
@@ -157,8 +157,9 @@ def printXml(sceneTextureId: int, texturesPerOffset: dict):
     print(f'    <File Name="scene_texture_{sceneTextureId:02}" Segment="6">')
 
     sortedTextures = sorted(texturesPerOffset.items())
-    for offset, (texFmt, width, height) in sortedTextures:
-        print(f'        <Texture Name="scene_texture_{sceneTextureId:02}_Tex_{offset:06X}" OutName="tex_{offset:06X}" Format="{texFmt}" Width="{width}" Height="{height}" Offset="0x{offset:X}"/>')
+    for offset, (texFmt, width, height, isTlut) in sortedTextures:
+        suffix = "TLUT" if isTlut else "Tex"
+        print(f'        <Texture Name="scene_texture_{sceneTextureId:02}_{suffix}_{offset:06X}" OutName="{suffix.lower()}_{offset:06X}" Format="{texFmt}" Width="{width}" Height="{height}" Offset="0x{offset:X}"/>')
 
     print(f'    </File>')
     print(f'</Root>')
