@@ -187,43 +187,46 @@ glabel D_801C05F2
 glabel D_801C05FA
 glabel D_801C0608
 glabel D_801C0628
-glabel D_801C0678
-glabel D_801C0698
-glabel D_801C06B8
-glabel D_801C06E0
-glabel D_801C06F8
-glabel D_801C0718
-glabel D_801C0730
-glabel D_801C0740
-glabel D_801C0750
-glabel D_801C0778
-glabel D_801C0784
-glabel D_801C07AC
-glabel D_801C07C0
-glabel D_801C07F0
-glabel D_801C0820
-glabel D_801C0838
-glabel D_801C0850
-glabel D_801C0860
 #endif
+
+extern struct_80124618 D_801C0678[];
+extern struct_80124618 D_801C0698[];
+extern struct_80124618 D_801C06B8[];
+extern struct_80124618 D_801C06E0[];
+extern struct_80124618 D_801C06F8[];
+extern struct_80124618 D_801C0718[];
+extern struct_80124618 D_801C0730[];
+extern struct_80124618 D_801C0740[];
+
+extern struct_80124618 D_801C0750[];
+
+extern u8 D_801C0778[];
+
+extern struct_80124618 D_801C0784[];
+
+extern u8 D_801C07AC[];
+
+extern struct_80124618 D_801C07C0[];
+
+extern struct_80124618 D_801C07F0[];
+extern struct_80124618 D_801C0820[];
+extern struct_80124618 D_801C0838[];
+
+extern Gfx D_801C0850[];
+extern Gfx D_801C0860[];
 
 extern UNK_PTR D_801C0870[];
 extern void* D_801C0890[];
 extern u8 D_801C08A0[][2];
 
-#if 0
-glabel D_801C08C0
-#endif
+extern Vec3f D_801C08C0[];
 
 extern f32 D_801C08FC[];
 extern f32 D_801C0910[];
 extern f32 D_801C0924[];
 extern f32 D_801C0938[];
 
-#if 0
-glabel D_801C094C
-glabel D_801C0954
-#endif
+extern Vec3f D_801C094C;
 
 extern s32 D_801C0958 /* = false */;
 
@@ -271,19 +274,19 @@ glabel D_801C0A90
 glabel D_801C0AB4
 glabel D_801C0ABC
 glabel D_801C0ADC
-glabel D_801C0AF4
-glabel D_801C0AFC
-glabel D_801C0B04
-glabel D_801C0B0C
 #endif
+
+extern struct_80124618* D_801C0AF4[];
+extern struct_80124618* D_801C0AFC[];
+extern struct_80124618* D_801C0B04[];
+extern struct_80124618* D_801C0B0C[];
 
 extern Gfx* D_801C0B14[];
 
 extern Gfx* D_801C0B1C[];
 
-#if 0
-glabel D_801C0B20
-#endif
+extern Gfx* D_801C0B20[];
+
 extern Vec3f D_801C0B90[2];
 
 
@@ -323,10 +326,8 @@ extern s32 D_801F59E4;
 
 extern Vec3f D_801F59E8;
 
-#if 0
-glabel D_801F59F4
-glabel D_801F59F8
-#endif
+extern s32 D_801F59F4;
+extern s32 D_801F59F8;
 
 
 
@@ -1264,11 +1265,31 @@ void func_80124420(Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
 #endif
 
-void func_80124618(UNK_PTR, f32 curFrame, Vec3f*);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124618.s")
+void func_80124618(struct_80124618* arg0, f32 curFrame, Vec3f* arg2) {
+    s32 currentFrame = curFrame;
+    f32 temp_f0;
+    f32 temp_f14;
+    f32 progress;
+    s16 temp_v1;
 
-extern u16 D_801C08A1[];
+    do {
+        temp_v1 = arg0[1].unk_0;
+        arg0++;
+    } while (temp_v1 < currentFrame);
 
+    temp_f0 = arg0[-1].unk_0;
+
+    progress = (curFrame - temp_f0) / (((f32) temp_v1) - temp_f0);
+
+    temp_f14 = arg0[-1].unk_2.x;
+    arg2->x = LERPIMP(temp_f14, arg0->unk_2.x, progress) * 0.01f;
+
+    temp_f14 = arg0[-1].unk_2.y;
+    arg2->y = LERPIMP(temp_f14, arg0->unk_2.y, progress) * 0.01f;
+
+    temp_f14 = arg0[-1].unk_2.z;
+    arg2->z = LERPIMP(temp_f14, arg0->unk_2.z, progress) * 0.01f;
+}
 
 // OoT's func_8008F470
 void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
@@ -1418,9 +1439,7 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
 s32 func_80125580(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
 
-extern u16 D_801C0750[];
-
-void func_80125CE0(Player* player, u16* arg1, Vec3f* arg2, Vec3s* arg3) {
+void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* arg2, Vec3s* arg3) {
     Matrix_JointPosition(arg2, arg3);
     func_80125318(arg2, arg3);
     func_80124618(arg1, player->skelAnime.curFrame, player->unk_AF0);
@@ -1619,19 +1638,18 @@ extern LinkAnimationHeader gameplay_keep_Linkanim_00E278;
 extern Gfx D_06008AA0[];
 extern Gfx D_06008C50[];
 
-
 s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
     if ((player->transformation == PLAYER_FORM_DEKU) && (((player->skelAnime.animation == &D_0400E2D0)) || (player->skelAnime.animation == &D_0400E2D8) || (player->skelAnime.animation == &D_0400E2E8) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278))) {
-        void** sp3C = &D_801C0AF4;
+        struct_80124618** sp3C = D_801C0AF4;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         if (player->skelAnime.animation == &D_0400E2D8) {
-            sp3C = &D_801C0AFC;
+            sp3C = D_801C0AFC;
         } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278) {
-            sp3C = &D_801C0B0C;
+            sp3C = D_801C0B0C;
         } else if (player->skelAnime.animation == &D_0400E2E8) {
-            sp3C = &D_801C0B04;
+            sp3C = D_801C0B04;
         }
 
         Matrix_StatePush();
