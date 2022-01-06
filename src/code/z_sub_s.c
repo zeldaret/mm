@@ -98,13 +98,13 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
 Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
                             OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                             TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx) {
-    StandardLimb* limb;
+    StandardLimb* rootLimb;
     s32 pad;
     Gfx* newDlist;
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
-    Mtx* mtx = (Mtx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(dListCount * sizeof(Mtx)));
+    Mtx* mtx = GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(dListCount * sizeof(Mtx)));
 
     if (skeleton == NULL) {
         return NULL;
@@ -112,13 +112,13 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
 
     gSPSegment(gfx++, 0x0D, mtx);
     Matrix_StatePush();
-    limb = Lib_SegmentedToVirtual(skeleton[0]);
+    rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
     pos.x = jointTable->x;
     pos.y = jointTable->y;
     pos.z = jointTable->z;
     rot = jointTable[1];
-    newDlist = limb->dList;
-    limbDList = limb->dList;
+    newDlist = rootLimb->dList;
+    limbDList = rootLimb->dList;
 
     if (overrideLimbDraw == NULL || !overrideLimbDraw(globalCtx, 1, &newDlist, &pos, &rot, actor, &gfx)) {
         Matrix_JointPosition(&pos, &rot);
@@ -142,8 +142,8 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
         postLimbDraw(globalCtx, 1, &limbDList, &rot, actor, &gfx);
     }
 
-    if (limb->child != LIMB_DONE) {
-        gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+    if (rootLimb->child != LIMB_DONE) {
+        gfx = SubS_DrawTransformFlexLimb(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, &mtx, gfx);
     }
     Matrix_StatePop();
