@@ -1333,7 +1333,52 @@ void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124870.s")
 
+#ifdef NON_MATCHING
+// Matches, but requires in function static data
+void func_80124CC4(GlobalContext* globalCtx, Actor* arg1, f32 arg2) {
+    static Vec3f D_801C094C = { -500.0f, -100.0f, 0.0f };
+    CollisionPoly* poly;
+    s32 bgId;
+    Vec3f sp7C;
+    Vec3f sp70;
+    Vec3f sp64;
+    Vec3f sp58;
+    f32 sp54;
+    f32 sp50;
+
+    D_801C094C.z = 0.0f;
+    Matrix_MultiplyVector3fByState(&D_801C094C, &sp7C);
+    D_801C094C.z = arg2;
+    Matrix_MultiplyVector3fByState(&D_801C094C, &sp70);
+
+    if (BgCheck_AnyLineTest3(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
+        if (func_800B90AC(globalCtx, arg1, poly, bgId, &sp64) == 0 || BgCheck_ProjectileLineTest(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
+            OPEN_DISPS(globalCtx->state.gfxCtx);
+
+            OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 7);
+
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &sp64, &sp58, &sp54);
+            if (sp54 < 200.0f) {
+                sp50 = 0.08f;
+            } else {
+                sp50 = (sp54 / 200.0f) * 0.08f;
+            }
+            Matrix_InsertTranslation(sp64.x, sp64.y, sp64.z, MTXMODE_NEW);
+            Matrix_Scale(sp50, sp50, sp50, 1);
+
+            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            gSPSegment(OVERLAY_DISP++, 0x06, globalCtx->objectCtx.status[arg1->objBankIndex].segment);
+
+            gSPDisplayList(OVERLAY_DISP++, gameplay_keep_DL_04F250);
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124CC4.s")
+#endif
 
 #ifdef NON_EQUIVALENT
 // Float fun, maybe equivalent
