@@ -69,9 +69,9 @@ extern u8 D_801BFFB0[0xF][5];/* = {
     { 0, 1, 7, 0xE, 0x10 },
 };*/
 
-#if 0
-glabel D_801BFFFC
+extern Gfx* D_801BFFFC[];
 
+#if 0
 glabel D_801C0000
 
 glabel D_801C0001
@@ -85,15 +85,23 @@ glabel D_801C0010
 
 #if 0
 glabel D_801C0024
-glabel D_801C0034
+#endif
+
+extern Gfx* D_801C0034[];
+
+#if 0
 glabel D_801C0040
-glabel D_801C005C
+#endif
+
+extern Gfx* D_801C005C[];
+
+#if 0
 glabel D_801C0060
 glabel D_801C0070
 #endif
-#if 0
-glabel D_801C0084
-#endif
+
+extern Gfx* D_801C0084[];
+
 #if 0
 glabel D_801C00A0
 #endif
@@ -104,19 +112,21 @@ glabel D_801C00BC
 glabel D_801C00D4
 #endif
 
+extern Gfx* D_801C00EC[];
+extern Gfx* D_801C0114[];
+extern Gfx* D_801C013C[];
+extern Gfx* D_801C0164[];
+
 #if 0
-glabel D_801C00EC
-glabel D_801C0114
-glabel D_801C013C
-glabel D_801C0164
 glabel D_801C018C
-glabel D_801C01A4
-glabel D_801C01CC
-glabel D_801C01F4
-glabel D_801C021C
-glabel D_801C0244
-glabel D_801C026C
 #endif
+
+extern Gfx* D_801C01A4[];
+extern Gfx* D_801C01CC[];
+extern Gfx* D_801C01F4[];
+extern Gfx* D_801C021C[];
+extern Gfx* D_801C0244[];
+extern Gfx* D_801C026C[];
 
 
 #if 0
@@ -133,7 +143,26 @@ extern Gfx* D_801C02D0[PLAYER_FORM_MAX];
 extern Gfx* D_801C02E4[PLAYER_FORM_MAX];
 
 // sPlayerDListGroups
-extern Gfx** D_801C02F8[];
+extern Gfx** D_801C02F8[]; /* = {
+    D_801C0114,
+    D_801C013C,
+    D_801C0164,
+    D_801C00EC,
+    D_801C0114,
+    D_801C026C,
+    D_801C01A4,
+    D_801C01CC,
+    D_801C01CC,
+    D_801C01F4,
+    D_801C021C,
+    D_801C0244,
+    D_801C0034,
+    D_801C005C,
+    D_801C0084,
+    D_801C0084,
+    D_801BFFFC,
+    NULL,
+};*/
 
 
 #if 0
@@ -763,7 +792,82 @@ s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
     return false;
 }
 
+#ifdef NON_MATCHING
+// regalloc and a few missing moves
+s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
+    s32 phi_v1;
+
+    if (arg2 >= 4) {
+        if (1) {}
+        return 0xFF;
+    }
+
+    if (arg2 == 0) {
+        phi_v1 = func_8012EC80(globalCtx);
+        if (phi_v1 >= 0xFD) {
+            return phi_v1;
+        }
+
+        if ((player->currentMask == PLAYER_MASK_BLAST) && (globalCtx->interfaceCtx.unk_21E == 0x18)) {
+            return 0xF0;
+        }
+        if ((player->currentMask == PLAYER_MASK_BREMEN) && (globalCtx->interfaceCtx.unk_21E == 0x1A)) {
+            return 0xF1;
+        }
+        if ((player->currentMask == PLAYER_MASK_KAMARO) && (globalCtx->interfaceCtx.unk_21E == 0x19)) {
+            return 0xF2;
+        }
+    } else {
+        s32 phi_v0;
+
+        dummy_label_74791: ;
+
+        if (arg2 == 1) {
+            if (gSaveContext.buttonStatus[1] != 0xFF) {
+                //if (gSaveContext.equips.buttonItems && gSaveContext.equips.buttonItems) {}
+                return gSaveContext.equips.buttonItems[0][1];
+            } 
+
+            if (gSaveContext.unk_3F22 == 0x10) {
+                phi_v0 = gSaveContext.equips.buttonItems[0][1];
+            } else {
+                phi_v0 = 0xFF;
+            }
+
+            phi_v1 = phi_v0;
+        } else if (arg2 == 2) {
+            if (gSaveContext.buttonStatus[2] != 0xFF) {
+                return gSaveContext.equips.buttonItems[0][2];
+            }
+
+            if (gSaveContext.unk_3F22 == 0x10) {
+                phi_v0 = gSaveContext.equips.buttonItems[0][2];
+            } else {
+                phi_v0 = 0xFF;
+            }
+            phi_v1 = phi_v0;
+        } else if (gSaveContext.buttonStatus[3] != 0xFF) {
+            phi_v1 = gSaveContext.equips.buttonItems[0][3];
+        } else {
+            if (gSaveContext.unk_3F22 == 0x10) {
+                if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } if (1) { }
+                phi_v0 = gSaveContext.equips.buttonItems[0][3];
+            } else {
+                phi_v0 = 0xFF;
+            }
+            phi_v1 = phi_v0;
+            //phi_v1 = gSaveContext.unk_3F22 == 0x10 ? gSaveContext.equips.buttonItems[0][3] : 0xFF;
+        }
+    }
+
+    if (!gSaveContext.unk_3F22) {}
+
+    return phi_v1;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012364C.s")
+#endif
+
 
 #ifdef NON_EQUIVALENT
 s32 func_80123810(GlobalContext* globalCtx) {
@@ -791,7 +895,7 @@ s32 func_80123810(GlobalContext* globalCtx) {
             globalCtx->interfaceCtx.unk_224 = 0;
             Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
             if ((sp24 >= 0xFD) || ( temp_v0 = globalCtx->unk_18794(globalCtx, player, sp24, i + 1), (temp_v0 < 0))) {
-                play_sound(0x4806U);
+                play_sound(0x4806);
                 return -1;
             }
             player->heldItemButton = i + 1;
