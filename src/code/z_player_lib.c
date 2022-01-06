@@ -1335,7 +1335,7 @@ void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
 
 #ifdef NON_MATCHING
 // Matches, but requires in function static data
-void func_80124CC4(GlobalContext* globalCtx, Actor* arg1, f32 arg2) {
+void func_80124CC4(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
     static Vec3f D_801C094C = { -500.0f, -100.0f, 0.0f };
     CollisionPoly* poly;
     s32 bgId;
@@ -1352,7 +1352,7 @@ void func_80124CC4(GlobalContext* globalCtx, Actor* arg1, f32 arg2) {
     Matrix_MultiplyVector3fByState(&D_801C094C, &sp70);
 
     if (BgCheck_AnyLineTest3(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
-        if (func_800B90AC(globalCtx, arg1, poly, bgId, &sp64) == 0 || BgCheck_ProjectileLineTest(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
+        if (func_800B90AC(globalCtx, actor, poly, bgId, &sp64) == 0 || BgCheck_ProjectileLineTest(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 7);
@@ -1368,7 +1368,7 @@ void func_80124CC4(GlobalContext* globalCtx, Actor* arg1, f32 arg2) {
 
             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPSegment(OVERLAY_DISP++, 0x06, globalCtx->objectCtx.status[arg1->objBankIndex].segment);
+            gSPSegment(OVERLAY_DISP++, 0x06, globalCtx->objectCtx.status[actor->objBankIndex].segment);
 
             gSPDisplayList(OVERLAY_DISP++, gameplay_keep_DL_04F250);
 
@@ -1377,6 +1377,7 @@ void func_80124CC4(GlobalContext* globalCtx, Actor* arg1, f32 arg2) {
     }
 }
 #else
+void func_80124CC4(GlobalContext* globalCtx, Actor* actor, f32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124CC4.s")
 #endif
 
@@ -1406,14 +1407,81 @@ void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
     }
 }
 #else
+void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124F18.s")
 #endif
 
-//void func_80124FF0(f32 arg0, s16 arg1, f32* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124FF0.s")
+#if 0
+void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9) {
+    Vec3f sp44;
+    f32 sp40;
+    volatile s16 sp3C;
+    f32 sp34;
+    f32 sp30;
+    s32 sp28;
+    s32 sp24;
+    f32 temp_f14;
+    s16 temp_v1;
+    s32 temp_v0_2;
+    s16 phi_a1;
+    //s32 phi_v1;
+    s32 phi_v0;
+    s32 phi_a2;
 
-void func_801251C4(Player* player, Vec3f* arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801251C4.s")
+    sp34 = Math_CosS(arg1) * arg0;
+    sp30 = Math_SinS(arg1) * -arg0;
+
+    arg5->x = (Math_SinS(arg3) * sp30) + arg2->x;
+    arg5->y = arg2->y + sp34;
+    arg5->z = (Math_CosS(arg3) * sp30) + arg2->z;
+
+    Math_Vec3f_Diff(arg5, arg4, &sp44);
+    sp40 = sqrtf(SQ(sp44.x) + SQ(sp44.z));
+    if (sp40 <= 1.0f) {
+        phi_a1 = arg3;
+    } else {
+        phi_a1 = Math_FAtan2F(sp44.z, sp44.x);
+    }
+
+    phi_v0 = phi_a1 - arg3;
+    sp24 = (s32) phi_v0;
+    sp28 = (s32) phi_v0;
+    temp_f14 = (Math_CosS(phi_v0) * sp40) + arg8;
+
+    if (ABS_ALT(phi_v0) > 0x4000) {
+        phi_v0 = (s16) BINANG_ROT180(phi_a1) - arg3;
+    }
+    sp3C = phi_v0;
+
+    temp_v0_2 = Math_FAtan2F(sp44.y, temp_f14);
+    temp_v1 = (s32) arg9 * -1;
+    phi_a2 = temp_v1;
+    if ((temp_v0_2 >= (s32) temp_v1)) {
+
+        phi_a2 = CLAMP_MAX(temp_v0_2, arg9);
+    }
+
+    func_80124F18(arg6, arg7, (s16) phi_a2, 20.0f, 2000.0f);
+}
+#else
+void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9, s16* arg10, f32* arg11, UNK_TYPE arg12);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124FF0.s")
+#endif
+
+void func_801251C4(Player* player, Vec3f* arg1) {
+    Vec3f sp4C;
+    Vec3f sp40;
+
+    sp4C.x = player->actor.world.pos.x;
+    sp4C.y = player->actor.world.pos.y + 60.0f;
+    sp4C.z = player->actor.world.pos.z;
+    func_80124FF0(-20.0f, player->unk_B8C, &sp4C, player->actor.shape.rot.y, player->bodyPartsPos, arg1, &player->unk_B90, &player->unk_B08[2], 0.0f, 0x1F40, &player->unk_B92, &player->unk_B08[3], 0);
+
+    sp40.x = (player->bodyPartsPos[6].x + player->bodyPartsPos[3].x) * 0.5f;
+    sp40.y = (player->bodyPartsPos[6].y + player->bodyPartsPos[3].y) * 0.5f;
+    sp40.z = (player->bodyPartsPos[6].z + player->bodyPartsPos[3].z) * 0.5f;
+    func_80124FF0(-20.0f, player->unk_B90, arg1, (player->actor.shape.rot.y + player->unk_B92), &sp40, arg1, &player->unk_B94, &player->unk_B08[4], -1.9f, 0x1F40, &player->unk_B96, &player->unk_B08[5], 0);
+}
 
 void func_80125318(Vec3f* arg0, Vec3s* arg1) {
     arg0->x = 0.0f;
