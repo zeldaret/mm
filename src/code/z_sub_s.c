@@ -143,8 +143,8 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     }
 
     if (rootLimb->child != LIMB_DONE) {
-        gfx = SubS_DrawTransformFlexLimb(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
-                                         transformLimbDraw, actor, &mtx, gfx);
+        gfx = SubS_DrawTransformFlexLimb(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw,
+                                         postLimbDraw, transformLimbDraw, actor, &mtx, gfx);
     }
     Matrix_StatePop();
     return gfx;
