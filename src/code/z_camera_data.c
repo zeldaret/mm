@@ -728,29 +728,18 @@ CameraModeValue sSetNormal0ModeChargeZData[] = {
     { 0, CAM_DATA_12 },
 };
 
-/**
- * Setting        Mode      Function
- * ------------   -----    --------
- * NORMAL0        STILL    NORM1
- * NANAME         STILL    NORM1
- * CLIMEMAZE      STILL    NORM1
- * KEEPBACK       STILL    NORM1
- * WHIRLPOOL      STILL    NORM1
- * FORCEKEEP      STILL    NORM1
- * PARALLEL1      STILL    NORM1
- * NORMAL4        STILL    NORM1
- */
 CameraModeValue sSetNormal0ModeStillData[] = {
-    { -20, CAM_DATA_YOFFSET },
-    { 0x0118, CAM_DATA_01 },
-    { 0x0140, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    CAM_FUNCDATA_NORM1( // CAM_FUNC_NORM1
+        -20,            // CAM_DATA_YOFFSET
+        0x118,          // CAM_DATA_01
+        0x140,          // CAM_DATA_02
+        10,             // CAM_DATA_PITCHTARGET
+        100,           // CAM_DATA_04
+        100,            // CAM_DATA_05
+        100,           // CAM_DATA_YAWDIFFRANGE
+        60,             // CAM_DATA_FOV
+        20,           // CAM_DATA_08
+        (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 /**
@@ -888,49 +877,18 @@ CameraModeValue sSetNormal0ModeDekuShootData[] = {
     { SHRINKWINVAL_NONE | IFACE_ALPHA(0), CAM_DATA_FLAGS },
 };
 
-/**
- * Setting        Mode         Function
- * ------------   ---------    --------
- * NORMAL0        GORONDASH    NORM1
- * FUKAN0         GORONDASH    NORM1
- * NORMAL1        GORONDASH    NORM1
- * NANAME         GORONDASH    NORM1
- * DUNGEON0       GORONDASH    NORM1
- * DUNGEON1       GORONDASH    NORM1
- * TOWER0         GORONDASH    NORM1
- * CLIMEMAZE      GORONDASH    NORM1
- * DUNGEON2       GORONDASH    NORM1
- * BOSS_ODOLWA    GORONDASH    NORM1
- * KEEPBACK       GORONDASH    NORM1
- * MINIBOSS       GORONDASH    NORM1
- * FUKAN1         GORONDASH    NORM1
- * DUNGEON3       GORONDASH    NORM1
- * ONTHEPOLE      GORONDASH    NORM1
- * INBUSH         GORONDASH    NORM1
- * BOSS_MAJORA    GORONDASH    NORM1
- * BOSS_TWINMOLD  GORONDASH    NORM1
- * NORMAL2        GORONDASH    NORM1
- * CUCCO_SHACK    GORONDASH    NORM1
- * GIANT          GORONDASH    NORM1
- * ROOM1          GORONDASH    NORM1
- * SOKONASI       GORONDASH    NORM1
- * FORCEKEEP      GORONDASH    NORM1
- * PARALLEL1      GORONDASH    NORM1
- * ROOM2          GORONDASH    NORM1
- * NORMAL4        GORONDASH    NORM1
- * DUNGEON4       GORONDASH    NORM1
- */
 CameraModeValue sSetNormal0ModeGoronDashData[] = {
-    { 50, CAM_DATA_YOFFSET },
-    { 0x00A0, CAM_DATA_01 },
-    { 0x00FF, CAM_DATA_02 },
-    { 0xFFFE, CAM_DATA_PITCHTARGET },
-    { 0x000C, CAM_DATA_04 },
-    { 10, CAM_DATA_05 },
-    { 0x0028, CAM_DATA_YAWDIFFRANGE },
-    { 92, CAM_DATA_FOV },
-    { 0x0058, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    CAM_FUNCDATA_NORM1( // CAM_FUNC_NORM1
+        50,            // CAM_DATA_YOFFSET
+        0xA0,          // CAM_DATA_01
+        0xFF,          // CAM_DATA_02
+        0xFFFE,             // CAM_DATA_PITCHTARGET
+        0xC,           // CAM_DATA_04
+        10,            // CAM_DATA_05
+        0x28,           // CAM_DATA_YAWDIFFRANGE
+        92,             // CAM_DATA_FOV
+        0x58,           // CAM_DATA_08
+        (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 /**
@@ -1158,7 +1116,7 @@ CameraModeValue sSetNormal0ModeZoraFinData[] = {
  * -------    ------    --------
  * NORMAL3    NORMAL    JUMP3
  */
-CameraModeValue D_801B4BDC[] = {
+CameraModeValue sSetNormal3ModeNormalData[] = {
     { -40, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
     { 300, CAM_DATA_02 },
@@ -1176,7 +1134,7 @@ CameraModeValue D_801B4BDC[] = {
  * -------    ------    --------
  * NORMAL3    TARGET    PARA1
  */
-CameraModeValue D_801B4C04[] = {
+CameraModeValue sSetNormal3ModeTargetData[] = {
     { -50, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
     { 0x0028, CAM_DATA_02 },
@@ -1199,7 +1157,7 @@ CameraModeValue D_801B4C04[] = {
  * PINNACLE_ROCK  FREEFALL    JUMP3
  * WATER2         FREEFALL    JUMP3
  */
-CameraModeValue D_801B4C34[] = {
+CameraModeValue sSetNormal3ModeFreeFallData[] = {
     { 0, CAM_DATA_YOFFSET },
     { 80, CAM_DATA_01 },
     { 100, CAM_DATA_02 },
@@ -1218,7 +1176,7 @@ CameraModeValue D_801B4C34[] = {
  * NORMAL3    GORONJUMP    JUMP3
  * WATER2     GORONJUMP    JUMP3
  */
-CameraModeValue D_801B4C5C[] = {
+CameraModeValue sSetNormal3ModeGoronJumpData[] = {
     { -40, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
     { 0x00F0, CAM_DATA_02 },
@@ -1234,10 +1192,10 @@ CameraModeValue D_801B4C5C[] = {
 /**
  * Setting    Mode       Function
  * -------    -------    --------
- * NORMAL3    NUTSFLY    JUMP3
- * WATER2     NUTSFLY    JUMP3
+ * NORMAL3    DEKUFLY    JUMP3
+ * WATER2     DEKUFLY    JUMP3
  */
-CameraModeValue D_801B4C84[] = {
+CameraModeValue sSetNormal3ModeDekuFlyData[] = {
     { -40, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
     { 250, CAM_DATA_02 },
@@ -1253,10 +1211,10 @@ CameraModeValue D_801B4C84[] = {
 /**
  * Setting    Mode        Function
  * -------    --------    --------
- * NORMAL3    NUTSHIDE    JUMP3
- * WATER2     NUTSHIDE    JUMP3
+ * NORMAL3    DEKUHIDE    JUMP3
+ * WATER2     DEKUHIDE    JUMP3
  */
-CameraModeValue D_801B4CAC[] = {
+CameraModeValue sSetNormal3ModeDekuHideData[] = {
     { 0xFFC4, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
     { 250, CAM_DATA_02 },
@@ -1275,7 +1233,7 @@ CameraModeValue D_801B4CAC[] = {
  * NORMAL3    STILL    NORM1
  * WATER2     STILL    NORM1
  */
-CameraModeValue D_801B4CD4[] = {
+CameraModeValue sSetNormal3ModeStillData[] = {
     { -40, CAM_DATA_YOFFSET },
     { 80, CAM_DATA_01 },
     { 300, CAM_DATA_02 },
@@ -1294,7 +1252,7 @@ CameraModeValue D_801B4CD4[] = {
  * NORMAL3     GORONDASH    JUMP3
  * BOSS_GYORG  GORONDASH    JUMP3
  */
-CameraModeValue D_801B4CFC[] = {
+CameraModeValue sSetNormal3ModeGoronDashData[] = {
     { -40, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
     { 200, CAM_DATA_02 },
@@ -1317,7 +1275,7 @@ CameraModeValue D_801B4CFC[] = {
  * -------    ------    --------
  * CIRCLE5    NORMAL    UNIQ2
  */
-CameraModeValue D_801B4D24[] = {
+CameraModeValue sSetPivotDivingModeNormalData[] = {
     { -40, CAM_DATA_YOFFSET },
     { 60, 1 },
     { 60, CAM_DATA_FOV },
@@ -1329,7 +1287,7 @@ CameraModeValue D_801B4D24[] = {
  * -------    ------    --------
  * CIRCLE5    TARGET    UNIQ2
  */
-CameraModeValue D_801B4D34[] = {
+CameraModeValue sSetPivotDivingModeTargetData[] = {
     { -30, CAM_DATA_YOFFSET },
     { 0x002D, 1 },
     { 100, CAM_DATA_FOV },
@@ -1346,7 +1304,7 @@ CameraModeValue D_801B4D34[] = {
  * -------    ------    --------
  * HORSE      NORMAL    NORM3
  */
-CameraModeValue D_801B4D44[] = {
+CameraModeValue sSetHorseModeNormalData[] = {
     { -50, CAM_DATA_YOFFSET },    // yOffset
     { 220, CAM_DATA_01 },    // distMin
     { 250, CAM_DATA_02 },    // distMax
@@ -1363,7 +1321,7 @@ CameraModeValue D_801B4D44[] = {
  * -------    ------    --------
  * HORSE      TARGET    NORM3
  */
-CameraModeValue D_801B4D68[] = {
+CameraModeValue sSetHorseModeTargetData[] = {
     { -40, CAM_DATA_YOFFSET },    // yOffset
     { 180, CAM_DATA_01 },    // distMin
     { 200, CAM_DATA_02 },    // distMax
@@ -1380,7 +1338,7 @@ CameraModeValue D_801B4D68[] = {
  * -------    ----    --------
  * HORSE      JUMP    NORM3
  */
-CameraModeValue D_801B4D8C[] = {
+CameraModeValue sSetHorseModeJumpData[] = {
     { -50, CAM_DATA_YOFFSET },    // yOffset
     { 220, CAM_DATA_01 },    // distMin
     { 260, CAM_DATA_02 },    // distMax
@@ -1397,7 +1355,7 @@ CameraModeValue D_801B4D8C[] = {
  * -------    --------    --------
  * HORSE      BOWARROW    SUBJ1
  */
-CameraModeValue D_801B4DB0[] = {
+CameraModeValue sSetHorseModeBowArrowData[] = {
     { 0xFFF9, CAM_DATA_YOFFSET },
     { 0x000E, CAM_DATA_01 },
     { 100, CAM_DATA_02 },
@@ -1414,7 +1372,7 @@ CameraModeValue D_801B4DB0[] = {
  * -------    ---------    --------
  * HORSE      SLINGSHOT    SUBJ1
  */
-CameraModeValue D_801B4DD4[] = {
+CameraModeValue sSetHorseModeSlingShotData[] = {
     { 0xFFF9, CAM_DATA_YOFFSET },
     { 0x000E, CAM_DATA_01 },
     { 100, CAM_DATA_02 },
@@ -1431,7 +1389,7 @@ CameraModeValue D_801B4DD4[] = {
  * -------    ------    --------
  * HORSE      BATTLE    BATT1
  */
-CameraModeValue D_801B4DF8[] = {
+CameraModeValue sSetHorseModeBattleData[] = {
     { 0xFFC4, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
     { 0x0118, CAM_DATA_02 },
@@ -1452,7 +1410,7 @@ CameraModeValue D_801B4DF8[] = {
  * -------    ------------    --------
  * HORSE      FOLLOWTARGET    KEEP1
  */
-CameraModeValue D_801B4E2C[] = {
+CameraModeValue sSetHorseModeFollowTargetData[] = {
     { 0xFFC4, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
     { 220, CAM_DATA_02 },
@@ -1472,7 +1430,7 @@ CameraModeValue D_801B4E2C[] = {
  * -------    ----    --------
  * HORSE      TALK    KEEP3
  */
-CameraModeValue D_801B4E5C[] = {
+CameraModeValue sSetHorseModeTalkData[] = {
     { -50, CAM_DATA_YOFFSET },
     { 0x008C, CAM_DATA_01 },
     { 200, CAM_DATA_02 },
@@ -1493,7 +1451,7 @@ CameraModeValue D_801B4E5C[] = {
  * -------    -----    --------
  * HORSE      STILL    NORM3
  */
-CameraModeValue D_801B4E90[] = {
+CameraModeValue sSetHorseModeStillData[] = {
     { -40, CAM_DATA_YOFFSET },    // yOffset
     { 180, CAM_DATA_01 },    // distMin
     { 200, CAM_DATA_02 },    // distMax
@@ -1528,30 +1486,30 @@ CameraModeValue D_801B4EB4[] = {
 };
 
 /*=====================================================================
- *                   Custom Data: PREREND0 Setting
+ *                   Custom Data: PREREND_FIXED Setting
  *=====================================================================
  */
 
 /**
- * Setting     Mode      Function
- * --------    ------    --------
- * PREREND0    NORMAL    FIXD3
+ * Setting          Mode      Function
+ * -------------    ------    --------
+ * PREREND_FIXED    NORMAL    FIXD3
  */
-CameraModeValue D_801B4ED8[] = {
+CameraModeValue sSetPrerendFixedModeNormalData[] = {
     { SHRINKWINVAL_NONE | IFACE_ALPHA(0), CAM_DATA_FLAGS },
 };
 
 /*=====================================================================
- *                   Custom Data: PREREND1 Setting
+ *                   Custom Data: PREREND_PIVOT Setting
  *=====================================================================
  */
 
 /**
- * Setting     Mode      Function
- * --------    ------    --------
- * PREREND1    NORMAL    UNIQ7
+ * Setting          Mode      Function
+ * -------------    ------    --------
+ * PREREND_PIVOT    NORMAL    UNIQ7
  */
-CameraModeValue D_801B4EDC[] = {
+CameraModeValue sSetPrerendPivotModeNormalData[] = {
     { 60, CAM_DATA_FOV },
     { SHRINKWINVAL_NONE | IFACE_ALPHA(0), CAM_DATA_FLAGS },
 };
@@ -1701,7 +1659,7 @@ CameraModeValue D_801B4F78[] = {
  * -------    ------    --------
  * NORMAL1    NORMAL    NORM1
  */
-CameraModeValue D_801B4FA0[] = {
+CameraModeValue sSetNormal1ModeNormalData[] = {
     { -20, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
     { 0x0140, CAM_DATA_02 },
@@ -1719,7 +1677,7 @@ CameraModeValue D_801B4FA0[] = {
  * -------    -----    --------
  * NORMAL1    STILL    NORM1
  */
-CameraModeValue D_801B4FC8[] = {
+CameraModeValue sSetNormal1ModeStillData[] = {
     { -20, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
     { 0x0140, CAM_DATA_02 },
@@ -1855,7 +1813,7 @@ CameraModeValue D_801B507C[] = {
  * --------    ------    --------
  * DUNGEON0    NORMAL    NORM1
  */
-CameraModeValue D_801B5094[] = {
+CameraModeValue sSetDungeon0ModeNormalData[] = {
     { -20, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
     { 250, CAM_DATA_02 },
@@ -1880,7 +1838,7 @@ CameraModeValue D_801B5094[] = {
  * ROOM1         TARGET    PARA1
  * ROOM2         TARGET    PARA1
  */
-CameraModeValue D_801B50BC[] = {
+CameraModeValue sSetDungeon0ModeTargetData[] = {
     { 0, CAM_DATA_YOFFSET },
     { 200, CAM_DATA_01 },
     { 0x0019, CAM_DATA_02 },
@@ -1905,7 +1863,7 @@ CameraModeValue D_801B50BC[] = {
  * ONTHEPOLE    FOLLOWTARGET    KEEP1
  * DUNGEON4     FOLLOWTARGET    KEEP1
  */
-CameraModeValue D_801B50EC[] = {
+CameraModeValue sSetDungeon0ModeFollowTargetData[] = {
     { -20, CAM_DATA_YOFFSET },
     { 0x0078, CAM_DATA_01 },
     { 0x008C, CAM_DATA_02 },
@@ -1929,7 +1887,7 @@ CameraModeValue D_801B50EC[] = {
  * ONTHEPOLE    BATTLE    BATT1
  * DUNGEON4     BATTLE    BATT1
  */
-CameraModeValue D_801B511C[] = {
+CameraModeValue sSetDungeon0ModeBattleData[] = {
     { -30, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
     { 0x00F0, CAM_DATA_02 },
@@ -1959,7 +1917,7 @@ CameraModeValue D_801B511C[] = {
  * BOSS_GOHT     FOLLOWBOOMERANG    KEEP1
  * DUNGEON4      FOLLOWBOOMERANG    KEEP1
  */
-CameraModeValue D_801B5150[] = {
+CameraModeValue sSetDungeon0ModeFollowBoomerangData[] = {
     { -5, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
     { 0x00F0, CAM_DATA_02 },
@@ -1979,7 +1937,7 @@ CameraModeValue D_801B5150[] = {
  * --------    ----    --------
  * DUNGEON0    JUMP    NORM1
  */
-CameraModeValue D_801B5180[] = {
+CameraModeValue sSetDungeon0ModeJumpData[] = {
     { -20, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
     { 250, CAM_DATA_02 },
@@ -2008,7 +1966,7 @@ CameraModeValue D_801B5180[] = {
  * ROOM2         FREEFALL    PARA1
  * DUNGEON4      FREEFALL    PARA1
  */
-CameraModeValue D_801B51A8[] = {
+CameraModeValue sSetDungeon0ModeFreeFallData[] = {
     { -10, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
     { 100, CAM_DATA_02 },
@@ -2039,7 +1997,7 @@ CameraModeValue D_801B51A8[] = {
  * ROOM2         CLIMB    JUMP2
  * DUNGEON4      CLIMB    JUMP2
  */
-CameraModeValue D_801B51D8[] = {
+CameraModeValue sSetDungeon0ModeClimbData[] = {
     { -40, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
     { 250, CAM_DATA_02 },
@@ -2067,7 +2025,7 @@ CameraModeValue D_801B51D8[] = {
  * ROOM2         CLIMBZ    JUMP2
  * DUNGEON4      CLIMBZ    JUMP2
  */
-CameraModeValue D_801B51FC[] = {
+CameraModeValue sSetDungeon0ModeClimbZData[] = {
     { -40, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
     { 250, CAM_DATA_02 },
@@ -2095,7 +2053,7 @@ CameraModeValue D_801B51FC[] = {
  * ROOM2         CHARGE    PARA1
  * DUNGEON4      CHARGE    PARA1
  */
-CameraModeValue D_801B5220[] = {
+CameraModeValue sSetDungeon0ModeChargeData[] = {
     { 0, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
     { -20, CAM_DATA_02 },
@@ -2115,7 +2073,7 @@ CameraModeValue D_801B5220[] = {
  * --------    -------    --------
  * DUNGEON0    CHARGEZ    PARA1
  */
-CameraModeValue D_801B5250[] = {
+CameraModeValue sSetDungeon0ModeChargeZData[] = {
     { 50, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
     { -20, CAM_DATA_02 },
@@ -2145,7 +2103,7 @@ CameraModeValue D_801B5250[] = {
  * ROOM2         HANG    PARA1
  * DUNGEON4      HANG    PARA1
  */
-CameraModeValue D_801B5280[] = {
+CameraModeValue sSetDungeon0ModeHangData[] = {
     { -40, CAM_DATA_YOFFSET },
     { 220, CAM_DATA_01 },
     { 50, CAM_DATA_02 },
@@ -2175,7 +2133,7 @@ CameraModeValue D_801B5280[] = {
  * ROOM2         HANGZ    PARA1
  * DUNGEON4      HANGZ    PARA1
  */
-CameraModeValue D_801B52B0[] = {
+CameraModeValue sSetDungeon0ModeHangZData[] = {
     { 0xFFB0, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
     { 50, CAM_DATA_02 },
@@ -2195,7 +2153,7 @@ CameraModeValue D_801B52B0[] = {
  * --------    -----    --------
  * DUNGEON0    STILL    NORM1
  */
-CameraModeValue D_801B52E0[] = {
+CameraModeValue sSetDungeon0ModeStillData[] = {
     { -10, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
     { 220, CAM_DATA_02 },
@@ -2218,7 +2176,7 @@ CameraModeValue D_801B52E0[] = {
  * BOSS_GOHT     PUSHPULL    PARA1
  * DUNGEON4      PUSHPULL    PARA1
  */
-CameraModeValue D_801B5308[] = {
+CameraModeValue sSetDungeon0ModePushPullData[] = {
     { 0, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
     { 0x0005, CAM_DATA_02 },
@@ -2309,7 +2267,7 @@ CameraModeValue D_801B53A4[] = {
 /**
  * Setting    Mode       Function
  * -------    -------    --------
- * ITEM0      NUTSFLY    KEEP4
+ * ITEM0      DEKUFLY    KEEP4
  */
 CameraModeValue D_801B53C8[] = {
     { 10, CAM_DATA_YOFFSET },
@@ -2399,7 +2357,7 @@ CameraModeValue D_801B5458[] = {
 /**
  * Setting    Mode       Function
  * -------    -------    --------
- * ITEM1      NUTSFLY    KEEP4
+ * ITEM1      DEKUFLY    KEEP4
  */
 CameraModeValue D_801B547C[] = {
     { 0xFFC4, CAM_DATA_YOFFSET },
@@ -2489,7 +2447,7 @@ CameraModeValue D_801B550C[] = {
 /**
  * Setting    Mode       Function
  * -------    -------    --------
- * ITEM2      NUTSFLY    KEEP4
+ * ITEM2      DEKUFLY    KEEP4
  */
 CameraModeValue D_801B5530[] = {
     { 0xFFC4, CAM_DATA_YOFFSET },
@@ -2579,7 +2537,7 @@ CameraModeValue D_801B55C0[] = {
 /**
  * Setting    Mode       Function
  * -------    -------    --------
- * ITEM3      NUTSFLY    KEEP4
+ * ITEM3      DEKUFLY    KEEP4
  */
 CameraModeValue D_801B55E4[] = {
     { -20, CAM_DATA_YOFFSET },
@@ -2670,7 +2628,7 @@ CameraModeValue D_801B5674[] = {
 /**
  * Setting    Mode       Function
  * -------    -------    --------
- * WARP0      NUTSFLY    KEEP4
+ * WARP0      DEKUFLY    KEEP4
  */
 CameraModeValue D_801B5698[] = {
     { 0xFFC4, CAM_DATA_YOFFSET },
@@ -2694,7 +2652,7 @@ CameraModeValue D_801B5698[] = {
  * -------    ------    --------
  * DEATH      NORMAL    KEEP4
  */
-CameraModeValue D_801B56BC[] = {
+CameraModeValue sSetDeathModeNormalData[] = {
     { 0xFFBA, CAM_DATA_YOFFSET },
     { 0x00A0, CAM_DATA_01 },
     { 0, CAM_DATA_PITCHTARGET },
@@ -2711,9 +2669,9 @@ CameraModeValue D_801B56BC[] = {
  * -------    ---------    --------
  * DEATH      JUMP         KEEP4
  * DEATH      GORONDASH    KEEP4
- * DEATH      NUTSFLY      KEEP4
+ * DEATH      DEKUFLY      KEEP4
  */
-CameraModeValue D_801B56E0[] = {
+CameraModeValue sSetDeathModeJumpData[] = {
     { 0xFFBA, CAM_DATA_YOFFSET },
     { 0x00A0, CAM_DATA_01 },
     { 0, CAM_DATA_PITCHTARGET },
@@ -2730,7 +2688,7 @@ CameraModeValue D_801B56E0[] = {
  * -------    --------    --------
  * DEATH      NUTSSHOT    KEEP4
  */
-CameraModeValue D_801B5704[] = {
+CameraModeValue sSetDeathModeDekuShootData[] = {
     { 0xFFBA, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
     { 0, CAM_DATA_PITCHTARGET },
@@ -2753,7 +2711,7 @@ CameraModeValue D_801B5704[] = {
  * REBIRTH    NORMAL       KEEP4
  * REBIRTH    JUMP         KEEP4
  * REBIRTH    GORONDASH    KEEP4
- * REBIRTH    NUTSFLY      KEEP4
+ * REBIRTH    DEKUFLY      KEEP4
  */
 CameraModeValue D_801B5728[] = {
     { 0xFFC4, CAM_DATA_YOFFSET },
@@ -2810,7 +2768,7 @@ CameraModeValue D_801B5770[] = {
  * --------    ------    --------
  * DUNGEON1    NORMAL    NORM1
  */
-CameraModeValue D_801B577C[] = {
+CameraModeValue sSetDungeon1ModeNormalData[] = {
     { -20, CAM_DATA_YOFFSET },
     { 350, CAM_DATA_01 },
     { 0x0190, CAM_DATA_02 },
@@ -2828,7 +2786,7 @@ CameraModeValue D_801B577C[] = {
  * --------    ----    --------
  * DUNGEON1    JUMP    NORM1
  */
-CameraModeValue D_801B57A4[] = {
+CameraModeValue sSetDungeon1ModeJumpData[] = {
     { -20, CAM_DATA_YOFFSET },
     { 350, CAM_DATA_01 },
     { 0x0190, CAM_DATA_02 },
@@ -2846,7 +2804,7 @@ CameraModeValue D_801B57A4[] = {
  * --------    -----    --------
  * DUNGEON1    STILL    NORM1
  */
-CameraModeValue D_801B57CC[] = {
+CameraModeValue sSetDungeon1ModeStillData[] = {
     { -20, CAM_DATA_YOFFSET },
     { 350, CAM_DATA_01 },
     { 0x0190, CAM_DATA_02 },
@@ -2865,7 +2823,7 @@ CameraModeValue D_801B57CC[] = {
  * DUNGEON1     PUSHPULL    PARA1
  * ONTHEPOLL    PUSHPULL    PARA1
  */
-CameraModeValue D_801B57F4[] = {
+CameraModeValue sSetDungeon1ModePushPullData[] = {
     { 0, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
     { 0x0005, CAM_DATA_02 },
@@ -3288,7 +3246,7 @@ CameraModeValue D_801B5A64[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5A94[] = {
+CameraModeValue sSetDungeon2ModeNormalData[] = {
     /* CAM_FUNC_NORM1 */
     { -10, CAM_DATA_YOFFSET },
     { 270, CAM_DATA_01 },
@@ -3307,7 +3265,7 @@ CameraModeValue D_801B5A94[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5ABC[] = {
+CameraModeValue sSetDungeon2ModeBattleData[] = {
     /* CAM_FUNC_BATT1 */
     { -40, CAM_DATA_YOFFSET },
     { 200, CAM_DATA_01 },
@@ -3329,7 +3287,7 @@ CameraModeValue D_801B5ABC[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5AF0[] = {
+CameraModeValue sSetDungeon2ModeJumpData[] = {
     /* CAM_FUNC_NORM1 */
     { -20, CAM_DATA_YOFFSET },
     { 270, CAM_DATA_01 },
@@ -3348,7 +3306,7 @@ CameraModeValue D_801B5AF0[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5B18[] = {
+CameraModeValue sSetDungeon2ModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { -10, CAM_DATA_YOFFSET },
     { 270, CAM_DATA_01 },
@@ -3367,7 +3325,7 @@ CameraModeValue D_801B5B18[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5B40[] = {
+CameraModeValue sSetDungeon2ModePushPullData[] = {
     /* CAM_FUNC_PARA1 */
     { 0, CAM_DATA_YOFFSET },
     { 200, CAM_DATA_01 },
@@ -3388,7 +3346,7 @@ CameraModeValue D_801B5B40[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5B70[] = {
+CameraModeValue sSetBossOdolwaModeNormalData[] = {
     /* CAM_FUNC_NORM1 */
     { -20, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
@@ -3407,7 +3365,7 @@ CameraModeValue D_801B5B70[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5B98[] = {
+CameraModeValue sSetBossOdolwaModeFollowTargetData[] = {
     /* CAM_FUNC_KEEP1 */
     { -50, CAM_DATA_YOFFSET },
     { 300, CAM_DATA_01 },
@@ -3428,7 +3386,7 @@ CameraModeValue D_801B5B98[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5BC8[] = {
+CameraModeValue sSetBossOdolwaModeTalkData[] = {
     /* CAM_FUNC_KEEP3 */
     { -20, CAM_DATA_YOFFSET },
     { 230, CAM_DATA_01 },
@@ -3450,7 +3408,7 @@ CameraModeValue D_801B5BC8[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5BFC[] = {
+CameraModeValue sSetBossOdolwaModeBattleData[] = {
     /* CAM_FUNC_BATT1 */
     { 0xFFC4, CAM_DATA_YOFFSET },
     { 200, CAM_DATA_01 },
@@ -3472,7 +3430,7 @@ CameraModeValue D_801B5BFC[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5C30[] = {
+CameraModeValue sSetBossOdolwaModeJumpData[] = {
     /* CAM_FUNC_NORM1 */
     { -20, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
@@ -3491,7 +3449,7 @@ CameraModeValue D_801B5C30[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5C58[] = {
+CameraModeValue sSetBossOdolwaModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { -20, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
@@ -3786,7 +3744,7 @@ CameraModeValue D_801B5E8C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5EB4[] = {
+CameraModeValue sSetDungeon3ModeNormalData[] = {
     /* CAM_FUNC_NORM1 */
     { -30, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
@@ -3805,7 +3763,7 @@ CameraModeValue D_801B5EB4[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5EDC[] = {
+CameraModeValue sSetDungeon3ModeTargetData[] = {
     /* CAM_FUNC_PARA1 */
     { -30, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
@@ -3826,7 +3784,7 @@ CameraModeValue D_801B5EDC[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5F0C[] = {
+CameraModeValue sSetDungeon3ModeJumpData[] = {
     /* CAM_FUNC_NORM1 */
     { -30, CAM_DATA_YOFFSET },
     { 0x00A0, CAM_DATA_01 },
@@ -3845,7 +3803,7 @@ CameraModeValue D_801B5F0C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5F34[] = {
+CameraModeValue sSetDungeon3ModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { -40, CAM_DATA_YOFFSET },
     { 0x00AA, CAM_DATA_01 },
@@ -3864,7 +3822,7 @@ CameraModeValue D_801B5F34[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5F5C[] = {
+CameraModeValue sSetDungeon3ModePushPullData[] = {
     /* CAM_FUNC_PARA1 */
     { 0, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
@@ -3885,7 +3843,7 @@ CameraModeValue D_801B5F5C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5F8C[] = {
+CameraModeValue sSetTelescopeModeNormalData[] = {
     /* CAM_FUNC_SUBJ1 */
     { 0, CAM_DATA_YOFFSET },
     { 0x0005, CAM_DATA_01 },
@@ -3903,7 +3861,7 @@ CameraModeValue D_801B5F8C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5FB0[] = {
+CameraModeValue sSetTelescopeModeTargetData[] = {
     /* CAM_FUNC_SUBJ1 */
     { 0, CAM_DATA_YOFFSET },
     { 0x0005, CAM_DATA_01 },
@@ -3921,7 +3879,7 @@ CameraModeValue D_801B5FB0[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5FD4[] = {
+CameraModeValue sSetTelescopeModeFirstPersonData[] = {
     /* CAM_FUNC_SUBJ1 */
     { 0, CAM_DATA_YOFFSET },
     { 0x0005, CAM_DATA_01 },
@@ -3939,7 +3897,7 @@ CameraModeValue D_801B5FD4[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B5FF8[] = {
+CameraModeValue sSetTelescopeModeDekuHideData[] = {
     /* CAM_FUNC_SUBJ1 */
     { 0, CAM_DATA_YOFFSET },
     { 0x0005, CAM_DATA_01 },
@@ -4752,7 +4710,7 @@ CameraModeValue D_801B66C0[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B66E8[] = {
+CameraModeValue sSetBossMajoraModeNormalData[] = {
     /* CAM_FUNC_NORM1 */
     { 0, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
@@ -4771,7 +4729,7 @@ CameraModeValue D_801B66E8[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6710[] = {
+CameraModeValue sSetBossMajoraModeFollowTargetData[] = {
     /* CAM_FUNC_KEEP1 */
     { -30, CAM_DATA_YOFFSET },
     { 0x00F0, CAM_DATA_01 },
@@ -4792,7 +4750,7 @@ CameraModeValue D_801B6710[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6740[] = {
+CameraModeValue sSetBossMajoraModeBattleData[] = {
     /* CAM_FUNC_BATT1 */
     { 0xFFC4, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
@@ -4814,7 +4772,7 @@ CameraModeValue D_801B6740[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6774[] = {
+CameraModeValue sSetBossMajoraModeJumpData[] = {
     /* CAM_FUNC_NORM1 */
     { -20, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
@@ -4833,7 +4791,7 @@ CameraModeValue D_801B6774[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B679C[] = {
+CameraModeValue sSetBossMajoraModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { 0, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
@@ -4852,7 +4810,7 @@ CameraModeValue D_801B679C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B67C4[] = {
+CameraModeValue sSetBossTwinmoldModeNormalData[] = {
     /* CAM_FUNC_NORM1 */
     { 20, CAM_DATA_YOFFSET },
     { 350, CAM_DATA_01 },
@@ -4871,7 +4829,7 @@ CameraModeValue D_801B67C4[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B67EC[] = {
+CameraModeValue sSetBossTwinmoldModeTargetData[] = {
     /* CAM_FUNC_PARA1 */
     { 0, CAM_DATA_YOFFSET },
     { 0x0190, CAM_DATA_01 },
@@ -4892,7 +4850,7 @@ CameraModeValue D_801B67EC[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B681C[] = {
+CameraModeValue sSetBossTwinmoldModeFollowTargetData[] = {
     /* CAM_FUNC_KEEP1 */
     { -30, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
@@ -4913,7 +4871,7 @@ CameraModeValue D_801B681C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B684C[] = {
+CameraModeValue sSetBossTwinmoldModeBattleData[] = {
     /* CAM_FUNC_BATT1 */
     { 0, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -4935,7 +4893,7 @@ CameraModeValue D_801B684C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6880[] = {
+CameraModeValue sSetBossTwinmoldModeJumpData[] = {
     /* CAM_FUNC_NORM1 */
     { -20, CAM_DATA_YOFFSET },
     { 350, CAM_DATA_01 },
@@ -4954,7 +4912,7 @@ CameraModeValue D_801B6880[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B68A8[] = {
+CameraModeValue sSetBossTwinmoldModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { -20, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
@@ -4973,7 +4931,7 @@ CameraModeValue D_801B68A8[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B68D0[] = {
+CameraModeValue sSetBossGohtModeNormalData[] = {
     /* CAM_FUNC_NORM1 */
     { -20, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
@@ -4992,7 +4950,7 @@ CameraModeValue D_801B68D0[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B68F8[] = {
+CameraModeValue sSetBossGohtModeBattleData[] = {
     /* CAM_FUNC_BATT1 */
     { -25, CAM_DATA_YOFFSET },
     { 220, CAM_DATA_01 },
@@ -5014,7 +4972,7 @@ CameraModeValue D_801B68F8[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B692C[] = {
+CameraModeValue sSetBossGohtModeJumpData[] = {
     /* CAM_FUNC_NORM1 */
     { -20, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
@@ -5033,7 +4991,7 @@ CameraModeValue D_801B692C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6954[] = {
+CameraModeValue sSetBossGohtModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { -20, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
@@ -5052,7 +5010,7 @@ CameraModeValue D_801B6954[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B697C[] = {
+CameraModeValue sSetBossGohtModeGoronDashData[] = {
     /* CAM_FUNC_NORM1 */
     { 60, CAM_DATA_YOFFSET },
     { 200, CAM_DATA_01 },
@@ -5071,7 +5029,7 @@ CameraModeValue D_801B697C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B69A4[] = {
+CameraModeValue sSetBossGyorgModeNormalData[] = {
     /* CAM_FUNC_JUMP3 */
     { -20, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
@@ -5090,7 +5048,7 @@ CameraModeValue D_801B69A4[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B69CC[] = {
+CameraModeValue sSetBossGyorgModeFollowTargetData[] = {
     /* CAM_FUNC_KEEP1 */
     { -30, CAM_DATA_YOFFSET },
     { 200, CAM_DATA_01 },
@@ -5111,7 +5069,7 @@ CameraModeValue D_801B69CC[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B69FC[] = {
+CameraModeValue sSetBossGyorgModeBattleData[] = {
     /* CAM_FUNC_BATT1 */
     { -30, CAM_DATA_YOFFSET },
     { 0x00BE, CAM_DATA_01 },
@@ -5133,7 +5091,7 @@ CameraModeValue D_801B69FC[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6A30[] = {
+CameraModeValue sSetBossGyorgModeGoronJumpData[] = {
     /* CAM_FUNC_JUMP3 */
     { -40, CAM_DATA_YOFFSET },
     { 0x00A0, CAM_DATA_01 },
@@ -5152,7 +5110,7 @@ CameraModeValue D_801B6A30[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6A58[] = {
+CameraModeValue sSetBossGyorgModeDekuFlyData[] = {
     /* CAM_FUNC_JUMP3 */
     { -30, CAM_DATA_YOFFSET },
     { 220, CAM_DATA_01 },
@@ -5171,7 +5129,7 @@ CameraModeValue D_801B6A58[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6A80[] = {
+CameraModeValue sSetBossGyorgModeDekuHideData[] = {
     /* CAM_FUNC_JUMP3 */
     { 0xFFC4, CAM_DATA_YOFFSET },
     { 0x00A0, CAM_DATA_01 },
@@ -5190,7 +5148,7 @@ CameraModeValue D_801B6A80[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6AA8[] = {
+CameraModeValue sSetBossGyorgModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { -40, CAM_DATA_YOFFSET },
     { 100, CAM_DATA_01 },
@@ -5209,7 +5167,7 @@ CameraModeValue D_801B6AA8[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6AD0[] = {
+CameraModeValue sSetPinnacleRockModeNormalData[] = {
     /* CAM_FUNC_JUMP3 */
     { -40, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
@@ -5228,7 +5186,7 @@ CameraModeValue D_801B6AD0[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6AF8[] = {
+CameraModeValue sSetPinnacleRockModeTargetData[] = {
     /* CAM_FUNC_PARA1 */
     { -50, CAM_DATA_YOFFSET },
     { 350, CAM_DATA_01 },
@@ -5249,7 +5207,7 @@ CameraModeValue D_801B6AF8[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6B28[] = {
+CameraModeValue sSetPinnacleRockModeGoronJumpData[] = {
     /* CAM_FUNC_JUMP3 */
     { -40, CAM_DATA_YOFFSET },
     { 0x0140, CAM_DATA_01 },
@@ -5268,7 +5226,7 @@ CameraModeValue D_801B6B28[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6B50[] = {
+CameraModeValue sSetPinnacleRockModeDekuFlyData[] = {
     /* CAM_FUNC_JUMP3 */
     { -40, CAM_DATA_YOFFSET },
     { 300, CAM_DATA_01 },
@@ -5287,7 +5245,7 @@ CameraModeValue D_801B6B50[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6B78[] = {
+CameraModeValue sSetPinnacleRockModeDekuHideData[] = {
     /* CAM_FUNC_JUMP3 */
     { 0xFFC4, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -5306,7 +5264,7 @@ CameraModeValue D_801B6B78[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6BA0[] = {
+CameraModeValue sSetPinnacleRockModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { -40, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
@@ -5325,7 +5283,7 @@ CameraModeValue D_801B6BA0[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6BC8[] = {
+CameraModeValue sSetPinnacleRockModeGoronDashData[] = {
     /* CAM_FUNC_JUMP3 */
     { -40, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
@@ -5344,7 +5302,7 @@ CameraModeValue D_801B6BC8[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6BF0[] = {
+CameraModeValue sSetNormal2ModeNormalData[] = {
     /* CAM_FUNC_NORM1 */
     { -10, CAM_DATA_YOFFSET },
     { 350, CAM_DATA_01 },
@@ -5363,7 +5321,7 @@ CameraModeValue D_801B6BF0[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6C18[] = {
+CameraModeValue sSetNormal2ModeTargetData[] = {
     /* CAM_FUNC_PARA1 */
     { 0, CAM_DATA_YOFFSET },
     { 350, CAM_DATA_01 },
@@ -5384,7 +5342,7 @@ CameraModeValue D_801B6C18[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6C48[] = {
+CameraModeValue sSetNormal2ModeJumpData[] = {
     /* CAM_FUNC_NORM1 */
     { -10, CAM_DATA_YOFFSET },
     { 350, CAM_DATA_01 },
@@ -5403,7 +5361,7 @@ CameraModeValue D_801B6C48[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6C70[] = {
+CameraModeValue sSetNormal2ModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { -10, CAM_DATA_YOFFSET },
     { 350, CAM_DATA_01 },
@@ -5538,7 +5496,7 @@ CameraModeValue D_801B6D74[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6D90[] = {
+CameraModeValue sSetWhirlpoolModeNormalData[] = {
     /* CAM_FUNC_JUMP3 */
     { -10, CAM_DATA_YOFFSET },
     { 0x0118, CAM_DATA_01 },
@@ -5557,7 +5515,7 @@ CameraModeValue D_801B6D90[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6DB8[] = {
+CameraModeValue sSetWhirlpoolModeFreeFallData[] = {
     /* CAM_FUNC_JUMP3 */
     { 0, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
@@ -5576,7 +5534,7 @@ CameraModeValue D_801B6DB8[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6DE0[] = {
+CameraModeValue sSetWhirlpoolModeGoronJumpData[] = {
     /* CAM_FUNC_JUMP3 */
     { -40, CAM_DATA_YOFFSET },
     { 0x0140, CAM_DATA_01 },
@@ -5595,7 +5553,7 @@ CameraModeValue D_801B6DE0[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6E08[] = {
+CameraModeValue sSetWhirlpoolModeDekuFlyData[] = {
     /* CAM_FUNC_JUMP3 */
     { -40, CAM_DATA_YOFFSET },
     { 300, CAM_DATA_01 },
@@ -5614,7 +5572,7 @@ CameraModeValue D_801B6E08[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6E30[] = {
+CameraModeValue sSetWhirlpoolModeDekuHideData[] = {
     /* CAM_FUNC_JUMP3 */
     { 0xFFC4, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -5633,7 +5591,7 @@ CameraModeValue D_801B6E30[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6E58[] = {
+CameraModeValue sSetWhirlpoolModeGoronDashData[] = {
     /* CAM_FUNC_JUMP3 */
     { -40, CAM_DATA_YOFFSET },
     { 220, CAM_DATA_01 },
@@ -5652,7 +5610,7 @@ CameraModeValue D_801B6E58[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6E80[] = {
+CameraModeValue sSetCuccoShackModeNormalData[] = {
     /* CAM_FUNC_NORM1 */
     { 0xFFBA, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
@@ -5671,7 +5629,7 @@ CameraModeValue D_801B6E80[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6EA8[] = {
+CameraModeValue sSetCuccoShackModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { -40, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
@@ -5690,7 +5648,7 @@ CameraModeValue D_801B6EA8[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6ED0[] = {
+CameraModeValue sSetCuccoShackModeDekuHideData[] = {
     /* CAM_FUNC_NORM1 */
     { -40, CAM_DATA_YOFFSET },
     { 250, CAM_DATA_01 },
@@ -5709,7 +5667,7 @@ CameraModeValue D_801B6ED0[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6EF8[] = {
+CameraModeValue sSetGiantModeNormalData[] = {
     /* CAM_FUNC_NORM1 */
     { -40, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -5728,7 +5686,7 @@ CameraModeValue D_801B6EF8[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6F20[] = {
+CameraModeValue sSetGiantModeTargetData[] = {
     /* CAM_FUNC_PARA1 */
     { -40, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
@@ -5749,7 +5707,7 @@ CameraModeValue D_801B6F20[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6F50[] = {
+CameraModeValue sSetGiantModeJumpData[] = {
     /* CAM_FUNC_NORM1 */
     { -10, CAM_DATA_YOFFSET },
     { 100, CAM_DATA_01 },
@@ -5768,7 +5726,7 @@ CameraModeValue D_801B6F50[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B6F78[] = {
+CameraModeValue sSetGiantModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { -40, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -6100,7 +6058,7 @@ CameraModeValue D_801B7210[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B7244[] = {
+CameraModeValue sSetNormal4ModeTalkData[] = {
     /* CAM_FUNC_KEEP3 */
     { -20, CAM_DATA_YOFFSET },
     { 0x006E, CAM_DATA_01 },
@@ -6122,7 +6080,7 @@ CameraModeValue D_801B7244[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B7278[] = {
+CameraModeValue sSetElegyShellModeNormalData[] = {
     /* CAM_FUNC_KEEP4 */
     { -45, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -6140,7 +6098,7 @@ CameraModeValue D_801B7278[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B729C[] = {
+CameraModeValue sSetElegyShellModeJumpData[] = {
     /* CAM_FUNC_KEEP4 */
     { -40, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -6158,7 +6116,7 @@ CameraModeValue D_801B729C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B72C0[] = {
+CameraModeValue sSetElegyShellModeDekuShootData[] = {
     /* CAM_FUNC_KEEP4 */
     { -20, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -6176,7 +6134,7 @@ CameraModeValue D_801B72C0[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B72E4[] = {
+CameraModeValue sSetElegyShellModeGoronDashData[] = {
     /* CAM_FUNC_KEEP4 */
     { -50, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -6194,7 +6152,7 @@ CameraModeValue D_801B72E4[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B7308[] = {
+CameraModeValue sSetElegyShellModeDekuFlyData[] = {
     /* CAM_FUNC_KEEP4 */
     { 0xFFC4, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -6212,7 +6170,7 @@ CameraModeValue D_801B7308[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B732C[] = {
+CameraModeValue sSetDungeon4ModeNormalData[] = {
     /* CAM_FUNC_NORM1 */
     { 0, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -6231,7 +6189,7 @@ CameraModeValue D_801B732C[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B7354[] = {
+CameraModeValue sSetDungeon4ModeTargetData[] = {
     /* CAM_FUNC_PARA1 */
     { 0, CAM_DATA_YOFFSET },
     { 200, CAM_DATA_01 },
@@ -6252,7 +6210,7 @@ CameraModeValue D_801B7354[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B7384[] = {
+CameraModeValue sSetDungeon4ModeJumpData[] = {
     /* CAM_FUNC_NORM1 */
     { 0, CAM_DATA_YOFFSET },
     { 0x0096, CAM_DATA_01 },
@@ -6271,7 +6229,7 @@ CameraModeValue D_801B7384[] = {
  * -------    ------    --------
  * NORMAL0    NORMAL    NORM1
  */
-CameraModeValue D_801B73AC[] = {
+CameraModeValue sSetDungeon4ModeStillData[] = {
     /* CAM_FUNC_NORM1 */
     { 0, CAM_DATA_YOFFSET },
     { 180, CAM_DATA_01 },
@@ -6294,7 +6252,7 @@ CameraModeValue D_801B73AC[] = {
 #define CAM_SETTING_MODE_ENTRY(func, data) \
     { func, ARRAY_COUNT(data), data }
 
-CameraMode sCamSetNorm0Modes[] = {
+CameraMode sCamSetNormal0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeNormalData),
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),
@@ -6327,38 +6285,38 @@ CameraMode sCamSetNorm0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeTargetData),
 };
 
-CameraMode sCamSetNorm3Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4BDC),  
+CameraMode sCamSetNormal3Modes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeNormalData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4CFC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeGoronDashData),  
     { CAM_FUNC_NONE, 0, NULL },                               
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4C84),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B4C04),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal3ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     { CAM_FUNC_NONE, 0, NULL },                               
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4CAC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B4CD4),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeDekuHideData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal3ModeStillData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4C34),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeFreeFallData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModePushPullData),  
     { CAM_FUNC_NONE, 0, NULL },                               
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4C5C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeGoronJumpData),  
 };
 
-CameraMode sCamSetCirc5Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ2, D_801B4D24),  
+CameraMode sCamSetPivotDivingModes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ2, sSetPivotDivingModeNormalData),  
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
@@ -6368,12 +6326,12 @@ CameraMode sCamSetCirc5Modes[] = {
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ2, D_801B4D34),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ2, sSetPivotDivingModeTargetData),  
 };
 
-CameraMode sCamSetHorse0Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, D_801B4D44),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, D_801B4D8C),   
+CameraMode sCamSetHorseModes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, sSetHorseModeNormalData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, sSetHorseModeJumpData),   
     { CAM_FUNC_NONE, 0, NULL },          
     { CAM_FUNC_NONE, 0, NULL },          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
@@ -6381,26 +6339,26 @@ CameraMode sCamSetHorse0Modes[] = {
     { CAM_FUNC_NONE, 0, NULL },          
     { CAM_FUNC_NONE, 0, NULL },          
     { CAM_FUNC_NONE, 0, NULL },          
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B4E2C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, D_801B4D68),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, D_801B4E5C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, D_801B4DD4),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, D_801B4DB0),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B4DF8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetHorseModeFollowTargetData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, sSetHorseModeTargetData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetHorseModeTalkData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetHorseModeSlingShotData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetHorseModeBowArrowData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetHorseModeBattleData),  
     { CAM_FUNC_NONE, 0, NULL },          
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, D_801B4E90),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, sSetHorseModeStillData),   
 };
 
 CameraMode sCamSetZora0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, D_801B4EB4),  
 };
 
-CameraMode sCamSetPreRend0Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD3, D_801B4ED8),  
+CameraMode sCamSetPreRendFixedModes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD3, sSetPrerendFixedModeNormalData),  
 };
 
-CameraMode sCamSetPreRend1Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ7, D_801B4EDC),  
+CameraMode sCamSetPreRendPivotModes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ7, sSetPrerendPivotModeNormalData),  
 };
 
 CameraMode sCamSetDoorCModes[] = {
@@ -6444,8 +6402,8 @@ CameraMode sCamSetFukan0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
-CameraMode sCamSetNorm1Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B4FA0),  
+CameraMode sCamSetNormal1Modes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal1ModeNormalData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
@@ -6461,7 +6419,7 @@ CameraMode sCamSetNorm1Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B4FC8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal1ModeStillData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbZData),   
@@ -6539,35 +6497,35 @@ CameraMode sCamSetSpiralModes[] = {
 };
 
 CameraMode sCamSetDungeon0Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5094),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5180),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon0ModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon0ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5150),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B50EC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B50BC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowTargetData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B511C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetDungeon0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B52E0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon0ModeStillData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5308),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModePushPullData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBoomerangData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5250),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeTargetData),  
 };
 
@@ -6576,7 +6534,7 @@ CameraMode sCamSetItem0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B535C),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B53A4),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5380),  
-    { CAM_FUNC_NONE, 0, NULL },         
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B53C8),  
 };
 
@@ -6585,7 +6543,7 @@ CameraMode sCamSetItem1Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5410),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5458),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5434),  
-    { CAM_FUNC_NONE, 0, NULL },         
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B547C),  
 };
 
@@ -6594,7 +6552,7 @@ CameraMode sCamSetItem2Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B54C4),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B550C),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B54E8),  
-    { CAM_FUNC_NONE, 0, NULL },         
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5530),  
 };
 
@@ -6603,7 +6561,7 @@ CameraMode sCamSetItem3Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5578),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B55C0),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B559C),  
-    { CAM_FUNC_NONE, 0, NULL },         
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B55E4),  
 };
 
@@ -6616,17 +6574,17 @@ CameraMode sCamSetWarp0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B562C),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5674),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5650),  
-    { CAM_FUNC_NONE, 0, NULL },         
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5698),  
 };
 
 CameraMode sCamSetDeathModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B56BC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B56E0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B56E0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5704),  
-    { CAM_FUNC_NONE, 0, NULL },         
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B56E0),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetDeathModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetDeathModeJumpData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetDeathModeJumpData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetDeathModeDekuShootData),  
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetDeathModeJumpData),  
 };
 
 CameraMode sCamSetRebirthModes[] = {
@@ -6634,7 +6592,7 @@ CameraMode sCamSetRebirthModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5728),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5728),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B574C),  
-    { CAM_FUNC_NONE, 0, NULL },         
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5728),  
 };
 
@@ -6656,31 +6614,31 @@ CameraMode sCamSetWarp1Modes[] = {
 };
 
 CameraMode sCamSetDungeon1Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B577C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B57A4),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon1ModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon1ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5150),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B50EC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B50BC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowTargetData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B511C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetDungeon0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B57CC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon1ModeStillData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B57F4),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon1ModePushPullData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
@@ -6848,60 +6806,60 @@ CameraMode sCamSetSidedModes[] = {
 };
 
 CameraMode sCamSetDungeon2Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5A94),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5AF0),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon2ModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon2ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5150),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B50EC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B50BC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowTargetData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B5ABC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetDungeon2ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5B18),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon2ModeStillData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5B40),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon2ModePushPullData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
 CameraMode sCamSetBossOdolwaModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5B70),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5C30),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossOdolwaModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossOdolwaModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5150),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5B98),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B50BC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, D_801B5BC8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetBossOdolwaModeFollowTargetData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeTargetData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetBossOdolwaModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B5BFC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetBossOdolwaModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5C58),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossOdolwaModeStillData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5308),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModePushPullData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
@@ -6950,24 +6908,24 @@ CameraMode sCamSetMiniBossModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5150),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5D10),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B50BC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B5D40),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5D9C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5308),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModePushPullData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
@@ -7027,51 +6985,51 @@ CameraMode sCamSetFukan1Modes[] = {
 };
 
 CameraMode sCamSetDungeon3Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5EB4),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5F0C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon3ModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon3ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5150),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B50EC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5EDC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowTargetData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon3ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B511C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetDungeon0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5F34),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon3ModeStillData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5F5C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon3ModePushPullData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
 CameraMode sCamSetTelescopeModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, D_801B5F8C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetTelescopeModeNormalData),  
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, D_801B5FD4),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetTelescopeModeFirstPersonData),  
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, D_801B5FB0),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetTelescopeModeTargetData),  
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
     { CAM_FUNC_NONE, 0, NULL },         
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, D_801B5FF8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetTelescopeModeDekuHideData),  
 };
 
 CameraMode sCamSetRoom0Modes[] = {
@@ -7135,24 +7093,24 @@ CameraMode sCamSetOnThePoleModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5150),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B50EC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B645C),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B511C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetDungeon0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B655C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B64B4),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B64D8),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B64FC),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B652C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B57F4),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon1ModePushPullData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
@@ -7186,37 +7144,37 @@ CameraMode sCamSetInBushModes[] = {
 };
 
 CameraMode sCamSetBossMajoraModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B66E8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6774),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossMajoraModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossMajoraModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5150),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B6710),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B50BC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetBossMajoraModeFollowTargetData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B6740),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetBossMajoraModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B679C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossMajoraModeStillData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5308),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModePushPullData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
 CameraMode sCamSetBossTwinmoldModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B67C4),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6880),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossTwinmoldModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossTwinmoldModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
@@ -7224,14 +7182,14 @@ CameraMode sCamSetBossTwinmoldModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B681C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B67EC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetBossTwinmoldModeFollowTargetData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetBossTwinmoldModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B684C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetBossTwinmoldModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B68A8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossTwinmoldModeStillData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeClimbZData),   
@@ -7244,62 +7202,62 @@ CameraMode sCamSetBossTwinmoldModes[] = {
 };
 
 CameraMode sCamSetBossGohtModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B68D0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B692C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B697C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossGohtModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossGohtModeJumpData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossGohtModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5150),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B68F8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetBossGohtModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6954),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossGohtModeStillData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5308),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModePushPullData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
 CameraMode sCamSetBossGyorgModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B69A4),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetBossGyorgModeNormalData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4CFC),  
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeGoronDashData),  
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUSHOOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6A58),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetBossGyorgModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B69CC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetBossGyorgModeFollowTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
-    { CAM_FUNC_NONE, 0, NULL },          
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_SLINGSHOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B69FC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6A80),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6AA8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetBossGyorgModeBattleData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetBossGyorgModeDekuHideData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetBossGyorgModeStillData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4C34),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeFreeFallData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModePushPullData),  
-    { CAM_FUNC_NONE, 0, NULL },          
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6A30),  
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUFLYZ      
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetBossGyorgModeGoronJumpData),  
 };
 
 CameraMode sCamSetConnect0Modes[] = {
@@ -7307,38 +7265,38 @@ CameraMode sCamSetConnect0Modes[] = {
 };
 
 CameraMode sCamSetPinnacleRockModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6AD0),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetPinnacleRockModeNormalData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6BC8),  
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetPinnacleRockModeGoronDashData),  
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUSHOOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6B50),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetPinnacleRockModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B6AF8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetPinnacleRockModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
-    { CAM_FUNC_NONE, 0, NULL },          
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_SLINGSHOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6B78),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6BA0),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetPinnacleRockModeDekuHideData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetPinnacleRockModeStillData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4C34),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeFreeFallData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModePushPullData),  
-    { CAM_FUNC_NONE, 0, NULL },          
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6B28),  
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUFLYZ
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetPinnacleRockModeGoronJumpData),  
 };
 
-CameraMode sCamSetNorm2Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6BF0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6C48),  
+CameraMode sCamSetNormal2Modes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal2ModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal2ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
@@ -7347,13 +7305,13 @@ CameraMode sCamSetNorm2Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B6C18),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal2ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6C70),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal2ModeStillData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbZData),   
@@ -7399,53 +7357,53 @@ CameraMode sCamSetCircAModes[] = {
 };
 
 CameraMode sCamSetWhirlpoolModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6D90),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeNormalData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6E58),  
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeGoronDashData),  
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUSHOOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6E08),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B6AF8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetPinnacleRockModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
-    { CAM_FUNC_NONE, 0, NULL },          
+    { CAM_FUNC_NONE, 0, NULL },  // CAM_MODE_SLINGSHOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6E30),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeDekuHideData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeStillData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6DB8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeFreeFallData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModePushPullData),  
-    { CAM_FUNC_NONE, 0, NULL },          
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B6DE0),  
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUFLYZ
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeGoronJumpData),  
 };
 
 CameraMode sCamSetCuccoShackModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6E80),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6C48),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetCuccoShackModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal2ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    { CAM_FUNC_NONE, 0, NULL },          
+    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUFLY
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B6C18),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal2ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6ED0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6EA8),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetCuccoShackModeDekuHideData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetCuccoShackModeStillData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbZData),   
@@ -7457,8 +7415,8 @@ CameraMode sCamSetCuccoShackModes[] = {
 };
 
 CameraMode sCamSetGiantModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6EF8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6F50),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetGiantModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetGiantModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
@@ -7467,13 +7425,13 @@ CameraMode sCamSetGiantModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B6F20),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetGiantModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B6F78),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetGiantModeStillData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbZData),   
@@ -7500,20 +7458,20 @@ CameraMode sCamSetRoom1Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B62C4),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B6FD8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B50BC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, D_801B60A4),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B7008),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B7064),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B708C),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
@@ -7524,7 +7482,7 @@ CameraMode sCamSetWater2Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B7148),  
     { CAM_FUNC_NONE, 0, NULL },          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4C84),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
@@ -7534,18 +7492,18 @@ CameraMode sCamSetWater2Modes[] = {
     { CAM_FUNC_NONE, 0, NULL },          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4CAC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B4CD4),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeDekuHideData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal3ModeStillData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeChargeData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetNormal0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4C34),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeFreeFallData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModePushPullData),  
     { CAM_FUNC_NONE, 0, NULL },          
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B4C5C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeGoronJumpData),  
 };
 
 CameraMode sCamSetSokonasiModes[] = {
@@ -7567,8 +7525,8 @@ CameraMode sCamSetSokonasiModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ4, sSetNormal0ModeDekuHideData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ3, D_801B66C0),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ4, sSetNormal0ModeChargeData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ4, sSetNormal0ModeFreeFallData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ4, sSetNormal0ModeHangData),  
@@ -7650,20 +7608,20 @@ CameraMode sCamSetRoom2Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B62C4),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B6FD8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B50BC),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, D_801B7210),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B7008),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B7064),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B708C),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
@@ -7680,7 +7638,7 @@ CameraMode sCamSetNorm4Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeTargetData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, D_801B7244),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal4ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
@@ -7697,58 +7655,58 @@ CameraMode sCamSetNorm4Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
-CameraMode sCamSetShellModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B7278),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B729C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B72E4),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B72C0),  
+CameraMode sCamSetElegyShellModes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetElegyShellModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetElegyShellModeJumpData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetElegyShellModeGoronDashData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetElegyShellModeDekuShootData),  
     { CAM_FUNC_NONE, 0, NULL },         
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B7308),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetElegyShellModeDekuFlyData),  
 };
 
 CameraMode sCamSetDungeon4Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B732C),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B7384),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon4ModeNormalData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon4ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B5150),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, D_801B50EC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B7354),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetDungeon0ModeFollowTargetData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon4ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, D_801B511C),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetDungeon0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuHideData),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B73AC),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5220),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51D8),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, D_801B51FC),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetDungeon4ModeStillData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeChargeData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbData),   
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP2, sSetDungeon0ModeClimbZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SPEC5, sSetNormal0ModeHookshotData),   
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B51A8),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5280),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B52B0),  
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5308),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeFreeFallData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModeHangZData),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetDungeon0ModePushPullData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeDekuFlyZData),  
 };
 
 CameraSetting sCameraSettings[] = {
     { 0x00000000, 0x00000000, NULL },                     // CAM_SET_NONE
-    { 0x3FFFFFFF, 0x00000005, sCamSetNorm0Modes },        // CAM_SET_NORMAL0
-    { 0x05FFEFF7, 0x00000005, sCamSetNorm3Modes },        // CAM_SET_NORMAL3
-    { 0x00000401, 0x00000005, sCamSetCirc5Modes },        // CAM_SET_PIVOT_WATER_SURFACE
-    { 0x00017E13, 0x80000005, sCamSetHorse0Modes },       // CAM_SET_HORSE
+    { 0x3FFFFFFF, 0x00000005, sCamSetNormal0Modes },        // CAM_SET_NORMAL0
+    { 0x05FFEFF7, 0x00000005, sCamSetNormal3Modes },        // CAM_SET_NORMAL3
+    { 0x00000401, 0x00000005, sCamSetPivotDivingModes },        // CAM_SET_PIVOT_DIVING
+    { 0x00017E13, 0x80000005, sCamSetHorseModes },       // CAM_SET_HORSE
     { 0x00000001, 0x80000005, sCamSetZora0Modes },        // CAM_SET_ZORA
-    { 0x00000001, 0x8000000C, sCamSetPreRend0Modes },     // CAM_SET_PREREND0
-    { 0x00000001, 0x8000000C, sCamSetPreRend1Modes },     // CAM_SET_PREREND1
+    { 0x00000001, 0x8000000C, sCamSetPreRendFixedModes },     // CAM_SET_PREREND_FIXED
+    { 0x00000001, 0x8000000C, sCamSetPreRendPivotModes },     // CAM_SET_PREREND_PIVOT
     { 0x00000001, 0xC0000007, sCamSetDoorCModes },        // CAM_SET_DOORC
     { 0x00000001, 0xC000000E, sCamSetDemo0Modes },        // CAM_SET_DEMO0
     { 0x00000001, 0x80000005, sCamSetFree0Modes },        // CAM_SET_FREE0
     { 0x03FFFFFF, 0x00000005, sCamSetFukan0Modes },       // CAM_SET_FUKAN0
-    { 0x03FFFFFF, 0x00000005, sCamSetNorm1Modes },        // CAM_SET_NORMAL1
+    { 0x03FFFFFF, 0x00000005, sCamSetNormal1Modes },        // CAM_SET_NORMAL1
     { 0x03FFFFFF, 0x80000005, sCamSetNanameModes },       // CAM_SET_NANAME
     { 0x00001BD9, 0x80000005, sCamSetCirc0Modes },        // CAM_SET_CIRCLE0
     { 0x000011D9, 0x80000005, sCamSetFixed0Modes },       // CAM_SET_FIXED0
@@ -7810,7 +7768,7 @@ CameraSetting sCameraSettings[] = {
     { 0x05FFEFF7, 0x00000005, sCamSetBossGyorgModes },    // CAM_SET_BOSS_GYORG
     { 0x00000001, 0x00000005, sCamSetConnect0Modes },     // CAM_SET_CONNECT0
     { 0x05FFEFF7, 0x00000005, sCamSetPinnacleRockModes }, // CAM_SET_PINNACLE_ROCK
-    { 0x03FFFFFF, 0x00000005, sCamSetNorm2Modes },        // CAM_SET_NORMAL2
+    { 0x03FFFFFF, 0x00000005, sCamSetNormal2Modes },        // CAM_SET_NORMAL2
     { 0x03FFFFFF, 0x00000005, sCamSetBombBowlModes },     // CAM_SET_BOMBBOWL
     { 0x00000001, 0x80000005, sCamSetCircAModes },        // CAM_SET_CIRCLEA
     { 0x05FFEFF7, 0x00000005, sCamSetWhirlpoolModes },    // CAM_SET_WHIRLPOOL
@@ -7825,7 +7783,7 @@ CameraSetting sCameraSettings[] = {
     { 0x00000001, 0xC0000008, sCamSetStart1Modes },       // CAM_SET_START1
     { 0x03FFFFFF, 0x00000005, sCamSetRoom2Modes },        // CAM_SET_ROOM2
     { 0x03FFFFFF, 0x00000005, sCamSetNorm4Modes },        // CAM_SET_NORMAL4
-    { 0x0000002F, 0x00000005, sCamSetShellModes },        // CAM_SET_ELEGY_SHELL
+    { 0x0000002F, 0x00000005, sCamSetElegyShellModes },        // CAM_SET_ELEGY_SHELL
     { 0x03FFFFFF, 0x00000005, sCamSetDungeon4Modes },     // CAM_SET_DUNGEON4
 };
 

@@ -6918,7 +6918,7 @@ s32 Camera_CheckWater(Camera* camera) {
     if (camera->flags2 & CAM_FLAG2_200) {
         if (Camera_IsDiving(camera)) {
             if (!Camera_IsPlayerFormZora(camera)) {
-                Camera_ChangeSettingFlags(camera, CAM_SET_PIVOT_WATER_SURFACE, CAM_CHANGE_SET_FLAG_4 | CAM_CHANGE_SET_FLAG_2);
+                Camera_ChangeSettingFlags(camera, CAM_SET_PIVOT_DIVING, CAM_CHANGE_SET_FLAG_4 | CAM_CHANGE_SET_FLAG_2);
             } else {
                 Camera_ChangeSettingFlags(camera, CAM_SET_ZORA, CAM_CHANGE_SET_FLAG_4 | CAM_CHANGE_SET_FLAG_2);
             }

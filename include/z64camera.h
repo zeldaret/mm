@@ -101,11 +101,11 @@ typedef enum {
     /* 0x00 */ CAM_SET_NONE,
     /* 0x01 */ CAM_SET_NORMAL0,
     /* 0x02 */ CAM_SET_NORMAL3,
-    /* 0x03 */ CAM_SET_PIVOT_WATER_SURFACE, // Player diving from the surface of the water to underwater not as zora "CIRCLE5"
+    /* 0x03 */ CAM_SET_PIVOT_DIVING, // Player diving from the surface of the water to underwater not as zora "CIRCLE5"
     /* 0x04 */ CAM_SET_HORSE, // "HORSE0"
     /* 0x05 */ CAM_SET_ZORA, // "ZORA0"
-    /* 0x06 */ CAM_SET_PREREND0, // Unused remnant of OoT: camera is fixed in position and rotation "PREREND0"
-    /* 0x07 */ CAM_SET_PREREND1, // Unused remnant of OoT: Camera is fixed in position with fixed pitch, but is free to rotate in the yaw direction 360 degrees "PREREND1"
+    /* 0x06 */ CAM_SET_PREREND_FIXED, // Unused remnant of OoT: camera is fixed in position and rotation "PREREND0"
+    /* 0x07 */ CAM_SET_PREREND_PIVOT, // Unused remnant of OoT: Camera is fixed in position with fixed pitch, but is free to rotate in the yaw direction 360 degrees "PREREND1"
     /* 0x08 */ CAM_SET_DOORC, // Generic room door transitions, camera moves and follows player as the door is open and closed
     /* 0x09 */ CAM_SET_DEMO0,
     /* 0x0A */ CAM_SET_FREE0,
@@ -160,7 +160,7 @@ typedef enum {
     /* 0x3B */ CAM_SET_CIRCLE8,
     /* 0x3C */ CAM_SET_FUKAN1,
     /* 0x3D */ CAM_SET_DUNGEON3,
-    /* 0x3E */ CAM_SET_TELESCOPE,
+    /* 0x3E */ CAM_SET_TELESCOPE, // Observatory telescope and Curiosity Shop Peep-Hole "TELESCOPE"
     /* 0x3F */ CAM_SET_ROOM0,
     /* 0x40 */ CAM_SET_RCIRC0,
     /* 0x41 */ CAM_SET_CIRCLE9,
@@ -187,7 +187,7 @@ typedef enum {
     /* 0x56 */ CAM_SET_START1,
     /* 0x57 */ CAM_SET_ROOM2,
     /* 0x58 */ CAM_SET_NORMAL4,
-    /* 0x59 */ CAM_SET_ELEGY_SHELL, // "SHELL"
+    /* 0x59 */ CAM_SET_ELEGY_SHELL, // cutscene after playing elegy of emptyness and spawning a shell "SHELL"
     /* 0x5A */ CAM_SET_DUNGEON4,
     /* 0x5B */ CAM_SET_MAX
 } CameraSettingType;
