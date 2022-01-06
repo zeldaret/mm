@@ -308,7 +308,12 @@ animdict = {
     "func_800A81F0": "EffectBlure_AddVertex",
     "func_800A8514": "EffectBlure_AddSpace",
     "Effect_GetParams": "Effect_GetByIndex",
-    
+    "convert_scene_number_among_shared_scenes": "Play_GetOriginalSceneNumber",
+    "func_80169D40": "Play_SaveCycleSceneFlags",
+    "func_80169DCC": "Play_SetRespawnData",
+    "func_80169E6C": "Play_SetupRespawnPoint",
+    "func_8016A0AC": "Play_IsUnderwater",
+
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",
     "skelAnime.initialFrame": "skelAnime.startFrame",
