@@ -593,44 +593,44 @@ void EnTalkGibud_Revive(EnTalkGibud* this, GlobalContext* globalCtx) {
 void EnTalkGibud_GetTextIdForRequestedItem(EnTalkGibud* this, GlobalContext* globalCtx) {
     switch (this->requestedItemIndex) {
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BLUE_POTION:
-            func_801518B0(globalCtx, 0x138C, &this->actor);
-            this->textId = 0x138C;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_BLUE_POTION, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_BLUE_POTION;
             break;
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BEANS:
-            func_801518B0(globalCtx, 0x138D, &this->actor);
-            this->textId = 0x138D;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_MAGIC_BEANS, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_MAGIC_BEANS;
             break;
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_SPRING_WATER:
-            func_801518B0(globalCtx, 0x138E, &this->actor);
-            this->textId = 0x138E;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_SPRING_WATER, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_SPRING_WATER;
             break;
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_FISH:
-            func_801518B0(globalCtx, 0x138F, &this->actor);
-            this->textId = 0x138F;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_FISH, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_FISH;
             break;
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BUGS:
-            func_801518B0(globalCtx, 0x1390, &this->actor);
-            this->textId = 0x1390;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_BUGS, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_BUGS;
             break;
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_DEKU_NUTS:
-            func_801518B0(globalCtx, 0x1391, &this->actor);
-            this->textId = 0x1391;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_DEKU_NUTS, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_DEKU_NUTS;
             break;
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BOMBS:
-            func_801518B0(globalCtx, 0x1392, &this->actor);
-            this->textId = 0x1392;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_BOMBS, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_BOMBS;
             break;
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_HOT_SPRING_WATER:
-            func_801518B0(globalCtx, 0x1393, &this->actor);
-            this->textId = 0x1393;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_HOT_SPRING_WATER, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_HOT_SPRING_WATER;
             break;
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BIG_POE:
-            func_801518B0(globalCtx, 0x1394, &this->actor);
-            this->textId = 0x1394;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_BIG_POE, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_BIG_POE;
             break;
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK:
-            func_801518B0(globalCtx, 0x1395, &this->actor);
-            this->textId = 0x1395;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_MILK, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_MILK;
             break;
     }
 }
@@ -638,22 +638,21 @@ void EnTalkGibud_GetTextIdForRequestedItem(EnTalkGibud* this, GlobalContext* glo
 void EnTalkGibud_GetNextTextBoxId(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx)) {
         switch (this->textId) {
-            case 0x1388:
+            case TEXT_EN_TALK_GIBUD_LEAVE_IT:
                 EnTalkGibud_GetTextIdForRequestedItem(this, globalCtx);
                 break;
-            case 0x138C:
-            case 0x138D:
-            case 0x138E:
-            case 0x138F:
-            case 0x1390:
-            case 0x1391:
-            case 0x1392:
-            case 0x1393:
-            case 0x1394:
-            case 0x1395:
-                // Prompts the player to choose an item
-                func_801518B0(globalCtx, 0xFF, &this->actor);
-                this->textId = 0xFF;
+            case TEXT_EN_TALK_GIBUD_BLUE_POTION:
+            case TEXT_EN_TALK_GIBUD_MAGIC_BEANS:
+            case TEXT_EN_TALK_GIBUD_SPRING_WATER:
+            case TEXT_EN_TALK_GIBUD_FISH:
+            case TEXT_EN_TALK_GIBUD_BUGS:
+            case TEXT_EN_TALK_GIBUD_DEKU_NUTS:
+            case TEXT_EN_TALK_GIBUD_BOMBS:
+            case TEXT_EN_TALK_GIBUD_HOT_SPRING_WATER:
+            case TEXT_EN_TALK_GIBUD_BIG_POE:
+            case TEXT_EN_TALK_GIBUD_MILK:
+                func_801518B0(globalCtx, TEXT_OPEN_THE_SELECT_ITEM_SCREEN, &this->actor);
+                this->textId = TEXT_OPEN_THE_SELECT_ITEM_SCREEN;
                 break;
         }
     }
@@ -689,24 +688,24 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, GlobalContext* globalCtx)
         if (this->itemActionParam > PLAYER_AP_NONE) {
             switch (EnTalkGibud_PresentedItemMatchesRequest(this, globalCtx, this->itemActionParam)) {
                 case EN_TALK_GIBUD_REQUESTED_ITEM_MET:
-                    player->actor.textId = 0x138A;
-                    this->textId = 0x138A;
+                    player->actor.textId = TEXT_EN_TALK_GIBUD_NO_REMORSE;
+                    this->textId = TEXT_EN_TALK_GIBUD_NO_REMORSE;
                     break;
                 case EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO:
-                    player->actor.textId = 0x138B;
-                    this->textId = 0x138B;
+                    player->actor.textId = TEXT_EN_TALK_GIBUD_NOT_ENOUGH;
+                    this->textId = TEXT_EN_TALK_GIBUD_NOT_ENOUGH;
                     break;
                 case EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET:
-                    player->actor.textId = 0x1389;
-                    this->textId = 0x1389;
+                    player->actor.textId = TEXT_EN_TALK_GIBUD_AWAY;
+                    this->textId = TEXT_EN_TALK_GIBUD_AWAY;
                     break;
                 default:
                     break;
             }
             func_801477B4(globalCtx);
         } else if (this->itemActionParam < PLAYER_AP_NONE) {
-            func_801518B0(globalCtx, 0x1389, &this->actor);
-            this->textId = 0x1389;
+            func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_AWAY, &this->actor);
+            this->textId = TEXT_EN_TALK_GIBUD_AWAY;
         }
     }
 }
@@ -726,8 +725,8 @@ void EnTalkGibud_SetupPassiveIdle(EnTalkGibud* this) {
 void EnTalkGibud_PassiveIdle(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->isTalking = true;
-        func_801518B0(globalCtx, 0x1388, &this->actor);
-        this->textId = 0x1388;
+        func_801518B0(globalCtx, TEXT_EN_TALK_GIBUD_LEAVE_IT, &this->actor);
+        this->textId = TEXT_EN_TALK_GIBUD_LEAVE_IT;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
         EnTalkGibud_SetupTalk(this);
     } else if (this->actor.xzDistToPlayer < 100.0f && !(this->collider.base.acFlags & AC_HIT)) {
@@ -767,7 +766,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, GlobalContext* globalCtx) {
             break;
         case 6:
             if (func_80147624(globalCtx)) {
-                if (this->textId == 0x138A) {
+                if (this->textId == TEXT_EN_TALK_GIBUD_NO_REMORSE) {
                     // Remove the requested item/amount from the player's inventory
                     requestedItem = &sRequestedItemTable[this->requestedItemIndex];
                     if (!requestedItem->isBottledItem) {
