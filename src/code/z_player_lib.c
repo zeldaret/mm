@@ -1,6 +1,6 @@
 #include "global.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-
+#include "objects/object_link_zora/object_link_zora.h"
 
 
 extern Gfx D_0600E2A0[];
@@ -1500,13 +1500,6 @@ void func_8012536C(void) {
     }
 }
 
-extern AnimatedMaterial D_06012A80;
-
-extern UNK_TYPE D_06011210;
-extern UNK_TYPE D_06011710;
-
-extern Gfx D_06011760[];
-
 #ifdef NON_MATCHING
 void func_801253A4(GlobalContext* globalCtx, Player* player) {
     Vtx* sp30;
@@ -1519,21 +1512,21 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&D_06012A80));
+    AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_link_zora_Matanimheader_012A80));
     Matrix_Scale(sp28, sp28, sp28, 1);
 
     // clang-format off
-    sp30 = Lib_SegmentedToVirtual(&D_06011210); phi_a0 = Lib_SegmentedToVirtual(&D_06011710);
+    sp30 = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210); phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);
     // clang-format on
 
-    for (i = 0; i < 0x50; i++) {
+    for (i = 0; i < 80; i++) {
         sp30[i].v.cn[3] = (phi_a0[i] * player->unk_B62) >> 8;
     }
 
     dl = POLY_XLU_DISP;
 
     gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dl[1], D_06011760);
+    gSPDisplayList(&dl[1], object_link_zora_DL_011760);
 
     POLY_XLU_DISP = &dl[2];
 
