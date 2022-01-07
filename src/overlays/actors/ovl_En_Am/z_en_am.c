@@ -30,7 +30,7 @@ void func_808B057C(EnAm* this);
 void func_808B05C8(EnAm* this, GlobalContext* globalCtx);
 void func_808B0640(EnAm* this);
 void func_808B066C(EnAm* this, GlobalContext* globalCtx);
-void func_808B06D0(EnAm* this, GlobalContext* globalCtx);
+void EnAm_TakeDamage(EnAm* this, GlobalContext* globalCtx);
 void func_808B07A8(EnAm* this, GlobalContext* globalCtx);
 void func_808B0820(EnAm* this);
 void func_808B0894(EnAm* this, GlobalContext* globalCtx);
@@ -89,46 +89,39 @@ static ColliderCylinderInit sCylinderInit = {
     { 23, 98, 0, { 0, 0, 0 } },
 };
 
-typedef enum {
-    /* 0x0 */ ARMOS_DMGEFF_NONE, // anything that is unable to kill an armos
-    /* 0x0 */ ARMOS_DMGEFF_LIGHT = 0x4,
-    /* 0xD */ ARMOS_DMGEFF_HOOKSHOT = 0xD,
-    /* 0xF */ ARMOS_DMGEFF_KILL = 0xF, // Attacks that can kill or damage an armos
-} ArmosDamageEffect;
-
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, ARMOS_DMGEFF_KILL),
-    /* Deku Stick     */ DMG_ENTRY(0, ARMOS_DMGEFF_KILL),
-    /* Horse trample  */ DMG_ENTRY(0, ARMOS_DMGEFF_KILL),
-    /* Explosives     */ DMG_ENTRY(1, ARMOS_DMGEFF_KILL),
-    /* Zora boomerang */ DMG_ENTRY(0, ARMOS_DMGEFF_KILL),
-    /* Normal arrow   */ DMG_ENTRY(0, ARMOS_DMGEFF_KILL),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, ARMOS_DMGEFF_NONE),
-    /* Hookshot       */ DMG_ENTRY(0, ARMOS_DMGEFF_HOOKSHOT),
-    /* Goron punch    */ DMG_ENTRY(1, ARMOS_DMGEFF_NONE),
-    /* Sword          */ DMG_ENTRY(1, ARMOS_DMGEFF_NONE),
-    /* Goron pound    */ DMG_ENTRY(1, ARMOS_DMGEFF_NONE),
-    /* Fire arrow     */ DMG_ENTRY(0, ARMOS_DMGEFF_KILL),
-    /* Ice arrow      */ DMG_ENTRY(0, ARMOS_DMGEFF_KILL),
-    /* Light arrow    */ DMG_ENTRY(0, ARMOS_DMGEFF_KILL),
-    /* Goron spikes   */ DMG_ENTRY(1, ARMOS_DMGEFF_NONE),
-    /* Deku spin      */ DMG_ENTRY(1, ARMOS_DMGEFF_NONE),
-    /* Deku bubble    */ DMG_ENTRY(0, ARMOS_DMGEFF_KILL),
-    /* Deku launch    */ DMG_ENTRY(2, ARMOS_DMGEFF_NONE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, ARMOS_DMGEFF_KILL),
-    /* Zora barrier   */ DMG_ENTRY(0, ARMOS_DMGEFF_NONE),
-    /* Normal shield  */ DMG_ENTRY(0, ARMOS_DMGEFF_NONE),
-    /* Light ray      */ DMG_ENTRY(0, ARMOS_DMGEFF_NONE),
-    /* Thrown object  */ DMG_ENTRY(1, ARMOS_DMGEFF_NONE),
-    /* Zora punch     */ DMG_ENTRY(1, ARMOS_DMGEFF_NONE),
-    /* Spin attack    */ DMG_ENTRY(1, ARMOS_DMGEFF_NONE),
-    /* Sword beam     */ DMG_ENTRY(0, ARMOS_DMGEFF_NONE),
-    /* Normal Roll    */ DMG_ENTRY(0, ARMOS_DMGEFF_NONE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, ARMOS_DMGEFF_NONE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, ARMOS_DMGEFF_NONE),
-    /* Unblockable    */ DMG_ENTRY(0, ARMOS_DMGEFF_NONE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, ARMOS_DMGEFF_NONE),
-    /* Powder Keg     */ DMG_ENTRY(1, ARMOS_DMGEFF_KILL),
+    /* Deku Nut       */ DMG_ENTRY(0, 0xF),
+    /* Deku Stick     */ DMG_ENTRY(0, 0xF),
+    /* Horse trample  */ DMG_ENTRY(0, 0xF),
+    /* Explosives     */ DMG_ENTRY(1, 0xF),
+    /* Zora boomerang */ DMG_ENTRY(0, 0xF),
+    /* Normal arrow   */ DMG_ENTRY(0, 0xF),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0xD),
+    /* Goron punch    */ DMG_ENTRY(1, 0x0),
+    /* Sword          */ DMG_ENTRY(1, 0x0),
+    /* Goron pound    */ DMG_ENTRY(1, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(0, 0xF),
+    /* Ice arrow      */ DMG_ENTRY(0, 0xF),
+    /* Light arrow    */ DMG_ENTRY(0, 0xF),
+    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
+    /* Deku spin      */ DMG_ENTRY(1, 0x0),
+    /* Deku bubble    */ DMG_ENTRY(0, 0xF),
+    /* Deku launch    */ DMG_ENTRY(2, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0xF),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0x0),
+    /* Zora punch     */ DMG_ENTRY(1, 0x0),
+    /* Spin attack    */ DMG_ENTRY(1, 0x0),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 23, 98, MASS_HEAVY };
@@ -169,8 +162,8 @@ static Vec3f D_808B117C[] = {
     { 800.0f, -1000.0f, -1000.0f },
 };
 
-extern AnimationHeader D_06000238; // Wake up
-extern AnimationHeader D_0600033C;
+extern AnimationHeader D_06000238; // Hop Anim
+extern AnimationHeader D_0600033C; // Panic Anim
 extern AnimationHeader D_06005B3C; // Take Damage
 extern SkeletonHeader D_06005948;
 
@@ -178,7 +171,7 @@ void EnAm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnAm* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 300.0f/7.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 300.0f / 7.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005948, &D_0600033C, this->jointTable, this->morphTable, 14);
     Collider_InitAndSetCylinder(globalCtx, &this->enemyCollider, &this->actor, &sEnemyCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->interactCollider, &this->actor, &sCylinderInit);
@@ -232,8 +225,7 @@ void func_808B0040(EnAm* this, GlobalContext* globalCtx) {
         if (this->textureBlend == 0) {
             func_808B00D8(this);
         }
-    }
-    else if (this->textureBlend >= 11) {
+    } else if (this->textureBlend >= 11) {
         this->textureBlend -= 10;
     } else {
         this->textureBlend = 0;
@@ -304,7 +296,7 @@ void func_808B0208(EnAm* this, GlobalContext* globalCtx) {
 
 void func_808B0358(EnAm* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &D_06000238, 4.0f);
-    this->unk_236 = 3;
+    this->explodeTimer = 3;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_240 = 6.0f;
@@ -315,9 +307,9 @@ void func_808B03C0(EnAm* this, GlobalContext* globalCtx) {
     this->unk_23C = this->actor.yawTowardsPlayer;
     func_808B0208(this, globalCtx);
     if (this->actor.bgCheckFlags & 2) {
-        this->unk_236--;
+        this->explodeTimer--;
     }
-    if (this->unk_236 == 0) {
+    if (this->explodeTimer == 0) {
         func_808B0640(this);
     } else if ((this->returnHomeTimer == 0) || Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 240.0f) {
         func_808B0460(this);
@@ -358,7 +350,7 @@ void func_808B0508(EnAm* this, GlobalContext* globalCtx) {
 void func_808B057C(EnAm* this) {
     this->unk_240 = 6.0f;
     this->unk_23C = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
-    this->unk_236 = 1;
+    this->explodeTimer = 1;
     this->actionFunc = func_808B05C8;
 }
 
@@ -371,15 +363,15 @@ void func_808B05C8(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void func_808B0640(EnAm* this) {
-    this->unk_236 = 0x28;
+    this->explodeTimer = 0x28;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_240 = 0.0f;
     this->actionFunc = func_808B066C;
 }
 
 void func_808B066C(EnAm* this, GlobalContext* globalCtx) {
-    if (this->unk_236 != 0) {
-        this->unk_236--;
+    if (this->explodeTimer != 0) {
+        this->explodeTimer--;
     } else {
         this->unk_23C = this->actor.yawTowardsPlayer;
         func_808B0208(this, globalCtx);
@@ -390,7 +382,7 @@ void func_808B066C(EnAm* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808B06D0(EnAm* this, GlobalContext* globalCtx) {
+void EnAm_TakeDamage(EnAm* this, GlobalContext* globalCtx) {
     Animation_Change(&this->skelAnime, &D_06005B3C, 1.0f, 4.0f, Animation_GetLastFrame(&D_06005B3C) - 6, 2, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speedXZ = 6.0f;
@@ -415,7 +407,7 @@ void func_808B07A8(EnAm* this, GlobalContext* globalCtx) {
 
 void func_808B0820(EnAm* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &D_06000238, 4.0f);
-    this->unk_236 = 64;
+    this->explodeTimer = 64;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.flags |= 0x10;
     this->actor.speedXZ = 0.0f;
@@ -428,10 +420,10 @@ void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
     Vec3f dustPos;
     s32 pad;
 
-    this->unk_236--;
+    this->explodeTimer--;
     this->unk_23C = this->actor.yawTowardsPlayer;
     func_808B0208(this, globalCtx);
-    if (this->unk_236 == 1) {
+    if (this->explodeTimer == 1) {
         EnBom* bomb = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
                                           this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 2, 0);
         if (bomb != NULL) {
@@ -447,10 +439,10 @@ void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
 
             func_800B0EB0(globalCtx, &dustPos, &gZeroVec3f, &gZeroVec3f, &D_808B1120, &D_808B1124, 200, 45, 12);
         }
-    } else if (this->unk_236 == 0) {
+    } else if (this->explodeTimer == 0) {
         Actor_MarkForDeath(&this->actor);
         return;
-    } else if (!(this->unk_236 & 3)) {
+    } else if (!(this->explodeTimer & 3)) {
         func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 4);
     }
     if (this->actor.world.rot.z < 0x1F40) {
@@ -480,21 +472,21 @@ s32 EnAm_UpdateDamage(EnAm* this, GlobalContext* globalCtx) {
         if (!Actor_ApplyDamage(&this->actor)) {
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
         }
-        if (this->actor.colChkInfo.damageEffect == ARMOS_DMGEFF_HOOKSHOT) {
+        if (this->actor.colChkInfo.damageEffect == 0xD) {
             return true;
         }
         if (this->actor.colChkInfo.health != 0) {
             this->enemyCollider.base.atFlags &= ~AT_ON;
         }
         this->enemyCollider.base.atFlags &= ~AT_HIT;
-        if (this->actor.colChkInfo.damageEffect == ARMOS_DMGEFF_LIGHT) {
+        if (this->actor.colChkInfo.damageEffect == 0x4) {
             this->unk_248 = 0.7f;
             this->unk_244 = 4.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->enemyCollider.info.bumper.hitPos.x,
                         this->enemyCollider.info.bumper.hitPos.y, this->enemyCollider.info.bumper.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_LARGE_LIGHT_RAYS);
         }
-        func_808B06D0(this, globalCtx);
+        EnAm_TakeDamage(this, globalCtx);
         return true;
     }
     return false;

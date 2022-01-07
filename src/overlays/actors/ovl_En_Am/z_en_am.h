@@ -15,7 +15,7 @@ typedef struct EnAm {
     /* 0x0230 */ EnAmActionFunc actionFunc;
     /* 0x0234 */ u8 textureBlend; // 0 = statue textures; 255 = enemy textures
     /* 0x0235 */ s8 unk_235;
-    /* 0x0236 */ s16 unk_236;
+    /* 0x0236 */ s16 explodeTimer;
     /* 0x0238 */ s16 returnHomeTimer;
     /* 0x023A */ s16 unk_23A;
     /* 0x023C */ s16 unk_23C;
