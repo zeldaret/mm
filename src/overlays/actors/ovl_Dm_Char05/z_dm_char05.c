@@ -35,12 +35,6 @@ void func_80AADF54(GlobalContext* globalCtx, DmChar05* this);
 void func_80AAE030(GlobalContext* globalCtx, DmChar05* this);
 void func_80AAE114(GlobalContext* globalCtx, DmChar05* this);
 
-extern FlexSkeletonHeader D_060001D0;
-extern SkeletonHeader D_060010B0;
-extern SkeletonHeader D_060013D0;
-extern Gfx D_06001E70;
-extern SkeletonHeader D_060042B0;
-
 const ActorInit Dm_Char05_InitVars = {
     ACTOR_DM_CHAR05,
     ACTORCAT_ITEMACTION,
@@ -80,7 +74,7 @@ void func_80AAC63C(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_060010B0, NULL, NULL, NULL, 0);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dmask_Skel_010B0, NULL, NULL, NULL, 0);
     if (DMCHAR05_GET(&this->actor) == DMCHAR05_0) {
         func_80AAC5A0(&this->skelAnime, &sAnimations[0], 0);
     } else {
@@ -93,7 +87,7 @@ void func_80AAC6E4(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_060042B0, NULL, NULL, NULL, 0);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dmask_Skel_042B0, NULL, NULL, NULL, 0);
     func_80AAC5A0(&this->skelAnime, &sAnimations[1], 0);
     this->actionFunc = func_80AACC48;
 }
@@ -102,7 +96,7 @@ void func_80AAC770(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060001D0, NULL, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dmask_Skel_001D0, NULL, NULL, NULL, 0);
     func_80AAC5A0(&this->skelAnime, &sAnimations[3], 0);
     this->actionFunc = func_80AACC48;
 }
@@ -111,7 +105,7 @@ void func_80AAC7FC(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_060013D0, NULL, NULL, NULL, 0);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dmask_Skel_013D0, NULL, NULL, NULL, 0);
     func_80AAC5A0(&this->skelAnime, &sAnimations[4], 0);
     this->actionFunc = func_80AACC48;
 }
@@ -681,7 +675,7 @@ void func_80AADC00(Actor* thisx, GlobalContext* globalCtx) {
 
         if (globalCtx->csCtx.npcActions[temp_v0]->unk0 == 4) {
             Matrix_InsertTranslation(-600.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-            func_800BDFC0(globalCtx, &D_06001E70);
+            func_800BDFC0(globalCtx, object_dmask_DL_001E70);
         }
     }
 }
