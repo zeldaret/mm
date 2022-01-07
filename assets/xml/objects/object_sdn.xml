@@ -3,7 +3,7 @@
         <DList Name="gGuardBottleDL" Offset="0x630" />
         <DList Name="gGuardBottleContentsDL" Offset="0x768" />
         <DList Name="gGuardBottleEmptyContentsDL" Offset="0x800" />
-        <Texture Name="gDemoheishiBottleTex" OutName="tex_000808" Format="i4" Width="16" Height="16" Offset="0x808" />
+        <Texture Name="gDemoheishiBottleTex" OutName="demoheishi_bottle_tex" Format="i4" Width="16" Height="16" Offset="0x808" />
         <Animation Name="gDemoheishiStandWithHandOnChest" Offset="0xA54" />
         <Animation Name="gDemoheishiDrink" Offset="0x20D8" />
         <Animation Name="gDemoheishiCheerWithSpear" Offset="0x2A84" />
