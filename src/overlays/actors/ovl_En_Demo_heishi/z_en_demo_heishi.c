@@ -63,6 +63,7 @@ static u16 sTextIds[] = { 0x1473 };
 
 void EnDemoheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDemoheishi* this = THIS;
+
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D640, &D_06003BFC, this->jointTable, this->morphTable, 17);
     this->actor.colChkInfo.mass = 0xFF;
@@ -74,6 +75,7 @@ void EnDemoheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnDemoheishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnDemoheishi* this = THIS;
+
     Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
 }
 
@@ -182,6 +184,7 @@ s32 EnDemoheishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx**
 
 void EnDemoheishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDemoheishi* this = (EnDemoheishi*)thisx;
+    
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                           (s32)this->skelAnime.dListCount, EnDemoheishi_OverrideLimbDraw, NULL, &this->actor);
