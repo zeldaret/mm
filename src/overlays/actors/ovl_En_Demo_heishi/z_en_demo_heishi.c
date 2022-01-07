@@ -62,7 +62,7 @@ void EnDemoheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDemoheishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDemoheishiSkeleton, &gDemoheishiWave, this->jointTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable,
                        this->morphTable, 17);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 6;
@@ -79,8 +79,7 @@ void EnDemoheishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
-        &gDemoheishiStandHandOnHip, &gDemoheishiCheerWithSpear, &gDemoheishiWave,
-        &gDemoheishiSitAndReach,    &gDemoheishiStandUp,
+        &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave, &gSoldierSitAndReach, &gSoldierStandUp,
     };
     static u8 sAnimModes[] = { 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0 };
 

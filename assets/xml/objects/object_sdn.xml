@@ -1,66 +1,66 @@
 ﻿<Root>
     <File Name="object_sdn" Segment="6">
-        <DList Name="gGuardBottleDL" Offset="0x630" />
-        <DList Name="gGuardBottleContentsDL" Offset="0x768" />
-        <DList Name="gGuardBottleEmptyContentsDL" Offset="0x800" />
-        <Texture Name="gDemoheishiBottleTex" OutName="demoheishi_bottle_tex" Format="i4" Width="16" Height="16" Offset="0x808" />
-        <Animation Name="gDemoheishiStandWithHandOnChest" Offset="0xA54" />
-        <Animation Name="gDemoheishiDrink" Offset="0x20D8" />
-        <Animation Name="gDemoheishiCheerWithSpear" Offset="0x2A84" />
-        <Animation Name="gDemoheishiSitAndReach" Offset="0x3380" />
-        <Animation Name="gDemoheishiWave" Offset="0x3BFC" />
-        <Animation Name="gDemoheishiStandUp" Offset="0x4770" />
-        <Animation Name="gDemoheishiLookDown" Offset="0x4AC0" />
-        <Animation Name="gDemoheishiComeUpHere" Offset="0x5320" />
-        <Animation Name="gDemoheishiHalt" Offset="0x57BC" />
-        <Animation Name="gDemoheishiHalt2" Offset="0x5D28" />
-        <Animation Name="gDemoheishiHalt3" Offset="0x64C0" />
-        <Animation Name="gDemoheishiStandHandOnHip" Offset="0x6C18" />
-        <DList Name="gDemoheishiTorsoDL" Offset="0x9EB0" />
-        <DList Name="gDemoheishiHeadDL" Offset="0xA1A8" />
-        <DList Name="gDemoheishiRightShoulderDL" Offset="0xA678" />
-        <DList Name="gDemoheishiRightForearmDL" Offset="0xA768" />
-        <DList Name="gDemoheishiRightHandWithSpearDL" Offset="0xA9A8" />
-        <DList Name="gDemoheishiLeftShoulderDL" Offset="0xADE0" />
-        <DList Name="gDemoheishiLeftForearmDL" Offset="0xAED0" />
-        <DList Name="gDemoheishiLeftHandDL" Offset="0xB120" />
-        <DList Name="gDemoheishiPelvisDL" Offset="0xB438" />
-        <DList Name="gDemoheishiRightThighDL" Offset="0xB5B0" />
-        <DList Name="gDemoheishiRightCalfDL" Offset="0xB698" />
-        <DList Name="gDemoheishiRightFootDL" Offset="0xB988" />
-        <DList Name="gDemoheishiLeftThighDL" Offset="0xBAD0" />
-        <DList Name="gDemoheishiLeftCalfDL" Offset="0xBBB8" />
-        <DList Name="gDemoheishiLeftFootDL" Offset="0xBEB8" />
-        <Texture Name="gDemoheishiSkinTLUT" OutName="demoheishi_skin_tlut" Format="rgba16" Width="16" Height="16" Offset="0xC000" />
-        <Texture Name="gDemoheishiGeneralTLUT" OutName="demoheishi_general_tlut" Format="rgba16" Width="16" Height="16" Offset="0xC200" />
-        <Texture Name="gDemoheishArmorStrapTex" OutName="demoheishi_armor_strap_tex" Format="ci8" Width="32" Height="32" Offset="0xC400" />
-        <Texture Name="gDemoheishiArmorPlate1Tex" OutName="demoheishi_armor_plate1_tex" Format="i8" Width="16" Height="16" Offset="0xC800" />
-        <Texture Name="gDemoheishArmorEmblemTex" OutName="demoheishi_armor_emblem_tex" Format="i8" Width="32" Height="32" Offset="0xC900" />
-        <Texture Name="gDemoheishSkinShadowGradient2Tex" OutName="demoheishi_skin_shadow_gradient2_tex" Format="ci8" Width="8" Height="8" Offset="0xCD00" />
-        <Texture Name="gDemoheishiShortsToLegTex" OutName="demoheishi_shorts_to_leg_tex" Format="ci8" Width="16" Height="16" Offset="0xCD40" />
-        <Texture Name="gDemoheishArmorTex" OutName="demoheishi_armor_tex" Format="ci8" Width="8" Height="8" Offset="0xCE40" />
-        <Texture Name="gDemoheishSkinShadowGradient1Tex" OutName="demoheishi_skin_shadow_gradient1_tex" Format="ci8" Width="8" Height="8" Offset="0xCE80" />
+        <DList Name="gSoldierBottleDL" Offset="0x630" />
+        <DList Name="gSoldierBottleContentsDL" Offset="0x768" />
+        <DList Name="gSoldierBottleEmptyContentsDL" Offset="0x800" />
+        <Texture Name="gSoldierBottleTex" OutName="demoheishi_bottle_tex" Format="i4" Width="16" Height="16" Offset="0x808" />
+        <Animation Name="gSoldierStandWithHandOnChest" Offset="0xA54" />
+        <Animation Name="gSoldierDrink" Offset="0x20D8" />
+        <Animation Name="gSoldierCheerWithSpear" Offset="0x2A84" />
+        <Animation Name="gSoldierSitAndReach" Offset="0x3380" />
+        <Animation Name="gSoldierWave" Offset="0x3BFC" />
+        <Animation Name="gSoldierStandUp" Offset="0x4770" />
+        <Animation Name="gSoldierLookDown" Offset="0x4AC0" />
+        <Animation Name="gSoldierComeUpHere" Offset="0x5320" />
+        <Animation Name="gSoldierHalt" Offset="0x57BC" />
+        <Animation Name="gSoldierHalt2" Offset="0x5D28" />
+        <Animation Name="gSoldierHalt3" Offset="0x64C0" />
+        <Animation Name="gSoldierStandHandOnHip" Offset="0x6C18" />
+        <DList Name="gSoldierTorsoDL" Offset="0x9EB0" />
+        <DList Name="gSoldierHeadDL" Offset="0xA1A8" />
+        <DList Name="gSoldierRightShoulderDL" Offset="0xA678" />
+        <DList Name="gSoldierRightForearmDL" Offset="0xA768" />
+        <DList Name="gSoldierRightHandWithSpearDL" Offset="0xA9A8" />
+        <DList Name="gSoldierLeftShoulderDL" Offset="0xADE0" />
+        <DList Name="gSoldierLeftForearmDL" Offset="0xAED0" />
+        <DList Name="gSoldierLeftHandDL" Offset="0xB120" />
+        <DList Name="gSoldierPelvisDL" Offset="0xB438" />
+        <DList Name="gSoldierRightThighDL" Offset="0xB5B0" />
+        <DList Name="gSoldierRightCalfDL" Offset="0xB698" />
+        <DList Name="gSoldierRightFootDL" Offset="0xB988" />
+        <DList Name="gSoldierLeftThighDL" Offset="0xBAD0" />
+        <DList Name="gSoldierLeftCalfDL" Offset="0xBBB8" />
+        <DList Name="gSoldierLeftFootDL" Offset="0xBEB8" />
+        <Texture Name="gSoldierSkinTLUT" OutName="demoheishi_skin_tlut" Format="rgba16" Width="16" Height="16" Offset="0xC000" />
+        <Texture Name="gSoldierGeneralTLUT" OutName="demoheishi_general_tlut" Format="rgba16" Width="16" Height="16" Offset="0xC200" />
+        <Texture Name="gSoldierArmorStrapTex" OutName="demoheishi_armor_strap_tex" Format="ci8" Width="32" Height="32" Offset="0xC400" />
+        <Texture Name="gSoldierArmorPlate1Tex" OutName="demoheishi_armor_plate1_tex" Format="i8" Width="16" Height="16" Offset="0xC800" />
+        <Texture Name="gSoldierArmorEmblemTex" OutName="demoheishi_armor_emblem_tex" Format="i8" Width="32" Height="32" Offset="0xC900" />
+        <Texture Name="gSoldierSkinShadowGradient2Tex" OutName="demoheishi_skin_shadow_gradient2_tex" Format="ci8" Width="8" Height="8" Offset="0xCD00" />
+        <Texture Name="gSoldierShortsToLegTex" OutName="demoheishi_shorts_to_leg_tex" Format="ci8" Width="16" Height="16" Offset="0xCD40" />
+        <Texture Name="gSoldierArmorTex" OutName="demoheishi_armor_tex" Format="ci8" Width="8" Height="8" Offset="0xCE40" />
+        <Texture Name="gSoldierSkinShadowGradient1Tex" OutName="demoheishi_skin_shadow_gradient1_tex" Format="ci8" Width="8" Height="8" Offset="0xCE80" />
         <Texture Name="gGenericLipsTex" OutName="generic_lips_tex" Format="ci8" Width="16" Height="16" Offset="0xCEC0" />
-        <Texture Name="gDemoheishArmorCoatOfArmsTex" OutName="demoheishi_armor_coat_of_arms_tex" Format="ci8" Width="32" Height="32" Offset="0xCFC0" />
-        <Texture Name="gDemoheishiArmorPlate2Tex" OutName="demoheishi_armor_plate2_tex" Format="i8" Width="16" Height="8" Offset="0xD3C0" />
+        <Texture Name="gSoldierArmorCoatOfArmsTex" OutName="demoheishi_armor_coat_of_arms_tex" Format="ci8" Width="32" Height="32" Offset="0xCFC0" />
+        <Texture Name="gSoldierArmorPlate2Tex" OutName="demoheishi_armor_plate2_tex" Format="i8" Width="16" Height="8" Offset="0xD3C0" />
         <Texture Name="gGenericFingersTex" OutName="generic_fingers_tex" Format="ci8" Width="16" Height="16" Offset="0xD440" />
-        <Limb Name="gDemoheishiRootLimb" Type="Standard" Offset="0xD540" />
-        <Limb Name="gDemoheishiPelvisLimb" Type="Standard" Offset="0xD54C" />
-        <Limb Name="gDemoheishiLeftThighLimb" Type="Standard" Offset="0xD558" />
-        <Limb Name="gDemoheishiLeftCalfLimb" Type="Standard" Offset="0xD564" />
-        <Limb Name="gDemoheishiLeftFootLimb" Type="Standard" Offset="0xD570" />
-        <Limb Name="gDemoheishiRightThighLimb" Type="Standard" Offset="0xD57C" />
-        <Limb Name="gDemoheishiRightCalfLimb" Type="Standard" Offset="0xD588" />
-        <Limb Name="gDemoheishiRightFootLimb" Type="Standard" Offset="0xD594" />
-        <Limb Name="gDemoheishiTorsoLimb" Type="Standard" Offset="0xD5A0" />
-        <Limb Name="gDemoheishiLeftShoulderLimb" Type="Standard" Offset="0xD5AC" />
-        <Limb Name="gDemoheishiLeftForearmLimb" Type="Standard" Offset="0xD5B8" />
-        <Limb Name="gDemoheishiLeftHandLimb" Type="Standard" Offset="0xD5C4" />
-        <Limb Name="gDemoheishiRightShoulderLimb" Type="Standard" Offset="0xD5D0" />
-        <Limb Name="gDemoheishiRightForearmLimb" Type="Standard" Offset="0xD5DC" />
-        <Limb Name="gDemoheishiRightHandWithSpearLimb" Type="Standard" Offset="0xD5E8" />
-        <Limb Name="gDemoheishiHeadLimb" Type="Standard" Offset="0xD5F4" />
-        <Skeleton Name="gDemoheishiSkeleton" Type="Flex" LimbType="Standard" Offset="0xD640" />
-        <Animation Name="gDemoheishiStandAndLookDown" Offset="0xDC7C" />
+        <Limb Name="gSoldierRootLimb" Type="Standard" Offset="0xD540" />
+        <Limb Name="gSoldierPelvisLimb" Type="Standard" Offset="0xD54C" />
+        <Limb Name="gSoldierLeftThighLimb" Type="Standard" Offset="0xD558" />
+        <Limb Name="gSoldierLeftCalfLimb" Type="Standard" Offset="0xD564" />
+        <Limb Name="gSoldierLeftFootLimb" Type="Standard" Offset="0xD570" />
+        <Limb Name="gSoldierRightThighLimb" Type="Standard" Offset="0xD57C" />
+        <Limb Name="gSoldierRightCalfLimb" Type="Standard" Offset="0xD588" />
+        <Limb Name="gSoldierRightFootLimb" Type="Standard" Offset="0xD594" />
+        <Limb Name="gSoldierTorsoLimb" Type="Standard" Offset="0xD5A0" />
+        <Limb Name="gSoldierLeftShoulderLimb" Type="Standard" Offset="0xD5AC" />
+        <Limb Name="gSoldierLeftForearmLimb" Type="Standard" Offset="0xD5B8" />
+        <Limb Name="gSoldierLeftHandLimb" Type="Standard" Offset="0xD5C4" />
+        <Limb Name="gSoldierRightShoulderLimb" Type="Standard" Offset="0xD5D0" />
+        <Limb Name="gSoldierRightForearmLimb" Type="Standard" Offset="0xD5DC" />
+        <Limb Name="gSoldierRightHandWithSpearLimb" Type="Standard" Offset="0xD5E8" />
+        <Limb Name="gSoldierHeadLimb" Type="Standard" Offset="0xD5F4" />
+        <Skeleton Name="gSoldierSkeleton" Type="Flex" LimbType="Standard" Offset="0xD640" />
+        <Animation Name="gSoldierStandAndLookDown" Offset="0xDC7C" />
     </File>
 </Root>
