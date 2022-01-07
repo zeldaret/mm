@@ -95,13 +95,13 @@ typedef enum {
     /* 0x14 */ CAM_SET_ITEM2, // Bottles: chugging, releasing fairy, dropping fish
     /* 0x15 */ CAM_SET_ITEM3, // Bottles: catching fish or bugs, showing an item
     /* 0x16 */ CAM_SET_NAVI, // Song of Soaring, variations of playing Song of Time "NAVI"
-    /* 0x17 */ CAM_SET_WARP0, // Warp circles from Goron Trial on the moon "WARP0"
+    /* 0x17 */ CAM_SET_WARP_PAD_MOON, // Warp circles from Goron Trial on the moon "WARP0"
     /* 0x18 */ CAM_SET_DEATH, // Player death animation when health goes to 0 "DEATH"
-    /* 0x19 */ CAM_SET_REBIRTH, // Unknown (it's not being revived by a fairy)
+    /* 0x19 */ CAM_SET_REBIRTH, // Unknown set with camDataId = -9 (it's not being revived by a fairy)
     /* 0x1A */ CAM_SET_LONG_CHEST_OPENING, // Long cutscene when opening a big chest with a major item "TREASURE"
-    /* 0x1B */ CAM_SET_TRANSFORM, // Putting on a transformation mask "TRANSFORM"
-    /* 0x1C */ CAM_SET_ATTENTION, // Unknown
-    /* 0x1D */ CAM_SET_WARP1, // Warp pad from start to end of dungeon "WARP1"
+    /* 0x1B */ CAM_SET_MASK_TRANSFORMATION, // Putting on a transformation mask "TRANSFORM"
+    /* 0x1C */ CAM_SET_ATTENTION, // Unknown, set with camDataId = -15
+    /* 0x1D */ CAM_SET_WARP_PAD_ENTRANCE, // Warp pad from start of a dungeon to the boss-room "WARP1"
     /* 0x1E */ CAM_SET_DUNGEON1, // Generic dungeon camera 1, used in various places
     /* 0x1F */ CAM_SET_FIXED1, // Fixes camera in place, used in various places eg. entering Stock Pot Inn, hiting a switch, giving witch a red potion
     /* 0x20 */ CAM_SET_FIXED2, // Used in Pinnacle Rock after defeating Sea Monsters, and by Tatl in Fortress
@@ -114,17 +114,17 @@ typedef enum {
     /* 0x27 */ CAM_SET_FIXED3, // Used in Stock Pot Inn Toilet (???) and Tatl cutscene after woodfall "FIXED3"
     /* 0x28 */ CAM_SET_TOWER_CLIMB, // Various climbing structures (Snowhead climb to the temple entrance) "TOWER0"
     /* 0x29 */ CAM_SET_PARALLEL0, // Unknown
-    /* 0x2A */ CAM_SET_NORMALD, // Unknown
-    /* 0x2B */ CAM_SET_SUBJECTD, // Unknown
+    /* 0x2A */ CAM_SET_NORMALD, // Unknown, set with camDataId = -20
+    /* 0x2B */ CAM_SET_SUBJECTD, // Unknown, set with camDataId = -21
     /* 0x2C */ CAM_SET_START0, // Entering a room, either Dawn of a New Day reload, or entering a door where the camera is fixed on the other end "START0"
     /* 0x2D */ CAM_SET_START2, // Entering a scene, camera is put at a low angle eg. Grottos, Deku Palace, Stock Pot Inn "START2"
     /* 0x2E */ CAM_SET_STOP0, // Called in z_play "STOP0"
     /* 0x2F */ CAM_SET_BOAT_CRUISE, //  Koume's boat cruise "JCRUISING"
     /* 0x30 */ CAM_SET_VERTICAL_CLIMB, // Large vertical climbs, such as Mountain Village wall or Pirates Fortress ladder. "CLIMBMAZE"
-    /* 0x31 */ CAM_SET_SIDED, // Unknown
+    /* 0x31 */ CAM_SET_SIDED, // Unknown, set with camDataId = -24
     /* 0x32 */ CAM_SET_DUNGEON2, // Generic dungeon camera 2, used in various places
     /* 0x33 */ CAM_SET_BOSS_ODOLWA, // Odolwa's Lair, also used in GBT entrance: "BOSS_SHIGE"
-    /* 0x34 */ CAM_SET_KEEPBACK, // Unknown
+    /* 0x34 */ CAM_SET_KEEPBACK, // Unknown. Possibly related to climbing something?
     /* 0x35 */ CAM_SET_CIRCLE6, // Used in select regions from Ikana
     /* 0x36 */ CAM_SET_CIRCLE7, // Unknown
     /* 0x37 */ CAM_SET_MINI_BOSS, // Used during the various minibosses of the "CHUBOSS"
@@ -136,7 +136,7 @@ typedef enum {
     /* 0x3D */ CAM_SET_DUNGEON3, // Generic dungeon camera 3, used in various places
     /* 0x3E */ CAM_SET_TELESCOPE, // Observatory telescope and Curiosity Shop Peep-Hole "TELESCOPE"
     /* 0x3F */ CAM_SET_ROOM0, // Certain rooms eg. inside the clock tower
-    /* 0x40 */ CAM_SET_RCIRC0, // Used by a few NPC cutscenes
+    /* 0x40 */ CAM_SET_RCIRC0, // Used by a few NPC cutscenes, focus close on the NPC
     /* 0x41 */ CAM_SET_CIRCLE9, // Used by Sakon Hideout entrance and Deku Palace Maze
     /* 0x42 */ CAM_SET_ONTHEPOLE, // Somewhere in Snowhead Temple and Woodfall Temple
     /* 0x43 */ CAM_SET_INBUSH, // Various bush environments eg. grottos, Swamp Spider House, Termina Field grass, Deku Palace near bean "INBUSH"
@@ -155,7 +155,7 @@ typedef enum {
     /* 0x50 */ CAM_SET_SCENE0, // Entering doors to a new scene
     /* 0x51 */ CAM_SET_ROOM1, // Certain rooms eg. some rooms in Stock Pot Inn
     /* 0x52 */ CAM_SET_WATER2, // Swimming as Zora in Great Bay Temple
-    /* 0x53 */ CAM_SET_SOKONASI, // Woodfall inside the swamp, but not on the platforms, "SOKONASI"
+    /* 0x53 */ CAM_SET_WOODFALL_SWAMP, // Woodfall inside the swamp, but not on the platforms, "SOKONASI"
     /* 0x54 */ CAM_SET_FORCEKEEP, // Unknown
     /* 0x55 */ CAM_SET_PARALLEL1, // Unknown
     /* 0x56 */ CAM_SET_START1, // Used when entering the lens cave

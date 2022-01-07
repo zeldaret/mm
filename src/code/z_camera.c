@@ -7591,7 +7591,7 @@ s32 Camera_ChangeDataIdx(Camera* camera, s32 bgCamDataId) {
     }
 
     if (bgCamDataId < 0) {
-        setting = sCsCamSceneDataGlobalSettingsPtr[bgCamDataId];
+        setting = sGlobalCamDataSettingsPtr[bgCamDataId];
     } else if (!(camera->flags1 & CAM_FLAG1_SCENE_DATA_2)) {
         setting = Camera_GetCamDataSetting(camera, bgCamDataId);
     } else {
