@@ -369,16 +369,6 @@ typedef struct {
     { flags, CAM_DATA_FLAGS }
 
 typedef struct {
-    /* 0x00 */ f32 unk_00; // yPos
-    /* 0x04 */ f32 unk_04; // xzSpeed
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A; // angle
-    /* 0x0C */ s16 unk_0C; // flags (May be s32)
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ f32 unk_10; // set to float
-} Normal1Anim; // size = 0x14
-
-typedef struct {
     /* 0x00 */ f32 unk_00; // yOffset
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
@@ -389,7 +379,21 @@ typedef struct {
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20; // pitchTarget
     /* 0x22 */ s16 unk_22; // flags
-    /* 0x24 */ Normal1Anim anim;
+} Normal1StaticData; // size = 0x24
+
+typedef struct {
+    /* 0x00 */ f32 unk_00; // yPos
+    /* 0x04 */ f32 unk_04; // xzSpeed
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A; // angle
+    /* 0x0C */ s16 unk_0C; // flags (May be s32)
+    /* 0x0E */ s16 unk_0E;
+    /* 0x10 */ f32 unk_10; // set to float
+} Normal1DynamicData; // size = 0x14
+
+typedef struct {
+    /* 0x00 */ Normal1StaticData staticData;
+    /* 0x24 */ Normal1DynamicData dynamicData;
 } Normal1; // size = 0x38
 
 
@@ -404,17 +408,6 @@ typedef struct {
 #define NORM3_FLG_80 (1 << 7)
 
 typedef struct {
-    /* 0x00 */ f32 isZero; // set but unused
-    /* 0x04 */ f32 yPosOffset;
-    /* 0x08 */ s16 curPitch;
-    /* 0x0A */ s16 yawUpdateRate;
-    /* 0x0C */ s16 yawTimer;
-    /* 0x0E */ s16 distTimer;
-    /* 0x10 */ s16 flag;
-    /* 0x12 */ s16 is1200; // set but unused
-} Normal3Anim; // size = 0x14
-
-typedef struct {
     /* 0x00 */ f32 yOffset;
     /* 0x04 */ f32 distMin;
     /* 0x08 */ f32 distMax;
@@ -424,7 +417,22 @@ typedef struct {
     /* 0x18 */ f32 maxAtLERPScale;
     /* 0x1C */ s16 pitchTarget;
     /* 0x1E */ s16 flags;
-    /* 0x20 */ Normal3Anim anim;
+} Normal3StaticData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ f32 isZero; // set but unused
+    /* 0x04 */ f32 yPosOffset;
+    /* 0x08 */ s16 curPitch;
+    /* 0x0A */ s16 yawUpdateRate;
+    /* 0x0C */ s16 yawTimer;
+    /* 0x0E */ s16 distTimer;
+    /* 0x10 */ s16 flag;
+    /* 0x12 */ s16 is1200; // set but unused
+} Normal3DynamicData; // size = 0x14
+
+typedef struct {
+    /* 0x00 */ Normal3StaticData staticData;
+    /* 0x20 */ Normal3DynamicData dynamicData;
 } Normal3; // size = 0x34
 
 
@@ -439,18 +447,6 @@ typedef struct {
 #define NORM0_FLG_80 (1 << 7)
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ s16 unk_2C;
-} Normal0Anim; // size = 0x2E
-
-typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
@@ -460,8 +456,24 @@ typedef struct {
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ s16 unk_1C;
     /* 0x1E */ s16 unk_1E;
-    /* 0x20 */ Normal0Anim anim;
-} Normal0; // size = 0x4E
+} Normal0StaticData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ f32 unk_24;
+    /* 0x28 */ f32 unk_28;
+    /* 0x2C */ s16 unk_2C;
+} Normal0DynamicData; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ Normal0StaticData staticData;
+    /* 0x20 */ Normal0DynamicData dynamicData;
+} Normal0; // size = 0x50
 
 
 /*================================
@@ -483,20 +495,6 @@ typedef struct {
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
-    /* 0x24 */ s16 unk_24;
-    /* 0x26 */ s16 unk_26;
-} Parallel1Anim; // size = 0x28
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ f32 unk_18;
@@ -505,7 +503,25 @@ typedef struct {
     /* 0x22 */ s16 unk_22;
     /* 0x24 */ s16 unk_24;
     /* 0x26 */ s16 unk_26;
-    /* 0x28 */ Parallel1Anim anim;
+} Parallel1StaticData; // size = 0x28
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ s16 unk_1C;
+    /* 0x1E */ s16 unk_1E;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ s16 unk_24;
+    /* 0x26 */ s16 unk_26;
+} Parallel1DynamicData; // size = 0x28
+
+typedef struct {
+    /* 0x00 */ Parallel1StaticData staticData;
+    /* 0x28 */ Parallel1DynamicData dynamicData;
 } Parallel1; // size = 0x50
 
 
@@ -518,18 +534,6 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s32 unk_10; // unused?
-    /* 0x1C */ s16 unk_1C;
-} Jump2Anim;
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
@@ -538,9 +542,24 @@ typedef struct {
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 pad;
-    /* 0x24 */ Jump2Anim anim;
-} Jump2; // 9
+} Jump2StaticData; // size = 0x24
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ s16 unk_0E;
+    /* 0x10 */ s32 unk_10; // unused?
+    /* 0x1C */ s16 unk_1C;
+} Jump2DynamicData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ Jump2StaticData staticData;
+    /* 0x02 */ Jump2DynamicData dynamicData;
+} Jump2; // size = 0x44
 
 
 /*================================
@@ -548,22 +567,11 @@ typedef struct {
  *================================
  */
 
+#define JUMP3_FLG_4 (1 << 2)
 #define JUMP3_FLG_8 (1 << 3)
 #define JUMP3_FLG_20 (1 << 5)
 #define JUMP3_FLG_40 (1 << 6)
 #define JUMP3_FLG_80 (1 << 7)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00; //
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08; //
-    /* 0x0A */ s16 unk_0A; //
-    /* 0x0C */ s32 unk_0C; // mode
-    /* 0x10 */ s16 unk_10; //
-    /* 0x12 */ s16 unk_12;
-    /* 0x1C */ s16 unk_1C;
-} Jump3Anim;
 
 typedef struct {
     /* 0x00 */ f32 unk_00; // yOffset
@@ -576,8 +584,24 @@ typedef struct {
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 unk_22; // flags
-    /* 0x24 */ Jump3Anim anim;
-} Jump3; // 10
+} Jump3StaticData; // size = 0x24
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ s32 unk_0C; // mode
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x1C */ s16 unk_1C;
+} Jump3DynamicData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ Jump3StaticData staticData; // yOffset
+    /* 0x24 */ Jump3DynamicData dynamicData;
+} Jump3; // size = 0x44
 
 
 /*================================
@@ -593,19 +617,6 @@ typedef struct {
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
-    /* 0x08 */ struct Actor* unk_08; // targe3t
-    /* 0x0C */ s32 unk_0C; // unused?
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-} Battle1Anim;
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
@@ -617,9 +628,25 @@ typedef struct {
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ f32 unk_2C;
     /* 0x30 */ s16 unk_30;
-    /* 0x32 */ s16 pad; // TODO: May not need
-    /* 0x34 */ Battle1Anim anim;
-} Battle1; // 13
+} Battle1StaticData; // size = 0x34
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ Actor* unk_08; // targe3t
+    /* 0x0C */ s32 unk_0C; // unused?
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} Battle1DynamicData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ Battle1StaticData staticData;
+    /* 0x24 */ Battle1DynamicData dynamicData;
+} Battle1; // size = 0x50
 
 
 /*================================
@@ -636,18 +663,6 @@ typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Actor* unk_0C;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-} KeepOn1Anim; // size = 0x18
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
@@ -657,9 +672,24 @@ typedef struct {
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ s16 unk_2C;
-    /* 0x2E */ s16 unk_2E; // Pad?
-    /* 0x30 */ KeepOn1Anim anim;
-} KeepOn1; // 12
+} KeepOn1StaticData; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ Actor* unk_0C;
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+} KeepOn1DynamicData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ KeepOn1StaticData staticData;
+    /* 0x30 */ KeepOn1DynamicData dynamicData;
+} KeepOn1; // size = 0x4C
 
 
 /*================================
@@ -670,15 +700,6 @@ typedef struct {
 #define KEEP3_FLG_20 (1 << 5)
 #define KEEP3_FLG_40 (1 << 6)
 #define KEEP3_FLG_80 (1 << 7)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00; // Vec3f?
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Actor* unk_0C;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ s16 unk_1C;
-} KeepOn3Anim; // size = 0x18
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -694,8 +715,21 @@ typedef struct {
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ s16 unk_2C;
     /* 0x2E */ s16 unk_2E;
-    /* 0x30 */ KeepOn3Anim anim;
-} KeepOn3; // 13
+} KeepOn3StaticData; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ f32 unk_00; // Vec3f?
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ Actor* unk_0C;
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ s16 unk_1C;
+} KeepOn3DynamicData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ KeepOn3StaticData staticData;
+    /* 0x30 */ KeepOn3DynamicData dynamicData;
+} KeepOn3; // size = 0x50
 
 
 /*================================
@@ -709,18 +743,6 @@ typedef struct {
 #define KEEP4_FLG_40 (1 << 6)
 
 typedef struct {
-    /* 0x00 */ f32 unk_00; // Vec3f?
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Actor* unk_0C;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-} KeepOn4Anim; // size = 0x18
-
-typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
@@ -730,8 +752,24 @@ typedef struct {
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ s16 unk_1C;
     /* 0x1E */ s16 unk_1E;
-    /* 0x20 */ KeepOn4Anim anim;
-} KeepOn4; // 9
+} KeepOn4StaticData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ f32 unk_00; // Vec3f?
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ Actor* unk_0C;
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+} KeepOn4DynamicData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ KeepOn4StaticData staticData;
+    /* 0x20 */ KeepOn4DynamicData dynamicData;
+} KeepOn4; // size = 0x3C
 
 
 /*================================
@@ -742,17 +780,21 @@ typedef struct {
 #define FIXD1_FLG_10 (1 << 4)
 
 typedef struct {
-    /* 0x00 */ PosRot eyePosRotTarget;
-    /* 0x14 */ s16 fov;
-    /* 0x18 */ struct Actor* trackActor;
-} Fixed1Anim; // size = 0x1C
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 jfifId;
+    /* 0x08 */ f32 fov;
+    /* 0x0C */ s16 flags;
+} Fixed1StaticData; // size = 0x10
 
 typedef struct {
-    /* 0x0000 */ f32 unk_00;
-    /* 0x0004 */ f32 jfifId;
-    /* 0x0008 */ f32 fov;
-    /* 0x000C */ s16 flags;
-    /* 0x0010 */ Fixed1Anim anim;
+    /* 0x00 */ PosRot eyePosRotTarget;
+    /* 0x14 */ s16 fov;
+    /* 0x18 */ Actor* trackActor;
+} Fixed1DynamicData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ Fixed1StaticData staticData;
+    /* 0x10 */ Fixed1DynamicData dynamicData;
 } Fixed1; // size = 0x2C
 
 
@@ -771,15 +813,6 @@ typedef struct {
 #define FIXD2_FLG_80 (1 << 7)
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ s16 unk_1C;
-} Fixed2Anim;
-
-typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
@@ -787,9 +820,21 @@ typedef struct {
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A; //pad
-    /* 0x1C */ Fixed2Anim anim;
-} Fixed2; // 7
+} Fixed2StaticData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ s16 unk_1C;
+} Fixed2DynamicData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ Fixed2StaticData staticData;
+    /* 0x1C */ Fixed2DynamicData dynamicData;
+} Fixed2; // size = 0x3C
 
 
 /*================================
@@ -801,13 +846,6 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04; // yaw
-    /* 0x06 */ s16 unk_06; // pitch
-    /* 0x08 */ s16 unk_08;
-} Subj1Anim;
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
@@ -816,9 +854,19 @@ typedef struct {
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22; // pad
-    /* 0x24 */ Subj1Anim anim;
-} Subj1; // 9
+} Subj1StaticData; // size = 0x24
+
+typedef struct {
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ s16 unk_04; // yaw
+    /* 0x6 */ s16 unk_06; // pitch
+    /* 0x8 */ s16 unk_08;
+} Subj1DynamicData; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ Subj1StaticData staticData;
+    /* 0x24 */ Subj1DynamicData dynamicData;
+} Subj1; // size = 0x30
 
 
 /*================================
@@ -833,18 +881,21 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
-} Unique2Anim; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12; // pad
-    /* 0x14 */ Unique2Anim anim;
-} Unique2; //
+} Unique2StaticData; // size = 0x14
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+} Unique2DynamicData; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ Unique2StaticData staticData;
+    /* 0x14 */ Unique2DynamicData dynamicData;
+} Unique2; // size = 0x1C
 
 
 /*================================
@@ -857,6 +908,12 @@ typedef struct {
 #define UNIQ0_FLG_10 (1 << 4)
 
 typedef struct {
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ f32 unk_04;
+    /* 0x8 */ s16 unk_08;
+} Unique0StaticData; // size = 0xC
+
+typedef struct {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f unk_0C;
     /* 0x18 */ f32 unk_18;
@@ -866,14 +923,12 @@ typedef struct {
     /* 0x3A */ s16 unk_3A;
     /* 0x3C */ s16 unk_3C;
     /* 0x3E */ s16 unk_3E;
-} Unique0Anim; // size = 0xC
+} Unique0DynamicData; // size = 0x40
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0C */ Unique0Anim anim;
-} Unique0; // 3
+    /* 0x00 */ Unique0StaticData staticData;
+    /* 0x0C */ Unique0DynamicData dynamicData;
+} Unique0; // size = 0x4C
 
 
 /*================================
@@ -906,12 +961,12 @@ typedef struct {
     /* 0x0C */ VecSph unk_0C;
     /* 0x14 */ VecSph unk_14;
     /* 0x1C */ s16 unk_1C;
-} Demo1DynamicData; // size = 0xC
+} Demo1DynamicData; // size = 0x20
 
 typedef struct {
     /* 0x00 */ Demo1StaticData staticData;
     /* 0x04 */ Demo1DynamicData dynamicData;
-} Demo1; // size = 0x4
+} Demo1; // size = 0x24
 
 
 /*================================
@@ -928,14 +983,14 @@ typedef struct {
 typedef struct {
     /* 0x00 */ Vec3f initialAt;
     /* 0x0C */ f32 unk_0C;
-    /* 0x14 */ s16 animFrame;
+    /* 0x10 */ s16 animFrame;
     /* 0x12 */ s16 yawDir;
-} Demo2DynamicData; // size = 0xC
+} Demo2DynamicData; // size = 0x14
 
 typedef struct {
     /* 0x08 */ Demo2StaticData staticData;
     /* 0x0C */ Demo2DynamicData dynamicData;
-} Demo2; // size = 0xC
+} Demo2; // size = 0x20
 
 
 /*================================
@@ -1077,7 +1132,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ struct Actor* doorActor;
+    /* 0x00 */ Actor* doorActor;
     /* 0x04 */ s16 bgCamDataId;
     /* 0x06 */ union {
         Vec3s eye;
@@ -1176,14 +1231,14 @@ typedef struct {
 } CamColChk; // size = 0x28
 
 typedef struct {
-    Vec3f collisionClosePoint;
-    CamColChk atEyeColChk;
-    CamColChk eyeAtColChk;
-    f32 swingUpdateRate;
-    s16 pitch;
-    s16 yaw;
-    s16 unk_64;
-    s16 unk_66; // startSwingTimer
+    /* 0x00 */ Vec3f collisionClosePoint;
+    /* 0x0C */ CamColChk atEyeColChk;
+    /* 0x34 */ CamColChk eyeAtColChk;
+    /* 0x5C */ f32 swingUpdateRate;
+    /* 0x60 */ s16 pitch;
+    /* 0x62 */ s16 yaw;
+    /* 0x64 */ s16 unk_64;
+    /* 0x66 */ s16 unk_66; // startSwingTimer
 } SwingAnimation; // size = 0x68
 
 
@@ -1200,9 +1255,9 @@ typedef struct Camera {
     /* 0x074 */ Vec3f eyeNext;
     /* 0x080 */ Vec3f skyboxOffset;
     /* 0x08C */ struct GlobalContext* globalCtx;
-    /* 0x090 */ struct Actor* trackActor; // trackActor Is likely Actor* not Player*. This is the actor the camera focuses on
+    /* 0x090 */ Actor* trackActor; // trackActor Is likely Actor* not Player*. This is the actor the camera focuses on
     /* 0x094 */ PosRot trackActorPosRot;
-    /* 0x0A8 */ struct Actor* target; // targetedActor
+    /* 0x0A8 */ Actor* target; // targetedActor
     /* 0x0AC */ PosRot targetPosRot;
     /* 0x0C0 */ f32 rUpdateRateInv;
     /* 0x0C4 */ f32 pitchUpdateRateInv;
