@@ -1025,7 +1025,7 @@ CameraModeValue sSetSpiralDoorModeNormalData[] = {
         50,               // eyeStepScale
         80,               // posStepScale
         60,               // fov
-        10,               // maxDoorCutsceneCounter
+        10,               // spiralDoorCsLength
         SHRINKWINVAL_NONE | IFACE_ALPHA(0) | SPEC8_FLG_1),
 };
 
@@ -7116,7 +7116,7 @@ s32 Camera_Special7(Camera* camera);
 s32 Camera_Special8(Camera* camera);
 s32 Camera_Special9(Camera* camera);
 
-s32 (*sCameraFunctions[])(Camera*) = {
+s32 (*sCameraActionFunctions[])(Camera*) = {
     NULL,
     Camera_Normal0,
     Camera_Normal1,
@@ -7208,4 +7208,4 @@ static s16 D_801B9E34[] = {
 
 static s32 sUpdateCameraDirection = 0;
 static s32 sIsFalse = false;
-static s32 sCameraInitCounter = 0;
+static s32 sCameraInitSceneTimer = 0;

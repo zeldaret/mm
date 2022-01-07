@@ -45,7 +45,7 @@
 #define CAM_FLAG1_SCENE_DATA_2 (1 << 6)
 
 // Camera flags2
-#define CAM_FLAG2_1 (1 << 0)
+#define CAM_FLAG2_1 (1 << 0) // Surpresses the camera from changing settings based on the bg surface
 #define CAM_FLAG2_2 (1 << 1)
 #define CAM_FLAG2_4 (1 << 2)
 #define CAM_FLAG2_8 (1 << 3)
@@ -55,7 +55,7 @@
 #define CAM_FLAG2_80 (1 << 7)
 #define CAM_FLAG2_100 (1 << 8)
 #define CAM_FLAG2_200 (1 << 9)
-#define CAM_FLAG2_400 (1 << 10)
+#define CAM_FLAG2_400 (1 << 10) // Surpresses the camera from changing settings based on the bg surface
 #define CAM_FLAG2_800 (1 << 11)
 #define CAM_FLAG2_1000 (1 << 12)
 #define CAM_FLAG2_2000 (1 << 13)
@@ -326,12 +326,12 @@ typedef struct {
  *     - Dynamic Data: Camera Action-Function data that is calculated at run-time but needs to be stored while the function is active
  */
 
-#define CAM_GET_STATIC_DATA(type) &((type*)camera->paramData)->staticData
-#define CAM_GET_DYNAMIC_DATA(type) &((type*)camera->paramData)->dynamicData
+#define CAM_GET_STATIC_DATA(type) &((type*)camera->actionFuncData)->staticData
+#define CAM_GET_DYNAMIC_DATA(type) &((type*)camera->actionFuncData)->dynamicData
 
 // Camera will reload static data from camera_data
 #define RELOAD_PARAMS \
-    (camera->animState == 0 || camera->animState == 10 || camera->animState == 20)
+    (camera->actionFuncState == 0 || camera->actionFuncState == 10 || camera->actionFuncState == 20)
 
 // It is common to scale data by a factor of 0.01f
 #define PCT(x) ((x)*0.01f)
@@ -1135,16 +1135,16 @@ typedef struct {
     /* 0x00 */ Actor* doorActor;
     /* 0x04 */ s16 bgCamDataId;
     /* 0x06 */ union {
-        Vec3s eye;
+        Vec3s eye; // position of the camera while exiting a spiral staircase
         struct {
-            s16 timer1;
-            s16 timer2;
-            s16 timer3;
+            s16 timer1; // timer while camera is fixed in front of the door
+            s16 timer2; // timer while camera is behind the door looking at player
+            s16 timer3; // timer while camera turns around to face forward
         };
     };
 } DoorParams; // size = 0xC
 
-#define CAM_GET_DOOR_PARAMS(type) &((type*)camera->paramData)->doorParams
+#define CAM_GET_DOOR_PARAMS(type) &((type*)camera->actionFuncData)->doorParams
 
 
 /*================================
@@ -1155,34 +1155,34 @@ typedef struct {
 #define SPEC8_FLG_1 (1 << 0)
 #define SPEC8_FLG_8 (1 << 3)
 
-#define SET_SPEC8_STATICDATA(yOffset, eyeStepScale, posStepScale, fov, maxDoorCutsceneCounter, flags) \
+#define SET_SPEC8_STATICDATA(yOffset, eyeStepScale, posStepScale, fov, spiralDoorCsLength, flags) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { eyeStepScale, CAM_DATA_04 }, \
     { posStepScale, CAM_DATA_05 }, \
     { fov, CAM_DATA_FOV }, \
-    { maxDoorCutsceneCounter, CAM_DATA_12 }, \
+    { spiralDoorCsLength, CAM_DATA_12 }, \
     { flags, CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
     /* 0x04 */ f32 eyeStepScale;
-    /* 0x00 */ f32 posStepScale;
-    /* 0x04 */ f32 fov;
-    /* 0x08 */ s16 maxDoorCutsceneCounter;
-    /* 0x0A */ s16 flags;
-} Special8StaticData; // size = 0xC
+    /* 0x08 */ f32 posStepScale;
+    /* 0x0C */ f32 fov;
+    /* 0x10 */ s16 spiralDoorCsLength;
+    /* 0x12 */ s16 flags;
+} Special8StaticData; // size = 0x14
 
 typedef struct {
     /* 0x00 */ Vec3f eye;
-    /* 0x0C */ s16 doorCutsceneCounter;
+    /* 0x0C */ s16 spiralDoorCsFrame; // 1/5th of the length of the cutscene
     /* 0x0E */ s16 fov;
 } Special8DynamicData; // size = 0x10
 
 typedef struct {
     /* 0x00 */ DoorParams doorParams;
     /* 0x0C */ Special8StaticData staticData;
-    /* 0x18 */ Special8DynamicData dynamicData;
-} Special8; // size = 0x28
+    /* 0x20 */ Special8DynamicData dynamicData;
+} Special8; // size = 0x30
 
 
 /*================================
@@ -1248,7 +1248,7 @@ typedef struct {
  */
 
 typedef struct Camera {
-    /* 0x000 */ char paramData[0x50]; // function Data
+    /* 0x000 */ char actionFuncData[0x50]; // function Data
     /* 0x050 */ Vec3f at;
     /* 0x05C */ Vec3f eye;
     /* 0x068 */ Vec3f up;
@@ -1284,7 +1284,7 @@ typedef struct Camera {
     /* 0x12C */ s16 data2;
     /* 0x12E */ s16 data3;
     /* 0x130 */ s16 uid;
-    /* 0x132 */ UNK_TYPE1 pad132[2];
+    /* 0x132 */ UNK_TYPE1 pad132;
     /* 0x134 */ Vec3s inputDir;
     /* 0x13A */ Vec3s camDir;
     /* 0x140 */ s16 status;
@@ -1295,16 +1295,17 @@ typedef struct Camera {
     /* 0x14A */ s16 flags1;
     /* 0x14C */ s16 flags2;
     /* 0x14E */ s16 childCamId;
-    /* 0x150 */ s16 unk150;
+    /* 0x150 */ s16 doorTimer1; // a door timer used when door cam is indexed from bgCamDataId
     /* 0x152 */ s16 unk152;
     /* 0x154 */ s16 prevSetting;
     /* 0x156 */ s16 nextCamSceneDataId;
     /* 0x158 */ s16 nextBgId;
     /* 0x15A */ s16 roll;
     /* 0x15C */ s16 paramFlags;
-    /* 0x15E */ s16 animState;
+    /* 0x15E */ s16 actionFuncState; // A state that starts at 0 when a new action function is started, and increments
+                                     // upwards as the action function reaches new states
     /* 0x160 */ s16 unk160;
-    /* 0x162 */ s16 timer;
+    /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamDataId
     /* 0x164 */ s16 camId;
     /* 0x166 */ s16 prevBgCamDataId;
     /* 0x168 */ s16 unk168;

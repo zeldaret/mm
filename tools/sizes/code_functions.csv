@@ -678,7 +678,7 @@ asm/non_matchings/code/z_camera/func_800CC9C0.s,func_800CC9C0,0x800CC9C0,0xCB
 asm/non_matchings/code/z_camera/func_800CCCEC.s,func_800CCCEC,0x800CCCEC,0xD8
 asm/non_matchings/code/z_camera/Camera_CalcUpFromPitchYawRoll.s,Camera_CalcUpFromPitchYawRoll,0x800CD04C,0x8F
 asm/non_matchings/code/z_camera/Camera_ClampLERPScale.s,Camera_ClampLERPScale,0x800CD288,0x16
-asm/non_matchings/code/z_camera/Camera_ResetAnim.s,Camera_ResetAnim,0x800CD2E0,0x4
+asm/non_matchings/code/z_camera/Camera_ResetActionFuncState.s,Camera_ResetActionFuncState,0x800CD2E0,0x4
 asm/non_matchings/code/z_camera/Camera_UpdateInterface.s,Camera_UpdateInterface,0x800CD2F0,0x3D
 asm/non_matchings/code/z_camera/Camera_BgCheckCorner.s,Camera_BgCheckCorner,0x800CD3E4,0x1A
 asm/non_matchings/code/z_camera/func_800CD44C.s,func_800CD44C,0x800CD44C,0x7A
@@ -776,7 +776,7 @@ asm/non_matchings/code/z_camera/Camera_InitPlayerSettings.s,Camera_InitPlayerSet
 asm/non_matchings/code/z_camera/Camera_ChangeStatus.s,Camera_ChangeStatus,0x800DE308,0x7
 asm/non_matchings/code/z_camera/Camera_CheckWater.s,Camera_CheckWater,0x800DE324,0xC2
 asm/non_matchings/code/z_camera/Camera_EarthquakeDay3.s,Camera_EarthquakeDay3,0x800DE62C,0x85
-asm/non_matchings/code/z_camera/Camera_SetRoomHotFlag.s,Camera_SetRoomHotFlag,0x800DE840,0x14
+asm/non_matchings/code/z_camera/func_800DE840.s,func_800DE840,0x800DE840,0x14
 asm/non_matchings/code/z_camera/func_800DE890.s,func_800DE890,0x800DE890,0x31
 asm/non_matchings/code/z_camera/Camera_IsWearingGiantsMask.s,Camera_IsWearingGiantsMask,0x800DE954,0x17
 asm/non_matchings/code/z_camera/Camera_Update.s,Camera_Update,0x800DE9B0,0x2BA
@@ -797,7 +797,7 @@ asm/non_matchings/code/z_camera/Camera_AddQuake.s,Camera_AddQuake,0x800DFD04,0x1
 asm/non_matchings/code/z_camera/Camera_SetParam.s,Camera_SetParam,0x800DFD78,0x5E
 asm/non_matchings/code/z_camera/Camera_UnsetParam.s,Camera_UnsetParam,0x800DFEF0,0xA
 asm/non_matchings/code/z_camera/Camera_OverwriteFlags.s,Camera_OverwriteFlags,0x800DFF18,0x7
-asm/non_matchings/code/z_camera/Camera_ResetAnimUnused.s,Camera_ResetAnimUnused,0x800DFF34,0x4
+asm/non_matchings/code/z_camera/Camera_ResetActionFuncStateUnused.s,Camera_ResetActionFuncStateUnused,0x800DFF34,0x4
 asm/non_matchings/code/z_camera/Camera_SetCsParams.s,Camera_SetCsParams,0x800DFF44,0x7
 asm/non_matchings/code/z_camera/Camera_SetFlags.s,Camera_SetFlags,0x800DFF60,0x9
 asm/non_matchings/code/z_camera/Camera_UnsetFlags.s,Camera_UnsetFlags,0x800DFF84,0xA

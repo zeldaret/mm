@@ -242,18 +242,18 @@ void Camera_UpdateAtActorOffset(Camera* camera, Vec3f* actorOffset) {
 f32 Camera_GetTrackedActorHeight(Camera* camera) {
     PosRot actorFocus;
     Actor* trackActor = camera->trackActor;
-    f32 trackActorHeight;
+    f32 trackHeight;
 
     if (trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
-        trackActorHeight = Player_GetHeight((Player*)trackActor);
+        trackHeight = Player_GetHeight((Player*)trackActor);
     } else {
         Actor_GetFocus(&actorFocus, trackActor);
-        trackActorHeight = actorFocus.pos.y - camera->trackActorPosRot.pos.y;
-        if (trackActorHeight == 0.0f) {
-            trackActorHeight = 10.0f;
+        trackHeight = actorFocus.pos.y - camera->trackActorPosRot.pos.y;
+        if (trackHeight == 0.0f) {
+            trackHeight = 10.0f;
         }
     }
-    return trackActorHeight;
+    return trackHeight;
 }
 
 f32 Camera_GetRunSpeedLimit(Camera* camera) {
@@ -857,17 +857,17 @@ s16 func_800CC9C0(Camera* camera, s16 yaw, s16 arg2) {
     f32 sp30;
     f32 sp2C;
     f32 phi_f16;
-    f32 trackActorHeight = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
 
-    temp_f2 = (trackActorHeight * 1.2f);
-    sp2C = trackActorHeight * 2.5f;
-    sp30 = trackActorHeight;
+    temp_f2 = (trackHeight * 1.2f);
+    sp2C = trackHeight * 2.5f;
+    sp30 = trackHeight;
     playerPos.x = camera->trackActorPosRot.pos.x;
     playerPos.y = camera->playerGroundY + temp_f2;
     playerPos.z = camera->trackActorPosRot.pos.z;
-    rotatedPos.x = (trackActorHeight * sinYaw) + playerPos.x;
+    rotatedPos.x = (trackHeight * sinYaw) + playerPos.x;
     rotatedPos.y = playerPos.y;
-    rotatedPos.z = (trackActorHeight * cosYaw) + playerPos.z;
+    rotatedPos.z = (trackHeight * cosYaw) + playerPos.z;
 
     if (arg2 || ((camera->globalCtx->state.frames % 2) == 0)) {
         D_801EDC00.pos.x = playerPos.x + (sp2C * sinYaw);
@@ -916,7 +916,7 @@ f32 func_800CCCEC(Camera* camera, s16 arg1) {
     PosRot sp5C;    // 5C-60-64 -- 68-6A-6C
     CamColChk sp34; // 34-38-3C -- 40-44-48 -- 4C -- 50-54-56 -- 58
     f32 temp_f0;
-    f32 trackActorHeight = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     f32 sp28;
     f32 temp_f2;
     s16 sp22;
@@ -933,7 +933,7 @@ f32 func_800CCCEC(Camera* camera, s16 arg1) {
     temp_f0 = Math_CosS(sp5C.rot.y);
 
     sp7C.x = (30.0f * sp28) + sp5C.pos.x;
-    sp7C.y = sp5C.pos.y + trackActorHeight;
+    sp7C.y = sp5C.pos.y + trackHeight;
     sp7C.z = 30.0f * temp_f0 + sp5C.pos.z;
     sp34.pos.x = sp5C.pos.x + (12.0f * sp28);
     sp34.pos.y = sp7C.y;
@@ -1090,8 +1090,8 @@ f32 Camera_ClampLERPScale(Camera* camera, f32 maxLERPScale) {
     return ret;
 }
 
-void Camera_ResetAnim(Camera* camera, s32 mode) {
-    camera->animState = 0;
+void Camera_ResetActionFuncState(Camera* camera, s32 mode) {
+    camera->actionFuncState = 0;
 }
 
 void Camera_UpdateInterface(s32 flags) {
@@ -1244,15 +1244,15 @@ s32 Camera_CalcAtDefault(Camera* camera, VecSph* eyeAtDir, f32 yOffset, s16 calc
     Vec3f atTarget;
     s32 pad;
     PosRot* playerPosRot = &camera->trackActorPosRot;
-    f32 trackActorHeight = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
 
     posOffsetTarget.x = 0.0f;
-    posOffsetTarget.y = trackActorHeight + yOffset;
+    posOffsetTarget.y = trackHeight + yOffset;
     posOffsetTarget.z = 0.0f;
 
     if (calcSlope) {
         posOffsetTarget.y -= OLib_ClampMaxDist(
-            Camera_CalcSlopeYAdj(&camera->floorNorm, playerPosRot->rot.y, eyeAtDir->yaw, 25.0f), trackActorHeight);
+            Camera_CalcSlopeYAdj(&camera->floorNorm, playerPosRot->rot.y, eyeAtDir->yaw, 25.0f), trackHeight);
     }
 
     Camera_LERPCeilVec3f(&posOffsetTarget, &camera->atActorOffset, camera->xzOffsetUpdateRate,
@@ -1321,11 +1321,11 @@ s32 func_800CDA14(Camera* camera, VecSph* arg1, f32 yOffset, f32 arg3) {
     Vec3f sp44;
     Vec3f sp38;
     f32 atLERPStepScale;
-    f32 trackActorHeight = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
 
     sp50.x = Math_SinS(temp_s1->rot.y) * arg3;
     sp50.z = Math_CosS(temp_s1->rot.y) * arg3;
-    sp50.y = trackActorHeight + yOffset;
+    sp50.y = trackHeight + yOffset;
     Camera_LERPCeilVec3f(&sp50, &camera->atActorOffset, camera->xzOffsetUpdateRate, camera->yOffsetUpdateRate, 0.1f);
 
     sp44.x = temp_s1->pos.x + camera->atActorOffset.x;
@@ -1354,7 +1354,7 @@ s32 func_800CDB6C(Camera* camera, VecSph* arg1, f32 yOffset, f32 arg3, f32* arg4
     f32 sp58;
     f32 sp54;
     PosRot* trackActorPosRot = &camera->trackActorPosRot;
-    f32 trackActorHeight = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     VecSph sp44;
     Vec3f* at = &camera->at;
 
@@ -1376,7 +1376,7 @@ s32 func_800CDB6C(Camera* camera, VecSph* arg1, f32 yOffset, f32 arg3, f32* arg4
         sp58 = temp_f0; // TODO: Needed to match?
     }
 
-    sp70.y = trackActorHeight + yOffset;
+    sp70.y = trackHeight + yOffset;
 
     if ((PREG(76) != 0) && (arg5 != 0)) {
         sp70.y -= Camera_CalcSlopeYAdj(&camera->floorNorm, trackActorPosRot->rot.y, arg1->yaw, 25.0f);
@@ -1430,12 +1430,12 @@ s32 Camera_CalcAtForLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* targetPos, f
     f32 temp_f20;
     f32 temp_f2;
     f32 phi_f16;
-    f32 trackActorHeight = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     f32 sp50;
     PosRot* trackActorPosRot = &camera->trackActorPosRot;
 
     sp80.x = 0.0f;
-    sp80.y = trackActorHeight + yOffset;
+    sp80.y = trackHeight + yOffset;
     sp80.z = 0.0f;
 
     if (PREG(76) && (flags & FLG_ADJSLOPE)) {
@@ -1443,7 +1443,7 @@ s32 Camera_CalcAtForLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* targetPos, f
     }
 
     sp74 = trackActorPosRot->pos;
-    sp74.y += trackActorHeight;
+    sp74.y += trackHeight;
 
     OLib_Vec3fDiffToVecSphGeo(outPlayerToTargetDir, &sp74, targetPos);
 
@@ -1591,7 +1591,7 @@ s32 Camera_CalcAtForHorse(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* yP
     Vec3f posOffsetTarget;
     Vec3f focalTarget;
     s32 pad[2];
-    f32 playerHeight = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     Player* player = (Player*)camera->trackActor;
     PosRot horsePosRot;
 
@@ -1606,7 +1606,7 @@ s32 Camera_CalcAtForHorse(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* yP
     }
 
     posOffsetTarget.x = 0.0f;
-    posOffsetTarget.y = playerHeight + yOffset;
+    posOffsetTarget.y = trackHeight + yOffset;
     posOffsetTarget.z = 0.0f;
 
     if (calcSlope != 0) {
@@ -1949,18 +1949,18 @@ s32 Camera_Normal1(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&spA4, &camera->at, sp4C);
     OLib_Vec3fDiffToVecSphGeo(&sp9C, &camera->at, &camera->eyeNext);
 
-    switch (camera->animState) {
+    switch (camera->actionFuncState) {
         case 20:
             Camera_SetUpdateRatesFastYaw(camera);
             // fallthrough?
         case 0:
             dynamicData->unk_0C = 1;
-            if (!(staticData->unk_22 & NORM1_FLG_8) && (camera->animState != 20)) {
+            if (!(staticData->unk_22 & NORM1_FLG_8) && (camera->actionFuncState != 20)) {
                 dynamicData->unk_0C |= 0x1000;
             }
             // fallthrough?
         case 10:
-            if (camera->animState == 10) {
+            if (camera->actionFuncState == 10) {
                 dynamicData->unk_0C = 0;
             }
             dynamicData->unk_08 = 0;
@@ -1974,7 +1974,7 @@ s32 Camera_Normal1(Camera* camera) {
             dynamicData->unk_10 = 120.0f;
     }
 
-    camera->animState = 1;
+    camera->actionFuncState = 1;
     sUpdateCameraDirection = true;
 
     if ((camera->speedRatio < 0.01f) || (dynamicData->unk_0A > 0x4B0)) {
@@ -2157,7 +2157,7 @@ s32 Camera_Normal1(Camera* camera) {
         if (staticData->unk_22 & NORM1_FLG_20) {
             spB4.yaw = sp9C.yaw;
             spB4.pitch = sp9C.pitch;
-            camera->animState = 20;
+            camera->actionFuncState = 20;
         } else {
             if (D_801ED920 != NULL) {
                 if (sp40) {}
@@ -2301,7 +2301,7 @@ s32 Camera_Normal3(Camera* camera) {
     Normal3DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Normal3);
     f32 sp8C;
     f32 sp90;
-    f32 temp_f2;
+    f32 temp_f2; // multi-use temp
     f32 sp88;
     VecSph sp80;
     VecSph sp78;
@@ -2344,7 +2344,7 @@ s32 Camera_Normal3(Camera* camera) {
     sUpdateCameraDirection = true;
     sCameraInterfaceFlags = staticData->flags;
 
-    phi_v1_2 = camera->animState;
+    phi_v1_2 = camera->actionFuncState;
     if (!(((phi_v1_2 == 0) || (phi_v1_2 == 10)) || (phi_v1_2 == 20))) {
     } else {
         dynamicData->isZero = 0;
@@ -2364,7 +2364,7 @@ s32 Camera_Normal3(Camera* camera) {
             dynamicData->yawTimer = 0;
         }
 
-        camera->animState = 1;
+        camera->actionFuncState = 1;
         D_801EDC30[camera->camId].unk_66 = 0;
         dynamicData->flag = 1;
     }
@@ -2536,7 +2536,7 @@ s32 Camera_Normal0(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->unk_1E;
 
-    if ((camera->animState == 0) || (camera->animState == 10) || (camera->animState == 20)) {
+    if (RELOAD_PARAMS) {
         bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
         Camera_Vec3sToVec3f(&dynamicData->unk_00, &bgCamData->pos);
         dynamicData->unk_20 = bgCamData->rot.x;
@@ -2567,7 +2567,7 @@ s32 Camera_Normal0(Camera* camera) {
             sp88.r = 100.0f;
             OLib_VecSphGeoToVec3f(&dynamicData->unk_0C, &sp88);
         }
-        camera->animState = 1;
+        camera->actionFuncState = 1;
         camera->yawUpdateRateInv = 50.0f;
     } else {
         if (func_800CB950(camera)) {
@@ -2689,21 +2689,19 @@ s32 Camera_Parallel1(Camera* camera) {
     Parallel1StaticData* staticData = CAM_GET_STATIC_DATA(Parallel1);
     Parallel1DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Parallel1);
     s32 new_var3;
-    f32 sp60;
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     s16 new_var2;
     s16 phi_a0;
     s32 phi_a0_2;
     CameraModeValue* values;
     f32 sp50;
 
-    sp60 = Camera_GetTrackedActorHeight(camera);
-
     if (!RELOAD_PARAMS) {
     } else {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        staticData->unk_00 = NEXTPCT * sp60 * (0.8f - ((68.0f / sp60) * -0.2f));
-        staticData->unk_04 = NEXTPCT * sp60 * (0.8f - ((68.0f / sp60) * -0.2f));
-        staticData->unk_08 = NEXTPCT * sp60 * (0.8f - ((68.0f / sp60) * -0.2f));
+        staticData->unk_00 = NEXTPCT * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
+        staticData->unk_04 = NEXTPCT * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
+        staticData->unk_08 = NEXTPCT * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
         staticData->unk_20 = DEGF_TO_BINANG(NEXTSETTING);
         staticData->unk_22 = DEGF_TO_BINANG(NEXTSETTING);
         staticData->unk_0C = NEXTSETTING;
@@ -2720,7 +2718,7 @@ s32 Camera_Parallel1(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&sp78, at, eyeNext);
     func_800CBAD4(&spA4, camera);
 
-    switch (camera->animState) {
+    switch (camera->actionFuncState) {
         case 20:
             if ((staticData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == 0) {
                 Camera_SetUpdateRatesFastYaw(camera);
@@ -2767,14 +2765,14 @@ s32 Camera_Parallel1(Camera* camera) {
 
             if ((staticData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == (PARA1_FLG_8 | PARA1_FLG_2)) {
                 dynamicData->unk_22 = 1;
-                sp50 = 0.8f - ((68.0f / sp60) * -0.2f);
+                sp50 = 0.8f - ((68.0f / trackHeight) * -0.2f);
                 bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
                 dynamicData->unk_20 = bgCamData->rot.x;
                 dynamicData->unk_1E = bgCamData->rot.y;
                 dynamicData->unk_08 = (bgCamData->fov == -1)   ? staticData->unk_14
                                : (bgCamData->fov > 360) ? bgCamData->fov * 0.01f
                                                         : bgCamData->fov;
-                dynamicData->unk_00 = (bgCamData->unk_0E == -1) ? staticData->unk_04 : bgCamData->unk_0E * 0.01f * sp60 * sp50;
+                dynamicData->unk_00 = (bgCamData->unk_0E == -1) ? staticData->unk_04 : bgCamData->unk_0E * 0.01f * trackHeight * sp50;
             dummy:; // TODO: is needed?
             } else {
                 dynamicData->unk_08 = staticData->unk_14;
@@ -2784,7 +2782,7 @@ s32 Camera_Parallel1(Camera* camera) {
             dynamicData->unk_24 = staticData->unk_24;
             dynamicData->unk_04 = sp38->pos.y - camera->playerPosDelta.y;
             dynamicData->unk_26 = 1;
-            camera->animState = 1;
+            camera->actionFuncState = 1;
             sCameraInterfaceFlags = staticData->unk_26;
     }
 
@@ -2823,10 +2821,10 @@ s32 Camera_Parallel1(Camera* camera) {
         dynamicData->unk_1E = BINANG_ROT180(camera->trackActorPosRot.rot.y) + staticData->unk_22;
     }
 
-    if (camera->animState == 0x15) {
-        camera->animState = 1;
-    } else if (camera->animState == 0xB) {
-        camera->animState = 1;
+    if (camera->actionFuncState == 21) {
+        camera->actionFuncState = 1;
+    } else if (camera->actionFuncState == 11) {
+        camera->actionFuncState = 1;
     }
 
     spA0 = camera->speedRatio * 0.5f;
@@ -2881,13 +2879,13 @@ s32 Camera_Parallel1(Camera* camera) {
     if ((((Player*)camera->trackActor)->stateFlags1 & 0x4000) || (((Player*)camera->trackActor)->stateFlags1 & 4) ||
         ((staticData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == (PARA1_FLG_4 | PARA1_FLG_2))) {
         spB0 = spA4;
-        spB0.y += ((sp60 * 0.6f) + staticData->unk_00);
+        spB0.y += ((trackHeight * 0.6f) + staticData->unk_00);
         Camera_LERPCeilVec3f(&spB0, at, camera->xzOffsetUpdateRate, camera->yOffsetUpdateRate, 0.0001f);
         Camera_UpdateAtActorOffset(camera, &sp38->pos);
     } else {
         if ((staticData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) {
             spB0 = sp38->pos;
-            spB0.y += sp60 + staticData->unk_00;
+            spB0.y += trackHeight + staticData->unk_00;
             Camera_LERPCeilVec3f(&spB0, at, camera->xzOffsetUpdateRate, camera->yOffsetUpdateRate, 0.0001f);
             Camera_UpdateAtActorOffset(camera, &sp38->pos);
         } else if (dynamicData->unk_22 != 0) {
@@ -2970,7 +2968,7 @@ s32 Camera_Parallel1(Camera* camera) {
             // (stateFlags1 & 0x4) Climbing ledge
             if ((((Player*)camera->trackActor)->stateFlags1 & 0x4000) ||
                 (((Player*)camera->trackActor)->stateFlags1 & 4) || ((staticData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == (PARA1_FLG_4 | PARA1_FLG_2))) {
-                spB0.y += sp60;
+                spB0.y += trackHeight;
             }
             *eye = *eyeNext;
             func_800CBFA4(camera, &spB0, eye, 0);
@@ -3041,13 +3039,13 @@ s32 Camera_Jump2(Camera* camera) {
     Jump2DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Jump2);
     f32 phi_f2;
     f32 yNormal; // used twice
-    f32 actorHeight = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     f32 temp_f16;
 
     if (RELOAD_PARAMS) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        yNormal = 0.8f - (-0.2f * (68.0f / actorHeight));
+        yNormal = 0.8f - (-0.2f * (68.0f / trackHeight));
 
         if (camera->playerPosDelta.y > 0.0f) {
             phi_f2 = -10.0f;
@@ -3055,9 +3053,9 @@ s32 Camera_Jump2(Camera* camera) {
             phi_f2 = 10.0f;
         }
 
-        staticData->unk_00 = PCT(phi_f2 + NEXTSETTING) * actorHeight * yNormal;
-        staticData->unk_04 = NEXTPCT * actorHeight * yNormal;
-        staticData->unk_08 = NEXTPCT * actorHeight * yNormal;
+        staticData->unk_00 = PCT(phi_f2 + NEXTSETTING) * trackHeight * yNormal;
+        staticData->unk_04 = NEXTPCT * trackHeight * yNormal;
+        staticData->unk_08 = NEXTPCT * trackHeight * yNormal;
         staticData->unk_0C = NEXTPCT;
         staticData->unk_10 = NEXTSETTING;
         staticData->unk_14 = NEXTPCT;
@@ -3080,7 +3078,7 @@ s32 Camera_Jump2(Camera* camera) {
         if (temp_f0_2 == BGCHECK_Y_MIN) {
             dynamicData->unk_0A = -1;
             dynamicData->unk_00 = sp2C->pos.y - 1000.0f;
-        } else if ((sp2C->pos.y - dynamicData->unk_00) < actorHeight) {
+        } else if ((sp2C->pos.y - dynamicData->unk_00) < trackHeight) {
             dynamicData->unk_0A = 1;
         } else {
             dynamicData->unk_0A = -1;
@@ -3098,7 +3096,7 @@ s32 Camera_Jump2(Camera* camera) {
         sp2C->pos.y -= camera->playerPosDelta.y;
         sp2C->pos.z -= camera->playerPosDelta.z;
         dynamicData->unk_0C = 6;
-        camera->animState++;
+        camera->actionFuncState++;
         camera->atLERPStepScale = staticData->unk_1C;
     }
 
@@ -3137,7 +3135,7 @@ s32 Camera_Jump2(Camera* camera) {
     }
 
     spC8.x = sp2C->pos.x + (Math_SinS(sp2C->rot.y) * 25.0f);
-    spC8.y = sp2C->pos.y + (actorHeight * 2.2f);
+    spC8.y = sp2C->pos.y + (trackHeight * 2.2f);
     spC8.z = sp2C->pos.z + (Math_CosS(sp2C->rot.y) * 25.0f);
 
     yNormal = Camera_GetFloorYNorm(camera, &spBC, &spC8, &sp88);
@@ -3151,7 +3149,7 @@ s32 Camera_Jump2(Camera* camera) {
         if (camera->playerPosDelta.y > 1.0f) {
             spB4.pitch = Camera_LERPCeilS(0x1F4, spA4.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
         }
-    } else if ((sp2C->pos.y - dynamicData->unk_00) < actorHeight) {
+    } else if ((sp2C->pos.y - dynamicData->unk_00) < trackHeight) {
         camera->pitchUpdateRateInv = Camera_LERPCeilF(20.0f, camera->pitchUpdateRateInv, 0.2f, 0.1f);
         camera->rUpdateRateInv = Camera_LERPCeilF(20.0f, camera->rUpdateRateInv, 0.2f, 0.1f);
         if (camera->playerPosDelta.y > 1.0f) {
@@ -3289,7 +3287,7 @@ s32 Camera_Jump3(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->unk_22;
 
-    switch (camera->animState) {
+    switch (camera->actionFuncState) {
         case 0:
             dynamicData->unk_10 = 0x1000;
         case 10:
@@ -3298,7 +3296,7 @@ s32 Camera_Jump3(Camera* camera) {
             D_801EDC30[camera->camId].yaw = D_801EDC30[camera->camId].pitch = D_801EDC30[camera->camId].unk_64 = 0;
             dynamicData->unk_08 = 0xA;
             D_801EDC30[camera->camId].swingUpdateRate = staticData->unk_0C;
-            camera->animState++;
+            camera->actionFuncState++;
             D_801EDC30[camera->camId].unk_66 = 0;
             break;
         default:
@@ -3532,7 +3530,7 @@ s32 Camera_Battle1(Camera* camera) {
     sp8C = &(camera->trackActor)->focus;
     sp68 = Camera_GetTrackedActorHeight(camera);
 
-    if ((camera->animState != 0) && (camera->animState != 0xA) && (camera->animState != 0x14)) {
+    if ((camera->actionFuncState != 0) && (camera->actionFuncState != 0xA) && (camera->actionFuncState != 0x14)) {
     } else {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
@@ -3556,7 +3554,7 @@ s32 Camera_Battle1(Camera* camera) {
         staticData->unk_28 = NEXTSETTING * 0.01f;
         staticData->unk_28 = 0.2f - (0.2f - staticData->unk_28);
         staticData->unk_2C = NEXTSETTING * 0.01f;
-        if ((camera->animState != 0) && (camera->animState != 0xA) && (camera->animState != 0x14)) {
+        if ((camera->actionFuncState != 0) && (camera->actionFuncState != 0xA) && (camera->actionFuncState != 0x14)) {
         } else {
             dynamicData->unk_18 = 0x28;
             camera->pitchUpdateRateInv = 9.0f;
@@ -3606,11 +3604,11 @@ s32 Camera_Battle1(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->unk_30;
 
-    if ((camera->animState == 0) || (camera->animState == 0xA) || (camera->animState == 0x14)) {
+    if ((camera->actionFuncState == 0) || (camera->actionFuncState == 0xA) || (camera->actionFuncState == 0x14)) {
         dynamicData->unk_10 = 0;
         dynamicData->unk_1A = 0;
         dynamicData->unk_08 = camera->target;
-        camera->animState++;
+        camera->actionFuncState++;
         dynamicData->unk_16 = 7;
         dynamicData->unk_12 = sp9C.yaw;
         dynamicData->unk_14 = sp9C.pitch;
@@ -3646,7 +3644,7 @@ s32 Camera_Battle1(Camera* camera) {
     Actor_GetFocus(&sp40->pos, camera->target);
 
     if (dynamicData->unk_08 != camera->target) {
-        camera->animState = 0;
+        camera->actionFuncState = 0;
         return true;
     }
 
@@ -3969,7 +3967,7 @@ s32 Camera_KeepOn1(Camera* camera) {
     sCameraInterfaceFlags = staticData->unk_2C;
 
     if (RELOAD_PARAMS) {
-        camera->animState++;
+        camera->actionFuncState++;
         dynamicData->unk_18 = 0;
         dynamicData->unk_10 = 0;
         dynamicData->unk_04 = 0.0f;
@@ -4250,12 +4248,12 @@ s32 Camera_KeepOn3(Camera* camera) {
     PosRot* sp3C = &camera->trackActorPosRot;
     KeepOn3StaticData* staticData = CAM_GET_STATIC_DATA(KeepOn3);
     KeepOn3DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(KeepOn3);
-    f32 sp58;
+    f32 trackHeight;
     s32 i;
 
     sp70 = &(camera->trackActor)->focus; // TODO: Move above?
     sp6A = 0;
-    sp58 = Camera_GetTrackedActorHeight(camera);
+    trackHeight = Camera_GetTrackedActorHeight(camera);
 
     if ((camera->target == NULL) || (camera->target->update == NULL)) {
         camera->target = NULL;
@@ -4276,7 +4274,7 @@ s32 Camera_KeepOn3(Camera* camera) {
     if (RELOAD_PARAMS) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
         
-        staticData->unk_00 = NEXTSETTING * 0.01f * sp58 * (0.8f - ((68.0f / sp58) * -0.2f));
+        staticData->unk_00 = NEXTSETTING * 0.01f * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
         staticData->unk_04 = NEXTSETTING;
         staticData->unk_08 = NEXTSETTING;
         staticData->unk_0C = NEXTSETTING;
@@ -4291,7 +4289,7 @@ s32 Camera_KeepOn3(Camera* camera) {
         staticData->unk_28 = NEXTSETTING * 0.01f;
     }
 
-    if (camera->animState == 10) {
+    if (camera->actionFuncState == 10) {
         staticData->unk_2C >>= 1;
         if (staticData->unk_2C < 0x14) {
             staticData->unk_2C = 0x14;
@@ -4302,11 +4300,11 @@ s32 Camera_KeepOn3(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&sp80, at, eyeNext);
     Actor_GetFocus(&camera->targetPosRot, camera->target);
     spD8 = sp3C->pos;
-    spD8.y += sp58;
+    spD8.y += trackHeight;
     OLib_Vec3fDiffToVecSphGeo(&spA0, &spD8, &camera->targetPosRot.pos);
 
     if (RELOAD_PARAMS) {
-        camera->animState++;
+        camera->actionFuncState++;
         spA8[0] = camera->target;
         spA8[1] = camera->trackActor;
         dynamicData->unk_0C = camera->target;
@@ -4374,7 +4372,7 @@ s32 Camera_KeepOn3(Camera* camera) {
         phi_f14 = staticData->unk_28;
         spA0.r = spB8 * phi_f14 + (spB4 * (1.0f - phi_f14));
         spD8 = sp3C->pos;
-        spD8.y += sp58;
+        spD8.y += trackHeight;
 
         OLib_VecSphAddToVec3f(&dynamicData->unk_10, &spD8, &spA0);
         dynamicData->unk_10.y += staticData->unk_00;
@@ -4459,7 +4457,7 @@ s32 Camera_KeepOn3(Camera* camera) {
 
     if (dynamicData->unk_0C != camera->target) {
         dynamicData->unk_0C = camera->target;
-        camera->animState = 10;
+        camera->actionFuncState = 10;
     }
 
     return true;
@@ -4485,8 +4483,8 @@ s32 Camera_KeepOn4(Camera* camera) {
     PosRot* sp38 = &camera->trackActorPosRot;
     KeepOn4StaticData* staticData = CAM_GET_STATIC_DATA(KeepOn4);
     KeepOn4DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(KeepOn4);
-    f32 sp88;
-    s32 sp84; // bgId
+    f32 trackHeight;
+    s32 bgId;
     s16 sp82; // mode
     Player* player; // sp7C
     Vec3f* data;
@@ -4525,14 +4523,14 @@ s32 Camera_KeepOn4(Camera* camera) {
                 break;
         }
 
-        sp88 = Camera_GetTrackedActorHeight(camera) - (player->unk_AB8 * (camera->trackActor)->scale.y);
+        trackHeight = Camera_GetTrackedActorHeight(camera) - (player->unk_AB8 * (camera->trackActor)->scale.y);
     } else {
         sp82 = CAM_MODE_NORMAL;
-        sp88 = Camera_GetTrackedActorHeight(camera);
+        trackHeight = Camera_GetTrackedActorHeight(camera);
     }
 
     if (dynamicData->unk_18 != *sp44) {
-        camera->animState = 20;
+        camera->actionFuncState = 20;
         Camera_SetFlags(camera, CAM_FLAG2_20);
         Camera_UnsetFlags(camera, CAM_FLAG2_4 | CAM_FLAG2_2);
         camera->globalCtx->view.unk164 = camera->camId | 0x50;
@@ -4543,8 +4541,8 @@ s32 Camera_KeepOn4(Camera* camera) {
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[sp82].values;
         new_var = -0.5f;
-        staticData->unk_00 = NEXTPCT * sp88 * ((1.0f + new_var) - ((68.0f / sp88) * new_var));
-        staticData->unk_04 = NEXTPCT * sp88 * ((1.0f + new_var) - ((68.0f / sp88) * new_var));
+        staticData->unk_00 = NEXTPCT * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
+        staticData->unk_04 = NEXTPCT * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
         staticData->unk_08 = NEXTSETTING;
         staticData->unk_0C = NEXTSETTING;
         staticData->unk_10 = NEXTSETTING;
@@ -4560,8 +4558,8 @@ s32 Camera_KeepOn4(Camera* camera) {
     data = &D_801EDDD0;
     OLib_Vec3fDiffToVecSphGeo(&spA8, at, eyeNext);
     D_801EDDD0 = sp38->pos;
-    D_801EDDD0.y = data->y + sp88;
-    temp_f0_2 = BgCheck_CameraRaycastFloor2(&camera->globalCtx->colCtx, &spC0, &sp84, &D_801EDDD0);
+    D_801EDDD0.y = data->y + trackHeight;
+    temp_f0_2 = BgCheck_CameraRaycastFloor2(&camera->globalCtx->colCtx, &spC0, &bgId, &D_801EDDD0);
     if ((staticData->unk_00 + data->y) < temp_f0_2) {
         D_801EDDD0.y = temp_f0_2 + 10.0f;
     } else {
@@ -4576,7 +4574,7 @@ s32 Camera_KeepOn4(Camera* camera) {
     }
 
     sp9C = 0;
-    switch (camera->animState) {
+    switch (camera->actionFuncState) {
         case 0:
         case 20:
             spCC[sp9C] = camera->trackActor;
@@ -4642,12 +4640,13 @@ s32 Camera_KeepOn4(Camera* camera) {
             spB8.pitch = spA2;
             spB8.yaw = spA0;
             spB8.r = staticData->unk_04;
-            sp84 = func_800CC260(camera, &D_801EDDF0, &D_801EDDD0, &spB8, spCC, sp9C);
+            // Odd that the return is set to bgId and remains unused
+            bgId = func_800CC260(camera, &D_801EDDF0, &D_801EDDD0, &spB8, spCC, sp9C);
             dynamicData->unk_04 = (f32)(s16)(spB8.pitch - spA8.pitch) / dynamicData->unk_14;
             dynamicData->unk_00 = (f32)(s16)(spB8.yaw - spA8.yaw) / dynamicData->unk_14;
             dynamicData->unk_10 = spA8.yaw;
             dynamicData->unk_12 = spA8.pitch;
-            camera->animState++;
+            camera->actionFuncState++;
             dynamicData->unk_16 = 1;
             break;
 
@@ -4710,7 +4709,7 @@ s32 Camera_Fixed1(Camera* camera) {
     Vec3f* eye = &camera->eye;
     Vec3f* at = &camera->at;
     PosRot* playerPosRot = &camera->trackActorPosRot;
-    f32 playerHeight = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     CameraModeValue* values;
     PosRot* sp50;
     PosRot* sp4C;
@@ -4731,7 +4730,7 @@ s32 Camera_Fixed1(Camera* camera) {
         dynamicData->fov = bgCamData->fov;
         dynamicData->trackActor = camera->trackActor;
 
-        staticData->unk_00 = NEXTPCT * playerHeight;
+        staticData->unk_00 = NEXTPCT * trackHeight;
         staticData->jfifId = NEXTPCT;
         staticData->fov = NEXTSETTING;
         staticData->flags = NEXTSETTING;
@@ -4755,7 +4754,7 @@ s32 Camera_Fixed1(Camera* camera) {
     negOne = -1;
 
     if (dynamicData->trackActor != camera->trackActor) {
-        camera->animState = 20;
+        camera->actionFuncState = 20;
     }
 
     if (dynamicData->fov == (s32)negOne) {
@@ -4766,8 +4765,8 @@ s32 Camera_Fixed1(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->flags;
 
-    if (camera->animState == 0) {
-        camera->animState++;
+    if (camera->actionFuncState == 0) {
+        camera->actionFuncState++;
         Camera_SetUpdateRatesSlow(camera);
         if (dynamicData->fov != (s32)negOne) {
             staticData->fov = PCT(dynamicData->fov);
@@ -4781,7 +4780,7 @@ s32 Camera_Fixed1(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&eyeAtOffset, eye, at);
     Camera_LERPCeilVec3f(&dynamicData->eyePosRotTarget.pos, eye, staticData->jfifId, staticData->jfifId, 0.2f);
     adjustedPos = playerPosRot->pos;
-    adjustedPos.y += playerHeight;
+    adjustedPos.y += trackHeight;
     camera->dist = OLib_Vec3fDist(&adjustedPos, eye);
     eyeOffset.r = camera->dist;
     eyeOffset.pitch = Camera_LERPCeilS(dynamicData->eyePosRotTarget.rot.x * -1, eyeAtOffset.pitch, staticData->jfifId, 5);
@@ -4815,7 +4814,7 @@ s32 Camera_Fixed2(Camera* camera) {
     Vec3f* new_var1;
     Vec3f* new_var2;
     Player* player;
-    f32 sp60 = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     Actor* actor;
     Fixed2StaticData* staticData = CAM_GET_STATIC_DATA(Fixed2);
     Fixed2DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Fixed2);
@@ -4826,7 +4825,7 @@ s32 Camera_Fixed2(Camera* camera) {
     } else {
         if (new_var2) {}
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        staticData->unk_00 = NEXTPCT * sp60 * (0.8f - ((68.0f / sp60) * -0.2f));
+        staticData->unk_00 = NEXTPCT * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
         staticData->unk_04 = NEXTSETTING;
         staticData->unk_08 = NEXTSETTING;
         staticData->unk_0C = NEXTPCT;
@@ -4909,7 +4908,7 @@ s32 Camera_Fixed2(Camera* camera) {
         if (dynamicData->unk_1C <= 360) {
             dynamicData->unk_1C *= 100;
         }
-        if (camera->animState == 20) {
+        if (camera->actionFuncState == 20) {
             dynamicData->unk_14 = 0.2f;
         }
         if (1) {}
@@ -4931,7 +4930,7 @@ s32 Camera_Fixed2(Camera* camera) {
         camera->atActorOffset.z = spB0.z - sp34->pos.z;
     } else if (staticData->unk_18 & FIXD2_FLG_40) {
         sp98.x = new_var;
-        sp98.y = staticData->unk_00 + sp60;
+        sp98.y = staticData->unk_00 + trackHeight;
         sp98.z = new_var;
 
         if (camera->target != NULL) {
@@ -4948,7 +4947,7 @@ s32 Camera_Fixed2(Camera* camera) {
         spB0.z = sp34->pos.z + camera->atActorOffset.z;
     } else if (staticData->unk_18 & FIXD2_FLG_80) {
         sp98.x = new_var;
-        sp98.y = staticData->unk_00 + sp60;
+        sp98.y = staticData->unk_00 + trackHeight;
         sp98.z = new_var;
 
         if (camera->target != NULL) {
@@ -4971,7 +4970,7 @@ s32 Camera_Fixed2(Camera* camera) {
         if ((((Player*)camera->trackActor)->stateFlags1 & 0x4000) || (((Player*)camera->trackActor)->stateFlags1 & 4)) {
             sp98.y = staticData->unk_00;
         } else {
-            sp98.y = staticData->unk_00 + sp60;
+            sp98.y = staticData->unk_00 + trackHeight;
         }
 
         Camera_LERPCeilVec3f(&sp98, &camera->atActorOffset, dynamicData->unk_14, dynamicData->unk_14, 0.1f);
@@ -4980,7 +4979,7 @@ s32 Camera_Fixed2(Camera* camera) {
         spB0.z = sp34->pos.z + camera->atActorOffset.z;
     }
 
-    if (camera->animState == 0) {
+    if (camera->actionFuncState == 0) {
         Camera_SetUpdateRatesSlow(camera);
         if (!(staticData->unk_18 & FIXD2_FLG_1)) {
             *at = spB0;
@@ -5026,7 +5025,7 @@ s32 Camera_Fixed2(Camera* camera) {
     camera->fov = Camera_LERPCeilF(dynamicData->unk_10, camera->fov, dynamicData->unk_14, 0.1f);
     camera->atLERPStepScale = Camera_ClampLERPScale(camera, 1.0f);
     Camera_UpdateAtActorOffset(camera, &sp34->pos);
-    camera->animState = 1;
+    camera->actionFuncState = 1;
     return true;
 }
 
@@ -5063,14 +5062,14 @@ s32 Camera_Subj1(Camera* camera) {
     Subj1DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Subj1);
     CameraModeValue* values;
     f32 temp_f0;
-    f32 sp38;
+    f32 trackHeight;
 
     Actor_GetFocus(&sp58, camera->trackActor);
-    sp38 = Camera_GetTrackedActorHeight(camera);
+    trackHeight = Camera_GetTrackedActorHeight(camera);
     Camera_SetUpdateRatesFastPitch(camera);
 
     values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-    staticData->unk_00 = NEXTPCT * sp38;
+    staticData->unk_00 = NEXTPCT * trackHeight;
     staticData->unk_04 = NEXTSETTING;
     staticData->unk_08 = NEXTSETTING;
     staticData->unk_0C = NEXTSETTING;
@@ -5108,7 +5107,7 @@ s32 Camera_Subj1(Camera* camera) {
         }
         camera->dist = staticData->unk_08;
         camera->rUpdateRateInv = 1.0f;
-        camera->animState++;
+        camera->actionFuncState++;
         camera->dist = staticData->unk_08;
     }
 
@@ -5224,7 +5223,7 @@ s32 Camera_Unique2(Camera* camera) {
     s32 pad[3];
     Unique2StaticData* staticData = CAM_GET_STATIC_DATA(Unique2);
     Unique2DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Unique2);
-    f32 sp48 = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     Vec3f* eyeNext = &camera->eyeNext;
     CameraModeValue* values;
 
@@ -5232,7 +5231,7 @@ s32 Camera_Unique2(Camera* camera) {
 
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        staticData->unk_00 = NEXTPCT * sp48 * (0.8f - ((68.0f / sp48) * -0.2f));
+        staticData->unk_00 = NEXTPCT * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
         staticData->unk_04 = NEXTSETTING;
         staticData->unk_08 = 0.25f;
         staticData->unk_0C = NEXTSETTING;
@@ -5241,12 +5240,12 @@ s32 Camera_Unique2(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->unk_10;
 
-    if ((camera->animState == 0) || (dynamicData->unk_04 != staticData->unk_10)) {
+    if ((camera->actionFuncState == 0) || (dynamicData->unk_04 != staticData->unk_10)) {
         dynamicData->unk_04 = staticData->unk_10;
     }
 
-    if (camera->animState == 0) {
-        camera->animState = 1;
+    if (camera->actionFuncState == 0) {
+        camera->actionFuncState = 1;
         Camera_SetUpdateRatesSlow(camera);
         dynamicData->unk_00 = 200.0f;
     }
@@ -5265,7 +5264,7 @@ s32 Camera_Unique2(Camera* camera) {
     }
 
     at->x += ((sp70.x - at->x) * phi_f16 * 0.3f);
-    at->y += (((sp70.y + sp48 + staticData->unk_00) - at->y) * 0.2f);
+    at->y += (((sp70.y + trackHeight + staticData->unk_00) - at->y) * 0.2f);
     at->z += ((sp70.z - at->z) * phi_f16 * 0.3f);
 
     dynamicData->unk_00 = dynamicData->unk_00 + ((2.0f - dynamicData->unk_00) * 0.05f);
@@ -5365,7 +5364,7 @@ s32 Camera_Unique0(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->unk_08;
 
-    switch (camera->animState) {
+    switch (camera->actionFuncState) {
         case 0:
             bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
             Camera_Vec3sToVec3f(&dynamicData->unk_1C, &bgCamData->pos);
@@ -5400,7 +5399,7 @@ s32 Camera_Unique0(Camera* camera) {
             dynamicData->unk_3E = 0;
             camera->eye = camera->eyeNext = dynamicData->unk_1C;
             Camera_UnsetFlags(camera, CAM_FLAG2_4);
-            camera->animState++;
+            camera->actionFuncState++;
         case 1:
             sp84.r = OLib_Vec3fDist(&sp8C, &camera->eye);
             sp84.yaw = dynamicData->unk_34.y;
@@ -5423,7 +5422,7 @@ s32 Camera_Unique0(Camera* camera) {
                 camera->xzOffsetUpdateRate = Camera_LERPCeilF(dynamicData->unk_18, camera->xzOffsetUpdateRate, 0.1f, 0.0001f);
             }
 
-            if ((camera->animState == 999) || (camera->animState == 666)) {
+            if ((camera->actionFuncState == 999) || (camera->actionFuncState == 666)) {
                 dynamicData->unk_3E = 2;
             }
             if (staticData->unk_08 & UNIQ0_FLG_1) {
@@ -5512,7 +5511,7 @@ s32 Camera_Unique0(Camera* camera) {
  * Allows for manual control of camera parameters without interference from update
  */
 s32 Camera_Unique6(Camera* camera) {
-    f32 playerHeight;
+    f32 trackHeight;
     CameraModeValue* values;
     Vec3f playerPosDisp;
     PosRot* playerPosRot = &camera->trackActorPosRot;
@@ -5525,15 +5524,15 @@ s32 Camera_Unique6(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->flags;
 
-    if (camera->animState == 0) {
-        camera->animState++;
+    if (camera->actionFuncState == 0) {
+        camera->actionFuncState++;
         Camera_SetUpdateRatesFastPitch(camera);
     }
 
     if (camera->trackActor != NULL) {
-        playerHeight = Camera_GetTrackedActorHeight(camera);
+        trackHeight = Camera_GetTrackedActorHeight(camera);
         playerPosDisp = playerPosRot->pos;
-        playerPosDisp.y += playerHeight;
+        playerPosDisp.y += trackHeight;
         camera->dist = OLib_Vec3fDist(&playerPosDisp, &camera->eye);
         Camera_UpdateAtActorOffset(camera, &playerPosRot->pos);
     } else {
@@ -5578,13 +5577,13 @@ s32 Camera_Demo1(Camera* camera) {
     Demo1DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Demo1);
     s32 pad;
 
-    if (camera->animState == 0) {
+    if (camera->actionFuncState == 0) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
         
         staticData->flags = NEXTSETTING;
     }
 
-    if (camera->animState == 0) {
+    if (camera->actionFuncState == 0) {
         dynamicData->unk_1C = 0;
         OLib_Vec3fDiffToVecSphGeo(&dynamicData->unk_0C, &camera->targetPosRot.pos, eye);
         OLib_Vec3fDiffToVecSphGeo(&dynamicData->unk_14, &camera->at, eye);
@@ -5594,7 +5593,7 @@ s32 Camera_Demo1(Camera* camera) {
         camera->targetPosRot.pos.y = (sp74.pos.y + targetHead.pos.y) * 0.5f;
         camera->targetPosRot.pos.z = (sp74.pos.z + targetHead.pos.z) * 0.5f;
         camera->targetPosRot.rot = targetHead.rot;
-        camera->animState++;
+        camera->actionFuncState++;
     }
 
     func_800B8898(camera->globalCtx, camera->target, &sp96, &sp94);
@@ -5763,7 +5762,7 @@ s32 Camera_Demo2(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->flags;
 
-    switch (camera->animState) {
+    switch (camera->actionFuncState) {
         case 0:
             Camera_UnsetFlags(camera, CAM_FLAG2_8 | CAM_FLAG2_4);
             Camera_SetUpdateRatesSlow(camera);
@@ -5868,7 +5867,7 @@ s32 Camera_Demo2(Camera* camera) {
         case 30:
             Camera_SetFlags(camera, CAM_FLAG2_400);
             if (camera->flags2 & CAM_FLAG2_8) {
-                camera->animState = 4;
+                camera->actionFuncState = 4;
             }
         case 10:
         case 20:
@@ -5907,19 +5906,19 @@ s32 Camera_Demo2(Camera* camera) {
     dynamicData->animFrame++;
 
     if (dynamicData->animFrame == 1) {
-        camera->animState = 0xA;
+        camera->actionFuncState = 10;
     } else if (dynamicData->animFrame == 2) {
-        camera->animState = 1;
+        camera->actionFuncState = 1;
     } else if (dynamicData->animFrame == 148) {
-        camera->animState = 2;
+        camera->actionFuncState = 2;
     } else if (dynamicData->animFrame == 158) {
-        camera->animState = 20;
+        camera->actionFuncState = 20;
     } else if (dynamicData->animFrame == 159) {
-        camera->animState = 3;
+        camera->actionFuncState = 3;
     } else if (dynamicData->animFrame == 168) {
-        camera->animState = 30;
+        camera->actionFuncState = 30;
     } else if (dynamicData->animFrame == 228) {
-        camera->animState = 4;
+        camera->actionFuncState = 4;
     }
 
     if (!skipUpdateEye) {
@@ -5958,14 +5957,14 @@ s32 Camera_Demo3(Camera* camera) {
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
         staticData->flags = NEXTSETTING;
-        camera->animState = 0;
+        camera->actionFuncState = 0;
     }
 
     sCameraInterfaceFlags = staticData->flags;
 
-    switch (camera->animState) {
+    switch (camera->actionFuncState) {
         case 0:
-            camera->animState++;
+            camera->actionFuncState++;
             dynamicData->unk_06 = 125;
             Quake2_SetType(8);
             Quake2_SetCountdown(60);
@@ -5977,7 +5976,7 @@ s32 Camera_Demo3(Camera* camera) {
             camera->fov = Camera_LERPCeilF(50.0f, camera->fov, 0.1f, 0.1f);
             if (dynamicData->unk_06 <= 0) {
                 dynamicData->unk_06 = 20;
-                camera->animState++;
+                camera->actionFuncState++;
                 Quake2_SetType(0x10);
                 Quake2_SetCountdown(80);
             }
@@ -5988,7 +5987,7 @@ s32 Camera_Demo3(Camera* camera) {
                 dynamicData->unk_04 = 120;
                 dynamicData->unk_06 = 0;
                 dynamicData->unk_00 = (175.0f - camera->fov) / dynamicData->unk_04;
-                camera->animState++;
+                camera->actionFuncState++;
                 Quake2_SetType(0x400);
                 Quake2_SetCountdown(15);
             }
@@ -6000,7 +5999,7 @@ s32 Camera_Demo3(Camera* camera) {
                 Quake2_ClearType(0x400);
                 Quake2_ClearType(0x10);
                 Quake2_ClearType(8);
-                camera->animState++;
+                camera->actionFuncState++;
             }
             break;
     }
@@ -6028,7 +6027,7 @@ s32 Camera_Demo4(Camera* camera) {
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
         staticData->flags = NEXTSETTING;
-        camera->animState = 0;
+        camera->actionFuncState = 0;
         dynamicData->unk_00 = *at;
         dynamicData->unk_18 = atToEye;
         dynamicData->unk_14 = camera->fov;
@@ -6037,10 +6036,10 @@ s32 Camera_Demo4(Camera* camera) {
     Actor_GetFocus(&playerHead, camera->trackActor);
     sCameraInterfaceFlags = staticData->flags;
 
-    switch (camera->animState) {
+    switch (camera->actionFuncState) {
         if (1) {}
         case 0:
-            camera->animState++;
+            camera->actionFuncState++;
             dynamicData->unk_22 = 0;
             if (!(atToEye.r < 40.0f)) {
                 atToEye.r = 40.0f;
@@ -6073,7 +6072,7 @@ s32 Camera_Demo4(Camera* camera) {
             atToEye.pitch = 0;
             if (dynamicData->unk_22 >= 38) {
                 dynamicData->unk_22 = 24;
-                camera->animState++;
+                camera->actionFuncState++;
                 dynamicData->unk_0C = (32.0f - camera->fov) / 24.0f;
                 Quake2_SetType(0x800);
             }
@@ -6100,7 +6099,7 @@ s32 Camera_Demo4(Camera* camera) {
                 dynamicData->unk_20 = 0x276;
                 dynamicData->unk_22 = 0;
                 dynamicData->unk_0C = (60.0f - camera->fov) / dynamicData->unk_20;
-                camera->animState = 3;
+                camera->actionFuncState = 3;
             }
             break;
         case 3:
@@ -6116,14 +6115,14 @@ s32 Camera_Demo4(Camera* camera) {
             if (dynamicData->unk_22 >= 0x23) {
                 Quake2_ClearType(0x200);
                 Quake2_ClearType(0x800);
-                camera->animState = 4;
+                camera->actionFuncState = 4;
             }
             break;
         case 999:
             Actor_GetFocus(&playerHead, camera->trackActor);
             Quake2_ClearType(0x200);
             Quake2_ClearType(0x800);
-            camera->animState = 4;
+            camera->actionFuncState = 4;
             break;
         case 4:
             playerHead.pos.y -= (playerHead.pos.y - camera->trackActorPosRot.pos.y) * 0.1f;
@@ -6159,7 +6158,7 @@ s32 Camera_Demo5(Camera* camera) {
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
         staticData->flags = NEXTSETTING;
-        camera->animState = 0;
+        camera->actionFuncState = 0;
         dynamicData->unk_00 = *at;
         dynamicData->unk_1C = atToEye;
         dynamicData->unk_18 = camera->fov;
@@ -6169,9 +6168,9 @@ s32 Camera_Demo5(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->flags;
 
-    switch (camera->animState) {
+    switch (camera->actionFuncState) {
         case 0:
-            camera->animState++;
+            camera->actionFuncState++;
             atToEye.pitch = 0;
             dynamicData->unk_26 = 0x12;
             dynamicData->unk_14 = 80.0f;
@@ -6186,7 +6185,7 @@ s32 Camera_Demo5(Camera* camera) {
             dynamicData->unk_26--;
             if (dynamicData->unk_26 <= 0) {
                 dynamicData->unk_26 = 0;
-                camera->animState = 2;
+                camera->actionFuncState = 2;
                 dynamicData->unk_24 = camera->trackActorPosRot.rot.y + 0x4000;
                 dynamicData->unk_26 = 0x2E;
                 Quake2_SetType(0x200);
@@ -6210,13 +6209,13 @@ s32 Camera_Demo5(Camera* camera) {
             dynamicData->unk_26--;
             atToEye.pitch = 0;
             if (dynamicData->unk_26 <= 0) {
-                camera->animState = 3;
+                camera->actionFuncState = 3;
                 Quake2_ClearType(0x200);
             }
             break;
         case 999:
             Actor_GetFocus(&playerHead, camera->trackActor);
-            camera->animState = 3;
+            camera->actionFuncState = 3;
             Quake2_ClearType(0x200);
             break;
         case 3:
@@ -6263,13 +6262,13 @@ s32 Camera_Demo0(Camera* camera) {
     Demo0StaticData* staticData = CAM_GET_STATIC_DATA(Demo0);
     Demo0DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Demo0);
 
-    if (camera->animState == 0) {
+    if (camera->actionFuncState == 0) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
         staticData->unk_00 = NEXTSETTING;
     }
 
-    if (camera->animState == 0) {
+    if (camera->actionFuncState == 0) {
         OLib_Vec3fDiffToVecSphGeo(&dynamicData->unk_04, &subCam->at, subEye);
         OLib_Vec3fDiffToVecSphGeo(&dynamicData->unk_0C, &camera->at, mainEye);
         if (dynamicData->unk_04.r < 50.0f) {
@@ -6334,7 +6333,7 @@ s32 Camera_Demo0(Camera* camera) {
             dynamicData->unk_16 = (s16)(dynamicData->unk_04.yaw - dynamicData->unk_0C.yaw) / dynamicData->unk_1A;
             dynamicData->unk_18 = (s16)(subCam->roll - camera->roll) / dynamicData->unk_1A;
         }
-        camera->animState++;
+        camera->actionFuncState++;
     }
 
     if (dynamicData->unk_1A != 0) {
@@ -6397,13 +6396,13 @@ s32 Camera_Special5(Camera* camera) {
     Special5StaticData* staticData = CAM_GET_STATIC_DATA(Special5);
     Special5DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Special5);
     f32 rand;
-    f32 yOffset = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
 
     if (RELOAD_PARAMS) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        f32 yNormal = (0.8f - ((68.0f / yOffset) * -0.2f));
+        f32 yNormal = (0.8f - ((68.0f / trackHeight) * -0.2f));
 
-        staticData->yOffset = (NEXTPCT * yOffset) * yNormal;
+        staticData->yOffset = (NEXTPCT * trackHeight) * yNormal;
         staticData->eyeDist = NEXTSETTING;
         staticData->minDistForRot = NEXTSETTING;
         staticData->pitch = DEGF_TO_BINANG(NEXTSETTING);
@@ -6419,8 +6418,8 @@ s32 Camera_Special5(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->flags;
 
-    if (camera->animState == 0) {
-        camera->animState++;
+    if (camera->actionFuncState == 0) {
+        camera->actionFuncState++;
         dynamicData->animTimer = staticData->timerInit;
     }
 
@@ -6468,7 +6467,8 @@ s32 Camera_Special7(Camera* camera) {
 }
 
 /**
- * When opening certain doors, the camera will jump to the next room for a mini "cutscene"
+ * Exiting a spiral staircase cutscene.
+ * Camera remains fixed at given position, and tracks player for the duration of the cutscene
  */
 s32 Camera_Special8(Camera* camera) {
     Vec3f* at = &camera->at;
@@ -6477,53 +6477,60 @@ s32 Camera_Special8(Camera* camera) {
     Vec3f atTarget;
     Vec3f posOffsetTarget;
     f32 yNormal;
-    f32 yOffset = Camera_GetTrackedActorHeight(camera);
+    f32 trackHeight = Camera_GetTrackedActorHeight(camera);
     DoorParams* doorParams = CAM_GET_DOOR_PARAMS(Special8);
     Special8StaticData* staticData = CAM_GET_STATIC_DATA(Special8);
     Special8DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Special8);
     s32 pad[2];
 
     Camera_UnsetFlags(camera, CAM_FLAG2_10);
-    yNormal = (0.8f - ((68.0f / yOffset) * -0.2f));
+    yNormal = (0.8f - ((68.0f / trackHeight) * -0.2f));
 
     if (!RELOAD_PARAMS) {
     } else {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        staticData->yOffset = NEXTPCT * yOffset * yNormal;
+        // Initialize data
+        staticData->yOffset = NEXTPCT * trackHeight * yNormal;
         staticData->eyeStepScale = NEXTPCT;
         staticData->posStepScale = NEXTPCT;
         staticData->fov = NEXTSETTING;
-        staticData->maxDoorCutsceneCounter = NEXTSETTING * 5;
+        staticData->spiralDoorCsLength = NEXTSETTING * 5;
         staticData->flags = NEXTSETTING;
         dynamicData->fov = staticData->fov * 100.0f;
-        dynamicData->doorCutsceneCounter = 0;
+        dynamicData->spiralDoorCsFrame = 0;
         Camera_UnsetFlags(camera, CAM_FLAG2_4 | CAM_FLAG2_2);
         dynamicData->eye.x = doorParams->eye.x;
         dynamicData->eye.y = doorParams->eye.y;
         dynamicData->eye.z = doorParams->eye.z;
     }
 
-    if (dynamicData->doorCutsceneCounter < staticData->maxDoorCutsceneCounter) {
-        dynamicData->doorCutsceneCounter++;
+    // Check if cutscene is still playing
+    if (dynamicData->spiralDoorCsFrame < staticData->spiralDoorCsLength) {
+        dynamicData->spiralDoorCsFrame++;
         sCameraInterfaceFlags = staticData->flags;
         posOffsetTarget.x = 0.0f;
-        posOffsetTarget.y = staticData->yOffset + yOffset;
+        posOffsetTarget.y = staticData->yOffset + trackHeight;
         posOffsetTarget.z = 0.0f;
         Camera_LERPCeilVec3f(&posOffsetTarget, &camera->atActorOffset, staticData->posStepScale, staticData->posStepScale,
                              0.1f);
+
+        // Camera follows player as they exit the stairwell
         atTarget.x = playerPosRot->pos.x + camera->atActorOffset.x;
         atTarget.y = playerPosRot->pos.y + camera->atActorOffset.y;
         atTarget.z = playerPosRot->pos.z + camera->atActorOffset.z;
-        if (camera->animState == 0) {
-            camera->animState++;
+        if (camera->actionFuncState == 0) {
+            camera->actionFuncState++;
             if (!(staticData->flags & SPEC8_FLG_1)) {
                 camera->eyeNext = dynamicData->eye;
                 camera->at = atTarget;
             }
         }
 
+        // Update at to look at player
         Camera_LERPCeilVec3f(&atTarget, at, staticData->posStepScale, staticData->posStepScale, 10.0f);
+        
+        // Move camera position &dynamicData->eye and remain there for the entire cutscen
         Camera_LERPCeilVec3f(&dynamicData->eye, eyeNext, staticData->eyeStepScale, staticData->eyeStepScale, 0.1f);
         camera->eye = *eyeNext;
         camera->dist = OLib_Vec3fDist(at, &camera->eye);
@@ -6533,8 +6540,11 @@ s32 Camera_Special8(Camera* camera) {
         camera->atLERPStepScale = Camera_ClampLERPScale(camera, 1.0f);
         Camera_UpdateAtActorOffset(camera, &playerPosRot->pos);
     } else {
+        // Cutscene is finished
         Camera_SetFlags(camera, CAM_FLAG2_400 | CAM_FLAG2_10);
         sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
+
+        // Wait for user input to move to the next camera action function
         if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
             CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_B) ||
             CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CUP) ||
@@ -6552,6 +6562,10 @@ s32 Camera_Special8(Camera* camera) {
     return true;
 }
 
+/**
+ * Entering and exiting a door between rooms (eg. sliding doors)
+ * Camera closely follows player on both the front and the back room
+ */
 s32 Camera_Special9(Camera* camera) {
     Vec3f* eye = &camera->eye;
     Vec3f* at = &camera->at;
@@ -6559,7 +6573,7 @@ s32 Camera_Special9(Camera* camera) {
     Vec3f spB8;
     VecSph spB0;
     VecSph spA8;
-    f32 spA4;
+    f32 trackHeight;
     s32 phi_v1_2;
     s16 actorCsId;
     f32 sp34;
@@ -6572,7 +6586,7 @@ s32 Camera_Special9(Camera* camera) {
     s32 sp50[1];
     SubCamData* bgCamData;
 
-    spA4 = Camera_GetTrackedActorHeight(camera);
+    trackHeight = Camera_GetTrackedActorHeight(camera);
     actorCsId = ActorCutscene_GetCurrentIndex();
 
     if ((actorCsId != -1) && (actorCsId != 0x7D)) {
@@ -6580,13 +6594,13 @@ s32 Camera_Special9(Camera* camera) {
     }
 
     Camera_UnsetFlags(camera, CAM_FLAG2_10);
-    sp34 = 0.8f - ((68.0f / spA4) * -0.2f);
+    sp34 = 0.8f - ((68.0f / trackHeight) * -0.2f);
 
     if (!RELOAD_PARAMS) {
     } else {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        staticData->yOffset = NEXTPCT * spA4 * sp34;
+        staticData->yOffset = NEXTPCT * trackHeight * sp34;
         staticData->fov = NEXTSETTING;
         staticData->flags = NEXTSETTING;
     }
@@ -6595,7 +6609,7 @@ s32 Camera_Special9(Camera* camera) {
         Actor_GetWorldPosShapeRot(&sp84, doorParams->doorActor);
     } else {
         sp84 = *sp40;
-        sp84.pos.y += spA4 + staticData->yOffset;
+        sp84.pos.y += trackHeight + staticData->yOffset;
         sp84.rot.x = 0;
     }
 
@@ -6603,37 +6617,47 @@ s32 Camera_Special9(Camera* camera) {
 
     sCameraInterfaceFlags = staticData->flags;
 
-    switch (camera->animState) {
+    switch (camera->actionFuncState) {
         case 0:
+            // Init
             Camera_UnsetFlags(camera, CAM_FLAG2_4 | CAM_FLAG2_2);
-            camera->animState++;
+            camera->actionFuncState++;
             if (ABS((s16)(sp40->rot.y - sp84.rot.y)) > 0x4000) {
                 dynamicData->unk_00 = BINANG_ROT180(sp84.rot.y);
             } else {
                 dynamicData->unk_00 = sp84.rot.y;
             }
         case 1:
+            // Camera is fixed in front of the door
             doorParams->timer1--;
             if (doorParams->timer1 <= 0) {
-                camera->animState++;
+                camera->actionFuncState++;
+                
+                // Setup for the camera moving behind the door
                 if (staticData->flags & SPEC9_FLG_1) {
                     bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
                     Camera_Vec3sToVec3f(eyeNext, &bgCamData->pos);
                     spB8 = *eye = *eyeNext;
                 } else {
-                    s16 sp30;
+                    s16 camEyeSide;
                     s16 randFloat;
 
                     spB0.pitch = ((s16)(Rand_ZeroOne() * 640.0f) + 0xBB8);
                     randFloat = ((s16)(Rand_ZeroOne() * 1230.0f) + 0x5DC);
-                    sp30 = (s16)(randFloat * ((camera->globalCtx->state.frames % 2) ? 1 : -1));
-                    spB0.yaw = dynamicData->unk_00 + sp30;
+
+                    // The camera will either position itself either to the left or to the right 
+                    // of the door when it jumps behind it. It's effectively 50/50 percent chance
+                    camEyeSide = (s16)(randFloat * ((camera->globalCtx->state.frames % 2) ? 1 : -1));
+
+                    spB0.yaw = dynamicData->unk_00 + camEyeSide;
                     spB0.r = 200.0f * sp34;
                     OLib_VecSphAddToVec3f(eyeNext, at, &spB0);
                     spB8 = *eye = *eyeNext;
+
+                    // If the side chosen moves the camera out-of-bounds, move to the other side
                     if (Camera_CheckOOB(camera, &spB8, &sp40->pos)) {
-                        sp30 = (s16)-sp30;
-                        spB0.yaw = dynamicData->unk_00 + sp30;
+                        camEyeSide = (s16)-camEyeSide;
+                        spB0.yaw = dynamicData->unk_00 + camEyeSide;
                         OLib_VecSphAddToVec3f(eyeNext, at, &spB0);
                         *eye = *eyeNext;
                     }
@@ -6642,36 +6666,43 @@ s32 Camera_Special9(Camera* camera) {
                 break;
             }
         case 2:
+            // Camera is behind the door looking at player
             spB8 = sp40->pos;
-            spB8.y += spA4 + staticData->yOffset;
-
+            spB8.y += trackHeight + staticData->yOffset;
+            // Update camera at to follow the player
             Camera_LERPCeilVec3f(&spB8, at, 0.25f, 0.25f, 0.1f);
+
             doorParams->timer2--;
             if (doorParams->timer2 <= 0) {
-                camera->animState++;
+                // Setup for the camera turning around to look in front of player
+                camera->actionFuncState++;
                 dynamicData->unk_00 = BINANG_ROT180(dynamicData->unk_00);
             } else {
                 break;
             }
         case 3:
+            // Camera turns around to look in front of player
             spB8 = sp40->pos;
-            spB8.y += spA4 + staticData->yOffset;
+            spB8.y += trackHeight + staticData->yOffset;
             Camera_LERPCeilVec3f(&spB8, at, 0.5f, 0.5f, 0.1f);
             spB0.pitch = Camera_LERPCeilS(0xAAA, spA8.pitch, 0.3f, 5);
             spB0.yaw = Camera_LERPCeilS(dynamicData->unk_00, spA8.yaw, 0.3f, 5);
             spB0.r = Camera_LERPCeilF(60.0f, spA8.r, 0.3f, 1.0f);
             OLib_VecSphAddToVec3f(eyeNext, at, &spB0);
+            
             *eye = *eyeNext;
+
             doorParams->timer3--;
             if (doorParams->timer3 <= 0) {
-                camera->animState++;
+                camera->actionFuncState++;
             } else {
                 break;
             }
         case 4:
-            camera->animState++;
+            camera->actionFuncState++;
         case 999:
         default:
+            // Door is closed and is waiting for user input to toggle to a new setting
             Camera_SetFlags(camera, CAM_FLAG2_400 | CAM_FLAG2_10);
             sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
 
@@ -6693,7 +6724,7 @@ s32 Camera_Special9(Camera* camera) {
     }
 
     spB8 = sp40->pos;
-    spB8.y += spA4;
+    spB8.y += trackHeight;
     camera->dist = OLib_Vec3fDist(&spB8, eye);
     Camera_UpdateAtActorOffset(camera, &sp40->pos);
     return true;
@@ -6778,7 +6809,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
     camera->atLERPStepScale = 1;
     camera->up.y = 1.0f;
     sCameraInterfaceFlags = SHRINKWINVAL_PREV | IFACE_ALPHA(0xF);
-    sCameraInitCounter = 3;
+    sCameraInitSceneTimer = 3;
 }
 
 /**
@@ -6823,13 +6854,13 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
     s32 bgId;
     Vec3f floorPos;
     s32 upXZ;
-    f32 playerYOffset;
+    f32 trackHeight;
     Vec3f* eye = &camera->eye;
     s32 pad;
 
     Actor_GetWorldPosShapeRot(&playerPosShape, &player->actor);
     camera->trackActor = &player->actor;
-    playerYOffset = Camera_GetTrackedActorHeight(camera);
+    trackHeight = Camera_GetTrackedActorHeight(camera);
     camera->trackActorPosRot = playerPosShape;
     camera->dist = eyeNextAtOffset.r = 180.0f;
     camera->inputDir.y = playerPosShape.rot.y;
@@ -6840,10 +6871,10 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
     camera->xzSpeed = 0.0f;
     camera->playerPosDelta.y = 0.0f;
     camera->at = playerPosShape.pos;
-    camera->at.y += playerYOffset;
+    camera->at.y += trackHeight;
 
     camera->atActorOffset.x = 0;
-    camera->atActorOffset.y = playerYOffset;
+    camera->atActorOffset.y = trackHeight;
     camera->atActorOffset.z = 0;
 
     OLib_VecSphAddToVec3f(&camera->eyeNext, &camera->at, &eyeNextAtOffset);
@@ -6877,7 +6908,7 @@ dummy:;
     camera->xzOffsetUpdateRate = 0.01f;
     camera->fovUpdateRate = 0.01f;
     camera->atLERPStepScale = 1;
-    Camera_ResetAnim(camera, camera->mode);
+    Camera_ResetActionFuncState(camera, camera->mode);
 
     if (camera == &camera->globalCtx->mainCamera) {
         sCameraInterfaceFlags = SHRINKWIN_MAG | SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
@@ -7027,11 +7058,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
     }
 }
 
-/**
- * TODO: This description and name is wrong, there is no hot room in MM
- * Sets the room to be hot camera quake flag
- */
-s32 Camera_SetRoomHotFlag(Camera* camera) {
+s32 func_800DE840(Camera* camera) {
     Quake2_ClearType(1);
     if (camera->globalCtx->roomCtx.currRoom.unk2 == 3) {
         Quake2_SetType(1);
@@ -7084,7 +7111,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     Vec3f spA0;
     s32 bgId;
     s32 sp98;
-    s32 sp94;
+    s32 changeCamSceneDataType;
     CollisionPoly* sp90;
     CollisionPoly* sp8C;
     f32 runSpeedLimit;
@@ -7098,6 +7125,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     s16 bgCamDataId;
     f32 playerGroundY;
 
+    // Camera of status CUT only updates to this point
     if (camera->status == CAM_STATUS_CUT) {
         *inputDir = camera->inputDir;
         return inputDir;
@@ -7157,6 +7185,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
                 }
             }
 
+            // Set camera speed
             runSpeedLimit = Camera_GetRunSpeedLimit(camera) * 1.5f;
             sp84 = Camera_Vec3fMagnitude(&camera->playerPosDelta);
             camera->xzSpeed = OLib_ClampMaxDist(sp84, runSpeedLimit);
@@ -7165,20 +7194,27 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
             if (camera->camId == CAM_ID_MAIN) {
                 Camera_CheckWater(camera);
-                Camera_SetRoomHotFlag(camera);
+                func_800DE840(camera);
                 Camera_EarthquakeDay3(camera);
                 func_800DE890(camera);
             }
 
-            if (camera->unk150 != 0) {
+            /**
+             * This section is about updating the camera setting based on the camera scene data
+             * 
+             */
+
+            // If doorTimer1 is active, set CAM_FLAG2_400 which suppresses bg camera scene data from being read
+            if (camera->doorTimer1 != 0) {
                 Camera_SetFlags(camera, CAM_FLAG2_400);
             } else if (!(camera->flags2 & CAM_FLAG2_4)) {
                 camera->nextCamSceneDataId = -1;
             }
 
-            sp94 = 0;
+            changeCamSceneDataType = 0; // default to no change in the cam scene data
             bgId = camera->bgId;
 
+            // Sets the next cam scene data Index based on the bg surface
             if ((camera->flags2 & CAM_FLAG2_1) && (camera->flags2 & CAM_FLAG2_4) && !(camera->flags2 & CAM_FLAG2_400) &&
                 (!(camera->flags2 & CAM_FLAG2_200) || func_800CBB58(camera)) && !(camera->flags2 & (s16)CAM_FLAG2_8000) &&
                 !Camera_IsMountedOnHorse(camera) && !Camera_IsWearingGiantsMask(camera) && !Camera_IsDekuHovering(camera) && (sp98 != 0)) {
@@ -7197,34 +7233,35 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
                     bgCamDataId = Camera_GetBgCamDataId(camera, &bgId, sp8C);
                     if ((bgCamDataId != -1) && (bgId == BGCHECK_SCENE)) {
                         camera->nextCamSceneDataId = bgCamDataId | 0x1000;
-                        sp94 = 1;
+                        changeCamSceneDataType = 1; // change cam scene data based on the bg cam data
                     }
                 }
             }
 
-            if (camera->unk150 != 0) {
-                camera->unk150--;
-                if (camera->unk150 == 0) {
+            if (camera->doorTimer1 != 0) {
+                camera->doorTimer1--;
+                if (camera->doorTimer1 == 0) {
                     Camera_UnsetFlags(camera, CAM_FLAG2_400);
-                    sp94 = 5;
+                    changeCamSceneDataType = 5; // change cam scene data based on the cutscene cam data
                 }
             }
 
             if (((camera->camId == CAM_ID_MAIN) || (camera->flags2 & CAM_FLAG2_40)) &&
-                ((camera->bgId == BGCHECK_SCENE) || ((bgId == BGCHECK_SCENE) && (sp94 != 0))) &&
-                (camera->nextCamSceneDataId != -1) && (camera->unk150 == 0) &&
-                ((Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f) || (sp94 != 0)) &&
+                ((camera->bgId == BGCHECK_SCENE) || ((bgId == BGCHECK_SCENE) && (changeCamSceneDataType != 0))) &&
+                (camera->nextCamSceneDataId != -1) && (camera->doorTimer1 == 0) &&
+                ((Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f) || (changeCamSceneDataType != 0)) &&
                 (!(camera->flags2 & CAM_FLAG2_200) || func_800CBB58(camera))) {
 
                 Camera_ChangeDataIdx(camera, camera->nextCamSceneDataId);
                 camera->nextCamSceneDataId = -1;
-                if (camera->timer != 0) {
-                    camera->unk150 = camera->timer;
-                    camera->timer = 0;
+                if (camera->doorTimer2 != 0) {
+                    camera->doorTimer1 = camera->doorTimer2;
+                    camera->doorTimer2 = 0;
                 }
             }
         }
 
+        // Camera of status WAIT only updates to this point
         if (camera->status == CAM_STATUS_WAIT) {
             *inputDir = camera->inputDir;
             return inputDir;
@@ -7235,13 +7272,16 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         Camera_SetFlags(camera, CAM_FLAG2_10);
     }
 
-    sCameraFunctions[sCameraSettings[camera->setting].cameraModes[camera->mode].funcId](camera);
-    if (sCameraInitCounter != 0) {
-        sCameraInitCounter--;
-    }
+    // Call the Action Function
+    sCameraActionFunctions[sCameraSettings[camera->setting].cameraModes[camera->mode].funcId](camera);
 
+    // Update the interface
+    if (sCameraInitSceneTimer != 0) {
+        sCameraInitSceneTimer--;
+    }
     if (camera->status == CAM_STATUS_ACTIVE) {
-        if (((sCameraInitCounter != 0) || func_800CB854(camera)) && (camera->camId == CAM_ID_MAIN)) {
+        if (((sCameraInitSceneTimer != 0) || func_800CB854(camera)) && (camera->camId == CAM_ID_MAIN)) {
+            // Surpresses the interface for the first few frames of a scene
             sCameraInterfaceFlags = SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
             Camera_UpdateInterface(sCameraInterfaceFlags);
         } else if ((camera->globalCtx->unk_18B4A != 0) && (camera->camId != CAM_ID_MAIN)) {
@@ -7252,11 +7292,18 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         }
     }
 
+    // Camera of status UNK3 only updates to this point
     if (camera->status == CAM_STATUS_UNK3) {
         *inputDir = camera->inputDir;
         return inputDir;
     }
 
+    /**
+     * This section is about updating view structs from the active camera, 
+     * which view uses to calculate the viewing/projection matrices
+     */
+
+    // Set view at, eye, fov
     bgId = Quake_Calc(camera, &quake);
     if (bgId != 0) {
         viewAt.x = camera->at.x + quake.atOffset.x;
@@ -7268,8 +7315,8 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         OLib_Vec3fDiffToVecSphGeo(&sp3C, &viewEye, &viewAt);
         Camera_CalcUpFromPitchYawRoll(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll + quake.rollOffset);
         viewFov = camera->fov + BINANG_TO_DEGF(quake.zoom);
-        //! @bug: Condition is impossible to achieve
     } else if (sIsFalse) {
+        //! @bug: Condition is impossible to achieve
         viewAt = camera->at;
         viewEye = camera->eye;
         OLib_Vec3fDiffToVecSphGeo(&sp3C, &viewEye, &viewAt);
@@ -7282,7 +7329,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         Camera_CalcUpFromPitchYawRoll(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll);
         viewFov = camera->fov;
     }
-
+    // set view up
     if (camera->paramFlags & CAM_PARAM_FLAG_4) {
         camera->paramFlags &= ~CAM_PARAM_FLAG_4;
         viewUp = camera->up;
@@ -7330,7 +7377,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
     if (!(sCameraSettings[camera->setting].validModes & (1 << mode))) {
         if (camera->mode != CAM_MODE_NORMAL) {
             camera->mode = CAM_MODE_NORMAL;
-            Camera_ResetAnim(camera, camera->mode);
+            Camera_ResetActionFuncState(camera, camera->mode);
             func_800DF498(camera);
             return 0xC0000000 | mode;
         } else {
@@ -7346,7 +7393,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
         camera->flags1 |= CAM_FLAG1_MODE_2;
         camera->flags1 |= CAM_FLAG1_MODE_1;
 
-        Camera_ResetAnim(camera, mode);
+        Camera_ResetActionFuncState(camera, mode);
 
         modeChangeFlags = 0;
 
@@ -7378,31 +7425,31 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
         switch (camera->mode) {
             case CAM_MODE_FIRSTPERSON:
                 if (modeChangeFlags & 0x20) {
-                    camera->animState = 10;
+                    camera->actionFuncState = 10;
                 }
                 break;
             case CAM_MODE_JUMP:
             case CAM_MODE_HANG:
                 if (modeChangeFlags & 0x10) {
-                    camera->animState = 20;
+                    camera->actionFuncState = 20;
                 }
                 modeChangeFlags |= 1;
                 break;
             case CAM_MODE_CHARGE:
                 if (modeChangeFlags & 0x10) {
-                    camera->animState = 20;
+                    camera->actionFuncState = 20;
                 }
                 modeChangeFlags |= 1;
                 break;
             case CAM_MODE_FOLLOWTARGET:
                 if (modeChangeFlags & 8) {
-                    camera->animState = 10;
+                    camera->actionFuncState = 10;
                 }
                 modeChangeFlags |= 1;
                 break;
             case CAM_MODE_BATTLE:
                 if (modeChangeFlags & 4) {
-                    camera->animState = 10;
+                    camera->actionFuncState = 10;
                 }
                 modeChangeFlags |= 1;
                 break;
@@ -7413,7 +7460,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
                 break;
             case CAM_MODE_NORMAL:
                 if (modeChangeFlags & 0x10) {
-                    camera->animState = 20;
+                    camera->actionFuncState = 20;
                 }
                 break;
         }
@@ -7514,7 +7561,7 @@ s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
     camera->setting = setting;
 
     if (Camera_ChangeModeFlags(camera, camera->mode, true) >= 0) {
-        Camera_ResetAnim(camera, camera->mode);
+        Camera_ResetActionFuncState(camera, camera->mode);
     }
 
     return setting;
@@ -7551,7 +7598,7 @@ s32 Camera_ChangeDataIdx(Camera* camera, s32 bgCamDataId) {
         (sCameraSettings[camera->setting].unk_04 & 0x80000000)) {
         camera->bgCamDataId = bgCamDataId;
         camera->flags1 |= CAM_FLAG1_SCENE_DATA_1;
-        Camera_ResetAnim(camera, camera->mode);
+        Camera_ResetActionFuncState(camera, camera->mode);
     }
 
     return bgCamDataId | 0x80000000;
@@ -7657,8 +7704,8 @@ s32 Camera_OverwriteFlags(Camera* camera, s16 flags) {
     return true;
 }
 
-s32 Camera_ResetAnimUnused(Camera* camera) {
-    camera->animState = 0;
+s32 Camera_ResetActionFuncStateUnused(Camera* camera) {
+    camera->actionFuncState = 0;
     return true;
 }
 
@@ -7682,7 +7729,7 @@ s16 Camera_UnsetFlags(Camera* camera, s16 flags) {
 
 s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 bgCamDataId, f32 arg3, s16 timer1, s16 timer2,
                          s16 timer3) {
-    DoorParams* doorParams = (DoorParams*)camera->paramData;
+    DoorParams* doorParams = (DoorParams*)camera->actionFuncData;
 
     if (camera->setting == CAM_SET_DOORC) {
         return 0;
@@ -7695,7 +7742,7 @@ s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 bgCamDataId, f32 
     doorParams->bgCamDataId = bgCamDataId;
 
     if (bgCamDataId == -99) {
-        Camera_ResetAnim(camera, camera->mode);
+        Camera_ResetActionFuncState(camera, camera->mode);
         return -99;
     }
 
@@ -7705,11 +7752,11 @@ s32 Camera_ChangeDoorCam(Camera* camera, Actor* doorActor, s16 bgCamDataId, f32 
         Camera_ChangeSettingFlags(camera, CAM_SET_SPIRAL_DOOR, 0);
     } else {
         camera->nextCamSceneDataId = bgCamDataId;
-        camera->unk150 = timer1;
-        camera->timer = timer2 + timer3;
+        camera->doorTimer1 = timer1;
+        camera->doorTimer2 = timer2 + timer3;
     }
 
-    Camera_ResetAnim(camera, camera->mode);
+    Camera_ResetActionFuncState(camera, camera->mode);
     return -1;
 }
 
@@ -7792,12 +7839,12 @@ void Camera_SetToTrackActor(Camera* camera, Actor* actor) {
         Actor_GetWorld(&camera->trackActorPosRot, camera->trackActor);
     }
 
-    camera->animState = 0;
+    camera->actionFuncState = 0;
 }
 
 void Camera_SetTargetActor(Camera* camera, Actor* actor) {
     camera->target = actor;
-    camera->animState = 20;
+    camera->actionFuncState = 20;
 }
 
 f32 Camera_GetWaterYPos(Camera* camera) {
@@ -7811,9 +7858,9 @@ f32 Camera_GetWaterYPos(Camera* camera) {
 
 void func_800E0348(Camera* camera) {
     if (!RELOAD_PARAMS) {
-        camera->animState = 999;
+        camera->actionFuncState = 999;
         Camera_SetFlags(camera, CAM_FLAG2_400 | CAM_FLAG2_10 | CAM_FLAG2_4 | CAM_FLAG2_2);
     } else {
-        camera->animState = 666;
+        camera->actionFuncState = 666;
     }
 }
