@@ -5029,6 +5029,9 @@ s32 Camera_Fixed2(Camera* camera) {
     return true;
 }
 
+/**
+ * Used by the unused PREREND_FIXED Camera Setting. Remnant of OoT
+ */
 s32 Camera_Fixed3(Camera* camera) {
     return Camera_Noop(camera);
 }
@@ -5548,6 +5551,9 @@ s32 Camera_Unique6(Camera* camera) {
     return true;
 }
 
+/**
+ * Used by the unused PREREND_PIVOT Camera Setting. Remnant of OoT
+ */
 s32 Camera_Unique7(Camera* camera) {
     return Camera_Noop(camera);
 }
@@ -6943,7 +6949,7 @@ s32 Camera_CheckWater(Camera* camera) {
             if (!Camera_IsPlayerFormZora(camera)) {
                 Camera_ChangeSettingFlags(camera, CAM_SET_PIVOT_DIVING, CAM_CHANGE_SET_FLAG_4 | CAM_CHANGE_SET_FLAG_2);
             } else {
-                Camera_ChangeSettingFlags(camera, CAM_SET_ZORA, CAM_CHANGE_SET_FLAG_4 | CAM_CHANGE_SET_FLAG_2);
+                Camera_ChangeSettingFlags(camera, CAM_SET_ZORA_DIVING, CAM_CHANGE_SET_FLAG_4 | CAM_CHANGE_SET_FLAG_2);
             }
             Camera_SetFlags(camera, CAM_FLAG2_8000);
         } else if (camera->flags2 & (s16)CAM_FLAG2_8000) {

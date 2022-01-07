@@ -1169,11 +1169,11 @@ void func_80963F44(EnFu* this, GlobalContext* globalCtx) {
 
 void func_80963F88(EnFu* this, GlobalContext* globalCtx) {
     if (this->unk_542 == 1) {
-        Camera_ChangeSetting(globalCtx->cameraPtrs[CAM_ID_MAIN], CAM_SET_BOMBBOWL);
+        Camera_ChangeSetting(globalCtx->cameraPtrs[CAM_ID_MAIN], CAM_SET_HONEY_AND_DARLING_2);
         globalCtx->unk_1887E = 0;
     } else if (this->unk_542 == 2) {
         globalCtx->unk_1887D = 0;
-        Camera_ChangeSetting(globalCtx->cameraPtrs[CAM_ID_MAIN], CAM_SET_BOMBBOWL);
+        Camera_ChangeSetting(globalCtx->cameraPtrs[CAM_ID_MAIN], CAM_SET_HONEY_AND_DARLING_2);
     }
 }
 

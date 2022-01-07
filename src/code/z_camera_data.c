@@ -573,43 +573,43 @@ CameraModeValue sSetPivotDivingModeTargetData[] = {
  *=====================================================================
  */
 
-// Function: NORM3
 CameraModeValue sSetHorseModeNormalData[] = {
-    { -50, CAM_DATA_Y_OFFSET },    // yOffset
-    { 220, CAM_DATA_01 },    // distMin
-    { 250, CAM_DATA_02 },    // distMax
-    { 10, CAM_DATA_PITCHTARGET },     // yawUpdateRateInv
-    { 10, CAM_DATA_04 },     // pitchUpdateRateInv
-    { 20, CAM_DATA_05 },     // fovTarget
-    { 60, CAM_DATA_FOV },     // maxAtLERPScale
-    { 80, CAM_DATA_08 },     // pitchTarget
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(6) | NORM3_FLG_20, CAM_DATA_FLAGS },
+    SET_NORM3_STATICDATA( // Camera_Normal3()
+        -50,              // yOffset
+        220,              // distMin
+        250,              // distMax
+        10,               // yawUpdateRateInv
+        10,               // pitchUpdateRateInv
+        20,               // fovTarget
+        60,               // maxAtLERPScale
+        80,               // pitchTarget
+        SHRINKWINVAL_NONE | IFACE_ALPHA(6) | NORM3_FLG_20),
 };
 
-// Function: NORM3
 CameraModeValue sSetHorseModeTargetData[] = {
-    { -40, CAM_DATA_Y_OFFSET },    // yOffset
-    { 180, CAM_DATA_01 },    // distMin
-    { 200, CAM_DATA_02 },    // distMax
-    { -3, CAM_DATA_PITCHTARGET },     // yawUpdateRateInv
-    { 2, CAM_DATA_04 },      // pitchUpdateRateInv
-    { 100, CAM_DATA_05 },    // fovTarget
-    { 50, CAM_DATA_FOV },     // maxAtLERPScale
-    { 90, CAM_DATA_08 },     // pitchTarget
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(6) | NORM3_FLG_2, CAM_DATA_FLAGS },
+    SET_NORM3_STATICDATA( // Camera_Normal3()
+        -40,              // yOffset
+        180,              // distMin
+        200,              // distMax
+        -3,               // yawUpdateRateInv
+        2,                // pitchUpdateRateInv
+        100,              // fovTarget
+        50,               // maxAtLERPScale
+        90,               // pitchTarget
+        SHRINKWINVAL_MEDIUM | IFACE_ALPHA(6) | NORM3_FLG_2),
 };
 
-// Function: NORM3
 CameraModeValue sSetHorseModeJumpData[] = {
-    { -50, CAM_DATA_Y_OFFSET },    // yOffset
-    { 220, CAM_DATA_01 },    // distMin
-    { 260, CAM_DATA_02 },    // distMax
-    { 10, CAM_DATA_PITCHTARGET },     // yawUpdateRateInv
-    { 10, CAM_DATA_04 },     // pitchUpdateRateInv
-    { 20, CAM_DATA_05 },     // fovTarget
-    { 60, CAM_DATA_FOV },     // maxAtLERPScale
-    { 50, CAM_DATA_08 },     // pitchTarge
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(6), CAM_DATA_FLAGS },
+    SET_NORM3_STATICDATA( // Camera_Normal3()
+        -50,              // yOffset
+        220,              // distMin
+        260,              // distMax
+        10,               // yawUpdateRateInv
+        10,               // pitchUpdateRateInv
+        20,               // fovTarget
+        60,               // maxAtLERPScale
+        50,               // pitchTarge
+        SHRINKWINVAL_NONE | IFACE_ALPHA(6)),
 };
 
 // Function: SUBJ1
@@ -688,43 +688,39 @@ CameraModeValue sSetHorseModeTalkData[] = {
     { 60, CAM_DATA_18 },
 };
 
-// Function: NORM3
 CameraModeValue sSetHorseModeStillData[] = {
-    { -40, CAM_DATA_Y_OFFSET },    // yOffset
-    { 180, CAM_DATA_01 },    // distMin
-    { 200, CAM_DATA_02 },    // distMax
-    { -3, CAM_DATA_PITCHTARGET },     // yawUpdateRateInv
-    { 100, CAM_DATA_04 },    // pitchUpdateRateInv
-    { 100, CAM_DATA_05 },    // fovTarget
-    { 60, CAM_DATA_FOV },     // maxAtLERPScale
-    { 10, CAM_DATA_08 },     // pitchTarget
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | NORM3_FLG_80, CAM_DATA_FLAGS },
+    SET_NORM3_STATICDATA( // Camera_Normal3()
+        -40,              // yOffset
+        180,              // distMin
+        200,              // distMax
+        -3,               // yawUpdateRateInv
+        100,              // pitchUpdateRateInv
+        100,              // fovTarget
+        60,               // maxAtLERPScale
+        10,               // pitchTarget
+        SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | NORM3_FLG_80),
 };
 
 /*=====================================================================
- *                   Custom Data: ZORA Setting
+ *                Custom Data: ZORA_DIVING Setting
  *=====================================================================
  */
 
-/**
- * Setting    Mode      Function
- * -------    ------    --------
- * ZORA       NORMAL    NORM3
- */
-CameraModeValue D_801B4EB4[] = {
-    { -20, CAM_DATA_Y_OFFSET },    // yOffset
-    { 250, CAM_DATA_01 },    // distMin
-    { 250, CAM_DATA_02 },    // distMax
-    { 0, CAM_DATA_PITCHTARGET },      // yawUpdateRateInv
-    { 20, CAM_DATA_04 },     // pitchUpdateRateInv
-    { 20, CAM_DATA_05 },     // fovTarget
-    { 60, CAM_DATA_FOV },     // maxAtLERPScale
-    { 50, CAM_DATA_08 },     // pitchTarget
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(6) | NORM3_FLG_80, CAM_DATA_FLAGS },
+CameraModeValue sSetZoraDivingModeNormalData[] = {
+    SET_NORM3_STATICDATA( // Camera_Normal3()
+        -20,              // yOffset
+        250,              // distMin
+        250,              // distMax
+        0,                // yawUpdateRateInv
+        20,               // pitchUpdateRateInv
+        20,               // fovTarget
+        60,               // maxAtLERPScale
+        50,               // pitchTarget
+        SHRINKWINVAL_NONE | IFACE_ALPHA(6) | NORM3_FLG_80),
 };
 
 /*=====================================================================
- *                   Custom Data: PREREND_FIXED Setting
+ *                Custom Data: PREREND_FIXED Setting
  *=====================================================================
  */
 
@@ -1978,7 +1974,7 @@ CameraModeValue D_801B574C[] = {
  * --------    ------    --------
  * TREASURE    NORMAL    DEMO2
  */
-CameraModeValue D_801B5770[] = {
+CameraModeValue sSetLongChestOpeningModeNormalData[] = {
     { 60, CAM_DATA_FOV },     // fov
     { 30, CAM_DATA_08 },     // unk_04
     { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF), CAM_DATA_FLAGS },
@@ -5575,8 +5571,8 @@ CameraMode sCamSetHorseModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, sSetHorseModeStillData),   
 };
 
-CameraMode sCamSetZora0Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, D_801B4EB4),  
+CameraMode sCamSetZoraDivingModes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, sSetZoraDivingModeNormalData),  
 };
 
 CameraMode sCamSetPreRendFixedModes[] = {
@@ -5822,8 +5818,8 @@ CameraMode sCamSetRebirthModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5728),  
 };
 
-CameraMode sCamSetTreasureModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO2, D_801B5770),  
+CameraMode sCamSetLongChestOpeningModes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO2, sSetLongChestOpeningModeNormalData),  
 };
 
 CameraMode sCamSetTransformModes[] = {
@@ -6925,13 +6921,13 @@ CameraSetting sCameraSettings[] = {
     { 0x05FFEFF7, 0x00000005, sCamSetNormal3Modes },        // CAM_SET_NORMAL3
     { 0x00000401, 0x00000005, sCamSetPivotDivingModes },        // CAM_SET_PIVOT_DIVING
     { 0x00017E13, 0x80000005, sCamSetHorseModes },       // CAM_SET_HORSE
-    { 0x00000001, 0x80000005, sCamSetZora0Modes },        // CAM_SET_ZORA
+    { 0x00000001, 0x80000005, sCamSetZoraDivingModes },        // CAM_SET_ZORA_DIVING
     { 0x00000001, 0x8000000C, sCamSetPreRendFixedModes },     // CAM_SET_PREREND_FIXED
     { 0x00000001, 0x8000000C, sCamSetPreRendPivotModes },     // CAM_SET_PREREND_PIVOT
     { 0x00000001, 0xC0000007, sCamSetDoorCModes },        // CAM_SET_DOORC
     { 0x00000001, 0xC000000E, sCamSetDemo0Modes },        // CAM_SET_DEMO0
     { 0x00000001, 0x80000005, sCamSetFree0Modes },        // CAM_SET_FREE0
-    { 0x03FFFFFF, 0x00000005, sCamSetFukan0Modes },       // CAM_SET_FUKAN0
+    { 0x03FFFFFF, 0x00000005, sCamSetFukan0Modes },       // CAM_SET_BIRDS_EYE_VIEW_0
     { 0x03FFFFFF, 0x00000005, sCamSetNormal1Modes },        // CAM_SET_NORMAL1
     { 0x03FFFFFF, 0x80000005, sCamSetNanameModes },       // CAM_SET_NANAME
     { 0x00001BD9, 0x80000005, sCamSetCirc0Modes },        // CAM_SET_CIRCLE0
@@ -6946,7 +6942,7 @@ CameraSetting sCameraSettings[] = {
     { 0x0000002F, 0x00000005, sCamSetWarp0Modes },        // CAM_SET_WARP0
     { 0x0000002F, 0x00000005, sCamSetDeathModes },        // CAM_SET_DEATH
     { 0x0000002F, 0x00000005, sCamSetRebirthModes },      // CAM_SET_REBIRTH
-    { 0x00000001, 0x40000005, sCamSetTreasureModes },     // CAM_SET_TREASURE_MINIGAME
+    { 0x00000001, 0x40000005, sCamSetLongChestOpeningModes },     // CAM_SET_LONG_CHEST_OPENING
     { 0x00000003, 0x00000005, sCamSetTransformModes },    // CAM_SET_TRANSFORM
     { 0x00000001, 0x00000005, sCamSetAttentionModes },    // CAM_SET_ATTENTION
     { 0x00000001, 0x00000005, sCamSetWarp1Modes },        // CAM_SET_WARP1
@@ -6960,27 +6956,27 @@ CameraSetting sCameraSettings[] = {
     { 0x00001BD9, 0x80000005, sCamSetCirc3Modes },        // CAM_SET_CIRCLE3
     { 0x00000001, 0x80000005, sCamSetCirc4Modes },        // CAM_SET_CIRCLE4
     { 0x000011D9, 0x80000005, sCamSetFixed3Modes },       // CAM_SET_FIXED3
-    { 0x03FFFFFF, 0x80000005, sCamSetTower0Modes },       // CAM_SET_TOWER0
+    { 0x03FFFFFF, 0x80000005, sCamSetTower0Modes },       // CAM_SET_TOWER_CLIMB
     { 0x00000001, 0x80000005, sCamSetParallel0Modes },    // CAM_SET_PARALLEL0
     { 0x00000001, 0x00000005, sCamSetNormDModes },        // CAM_SET_NORMALD
     { 0x00000001, 0x00000005, sCamSetSubjectDModes },     // CAM_SET_SUBJECTD
     { 0x00000001, 0xC0000008, sCamSetStart0Modes },       // CAM_SET_START0
     { 0x00000001, 0xC0000008, sCamSetStart2Modes },       // CAM_SET_START2
     { 0x00000001, 0x00000005, sCamSetStop0Modes },        // CAM_SET_STOP0
-    { 0x00003051, 0x00000005, sCamSetJCruisingModes },    // CAM_SET_JCRUISING
-    { 0x03FFFFFF, 0x00000005, sCamSetClimeMazeModes },    // CAM_SET_CLIMEMAZE
+    { 0x00003051, 0x00000005, sCamSetJCruisingModes },    // CAM_SET_BOAT_CRUISE
+    { 0x03FFFFFF, 0x00000005, sCamSetClimeMazeModes },    // CAM_SET_VERTICAL_CLIMB
     { 0x00000001, 0x00000005, sCamSetSidedModes },        // CAM_SET_SIDED
     { 0x03FFFFFF, 0x00000005, sCamSetDungeon2Modes },     // CAM_SET_DUNGEON2
     { 0x03FFFFFF, 0x00000005, sCamSetBossOdolwaModes },   // CAM_SET_BOSS_ODOLWA
     { 0x03FFFFFF, 0x80000005, sCamSetKeepBackModes },     // CAM_SET_KEEPBACK
     { 0x00000001, 0x80000005, sCamSetCirc6Modes },        // CAM_SET_CIRCLE6
     { 0x00000001, 0x80000005, sCamSetCirc7Modes },        // CAM_SET_CIRCLE7
-    { 0x03FFFFFF, 0x00000005, sCamSetMiniBossModes },     // CAM_SET_MINIBOSS
+    { 0x03FFFFFF, 0x00000005, sCamSetMiniBossModes },     // CAM_SET_MINI_BOSS
     { 0x00000001, 0x80000005, sCamSetRFixed1Modes },      // CAM_SET_RFIXED1
-    { 0x00000401, 0x00000005, sCamSetTresure1Modes },     // CAM_SET_TRESURE1
-    { 0x00000001, 0x80000005, sCamSetBombBasketModes },   // CAM_SET_BOMBBASKET
+    { 0x00000401, 0x00000005, sCamSetTresure1Modes },     // CAM_SET_TREASURE_CHEST_MINIGAME
+    { 0x00000001, 0x80000005, sCamSetBombBasketModes },   // CAM_SET_HONEY_AND_DARLING_1
     { 0x00000001, 0x80000005, sCamSetCirc8Modes },        // CAM_SET_CIRCLE8
-    { 0x03FFFFFF, 0x00000005, sCamSetFukan1Modes },       // CAM_SET_FUKAN1
+    { 0x03FFFFFF, 0x00000005, sCamSetFukan1Modes },       // CAM_SET_BIRDS_EYE_VIEW_1
     { 0x03FFFFFF, 0x00000005, sCamSetDungeon3Modes },     // CAM_SET_DUNGEON3
     { 0x00008441, 0x0000000A, sCamSetTelescopeModes },    // CAM_SET_TELESCOPE
     { 0x3FFFFFFF, 0x00000005, sCamSetRoom0Modes },        // CAM_SET_ROOM0
@@ -6995,7 +6991,7 @@ CameraSetting sCameraSettings[] = {
     { 0x00000001, 0x00000005, sCamSetConnect0Modes },     // CAM_SET_CONNECT0
     { 0x05FFEFF7, 0x00000005, sCamSetPinnacleRockModes }, // CAM_SET_PINNACLE_ROCK
     { 0x03FFFFFF, 0x00000005, sCamSetNormal2Modes },        // CAM_SET_NORMAL2
-    { 0x03FFFFFF, 0x00000005, sCamSetBombBowlModes },     // CAM_SET_BOMBBOWL
+    { 0x03FFFFFF, 0x00000005, sCamSetBombBowlModes },     // CAM_SET_HONEY_AND_DARLING_2
     { 0x00000001, 0x80000005, sCamSetCircAModes },        // CAM_SET_CIRCLEA
     { 0x05FFEFF7, 0x00000005, sCamSetWhirlpoolModes },    // CAM_SET_WHIRLPOOL
     { 0x01FFFFDF, 0x00000005, sCamSetCuccoShackModes },   // CAM_SET_CUCCO_SHACK
@@ -7016,7 +7012,7 @@ CameraSetting sCameraSettings[] = {
 static s16 sCsCamSceneDataGlobalSettings[26] = {
     /* -25 */ CAM_SET_ELEGY_SHELL,
     /* -24 */ CAM_SET_SIDED,
-    /* -23 */ CAM_SET_JCRUISING,
+    /* -23 */ CAM_SET_BOAT_CRUISE,
     /* -22 */ CAM_SET_NONE,
     /* -21 */ CAM_SET_SUBJECTD,
     /* -20 */ CAM_SET_NORMALD,
@@ -7029,7 +7025,7 @@ static s16 sCsCamSceneDataGlobalSettings[26] = {
     /* -13 */ CAM_SET_REMOTEBOMB,
     /* -12 */ CAM_SET_NONE,
     /* -11 */ CAM_SET_TRANSFORM,
-    /* -10 */ CAM_SET_TREASURE_MINIGAME,
+    /* -10 */ CAM_SET_LONG_CHEST_OPENING,
     /* -09 */ CAM_SET_REBIRTH,
     /* -08 */ CAM_SET_DEATH,
     /* -07 */ CAM_SET_WARP0,
