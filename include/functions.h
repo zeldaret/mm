@@ -2194,7 +2194,7 @@ s32 func_801242DC(GlobalContext* globalCtx);
 // void func_80125500(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80125580(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_80125CE0(void);
-s32 func_80125D4C(GlobalContext* globalCtx, Vec3s* arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
+//s32 func_80125D4C(GlobalContext* globalCtx, Vec3s* arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
 //s32 func_801262C8(GlobalContext* globalCtx, Vec3s* arg1, s32* arg2, Vec3f* arg3, Vec3s* arg4, Player* player);
 // void func_801263FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, WeaponInfo* weaponInfo, Vec3f* arg3, Vec3f* arg4);
