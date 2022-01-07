@@ -1,10 +1,10 @@
 #include "global.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_link_nuts/object_link_nuts.h"
+#include "objects/object_link_goron/object_link_goron.h"
 #include "objects/object_link_zora/object_link_zora.h"
-
-
-extern Gfx D_0600E2A0[];
-extern Gfx D_0600E088[];
+#include "objects/object_mask_meoto/object_mask_meoto.h"
+#include "objects/object_mask_bakuretu/object_mask_bakuretu.h"
 
 extern s16 D_801BFDA0[];
 
@@ -535,9 +535,6 @@ void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122C20.s")
 #endif
 
-
-extern AnimatedMaterial D_06013138;
-
 void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
     struct _struct_D_801BFDD0_0x8* temp_s3;
     struct_80122D44_arg1_unk_04* phi_s2 = arg1->unk_04;
@@ -554,7 +551,7 @@ void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (!phi_s6 && phi_s2->unk_00 == 2) {
-                AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&D_06013138));
+                AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_link_goron_Matanimheader_013138));
                 phi_s6 = true;
             }
 
@@ -1501,6 +1498,7 @@ void func_8012536C(void) {
 }
 
 #ifdef NON_MATCHING
+// draws zora shield (?)
 void func_801253A4(GlobalContext* globalCtx, Player* player) {
     Vtx* sp30;
     Gfx* dl;
@@ -1648,8 +1646,8 @@ s32 func_80125580(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Vec3f* arg3, V
                     func_80125340();
                 }
                 func_80125318(arg3, arg4);
-                if ((player->transformation != PLAYER_FORM_ZORA) || (&D_0400E410 == player->skelAnime.animation)) {
-                    if (&D_0400E410 == player->skelAnime.animation) {
+                if ((player->transformation != PLAYER_FORM_ZORA) || (&gameplay_keep_Linkanim_00E410 == player->skelAnime.animation)) {
+                    if (&gameplay_keep_Linkanim_00E410 == player->skelAnime.animation) {
                         phi_a0 = D_801C0608;
                     } else {
                         if (&gameplay_keep_Linkanim_00E260 == player->skelAnime.animation) {
@@ -1900,21 +1898,17 @@ void func_80126B8C(GlobalContext* globalCtx, Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126BD0.s")
 
-extern LinkAnimationHeader gameplay_keep_Linkanim_00E278;
-extern Gfx D_06008AA0[];
-extern Gfx D_06008C50[];
-
 s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
-    if ((player->transformation == PLAYER_FORM_DEKU) && (((player->skelAnime.animation == &D_0400E2D0)) || (player->skelAnime.animation == &D_0400E2D8) || (player->skelAnime.animation == &D_0400E2E8) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278))) {
+    if ((player->transformation == PLAYER_FORM_DEKU) && (((player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D0)) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D8) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2E8) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278))) {
         struct_80124618** sp3C = D_801C0AF4;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        if (player->skelAnime.animation == &D_0400E2D8) {
+        if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D8) {
             sp3C = D_801C0AFC;
         } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278) {
             sp3C = D_801C0B0C;
-        } else if (player->skelAnime.animation == &D_0400E2E8) {
+        } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2E8) {
             sp3C = D_801C0B04;
         }
 
@@ -1934,8 +1928,10 @@ s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(POLY_OPA_DISP++, player->actor.velocity.y < -6.0f ? &D_06008AA0 : &D_06008C50);
+        // Close flower / Open flower
+        gSPDisplayList(POLY_OPA_DISP++, player->actor.velocity.y < -6.0f ? object_link_nuts_DL_008AA0 : object_link_nuts_DL_008C50);
 
+        // fake match?
         Matrix_GetStateTranslation(&player->bodyPartsPos[*((u8*)D_801C0B1C + arg2)]);
         Matrix_StatePop();
 
@@ -1959,25 +1955,21 @@ s32 func_80127438(GlobalContext* globalCtx, Player* player, s32 maskId) {
     return false;
 }
 
-extern Gfx D_06011AB8[];
-
 void func_80127488(GraphicsContext** gfxCtx, Player* player, u8 arg2) {
     OPEN_DISPS(*gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(*gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, arg2);
-    gSPDisplayList(POLY_XLU_DISP++, D_06011AB8);
+    gSPDisplayList(POLY_XLU_DISP++, object_link_goron_DL_011AB8);
 
     func_80122BA4(gfxCtx, &player->unk_3D0, 3, arg2);
 
     CLOSE_DISPS(*gfxCtx);
 }
 
-extern AnimatedMaterial D_0A001CD8;
-
 void func_8012754C(GlobalContext* globalCtx, Player* player) {
     gSegments[0xA] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
-    AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&D_0A001CD8));
+    AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
 #ifdef NON_EQUIVALENT
@@ -2029,6 +2021,7 @@ void func_80127594(GlobalContext* globalCtx, Player* player) {
             //phi_s1->unk_C = (s32) (*temp_s0 + ((s32) &D_04091BE0 & 0xFFFFFF));
             //gSPSegment(&phi_s1[1], 0x08, (*temp_s0 + ((s32) D_04091BE0 & 0xFFFFFF)));
             //gSPSegment(&phi_s1[1], 0x08, (*temp_s0 + ((s32) D_04091BE0 & 0xFFFFFF)));
+            // gameplay_keep_Tex_091BE0
             gSPSegment(&phi_s1[1], 0x08, (*temp_s0 + ((s32) D_04091BE0 & 0xFFFFFF)));
 
 
@@ -2042,7 +2035,7 @@ void func_80127594(GlobalContext* globalCtx, Player* player) {
 
             //phi_s1->unk_20 = 0xDE000000;
             //phi_s1->unk_24 = D_040301B0;
-            gSPDisplayList(&phi_s1[4], D_040301B0);
+            gSPDisplayList(&phi_s1[4], gameplay_keep_DL_0301B0);
 
             //phi_s1->unk_2C = 0x40;
             //phi_s1->unk_28 = 0xD8380002;
@@ -2185,11 +2178,6 @@ glabel D_801C0EB8
 #endif
 
 
-
-extern AnimatedMaterial D_0A0011F8;
-
-extern Gfx D_0A000440[];
-
 #if NON_MATCHING
 // regalloc
 void func_801278F8(GlobalContext* globalCtx, Player* player) {
@@ -2201,7 +2189,7 @@ void func_801278F8(GlobalContext* globalCtx, Player* player) {
 
         gSegments[0xA] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
 
-        AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&D_0A0011F8));
+        AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
         if ((player->unk_B60 < 0xB) != 0)
         {
@@ -2214,7 +2202,7 @@ void func_801278F8(GlobalContext* globalCtx, Player* player) {
 
         new_var = phi_a0;
 
-        gSPDisplayList(POLY_OPA_DISP++, D_0A000440);
+        gSPDisplayList(POLY_OPA_DISP++, object_mask_bakuretu_DL_000440);
 
         gSPSegment(POLY_OPA_DISP++, 0x09, &D_801C0BD0);
 
@@ -2391,8 +2379,8 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
     Color_RGB8* temp_v1_3;
     Vec3f* temp_v1_2;
 
-    temp_v1 = &D_0400D0A8 == player->skelAnime.animation;
-    if ((temp_v1 != 0) || ((player->currentMask != 0) && (&D_0400D0C8 == player->skelAnime.animation) && (temp_f0 = player->skelAnime.curFrame - 8.0f, (temp_f0 >= 0.0f)) && (temp_f0 < 4.0f)) || (player->stateFlags2 & 0x01000000)) {
+    temp_v1 = &gameplay_keep_Linkanim_00D0A8 == player->skelAnime.animation;
+    if ((temp_v1 != 0) || ((player->currentMask != 0) && (&gameplay_keep_Linkanim_00D0C8 == player->skelAnime.animation) && (temp_f0 = player->skelAnime.curFrame - 8.0f, (temp_f0 >= 0.0f)) && (temp_f0 < 4.0f)) || (player->stateFlags2 & 0x01000000)) {
         if (temp_v1 != 0) {
             sp6C = player->prevMask;
         } else {
@@ -2443,7 +2431,7 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
 
         //temp_v0_5 = sp58->polyOpa.p;
         //sp58->polyOpa.p = temp_v0_5 + 8;
-        //temp_v0_5->words.w1 = (u32) &D_040032B0;
+        //temp_v0_5->words.w1 = (u32)gameplay_keep_DL_0032B0;
         //temp_v0_5->words.w0 = 0xDE000000;
         gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0032B0); 
 
@@ -2497,7 +2485,9 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
 
         return 1;
     }
-    if (dlist == D_0600E2A0) {
+
+    // zora guitar
+    if (dlist == object_link_zora_DL_00E2A0) {
         f32 sins_1 = Math_SinS(player->unk_B86);
         f32 sins_2;
 
@@ -2535,9 +2525,10 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
 
         //temp_v0_13 = sp20->polyOpa.p;
         //sp20->polyOpa.p = temp_v0_13 + 8;
-        //temp_v0_13->words.w1 = D_0600E088;
+        //temp_v0_13->words.w1 = object_link_zora_DL_00E088;
         //temp_v0_13->words.w0 = 0xDE000000;
-        gSPDisplayList(POLY_OPA_DISP++, D_0600E088);
+        // hand
+        gSPDisplayList(POLY_OPA_DISP++, object_link_zora_DL_00E088);
 
         Matrix_StatePop();
 
@@ -2546,6 +2537,7 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
         return 1;
         //if (((!__gfxCtx) && (!__gfxCtx)) && (!__gfxCtx)) {}
     }
+
     return 0;
 }
 #else
@@ -2761,7 +2753,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Gfx** arg3, P
     }
     if (arg1 == 0x10) {
         Math_Vec3f_Copy(&arg5->leftHandWorld.pos, D_801F59DC);
-        if ((*arg2 != 0) && (func_801271B0(globalCtx, arg5, 0) == 0) && (func_80128640(globalCtx, arg5, *arg2) == 0) && (&D_0400E218 == arg5->skelAnime.animation)) {
+        if ((*arg2 != 0) && (func_801271B0(globalCtx, arg5, 0) == 0) && (func_80128640(globalCtx, arg5, *arg2) == 0) && (&gameplay_keep_Linkanim_00E218 == arg5->skelAnime.animation)) {
             func_80127488(globalCtx, arg5, D_801C0778[(s32) arg5->skelAnime.curFrame]);
         }
         if (arg5->actor.scale.y >= 0.0f) {
@@ -2884,13 +2876,13 @@ void func_80128BD0(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Gfx** arg3, P
     } else if (arg1 == 0x12) {
         func_80126BD0(globalCtx, arg5, 1);
     } else if (arg1 == 0x15) {
-        if ((arg5->transformation == 1) && (( ( &gameplay_keep_Linkanim_00E1F8 == arg5->skelAnime.animation)) || (&D_0400E200 == arg5->skelAnime.animation != 0) || (&D_0400E1F0 == arg5->skelAnime.animation))) {
+        if ((arg5->transformation == 1) && (( ( &gameplay_keep_Linkanim_00E1F8 == arg5->skelAnime.animation)) || (&gameplay_keep_Linkanim_00E200 == arg5->skelAnime.animation != 0) || (&gameplay_keep_Linkanim_00E1F0 == arg5->skelAnime.animation))) {
             Gfx** aux_a1;
 
             OPEN_DISPS(globalCtx->state.gfxCtx);
             //sp170 = globalCtx->state.gfxCtx;
 
-            if (&D_0400E200 == arg5->skelAnime.animation) {
+            if (&gameplay_keep_Linkanim_00E200 == arg5->skelAnime.animation) {
 
                 phi_v0 = &arg5->unk_B08[2];
                 phi_s0 = (Vec3f* ) &sp178;
@@ -2958,7 +2950,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Gfx** arg3, P
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
     } else if (arg1 == 0xB) {
-        if ((*arg2 != 0) && ((arg5->currentMask != 0)) && ((((arg5->transformation == 4)) && ((&D_0400D0C8 != arg5->skelAnime.animation) || (arg5->skelAnime.curFrame >= 12.0f))) || ((arg5->transformation != 4) && ((s32) arg5->currentMask >= 0x15) && (arg5->currentMask != (arg5->transformation + 0x15)) && (arg5->skelAnime.curFrame >= 10.0f)))) {
+        if ((*arg2 != 0) && ((arg5->currentMask != 0)) && ((((arg5->transformation == 4)) && ((&gameplay_keep_Linkanim_00D0C8 != arg5->skelAnime.animation) || (arg5->skelAnime.curFrame >= 12.0f))) || ((arg5->transformation != 4) && ((s32) arg5->currentMask >= 0x15) && (arg5->currentMask != (arg5->transformation + 0x15)) && (arg5->skelAnime.curFrame >= 10.0f)))) {
             if (func_80127438(globalCtx, arg5, (s32) arg5->currentMask) != 0) {
                 OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -2975,7 +2967,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Gfx** arg3, P
                     func_80127A60(globalCtx, arg5);
                 } else if (temp_v0_11 == 0xB) {
                     func_801284A0(globalCtx, arg5);
-                } else if (((s32) temp_v0_11 >= 0x15) && (((temp_s0_6 = (arg5->transformation * 8) + &D_801C0E04, Matrix_StatePush(), Matrix_InsertTranslation(temp_s0_6->x, temp_s0_6->y, 0.0f, 1), Matrix_Scale(1.0f, 1.0f - arg5->unk_B08[5], 1.0f - arg5->unk_B08[4], 1), temp_v0_12 = sp150->polyOpa.p, sp150->polyOpa.p = temp_v0_12 + 8, temp_v0_12->words.w0 = 0xDA380003, temp_v0_12->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx), Matrix_StatePop(), temp_v0_13 = arg5->skelAnime.animation, (&D_0400D0C8 == temp_v0_13)) && (arg5->skelAnime.curFrame >= 51.0f)) || (&gameplay_keep_Linkanim_00D0D0 == temp_v0_13))) {
+                } else if (((s32) temp_v0_11 >= 0x15) && (((temp_s0_6 = (arg5->transformation * 8) + &D_801C0E04, Matrix_StatePush(), Matrix_InsertTranslation(temp_s0_6->x, temp_s0_6->y, 0.0f, 1), Matrix_Scale(1.0f, 1.0f - arg5->unk_B08[5], 1.0f - arg5->unk_B08[4], 1), temp_v0_12 = sp150->polyOpa.p, sp150->polyOpa.p = temp_v0_12 + 8, temp_v0_12->words.w0 = 0xDA380003, temp_v0_12->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx), Matrix_StatePop(), temp_v0_13 = arg5->skelAnime.animation, (&gameplay_keep_Linkanim_00D0C8 == temp_v0_13)) && (arg5->skelAnime.curFrame >= 51.0f)) || (&gameplay_keep_Linkanim_00D0D0 == temp_v0_13))) {
                     sp154 += 4;
                 }
                 //temp_v0_14 = sp150->polyOpa.p;
@@ -3010,7 +3002,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Gfx** arg3, P
 
                 CLOSE_DISPS(globalCtx->state.gfxCtx);
             } else {
-                if (&gameplay_keep_Linkanim_00E2B0 ==  arg5->skelAnime.animation || (&D_0400E2A8 == arg5->skelAnime.animation) || (&gameplay_keep_Linkanim_00D300 == arg5->skelAnime.animation)) {
+                if (&gameplay_keep_Linkanim_00E2B0 ==  arg5->skelAnime.animation || (&gameplay_keep_Linkanim_00E2A8 == arg5->skelAnime.animation) || (&gameplay_keep_Linkanim_00D300 == arg5->skelAnime.animation)) {
                     s32 i;
 
                     OPEN_DISPS(globalCtx->state.gfxCtx);
