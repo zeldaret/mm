@@ -3,18 +3,14 @@
 
 #include "ultra64.h"
 
-#define CAM_STATUS_CUT        0
-#define CAM_STATUS_WAIT       1
-#define CAM_STATUS_UNK3       3
-#define CAM_STATUS_ACTIVE     7
-#define CAM_STATUS_INACTIVE   0x100
-
+// Camera Id flags
 #define NUM_CAMS 4
 #define CAM_ID_MAIN 0
 #define CAM_ID_SUB_FIRST 1
 #define CAM_ID_NONE -1
 #define CAM_ID_ACTIVE -1
 
+// Camera shrink window flags
 #define SHRINKWINVAL_NONE 0x0000
 #define SHRINKWINVAL_SMALL 0x1000
 #define SHRINKWINVAL_MEDIUM 0x2000
@@ -25,26 +21,29 @@
 #define SHRINKWIN_MASK 0xF000
 #define SHRINKWINVAL_MASK 0x7000
 
+// Camera Interface flags
 #define IFACE_ALPHA(alpha) ((alpha) << 8)
 #define IFACE_ALPHA_MASK (0x0F00)
 
+// Camera bg surface flags
 #define FLG_ADJSLOPE (1 << 0)
 #define FLG_OFFGROUND (1 << 7)
 
 #define CAM_TRACKED_PLAYER(camera) ((Player*)camera->trackActor)
 
-// Camera flags1
-// Setting 
+// Camera flags1. Flags spcifically for settings, modes, and scene/bg/cs camData
+// Used to store current state, but not read from with only 1 exception (possibly read from outside of camera)
+// Setting (0x1, 0x10)
 #define CAM_FLAG1_SET_1 (1 << 0)
 #define CAM_FLAG1_SET_2 (1 << 4)
-// Mode
+// Mode (0x2, 0x20)
 #define CAM_FLAG1_MODE_1 (1 << 1)
 #define CAM_FLAG1_MODE_2 (1 << 5)
-// Data
+// scene Data (0x4, 0x40)
 #define CAM_FLAG1_SCENE_DATA_1 (1 << 2)
 #define CAM_FLAG1_SCENE_DATA_2 (1 << 6)
 
-// Camera flags2
+// Camera flags2. Variety of generic flags
 #define CAM_FLAG2_1 (1 << 0) // Must be set for the camera from changing settings based on the bg surface
 #define CAM_FLAG2_2 (1 << 1)
 #define CAM_FLAG2_4 (1 << 2)
@@ -62,7 +61,7 @@
 #define CAM_FLAG2_4000 (1 << 14)
 #define CAM_FLAG2_8000 (1 << 15)
 
-// Camera paramFlags
+// Camera paramFlags. Each corresponds to a struct member from the camera struct
 #define CAM_PARAM_FLAG_1 (1 << 0)
 #define CAM_PARAM_FLAG_2 (1 << 1)
 #define CAM_PARAM_FLAG_4 (1 << 2)
@@ -70,6 +69,19 @@
 #define CAM_PARAM_FLAG_10 (1 << 4)
 #define CAM_PARAM_FLAG_20 (1 << 5)
 #define CAM_PARAM_FLAG_40 (1 << 6)
+
+/**
+ * Camera Status type
+ * Determines how much the camera is updated each frame
+ * Higher values represents higher levels of activity
+ */
+// Camera is on
+#define CAM_STATUS_CUT        0 // The camera is not updated at all
+#define CAM_STATUS_WAIT       1 // There is minimally/partially updated, action function is not run
+#define CAM_STATUS_UNK3       3 // The camera is mostly updated including running its action function, but data is not set to view
+#define CAM_STATUS_ACTIVE     7 // The camera is fully updated, info is sent to view
+// Camera is off
+#define CAM_STATUS_INACTIVE   0x100
 
 typedef enum {
     /* 0x00 */ CAM_SET_NONE,
@@ -81,11 +93,11 @@ typedef enum {
     /* 0x06 */ CAM_SET_PREREND_FIXED, // Unused remnant of OoT: camera is fixed in position and rotation "PREREND0"
     /* 0x07 */ CAM_SET_PREREND_PIVOT, // Unused remnant of OoT: Camera is fixed in position with fixed pitch, but is free to rotate in the yaw direction 360 degrees "PREREND1"
     /* 0x08 */ CAM_SET_DOORC, // Generic room door transitions, camera moves and follows player as the door is open and closed
-    /* 0x09 */ CAM_SET_DEMO0, // TODO: Confirm. Opening chest as goron (treasure chest game)
+    /* 0x09 */ CAM_SET_DEMO0, // Unknown, possibly related to treasure chest game as goron?
     /* 0x0A */ CAM_SET_FREE0, // Free Camera, manual control is given, no auto-updating eye or at
     /* 0x0B */ CAM_SET_BIRDS_EYE_VIEW_0, // Appears unused. Camera is a top-down view "FUKAN0"
     /* 0x0C */ CAM_SET_NORMAL1, // Generic camera 1, used in various places
-    /* 0x0D */ CAM_SET_NANAME, // Unknown
+    /* 0x0D */ CAM_SET_NANAME, // Unknown, slanted or tilted. Behaves identical to Normal0 except with added roll
     /* 0x0E */ CAM_SET_CIRCLE0, // Used in Curiosity Shop, Pirates Fortress, Mayor's Residence
     /* 0x0F */ CAM_SET_FIXED0, // Used in Sakon's Hideout puzzle rooms, milk bar stage
     /* 0x10 */ CAM_SET_SPIRAL_DOOR, // Exiting a Spiral Staircase "SPIRAL"
@@ -103,7 +115,7 @@ typedef enum {
     /* 0x1C */ CAM_SET_ATTENTION, // Unknown, set with camDataId = -15
     /* 0x1D */ CAM_SET_WARP_PAD_ENTRANCE, // Warp pad from start of a dungeon to the boss-room "WARP1"
     /* 0x1E */ CAM_SET_DUNGEON1, // Generic dungeon camera 1, used in various places
-    /* 0x1F */ CAM_SET_FIXED1, // Fixes camera in place, used in various places eg. entering Stock Pot Inn, hiting a switch, giving witch a red potion
+    /* 0x1F */ CAM_SET_FIXED1, // Fixes camera in place, used in various places eg. entering Stock Pot Inn, hiting a switch, giving witch a red potion, shop browsing
     /* 0x20 */ CAM_SET_FIXED2, // Used in Pinnacle Rock after defeating Sea Monsters, and by Tatl in Fortress
     /* 0x21 */ CAM_SET_MAZE, // Unknown
     /* 0x22 */ CAM_SET_REMOTEBOMB, // Unknown, related to Play_ChangeCameraSetting?
@@ -139,7 +151,7 @@ typedef enum {
     /* 0x40 */ CAM_SET_RCIRC0, // Used by a few NPC cutscenes, focus close on the NPC
     /* 0x41 */ CAM_SET_CIRCLE9, // Used by Sakon Hideout entrance and Deku Palace Maze
     /* 0x42 */ CAM_SET_ONTHEPOLE, // Somewhere in Snowhead Temple and Woodfall Temple
-    /* 0x43 */ CAM_SET_INBUSH, // Various bush environments eg. grottos, Swamp Spider House, Termina Field grass, Deku Palace near bean "INBUSH"
+    /* 0x43 */ CAM_SET_INBUSH, // Various bush environments eg. grottos, Swamp Spider House, Termina Field grass bushes, Deku Palace near bean "INBUSH"
     /* 0x44 */ CAM_SET_BOSS_MAJORA, // Majora's Lair: "BOSS_LAST" 
     /* 0x45 */ CAM_SET_BOSS_TWINMOLD, // Twinmold's Lair: "BOSS_INI"
     /* 0x46 */ CAM_SET_BOSS_GOHT, // Goht's Lair: "BOSS_HAK" 
@@ -313,918 +325,9 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u32 validModes;
-    /* 0x4 */ u32 unk_04;
+    /* 0x4 */ u32 unk_04; // flags?
     /* 0x8 */ CameraMode* cameraModes;
 } CameraSetting; // size = 0xC
-
-/**
- * Data that is loaded into camera->params when a camera is set to a specific action-function
- * This data persists while a camera is set to a specific function over many function calls
- * Each function gets up to 50 bytes of customized storage
- * This data is broken up into two types:
- *     - Static Data: Camera Action-Function data that is predefined in Camera_Data.c. Is read-only data
- *     - Dynamic Data: Camera Action-Function data that is calculated at run-time but needs to be stored while the function is active
- */
-
-#define CAM_GET_STATIC_DATA(type) &((type*)camera->actionFuncData)->staticData
-#define CAM_GET_DYNAMIC_DATA(type) &((type*)camera->actionFuncData)->dynamicData
-
-// Camera will reload static data from camera_data
-#define RELOAD_PARAMS \
-    (camera->actionFuncState == 0 || camera->actionFuncState == 10 || camera->actionFuncState == 20)
-
-// It is common to scale data by a factor of 0.01f
-#define PCT(x) ((x)*0.01f)
-// Load the next setting from camera_data.c
-#define NEXTSETTING ((values++)->val)
-// Load the next setting from camera_data.c and scale
-#define NEXTPCT PCT(NEXTSETTING)
-
-
-
-/*================================
- *   Camera_Normal1() DATA
- *================================
- */
-
-#define NORM1_FLG_1 (1 << 0)
-#define NORM1_FLG_2 (1 << 1)
-#define NORM1_FLG_4 (1 << 2)
-#define NORM1_FLG_8 (1 << 3)
-#define NORM1_FLG_10 (1 << 4)
-#define NORM1_FLG_20 (1 << 5)
-#define NORM1_FLG_40 (1 << 6)
-#define NORM1_FLG_80 (1 << 7)
-
-#define SET_NORM1_STATICDATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, yawDiffRange, fov, data08, flags) \
-    { yOffset, CAM_DATA_Y_OFFSET }, \
-    { data01, CAM_DATA_01 }, \
-    { data02, CAM_DATA_02 }, \
-    { pitchTarget, CAM_DATA_PITCHTARGET }, \
-    { eyeStepScale, CAM_DATA_04 }, \
-    { posStepScale, CAM_DATA_05 }, \
-    { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
-    { fov, CAM_DATA_FOV }, \
-    { data08, CAM_DATA_08 }, \
-    { flags, CAM_DATA_FLAGS }
-
-typedef struct {
-    /* 0x00 */ f32 unk_00; // yOffset
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14; // attenuationYawDiffRange
-    /* 0x18 */ f32 unk_18; // fovTarget
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ s16 unk_20; // pitchTarget
-    /* 0x22 */ s16 unk_22; // flags
-} Normal1StaticData; // size = 0x24
-
-typedef struct {
-    /* 0x00 */ f32 unk_00; // yPos
-    /* 0x04 */ f32 unk_04; // xzSpeed
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A; // angle
-    /* 0x0C */ s16 unk_0C; // flags (May be s32)
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ f32 unk_10; // set to float
-} Normal1DynamicData; // size = 0x14
-
-typedef struct {
-    /* 0x00 */ Normal1StaticData staticData;
-    /* 0x24 */ Normal1DynamicData dynamicData;
-} Normal1; // size = 0x38
-
-
-/*================================
- *   Camera_Normal3() DATA
- *================================
- */
-
-#define NORM3_FLG_2 (1 << 1)
-#define NORM3_FLG_20 (1 << 5)
-#define NORM3_FLG_40 (1 << 6)
-#define NORM3_FLG_80 (1 << 7)
-
-#define SET_NORM3_STATICDATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, fov, data08, flags) \
-    { yOffset, CAM_DATA_Y_OFFSET }, \
-    { data01, CAM_DATA_01 }, \
-    { data02, CAM_DATA_02 }, \
-    { pitchTarget, CAM_DATA_PITCHTARGET }, \
-    { eyeStepScale, CAM_DATA_04 }, \
-    { posStepScale, CAM_DATA_05 }, \
-    { fov, CAM_DATA_FOV }, \
-    { data08, CAM_DATA_08 }, \
-    { flags, CAM_DATA_FLAGS }
-
-typedef struct {
-    /* 0x00 */ f32 yOffset;
-    /* 0x04 */ f32 distMin;
-    /* 0x08 */ f32 distMax;
-    /* 0x0C */ f32 yawUpdateRateInv;
-    /* 0x10 */ f32 pitchUpdateRateInv;
-    /* 0x14 */ f32 fovTarget;
-    /* 0x18 */ f32 maxAtLERPScale;
-    /* 0x1C */ s16 pitchTarget;
-    /* 0x1E */ s16 flags;
-} Normal3StaticData; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ f32 isZero; // set but unused
-    /* 0x04 */ f32 yPosOffset;
-    /* 0x08 */ s16 curPitch;
-    /* 0x0A */ s16 yawUpdateRate;
-    /* 0x0C */ s16 yawTimer;
-    /* 0x0E */ s16 distTimer;
-    /* 0x10 */ s16 flag;
-    /* 0x12 */ s16 is1200; // set but unused
-} Normal3DynamicData; // size = 0x14
-
-typedef struct {
-    /* 0x00 */ Normal3StaticData staticData;
-    /* 0x20 */ Normal3DynamicData dynamicData;
-} Normal3; // size = 0x34
-
-
-/*================================
- *   Camera_Normal0() DATA
- *================================
- */
-
-#define NORM0_FLG_1 (1 << 0)
-#define NORM0_FLG_4 (1 << 2)
-#define NORM0_FLG_10 (1 << 4)
-#define NORM0_FLG_80 (1 << 7)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
-} Normal0StaticData; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ s16 unk_2C;
-} Normal0DynamicData; // size = 0x30
-
-typedef struct {
-    /* 0x00 */ Normal0StaticData staticData;
-    /* 0x20 */ Normal0DynamicData dynamicData;
-} Normal0; // size = 0x50
-
-
-/*================================
- *   Camera_Parallel1() DATA
- *================================
- */
-
-#define PARA1_FLG_1 (1 << 0)
-#define PARA1_FLG_2 (1 << 1)
-#define PARA1_FLG_4 (1 << 2)
-#define PARA1_FLG_8 (1 << 3)
-#define PARA1_FLG_10 (1 << 4)
-#define PARA1_FLG_20 (1 << 5)
-#define PARA1_FLG_40 (1 << 6)
-#define PARA1_FLG_80 (1 << 7)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
-    /* 0x24 */ s16 unk_24;
-    /* 0x26 */ s16 unk_26;
-} Parallel1StaticData; // size = 0x28
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
-    /* 0x24 */ s16 unk_24;
-    /* 0x26 */ s16 unk_26;
-} Parallel1DynamicData; // size = 0x28
-
-typedef struct {
-    /* 0x00 */ Parallel1StaticData staticData;
-    /* 0x28 */ Parallel1DynamicData dynamicData;
-} Parallel1; // size = 0x50
-
-
-/*================================
- *   Camera_Jump2() DATA
- *================================
- */
-
-#define JUMP2_FLG_2 (1 << 1)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ s16 unk_20;
-} Jump2StaticData; // size = 0x24
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s32 unk_10; // unused?
-    /* 0x1C */ s16 unk_1C;
-} Jump2DynamicData; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ Jump2StaticData staticData;
-    /* 0x02 */ Jump2DynamicData dynamicData;
-} Jump2; // size = 0x44
-
-
-/*================================
- *   Camera_Jump3() DATA
- *================================
- */
-
-#define JUMP3_FLG_4 (1 << 2)
-#define JUMP3_FLG_8 (1 << 3)
-#define JUMP3_FLG_20 (1 << 5)
-#define JUMP3_FLG_40 (1 << 6)
-#define JUMP3_FLG_80 (1 << 7)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00; // yOffset
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14; // attenuationYawDiffRange
-    /* 0x18 */ f32 unk_18; // fovTarget
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22; // flags
-} Jump3StaticData; // size = 0x24
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s32 unk_0C; // mode
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x1C */ s16 unk_1C;
-} Jump3DynamicData; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ Jump3StaticData staticData; // yOffset
-    /* 0x24 */ Jump3DynamicData dynamicData;
-} Jump3; // size = 0x44
-
-
-/*================================
- *   Camera_Battle1() DATA
- *================================
- */
-
-#define BATT1_FLG_1 (1 << 0)
-#define BATT1_FLG_2 (1 << 1)
-#define BATT1_FLG_10 (1 << 4)
-#define BATT1_FLG_80 (1 << 7)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ f32 unk_2C;
-    /* 0x30 */ s16 unk_30;
-} Battle1StaticData; // size = 0x34
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ Actor* unk_08; // targe3t
-    /* 0x0C */ s32 unk_0C; // unused?
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-} Battle1DynamicData; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ Battle1StaticData staticData;
-    /* 0x24 */ Battle1DynamicData dynamicData;
-} Battle1; // size = 0x50
-
-
-/*================================
- *   Camera_KeepOn1() DATA
- *================================
- */
-
-#define KEEP1_FLG_1 (1 << 0)
-#define KEEP1_FLG_2 (1 << 1)
-#define KEEP1_FLG_10 (1 << 4)
-#define KEEP1_FLG_80 (1 << 7)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ s16 unk_2C;
-} KeepOn1StaticData; // size = 0x30
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Actor* unk_0C;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-} KeepOn1DynamicData; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ KeepOn1StaticData staticData;
-    /* 0x30 */ KeepOn1DynamicData dynamicData;
-} KeepOn1; // size = 0x4C
-
-
-/*================================
- *   Camera_KeepOn3() DATA
- *================================
- */
-
-#define KEEP3_FLG_20 (1 << 5)
-#define KEEP3_FLG_40 (1 << 6)
-#define KEEP3_FLG_80 (1 << 7)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ s16 unk_2C;
-    /* 0x2E */ s16 unk_2E;
-} KeepOn3StaticData; // size = 0x30
-
-typedef struct {
-    /* 0x00 */ f32 unk_00; // Vec3f?
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Actor* unk_0C;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ s16 unk_1C;
-} KeepOn3DynamicData; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ KeepOn3StaticData staticData;
-    /* 0x30 */ KeepOn3DynamicData dynamicData;
-} KeepOn3; // size = 0x50
-
-
-/*================================
- *   Camera_KeepOn4() DATA
- *================================
- */
-
-#define KEEP4_FLG_2 (1 << 1)
-#define KEEP4_FLG_4 (1 << 2)
-#define KEEP4_FLG_8 (1 << 3)
-#define KEEP4_FLG_40 (1 << 6)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
-} KeepOn4StaticData; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ f32 unk_00; // Vec3f?
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Actor* unk_0C;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-} KeepOn4DynamicData; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ KeepOn4StaticData staticData;
-    /* 0x20 */ KeepOn4DynamicData dynamicData;
-} KeepOn4; // size = 0x3C
-
-
-/*================================
- *   Camera_Fixed1() DATA
- *================================
- */
-
-#define FIXD1_FLG_10 (1 << 4)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 jfifId;
-    /* 0x08 */ f32 fov;
-    /* 0x0C */ s16 flags;
-} Fixed1StaticData; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ PosRot eyePosRotTarget;
-    /* 0x14 */ s16 fov;
-    /* 0x18 */ Actor* trackActor;
-} Fixed1DynamicData; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ Fixed1StaticData staticData;
-    /* 0x10 */ Fixed1DynamicData dynamicData;
-} Fixed1; // size = 0x2C
-
-
-/*================================
- *   Camera_Fixed2() DATA
- *================================
- */
-
-#define FIXD2_FLG_1 (1 << 0)
-#define FIXD2_FLG_2 (1 << 1)
-#define FIXD2_FLG_4 (1 << 2)
-#define FIXD2_FLG_8 (1 << 3)
-#define FIXD2_FLG_10 (1 << 4)
-#define FIXD2_FLG_20 (1 << 5)
-#define FIXD2_FLG_40 (1 << 6)
-#define FIXD2_FLG_80 (1 << 7)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ s16 unk_18;
-} Fixed2StaticData; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ s16 unk_1C;
-} Fixed2DynamicData; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ Fixed2StaticData staticData;
-    /* 0x1C */ Fixed2DynamicData dynamicData;
-} Fixed2; // size = 0x3C
-
-
-/*================================
- *   Camera_Subj1() DATA
- *================================
- */
-
-#define SUBJ1_FLG_10 (1 << 4)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ s16 unk_20;
-} Subj1StaticData; // size = 0x24
-
-typedef struct {
-    /* 0x0 */ f32 unk_00;
-    /* 0x4 */ s16 unk_04; // yaw
-    /* 0x6 */ s16 unk_06; // pitch
-    /* 0x8 */ s16 unk_08;
-} Subj1DynamicData; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ Subj1StaticData staticData;
-    /* 0x24 */ Subj1DynamicData dynamicData;
-} Subj1; // size = 0x30
-
-
-/*================================
- *   Camera_Unique2() DATA
- *================================
- */
-
-#define UNIQ2_FLG_1 (1 << 0)
-#define UNIQ2_FLG_2 (1 << 1)
-#define UNIQ2_FLG_10 (1 << 4)
-#define UNIQ2_FLG_20 (1 << 5)
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ s16 unk_10;
-} Unique2StaticData; // size = 0x14
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
-} Unique2DynamicData; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ Unique2StaticData staticData;
-    /* 0x14 */ Unique2DynamicData dynamicData;
-} Unique2; // size = 0x1C
-
-
-/*================================
- *   Camera_Unique0() DATA
- *================================
- */
-
-#define UNIQ0_FLG_1 (1 << 0)
-#define UNIQ0_FLG_2 (1 << 1)
-#define UNIQ0_FLG_10 (1 << 4)
-
-typedef struct {
-    /* 0x0 */ f32 unk_00;
-    /* 0x4 */ f32 unk_04;
-    /* 0x8 */ s16 unk_08;
-} Unique0StaticData; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ Vec3f unk_1C;
-    /* 0x28 */ Vec3f unk_28;
-    /* 0x34 */ Vec3s unk_34;
-    /* 0x3A */ s16 unk_3A;
-    /* 0x3C */ s16 unk_3C;
-    /* 0x3E */ s16 unk_3E;
-} Unique0DynamicData; // size = 0x40
-
-typedef struct {
-    /* 0x00 */ Unique0StaticData staticData;
-    /* 0x0C */ Unique0DynamicData dynamicData;
-} Unique0; // size = 0x4C
-
-
-/*================================
- *   Camera_Unique6() DATA
- *================================
- */
-
-#define UNIQ6_FLG_1 (1 << 0)
-
-typedef struct {
-    /* 0x00 */ s16 flags;
-} Unique6StaticData; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ Unique6StaticData staticData;
-} Unique6; // size = 0x4
-
-
-/*================================
- *   Camera_Demo1() DATA
- *================================
- */
-
-typedef struct {
-    /* 0x00 */ s16 flags;
-} Demo1StaticData; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ VecSph unk_0C;
-    /* 0x14 */ VecSph unk_14;
-    /* 0x1C */ s16 unk_1C;
-} Demo1DynamicData; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ Demo1StaticData staticData;
-    /* 0x04 */ Demo1DynamicData dynamicData;
-} Demo1; // size = 0x24
-
-
-/*================================
- *   Camera_Demo2() DATA
- *================================
- */
-
-typedef struct {
-    /* 0x00 */ f32 fov;
-    /* 0x04 */ f32 unk_04; // unused
-    /* 0x08 */ s16 flags;
-} Demo2StaticData; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ Vec3f initialAt;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ s16 animFrame;
-    /* 0x12 */ s16 yawDir;
-} Demo2DynamicData; // size = 0x14
-
-typedef struct {
-    /* 0x08 */ Demo2StaticData staticData;
-    /* 0x0C */ Demo2DynamicData dynamicData;
-} Demo2; // size = 0x20
-
-
-/*================================
- *   Camera_Demo3() DATA
- *================================
- */
-
-typedef struct {
-    /* 0x00 */ s16 flags;
-} Demo3StaticData; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-} Demo3DynamicData; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ Demo3StaticData staticData;
-    /* 0x04 */ Demo3DynamicData dynamicData;
-} Demo3; // size = 0xC
-
-
-/*================================
- *   Camera_Demo4() DATA
- *================================
- */
-
-typedef struct {
-    /* 0x00 */ s16 flags;
-} Demo4StaticData; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ VecSph unk_18; // sp18-1C-20--24-26-28 // CutsceneCameraPoint?
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
-} Demo4DynamicData; // size = 0x24
-
-typedef struct {
-    /* 0x00 */ Demo4StaticData staticData;
-    /* 0x04 */ Demo4DynamicData dynamicData;
-} Demo4; // size = 0x28
-
-
-/*================================
- *   Camera_Demo5() DATA
- *================================
- */
-
-typedef struct {
-    /* 0x00 */ s16 flags;
-} Demo5StaticData; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ VecSph unk_1C;
-    /* 0x24 */ s16 unk_24;
-    /* 0x26 */ s16 unk_26;
-} Demo5DynamicData; // size = 0x28
-
-typedef struct {
-    /* 0x00 */ Demo5StaticData staticData;
-    /* 0x04 */ Demo5DynamicData dynamicData;
-} Demo5; // size = 0x2C
-
-
-/*================================
- *   Camera_Demo0() DATA
- *================================
- */
-
-typedef struct {
-    /* 0x00 */ s16 unk_00;
-} Demo0StaticData; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ VecSph unk_04;
-    /* 0x0C */ VecSph unk_0C;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-} Demo0DynamicData; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ Demo0StaticData staticData;
-    /* 0x04 */ Demo0DynamicData dynamicData;
-} Demo0; // size = 0x20
-
-
-/*================================
- *   Camera_Special5() DATA
- *================================
- */
-
-#define SET_SPEC5_STATICDATA(yOffset, eyeDist, minDistForRot, fov, atMaxLERPScale, timerInit, pitch, flags) \
-    { yOffset, CAM_DATA_Y_OFFSET }, \
-    { eyeDist, CAM_DATA_01 }, \
-    { minDistForRot, CAM_DATA_02 }, \
-    { fov, CAM_DATA_PITCHTARGET }, \
-    { atMaxLERPScale, CAM_DATA_FOV }, \
-    { timerInit, CAM_DATA_08 }, \
-    { pitch, CAM_DATA_12 }, \
-    { flags, CAM_DATA_FLAGS }
-
-typedef struct {
-    /* 0x00 */ f32 yOffset;
-    /* 0x04 */ f32 eyeDist;
-    /* 0x08 */ f32 minDistForRot;
-    /* 0x0C */ f32 fovTarget;
-    /* 0x10 */ f32 atMaxLERPScale;
-    /* 0x14 */ s16 timerInit;
-    /* 0x16 */ s16 pitch;
-    /* 0x18 */ s16 flags;
-} Special5StaticData; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ s16 animTimer;
-} Special5DynamicData; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ Special5StaticData staticData;
-    /* 0x1C */ Special5DynamicData dynamicData;
-} Special5; // size = 0x20
-
-
-/*================================
- *   DOOR DATA
- *================================
- */
-
-typedef struct {
-    /* 0x00 */ Actor* doorActor;
-    /* 0x04 */ s16 bgCamDataId;
-    /* 0x06 */ union {
-        Vec3s eye; // position of the camera while exiting a spiral staircase
-        struct {
-            s16 timer1; // timer while camera is fixed in front of the door
-            s16 timer2; // timer while camera is behind the door looking at player
-            s16 timer3; // timer while camera turns around to face forward
-        };
-    };
-} DoorParams; // size = 0xC
-
-#define CAM_GET_DOOR_PARAMS(type) &((type*)camera->actionFuncData)->doorParams
-
-
-/*================================
- *   Camera_Special8() DATA
- *================================
- */
-
-#define SPEC8_FLG_1 (1 << 0)
-#define SPEC8_FLG_8 (1 << 3)
-
-#define SET_SPEC8_STATICDATA(yOffset, eyeStepScale, posStepScale, fov, spiralDoorCsLength, flags) \
-    { yOffset, CAM_DATA_Y_OFFSET }, \
-    { eyeStepScale, CAM_DATA_04 }, \
-    { posStepScale, CAM_DATA_05 }, \
-    { fov, CAM_DATA_FOV }, \
-    { spiralDoorCsLength, CAM_DATA_12 }, \
-    { flags, CAM_DATA_FLAGS }
-
-typedef struct {
-    /* 0x00 */ f32 yOffset;
-    /* 0x04 */ f32 eyeStepScale;
-    /* 0x08 */ f32 posStepScale;
-    /* 0x0C */ f32 fov;
-    /* 0x10 */ s16 spiralDoorCsLength;
-    /* 0x12 */ s16 flags;
-} Special8StaticData; // size = 0x14
-
-typedef struct {
-    /* 0x00 */ Vec3f eye;
-    /* 0x0C */ s16 spiralDoorCsFrame; // 1/5th of the length of the cutscene
-    /* 0x0E */ s16 fov;
-} Special8DynamicData; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ DoorParams doorParams;
-    /* 0x0C */ Special8StaticData staticData;
-    /* 0x20 */ Special8DynamicData dynamicData;
-} Special8; // size = 0x30
-
-
-/*================================
- *   Camera_Special9() DATA
- *================================
- */
-
-#define SPEC9_FLG_1 (1 << 0)
-#define SPEC9_FLG_2 (1 << 1)
-#define SPEC9_FLG_8 (1 << 3)
-
-#define SET_SPEC9_STATICDATA(yOffset, fov, flags) \
-    { yOffset, CAM_DATA_Y_OFFSET }, \
-    { fov, CAM_DATA_FOV }, \
-    { flags, CAM_DATA_FLAGS }
-
-typedef struct {
-    /* 0x00 */ f32 yOffset;
-    /* 0x04 */ f32 fov;
-    /* 0x08 */ s16 flags;
-} Special9StaticData; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ s16 unk_00;
-} Special9DynamicData; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ DoorParams doorParams;
-    /* 0x0C */ Special9StaticData staticData;
-    /* 0x18 */ Special9DynamicData dynamicData;
-} Special9; // size = 0x1C
 
 
 /*================================
@@ -1259,7 +362,7 @@ typedef struct {
  */
 
 typedef struct Camera {
-    /* 0x000 */ char actionFuncData[0x50]; // function Data
+    /* 0x000 */ char actionFuncHeap[0x50]; // function Data, acts like a heap that's reset every time a new action function is switched to
     /* 0x050 */ Vec3f at;
     /* 0x05C */ Vec3f eye;
     /* 0x068 */ Vec3f up;
@@ -1322,5 +425,921 @@ typedef struct Camera {
     /* 0x168 */ s16 unk168;
     /* 0x16C */ Vec3f meshActorPos;
 } Camera; // size = 0x178
+
+
+/*================================
+ *   CAMERA MINI-HEAP
+ *================================
+ */
+
+/**
+ * Each camera has its own mini-heap stored within the first 50 bytes, called camera->actionFuncHeap
+ * This heap is used by action functions to store data that needs to persist over multiple calls to the action function
+ * Every action function has its own custom structs to store data in a way customized to that particular function
+ * This data is broken up into two types:
+ *     - Fixed Data: Camera Action-Function data that is predefined in Camera_Data.c. Is read-only data (a majority of camera_data is for this type of data)
+ *     - Dynamic Data: Camera Action-Function data that is calculated at run-time but needs to persist over multiple function calls
+ */
+
+#define CAM_GET_STATIC_DATA(type) &((type*)camera->actionFuncHeap)->fixedData
+#define CAM_GET_DYNAMIC_DATA(type) &((type*)camera->actionFuncHeap)->dynamicData
+
+// Camera will reload static data from camera_data
+#define RELOAD_PARAMS \
+    (camera->actionFuncState == 0 || camera->actionFuncState == 10 || camera->actionFuncState == 20)
+
+// It is common to scale data by a factor of 0.01f
+#define PCT(x) ((x)*0.01f)
+// Load the next setting from camera_data.c
+#define NEXTSETTING ((values++)->val)
+// Load the next setting from camera_data.c and scale
+#define NEXTPCT PCT(NEXTSETTING)
+
+
+
+/*================================
+ *   Camera_Normal1() HEAP DATA
+ *================================
+ */
+
+#define SET_NORM1_STATICDATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, yawDiffRange, fov, data08, flags) \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
+    { data01, CAM_DATA_01 }, \
+    { data02, CAM_DATA_02 }, \
+    { pitchTarget, CAM_DATA_PITCHTARGET }, \
+    { eyeStepScale, CAM_DATA_04 }, \
+    { posStepScale, CAM_DATA_05 }, \
+    { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
+    { fov, CAM_DATA_FOV }, \
+    { data08, CAM_DATA_08 }, \
+    { flags, CAM_DATA_FLAGS }
+
+typedef struct {
+    /* 0x00 */ f32 unk_00; // yOffset
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14; // attenuationYawDiffRange
+    /* 0x18 */ f32 unk_18; // fovTarget
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20; // pitchTarget
+    /* 0x22 */ s16 unk_22; // flags
+} Normal1FixedData; // size = 0x24
+
+typedef struct {
+    /* 0x00 */ f32 unk_00; // yPos
+    /* 0x04 */ f32 unk_04; // xzSpeed
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A; // angle
+    /* 0x0C */ s16 unk_0C; // flags (May be s32)
+    /* 0x0E */ s16 unk_0E;
+    /* 0x10 */ f32 unk_10; // set to float
+} Normal1DynamicData; // size = 0x14
+
+typedef struct {
+    /* 0x00 */ Normal1FixedData fixedData;
+    /* 0x24 */ Normal1DynamicData dynamicData;
+} Normal1; // size = 0x38
+
+#define NORM1_FLG_1 (1 << 0)
+#define NORM1_FLG_2 (1 << 1)
+#define NORM1_FLG_4 (1 << 2)
+#define NORM1_FLG_8 (1 << 3)
+#define NORM1_FLG_10 (1 << 4)
+#define NORM1_FLG_20 (1 << 5)
+#define NORM1_FLG_40 (1 << 6)
+#define NORM1_FLG_80 (1 << 7)
+
+
+/*================================
+ *   Camera_Normal3() HEAP DATA
+ *================================
+ */
+
+#define SET_NORM3_STATICDATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, fov, data08, flags) \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
+    { data01, CAM_DATA_01 }, \
+    { data02, CAM_DATA_02 }, \
+    { pitchTarget, CAM_DATA_PITCHTARGET }, \
+    { eyeStepScale, CAM_DATA_04 }, \
+    { posStepScale, CAM_DATA_05 }, \
+    { fov, CAM_DATA_FOV }, \
+    { data08, CAM_DATA_08 }, \
+    { flags, CAM_DATA_FLAGS }
+
+typedef struct {
+    /* 0x00 */ f32 yOffset;
+    /* 0x04 */ f32 distMin;
+    /* 0x08 */ f32 distMax;
+    /* 0x0C */ f32 yawUpdateRateInv;
+    /* 0x10 */ f32 pitchUpdateRateInv;
+    /* 0x14 */ f32 fovTarget;
+    /* 0x18 */ f32 maxAtLERPScale;
+    /* 0x1C */ s16 pitchTarget;
+    /* 0x1E */ s16 flags;
+} Normal3FixedData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ f32 isZero; // set but unused
+    /* 0x04 */ f32 yPosOffset;
+    /* 0x08 */ s16 curPitch;
+    /* 0x0A */ s16 yawUpdateRate;
+    /* 0x0C */ s16 yawTimer;
+    /* 0x0E */ s16 distTimer;
+    /* 0x10 */ s16 flag;
+    /* 0x12 */ s16 is1200; // set but unused
+} Normal3DynamicData; // size = 0x14
+
+typedef struct {
+    /* 0x00 */ Normal3FixedData fixedData;
+    /* 0x20 */ Normal3DynamicData dynamicData;
+} Normal3; // size = 0x34
+
+#define NORM3_FLG_2 (1 << 1)
+#define NORM3_FLG_20 (1 << 5)
+#define NORM3_FLG_40 (1 << 6)
+#define NORM3_FLG_80 (1 << 7)
+
+
+/*================================
+ *   Camera_Normal0() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ s16 unk_1C;
+    /* 0x1E */ s16 unk_1E;
+} Normal0FixedData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ f32 unk_24;
+    /* 0x28 */ f32 unk_28;
+    /* 0x2C */ s16 unk_2C;
+} Normal0DynamicData; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ Normal0FixedData fixedData;
+    /* 0x20 */ Normal0DynamicData dynamicData;
+} Normal0; // size = 0x50
+
+#define NORM0_FLG_1 (1 << 0)
+#define NORM0_FLG_4 (1 << 2)
+#define NORM0_FLG_10 (1 << 4)
+#define NORM0_FLG_80 (1 << 7)
+
+
+/*================================
+ *   Camera_Parallel1() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ s16 unk_24;
+    /* 0x26 */ s16 unk_26;
+} Parallel1FixedData; // size = 0x28
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ s16 unk_1C;
+    /* 0x1E */ s16 unk_1E;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+    /* 0x24 */ s16 unk_24;
+    /* 0x26 */ s16 unk_26;
+} Parallel1DynamicData; // size = 0x28
+
+typedef struct {
+    /* 0x00 */ Parallel1FixedData fixedData;
+    /* 0x28 */ Parallel1DynamicData dynamicData;
+} Parallel1; // size = 0x50
+
+#define PARA1_FLG_1 (1 << 0)
+#define PARA1_FLG_2 (1 << 1)
+#define PARA1_FLG_4 (1 << 2)
+#define PARA1_FLG_8 (1 << 3)
+#define PARA1_FLG_10 (1 << 4)
+#define PARA1_FLG_20 (1 << 5)
+#define PARA1_FLG_40 (1 << 6)
+#define PARA1_FLG_80 (1 << 7)
+
+
+/*================================
+ *   Camera_Jump2() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+} Jump2FixedData; // size = 0x24
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ s16 unk_0E;
+    /* 0x10 */ s32 unk_10; // unused?
+    /* 0x1C */ s16 unk_1C;
+} Jump2DynamicData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ Jump2FixedData fixedData;
+    /* 0x02 */ Jump2DynamicData dynamicData;
+} Jump2; // size = 0x44
+
+#define JUMP2_FLG_2 (1 << 1)
+
+
+/*================================
+ *   Camera_Jump3() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00; // yOffset
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14; // attenuationYawDiffRange
+    /* 0x18 */ f32 unk_18; // fovTarget
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22; // flags
+} Jump3FixedData; // size = 0x24
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ s32 unk_0C; // mode
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x1C */ s16 unk_1C;
+} Jump3DynamicData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ Jump3FixedData fixedData; // yOffset
+    /* 0x24 */ Jump3DynamicData dynamicData;
+} Jump3; // size = 0x44
+
+#define JUMP3_FLG_4 (1 << 2)
+#define JUMP3_FLG_8 (1 << 3)
+#define JUMP3_FLG_20 (1 << 5)
+#define JUMP3_FLG_40 (1 << 6)
+#define JUMP3_FLG_80 (1 << 7)
+
+
+/*================================
+ *   Camera_Battle1() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ f32 unk_20;
+    /* 0x24 */ f32 unk_24;
+    /* 0x28 */ f32 unk_28;
+    /* 0x2C */ f32 unk_2C;
+    /* 0x30 */ s16 unk_30;
+} Battle1FixedData; // size = 0x34
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ Actor* unk_08; // targe3t
+    /* 0x0C */ s32 unk_0C; // unused?
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} Battle1DynamicData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ Battle1FixedData fixedData;
+    /* 0x24 */ Battle1DynamicData dynamicData;
+} Battle1; // size = 0x50
+
+#define BATT1_FLG_1 (1 << 0)
+#define BATT1_FLG_2 (1 << 1)
+#define BATT1_FLG_10 (1 << 4)
+#define BATT1_FLG_80 (1 << 7)
+
+
+/*================================
+ *   Camera_KeepOn1() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ f32 unk_20;
+    /* 0x24 */ f32 unk_24;
+    /* 0x28 */ f32 unk_28;
+    /* 0x2C */ s16 unk_2C;
+} KeepOn1FixedData; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ Actor* unk_0C;
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+} KeepOn1DynamicData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ KeepOn1FixedData fixedData;
+    /* 0x30 */ KeepOn1DynamicData dynamicData;
+} KeepOn1; // size = 0x4C
+
+#define KEEP1_FLG_1 (1 << 0)
+#define KEEP1_FLG_2 (1 << 1)
+#define KEEP1_FLG_10 (1 << 4)
+#define KEEP1_FLG_80 (1 << 7)
+
+
+/*================================
+ *   Camera_KeepOn3() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ f32 unk_20;
+    /* 0x24 */ f32 unk_24;
+    /* 0x28 */ f32 unk_28;
+    /* 0x2C */ s16 unk_2C;
+    /* 0x2E */ s16 unk_2E;
+} KeepOn3FixedData; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ f32 unk_00; // Vec3f?
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ Actor* unk_0C;
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ s16 unk_1C;
+} KeepOn3DynamicData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ KeepOn3FixedData fixedData;
+    /* 0x30 */ KeepOn3DynamicData dynamicData;
+} KeepOn3; // size = 0x50
+
+#define KEEP3_FLG_20 (1 << 5)
+#define KEEP3_FLG_40 (1 << 6)
+#define KEEP3_FLG_80 (1 << 7)
+
+
+/*================================
+ *   Camera_KeepOn4() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ s16 unk_1C;
+    /* 0x1E */ s16 unk_1E;
+} KeepOn4FixedData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ f32 unk_00; // Vec3f?
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ Actor* unk_0C;
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+} KeepOn4DynamicData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ KeepOn4FixedData fixedData;
+    /* 0x20 */ KeepOn4DynamicData dynamicData;
+} KeepOn4; // size = 0x3C
+
+#define KEEP4_FLG_2 (1 << 1)
+#define KEEP4_FLG_4 (1 << 2)
+#define KEEP4_FLG_8 (1 << 3)
+#define KEEP4_FLG_40 (1 << 6)
+
+
+/*================================
+ *   Camera_Fixed1() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 jfifId;
+    /* 0x08 */ f32 fov;
+    /* 0x0C */ s16 flags;
+} Fixed1FixedData; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ PosRot eyePosRotTarget;
+    /* 0x14 */ s16 fov;
+    /* 0x18 */ Actor* trackActor;
+} Fixed1DynamicData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ Fixed1FixedData fixedData;
+    /* 0x10 */ Fixed1DynamicData dynamicData;
+} Fixed1; // size = 0x2C
+
+#define FIXD1_FLG_10 (1 << 4)
+
+
+/*================================
+ *   Camera_Fixed2() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ s16 unk_18;
+} Fixed2FixedData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ s16 unk_1C;
+} Fixed2DynamicData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ Fixed2FixedData fixedData;
+    /* 0x1C */ Fixed2DynamicData dynamicData;
+} Fixed2; // size = 0x3C
+
+#define FIXD2_FLG_1 (1 << 0)
+#define FIXD2_FLG_2 (1 << 1)
+#define FIXD2_FLG_4 (1 << 2)
+#define FIXD2_FLG_8 (1 << 3)
+#define FIXD2_FLG_10 (1 << 4)
+#define FIXD2_FLG_20 (1 << 5)
+#define FIXD2_FLG_40 (1 << 6)
+#define FIXD2_FLG_80 (1 << 7)
+
+
+/*================================
+ *   Camera_Subj1() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ s16 unk_20;
+} Subj1FixedData; // size = 0x24
+
+typedef struct {
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ s16 unk_04; // yaw
+    /* 0x6 */ s16 unk_06; // pitch
+    /* 0x8 */ s16 unk_08;
+} Subj1DynamicData; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ Subj1FixedData fixedData;
+    /* 0x24 */ Subj1DynamicData dynamicData;
+} Subj1; // size = 0x30
+
+#define SUBJ1_FLG_10 (1 << 4)
+
+
+/*================================
+ *   Camera_Unique2() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ s16 unk_10;
+} Unique2FixedData; // size = 0x14
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+} Unique2DynamicData; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ Unique2FixedData fixedData;
+    /* 0x14 */ Unique2DynamicData dynamicData;
+} Unique2; // size = 0x1C
+
+#define UNIQ2_FLG_1 (1 << 0)
+#define UNIQ2_FLG_2 (1 << 1)
+#define UNIQ2_FLG_10 (1 << 4)
+#define UNIQ2_FLG_20 (1 << 5)
+
+
+/*================================
+ *   Camera_Unique0() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ f32 unk_04;
+    /* 0x8 */ s16 unk_08;
+} Unique0FixedData; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ Vec3f unk_1C;
+    /* 0x28 */ Vec3f unk_28;
+    /* 0x34 */ Vec3s unk_34;
+    /* 0x3A */ s16 unk_3A;
+    /* 0x3C */ s16 unk_3C;
+    /* 0x3E */ s16 unk_3E;
+} Unique0DynamicData; // size = 0x40
+
+typedef struct {
+    /* 0x00 */ Unique0FixedData fixedData;
+    /* 0x0C */ Unique0DynamicData dynamicData;
+} Unique0; // size = 0x4C
+
+#define UNIQ0_FLG_1 (1 << 0)
+#define UNIQ0_FLG_2 (1 << 1)
+#define UNIQ0_FLG_10 (1 << 4)
+
+
+/*================================
+ *   Camera_Unique6() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ s16 flags;
+} Unique6FixedData; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ Unique6FixedData fixedData;
+} Unique6; // size = 0x4
+
+#define UNIQ6_FLG_1 (1 << 0)
+
+
+/*================================
+ *   Camera_Demo1() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ s16 flags;
+} Demo1FixedData; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ VecSph unk_0C;
+    /* 0x14 */ VecSph unk_14;
+    /* 0x1C */ s16 unk_1C;
+} Demo1DynamicData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ Demo1FixedData fixedData;
+    /* 0x04 */ Demo1DynamicData dynamicData;
+} Demo1; // size = 0x24
+
+
+/*================================
+ *   Camera_Demo2() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ f32 fov;
+    /* 0x04 */ f32 unk_04; // unused
+    /* 0x08 */ s16 flags;
+} Demo2FixedData; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ Vec3f initialAt;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ s16 animFrame;
+    /* 0x12 */ s16 yawDir;
+} Demo2DynamicData; // size = 0x14
+
+typedef struct {
+    /* 0x08 */ Demo2FixedData fixedData;
+    /* 0x0C */ Demo2DynamicData dynamicData;
+} Demo2; // size = 0x20
+
+
+/*================================
+ *   Camera_Demo3() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ s16 flags;
+} Demo3FixedData; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 timer;
+} Demo3DynamicData; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ Demo3FixedData fixedData;
+    /* 0x04 */ Demo3DynamicData dynamicData;
+} Demo3; // size = 0xC
+
+
+/*================================
+ *   Camera_Demo4() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ s16 flags;
+} Demo4FixedData; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ VecSph unk_18; // sp18-1C-20--24-26-28 // CutsceneCameraPoint?
+    /* 0x20 */ s16 unk_20;
+    /* 0x22 */ s16 unk_22;
+} Demo4DynamicData; // size = 0x24
+
+typedef struct {
+    /* 0x00 */ Demo4FixedData fixedData;
+    /* 0x04 */ Demo4DynamicData dynamicData;
+} Demo4; // size = 0x28
+
+
+/*================================
+ *   Camera_Demo5() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ s16 flags;
+} Demo5FixedData; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ VecSph unk_1C;
+    /* 0x24 */ s16 unk_24;
+    /* 0x26 */ s16 timer;
+} Demo5DynamicData; // size = 0x28
+
+typedef struct {
+    /* 0x00 */ Demo5FixedData fixedData;
+    /* 0x04 */ Demo5DynamicData dynamicData;
+} Demo5; // size = 0x2C
+
+
+/*================================
+ *   Camera_Demo0() HEAP DATA
+ *================================
+ */
+
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+} Demo0FixedData; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ VecSph unk_04;
+    /* 0x0C */ VecSph unk_0C;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} Demo0DynamicData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ Demo0FixedData fixedData;
+    /* 0x04 */ Demo0DynamicData dynamicData;
+} Demo0; // size = 0x20
+
+
+/*================================
+ *   Camera_Special5() HEAP DATA
+ *================================
+ */
+
+#define SET_SPEC5_STATICDATA(yOffset, eyeDist, minDistForRot, fov, atMaxLERPScale, timerInit, pitch, flags) \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
+    { eyeDist, CAM_DATA_01 }, \
+    { minDistForRot, CAM_DATA_02 }, \
+    { fov, CAM_DATA_PITCHTARGET }, \
+    { atMaxLERPScale, CAM_DATA_FOV }, \
+    { timerInit, CAM_DATA_08 }, \
+    { pitch, CAM_DATA_12 }, \
+    { flags, CAM_DATA_FLAGS }
+
+typedef struct {
+    /* 0x00 */ f32 yOffset;
+    /* 0x04 */ f32 eyeDist;
+    /* 0x08 */ f32 minDistForRot;
+    /* 0x0C */ f32 fovTarget;
+    /* 0x10 */ f32 atMaxLERPScale;
+    /* 0x14 */ s16 timerInit;
+    /* 0x16 */ s16 pitch;
+    /* 0x18 */ s16 flags;
+} Special5FixedData; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ s16 animTimer;
+} Special5DynamicData; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ Special5FixedData fixedData;
+    /* 0x1C */ Special5DynamicData dynamicData;
+} Special5; // size = 0x20
+
+/*================================
+ *   DOOR HEAP DATA
+ *================================
+ */
+
+// For functions that deal with doors, an extra struct is added to the heap
+
+typedef struct {
+    /* 0x00 */ Actor* doorActor;
+    /* 0x04 */ s16 bgCamDataId;
+    /* 0x06 */ union {
+        Vec3s eye; // position of the camera while exiting a spiral staircase
+        struct {
+            s16 timer1; // timer while camera is fixed in front of the door
+            s16 timer2; // timer while camera is behind the door looking at player
+            s16 timer3; // timer while camera turns around to face forward
+        };
+    };
+} DoorParams; // size = 0xC
+
+#define CAM_GET_DOOR_PARAMS(type) &((type*)camera->actionFuncHeap)->doorParams
+
+
+/*================================
+ *   Camera_Special8() HEAP DATA
+ *================================
+ */
+
+#define SET_SPEC8_STATICDATA(yOffset, eyeStepScale, posStepScale, fov, spiralDoorCsLength, flags) \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
+    { eyeStepScale, CAM_DATA_04 }, \
+    { posStepScale, CAM_DATA_05 }, \
+    { fov, CAM_DATA_FOV }, \
+    { spiralDoorCsLength, CAM_DATA_12 }, \
+    { flags, CAM_DATA_FLAGS }
+
+typedef struct {
+    /* 0x00 */ f32 yOffset;
+    /* 0x04 */ f32 eyeStepScale;
+    /* 0x08 */ f32 posStepScale;
+    /* 0x0C */ f32 fov;
+    /* 0x10 */ s16 spiralDoorCsLength;
+    /* 0x12 */ s16 flags;
+} Special8FixedData; // size = 0x14
+
+typedef struct {
+    /* 0x00 */ Vec3f eye;
+    /* 0x0C */ s16 spiralDoorCsFrame; // 1/5th of the length of the cutscene
+    /* 0x0E */ s16 fov;
+} Special8DynamicData; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ DoorParams doorParams;
+    /* 0x0C */ Special8FixedData fixedData;
+    /* 0x20 */ Special8DynamicData dynamicData;
+} Special8; // size = 0x30
+
+#define SPEC8_FLG_1 (1 << 0)
+#define SPEC8_FLG_8 (1 << 3)
+
+
+/*================================
+ *   Camera_Special9() HEAP DATA
+ *================================
+ */
+
+#define SET_SPEC9_STATICDATA(yOffset, fov, flags) \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
+    { fov, CAM_DATA_FOV }, \
+    { flags, CAM_DATA_FLAGS }
+
+typedef struct {
+    /* 0x00 */ f32 yOffset;
+    /* 0x04 */ f32 fov;
+    /* 0x08 */ s16 flags;
+} Special9FixedData; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+} Special9DynamicData; // size = 0x4
+
+typedef struct {
+    /* 0x00 */ DoorParams doorParams;
+    /* 0x0C */ Special9FixedData fixedData;
+    /* 0x18 */ Special9DynamicData dynamicData;
+} Special9; // size = 0x1C
+
+#define SPEC9_FLG_1 (1 << 0)
+#define SPEC9_FLG_2 (1 << 1)
+#define SPEC9_FLG_8 (1 << 3)
 
 #endif
