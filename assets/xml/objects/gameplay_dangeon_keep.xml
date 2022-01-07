@@ -28,7 +28,7 @@
         <Texture Name="gameplay_dangeon_keep_Tex_00B6C0" OutName="tex_00B6C0" Format="rgba16" Width="32" Height="32" Offset="0xB6C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_00BEC0" OutName="tex_00BEC0" Format="rgba16" Width="32" Height="32" Offset="0xBEC0" />
         <Texture Name="gameplay_dangeon_keep_Tex_00C6C0" OutName="tex_00C6C0" Format="rgba16" Width="32" Height="32" Offset="0xC6C0" />
-        <Texture Name="gameplay_dangeon_keep_Tex_00CEC0" OutName="tex_00CEC0" Format="rgba16" Width="32" Height="32" Offset="0xCEC0" />
+        <Texture Name="gameplay_dangeon_keep_demoheishi_lips_tex" OutName="demoheishi_lips_tex" Format="rgba16" Width="32" Height="32" Offset="0xCEC0" />
         <Texture Name="gameplay_dangeon_keep_Tex_00D6C0" OutName="tex_00D6C0" Format="rgba16" Width="32" Height="32" Offset="0xD6C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_00DEC0" OutName="tex_00DEC0" Format="rgba16" Width="32" Height="32" Offset="0xDEC0" />
         <Texture Name="gameplay_dangeon_keep_Tex_00E6C0" OutName="tex_00E6C0" Format="rgba16" Width="32" Height="32" Offset="0xE6C0" />

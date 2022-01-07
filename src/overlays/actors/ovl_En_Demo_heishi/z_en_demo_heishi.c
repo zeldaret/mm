@@ -6,6 +6,7 @@
 
 #include "z_en_demo_heishi.h"
 #include "objects/object_sdn/object_sdn.h"
+
 #define FLAGS 0x00000009
 
 #define THIS ((EnDemoheishi*)thisx)
@@ -86,7 +87,7 @@ void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex) {
     this->animIndex = animIndex;
     this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
-                     (u8)(s32)sAnimModes[this->animIndex], -10.0f);
+                     sAnimModes[this->animIndex], -10.0f);
 }
 
 void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
@@ -106,7 +107,8 @@ void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
 
 void EnDemoheishi_SetupIdle(EnDemoheishi* this) {
     EnDemoheishi_ChangeAnimation(this, 0);
-    this->actor.textId = sTextIds[this->unk272 = 0];
+    this->unk272 = 0;
+    this->actor.textId = sTextIds[this->unk272];
     this->unk270 = 0;
     this->actionFunc = EnDemoheishi_Idle;
 }
@@ -139,7 +141,7 @@ void EnDemoheishi_Talk(EnDemoheishi* this, GlobalContext* globalCtx) {
 }
 
 void EnDemoheishi_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ColliderCylinder* collider;
+    s32 pad;
     EnDemoheishi* this = THIS;
 
     SkelAnime_Update(&this->skelAnime);
@@ -150,14 +152,13 @@ void EnDemoheishi_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1DU);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Actor_SetScale(&this->actor, 0.01f);
     EnDemoheishi_SetHeadRotation(this);
 
     Actor_SetHeight(&this->actor, 60.0f);
-    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 0xBB8, (s16)0);
-    Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 0x3E8, (s16)0);
-    collider = &this->colliderCylinder;
+    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 0x3E8, 0);
     Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
 }
@@ -179,6 +180,6 @@ void EnDemoheishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDemoheishi* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                          (s32)this->skelAnime.dListCount, EnDemoheishi_OverrideLimbDraw, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnDemoheishi_OverrideLimbDraw, NULL, &this->actor);
 }
