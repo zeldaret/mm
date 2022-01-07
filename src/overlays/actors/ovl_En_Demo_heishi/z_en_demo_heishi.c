@@ -5,7 +5,7 @@
  */
 
 #include "z_en_demo_heishi.h"
-
+#include "objects/object_sdn/object_sdn.h"
 #define FLAGS 0x00000009
 
 #define THIS ((EnDemoheishi*)thisx)
@@ -79,8 +79,8 @@ void EnDemoheishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
-        (AnimationHeader*)0x06006C18, (AnimationHeader*)0x06002A84, (AnimationHeader*)0x06003BFC,
-        (AnimationHeader*)0x06003380, (AnimationHeader*)0x06004770,
+        &gDemoheishiStandHandOnHip, &gDemoheishiCheerWithSpear, &gDemoheishiWave,
+        &gDemoheishiSitAndReach, &gDemoheishiStandUp,
     };
     static u8 sAnimModes[] = { 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0 };
 
