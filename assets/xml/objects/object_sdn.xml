@@ -40,10 +40,10 @@
         <Texture Name="gDemoheishiShortsToLegTex" OutName="demoheishi_shorts_to_leg_tex" Format="ci8" Width="16" Height="16" Offset="0xCD40" />
         <Texture Name="gDemoheishArmorTex" OutName="demoheishi_armor_tex" Format="ci8" Width="8" Height="8" Offset="0xCE40" />
         <Texture Name="gDemoheishSkinShadowGradient1Tex" OutName="demoheishi_skin_shadow_gradient1_tex" Format="ci8" Width="8" Height="8" Offset="0xCE80" />
-        <Texture Name="gDemoheishiLipsTex" OutName="generic_lips_tex" Format="ci8" Width="16" Height="16" Offset="0xCEC0" />
+        <Texture Name="gGenericLipsTex" OutName="generic_lips_tex" Format="ci8" Width="16" Height="16" Offset="0xCEC0" />
         <Texture Name="gDemoheishArmorCoatOfArmsTex" OutName="demoheishi_armor_coat_of_arms_tex" Format="ci8" Width="32" Height="32" Offset="0xCFC0" />
         <Texture Name="gDemoheishiArmorPlate2Tex" OutName="demoheishi_armor_plate2_tex" Format="i8" Width="16" Height="8" Offset="0xD3C0" />
-        <Texture Name="gDemoheishiFingersTex" OutName="generic_fingers_tex" Format="ci8" Width="16" Height="16" Offset="0xD440" />
+        <Texture Name="gGenericFingersTex" OutName="generic_fingers_tex" Format="ci8" Width="16" Height="16" Offset="0xD440" />
         <Limb Name="gDemoheishiRootLimb" Type="Standard" Offset="0xD540" />
         <Limb Name="gDemoheishiPelvisLimb" Type="Standard" Offset="0xD54C" />
         <Limb Name="gDemoheishiLeftThighLimb" Type="Standard" Offset="0xD558" />
