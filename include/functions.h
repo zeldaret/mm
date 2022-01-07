@@ -812,7 +812,7 @@ void func_800B9010(Actor* actor, u16 sfxId);
 // void func_800B9084(void);
 void func_800B9098(Actor* actor);
 s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, UNK_TYPE arg2, UNK_TYPE arg3, UNK_TYPE arg4);
-// void func_800B90F4(void);
+void func_800B90F4(GlobalContext* globalCtx);
 void func_800B9120(ActorContext* actorCtx);
 // void Actor_Init(GlobalContext* globalCtx, ActorContext* actorCtx, UNK_TYPE4 uParm3);
 void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx);
