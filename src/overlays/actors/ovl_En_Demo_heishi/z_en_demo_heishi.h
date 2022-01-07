@@ -21,7 +21,6 @@ typedef struct EnDemoheishi {
     /* 0x262 */ s16 headRotZTarget;
     /* 0x264 */ s32 animIndex;
     /* 0x268 */ s16 unk268;                         /* inferred */
-    /* 0x26A */ char pad26A[2];                     /* inferred */
     /* 0x26C */ f32 frameCount;
     /* 0x270 */ s16 unk270;                         /* inferred */
     /* 0x272 */ s16 unk272;                         /* inferred */
