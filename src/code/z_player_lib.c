@@ -23,7 +23,7 @@ extern struct _struct_D_801BFDD0_0x8 D_801BFDD0[3];/* = {
 
 extern u8 D_801BFDE8[];
 
-extern UNK_PTR D_801BFE00[];
+extern FlexSkeletonHeader* D_801BFE00[];
 
 extern s16 D_801BFE14[][18];
 
@@ -1323,8 +1323,125 @@ void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+#ifdef NON_EQUIVALENT
+void func_80124870(GlobalContext* globalCtx, Player* player, SkelAnime* skelAnime, Vec3f* arg3, Vec3s* arg4, s32 arg5, s32 arg6, s32 arg7) {
+    if (!(player->stateFlags3 & 1) && (player->actor.scale.y >= 0.0f) && !(player->stateFlags1 & 0x80) && (globalCtx->unk_18844 == 0)) {
+        CollisionPoly* spA4;
+        s32 spA0;
+        f32 sp9C;
+        Vec3f sp90;
+        Vec3f sp84;
+        Vec3f sp78;
+        f32 sp74;
+        f32 sp70;
+        f32 sp68;
+        f32 sp60;
+        f32 sp58;
+        f32 sp54;
+        f32 sp4C;
+        f32 sp48;
+        Vec3s* temp_a3;
+        f32 temp_f0;
+        f32 temp_f0_2;
+        f32 temp_f12_2;
+        f32 temp_f14_2;
+        f32 temp_f16;
+        f32 temp_f18;
+        f32 temp_f18_2;
+        f32 temp_f20;
+        s16 temp_v0_2;
+        s32 temp_f8;
+        s32 temp_v0_4;
+        Vec3s* temp_v1;
+        Vec3s* temp_v1_2;
+        f32 phi_f20;
+        f32 phi_f20_2;
+        s16 phi_v1;
+        s16 phi_a0;
+        s16 phi_t1;
 
+        sp74 = D_801C0910[player->transformation];
+        sp70 = D_801C0924[player->transformation];
+        temp_f20 = D_801C0938[player->transformation] - player->unk_AB8;
+        Matrix_StatePush();
+        Matrix_JointPosition(arg3, arg4);
+        Matrix_GetStateTranslation(&sp90);
+        Matrix_JointPosition(&D_801C08C0[player->transformation], &skelAnime->jointTable[arg6]);
+        Matrix_InsertTranslation(D_801C08FC[player->transformation], 0.0f, 0.0f, 1);
+        Matrix_GetStateTranslation(&sp84);
+        Matrix_GetStateTranslationAndScaledY(-300.0f, &sp78);
+        Matrix_StatePop();
+
+        sp78.y += 15.0f;
+        sp9C = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &spA4, &spA0, &sp78) + temp_f20 + (player->unk_ABC * player->actor.scale.y);
+        if (sp78.z < sp9C) {
+            sp68 = sp84.x - sp90.x;
+            temp_f16 = sp84.y - sp90.y;
+            sp60 = sp84.z - sp90.z;
+            temp_f0 = sqrtf(SQ(sp68) + SQ(temp_f16) + SQ(sp60));
+
+
+            sp58 = ((temp_f0 * temp_f0) + sp70) / (2.0f * temp_f0);
+            temp_f18 = SQ(sp58);
+            if (sp74 < temp_f18) {
+                phi_f20 = 0.0f;
+            } else {
+                phi_f20 = sqrtf(sp74 - temp_f18);
+            }
+            sp4C = func_80086B30(phi_f20, sp58);
+            temp_f12_2 = sp9C - sp90.y;
+            temp_f0_2 = sqrtf((sp68 * sp68) + (temp_f12_2 * temp_f12_2) + (sp60 * sp60));
+            temp_f14_2 = ((temp_f0_2 * temp_f0_2) + sp70) / (2.0f * temp_f0_2);
+            sp54 = temp_f0_2 - temp_f14_2;
+            temp_f18_2 = SQ(temp_f14_2);
+
+            if (sp74 < temp_f18_2) {
+                phi_f20_2 = 0.0f;
+            } else {
+                phi_f20_2 = sqrtf(sp74 - temp_f18_2);
+            }
+
+            sp48 = func_80086B30(phi_f20_2, temp_f14_2);
+            //temp_v1 = &skelAnime->jointTable[arg6];
+            //phi_t1 = (s32) ((3.1415927f - (func_80086B30(sp54, phi_f20_2) + (1.5707964f - sp48))) * 10430.378f) - temp_v1->x;
+            //phi_t1 = (s32) ((3.1415927f - (func_80086B30(sp54, phi_f20_2) + (1.5707964f - sp48))) * 10430.378f) - skelAnime->jointTable[arg6].x;
+            phi_t1 = skelAnime->jointTable[arg6].x + (-((s32) ((3.1415927f - (func_80086B30(sp54, phi_f20_2) + (1.5707964f - sp48))) * 10430.378f)));
+            temp_f8 = (s32) ((sp48 - sp4C) * 10430.378f);
+
+            //phi_a0 = ABS_ALT(temp_v1->x);
+            //phi_v1 = ABS_ALT(temp_v1->y);
+            //if ((s32) (s16) (phi_v1 + phi_a0) < 0) {
+            //    phi_t1 = (s16) (phi_t1 + 0x8000);
+            //}
+            //if ((s16) (ABS_ALT(temp_v1->y) + ABS_ALT(temp_v1->x)) < 0) 
+            //if (((s16) ((((&skelAnime->jointTable[arg6])->y < 0) ? (-(&skelAnime->jointTable[arg6])->y) : ((&skelAnime->jointTable[arg6])->y)) + (((&skelAnime->jointTable[arg6])->x < 0) ? (-(&skelAnime->jointTable[arg6])->x) : ((&skelAnime->jointTable[arg6])->x)))) < 0)
+            if ((s16) (ABS_ALT(skelAnime->jointTable[arg6].x) + ABS_ALT(skelAnime->jointTable[arg6].y)) < 0) 
+            {
+                phi_t1 = (s16) (phi_t1 + 0x8000);
+            }
+
+            arg4->z -= (s16) temp_f8;
+
+            temp_a3 = &skelAnime->jointTable[arg5];
+            temp_a3->z -= (s16) temp_f8;
+
+            temp_v1_2 = &skelAnime->jointTable[arg6];
+            temp_v1_2->z = (s16) (temp_v1_2->z + phi_t1);
+
+            skelAnime->jointTable[arg7].z = (skelAnime->jointTable[arg7].z +  (s16) temp_f8) - phi_t1;
+
+            temp_v0_4 = func_800C99D4(&globalCtx->colCtx, spA4, spA0);
+            if ((temp_v0_4 >= 2) && (temp_v0_4 < 4) && (SurfaceType_IsWallDamage(&globalCtx->colCtx, spA4, spA0) == 0)) {
+                sp78.y = sp9C;
+                EffectSsGFire_Spawn(globalCtx, &sp78);
+            }
+        }
+    }
+}
+#else
+void func_80124870(GlobalContext* globalCtx, Player* player, SkelAnime* skelAnime, Vec3f* arg3, Vec3s* arg4, s32 arg5, s32 arg6, s32 arg7);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124870.s")
+#endif
 
 #ifdef NON_MATCHING
 // Matches, but requires in function static data
@@ -1534,8 +1651,16 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801253A4.s")
 #endif
 
-void func_80125500(GlobalContext* globalCtx, Player* player, UNK_PTR arg2, UNK_TYPE arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125500.s")
+void func_80125500(GlobalContext* globalCtx, Player* player, s32 arg2, Vec3f* arg3, Vec3s* arg4) {
+    if (arg2 == 7) {
+        func_80124870(globalCtx, player, &player->skelAnime, arg3, arg4, 7, 8, 9);
+        return;
+    }
+    if (arg2 == 4) {
+        func_80124870(globalCtx, player, &player->skelAnime, arg3, arg4, 4, 5, 6);
+    }
+}
+
 
 extern Vec3f* D_801F59DC;
 
