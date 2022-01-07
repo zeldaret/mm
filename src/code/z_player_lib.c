@@ -2168,7 +2168,6 @@ void func_80126B8C(GlobalContext* globalCtx, Player* player) {
     func_8012669C(globalCtx, player, sp1C, D_801C0970);
 }
 
-#ifdef NON_MATCHING
 void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
     if ((player->transformation != PLAYER_FORM_ZORA) || (player->rightHandType == 0xB)) {
         return;
@@ -2183,13 +2182,11 @@ void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else {
         Actor* temp_v0_3;
-        s16 temp_v0_10;
-        f32 temp_f0;
         Vec3f sp58;
         Vec3f sp4C;
 
         temp_v0_3 = player->boomerangActor;
-        if (!(player->stateFlags1 & 0x02000000) || ((temp_v0_3 != NULL) && (arg2 != temp_v0_3->params) && (( (temp_v0_3->child == NULL)) || (arg2 != temp_v0_3->child->params)))) {
+        if (!(player->stateFlags1 & 0x02000000) || ((player->boomerangActor != 0) && (player->boomerangActor->params != arg2)  && (( (temp_v0_3->child == NULL)) || (temp_v0_3->child->params != arg2)))) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             if ((player->skelAnime.animation != &gameplay_keep_Linkanim_00E3E0) && (player->skelAnime.animation != &gameplay_keep_Linkanim_00E3D8)) {
@@ -2233,49 +2230,42 @@ void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
                 D_801C05F0[0].unk_2.y = 0x32;
                 D_801C05F0[0].unk_2.z = 0x32;
                 D_801C05F0[1].unk_2 = D_801C05F0[0].unk_2;
-                goto block_42;
-            }
-            if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E408) {
+            } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E408) {
                 func_80124618(D_801C05F0, player->skelAnime.curFrame, player->unk_AF0);
-                goto block_42;
-            }
-            if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E3D8) {
-                temp_f0 = ((f32) ABS_ALT(player->unk_B8A) * 0.00003f) + 0.5f;
-                player->unk_AF0[0].x = temp_f0;
-                player->unk_AF0[0].y = temp_f0;
-                player->unk_AF0[0].z = temp_f0;
+            } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E3D8) {
+                player->unk_AF0[0].x = ((f32) ABS_ALT(player->unk_B8A) * 0.00003f) + 0.5f;
+                player->unk_AF0[0].y = player->unk_AF0[0].x;
+                player->unk_AF0[0].z = player->unk_AF0[0].x;
 
-                D_801C05F0[0].unk_2.x = (s16) (s32) (temp_f0 * 100.0f);
+                D_801C05F0[0].unk_2.x = (player->unk_AF0[0].x * 100.0f);
 
-                temp_v0_10 = D_801C05F0[0].unk_2.x;
-                D_801C05F0[0].unk_2.y = temp_v0_10;
-                D_801C05F0[0].unk_2.z = temp_v0_10;
+                D_801C05F0[0].unk_2.y = D_801C05F0[0].unk_2.x;
+                D_801C05F0[0].unk_2.z = D_801C05F0[0].unk_2.x;
 
                 D_801C05F0[1].unk_2 = D_801C05F0[0].unk_2;
-block_42:
-                Matrix_StatePush();
-                Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
-
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, D_801C0ABC[arg2]);
-
-                Matrix_MultiplyVector3fByState(&D_801C0AC4[arg2], &sp58);
-                Matrix_MultiplyVector3fByState(&D_801C0ADC[arg2], &sp4C);
-
-                if ((func_80126440(globalCtx, NULL, &player->swordInfo[arg2], &sp58, &sp4C) != 0) && ((player->stateFlags1 &  0x8000000) )) {
-                    EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[arg2]), &player->swordInfo[arg2].tip, &player->swordInfo[arg2].base);
-                }
-                Matrix_StatePop();
+            } else {
+                //! @bug Skips CLOSE_DISPS
+                return;
             }
+
+            Matrix_StatePush();
+            Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, D_801C0ABC[arg2]);
+
+            Matrix_MultiplyVector3fByState(&D_801C0AC4[arg2], &sp58);
+            Matrix_MultiplyVector3fByState(&D_801C0ADC[arg2], &sp4C);
+
+            if ((func_80126440(globalCtx, NULL, &player->swordInfo[arg2], &sp58, &sp4C) != 0) && ((player->stateFlags1 &  0x8000000) )) {
+                EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[arg2]), &player->swordInfo[arg2].tip, &player->swordInfo[arg2].base);
+            }
+            Matrix_StatePop();
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
     }
 }
-#else
-void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126BD0.s")
-#endif
 
 s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
     if ((player->transformation == PLAYER_FORM_DEKU) && (((player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D0)) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D8) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2E8) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278))) {
