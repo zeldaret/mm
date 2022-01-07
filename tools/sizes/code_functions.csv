@@ -673,7 +673,7 @@ asm/non_matchings/code/z_camera/Camera_GetCamDataVec3s.s,Camera_GetCamDataVec3s,
 asm/non_matchings/code/z_camera/Camera_GetBgCamDataId.s,Camera_GetBgCamDataId,0x800CC804,0x1C
 asm/non_matchings/code/z_camera/Camera_GetWaterBoxCamSetting.s,Camera_GetWaterBoxCamSetting,0x800CC874,0x31
 asm/non_matchings/code/z_camera/func_800CC938.s,func_800CC938,0x800CC938,0x8
-asm/non_matchings/code/z_camera/Camera_XZAngle.s,Camera_XZAngle,0x800CC958,0x1A
+asm/non_matchings/code/z_camera/Camera_CalcXZAngle.s,Camera_CalcXZAngle,0x800CC958,0x1A
 asm/non_matchings/code/z_camera/func_800CC9C0.s,func_800CC9C0,0x800CC9C0,0xCB
 asm/non_matchings/code/z_camera/func_800CCCEC.s,func_800CCCEC,0x800CCCEC,0xD8
 asm/non_matchings/code/z_camera/Camera_CalcUpFromPitchYawRoll.s,Camera_CalcUpFromPitchYawRoll,0x800CD04C,0x8F
@@ -2522,14 +2522,14 @@ asm/non_matchings/code/z_play/Play_SceneInit.s,Play_SceneInit,0x801693D4,0x28
 asm/non_matchings/code/z_play/func_80169474.s,func_80169474,0x80169474,0x1A
 asm/non_matchings/code/z_play/Play_CreateSubCamera.s,Play_CreateSubCamera,0x801694DC,0x2A
 asm/non_matchings/code/z_play/Play_GetActiveCamId.s,Play_GetActiveCamId,0x80169584,0x3
-asm/non_matchings/code/z_play/Play_ChangeCameraStatus.s,Play_ChangeCameraStatus,0x80169590,0x1C
+asm/non_matchings/code/z_play/Play_CameraChangeStatus.s,Play_CameraChangeStatus,0x80169590,0x1C
 asm/non_matchings/code/z_play/Play_ClearCamera.s,Play_ClearCamera,0x80169600,0x1A
 asm/non_matchings/code/z_play/Play_ClearAllSubCameras.s,Play_ClearAllSubCameras,0x80169668,0x1B
 asm/non_matchings/code/z_play/Play_GetCamera.s,Play_GetCamera,0x801696D4,0xE
 asm/non_matchings/code/z_play/Play_CameraSetAtEye.s,Play_CameraSetAtEye,0x8016970C,0x44
 asm/non_matchings/code/z_play/Play_CameraSetAtEyeUp.s,Play_CameraSetAtEyeUp,0x8016981C,0x49
 asm/non_matchings/code/z_play/Play_CameraSetFov.s,Play_CameraSetFov,0x80169940,0x12
-asm/non_matchings/code/z_play/Play_SetCameraRoll.s,Play_SetCameraRoll,0x80169988,0x13
+asm/non_matchings/code/z_play/Play_CameraSetRoll.s,Play_CameraSetRoll,0x80169988,0x13
 asm/non_matchings/code/z_play/Play_CopyCamera.s,Play_CopyCamera,0x801699D4,0x1F
 asm/non_matchings/code/z_play/func_80169A50.s,func_80169A50,0x80169A50,0x1C
 asm/non_matchings/code/z_play/Play_CameraChangeSetting.s,Play_CameraChangeSetting,0x80169AC0,0xF

@@ -78,7 +78,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetActiveCamId.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ChangeCameraStatus.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraChangeStatus.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearCamera.s")
 
@@ -92,7 +92,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetFov.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_SetCameraRoll.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetRoll.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CopyCamera.s")
 

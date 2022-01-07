@@ -261,8 +261,8 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
                     this->unk_704 = 0;
                     func_800EA0D4(globalCtx, &globalCtx->csCtx);
                     this->unk_70A = Play_CreateSubCamera(globalCtx);
-                    Play_ChangeCameraStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_WAIT);
-                    Play_ChangeCameraStatus(globalCtx, this->unk_70A, CAM_STATUS_ACTIVE);
+                    Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                    Play_CameraChangeStatus(globalCtx, this->unk_70A, CAM_STATUS_ACTIVE);
                     func_800B7298(globalCtx, &this->actor, 7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;

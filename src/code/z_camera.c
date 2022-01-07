@@ -830,7 +830,7 @@ void func_800CC938(Camera* camera) {
 /**
  * Calculates the angle between points `from` and `to`
  */
-s16 Camera_XZAngle(Vec3f* to, Vec3f* from) {
+s16 Camera_CalcXZAngle(Vec3f* to, Vec3f* from) {
     // Math_FAtan2F in OoT
     return DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(from->x - to->x, from->z - to->z)));
 }
@@ -4620,7 +4620,7 @@ s32 Camera_KeepOn4(Camera* camera) {
                     if (camera->target != 0) {
                         Actor_GetWorld(&sp4C, camera->target);
                         spA2 = DEGF_TO_BINANG(staticData->unk_08);
-                        sp9E = Camera_XZAngle(&sp4C.pos, &sp38->pos);
+                        sp9E = Camera_CalcXZAngle(&sp4C.pos, &sp38->pos);
                         spA0 = (SUB16(sp9E, spA8.yaw) > 0) ? sp9E + DEGF_TO_BINANG(staticData->unk_0C)
                                                            : sp9E - DEGF_TO_BINANG(staticData->unk_0C);
                         spCC[1] = camera->target;
