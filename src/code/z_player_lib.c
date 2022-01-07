@@ -72,18 +72,6 @@ extern u8 D_801BFFB0[0xF][5];/* = {
 extern Gfx* D_801BFFFC[];
 
 #if 0
-glabel D_801C0000
-
-glabel D_801C0001
-
-glabel D_801C0002
-
-glabel D_801C0008
-
-glabel D_801C0010
-#endif
-
-#if 0
 glabel D_801C0024
 #endif
 
@@ -2163,13 +2151,17 @@ Vec3f D_801C0C30[3] = {
 */
 extern Vec3f D_801C0C30[3];
 
-extern UNK_TYPE D_801C0C54;
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ Vec3f unk_08;
+    /* 0x14 */ char unk_14[0x04];
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} struct_80128388_arg1; // size = 0x1C
 
-//Vec3f D_801C0C78[2] = { { 0.0f, 0.0f, 0.0f }, { 20.0f, 3.4350486e-27f, 30.0f } };
-extern Vec3f D_801C0C78[2];
-
-//Vec3f D_801C0C94 = { 0.0f, 0.0f, 0.0f };
-extern Vec3f D_801C0C94;
+extern struct_80128388_arg1 D_801C0C54[3];
 
 extern Color_RGB8 D_801C0CA8[];
 
@@ -2315,15 +2307,10 @@ void func_80127BE8(GlobalContext* arg0, Vec3f* arg1) {
 }
 
 
+void func_80127DA4(GlobalContext* globalCtx, struct_801F58B0 arg1[], struct_80128388_arg1 arg2[], s32, Vec3f*, Vec3f*, u32*);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127DA4.s")
 
 
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ char unk_08[0x14];
-} struct_80128388_arg1; // size = 0x1C
 
 void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2, Mtx** arg3) {
     struct_801F58B0* phi_s1;
@@ -2372,19 +2359,19 @@ void func_801284A0(GlobalContext* globalCtx, Player* player) {
 
     gSPSegment(POLY_OPA_DISP++, 0x0B, sp90);
 
-    Matrix_MultiplyVector3fByState(&D_801C0C00, D_801C0C78);
-    Math_Vec3f_Lerp(&player->bodyPartsPos[7], &player->bodyPartsPos[0], 0.2f, &D_801C0C94);
+    Matrix_MultiplyVector3fByState(&D_801C0C00, &D_801C0C54[1].unk_08);
+    Math_Vec3f_Lerp(&player->bodyPartsPos[7], &player->bodyPartsPos[0], 0.2f, &D_801C0C54[1].unk_08);
 
     for (i = 0; i < 3; i++) {
         Matrix_MultiplyVector3fByState(&D_801C0C0C[i], &sp84);
         Matrix_MultiplyVector3fByState(&D_801C0C30[i], &sp78);
 
-        func_80127DA4(globalCtx, D_801F58B0[i], &D_801C0C54, 3, &sp84, &sp78, &sp6C);
+        func_80127DA4(globalCtx, D_801F58B0[i], D_801C0C54, 3, &sp84, &sp78, &sp6C);
         sp6C += 11;
 
         Matrix_StatePush();
         Matrix_InsertTranslation(D_801C0C0C[i].x, D_801C0C0C[i].y, D_801C0C0C[i].z, 1);
-        func_80128388(D_801F58B0[i], &D_801C0C54, 3, &sp90);
+        func_80128388(D_801F58B0[i], D_801C0C54, 3, &sp90);
         Matrix_StatePop();
     }
 
