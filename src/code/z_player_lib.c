@@ -177,15 +177,13 @@ glabel D_801C0510
 extern struct_80124618 D_801C0538[];
 extern struct_80124618 D_801C0560[];
 
-#if 0
-glabel D_801C0580
-glabel D_801C05A8
-glabel D_801C05C8
-glabel D_801C05D8
-glabel D_801C05F0
-glabel D_801C05F2
-glabel D_801C05FA
-#endif
+extern struct_80124618 D_801C0580[];
+extern struct_80124618 D_801C05A8[];
+
+extern struct_80124618 D_801C05C8[];
+extern struct_80124618 D_801C05D8[];
+
+extern struct_80124618 D_801C05F0[];
 
 extern struct_80124618 D_801C0608[];
 extern struct_80124618 D_801C0628[];
@@ -265,17 +263,20 @@ Vec3f D_801C09B8[3] = {
 #endif
 extern Vec3f D_801C09B8[];
 
+extern Vec3f D_801C09DC[];
+extern Vec3f D_801C0A00[];
+
 #if 0
-glabel D_801C09DC
-glabel D_801C0A00
 glabel D_801C0A24
 glabel D_801C0A48
 glabel D_801C0A6C
 glabel D_801C0A90
-glabel D_801C0AB4
-glabel D_801C0ABC
-glabel D_801C0ADC
 #endif
+
+extern Gfx* D_801C0AB4[];
+extern Gfx* D_801C0ABC[];
+extern Vec3f D_801C0AC4[];
+extern Vec3f D_801C0ADC[];
 
 extern struct_80124618* D_801C0AF4[];
 extern struct_80124618* D_801C0AFC[];
@@ -2167,7 +2168,114 @@ void func_80126B8C(GlobalContext* globalCtx, Player* player) {
     func_8012669C(globalCtx, player, sp1C, D_801C0970);
 }
 
+#ifdef NON_MATCHING
+void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
+    if ((player->transformation != PLAYER_FORM_ZORA) || (player->rightHandType == 0xB)) {
+        return;
+    }
+
+    if ((arg2 != 0) && (player->stateFlags1 & 0x400000)) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, object_link_zora_DL_0110A8);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    } else {
+        Actor* temp_v0_3;
+        s16 temp_v0_10;
+        f32 temp_f0;
+        Vec3f sp58;
+        Vec3f sp4C;
+
+        temp_v0_3 = player->boomerangActor;
+        if (!(player->stateFlags1 & 0x02000000) || ((temp_v0_3 != NULL) && (arg2 != temp_v0_3->params) && (( (temp_v0_3->child == NULL)) || (arg2 != temp_v0_3->child->params)))) {
+            OPEN_DISPS(globalCtx->state.gfxCtx);
+
+            if ((player->skelAnime.animation != &gameplay_keep_Linkanim_00E3E0) && (player->skelAnime.animation != &gameplay_keep_Linkanim_00E3D8)) {
+                if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E3E8) {
+                    func_80124618(D_801C0580, player->skelAnime.curFrame, player->unk_AF0);
+                } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E418) {
+                        func_80124618(D_801C05A8, player->skelAnime.curFrame, player->unk_AF0);
+                } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E408) {
+                        func_80124618(D_801C05D8, player->skelAnime.curFrame, player->unk_AF0);
+                } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E350) {
+                        func_80124618(D_801C07F0, player->skelAnime.curFrame, player->unk_AF0);
+                } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E3F0) {
+                        func_80124618(D_801C0820, player->skelAnime.curFrame, player->unk_AF0);
+                } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E3F8) {
+                        func_80124618(D_801C0838, player->skelAnime.curFrame, player->unk_AF0);
+                } else if (player->itemActionParam == 8) {
+                    player->unk_AF0[0].x = 1.0f;
+                    player->unk_AF0[0].y = 1.0f;
+                    player->unk_AF0[0].z = 1.0f;
+                } else {
+                    player->unk_AF0[0].x = 0.4f;
+                    player->unk_AF0[0].y = 0.6f;
+                    player->unk_AF0[0].z = 0.7f;
+                }
+                Matrix_StatePush();
+
+                Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                gSPDisplayList(POLY_OPA_DISP++, D_801C0AB4[arg2]);
+
+                if ((player->swordState != 0) && ((((player->swordAnimation == 0x1B)) && (arg2 == 0)) || ((player->swordAnimation == 0x1C) && (arg2 != 0)))) {
+                    func_8012669C(globalCtx, player, D_801C0A00, D_801C09DC);
+                }
+                Matrix_StatePop();
+            }
+
+            if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E418) {
+                func_80124618(D_801C05C8, player->skelAnime.curFrame, player->unk_AF0);
+                D_801C05F0[0].unk_2.x = 0x32;
+                D_801C05F0[0].unk_2.y = 0x32;
+                D_801C05F0[0].unk_2.z = 0x32;
+                D_801C05F0[1].unk_2 = D_801C05F0[0].unk_2;
+                goto block_42;
+            }
+            if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E408) {
+                func_80124618(D_801C05F0, player->skelAnime.curFrame, player->unk_AF0);
+                goto block_42;
+            }
+            if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E3D8) {
+                temp_f0 = ((f32) ABS_ALT(player->unk_B8A) * 0.00003f) + 0.5f;
+                player->unk_AF0[0].x = temp_f0;
+                player->unk_AF0[0].y = temp_f0;
+                player->unk_AF0[0].z = temp_f0;
+
+                D_801C05F0[0].unk_2.x = (s16) (s32) (temp_f0 * 100.0f);
+
+                temp_v0_10 = D_801C05F0[0].unk_2.x;
+                D_801C05F0[0].unk_2.y = temp_v0_10;
+                D_801C05F0[0].unk_2.z = temp_v0_10;
+
+                D_801C05F0[1].unk_2 = D_801C05F0[0].unk_2;
+block_42:
+                Matrix_StatePush();
+                Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
+
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPDisplayList(POLY_OPA_DISP++, D_801C0ABC[arg2]);
+
+                Matrix_MultiplyVector3fByState(&D_801C0AC4[arg2], &sp58);
+                Matrix_MultiplyVector3fByState(&D_801C0ADC[arg2], &sp4C);
+
+                if ((func_80126440(globalCtx, NULL, &player->swordInfo[arg2], &sp58, &sp4C) != 0) && ((player->stateFlags1 &  0x8000000) )) {
+                    EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[arg2]), &player->swordInfo[arg2].tip, &player->swordInfo[arg2].base);
+                }
+                Matrix_StatePop();
+            }
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+    }
+}
+#else
+void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126BD0.s")
+#endif
 
 s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
     if ((player->transformation == PLAYER_FORM_DEKU) && (((player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D0)) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D8) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2E8) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278))) {
