@@ -5,7 +5,7 @@
 
 struct BgF40Switch;
 
-#define GET_BGF40SWITCH_SWITCHFLAG(this) (((this)->actor.actor.params & 0xFE00) >> 9)
+#define BGF40SWITCH_GET_SWITCHFLAG(this) (((this)->actor.actor.params & 0xFE00) >> 9)
 
 typedef void (*BgF40SwitchActionFunc)(struct BgF40Switch*, GlobalContext*);
 
