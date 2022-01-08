@@ -5989,6 +5989,6 @@ static s16 D_801B9E34[] = {
     0x0000, 0x02C6, 0x058C, 0x0000, 0x0000, 0xFD3A, 0x0000, 0x0852, 0x0000, 0x0000, 0x0B18, 0x02C6, 0xFA74, 0x0000,
 };
 
-static s32 sUpdateCameraDirection = 0;
+static s32 sUpdateCameraDirection = false;
 static s32 sIsFalse = false;
 static s32 sCameraInitSceneTimer = 0;

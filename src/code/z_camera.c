@@ -456,25 +456,29 @@ s32 func_800CBAD4(Vec3f* dst, Camera* camera) {
     }
 }
 
-s32 func_800CBB58(Camera* camera) {
+s32 Camera_IsUnderwaterAsZora(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
     if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
-        return ((Player*)trackActor)->currentBoots == 5;
+        return ((Player*)trackActor)->currentBoots == PLAYER_BOOTS_ZORA_UNDERWATER;
     } else {
         return 0;
     }
 }
 
+/**
+ * Evaluate if player is in one of two sword animations
+ */
 s32 func_800CBB88(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
     if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+        // unknown sword animation
         if ((((Player*)trackActor)->swordState != 0) && (((Player*)trackActor)->swordAnimation == 26)) {
             return 3;
         }
 
-        // Is using spin attack
+        // A non-magic spin attack
         if ((((Player*)trackActor)->stateFlags2 & 0x20000) ||
             ((((Player*)trackActor)->swordState != 0) && (((Player*)trackActor)->swordAnimation == 29))) {
             return 1;
@@ -4547,7 +4551,7 @@ s32 Camera_KeepOn4(Camera* camera) {
         fixedData->unk_1E = NEXTSETTING;
     }
 
-    sUpdateCameraDirection = 1;
+    sUpdateCameraDirection = true;
     sCameraInterfaceFlags = fixedData->unk_1C;
     OLib_Vec3fDiffToVecSphGeo(&spB0, at, eye);
     data = &D_801EDDD0;
@@ -6034,8 +6038,8 @@ s32 Camera_Demo3(Camera* camera) {
             // Init Data
             camera->actionFuncState++;
             dynamicData->timer = 125;
-            Quake2_SetType(8);
-            Quake2_SetCountdown(60);
+            Distortion_SetType(8);
+            Distortion_SetCountdown(60);
             break;
         case 1:
             // Zoom into player, start to rise
@@ -6046,8 +6050,8 @@ s32 Camera_Demo3(Camera* camera) {
             if (dynamicData->timer <= 0) {
                 dynamicData->timer = 20;
                 camera->actionFuncState++;
-                Quake2_SetType(0x10);
-                Quake2_SetCountdown(80);
+                Distortion_SetType(0x10);
+                Distortion_SetCountdown(80);
             }
             break;
         case 2:
@@ -6058,17 +6062,17 @@ s32 Camera_Demo3(Camera* camera) {
                 dynamicData->timer = 0;
                 dynamicData->unk_00 = (175.0f - camera->fov) / dynamicData->unk_04;
                 camera->actionFuncState++;
-                Quake2_SetType(0x400);
-                Quake2_SetCountdown(15);
+                Distortion_SetType(0x400);
+                Distortion_SetCountdown(15);
             }
             break;
         case 3:
             dynamicData->timer++;
             camera->fov += dynamicData->unk_00 * dynamicData->timer;
             if (dynamicData->timer >= 15) {
-                Quake2_ClearType(0x400);
-                Quake2_ClearType(0x10);
-                Quake2_ClearType(8);
+                Distortion_ClearType(0x400);
+                Distortion_ClearType(0x10);
+                Distortion_ClearType(8);
                 camera->actionFuncState++;
             }
             break;
@@ -6128,8 +6132,8 @@ s32 Camera_Demo4(Camera* camera) {
                 sin = sin_rad(dynamicData->unk_0C * (M_PI / 180));
                 dynamicData->unk_0C = ((dynamicData->unk_10 < 0.0f) ? -1.0f : 1.0f) * sin;
                 if (dynamicData->unk_22 == 12) {
-                    Quake2_SetType(0x200);
-                    Quake2_SetCountdown(26);
+                    Distortion_SetType(0x200);
+                    Distortion_SetCountdown(26);
                 }
             } else {
                 dynamicData->unk_0C = 0.0f;
@@ -6152,7 +6156,7 @@ s32 Camera_Demo4(Camera* camera) {
                 dynamicData->unk_22 = 24;
                 camera->actionFuncState++;
                 dynamicData->unk_0C = (32.0f - camera->fov) / 24.0f;
-                Quake2_SetType(0x800);
+                Distortion_SetType(0x800);
             }
             break;
         case 2:
@@ -6193,15 +6197,15 @@ s32 Camera_Demo4(Camera* camera) {
             atToEye.pitch = 0x2000;
             atToEye.r = 35.0f;
             if (dynamicData->unk_22 >= 35) {
-                Quake2_ClearType(0x200);
-                Quake2_ClearType(0x800);
+                Distortion_ClearType(0x200);
+                Distortion_ClearType(0x800);
                 camera->actionFuncState = 4;
             }
             break;
         case 999:
             Actor_GetFocus(&playerHead, camera->trackActor);
-            Quake2_ClearType(0x200);
-            Quake2_ClearType(0x800);
+            Distortion_ClearType(0x200);
+            Distortion_ClearType(0x800);
             camera->actionFuncState = 4;
             break;
         case 4:
@@ -6274,8 +6278,8 @@ s32 Camera_Demo5(Camera* camera) {
                 camera->actionFuncState = 2;
                 dynamicData->unk_24 = camera->trackActorPosRot.rot.y + 0x4000;
                 dynamicData->timer = 46;
-                Quake2_SetType(0x200);
-                Quake2_SetCountdown(46);
+                Distortion_SetType(0x200);
+                Distortion_SetCountdown(46);
             }
             break;
         case 2:
@@ -6297,13 +6301,13 @@ s32 Camera_Demo5(Camera* camera) {
             atToEye.pitch = 0;
             if (dynamicData->timer <= 0) {
                 camera->actionFuncState = 3;
-                Quake2_ClearType(0x200);
+                Distortion_ClearType(0x200);
             }
             break;
         case 999:
             Actor_GetFocus(&playerHead, camera->trackActor);
             camera->actionFuncState = 3;
-            Quake2_ClearType(0x200);
+            Distortion_ClearType(0x200);
             break;
         case 3:
             // Player is in new form
@@ -7023,7 +7027,7 @@ s32 Camera_CheckWater(Camera* camera) {
     s32* waterPrevCamSetting = &camera->waterPrevCamSetting;
     s16 prevBgId;
 
-    if (!(camera->flags2 & CAM_FLAG2_2) || (sCameraSettings[camera->setting].unk_04 & 0x40000000)) {
+    if (!(camera->flags2 & CAM_FLAG2_2) || (sCameraSettings[camera->setting].flags & 0x40000000)) {
         return false;
     }
 
@@ -7036,7 +7040,7 @@ s32 Camera_CheckWater(Camera* camera) {
             }
             Camera_SetFlags(camera, CAM_FLAG2_8000);
         } else if (camera->flags2 & (s16)CAM_FLAG2_8000) {
-            Camera_ChangeSettingFlags(camera, *waterPrevCamSetting, CAM_CHANGE_SET_FLAG_4 | CAM_CHANGE_SET_FLAG_2); // unk11E
+            Camera_ChangeSettingFlags(camera, *waterPrevCamSetting, CAM_CHANGE_SET_FLAG_4 | CAM_CHANGE_SET_FLAG_2);
             Camera_UnsetFlags(camera, CAM_FLAG2_8000);
         }
     }
@@ -7052,7 +7056,7 @@ s32 Camera_CheckWater(Camera* camera) {
             }
 
             if (!(Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f) ||
-                (Camera_IsSwimming(camera) && !func_800CBB58(camera))) {
+                (Camera_IsSwimming(camera) && !Camera_IsUnderwaterAsZora(camera))) {
                 prevBgId = camera->bgId;
                 camera->bgId = BGCHECK_SCENE;
                 waterPrevCamSetting = &camera->waterPrevCamSetting;
@@ -7071,7 +7075,7 @@ s32 Camera_CheckWater(Camera* camera) {
             }
 
             if (!(Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f) ||
-                (Camera_IsSwimming(camera) && !func_800CBB58(camera))) {
+                (Camera_IsSwimming(camera) && !Camera_IsUnderwaterAsZora(camera))) {
                 prevBgId = camera->bgId;
                 camera->bgId = BGCHECK_SCENE;
                 waterPrevCamSetting = &camera->waterPrevCamSetting;
@@ -7147,33 +7151,38 @@ void Camera_EarthquakeDay3(Camera* camera) {
     }
 }
 
-s32 func_800DE840(Camera* camera) {
-    Quake2_ClearType(1);
+/**
+ * Sets the distortion to type 1 for a hot room
+ * Remnant of OoT as no room in any MM scene is set to a hot-room
+ */
+s32 Camera_SetHotRoomDistortion(Camera* camera) {
+    Distortion_ClearType(1);
     if (camera->globalCtx->roomCtx.currRoom.unk2 == 3) {
-        Quake2_SetType(1);
+        Distortion_SetType(1);
     }
     return true;
 }
 
-s32 func_800DE890(Camera* camera) {
+s32 Camera_SetSwordDistortion(Camera* camera) {
     switch (func_800CBB88(camera)) {
         case 1:
-            if (Quake2_GetType() != 0x40) {
-                Quake2_SetType(0x40);
-                Quake2_SetCountdown(12);
+            // non-magic spin attack
+            if (Distortion_GetType() != 0x40) {
+                Distortion_SetType(0x40);
+                Distortion_SetCountdown(12);
             }
             break;
-        //! @bug: Case 2 is impossible to achieve
         case 2:
-            if (Quake2_GetType() != 0x80) {
-                Quake2_SetType(0x80);
-                Quake2_SetCountdown(5);
+            // Unused: case 2 is impossible to achieve
+            if (Distortion_GetType() != 0x80) {
+                Distortion_SetType(0x80);
+                Distortion_SetCountdown(5);
             }
             break;
         case 3:
-            if (Quake2_GetType() != 0x100) {
-                Quake2_SetType(0x100);
-                Quake2_SetCountdown(15);
+            if (Distortion_GetType() != 0x100) {
+                Distortion_SetType(0x100);
+                Distortion_SetCountdown(15);
             }
             break;
     }
@@ -7283,9 +7292,9 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
             if (camera->camId == CAM_ID_MAIN) {
                 Camera_CheckWater(camera);
-                func_800DE840(camera);
+                Camera_SetHotRoomDistortion(camera);
                 Camera_EarthquakeDay3(camera);
-                func_800DE890(camera);
+                Camera_SetSwordDistortion(camera);
             }
 
             /**
@@ -7305,7 +7314,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
             // Sets the next cam scene data Index based on the bg surface
             if ((camera->flags2 & CAM_FLAG2_1) && (camera->flags2 & CAM_FLAG2_4) && !(camera->flags2 & CAM_FLAG2_400) &&
-                (!(camera->flags2 & CAM_FLAG2_200) || func_800CBB58(camera)) && !(camera->flags2 & (s16)CAM_FLAG2_8000) &&
+                (!(camera->flags2 & CAM_FLAG2_200) || Camera_IsUnderwaterAsZora(camera)) && !(camera->flags2 & (s16)CAM_FLAG2_8000) &&
                 !Camera_IsMountedOnHorse(camera) && !Camera_IsWearingGiantsMask(camera) && !Camera_IsDekuHovering(camera) && (sp98 != 0)) {
 
                 bgCamDataId = Camera_GetBgCamDataId(camera, &bgId, sp90);
@@ -7339,7 +7348,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
                 ((camera->bgId == BGCHECK_SCENE) || ((bgId == BGCHECK_SCENE) && (changeCamSceneDataType != 0))) &&
                 (camera->nextCamSceneDataId != -1) && (camera->doorTimer1 == 0) &&
                 ((Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f) || (changeCamSceneDataType != 0)) &&
-                (!(camera->flags2 & CAM_FLAG2_200) || func_800CBB58(camera))) {
+                (!(camera->flags2 & CAM_FLAG2_200) || Camera_IsUnderwaterAsZora(camera))) {
 
                 Camera_ChangeDataIdx(camera, camera->nextCamSceneDataId);
                 camera->nextCamSceneDataId = -1;
@@ -7600,11 +7609,11 @@ s32 Camera_CheckValidMode(Camera* camera, s16 mode) {
 }
 
 s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
-    if ((camera->flags1 & CAM_FLAG1_SET_1) &&
-        ((sCameraSettings[camera->setting].unk_04 & 0xF) >= (sCameraSettings[setting].unk_04 & 0xF))) {
+    if ((camera->flags1 & CAM_FLAG1_SET_USE_PRIORITY) &&
+        ((sCameraSettings[camera->setting].flags & 0xF) >= (sCameraSettings[setting].flags & 0xF))) {
         camera->flags1 |= CAM_FLAG1_SET_2;
         if (!(flags & CAM_CHANGE_SET_FLAG_2)) {
-            camera->flags1 |= CAM_FLAG1_SET_1;
+            camera->flags1 |= CAM_FLAG1_SET_USE_PRIORITY;
         }
         return -2;
     }
@@ -7620,7 +7629,7 @@ s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
     if ((setting == camera->setting) && !(flags & CAM_CHANGE_SET_FLAG_1)) {
         camera->flags1 |= CAM_FLAG1_SET_2;
         if (!(flags & CAM_CHANGE_SET_FLAG_2)) {
-            camera->flags1 |= CAM_FLAG1_SET_1;
+            camera->flags1 |= CAM_FLAG1_SET_USE_PRIORITY;
         }
         return -1;
     }
@@ -7628,12 +7637,12 @@ s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
     camera->flags1 |= CAM_FLAG1_SET_2;
 
     if (!(flags & CAM_CHANGE_SET_FLAG_2)) {
-        camera->flags1 |= CAM_FLAG1_SET_1;
+        camera->flags1 |= CAM_FLAG1_SET_USE_PRIORITY;
     }
 
     func_800DF498(camera);
 
-    if (!(sCameraSettings[camera->setting].unk_04 & 0x40000000)) {
+    if (!(sCameraSettings[camera->setting].flags & 0x40000000)) {
         camera->prevSetting = camera->setting;
     }
 
@@ -7641,7 +7650,7 @@ s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags) {
         camera->bgCamDataId = camera->prevBgCamDataId;
         camera->prevBgCamDataId = -1;
     } else if (!(flags & CAM_CHANGE_SET_FLAG_4)) {
-        if (!(sCameraSettings[camera->setting].unk_04 & 0x40000000)) {
+        if (!(sCameraSettings[camera->setting].flags & 0x40000000)) {
             camera->prevBgCamDataId = camera->bgCamDataId;
         }
         camera->bgCamDataId = -1;
@@ -7684,7 +7693,7 @@ s32 Camera_ChangeDataIdx(Camera* camera, s32 bgCamDataId) {
     camera->flags1 |= CAM_FLAG1_SCENE_DATA_2;
     // Sets camera setting based on bg/scene data
     if ((Camera_ChangeSettingFlags(camera, setting, CAM_CHANGE_SET_FLAG_4 | CAM_CHANGE_SET_FLAG_1) >= 0) ||
-        (sCameraSettings[camera->setting].unk_04 & 0x80000000)) {
+        (sCameraSettings[camera->setting].flags & 0x80000000)) {
         camera->bgCamDataId = bgCamDataId;
         camera->flags1 |= CAM_FLAG1_SCENE_DATA_1;
         Camera_ResetActionFuncState(camera, camera->mode);

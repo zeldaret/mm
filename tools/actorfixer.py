@@ -267,7 +267,7 @@ animdict = {
     "func_800C9CEC": "SurfaceType_IsHookshotSurface",
     "func_800C9D14": "SurfaceType_IsIgnoredByEntities",
     "func_800C9D50": "SurfaceType_IsIgnoredByProjectiles",
-    "func_800C9D8C": "SurfaceType_IsConveyor",
+    "func_800C9D8C": "SurfaceType_GetConveyorType",
     "func_800C9E18": "SurfaceType_GetConveyorSpeed",
     "func_800C9E40": "SurfaceType_GetConveyorDirection",
     "func_800C9E88": "SurfaceType_IsWallDamage",

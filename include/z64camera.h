@@ -34,7 +34,7 @@
 // Camera flags1. Flags spcifically for settings, modes, and scene/bg/cs camData
 // Used to store current state, but not read from with only 1 exception (possibly read from outside of camera)
 // Setting (0x1, 0x10)
-#define CAM_FLAG1_SET_1 (1 << 0)
+#define CAM_FLAG1_SET_USE_PRIORITY (1 << 0) // Use settings priority system
 #define CAM_FLAG1_SET_2 (1 << 4)
 // Mode (0x2, 0x20)
 #define CAM_FLAG1_MODE_1 (1 << 1)
@@ -323,9 +323,15 @@ typedef struct {
     /* 0x4 */ CameraModeValue* values;
 } CameraMode; // size = 0x8
 
+/**
+ * Flags:
+ * (flags & 0xF): Priority (lower value has higher priority)
+ * (flags & 0x40000000): Store previous setting and bgCamData, also ignores water checks
+ * (flags & 0x80000000): Set camera setting based on bg/scene data and reset action function state
+ */
 typedef struct {
     /* 0x0 */ u32 validModes;
-    /* 0x4 */ u32 unk_04; // flags?
+    /* 0x4 */ u32 flags;
     /* 0x8 */ CameraMode* cameraModes;
 } CameraSetting; // size = 0xC
 

@@ -495,11 +495,11 @@ typedef struct {
     /* 0x0E0 */ Mtx unkE0;
     /* 0x120 */ Mtx* projectionPtr;
     /* 0x124 */ Mtx* viewingPtr;
-    /* 0x128 */ Vec3f quakeRot;
-    /* 0x134 */ Vec3f quakeScale;
-    /* 0x140 */ f32 quakeSpeed;
-    /* 0x144 */ Vec3f currQuakeRot;
-    /* 0x150 */ Vec3f currQuakeScale;
+    /* 0x128 */ Vec3f distortionRot;
+    /* 0x134 */ Vec3f distortionScale;
+    /* 0x140 */ f32 distortionSpeed;
+    /* 0x144 */ Vec3f currDistortionRot;
+    /* 0x150 */ Vec3f currDistortionScale;
     /* 0x15C */ u16 normal;
     /* 0x15E */ UNK_TYPE1 pad15E[0x2];
     /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
@@ -1073,12 +1073,12 @@ typedef struct {
     /* 0x4 */ s32 type; // bitfield, highest set bit determines type
     /* 0x8 */ s16 countdown;
     /* 0xA */ s16 state;
-} Quake2Context; // size = 0xC
+} DistortionContext; // size = 0xC
 
 typedef enum {
-    QUAKE2_INACTIVE,
-    QUAKE2_ACTIVE,
-    QUAKE2_SETUP,
+    DISTORTION_INACTIVE,
+    DISTORTION_ACTIVE,
+    DISTORTION_SETUP,
 } Quake2State;
 
 typedef struct {
