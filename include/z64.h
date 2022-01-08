@@ -1152,10 +1152,10 @@ typedef struct {
 } DistortionContext; // size = 0xC
 
 typedef enum {
-    DISTORTION_INACTIVE,
-    DISTORTION_ACTIVE,
-    DISTORTION_SETUP,
-} Quake2State;
+    /* 0 */ DISTORTION_INACTIVE,
+    /* 1 */ DISTORTION_ACTIVE,
+    /* 2 */ DISTORTION_SETUP,
+} DistortionState;
 
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
