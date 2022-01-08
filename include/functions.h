@@ -2701,7 +2701,7 @@ s32 View_SetDistortionScale(View* view, f32 scaleX, f32 scaleY, f32 scaleZ);
 s32 View_SetDistortionSpeed(View* view, f32 speed);
 s32 View_InitDistortion(View* view);
 s32 View_ClearDistortion(View* view);
-s32 View_SetDistortion(View* view, Vec3f rot, Vec3f scale, f32 speed);
+s32 View_SetDistortion(View* view, Vec3f dirRot, Vec3f scale, f32 speed);
 s32 View_StepDistortion(View* view, Mtx* projectionMtx);
 void View_RenderView(View* view, s32 uParm2);
 s32 View_RenderToPerspectiveMatrix(View* view);
