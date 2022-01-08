@@ -505,11 +505,11 @@ typedef struct {
     /* 0x0E0 */ Mtx unkE0;
     /* 0x120 */ Mtx* projectionPtr;
     /* 0x124 */ Mtx* viewingPtr;
-    /* 0x128 */ Vec3f distortionRot;
+    /* 0x128 */ Vec3f distortionDirRot;
     /* 0x134 */ Vec3f distortionScale;
     /* 0x140 */ f32 distortionSpeed;
-    /* 0x144 */ Vec3f currDistortionRot;
-    /* 0x150 */ Vec3f currDistortionScale;
+    /* 0x144 */ Vec3f curDistortionDirRot;
+    /* 0x150 */ Vec3f curDistortionScale;
     /* 0x15C */ u16 normal;
     /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
     /* 0x164 */ UNK_TYPE4 unk164;

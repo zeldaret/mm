@@ -2696,7 +2696,7 @@ void View_GetViewport(View* view, Viewport* viewport);
 void View_WriteScissor(Gfx** gfx, s32 ulx, s32 uly, s32 lrx, s32 lry);
 void View_SyncAndWriteScissor(View* view, Gfx** gfx);
 void View_SetScissorForLetterbox(View* view);
-s32 View_SetDistortionRotation(View* view, f32 rotX, f32 rotY, f32 rotZ);
+s32 View_SetDistortionDirRot(View* view, f32 dirRotX, f32 dirRotY, f32 dirRotZ);
 s32 View_SetDistortionScale(View* view, f32 scaleX, f32 scaleY, f32 scaleZ);
 s32 View_SetDistortionSpeed(View* view, f32 speed);
 s32 View_InitDistortion(View* view);
