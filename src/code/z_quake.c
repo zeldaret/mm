@@ -456,14 +456,18 @@ void Distortion_Update(void) {
             sDistortionContext.countdown = 2;
             angle1 = 0x3F0;
             angle2 = 0x156;
+
             angle1Speed = 0.0f;
             angle2Speed = 170.0f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
+
             xScale = -0.01f;
             yScale = 0.01f;
             zScale = 0.0f;
+
             speed = 0.6f;
             xyScaleFactor = zScaleFactor = sDistortionContext.countdown / 60.0f;
             speedScaleFactor = 1.0f;
@@ -476,12 +480,15 @@ void Distortion_Update(void) {
 
             angle1Speed = 0.0f;
             angle2Speed = 50.0f / countdownMax;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
+
             xScale = 0.01f;
             yScale = 100.0f;
             zScale = 0.0f;
+
             speed = 0.4f;
             xyScaleFactor = zScaleFactor = ((f32)countdownMax - sDistortionContext.countdown) / (f32)countdownMax;
             speedScaleFactor = 0.5f;
@@ -494,12 +501,15 @@ void Distortion_Update(void) {
 
             angle1Speed = -5.0f;
             angle2Speed = 5.0f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 2.0f;
+
             xScale = 0.3f;
             yScale = 0.3f;
             zScale = 0.0f;
+
             speed = 0.1f;
             xyScaleFactor = zScaleFactor = ((f32)countdownMax - sDistortionContext.countdown) / (f32)countdownMax;
             speedScaleFactor = 1.0f;
@@ -512,12 +522,15 @@ void Distortion_Update(void) {
 
             angle1Speed = 0.0f;
             angle2Speed = 150.0f;
+
             rotX = 0;
             rotY = 0;
             rotZ = 0.2f;
+
             xScale = 0.025f;
             yScale = 0.02f;
             zScale = 0.01f;
+
             speed = 1.5f;
             if (sDistortionContext.countdown < 5) {
                 xyScaleFactor = zScaleFactor = ((f32)countdownMax - sDistortionContext.countdown) / (f32)countdownMax;
@@ -534,12 +547,15 @@ void Distortion_Update(void) {
 
             angle1Speed = 0.0f;
             angle2Speed = 150.0f;
+
             rotX = 0;
             rotY = 0;
             rotZ = 0;
+
             xScale = 0.03f;
             yScale = 0.02f;
             zScale = 0.01f;
+
             speed = 1.5f;
             xyScaleFactor = zScaleFactor = sDistortionContext.countdown / (f32)countdownMax;
             speedScaleFactor = 1.0f;
@@ -552,12 +568,15 @@ void Distortion_Update(void) {
 
             angle1Speed = 0.0f;
             angle2Speed = 150.0f;
+
             rotX = 0;
             rotY = 0;
             rotZ = 0;
+
             xScale = 0.03f;
             yScale = 0.03f;
             zScale = 0.01f;
+
             speed = 1.3f;
             if (sDistortionContext.countdown < 4) {
                 xyScaleFactor = zScaleFactor = sDistortionContext.countdown / (f32)countdownMax;
@@ -574,14 +593,18 @@ void Distortion_Update(void) {
 
             angle1 += 0xB1;
             angle2 -= 0x2B;
+
             angle1Speed = -107.0f;
             angle2Speed = 158.0f;
+
             rotX = 0.2f;
             rotY = 1.7f;
             rotZ = -2.9f;
+
             xScale = -0.6f;
             yScale = -0.7f;
             zScale = 0.6f;
+
             speed = 0.2f;
             zScaleFactor = 1.0f;
             xyScaleFactor = 1.0f;
@@ -595,12 +618,15 @@ void Distortion_Update(void) {
 
             angle1Speed = 248.0f;
             angle2Speed = -90.0f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
+
             xScale = -0.4f;
             yScale = 0.4f;
             zScale = 0.2f;
+
             speed = 0.25f;
             countdownRatio = sDistortionContext.countdown / (f32)countdownMax;
             zScaleFactor = xyScaleFactor = countdownRatio;
@@ -608,6 +634,7 @@ void Distortion_Update(void) {
         } else if (sDistortionContext.type & 8) {
             angle1 = 0x3F0;
             angle2 = 0x156;
+
             sDistortionContext.countdown = 2;
             player = GET_PLAYER(globalCtx);
 
@@ -617,9 +644,11 @@ void Distortion_Update(void) {
 
             angle1Speed = 359.2f;
             angle2Speed = -18.5f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.3f;
+
             switch (Distortion_GetUnderwaterCurrentSpeed(player)) {
                 case 3:
                     xScale = -0.06f;
@@ -657,10 +686,13 @@ void Distortion_Update(void) {
         } else if (sDistortionContext.type & 4) {
             angle1 = 0x3F0;
             angle2 = 0x156;
+
             sDistortionContext.countdown = 2;
             player = GET_PLAYER(globalCtx);
+
             angle1Speed = 359.2f;
             angle2Speed = -18.5f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
@@ -702,15 +734,19 @@ void Distortion_Update(void) {
         } else if (sDistortionContext.type & 1) {
             angle1 = 0x3F0;
             angle2 = 0x156;
+
             sDistortionContext.countdown = 2;
             angle1Speed = 0.0f;
             angle2Speed = 150.0f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
+
             xScale = -0.01f;
             yScale = 0.01f;
             zScale = 0.01f;
+
             speed = 0.6f;
             speedScaleFactor = 1.0f;
             zScaleFactor = 1.0f;
@@ -721,6 +757,7 @@ void Distortion_Update(void) {
 
         angle1 += DEGF_TO_BINANG(angle1Speed);
         angle2 += DEGF_TO_BINANG(angle2Speed);
+
         View_SetDistortionRotation(&sDistortionContext.globalCtx->view,
                                    Math_CosS(angle1) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
                                    Math_SinS(angle1) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
@@ -730,9 +767,12 @@ void Distortion_Update(void) {
                                 (Math_CosS(angle2) * (yScale * xyScaleFactor)) + 1.0f,
                                 (Math_CosS(angle1) * (zScale * zScaleFactor)) + 1.0f);
         View_SetDistortionSpeed(&sDistortionContext.globalCtx->view, speed * speedScaleFactor);
+
         sDistortionContext.state = DISTORTION_ACTIVE;
+
     } else if (sDistortionContext.state != DISTORTION_INACTIVE) {
         View_ClearDistortion(&globalCtx->view);
+
         sDistortionContext.state = DISTORTION_INACTIVE;
         sDistortionContext.countdown = 0;
     }

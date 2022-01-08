@@ -187,17 +187,17 @@ void View_SetScissorForLetterbox(View* view) {
     CLOSE_DISPS(view->gfxCtx);
 }
 
-s32 View_SetDistortionRotation(View* view, f32 x, f32 y, f32 z) {
-    view->distortionRot.x = x;
-    view->distortionRot.y = y;
-    view->distortionRot.z = z;
+s32 View_SetDistortionRotation(View* view, f32 rotX, f32 rotY, f32 rotZ) {
+    view->distortionRot.x = rotX;
+    view->distortionRot.y = rotY;
+    view->distortionRot.z = rotZ;
     return true;
 }
 
-s32 View_SetDistortionScale(View* view, f32 x, f32 y, f32 z) {
-    view->distortionScale.x = x;
-    view->distortionScale.y = y;
-    view->distortionScale.z = z;
+s32 View_SetDistortionScale(View* view, f32 scaleX, f32 scaleY, f32 scaleZ) {
+    view->distortionScale.x = scaleX;
+    view->distortionScale.y = scaleY;
+    view->distortionScale.z = scaleZ;
     return true;
 }
 
@@ -237,8 +237,8 @@ s32 View_SetDistortion(View* view, Vec3f rot, Vec3f scale, f32 speed) {
     return true;
 }
 
-s32 View_StepDistortion(View* view, Mtx* matrix) {
-    MtxF mf;
+s32 View_StepDistortion(View* view, Mtx* projectionMtx) {
+    MtxF projectionMtxF;
 
     if (view->distortionSpeed == 0.0f) {
         return false;
@@ -262,8 +262,8 @@ s32 View_StepDistortion(View* view, Mtx* matrix) {
             F32_LERPIMP(view->currDistortionScale.z, view->distortionScale.z, view->distortionSpeed);
     }
 
-    Matrix_FromRSPMatrix(matrix, &mf);
-    Matrix_SetCurrentState(&mf);
+    Matrix_FromRSPMatrix(projectionMtx, &projectionMtxF);
+    Matrix_SetCurrentState(&projectionMtxF);
     Matrix_RotateStateAroundXAxis(view->currDistortionRot.x);
     Matrix_InsertYRotation_f(view->currDistortionRot.y, MTXMODE_APPLY);
     Matrix_InsertZRotation_f(view->currDistortionRot.z, MTXMODE_APPLY);
@@ -271,7 +271,7 @@ s32 View_StepDistortion(View* view, Mtx* matrix) {
     Matrix_InsertZRotation_f(-view->currDistortionRot.z, MTXMODE_APPLY);
     Matrix_InsertYRotation_f(-view->currDistortionRot.y, MTXMODE_APPLY);
     Matrix_RotateStateAroundXAxis(-view->currDistortionRot.x);
-    Matrix_ToMtx(matrix);
+    Matrix_ToMtx(projectionMtx);
 
     return true;
 }
@@ -315,8 +315,8 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
 
     guPerspective(projection, &view->normal, view->fovy, aspect, view->zNear, view->zFar, view->scale);
     view->projection = *projection;
-    //! @bug: This cast of `projection` is invalid
-    View_StepDistortion(view, (Mtx*)projection);
+
+    View_StepDistortion(view, projection);
 
     gSPPerspNormalize(POLY_OPA_DISP++, view->normal);
     gSPMatrix(POLY_OPA_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
