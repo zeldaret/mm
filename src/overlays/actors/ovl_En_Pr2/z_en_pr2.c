@@ -116,7 +116,7 @@ void EnPr2_Init(Actor* thisx, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&this->unk_228, &this->actor.home.pos);
 
     if (this->unk_1E0 == 2) {
-        this->unk_208 = ENPR2_GET_FF00(&this->actor) * 20.0f;
+        this->unk_208 = ENPR2_GET_FF0(&this->actor) * 20.0f;
     }
     this->unk_1F4 = 255;
     this->actor.shape.yOffset = 500.0f;
@@ -436,7 +436,7 @@ void func_80A74DEC(EnPr2* this, GlobalContext* globalCtx) {
     func_80A74510(this, 1);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
     Math_Vec3f_Copy(&this->unk_21C, &player->actor.world.pos);
-    
+
     this->unk_1EE = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_21C);
     this->unk_20C = Rand_ZeroFloat(30.0f);
     this->unk_1DC = 0;
