@@ -12,6 +12,61 @@
 
 #define THIS ((EnJg*)thisx)
 
+#define TEXT_EN_JG_TATL_HES_FROZEN_SOLID 0x236
+#define TEXT_EN_JG_WHAT_WAS_I_DOING 0xDAC
+#define TEXT_EN_JG_I_MUST_HURRY 0xDAD
+#define TEXT_EN_JG_HAVE_YOU_SOME_BUSINESS_WITH_ME 0xDAE
+#define TEXT_EN_JG_WHAT_HAS_ME_SO_RUSHED 0xDAF
+#define TEXT_EN_JG_ITS_THIS_COLD_SNAP 0xDB0
+#define TEXT_EN_JG_ITS_THE_LACK_OF_GOODS 0xDB1
+#define TEXT_EN_JG_MY_SON_CRYING_CONTINUOUSLY 0xDB2
+#define TEXT_EN_JG_AS_THE_ELDER_I_MUST_DO_SOMETHING 0xDB3
+#define TEXT_EN_JG_THIS_IS_OUR_PROBLEM_FIRST 0xDB4
+#define TEXT_EN_JG_THIS_IS_OUR_PROBLEM_REPEAT 0xDB5
+#define TEXT_EN_JG_HUNH 0xDB6
+#define TEXT_EN_JG_OH_YOURE_DARMANI 0xDB7
+#define TEXT_EN_JG_AM_I_HALLUCINATING 0xDB8
+#define TEXT_EN_JG_MAYBE_THIS_IS_THE_DOING_OF_SNOWHEAD 0xDB9
+#define TEXT_EN_JG_IVE_BEEN_MADE_A_FOOL_OF 0xDBA
+#define TEXT_EN_JG_I_CAN_SEE_PAST_THE_ILLUSION 0xDBB
+#define TEXT_EN_JG_FOLLOWING_ME_WONT_DO_ANY_GOOD 0xDBC
+#define TEXT_EN_JG_WHAT 0xDBD
+#define TEXT_EN_JG_MY_SON_MISSES_ME 0xDBE
+#define TEXT_EN_JG_WHY_DO_YOU_KNOW_THAT 0xDBF
+#define TEXT_EN_JG_FORGIVE_ME_MY_CHILD 0xDC0
+#define TEXT_EN_JG_I_NO_LONGER_CARE 0xDC1
+#define TEXT_EN_JG_PLEASE_QUIETLY_SING_MY_SON_TO_SLEEP 0xDC2
+#define TEXT_EN_JG_THE_SAME_MELODY_I_PLAYED_FOR_YOU 0xDC3
+#define TEXT_EN_JG_SO_COLD_I_CANT_PLAY 0xDC4
+#define TEXT_EN_JG_LET_ME_PLAY_ONCE_MORE 0xDC5
+#define TEXT_EN_JG_I_AM_COUNTING_ON_YOU 0xDC6
+#define TEXT_EN_JG_HOW_DOES_SONG_GO 0xDC7
+#define TEXT_EN_JG_UMM 0xDC8
+#define TEXT_EN_JG_LIKE_THIS 0xDC9
+#define TEXT_EN_JG_ONLY_REMEMBER_THE_BEGINNING 0xDCA
+#define TEXT_EN_JG_WELCOME_TO_SPRING 0xDCB
+#define TEXT_EN_JG_WERE_HOLDING_THE_GORON_RACES 0xDCC
+#define TEXT_EN_JG_IVE_BEEN_WAITING_IMPATIENTLY 0xDCD
+#define TEXT_EN_JG_I_HEARD_YOU_SEALED_THE_BLIZZARD 0xDCE
+#define TEXT_EN_JG_SPRING_HAS_COME_THANKS_TO_YOU 0xDCF
+#define TEXT_EN_JG_CHEER_GREATEST_GORON_HERO 0xDD0
+#define TEXT_EN_JG_CHEER_DARMANI 0xDD1
+#define TEXT_EN_JG_CHEER_THE_IMMORTAL_GORON 0xDD2
+#define TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON 0xDD3
+#define TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS 0xDD4
+#define TEXT_EN_JG_CHEER_GREATEST_OF_GORONS 0xDD5
+#define TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD 0xDD6
+#define TEXT_EN_JG_CHEER_GREATEST_IN_THE_WORLD 0xDD7
+#define TEXT_EN_JG_SON_WENT_TO_SEE_RACES 0xDD8
+#define TEXT_EN_JG_YIELD_PATRIARCH_TO_YOUNGER_ONE 0xDD9
+#define TEXT_EN_JG_GORON_WHO_TAKES_CARE_OF_ALL 0xDDA
+#define TEXT_EN_JG_THE_CHOSEN_ONE_DARMANI 0xDDB
+#define TEXT_EN_JG_EVERYONE_WOULD_ACCEPT_YOU 0xDDC
+#define TEXT_EN_JG_THINK_IT_OVER_SLOWLY 0xDDD
+#define TEXT_EN_JG_COME_BACK_AFTER_ENTERING_RACE 0xDDE
+#define TEXT_EN_JG_MY_SON_IS_AWAITING_YOU 0xDDF
+#define TEXT_EN_JG_GO_BEYOND_TWIN_ISLANDS_CAVE 0xDE0
+
 void EnJg_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -227,11 +282,11 @@ void func_80B73E3C(EnJg* this) {
     this->actionFunc = func_80B741F8;
 
     switch (this->textId) {
-        case 0xDD0:
-        case 0xDD2:
-        case 0xDD3:
-        case 0xDD4:
-        case 0xDD6:
+        case TEXT_EN_JG_CHEER_GREATEST_GORON_HERO:
+        case TEXT_EN_JG_CHEER_THE_IMMORTAL_GORON:
+        case TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON:
+        case TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS:
+        case TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD:
             this->flags |= EN_JG_FLAG_1;
             break;
 
@@ -243,46 +298,46 @@ void func_80B73E3C(EnJg* this) {
 
 void func_80B73F1C(EnJg* this, GlobalContext* globalCtx) {
     switch (this->textId) {
-        case 0xDAC:
+        case TEXT_EN_JG_WHAT_WAS_I_DOING:
             this->animationIndex = EN_JG_ANIMATION_SHAKING_HEAD;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = func_80B74550;
             break;
 
-        case 0xDAD:
+        case TEXT_EN_JG_I_MUST_HURRY:
             this->animationIndex = EN_JG_ANIMATION_SURPRISE_START;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = func_80B742F8;
             break;
 
-        case 0xDB7:
+        case TEXT_EN_JG_OH_YOURE_DARMANI:
             this->animationIndex = EN_JG_ANIMATION_SURPRISE_START;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = func_80B74550;
             break;
 
-        case 0xDAE:
-        case 0xDB3:
-        case 0xDB6:
-        case 0xDBA:
-        case 0xDBD:
-        case 0xDC4:
+        case TEXT_EN_JG_HAVE_YOU_SOME_BUSINESS_WITH_ME:
+        case TEXT_EN_JG_AS_THE_ELDER_I_MUST_DO_SOMETHING:
+        case TEXT_EN_JG_HUNH:
+        case TEXT_EN_JG_IVE_BEEN_MADE_A_FOOL_OF:
+        case TEXT_EN_JG_WHAT:
+        case TEXT_EN_JG_SO_COLD_I_CANT_PLAY:
             this->animationIndex = EN_JG_ANIMATION_IDLE;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = func_80B74550;
             break;
 
-        case 0xDB0:
-        case 0xDBB:
-        case 0xDBC:
-        case 0xDC6:
+        case TEXT_EN_JG_ITS_THIS_COLD_SNAP:
+        case TEXT_EN_JG_I_CAN_SEE_PAST_THE_ILLUSION:
+        case TEXT_EN_JG_FOLLOWING_ME_WONT_DO_ANY_GOOD:
+        case TEXT_EN_JG_I_AM_COUNTING_ON_YOU:
             this->animationIndex = EN_JG_ANIMATION_ANGRY;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = func_80B74550;
             break;
 
-        case 0xDB4:
-        case 0xDB5:
+        case TEXT_EN_JG_THIS_IS_OUR_PROBLEM_FIRST:
+        case TEXT_EN_JG_THIS_IS_OUR_PROBLEM_REPEAT:
             this->animationIndex = EN_JG_ANIMATION_WAVING;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = func_80B74550;
@@ -307,7 +362,9 @@ void func_80B7408C(EnJg* this, GlobalContext* globalCtx) {
 
 void func_80B74134(EnJg* this, GlobalContext* globalCtx) {
     if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx) != 0)) {
-        if ((this->textId == 0xDCC) || (this->textId == 0xDDD) || (this->textId == 0xDE0)) {
+        if ((this->textId == TEXT_EN_JG_WERE_HOLDING_THE_GORON_RACES) ||
+            (this->textId == TEXT_EN_JG_THINK_IT_OVER_SLOWLY) ||
+            (this->textId == TEXT_EN_JG_GO_BEYOND_TWIN_ISLANDS_CAVE)) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags &= ~EN_JG_FLAG_4;
@@ -322,11 +379,11 @@ void func_80B74134(EnJg* this, GlobalContext* globalCtx) {
 void func_80B741F8(EnJg* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene) != 0) {
         switch (this->textId) {
-            case 0xDD0:
-            case 0xDD2:
-            case 0xDD3:
-            case 0xDD4:
-            case 0xDD6:
+            case TEXT_EN_JG_CHEER_GREATEST_GORON_HERO:
+            case TEXT_EN_JG_CHEER_THE_IMMORTAL_GORON:
+            case TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON:
+            case TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS:
+            case TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD:
                 this->shrineGoron = func_80B73A90(globalCtx, this->unk_3D0);
                 ActorCutscene_Start(this->cutscene, this->shrineGoron);
                 func_800E0308(globalCtx->cameraPtrs[0], this->shrineGoron);
@@ -417,7 +474,8 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
 
     if ((sp27 == 5) && (func_80147624(globalCtx))) {
         temp = this->textId;
-        if ((temp == 0xDB4) || (temp == 0xDB5) || (temp == 0xDC4) || (temp == 0xDC6)) {
+        if ((temp == TEXT_EN_JG_THIS_IS_OUR_PROBLEM_FIRST) || (temp == TEXT_EN_JG_THIS_IS_OUR_PROBLEM_REPEAT) ||
+            (temp == TEXT_EN_JG_SO_COLD_I_CANT_PLAY) || (temp == TEXT_EN_JG_I_AM_COUNTING_ON_YOU)) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags &= ~EN_JG_FLAG_4;
@@ -426,7 +484,7 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
         }
 
         temp = this->textId;
-        if ((temp == 0xDBB) || (temp == 0xDBC)) {
+        if ((temp == TEXT_EN_JG_I_CAN_SEE_PAST_THE_ILLUSION) || (temp == TEXT_EN_JG_FOLLOWING_ME_WONT_DO_ANY_GOOD)) {
             if (!(gSaveContext.weekEventReg[0x18] & 0x80)) {
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
@@ -502,7 +560,7 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
         if (this->animationIndex == EN_JG_ANIMATION_FROZEN_LOOP) {
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
                 this->animationIndex = EN_JG_ANIMATION_IDLE;
-                if (this->textId == 0xDAC) {
+                if (this->textId == TEXT_EN_JG_WHAT_WAS_I_DOING) {
                     func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
                     this->actionFunc = func_80B7406C;
                 } else {
@@ -514,8 +572,7 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
         }
     } else {
         if (func_800B84D0(&this->actor, globalCtx)) {
-            // Tatl tells you he's frozen solid
-            func_801518B0(globalCtx, 0x236, &this->actor);
+            func_801518B0(globalCtx, TEXT_EN_JG_TATL_HES_FROZEN_SOLID, &this->actor);
             this->actionFunc = EnJg_FrozenTalking;
         } else if (this->actor.isTargeted) {
             func_800B863C(&this->actor, globalCtx);
@@ -630,123 +687,123 @@ void func_80B74BC8(EnJg* this, GlobalContext* globalCtx) {
 
 s32 func_80B74E5C(EnJg* this) {
     switch (this->textId) {
-        case 0xDAC:
-            return 0xDAD;
+        case TEXT_EN_JG_WHAT_WAS_I_DOING:
+            return TEXT_EN_JG_I_MUST_HURRY;
 
-        case 0xDAE:
-            return 0xDB0;
+        case TEXT_EN_JG_HAVE_YOU_SOME_BUSINESS_WITH_ME:
+            return TEXT_EN_JG_ITS_THIS_COLD_SNAP;
 
-        case 0xDB0:
-            return 0xDB3;
+        case TEXT_EN_JG_ITS_THIS_COLD_SNAP:
+            return TEXT_EN_JG_AS_THE_ELDER_I_MUST_DO_SOMETHING;
 
-        case 0xDB3:
-            return 0xDB4;
+        case TEXT_EN_JG_AS_THE_ELDER_I_MUST_DO_SOMETHING:
+            return TEXT_EN_JG_THIS_IS_OUR_PROBLEM_FIRST;
 
-        case 0xDB6:
-            return 0xDB7;
+        case TEXT_EN_JG_HUNH:
+            return TEXT_EN_JG_OH_YOURE_DARMANI;
 
-        case 0xDB7:
-            return 0xDBA;
+        case TEXT_EN_JG_OH_YOURE_DARMANI:
+            return TEXT_EN_JG_IVE_BEEN_MADE_A_FOOL_OF;
 
-        case 0xDBA:
-            return 0xDBB;
+        case TEXT_EN_JG_IVE_BEEN_MADE_A_FOOL_OF:
+            return TEXT_EN_JG_I_CAN_SEE_PAST_THE_ILLUSION;
 
-        case 0xDBB:
-        case 0xDBC:
-            return 0xDC6;
+        case TEXT_EN_JG_I_CAN_SEE_PAST_THE_ILLUSION:
+        case TEXT_EN_JG_FOLLOWING_ME_WONT_DO_ANY_GOOD:
+            return TEXT_EN_JG_I_AM_COUNTING_ON_YOU;
 
-        case 0xDCB:
-            return 0xDCC;
+        case TEXT_EN_JG_WELCOME_TO_SPRING:
+            return TEXT_EN_JG_WERE_HOLDING_THE_GORON_RACES;
 
-        case 0xDDE:
-            return 0xDDF;
+        case TEXT_EN_JG_COME_BACK_AFTER_ENTERING_RACE:
+            return TEXT_EN_JG_MY_SON_IS_AWAITING_YOU;
 
-        case 0xDDF:
-            return 0xDE0;
+        case TEXT_EN_JG_MY_SON_IS_AWAITING_YOU:
+            return TEXT_EN_JG_GO_BEYOND_TWIN_ISLANDS_CAVE;
 
-        case 0xDCD:
-            return 0xDCE;
+        case TEXT_EN_JG_IVE_BEEN_WAITING_IMPATIENTLY:
+            return TEXT_EN_JG_I_HEARD_YOU_SEALED_THE_BLIZZARD;
 
-        case 0xDCE:
-            return 0xDCF;
+        case TEXT_EN_JG_I_HEARD_YOU_SEALED_THE_BLIZZARD:
+            return TEXT_EN_JG_SPRING_HAS_COME_THANKS_TO_YOU;
 
-        case 0xDCF:
+        case TEXT_EN_JG_SPRING_HAS_COME_THANKS_TO_YOU:
             this->unk_3D0 = 3;
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
             ActorCutscene_SetIntentToPlay(this->cutscene);
             this->actionFunc = func_80B741F8;
-            return 0xDD0;
+            return TEXT_EN_JG_CHEER_GREATEST_GORON_HERO;
 
-        case 0xDD0:
+        case TEXT_EN_JG_CHEER_GREATEST_GORON_HERO:
             func_80B73E3C(this);
-            return 0xDD1;
+            return TEXT_EN_JG_CHEER_DARMANI;
 
-        case 0xDD1:
+        case TEXT_EN_JG_CHEER_DARMANI:
             switch (this->unk_3D0) {
                 case 3:
                     this->unk_3D0 = 4;
                     func_80B73E3C(this);
-                    return 0xDD2;
+                    return TEXT_EN_JG_CHEER_THE_IMMORTAL_GORON;
 
                 case 4:
                     this->unk_3D0 = 5;
                     func_80B73E3C(this);
-                    return 0xDD3;
+                    return TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON;
 
                 case 5:
                     this->unk_3D0 = 6;
                     func_80B73E3C(this);
-                    return 0xDD4;
+                    return TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS;
 
                 default:
-                    return 0xDD4;
+                    return TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS;
             }
             break;
 
-        case 0xDD2:
+        case TEXT_EN_JG_CHEER_THE_IMMORTAL_GORON:
             func_80B73E3C(this);
-            return 0xDD1;
+            return TEXT_EN_JG_CHEER_DARMANI;
 
-        case 0xDD3:
+        case TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON:
             func_80B73E3C(this);
-            return 0xDD1;
+            return TEXT_EN_JG_CHEER_DARMANI;
 
-        case 0xDD4:
+        case TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS:
             func_80B73E3C(this);
-            return 0xDD5;
+            return TEXT_EN_JG_CHEER_GREATEST_OF_GORONS;
 
-        case 0xDD5:
+        case TEXT_EN_JG_CHEER_GREATEST_OF_GORONS:
             this->unk_3D0 = 7;
             func_80B73E3C(this);
-            return 0xDD6;
+            return TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD;
 
-        case 0xDD6:
+        case TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD:
             func_80B73E3C(this);
-            return 0xDD7;
+            return TEXT_EN_JG_CHEER_GREATEST_IN_THE_WORLD;
 
-        case 0xDD7:
+        case TEXT_EN_JG_CHEER_GREATEST_IN_THE_WORLD:
             this->unk_3D0 = 0xA;
             func_80B73E3C(this);
             this->flags &= ~EN_JG_FLAG_1;
-            return 0xDD8;
+            return TEXT_EN_JG_SON_WENT_TO_SEE_RACES;
 
-        case 0xDD8:
-            return 0xDD9;
+        case TEXT_EN_JG_SON_WENT_TO_SEE_RACES:
+            return TEXT_EN_JG_YIELD_PATRIARCH_TO_YOUNGER_ONE;
 
-        case 0xDD9:
-            return 0xDDA;
+        case TEXT_EN_JG_YIELD_PATRIARCH_TO_YOUNGER_ONE:
+            return TEXT_EN_JG_GORON_WHO_TAKES_CARE_OF_ALL;
 
-        case 0xDDA:
-            return 0xDDB;
+        case TEXT_EN_JG_GORON_WHO_TAKES_CARE_OF_ALL:
+            return TEXT_EN_JG_THE_CHOSEN_ONE_DARMANI;
 
-        case 0xDDB:
-            return 0xDDC;
+        case TEXT_EN_JG_THE_CHOSEN_ONE_DARMANI:
+            return TEXT_EN_JG_EVERYONE_WOULD_ACCEPT_YOU;
 
-        case 0xDDC:
+        case TEXT_EN_JG_EVERYONE_WOULD_ACCEPT_YOU:
             gSaveContext.weekEventReg[0x4D] |= 0x80;
-            return 0xDDD;
+            return TEXT_EN_JG_THINK_IT_OVER_SLOWLY;
 
         default:
             return 0;
@@ -760,24 +817,24 @@ s32 func_80B750A0(EnJg* this, GlobalContext* globalCtx) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if ((gSaveContext.weekEventReg[0x18] & 0x10) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
-                return 0xDBC;
+                return TEXT_EN_JG_FOLLOWING_ME_WONT_DO_ANY_GOOD;
             }
-            return 0xDB6;
+            return TEXT_EN_JG_HUNH;
         }
         if (gSaveContext.weekEventReg[0x18] & 0x20) {
-            return 0xDB5;
+            return TEXT_EN_JG_THIS_IS_OUR_PROBLEM_REPEAT;
         }
-        return 0xDAE;
+        return TEXT_EN_JG_HAVE_YOU_SOME_BUSINESS_WITH_ME;
     }
 
     if (player->transformation == PLAYER_FORM_GORON) {
         if (gSaveContext.weekEventReg[0x4D] & 0x80) {
-            return 0xDDE;
+            return TEXT_EN_JG_COME_BACK_AFTER_ENTERING_RACE;
         }
-        return 0xDCD;
+        return TEXT_EN_JG_IVE_BEEN_WAITING_IMPATIENTLY;
     }
 
-    return 0xDCB;
+    return TEXT_EN_JG_WELCOME_TO_SPRING;
 }
 
 void EnJg_SpawnBreath(EnJg* this, GlobalContext* globalCtx) {
@@ -796,11 +853,11 @@ void func_80B751F8(EnJg* this, GlobalContext* globalCtx) {
         this->flags |= EN_JG_FLAG_4;
         this->actor.speedXZ = 0.0f;
 
-        if (this->textId == 0xDAC) {
+        if (this->textId == TEXT_EN_JG_WHAT_WAS_I_DOING) {
             this->action = EN_JG_ACTION_UNK0;
-        } else if (this->textId == 0xDAE) {
+        } else if (this->textId == TEXT_EN_JG_HAVE_YOU_SOME_BUSINESS_WITH_ME) {
             gSaveContext.weekEventReg[0x18] |= 0x20;
-        } else if (this->textId == 0xDB6) {
+        } else if (this->textId == TEXT_EN_JG_HUNH) {
             gSaveContext.weekEventReg[0x18] |= 0x10;
         }
 
@@ -849,7 +906,7 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->animationIndex = EN_JG_ANIMATION_SURPRISE_START;
             this->action = EN_JG_ACTION_SPAWNING;
             this->freezeTimer = 1000;
-            this->textId = 0xDAC;
+            this->textId = TEXT_EN_JG_WHAT_WAS_I_DOING;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = EnJg_Freeze;
         }
@@ -897,6 +954,7 @@ s32 EnJg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
             Matrix_RotateY(this->rootRotationWhenTalking, MTXMODE_APPLY);
         }
     }
+
     return false;
 }
 
