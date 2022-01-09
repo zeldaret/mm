@@ -788,7 +788,7 @@ void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* arg2, s16* arg3)
 s32 func_800B8934(GlobalContext* globalCtx, Actor* actor);
 u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx);
 UNK_TYPE4 func_800B8A1C(Actor* actor, GlobalContext* globalCtx, s32 iParm3, f32 fParm4, f32 param_5);
-// void func_800B8B84(void);
+void func_800B8B84(Actor* actor, GlobalContext* globalCtx, s32 arg2);
 void func_800B8BB0(Actor* actor, GlobalContext* globalCtx);
 // void func_800B8BD0(void);
 s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx);

@@ -1280,8 +1280,7 @@ beginseg
     name "ovl_En_Karebaba"
     compress
     include "build/src/overlays/actors/ovl_En_Karebaba/z_en_karebaba.o"
-    include "build/data/ovl_En_Karebaba/ovl_En_Karebaba.data.o"
-    include "build/data/ovl_En_Karebaba/ovl_En_Karebaba.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Karebaba/ovl_En_Karebaba_reloc.o"
 endseg
 
 beginseg
