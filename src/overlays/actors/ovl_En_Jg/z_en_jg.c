@@ -822,7 +822,7 @@ s32 EnJg_GetNextTextId(EnJg* this) {
 s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((this->actor.params & 1) == 0) {
+    if (!EN_JG_IS_IN_GORON_SHRINE(&this->actor)) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if ((gSaveContext.weekEventReg[0x18] & 0x10) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
@@ -910,7 +910,7 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    if ((thisx->params & 1) == 0) {
+    if (!EN_JG_IS_IN_GORON_SHRINE(thisx)) {
         if (globalCtx->sceneNum == SCENE_SPOT00 && gSaveContext.sceneSetupIndex == 7 && globalCtx->csCtx.unk_12 == 0) {
             this->animationIndex = EN_JG_ANIMATION_IDLE;
             this->action = EN_JG_ACTION_LULLABY_INTRO_CS;
@@ -947,7 +947,7 @@ void EnJg_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         SkelAnime_Update(&this->skelAnime);
 
-        if (this->action != EN_JG_ACTION_LULLABY_INTRO_CS && ((this->actor.params & 1) == 0)) {
+        if (this->action != EN_JG_ACTION_LULLABY_INTRO_CS && (!EN_JG_IS_IN_GORON_SHRINE(&this->actor))) {
             EnJg_SpawnBreath(this, globalCtx);
         }
 

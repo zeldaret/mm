@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#define EN_JG_IS_IN_GORON_SHRINE(thisx) ((thisx)->params & 0x1)
 #define EN_JG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
 
 #define EN_JG_FLAG_1 (1 << 0)
