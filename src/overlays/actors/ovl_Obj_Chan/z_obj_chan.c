@@ -39,7 +39,6 @@ const ActorInit Obj_Chan_InitVars = {
     (ActorFunc)ObjChan_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit sObjChanCylinderInit = {
     {
         COLTYPE_HARD,
