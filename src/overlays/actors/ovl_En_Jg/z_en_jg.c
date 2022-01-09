@@ -72,7 +72,7 @@ void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnJg_FrozenTalking(EnJg* this, GlobalContext* globalCtx);
+void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx);
 void func_80B74134(EnJg* this, GlobalContext* globalCtx);
 s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx);
 void func_80B751F8(EnJg* this, GlobalContext* globalCtx);
@@ -82,7 +82,7 @@ void func_80B747C8(EnJg* this, GlobalContext* globalCtx);
 void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx);
 s32 func_80B74E5C(EnJg* this);
 void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx);
-void func_80B74440(EnJg* this, GlobalContext* globalCtx);
+void EnJg_Walk(EnJg* this, GlobalContext* globalCtx);
 void func_80B741F8(EnJg* this, GlobalContext* globalCtx);
 void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx);
 
@@ -200,14 +200,14 @@ void EnJg_UpdateCollision(EnJg* this, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 30.0f, 30.0f, 7);
 }
 
-s16 func_80B73B98(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
+s16 EnJg_GetWalkingYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) {
     Vec3s* points;
     f32 diffX;
     f32 diffZ;
 
     if (path != NULL) {
         points = Lib_SegmentedToVirtual(path->points);
-        points = &points[idx];
+        points = &points[pointIndex];
         diffX = points[0].x - pos->x;
         diffZ = points[0].z - pos->z;
     } else {
@@ -220,37 +220,39 @@ s16 func_80B73B98(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
     return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
 }
 
-s32 func_80B73C58(EnJg* this, Path* path, s32 arg2) {
-    Vec3s* sp5C = (Vec3s*)Lib_SegmentedToVirtual(path->points);
-    s32 count = path->count;
-    s32 idx = arg2;
-    s32 ret = false;
-    f32 phi_f12;
-    f32 phi_f14;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+s32 EnJg_ReachedPoint(EnJg* this, Path* path, s32 pointIndex) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 pathCount = path->count;
+    s32 currentPoint = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
-    if (idx == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
-    } else if ((count - 1) == idx) {
-        phi_f12 = sp5C[count - 1].x - sp5C[count - 2].x;
-        phi_f14 = sp5C[count - 1].z - sp5C[count - 2].z;
+    Math_Vec3s_ToVec3f(&point, &points[pointIndex]);
+    if (currentPoint == 0) {
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
     } else {
-        phi_f12 = sp5C[idx + 1].x - sp5C[idx - 1].x;
-        phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
+        if (currentPoint == (pathCount - 1)) {
+            diffX = points[pathCount - 1].x - points[pathCount - 2].x;
+            diffZ = points[pathCount - 1].z - points[pathCount - 2].z;
+        } else {
+            diffX = points[currentPoint + 1].x - points[currentPoint - 1].x;
+            diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
+        }
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
 
-    if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        ret = true;
+    if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
 
-    return ret;
+    return reached;
 }
 
 s16 EnJg_GetCutsceneForTeachingLullabyIntro(EnJg* this) {
@@ -348,7 +350,7 @@ void func_80B73F1C(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B7406C(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_Idle(EnJg* this, GlobalContext* globalCtx) {
     func_80B751F8(this, globalCtx);
 }
 
@@ -427,7 +429,7 @@ void func_80B742F8(EnJg* this, GlobalContext* globalCtx) {
             this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
             this->animationIndex = EN_JG_ANIMATION_WALK;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-            this->actionFunc = func_80B74440;
+            this->actionFunc = EnJg_Walk;
         }
     } else if (this->animationIndex == EN_JG_ANIMATION_WALK) {
         Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
@@ -435,25 +437,25 @@ void func_80B742F8(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B74440(EnJg* this, GlobalContext* globalCtx) {
-    s16 phi_a1;
-    f32 sp30;
+void EnJg_Walk(EnJg* this, GlobalContext* globalCtx) {
+    s16 yRotation;
+    f32 distSQ;
 
     if (this->path != NULL) {
-        phi_a1 = func_80B73B98(this->path, this->unk_1E4, &this->actor.world.pos, &sp30);
+        yRotation = EnJg_GetWalkingYRotation(this->path, this->currentPoint, &this->actor.world.pos, &distSQ);
         if (this->actor.bgCheckFlags & 8) {
-            phi_a1 = this->actor.wallYaw;
+            yRotation = this->actor.wallYaw;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y, yRotation, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
 
-        if (func_80B73C58(this, this->path, this->unk_1E4)) {
-            if (this->unk_1E4 >= (this->path->count - 1)) {
+        if (EnJg_ReachedPoint(this, this->path, this->currentPoint)) {
+            if (this->currentPoint >= (this->path->count - 1)) {
                 this->animationIndex = EN_JG_ANIMATION_WALK;
                 this->actionFunc = func_80B742F8;
             } else {
-                this->unk_1E4++;
+                this->currentPoint++;
                 Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
             }
         } else {
@@ -522,10 +524,10 @@ void func_80B747C8(EnJg* this, GlobalContext* globalCtx) {
         this->animationIndex = EN_JG_ANIMATION_WALK;
         this->freezeTimer = 1000;
         func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-        this->actionFunc = func_80B74440;
+        this->actionFunc = EnJg_Walk;
     } else {
         this->freezeTimer = 1000;
-        this->actionFunc = func_80B74440;
+        this->actionFunc = EnJg_Walk;
     }
 }
 
@@ -565,25 +567,25 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
                 this->animationIndex = EN_JG_ANIMATION_IDLE;
                 if (this->textId == TEXT_EN_JG_WHAT_WAS_I_DOING) {
                     func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-                    this->actionFunc = func_80B7406C;
+                    this->actionFunc = EnJg_Idle;
                 } else {
                     this->freezeTimer = 1000;
                     func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-                    this->actionFunc = func_80B74440;
+                    this->actionFunc = EnJg_Walk;
                 }
             }
         }
     } else {
         if (func_800B84D0(&this->actor, globalCtx)) {
             func_801518B0(globalCtx, TEXT_EN_JG_TATL_HES_FROZEN_SOLID, &this->actor);
-            this->actionFunc = EnJg_FrozenTalking;
+            this->actionFunc = EnJg_EndFrozenInteraction;
         } else if (this->actor.isTargeted) {
             func_800B863C(&this->actor, globalCtx);
         }
     }
 }
 
-void EnJg_FrozenTalking(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) != 0) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
@@ -685,7 +687,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
         this->csAction = 99;
         this->freezeTimer = 1000;
         gSaveContext.weekEventReg[0x18] |= 0x40;
-        this->actionFunc = func_80B7406C;
+        this->actionFunc = EnJg_Idle;
     }
 }
 
@@ -934,7 +936,7 @@ void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnJg_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnJg* this = THIS;
 
-    if (this->actionFunc != EnJg_FrozenIdle && this->actionFunc != EnJg_FrozenTalking) {
+    if (this->actionFunc != EnJg_FrozenIdle && this->actionFunc != EnJg_EndFrozenInteraction) {
         EnJg_UpdateCollision(this, globalCtx);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         SkelAnime_Update(&this->skelAnime);

@@ -91,7 +91,7 @@ typedef struct EnJg {
     /* 0x198 */ SkelAnime skelAnime;
     /* 0x1DC */ EnJgActionFunc actionFunc;
     /* 0x1E0 */ Path* path;
-    /* 0x1E4 */ s32 unk_1E4;
+    /* 0x1E4 */ s32 currentPoint;
     /* 0x1E8 */ Actor* drum;
     /* 0x1EC */ Vec3s unusedRotation1; // probably meant to be a head rotation to look at the player
     /* 0x1F2 */ Vec3s unusedRotation2; // probably meant to be a body rotation to look at the player
