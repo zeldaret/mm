@@ -74,14 +74,14 @@ void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnJg_FrozenTalking(EnJg* this, GlobalContext* globalCtx);
 void func_80B74134(EnJg* this, GlobalContext* globalCtx);
-s32 func_80B750A0(EnJg* this, GlobalContext* globalCtx);
+s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx);
 void func_80B751F8(EnJg* this, GlobalContext* globalCtx);
 void func_80B74550(EnJg* this, GlobalContext* globalCtx);
 void func_80B742F8(EnJg* this, GlobalContext* globalCtx);
 void func_80B747C8(EnJg* this, GlobalContext* globalCtx);
-void func_80B74B54(EnJg* this, GlobalContext* globalCtx);
+void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx);
 s32 func_80B74E5C(EnJg* this);
-void func_80B74BC8(EnJg* this, GlobalContext* globalCtx);
+void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx);
 void func_80B74440(EnJg* this, GlobalContext* globalCtx);
 void func_80B741F8(EnJg* this, GlobalContext* globalCtx);
 void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx);
@@ -190,7 +190,7 @@ Actor* func_80B73A90(GlobalContext* globalCtx, u8 arg1) {
     return NULL;
 }
 
-void EnJg_CheckCollision(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_UpdateCollision(EnJg* this, GlobalContext* globalCtx) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
@@ -253,7 +253,7 @@ s32 func_80B73C58(EnJg* this, Path* path, s32 arg2) {
     return ret;
 }
 
-s16 func_80B73DF4(EnJg* this) {
+s16 EnJg_GetCutsceneForTeachingLullabyIntro(EnJg* this) {
     s16 temp = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     if (temp > 0) {
@@ -263,9 +263,12 @@ s16 func_80B73DF4(EnJg* this) {
     return ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
 }
 
-void func_80B73E3C(EnJg* this) {
+/**
+ * Maybe rename this
+ */
+void EnJg_SetupCheerCutscene(EnJg* this) {
     ActorCutscene_Stop(this->cutscene);
-    if (this->unk_3D0 == 0xA) {
+    if (this->cheerState == 0xA) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             this->actionFunc = func_80B74134;
         } else {
@@ -349,14 +352,14 @@ void func_80B7406C(EnJg* this, GlobalContext* globalCtx) {
     func_80B751F8(this, globalCtx);
 }
 
-void func_80B7408C(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_GoronShrineIdle(EnJg* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
-        this->flags |= EN_JG_FLAG_4;
+        this->flags |= EN_JG_FLAG_LOOKING_AT_PLAYER;
         func_801518B0(globalCtx, this->textId, &this->actor);
         this->actionFunc = func_80B74134;
     } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
         func_800B863C(&this->actor, globalCtx);
-        this->textId = func_80B750A0(this, globalCtx);
+        this->textId = EnJg_GetStartingConversationTextId(this, globalCtx);
     }
 }
 
@@ -367,8 +370,8 @@ void func_80B74134(EnJg* this, GlobalContext* globalCtx) {
             (this->textId == TEXT_EN_JG_GO_BEYOND_TWIN_ISLANDS_CAVE)) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
-            this->flags &= ~EN_JG_FLAG_4;
-            this->actionFunc = func_80B7408C;
+            this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
+            this->actionFunc = EnJg_GoronShrineIdle;
         } else {
             this->textId = func_80B74E5C(this);
             func_801518B0(globalCtx, this->textId, &this->actor);
@@ -384,7 +387,7 @@ void func_80B741F8(EnJg* this, GlobalContext* globalCtx) {
             case TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON:
             case TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS:
             case TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD:
-                this->shrineGoron = func_80B73A90(globalCtx, this->unk_3D0);
+                this->shrineGoron = func_80B73A90(globalCtx, this->cheerState);
                 ActorCutscene_Start(this->cutscene, this->shrineGoron);
                 func_800E0308(globalCtx->cameraPtrs[0], this->shrineGoron);
                 break;
@@ -397,7 +400,7 @@ void func_80B741F8(EnJg* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80B74134;
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            if (this->unk_3D0 == 0xA) {
+            if (this->cheerState == 0xA) {
                 this->actionFunc = func_80B74134;
             } else {
                 ActorCutscene_Stop(0x7C);
@@ -421,7 +424,7 @@ void func_80B742F8(EnJg* this, GlobalContext* globalCtx) {
         if ((sp27 == 5) && (func_80147624(globalCtx) != 0)) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
-            this->flags &= ~EN_JG_FLAG_4;
+            this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
             this->animationIndex = EN_JG_ANIMATION_WALK;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = func_80B74440;
@@ -478,7 +481,7 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
             (temp == TEXT_EN_JG_SO_COLD_I_CANT_PLAY) || (temp == TEXT_EN_JG_I_AM_COUNTING_ON_YOU)) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
-            this->flags &= ~EN_JG_FLAG_4;
+            this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = func_80B747C8;
             return;
         }
@@ -488,7 +491,7 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
             if (!(gSaveContext.weekEventReg[0x18] & 0x80)) {
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
-                this->flags &= ~EN_JG_FLAG_4;
+                this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
                 this->actionFunc = func_80B747C8;
             } else if (((gSaveContext.weekEventReg[0x18] & 0x40) != 0) ||
                        (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
@@ -498,13 +501,13 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
             } else {
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
-                this->flags &= ~EN_JG_FLAG_4;
-                this->cutscene = func_80B73DF4(this);
+                this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
+                this->cutscene = EnJg_GetCutsceneForTeachingLullabyIntro(this);
                 if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                     ActorCutscene_Stop(0x7C);
                 }
                 ActorCutscene_SetIntentToPlay(this->cutscene);
-                this->actionFunc = func_80B74B54;
+                this->actionFunc = EnJg_TeachLullabyIntro;
             }
         } else {
             this->textId = func_80B74E5C(this);
@@ -588,10 +591,10 @@ void EnJg_FrozenTalking(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B74B54(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->actor);
-        this->actionFunc = func_80B74BC8;
+        this->actionFunc = EnJg_LullabyIntroCutsceneAction;
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -600,7 +603,7 @@ void func_80B74B54(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B74BC8(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (func_800EE29C(globalCtx, 0x1D6)) {
@@ -654,6 +657,7 @@ void func_80B74BC8(EnJg* this, GlobalContext* globalCtx) {
                     this->cutsceneAnimationIndex = EN_JG_ANIMATION_IDLE;
                     break;
             }
+
             func_8013BC6C(&this->skelAnime, sAnimations, this->cutsceneAnimationIndex);
         }
 
@@ -728,7 +732,7 @@ s32 func_80B74E5C(EnJg* this) {
             return TEXT_EN_JG_SPRING_HAS_COME_THANKS_TO_YOU;
 
         case TEXT_EN_JG_SPRING_HAS_COME_THANKS_TO_YOU:
-            this->unk_3D0 = 3;
+            this->cheerState = 3;
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
@@ -737,24 +741,24 @@ s32 func_80B74E5C(EnJg* this) {
             return TEXT_EN_JG_CHEER_GREATEST_GORON_HERO;
 
         case TEXT_EN_JG_CHEER_GREATEST_GORON_HERO:
-            func_80B73E3C(this);
+            EnJg_SetupCheerCutscene(this);
             return TEXT_EN_JG_CHEER_DARMANI;
 
         case TEXT_EN_JG_CHEER_DARMANI:
-            switch (this->unk_3D0) {
+            switch (this->cheerState) {
                 case 3:
-                    this->unk_3D0 = 4;
-                    func_80B73E3C(this);
+                    this->cheerState = 4;
+                    EnJg_SetupCheerCutscene(this);
                     return TEXT_EN_JG_CHEER_THE_IMMORTAL_GORON;
 
                 case 4:
-                    this->unk_3D0 = 5;
-                    func_80B73E3C(this);
+                    this->cheerState = 5;
+                    EnJg_SetupCheerCutscene(this);
                     return TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON;
 
                 case 5:
-                    this->unk_3D0 = 6;
-                    func_80B73E3C(this);
+                    this->cheerState = 6;
+                    EnJg_SetupCheerCutscene(this);
                     return TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS;
 
                 default:
@@ -763,29 +767,29 @@ s32 func_80B74E5C(EnJg* this) {
             break;
 
         case TEXT_EN_JG_CHEER_THE_IMMORTAL_GORON:
-            func_80B73E3C(this);
+            EnJg_SetupCheerCutscene(this);
             return TEXT_EN_JG_CHEER_DARMANI;
 
         case TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON:
-            func_80B73E3C(this);
+            EnJg_SetupCheerCutscene(this);
             return TEXT_EN_JG_CHEER_DARMANI;
 
         case TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS:
-            func_80B73E3C(this);
+            EnJg_SetupCheerCutscene(this);
             return TEXT_EN_JG_CHEER_GREATEST_OF_GORONS;
 
         case TEXT_EN_JG_CHEER_GREATEST_OF_GORONS:
-            this->unk_3D0 = 7;
-            func_80B73E3C(this);
+            this->cheerState = 7;
+            EnJg_SetupCheerCutscene(this);
             return TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD;
 
         case TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD:
-            func_80B73E3C(this);
+            EnJg_SetupCheerCutscene(this);
             return TEXT_EN_JG_CHEER_GREATEST_IN_THE_WORLD;
 
         case TEXT_EN_JG_CHEER_GREATEST_IN_THE_WORLD:
-            this->unk_3D0 = 0xA;
-            func_80B73E3C(this);
+            this->cheerState = 0xA;
+            EnJg_SetupCheerCutscene(this);
             this->flags &= ~EN_JG_FLAG_1;
             return TEXT_EN_JG_SON_WENT_TO_SEE_RACES;
 
@@ -810,7 +814,7 @@ s32 func_80B74E5C(EnJg* this) {
     }
 }
 
-s32 func_80B750A0(EnJg* this, GlobalContext* globalCtx) {
+s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((this->actor.params & 1) == 0) {
@@ -819,11 +823,14 @@ s32 func_80B750A0(EnJg* this, GlobalContext* globalCtx) {
                 CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
                 return TEXT_EN_JG_FOLLOWING_ME_WONT_DO_ANY_GOOD;
             }
+
             return TEXT_EN_JG_HUNH;
         }
+
         if (gSaveContext.weekEventReg[0x18] & 0x20) {
             return TEXT_EN_JG_THIS_IS_OUR_PROBLEM_REPEAT;
         }
+
         return TEXT_EN_JG_HAVE_YOU_SOME_BUSINESS_WITH_ME;
     }
 
@@ -850,7 +857,7 @@ void func_80B751F8(EnJg* this, GlobalContext* globalCtx) {
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
-        this->flags |= EN_JG_FLAG_4;
+        this->flags |= EN_JG_FLAG_LOOKING_AT_PLAYER;
         this->actor.speedXZ = 0.0f;
 
         if (this->textId == TEXT_EN_JG_WHAT_WAS_I_DOING) {
@@ -867,7 +874,7 @@ void func_80B751F8(EnJg* this, GlobalContext* globalCtx) {
         if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
             func_800B863C(&this->actor, globalCtx);
             if (this->action == EN_JG_ACTION_UNK0) {
-                this->textId = func_80B750A0(this, globalCtx);
+                this->textId = EnJg_GetStartingConversationTextId(this, globalCtx);
             }
         }
 
@@ -900,7 +907,7 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->animationIndex = EN_JG_ANIMATION_IDLE;
             this->action = EN_JG_ACTION_LULLABY_INTRO_CS;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-            this->actionFunc = func_80B74BC8;
+            this->actionFunc = EnJg_LullabyIntroCutsceneAction;
         } else {
             this->path = func_8013D648(globalCtx, EN_JG_GET_PATH(thisx), 0x3F);
             this->animationIndex = EN_JG_ANIMATION_SURPRISE_START;
@@ -914,7 +921,7 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->animationIndex = EN_JG_ANIMATION_IDLE;
         this->cutscene = this->actor.cutscene;
         func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-        this->actionFunc = func_80B7408C;
+        this->actionFunc = EnJg_GoronShrineIdle;
     }
 }
 
@@ -928,7 +935,7 @@ void EnJg_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnJg* this = THIS;
 
     if (this->actionFunc != EnJg_FrozenIdle && this->actionFunc != EnJg_FrozenTalking) {
-        EnJg_CheckCollision(this, globalCtx);
+        EnJg_UpdateCollision(this, globalCtx);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         SkelAnime_Update(&this->skelAnime);
 
@@ -945,7 +952,7 @@ s32 EnJg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnJg* this = THIS;
 
     if (limbIndex == EN_JG_LIMB_ROOT) {
-        if (this->flags & EN_JG_FLAG_4) {
+        if (this->flags & EN_JG_FLAG_LOOKING_AT_PLAYER) {
             Math_SmoothStepToS(&this->rootRotationWhenTalking, this->actor.yawTowardsPlayer - this->actor.shape.rot.y,
                                5, 0x1000, 0x100);
             Matrix_RotateY(this->rootRotationWhenTalking, MTXMODE_APPLY);

@@ -6,8 +6,7 @@
 #define EN_JG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
 
 #define EN_JG_FLAG_1 (1 << 0)
-#define EN_JG_FLAG_2 (1 << 1)
-#define EN_JG_FLAG_4 (1 << 2)
+#define EN_JG_FLAG_LOOKING_AT_PLAYER (1 << 2)
 #define EN_JG_FLAG_DRUM_SPAWNED (1 << 3)
 
 typedef enum {
@@ -110,7 +109,7 @@ typedef struct EnJg {
     /* 0x3CB */ u8 csAction;
     /* 0x3CC */ u16 flags;
     /* 0x3CE */ u16 textId;
-    /* 0x3D0 */ u8 unk_3D0;
+    /* 0x3D0 */ u8 cheerState; // maybe rename this
 } EnJg; // size = 0x3D4
 
 extern const ActorInit En_Jg_InitVars;
