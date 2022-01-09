@@ -420,7 +420,7 @@ void Distortion_ClearType(s32 type) {
  */
 s32 Distortion_GetUnderwaterCurrentSpeed(Player* player) {
     if (SurfaceType_GetConveyorType(&sDistortionContext.globalCtx->colCtx, player->actor.floorPoly,
-                                    player->actor.floorBgId) == 0) {
+                                    player->actor.floorBgId) == CONVEYOR_WATER) {
         return SurfaceType_GetConveyorSpeed(&sDistortionContext.globalCtx->colCtx, player->actor.floorPoly,
                                             player->actor.floorBgId);
     }
