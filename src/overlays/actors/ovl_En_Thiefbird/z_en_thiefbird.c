@@ -401,12 +401,12 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
             sp64.y = player->actor.world.pos.y + 20.0f;
             sp64.z = (Math_CosS(phi_s3) * 40.0f) + player->actor.world.pos.z;
             if (dropItem00Ids[i] != ITEM00_NO_DROP) {
-                EnItem00* temp_s1_5 = Item_DropCollectible(globalCtx, &sp64, dropItem00Ids[i]);
+                Actor* temp_s1_5 = Item_DropCollectible(globalCtx, &sp64, dropItem00Ids[i]);
 
                 if (temp_s1_5 != NULL) {
-                    temp_s1_5->actor.velocity.y = Rand_ZeroFloat(3.0f) + 6.0f;
-                    temp_s1_5->actor.speedXZ = Rand_ZeroFloat(3.0f) + 3.0f;
-                    temp_s1_5->actor.world.rot.y = phi_s3;
+                    temp_s1_5->velocity.y = Rand_ZeroFloat(3.0f) + 6.0f;
+                    temp_s1_5->speedXZ = Rand_ZeroFloat(3.0f) + 3.0f;
+                    temp_s1_5->world.rot.y = phi_s3;
                 }
                 phi_s3 += (s16)(0x10000 / (spB0 + spAC + phi_s0_2 + spA0 + phi_s2 + spA8));
             }
@@ -429,7 +429,7 @@ void func_80C11338(EnThiefbird* this, GlobalContext* globalCtx) {
     this->unk_3EC = NULL;
 
     do {
-        item = (EnItem00*)func_ActorCategoryIterateById(globalCtx, &item->actor, ACTORCAT_MISC, ACTOR_EN_ITEM00);
+        item = (EnItem00*)SubS_FindActor(globalCtx, &item->actor, ACTORCAT_MISC, ACTOR_EN_ITEM00);
         if (item != NULL) {
             if (item->unk152 > 0) {
                 if (Actor_XZDistanceBetweenActors(&player->actor, &item->actor) > 10.0f) {
@@ -658,7 +658,7 @@ void func_80C11DF0(EnThiefbird* this, GlobalContext* globalCtx) {
 
     if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
         for (i = 0; i < ARRAY_COUNT(this->unk_350); i++) {
-            func_800B3030(globalCtx, &this->unk_350[i], &D_801D15B0, &D_801D15B0, 0x8C, 0, 0);
+            func_800B3030(globalCtx, &this->unk_350[i], &gZeroVec3f, &gZeroVec3f, 0x8C, 0, 0);
         }
 
         Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);

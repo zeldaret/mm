@@ -6,6 +6,7 @@
 
 #include "z_en_dno.h"
 #include "overlays/actors/ovl_Bg_Crace_Movebg/z_bg_crace_movebg.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000039
 
@@ -134,7 +135,7 @@ void func_80A714B4(EnDno* this, GlobalContext* globalCtx) {
     Actor* actor = NULL;
 
     do {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
+        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
             if ((s32)ENDNO_GET_F(actor) == ENDNO_GET_F_1) {
                 Actor_SetSwitchFlag(globalCtx, ENDNO_GET_7F0(actor));
@@ -164,8 +165,7 @@ void func_80A715DC(EnDno* this, GlobalContext* globalCtx) {
     Vec3f sp70;
 
     do {
-        crace =
-            (BgCraceMovebg*)func_ActorCategoryIterateById(globalCtx, &crace->actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
+        crace = (BgCraceMovebg*)SubS_FindActor(globalCtx, &crace->actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (crace != NULL) {
             if (ENDNO_GET_F(&crace->actor) == ENDNO_GET_F_0 && !(crace->unk_170 & 1)) {
                 if (func_8013E5CC(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C, &this->actor.prevPos,
@@ -187,7 +187,7 @@ void func_80A71788(EnDno* this, GlobalContext* globalCtx) {
     Actor* actor = NULL;
 
     do {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
+        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
             Actor_UnsetSwitchFlag(globalCtx, ENDNO_GET_7F0(actor));
             actor = actor->next;
@@ -201,7 +201,7 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor* actor = NULL;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_DNO);
+        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_DNO);
         if (actor != NULL) {
             if (actor != thisx) {
                 Actor_MarkForDeath(thisx);
@@ -248,7 +248,7 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
                         Actor_MarkForDeath(thisx);
                     } else {
                         func_8013E1C8(&this->skelAnime, sAnimations, 13, &this->unk_32C);
-                        this->unk_460 = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_DNQ);
+                        this->unk_460 = SubS_FindActor(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_DNQ);
                         if (this->unk_460 == NULL) {
                             Actor_MarkForDeath(thisx);
                         } else {
@@ -1015,7 +1015,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, -frames * 20, 0x20, 0x80));
         gDPSetPrimColor(&gfxXlu[2], 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(&gfxXlu[3], 255, 0, 0, 0);
-        gSPDisplayList(&gfxXlu[4], D_0407D590);
+        gSPDisplayList(&gfxXlu[4], gGameplayKeepDrawFlameDL);
 
         POLY_XLU_DISP = gfxXlu + 5;
 

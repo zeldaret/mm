@@ -50,27 +50,7 @@ We recommend using Debian or Ubuntu 20.04 Linux distributions.
 
 ### MacOS
 
-For macOS, use Homebrew to install the following dependencies:
-
-* coreutils
-* make
-* python3
-* libpng
-
-You can install them with the following commands:
-
-```bash
-brew update
-brew install coreutils make python3 libpng
-```
-
-(The repository expects Homebrew-installed programs to be either linked correctly in `$PATH` etc. or in their default locations.)
-
-You'll also need to [build and install mips-linux-binutils](docs/BUILDING_BINUTILS_MACOS.md).
-
-Apple's version of `make` is very out-of-date, so you should use the brew-installed `gmake` in place of `make` from now on.
-
-You should now be able to continue from [step 2](#2-clone-the-repository) of the Linux instructions.
+Preparation is covered in a [separate document](docsBUILDING_MACOS.md).
 
 
 ### Linux (Native or under WSL / VM)

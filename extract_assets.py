@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-import argparse, json, os, signal, time, colorama
-from multiprocessing import *
+import argparse, json, os, signal, time, colorama, multiprocessing
 
-colorama.init();
+colorama.init()
 
 EXTRACTED_ASSETS_NAMEFILE = ".extracted-assets.json"
 
@@ -77,27 +76,27 @@ def main():
     parser.add_argument("-Z", help="Pass the argument on to ZAPD, e.g. `-ZWunaccounted` to warn about unaccounted blocks in XMLs. Each argument should be passed separately, *without* the leading dash.", metavar="ZAPD_ARG", action="append")
     args = parser.parse_args()
 
-    global ZAPDArgs;
-    ZAPDArgs = "";
+    global ZAPDArgs
+    ZAPDArgs = ""
     if args.Z is not None:
-        badZAPDArg = False;
+        badZAPDArg = False
         for i in range(len(args.Z)):
             z = args.Z[i]
             if z[0] == '-':
-                print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: argument \"{z}\" starts with \"-\", which is not supported.", file=os.sys.stderr);
-                badZAPDArg = True;
+                print(f"{colorama.Fore.LIGHTRED_EX}error{colorama.Fore.RESET}: argument \"{z}\" starts with \"-\", which is not supported.", file=os.sys.stderr)
+                badZAPDArg = True
             else:
-                args.Z[i] = "-" + z;
+                args.Z[i] = "-" + z
 
         if badZAPDArg:
-            exit(1);
+            exit(1)
 
-        ZAPDArgs = " ".join(args.Z);
-        print("Using extra ZAPD arguments: " + ZAPDArgs);
+        ZAPDArgs = " ".join(args.Z)
+        print("Using extra ZAPD arguments: " + ZAPDArgs)
 
     global mainAbort
-    mainAbort = Event()
-    manager = Manager()
+    mainAbort = multiprocessing.Event()
+    manager = multiprocessing.Manager()
     signal.signal(signal.SIGINT, SignalHandler)
 
     extractedAssetsTracker = manager.dict()
@@ -130,9 +129,9 @@ def main():
             if numCores <= 0:
                 numCores = 1
             print("Extracting assets with " + str(numCores) + " CPU core" + ("s" if numCores > 1 else "") + ".")
-            with get_context("fork").Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
+            with multiprocessing.get_context("fork").Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
                 p.map(ExtractFunc, xmlFiles)
-        except (ProcessError, TypeError):
+        except (multiprocessing.ProcessError, TypeError):
             print("Warning: Multiprocessing exception ocurred.", file=os.sys.stderr)
             print("Disabling mutliprocessing.", file=os.sys.stderr)
 
