@@ -6,6 +6,7 @@
 
 #include "z_en_jg.h"
 #include "objects/object_jg/object_jg.h"
+#include "overlays/actors/ovl_En_S_Goro/z_en_s_goro.h"
 
 #define FLAGS 0x00000019
 
@@ -126,7 +127,7 @@ Actor* func_80B73A90(GlobalContext* globalCtx, u8 arg1) {
     Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
 
     while (actorIterator != NULL) {
-        if ((actorIterator->id == ACTOR_EN_S_GORO) && ((actorIterator->params & 0xF) == arg1)) {
+        if ((actorIterator->id == ACTOR_EN_S_GORO) && (EN_S_GORO_GET_PARAM_F(actorIterator) == arg1)) {
             return actorIterator;
         }
         actorIterator = actorIterator->next;
