@@ -73,17 +73,17 @@ void EnJg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx);
-void func_80B74134(EnJg* this, GlobalContext* globalCtx);
+void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx);
 s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx);
-void func_80B751F8(EnJg* this, GlobalContext* globalCtx);
-void func_80B74550(EnJg* this, GlobalContext* globalCtx);
-void func_80B742F8(EnJg* this, GlobalContext* globalCtx);
-void func_80B747C8(EnJg* this, GlobalContext* globalCtx);
+void EnJg_DoStuff(EnJg* this, GlobalContext* globalCtx);
+void EnJg_Talk(EnJg* this, GlobalContext* globalCtx);
+void EnJg_FirstConversationAfterThawing(EnJg* this, GlobalContext* globalCtx);
+void EnJg_SetupWalk(EnJg* this, GlobalContext* globalCtx);
 void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx);
-s32 func_80B74E5C(EnJg* this);
+s32 EnJg_GetNextTextId(EnJg* this);
 void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx);
 void EnJg_Walk(EnJg* this, GlobalContext* globalCtx);
-void func_80B741F8(EnJg* this, GlobalContext* globalCtx);
+void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx);
 void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx);
 
 const ActorInit En_Jg_InitVars = {
@@ -178,7 +178,7 @@ static Vec3f sBreathVelOffset = { 0.0f, 0.0f, 0.75f };
 
 static Vec3f sBreathAccelOffset = { 0.0f, 0.0f, -0.070000000298f };
 
-Actor* func_80B73A90(GlobalContext* globalCtx, u8 arg1) {
+Actor* EnJg_GetShrineGoron(GlobalContext* globalCtx, u8 arg1) {
     Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
 
     while (actorIterator != NULL) {
@@ -272,7 +272,7 @@ void EnJg_SetupCheerCutscene(EnJg* this) {
     ActorCutscene_Stop(this->cutscene);
     if (this->cheerState == 0xA) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            this->actionFunc = func_80B74134;
+            this->actionFunc = EnJg_GoronShrineTalk;
         } else {
             this->cutscene = 0x7C;
         }
@@ -284,7 +284,7 @@ void EnJg_SetupCheerCutscene(EnJg* this) {
     }
 
     ActorCutscene_SetIntentToPlay(this->cutscene);
-    this->actionFunc = func_80B741F8;
+    this->actionFunc = EnJg_GoronShrineCheer;
 
     switch (this->textId) {
         case TEXT_EN_JG_CHEER_GREATEST_GORON_HERO:
@@ -301,24 +301,24 @@ void EnJg_SetupCheerCutscene(EnJg* this) {
     }
 }
 
-void func_80B73F1C(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_SetupTalk(EnJg* this, GlobalContext* globalCtx) {
     switch (this->textId) {
         case TEXT_EN_JG_WHAT_WAS_I_DOING:
             this->animationIndex = EN_JG_ANIMATION_SHAKING_HEAD;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-            this->actionFunc = func_80B74550;
+            this->actionFunc = EnJg_Talk;
             break;
 
         case TEXT_EN_JG_I_MUST_HURRY:
             this->animationIndex = EN_JG_ANIMATION_SURPRISE_START;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-            this->actionFunc = func_80B742F8;
+            this->actionFunc = EnJg_FirstConversationAfterThawing;
             break;
 
         case TEXT_EN_JG_OH_YOURE_DARMANI:
             this->animationIndex = EN_JG_ANIMATION_SURPRISE_START;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-            this->actionFunc = func_80B74550;
+            this->actionFunc = EnJg_Talk;
             break;
 
         case TEXT_EN_JG_HAVE_YOU_SOME_BUSINESS_WITH_ME:
@@ -329,7 +329,7 @@ void func_80B73F1C(EnJg* this, GlobalContext* globalCtx) {
         case TEXT_EN_JG_SO_COLD_I_CANT_PLAY:
             this->animationIndex = EN_JG_ANIMATION_IDLE;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-            this->actionFunc = func_80B74550;
+            this->actionFunc = EnJg_Talk;
             break;
 
         case TEXT_EN_JG_ITS_THIS_COLD_SNAP:
@@ -338,34 +338,34 @@ void func_80B73F1C(EnJg* this, GlobalContext* globalCtx) {
         case TEXT_EN_JG_I_AM_COUNTING_ON_YOU:
             this->animationIndex = EN_JG_ANIMATION_ANGRY;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-            this->actionFunc = func_80B74550;
+            this->actionFunc = EnJg_Talk;
             break;
 
         case TEXT_EN_JG_THIS_IS_OUR_PROBLEM_FIRST:
         case TEXT_EN_JG_THIS_IS_OUR_PROBLEM_REPEAT:
             this->animationIndex = EN_JG_ANIMATION_WAVING;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-            this->actionFunc = func_80B74550;
+            this->actionFunc = EnJg_Talk;
             break;
     }
 }
 
 void EnJg_Idle(EnJg* this, GlobalContext* globalCtx) {
-    func_80B751F8(this, globalCtx);
+    EnJg_DoStuff(this, globalCtx);
 }
 
 void EnJg_GoronShrineIdle(EnJg* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->flags |= EN_JG_FLAG_LOOKING_AT_PLAYER;
         func_801518B0(globalCtx, this->textId, &this->actor);
-        this->actionFunc = func_80B74134;
+        this->actionFunc = EnJg_GoronShrineTalk;
     } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
         func_800B863C(&this->actor, globalCtx);
         this->textId = EnJg_GetStartingConversationTextId(this, globalCtx);
     }
 }
 
-void func_80B74134(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx) {
     if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx) != 0)) {
         if ((this->textId == TEXT_EN_JG_WERE_HOLDING_THE_GORON_RACES) ||
             (this->textId == TEXT_EN_JG_THINK_IT_OVER_SLOWLY) ||
@@ -375,13 +375,13 @@ void func_80B74134(EnJg* this, GlobalContext* globalCtx) {
             this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_GoronShrineIdle;
         } else {
-            this->textId = func_80B74E5C(this);
+            this->textId = EnJg_GetNextTextId(this);
             func_801518B0(globalCtx, this->textId, &this->actor);
         }
     }
 }
 
-void func_80B741F8(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene) != 0) {
         switch (this->textId) {
             case TEXT_EN_JG_CHEER_GREATEST_GORON_HERO:
@@ -389,7 +389,7 @@ void func_80B741F8(EnJg* this, GlobalContext* globalCtx) {
             case TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON:
             case TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS:
             case TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD:
-                this->shrineGoron = func_80B73A90(globalCtx, this->cheerState);
+                this->shrineGoron = EnJg_GetShrineGoron(globalCtx, this->cheerState);
                 ActorCutscene_Start(this->cutscene, this->shrineGoron);
                 func_800E0308(globalCtx->cameraPtrs[0], this->shrineGoron);
                 break;
@@ -399,11 +399,11 @@ void func_80B741F8(EnJg* this, GlobalContext* globalCtx) {
                 func_800E0308(globalCtx->cameraPtrs[0], this->shrineGoron);
                 break;
         }
-        this->actionFunc = func_80B74134;
+        this->actionFunc = EnJg_GoronShrineTalk;
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             if (this->cheerState == 0xA) {
-                this->actionFunc = func_80B74134;
+                this->actionFunc = EnJg_GoronShrineTalk;
             } else {
                 ActorCutscene_Stop(0x7C);
             }
@@ -412,7 +412,7 @@ void func_80B741F8(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B742F8(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_FirstConversationAfterThawing(EnJg* this, GlobalContext* globalCtx) {
     u8 sp27 = func_80152498(&globalCtx->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
@@ -433,7 +433,7 @@ void func_80B742F8(EnJg* this, GlobalContext* globalCtx) {
         }
     } else if (this->animationIndex == EN_JG_ANIMATION_WALK) {
         Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
-        func_80B751F8(this, globalCtx);
+        EnJg_DoStuff(this, globalCtx);
     }
 }
 
@@ -453,7 +453,7 @@ void EnJg_Walk(EnJg* this, GlobalContext* globalCtx) {
         if (EnJg_ReachedPoint(this, this->path, this->currentPoint)) {
             if (this->currentPoint >= (this->path->count - 1)) {
                 this->animationIndex = EN_JG_ANIMATION_WALK;
-                this->actionFunc = func_80B742F8;
+                this->actionFunc = EnJg_FirstConversationAfterThawing;
             } else {
                 this->currentPoint++;
                 Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
@@ -463,10 +463,10 @@ void EnJg_Walk(EnJg* this, GlobalContext* globalCtx) {
         }
     }
 
-    func_80B751F8(this, globalCtx);
+    EnJg_DoStuff(this, globalCtx);
 }
 
-void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
     u8 sp27 = func_80152498(&globalCtx->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
@@ -484,7 +484,7 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
-            this->actionFunc = func_80B747C8;
+            this->actionFunc = EnJg_SetupWalk;
             return;
         }
 
@@ -494,12 +494,12 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
-                this->actionFunc = func_80B747C8;
+                this->actionFunc = EnJg_SetupWalk;
             } else if (((gSaveContext.weekEventReg[0x18] & 0x40) != 0) ||
                        (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
-                this->textId = func_80B74E5C(this);
+                this->textId = EnJg_GetNextTextId(this);
                 func_801518B0(globalCtx, this->textId, &this->actor);
-                this->actionFunc = func_80B73F1C;
+                this->actionFunc = EnJg_SetupTalk;
             } else {
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
@@ -512,14 +512,14 @@ void func_80B74550(EnJg* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnJg_TeachLullabyIntro;
             }
         } else {
-            this->textId = func_80B74E5C(this);
+            this->textId = EnJg_GetNextTextId(this);
             func_801518B0(globalCtx, this->textId, &this->actor);
-            this->actionFunc = func_80B73F1C;
+            this->actionFunc = EnJg_SetupTalk;
         }
     }
 }
 
-void func_80B747C8(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_SetupWalk(EnJg* this, GlobalContext* globalCtx) {
     if (this->animationIndex != EN_JG_ANIMATION_WALK) {
         this->animationIndex = EN_JG_ANIMATION_WALK;
         this->freezeTimer = 1000;
@@ -691,7 +691,10 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B74E5C(EnJg* this) {
+/**
+ * Maybe rename this
+ */
+s32 EnJg_GetNextTextId(EnJg* this) {
     switch (this->textId) {
         case TEXT_EN_JG_WHAT_WAS_I_DOING:
             return TEXT_EN_JG_I_MUST_HURRY;
@@ -739,7 +742,7 @@ s32 func_80B74E5C(EnJg* this) {
                 ActorCutscene_Stop(0x7C);
             }
             ActorCutscene_SetIntentToPlay(this->cutscene);
-            this->actionFunc = func_80B741F8;
+            this->actionFunc = EnJg_GoronShrineCheer;
             return TEXT_EN_JG_CHEER_GREATEST_GORON_HERO;
 
         case TEXT_EN_JG_CHEER_GREATEST_GORON_HERO:
@@ -854,7 +857,10 @@ void EnJg_SpawnBreath(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B751F8(EnJg* this, GlobalContext* globalCtx) {
+/**
+ * This name is awful but it gets the point across for now
+ */
+void EnJg_DoStuff(EnJg* this, GlobalContext* globalCtx) {
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
 
@@ -871,7 +877,7 @@ void func_80B751F8(EnJg* this, GlobalContext* globalCtx) {
         }
 
         func_801518B0(globalCtx, this->textId, &this->actor);
-        this->actionFunc = func_80B73F1C;
+        this->actionFunc = EnJg_SetupTalk;
     } else {
         if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
             func_800B863C(&this->actor, globalCtx);
