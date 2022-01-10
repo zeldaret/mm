@@ -34,7 +34,7 @@ void EnRailgibud_Damage(EnRailgibud* this, GlobalContext* globalCtx);
 void EnRailgibud_Stunned(EnRailgibud* this, GlobalContext* globalCtx);
 void EnRailgibud_SetupDead(EnRailgibud* this);
 void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA6974(GlobalContext* globalCtx, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5);
+void EnRailgibud_SpawnDust(GlobalContext* globalCtx, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5);
 void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_PlayerOutOfRange(EnRailgibud* this, GlobalContext* globalCtx);
@@ -635,45 +635,48 @@ void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BA6800(EnRailgibud* this, GlobalContext* globalCtx, s32 arg2) {
-    Vec3f sp5C = this->actor.world.pos;
-    Vec3f sp50 = { 0.0f, 8.0f, 0.0f };
-    Vec3f sp44 = { 0.0f, -1.5f, 0.0f };
+void EnRailgibud_SpawnEffectsForSinkingIntoTheGround(EnRailgibud* this, GlobalContext* globalCtx, s32 arg2) {
+    Vec3f rockFragmentPos = this->actor.world.pos;
+    Vec3f rockFragmentVelocity = { 0.0f, 8.0f, 0.0f };
+    Vec3f rockFragmentAccel = { 0.0f, -1.5f, 0.0f };
     s16 rand;
     s32 pad;
 
     if ((globalCtx->gameplayFrames & arg2) == 0) {
         rand = Rand_Next();
-        sp5C.x += 15.0f * Math_SinS(rand);
-        sp5C.z += 15.0f * Math_CosS(rand);
-        sp44.x = Rand_Centered();
-        sp44.z = Rand_Centered();
-        sp50.y += Rand_Centered() * 4.0f;
-        EffectSsHahen_Spawn(globalCtx, &sp5C, &sp50, &sp44, 0, (Rand_Next() & 7) + 10, -1, 10, NULL);
-        func_80BA6974(globalCtx, &sp5C, 10.0f, 10, 150, 0);
+        rockFragmentPos.x += 15.0f * Math_SinS(rand);
+        rockFragmentPos.z += 15.0f * Math_CosS(rand);
+        rockFragmentAccel.x = Rand_Centered();
+        rockFragmentAccel.z = Rand_Centered();
+        rockFragmentVelocity.y += Rand_Centered() * 4.0f;
+        EffectSsHahen_Spawn(globalCtx, &rockFragmentPos, &rockFragmentVelocity, &rockFragmentAccel, 0,
+                            (Rand_Next() & 7) + 10, -1, 10, NULL);
+        EnRailgibud_SpawnDust(globalCtx, &rockFragmentPos, 10.0f, 10, 150, 0);
     }
 }
 
-void func_80BA6974(GlobalContext* globalCtx, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5) {
-    Vec3f sp8C;
-    Vec3f sp80 = { 0.0f, 0.3f, 0.0f };
-    Vec3f sp74 = gZeroVec3f;
+void EnRailgibud_SpawnDust(GlobalContext* globalCtx, Vec3f* basePos, f32 randomnessScale, s32 dustCount, s16 dustScale,
+                           s16 scaleStep) {
+    Vec3f dustPos;
+    Vec3f dustAccel = { 0.0f, 0.3f, 0.0f };
+    Vec3f dustVelocity = gZeroVec3f;
     s32 i;
     s32 pad;
 
-    sp74.y = 2.5f;
+    dustVelocity.y = 2.5f;
 
-    for (i = arg3; i >= 0; i--) {
-        sp74.x = (Rand_ZeroOne() - 0.5f) * arg2;
-        sp74.z = (Rand_ZeroOne() - 0.5f) * arg2;
+    for (i = dustCount; i >= 0; i--) {
+        dustVelocity.x = (Rand_ZeroOne() - 0.5f) * randomnessScale;
+        dustVelocity.z = (Rand_ZeroOne() - 0.5f) * randomnessScale;
 
-        sp8C.x = vec->x + sp74.x;
-        sp8C.y = ((Rand_ZeroOne() - 0.5f) * arg2) + vec->y;
-        sp8C.z = vec->z + sp74.z;
+        dustPos.x = basePos->x + dustVelocity.x;
+        dustPos.y = ((Rand_ZeroOne() - 0.5f) * randomnessScale) + basePos->y;
+        dustPos.z = basePos->z + dustVelocity.z;
 
-        sp74.x *= 0.5f;
-        sp74.z *= 0.5f;
-        func_800B1210(globalCtx, &sp8C, &sp74, &sp80, (s16)(Rand_ZeroOne() * arg4 * 0.2f) + arg4, arg5);
+        dustVelocity.x *= 0.5f;
+        dustVelocity.z *= 0.5f;
+        func_800B1210(globalCtx, &dustPos, &dustVelocity, &dustAccel,
+                      (s16)(Rand_ZeroOne() * dustScale * 0.2f) + dustScale, scaleStep);
     }
 }
 
@@ -1126,7 +1129,7 @@ void func_80BA7D30(EnRailgibud* this, GlobalContext* globalCtx) {
     } else if (Math_SmoothStepToF(&this->actor.shape.yOffset, -9500.0f, 0.5f, 200.0f, 10.0f) < 10.0f) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        func_80BA6800(this, globalCtx, 0);
+        EnRailgibud_SpawnEffectsForSinkingIntoTheGround(this, globalCtx, 0);
     }
 }
 
