@@ -381,12 +381,8 @@ void EnTalkGibud_SetupGrab(EnTalkGibud* this) {
 }
 
 void EnTalkGibud_Grab(EnTalkGibud* this, GlobalContext* globalCtx) {
-    // This function needs to have two different temps for Player to match,
-    // but you don't have to necessarily use them both. This is just the most
-    // likely scenario; they got an Actor* pointer in the first temp, then
-    // casted it to Player* in the second temp.
-    Actor* playerActor = &GET_PLAYER(globalCtx)->actor;
-    Player* player = (Player*)playerActor;
+    Player* player2 = GET_PLAYER(globalCtx);
+    Player* player = player2;
     s32 inPositionToAttack;
     u16 damageSfxId;
 
