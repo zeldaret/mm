@@ -444,10 +444,10 @@ void func_80B03FF8(ObjSnowball* this, GlobalContext* globalCtx) {
         sp18->unk_04(this, globalCtx);
     }
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
     if (rotY == 5) {
-        Actor_SetSwitchFlag(globalCtx, OBJSNOWBALL_GET_3F(&this->actor));
+        Flags_SetSwitch(globalCtx, OBJSNOWBALL_GET_3F(&this->actor));
     }
 }
 
@@ -484,7 +484,7 @@ void ObjSnowball_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.textId = 0x238;
         this->actor.flags |= 1;
         this->actor.targetArrowOffset = 1400.0f / 3.0f;
-        Actor_SetHeight(&this->actor, 24.0f);
+        Actor_SetFocus(&this->actor, 24.0f);
         this->actor.targetMode = 3;
     }
 
@@ -575,7 +575,7 @@ void func_80B04350(ObjSnowball* this, GlobalContext* globalCtx) {
             } else {
                 this->unk_209 = 10;
             }
-            Audio_PlayActorSound2(&this->actor, NA_SE_IT_REFLECTION_SNOW);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_REFLECTION_SNOW);
         }
     }
 
@@ -760,11 +760,11 @@ void ObjSnowball_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.home.rot.y == 1) {
         if (this->unk_211 != 0) {
-            if (func_800B867C(&this->actor, globalCtx)) {
+            if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
                 this->actor.flags &= ~0x10;
                 this->unk_211 = 0;
             }
-        } else if (func_800B84D0(&this->actor, globalCtx)) {
+        } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->actor.flags |= 0x10;
             this->unk_211 = 1;
         } else if (this->actor.isTargeted) {
@@ -781,10 +781,10 @@ void ObjSnowball_Update(Actor* thisx, GlobalContext* globalCtx) {
     if ((this->actor.floorPoly != NULL) && (this->actor.projectedPos.z < 920.0f)) {
         if (this->actor.projectedPos.z > 400.0f) {
             this->actor.shape.shadowAlpha = (920 - (s32)this->actor.projectedPos.z) >> 2;
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         } else if (this->actor.projectedPos.z > -30.0f) {
             this->actor.shape.shadowAlpha = 130;
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         } else {
             this->actor.shape.shadowDraw = NULL;
         }
@@ -796,7 +796,7 @@ void ObjSnowball_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjSnowball_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjSnowball* this = THIS;
 
-    func_800BDFC0(globalCtx, object_goroiwa_DL_008B90);
+    Gfx_DrawDListOpa(globalCtx, object_goroiwa_DL_008B90);
 }
 
 void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
@@ -817,7 +817,7 @@ void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
 
             Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            func_800BDFC0(globalCtx, object_goroiwa_DL_0082D0);
+            Gfx_DrawDListOpa(globalCtx, object_goroiwa_DL_0082D0);
 
             if ((ptr->unk_28 != NULL) && (ptr->unk_2C > 0)) {
                 OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -834,7 +834,7 @@ void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_076BC0);
+                gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
                 CLOSE_DISPS(globalCtx->state.gfxCtx);
             }
