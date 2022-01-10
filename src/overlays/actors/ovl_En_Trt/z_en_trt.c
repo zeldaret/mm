@@ -1232,9 +1232,8 @@ void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
 
-    // Possbily fake temps
+    // POSSIBLY FAKE
     s32 maxColor = 255;
-    f32 tmp;
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -1261,9 +1260,6 @@ void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
         stickAnimTween = 0.0f;
         this->stickAnimState = 0;
     }
-
-    tmp = 155.0f * arrowAnimTween;
-
     this->stickAnimTween = stickAnimTween;
 
     this->stickLeftPrompt.arrowColor.r = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
@@ -1271,21 +1267,26 @@ void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
     this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100, arrowAnimTween);
     this->stickLeftPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowColor.r = (maxColor - ((s32)tmp)) & 0xFF;
-    this->stickRightPrompt.arrowColor.g = (255 - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowTexX = 290.0f;
+
+    this->stickRightPrompt.arrowColor.r = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.g = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
 
     this->stickRightPrompt.stickTexX = 274.0f;
     this->stickRightPrompt.stickTexX += 8.0f * stickAnimTween;
+
     this->stickLeftPrompt.stickTexX = 49.0f;
     this->stickLeftPrompt.stickTexX -= 8.0f * stickAnimTween;
 
-    this->stickLeftPrompt.arrowTexY = this->stickRightPrompt.arrowTexY = 91.0f;
-    this->stickLeftPrompt.stickTexY = this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickRightPrompt.arrowTexY = 91.0f;
+    this->stickLeftPrompt.arrowTexY = 91.0f;
+
+    this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickLeftPrompt.stickTexY = 95.0f;
 }
 
 void EnTrt_OpenEyes(EnTrt* this) {
@@ -1461,9 +1462,6 @@ void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
-    u32 maxcolor = 255;
-    EnTrt* this2;
-
     EnTrt_GetCutscenes(this, globalCtx);
     this->cutscene = this->lookForwardCutscene;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
@@ -1480,58 +1478,55 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
         this->actionFunc = EnTrt_IdleSleeping;
     }
 
+    this->cursorPos.y = this->cursorPos.x = 100.0f;
     this->stickAccumY = 0;
     this->stickAccumX = 0;
+
     this->cursorIdx = 0;
-    this->cursorPos.y = this->cursorPos.x = 100.0f;
     this->cursorPos.z = 1.2f;
     this->cursorColor.r = 0;
     this->cursorColor.g = 80;
-    this->cursorColor.b = maxcolor;
-    this->cursorColor.a = maxcolor;
+    this->cursorColor.b = 255;
+    this->cursorColor.a = 255;
     this->cursorAnimTween = 0.0f;
     this->cursorAnimState = 0;
     this->drawCursor = 0;
 
-    this2 = this;
-
     this->stickLeftPrompt.stickColor.r = 200;
-    this2->stickLeftPrompt.stickColor.g = 200;
-    this2->stickLeftPrompt.stickColor.b = 200;
-    this2->stickLeftPrompt.stickColor.a = 180;
-    this2->stickLeftPrompt.stickTexX = 49.0f;
-    this2->stickLeftPrompt.stickTexY = 95.0f;
-    this2->stickLeftPrompt.arrowColor.r = maxcolor;
-    this2->stickLeftPrompt.arrowColor.g = maxcolor;
-    this2->stickLeftPrompt.arrowColor.b = 0;
-    this2->stickLeftPrompt.arrowColor.a = 200;
-    this2->stickLeftPrompt.arrowTexX = 33.0f;
-    this2->stickLeftPrompt.arrowTexY = 91.0f;
-    this2->stickLeftPrompt.texZ = 1.0f;
-    this2->stickLeftPrompt.isEnabled = false;
+    this->stickLeftPrompt.stickColor.g = 200;
+    this->stickLeftPrompt.stickColor.b = 200;
+    this->stickLeftPrompt.stickColor.a = 180;
+    this->stickLeftPrompt.stickTexX = 49.0f;
+    this->stickLeftPrompt.stickTexY = 95.0f;
+    this->stickLeftPrompt.arrowColor.r = 255;
+    this->stickLeftPrompt.arrowColor.g = 255;
+    this->stickLeftPrompt.arrowColor.b = 0;
+    this->stickLeftPrompt.arrowColor.a = 200;
+    this->stickLeftPrompt.arrowTexX = 33.0f;
+    this->stickLeftPrompt.arrowTexY = 91.0f;
+    this->stickLeftPrompt.texZ = 1.0f;
+    this->stickLeftPrompt.isEnabled = false;
 
-    if (1) {}
+    this->stickRightPrompt.stickColor.r = 200;
+    this->stickRightPrompt.stickColor.g = 200;
+    this->stickRightPrompt.stickColor.b = 200;
+    this->stickRightPrompt.stickColor.a = 180;
+    this->stickRightPrompt.stickTexX = 274.0f;
+    this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickRightPrompt.arrowColor.r = 255;
+    this->stickRightPrompt.arrowColor.g = 0;
+    this->stickRightPrompt.arrowColor.b = 0;
+    this->stickRightPrompt.arrowColor.a = 200;
+    this->stickRightPrompt.arrowTexX = 290.0f;
+    this->stickRightPrompt.arrowTexY = 91.0f;
+    this->stickRightPrompt.texZ = 1.0f;
+    this->stickRightPrompt.isEnabled = false;
 
-    this2->stickRightPrompt.stickColor.r = 200;
-    this2->stickRightPrompt.stickColor.g = 200;
-    this2->stickRightPrompt.stickColor.b = 200;
-    this2->stickRightPrompt.stickColor.a = 180;
-    this2->stickRightPrompt.stickTexX = 274.0f;
-    this2->stickRightPrompt.stickTexY = 95.0f;
-    this2->stickRightPrompt.arrowColor.r = maxcolor;
-    this2->stickRightPrompt.arrowColor.g = 0;
-    this2->stickRightPrompt.arrowColor.b = 0;
-    this2->stickRightPrompt.arrowColor.a = 200;
-    this2->stickRightPrompt.arrowTexX = 290.0f;
-    this2->stickRightPrompt.arrowTexY = 91.0f;
-    this2->stickRightPrompt.texZ = 1.0f;
-    this2->stickRightPrompt.isEnabled = false;
-
-    this2->arrowAnimTween = 0.0f;
-    this2->stickAnimTween = 0.0f;
-    this2->arrowAnimState = 0;
-    this2->stickAnimState = 0;
-    this2->shopItemSelectedTween = 0.0f;
+    this->arrowAnimTween = 0.0f;
+    this->stickAnimTween = 0.0f;
+    this->arrowAnimState = 0;
+    this->stickAnimState = 0;
+    this->shopItemSelectedTween = 0.0f;
 
     this->actor.gravity = 0.0f;
     Actor_SetScale(&this->actor, sActorScale);

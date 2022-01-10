@@ -25,7 +25,7 @@ typedef struct ShopItemEntry {
 
 typedef struct EnGirlA {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk144[0x44];
+    /* 0x144 */ UNK_TYPE1 unk144[0x44];
     /* 0x188 */ EnGirlAActionFunc actionFunc;
     /* 0x18C */ s8 objIndex;
     /* 0x190 */ EnGirlAActionFunc mainActionFunc;

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_fsn.h"
+#include "objects/object_fsn/object_fsn.h"
 
 #define FLAGS 0x00000019
 
@@ -45,25 +46,6 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_PlayerCannotBuy(EnFsn* this, GlobalContext* globalCtx);
 
-extern AnimationHeader D_06012C34;
-extern AnimationHeader D_060131FC;
-extern AnimationHeader D_0600C58C;
-extern AnimationHeader D_0600E3EC;
-extern AnimationHeader D_0600F00C;
-extern AnimationHeader D_0600CB3C;
-extern AnimationHeader D_0600D354;
-extern AnimationHeader D_060138B0;
-extern AnimationHeader D_0601430C;
-extern AnimationHeader D_0600B9D8;
-extern AnimationHeader D_0600C26C;
-extern AnimationHeader D_0600DE34;
-extern FlexSkeletonHeader D_06013320;
-extern UNK_TYPE D_06005BC0;
-extern UNK_TYPE D_06006D40;
-extern UNK_TYPE D_06007140;
-extern Gfx D_0600F180[];
-extern Gfx D_0600F218[];
-
 const ActorInit En_Fsn_InitVars = {
     ACTOR_EN_FSN,
     ACTORCAT_NPC,
@@ -77,11 +59,13 @@ const ActorInit En_Fsn_InitVars = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
-    { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
-    { &D_0600CB3C, 1.0f, 0, -1, 2, 0 },  { &D_0600D354, 1.0f, 0, -1, 0, 0 }, { &D_060138B0, 1.0f, 0, -1, 2, 0 },
-    { &D_0601430C, 1.0f, 0, -1, 0, 0 },  { &D_0600B9D8, 1.0f, 0, -1, 2, 0 }, { &D_0600C26C, 1.0f, 0, -1, 0, 0 },
-    { &D_0600DE34, 1.0f, 0, -1, 2, 0 },
+    { &object_fsn_Anim_012C34, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_0131FC, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C58C, -1.0f, 0, -1, 2, 0 },
+    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00F00C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00D354, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_01430C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C26C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, 2, 0 },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -589,8 +573,9 @@ void EnFsn_UpdateCursorAnim(EnFsn* this) {
 void EnFsn_UpdateStickDirectionPromptAnim(EnFsn* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
+
+    // POSSIBLY FAKE
     s32 maxColor = 255;
-    f32 tmp;
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -617,9 +602,6 @@ void EnFsn_UpdateStickDirectionPromptAnim(EnFsn* this) {
         stickAnimTween = 0.0f;
         this->stickAnimState = 0;
     }
-
-    tmp = 155.0f * arrowAnimTween;
-
     this->stickAnimTween = stickAnimTween;
 
     this->stickLeftPrompt.arrowColor.r = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
@@ -627,44 +609,44 @@ void EnFsn_UpdateStickDirectionPromptAnim(EnFsn* this) {
     this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100, arrowAnimTween);
     this->stickLeftPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowColor.r = (maxColor - ((s32)tmp)) & 0xFF;
-    this->stickRightPrompt.arrowColor.g = (255 - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowTexX = 290.0f;
+
+    this->stickRightPrompt.arrowColor.r = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.g = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
 
     this->stickRightPrompt.stickTexX = 274.0f;
     this->stickRightPrompt.stickTexX += 8.0f * stickAnimTween;
+
     this->stickLeftPrompt.stickTexX = 49.0f;
     this->stickLeftPrompt.stickTexX -= 8.0f * stickAnimTween;
 
-    this->stickLeftPrompt.arrowTexY = this->stickRightPrompt.arrowTexY = 91.0f;
-    this->stickLeftPrompt.stickTexY = this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickRightPrompt.arrowTexY = 91.0f;
+    this->stickLeftPrompt.arrowTexY = 91.0f;
+
+    this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickLeftPrompt.stickTexY = 95.0f;
 }
 
 void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
-    EnFsn* this2;
-    s32 maxColor = 255;
-
     if (EnFsn_HasItemsToSell()) {
         EnFsn_SpawnShopItems(this, globalCtx);
 
-        this2 = this;
-        this2->cursorPos.x = 100.0f;
-        this2->cursorPos.y = 100.0f;
-        this2->stickAccumY = 0;
-        this2->stickAccumX = 0;
+        this->cursorPos.y = this->cursorPos.x = 100.0f;
+        this->stickAccumY = 0;
+        this->stickAccumX = 0;
 
         this->cursorPos.z = 1.2f;
         this->cursorColor.r = 0;
         this->cursorColor.g = 80;
-        this->cursorColor.b = maxColor;
-        this->cursorColor.a = maxColor;
+        this->cursorColor.b = 255;
+        this->cursorColor.a = 255;
+        this->cursorAnimTween = 0.0f;
         this->cursorAnimState = 0;
         this->drawCursor = 0;
-        this->cursorAnimTween = 0.0f;
 
         this->stickLeftPrompt.stickColor.r = 200;
         this->stickLeftPrompt.stickColor.g = 200;
@@ -672,8 +654,8 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
         this->stickLeftPrompt.stickColor.a = 180;
         this->stickLeftPrompt.stickTexX = 49.0f;
         this->stickLeftPrompt.stickTexY = 95.0f;
-        this->stickLeftPrompt.arrowColor.r = maxColor;
-        this->stickLeftPrompt.arrowColor.g = maxColor;
+        this->stickLeftPrompt.arrowColor.r = 255;
+        this->stickLeftPrompt.arrowColor.g = 255;
         this->stickLeftPrompt.arrowColor.b = 0;
         this->stickLeftPrompt.arrowColor.a = 200;
         this->stickLeftPrompt.arrowTexX = 33.0f;
@@ -687,7 +669,7 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
         this->stickRightPrompt.stickColor.a = 180;
         this->stickRightPrompt.stickTexX = 274.0f;
         this->stickRightPrompt.stickTexY = 95.0f;
-        this->stickRightPrompt.arrowColor.r = maxColor;
+        this->stickRightPrompt.arrowColor.r = 255;
         this->stickRightPrompt.arrowColor.g = 0;
         this->stickRightPrompt.arrowColor.b = 0;
         this->stickRightPrompt.arrowColor.a = 200;
@@ -1398,7 +1380,8 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013320, &D_06012C34, this->jointTable, this->morphTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &object_fsn_Anim_012C34, this->jointTable,
+                       this->morphTable, 19);
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
         this->actor.flags &= ~1;
@@ -1585,7 +1568,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     if (limbIndex == 17) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
 void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1597,14 +1580,14 @@ void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         this->actor.focus.pos.z = this->actor.world.pos.z;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        gSPDisplayList(POLY_OPA_DISP++, D_0600F180);
-        gSPDisplayList(POLY_OPA_DISP++, D_0600F218);
+        gSPDisplayList(POLY_OPA_DISP++, gFsnGlassesFrameDL);
+        gSPDisplayList(POLY_OPA_DISP++, gFsnGlassesLensesDL);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
 
 void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static void* sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
+    static TexturePtr sEyeTextures[] = { gFsnEyeOpenTex, gFsnEyeHalfTex, gFsnEyeClosedTex };
     EnFsn* this = THIS;
     s32 pad;
     s16 i;
