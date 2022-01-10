@@ -267,7 +267,7 @@ typedef struct Player {
     /* 0x32A */ Vec3s morphTable[5];
     /* 0x348 */ s16 eyeTexId;
     /* 0x34A */ s16 eyeAnimTimer;
-    /* 0x34C */ Actor* leftHandActor;
+    /* 0x34C */ Actor* heldActor;
     /* 0x350 */ PosRot leftHandWorld;
     /* 0x364 */ Actor* rightHandActor;
     /* 0x368 */ PosRot rightHandWorld;
@@ -276,12 +276,12 @@ typedef struct Player {
     /* 0x37E */ s8 doorTimer;
     /* 0x37F */ s8 doorNext; // used with spiral staircase
     /* 0x380 */ Actor* doorActor;
-    /* 0x384 */ s16 unk_384;
-    /* 0x386 */ u16 unk_386;
-    /* 0x388 */ Actor* unk_388;
-    /* 0x38C */ s16 unk_38C;
+    /* 0x384 */ s16 getItemId;
+    /* 0x386 */ u16 getItemDirection;
+    /* 0x388 */ Actor* interactRangeActor;
+    /* 0x38C */ s8 mountSide;
     /* 0x390 */ Actor* rideActor;
-    /* 0x394 */ u8 unk_394; // csMode?
+    /* 0x394 */ u8 csMode;
     /* 0x395 */ u8 unk_395; // prevCsMode?
     /* 0x396 */ u8 unk_396;
     /* 0x397 */ u8 unk_397;
@@ -305,7 +305,8 @@ typedef struct Player {
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
     /* 0x730 */ Actor* unk_730;
-    /* 0x734 */ char unk_734[8];
+    /* 0x734 */ char unk_734[4];
+    /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 blureEffectIndex[3];
     /* 0x748 */ char unk_748[0x320];
     /* 0xA68 */ PlayerAgeProperties* ageProperties; // repurposed as "transformation properties"?
@@ -317,7 +318,7 @@ typedef struct Player {
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 unk_A86;
-    /* 0xA87 */ s8 unk_A87;
+    /* 0xA87 */ s8 exchangeItemId;
     /* 0xA88 */ Actor* targetActor;
     /* 0xA8C */ f32 targetActorDistance;
     /* 0xA90 */ Actor* unk_A90;
