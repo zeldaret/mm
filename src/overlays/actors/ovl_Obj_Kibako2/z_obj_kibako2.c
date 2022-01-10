@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_kibako2.h"
+#include "objects/object_kibako2/object_kibako2.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
 
 #define FLAGS 0x00000000
@@ -57,10 +58,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-extern Gfx D_06000960[];
-extern CollisionHeader D_06000B70;
-extern Gfx D_06001040[];
-
 s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
     s32 flag = -1;
@@ -68,7 +65,7 @@ s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     if ((u16)actorSpawnParam & 3) {
         flag = ((actorSpawnParam & 0x3FC) >> 2) & 0xFF;
     }
-    return !(flag >= 0 && Actor_GetChestFlag(globalCtx, flag));
+    return !(flag >= 0 && Flags_GetTreasure(globalCtx, flag));
 }
 
 void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
@@ -103,7 +100,7 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
             phi_s0 = 0x20;
         }
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -200, phi_s0, 28, 2, 0, (Rand_ZeroOne() * 30.0f) + 5.0f,
-                             0, 0, 70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, D_06001040);
+                             0, 0, 70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, gLargeCrateFragment1DL);
     }
     func_800BBFB0(globalCtx, thisPos, 90.0f, 6, 100, 160, 1);
 }
@@ -147,12 +144,12 @@ void ObjKibako2_SpawnContents(ObjKibako2* this, GlobalContext* globalCtx) {
 void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako2* this = THIS;
     s32 pad;
-    ObjKibako2Contents contents = KIBAKO2_CONTENTS(&this->dyna.actor);
+    s32 contents = KIBAKO2_CONTENTS(&this->dyna.actor);
 
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000B70);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gLargeCrateCol);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     this->dyna.actor.home.rot.z = 0;
@@ -236,7 +233,7 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->skulltulaNoiseTimer >= 0) {
         if (this->skulltulaNoiseTimer == 0) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
             if (Rand_ZeroOne() < 0.1f) {
                 this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
             } else {
@@ -250,5 +247,5 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000960);
+    Gfx_DrawDListOpa(globalCtx, gLargeCrateDL);
 }
