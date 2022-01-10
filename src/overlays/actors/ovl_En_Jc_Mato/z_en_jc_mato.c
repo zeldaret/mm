@@ -94,7 +94,7 @@ s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.center.z = this->pos.z;
     if ((this->collider.base.acFlags & AC_HIT) && !this->hitFlag && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Audio_PlayActorSound2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
         globalCtx->interfaceCtx.unk_25C = 1;
         this->hitFlag = 1;
         return 1;
@@ -128,7 +128,7 @@ void EnJcMato_Idle(EnJcMato* this, GlobalContext* globalCtx) {
 void EnJcMato_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnJcMato* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     Collider_InitSphere(globalCtx, &this->collider);
     Collider_SetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = 0xF;
