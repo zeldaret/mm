@@ -7,17 +7,6 @@
 #define EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx) ((thisx)->params & 0xF)
 #define EN_TALK_GIBUD_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF0) >> 4)
 
-typedef enum {
-    /* 0 */ EN_TALK_GIBUD_TYPE_GIBDO,
-    /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD,
-} EnTalkGibudType;
-
-typedef enum {
-    /* 0 */ EN_TALK_GIBUD_GRAB_START,
-    /* 1 */ EN_TALK_GIBUD_GRAB_ATTACK,
-    /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE,
-} EnTalkGibudGrabState;
-
 struct EnTalkGibud;
 
 typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, GlobalContext*);

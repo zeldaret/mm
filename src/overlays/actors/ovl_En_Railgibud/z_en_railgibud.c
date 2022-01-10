@@ -48,6 +48,17 @@ void func_80BA7D04(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7D30(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA8050(Actor* thisx, GlobalContext* globalCtx);
 
+typedef enum {
+    /* 0 */ EN_RAILGIBUD_TYPE_GIBDO,
+    /* 1 */ EN_RAILGIBUD_TYPE_REDEAD,
+} EnRailgibudType;
+
+typedef enum {
+    /* 0 */ EN_RAILGIBUD_GRAB_START,
+    /* 1 */ EN_RAILGIBUD_GRAB_ATTACK,
+    /* 2 */ EN_RAILGIBUD_GRAB_RELEASE,
+} EnRailgibudGrabState;
+
 const ActorInit En_Railgibud_InitVars = {
     ACTOR_EN_RAILGIBUD,
     ACTORCAT_ENEMY,
@@ -211,7 +222,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->playerStunWaitTimer = 0;
     this->timeInitialized = gSaveContext.time;
     this->effectType = 0;
-    this->type = 0;
+    this->type = EN_RAILGIBUD_TYPE_GIBDO;
     this->textId = 0;
     this->isInvincible = false;
     if (this->actor.parent == NULL) {
@@ -368,7 +379,7 @@ void EnRailgibud_SetupGrab(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 2);
     this->grabDamageTimer = 0;
     this->actor.flags &= ~1;
-    this->grabState = 0;
+    this->grabState = EN_RAILGIBUD_GRAB_START;
     this->actionFunc = EnRailgibud_Grab;
 }
 
@@ -383,20 +394,20 @@ void EnRailgibud_Grab(EnRailgibud* this, GlobalContext* globalCtx) {
     u16 damageSfxId;
 
     switch (this->grabState) {
-        case 0:
+        case EN_RAILGIBUD_GRAB_START:
             inPositionToAttack = EnRailgibud_MoveToIdealGrabPositionAndRotation(this, globalCtx);
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (inPositionToAttack == true)) {
-                this->grabState = 1;
+                this->grabState = EN_RAILGIBUD_GRAB_ATTACK;
                 func_800BDC5C(&this->skelAnime, sAnimations, 0);
             } else if (!(player->stateFlags2 & 0x80)) {
                 func_800BDC5C(&this->skelAnime, sAnimations, 1);
                 this->actor.flags |= 1;
-                this->grabState = 2;
+                this->grabState = EN_RAILGIBUD_GRAB_RELEASE;
                 this->grabDamageTimer = 0;
             }
             break;
 
-        case 1:
+        case EN_RAILGIBUD_GRAB_ATTACK:
             if (this->grabDamageTimer == 20) {
                 s16 requiredScopeTemp;
 
@@ -420,12 +431,12 @@ void EnRailgibud_Grab(EnRailgibud* this, GlobalContext* globalCtx) {
                 }
                 func_800BDC5C(&this->skelAnime, sAnimations, 1);
                 this->actor.flags |= 1;
-                this->grabState = 2;
+                this->grabState = EN_RAILGIBUD_GRAB_RELEASE;
                 this->grabDamageTimer = 0;
             }
             break;
 
-        case 2:
+        case EN_RAILGIBUD_GRAB_RELEASE:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->grabWaitTimer = 40;
                 this->actor.shape.yOffset = 0.0f;
@@ -527,11 +538,11 @@ void EnRailgibud_Damage(EnRailgibud* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_405 = -1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if ((this->effectTimer > 0) && (this->effectType == 0) && (this->type == 0)) {
+        if ((this->effectTimer > 0) && (this->effectType == 0) && (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
             this->actor.hintId = 0x2A;
             SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                                REDEAD_GIBDO_LIMB_MAX);
-            this->type = 1;
+            this->type = EN_RAILGIBUD_TYPE_REDEAD;
         }
         EnRailgibud_SetupWalkToHome(this);
     }
@@ -592,10 +603,11 @@ void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx) {
         this->deathTimer++;
     }
 
-    if ((this->deathTimer == 20) && (this->effectTimer > 0) && (this->effectType == 0) && (this->type == 0)) {
+    if ((this->deathTimer == 20) && (this->effectTimer > 0) && (this->effectType == 0) &&
+        (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                            REDEAD_GIBDO_LIMB_MAX);
-        this->type = 1;
+        this->type = EN_RAILGIBUD_TYPE_REDEAD;
     }
 }
 
@@ -722,7 +734,7 @@ void EnRailgibud_UpdateDamage(EnRailgibud* this, GlobalContext* globalCtx) {
                 break;
 
             case EN_RAILGIBUD_DMGEFF_LIGHT_RAY:
-                if (this->type == 1) {
+                if (this->type == EN_RAILGIBUD_TYPE_REDEAD) {
                     this->actor.colChkInfo.health = 0;
                     this->actor.shape.yOffset = 0.0f;
                     EnRailgibud_SetupDead(this);
@@ -813,13 +825,14 @@ void func_80BA7234(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp30;
 
-    if ((this->actionFunc == EnRailgibud_Grab) && (this->grabState != 2)) {
+    if ((this->actionFunc == EnRailgibud_Grab) && (this->grabState != EN_RAILGIBUD_GRAB_RELEASE)) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 35.0f, 1);
     } else {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 35.0f, 0x1D);
     }
 
-    if ((this->actionFunc == EnRailgibud_Grab) && (this->grabState == 0) && (this->actor.bgCheckFlags & 8)) {
+    if ((this->actionFunc == EnRailgibud_Grab) && (this->grabState == EN_RAILGIBUD_GRAB_START) &&
+        (this->actor.bgCheckFlags & 8)) {
         sp30 = player->actor.world.pos;
         sp30.x += 10.0f * Math_SinS(this->actor.wallYaw);
         sp30.z += 10.0f * Math_CosS(this->actor.wallYaw);
@@ -857,7 +870,7 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
         } else if (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO) {
             this->actor.flags &= ~(0x8 | 0x1);
             this->actor.flags |= (0x4 | 0x1);
-            if (this->type == 1) {
+            if (this->type == EN_RAILGIBUD_TYPE_REDEAD) {
                 this->actor.hintId = 0x2A;
             } else {
                 this->actor.hintId = 0x2D;
@@ -869,7 +882,7 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
-    if ((this->textId == 0) && (this->type == 0)) {
+    if ((this->textId == 0) && (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
         if (func_800B84D0(&this->actor, globalCtx)) {
             this->isInvincible = true;
             func_801518B0(globalCtx, 0x13B2, &this->actor);
@@ -909,7 +922,8 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
 void EnRailgibud_CheckCollision(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((this->actionFunc != EnRailgibud_Dead) && ((this->actionFunc != EnRailgibud_Grab) || (this->grabState == 2))) {
+    if ((this->actionFunc != EnRailgibud_Dead) &&
+        ((this->actionFunc != EnRailgibud_Grab) || (this->grabState == EN_RAILGIBUD_GRAB_RELEASE))) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         if (((this->actionFunc != EnRailgibud_Damage) ||

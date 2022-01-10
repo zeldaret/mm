@@ -91,6 +91,17 @@ typedef enum {
     /*  9 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK,
 } EnTalkGibudRequestedItemIndex;
 
+typedef enum {
+    /* 0 */ EN_TALK_GIBUD_TYPE_GIBDO,
+    /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD,
+} EnTalkGibudType;
+
+typedef enum {
+    /* 0 */ EN_TALK_GIBUD_GRAB_START,
+    /* 1 */ EN_TALK_GIBUD_GRAB_ATTACK,
+    /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE,
+} EnTalkGibudGrabState;
+
 const ActorInit En_Talk_Gibud_InitVars = {
     ACTOR_EN_TALK_GIBUD,
     ACTORCAT_ENEMY,
