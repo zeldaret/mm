@@ -20,7 +20,7 @@ void SoundSource_UpdateAll(GlobalContext* globalCtx) {
             } else {
                 SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->viewProjectionMtxF, &source->worldPos, &source->projectedPos);
                 if (source->playSfxEachFrame) {
-                    Audio_PlaySfxByPos(&source->projectedPos, source->sfxId);
+                    Audio_PlaySfxAtPos(&source->projectedPos, source->sfxId);
                 }
             }
         }
@@ -63,7 +63,7 @@ void SoundSource_Add(GlobalContext* globalCtx, Vec3f* worldPos, u32 duration, u1
     source->sfxId = sfxId;
 
     SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->viewProjectionMtxF, &source->worldPos, &source->projectedPos);
-    Audio_PlaySfxByPos(&source->projectedPos, sfxId);
+    Audio_PlaySfxAtPos(&source->projectedPos, sfxId);
 }
 
 void SoundSource_PlaySfxAtFixedWorldPos(GlobalContext* globalCtx, Vec3f* worldPos, u32 duration, u16 sfxId) {

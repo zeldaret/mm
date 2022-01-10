@@ -56,7 +56,7 @@ const ActorInit Bg_Icicle_InitVars = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
     ICHAIN_F32(gravity, -3, ICHAIN_CONTINUE),
-    ICHAIN_F32(minVelocityY, -30, ICHAIN_CONTINUE),
+    ICHAIN_F32(terminalVelocity, -30, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -144,7 +144,7 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
     }
 
     if (!(this->shiverTimer % 4)) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_ICE_SWING);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_SWING);
     }
 
     if (this->shiverTimer == 0) {
@@ -184,7 +184,7 @@ void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
             return;
         }
     } else {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+        Actor_MoveWithGravity(&this->dyna.actor);
         this->dyna.actor.world.pos.y += 40.0f;
         Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
         this->dyna.actor.world.pos.y -= 40.0f;
@@ -245,5 +245,5 @@ void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIcicle_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060000D0);
+    Gfx_DrawDListOpa(globalCtx, D_060000D0);
 }

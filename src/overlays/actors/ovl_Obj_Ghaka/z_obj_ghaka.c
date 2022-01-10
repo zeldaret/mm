@@ -75,7 +75,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 distDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
-    if (func_800B84D0(&this->dyna.actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
         func_80B3C29C(this);
     } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
         if (distDiff <= -0x5556 || distDiff >= 0x5556) {
@@ -97,7 +97,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (talkState == 5) {
         if (func_80147624(globalCtx)) {
@@ -140,9 +140,9 @@ void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
         func_80B3C2C4(this, globalCtx);
         gSaveContext.weekEventReg[20] |= 0x20;
         func_80B3C260(this);
-        Audio_PlaySfxByPos(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
+        Audio_PlaySfxAtPos(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
     } else {
-        Audio_PlaySfxByPos(&D_80B3C960, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+        Audio_PlaySfxAtPos(&D_80B3C960, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 

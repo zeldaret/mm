@@ -648,7 +648,7 @@ void func_801000CC(u16 sfxId) {
 }
 
 void Lib_PlaySfxByPos(Vec3f* pos, u16 sfxId) {
-    Audio_PlaySfxByPos(pos, sfxId);
+    Audio_PlaySfxAtPos(pos, sfxId);
 }
 
 void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 a, Vec3f* src, Vec3f* dst) {

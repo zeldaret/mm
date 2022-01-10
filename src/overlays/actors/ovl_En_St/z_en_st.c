@@ -334,7 +334,7 @@ void func_808A5AF8(EnSt* this, GlobalContext* globalCtx) {
         sp54.z += this->unk_358[i].z;
         Math_Vec3f_Copy(&this->unk_358[i], &sp54);
     }
-    func_800BF7CC(globalCtx, &this->actor, this->unk_358, 12, 3, 0.1f, 0.3f);
+    Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_358, 12, 3, 0.1f, 0.3f);
 }
 
 s16 func_808A5BEC(EnSt* this) {
@@ -345,7 +345,7 @@ s16 func_808A5BEC(EnSt* this) {
     } else {
         ret = this->actor.yawTowardsPlayer;
         if (DECR(this->unk_30E) == 0) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTU_ROLL);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_ROLL);
             this->unk_18C ^= 2;
             this->unk_310 = 8;
             if (this->unk_18C & 1) {
@@ -453,7 +453,7 @@ void func_808A60E0(EnSt* this) {
 
     if (sp1C == 1.0f) {
         func_8013BC6C(&this->skelAnime, sAnimations, idx);
-        Audio_PlayActorSound2(&this->actor, sfxId);
+        Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
     this->unk_2D4 = (1.0f - sp1C) * sp20 * this->unk_2C8;
@@ -584,23 +584,23 @@ s32 func_808A6580(EnSt* this, GlobalContext* globalCtx) {
         } else if (func_808A61F4(this)) {
             switch (this->actor.colChkInfo.damageEffect) {
                 case 1:
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->unk_312 = 40;
-                    func_800BCB70(&this->actor, 0, 200, 0, this->unk_312);
+                    Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_312);
                     break;
 
                 case 5:
                     this->unk_18E = 30;
                     this->unk_312 = 40;
                     func_808A576C(this);
-                    func_800BCB70(&this->actor, 0, 200, 0, this->unk_312);
+                    Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_312);
                     break;
 
                 default:
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTU_DAMAGE);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_DAMAGE);
                     this->unk_314 = 20;
                     this->unk_312 = 0;
-                    func_800BCB70(&this->actor, 0x4000, 200, 0, this->unk_314);
+                    Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_314);
                     func_8013BC6C(&this->skelAnime, sAnimations, 1);
                     this->unk_18C |= 8;
                     this->actionFunc = func_808A6D84;
@@ -609,7 +609,7 @@ s32 func_808A6580(EnSt* this, GlobalContext* globalCtx) {
             }
         } else {
             if (ENST_GET_3F(&this->actor) != ENST_3F_63) {
-                Actor_SetSwitchFlag(globalCtx, ENST_GET_3F(&this->actor));
+                Flags_SetSwitch(globalCtx, ENST_GET_3F(&this->actor));
             }
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
@@ -649,7 +649,7 @@ s32 func_808A6580(EnSt* this, GlobalContext* globalCtx) {
             }
             this->unk_314 = 20;
             this->unk_312 = 0;
-            func_800BCB70(&this->actor, 0x4000, 200, 0, this->unk_314);
+            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_314);
             ret = true;
         }
         this->unk_310 = 0;
@@ -660,7 +660,7 @@ s32 func_808A6580(EnSt* this, GlobalContext* globalCtx) {
         if ((this->unk_316 == 0) && (this->unk_314 == 0) && (this->unk_312 == 0) &&
             !(this->collider1.base.atFlags & AT_BOUNCED) && (this->actor.colChkInfo.health != 0)) {
             globalCtx->damagePlayer(globalCtx, -8);
-            Audio_PlayActorSound2(&sp3C->actor, NA_SE_PL_BODY_HIT);
+            Actor_PlaySfxAtPos(&sp3C->actor, NA_SE_PL_BODY_HIT);
             func_800B8D98(globalCtx, &this->actor, 4.0f, this->actor.yawTowardsPlayer, 6.0f);
             this->unk_316 = 10;
             this->unk_18C |= 1;
@@ -685,7 +685,7 @@ void func_808A6A78(EnSt* this, GlobalContext* globalCtx) {
     s32 pad[2];
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_2C0)) {
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 8.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 8.0f);
         SkelAnime_Init(globalCtx, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable,
                        30);
         func_8013BC6C(&this->skelAnime, sAnimations, 0);
@@ -716,7 +716,7 @@ void func_808A6C04(EnSt* this, GlobalContext* globalCtx) {
     this->unk_30C += 0xE00;
     Math_ApproachF(&this->unk_2C4, 1.0f, 0.1f, 0.3f);
     this->actor.velocity.y = this->unk_2D4 + this->unk_2CC;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     if ((this->unk_18C & 8) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         func_8013BC6C(&this->skelAnime, sAnimations, 3);
@@ -737,7 +737,7 @@ void func_808A6C04(EnSt* this, GlobalContext* globalCtx) {
 void func_808A6D84(EnSt* this, GlobalContext* globalCtx) {
     func_808A60E0(this);
     this->actor.velocity.y = this->unk_2D4 + this->unk_2CC;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (func_808A6064(this)) {
         if (this->unk_2C8 < 0.0f) {
             func_808A6468(this, globalCtx);
@@ -782,7 +782,7 @@ void func_808A6E24(EnSt* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.0f;
 
             if ((s32)this->unk_2D0 != 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
             } else {
                 this->actor.velocity.y = 0.0f;
                 this->actionFunc = func_808A701C;
@@ -799,7 +799,7 @@ void func_808A6E24(EnSt* this, GlobalContext* globalCtx) {
             }
             this->actor.shape.rot.x = this->actor.world.rot.x;
         }
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 
@@ -891,7 +891,7 @@ void EnSt_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    Actor_SetHeight(&this->actor, 0.0f);
+    Actor_SetFocus(&this->actor, 0.0f);
     func_808A6220(this, globalCtx);
 }
 

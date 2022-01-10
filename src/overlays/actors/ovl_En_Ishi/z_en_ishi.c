@@ -124,14 +124,14 @@ static Vec3f D_8095F778 = { 0.0f, 1.0f, 0.0f };
 static InitChainEntry sInitChain[][5] = {
     {
         ICHAIN_F32_DIV1000(gravity, -1200, ICHAIN_CONTINUE),
-        ICHAIN_F32_DIV1000(minVelocityY, -20000, ICHAIN_CONTINUE),
+        ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
         ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
         ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
         ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
     },
     {
         ICHAIN_F32_DIV1000(gravity, -2500, ICHAIN_CONTINUE),
-        ICHAIN_F32_DIV1000(minVelocityY, -20000, ICHAIN_CONTINUE),
+        ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
         ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
         ICHAIN_F32(uncullZoneScale, 250, ICHAIN_CONTINUE),
         ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
@@ -333,8 +333,8 @@ void func_8095DFF0(EnIshi* this, GlobalContext* globalCtx) {
 
 void func_8095E14C(EnIshi* this) {
     this->actor.velocity.y += this->actor.gravity;
-    if (this->actor.velocity.y < this->actor.minVelocityY) {
-        this->actor.velocity.y = this->actor.minVelocityY;
+    if (this->actor.velocity.y < this->actor.terminalVelocity) {
+        this->actor.velocity.y = this->actor.terminalVelocity;
     }
 }
 
@@ -403,7 +403,7 @@ void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
 
     if (sp34 == 1) {
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.shape.shadowScale = 2.3f;
     } else {
         this->actor.shape.shadowScale = 2.4f;
@@ -471,7 +471,7 @@ void func_8095E660(EnIshi* this, GlobalContext* globalCtx) {
         if (ENISHI_GET_2(&this->actor)) {
             func_8095E204(this, globalCtx);
         }
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         return;
     }
 
@@ -508,9 +508,9 @@ void func_8095E660(EnIshi* this, GlobalContext* globalCtx) {
 
         if ((this->actor.xzDistToPlayer < 90.0f) && (sp30 == 0)) {
             if (sp38 == 1) {
-                func_800B8A1C(&this->actor, globalCtx, 0, 80.0f, 20.0f);
+                Actor_PickUp(&this->actor, globalCtx, 0, 80.0f, 20.0f);
             } else {
-                func_800B8A1C(&this->actor, globalCtx, 0, 50.0f, 10.0f);
+                Actor_PickUp(&this->actor, globalCtx, 0, 50.0f, 10.0f);
             }
         }
     }
@@ -530,12 +530,12 @@ void func_8095E95C(EnIshi* this, GlobalContext* globalCtx) {
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->actor.room = globalCtx->roomCtx.currRoom.num;
         if (ENISHI_GET_1(&this->actor) == 1) {
-            Actor_SetSwitchFlag(globalCtx, ENISHI_GET_FE00(&this->actor));
+            Flags_SetSwitch(globalCtx, ENISHI_GET_FE00(&this->actor));
         }
         func_8095EA70(this);
         func_8095E14C(this);
         func_8095E180(&this->actor.velocity, D_8095F6C8[ENISHI_GET_1(&this->actor)]);
-        Actor_ApplyMovement(&this->actor);
+        Actor_UpdatePos(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 7.5f, 35.0f, 0.0f, 0xC5);
     } else {
         sp30.x = this->actor.world.pos.x;
@@ -623,7 +623,7 @@ void func_8095EBDC(EnIshi* this, GlobalContext* globalCtx) {
             EffectSsGRipple_Spawn(globalCtx, &sp58, 500, 900, 4);
         }
 
-        this->actor.minVelocityY = -6.0f;
+        this->actor.terminalVelocity = -6.0f;
         this->actor.velocity.x *= 0.12f;
         this->actor.velocity.y *= 0.4f;
         this->actor.velocity.z *= 0.12f;
@@ -639,7 +639,7 @@ void func_8095EBDC(EnIshi* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.shape.yOffset, 0.0f, 2.0f);
     func_8095E14C(this);
     func_8095E180(&this->actor.velocity, D_8095F6C8[sp70]);
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
     this->actor.shape.rot.x += D_8095F690;
     this->actor.shape.rot.y += D_8095F694;
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 7.5f, 35.0f, 0.0f, 0xC5);
@@ -693,7 +693,7 @@ void func_8095F210(EnIshi* this, GlobalContext* globalCtx) {
     s32 sp28;
 
     if ((this->actor.projectedPos.z <= 1200.0f) || ((this->unk_197 & 1) && (this->actor.projectedPos.z < 1300.0f))) {
-        func_800BDFC0(globalCtx, gameplay_field_keep_DL_0066B0);
+        Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0066B0);
         return;
     }
 
@@ -751,5 +751,5 @@ void func_8095F61C(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_8095F654(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, object_ishi_DL_0009B0);
+    Gfx_DrawDListOpa(globalCtx, object_ishi_DL_0009B0);
 }

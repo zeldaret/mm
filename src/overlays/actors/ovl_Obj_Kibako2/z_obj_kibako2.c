@@ -65,7 +65,7 @@ s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     if ((u16)actorSpawnParam & 3) {
         flag = ((actorSpawnParam & 0x3FC) >> 2) & 0xFF;
     }
-    return !(flag >= 0 && Actor_GetChestFlag(globalCtx, flag));
+    return !(flag >= 0 && Flags_GetTreasure(globalCtx, flag));
 }
 
 void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
@@ -233,7 +233,7 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->skulltulaNoiseTimer >= 0) {
         if (this->skulltulaNoiseTimer == 0) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
             if (Rand_ZeroOne() < 0.1f) {
                 this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
             } else {
@@ -247,5 +247,5 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, gLargeCrateDL);
+    Gfx_DrawDListOpa(globalCtx, gLargeCrateDL);
 }
