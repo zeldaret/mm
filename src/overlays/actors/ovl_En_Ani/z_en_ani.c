@@ -116,7 +116,7 @@ void EnAni_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnAni* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gAniSkeleton, &gAniStandingNormalAnim, this->jointTable,
                        this->morphTable, ANI_LIMB_COUNT);
     Animation_PlayOnce(&this->skelAnime, &gAniStandingNormalAnim);
@@ -134,7 +134,7 @@ void EnAni_Init(Actor* thisx, GlobalContext* globalCtx) {
                          Animation_GetLastFrame(&gAniTreeHangingAnim), 2, 0.0f);
         this->actionFunc = EnAni_HangInTree;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = 0.0f;
+        this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
         this->actor.flags |= 0x10;
         this->stateFlags |= ANI_STATE_CLIMBING;
@@ -146,7 +146,7 @@ void EnAni_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider2.dim.radius = 60;
         this->actionFunc = EnAni_IdleStanding;
         this->actor.velocity.y = -25.0f;
-        this->actor.minVelocityY = -25.0f;
+        this->actor.terminalVelocity = -25.0f;
         this->actor.gravity = -5.0f;
     }
 }
@@ -175,14 +175,14 @@ void EnAni_IdleStanding(EnAni* this, GlobalContext* globalCtx) {
 
 void EnAni_Talk(EnAni* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (func_80152498(&globalCtx->msgCtx) == 2 && globalCtx->msgCtx.unk11F04 == 0x6DE) {
+    if (Message_GetState(&globalCtx->msgCtx) == 2 && globalCtx->msgCtx.unk11F04 == 0x6DE) {
         this->actionFunc = EnAni_IdleInPain;
     }
 }
 
 void EnAni_IdleInPain(EnAni* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnAni_Talk;
     } else {
         // telling you not to take his rupees you knocked from the tree
@@ -224,7 +224,7 @@ void EnAni_FallToGround(EnAni* this, GlobalContext* globalCtx) {
         Quake_SetSpeed(quakeValue, 0x6978);
         Quake_SetQuakeValues(quakeValue, 7, 0, 0, 0);
         Quake_SetCountdown(quakeValue, 0x14);
-        Audio_PlayActorSound2(&this->actor, NA_SE_IT_HAMMER_HIT);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_HAMMER_HIT);
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2, 0x7D0, 0x100);
@@ -235,7 +235,7 @@ void EnAni_LoseBalance(EnAni* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        this->actor.minVelocityY = -20.0f;
+        this->actor.terminalVelocity = -20.0f;
         this->actor.gravity = -5.0f;
         this->actor.velocity.y = 0.0f;
         this->actor.velocity.z = -4.0f;
@@ -284,12 +284,12 @@ void EnAni_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.velocity.y += this->actor.gravity;
-    minVelocity = this->actor.minVelocityY;
+    minVelocity = this->actor.terminalVelocity;
     if (this->actor.velocity.y < minVelocity) {
         this->actor.velocity.y = minVelocity;
     }
 
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     this->actionFunc(this, globalCtx);
     if (this->actor.xzDistToPlayer < 100.0f && !(this->stateFlags & ANI_STATE_CLIMBING)) {
