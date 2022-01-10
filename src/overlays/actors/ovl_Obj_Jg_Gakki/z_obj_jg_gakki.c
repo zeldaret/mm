@@ -33,7 +33,7 @@ void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
     ObjJgGakki* this = THIS;
     f32 frameCount = Animation_GetLastFrame(&gGoronElderDrumTakeOutAnim);
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &gGoronElderDrumSkel, NULL, NULL, NULL, 0);
 
     if (((globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7)) &&

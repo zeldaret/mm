@@ -142,7 +142,7 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
     Actor* actor = actorListStart;
 
     if (actor == NULL) {
-        actor = globalCtx->actorCtx.actorList[actorCategory].first;
+        actor = globalCtx->actorCtx.actorLists[actorCategory].first;
     }
 
     while (actor != NULL && actorId != actor->id) {
@@ -191,7 +191,7 @@ Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actor
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
-        actorIter = globalCtx->actorCtx.actorList[actorCategory].first;
+        actorIter = globalCtx->actorCtx.actorLists[actorCategory].first;
     }
 
     while (actorIter != NULL && (actorId != actorIter->id ||

@@ -866,7 +866,7 @@
         <Texture Name="gameplay_keep_Tex_01EAF8" OutName="tex_01EAF8" Format="rgba16" Width="16" Height="16" Offset="0x1EAF8" />
         <DList Name="gameplay_keep_DL_01ED00" Offset="0x1ED00" />
         <DList Name="gameplay_keep_DL_01ED90" Offset="0x1ED90" />
-        <DList Name="gameplay_keep_DL_01F0F0" Offset="0x1F0F0" />
+        <DList Name="gZTargetArrowDL" Offset="0x1F0F0" />
         <Texture Name="gameplay_keep_Tex_01F200" OutName="tex_01F200" Format="i8" Width="8" Height="8" Offset="0x1F200" />
         <DList Name="gameplay_keep_DL_01F300" Offset="0x1F300" />
         <Texture Name="gameplay_keep_Tex_01F340" OutName="tex_01F340" Format="ia8" Width="32" Height="32" Offset="0x1F340" />
@@ -1301,13 +1301,13 @@
         <Texture Name="gameplay_keep_Tex_075000" OutName="tex_075000" Format="i4" Width="32" Height="64" Offset="0x75000" />
         <Texture Name="gameplay_keep_Tex_075400" OutName="tex_075400" Format="i4" Width="32" Height="64" Offset="0x75400" />
         <Texture Name="gameplay_keep_Tex_075800" OutName="tex_075800" Format="i4" Width="32" Height="32" Offset="0x75800" />
-        <DList Name="gameplay_keep_DL_075A40" Offset="0x75A40" />
+        <DList Name="gSquareShadowDL" Offset="0x75A40" />
         <Texture Name="gameplay_keep_Tex_075AA8" OutName="tex_075AA8" Format="i4" Width="16" Height="16" Offset="0x75AA8" />
-        <DList Name="gameplay_keep_DL_075B30" Offset="0x75B30" />
+        <DList Name="gFootShadowDL" Offset="0x75B30" />
         <Texture Name="gameplay_keep_Tex_075BC0" OutName="tex_075BC0" Format="ia16" Width="32" Height="64" Offset="0x75BC0" />
-        <DList Name="gameplay_keep_DL_076BC0" Offset="0x76BC0" />
+        <DList Name="gCircleShadowDL" Offset="0x76BC0" />
         <Texture Name="gameplay_keep_Tex_076C40" OutName="tex_076C40" Format="ia16" Width="32" Height="32" Offset="0x76C40" />
-        <DList Name="gameplay_keep_DL_077480" Offset="0x77480" />
+        <DList Name="gHorseShadowDL" Offset="0x77480" />
         <Texture Name="gameplay_keep_Tex_0774D0" OutName="tex_0774D0" Format="i8" Width="16" Height="64" Offset="0x774D0" />
         <DList Name="gameplay_keep_DL_077990" Offset="0x77990" />
         <Texture Name="gameplay_keep_Tex_077A40" OutName="tex_077A40" Format="ia8" Width="32" Height="128" Offset="0x77A40" />
@@ -1322,7 +1322,7 @@
         <DList Name="gameplay_keep_DL_07AB10" Offset="0x7AB10" />
         <DList Name="gameplay_keep_DL_07AB58" Offset="0x7AB58" />
         <DList Name="gameplay_keep_DL_07AB70" Offset="0x7AB70" />
-        <DList Name="gameplay_keep_DL_07AE00" Offset="0x7AE00" />
+        <DList Name="gZTargetLockOnTriangleDL" Offset="0x7AE00" />
         <DList Name="gameplay_keep_DL_07AFB0" Offset="0x7AFB0" />
         <DList Name="gameplay_keep_DL_07B0B8" Offset="0x7B0B8" />
         <Texture Name="gameplay_keep_Tex_07B0C0" OutName="tex_07B0C0" Format="i8" Width="64" Height="64" Offset="0x7B0C0" />
