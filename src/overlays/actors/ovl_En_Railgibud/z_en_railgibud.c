@@ -45,7 +45,7 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7C78(EnRailgibud* this);
 void func_80BA7CF0(EnRailgibud* this);
 void func_80BA7D04(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA7D30(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_SinkIntoGround(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA8050(Actor* thisx, GlobalContext* globalCtx);
 
 typedef enum {
@@ -1118,14 +1118,14 @@ void func_80BA7CF0(EnRailgibud* this) {
 void func_80BA7D04(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
-void func_80BA7D14(EnRailgibud* this) {
-    this->unk_3F2 = 30;
-    this->actionFunc = func_80BA7D30;
+void EnRailgibud_SetupSinkIntoGround(EnRailgibud* this) {
+    this->sinkTimer = 30;
+    this->actionFunc = EnRailgibud_SinkIntoGround;
 }
 
-void func_80BA7D30(EnRailgibud* this, GlobalContext* globalCtx) {
-    if (this->unk_3F2 != 0) {
-        this->unk_3F2--;
+void EnRailgibud_SinkIntoGround(EnRailgibud* this, GlobalContext* globalCtx) {
+    if (this->sinkTimer != 0) {
+        this->sinkTimer--;
     } else if (Math_SmoothStepToF(&this->actor.shape.yOffset, -9500.0f, 0.5f, 200.0f, 10.0f) < 10.0f) {
         Actor_MarkForDeath(&this->actor);
     } else {
@@ -1174,14 +1174,14 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
             } else if (this->cutsceneAnimationIndex == EN_RAILGIBUD_ANIMATION_ARMS_UP_START) {
                 this->cutsceneAnimationIndex = EN_RAILGIBUD_ANIMATION_ARMS_UP_LOOP;
                 func_800BDC5C(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_ARMS_UP_LOOP);
-                func_80BA7D14(this);
+                EnRailgibud_SetupSinkIntoGround(this);
             }
         }
 
         switch (this->csAction) {
             case 3:
             case 4:
-                if (this->actionFunc == func_80BA7D30) {
+                if (this->actionFunc == EnRailgibud_SinkIntoGround) {
                     func_800B9010(&this->actor, NA_SE_EN_REDEAD_WEAKENED_L2 - SFX_FLAG);
                 } else {
                     func_800B9010(&this->actor, NA_SE_EN_REDEAD_WEAKENED_L1 - SFX_FLAG);

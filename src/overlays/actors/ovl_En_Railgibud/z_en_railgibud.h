@@ -41,7 +41,7 @@ typedef struct EnRailgibud {
                     s16 headShakeTimer;
                     s16 stunTimer;
                     s16 deathTimer;
-                    s16 unk_3F2;
+                    s16 sinkTimer;
                 };
     /* 0x03F4 */ s16 grabWaitTimer; // Cannot grab the player if this is non-zero
     /* 0x03F6 */ s16 effectTimer;
