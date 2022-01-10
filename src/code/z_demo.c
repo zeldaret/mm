@@ -1042,7 +1042,7 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     else_label:
         if (csCtx->frames >= cmd->endFrame) {
             originalCsFrames = csCtx->frames;
-            dialogState = func_80152498(&globalCtx->msgCtx);
+            dialogState = Message_GetState(&globalCtx->msgCtx);
             if (dialogState != 2 && dialogState != 0 && dialogState != 7 && dialogState != 8) {
                 csCtx->frames--;
                 if (dialogState == 4 && func_80147624(globalCtx)) {
@@ -1411,7 +1411,7 @@ void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !func_801233E4(globalCtx)) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !Player_InCsMode(&globalCtx->state)) {
         gSaveContext.cutscene = 0xFFFD;
     }
 
