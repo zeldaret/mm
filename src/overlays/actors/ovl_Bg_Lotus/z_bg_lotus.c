@@ -173,5 +173,5 @@ void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgLotus_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000040);
+    Gfx_DrawDListOpa(globalCtx, D_06000040);
 }

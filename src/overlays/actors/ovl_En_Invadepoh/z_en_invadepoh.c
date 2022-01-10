@@ -561,7 +561,7 @@ static InitChainEntry sInitChainRomani[] = {
 static InitChainEntry D_80B4EC68[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE), ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32(minVelocityY, -100, ICHAIN_CONTINUE),       ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
+    ICHAIN_F32(terminalVelocity, -100, ICHAIN_CONTINUE),   ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
 static InitChainEntry sInitChainDog[] = {
@@ -1131,7 +1131,7 @@ void func_80B44A90(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.velocity.y *= 0.8f;
         this->actor.speedXZ *= 0.8f;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 40.0f, 0.0f, 5);
 }
 
@@ -1207,7 +1207,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y,
                        Math_FAtan2F(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x), 4,
                        0xFA0, 0x64);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (func_80B440B8(this, 50.0f, 15.0f)) {
         phi_v0 = 4;
     } else {
@@ -1220,7 +1220,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B44E90(EnInvadepoh* this, GlobalContext* globalCtx) {
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 15.0f, 0.0f, 5);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
 }
@@ -1377,7 +1377,7 @@ void EnInvadepoh_SetSysMatrix(Vec3f* vec) {
 
 s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 arg3) {
     s32 pad;
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_DOOR].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_DOOR].first;
     s32 retVal = false;
 
     while (actorIterator != NULL) {
@@ -1412,7 +1412,7 @@ s32 func_80B456A8(GlobalContext* globalCtx, Vec3f* vec) {
     Vec3f multDest;
     f32 wDest;
 
-    func_800B4EDC(globalCtx, vec, &multDest, &wDest);
+    Actor_GetProjectedPos(globalCtx, vec, &multDest, &wDest);
     if (((multDest.z > 1.0f) && (fabsf(multDest.x * wDest) < 1.0f)) && (fabsf(multDest.y * wDest) < 1.0f)) {
         s32 wX = (multDest.x * wDest * 160.0f) + 160.0f;
         s32 wY = (multDest.y * wDest * -120.0f) + 120.0f;
@@ -1720,7 +1720,7 @@ void EnInvadepoh_InitAlien(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, D_80B4EC24);
     Collider_InitCylinder(globalCtx, &this->collider);
-    ActorShape_Init(&this->actor.shape, 6800.0f, func_800B4088, 150.0f);
+    ActorShape_Init(&this->actor.shape, 6800.0f, ActorShadow_DrawWhiteCircle, 150.0f);
     this->actor.shape.shadowAlpha = 140;
     this->actor.flags = 0x80001010;
     if (INVADEPOH_TYPE(this) == TYPE_ALIEN1) {
@@ -1768,7 +1768,7 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_NPC);
     Collider_InitCylinder(globalCtx, &this->collider);
     if (temp != 4) {
-        ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 18.0f);
+        ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 18.0f);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitRomaniAndCremia);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     }
@@ -1842,7 +1842,7 @@ void EnInvadepoh_InitDog(EnInvadepoh* this, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitDog);
     this->actor.colChkInfo.mass = 0x50;
-    ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 24.0f);
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_DOG);
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
@@ -1858,7 +1858,7 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitRomaniAndCremia);
     this->actor.colChkInfo.mass = MASS_HEAVY;
-    ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 18.0f);
+    ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 18.0f);
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MA2);
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
@@ -2231,7 +2231,7 @@ void func_80B47830(EnInvadepoh* this) {
     this->collider.base.acFlags &= ~1;
     this->collider.base.ocFlags1 |= 1;
     Animation_PlayLoop(&this->skelAnime, &D_060006C8);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
     this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
     this->drawAlien = true;
@@ -2323,7 +2323,7 @@ void func_80B47BAC(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B45080();
         this->actor.update = func_80B47D30;
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004E50, &D_06001D80, this->jointTable, this->morphTable,
@@ -2406,7 +2406,7 @@ void func_80B47FA8(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, thisx);
+        Actor_SetObjectDependency(globalCtx, thisx);
         this->actor.update = func_80B48060;
         this->actor.draw = func_80B4E158;
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004010, NULL, this->jointTable, this->morphTable, 6);
@@ -2449,7 +2449,7 @@ void func_80B481C4(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         this->actor.update = func_80B4827C;
         this->actor.draw = func_80B4E1B0;
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004C30, NULL, this->jointTable, this->morphTable, 6);
@@ -2562,7 +2562,7 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4873C;
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->jointTable, this->morphTable,
@@ -2619,7 +2619,7 @@ void func_80B48848(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B43E6C(this, 6, this->behaviorInfo.unk4C, 0x46);
     if (((this->actor.flags & 0x40) == 0x40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->actionTimer > 0) {
         this->actionTimer--;
@@ -2754,7 +2754,7 @@ void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff * 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         func_80B48948(this);
     }
 }
@@ -2764,7 +2764,7 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B490F0;
         this->actor.draw = func_80B4E324;
@@ -2784,7 +2784,7 @@ void func_80B490F0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = func_800B84D0(&this->actor, globalCtx);
+    s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -2815,7 +2815,7 @@ void func_80B49228(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad;
     f32 temp_f0;
 
-    Actor_SetVelocityYRotationAndGravity(&this->actor);
+    Actor_UpdateVelocityWithGravity(&this->actor);
     this->actor.velocity.y *= 0.97f;
     temp_f0 = Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + D_80B4E934.y + 300.0f, 0.7f,
                                  fabsf(this->actor.velocity.y), 1.0f);
@@ -2844,7 +2844,7 @@ void func_80B4934C(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.gravity = -2.0f;
     }
     this->actor.velocity.y *= 0.96f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_800B9010(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
     this->actionTimer--;
     if (this->actionTimer <= 0) {
@@ -2931,7 +2931,7 @@ void func_80B49670(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.gravity = 2.0f;
     }
     this->actor.velocity.y *= 0.97f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (D_80B4E940 == 3) {
         func_80B499BC(this);
     }
@@ -2961,7 +2961,7 @@ void func_80B497EC(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.gravity = 2.0f;
     }
     this->actor.velocity.y *= 0.97f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -2981,7 +2981,7 @@ void func_80B49904(EnInvadepoh* this) {
 void func_80B4994C(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 150.0f, 4.0f);
     this->actor.velocity.y *= 0.95f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -3013,7 +3013,7 @@ void func_80B49A00(EnInvadepoh* this, GlobalContext* globalCtx) {
     } else {
         this->actor.gravity = 2.0f;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     if (this->actionTimer > 0) {
         this->actionTimer--;
@@ -3072,7 +3072,7 @@ void func_80B49C38(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (((this->actor.flags & 0x40) == 0x40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->clockTime >= 0.9999f) {
         Actor_MarkForDeath(&this->actor);
@@ -3102,7 +3102,7 @@ void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.save.weekEventReg[54] |= 0x10;
             this->actor.textId = 0x332E;
@@ -3119,7 +3119,7 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         sp38 = gSaveContext.save.time;
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
                            23);
@@ -3167,7 +3167,7 @@ void func_80B4A1B8(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = func_800B84D0(&this->actor, globalCtx);
+    s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3298,7 +3298,7 @@ void func_80B4A67C(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
     if (((this->actor.flags & 0x40) == 0x40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->pathIndex == this->endPoint) {
         func_80B4A2C0(this);
@@ -3329,7 +3329,7 @@ void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.save.weekEventReg[54] |= 0x10;
             this->actor.textId = 0x332E;
@@ -3350,7 +3350,7 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         sp38 = gSaveContext.save.time;
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
                            23);
@@ -3396,7 +3396,7 @@ void func_80B4ABDC(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = func_800B84D0(&this->actor, globalCtx);
+    s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3432,7 +3432,7 @@ void func_80B4AD3C(EnInvadepoh* this) {
 }
 
 void func_80B4AD60(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnInvadepoh_SetTextID(this, globalCtx, 0x3331);
         func_80B4ADB8(this);
     } else {
@@ -3445,7 +3445,7 @@ void func_80B4ADB8(EnInvadepoh* this) {
 }
 
 void func_80B4ADCC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (this->textId == 0x3331) {
             if (gSaveContext.save.weekEventReg[22] & 2) {
                 EnInvadepoh_SetTextID(this, globalCtx, 0x3334);
@@ -3482,7 +3482,7 @@ void func_80B4AEDC(EnInvadepoh* this, GlobalContext* globalCtx) {
         gSaveContext.save.weekEventReg[22] |= 2;
         func_80B4AF80(this);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
     }
 }
 
@@ -3491,14 +3491,14 @@ void func_80B4AF80(EnInvadepoh* this) {
 }
 
 void func_80B4AF94(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnInvadepoh_SetTextID(this, globalCtx, 0x3334);
         func_80151BB4(globalCtx, 0x1E);
         func_80151BB4(globalCtx, 0x1D);
         func_80151BB4(globalCtx, 5);
         func_80B4ADB8(this);
     } else {
-        func_800B85E0(&this->actor, globalCtx, 2000.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 2000.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -3511,7 +3511,7 @@ void func_80B4B048(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (globalCtx->msgCtx.unk120B1 == 0) {
         if (globalCtx->msgCtx.unk11F22 == 0) {
             D_80B4E998 = 1;
-        } else if ((func_80152498(&globalCtx->msgCtx) == 6) || (func_80152498(&globalCtx->msgCtx) == 5)) {
+        } else if ((Message_GetState(&globalCtx->msgCtx) == 6) || (Message_GetState(&globalCtx->msgCtx) == 5)) {
             D_80B4E998 = 1;
         }
     }
@@ -3524,7 +3524,7 @@ void func_80B4B0C4(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4B218;
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
@@ -3571,7 +3571,7 @@ void func_80B4B3DC(EnInvadepoh* this) {
     s32 pad;
 
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
@@ -3634,7 +3634,7 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actionTimer--;
     } else if (this->unk3BC >= 0) {
         if ((D_80B50348 == 0) && (Rand_ZeroOne() < 0.4f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
         }
         func_80B4B724(this);
     } else {
@@ -3655,7 +3655,7 @@ void func_80B4B768(EnInvadepoh* this, GlobalContext* globalCtx) {
                        0x64);
     func_80B44E90(this, globalCtx);
     if (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 19.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
     if (this->animPlayFlag) {
         func_80B4B510(this);
@@ -3681,7 +3681,7 @@ void func_80B4B8BC(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, &D_060021C8, this->jointTable, this->morphTable,
                            13);
         func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &gZeroVec3s, 3000, 0.1f, 0.0f, 0.0f);
@@ -3832,7 +3832,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (((this->actor.flags & 0x40) == 0x40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (gSaveContext.save.time > CLOCK_TIME(20, 15)) {
         Actor_MarkForDeath(&this->actor);
@@ -3868,7 +3868,7 @@ void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         func_80B4BBE0(this);
     }
 }
@@ -3914,7 +3914,7 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
         s32 currentTime = gSaveContext.save.time;
 
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44FEC();
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06015C28, &D_06016720, this->jointTable, this->morphTable,
                            22);
@@ -3958,7 +3958,7 @@ void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = func_800B84D0(&this->actor, globalCtx);
+    s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 6);
@@ -4053,7 +4053,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (((this->actor.flags & 0x40) == 0x40) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 7.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
 
     if (this->clockTime >= 0.9999f) {
@@ -4090,7 +4090,7 @@ void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         func_80B4C6C8(this);
     }
 }
@@ -4135,7 +4135,7 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
         sp38 = gSaveContext.save.time;
 
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
                            23);
@@ -4174,7 +4174,7 @@ void func_80B4D054(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = func_800B84D0(&this->actor, globalCtx);
+    s32 isTalking = Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -4323,7 +4323,7 @@ void func_80B4D670(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         invadepohType = this->actor.params & 7;
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B45080();
         this->actor.update = func_80B4D760;
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004E50, &D_06001674, this->jointTable, this->morphTable,

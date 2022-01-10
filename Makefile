@@ -8,6 +8,8 @@ COMPARE ?= 1
 NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
+# if WERROR is 1, pass -Werror to CC_CHECK, so warnings would be treated as errors
+WERROR ?= 0
 # Keep .mdebug section in build
 KEEP_MDEBUG ?= 0
 # Disassembles all asm from the ROM instead of skipping files which are entirely in C
@@ -109,6 +111,10 @@ endif
 COMPFLAGS := --threads $(N_THREADS)
 ifneq ($(NON_MATCHING),1)
 	COMPFLAGS += --matching
+endif
+
+ifneq ($(WERROR), 0)
+  CC_CHECK += -Werror
 endif
 
 #### Files ####

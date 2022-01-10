@@ -75,7 +75,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 distDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
-    if (func_800B84D0(&this->dyna.actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
         func_80B3C29C(this);
     } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
         if (distDiff <= -0x5556 || distDiff >= 0x5556) {
@@ -98,7 +98,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (talkState == 5) {
         if (func_80147624(globalCtx)) {

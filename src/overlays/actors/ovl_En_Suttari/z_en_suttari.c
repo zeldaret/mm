@@ -173,7 +173,7 @@ void EnSuttari_UpdateCollider(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 Actor* EnSuttari_GetActorById(GlobalContext* globalCtx, s16 actorId) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actor != NULL) {
         if (actor->id == actorId) {
@@ -229,13 +229,13 @@ void func_80BAA9B4(EnSuttari* this) {
         case 0x145B:
             if ((this->animationIdx != 8) && (curFrame == frameCount)) {
                 this->animationIdx = 8;
-                func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
             }
             break;
         default:
             if ((this->animationIdx != 1) && (curFrame == frameCount)) {
                 this->animationIdx = 1;
-                func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
             }
     }
 }
@@ -244,7 +244,7 @@ void func_80BAAA94(EnSuttari* this) {
     switch (this->textId) {
         case 0x29E5:
             this->animationIdx = 1;
-            func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
             break;
         case 0x29E9:
             this->enFsn->flags |= ENFSN_ANGRY;
@@ -257,11 +257,11 @@ void func_80BAAA94(EnSuttari* this) {
             break;
         case 0x29EC:
             this->animationIdx = 7;
-            func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
             break;
         case 0x29ED:
             this->animationIdx = 1;
-            func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
             break;
     }
 }
@@ -387,10 +387,10 @@ void func_80BAAF1C(EnSuttari* this) {
 
     if (this->animationIdx == 5) {
         this->animationIdx = 3;
-        func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
     } else if ((this->animationIdx == 3) && (curFrame == frameCount)) {
         this->animationIdx = 6;
-        func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
         this->flags1 &= ~0x100;
     }
 }
@@ -469,7 +469,7 @@ void func_80BAB374(EnSuttari* this, GlobalContext* globalCtx) {
         sp38.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
         sp38.y = this->actor.world.pos.y;
         sp38.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
-        func_800BBDAC(globalCtx, &this->actor, &sp38, 10.0f, 0, 2.0f, 0, 0, 0);
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &sp38, 10.0f, 0, 2.0f, 0, 0, 0);
     }
 }
 
@@ -823,7 +823,7 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
         case 15:
             if ((this->animationIdx == 1) && (curFrame == frameCount)) {
                 this->animationIdx = 2;
-                func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
             }
             if (!(gSaveContext.save.weekEventReg[0x53] & 4) && !(this->flags1 & 0x1000)) {
                 if (ActorCutscene_GetCanPlayNext(this->cutscenes[0])) {
@@ -856,7 +856,7 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
             this->enFsn->flags &= ~ENFSN_HAGGLE;
             if (this->animationIdx != 2) {
                 this->animationIdx = 2;
-                func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
             }
             func_80BAC220(this, globalCtx);
             break;
@@ -887,7 +887,7 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
             if (!(gSaveContext.save.weekEventReg[0x21] & 8)) {
                 if (this->animationIdx == 2 || this->animationIdx == 1) {
                     this->animationIdx = 5;
-                    func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
                 }
                 this->flags1 |= 0x10;
                 if (this->flags2 & 2) {
@@ -915,7 +915,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
         this->flags1 |= 1;
         if (gSaveContext.save.day == 1 || gSaveContext.save.day == 2) {
             this->animationIdx = 2;
-            func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
             this->flags1 |= 0x80;
             this->actionFunc = func_80BACA14;
             return;
@@ -923,7 +923,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
                    !(gSaveContext.save.weekEventReg[0x3D] & 8) && !(gSaveContext.save.weekEventReg[0x21] & 8) &&
                    (gSaveContext.save.weekEventReg[0x33] & 8)) {
             this->animationIdx = 2;
-            func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
             this->actionFunc = func_80BACEE0;
             return;
         }
@@ -939,7 +939,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
         this->flags1 |= 0x80;
         this->flags1 |= 8;
         this->animationIdx = 1;
-        func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
         this->actionFunc = func_80BAD004;
         return;
     } else if (globalCtx->sceneNum == SCENE_ICHIBA) {
@@ -948,7 +948,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
             return;
         }
         this->animationIdx = 0;
-        func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
         this->flags1 |= 2;
         this->actionFunc = func_80BAD5F8;
         return;
@@ -958,7 +958,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
             return;
         }
         this->animationIdx = 0;
-        func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
         this->cutscenes[0] = this->actor.cutscene;
         this->cutscenes[1] = ActorCutscene_GetAdditionalCutscene(this->cutscenes[0]);
         this->flags1 |= 4;
@@ -978,7 +978,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
 
     if (this->animationIdx == 1 || this->animationIdx == 8) {
         this->animationIdx = 2;
-        func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
     }
     func_80BABA90(this, 0, 0);
     func_80BAB434(this);
@@ -988,7 +988,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80BACBB0;
         }
     } else if ((player->transformation == PLAYER_FORM_HUMAN) && GET_CUR_EQUIP_VALUE(EQUIP_SWORD) != 0) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk3F2 = this->unk2DC.y;
             func_80BAAB78(this, globalCtx);
             this->actionFunc = func_80BADA9C;
@@ -997,7 +997,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
         }
     }
     Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 0.1f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80BACBB0(EnSuttari* this, GlobalContext* globalCtx) {
@@ -1023,7 +1023,7 @@ void func_80BACBB0(EnSuttari* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80BACD2C;
         this->actor.speedXZ = 0.0f;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (!(this->actor.bgCheckFlags & 1)) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
@@ -1045,7 +1045,7 @@ void func_80BACD2C(EnSuttari* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (!(this->actor.bgCheckFlags & 1)) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
@@ -1057,7 +1057,7 @@ void func_80BACE4C(EnSuttari* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer > 100.0f) {
         this->actionFunc = func_80BACBB0;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (this->actor.world.pos.y != this->actor.floorHeight) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
@@ -1087,7 +1087,7 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
     } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
         func_80BAB1A0(this, globalCtx);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
@@ -1104,17 +1104,17 @@ void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
     }
     this->unk428 = unkStruct.unk0;
     func_80BAC2FC(this, globalCtx);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isTargeted) {
         func_800B863C(&this->actor, globalCtx);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80BAD130(EnSuttari* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0x43;
@@ -1147,7 +1147,7 @@ void func_80BAD230(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD2B4(EnSuttari* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->textId == 0x2A30) {
             ActorCutscene_Stop(this->cutscenes[0]);
             ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
@@ -1164,7 +1164,7 @@ void func_80BAD2B4(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
     Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags1 & 0x40) && (globalCtx->msgCtx.unk11F04 != 0x2A31)) {
@@ -1206,7 +1206,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
         } else {
             this->unk3F2 = this->unk2DC.y;
             Math_ApproachF(&this->actor.speedXZ, 4.0f, 0.2f, 0.5f);
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             func_80BAB374(this, globalCtx);
         }
     }
@@ -1220,7 +1220,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
 
     if ((curFrame == frameCount) && (this->animationIdx == 0) && (this->flags1 & 0x20)) {
         this->animationIdx = 2;
-        func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
     }
     this->unk42A = REG(15) + *unk_14;
     if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
@@ -1238,14 +1238,14 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
     }
     func_80BAB434(this);
     if ((this->flags1 & 0x20) && (this->unk430 == 0) && (unkStruct.unk0 != 7)) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_801518B0(globalCtx, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
             func_800B863C(&this->actor, globalCtx);
         }
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
@@ -1259,7 +1259,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
     } else {
         if ((this->flags1 & 0x2000) && (this->animationIdx == 1) && (curFrame == frameCount)) {
             this->animationIdx = 2;
-            func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
         }
         this->unk42A = REG(15) + *unk_14;
         if (!func_80133038(globalCtx, D_80BAE820, &unkStruct) ||
@@ -1276,19 +1276,19 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
             return;
         }
         if ((this->flags1 & 0x20) && (unkStruct.unk0 != 9)) {
-            if (func_800B84D0(&this->actor, globalCtx)) {
+            if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
                 func_801518B0(globalCtx, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;
             } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
                 func_800B863C(&this->actor, globalCtx);
             }
         }
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 
 void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_80BAAB78(this, globalCtx);
         gSaveContext.save.weekEventReg[0x51] |= 4;
@@ -1299,7 +1299,7 @@ void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
-    u8 talkstate = func_80152498(&globalCtx->msgCtx);
+    u8 talkstate = Message_GetState(&globalCtx->msgCtx);
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
@@ -1308,7 +1308,7 @@ void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
         func_80BAA9B4(this);
     } else if ((this->animationIdx == 7) && (curFrame == frameCount)) {
         this->animationIdx = 1;
-        func_800BDC5C(&this->skelAnime, sAnimations, this->animationIdx);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->animationIdx);
     }
     if (talkstate == 5) {
         if (func_80147624(globalCtx)) {
@@ -1372,7 +1372,7 @@ void func_80BADDB4(EnSuttari* this, GlobalContext* globalCtx) {
     if (gSaveContext.save.weekEventReg[0x33] & 0x10) {
         this->actionFunc = func_80BADE14;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80BADE14(EnSuttari* this, GlobalContext* globalCtx) {
@@ -1383,13 +1383,13 @@ void func_80BADE14(EnSuttari* this, GlobalContext* globalCtx) {
         this->unk3F2 = this->unk2DC.y;
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80BADE8C(EnSuttari* this, GlobalContext* globalCtx) {
     this->unk3F2 = this->unk2DC.y;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_801518B0(globalCtx, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
@@ -1408,7 +1408,7 @@ void func_80BADF3C(EnSuttari* this, GlobalContext* globalCtx) {
     if (DECR(this->unk3F6) == 0) {
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void EnSuttari_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -1456,11 +1456,11 @@ void EnSuttari_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk428 != 0) {
         if (this->animationIdx == 2 || this->animationIdx == 6) {
             if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 16.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         } else if (this->animationIdx == 0 || this->animationIdx == 5) {
             if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 17.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         }
     }

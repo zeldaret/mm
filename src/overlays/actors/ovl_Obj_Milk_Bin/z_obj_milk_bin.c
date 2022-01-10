@@ -100,6 +100,6 @@ void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
 
     if (!(this->disableDraw & 1)) {
-        func_800BDFC0(globalCtx, D_060004B0);
+        Gfx_DrawDListOpa(globalCtx, D_060004B0);
     }
 }

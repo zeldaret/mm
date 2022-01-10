@@ -143,7 +143,7 @@ void func_80B40BC0(EnKgy* this, s16 arg1) {
 }
 
 EnKbt* EnKgy_FindZubora(GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actor != NULL) {
         if (actor->id == ACTOR_EN_KBT) {
@@ -155,7 +155,7 @@ EnKbt* EnKgy_FindZubora(GlobalContext* globalCtx) {
 }
 
 ObjIcePoly* EnKgy_FindIceBlock(GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (actor != NULL) {
         if (actor->id == ACTOR_OBJ_ICE_POLY) {
@@ -259,7 +259,7 @@ void func_80B40EE8(EnKgy* this, GlobalContext* globalCtx) {
         f32 sp34;
         f32 temp_f0;
 
-        func_800B4EDC(globalCtx, &this->unk_2B4, &sp38, &sp34);
+        Actor_GetProjectedPos(globalCtx, &this->unk_2B4, &sp38, &sp34);
         temp_f0 = sp38.x * sp34;
         if (this->unk_2E6 > 0) {
             this->unk_2E6--;
@@ -459,7 +459,7 @@ void func_80B4163C(EnKgy* this, GlobalContext* globalCtx) {
             this->lightInfo.params.point.y = this->unk_2C0.y;
             this->lightInfo.params.point.z = this->unk_2C0.z;
             this->unk_300 = 200;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_SWORD_FORGE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SWORD_FORGE);
             break;
     }
 
@@ -471,7 +471,7 @@ void func_80B4163C(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B417B8(EnKgy* this, GlobalContext* globalCtx) {
     func_80B4163C(this, globalCtx);
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         func_80B413C8(this);
         this->actor.flags &= ~0x100;
@@ -495,7 +495,7 @@ void func_80B41858(EnKgy* this, GlobalContext* globalCtx) {
 void func_80B418C4(EnKgy* this, GlobalContext* globalCtx) {
     func_80B4163C(this, globalCtx);
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx) &&
+        (Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx) &&
         ((globalCtx->msgCtx.unk11F04 == 0xC4E) || (globalCtx->msgCtx.unk11F04 == 0xC4F))) {
         func_801477B4(globalCtx);
         this->actor.textId = 0xC4F;
@@ -512,7 +512,7 @@ void func_80B419B0(EnKgy* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     func_80B4163C(this, globalCtx);
-    if (func_800B84D0(&this->actor, globalCtx) || (&this->actor == player->targetActor)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) || (&this->actor == player->targetActor)) {
         func_80B411DC(this, globalCtx, 4);
         func_80B40E18(this, this->actor.textId);
         if (this->actor.textId == 0xC37) {
@@ -538,7 +538,7 @@ void func_80B41ACC(EnKgy* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_Update(&this->skelAnime);
-    if (func_80152498(&globalCtx->msgCtx) == 0x10) {
+    if (Message_GetState(&globalCtx->msgCtx) == 0x10) {
         itemActionParam = func_80123810(globalCtx);
         if (itemActionParam != PLAYER_AP_NONE) {
             this->actionFunc = func_80B41E18;
@@ -587,7 +587,7 @@ void func_80B41C30(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B41C54(EnKgy* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->actionFunc = func_80B41C30;
         this->actor.flags &= ~0x100;
     }
@@ -596,13 +596,13 @@ void func_80B41C54(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B41CBC(EnKgy* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_80B40E18(this, this->actor.textId);
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, globalCtx, 4);
     } else {
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -611,9 +611,9 @@ void func_80B41D64(EnKgy* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actionFunc = func_80B41CBC;
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
     }
     func_80B40EE8(this, globalCtx);
 }
@@ -628,7 +628,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && func_80B40E54(this) == 0) {
-        switch (func_80152498(&globalCtx->msgCtx)) {
+        switch (Message_GetState(&globalCtx->msgCtx)) {
             case 4:
                 if (func_80147624(globalCtx)) {
                     temp = globalCtx->msgCtx.unk11F04;
@@ -760,7 +760,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                         case 0xC46:
                         case 0xC55:
                             func_80123D50(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
-                            player->unk_A87 = PLAYER_AP_NONE;
+                            player->exchangeItemId = EXCH_ITEM_NONE;
                             this->unk_29C &= ~0x8;
                             globalCtx->msgCtx.unk11F10 = 0;
                             func_80B41368(this, globalCtx, 4);
@@ -775,7 +775,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                         case 0xC47:
                             func_80B40BC0(this, 1);
                             if (this->unk_29C & 8) {
-                                player->unk_A87 = PLAYER_AP_NONE;
+                                player->exchangeItemId = EXCH_ITEM_NONE;
                                 this->unk_29C &= ~8;
                             }
                             func_80B40EBC(this, globalCtx, temp);
@@ -814,7 +814,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                             func_801477B4(globalCtx);
                             this->actionFunc = func_80B41D64;
                             func_80B413C8(this);
-                            func_800B8A1C(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
+                            Actor_PickUp(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
                             break;
 
                         case 0xC51:
@@ -847,7 +847,7 @@ void func_80B42508(EnKgy* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
-    if (func_800B84D0(&this->actor, globalCtx) || (&this->actor == player->targetActor)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) || (&this->actor == player->targetActor)) {
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, globalCtx, 4);
         func_80B40E18(this, this->actor.textId);
@@ -857,7 +857,7 @@ void func_80B42508(EnKgy* this, GlobalContext* globalCtx) {
 void func_80B425A0(EnKgy* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B41E18;
         func_80B40BC0(this, 1);
         func_80B411DC(this, globalCtx, 0);
@@ -870,7 +870,7 @@ void func_80B425A0(EnKgy* this, GlobalContext* globalCtx) {
 void func_80B42660(EnKgy* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         func_80B413C8(this);
         this->actor.flags &= ~0x100;
@@ -886,7 +886,7 @@ void func_80B42714(EnKgy* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
-    if (func_800B84D0(&this->actor, globalCtx) || (&this->actor == player->targetActor)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) || (&this->actor == player->targetActor)) {
         func_80B411DC(this, globalCtx, 4);
         func_80B40E18(this, this->actor.textId);
         if (this->actor.textId == 0xC37) {
@@ -911,7 +911,7 @@ void func_80B427C8(EnKgy* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        (Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         temp_a2 = globalCtx->msgCtx.unk11F04;
 
         switch (temp_a2) {
@@ -952,7 +952,7 @@ void func_80B4296C(EnKgy* this, GlobalContext* globalCtx) {
     }
 
     this->actor.focus.pos = this->unk_2A8;
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B427C8;
         if (this->unk_2D2 == 4) {
             func_80B40BC0(this, 7);
@@ -964,7 +964,7 @@ void func_80B4296C(EnKgy* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~0x10000;
     } else {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, 0);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_NONE);
     }
 }
 
@@ -983,7 +983,7 @@ void func_80B42A8C(EnKgy* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        (Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         temp_a2 = globalCtx->msgCtx.unk11F04;
         switch (temp_a2) {
             case 0xC1D:
@@ -1064,7 +1064,7 @@ void func_80B42D28(EnKgy* this, GlobalContext* globalCtx) {
     }
 
     this->actor.focus.pos = this->unk_2A8;
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B42A8C;
         if (this->actor.textId == 0xC2D) {
             func_80B40BC0(this, 1);

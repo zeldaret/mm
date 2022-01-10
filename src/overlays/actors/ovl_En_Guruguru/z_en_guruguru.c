@@ -79,7 +79,7 @@ void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGuruguru* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06006C90, &D_06000B04, this->jointTable, this->morphTable, 16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {
@@ -170,7 +170,7 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
     yawTemp = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     yaw = ABS_ALT(yawTemp);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BC701C(this, globalCtx);
     } else if (yaw <= 0x2890) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
@@ -197,7 +197,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     } else if (this->unusedTimer == 0) {
         this->unusedTimer = 6;
-        if (func_80152498(&globalCtx->msgCtx) != 5) {
+        if (Message_GetState(&globalCtx->msgCtx) != 5) {
             if (this->unk266 == 0) {
                 if (this->headZRotTarget != 0) {
                     this->headZRotTarget = 0;
@@ -213,7 +213,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
         func_801477B4(globalCtx);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
@@ -301,21 +301,21 @@ void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
         this->textIdIndex++;
         this->actor.textId = textIDs[this->textIdIndex];
         func_801A3B48(1);
-        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
         this->unk268 = 0;
         gSaveContext.save.weekEventReg[38] |= 0x40;
         this->actionFunc = func_80BC7520;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MASK_BREMEN, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MASK_BREMEN, 300.0f, 300.0f);
     }
 }
 
 void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BC7068;
     } else {
-        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -365,8 +365,8 @@ void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     Actor_SetScale(&this->actor, 0.01f);
-    Actor_SetHeight(&this->actor, 50.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_SetFocus(&this->actor, 50.0f);
+    Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->headXRot, this->headXRotTarget, 1, 3000, 0);
     Math_SmoothStepToS(&this->headZRot, this->headZRotTarget, 1, 1000, 0);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);

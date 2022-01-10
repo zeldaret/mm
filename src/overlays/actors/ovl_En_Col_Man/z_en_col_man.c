@@ -73,11 +73,11 @@ void EnColMan_Init(Actor* thisx, GlobalContext* globalCtx) {
         case EN_COL_MAN_HEART_PIECE:
         case EN_COL_MAN_RECOVERY_HEART:
         default:
-            ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
+            ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
             func_80AFDD60(this);
             break;
         case EN_COL_MAN_FALLING_ROCK:
-            ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
+            ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
             func_80AFDF60(this);
             break;
         case EN_COL_MAN_CUTSCENE_BOMB:
@@ -131,14 +131,14 @@ void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx) {
         this->actor.draw = NULL;
         this->actionFunc = EnColMan_SetHeartPieceCollectedAndKill;
     } else if (!(gSaveContext.save.weekEventReg[56] & 2)) {
-        func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 40.0f, 40.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 40.0f, 40.0f);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_RECOVERY_HEART, 40.0f, 40.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RECOVERY_HEART, 40.0f, 40.0f);
     }
 }
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
         gSaveContext.save.weekEventReg[56] |= 2;
         Actor_MarkForDeath(&this->actor);
     }
@@ -167,7 +167,7 @@ void func_80AFDFB4(EnColMan* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 2.0f + BREG(56) + Rand_ZeroFloat(2.0f);
             this->actor.velocity.y = 12.0f + BREG(57) + Rand_ZeroFloat(5.0f);
             this->hasSetRandomValues = true;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ANSATSUSYA_ROCK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ANSATSUSYA_ROCK);
             return;
         }
 
@@ -210,7 +210,7 @@ void func_80AFE25C(EnColMan* this, GlobalContext* globalCtx) {
             }
         }
 
-        Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -221,7 +221,7 @@ void EnColMan_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, this->scale);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 30.0f, 30.0f, 0x1F);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);

@@ -20,7 +20,7 @@ s32 func_8013A240(GlobalContext* globalCtx) {
     }
 
     for (; type < 12; type++) {
-        for (actor = globalCtx->actorCtx.actorList[type].first; actor != NULL; actor = actor->next) {
+        for (actor = globalCtx->actorCtx.actorLists[type].first; actor != NULL; actor = actor->next) {
             seen = 0;
 
             switch (globalCtx->sceneNum) {
@@ -134,7 +134,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
         ret |= 0x3E;
     }
 
-    func_800B4EDC(globalCtx, pos, &screenSpace, &distance);
+    Actor_GetProjectedPos(globalCtx, pos, &screenSpace, &distance);
     x = (s16)(screenSpace.x * distance * 160.0f + 160.0f) - 85;
     y = (s16)(screenSpace.y * distance * -120.0f + 120.0f) - 67;
     if ((x < 0) || (150 < x) || (y < 0) || (105 < y)) {

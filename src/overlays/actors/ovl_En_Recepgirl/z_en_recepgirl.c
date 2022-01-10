@@ -108,9 +108,9 @@ void EnRecepgirl_Wait(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnRecepgirl_SetupTalk(this);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2000)) {
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
         if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
             this->actor.textId = 0x2367; // "... doesn't Kafei want to break off his engagement ... ?"
@@ -148,13 +148,13 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    temp_v0_2 = func_80152498(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC; // hear directions again?
         EnRecepgirl_SetupWait(this);
     } else if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
-            Actor_SetSwitchFlag(globalCtx, this->actor.params);
+            Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
 
             if (gSaveContext.save.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting

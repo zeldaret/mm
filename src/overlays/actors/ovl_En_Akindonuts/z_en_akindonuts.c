@@ -129,7 +129,7 @@ void func_80BECBE0(EnAkindonuts* this, s16 arg1) {
         this->actor.velocity.z = 0.0f;
     }
 
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
 }
 
 void func_80BECC7C(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -1036,7 +1036,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
             player->actor.textId = D_80BF048C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15E4) {
-                player->unk_A87 = itemActionParam;
+                player->exchangeItemId = itemActionParam;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1045,7 +1045,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
             player->actor.textId = D_80BF0494[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15F9) {
-                player->unk_A87 = itemActionParam;
+                player->exchangeItemId = itemActionParam;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1054,7 +1054,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
             player->actor.textId = D_80BF049C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x160C) {
-                player->unk_A87 = itemActionParam;
+                player->exchangeItemId = itemActionParam;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1063,7 +1063,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
             player->actor.textId = D_80BF04A4[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x1621) {
-                player->unk_A87 = itemActionParam;
+                player->exchangeItemId = itemActionParam;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1162,7 +1162,7 @@ void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx) {
         }
 
         if (phi_v0) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
             this->actionFunc = func_80BEEDC0;
             this->unk_338 = 3;
             this->collider.dim.height = 64;
@@ -1175,12 +1175,12 @@ void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx) {
         if ((this->unk_338 == 4) || (this->unk_338 == 18)) {
             this->unk_338 = 17;
             this->collider.dim.height = 0;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
             func_8013BC6C(&this->skelAnime, sAnimations, 17);
         } else if (this->unk_338 == 2) {
             this->unk_338 = 16;
             this->collider.dim.height = 32;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_UP);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
             func_8013BC6C(&this->skelAnime, sAnimations, 16);
         } else if (this->unk_338 == 17) {
             phi_v0 = DECR(this->unk_33A);
@@ -1213,7 +1213,7 @@ void func_80BEEE10(EnAkindonuts* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 2000, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_2DC(this, globalCtx);
         this->actionFunc = func_80BEEFA8;
     } else if (((this->actor.xzDistToPlayer < 100.0f) &&
@@ -1229,7 +1229,7 @@ void func_80BEEE10(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
-    u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
         if (func_80147624(globalCtx)) {
@@ -1274,7 +1274,7 @@ void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEF18C(EnAkindonuts* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_33C = 0;
@@ -1283,7 +1283,7 @@ void func_80BEF18C(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEF20C(EnAkindonuts* this, GlobalContext* globalCtx) {
-    u8 sp27 = func_80152498(&globalCtx->msgCtx);
+    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
     s16 sp24 = this->skelAnime.curFrame;
     s16 sp22 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
 
@@ -1319,25 +1319,25 @@ void func_80BEF360(EnAkindonuts* this, GlobalContext* globalCtx) {
             this->unk_32C &= ~0x40;
             this->actionFunc = func_80BEF450;
         } else {
-            func_800B8A1C(&this->actor, globalCtx, func_80BED034(this), 300.0f, 300.0f);
+            Actor_PickUp(&this->actor, globalCtx, func_80BED034(this), 300.0f, 300.0f);
         }
     } else if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BEF450;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, func_80BECFBC(this), 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, func_80BECFBC(this), 300.0f, 300.0f);
     }
 }
 
 void func_80BEF450(EnAkindonuts* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
         this->actionFunc = func_80BEF4B8;
     }
 }
 
 void func_80BEF4B8(EnAkindonuts* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_2DC(this, globalCtx);
         this->actionFunc = func_80BEEFA8;
     } else {
@@ -1422,7 +1422,7 @@ void func_80BEF518(EnAkindonuts* this, GlobalContext* globalCtx) {
         this->unk_33E = 3;
         this->unk_338 = 19;
         func_8013BC6C(&this->skelAnime, sAnimations, this->unk_338);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
         this->unk_32C &= ~2;
         this->unk_32C |= 0x80;
         this->unk_358 = this->actor.world.pos.y;
@@ -1481,7 +1481,7 @@ void func_80BEF83C(EnAkindonuts* this, GlobalContext* globalCtx) {
         this->unk_34C = 0.3f;
         this->unk_338 = 9;
         func_8013BC6C(&this->skelAnime, sAnimations, this->unk_338);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80BEF9F0;
     }
 }
@@ -1587,7 +1587,7 @@ void EnAkindonuts_Init(Actor* thisx, GlobalContext* globalCtx) {
                        this->morphTable, 28);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actor.colChkInfo.cylRadius = 0;
@@ -1620,9 +1620,9 @@ void EnAkindonuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnAkindonuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnAkindonuts* this = THIS;
 
-    Actor_SetHeight(&this->actor, 60.0f);
+    Actor_SetFocus(&this->actor, 60.0f);
     SkelAnime_Update(&this->skelAnime);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     this->actionFunc(this, globalCtx);
 

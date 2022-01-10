@@ -150,7 +150,7 @@ s32 func_809C1424(EnAob01* this) {
     if (this->unk_43C == 1) {
         if (curFrame == lastFrame) {
             this->unk_43C = 2;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 2);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 2);
             return true;
         }
     } else if (this->unk_43C == 2) {
@@ -166,13 +166,13 @@ s32 func_809C14D0(EnAob01* this) {
     if ((this->unk_43C == 0) || (this->unk_43C == 5)) {
         if (curFrame == lastFrame) {
             this->unk_43C = 3;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 3);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 3);
             return true;
         }
     } else if (this->unk_43C == 3) {
         if (curFrame == lastFrame) {
             this->unk_43C = 4;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 4);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 4);
             return true;
         }
     } else if (this->unk_43C == 4) {
@@ -188,7 +188,7 @@ s32 func_809C15BC(EnAob01* this) {
     if ((this->unk_43C != 0) && (this->unk_43C != 5)) {
         if (curFrame == lastFrame) {
             this->unk_43C = 5;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 5);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 5);
             return true;
         }
     } else {
@@ -330,7 +330,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2D2 |= 0x40;
             this->unk_2D2 |= 0x10;
             this->unk_43C = 1;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
             break;
 
         case 0x3525:
@@ -345,7 +345,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 |= 0x40;
                 this->unk_2D2 |= 0x10;
                 this->unk_43C = 1;
-                func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
                 break;
             }
 
@@ -360,7 +360,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2D2 |= 4;
             this->unk_2D2 |= 0x10;
             this->unk_43C = 1;
-            func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
             break;
 
         case 0x3527:
@@ -372,7 +372,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_210 = 0x3536;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
                 break;
             }
 
@@ -380,7 +380,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_210 = 0x3537;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
                 break;
             }
 
@@ -427,7 +427,7 @@ void func_809C1C9C(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
-    u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 4) {
         if (func_80147624(globalCtx)) {
@@ -499,7 +499,7 @@ void func_809C2060(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 |= 8;
                 this->actionFunc = func_809C21E0;
             }
-        } else if (func_800B84D0(&this->actor, globalCtx) && (this->unk_2D2 & 0x100)) {
+        } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) && (this->unk_2D2 & 0x100)) {
             this->unk_2D2 &= ~0x100;
             this->unk_2E6 = this->unk_2D4;
             this->unk_2EC = this->unk_2DA;
@@ -517,7 +517,7 @@ void func_809C2060(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
-    u8 sp2F = func_80152498(&globalCtx->msgCtx);
+    u8 sp2F = Message_GetState(&globalCtx->msgCtx);
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 1);
 
@@ -542,7 +542,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_2D2 & 8) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->actor.flags &= ~0x10000;
             func_80123E90(globalCtx, &this->actor);
             if (this->unk_2D2 & 4) {
@@ -552,7 +552,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 |= 0x10;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
                 func_801518B0(globalCtx, 0x354B, &this->actor);
             }
             this->unk_2D2 &= ~8;
@@ -593,7 +593,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 s32 func_809C2504(EnAob01* this, GlobalContext* globalCtx) {
-    Actor* npc = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* npc = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npc != NULL) {
         if ((npc->id == ACTOR_EN_RACEDOG) && (func_800F2178(this->unk_430) == ((EnRacedog*)npc)->unk_1E8)) {
@@ -609,7 +609,7 @@ s32 func_809C2504(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 s32 func_809C2594(EnAob01* this, GlobalContext* globalCtx) {
-    Actor* npc = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* npc = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npc != NULL) {
         if ((npc->id == ACTOR_EN_RACEDOG) && (((EnRacedog*)npc)->unk_290 == ((EnRacedog*)npc)->unk_292)) {
@@ -623,7 +623,7 @@ s32 func_809C2594(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 s32 func_809C25E4(EnAob01* this, GlobalContext* globalCtx) {
-    Actor* npc = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* npc = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
     s16 count = 0;
 
     while (npc != NULL) {
@@ -699,7 +699,7 @@ void func_809C2824(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 void func_809C28B8(EnAob01* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_80123E90(globalCtx, &this->actor);
         this->unk_434 = gSaveContext.unk_3F5C;
@@ -731,7 +731,7 @@ void func_809C28B8(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_210 = 0x352D;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                func_800BDC5C(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
                 break;
         }
 
@@ -743,7 +743,7 @@ void func_809C28B8(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
-    u8 sp2F = func_80152498(&globalCtx->msgCtx);
+    u8 sp2F = Message_GetState(&globalCtx->msgCtx);
 
     if (func_809C15BC(this)) {
         if ((sp2F == 5) && func_80147624(globalCtx)) {
@@ -765,15 +765,15 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_809C2BE4;
             }
         } else if (gSaveContext.save.weekEventReg[8] & 0x20) {
-            func_800B8A1C(&this->actor, globalCtx, 4, 300.0f, 300.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_RED, 300.0f, 300.0f);
         } else {
-            func_800B8A1C(&this->actor, globalCtx, 12, 300.0f, 300.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 300.0f, 300.0f);
         }
     }
 }
 
 void func_809C2BE4(EnAob01* this, GlobalContext* globalCtx) {
-    u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (((temp_v0 == 5) || (temp_v0 == 6)) && func_80147624(globalCtx)) {
         if (gSaveContext.save.weekEventReg[63] & 2) {
@@ -792,7 +792,7 @@ void func_809C2BE4(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 void func_809C2C9C(EnAob01* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_210 = 0x354C;
         func_80151938(globalCtx, this->unk_210);
         this->actionFunc = func_809C1D64;
@@ -802,7 +802,7 @@ void func_809C2C9C(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx) {
-    u8 sp2F = func_80152498(&globalCtx->msgCtx);
+    u8 sp2F = Message_GetState(&globalCtx->msgCtx);
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 1);
 
@@ -847,7 +847,7 @@ void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx) {
 }
 
 s32 func_809C2EC4(EnAob01* this, GlobalContext* globalCtx) {
-    Actor* dog = globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first;
+    Actor* dog = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
 
     while (dog != NULL) {
         if (dog->id == ACTOR_EN_DG) {
@@ -927,7 +927,7 @@ void EnAob01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_43C = 0;
-    func_800BDC5C(&this->skelAnime, D_809C3790, 0);
+    Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 0);
     Actor_SetScale(&this->actor, 0.01f);
 
     switch (gSaveContext.eventInf[0] & 7) {

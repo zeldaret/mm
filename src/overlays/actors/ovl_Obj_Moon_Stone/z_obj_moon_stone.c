@@ -76,7 +76,7 @@ void func_80C06640(ObjMoonStone* this, GlobalContext* globalCtx) {
     s16 sp1A = this->actor.yawTowardsPlayer - 0x8000;
 
     sp1A -= player->actor.shape.rot.y;
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.colChkInfo.health = 1;
         func_801518B0(globalCtx, 0x5E3U, &this->actor);
         func_80C066F8(this);
@@ -93,7 +93,7 @@ void func_80C066F8(ObjMoonStone* this) {
 }
 
 void func_80C0670C(ObjMoonStone* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx) != 0) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->actor.colChkInfo.health = 0;
         func_80C0662C(this);
     }
@@ -120,7 +120,7 @@ void func_80C06768(ObjMoonStone* this, GlobalContext* globalCtx) {
             this->actor.draw = NULL;
             func_80C0685C(this);
         } else if (this->actor.xzDistToPlayer < 25.0f) {
-            func_800B8A1C(&this->actor, globalCtx, GI_MOON_TEAR, 100.0f, 30.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_MOON_TEAR, 100.0f, 30.0f);
         }
     }
 }
@@ -130,7 +130,7 @@ void func_80C0685C(ObjMoonStone* this) {
 }
 
 void func_80C06870(ObjMoonStone* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
         gSaveContext.save.weekEventReg[74] |= 0x40;
         Actor_MarkForDeath(&this->actor);
     }

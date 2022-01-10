@@ -245,7 +245,8 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (!EnMaYts_CheckValidSpawn(this, globalCtx)) {
         Actor_MarkForDeath(&this->actor);
     }
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
+
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, NULL, this->jointTable, this->morphTable,
                        MA1_LIMB_MAX);
     EnMaYts_InitAnimation(this, globalCtx);
@@ -317,7 +318,7 @@ void EnMaYts_SetupStartDialogue(EnMaYts* this) {
 void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (func_800B84D0(&this->actor, globalCtx)) { // if (Actor_IsTalking)
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (!(gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             if (!(gSaveContext.save.weekEventReg[0x41] & 0x80)) {
                 // Saying to non-human Link: "Cremia went to town."
@@ -374,7 +375,7 @@ void EnMaYts_SetupDialogueHandler(EnMaYts* this) {
 }
 
 void EnMaYts_DialogueHandler(EnMaYts* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5: // End message block
             EnMaYts_ChooseNextDialogue(this, globalCtx);
             break;

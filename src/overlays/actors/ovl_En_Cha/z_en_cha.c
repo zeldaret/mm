@@ -86,12 +86,12 @@ void EnCha_Ring(EnCha* this, GlobalContext* globalCtx) {
 
 void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
     if (gSaveContext.save.weekEventReg[60] & 4) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_DOOR_BELL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
         gSaveContext.save.weekEventReg[60] &= 0xFB;
         this->actor.home.rot.z = 0x7D0;
     }
     if (this->collider.base.acFlags & AC_HIT) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_DOOR_BELL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
         this->actor.home.rot.z = 0x7D0;
         if (!(gSaveContext.save.weekEventReg[51] & 4)) {
             gSaveContext.save.weekEventReg[51] |= 4;
@@ -117,8 +117,8 @@ void EnCha_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
 
-    func_800BDFC0(globalCtx, D_06000710);
+    Gfx_DrawDListOpa(globalCtx, D_06000710);
     Matrix_InsertTranslation(-1094.0f, 4950.0f, 9.0f, MTXMODE_APPLY);
     Matrix_InsertXRotation_s(this->actor.home.rot.x, MTXMODE_APPLY);
-    func_800BDFC0(globalCtx, D_06000958);
+    Gfx_DrawDListOpa(globalCtx, D_06000958);
 }
