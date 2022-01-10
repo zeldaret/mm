@@ -8,8 +8,8 @@ struct EnRailgibud;
 
 typedef void (*EnRailgibudActionFunc)(struct EnRailgibud*, GlobalContext*);
 
-#define ENRAILGIBUD_GET_7F(thisx) ((thisx)->params & 0x7F)
-#define ENRAILGIBUD_GET_80(thisx) ((thisx)->params & 0x80)
+#define ENRAILGIBUD_GET_CUTSCENE_TYPE(thisx) ((thisx)->params & 0x7F)
+#define ENRAILGIBUD_IS_CUTSCENE_TYPE(thisx) ((thisx)->params & 0x80)
 #define ENRAILGIBUD_GET_PATH(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 typedef struct EnRailgibud {
@@ -29,8 +29,8 @@ typedef struct EnRailgibud {
     /* 0x0344 */ Vec3s morphTable[REDEAD_GIBDO_LIMB_MAX];
     /* 0x03E0 */ Vec3s headRotation;
     /* 0x03E6 */ Vec3s upperBodyRotation;
-    /* 0x03EC */ s16 unk_3EC;
-    /* 0x03EE */ s16 unk_3EE;
+    /* 0x03EC */ s16 shouldWalkForward; // Only used by the "main" Gibdo
+    /* 0x03EE */ s16 shouldWalkForwardNextFrame; // Only used by the "main" Gibdo
     /* 0x03F0 */ union {
                     s16 grabState;
                     s16 cutsceneAnimationIndex;

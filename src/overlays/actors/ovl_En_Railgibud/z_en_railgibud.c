@@ -40,13 +40,13 @@ s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, GlobalContext* 
 s32 EnRailgibud_PlayerOutOfRange(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_MoveToIdealGrabPositionAndRotation(EnRailgibud* this, GlobalContext* globalCtx);
 void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA7878(Actor* thisx, GlobalContext* globalCtx);
-void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA7C78(EnRailgibud* this);
-void func_80BA7CF0(EnRailgibud* this);
-void func_80BA7D04(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_MainGibdo_DeadUpdate(Actor* thisx, GlobalContext* globalCtx);
+void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_InitActorActionCommand(EnRailgibud* this);
+void EnRailgibud_SetupDoNothing(EnRailgibud* this);
+void EnRailgibud_DoNothing(EnRailgibud* this, GlobalContext* globalCtx);
 void EnRailgibud_SinkIntoGround(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA8050(Actor* thisx, GlobalContext* globalCtx);
+void EnRailgibud_Cutscene_Update(Actor* thisx, GlobalContext* globalCtx);
 
 typedef enum {
     /*  0 */ EN_RAILGIBUD_ANIMATION_GRAB_ATTACK,
@@ -185,24 +185,35 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_IMMOVABLE };
 
-void func_80BA5400(EnRailgibud* this, GlobalContext* globalCtx) {
-    static s32 D_80BA82F8 = 0;
+/**
+ * The design behind this actor is that scene files should only spawn a single "main" Gibdo
+ * who then spawns all the other Gibdos. It spawns enough Gibdos for one to exist on every
+ * point along the path up to a maximum of nine additional Gibdos (not counting itself).
+ */
+void EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(EnRailgibud* this, GlobalContext* globalCtx) {
+    static s32 currentGibdoIndex = 0;
     s32 nextPoint;
     Vec3f targetPos;
     Path* path = &globalCtx->setupPathList[ENRAILGIBUD_GET_PATH(&this->actor)];
 
     this->points = Lib_SegmentedToVirtual(path->points);
-    this->currentPoint = D_80BA82F8;
+    this->currentPoint = currentGibdoIndex;
     this->pathCount = path->count;
-    if (D_80BA82F8 == 0) {
+
+    // This branch will only be taken for the first, "main" Gibdo. The subsequent
+    // Gibdos created by Actor_SpawnAsChild will go through this function to set
+    // their position and rotation, but they will not be able to spawn any more
+    // Gibdos themselves because currentGibdoIndex will be non-zero.
+    if (currentGibdoIndex == 0) {
         s32 i;
 
         for (i = 1; i < this->pathCount && i < 10; i++) {
-            D_80BA82F8++;
+            currentGibdoIndex++;
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_RAILGIBUD, 0.0f, 0.0f, 0.0f, 0,
                                0, 0, this->actor.params);
         }
-        D_80BA82F8 = 0;
+
+        currentGibdoIndex = 0;
     }
 
     this->actor.world.pos.x = this->points[this->currentPoint].x;
@@ -236,12 +247,12 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 0;
     this->actor.hintId = 0x2D;
     this->actor.textId = 0;
-    if (ENRAILGIBUD_GET_80(&this->actor)) {
-        func_80BA7B6C(this, globalCtx);
+    if (ENRAILGIBUD_IS_CUTSCENE_TYPE(&this->actor)) {
+        EnRailgibud_InitCutsceneGibdo(this, globalCtx);
         return;
     }
 
-    func_80BA5400(this, globalCtx);
+    EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(this, globalCtx);
     this->playerStunWaitTimer = 0;
     this->timeInitialized = gSaveContext.time;
     this->effectType = 0;
@@ -249,8 +260,8 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->textId = 0;
     this->isInvincible = false;
     if (this->actor.parent == NULL) {
-        this->unk_3EC = 1;
-        this->unk_3EE = 1;
+        this->shouldWalkForward = true;
+        this->shouldWalkForwardNextFrame = true;
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
@@ -296,15 +307,17 @@ void EnRailgibud_WalkInCircles(EnRailgibud* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
 
+    // If we're not supposed to walk forward, then stop here;
+    // don't rotate the Gibdo or move it around.
     if (this->actor.parent == NULL) {
-        if (this->unk_3EC != 0) {
+        if (this->shouldWalkForward) {
         } else {
             return;
         }
     } else {
         EnRailgibud* parent = (EnRailgibud*)this->actor.parent;
 
-        if (parent->unk_3EC == 0) {
+        if (!parent->shouldWalkForward) {
             return;
         }
     }
@@ -611,9 +624,13 @@ void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx) {
             if (this->actor.parent != NULL) {
                 Actor_MarkForDeath(&this->actor);
             } else {
+                // Don't delete the "main" Gibdo, since that will break the surviving
+                // Gibdos' ability to start and stop walking forward. Instead, just
+                // stop drawing it, and make its Update function only check to see if
+                // the Gibdos should move forward.
                 this->actor.draw = NULL;
                 this->actor.flags &= ~1;
-                this->actor.update = func_80BA7878;
+                this->actor.update = EnRailgibud_MainGibdo_DeadUpdate;
             }
         } else {
             this->actor.shape.shadowAlpha -= 5;
@@ -680,15 +697,22 @@ void EnRailgibud_SpawnDust(GlobalContext* globalCtx, Vec3f* basePos, f32 randomn
     }
 }
 
-void func_80BA6B30(EnRailgibud* this) {
+/**
+ * If any Gibdo in the ring of Gibdos is doing any other action besides walking in
+ * circles or being dead, then this function will update the "main" Gibdo's
+ * walking forward variables such that all Gibdos in the ring will stop moving.
+ * Similarly, this will make all Gibdos in the ring start walking forward again
+ * if the Gibdos are all performing the appropriate action.
+ */
+void EnRailgibud_UpdateWalkForwardState(EnRailgibud* this) {
     if (this->actor.parent == NULL) {
-        this->unk_3EC = this->unk_3EE;
-        this->unk_3EE = 1;
+        this->shouldWalkForward = this->shouldWalkForwardNextFrame;
+        this->shouldWalkForwardNextFrame = true;
         if ((this->actionFunc != EnRailgibud_WalkInCircles) && (this->actionFunc != EnRailgibud_Dead)) {
-            this->unk_3EE = 0;
+            this->shouldWalkForwardNextFrame = false;
         }
     } else if ((this->actionFunc != EnRailgibud_WalkInCircles) && (this->actionFunc != EnRailgibud_Dead)) {
-        ((EnRailgibud*)this->actor.parent)->unk_3EE = 0;
+        ((EnRailgibud*)this->actor.parent)->shouldWalkForwardNextFrame = false;
     }
 }
 
@@ -977,7 +1001,7 @@ void EnRailgibud_CheckCollision(EnRailgibud* this, GlobalContext* globalCtx) {
 void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRailgibud* this = THIS;
 
-    func_80BA6B30(this);
+    EnRailgibud_UpdateWalkForwardState(this);
     EnRailgibud_CheckForGibdoMask(this, globalCtx);
     EnRailgibud_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
@@ -992,10 +1016,10 @@ void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.y += 50.0f;
 }
 
-void func_80BA7878(Actor* thisx, GlobalContext* globalCtx) {
+void EnRailgibud_MainGibdo_DeadUpdate(Actor* thisx, GlobalContext* globalCtx) {
     EnRailgibud* this = THIS;
 
-    func_80BA6B30(this);
+    EnRailgibud_UpdateWalkForwardState(this);
 }
 
 s32 EnRailgibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
@@ -1063,28 +1087,31 @@ void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, GlobalContext* globalCtx) {
     s32 pad[2];
 
-    func_80BA7C78(this);
+    EnRailgibud_InitActorActionCommand(this);
     this->csAction = 99;
     this->actor.flags |= 0x100000;
     this->actor.flags |= 0x10;
+
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGibdoSkel, &gGibdoRedeadIdleAnim, this->jointTable,
                        this->morphTable, REDEAD_GIBDO_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+
     if (gSaveContext.entranceIndex != 0x2090) { // NOT Cutscene: Music Box House Opens
         Actor_MarkForDeath(&this->actor);
     }
-    func_80BA7CF0(this);
-    this->actor.update = func_80BA8050;
+
+    EnRailgibud_SetupDoNothing(this);
+    this->actor.update = EnRailgibud_Cutscene_Update;
 }
 
-void func_80BA7C78(EnRailgibud* this) {
-    switch (ENRAILGIBUD_GET_7F(&this->actor)) {
+void EnRailgibud_InitActorActionCommand(EnRailgibud* this) {
+    switch (ENRAILGIBUD_GET_CUTSCENE_TYPE(&this->actor)) {
         case 1:
             this->actorActionCommand = 0x207;
             break;
@@ -1111,11 +1138,11 @@ void func_80BA7C78(EnRailgibud* this) {
     }
 }
 
-void func_80BA7CF0(EnRailgibud* this) {
-    this->actionFunc = func_80BA7D04;
+void EnRailgibud_SetupDoNothing(EnRailgibud* this) {
+    this->actionFunc = EnRailgibud_DoNothing;
 }
 
-void func_80BA7D04(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_DoNothing(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void EnRailgibud_SetupSinkIntoGround(EnRailgibud* this) {
@@ -1133,7 +1160,7 @@ void EnRailgibud_SinkIntoGround(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
+s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, GlobalContext* globalCtx) {
     u32 actionIndex;
 
     if (func_800EE29C(globalCtx, this->actorActionCommand)) {
@@ -1207,10 +1234,10 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_80BA8050(Actor* thisx, GlobalContext* globalCtx) {
+void EnRailgibud_Cutscene_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRailgibud* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    func_80BA7DC8(this, globalCtx);
+    EnRailgibud_PerformCutsceneActions(this, globalCtx);
     SkelAnime_Update(&this->skelAnime);
 }
