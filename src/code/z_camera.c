@@ -272,6 +272,7 @@ f32 Camera_GetRunSpeedLimit(Camera* camera) {
 s32 func_800CB7CC(Camera* camera) {
     Actor* trackActor = camera->trackActor;
 
+    // stateFlags3 & 0x10: Turned off in the first line of Player_Update (func_808460B8)
     if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
         return ((Player*)trackActor)->stateFlags3 & 0x10;
     } else {
@@ -360,13 +361,13 @@ s32 func_800CB924(Camera* camera) {
 }
 
 s32 func_800CB950(Camera* camera) {
-    Actor* trackActor;
+    Player* player;
     s32 phi_v0;
     s32 ret;
     f32 new_var;
 
     if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
-        new_var = Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY);
+        new_var = Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerFloorHeight);
 
         phi_v0 = false;
         if (new_var < 11.0f) {
@@ -378,14 +379,15 @@ s32 func_800CB950(Camera* camera) {
         if (!ret) {
 
             ret = false;
-            if ((camera->trackActor)->gravity > -0.1f) {
+
+            if (camera->trackActor->gravity > -0.1f) {
                 ret = true;
             }
 
-            trackActor = camera->trackActor;
+            player = (Player*)camera->trackActor;
             if (!ret) {
                 // Using zora fins
-                ret = ((Player*)trackActor)->stateFlags1 & 0x200000;
+                ret = player->stateFlags1 & 0x200000;
                 ret = !!ret;
             }
         }
@@ -499,7 +501,7 @@ s32 Camera_IsUsingZoraFins(Camera* camera) {
 }
 
 s32 func_800CBC30(Camera* camera, f32 arg1, f32 arg2) {
-    if ((camera->playerGroundY != camera->waterYPos) && (camera->waterYPos < arg1) && (camera->waterYPos > arg2)) {
+    if ((camera->playerFloorHeight != camera->waterYPos) && (camera->waterYPos < arg1) && (camera->waterYPos > arg2)) {
         return true;
     } else {
         return false;
@@ -529,8 +531,8 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3) {
         if (1) {}
         toNewPos.y += 5.0f;
         if ((arg3 != 0) && func_800CB7CC(camera)) {
-            to->poly = (camera->trackActor)->floorPoly;
-            floorBgId = (camera->trackActor)->floorBgId;
+            to->poly = camera->trackActor->floorPoly;
+            floorBgId = camera->trackActor->floorBgId;
             to->norm.x = COLPOLY_GET_NORMAL(to->poly->normal.x);
             to->norm.y = COLPOLY_GET_NORMAL(to->poly->normal.y);
             to->norm.z = COLPOLY_GET_NORMAL(to->poly->normal.z);
@@ -737,7 +739,7 @@ f32 Camera_GetFloorYLayer(Camera* camera, Vec3f* norm, Vec3f* pos, s32* bgId) {
     }
 
     if ((floorY == BGCHECK_Y_MIN) ||
-        ((camera->playerGroundY < floorY) && !(COLPOLY_GET_NORMAL(floorPoly->normal.y) > 0.5f))) {
+        ((camera->playerFloorHeight < floorY) && !(COLPOLY_GET_NORMAL(floorPoly->normal.y) > 0.5f))) {
         // no floor, or player is below the floor and floor is not considered steep
         norm->x = 0.0f;
         norm->y = 1.0f;
@@ -867,7 +869,7 @@ s16 func_800CC9C0(Camera* camera, s16 yaw, s16 arg2) {
     sp2C = trackHeight * 2.5f;
     sp30 = trackHeight;
     playerPos.x = camera->trackActorPosRot.pos.x;
-    playerPos.y = camera->playerGroundY + temp_f2;
+    playerPos.y = camera->playerFloorHeight + temp_f2;
     playerPos.z = camera->trackActorPosRot.pos.z;
     rotatedPos.x = (trackHeight * sinYaw) + playerPos.x;
     rotatedPos.y = playerPos.y;
@@ -880,7 +882,7 @@ s16 func_800CC9C0(Camera* camera, s16 yaw, s16 arg2) {
             playerPos.z + (sp2C * cosYaw); // TODO: D_801EDC04 may be D_801EDC00 or D_801EDC04.x = D_801EDC04.y
         Camera_BGCheckInfo(camera, &playerPos, &D_801EDC00);
         if (arg2) {
-            D_801EDBF4 = D_801EDBF8 = camera->playerGroundY;
+            D_801EDBF4 = D_801EDBF8 = camera->playerFloorHeight;
         }
     } else {
         sp2C = OLib_Vec3fDistXZ(&playerPos, &D_801EDC00.pos);
@@ -896,7 +898,7 @@ s16 func_800CC9C0(Camera* camera, s16 yaw, s16 arg2) {
         }
 
         if (D_801EDBF4 == BGCHECK_Y_MIN) {
-            D_801EDBF4 = camera->playerGroundY;
+            D_801EDBF4 = camera->playerFloorHeight;
         }
 
         if (D_801EDBF8 == BGCHECK_Y_MIN) {
@@ -904,8 +906,8 @@ s16 func_800CC9C0(Camera* camera, s16 yaw, s16 arg2) {
         }
     }
 
-    phi_f16 = (D_801EDBF4 - camera->playerGroundY) * 0.8f;
-    phi_f18 = (D_801EDBF8 - camera->playerGroundY) * 0.19999999f;
+    phi_f16 = (D_801EDBF4 - camera->playerFloorHeight) * 0.8f;
+    phi_f18 = (D_801EDBF8 - camera->playerFloorHeight) * 0.19999999f;
     temp_s0 = DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(phi_f16, sp30)));
     temp_s1 = DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(phi_f18, sp2C)));
     return temp_s0 + temp_s1;
@@ -1238,8 +1240,8 @@ s32 Camera_CalcAtDefault(Camera* camera, VecSph* eyeAtDir, f32 yOffset, s16 calc
     atTarget.y = playerPosRot->pos.y + camera->atActorOffset.y;
     atTarget.z = playerPosRot->pos.z + camera->atActorOffset.z;
 
-    if (atTarget.y < (camera->playerGroundY + 10.0f)) {
-        atTarget.y = camera->playerGroundY + 10.0f;
+    if (atTarget.y < (camera->playerFloorHeight + 10.0f)) {
+        atTarget.y = camera->playerFloorHeight + 10.0f;
     }
 
     Camera_LERPCeilVec3f(&atTarget, at, camera->atLERPStepScale, camera->atLERPStepScale, 0.2f);
@@ -1285,7 +1287,7 @@ s32 func_800CD834(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* arg3, f32 
     atTarget.x = playerPosRot->pos.x + camera->atActorOffset.x;
     atTarget.y = playerPosRot->pos.y + camera->atActorOffset.y;
     atTarget.z = playerPosRot->pos.z + camera->atActorOffset.z;
-    atTarget.y = CLAMP_MIN(atTarget.y, camera->playerGroundY + 10.0f);
+    atTarget.y = CLAMP_MIN(atTarget.y, camera->playerFloorHeight + 10.0f);
 
     Camera_LERPCeilVec3f(&atTarget, &camera->at, camera->atLERPStepScale, camera->atLERPStepScale, 0.1f);
     return true;
@@ -1340,8 +1342,8 @@ s32 func_800CDB6C(Camera* camera, VecSph* arg1, f32 yOffset, f32 arg3, f32* arg4
         sp44.pitch = 0;
         OLib_VecSphGeoToVec3f(&sp70, &sp44);
     } else {
-        temp_f0 = camera->atActorOffset.x + camera->playerPosDelta.x;
-        temp_f12 = camera->atActorOffset.z + camera->playerPosDelta.z;
+        temp_f0 = camera->atActorOffset.x + camera->trackActorPosRelToCam.x;
+        temp_f12 = camera->atActorOffset.z + camera->trackActorPosRelToCam.z;
         if (sqrtf(SQ(temp_f0) + SQ(temp_f12)) < arg3) {
             sp70.x = temp_f0;
             sp70.z = temp_f12;
@@ -1756,7 +1758,7 @@ void func_800CED90(Camera* camera, VecSph* arg1, VecSph* arg2, f32 arg3, f32 arg
         } else if (swing->atEyeColChk.norm.y > 0.50f) {
             swing->unk_64 = 0;
         } else {
-            Math3D_AngleBetweenVectors(&camera->playerPosDelta, &swing->eyeAtColChk.norm, &sp88);
+            Math3D_AngleBetweenVectors(&camera->trackActorPosRelToCam, &swing->eyeAtColChk.norm, &sp88);
             if (sp88 > 0.0f) {
                 swing->unk_64 = 0;
             }
@@ -2164,13 +2166,13 @@ s32 Camera_Normal1(Camera* camera) {
             dummy:; // TODO: Will this be needed?
             } else if (fixedData->unk_22 & NORM1_FLG_2) {
                 if ((camera->speedRatio > 0.1f) || (dynamicData->unk_0A > 0x4B0)) {
-                    OLib_Vec3fToVecSphGeo(&sp64, &camera->playerPosDelta);
+                    OLib_Vec3fToVecSphGeo(&sp64, &camera->trackActorPosRelToCam);
                     if (!(fixedData->unk_22 & NORM1_FLG_8) || !func_800CB924(camera)) {
                         spB4.yaw = Camera_CalcDefaultYaw(camera, sp9C.yaw, sp64.yaw, fixedData->unk_14, spC0);
                     }
                     if (!(fixedData->unk_22 & NORM1_FLG_8)) {
                         spB4.pitch = Camera_CalcDefaultPitch(camera, sp9C.pitch, fixedData->unk_20, dynamicData->unk_08);
-                    } else if ((camera->playerPosDelta.y > 0.0f) && func_800CB924(camera)) {
+                    } else if ((camera->trackActorPosRelToCam.y > 0.0f) && func_800CB924(camera)) {
                         spB4.pitch = Camera_CalcDefaultPitch(camera, sp9C.pitch, fixedData->unk_20, dynamicData->unk_08);
                     }
                 } else {
@@ -2215,7 +2217,7 @@ s32 Camera_Normal1(Camera* camera) {
             // new_var2 = sp4C->y;
             if ((sp58 != BGCHECK_Y_MIN) && (phi_f0_4 < phi_f16_2)) {
                 sp4C->y = sp58 + phi_f16_2;
-            } else if ((camera->waterYPos != camera->playerGroundY) && ((spD0 - camera->waterYPos) < 5.0f) &&
+            } else if ((camera->waterYPos != camera->playerFloorHeight) && ((spD0 - camera->waterYPos) < 5.0f) &&
                        ((spD0 - camera->waterYPos) > -5.0f)) {
                 sp4C->y = camera->waterYPos + 5.0f;
             }
@@ -2325,7 +2327,7 @@ s32 Camera_Normal3(Camera* camera) {
     } else {
         dynamicData->isZero = 0;
         dynamicData->curPitch = 0;
-        dynamicData->yPosOffset = camera->playerGroundY;
+        dynamicData->yPosOffset = camera->playerFloorHeight;
 
         D_801EDC30[camera->camId].yaw = D_801EDC30[camera->camId].pitch = D_801EDC30[camera->camId].unk_64 = 0;
         D_801EDC30[camera->camId].swingUpdateRate = fixedData->yawUpdateRateInv;
@@ -2387,7 +2389,7 @@ s32 Camera_Normal3(Camera* camera) {
     camera->dist = sp80.r = temp_f2 + phi_f2;
 
     if (fixedData->flags & NORM3_FLG_80) {
-        sp80.pitch = Camera_LERPCeilS((camera->trackActor)->focus.rot.x - dynamicData->curPitch, sp68.pitch, 0.25f, 5);
+        sp80.pitch = Camera_LERPCeilS(camera->trackActor->focus.rot.x - dynamicData->curPitch, sp68.pitch, 0.25f, 5);
     } else {
         sp62 = fixedData->pitchTarget - dynamicData->curPitch;
         sp80.pitch = Camera_LERPCeilS(sp62, sp68.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
@@ -2401,11 +2403,11 @@ s32 Camera_Normal3(Camera* camera) {
     }
 
     if (fixedData->flags & NORM3_FLG_80) {
-        sp62 = SUB16((camera->trackActor)->focus.rot.y, BINANG_ROT180(sp68.yaw));
+        sp62 = SUB16(camera->trackActor->focus.rot.y, BINANG_ROT180(sp68.yaw));
         temp_f2 = 1.0f;
     } else {
         sp62 = SUB16(playerPosRot->rot.y, BINANG_ROT180(sp68.yaw));
-        OLib_Vec3fToVecSphGeo(&sp78, &camera->playerPosDelta);
+        OLib_Vec3fToVecSphGeo(&sp78, &camera->trackActorPosRelToCam);
         phi_v1_2 = playerPosRot->rot.y - sp78.yaw;
         if (phi_v1_2 < 0) {
             phi_v1_2 *= -1;
@@ -2763,7 +2765,7 @@ s32 Camera_Parallel1(Camera* camera) {
             }
 
             dynamicData->unk_24 = fixedData->unk_24;
-            dynamicData->unk_04 = sp38->pos.y - camera->playerPosDelta.y;
+            dynamicData->unk_04 = sp38->pos.y - camera->trackActorPosRelToCam.y;
             dynamicData->unk_26 = 1;
             camera->actionFuncState = 1;
             sCameraInterfaceFlags = fixedData->unk_26;
@@ -3032,7 +3034,7 @@ s32 Camera_Jump2(Camera* camera) {
 
         yNormal = 0.8f - (-0.2f * (68.0f / trackHeight));
 
-        if (camera->playerPosDelta.y > 0.0f) {
+        if (camera->trackActorPosRelToCam.y > 0.0f) {
             phi_f2 = -10.0f;
         } else {
             phi_f2 = 10.0f;
@@ -3077,9 +3079,9 @@ s32 Camera_Jump2(Camera* camera) {
             dynamicData->unk_08 = 10000;
         }
 
-        sp2C->pos.x -= camera->playerPosDelta.x;
-        sp2C->pos.y -= camera->playerPosDelta.y;
-        sp2C->pos.z -= camera->playerPosDelta.z;
+        sp2C->pos.x -= camera->trackActorPosRelToCam.x;
+        sp2C->pos.y -= camera->trackActorPosRelToCam.y;
+        sp2C->pos.z -= camera->trackActorPosRelToCam.z;
         dynamicData->unk_0C = 6;
         camera->actionFuncState++;
         camera->atLERPStepScale = fixedData->unk_1C;
@@ -3124,20 +3126,20 @@ s32 Camera_Jump2(Camera* camera) {
     spC8.z = sp2C->pos.z + (Math_CosS(sp2C->rot.y) * 25.0f);
 
     yNormal = Camera_GetFloorYNorm(camera, &spBC, &spC8, &sp88);
-    if ((camera->trackActor)->bgCheckFlags & 0x10) {
+    if (camera->trackActor->bgCheckFlags & 0x10) {
         camera->pitchUpdateRateInv = Camera_LERPCeilF(20.0f, camera->pitchUpdateRateInv, 0.2f, 0.1f);
         camera->rUpdateRateInv = Camera_LERPCeilF(20.0f, camera->rUpdateRateInv, 0.2f, 0.1f);
         spB4.pitch = Camera_LERPCeilS(-0x1388, spA4.pitch, 0.2f, 5);
     } else if ((yNormal != BGCHECK_Y_MIN) && (sp2C->pos.y < yNormal)) {
         camera->pitchUpdateRateInv = Camera_LERPCeilF(20.0f, camera->pitchUpdateRateInv, 0.2f, 0.1f);
         camera->rUpdateRateInv = Camera_LERPCeilF(20.0f, camera->rUpdateRateInv, 0.2f, 0.1f);
-        if (camera->playerPosDelta.y > 1.0f) {
+        if (camera->trackActorPosRelToCam.y > 1.0f) {
             spB4.pitch = Camera_LERPCeilS(0x1F4, spA4.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
         }
     } else if ((sp2C->pos.y - dynamicData->unk_00) < trackHeight) {
         camera->pitchUpdateRateInv = Camera_LERPCeilF(20.0f, camera->pitchUpdateRateInv, 0.2f, 0.1f);
         camera->rUpdateRateInv = Camera_LERPCeilF(20.0f, camera->rUpdateRateInv, 0.2f, 0.1f);
-        if (camera->playerPosDelta.y > 1.0f) {
+        if (camera->trackActorPosRelToCam.y > 1.0f) {
             spB4.pitch = Camera_LERPCeilS(0x1F4, spA4.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
         }
     } else {
@@ -3222,7 +3224,7 @@ s32 Camera_Jump3(Camera* camera) {
     }
 
     if (camera->mode == CAM_MODE_NORMAL) {
-        if (((camera->trackActor)->bgCheckFlags & 0x10) || (dynamicData->unk_0C != 0)) {
+        if ((camera->trackActor->bgCheckFlags & 0x10) || (dynamicData->unk_0C != 0)) {
             if (dynamicData->unk_0A != 0xF) {
                 dynamicData->unk_0A = 0xF;
                 sp58 = true;
@@ -3233,7 +3235,7 @@ s32 Camera_Jump3(Camera* camera) {
                 dynamicData->unk_0A = 0;
                 sp58 = true;
             }
-        } else if (Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f) {
+        } else if (Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerFloorHeight) < 11.0f) {
             if (dynamicData->unk_0A != 5) {
                 dynamicData->unk_0A = 5;
                 sp58 = true;
@@ -3281,7 +3283,7 @@ s32 Camera_Jump3(Camera* camera) {
             dynamicData->unk_10 = 0x1000;
         case 10:
         case 20:
-            dynamicData->unk_00 = camera->playerGroundY;
+            dynamicData->unk_00 = camera->playerFloorHeight;
             D_801EDC30[camera->camId].yaw = D_801EDC30[camera->camId].pitch = D_801EDC30[camera->camId].unk_64 = 0;
             dynamicData->unk_08 = 0xA;
             D_801EDC30[camera->camId].swingUpdateRate = fixedData->unk_0C;
@@ -3332,12 +3334,12 @@ s32 Camera_Jump3(Camera* camera) {
 
     if (fixedData->unk_22 & JUMP3_FLG_80) {
         camera->yOffsetUpdateRate = Camera_LERPCeilF(0.01f, camera->yOffsetUpdateRate, spD0, 0.0001f);
-        // sp4C = sqrtf(SQXZ(camera->playerPosDelta));
+        // sp4C = sqrtf(SQXZ(camera->trackActorPosRelToCam));
         // if (1) {} // TODO: is needed? (helps a lot)
-        // temp_f0 = sqrtf((camera->playerPosDelta.x * camera->playerPosDelta.x) + (camera->playerPosDelta.z *
-        // camera->playerPosDelta.z)); if (1) {}
-        sp5C = sqrtf((camera->playerPosDelta.x * camera->playerPosDelta.x) +
-                     (camera->playerPosDelta.z * camera->playerPosDelta.z)) /
+        // temp_f0 = sqrtf((camera->trackActorPosRelToCam.x * camera->trackActorPosRelToCam.x) + (camera->trackActorPosRelToCam.z *
+        // camera->trackActorPosRelToCam.z)); if (1) {}
+        sp5C = sqrtf((camera->trackActorPosRelToCam.x * camera->trackActorPosRelToCam.x) +
+                     (camera->trackActorPosRelToCam.z * camera->trackActorPosRelToCam.z)) /
                Camera_GetRunSpeedLimit(camera);
         camera->speedRatio = OLib_ClampMaxDist(sp5C / Camera_GetRunSpeedLimit(camera), 1.8f);
         spCC = camera->speedRatio * 0.2f;
@@ -3372,7 +3374,7 @@ s32 Camera_Jump3(Camera* camera) {
     spAC.r = Camera_ClampDist1(camera, spAC.r, fixedData->unk_04, fixedData->unk_08, dynamicData->unk_08);
     camera->dist = spAC.r;
 
-    if (!(Camera_fabsf(sp3C->pos.y - camera->playerGroundY) < 10.0f) &&
+    if (!(Camera_fabsf(sp3C->pos.y - camera->playerFloorHeight) < 10.0f) &&
         !(Camera_fabsf(sp64.y - camera->waterYPos) < 50.f)) { // No 0?
         camera->pitchUpdateRateInv = 100.0f;
     }
@@ -3516,7 +3518,7 @@ s32 Camera_Battle1(Camera* camera) {
     sp40 = &camera->targetPosRot;
 
     spF0 = false;
-    sp8C = &(camera->trackActor)->focus;
+    sp8C = &camera->trackActor->focus;
     sp68 = Camera_GetTrackedActorHeight(camera);
 
     if ((camera->actionFuncState != 0) && (camera->actionFuncState != 0xA) && (camera->actionFuncState != 0x14)) {
@@ -3602,7 +3604,7 @@ s32 Camera_Battle1(Camera* camera) {
         dynamicData->unk_12 = sp9C.yaw;
         dynamicData->unk_14 = sp9C.pitch;
         dynamicData->unk_00 = sp9C.r;
-        dynamicData->unk_04 = camera->trackActorPosRot.pos.y - camera->playerPosDelta.y;
+        dynamicData->unk_04 = camera->trackActorPosRot.pos.y - camera->trackActorPosRelToCam.y;
         if ((2.0f * fixedData->unk_04) < camera->dist) {
             camera->dist = 2.0f * fixedData->unk_04;
             sp94.r = camera->dist;
@@ -3915,7 +3917,7 @@ s32 Camera_KeepOn1(Camera* camera) {
     s16 temp_v0_3;
     s16 new_var4;
 
-    spA4 = &(camera->trackActor)->focus;
+    spA4 = &camera->trackActor->focus;
     if (temp_v0_3) {} // TODO: Is needed?
     sp78 = 0;
     temp_f0 = Camera_GetTrackedActorHeight(camera);
@@ -3968,7 +3970,7 @@ s32 Camera_KeepOn1(Camera* camera) {
         dynamicData->unk_12 = spC8.yaw;
         dynamicData->unk_14 = spC8.pitch;
         dynamicData->unk_00 = spC8.r;
-        dynamicData->unk_08 = sp3C->pos.y - camera->playerPosDelta.y;
+        dynamicData->unk_08 = sp3C->pos.y - camera->trackActorPosRelToCam.y;
         if ((2.0f * fixedData->unk_04) < camera->dist) {
             camera->dist = 2.0f * fixedData->unk_04;
             spC0.r = camera->dist;
@@ -4246,7 +4248,7 @@ s32 Camera_KeepOn3(Camera* camera) {
     f32 trackHeight;
     s32 i;
 
-    sp70 = &(camera->trackActor)->focus; // TODO: Move above?
+    sp70 = &camera->trackActor->focus; // TODO: Move above?
     sp6A = 0;
     trackHeight = Camera_GetTrackedActorHeight(camera);
 
@@ -4522,7 +4524,7 @@ s32 Camera_KeepOn4(Camera* camera) {
                 break;
         }
 
-        trackHeight = Camera_GetTrackedActorHeight(camera) - (player->unk_AB8 * (camera->trackActor)->scale.y);
+        trackHeight = Camera_GetTrackedActorHeight(camera) - (player->unk_AB8 * camera->trackActor->scale.y);
     } else {
         sp82 = CAM_MODE_NORMAL;
         trackHeight = Camera_GetTrackedActorHeight(camera);
@@ -4581,7 +4583,7 @@ s32 Camera_KeepOn4(Camera* camera) {
             Camera_SetUpdateRatesFastPitch(camera);
             Camera_UnsetFlags(camera, CAM_FLAG2_4 | CAM_FLAG2_2);
             dynamicData->unk_14 = fixedData->unk_1E;
-            dynamicData->unk_08 = sp38->pos.y - camera->playerPosDelta.y;
+            dynamicData->unk_08 = sp38->pos.y - camera->trackActorPosRelToCam.y;
 
             switch (fixedData->unk_1C & (KEEP4_FLG_8 | KEEP4_FLG_4 | KEEP4_FLG_2)) {
                 case KEEP4_FLG_2:
@@ -4650,7 +4652,7 @@ s32 Camera_KeepOn4(Camera* camera) {
             break;
 
         case 10:
-            dynamicData->unk_08 = sp38->pos.y - camera->playerPosDelta.y;
+            dynamicData->unk_08 = sp38->pos.y - camera->trackActorPosRelToCam.y;
             break;
     }
 
@@ -4939,7 +4941,7 @@ s32 Camera_Fixed2(Camera* camera) {
         sp98.z = new_var;
 
         if (camera->target != NULL) {
-            new_var1 = &(camera->trackActor)->focus.pos;
+            new_var1 = &camera->trackActor->focus.pos;
             new_var2 = &camera->target->focus.pos;
             sp98.x = ((void)0, new_var) + ((new_var2->x - new_var1->x) * 0.4f);
             sp98.y += (new_var2->y - new_var1->y) * 0.4f;
@@ -4956,7 +4958,7 @@ s32 Camera_Fixed2(Camera* camera) {
         sp98.z = new_var;
 
         if (camera->target != NULL) {
-            new_var1 = &(camera->trackActor)->focus.pos;
+            new_var1 = &camera->trackActor->focus.pos;
             new_var2 = &camera->target->focus.pos;
             sp98.x = ((void)0, new_var) + ((new_var2->x - new_var1->x) * 0.7f);
             sp98.y += (new_var2->y - new_var1->y) * 0.7f;
@@ -5419,7 +5421,7 @@ s32 Camera_Unique0(Camera* camera) {
                 dynamicData->unk_0C.y = sp40->pos.y + playerHeight + fixedData->unk_00;
                 dynamicData->unk_0C.z = sp40->pos.z;
             }
-            dynamicData->unk_3A = (camera->trackActor)->world.rot.y;
+            dynamicData->unk_3A = camera->trackActor->world.rot.y;
             dynamicData->unk_3E = 0;
             camera->eye = camera->eyeNext = dynamicData->unk_1C;
             Camera_UnsetFlags(camera, CAM_FLAG2_4);
@@ -5480,7 +5482,7 @@ s32 Camera_Unique0(Camera* camera) {
 
                 // Time is stopped but Link & NPC animations continue
                 if ((player->stateFlags1 & 0x20000000) == 0) { // TODO: Merge into 1 if-statement
-                    if ((dynamicData->unk_3A != (camera->trackActor)->world.rot.y) ||
+                    if ((dynamicData->unk_3A != camera->trackActor->world.rot.y) ||
                         CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
                         CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_B) ||
                         CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CUP) ||
@@ -5827,8 +5829,8 @@ s32 Camera_Demo2(Camera* camera) {
             camera->fov = fixedData->fov;
             camera->roll = dynamicData->animFrame = 0;
             dynamicData->initialAt = playerPosRot->pos;
-            if (camera->playerGroundY != BGCHECK_Y_MIN) {
-                dynamicData->initialAt.y = camera->playerGroundY;
+            if (camera->playerFloorHeight != BGCHECK_Y_MIN) {
+                dynamicData->initialAt.y = camera->playerFloorHeight;
             }
             angle = playerPosRot->rot.y;
             sp70.x = dynamicData->initialAt.x + (Math_SinS(angle) * 40.0f);
@@ -6962,7 +6964,7 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
     camera->inputDir.z = 0;
     camera->camDir = camera->inputDir;
     camera->xzSpeed = 0.0f;
-    camera->playerPosDelta.y = 0.0f;
+    camera->trackActorPosRelToCam.y = 0.0f;
     camera->at = playerPosShape.pos;
     camera->at.y += trackHeight;
 
@@ -7055,7 +7057,7 @@ s32 Camera_CheckWater(Camera* camera) {
                 camera->waterQuakeId = -1;
             }
 
-            if (!(Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f) ||
+            if (!(Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerFloorHeight) < 11.0f) ||
                 (Camera_IsSwimming(camera) && !Camera_IsUnderwaterAsZora(camera))) {
                 prevBgId = camera->bgId;
                 camera->bgId = BGCHECK_SCENE;
@@ -7074,7 +7076,7 @@ s32 Camera_CheckWater(Camera* camera) {
                 camera->waterQuakeId = -1;
             }
 
-            if (!(Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f) ||
+            if (!(Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerFloorHeight) < 11.0f) ||
                 (Camera_IsSwimming(camera) && !Camera_IsUnderwaterAsZora(camera))) {
                 prevBgId = camera->bgId;
                 camera->bgId = BGCHECK_SCENE;
@@ -7216,12 +7218,12 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     f32 sp84;
     f32 viewFov;
     DynaPolyActor* meshActor;
-    PosRot sp68;
+    PosRot trackActorPosRot;
     QuakeCamCalc quake;
     Actor* trackActor = camera->trackActor;
     VecSph sp3C;
     s16 bgCamDataId;
-    f32 playerGroundY;
+    f32 playerFloorHeight;
 
     // Camera of status CUT only updates to this point
     if (camera->status == CAM_STATUS_CUT) {
@@ -7234,61 +7236,65 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
     if (camera->globalCtx->view.unk164 == 0) {
         if (camera->trackActor != NULL) {
-            if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
-                Actor_GetWorldPosShapeRot(&sp68, camera->trackActor);
-            } else {
-                Actor_GetWorld(&sp68, camera->trackActor);
-            }
-            camera->playerPosDelta.x = sp68.pos.x - camera->trackActorPosRot.pos.x;
-            camera->playerPosDelta.y = sp68.pos.y - camera->trackActorPosRot.pos.y;
-            camera->playerPosDelta.z = sp68.pos.z - camera->trackActorPosRot.pos.z;
+            // Updates camera info on the actor it's tracking
 
+
+            if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
+                Actor_GetWorldPosShapeRot(&trackActorPosRot, camera->trackActor);
+            } else {
+                Actor_GetWorld(&trackActorPosRot, camera->trackActor);
+            }
+            camera->trackActorPosRelToCam.x = trackActorPosRot.pos.x - camera->trackActorPosRot.pos.x;
+            camera->trackActorPosRelToCam.y = trackActorPosRot.pos.y - camera->trackActorPosRot.pos.y;
+            camera->trackActorPosRelToCam.z = trackActorPosRot.pos.z - camera->trackActorPosRot.pos.z;
+
+            // bg related to tracked actor
             sp98 = 0;
             if (Camera_IsMountedOnHorse(camera)) {
                 if (((Player*)trackActor)->rideActor->floorPoly != NULL) {
                     sp90 = ((Player*)trackActor)->rideActor->floorPoly;
                     camera->bgId = ((Player*)trackActor)->rideActor->floorBgId;
-                    camera->playerGroundY = ((Player*)trackActor)->rideActor->floorHeight;
+                    camera->playerFloorHeight = ((Player*)trackActor)->rideActor->floorHeight;
                     sp98 = 3;
                 }
             } else if (func_800CB7CC(camera)) {
-                if ((camera->trackActor)->floorPoly != NULL) {
-                    sp90 = (camera->trackActor)->floorPoly;
-                    camera->bgId = (camera->trackActor)->floorBgId;
-                    camera->playerGroundY = (camera->trackActor)->floorHeight;
+                if (camera->trackActor->floorPoly != NULL) {
+                    sp90 = camera->trackActor->floorPoly;
+                    camera->bgId = camera->trackActor->floorBgId;
+                    camera->playerFloorHeight = camera->trackActor->floorHeight;
                     sp98 = 1;
                 }
             } else {
-                spA0 = sp68.pos;
+                spA0 = trackActorPosRot.pos;
                 spA0.y += Camera_GetTrackedActorHeight(camera);
-                playerGroundY = BgCheck_EntityRaycastFloor5_3(camera->globalCtx, &camera->globalCtx->colCtx, &sp90,
+                playerFloorHeight = BgCheck_EntityRaycastFloor5_3(camera->globalCtx, &camera->globalCtx->colCtx, &sp90,
                                                               &bgId, camera->trackActor, &spA0);
-                if (playerGroundY != BGCHECK_Y_MIN) {
+                if (playerFloorHeight != BGCHECK_Y_MIN) {
                     camera->bgId = bgId;
-                    camera->playerGroundY = playerGroundY;
+                    camera->playerFloorHeight = playerFloorHeight;
                     sp98 = 2;
                 }
             }
 
-            if ((sp98 != 0) && (Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f)) {
+            if ((sp98 != 0) && (Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerFloorHeight) < 11.0f)) {
                 meshActor = DynaPoly_GetActor(&camera->globalCtx->colCtx, camera->bgId);
                 if (meshActor != NULL) {
                     camera->floorNorm.x = COLPOLY_GET_NORMAL(sp90->normal.x);
                     camera->floorNorm.y = COLPOLY_GET_NORMAL(sp90->normal.y);
                     camera->floorNorm.z = COLPOLY_GET_NORMAL(sp90->normal.z);
-                    camera->playerPosDelta.x -= meshActor->actor.world.pos.x - camera->meshActorPos.x;
-                    camera->playerPosDelta.y -= meshActor->actor.world.pos.y - camera->meshActorPos.y;
-                    camera->playerPosDelta.z -= meshActor->actor.world.pos.z - camera->meshActorPos.z;
+                    camera->trackActorPosRelToCam.x -= meshActor->actor.world.pos.x - camera->meshActorPos.x;
+                    camera->trackActorPosRelToCam.y -= meshActor->actor.world.pos.y - camera->meshActorPos.y;
+                    camera->trackActorPosRelToCam.z -= meshActor->actor.world.pos.z - camera->meshActorPos.z;
                     camera->meshActorPos = meshActor->actor.world.pos;
                 }
             }
 
             // Set camera speed
             runSpeedLimit = Camera_GetRunSpeedLimit(camera) * 1.5f;
-            sp84 = Camera_Vec3fMagnitude(&camera->playerPosDelta);
+            sp84 = Camera_Vec3fMagnitude(&camera->trackActorPosRelToCam);
             camera->xzSpeed = OLib_ClampMaxDist(sp84, runSpeedLimit);
             camera->speedRatio = OLib_ClampMaxDist(sp84 / runSpeedLimit, 1.8f);
-            camera->trackActorPosRot = sp68;
+            camera->trackActorPosRot = trackActorPosRot;
 
             if (camera->camId == CAM_ID_MAIN) {
                 Camera_CheckWater(camera);
@@ -7323,11 +7329,11 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
                         camera->nextCamSceneDataId = bgCamDataId | 0x1000;
                     }
                 }
-                spA0 = sp68.pos;
+                spA0 = trackActorPosRot.pos;
                 spA0.y += Camera_GetTrackedActorHeight(camera);
-                playerGroundY = BgCheck_CameraRaycastFloor2(&camera->globalCtx->colCtx, &sp8C, &bgId, &spA0);
-                if ((playerGroundY != BGCHECK_Y_MIN) && (sp8C != sp90) && (bgId == BGCHECK_SCENE) &&
-                    ((camera->playerGroundY - 2.0f) < playerGroundY)) {
+                playerFloorHeight = BgCheck_CameraRaycastFloor2(&camera->globalCtx->colCtx, &sp8C, &bgId, &spA0);
+                if ((playerFloorHeight != BGCHECK_Y_MIN) && (sp8C != sp90) && (bgId == BGCHECK_SCENE) &&
+                    ((camera->playerFloorHeight - 2.0f) < playerFloorHeight)) {
                     bgCamDataId = Camera_GetBgCamDataId(camera, &bgId, sp8C);
                     if ((bgCamDataId != -1) && (bgId == BGCHECK_SCENE)) {
                         camera->nextCamSceneDataId = bgCamDataId | 0x1000;
@@ -7347,7 +7353,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             if (((camera->camId == CAM_ID_MAIN) || (camera->flags2 & CAM_FLAG2_40)) &&
                 ((camera->bgId == BGCHECK_SCENE) || ((bgId == BGCHECK_SCENE) && (changeCamSceneDataType != 0))) &&
                 (camera->nextCamSceneDataId != -1) && (camera->doorTimer1 == 0) &&
-                ((Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerGroundY) < 11.0f) || (changeCamSceneDataType != 0)) &&
+                ((Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerFloorHeight) < 11.0f) || (changeCamSceneDataType != 0)) &&
                 (!(camera->flags2 & CAM_FLAG2_200) || Camera_IsUnderwaterAsZora(camera))) {
 
                 Camera_ChangeDataIdx(camera, camera->nextCamSceneDataId);

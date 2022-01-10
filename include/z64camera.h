@@ -388,11 +388,11 @@ typedef struct Camera {
     /* 0x0D8 */ f32 xzSpeed;
     /* 0x0DC */ f32 dist;
     /* 0x0E0 */ f32 speedRatio;
-    /* 0x0E4 */ Vec3f atActorOffset; // Offset between camera's at-coordinates and centered actor's coordinates
-    /* 0x0F0 */ Vec3f playerPosDelta;
+    /* 0x0E4 */ Vec3f atActorOffset; // Displacement from trackActor to at (Offset between camera's at-coordinates and centered actor's coordinates)
+    /* 0x0F0 */ Vec3f trackActorPosRelToCam; // Displacement from cam's trackActor pos to real-time trackActor pos (Offset between camera's trackActor-coordinates and centered actor's coordinates)
     /* 0x0FC */ f32 fov;
     /* 0x100 */ f32 atLERPStepScale;
-    /* 0x104 */ f32 playerGroundY;
+    /* 0x104 */ f32 playerFloorHeight;
     /* 0x108 */ Vec3f floorNorm;
     /* 0x114 */ f32 waterYPos;
     /* 0x118 */ s32 waterPrevBgCamDataId;
