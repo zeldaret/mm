@@ -254,7 +254,7 @@ typedef struct {
     /* 0x0C */ void* vramEnd;
     /* 0x10 */ void* loadedRamAddr;
     /* 0x14 */ EffectSsInit* initInfo;
-    /* 0x18 */ u32 unk18; // Always 0x01000000?
+    /* 0x18 */ u8 unk18; // Always 1?
 } EffectSsOverlay; // size = 0x1C
 
 typedef struct EffectSs {
@@ -278,27 +278,6 @@ typedef struct {
     /* 0x4 */ s32 searchIndex;
     /* 0x8 */ s32 size;
 } EffectSsInfo; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ EffectSs* data_table; // Name from debug assert
-    /* 0x4 */ s32 searchIndex;
-    /* 0x8 */ s32 size;
-} EffectTableInfo; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ UNK_TYPE4 unk0;
-    /* 0x4 */ EffectSsInitFunc init;
-} ParticleOverlayInfo; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ u32 vromStart;
-    /* 0x04 */ u32 vromEnd;
-    /* 0x08 */ void* vramStart;
-    /* 0x0C */ void* vramEnd;
-    /* 0x10 */ void* loadedRamAddr;
-    /* 0x14 */ ParticleOverlayInfo* overlayInfo;
-    /* 0x18 */ u32 unk18; // Always 0x01000000?
-} ParticleOverlay; // size = 0x1C
 
 typedef enum {
     /* 0x00 */ EFFECT_SS_DUST,
