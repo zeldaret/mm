@@ -4071,8 +4071,7 @@ beginseg
     name "ovl_Obj_Snowball2"
     compress
     include "build/src/overlays/actors/ovl_Obj_Snowball2/z_obj_snowball2.o"
-    include "build/data/ovl_Obj_Snowball2/ovl_Obj_Snowball2.data.o"
-    include "build/data/ovl_Obj_Snowball2/ovl_Obj_Snowball2.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Snowball2/ovl_Obj_Snowball2_reloc.o"
 endseg
 
 beginseg
