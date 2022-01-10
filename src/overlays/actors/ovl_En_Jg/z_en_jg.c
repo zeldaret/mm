@@ -220,7 +220,7 @@ static Vec3f sBreathAccelOffset = { 0.0f, 0.0f, -0.070000000298f };
  * can focus on them.
  */
 Actor* EnJg_GetShrineGoronToFocusOn(GlobalContext* globalCtx, u8 focusedShrineGoronParam) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actorIterator != NULL) {
         if ((actorIterator->id == ACTOR_EN_S_GORO) &&
@@ -396,7 +396,7 @@ void EnJg_Idle(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void EnJg_GoronShrineIdle(EnJg* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
         this->flags |= FLAG_LOOKING_AT_PLAYER;
         func_801518B0(globalCtx, this->textId, &this->actor);
         this->actionFunc = EnJg_GoronShrineTalk;
@@ -407,7 +407,7 @@ void EnJg_GoronShrineIdle(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
         if ((this->textId == TEXT_EN_JG_WERE_HOLDING_THE_GORON_RACES) ||
             (this->textId == TEXT_EN_JG_THINK_IT_OVER_SLOWLY) ||
             (this->textId == TEXT_EN_JG_GO_BEYOND_TWIN_ISLANDS_CAVE)) {
@@ -466,7 +466,7 @@ void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx) {
  * set his speed to 0, causing him to walk in place.
  */
 void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, GlobalContext* globalCtx) {
-    u8 sp27 = func_80152498(&globalCtx->msgCtx);
+    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
 
@@ -521,7 +521,7 @@ void EnJg_Walk(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
-    u8 sp27 = func_80152498(&globalCtx->msgCtx);
+    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
     u16 temp;
@@ -642,7 +642,7 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
             func_801518B0(globalCtx, TEXT_TATL_OLD_GORON_FROZEN_SOLID, &this->actor);
             this->actionFunc = EnJg_EndFrozenInteraction;
         } else if (this->actor.isTargeted) {
@@ -652,7 +652,7 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) != 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) != 0) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = EnJg_FrozenIdle;
@@ -956,7 +956,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, GlobalContext* 
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
         this->flags |= FLAG_LOOKING_AT_PLAYER;
         this->actor.speedXZ = 0.0f;
 
@@ -992,7 +992,7 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnJg* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronElderSkel, &gGoronElderIdleAnim, this->jointTable,
                        this->morphTable, EN_JG_LIMB_MAX);
 
@@ -1040,7 +1040,7 @@ void EnJg_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((this->actionFunc != EnJg_FrozenIdle) && (this->actionFunc != EnJg_EndFrozenInteraction)) {
         EnJg_UpdateCollision(this, globalCtx);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         SkelAnime_Update(&this->skelAnime);
 
         if ((this->action != EN_JG_ACTION_LULLABY_INTRO_CS) && (!EN_JG_IS_IN_GORON_SHRINE(&this->actor))) {
