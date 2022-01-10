@@ -331,8 +331,8 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, GlobalContext* globalCtx) {
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xFA);
     this->actor.world.rot = this->actor.shape.rot;
-    Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
     if (EnTalkGibud_PlayerInRangeWithCorrectState(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
         if (this->grabWaitTimer == 0 && this->actor.xzDistToPlayer <= 45.0f) {
             player->actor.freezeTimer = 0;

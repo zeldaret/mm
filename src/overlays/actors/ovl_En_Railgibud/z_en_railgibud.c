@@ -36,7 +36,7 @@ void EnRailgibud_SetupDead(EnRailgibud* this);
 void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA6974(GlobalContext* globalCtx, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5);
 void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, GlobalContext* globalCtx);
-s32 func_80BA6D10(EnRailgibud* this, GlobalContext* globalCtx);
+s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, GlobalContext* globalCtx);
 s32 func_80BA6DAC(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_MoveToIdealGrabPositionAndRotation(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx);
@@ -337,7 +337,7 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
     this->actor.world.rot = this->actor.shape.rot;
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
-    if (func_80BA6D10(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
+    if (EnRailgibud_PlayerInRangeWithCorrectState(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
         if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
             if ((gSaveContext.playerForm == PLAYER_FORM_GORON) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
@@ -512,7 +512,7 @@ void EnRailgibud_WalkToHome(EnRailgibud* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 450);
         this->actor.world.rot = this->actor.shape.rot;
     }
-    if (func_80BA6D10(this, globalCtx)) {
+    if (EnRailgibud_PlayerInRangeWithCorrectState(this, globalCtx)) {
         if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
             Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
             EnRailgibud_SetupWalkToPlayer(this);
@@ -684,7 +684,7 @@ void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, GlobalContext* globalCtx) 
     this->headRotation.y = CLAMP(this->headRotation.y, -0x256F, 0x256F);
 }
 
-s32 func_80BA6D10(EnRailgibud* this, GlobalContext* globalCtx) {
+s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
