@@ -61,7 +61,7 @@ static u16 sTextIds[] = { 0x1473 };
 void EnDemoheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDemoheishi* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable,
                        this->morphTable, 17);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -120,7 +120,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, GlobalContext* globalCtx) {
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absYawDiff = ABS_ALT(yawDiff);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnDemoheishi_SetupTalk(this);
     } else if (absYawDiff <= 0x4BB8) {
         func_800B8614(&this->actor, globalCtx, 70.0f);
@@ -133,7 +133,7 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this) {
 }
 
 void EnDemoheishi_Talk(EnDemoheishi* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx) != 0)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx) != 0)) {
         func_801477B4(globalCtx);
         EnDemoheishi_SetupIdle(this);
     }
@@ -150,12 +150,12 @@ void EnDemoheishi_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Actor_SetScale(&this->actor, 0.01f);
     EnDemoheishi_SetHeadRotation(this);
 
-    Actor_SetHeight(&this->actor, 60.0f);
+    Actor_SetFocus(&this->actor, 60.0f);
     Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 0xBB8, 0);
     Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 0x3E8, 0);
     Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
