@@ -15,8 +15,7 @@ s32 DmaMgr_FindDmaIndex(u32 vromAddr);
 const char* func_800809F4(u32 param_1);
 void DmaMgr_ProcessMsg(DmaRequest* req);
 void DmaMgr_ThreadEntry(void* arg);
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused,
-                           OSMesgQueue* callback, void* callbackMesg);
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg);
 s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size);
 void DmaMgr_Start(void);
 void DmaMgr_Stop(void);
@@ -317,8 +316,7 @@ void osViSetMode(OSViMode* modep);
 void guLookAtF(float mf[4][4], f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp);
 void guLookAt(Mtx* m, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp);
 s32 osPfsAllocateFile(OSPfs* pfs, u16 companyCode, u32 gameCode, u8* gameName, u8* extName, s32 fileSize, s32* fileNo);
-s32 __osPfsDeclearPage(OSPfs* pfs, __OSInode* inode, s32 fileSizeInPages, s32* startPage, u8 bank, s32* decleared,
-                       s32* finalPage);
+s32 __osPfsDeclearPage(OSPfs* pfs, __OSInode* inode, s32 fileSizeInPages, s32* startPage, u8 bank, s32* decleared, s32* finalPage);
 s32 osStopTimer(OSTimer* t);
 u32 __osProbeTLB(void* param_1);
 void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt);
@@ -551,45 +549,31 @@ s16 func_800B09D0(s16 a0, s16 a1, f32 a2);
 u8 func_800B0A24(u8 a0, u8 a1, f32 a2);
 void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* texture);
 void EffectSsDust_Spawn(GlobalContext* globalCtx, u16 drawFlags, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life, u8 updateMode);
-void func_800B0DE0(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                   Color_RGBA8* envColor, s16 scale, s16 scaleStep);
-void func_800B0E48(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                   Color_RGBA8* envColor, s16 scale, s16 scaleStep);
-void func_800B0EB0(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                   Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life);
-void func_800B0F18(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                   Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life);
-void func_800B0F80(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                   Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life);
-void func_800B0FE8(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                   Color_RGBA8* envColor, s16 scale, s16 scaleStep);
-void func_800B1054(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                   Color_RGBA8* envColor, s16 scale, s16 scaleStep);
+void func_800B0DE0(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep);
+void func_800B0E48(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep);
+void func_800B0EB0(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life);
+void func_800B0F18(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life);
+void func_800B0F80(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life);
+void func_800B0FE8(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep);
+void func_800B1054(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep);
 void func_800B10C0(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel);
 void func_800B1130(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel);
 void func_800B11A0(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep);
 void func_800B1210(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep);
-void func_800B1280(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                   s16 life);
-void func_800B12F0(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                   s16 life);
-void func_800B1360(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                   Color_RGBA8* envColor);
-void func_800B139C(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                   Color_RGBA8* envColor);
+void func_800B1280(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s16 life);
+void func_800B12F0(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s16 life);
+void func_800B1360(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor);
+void func_800B139C(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor);
 void func_800B13D8(Vec3f* srcPos, f32 randScale, Vec3f* newPos, Vec3f* velocity, Vec3f* accel);
 void func_800B14D4(GlobalContext* globalCtx, f32 randScale, Vec3f* srcPos);
 void func_800B1598(GlobalContext* globalCtx, f32 randScale, Vec3f* srcPos);
 void EffectSsKiraKira_SpawnSmallYellow(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel);
-void EffectSsKiraKira_SpawnSmall(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
-                                 Color_RGBA8* primColor, Color_RGBA8* envColor);
-void EffectSsGSpk_SpawnSmall(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
-                             Color_RGBA8* primColor, Color_RGBA8* envColor);
+void EffectSsKiraKira_SpawnSmall(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor);
+void EffectSsGSpk_SpawnSmall(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor);
 void EffectSsKiraKira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s32 life);
 // void EffectSsKiraKira_SpawnFocused(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
 // void EffectSsBomb2_SpawnFade(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4);
-void EffectSsBomb2_SpawnLayered(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale,
-                                s16 scaleStep);
+void EffectSsBomb2_SpawnLayered(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep);
 // void EffectSsBlast_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, Color_RGBA8* param_5, Color_RGBA8* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10);
 void EffectSsBlast_SpawnWhiteCustomScale(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale,
                                          s16 scaleStep, s16 life);
@@ -600,22 +584,16 @@ void EffectSsBlast_SpawnWhiteShockwave(GlobalContext* globalCtx, Vec3f* arg1, Ve
 // void EffectSsGSpk_SpawnFuse(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void EffectSsGSpk_SpawnRandColor(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 // void EffectSsGSpk_SpawnSmall(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                         s16 alpha, s16 fadeDelay, s16 life, s32 arg9);
-void EffectSsBubble_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 yPosOffset, f32 yPosRandScale, f32 xzPosRandScale,
-                          f32 scale);
+void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s16 alpha, s16 fadeDelay, s16 life, s32 arg9);
+void EffectSsBubble_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 yPosOffset, f32 yPosRandScale, f32 xzPosRandScale, f32 scale);
 void EffectSsGRipple_Spawn(GlobalContext* globalCtx, Vec3f* pos, s16 radius, s16 radiusMax, s16 life);
-void EffectSsGSplash_Spawn(GlobalContext* globalCtx, Vec3f* pos, Color_RGBA8* primColor, Color_RGBA8* envColor,
-                           s16 type, s16 scale);
+void EffectSsGSplash_Spawn(GlobalContext* globalCtx, Vec3f* pos, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 type, s16 scale);
 // void EffectSsGFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2);
 // void EffectSsLightning_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Color_RGBA8* pzParm3, Color_RGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
 // void EffectSsDtBubble_SpawnColorProfile(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
-void EffectSsDtBubble_SpawnCustomColor(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
-                                       Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 life, s16 randXZ);
-void EffectSsHahen_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused, s16 scale,
-                         s16 objId, s16 life, Gfx* dList);
-void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstScale, s16 unused, s16 scale,
-                              s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList);
+void EffectSsDtBubble_SpawnCustomColor(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 life, s16 randXZ);
+void EffectSsHahen_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused, s16 scale, s16 objId, s16 life, Gfx* dList);
+void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstScale, s16 unused, s16 scale, s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList);
 // void func_800B2364(void);
 // void EffectSsStick_Spawn(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE2 uParm3);
 // void EffectSsSibuki_Spawn(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
@@ -626,28 +604,22 @@ void EffectSsHitMark_SpawnFixedScale(GlobalContext* globalCtx, s32 type, Vec3f* 
 // void EffectSsHitMark_SpawnCustomScale(void);
 // void EffectSsFhgFlash_SpawnShock(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1 param_5);
 // void EffectSsKFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6);
-void EffectSsSolderSrchBall_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused,
-                                  s16* linkDetected, s16 drawFlag);
-void EffectSsKakera_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* arg3, s16 gravity, s16 arg5,
-                          s16 arg6, s16 arg7, s16 arg8, s16 scale, s16 arg10, s16 arg11, s32 life, s16 colorIdx,
-                          s16 objId, Gfx* dList);
+void EffectSsSolderSrchBall_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused, s16* linkDetected, s16 drawFlag);
+void EffectSsKakera_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* arg3, s16 gravity, s16 arg5, s16 arg6, s16 arg7, s16 arg8, s16 scale, s16 arg10, s16 arg11, s32 life, s16 colorIdx, s16 objId, Gfx* dList);
 // void EffectSsIcePiece_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, Vec3f* pzParm4, Vec3f* param_5, UNK_TYPE4 param_6);
 // void EffectSsIcePiece_SpawnBurst(void);
 // void EffectSsEnIce_SpawnFlyingVec3f(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, Color_RGBA8* pzParm4, Color_RGBA8* param_5, UNK_TYPE4 param_6);
 // void func_800B2B44(void);
 // void func_800B2B7C(void);
-void EffectSsEnIce_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 scale, Vec3f* velocity, Vec3f* accel,
-                         Color_RGBA8* primColor, Color_RGBA8* envColor, s32 life);
+void EffectSsEnIce_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 scale, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s32 life);
 // void EffectSsFireTail_Spawn(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE4 uParm4, Vec3f* param_5, UNK_TYPE2 param_6, Color_RGBA8* param_7, Color_RGBA8* param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE4 param_11);
 // void EffectSsFireTail_SpawnFlame(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
 // void EffectSsFireTail_SpawnFlameOnPlayer(void);
 void EffectSsEnFire_SpawnVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, s16 scale, s16 arg4, s16 flags, s16 bodyPart);
 // void EffectSsEnFire_SpawnVec3s(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 // void EffectSsExtra_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
-void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env,
-                          s16 scale, s16 scaleStep, s32 unk);
-void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                   s32 colorIndex);
+void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env, s16 scale, s16 scaleStep, s32 unk);
+void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s32 colorIndex);
 // void EffectSsDeadDd_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE1* param_5, UNK_TYPE1* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
 // void EffectSsDeadDs_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
 // void func_800B31BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
@@ -657,73 +629,60 @@ void FlagSet_Update(GameState* gameState);
 void FlagSet_Draw(GameState* gameState);
 void Overlay_LoadGameState(GameStateOverlay* gameState);
 void Overlay_FreeGameState(GameStateOverlay* gameState);
-void Actor_PrintLists(ActorContext* actorCtx);
-void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc func, f32 scale);
-void ActorShadow_Draw(Actor* actor, Lights* mapper, GlobalContext* globalCtx, Gfx* displayList, Color_RGBA8* color);
-void func_800B3FC0(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
-void func_800B4024(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
-void func_800B4088(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
-void func_800B40B8(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
-void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3, f32 arg4, f32 arg5, f32 arg6);
-void func_800B42F8(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
-// void func_800B4A98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 param_3);
+
+void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale);
+void ActorShadow_DrawCircle(Actor* actor, Lights* lights, GlobalContext* globalCtx);
+void ActorShadow_DrawSquare(Actor* actor, Lights* lights, GlobalContext* globalCtx);
+void ActorShadow_DrawWhiteCircle(Actor* actor, Lights* lights, GlobalContext* globalCtx);
+void ActorShadow_DrawHorse(Actor* actor, Lights* lights, GlobalContext* globalCtx);
+
+void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
+void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex, Vec3f* rightFootPos);
+void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 y);
 void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
-void func_800B4EDC(GlobalContext* globalCtx, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4);
-// void func_800B4F40(TargetContext* targetCtx, s32 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5);
-void func_800B4F78(TargetContext* targetCtx, u8 type, GlobalContext* globalCtx);
-void func_800B5040(TargetContext* targetCtx, Actor* actor, u8 type, GlobalContext* globalCtx);
-void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx);
-void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx);
-void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GlobalContext* globalCtx);
-u32 Flags_GetSwitch(GlobalContext* globalCtx, s32 flag);
-void Actor_SetSwitchFlag(GlobalContext* globalCtx, s32 flag);
-void Actor_UnsetSwitchFlag(GlobalContext* globalCtx, s32 flag);
-u32 Actor_GetChestFlag(GlobalContext* globalCtx, u32 flag);
-void Actor_SetChestFlag(GlobalContext* globalCtx, u32 flag);
-void Actor_SetAllChestFlag(GlobalContext* globalCtx, u32 flags);
-u32 Actor_GetAllChestFlag(GlobalContext* globalCtx);
-u32 Actor_GetRoomCleared(GlobalContext* globalCtx, u32 roomNumber);
-void Actor_SetRoomCleared(GlobalContext* globalCtx, u32 roomNumber);
-void Actor_UnsetRoomCleared(GlobalContext* globalCtx, u32 roomNumber);
-u32 Actor_GetRoomClearedTemp(GlobalContext* globalCtx, u32 roomNumber);
-void Actor_SetRoomClearedTemp(GlobalContext* globalCtx, u32 roomNumber);
-void Actor_UnsetRoomClearedTemp(GlobalContext* globalCtx, u32 roomNumber);
-u32 Actor_GetCollectibleFlag(GlobalContext* globalCtx, s32 index);
-void Actor_SetCollectibleFlag(GlobalContext* globalCtx, s32 index);
-void Actor_TitleCardContextInit(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
-void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4, s16 param_5, u8 param_6, u8 param_7);
-// void Actor_Nop800B5E50(UNK_TYPE4 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4);
-void Actor_TitleCardUpdate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
-void Actor_TitleCardDraw(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
-// UNK_TYPE4 func_800B6434(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
-// UNK_TYPE4 func_800B645C(void);
-void func_800B6468(GlobalContext* globalCtx);
-void func_800B6474(GlobalContext* globalCtx);
-// UNK_TYPE4 func_800B648C(GlobalContext* globalCtx, UNK_TYPE1 param_2, UNK_TYPE1 param_3, f32 param_4, Vec3f* param_5);
-f32 func_800B64FC(GlobalContext* globalCtx, f32 fParm2, Vec3f* pzParm3, u32* puParm4);
-void* func_800B6584(GlobalContext* globalCtx, s16 sParm2, void* pvParm3, u32 uParm4);
-// UNK_TYPE4 func_800B6608(s32 iParm1, s16 sParm2);
-// void func_800B6680(void);
+void Actor_GetProjectedPos(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, f32* arg3);
+
+void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx);
+
+s32 Flags_GetSwitch(GlobalContext* globalCtx, s32 flag);
+void Flags_SetSwitch(GlobalContext* globalCtx, s32 flag);
+void Flags_UnsetSwitch(GlobalContext* globalCtx, s32 flag);
+s32 Flags_GetTreasure(GlobalContext* globalCtx, s32 flag);
+void Flags_SetTreasure(GlobalContext* globalCtx, s32 flag);
+void Flags_SetAllTreasure(GlobalContext* globalCtx, s32 flag);
+s32 Flags_GetAllTreasure(GlobalContext* globalCtx);
+s32 Flags_GetClear(GlobalContext* globalCtx, s32 roomNumber);
+void Flags_SetClear(GlobalContext* globalCtx, s32 roomNumber);
+void Flags_UnsetClear(GlobalContext* globalCtx, s32 roomNumber);
+s32 Flags_GetClearTemp(GlobalContext* globalCtx, s32 roomNumber);
+void Flags_SetClearTemp(GlobalContext* globalCtx, s32 roomNumber);
+void Flags_UnsetClearTemp(GlobalContext* globalCtx, s32 roomNumber);
+s32 Flags_GetCollectible(GlobalContext* globalCtx, s32 flag);
+void Flags_SetCollectible(GlobalContext* globalCtx, s32 flag);
+
+void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 x, s16 y, u8 width, u8 height);
+
+s32 func_800B648C(GlobalContext* globalCtx, s32 arg1, s32 arg2, f32 arg3, Vec3f* arg4);
+f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3);
+void* func_800B6584(GlobalContext* globalCtx, s16 id, void* arg2, size_t size);
+void* func_800B6608(GlobalContext* globalCtx, s16 id);
+void* func_800B6680(GlobalContext* globalCtx, s16 id);
 void Actor_MarkForDeath(Actor* actor);
-void Actor_InitCurrPosition(Actor* actor);
-void Actor_SetHeight(Actor* actor, f32 height);
-void Actor_SetRotationFromDrawRotation(Actor* actor);
-void Actor_InitDrawRotation(Actor* actor);
+void Actor_SetWorldToHome(Actor* actor);
+void Actor_SetFocus(Actor* actor, f32 height);
+void Actor_SetWorldRotToShape(Actor* actor);
+void Actor_SetShapeRotToWorld(Actor* actor);
 void Actor_SetScale(Actor* actor, f32 scale);
-void Actor_SetObjectSegment(GlobalContext* globalCtx, Actor* actor);
-void Actor_InitToDefaultValues(Actor* actor, GlobalContext* globalCtx);
-void Actor_FiniActor(Actor* actor, GlobalContext* globalCtx);
+void Actor_SetObjectDependency(GlobalContext* globalCtx, Actor* actor);
 void Actor_SetMovementScale(s32 scale);
-void Actor_ApplyMovement(Actor* actor);
-void Actor_SetVelocityYRotationAndGravity(Actor* actor);
-void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor);
-void Actor_SetVelocityXYRotation(Actor* actor);
-void Actor_SetVelocityAndMoveXYRotation(Actor* actor);
-void Actor_SetVelocityXYRotationReverse(Actor* actor);
-void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor);
-void func_800B6C04(Actor* actor, f32 fParm2);
-// void func_800B6C58(Actor* actor, UNK_TYPE4 param_2);
+void Actor_UpdatePos(Actor* actor);
+void Actor_UpdateVelocityWithGravity(Actor* actor);
+void Actor_MoveWithGravity(Actor* actor);
+void Actor_UpdateVelocityWithoutGravity(Actor* actor);
+void Actor_MoveWithoutGravity(Actor* actor);
+void Actor_UpdateVelocityWithoutGravityReverse(Actor* actor);
+void Actor_MoveWithoutGravityReverse(Actor* actor);
+void Actor_SetSpeeds(Actor* actor, f32 speed);
 s16 Actor_YawBetweenActors(Actor* from, Actor* to);
 s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to);
 s16 Actor_YawToPoint(Actor* actor, Vec3f* point);
@@ -734,171 +693,142 @@ f32 Actor_DistanceBetweenActors(Actor* actor1, Actor* actor2);
 f32 Actor_DistanceToPoint(Actor* actor, Vec3f* point);
 f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2);
 f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point);
-void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point);
-f32 Actor_YDistance(Actor* actor1, Actor* actor2);
-void func_800B6F20(GlobalContext* globalCtx, s32 param_2, f32 param_3, s16 param_4);
-float func_800B6FC8(Player* player);
-// void func_800B7090(void);
-// void func_800B7118(void);
-// void func_800B7128(void);
+void Actor_OffsetOfPointInActorCoords(Actor* actor, Vec3f* offset, Vec3f* point);
+f32 Actor_HeightDiff(Actor* actor1, Actor* actor2);
+void func_800B6F20(GlobalContext* globalCtx, Input* input, f32 arg2, s16 arg3);
+f32 Player_GetHeight(Player* player);
+f32 Player_GetRunSpeedLimit(Player* player);
+s32 func_800B7118(Player* player);
+s32 func_800B7128(Player* player);
 s32 func_800B715C(GlobalContext* globalCtx);
-// void func_800B7170(void);
-// void func_800B71DC(void);
-u32 func_800B7200(s32 param_1);
-// void func_800B722C(void);
-void func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 arg2);
-u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 arg2);
-void func_800B72E0(s32 param_1);
-void func_800B72F8(DynaPolyActor* dpactor, f32 a1, s16 a2);
-s32 Actor_IsLinkFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx);
-s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance);
-s32 Actor_IsActorFacingLink(Actor* actor, s16 angle);
-s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance);
-s32 Actor_IsActorFacingLinkAndWithinRange(Actor* actor, f32 range, s16 tolerance);
-s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance);
-void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3);
-// UNK_TYPE4 func_800B761C(Actor* param_1, UNK_TYPE4 param_2, u32 param_3);
-// UNK_TYPE4 func_800B7678(GlobalContext* globalCtx, Actor* param_2, s32 param_3, u32 param_4);
+void Actor_SetCameraHorseSetting(GlobalContext* globalCtx, Player* player);
+void Actor_MountHorse(GlobalContext* globalCtx, Player* player, Actor* horse);
+s32 func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 csMode);
+u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 csMode);
+void func_800B72F8(DynaPolyActor* dyna, f32 extraPushForce, s16 yRotation);
+
+s32 Player_IsFacingActor(Actor* actor, s16 maxAngleDiff, GlobalContext* globalCtx);
+s32 Actor_ActorBIsFacingActorA(Actor* actorA, Actor* actorB, s16 maxAngleDiff);
+s32 Actor_IsFacingPlayer(Actor* actor, s16 angle);
+s32 Actor_ActorAIsFacingActorB(Actor* actorA, Actor* actorB, s16 maxAngleDiff);
+s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 maxAngleDiff);
+s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s16 maxAngleDiff);
+
+void func_800B75A0(CollisionPoly* poly, Vec3f* normal, s16* azimuth);
 void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags);
-// void func_800B7E04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-Hilite* func_800B7FE0(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx);
-// void func_800B8018(void);
-void func_800B8050(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
-void func_800B8118(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
-// void func_800B81E0(void);
-UNK_PTR func_800B8214(PosRot* param_1, Actor* param_2);
-f32* func_800B8248(PosRot* param_1, Player* param_2);
-// void func_800B82EC(void);
-// void func_800B83BC(void);
-// void func_800B83F8(void);
-s32 func_800B84D0(Actor* actor, GlobalContext* globalCtx); // Actor_IsTalking
-s32 func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 fParm3, f32 fParm4, s32 param_5);
-s32 func_800B85E0(Actor* actor, GlobalContext* globalCtx, f32 uParm3, s32 uParm4);
-s32 func_800B8614(Actor* actor, GlobalContext* globalCtx, f32 uParm3);
+Hilite* Hilite_DrawOpa(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx);
+void func_800B8050(Actor* actor, GlobalContext* globalCtx, s32 flag);
+void func_800B8118(Actor* actor, GlobalContext* globalCtx, s32 flag);
+PosRot* Actor_GetFocus(PosRot* dest, Actor* actor);
+PosRot* Actor_GetWorld(PosRot* dest, Actor* actor);
+PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
+
+s32 func_800B83F8(Actor* actor, Player* player, s32 flag);
+s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState);
+s32 func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId);
+s32 func_800B85E0(Actor* actor, GlobalContext* globalCtx, f32 radius, s32 exchangeItemId);
+s32 func_800B8614(Actor* actor, GlobalContext* globalCtx, f32 radius);
 s32 func_800B863C(Actor* actor, GlobalContext* globalCtx);
-u32 func_800B867C(Actor* actor, GlobalContext* globalCtx);
-UNK_TYPE4 func_800B86C8(Actor* actor1, GlobalContext* globalCtx, Actor* actor2);
-s32 func_800B8708(GlobalContext* globalCtx);
-s32 func_800B8718(Actor* actor, GlobalContext* globalCtx);
-void func_800B874C(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3);
-// void func_800B8804(void);
-// void func_800B882C(void);
-// void func_800B886C(void);
-void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* arg2, s16* arg3);
+s32 Actor_TextboxIsClosing(Actor* actor, GlobalContext* globalCtx);
+s32 Actor_ChangeFocus(Actor* actor1, GlobalContext* globalCtx, Actor* actor2);
+s32 Player_GetExchangeItemId(GlobalContext* globalCtx);
+s32 func_800B8718(Actor* actor, GameState* gameState);
+s32 func_800B874C(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange);
+s32 func_800B8804(Actor* actor, GlobalContext* globalCtx, f32 xzRange);
+s32 func_800B886C(Actor* actor, GlobalContext* globalCtx);
+void Actor_GetScreenPos(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y);
 s32 func_800B8934(GlobalContext* globalCtx, Actor* actor);
-u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx);
-UNK_TYPE4 func_800B8A1C(Actor* actor, GlobalContext* globalCtx, s32 iParm3, f32 fParm4, f32 param_5);
-// void func_800B8B84(void);
-void func_800B8BB0(Actor* actor, GlobalContext* globalCtx);
-// void func_800B8BD0(void);
+s32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx);
+s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange);
+s32 Actor_PickUpNearby(Actor* actor, GlobalContext* globalCtx, s32 getItemId);
+s32 Actor_LiftActor(Actor* actor, GlobalContext* globalCtx);
+s32 Actor_PickUpFar(Actor* actor, GlobalContext* globalCtx, s32 getItemId);
 s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx);
-// void func_800B8C20(void);
+void func_800B8C20(Actor* actorA, Actor* actorB, GlobalContext* globalCtx);
 void func_800B8C50(Actor* actor, GlobalContext* globalCtx);
-// void func_800B8C78(void);
-// void func_800B8C9C(void);
-// void func_800B8CEC(void);
-// void func_800B8D10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+s32 Actor_HasRider(GlobalContext* globalCtx, Actor* horse);
+s32 Actor_SetRideActor(GlobalContext* globalCtx, Actor* horse, s32 mountSide);
+s32 Actor_HasNoRider(GlobalContext* globalCtx, Actor* horse);
+void func_800B8D10(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6);
 void func_800B8D50(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5);
 void func_800B8D98(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
-// void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-void func_800B8E58(Actor* actor, u16 sfxId);
-void Audio_PlayActorSound2(Actor* actor, u16 sfxId);
-// void func_800B8FC0(void);
+void func_800B8DD4(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5);
+void func_800B8E1C(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
+void func_800B8E58(Player* player, u16 sfxId);
+void Actor_PlaySfxAtPos(Actor* actor, u16 sfxId);
+void func_800B8EF4(GlobalContext* globalCtx, Actor* actor);
 void func_800B8F98(Actor* actor, u16 sfxId);
+void func_800B8FC0(Actor* actor, u16 sfxId);
 void func_800B8FE8(Actor* actor, u16 sfxId);
 void func_800B9010(Actor* actor, u16 sfxId);
-// void func_800B9038(void);
-// void func_800B9084(void);
+void func_800B9038(Actor* actor, s32 timer);
+void func_800B9084(Actor* actor);
 void func_800B9098(Actor* actor);
-s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, UNK_TYPE arg2, UNK_TYPE arg3, UNK_TYPE arg4);
-// void func_800B90F4(void);
+s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon, s32 index, s32 arg4);
+void func_800B90F4(GlobalContext* globalCtx);
 void func_800B9120(ActorContext* actorCtx);
-// void Actor_Init(GlobalContext* globalCtx, ActorContext* actorCtx, UNK_TYPE4 uParm3);
-void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx);
-Actor* Actor_UpdateActor(s800B948C* params);
+void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry* actorEntry);
 void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx);
-void Actor_DrawActor(GlobalContext* globalCtx, Actor* actor);
-void func_800B9D1C(Actor* actor);
-void Actor_DrawAllSetup(GlobalContext* globalCtx);
 s32 Actor_RecordUndrawnActor(GlobalContext* globalCtx, Actor* actor);
-// void func_800B9E84(void);
-void func_800B9EF4(GlobalContext* globalCtx, s32 numActors, Actor** actors);
-s32 func_800BA2D8(GlobalContext* globalCtx, Actor* actor);
-s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* param_3, f32 param_4);
 void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx);
-void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx);
-// void func_800BA9B4(void);
-void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 type);
-Actor* Actor_RemoveFromTypeList(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor);
-void Actor_FreeOverlay(ActorOverlay* entry);
-Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 sParm10);
-ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index);
-Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 variable, u32 cutscene, s32 param_12, Actor* parent);
-Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 variable);
+void Actor_CleanupContext(ActorContext* actorCtx, GlobalContext* globalCtx);
+Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
+Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 arg11, Actor* parent);
+Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
 void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCtx);
-void func_800BB2D0(ActorContext* actorCtx, u16* param_2, GlobalContext* globalCtx);
-Actor* func_800BB498(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
-// void func_800BB59C(void);
-// void func_800BB604(void);
-// void func_800BB8EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor);
-// void func_800BBAC0(void);
-void func_800BBB74(s16* arg1, UNK_TYPE1 arg2, UNK_TYPE1 arg3, UNK_TYPE4 arg4);
-// void func_800BBC20(void);
-void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s16 arg2, Gfx** dList);
-void func_800BBDAC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3, UNK_TYPE4 arg4, f32 arg5, s16 arg6, s16 arg7, u8 arg8);
-void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6, u8 param_7);
+s16 func_800BBAC0(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3);
+s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3);
+void Actor_SpawnBodyParts(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx** dList);
+void Actor_SpawnFloorDustRing(GlobalContext* globalCtx, Actor* actor, Vec3f* posXZ, f32 radius, s32 countMinusOne, f32 randAccelWeight, s16 scale, s16 scaleStep, u8 useLighting);
+void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 arg2, s32 arg3, s16 arg4, s16 scaleStep, u8 arg6);
 void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
-// void func_800BC188(void);
-// void func_800BC1B4(void);
-Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, UNK_TYPE4 arg3);
+s32 func_800BC188(s32 index);
+Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, s32 arg3);
 Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2);
-s16 func_800BC4EC(Actor* actor, GlobalContext* globalCtx, f32 distance, s16 angle); 
-s32 func_800BC5B8(GlobalContext* globalCtx, Actor* actor);
-s32 func_800BC5EC(GlobalContext* globalCtx, Actor* actor);
-void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx);
-// void func_800BC770(void);
-// void func_800BC7D8(void);
+s16 Actor_TestFloorInDirection(Actor* actor, GlobalContext* globalCtx, f32 distance, s16 angle);
+s32 Actor_IsTargeted(GlobalContext* globalCtx, Actor* actor);
+s32 Actor_OtherIsTargeted(GlobalContext* globalCtx, Actor* actor);
+void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, GlobalContext* globalCtx);
+void func_800BC770(GlobalContext* globalCtx, s16 y, s16 countdown);
+void func_800BC7D8(GlobalContext* globalCtx, s16 y, s16 countdown, s16 speed);
 void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3);
-// void func_800BC8B8(void);
-// void func_800BCB50(void);
-void func_800BCB70(Actor* actor, u16 arg1, u16 arg2, s16 arg3, s16 arg4);
-void func_800BCBF4(Vec3f* uParm1, GlobalContext* globalCtx);
-void func_800BCC68(Vec3f* param_1, GlobalContext* globalCtx);
-UNK_RET func_800BCCDC(Vec3s* points, u8 pathcount, Vec3f* pos1, Vec3f* pos2, UNK_TYPE parm5);
-// void func_800BD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_800BD384(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9);
-// void func_800BD6E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
-void func_800BD888(Actor*, struct_800BD888_arg1*, s16, s16); // This function is very similar to OoT's func_80034A14
-// void func_800BD9A0(void);
-// void func_800BD9E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
-// void func_800BDAA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
-// void func_800BDB6C(void);
-void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry animation[], s32 index);
-// void func_800BDCF4(void);
+void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type);
+void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration);
+Hilite* func_800BCBF4(Vec3f* arg0, GlobalContext* globalCtx);
+Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx);
+void func_800BCCDC(Vec3s* points, s32 pathCount, Vec3f* pos1, Vec3f* pos2, s32 parm5);
+s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3, u16 (*textIdCallback)(GlobalContext*, Actor*), s16 (*arg5)(GlobalContext*, Actor*));
+void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3);
+void func_800BD9E0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
+void func_800BDAA0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
+void Actor_ChangeAnimation(SkelAnime* skelAnime, ActorAnimationEntry* animation, s32 index);
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx);
-void func_800BDFC0(GlobalContext* globalCtx, Gfx* dl);
-void func_800BE03C(GlobalContext* globalCtx, Gfx* dl);
-Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3, f32 arg4);
-s32 func_800BE184(GlobalContext* globalCtx, Actor* actor, f32 arg2, s32 arg3, s32 arg4, s32 arg5);
-u8 Actor_ApplyDamage(Actor* actor); // returns current health
-void func_800BE258(Actor* actor, UNK_PTR arg1);
-void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere);
+
+void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist);
+void Gfx_DrawDListXlu(GlobalContext* globalCtx, Gfx* dlist);
+
+Actor* Actor_FindNearby(GlobalContext* globalCtx, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance);
+s32 func_800BE184(GlobalContext* globalCtx, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5);
+u8 Actor_ApplyDamage(Actor* actor);
+void Actor_SetDropFlag(Actor* actor, ColliderInfo* colInfo);
+void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere);
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3);
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2);
 void func_800BE504(Actor* actor, ColliderCylinder* collider);
 void func_800BE568(Actor* actor, ColliderSphere* collider);
-void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2);
-// void func_800BE63C(void);
-void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 arg4, f32 arg5, f32 arg6, u8 mode);
-void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, s32 arg4, f32 arg5, f32 arg6);
-void ActorOverlayTable_FaultPrint(void* arg0, void* arg1); // ActorOverlayTable_FaultPrint
-void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1); // ActorOverlayTable_FaultAddrConv
-void ActorOverlayTable_Init(void); // ActorOverlayTable_Init
-void ActorOverlayTable_Cleanup(void); // ActorOverlayTable_Cleanup
+void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex);
+s32 func_800BE63C(struct EnBox* chest);
+void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 effectScale, f32 steamScale, f32 effectAlpha, u8 mode);
+void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 limbPosCount, s32 effectsPerLimb, f32 scale, f32 scaleRange);
+
+void ActorOverlayTable_FaultPrint(void* arg0, void* arg1);
+void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1);
+void ActorOverlayTable_Init(void);
+void ActorOverlayTable_Cleanup(void);
+
 void SSNode_SetValue(SSNode* node, s16* polyIndex, u16 next);
 void SSList_SetNull(SSList* head);
 void SSNodeList_SetSSListHead(SSNodeList* list, SSList* ssList, s16* polyIndex);
@@ -1228,7 +1158,7 @@ void func_800DE0EC(Camera* camera, Actor* actor);
 Vec3s* Camera_Update(Vec3s* param_1, Camera* camera);
 // void func_800DF498(void);
 u32 Camera_SetMode(Camera* camera, s16 mode, s8 param_3);
-// void func_800DF840(void);
+s32 Camera_ChangeMode(Camera* camera, s16 mode);
 // void func_800DF86C(void);
 // void func_800DF8EC(void);
 s32 func_800DFAC8(Camera* camera, s16 param_2);
@@ -1619,14 +1549,11 @@ void ActorCutscene_SetReturnCamera(s16 index);
 // void func_800F23E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 f32 func_800F2478(f32 target, TransformData* transData, s32 refIdx);
 void SkelCurve_Clear(SkelAnimeCurve* skelCurve);
-s32 SkelCurve_Init(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve, SkelCurveLimbList* limbListSeg,
-                   TransformUpdateIndex* transUpdIdx);
+s32 SkelCurve_Init(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve, SkelCurveLimbList* limbListSeg, TransformUpdateIndex* transUpdIdx);
 void SkelCurve_Destroy(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve);
-void SkelCurve_SetAnim(SkelAnimeCurve* skelCurve, TransformUpdateIndex* transUpdIdx, f32 arg2, f32 animFinalFrame,
-                       f32 animCurFrame, f32 animSpeed);
+void SkelCurve_SetAnim(SkelAnimeCurve* skelCurve, TransformUpdateIndex* transUpdIdx, f32 arg2, f32 animFinalFrame, f32 animCurFrame, f32 animSpeed);
 s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve);
-void SkelCurve_Draw(Actor* actor, GlobalContext* globalCtx, SkelAnimeCurve* skelCurve,
-                    OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx);
+void SkelCurve_Draw(Actor* actor, GlobalContext* globalCtx, SkelAnimeCurve* skelCurve, OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx);
 void FireObj_SetPosition(FireObj* fire, Vec3f* pos);
 void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire);
 void FireObj_Init(GlobalContext* globalCtx, FireObj* fire, FireObjInitParams* init, Actor* actor);
@@ -1640,7 +1567,7 @@ void FireObj_Update(GlobalContext* globalCtx, FireObj* fire, Actor* actor);
 // void func_800F3B68(void);
 // void func_800F3C44(void);
 // void func_800F3ED4(void);
-void func_800F40A0(GlobalContext* globalCtx, s32 param_2);
+void func_800F40A0(GameState* gameState, Player* player);
 // void func_800F415C(void);
 UNK_TYPE func_800F41E4(GlobalContext* globalCtx, ActorContext* actorCtx);
 
@@ -2137,7 +2064,7 @@ void func_80122F28(Player* player, GlobalContext* globalCtx, Actor* actor);
 void func_8012301C(s32 iParm1, GlobalContext* globalCtx);
 void func_80123140(GlobalContext* globalCtx, Player* param_2);
 u32 func_80123358(GlobalContext* globalCtx, Player* player);
-u32 func_801233E4(GlobalContext* globalCtx);
+s32 Player_InCsMode(GameState* gameState);
 // void func_80123420(void);
 // void func_80123434(void);
 // void func_80123448(void);
@@ -2173,7 +2100,7 @@ s32 func_801240C8(Player* player);
 // void func_801241E0(void);
 // void func_8012420C(void);
 // void func_8012422C(void);
-// void func_80124258(void);
+s32 Player_GetExplosiveHeld(Player* player);
 // void func_80124278(void);
 s32 func_801242B4(Player* player);
 // void func_801242DC(void);
@@ -2466,35 +2393,20 @@ UNK_TYPE func_80133038(GlobalContext* globalCtx, UNK_TYPE* arg1, struct_80133038
 void SkelAnime_DrawLimbLod(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, s32 lod);
 void SkelAnime_DrawLod(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, s32 lod);
 void SkelAnime_DrawFlexLimbLod(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor, s32 lod, Mtx** mtx);
-void SkelAnime_DrawFlexLod(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                         OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor,
-                         s32 lod);
-void SkelAnime_DrawLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                        OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
-void SkelAnime_DrawOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
-                    OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
-void SkelAnime_DrawFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                          OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor,
-                          Mtx** limbMatricies);
-void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                      OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
-void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw, Actor* actor,
-                   Mtx** mtx);
-void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw, Actor* actor);
+void SkelAnime_DrawFlexLod(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor, s32 lod);
+void SkelAnime_DrawLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
+void SkelAnime_DrawOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
+void SkelAnime_DrawFlexLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor, Mtx** limbMatricies);
+void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, Actor* actor);
+void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw, Actor* actor, Mtx** mtx);
+void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, UnkActorDrawOpa unkDraw, Actor* actor);
 void SkelAnime_GetFrameData(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCount, Vec3s* dst);
 s16 Animation_GetLength(void* animation);
 s16 Animation_GetLastFrame(void* animation);
-Gfx* SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                         OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, Gfx* gfx);
-Gfx* SkelAnime_Draw(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
-                     OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, Gfx* gfx);
-Gfx* SkelAnime_DrawFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                           OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor,
-                           Mtx** mtx, Gfx* gfx);
-Gfx* SkelAnime_DrawFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                       OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, Gfx* gfx);
+Gfx* SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, Gfx* gfx);
+Gfx* SkelAnime_Draw(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, Gfx* gfx);
+Gfx* SkelAnime_DrawFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, Mtx** mtx, Gfx* gfx);
+Gfx* SkelAnime_DrawFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, Gfx* gfx);
 s16 SkelAnime_GetFrameDataLegacy(LegacyAnimationHeader* animation, s32 frame, Vec3s* frameTable);
 s16 Animation_GetLimbCount2(LegacyAnimationHeader* animation);
 s16 Animation_GetLength2(LegacyAnimationHeader* animation);
@@ -2504,8 +2416,7 @@ void AnimationContext_Reset(AnimationContext* animationCtx);
 void AnimationContext_SetNextQueue(GlobalContext* globalCtx);
 void AnimationContext_DisableQueue(GlobalContext* globalCtx);
 AnimationEntry* AnimationContext_AddEntry(AnimationContext* animationCtx, AnimationType type);
-void AnimationContext_SetLoadFrame(GlobalContext* globalCtx, LinkAnimationHeader* animation, s32 frame,
-                                 s32 limbCount, Vec3s* frameTable);
+void AnimationContext_SetLoadFrame(GlobalContext* globalCtx, LinkAnimationHeader* animation, s32 frame, s32 limbCount, Vec3s* frameTable);
 void AnimationContext_SetCopyAll(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src);
 void AnimationContext_SetInterp(GlobalContext* globalCtx, s32 limbCount, Vec3s* arg2, Vec3s* arg3, f32 arg4);
 void AnimationContext_SetCopyTrue(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src, u8* index);
@@ -2518,9 +2429,7 @@ void AnimationContext_CopyTrue(GlobalContext* globalCtx, AnimationEntryData* dat
 void AnimationContext_CopyFalse(GlobalContext* globalCtx, AnimationEntryData* data);
 void AnimationContext_MoveActor(GlobalContext* globalCtx, AnimationEntryData* data);
 void AnimationContext_Update(GlobalContext* globalCtx, AnimationContext* animationCtx);
-void SkelAnime_InitLink(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
-                                 LinkAnimationHeader* animation, s32 flags, Vec3s* jointTable,
-                                 Vec3s* morphTable, s32 limbBufCount);
+void SkelAnime_InitLink(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, LinkAnimationHeader* animation, s32 flags, Vec3s* jointTable, Vec3s* morphTable, s32 limbBufCount);
 void LinkAnimation_SetUpdateFunction(SkelAnime* skelAnime);
 s32 LinkAnimation_Update(GlobalContext* globalCtx, SkelAnime* skelAnime);
 s32 LinkAnimation_Morph(GlobalContext* globalCtx, SkelAnime* skelAnime);
@@ -2544,8 +2453,7 @@ void LinkAnimation_EndLoop(SkelAnime* skelAnime);
 s32 Animation_OnFrameImpl(SkelAnime* skelAnime, f32 arg1, f32 updateRate);
 s32 LinkAnimation_OnFrame(SkelAnime* skelAnime, f32 arg1);
 void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
-void SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
-                      AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
+void SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
 void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg);
 void SkelAnime_SetUpdate(SkelAnime* skelAnime);
 s32 SkelAnime_Update(SkelAnime* skelAnime);
@@ -2740,8 +2648,7 @@ void VisMono_Draw(void* arg0, Gfx** gfx, u32 arg2);
 void func_801420C0(void* arg0);
 void func_801420F4(void* arg0);
 void func_80142100(void* arg0, Gfx** gfx, u32 arg2);
-s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7,
-                  s32 arg8);
+s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 void func_80143148(SkyboxContext* skyboxCtx, s32 arg1);
 void func_801431E8(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType);
 void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType);
@@ -2823,7 +2730,7 @@ void func_80151BB4(GlobalContext* globalCtx, u32 uParm2);
 // void func_80151DA4(void);
 void func_80152434(GlobalContext* globalCtx, u16 arg2);
 // void func_80152464(void);
-u8 func_80152498(MessageContext* msgCtx);
+u8 Message_GetState(MessageContext* msgCtx);
 // void func_8015268C(void);
 // void func_80152C64(void);
 // void func_80152CAC(void);
@@ -2925,7 +2832,7 @@ void* TransitionFade_Init(void* param_1);
 // void TransitionCircle_Update(void);
 // void TransitionCircle_SetColor(void);
 // void TransitionCircle_SetType(void);
-// void func_80164C14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+void func_80164C14(Gfx** arg0, TexturePtr* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, f32 arg6);
 // void TransitionCircle_Draw(void);
 // void TransitionCircle_IsDone(void);
 // void func_801651B0(void);
@@ -2961,7 +2868,7 @@ void Play_Draw(GlobalContext* globalCtx);
 void func_80168DAC(GlobalContext* globalCtx);
 void Play_Update(GlobalContext* globalCtx);
 s32 func_801690CC(GlobalContext* globalCtx);
-// void func_80169100(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+f32 func_80169100(GlobalContext* globalCtx, MtxF* mtx, CollisionPoly** arg2, s32* arg3, Vec3f* feetPosPtr);
 // void func_801691F0(void);
 void* Play_LoadScene(GlobalContext* globalCtx, RomFile* entry);
 void func_8016927C(GlobalContext* globalCtx, s16 sParm2);
@@ -2984,7 +2891,7 @@ void func_801699D4(GlobalContext* globalCtx, s16 arg1, s16 arg2);
 void func_80169AFC(GlobalContext* globalCtx, s16 camId, s16 arg2);
 // void func_80169C64(void);
 // void func_80169C84(void);
-// void convert_scene_number_among_shared_scenes(void);
+s16 convert_scene_number_among_shared_scenes(s16 arg0);
 void func_80169D40(GlobalContext* globalCtx);
 void func_80169DCC(GlobalContext* globalCtx, s32 arg1, u16 arg2, s32 arg3, s32 arg4, Vec3f* arg5, s16 arg6);
 void func_80169E6C(GlobalContext* globalCtx, s32 param_1, s32 param_2);
@@ -3039,8 +2946,7 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this);
 void PreRender_ApplyFiltersSlowlyDestroy(PreRender* this);
 void func_801720C4(PreRender* this);
 void func_801720FC(PreRenderParams* params, Gfx** gfxp);
-void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x,
-                   f32 y, f32 xScale, f32 yScale, u32 flags);
+void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x, f32 y, f32 xScale, f32 yScale, u32 flags);
 void THGA_Ct(TwoHeadGfxArena* thga, Gfx* start, size_t size);
 void THGA_Dt(TwoHeadGfxArena* thga);
 u32 THGA_IsCrash(TwoHeadGfxArena* thga);
@@ -3284,7 +3190,7 @@ s32 Math3D_TriChkLineSegParaZIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, 
 // void func_8017D404(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 void Math3D_TriSetCoords(TriNorm* tri, Vec3f* pointA, Vec3f* pointB, Vec3f* pointC);
 u32 Math3D_IsPointInSphere(Sphere16* sphere, Vec3f* point);
-// void func_8017D668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+s32 Math3D_PointDistToLine2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32* arg6, f32* arg7, f32* arg8); // returns boolean
 // void func_8017D7C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8017D814(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017D91C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
@@ -3783,8 +3689,8 @@ void func_8019F170(Vec3f* pos, u16 sfxId);
 void func_8019F1C0(Vec3f* pos, u16 sfxId);
 void play_sound(u16 sfxId);
 void func_8019F128(u16 sfxId);
-void func_8019F208(void); // decide
-void func_8019F230(void); // cancel
+void func_8019F208(void); // Decide sound
+void func_8019F230(void); // Cancel sound
 // void func_8019F258(void);
 // void func_8019F300(void);
 void func_8019F420(Vec3f* pos, u16 sfxId);
@@ -3823,7 +3729,7 @@ void func_801A0204(s8 seqId);
 // void func_801A0554(void);
 // void func_801A05F0(void);
 void func_801A0654(Vec3f* arg0, u16 sfxId, s32 arg2);
-// void func_801A0810(void);
+void func_801A0810(s32* arg0, u16 sfxId, u8 arg2);
 // void func_801A0868(void);
 // void func_801A09D4(void);
 // void func_801A0CB0(void);
@@ -3841,7 +3747,7 @@ void func_801A1DB8(Vec3f* vec, u8 seqId, f32 arg2);
 // void func_801A1E0C(void);
 void func_801A1F00(u8 arg0, u16 seqId);
 void func_801A1F88(void);
-// void func_801A1FB4(void);
+void func_801A1FB4(u8 playerIdx, Vec3f* pos, u16 seqId, f32 maxDist);
 // void func_801A2090(void);
 void func_801A246C(u8 param_1, u8 param_2);
 // void func_801A2544(void);
@@ -3933,7 +3839,7 @@ UNK_TYPE func_801A51F0(UNK_TYPE arg0);
 void func_801A5BD0(s32 param_1);
 // void func_801A5C28(void);
 // void func_801A5C8C(void);
-void func_801A5CFC(u16 sfxId, Vec3f* param_2, u8 param_3, f32* param_4, f32* param_5, s8* param_6);
+void Audio_PlaySfxGeneral(u16 sfxId, Vec3f* param_2, u8 param_3, f32* param_4, f32* param_5, s8* param_6);
 // void func_801A5DDC(void);
 // void func_801A5F7C(void);
 // void func_801A6430(void);
