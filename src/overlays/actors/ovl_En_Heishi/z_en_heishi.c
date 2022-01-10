@@ -149,14 +149,14 @@ void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->actionFunc(this, globalCtx);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 29);
         Actor_SetScale(&this->actor, 0.01f);
         if (this->unk26C != 0) {
             EnHeishi_SetHeadRotation(this);
         }
 
-        Actor_SetHeight(&this->actor, 60.0f);
+        Actor_SetFocus(&this->actor, 60.0f);
         Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 3000, 0);
         Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 1000, 0);
         Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
