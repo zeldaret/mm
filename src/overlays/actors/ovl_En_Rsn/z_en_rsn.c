@@ -37,7 +37,7 @@ extern Gfx D_06005458[];
 static ActorAnimationEntry animations[] = { { &D_0600788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f } };
 
 void func_80C25D40(EnRsn* this) {
-    func_800BDC5C(&this->skelAnime, animations, 0);
+    Actor_ChangeAnimation(&this->skelAnime, animations, 0);
     this->actionFunc = func_80C25D84;
 }
 
@@ -47,7 +47,7 @@ void func_80C25D84(EnRsn* this, GlobalContext* globalCtx) {
 void EnRsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRsn* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06009220, &D_06009120, NULL, NULL, 0);
     this->actor.flags &= ~1;
     func_80C25D40(this);
@@ -63,7 +63,7 @@ void EnRsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRsn* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
     func_800E9250(globalCtx, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.focus.pos);
 }
