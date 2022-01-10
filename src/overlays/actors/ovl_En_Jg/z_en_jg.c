@@ -396,7 +396,7 @@ void EnJg_Idle(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void EnJg_GoronShrineIdle(EnJg* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->flags |= FLAG_LOOKING_AT_PLAYER;
         func_801518B0(globalCtx, this->textId, &this->actor);
         this->actionFunc = EnJg_GoronShrineTalk;
@@ -642,7 +642,7 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_801518B0(globalCtx, TEXT_TATL_OLD_GORON_FROZEN_SOLID, &this->actor);
             this->actionFunc = EnJg_EndFrozenInteraction;
         } else if (this->actor.isTargeted) {
@@ -956,7 +956,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, GlobalContext* 
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
 
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->flags |= FLAG_LOOKING_AT_PLAYER;
         this->actor.speedXZ = 0.0f;
 
