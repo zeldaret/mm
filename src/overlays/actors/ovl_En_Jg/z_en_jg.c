@@ -466,7 +466,7 @@ void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx) {
  * set his speed to 0, causing him to walk in place.
  */
 void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, GlobalContext* globalCtx) {
-    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
+    u8 messageState = Message_GetState(&globalCtx->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
 
@@ -476,7 +476,7 @@ void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, GlobalContext* globalCtx) {
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
         }
     } else if (this->animationIndex == EN_JG_ANIMATION_SURPRISE_LOOP) {
-        if ((sp27 == 5) && (func_80147624(globalCtx))) {
+        if ((messageState == 5) && (func_80147624(globalCtx))) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
@@ -521,7 +521,7 @@ void EnJg_Walk(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
-    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
+    u8 messageState = Message_GetState(&globalCtx->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
     u16 temp;
@@ -531,7 +531,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
         func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
     }
 
-    if ((sp27 == 5) && (func_80147624(globalCtx))) {
+    if ((messageState == 5) && (func_80147624(globalCtx))) {
         temp = this->textId;
         if ((temp == TEXT_EN_JG_THIS_IS_OUR_PROBLEM_FIRST) || (temp == TEXT_EN_JG_THIS_IS_OUR_PROBLEM_REPEAT) ||
             (temp == TEXT_EN_JG_SO_COLD_I_CANT_PLAY) || (temp == TEXT_EN_JG_I_AM_COUNTING_ON_YOU)) {
