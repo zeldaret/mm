@@ -647,7 +647,7 @@ void func_801000CC(u16 sfxId) {
     func_8019F128(sfxId);
 }
 
-void Lib_PlaySfxByPos(Vec3f* pos, u16 sfxId) {
+void Lib_PlaySfxAtPos(Vec3f* pos, u16 sfxId) {
     Audio_PlaySfxAtPos(pos, sfxId);
 }
 
