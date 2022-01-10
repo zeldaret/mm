@@ -14407,7 +14407,7 @@
     0x80B72E88:("EnRailSkb_OverrideLimbDraw",),
     0x80B7302C:("EnRailSkb_PostLimbDraw",),
     0x80B731EC:("EnRailSkb_Draw",),
-    0x80B73A90:("EnJg_GetShrineGoron",),
+    0x80B73A90:("EnJg_GetShrineGoronToFocusOn",),
     0x80B73AE4:("EnJg_UpdateCollision",),
     0x80B73B98:("EnJg_GetWalkingYRotation",),
     0x80B73C58:("EnJg_ReachedPoint",),

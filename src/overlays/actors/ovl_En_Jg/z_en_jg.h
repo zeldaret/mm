@@ -75,7 +75,7 @@ typedef struct EnJg {
     /* 0x3CB */ u8 csAction;
     /* 0x3CC */ u16 flags;
     /* 0x3CE */ u16 textId;
-    /* 0x3D0 */ u8 cheerState; // maybe rename this
+    /* 0x3D0 */ u8 focusedShrineGoronParam;
 } EnJg; // size = 0x3D4
 
 extern const ActorInit En_Jg_InitVars;

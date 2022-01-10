@@ -212,15 +212,25 @@ static Vec3f sBreathVelOffset = { 0.0f, 0.0f, 0.75f };
 
 static Vec3f sBreathAccelOffset = { 0.0f, 0.0f, -0.070000000298f };
 
-Actor* EnJg_GetShrineGoron(GlobalContext* globalCtx, u8 arg1) {
+/**
+ * When the elder and the Gorons in the shrine are doing a cheer
+ * for Darmani, the camera will focus on specific Gorons for
+ * certain parts of the cheer. This function is responsible for
+ * returning a pointer to the specified Goron so the camera
+ * can focus on them.
+ */
+Actor* EnJg_GetShrineGoronToFocusOn(GlobalContext* globalCtx, u8 focusedShrineGoronParam) {
     Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
 
     while (actorIterator != NULL) {
-        if ((actorIterator->id == ACTOR_EN_S_GORO) && (EN_S_GORO_GET_PARAM_F(actorIterator) == arg1)) {
+        if ((actorIterator->id == ACTOR_EN_S_GORO) &&
+            (EN_S_GORO_GET_PARAM_F(actorIterator) == focusedShrineGoronParam)) {
             return actorIterator;
         }
+
         actorIterator = actorIterator->next;
     }
+
     return NULL;
 }
 
@@ -304,7 +314,7 @@ s16 EnJg_GetCutsceneForTeachingLullabyIntro(EnJg* this) {
  */
 void EnJg_SetupCheerCutscene(EnJg* this) {
     ActorCutscene_Stop(this->cutscene);
-    if (this->cheerState == 0xA) {
+    if (this->focusedShrineGoronParam == 10) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             this->actionFunc = EnJg_GoronShrineTalk;
         } else {
@@ -423,7 +433,7 @@ void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx) {
             case TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON:
             case TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS:
             case TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD:
-                this->shrineGoron = EnJg_GetShrineGoron(globalCtx, this->cheerState);
+                this->shrineGoron = EnJg_GetShrineGoronToFocusOn(globalCtx, this->focusedShrineGoronParam);
                 ActorCutscene_Start(this->cutscene, this->shrineGoron);
                 func_800E0308(globalCtx->cameraPtrs[0], this->shrineGoron);
                 break;
@@ -436,7 +446,7 @@ void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx) {
         this->actionFunc = EnJg_GoronShrineTalk;
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            if (this->cheerState == 0xA) {
+            if (this->focusedShrineGoronParam == 10) {
                 this->actionFunc = EnJg_GoronShrineTalk;
             } else {
                 ActorCutscene_Stop(0x7C);
@@ -771,7 +781,7 @@ s32 EnJg_GetNextTextId(EnJg* this) {
             return TEXT_EN_JG_SPRING_HAS_COME_THANKS_TO_YOU;
 
         case TEXT_EN_JG_SPRING_HAS_COME_THANKS_TO_YOU:
-            this->cheerState = 3;
+            this->focusedShrineGoronParam = 3;
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
@@ -784,19 +794,19 @@ s32 EnJg_GetNextTextId(EnJg* this) {
             return TEXT_EN_JG_CHEER_DARMANI;
 
         case TEXT_EN_JG_CHEER_DARMANI:
-            switch (this->cheerState) {
+            switch (this->focusedShrineGoronParam) {
                 case 3:
-                    this->cheerState = 4;
+                    this->focusedShrineGoronParam = 4;
                     EnJg_SetupCheerCutscene(this);
                     return TEXT_EN_JG_CHEER_THE_IMMORTAL_GORON;
 
                 case 4:
-                    this->cheerState = 5;
+                    this->focusedShrineGoronParam = 5;
                     EnJg_SetupCheerCutscene(this);
                     return TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON;
 
                 case 5:
-                    this->cheerState = 6;
+                    this->focusedShrineGoronParam = 6;
                     EnJg_SetupCheerCutscene(this);
                     return TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS;
 
@@ -818,7 +828,7 @@ s32 EnJg_GetNextTextId(EnJg* this) {
             return TEXT_EN_JG_CHEER_GREATEST_OF_GORONS;
 
         case TEXT_EN_JG_CHEER_GREATEST_OF_GORONS:
-            this->cheerState = 7;
+            this->focusedShrineGoronParam = 7;
             EnJg_SetupCheerCutscene(this);
             return TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD;
 
@@ -827,7 +837,7 @@ s32 EnJg_GetNextTextId(EnJg* this) {
             return TEXT_EN_JG_CHEER_GREATEST_IN_THE_WORLD;
 
         case TEXT_EN_JG_CHEER_GREATEST_IN_THE_WORLD:
-            this->cheerState = 0xA;
+            this->focusedShrineGoronParam = 10;
             EnJg_SetupCheerCutscene(this);
             this->flags &= ~FLAG_SHRINE_GORON_ARMS_RAISED;
             return TEXT_EN_JG_SON_WENT_TO_SEE_RACES;
