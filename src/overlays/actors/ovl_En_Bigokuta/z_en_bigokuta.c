@@ -103,7 +103,7 @@ void EnBigokuta_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gBigOctoSkel, &gBigOctoIdleAnim, this->jointTable,
-                       this->morphTable, 20);
+                       this->morphTable, BIGOKUTA_LIMB_MAX);
 
     Collider_InitAndSetCylinder(globalCtx, &this->shellCollider, &this->actor, &sShellCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->bodyCollider, &this->actor, &sBodyCylinderInit);
@@ -118,9 +118,9 @@ void EnBigokuta_Init(Actor* thisx, GlobalContext* globalCtx) {
         EnBigokuta_SetupIdle(this);
     }
 
-    this->camAt.x = ((Math_SinS(this->actor.home.rot.y) * 66.0f) + this->actor.world.pos.x);
-    this->camAt.y = ((this->actor.home.pos.y - 49.5f) + 42.899998f);
-    this->camAt.z = ((Math_CosS(this->actor.home.rot.y) * 66.0f) + this->actor.world.pos.z);
+    this->camAt.x = (Math_SinS(this->actor.home.rot.y) * 66.0f) + this->actor.world.pos.x;
+    this->camAt.y = (this->actor.home.pos.y - 49.5f) + 42.899998f;
+    this->camAt.z = (Math_CosS(this->actor.home.rot.y) * 66.0f) + this->actor.world.pos.z;
 
     this->unkFunc = func_80AC2B4C; // set but never called
 }
@@ -236,8 +236,8 @@ void EnBigokuta_SetupRise(EnBigokuta* this, GlobalContext* globalCtx) {
     Animation_PlayOnce(&this->skelAnime, &gBigOctoRiseOutOfWaterAnim);
     splashPos.y = this->actor.home.pos.y;
     for (i = 0; i < 8; i++) {
-        splashPos.x = (Math_SinS(angle) * 70.0f) + this->actor.world.pos.x;
-        splashPos.z = (Math_CosS(angle) * 70.0f) + this->actor.world.pos.z;
+        splashPos.x = Math_SinS(angle) * 70.0f + this->actor.world.pos.x;
+        splashPos.z = Math_CosS(angle) * 70.0f + this->actor.world.pos.z;
         EffectSsGSplash_Spawn(globalCtx, &splashPos, NULL, NULL, 0, Rand_S16Offset(1000, 200));
         angle = BINANG_ADD(angle, 0x2000);
     }
@@ -295,9 +295,9 @@ void EnBigokuta_SetupSuckInPlayer(EnBigokuta* this, GlobalContext* globalCtx) {
     Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 1.0f, 12.0f, 12.0f, 2, -3.0f);
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
 
-    this->playerHoldPos.x = ((Math_SinS(this->actor.shape.rot.y) * 66.0f) + this->actor.world.pos.x);
-    this->playerHoldPos.y = ((this->actor.home.pos.y - 49.5f) + 42.899998f);
-    this->playerHoldPos.z = ((Math_CosS(this->actor.shape.rot.y) * 66.0f) + this->actor.world.pos.z);
+    this->playerHoldPos.x = (Math_SinS(this->actor.shape.rot.y) * 66.0f) + this->actor.world.pos.x;
+    this->playerHoldPos.y = (this->actor.home.pos.y - 49.5f) + 42.899998f;
+    this->playerHoldPos.z = (Math_CosS(this->actor.shape.rot.y) * 66.0f) + this->actor.world.pos.z;
 
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_SLIME_DEAD);
     this->actionFunc = EnBigokuta_SuckInPlayer;
@@ -401,7 +401,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, GlobalContext* globalCtx) {
 void EnBigokuta_SetupDeathEffects(EnBigokuta* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gBigOctoDeathAnim, -5.0f);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIOCTA_DEAD2);
-    this->actor.flags &= -2;
+    this->actor.flags &= ~1;
     this->timer = 10;
     this->actionFunc = EnBigokuta_PlayDeathEffects;
 }
@@ -488,7 +488,7 @@ s32 EnBigokuta_IsNearSwampBoat(EnBigokuta* this, GlobalContext* globalCtx) {
 void EnBigokuta_CheckOneHitKill(EnBigokuta* this, GlobalContext* globalCtx) {
     if ((this->bodyCollider.base.acFlags & AC_ON) &&
         ((this->bodyCollider.base.acFlags & AC_HIT) ||
-         (((globalCtx->sceneNum == SCENE_20SICHITAI) || (globalCtx->sceneNum == SCENE_20SICHITAI2)) &&
+         ((globalCtx->sceneNum == SCENE_20SICHITAI || globalCtx->sceneNum == SCENE_20SICHITAI2) &&
           EnBigokuta_IsNearSwampBoat(this, globalCtx)))) {
         Enemy_StartFinishingBlow(globalCtx, &this->actor);
 
@@ -623,7 +623,7 @@ s32 EnBigokuta_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
             }
         }
     }
-    return 0;
+    return false;
 }
 
 void EnBigokuta_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
