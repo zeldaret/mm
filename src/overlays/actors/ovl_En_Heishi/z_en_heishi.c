@@ -5,6 +5,7 @@
  */
 
 #include "z_en_heishi.h"
+#include "objects/object_sdn/object_sdn.h"
 
 #define FLAGS 0x00000009
 
@@ -15,9 +16,13 @@ void EnHeishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHeishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BE9214(EnHeishi* this, GlobalContext* globalCtx);
+void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex);
+void EnHeishi_SetHeadRotation(EnHeishi* this);
+void EnHeishi_SetupIdle(EnHeishi* this);
+void EnHeishi_Idle(EnHeishi* this, GlobalContext* globalCtx);
+s32 EnHeishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                              Actor* thisx);
 
-#if 0
 const ActorInit En_Heishi_InitVars = {
     ACTOR_EN_HEISHI,
     ACTORCAT_NPC,
@@ -30,33 +35,152 @@ const ActorInit En_Heishi_InitVars = {
     (ActorFunc)EnHeishi_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80BE9450 = {
-    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-#endif
+static AnimationHeader* sAnimations[] = { &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave,
+                                          &gSoldierSitAndReach, &gSoldierStandUp };
 
-extern ColliderCylinderInit D_80BE9450;
+static u8 sAnimModes[] = { 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-extern UNK_TYPE D_06003BFC;
+extern AnimationHeader D_06003BFC;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/EnHeishi_Init.s")
+extern FlexSkeletonHeader D_0600D640;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/EnHeishi_Destroy.s")
+extern SaveContext gSaveContext;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/func_80BE90BC.s")
+void EnHeishi_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnHeishi* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/func_80BE9148.s")
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable,
+                       this->morphTable, 17);
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    this->paramCopy = this->actor.params;
+    this->yawTowardsPlayer = this->actor.world.rot.y;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/func_80BE91DC.s")
+    if (this->paramCopy == 0) {
+        this->unk26C = 1;
+        if (((gSaveContext.weekEventReg[63] & 0x80) == 0) && ((gSaveContext.day != 3) || !gSaveContext.isNight)) {
+            Actor_MarkForDeath(&this->actor);
+        }
+    } else {
+        this->colliderCylinder.dim.radius = 30;
+        this->colliderCylinder.dim.height = 60;
+        this->colliderCylinder.dim.yShift = 0;
+        if (((gSaveContext.weekEventReg[63] & 0x80) != 0) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
+            Actor_MarkForDeath(&this->actor);
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/func_80BE9214.s")
+    this->actor.targetMode = 6;
+    this->actor.gravity = -3.0f;
+    Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
+    this->actor.flags |= 0x08000000;
+    EnHeishi_SetupIdle(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/EnHeishi_Update.s")
+void EnHeishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnHeishi* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/func_80BE9380.s")
+    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Heishi/EnHeishi_Draw.s")
+void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex) {
+    this->animIndex = animIndex;
+    this->frameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
+                     sAnimModes[this->animIndex], -10.0f);
+}
+
+void EnHeishi_SetHeadRotation(EnHeishi* this) {
+    s16 yawTemp = this->yawTowardsPlayer - this->actor.world.rot.y;
+    s32 yaw = ABS_ALT(yawTemp);
+
+    this->headRotXTarget = 0;
+    if ((this->actor.xzDistToPlayer < 200.0f) && (yaw < 20000)) {
+        this->headRotXTarget = this->yawTowardsPlayer - this->actor.world.rot.y;
+        if (this->headRotXTarget > 10000) {
+            this->headRotXTarget = 10000;
+        } else if (this->headRotXTarget < -10000) {
+            this->headRotXTarget = -10000;
+        }
+    }
+}
+
+void EnHeishi_SetupIdle(EnHeishi* this) {
+    s8 animIndex = 0;
+    EnHeishi_ChangeAnimation(this, animIndex);
+    this->unk278 = animIndex;
+    this->actionFunc = EnHeishi_Idle;
+}
+
+void EnHeishi_Idle(EnHeishi* this, GlobalContext* globalCtx) {
+}
+
+void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnHeishi* this = THIS;
+
+    SkelAnime_Update(&this->skelAnime);
+    if (this->unk270 != 0) {
+        this->unk270--;
+    }
+
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    if ((this->paramCopy != 0) && (gSaveContext.day == 3) && (gSaveContext.isNight != 0)) {
+        Actor_MarkForDeath(&this->actor);
+    } else {
+        this->actionFunc(this, globalCtx);
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 29);
+        Actor_SetScale(&this->actor, 0.01f);
+        if (this->unk26C != 0) {
+            EnHeishi_SetHeadRotation(this);
+        }
+
+        Actor_SetHeight(&this->actor, 60.0f);
+        Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 3000, 0);
+        Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 1000, 0);
+        Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
+    }
+}
+
+s32 EnHeishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                              Actor* thisx) {
+    EnHeishi* this = THIS;
+
+    if (limbIndex == 16) {
+        rot->x += this->headRotX;
+        rot->y += this->headRotY;
+        rot->z += this->headRotZ;
+    }
+
+    return 0;
+}
+
+void EnHeishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnHeishi* this = THIS;
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnHeishi_OverrideLimbDraw, 0, &this->actor);
+}
