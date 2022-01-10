@@ -39,7 +39,7 @@ void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_PlayerOutOfRange(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_MoveToIdealGrabPositionAndRotation(EnRailgibud* this, GlobalContext* globalCtx);
-void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7878(Actor* thisx, GlobalContext* globalCtx);
 void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7C78(EnRailgibud* this);
@@ -867,14 +867,14 @@ void EnRailgibud_UpdateEffect(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->actionFunc != EnRailgibud_Grab) && (this->actionFunc != EnRailgibud_Damage) &&
         (this->actionFunc != EnRailgibud_GrabFail) && (this->actionFunc != EnRailgibud_TurnAwayAndShakeHead) &&
         (this->actionFunc != EnRailgibud_Dead)) {
         if ((this->actor.flags & 5) == 5) {
             if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
-                this->actor.flags &= ~5;
-                this->actor.flags |= 9;
+                this->actor.flags &= ~(0x4 | 0x1);
+                this->actor.flags |= (0x8 | 0x1);
                 this->actor.hintId = 0xFF;
                 this->actor.textId = 0;
                 if ((this->actionFunc != EnRailgibud_WalkInCircles) && (this->actionFunc != EnRailgibud_WalkToHome)) {
@@ -891,11 +891,11 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
             }
             this->actor.textId = 0;
         }
-        func_80BA7578(this, globalCtx);
+        EnRailgibud_CheckIfTalkingToPlayer(this, globalCtx);
     }
 }
 
-void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->textId == 0) && (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
         if (func_800B84D0(&this->actor, globalCtx)) {
             this->isInvincible = true;
@@ -952,7 +952,7 @@ void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRailgibud* this = THIS;
 
     func_80BA6B30(this);
-    func_80BA7434(this, globalCtx);
+    EnRailgibud_CheckForGibdoMask(this, globalCtx);
     EnRailgibud_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
     if (this->actionFunc != EnRailgibud_Stunned) {
