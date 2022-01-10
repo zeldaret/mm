@@ -136,7 +136,7 @@ void EnAni_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.velocity.y = 0.0f;
         this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
-        this->actor.flags |= 0x10;
+        this->actor.flags |= ACTOR_FLAG_10;
         this->stateFlags |= ANI_STATE_CLIMBING;
         gSaveContext.eventInf[1] &= (u8)~0x10;
 
@@ -213,7 +213,7 @@ void EnAni_FallToGround(EnAni* this, GlobalContext* globalCtx) {
 
     // if hit the ground
     if (this->actor.bgCheckFlags & 1) {
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
         this->actionFunc = EnAni_LandOnFoot;
         this->actor.velocity.x = 0.0f;
         this->actor.velocity.z = 0.0f;
