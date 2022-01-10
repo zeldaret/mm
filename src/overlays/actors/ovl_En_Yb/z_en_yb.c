@@ -275,7 +275,7 @@ void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx) {
 
 void func_80BFA868(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) { // is talking?
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->actionFunc = func_80BFA9D4;
         // I am counting on you
@@ -340,7 +340,7 @@ void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx) {
 
 void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BFA9D4;
         // Spread my dance across the world
         func_801518B0(globalCtx, 0x147C, &this->actor);
@@ -377,7 +377,7 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);
-    } else if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BFA2FC(globalCtx);
         this->actionFunc = func_80BFA9D4;
         if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMARO) {
