@@ -157,16 +157,16 @@ void Play_SaveCycleSceneFlags(GameState* gameState) {
     CycleSceneFlags* cycleSceneFlags;
 
     cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(globalCtx->sceneNum)];
-    cycleSceneFlags->chest = globalCtx->actorCtx.chestFlags;
-    cycleSceneFlags->swch0 = globalCtx->actorCtx.switchFlags[0];
-    cycleSceneFlags->swch1 = globalCtx->actorCtx.switchFlags[1];
+    cycleSceneFlags->chest = globalCtx->actorCtx.flags.chest;
+    cycleSceneFlags->swch0 = globalCtx->actorCtx.flags.switches[0];
+    cycleSceneFlags->swch1 = globalCtx->actorCtx.flags.switches[1];
 
     if (globalCtx->sceneNum == SCENE_INISIE_R) { // Inverted Stone Tower Temple
         cycleSceneFlags = &gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
 
-    cycleSceneFlags->collectible = globalCtx->actorCtx.collectibleFlags[0];
-    cycleSceneFlags->clearedRoom = globalCtx->actorCtx.clearedRooms;
+    cycleSceneFlags->collectible = globalCtx->actorCtx.flags.collectible[0];
+    cycleSceneFlags->clearedRoom = globalCtx->actorCtx.flags.clearedRoom;
 }
 
 void Play_SetRespawnData(GameState* gameState, s32 respawnMode, u16 entranceIndex, s32 roomIndex, s32 playerParams,
@@ -178,9 +178,9 @@ void Play_SetRespawnData(GameState* gameState, s32 respawnMode, u16 entranceInde
     gSaveContext.respawn[respawnMode].pos = *pos;
     gSaveContext.respawn[respawnMode].yaw = yaw;
     gSaveContext.respawn[respawnMode].playerParams = playerParams;
-    gSaveContext.respawn[respawnMode].tempSwchFlags = globalCtx->actorCtx.switchFlags[2];
-    gSaveContext.respawn[respawnMode].unk_18 = globalCtx->actorCtx.collectibleFlags[1];
-    gSaveContext.respawn[respawnMode].tempCollectFlags = globalCtx->actorCtx.collectibleFlags[2];
+    gSaveContext.respawn[respawnMode].tempSwchFlags = globalCtx->actorCtx.flags.switches[2];
+    gSaveContext.respawn[respawnMode].unk_18 = globalCtx->actorCtx.flags.collectible[1];
+    gSaveContext.respawn[respawnMode].tempCollectFlags = globalCtx->actorCtx.flags.collectible[2];
 }
 
 void Play_SetupRespawnPoint(GameState* gameState, s32 respawnMode, s32 playerParams) {
@@ -207,9 +207,9 @@ void func_80169ECC(GlobalContext* globalCtx) {
 void func_80169EFC(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-    gSaveContext.respawn[0].tempSwchFlags = globalCtx->actorCtx.switchFlags[2];
-    gSaveContext.respawn[0].unk_18 = globalCtx->actorCtx.collectibleFlags[1];
-    gSaveContext.respawn[0].tempCollectFlags = globalCtx->actorCtx.collectibleFlags[2];
+    gSaveContext.respawn[0].tempSwchFlags = globalCtx->actorCtx.flags.switches[2];
+    gSaveContext.respawn[0].unk_18 = globalCtx->actorCtx.flags.collectible[1];
+    gSaveContext.respawn[0].tempCollectFlags = globalCtx->actorCtx.flags.collectible[2];
     globalCtx->nextEntranceIndex = gSaveContext.respawn[0].entranceIndex;
     gSaveContext.respawnFlag = 1;
     func_80169ECC(globalCtx);

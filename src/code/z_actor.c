@@ -2234,11 +2234,11 @@ void func_800B9120(ActorContext* actorCtx) {
 
 void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry* actorEntry) {
     ActorOverlay* overlayEntry;
-    u32* cycleFlags;
+    CycleSceneFlags* cycleFlags;
     s32 i;
 
     gSaveContext.weekEventReg[92] |= 0x80;
-    cycleFlags = gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
+    cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(globalCtx->sceneNum)];
 
     bzero(actorCtx, sizeof(ActorContext));
     ActorOverlayTable_Init();
@@ -2252,14 +2252,14 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
         overlayEntry++;
     }
 
-    actorCtx->flags.chest = cycleFlags[0];
-    actorCtx->flags.switches[0] = cycleFlags[1];
-    actorCtx->flags.switches[1] = cycleFlags[2];
+    actorCtx->flags.chest = cycleFlags->chest;
+    actorCtx->flags.switches[0] = cycleFlags->swch0;
+    actorCtx->flags.switches[1] = cycleFlags->swch1;
     if (globalCtx->sceneNum == SCENE_INISIE_R) {
-        cycleFlags = gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
+        cycleFlags = &gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
-    actorCtx->flags.collectible[0] = cycleFlags[4];
-    actorCtx->flags.clearedRoom = cycleFlags[3];
+    actorCtx->flags.collectible[0] = cycleFlags->collectible;
+    actorCtx->flags.clearedRoom = cycleFlags->clearedRoom;
 
     TitleCard_ContextInit(&globalCtx->state, &actorCtx->titleCtxt);
     func_800B6468(globalCtx);
@@ -3038,7 +3038,7 @@ void Actor_CleanupContext(ActorContext* actorCtx, GlobalContext* globalCtx) {
         actorCtx->absoluteSpace = NULL;
     }
 
-    func_80169D40(globalCtx);
+    Play_SaveCycleSceneFlags(&globalCtx->state);
     ActorOverlayTable_Cleanup();
 }
 
