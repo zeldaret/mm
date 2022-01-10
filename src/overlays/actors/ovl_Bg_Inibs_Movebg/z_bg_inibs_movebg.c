@@ -71,11 +71,11 @@ void BgInibsMovebg_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     dl1 = this->unk_15C;
     if (dl1 != NULL) {
-        func_800BDFC0(globalCtx, this->unk_15C);
+        Gfx_DrawDListOpa(globalCtx, this->unk_15C);
     }
 
     dl2 = this->unk_160;
     if (dl2 != NULL) {
-        func_800BE03C(globalCtx, this->unk_160);
+        Gfx_DrawDListXlu(globalCtx, this->unk_160);
     }
 }

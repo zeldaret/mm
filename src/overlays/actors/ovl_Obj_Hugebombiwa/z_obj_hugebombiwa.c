@@ -403,7 +403,7 @@ void func_80A54CEC(ObjHugebombiwa* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        Actor_SetSwitchFlag(globalCtx, ENHUGEBOMBIWA_GET_7F(&this->actor));
+        Flags_SetSwitch(globalCtx, ENHUGEBOMBIWA_GET_7F(&this->actor));
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
             ((globalCtx->sceneNum == SCENE_17SETUGEN) || (globalCtx->sceneNum == SCENE_17SETUGEN2))) {
             gSaveContext.weekEventReg[19] |= 2;
@@ -689,7 +689,7 @@ void func_80A55B34(Actor* thisx, GlobalContext* globalCtx) {
     EnHugebombiwaStruct* ptr;
 
     if ((this->actionFunc == func_80A54C04) || (this->actionFunc == func_80A54CEC)) {
-        func_800BDFC0(globalCtx, object_bombiwa_DL_001820);
+        Gfx_DrawDListOpa(globalCtx, object_bombiwa_DL_001820);
         return;
     }
 
