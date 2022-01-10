@@ -130,7 +130,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->alpha = 0;
         this->actionFunc = EnYb_WaitForMidnight;
-        this->actor.flags &= ~0x1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
     // check if already healed
@@ -276,7 +276,7 @@ void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx) {
 void func_80BFA868(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = func_80BFA9D4;
         // I am counting on you
         func_801518B0(globalCtx, 0x147D, &this->actor);
@@ -293,7 +293,7 @@ void func_80BFA91C(EnYb* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BFA868;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     } else {
         Actor_PickUp(&this->actor, globalCtx, 0x89, 10000.0f, 100.0f);
@@ -344,7 +344,7 @@ void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80BFA9D4;
         // Spread my dance across the world
         func_801518B0(globalCtx, 0x147C, &this->actor);
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     }
@@ -360,7 +360,7 @@ void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx) {
     } else {
         EnYb_FinishTeachingCutscene(this);
         this->actionFunc = EnYb_TeachingDanceFinish;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     }
     EnYb_EnableProximityMusic(this);
@@ -412,7 +412,7 @@ void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx) {
         this->alpha += 5;
         if (this->alpha > 250) {
             this->alpha = 255;
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             this->actionFunc = EnYb_Idle;
         }
         EnYb_EnableProximityMusic(this);
@@ -423,11 +423,11 @@ void EnYb_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnYb* this = THIS;
 
-    if ((this->actor.flags & 1) == 1) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_1)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
-    if ((this->actor.flags & 1) == 1) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_1)) {
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 40.0f, 25.0f, 40.0f, 5);
     }
