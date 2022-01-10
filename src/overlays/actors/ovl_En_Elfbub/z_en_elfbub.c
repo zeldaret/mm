@@ -62,7 +62,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 16.0f, func_800B3FC0, 0.2f);
+    ActorShape_Init(&this->actor.shape, 16.0f, ActorShadow_DrawCircle, 0.2f);
     this->actor.hintId = 0x16;
     Actor_SetScale(&this->actor, 1.25f);
 
@@ -143,7 +143,7 @@ void EnElfbub_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnElfbub* this = THIS;
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, this->actor.shape.yOffset);
+    Actor_SetFocus(&this->actor, this->actor.shape.yOffset);
 }
 
 void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx2) {
