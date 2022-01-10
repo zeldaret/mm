@@ -639,7 +639,7 @@ void Distortion_Update(void) {
             player = GET_PLAYER(globalCtx);
 
             if (&player->actor != NULL) {
-                func_800B8248(&playerPosRot, player);
+                Actor_GetWorldPosShapeRot(&playerPosRot, &player->actor);
             }
 
             depthCycleSpeed = 359.2f;
