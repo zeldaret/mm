@@ -193,7 +193,7 @@ s32 func_809C6720(GlobalContext* globalCtx, Vec3f arg1) {
     }
 
     globalCtx->actorCtx.unk268 = 1;
-    func_800B6F20(globalCtx, globalCtx->actorCtx.pad26C, phi_f0, sp22);
+    func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, phi_f0, sp22);
 
     if (sp28 < 5.0f) {
         return true;
@@ -213,10 +213,10 @@ void func_809C6810(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         u16 sp22;
 
-        func_800BDC5C(&this->skelAnime, sAnimations, 2);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
         sp22 = Text_GetFaceReaction(globalCtx, 0x31);
         if (sp22 != 0) {
             func_801518B0(globalCtx, sp22, &this->actor);
@@ -381,7 +381,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
         player->stateFlags1 |= 0x20;
     }
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 2:
             this->actionFunc = func_809C6848;
             this->unk_26A = 0;
@@ -419,7 +419,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (this->skelAnime.animation == &D_0600D2F8) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            func_800BDC5C(&this->skelAnime, sAnimations, 0);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
         }
     }
 }
@@ -427,7 +427,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
     switch (gSaveContext.playerForm) {
         case PLAYER_FORM_HUMAN:
-            Actor_SetAllChestFlag(globalCtx, Actor_GetAllChestFlag(globalCtx) + 1);
+            Flags_SetAllTreasure(globalCtx, Flags_GetAllTreasure(globalCtx) + 1);
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 1)) {
                     this->unk_282 |= 1;
@@ -510,7 +510,7 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C72D8(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         u16 sp26 = Text_GetFaceReaction(globalCtx, 0x30);
 
         if (sp26 != 0) {
@@ -715,7 +715,7 @@ void func_809C7990(EnSyatekiMan* this, GlobalContext* globalCtx) {
         player->stateFlags1 |= 0x20;
     }
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 2:
             this->actionFunc = func_809C72D8;
             this->unk_26A = 0;
@@ -763,13 +763,13 @@ void func_809C7A90(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->actionFunc = func_809C7C14;
     } else {
         if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !(gSaveContext.weekEventReg[59] & 0x10)) {
-            func_800B8A1C(&this->actor, globalCtx, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
         } else if (this->unk_280 < 0x884) {
-            func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_RED, 500.0f, 100.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_RED, 500.0f, 100.0f);
         } else if (!(gSaveContext.weekEventReg[32] & 2)) {
-            func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
-            func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
         }
 
         player->actor.shape.rot.y = -0x8000;
@@ -782,7 +782,7 @@ void func_809C7A90(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if ((CURRENT_DAY == 3) && (gSaveContext.time > CLOCK_TIME(12, 00))) {
             func_801518B0(globalCtx, 0xA36, &this->actor);
             this->unk_284 = 0xA36;
@@ -796,7 +796,7 @@ void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_26A = 0;
         this->actionFunc = func_809C6E30;
     } else {
-        func_800B85E0(&this->actor, globalCtx, 500.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -820,14 +820,14 @@ void func_809C7D14(EnSyatekiMan* this, GlobalContext* globalCtx) {
     } else {
         if (this->unk_284 == 0x407) {
             if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !(gSaveContext.weekEventReg[59] & 0x20)) {
-                func_800B8A1C(&this->actor, globalCtx, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
+                Actor_PickUp(&this->actor, globalCtx, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
             } else {
-                func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+                Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
             }
         } else if (!(gSaveContext.weekEventReg[32] & 4)) {
-            func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
-            func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_HUGE, 500.0f, 100.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_HUGE, 500.0f, 100.0f);
         }
 
         player->actor.shape.rot.y = -0x8000;
@@ -841,7 +841,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (CURRENT_DAY != 3) {
-        if ((func_80152498(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
             player->stateFlags1 &= ~0x20;
             this->unk_280 = 0;
             this->unk_26A = 0;
@@ -849,7 +849,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
             gSaveContext.weekEventReg[63] &= (u8)~2;
             this->actionFunc = func_809C6810;
         }
-    } else if (func_800B84D0(&this->actor, globalCtx)) {
+    } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0x408, &this->actor);
         this->unk_284 = 0x408;
         player->stateFlags1 &= ~0x20;
@@ -858,7 +858,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_26A = 0;
         this->actionFunc = func_809C7990;
     } else {
-        func_800B85E0(&this->actor, globalCtx, 500.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -895,7 +895,7 @@ void func_809C80C0(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_27E = 0;
         this->unk_280 = 0;
         player->stateFlags1 &= ~0x20;
-        Audio_PlayActorSound2(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
         this->unk_272 = 0x1F;
         this->unk_274 = 0;
         this->unk_276 = 0;
@@ -917,7 +917,7 @@ void func_809C81D0(EnSyatekiMan* this, GlobalContext* globalCtx) {
     if (((this->unk_272 == 0) || (this->unk_26C > 140)) && (D_809C949C == 0) && (this->unk_27C < 4)) {
         D_809C949C = 1;
         this->unk_26C = 0;
-        Audio_PlayActorSound2(&this->actor, NA_SE_SY_FOUND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
         this->unk_274 = D_809C91C8[this->unk_27E];
         if (this->unk_27E == 3) {
             this->unk_27E = 0;
@@ -1037,7 +1037,7 @@ void func_809C8610(EnSyatekiMan* this, GlobalContext* globalCtx) {
             gSaveContext.unk_3E88[1] += 100;
             globalCtx->interfaceCtx.unk_25C += 10;
             this->unk_280 += 10;
-            Audio_PlayActorSound2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             D_809C94A0 = 0;
         } else {
             D_809C94A0++;
@@ -1144,7 +1144,7 @@ void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx) {
         if ((D_809C94A8 == (sp30 % 50)) && (this->unk_26C >= 70)) {
             if (this->unk_27E < 15) {
                 this->unk_190 = D_809C94D0[this->unk_27E++];
-                Audio_PlayActorSound2(&this->actor, NA_SE_SY_FOUND);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
                 this->unk_26C = 0;
             }
         }
@@ -1171,7 +1171,7 @@ void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx) {
     if (this->unk_26A == 1) {
         this->unk_190 = 0;
         if ((this->unk_270 <= 0) && (globalCtx->interfaceCtx.unk_286 == 0)) {
-            Actor_SetAllChestFlag(globalCtx, this->unk_280);
+            Flags_SetAllTreasure(globalCtx, this->unk_280);
             this->unk_270 = 15;
             if (((s32)(gSaveContext.unk_EF4 & 0xFFFF) < this->unk_280) || (this->unk_280 == 50)) {
                 if ((s32)(gSaveContext.unk_EF4 & 0xFFFF) < this->unk_280) {
@@ -1239,7 +1239,7 @@ void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     func_809C8DE8(this);
     this->actor.focus.pos.y = 70.0f;
-    Actor_SetHeight(&this->actor, 70.0f);
+    Actor_SetFocus(&this->actor, 70.0f);
     if (this->unk_26A != 1) {
         SkelAnime_Update(&this->skelAnime);
         func_800E9250(globalCtx, &this->actor, &this->unk_258, &this->unk_25E, this->actor.focus.pos);

@@ -78,7 +78,7 @@ void func_80C2590C(EnInvisibleRuppe* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_190 >= 0) {
-            Actor_SetSwitchFlag(globalCtx, this->unk_190);
+            Flags_SetSwitch(globalCtx, this->unk_190);
         }
 
         this->actionFunc = func_80C259E8;
