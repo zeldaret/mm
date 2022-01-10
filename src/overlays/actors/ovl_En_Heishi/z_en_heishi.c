@@ -55,17 +55,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* sAnimations[] = { &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave,
-                                          &gSoldierSitAndReach, &gSoldierStandUp };
-
-static u8 sAnimModes[] = { 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-extern AnimationHeader D_06003BFC;
-
-extern FlexSkeletonHeader D_0600D640;
-
-extern SaveContext gSaveContext;
-
 void EnHeishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHeishi* this = THIS;
 
@@ -104,6 +93,10 @@ void EnHeishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex) {
+    static AnimationHeader* sAnimations[] = { &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave,
+                                              &gSoldierSitAndReach, &gSoldierStandUp };
+    static u8 sAnimModes[] = { 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
     this->animIndex = animIndex;
     this->frameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
