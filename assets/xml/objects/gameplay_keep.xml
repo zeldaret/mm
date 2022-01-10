@@ -766,59 +766,62 @@
         <PlayerAnimation Name="gameplay_keep_Linkanim_00E4E8" Offset="0xE4E8" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00E4F0" Offset="0xE4F0" />
         <DList Name="gameplay_keep_DL_00E5C0" Offset="0xE5C0" />
-        <Collision Name="gameplay_keep_Colheader_00E710" Offset="0xE710" />
-        <Animation Name="gameplay_keep_Anim_00EB7C" Offset="0xEB7C" />
-        <DList Name="gameplay_keep_DL_00ED80" Offset="0xED80" />
-        <DList Name="gameplay_keep_DL_00F2B8" Offset="0xF2B8" />
-        <DList Name="gameplay_keep_DL_00F350" Offset="0xF350" />
-        <DList Name="gameplay_keep_DL_00F438" Offset="0xF438" />
-        <DList Name="gameplay_keep_DL_00F4C0" Offset="0xF4C0" />
-        <DList Name="gameplay_keep_DL_00F548" Offset="0xF548" />
-        <DList Name="gameplay_keep_DL_00F5D0" Offset="0xF5D0" />
-        <DList Name="gameplay_keep_DL_00F658" Offset="0xF658" />
-        <DList Name="gameplay_keep_DL_00F6E0" Offset="0xF6E0" />
-        <DList Name="gameplay_keep_DL_00F768" Offset="0xF768" />
-        <DList Name="gameplay_keep_DL_00F7F0" Offset="0xF7F0" />
-        <Texture Name="gameplay_keep_Tex_00F878" OutName="tex_00F878" Format="rgba16" Width="16" Height="32" Offset="0xF878" />
-        <Texture Name="gameplay_keep_Tex_00FC78" OutName="tex_00FC78" Format="rgba16" Width="16" Height="32" Offset="0xFC78" />
-        <Texture Name="gameplay_keep_Tex_010078" OutName="tex_010078" Format="rgba16" Width="32" Height="32" Offset="0x10078" />
-        <Texture Name="gameplay_keep_Tex_010878" OutName="tex_010878" Format="rgba16" Width="16" Height="32" Offset="0x10878" />
-        <Texture Name="gameplay_keep_Tex_010C78" OutName="tex_010C78" Format="rgba16" Width="32" Height="32" Offset="0x10C78" />
-        <Limb Name="gameplay_keep_Standardlimb_011478" Type="Standard" Offset="0x11478" />
-        <Limb Name="gameplay_keep_Standardlimb_011484" Type="Standard" Offset="0x11484" />
-        <Limb Name="gameplay_keep_Standardlimb_011490" Type="Standard" Offset="0x11490" />
-        <Limb Name="gameplay_keep_Standardlimb_01149C" Type="Standard" Offset="0x1149C" />
-        <Limb Name="gameplay_keep_Standardlimb_0114A8" Type="Standard" Offset="0x114A8" />
-        <Limb Name="gameplay_keep_Standardlimb_0114B4" Type="Standard" Offset="0x114B4" />
-        <Limb Name="gameplay_keep_Standardlimb_0114C0" Type="Standard" Offset="0x114C0" />
-        <Limb Name="gameplay_keep_Standardlimb_0114CC" Type="Standard" Offset="0x114CC" />
-        <Limb Name="gameplay_keep_Standardlimb_0114D8" Type="Standard" Offset="0x114D8" />
-        <Limb Name="gameplay_keep_Standardlimb_0114E4" Type="Standard" Offset="0x114E4" />
-        <Skeleton Name="gameplay_keep_Skel_011518" Type="Normal" LimbType="Standard" Offset="0x11518" />
-        <Animation Name="gameplay_keep_Anim_0117A8" Offset="0x117A8" />
-        <Collision Name="gameplay_keep_Colheader_0118D8" Offset="0x118D8" />
-        <DList Name="gameplay_keep_DL_011BD0" Offset="0x11BD0" />
-        <DList Name="gameplay_keep_DL_0121B0" Offset="0x121B0" />
-        <DList Name="gameplay_keep_DL_012260" Offset="0x12260" />
-        <DList Name="gameplay_keep_DL_012308" Offset="0x12308" />
-        <DList Name="gameplay_keep_DL_012390" Offset="0x12390" />
-        <DList Name="gameplay_keep_DL_012418" Offset="0x12418" />
-        <DList Name="gameplay_keep_DL_0124A0" Offset="0x124A0" />
-        <DList Name="gameplay_keep_DL_012528" Offset="0x12528" />
-        <DList Name="gameplay_keep_DL_0125B0" Offset="0x125B0" />
-        <DList Name="gameplay_keep_DL_012638" Offset="0x12638" />
-        <DList Name="gameplay_keep_DL_0126C0" Offset="0x126C0" />
-        <Limb Name="gameplay_keep_Standardlimb_012748" Type="Standard" Offset="0x12748" />
-        <Limb Name="gameplay_keep_Standardlimb_012754" Type="Standard" Offset="0x12754" />
-        <Limb Name="gameplay_keep_Standardlimb_012760" Type="Standard" Offset="0x12760" />
-        <Limb Name="gameplay_keep_Standardlimb_01276C" Type="Standard" Offset="0x1276C" />
-        <Limb Name="gameplay_keep_Standardlimb_012778" Type="Standard" Offset="0x12778" />
-        <Limb Name="gameplay_keep_Standardlimb_012784" Type="Standard" Offset="0x12784" />
-        <Limb Name="gameplay_keep_Standardlimb_012790" Type="Standard" Offset="0x12790" />
-        <Limb Name="gameplay_keep_Standardlimb_01279C" Type="Standard" Offset="0x1279C" />
-        <Limb Name="gameplay_keep_Standardlimb_0127A8" Type="Standard" Offset="0x127A8" />
-        <Limb Name="gameplay_keep_Standardlimb_0127B4" Type="Standard" Offset="0x127B4" />
-        <Skeleton Name="gameplay_keep_Skel_0127E8" Type="Flex" LimbType="Standard" Offset="0x127E8" />
+
+        <!-- Deku Flower -->
+        <Collision Name="gPinkDekuFlowerCol" Offset="0xE710" />
+        <Animation Name="gDekuFlowerBounceAnim" Offset="0xEB7C" /> <!-- Original name is "dnp_boyoyon" ("bounce") -->
+        <DList Name="gPinkDekuFlowerIdleDL" Offset="0xED80" />
+        <DList Name="gPinkDekuFlowerBaseDL" Offset="0xF2B8" />
+        <DList Name="gPinkDekuFlowerCenterDL" Offset="0xF350" />
+        <DList Name="gPinkDekuFlowerBackLeftPetalDL" Offset="0xF438" />
+        <DList Name="gPinkDekuFlowerLeftLeafDL" Offset="0xF4C0" />
+        <DList Name="gPinkDekuFlowerFrontLeftPetalDL" Offset="0xF548" />
+        <DList Name="gPinkDekuFlowerRightLeafDL" Offset="0xF5D0" />
+        <DList Name="gPinkDekuFlowerBackRightPetalDL" Offset="0xF658" />
+        <DList Name="gPinkDekuFlowerFrontRightPetalDL" Offset="0xF6E0" />
+        <DList Name="gPinkDekuFlowerFrontLeafDL" Offset="0xF768" />
+        <DList Name="gPinkDekuFlowerBackLeafDL" Offset="0xF7F0" />
+        <Texture Name="gPinkDekuFlowerPetalAndCenterTex" OutName="pink_deku_flower_petal_and_center" Format="rgba16" Width="16" Height="32" Offset="0xF878" />
+        <Texture Name="gPinkDekuFlowerLeafAndCenterTex" OutName="pink_deku_flower_leaf_and_center" Format="rgba16" Width="16" Height="32" Offset="0xFC78" />
+        <Texture Name="gPinkDekuFlowerBaseLeafTex" OutName="pink_deku_flower_base_leaf" Format="rgba16" Width="32" Height="32" Offset="0x10078" />
+        <Texture Name="gGoldDekuFlowerPetalAndCenterTex" OutName="gold_deku_flower_petal_and_center" Format="rgba16" Width="16" Height="32" Offset="0x10878" />
+        <Texture Name="gGoldDekuFlowerBaseLeafTex" OutName="gold_deku_flower_base_leaf" Format="rgba16" Width="32" Height="32" Offset="0x10C78" />
+        <Limb Name="gPinkDekuFlowerBaseLimb" Type="Standard" Offset="0x11478" />
+        <Limb Name="gPinkDekuFlowerCenterLimb" Type="Standard" Offset="0x11484" />
+        <Limb Name="gPinkDekuFlowerBackLeafLimb" Type="Standard" Offset="0x11490" />
+        <Limb Name="gPinkDekuFlowerFrontLeafLimb" Type="Standard" Offset="0x1149C" />
+        <Limb Name="gPinkDekuFlowerFrontRightPetalLimb" Type="Standard" Offset="0x114A8" />
+        <Limb Name="gPinkDekuFlowerBackRightPetalLimb" Type="Standard" Offset="0x114B4" />
+        <Limb Name="gPinkDekuFlowerRightLeafLimb" Type="Standard" Offset="0x114C0" />
+        <Limb Name="gPinkDekuFlowerFrontLeftPetalLimb" Type="Standard" Offset="0x114CC" />
+        <Limb Name="gPinkDekuFlowerLeftLeafLimb" Type="Standard" Offset="0x114D8" />
+        <Limb Name="gPinkDekuFlowerBackLeftPetalLimb" Type="Standard" Offset="0x114E4" />
+        <Skeleton Name="gPinkDekuFlowerSkel" Type="Normal" LimbType="Standard" Offset="0x11518" />
+        <Animation Name="gDekuFlowerRustleAnim" Offset="0x117A8" /> <!-- Original name is "dnp_zawa" ("rustling") -->
+        <Collision Name="gGoldDekuFlowerCol" Offset="0x118D8" />
+        <DList Name="gGoldDekuFlowerIdleDL" Offset="0x11BD0" />
+        <DList Name="gGoldDekuFlowerBaseDL" Offset="0x121B0" />
+        <DList Name="gGoldDekuFlowerCenterDL" Offset="0x12260" />
+        <DList Name="gGoldDekuFlowerBackLeftPetalDL" Offset="0x12308" />
+        <DList Name="gGoldDekuFlowerLeftPetalDL" Offset="0x12390" />
+        <DList Name="gGoldDekuFlowerFrontLeftPetalDL" Offset="0x12418" />
+        <DList Name="gGoldDekuFlowerRightPetalDL" Offset="0x124A0" />
+        <DList Name="gGoldDekuFlowerBackRightPetalDL" Offset="0x12528" />
+        <DList Name="gGoldDekuFlowerFrontRightPetalDL" Offset="0x125B0" />
+        <DList Name="gGoldDekuFlowerFrontPetalDL" Offset="0x12638" />
+        <DList Name="gGoldDekuFlowerBackPetalDL" Offset="0x126C0" />
+        <Limb Name="gGoldDekuFlowerBaseLimb" Type="Standard" Offset="0x12748" />
+        <Limb Name="gGoldDekuFlowerCenterLimb" Type="Standard" Offset="0x12754" />
+        <Limb Name="gGoldDekuFlowerBackPetalLimb" Type="Standard" Offset="0x12760" />
+        <Limb Name="gGoldDekuFlowerFrontPetalLimb" Type="Standard" Offset="0x1276C" />
+        <Limb Name="gGoldDekuFlowerFrontRightPetalLimb" Type="Standard" Offset="0x12778" />
+        <Limb Name="gGoldDekuFlowerBackRightPetalLimb" Type="Standard" Offset="0x12784" />
+        <Limb Name="gGoldDekuFlowerRightPetalLimb" Type="Standard" Offset="0x12790" />
+        <Limb Name="gGoldDekuFlowerFrontLeftPetalLimb" Type="Standard" Offset="0x1279C" />
+        <Limb Name="gGoldDekuFlowerLeftPetalLimb" Type="Standard" Offset="0x127A8" />
+        <Limb Name="gGoldDekuFlowerBackLeftPetalLimb" Type="Standard" Offset="0x127B4" />
+        <Skeleton Name="gGoldDekuFlowerSkel" Type="Flex" LimbType="Standard" Offset="0x127E8" />
+
         <Animation Name="gameplay_keep_Anim_012860" Offset="0x12860" />
         <Animation Name="gameplay_keep_Anim_0128BC" Offset="0x128BC" />
         <Texture Name="gameplay_keep_Tex_0128D0" OutName="tex_0128D0" Format="rgba16" Width="16" Height="128" Offset="0x128D0" />
@@ -863,7 +866,7 @@
         <Texture Name="gameplay_keep_Tex_01EAF8" OutName="tex_01EAF8" Format="rgba16" Width="16" Height="16" Offset="0x1EAF8" />
         <DList Name="gameplay_keep_DL_01ED00" Offset="0x1ED00" />
         <DList Name="gameplay_keep_DL_01ED90" Offset="0x1ED90" />
-        <DList Name="gameplay_keep_DL_01F0F0" Offset="0x1F0F0" />
+        <DList Name="gZTargetArrowDL" Offset="0x1F0F0" />
         <Texture Name="gameplay_keep_Tex_01F200" OutName="tex_01F200" Format="i8" Width="8" Height="8" Offset="0x1F200" />
         <DList Name="gameplay_keep_DL_01F300" Offset="0x1F300" />
         <Texture Name="gameplay_keep_Tex_01F340" OutName="tex_01F340" Format="ia8" Width="32" Height="32" Offset="0x1F340" />
@@ -939,36 +942,39 @@
         <Limb Name="gameplay_keep_Standardlimb_02AF34" Type="Standard" Offset="0x2AF34" />
         <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Flex" LimbType="Standard" Offset="0x2AF58" />
         <Animation Name="gameplay_keep_Anim_02B2E8" Offset="0x2B2E8" />
-        <Animation Name="gameplay_keep_Anim_02B494" Offset="0x2B494" />
-        <DList Name="gameplay_keep_DL_02B6B0" Offset="0x2B6B0" />
-        <DList Name="gameplay_keep_DL_02B748" Offset="0x2B748" />
-        <DList Name="gameplay_keep_DL_02B7E0" Offset="0x2B7E0" />
-        <DList Name="gameplay_keep_DL_02B888" Offset="0x2B888" />
-        <DList Name="gameplay_keep_DL_02B920" Offset="0x2B920" />
-        <DList Name="gameplay_keep_DL_02B9B8" Offset="0x2B9B8" />
-        <DList Name="gameplay_keep_DL_02BA68" Offset="0x2BA68" />
-        <DList Name="gameplay_keep_DL_02BB00" Offset="0x2BB00" />
-        <DList Name="gameplay_keep_DL_02BB98" Offset="0x2BB98" />
-        <Texture Name="gameplay_keep_Tex_02BC30" OutName="tex_02BC30" Format="ia8" Width="32" Height="32" Offset="0x2BC30" />
-        <Texture Name="gameplay_keep_Tex_02C030" OutName="tex_02C030" Format="ia8" Width="16" Height="32" Offset="0x2C030" />
-        <Texture Name="gameplay_keep_Tex_02C230" OutName="tex_02C230" Format="ia8" Width="32" Height="32" Offset="0x2C230" />
-        <Texture Name="gameplay_keep_Tex_02C630" OutName="tex_02C630" Format="ia8" Width="16" Height="16" Offset="0x2C630" />
-        <Texture Name="gameplay_keep_Tex_02C730" OutName="tex_02C730" Format="i4" Width="16" Height="16" Offset="0x2C730" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_02C818" Offset="0x2C818" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_02C890" Offset="0x2C890" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_02C908" Offset="0x2C908" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_02C980" Offset="0x2C980" />
-        <TextureAnimation Name="gameplay_keep_Matanimheader_02C9F8" Offset="0x2C9F8" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA08" Type="Standard" Offset="0x2CA08" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA14" Type="Standard" Offset="0x2CA14" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA20" Type="Standard" Offset="0x2CA20" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA2C" Type="Standard" Offset="0x2CA2C" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA38" Type="Standard" Offset="0x2CA38" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA44" Type="Standard" Offset="0x2CA44" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA50" Type="Standard" Offset="0x2CA50" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA5C" Type="Standard" Offset="0x2CA5C" />
-        <Limb Name="gameplay_keep_Standardlimb_02CA68" Type="Standard" Offset="0x2CA68" />
-        <Skeleton Name="gameplay_keep_Skel_02CA98" Type="Flex" LimbType="Standard" Offset="0x2CA98" />
+
+        <!-- Stray Fairy -->
+        <Animation Name="gStrayFairyFlyingAnim" Offset="0x2B494" /> <!-- Original name is "ys_fly01" -->
+        <DList Name="gStrayFairyRightFacingHeadDL" Offset="0x2B6B0" />
+        <DList Name="gStrayFairyLeftFacingHeadDL" Offset="0x2B748" />
+        <DList Name="gStrayFairyGlowDL" Offset="0x2B7E0" />
+        <DList Name="gStrayFairyTorsoDL" Offset="0x2B888" />
+        <DList Name="gStrayFairyLeftArmDL" Offset="0x2B920" />
+        <DList Name="gStrayFairyPelvisAndLegsDL" Offset="0x2B9B8" />
+        <DList Name="gStrayFairyRightArmDL" Offset="0x2BA68" />
+        <DList Name="gStrayFairyRightWingDL" Offset="0x2BB00" />
+        <DList Name="gStrayFairyLeftWingDL" Offset="0x2BB98" />
+        <Texture Name="gStrayFairyRightFacingHeadTex" OutName="stray_fairy_right_facing_head" Format="ia8" Width="32" Height="32" Offset="0x2BC30" />
+        <Texture Name="gStrayFairyBodyTex" OutName="stray_fairy_body" Format="ia8" Width="16" Height="32" Offset="0x2C030" />
+        <Texture Name="gStrayFairyLeftFacingHeadTex" OutName="stray_fairy_left_facing_head" Format="ia8" Width="32" Height="32" Offset="0x2C230" />
+        <Texture Name="gStrayFairyWingTex" OutName="stray_fairy_wing" Format="ia8" Width="16" Height="16" Offset="0x2C630" />
+        <Texture Name="gStrayFairyGlowTex" OutName="stray_fairy_glow" Format="i4" Width="16" Height="16" Offset="0x2C730" />
+        <TextureAnimation Name="gStrayFairyClockTownTexAnim" Offset="0x2C818" />
+        <TextureAnimation Name="gStrayFairySnowheadTexAnim" Offset="0x2C890" />
+        <TextureAnimation Name="gStrayFairyWoodfallTexAnim" Offset="0x2C908" />
+        <TextureAnimation Name="gStrayFairyGreatBayTexAnim" Offset="0x2C980" />
+        <TextureAnimation Name="gStrayFairyStoneTowerTexAnim" Offset="0x2C9F8" />
+        <Limb Name="gStrayFairyRightFacingHeadLimb" Type="Standard" Offset="0x2CA08" />
+        <Limb Name="gStrayFairyLeftWingLimb" Type="Standard" Offset="0x2CA14" />
+        <Limb Name="gStrayFairyRightWingLimb" Type="Standard" Offset="0x2CA20" />
+        <Limb Name="gStrayFairyGlowLimb" Type="Standard" Offset="0x2CA2C" />
+        <Limb Name="gStrayFairyTorsoLimb" Type="Standard" Offset="0x2CA38" />
+        <Limb Name="gStrayFairyRightArmLimb" Type="Standard" Offset="0x2CA44" />
+        <Limb Name="gStrayFairyPelvisAndLegsLimb" Type="Standard" Offset="0x2CA50" />
+        <Limb Name="gStrayFairyLeftArmLimb" Type="Standard" Offset="0x2CA5C" />
+        <Limb Name="gStrayFairyLeftFacingHeadLimb" Type="Standard" Offset="0x2CA68" />
+        <Skeleton Name="gStrayFairySkel" Type="Flex" LimbType="Standard" Offset="0x2CA98" />
+
         <Texture Name="gameplay_keep_Tex_02CAA8" OutName="tex_02CAA8" Format="i4" Width="16" Height="16" Offset="0x2CAA8" />
         <Texture Name="gameplay_keep_Tex_02CB30" OutName="tex_02CB30" Format="i8" Width="16" Height="16" Offset="0x2CB30" />
         <Texture Name="gameplay_keep_Tex_02CC30" OutName="tex_02CC30" Format="rgba16" Width="32" Height="32" Offset="0x2CC30" />
@@ -1295,13 +1301,13 @@
         <Texture Name="gameplay_keep_Tex_075000" OutName="tex_075000" Format="i4" Width="32" Height="64" Offset="0x75000" />
         <Texture Name="gameplay_keep_Tex_075400" OutName="tex_075400" Format="i4" Width="32" Height="64" Offset="0x75400" />
         <Texture Name="gameplay_keep_Tex_075800" OutName="tex_075800" Format="i4" Width="32" Height="32" Offset="0x75800" />
-        <DList Name="gameplay_keep_DL_075A40" Offset="0x75A40" />
+        <DList Name="gSquareShadowDL" Offset="0x75A40" />
         <Texture Name="gameplay_keep_Tex_075AA8" OutName="tex_075AA8" Format="i4" Width="16" Height="16" Offset="0x75AA8" />
-        <DList Name="gameplay_keep_DL_075B30" Offset="0x75B30" />
+        <DList Name="gFootShadowDL" Offset="0x75B30" />
         <Texture Name="gameplay_keep_Tex_075BC0" OutName="tex_075BC0" Format="ia16" Width="32" Height="64" Offset="0x75BC0" />
-        <DList Name="gameplay_keep_DL_076BC0" Offset="0x76BC0" />
+        <DList Name="gCircleShadowDL" Offset="0x76BC0" />
         <Texture Name="gameplay_keep_Tex_076C40" OutName="tex_076C40" Format="ia16" Width="32" Height="32" Offset="0x76C40" />
-        <DList Name="gameplay_keep_DL_077480" Offset="0x77480" />
+        <DList Name="gHorseShadowDL" Offset="0x77480" />
         <Texture Name="gameplay_keep_Tex_0774D0" OutName="tex_0774D0" Format="i8" Width="16" Height="64" Offset="0x774D0" />
         <DList Name="gameplay_keep_DL_077990" Offset="0x77990" />
         <Texture Name="gameplay_keep_Tex_077A40" OutName="tex_077A40" Format="ia8" Width="32" Height="128" Offset="0x77A40" />
@@ -1316,7 +1322,7 @@
         <DList Name="gameplay_keep_DL_07AB10" Offset="0x7AB10" />
         <DList Name="gameplay_keep_DL_07AB58" Offset="0x7AB58" />
         <DList Name="gameplay_keep_DL_07AB70" Offset="0x7AB70" />
-        <DList Name="gameplay_keep_DL_07AE00" Offset="0x7AE00" />
+        <DList Name="gZTargetLockOnTriangleDL" Offset="0x7AE00" />
         <DList Name="gameplay_keep_DL_07AFB0" Offset="0x7AFB0" />
         <DList Name="gameplay_keep_DL_07B0B8" Offset="0x7B0B8" />
         <Texture Name="gameplay_keep_Tex_07B0C0" OutName="tex_07B0C0" Format="i8" Width="64" Height="64" Offset="0x7B0C0" />
@@ -1324,11 +1330,11 @@
         <DList Name="gameplay_keep_DL_07D260" Offset="0x7D260" />
         <DList Name="gameplay_keep_DL_07D348" Offset="0x7D348" />
         <Texture Name="gameplay_keep_Tex_07D350" OutName="tex_07D350" Format="i8" Width="16" Height="32" Offset="0x7D350" />
-        <DList Name="gameplay_keep_DL_07D590" Offset="0x7D590" />
+        <DList Name="gGameplayKeepDrawFlameDL" Offset="0x7D590" />
         <DList Name="gameplay_keep_DL_07D650" Offset="0x7D650" />
-        <Texture Name="gameplay_keep_Tex_07D710" OutName="tex_07D710" Format="i4" Width="32" Height="64" Offset="0x7D710" />
+        <Texture Name="gGameplayKeepFlameRippleTex" OutName="gameplay_keep_flame_ripple" Format="i4" Width="32" Height="64" Offset="0x7D710" />
         <Texture Name="gameplay_keep_Tex_07DB10" OutName="tex_07DB10" Format="i4" Width="32" Height="64" Offset="0x7DB10" />
-        <Texture Name="gameplay_keep_Tex_07DF10" OutName="tex_07DF10" Format="i8" Width="32" Height="64" Offset="0x7DF10" />
+        <Texture Name="gGameplayKeepFlameOutlineTex" OutName="gameplay_keep_flame_outline" Format="i8" Width="32" Height="64" Offset="0x7DF10" />
         <DList Name="gameplay_keep_DL_07E8C0" Offset="0x7E8C0" />
         <Texture Name="gameplay_keep_Tex_07EA08" OutName="tex_07EA08" Format="i8" Width="32" Height="64" Offset="0x7EA08" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_07F218" Offset="0x7F218" />

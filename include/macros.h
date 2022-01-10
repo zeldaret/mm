@@ -39,9 +39,9 @@
     }                                      \
     (void)0
 
-#define GET_PLAYER(globalCtx) ((Player*)(globalCtx)->actorCtx.actorList[ACTORCAT_PLAYER].first)
+#define GET_PLAYER(globalCtx) ((Player*)(globalCtx)->actorCtx.actorLists[ACTORCAT_PLAYER].first)
 
-#define GET_FIRST_ENEMY(globalCtx) ((Actor*)(globalCtx)->actorCtx.actorList[ACTORCAT_ENEMY].first)
+#define GET_FIRST_ENEMY(globalCtx) ((Actor*)(globalCtx)->actorCtx.actorLists[ACTORCAT_ENEMY].first)
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
@@ -63,6 +63,7 @@
     ((((void)0, gSaveContext.equips.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_UPG_VALUE_VOID(upg) \
     ((((void)0, gSaveContext.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+#define INV_CONTENT_VOID(item) ((void)0, gSaveContext.inventory.items)[SLOT(item)]
 
 #define CUR_FORM ((gSaveContext.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.playerForm)
 
@@ -85,6 +86,8 @@
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
 
+#define CHECK_FLAG_ALL(flags, mask) (((flags) & (mask)) == (mask))
+
 extern GraphicsContext* __gfxCtx;
 
 #define WORK_DISP __gfxCtx->work.p
@@ -101,6 +104,7 @@ extern GraphicsContext* __gfxCtx;
         s32 __dispPad
 
 #define CLOSE_DISPS(gfxCtx) \
+    (void)0;                \
     }                       \
     (void)0
 
@@ -144,6 +148,9 @@ extern GraphicsContext* __gfxCtx;
         (a) = (b);        \
         (b) = _temp;      \
     }
+
+#define OVERLAY_RELOCATION_OFFSET(overlayEntry) ((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
+#define VRAM_PTR_SIZE(entry) ((uintptr_t)((entry)->vramEnd) - (uintptr_t)((entry)->vramStart))
 
 #ifdef __GNUC__
 #define ALIGNED8 __attribute__ ((aligned (8)))

@@ -84,11 +84,10 @@ s32 func_80BD6638(s16* arg0, s16* arg1, s32 arg2) {
 void func_80BD66AC(BgHakaTomb* this, GlobalContext* globalCtx) {
     s16 temp;
 
-    if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
+    if (Flags_GetClear(globalCtx, this->dyna.actor.room)) {
         this->dyna.actor.flags |= 9;
     }
-    if (!func_80BD6638(&temp, this->cutscenes, 1) && (temp < 0) &&
-        Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
+    if (!func_80BD6638(&temp, this->cutscenes, 1) && (temp < 0) && Flags_GetClear(globalCtx, this->dyna.actor.room)) {
         this->dyna.actor.flags |= 1;
         if (this->dyna.actor.isTargeted) {
             func_80BD6754(this);
@@ -129,5 +128,5 @@ void BgHakaTomb_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgHakaTomb_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060007B0);
+    Gfx_DrawDListOpa(globalCtx, D_060007B0);
 }

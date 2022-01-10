@@ -8,13 +8,21 @@ COMPARE ?= 1
 NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
+# if WERROR is 1, pass -Werror to CC_CHECK, so warnings would be treated as errors
+WERROR ?= 0
 # Keep .mdebug section in build
 KEEP_MDEBUG ?= 0
+# Disassembles all asm from the ROM instead of skipping files which are entirely in C
+FULL_DISASM ?= 0
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
   CPPFLAGS := -DNON_MATCHING
   COMPARE := 0
+endif
+
+ifneq ($(FULL_DISASM), 0)
+  DISASM_FLAGS += --full
 endif
 
 PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -36,12 +44,7 @@ else
   endif
 endif
 
-# Threads to compress and extract assets with, TODO improve later
-ifeq ($(DETECTED_OS),linux)
-  N_THREADS ?= $(shell nproc)
-else
-  N_THREADS ?= 1
-endif
+N_THREADS ?= $(shell nproc)
 
 #### Tools ####
 ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
@@ -109,6 +112,10 @@ ifneq ($(NON_MATCHING),1)
 	COMPFLAGS += --matching
 endif
 
+ifneq ($(WERROR), 0)
+  CC_CHECK += -Werror
+endif
+
 #### Files ####
 
 # ROM image
@@ -140,9 +147,10 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS),$(wildcard $(dir)/*.c))
 S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
+BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(C_FILES:.c=.o),build/$f) \
-                 $(foreach f,$(wildcard baserom/*),build/$f.o)
+                 $(foreach f,$(BASEROM_FILES),build/$f.o)
 
 # Automatic dependency files
 # (Only asm_processor dependencies are handled for now)
@@ -165,6 +173,8 @@ build/src/libultra/flash/%.o: OPTFLAGS := -g
 build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 build/src/code/audio/%.o: OPTFLAGS := -O2
+
+build/assets/%.o: OPTFLAGS := 
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
@@ -243,12 +253,12 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
-	python3 extract_assets.py -t $(N_THREADS)
+	python3 extract_assets.py -j $(N_THREADS)
 
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py -j $(N_THREADS)
+	python3 tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
 
 diff-init: uncompressed
 	$(RM) -rf expected/
@@ -283,11 +293,11 @@ build/baserom/%.o: baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
 build/data/%.o: data/%.s
-	iconv --from UTF-8 --to EUC-JP $< | $(AS) $(ASFLAGS) -o $@
+	$(AS) $(ASFLAGS) $< -o $@
 
 build/src/overlays/%.o: src/overlays/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 # TODO: `() || true` is currently necessary to suppress `Error 1 (ignored)` make warnings caused by `test`, but this will go away if 
 # 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
@@ -296,21 +306,21 @@ build/src/overlays/%.o: src/overlays/%.c
 	$(RM_MDEBUG)
 
 build/src/%.o: src/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
