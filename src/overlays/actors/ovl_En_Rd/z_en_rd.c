@@ -1057,7 +1057,7 @@ void func_808D66A0(EnRd* this, GlobalContext* globalCtx) {
     this->headYRotation = CLAMP(this->headYRotation, -0x256F, 0x256F);
 }
 
-void EnRd_CheckDamageEffect(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
@@ -1171,7 +1171,7 @@ void func_808D6B64(EnRd* this, GlobalContext* globalCtx) {
 void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRd* this = THIS;
 
-    EnRd_CheckDamageEffect(this, globalCtx);
+    EnRd_UpdateDamage(this, globalCtx);
     if ((gSaveContext.unk_3F58 != 0) && (this->unk_3E9 == 0)) {
         gSaveContext.unk_3F58 = 0;
     }

@@ -697,7 +697,7 @@ s32 func_80BA6DAC(EnRailgibud* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void EnRailgibud_CheckDamageEffect(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_UpdateDamage(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((this->isInvincible != true) && (this->collider.base.acFlags & AC_HIT)) {
@@ -925,7 +925,7 @@ void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80BA6B30(this);
     func_80BA7434(this, globalCtx);
-    EnRailgibud_CheckDamageEffect(this, globalCtx);
+    EnRailgibud_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
     if (this->actionFunc != EnRailgibud_Stunned) {
         SkelAnime_Update(&this->skelAnime);

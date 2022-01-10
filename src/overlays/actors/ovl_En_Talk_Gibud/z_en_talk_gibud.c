@@ -966,7 +966,7 @@ void EnTalkGibud_MoveWithGravity(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnTalkGibud_CheckDamageEffect(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_UpdateDamage(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -1094,7 +1094,7 @@ void EnTalkGibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTalkGibud* this = THIS;
 
     EnTalkGibud_CheckForGibdoMask(this, globalCtx);
-    EnTalkGibud_CheckDamageEffect(this, globalCtx);
+    EnTalkGibud_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
     EnTalkGibud_PlayAnimation(this, globalCtx);
     EnTalkGibud_MoveWithGravity(this, globalCtx);
