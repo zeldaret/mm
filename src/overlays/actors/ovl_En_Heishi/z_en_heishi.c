@@ -69,7 +69,7 @@ extern SaveContext gSaveContext;
 void EnHeishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHeishi* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable,
                        this->morphTable, 17);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
