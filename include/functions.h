@@ -3845,7 +3845,7 @@ void func_801A1DB8(Vec3f* vec, u8 seqId, f32 arg2);
 // void func_801A1E0C(void);
 void func_801A1F00(u8 arg0, u16 seqId);
 void func_801A1F88(void);
-// void func_801A1FB4(void);
+void func_801A1FB4(s32 arg0, Vec3f* arg1, s32 arg2, f32 arg3);
 // void func_801A2090(void);
 void func_801A246C(u8 param_1, u8 param_2);
 // void func_801A2544(void);
