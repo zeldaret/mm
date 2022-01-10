@@ -58,7 +58,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),          ICHAIN_VEC3S(world.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),   ICHAIN_F32_DIV1000(minVelocityY, -4000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),   ICHAIN_F32_DIV1000(terminalVelocity, -4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
@@ -150,7 +150,7 @@ void ObjAqua_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.scale.z = 0.0009f;
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 60.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     if (1) {};
     this->actor.shape.shadowAlpha = 140;
     this->alpha = 255;
@@ -180,7 +180,7 @@ void func_80ACBC8C(ObjAqua* this, GlobalContext* globalCtx) {
         if (this->actor.bgCheckFlags & 1) {
             func_80ACB7F4(this, globalCtx);
             func_80ACBA10(this);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOTTLE_WATERING);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOTTLE_WATERING);
             func_80ACBD34(this);
         } else {
             func_80ACB6A0(this, globalCtx);
@@ -254,7 +254,7 @@ void ObjAqua_Update(Actor* thisx, GlobalContext* globalCtx) {
             Math_Vec3f_StepTo(&this->actor.scale, &D_80ACC320, 0.0004f);
         }
         this->actor.velocity.y *= 0.9f;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 12.0f, 4.0f, 0.0f, 5);
         if (this->actionFunc != func_80ACBDFC) {
             Collider_UpdateCylinder(&this->actor, &this->collider);

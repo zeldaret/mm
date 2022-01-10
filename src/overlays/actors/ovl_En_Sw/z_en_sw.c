@@ -248,7 +248,7 @@ void func_808D8ED0(EnSw* this, GlobalContext* globalCtx) {
         sp54.z += this->unk_380[i].z;
         Math_Vec3f_Copy(&this->unk_380[i], &sp54);
     }
-    func_800BF7CC(globalCtx, &this->actor, this->unk_380, ARRAY_COUNT(this->unk_380), 3, 0.1f, 0.3f);
+    Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_380, ARRAY_COUNT(this->unk_380), 3, 0.1f, 0.3f);
 }
 
 void func_808D8FC4(EnSw* this, GlobalContext* globalCtx) {
@@ -458,7 +458,7 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     }
 
     if (arg2 == 1) {
-        Actor_SetVelocityAndMoveXYRotation(&this->actor);
+        Actor_MoveWithoutGravity(&this->actor);
     }
 }
 #else
@@ -498,10 +498,10 @@ void func_808D9894(EnSw* this, Vec3f* vec) {
 
 s32 func_808D9968(EnSw* this, GlobalContext* globalCtx) {
     s32 ret = false;
-    u8 param = ENSW_GET_3FC(&this->actor);
+    s32 param = ENSW_GET_3FC(&this->actor) & 0xFF;
 
     if (ENSW_GET_3(&this->actor)) {
-        if ((param != 0x3F) && Actor_GetChestFlag(globalCtx, param)) {
+        if ((param != 0x3F) && Flags_GetTreasure(globalCtx, param)) {
             ret = true;
         }
     }
@@ -536,9 +536,9 @@ s32 func_808D9A70(EnSw* this, GlobalContext* globalCtx) {
         } else {
             if (this->unk_456 != 0) {
                 if (!ENSW_GET_3(&this->actor)) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_ROLL);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_ROLL);
                 } else {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 }
                 this->unk_456--;
                 this->skelAnime.curFrame = 0.0f;
@@ -587,7 +587,7 @@ s32 func_808D9C18(EnSw* this) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp3C, &sp30);
     }
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTURA_APPEAR);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_APPEAR);
 
     if (ENSW_GET_3(&this->actor) == 1) {
         Actor_SetScale(&this->actor, 0.0f);
@@ -729,19 +729,19 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
             }
             this->unk_458 = 20;
             this->unk_45A = 0;
-            func_800BCB70(&this->actor, 0x4000, 200, 0, this->unk_458);
+            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_458);
             ret = true;
         } else if (this->actor.colChkInfo.damageEffect == 1) {
             if (this->unk_45A == 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->unk_45A = 40;
-                func_800BCB70(&this->actor, 0, 200, 0, this->unk_45A);
+                Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_45A);
             }
         } else {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTU_DAMAGE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_DAMAGE);
             this->unk_458 = 20;
             this->unk_45A = 0;
-            func_800BCB70(&this->actor, 0x4000, 200, 0, this->unk_458);
+            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_458);
         }
     }
     return ret;
@@ -751,7 +751,7 @@ void func_808DA350(EnSw* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags1 & 0x200000) && (this->actor.xyzDistToPlayerSq < 8000.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_LAUGH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_LAUGH);
         Math_Vec3f_Copy(&this->unk_374, &player->actor.world.pos);
         this->unk_410 &= ~0x20;
         this->unk_414 = 0.0f;
@@ -776,7 +776,7 @@ void func_808DA3F4(EnSw* this, GlobalContext* globalCtx) {
         temp_v0 = Math_FAtan2F(sp38.z, sp38.x);
         if (ABS_ALT(temp_v0) < temp_s1) {
             this->skelAnime.curFrame = 0.0f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_DASH);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
             this->unk_414 = 0.0f;
             if (this->unk_410 & 0x20) {
                 this->actionFunc = func_808DA6FC;
@@ -787,7 +787,7 @@ void func_808DA3F4(EnSw* this, GlobalContext* globalCtx) {
         }
         temp_s1 *= (temp_v0 < 0) ? -1 : 1;
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_ROLL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_ROLL);
         this->skelAnime.curFrame = 0.0f;
     }
     func_808D94D0(this, globalCtx, 0, 0, temp_s1);
@@ -813,7 +813,7 @@ void func_808DA578(EnSw* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->unk_374, &this->actor.home.pos);
         this->actionFunc = func_808DA3F4;
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_DASH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
         this->skelAnime.curFrame = 0.0f;
     }
 
@@ -849,7 +849,7 @@ void func_808DA6FC(EnSw* this, GlobalContext* globalCtx) {
             func_808D94D0(this, globalCtx, 0, 0, Math_FAtan2F(sp38.z, sp38.x));
         }
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_DASH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
         this->skelAnime.curFrame = 0.0f;
     }
 
@@ -912,7 +912,7 @@ void func_808DA89C(EnSw* this, GlobalContext* globalCtx) {
         this->unk_448 = temp_f2;
         this->actor.speedXZ = 0.0f;
         if ((s32)temp_f2 != 0) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTURA_BOUND);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
         } else {
             this->actionFunc = func_808DAEB4;
             this->actor.velocity.y = 0.0f;
@@ -924,7 +924,7 @@ void func_808DA89C(EnSw* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.shape.yOffset, 400.0f, 0.3f, 1000.0f);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
 }
 
@@ -948,7 +948,7 @@ void func_808DAA60(EnSw* this, GlobalContext* globalCtx) {
                 temp_v0 = Math_FAtan2F(sp34.z, sp34.x);
                 if (ABS_ALT(temp_v0) < sp40) {
                     this->skelAnime.curFrame = 0.0f;
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_DASH);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
                     Math_Vec3s_ToVec3f(&this->unk_374, &sp44[this->unk_4A0]);
                     this->actionFunc = func_808DACF4;
                     this->unk_414 = 0.0f;
@@ -958,7 +958,7 @@ void func_808DAA60(EnSw* this, GlobalContext* globalCtx) {
             }
         } else {
             if (this->unk_456 != 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 this->unk_456--;
                 this->skelAnime.curFrame = 0.0f;
             } else {
@@ -1001,7 +1001,7 @@ void func_808DACF4(EnSw* this, GlobalContext* globalCtx) {
             func_808D94D0(this, globalCtx, 0, 0, Math_FAtan2F(sp38.z, sp38.x));
         }
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_DASH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
         this->skelAnime.curFrame = 0.0f;
     }
 
@@ -1108,9 +1108,9 @@ void func_808DB100(EnSw* this, GlobalContext* globalCtx) {
     if ((DECR(this->unk_454) == 0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->unk_456 != 0) {
             if (!ENSW_GET_3(&this->actor)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_ROLL);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_ROLL);
             } else {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
             }
             this->unk_456--;
             this->skelAnime.curFrame = 0.0f;
@@ -1145,7 +1145,7 @@ void func_808DB2E0(EnSw* this, GlobalContext* globalCtx) {
         this->actor.velocity.z *= 0.5f;
 
         if ((s32)temp_f2 != 0) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTURA_BOUND);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
         } else {
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 5);
             Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
@@ -1161,7 +1161,7 @@ void func_808DB2E0(EnSw* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.scale.x, 0.02f, 0.4f, 1.0f);
     Actor_SetScale(&this->actor, this->actor.scale.x);
     this->actor.velocity.y += this->actor.gravity;
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
 }
 
@@ -1266,7 +1266,7 @@ void EnSw_Update(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    Actor_SetHeight(&this->actor, 0.0f);
+    Actor_SetFocus(&this->actor, 0.0f);
     func_808D8FC4(this, globalCtx);
 }
 

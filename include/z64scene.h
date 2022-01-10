@@ -295,7 +295,7 @@ typedef struct {
     /* 0x04 */ s16   id;
     /* 0x06 */ Vec3s pos;
     /* 0x0C */ s16   rotY;
-    /* 0x0E */ s16   params;
+    /* 0x0E */ u16   params;
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {

@@ -76,7 +76,7 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDaiku* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 40.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
     this->actor.targetMode = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU_GET_FF(&this->actor);
@@ -195,7 +195,7 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
         this->actor.textId = sTextIds[this->unk_28C];
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80943BC0(this);
         return;
     }
@@ -255,7 +255,7 @@ void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         func_80943820(this);
     }
@@ -286,8 +286,8 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Actor_SetHeight(&this->actor, 65.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_SetFocus(&this->actor, 65.0f);
+    Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->unk_260, this->unk_266, 1, 0xBB8, 0);
     Math_SmoothStepToS(&this->unk_25E, this->unk_264, 1, 0xBB8, 0);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);

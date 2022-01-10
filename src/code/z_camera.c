@@ -261,7 +261,7 @@ f32 Camera_GetRunSpeedLimit(Camera* camera) {
     f32 runSpeedLimit;
 
     if (trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
-        runSpeedLimit = func_800B7090((Player*)trackActor);
+        runSpeedLimit = Player_GetRunSpeedLimit((Player*)trackActor);
     } else {
         runSpeedLimit = 10.0f;
     }
@@ -1207,10 +1207,8 @@ f32 Camera_CalcSlopeYAdj(Vec3f* floorNorm, s16 playerYRot, s16 eyeAtYaw, f32 adj
     return (Camera_fabsf(tmp) * adjAmt) * Math_CosS(playerYRot - eyeAtYaw);
 }
 
-// TODO: D_801AECF0 as Vec2f matched, but real data type is unknown
-// Note: D_801AECF0 size is unknown but OoT arrays indexed by actor->targetMode are size 10
 f32 func_800CD6CC(Actor* actor) {
-    return sqrtf(D_801AECF0[actor->targetMode].x / D_801AECF0[actor->targetMode].y);
+    return sqrtf(gTargetRanges[actor->targetMode].rangeSq / gTargetRanges[actor->targetMode].leashScale);
 }
 
 /**
@@ -1263,7 +1261,7 @@ s32 func_800CD834(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* arg3, f32 
     posOffsetTarget.x = 0.0f;
     posOffsetTarget.z = 0.0f;
 
-    func_800B8898(camera->globalCtx, camera->trackActor, &phi_v1, &temp_v0);
+    Actor_GetScreenPos(camera->globalCtx, camera->trackActor, &phi_v1, &temp_v0);
     temp_v0 -= 120;
 
     phi_v1 = ABS(temp_v0);
@@ -3772,7 +3770,7 @@ s32 Camera_Battle1(Camera* camera) {
                     spF4 = OLib_Vec3fDist(sp4C, &spC4);
                     phi_f0_3 = (dynamicData->unk_1A & 0x10) ? 40.0f : 0.0f;
                     spF8 = spF8 + phi_f0_3;
-                    func_800B8898(camera->globalCtx, camera->trackActor, &sp5E, &sp5C);
+                    Actor_GetScreenPos(camera->globalCtx, camera->trackActor, &sp5E, &sp5C);
                     if ((spF4 < spF8) || ((sp5E >= 0) && (sp5E < 0x141) && (sp5C >= 0) && (sp5C < 0xF1))) {
                         dynamicData->unk_1A |= 0x10;
                         spB4.yaw = spA4.yaw + 0x8000;
@@ -4140,7 +4138,7 @@ s32 Camera_KeepOn1(Camera* camera) {
                     spF8 = OLib_Vec3fDist(sp44, spA4);
                     spF4 = OLib_Vec3fDist(sp44, &sp7C.pos);
                     spF8 += (dynamicData->unk_18 & 0x10) ? 40 : 0.0f; // TODO: 40.0f?
-                    func_800B8898(camera->globalCtx, camera->trackActor, &sp56, &sp54);
+                    Actor_GetScreenPos(camera->globalCtx, camera->trackActor, &sp56, &sp54);
                     if ((spF4 < spF8) || ((sp56 >= 0) && (sp56 <= 320) && (sp54 >= 0) && (sp54 <= 240))) {
                         dynamicData->unk_18 |= 0x10;
                         spE0.yaw = (s16)(spD0.yaw + 0x8000);
@@ -5628,7 +5626,7 @@ s32 Camera_Demo1(Camera* camera) {
         camera->actionFuncState++;
     }
 
-    func_800B8898(camera->globalCtx, camera->target, &sp96, &sp94);
+    Actor_GetScreenPos(camera->globalCtx, camera->target, &sp96, &sp94);
 
     temp_f0 = dynamicData->unk_0C.r;
     if ((sp96 > 20) && (sp96 < 300) && (sp94 > 40) && (sp94 < 200)) {
@@ -7881,10 +7879,10 @@ s32 Camera_Copy(Camera* dstCam, Camera* srcCam) {
     Camera_SetUpdateRatesSlow(dstCam);
 
     if (dstCam->trackActor != NULL) {
-        if ((Actor*)dstCam->trackActor == dstCam->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) {
-            Actor_GetWorldPosShapeRot(&dstCam->trackActorPosRot, (Actor*)dstCam->trackActor);
+        if (dstCam->trackActor == &GET_PLAYER(dstCam->globalCtx)->actor) {
+            Actor_GetWorldPosShapeRot(&dstCam->trackActorPosRot, dstCam->trackActor);
         } else {
-            Actor_GetWorld(&dstCam->trackActorPosRot, (Actor*)dstCam->trackActor);
+            Actor_GetWorld(&dstCam->trackActorPosRot, dstCam->trackActor);
         }
         Camera_UpdateAtActorOffset(dstCam, &dstCam->trackActorPosRot.pos);
     }

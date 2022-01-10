@@ -203,7 +203,7 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.bgCheckFlags |= 0x400;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A978,
                        ((globalCtx->sceneNum == SCENE_SONCHONOIE) ? &D_06003AA8 : &D_0600C880), this->jointTable,
@@ -227,7 +227,7 @@ void func_80BA383C(EnToto* this, GlobalContext* globalCtx) {
         }
         Animation_PlayOnce(&this->skelAnime, D_80BA5078[this->unk2B4]);
     }
-    func_800BBB74(&this->unk260, 0x14, 0x50, 3);
+    func_800BBB74(this->unk260, 0x14, 0x50, 3);
 }
 
 void func_80BA3930(EnToto* this, GlobalContext* globalCtx) {
@@ -253,12 +253,12 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     func_80BA383C(this, globalCtx);
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BA36C0(this, globalCtx, 1);
         if (globalCtx->sceneNum != SCENE_SONCHONOIE) {
-            Actor_SetSwitchFlag(globalCtx, this->actor.params & 0x7F);
+            Flags_SetSwitch(globalCtx, this->actor.params & 0x7F);
         } else if (player->transformation == PLAYER_FORM_DEKU) {
-            Actor_SetSwitchFlag(globalCtx, this->actor.home.rot.x);
+            Flags_SetSwitch(globalCtx, this->actor.home.rot.x);
         }
         this->unk2B6 = 0;
         return;
@@ -269,7 +269,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= 0x10000;
-            func_800B8500(&this->actor, globalCtx, 9999.9f, 9999.9f, 0);
+            func_800B8500(&this->actor, globalCtx, 9999.9f, 9999.9f, EXCH_ITEM_NONE);
         } else {
             this->actor.flags &= ~0x10000;
             func_800B8614(&this->actor, globalCtx, 50.0f);
@@ -315,7 +315,7 @@ void func_80BA3C88(EnToto* this) {
 void func_80BA3CC4(EnToto* this, GlobalContext* globalCtx) {
     func_80BA383C(this, globalCtx);
     func_80BA3C88(this);
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         func_80BA36C0(this, globalCtx, this->text->unk1);
     } else {
         func_80BA4C44(this, globalCtx);
@@ -327,7 +327,7 @@ void func_80BA3D38(EnToto* this, GlobalContext* globalCtx) {
     this->text = ENTOTO_WEEK_EVENT_FLAGS ? D_80BA50BC : D_80BA5088;
     func_80BA4C0C(this, globalCtx);
     globalCtx->actorCtx.unk5 |= 0x20;
-    this->unk260 = 0;
+    this->unk260[0] = 0;
 }
 
 void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx) {
@@ -419,21 +419,21 @@ s32 func_80BA407C(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA40D4(EnToto* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         return 1;
     }
     return 0;
 }
 
 s32 func_80BA4128(EnToto* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 2) {
+    if (Message_GetState(&globalCtx->msgCtx) == 2) {
         return 1;
     }
     return 0;
 }
 
 s32 func_80BA415C(EnToto* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 4 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 4 && func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             func_8019F230();
         } else {
@@ -655,14 +655,14 @@ s32 func_80BA4B24(EnToto* this, GlobalContext* globalCtx) {
         Animation_MorphToPlayOnce(&this->skelAnime, &D_060028B8, -4.0f);
         if (player->transformation == PLAYER_FORM_ZORA) {
             if (!Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
-                Actor_SetSwitchFlag(globalCtx, this->actor.params & 0x7F);
+                Flags_SetSwitch(globalCtx, this->actor.params & 0x7F);
                 return 1;
             } else {
                 return 3;
             }
         } else {
             if (!Flags_GetSwitch(globalCtx, (this->actor.params >> 7) & 0x7F)) {
-                Actor_SetSwitchFlag(globalCtx, (this->actor.params >> 7) & 0x7F);
+                Flags_SetSwitch(globalCtx, (this->actor.params >> 7) & 0x7F);
                 return 4;
             } else {
                 return 7;
@@ -712,7 +712,7 @@ void func_80BA4CB4(EnToto* this, GlobalContext* globalCtx) {
         }
     }
     if (this->unk2B5 == 4 && !Actor_HasParent(&this->actor, globalCtx)) {
-        func_800B8A1C(&this->actor, globalCtx, GI_MASK_CIRCUS_LEADER, 9999.9f, 9999.9f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MASK_CIRCUS_LEADER, 9999.9f, 9999.9f);
     }
 }
 
@@ -730,7 +730,7 @@ void EnToto_Update(Actor* thisx, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_SetHeight(&this->actor, 40.0f);
+    Actor_SetFocus(&this->actor, 40.0f);
 }
 
 void EnToto_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -741,7 +741,7 @@ void EnToto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk260]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk260[0]]));
     Scene_SetRenderModeXlu(globalCtx, 0, 1);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, NULL, &this->actor);

@@ -91,7 +91,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     int i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 15.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B538, &D_06001534, this->jointTable, this->morphTable, 24);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -164,7 +164,7 @@ void EnMinifrog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 EnMinifrog* EnMinifrog_GetFrog(GlobalContext* globalCtx) {
-    EnMinifrog* frog = (EnMinifrog*)globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    EnMinifrog* frog = (EnMinifrog*)globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (frog != NULL) {
         if ((frog->actor.id != ACTOR_EN_MINIFROG) || (frog->actor.params & 0xF)) {
@@ -200,7 +200,7 @@ void EnMinifrog_Jump(EnMinifrog* this) {
             if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
                 this->actor.bgCheckFlags &= ~1;
                 this->actor.velocity.y = 6.0f;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_JUMP);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_JUMP);
                 this->jumpState = MINIFROG_STATE_AIR;
             }
             break;
@@ -262,7 +262,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
 
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         EnMinifrog_SetJumpState(this);
 
         switch (globalCtx->msgCtx.unk11F04) {
@@ -329,12 +329,12 @@ void EnMinifrog_Idle(EnMinifrog* this, GlobalContext* globalCtx) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
     EnMinifrog_JumpTimer(this);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnMinifrog_ReturnFrogCutscene;
         if (this->actor.cutscene != -1) {
             this->flags |= 1;
         }
-    } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) &&
+    } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, globalCtx) &&
                (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GERO)) {
         func_800B8614(&this->actor, globalCtx, 110.0f);
     }
@@ -473,11 +473,11 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
 void EnMinifrog_EndChoir(EnMinifrog* this, GlobalContext* globalCtx) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0xD7E, &this->actor); // "Let us do it again sometime."
         this->actionFunc = EnMinifrog_YellowFrogDialog;
     } else {
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -488,16 +488,16 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = EnMinifrog_EndChoir;
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, 0);
+        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_NONE);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 50.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 50.0f);
     }
 }
 
 void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
             if (func_80147624(globalCtx)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
@@ -565,7 +565,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
     EnMinifrog_JumpTimer(this);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
         if (!(gSaveContext.weekEventReg[34] & 1)) { // Not spoken with MINIFROG_YELLOW
             func_801518B0(globalCtx, 0xD76,
@@ -575,8 +575,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
             func_801518B0(globalCtx, 0xD7F, &this->actor); // "Well, if it isn't the great Don Gero."
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) &&
-               (Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) ||
-                ((this->actor.flags & 0x10000) == 0x10000)) &&
+               (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) || ((this->actor.flags & 0x10000) == 0x10000)) &&
                Player_GetMask(globalCtx) == PLAYER_MASK_DON_GERO) {
         func_800B8614(&this->actor, globalCtx, 160.0f);
     }
@@ -587,7 +586,7 @@ void EnMinifrog_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 12.0f, 0.0f, 0x1D);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
