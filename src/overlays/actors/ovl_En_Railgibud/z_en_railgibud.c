@@ -352,17 +352,20 @@ void EnRailgibud_AttemptPlayerStun(EnRailgibud* this, GlobalContext* globalCtx) 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
         EnRailgibud_SetupWalkToPlayer(this);
     }
+
     EnRailgibud_TurnTowardsPlayer(this, globalCtx);
 }
 
 void EnRailgibud_SetupWalkToPlayer(EnRailgibud* this) {
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_WALK);
     this->actor.speedXZ = 0.4f;
+
     if (this->actionFunc == EnRailgibud_AttemptPlayerStun) {
         this->playerStunWaitTimer = 80;
     } else {
         this->playerStunWaitTimer = 20;
     }
+
     this->actionFunc = EnRailgibud_WalkToPlayer;
 }
 
@@ -374,6 +377,7 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
     this->actor.world.rot = this->actor.shape.rot;
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
+
     if (EnRailgibud_PlayerInRangeWithCorrectStateToGrab(this, globalCtx) &&
         Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
@@ -408,7 +412,7 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
-    } else if ((globalCtx->gameplayFrames & 95) == 0) {
+    } else if (!(globalCtx->gameplayFrames & 95)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
@@ -537,6 +541,7 @@ void EnRailgibud_WalkToHome(EnRailgibud* this, GlobalContext* globalCtx) {
         } else {
             this->actor.speedXZ = 0.0f;
         }
+
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 200, 10);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (this->actor.world.rot.y == this->actor.home.rot.y) {
@@ -578,6 +583,7 @@ void EnRailgibud_Damage(EnRailgibud* this, GlobalContext* globalCtx) {
                                REDEAD_GIBDO_LIMB_MAX);
             this->type = EN_RAILGIBUD_TYPE_REDEAD;
         }
+
         EnRailgibud_SetupWalkToHome(this);
     }
 }
@@ -585,11 +591,13 @@ void EnRailgibud_Damage(EnRailgibud* this, GlobalContext* globalCtx) {
 void EnRailgibud_SetupStunned(EnRailgibud* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->stunTimer = 10;
+
     if (this->effectTimer != 0) {
         Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
     } else {
         Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
     }
+
     this->actionFunc = EnRailgibud_Stunned;
 }
 
@@ -938,6 +946,7 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, GlobalContext* globalCtx) 
             }
             this->actor.textId = 0;
         }
+
         EnRailgibud_CheckIfTalkingToPlayer(this, globalCtx);
     }
 }
