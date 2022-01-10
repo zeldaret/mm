@@ -116,7 +116,7 @@ typedef enum {
 typedef enum {
     /* 0x0 */ EN_JG_ACTION_FIRST_THAW,
     /* 0x1 */ EN_JG_ACTION_SPAWNING,
-    /* 0x2 */ EN_JG_ACTION_DEFAULT,
+    /* 0x2 */ EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW,
     /* 0x3 */ EN_JG_ACTION_LULLABY_INTRO_CS,
 } EnJgAction;
 
@@ -597,7 +597,7 @@ void EnJg_Freeze(EnJg* this, GlobalContext* globalCtx) {
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
 
     if (this->action == EN_JG_ACTION_SPAWNING) {
-        this->action = EN_JG_ACTION_DEFAULT;
+        this->action = EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW;
         this->freezeTimer = 1000;
         this->skelAnime.curFrame = lastFrame;
         this->icePoly = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
@@ -607,7 +607,7 @@ void EnJg_Freeze(EnJg* this, GlobalContext* globalCtx) {
         func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
         this->actionFunc = EnJg_FrozenIdle;
     } else if (this->animationIndex == EN_JG_ANIMATION_FROZEN_START) {
-        this->action = EN_JG_ACTION_DEFAULT;
+        this->action = EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW;
         if (currentFrame == lastFrame) {
             this->freezeTimer = 1000;
             this->icePoly = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
