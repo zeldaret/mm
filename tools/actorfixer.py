@@ -218,6 +218,7 @@ animdict = {
     "Actor_IsFacingPlayerAndWithinRange": "Actor_IsFacingAndNearPlayer",
     "func_800BC8B8": "Actor_DrawDoorLock",
     "func_800B86C8": "Actor_ChangeFocus",
+    "func_800DF840": "Camera_ChangeMode",
     "zelda_malloc(": "ZeldaArena_Malloc(",
     "zelda_mallocR(": "ZeldaArena_MallocR(",
     "zelda_realloc": "ZeldaArena_Realloc",

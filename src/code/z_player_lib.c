@@ -385,7 +385,7 @@ s32 func_80122760(GlobalContext* globalCtx, PlayerLib_80122744_arg1* arg1, f32 a
 
         Math_Vec3s_ToVec3f(&sp30, &arg1->unk_04[arg1->unk_01]);
         yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &sp30);
-        func_800B6F20(globalCtx, globalCtx->actorCtx.pad26C, arg2, yaw);
+        func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, arg2, yaw);
         globalCtx->actorCtx.unk268 = 1;
         distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &sp30);
 
@@ -705,7 +705,7 @@ void func_80123140(GlobalContext* globalCtx, Player* player) {
 
 
 s32 Player_InBlockingCsMode(GlobalContext* globalCtx, Player* player) {
-    return (player->stateFlags1 & 0x20000280) || player->unk_394 != 0 || globalCtx->sceneLoadFlag == 0x14 ||
+    return (player->stateFlags1 & 0x20000280) || player->csMode != 0 || globalCtx->sceneLoadFlag == 0x14 ||
            globalCtx->unk_18B4A != 0 || (player->stateFlags1 & 1) || (player->stateFlags3 & 0x80) ||
            globalCtx->actorCtx.unk268 != 0;
 }
@@ -764,9 +764,9 @@ s32 func_801234D4(GlobalContext* globalCtx) {
 s32 func_80123590(GlobalContext* globalCtx, Actor* actor) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->stateFlags1 & 0x800) && (player->leftHandActor == actor)) {
-        player->unk_388 = NULL;
-        player->leftHandActor = NULL;
+    if ((player->stateFlags1 & 0x800) && (player->heldActor == actor)) {
+        player->interactRangeActor = NULL;
+        player->heldActor = NULL;
         player->actor.child = NULL;
         player->stateFlags1 &= ~0x800;
         return 1;
@@ -993,7 +993,7 @@ void func_80123C58(Player* player) {
 }
 
 void Player_SetEquipmentData(GlobalContext* globalCtx, Player* player) {
-    if (player->unk_394 != 0x86) {
+    if (player->csMode != 0x86) {
         player->currentShield = CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD);
         if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) && (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
             player->currentBoots = D_801BFF90[player->transformation];
@@ -1039,7 +1039,7 @@ void func_80123E90(GlobalContext* globalCtx, Actor* actor) {
     player->unk_A78 = actor;
     player->stateFlags1 |= 0x10000;
     func_800DFD78(Play_GetCamera(globalCtx, MAIN_CAM), 8, actor);
-    func_800DF840(Play_GetCamera(globalCtx, MAIN_CAM), 9);
+    Camera_ChangeMode(Play_GetCamera(globalCtx, MAIN_CAM), 9);
 }
 
 s32 func_80123F14(GlobalContext* globalCtx) {
@@ -1100,7 +1100,7 @@ s32 func_801240C8(Player* player) {
 }
 
 s32 func_801240DC(Player* player) {
-    return func_801240C8(player) && player->leftHandActor == NULL;
+    return func_801240C8(player) && player->heldActor == NULL;
 }
 
 s32 func_80124110(Player* player, s32 actionParam) {
@@ -1751,7 +1751,7 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
             if (player->transformation == PLAYER_FORM_DEKU) {
                 phi_v0 = NULL;
 
-                if (((&gameplay_keep_Linkanim_00E298 == player->skelAnime.animation)) || (&gameplay_keep_Linkanim_00E2F0 == player->unk_284.animation) || (((player->stateFlags3 & 0x40) != 0) && (phi_v0 = player->leftHandActor, (phi_v0 != 0)))) {
+                if (((&gameplay_keep_Linkanim_00E298 == player->skelAnime.animation)) || (&gameplay_keep_Linkanim_00E2F0 == player->unk_284.animation) || (((player->stateFlags3 & 0x40) != 0) && (phi_v0 = player->heldActor, (phi_v0 != 0)))) {
                     sp50 = phi_v0;
                     Matrix_JointPosition(pos, rot);
                     func_80125340();
@@ -1813,8 +1813,8 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
             }
             phi_a0_2 = player->unk_AB2.x;
             if ((player->transformation == PLAYER_FORM_DEKU) && ((player->stateFlags3 & 0x40) != 0)) {
-                if (player->leftHandActor != 0) {
-                    phi_a0_2 = (s16) (player->unk_AB2.x + (s32) (((ActorUnknown*)player->leftHandActor)->unk_144 * -470.0f));
+                if (player->heldActor != 0) {
+                    phi_a0_2 = (s16) (player->unk_AB2.x + (s32) (((ActorUnknown*)player->heldActor)->unk_144 * -470.0f));
                 }
             }
             Matrix_InsertXRotation_s(phi_a0_2, 1);
@@ -3064,7 +3064,7 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
 void func_80128B74(GlobalContext* globalCtx, Player* player, s32 limbIndex) {
     Vec3f* footPos = &D_801C0D24[player->transformation];
 
-    func_800B4A98(&player->actor, limbIndex, 9, footPos, 6, footPos);
+    Actor_SetFeetPos(&player->actor, limbIndex, 9, footPos, 6, footPos);
 }
 
 
