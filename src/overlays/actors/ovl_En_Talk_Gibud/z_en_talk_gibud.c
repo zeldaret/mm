@@ -43,7 +43,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_SetupDisappear(EnTalkGibud* this);
 void EnTalkGibud_Disappear(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalCtx);
-s32 EnTalkGibud_PlayerInRangeWithCorrectState(EnTalkGibud* this, GlobalContext* globalCtx);
+s32 EnTalkGibud_PlayerInRangeWithCorrectStateToGrab(EnTalkGibud* this, GlobalContext* globalCtx);
 s32 EnTalkGibud_PlayerOutOfRange(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, GlobalContext* globalCtx);
 s32 EnTalkGibud_MoveToIdealGrabPositionAndRotation(EnTalkGibud* this, GlobalContext* globalCtx);
@@ -333,7 +333,8 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, GlobalContext* globalCtx) {
     this->actor.world.rot = this->actor.shape.rot;
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
-    if (EnTalkGibud_PlayerInRangeWithCorrectState(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
+    if (EnTalkGibud_PlayerInRangeWithCorrectStateToGrab(this, globalCtx) &&
+        Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
         if (this->grabWaitTimer == 0 && this->actor.xzDistToPlayer <= 45.0f) {
             player->actor.freezeTimer = 0;
             if (gSaveContext.playerForm == PLAYER_FORM_GORON || gSaveContext.playerForm == PLAYER_FORM_DEKU) {
@@ -503,7 +504,7 @@ void EnTalkGibud_WalkToHome(EnTalkGibud* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 450);
         this->actor.world.rot = this->actor.shape.rot;
     }
-    if (EnTalkGibud_PlayerInRangeWithCorrectState(this, globalCtx)) {
+    if (EnTalkGibud_PlayerInRangeWithCorrectStateToGrab(this, globalCtx)) {
         if (gSaveContext.playerForm != PLAYER_FORM_GORON && gSaveContext.playerForm != PLAYER_FORM_DEKU &&
             Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
             EnTalkGibud_SetupWalkToPlayer(this);
@@ -864,7 +865,7 @@ void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalC
     Math_ScaledStepToS(&this->headRotation.y, target, 0x190);
 }
 
-s32 EnTalkGibud_PlayerInRangeWithCorrectState(EnTalkGibud* this, GlobalContext* globalCtx) {
+s32 EnTalkGibud_PlayerInRangeWithCorrectStateToGrab(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f) && !(player->stateFlags1 & 0x2C6080) &&
