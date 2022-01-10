@@ -10,7 +10,7 @@ typedef void (*EnRailgibudActionFunc)(struct EnRailgibud*, GlobalContext*);
 
 #define ENRAILGIBUD_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define ENRAILGIBUD_GET_80(thisx) ((thisx)->params & 0x80)
-#define ENRAILGIBUD_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define ENRAILGIBUD_GET_PATH(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 typedef struct EnRailgibud {
     /* 0x0000 */ Actor actor;
@@ -20,9 +20,9 @@ typedef struct EnRailgibud {
     /* 0x01D8 */ Vec3f limbPos[15];
     /* 0x028C */ s32 limbIndex;
     /* 0x0290 */ UNK_TYPE1 unk290[0x4];
-    /* 0x0294 */ Vec3s* unk_294;
-    /* 0x0298 */ s32 unk_298;
-    /* 0x029C */ s32 unk_29C;
+    /* 0x0294 */ Vec3s* points;
+    /* 0x0298 */ s32 currentPoint;
+    /* 0x029C */ s32 pathCount;
     /* 0x02A0 */ f32 effectAlpha;
     /* 0x02A4 */ f32 effectScale;
     /* 0x02A8 */ Vec3s jointTable[REDEAD_GIBDO_LIMB_MAX];

@@ -16,8 +16,8 @@ void EnRailgibud_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BA57A8(EnRailgibud* this);
-void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_SetupWalkInCircles(EnRailgibud* this);
+void EnRailgibud_WalkInCircles(EnRailgibud* this, GlobalContext* globalCtx);
 void EnRailgibud_SetupAttemptPlayerStun(EnRailgibud* this);
 void EnRailgibud_AttemptPlayerStun(EnRailgibud* this, GlobalContext* globalCtx);
 void EnRailgibud_SetupWalkToPlayer(EnRailgibud* this);
@@ -164,17 +164,17 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_IMMOVABLE };
 
 void func_80BA5400(EnRailgibud* this, GlobalContext* globalCtx) {
     static s32 D_80BA82F8 = 0;
-    s32 phi_a3;
-    Vec3f sp70;
-    Path* path = &globalCtx->setupPathList[ENRAILGIBUD_GET_FF00(&this->actor)];
+    s32 nextPoint;
+    Vec3f targetPos;
+    Path* path = &globalCtx->setupPathList[ENRAILGIBUD_GET_PATH(&this->actor)];
 
-    this->unk_294 = Lib_SegmentedToVirtual(path->points);
-    this->unk_298 = D_80BA82F8;
-    this->unk_29C = path->count;
+    this->points = Lib_SegmentedToVirtual(path->points);
+    this->currentPoint = D_80BA82F8;
+    this->pathCount = path->count;
     if (D_80BA82F8 == 0) {
         s32 i;
 
-        for (i = 1; i < this->unk_29C && i < 10; i++) {
+        for (i = 1; i < this->pathCount && i < 10; i++) {
             D_80BA82F8++;
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_RAILGIBUD, 0.0f, 0.0f, 0.0f, 0,
                                0, 0, this->actor.params);
@@ -182,19 +182,19 @@ void func_80BA5400(EnRailgibud* this, GlobalContext* globalCtx) {
         D_80BA82F8 = 0;
     }
 
-    this->actor.world.pos.x = this->unk_294[this->unk_298].x;
-    this->actor.world.pos.y = this->unk_294[this->unk_298].y;
-    this->actor.world.pos.z = this->unk_294[this->unk_298].z;
-    if (this->unk_298 < (this->unk_29C - 1)) {
-        phi_a3 = this->unk_298 + 1;
+    this->actor.world.pos.x = this->points[this->currentPoint].x;
+    this->actor.world.pos.y = this->points[this->currentPoint].y;
+    this->actor.world.pos.z = this->points[this->currentPoint].z;
+    if (this->currentPoint < (this->pathCount - 1)) {
+        nextPoint = this->currentPoint + 1;
     } else {
-        phi_a3 = 0;
+        nextPoint = 0;
     }
 
-    sp70.x = this->unk_294[phi_a3].x;
-    sp70.y = this->unk_294[phi_a3].y;
-    sp70.z = this->unk_294[phi_a3].z;
-    this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp70);
+    targetPos.x = this->points[nextPoint].x;
+    targetPos.y = this->points[nextPoint].y;
+    targetPos.z = this->points[nextPoint].z;
+    this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &targetPos);
 
     this->actor.home = this->actor.world;
 }
@@ -240,7 +240,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     }
 
-    func_80BA57A8(this);
+    EnRailgibud_SetupWalkInCircles(this);
 }
 
 void EnRailgibud_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -249,20 +249,20 @@ void EnRailgibud_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80BA57A8(EnRailgibud* this) {
+void EnRailgibud_SetupWalkInCircles(EnRailgibud* this) {
     this->actor.speedXZ = 0.6f;
     func_800BDC5C(&this->skelAnime, sAnimations, 10);
-    this->actionFunc = func_80BA57F8;
+    this->actionFunc = EnRailgibud_WalkInCircles;
 }
 
-void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
-    Vec3f sp3C;
+void EnRailgibud_WalkInCircles(EnRailgibud* this, GlobalContext* globalCtx) {
+    Vec3f targetPos;
     s32 pad;
-    s16 sp36;
+    s16 yRotation;
 
-    sp3C.x = this->unk_294[this->unk_298].x;
-    sp3C.y = this->unk_294[this->unk_298].y;
-    sp3C.z = this->unk_294[this->unk_298].z;
+    targetPos.x = this->points[this->currentPoint].x;
+    targetPos.y = this->points[this->currentPoint].y;
+    targetPos.z = this->points[this->currentPoint].z;
 
     if ((this->actor.xzDistToPlayer <= 100.0f) && func_800B715C(globalCtx) &&
         (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO)) {
@@ -286,15 +286,16 @@ void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
         }
     }
 
-    sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp3C);
-    if (Math_Vec3f_DistXZ(&this->actor.world.pos, &sp3C) > 60.0f) {
-        Math_SmoothStepToS(&this->actor.world.rot.y, sp36, 1, 0x190, 0xA);
+    yRotation = Math_Vec3f_Yaw(&this->actor.world.pos, &targetPos);
+    if (Math_Vec3f_DistXZ(&this->actor.world.pos, &targetPos) > 60.0f) {
+        Math_SmoothStepToS(&this->actor.world.rot.y, yRotation, 1, 0x190, 0xA);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-    } else if (this->unk_298 < (this->unk_29C - 1)) {
-        this->unk_298++;
+    } else if (this->currentPoint < (this->pathCount - 1)) {
+        this->currentPoint++;
     } else {
-        this->unk_298 = 0;
+        this->currentPoint = 0;
     }
+
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
 
@@ -506,7 +507,7 @@ void EnRailgibud_WalkToHome(EnRailgibud* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 200, 10);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (this->actor.world.rot.y == this->actor.home.rot.y) {
-            func_80BA57A8(this);
+            EnRailgibud_SetupWalkInCircles(this);
         }
     } else {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 450);
@@ -657,10 +658,10 @@ void func_80BA6B30(EnRailgibud* this) {
     if (this->actor.parent == NULL) {
         this->unk_3EC = this->unk_3EE;
         this->unk_3EE = 1;
-        if ((this->actionFunc != func_80BA57F8) && (this->actionFunc != EnRailgibud_Dead)) {
+        if ((this->actionFunc != EnRailgibud_WalkInCircles) && (this->actionFunc != EnRailgibud_Dead)) {
             this->unk_3EE = 0;
         }
-    } else if ((this->actionFunc != func_80BA57F8) && (this->actionFunc != EnRailgibud_Dead)) {
+    } else if ((this->actionFunc != EnRailgibud_WalkInCircles) && (this->actionFunc != EnRailgibud_Dead)) {
         ((EnRailgibud*)this->actor.parent)->unk_3EE = 0;
     }
 }
@@ -718,7 +719,7 @@ void EnRailgibud_UpdateDamage(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((this->isInvincible != true) && (this->collider.base.acFlags & AC_HIT)) {
-        if (this->actionFunc == func_80BA57F8) {
+        if (this->actionFunc == EnRailgibud_WalkInCircles) {
             this->actor.home = this->actor.world;
         }
         this->collider.base.acFlags &= ~AC_HIT;
@@ -876,7 +877,7 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
                 this->actor.flags |= 9;
                 this->actor.hintId = 0xFF;
                 this->actor.textId = 0;
-                if ((this->actionFunc != func_80BA57F8) && (this->actionFunc != EnRailgibud_WalkToHome)) {
+                if ((this->actionFunc != EnRailgibud_WalkInCircles) && (this->actionFunc != EnRailgibud_WalkToHome)) {
                     EnRailgibud_SetupWalkToHome(this);
                 }
             }
