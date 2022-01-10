@@ -15146,7 +15146,7 @@
     0x80BA6B30:("func_80BA6B30",),
     0x80BA6B9C:("EnRailgibud_TurnTowardsPlayer",),
     0x80BA6D10:("EnRailgibud_PlayerInRangeWithCorrectState",),
-    0x80BA6DAC:("func_80BA6DAC",),
+    0x80BA6DAC:("EnRailgibud_PlayerOutOfRange",),
     0x80BA6DF8:("EnRailgibud_UpdateDamage",),
     0x80BA7088:("EnRailgibud_MoveToIdealGrabPositionAndRotation",),
     0x80BA71E4:("EnRailgibud_MoveWithGravity",),

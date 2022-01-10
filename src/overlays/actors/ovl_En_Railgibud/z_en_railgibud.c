@@ -37,7 +37,7 @@ void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA6974(GlobalContext* globalCtx, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5);
 void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, GlobalContext* globalCtx);
-s32 func_80BA6DAC(EnRailgibud* this, GlobalContext* globalCtx);
+s32 EnRailgibud_PlayerOutOfRange(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_MoveToIdealGrabPositionAndRotation(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7878(Actor* thisx, GlobalContext* globalCtx);
@@ -360,7 +360,7 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
         }
     } else if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
         EnRailgibud_SetupWalkToHome(this);
-    } else if (func_80BA6DAC(this, globalCtx)) {
+    } else if (EnRailgibud_PlayerOutOfRange(this, globalCtx)) {
         EnRailgibud_SetupWalkToHome(this);
     }
 
@@ -699,7 +699,12 @@ s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, GlobalContext* 
     return false;
 }
 
-s32 func_80BA6DAC(EnRailgibud* this, GlobalContext* globalCtx) {
+/**
+ * Gibdos/Redeads have a very short range around their home where they will
+ * engage with the player. If the player is out of this range, they will simply
+ * walk back to their home.
+ */
+s32 EnRailgibud_PlayerOutOfRange(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 100.0f) {
