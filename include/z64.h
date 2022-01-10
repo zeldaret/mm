@@ -336,26 +336,6 @@ typedef struct {
 } SramContext; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE4 unk0;
-    /* 0x04 */ UNK_TYPE4 unk4;
-    /* 0x08 */ UNK_TYPE4 unk8;
-    /* 0x0C */ f32 unkC;
-    /* 0x10 */ Color_RGBA8 unk10;
-} TargetContextEntry; // size = 0x14
-
-typedef struct {
-    /* 0x0 */ u32 texture;
-    /* 0x4 */ s16 unk4;
-    /* 0x6 */ s16 unk6;
-    /* 0x8 */ u8 unk8;
-    /* 0x9 */ u8 unk9;
-    /* 0xA */ u8 fadeOutDelay;
-    /* 0xB */ u8 fadeInDelay;
-    /* 0xC */ s16 alpha;
-    /* 0xE */ s16 color;
-} TitleCardContext; // size = 0x10
-
-typedef struct {
     /* 0x0 */ s32 topY;
     /* 0x4 */ s32 bottomY;
     /* 0x8 */ s32 leftX;
@@ -393,15 +373,27 @@ typedef struct {
 } s80185D40; // size = 0x2C
 
 typedef struct {
-    /* 0x0 */ u8 unk0;
-    /* 0x1 */ u8 unk1;
-    /* 0x2 */ u8 unk2;
-    /* 0x3 */ u8 unk3;
-    /* 0x4 */ u8 unk4;
-    /* 0x5 */ u8 unk5;
-    /* 0x6 */ u8 unk6;
-    /* 0x7 */ u8 unk7;
-} s801AEC84; // size = 0x8
+    /* 0x00 */ u32 unk0;
+    /* 0x04 */ u8 unk4;
+    /* 0x05 */ u8 unk5;
+    /* 0x06 */ u8 unk6;
+    /* 0x07 */ UNK_TYPE1 pad7[0x2];
+    /* 0x09 */ u8 unk9;
+    /* 0x0A */ UNK_TYPE1 padA[0x2];
+    /* 0x0C */ u32 unkC;
+    /* 0x10 */ u16 unk10;
+    /* 0x12 */ u16 unk12;
+    /* 0x14 */ u16 unk14;
+    /* 0x16 */ UNK_TYPE1 pad16[0x2];
+    /* 0x18 */ u32 unk18;
+    /* 0x1C */ u32 unk1C;
+    /* 0x20 */ u32 unk20;
+    /* 0x24 */ u32 unk24;
+    /* 0x28 */ u32 unk28;
+    /* 0x2C */ u32 unk2C;
+    /* 0x30 */ u32 unk30;
+    /* 0x34 */ u32 unk34;
+} s8018CFAC; // size = 0x38
 
 typedef struct {
     /* 0x00 */ Vec3f unk0;
@@ -480,13 +472,6 @@ typedef struct {
     /* 0x04 */ Vec3f originPos;
     /* 0x10 */ Vec3f relativePos;
 } SoundSource; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ OSContPad cur;
-    /* 0x06 */ OSContPad prev;
-    /* 0x0C */ OSContPad press; // X/Y store delta from last frame
-    /* 0x12 */ OSContPad rel; // X/Y store adjusted
-} Input; // size = 0x18
 
 typedef struct {
     /* 0x000 */ u32 magic;
@@ -744,7 +729,7 @@ typedef struct {
     /* 0x22 */ u16 unk_22;
     /* 0x24 */ u16 unk_24;
     /* 0x26 */ u8 unk_26;
-    /* 0x28 */ LightInfo unk_28; // sun 1
+    /* 0x28 */ LightInfo dirLight1; // sun 1
     /* 0x36 */ LightInfo unk_36; // sun 2
     /* 0x44 */ s8 unk_44;
     /* 0x48 */ DmaRequest unk_48;
@@ -878,7 +863,9 @@ typedef struct {
     /* 0x1202A */ u16 unk1202A;
     /* 0x1202C */ UNK_TYPE1 pad1202C[0x2];
     /* 0x1202E */ u16 unk1202E;
-    /* 0x12030 */ UNK_TYPE1 pad12030[0x14];
+    /* 0x12030 */ s16 unk_12030;
+    /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
+    /* 0x12034 */ UNK_TYPE1 pad12034[0x10];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
     /* 0x12048 */ u8 unk12048; // EnKakasi
@@ -1198,23 +1185,11 @@ typedef enum {
     STACK_STATUS_OVERFLOW = 2
 } StackStatus;
 
-typedef struct TargetContext TargetContext;
-
-typedef struct ActorContext ActorContext;
-
-typedef struct s800B948C s800B948C;
-
 struct FireObjLight {
     /* 0x00 */ LightNode* light;
     /* 0x04 */ LightInfoPositional lightInfo;
     /* 0x12 */ u8 unk12;
 }; // size = 0x13
-
-typedef struct ActorListEntry {
-    /* 0x0 */ s32 length; // number of actors loaded of this type
-    /* 0x4 */ Actor* first; // pointer to first actor of this type
-    /* 0x8 */ UNK_TYPE1 pad8[0x4];
-} ActorListEntry; // size = 0xC
 
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
@@ -1271,72 +1246,6 @@ struct FireObj {
     /* 0x2C */ ColliderCylinder collision;
     /* 0x78 */ FireObjLight light;
 }; // size = 0x8B
-
-struct TargetContext {
-    /* 0x00 */ Vec3f unk0;
-    /* 0x0C */ Vec3f unkC;
-    /* 0x18 */ Color_RGBAf unk18;
-    /* 0x28 */ Color_RGBAf unk28;
-    /* 0x38 */ Actor* unk38;
-    /* 0x3C */ Actor* unk3C;
-    /* 0x40 */ f32 unk40;
-    /* 0x44 */ f32 unk44;
-    /* 0x48 */ s16 unk48;
-    /* 0x4A */ u8 unk4A;
-    /* 0x4B */ u8 unk4B;
-    /* 0x4C */ s8 unk4C;
-    /* 0x4D */ UNK_TYPE1 pad4D[0x3];
-    /* 0x50 */ TargetContextEntry unk50[3];
-    /* 0x8C */ Actor* unk8C;
-    /* 0x90 */ Actor* unk90;
-    /* 0x94 */ Actor* unk_94;
-}; // size = 0x98
-
-struct s800B948C {
-    /* 0x00 */ GlobalContext* globalCtx;
-    /* 0x04 */ Actor* actor;
-    /* 0x08 */ u32 updateActorIfSet;
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ Actor* unk10;
-    /* 0x14 */ Player* player;
-    /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
-}; // size = 0x1C
-
-struct ActorContext {
-    /* 0x000 */ UNK_TYPE1 pad0[0x2];
-    /* 0x002 */ u8 unk2;
-    /* 0x003 */ u8 unk3;
-    /* 0x004 */ s8 unk4;
-    /* 0x005 */ u8 unk5;
-    /* 0x006 */ UNK_TYPE1 pad6[0x5];
-    /* 0x00B */ s8 unkB;
-    /* 0x00C */ s16 unkC;
-    /* 0x00E */ u8 totalLoadedActors;
-    /* 0x00F */ u8 undrawnActorCount;
-    /* 0x010 */ ActorListEntry actorList[12];
-    /* 0x0A0 */ Actor* undrawnActors[32]; // Records the first 32 actors drawn each frame
-    /* 0x120 */ TargetContext targetContext;
-    /* 0x1B8 */ u32 switchFlags[4]; // First 0x40 are permanent, second 0x40 are temporary
-    /* 0x1C8 */ u32 chestFlags;
-    /* 0x1CC */ u32 clearedRooms;
-    /* 0x1D0 */ u32 clearedRoomsTemp;
-    /* 0x1D4 */ u32 collectibleFlags[4]; // bitfield of 128 bits
-    /* 0x1E4 */ TitleCardContext titleCtxt;
-    /* 0x1F4 */ u8 unk1F4;
-    /* 0x1F5 */ u8 unk1F5;
-    /* 0x1F6 */ UNK_TYPE1 pad1F6[0x2];
-    /* 0x1F8 */ f32 unk1F8;
-    /* 0x1FC */ Vec3f unk1FC;
-    /* 0x208 */ UNK_TYPE1 pad208[0x48];
-    /* 0x250 */ void* unk250; // allocation of 0x20f0 bytes?
-    /* 0x254 */ u32 unk254[5];
-    /* 0x268 */ u8 unk268;
-    /* 0x269 */ UNK_TYPE1 pad269[0x3];
-    /* 0x26C */ UNK_TYPE1 pad26C[0xC];
-    /* 0x278 */ u16 unk278;
-    /* 0x27A */ UNK_TYPE1 pad27A[0x2];
-    /* 0x27C */ UNK_TYPE1 pad27C[0x8];
-}; // size = 0x284
 
 typedef struct {
     /* 0x00 */ u8   seqIndex;
@@ -1449,7 +1358,9 @@ struct GlobalContext {
     /* 0x18B4C */ PreRender pauseBgPreRender;
     /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* loadedScene;
-    /* 0x18E58 */ char unk_18E58[0x400];
+    /* 0x18E58 */ char unk_18E58[0x10];
+    /* 0x18E68 */ s32 unk_18E68;
+    /* 0x18E6C */ char unk_18E6C[0x3EC];
 }; // size = 0x19258
 
 typedef struct {
@@ -1577,6 +1488,11 @@ typedef struct DebugDispObject {
     /* 0x28 */ struct DebugDispObject* next;
     /* 0x2C */ s32 pad; //Padding not in the OOT version
 } DebugDispObject; // size = 0x30
+
+typedef struct {
+    /* 0x0 */ f32 rangeSq;
+    /* 0x4 */ f32 leashScale;
+} TargetRangeParams; // size = 0x8
 
 typedef struct {
     /* 0x00 */ u8* value;
