@@ -112,7 +112,7 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
     SkelAnime_InitFlex(globalCtx, &this->anime, &D_060024F0, &D_06000040, this->jointTable, this->morphTable, 10);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
     if (EnPoFusen_CheckParent(this, globalCtx) == 0) {
@@ -150,7 +150,7 @@ void EnPoFusen_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 u16 EnPoFusen_CheckParent(EnPoFusen* this, GlobalContext* globalCtx) {
     struct Actor* actorPtr;
 
-    actorPtr = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    actorPtr = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
     if (GET_IS_FUSE_TYPE_PARAM(this)) {
         return 1;
     }
@@ -243,7 +243,7 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
 void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx) {
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                 this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
-    Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_MarkForDeath(&this->actor);
 }
 
