@@ -35,7 +35,7 @@ void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
     ObjJgGakki* this = THIS;
     f32 frameCount = Animation_GetLastFrame(&D_0601B1E8);
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_0601B210, NULL, NULL, NULL, 0);
 
     if (((globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7)) &&

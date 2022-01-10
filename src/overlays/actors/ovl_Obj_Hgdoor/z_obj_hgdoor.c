@@ -49,7 +49,7 @@ static s32 unused = 0;
 static s32 unused2 = 0;
 
 void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actorIterator) {
         if ((actorIterator->id == ACTOR_OBJ_HGDOOR) && (&this->dyna.actor != actorIterator)) {
@@ -61,7 +61,7 @@ void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
 }
 
 void ObjHgdoor_SetParent(ObjHgdoor* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actorIterator) {
         if (actorIterator->id == ACTOR_EN_HG) {
@@ -142,7 +142,7 @@ void func_80BD4358(ObjHgdoor* this, GlobalContext* globalCtx) {
             this->unk166 = globalCtx->csCtx.actorActions[actionIndex]->action;
             switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
+                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
                         this->dyna.actor.parent->colChkInfo.health = 1;
                     }

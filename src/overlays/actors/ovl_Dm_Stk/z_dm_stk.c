@@ -260,7 +260,7 @@ void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, 
 void func_80A9FED8(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames + 20) {
         case 1195:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
             break;
 
         case 1232:
@@ -268,48 +268,48 @@ void func_80A9FED8(DmStk* this, GlobalContext* globalCtx) {
         case 1252:
         case 1255:
         case 1257:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
             break;
 
         case 1285:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
             break;
 
         case 1343:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 1410:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
             break;
 
         case 1603:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_WALK);
             break;
 
         case 1610:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_REVERSE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_REVERSE);
             break;
 
         case 2095:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_SURPRISED);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_SURPRISED);
             break;
 
         case 2190:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_JUMP);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_JUMP);
             break;
 
         case 2212:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_ONGND);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_ONGND);
             break;
 
         case 2214:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL02_LAUGH_SHORT);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL02_LAUGH_SHORT);
             break;
 
         case 2250:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL06_SURPRISED);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL06_SURPRISED);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
             break;
 
         case 2255:
@@ -338,7 +338,7 @@ void func_80A9FED8(DmStk* this, GlobalContext* globalCtx) {
         case 2508:
         case 2519:
         case 2530:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
     }
 }
@@ -368,11 +368,11 @@ void func_80AA0100(DmStk* this, GlobalContext* globalCtx) {
         case 232:
         case 243:
         case 254:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
 
         case 173:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
             break;
     }
 }
@@ -380,15 +380,15 @@ void func_80AA0100(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA0158(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 18:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_GASAGOSO);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_GASAGOSO);
             break;
 
         case 90:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
             break;
 
         case 142:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_EVIL_POWER);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EVIL_POWER);
             break;
     }
 }
@@ -405,11 +405,11 @@ void func_80AA01C0(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 560:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL02_LAUGH_SHORT);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL02_LAUGH_SHORT);
             break;
 
         case 890:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL21_PSYCHO_VOICE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL21_PSYCHO_VOICE);
             break;
     }
 }
@@ -423,7 +423,7 @@ void func_80AA0264(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 71:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_BODY);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_BODY);
             break;
 
         case 365:
@@ -435,30 +435,30 @@ void func_80AA0264(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 265:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
             break;
 
         case 126:
-            Audio_PlayActorSound2(&player->actor, NA_SE_VO_DUMMY_150);
+            Actor_PlaySfxAtPos(&player->actor, NA_SE_VO_DUMMY_150);
             break;
 
         case 197:
-            Audio_PlayActorSound2(&player->actor, NA_SE_VO_DUMMY_134);
+            Actor_PlaySfxAtPos(&player->actor, NA_SE_VO_DUMMY_134);
             break;
 
         case 207:
-            Audio_PlayActorSound2(&player->actor, NA_SE_VO_DUMMY_135);
+            Actor_PlaySfxAtPos(&player->actor, NA_SE_VO_DUMMY_135);
             break;
 
         case 217:
-            Audio_PlayActorSound2(&player->actor, NA_SE_VO_DUMMY_136);
+            Actor_PlaySfxAtPos(&player->actor, NA_SE_VO_DUMMY_136);
             break;
     }
 
     if (player) {}
 
     if ((globalCtx->csCtx.frames >= 263) && (globalCtx->csCtx.frames < 698)) {
-        Audio_PlayActorSound2(&player->actor, NA_SE_EN_STALKIDS_BODY_LEV - SFX_FLAG);
+        Actor_PlaySfxAtPos(&player->actor, NA_SE_EN_STALKIDS_BODY_LEV - SFX_FLAG);
     }
 }
 
@@ -471,37 +471,37 @@ void func_80AA0420(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 258:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_TURN);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_TURN);
             break;
 
         case 524:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_TURN);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL04_ANGER);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_TURN);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL04_ANGER);
             break;
 
         case 534:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_ROLL);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_ROLL);
             break;
 
         case 678:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_STRETCH);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_STRETCH);
             break;
     }
 
     if ((this->unk_2E0 == 31) && (globalCtx->csCtx.frames < 700)) {
         if (Animation_OnFrame(&this->skelAnime, 5.0f) || Animation_OnFrame(&this->skelAnime, 25.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA1);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA1);
         } else if (Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 40.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA2);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA2);
         }
     }
 
     if (globalCtx->csCtx.frames >= 700) {
         if (D_80AA3CB8 < 128) {
             if ((D_80AA3CB8 & 0x1F) == 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
             } else if ((D_80AA3CB8 & 0x1F) == 16) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
             }
             D_80AA3CB8++;
         }
@@ -512,14 +512,14 @@ void func_80AA0420(DmStk* this, GlobalContext* globalCtx) {
 
 void func_80AA05F0(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 3) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL06_SURPRISED);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL06_SURPRISED);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
     }
 }
 
 void func_80AA0634(DmStk* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.frames >= 642) && (globalCtx->csCtx.frames < 845)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_NE_STAL23_COLD - SFX_FLAG);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_NE_STAL23_COLD - SFX_FLAG);
     }
 }
 
@@ -531,16 +531,16 @@ void func_80AA066C(DmStk* this, GlobalContext* globalCtx) {
         case 72:
         case 77:
         case 79:
-            Audio_PlayActorSound2(&this->actor, NA_SE_PL_WALK_WATER2);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_WATER2);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_WALK);
             break;
 
         case 186:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_UP);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
             break;
 
         case 230:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL22_LAUGH_KID_L);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL22_LAUGH_KID_L);
             break;
     }
 }
@@ -552,7 +552,7 @@ void func_80AA071C(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 660:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
             break;
     }
 }
@@ -566,27 +566,27 @@ void func_80AA076C(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 45:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
 
         case 93:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 245:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
 
         case 269:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL11_LAUGH_SHY2);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL11_LAUGH_SHY2);
             break;
 
         case 327:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
             break;
 
         case 455:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
 
         case 1730:
@@ -594,7 +594,7 @@ void func_80AA076C(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 1395:
-            func_800B8E58(&player->actor, NA_SE_VO_DUMMY_34);
+            func_800B8E58(player, NA_SE_VO_DUMMY_34);
             break;
 
         case 1850:
@@ -608,20 +608,20 @@ void func_80AA076C(DmStk* this, GlobalContext* globalCtx) {
 
     if (this->unk_2E0 == 0) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 17.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
         }
 
         if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
         }
     } else if (this->unk_2E0 == 71) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
             Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
         }
     } else if ((this->unk_2E0 == 70) &&
                (Animation_OnFrame(&this->skelAnime, 16.0f) || Animation_OnFrame(&this->skelAnime, 23.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_NOSE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_NOSE);
     }
 }
 
@@ -634,25 +634,25 @@ void func_80AA09DC(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 234:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_TURN);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL04_ANGER);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_TURN);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL04_ANGER);
             break;
 
         case 244:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_ROLL);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_ROLL);
             break;
 
         case 388:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_STRETCH);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_STRETCH);
             break;
     }
 
     if (globalCtx->csCtx.frames >= 408) {
         if (D_80AA3CBC < 128) {
             if ((D_80AA3CBC & 0x1F) == 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
             } else if ((D_80AA3CBC & 0x1F) == 16) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON2);
             }
             D_80AA3CBC++;
         }
@@ -675,19 +675,19 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
         case 332:
         case 335:
         case 344:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 367:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_BODY_LEV);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_BODY_LEV);
             break;
 
         case 470:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_HEADACHE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_HEADACHE);
             break;
 
         case 486:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             func_8019F1C0(&this->unk_310, NA_SE_EN_STAL08_CRY_BIG);
             break;
 
@@ -696,11 +696,11 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 590:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 592:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_RIDE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
 
         case 594:
@@ -712,16 +712,16 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
 
     if ((globalCtx->csCtx.frames >= 62) && (globalCtx->csCtx.frames < 273)) {
         if ((Rand_ZeroOne() < 0.75f) && ((globalCtx->state.frames % 2) != 0)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_EARTHQUAKE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_EARTHQUAKE);
         }
     }
 
     if ((globalCtx->csCtx.frames >= 498) && (globalCtx->csCtx.frames < 577)) {
         if ((globalCtx->state.frames % 4) == 0) {
             if ((globalCtx->state.frames & 4) != 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_BODY_LEV);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_BODY_LEV);
             } else {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             }
         }
     }
@@ -734,16 +734,16 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA0DA8(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 551:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_PULLED);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
             break;
 
         case 711:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 716:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_ONGND);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_ONGND);
             break;
     }
 }
@@ -751,16 +751,16 @@ void func_80AA0DA8(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA0E1C(DmStk* this, GlobalContext* globalCtx) {
     switch (globalCtx->csCtx.frames) {
         case 311:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_PULLED);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
             break;
 
         case 365:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
             break;
 
         case 372:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_ONGND);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_ONGND);
             break;
     }
 }
@@ -834,24 +834,24 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
 
     if (this->unk_2E0 == 1) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_WALK);
         }
     } else if (this->unk_2E0 == 19) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 13.0f) ||
             Animation_OnFrame(&this->skelAnime, 20.0f) || Animation_OnFrame(&this->skelAnime, 27.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_PL_CALM_HIT);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_CALM_HIT);
         }
     } else if (this->unk_2E0 == 14) {
         if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_PL_PUT_OUT_ITEM);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PUT_OUT_ITEM);
         }
     } else if (this->unk_2E0 == 15) {
         if (Animation_OnFrame(&this->skelAnime, 14.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_UNSKILLFUL_OCARINA);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_UNSKILLFUL_OCARINA);
         }
 
         if (Animation_OnFrame(&this->skelAnime, 45.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STAL01_LAUGH);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL01_LAUGH);
         }
     }
 }
@@ -964,7 +964,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_2E4 = this->unk_2E4;
         this->actor.targetArrowOffset = 1100.0f;
         this->unk_334 = 99;
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013328, NULL, NULL, NULL, 0);
         func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
     }
@@ -1062,7 +1062,7 @@ void func_80AA19EC(DmStk* this, GlobalContext* globalCtx) {
 
 void func_80AA1A50(DmStk* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(0xA)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_DAMAGE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DAMAGE);
         ActorCutscene_Start(0xA, &this->actor);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;
@@ -1109,7 +1109,7 @@ void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx) {
 
     this->unk_2E0 = 39;
     func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
     this->actionFunc = func_80AA1C64;
 }
 
@@ -1568,9 +1568,9 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.params != 1) {
         if (this->unk_2E0 == 33) {
-            Actor_SetHeight(&this->actor, 40.0f);
+            Actor_SetFocus(&this->actor, 40.0f);
         } else {
-            Actor_SetHeight(&this->actor, 6.0f);
+            Actor_SetFocus(&this->actor, 6.0f);
         }
 
         func_80A9FDB0(this, globalCtx);
@@ -1592,7 +1592,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         switch (this->unk_33A) {
             case 1:
-                if (func_800B8718(&this->actor, globalCtx)) {
+                if (func_800B8718(&this->actor, &globalCtx->state)) {
                     this->unk_33A = 2;
                 } else {
                     func_800B874C(&this->actor, globalCtx, this->actor.xzDistToPlayer,
@@ -1720,7 +1720,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_337].segment);
 
                     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06008658));
-                    func_800BDFC0(globalCtx, D_06007840);
+                    Gfx_DrawDListOpa(globalCtx, D_06007840);
                     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_336].segment);
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_336].segment);
@@ -1830,7 +1830,7 @@ void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_33B != 0) {
         if (this->actor.params == 1) {
-            func_800BDFC0(globalCtx, D_06006BB0);
+            Gfx_DrawDListOpa(globalCtx, D_06006BB0);
             return;
         }
 

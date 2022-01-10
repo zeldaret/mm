@@ -386,7 +386,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
     f32 temp_f0_2;
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp90;
-    Actor* rotaryRoom = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* rotaryRoom = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
     CollisionPoly* sp88;
     EnWaterEffectStruct* ptr = &this->unk_144[0];
     u8 phi_s5;
@@ -471,7 +471,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
                                 player->flameTimers[j] = Rand_S16Offset(0, 200);
                             }
                             player->isBurning = true;
-                            func_800B8E58(&player->actor, player->ageProperties->unk_92 + NA_SE_VO_LI_DEMO_DAMAGE);
+                            func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DEMO_DAMAGE);
                         }
                     }
 

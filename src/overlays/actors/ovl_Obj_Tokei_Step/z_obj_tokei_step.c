@@ -153,7 +153,7 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
         if (hasPrevBounced && (panel->numBounces < 3) && (panel->startFallingTimer <= 0)) {
             finalPosY = sPanelXOffsets[i] + this->dyna.actor.world.pos.y;
             if (!panel->hasSoundPlayed) {
-                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
                 panel->hasSoundPlayed = true;
             }
             panel->posChangeY += -2.5f;
@@ -267,7 +267,7 @@ void ObjTokeiStep_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjTokeiStep_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
 
-    func_800BDFC0(globalCtx, gClocktowerPanelDL);
+    Gfx_DrawDListOpa(globalCtx, gClocktowerPanelDL);
 }
 
 void ObjTokeiStep_DrawOpen(Actor* thisx, GlobalContext* globalCtx) {

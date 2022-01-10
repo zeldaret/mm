@@ -200,7 +200,7 @@ void EnMa4_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMa4* this = THIS;
     s32 pad;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, NULL, this->jointTable, this->morphTable,
                        MA1_LIMB_MAX);
 
@@ -287,7 +287,7 @@ void EnMa4_RunInCircles(EnMa4* this, GlobalContext* globalCtx) {
     }
 
     if (sCurrentAnim == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
     sp34.x = this->pathPoints[this->pathIndex].x;
@@ -317,10 +317,10 @@ void EnMa4_RunInCircles(EnMa4* this, GlobalContext* globalCtx) {
     }
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (this->skelAnime.animation == &D_06007328) { // Walking animation
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
 }
@@ -363,7 +363,7 @@ void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         EnMa4_StartDialogue(this, globalCtx);
         EnMa4_SetupDialogueHandler(this);
     } else if (this->type != MA4_TYPE_ALIENS_WON || ABS_ALT(yaw) < 0x4000) {
@@ -648,7 +648,7 @@ void EnMa4_SetupDialogueHandler(EnMa4* this) {
 void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
     s32 temp_v0;
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         default:
             break;
 
@@ -692,7 +692,7 @@ void EnMa4_BeginHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
 }
 
 void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         // "You're feeling confident"
         Message_StartTextbox(globalCtx, 0x336E, &this->actor);
         this->actionFunc = EnMa4_HorsebackGameTalking;
@@ -702,7 +702,7 @@ void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, GlobalContext* glob
 }
 
 void EnMa4_HorsebackGameTalking(EnMa4* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->actionFunc = EnMa4_HorsebackGameWait;
     }
 }
@@ -760,7 +760,7 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
 
     if (player->stateFlags1 & 0x100000) {
         globalCtx->actorCtx.unk268 = 1;
-        globalCtx->actorCtx.unk278 = 0x8000;
+        globalCtx->actorCtx.unk_26C.press.button = BTN_A;
     } else {
         globalCtx->actorCtx.unk268 = 1;
     }
@@ -850,7 +850,7 @@ void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
         Player* player = GET_PLAYER(globalCtx);
 
         player->stateFlags1 |= 0x20;
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
         D_80AC0260 = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
@@ -865,14 +865,14 @@ void EnMa4_EndEponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     this->actor.flags |= 0x10000;
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         player->stateFlags1 &= ~0x20;
         Message_StartTextbox(globalCtx, 0x334C, &this->actor);
         this->textId = 0x334C;
         this->actor.flags &= ~0x10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 

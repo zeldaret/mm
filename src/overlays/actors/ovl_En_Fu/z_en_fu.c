@@ -188,7 +188,7 @@ void func_809619D0(EnFu* this, GlobalContext* globalCtx) {
 void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFu* this = THIS;
-    Actor* fuKaiten = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* fuKaiten = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (fuKaiten != NULL) {
         if (fuKaiten->id == ACTOR_BG_FU_KAITEN) {
@@ -199,7 +199,7 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (fuKaiten != NULL) {
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B2B0, &D_06001F74, this->jointTable, this->morphTable,
                            21);
         Collider_InitCylinder(globalCtx, &this->collider);
@@ -257,7 +257,7 @@ s32 func_80961D10(EnFu* this) {
 }
 
 void func_80961D7C(GlobalContext* globalCtx) {
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
         if ((explosive->id == ACTOR_EN_BOM) && (explosive->bgCheckFlags & 1)) {
@@ -277,7 +277,7 @@ void func_80961D7C(GlobalContext* globalCtx) {
 }
 
 void func_80961E88(GlobalContext* globalCtx) {
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
         Actor_MarkForDeath(explosive);
@@ -286,7 +286,7 @@ void func_80961E88(GlobalContext* globalCtx) {
 }
 
 void func_80961EC8(GlobalContext* globalCtx) {
-    Actor* fuMato = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* fuMato = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (fuMato != NULL) {
         if (fuMato->id == ACTOR_EN_FU_MATO) {
@@ -297,7 +297,7 @@ void func_80961EC8(GlobalContext* globalCtx) {
 }
 
 void func_80961F00(GlobalContext* globalCtx) {
-    Actor* fuKago = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* fuKago = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (fuKago != NULL) {
         if (fuKago->id == ACTOR_EN_FU_KAGO) {
@@ -377,7 +377,7 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_809622FC(EnFu* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
     this->actionFunc = func_80962340;
 }
 
@@ -388,7 +388,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
         this->actor.flags |= 0x10000;
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (this->unk_54A == 2) {
             if (this->unk_552 == 0x287D) {
                 if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
@@ -542,7 +542,7 @@ void func_80962660(EnFu* this, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
-                func_800BDC5C(&this->skelAnime, sAnimations, 3);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
                 func_801A2BB8(NA_BGM_MINI_GAME_2);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
@@ -583,7 +583,7 @@ void func_809628BC(EnFu* this) {
 }
 
 void func_809628D0(EnFu* this, GlobalContext* globalCtx) {
-    u8 sp27 = func_80152498(&globalCtx->msgCtx);
+    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
 
     switch (sp27) {
         case 0:
@@ -846,8 +846,8 @@ void func_80963350(EnFu* this, GlobalContext* globalCtx) {
     static s32 D_80964C24 = 0;
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((this->unk_54A == 0) && (((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) ||
-                                 ((func_80152498(&globalCtx->msgCtx) == 2) && (globalCtx->msgCtx.unk12023 == 1)))) {
+    if ((this->unk_54A == 0) && (((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) ||
+                                 ((Message_GetState(&globalCtx->msgCtx) == 2) && (globalCtx->msgCtx.unk12023 == 1)))) {
         func_801477B4(globalCtx);
         this->unk_54A = 2;
         D_80964C24 = 1;
@@ -884,9 +884,9 @@ void func_80963560(EnFu* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         func_80963610(this);
     } else if ((this->unk_552 == 0x2880) && !(gSaveContext.weekEventReg[22] & 0x80)) {
-        func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     }
     this->actor.child->freezeTimer = 10;
 }
@@ -899,7 +899,7 @@ void func_80963610(EnFu* this) {
 void func_80963630(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if ((gSaveContext.weekEventReg[22] & 0x10) && (gSaveContext.weekEventReg[22] & 0x20) && (CURRENT_DAY == 3) &&
             (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             if (gSaveContext.weekEventReg[22] & 0x40) {
@@ -940,7 +940,7 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
         player->stateFlags1 &= ~0x20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, globalCtx, 500.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -962,7 +962,7 @@ s32 func_80963810(GlobalContext* globalCtx, Vec3f pos) {
     }
 
     globalCtx->actorCtx.unk268 = 1;
-    func_800B6F20(globalCtx, globalCtx->actorCtx.pad26C, phi_f0, sp22);
+    func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, phi_f0, sp22);
 
     if (sp28 < 80.0f) {
         return true;
@@ -1181,7 +1181,7 @@ void func_80963FF8(EnFu* this, GlobalContext* globalCtx) {
 
     if (player->stateFlags1 & 0x100000) {
         globalCtx->actorCtx.unk268 = 1;
-        globalCtx->actorCtx.unk278 = 0x8000;
+        globalCtx->actorCtx.unk_26C.press.button = 0x8000;
     } else {
         globalCtx->actorCtx.unk268 = 1;
     }
@@ -1219,7 +1219,7 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
             case 0x2842:
             case 0x2844:
             case 0x2848:
-                func_800BDC5C(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
                 break;
 
             case 0x2840:
@@ -1245,21 +1245,21 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
             case 0x286B:
             case 0x286D:
             case 0x2871:
-                func_800BDC5C(&this->skelAnime, sAnimations, 4);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
                 break;
 
             case 0x2860:
-                func_800BDC5C(&this->skelAnime, sAnimations, 5);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
                 break;
 
             case 0x285F:
-                func_800BDC5C(&this->skelAnime, sAnimations, 6);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
                 break;
 
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                func_800BDC5C(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
                 break;
         }
     }
@@ -1340,7 +1340,7 @@ void EnFu_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     func_809642E0(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_8096209C(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     SkelAnime_Update(&this->skelAnime);
