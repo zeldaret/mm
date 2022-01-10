@@ -77,7 +77,7 @@ void ArmsHook_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void ArmsHook_Wait(ArmsHook* this, GlobalContext* globalCtx) {
     if (this->actor.parent == NULL) {
         ArmsHook_SetupAction(this, ArmsHook_Shoot);
-        func_800B6C04(&this->actor, 20.0f);
+        Actor_SetSpeeds(&this->actor, 20.0f);
         this->actor.parent = &GET_PLAYER(globalCtx)->actor;
         this->timer = 26;
     }
@@ -90,7 +90,7 @@ void func_808C1154(ArmsHook* this) {
 
 s32 ArmsHook_AttachToPlayer(ArmsHook* this, Player* player) {
     player->actor.child = &this->actor;
-    player->leftHandActor = &this->actor;
+    player->heldActor = &this->actor;
     if (this->actor.child != NULL) {
         player->actor.parent = this->actor.child = NULL;
         return 1;
@@ -237,7 +237,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         Vec3f prevFrameDiff;
         Vec3f sp60;
 
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.prevPos, &prevFrameDiff);
         Math_Vec3f_Sum(&this->unk1E0, &prevFrameDiff, &this->unk1E0);
         this->actor.shape.rot.x = Math_FAtan2F(this->actor.speedXZ, -this->actor.velocity.y);

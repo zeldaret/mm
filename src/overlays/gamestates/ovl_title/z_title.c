@@ -74,7 +74,7 @@ void Title_Draw(GameState* thisx) {
     eye.y = 4002.5417f;
     eye.z = 1119.0837f;
 
-    func_800B7FE0(&object, &eye, &lightDir, this->gameState.gfxCtx);
+    Hilite_DrawOpa(&object, &eye, &lightDir, this->gameState.gfxCtx);
 
     gSPSetLights1(POLY_OPA_DISP++, sTitleLights);
 

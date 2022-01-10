@@ -107,7 +107,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actionFunc = EnYb_Idle;
     this->currentAnimIndex = 3; // gets overwritten in EnYb_SetAnimation...?
-    this->actor.minVelocityY = -9.0f;
+    this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
     EnYb_SetAnimation(globalCtx, this, 2, 0, 0.0f);
@@ -176,7 +176,7 @@ void EnYb_ActorShadowFunc(Actor* actor, Lights* mapper, GlobalContext* globalCtx
             actor->world.pos.y = oldPos.y;
         }
 
-        func_800B3FC0(actor, mapper, globalCtx);
+        ActorShadow_DrawCircle(actor, mapper, globalCtx);
         Math_Vec3f_Copy(&actor->world.pos, &oldPos);
         actor->scale.x = 0.01f;
     }
@@ -215,8 +215,8 @@ void EnYb_SetAnimation(GlobalContext* globalCtx, EnYb* this, s16 animIndex, u8 a
 }
 
 s32 EnYb_CanTalk(EnYb* this, GlobalContext* globalCtx) {
-    if (this->actor.xzDistToPlayer < 100.0f && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) &&
-        Actor_IsActorFacingLink(&this->actor, 0x3000)) {
+    if (this->actor.xzDistToPlayer < 100.0f && Player_IsFacingActor(&this->actor, 0x3000, globalCtx) &&
+        Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         return true;
     } else {
         return false;
@@ -275,7 +275,7 @@ void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx) {
 
 void func_80BFA868(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
-    if (func_800B84D0(&this->actor, globalCtx)) { // is talking?
+    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) { // is talking?
         this->actor.flags &= ~0x10000;
         this->actionFunc = func_80BFA9D4;
         // I am counting on you
@@ -296,7 +296,7 @@ void func_80BFA91C(EnYb* this, GlobalContext* globalCtx) {
         this->actor.flags |= 0x10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x89, 10000.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, 0x89, 10000.0f, 100.0f);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -307,7 +307,7 @@ void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     EnYb_UpdateAnimation(this, globalCtx);
 
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx) != 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx) != 0) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x147D: // I am counting on you
                 func_801477B4(globalCtx);
@@ -340,7 +340,7 @@ void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx) {
 
 void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, globalCtx) != 0) {
         this->actionFunc = func_80BFA9D4;
         // Spread my dance across the world
         func_801518B0(globalCtx, 0x147C, &this->actor);
@@ -377,7 +377,7 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);
-    } else if (func_800B84D0(&this->actor, globalCtx)) {
+    } else if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
         func_80BFA2FC(globalCtx);
         this->actionFunc = func_80BFA9D4;
         if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMARO) {
@@ -400,7 +400,7 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
                fabsf(this->actor.playerHeightRel) < 50.0f) {
 
         this->unkFlag410 |= 1;
-        Audio_PlayActorSound2(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
     }
 
     EnYb_EnableProximityMusic(this);
@@ -428,7 +428,7 @@ void EnYb_Update(Actor* thisx, GlobalContext* globalCtx) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
     if ((this->actor.flags & 1) == 1) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 40.0f, 25.0f, 40.0f, 5);
     }
 
