@@ -476,7 +476,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, GlobalContext* globalCtx) {
 }
 
 s32 EnBigokuta_IsNearSwampBoat(EnBigokuta* this, GlobalContext* globalCtx) {
-    this->actor.child = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_BG, ACTOR_BG_INGATE);
+    this->actor.child = SubS_FindActor(globalCtx, NULL, ACTORCAT_BG, ACTOR_BG_INGATE);
 
     if ((this->actor.child != NULL) && (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) < 250.0f)) {
         return true;
