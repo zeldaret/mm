@@ -292,7 +292,7 @@ void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
 
     if (currentClockMinute != this->clockMinute) {
         if (this->minuteRingOrExteriorGearRotationTimer == 8 && playSfx) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_SECOND_HAND);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_SECOND_HAND);
         }
 
         if (this->minuteRingOrExteriorGearRotationTimer > 8) {
@@ -330,7 +330,7 @@ void ObjTokeidai_ExteriorGear_Collapse(ObjTokeidai* this, GlobalContext* globalC
     } else {
         this->actor.shape.rot.x += 0x50;
         this->actor.shape.rot.z += 0x50;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     }
 }
@@ -340,7 +340,7 @@ void ObjTokeidai_ExteriorGear_OpenedIdle(ObjTokeidai* this, GlobalContext* globa
         this->actionFunc = ObjTokeidai_ExteriorGear_Collapse;
         this->actor.speedXZ = this->actor.scale.y * 5.0f;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = this->actor.scale.y * -50.0f;
+        this->actor.terminalVelocity = this->actor.scale.y * -50.0f;
         this->actor.gravity = this->actor.scale.y * -5.0f;
     }
 }
@@ -356,7 +356,7 @@ void ObjTokeidai_TowerClock_Fall(ObjTokeidai* this, GlobalContext* globalCtx) {
     }
 
     this->actor.world.pos.z += 4.0f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (this->actor.world.pos.y < 0.0f) {
         this->actionFunc = ObjTokeidai_DoNothing;
     }
@@ -390,7 +390,7 @@ void ObjTokeidai_TowerClock_SlideOff(ObjTokeidai* this, GlobalContext* globalCtx
         } else {
             thisx->shape.rot.x += this->fallingClockFaceRotationalVelocity;
             this->actionFunc = ObjTokeidai_TowerClock_Fall;
-            thisx->minVelocityY = -7.5f;
+            thisx->terminalVelocity = -7.5f;
             thisx->gravity = -0.75f;
             thisx->velocity.y = -2.0f;
         }
@@ -415,7 +415,7 @@ void ObjTokeidai_Counterweight_Collapse(ObjTokeidai* this, GlobalContext* global
         this->actionFunc = ObjTokeidai_DoNothing;
     } else {
         this->xRotation += 0x64;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 
@@ -424,7 +424,7 @@ void ObjTokeidai_Counterweight_OpenedIdle(ObjTokeidai* this, GlobalContext* glob
         this->actionFunc = ObjTokeidai_Counterweight_Collapse;
         this->xRotation = 0;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = this->actor.scale.y * -50.0f;
+        this->actor.terminalVelocity = this->actor.scale.y * -50.0f;
         this->actor.gravity = this->actor.scale.y * -5.0f;
     }
 }
@@ -506,15 +506,15 @@ void ObjTokeidai_TowerOpening_DropCounterweight(ObjTokeidai* this, GlobalContext
     this->xRotation = 0x4000;
     switch (this->boundCount) {
         case 0:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_0);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_0);
             break;
 
         case 1:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_1);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_1);
             break;
 
         case 2:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_2);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_BOUND_2);
             break;
     }
     this->boundCount++;
@@ -554,7 +554,7 @@ void ObjTokeidai_TowerOpening_FinishRaise(ObjTokeidai* this, GlobalContext* glob
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
         if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
             (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_FALL);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_FALL);
         }
         this->yTranslation = 3400;
         this->actionFunc = ObjTokeidai_TowerOpening_DropCounterweight;
@@ -578,7 +578,7 @@ void ObjTokeidai_TowerOpening_RaiseTower(ObjTokeidai* this, GlobalContext* globa
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
         if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
             (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_STOP);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOCK_TOWER_STOP);
         }
         this->yTranslation = 3400;
         this->actionFunc = ObjTokeidai_TowerOpening_FinishRaise;

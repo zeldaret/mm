@@ -66,7 +66,7 @@ Actor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
     f32 minDist = 0.0f;
 
     do {
-        doorIter = func_ActorCategoryIterateById(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        doorIter = SubS_FindActor(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = doorIter;
         dist = Actor_DistanceBetweenActors(actor, door);
         if (!isSetup || (dist < minDist)) {
@@ -131,7 +131,7 @@ void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, Actor* door, s16 arg3, 
     Vec3f offset;
     f32 phi_f0;
 
-    Actor_CalcOffsetOrientedToDrawRotation(door, &offset, &enHy->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(door, &offset, &enHy->actor.world.pos);
     phi_f0 = (offset.z >= 0.0f) ? 1.0f : -1.0f;
     sp3B = ((s8)phi_f0 < 0) ? 0 : 2;
     EnHy_ChangeObjectAndAnim(enHy, globalCtx, (sp3B == 0) ? arg3 : arg4);
@@ -260,12 +260,12 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThr
 
     enHy->isLeftFootOnGround = isFootOnGround = func_8013DB90(globalCtx, &enHy->leftFootPos, distAboveThreshold);
     if (enHy->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
-        Audio_PlayActorSound2(&enHy->actor, sfxId);
+        Actor_PlaySfxAtPos(&enHy->actor, sfxId);
     }
 
     enHy->isRightFootOnGround = isFootOnGround = func_8013DB90(globalCtx, &enHy->rightFootPos, distAboveThreshold);
     if (enHy->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
-        Audio_PlayActorSound2(&enHy->actor, sfxId);
+        Actor_PlaySfxAtPos(&enHy->actor, sfxId);
     }
     return 0;
 }

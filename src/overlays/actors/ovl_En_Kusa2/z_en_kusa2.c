@@ -845,7 +845,7 @@ void func_80A5D178(EnKusa2* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(minVelocityY, -17000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(terminalVelocity, -17000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
@@ -960,7 +960,7 @@ void func_80A5D7C4(EnKusa2* this, GlobalContext* globalCtx) {
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_PL_PULL_UP_PLANT);
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.shape.shadowAlpha = 60;
         this->actor.room = -1;
         func_80A5BD94(this);
@@ -970,14 +970,14 @@ void func_80A5D7C4(EnKusa2* this, GlobalContext* globalCtx) {
 
     if (!func_80A5BFD8(this, globalCtx)) {
         if ((this->unk_1C0 != NULL) && (this->unk_1C0->unk_1BE != 0)) {
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
             if (this2->unk_1C0 != NULL) {
                 sp2A = Actor_YawBetweenActors(&this->unk_1C0->actor, &this->actor);
                 this->actor.home.rot.y = Rand_S16Offset(-1500, 3000) + sp2A;
             }
             this->unk_1C8 = Rand_S16Offset(72, 16);
             this->actor.velocity.y = 8.8f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
             func_80A5DC70(this);
         }
 
@@ -986,7 +986,7 @@ void func_80A5D7C4(EnKusa2* this, GlobalContext* globalCtx) {
             if (this->actor.xzDistToPlayer < 400.0f) {
                 CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
-                    func_800B8BB0(&this->actor, globalCtx);
+                    Actor_LiftActor(&this->actor, globalCtx);
                 }
             }
         }
@@ -1035,7 +1035,7 @@ void func_80A5D9C8(EnKusa2* this, GlobalContext* globalCtx) {
         this->actor.home.rot.y = this->actor.world.rot.y;
         this->actor.velocity.y = 12.5f;
         this->actor.speedXZ += 3.0f;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         func_80A5BAFC(this, globalCtx);
         func_80A5CD0C(this);
         this->unk_1C8 = 30;
@@ -1051,7 +1051,7 @@ void func_80A5D9C8(EnKusa2* this, GlobalContext* globalCtx) {
 
         this->unk_1D0--;
         if (this->unk_1D0 <= 0) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             this->unk_1D0 = ((u32)Rand_Next() >> 0x1D) + 14;
         }
 
@@ -1078,7 +1078,7 @@ void func_80A5DC98(EnKusa2* this, GlobalContext* globalCtx) {
 
         this->actor.scale.z = this->actor.scale.x;
         Math_StepToF(&this->actor.gravity, -7.0f, 1.8f);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         func_80A5BAFC(this, globalCtx);
         func_80A5BF38(this, 4);
         func_80A5BF84(this, globalCtx);
@@ -1086,7 +1086,7 @@ void func_80A5DC98(EnKusa2* this, GlobalContext* globalCtx) {
         if (this->actor.bgCheckFlags & 1) {
             func_80A5CD0C(this);
             func_80A5BB40(this, globalCtx, 1);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
             func_80A5DE18(this);
         } else if (this->actor.bgCheckFlags & 0x20) {
             func_80A5BDB0(this, globalCtx);
@@ -1118,14 +1118,14 @@ void func_80A5DEB4(EnKusa2* this, GlobalContext* globalCtx) {
         if (this->unk_1D0 > 0) {
             this->unk_1D0--;
             if (this->unk_1D0 == 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             }
         }
 
         if (this->unk_1D1 > 0) {
             this->unk_1D1--;
             if (this->unk_1D1 == 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
             }
         }
 
@@ -1139,7 +1139,7 @@ void func_80A5DEB4(EnKusa2* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.0f;
         }
 
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
 
         this->actor.world.rot.y = (s32)(Math_SinS(this->unk_1C4) * 3000.0f) + this->actor.home.rot.y;
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -1204,7 +1204,7 @@ void func_80A5E210(EnKusa2* this, GlobalContext* globalCtx) {
         }
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80A5BAFC(this, globalCtx);
 
     if (this->actor.velocity.y > 0.01f) {
@@ -1244,7 +1244,7 @@ void func_80A5E210(EnKusa2* this, GlobalContext* globalCtx) {
 }
 
 void func_80A5E418(EnKusa2* this) {
-    this->actor.minVelocityY = -4.0f;
+    this->actor.terminalVelocity = -4.0f;
     this->actor.velocity.x *= 0.1f;
     this->actor.velocity.y *= 0.25f;
     this->actor.velocity.z *= 0.1f;
@@ -1259,7 +1259,7 @@ void func_80A5E4BC(EnKusa2* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.scale.y, 0.4f, 0.032f);
     Math_StepToF(&this->actor.scale.x, 0.4f, 0.032f);
     this->actor.scale.z = this->actor.scale.x;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80A5BAFC(this, globalCtx);
     func_80A5BF60(this, 6);
     this->actor.shape.rot.x -= 0x5DC;
@@ -1354,7 +1354,7 @@ void EnKusa2_Draw(Actor* thisx, GlobalContext* globalCtx) {
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }
-        func_800BDFC0(globalCtx, D_050078A0);
+        Gfx_DrawDListOpa(globalCtx, D_050078A0);
     } else if (this->actor.projectedPos.z < 1300.0f) {
         func_80A5E80C(globalCtx, (1300.0f - this->actor.projectedPos.z) * 2.55f);
     }
@@ -1368,14 +1368,14 @@ void func_80A5E9B4(Actor* thisx, GlobalContext* globalCtx) {
     sp18.z = thisx->shape.rot.z + D_80A5EAFC.z;
     Matrix_SetStateRotationAndTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    func_800BDFC0(globalCtx, D_050078A0);
+    Gfx_DrawDListOpa(globalCtx, D_050078A0);
 }
 
 void func_80A5EA48(Actor* thisx, GlobalContext* globalCtx) {
     EnKusa2* this = THIS;
 
     if (this->unk_1CF == 0xFF) {
-        func_800BDFC0(globalCtx, D_050078A0);
+        Gfx_DrawDListOpa(globalCtx, D_050078A0);
     } else {
         func_80A5E80C(globalCtx, this->unk_1CF);
     }
