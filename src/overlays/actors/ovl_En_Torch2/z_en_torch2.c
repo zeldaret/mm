@@ -89,7 +89,7 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.gravity = -1.0f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
 
     if (this->framesUntilNextState == 0) {
@@ -141,7 +141,7 @@ void EnTorch2_UpdateDeath(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->actor.gravity = -1.0f;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 
@@ -155,11 +155,11 @@ void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->alpha == 0xFF) {
         Scene_SetRenderModeXlu(globalCtx, 0, 0x01);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
-        func_800BDFC0(globalCtx, gfx);
+        Gfx_DrawDListOpa(globalCtx, gfx);
     } else {
         Scene_SetRenderModeXlu(globalCtx, 1, 0x02);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alpha);
-        func_800BE03C(globalCtx, gfx);
+        Gfx_DrawDListXlu(globalCtx, gfx);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
