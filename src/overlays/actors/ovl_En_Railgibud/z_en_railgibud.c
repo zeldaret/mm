@@ -821,9 +821,17 @@ void EnRailgibud_MoveWithGravity(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BA7234(EnRailgibud* this, GlobalContext* globalCtx) {
+/**
+ * If the Gibdo is starting a grab and is touching a wall, the player is moved
+ * away from that wall with this function. This can happen when the player's
+ * back is close to a wall before being grabbed. The Gibdo changes its own
+ * position to match the player's position at the start of a grab, so moving
+ * the player like this will help prevent the Gibdo from looking like it's
+ * clipping into the wall as it grabs onto the player.
+ */
+void EnRailgibud_MoveGrabbedPlayerAwayFromWall(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp30;
+    Vec3f targetPos;
 
     if ((this->actionFunc == EnRailgibud_Grab) && (this->grabState != EN_RAILGIBUD_GRAB_RELEASE)) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 35.0f, 1);
@@ -833,10 +841,10 @@ void func_80BA7234(EnRailgibud* this, GlobalContext* globalCtx) {
 
     if ((this->actionFunc == EnRailgibud_Grab) && (this->grabState == EN_RAILGIBUD_GRAB_START) &&
         (this->actor.bgCheckFlags & 8)) {
-        sp30 = player->actor.world.pos;
-        sp30.x += 10.0f * Math_SinS(this->actor.wallYaw);
-        sp30.z += 10.0f * Math_CosS(this->actor.wallYaw);
-        Math_Vec3f_StepTo(&player->actor.world.pos, &sp30, 5.0f);
+        targetPos = player->actor.world.pos;
+        targetPos.x += 10.0f * Math_SinS(this->actor.wallYaw);
+        targetPos.z += 10.0f * Math_CosS(this->actor.wallYaw);
+        Math_Vec3f_StepTo(&player->actor.world.pos, &targetPos, 5.0f);
     }
 }
 
@@ -946,7 +954,7 @@ void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     EnRailgibud_MoveWithGravity(this, globalCtx);
     EnRailgibud_CheckCollision(this, globalCtx);
-    func_80BA7234(this, globalCtx);
+    EnRailgibud_MoveGrabbedPlayerAwayFromWall(this, globalCtx);
     EnRailgibud_UpdateEffect(this, globalCtx);
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;

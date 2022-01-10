@@ -15150,7 +15150,7 @@
     0x80BA6DF8:("EnRailgibud_UpdateDamage",),
     0x80BA7088:("EnRailgibud_MoveToIdealGrabPositionAndRotation",),
     0x80BA71E4:("EnRailgibud_MoveWithGravity",),
-    0x80BA7234:("func_80BA7234",),
+    0x80BA7234:("EnRailgibud_MoveGrabbedPlayerAwayFromWall",),
     0x80BA7388:("EnRailgibud_UpdateEffect",),
     0x80BA7434:("func_80BA7434",),
     0x80BA7578:("func_80BA7578",),
