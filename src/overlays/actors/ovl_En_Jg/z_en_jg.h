@@ -6,10 +6,6 @@
 #define EN_JG_IS_IN_GORON_SHRINE(thisx) ((thisx)->params & 0x1)
 #define EN_JG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
 
-#define EN_JG_FLAG_1 (1 << 0)
-#define EN_JG_FLAG_LOOKING_AT_PLAYER (1 << 2)
-#define EN_JG_FLAG_DRUM_SPAWNED (1 << 3)
-
 typedef enum {
     /*  0 */ EN_JG_LIMB_NONE,
     /*  1 */ EN_JG_LIMB_ROOT, // Root of Upper Body Root and Pelvis
@@ -48,37 +44,6 @@ typedef enum {
     /* 34 */ EN_JG_LIMB_RIGHT_FOOT,
     /* 35 */ EN_JG_LIMB_MAX,
 } EnJgLimbs;
-
-typedef enum {
-    /*  0 */ EN_JG_ANIMATION_IDLE,
-    /*  1 */ EN_JG_ANIMATION_WALK,
-    /*  2 */ EN_JG_ANIMATION_WAVING,
-    /*  3 */ EN_JG_ANIMATION_SHAKING_HEAD,
-    /*  4 */ EN_JG_ANIMATION_SURPRISE_START,
-    /*  5 */ EN_JG_ANIMATION_SURPRISE_LOOP,
-    /*  6 */ EN_JG_ANIMATION_ANGRY,
-    /*  7 */ EN_JG_ANIMATION_FROZEN_START,
-    /*  8 */ EN_JG_ANIMATION_FROZEN_LOOP,
-    /*  9 */ EN_JG_ANIMATION_WALK_2,
-    /* 10 */ EN_JG_ANIMATION_TAKING_OUT_DRUM,
-    /* 11 */ EN_JG_ANIMATION_DRUM_IDLE,
-    /* 12 */ EN_JG_ANIMATION_PLAYING_DRUM,
-    /* 13 */ EN_JG_ANIMATION_THINKING,
-    /* 14 */ EN_JG_ANIMATION_REMEMBERING,
-    /* 15 */ EN_JG_ANIMATION_STRONG_REMEMBERING,
-    /* 16 */ EN_JG_ANIMATION_DEPRESSED,
-    /* 17 */ EN_JG_ANIMATION_IDLE_2,
-    /* 18 */ EN_JG_ANIMATION_CRADLE,
-    /* 19 */ EN_JG_ANIMATION_MAX,
-} EnJgAnimationIndex;
-
-typedef enum {
-    /* 0x0 */ EN_JG_ACTION_UNK0,
-    /* 0x1 */ EN_JG_ACTION_SPAWNING,
-    /* 0x2 */ EN_JG_ACTION_UNK2,
-    /* 0x3 */ EN_JG_ACTION_LULLABY_INTRO_CS,
-} EnJgAction;
-
 
 struct EnJg;
 

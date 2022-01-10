@@ -12,7 +12,11 @@
 
 #define THIS ((EnJg*)thisx)
 
-#define TEXT_EN_JG_TATL_HES_FROZEN_SOLID 0x236
+#define FLAG_SHRINE_GORON_ARMS_RAISED (1 << 0)
+#define FLAG_LOOKING_AT_PLAYER (1 << 2)
+#define FLAG_DRUM_SPAWNED (1 << 3)
+
+#define TEXT_TATL_OLD_GORON_FROZEN_SOLID 0x236
 #define TEXT_EN_JG_WHAT_WAS_I_DOING 0xDAC
 #define TEXT_EN_JG_I_MUST_HURRY 0xDAD
 #define TEXT_EN_JG_HAVE_YOU_SOME_BUSINESS_WITH_ME 0xDAE
@@ -72,19 +76,49 @@ void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx);
 void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx);
+void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx);
+void EnJg_FirstConversationAfterThawing(EnJg* this, GlobalContext* globalCtx);
+void EnJg_Walk(EnJg* this, GlobalContext* globalCtx);
+void EnJg_Talk(EnJg* this, GlobalContext* globalCtx);
+void EnJg_SetupWalk(EnJg* this, GlobalContext* globalCtx);
+void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx);
+void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx);
+void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx);
+void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx);
+s32 EnJg_GetNextTextId(EnJg* this);
 s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx);
 void EnJg_DoStuff(EnJg* this, GlobalContext* globalCtx);
-void EnJg_Talk(EnJg* this, GlobalContext* globalCtx);
-void EnJg_FirstConversationAfterThawing(EnJg* this, GlobalContext* globalCtx);
-void EnJg_SetupWalk(EnJg* this, GlobalContext* globalCtx);
-void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx);
-s32 EnJg_GetNextTextId(EnJg* this);
-void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx);
-void EnJg_Walk(EnJg* this, GlobalContext* globalCtx);
-void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx);
-void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx);
+
+typedef enum {
+    /*  0 */ EN_JG_ANIMATION_IDLE,
+    /*  1 */ EN_JG_ANIMATION_WALK,
+    /*  2 */ EN_JG_ANIMATION_WAVING,
+    /*  3 */ EN_JG_ANIMATION_SHAKING_HEAD,
+    /*  4 */ EN_JG_ANIMATION_SURPRISE_START,
+    /*  5 */ EN_JG_ANIMATION_SURPRISE_LOOP,
+    /*  6 */ EN_JG_ANIMATION_ANGRY,
+    /*  7 */ EN_JG_ANIMATION_FROZEN_START,
+    /*  8 */ EN_JG_ANIMATION_FROZEN_LOOP,
+    /*  9 */ EN_JG_ANIMATION_WALK_2,
+    /* 10 */ EN_JG_ANIMATION_TAKING_OUT_DRUM,
+    /* 11 */ EN_JG_ANIMATION_DRUM_IDLE,
+    /* 12 */ EN_JG_ANIMATION_PLAYING_DRUM,
+    /* 13 */ EN_JG_ANIMATION_THINKING,
+    /* 14 */ EN_JG_ANIMATION_REMEMBERING,
+    /* 15 */ EN_JG_ANIMATION_STRONG_REMEMBERING,
+    /* 16 */ EN_JG_ANIMATION_DEPRESSED,
+    /* 17 */ EN_JG_ANIMATION_CUTSCENE_IDLE,
+    /* 18 */ EN_JG_ANIMATION_CRADLE,
+    /* 19 */ EN_JG_ANIMATION_MAX,
+} EnJgAnimationIndex;
+
+typedef enum {
+    /* 0x0 */ EN_JG_ACTION_UNK0,
+    /* 0x1 */ EN_JG_ACTION_SPAWNING,
+    /* 0x2 */ EN_JG_ACTION_UNK2,
+    /* 0x3 */ EN_JG_ACTION_LULLABY_INTRO_CS,
+} EnJgAction;
 
 const ActorInit En_Jg_InitVars = {
     ACTOR_EN_JG,
@@ -292,11 +326,11 @@ void EnJg_SetupCheerCutscene(EnJg* this) {
         case TEXT_EN_JG_CHEER_THE_STAR_WE_WISH_UPON:
         case TEXT_EN_JG_CHEER_DARMANI_GREATEST_OF_GORONS:
         case TEXT_EN_JG_CHEER_DARMANI_GREATEST_IN_THE_WORLD:
-            this->flags |= EN_JG_FLAG_1;
+            this->flags |= FLAG_SHRINE_GORON_ARMS_RAISED;
             break;
 
         default:
-            this->flags &= ~EN_JG_FLAG_1;
+            this->flags &= ~FLAG_SHRINE_GORON_ARMS_RAISED;
             break;
     }
 }
@@ -356,7 +390,7 @@ void EnJg_Idle(EnJg* this, GlobalContext* globalCtx) {
 
 void EnJg_GoronShrineIdle(EnJg* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
-        this->flags |= EN_JG_FLAG_LOOKING_AT_PLAYER;
+        this->flags |= FLAG_LOOKING_AT_PLAYER;
         func_801518B0(globalCtx, this->textId, &this->actor);
         this->actionFunc = EnJg_GoronShrineTalk;
     } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
@@ -372,7 +406,7 @@ void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx) {
             (this->textId == TEXT_EN_JG_GO_BEYOND_TWIN_ISLANDS_CAVE)) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
-            this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
+            this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_GoronShrineIdle;
         } else {
             this->textId = EnJg_GetNextTextId(this);
@@ -426,7 +460,7 @@ void EnJg_FirstConversationAfterThawing(EnJg* this, GlobalContext* globalCtx) {
         if ((sp27 == 5) && (func_80147624(globalCtx) != 0)) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
-            this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
+            this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->animationIndex = EN_JG_ANIMATION_WALK;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
             this->actionFunc = EnJg_Walk;
@@ -483,7 +517,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
             (temp == TEXT_EN_JG_SO_COLD_I_CANT_PLAY) || (temp == TEXT_EN_JG_I_AM_COUNTING_ON_YOU)) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
-            this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
+            this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_SetupWalk;
             return;
         }
@@ -493,7 +527,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
             if (!(gSaveContext.weekEventReg[0x18] & 0x80)) {
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
-                this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
+                this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->actionFunc = EnJg_SetupWalk;
             } else if (((gSaveContext.weekEventReg[0x18] & 0x40) != 0) ||
                        (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
@@ -503,7 +537,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
             } else {
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
-                this->flags &= ~EN_JG_FLAG_LOOKING_AT_PLAYER;
+                this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->cutscene = EnJg_GetCutsceneForTeachingLullabyIntro(this);
                 if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                     ActorCutscene_Stop(0x7C);
@@ -577,7 +611,7 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
         }
     } else {
         if (func_800B84D0(&this->actor, globalCtx)) {
-            func_801518B0(globalCtx, TEXT_EN_JG_TATL_HES_FROZEN_SOLID, &this->actor);
+            func_801518B0(globalCtx, TEXT_TATL_OLD_GORON_FROZEN_SOLID, &this->actor);
             this->actionFunc = EnJg_EndFrozenInteraction;
         } else if (this->actor.isTargeted) {
             func_800B863C(&this->actor, globalCtx);
@@ -616,7 +650,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
 
             switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
                 case 1:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_IDLE_2;
+                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_CUTSCENE_IDLE;
                     if (this->drum != NULL) {
                         Actor_MarkForDeath(this->drum);
                         this->drum = NULL;
@@ -663,13 +697,13 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
             func_8013BC6C(&this->skelAnime, sAnimations, this->cutsceneAnimationIndex);
         }
 
-        if ((!(this->flags & EN_JG_FLAG_DRUM_SPAWNED)) &&
+        if ((!(this->flags & FLAG_DRUM_SPAWNED)) &&
             (((this->cutsceneAnimationIndex == EN_JG_ANIMATION_TAKING_OUT_DRUM) &&
               (Animation_OnFrame(&this->skelAnime, 14.0f)) && (this->action != EN_JG_ACTION_LULLABY_INTRO_CS)) ||
              (((this->cutsceneAnimationIndex == EN_JG_ANIMATION_DRUM_IDLE) ||
                (this->cutsceneAnimationIndex == EN_JG_ANIMATION_PLAYING_DRUM)) &&
               (this->action == EN_JG_ACTION_LULLABY_INTRO_CS)))) {
-            this->flags |= EN_JG_FLAG_DRUM_SPAWNED;
+            this->flags |= FLAG_DRUM_SPAWNED;
             this->drum = Actor_SpawnAsChildAndCutscene(
                 &globalCtx->actorCtx, globalCtx, ACTOR_OBJ_JG_GAKKI, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z,
@@ -795,7 +829,7 @@ s32 EnJg_GetNextTextId(EnJg* this) {
         case TEXT_EN_JG_CHEER_GREATEST_IN_THE_WORLD:
             this->cheerState = 0xA;
             EnJg_SetupCheerCutscene(this);
-            this->flags &= ~EN_JG_FLAG_1;
+            this->flags &= ~FLAG_SHRINE_GORON_ARMS_RAISED;
             return TEXT_EN_JG_SON_WENT_TO_SEE_RACES;
 
         case TEXT_EN_JG_SON_WENT_TO_SEE_RACES:
@@ -865,7 +899,7 @@ void EnJg_DoStuff(EnJg* this, GlobalContext* globalCtx) {
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animationSeg);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
-        this->flags |= EN_JG_FLAG_LOOKING_AT_PLAYER;
+        this->flags |= FLAG_LOOKING_AT_PLAYER;
         this->actor.speedXZ = 0.0f;
 
         if (this->textId == TEXT_EN_JG_WHAT_WAS_I_DOING) {
@@ -960,7 +994,7 @@ s32 EnJg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnJg* this = THIS;
 
     if (limbIndex == EN_JG_LIMB_ROOT) {
-        if (this->flags & EN_JG_FLAG_LOOKING_AT_PLAYER) {
+        if (this->flags & FLAG_LOOKING_AT_PLAYER) {
             Math_SmoothStepToS(&this->rootRotationWhenTalking, this->actor.yawTowardsPlayer - this->actor.shape.rot.y,
                                5, 0x1000, 0x100);
             Matrix_RotateY(this->rootRotationWhenTalking, MTXMODE_APPLY);
