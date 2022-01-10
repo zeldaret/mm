@@ -33,7 +33,7 @@ typedef struct EnRailgibud {
     /* 0x03EE */ s16 unk_3EE;
     /* 0x03F0 */ union {
                     s16 grabState;
-                    s16 unk_3F0;
+                    s16 cutsceneAnimationIndex;
                 };
     /* 0x03F2 */ union {
                     s16 playerStunWaitTimer; // Cannot stun the player if this is non-zero
