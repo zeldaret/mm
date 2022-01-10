@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tubo_trap.h"
+#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS 0x00000000
 
@@ -63,7 +64,7 @@ void EnTuboTrap_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.shape.rot.z = 0;
     this->actor.world.rot.z = 0;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 1.8f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 1.8f);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actionFunc = EnTuboTrap_Idle;
@@ -245,7 +246,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, GlobalContext* globalCtx) {
                 this->targetHeight += transformationHeight;
             }
             this->originPos = this->actor.world.pos;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_POT_MOVE_START);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POT_MOVE_START);
             this->actionFunc = EnTuboTrap_Levitate;
         }
     }
@@ -272,7 +273,7 @@ void EnTuboTrap_FlyAtPlayer(EnTuboTrap* this, GlobalContext* globalCtx) {
     // But in MM, certain sfxIds got reordered and devs forgot to update:
     // In MM, NA_SE_EN_MIZUBABA2_ATTACK is the old value 0x3837
     // In MM, NA_SE_EN_TUBOOCK_FLY is the new value 0x3AE0
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
 
     if ((SQ(dX) + SQ(dY) + SQ(dZ) > SQ(240.0f))) {
         Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
@@ -287,17 +288,17 @@ void EnTuboTrap_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 padding;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 12.0f, 10.0f, 20.0f, 0x1F);
-    Actor_SetHeight(&this->actor, 0.0f);
+    Actor_SetFocus(&this->actor, 0.0f);
 
     if (this->actor.projectedPos.z < 811.0f) {
         if (this->actor.projectedPos.z > 300.0f) {
             this->actor.shape.shadowAlpha = (u8)((811 - (s32)this->actor.projectedPos.z) >> 1);
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         } else if (this->actor.projectedPos.z > -10.0f) {
             this->actor.shape.shadowAlpha = 255;
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         } else {
             this->actor.shape.shadowDraw = NULL;
         }
@@ -311,6 +312,5 @@ void EnTuboTrap_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTuboTrap_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    //  Gfx_DrawDListOpa with a display list
-    func_800BDFC0(globalCtx, D_05017EA0);
+    Gfx_DrawDListOpa(globalCtx, gameplay_dangeon_keep_DL_017EA0);
 }

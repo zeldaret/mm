@@ -49,7 +49,7 @@
         <Texture Name="object_cs_Tex_00B9A0" OutName="tex_00B9A0" Format="ci8" Width="8" Height="8" Offset="0xB9A0" />
         <Texture Name="object_cs_Tex_00B9E0" OutName="tex_00B9E0" Format="ci8" Width="16" Height="16" Offset="0xB9E0" />
         <Texture Name="object_cs_Tex_00BAE0" OutName="tex_00BAE0" Format="ci8" Width="16" Height="16" Offset="0xBAE0" />
-        <!-- <Blob Name="object_cs_Blob_00BBE0" Size="0x400" Offset="0xBBE0" /> -->
+        <Blob Name="object_cs_Blob_00BBE0" Size="0x400" Offset="0xBBE0" />
         <Texture Name="object_cs_Tex_00BFE0" OutName="tex_00BFE0" Format="ci8" Width="8" Height="8" Offset="0xBFE0" />
         <Texture Name="object_cs_Tex_00C020" OutName="tex_00C020" Format="ci8" Width="8" Height="8" Offset="0xC020" />
         <Texture Name="object_cs_Tex_00C060" OutName="tex_00C060" Format="ci8" Width="8" Height="8" Offset="0xC060" />
