@@ -96,7 +96,7 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
 
     do {
         player = GET_PLAYER(globalCtx);
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_80A66384(this, globalCtx);
         } else {
             phi_a0 = ABS((s16)(Actor_YawBetweenActors(&this->actor, &player->actor) - this->actor.shape.rot.y));
@@ -133,5 +133,5 @@ void EnWarpUzu_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000EC0);
+    Gfx_DrawDListOpa(globalCtx, D_06000EC0);
 }

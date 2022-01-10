@@ -174,7 +174,7 @@ void EnThiefbird_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    ActorShape_Init(&this->actor.shape, 1500.0f, func_800B3FC0, 35.0f);
+    ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
     if (this->actor.params == 1) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
@@ -251,7 +251,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     if (isItemFound) {
         func_801149A0(itemId2, slotId);
         this->unk_3E8 = D_060033B0;
-        if (!func_80152498(&globalCtx->msgCtx)) {
+        if (!Message_GetState(&globalCtx->msgCtx)) {
             func_801518B0(globalCtx, 0xF4, NULL);
         }
         itemId1 = ITEM_BOTTLE;
@@ -275,7 +275,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
             this->unk_3E8 = D_80C13680[phi_a3 - 1];
         }
 
-        if (!func_80152498(&globalCtx->msgCtx)) {
+        if (!Message_GetState(&globalCtx->msgCtx)) {
             func_801518B0(globalCtx, 0xF5, NULL);
         }
     } else {
@@ -459,14 +459,14 @@ void func_80C11454(EnThiefbird* this) {
     this->unk_3DC = 0.75f;
     this->unk_3D4 = 1.0f;
     this->actor.flags &= ~0x200;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_80C114C0(EnThiefbird* this, GlobalContext* globalCtx) {
     if (this->unk_18C == 10) {
         this->unk_18C = 0;
         this->unk_3D4 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_350, 11, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_350, 11, 2, 0.2f, 0.2f);
         this->actor.flags |= 0x200;
     }
 }
@@ -503,7 +503,7 @@ void func_80C11590(EnThiefbird* this, GlobalContext* globalCtx) {
         } else {
             this->unk_192 -= Rand_S16Offset(4096, 4096);
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
     }
 
     if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
@@ -548,7 +548,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
 
     if (this->unk_18E != 0) {
@@ -560,7 +560,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.x, pitch, 4, 0x800, 0x80);
     if (this->actor.bgCheckFlags & 8) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 6, 0x1000, 0x100);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x3C00) || (this->actor.xzDistToPlayer > 120.0f)) {
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x3C00) || (this->actor.xzDistToPlayer > 120.0f)) {
         s16 rot = BINANG_ROT180(this->actor.yawTowardsPlayer - player->actor.shape.rot.y);
 
         if (rot > 0x4000) {
@@ -578,7 +578,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
         (this->actor.depthInWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
             if (!(this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((D_80C1392C != 0) && CUR_UPG_VALUE(UPG_QUIVER) &&
                     (!((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18) ||
@@ -608,8 +608,8 @@ void func_80C11C60(EnThiefbird* this) {
     this->actor.shape.rot.x = 0;
     this->unk_18E = 40;
     this->actor.velocity.y = 0.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_DEAD);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_THIEFBIRD_DEAD);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= 0x10;
     this->unk_192 = 0x1C00;
@@ -684,14 +684,14 @@ void func_80C11F6C(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.colChkInfo.damageEffect == 5) {
-        func_800BCB70(&this->actor, 0, 255, 0, 40);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
     } else if (this->actor.colChkInfo.damageEffect == 1) {
-        func_800BCB70(&this->actor, 0, 255, 0, 40);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
     } else {
-        func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_DAMAGE);
+        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_THIEFBIRD_DAMAGE);
     }
 
     this->collider.base.acFlags &= ~AC_ON;
@@ -931,7 +931,7 @@ void func_80C12B1C(EnThiefbird* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~AT_HIT;
-        func_800BE258(&this->actor, this->collider.elements);
+        Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
         func_80C114C0(this, globalCtx);
         this->unk_194 = 0;
 
@@ -1016,9 +1016,9 @@ void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.x = -this->actor.shape.rot.x;
     if (this->actor.colChkInfo.health != 0) {
-        Actor_SetVelocityAndMoveXYRotation(&this->actor);
+        Actor_MoveWithoutGravity(&this->actor);
     } else {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 25.0f, 50.0f, 7);
@@ -1044,7 +1044,7 @@ void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx2) {
     func_80C12D00(this);
     if (((this->skelAnime.animation == &D_06000604) && Animation_OnFrame(&this->skelAnime, 13.0f)) ||
         ((this->skelAnime.animation == &D_06000278) && Animation_OnFrame(&this->skelAnime, 1.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
 }
 
