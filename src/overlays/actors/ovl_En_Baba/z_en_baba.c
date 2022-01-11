@@ -491,7 +491,7 @@ void func_80BA9480(EnBaba* this, GlobalContext* globalCtx) {
 
 void func_80BA9758(EnBaba* this, GlobalContext* globalCtx) {
     if ((this->unk_40A & 8) || (this->unk_144 != 0) || func_80BA8820(this, globalCtx)) {
-        if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_80BA886C(this, globalCtx);
             if (this->unk_40A & 8) {
                 this->actor.flags &= ~0x10000;
@@ -569,7 +569,7 @@ void func_80BA9AB8(EnBaba* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA9B24(EnBaba* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BA886C(this, globalCtx);
         this->actionFunc = func_80BA98EC;
     } else {
@@ -597,7 +597,7 @@ void func_80BA9B80(EnBaba* this, GlobalContext* globalCtx) {
     func_80BA93AC(this, globalCtx);
 
     if (this->unk_40A & 2) {
-        if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_801518B0(globalCtx, 0x2A39, &this->actor);
             this->actionFunc = func_80BA9848;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
