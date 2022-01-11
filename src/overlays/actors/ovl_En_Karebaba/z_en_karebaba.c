@@ -137,7 +137,7 @@ void EnKarebaba_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKarebaba* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 22.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 22.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekubaba_Skel_002A40, &object_dekubaba_Anim_0002B8,
                    this->jointTable, this->morphTable, 8);
 
@@ -179,7 +179,7 @@ void func_808F1374(EnKarebaba* this, GlobalContext* globalCtx) {
         } else {
             phi_a3 = 4;
         }
-        func_800BF7CC(globalCtx, &this->actor, &this->unk_1FC, phi_a3, 4, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, &this->unk_1FC, phi_a3, 4, 0.3f, 0.2f);
     }
 }
 
@@ -251,7 +251,7 @@ void func_808F169C(EnKarebaba* this, GlobalContext* globalCtx) {
 void func_808F16FC(EnKarebaba* this) {
     Animation_Change(&this->skelAnime, &object_dekubaba_Anim_0002B8, 4.0f, 0.0f,
                      Animation_GetLastFrame(&object_dekubaba_Anim_0002B8), 0, -3.0f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKU_WAKEUP);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_WAKEUP);
     this->actionFunc = func_808F1778;
 }
 
@@ -305,7 +305,7 @@ void func_808F190C(EnKarebaba* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
     }
 
     if (this->collider2.base.acFlags & 2) {
@@ -340,7 +340,7 @@ void func_808F1A58(EnKarebaba* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
     }
 
     phi_v0 = 20 - this->unk_1EE;
@@ -384,7 +384,7 @@ void func_808F1BF8(EnKarebaba* this) {
         this->unk_1EE = 3;
     }
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
     this->actor.flags |= 0x30;
     this->actionFunc = func_808F1C84;
 }
@@ -422,7 +422,7 @@ void func_808F1C84(EnKarebaba* this, GlobalContext* globalCtx) {
             }
 
             if (this->actor.bgCheckFlags & 2) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
                 this->unk_1EE = 1;
             }
         } else if (this->unk_1EE == 1) {
@@ -446,7 +446,7 @@ void func_808F1C84(EnKarebaba* this, GlobalContext* globalCtx) {
 }
 
 void func_808F1FAC(EnKarebaba* this) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
     this->actor.flags |= (0x20 | 0x10);
     this->actor.flags &= ~1;
     if (this->unk_1EC == 10) {
@@ -496,7 +496,7 @@ void func_808F21A4(EnKarebaba* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx) || (this->unk_1EE == 0)) {
         func_808F238C(this);
     } else {
-        func_800B8B84(&this->actor, globalCtx, 25);
+        Actor_PickUpNearby(&this->actor, globalCtx, 25);
     }
 }
 
@@ -599,7 +599,7 @@ void EnKarebaba_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     if (this->actionFunc != func_808F254C) {
         if (this->actionFunc == func_808F1C84) {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 15.0f, 10.0f, 5);
         } else {
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
@@ -616,7 +616,7 @@ void EnKarebaba_Update(Actor* thisx, GlobalContext* globalCtx2) {
             }
 
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-            Actor_SetHeight(&this->actor, (this->actor.scale.x * 10.0f) / 0.01f);
+            Actor_SetFocus(&this->actor, (this->actor.scale.x * 10.0f) / 0.01f);
 
             max = this->actor.home.pos.y + 40.0f;
             this->actor.focus.pos.x = this->actor.home.pos.x;
