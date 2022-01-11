@@ -200,11 +200,11 @@ void func_80A1B914(ObjFlowerpot* this, GlobalContext* globalCtx) {
 }
 
 void func_80A1B994(ObjFlowerpot* this, GlobalContext* globalCtx) {
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
 }
 
 void func_80A1B9CC(ObjFlowerpot* this, GlobalContext* globalCtx) {
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
 }
 
 void func_80A1BA04(ObjFlowerpot* this, Vec3f* arg1) {
@@ -620,7 +620,7 @@ void func_80A1CEF4(ObjFlowerpot* this2, GlobalContext* globalCtx) {
         }
         func_80A1BD80(this, globalCtx);
         func_80A1B994(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         Actor_MarkForDeath(&this->actor);
         return;
     }
