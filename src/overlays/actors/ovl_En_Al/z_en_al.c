@@ -237,7 +237,7 @@ s32 func_80BDE4E0(EnAl* this, s16* arg1, s16 arg2) {
     }
 
     if (arg2 == *arg1) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHAIR_ROLL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
         func_80BDE27C(this, 3);
         this->unk_4E8 = 0;
         (*arg1)++;
@@ -272,7 +272,7 @@ s32 func_80BDE678(EnAl* this, s16* arg1, s16 arg2) {
     }
 
     if (arg2 == *arg1) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHAIR_ROLL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
         func_80BDE27C(this, 4);
         this->unk_4E8 = 0;
         (*arg1)++;
@@ -457,14 +457,14 @@ s32 func_80BDEC2C(EnAl* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 ret = false;
 
-    if ((this->unk_4C2 & 7) && func_800B84D0(&this->actor, globalCtx)) {
+    if ((this->unk_4C2 & 7) && Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
         this->unk_4C2 &= ~0x1800;
-        if (player->unk_A87 == 0x33) {
+        if (player->exchangeItemId == 0x33) {
             this->unk_4C2 |= 0x800;
-            this->unk_4F4 = player->unk_A87;
-        } else if (player->unk_A87 != 0) {
+            this->unk_4F4 = player->exchangeItemId;
+        } else if (player->exchangeItemId != 0) {
             this->unk_4C2 |= 0x1000;
-            this->unk_4F4 = player->unk_A87;
+            this->unk_4F4 = player->exchangeItemId;
         }
         func_8013AED4(&this->unk_4C2, 0, 7);
         this->unk_4E6 = 0;
@@ -736,7 +736,7 @@ void func_80BDF5E8(EnAl* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~1;
         sp20.unk0 = 0;
     } else {
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= 1;
     }
     this->unk_35C = sp20.unk0;
