@@ -385,7 +385,7 @@ void func_80C2075C(EnHintSkb* this) {
 }
 
 void func_80C2077C(EnHintSkb* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_3E0 = 1;
         if (this->unk_3DC == 0) {
             this->unk_3DC = 1;
