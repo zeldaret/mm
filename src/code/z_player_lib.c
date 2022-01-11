@@ -37,11 +37,11 @@ extern u8 D_801BFF90[];
 extern u8 D_801BFF98[];
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x02 */ u16 unk_02;
-} struct_801BFFA0;
+    /* 0x00 */ u8 flag;
+    /* 0x02 */ u16 textId;
+} TextTriggerEntry; // size = 0x04
 
-extern struct_801BFFA0 D_801BFFA0[];
+extern TextTriggerEntry D_801BFFA0[];
 
 struct _struct_D_801BFFB0_0x5 {
     /* 0x0 */ u8 unk_0;                             /* inferred */
@@ -72,43 +72,25 @@ extern u8 D_801BFFB0[0xF][5];/* = {
 
 extern Gfx* D_801BFFFC[];
 
-#if 0
-glabel D_801C0024
-#endif
+extern Gfx* D_801C0024[][2];
 
 extern Gfx* D_801C0034[];
 
-#if 0
-glabel D_801C0040
-#endif
-
 extern Gfx* D_801C005C[];
-
-#if 0
-glabel D_801C0060
-glabel D_801C0070
-#endif
 
 extern Gfx* D_801C0084[];
 
-#if 0
-glabel D_801C00A0
-#endif
+extern Gfx* D_801C00AC[][2];
+extern Gfx* D_801C00BC[][2];
 
-#if 0
-glabel D_801C00AC
-glabel D_801C00BC
-glabel D_801C00D4
-#endif
+extern Gfx* D_801C00D4[][2];
 
 extern Gfx* D_801C00EC[];
 extern Gfx* D_801C0114[];
 extern Gfx* D_801C013C[];
 extern Gfx* D_801C0164[];
 
-#if 0
-glabel D_801C018C
-#endif
+extern Gfx* D_801C018C[][2];
 
 extern Gfx* D_801C01A4[];
 extern Gfx* D_801C01CC[];
@@ -153,27 +135,21 @@ extern Gfx** D_801C02F8[]; /* = {
     NULL,
 };*/
 
+extern struct_80124618 D_801C0340[];
+extern struct_80124618 D_801C0368[];
 
-#if 0
-glabel D_801C0340
-glabel D_801C0368
-glabel D_801C03A0
-#endif
+extern struct_80124618 D_801C03A0[];
 
 extern struct_80124618 D_801C03C0[];
 extern struct_80124618 D_801C03E0[];
 
-#if 0
-glabel D_801C0410
-glabel D_801C0428
-#endif
+extern struct_80124618 D_801C0410[];
+extern struct_80124618 D_801C0428[];
 
 extern struct_80124618 D_801C0460[];
 
-#if 0
-glabel D_801C0490
-glabel D_801C0510
-#endif
+extern struct_80124618 D_801C0490[];
+extern struct_80124618 D_801C0510[];
 
 extern struct_80124618 D_801C0538[];
 extern struct_80124618 D_801C0560[];
@@ -230,10 +206,9 @@ extern Vec3f D_801C094C;
 
 extern s32 D_801C0958 /* = false */;
 
-#if 0
-glabel D_801C095C
-glabel D_801C0964
-#endif
+extern Gfx** D_801C095C[];
+extern Gfx** D_801C0964[];
+
 extern u8 D_801C096C[];
 
 #if 0
@@ -267,12 +242,10 @@ extern Vec3f D_801C09B8[];
 extern Vec3f D_801C09DC[];
 extern Vec3f D_801C0A00[];
 
-#if 0
-glabel D_801C0A24
-glabel D_801C0A48
-glabel D_801C0A6C
-glabel D_801C0A90
-#endif
+extern Vec3f D_801C0A24[];
+extern Vec3f D_801C0A48[];
+extern Vec3f D_801C0A6C[];
+extern Vec3f D_801C0A90[];
 
 extern Gfx* D_801C0AB4[];
 extern Gfx* D_801C0ABC[];
@@ -1067,7 +1040,7 @@ s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRan
     }
 }
 
-u8 func_80124020(void) {
+u8 Player_GetStrength(void) {
     return D_801BFF98[(void)0, gSaveContext.playerForm];
 }
 
@@ -1083,24 +1056,24 @@ void Player_RemoveMask(GlobalContext* globalCtx) {
     player->currentMask = PLAYER_MASK_NONE;
 }
 
-s32 func_8012405C(GlobalContext* globalCtx) {
+s32 Player_HasMirrorShieldEquipped(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    return player->transformation == PLAYER_FORM_HUMAN && player->currentShield == 2;
+    return player->transformation == PLAYER_FORM_HUMAN && player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD;
 }
 
-s32 func_80124088(GlobalContext* globalCtx) {
+s32 Player_HasMirrorShieldSetToDraw(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    return player->transformation == PLAYER_FORM_HUMAN && player->rightHandType == 8 && player->currentShield == 2;
+    return player->transformation == PLAYER_FORM_HUMAN && player->rightHandType == 8 && player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD;
 }
 
-s32 func_801240C8(Player* player) {
-    return player->itemActionParam == 0xD;
+s32 Player_HoldsHookshot(Player* player) {
+    return player->itemActionParam == PLAYER_AP_HOOKSHOT;
 }
 
 s32 func_801240DC(Player* player) {
-    return func_801240C8(player) && player->heldActor == NULL;
+    return Player_HoldsHookshot(player) && player->heldActor == NULL;
 }
 
 s32 func_80124110(Player* player, s32 actionParam) {
@@ -1110,26 +1083,24 @@ s32 func_80124110(Player* player, s32 actionParam) {
         return temp_v0;
     }
 
-    return PLAYER_AP_NONE;
+    return 0;
 }
 
 s32 func_80124148(Player* player) {
     return func_80124110(player, player->itemActionParam);
 }
 
-// Player_ActionToSword
-s32 func_80124168(s32 actionParam) {
+s32 Player_ActionToSword(s32 actionParam) {
     s32 sword = actionParam - PLAYER_AP_UNK_2;
 
     if ((sword > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2)) && (sword <= (PLAYER_AP_UNK_8 - PLAYER_AP_UNK_2))) {
         return sword;
     }
-    return PLAYER_AP_NONE;
+    return 0;
 }
 
-// Player_GetSwordHeld
-s32 func_80124190(Player* player) {
-    return func_80124168(player->itemActionParam);
+s32 Player_GetSwordHeld(Player* player) {
+    return Player_ActionToSword(player->itemActionParam);
 }
 
 s32 Player_HoldsTwoHandedWeapon(Player* player) {
@@ -1187,12 +1158,12 @@ s32 func_801242B4(Player* player) {
 
 s32 func_801242DC(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    struct_801BFFA0* sp18;
+    TextTriggerEntry* triggerEntry;
     s32 sp1C;
 
     if (globalCtx->roomCtx.currRoom.unk2 == 3) {
         sp1C = 0;
-    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 0x50)) {
+    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 80)) {
         sp1C = 3;
     } else if (player->stateFlags1 & 0x8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) && (player->actor.bgCheckFlags & 1)) {
@@ -1204,11 +1175,11 @@ s32 func_801242DC(GlobalContext* globalCtx) {
         return 0;
     }
 
-    sp18 = &D_801BFFA0[sp1C];
+    triggerEntry = &D_801BFFA0[sp1C];
     if (!Player_InCsMode(globalCtx)) {
-        if ((sp18->unk_00 != 0) && !(gSaveContext.textTriggerFlags & sp18->unk_00) && (sp1C == 0)) {
-            func_801518B0(globalCtx, sp18->unk_02, NULL);
-            gSaveContext.textTriggerFlags |= sp18->unk_00;
+        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (sp1C == 0)) {
+            func_801518B0(globalCtx, triggerEntry->textId, NULL);
+            gSaveContext.textTriggerFlags |= triggerEntry->flag;
         }
     }
 
@@ -1292,33 +1263,33 @@ void func_80124618(struct_80124618* arg0, f32 curFrame, Vec3f* arg2) {
 
 // OoT's func_8008F470
 void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
-    s32 phi_v1 = (jointTable[0x16].x & 0xF) - 1; // eyeIndex
-    s32 phi_t1 = (((s32) jointTable[0x16].x >> 4) & 0xF) - 1; // mouthIndex
+    s32 eyeIndex = (jointTable[0x16].x & 0xF) - 1; // eyeIndex
+    s32 mouthIndex = ((jointTable[0x16].x >> 4) & 0xF) - 1; // mouthIndex
     Gfx* dl;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     dl = POLY_OPA_DISP;
 
-    if (phi_v1 < 0) {
-        phi_v1 = D_801C08A0[face][0];
+    if (eyeIndex < 0) {
+        eyeIndex = D_801C08A0[face][0];
     }
 
     if (tunic == 1) {
-        if ((phi_v1 >= 3) && (phi_v1 < 7)) {
-            phi_v1 = 0;
-        } else if (phi_v1 == 7) {
-            phi_v1 = 3;
+        if ((eyeIndex >= 3) && (eyeIndex < 7)) {
+            eyeIndex = 0;
+        } else if (eyeIndex == 7) {
+            eyeIndex = 3;
         }
     }
 
-    gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual(D_801C0870[phi_v1]));
+    gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual(D_801C0870[eyeIndex]));
 
-    if (phi_t1 < 0) {
-        phi_t1 = D_801C08A0[face][1];
+    if (mouthIndex < 0) {
+        mouthIndex = D_801C08A0[face][1];
     }
 
-    gSPSegment(&dl[1], 0x09, Lib_SegmentedToVirtual(D_801C0890[phi_t1]));
+    gSPSegment(&dl[1], 0x09, Lib_SegmentedToVirtual(D_801C0890[mouthIndex]));
 
     POLY_OPA_DISP = &dl[2];
 
@@ -1331,6 +1302,7 @@ void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
 
 #ifdef NON_EQUIVALENT
 // float fun
+// OoT: func_8008F87C
 void func_80124870(GlobalContext* globalCtx, Player* player, SkelAnime* skelAnime, Vec3f* pos, Vec3s* rot, s32 arg5, s32 arg6, s32 arg7) {
     if (!(player->stateFlags3 & 1) && (player->actor.scale.y >= 0.0f) && !(player->stateFlags1 & 0x80) && (globalCtx->unk_18844 == 0)) {
         CollisionPoly* spA4;
@@ -1840,16 +1812,9 @@ void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* arg2, Vec3s* ar
     Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
 }
 
-extern Gfx* D_801C018C[][2];
-
 extern Gfx** D_801C095C[];
 
-extern Gfx* D_801C0024[][2];
-
 extern Gfx** D_801C0964[];
-
-extern Gfx* D_801C00BC[][2];
-extern Gfx* D_801C00D4[][2];
 
 #ifdef NON_EQUIVALENT
 s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
@@ -1992,7 +1957,7 @@ s32 func_801262C8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         } else if (limbIndex == 0x11) {
             *dList = D_801C02BC[player->transformation];
         } else if (limbIndex == 0x13) {
-            if (func_801240C8(player)) {
+            if (Player_HoldsHookshot(player)) {
                 *dList = D_801C02E4[player->transformation];
             } else {
                 *dList = D_801C02D0[player->transformation];
@@ -2009,7 +1974,7 @@ s32 func_801262C8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 s32 func_801263FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     Player* player = (Player*)actor;
 
-    if (func_80125580(globalCtx, limbIndex, dList, pos, rot, player) == 0) {
+    if (!func_80125580(globalCtx, limbIndex, dList, pos, rot, player)) {
         *dList = NULL;
     }
 
@@ -2467,17 +2432,8 @@ extern UNK_TYPE D_801C0BC0;
 extern UNK_TYPE D_801C0BD0;
 
 extern Vec3f D_801C0BE0;
-#if 0
-glabel D_801C0BE4
-glabel D_801C0BE8
-#endif
 
 extern Vec3f D_801C0BEC;
-
-#if 0
-glabel D_801C0BF0
-glabel D_801C0BF4
-#endif
 
 extern Color_RGBA8 D_801C0BF8;
 
@@ -3148,7 +3104,6 @@ extern AnimatedMaterial D_04054F18;
 extern Gfx D_06007390[];
 extern Gfx D_0600A348[];
 extern Gfx D_0600FC18[];
-extern Gfx* D_801C00AC[][2];
 extern u16 D_801C0340;
 extern u16 D_801C0368;
 extern u16 D_801C0410;
@@ -3274,7 +3229,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Gfx** arg3, P
             func_80127488(globalCtx, arg5, D_801C0778[(s32) arg5->skelAnime.curFrame]);
         }
         if (arg5->actor.scale.y >= 0.0f) {
-            if ((func_801240C8(arg5) == 0) && ((arg5->leftHandActor != 0))) {
+            if ((Player_HoldsHookshot(arg5) == 0) && ((arg5->leftHandActor != 0))) {
                 if (((arg5->stateFlags3 & 0x40) != 0) && (temp_v1 = arg5->transformation, (temp_v1 != 3))) {
                     phi_a0 = &D_801C0D60;
                     if (temp_v1 == 4) {
@@ -3296,7 +3251,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 arg1, Gfx** arg2, Gfx** arg3, P
                     if (arg5->heldItemActionParam == 7) {
                         D_801C0994->x = arg5->unk_B08[1] * 5000.0f;
                     } else {
-                        D_801C0994->x = D_801C0D78[func_80124190(arg5)];
+                        D_801C0994->x = D_801C0D78[Player_GetSwordHeld(arg5)];
                     }
                     func_80126B8C(globalCtx, arg5);
                 }
