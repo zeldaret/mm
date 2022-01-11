@@ -226,7 +226,7 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 step;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->dyna.actor, 10.0f);
+    Actor_SetFocus(&this->dyna.actor, 10.0f);
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
@@ -283,12 +283,12 @@ void ObjRaillift_Draw(Actor* thisx, GlobalContext* globalCtx) {
 The non-colorful platforms are the ones found in Woodfall Temple
 */
 void ObjRaillift_DrawDekuFlowerPlatform(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000208);
+    Gfx_DrawDListOpa(globalCtx, D_06000208);
 }
 
 /*
 The colorful platforms are the ones found in Deku Palace
 */
 void ObjRaillift_DrawDekuFlowerPlatformColorful(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060071B8);
+    Gfx_DrawDListOpa(globalCtx, D_060071B8);
 }

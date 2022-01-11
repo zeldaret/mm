@@ -63,7 +63,7 @@ void EnMs_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06003DC0, &D_060005EC, this->jointTable, this->morphTable, 9);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &D_80952BA0);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     Actor_SetScale(&this->actor, 0.015f);
     this->actor.colChkInfo.mass = 0xFF;
     this->actionFunc = func_80952734;
@@ -87,7 +87,7 @@ void func_80952734(EnMs* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x932;
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         this->actionFunc = func_809527F8;
         return;
     }
@@ -107,12 +107,12 @@ void func_809529AC(EnMs *this, GlobalContext *globalCtx) {
         func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_PickUp(&this->actor, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
 void func_80952A1C(EnMs *this, GlobalContext *globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80151938(globalCtx, 0x936U);
         this->actionFunc = func_809527F8;
     } else {
@@ -124,7 +124,7 @@ void EnMs_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnMs* this = THIS;
 
-    Actor_SetHeight(&this->actor, 20.0f);
+    Actor_SetFocus(&this->actor, 20.0f);
     this->actor.targetArrowOffset = 500.0f;
     Actor_SetScale(&this->actor, 0.015f);
     SkelAnime_Update(&this->skelAnime);
@@ -156,7 +156,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     u8 temp_v0;
     u8 temp_v0_2;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 != 4) {
         if (temp_v0 != 5) {
             if ((temp_v0 == 6) && (func_80147624(globalCtx) != 0)) {
@@ -168,7 +168,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
         }
         if (func_80147624(globalCtx) != 0) {
             func_801477B4(globalCtx);
-            func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+            Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             return;
         }
@@ -198,7 +198,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
             return;
         }
         func_8019F208();
-        func_800B8A1C((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+        Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
         func_801159EC(-0xA);
         this->actionFunc = func_809529AC;
     }
@@ -208,7 +208,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
 which is long, messy, and contains some rather nasty-looking control flow, including horrors like
 
 ```C
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 != 4) {
         if (temp_v0 != 5) {
             if ((temp_v0 == 6) && (func_80147624(globalCtx) != 0)) {
@@ -238,7 +238,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     u8 temp_v0;
     u8 temp_v0_2;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 == 4) {
         goto block_7;
     }
@@ -258,7 +258,7 @@ block_5:
         goto block_17;
     }
     func_801477B4(globalCtx);
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -290,7 +290,7 @@ block_13:
     return;
 block_15:
     func_8019F208();
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+    Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
     func_801159EC(-0xA);
     this->actionFunc = func_809529AC;
     return;
@@ -340,7 +340,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     u8 temp_v0;
     u8 temp_v0_2;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 == 4) {
         goto block_7;
     }
@@ -360,7 +360,7 @@ block_5:
         goto block_17;
     }
     func_801477B4(globalCtx);
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -390,7 +390,7 @@ block_11:
     }
 
     func_8019F208();
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+    Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
     func_801159EC(-0xA);
     this->actionFunc = func_809529AC;
     return;
@@ -410,7 +410,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     u8 temp_v0;
     u8 temp_v0_2;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 == 4) {
         goto block_7;
     }
@@ -430,7 +430,7 @@ block_5:
         return;
     }
     func_801477B4(globalCtx);
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -460,7 +460,7 @@ block_11:
     }
 
     func_8019F208();
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+    Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
     func_801159EC(-0xA);
     this->actionFunc = func_809529AC;
     return;
@@ -509,7 +509,7 @@ So let us rewrite the entire second half as a switch:
             }
 
             func_8019F208();
-            func_800B8A1C((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+            Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
             func_801159EC(-0xA);
             this->actionFunc = func_809529AC;
             return;
@@ -540,7 +540,7 @@ There's a couple of other obvious things here:
                 func_80151938(globalCtx, 0x937U);
             } else {
                 func_8019F208();
-                func_800B8A1C((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+                Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
                 func_801159EC(-0xA);
                 this->actionFunc = func_809529AC;
             }
@@ -568,7 +568,7 @@ can be swapped round and made to wrap the switch. This leaves us with
 void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     u8 temp_v0;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 == 4) {
         goto block_7;
     }
@@ -588,7 +588,7 @@ block_5:
         return;
     }
     func_801477B4(globalCtx);
-    func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
 block_7:
@@ -605,7 +605,7 @@ block_7:
                     func_80151938(globalCtx, 0x937U);
                 } else {
                     func_8019F208();
-                    func_800B8A1C((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+                    Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
                     func_801159EC(-0xA);
                     this->actionFunc = func_809529AC;
                 }
@@ -623,7 +623,7 @@ block_7:
 
 Now, the top of the function also looks like a switch:
 ```C
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 == 4) {
         goto block_7;
     }
@@ -641,7 +641,7 @@ Putting all this together, we write down a function with no gotos in it:
 
 ```C
 void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 6:
             this->actionFunc = func_80952734;
             break;
@@ -651,7 +651,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
                 return;
             }
             func_801477B4(globalCtx);
-            func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+            Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             break;
 
@@ -660,7 +660,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_801477B4(globalCtx);
-                        
+
                         if (gSaveContext.rupees < 0xA) {
                             play_sound(0x4806U);
                             func_80151938(globalCtx, 0x935U);
@@ -669,7 +669,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
                             func_80151938(globalCtx, 0x937U);
                         } else {
                             func_8019F208();
-                            func_800B8A1C((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+                            Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
                             func_801159EC(-0xA);
                             this->actionFunc = func_809529AC;
                         }
@@ -694,7 +694,7 @@ Lastly, we can simplify `case 5` to replace the return in the if by the rest of 
 
 ```C
 void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 6:
             this->actionFunc = func_80952734;
             break;
@@ -702,7 +702,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
         case 5:
             if (func_80147624(globalCtx) != 0) {
                 func_801477B4(globalCtx);
-                func_800B8A1C((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+                Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
                 this->actionFunc = func_809529AC;
             }
             break;
@@ -712,7 +712,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_801477B4(globalCtx);
-                        
+
                         if (gSaveContext.rupees < 0xA) {
                             play_sound(0x4806U);
                             func_80151938(globalCtx, 0x935U);
@@ -721,7 +721,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
                             func_80151938(globalCtx, 0x937U);
                         } else {
                             func_8019F208();
-                            func_800B8A1C((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
+                            Actor_PickUp((Actor *) this, globalCtx, 0x35, 90.0f, 10.0f);
                             func_801159EC(-0xA);
                             this->actionFunc = func_809529AC;
                         }
