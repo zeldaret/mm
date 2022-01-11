@@ -80,7 +80,7 @@ void EnZob_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     s16 cs;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.0115f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zob_Skel_010810, &object_zob_Anim_006998, this->jointTable,
@@ -92,7 +92,7 @@ void EnZob_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_310 = 0;
     this->unk_302 = 9;
     this->unk_304 = 0;
-    this->actor.minVelocityY = -4.0f;
+    this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -4.0f;
     func_80B9F7E4(this, 6, 2);
     this->actionFunc = func_80BA0728;
@@ -317,7 +317,7 @@ void func_80B9FE5C(EnZob* this, GlobalContext* globalCtx) {
         globalCtx->msgCtx.unk11F10 = 0;
         this->actionFunc = func_80B9FDDC;
         func_80B9FC70(this, 0);
-    } else if (func_80152498(&globalCtx->msgCtx) == 11) {
+    } else if (Message_GetState(&globalCtx->msgCtx) == 11) {
         globalCtx->msgCtx.unk11F10 = 0;
         this->actionFunc = func_80B9FE1C;
         this->unk_304 = 3;
@@ -328,7 +328,7 @@ void func_80B9FE5C(EnZob* this, GlobalContext* globalCtx) {
 
 void func_80B9FF20(EnZob* this, GlobalContext* globalCtx) {
     func_80B9F86C(this);
-    if (func_80152498(&globalCtx->msgCtx) == 7) {
+    if (Message_GetState(&globalCtx->msgCtx) == 7) {
         func_80152434(globalCtx, 0x42);
         this->actionFunc = func_80B9FE5C;
         func_80B9FC70(this, 2);
@@ -343,7 +343,7 @@ void func_80B9FF80(EnZob* this, GlobalContext* globalCtx) {
         func_80B9F7E4(this, 1, 0);
         func_80152434(globalCtx, 0x3E);
         func_80B9FC70(this, 1);
-    } else if (func_80152498(&globalCtx->msgCtx) == 11) {
+    } else if (Message_GetState(&globalCtx->msgCtx) == 11) {
         globalCtx->msgCtx.unk11F10 = 0;
         this->actionFunc = func_80B9FE1C;
         this->unk_304 = 3;
@@ -354,7 +354,7 @@ void func_80B9FF80(EnZob* this, GlobalContext* globalCtx) {
 
 void func_80BA005C(EnZob* this, GlobalContext* globalCtx) {
     func_80B9F86C(this);
-    if (func_80152498(&globalCtx->msgCtx) == 7) {
+    if (Message_GetState(&globalCtx->msgCtx) == 7) {
         func_80152434(globalCtx, 0x41);
         this->actionFunc = func_80B9FF80;
         func_80B9FC70(this, 2);
@@ -364,7 +364,7 @@ void func_80BA005C(EnZob* this, GlobalContext* globalCtx) {
 void func_80BA00BC(EnZob* this, GlobalContext* globalCtx) {
     func_80B9F86C(this);
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
             if (func_80147624(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1212)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
@@ -449,7 +449,7 @@ void func_80BA0374(EnZob* this, GlobalContext* globalCtx) {
 
     func_80B9F86C(this);
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
             if (func_80147624(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1205)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
@@ -533,7 +533,7 @@ void func_80BA0374(EnZob* this, GlobalContext* globalCtx) {
 
 void func_80BA0610(EnZob* this, GlobalContext* globalCtx) {
     func_80B9F86C(this);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
         this->actor.flags &= ~0x10000;
         func_801518B0(globalCtx, 0x120D, &this->actor);
         this->unk_304 = 3;
@@ -572,14 +572,13 @@ void func_80BA0728(EnZob* this, GlobalContext* globalCtx) {
         func_80B9F7E4(this, 2, 2);
         this->unk_30E = 0;
         this->unk_2F4 |= 1;
-    } else if (func_800B84D0(&this->actor, globalCtx)) {
+    } else if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
         this->actionFunc = func_80BA0374;
         func_80B9FA3C(this, globalCtx);
     } else if (func_800EE29C(globalCtx, 500)) {
         this->actionFunc = func_80BA06BC;
     } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.xzDistToPlayer > 60.0f) &&
-               Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) &&
-               Actor_IsActorFacingLink(&this->actor, 0x3000)) {
+               Player_IsFacingActor(&this->actor, 0x3000, globalCtx) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         func_800B8614(&this->actor, globalCtx, 150.0f);
         func_800B874C(&this->actor, globalCtx, 200.0f, 150.0f);
     }
@@ -628,7 +627,7 @@ void func_80BA0A04(EnZob* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 != 2) {
         if ((temp_v0 == 5) && func_80147624(globalCtx)) {
             func_801477B4(globalCtx);
@@ -651,11 +650,11 @@ void func_80BA0AD8(EnZob* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
         this->actionFunc = func_80BA0A04;
         func_80BA08E8(this, globalCtx);
-    } else if ((this->actor.xzDistToPlayer < 120.0f) && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx) &&
-               Actor_IsActorFacingLink(&this->actor, 0x3000)) {
+    } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, globalCtx) &&
+               Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 }
@@ -704,7 +703,7 @@ void EnZob_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnZob* this = THIS;
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
