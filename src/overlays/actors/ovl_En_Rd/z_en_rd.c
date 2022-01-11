@@ -30,8 +30,8 @@ void func_808D4CA8(EnRd* this, GlobalContext* globalCtx);
 void func_808D4DC4(EnRd* this);
 void func_808D4E60(EnRd* this, GlobalContext* globalCtx);
 void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx);
-void func_808D53C0(EnRd* this, GlobalContext* globalCtx);
-void func_808D5440(EnRd* this, GlobalContext* globalCtx);
+void EnRd_SetupWalkToHome(EnRd* this, GlobalContext* globalCtx);
+void EnRd_WalkToHome(EnRd* this, GlobalContext* globalCtx);
 void func_808D5660(EnRd* this);
 void func_808D56E4(EnRd* this, GlobalContext* globalCtx);
 void EnRd_SetupGrab(EnRd* this);
@@ -571,7 +571,7 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
-        func_808D53C0(this, globalCtx);
+        EnRd_SetupWalkToHome(this, globalCtx);
     }
 
     if ((ABS_ALT(yaw) < 0x1554) && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 150.0f)) {
@@ -588,7 +588,7 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             }
         } else {
-            func_808D53C0(this, globalCtx);
+            EnRd_SetupWalkToHome(this, globalCtx);
         }
     }
 
@@ -605,7 +605,7 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
                 // do so. It will appear to take damage and shake its head side-to-side.
                 EnRd_SetupGrabFail(this);
             } else {
-                func_808D53C0(this, globalCtx);
+                EnRd_SetupWalkToHome(this, globalCtx);
             }
         } else if (globalCtx->grabPlayer(globalCtx, player)) {
             this->actor.flags &= ~1;
@@ -626,14 +626,14 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D53C0(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_SetupWalkToHome(EnRd* this, GlobalContext* globalCtx) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 0.5f, 0.0f, Animation_GetLastFrame(&gGibdoRedeadWalkAnim),
                      1, -4.0f);
     this->unk_3EF = 2;
-    this->actionFunc = func_808D5440;
+    this->actionFunc = EnRd_WalkToHome;
 }
 
-void func_808D5440(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_WalkToHome(EnRd* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     s16 sp36 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
@@ -877,8 +877,8 @@ void EnRd_TurnAwayAndShakeHead(EnRd* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 5, 3500, 200);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->headShakeTimer > 60) {
-        func_808D53C0(this, globalCtx);
-        this->unk_3D4 = 0;
+        EnRd_SetupWalkToHome(this, globalCtx);
+        this->headShakeTimer = 0;
     } else {
         this->headYRotation = Math_SinS(this->headShakeTimer * 4000) * (0x256F * ((60 - this->headShakeTimer) / 60.0f));
         SkelAnime_Update(&this->skelAnime);
@@ -944,7 +944,7 @@ void EnRd_Damage(EnRd* this, GlobalContext* globalCtx) {
         if (this->actor.parent != NULL) {
             func_808D5660(this);
         } else if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
-            func_808D53C0(this, globalCtx);
+            EnRd_SetupWalkToHome(this, globalCtx);
         } else {
             EnRd_SetupWalkToPlayer(this, globalCtx);
         }
