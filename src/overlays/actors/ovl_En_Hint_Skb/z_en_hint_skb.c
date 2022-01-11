@@ -865,11 +865,11 @@ void func_80C219D4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Collider_UpdateSpheres(limbIndex, &this->collider);
 
         if ((limbIndex == 11) && (this->unk_3E8 & 1) && !(this->unk_3E8 & 2)) {
-            func_800BBCEC(&this->actor, globalCtx, 1, dList);
+            Actor_SpawnBodyParts(&this->actor, globalCtx, 1, dList);
             this->unk_3E8 |= 2;
         } else if ((this->unk_3E8 & 4) && !(this->unk_3E8 & 8) && ((limbIndex != 11) || !(this->unk_3E8 & 1)) &&
                    (limbIndex != 12)) {
-            func_800BBCEC(&this->actor, globalCtx, 1, dList);
+            Actor_SpawnBodyParts(&this->actor, globalCtx, 1, dList);
         }
 
         if (this->unk_3E2 != 0) {
