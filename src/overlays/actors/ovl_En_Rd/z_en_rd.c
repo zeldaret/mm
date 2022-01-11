@@ -272,7 +272,8 @@ void EnRd_UpdateParentForOtherRedeads(GlobalContext* globalCtx, EnRd* this, s32 
     Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
 
     while (actor != NULL) {
-        if ((actor->id != ACTOR_EN_RD) || (this == (EnRd*)actor) || (EN_RD_GET_TYPE(actor) < EN_RD_TYPE_0)) {
+        if ((actor->id != ACTOR_EN_RD) || (this == (EnRd*)actor) ||
+            (EN_RD_GET_TYPE(actor) < EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING)) {
             actor = actor->next;
             continue;
         }
@@ -644,7 +645,7 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~1;
             EnRd_SetupGrab(this);
         }
-    } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_0) {
+    } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING) {
         if (this->actor.parent != NULL) {
             EnRd_SetupWalkToParent(this);
         } else {
@@ -695,7 +696,7 @@ void EnRd_WalkToHome(EnRd* this, GlobalContext* globalCtx) {
         (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
         this->actor.targetMode = 0;
         EnRd_SetupWalkToPlayer(this, globalCtx);
-    } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_0) {
+    } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING) {
         if (this->actor.parent != NULL) {
             EnRd_SetupWalkToParent(this);
         } else {

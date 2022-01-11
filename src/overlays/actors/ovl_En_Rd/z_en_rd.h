@@ -49,10 +49,8 @@ typedef enum {
 
 typedef enum {
     /* -2 */ EN_RD_TYPE_GIBDO = -2,
-    /* -1 */ EN_RD_TYPE_MINUS_1 = -1,
-    /*  0 */ EN_RD_TYPE_0 = 0,
-    /*  1 */ EN_RD_TYPE_1,
-    /*  2 */ EN_RD_TYPE_CRYING,
+    /*  0 */ EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING = 0, // Still mourns, but it must come to a complete stop first
+    /*  2 */ EN_RD_TYPE_CRYING = 2,
     /*  3 */ EN_RD_TYPE_INVISIBLE,
     /*  4 */ EN_RD_TYPE_FROZEN,
     /*  5 */ EN_RD_TYPE_SQUATTING_DANCE,
