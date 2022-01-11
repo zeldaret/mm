@@ -134,10 +134,10 @@ void ObjChan_CalculatePotPosition(Vec3f* childPosOut, Vec3s* childRotOut, Vec3f*
                                   s16 childAngle) {
     Vec3f offset;
 
-    Matrix_RotateY(parentRot->y, false);
-    Matrix_InsertXRotation_s(parentRot->x, true);
-    Matrix_InsertZRotation_s(parentRot->z, true);
-    Matrix_RotateY(childAngle, true);
+    Matrix_RotateY(parentRot->y, MTXMODE_NEW);
+    Matrix_InsertXRotation_s(parentRot->x, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(parentRot->z, MTXMODE_APPLY);
+    Matrix_RotateY(childAngle, MTXMODE_APPLY);
     Matrix_GetStateTranslationAndScaledX(-280.0f, &offset);
 
     childPosOut->x = parentPos->x + offset.x;
@@ -235,10 +235,10 @@ void ObjChan_MainAction(ObjChan* thisx, GlobalContext* globalCtx) {
         this->stateFlags &= ~OBJCHAN_STATE_CUTSCENE;
         ActorCutscene_Stop(this->cutscenes[0]);
     }
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
-    Matrix_InsertXRotation_s(this->actor.shape.rot.x, 1);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, 1);
-    Matrix_RotateY(this->rotation, 1);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateY(this->rotation, MTXMODE_APPLY);
     Matrix_GetStateTranslationAndScaledY(this->unk1CC, &this->actor.world.pos);
     Math_Vec3f_Sum(&this->actor.world.pos, &this->unk1C0, &this->actor.world.pos);
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -247,7 +247,7 @@ void ObjChan_MainAction(ObjChan* thisx, GlobalContext* globalCtx) {
         if (temp != NULL) {
             ObjChan_CalculatePotPosition(
                 &sp60, &sp58, &this->actor.world.pos, &this->actor.shape.rot,
-                (s16)((s32)((((f32)i * 360.0f) / 5.0f) * (65536.0f / 360.0f)) + this->rotation));
+                (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
             Math_Vec3f_Copy(&temp->actor.world.pos, (Vec3f*)&sp60);
             Math_Vec3s_Copy(&temp->actor.shape.rot, &this->actor.shape.rot);
             temp->actor.shape.rot.y = this->rotation;
@@ -272,12 +272,12 @@ void ObjChan_MainAction(ObjChan* thisx, GlobalContext* globalCtx) {
             this->stateFlags |= OBJCHAN_STATE_FIRE_DELAY;
             this->stateFlags |= OBJCHAN_STATE_ON_FIRE;
             this->stateFlags |= OBJCHAN_STATE_START_CUTSCENE;
-            return;
+        } else {
+            Math_StepToF(&this->flameSize, 1.0f, 0.05f);
+            this->rotation += this->rotationSpeed;
+            Math_StepToS(&this->rotationSpeed, OBJCHAN_ROTATION_SPEED, 5);
+            func_800B9010(&this->actor, NA_SE_EV_CHANDELIER_ROLL - SFX_FLAG);
         }
-        Math_StepToF(&this->flameSize, 1.0f, 0.05f);
-        this->rotation += this->rotationSpeed;
-        Math_StepToS(&this->rotationSpeed, OBJCHAN_ROTATION_SPEED, 5);
-        func_800B9010(&this->actor, NA_SE_EV_CHANDELIER_ROLL - SFX_FLAG);
     }
 }
 
@@ -305,7 +305,7 @@ void ObjChan_PotAction(ObjChan* this, GlobalContext* globalCtx) {
     }
     if (potBreaks) {
         func_80BBA488(this, globalCtx);
-        ((ObjChan*)(this->actor.parent))->pots[this->myPotIndex] = NULL;
+        ((ObjChan*)this->actor.parent)->pots[this->myPotIndex] = NULL;
         Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_CHANDELIER_BROKEN);
         func_80BB9A1C((ObjChan*)this->actor.parent, 40.0f);
         if (this->myPotIndex == 4) {
@@ -325,7 +325,7 @@ void ObjChan_PotAction(ObjChan* this, GlobalContext* globalCtx) {
  * Plays some kind of effect when a pot is smashed
  */
 void func_80BBA488(ObjChan* this, GlobalContext* globalCtx) {
-    short new_var;
+    short new_var = 0;
     s32 phi_s0;
     Vec3f spDC;
     Vec3f spD0;
@@ -334,20 +334,17 @@ void func_80BBA488(ObjChan* this, GlobalContext* globalCtx) {
     s16 temp_s1 = 0;
     s32 temp_s2;
     f32 spAC;
-    f32 spA8;
-    f32 spA4;
+    f32 spA8 = new_var + 15.0f;
+    f32 spA4 = new_var + (spAC = 110.0f);
 
-    new_var = 0;
-    spA8 = new_var + 15.0f;
-    spA4 = new_var + (spAC = 110.0f);
     for (temp_s2 = 0, temp_s1 = 0; temp_s2 != 18; temp_s2++, temp_s1 += 0x4E20) {
         float sin = Math_SinS(temp_s1);
         float cos = Math_CosS(temp_s1);
         spDC.x = sin * 8.0f;
-        spDC.y = (Rand_ZeroOne() * 12.0f) + 2.0f;
+        spDC.y = Rand_ZeroOne() * 12.0f + 2.0f;
         spDC.z = cos * 8.0f;
         spD0.x = spDC.x * 0.23f;
-        spD0.y = (Rand_ZeroOne() * 5.0f) + 2.5f;
+        spD0.y = Rand_ZeroOne() * 5.0f + 2.5f;
         spD0.z = spDC.z * 0.23f;
         temp_f0 = Rand_ZeroOne();
         if (temp_f0 < 0.2f) {
@@ -357,7 +354,7 @@ void func_80BBA488(ObjChan* this, GlobalContext* globalCtx) {
         } else {
             phi_s0 = 0x20;
         }
-        new_var2 = (spA4 * Rand_ZeroOne());
+        new_var2 = spA4 * Rand_ZeroOne();
         EffectSsKakera_Spawn(globalCtx, &spDC, &spD0, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, spA8 + new_var2,
                              0, 0, 50, -1, OBJECT_TSUBO, object_tsubo_DL_001960);
     }
@@ -379,9 +376,9 @@ void ObjChan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* dl_xlu;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    Matrix_RotateY(this->rotation, true);
+    Matrix_RotateY(this->rotation, MTXMODE_APPLY);
 
-    dl_opa = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19U);
+    dl_opa = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
     gSPMatrix(dl_opa, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(dl_opa + 1, object_obj_chan_DL_000AF0);
     POLY_OPA_DISP = dl_opa + 2;
@@ -406,7 +403,7 @@ void ObjChan_DrawPot(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* dl;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    dl = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19U);
+    dl = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
     gSPMatrix(dl, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(dl + 1, object_obj_chan_DL_002358);
     POLY_OPA_DISP = dl + 2;
@@ -424,17 +421,17 @@ void func_80BBA930(ObjChan* this, GlobalContext* globalCtx) {
 
     sp4C = globalCtx->gameplayFrames;
 
-    Matrix_RotateY(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y - this->rotation + 0x8000, 1);
+    Matrix_RotateY(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y - this->rotation + 0x8000, MTXMODE_APPLY);
     Matrix_Scale(sObjChanFlameSize[OBJCHAN_SUBTYPE(this)].x * this->flameSize,
-                 sObjChanFlameSize[OBJCHAN_SUBTYPE(this)].y * this->flameSize, 1.0f, 1);
-    Matrix_InsertTranslation(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(this)], 0.0f, 1);
+                 sObjChanFlameSize[OBJCHAN_SUBTYPE(this)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(this)], 0.0f, MTXMODE_APPLY);
 
     dl = func_8012C2B4(POLY_XLU_DISP);
     gSPMatrix(dl, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
     gMoveWd(dl + 1, 6, 32,
-            Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0U, 0U, 0x20, 0x40, 1, 0U, -sp4C * 20, 0x20, 0x80));
-    gDPSetPrimColor(dl + 2, 0x80, 0x80, 0xFF, 0xFF, 0x00, 0xFF);
-    gDPSetEnvColor(dl + 3, 0xFF, 0x00, 0x00, 0x00);
+            Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0U, -sp4C * 20, 32, 128));
+    gDPSetPrimColor(dl + 2, 128, 128, 255, 255, 0, 255);
+    gDPSetEnvColor(dl + 3, 255, 0, 0, 0);
     gSPDisplayList(dl + 4, &gGameplayKeepDrawFlameDL);
     POLY_XLU_DISP = dl + 5;
 

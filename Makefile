@@ -89,8 +89,7 @@ MKLDSCRIPT := tools/buildtools/mkldscript
 YAZ0       := tools/buildtools/yaz0
 ZAPD       := tools/ZAPD/ZAPD.out
 
-#OPTFLAGS := -g
-OPTFLAGS := -g3 -O2
+OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 

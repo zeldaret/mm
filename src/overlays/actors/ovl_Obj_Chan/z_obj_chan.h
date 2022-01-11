@@ -15,24 +15,24 @@ struct ObjChan;
  * The delay is different for each pot. Remaining frame count is stored in fireDelayFrames.
  * The main actor also gets this flag but it's always equivalent to OBJCHAN_STATE_ON_FIRE.
  */
-#define OBJCHAN_STATE_FIRE_DELAY 1
+#define OBJCHAN_STATE_FIRE_DELAY (1 << 0)
 /**
  * Pot is now on fire. After this state is set the flame grows to full size over 20 frames. Flame size is stored in flameSize.
  * OBJCHAN_STATE_FIRE_DELAY is not cleared when this flag is set.
  * The main actor also gets this flag.
  */
-#define OBJCHAN_STATE_ON_FIRE 2 // Pot has fire. Flame grows to full size over about 1 second. Flame size is stored in fireSize.
+#define OBJCHAN_STATE_ON_FIRE (1 << 1) // Pot has fire. Flame grows to full size over about 1 second. Flame size is stored in fireSize.
 /**
  * Only for the main actor.
  * Once set, the actor tries to start a cutscene.
  * Once cutscene is started, this flag is unset and OBJCHAN_STATE_MAIN_STOP_CUTSCENE_AT_FULL_SPEED is set.
  */
-#define OBJCHAN_STATE_START_CUTSCENE 4
+#define OBJCHAN_STATE_START_CUTSCENE (1 << 2)
 /**
  * Only for the main actor.
  * Cutscene is running. Once set, the actor waits for full rotation speed and then cancels the cutscene.
  */
-#define OBJCHAN_STATE_CUTSCENE 8
+#define OBJCHAN_STATE_CUTSCENE (1 << 3)
 
 
 
@@ -44,7 +44,7 @@ typedef struct ObjChan {
     /* 0x0148 */ ColliderCylinder collider;
     /* 0x0194 */ u8 myPotIndex; // For OBJCHAN_SUBTYPE_POT: which pot is this?
     /* 0x0196 */ s16 fireDelayFrames;
-    /* 0x0198 */ char pad198[0x12];
+    /* 0x0198 */ UNK_TYPE1 unk198[0x12];
     /* 0x01AA */ u8 stateFlags;
     /* 0x01AC */ struct ObjChan* pots[5]; // For OBJCHAN_SUBTYPE_BODY: pointers to pot actors
     /* 0x01C0 */ Vec3f unk1C0;
