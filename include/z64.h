@@ -468,9 +468,11 @@ typedef enum {
 } GfxPrintFlag;
 
 typedef struct {
-    /* 0x00 */ u16 countdown;
-    /* 0x04 */ Vec3f originPos;
-    /* 0x10 */ Vec3f relativePos;
+    /* 0x00 */ u8 countdown;
+    /* 0x01 */ u8 playSfxEachFrame;
+    /* 0x02 */ u16 sfxId;
+    /* 0x04 */ Vec3f worldPos;
+    /* 0x10 */ Vec3f projectedPos;
 } SoundSource; // size = 0x1C
 
 typedef struct {

@@ -965,7 +965,7 @@ void func_80941060(EnGoroiwa* this, GlobalContext* globalCtx) {
 }
 
 void func_80941274(EnGoroiwa* this, GlobalContext* globalCtx) {
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_SNOWBALL_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_SNOWBALL_BROKEN);
 }
 
 void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {

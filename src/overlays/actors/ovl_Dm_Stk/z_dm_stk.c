@@ -668,7 +668,7 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
 
     switch (globalCtx->csCtx.frames) {
         case 64:
-            func_8019F1C0(&this->unk_310, NA_SE_EN_STAL06_SURPRISED);
+            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL06_SURPRISED);
             break;
 
         case 327:
@@ -688,11 +688,11 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
 
         case 486:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
-            func_8019F1C0(&this->unk_310, NA_SE_EN_STAL08_CRY_BIG);
+            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL08_CRY_BIG);
             break;
 
         case 496:
-            func_8019F1C0(&this->unk_310, NA_SE_EN_STAL09_SCREAM);
+            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL09_SCREAM);
             break;
 
         case 590:
@@ -704,7 +704,7 @@ void func_80AA0B08(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 594:
-            func_8019F1C0(&this->unk_310, NA_SE_EN_STAL24_SCREAM2);
+            Audio_PlaySfxAtPos(&this->unk_310, NA_SE_EN_STAL24_SCREAM2);
             break;
     }
 
