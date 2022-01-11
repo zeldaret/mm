@@ -38,10 +38,10 @@ void func_808D586C(EnRd* this);
 void func_808D58CC(EnRd* this, GlobalContext* globalCtx);
 void func_808D5C54(EnRd* this);
 void func_808D5CCC(EnRd* this, GlobalContext* globalCtx);
-void func_808D5D88(EnRd* this);
-void func_808D5DF4(EnRd* this, GlobalContext* globalCtx);
-void func_808D5E98(EnRd* this);
-void func_808D5F18(EnRd* this, GlobalContext* globalCtx);
+void EnRd_SetupGrabFail(EnRd* this);
+void EnRd_GrabFail(EnRd* this, GlobalContext* globalCtx);
+void EnRd_SetupTurnAwayAndShakeHead(EnRd* this);
+void EnRd_TurnAwayAndShakeHead(EnRd* this, GlobalContext* globalCtx);
 void func_808D6008(EnRd* this);
 void func_808D6054(EnRd* this, GlobalContext* globalCtx);
 void func_808D60B0(EnRd* this);
@@ -601,7 +601,9 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
         player->actor.freezeTimer = 0;
         if ((player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU)) {
             if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) < 150.0f) {
-                func_808D5D88(this);
+                // If the Gibdo/Redead tries to grab Goron or Deku Link, it will fail to
+                // do so. It will appear to take damage and shake its head side-to-side.
+                EnRd_SetupGrabFail(this);
             } else {
                 func_808D53C0(this, globalCtx);
             }
@@ -839,16 +841,16 @@ void func_808D5CCC(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D5D88(EnRd* this) {
+void EnRd_SetupGrabFail(EnRd* this) {
     this->unk_3EF = 8;
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDamageAnim, -6.0f);
     this->actor.speedXZ = -2.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3EF = 8;
-    this->actionFunc = func_808D5DF4;
+    this->actionFunc = EnRd_GrabFail;
 }
 
-void func_808D5DF4(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_GrabFail(EnRd* this, GlobalContext* globalCtx) {
     if (this->actor.speedXZ < 0.0f) {
         this->actor.speedXZ += 0.15f;
     }
@@ -858,29 +860,29 @@ void func_808D5DF4(EnRd* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 300, 0);
     if (SkelAnime_Update(&this->skelAnime)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        func_808D5E98(this);
+        EnRd_SetupTurnAwayAndShakeHead(this);
     }
 }
 
-void func_808D5E98(EnRd* this) {
+void EnRd_SetupTurnAwayAndShakeHead(EnRd* this) {
     f32 frameCount = Animation_GetLastFrame(&gGibdoRedeadWalkAnim);
 
     Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 0.5f, 0.0f, frameCount, 1, -4.0f);
     this->unk_3EF = 9;
-    this->unk_3D4 = 0;
-    this->actionFunc = func_808D5F18;
+    this->headShakeTimer = 0;
+    this->actionFunc = EnRd_TurnAwayAndShakeHead;
 }
 
-void func_808D5F18(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_TurnAwayAndShakeHead(EnRd* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 5, 3500, 200);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (this->unk_3D4 > 60) {
+    if (this->headShakeTimer > 60) {
         func_808D53C0(this, globalCtx);
         this->unk_3D4 = 0;
     } else {
-        this->headYRotation = Math_SinS(this->unk_3D4 * 4000) * (9583.0f * ((60 - this->unk_3D4) / 60.0f));
+        this->headYRotation = Math_SinS(this->headShakeTimer * 4000) * (0x256F * ((60 - this->headShakeTimer) / 60.0f));
         SkelAnime_Update(&this->skelAnime);
-        this->unk_3D4++;
+        this->headShakeTimer++;
     }
 }
 

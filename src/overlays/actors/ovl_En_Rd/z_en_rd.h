@@ -69,7 +69,10 @@ typedef struct EnRd {
     /* 0x0298 */ f32 effectScale;
     /* 0x029C */ Vec3s jointTable[REDEAD_GIBDO_LIMB_MAX];
     /* 0x0338 */ Vec3s morphTable[REDEAD_GIBDO_LIMB_MAX];
-    /* 0x03D4 */ s16 unk_3D4;
+    /* 0x03D4 */ union {
+                    s16 headShakeTimer;
+                    s16 unk_3D4;
+                };
     /* 0x03D6 */ s16 unk_3D6;
     /* 0x03D8 */ s16 headYRotation;
     /* 0x03DA */ s16 upperBodyYRotation;
