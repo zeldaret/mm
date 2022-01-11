@@ -10,8 +10,7 @@ typedef void (*EnRdFunc)(struct EnRd*);
 
 #define ENRD_GET_80(thisx) ((thisx)->params & 0x80)
 #define ENRD_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
-#define EN_RD_IS_REDEAD(thisx) ((thisx)->params >= -1)
-#define EN_RD_IS_FROZEN(thisx) ((thisx)->params == 4)
+#define EN_RD_GET_TYPE(thisx) ((thisx)->params)
 
 // This limb enum is used for both Redeads and Gibdos for all actors
 // that use object_rd (i.e., En_Rd, En_Railgibud, and En_Talk_Gibud)
@@ -45,16 +44,18 @@ typedef enum {
     /* 26 */ REDEAD_GIBDO_LIMB_MAX,
 } RedeadGibdoLimbs;
 
-enum {
-    /*   -2 */ ENRD_GET_MINUS_2 = -2,
-    /*   -1 */ ENRD_GET_MINUS_1 = -1,
-    /* 0x00 */ ENRD_GET_0 = 0,
-    /* 0x01 */ ENRD_GET_1,
-    /* 0x02 */ ENRD_GET_2,
-    /* 0x03 */ ENRD_GET_3,
-    /* 0x04 */ ENRD_GET_4,
-    /* 0x05 */ ENRD_GET_5,
-};
+typedef enum {
+    /* -2 */ EN_RD_TYPE_MINUS_2 = -2,
+    /* -1 */ EN_RD_TYPE_MINUS_1 = -1,
+    /*  0 */ EN_RD_TYPE_0 = 0,
+    /*  1 */ EN_RD_TYPE_1,
+    /*  2 */ EN_RD_TYPE_2,
+    /*  3 */ EN_RD_TYPE_INVISIBLE,
+    /*  4 */ EN_RD_TYPE_FROZEN,
+    /*  5 */ EN_RD_TYPE_SQUATTING_DANCE,
+    /*  6 */ EN_RD_TYPE_CLAPPING_DANCE,
+    /*  7 */ EN_RD_TYPE_PIROUETTE,
+} EnRdType;
 
 typedef struct EnRd {
     /* 0x0000 */ Actor actor;
