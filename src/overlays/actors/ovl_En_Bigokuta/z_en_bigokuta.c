@@ -241,7 +241,7 @@ void EnBigokuta_SetupRise(EnBigokuta* this, GlobalContext* globalCtx) {
         EffectSsGSplash_Spawn(globalCtx, &splashPos, NULL, NULL, 0, Rand_S16Offset(1000, 200));
         angle = BINANG_ADD(angle, 0x2000);
     }
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIOCTA_LAND);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_LAND);
     this->actionFunc = EnBigokuta_RiseOutOfWater;
 }
 
@@ -263,7 +263,7 @@ void EnBigokuta_IdleAboveWater(EnBigokuta* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000);
 
     if ((this->actor.xzDistToPlayer > 400.0f) || (this->actor.playerHeightRel > 200.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIOCTA_SINK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_SINK);
         EnBigokuta_SetupIdle(this);
     } else if ((this->actor.xzDistToPlayer < 200.0f) && globalCtx->grabPlayer(globalCtx, GET_PLAYER(globalCtx))) {
         EnBigokuta_SetupSuckInPlayer(this, globalCtx);
@@ -299,7 +299,7 @@ void EnBigokuta_SetupSuckInPlayer(EnBigokuta* this, GlobalContext* globalCtx) {
     this->playerHoldPos.y = (this->actor.home.pos.y - 49.5f) + 42.899998f;
     this->playerHoldPos.z = (Math_CosS(this->actor.shape.rot.y) * 66.0f) + this->actor.world.pos.z;
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_SLIME_DEAD);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_DEAD);
     this->actionFunc = EnBigokuta_SuckInPlayer;
 }
 
@@ -351,7 +351,7 @@ void EnBigokuta_HoldPlayer(EnBigokuta* this, GlobalContext* globalCtx) {
 
         if (this->timer == 0) {
             EnBigokuta_ShootPlayer(this, globalCtx);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
         }
     } else if (this->timer == -24) {
         EnBigokuta_SetupIdleAboveWater(this);
@@ -375,7 +375,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, GlobalContext* globalCtx) {
         if (this->timer == 0) {
             this->drawEffect = 0;
             this->drawEffectAlpha = 0.0f;
-            func_800BF7CC(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.5f, 0.35f);
+            Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.5f, 0.35f);
             EnBigokuta_SetupDeathEffects(this);
         }
     } else if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -400,7 +400,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, GlobalContext* globalCtx) {
 
 void EnBigokuta_SetupDeathEffects(EnBigokuta* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gBigOctoDeathAnim, -5.0f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIOCTA_DEAD2);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_DEAD2);
     this->actor.flags &= ~1;
     this->timer = 10;
     this->actionFunc = EnBigokuta_PlayDeathEffects;
@@ -426,7 +426,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, GlobalContext* globalCtx) {
                 dustPos.z = this->actor.world.pos.z;
 
                 func_800B0DE0(globalCtx, &dustPos, &gZeroVec3f, &gZeroVec3f, &D_80AC45B0, &D_80AC45B4, 1200, 20);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
             }
         } else {
             this->actor.world.pos.y -= 0.2f;
@@ -436,7 +436,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, GlobalContext* globalCtx) {
                 Vec3f bubbleVel;
                 Vec3f bubblePos;
 
-                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 50, NA_SE_EN_COMMON_WATER_MID);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EN_COMMON_WATER_MID);
                 bubblePos.y = this->actor.world.pos.y;
 
                 for (i = 0; i < 20; i++) {
@@ -451,7 +451,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, GlobalContext* globalCtx) {
                 }
 
                 if (this->actor.params != 0xFF) {
-                    Actor_SetSwitchFlag(globalCtx, this->actor.params);
+                    Flags_SetSwitch(globalCtx, this->actor.params);
                 }
 
                 ActorCutscene_Stop(this->cutscene);
@@ -509,7 +509,7 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, GlobalContext* globalCtx) {
         }
 
         this->bodyCollider.base.acFlags &= ~AC_HIT;
-        func_800BCB70(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&gBigOctoDeathAnim));
+        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&gBigOctoDeathAnim));
         EnBigokuta_ShootPlayer(this, globalCtx);
         EnBigokuta_SetupDeathCutscene(this);
     }
@@ -543,7 +543,7 @@ void EnBigokuta_Update(Actor* thisx, GlobalContext* globalCtx) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->bodyCollider.base);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->shellCollider.base);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->shellCollider.base);
-        Actor_SetHeight(&this->actor, 82.5f);
+        Actor_SetFocus(&this->actor, 82.5f);
     }
 
     if (this->drawEffectAlpha > 0.0f) {
