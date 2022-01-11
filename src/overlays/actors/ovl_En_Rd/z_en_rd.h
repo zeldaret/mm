@@ -6,7 +6,7 @@
 struct EnRd;
 
 typedef void (*EnRdActionFunc)(struct EnRd*, GlobalContext*);
-typedef void (*EnRdFunc)(struct EnRd*);
+typedef void (*EnRdSetupDanceFunc)(struct EnRd*);
 
 #define ENRD_GET_80(thisx) ((thisx)->params & 0x80)
 #define ENRD_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
@@ -61,7 +61,7 @@ typedef struct EnRd {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
     /* 0x0188 */ EnRdActionFunc actionFunc;
-    /* 0x018C */ EnRdFunc unkFunc;
+    /* 0x018C */ EnRdSetupDanceFunc setupDanceFunc;
     /* 0x0190 */ ColliderCylinder collider;
     /* 0x01DC */ Vec3f limbPos[15];
     /* 0x0290 */ s32 limbIndex;
