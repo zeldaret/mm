@@ -183,7 +183,7 @@ void func_80954BE8(EnKanban* this, GlobalContext* globalCtx) {
         if (this->msgTimer == 0) {
             yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
             if (ABS_ALT(yaw) < 0x2800) {
-                if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+                if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
                     this->msgFlag = true;
                 } else {
                     func_800B8614(&this->actor, globalCtx, 68.0f);
