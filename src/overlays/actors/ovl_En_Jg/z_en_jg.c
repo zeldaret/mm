@@ -744,9 +744,9 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
 
         if (this->cutsceneAnimationIndex == EN_JG_ANIMATION_TAKING_OUT_DRUM) {
             if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
-                func_8019F1C0(&sSfxPos, NA_SE_EV_WOOD_BOUND_S);
+                Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_WOOD_BOUND_S);
             } else if (Animation_OnFrame(&this->skelAnime, 38.0f)) {
-                func_8019F1C0(&sSfxPos, NA_SE_EV_OBJECT_SLIDE);
+                Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_OBJECT_SLIDE);
             }
         }
     } else {
@@ -982,7 +982,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, GlobalContext* 
         if ((this->freezeTimer <= 0) && (currentFrame == lastFrame)) {
             this->animationIndex = EN_JG_ANIMATION_FROZEN_START;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIndex);
-            func_8019F1C0(&sSfxPos, NA_SE_EV_FREEZE_S);
+            Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_FREEZE_S);
             this->actionFunc = EnJg_Freeze;
         }
     }
