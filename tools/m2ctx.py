@@ -41,7 +41,7 @@ def custom_replacements(output):
                 actorList.append(actorListText.replace("first;", f"{actorCats[x]};") + "\n")
                 if x == 2:
                     actorList[x] = actorList[x].replace("Actor*", "Player*")
-        elif "ActorListEntry actorList[12];" in line:
+        elif "ActorListEntry actorLists[ACTORCAT_MAX];" in line:
             output[i] = "struct {\n" + "".join(actorList) + "};"
         ########################################################
 

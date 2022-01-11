@@ -290,7 +290,7 @@ void EnDoor_Init(Actor* thisx, GlobalContext* globalCtx2) {
     } else {
         this->actionFunc = func_80866A5C;
     }
-    Actor_SetHeight(&this->dyna.actor, 35.0f);
+    Actor_SetFocus(&this->dyna.actor, 35.0f);
 }
 
 void EnDoor_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -339,7 +339,7 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
     // s16 baseTextId;
 
     player = GET_PLAYER(globalCtx);
-    if ((func_800B84D0(&this->dyna.actor, globalCtx) != 0) && (this->dyna.actor.textId == 0x1821)) {
+    if ((Actor_ProcessTalkRequest(&this->dyna.actor, globalCtx) != 0) && (this->dyna.actor.textId == 0x1821)) {
         D_80867BC0[0] = 1;
     }
     if (this->unk_1A1 != 0) {
@@ -348,14 +348,14 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
                                    (player->stateFlags1 & 0x8000000) ? 0.75f : 1.5f);
         if (this->unk_1A6 != 0) {
             gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex]--;
-            Actor_SetSwitchFlag(globalCtx, this->switchFlag);
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
+            Flags_SetSwitch(globalCtx, this->switchFlag);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
     } else if (this->unk_1A7 != 0) {
         this->actionFunc = func_80866F94;
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
-    } else if (func_801233E4(globalCtx) == 0) { // Player_InCsMode
-        Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
+    } else if (Player_InCsMode(globalCtx) == 0) { // Player_InCsMode
+        Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
         if ((D_80867BC0[0] != 0) || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
                                      (fabsf(playerPosRelToDoor.z) < 50.0f))) {
             yawDiff = player->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
@@ -404,7 +404,7 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
                 func_80122F28(player);
             }
         } else if ((this->unk_1A4 == 4) && (this->dyna.actor.xzDistToPlayer > 240.0f)) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
             this->actionFunc = func_80867080;
         }
     }
@@ -428,7 +428,7 @@ void func_80866F94(EnDoor* this, GlobalContext* globalCtx) {
     } else {
         if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, 0, 0x7D0)) {
             this->actionFunc = func_80866B20;
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_AUTO_DOOR_CLOSE);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_AUTO_DOOR_CLOSE);
         }
     }
 }
@@ -449,7 +449,7 @@ void func_80867080(EnDoor* this, GlobalContext* globalCtx) {
 
 void func_808670F0(EnDoor* this, GlobalContext* globalCtx) {
     if (Math_ScaledStepToS(&this->dyna.actor.world.rot.y, 0, 0x700)) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
         this->actionFunc = func_80866B20;
     }
 }
@@ -463,7 +463,7 @@ void func_80867144(EnDoor* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80866B20;
             this->unk_1A1 = 0;
         } else if (Animation_OnFrame(&this->skelAnime, sAnimOpenFrames[this->animIndex])) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_OC_DOOR_OPEN);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_OC_DOOR_OPEN);
             if (this->skelAnime.playSpeed < 1.5f) {
                 numEffects = (s32)(Rand_ZeroOne() * 30.0f) + 50;
                 for (i = 0; i < numEffects; i++) {
@@ -471,7 +471,7 @@ void func_80867144(EnDoor* this, GlobalContext* globalCtx) {
                 }
             }
         } else if (Animation_OnFrame(&this->skelAnime, sAnimCloseFrames[this->animIndex])) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_CLOSE);
         }
     }
 }
@@ -523,7 +523,7 @@ void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->dyna.actor.objBankIndex == this->requiredObjBankIndex) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         if ((this->unk_1A4 == 7) && (this->switchFlag == 0)) {
-            func_800BDFC0(globalCtx, gameplay_keep_DL_0221B8);
+            Gfx_DrawDListOpa(globalCtx, gameplay_keep_DL_0221B8);
         } else {
             func_8012C28C(globalCtx->state.gfxCtx);
         }
@@ -537,7 +537,7 @@ void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx) {
             }
         }
         if (this->unk_1A6) {
-            func_800BC8B8(globalCtx, this->unk_1A6, 0);
+            Actor_DrawDoorLock(globalCtx, this->unk_1A6, 0);
         }
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

@@ -129,7 +129,7 @@ void EnKame_Init(Actor* thisx, GlobalContext* globalCtx) {
                        this->morphTable1, 13);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime2, &object_tl_Skel_001A50, &object_tl_Anim_000B30, this->jointTable2,
                        this->morphTable2, 4);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 55.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 55.0f);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
@@ -170,7 +170,7 @@ void func_80AD6F9C(EnKame* this) {
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_2A2 = 80;
     this->actor.flags &= ~0x400;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_80AD7018(EnKame* this, GlobalContext* globalCtx) {
@@ -178,7 +178,7 @@ void func_80AD7018(EnKame* this, GlobalContext* globalCtx) {
         this->unk_29D = 0;
         this->collider.base.colType = COLTYPE_HIT6;
         this->unk_2B0 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_2C8, 10, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2C8, 10, 2, 0.3f, 0.2f);
         this->actor.flags |= 0x400;
     }
 }
@@ -193,7 +193,7 @@ void func_80AD70EC(EnKame* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (Animation_OnFrame(&this->skelAnime1, 10.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PAMET_VOICE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_VOICE);
         this->unk_2A0 = 40;
     }
 
@@ -237,7 +237,7 @@ void func_80AD7254(EnKame* this, GlobalContext* globalCtx) {
     if (this->unk_29E == 0) {
         func_80AD70A0(this);
     } else if (Animation_OnFrame(&this->skelAnime1, 0.0f) || Animation_OnFrame(&this->skelAnime1, 15.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PAMET_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_WALK);
     }
 }
 
@@ -248,7 +248,7 @@ void func_80AD73A8(EnKame* this) {
     this->unk_2A8 = 1.0f;
     this->actor.speedXZ = 0.0f;
     if (this->unk_2A0 == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PAMET_VOICE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_VOICE);
     }
     this->actionFunc = func_80AD7424;
 }
@@ -313,7 +313,7 @@ void func_80AD76CC(EnKame* this) {
         func_80AD7568(this);
         this->unk_29E = 15;
         this->actor.speedXZ = 0.0f;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PAMET_CUTTER_ON);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_CUTTER_ON);
         this->unk_2BC.y = this->actor.home.pos.y - 100.0f;
     } else {
         this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
@@ -383,7 +383,7 @@ void func_80AD7948(EnKame* this, GlobalContext* globalCtx) {
     if (Math_ScaledStepToS(&this->unk_2A6, this->unk_29E, (s32)(this->unk_2A6 * 0.09f) + 45)) {
         if (this->unk_29E == 0) {
             if (this->unk_2AC >= 1.0f) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_CUTTER_OFF);
             }
             this->unk_2AC -= 0.1f;
             this->collider.base.atFlags &= ~AT_ON;
@@ -440,7 +440,7 @@ void func_80AD7C54(EnKame* this) {
     this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
     this->actor.flags &= ~0x10;
     this->actor.shape.rot.z = 0;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PAMET_REVERSE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_REVERSE);
     this->actionFunc = func_80AD7D40;
 }
 
@@ -472,7 +472,7 @@ void func_80AD7E0C(EnKame* this, GlobalContext* globalCtx) {
                 Animation_PlayOnce(&this->skelAnime1, &object_tl_Anim_0027D8);
             } else {
                 Animation_PlayOnce(&this->skelAnime1, &object_tl_Anim_002F88);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_PAMET_ROAR);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_ROAR);
             }
         }
     } else {
@@ -482,13 +482,13 @@ void func_80AD7E0C(EnKame* this, GlobalContext* globalCtx) {
 
 void func_80AD7EC0(EnKame* this) {
     Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_002510, -3.0f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PAMET_WAKEUP);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_WAKEUP);
     this->actionFunc = func_80AD7F10;
 }
 
 void func_80AD7F10(EnKame* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime1)) {
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         func_80AD71B4(this);
     } else if (this->skelAnime1.curFrame >= 10.0f) {
         this->actor.shape.shadowDraw = NULL;
@@ -526,8 +526,8 @@ void func_80AD8060(EnKame* this) {
     s16 sp36 = Animation_GetLastFrame(&object_tl_Anim_0008B4);
 
     Animation_Change(&this->skelAnime1, &object_tl_Anim_0008B4, 1.0f, 0.0f, sp36, 2, -3.0f);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, sp36);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PAMET_DAMAGE);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, sp36);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_DAMAGE);
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80AD810C;
 }
@@ -540,7 +540,7 @@ void func_80AD810C(EnKame* this, GlobalContext* globalCtx) {
 
 void func_80AD8148(EnKame* this, GlobalContext* globalCtx) {
     Animation_PlayLoop(&this->skelAnime1, &object_tl_Anim_000AF4);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.atFlags &= ~(AC_HARD | AC_HIT);
@@ -557,7 +557,7 @@ void func_80AD8148(EnKame* this, GlobalContext* globalCtx) {
     this->actor.bgCheckFlags &= ~0x1;
     this->actor.flags &= ~0x1;
     this->actor.flags |= 0x10;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PAMET_DEAD);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_DEAD);
     this->unk_29E = 0;
     this->actionFunc = func_80AD825C;
 }
@@ -565,13 +565,13 @@ void func_80AD8148(EnKame* this, GlobalContext* globalCtx) {
 void func_80AD825C(EnKame* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime1);
     if ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_HIPLOOP_LAND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HIPLOOP_LAND);
         func_80AD8364(this);
     } else {
         if (this->unk_29E == 1) {
             this->actor.colorFilterTimer = 100;
         } else if (this->actor.colorFilterTimer == 0) {
-            func_800BCB70(&this->actor, 0xC000, 255, 0, 100);
+            Actor_SetColorFilter(&this->actor, 0xC000, 255, 0, 100);
         }
         this->actor.shape.rot.x += Rand_S16Offset(0x700, 0x1400);
         this->actor.shape.rot.y += (s16)Rand_ZeroFloat(5120.0f);
@@ -593,7 +593,8 @@ void func_80AD8388(EnKame* this, GlobalContext* globalCtx) {
     if (this->unk_29E > 0) {
         this->unk_29E--;
         if (this->unk_29E == 0) {
-            func_800F0590(globalCtx, &this->actor.world.pos, 21, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            SoundSource_PlaySfxEachFrameAtFixedWorldPos(globalCtx, &this->actor.world.pos, 21,
+                                                        NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         }
     } else {
         this->actor.scale.x -= 0.001f;
@@ -615,7 +616,7 @@ void func_80AD84C0(EnKame* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
 
-        func_800BE258(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
         if ((this->unk_29D == 10) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             return;
         }
@@ -641,16 +642,16 @@ void func_80AD84C0(EnKame* this, GlobalContext* globalCtx) {
         } else if (!(this->collider.base.acFlags & AC_HARD)) {
             if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2A2 = 40;
-                func_800BCB70(&this->actor, 0, 255, 0, 40);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->unk_2B4 = 0.6f;
                 this->unk_2B0 = 2.0f;
                 this->unk_29D = 30;
                 func_80AD7FA4(this);
             } else if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2A2 = 40;
-                func_800BCB70(&this->actor, 0, 255, 0, 40);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_80AD7FA4(this);
             } else if (this->actor.colChkInfo.damageEffect == 3) {
                 func_80AD6F9C(this);
@@ -713,11 +714,11 @@ void EnKame_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 40.0f, 60.0f, 40.0f, 0x1F);
 
     if (this->actor.shape.shadowDraw != NULL) {
-        Actor_SetHeight(&this->actor, 25.0f);
+        Actor_SetFocus(&this->actor, 25.0f);
         Collider_UpdateCylinder(&this->actor, &this->collider);
     }
 
@@ -810,8 +811,8 @@ void EnKame_Draw(Actor* thisx, GlobalContext* globalCtx) {
                   this->unk_29D);
 
     if (this->actor.shape.shadowDraw == NULL) {
-        func_800B3FC0(&this->actor, NULL, globalCtx);
-        Actor_SetHeight(&this->actor, 25.0f);
+        ActorShadow_DrawCircle(&this->actor, NULL, globalCtx);
+        Actor_SetFocus(&this->actor, 25.0f);
         Collider_UpdateCylinder(&this->actor, &this->collider);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
     }

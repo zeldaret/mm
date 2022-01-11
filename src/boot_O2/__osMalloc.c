@@ -182,7 +182,7 @@ void __osFree(Arena* arena, void* ptr) {
     ArenaNode* newNext;
 
     ArenaImpl_Lock(arena);
-    node = (ArenaNode*)((u32)ptr - sizeof(ArenaNode));
+    node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
     if (ptr == NULL || (node->magic != NODE_MAGIC) || node->isFree) {
         goto end;
@@ -190,10 +190,10 @@ void __osFree(Arena* arena, void* ptr) {
 
     next = node->next;
     prev = node->prev;
-    node->isFree = 1;
+    node->isFree = true;
 
     newNext = next;
-    if ((u32)next == (u32)node + sizeof(ArenaNode) + node->size && next->isFree) {
+    if ((uintptr_t)next == (uintptr_t)node + sizeof(ArenaNode) + node->size && next->isFree) {
         newNext = next->next;
         if (newNext != NULL) {
             newNext->prev = node;
@@ -205,7 +205,7 @@ void __osFree(Arena* arena, void* ptr) {
         next = newNext;
     }
 
-    if (prev != NULL && prev->isFree && (u32)node == (u32)prev + sizeof(ArenaNode) + prev->size) {
+    if (prev != NULL && prev->isFree && (uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size) {
         if (next) {
             next->prev = prev;
         }
