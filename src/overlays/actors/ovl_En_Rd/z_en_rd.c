@@ -16,7 +16,7 @@ void EnRd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRd_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 func_808D41FC(GlobalContext* globalCtx);
+s32 EnRd_IsHostile(GlobalContext* globalCtx);
 void func_808D4308(EnRd* this);
 void func_808D43AC(EnRd* this, GlobalContext* globalCtx);
 void func_808D45D4(EnRd* this);
@@ -171,7 +171,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.params >= ENRD_GET_MINUS_2) {
         switch (this->actor.params) {
             case 5:
-                if (!func_808D41FC(globalCtx)) {
+                if (!EnRd_IsHostile(globalCtx)) {
                     func_808D45D4(this);
                 } else {
                     this->actor.hintId = 0x2A;
@@ -181,7 +181,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
                 break;
 
             case 6:
-                if (!func_808D41FC(globalCtx)) {
+                if (!EnRd_IsHostile(globalCtx)) {
                     func_808D47DC(this);
                 } else {
                     this->actor.hintId = 0x2A;
@@ -191,7 +191,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
                 break;
 
             case 7:
-                if (!func_808D41FC(globalCtx)) {
+                if (!EnRd_IsHostile(globalCtx)) {
                     func_808D4A90(this);
                 } else {
                     this->actor.hintId = 0x2A;
@@ -254,11 +254,12 @@ void func_808D4190(GlobalContext* globalCtx, EnRd* this, s32 arg2) {
     }
 }
 
-s32 func_808D41FC(GlobalContext* globalCtx) {
+s32 EnRd_IsHostile(GlobalContext* globalCtx) {
     if ((Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) || (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) ||
         (Player_GetMask(globalCtx) == PLAYER_MASK_GARO)) {
         return false;
     }
+
     return true;
 }
 
@@ -267,7 +268,7 @@ void func_808D4260(EnRd* this, GlobalContext* globalCtx) {
         (this->actionFunc != func_808D4868) && (this->actionFunc != func_808D4B20) &&
         (this->actionFunc != func_808D65BC) && (this->actionFunc != func_808D58CC) &&
         (this->actionFunc != func_808D6200) && (this->actionFunc != func_808D6388)) {
-        if (!func_808D41FC(globalCtx)) {
+        if (!EnRd_IsHostile(globalCtx)) {
             this->unkFunc(this);
         }
     }
@@ -356,7 +357,7 @@ void func_808D4660(EnRd* this, GlobalContext* globalCtx) {
     }
 
     this->unk_3EC = 0;
-    if ((this->actor.xzDistToPlayer <= 150.0f) && func_808D41FC(globalCtx) && func_800B715C(globalCtx)) {
+    if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
         if (this->actor.params == ENRD_GET_MINUS_2) {
             this->actor.hintId = 0x2D;
         } else {
@@ -366,7 +367,7 @@ void func_808D4660(EnRd* this, GlobalContext* globalCtx) {
         this->actionFunc = func_808D49E4;
     }
 
-    if (func_808D41FC(globalCtx)) {
+    if (EnRd_IsHostile(globalCtx)) {
         if (this->actor.params == ENRD_GET_MINUS_2) {
             this->actor.hintId = 0x2D;
         } else {
@@ -399,7 +400,7 @@ void func_808D4868(EnRd* this, GlobalContext* globalCtx) {
     }
 
     this->unk_3EC = 0;
-    if ((this->actor.xzDistToPlayer <= 150.0f) && func_808D41FC(globalCtx) && func_800B715C(globalCtx)) {
+    if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
         if (this->actor.params == ENRD_GET_MINUS_2) {
             this->actor.hintId = 0x2D;
         } else {
@@ -409,7 +410,7 @@ void func_808D4868(EnRd* this, GlobalContext* globalCtx) {
         this->actionFunc = func_808D49E4;
     }
 
-    if (func_808D41FC(globalCtx)) {
+    if (EnRd_IsHostile(globalCtx)) {
         if (this->actor.params == ENRD_GET_MINUS_2) {
             this->actor.hintId = 0x2D;
         } else {
@@ -459,7 +460,7 @@ void func_808D4B20(EnRd* this, GlobalContext* globalCtx) {
     }
 
     this->unk_3EC = 0;
-    if ((this->actor.xzDistToPlayer <= 150.0f) && func_808D41FC(globalCtx) && func_800B715C(globalCtx)) {
+    if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
         if (this->actor.params == ENRD_GET_MINUS_2) {
             this->actor.hintId = 0x2D;
         } else {
@@ -468,7 +469,7 @@ void func_808D4B20(EnRd* this, GlobalContext* globalCtx) {
         this->actionFunc = func_808D4CA8;
     }
 
-    if (func_808D41FC(globalCtx)) {
+    if (EnRd_IsHostile(globalCtx)) {
         if (this->actor.params == ENRD_GET_MINUS_2) {
             this->actor.hintId = 0x2D;
         } else {
@@ -1142,7 +1143,7 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D6A94(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_CheckCollision(EnRd* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((this->actor.colChkInfo.health > 0) && (this->unk_3EF != 10)) {
@@ -1155,7 +1156,7 @@ void func_808D6A94(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D6B64(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_UpdateEffect(EnRd* this, GlobalContext* globalCtx) {
     if (this->effectTimer > 0) {
         this->effectTimer--;
     }
@@ -1198,9 +1199,9 @@ void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
-    func_808D6A94(this, globalCtx);
+    EnRd_CheckCollision(this, globalCtx);
     func_808D4260(this, globalCtx);
-    func_808D6B64(this, globalCtx);
+    EnRd_UpdateEffect(this, globalCtx);
 }
 
 s32 EnRd_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
