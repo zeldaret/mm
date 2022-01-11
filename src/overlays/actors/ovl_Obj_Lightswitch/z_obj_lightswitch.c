@@ -106,9 +106,9 @@ void ObjLightswitch_UpdateSwitchFlags(ObjLightswitch* this, GlobalContext* globa
     if (this) {}
 
     if (set) {
-        Actor_SetSwitchFlag(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
+        Flags_SetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
     } else {
-        Actor_UnsetSwitchFlag(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
+        Flags_UnsetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
     }
 }
 
@@ -159,7 +159,7 @@ void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     isSwitchActivated = Flags_GetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
     isTriggered = false;
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Actor_SetHeight(&this->actor, 0.0f);
+    Actor_SetFocus(&this->actor, 0.0f);
 
     if (isSwitchActivated) {
         if (GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_FAKE) {
@@ -237,7 +237,7 @@ void ObjLightSwitch_SetupAsleep(ObjLightswitch* this) {
 
 void ObjLightSwitch_Asleep(ObjLightswitch* this, GlobalContext* globalCtx) {
     if (this->colorShiftTimer == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SUN_MARK_FLASH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SUN_MARK_FLASH);
     }
     this->colorShiftTimer++;
 
@@ -250,7 +250,7 @@ void ObjLightSwitch_Asleep(ObjLightswitch* this, GlobalContext* globalCtx) {
         ObjLightSwitch_SetupEnabled(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_WAKING;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_FOOT_SWITCH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
@@ -308,7 +308,7 @@ void ObjLightSwitch_Disabled(ObjLightswitch* this, GlobalContext* globalCtx) {
         ObjLightswitch_SetupIdle(this);
     } else if (this->colorShiftTimer == 15) {
         this->faceState = LIGHTSWITCH_FACE_ASLEEP;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_FOOT_SWITCH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FOOT_SWITCH);
     }
 }
 
