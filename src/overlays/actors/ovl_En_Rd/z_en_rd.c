@@ -29,15 +29,15 @@ void EnRd_Pirouette(EnRd* this, GlobalContext* globalCtx);
 void func_808D4CA8(EnRd* this, GlobalContext* globalCtx);
 void func_808D4DC4(EnRd* this);
 void func_808D4E60(EnRd* this, GlobalContext* globalCtx);
-void func_808D506C(EnRd* this, GlobalContext* globalCtx);
+void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx);
 void func_808D53C0(EnRd* this, GlobalContext* globalCtx);
 void func_808D5440(EnRd* this, GlobalContext* globalCtx);
 void func_808D5660(EnRd* this);
 void func_808D56E4(EnRd* this, GlobalContext* globalCtx);
-void func_808D586C(EnRd* this);
-void func_808D58CC(EnRd* this, GlobalContext* globalCtx);
-void func_808D5C54(EnRd* this);
-void func_808D5CCC(EnRd* this, GlobalContext* globalCtx);
+void EnRd_SetupGrab(EnRd* this);
+void EnRd_Grab(EnRd* this, GlobalContext* globalCtx);
+void EnRd_SetupAttemptPlayerStun(EnRd* this);
+void EnRd_AttemptPlayerStun(EnRd* this, GlobalContext* globalCtx);
 void EnRd_SetupGrabFail(EnRd* this);
 void EnRd_GrabFail(EnRd* this, GlobalContext* globalCtx);
 void EnRd_SetupTurnAwayAndShakeHead(EnRd* this);
@@ -266,8 +266,8 @@ s32 EnRd_IsHostile(GlobalContext* globalCtx) {
 void func_808D4260(EnRd* this, GlobalContext* globalCtx) {
     if ((EN_RD_GET_TYPE(&this->actor) >= EN_RD_TYPE_SQUATTING_DANCE) && (this->actionFunc != EnRd_SquattingDance) &&
         (this->actionFunc != EnRd_ClappingDance) && (this->actionFunc != EnRd_Pirouette) &&
-        (this->actionFunc != func_808D65BC) && (this->actionFunc != func_808D58CC) &&
-        (this->actionFunc != func_808D6200) && (this->actionFunc != func_808D6388)) {
+        (this->actionFunc != func_808D65BC) && (this->actionFunc != EnRd_Grab) && (this->actionFunc != func_808D6200) &&
+        (this->actionFunc != func_808D6388)) {
         if (!EnRd_IsHostile(globalCtx)) {
             this->unkFunc(this);
         }
@@ -317,7 +317,7 @@ void func_808D43AC(EnRd* this, GlobalContext* globalCtx) {
     } else {
         if (this->unk_3EC != 0) {
             if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
-                func_808D5C54(this);
+                EnRd_SetupAttemptPlayerStun(this);
             } else {
                 func_808D6008(this);
             }
@@ -326,7 +326,7 @@ void func_808D43AC(EnRd* this, GlobalContext* globalCtx) {
         this->unk_3EC = 0;
         if ((this->actor.xzDistToPlayer <= 150.0f) && func_800B715C(globalCtx)) {
             if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
-                func_808D5C54(this);
+                EnRd_SetupAttemptPlayerStun(this);
             } else {
                 func_808D6008(this);
             }
@@ -353,7 +353,7 @@ void EnRd_SquattingDance(EnRd* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     if (this->unk_3EC != 0) {
-        func_808D5C54(this);
+        EnRd_SetupAttemptPlayerStun(this);
     }
 
     this->unk_3EC = 0;
@@ -396,7 +396,7 @@ void EnRd_ClappingDance(EnRd* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     if (this->unk_3EC != 0) {
-        func_808D5C54(this);
+        EnRd_SetupAttemptPlayerStun(this);
     }
 
     this->unk_3EC = 0;
@@ -433,7 +433,7 @@ void func_808D49E4(EnRd* this, GlobalContext* globalCtx) {
     this->unk_3E4++;
     if (this->unk_3E4 > 10) {
         if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
-            func_808D5C54(this);
+            EnRd_SetupAttemptPlayerStun(this);
         } else {
             func_808D6008(this);
         }
@@ -456,7 +456,7 @@ void EnRd_Pirouette(EnRd* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     if (this->unk_3EC != 0) {
-        func_808D5C54(this);
+        EnRd_SetupAttemptPlayerStun(this);
     }
 
     this->unk_3EC = 0;
@@ -506,7 +506,7 @@ void func_808D4CA8(EnRd* this, GlobalContext* globalCtx) {
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, 2, -10.0f);
     } else if (this->unk_3E4 < 1000) {
         if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
-            func_808D5C54(this);
+            EnRd_SetupAttemptPlayerStun(this);
         } else {
             func_808D6008(this);
         }
@@ -548,19 +548,19 @@ void func_808D4E60(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D4FE0(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_SetupWalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
     f32 frameCount = Animation_GetLastFrame(&gGibdoRedeadWalkAnim);
 
     Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 1.0f, 4.0f, frameCount, 1, -4.0f);
     this->actor.speedXZ = 0.4f;
     this->unk_3EF = 4;
-    this->actionFunc = func_808D506C;
+    this->actionFunc = EnRd_WalkToPlayer;
 }
 
-void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
-    s16 sp36 =
+    s16 yaw =
         ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->headYRotation) - this->upperBodyYRotation;
 
     this->skelAnime.playSpeed = this->actor.speedXZ;
@@ -574,7 +574,7 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
         func_808D53C0(this, globalCtx);
     }
 
-    if ((ABS_ALT(sp36) < 0x1554) && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 150.0f)) {
+    if ((ABS_ALT(yaw) < 0x1554) && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 150.0f)) {
         if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
             !(player->stateFlags2 & 0x4080)) {
             if (this->unk_3ED == 0) {
@@ -609,7 +609,7 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
             }
         } else if (globalCtx->grabPlayer(globalCtx, player)) {
             this->actor.flags &= ~1;
-            func_808D586C(this);
+            EnRd_SetupGrab(this);
         }
     } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_0) {
         if (this->actor.parent != NULL) {
@@ -661,7 +661,7 @@ void func_808D5440(EnRd* this, GlobalContext* globalCtx) {
         (player->transformation != PLAYER_FORM_DEKU) &&
         (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
         this->actor.targetMode = 0;
-        func_808D4FE0(this, globalCtx);
+        EnRd_SetupWalkToPlayer(this, globalCtx);
     } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_0) {
         if (this->actor.parent != NULL) {
             func_808D5660(this);
@@ -709,7 +709,7 @@ void func_808D56E4(EnRd* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
         Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
     } else {
-        func_808D4FE0(this, globalCtx);
+        EnRd_SetupWalkToPlayer(this, globalCtx);
     }
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -722,17 +722,17 @@ void func_808D56E4(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D586C(EnRd* this) {
+void EnRd_SetupGrab(EnRd* this) {
     Animation_PlayOnce(&this->skelAnime, &gGibdoRedeadGrabStartAnim);
     this->unk_3D6 = 0;
     this->unk_3EB = 0;
     this->unk_3EA = 200;
     this->unk_3EF = 10;
     this->actor.speedXZ = 0.0f;
-    this->actionFunc = func_808D58CC;
+    this->actionFunc = EnRd_Grab;
 }
 
-void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_Grab(EnRd* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
 
@@ -813,31 +813,31 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
             this->actor.flags |= 1;
             this->unk_3ED = 10;
             this->unk_3EE = 15;
-            func_808D4FE0(this, globalCtx);
+            EnRd_SetupWalkToPlayer(this, globalCtx);
             break;
     }
 }
 
-void func_808D5C54(EnRd* this) {
+void EnRd_SetupAttemptPlayerStun(EnRd* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f,
                      Animation_GetLastFrame(&gGibdoRedeadLookBackAnim), 2, 0.0f);
     this->unk_3EF = 7;
-    this->actionFunc = func_808D5CCC;
+    this->actionFunc = EnRd_AttemptPlayerStun;
 }
 
-void func_808D5CCC(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_AttemptPlayerStun(EnRd* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 temp_v0 =
+    s16 yaw =
         ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->headYRotation) - this->upperBodyYRotation;
 
-    if (ABS_ALT(temp_v0) < 0x2008) {
+    if (ABS_ALT(yaw) < 0x2008) {
         if (!(this->unk_3DC & 0x80)) {
             player->actor.freezeTimer = 60;
             func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
             func_80123E90(globalCtx, &this->actor);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
-        func_808D4FE0(this, globalCtx);
+        EnRd_SetupWalkToPlayer(this, globalCtx);
     }
 }
 
@@ -897,7 +897,7 @@ void func_808D6054(EnRd* this, GlobalContext* globalCtx) {
         if (this->actor.parent != NULL) {
             func_808D5660(this);
         } else {
-            func_808D5C54(this);
+            EnRd_SetupAttemptPlayerStun(this);
         }
     }
 }
@@ -946,7 +946,7 @@ void func_808D6200(EnRd* this, GlobalContext* globalCtx) {
         } else if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 150.0f) {
             func_808D53C0(this, globalCtx);
         } else {
-            func_808D4FE0(this, globalCtx);
+            EnRd_SetupWalkToPlayer(this, globalCtx);
         }
         this->unk_3F1 = -1;
     }
@@ -1086,8 +1086,7 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
 
         switch (this->unk_3F0) {
             case EN_RD_DMGEFF_ZORA_MAGIC:
-                if ((this->actionFunc != func_808D58CC) &&
-                    ((this->actionFunc != func_808D65BC) || (this->unk_3D6 == 0))) {
+                if ((this->actionFunc != EnRd_Grab) && ((this->actionFunc != func_808D65BC) || (this->unk_3D6 == 0))) {
                     this->effectTimer = 40;
                     this->effectType = 30;
                     this->effectAlpha = 1.0f;
