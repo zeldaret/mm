@@ -1,4 +1,4 @@
-#include "include/prevent_bss_reordering.h"
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #define RSP_DONE_MSG 667

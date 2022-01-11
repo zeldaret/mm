@@ -66,15 +66,15 @@ void EnTest5_HandleBottleAction(EnTest5* this, GlobalContext* globalCtx) {
 
     player = GET_PLAYER(globalCtx);
 
-    if (player->unk_388 == NULL || player->unk_384 != GI_MAX) {
+    if (player->interactRangeActor == NULL || player->getItemId != GI_MAX) {
         Math_Vec3f_DistXYZAndStoreDiff(&this->minPos, &player->actor.world.pos, &playerPosRelativeToWater);
 
         // Make sure that the player is within the bounds of the water and deep enough to grab some
         if (playerPosRelativeToWater.x >= 0.0f && playerPosRelativeToWater.x <= this->xLength &&
             playerPosRelativeToWater.z >= 0.0f && playerPosRelativeToWater.z <= this->zLength &&
             fabsf(playerPosRelativeToWater.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-            func_800B8A1C(&this->actor, globalCtx, GI_MAX, this->actor.xzDistToPlayer,
-                          fabsf(this->actor.playerHeightRel));
+            Actor_PickUp(&this->actor, globalCtx, GI_MAX, this->actor.xzDistToPlayer,
+                         fabsf(this->actor.playerHeightRel));
         }
     }
 }

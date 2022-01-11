@@ -374,7 +374,6 @@ extern u8 D_801AE214[32];
 // extern UNK_TYPE4 D_801AE240;
 // extern UNK_TYPE4 D_801AE250;
 extern UNK_PTR D_801AE260[3];
-// extern UNK_TYPE4 D_801AE26C;
 // extern UNK_TYPE4 D_801AE27C;
 // extern UNK_TYPE4 D_801AE28C;
 // extern UNK_TYPE4 D_801AE29C;
@@ -382,7 +381,7 @@ extern UNK_PTR D_801AE260[3];
 // extern UNK_TYPE4 D_801AE2BC;
 // extern UNK_TYPE4 D_801AE2CC;
 // extern UNK_TYPE4 D_801AE2DC;
-extern EffectSsInfo EffectSS2Info;
+// extern EffectSsInfo sEffectSsInfo;
 // extern UNK_TYPE1 D_801AE3B0;
 // extern UNK_TYPE1 D_801AE3B4;
 // extern UNK_TYPE4 D_801AE3B8;
@@ -410,16 +409,13 @@ extern EffectSsInfo EffectSS2Info;
 // extern UNK_TYPE1 D_801AE48A;
 // extern UNK_TYPE1 D_801AE48C;
 // extern UNK_TYPE1 D_801AE490;
-extern EffectSsOverlay particleOverlayTable[39];
+extern EffectSsOverlay gParticleOverlayTable[39];
 // extern FlagSetEntry sFlagEntries[];
 // extern s32 sEntryIndex;
 // extern u32 sCurrentBit;
 // extern s32 sTimer;
-extern Color_RGBA8 D_801AEC80;
-extern s801AEC84 D_801AEC84[13];
 extern f32 actorMovementScale;
-extern f32 D_801AECF0;
-extern f32 D_801AECF4;
+extern TargetRangeParams gTargetRanges[];
 extern s16 D_801AED48[8];
 // extern UNK_TYPE4 D_801AED58;
 extern Color_RGBA8 actorDefaultHitColor;
@@ -2838,7 +2834,7 @@ extern f32 D_801DE860;
 extern f32 D_801DE864;
 extern f32 D_801DE868;
 extern f32 D_801DE884;
-// extern UNK_TYPE1 D_801DE890;
+extern TexturePtr D_801DE890[];
 extern f32 D_801DF090;
 extern f32 D_801DF094;
 extern f32 D_801DF0A0;
@@ -3102,15 +3098,15 @@ extern u64 gJpegUCodeData[];
 
 // bss
 // extern UNK_TYPE1 D_801ED890;
-// extern UNK_TYPE1 D_801ED8A0;
-// extern UNK_TYPE1 D_801ED8B0;
-// extern UNK_TYPE1 D_801ED8B4;
+// extern UNK_TYPE1 D_801ED894;
+extern CollisionPoly* D_801ED8B0;
+extern s32 D_801ED8B4;
 // extern UNK_TYPE1 D_801ED8B8;
 // extern UNK_TYPE1 D_801ED8BC;
 // extern UNK_TYPE1 D_801ED8C0;
 // extern UNK_TYPE1 D_801ED8C4;
 extern f32 D_801ED8C8;
-extern f32 D_801ED8CC;
+extern f32 sBgmEnemyDistSq;
 extern f32 D_801ED8D0;
 // extern UNK_TYPE1 D_801ED8D4;
 // extern UNK_TYPE1 D_801ED8D8;
@@ -3862,14 +3858,6 @@ extern UNK_TYPE D_0400E3D8;
 extern UNK_TYPE D_0400E408;
 extern UNK_TYPE D_0400E410;
 extern UNK_TYPE D_0400E418;
-extern CollisionHeader D_0400E710; // Pink Deku Flower collision
-extern AnimationHeader D_0400EB7C; // Deku Flower intense flutter animation
-extern Gfx D_0400ED80; // Pink Deku Flower display list
-extern SkeletonHeader D_04011518; // Pink Deku Flower skeleton
-extern AnimationHeader D_040117A8; // Deku Flower small flutter animation
-extern CollisionHeader D_040118D8; // Gold Deku Flower collision
-extern Gfx D_04011BD0; // Gold Deku Flower display list
-extern SkeletonHeader D_040127E8; // Gold Deku Flower skeleton
 extern UNK_TYPE D_04012860;
 extern UNK_TYPE D_040128BC;
 extern u64 D_04014570[];
@@ -3891,7 +3879,6 @@ extern Gfx D_04023210[];
 extern UNK_TYPE D_04023288;
 extern Gfx D_04023348[];
 extern Gfx D_04023428[];
-extern UNK_TYPE D_04025850;
 extern UNK_TYPE D_04025DD0;
 extern UNK_TYPE D_040281DC;
 extern UNK_TYPE D_04028FEC;
@@ -3899,16 +3886,9 @@ extern AnimationHeader D_04029140;
 extern Gfx D_04029CB0[];
 extern Gfx D_04029CF0[];
 extern UNK_TYPE D_04029D20;
-extern AnimationHeader D_0402B494;
-extern AnimatedMaterial D_0402C818;
-extern AnimatedMaterial D_0402C890;
-extern AnimatedMaterial D_0402C908;
-extern AnimatedMaterial D_0402C980;
-extern AnimatedMaterial D_0402C9F8;
-extern FlexSkeletonHeader D_0402CA98;
 extern Gfx D_0402E510[];
-extern UNK_TYPE D_0402E65C;
-extern UNK_TYPE D_0402F0EC;
+extern AnimationHeader D_0402E65C;
+extern AnimationHeader D_0402F0EC;
 extern Gfx D_04030100[]; // Floor shockwave ring
 extern Gfx D_040301B0[];
 extern UNK_TYPE D_04032270;
@@ -3930,11 +3910,11 @@ extern UNK_TYPE D_0403F230;
 extern UNK_TYPE D_04044300;
 extern Gfx D_04048DF0[];
 extern UNK_TYPE D_04050D10;
-extern UNK_TYPE D_04051180;
-extern UNK_TYPE D_04051238;
+extern Gfx D_04051180[];
+extern Gfx D_04051238[];
 extern AnimationHeader D_0405140C;
-extern UNK_TYPE D_040527F0;
-extern UNK_TYPE D_040528B0;
+extern Gfx D_040527F0[];
+extern Gfx D_040528B0[];
 extern Gfx D_04054A90[];
 extern u64 D_04054F20[];
 extern UNK_TYPE D_04055628;
@@ -3950,7 +3930,8 @@ extern TexturePtr D_0408EFE0[]; // gDust6Tex
 extern TexturePtr D_0408F3E0[]; // gDust7Tex
 extern TexturePtr D_0408F7E0[]; // gDust8Tex
 extern UNK_TYPE D_04050550;
-extern UNK_TYPE D_04050648;
+extern Gfx D_04050648[];
+extern Gfx D_040506E0[];
 extern UNK_TYPE D_040510B0;
 extern UNK_TYPE D_04054940;
 extern Gfx D_0405AAB0[];
@@ -3976,17 +3957,14 @@ extern Gfx D_0406AB30[];
 extern UNK_TYPE D_0406B730;
 extern UNK_TYPE D_0406BB0C;
 extern UNK_TYPE D_0406F380;
+extern Gfx D_040706E0[];
 extern UNK_TYPE D_04073F00;
 extern UNK_TYPE D_04075400;
-extern Gfx D_04075A40[];
-extern Gfx D_04075B30[];
 extern Gfx D_04076BC0[];
-extern Gfx D_04077480[];
 extern UNK_TYPE D_04079B10;
 extern Gfx D_0407AB10[]; // sun (sparkles when small) displaylist
 extern Gfx D_0407AB58[];
 extern UNK_TYPE D_0407AFB0;
-extern Gfx gGameplayKeepDrawFlameDL[];
 extern UNK_TYPE D_0407D650;
 extern UNK_TYPE D_0407F218;
 extern UNK_TYPE D_040815D0;
@@ -3994,16 +3972,20 @@ extern UNK_TYPE D_04081628;
 extern UNK_TYPE D_04083534;
 extern UNK_TYPE D_04091BE0;
 extern UNK_TYPE D_04091CE0;
+extern TexturePtr D_04091DE0[];
+extern TexturePtr D_04091FE0[];
+extern TexturePtr D_040921E0[];
+extern TexturePtr D_040923E0[];
 
 extern Gfx D_05000C40[];
 extern UNK_TYPE D_05001D20;
-extern UNK_TYPE D_050061E8;
-extern UNK_TYPE D_05006420;
-extern UNK_TYPE D_050066B0;
+extern Gfx D_050061E8[];
+extern Gfx D_05006420[];
+extern Gfx D_050066B0[];
 extern UNK_TYPE D_05007498;
 extern Gfx D_05007890[];
-extern UNK_TYPE D_050078A0;
-extern UNK_TYPE D_05007938;
+extern Gfx D_050078A0[];
+extern Gfx D_05007938[];
 extern Gfx D_05007980[];
 extern UNK_TYPE D_05007E00;
 extern UNK_TYPE D_05008018;
@@ -4020,7 +4002,7 @@ extern UNK_TYPE D_0502324C;
 
 // other segments
 extern GfxMasterList D_0E000000;
-
+extern Mtx D_01000000;
 extern UNK_TYPE D_0F000000;
 
 
