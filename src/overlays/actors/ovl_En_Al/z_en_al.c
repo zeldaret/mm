@@ -457,7 +457,7 @@ s32 func_80BDEC2C(EnAl* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 ret = false;
 
-    if ((this->unk_4C2 & 7) && Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if ((this->unk_4C2 & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_4C2 &= ~0x1800;
         if (player->exchangeItemId == 0x33) {
             this->unk_4C2 |= 0x800;
