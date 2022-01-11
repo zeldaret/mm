@@ -577,14 +577,14 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
     if ((ABS_ALT(yaw) < 0x1554) && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 150.0f)) {
         if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
             !(player->stateFlags2 & 0x4080)) {
-            if (this->unk_3ED == 0) {
+            if (this->playerStunWaitTimer == 0) {
                 if (!(this->unk_3DC & 0x80)) {
                     player->actor.freezeTimer = 40;
                     func_80123E90(globalCtx, &this->actor);
                     GET_PLAYER(globalCtx)->unk_A78 = &this->actor;
                     func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
                 }
-                this->unk_3ED = 60;
+                this->playerStunWaitTimer = 60;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             }
         } else {
@@ -592,11 +592,11 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->unk_3EE != 0) {
-        this->unk_3EE--;
+    if (this->grabWaitTimer != 0) {
+        this->grabWaitTimer--;
     }
 
-    if (!this->unk_3EE && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 45.0f) &&
+    if (!this->grabWaitTimer && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 45.0f) &&
         Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         player->actor.freezeTimer = 0;
         if ((player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU)) {
@@ -811,8 +811,8 @@ void EnRd_Grab(EnRd* this, GlobalContext* globalCtx) {
             }
             this->actor.targetMode = 0;
             this->actor.flags |= 1;
-            this->unk_3ED = 10;
-            this->unk_3EE = 15;
+            this->playerStunWaitTimer = 10;
+            this->grabWaitTimer = 15;
             EnRd_SetupWalkToPlayer(this, globalCtx);
             break;
     }
@@ -999,8 +999,8 @@ void EnRd_SetupStunned(EnRd* this) {
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (gSaveContext.unk_3F58 != 0) {
-        this->unk_3E9 = 1;
-        this->unk_3E0 = 600;
+        this->stunnedBySunsSong = true;
+        this->sunsSongStunTimer = 600;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
         Actor_SetColorFilter(&this->actor, 0x8000, 0x80C8, 0, 255);
     } else if (this->unk_3F0 == 1) {
@@ -1016,15 +1016,15 @@ void EnRd_Stunned(EnRd* this, GlobalContext* globalCtx) {
         this->stunTimer--;
     }
 
-    if (this->unk_3E9 != 0) {
-        if (this->unk_3E0 != 0) {
-            this->unk_3E0--;
-            if (this->unk_3E0 >= 255) {
+    if (this->stunnedBySunsSong) {
+        if (this->sunsSongStunTimer != 0) {
+            this->sunsSongStunTimer--;
+            if (this->sunsSongStunTimer >= 255) {
                 Actor_SetColorFilter(&this->actor, 0x8000, 0x80C8, 0, 255);
             }
 
-            if (this->unk_3E0 == 0) {
-                this->unk_3E9 = 0;
+            if (this->sunsSongStunTimer == 0) {
+                this->stunnedBySunsSong = false;
                 gSaveContext.unk_3F58 = 0;
             }
         }
@@ -1064,7 +1064,7 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((gSaveContext.unk_3F58 != 0) && (this->actor.shape.rot.x == 0) && (this->unk_3E9 == 0) &&
+    if ((gSaveContext.unk_3F58 != 0) && (this->actor.shape.rot.x == 0) && (!this->stunnedBySunsSong) &&
         (this->unk_3EF != 11) && (this->unk_3EF != 12) && (this->unk_3EF != 1)) {
         EnRd_SetupStunned(this);
         return;
@@ -1102,8 +1102,8 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
                 this->effectTimer = 180;
                 this->effectType = 0;
-                this->unk_3E9 = 0;
-                this->unk_3E0 = 0;
+                this->stunnedBySunsSong = false;
+                this->sunsSongStunTimer = 0;
                 this->effectAlpha = 1.0f;
                 break;
 
@@ -1111,21 +1111,21 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
                 this->effectTimer = 60;
                 this->effectType = 20;
-                this->unk_3E9 = 0;
-                this->unk_3E0 = 0;
+                this->stunnedBySunsSong = false;
+                this->sunsSongStunTimer = 0;
                 this->effectAlpha = 1.0f;
                 break;
 
             case EN_RD_DMGEFF_DAMAGE:
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-                this->unk_3E9 = 0;
-                this->unk_3E0 = 0;
+                this->stunnedBySunsSong = false;
+                this->sunsSongStunTimer = 0;
                 break;
 
             case EN_RD_DMGEFF_LIGHT_RAY:
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-                this->unk_3E9 = 0;
-                this->unk_3E0 = 0;
+                this->stunnedBySunsSong = false;
+                this->sunsSongStunTimer = 0;
                 this->actor.colChkInfo.health = 0;
                 break;
 
@@ -1174,13 +1174,13 @@ void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRd* this = THIS;
 
     EnRd_UpdateDamage(this, globalCtx);
-    if ((gSaveContext.unk_3F58 != 0) && (this->unk_3E9 == 0)) {
+    if ((gSaveContext.unk_3F58 != 0) && (!this->stunnedBySunsSong)) {
         gSaveContext.unk_3F58 = 0;
     }
 
     if ((this->unk_3F0 != 6) && ((this->unk_3EF != 13) || (this->unk_3F0 != 2))) {
-        if (this->unk_3ED != 0) {
-            this->unk_3ED--;
+        if (this->playerStunWaitTimer != 0) {
+            this->playerStunWaitTimer--;
         }
 
         this->actionFunc(this, globalCtx);

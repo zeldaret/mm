@@ -79,17 +79,17 @@ typedef struct EnRd {
     /* 0x03DA */ s16 upperBodyYRotation;
     /* 0x03DC */ s16 unk_3DC;
     /* 0x03DE */ s16 alpha;
-    /* 0x03E0 */ s16 unk_3E0;
+    /* 0x03E0 */ s16 sunsSongStunTimer;
     /* 0x03E2 */ s16 unk_3E2;
     /* 0x03E4 */ s16 unk_3E4;
     /* 0x03E6 */ s16 effectTimer;
     /* 0x03E8 */ u8 effectType;
-    /* 0x03E9 */ u8 unk_3E9;
+    /* 0x03E9 */ u8 stunnedBySunsSong;
     /* 0x03EA */ u8 unk_3EA;
     /* 0x03EB */ u8 unk_3EB;
     /* 0x03EC */ u8 unk_3EC;
-    /* 0x03ED */ u8 unk_3ED;
-    /* 0x03EE */ u8 unk_3EE;
+    /* 0x03ED */ u8 playerStunWaitTimer; // Cannot stun the player if this is non-zero
+    /* 0x03EE */ u8 grabWaitTimer; // Cannot grab the player if this is non-zero
     /* 0x03EF */ u8 unk_3EF;
     /* 0x03F0 */ u8 unk_3F0;
     /* 0x03F1 */ s8 unk_3F1;
