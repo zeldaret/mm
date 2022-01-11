@@ -262,7 +262,7 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
             if (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000) {
                 this->unk_168 = 0;
                 this->unk_148 = 1;
-                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
             }
         }
 
@@ -317,7 +317,7 @@ void func_80A49FD8(EnWizFire* this, GlobalContext* globalCtx) {
             if (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000) {
                 this->unk_168 = 0;
                 this->unk_148 = 1;
-                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
             }
         }
     }
@@ -382,7 +382,7 @@ void func_80A4A11C(EnWizFire* this, GlobalContext* globalCtx) {
                 D_80A4C1C0 = 1;
                 this->unk_148 = 1;
                 this->unk_16A = 0;
-                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
             }
         }
         this->actor.world.pos.y = this->actor.floorHeight + 10.0f;

@@ -2139,7 +2139,7 @@ void func_800B8E58(Player* player, u16 sfxId) {
  * Plays the sound effect at the actor's position
  */
 void Actor_PlaySfxAtPos(Actor* actor, u16 sfxId) {
-    func_8019F1C0(&actor->projectedPos, sfxId);
+    Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
 }
 
 void func_800B8EF4(GlobalContext* globalCtx, Actor* actor) {
@@ -2155,8 +2155,8 @@ void func_800B8EF4(GlobalContext* globalCtx, Actor* actor) {
         sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
     }
 
-    func_8019F1C0(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
-    func_8019F1C0(&actor->projectedPos, sfxId + SFX_FLAG);
+    Audio_PlaySfxAtPos(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
+    Audio_PlaySfxAtPos(&actor->projectedPos, sfxId + SFX_FLAG);
 }
 
 void func_800B8F98(Actor* actor, u16 sfxId) {
@@ -2580,7 +2580,7 @@ void func_800B9D1C(Actor* actor) {
         } else if (actor->audioFlags & 0x10) {
             func_801A0810(&D_801DB4A4, NA_SE_SY_TIMER - SFX_FLAG, (sfxId - 1));
         } else if (actor->audioFlags & 1) {
-            func_8019F1C0(&actor->projectedPos, sfxId);
+            Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
         }
     }
 
@@ -3345,7 +3345,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
         actorCtx->targetContext.bgmEnemy = NULL;
     }
 
-    func_801A72CC(&actor->projectedPos);
+    Audio_StopSfxByPos(&actor->projectedPos);
     Actor_Destroy(actor, globalCtx);
 
     newHead = Actor_RemoveFromCategory(globalCtx, actorCtx, actor);
@@ -3487,7 +3487,7 @@ void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, A
  */
 void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor) {
     globalCtx->actorCtx.freezeFlashTimer = 5;
-    Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 20, NA_SE_EN_LAST_DAMAGE);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &actor->world.pos, 20, NA_SE_EN_LAST_DAMAGE);
 }
 
 // blinking routine
@@ -4717,7 +4717,7 @@ void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos
     s16 yaw;
     s32 j;
 
-    Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 30, NA_SE_EV_ICE_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &actor->world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < limbPosCount; i++) {
         yaw = Actor_YawToPoint(actor, limbPos);

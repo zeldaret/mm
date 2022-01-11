@@ -198,11 +198,11 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
                     if (phi_v0) {
                         ptr->unk_00 = 0;
-                        Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_BOMB_DROP_WATER);
+                        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_BOMB_DROP_WATER);
                     } else {
                         ptr->unk_04.y = this->actor.floorHeight;
                         if (ptr->unk_2A == 0) {
-                            Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP_GRD);
+                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP_GRD);
                             ptr->unk_00 = 3;
                             ptr->unk_2C.x = 0.1f;
                             ptr->unk_2C.y = 0.6f;
@@ -215,7 +215,7 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             EffectSsGSplash_Spawn(globalCtx, &sp98, NULL, NULL, 1, 100);
                         } else {
                             ptr->unk_00 = 0;
-                            Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP);
+                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP);
                             EffectSsGRipple_Spawn(globalCtx, &ptr->unk_04, 70, 500, 0);
                             EffectSsGRipple_Spawn(globalCtx, &ptr->unk_04, 70, 500, 10);
                             Math_Vec3f_Copy(&sp98, &ptr->unk_04);
@@ -493,7 +493,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
                             for (j = 0; j < 5; j++) {
                                 func_80A599E8(this, &ptr->unk_04, 2);
                             }
-                            Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_PLANT_BROKEN);
+                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_PLANT_BROKEN);
                         }
                         ptr->unk_2A++;
                     }

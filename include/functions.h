@@ -1353,11 +1353,10 @@ void EffFootmark_Init(GlobalContext* globalCtx);
 void EffFootmark_Add(GlobalContext* globalCtx, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay);
 void EffFootmark_Update(GlobalContext* globalCtx);
 void EffFootmark_Draw(GlobalContext* globalCtx);
-void func_800F0390(GlobalContext* globalCtx);
-void func_800F03C0(GlobalContext* globalCtx);
-void func_800F048C(GlobalContext* globalCtx, Vec3f* param_2, u8 param_3, u16 param_4, u8 param_5);
-void Audio_PlaySoundAtPosition(GlobalContext* globalCtx, Vec3f* position, s32 param_3, u16 sfxId);
-void func_800F0590(GlobalContext* globalCtx, Vec3f* arg1, s32 arg2, s32 arg3);
+void SoundSource_InitAll(GlobalContext* globalCtx);
+void SoundSource_UpdateAll(GlobalContext* globalCtx);
+void SoundSource_PlaySfxAtFixedWorldPos(GlobalContext* globalCtx, Vec3f* worldPos, u32 duration, u16 sfxId);
+void SoundSource_PlaySfxEachFrameAtFixedWorldPos(GlobalContext* globalCtx, Vec3f* worldPos, u32 duration, u16 sfxId);
 u16 ElfMessage_GetFirstCycleHint(GlobalContext* globalCtx);
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex);
 Actor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx);
@@ -1578,7 +1577,7 @@ void Math_ApproachS(s16* pValue, s16 target, s16 scale, s16 maxStep);
 void Color_RGBA8_Copy(Color_RGBA8* dst, Color_RGBA8* src);
 void func_801000A4(u16 sfxId);
 void func_801000CC(u16 sfxId);
-void func_801000F4(s32 a0, u16 a1);
+void Lib_PlaySfxAtPos(Vec3f* pos, u16 sfxId);
 void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 a, Vec3f* src, Vec3f* dst);
 void Lib_LerpRGB(Color_RGB8* a, Color_RGB8* b, f32 t, Color_RGB8* dst);
 f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed);
@@ -3548,12 +3547,12 @@ void func_8019E014(void);
 // void func_8019EB2C(void);
 // void func_8019F024(void);
 // void func_8019F05C(void);
-void func_8019F170(Vec3f* pos, u16 sfxId);
-void func_8019F1C0(Vec3f* pos, u16 sfxId);
 void play_sound(u16 sfxId);
 void func_8019F128(u16 sfxId);
-void func_8019F208(void); // Decide sound
-void func_8019F230(void); // Cancel sound
+void func_8019F170(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfxAtPos(Vec3f* pos, u16 sfxId);
+void func_8019F208(void); // decide sfx
+void func_8019F230(void); // cancel sfx
 // void func_8019F258(void);
 // void func_8019F300(void);
 void func_8019F420(Vec3f* pos, u16 sfxId);
@@ -3711,7 +3710,7 @@ void Audio_PlaySfxGeneral(u16 sfxId, Vec3f* param_2, u8 param_3, f32* param_4, f
 // void func_801A7084(void);
 // void func_801A7168(void);
 // void func_801A7284(void);
-void func_801A72CC(Vec3f* uParm1);
+void Audio_StopSfxByPos(Vec3f* pos);
 void func_801A7328(Vec3f* pos, u16 sfxId);
 // void func_801A7484(void);
 void func_801A75E8(u16 sfxId);
