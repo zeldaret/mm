@@ -593,7 +593,8 @@ void func_80AD8388(EnKame* this, GlobalContext* globalCtx) {
     if (this->unk_29E > 0) {
         this->unk_29E--;
         if (this->unk_29E == 0) {
-            func_800F0590(globalCtx, &this->actor.world.pos, 21, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            SoundSource_PlaySfxEachFrameAtFixedWorldPos(globalCtx, &this->actor.world.pos, 21,
+                                                        NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         }
     } else {
         this->actor.scale.x -= 0.001f;
