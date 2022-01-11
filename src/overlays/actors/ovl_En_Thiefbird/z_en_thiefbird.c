@@ -661,7 +661,7 @@ void func_80C11DF0(EnThiefbird* this, GlobalContext* globalCtx) {
             func_800B3030(globalCtx, &this->unk_350[i], &gZeroVec3f, &gZeroVec3f, 0x8C, 0, 0);
         }
 
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
         Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_RUPEE_HUGE);
 
         for (i = 0; i < ARRAY_COUNT(D_80C13664); i++) {
