@@ -87,6 +87,8 @@ typedef enum {
     /* 0x1 */ EN_RD_DMGEFF_STUN,              // Stuns without applying any effect
     /* 0x2 */ EN_RD_DMGEFF_FIRE_ARROW,        // Damages and applies a fire effect
     /* 0x4 */ EN_RD_DMGEFF_LIGHT_ARROW = 0x4, // Damages and applies a light effect
+    /* 0x6 */ EN_RD_DMGEFF_UNUSED_6 = 0x6,    // Referenced in EnRd_Update, but no attack uses this damage effect.
+                                              // Likely to have originally been used for Ice Arrows like OoT.
     /* 0xC */ EN_RD_DMGEFF_ZORA_MAGIC = 0xC,  // Stuns and applies an electric effect
     /* 0xD */ EN_RD_DMGEFF_RECOIL,            // Deals no damage, but displays hit mark and recoil animation
     /* 0xE */ EN_RD_DMGEFF_LIGHT_RAY,         // Instantly kills on contact
@@ -1003,9 +1005,9 @@ void EnRd_SetupStunned(EnRd* this) {
         this->sunsSongStunTimer = 600;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
         Actor_SetColorFilter(&this->actor, 0x8000, 0x80C8, 0, 255);
-    } else if (this->unk_3F0 == 1) {
+    } else if (this->damageEffect == EN_RD_DMGEFF_STUN) {
         Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 40);
-    } else if (this->unk_3F0 == 12) {
+    } else if (this->damageEffect == EN_RD_DMGEFF_ZORA_MAGIC) {
         Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 40);
     }
     this->actionFunc = EnRd_Stunned;
@@ -1072,7 +1074,7 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        this->unk_3F0 = this->actor.colChkInfo.damageEffect;
+        this->damageEffect = this->actor.colChkInfo.damageEffect;
 
         if (this->unk_3EF == 13) {
             return;
@@ -1084,7 +1086,7 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
             this->unk_3F1 = player->unk_ADD;
         }
 
-        switch (this->unk_3F0) {
+        switch (this->damageEffect) {
             case EN_RD_DMGEFF_ZORA_MAGIC:
                 if ((this->actionFunc != EnRd_Grab) && ((this->actionFunc != EnRd_Stunned) || (this->stunTimer == 0))) {
                     this->effectTimer = 40;
@@ -1178,7 +1180,8 @@ void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.unk_3F58 = 0;
     }
 
-    if ((this->unk_3F0 != 6) && ((this->unk_3EF != 13) || (this->unk_3F0 != 2))) {
+    if ((this->damageEffect != EN_RD_DMGEFF_UNUSED_6) &&
+        ((this->unk_3EF != 13) || (this->damageEffect != EN_RD_DMGEFF_FIRE_ARROW))) {
         if (this->playerStunWaitTimer != 0) {
             this->playerStunWaitTimer--;
         }

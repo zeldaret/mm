@@ -91,8 +91,8 @@ typedef struct EnRd {
     /* 0x03ED */ u8 playerStunWaitTimer; // Cannot stun the player if this is non-zero
     /* 0x03EE */ u8 grabWaitTimer; // Cannot grab the player if this is non-zero
     /* 0x03EF */ u8 unk_3EF;
-    /* 0x03F0 */ u8 unk_3F0;
-    /* 0x03F1 */ s8 unk_3F1;
+    /* 0x03F0 */ u8 damageEffect;
+    /* 0x03F1 */ s8 unk_3F1; // related to player->unk_ADD
 } EnRd; // size = 0x3F4
 
 extern const ActorInit En_Rd_InitVars;
