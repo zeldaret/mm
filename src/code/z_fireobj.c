@@ -131,7 +131,7 @@ void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
             }
         } else if (player->unk_B28 == 0) {
             player->unk_B28 = 0xD2;
-            Audio_PlaySoundAtPosition(globalCtx, &fire->position, 20, NA_SE_EV_FLAME_IGNITION);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &fire->position, 20, NA_SE_EV_FLAME_IGNITION);
         } else if (player->unk_B28 < 0xC8) {
             player->unk_B28 = 0xC8;
         }
