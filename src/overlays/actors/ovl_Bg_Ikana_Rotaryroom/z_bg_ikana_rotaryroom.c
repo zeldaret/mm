@@ -198,7 +198,7 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         spC4 = 0;
     }
 
-    actor = globalCtx->actorCtx.actorList[ACTORCAT_DOOR].first;
+    actor = globalCtx->actorCtx.actorLists[ACTORCAT_DOOR].first;
     Matrix_StatePush();
     sp60.x = BINANG_ROT180(this->dyna.actor.home.rot.x);
     sp60.y = this->dyna.actor.home.rot.y;
@@ -293,7 +293,7 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         this->unk_248[i].unk_00 = NULL;
     }
 
-    actor = globalCtx->actorCtx.actorList[ACTORCAT_DOOR].first;
+    actor = globalCtx->actorCtx.actorLists[ACTORCAT_DOOR].first;
     i = 0;
     while (actor != NULL) {
         if (func_80B80778(this, globalCtx, actor) && (i < 2)) {
@@ -317,7 +317,7 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         this->unk_2D0[i].unk_00 = NULL;
     }
 
-    actor = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    actor = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     i = 0;
     while (actor != NULL) {
         if ((actor->id == ACTOR_EN_TORCH2) && (actor->update != NULL) && (i < 4)) {
@@ -341,7 +341,7 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         this->unk_3E0[i].unk_00 = NULL;
     }
 
-    actor = globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first;
+    actor = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
     i = 0;
     while (actor != NULL) {
         if ((actor->update != NULL) && (actor->id != ACTOR_EN_WATER_EFFECT) && (i < 4)) {
@@ -494,7 +494,7 @@ s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             if (!Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
                 sp24 = true;
             }
-            Actor_SetSwitchFlag(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor));
+            Flags_SetSwitch(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor));
         }
     }
     return sp24;
@@ -755,9 +755,9 @@ void func_80B818C8(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~AC_HIT;
         sp20 = BGIKANAROTARYROOM_GET_FE(&this->dyna.actor);
         if (Flags_GetSwitch(globalCtx, sp20)) {
-            Actor_UnsetSwitchFlag(globalCtx, sp20);
+            Flags_UnsetSwitch(globalCtx, sp20);
         } else {
-            Actor_SetSwitchFlag(globalCtx, sp20);
+            Flags_SetSwitch(globalCtx, sp20);
         }
         func_80B81978(this);
     } else {
@@ -991,11 +991,11 @@ void BgIkanaRotaryroom_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 param = BGIKANAROTARYROOM_GET_1(&this->dyna.actor);
 
     if (!param) {
-        func_800BDFC0(globalCtx, object_ikana_obj_DL_0048A0);
-        func_800BE03C(globalCtx, object_ikana_obj_DL_004710);
+        Gfx_DrawDListOpa(globalCtx, object_ikana_obj_DL_0048A0);
+        Gfx_DrawDListXlu(globalCtx, object_ikana_obj_DL_004710);
     } else {
         AnimatedMat_Draw(globalCtx, this->unk_1FC);
-        func_800BDFC0(globalCtx, object_ikana_obj_DL_007448);
-        func_800BE03C(globalCtx, object_ikana_obj_DL_007360);
+        Gfx_DrawDListOpa(globalCtx, object_ikana_obj_DL_007448);
+        Gfx_DrawDListXlu(globalCtx, object_ikana_obj_DL_007360);
     }
 }
