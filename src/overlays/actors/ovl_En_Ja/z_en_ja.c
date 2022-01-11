@@ -115,7 +115,7 @@ void func_80BC1984(EnJa* this, GlobalContext* globalCtx) {
 s32 func_80BC19FC(EnJa* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if ((this->unk_340 & 7) && func_800B84D0(&this->actor, globalCtx)) {
+    if ((this->unk_340 & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_8013AED4(&this->unk_340, 0, 7);
         this->actionFunc = func_80BC22F4;
         ret = true;
@@ -208,7 +208,7 @@ s32 func_80BC1D70(EnJa* this, GlobalContext* globalCtx) {
 
 void func_80BC1E40(EnJa* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 sp20 = func_80152498(&globalCtx->msgCtx);
+    s32 sp20 = Message_GetState(&globalCtx->msgCtx);
     f32 phi_f0;
 
     if (((globalCtx->msgCtx.unk11F04 < 0xFF) || (globalCtx->msgCtx.unk11F04 > 0x200)) && (sp20 == 3) &&
@@ -301,7 +301,7 @@ void func_80BC21A8(EnJa* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~1;
         sp18.unk0 = 0;
     } else {
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= 1;
     }
     this->unk_1D8.unk_00 = sp18.unk0;
@@ -339,7 +339,7 @@ void func_80BC22F4(EnJa* this, GlobalContext* globalCtx) {
 void EnJa_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnJa* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boj_Skel_00C240, NULL, this->jointTable, this->morphTable,
                        16);
     this->unk_36C = -1;
@@ -382,7 +382,7 @@ void EnJa_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_8013C964(&this->actor, globalCtx, radius, height, 0, this->unk_340 & 7);
 
         if (this->unk_1D8.unk_00 != 2) {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         }
         func_80BC1984(this, globalCtx);
