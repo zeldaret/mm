@@ -2255,7 +2255,7 @@ void func_80AA88A8(DmChar01* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x87)) {
         if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x87)]->startFrame) {
             D_80AAAE24 = 1;
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_FORT_RISING);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FORT_RISING);
         }
     } else {
         D_80AAAE24 = 0;
@@ -2330,7 +2330,7 @@ void func_80AA8C28(DmChar01* this, GlobalContext* globalCtx) {
 
     switch (this->unk_346) {
         case 0:
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WATER_PURIFICATION);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WATER_PURIFICATION);
             D_80AAAE22 = -2200;
             D_80AAAE20 = 100;
             this->unk_346++;
@@ -2458,14 +2458,14 @@ void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx) {
             switch (this->unk_34C) {
                 case 0:
                     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_00AA50));
-                    func_800BDFC0(globalCtx, object_mtoride_DL_00A8F8);
+                    Gfx_DrawDListOpa(globalCtx, object_mtoride_DL_00A8F8);
                     break;
 
                 case 1:
                     if (gSaveContext.sceneSetupIndex == 1) {
                         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_0110B8));
-                        func_800BDFC0(globalCtx, object_mtoride_DL_010FD8);
-                        func_800BE03C(globalCtx, object_mtoride_DL_010EF0);
+                        Gfx_DrawDListOpa(globalCtx, object_mtoride_DL_010FD8);
+                        Gfx_DrawDListXlu(globalCtx, object_mtoride_DL_010EF0);
                         Matrix_InsertTranslation(0.0f, 10.0f, 0.0f, MTXMODE_APPLY);
                     }
                     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_009D70));
@@ -2501,8 +2501,8 @@ void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
                 case 2:
                     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_0110B8));
-                    func_800BDFC0(globalCtx, object_mtoride_DL_010FD8);
-                    func_800BE03C(globalCtx, object_mtoride_DL_010EF0);
+                    Gfx_DrawDListOpa(globalCtx, object_mtoride_DL_010FD8);
+                    Gfx_DrawDListXlu(globalCtx, object_mtoride_DL_010EF0);
                     break;
             }
             break;
@@ -2511,19 +2511,19 @@ void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx) {
             switch (this->unk_34C) {
                 case 0:
                     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_00A5C0));
-                    func_800BDFC0(globalCtx, object_mtoride_DL_00A398);
+                    Gfx_DrawDListOpa(globalCtx, object_mtoride_DL_00A398);
                     break;
 
                 case 1:
                     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_00B1A0));
-                    func_800BDFC0(globalCtx, object_mtoride_DL_00AF98);
+                    Gfx_DrawDListOpa(globalCtx, object_mtoride_DL_00AF98);
                     break;
             }
             break;
 
         case 2:
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_00FE90));
-            func_800BDFC0(globalCtx, object_mtoride_DL_00DF18);
+            Gfx_DrawDListOpa(globalCtx, object_mtoride_DL_00DF18);
 
             if ((this->unk_34C != 0) && ((u8)this->unk_348 != 0)) {
                 AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_00F768));
@@ -2587,12 +2587,12 @@ void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 }
             }
 
-            func_800BE03C(globalCtx, object_mtoride_DL_00DE50);
+            Gfx_DrawDListXlu(globalCtx, object_mtoride_DL_00DE50);
             break;
 
         case 3:
             if (thisx->world.pos.y > -120.0f) {
-                func_800BDFC0(globalCtx, object_mtoride_DL_00FAE8);
+                Gfx_DrawDListOpa(globalCtx, object_mtoride_DL_00FAE8);
             }
             break;
     }
