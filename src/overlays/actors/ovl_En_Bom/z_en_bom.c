@@ -130,13 +130,13 @@ void EnBom_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 params;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 700.0f, func_800B3FC0, 16.0f);
+    ActorShape_Init(&this->actor.shape, 700.0f, ActorShadow_DrawCircle, 16.0f);
     this->actor.colChkInfo.mass = 200;
     this->actor.colChkInfo.cylRadius = 5;
     this->actor.colChkInfo.cylHeight = 10;
 
     this->flashSpeedScale = 7;
-    this->isPowderKeg = this->actor.shape.rot.x & 1;
+    this->isPowderKeg = ENBOM_GETX_1(&this->actor);
     if (this->isPowderKeg) {
         globalCtx->actorCtx.unk5 |= 1;
         this->timer = gSaveContext.powderKegTimer;
@@ -159,9 +159,9 @@ void EnBom_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_80872648(globalCtx, &this->actor.world.pos);
     }
 
-    this->collider3.info.toucher.damage += (thisx->shape.rot.z & 0xFF00) >> 8;
+    this->collider3.info.toucher.damage += ENBOM_GETZ_FF00(thisx);
     this->actor.shape.rot.z &= 0xFF;
-    if (this->actor.shape.rot.z & 0x80) {
+    if (ENBOM_GETZ_80(&this->actor)) {
         this->actor.shape.rot.z |= 0xFF00;
     }
 
@@ -216,8 +216,8 @@ void func_80871058(EnBom* this, GlobalContext* globalCtx) {
                 BINANG_SUB(this->actor.wallYaw - this->actor.world.rot.y + this->actor.wallYaw, 0x8000);
         }
 
-        Audio_PlayActorSound2(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_PlaySfxAtPos(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
+        Actor_MoveWithGravity(&this->actor);
         this->actor.speedXZ *= 0.7f;
         this->actor.bgCheckFlags &= ~8;
     }
@@ -280,7 +280,7 @@ void func_80871058(EnBom* this, GlobalContext* globalCtx) {
         }
 
         if (this->actor.bgCheckFlags & 2) {
-            Audio_PlayActorSound2(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
+            Actor_PlaySfxAtPos(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
             if (this->actor.velocity.y < sp58->y) {
                 if ((sp54 == 4) || (sp54 == 14) || (sp54 == 15)) {
                     this->actor.velocity.y = 0.0f;
@@ -290,11 +290,11 @@ void func_80871058(EnBom* this, GlobalContext* globalCtx) {
                 this->actor.bgCheckFlags &= ~1;
             }
         } else if (this->timer >= 4) {
-            func_800B8BB0(&this->actor, globalCtx);
+            Actor_LiftActor(&this->actor, globalCtx);
         }
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_808714D4(EnBom* this, GlobalContext* globalCtx) {
@@ -346,7 +346,7 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
         this->collider2.base.atFlags &= ~OC1_TYPE_1;
     }
 
-    if (this->actor.params == 1) {
+    if (this->actor.params == ENBOM_1) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
     }
 
@@ -444,7 +444,7 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_1FC != 0) {
         this->unk_1FC--;
         Math_ApproachZeroF(&thisx->speedXZ, 1.0f, 1.0f);
-        Actor_SetVelocityAndMoveYRotationAndGravity(thisx);
+        Actor_MoveWithGravity(thisx);
         Actor_UpdateBgCheckInfo(globalCtx, thisx, 35.0f, 10.0f, 36.0f, 4);
         if (this->unk_1FC == 0) {
             if (this->isPowderKeg) {
@@ -461,7 +461,7 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if ((!this->isPowderKeg && (this->timer == 67)) || (this->isPowderKeg && (this->timer <= 2400))) {
-            Audio_PlayActorSound2(thisx, NA_SE_PL_TAKE_OUT_SHIELD);
+            Actor_PlaySfxAtPos(thisx, NA_SE_PL_TAKE_OUT_SHIELD);
             Actor_SetScale(thisx, enBomScales[this->isPowderKeg]);
         }
 
@@ -472,7 +472,7 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
 
         Actor_UpdateBgCheckInfo(globalCtx, thisx, 35.0f, 10.0f, 36.0f, 0x1F);
-        if (thisx->params == 0) {
+        if (thisx->params == ENBOM_0) {
             static Vec3us D_80872ED4[] = {
                 { 40, 20, 100 },
                 { 300, 60, 600 },
@@ -490,7 +490,7 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
                               : (this->flashSpeedScale == 3) ? 1
                                                              : 2);
             } else {
-                Audio_PlayActorSound2(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
+                Actor_PlaySfxAtPos(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
             }
 
             sp80.y += 3.0f;
@@ -538,22 +538,22 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
                 globalCtx->envCtx.unk_8C.ambientColor[0] = globalCtx->envCtx.unk_8C.ambientColor[1] =
                     globalCtx->envCtx.unk_8C.ambientColor[2] = 250;
                 func_800DFD04(&globalCtx->mainCamera, 2, 11, 8);
-                thisx->params = 1;
+                thisx->params = ENBOM_1;
                 this->timer = 10;
                 thisx->flags |= (0x100000 | 0x20);
                 this->actionFunc = func_808715B8;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;
-                    Audio_PlayActorSound2(thisx, NA_SE_IT_BIG_BOMB_EXPLOSION);
+                    Actor_PlaySfxAtPos(thisx, NA_SE_IT_BIG_BOMB_EXPLOSION);
                 } else {
-                    Audio_PlayActorSound2(thisx, NA_SE_IT_BOMB_EXPLOSION);
+                    Actor_PlaySfxAtPos(thisx, NA_SE_IT_BOMB_EXPLOSION);
                 }
             }
         }
 
-        Actor_SetHeight(thisx, 20.0f);
+        Actor_SetFocus(thisx, 20.0f);
 
-        if (thisx->params <= 0) {
+        if (thisx->params <= ENBOM_0) {
             Collider_UpdateCylinder(thisx, &this->collider1);
             if (!Actor_HasParent(thisx, globalCtx) && (this->unk_1F8 != 0)) {
                 CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
@@ -561,7 +561,7 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
         }
 
-        if ((enBomScales[this->isPowderKeg] <= thisx->scale.x) && (thisx->params != 1)) {
+        if ((enBomScales[this->isPowderKeg] <= thisx->scale.x) && (thisx->params != ENBOM_1)) {
             if (thisx->depthInWater >= 20.0f) {
                 Vec3f sp54;
 
@@ -573,14 +573,14 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
                 sp54.y += 10.0f;
                 EffectSsGSplash_Spawn(globalCtx, &sp54, NULL, NULL, 1, 500);
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sp54.x, sp54.y, sp54.z, 0, 0, 1, 200);
-                Audio_PlaySoundAtPosition(globalCtx, &thisx->world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &thisx->world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
                 this->unk_1F4 = 0.0f;
                 thisx->velocity.y = (KREG(83) * 0.1f) + -2.0f;
                 thisx->gravity = (KREG(84) * 0.1f) + -0.5f;
                 this->unk_1FC = KREG(81) + 10;
             } else if (thisx->bgCheckFlags & 0x40) {
                 thisx->bgCheckFlags &= ~0x40;
-                Audio_PlayActorSound2(thisx, NA_SE_EV_BOMB_DROP_WATER);
+                Actor_PlaySfxAtPos(thisx, NA_SE_EV_BOMB_DROP_WATER);
             }
         }
     }
@@ -599,7 +599,7 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    if (this->actor.params == 0) {
+    if (this->actor.params == ENBOM_0) {
         func_8012C28C(globalCtx->state.gfxCtx);
 
         Collider_UpdateSpheres(0, &this->collider2);

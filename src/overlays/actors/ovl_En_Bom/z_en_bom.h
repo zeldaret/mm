@@ -7,6 +7,15 @@ struct EnBom;
 
 typedef void (*EnBomActionFunc)(struct EnBom*, GlobalContext*);
 
+#define ENBOM_GETX_1(thisx) ((thisx)->shape.rot.x & 1)
+#define ENBOM_GETZ_80(thisx) ((thisx)->shape.rot.z & 0x80)
+#define ENBOM_GETZ_FF00(thisx) (((thisx)->shape.rot.z & 0xFF00) >> 8)
+
+enum {
+    /* 0 */ ENBOM_0,
+    /* 1 */ ENBOM_1,
+};
+
 typedef struct EnBom {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider1;
