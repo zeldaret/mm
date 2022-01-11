@@ -157,7 +157,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.params &= 0xFF;
     }
 
-    if (this->actor.params >= ENRD_GET_MINUS_1) {
+    if (EN_RD_IS_REDEAD(&this->actor)) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, &gGibdoRedeadIdleAnim, this->jointTable,
                            this->morphTable, REDEAD_GIBDO_LIMB_MAX);
     } else {
