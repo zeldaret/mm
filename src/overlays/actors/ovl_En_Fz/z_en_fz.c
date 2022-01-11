@@ -359,7 +359,8 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
     Vec3f sp3C;
 
     if (this->unk_BCD != 0) {
-        if ((this->actor.bgCheckFlags & 8) || !func_800BC4EC(&this->actor, globalCtx, 60.0f, this->actor.world.rot.y)) {
+        if ((this->actor.bgCheckFlags & 8) ||
+            !Actor_TestFloorInDirection(&this->actor, globalCtx, 60.0f, this->actor.world.rot.y)) {
             this->actor.bgCheckFlags &= ~0x8;
             this->unk_BCD = 0;
             this->unk_BBC = 0.0f;
@@ -374,8 +375,8 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
             if ((parent->update == NULL) || (parent->colChkInfo.health <= 0)) {
                 this->actor.colChkInfo.health = 0;
                 this->unk_BC4 = 5;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_FREEZAD_DEAD);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_BROKEN);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DEAD);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_BROKEN);
                 sp3C.x = this->actor.world.pos.x;
                 sp3C.y = this->actor.world.pos.y;
                 sp3C.z = this->actor.world.pos.z;
@@ -387,8 +388,8 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
             if ((this->actor.colChkInfo.health != 0) && (this->unk_BC4 == 1)) {
                 this->actor.colChkInfo.health = 0;
                 this->unk_BC4 = 5;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_FREEZAD_DEAD);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_BROKEN);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DEAD);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_BROKEN);
                 sp3C.x = this->actor.world.pos.x;
                 sp3C.y = this->actor.world.pos.y;
                 sp3C.z = this->actor.world.pos.z;
@@ -419,9 +420,9 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
 
                 case 15:
                     Actor_ApplyDamage(&this->actor);
-                    func_800BCB70(&this->actor, 0x4000, 0xFF, 0x2000, 8);
+                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 8);
                     if (this->actor.colChkInfo.health != 0) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FREEZAD_DAMAGE);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DAMAGE);
                         sp3C.x = this->actor.world.pos.x;
                         sp3C.y = this->actor.world.pos.y;
                         sp3C.z = this->actor.world.pos.z;
@@ -429,8 +430,8 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
                         this->unk_BCF++;
                         break;
                     }
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FREEZAD_DEAD);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_BROKEN);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DEAD);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_BROKEN);
                     sp3C.x = this->actor.world.pos.x;
                     sp3C.y = this->actor.world.pos.y;
                     sp3C.z = this->actor.world.pos.z;
@@ -439,7 +440,7 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FREEZAD_DEAD);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DEAD);
                     func_80933790(this);
                     break;
             }
@@ -803,7 +804,7 @@ void EnFz_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_BD9--;
     }
 
-    Actor_SetHeight(&this->actor, 50.0f);
+    Actor_SetFocus(&this->actor, 50.0f);
     func_80932C98(this, globalCtx);
 
     this->actionFunc(this, globalCtx);
@@ -821,7 +822,7 @@ void EnFz_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Math_StepToF(&this->actor.speedXZ, this->unk_BBC, 0.2f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (this->unk_BCC != 0) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 20.0f, 5);
     }

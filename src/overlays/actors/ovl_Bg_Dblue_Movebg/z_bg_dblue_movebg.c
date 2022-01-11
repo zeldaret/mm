@@ -305,7 +305,7 @@ void BgDblueMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     if ((this->unk_160 == 9) || (this->unk_160 == 8)) {
-        func_801A72CC(&this->unk_1A8);
+        Audio_StopSfxByPos(&this->unk_1A8);
     }
 }
 
@@ -439,8 +439,8 @@ void func_80A2A444(BgDblueMovebg* this, GlobalContext* globalCtx) {
     if (sp20) {
         player->stateFlags2 &= ~0x10;
         this->dyna.pushForce = 0.0f;
-        Actor_SetSwitchFlag(globalCtx, this->unk_1C0);
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+        Flags_SetSwitch(globalCtx, this->unk_1C0);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(globalCtx, this->unk_1C8, this->unk_1C4)) {
             this->unk_172 |= 1;
@@ -528,9 +528,9 @@ void func_80A2A7F8(BgDblueMovebg* this, GlobalContext* globalCtx) {
         temp = (this->unk_18C + sp26 + 3600) % 3600;
 
         if ((temp == 900) || (temp == 2700)) {
-            Actor_SetSwitchFlag(globalCtx, this->unk_1C0);
+            Flags_SetSwitch(globalCtx, this->unk_1C0);
         } else {
-            Actor_UnsetSwitchFlag(globalCtx, this->unk_1C0);
+            Flags_UnsetSwitch(globalCtx, this->unk_1C0);
         }
 
         player->stateFlags1 |= 0x20;
@@ -542,7 +542,7 @@ void func_80A2A7F8(BgDblueMovebg* this, GlobalContext* globalCtx) {
         this->unk_18A = 0;
         this->unk_17E = 0;
 
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(globalCtx, this->unk_1C8, this->unk_1C4)) {
             this->unk_172 |= 1;
@@ -705,8 +705,8 @@ void func_80A2AED0(BgDblueMovebg* this, GlobalContext* globalCtx) {
         Vec3f sp54;
         f32 sp50;
 
-        if (func_8017D668(globalCtx->view.eye.x, globalCtx->view.eye.z, this->unk_190.x, this->unk_190.z,
-                          this->unk_19C.x, this->unk_19C.z, &sp54.x, &sp54.z, &sp50)) {
+        if (Math3D_PointDistToLine2D(globalCtx->view.eye.x, globalCtx->view.eye.z, this->unk_190.x, this->unk_190.z,
+                                     this->unk_19C.x, this->unk_19C.z, &sp54.x, &sp54.z, &sp50)) {
             sp54.y = this->dyna.actor.world.pos.y;
         } else {
             if (Math_Vec3f_DistXYZ(&globalCtx->view.eye, &this->unk_190) <=
