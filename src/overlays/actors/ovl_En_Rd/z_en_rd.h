@@ -72,6 +72,7 @@ typedef struct EnRd {
     /* 0x03D4 */ s16 headShakeTimer;
     /* 0x03D6 */ union {
                     s16 stunTimer;
+                    s16 deathTimer;
                     s16 unk_3D6;
                 };
     /* 0x03D8 */ s16 headYRotation;

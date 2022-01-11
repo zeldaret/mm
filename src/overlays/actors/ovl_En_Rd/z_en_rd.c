@@ -955,7 +955,7 @@ void EnRd_Damage(EnRd* this, GlobalContext* globalCtx) {
 void EnRd_SetupDead(EnRd* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f);
     this->unk_3EF = 12;
-    this->unk_3D6 = 300;
+    this->deathTimer = 300;
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
@@ -971,7 +971,7 @@ void EnRd_Dead(EnRd* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 2000, 0);
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->unk_3D6 == 0) {
+        if (this->deathTimer == 0) {
             if (!Flags_GetSwitch(globalCtx, this->unk_3DC & 0x7F)) {
                 Flags_SetSwitch(globalCtx, this->unk_3DC & 0x7F);
             }
@@ -986,7 +986,7 @@ void EnRd_Dead(EnRd* this, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             }
         } else {
-            this->unk_3D6--;
+            this->deathTimer--;
         }
     } else if (Animation_OnFrame(&this->skelAnime, 33.0f) || Animation_OnFrame(&this->skelAnime, 40.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
