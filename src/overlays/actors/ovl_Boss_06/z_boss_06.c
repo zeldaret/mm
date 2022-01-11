@@ -208,7 +208,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
             this->unk_1E0 = 255.0f;
             this->unk_1DC = 0.0f;
 
-            temp_s0 = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+            temp_s0 = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
             while (temp_s0 != NULL) {
                 if (temp_s0->id == ACTOR_EN_ARROW) {
                     Actor_MarkForDeath(temp_s0);
@@ -252,7 +252,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
                 this->unk_A10.z = player->actor.world.pos.z;
 
                 if (this->unk_1CA >= 75) {
-                    temp_v0_2 = globalCtx->actorCtx.actorList[ACTORCAT_BOSS].first;
+                    temp_v0_2 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
                     while (temp_v0_2 != NULL) {
                         if ((temp_v0_2->id == ACTOR_EN_KNIGHT) && (&D_809F4970->actor == temp_v0_2) &&
                             (D_809F4970->unk_680 != 0)) {
