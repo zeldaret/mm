@@ -170,7 +170,7 @@ void func_80B35250(EnGg* this) {
     this->unk_2E4 = 20;
     this->unk_2E2 = 0;
     this->unk_2E6 = 0;
-    func_800BDC5C(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80B35450;
 }
 
@@ -182,34 +182,34 @@ void func_80B352A4(EnGg* this, GlobalContext* globalCtx) {
         switch (this->actor.textId) {
             case 0xCE5:
                 this->unk_2E6 = 1;
-                func_800BDC5C(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
                 break;
 
             case 0xCE6:
             case 0xCEC:
                 this->unk_2E6 = 0;
-                func_800BDC5C(&this->skelAnime, sAnimations, 0);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
                 break;
 
             case 0xCE8:
                 this->unk_2E6 = 2;
-                func_800BDC5C(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
                 break;
 
             case 0xCE9:
                 this->unk_2E6 = 3;
-                func_800BDC5C(&this->skelAnime, sAnimations, 3);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
                 break;
 
             case 0xCED:
             case 0xCEE:
                 this->unk_2E6 = 4;
-                func_800BDC5C(&this->skelAnime, sAnimations, 4);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
                 break;
 
             default:
                 this->unk_2E6 = 0;
-                func_800BDC5C(&this->skelAnime, sAnimations, 0);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
                 break;
         }
         gSaveContext.weekEventReg[19] |= 0x80;
@@ -219,7 +219,7 @@ void func_80B352A4(EnGg* this, GlobalContext* globalCtx) {
             this->skelAnime.playSpeed = 2.0f;
         } else {
             this->unk_2E6 = 4;
-            func_800BDC5C(&this->skelAnime, sAnimations, 4);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
         }
     }
 }
@@ -229,7 +229,7 @@ void func_80B35450(EnGg* this, GlobalContext* globalCtx) {
         func_80B359DC(this, globalCtx);
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if ((this->actor.flags & 0x80) == 0x80) {
             func_800B90F4(globalCtx);
         }
@@ -247,7 +247,7 @@ void func_80B35450(EnGg* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3556C(EnGg* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (this->unk_2E6 == 4) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
@@ -326,7 +326,7 @@ void func_80B35634(EnGg* this, GlobalContext* globalCtx) {
                     this->unk_2DA = 0;
                     break;
             }
-            func_800BDC5C(&this->skelAnime, sAnimations, this->unk_2DA);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_2DA);
         }
 
         if (this->unk_2DA == 14) {
@@ -370,7 +370,7 @@ void func_80B358D8(EnGg* this, GlobalContext* globalCtx) {
 
     if ((this->unk_2E6 == 14) && (sp1E == frame)) {
         this->unk_2E6 = 15;
-        func_800BDC5C(&this->skelAnime, sAnimations, 15);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 15);
     }
 }
 
@@ -652,7 +652,7 @@ void EnGg_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.bgCheckFlags |= 0x400;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_gg_Skel_00F6C0, &object_gg_Anim_00F578, this->jointTable,
                        this->morphTable, 20);
@@ -719,7 +719,7 @@ void EnGg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80B34F70(this);
     func_80B35108(this, globalCtx);
     func_80B34FB4(this, globalCtx);
-    Actor_SetVelocityAndMoveXYRotation(&this->actor);
+    Actor_MoveWithoutGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
 
     if (globalCtx->csCtx.state == 0) {
