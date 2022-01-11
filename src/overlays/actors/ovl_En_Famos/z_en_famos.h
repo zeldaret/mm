@@ -33,7 +33,7 @@ typedef struct EnFamos {
     /* 0x1DA */ s16 unk1DA; // counter
     /* 0x1DC */ s16 unk1DC;
     /* 0x1DE */ s16 unk1DE;
-    /* 0x1E0 */ s16 unk1E0; // pad ?
+    /* 0x1E0 */ s16 unk1E0;
     /* 0x1E2 */ s16 unk1E2;
     /* 0x1E4 */ s16 unk1E4;
     /* 0x1E6 */ s16 unk1E6;

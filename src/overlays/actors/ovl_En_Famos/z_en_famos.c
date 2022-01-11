@@ -6,6 +6,7 @@
 
 #include "z_en_famos.h"
 #include "objects/object_famos/object_famos.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000005
 
@@ -53,7 +54,7 @@ void func_808ADFF0(EnFamos* this, GlobalContext* globalCtx);
 
 s32 func_808ACF1C(EnFamos* this, GlobalContext* globalCtx);
 
-void func_808AE304(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
+s32 func_808AE304(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
 void func_808AE3A8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
 // draw func extension
 void func_808AE3FC(EnFamos* this, GlobalContext* globalCtx);
@@ -112,7 +113,7 @@ static s32 animatedMaterialsVirtualized = false;
 void EnFamos_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnFamos *this = THIS;
     Path *path;
-    s32 newValue = 1;
+    s32 sTrue = 1;
     int i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -136,7 +137,7 @@ void EnFamos_Init(Actor *thisx, GlobalContext *globalCtx) {
         for (i = 0; i < ARRAY_COUNT(D_808AE6B0); i++) {
             D_808AE6B0[i] = Lib_SegmentedToVirtual(D_808AE6B0[i]);
         }
-        animatedMaterialsVirtualized = true;
+        animatedMaterialsVirtualized = sTrue;
     }
     
     this->actor.colChkInfo.mass = 0xFA;
@@ -144,8 +145,10 @@ void EnFamos_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unk1F0 = (this->actor.shape.rot.x <= 0) ? 200.0f : this->actor.shape.rot.x * 40.0f * 0.1f;
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
-    this->unk1D5 = newValue;
-    this->unk1D8 = newValue;
+    //this->unk1D5 = newValue;
+    //this->unk1D8 = newValue;
+    this->unk1D5 = 1;
+    this->unk1D8 = 1;
     if (this->pathPoints != NULL) {
         func_808AD1F0(this);
     } else {
@@ -408,7 +411,7 @@ void func_808AD888(EnFamos *this) {
 }
 
 void func_808AD8B8(EnFamos *this, GlobalContext *globalCtx) {
-    s32 bgflags; // temp name, should be more psecific
+    s32 hitGround;
     u32 floorValue; // name is a guess
 
     Math_StepToF(&this->actor.speedXZ, 20.0f, 2.0f);
@@ -417,19 +420,17 @@ void func_808AD8B8(EnFamos *this, GlobalContext *globalCtx) {
         this->collider3.base.acFlags = this->collider3.base.acFlags & 0xFFFE;
     }
     floorValue = func_800C9B18(&globalCtx->colCtx, (CollisionPoly *) this->actor.floorPoly, (s32) this->actor.floorBgId);
-    bgflags = this->actor.bgCheckFlags & 1;
-    if (( bgflags != 0) 
-      || (this->actor.floorHeight == -32000.0f)
-      || (floorValue == 0xC)
-      || (floorValue == 0xD)) {
-        this->collider1.base.atFlags = this->collider1.base.atFlags & 0xFFFE;
+    hitGround = this->actor.bgCheckFlags & 1;
+    if ( hitGround || this->actor.floorHeight == -32000.0f
+      || floorValue == 0xC || floorValue == 0xD) {
+        this->collider1.base.atFlags = this->collider1.base.atFlags & ~0x1;
         this->collider2.base.atFlags |= 1;
-        if ( bgflags != 0) {
+        if ( hitGround != 0) {
             func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 0xF, 0xA);
-            func_8013ECE0(this->actor.xyzDistToPlayerSq, 0xB4, 0x14, 0x64);
+            func_8013ECE0(this->actor.xyzDistToPlayerSq, 0xB4, 20, 100);
             func_808ACB58(this);
             Actor_SpawnAsChild(&globalCtx->actorCtx, (Actor *) this, globalCtx, 
-                (u16)1, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0);
+                1, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0);
 
             if (this->actor.child != NULL) {
                 Actor_SetScale(this->actor.child, 0.015f);
@@ -483,13 +484,115 @@ void func_808AD8B8(EnFamos *this, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808AE030.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/EnFamos_Update.s")
+void EnFamos_Update(Actor *thisx, GlobalContext *globalCtx) {
+    EnFamos *this = THIS;
+    s32 pad;
+    f32 oldHeight;
+    s32 old1DA;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808AE304.s")
+    if ( this->unk1DE <= 0 || 
+          (this->unk1DE--, func_808AE030(this), (this->actionFunc != func_808ADFF0 ))) {
+        old1DA = (s32) this->unk1DA;
+        func_808AD05C(this);
+        if (this->unk1E2 > 0) {
+            this->unk1E2--;
+            if (this->unk1E2 == 0) {
+                this->actor.child->parent = NULL;
+            }
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808AE3A8.s")
+        this->actionFunc(this, globalCtx);
+        oldHeight = this->actor.world.pos.y;
+        Actor_MoveWithoutGravity(&this->actor);
+        if (old1DA != this->unk1DA) {
+            this->unk1EC += this->actor.world.pos.y - oldHeight;
+        }
+        if (this->unk1E0 >= 0) {
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
+            if (this->actionFunc == func_808AD8B8 && 
+                this->animatedMaterialIndex != 0 && (this->actor.bgCheckFlags & 1) != 0) {
+                this->actor.world.pos.y -= 60.0f;
+            }
+        }
+        this->actor.focus.rot.y = this->actor.shape.rot.y;
+        Collider_UpdateCylinder(&this->actor, &this->collider1);
+        if ((this->collider1.base.atFlags & 1) != 0) {
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+        }
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+        if ((this->collider3.base.acFlags & 1) != 0) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider3.base);
+        }
+        if ((this->collider2.base.atFlags & 1) != 0) {
+            Collider_UpdateCylinder(&this->actor, &this->collider2);
+            this->collider2.dim.pos.y = (s16) (s32) this->actor.floorHeight;
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808AE3FC.s")
+// override limb draw
+s32 func_808AE304(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor) {
+    EnFamos* this = (EnFamos*) actor;
+
+    if (limbIndex == 1) {
+        Matrix_InsertTranslation(0.0f, 4000.0f, 0.0f, 1);
+        Matrix_InsertZRotation_s(this->unk1E6, 1);
+        Matrix_InsertTranslation(0.0f, -4000.0f, 0.0f, 1);
+    } else if (( this->unk1E0 < 0) && ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 5))) {
+        *dList = NULL;
+    }
+
+    return 0;
+}
+
+// post limb draw
+void func_808AE3A8(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *actor) {
+    EnFamos* this = (EnFamos*) actor;
+    
+    if (limbIndex == 2) {
+        limbIndex = limbIndex;
+        Matrix_GetStateTranslation(&actor->focus.pos);
+        Collider_UpdateSpheres(limbIndex, &this->collider3);
+    }
+}
+
+void func_808AE3FC(EnFamos *this, GlobalContext *globalCtx) {
+    s32 i;
+
+  
+    if (this->unk1DE > 0) {
+        Gfx* dispOpa;
+        EnFamosParticle *particle;
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        dispOpa = POLY_OPA_DISP;
+
+        gSPDisplayList(&dispOpa[0], &sSetupDL[0x96]);
+
+        gDPSetPrimColor(&dispOpa[1], 0, 0x80, 255, 255, 255, 255);
+
+        gDPSetEnvColor(&dispOpa[2], 255, 255, 255, 255);
+
+        particle = &this->particles[0];
+        for(i = 0; i < 20; i++){
+            Matrix_SetStateRotationAndTranslation(particle->unk0.x, particle->unk0.y, particle->unk0.z, &particle->unk18);
+            Matrix_Scale(particle->unk20, particle->unk20, particle->unk20, 1);
+
+            gSPMatrix(&dispOpa[3 + (i * 2)], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            gSPDisplayList(&dispOpa[4 + (i * 2)], &gameplay_keep_DL_06AB30);
+
+            particle++;
+        }
+
+        POLY_OPA_DISP = &dispOpa[3 + (20 * 2)];
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+
+}
 
 void EnFamos_Draw(Actor *thisx, GlobalContext *globalCtx) {
     EnFamos *this = THIS;
