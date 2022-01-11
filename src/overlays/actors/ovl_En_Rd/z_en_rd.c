@@ -46,9 +46,9 @@ void func_808D6008(EnRd* this);
 void func_808D6054(EnRd* this, GlobalContext* globalCtx);
 void func_808D60B0(EnRd* this);
 void func_808D6130(EnRd* this, GlobalContext* globalCtx);
-void func_808D6200(EnRd* this, GlobalContext* globalCtx);
-void func_808D6388(EnRd* this, GlobalContext* globalCtx);
-void func_808D65BC(EnRd* this, GlobalContext* globalCtx);
+void EnRd_Damage(EnRd* this, GlobalContext* globalCtx);
+void EnRd_Dead(EnRd* this, GlobalContext* globalCtx);
+void EnRd_Stunned(EnRd* this, GlobalContext* globalCtx);
 
 const ActorInit En_Rd_InitVars = {
     ACTOR_EN_RD,
@@ -266,8 +266,8 @@ s32 EnRd_IsHostile(GlobalContext* globalCtx) {
 void func_808D4260(EnRd* this, GlobalContext* globalCtx) {
     if ((EN_RD_GET_TYPE(&this->actor) >= EN_RD_TYPE_SQUATTING_DANCE) && (this->actionFunc != EnRd_SquattingDance) &&
         (this->actionFunc != EnRd_ClappingDance) && (this->actionFunc != EnRd_Pirouette) &&
-        (this->actionFunc != func_808D65BC) && (this->actionFunc != EnRd_Grab) && (this->actionFunc != func_808D6200) &&
-        (this->actionFunc != func_808D6388)) {
+        (this->actionFunc != EnRd_Stunned) && (this->actionFunc != EnRd_Grab) && (this->actionFunc != EnRd_Damage) &&
+        (this->actionFunc != EnRd_Dead)) {
         if (!EnRd_IsHostile(globalCtx)) {
             this->unkFunc(this);
         }
@@ -766,13 +766,13 @@ void EnRd_Grab(EnRd* this, GlobalContext* globalCtx) {
             }
 
             switch (player->transformation) {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
+                case PLAYER_FORM_FIERCE_DEITY:
+                case PLAYER_FORM_GORON:
+                case PLAYER_FORM_ZORA:
+                case PLAYER_FORM_DEKU:
                     break;
 
-                case 4:
+                case PLAYER_FORM_HUMAN:
                     Math_SmoothStepToF(&this->actor.shape.yOffset, -1500.0f, 1.0f, 150.0f, 0.0f);
                     break;
             }
@@ -915,7 +915,7 @@ void func_808D6130(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D616C(EnRd* this) {
+void EnRd_SetupDamage(EnRd* this) {
     this->actor.shape.yOffset = 0.0f;
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDamageAnim, -6.0f);
     if (this->actor.bgCheckFlags & 1) {
@@ -925,10 +925,10 @@ void func_808D616C(EnRd* this) {
     this->actor.flags |= 1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3EF = 11;
-    this->actionFunc = func_808D6200;
+    this->actionFunc = EnRd_Damage;
 }
 
-void func_808D6200(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_Damage(EnRd* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->actor.speedXZ < 0.0f) {
@@ -952,19 +952,19 @@ void func_808D6200(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D6310(EnRd* this) {
+void EnRd_SetupDead(EnRd* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f);
     this->unk_3EF = 12;
     this->unk_3D6 = 300;
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
-    this->actionFunc = func_808D6388;
+    this->actionFunc = EnRd_Dead;
 }
 
-void func_808D6388(EnRd* this, GlobalContext* globalCtx) {
-    if (this->actor.category != 6) {
-        func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 6);
+void EnRd_Dead(EnRd* this, GlobalContext* globalCtx) {
+    if (this->actor.category != ACTORCAT_PROP) {
+        func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_PROP);
     }
 
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 2000, 0);
@@ -993,9 +993,9 @@ void func_808D6388(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D64D0(EnRd* this) {
+void EnRd_SetupStunned(EnRd* this) {
     this->unk_3EF = 1;
-    this->unk_3D6 = 0xA;
+    this->stunTimer = 10;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (gSaveContext.unk_3F58 != 0) {
@@ -1008,12 +1008,12 @@ void func_808D64D0(EnRd* this) {
     } else if (this->unk_3F0 == 12) {
         Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 40);
     }
-    this->actionFunc = func_808D65BC;
+    this->actionFunc = EnRd_Stunned;
 }
 
-void func_808D65BC(EnRd* this, GlobalContext* globalCtx) {
-    if (this->unk_3D6 > 0) {
-        this->unk_3D6--;
+void EnRd_Stunned(EnRd* this, GlobalContext* globalCtx) {
+    if (this->stunTimer > 0) {
+        this->stunTimer--;
     }
 
     if (this->unk_3E9 != 0) {
@@ -1033,10 +1033,10 @@ void func_808D65BC(EnRd* this, GlobalContext* globalCtx) {
     if (this->actor.colorFilterTimer == 0) {
         if (this->actor.colChkInfo.health == 0) {
             func_808D4190(globalCtx, this, 1);
-            func_808D6310(this);
+            EnRd_SetupDead(this);
             Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x90);
         } else {
-            func_808D616C(this);
+            EnRd_SetupDamage(this);
         }
     }
 }
@@ -1066,7 +1066,7 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
 
     if ((gSaveContext.unk_3F58 != 0) && (this->actor.shape.rot.x == 0) && (this->unk_3E9 == 0) &&
         (this->unk_3EF != 11) && (this->unk_3EF != 12) && (this->unk_3EF != 1)) {
-        func_808D64D0(this);
+        EnRd_SetupStunned(this);
         return;
     }
 
@@ -1086,16 +1086,16 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
 
         switch (this->unk_3F0) {
             case EN_RD_DMGEFF_ZORA_MAGIC:
-                if ((this->actionFunc != EnRd_Grab) && ((this->actionFunc != func_808D65BC) || (this->unk_3D6 == 0))) {
+                if ((this->actionFunc != EnRd_Grab) && ((this->actionFunc != EnRd_Stunned) || (this->stunTimer == 0))) {
                     this->effectTimer = 40;
                     this->effectType = 30;
                     this->effectAlpha = 1.0f;
-                    func_808D64D0(this);
+                    EnRd_SetupStunned(this);
                 }
                 return;
 
             case EN_RD_DMGEFF_STUN:
-                func_808D64D0(this);
+                EnRd_SetupStunned(this);
                 return;
 
             case EN_RD_DMGEFF_FIRE_ARROW:
@@ -1136,10 +1136,10 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
         Actor_ApplyDamage(&this->actor);
         if (this->actor.colChkInfo.health == 0) {
             func_808D4190(globalCtx, this, 1);
-            func_808D6310(this);
+            EnRd_SetupDead(this);
             Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, 0x90);
         } else {
-            func_808D616C(this);
+            EnRd_SetupDamage(this);
         }
     }
 }
@@ -1151,7 +1151,7 @@ void EnRd_CheckCollision(EnRd* this, GlobalContext* globalCtx) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         if (((this->unk_3EF != 11) || ((player->unk_ADC != 0) && (player->unk_ADD != this->unk_3F1))) &&
-            ((this->actionFunc != func_808D65BC) || (this->unk_3D6 == 0))) {
+            ((this->actionFunc != EnRd_Stunned) || (this->stunTimer == 0))) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
     }
