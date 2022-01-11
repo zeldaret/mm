@@ -265,7 +265,7 @@ void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx) {
         func_800B3030(globalCtx, &sp60, &D_80BFB2E8, &D_80BFB2E8, 0x64, 0, 2);
     }
 
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x14, NA_SE_EN_EXTINCT);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x14, NA_SE_EN_EXTINCT);
     if (this->alpha > 10) {
         this->alpha -= 10;
     } else {
