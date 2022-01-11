@@ -1516,8 +1516,6 @@ typedef struct {
 
 extern Vec3f* D_801F59DC;
 
-#ifdef NON_MATCHING
-// one weird tiny diff
 s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
     Player* player = (Player*)thisx;
@@ -1526,7 +1524,6 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     f32 temp_f6;
     Actor* phi_v0;
     struct_80124618* phi_a0;
-    s16 phi_a0_2;
     struct_80124618* phi_v0_2;
     struct_80124618* phi_v1_2;
 
@@ -1644,8 +1641,11 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
             }
         } else if (limbIndex == 0xA) {
+            s16 phi_a0_2;
+            s16 rot_temp = 0x44C;
+
             if (player->unk_AA8 != 0) {
-                Matrix_InsertZRotation_s(0x44C, 1);
+                Matrix_InsertZRotation_s(rot_temp, 1);
                 Matrix_RotateY(player->unk_AA8, 1);
             }
             if (player->unk_AB2.y != 0) {
@@ -1668,10 +1668,6 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
     return 0;
 }
-#else
-s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
-#endif
 
 void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* arg2, Vec3s* arg3) {
     Matrix_JointPosition(arg2, arg3);
