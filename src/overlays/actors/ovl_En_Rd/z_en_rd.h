@@ -80,8 +80,11 @@ typedef struct EnRd {
     /* 0x03DC */ s16 unk_3DC;
     /* 0x03DE */ s16 alpha;
     /* 0x03E0 */ s16 sunsSongStunTimer;
-    /* 0x03E2 */ s16 unk_3E2;
-    /* 0x03E4 */ s16 unk_3E4;
+    /* 0x03E2 */ UNK_TYPE1 unk3E2[0x2];
+    /* 0x03E4 */ union {
+                    s16 danceEndTimer;
+                    s16 pirouetteRotationalVelocity;
+                };
     /* 0x03E6 */ s16 effectTimer;
     /* 0x03E8 */ u8 effectType;
     /* 0x03E9 */ u8 stunnedBySunsSong;

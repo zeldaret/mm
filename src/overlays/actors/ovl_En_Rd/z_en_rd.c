@@ -347,7 +347,7 @@ void EnRd_SetupSquattingDance(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadSquattingDanceAnim, -6.0f);
     this->unk_3EF = 14;
     this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
-    this->unk_3E4 = 0;
+    this->danceEndTimer = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnRd_SquattingDance;
@@ -390,7 +390,7 @@ void EnRd_SetupClappingDance(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadClappingDanceAnim, -6.0f);
     this->unk_3EF = 15;
     this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
-    this->unk_3E4 = 0;
+    this->danceEndTimer = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnRd_ClappingDance;
@@ -435,14 +435,14 @@ void EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose(EnRd* this, GlobalContext
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
-    this->unk_3E4++;
-    if (this->unk_3E4 > 10) {
+    this->danceEndTimer++;
+    if (this->danceEndTimer > 10) {
         if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
             EnRd_SetupAttemptPlayerStun(this);
         } else {
             EnRd_SetupStandUp(this);
         }
-        this->unk_3E4 = 0;
+        this->danceEndTimer = 0;
     }
 }
 
@@ -450,7 +450,7 @@ void EnRd_SetupPirouette(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadPirouetteAnim, -6.0f);
     this->unk_3EF = 16;
     this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
-    this->unk_3E4 = 4370;
+    this->pirouetteRotationalVelocity = 0x1112;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnRd_Pirouette;
@@ -488,12 +488,12 @@ void EnRd_Pirouette(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        this->unk_3E4 = 4370;
+        this->pirouetteRotationalVelocity = 0x1112;
     } else if (Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        this->unk_3E4 = 6554;
+        this->pirouetteRotationalVelocity = 0x199A;
     }
 
-    this->actor.world.rot.y -= this->unk_3E4;
+    this->actor.world.rot.y -= this->pirouetteRotationalVelocity;
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
@@ -503,13 +503,13 @@ void EnRd_EndPirouetteWhenPlayerIsClose(EnRd* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
-    this->actor.world.rot.y -= this->unk_3E4;
+    this->actor.world.rot.y -= this->pirouetteRotationalVelocity;
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
-    this->unk_3E4 -= 100;
-    if ((this->unk_3E4 < 2100) && (this->unk_3E4 >= 2000)) {
+    this->pirouetteRotationalVelocity -= 0x64;
+    if ((this->pirouetteRotationalVelocity < 0x834) && (this->pirouetteRotationalVelocity >= 0x7D0)) {
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, 2, -10.0f);
-    } else if (this->unk_3E4 < 1000) {
+    } else if (this->pirouetteRotationalVelocity < 0x3E8) {
         if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
             EnRd_SetupAttemptPlayerStun(this);
         } else {
