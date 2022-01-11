@@ -53,16 +53,17 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 };
 
 static ColliderJntSphInit sJntSphInit = {
-    {
-        COLTYPE_NONE,
-        AT_ON | AT_TYPE_PLAYER,
-        AC_ON | AC_TYPE_PLAYER,
-        OC1_ON | OC1_TYPE_ALL,
-        OC2_TYPE_2,
-        COLSHAPE_JNTSPH,
-    },
-    1,
-    sJntSphElementsInit,
+    { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_JNTSPH, },
+    1, D_80B3A8E0, // sJntSphElementsInit,
+};
+
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
 };
 
 static Color_RGBA8 D_80B3A914 = { 250, 250, 250, 255 };

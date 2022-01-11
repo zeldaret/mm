@@ -92,7 +92,7 @@ static u8 D_80A1D404 = true;
 static Vec3f D_80A1D408 = { 0.0f, 20.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(minVelocityY, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneForward, 1600, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
@@ -200,11 +200,11 @@ void func_80A1B914(ObjFlowerpot* this, GlobalContext* globalCtx) {
 }
 
 void func_80A1B994(ObjFlowerpot* this, GlobalContext* globalCtx) {
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
 }
 
 void func_80A1B9CC(ObjFlowerpot* this, GlobalContext* globalCtx) {
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
 }
 
 void func_80A1BA04(ObjFlowerpot* this, Vec3f* arg1) {
@@ -370,7 +370,7 @@ void func_80A1C328(ObjFlowerpot* this, GlobalContext* globalCtx) {
 
 void func_80A1C554(ObjFlowerpot* this) {
     if ((this->actor.projectedPos.z < 455.0f) && (this->actor.projectedPos.z > -10.0f)) {
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.shape.shadowScale = 1.9f;
         if (this->actor.projectedPos.z < 255.0f) {
             this->actor.shape.shadowAlpha = 200;
@@ -448,7 +448,10 @@ void func_80A1C838(ObjFlowerpot* this, GlobalContext* globalCtx) {
         if (func_800A817C(ENOBJFLOWERPOT_GET_3F(&this->actor))) {
             func_80A1B914(this, globalCtx);
         }
-        func_800B8E58(&this->actor, NA_SE_PL_PULL_UP_POT);
+
+        //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
+        //! player->currentMask, but in this case is garbage in the collider
+        func_800B8E58((Player*)this, NA_SE_PL_PULL_UP_POT);
     } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 19.0f)) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, globalCtx);
@@ -482,7 +485,7 @@ void func_80A1C838(ObjFlowerpot* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_1EA & 1) {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             func_80A1C5E8(this, globalCtx);
             if (this->actor.bgCheckFlags & 1) {
                 if (this->actor.colChkInfo.mass == MASS_IMMOVABLE) {
@@ -512,7 +515,7 @@ void func_80A1C838(ObjFlowerpot* this, GlobalContext* globalCtx) {
                     s16 temp_v0_3 = this->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
 
                     if (ABS_ALT(temp_v0_3) >= 0x5556) {
-                        func_800B8A1C(&this->actor, globalCtx, 0, 36.0f, 30.0f);
+                        Actor_PickUp(&this->actor, globalCtx, 0, 36.0f, 30.0f);
                     }
                 }
             }
@@ -533,10 +536,10 @@ void func_80A1CC0C(ObjFlowerpot* this, GlobalContext* globalCtx) {
         this->actor.room = globalCtx->roomCtx.currRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             func_80A1C818(this);
-            func_800B8E58(&GET_PLAYER(globalCtx)->actor, NA_SE_PL_PUT_DOWN_POT);
+            func_800B8E58(GET_PLAYER(globalCtx), NA_SE_PL_PUT_DOWN_POT);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
         } else {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             func_80A1CD10(this);
         }
         func_80A1C5E8(this, globalCtx);
@@ -617,12 +620,12 @@ void func_80A1CEF4(ObjFlowerpot* this2, GlobalContext* globalCtx) {
         }
         func_80A1BD80(this, globalCtx);
         func_80A1B994(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     if (!(this->unk_1EA & 2)) {
         D_80A1D3F8 += (s16)(this->actor.shape.rot.x * -0.06f);
