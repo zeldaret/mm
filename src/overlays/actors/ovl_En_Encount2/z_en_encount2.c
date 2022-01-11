@@ -109,7 +109,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&D_06002420, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    ActorShape_Init(&this->dyna.actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colElement);
 
@@ -172,7 +172,7 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
         EnEncount2_InitParticles(this, &curPos, 10);
     }
 
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }
@@ -180,7 +180,7 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
 void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx) {
     if (this->deathTimer == 0) {
         if (this->switchFlag >= 0) {
-            Actor_SetSwitchFlag(globalCtx, this->switchFlag);
+            Flags_SetSwitch(globalCtx, this->switchFlag);
         }
         Actor_MarkForDeath(&this->dyna.actor);
     }
@@ -193,10 +193,10 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     DECR(this->deathTimer);
 
     this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
-    Actor_SetHeight(&this->dyna.actor, 30.0f);
+    Actor_SetFocus(&this->dyna.actor, 30.0f);
     Actor_SetScale(&this->dyna.actor, this->scale);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+    Actor_MoveWithGravity(&this->dyna.actor);
     EnEncount2_UpdateParticles(this, globalCtx);
 
     if (!this->isPopped) {
@@ -209,8 +209,8 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     if (this->isPopped != true) {
-        func_800BDFC0(globalCtx, D_06000A00);
-        func_800BDFC0(globalCtx, D_06000D78);
+        Gfx_DrawDListOpa(globalCtx, D_06000A00);
+        Gfx_DrawDListOpa(globalCtx, D_06000D78);
     }
     EnEncount2_DrawParticles(this, globalCtx);
 }
