@@ -123,7 +123,7 @@ void EnPr2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.shadowScale = 12.0f;
 
     if (this->unk_1E0 < 10) {
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         this->unk_218 = -1;
         this->unk_204 = 0.0f;
@@ -194,7 +194,7 @@ s32 func_80A7429C(EnPr2* this, GlobalContext* globalCtx) {
     s16 sp1A;
     s16 sp18;
 
-    func_800B8898(globalCtx, &this->actor, &sp1A, &sp18);
+    Actor_GetScreenPos(globalCtx, &this->actor, &sp1A, &sp18);
 
     if ((fabsf(player->actor.world.pos.y - this->actor.world.pos.y) > 160.0f) ||
         (this->actor.projectedPos.z < -40.0f) || (sp1A < 0) || (sp1A > 320) || (sp18 < 0) || (sp18 > 240)) {
@@ -271,7 +271,7 @@ void func_80A745FC(EnPr2* this, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
 
     if (this->path->unk2 < this->unk_1D0) {
@@ -330,7 +330,7 @@ void func_80A748E8(EnPr2* this, GlobalContext* globalCtx) {
     Vec3f sp3C;
 
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
 
     if (fabsf(this->actor.world.rot.y - this->unk_1EE) < 200.0f) {
         sp48 = 1;
@@ -434,7 +434,7 @@ void func_80A74DEC(EnPr2* this, GlobalContext* globalCtx) {
 
     this->unk_1F0 = 0;
     func_80A74510(this, 1);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
     Math_Vec3f_Copy(&this->unk_21C, &player->actor.world.pos);
 
     this->unk_1EE = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_21C);
@@ -538,7 +538,7 @@ void func_80A751B4(EnPr2* this) {
         this->actor.speedXZ = Rand_ZeroFloat(0.5f);
         this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x8000);
     }
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 10);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 10);
     this->unk_1D4 = 3;
     this->actionFunc = func_80A75310;
 }
@@ -622,7 +622,7 @@ void func_80A755D8(EnPr2* this, GlobalContext* globalCtx) {
         if ((this->actor.colChkInfo.health <= 0) && (this->unk_1D4 != 3)) {
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             this->actor.speedXZ = 0.0f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_DEAD);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_DEAD);
 
             if (this->unk_218 >= 0) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, D_80A75C3C[this->unk_218]);
@@ -664,9 +664,9 @@ void EnPr2_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_1DE--;
     }
 
-    Actor_SetHeight(&this->actor, 10.0f);
+    Actor_SetFocus(&this->actor, 10.0f);
     func_80A755D8(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0, 10.0f, 20.0f, 0x1F);
 
     if (this->unk_1D6 != 0) {
