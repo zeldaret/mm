@@ -65,7 +65,7 @@ s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     if ((u16)actorSpawnParam & 3) {
         flag = ((actorSpawnParam & 0x3FC) >> 2) & 0xFF;
     }
-    return !(flag >= 0 && Actor_GetChestFlag(globalCtx, flag));
+    return !(flag >= 0 && Flags_GetTreasure(globalCtx, flag));
 }
 
 void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
@@ -209,7 +209,7 @@ s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
 void ObjKibako2_Idle(ObjKibako2* this, GlobalContext* globalCtx) {
     if (ObjKibako2_ShouldBreak(this)) {
         ObjKibako2_Break(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         this->dyna.actor.flags |= 0x10;
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
@@ -233,7 +233,7 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->skulltulaNoiseTimer >= 0) {
         if (this->skulltulaNoiseTimer == 0) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
             if (Rand_ZeroOne() < 0.1f) {
                 this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
             } else {
@@ -247,5 +247,5 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, gLargeCrateDL);
+    Gfx_DrawDListOpa(globalCtx, gLargeCrateDL);
 }
