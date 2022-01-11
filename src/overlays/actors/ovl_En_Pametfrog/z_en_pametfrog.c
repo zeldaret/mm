@@ -964,7 +964,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     vec1.z = (Math_CosS(yaw) * 20.0f) + this->actor.world.pos.z;
     this->collider.base.ocFlags1 &= ~OC1_ON;
     func_800B0DE0(globalCtx, &vec1, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 800, 50);
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
     Flags_SetClearTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
 
     for (i = 0; i < 25; i++) {
