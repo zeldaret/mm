@@ -441,7 +441,6 @@ beginseg
     include "build/src/code/pad_801DC9C0.o"
     include "build/src/code/z_DLF.o"
     include "build/src/code/z_actor.o"
-    include "build/data/code/z_actor.data.o"
     include "build/data/code/z_actor.bss.o"
     include "build/src/code/z_actor_dlftbls.o"
     include "build/src/code/z_bgcheck.o"
@@ -466,7 +465,7 @@ beginseg
     include "build/data/code/z_draw.data.o"
     include "build/src/code/z_eff_footmark.o"
     include "build/data/code/z_eff_footmark.data.o"
-    include "build/src/code/code_800F0390.o"
+    include "build/src/code/z_sound_source.o"
     include "build/src/code/z_elf_message.o"
     include "build/src/code/z_en_hy.o"
     include "build/src/code/z_face_reaction.o"
@@ -1674,8 +1673,7 @@ beginseg
     name "ovl_En_Ishi"
     compress
     include "build/src/overlays/actors/ovl_En_Ishi/z_en_ishi.o"
-    include "build/data/ovl_En_Ishi/ovl_En_Ishi.data.o"
-    include "build/data/ovl_En_Ishi/ovl_En_Ishi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ishi/ovl_En_Ishi_reloc.o"
 endseg
 
 beginseg
@@ -2644,9 +2642,7 @@ beginseg
     name "ovl_Obj_Flowerpot"
     compress
     include "build/src/overlays/actors/ovl_Obj_Flowerpot/z_obj_flowerpot.o"
-    include "build/data/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot.data.o"
-    include "build/data/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot.bss.o"
-    include "build/data/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Flowerpot/ovl_Obj_Flowerpot_reloc.o"
 endseg
 
 beginseg
