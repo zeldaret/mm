@@ -34,9 +34,9 @@ s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx) {
     s32 flag = DOWSING_GET_FLAG(&this->actor);
 
     if (type == DOWSING_COLLECTIBLE) {
-        return Actor_GetCollectibleFlag(globalCtx, flag);
+        return Flags_GetCollectible(globalCtx, flag);
     } else if (type == DOWSING_CHEST) {
-        return Actor_GetChestFlag(globalCtx, flag);
+        return Flags_GetTreasure(globalCtx, flag);
     } else if (type == DOWSING_SWITCH) {
         return Flags_GetSwitch(globalCtx, flag);
     } else {
