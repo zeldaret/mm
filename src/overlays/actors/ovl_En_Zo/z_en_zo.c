@@ -323,7 +323,7 @@ void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-Gfx D_8099F5E8[] = {
+static Gfx sTransparencyDlist[] = {
     gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
                           G_RM_FOG_SHADE_A,
                       AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
@@ -346,7 +346,7 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gDPPipeSync(POLY_OPA_DISP++);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[this->eyeIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x0C, &D_8099F5E8[2]);
+    gSPSegment(POLY_OPA_DISP++, 0x0C, &sTransparencyDlist[2]);
 
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
