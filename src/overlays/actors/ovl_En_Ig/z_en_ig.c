@@ -385,7 +385,7 @@ s32 func_80BF19A0(EnIg* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if (this->unk_3D0 & 7) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
             func_8013AED4(&this->unk_3D0, 0, 7);
             this->unk_3F6 = 0;
             this->unk_3F8 = NULL;
@@ -713,7 +713,7 @@ s32 func_80BF2470(EnIg* this, GlobalContext* globalCtx) {
         Lib_Vec3f_TranslateAndRotateY(&this->unk_2B0, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
         this->unk_3E2 += this->unk_3EC;
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_PIRATE_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PIRATE_WALK);
         }
     }
     return false;
@@ -765,7 +765,7 @@ s32 func_80BF25E8(EnIg* this, GlobalContext* globalCtx) {
         this->unk_290 = sp50;
         this->unk_278 = sp58;
     } else if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_PIRATE_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PIRATE_WALK);
     }
     return false;
 }
@@ -777,9 +777,9 @@ s32 func_80BF2890(EnIg* this, GlobalContext* globalCtx) {
 
     if (!(this->unk_3D0 & 0x100) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->unk_408 != 0) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOLON_SNORE1);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SNORE1);
         } else {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOLON_SNORE2);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SNORE2);
         }
         this->unk_408 ^= 1;
     }
@@ -846,7 +846,7 @@ void func_80BF2AF8(EnIg* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~1;
         sp20.unk0 = 0;
     } else {
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= 1;
     }
     this->unk_2A8 = func_80BF146C(this, globalCtx);
@@ -878,7 +878,7 @@ void func_80BF2BD4(EnIg* this, GlobalContext* globalCtx) {
 void EnIg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnIg* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable,
                        19);
     this->unk_3FC = -1;
@@ -914,7 +914,7 @@ void EnIg_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_80BF13E4(this);
         func_80BF15EC(this);
         func_8013C964(&this->actor, globalCtx, 60.0f, 30.0f, 0, this->unk_3D0 & 7);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         func_80BF1354(this, globalCtx);
     }
