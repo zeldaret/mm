@@ -62,13 +62,7 @@ static ColliderJntSphInit sJntSphInit = {
         COLSHAPE_JNTSPH,
     },
     1,
-    D_80B3A8E0, // sJntSphElementsInit,
-};
-
-static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
+    sJntSphElementsInit,
 };
 
 static Color_RGBA8 D_80B3A914 = { 250, 250, 250, 255 };
@@ -363,7 +357,7 @@ void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx) {
             func_80B38E88(this, globalCtx);
         }
         func_80B38EFC(this, globalCtx);
-        func_800B8E58(&GET_PLAYER(globalCtx)->actor, NA_SE_PL_PULL_UP_SNOWBALL);
+        func_800B8E58(GET_PLAYER(globalCtx), NA_SE_PL_PULL_UP_SNOWBALL);
         func_80B39F60(this);
     } else if ((this->actor.bgCheckFlags & 0x20) &&
                ((this->actor.shape.yOffset * this->actor.scale.y) < this->actor.depthInWater)) {
