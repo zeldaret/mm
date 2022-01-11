@@ -272,7 +272,7 @@ void func_80B9FCA0(EnZob* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80BA0728;
     this->unk_304 = 0;
     func_80B9F7E4(this, 6, 2);
-    func_800B8718(&this->actor, globalCtx);
+    func_800B8718(&this->actor, &globalCtx->state);
 }
 
 void func_80B9FD24(EnZob* this, GlobalContext* globalCtx) {
@@ -560,7 +560,7 @@ void func_80BA0728(EnZob* this, GlobalContext* globalCtx) {
 
     func_80B9F86C(this);
 
-    if (func_800B8718(&this->actor, globalCtx)) {
+    if (func_800B8718(&this->actor, &globalCtx->state)) {
         if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
             func_801518B0(globalCtx, 0x1208, NULL);
             gSaveContext.weekEventReg[30] |= 8;
