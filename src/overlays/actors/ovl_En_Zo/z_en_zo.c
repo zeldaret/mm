@@ -142,12 +142,12 @@ s32 EnZo_PlayWalkingSound(EnZo* this, GlobalContext* globalCtx) {
 
     this->isLeftFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->leftFootPos, -6.0f);
     if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
-        Audio_PlayActorSound2(&this->actor, sfxId);
+        Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
     this->isRightFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->rightFootPos, -6.0f);
     if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
-        Audio_PlayActorSound2(&this->actor, sfxId);
+        Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
     return 0;

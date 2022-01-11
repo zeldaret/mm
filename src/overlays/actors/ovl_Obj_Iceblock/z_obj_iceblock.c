@@ -193,8 +193,8 @@ void func_80A2339C(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3, s3
 
 void func_80A23690(ObjIceblock* this) {
     this->dyna.actor.velocity.y += this->dyna.actor.gravity;
-    if (this->dyna.actor.velocity.y < this->dyna.actor.minVelocityY) {
-        this->dyna.actor.velocity.y = this->dyna.actor.minVelocityY;
+    if (this->dyna.actor.velocity.y < this->dyna.actor.terminalVelocity) {
+        this->dyna.actor.velocity.y = this->dyna.actor.terminalVelocity;
     }
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
 }
@@ -751,7 +751,7 @@ void func_80A24DD0(ObjIceblock* this, GlobalContext* globalCtx) {
             spA8.z += this->dyna.actor.world.pos.z;
 
             temp_f20 = ((Rand_ZeroOne() * 800.0f) + (1600.0f * this->dyna.actor.scale.x)) * phi_f22;
-            func_800B0E48(globalCtx, &spA8, &D_801D15B0, &D_80A26F90, &D_80A26F9C, &D_80A26FA0, temp_f20,
+            func_800B0E48(globalCtx, &spA8, &gZeroVec3f, &D_80A26F90, &D_80A26F9C, &D_80A26FA0, temp_f20,
                           (Rand_ZeroOne() * 20.0f) + 30.0f);
         }
     }
@@ -786,7 +786,7 @@ void func_80A2508C(ObjIceblock* this, GlobalContext* globalCtx) {
             sp34.z = (this->dyna.actor.scale.z * sp34.z) + this->dyna.actor.world.pos.z;
 
             if ((this->unk_244 - 3.0f) < sp34.y) {
-                EffectSsIceSmoke_Spawn(globalCtx, &sp34, &sp40, &D_801D15B0,
+                EffectSsIceSmoke_Spawn(globalCtx, &sp34, &sp40, &gZeroVec3f,
                                        (s32)(this->dyna.actor.scale.y * 1300.0f) + 60);
             }
         }
@@ -893,9 +893,12 @@ void func_80A25440(ObjIceblock* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(speedXZ, 16000, ICHAIN_CONTINUE),       ICHAIN_F32_DIV1000(gravity, -1800, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -26000, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),      ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(speedXZ, 16000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -1800, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -26000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
@@ -1093,13 +1096,13 @@ void func_80A25BBC(ObjIceblock* this, GlobalContext* globalCtx) {
     func_80A23690(this);
 
     if (func_80A23F90(this, globalCtx)) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
     }
 
     if (func_80A24954(this, globalCtx)) {
         func_80A2491C(this);
         if (this->unk_2B0 == 3) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DIVE_INTO_WATER_L);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DIVE_INTO_WATER_L);
         }
     }
 }
@@ -1172,7 +1175,7 @@ void func_80A25E50(ObjIceblock* this, GlobalContext* globalCtx) {
         func_80A25BA0(this);
     } else if (sp38) {
         if (func_80A24118(this, globalCtx, 59.9f, &sp28)) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         }
         func_80A2541C(this, globalCtx);
         func_80A25CF4(this);
@@ -1201,7 +1204,7 @@ void func_80A25FD4(ObjIceblock* this, GlobalContext* globalCtx) {
     if (sp2C == -1) {
         sp30 = false;
     } else if (!(this->unk_1B0 & 2) && (this->unk_26E[sp2C] >= 11) && !func_80A24118(this, globalCtx, 2.0f, &sp20) &&
-               !func_801233E4(globalCtx)) {
+               !Player_InCsMode(&globalCtx->state)) {
         func_80A23370(this, sp2C);
         func_80A260E8(this);
         sp30 = false;
@@ -1259,7 +1262,7 @@ void func_80A26144(ObjIceblock* this, GlobalContext* globalCtx) {
         func_80A23B88(this);
         func_80A25BA0(this);
     } else if (sp28) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         func_80A23B88(this);
         func_80A25FA0(this);
     } else {
@@ -1495,7 +1498,7 @@ void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     func_80A25440(this);
-    Actor_SetHeight(&this->dyna.actor, this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y);
+    Actor_SetFocus(&this->dyna.actor, this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y);
     this->unk_1B0 &= ~0x2;
 
     if (parent) {}
@@ -1505,10 +1508,10 @@ void func_80A26B64(ObjIceblock* this, GlobalContext* globalCtx) {
 }
 
 void func_80A26B74(ObjIceblock* this, GlobalContext* globalCtx) {
-    func_800BE03C(globalCtx, object_ice_block_DL_0001A0);
+    Gfx_DrawDListXlu(globalCtx, object_ice_block_DL_0001A0);
     if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_0009D0));
-        func_800BE03C(globalCtx, object_ice_block_DL_0007F0);
+        Gfx_DrawDListXlu(globalCtx, object_ice_block_DL_0007F0);
     }
 }
 
