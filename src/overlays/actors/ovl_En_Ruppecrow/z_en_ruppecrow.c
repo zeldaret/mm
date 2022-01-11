@@ -613,7 +613,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, GlobalContext* globalCtx) {
             func_800B3030(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, (this->actor.scale.x * 10000.0f),
                           0x0, 0x0);
 
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0xB, NA_SE_EN_EXTINCT);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0xB, NA_SE_EN_EXTINCT);
             Actor_MarkForDeath(&this->actor);
             return;
         }
