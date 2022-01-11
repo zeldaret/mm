@@ -320,7 +320,7 @@ void EnRd_IdleOrCrying(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.parent != NULL) {
-        if (this->unk_3EC == 0) {
+        if (!this->isMourning) {
             if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
                 EnRd_SetupWalkToParent(this);
             } else {
@@ -328,7 +328,7 @@ void EnRd_IdleOrCrying(EnRd* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        if (this->unk_3EC != 0) {
+        if (this->isMourning) {
             if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
                 EnRd_SetupAttemptPlayerStun(this);
             } else {
@@ -336,9 +336,9 @@ void EnRd_IdleOrCrying(EnRd* this, GlobalContext* globalCtx) {
             }
         }
 
-        this->unk_3EC = 0;
+        this->isMourning = false;
         if ((this->actor.xzDistToPlayer <= 150.0f) && func_800B715C(globalCtx)) {
-            if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
+            if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (!this->isMourning)) {
                 EnRd_SetupAttemptPlayerStun(this);
             } else {
                 EnRd_SetupStandUp(this);
@@ -365,11 +365,11 @@ void EnRd_SquattingDance(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
-    if (this->unk_3EC != 0) {
+    if (this->isMourning) {
         EnRd_SetupAttemptPlayerStun(this);
     }
 
-    this->unk_3EC = 0;
+    this->isMourning = false;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
@@ -408,11 +408,11 @@ void EnRd_ClappingDance(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
-    if (this->unk_3EC != 0) {
+    if (this->isMourning) {
         EnRd_SetupAttemptPlayerStun(this);
     }
 
-    this->unk_3EC = 0;
+    this->isMourning = false;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
@@ -445,7 +445,7 @@ void EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose(EnRd* this, GlobalContext
 
     this->danceEndTimer++;
     if (this->danceEndTimer > 10) {
-        if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
+        if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (!this->isMourning)) {
             EnRd_SetupAttemptPlayerStun(this);
         } else {
             EnRd_SetupStandUp(this);
@@ -468,11 +468,11 @@ void EnRd_Pirouette(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
-    if (this->unk_3EC != 0) {
+    if (this->isMourning) {
         EnRd_SetupAttemptPlayerStun(this);
     }
 
-    this->unk_3EC = 0;
+    this->isMourning = false;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
@@ -518,7 +518,7 @@ void EnRd_EndPirouetteWhenPlayerIsClose(EnRd* this, GlobalContext* globalCtx) {
     if ((this->pirouetteRotationalVelocity < 0x834) && (this->pirouetteRotationalVelocity >= 0x7D0)) {
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, 2, -10.0f);
     } else if (this->pirouetteRotationalVelocity < 0x3E8) {
-        if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
+        if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (!this->isMourning)) {
             EnRd_SetupAttemptPlayerStun(this);
         } else {
             EnRd_SetupStandUp(this);
@@ -628,7 +628,7 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
         if (this->actor.parent != NULL) {
             EnRd_SetupWalkToParent(this);
         } else {
-            this->unk_3EC = 0;
+            this->isMourning = false;
         }
     }
 
@@ -679,7 +679,7 @@ void EnRd_WalkToHome(EnRd* this, GlobalContext* globalCtx) {
         if (this->actor.parent != NULL) {
             EnRd_SetupWalkToParent(this);
         } else {
-            this->unk_3EC = 0;
+            this->isMourning = false;
         }
     }
 
@@ -695,7 +695,7 @@ void EnRd_SetupWalkToParent(EnRd* this) {
 
     Animation_Change(&this->skelAnime, &gGibdoRedeadWalkAnim, 0.5f, 0.0f, frameCount, 1, -4.0f);
     this->unk_3EF = 3;
-    this->unk_3EC = 1;
+    this->isMourning = true;
     this->actionFunc = EnRd_WalkToParent;
 }
 

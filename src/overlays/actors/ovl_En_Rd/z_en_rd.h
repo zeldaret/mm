@@ -90,7 +90,7 @@ typedef struct EnRd {
     /* 0x03E9 */ u8 stunnedBySunsSong;
     /* 0x03EA */ u8 grabDamageTimer;
     /* 0x03EB */ u8 grabState;
-    /* 0x03EC */ u8 unk_3EC;
+    /* 0x03EC */ u8 isMourning;
     /* 0x03ED */ u8 playerStunWaitTimer; // Cannot stun the player if this is non-zero
     /* 0x03EE */ u8 grabWaitTimer; // Cannot grab the player if this is non-zero
     /* 0x03EF */ u8 unk_3EF;
