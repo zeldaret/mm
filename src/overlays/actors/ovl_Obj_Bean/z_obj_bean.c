@@ -544,7 +544,7 @@ void func_80937FB0(ObjBean* this) {
 void func_80937FC8(ObjBean* this, GlobalContext* globalCtx) {
     this->unk_1E8(this);
 
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
         if (Player_GetExchangeItemId(globalCtx) == 0x2E) {
             func_809383B4(this);
             Flags_SetSwitch(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 0));
