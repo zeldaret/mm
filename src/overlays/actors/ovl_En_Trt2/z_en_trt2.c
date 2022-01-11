@@ -413,7 +413,7 @@ void func_80AD40AC(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD4110(EnTrt2* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_3A8 = 0x84C;
         func_80151938(globalCtx, this->unk_3A8);
         this->unk_3B2 = 10;
@@ -643,7 +643,7 @@ s32 func_80AD4B4C(EnTrt2* this, GlobalContext* globalCtx) {
     s32 sp24 = false;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         sp24 = true;
         this->actor.speedXZ = 0.0f;
         func_80AD349C(this);
