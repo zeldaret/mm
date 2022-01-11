@@ -268,11 +268,11 @@ void func_80BF3FF8(EnRg* this) {
 s32 func_80BF4024(EnRg* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.state == 0) && (this->unk_334 == 1)) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOLON_CIRCLE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_CIRCLE);
         }
 
         if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
         }
     }
 
@@ -302,7 +302,7 @@ void func_80BF40F4(EnRg* this) {
 
 s32 func_80BF416C(EnRg* this, GlobalContext* globalCtx) {
     if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ >= 0.01f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOLON_ROLLING - SFX_FLAG);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_ROLLING - SFX_FLAG);
         func_800AE930(&globalCtx->colCtx, Effect_GetByIndex(this->unk_340), &this->actor.world.pos, 18.0f,
                       this->actor.shape.rot.y, this->actor.floorPoly, this->actor.floorBgId);
     } else {
@@ -316,7 +316,7 @@ s32 func_80BF4220(EnRg* this, GlobalContext* globalCtx, Actor* arg2) {
     s32 sp40;
     Vec3f sp34;
 
-    if (Actor_IsActorFacingActorAndWithinRange(&this->actor, arg2, 400.0f, 0x2000) &&
+    if (Actor_ActorAIsFacingAndNearActorB(&this->actor, arg2, 400.0f, 0x2000) &&
         !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &arg2->world.pos, &sp34, &sp44, 1, 0, 0, 1,
                                  &sp40)) {
         return true;
@@ -370,8 +370,8 @@ s32 func_80BF43FC(EnRg* this) {
         func_8013C8B8(this->path, temp, &sp9C);
         temp2 = phi_s0 + 1;
         func_8013C8B8(this->path, temp2, &sp90);
-        if (func_8017D668(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z, &sp8C,
-                          &sp88, &sp84) &&
+        if (Math3D_PointDistToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z,
+                                     &sp8C, &sp88, &sp84) &&
             (!phi_s6 || (phi_s4 == temp) || (sp84 < phi_f20))) {
             phi_s6 = 1;
             phi_f20 = sp84;
@@ -433,7 +433,7 @@ s32 func_80BF45B4(EnRg* this) {
                 this->actor.world.rot.y += 0x2000;
             }
         }
-        func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
         this->unk_322 = 0xA;
     }
 
@@ -495,7 +495,7 @@ s32 func_80BF47AC(EnRg* this, GlobalContext* globalCtx) {
 
 void func_80BF4934(EnRg* this) {
     if (this->unk_318 == 1) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_GOLON_DASH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_DASH);
     }
 }
 
@@ -711,8 +711,8 @@ void func_80BF4FC4(EnRg* this, GlobalContext* globalCtx) {
                 }
 
                 func_80BF4964(this);
-                Actor_SetVelocityYRotationAndGravity(&this->actor);
-                Actor_ApplyMovement(&this->actor);
+                Actor_UpdateVelocityWithGravity(&this->actor);
+                Actor_UpdatePos(&this->actor);
                 func_80BF416C(this, globalCtx);
                 return;
             }
@@ -730,7 +730,7 @@ void EnRg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRg* this = THIS;
 
     if (gSaveContext.entranceIndex == 0xD010) {
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
                            this->morphTable, 18);
 
