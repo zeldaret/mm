@@ -215,12 +215,13 @@ s32 func_808F3178(EnIn* this, GlobalContext* globalCtx) {
 
     this->unk260 = tmp = func_8013DB90(globalCtx, &this->unk248, -6.0f);
     if (this->unk260 != 0 && prevUnk260 == 0 && tmp) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_PL_WALK_CONCRETE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     this->unk261 = tmp = func_8013DB90(globalCtx, &this->unk254, -6.0f);
     if (this->unk261 != 0 && prevUnk261 == 0 && tmp) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_PL_WALK_CONCRETE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
+
     return 0;
 }
 
@@ -258,7 +259,7 @@ s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
         if (this->colliderJntSph.base.atFlags & AT_BOUNCED) {
             return 0;
         }
-        Audio_PlayActorSound2(&player->actor, 0x83E);
+        Actor_PlaySfxAtPos(&player->actor, 0x83E);
         func_800B8D98(globalCtx, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
     }
     return 1;
@@ -350,13 +351,13 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
             func_8019F88C(&this->actor.projectedPos, NA_SE_VO_IN_LASH_0, 2);
             if (Rand_ZeroOne() < 0.3f) {
-                func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_INGO_HORSE_NEIGH);
+                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_INGO_HORSE_NEIGH);
             }
-            func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_LASH);
+            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_LASH);
         }
     }
     if (this->skelAnime.animation == &D_060198A8 && Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_CRY_0);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_CRY_0);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk486 = this->unk488 %= 8;
@@ -381,7 +382,7 @@ void func_808F395C(EnIn* this, GlobalContext* globalCtx) {
     if (this->unk4B0 == 0) {
         this->actionFunc = func_808F5A94;
     }
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->actionFunc = func_808F5A34;
         this->unk48C = 1;
@@ -418,19 +419,19 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
     if (this->unk4B0 == 2) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_LOST);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_JOY0);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
     }
 }
 
 void func_808F3AD4(EnIn* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -444,17 +445,17 @@ void func_808F3B40(EnIn* this, GlobalContext* globalCtx) {
         textId = gSaveContext.day != 3 ? 0x3481 : 0x34A4;
         this->actor.textId = textId;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
     }
 }
 
 void func_808F3BD4(EnIn* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -468,17 +469,17 @@ void func_808F3C40(EnIn* this, GlobalContext* globalCtx) {
         textId = gSaveContext.day != 3 ? 0x346A : 0x3492;
         this->actor.textId = textId;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
     }
 }
 
 void func_808F3CD4(EnIn* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -492,7 +493,7 @@ void func_808F3D40(EnIn* this, GlobalContext* globalCtx) {
         this->actor.textId = textId;
         this->actor.flags |= 0x10000;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MASK_GARO, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MASK_GARO, 500.0f, 100.0f);
     }
 }
 
@@ -606,7 +607,7 @@ void func_808F4054(GlobalContext* globalCtx, EnIn* this, s32 arg2, u16 textId) {
 }
 
 void func_808F4108(EnIn* this, GlobalContext* globalCtx, u16 textId) {
-    func_800B86C8(&this->actor, globalCtx, &this->unk4A4->actor);
+    Actor_ChangeFocus(&this->actor, globalCtx, &this->unk4A4->actor);
     this->actor.textId = 0;
     this->unk4A4->actor.textId = textId;
     this->unk4A4->unk48C = 2;
@@ -792,7 +793,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
                             if (func_80114E90()) {
                                 this->actionFunc = func_808F3C40;
-                                func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                                Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
                                 ret = true;
                             } else {
@@ -938,7 +939,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_808F35D8(this, globalCtx);
                     if (func_80114E90()) {
                         this->actionFunc = func_808F3B40;
-                        func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                         ret = true;
                     } else {
                         func_800E8EA0(globalCtx, &this->actor, 0x347F);
@@ -962,7 +963,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x347C:
                     this->actionFunc = func_808F3D40;
-                    func_800B8A1C(&this->actor, globalCtx, GI_MASK_GARO, 500.0f, 100.0f);
+                    Actor_PickUp(&this->actor, globalCtx, GI_MASK_GARO, 500.0f, 100.0f);
                     func_808F35D8(this, globalCtx);
                     ret = true;
                     break;
@@ -1044,7 +1045,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
                             if (func_80114E90()) {
                                 this->actionFunc = func_808F3C40;
-                                func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                                Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
                                 ret = true;
                             } else {
@@ -1127,7 +1128,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x349F:
                     this->actionFunc = func_808F3D40;
-                    func_800B8A1C(&this->actor, globalCtx, GI_MASK_GARO, 500.0f, 100.0f);
+                    Actor_PickUp(&this->actor, globalCtx, GI_MASK_GARO, 500.0f, 100.0f);
                     func_808F35D8(this, globalCtx);
                     ret = true;
                     break;
@@ -1142,7 +1143,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_808F35D8(this, globalCtx);
                     if (func_80114E90()) {
                         this->actionFunc = func_808F3B40;
-                        func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                         ret = true;
                     } else {
                         func_800E8EA0(globalCtx, &this->actor, 0x34A2);
@@ -1222,7 +1223,7 @@ s32 func_808F5674(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
     s32 pad;
     s32 ret = false;
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 2:
             func_808F4054(globalCtx, this, arg2, this->actor.textId);
             ret = true;
@@ -1257,7 +1258,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         *arg3 = 1;
         return 0;
     }
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         *arg3 = 1;
         return 1;
     }
@@ -1379,9 +1380,9 @@ void func_808F5C98(EnIn* this, GlobalContext* globalCtx) {
     }
     if (this->unk4A8 == 2) {
         if (this->unk4B0 == 2) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_LOST);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
         } else {
-            Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_JOY0);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
         }
         this->unk4A8 = 3;
     } else if (this->unk4A8 < 3) {
@@ -1400,7 +1401,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     s16 type;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06014EA8, NULL, this->jointTable, this->morphTable, 20);
     func_808F30B0(&this->skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->colliderCylinder);
@@ -1519,7 +1520,7 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 newUnk4C8;
 
-    newUnk4C8 = func_80152498(&globalCtx->msgCtx);
+    newUnk4C8 = Message_GetState(&globalCtx->msgCtx);
     this->unk4C4 += this->unk4C0 != 0.0f ? 40.0f : -40.0f;
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
