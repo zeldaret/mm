@@ -146,7 +146,7 @@ void EnArrow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_8088A514(EnArrow* this) {
     f32 temp_f0 = 16.0f - this->bubble.unk_144;
 
-    func_800B6C04(&this->actor, CLAMP(temp_f0, 1.0f, 80.0f));
+    Actor_SetSpeeds(&this->actor, CLAMP(temp_f0, 1.0f, 80.0f));
 }
 
 void func_8088A594(EnArrow* this, GlobalContext* globalCtx) {
@@ -208,14 +208,14 @@ void func_8088A594(EnArrow* this, GlobalContext* globalCtx) {
                 Actor_SetScale(&this->actor, 0.009f);
                 this->unk_260 = 40;
             } else {
-                func_800B6C04(&this->actor, 80.0f);
+                Actor_SetSpeeds(&this->actor, 80.0f);
                 this->unk_260 = 15;
             }
             this->actor.shape.rot.x = 0;
             this->actor.shape.rot.y = 0;
             this->actor.shape.rot.z = 0;
         } else {
-            func_800B6C04(&this->actor, 150.0f);
+            Actor_SetSpeeds(&this->actor, 150.0f);
             this->unk_260 = 16;
         }
     }
@@ -290,7 +290,7 @@ void func_8088AA98(EnArrow* this, GlobalContext* globalCtx) {
             EffectSsGSplash_Spawn(globalCtx, &sp44, NULL, NULL, 0, 300);
         }
 
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
 
         EffectSsGRipple_Spawn(globalCtx, &sp44, 100, 500, 0);
         EffectSsGRipple_Spawn(globalCtx, &sp44, 100, 500, 4);
@@ -353,7 +353,7 @@ void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx) {
                 EffectSsStone1_Spawn(globalCtx, &this->actor.world.pos, 0);
             }
 
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_IT_DEKUNUTS_BUBLE_VANISH);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_IT_DEKUNUTS_BUBLE_VANISH);
 
             if ((this->unk_262 != 0) && (this->actor.wallBgId == BG_ACTOR_MAX)) {
 
@@ -387,7 +387,7 @@ void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx) {
                 sp82 = NA_SE_IT_SLING_REFLECT;
             }
             EffectSsStone1_Spawn(globalCtx, &this->actor.world.pos, 0);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, sp82);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, sp82);
             Actor_MarkForDeath(&this->actor);
         } else {
             EffectSsHitMark_SpawnCustomScale(globalCtx, 0, 150, &this->actor.world.pos);
@@ -408,7 +408,7 @@ void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx) {
                     this->unk_261 |= 2;
                     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                     func_8088A7D8(globalCtx, this);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_IT_HOOKSHOT_STICK_CRE);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_HOOKSHOT_STICK_CRE);
                 }
             } else if (this->unk_262 != 0) {
                 this->actionFunc = func_8088B630;
@@ -421,7 +421,7 @@ void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx) {
                 if ((this->actor.params >= ENARROW_3) && (this->actor.params < ENARROW_6)) {
                     this->actor.draw = NULL;
                 }
-                Audio_PlayActorSound2(&this->actor, NA_SE_IT_ARROW_STICK_OBJ);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_ARROW_STICK_OBJ);
                 this->unk_261 |= 1;
             }
         }
@@ -463,12 +463,12 @@ void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx) {
 
         if (this->actor.speedXZ == 0.0f) {
             this->actor.velocity.y -= 1.0f;
-            if (this->actor.velocity.y < this->actor.minVelocityY) {
-                this->actor.velocity.y = this->actor.minVelocityY;
+            if (this->actor.velocity.y < this->actor.terminalVelocity) {
+                this->actor.velocity.y = this->actor.terminalVelocity;
             }
-            Actor_ApplyMovement(&this->actor);
+            Actor_UpdatePos(&this->actor);
         } else {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
         }
 
         this->unk_262 = BgCheck_ProjectileLineTest(&globalCtx->colCtx, &this->actor.prevPos, &this->actor.world.pos,
@@ -530,7 +530,7 @@ void func_8088B630(EnArrow* this, GlobalContext* globalCtx) {
 
 void func_8088B6B0(EnArrow* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->arrow.skelAnime);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_8088AA98(this, globalCtx);
 
     if (DECR(this->unk_260) == 0) {
