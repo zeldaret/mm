@@ -65,7 +65,7 @@ void __osMallocInit(Arena* arena, void* heap, size_t size) {
     arena->isInit = true;
 }
 
-// Original name: __osMallocAddHeap
+// Original name: __osMallocAddBlock
 void __osMallocAddHeap(Arena* arena, void* heap, size_t size) {
     ptrdiff_t diff;
     s32 alignedSize;
