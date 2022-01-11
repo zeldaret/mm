@@ -29,6 +29,7 @@ extern s16 D_801BFE14[][18];
 
 extern u16 D_801BFF34[4];
 
+// sActionModelGroups
 extern u8 D_801BFF3C[];
 
 extern u8 D_801BFF90[];
@@ -353,7 +354,7 @@ void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
 
 
 
-s32 func_801241B4(Player* player);
+s32 Player_HoldsTwoHandedWeapon(Player* player);
 
 
 s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
@@ -590,7 +591,7 @@ u8 func_80122EEC(GlobalContext* globalCtx) {
 }
 
 void func_80122F28(Player* player) {
-    if ((player->actor.category == 2) && (!(player->stateFlags1 & (0x20000000 | 0xA00000 | 0xC00))) && (!(player->stateFlags2 & 1))) {
+    if ((player->actor.category == ACTORCAT_PLAYER) && (!(player->stateFlags1 & (0x20000000 | 0xA00000 | 0xC00))) && (!(player->stateFlags2 & 1))) {
         if (player->doorType < 0) {
             ActorCutscene_SetIntentToPlay(0x7C);
         } else {
@@ -909,31 +910,29 @@ s32 func_80123810(GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
 #endif
 
-s32 func_80123960(Player* player, s32 actionParam) {
-    s32 temp_v1_2;
+s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
+    s32 modelGroup = D_801BFF3C[actionParam];
 
-    temp_v1_2 = D_801BFF3C[actionParam];
-    if ((temp_v1_2 == 2) && func_801234B0(player)) {
+    if ((modelGroup == 2) && func_801234B0(player)) {
         return 1;
     }
-    return temp_v1_2;
+    return modelGroup;
 }
 
+// Player_SetModelsForHoldingShield?
 void func_801239AC(Player* player) {
-    u8 phi_v0;
-
     if (player->stateFlags1 & 0x400000) {
         if ((player->heldItemActionParam < 0) || (player->heldItemActionParam == player->itemActionParam)) {
-            if (func_801241B4(player) == 0) {
-                if (func_801234B0(player) == 0) {
+            if (!Player_HoldsTwoHandedWeapon(player)) {
+                if (!func_801234B0(player)) {
                     D_801F59E0 = player->transformation * 2;
                     player->rightHandType = 8;
                     player->rightHandDLists = &D_801C02F8[8][D_801F59E0];
 
-                    if (player->sheathType == 0xE) {
-                        player->sheathType = 0xC;
-                    } else if (player->sheathType == 0xF) {
-                        player->sheathType = 0xD;
+                    if (player->sheathType == 14) {
+                        player->sheathType = 12;
+                    } else if (player->sheathType == 15) {
+                        player->sheathType = 13;
                     }
 
                     player->sheathDLists = &D_801C02F8[player->sheathType][D_801F59E0];
@@ -945,8 +944,7 @@ void func_801239AC(Player* player) {
     }
 }
 
-// Player_SetModels
-void func_80123AA4(Player* player, s32 modelGroup) {
+void Player_SetModels(Player* player, s32 modelGroup) {
     u8* aux;
 
     D_801F59E0 = player->transformation * 2;
@@ -954,9 +952,9 @@ void func_80123AA4(Player* player, s32 modelGroup) {
     player->rightHandType = D_801BFFB0[modelGroup][2];
     player->sheathType = D_801BFFB0[modelGroup][3];
 
-    if (player->sheathType == 0xE) {
+    if (player->sheathType == 14) {
         if (gSaveContext.equips.buttonItems[CUR_FORM][0] == 0xFF) {
-            player->sheathType = 0xF;
+            player->sheathType = 15;
         }
     }
 
@@ -970,25 +968,25 @@ void func_80123AA4(Player* player, s32 modelGroup) {
     func_801239AC(player);
 }
 
-void func_80123BD4(Player* player, s32 arg1) {
-    player->modelGroup = arg1;
+void Player_SetModelGroup(Player* player, s32 modelGroup) {
+    player->modelGroup = modelGroup;
 
-    if (arg1 == 1) {
+    if (modelGroup == 1) {
         player->modelAnimType = 0;
     } else {
-        player->modelAnimType = D_801BFFB0[arg1][0];
+        player->modelAnimType = D_801BFFB0[modelGroup][0];
     }
 
-    if ((player->modelAnimType < 3) && ((((player->transformation != PLAYER_FORM_FIERCE_DEITY)) && (player->transformation != PLAYER_FORM_HUMAN)) || (player->currentShield == 0))) {
+    if ((player->modelAnimType < 3) && ((((player->transformation != PLAYER_FORM_FIERCE_DEITY)) && (player->transformation != PLAYER_FORM_HUMAN)) || (player->currentShield == PLAYER_SHIELD_NONE))) {
         player->modelAnimType = 0;
     }
 
-    func_80123AA4(player, arg1);
+    Player_SetModels(player, modelGroup);
 }
 
 void func_80123C58(Player* player) {
     player->heldItemActionParam = player->itemActionParam;
-    func_80123BD4(player, func_80123960(player, player->itemActionParam));
+    Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->itemActionParam));
     player->unk_AA5 = 0;
 }
 
@@ -998,7 +996,7 @@ void Player_SetEquipmentData(GlobalContext* globalCtx, Player* player) {
         if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) && (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
             player->currentBoots = D_801BFF90[player->transformation];
         }
-        func_80123BD4(player, func_80123960(player, player->itemActionParam));
+        Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->itemActionParam));
         func_80123140(globalCtx, player);
         if (player->unk_B62 != 0) {
             player->unk_B62 = 1;
@@ -1006,13 +1004,15 @@ void Player_SetEquipmentData(GlobalContext* globalCtx, Player* player) {
     }
 }
 
-void func_80123D50(GlobalContext* globalCtx, Player* player, s32 arg2, s32 arg3) {
-    func_80114FD0(globalCtx, arg2, player->heldItemButton);
-    if (arg2 != 0x12) {
-        player->heldItemId = arg2;
-        player->itemActionParam = arg3;
+void func_80123D50(GlobalContext* globalCtx, Player* player, s32 item, s32 actionParam) {
+    func_80114FD0(globalCtx, item, player->heldItemButton);
+
+    if (item != ITEM_BOTTLE) {
+        player->heldItemId = item;
+        player->itemActionParam = actionParam;
     }
-    player->heldItemActionParam = arg3;
+
+    player->heldItemActionParam = actionParam;
 }
 
 void func_80123DA4(Player* player) {
@@ -1048,8 +1048,8 @@ s32 func_80123F14(GlobalContext* globalCtx) {
     return player->stateFlags1 & 0x800000;
 }
 
-s32 func_80123F2C(GlobalContext* globalCtx, s32 arg1) {
-    globalCtx->unk_1887C = arg1 + 1;
+s32 func_80123F2C(GlobalContext* globalCtx, s32 ammo) {
+    globalCtx->unk_1887C = ammo + 1;
 
     return 1;
 }
@@ -1110,7 +1110,7 @@ s32 func_80124110(Player* player, s32 actionParam) {
         return temp_v0;
     }
 
-    return 0;
+    return PLAYER_AP_NONE;
 }
 
 s32 func_80124148(Player* player) {
@@ -1124,7 +1124,7 @@ s32 func_80124168(s32 actionParam) {
     if ((sword > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2)) && (sword <= (PLAYER_AP_UNK_8 - PLAYER_AP_UNK_2))) {
         return sword;
     }
-    return 0;
+    return PLAYER_AP_NONE;
 }
 
 // Player_GetSwordHeld
@@ -1132,8 +1132,8 @@ s32 func_80124190(Player* player) {
     return func_80124168(player->itemActionParam);
 }
 
-// Player_HoldsTwoHandedWeapon
-s32 func_801241B4(Player* player) {
+s32 Player_HoldsTwoHandedWeapon(Player* player) {
+    // Relies on two-handed weapons to be contiguous
     if ((player->itemActionParam >= PLAYER_AP_SWORD_GREAT_FAIRY) && (player->itemActionParam <= PLAYER_AP_STICK)) {
         return true;
     }

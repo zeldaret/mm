@@ -879,7 +879,7 @@ s32 func_80A87880(Actor* thisx, GlobalContext* globalCtx) {
             } else if (Animation_OnFrame(&this->skelAnime, 12.0f) && !(this->unk_34E & 0x800)) {
                 this->unk_34E |= 0x400;
                 this->unk_34E |= 0x800;
-                func_80123AA4(player, 3);
+                Player_SetModels(player, 3);
             }
             break;
 

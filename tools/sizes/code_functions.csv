@@ -1715,10 +1715,10 @@ asm/non_matchings/code/z_player_lib/func_80123590.s,func_80123590,0x80123590,0x1
 asm/non_matchings/code/z_player_lib/func_801235DC.s,func_801235DC,0x801235DC,0x1C
 asm/non_matchings/code/z_player_lib/func_8012364C.s,func_8012364C,0x8012364C,0x71
 asm/non_matchings/code/z_player_lib/func_80123810.s,func_80123810,0x80123810,0x54
-asm/non_matchings/code/z_player_lib/func_80123960.s,func_80123960,0x80123960,0x13
+asm/non_matchings/code/z_player_lib/Player_ActionToModelGroup.s,Player_ActionToModelGroup,0x80123960,0x13
 asm/non_matchings/code/z_player_lib/func_801239AC.s,func_801239AC,0x801239AC,0x3E
-asm/non_matchings/code/z_player_lib/func_80123AA4.s,func_80123AA4,0x80123AA4,0x4C
-asm/non_matchings/code/z_player_lib/func_80123BD4.s,func_80123BD4,0x80123BD4,0x21
+asm/non_matchings/code/z_player_lib/Player_SetModels.s,Player_SetModels,0x80123AA4,0x4C
+asm/non_matchings/code/z_player_lib/Player_SetModelGroup.s,Player_SetModelGroup,0x80123BD4,0x21
 asm/non_matchings/code/z_player_lib/func_80123C58.s,func_80123C58,0x80123C58,0xE
 asm/non_matchings/code/z_player_lib/Player_SetEquipmentData.s,Player_SetEquipmentData,0x80123C90,0x30
 asm/non_matchings/code/z_player_lib/func_80123D50.s,func_80123D50,0x80123D50,0x15
@@ -1739,7 +1739,7 @@ asm/non_matchings/code/z_player_lib/func_80124110.s,func_80124110,0x80124110,0xE
 asm/non_matchings/code/z_player_lib/func_80124148.s,func_80124148,0x80124148,0x8
 asm/non_matchings/code/z_player_lib/func_80124168.s,func_80124168,0x80124168,0xA
 asm/non_matchings/code/z_player_lib/func_80124190.s,func_80124190,0x80124190,0x9
-asm/non_matchings/code/z_player_lib/func_801241B4.s,func_801241B4,0x801241B4,0xB
+asm/non_matchings/code/z_player_lib/Player_HoldsTwoHandedWeapon.s,Player_HoldsTwoHandedWeapon,0x801241B4,0xB
 asm/non_matchings/code/z_player_lib/Player_ActionToBottle.s,Player_ActionToBottle,0x801241E0,0xB
 asm/non_matchings/code/z_player_lib/Player_GetBottleHeld.s,Player_GetBottleHeld,0x8012420C,0x8
 asm/non_matchings/code/z_player_lib/Player_ActionToExplosive.s,Player_ActionToExplosive,0x8012422C,0xB
