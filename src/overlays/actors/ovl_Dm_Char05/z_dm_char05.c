@@ -73,7 +73,7 @@ void func_80AAC5A0(SkelAnime* skelAnime, ActorAnimationEntry* animation, u16 arg
 void func_80AAC63C(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_dmask_Skel_010B0, NULL, NULL, NULL, 0);
     if (DMCHAR05_GET(&this->actor) == DMCHAR05_0) {
         func_80AAC5A0(&this->skelAnime, &sAnimations[0], 0);
@@ -86,7 +86,7 @@ void func_80AAC63C(Actor* thisx, GlobalContext* globalCtx) {
 void func_80AAC6E4(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_dmask_Skel_042B0, NULL, NULL, NULL, 0);
     func_80AAC5A0(&this->skelAnime, &sAnimations[1], 0);
     this->actionFunc = func_80AACC48;
@@ -95,7 +95,7 @@ void func_80AAC6E4(Actor* thisx, GlobalContext* globalCtx) {
 void func_80AAC770(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dmask_Skel_001D0, NULL, NULL, NULL, 0);
     func_80AAC5A0(&this->skelAnime, &sAnimations[3], 0);
     this->actionFunc = func_80AACC48;
@@ -104,7 +104,7 @@ void func_80AAC770(Actor* thisx, GlobalContext* globalCtx) {
 void func_80AAC7FC(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_dmask_Skel_013D0, NULL, NULL, NULL, 0);
     func_80AAC5A0(&this->skelAnime, &sAnimations[4], 0);
     this->actionFunc = func_80AACC48;
@@ -497,21 +497,21 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
 
 void func_80AAD3F8(DmChar05* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 490) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_EVIL_POWER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EVIL_POWER);
     }
 
     if (globalCtx->csCtx.frames > 550) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_MASK_FLOAT - SFX_FLAG);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MASK_FLOAT - SFX_FLAG);
     }
 }
 
 void func_80AAD450(DmChar05* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.frames == 262) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_EVIL_POWER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EVIL_POWER);
     }
 
     if (globalCtx->csCtx.frames > 318) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_MASK_FLOAT - SFX_FLAG);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MASK_FLOAT - SFX_FLAG);
     }
 }
 
@@ -520,31 +520,31 @@ void func_80AAD4A8(DmChar05* this, GlobalContext* globalCtx) {
         if (func_800EE29C(globalCtx, 0x6D) &&
             (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x6D)]->unk0 == 3)) {
             if (Animation_OnFrame(&this->skelAnime, 14.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_IT_MASK_BOUND_0);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_0);
             } else if (Animation_OnFrame(&this->skelAnime, 19.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_IT_MASK_BOUND_1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_1);
             }
         }
     } else if (DMCHAR05_GET(&this->actor) == DMCHAR05_1) {
         if (func_800EE29C(globalCtx, 0x1D9)) {
             if ((globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1D9)]->unk0 == 3) &&
                 Animation_OnFrame(&this->skelAnime, 5.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_IT_MASK_BOUND_SAND);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_SAND);
             }
         }
     } else if (DMCHAR05_GET(&this->actor) == DMCHAR05_2) {
         if (func_800EE29C(globalCtx, 0x206) &&
             (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x206)]->unk0 == 2)) {
             if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_IT_MASK_BOUND_0);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_0);
             }
 
             if (Animation_OnFrame(&this->skelAnime, 14.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_IT_MASK_BOUND_1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_1);
             }
 
             if (Animation_OnFrame(&this->skelAnime, 18.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_IT_MASK_BOUND_1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_1);
             }
         }
     } else if (DMCHAR05_GET(&this->actor) == DMCHAR05_3) {
@@ -559,10 +559,10 @@ void func_80AAD4A8(DmChar05* this, GlobalContext* globalCtx) {
         } else if (globalCtx->sceneNum == SCENE_SPOT00) {
             if (gSaveContext.sceneSetupIndex == 9) {
                 if ((globalCtx->csCtx.unk_12 == 0) && (globalCtx->csCtx.frames == 255)) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_EVIL_POWER);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EVIL_POWER);
                 }
             } else if ((gSaveContext.sceneSetupIndex == 0xB) && (globalCtx->csCtx.frames == 115)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_EVIL_POWER_PREDEMO);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EVIL_POWER_PREDEMO);
             }
         }
     }
@@ -675,7 +675,7 @@ void func_80AADC00(Actor* thisx, GlobalContext* globalCtx) {
 
         if (globalCtx->csCtx.npcActions[temp_v0]->unk0 == 4) {
             Matrix_InsertTranslation(-600.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-            func_800BDFC0(globalCtx, object_dmask_DL_001E70);
+            Gfx_DrawDListOpa(globalCtx, object_dmask_DL_001E70);
         }
     }
 }
