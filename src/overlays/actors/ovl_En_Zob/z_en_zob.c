@@ -533,7 +533,7 @@ void func_80BA0374(EnZob* this, GlobalContext* globalCtx) {
 
 void func_80BA0610(EnZob* this, GlobalContext* globalCtx) {
     func_80B9F86C(this);
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_801518B0(globalCtx, 0x120D, &this->actor);
         this->unk_304 = 3;
@@ -572,7 +572,7 @@ void func_80BA0728(EnZob* this, GlobalContext* globalCtx) {
         func_80B9F7E4(this, 2, 2);
         this->unk_30E = 0;
         this->unk_2F4 |= 1;
-    } else if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BA0374;
         func_80B9FA3C(this, globalCtx);
     } else if (func_800EE29C(globalCtx, 500)) {
@@ -650,7 +650,7 @@ void func_80BA0AD8(EnZob* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BA0A04;
         func_80BA08E8(this, globalCtx);
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, globalCtx) &&
