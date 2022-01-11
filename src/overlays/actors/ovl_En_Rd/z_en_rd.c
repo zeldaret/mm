@@ -50,6 +50,14 @@ void EnRd_Damage(EnRd* this, GlobalContext* globalCtx);
 void EnRd_Dead(EnRd* this, GlobalContext* globalCtx);
 void EnRd_Stunned(EnRd* this, GlobalContext* globalCtx);
 
+typedef enum {
+    /* 0 */ EN_RD_GRAB_START,
+    /* 1 */ EN_RD_GRAB_INITIAL_DAMAGE,
+    /* 2 */ EN_RD_GRAB_ATTACK,
+    /* 3 */ EN_RD_GRAB_RELEASE,
+    /* 4 */ EN_RD_GRAB_END,
+} EnRdGrabState;
+
 const ActorInit En_Rd_InitVars = {
     ACTOR_EN_RD,
     ACTORCAT_ENEMY,
@@ -730,8 +738,8 @@ void EnRd_WalkToParent(EnRd* this, GlobalContext* globalCtx) {
 void EnRd_SetupGrab(EnRd* this) {
     Animation_PlayOnce(&this->skelAnime, &gGibdoRedeadGrabStartAnim);
     this->unk_3D6 = 0;
-    this->unk_3EB = 0;
-    this->unk_3EA = 200;
+    this->grabState = 0;
+    this->grabDamageTimer = 200;
     this->unk_3EF = 10;
     this->actor.speedXZ = 0.0f;
     this->actionFunc = EnRd_Grab;
@@ -742,22 +750,22 @@ void EnRd_Grab(EnRd* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        this->unk_3EB++;
+        this->grabState++;
     }
 
-    switch (this->unk_3EB) {
-        case 1:
+    switch (this->grabState) {
+        case EN_RD_GRAB_INITIAL_DAMAGE:
             Animation_PlayLoop(&this->skelAnime, &gGibdoRedeadGrabAttackAnim);
-            this->unk_3EB++;
+            this->grabState++;
             globalCtx->damagePlayer(globalCtx, -8);
             func_8013ECE0(this->actor.xzDistToPlayer, 255, 1, 12);
-            this->unk_3EA = 20;
+            this->grabDamageTimer = 20;
 
-        case 0:
+        case EN_RD_GRAB_START:
             Math_SmoothStepToS(&this->headYRotation, 0, 1, 1500, 0);
             Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 1500, 0);
 
-        case 2:
+        case EN_RD_GRAB_ATTACK:
             if (!(player->stateFlags2 & 0x80) || (player->unk_B62 != 0)) {
                 if ((player->unk_B62 != 0) && (player->stateFlags2 & 0x80)) {
                     player->stateFlags2 &= ~0x80;
@@ -765,7 +773,7 @@ void EnRd_Grab(EnRd* this, GlobalContext* globalCtx) {
                 }
                 Animation_Change(&this->skelAnime, &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f,
                                  Animation_GetLastFrame(&gGibdoRedeadGrabEndAnim), 3, 0.0f);
-                this->unk_3EB++;
+                this->grabState++;
                 this->unk_3EF = 4;
                 break;
             }
@@ -795,22 +803,22 @@ void EnRd_Grab(EnRd* this, GlobalContext* globalCtx) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
 
-            this->unk_3EA--;
-            if (this->unk_3EA == 0) {
+            this->grabDamageTimer--;
+            if (this->grabDamageTimer == 0) {
                 globalCtx->damagePlayer(globalCtx, -8);
                 func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
-                this->unk_3EA = 20;
-                func_800B8E58(player, player->ageProperties->unk_92 + 0x6805);
+                this->grabDamageTimer = 20;
+                func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
             }
             break;
 
-        case 3:
+        case EN_RD_GRAB_RELEASE:
             if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
             break;
 
-        case 4:
+        case EN_RD_GRAB_END:
             if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
