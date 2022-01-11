@@ -24,7 +24,7 @@ typedef struct EnFamos {
     /* 0x188 */ Vec3s limbDrawTbl[FAMOS_LIMB_COUNT];
     /* 0x1AC */ Vec3s transitionDrawTbl[FAMOS_LIMB_COUNT];
     /* 0x1D0 */ EnFamosActionFunc actionFunc;
-    /* 0x1D4 */ u8 unk1D4; // animated material pointer
+    /* 0x1D4 */ u8 animatedMaterialIndex;
     /* 0x1D5 */ u8 unk1D5;
     /* 0x1D6 */ u8 unk1D6; //path count
     /* 0x1D7 */ u8 unk1D7; //path count
