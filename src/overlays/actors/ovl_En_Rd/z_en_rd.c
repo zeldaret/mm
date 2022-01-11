@@ -19,13 +19,13 @@ void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx);
 s32 EnRd_IsHostile(GlobalContext* globalCtx);
 void func_808D4308(EnRd* this);
 void func_808D43AC(EnRd* this, GlobalContext* globalCtx);
-void func_808D45D4(EnRd* this);
-void func_808D4660(EnRd* this, GlobalContext* globalCtx);
-void func_808D47DC(EnRd* this);
-void func_808D4868(EnRd* this, GlobalContext* globalCtx);
+void EnRd_SetupSquattingDance(EnRd* this);
+void EnRd_SquattingDance(EnRd* this, GlobalContext* globalCtx);
+void EnRd_SetupClappingDance(EnRd* this);
+void EnRd_ClappingDance(EnRd* this, GlobalContext* globalCtx);
 void func_808D49E4(EnRd* this, GlobalContext* globalCtx);
-void func_808D4A90(EnRd* this);
-void func_808D4B20(EnRd* this, GlobalContext* globalCtx);
+void EnRd_SetupPirouette(EnRd* this);
+void EnRd_Pirouette(EnRd* this, GlobalContext* globalCtx);
 void func_808D4CA8(EnRd* this, GlobalContext* globalCtx);
 void func_808D4DC4(EnRd* this);
 void func_808D4E60(EnRd* this, GlobalContext* globalCtx);
@@ -172,32 +172,32 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
         switch (this->actor.params) {
             case 5:
                 if (!EnRd_IsHostile(globalCtx)) {
-                    func_808D45D4(this);
+                    EnRd_SetupSquattingDance(this);
                 } else {
                     this->actor.hintId = 0x2A;
                     func_808D4308(this);
                 }
-                this->unkFunc = func_808D45D4;
+                this->unkFunc = EnRd_SetupSquattingDance;
                 break;
 
             case 6:
                 if (!EnRd_IsHostile(globalCtx)) {
-                    func_808D47DC(this);
+                    EnRd_SetupClappingDance(this);
                 } else {
                     this->actor.hintId = 0x2A;
                     func_808D4308(this);
                 }
-                this->unkFunc = func_808D47DC;
+                this->unkFunc = EnRd_SetupClappingDance;
                 break;
 
             case 7:
                 if (!EnRd_IsHostile(globalCtx)) {
-                    func_808D4A90(this);
+                    EnRd_SetupPirouette(this);
                 } else {
                     this->actor.hintId = 0x2A;
                     func_808D4308(this);
                 }
-                this->unkFunc = func_808D4A90;
+                this->unkFunc = EnRd_SetupPirouette;
                 break;
 
             default:
@@ -264,8 +264,8 @@ s32 EnRd_IsHostile(GlobalContext* globalCtx) {
 }
 
 void func_808D4260(EnRd* this, GlobalContext* globalCtx) {
-    if ((this->actor.params >= ENRD_GET_5) && (this->actionFunc != func_808D4660) &&
-        (this->actionFunc != func_808D4868) && (this->actionFunc != func_808D4B20) &&
+    if ((this->actor.params >= ENRD_GET_5) && (this->actionFunc != EnRd_SquattingDance) &&
+        (this->actionFunc != EnRd_ClappingDance) && (this->actionFunc != EnRd_Pirouette) &&
         (this->actionFunc != func_808D65BC) && (this->actionFunc != func_808D58CC) &&
         (this->actionFunc != func_808D6200) && (this->actionFunc != func_808D6388)) {
         if (!EnRd_IsHostile(globalCtx)) {
@@ -338,17 +338,17 @@ void func_808D43AC(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D45D4(EnRd* this) {
+void EnRd_SetupSquattingDance(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadSquattingDanceAnim, -6.0f);
     this->unk_3EF = 14;
     this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->unk_3E4 = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actionFunc = func_808D4660;
+    this->actionFunc = EnRd_SquattingDance;
 }
 
-void func_808D4660(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_SquattingDance(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
@@ -381,17 +381,17 @@ void func_808D4660(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D47DC(EnRd* this) {
+void EnRd_SetupClappingDance(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadClappingDanceAnim, -6.0f);
     this->unk_3EF = 15;
     this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->unk_3E4 = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actionFunc = func_808D4868;
+    this->actionFunc = EnRd_ClappingDance;
 }
 
-void func_808D4868(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_ClappingDance(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
@@ -441,17 +441,17 @@ void func_808D49E4(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808D4A90(EnRd* this) {
+void EnRd_SetupPirouette(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadPirouetteAnim, -6.0f);
     this->unk_3EF = 16;
     this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->unk_3E4 = 4370;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actionFunc = func_808D4B20;
+    this->actionFunc = EnRd_Pirouette;
 }
 
-void func_808D4B20(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_Pirouette(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
