@@ -183,7 +183,7 @@ void func_80954BE8(EnKanban* this, GlobalContext* globalCtx) {
         if (this->msgTimer == 0) {
             yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
             if (ABS_ALT(yaw) < 0x2800) {
-                if (func_800B84D0(&this->actor, globalCtx)) {
+                if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
                     this->msgFlag = true;
                 } else {
                     func_800B8614(&this->actor, globalCtx, 68.0f);
@@ -192,7 +192,7 @@ void func_80954BE8(EnKanban* this, GlobalContext* globalCtx) {
         } else {
             this->msgTimer--;
         }
-    } else if (func_800B867C(&this->actor, globalCtx)) {
+    } else if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->msgFlag = false;
         this->msgTimer = 20;
     }
@@ -384,7 +384,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
                         piece->actor.flags &= ~1;
                         piece->actor.flags |= 0x2000000;
                         this->cutMarkTimer = 5;
-                        Audio_PlayActorSound2(&this->actor, NA_SE_IT_SWORD_STRIKE);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SWORD_STRIKE);
                     }
                 }
             }
@@ -428,9 +428,9 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
 
             if (this->unk_198 != 0) {
                 this->actor.velocity.y = -2.0f;
-                Actor_ApplyMovement(&this->actor);
+                Actor_UpdatePos(&this->actor);
             } else {
-                Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+                Actor_MoveWithGravity(&this->actor);
             }
 
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 10.0f, 50.0f, 5);
@@ -497,14 +497,14 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
 
             if (this->actor.bgCheckFlags & 8) {
                 if (!(this->actor.bgCheckFlags & 1)) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
                 }
                 this->actor.speedXZ *= -0.5f;
             }
 
             if (this->actor.bgCheckFlags & 0x40) {
                 this->actionState = ENKANBAN_WATER;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
                 this->bounceX = this->bounceZ = 0;
                 this->actor.world.pos.y += this->actor.depthInWater;
                 EffectSsGSplash_Spawn(globalCtx, &this->actor.world.pos, NULL, NULL, 0, (this->partCount * 20) + 300);
@@ -622,9 +622,9 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
 
             if (bounced) {
                 if (this->unk_197 > 0) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_PL_WALK_SNOW);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_SNOW);
                 } else {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
                 }
             }
 
@@ -706,7 +706,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
                     this->actor.speedXZ = 0.0f;
                 }
 
-                Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+                Actor_MoveWithGravity(&this->actor);
 
                 if (this->actor.speedXZ != 0.0f) {
                     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 50.0f, 5);
@@ -775,7 +775,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             if (this->bounceX == 0) {
-                Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+                Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
                 f32 dx;
                 f32 dy;
                 f32 dz;
