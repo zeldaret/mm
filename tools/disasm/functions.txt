@@ -222,7 +222,7 @@
     0x800871B4:("ArenaImpl_Unlock",),
     0x800871DC:("ArenaImpl_GetLastBlock",),
     0x8008720C:("__osMallocInit",),
-    0x8008725C:("__osMallocAddBlock",),
+    0x8008725C:("__osMallocAddHeap",),
     0x800872FC:("__osMallocCleanup",),
     0x8008731C:("__osMallocIsInitalized",),
     0x80087324:("__osMalloc",),

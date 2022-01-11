@@ -19,7 +19,7 @@
 
 OSMesg sArenaLockMsg[1];
 
-void __osMallocAddBlock(Arena* arena, void* heap, size_t size);
+void __osMallocAddHeap(Arena* arena, void* heap, size_t size);
 
 void ArenaImpl_LockInit(Arena* arena) {
     osCreateMesgQueue(&arena->lock, sArenaLockMsg, ARRAY_COUNT(sArenaLockMsg));
@@ -61,11 +61,12 @@ void __osMallocInit(Arena* arena, void* heap, size_t size) {
 
     ArenaImpl_LockInit(arena);
 
-    __osMallocAddBlock(arena, heap, size);
+    __osMallocAddHeap(arena, heap, size);
     arena->isInit = true;
 }
 
-void __osMallocAddBlock(Arena* arena, void* heap, size_t size) {
+// Original name: __osMallocAddHeap
+void __osMallocAddHeap(Arena* arena, void* heap, size_t size) {
     ptrdiff_t diff;
     s32 alignedSize;
     ArenaNode* firstNode;
@@ -91,10 +92,12 @@ void __osMallocAddBlock(Arena* arena, void* heap, size_t size) {
 
         lastNode = ArenaImpl_GetLastBlock(arena);
 
+        // Checks if there's already a block
         if (lastNode == NULL) {
             arena->head = firstNode;
             arena->start = heap;
         } else {
+            // Chain the existing block with the new one
             firstNode->prev = lastNode;
             lastNode->next = firstNode;
         }
