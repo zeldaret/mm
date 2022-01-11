@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="gameplay_dangeon_keep" Segment="5">
-        <DList Name="gameplay_dangeon_keep_DL_000140" Offset="0x140" />
-        <DList Name="gameplay_dangeon_keep_DL_000230" Offset="0x230" />
+        <DList Name="gDoorLockDL" Offset="0x140" />
+        <DList Name="gDoorChainsDL" Offset="0x230" />
         <Texture Name="gameplay_dangeon_keep_Tex_0002C0" OutName="tex_0002C0" Format="rgba16" Width="32" Height="32" Offset="0x2C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_000AC0" OutName="tex_000AC0" Format="rgba16" Width="32" Height="32" Offset="0xAC0" />
         <Texture Name="gameplay_dangeon_keep_Tex_0012C0" OutName="tex_0012C0" Format="rgba16" Width="16" Height="128" Offset="0x12C0" />
