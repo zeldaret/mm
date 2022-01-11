@@ -220,8 +220,8 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags |= 0x80;
     }
 
-    if (this->actor.params == ENRD_GET_4) {
-        s32 pad2;
+    if (EN_RD_IS_FROZEN(&this->actor)) {
+        s32 requiredScopeTemp;
 
         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
                            this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,

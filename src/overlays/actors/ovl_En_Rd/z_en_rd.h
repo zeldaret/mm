@@ -11,6 +11,7 @@ typedef void (*EnRdFunc)(struct EnRd*);
 #define ENRD_GET_80(thisx) ((thisx)->params & 0x80)
 #define ENRD_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
 #define EN_RD_IS_REDEAD(thisx) ((thisx)->params >= -1)
+#define EN_RD_IS_FROZEN(thisx) ((thisx)->params == 4)
 
 // This limb enum is used for both Redeads and Gibdos for all actors
 // that use object_rd (i.e., En_Rd, En_Railgibud, and En_Talk_Gibud)
