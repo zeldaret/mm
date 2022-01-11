@@ -176,22 +176,22 @@ void func_8088A594(EnArrow* this, GlobalContext* globalCtx) {
 
         switch (this->actor.params) {
             case ENARROW_6:
-                func_800B8E58(&player->actor, NA_SE_IT_SLING_SHOT);
+                func_800B8E58(player, NA_SE_IT_SLING_SHOT);
                 break;
 
             case ENARROW_0:
             case ENARROW_1:
             case ENARROW_2:
-                func_800B8E58(&player->actor, NA_SE_IT_ARROW_SHOT);
+                func_800B8E58(player, NA_SE_IT_ARROW_SHOT);
                 break;
 
             case ENARROW_3:
             case ENARROW_4:
             case ENARROW_5:
-                func_800B8E58(&player->actor, NA_SE_IT_MAGIC_ARROW_SHOT);
+                func_800B8E58(player, NA_SE_IT_MAGIC_ARROW_SHOT);
 
             case ENARROW_7:
-                func_800B8E58(&player->actor, NA_SE_PL_DEKUNUTS_FIRE);
+                func_800B8E58(player, NA_SE_PL_DEKUNUTS_FIRE);
                 break;
         }
 
