@@ -157,7 +157,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.params &= 0xFF;
     }
 
-    if (EN_RD_GET_TYPE(&this->actor) >= EN_RD_TYPE_MINUS_1) {
+    if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_GIBDO) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, &gGibdoRedeadIdleAnim, this->jointTable,
                            this->morphTable, REDEAD_GIBDO_LIMB_MAX);
     } else {
@@ -168,7 +168,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
-    if (EN_RD_GET_TYPE(&this->actor) >= EN_RD_TYPE_MINUS_2) {
+    if (EN_RD_GET_TYPE(&this->actor) >= EN_RD_TYPE_GIBDO) {
         switch (EN_RD_GET_TYPE(&this->actor)) {
             case EN_RD_TYPE_SQUATTING_DANCE:
                 if (!EnRd_IsHostile(globalCtx)) {
@@ -201,7 +201,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
                 break;
 
             default:
-                if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_MINUS_2) {
+                if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
                     this->actor.hintId = 0x2D;
                 } else {
                     this->actor.hintId = 0x2A;
@@ -275,7 +275,7 @@ void func_808D4260(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D4308(EnRd* this) {
-    if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_2) {
+    if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
         Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadIdleAnim, -6.0f);
     } else {
         Animation_PlayLoop(&this->skelAnime, &gGibdoRedeadSobbingAnim);
@@ -292,7 +292,7 @@ void func_808D43AC(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
-    if ((EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_2) && Animation_OnFrame(&this->skelAnime, 0.0f)) {
+    if ((EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_CRYING) && Animation_OnFrame(&this->skelAnime, 0.0f)) {
         if (Rand_ZeroOne() >= 0.5f) {
             Animation_PlayLoop(&this->skelAnime, &gGibdoRedeadSobbingAnim);
         } else {
@@ -308,7 +308,7 @@ void func_808D43AC(EnRd* this, GlobalContext* globalCtx) {
 
     if (this->actor.parent != NULL) {
         if (this->unk_3EC == 0) {
-            if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_2) {
+            if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
                 func_808D5660(this);
             } else {
                 func_808D6008(this);
@@ -316,7 +316,7 @@ void func_808D43AC(EnRd* this, GlobalContext* globalCtx) {
         }
     } else {
         if (this->unk_3EC != 0) {
-            if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_2) {
+            if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
                 func_808D5C54(this);
             } else {
                 func_808D6008(this);
@@ -325,7 +325,7 @@ void func_808D43AC(EnRd* this, GlobalContext* globalCtx) {
 
         this->unk_3EC = 0;
         if ((this->actor.xzDistToPlayer <= 150.0f) && func_800B715C(globalCtx)) {
-            if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_2) && (this->unk_3EC == 0)) {
+            if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
                 func_808D5C54(this);
             } else {
                 func_808D6008(this);
@@ -358,7 +358,7 @@ void EnRd_SquattingDance(EnRd* this, GlobalContext* globalCtx) {
 
     this->unk_3EC = 0;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
-        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_MINUS_2) {
+        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
             this->actor.hintId = 0x2A;
@@ -368,7 +368,7 @@ void EnRd_SquattingDance(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (EnRd_IsHostile(globalCtx)) {
-        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_MINUS_2) {
+        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
             this->actor.hintId = 0x2A;
@@ -401,7 +401,7 @@ void EnRd_ClappingDance(EnRd* this, GlobalContext* globalCtx) {
 
     this->unk_3EC = 0;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
-        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_MINUS_2) {
+        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
             this->actor.hintId = 0x2A;
@@ -411,7 +411,7 @@ void EnRd_ClappingDance(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (EnRd_IsHostile(globalCtx)) {
-        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_MINUS_2) {
+        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
             this->actor.hintId = 0x2A;
@@ -432,7 +432,7 @@ void func_808D49E4(EnRd* this, GlobalContext* globalCtx) {
 
     this->unk_3E4++;
     if (this->unk_3E4 > 10) {
-        if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_2) && (this->unk_3EC == 0)) {
+        if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
             func_808D5C54(this);
         } else {
             func_808D6008(this);
@@ -461,7 +461,7 @@ void EnRd_Pirouette(EnRd* this, GlobalContext* globalCtx) {
 
     this->unk_3EC = 0;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
-        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_MINUS_2) {
+        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
             this->actor.hintId = 0x2A;
@@ -470,7 +470,7 @@ void EnRd_Pirouette(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (EnRd_IsHostile(globalCtx)) {
-        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_MINUS_2) {
+        if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
             this->actor.hintId = 0x2A;
@@ -505,7 +505,7 @@ void func_808D4CA8(EnRd* this, GlobalContext* globalCtx) {
     if ((this->unk_3E4 < 2100) && (this->unk_3E4 >= 2000)) {
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, 2, -10.0f);
     } else if (this->unk_3E4 < 1000) {
-        if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_2) && (this->unk_3EC == 0)) {
+        if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (this->unk_3EC == 0)) {
             func_808D5C54(this);
         } else {
             func_808D6008(this);
@@ -641,7 +641,7 @@ void func_808D5440(EnRd* this, GlobalContext* globalCtx) {
     } else {
         this->actor.speedXZ = 0.0f;
         if (!Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 450, 0)) {
-            if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_2) {
+            if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
                 func_808D4308(this);
             } else {
                 func_808D60B0(this);
@@ -698,7 +698,7 @@ void func_808D56E4(EnRd* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.4f;
         } else {
             this->actor.speedXZ = 0.0f;
-            if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_2) {
+            if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
                 func_808D4308(this);
             } else {
                 func_808D60B0(this);
