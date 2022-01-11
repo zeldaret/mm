@@ -43,7 +43,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnItem00_SetObject(EnItem00* this, GlobalContext* globalCtx, f32* shadowOffset, f32* shadowScale) {
-    Actor_SetObjectSegment(globalCtx, &this->actor);
+    Actor_SetObjectDependency(globalCtx, &this->actor);
     Actor_SetScale(&this->actor, 0.5f);
     this->unk154 = 0.5f;
     *shadowOffset = 0.0f;
@@ -63,7 +63,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     thisx->params &= 0xFF; // Has to be thisx to match
 
-    if (Actor_GetCollectibleFlag(globalCtx, this->collectibleFlag)) {
+    if (Flags_GetCollectible(globalCtx, this->collectibleFlag)) {
         if (this->actor.params == ITEM00_HEART_PIECE) {
             sp30 = 0;
             this->collectibleFlag = 0;
@@ -169,7 +169,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk14E = 0;
-    ActorShape_Init(&this->actor.shape, shadowOffset, func_800B3FC0, shadowScale);
+    ActorShape_Init(&this->actor.shape, shadowOffset, ActorShadow_DrawCircle, shadowScale);
     this->actor.shape.shadowAlpha = 180;
     this->actor.focus.pos = this->actor.world.pos;
     this->unk14A = GI_NONE;
@@ -251,7 +251,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((getItemId != GI_NONE) && (Actor_HasParent(&this->actor, globalCtx) == 0)) {
-        func_800B8A1C(&this->actor, globalCtx, getItemId, 50.0f, 20.0f);
+        Actor_PickUp(&this->actor, globalCtx, getItemId, 50.0f, 20.0f);
     }
 
     this->actionFunc = func_800A6A40;
@@ -407,7 +407,7 @@ void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
 
     if (this->unk14A != GI_NONE) {
         if (Actor_HasParent(&this->actor, globalCtx) == 0) {
-            func_800B8A1C(&this->actor, globalCtx, this->unk14A, 50.0f, 80.0f);
+            Actor_PickUp(&this->actor, globalCtx, this->unk14A, 50.0f, 80.0f);
             this->unk152++;
         } else {
             this->unk14A = GI_NONE;
@@ -457,7 +457,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.scale.y = this->actor.scale.x;
 
     if (this->actor.gravity != 0.0f) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
 
         if (this->actor.floorHeight <= BGCHECK_Y_MIN) {
@@ -574,7 +574,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, globalCtx)) {
-            func_800B8A1C(&this->actor, globalCtx, getItemId, 50.0f, 20.0f);
+            Actor_PickUp(&this->actor, globalCtx, getItemId, 50.0f, 20.0f);
         }
     }
 
@@ -586,7 +586,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         case ITEM00_MAP:
         case ITEM00_COMPASS:
             if (Actor_HasParent(&this->actor, globalCtx)) {
-                Actor_SetCollectibleFlag(globalCtx, this->collectibleFlag);
+                Flags_SetCollectible(globalCtx, this->collectibleFlag);
                 Actor_MarkForDeath(&this->actor);
             }
             return;
@@ -598,7 +598,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         play_sound(NA_SE_SY_GET_RUPY);
     } else if (getItemId != GI_NONE) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
-            Actor_SetCollectibleFlag(globalCtx, this->collectibleFlag);
+            Flags_SetCollectible(globalCtx, this->collectibleFlag);
             Actor_MarkForDeath(&this->actor);
         }
         return;
@@ -606,7 +606,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         play_sound(NA_SE_SY_GET_ITEM);
     }
 
-    Actor_SetCollectibleFlag(globalCtx, this->collectibleFlag);
+    Flags_SetCollectible(globalCtx, this->collectibleFlag);
 
     this->unk152 = 15;
     this->unk14C = 35;
@@ -651,7 +651,7 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
                         s8 bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_HEART);
                         if (Object_IsLoaded(&globalCtx->objectCtx, bankIndex)) {
                             this->actor.objBankIndex = bankIndex;
-                            Actor_SetObjectSegment(globalCtx, &this->actor);
+                            Actor_SetObjectDependency(globalCtx, &this->actor);
                             this->unk152 = -2;
                         }
                     } else {
@@ -848,7 +848,7 @@ Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 param
         }
     } else if (paramFF == ITEM00_MUSHROOM_CLOUD) {
         param7F00 >>= 8;
-        if (!Actor_GetCollectibleFlag(globalCtx, param7F00)) {
+        if (!Flags_GetCollectible(globalCtx, param7F00)) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_KINOKO, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0,
                         0, param7F00);
         }
@@ -857,16 +857,16 @@ Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 param
         if (newParamFF == ITEM00_FLEXIBLE) {
             spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                                        spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
-            if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
-                Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+            if (!Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F)) {
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
         } else {
             spawnedActor =
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
             if (param20000 == 0) {
-                if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
-                    Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                if (!Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F)) {
+                    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 }
             }
         }
@@ -923,8 +923,8 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, s32 para
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
         }
-        if (Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F) == 0) {
-            Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+        if (Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F) == 0) {
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
         }
     } else {
         params = func_800A7650(params & 0xFF);
@@ -1080,7 +1080,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
             if (gSaveContext.health <= 0x10) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, 2);
-                Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }
 
@@ -1179,5 +1179,5 @@ s32 func_800A817C(s32 index) {
 }
 
 s32 func_800A81A4(GlobalContext* globalCtx, s32 a1, s32 a2) {
-    return (func_800A8150(a1) == ITEM00_BIG_FAIRY) && (!Actor_GetCollectibleFlag(globalCtx, a2));
+    return (func_800A8150(a1) == ITEM00_BIG_FAIRY) && (!Flags_GetCollectible(globalCtx, a2));
 }

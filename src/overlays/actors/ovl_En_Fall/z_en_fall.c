@@ -176,7 +176,7 @@ void EnFall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
  * Finds the Termina Field moon so the Moon's Tear can spawn in the correct place.
  */
 Actor* EnFall_MoonsTear_GetTerminaFieldMoon(GlobalContext* globalCtx) {
-    Actor* itemAction = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* itemAction = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (itemAction != NULL) {
         if (itemAction->id == ACTOR_EN_FALL && EN_FALL_TYPE(itemAction) == EN_FALL_TYPE_TERMINA_FIELD_MOON) {
@@ -350,7 +350,7 @@ void EnFall_StoppedOpenMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCont
         switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x85)]->unk0) {
             case 3:
                 if (this->eyeGlowIntensity == 0.0f) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_EYE_FLASH);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_EYE_FLASH);
                 }
                 this->eyeGlowIntensity += 0.033333335f;
                 if (this->eyeGlowIntensity > 1.0f) {
@@ -381,13 +381,13 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
             case 0:
                 switch (globalCtx->csCtx.frames) {
                     case 1060:
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_MOON_SCREAM1);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM1);
                         break;
                     case 1089:
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_CRY);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_CRY);
                         break;
                     case 1303:
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SLIP_MOON);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
                 }
                 if (globalCtx->csCtx.frames >= 1145) {
@@ -397,13 +397,13 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
             case 1:
                 switch (globalCtx->csCtx.frames) {
                     case 561:
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_MOON_SCREAM1);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM1);
                         break;
                     case 590:
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_MOON_CRY);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_CRY);
                         break;
                     case 737:
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SLIP_MOON);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
                 }
                 if (globalCtx->csCtx.frames >= 650) {
@@ -481,7 +481,7 @@ void EnFall_MoonsTear_Fall(EnFall* this, GlobalContext* globalCtx) {
 
     if (this->actor.draw != NULL) {
         if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, this->actor.speedXZ) <= 0.0f) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_GORON_BOUND_1);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
             gSaveContext.weekEventReg[0x4A] |= 0x80;
             gSaveContext.weekEventReg[0x4A] |= 0x20;
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TEST, this->actor.world.pos.x,
@@ -661,7 +661,7 @@ void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (func_800EE29C(globalCtx, 0x1C2) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C2)]->unk0 == 5) {
         if (!(this->flags & EN_FALL_FLAG_FIRE_RING_APPEARS)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
         }
         this->flags |= EN_FALL_FLAG_FIRE_RING_APPEARS;
     }

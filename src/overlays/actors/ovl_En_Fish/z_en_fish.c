@@ -147,7 +147,7 @@ Actor* func_8091D944(EnFish* this, GlobalContext* globalCtx) {
     f32 distSq;
     Actor* retActor = NULL;
     f32 minDistSq = FLT_MAX;
-    Actor* foundActor = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* foundActor = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (foundActor != NULL) {
         if ((foundActor->id == ACTOR_EN_FISH) && (foundActor->params == ENFISH_2) &&
@@ -215,7 +215,7 @@ void EnFish_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (sp36 == ENFISH_0) {
         this->actor.flags |= 0x10;
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 8.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 8.0f);
         func_8091E810(this);
     } else if (sp36 == ENFISH_1) {
         func_8091F344(this);
@@ -262,7 +262,7 @@ void func_8091DEE4(EnFish* this) {
     static s16 D_8091FACC[] = { 85, 60, 45 };
 
     this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
+    this->actor.terminalVelocity = 0.0f;
     this->unk_240 = Rand_S16Offset(5, D_8091FACC[this->unk_278]);
     this->unk_248 = 0;
     this->unk_26E = 400;
@@ -302,7 +302,7 @@ void func_8091E070(EnFish* this) {
     s16 phi_a1;
 
     this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
+    this->actor.terminalVelocity = 0.0f;
 
     if ((Rand_Next() & 3) == 0) {
         if (((Rand_Next() & 7) == 0) && (this->unk_278 != 0)) {
@@ -359,7 +359,7 @@ void func_8091E128(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_8091E2E0(EnFish* this) {
     this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
+    this->actor.terminalVelocity = 0.0f;
     this->unk_240 = Rand_S16Offset(10, 40);
     this->unk_248 = 0;
     this->unk_26E = 400;
@@ -433,7 +433,7 @@ void func_8091E34C(Actor* thisx, GlobalContext* globalCtx2) {
 
 void func_8091E5EC(EnFish* this) {
     this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
+    this->actor.terminalVelocity = 0.0f;
     this->unk_26E = 400;
     this->unk_272 = 400;
     this->unk_268 = 0;
@@ -490,7 +490,7 @@ void func_8091E810(EnFish* this) {
     this->unk_270 = 0;
     this->unk_26A = 0;
     this->actor.gravity = -1.0f;
-    this->actor.minVelocityY = -10.0f;
+    this->actor.terminalVelocity = -10.0f;
     this->actor.shape.yOffset = 0.0f;
     func_8091D6C4(this);
     this->unk_248 = 5;
@@ -511,7 +511,7 @@ void func_8091E880(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_240 = 400;
         func_8091E9A4(this);
     } else if (this->actor.bgCheckFlags & 0x20) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
         func_8091D840(thisx, globalCtx, 10, 15.0f);
         if (func_8091DA14(this, globalCtx)) {
             func_8091EF30(this);
@@ -530,7 +530,7 @@ void func_8091E9A4(EnFish* this) {
     f32 temp_f0;
 
     this->actor.gravity = -1.0f;
-    this->actor.minVelocityY = -10.0f;
+    this->actor.terminalVelocity = -10.0f;
 
     temp_f0 = Rand_ZeroOne();
     if (temp_f0 < 0.1f) {
@@ -554,7 +554,7 @@ void func_8091E9A4(EnFish* this) {
     this->unk_248 = 5;
     this->unk_24C = 0.0f;
     if (sp24 && (this->actor.draw != NULL)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_FISH_LEAP);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_LEAP);
     }
 }
 
@@ -603,7 +603,7 @@ void func_8091EAF0(Actor* thisx, GlobalContext* globalCtx) {
 void func_8091ECF4(EnFish* this) {
     this->actor.home.pos = this->actor.world.pos;
     this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
+    this->actor.terminalVelocity = 0.0f;
     this->actor.shape.yOffset = 0.0f;
     this->actor.flags |= 0x10;
     this->unk_240 = 200;
@@ -661,7 +661,7 @@ void func_8091ED70(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_8091EF30(EnFish* this) {
     this->actor.gravity = -2.0f;
-    this->actor.minVelocityY = -10.0f;
+    this->actor.terminalVelocity = -10.0f;
     this->actor.shape.yOffset = 0.0f;
     if (this->actor.velocity.y < -1.0f) {
         this->actor.velocity.y = -1.0f;
@@ -766,7 +766,7 @@ void func_8091EFE8(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_8091F344(EnFish* this) {
     this->actor.gravity = 0.0f;
-    this->actor.minVelocityY = 0.0f;
+    this->actor.terminalVelocity = 0.0f;
     this->unk_240 = Rand_S16Offset(5, 35);
     this->unk_248 = 1;
     this->unk_268 = 0;
@@ -851,7 +851,7 @@ void func_8091F5A4(Actor* thisx, GlobalContext* globalCtx) {
         }
         SkelAnime_Update(&this->skelAnime);
         func_8091D7C4(this);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         if (this->unk_248 != 0) {
             u32 temp = (globalCtx->sceneNum ^ SCENE_MARINE_RESEARCH_LAB) != 0;
             phi_f0 = BREG(1) + 10.0f;
@@ -872,7 +872,7 @@ void func_8091F5A4(Actor* thisx, GlobalContext* globalCtx) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
 
-        Actor_SetHeight(&this->actor, this->actor.shape.yOffset * 0.01f);
+        Actor_SetFocus(&this->actor, this->actor.shape.yOffset * 0.01f);
 
         if (Actor_HasParent(&this->actor, globalCtx)) {
             this->actor.parent = NULL;
@@ -882,7 +882,7 @@ void func_8091F5A4(Actor* thisx, GlobalContext* globalCtx) {
                 func_8091D904(this);
             }
         } else if (func_8091DDF4(this, globalCtx)) {
-            func_800B8A1C(&this->actor, globalCtx, 0xBA, 80.0f, 25.0f);
+            Actor_PickUp(&this->actor, globalCtx, 0xBA, 80.0f, 25.0f);
         }
     }
 }
@@ -901,7 +901,7 @@ void func_8091F830(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((this->unkFunc == NULL) || (this->unkFunc(&this->actor, globalCtx), (this->actor.update != NULL))) {
         func_8091D7C4(this);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
 
         if (this->unk_242 == 20) {
             this->actor.draw = EnFish_Draw;

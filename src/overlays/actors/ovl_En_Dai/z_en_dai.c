@@ -192,7 +192,7 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_SNOWHEAD) && (globalCtx->csCtx.unk_12 == 0) &&
         !(gSaveContext.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
-            Actor_SetSwitchFlag(globalCtx, 20);
+            Flags_SetSwitch(globalCtx, 20);
             this->unk_1CE |= (0x80 | 0x10);
             this->unk_1CE &= ~(0x100 | 0x20);
             this->unk_1CC = 0xFF;
@@ -216,7 +216,7 @@ s32 func_80B3E7C8(EnDai* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if (this->unk_1CE & 7) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_8013AED4(&this->unk_1CE, 0, 7);
             this->actionFunc = func_80B3EF90;
             ret = true;
@@ -304,7 +304,7 @@ s32 func_80B3E96C(EnDai* this, GlobalContext* globalCtx) {
                 break;
 
             case 1:
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WEATHER_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0x1388, 0x708, 0x3E8, 0);
                 func_80B3E5DC(this, 3);
@@ -470,7 +470,7 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROLL_AND_FALL);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROLL_AND_FALL);
                     break;
 
                 case 3:
@@ -493,27 +493,27 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
 
         case 2:
             if (globalCtx->csCtx.frames == 360) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
             }
             if (Animation_OnFrame(&this->skelAnime, 43.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_GORON_BOUND_1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
 
         case 3:
             if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
 
         case 4:
             if (Animation_OnFrame(&this->skelAnime, 30.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIGOLON_SLEEP2);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP2);
             }
             if (Animation_OnFrame(&this->skelAnime, 35.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_GORON_BOUND_0);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_0);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
@@ -525,7 +525,7 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
 void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDai* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060130D0, NULL, this->jointTable, this->morphTable, 19);
     this->unk_A70 = -1;
     func_80B3E5DC(this, 0);

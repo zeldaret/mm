@@ -297,7 +297,7 @@ void func_8088CC48(EnElf* this, GlobalContext* globalCtx) {
     func_8088CBAC(this, globalCtx);
     this->unk_25C = 0;
     this->disappearTimer = 240;
-    if ((this->fairyFlags & 0x400) && Actor_GetCollectibleFlag(globalCtx, this->unk_260)) {
+    if ((this->fairyFlags & 0x400) && Flags_GetCollectible(globalCtx, this->unk_260)) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -386,7 +386,7 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
         case 7:
             this->fairyFlags |= 0x200;
-            thisx->shape.shadowDraw = func_800B4088;
+            thisx->shape.shadowDraw = ActorShadow_DrawWhiteCircle;
             this->fairyFlags |= 0x100;
             colorConfig = -1;
             this->fairyFlags |= 0x800;
@@ -519,14 +519,14 @@ void func_8088D660(EnElf* this, Vec3f* targetPos, f32 arg2) {
     func_8088D5A0(this, targetPos, arg2);
     Math_StepToF(&this->actor.velocity.x, xVelTarget, 1.5f);
     Math_StepToF(&this->actor.velocity.z, zVelTarget, 1.5f);
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
 }
 
 void func_8088D7F8(EnElf* this, Vec3f* targetPos) {
     func_8088D5A0(this, targetPos, 0.2f);
     this->actor.velocity.x = 0.0f;
     this->actor.velocity.z = 0.0f;
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
     this->actor.world.pos.x = targetPos->x + this->unk_224.x;
     this->actor.world.pos.z = targetPos->z + this->unk_224.z;
 }
@@ -535,7 +535,7 @@ void func_8088D864(EnElf* this, Vec3f* targetPos) {
     func_8088D5A0(this, targetPos, 0.2f);
     this->actor.velocity.z = 0.0f;
     this->actor.velocity.x = 0.0f;
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
     this->actor.world.pos.x = targetPos->x + this->unk_224.x;
     this->actor.world.pos.z = targetPos->z + this->unk_224.z;
 }
@@ -590,7 +590,7 @@ void func_8088D9BC(EnElf* this, GlobalContext* globalCtx) {
     }
 
     this->actor.world.rot.y = this->unk_258;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_8088DB4C(EnElf* this, Vec3f* arg1, f32 arg2, f32 arg3, f32 arg4) {
@@ -616,7 +616,7 @@ void func_8088DB4C(EnElf* this, Vec3f* arg1, f32 arg2, f32 arg3, f32 arg4) {
 
     Math_StepToF(&this->actor.velocity.x, xVelTarget, 5.0f);
     Math_StepToF(&this->actor.velocity.z, zVelTarget, 5.0f);
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
 }
 
 s32 func_8088DCA4(EnElf* this) {
@@ -656,13 +656,13 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
     func_8088D9BC(this, globalCtx);
     if (Actor_HasParent(&this->actor, globalCtx)) {
         if (this->fairyFlags & 0x400) {
-            Actor_SetCollectibleFlag(globalCtx, this->unk_260);
+            Flags_SetCollectible(globalCtx, this->unk_260);
         }
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
-    if (func_801233E4(globalCtx)) {
+    if (Player_InCsMode(&globalCtx->state)) {
         if ((this->fairyFlags & 0x4000) && (this->fairyFlags & 0x100) && func_8088DCA4(this)) {
             return;
         }
@@ -686,7 +686,7 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
         this->unk_246 = 0;
         EnElf_SetupAction(this, func_8088E0F0);
         if (this->fairyFlags & 0x400) {
-            Actor_SetCollectibleFlag(globalCtx, this->unk_260);
+            Flags_SetCollectible(globalCtx, this->unk_260);
         }
         return;
     }
@@ -700,7 +700,7 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
     }
 
     if (this->fairyFlags & 0x2000) {
-        func_800B8A1C(&this->actor, globalCtx, 0xBA, 80.0f, 60.0f);
+        Actor_PickUp(&this->actor, globalCtx, 0xBA, 80.0f, 60.0f);
     }
 }
 
@@ -768,7 +768,7 @@ void func_8088E0F0(EnElf* this, GlobalContext* globalCtx) {
 
     this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
     func_8088F5F4(this, globalCtx, 32);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
 }
 
 void func_8088E304(EnElf* this, GlobalContext* globalCtx) {
@@ -802,7 +802,7 @@ void func_8088E304(EnElf* this, GlobalContext* globalCtx) {
     func_8088D7F8(this, &player->bodyPartsPos[0]);
     this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
     func_8088F5F4(this, globalCtx, 0x20);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
 }
 
 void func_8088E484(EnElf* this, GlobalContext* globalCtx) {
@@ -827,7 +827,7 @@ void func_8088E484(EnElf* this, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, (1.0f - (SQ(this->unk_250) * SQ(1.0f / 9.0f))) * 0.008f);
     this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
     func_8088F5F4(this, globalCtx, 32);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
 }
 
 void func_8088E5A8(EnElf* this, GlobalContext* globalCtx) {
@@ -907,12 +907,12 @@ void func_8088E850(EnElf* this, GlobalContext* globalCtx) {
             (globalCtx->csCtx.unk_12 == 0) &&
             ((globalCtx->csCtx.frames == 0x95) || (globalCtx->csCtx.frames == 0x17D) ||
              (globalCtx->csCtx.frames == 0x24F))) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
 
         if ((globalCtx->sceneNum == SCENE_SAKONS_HIDEOUT) && (gSaveContext.sceneSetupIndex == 0) &&
             (globalCtx->csCtx.unk_12 == 4) && (globalCtx->csCtx.frames == 0x5F)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
     } else {
         this->actor.shape.rot.x = 0;
@@ -967,7 +967,7 @@ void func_8088E850(EnElf* this, GlobalContext* globalCtx) {
                 break;
 
             default:
-                arrowPointedActor = globalCtx->actorCtx.targetContext.unk38;
+                arrowPointedActor = globalCtx->actorCtx.targetContext.arrowPointedActor;
                 if ((player->stateFlags1 & 0x40) && (player->targetActor != NULL)) {
                     Math_Vec3f_Copy(&nextPos, &player->targetActor->focus.pos);
                 } else {
@@ -995,7 +995,7 @@ void func_8088E850(EnElf* this, GlobalContext* globalCtx) {
                         if (distFromLinksHead > 100.0f) {
                             this->fairyFlags |= 2;
                             if (this->unk_269 == 0) {
-                                Audio_PlayActorSound2(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
+                                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
                             }
                             this->unk_25C = 100;
                         }
@@ -1036,7 +1036,7 @@ void func_8088EF18(Color_RGBAf* dest, Color_RGBAf* newColor, Color_RGBAf* curCol
 }
 
 void func_8088EFA4(EnElf* this, GlobalContext* globalCtx) {
-    Actor* arrayPointerActor = globalCtx->actorCtx.targetContext.unk38;
+    Actor* arrayPointerActor = globalCtx->actorCtx.targetContext.arrowPointedActor;
     Player* player = GET_PLAYER(globalCtx);
     f32 transitionRate;
 
@@ -1065,7 +1065,7 @@ void func_8088EFA4(EnElf* this, GlobalContext* globalCtx) {
         this->unk_268 = 0;
         this->unk_238 = 1.0f;
         if (!this->unk_269) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
         }
     } else if (this->unk_268 == 0) {
         if ((arrayPointerActor == NULL) ||
@@ -1074,13 +1074,13 @@ void func_8088EFA4(EnElf* this, GlobalContext* globalCtx) {
         }
     } else if (this->unk_238 != 0.0f) {
         if (Math_StepToF(&this->unk_238, 0.0f, 0.25f)) {
-            this->innerColor = globalCtx->actorCtx.targetContext.unk18;
-            this->outerColor = globalCtx->actorCtx.targetContext.unk28;
+            this->innerColor = globalCtx->actorCtx.targetContext.fairyInner;
+            this->outerColor = globalCtx->actorCtx.targetContext.fairyOuter;
         } else {
             transitionRate = 0.25f / this->unk_238;
-            func_8088EF18(&this->innerColor, &globalCtx->actorCtx.targetContext.unk18, &this->innerColor,
+            func_8088EF18(&this->innerColor, &globalCtx->actorCtx.targetContext.fairyInner, &this->innerColor,
                           transitionRate);
-            func_8088EF18(&this->outerColor, &globalCtx->actorCtx.targetContext.unk28, &this->outerColor,
+            func_8088EF18(&this->outerColor, &globalCtx->actorCtx.targetContext.fairyOuter, &this->outerColor,
                           transitionRate);
         }
     }
@@ -1094,7 +1094,7 @@ void func_8088EFA4(EnElf* this, GlobalContext* globalCtx) {
         u16 targetSfxId = this->unk_269 == 0 ? NA_SE_PL_WALK_GROUND - SFX_FLAG : NA_SE_PL_WALK_GROUND - SFX_FLAG;
 
         if (!temp) {
-            Audio_PlayActorSound2(&this->actor, targetSfxId);
+            Actor_PlaySfxAtPos(&this->actor, targetSfxId);
         }
         this->fairyFlags |= 1;
     }
@@ -1133,7 +1133,7 @@ void func_8088F214(EnElf* this, GlobalContext* globalCtx) {
         sp34 = 1;
         func_800B9010(&this->actor, NA_SE_EV_BELL_ANGER - SFX_FLAG);
     } else {
-        arrowPointedActor = globalCtx->actorCtx.targetContext.unk38;
+        arrowPointedActor = globalCtx->actorCtx.targetContext.arrowPointedActor;
         if (player->stateFlags1 & 0x400) {
             sp34 = 10;
             this->unk_25C = 100;
@@ -1150,7 +1150,7 @@ void func_8088F214(EnElf* this, GlobalContext* globalCtx) {
                             sp34 = 0;
                         } else if (!(player->stateFlags1 & 0x40)) {
                             if (this->unk_269 == 0) {
-                                Audio_PlayActorSound2(&this->actor, NA_SE_EV_NAVY_VANISH);
+                                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_NAVY_VANISH);
                             }
                             sp34 = 5;
                         } else {
@@ -1199,7 +1199,7 @@ void func_8088F214(EnElf* this, GlobalContext* globalCtx) {
                 if (!(player->stateFlags2 & 0x100000)) {
                     sp34 = 5;
                     if (this->unk_269 == 0) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_NAVY_VANISH);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_NAVY_VANISH);
                     }
                 }
                 break;
@@ -1209,7 +1209,7 @@ void func_8088F214(EnElf* this, GlobalContext* globalCtx) {
                     sp34 = 9;
                     this->unk_25C = 0x2A;
                     if (this->unk_269 == 0) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
                     }
                 } else if (player->stateFlags1 & 0x40) {
                     player->stateFlags2 |= 0x100000;
@@ -1358,7 +1358,7 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_8088FA38(this, globalCtx);
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
             if (func_80147624(globalCtx)) {
                 if (globalCtx->msgCtx.unk11F04 == 0x202) {
@@ -1467,7 +1467,7 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
         thisx->flags |= 0x10000;
     }
 
-    if (func_800B84D0(thisx, globalCtx)) {
+    if (Actor_ProcessTalkRequest(thisx, &globalCtx->state)) {
         func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
@@ -1488,7 +1488,7 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
             }
             if (this->elfMsg->home.rot.x == -0x961) {
                 this->unk_234 = this->elfMsg;
-                func_800B86C8(thisx, globalCtx, this->elfMsg);
+                Actor_ChangeFocus(thisx, globalCtx, this->elfMsg);
             }
         } else {
             thisx->cutscene = -1;

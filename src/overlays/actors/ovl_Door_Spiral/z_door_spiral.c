@@ -208,7 +208,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
-    Actor_SetHeight(&this->actor, 60.0f);
+    Actor_SetFocus(&this->actor, 60.0f);
 }
 
 void DoorSpiral_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -240,7 +240,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
     target.y = player->actor.world.pos.y + yOffset;
     target.z = player->actor.world.pos.z;
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &offset, &target);
+    Actor_OffsetOfPointInActorCoords(&this->actor, &offset, &target);
 
     if ((spiralWidth < fabsf(offset.x)) || (spiralHeight < fabsf(offset.y))) {
         return FLT_MAX;
@@ -255,7 +255,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
 s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!(func_801233E4(globalCtx))) {
+    if (!Player_InCsMode(&globalCtx->state)) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
         f32 dist =
             DoorSpiral_GetDistFromPlayer(globalCtx, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
