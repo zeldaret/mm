@@ -161,7 +161,7 @@ void func_80AD3530(EnTrt2* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(20, 20);
@@ -208,10 +208,10 @@ void func_80AD36EC(EnTrt2* this, GlobalContext* globalCtx) {
             }
         }
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOTAKE_ROLL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
 }
 
@@ -262,7 +262,7 @@ void func_80AD38B8(EnTrt2* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
     }
 
-    Actor_SetVelocityAndMoveXYRotation(&this->actor);
+    Actor_MoveWithoutGravity(&this->actor);
     func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
 }
 
@@ -275,7 +275,7 @@ void func_80AD3A24(EnTrt2* this, GlobalContext* globalCtx) {
         func_80AD3380(&this->skelAnime, sAnimations, 6);
         this->unk_3B2 = 4;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80AD3AE4(EnTrt2* this, GlobalContext* globalCtx) {
@@ -286,7 +286,7 @@ void func_80AD3AE4(EnTrt2* this, GlobalContext* globalCtx) {
         func_80AD3380(&this->skelAnime, sAnimations, 6);
         this->unk_3B2 = 4;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80AD3B6C(EnTrt2* this, GlobalContext* globalCtx) {
@@ -321,7 +321,7 @@ void func_80AD3C94(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD3CEC(EnTrt2* this, GlobalContext* globalCtx) {
-    u8 sp27 = func_80152498(&globalCtx->msgCtx);
+    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
 
     func_80AD46F8(this);
     if (this->unk_3D8) {
@@ -354,7 +354,7 @@ void func_80AD3DA4(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD3E34(EnTrt2* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (func_80114E90()) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
@@ -369,7 +369,7 @@ void func_80AD3E34(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD3EF0(EnTrt2* this, GlobalContext* globalCtx) {
-    u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 6) {
         if (func_80147624(globalCtx)) {
@@ -399,21 +399,21 @@ void func_80AD3FF4(EnTrt2* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
     } else if (gSaveContext.weekEventReg[12] & 0x10) {
-        func_800B8A1C(&this->actor, globalCtx, 91, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, 91, 300.0f, 300.0f);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 89, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, 89, 300.0f, 300.0f);
     }
 }
 
 void func_80AD40AC(EnTrt2* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
         this->unk_3B2 = 13;
     }
 }
 
 void func_80AD4110(EnTrt2* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
         this->unk_3A8 = 0x84C;
         func_80151938(globalCtx, this->unk_3A8);
         this->unk_3B2 = 10;
@@ -423,7 +423,7 @@ void func_80AD4110(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD417C(EnTrt2* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (this->unk_3A8 == 0x84B) {
             func_80AD349C(this);
             func_80AD3DA4(this, globalCtx);
@@ -493,16 +493,16 @@ void func_80AD434C(EnTrt2* this, GlobalContext* globalCtx) {
         func_80AD4A78(this, globalCtx);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOTAKE_ROLL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
 }
 
 void func_80AD4550(EnTrt2* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u8 sp23 = func_80152498(&globalCtx->msgCtx);
+    u8 sp23 = Message_GetState(&globalCtx->msgCtx);
 
     if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
         func_80AD3380(&this->skelAnime, sAnimations, 7);
@@ -624,7 +624,7 @@ void func_80AD4A78(EnTrt2* this, GlobalContext* globalCtx) {
     sp34.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
     sp34.y = this->actor.world.pos.y;
     sp34.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
-    func_800BBDAC(globalCtx, &this->actor, &sp34, 50.0f, 0, 2.0f, 0, 0, 0);
+    Actor_SpawnFloorDustRing(globalCtx, &this->actor, &sp34, 50.0f, 0, 2.0f, 0, 0, 0);
 }
 
 s32 func_80AD4B08(GlobalContext* globalCtx) {
@@ -643,7 +643,7 @@ s32 func_80AD4B4C(EnTrt2* this, GlobalContext* globalCtx) {
     s32 sp24 = false;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
         sp24 = true;
         this->actor.speedXZ = 0.0f;
         func_80AD349C(this);
@@ -701,7 +701,7 @@ void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
     static Vec3f D_80AD5904 = { 0.0f, 50.0f, 0.0 };
 
     this->actor.flags &= ~0x10;
-    Actor_SetObjectSegment(globalCtx, &this->actor);
+    Actor_SetObjectDependency(globalCtx, &this->actor);
     Actor_SetScale(&this->actor, 0.008f);
     this->path = func_8013D648(globalCtx, ENTRT2_GET_FC00(&this->actor), 0x3F);
     this->unk_3AE = Rand_S16Offset(100, 50);
@@ -712,7 +712,7 @@ void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y += D_80AD5904.y;
     this->actor.world.pos.z += D_80AD5904.z;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     func_80AD469C(this, globalCtx);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.colChkInfo.cylRadius = 50;
@@ -770,13 +770,13 @@ void func_80AD4FE4(EnTrt2* this, GlobalContext* globalCtx) {
     this->unk_3BC(this);
 
     D_80AD5910[this->unk_3B2](this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     if (globalCtx->sceneNum != SCENE_20SICHITAI) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 26.0f, 10.0f, 0.0f, 5);
     }
 
-    Actor_SetHeight(&this->actor, 90.0f);
+    Actor_SetFocus(&this->actor, 90.0f);
     SkelAnime_Update(&this->skelAnime);
 }
 
