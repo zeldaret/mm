@@ -53,17 +53,22 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 };
 
 static ColliderJntSphInit sJntSphInit = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_JNTSPH, },
-    1, D_80B3A8E0, // sJntSphElementsInit,
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_JNTSPH,
+    },
+    1,
+    D_80B3A8E0, // sJntSphElementsInit,
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
 };
 
 static Color_RGBA8 D_80B3A914 = { 250, 250, 250, 255 };
@@ -143,7 +148,7 @@ void func_80B39108(ObjSnowball2* this, GlobalContext* globalCtx) {
     f32 temp_f22;
     f32 temp_f24;
 
-    for (i = 0, phi_s5 = 0; i < 11; i++, phi_s5 += 0x1745) {
+    for (i = 0, phi_s5 = 0; i < 11; i++, phi_s5 += (0x10000 / 11)) {
         temp_s3 = (s32)(Rand_ZeroOne() * 5957.0f) + phi_s5;
 
         if (((u32)Rand_Next() >> 0x1E) == 0) {
@@ -199,7 +204,7 @@ void func_80B39470(Actor* thisx, GlobalContext* globalCtx) {
 
     sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
 
-    for (phi_s0 = 0, i = 0; i < 5; i++, phi_s0 += 0x3333) {
+    for (phi_s0 = 0, i = 0; i < 5; i++, phi_s0 += (0x10000 / 5)) {
         sp58.x = (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.x;
         sp58.z = (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.z;
         EffectSsGSplash_Spawn(globalCtx, &sp58, NULL, NULL, 0, 200);
@@ -304,11 +309,11 @@ void func_80B39B28(ObjSnowball2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B39B5C(ObjSnowball2* this, GlobalContext* globalCtx) {
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(minVelocityY, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
 };
@@ -375,7 +380,7 @@ void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_1AD == 0) {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
             if ((this->actor.bgCheckFlags & 1) &&
                 (DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId) == NULL)) {
@@ -391,7 +396,7 @@ void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx) {
                 if (this->actor.xzDistToPlayer < 100.0f) {
                     if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, GET_PLAYER(globalCtx)->actor.world.rot.y)) >=
                         0x5556) {
-                        func_800B8A1C(&this->actor, globalCtx, 0, 36.0f, 30.0f);
+                        Actor_PickUp(&this->actor, globalCtx, 0, 36.0f, 30.0f);
                     }
                 }
             }
@@ -423,7 +428,7 @@ void func_80B39FA8(ObjSnowball2* this, GlobalContext* globalCtx) {
         this->actor.speedXZ *= 3.8f;
         this->actor.velocity.y *= 0.4f;
         this->actor.gravity = -2.8f;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x45);
         func_80B3A0D8(this);
     } else {
@@ -479,7 +484,7 @@ void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx) {
                 func_80B395EC(&this->actor, globalCtx);
             }
             if (this->actor.bgCheckFlags & 0x40) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
             }
         } else if ((((globalCtx->gameplayFrames % 16) == 0) || (((u32)Rand_Next() >> 0x10) == 0)) &&
                    (this->actor.depthInWater < (1200.0f * this->actor.scale.y))) {
@@ -509,7 +514,7 @@ void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx) {
         this->actor.velocity.y *= 0.96f;
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x45);
     this->actor.shape.rot.x += this->unk_1A8;
     this->actor.shape.rot.y += this->unk_1AA;
@@ -608,10 +613,10 @@ void ObjSnowball2_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.projectedPos.z < 460.0f) {
         if (this->actor.projectedPos.z > 200.0f) {
             this->actor.shape.shadowAlpha = (460 - (s32)this->actor.projectedPos.z) >> 1;
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         } else if (this->actor.projectedPos.z > -10.0f) {
             this->actor.shape.shadowAlpha = 130;
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         } else {
             this->actor.shape.shadowDraw = NULL;
         }
@@ -623,5 +628,5 @@ void ObjSnowball2_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjSnowball2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjSnowball2* this = THIS;
 
-    func_800BDFC0(globalCtx, object_goroiwa_DL_008B90);
+    Gfx_DrawDListOpa(globalCtx, object_goroiwa_DL_008B90);
 }
