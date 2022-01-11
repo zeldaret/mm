@@ -260,7 +260,7 @@ void func_809372D0(ObjBean* this) {
 }
 
 s32 func_80937468(ObjBean* this, GlobalContext* globalCtx) {
-    Actor* bgActor = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* bgActor = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (bgActor != NULL) {
         if ((bgActor->id == ACTOR_EN_HORSE) &&
@@ -273,8 +273,8 @@ s32 func_80937468(ObjBean* this, GlobalContext* globalCtx) {
     return false;
 }
 
-Actor* func_809374F8(ObjBean* this, GlobalContext* globalCtx) {
-    Actor* bgActor = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+ObjBean* func_809374F8(ObjBean* this, GlobalContext* globalCtx) {
+    Actor* bgActor = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
     s32 params = OBJBEAN_GET_3F80(&this->dyna.actor, 0);
 
     while (bgActor != NULL) {
@@ -290,11 +290,11 @@ Actor* func_809374F8(ObjBean* this, GlobalContext* globalCtx) {
         bgActor = bgActor->next;
     }
 
-    return bgActor;
+    return (ObjBean*)bgActor;
 }
 
 void func_809375C8(ObjBean* this, GlobalContext* globalCtx) {
-    ObjBean* bean = (ObjBean*)func_809374F8(this, globalCtx);
+    ObjBean* bean = func_809374F8(this, globalCtx);
 
     if (bean != NULL) {
         bean->unk_200 = 1;
@@ -402,12 +402,12 @@ void ObjBean_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_80937268(this, globalCtx);
         func_809372A8(this);
         func_80937238(this);
-        ActorShape_Init(&this->dyna.actor.shape, 0.0f, func_800B3FC0, 8.8f);
+        ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 8.8f);
         func_80936CF0(this, globalCtx);
 
         if (!OBJBEAN_GET_80(&this->dyna.actor) && Flags_GetSwitch(globalCtx, OBJBEAN_GET_7F(&this->dyna.actor, 0)) &&
             !Flags_GetSwitch(globalCtx, OBJBEAN_GET_7F(&this->dyna.actor, 1)) && func_800FE9B4(globalCtx)) {
-            Actor_SetSwitchFlag(globalCtx, OBJBEAN_GET_7F(&this->dyna.actor, 1));
+            Flags_SetSwitch(globalCtx, OBJBEAN_GET_7F(&this->dyna.actor, 1));
         }
 
         if (OBJBEAN_GET_80(&this->dyna.actor) || Flags_GetSwitch(globalCtx, OBJBEAN_GET_7F(&this->dyna.actor, 1))) {
@@ -505,7 +505,7 @@ void func_80937DEC(ObjBean* this, GlobalContext* globalCtx) {
 
     if (this->unk_1FF && !Flags_GetSwitch(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 1)) &&
         Flags_GetSwitch(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 0)) && func_800FE9B4(globalCtx)) {
-        Actor_SetSwitchFlag(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 1));
+        Flags_SetSwitch(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 1));
     }
 
     if (this->unk_1FF && Flags_GetSwitch(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 1))) {
@@ -544,10 +544,10 @@ void func_80937FB0(ObjBean* this) {
 void func_80937FC8(ObjBean* this, GlobalContext* globalCtx) {
     this->unk_1E8(this);
 
-    if (func_800B84D0(&this->dyna.actor, globalCtx)) {
-        if (func_800B8708(globalCtx) == 0x2E) {
+    if (Actor_ProcessTalkRequest(&this->dyna.actor, globalCtx)) {
+        if (Player_GetExchangeItemId(globalCtx) == 0x2E) {
             func_809383B4(this);
-            Actor_SetSwitchFlag(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 0));
+            Flags_SetSwitch(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 0));
         }
 
         if (Flags_GetSwitch(globalCtx, OBJBEAN_GET_7F(&this->dyna.actor, 0))) {
@@ -565,7 +565,7 @@ void func_80937FC8(ObjBean* this, GlobalContext* globalCtx) {
                ((this->unk_1FF != 0) && (this->unk_1FE & 4) && (this->dyna.actor.xzDistToPlayer < 300.0f) &&
                 func_800FE9B4(globalCtx))) {
         func_809375C8(this, globalCtx);
-        Actor_SetSwitchFlag(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 1));
+        Flags_SetSwitch(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 1));
         this->unk_1E4 = 6;
         func_80938670(this);
     } else if (this->unk_1FF != 0) {
@@ -613,7 +613,7 @@ void func_80938298(ObjBean* this, GlobalContext* globalCtx) {
 
     if (this->unk_1E0 >= 3) {
         this->unk_1E4 = 3;
-        Actor_SetSwitchFlag(globalCtx, OBJBEAN_GET_7F(&this->dyna.actor, 0));
+        Flags_SetSwitch(globalCtx, OBJBEAN_GET_7F(&this->dyna.actor, 0));
         this->unk_1E4 = 5;
         func_8093833C(this);
     } else if (this->unk_1E4 == 4) {
@@ -843,7 +843,7 @@ void func_80938AD8(ObjBean* this, GlobalContext* globalCtx) {
 
     func_80937160(this);
     if (this->unk_1B2 == 25) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_PL_PLANT_GROW_BIG);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_PL_PLANT_GROW_BIG);
     }
 
     if (sp30 != 0) {
@@ -917,7 +917,7 @@ void ObjBean_Update(Actor* thisx, GlobalContext* globalCtx) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
         func_80936CF0(this, globalCtx);
-        this->dyna.actor.shape.shadowDraw = func_800B3FC0;
+        this->dyna.actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->dyna.actor.shape.shadowScale = this->dyna.actor.scale.x * 88.0f;
         if (func_80937468(this, globalCtx)) {
             func_809375F4(this, globalCtx);
@@ -927,7 +927,7 @@ void ObjBean_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->dyna.actor.shape.shadowDraw = NULL;
     }
-    Actor_SetHeight(&this->dyna.actor, 6.0f);
+    Actor_SetFocus(&this->dyna.actor, 6.0f);
 }
 
 void func_80938E00(Actor* thisx, GlobalContext* globalCtx) {
@@ -962,5 +962,5 @@ void func_80938E00(Actor* thisx, GlobalContext* globalCtx) {
 void func_80938F50(Actor* thisx, GlobalContext* globalCtx) {
     ObjBean* this = THIS;
 
-    func_800BE03C(globalCtx, object_mamenoki_DL_002208);
+    Gfx_DrawDListXlu(globalCtx, object_mamenoki_DL_002208);
 }
