@@ -388,7 +388,7 @@ void EnBigslime_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Collider_DestroyCylinder(globalCtx, &this->gekkoCollider);
-    func_801A72CC(&this->gekkoProjectedPos);
+    Audio_StopSfxByPos(&this->gekkoProjectedPos);
 }
 
 void EnBigslime_DynamicVtxCopyState(EnBigslime* this) {
@@ -894,7 +894,7 @@ void EnBigslime_SetTargetVtxFromPreFrozen(EnBigslime* this) {
  * Plays the standard Gekko sound effects without reverb
  */
 void EnBigslime_GekkoSfxOutsideBigslime(EnBigslime* this, u16 sfxId) {
-    func_8019F1C0(&this->gekkoProjectedPos, sfxId);
+    Audio_PlaySfxAtPos(&this->gekkoProjectedPos, sfxId);
 }
 
 /**
@@ -2436,7 +2436,7 @@ void EnBigslime_SetupFrogSpawn(EnBigslime* this, GlobalContext* globalCtx) {
     worldPos = &this->actor.world.pos;
     dustPos.z = (Math_CosS(yawReverse) * 20.0f) + this->actor.world.pos.z;
 
-    Audio_PlaySoundAtPosition(globalCtx, worldPos, 40, NA_SE_EN_NPC_APPEAR);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, worldPos, 40, NA_SE_EN_NPC_APPEAR);
 
     // dust cloud where the red frog appears
     func_800B0DE0(globalCtx, &dustPos, &gZeroVec3f, &gZeroVec3f, &dustPrimColor, &dustEnvColor, 500, 50);
