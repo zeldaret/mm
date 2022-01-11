@@ -351,9 +351,9 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
             func_8019F88C(&this->actor.projectedPos, NA_SE_VO_IN_LASH_0, 2);
             if (Rand_ZeroOne() < 0.3f) {
-                func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_INGO_HORSE_NEIGH);
+                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_INGO_HORSE_NEIGH);
             }
-            func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_LASH);
+            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_LASH);
         }
     }
     if (this->skelAnime.animation == &D_060198A8 && Animation_OnFrame(&this->skelAnime, 20.0f)) {

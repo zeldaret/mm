@@ -2196,7 +2196,7 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                     D_8091726C = 0.5f;
                     D_80917268 = Rand_ZeroFloat(1.9f);
                     sFishMouthOffset.y = 500.0f;
-                    func_8019F1C0(&D_8090D614, NA_SE_IT_SWORD_SWING_HARD);
+                    Audio_PlaySfxAtPos(&D_8090D614, NA_SE_IT_SWORD_SWING_HARD);
                 }
             }
             break;
@@ -2275,8 +2275,8 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                     D_809101D0 = 0.0;
                 } else {
                     Math_ApproachF(&D_809101C4, 0.0f, 1.0f, 0.05f);
-                    func_8019F1C0(&D_8090D614,
-                                  NA_SE_EN_WIZ_UNARI - SFX_FLAG); // changed from NA_SE_EN_FANTOM_FLOAT in OoT
+                    Audio_PlaySfxAtPos(&D_8090D614,
+                                       NA_SE_EN_WIZ_UNARI - SFX_FLAG); // changed from NA_SE_EN_FANTOM_FLOAT in OoT
                 }
             } else {
                 f32 sp7C = WATER_SURFACE_Y(globalCtx);
@@ -2296,7 +2296,7 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
 
                     if ((sLurePos.y <= sp7C) && (sp7C < spE0) && (sp7C == WATER_SURFACE_Y(globalCtx))) {
                         D_80917264 = 10;
-                        func_8019F1C0(&D_8090D614, NA_SE_EV_BOMB_DROP_WATER);
+                        Audio_PlaySfxAtPos(&D_8090D614, NA_SE_EV_BOMB_DROP_WATER);
                         D_80917248.y = 0.0f;
                         D_80917238.y *= 0.2f;
 
@@ -2322,8 +2322,8 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                     }
                 } else {
                     Math_ApproachZeroF(&D_809101C4, 1.0f, 0.05f);
-                    func_8019F1C0(&D_8090D614,
-                                  NA_SE_EN_WIZ_UNARI - SFX_FLAG); // changed from NA_SE_EN_FANTOM_FLOAT in OoT
+                    Audio_PlaySfxAtPos(&D_8090D614,
+                                       NA_SE_EN_WIZ_UNARI - SFX_FLAG); // changed from NA_SE_EN_FANTOM_FLOAT in OoT
                 }
             }
 
@@ -2460,7 +2460,7 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                     sLureRot.x = 0.0f;
                     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                         D_809101C0 += 6.0f;
-                        func_8019F1C0(&D_8090D614, NA_SE_PL_WALK_SAND);
+                        Audio_PlaySfxAtPos(&D_8090D614, NA_SE_PL_WALK_SAND);
                     }
                 } else {
                     if (D_809101C0 > 150.0f) {
@@ -5593,7 +5593,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
     SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &sStreamSoundPos, &sStreamSoundProjectedPos,
                                  &sProjectedW);
 
-    func_8019F1C0(&sStreamSoundProjectedPos, NA_SE_EV_WATER_WALL - SFX_FLAG);
+    Audio_PlaySfxAtPos(&sStreamSoundProjectedPos, NA_SE_EV_WATER_WALL - SFX_FLAG);
 
     if (gSaveContext.language == 0) { // Added in MM
         gSaveContext.minigameScore = D_8090CCF8;
