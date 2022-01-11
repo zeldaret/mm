@@ -142,7 +142,7 @@ void func_80BCAD64(EnScopenuts* this, s16 arg1) {
             this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * sp24;
             break;
     }
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
 }
 
 void func_80BCAE78(EnScopenuts* this, GlobalContext* globalCtx) {
@@ -221,7 +221,7 @@ void func_80BCB078(EnScopenuts* this, GlobalContext* globalCtx) {
     } else {
         Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
     }
-    Actor_SetVelocityAndMoveXYRotation(&this->actor);
+    Actor_MoveWithoutGravity(&this->actor);
 }
 
 void func_80BCB1C8(EnScopenuts* this, GlobalContext* globalCtx) {
@@ -241,7 +241,7 @@ void func_80BCB230(EnScopenuts* this, GlobalContext* globalCtx) {
 
     if ((((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? 1 : 0) &&
         ((this->actor.xzDistToPlayer < 200.0f) ? 1 : 0)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80BCB4DC;
         this->unk_348 = 3;
         this->collider.dim.height = 64;
@@ -251,12 +251,12 @@ void func_80BCB230(EnScopenuts* this, GlobalContext* globalCtx) {
         if ((this->unk_348 == 4) || (this->unk_348 == 18)) {
             this->unk_348 = 17;
             this->collider.dim.height = 0;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
             func_8013BC6C(&this->skelAnime, D_80BCCB6C, 17);
         } else if (this->unk_348 == 2) {
             this->unk_348 = 16;
             this->collider.dim.height = 32;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_UP);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
             func_8013BC6C(&this->skelAnime, D_80BCCB6C, 16);
         } else if (this->unk_348 == 17) {
             if (DECR(this->unk_34E) == 0) {
@@ -284,7 +284,7 @@ void func_80BCB4DC(EnScopenuts* this, GlobalContext* globalCtx) {
 void func_80BCB52C(EnScopenuts* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 2000, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_33C = func_80BCAF0C(this);
         func_801518B0(globalCtx, this->unk_33C, &this->actor);
         this->actionFunc = func_80BCB6D0;
@@ -301,7 +301,7 @@ void func_80BCB52C(EnScopenuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
-    u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
         if (func_80147624(globalCtx)) {
@@ -360,12 +360,12 @@ void func_80BCB90C(EnScopenuts* this, GlobalContext* globalCtx) {
         gSaveContext.weekEventReg[53] |= 2;
         this->actionFunc = func_80BCB6D0;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 12, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, 12, 300.0f, 300.0f);
     }
 }
 
 void func_80BCB980(EnScopenuts* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_33C = 0x1637;
         this->unk_328 |= 1;
         func_801518B0(globalCtx, this->unk_33C, &this->actor);
@@ -453,7 +453,7 @@ void func_80BCBA00(EnScopenuts* this, GlobalContext* globalCtx) {
         this->unk_35A = 3;
         this->unk_348 = 19;
         func_8013BC6C(&this->skelAnime, D_80BCCB6C, 19);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
         this->unk_328 &= ~2;
         this->unk_34E = 50;
         this->unk_328 |= 8;
@@ -517,7 +517,7 @@ void func_80BCBD28(EnScopenuts* this, GlobalContext* globalCtx) {
         this->unk_368 = 0.3f;
         this->unk_348 = 9;
         func_8013BC6C(&this->skelAnime, D_80BCCB6C, 9);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         func_80BCAC40(this, globalCtx);
         this->actionFunc = func_80BCBF0C;
     }
@@ -683,7 +683,7 @@ void EnScopenuts_Init(Actor* thisx, GlobalContext* globalCtx) {
                        this->morphTable, 28);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     this->unk_350 = 0.01f;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.cylRadius = 0;
@@ -736,9 +736,9 @@ void EnScopenuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnScopenuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnScopenuts* this = THIS;
 
-    Actor_SetHeight(&this->actor, 60.0f);
+    Actor_SetFocus(&this->actor, 60.0f);
     SkelAnime_Update(&this->skelAnime);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     this->actionFunc(this, globalCtx);
 
