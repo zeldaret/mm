@@ -158,7 +158,7 @@ void EnSb_SetupOpen(EnSb* this) {
     Animation_Change(&this->skelAnime, &D_06000194, 1.0f, 0, Animation_GetLastFrame(&D_06000194), 2, 0.0f);
     this->state = SHELLBLADE_OPEN;
     this->actionFunc = EnSb_Open;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupWaitOpen(EnSb* this) {
@@ -174,7 +174,7 @@ void EnSb_SetupLunge(EnSb* this) {
     Animation_Change(&this->skelAnime, &D_06000124, playbackSpeed, 0.0f, frameCount, 2, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupBounce(EnSb* this) {
@@ -271,7 +271,7 @@ void EnSb_Lunge(EnSb* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     if (this->actor.velocity.y <= -0.1f || this->actor.bgCheckFlags & 2) {
         if (!(this->actor.depthInWater > 0.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
         this->actor.bgCheckFlags &= ~2;
         EnSb_SetupBounce(this);
@@ -332,7 +332,7 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
             hitPlayer = 0;
             if (this->vulnerableTimer != 0) {
                 Actor_ApplyDamage(&this->actor);
-                func_800BCB70(&this->actor, 0x4000, 0xFF, 0x2000, 80);
+                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 80);
                 hitPlayer = 1;
             }
         }
@@ -343,7 +343,7 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
             }
             this->isDead = true;
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
             return;
         }
         hitPoint.x = this->collider.info.bumper.hitPos.x;
@@ -371,8 +371,8 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x80);
         Actor_MarkForDeath(&this->actor);
     } else {
-        Actor_SetHeight(&this->actor, 20.0f);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_SetFocus(&this->actor, 20.0f);
+        Actor_MoveWithGravity(&this->actor);
         this->actionFunc(this, globalCtx);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 25.0f, 20.0f, 5);
         EnSb_UpdateDamage(this, globalCtx);
@@ -394,7 +394,7 @@ void EnSb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (this->isDrawn != false) {
         if (limbIndex < 7) {
             phi_a2 = (this->actor.depthInWater > 0) ? 4 : 1;
-            func_800BBCEC(thisx, globalCtx, phi_a2, dList);
+            Actor_SpawnBodyParts(thisx, globalCtx, phi_a2, dList);
         }
         if (limbIndex == 6) {
             this->isDrawn = false;
