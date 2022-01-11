@@ -385,7 +385,7 @@ s32 func_80BF19A0(EnIg* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if (this->unk_3D0 & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_8013AED4(&this->unk_3D0, 0, 7);
             this->unk_3F6 = 0;
             this->unk_3F8 = NULL;
