@@ -5,6 +5,7 @@
  */
 
 #include "z_en_famos.h"
+#include "objects/object_famos/object_famos.h"
 
 #define FLAGS 0x00000005
 
@@ -15,7 +16,6 @@ void EnFamos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFamos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Famos_InitVars = {
     ACTOR_EN_FAMOS,
     ACTORCAT_ENEMY,
@@ -28,15 +28,13 @@ const ActorInit En_Famos_InitVars = {
     (ActorFunc)EnFamos_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_808AE600 = {
+static ColliderCylinderInit sCylinderInit1 = {
     { COLTYPE_METAL, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK2, { 0x20000000, 0x04, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 20, 80, 0, { 0, 0, 0 } },
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_808AE62C = {
+static ColliderCylinderInit sCylinderInit2 = {
     { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_NONE, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x04, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
     { 70, 10, 0, { 0, 0, 0 } },
@@ -54,11 +52,13 @@ static ColliderJntSphElementInit D_808AE658[2] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_808AE6A0 = {
+static ColliderJntSphInit sJntSphInit = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     2, D_808AE658, // sJntSphElementsInit,
 };
+
+static AnimatedMaterial* D_808AE6B0[] = {gFamosAnimTex1, gFamosAnimTex2};
+
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808AE6B8[] = {
@@ -66,18 +66,52 @@ static InitChainEntry D_808AE6B8[] = {
     ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
 };
 
-#endif
+static u32 D_808AE6C0 = 0;//{ 0x00000000, 0x00000000, 0x00000000, 0x00000000, };
 
-extern ColliderCylinderInit D_808AE600;
-extern ColliderCylinderInit D_808AE62C;
-extern ColliderJntSphElementInit D_808AE658[2];
-extern ColliderJntSphInit D_808AE6A0;
-extern InitChainEntry D_808AE6B8[];
 
-extern UNK_TYPE D_060000F8;
-extern UNK_TYPE D_06003DC8;
+void EnFamos_Init(Actor *thisx, GlobalContext *globalCtx) {
+    EnFamos *this = THIS;
+    Path *path;
+    s32 newValue = 1;
+    int i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/EnFamos_Init.s")
+    Actor_ProcessInitChain(&this->actor, D_808AE6B8);
+    if (this->actor.params != 0xFF) {
+        path = &globalCtx->setupPathList[this->actor.params];
+        this->pathPoints = Lib_SegmentedToVirtual(path->points);
+        this->unk1D6 = path->count;
+        if (this->unk1D6 == 1) {
+            this->pathPoints = NULL;
+            this->unk1D6 = 0;
+        }
+    }
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawSquare, 30.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gFamosSkeleton, &gFamosLowerSNSAnim, 
+          this->limbDrawTbl, this->transitionDrawTbl, 6);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider3, &this->actor, &sJntSphInit, &this->collider3Elements);
+
+    if(D_808AE6C0 == false){
+        for (i = 0; i < ARRAY_COUNT(D_808AE6B0); i++) {
+            D_808AE6B0[i] = Lib_SegmentedToVirtual(D_808AE6B0[i]);
+        }
+        D_808AE6C0 = true;
+    }
+    
+    this->actor.colChkInfo.mass = 0xFA;
+    this->unk1EC = this->actor.world.pos.y;
+    this->unk1F0 = (this->actor.shape.rot.x <= 0) ? 200.0f : this->actor.shape.rot.x * 40.0f * 0.1f;
+    this->actor.shape.rot.x = 0;
+    this->actor.world.rot.x = 0;
+    this->unk1D5 = newValue;
+    this->unk1D8 = newValue;
+    if (this->pathPoints != NULL) {
+        func_808AD1F0(this);
+    } else {
+        func_808AD170(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/EnFamos_Destroy.s")
 
