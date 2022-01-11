@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse, os
+import argparse, os, re
 
 # There are a few commented out entries that would produce unexpected renames.
 # They are left as a comment so people can just grab them.
@@ -385,6 +385,7 @@ animdict = {
     "func_800A81F0": "EffectBlure_AddVertex",
     "func_800A8514": "EffectBlure_AddSpace",
     "Effect_GetParams": "Effect_GetByIndex",
+    "func_800BBCEC": "Actor_SpawnBodyParts",
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",
@@ -429,6 +430,10 @@ animdict = {
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
 }
 
+RE = [
+    (re.compile(r"(Actor_ProcessTalkRequest\(.*, )(?:globalCtx)\)"), r"\g<1>&globalCtx->state)"),
+]
+
 def replace_anim(file):
     with open(file, 'r', encoding='utf-8') as infile:
         srcdata = infile.read()
@@ -444,6 +449,10 @@ def replace_anim(file):
             fixes += 1
             print(func)
             srcdata = srcdata.replace(func, newfunc)
+
+    for old, new in RE:
+        srcdata, fixed = re.subn(old, new, srcdata)
+        fixes += fixed
 
     if(fixes > 0):
         print('Changed', fixes,'entr' + ('y' if fixes == 1 else 'ies') + ' in',file)
