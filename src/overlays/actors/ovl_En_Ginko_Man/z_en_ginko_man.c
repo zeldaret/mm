@@ -512,7 +512,7 @@ void EnGinkoMan_SetupBankAward(EnGinkoMan* this) {
 
 void EnGinkoMan_BankAward(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        // ? when would bank have a parent?
+        // Parent is Link when starting to receive the award
         this->actor.parent = NULL;
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
@@ -535,7 +535,7 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
     this->actionFunc = EnGinkoMan_BankAward2;
 }
 
-// separate function to handle bank rewards... if the bank has a parent actor? might be unused
+// separate function to handle bank rewards... called while Link is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (!(gSaveContext.weekEventReg[10] & 8) && (this->curTextId == 0x45B)) {
@@ -547,7 +547,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
         } else {
             Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
             func_801518B0(globalCtx, 0x47B, &this->actor);
-            this->curTextId = 0x47B; // "Is that so?  Think it over, little guy!  So what are you gonna do?"
+            this->curTextId = 0x47B; // "That's what they call interest!"
         }
 
         EnGinkoMan_SetupDialogue(this);
