@@ -1365,7 +1365,7 @@ void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
         *arg1 -= arg3;
     }
 
-    *arg1 = (*arg1 < -arg4) ? -arg4 : (arg4 < *arg1) ? arg4 : *arg1;
+    *arg1 = CLAMP(*arg1, -arg4, arg4);
     *arg0 += (s16)*arg1;
     if (((arg2 - *arg0) * (s16) *arg1) < 0) {
         *arg0 = arg2;
@@ -1814,7 +1814,7 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 s32 func_801262C8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     Player* player = (Player*)actor;
 
-    if (func_80125580(globalCtx, limbIndex, dList, pos, rot, player) == 0) {
+    if (func_80125580(globalCtx, limbIndex, dList, pos, rot, actor) == 0) {
         if (player->unk_AA5 != 3) {
             *dList = NULL;
         } else if (limbIndex == 0xF) {
@@ -1841,7 +1841,7 @@ s32 func_801262C8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 s32 func_801263FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     Player* player = (Player*)actor;
 
-    if (!func_80125580(globalCtx, limbIndex, dList, pos, rot, player)) {
+    if (!func_80125580(globalCtx, limbIndex, dList, pos, rot, actor)) {
         *dList = NULL;
     }
 
@@ -2344,11 +2344,13 @@ void func_801278F8(GlobalContext* globalCtx, Player* player) {
         0xFB000000,
         0x000000FF,
         0xDF000000,
+        0
     };
     static Gfx D_801C0BD0[] = {
         0xE200001C,
         0xC81049F8,
         0xDF000000,
+        0
     };
     s32 phi_a0;
 
