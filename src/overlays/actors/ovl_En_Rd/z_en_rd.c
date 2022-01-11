@@ -179,9 +179,9 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.health = 8;
     this->alpha = 255;
     this->unk_3F1 = -1;
-    this->unk_3DC = ENRD_GET_FF00(thisx);
+    this->flags = EN_RD_GET_FLAGS(thisx);
 
-    if (ENRD_GET_80(&this->actor)) {
+    if (EN_RD_GET_80(&this->actor)) {
         this->actor.params |= 0xFF00;
     } else {
         this->actor.params &= 0xFF;
@@ -315,7 +315,7 @@ void EnRd_SetupIdle(EnRd* this) {
     }
 
     this->action = EN_RD_ACTION_IDLE;
-    this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
+    this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnRd_Idle;
@@ -332,9 +332,9 @@ void EnRd_Idle(EnRd* this, GlobalContext* globalCtx) {
             Animation_PlayLoop(&this->skelAnime, &gGibdoRedeadWipingTearsAnim);
         }
     } else {
-        this->unk_3D6--;
-        if (this->unk_3D6 == 0) {
-            this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 10.0f;
+        this->animationJudderTimer--;
+        if (this->animationJudderTimer == 0) {
+            this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 10.0f;
             this->skelAnime.curFrame = 0.0f;
         }
     }
@@ -374,7 +374,7 @@ void EnRd_Idle(EnRd* this, GlobalContext* globalCtx) {
 void EnRd_SetupSquattingDance(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadSquattingDanceAnim, -6.0f);
     this->action = EN_RD_ACTION_SQUATTING_DANCE;
-    this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
+    this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->danceEndTimer = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -417,7 +417,7 @@ void EnRd_SquattingDance(EnRd* this, GlobalContext* globalCtx) {
 void EnRd_SetupClappingDance(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadClappingDanceAnim, -6.0f);
     this->action = EN_RD_ACTION_CLAPPING_DANCE;
-    this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
+    this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->danceEndTimer = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -477,7 +477,7 @@ void EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose(EnRd* this, GlobalContext
 void EnRd_SetupPirouette(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadPirouetteAnim, -6.0f);
     this->action = EN_RD_ACTION_PIROUETTE;
-    this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
+    this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->pirouetteRotationalVelocity = 0x1112;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -550,7 +550,7 @@ void EnRd_SetupRiseFromCoffin(EnRd* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadIdleAnim, 0.0f, 0.0f, Animation_GetLastFrame(&gGibdoRedeadIdleAnim),
                      0, -6.0f);
     this->action = EN_RD_ACTION_RISING_FROM_COFFIN;
-    this->unk_3D6 = 6;
+    this->coffinRiseForwardAccelTimer = 6;
     this->actor.shape.rot.x = -0x4000;
     this->actor.gravity = 0.0f;
     this->actor.shape.yOffset = 0.0f;
@@ -571,8 +571,8 @@ void EnRd_RiseFromCoffin(EnRd* this, GlobalContext* globalCtx) {
         }
 
         if (Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 50.0f, 0.3f, 2.0f, 0.3f) == 0.0f) {
-            if (this->unk_3D6 != 0) {
-                this->unk_3D6--;
+            if (this->coffinRiseForwardAccelTimer != 0) {
+                this->coffinRiseForwardAccelTimer--;
                 Math_SmoothStepToF(&this->actor.speedXZ, 6.0f, 0.3f, 1.0f, 0.3f);
             } else if (Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.3f, 1.0f, 0.3f) == 0.0f) {
                 Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 1, 0x7D0, 0);
@@ -611,7 +611,7 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
         if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
             !(player->stateFlags2 & 0x4080)) {
             if (this->playerStunWaitTimer == 0) {
-                if (!(this->unk_3DC & 0x80)) {
+                if (!(this->flags & EN_RD_FLAG_CANNOT_FREEZE_PLAYER)) {
                     player->actor.freezeTimer = 40;
                     func_80123E90(globalCtx, &this->actor);
                     GET_PLAYER(globalCtx)->unk_A78 = &this->actor;
@@ -757,7 +757,7 @@ void EnRd_WalkToParent(EnRd* this, GlobalContext* globalCtx) {
 
 void EnRd_SetupGrab(EnRd* this) {
     Animation_PlayOnce(&this->skelAnime, &gGibdoRedeadGrabStartAnim);
-    this->unk_3D6 = 0;
+    this->animationJudderTimer = 0;
     this->grabState = 0;
     this->grabDamageTimer = 200;
     this->action = EN_RD_ACTION_GRABBING;
@@ -864,7 +864,7 @@ void EnRd_AttemptPlayerStun(EnRd* this, GlobalContext* globalCtx) {
         ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->headYRotation) - this->upperBodyYRotation;
 
     if (ABS_ALT(yaw) < 0x2008) {
-        if (!(this->unk_3DC & 0x80)) {
+        if (!(this->flags & EN_RD_FLAG_CANNOT_FREEZE_PLAYER)) {
             player->actor.freezeTimer = 60;
             func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
             func_80123E90(globalCtx, &this->actor);
@@ -1005,8 +1005,8 @@ void EnRd_Dead(EnRd* this, GlobalContext* globalCtx) {
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->deathTimer == 0) {
-            if (!Flags_GetSwitch(globalCtx, this->unk_3DC & 0x7F)) {
-                Flags_SetSwitch(globalCtx, this->unk_3DC & 0x7F);
+            if (!Flags_GetSwitch(globalCtx, EN_RD_GET_SWITCH_FLAG(this))) {
+                Flags_SetSwitch(globalCtx, EN_RD_GET_SWITCH_FLAG(this));
             }
 
             if (this->alpha != 0) {

@@ -8,9 +8,12 @@ struct EnRd;
 typedef void (*EnRdActionFunc)(struct EnRd*, GlobalContext*);
 typedef void (*EnRdSetupDanceFunc)(struct EnRd*);
 
-#define ENRD_GET_80(thisx) ((thisx)->params & 0x80)
-#define ENRD_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define EN_RD_GET_80(thisx) ((thisx)->params & 0x80)
+#define EN_RD_GET_FLAGS(thisx) (((thisx)->params & 0xFF00) >> 8)
 #define EN_RD_GET_TYPE(thisx) ((thisx)->params)
+#define EN_RD_GET_SWITCH_FLAG(this) ((this)->flags & 0x7F)
+
+#define EN_RD_FLAG_CANNOT_FREEZE_PLAYER (1 << 7)
 
 // This limb enum is used for both Redeads and Gibdos for all actors
 // that use object_rd (i.e., En_Rd, En_Railgibud, and En_Talk_Gibud)
@@ -71,13 +74,14 @@ typedef struct EnRd {
     /* 0x0338 */ Vec3s morphTable[REDEAD_GIBDO_LIMB_MAX];
     /* 0x03D4 */ s16 headShakeTimer;
     /* 0x03D6 */ union {
+                    s16 animationJudderTimer;
                     s16 stunTimer;
                     s16 deathTimer;
-                    s16 unk_3D6;
+                    s16 coffinRiseForwardAccelTimer;
                 };
     /* 0x03D8 */ s16 headYRotation;
     /* 0x03DA */ s16 upperBodyYRotation;
-    /* 0x03DC */ s16 unk_3DC;
+    /* 0x03DC */ s16 flags;
     /* 0x03DE */ s16 alpha;
     /* 0x03E0 */ s16 sunsSongStunTimer;
     /* 0x03E2 */ UNK_TYPE1 unk3E2[0x2];
