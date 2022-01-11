@@ -147,7 +147,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.y += 50.0f;
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.health = 8;
-    this->unk_3DE = 255;
+    this->alpha = 255;
     this->unk_3F1 = -1;
     this->unk_3DC = ENRD_GET_FF00(thisx);
 
@@ -976,12 +976,12 @@ void EnRd_Dead(EnRd* this, GlobalContext* globalCtx) {
                 Flags_SetSwitch(globalCtx, this->unk_3DC & 0x7F);
             }
 
-            if (this->unk_3DE != 0) {
-                if (this->unk_3DE == 180) {
+            if (this->alpha != 0) {
+                if (this->alpha == 180) {
                     func_808D4190(globalCtx, this, 0);
                 }
                 this->actor.scale.y -= (75.0f / 1000000.0f);
-                this->unk_3DE -= 5;
+                this->alpha -= 5;
             } else {
                 Actor_MarkForDeath(&this->actor);
             }
@@ -1244,10 +1244,10 @@ void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     this->limbIndex = 0;
 
-    if (this->unk_3DE == 255) {
+    if (this->alpha == 255) {
         func_8012C28C(globalCtx->state.gfxCtx);
 
-        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->unk_3DE);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->alpha);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
 
         POLY_OPA_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
@@ -1258,13 +1258,13 @@ void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         func_8012C2DC(globalCtx->state.gfxCtx);
 
-        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_3DE);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
 
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                this->skelAnime.dListCount, EnRd_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
-        func_800BC620(&sp54, &D_808D7138, this->unk_3DE, globalCtx);
+        func_800BC620(&sp54, &D_808D7138, this->alpha, globalCtx);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

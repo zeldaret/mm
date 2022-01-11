@@ -80,7 +80,7 @@ typedef struct EnRd {
     /* 0x03D8 */ s16 headYRotation;
     /* 0x03DA */ s16 upperBodyYRotation;
     /* 0x03DC */ s16 unk_3DC;
-    /* 0x03DE */ s16 unk_3DE;
+    /* 0x03DE */ s16 alpha;
     /* 0x03E0 */ s16 unk_3E0;
     /* 0x03E2 */ s16 unk_3E2;
     /* 0x03E4 */ s16 unk_3E4;
