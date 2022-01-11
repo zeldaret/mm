@@ -343,6 +343,7 @@ typedef enum {
     /* 0x9F */ GI_SHIELD_HERO_2, // Code that treats this as hero's shield is unused, so take with a grain of salt
     /* 0xA1 */ GI_LETTER_TO_MAMA = 0xA1,
     /* 0xA9 */ GI_BOTTLE = 0xA9,
+    /* 0xAB */ GI_PENDANT_OF_MEMORIES = 0xAB,
     /* 0xBA */ GI_MAX = 0xBA
 } GetItemID;
 
@@ -384,5 +385,13 @@ typedef enum {
     /* 0x70 */ GID_70 = 0x70,
     /* 0x71 */ GID_71,
 } GetItemDrawID;
+
+// TODO: fill
+typedef enum {
+    /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
+    /* 0x00 */ EXCH_ITEM_NONE,
+    /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
+    /* 0x2A */ EXCH_ITEM_2A = 0x2A // MOON_TEAR?
+} ExchangeItemID;
 
 #endif
