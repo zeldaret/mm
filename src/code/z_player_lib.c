@@ -72,7 +72,11 @@ extern u8 D_801BFFB0[0xF][5];/* = {
 
 extern Gfx* D_801BFFFC[];
 
-extern Gfx* D_801C0024[][2];
+typedef struct {
+    Gfx* unk_00;
+    Gfx* unk_04;
+} Gfx1;
+extern Gfx1 D_801C0024[];
 
 extern Gfx* D_801C0034[];
 
@@ -455,65 +459,22 @@ void func_80122BA4(GraphicsContext** gfxCtx, struct_80122D44_arg1* arg1, s32 arg
     }
 }
 
-#ifdef NON_EQUIVALENT
-// Probably equivalent, but I'm not sure
-// Maybe it is a unrolled loop?
 void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
-    u8 temp_v0;
-    struct_80122D44_arg1_unk_04* temp_v1;
+    struct_80122D44_arg1_unk_04* temp_v1 = &arg1->unk_04[0];
     s32 phi_a1;
+    s32 i;
 
-    temp_v1 = arg1->unk_04;
-    temp_v0 = temp_v1->unk_01;
-    if (temp_v0 != 0) {
-        phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
-
-        if (phi_a1 >= temp_v0) {
-            temp_v1->unk_01 = 0;
-        } else {
-            temp_v1->unk_01 = (temp_v0 - phi_a1);
-        }
-    }
-
-    temp_v1++;
-    temp_v0 = temp_v1->unk_01;
-    if (temp_v0 != 0) {
-        phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
-
-        if (phi_a1 >= temp_v0) {
-            temp_v1->unk_01 = 0;
-        } else {
-            temp_v1->unk_01 = (temp_v0 - phi_a1);
-        }
-    }
-
-    temp_v1++;
-    temp_v0 = temp_v1->unk_01;
-    if (temp_v0 != 0) {
-        phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
-
-        if (phi_a1 >= temp_v0) {
-            temp_v1->unk_01 = 0;
-        } else {
-            temp_v1->unk_01 = (temp_v0 - phi_a1);
-        }
-    }
-
-    temp_v1++;
-    temp_v0 = temp_v1->unk_01;
-    if (temp_v0 != 0) {
-        phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
-
-        if (phi_a1 >= temp_v0) {
-            temp_v1->unk_01 = 0;
-        } else {
-            temp_v1->unk_01 = (temp_v0 - phi_a1);
+    for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++, temp_v1++) {
+        if (temp_v1->unk_01) {
+            phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
+            if (phi_a1 >= temp_v1->unk_01) {
+                temp_v1->unk_01 = 0;
+            } else {
+                temp_v1->unk_01 -= phi_a1;
+            }
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122C20.s")
-#endif
 
 void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
     struct _struct_D_801BFDD0_0x8* temp_s3;
@@ -616,7 +577,6 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
         }
     }
 }
-
 
 // OoT's Player_SetBootData?
 void func_80123140(GlobalContext* globalCtx, Player* player) {
@@ -766,18 +726,16 @@ s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
     return false;
 }
 
-#ifdef NON_MATCHING
-// regalloc and a few missing moves
 s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
-    s32 phi_v1;
+    s32 ret;
 
     if (arg2 >= 4) {
-        if (1) {}
         return 0xFF;
     }
 
     if (arg2 == 0) {
-        phi_v1 = func_8012EC80(globalCtx);
+        s32 phi_v1 = func_8012EC80(globalCtx);
+
         if (phi_v1 >= 0xFD) {
             return phi_v1;
         }
@@ -785,72 +743,36 @@ s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
         if ((player->currentMask == PLAYER_MASK_BLAST) && (globalCtx->interfaceCtx.unk_21E == 0x18)) {
             return 0xF0;
         }
+
         if ((player->currentMask == PLAYER_MASK_BREMEN) && (globalCtx->interfaceCtx.unk_21E == 0x1A)) {
             return 0xF1;
         }
+
         if ((player->currentMask == PLAYER_MASK_KAMARO) && (globalCtx->interfaceCtx.unk_21E == 0x19)) {
             return 0xF2;
         }
+
+        return phi_v1;
+    } else if (arg2 == 1) {
+        return (gSaveContext.buttonStatus[1] != 0xFF) ? gSaveContext.equips.buttonItems[0][1] :
+                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][1] : 0xFF;
+    } else if (arg2 == 2) {
+        return (gSaveContext.buttonStatus[2] != 0xFF) ? gSaveContext.equips.buttonItems[0][2] :
+                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][2] : 0xFF;
     } else {
-        s32 phi_v0;
-
-        dummy_label_74791: ;
-
-        if (arg2 == 1) {
-            if (gSaveContext.buttonStatus[1] != 0xFF) {
-                //if (gSaveContext.equips.buttonItems && gSaveContext.equips.buttonItems) {}
-                return gSaveContext.equips.buttonItems[0][1];
-            } 
-
-            if (gSaveContext.unk_3F22 == 0x10) {
-                phi_v0 = gSaveContext.equips.buttonItems[0][1];
-            } else {
-                phi_v0 = 0xFF;
-            }
-
-            phi_v1 = phi_v0;
-        } else if (arg2 == 2) {
-            if (gSaveContext.buttonStatus[2] != 0xFF) {
-                return gSaveContext.equips.buttonItems[0][2];
-            }
-
-            if (gSaveContext.unk_3F22 == 0x10) {
-                phi_v0 = gSaveContext.equips.buttonItems[0][2];
-            } else {
-                phi_v0 = 0xFF;
-            }
-            phi_v1 = phi_v0;
-        } else if (gSaveContext.buttonStatus[3] != 0xFF) {
-            phi_v1 = gSaveContext.equips.buttonItems[0][3];
-        } else {
-            if (gSaveContext.unk_3F22 == 0x10) {
-                if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } if (1) { }
-                phi_v0 = gSaveContext.equips.buttonItems[0][3];
-            } else {
-                phi_v0 = 0xFF;
-            }
-            phi_v1 = phi_v0;
-            //phi_v1 = gSaveContext.unk_3F22 == 0x10 ? gSaveContext.equips.buttonItems[0][3] : 0xFF;
-        }
+        return (gSaveContext.buttonStatus[3] != 0xFF) ? gSaveContext.equips.buttonItems[0][3] :
+                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][3] : 0xFF;
     }
-
-    if (!gSaveContext.unk_3F22) {}
-
-    return phi_v1;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012364C.s")
-#endif
 
-
-#ifdef NON_EQUIVALENT
 s32 func_80123810(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
+    s32 temp_v0;
+    s32 sp24;
     s32 i;
-    Input* input = CONTROLLER1(globalCtx);
 
     if (gSaveContext.unk_06 == 0) {
-        if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_B)) {
+        if (CHECK_BTN_ANY(CONTROLLER1(globalCtx)->press.button, BTN_A | BTN_B)) {
             globalCtx->interfaceCtx.unk_222 = 0;
             globalCtx->interfaceCtx.unk_224 = 0;
             Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
@@ -860,28 +782,28 @@ s32 func_80123810(GlobalContext* globalCtx) {
         gSaveContext.unk_06--;
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_801BFF34); i++) {
-        if (CHECK_BTN_ALL(input->press.button, D_801BFF34[i])) {
-            s32 temp_v0;
-            s32 sp24 = func_8012364C(globalCtx, player, i + 1);
+    for (i = 0; i < ARRAY_COUNT(D_801BFF34) - 1; i++) {
+        if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, D_801BFF34[i])) {
+            i++;
+            sp24 = func_8012364C(globalCtx, player, i);
 
             globalCtx->interfaceCtx.unk_222 = 0;
             globalCtx->interfaceCtx.unk_224 = 0;
             Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
-            if ((sp24 >= 0xFD) || ( temp_v0 = globalCtx->unk_18794(globalCtx, player, sp24, i + 1), (temp_v0 < 0))) {
+            if ((sp24 >= 0xFD) || (temp_v0 = globalCtx->unk_18794(globalCtx, player, sp24, i), (temp_v0 < 0))) {
                 play_sound(0x4806);
                 return -1;
+            } else {
+                s32 pad;
+
+                player->heldItemButton = i;
+                return temp_v0;
             }
-            player->heldItemButton = i + 1;
-            return temp_v0;
         }
     }
 
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
-#endif
 
 s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
     s32 modelGroup = D_801BFF3C[actionParam];
@@ -1185,29 +1107,24 @@ s32 func_801242DC(GlobalContext* globalCtx) {
 
     return sp1C + 1;
 }
-
 #ifdef NON_MATCHING
 void func_80124420(Player* player) {
-    int new_var;
+    s16 sp2C;
     s16 sp28;
     s16 sp26;
     f32 sp20;
-    f32 temp_f10;
 
     D_801F59D0.unk_6 = D_801F59D0.unk_6 - (D_801F59D0.unk_6 >> 3);
     D_801F59D0.unk_8 = D_801F59D0.unk_8 - (D_801F59D0.unk_8 >> 3);
     D_801F59D0.unk_6 = D_801F59D0.unk_6 + (-D_801F59D0.unk_0 >> 2);
     D_801F59D0.unk_8 = D_801F59D0.unk_8 + (-D_801F59D0.unk_2 >> 2);
 
-    sp26 = player->actor.world.rot.y - player->actor.shape.rot.y;
-    sp20 = Math_CosS(sp26);
-    sp28 = (randPlusMinusPoint5Scaled(2.0f) + 10.0f) * (player->actor.speedXZ * -200.0f * sp20);
-    sp20 = Math_SinS(sp26);
-    temp_f10 = randPlusMinusPoint5Scaled(2.0f) + 10.0f;
-    new_var = ((s16) (temp_f10 * ((player->actor.speedXZ * 100.0f) * sp20)));
+    sp26 = BINANG_SUB(player->actor.world.rot.y, player->actor.shape.rot.y);
+    sp28 = ((player->actor.speedXZ * -200.0f * Math_CosS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f));
+    sp2C = ((player->actor.speedXZ * 100.0f * Math_SinS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f));
 
-    D_801F59D0.unk_6 = (D_801F59D0.unk_6 + (sp28 >> 2));
-    D_801F59D0.unk_8 = D_801F59D0.unk_8 + (new_var >> 2);
+    D_801F59D0.unk_6 += sp28 >> 2;
+    D_801F59D0.unk_8 += sp2C >> 2;
 
     if (D_801F59D0.unk_6 > 0x1770) {
         D_801F59D0.unk_6 = 0x1770;
@@ -1300,127 +1217,96 @@ void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#ifdef NON_EQUIVALENT
-// float fun
-// OoT: func_8008F87C
 void func_80124870(GlobalContext* globalCtx, Player* player, SkelAnime* skelAnime, Vec3f* pos, Vec3s* rot, s32 arg5, s32 arg6, s32 arg7) {
-    if (!(player->stateFlags3 & 1) && (player->actor.scale.y >= 0.0f) && !(player->stateFlags1 & 0x80) && (globalCtx->unk_18844 == 0)) {
-        CollisionPoly* spA4;
-        s32 spA0;
-        f32 sp9C;
-        Vec3f sp90;
-        Vec3f sp84;
-        Vec3f sp78;
-        f32 sp74;
-        f32 sp70;
-        f32 sp68;
-        f32 sp60;
-        f32 sp58;
-        f32 sp54;
-        f32 sp4C;
-        f32 sp48;
-        Vec3s* temp_a3;
-        f32 temp_f0;
-        f32 temp_f0_2;
-        f32 temp_f12_2;
-        f32 temp_f14_2;
-        f32 temp_f16;
-        f32 temp_f18;
-        f32 temp_f18_2;
-        f32 temp_f20;
-        s16 temp_v0_2;
-        s32 temp_f8;
-        s32 temp_v0_4;
-        Vec3s* temp_v1;
-        Vec3s* temp_v1_2;
-        f32 phi_f20;
-        f32 phi_f20_2;
-        s16 phi_v1;
-        s16 phi_a0;
-        s16 phi_t1;
+    CollisionPoly* spA4;
+    s32 spA0;
+    f32 sp9C;
+    Vec3f sp90;
+    Vec3f sp84;
+    Vec3f sp78;
+    f32 sp74;
+    f32 sp70;
+    f32 temp_f18;
+    f32 sp68;
+    f32 temp_f16;
+    f32 sp60;
+    f32 temp_f0;
+    f32 sp58;
+    f32 sp54;
+    f32 temp_f20;
+    f32 sp4C;
+    f32 sp48;
+    s32 temp_f8;
+    s32 temp_v0_4;
+    s16 phi_t1;
 
-        sp74 = D_801C0910[player->transformation];
-        sp70 = D_801C0924[player->transformation];
-        temp_f20 = D_801C0938[player->transformation] - player->unk_AB8;
-        Matrix_StatePush();
-        Matrix_JointPosition(pos, rot);
-        Matrix_GetStateTranslation(&sp90);
-        Matrix_JointPosition(&D_801C08C0[player->transformation], &skelAnime->jointTable[arg6]);
-        Matrix_InsertTranslation(D_801C08FC[player->transformation], 0.0f, 0.0f, 1);
-        Matrix_GetStateTranslation(&sp84);
-        Matrix_GetStateTranslationAndScaledY(-300.0f, &sp78);
-        Matrix_StatePop();
+    if ((player->stateFlags3 & 1) || !(player->actor.scale.y >= 0.0f) || 
+        (player->stateFlags1 & 0x80) || (globalCtx->unk_18844 != 0)) {
+        return;
+    }
 
-        sp78.y += 15.0f;
-        sp9C = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &spA4, &spA0, &sp78) + temp_f20 + (player->unk_ABC * player->actor.scale.y);
-        if (sp78.z < sp9C) {
-            sp68 = sp84.x - sp90.x;
-            temp_f16 = sp84.y - sp90.y;
-            sp60 = sp84.z - sp90.z;
-            temp_f0 = sqrtf(SQ(sp68) + SQ(temp_f16) + SQ(sp60));
+    sp74 = D_801C0910[player->transformation];
+    sp70 = D_801C0924[player->transformation];
+    temp_f20 = D_801C0938[player->transformation] - player->unk_AB8;
+    Matrix_StatePush();
+    Matrix_JointPosition(pos, rot);
+    Matrix_GetStateTranslation(&sp90);
+    Matrix_JointPosition(&D_801C08C0[player->transformation], &skelAnime->jointTable[arg6]);
+    Matrix_InsertTranslation(D_801C08FC[player->transformation], 0.0f, 0.0f, 1);
+    Matrix_GetStateTranslation(&sp84);
+    Matrix_GetStateTranslationAndScaledY(-300.0f, &sp78);
+    Matrix_StatePop();
 
+    sp78.y += 15.0f;
+    sp9C = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &spA4, &spA0, &sp78) + temp_f20 + (player->unk_ABC * player->actor.scale.y);
+    if (sp84.y < sp9C) {
+        sp68 = sp84.x - sp90.x;
+        temp_f16 = sp84.y - sp90.y;
+        sp60 = sp84.z - sp90.z;
+        temp_f0 = sqrtf(SQ(sp68) + SQ(temp_f16) + SQ(sp60));
 
-            sp58 = ((temp_f0 * temp_f0) + sp70) / (2.0f * temp_f0);
-            temp_f18 = SQ(sp58);
-            if (sp74 < temp_f18) {
-                phi_f20 = 0.0f;
-            } else {
-                phi_f20 = sqrtf(sp74 - temp_f18);
-            }
-            sp4C = func_80086B30(phi_f20, sp58);
-            temp_f12_2 = sp9C - sp90.y;
-            temp_f0_2 = sqrtf((sp68 * sp68) + (temp_f12_2 * temp_f12_2) + (sp60 * sp60));
-            temp_f14_2 = ((temp_f0_2 * temp_f0_2) + sp70) / (2.0f * temp_f0_2);
-            sp54 = temp_f0_2 - temp_f14_2;
-            temp_f18_2 = SQ(temp_f14_2);
+        sp58 = (SQ(temp_f0) + sp70) / (2.0f * temp_f0);
+        
+        temp_f20 = sp74 - SQ(sp58);
+        if (sp74 < SQ(sp58)) {
+            temp_f20 = 0.0f;
+        } else {
+            temp_f20 = sqrtf(temp_f20);
+        }
+        sp4C = func_80086B30(temp_f20, sp58);
+        temp_f0 = sqrtf(SQ(sp68) + SQ(sp9C - sp90.y) + SQ(sp60));
+        sp58 = (SQ(temp_f0) + sp70) / (2.0f * temp_f0);
+        sp54 = temp_f0 - sp58;
 
-            if (sp74 < temp_f18_2) {
-                phi_f20_2 = 0.0f;
-            } else {
-                phi_f20_2 = sqrtf(sp74 - temp_f18_2);
-            }
+        temp_f20 = sp74 - SQ(sp58);
+        if (sp74 < SQ(sp58)) {
+            temp_f20 = 0.0f;
+        } else {
+            temp_f20 = sqrtf(temp_f20);
+        }
 
-            sp48 = func_80086B30(phi_f20_2, temp_f14_2);
-            //temp_v1 = &skelAnime->jointTable[arg6];
-            //phi_t1 = (s32) ((3.1415927f - (func_80086B30(sp54, phi_f20_2) + (1.5707964f - sp48))) * 10430.378f) - temp_v1->x;
-            //phi_t1 = (s32) ((3.1415927f - (func_80086B30(sp54, phi_f20_2) + (1.5707964f - sp48))) * 10430.378f) - skelAnime->jointTable[arg6].x;
-            phi_t1 = skelAnime->jointTable[arg6].x + (-((s32) ((3.1415927f - (func_80086B30(sp54, phi_f20_2) + (1.5707964f - sp48))) * 10430.378f)));
-            temp_f8 = (s32) ((sp48 - sp4C) * 10430.378f);
+        sp48 = func_80086B30(temp_f20, sp58);
+        phi_t1 = (3.1415927f - (func_80086B30(sp54, temp_f20) + (1.5707964f - sp48))) * 10430.378f;
+        phi_t1 = -skelAnime->jointTable[arg6].z + phi_t1;
+        temp_f8 = (s32) ((sp48 - sp4C) * 10430.378f);
 
-            //phi_a0 = ABS_ALT(temp_v1->x);
-            //phi_v1 = ABS_ALT(temp_v1->y);
-            //if ((s32) (s16) (phi_v1 + phi_a0) < 0) {
-            //    phi_t1 = (s16) (phi_t1 + 0x8000);
-            //}
-            //if ((s16) (ABS_ALT(temp_v1->y) + ABS_ALT(temp_v1->x)) < 0) 
-            //if (((s16) ((((&skelAnime->jointTable[arg6])->y < 0) ? (-(&skelAnime->jointTable[arg6])->y) : ((&skelAnime->jointTable[arg6])->y)) + (((&skelAnime->jointTable[arg6])->x < 0) ? (-(&skelAnime->jointTable[arg6])->x) : ((&skelAnime->jointTable[arg6])->x)))) < 0)
-            if ((s16) (ABS_ALT(skelAnime->jointTable[arg6].x) + ABS_ALT(skelAnime->jointTable[arg6].y)) < 0) 
-            {
-                phi_t1 = (s16) (phi_t1 + 0x8000);
-            }
+        if ((s16) (ABS_ALT(skelAnime->jointTable[arg6].x) + ABS_ALT(skelAnime->jointTable[arg6].y)) < 0) {
+            phi_t1 = BINANG_ROT180(phi_t1);
+        }
 
-            rot->z -= (s16) temp_f8;
+        rot->z -= (s16) temp_f8;
 
-            temp_a3 = &skelAnime->jointTable[arg5];
-            temp_a3->z -= (s16) temp_f8;
+        skelAnime->jointTable[arg5].z -= (s16) temp_f8;
+        skelAnime->jointTable[arg6].z += (s16) phi_t1;
+        skelAnime->jointTable[arg7].z = (skelAnime->jointTable[arg7].z + (s16) temp_f8) - phi_t1;
 
-            temp_v1_2 = &skelAnime->jointTable[arg6];
-            temp_v1_2->z = (s16) (temp_v1_2->z + phi_t1);
-
-            skelAnime->jointTable[arg7].z = (skelAnime->jointTable[arg7].z +  (s16) temp_f8) - phi_t1;
-
-            temp_v0_4 = func_800C99D4(&globalCtx->colCtx, spA4, spA0);
-            if ((temp_v0_4 >= 2) && (temp_v0_4 < 4) && (SurfaceType_IsWallDamage(&globalCtx->colCtx, spA4, spA0) == 0)) {
-                sp78.y = sp9C;
-                EffectSsGFire_Spawn(globalCtx, &sp78);
-            }
+        temp_v0_4 = func_800C99D4(&globalCtx->colCtx, spA4, spA0);
+        if ((temp_v0_4 >= 2) && (temp_v0_4 < 4) && (SurfaceType_IsWallDamage(&globalCtx->colCtx, spA4, spA0) == 0)) {
+            sp78.y = sp9C;
+            EffectSsGFire_Spawn(globalCtx, &sp78);
         }
     }
 }
-#else
-void func_80124870(GlobalContext* globalCtx, Player* player, SkelAnime* skelAnime, Vec3f* pos, Vec3s* rot, s32 arg5, s32 arg6, s32 arg7);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124870.s")
-#endif
 
 #ifdef NON_MATCHING
 // Matches, but requires in function static data
@@ -1470,8 +1356,6 @@ void func_80124CC4(GlobalContext* globalCtx, Actor* actor, f32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124CC4.s")
 #endif
 
-#ifdef NON_EQUIVALENT
-// Float fun, maybe equivalent
 void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
     f32 phi_f12;
 
@@ -1481,24 +1365,12 @@ void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
         *arg1 -= arg3;
     }
 
-    if (*arg1 < -arg4) {
-        phi_f12 = -arg4;
-    } else if (arg4 < *arg1) {
-        phi_f12 = arg4;
-    } else {
-        phi_f12 = *arg1;
-    }
-
-    *arg1 = phi_f12;
+    *arg1 = (*arg1 < -arg4) ? -arg4 : (arg4 < *arg1) ? arg4 : *arg1;
     *arg0 += (s16)*arg1;
-    if (((s16) *arg1 * (arg2 - *arg0)) < 0) {
+    if (((arg2 - *arg0) * (s16) *arg1) < 0) {
         *arg0 = arg2;
     }
 }
-#else
-void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124F18.s")
-#endif
 
 #ifdef NON_EQUIVALENT
 // This is weird...
@@ -1592,15 +1464,14 @@ void func_8012536C(void) {
         D_801C0958 = false;
     }
 }
-
 #ifdef NON_MATCHING
 // draws zora shield (?)
 void func_801253A4(GlobalContext* globalCtx, Player* player) {
+    u8* phi_a0;
     Vtx* sp30;
     Gfx* dl;
     s32 i;
     f32 sp28; // scale
-    u8* phi_a0;
 
     sp28 = player->unk_B62 * 0.19607843f;
 
@@ -1612,7 +1483,7 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
     // clang-format off
     sp30 = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210); phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);
     // clang-format on
-
+    
     for (i = 0; i < 80; i++) {
         sp30[i].v.cn[3] = (phi_a0[i] * player->unk_B62) >> 8;
     }
@@ -1638,21 +1509,20 @@ void func_80125500(GlobalContext* globalCtx, Player* player, s32 limbIndex, Vec3
     }
 }
 
-
-extern Vec3f* D_801F59DC;
-
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x144 */ f32 unk_144;
 } ActorUnknown;
 
+extern Vec3f* D_801F59DC;
 
-#ifdef NON_EQUIVALENT
-// maybe equivalent?
-s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Player* player) {
+#ifdef NON_MATCHING
+// one weird tiny diff
+s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    s32 pad;
+    Player* player = (Player*)thisx;
     Vec3f sp54;
     Actor* sp50;
-    s32 pad[4];
     f32 temp_f6;
     Actor* phi_v0;
     struct_80124618* phi_a0;
@@ -1662,9 +1532,6 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
     if (limbIndex == 1) {
         D_801F59F4 = (s32) player->leftHandType;
-
-        if (1) { }
-
         D_801F59F8 = (s32) player->rightHandType;
         D_801F59DC = &player->swordInfo[2].base;
         if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
@@ -1721,19 +1588,20 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
             rot->y -= player->unk_AAC.y;
             rot->z += player->unk_AAC.x;
             if (player->transformation == PLAYER_FORM_DEKU) {
-                phi_v0 = NULL;
+                sp50 = NULL;
 
-                if (((&gameplay_keep_Linkanim_00E298 == player->skelAnime.animation)) || (&gameplay_keep_Linkanim_00E2F0 == player->unk_284.animation) || (((player->stateFlags3 & 0x40) != 0) && (phi_v0 = player->heldActor, (phi_v0 != 0)))) {
-                    sp50 = phi_v0;
+                if (((player->skelAnime.animation == &gameplay_keep_Linkanim_00E298)) || (player->unk_284.animation == &gameplay_keep_Linkanim_00E2F0) || ((player->stateFlags3 & 0x40) && (sp50 = player->heldActor, (sp50 != NULL)))) {
                     Matrix_JointPosition(pos, rot);
                     func_80125340();
                     func_80125318(pos, rot);
-                    if (phi_v0 != 0) {
-                        player->unk_AF0[0].x = 1.0f - (((ActorUnknown*)phi_v0)->unk_144 * 0.03f);
-                        player->unk_AF0[0].y = 1.0f - (((ActorUnknown*)phi_v0)->unk_144 * 0.01f);
-                        player->unk_AF0[0].z = 1.0f - (((ActorUnknown*)phi_v0)->unk_144 * 0.04f);
-                        rot->z = (s16) (s32) (((ActorUnknown*)phi_v0)->unk_144 * 320.0f);
-                    } else if (&gameplay_keep_Linkanim_00E298 == player->skelAnime.animation) {
+                    if (sp50 != 0) {
+                        f32 temp;
+
+                        player->unk_AF0[0].x = 1.0f - (((ActorUnknown*)sp50)->unk_144 * 0.03f);
+                        player->unk_AF0[0].y = 1.0f - (((ActorUnknown*)sp50)->unk_144 * 0.01f);
+                        player->unk_AF0[0].z = 1.0f - (((ActorUnknown*)sp50)->unk_144 * 0.04f);
+                        rot->z = (((ActorUnknown*)sp50)->unk_144 * 320.0f);
+                    } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E298) {
                         func_80124618(D_801C03E0, player->skelAnime.curFrame, player->unk_AF0);
                     } else {
                         func_80124618(D_801C03C0, player->unk_284.curFrame, player->unk_AF0);
@@ -1742,20 +1610,20 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 }
             }
         } else if (limbIndex == 0x15) {
-            if ((&gameplay_keep_Linkanim_00E1F8 == player->skelAnime.animation) || (&gameplay_keep_Linkanim_00E260 == player->skelAnime.animation) || (&gameplay_keep_Linkanim_00E248 == player->skelAnime.animation) || (player->transformation == PLAYER_FORM_ZORA)) {
+            if ((player->skelAnime.animation == &gameplay_keep_Linkanim_00E1F8) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E260 ) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E248 ) || (player->transformation == PLAYER_FORM_ZORA)) {
                 Matrix_JointPosition(pos, rot);
                 if (player->transformation == PLAYER_FORM_GORON) {
                     func_80125340();
                 }
                 func_80125318(pos, rot);
-                if ((player->transformation != PLAYER_FORM_ZORA) || (&gameplay_keep_Linkanim_00E410 == player->skelAnime.animation)) {
-                    if (&gameplay_keep_Linkanim_00E410 == player->skelAnime.animation) {
+                if ((player->transformation != PLAYER_FORM_ZORA) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E410)) {
+                    if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E410) {
                         phi_a0 = D_801C0608;
                     } else {
-                        if (&gameplay_keep_Linkanim_00E260 == player->skelAnime.animation) {
+                        if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E260) {
                             phi_v0_2 = D_801C0628;
                         } else {
-                            if (&gameplay_keep_Linkanim_00E248 == player->skelAnime.animation) {
+                            if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E248) {
                                 phi_v1_2 = D_801C07C0;
                             } else {
                                 phi_v1_2 = D_801C0460;
@@ -1769,9 +1637,9 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                     player->unk_AF0[0].y = 1.0f;
                 }
                 if (player->transformation == PLAYER_FORM_ZORA) {
+                    player->unk_AF0[0].y *= 1.0f + (0.29999995f * player->unk_B08[2]);
                     player->unk_AF0[0].x = 1.0f;
                     player->unk_AF0[0].z = 1.0f;
-                    player->unk_AF0[0].y *= 1.0f + (0.29999995f * player->unk_B08[2]);
                 }
                 Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
             }
@@ -1784,9 +1652,9 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 Matrix_RotateY(player->unk_AB2.y, 1);
             }
             phi_a0_2 = player->unk_AB2.x;
-            if ((player->transformation == PLAYER_FORM_DEKU) && ((player->stateFlags3 & 0x40) != 0)) {
-                if (player->heldActor != 0) {
-                    phi_a0_2 = (s16) (player->unk_AB2.x + (s32) (((ActorUnknown*)player->heldActor)->unk_144 * -470.0f));
+            if ((player->transformation == PLAYER_FORM_DEKU) && (player->stateFlags3 & 0x40)) {
+                if (player->heldActor != NULL) {
+                    phi_a0_2 += (s16)(((ActorUnknown*)player->heldActor)->unk_144 * -470.0f);
                 }
             }
             Matrix_InsertXRotation_s(phi_a0_2, 1);
@@ -1801,7 +1669,7 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 #else
-s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Player* player);
+s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
 #endif
 
@@ -1813,7 +1681,6 @@ void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* arg2, Vec3s* ar
 }
 
 extern Gfx** D_801C095C[];
-
 extern Gfx** D_801C0964[];
 
 #ifdef NON_EQUIVALENT
@@ -1829,10 +1696,10 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     Gfx** phi_v1_2;
     s32 phi_v0;
 
-    if (func_80125580(globalCtx, limbIndex, dList, pos, rot, player) == 0) {
+    if (!func_80125580(globalCtx, limbIndex, dList, pos, rot, player)) {
         if (limbIndex == 0x10) {
             phi_a0 = player->leftHandDLists;
-            if ((player->stateFlags3 & 0x2000) != 0) {
+            if (player->stateFlags3 & 0x2000) {
                 rot->z -= player->unk_B8C;
             } else if ((D_801F59F4 == 4) && (player->stateFlags1 & 0x02000000)) {
                 phi_a0 = &D_801C0114[D_801F59E0];
@@ -1841,21 +1708,23 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 if ((player->leftHandType == 0) && (player->actor.speedXZ > 2.0f) && (!(player->stateFlags1 & 0x8000000))) {
                     phi_a0 = &D_801C013C[D_801F59E0];
                     D_801F59F4 = 1;
-                } else 
-                // CUR_EQUIP_VALUE
-                //if ((player->leftHandType == 2) && (player->transformation == PLAYER_FORM_HUMAN) && (temp_v1 = (s32) (gSaveContext.equips.equipment & *gEquipMasks) >> *gEquipShifts, (temp_v1 != 0))) 
-                if ((player->leftHandType == 2) && (player->transformation == PLAYER_FORM_HUMAN) && ((CUR_EQUIP_VALUE(0) != 0))) 
-                {
-                    phi_a0 = D_801C018C[CUR_EQUIP_VALUE(0) - 1];
                 } else {
-                    //temp_v0_2 = player->skelAnime.jointTable->unk_84 & 0xF000;
-                    temp_v0_2 = player->skelAnime.jointTable[0x16].x & 0xF000;
-                    if (temp_v0_2 != 0) {
-                        phi_v0 = (temp_v0_2 >> 0xC) - 1;
-                        if (phi_v0 >= 2) {
-                            phi_v0 = 0;
+                    // CUR_EQUIP_VALUE
+                    //if ((player->leftHandType == 2) && (player->transformation == PLAYER_FORM_HUMAN) && (temp_v1 = (s32) (gSaveContext.equips.equipment & *gEquipMasks) >> *gEquipShifts, (temp_v1 != 0))) 
+                    if ((player->leftHandType == 2) && 
+                        (player->transformation == PLAYER_FORM_HUMAN) && 
+                        ((phi_v0 = CUR_EQUIP_VALUE(0), phi_v0 != 0))) {
+                        phi_a0 = &D_801C018C[phi_v0 - 1];
+                    } else {
+                        //temp_v0_2 = player->skelAnime.jointTable->unk_84 & 0xF000;
+                        phi_v0 = player->skelAnime.jointTable[0x16].x & 0xF000;
+                        if (phi_v0 != 0) {
+                            phi_v0 = (phi_v0 >> 0xC) - 1;
+                            if (phi_v0 >= 2) {
+                                phi_v0 = 0;
+                            }
+                            phi_a0 = &D_801C095C[phi_v0][D_801F59E0];
                         }
-                        phi_a0 = &D_801C095C[phi_v0][D_801F59E0 ];
                     }
                 }
             }
@@ -1868,16 +1737,16 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 if (((player->stateFlags1 & 2) != 0) || ((player->stateFlags1 & 0x400) != 0) || ((func_801242B4(player) != 0))) {
                     *dList = object_link_zora_DL_00FDF0;
                 } else {
-                    phi_a1 = &gameplay_keep_Linkanim_00E3E8 == player->skelAnime.animation && player->skelAnime.curFrame >= 6.0f;
-                    if ((phi_a1 != 0) || (& gameplay_keep_Linkanim_00E3E0 == player->skelAnime.animation)) 
+                    phi_a1 = player->skelAnime.animation == &gameplay_keep_Linkanim_00E3E8 && player->skelAnime.curFrame >= 6.0f;
+                    if ((phi_a1 != 0) || (player->skelAnime.animation == &gameplay_keep_Linkanim_00E3E0)) 
                     {
                         *dList = object_link_zora_DL_00E2A0;
                         if (phi_a1 != 0) {
-                            phi_a1_2 = D_801C0538;
+                            phi_a1 = D_801C0538;
                         } else {
-                            phi_a1_2 = D_801C0560;
+                            phi_a1 = D_801C0560;
                         }
-                        func_80125CE0(player, phi_a1_2, pos, rot);
+                        func_80125CE0(player, phi_a1, pos, rot);
                     }
                 }
             }
@@ -1892,7 +1761,7 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 if (D_801F59F8 == 8) {
                     if (player->transformation == PLAYER_FORM_HUMAN) {
                         if (player->currentShield != 0) {
-                            phi_v1 = (D_801C0024)[player->currentShield - 1];
+                            phi_v1 = &D_801C0024[player->currentShield - 1];
                         }
                     }
                 } else if ((player->rightHandType == 6) && (player->actor.speedXZ > 2.0f) && (!(player->stateFlags1 & 0x8000000))) {
@@ -1903,7 +1772,8 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                     temp_v0_9 = player->skelAnime.jointTable[0x16].x & 0xF00;
 
                     if (temp_v0_9 != 0) {
-                        phi_v1 = &D_801C0964[(temp_v0_9 >> 8) - 1][D_801F59E0];
+                        temp_v0_9 = (temp_v0_9 >> 8) - 1;
+                        phi_v1 = &D_801C0964[temp_v0_9][D_801F59E0];
                     }
                 }
                 *dList = phi_v1[D_801F59E4];
@@ -1912,21 +1782,18 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 }
             }
         } else if (limbIndex == 0x14) {
-            phi_v1_2 = player->sheathDLists;
+            Gfx** phi_v1_2 = player->sheathDLists;
             if (player->transformation == PLAYER_FORM_HUMAN) {
-                if (CUR_EQUIP_VALUE(0) != 0) {
-                    new_var = CUR_EQUIP_VALUE(0) - 1;
+                s32 val = CUR_EQUIP_VALUE_VOID(0);
+                if (val != 0) {
                     if ((player->sheathType == 0xE) || (player->sheathType == 0xC)) {
-                        phi_v1_2 = D_801C00BC[new_var];
+                        phi_v1_2 = &D_801C00BC[val - 1][0];
                     } else {
-                        if (1) { } if (1) { }
-                        phi_v1_2 = D_801C00D4[new_var];
+                        phi_v1_2 = &D_801C00D4[val - 1][0];
                     }
                 }
             }
             *dList = phi_v1_2[D_801F59E4];
-
-            return 0;
         } else if (limbIndex == 2) {
             *dList = player->waistDLists[D_801F59E4];
         } else if ((limbIndex == 0xC) && (player->transformation == PLAYER_FORM_ZORA)) {
@@ -2307,113 +2174,85 @@ void func_8012754C(GlobalContext* globalCtx, Player* player) {
 }
 
 #ifdef NON_EQUIVALENT
-void func_80127594(GlobalContext* globalCtx, Player* player) {
+void func_80127594(GlobalContext* globalCtx, Actor* actor) {
     static Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
     static Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
+    Player* player = (Player*)actor;
+    Gfx* gfx;
     f32 temp_f0;
     f32 temp_f20;
     f32 temp_f22;
-    s16 temp_s0_2;
-    s32 temp_v0;
-    u32* temp_s0;
-    Vec3f* phi_s6;
-    Vec3f* phi_s2;
-    s32* phi_s3;
-    f32 phi_f20;
-    Gfx* phi_s1;
     s32 phi_v0;
-    //f32 phi_f20_2;
     s16 phi_s0;
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    phi_s6 = D_801C0B90;
-    phi_s2 = D_801F59B0;
-    phi_s3 = D_801F59C8;
-    phi_s1 = POLY_XLU_DISP;
-    i = 0;
-    do {
-        temp_f22 = ((f32) *phi_s3 / 400.0f) * 0.1f;
-        Matrix_MultiplyVector3fByState(phi_s6, phi_s2);
-        phi_s2->y += -10.0f * temp_f22;
-        if (*phi_s3 < 0x190) {
-            //temp_s0 = &gSegments[(u32) ((s32) D_04091BE0 * 0x10) >> 0x1C];
-            temp_s0 = &gSegments[(u32) ((s32) D_04091BE0 * 0x10) >> 0x1C];
+    
+    gfx = POLY_XLU_DISP;
+
+    for (i = 0; i < 2; i++) {
+        temp_f22 = (D_801F59C8[i] / 400.0f) * 0.1f;
+        Matrix_MultiplyVector3fByState(&D_801C0B90[i], &D_801F59B0[i]);
+
+        if (1) {}
+
+        D_801F59B0[i].y += -10.0f * temp_f22;
+
+        if (D_801F59C8[i] < 0x190) {
+            f32 phi_f20;
+
             if (temp_f22 > 0.05f) {
                 phi_f20 = 0.05f;
             } else {
                 phi_f20 = temp_f22;
             }
             Matrix_StatePush();
-            Matrix_InsertTranslation(phi_s2->x, phi_s2->y, phi_s2->z, 0);
+            Matrix_InsertTranslation(D_801F59B0[i].x, D_801F59B0[i].y, D_801F59B0[i].z, 0);
             Matrix_Scale(phi_f20, temp_f22, phi_f20, 1);
-            //phi_s1->words.w0 = 0xDA380002;
-            //phi_s1->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-            gSPMatrix(&phi_s1[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            //TODO
-            //phi_s1->unk_8 = 0xDB060020;
-            //phi_s1->unk_C = (s32) (*temp_s0 + ((s32) &D_04091BE0 & 0xFFFFFF));
-            //gSPSegment(&phi_s1[1], 0x08, (*temp_s0 + ((s32) D_04091BE0 & 0xFFFFFF)));
-            //gSPSegment(&phi_s1[1], 0x08, (*temp_s0 + ((s32) D_04091BE0 & 0xFFFFFF)));
-            // gameplay_keep_Tex_091BE0
-            gSPSegment(&phi_s1[1], 0x08, (*temp_s0 + ((s32) D_04091BE0 & 0xFFFFFF)));
 
-
-            //phi_s1->unk_10 = 0xFA000000;
-            //phi_s1->unk_14 = -1;
-            gDPSetPrimColor(&phi_s1[2], 0, 0, 255, 255, 255, 255);
-
-            //phi_s1->unk_18 = 0xFB000000;
-            //phi_s1->unk_1C = 0x96969600;
-            gDPSetEnvColor(&phi_s1[3], 150, 150, 150, 0);
-
-            //phi_s1->unk_20 = 0xDE000000;
-            //phi_s1->unk_24 = D_040301B0;
-            gSPDisplayList(&phi_s1[4], gameplay_keep_DL_0301B0);
-
-            //phi_s1->unk_2C = 0x40;
-            //phi_s1->unk_28 = 0xD8380002;
-            gSPPopMatrix(&phi_s1[5], G_MTX_MODELVIEW);
+            gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPSegment(&gfx[1], 0x08, gSegments[SEGMENT_NUMBER(D_04091BE0)] + SEGMENT_OFFSET(D_04091BE0));
+            gDPSetPrimColor(&gfx[2], 0, 0, 255, 255, 255, 255);
+            gDPSetEnvColor(&gfx[3], 150, 150, 150, 0);
+            gSPDisplayList(&gfx[4], D_040301B0);
+            gSPPopMatrix(&gfx[5], G_MTX_MODELVIEW);
 
             Matrix_StatePop();
-            //phi_s1 = phi_s1 + 0x30;
-            phi_s1 = &phi_s1[6];
+
+            gfx = &gfx[6];
         } else {
             temp_f0 = sqrtf(SQ(player->actor.velocity.x) + SQ(player->actor.velocity.z));
-            temp_v0 = (temp_f0 * 2000.0f);
+            phi_s0 = temp_f0 * 2000.0f;
             D_801C0BA8.y = temp_f0 * 0.4f;
             D_801C0BB4.y = -0.3f;
-            phi_s0 = temp_v0;
-            if ((s16)temp_v0 > 0x3E80) {
+
+            if (phi_s0 > 0x3E80) {
                 phi_s0 = 0x3E80;
             }
 
-            //phi_s0 = CLAMP_MIN(temp_v0, 0x3E80);
-
-            if (phi_s2 != D_801F59B0) {
+            if (i != 0) {
                 phi_v0 = phi_s0;
             } else {
                 phi_v0 = -phi_s0;
             }
             temp_f20 = temp_f0 * 0.2f;
-            temp_s0_2 = phi_v0 + player->actor.focus.rot.y;
-            //phi_f20_2 = temp_f20;
-            //if (temp_f20 > 4.0f) {
-            //    phi_f20_2 = 4.0f;
-            //}
-            //phi_f20_2 = CLAMP_MIN(temp_f20, 4.0f);
-            D_801C0BA8.x = -Math_SinS(temp_s0_2) * CLAMP_MIN(temp_f20, 4.0f);
-            D_801C0BA8.z = -Math_CosS(temp_s0_2) * CLAMP_MIN(temp_f20, 4.0f);
-            EffectSsDtBubble_SpawnColorProfile(globalCtx, phi_s2, &D_801C0BA8, &D_801C0BB4, 0x14, 0x14, 3, 0);
-            *phi_s3 += -0x190;
+
+            phi_s0 = player->actor.focus.rot.y + phi_v0;
+
+            if (temp_f20 > 4.0f) {
+                temp_f20 = 4.0f;
+            }
+
+            D_801C0BA8.x = -Math_SinS(phi_s0) * temp_f20;
+            D_801C0BA8.z = -Math_CosS(phi_s0) * temp_f20;
+
+            EffectSsDtBubble_SpawnColorProfile(globalCtx, &D_801F59B0[i], &D_801C0BA8, &D_801C0BB4, 0x14, 0x14, 3, 0);
+            D_801F59C8[i] += -0x190;
         }
+    }
 
-        phi_s2 = phi_s2 + 1;
-        phi_s6 += 1;
-        phi_s3 += 1;
-    } while (phi_s2 != (Vec3f*)D_801F59C8);
-    POLY_XLU_DISP = phi_s1;
-
+    POLY_XLU_DISP = gfx;
+    
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
@@ -2422,8 +2261,6 @@ extern Vec3f D_801C0BB4;
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")
 void func_80127594(GlobalContext* globalCtx, Player* player);
 #endif
-
-
 
 // Gfx?
 extern UNK_TYPE D_801C0BC0;
@@ -2500,38 +2337,43 @@ glabel D_801C0EAC
 glabel D_801C0EB8
 #endif
 
-
-#if NON_MATCHING
+#ifdef NON_MATCHING
 // regalloc
 void func_801278F8(GlobalContext* globalCtx, Player* player) {
+    static Gfx D_801C0BC0[] = {
+        0xFB000000,
+        0x000000FF,
+        0xDF000000,
+    };
+    static Gfx D_801C0BD0[] = {
+        0xE200001C,
+        0xC81049F8,
+        0xDF000000,
+    };
+    s32 phi_a0;
+
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     if (player->unk_B60 != 0) {
-        u8 new_var;
-        s32 phi_a0;
-
-        gSegments[0xA] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
+        gSegments[0xA] = PHYSICAL_TO_VIRTUAL2(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
-        if ((player->unk_B60 < 0xB) != 0)
-        {
-            phi_a0 = ((player->unk_B60 / 10.0f) * 255.0f);
+        if ((player->unk_B60 < 11) != 0) {
+            phi_a0 = (player->unk_B60 / 10.0f) * 255.0f;
         } else {
             phi_a0 = 0xFF;
         }
 
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, phi_a0);
 
-        new_var = phi_a0;
-
         gSPDisplayList(POLY_OPA_DISP++, object_mask_bakuretu_DL_000440);
 
-        gSPSegment(POLY_OPA_DISP++, 0x09, &D_801C0BD0);
+        gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BD0);
 
-        gDPSetEnvColor(__gfxCtx->polyOpa.p++, 0, 0, 0, 0xFF - new_var);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0xFF - phi_a0);
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x09, &D_801C0BC0);
+        gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BC0);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -3022,8 +2864,6 @@ void func_80128B74(GlobalContext* globalCtx, Player* player, s32 limbIndex) {
 
     Actor_SetFeetPos(&player->actor, limbIndex, 9, footPos, 6, footPos);
 }
-
-
 
 
 
