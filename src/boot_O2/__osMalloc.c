@@ -50,7 +50,7 @@ ArenaNode* ArenaImpl_GetLastBlock(Arena* arena) {
 }
 
 /**
- * @brief Initializes \p arena to manage the memory region \p heap.
+ * Initializes \p arena to manage the memory region \p heap.
  *
  * @param arena  The Arena to initialize.
  * @param heap   The memory region to use as heap space.
@@ -107,7 +107,7 @@ void __osMallocAddHeap(Arena* arena, void* heap, size_t size) {
 }
 
 /**
- * @brief Clears the whole \p arena, invalidating every allocated pointer to it.
+ * Clears the whole \p arena, invalidating every allocated pointer to it.
  *
  * @param arena  The Arena to clear.
  */
@@ -116,7 +116,7 @@ void __osMallocCleanup(Arena* arena) {
 }
 
 /**
- * @brief Returns whether or not the \p arena has been initialized.
+ * Returns whether or not the \p arena has been initialized.
  *
  * @param arena  The Arena to check.
  * @return u8    `true` if the \p arena has been initialized. `false` otherwise.
@@ -126,7 +126,7 @@ u8 __osMallocIsInitalized(Arena* arena) {
 }
 
 /**
- * @brief Allocates at least \p size bytes of memory using the given \p arena.
+ * Allocates at least \p size bytes of memory using the given \p arena.
  * The block of memory will be allocated at the start of the first sufficiently large free block.
  *
  *  - If there's not enough space in the given \p arena, this function will fail, returning `NULL`.
@@ -191,7 +191,7 @@ void* __osMalloc(Arena* arena, size_t size) {
 }
 
 /**
- * @brief Allocates at least \p size bytes of memory using the given \p arena.
+ * Allocates at least \p size bytes of memory using the given \p arena.
  * Unlike __osMalloc, the block of memory will be allocated from the end of the \p arena.
  *
  * - If there's not enough space in the given \p arena, this function will fail, returning `NULL`.
@@ -255,7 +255,7 @@ void* __osMallocR(Arena* arena, size_t size) {
 }
 
 /**
- * @brief Deallocates the pointer \p ptr previously allocated by `__osMalloc`, `__osMallocR` or `__osRealloc`.
+ * Deallocates the pointer \p ptr previously allocated by `__osMalloc`, `__osMallocR` or `__osRealloc`.
  * If \p ptr is `NULL` or it has been already been freed, then this function does nothing.
  *
  * - The behaviour is undefined if \p ptr is not a memory region returned by one of the cited allocating
@@ -311,7 +311,7 @@ void __osFree(Arena* arena, void* ptr) {
 }
 
 /**
- * @brief Reallocates the pointer \p ptr.
+ * Reallocates the pointer \p ptr.
  * \p ptr must be either a pointer previously allocated by `__osMalloc`, `__osMallocR` or `__osRealloc` and
  * not freed yet, or a `NULL` pointer.
  *
@@ -391,7 +391,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
 }
 
 /**
- * @brief Gets the size of the largest free block, the total free space and the total allocated space.
+ * Gets the size of the largest free block, the total free space and the total allocated space.
  *
  * @param[in, out] arena   The Arena which will be used to get the values from.
  * @param[out] outMaxFree  The size of the largest free block.
@@ -425,7 +425,7 @@ void __osGetSizes(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t* out
 }
 
 /**
- * @brief Checks the validity of every node of the \p arena.
+ * Checks the validity of every node of the \p arena.
  *
  * @param arena  The Arena to check.
  * @return s32   0 if every pointer is valid. 1 otherwise.
