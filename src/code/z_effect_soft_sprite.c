@@ -58,11 +58,11 @@ EffectSs* EffectSS_GetTable() {
 
 void EffectSS_Delete(EffectSs* effectSs) {
     if (effectSs->flags & 2) {
-        func_801A72CC(&effectSs->pos);
+        Audio_StopSfxByPos(&effectSs->pos);
     }
 
     if (effectSs->flags & 4) {
-        func_801A72CC(&effectSs->vec);
+        Audio_StopSfxByPos(&effectSs->vec);
     }
 
     EffectSS_ResetEntry(effectSs);
@@ -172,7 +172,7 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
     }
 
     sEffectSsInfo.searchIndex = index + 1;
-    overlaySize = (uintptr_t)entry->vramEnd - (uintptr_t)entry->vramStart;
+    overlaySize = VRAM_PTR_SIZE(entry);
 
     if (entry->vramStart == NULL) {
         initInfo = entry->initInfo;
@@ -187,10 +187,8 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
             Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
         }
 
-        initInfo = (u32)((entry->initInfo != NULL)
-                             ? (EffectSsInit*)(-((uintptr_t)entry->vramStart - (uintptr_t)entry->loadedRamAddr) +
-                                               (uintptr_t)entry->initInfo)
-                             : NULL);
+        initInfo = (uintptr_t)(
+            (entry->initInfo != NULL) ? (void*)(-OVERLAY_RELOCATION_OFFSET(entry) + (uintptr_t)entry->initInfo) : NULL);
     }
 
     if (initInfo->init != NULL) {
