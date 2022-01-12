@@ -236,7 +236,7 @@ void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
     if ((this->actor.params != ENBIGPO_POSSIBLEFIRE) && (this->actor.params != ENBIGPO_CHOSENFIRE) &&
         (this->actor.params != ENBIGPO_REVEALEDFIRE) && (this->actor.params != ENBIGPO_UNK5)) {
         // if NOT a fire type, *ENBIGPO_REGULAR and ENBIGPO_SUMMONED (combat types only)
-        if(1) {}
+        if (1) {}
         for (fireCount = 0; fireCount < ARRAY_COUNT(this->fires); fireCount++) {
             LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->fires[fireCount].light);
         }
