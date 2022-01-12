@@ -48,11 +48,14 @@ typedef enum {
 } RedeadGibdoLimbs;
 
 typedef enum {
-    /* -2 */ EN_RD_TYPE_GIBDO = -2,
-    /*  0 */ EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING = 0, // Still mourns, but it must come to a complete stop first
-    /*  2 */ EN_RD_TYPE_CRYING = 2,
-    /*  3 */ EN_RD_TYPE_INVISIBLE,
-    /*  4 */ EN_RD_TYPE_FROZEN,
+    /* -3 */ EN_RD_TYPE_GIBDO_RISING_OUT_OF_COFFIN = -3, // Unused OoT leftover
+    /* -2 */ EN_RD_TYPE_GIBDO = -2, // Unused OoT leftover
+    /* -1 */ EN_RD_TYPE_DOES_NOT_MOURN = -1, // Unused OoT leftover
+    /*  0 */ EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING = 0, // Unused OoT leftover. Still mourns, but it must come to a complete stop first
+    /*  1 */ EN_RD_TYPE_REGULAR, // Unused OoT leftover
+    /*  2 */ EN_RD_TYPE_CRYING, // Unused in the final game
+    /*  3 */ EN_RD_TYPE_INVISIBLE, // Unused OoT leftover
+    /*  4 */ EN_RD_TYPE_FROZEN, // Unused in the final game
     /*  5 */ EN_RD_TYPE_SQUATTING_DANCE,
     /*  6 */ EN_RD_TYPE_CLAPPING_DANCE,
     /*  7 */ EN_RD_TYPE_PIROUETTE,
