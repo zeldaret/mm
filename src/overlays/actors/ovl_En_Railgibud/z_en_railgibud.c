@@ -991,7 +991,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* global
     }
 }
 
-void EnRailgibud_CheckCollision(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_UpdateCollision(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((this->actionFunc != EnRailgibud_Dead) &&
@@ -1017,7 +1017,7 @@ void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     }
     EnRailgibud_MoveWithGravity(this, globalCtx);
-    EnRailgibud_CheckCollision(this, globalCtx);
+    EnRailgibud_UpdateCollision(this, globalCtx);
     EnRailgibud_MoveGrabbedPlayerAwayFromWall(this, globalCtx);
     EnRailgibud_UpdateEffect(this, globalCtx);
     this->actor.focus.pos = this->actor.world.pos;

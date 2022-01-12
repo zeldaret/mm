@@ -1179,7 +1179,7 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnRd_CheckCollision(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_UpdateCollision(EnRd* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((this->actor.colChkInfo.health > 0) && (this->action != EN_RD_ACTION_GRABBING)) {
@@ -1237,7 +1237,7 @@ void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
-    EnRd_CheckCollision(this, globalCtx);
+    EnRd_UpdateCollision(this, globalCtx);
     EnRd_SetUpDanceIfConditionsMet(this, globalCtx);
     EnRd_UpdateEffect(this, globalCtx);
 }

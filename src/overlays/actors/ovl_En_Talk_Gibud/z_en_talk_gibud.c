@@ -1077,7 +1077,7 @@ void EnTalkGibud_UpdateDamage(EnTalkGibud* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnTalkGibud_CheckCollision(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_UpdateCollision(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((this->actionFunc != EnTalkGibud_Dead) && (this->actionFunc != EnTalkGibud_Disappear) &&
@@ -1138,7 +1138,7 @@ void EnTalkGibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     EnTalkGibud_PlayAnimation(this, globalCtx);
     EnTalkGibud_MoveWithGravity(this, globalCtx);
-    EnTalkGibud_CheckCollision(this, globalCtx);
+    EnTalkGibud_UpdateCollision(this, globalCtx);
     EnTalkGibud_MoveGrabbedPlayerAwayFromWall(this, globalCtx);
     EnTalkGibud_UpdateEffect(this, globalCtx);
     this->actor.focus.pos = this->actor.world.pos;
