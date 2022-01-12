@@ -610,7 +610,7 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
 
     if ((ABS_ALT(yaw) < 0x1554) && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 150.0f)) {
         if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
-            !(player->stateFlags2 & 0x4080)) {
+            !(player->stateFlags2 & (0x4000 | 0x80))) {
             if (this->playerStunWaitTimer == 0) {
                 if (!(this->flags & EN_RD_FLAG_CANNOT_FREEZE_PLAYER)) {
                     player->actor.freezeTimer = 40;
@@ -691,7 +691,7 @@ void EnRd_WalkToHome(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
-        !(player->stateFlags2 & 0x4080) && (player->transformation != PLAYER_FORM_GORON) &&
+        !(player->stateFlags2 & (0x4000 | 0x80)) && (player->transformation != PLAYER_FORM_GORON) &&
         (player->transformation != PLAYER_FORM_DEKU) &&
         (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
         this->actor.targetMode = 0;

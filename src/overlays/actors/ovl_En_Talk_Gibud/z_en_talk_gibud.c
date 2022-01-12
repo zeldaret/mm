@@ -893,8 +893,9 @@ void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalC
 s32 EnTalkGibud_PlayerInRangeWithCorrectStateToGrab(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f) && !(player->stateFlags1 & 0x2C6080) &&
-        !(player->stateFlags2 & 0x4080)) {
+    if ((Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f) &&
+        !(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
+        !(player->stateFlags2 & (0x4000 | 0x80))) {
         return true;
     }
 
