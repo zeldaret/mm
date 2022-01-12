@@ -36,7 +36,7 @@ void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnTest5* this = THIS;
     WaterBox* water;
-    f32 ySurface; // Unused
+    f32 ySurface;
 
     // If not spawned above a water source, immediately despawn
     if (!WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
@@ -83,8 +83,8 @@ void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnTest5* this = THIS;
     Vec3f steamPos;
-    CollisionPoly* poly; // Unused
-    s32 pad;             // Unused
+    CollisionPoly* poly;
+    s32 pad;
 
     this->actionFunc(this, globalCtx);
 
