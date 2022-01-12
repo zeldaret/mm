@@ -7,17 +7,8 @@
  */
 
 CameraModeValue sSetNormal0ModeNormalData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,            // CAM_DATA_Y_OFFSET
-        280,          // CAM_DATA_01
-        320,          // CAM_DATA_02
-        10,             // CAM_DATA_PITCHTARGET
-        22,           // CAM_DATA_04
-        15,            // CAM_DATA_05
-        40,           // CAM_DATA_YAWDIFFRANGE
-        60,             // CAM_DATA_FOV
-        84,           // CAM_DATA_08
-        (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
+    NORM1_FIXED_DATA(-20, 280, 320, 10, 22, 15, 40, 60, 84,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 // Function: PARA1
@@ -48,12 +39,12 @@ CameraModeValue sSetNormal0ModeFollowTargetData[] = {
     { 15, CAM_DATA_17 },
     { 45, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 30, CAM_DATA_11 },
 };
 
-// Function: BATT1
 CameraModeValue sSetNormal0ModeBattleData[] = {
+    /* CAM_FUNC_BATT1 */
     { -30, CAM_DATA_Y_OFFSET },
     { 150, CAM_DATA_01 },
     { 250, CAM_DATA_02 },
@@ -64,7 +55,7 @@ CameraModeValue sSetNormal0ModeBattleData[] = {
     { 35, CAM_DATA_17 },
     { 55, CAM_DATA_FOV },
     { 70, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_11 },
     { 40, CAM_DATA_18 },
 };
@@ -139,15 +130,7 @@ CameraModeValue sSetNormal0ModeBowArrowZData[] = {
 };
 
 CameraModeValue sSetNormal0ModeHookshotData[] = {
-    SET_SPEC5_STATICDATA( // Camera_Special5()
-        -20,              // yOffset
-        80,               // eyeDist
-        250,              // minDistForRot
-        45,               // fovTarget
-        60,               // atMaxLERPScale
-        40,               // timerInit
-        6,                // pitch
-        SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0)),
+    SPEC5_FIXED_DATA(-20, 80, 250, 45, 60, 40, 6, SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0)),
 };
 
 // Function: SUBJ1
@@ -186,21 +169,12 @@ CameraModeValue sSetNormal0ModeClimbZData[] = {
     { 5, CAM_DATA_05 },
     { 60, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x4 | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | JUMP2_FLG_4 | JUMP2_FLG_2, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetNormal0ModeJumpData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,            // CAM_DATA_Y_OFFSET
-        240,           // CAM_DATA_01
-        340,          // CAM_DATA_02
-        10,             // CAM_DATA_PITCHTARGET
-        30,             // CAM_DATA_04
-        12,            // CAM_DATA_05
-        40,           // CAM_DATA_YAWDIFFRANGE
-        60,             // CAM_DATA_FOV
-        50,             // CAM_DATA_08
-        (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
+    NORM1_FIXED_DATA(-20, 240, 340, 10, 30, 12, 40, 60, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 // Function: PARA1
@@ -245,7 +219,7 @@ CameraModeValue sSetNormal0ModeFreeFallData[] = {
     { 5, CAM_DATA_05 },
     { 70, CAM_DATA_FOV },
     { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x80 | 0x8, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | PARA1_FLG_80 | PARA1_FLG_8, CAM_DATA_FLAGS },
     { 60, CAM_DATA_11 },
     { 12, CAM_DATA_12 },
 };
@@ -277,23 +251,14 @@ CameraModeValue sSetNormal0ModeChargeZData[] = {
     { 5, CAM_DATA_05 },
     { 80, CAM_DATA_FOV },
     { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 60, CAM_DATA_11 },
     { 0, CAM_DATA_12 },
 };
 
 CameraModeValue sSetNormal0ModeStillData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,            // CAM_DATA_Y_OFFSET
-        280,          // CAM_DATA_01
-        320,          // CAM_DATA_02
-        10,             // CAM_DATA_PITCHTARGET
-        100,           // CAM_DATA_04
-        100,            // CAM_DATA_05
-        100,           // CAM_DATA_YAWDIFFRANGE
-        60,             // CAM_DATA_FOV
-        20,           // CAM_DATA_08
-        (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
+    NORM1_FIXED_DATA(-20, 280, 320, 10, 100, 100, 100, 60, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 // Function: PARA1
@@ -307,7 +272,7 @@ CameraModeValue sSetNormal0ModePushPullData[] = {
     { 5, CAM_DATA_05 },
     { 70, CAM_DATA_FOV },
     { 30, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x22, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 80, CAM_DATA_11 },
     { 0, CAM_DATA_12 },
 };
@@ -324,7 +289,7 @@ CameraModeValue sSetNormal0ModeFollowBoomerangData[] = {
     { 40, CAM_DATA_17 },
     { 50, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 30, CAM_DATA_11 },
 };
 
@@ -342,17 +307,8 @@ CameraModeValue sSetNormal0ModeDekuShootData[] = {
 };
 
 CameraModeValue sSetNormal0ModeGoronDashData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        50,            // CAM_DATA_Y_OFFSET
-        160,          // CAM_DATA_01
-        255,          // CAM_DATA_02
-        -2,             // CAM_DATA_PITCHTARGET
-        12,           // CAM_DATA_04
-        10,            // CAM_DATA_05
-        40,           // CAM_DATA_YAWDIFFRANGE
-        92,             // CAM_DATA_FOV
-        88,           // CAM_DATA_08
-        (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1)),
+    NORM1_FIXED_DATA(50, 160, 255, -2, 12, 10, 40, 92, 88,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetNormal0ModeDekuHideData[] = {
@@ -366,23 +322,14 @@ CameraModeValue sSetNormal0ModeDekuHideData[] = {
     { 5, CAM_DATA_05 },
     { 80, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x22, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | PARA1_FLG_20 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 80, CAM_DATA_11 },
     { 20, CAM_DATA_12 },
 };
 
 CameraModeValue sSetNormal0ModeDekuFlyData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        0xFFB0,           // CAM_DATA_Y_OFFSET
-        280,           // CAM_DATA_01
-        320,           // CAM_DATA_02
-        40,           // CAM_DATA_PITCHTARGET
-        20,               // CAM_DATA_04
-        12,           // CAM_DATA_05
-        40,           // CAM_DATA_YAWDIFFRANGE
-        80,               // CAM_DATA_FOV
-        80,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(0xFFB0, 280, 320, 40, 20, 12, 40, 80, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetNormal0ModeDekuFlyZData[] = {
@@ -396,23 +343,15 @@ CameraModeValue sSetNormal0ModeDekuFlyZData[] = {
     { 5, CAM_DATA_05 },
     { 70, CAM_DATA_FOV },
     { 90, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x0E, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 90, CAM_DATA_11 },
     { 0, CAM_DATA_12 },
 };
 
 CameraModeValue sSetNormal0ModeGoronJumpData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -10,              // CAM_DATA_Y_OFFSET
-        160,           // CAM_DATA_01
-        400,           // CAM_DATA_02
-        0,                // CAM_DATA_PITCHTARGET
-        18,           // CAM_DATA_04
-        12,           // CAM_DATA_05
-        40,           // CAM_DATA_YAWDIFFRANGE
-        80,               // CAM_DATA_FOV
-        60,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(
+        -10, 160, 400, 0, 18, 12, 40, 80, 60,
+        (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetNormal0ModeZoraFinData[] = {
@@ -444,7 +383,7 @@ CameraModeValue sSetNormal3ModeNormalData[] = {
     { 40, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 100, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x84, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetNormal3ModeTargetData[] = {
@@ -458,7 +397,7 @@ CameraModeValue sSetNormal3ModeTargetData[] = {
     { 5, CAM_DATA_05 },
     { 60, CAM_DATA_FOV },
     { 100, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x03, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_2 | PARA1_FLG_1, CAM_DATA_FLAGS },
     { 80, CAM_DATA_11 },
     { 0, CAM_DATA_12 },
 };
@@ -474,7 +413,7 @@ CameraModeValue sSetNormal3ModeFreeFallData[] = {
     { 40, CAM_DATA_YAWDIFFRANGE },
     { 80, CAM_DATA_FOV },
     { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x4, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetNormal3ModeGoronJumpData[] = {
@@ -488,7 +427,7 @@ CameraModeValue sSetNormal3ModeGoronJumpData[] = {
     { 40, CAM_DATA_YAWDIFFRANGE },
     { 70, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_8 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetNormal3ModeDekuFlyData[] = {
@@ -502,7 +441,7 @@ CameraModeValue sSetNormal3ModeDekuFlyData[] = {
     { 60, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x5, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_4 | JUMP3_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetNormal3ModeDekuHideData[] = {
@@ -516,21 +455,12 @@ CameraModeValue sSetNormal3ModeDekuHideData[] = {
     { 60, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x85, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_4 | JUMP3_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetNormal3ModeStillData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -40,              // CAM_DATA_Y_OFFSET
-        80,               // CAM_DATA_01
-        300,              // CAM_DATA_02
-        20,               // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        60,               // CAM_DATA_FOV
-        20,               // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-40, 80, 300, 20, 100, 100, 100, 60, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetNormal3ModeGoronDashData[] = {
@@ -544,7 +474,7 @@ CameraModeValue sSetNormal3ModeGoronDashData[] = {
     { 40, CAM_DATA_YAWDIFFRANGE },
     { 80, CAM_DATA_FOV },
     { 35, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_8 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 /*=====================================================================
@@ -557,7 +487,7 @@ CameraModeValue sSetPivotDivingModeNormalData[] = {
     { -40, CAM_DATA_Y_OFFSET },
     { 60, 1 },
     { 60, CAM_DATA_FOV },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | UNIQ2_FLG_2, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetPivotDivingModeTargetData[] = {
@@ -565,7 +495,7 @@ CameraModeValue sSetPivotDivingModeTargetData[] = {
     { -30, CAM_DATA_Y_OFFSET },
     { 45, 1 },
     { 100, CAM_DATA_FOV },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | UNIQ2_FLG_1, CAM_DATA_FLAGS },
 };
 
 /*=====================================================================
@@ -574,42 +504,15 @@ CameraModeValue sSetPivotDivingModeTargetData[] = {
  */
 
 CameraModeValue sSetHorseModeNormalData[] = {
-    SET_NORM3_STATICDATA( // Camera_Normal3()
-        -50,              // yOffset
-        220,              // distMin
-        250,              // distMax
-        10,               // yawUpdateRateInv
-        10,               // pitchUpdateRateInv
-        20,               // fovTarget
-        60,               // maxAtLERPScale
-        80,               // pitchTarget
-        SHRINKWINVAL_NONE | IFACE_ALPHA(6) | NORM3_FLG_20),
+    NORM3_FIXED_DATA(-50, 220, 250, 10, 10, 20, 60, 80, SHRINKWINVAL_NONE | IFACE_ALPHA(6) | NORM3_FLG_20),
 };
 
 CameraModeValue sSetHorseModeTargetData[] = {
-    SET_NORM3_STATICDATA( // Camera_Normal3()
-        -40,              // yOffset
-        180,              // distMin
-        200,              // distMax
-        -3,               // yawUpdateRateInv
-        2,                // pitchUpdateRateInv
-        100,              // fovTarget
-        50,               // maxAtLERPScale
-        90,               // pitchTarget
-        SHRINKWINVAL_MEDIUM | IFACE_ALPHA(6) | NORM3_FLG_2),
+    NORM3_FIXED_DATA(-40, 180, 200, -3, 2, 100, 50, 90, SHRINKWINVAL_MEDIUM | IFACE_ALPHA(6) | NORM3_FLG_2),
 };
 
 CameraModeValue sSetHorseModeJumpData[] = {
-    SET_NORM3_STATICDATA( // Camera_Normal3()
-        -50,              // yOffset
-        220,              // distMin
-        260,              // distMax
-        10,               // yawUpdateRateInv
-        10,               // pitchUpdateRateInv
-        20,               // fovTarget
-        60,               // maxAtLERPScale
-        50,               // pitchTarge
-        SHRINKWINVAL_NONE | IFACE_ALPHA(6)),
+    NORM3_FIXED_DATA(-50, 220, 260, 10, 10, 20, 60, 50, SHRINKWINVAL_NONE | IFACE_ALPHA(6)),
 };
 
 // Function: SUBJ1
@@ -638,8 +541,8 @@ CameraModeValue sSetHorseModeSlingShotData[] = {
     { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0), CAM_DATA_FLAGS },
 };
 
-// Function: BATT1
 CameraModeValue sSetHorseModeBattleData[] = {
+    /* CAM_FUNC_BATT1 */
     { 0xFFC4, CAM_DATA_Y_OFFSET },
     { 180, CAM_DATA_01 },
     { 280, CAM_DATA_02 },
@@ -650,7 +553,7 @@ CameraModeValue sSetHorseModeBattleData[] = {
     { 60, CAM_DATA_17 },
     { 60, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_11 },
     { 40, CAM_DATA_18 },
 };
@@ -667,7 +570,7 @@ CameraModeValue sSetHorseModeFollowTargetData[] = {
     { 15, CAM_DATA_17 },
     { 45, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(6) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(6) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 20, CAM_DATA_11 },
 };
 
@@ -689,16 +592,7 @@ CameraModeValue sSetHorseModeTalkData[] = {
 };
 
 CameraModeValue sSetHorseModeStillData[] = {
-    SET_NORM3_STATICDATA( // Camera_Normal3()
-        -40,              // yOffset
-        180,              // distMin
-        200,              // distMax
-        -3,               // yawUpdateRateInv
-        100,              // pitchUpdateRateInv
-        100,              // fovTarget
-        60,               // maxAtLERPScale
-        10,               // pitchTarget
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | NORM3_FLG_80),
+    NORM3_FIXED_DATA(-40, 180, 200, -3, 100, 100, 60, 10, SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | NORM3_FLG_80),
 };
 
 /*=====================================================================
@@ -707,16 +601,7 @@ CameraModeValue sSetHorseModeStillData[] = {
  */
 
 CameraModeValue sSetZoraDivingModeNormalData[] = {
-    SET_NORM3_STATICDATA( // Camera_Normal3()
-        -20,              // yOffset
-        250,              // distMin
-        250,              // distMax
-        0,                // yawUpdateRateInv
-        20,               // pitchUpdateRateInv
-        20,               // fovTarget
-        60,               // maxAtLERPScale
-        50,               // pitchTarget
-        SHRINKWINVAL_NONE | IFACE_ALPHA(6) | NORM3_FLG_80),
+    NORM3_FIXED_DATA(-20, 250, 250, 0, 20, 20, 60, 50, SHRINKWINVAL_NONE | IFACE_ALPHA(6) | NORM3_FLG_80),
 };
 
 /*=====================================================================
@@ -746,10 +631,7 @@ CameraModeValue sSetPrerendPivotModeNormalData[] = {
  */
 
 CameraModeValue sSetDoorCModeNormalData[] = {
-    SET_SPEC9_STATICDATA( // Camera_Special9()
-        -5,               // yOffset
-        60,               // fov
-        SHRINKWINVAL_NONE_4 | IFACE_ALPHA(2) | SPEC9_FLG_2),
+    SPEC9_FIXED_DATA(-5, 60, SHRINKWINVAL_NONE_4 | IFACE_ALPHA(2) | SPEC9_FLG_2),
 };
 
 /*=====================================================================
@@ -789,17 +671,8 @@ CameraModeValue D_801B4EF4[] = {
  */
 
 CameraModeValue D_801B4EF8[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -40,              // CAM_DATA_Y_OFFSET
-        600,           // CAM_DATA_01
-        600,           // CAM_DATA_02
-        45,           // CAM_DATA_PITCHTARGET
-        50,               // CAM_DATA_04
-        10,               // CAM_DATA_05
-        50,               // CAM_DATA_YAWDIFFRANGE
-        45,               // CAM_DATA_FOV
-        90,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_40 | NORM1_FLG_2),
+    NORM1_FIXED_DATA(-40, 600, 600, 45, 50, 10, 50, 45, 90,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_40 | NORM1_FLG_2)),
 };
 
 CameraModeValue D_801B4F20[] = {
@@ -813,37 +686,19 @@ CameraModeValue D_801B4F20[] = {
     { 5, CAM_DATA_05 },
     { 60, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 80, CAM_DATA_11 },
     { 0, CAM_DATA_12 },
 };
 
 CameraModeValue D_801B4F50[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -40,              // CAM_DATA_Y_OFFSET
-        600,           // CAM_DATA_01
-        600,           // CAM_DATA_02
-        45,           // CAM_DATA_PITCHTARGET
-        50,               // CAM_DATA_04
-        10,               // CAM_DATA_05
-        50,               // CAM_DATA_YAWDIFFRANGE
-        45,               // CAM_DATA_FOV
-        60,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-40, 600, 600, 45, 50, 10, 50, 45, 60,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B4F78[] = {
-    /* CAM_FUNC_NORM1 */
-    { -40, CAM_DATA_Y_OFFSET },
-    { 600, CAM_DATA_01 },
-    { 600, CAM_DATA_02 },
-    { 45, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 45, CAM_DATA_FOV },
-    { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-40, 600, 600, 45, 100, 100, 100, 45, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 /*=====================================================================
@@ -852,31 +707,12 @@ CameraModeValue D_801B4F78[] = {
  */
 
 CameraModeValue sSetNormal1ModeNormalData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        280,           // CAM_DATA_01
-        320,           // CAM_DATA_02
-        15,           // CAM_DATA_PITCHTARGET
-        18,           // CAM_DATA_04
-        12,           // CAM_DATA_05
-        70,           // CAM_DATA_YAWDIFFRANGE
-        60,               // CAM_DATA_FOV
-        80,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_2),
+    NORM1_FIXED_DATA(-20, 280, 320, 15, 18, 12, 70, 60, 80, (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_2)),
 };
 
 CameraModeValue sSetNormal1ModeStillData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        280,           // CAM_DATA_01
-        320,           // CAM_DATA_02
-        15,           // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        60,               // CAM_DATA_FOV
-        20,               // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 280, 320, 15, 100, 100, 100, 60, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 /*=====================================================================
@@ -884,18 +720,10 @@ CameraModeValue sSetNormal1ModeStillData[] = {
  *=====================================================================
  */
 
+// Normal4
 CameraModeValue D_801B4FF0[] = {
-    /* CAM_FUNC_NORM4 */
-    { -20, CAM_DATA_Y_OFFSET },
-    { 280, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 18, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 40, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x3, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-20, 280, 320, 10, 18, 12, 40, 60, 80,
+                     SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_2 | NORM1_FLG_1),
 };
 
 /*=====================================================================
@@ -911,7 +739,7 @@ CameraModeValue D_801B5018[] = {
     { 10, CAM_DATA_04 },
     { 20, CAM_DATA_05 },
     { 60, CAM_DATA_FOV },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | FIXD2_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B5034[] = {
@@ -922,7 +750,7 @@ CameraModeValue D_801B5034[] = {
     { 100, CAM_DATA_04 },
     { 80, CAM_DATA_05 },
     { 60, CAM_DATA_FOV },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x40, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | FIXD2_FLG_40, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B5050[] = {
@@ -933,7 +761,7 @@ CameraModeValue D_801B5050[] = {
     { 100, CAM_DATA_04 },
     { 50, CAM_DATA_05 },
     { 45, CAM_DATA_FOV },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x80, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | FIXD2_FLG_80, CAM_DATA_FLAGS },
 };
 
 /*=====================================================================
@@ -955,13 +783,7 @@ CameraModeValue D_801B506C[] = {
  */
 
 CameraModeValue sSetSpiralDoorModeNormalData[] = {
-    SET_SPEC8_STATICDATA( // Camera_Special8()
-        -40,              // yOffset
-        50,               // eyeStepScale
-        80,               // posStepScale
-        60,               // fov
-        10,               // spiralDoorCsLength (1/5th)
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | SPEC8_FLG_1),
+    SPEC8_FIXED_DATA(-40, 50, 80, 60, 10, SHRINKWINVAL_NONE | IFACE_ALPHA(0) | SPEC8_FLG_1),
 };
 
 /*=====================================================================
@@ -970,17 +792,8 @@ CameraModeValue sSetSpiralDoorModeNormalData[] = {
  */
 
 CameraModeValue sSetDungeon0ModeNormalData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        150,           // CAM_DATA_01
-        250,              // CAM_DATA_02
-        5,           // CAM_DATA_PITCHTARGET
-        18,           // CAM_DATA_04
-        5,           // CAM_DATA_05
-        45,           // CAM_DATA_YAWDIFFRANGE
-        60,               // CAM_DATA_FOV
-        80,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 150, 250, 5, 18, 5, 45, 60, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon0ModeTargetData[] = {
@@ -994,7 +807,7 @@ CameraModeValue sSetDungeon0ModeTargetData[] = {
     { 5, CAM_DATA_05 },
     { 45, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x42, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_40 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 80, CAM_DATA_11 },
     { 0, CAM_DATA_12 },
 };
@@ -1011,7 +824,7 @@ CameraModeValue sSetDungeon0ModeFollowTargetData[] = {
     { 15, CAM_DATA_17 },
     { 45, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 20, CAM_DATA_11 },
 };
 
@@ -1027,7 +840,7 @@ CameraModeValue sSetDungeon0ModeBattleData[] = {
     { 25, CAM_DATA_17 },
     { 50, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_11 },
     { 50, CAM_DATA_18 },
 };
@@ -1044,22 +857,13 @@ CameraModeValue sSetDungeon0ModeFollowBoomerangData[] = {
     { 40, CAM_DATA_17 },
     { 55, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 30, CAM_DATA_11 },
 };
 
 CameraModeValue sSetDungeon0ModeJumpData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        150,           // CAM_DATA_01
-        250,              // CAM_DATA_02
-        5,           // CAM_DATA_PITCHTARGET
-        24,           // CAM_DATA_04
-        5,           // CAM_DATA_05
-        50,               // CAM_DATA_YAWDIFFRANGE
-        60,               // CAM_DATA_FOV
-        50,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 150, 250, 5, 24, 5, 50, 60, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon0ModeFreeFallData[] = {
@@ -1073,7 +877,7 @@ CameraModeValue sSetDungeon0ModeFreeFallData[] = {
     { 5, CAM_DATA_05 },
     { 70, CAM_DATA_FOV },
     { 10, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x88, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | PARA1_FLG_80 | PARA1_FLG_8, CAM_DATA_FLAGS },
     { 70, CAM_DATA_11 },
     { 12, CAM_DATA_12 },
 };
@@ -1101,7 +905,7 @@ CameraModeValue sSetDungeon0ModeClimbZData[] = {
     { 5, CAM_DATA_05 },
     { 60, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x4 | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | JUMP2_FLG_4 | JUMP2_FLG_2, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetDungeon0ModeChargeData[] = {
@@ -1131,7 +935,7 @@ CameraModeValue sSetDungeon0ModeChargeZData[] = {
     { 5, CAM_DATA_05 },
     { 80, CAM_DATA_FOV },
     { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 60, CAM_DATA_11 },
     { 0, CAM_DATA_12 },
 };
@@ -1169,17 +973,8 @@ CameraModeValue sSetDungeon0ModeHangZData[] = {
 };
 
 CameraModeValue sSetDungeon0ModeStillData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -10,              // CAM_DATA_Y_OFFSET
-        180,              // CAM_DATA_01
-        220,              // CAM_DATA_02
-        10,               // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        60,               // CAM_DATA_FOV
-        10,               // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-10, 180, 220, 10, 100, 100, 100, 60, 10,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon0ModePushPullData[] = {
@@ -1193,7 +988,7 @@ CameraModeValue sSetDungeon0ModePushPullData[] = {
     { 5, CAM_DATA_05 },
     { 70, CAM_DATA_FOV },
     { 30, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x22, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 80, CAM_DATA_11 },
     { 0, CAM_DATA_12 },
 };
@@ -1211,7 +1006,7 @@ CameraModeValue D_801B5338[] = {
     { 0, CAM_DATA_10 },
     { 0, CAM_DATA_18 },
     { 45, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1224,7 +1019,7 @@ CameraModeValue D_801B535C[] = {
     { 0, CAM_DATA_10 },
     { 6, CAM_DATA_18 },
     { 80, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1237,7 +1032,7 @@ CameraModeValue D_801B5380[] = {
     { 0, CAM_DATA_10 },
     { 0, CAM_DATA_18 },
     { 60, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1250,7 +1045,7 @@ CameraModeValue D_801B53A4[] = {
     { 0, CAM_DATA_10 },
     { 12, CAM_DATA_18 },
     { 55, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1263,7 +1058,7 @@ CameraModeValue D_801B53C8[] = {
     { 0, CAM_DATA_10 },
     { 4, CAM_DATA_18 },
     { 42, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1281,7 +1076,7 @@ CameraModeValue D_801B53EC[] = {
     { 165, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 70, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1294,7 +1089,7 @@ CameraModeValue D_801B5410[] = {
     { 140, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 70, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1307,7 +1102,7 @@ CameraModeValue D_801B5434[] = {
     { 140, CAM_DATA_10 },
     { 15, CAM_DATA_18 },
     { 70, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1320,7 +1115,7 @@ CameraModeValue D_801B5458[] = {
     { 160, CAM_DATA_10 },
     { 6, CAM_DATA_18 },
     { 70, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1333,7 +1128,7 @@ CameraModeValue D_801B547C[] = {
     { 0xFF74, CAM_DATA_10 },
     { 30, CAM_DATA_18 },
     { 70, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x0C, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_8 | KEEP4_FLG_4, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1351,7 +1146,7 @@ CameraModeValue D_801B54A0[] = {
     { 150, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 65, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1364,7 +1159,7 @@ CameraModeValue D_801B54C4[] = {
     { 0x00AA, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 65, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1377,7 +1172,7 @@ CameraModeValue D_801B54E8[] = {
     { 140, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 65, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1390,7 +1185,7 @@ CameraModeValue D_801B550C[] = {
     { 160, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 70, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1403,7 +1198,7 @@ CameraModeValue D_801B5530[] = {
     { 150, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 70, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1421,7 +1216,7 @@ CameraModeValue D_801B5554[] = {
     { 0xFF65, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 75, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_8 | KEEP4_FLG_4, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1434,7 +1229,7 @@ CameraModeValue D_801B5578[] = {
     { 0xFF65, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 75, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_8 | KEEP4_FLG_4, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1447,7 +1242,7 @@ CameraModeValue D_801B559C[] = {
     { 0x00AA, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 75, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1460,7 +1255,7 @@ CameraModeValue D_801B55C0[] = {
     { 0xFF65, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 75, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_8 | KEEP4_FLG_4, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1473,7 +1268,7 @@ CameraModeValue D_801B55E4[] = {
     { 0xFF6A, CAM_DATA_10 },
     { -5, CAM_DATA_18 },
     { 75, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_8 | KEEP4_FLG_4, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 6, CAM_DATA_12 },
 };
@@ -1491,7 +1286,7 @@ CameraModeValue D_801B5608[] = {
     { 0x00B2, CAM_DATA_10 },
     { 0, CAM_DATA_18 },
     { 45, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x4E, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_40 | KEEP4_FLG_8 | KEEP4_FLG_4 | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 30, CAM_DATA_04 },
     { 10, CAM_DATA_12 },
 };
@@ -1504,7 +1299,7 @@ CameraModeValue D_801B562C[] = {
     { 0x00B2, CAM_DATA_10 },
     { 0, CAM_DATA_18 },
     { 45, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x4E, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_40 | KEEP4_FLG_8 | KEEP4_FLG_4 | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 30, CAM_DATA_04 },
     { 10, CAM_DATA_12 },
 };
@@ -1517,7 +1312,7 @@ CameraModeValue D_801B5650[] = {
     { 0x00B2, CAM_DATA_10 },
     { 0, CAM_DATA_18 },
     { 45, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x4E, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_40 | KEEP4_FLG_8 | KEEP4_FLG_4 | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 30, CAM_DATA_04 },
     { 10, CAM_DATA_12 },
 };
@@ -1531,7 +1326,7 @@ CameraModeValue D_801B5674[] = {
     { 0x00B2, CAM_DATA_10 },
     { 0, CAM_DATA_18 },
     { 45, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x4E, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_40 | KEEP4_FLG_8 | KEEP4_FLG_4 | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 30, CAM_DATA_04 },
     { 10, CAM_DATA_12 },
 };
@@ -1544,7 +1339,7 @@ CameraModeValue D_801B5698[] = {
     { 0x00B2, CAM_DATA_10 },
     { 0, CAM_DATA_18 },
     { 45, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x4E, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_40 | KEEP4_FLG_8 | KEEP4_FLG_4 | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 30, CAM_DATA_04 },
     { 10, CAM_DATA_12 },
 };
@@ -1606,7 +1401,7 @@ CameraModeValue D_801B5728[] = {
     { 160, CAM_DATA_10 },
     { 10, CAM_DATA_18 },
     { 60, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x4 | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_4 | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 5, CAM_DATA_04 },
     { 100, CAM_DATA_12 },
 };
@@ -1619,7 +1414,7 @@ CameraModeValue D_801B574C[] = {
     { 160, CAM_DATA_10 },
     { 10, CAM_DATA_18 },
     { 60, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x4 | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_4 | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 5, CAM_DATA_04 },
     { 100, CAM_DATA_12 },
 };
@@ -1642,45 +1437,18 @@ CameraModeValue sSetLongChestOpeningModeNormalData[] = {
  */
 
 CameraModeValue sSetDungeon1ModeNormalData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        350,              // CAM_DATA_01
-        400,           // CAM_DATA_02
-        45,           // CAM_DATA_PITCHTARGET
-        50,               // CAM_DATA_04
-        20,               // CAM_DATA_05
-        70,           // CAM_DATA_YAWDIFFRANGE
-        50,               // CAM_DATA_FOV
-        80,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 350, 400, 45, 50, 20, 70, 50, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon1ModeJumpData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        350,              // CAM_DATA_01
-        400,           // CAM_DATA_02
-        40,           // CAM_DATA_PITCHTARGET
-        50,               // CAM_DATA_04
-        20,               // CAM_DATA_05
-        50,               // CAM_DATA_YAWDIFFRANGE
-        50,               // CAM_DATA_FOV
-        50,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 350, 400, 40, 50, 20, 50, 50, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon1ModeStillData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        350,              // CAM_DATA_01
-        400,           // CAM_DATA_02
-        45,           // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        50,               // CAM_DATA_FOV
-        20,               // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 350, 400, 45, 100, 100, 100, 50, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon1ModePushPullData[] = {
@@ -1694,7 +1462,7 @@ CameraModeValue sSetDungeon1ModePushPullData[] = {
     { 5, CAM_DATA_05 },
     { 70, CAM_DATA_FOV },
     { 30, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x22, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 30, CAM_DATA_11 },
     { 0, CAM_DATA_12 },
 };
@@ -1730,16 +1498,8 @@ CameraModeValue D_801B5834[] = {
  *=====================================================================
  */
 
-CameraModeValue D_801B5844[] = {
-    /* CAM_FUNC_PARA2 */
-    { 0xFFDD, CAM_DATA_Y_OFFSET },
-    { 160, CAM_DATA_02 },
-    { 65, CAM_DATA_01 },
-    { -5,     CAM_DATA_PITCHTARGET },
-    { 2, CAM_DATA_04 },
-    { 70,     CAM_DATA_FOV },
-    { 0x0063, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+CameraModeValue sSetMazeModeNormalData[] = {
+    PARA2_FIXED_DATA(0xFFDD, 160, 65, -5, 2, 70, 99, SHRINKWINVAL_NONE | IFACE_ALPHA(0) | PARA2_FLG_2),
 };
 
 /*=====================================================================
@@ -1747,16 +1507,8 @@ CameraModeValue D_801B5844[] = {
  *=====================================================================
  */
 
-CameraModeValue D_801B5864[] = {
-    /* CAM_FUNC_NORM2 */
-    { 20,     CAM_DATA_Y_OFFSET },
-    { 200,    CAM_DATA_01 },
-    { 0x0320, CAM_DATA_02 },
-    { 15, CAM_DATA_PITCHTARGET },
-    { 6, CAM_DATA_04 },
-    { 70,     CAM_DATA_FOV },
-    { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+CameraModeValue sSetRemoteBombModeNormalData[] = {
+    NORM2_FIXED_DATA(20, 200, 800, 15, 6, 70, 40, SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM2_FLG_2),
 };
 
 /*=====================================================================
@@ -1772,7 +1524,7 @@ CameraModeValue D_801B5884[] = {
     { 10,     CAM_DATA_04 },
     { 20,     CAM_DATA_05 },
     { 60,     CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_1, CAM_DATA_FLAGS },
 };
 
 /*=====================================================================
@@ -1820,7 +1572,7 @@ CameraModeValue D_801B58D8[] = {
     { 100,    CAM_DATA_04 },
     { 10,     CAM_DATA_05 },
     { 60,     CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x9, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_8 | FIXD2_FLG_1, CAM_DATA_FLAGS },
 };
 
 /*=====================================================================
@@ -1837,49 +1589,22 @@ CameraModeValue D_801B58F4[] = {
 };
 
 /*=====================================================================
- *                   Custom Data: TOWER0 Setting
+ *             Custom Data: CAM_SET_TOWER_ASCENT Setting
  *=====================================================================
  */
 
 CameraModeValue sSetTowerClimbModeNormalData[] = {
-    /* CAM_FUNC_NORM0 */
-    { 0,      CAM_DATA_Y_OFFSET },
-    { 350,    CAM_DATA_01 },
-    { 400, CAM_DATA_02 },
-    { 20,     CAM_DATA_21 },
-    { 20,     CAM_DATA_04 },
-    { 50,     CAM_DATA_YAWDIFFRANGE },
-    { 65, CAM_DATA_FOV },
-    { 50,     CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM0_FLG_1, CAM_DATA_FLAGS },
+    NORM0_FIXED_DATA(0, 350, 400, 20, 20, 50, 65, 50, SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM0_FLG_1),
 };
 
 CameraModeValue sSetTowerClimbModeJumpData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        340,           // CAM_DATA_01
-        400,           // CAM_DATA_02
-        10,               // CAM_DATA_PITCHTARGET
-        30,               // CAM_DATA_04
-        12,           // CAM_DATA_05
-        40,           // CAM_DATA_YAWDIFFRANGE
-        65,           // CAM_DATA_FOV
-        50,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 340, 400, 10, 30, 12, 40, 65, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetTowerClimbModeStillData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        0,                // CAM_DATA_Y_OFFSET
-        350,              // CAM_DATA_01
-        400,           // CAM_DATA_02
-        10,               // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        65,           // CAM_DATA_FOV
-        20,               // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(0, 350, 400, 10, 100, 100, 100, 65, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 /*=====================================================================
@@ -1898,7 +1623,7 @@ CameraModeValue D_801B5978[] = {
     { 5, CAM_DATA_05 },
     { 70,     CAM_DATA_FOV },
     { 50,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x8 | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_8 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 80,     CAM_DATA_11 },
     { 0,      CAM_DATA_12 },
 };
@@ -1909,17 +1634,8 @@ CameraModeValue D_801B5978[] = {
  */
 
 CameraModeValue D_801B59A8[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-    0,      // CAM_DATA_Y_OFFSET
-    400, // CAM_DATA_01
-    0x01F4, // CAM_DATA_02
-    15, // CAM_DATA_PITCHTARGET
-    18, // CAM_DATA_04
-    12, // CAM_DATA_05
-    35, // CAM_DATA_YAWDIFFRANGE
-    70,     // CAM_DATA_FOV
-    30,     // CAM_DATA_08
-    SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(0, 400, 0x01F4, 15, 18, 12, 35, 70, 30,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 /*=====================================================================
@@ -1949,7 +1665,7 @@ CameraModeValue D_801B59F4[] = {
     /* CAM_FUNC_UNIQ0 */
     { 0,   CAM_DATA_Y_OFFSET },
     { 100, CAM_DATA_04 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | UNIQ0_FLG_1, CAM_DATA_FLAGS },
 };
 
 /*=====================================================================
@@ -1961,7 +1677,7 @@ CameraModeValue D_801B5A00[] = {
     /* CAM_FUNC_UNIQ0 */
     { 0,  CAM_DATA_Y_OFFSET },
     { 30, CAM_DATA_04 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x11, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | UNIQ0_FLG_10 | UNIQ0_FLG_1, CAM_DATA_FLAGS },
 };
 
 /*=====================================================================
@@ -1998,7 +1714,7 @@ CameraModeValue sSetVerticalClimbModeClimbData[] = {
     { 5,      CAM_DATA_05 },
     { 45,     CAM_DATA_FOV },
     { 50,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 70, CAM_DATA_11 },
     { 0,      CAM_DATA_12 },
     { 50,     CAM_DATA_18 },
@@ -2015,23 +1731,14 @@ CameraModeValue D_801B5A64[] = {
     { 5, CAM_DATA_05 },
     { 70,     CAM_DATA_FOV },
     { 50,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2E, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 70, CAM_DATA_11 },
     { 0,      CAM_DATA_12 },
 };
 
 CameraModeValue sSetDungeon2ModeNormalData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -10,              // CAM_DATA_Y_OFFSET
-        270,              // CAM_DATA_01
-        300,              // CAM_DATA_02
-        20,               // CAM_DATA_PITCHTARGET
-        0x001C,           // CAM_DATA_04
-        20,               // CAM_DATA_05
-        65,           // CAM_DATA_YAWDIFFRANGE
-        60,               // CAM_DATA_FOV
-        80,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-10, 270, 300, 20, 0x001C, 20, 65, 60, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon2ModeBattleData[] = {
@@ -2046,37 +1753,19 @@ CameraModeValue sSetDungeon2ModeBattleData[] = {
     { 20,     CAM_DATA_17 },
     { 50,     CAM_DATA_FOV },
     { 60,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_11 },
     { 40, CAM_DATA_18 },
 };
 
 CameraModeValue sSetDungeon2ModeJumpData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        270,              // CAM_DATA_01
-        300,              // CAM_DATA_02
-        40,           // CAM_DATA_PITCHTARGET
-        50,               // CAM_DATA_04
-        20,               // CAM_DATA_05
-        50,               // CAM_DATA_YAWDIFFRANGE
-        60,               // CAM_DATA_FOV
-        50,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 270, 300, 40, 50, 20, 50, 60, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon2ModeStillData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -10,              // CAM_DATA_Y_OFFSET
-        270,              // CAM_DATA_01
-        300,              // CAM_DATA_02
-        20,               // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        60,               // CAM_DATA_FOV
-        20,               // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-10, 270, 300, 20, 100, 100, 100, 60, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon2ModePushPullData[] = {
@@ -2090,23 +1779,14 @@ CameraModeValue sSetDungeon2ModePushPullData[] = {
     { 5, CAM_DATA_05 },
     { 70,     CAM_DATA_FOV },
     { 30,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x22, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 30,     CAM_DATA_11 },
     { 0,      CAM_DATA_12 },
 };
 
 CameraModeValue sSetBossOdolwaModeNormalData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        250,              // CAM_DATA_01
-        350,              // CAM_DATA_02
-        10,               // CAM_DATA_PITCHTARGET
-        24,           // CAM_DATA_04
-        12,           // CAM_DATA_05
-        40,           // CAM_DATA_YAWDIFFRANGE
-        65,           // CAM_DATA_FOV
-        80,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 250, 350, 10, 24, 12, 40, 65, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossOdolwaModeFollowTargetData[] = {
@@ -2138,7 +1818,7 @@ CameraModeValue sSetBossOdolwaModeTalkData[] = {
     { 55,     CAM_DATA_FOV },
     { 20,     CAM_DATA_08 },
     { 20,     CAM_DATA_04 },
-    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | 0x20, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | KEEP3_FLG_20, CAM_DATA_FLAGS },
     { 40, CAM_DATA_18 },
 };
 
@@ -2154,37 +1834,19 @@ CameraModeValue sSetBossOdolwaModeBattleData[] = {
     { 60,     CAM_DATA_17 },
     { 60,     CAM_DATA_FOV },
     { 20,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 10,     CAM_DATA_11 },
     { 40, CAM_DATA_18 },
 };
 
 CameraModeValue sSetBossOdolwaModeJumpData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        250,              // CAM_DATA_01
-        350,              // CAM_DATA_02
-        10,               // CAM_DATA_PITCHTARGET
-        30,               // CAM_DATA_04
-        12,               // CAM_DATA_05
-        40,               // CAM_DATA_YAWDIFFRANGE
-        65,               // CAM_DATA_FOV
-        50,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 250, 350, 10, 30, 12, 40, 65, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossOdolwaModeStillData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        250,              // CAM_DATA_01
-        350,              // CAM_DATA_02
-        10,               // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        65,           // CAM_DATA_FOV
-        15,           // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 250, 350, 10, 100, 100, 100, 65, 15,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B5C80[] = {
@@ -2198,7 +1860,7 @@ CameraModeValue D_801B5C80[] = {
     { 5, CAM_DATA_05 },
     { 80,     CAM_DATA_FOV },
     { 60,     CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x22, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 60,     CAM_DATA_11 },
     { 20,     CAM_DATA_12 },
 };
@@ -2211,7 +1873,7 @@ CameraModeValue D_801B5CB0[] = {
     { 10,     CAM_DATA_04 },
     { 20,     CAM_DATA_05 },
     { 60,     CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x3, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_2 | FIXD2_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B5CCC[] = {
@@ -2222,21 +1884,12 @@ CameraModeValue D_801B5CCC[] = {
     { 10,     CAM_DATA_04 },
     { 20,     CAM_DATA_05 },
     { 60,     CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x20, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_20, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetMiniBossModeNormalData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -15,              // CAM_DATA_Y_OFFSET
-        220,              // CAM_DATA_01
-        280,           // CAM_DATA_02
-        17,           // CAM_DATA_PITCHTARGET
-        14,           // CAM_DATA_04
-        5,           // CAM_DATA_05
-        65,           // CAM_DATA_YAWDIFFRANGE
-        70,               // CAM_DATA_FOV
-        75,           // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-15, 220, 280, 17, 14, 5, 65, 70, 75,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetMiniBossModeFollowTargetData[] = {
@@ -2251,7 +1904,7 @@ CameraModeValue sSetMiniBossModeFollowTargetData[] = {
     { 40, CAM_DATA_17 },
     { 60,     CAM_DATA_FOV },
     { 60,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 20,     CAM_DATA_11 },
 };
 
@@ -2267,37 +1920,19 @@ CameraModeValue sSetMiniBossModeBattleData[] = {
     { 40, CAM_DATA_17 },
     { 60,     CAM_DATA_FOV },
     { 50,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 20,     CAM_DATA_11 },
     { 50,     CAM_DATA_18 },
 };
 
 CameraModeValue sSetMiniBossModeJumpData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -15,              // CAM_DATA_Y_OFFSET
-        220,              // CAM_DATA_01
-        280,           // CAM_DATA_02
-        16,           // CAM_DATA_PITCHTARGET
-        12,           // CAM_DATA_04
-        5,           // CAM_DATA_05
-        60,               // CAM_DATA_YAWDIFFRANGE
-        70,               // CAM_DATA_FOV
-        40,           // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-15, 220, 280, 16, 12, 5, 60, 70, 40,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetMiniBossModeStillData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -15,              // CAM_DATA_Y_OFFSET
-        220,              // CAM_DATA_01
-        280,           // CAM_DATA_02
-        16,           // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        70,               // CAM_DATA_FOV
-        20,               // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-15, 220, 280, 16, 100, 100, 100, 70, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B5DC4[] = {
@@ -2305,21 +1940,12 @@ CameraModeValue D_801B5DC4[] = {
     { -40, CAM_DATA_Y_OFFSET },
     { 10,  CAM_DATA_04 },
     { 60,  CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x10, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD1_FLG_10, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B5DD4[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        80,               // CAM_DATA_01
-        120,             // CAM_DATA_02
-        -10,              // CAM_DATA_PITCHTARGET
-        15,              // CAM_DATA_04
-        20,               // CAM_DATA_05
-        40,             // CAM_DATA_YAWDIFFRANGE
-        70,               // CAM_DATA_FOV
-        70,             // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2),
+    NORM1_FIXED_DATA(-20, 80, 120, -10, 15, 20, 40, 70, 70,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2)),
 };
 
 CameraModeValue D_801B5DFC[] = {
@@ -2333,7 +1959,7 @@ CameraModeValue D_801B5DFC[] = {
     { 5, CAM_DATA_05 },
     { 75, CAM_DATA_FOV },
     { 50,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x42, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_40 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 60,     CAM_DATA_11 },
     { 0,      CAM_DATA_12 },
 };
@@ -2346,7 +1972,7 @@ CameraModeValue D_801B5E2C[] = {
     { 100,    CAM_DATA_04 },
     { 30,     CAM_DATA_05 },
     { 70,     CAM_DATA_FOV },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | FIXD2_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B5E48[] = {
@@ -2357,49 +1983,22 @@ CameraModeValue D_801B5E48[] = {
     { 100,    CAM_DATA_04 },
     { 20,     CAM_DATA_05 },
     { 60,     CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x8, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_8, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B5E64[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        0x0320,           // CAM_DATA_01
-        0x0320,           // CAM_DATA_02
-        60,               // CAM_DATA_PITCHTARGET
-        50,               // CAM_DATA_04
-        10,               // CAM_DATA_05
-        50,               // CAM_DATA_YAWDIFFRANGE
-        45,               // CAM_DATA_FOV
-        90,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_40 | NORM1_FLG_2),
+    NORM1_FIXED_DATA(-20, 800, 800, 60, 50, 10, 50, 45, 90,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_40 | NORM1_FLG_2)),
 };
 
 CameraModeValue D_801B5E8C[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        0x0320,           // CAM_DATA_01
-        0x0320,           // CAM_DATA_02
-        60,               // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        45,               // CAM_DATA_FOV
-        20,               // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 800, 800, 60, 100, 100, 100, 45, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon3ModeNormalData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -30,              // CAM_DATA_Y_OFFSET },
-        180,              // CAM_DATA_01 },
-        250,              // CAM_DATA_02 },
-        -5,               // CAM_DATA_PITCHTARGET },
-        18,           // CAM_DATA_04 },
-        20,               // CAM_DATA_05 },
-        60,               // CAM_DATA_YAWDIFFRANGE },
-        55,               // CAM_DATA_FOV },
-        50,               // CAM_DATA_08 },
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2),
+    NORM1_FIXED_DATA(-30, 180, 250, -5, 18, 20, 60, 55, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2)),
 };
 
 CameraModeValue sSetDungeon3ModeTargetData[] = {
@@ -2413,37 +2012,19 @@ CameraModeValue sSetDungeon3ModeTargetData[] = {
     { 5,   CAM_DATA_05 },
     { 45,  CAM_DATA_FOV },
     { 50,  CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x42, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_40 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 80,  CAM_DATA_11 },
     { 0,   CAM_DATA_12 },
 };
 
 CameraModeValue sSetDungeon3ModeJumpData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -30,              // CAM_DATA_Y_OFFSET
-        160,           // CAM_DATA_01
-        190,           // CAM_DATA_02
-        0,                // CAM_DATA_PITCHTARGET
-        30,               // CAM_DATA_04
-        20,               // CAM_DATA_05
-        60,               // CAM_DATA_YAWDIFFRANGE
-        55,               // CAM_DATA_FOV
-        30,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-30, 160, 190, 0, 30, 20, 60, 55, 30,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon3ModeStillData[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -40,              // CAM_DATA_Y_OFFSET
-        0x00AA,           // CAM_DATA_01
-        200,              // CAM_DATA_02
-        0,                // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        55,               // CAM_DATA_FOV
-        20,               // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-40, 0x00AA, 200, 0, 100, 100, 100, 55, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon3ModePushPullData[] = {
@@ -2457,7 +2038,7 @@ CameraModeValue sSetDungeon3ModePushPullData[] = {
     { 5, CAM_DATA_05 },
     { 70,     CAM_DATA_FOV },
     { 30,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x22, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 30,     CAM_DATA_11 },
     { 0,      CAM_DATA_12 },
 };
@@ -2498,7 +2079,7 @@ CameraModeValue sSetTelescopeModeFirstPersonData[] = {
     { 0, CAM_DATA_17 },
     { 0, CAM_DATA_18 },
     { 30, CAM_DATA_FOV },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(2) | 0x10, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(2) | FIXD1_FLG_10, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetTelescopeModeDekuHideData[] = {
@@ -2511,21 +2092,12 @@ CameraModeValue sSetTelescopeModeDekuHideData[] = {
     { 0, CAM_DATA_17 },
     { 0, CAM_DATA_18 },
     { 45, CAM_DATA_FOV },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(2) | 0x10, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(2) | FIXD1_FLG_10, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B601C[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        0xFFDD,           // CAM_DATA_Y_OFFSET
-        100,              // CAM_DATA_01
-        220,              // CAM_DATA_02
-        15,           // CAM_DATA_PITCHTARGET
-        0x0011,           // CAM_DATA_04
-        12,           // CAM_DATA_05
-        35,           // CAM_DATA_YAWDIFFRANGE
-        65,           // CAM_DATA_FOV
-        70,           // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(0xFFDD, 100, 220, 15, 0x0011, 12, 35, 65, 70,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B6044[] = {
@@ -2539,7 +2111,7 @@ CameraModeValue D_801B6044[] = {
     { 5, CAM_DATA_05 },
     { 65, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x52, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_40 | PARA1_FLG_10 | PARA1_FLG_2, CAM_DATA_FLAGS },
     { 60, CAM_DATA_11 },
     { 0, CAM_DATA_12 },
 };
@@ -2556,7 +2128,7 @@ CameraModeValue D_801B6074[] = {
     { 30, CAM_DATA_17 },
     { 45, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 30, CAM_DATA_11 },
 };
 
@@ -2573,7 +2145,7 @@ CameraModeValue D_801B60A4[] = {
     { 35, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
     { 20, CAM_DATA_04 },
-    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | 0x20, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | KEEP3_FLG_20, CAM_DATA_FLAGS },
     { 60, CAM_DATA_18 },
 };
 
@@ -2589,7 +2161,7 @@ CameraModeValue D_801B60D8[] = {
     { 25, CAM_DATA_17 },
     { 50, CAM_DATA_FOV },
     { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_11 },
     { 50, CAM_DATA_18 },
 };
@@ -2617,21 +2189,12 @@ CameraModeValue D_801B6130[] = {
     { 5, CAM_DATA_05 },
     { 60, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x4 | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | JUMP2_FLG_4 | JUMP2_FLG_2, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B6154[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -30,              // CAM_DATA_Y_OFFSET
-        100,              // CAM_DATA_01
-        220,              // CAM_DATA_02
-        10,               // CAM_DATA_PITCHTARGET
-        30,               // CAM_DATA_04
-        12,           // CAM_DATA_05
-        80,               // CAM_DATA_YAWDIFFRANGE
-        65,           // CAM_DATA_FOV
-        30,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-30, 100, 220, 10, 30, 12, 80, 65, 30,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B617C[] = {
@@ -2715,17 +2278,8 @@ CameraModeValue D_801B623C[] = {
 };
 
 CameraModeValue D_801B626C[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -20,              // CAM_DATA_Y_OFFSET
-        100,              // CAM_DATA_01
-        220,              // CAM_DATA_02
-        10,               // CAM_DATA_PITCHTARGET
-        100,              // CAM_DATA_04
-        100,              // CAM_DATA_05
-        100,              // CAM_DATA_YAWDIFFRANGE
-        65,           // CAM_DATA_FOV
-        20,               // CAM_DATA_08
-        SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-20, 100, 220, 10, 100, 100, 100, 65, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B6294[] = {
@@ -2756,22 +2310,13 @@ CameraModeValue D_801B62C4[] = {
     { 25,   CAM_DATA_17 },
     { 45,     CAM_DATA_FOV },
     { 50,     CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 30, CAM_DATA_11 },
 };
 
 CameraModeValue D_801B62F4[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        50,               // CAM_DATA_Y_OFFSET
-        140,             // CAM_DATA_01
-        220,              // CAM_DATA_02
-        0,                // CAM_DATA_PITCHTARGET
-        0xC,              // CAM_DATA_04
-        10,               // CAM_DATA_05
-        40,             // CAM_DATA_YAWDIFFRANGE
-        90,               // CAM_DATA_FOV
-        90,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(50, 140, 220, 0, 0xC, 10, 40, 90, 90,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B631C[] = {
@@ -2791,17 +2336,8 @@ CameraModeValue D_801B631C[] = {
 };
 
 CameraModeValue D_801B634C[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        0xFFC4,           // CAM_DATA_Y_OFFSET
-        150,           // CAM_DATA_01
-        250,              // CAM_DATA_02
-        40,           // CAM_DATA_PITCHTARGET
-        20,               // CAM_DATA_04
-        12,           // CAM_DATA_05
-        40,           // CAM_DATA_YAWDIFFRANGE
-        80,               // CAM_DATA_FOV
-        80,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(0xFFC4, 150, 250, 40, 20, 12, 40, 80, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B6374[] = {
@@ -2821,17 +2357,9 @@ CameraModeValue D_801B6374[] = {
 };
 
 CameraModeValue D_801B63A4[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -10,              // CAM_DATA_Y_OFFSET
-        120,           // CAM_DATA_01
-        240,           // CAM_DATA_02
-        0,                // CAM_DATA_PITCHTARGET
-        18,           // CAM_DATA_04
-        12,           // CAM_DATA_05
-        40,           // CAM_DATA_YAWDIFFRANGE
-        80,               // CAM_DATA_FOV
-        60,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1),
+    NORM1_FIXED_DATA(-10, 120, 240, 0, 18, 12, 40, 80, 60,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_4 | NORM1_FLG_2 |
+                             NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B63CC[] = {
@@ -2858,7 +2386,7 @@ CameraModeValue D_801B63FC[] = {
     { 100,    CAM_DATA_04 },
     { 20,     CAM_DATA_05 },
     { 60,     CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x18, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_10 | FIXD2_FLG_8, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B6418[] = {
@@ -2869,21 +2397,11 @@ CameraModeValue D_801B6418[] = {
     { 5, CAM_DATA_04 },
     { 25, CAM_DATA_05 },
     { 60,     CAM_DATA_FOV },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x5, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | FIXD2_FLG_4 | FIXD2_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B6434[] = {
-    SET_NORM1_STATICDATA( // Camera_Normal1()
-        -15,              // CAM_DATA_Y_OFFSET
-        60,               // CAM_DATA_01
-        600,           // CAM_DATA_02
-        35,           // CAM_DATA_PITCHTARGET
-        40,           // CAM_DATA_04
-        20,               // CAM_DATA_05
-        60,               // CAM_DATA_YAWDIFFRANGE
-        45,               // CAM_DATA_FOV
-        80,               // CAM_DATA_08
-        SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_2),
+    NORM1_FIXED_DATA(-15, 60, 600, 35, 40, 20, 60, 45, 80, (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_2)),
 };
 
 CameraModeValue D_801B645C[] = {
@@ -2903,17 +2421,8 @@ CameraModeValue D_801B645C[] = {
 };
 
 CameraModeValue D_801B648C[] = {
-    /* CAM_FUNC_NORM1 */
-    { -10, CAM_DATA_Y_OFFSET },
-    { 320, CAM_DATA_01 },
-    { 0x017C, CAM_DATA_02 },
-    { 30, CAM_DATA_PITCHTARGET },
-    { 0x0016, CAM_DATA_04 },
-    { 10, CAM_DATA_05 },
-    { 0x0020, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-10, 320, 0x017C, 30, 0x0016, 10, 0x0020, 60, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B64B4[] = {
@@ -2939,7 +2448,7 @@ CameraModeValue D_801B64D8[] = {
     { 5, CAM_DATA_05 },
     { 60, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x4 | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | JUMP2_FLG_4 | JUMP2_FLG_2, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B64FC[] = {
@@ -2975,31 +2484,13 @@ CameraModeValue D_801B652C[] = {
 };
 
 CameraModeValue D_801B655C[] = {
-    /* CAM_FUNC_NORM1 */
-    { -15, CAM_DATA_Y_OFFSET },
-    { 340, CAM_DATA_01 },
-    { 350, CAM_DATA_02 },
-    { 30, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-15, 340, 350, 30, 100, 100, 100, 60, 40,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B6584[] = {
-    /* CAM_FUNC_NORM1 */
-    { 0, CAM_DATA_Y_OFFSET },
-    { 260, CAM_DATA_01 },
-    { 280, CAM_DATA_02 },
-    { 20, CAM_DATA_PITCHTARGET },
-    { 20, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 50, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(0, 260, 280, 20, 20, 12, 50, 60, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2)),
 };
 
 CameraModeValue D_801B65AC[] = {
@@ -3030,7 +2521,7 @@ CameraModeValue D_801B65DC[] = {
     { 15, CAM_DATA_17 },
     { 45, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 30, CAM_DATA_11 },
 };
 
@@ -3047,7 +2538,7 @@ CameraModeValue D_801B660C[] = {
     { 45, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
     { 20, CAM_DATA_04 },
-    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | 0x40, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | KEEP3_FLG_40, CAM_DATA_FLAGS },
     { 60, CAM_DATA_18 },
 };
 
@@ -3063,7 +2554,7 @@ CameraModeValue D_801B6640[] = {
     { 25, CAM_DATA_17 },
     { 50, CAM_DATA_FOV },
     { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_11 },
     { 60, CAM_DATA_18 },
 };
@@ -3082,45 +2573,18 @@ CameraModeValue D_801B6674[] = {
 };
 
 CameraModeValue D_801B6698[] = {
-    /* CAM_FUNC_NORM1 */
-    { 0, CAM_DATA_Y_OFFSET },
-    { 260, CAM_DATA_01 },
-    { 280, CAM_DATA_02 },
-    { 40, CAM_DATA_PITCHTARGET },
-    { 20, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 40, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(0, 260, 280, 40, 20, 12, 40, 60, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2)),
 };
 
 CameraModeValue D_801B66C0[] = {
-    /* CAM_FUNC_NORM1 */
-    { 0, CAM_DATA_Y_OFFSET },
-    { 260, CAM_DATA_01 },
-    { 280, CAM_DATA_02 },
-    { 20, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(0, 260, 280, 20, 100, 100, 100, 60, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossMajoraModeNormalData[] = {
-    /* CAM_FUNC_NORM1 */
-    { 0, CAM_DATA_Y_OFFSET },
-    { 280, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { -5, CAM_DATA_PITCHTARGET },
-    { 24, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 0x0020, CAM_DATA_YAWDIFFRANGE },
-    { 65, CAM_DATA_FOV },
-    { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(0, 280, 320, -5, 24, 12, 0x0020, 65, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossMajoraModeFollowTargetData[] = {
@@ -3151,51 +2615,24 @@ CameraModeValue sSetBossMajoraModeBattleData[] = {
     { 20, CAM_DATA_17 },
     { 70, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 10, CAM_DATA_11 },
     { 40, CAM_DATA_18 },
 };
 
 CameraModeValue sSetBossMajoraModeJumpData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -20, CAM_DATA_Y_OFFSET },
-    { 280, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 30, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 40, CAM_DATA_YAWDIFFRANGE },
-    { 65, CAM_DATA_FOV },
-    { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-20, 280, 320, 10, 30, 12, 40, 65, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossMajoraModeStillData[] = {
-    /* CAM_FUNC_NORM1 */
-    { 0, CAM_DATA_Y_OFFSET },
-    { 280, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 0, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 65, CAM_DATA_FOV },
-    { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(0, 280, 320, 0, 100, 100, 100, 65, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossTwinmoldModeNormalData[] = {
-    /* CAM_FUNC_NORM1 */
-    { 20, CAM_DATA_Y_OFFSET },
-    { 350, CAM_DATA_01 },
-    { 400, CAM_DATA_02 },
-    { 0, CAM_DATA_PITCHTARGET },
-    { 0x001A, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 0x0020, CAM_DATA_YAWDIFFRANGE },
-    { 75, CAM_DATA_FOV },
-    { 70, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(20, 350, 400, 0, 0x001A, 12, 0x0020, 75, 70,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossTwinmoldModeTargetData[] = {
@@ -3242,51 +2679,24 @@ CameraModeValue sSetBossTwinmoldModeBattleData[] = {
     { 20, CAM_DATA_17 },
     { 70, CAM_DATA_FOV },
     { 30, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 10, CAM_DATA_11 },
     { 40, CAM_DATA_18 },
 };
 
 CameraModeValue sSetBossTwinmoldModeJumpData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -20, CAM_DATA_Y_OFFSET },
-    { 350, CAM_DATA_01 },
-    { 400, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 30, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 40, CAM_DATA_YAWDIFFRANGE },
-    { 75, CAM_DATA_FOV },
-    { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-20, 350, 400, 10, 30, 12, 40, 75, 40,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossTwinmoldModeStillData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -20, CAM_DATA_Y_OFFSET },
-    { 280, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_10 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-20, 280, 320, 10, 100, 100, 100, 60, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_10 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossGohtModeNormalData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -20, CAM_DATA_Y_OFFSET },
-    { 280, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 20, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 50, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-20, 280, 320, 10, 20, 12, 50, 60, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossGohtModeBattleData[] = {
@@ -3301,51 +2711,24 @@ CameraModeValue sSetBossGohtModeBattleData[] = {
     { 25, CAM_DATA_17 },
     { 50, CAM_DATA_FOV },
     { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_11 },
     { 50, CAM_DATA_18 },
 };
 
 CameraModeValue sSetBossGohtModeJumpData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -20, CAM_DATA_Y_OFFSET },
-    { 280, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 30, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 40, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-20, 280, 320, 10, 30, 12, 40, 60, 40,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossGohtModeStillData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -20, CAM_DATA_Y_OFFSET },
-    { 280, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 15, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-20, 280, 320, 10, 100, 100, 100, 60, 15,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossGohtModeGoronDashData[] = {
-    /* CAM_FUNC_NORM1 */
-    { 60, CAM_DATA_Y_OFFSET },
-    { 200, CAM_DATA_01 },
-    { 340, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 15, CAM_DATA_04 },
-    { 10, CAM_DATA_05 },
-    { 50, CAM_DATA_YAWDIFFRANGE },
-    { 85, CAM_DATA_FOV },
-    { 90, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(60, 200, 340, 10, 15, 10, 50, 85, 90,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetBossGyorgModeNormalData[] = {
@@ -3359,7 +2742,7 @@ CameraModeValue sSetBossGyorgModeNormalData[] = {
     { 40, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x84, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetBossGyorgModeFollowTargetData[] = {
@@ -3374,7 +2757,7 @@ CameraModeValue sSetBossGyorgModeFollowTargetData[] = {
     { 15, CAM_DATA_17 },
     { 45, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 30, CAM_DATA_11 },
 };
 
@@ -3390,7 +2773,7 @@ CameraModeValue sSetBossGyorgModeBattleData[] = {
     { 20, CAM_DATA_17 },
     { 50, CAM_DATA_FOV },
     { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_11 },
     { 50, CAM_DATA_18 },
 };
@@ -3406,7 +2789,7 @@ CameraModeValue sSetBossGyorgModeGoronJumpData[] = {
     { 40, CAM_DATA_YAWDIFFRANGE },
     { 70, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_8 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetBossGyorgModeDekuFlyData[] = {
@@ -3420,7 +2803,7 @@ CameraModeValue sSetBossGyorgModeDekuFlyData[] = {
     { 60, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x5, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_4 | JUMP3_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetBossGyorgModeDekuHideData[] = {
@@ -3434,21 +2817,12 @@ CameraModeValue sSetBossGyorgModeDekuHideData[] = {
     { 60, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x85, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_4 | JUMP3_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetBossGyorgModeStillData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -40, CAM_DATA_Y_OFFSET },
-    { 100, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 20, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-40, 100, 320, 20, 100, 100, 100, 60, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetPinnacleRockModeNormalData[] = {
@@ -3462,7 +2836,7 @@ CameraModeValue sSetPinnacleRockModeNormalData[] = {
     { 40, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 100, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x84, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetPinnacleRockModeTargetData[] = {
@@ -3492,7 +2866,7 @@ CameraModeValue sSetPinnacleRockModeGoronJumpData[] = {
     { 40, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_8 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetPinnacleRockModeDekuFlyData[] = {
@@ -3506,7 +2880,7 @@ CameraModeValue sSetPinnacleRockModeDekuFlyData[] = {
     { 60, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x5, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_4 | JUMP3_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetPinnacleRockModeDekuHideData[] = {
@@ -3520,21 +2894,12 @@ CameraModeValue sSetPinnacleRockModeDekuHideData[] = {
     { 60, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x85, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_4 | JUMP3_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetPinnacleRockModeStillData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -40, CAM_DATA_Y_OFFSET },
-    { 250, CAM_DATA_01 },
-    { 350, CAM_DATA_02 },
-    { 30, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-40, 250, 350, 30, 100, 100, 100, 60, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetPinnacleRockModeGoronDashData[] = {
@@ -3548,21 +2913,12 @@ CameraModeValue sSetPinnacleRockModeGoronDashData[] = {
     { 40, CAM_DATA_YAWDIFFRANGE },
     { 75, CAM_DATA_FOV },
     { 35, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_8 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetNormal2ModeNormalData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -10, CAM_DATA_Y_OFFSET },
-    { 350, CAM_DATA_01 },
-    { 400, CAM_DATA_02 },
-    { 14, CAM_DATA_PITCHTARGET },
-    { 25, CAM_DATA_04 },
-    { 14, CAM_DATA_05 },
-    { 60, CAM_DATA_YAWDIFFRANGE },
-    { 65, CAM_DATA_FOV },
-    { 70, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-10, 350, 400, 14, 25, 14, 60, 65, 70,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetNormal2ModeTargetData[] = {
@@ -3582,45 +2938,18 @@ CameraModeValue sSetNormal2ModeTargetData[] = {
 };
 
 CameraModeValue sSetNormal2ModeJumpData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -10, CAM_DATA_Y_OFFSET },
-    { 350, CAM_DATA_01 },
-    { 0x01A4, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 30, CAM_DATA_04 },
-    { 10, CAM_DATA_05 },
-    { 40, CAM_DATA_YAWDIFFRANGE },
-    { 65, CAM_DATA_FOV },
-    { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-10, 350, 0x01A4, 10, 30, 10, 40, 65, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetNormal2ModeStillData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -10, CAM_DATA_Y_OFFSET },
-    { 350, CAM_DATA_01 },
-    { 400, CAM_DATA_02 },
-    { 14, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 65, CAM_DATA_FOV },
-    { 16, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-10, 350, 400, 14, 100, 100, 100, 65, 16,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B6C98[] = {
-    /* CAM_FUNC_NORM1 */
-    { -30, CAM_DATA_Y_OFFSET },
-    { 300, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 15, CAM_DATA_PITCHTARGET },
-    { 0x0016, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 30, CAM_DATA_YAWDIFFRANGE },
-    { 55, CAM_DATA_FOV },
-    { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-30, 300, 320, 15, 0x0016, 12, 30, 55, 60,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B6CC0[] = {
@@ -3635,7 +2964,7 @@ CameraModeValue D_801B6CC0[] = {
     { 40, CAM_DATA_17 },
     { 45, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 30, CAM_DATA_11 },
 };
 
@@ -3652,36 +2981,18 @@ CameraModeValue D_801B6CF0[] = {
     { 45, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
     { 20, CAM_DATA_04 },
-    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | 0x20, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | KEEP3_FLG_20, CAM_DATA_FLAGS },
     { 50, CAM_DATA_18 },
 };
 
 CameraModeValue D_801B6D24[] = {
-    /* CAM_FUNC_NORM1 */
-    { -20, CAM_DATA_Y_OFFSET },
-    { 300, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 30, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 40, CAM_DATA_YAWDIFFRANGE },
-    { 55, CAM_DATA_FOV },
-    { 30, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-20, 300, 320, 10, 30, 12, 40, 55, 30,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B6D4C[] = {
-    /* CAM_FUNC_NORM1 */
-    { -30, CAM_DATA_Y_OFFSET },
-    { 300, CAM_DATA_01 },
-    { 320, CAM_DATA_02 },
-    { 15, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 55, CAM_DATA_FOV },
-    { 25, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-30, 300, 320, 15, 100, 100, 100, 55, 25,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B6D74[] = {
@@ -3692,7 +3003,7 @@ CameraModeValue D_801B6D74[] = {
     { 100, CAM_DATA_04 },
     { 20, CAM_DATA_05 },
     { 60, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0xB, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_8 | FIXD2_FLG_2 | FIXD2_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetWhirlpoolModeNormalData[] = {
@@ -3706,7 +3017,7 @@ CameraModeValue sSetWhirlpoolModeNormalData[] = {
     { 30, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0xA4, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_20 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetWhirlpoolModeFreeFallData[] = {
@@ -3720,7 +3031,7 @@ CameraModeValue sSetWhirlpoolModeFreeFallData[] = {
     { 25, CAM_DATA_YAWDIFFRANGE },
     { 75, CAM_DATA_FOV },
     { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x14, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_10 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetWhirlpoolModeGoronJumpData[] = {
@@ -3734,7 +3045,7 @@ CameraModeValue sSetWhirlpoolModeGoronJumpData[] = {
     { 25, CAM_DATA_YAWDIFFRANGE },
     { 65, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x1C, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_10 | JUMP3_FLG_8 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetWhirlpoolModeDekuFlyData[] = {
@@ -3748,7 +3059,7 @@ CameraModeValue sSetWhirlpoolModeDekuFlyData[] = {
     { 30, CAM_DATA_YAWDIFFRANGE },
     { 65, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x25, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_20 | JUMP3_FLG_4 | JUMP3_FLG_1, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetWhirlpoolModeDekuHideData[] = {
@@ -3762,7 +3073,7 @@ CameraModeValue sSetWhirlpoolModeDekuHideData[] = {
     { 30, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x94, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_10 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetWhirlpoolModeGoronDashData[] = {
@@ -3776,63 +3087,27 @@ CameraModeValue sSetWhirlpoolModeGoronDashData[] = {
     { 20, CAM_DATA_YAWDIFFRANGE },
     { 75, CAM_DATA_FOV },
     { 35, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x1C, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_10 | JUMP3_FLG_8 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue sSetCuccoShackModeNormalData[] = {
-    /* CAM_FUNC_NORM1 */
-    { 0xFFBA, CAM_DATA_Y_OFFSET },
-    { 250, CAM_DATA_01 },
-    { 0x01F4, CAM_DATA_02 },
-    { 5, CAM_DATA_PITCHTARGET },
-    { 30, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 45, CAM_DATA_YAWDIFFRANGE },
-    { 50, CAM_DATA_FOV },
-    { 70, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(0xFFBA, 250, 0x01F4, 5, 30, 12, 45, 50, 70,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetCuccoShackModeStillData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -40, CAM_DATA_Y_OFFSET },
-    { 250, CAM_DATA_01 },
-    { 0x01F4, CAM_DATA_02 },
-    { 5, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 50, CAM_DATA_FOV },
-    { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-40, 250, 0x01F4, 5, 100, 100, 100, 50, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetCuccoShackModeDekuHideData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -40, CAM_DATA_Y_OFFSET },
-    { 250, CAM_DATA_01 },
-    { 0x01F4, CAM_DATA_02 },
-    { 5, CAM_DATA_PITCHTARGET },
-    { 25, CAM_DATA_04 },
-    { 12, CAM_DATA_05 },
-    { 40, CAM_DATA_YAWDIFFRANGE },
-    { 50, CAM_DATA_FOV },
-    { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-40, 250, 0x01F4, 5, 25, 12, 40, 50, 40,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetGiantModeNormalData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -40, CAM_DATA_Y_OFFSET },
-    { 150, CAM_DATA_01 },
-    { 160, CAM_DATA_02 },
-    { -15, CAM_DATA_PITCHTARGET },
-    { 25, CAM_DATA_04 },
-    { 14, CAM_DATA_05 },
-    { 50, CAM_DATA_YAWDIFFRANGE },
-    { 50, CAM_DATA_FOV },
-    { 70, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-40, 150, 160, -15, 25, 14, 50, 50, 70,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetGiantModeTargetData[] = {
@@ -3852,31 +3127,13 @@ CameraModeValue sSetGiantModeTargetData[] = {
 };
 
 CameraModeValue sSetGiantModeJumpData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -10, CAM_DATA_Y_OFFSET },
-    { 100, CAM_DATA_01 },
-    { 150, CAM_DATA_02 },
-    { 10, CAM_DATA_PITCHTARGET },
-    { 30, CAM_DATA_04 },
-    { 10, CAM_DATA_05 },
-    { 40, CAM_DATA_YAWDIFFRANGE },
-    { 70, CAM_DATA_FOV },
-    { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-10, 100, 150, 10, 30, 10, 40, 70, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetGiantModeStillData[] = {
-    /* CAM_FUNC_NORM1 */
-    { -40, CAM_DATA_Y_OFFSET },
-    { 150, CAM_DATA_01 },
-    { 160, CAM_DATA_02 },
-    { 0xFFF4, CAM_DATA_PITCHTARGET },
-    { 25, CAM_DATA_04 },
-    { 14, CAM_DATA_05 },
-    { 50, CAM_DATA_YAWDIFFRANGE },
-    { 50, CAM_DATA_FOV },
-    { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-40, 150, 160, 0xFFF4, 25, 14, 50, 50, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B6FA0[] = {
@@ -3884,21 +3141,12 @@ CameraModeValue D_801B6FA0[] = {
     { -40, CAM_DATA_Y_OFFSET },
     { 20, CAM_DATA_01 },
     { 60, CAM_DATA_FOV },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x32, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | UNIQ2_FLG_20 | UNIQ2_FLG_10 | UNIQ2_FLG_2, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B6FB0[] = {
-    /* CAM_FUNC_NORM1 */
-    { -15, CAM_DATA_Y_OFFSET },
-    { 120, CAM_DATA_01 },
-    { 250, CAM_DATA_02 },
-    { 16, CAM_DATA_PITCHTARGET },
-    { 16, CAM_DATA_04 },
-    { 5, CAM_DATA_05 },
-    { 65, CAM_DATA_YAWDIFFRANGE },
-    { 60, CAM_DATA_FOV },
-    { 75, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-15, 120, 250, 16, 16, 5, 65, 60, 75,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B6FD8[] = {
@@ -3913,7 +3161,7 @@ CameraModeValue D_801B6FD8[] = {
     { 40, CAM_DATA_17 },
     { 60, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x1, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 20, CAM_DATA_11 },
 };
 
@@ -3929,37 +3177,19 @@ CameraModeValue D_801B7008[] = {
     { 40, CAM_DATA_17 },
     { 60, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 20, CAM_DATA_11 },
     { 50, CAM_DATA_18 },
 };
 
 CameraModeValue D_801B703C[] = {
-    /* CAM_FUNC_NORM1 */
-    { -15, CAM_DATA_Y_OFFSET },
-    { 120, CAM_DATA_01 },
-    { 250, CAM_DATA_02 },
-    { 16, CAM_DATA_PITCHTARGET },
-    { 12, CAM_DATA_04 },
-    { 5, CAM_DATA_05 },
-    { 60, CAM_DATA_YAWDIFFRANGE },
-    { 70, CAM_DATA_FOV },
-    { 40, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-15, 120, 250, 16, 12, 5, 60, 70, 40,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B7064[] = {
-    /* CAM_FUNC_NORM1 */
-    { -15, CAM_DATA_Y_OFFSET },
-    { 120, CAM_DATA_01 },
-    { 250, CAM_DATA_02 },
-    { 16, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 70, CAM_DATA_FOV },
-    { 20, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(-15, 120, 250, 16, 100, 100, 100, 70, 20,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue D_801B708C[] = {
@@ -3989,7 +3219,7 @@ CameraModeValue D_801B70BC[] = {
     { 65, CAM_DATA_YAWDIFFRANGE },
     { 60, CAM_DATA_FOV },
     { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x84, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B70E4[] = {
@@ -4036,7 +3266,7 @@ CameraModeValue D_801B7148[] = {
     { 40, CAM_DATA_YAWDIFFRANGE },
     { 75, CAM_DATA_FOV },
     { 35, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_8 | JUMP3_FLG_4, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B7170[] = {
@@ -4051,7 +3281,7 @@ CameraModeValue D_801B7170[] = {
     { 15, CAM_DATA_17 },
     { 45, CAM_DATA_FOV },
     { 60, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x11, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_10 | KEEP1_FLG_1, CAM_DATA_FLAGS },
     { 30, CAM_DATA_11 },
 };
 
@@ -4067,7 +3297,7 @@ CameraModeValue D_801B71A0[] = {
     { 35, CAM_DATA_17 },
     { 55, CAM_DATA_FOV },
     { 70, CAM_DATA_08 },
-    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | 0x12, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_10 | BATT1_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_11 },
     { 40, CAM_DATA_18 },
 };
@@ -4092,7 +3322,7 @@ CameraModeValue D_801B7204[] = {
     /* CAM_FUNC_UNIQ0 */
     { 0, CAM_DATA_Y_OFFSET },
     { 100, CAM_DATA_04 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | UNIQ0_FLG_2, CAM_DATA_FLAGS },
 };
 
 CameraModeValue D_801B7210[] = {
@@ -4108,7 +3338,7 @@ CameraModeValue D_801B7210[] = {
     { 35, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
     { 20, CAM_DATA_04 },
-    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | 0x20, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | KEEP3_FLG_20, CAM_DATA_FLAGS },
     { 60, CAM_DATA_18 },
 };
 
@@ -4125,7 +3355,7 @@ CameraModeValue sSetNormal4ModeTalkData[] = {
     { 40, CAM_DATA_FOV },
     { 50, CAM_DATA_08 },
     { 20, CAM_DATA_04 },
-    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | 0x20, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | KEEP3_FLG_20, CAM_DATA_FLAGS },
     { 50, CAM_DATA_18 },
 };
 
@@ -4137,7 +3367,7 @@ CameraModeValue sSetElegyShellModeNormalData[] = {
     { 165, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 70, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 30, CAM_DATA_12 },
 };
@@ -4150,7 +3380,7 @@ CameraModeValue sSetElegyShellModeJumpData[] = {
     { 140, CAM_DATA_10 },
     { 5, CAM_DATA_18 },
     { 70, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 30, CAM_DATA_12 },
 };
@@ -4163,7 +3393,7 @@ CameraModeValue sSetElegyShellModeDekuShootData[] = {
     { 140, CAM_DATA_10 },
     { 15, CAM_DATA_18 },
     { 50, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 30, CAM_DATA_12 },
 };
@@ -4176,7 +3406,7 @@ CameraModeValue sSetElegyShellModeGoronDashData[] = {
     { 160, CAM_DATA_10 },
     { 6, CAM_DATA_18 },
     { 50, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0x2, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 30, CAM_DATA_12 },
 };
@@ -4189,23 +3419,14 @@ CameraModeValue sSetElegyShellModeDekuFlyData[] = {
     { 0xFF74, CAM_DATA_10 },
     { 30, CAM_DATA_18 },
     { 50, CAM_DATA_FOV },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | 0xC, CAM_DATA_FLAGS },
+    { SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_8 | KEEP4_FLG_4, CAM_DATA_FLAGS },
     { 25, CAM_DATA_04 },
     { 30, CAM_DATA_12 },
 };
 
 CameraModeValue sSetDungeon4ModeNormalData[] = {
-    /* CAM_FUNC_NORM1 */
-    { 0, CAM_DATA_Y_OFFSET },
-    { 150, CAM_DATA_01 },
-    { 250, CAM_DATA_02 },
-    { -5, CAM_DATA_PITCHTARGET },
-    { 16, CAM_DATA_04 },
-    { 5, CAM_DATA_05 },
-    { 0x0034, CAM_DATA_YAWDIFFRANGE },
-    { 55, CAM_DATA_FOV },
-    { 80, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(0, 150, 250, -5, 16, 5, 0x0034, 55, 80,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon4ModeTargetData[] = {
@@ -4225,31 +3446,13 @@ CameraModeValue sSetDungeon4ModeTargetData[] = {
 };
 
 CameraModeValue sSetDungeon4ModeJumpData[] = {
-    /* CAM_FUNC_NORM1 */
-    { 0, CAM_DATA_Y_OFFSET },
-    { 150, CAM_DATA_01 },
-    { 250, CAM_DATA_02 },
-    { 0, CAM_DATA_PITCHTARGET },
-    { 24, CAM_DATA_04 },
-    { 5, CAM_DATA_05 },
-    { 50, CAM_DATA_YAWDIFFRANGE },
-    { 55, CAM_DATA_FOV },
-    { 50, CAM_DATA_08 },
-    { SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(0, 150, 250, 0, 24, 5, 50, 55, 50,
+                         (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_8 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 CameraModeValue sSetDungeon4ModeStillData[] = {
-    /* CAM_FUNC_NORM1 */
-    { 0, CAM_DATA_Y_OFFSET },
-    { 180, CAM_DATA_01 },
-    { 220, CAM_DATA_02 },
-    { 5, CAM_DATA_PITCHTARGET },
-    { 100, CAM_DATA_04 },
-    { 100, CAM_DATA_05 },
-    { 100, CAM_DATA_YAWDIFFRANGE },
-    { 55, CAM_DATA_FOV },
-    { 10, CAM_DATA_08 },
-    { SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_2 | NORM1_FLG_1, CAM_DATA_FLAGS },
+    NORM1_FIXED_DATA(0, 180, 220, 5, 100, 100, 100, 55, 10,
+                         (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
 /**
@@ -4260,6 +3463,9 @@ CameraModeValue sSetDungeon4ModeStillData[] = {
 
 #define CAM_SETTING_MODE_ENTRY(func, data) \
     { func, ARRAY_COUNT(data), data }
+
+#define CAM_SETTING_MODE_NULL \
+    { CAM_FUNC_NONE, 0, NULL }
 
 CameraMode sCamSetNormal0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeNormalData),
@@ -4298,7 +3504,7 @@ CameraMode sCamSetNormal3Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeNormalData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeGoronDashData),  
-    { CAM_FUNC_NONE, 0, NULL },                               
+    CAM_SETTING_MODE_NULL,                               
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),  
@@ -4307,7 +3513,7 @@ CameraMode sCamSetNormal3Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal3ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
-    { CAM_FUNC_NONE, 0, NULL },                               
+    CAM_SETTING_MODE_NULL,                               
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeDekuHideData),  
@@ -4320,41 +3526,41 @@ CameraMode sCamSetNormal3Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModePushPullData),  
-    { CAM_FUNC_NONE, 0, NULL },                               
+    CAM_SETTING_MODE_NULL,                               
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeGoronJumpData),  
 };
 
 CameraMode sCamSetPivotDivingModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ2, sSetPivotDivingModeNormalData),  
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ2, sSetPivotDivingModeTargetData),  
 };
 
 CameraMode sCamSetHorseModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, sSetHorseModeNormalData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, sSetHorseModeJumpData),   
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetHorseModeFollowTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, sSetHorseModeTargetData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetHorseModeTalkData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetHorseModeSlingShotData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetHorseModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetHorseModeBattleData),  
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM3, sSetHorseModeStillData),   
 };
 
@@ -4471,33 +3677,33 @@ CameraMode sCamSetNanameModes[] = {
 
 CameraMode sCamSetCirc0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD2, D_801B5018),   
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD2, D_801B5034),   
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD2, D_801B5050),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
 };
 
 CameraMode sCamSetFixed0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD1, D_801B506C),   
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
 };
 
@@ -4543,7 +3749,7 @@ CameraMode sCamSetItem0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B535C),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B53A4),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5380),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
+    CAM_SETTING_MODE_NULL, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B53C8),  
 };
 
@@ -4552,7 +3758,7 @@ CameraMode sCamSetItem1Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5410),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5458),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5434),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
+    CAM_SETTING_MODE_NULL, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B547C),  
 };
 
@@ -4561,7 +3767,7 @@ CameraMode sCamSetItem2Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B54C4),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B550C),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B54E8),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
+    CAM_SETTING_MODE_NULL, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5530),  
 };
 
@@ -4570,7 +3776,7 @@ CameraMode sCamSetItem3Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5578),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B55C0),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B559C),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
+    CAM_SETTING_MODE_NULL, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B55E4),  
 };
 
@@ -4583,7 +3789,7 @@ CameraMode sCamSetWarp0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B562C),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5674),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5650),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
+    CAM_SETTING_MODE_NULL, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5698),  
 };
 
@@ -4592,7 +3798,7 @@ CameraMode sCamSetDeathModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetDeathModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetDeathModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetDeathModeDekuShootData),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
+    CAM_SETTING_MODE_NULL, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetDeathModeJumpData),  
 };
 
@@ -4601,7 +3807,7 @@ CameraMode sCamSetRebirthModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5728),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5728),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B574C),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_BOWARROWZ
+    CAM_SETTING_MODE_NULL, // CAM_MODE_BOWARROWZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, D_801B5728),  
 };
 
@@ -4660,11 +3866,11 @@ CameraMode sCamSetFixed2Modes[] = {
 };
 
 CameraMode sCamSetMazeModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA2, D_801B5844),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA2, sSetMazeModeNormalData),  
 };
 
 CameraMode sCamSetRemoteBombModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM2, D_801B5864),  
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM2, sSetRemoteBombModeNormalData),  
 };
 
 CameraMode sCamSetCirc1Modes[] = {
@@ -4677,16 +3883,16 @@ CameraMode sCamSetCirc2Modes[] = {
 
 CameraMode sCamSetCirc3Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD2, D_801B58BC),   
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD2, D_801B5034),   
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD2, D_801B5050),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
 };
@@ -4697,17 +3903,17 @@ CameraMode sCamSetCirc4Modes[] = {
 
 CameraMode sCamSetFixed3Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD1, D_801B58F4),   
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
 };
 
@@ -4766,17 +3972,17 @@ CameraMode sCamSetStop0Modes[] = {
 
 CameraMode sCamSetBoatCruiseModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetBoatCruiseModeNormalData),  
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),  
-    { CAM_FUNC_NONE, 0, NULL },         
+    CAM_SETTING_MODE_NULL,         
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),  
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),  
 };
@@ -4944,15 +4150,15 @@ CameraMode sCamSetRFixed1Modes[] = {
 
 CameraMode sCamSetTresure1Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5DD4),  
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5DFC),  
 };
 
@@ -5024,20 +4230,20 @@ CameraMode sCamSetDungeon3Modes[] = {
 
 CameraMode sCamSetTelescopeModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetTelescopeModeNormalData),  
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetTelescopeModeFirstPersonData),  
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetTelescopeModeTargetData),  
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
-    { CAM_FUNC_NONE, 0, NULL },         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
+    CAM_SETTING_MODE_NULL,         
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetTelescopeModeDekuHideData),  
 };
 
@@ -5080,16 +4286,16 @@ CameraMode sCamSetRCirc0Modes[] = {
 
 CameraMode sCamSetCirc9Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD2, D_801B6418),   
-    { CAM_FUNC_NONE, 0, NULL },          
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD2, D_801B5034),   
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD2, D_801B5050),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeSlingshotData),   
 };
@@ -5243,7 +4449,7 @@ CameraMode sCamSetBossGyorgModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetBossGyorgModeNormalData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeGoronDashData),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUSHOOT
+    CAM_SETTING_MODE_NULL, // CAM_MODE_DEKUSHOOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetBossGyorgModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
@@ -5252,7 +4458,7 @@ CameraMode sCamSetBossGyorgModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetBossGyorgModeFollowTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_SLINGSHOT
+    CAM_SETTING_MODE_NULL, // CAM_MODE_SLINGSHOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetBossGyorgModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetBossGyorgModeDekuHideData),  
@@ -5265,7 +4471,7 @@ CameraMode sCamSetBossGyorgModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModePushPullData),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUFLYZ      
+    CAM_SETTING_MODE_NULL, // CAM_MODE_DEKUFLYZ      
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetBossGyorgModeGoronJumpData),  
 };
 
@@ -5277,7 +4483,7 @@ CameraMode sCamSetPinnacleRockModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetPinnacleRockModeNormalData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetPinnacleRockModeGoronDashData),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUSHOOT
+    CAM_SETTING_MODE_NULL, // CAM_MODE_DEKUSHOOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetPinnacleRockModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
@@ -5286,7 +4492,7 @@ CameraMode sCamSetPinnacleRockModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetPinnacleRockModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_SLINGSHOT
+    CAM_SETTING_MODE_NULL, // CAM_MODE_SLINGSHOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetPinnacleRockModeDekuHideData),  
@@ -5299,7 +4505,7 @@ CameraMode sCamSetPinnacleRockModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModePushPullData),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUFLYZ
+    CAM_SETTING_MODE_NULL, // CAM_MODE_DEKUFLYZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetPinnacleRockModeGoronJumpData),  
 };
 
@@ -5369,7 +4575,7 @@ CameraMode sCamSetWhirlpoolModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeNormalData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeGoronDashData),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUSHOOT
+    CAM_SETTING_MODE_NULL, // CAM_MODE_DEKUSHOOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
@@ -5378,7 +4584,7 @@ CameraMode sCamSetWhirlpoolModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetPinnacleRockModeTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, sSetNormal0ModeTalkData),  
-    { CAM_FUNC_NONE, 0, NULL },  // CAM_MODE_SLINGSHOT
+    CAM_SETTING_MODE_NULL,  // CAM_MODE_SLINGSHOT
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeDekuHideData),  
@@ -5391,7 +4597,7 @@ CameraMode sCamSetWhirlpoolModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModePushPullData),  
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUFLYZ
+    CAM_SETTING_MODE_NULL, // CAM_MODE_DEKUFLYZ
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetWhirlpoolModeGoronJumpData),  
 };
 
@@ -5401,7 +4607,7 @@ CameraMode sCamSetCuccoShackModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeDekuShootData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
-    { CAM_FUNC_NONE, 0, NULL }, // CAM_MODE_DEKUFLY
+    CAM_SETTING_MODE_NULL, // CAM_MODE_DEKUFLY
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowBoomerangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeZoraFinData),   
@@ -5489,7 +4695,7 @@ CameraMode sCamSetWater2Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B70BC),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetNormal0ModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, D_801B7148),  
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowZData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeDekuFlyData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeFirstPersonData),   
@@ -5498,7 +4704,7 @@ CameraMode sCamSetWater2Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP1, sSetNormal0ModeFollowTargetData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B70E4),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP3, D_801B7114),  
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_SUBJ1, sSetNormal0ModeBowArrowData),   
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_BATT1, sSetNormal0ModeBattleData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeDekuHideData),  
@@ -5511,7 +4717,7 @@ CameraMode sCamSetWater2Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModeHangZData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetNormal0ModePushPullData),  
-    { CAM_FUNC_NONE, 0, NULL },          
+    CAM_SETTING_MODE_NULL,          
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_JUMP3, sSetNormal3ModeGoronJumpData),  
 };
 
@@ -5669,7 +4875,7 @@ CameraMode sCamSetElegyShellModes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetElegyShellModeJumpData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetElegyShellModeGoronDashData),  
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetElegyShellModeDekuShootData),  
-    { CAM_FUNC_NONE, 0, NULL },         
+    CAM_SETTING_MODE_NULL,         
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_KEEP4, sSetElegyShellModeDekuFlyData),  
 };
 
@@ -5743,7 +4949,7 @@ CameraSetting sCameraSettings[] = {
     { 0x00001BD9, 0x80000005, sCamSetCirc3Modes },        // CAM_SET_CIRCLE3
     { 0x00000001, 0x80000005, sCamSetCirc4Modes },        // CAM_SET_CIRCLE4
     { 0x000011D9, 0x80000005, sCamSetFixed3Modes },       // CAM_SET_FIXED3
-    { 0x03FFFFFF, 0x80000005, sCamSetTowerClimbModes },       // CAM_SET_TOWER_CLIMB
+    { 0x03FFFFFF, 0x80000005, sCamSetTowerClimbModes },       // CAM_SET_TOWER_ASCENT
     { 0x00000001, 0x80000005, sCamSetParallel0Modes },    // CAM_SET_PARALLEL0
     { 0x00000001, 0x00000005, sCamSetNormDModes },        // CAM_SET_NORMALD
     { 0x00000001, 0x00000005, sCamSetSubjectDModes },     // CAM_SET_SUBJECTD

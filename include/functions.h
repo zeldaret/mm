@@ -942,8 +942,10 @@ void CollisionHeader_GetVirtual(CollisionHeader* meshSegPtr, CollisionHeader** p
 void BgCheck_InitCollisionHeaders(CollisionContext* colCtx, GlobalContext* globalCtx);
 u32 SurfaceType_GetData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 dataIdx);
 u32 SurfaceType_GetCamDataIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-u16 SurfaceType_GetCameraSType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+u16 BgCheck_GetBgCamDataSetting(CollisionContext* colCtx, u32 camId, s32 bgId);
+u16 SurfaceType_GetCameraSetting(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u16 SurfaceType_GetNumCameras(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+Vec3s* BgCheck_GetBgCamDataVec3s(CollisionContext* colCtx, s32 camId, s32 bgId);
 Vec3s* SurfaceType_GetCamPosData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 func_800C99D4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);

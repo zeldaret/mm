@@ -117,14 +117,14 @@ typedef enum {
     /* 0x1E */ CAM_SET_DUNGEON1, // Generic dungeon camera 1, used in various places
     /* 0x1F */ CAM_SET_FIXED1, // Fixes camera in place, used in various places eg. entering Stock Pot Inn, hiting a switch, giving witch a red potion, shop browsing
     /* 0x20 */ CAM_SET_FIXED2, // Used in Pinnacle Rock after defeating Sea Monsters, and by Tatl in Fortress
-    /* 0x21 */ CAM_SET_MAZE, // Unknown
-    /* 0x22 */ CAM_SET_REMOTEBOMB, // Unknown, related to Play_ChangeCameraSetting?
+    /* 0x21 */ CAM_SET_MAZE, // Unused. Set to use Camera_Parallel2(), which is only Camera_Noop()
+    /* 0x22 */ CAM_SET_REMOTEBOMB, // Unused. Set to use Camera_Parallel2(), which is only Camera_Noop(). But also related to Play_ChangeCameraSetting?
     /* 0x23 */ CAM_SET_CIRCLE1, // Unknown
     /* 0x24 */ CAM_SET_CIRCLE2, // Looking at far-away NPCs eg. Garo in Road to Ikana, Hungry Goron, Tingle
     /* 0x25 */ CAM_SET_CIRCLE3, // Used in curiosity shop, goron racetrack, final room in Sakon's hideout, other places
     /* 0x26 */ CAM_SET_CIRCLE4, // Used during the races on the doggy racetrack
     /* 0x27 */ CAM_SET_FIXED3, // Used in Stock Pot Inn Toilet (???) and Tatl cutscene after woodfall "FIXED3"
-    /* 0x28 */ CAM_SET_TOWER_CLIMB, // Various climbing structures (Snowhead climb to the temple entrance) "TOWER0"
+    /* 0x28 */ CAM_SET_TOWER_ASCENT, // Various climbing structures (Snowhead climb to the temple entrance) "TOWER0"
     /* 0x29 */ CAM_SET_PARALLEL0, // Unknown
     /* 0x2A */ CAM_SET_NORMALD, // Unknown, set with camDataId = -20
     /* 0x2B */ CAM_SET_SUBJECTD, // Unknown, set with camDataId = -21
@@ -468,7 +468,7 @@ typedef struct Camera {
  *================================
  */
 
-#define SET_NORM1_STATICDATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, yawDiffRange, fov, data08, flags) \
+#define NORM1_FIXED_DATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, yawDiffRange, fov, data08, flags) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01, CAM_DATA_01 }, \
     { data02, CAM_DATA_02 }, \
@@ -519,11 +519,31 @@ typedef struct {
 
 
 /*================================
+ *   Camera_Normal2() HEAP DATA
+ *================================
+ */
+
+// Unused Camera RemoteBomb Setting
+
+#define NORM2_FIXED_DATA(yOffset, data01, data02, pitchTarget, data04, fov, data08, flags) \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
+    { data01,      CAM_DATA_01 }, \
+    { data02,      CAM_DATA_02 }, \
+    { pitchTarget, CAM_DATA_PITCHTARGET }, \
+    { data04,      CAM_DATA_04 }, \
+    { fov,         CAM_DATA_FOV }, \
+    { data08,      CAM_DATA_08 }, \
+    { flags,       CAM_DATA_FLAGS }
+
+#define NORM2_FLG_2 (1 << 1)
+
+
+/*================================
  *   Camera_Normal3() HEAP DATA
  *================================
  */
 
-#define SET_NORM3_STATICDATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, fov, data08, flags) \
+#define NORM3_FIXED_DATA(yOffset, data01, data02, pitchTarget, eyeStepScale, posStepScale, fov, data08, flags) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { data01, CAM_DATA_01 }, \
     { data02, CAM_DATA_02 }, \
@@ -572,6 +592,17 @@ typedef struct {
  *   Camera_Normal0() HEAP DATA
  *================================
  */
+
+#define NORM0_FIXED_DATA(yOffset, data01, data02, data21, data04, yawDiffRange, fov, data08, flags) \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
+    { data01, CAM_DATA_01 }, \
+    { data02, CAM_DATA_02 }, \
+    { data21, CAM_DATA_21 }, \
+    { data04, CAM_DATA_04 }, \
+    { yawDiffRange,     CAM_DATA_YAWDIFFRANGE }, \
+    { fov,    CAM_DATA_FOV }, \
+    { data08, CAM_DATA_08 }, \
+    { flags, CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -658,6 +689,26 @@ typedef struct {
 
 
 /*================================
+ *   Camera_Parallel2() HEAP DATA
+ *================================
+ */
+
+// Unused Camera Maze Setting
+
+#define PARA2_FIXED_DATA(yOffset, data02, data01, pitchTarget, data04, fov, data08, flags) \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
+    { data02,      CAM_DATA_02 }, \
+    { data01,      CAM_DATA_01 }, \
+    { pitchTarget, CAM_DATA_PITCHTARGET }, \
+    { data04,      CAM_DATA_04 }, \
+    { fov,         CAM_DATA_FOV }, \
+    { data08,      CAM_DATA_08 }, \
+    { flags,       CAM_DATA_FLAGS }
+
+#define PARA2_FLG_2 (1 << 1)
+
+
+/*================================
  *   Camera_Jump2() HEAP DATA
  *================================
  */
@@ -692,6 +743,7 @@ typedef struct {
 } Jump2; // size = 0x44
 
 #define JUMP2_FLG_2 (1 << 1)
+#define JUMP2_FLG_4 (1 << 2)
 
 
 /*================================
@@ -729,8 +781,10 @@ typedef struct {
     /* 0x24 */ Jump3DynamicData dynamicData;
 } Jump3; // size = 0x44
 
+#define JUMP3_FLG_1 (1 << 0)
 #define JUMP3_FLG_4 (1 << 2)
 #define JUMP3_FLG_8 (1 << 3)
+#define JUMP3_FLG_10 (1 << 4)
 #define JUMP3_FLG_20 (1 << 5)
 #define JUMP3_FLG_40 (1 << 6)
 #define JUMP3_FLG_80 (1 << 7)
@@ -1227,7 +1281,7 @@ typedef struct {
  *================================
  */
 
-#define SET_SPEC5_STATICDATA(yOffset, eyeDist, minDistForRot, fov, atMaxLERPScale, timerInit, pitch, flags) \
+#define SPEC5_FIXED_DATA(yOffset, eyeDist, minDistForRot, fov, atMaxLERPScale, timerInit, pitch, flags) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { eyeDist, CAM_DATA_01 }, \
     { minDistForRot, CAM_DATA_02 }, \
@@ -1257,6 +1311,7 @@ typedef struct {
     /* 0x1C */ Special5DynamicData dynamicData;
 } Special5; // size = 0x20
 
+
 /*================================
  *   DOOR HEAP DATA
  *================================
@@ -1285,7 +1340,7 @@ typedef struct {
  *================================
  */
 
-#define SET_SPEC8_STATICDATA(yOffset, eyeStepScale, posStepScale, fov, spiralDoorCsLength, flags) \
+#define SPEC8_FIXED_DATA(yOffset, eyeStepScale, posStepScale, fov, spiralDoorCsLength, flags) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { eyeStepScale, CAM_DATA_04 }, \
     { posStepScale, CAM_DATA_05 }, \
@@ -1323,7 +1378,7 @@ typedef struct {
  *================================
  */
 
-#define SET_SPEC9_STATICDATA(yOffset, fov, flags) \
+#define SPEC9_FIXED_DATA(yOffset, fov, flags) \
     { yOffset, CAM_DATA_Y_OFFSET }, \
     { fov, CAM_DATA_FOV }, \
     { flags, CAM_DATA_FLAGS }
@@ -1347,5 +1402,6 @@ typedef struct {
 #define SPEC9_FLG_1 (1 << 0)
 #define SPEC9_FLG_2 (1 << 1)
 #define SPEC9_FLG_8 (1 << 3)
+
 
 #endif

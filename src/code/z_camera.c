@@ -2265,6 +2265,10 @@ s32 Camera_Normal1(Camera* camera) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal1.s")
 #endif
 
+
+/**
+ * Unused Camera RemoteBomb Setting
+ */
 s32 Camera_Normal2(Camera* camera) {
     return Camera_Noop(camera);
 }
@@ -2974,6 +2978,9 @@ s32 Camera_Parallel1(Camera* camera) {
     return true;
 }
 
+/**
+ * Unused Camera Maze Setting
+ */
 s32 Camera_Parallel2(Camera* camera) {
     return Camera_Noop(camera);
 }
