@@ -31,8 +31,8 @@ void Skin_InitAnimatedLimb(GameState* gameState, Skin* skin, s32 limbIndex) {
                 skinVtxEntry++;
 
                 vtx->n.flag = 0;
-                vtx->n.tc[0] = skinVtxEntry[-1].u;
-                vtx->n.tc[1] = skinVtxEntry[-1].v;
+                vtx->n.tc[0] = skinVtxEntry[-1].s;
+                vtx->n.tc[1] = skinVtxEntry[-1].t;
                 vtx->n.a = skinVtxEntry[-1].alpha;
             }
         }
@@ -41,7 +41,7 @@ void Skin_InitAnimatedLimb(GameState* gameState, Skin* skin, s32 limbIndex) {
 
 /**
  * Initializes a skin skeleton to looping animation, dynamically allocating the frame tables,
- * and dynamically allocating and initializing the Vtx buffers for its animated limbs
+ * and dynamically allocating and initializing the Vtx and SkinLimbVtx buffers for its animated limbs
  */
 void Skin_Init(GameState* gameState, Skin* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader) {
     s32 limbCount;
@@ -83,7 +83,7 @@ void Skin_Init(GameState* gameState, Skin* skin, SkeletonHeader* skeletonHeader,
 }
 
 /**
- * Frees the dynamically allocated Vtx buffers and tables
+ * Frees the dynamically allocated Vtx and SkinLimbVtx buffers and tables
  */
 void Skin_Free(GameState* gameState, Skin* skin) {
     if (skin->vtxTable != NULL) {

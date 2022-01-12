@@ -9,11 +9,11 @@
  */
 typedef struct {
     /* 0x00 */ u16 index;
-    /* 0x02 */ s16 u; // u and v are texture coordinates
-    /* 0x04 */ s16 v;
-    /* 0x06 */ s8 x;
-    /* 0x07 */ s8 y;
-    /* 0x08 */ s8 z;
+    /* 0x02 */ s16 s; // s and t are texture coordinates (also known as u and v)
+    /* 0x04 */ s16 t;
+    /* 0x06 */ s8 normX;
+    /* 0x07 */ s8 normY;
+    /* 0x08 */ s8 normZ;
     /* 0x09 */ u8 alpha;
 } SkinVertex; // size = 0xA
 
@@ -74,7 +74,7 @@ typedef struct {
     /* 0x04C */ SkelAnime skelAnime;
 } Skin; // size = 0x90
 
-typedef void (*SkinPostLimbDraw)(struct Actor*, struct GlobalContext*, Skin*);
+typedef void (*SkinPostDraw)(struct Actor*, struct GlobalContext*, Skin*);
 typedef s32 (*SkinOverrideLimbDraw)(struct Actor*, struct GlobalContext*, s32, Skin*);
 
 #define SKIN_DRAW_FLAG_CUSTOM_TRANSFORMS (1 << 0)
