@@ -1159,6 +1159,15 @@ typedef struct {
 
 
 /*================================
+ *   Camera_Fixed3() HEAP DATA
+ *================================
+ */
+
+#define FIXD3_FIXED_DATA(flags) \
+    { flags,       CAM_DATA_FLAGS }
+
+
+/*================================
  *   Camera_Subj1() HEAP DATA
  *================================
  */
@@ -1288,6 +1297,16 @@ typedef struct {
 } Unique6; // size = 0x4
 
 #define UNIQ6_FLG_1 (1 << 0)
+
+
+/*================================
+ *   Camera_Unique7() HEAP DATA
+ *================================
+ */
+
+#define UNIQ7_FIXED_DATA(fov, flags) \
+    { fov,      CAM_DATA_FOV }, \
+    { flags,       CAM_DATA_FLAGS }
 
 
 /*================================
