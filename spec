@@ -2687,11 +2687,7 @@ beginseg
     name "ovl_Obj_Iceblock"
     compress
     include "build/src/overlays/actors/ovl_Obj_Iceblock/z_obj_iceblock.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Obj_Iceblock/ovl_Obj_Iceblock_reloc.o"
-#else
-    include "build/data/ovl_Obj_Iceblock/ovl_Obj_Iceblock.reloc.o"
-#endif
 endseg
 
 beginseg
