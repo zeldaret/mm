@@ -110,7 +110,7 @@ static Vec3f D_808934E8 = {
 static s32 pad = 0;
 
 void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnNiw* this = (EnNiw*)thisx;
+    EnNiw* this = THIS;
     Vec3f dTemp = D_808934C4;
 
     if (this->actor.params < 0) { // all neg values become zero
@@ -163,7 +163,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnNiw* this = (EnNiw*)thisx;
+    EnNiw* this = THIS;
 
     if (this->niwType == ENNIW_TYPE_REGULAR) {
         Collider_DestroyCylinder(globalCtx, &this->collider);
@@ -732,7 +732,7 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
 }
 
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnNiw* this = (EnNiw*)thisx;
+    EnNiw* this = THIS;
     s8 pad0;
     s16 i;
     Player* player = GET_PLAYER(globalCtx);
@@ -929,7 +929,7 @@ s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnNiw* this = (EnNiw*)thisx;
+    EnNiw* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,

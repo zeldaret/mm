@@ -40,7 +40,7 @@ void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader_GetVirtual(&D_06002D30, &header);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, header);
 
-    this->bouceHeight = 0.0;
+    this->bounceHeight = 0.0;
     this->rotationSpeed = 0;
     this->bounceSpeed = 0;
     this->bounce = 0;
@@ -64,9 +64,9 @@ void BgFuKaiten_UpdateRotation(BgFuKaiten* this) {
 
 void BgFuKaiten_UpdateHeight(BgFuKaiten* this) {
     this->bounce += this->bounceSpeed;
-    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + this->elevation + this->bouceHeight;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + this->elevation + this->bounceHeight;
 
-    this->dyna.actor.world.pos.y -= this->bouceHeight * Math_CosS(this->bounce);
+    this->dyna.actor.world.pos.y -= this->bounceHeight * Math_CosS(this->bounce);
 }
 
 void BgFuKaiten_Update(Actor* thisx, GlobalContext* globalCtx) {
