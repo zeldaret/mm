@@ -1904,21 +1904,21 @@ s32 Camera_Normal1(Camera* camera) {
     // sp88;
 
     values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-    fixedData->unk_00 = NEXTSETTING * (sp88 * 0.01f * (0.8f - ((68.0f / sp88) * -0.2f)));
-    fixedData->unk_04 = NEXTSETTING * (sp88 * 0.01f * (0.8f - ((68.0f / sp88) * -0.2f)));
-    fixedData->unk_08 = NEXTSETTING * (sp88 * 0.01f * (0.8f - ((68.0f / sp88) * -0.2f)));
+    fixedData->unk_00 = READ_STATIC_DATA_VAL * (sp88 * 0.01f * (0.8f - ((68.0f / sp88) * -0.2f)));
+    fixedData->unk_04 = READ_STATIC_DATA_VAL * (sp88 * 0.01f * (0.8f - ((68.0f / sp88) * -0.2f)));
+    fixedData->unk_08 = READ_STATIC_DATA_VAL * (sp88 * 0.01f * (0.8f - ((68.0f / sp88) * -0.2f)));
     fixedData->unk_04 = fixedData->unk_08 - (fixedData->unk_08 - fixedData->unk_04);
 
     if (RELOAD_PARAMS) {
-        fixedData->unk_20 = (s16)((NEXTSETTING * 182.04167f) + .5f);
-        fixedData->unk_0C = NEXTSETTING;
+        fixedData->unk_20 = (s16)((READ_STATIC_DATA_VAL * 182.04167f) + .5f);
+        fixedData->unk_0C = READ_STATIC_DATA_VAL;
         fixedData->unk_0C = 40.0f - (40.0f - fixedData->unk_0C);
-        fixedData->unk_10 = NEXTSETTING;
-        fixedData->unk_14 = NEXTSETTING * 0.01f;
+        fixedData->unk_10 = READ_STATIC_DATA_VAL;
+        fixedData->unk_14 = READ_STATIC_DATA_VAL * 0.01f;
         fixedData->unk_14 = 1.0f - (1.0f - fixedData->unk_14);
-        fixedData->unk_18 = NEXTSETTING;
-        fixedData->unk_1C = NEXTSETTING * 0.01f;
-        fixedData->unk_22 = NEXTSETTING;
+        fixedData->unk_18 = READ_STATIC_DATA_VAL;
+        fixedData->unk_1C = READ_STATIC_DATA_VAL * 0.01f;
+        fixedData->unk_22 = READ_STATIC_DATA_VAL;
     }
 
     sCameraInterfaceFlags = fixedData->unk_22;
@@ -2306,17 +2306,17 @@ s32 Camera_Normal3(Camera* camera) {
     if (RELOAD_PARAMS) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        temp_f2 = PCT(temp_f2);
+        temp_f2 = SCALED_STATIC_DATA(temp_f2);
 
-        fixedData->yOffset = NEXTSETTING * temp_f2;
-        fixedData->distMin = NEXTSETTING * temp_f2;
-        fixedData->distMax = NEXTSETTING * temp_f2;
-        fixedData->pitchTarget = DEGF_TO_BINANG(NEXTSETTING);
-        fixedData->yawUpdateRateInv = NEXTSETTING;
-        fixedData->pitchUpdateRateInv = NEXTSETTING;
-        fixedData->fovTarget = NEXTSETTING;
-        fixedData->maxAtLERPScale = NEXTPCT;
-        fixedData->flags = NEXTSETTING;
+        fixedData->yOffset = READ_STATIC_DATA_VAL * temp_f2;
+        fixedData->distMin = READ_STATIC_DATA_VAL * temp_f2;
+        fixedData->distMax = READ_STATIC_DATA_VAL * temp_f2;
+        fixedData->pitchTarget = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->yawUpdateRateInv = READ_STATIC_DATA_VAL;
+        fixedData->pitchUpdateRateInv = READ_STATIC_DATA_VAL;
+        fixedData->fovTarget = READ_STATIC_DATA_VAL;
+        fixedData->maxAtLERPScale = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->flags = READ_STATIC_DATA_VAL;
     }
 
     OLib_Vec3fDiffToVecSphGeo(&sp70, at, eye);
@@ -2507,15 +2507,15 @@ s32 Camera_Normal0(Camera* camera) {
     } else {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        fixedData->unk_00 = NEXTPCT * temp_f0 * temp_f2;
-        fixedData->unk_04 = NEXTPCT * temp_f0 * temp_f2;
-        fixedData->unk_08 = NEXTPCT * temp_f0 * temp_f2;
-        fixedData->unk_1C = DEGF_TO_BINANG(NEXTSETTING);
-        fixedData->unk_0C = NEXTSETTING;
-        fixedData->unk_10 = NEXTPCT;
-        fixedData->unk_14 = NEXTSETTING;
-        fixedData->unk_18 = NEXTPCT;
-        fixedData->unk_1E = NEXTSETTING;
+        fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * temp_f0 * temp_f2;
+        fixedData->unk_04 = READ_SCALED_STATIC_DATA_VAL * temp_f0 * temp_f2;
+        fixedData->unk_08 = READ_SCALED_STATIC_DATA_VAL * temp_f0 * temp_f2;
+        fixedData->unk_1C = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->unk_0C = READ_STATIC_DATA_VAL;
+        fixedData->unk_10 = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_14 = READ_STATIC_DATA_VAL;
+        fixedData->unk_18 = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_1E = READ_STATIC_DATA_VAL;
     }
 
     sCameraInterfaceFlags = fixedData->unk_1E;
@@ -2686,18 +2686,18 @@ s32 Camera_Parallel1(Camera* camera) {
     if (!RELOAD_PARAMS) {
     } else {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        fixedData->unk_00 = NEXTPCT * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
-        fixedData->unk_04 = NEXTPCT * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
-        fixedData->unk_08 = NEXTPCT * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
-        fixedData->unk_20 = DEGF_TO_BINANG(NEXTSETTING);
-        fixedData->unk_22 = DEGF_TO_BINANG(NEXTSETTING);
-        fixedData->unk_0C = NEXTSETTING;
-        fixedData->unk_10 = NEXTSETTING;
-        fixedData->unk_14 = NEXTSETTING;
-        fixedData->unk_18 = NEXTPCT;
-        fixedData->unk_26 = NEXTSETTING;
-        fixedData->unk_1C = NEXTPCT;
-        fixedData->unk_24 = NEXTSETTING;
+        fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
+        fixedData->unk_04 = READ_SCALED_STATIC_DATA_VAL * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
+        fixedData->unk_08 = READ_SCALED_STATIC_DATA_VAL * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
+        fixedData->unk_20 = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->unk_22 = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->unk_0C = READ_STATIC_DATA_VAL;
+        fixedData->unk_10 = READ_STATIC_DATA_VAL;
+        fixedData->unk_14 = READ_STATIC_DATA_VAL;
+        fixedData->unk_18 = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_26 = READ_STATIC_DATA_VAL;
+        fixedData->unk_1C = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_24 = READ_STATIC_DATA_VAL;
         dynamicData->unk_00 = fixedData->unk_04;
     }
 
@@ -3045,15 +3045,15 @@ s32 Camera_Jump2(Camera* camera) {
             phi_f2 = 10.0f;
         }
 
-        fixedData->unk_00 = PCT(phi_f2 + NEXTSETTING) * trackHeight * yNormal;
-        fixedData->unk_04 = NEXTPCT * trackHeight * yNormal;
-        fixedData->unk_08 = NEXTPCT * trackHeight * yNormal;
-        fixedData->unk_0C = NEXTPCT;
-        fixedData->unk_10 = NEXTSETTING;
-        fixedData->unk_14 = NEXTPCT;
-        fixedData->unk_18 = NEXTSETTING;
-        fixedData->unk_1C = NEXTPCT;
-        fixedData->unk_20 = NEXTSETTING;
+        fixedData->unk_00 = SCALED_STATIC_DATA(phi_f2 + READ_STATIC_DATA_VAL) * trackHeight * yNormal;
+        fixedData->unk_04 = READ_SCALED_STATIC_DATA_VAL * trackHeight * yNormal;
+        fixedData->unk_08 = READ_SCALED_STATIC_DATA_VAL * trackHeight * yNormal;
+        fixedData->unk_0C = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_10 = READ_STATIC_DATA_VAL;
+        fixedData->unk_14 = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_18 = READ_STATIC_DATA_VAL;
+        fixedData->unk_1C = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_20 = READ_STATIC_DATA_VAL;
     }
 
     OLib_Vec3fDiffToVecSphGeo(&sp9C, at, eye);
@@ -3268,17 +3268,17 @@ s32 Camera_Jump3(Camera* camera) {
         spD0 = sp78 * 0.01f * sp5C;
         // if (phi_f2) {}
 
-        fixedData->unk_00 = NEXTSETTING * spD0;
-        fixedData->unk_04 = NEXTSETTING * spD0;
+        fixedData->unk_00 = READ_STATIC_DATA_VAL * spD0;
+        fixedData->unk_04 = READ_STATIC_DATA_VAL * spD0;
         if (1) {}
-        fixedData->unk_08 = NEXTSETTING * spD0;
-        fixedData->unk_20 = DEGF_TO_BINANG(NEXTSETTING);
-        fixedData->unk_0C = NEXTSETTING;
-        fixedData->unk_10 = NEXTSETTING;
-        fixedData->unk_14 = NEXTSETTING * 0.01f;
-        fixedData->unk_18 = NEXTSETTING;
-        fixedData->unk_1C = NEXTSETTING * 0.01f;
-        fixedData->unk_22 = NEXTSETTING;
+        fixedData->unk_08 = READ_STATIC_DATA_VAL * spD0;
+        fixedData->unk_20 = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->unk_0C = READ_STATIC_DATA_VAL;
+        fixedData->unk_10 = READ_STATIC_DATA_VAL;
+        fixedData->unk_14 = READ_STATIC_DATA_VAL * 0.01f;
+        fixedData->unk_18 = READ_STATIC_DATA_VAL;
+        fixedData->unk_1C = READ_STATIC_DATA_VAL * 0.01f;
+        fixedData->unk_22 = READ_STATIC_DATA_VAL;
     }
 
     sCameraInterfaceFlags = fixedData->unk_22;
@@ -3530,26 +3530,26 @@ s32 Camera_Battle1(Camera* camera) {
     } else {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        fixedData->unk_00 = NEXTSETTING * 0.01f * sp68 * (0.8f - ((68.0f / sp68) * -0.2f));
-        fixedData->unk_04 = NEXTSETTING;
-        fixedData->unk_08 = NEXTSETTING;
-        fixedData->unk_0C = NEXTSETTING;
+        fixedData->unk_00 = READ_STATIC_DATA_VAL * 0.01f * sp68 * (0.8f - ((68.0f / sp68) * -0.2f));
+        fixedData->unk_04 = READ_STATIC_DATA_VAL;
+        fixedData->unk_08 = READ_STATIC_DATA_VAL;
+        fixedData->unk_0C = READ_STATIC_DATA_VAL;
         fixedData->unk_0C = 80.0f - (80.0f - fixedData->unk_0C);
-        fixedData->unk_10 = NEXTSETTING;
+        fixedData->unk_10 = READ_STATIC_DATA_VAL;
         fixedData->unk_10 = 0.0f - (0.0f - fixedData->unk_10);
-        fixedData->unk_14 = NEXTSETTING;
+        fixedData->unk_14 = READ_STATIC_DATA_VAL;
         fixedData->unk_14 = 40.0f - (40.0f - fixedData->unk_14);
-        fixedData->unk_18 = NEXTSETTING;
+        fixedData->unk_18 = READ_STATIC_DATA_VAL;
         fixedData->unk_18 = 20.0f - (20.0f - fixedData->unk_18);
-        fixedData->unk_1C = NEXTSETTING * 0.01f;
+        fixedData->unk_1C = READ_STATIC_DATA_VAL * 0.01f;
         fixedData->unk_1C = 1.0f - (1.0f - fixedData->unk_1C);
-        fixedData->unk_20 = NEXTSETTING;
-        fixedData->unk_24 = NEXTSETTING * 0.01f;
+        fixedData->unk_20 = READ_STATIC_DATA_VAL;
+        fixedData->unk_24 = READ_STATIC_DATA_VAL * 0.01f;
         fixedData->unk_24 = 1.0f - (1.0f - fixedData->unk_24);
-        fixedData->unk_30 = NEXTSETTING;
-        fixedData->unk_28 = NEXTSETTING * 0.01f;
+        fixedData->unk_30 = READ_STATIC_DATA_VAL;
+        fixedData->unk_28 = READ_STATIC_DATA_VAL * 0.01f;
         fixedData->unk_28 = 0.2f - (0.2f - fixedData->unk_28);
-        fixedData->unk_2C = NEXTSETTING * 0.01f;
+        fixedData->unk_2C = READ_STATIC_DATA_VAL * 0.01f;
         if ((camera->actionFuncState != 0) && (camera->actionFuncState != 0xA) && (camera->actionFuncState != 0x14)) {
         } else {
             dynamicData->unk_18 = 0x28;
@@ -3937,24 +3937,24 @@ s32 Camera_KeepOn1(Camera* camera) {
     if (RELOAD_PARAMS) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        fixedData->unk_00 = NEXTPCT * temp_f0 * (0.8f - ((68.0f / temp_f0) * -0.2f));
-        fixedData->unk_04 = NEXTSETTING;
-        fixedData->unk_08 = NEXTSETTING;
-        fixedData->unk_0C = NEXTSETTING;
-        fixedData->unk_10 = NEXTSETTING;
-        fixedData->unk_14 = NEXTSETTING;
+        fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * temp_f0 * (0.8f - ((68.0f / temp_f0) * -0.2f));
+        fixedData->unk_04 = READ_STATIC_DATA_VAL;
+        fixedData->unk_08 = READ_STATIC_DATA_VAL;
+        fixedData->unk_0C = READ_STATIC_DATA_VAL;
+        fixedData->unk_10 = READ_STATIC_DATA_VAL;
+        fixedData->unk_14 = READ_STATIC_DATA_VAL;
         fixedData->unk_14 = 40.0f - (40.0f - fixedData->unk_14);
-        fixedData->unk_18 = NEXTSETTING;
+        fixedData->unk_18 = READ_STATIC_DATA_VAL;
         fixedData->unk_18 = 20.0f - (20.0f - fixedData->unk_18);
         // fixedData->unk_18 = fixedData->unk_18; // TODO: Fake
         // if (!fixedData->unk_08) {}
-        fixedData->unk_1C = NEXTPCT;
+        fixedData->unk_1C = READ_SCALED_STATIC_DATA_VAL;
         fixedData->unk_1C = 1.000f - (1.00f - fixedData->unk_1C); // TODO: Necessary?
-        fixedData->unk_20 = NEXTSETTING;
-        fixedData->unk_24 = NEXTPCT;
+        fixedData->unk_20 = READ_STATIC_DATA_VAL;
+        fixedData->unk_24 = READ_SCALED_STATIC_DATA_VAL;
         fixedData->unk_24 = 1.0f - (1.0f - fixedData->unk_24);
-        fixedData->unk_2C = NEXTSETTING;
-        fixedData->unk_28 = NEXTPCT;
+        fixedData->unk_2C = READ_STATIC_DATA_VAL;
+        fixedData->unk_28 = READ_SCALED_STATIC_DATA_VAL;
         fixedData->unk_28 = 0.2f - (0.2f - fixedData->unk_28);
     }
 
@@ -4276,19 +4276,19 @@ s32 Camera_KeepOn3(Camera* camera) {
     if (RELOAD_PARAMS) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
         
-        fixedData->unk_00 = NEXTSETTING * 0.01f * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
-        fixedData->unk_04 = NEXTSETTING;
-        fixedData->unk_08 = NEXTSETTING;
-        fixedData->unk_0C = NEXTSETTING;
-        fixedData->unk_10 = NEXTSETTING;
-        fixedData->unk_14 = NEXTSETTING;
-        fixedData->unk_18 = NEXTSETTING;
-        fixedData->unk_1C = NEXTSETTING * 0.01f;
-        fixedData->unk_20 = NEXTSETTING;
-        fixedData->unk_24 = NEXTSETTING * 0.01f;
-        fixedData->unk_2C = NEXTSETTING;
-        fixedData->unk_2E = NEXTSETTING;
-        fixedData->unk_28 = NEXTSETTING * 0.01f;
+        fixedData->unk_00 = READ_STATIC_DATA_VAL * 0.01f * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
+        fixedData->unk_04 = READ_STATIC_DATA_VAL;
+        fixedData->unk_08 = READ_STATIC_DATA_VAL;
+        fixedData->unk_0C = READ_STATIC_DATA_VAL;
+        fixedData->unk_10 = READ_STATIC_DATA_VAL;
+        fixedData->unk_14 = READ_STATIC_DATA_VAL;
+        fixedData->unk_18 = READ_STATIC_DATA_VAL;
+        fixedData->unk_1C = READ_STATIC_DATA_VAL * 0.01f;
+        fixedData->unk_20 = READ_STATIC_DATA_VAL;
+        fixedData->unk_24 = READ_STATIC_DATA_VAL * 0.01f;
+        fixedData->unk_2C = READ_STATIC_DATA_VAL;
+        fixedData->unk_2E = READ_STATIC_DATA_VAL;
+        fixedData->unk_28 = READ_STATIC_DATA_VAL * 0.01f;
     }
 
     if (camera->actionFuncState == 10) {
@@ -4547,15 +4547,15 @@ s32 Camera_KeepOn4(Camera* camera) {
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[sp82].values;
         new_var = -0.5f;
-        fixedData->unk_00 = NEXTPCT * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
-        fixedData->unk_04 = NEXTPCT * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
-        fixedData->unk_08 = NEXTSETTING;
-        fixedData->unk_0C = NEXTSETTING;
-        fixedData->unk_10 = NEXTSETTING;
-        fixedData->unk_18 = NEXTSETTING;
-        fixedData->unk_1C = NEXTSETTING;
-        fixedData->unk_14 = NEXTPCT;
-        fixedData->unk_1E = NEXTSETTING;
+        fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
+        fixedData->unk_04 = READ_SCALED_STATIC_DATA_VAL * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
+        fixedData->unk_08 = READ_STATIC_DATA_VAL;
+        fixedData->unk_0C = READ_STATIC_DATA_VAL;
+        fixedData->unk_10 = READ_STATIC_DATA_VAL;
+        fixedData->unk_18 = READ_STATIC_DATA_VAL;
+        fixedData->unk_1C = READ_STATIC_DATA_VAL;
+        fixedData->unk_14 = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_1E = READ_STATIC_DATA_VAL;
     }
 
     sUpdateCameraDirection = true;
@@ -4739,10 +4739,10 @@ s32 Camera_Fixed1(Camera* camera) {
         dynamicData->fov = bgCamData->fov;
         dynamicData->trackActor = camera->trackActor;
 
-        fixedData->unk_00 = NEXTPCT * trackHeight;
-        fixedData->jfifId = NEXTPCT;
-        fixedData->fov = NEXTSETTING;
-        fixedData->flags = NEXTSETTING;
+        fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * trackHeight;
+        fixedData->jfifId = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->fov = READ_STATIC_DATA_VAL;
+        fixedData->flags = READ_STATIC_DATA_VAL;
 
         if (fixedData->flags & FIXD1_FLG_10) {
             if (camera->target == NULL) {
@@ -4778,11 +4778,11 @@ s32 Camera_Fixed1(Camera* camera) {
         camera->actionFuncState++;
         Camera_SetUpdateRatesSlow(camera);
         if (dynamicData->fov != (s32)negOne) {
-            fixedData->fov = PCT(dynamicData->fov);
+            fixedData->fov = SCALED_STATIC_DATA(dynamicData->fov);
         }
 
         if (bgCamData->unk_0E != (s32)negOne) {
-            fixedData->jfifId = PCT(bgCamData->unk_0E);
+            fixedData->jfifId = SCALED_STATIC_DATA(bgCamData->unk_0E);
         }
     }
 
@@ -4837,13 +4837,13 @@ s32 Camera_Fixed2(Camera* camera) {
     } else {
         if (new_var2) {}
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        fixedData->unk_00 = NEXTPCT * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
-        fixedData->unk_04 = NEXTSETTING;
-        fixedData->unk_08 = NEXTSETTING;
-        fixedData->unk_0C = NEXTPCT;
-        fixedData->unk_10 = NEXTPCT;
-        fixedData->unk_14 = NEXTSETTING;
-        fixedData->unk_18 = NEXTSETTING;
+        fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
+        fixedData->unk_04 = READ_STATIC_DATA_VAL;
+        fixedData->unk_08 = READ_STATIC_DATA_VAL;
+        fixedData->unk_0C = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_10 = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_14 = READ_STATIC_DATA_VAL;
+        fixedData->unk_18 = READ_STATIC_DATA_VAL;
         dynamicData->unk_1C = fixedData->unk_14 * 100.0f;
         bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
         if (bgCamData != NULL) {
@@ -5084,15 +5084,15 @@ s32 Camera_Subj1(Camera* camera) {
     Camera_SetUpdateRatesFastPitch(camera);
 
     values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-    fixedData->unk_00 = NEXTPCT * trackHeight;
-    fixedData->unk_04 = NEXTSETTING;
-    fixedData->unk_08 = NEXTSETTING;
-    fixedData->unk_0C = NEXTSETTING;
-    fixedData->unk_10 = NEXTSETTING * 0.1f;
-    fixedData->unk_14 = NEXTSETTING * 0.1f;
-    fixedData->unk_18 = NEXTSETTING * 0.1f;
-    fixedData->unk_1C = NEXTSETTING;
-    fixedData->unk_20 = NEXTSETTING;
+    fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * trackHeight;
+    fixedData->unk_04 = READ_STATIC_DATA_VAL;
+    fixedData->unk_08 = READ_STATIC_DATA_VAL;
+    fixedData->unk_0C = READ_STATIC_DATA_VAL;
+    fixedData->unk_10 = READ_STATIC_DATA_VAL * 0.1f;
+    fixedData->unk_14 = READ_STATIC_DATA_VAL * 0.1f;
+    fixedData->unk_18 = READ_STATIC_DATA_VAL * 0.1f;
+    fixedData->unk_1C = READ_STATIC_DATA_VAL;
+    fixedData->unk_20 = READ_STATIC_DATA_VAL;
 
     sp7C.r = fixedData->unk_08;
     sp7C.yaw = BINANG_ROT180(sp58.rot.y);
@@ -5250,11 +5250,11 @@ s32 Camera_Unique2(Camera* camera) {
 
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        fixedData->unk_00 = NEXTPCT * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
-        fixedData->unk_04 = NEXTSETTING;
+        fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
+        fixedData->unk_04 = READ_STATIC_DATA_VAL;
         fixedData->unk_08 = 0.25f;
-        fixedData->unk_0C = NEXTSETTING;
-        fixedData->unk_10 = NEXTSETTING;
+        fixedData->unk_0C = READ_STATIC_DATA_VAL;
+        fixedData->unk_10 = READ_STATIC_DATA_VAL;
     }
 
     sCameraInterfaceFlags = fixedData->unk_10;
@@ -5378,9 +5378,9 @@ s32 Camera_Unique0(Camera* camera) {
     player = (Player*)camera->trackActor;
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        fixedData->unk_00 = NEXTSETTING;
-        fixedData->unk_04 = NEXTSETTING;
-        fixedData->unk_08 = NEXTSETTING;
+        fixedData->unk_00 = READ_STATIC_DATA_VAL;
+        fixedData->unk_04 = READ_STATIC_DATA_VAL;
+        fixedData->unk_08 = READ_STATIC_DATA_VAL;
     }
 
     OLib_Vec3fDiffToVecSphGeo(&sp7C, &camera->at, &camera->eye);
@@ -5550,7 +5550,7 @@ s32 Camera_Unique6(Camera* camera) {
 
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        fixedData->flags = NEXTSETTING;
+        fixedData->flags = READ_STATIC_DATA_VAL;
     }
 
     sCameraInterfaceFlags = fixedData->flags;
@@ -5617,7 +5617,7 @@ s32 Camera_Demo1(Camera* camera) {
     if (camera->actionFuncState == 0) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
         
-        fixedData->flags = NEXTSETTING;
+        fixedData->flags = READ_STATIC_DATA_VAL;
     }
 
     if (camera->actionFuncState == 0) {
@@ -5818,9 +5818,9 @@ s32 Camera_Demo2(Camera* camera) {
     if (RELOAD_PARAMS) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        fixedData->fov = NEXTSETTING;
-        fixedData->unk_04 = NEXTSETTING;
-        fixedData->flags = NEXTSETTING;
+        fixedData->fov = READ_STATIC_DATA_VAL;
+        fixedData->unk_04 = READ_STATIC_DATA_VAL;
+        fixedData->flags = READ_STATIC_DATA_VAL;
     }
 
     OLib_Vec3fDiffToVecSphGeo(&atToEye, at, eye);
@@ -6034,7 +6034,7 @@ s32 Camera_Demo3(Camera* camera) {
 
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        fixedData->flags = NEXTSETTING;
+        fixedData->flags = READ_STATIC_DATA_VAL;
         camera->actionFuncState = 0;
     }
 
@@ -6111,7 +6111,7 @@ s32 Camera_Demo4(Camera* camera) {
 
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        fixedData->flags = NEXTSETTING;
+        fixedData->flags = READ_STATIC_DATA_VAL;
         camera->actionFuncState = 0;
         dynamicData->unk_00 = *at;
         dynamicData->unk_18 = atToEye;
@@ -6253,7 +6253,7 @@ s32 Camera_Demo5(Camera* camera) {
 
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        fixedData->flags = NEXTSETTING;
+        fixedData->flags = READ_STATIC_DATA_VAL;
         camera->actionFuncState = 0;
         dynamicData->unk_00 = *at;
         dynamicData->unk_1C = atToEye;
@@ -6365,7 +6365,7 @@ s32 Camera_Demo0(Camera* camera) {
     if (camera->actionFuncState == 0) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        fixedData->unk_00 = NEXTSETTING;
+        fixedData->unk_00 = READ_STATIC_DATA_VAL;
     }
 
     if (camera->actionFuncState == 0) {
@@ -6502,14 +6502,14 @@ s32 Camera_Special5(Camera* camera) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
         f32 yNormal = (0.8f - ((68.0f / trackHeight) * -0.2f));
 
-        fixedData->yOffset = (NEXTPCT * trackHeight) * yNormal;
-        fixedData->eyeDist = NEXTSETTING;
-        fixedData->minDistForRot = NEXTSETTING;
-        fixedData->pitch = DEGF_TO_BINANG(NEXTSETTING);
-        fixedData->fovTarget = NEXTSETTING;
-        fixedData->atMaxLERPScale = NEXTPCT;
-        fixedData->timerInit = NEXTSETTING;
-        fixedData->flags = NEXTSETTING;
+        fixedData->yOffset = (READ_SCALED_STATIC_DATA_VAL * trackHeight) * yNormal;
+        fixedData->eyeDist = READ_STATIC_DATA_VAL;
+        fixedData->minDistForRot = READ_STATIC_DATA_VAL;
+        fixedData->pitch = DEGF_TO_BINANG(READ_STATIC_DATA_VAL);
+        fixedData->fovTarget = READ_STATIC_DATA_VAL;
+        fixedData->atMaxLERPScale = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->timerInit = READ_STATIC_DATA_VAL;
+        fixedData->flags = READ_STATIC_DATA_VAL;
     }
 
     OLib_Vec3fDiffToVecSphGeo(&atToEye, at, eye);
@@ -6591,12 +6591,12 @@ s32 Camera_Special8(Camera* camera) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
         // Initialize data
-        fixedData->yOffset = NEXTPCT * trackHeight * yNormal;
-        fixedData->eyeStepScale = NEXTPCT;
-        fixedData->posStepScale = NEXTPCT;
-        fixedData->fov = NEXTSETTING;
-        fixedData->spiralDoorCsLength = NEXTSETTING * 5;
-        fixedData->flags = NEXTSETTING;
+        fixedData->yOffset = READ_SCALED_STATIC_DATA_VAL * trackHeight * yNormal;
+        fixedData->eyeStepScale = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->posStepScale = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->fov = READ_STATIC_DATA_VAL;
+        fixedData->spiralDoorCsLength = READ_STATIC_DATA_VAL * 5;
+        fixedData->flags = READ_STATIC_DATA_VAL;
         dynamicData->fov = fixedData->fov * 100.0f;
         dynamicData->spiralDoorCsFrame = 0;
         Camera_UnsetFlags(camera, CAM_FLAG2_4 | CAM_FLAG2_2);
@@ -6636,7 +6636,7 @@ s32 Camera_Special8(Camera* camera) {
         camera->dist = OLib_Vec3fDist(at, &camera->eye);
         camera->roll = 0;
         camera->xzSpeed = 0.0f;
-        camera->fov = PCT(dynamicData->fov);
+        camera->fov = SCALED_STATIC_DATA(dynamicData->fov);
         camera->atLERPStepScale = Camera_ClampLERPScale(camera, 1.0f);
         Camera_UpdateAtActorOffset(camera, &playerPosRot->pos);
     } else {
@@ -6700,9 +6700,9 @@ s32 Camera_Special9(Camera* camera) {
     } else {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        fixedData->yOffset = NEXTPCT * trackHeight * sp34;
-        fixedData->fov = NEXTSETTING;
-        fixedData->flags = NEXTSETTING;
+        fixedData->yOffset = READ_SCALED_STATIC_DATA_VAL * trackHeight * sp34;
+        fixedData->fov = READ_STATIC_DATA_VAL;
+        fixedData->flags = READ_STATIC_DATA_VAL;
     }
 
     if (doorParams->doorActor != NULL) {
