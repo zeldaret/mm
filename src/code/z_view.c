@@ -251,9 +251,12 @@ s32 View_StepDistortion(View* view, Mtx* matrix) {
         view->currDistortionRot.y += ((view->distortionRot.y - view->currDistortionRot.y) * view->distortionSpeed);
         view->currDistortionRot.z += ((view->distortionRot.z - view->currDistortionRot.z) * view->distortionSpeed);
 
-        view->currDistortionScale.x += ((view->distortionScale.x - view->currDistortionScale.x) * view->distortionSpeed);
-        view->currDistortionScale.y += ((view->distortionScale.y - view->currDistortionScale.y) * view->distortionSpeed);
-        view->currDistortionScale.z += ((view->distortionScale.z - view->currDistortionScale.z) * view->distortionSpeed);
+        view->currDistortionScale.x +=
+            ((view->distortionScale.x - view->currDistortionScale.x) * view->distortionSpeed);
+        view->currDistortionScale.y +=
+            ((view->distortionScale.y - view->currDistortionScale.y) * view->distortionSpeed);
+        view->currDistortionScale.z +=
+            ((view->distortionScale.z - view->currDistortionScale.z) * view->distortionSpeed);
     }
 
     Matrix_FromRSPMatrix(matrix, &mf);

@@ -546,7 +546,8 @@ s32 func_80AF81E8(EnPm* this, GlobalContext* globalCtx) {
         case 4:
         case 6:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)),
+                                      this->actor.child);
             }
             this->unk_378++;
             ret = true;
@@ -598,7 +599,8 @@ s32 func_80AF8348(EnPm* this, GlobalContext* globalCtx) {
         case 5:
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)),
+                                      this->actor.child);
             }
             this->unk_378++;
             ret = true;

@@ -403,7 +403,8 @@ s32 func_8094E52C(EnGm* this, GlobalContext* globalCtx) {
 
         case 1:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)),
+                                      this->actor.child);
             }
             this->unk_3E0++;
             ret = true;

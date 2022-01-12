@@ -2169,9 +2169,11 @@ s32 Camera_Normal1(Camera* camera) {
                         spB4.yaw = Camera_CalcDefaultYaw(camera, sp9C.yaw, sp64.yaw, fixedData->unk_14, spC0);
                     }
                     if (!(fixedData->unk_22 & NORM1_FLG_8)) {
-                        spB4.pitch = Camera_CalcDefaultPitch(camera, sp9C.pitch, fixedData->unk_20, dynamicData->unk_08);
+                        spB4.pitch =
+                            Camera_CalcDefaultPitch(camera, sp9C.pitch, fixedData->unk_20, dynamicData->unk_08);
                     } else if ((camera->trackActorOffset.y > 0.0f) && func_800CB924(camera)) {
-                        spB4.pitch = Camera_CalcDefaultPitch(camera, sp9C.pitch, fixedData->unk_20, dynamicData->unk_08);
+                        spB4.pitch =
+                            Camera_CalcDefaultPitch(camera, sp9C.pitch, fixedData->unk_20, dynamicData->unk_08);
                     }
                 } else {
                     spB4.yaw = sp9C.yaw;
@@ -2265,7 +2267,6 @@ s32 Camera_Normal1(Camera* camera) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal1.s")
 #endif
 
-
 /**
  * Unused Camera RemoteBomb Setting
  */
@@ -2357,8 +2358,8 @@ s32 Camera_Normal3(Camera* camera) {
     sp8C = (temp_f2 = camera->speedRatio * 0.2f);
 
     if (D_801EDC30[camera->camId].unk_66 != 0) {
-        camera->yawUpdateRateInv = Camera_LERPCeilF((D_801EDC30[camera->camId].unk_66 * 2) + fixedData->yawUpdateRateInv,
-                                                    camera->yawUpdateRateInv, sp90, 0.1f);
+        camera->yawUpdateRateInv = Camera_LERPCeilF(
+            (D_801EDC30[camera->camId].unk_66 * 2) + fixedData->yawUpdateRateInv, camera->yawUpdateRateInv, sp90, 0.1f);
         camera->pitchUpdateRateInv =
             Camera_LERPCeilF((D_801EDC30[camera->camId].unk_66 * 2) + 16.0f, camera->pitchUpdateRateInv, sp8C, 0.1f);
         D_801EDC30[camera->camId].unk_66--;
@@ -2456,7 +2457,7 @@ s32 Camera_Normal3(Camera* camera) {
 }
 
 /**
- * Used for the unknown Naname setting. 
+ * Used for the unknown Naname setting.
  * Identical to Normal1 except reads camera scene data to apply a camera roll
  */
 s32 Camera_Normal4(Camera* camera) {
@@ -2742,8 +2743,7 @@ s32 Camera_Parallel1(Camera* camera) {
                 dynamicData->unk_22 = 6;
             }
 
-            if ((camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) &&
-                (camera->mode == CAM_MODE_CHARGE)) {
+            if ((camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) && (camera->mode == CAM_MODE_CHARGE)) {
                 dynamicData->unk_22 = 0x1E;
                 if (((Player*)camera->trackActor)->transformation == PLAYER_FORM_DEKU) {
                     fixedData->unk_24 = -1;
@@ -2757,9 +2757,10 @@ s32 Camera_Parallel1(Camera* camera) {
                 dynamicData->unk_20 = bgCamData->rot.x;
                 dynamicData->unk_1E = bgCamData->rot.y;
                 dynamicData->unk_08 = (bgCamData->fov == -1)   ? fixedData->unk_14
-                               : (bgCamData->fov > 360) ? bgCamData->fov * 0.01f
-                                                        : bgCamData->fov;
-                dynamicData->unk_00 = (bgCamData->unk_0E == -1) ? fixedData->unk_04 : bgCamData->unk_0E * 0.01f * trackHeight * sp50;
+                                      : (bgCamData->fov > 360) ? bgCamData->fov * 0.01f
+                                                               : bgCamData->fov;
+                dynamicData->unk_00 =
+                    (bgCamData->unk_0E == -1) ? fixedData->unk_04 : bgCamData->unk_0E * 0.01f * trackHeight * sp50;
             dummy:; // TODO: is needed?
             } else {
                 dynamicData->unk_08 = fixedData->unk_14;
@@ -2788,8 +2789,8 @@ s32 Camera_Parallel1(Camera* camera) {
                 if (dynamicData->unk_24 == 1) {
                     OLib_Vec3fDiffToVecSphGeo(&sp88, &dynamicData->unk_10, &spA4);
                     dynamicData->unk_1E = ((ABS(SUB16(sp88.yaw, sp80.yaw)) < 0x3A98) || Camera_IsClimbingLedge(camera))
-                                       ? sp80.yaw
-                                       : sp80.yaw + (s16)((SUB16(sp88.yaw, sp80.yaw) >> 2) * 3);
+                                              ? sp80.yaw
+                                              : sp80.yaw + (s16)((SUB16(sp88.yaw, sp80.yaw) >> 2) * 3);
                 }
                 dynamicData->unk_20 = fixedData->unk_20;
                 break;
@@ -2817,7 +2818,8 @@ s32 Camera_Parallel1(Camera* camera) {
     spA0 = camera->speedRatio * 0.5f;
     sp9C = camera->speedRatio * 0.2f;
 
-    if (((fixedData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == (PARA1_FLG_4 | PARA1_FLG_2)) || ((fixedData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == PARA1_FLG_8) ||
+    if (((fixedData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == (PARA1_FLG_4 | PARA1_FLG_2)) ||
+        ((fixedData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == PARA1_FLG_8) ||
         (fixedData->unk_26 & PARA1_FLG_20)) {
         camera->rUpdateRateInv = Camera_LERPCeilF(20.0f, camera->rUpdateRateInv, 0.5f, 0.1f);
         camera->yawUpdateRateInv = Camera_LERPCeilF(fixedData->unk_0C, camera->yawUpdateRateInv, 0.5f, 0.1f);
@@ -2870,7 +2872,8 @@ s32 Camera_Parallel1(Camera* camera) {
         Camera_LERPCeilVec3f(&spB0, at, camera->xzOffsetUpdateRate, camera->yOffsetUpdateRate, 0.0001f);
         Camera_UpdateAtActorOffset(camera, &sp38->pos);
     } else {
-        if ((fixedData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) {
+        if ((fixedData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) ==
+            (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) {
             spB0 = sp38->pos;
             spB0.y += trackHeight + fixedData->unk_00;
             Camera_LERPCeilVec3f(&spB0, at, camera->xzOffsetUpdateRate, camera->yOffsetUpdateRate, 0.0001f);
@@ -2879,7 +2882,8 @@ s32 Camera_Parallel1(Camera* camera) {
             Camera_CalcAtDefault(camera, &sp78, fixedData->unk_00, 0);
             dynamicData->unk_0C = 200.0f;
         } else if (!(fixedData->unk_26 & PARA1_FLG_80) && !sp72) {
-            func_800CDB6C(camera, &sp78, fixedData->unk_00, fixedData->unk_08, &dynamicData->unk_04, fixedData->unk_26 & (PARA1_FLG_40 | PARA1_FLG_1));
+            func_800CDB6C(camera, &sp78, fixedData->unk_00, fixedData->unk_08, &dynamicData->unk_04,
+                          fixedData->unk_26 & (PARA1_FLG_40 | PARA1_FLG_1));
             dynamicData->unk_0C = 200.0f;
         } else {
             func_800CD834(camera, &sp78, fixedData->unk_00, &dynamicData->unk_04, dynamicData->unk_0C);
@@ -2899,7 +2903,8 @@ s32 Camera_Parallel1(Camera* camera) {
 
             tangle = ((dynamicData->unk_22 + 1) * dynamicData->unk_22) >> 1;
             sp90.yaw = sp80.yaw + ((SUB16(dynamicData->unk_1E, sp80.yaw) / tangle) * dynamicData->unk_22);
-            phi_a0 = ((fixedData->unk_26 & PARA1_FLG_1) ? SUB16(dynamicData->unk_20, dynamicData->unk_1C) : dynamicData->unk_20);
+            phi_a0 = ((fixedData->unk_26 & PARA1_FLG_1) ? SUB16(dynamicData->unk_20, dynamicData->unk_1C)
+                                                        : dynamicData->unk_20);
             new_var2 = SUB16(phi_a0, sp80.pitch);
             sp90.pitch = sp80.pitch + ((new_var2 / tangle) * dynamicData->unk_22);
             sp90.r = camera->dist;
@@ -2954,7 +2959,8 @@ s32 Camera_Parallel1(Camera* camera) {
             spB0 = *at;
             // (stateFlags1 & 0x4) Climbing ledge
             if ((((Player*)camera->trackActor)->stateFlags1 & 0x4000) ||
-                (((Player*)camera->trackActor)->stateFlags1 & 4) || ((fixedData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == (PARA1_FLG_4 | PARA1_FLG_2))) {
+                (((Player*)camera->trackActor)->stateFlags1 & 4) ||
+                ((fixedData->unk_26 & (PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2)) == (PARA1_FLG_4 | PARA1_FLG_2))) {
                 spB0.y += trackHeight;
             }
             *eye = *eyeNext;
@@ -3003,7 +3009,7 @@ s32 Camera_Jump1(Camera* camera) {
 
 /**
  * Camera for climbing structures
- * 
+ *
  * This function is matching but rodata was improperly split between Camera_Jump2 and Camera_Jump3
  * This will successfully match when Camera_Jump3 is matching
  * (has been verified by manually moving rodata asm after extraction)
@@ -3120,8 +3126,8 @@ s32 Camera_Jump2(Camera* camera) {
         spB4.yaw = Camera_LERPCeilS(dynamicData->unk_04, spA4.yaw, 0.5f, 5);
     } else if (dynamicData->unk_08 < ABS(yawDiff)) {
         temp_t2 = BINANG_ROT180(sp2C->rot.y);
-        spB4.yaw =
-            Camera_LERPFloorS((yawDiff < 0) ? (temp_t2 + dynamicData->unk_08) : (temp_t2 - dynamicData->unk_08), spA4.yaw, 0.1f, 1);
+        spB4.yaw = Camera_LERPFloorS((yawDiff < 0) ? (temp_t2 + dynamicData->unk_08) : (temp_t2 - dynamicData->unk_08),
+                                     spA4.yaw, 0.1f, 1);
     } else {
         spB4.yaw = Camera_LERPCeilS(spB4.yaw, spA4.yaw, 0.25f, 5);
     }
@@ -3842,7 +3848,8 @@ s32 Camera_Battle1(Camera* camera) {
 
     camera->roll = Camera_LERPCeilS(sp88, camera->roll, 0.06f, 5);
     if (func_800CBAAC(camera) != 0) {
-        phi_f12 = ((camera->globalCtx->state.frames & 8) != 0) ? fixedData->unk_20 - (fixedData->unk_20 * 0.5f) : fixedData->unk_20;
+        phi_f12 = ((camera->globalCtx->state.frames & 8) != 0) ? fixedData->unk_20 - (fixedData->unk_20 * 0.5f)
+                                                               : fixedData->unk_20;
     } else {
         phi_f12 = ((gSaveContext.health <= 16) ? 0.8f : 1.0f) * (sp78 - (sp78 * 0.05f * spEC));
     }
@@ -4108,7 +4115,7 @@ s32 Camera_KeepOn1(Camera* camera) {
         // TODO: extra 0 on 0.050f needed?
         phi_a0 = (s16)(((fixedData->unk_14 + ((fixedData->unk_18 - fixedData->unk_14) * sp74)) * 182.04167f) + .5f);
         phi_a0 -= (s16)((spD0.pitch * (0.5f + (sp74 * 0.5f))) + 0.5f);
-        if (1) {}                          // TODO: Needed?
+        if (1) {}                              // TODO: Needed?
         sp60 = spD8.pitch * fixedData->unk_1C; // TODO: Fake sp60 temp?
         phi_a0 += (s16)sp60;
 
@@ -4275,7 +4282,7 @@ s32 Camera_KeepOn3(Camera* camera) {
     Camera_UnsetFlags(camera, CAM_FLAG2_10);
     if (RELOAD_PARAMS) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        
+
         fixedData->unk_00 = READ_STATIC_DATA_VAL * 0.01f * trackHeight * (0.8f - ((68.0f / trackHeight) * -0.2f));
         fixedData->unk_04 = READ_STATIC_DATA_VAL;
         fixedData->unk_08 = READ_STATIC_DATA_VAL;
@@ -4386,15 +4393,15 @@ s32 Camera_KeepOn3(Camera* camera) {
             sp78 = 14;
             OLib_VecSphAddToVec3f(&spCC, &dynamicData->unk_10, &sp98);
             if (!(fixedData->unk_2E & KEEP3_FLG_80)) {
-                if (CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colChkCtx, &dynamicData->unk_10, &spCC,
-                                               spA8, 2) ||
+                if (CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colChkCtx, &dynamicData->unk_10,
+                                               &spCC, spA8, 2) ||
                     Camera_BGCheck(camera, &dynamicData->unk_10, &spCC)) {
                     sp98.yaw = sp6A;
                     OLib_VecSphAddToVec3f(&spCC, &dynamicData->unk_10, &sp98);
                 }
                 while (i < sp78) {
-                    if (!CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colChkCtx, &dynamicData->unk_10,
-                                                    &spCC, spA8, 2) &&
+                    if (!CollisionCheck_LineOCCheck(camera->globalCtx, &camera->globalCtx->colChkCtx,
+                                                    &dynamicData->unk_10, &spCC, spA8, 2) &&
                         !Camera_BGCheck(camera, &dynamicData->unk_10, &spCC)) {
                         break;
                     }
@@ -4466,7 +4473,7 @@ s32 Camera_KeepOn3(Camera* camera) {
 }
 
 /**
- * Used for settings where camera turns around and faces player 
+ * Used for settings where camera turns around and faces player
  * eg. all item-based settings, elegy shell cutscene, death cutscene, ...
  */
 s32 Camera_KeepOn4(Camera* camera) {
@@ -4491,7 +4498,7 @@ s32 Camera_KeepOn4(Camera* camera) {
     KeepOn4DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(KeepOn4);
     f32 trackHeight;
     s32 bgId;
-    s16 sp82; // mode
+    s16 sp82;       // mode
     Player* player; // sp7C
     Vec3f* data;
     CameraModeValue* values;
@@ -4547,8 +4554,10 @@ s32 Camera_KeepOn4(Camera* camera) {
     if (RELOAD_PARAMS) {
         values = sCameraSettings[camera->setting].cameraModes[sp82].values;
         new_var = -0.5f;
-        fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
-        fixedData->unk_04 = READ_SCALED_STATIC_DATA_VAL * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
+        fixedData->unk_00 =
+            READ_SCALED_STATIC_DATA_VAL * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
+        fixedData->unk_04 =
+            READ_SCALED_STATIC_DATA_VAL * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
         fixedData->unk_08 = READ_STATIC_DATA_VAL;
         fixedData->unk_0C = READ_STATIC_DATA_VAL;
         fixedData->unk_10 = READ_STATIC_DATA_VAL;
@@ -4792,7 +4801,8 @@ s32 Camera_Fixed1(Camera* camera) {
     adjustedPos.y += trackHeight;
     camera->dist = OLib_Vec3fDist(&adjustedPos, eye);
     eyeOffset.r = camera->dist;
-    eyeOffset.pitch = Camera_LERPCeilS(dynamicData->eyePosRotTarget.rot.x * -1, eyeAtOffset.pitch, fixedData->unk_04, 5);
+    eyeOffset.pitch =
+        Camera_LERPCeilS(dynamicData->eyePosRotTarget.rot.x * -1, eyeAtOffset.pitch, fixedData->unk_04, 5);
     eyeOffset.yaw = Camera_LERPCeilS(dynamicData->eyePosRotTarget.rot.y, eyeAtOffset.yaw, fixedData->unk_04, 5);
     OLib_VecSphAddToVec3f(at, eye, &eyeOffset);
     camera->eyeNext = *eye;
@@ -5449,8 +5459,10 @@ s32 Camera_Unique0(Camera* camera) {
                 sp54.y = sp40->pos.y + playerHeight + fixedData->unk_00;
                 sp54.z = sp40->pos.z;
                 Camera_LERPCeilVec3f(&sp54, &camera->at, camera->xzOffsetUpdateRate, camera->yOffsetUpdateRate, 0.1f);
-                camera->yOffsetUpdateRate = Camera_LERPCeilF(dynamicData->unk_18, camera->yOffsetUpdateRate, 0.1f, 0.0001f);
-                camera->xzOffsetUpdateRate = Camera_LERPCeilF(dynamicData->unk_18, camera->xzOffsetUpdateRate, 0.1f, 0.0001f);
+                camera->yOffsetUpdateRate =
+                    Camera_LERPCeilF(dynamicData->unk_18, camera->yOffsetUpdateRate, 0.1f, 0.0001f);
+                camera->xzOffsetUpdateRate =
+                    Camera_LERPCeilF(dynamicData->unk_18, camera->xzOffsetUpdateRate, 0.1f, 0.0001f);
             }
 
             if ((camera->actionFuncState == 999) || (camera->actionFuncState == 666)) {
@@ -5496,7 +5508,8 @@ s32 Camera_Unique0(Camera* camera) {
                         CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CRIGHT) ||
                         CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_Z) ||
                         CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_L) ||
-                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_R) || (fixedData->unk_08 & UNIQ0_FLG_2)) {
+                        CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_R) ||
+                        (fixedData->unk_08 & UNIQ0_FLG_2)) {
                         dynamicData->unk_3E = 1;
                     }
                 }
@@ -5616,7 +5629,7 @@ s32 Camera_Demo1(Camera* camera) {
 
     if (camera->actionFuncState == 0) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-        
+
         fixedData->flags = READ_STATIC_DATA_VAL;
     }
 
@@ -5974,10 +5987,10 @@ s32 Camera_Demo2(Camera* camera) {
 
     /**
      * Opening a large chest only lasts 135 frames
-     * 
-     * So for one frame, the actionFuncState is set to 10, 
+     *
+     * So for one frame, the actionFuncState is set to 10,
      * allowing the static data to be loaded into the subCamera mini-heap
-     * 
+     *
      * For the remainder of the cutscene, actionFuncState is set to 1
      */
     if (dynamicData->animFrame == 1) {
@@ -6247,7 +6260,6 @@ s32 Camera_Demo5(Camera* camera) {
     Demo5FixedData* fixedData = CAM_GET_STATIC_DATA(Demo5);
     Demo5DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(Demo5);
     CameraModeValue* values;
-
 
     OLib_Vec3fDiffToVecSphGeo(&atToEye, at, eye);
 
@@ -6629,7 +6641,7 @@ s32 Camera_Special8(Camera* camera) {
 
         // Update at to look at player
         Camera_LERPCeilVec3f(&atTarget, at, fixedData->posStepScale, fixedData->posStepScale, 10.0f);
-        
+
         // Move camera position &dynamicData->eye and remain there for the entire cutscen
         Camera_LERPCeilVec3f(&dynamicData->eye, eyeNext, fixedData->eyeStepScale, fixedData->eyeStepScale, 0.1f);
         camera->eye = *eyeNext;
@@ -6732,7 +6744,7 @@ s32 Camera_Special9(Camera* camera) {
             doorParams->timer1--;
             if (doorParams->timer1 <= 0) {
                 camera->actionFuncState++;
-                
+
                 // Setup for the camera moving behind the door
                 if (fixedData->flags & SPEC9_FLG_1) {
                     bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
@@ -6745,7 +6757,7 @@ s32 Camera_Special9(Camera* camera) {
                     spB0.pitch = ((s16)(Rand_ZeroOne() * 640.0f) + 0xBB8);
                     randFloat = ((s16)(Rand_ZeroOne() * 1230.0f) + 0x5DC);
 
-                    // The camera will either position itself either to the left or to the right 
+                    // The camera will either position itself either to the left or to the right
                     // of the door when it jumps behind it. It's effectively 50/50 percent chance
                     camEyeSide = (s16)(randFloat * ((camera->globalCtx->state.frames % 2) ? 1 : -1));
 
@@ -6789,7 +6801,7 @@ s32 Camera_Special9(Camera* camera) {
             spB0.yaw = Camera_LERPCeilS(dynamicData->unk_00, spA8.yaw, 0.3f, 5);
             spB0.r = Camera_LERPCeilF(60.0f, spA8.r, 0.3f, 1.0f);
             OLib_VecSphAddToVec3f(eyeNext, at, &spB0);
-            
+
             *eye = *eyeNext;
 
             doorParams->timer3--;
@@ -6814,7 +6826,8 @@ s32 Camera_Special9(Camera* camera) {
                 CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_CRIGHT) ||
                 CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_Z) ||
                 CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_L) ||
-                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_R) || (fixedData->flags & SPEC9_FLG_8)) {
+                CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_R) ||
+                (fixedData->flags & SPEC9_FLG_8)) {
 
                 func_800CC938(camera);
                 Camera_SetFlags(camera, CAM_FLAG2_4 | CAM_FLAG2_2);
@@ -7199,8 +7212,7 @@ s32 Camera_SetSwordDistortion(Camera* camera) {
 s32 Camera_IsWearingGiantsMask(Camera* camera) {
     Player* player = GET_PLAYER(camera->globalCtx);
 
-    if ((camera->camId == CAM_ID_MAIN) &&
-        (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) &&
+    if ((camera->camId == CAM_ID_MAIN) && (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) &&
         (player->currentMask == PLAYER_MASK_GIANT)) {
         Camera_ChangeSettingFlags(camera, CAM_SET_GIANT, CAM_CHANGE_SET_FLAG_2);
         return true;
@@ -7243,7 +7255,6 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         if (camera->trackActor != NULL) {
             // Updates camera info on the actor it's tracking
 
-
             if (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) {
                 Actor_GetWorldPosShapeRot(&trackActorPosRot, camera->trackActor);
             } else {
@@ -7273,7 +7284,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
                 spA0 = trackActorPosRot.pos;
                 spA0.y += Camera_GetTrackedActorHeight(camera);
                 playerFloorHeight = BgCheck_EntityRaycastFloor5_3(camera->globalCtx, &camera->globalCtx->colCtx, &sp90,
-                                                              &bgId, camera->trackActor, &spA0);
+                                                                  &bgId, camera->trackActor, &spA0);
                 if (playerFloorHeight != BGCHECK_Y_MIN) {
                     camera->bgId = bgId;
                     camera->playerFloorHeight = playerFloorHeight;
@@ -7310,7 +7321,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
             /**
              * This section is about updating the camera setting based on the camera scene data
-             * 
+             *
              */
 
             // If doorTimer1 is active, set CAM_FLAG2_400 which suppresses bg camera scene data from being read
@@ -7325,8 +7336,9 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
             // Sets the next cam scene data Index based on the bg surface
             if ((camera->flags2 & CAM_FLAG2_1) && (camera->flags2 & CAM_FLAG2_4) && !(camera->flags2 & CAM_FLAG2_400) &&
-                (!(camera->flags2 & CAM_FLAG2_200) || Camera_IsUnderwaterAsZora(camera)) && !(camera->flags2 & (s16)CAM_FLAG2_8000) &&
-                !Camera_IsMountedOnHorse(camera) && !Camera_IsWearingGiantsMask(camera) && !Camera_IsDekuHovering(camera) && (sp98 != 0)) {
+                (!(camera->flags2 & CAM_FLAG2_200) || Camera_IsUnderwaterAsZora(camera)) &&
+                !(camera->flags2 & (s16)CAM_FLAG2_8000) && !Camera_IsMountedOnHorse(camera) &&
+                !Camera_IsWearingGiantsMask(camera) && !Camera_IsDekuHovering(camera) && (sp98 != 0)) {
 
                 bgCamDataId = Camera_GetBgCamDataId(camera, &bgId, sp90);
                 if ((bgCamDataId != -1) && (camera->bgId == BGCHECK_SCENE)) {
@@ -7358,7 +7370,8 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             if (((camera->camId == CAM_ID_MAIN) || (camera->flags2 & CAM_FLAG2_40)) &&
                 ((camera->bgId == BGCHECK_SCENE) || ((bgId == BGCHECK_SCENE) && (changeCamSceneDataType != 0))) &&
                 (camera->nextCamSceneDataId != -1) && (camera->doorTimer1 == 0) &&
-                ((Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerFloorHeight) < 11.0f) || (changeCamSceneDataType != 0)) &&
+                ((Camera_fabsf(camera->trackActorPosRot.pos.y - camera->playerFloorHeight) < 11.0f) ||
+                 (changeCamSceneDataType != 0)) &&
                 (!(camera->flags2 & CAM_FLAG2_200) || Camera_IsUnderwaterAsZora(camera))) {
 
                 Camera_ChangeDataIdx(camera, camera->nextCamSceneDataId);
@@ -7408,7 +7421,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     }
 
     /**
-     * This section is about updating view structs from the active camera, 
+     * This section is about updating view structs from the active camera,
      * which view uses to calculate the viewing/projection matrices
      */
 

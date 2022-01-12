@@ -416,7 +416,8 @@ void Distortion_ClearType(s32 type) {
 }
 
 s32 Distortion_GetFloorConveyorSpeed(Player* player) {
-    if (SurfaceType_GetConveyorType(&sDistortionContext.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 0) {
+    if (SurfaceType_GetConveyorType(&sDistortionContext.globalCtx->colCtx, player->actor.floorPoly,
+                                    player->actor.floorBgId) == 0) {
         return SurfaceType_GetConveyorSpeed(&sDistortionContext.globalCtx->colCtx, player->actor.floorPoly,
                                             player->actor.floorBgId);
     }
@@ -717,12 +718,14 @@ void Distortion_Update(void) {
 
         angle1 += DEGF_TO_BINANG(angle1Speed);
         angle2 += DEGF_TO_BINANG(angle2Speed);
-        View_SetDistortionRotation(&sDistortionContext.globalCtx->view, Math_CosS(angle1) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
-                              Math_SinS(angle1) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
-                              Math_SinS(angle2) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
-        View_SetDistortionScale(&sDistortionContext.globalCtx->view, (Math_SinS(angle2) * (xScale * xyScaleFactor)) + 1.0f,
-                           (Math_CosS(angle2) * (yScale * xyScaleFactor)) + 1.0f,
-                           (Math_CosS(angle1) * (zScale * zScaleFactor)) + 1.0f);
+        View_SetDistortionRotation(&sDistortionContext.globalCtx->view,
+                                   Math_CosS(angle1) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
+                                   Math_SinS(angle1) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
+                                   Math_SinS(angle2) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
+        View_SetDistortionScale(&sDistortionContext.globalCtx->view,
+                                (Math_SinS(angle2) * (xScale * xyScaleFactor)) + 1.0f,
+                                (Math_CosS(angle2) * (yScale * xyScaleFactor)) + 1.0f,
+                                (Math_CosS(angle1) * (zScale * zScaleFactor)) + 1.0f);
         View_SetDistortionSpeed(&sDistortionContext.globalCtx->view, speed * speedScaleFactor);
         sDistortionContext.state = DISTORTION_ACTIVE;
     } else if (sDistortionContext.state != DISTORTION_INACTIVE) {
