@@ -46,7 +46,6 @@ beginseg
     include "build/src/boot_O2/system_malloc.o"
     include "build/src/boot_O2/rand.o"
     include "build/src/boot_O2/__osMalloc.o"
-    include "build/data/boot/__osMalloc.bss.o"
     include "build/src/libultra/rmon/sprintf.o"
     include "build/src/boot_O2/printutils.o"
     include "build/src/boot_O2/sleep.o"
@@ -441,7 +440,6 @@ beginseg
     include "build/src/code/pad_801DC9C0.o"
     include "build/src/code/z_DLF.o"
     include "build/src/code/z_actor.o"
-    include "build/data/code/z_actor.data.o"
     include "build/data/code/z_actor.bss.o"
     include "build/src/code/z_actor_dlftbls.o"
     include "build/src/code/z_bgcheck.o"
@@ -466,7 +464,7 @@ beginseg
     include "build/data/code/z_draw.data.o"
     include "build/src/code/z_eff_footmark.o"
     include "build/data/code/z_eff_footmark.data.o"
-    include "build/src/code/code_800F0390.o"
+    include "build/src/code/z_sound_source.o"
     include "build/src/code/z_elf_message.o"
     include "build/src/code/z_en_hy.o"
     include "build/src/code/z_face_reaction.o"
@@ -492,7 +490,6 @@ beginseg
     include "build/src/code/z_lights.o"
     include "build/data/code/z_lights.bss.o"
     include "build/src/code/z_malloc.o"
-    include "build/data/code/z_malloc.bss.o"
     include "build/src/code/z_map_disp.o"
     include "build/data/code/z_map_disp.data.o"
     include "build/data/code/z_map_disp.bss.o"
@@ -1643,8 +1640,11 @@ beginseg
     name "ovl_En_Kanban"
     compress
     include "build/src/overlays/actors/ovl_En_Kanban/z_en_kanban.o"
-    include "build/data/ovl_En_Kanban/ovl_En_Kanban.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Kanban/ovl_En_Kanban_reloc.o"
+#else
     include "build/data/ovl_En_Kanban/ovl_En_Kanban.reloc.o"
+#endif
 endseg
 
 beginseg
