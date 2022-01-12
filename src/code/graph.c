@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
@@ -88,33 +89,27 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     return NULL;
 }
 
-#ifdef NON_MATCHING
-// Regalloc differences
 void* Graph_FaultAddrConvFunc(void* address, void* param) {
-    u32 addr = address;
-    GameStateOverlay* gamestateOvl;
-    u32 ramConv;
-    u32 ramStart;
-    u32 diff;
+    uintptr_t addr = address;
+    GameStateOverlay* gamestateOvl = &gGameStateOverlayTable[0];
+    uintptr_t ramConv;
+    void* ramStart;
+    uintptr_t diff;
     s32 i;
 
-    for (i = 0; i < graphNumGameStates; i++) {
-        gamestateOvl = &gGameStateOverlayTable[i];
+    for (i = 0; i < graphNumGameStates; i++, gamestateOvl++) {
+        diff = VRAM_PTR_SIZE(gamestateOvl);
         ramStart = gamestateOvl->loadedRamAddr;
-        diff = (u32)gamestateOvl->vramEnd - (u32)gamestateOvl->vramStart;
-        ramConv = (u32)gamestateOvl->vramStart - ramStart;
+        ramConv = (uintptr_t)gamestateOvl->vramStart - (uintptr_t)ramStart;
 
-        if (gamestateOvl->loadedRamAddr != NULL) {
-            if (addr >= ramStart && addr < ramStart + diff) {
+        if (ramStart != NULL) {
+            if (addr >= (uintptr_t)ramStart && addr < (uintptr_t)ramStart + diff) {
                 return addr + ramConv;
             }
         }
     }
     return NULL;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/graph/Graph_FaultAddrConvFunc.s")
-#endif
 
 void Graph_Init(GraphicsContext* gfxCtx) {
     bzero(gfxCtx, sizeof(GraphicsContext));

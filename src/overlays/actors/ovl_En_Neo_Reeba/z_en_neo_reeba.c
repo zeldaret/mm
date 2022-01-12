@@ -85,7 +85,7 @@ void func_80B7CA34(EnNeoReeba*); /* extern */
 void EnNeoReeba_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNeoReeba* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06001EE8, &D_060001E4, this->jointTable, this->morphTable, 18);
     if (!(this->actor.params & 0x8000)) {
         Actor_SetScale(&this->actor, 0.04f);
@@ -203,7 +203,7 @@ void func_80B7CD28(EnNeoReeba*, GlobalContext*); /* extern */
 void func_80B7CCE0(EnNeoReeba* this) {
     this->unk_2F8 = 0.0f;
     this->skelAnime.playSpeed = 2.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
     this->actionFunc = func_80B7CD28;
 }
 
@@ -212,7 +212,7 @@ void func_80B7CD28(EnNeoReeba* this, GlobalContext* globalCtx) {
     if (Math_SmoothStepToF(&this->actor.shape.yOffset, -2000.0f, 0.5f, this->unk_2F8, 10.0f) == 0.0f) {
         func_80B7CA34(this);
     } else if ((globalCtx->gameplayFrames % 4) == 0) {
-        func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f, 500, 10,
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f, 500, 10,
                       1);
     }
     if (this->unk_2F8 < 300.0f) {
@@ -228,7 +228,7 @@ void func_80B7CE34(EnNeoReeba* this) {
     this->actor.draw = EnNeoReeba_Draw;
     this->unk_2F8 = 300.0f;
     this->skelAnime.playSpeed = 2.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_APPEAR);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_APPEAR);
     this->actor.flags |= 1;
     this->actionFunc = func_80B7CE94;
 }
@@ -240,7 +240,7 @@ void func_80B7CE94(EnNeoReeba* this, GlobalContext* globalCtx) {
     if (Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 0.5f, this->unk_2F8, 10.0f) == 0.0f) {
         func_80B7CB3C(this);
     } else if ((globalCtx->gameplayFrames & 3) == 0) {
-        func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f, 500, 10,
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f, 500, 10,
                       1);
     }
     if (this->unk_2F8 > 20.0f) {
@@ -251,7 +251,7 @@ void func_80B7CE94(EnNeoReeba* this, GlobalContext* globalCtx) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Neo_Reeba/func_80B7CFA0.s")
 void func_80B7CFA0(EnNeoReeba* this) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIVA_MOVE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIVA_MOVE);
     this->unk_30C = 0xA;
     this->unk_30A = 0x3C;
     this->actionFunc = func_80B7CFFC;
@@ -263,7 +263,7 @@ void func_80B7CFA0(EnNeoReeba* this) {
 void func_80B7CFFC(EnNeoReeba* this, GlobalContext* globalCtx) {
     f32 sp3C = Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->unk_2B0, this->actor.speedXZ);
 
-    func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f, (s16)0xFA,
+    Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f, (s16)0xFA,
                   (s16)0xA, (u8)1);
     if (sp3C < 2.0f) {
         func_80B7CB3C(this);
@@ -271,7 +271,7 @@ void func_80B7CFFC(EnNeoReeba* this, GlobalContext* globalCtx) {
         this->actor.speedXZ -= 2.0f;
     }
     if (this->unk_30C == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIVA_MOVE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIVA_MOVE);
         this->unk_30C = 0xA;
     } else {
         this->unk_30C--;
@@ -335,7 +335,7 @@ void func_80B7D2E4(EnNeoReeba* this, GlobalContext* globalCtx) {
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Neo_Reeba/func_80B7D360.s")
 void func_80B7D398(EnNeoReeba*, GlobalContext*);
 void func_80B7D360(EnNeoReeba* this) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_80B7D398;
 }
 
@@ -367,7 +367,7 @@ void func_80B7D3EC(EnNeoReeba* this) {
     } else {
         this->unk_30E = 0xC;
     }
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_80B7D47C;
 }
 
@@ -403,8 +403,8 @@ void func_80B7D4FC(EnNeoReeba* this) {
     this->unk_2BC.x = Math_SinS(this->actor.yawTowardsPlayer) * -12.0f;
     this->unk_2BC.z = Math_CosS(this->actor.yawTowardsPlayer) * -12.0f;
     this->unk_2FC = 4551.0f;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 25);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIVA_DAMAGE);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIVA_DAMAGE);
     this->actionFunc = func_80B7D5A4;
 }
 
@@ -428,7 +428,7 @@ void func_80B7D5A4(EnNeoReeba* this, GlobalContext* globalCtx) {
             this->actor.scale.y *= 1.5f;
             this->actor.scale.z *= 1.5f;
         }
-        func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f,
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f,
                       250, 10, 1);
         this->unk_30A += -1;
     }

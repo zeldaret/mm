@@ -1,6 +1,40 @@
-#include "global.h"
+/*
+ * File: z_sub_s.c
+ * Description: Various miscellaneous helpers
+ */
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013A7C0.s")
+#include "global.h"
+#include "overlays/actors/ovl_En_Door/z_en_door.h"
+
+/**
+ * Finds the first EnDoor instance with unk_1A4 == 5 and the specified unk_1A5.
+ */
+EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 unk_1A5) {
+    Actor* actor = NULL;
+    EnDoor* door;
+
+    while (true) {
+        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        door = (EnDoor*)actor;
+
+        if (actor == NULL) {
+            break;
+        }
+
+        if ((door->unk_1A4 == 5) && (door->unk_1A5 == (u8)unk_1A5)) {
+            break;
+        }
+
+        if (actor->next == NULL) {
+            door = NULL;
+            break;
+        }
+
+        actor = actor->next;
+    }
+
+    return door;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013A860.s")
 
@@ -26,7 +60,40 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BB34.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BB7C.s")
+/**
+ * Finds the nearest actor instance of a specified Id and category to an actor.
+ */
+Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
+    Actor* actorTmp;
+    f32 dist;
+    Actor* closestActor = NULL;
+    f32 minDist = 99999.0f;
+    s32 isSetup = false;
+
+    do {
+        actorIter = SubS_FindActor(globalCtx, actorIter, actorCategory, actorId);
+
+        actorTmp = actorIter;
+        if (actorTmp == NULL) {
+            break;
+        }
+        actorIter = actorTmp;
+
+        if (actorIter != actor) {
+            dist = Actor_DistanceBetweenActors(actor, actorIter);
+            if (!isSetup || dist < minDist) {
+                closestActor = actorIter;
+                minDist = dist;
+                isSetup = true;
+            }
+        }
+
+        actorIter = actorIter->next;
+    } while (actorIter != NULL);
+
+    return closestActor;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BC6C.s")
 
@@ -68,7 +135,22 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D924.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_ActorCategoryIterateById.s")
+/**
+ * Finds the first actor instance of a specified Id and category.
+ */
+Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
+    Actor* actor = actorListStart;
+
+    if (actor == NULL) {
+        actor = globalCtx->actorCtx.actorLists[actorCategory].first;
+    }
+
+    while (actor != NULL && actorId != actor->id) {
+        actor = actor->next;
+    }
+
+    return actor;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D9C8.s")
 
@@ -100,7 +182,27 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E5CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E640.s")
+/**
+ * Finds the first actor instance of a specified Id and category verified with a custom callback.
+ * The callback should return `true` when the actor is succesfully verified.
+ */
+Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
+                            s16 actorId, void* verifyData, VerifyActor verifyActor) {
+    Actor* actorIter = actorListStart;
+
+    if (actorListStart == NULL) {
+        actorIter = globalCtx->actorCtx.actorLists[actorCategory].first;
+    }
+
+    while (actorIter != NULL && (actorId != actorIter->id ||
+                                 (actorId == actorIter->id &&
+                                  (verifyActor == NULL ||
+                                   (verifyActor != NULL && !verifyActor(globalCtx, actor, actorIter, verifyData)))))) {
+        actorIter = actorIter->next;
+    }
+
+    return actorIter;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E748.s")
 
