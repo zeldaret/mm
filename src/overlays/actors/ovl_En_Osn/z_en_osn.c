@@ -15,7 +15,6 @@ void EnOsn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Osn_InitVars = {
     ACTOR_EN_OSN,
     ACTORCAT_NPC,
@@ -28,18 +27,43 @@ const ActorInit En_Osn_InitVars = {
     (ActorFunc)EnOsn_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80AD2518 = {
+ActorAnimationEntry D_80AD22C0[0x19] = {
+    { (AnimationHeader* )0x060201BC, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06002F74, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x060037C4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06004320, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06004C8C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x060094E4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06009BB8, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x0600AC60, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06001614, 1.0f, 1.0f, 39.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06001034, 1.0f, 1.0f, 70.0f, 0, 0.0f },
+    { (AnimationHeader* )0x0600AE9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06003A1C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x060055F8, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06007220, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x0600A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x060000C4, 0.0f, 0.0f, 0.0f, 2, 0.0f },
+    { (AnimationHeader* )0x060000C4, 0.0f, 1.0f, 1.0f, 2, 0.0f },
+    { (AnimationHeader* )0x06006D48, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06001D6C, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { (AnimationHeader* )0x06002634, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06008D80, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { (AnimationHeader* )0x06005D78, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { (AnimationHeader* )0x06006564, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x0600A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { (AnimationHeader* )0x06008D80, 0.0f, 77.0f, 0.0f, 2, 0.0f },
+};
+
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80AD2544 = { 0, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80AD2550 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(0, 0x0),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -79,28 +103,23 @@ static InitChainEntry D_80AD2570[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
-#endif
+Vec3f D_80AD2574 = { 0.0f, 0.0f, 0.0f };
+Vec3s D_80AD2580 = { 0x9920, -0x384, -0x320 };
 
-void func_80AD1634(EnOsn*, GlobalContext*); /* extern */
-void func_80AD16A8(EnOsn*, GlobalContext*); /* extern */
-void EnOsn_Idle(EnOsn*, GlobalContext*);    /* extern */
-void func_80AD0998(EnOsn*);                 /* extern */
-void func_80AD0A24(EnOsn*);                 /* extern */
-void func_80AD14C8(EnOsn*, GlobalContext*);                /* extern */
-s32 func_80AD0E10(EnOsn*, GlobalContext*);                 /* extern */
-void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx); /* extern */
-
-extern FlexSkeletonHeader D_060202F0;
-extern ActorAnimationEntry D_80AD22C0;
-extern ColliderCylinderInit D_80AD2518;
-extern CollisionCheckInfoInit2 D_80AD2544;
-extern DamageTable D_80AD2550;
-extern InitChainEntry D_80AD2570[];
+void* D_80AD2588 = (void* )0x060166F8;
+void* D_80AD258C = (void* )0x06016EF8;
+void* D_80AD2590 = (void* )0x060176F8;
+void* D_80AD2594 = (void* )0x06017EF8;
+void* D_80AD2598 = (void* )0x060182F8;
 
 extern UNK_TYPE D_060192A0;
 extern UNK_TYPE D_060201BC;
-extern Vec3f D_80AD2574;
-extern Vec3s D_80AD2580;
+extern FlexSkeletonHeader D_060202F0;
+
+void func_80AD1634(EnOsn*, GlobalContext*); /* extern */
+void func_80AD16A8(EnOsn*, GlobalContext*); /* extern */
+void func_80AD14C8(EnOsn*, GlobalContext*);                /* extern */
+void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx); /* extern */
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD0830.s")
 void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
@@ -165,7 +184,7 @@ void func_80AD0998(EnOsn* this) {
     s16 new_var;
 
     sp1E = (s16)this->anime.curFrame;
-    new_var = Animation_GetLastFrame((&D_80AD22C0)[this->unk_1EC].animation);
+    new_var = Animation_GetLastFrame(D_80AD22C0[this->unk_1EC].animation);
     if ((this->unk_1EC == 0x12) && (sp1E == new_var)) {
         this->unk_1EC = 0x13;
         func_800BDC5C(&this->anime, (ActorAnimationEntry*)&D_80AD22C0, 0x13);
@@ -178,7 +197,7 @@ void func_80AD0A24(EnOsn* this) {
     s16 new_var;
 
     sp1E = (s16)this->anime.curFrame;
-    new_var = Animation_GetLastFrame((&D_80AD22C0)[this->unk_1EC].animation);
+    new_var = Animation_GetLastFrame(D_80AD22C0[this->unk_1EC].animation);
     if ((this->unk_1EC == 0x15) && (sp1E == new_var)) {
         this->unk_1EC = 0x16;
         func_800BDC5C(&this->anime, (ActorAnimationEntry*)(&D_80AD22C0), 0x16);
@@ -191,7 +210,7 @@ void func_80AD0AB0(EnOsn* this) {
     s16 new_var;
 
     sp1E = (s16)this->anime.curFrame;
-    new_var = Animation_GetLastFrame((&D_80AD22C0)[this->unk_1EC].animation);
+    new_var = Animation_GetLastFrame(D_80AD22C0[this->unk_1EC].animation);
     if (sp1E == new_var) {
         this->unk_1FC -= 8;
         if (this->unk_1FC < 8) {
@@ -811,8 +830,8 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
     SkelAnime_InitFlex(globalCtx, &this->anime, &D_060202F0, (AnimationHeader*)(&D_060201BC), 0, 0, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80AD2518);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80AD2550, &D_80AD2544);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_1D8[0x24] = -1;
     switch (this->actor.params & 3) {
         case 0:
@@ -930,11 +949,6 @@ void func_80AD1E28(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/EnOsn_Draw.s")
 s32 func_80AD1DA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor, Gfx** gfx); 
 void func_80AD1E28(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx); 
-extern void* D_80AD2588;
-extern void* D_80AD258C;
-extern void* D_80AD2590;
-extern void* D_80AD2594;
-extern void* D_80AD2598;
 
 void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     GraphicsContext* temp_s0;
