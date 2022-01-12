@@ -175,7 +175,7 @@ static Vec3f D_80B65084[] = {
 
 void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    EnBigpo* this = (EnBigpo*)thisx;
+    EnBigpo* this = THIS;
     EnBigpoFireEffect* firesPtr;
     s32 i;
 
@@ -228,20 +228,19 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnBigpo* this = (EnBigpo*)thisx;
-    GlobalContext* globalCtx2;
+void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnBigpo* this = THIS;
     s32 fireCount;
 
     if ((this->actor.params != ENBIGPO_POSSIBLEFIRE) && (this->actor.params != ENBIGPO_CHOSENFIRE) &&
         (this->actor.params != ENBIGPO_REVEALEDFIRE) && (this->actor.params != ENBIGPO_UNK5)) {
         // if NOT a fire type, *ENBIGPO_REGULAR and ENBIGPO_SUMMONED (combat types only)
-        if (1) {}
-        globalCtx2 = globalCtx;
+        if(1) {}
         for (fireCount = 0; fireCount < ARRAY_COUNT(this->fires); fireCount++) {
-            LightContext_RemoveLight(globalCtx2, &globalCtx2->lightCtx, this->fires[fireCount].light);
+            LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->fires[fireCount].light);
         }
-        Collider_DestroyCylinder(globalCtx2, &this->collider);
+        Collider_DestroyCylinder(globalCtx, &this->collider);
     }
 }
 
@@ -1150,7 +1149,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnBigpo* this = (EnBigpo*)thisx;
+    EnBigpo* this = THIS;
     s32 pad;
     ColliderCylinder* thisCollider;
 
@@ -1218,7 +1217,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
  * alt update func: the revealed fires under dampe's house
  */
 void EnBigpo_UpdateFire(Actor* thisx, GlobalContext* globalCtx) {
-    EnBigpo* this = (EnBigpo*)thisx;
+    EnBigpo* this = THIS;
     this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
     this->actionFunc(this, globalCtx);
 }
@@ -1290,7 +1289,7 @@ void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
-    EnBigpo* this = (EnBigpo*)thisx;
+    EnBigpo* this = THIS;
     Gfx* dispHead;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1331,7 +1330,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
-    EnBigpo* this = (EnBigpo*)thisx;
+    EnBigpo* this = THIS;
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1364,7 +1363,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
  *  might be able to find an alternative match with the macros, so far no success
  */
 void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
-    EnBigpo* this = (EnBigpo*)thisx;
+    EnBigpo* this = THIS;
     f32 magnitude;
     f32 magnitude2;
     Gfx* dispHead;
@@ -1420,7 +1419,7 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
-    EnBigpo* this = (EnBigpo*)thisx;
+    EnBigpo* this = THIS;
     s32 pad[3];
     s16 fireRadius;
     MtxF* mtfxPtr;
@@ -1462,7 +1461,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_RevealedFire(Actor* thisx, GlobalContext* globalCtx) {
-    EnBigpo* this = (EnBigpo*)thisx;
+    EnBigpo* this = THIS;
     EnBigpo* parent = (EnBigpo*)thisx->parent;
     s32 pad;
 

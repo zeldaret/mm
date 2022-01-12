@@ -103,14 +103,14 @@ void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
     this->actor.home.rot.z *= 0.96f;
 }
 
-void EnCha_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnCha_Update(Actor* thisx, GlobalContext* globalCtx2) {
     EnCha* this = THIS;
-    GlobalContext* globalCtx2 = globalCtx;
+    GlobalContext* globalCtx = globalCtx2;
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx2->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     this->actionFunc(this, globalCtx);
     if ((this->actor.shape.rot.z >= -0x1F3F) && (this->actor.shape.rot.z < 0x1F40)) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx2->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
