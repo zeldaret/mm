@@ -98,8 +98,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80AD2570[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
@@ -126,8 +125,8 @@ void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Osn/func_80AD08B0.s")
@@ -627,7 +626,7 @@ void func_80AD10FC(EnOsn *this, GlobalContext *globalCtx)
 void func_80AD1398(EnOsn* this) {
     this->cutscene = (s16)this->actor.cutscene;
     if (((gSaveContext.inventory.items[0] == 0xFF) || (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32)) &&
-        ((this = this, this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene),
+        ((this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene),
           (gSaveContext.inventory.items[0] != 0xFF)) ||
          (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32))) {
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
@@ -656,7 +655,7 @@ void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
     if ((gSaveContext.inventory.items[0] != 0xFF) &&
         (((*(gBitFlags + 0xD)) & gSaveContext.inventory.questItems) == 0)) {
         if (gSaveContext.inventory.questItems) {}
-        if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->actionFunc = func_80AD1634;
             return;
         }
@@ -666,7 +665,7 @@ void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
             this->actor.textId = 0xFFFF;
         }
     } else {
-        if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk_1F4 = (s16)func_80AD0E10(this, globalCtx);
             func_801518B0(globalCtx, this->unk_1F4, &this->actor);
             this->actionFunc = func_80AD19A0;
@@ -826,20 +825,20 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnOsn* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, D_80AD2570);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(globalCtx, &this->anime, &D_060202F0, (AnimationHeader*)(&D_060201BC), 0, 0, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->unk_1D8[0x24] = -1;
+    this->unk_1FC = -1;
     switch (this->actor.params & 3) {
         case 0:
             if (((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC030)) ||
                 (gSaveContext.entranceIndex == 0xC060)) {
                 this->unk_1EA = (u16)(this->unk_1EA | 1);
             }
-            this->unk_1D8[0x18] = 1;
+            this->unk_1F0 = 1;
             if (globalCtx->sceneNum == 0x63) {
                 if ((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC060)) {
                     this->actionFunc = func_80AD16A8;
@@ -857,14 +856,14 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
             return;
 
         case 1:
-            this->unk_1D8[0x14] = 0xF;
-            Actor_ChangeAnimation(&this->anime, (ActorAnimationEntry*)(&D_80AD22C0), this->unk_1D8[0x14]);
+            this->unk_1EC = 0xF;
+            Actor_ChangeAnimation(&this->anime, (ActorAnimationEntry*)(&D_80AD22C0), this->unk_1EC);
             this->actionFunc = EnOsn_Idle;
             return;
 
         case 2:
-            this->unk_1D8[0x14] = 0x10;
-            Actor_ChangeAnimation(&this->anime, (ActorAnimationEntry*)(&D_80AD22C0), this->unk_1D8[0x14]);
+            this->unk_1EC = 0x10;
+            Actor_ChangeAnimation(&this->anime, (ActorAnimationEntry*)(&D_80AD22C0), this->unk_1EC);
             this->actionFunc = EnOsn_Idle;
             return;
 
