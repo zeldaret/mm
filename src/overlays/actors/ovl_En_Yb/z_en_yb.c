@@ -18,31 +18,21 @@ void EnYb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnYb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnYb_Idle(EnYb* this, GlobalContext* globalCtx);
-void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx);
-void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx);
-void func_80BFA91C(EnYb* this, GlobalContext* globalCtx);
-void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx);
 void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx);
-void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx);
-void func_80BFA868(EnYb* this, GlobalContext* globalCtx);
+void EnYb_SetupLeaving(EnYb* this, GlobalContext* globalCtx);
 
 void EnYb_UpdateAnimation(EnYb* this, GlobalContext* globalCtx);
-s32 EnYb_CanTalk(EnYb* this, GlobalContext* globalCtx);
 void EnYb_FinishTeachingCutscene(EnYb* this);
+void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx);
+void EnYb_ReceiveMask(EnYb* this, GlobalContext* globalCtx);
+void EnYb_Talk(EnYb* this, GlobalContext* globalCtx);
+void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx);
+void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx);
 
 // custom shadow function
 void EnYb_ActorShadowFunc(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
-
 void EnYb_SetAnimation(GlobalContext*, EnYb*, s16, u8, f32);
-
-void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx);
-void func_80BFA868(EnYb* this, GlobalContext* globalCtx);
-void func_80BFA91C(EnYb* this, GlobalContext* globalCtx);
-void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx);
-void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx);
-void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx);
-void EnYb_Idle(EnYb* this, GlobalContext* globalCtx);
-void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx);
+s32 EnYb_CanTalk(EnYb* this, GlobalContext* globalCtx);
 
 const ActorInit En_Yb_InitVars = {
     ACTOR_EN_YB,
@@ -273,11 +263,11 @@ void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BFA868(EnYb* this, GlobalContext* globalCtx) {
+void EnYb_SetupLeaving(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        this->actionFunc = func_80BFA9D4;
+        this->actionFunc = EnYb_Talk;
         // I am counting on you
         func_801518B0(globalCtx, 0x147D, &this->actor);
         func_80BFA2FC(globalCtx);
@@ -287,21 +277,21 @@ void func_80BFA868(EnYb* this, GlobalContext* globalCtx) {
     EnYb_EnableProximityMusic(this);
 }
 
-void func_80BFA91C(EnYb* this, GlobalContext* globalCtx) {
+void EnYb_ReceiveMask(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
-    // what parent? when would kamaro be spawned by another actor?
+    // Player is parent: receiving the Kamaro mask
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        this->actionFunc = func_80BFA868;
+        this->actionFunc = EnYb_SetupLeaving;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     } else {
-        Actor_PickUp(&this->actor, globalCtx, 0x89, 10000.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MASK_KAMARO, 10000.0f, 100.0f);
     }
     EnYb_EnableProximityMusic(this);
 }
 
-void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx) {
+void EnYb_Talk(EnYb* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -325,8 +315,8 @@ void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx) {
 
                 } else {
                     func_801477B4(globalCtx);
-                    this->actionFunc = func_80BFA91C;
-                    func_80BFA91C(this, globalCtx);
+                    this->actionFunc = EnYb_ReceiveMask;
+                    EnYb_ReceiveMask(this, globalCtx);
                 }
                 break;
             default:
@@ -341,7 +331,7 @@ void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx) {
 void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actionFunc = func_80BFA9D4;
+        this->actionFunc = EnYb_Talk;
         // Spread my dance across the world
         func_801518B0(globalCtx, 0x147C, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -379,7 +369,7 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
         EnYb_ChangeCutscene(this, 0);
     } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BFA2FC(globalCtx);
-        this->actionFunc = func_80BFA9D4;
+        this->actionFunc = EnYb_Talk;
         if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMARO) {
             // I have taught you, go use it
             func_801518B0(globalCtx, 0x147C, &this->actor);
