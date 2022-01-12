@@ -7,7 +7,7 @@
 #include "z_en_rd.h"
 #include "objects/object_rd/object_rd.h"
 
-#define FLAGS 0x00000415
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnRd*)thisx)
 
@@ -247,7 +247,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_INVISIBLE) {
-        this->actor.flags |= 0x80;
+        this->actor.flags |= ACTOR_FLAG_80;
     }
 
     if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_FROZEN) {
@@ -642,7 +642,7 @@ void EnRd_WalkToPlayer(EnRd* this, GlobalContext* globalCtx) {
                 EnRd_SetupWalkToHome(this, globalCtx);
             }
         } else if (globalCtx->grabPlayer(globalCtx, player)) {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             EnRd_SetupGrab(this);
         }
     } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING) {
@@ -844,7 +844,7 @@ void EnRd_Grab(EnRd* this, GlobalContext* globalCtx) {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
             this->actor.targetMode = 0;
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             this->playerStunWaitTimer = 10;
             this->grabWaitTimer = 15;
             EnRd_SetupWalkToPlayer(this, globalCtx);
@@ -956,7 +956,7 @@ void EnRd_SetupDamage(EnRd* this) {
         this->actor.speedXZ = -2.0f;
     }
 
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->action = EN_RD_ACTION_DAMAGE;
     this->actionFunc = EnRd_Damage;
@@ -990,7 +990,7 @@ void EnRd_SetupDead(EnRd* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f);
     this->action = EN_RD_ACTION_DEAD;
     this->deathTimer = 300;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->actionFunc = EnRd_Dead;

@@ -7,7 +7,7 @@
 #include "z_en_railgibud.h"
 #include "objects/object_rd/object_rd.h"
 
-#define FLAGS 0x00000415
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnRailgibud*)thisx)
 
@@ -420,7 +420,7 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
 void EnRailgibud_SetupGrab(EnRailgibud* this) {
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_GRAB_START);
     this->grabDamageTimer = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->grabState = EN_RAILGIBUD_GRAB_START;
     this->actionFunc = EnRailgibud_Grab;
 }
@@ -439,7 +439,7 @@ void EnRailgibud_Grab(EnRailgibud* this, GlobalContext* globalCtx) {
                 Actor_ChangeAnimation(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_GRAB_ATTACK);
             } else if (!(player->stateFlags2 & 0x80)) {
                 Actor_ChangeAnimation(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_GRAB_END);
-                this->actor.flags |= 1;
+                this->actor.flags |= ACTOR_FLAG_1;
                 this->grabState = EN_RAILGIBUD_GRAB_RELEASE;
                 this->grabDamageTimer = 0;
             }
@@ -468,7 +468,7 @@ void EnRailgibud_Grab(EnRailgibud* this, GlobalContext* globalCtx) {
                     player->unk_AE8 = 100;
                 }
                 Actor_ChangeAnimation(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_GRAB_END);
-                this->actor.flags |= 1;
+                this->actor.flags |= ACTOR_FLAG_1;
                 this->grabState = EN_RAILGIBUD_GRAB_RELEASE;
                 this->grabDamageTimer = 0;
             }
@@ -617,7 +617,7 @@ void EnRailgibud_Stunned(EnRailgibud* this, GlobalContext* globalCtx) {
 
 void EnRailgibud_SetupDead(EnRailgibud* this) {
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_DEATH);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->deathTimer = 0;
     this->actionFunc = EnRailgibud_Dead;
@@ -634,7 +634,7 @@ void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx) {
                 // stop drawing it, and make its Update function only check to see if
                 // the Gibdos should move forward.
                 this->actor.draw = NULL;
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
                 this->actor.update = EnRailgibud_MainGibdo_DeadUpdate;
             }
         } else {
@@ -926,10 +926,10 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, GlobalContext* globalCtx) 
     if ((this->actionFunc != EnRailgibud_Grab) && (this->actionFunc != EnRailgibud_Damage) &&
         (this->actionFunc != EnRailgibud_GrabFail) && (this->actionFunc != EnRailgibud_TurnAwayAndShakeHead) &&
         (this->actionFunc != EnRailgibud_Dead)) {
-        if ((this->actor.flags & 5) == 5) {
+        if ((this->actor.flags & (ACTOR_FLAG_4 | ACTOR_FLAG_1)) == 5) {
             if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
-                this->actor.flags &= ~(0x4 | 0x1);
-                this->actor.flags |= (0x8 | 0x1);
+                this->actor.flags &= ~(ACTOR_FLAG_4 | ACTOR_FLAG_1);
+                this->actor.flags |= (ACTOR_FLAG_8 | ACTOR_FLAG_1);
                 this->actor.hintId = 0xFF;
                 this->actor.textId = 0;
                 if ((this->actionFunc != EnRailgibud_WalkInCircles) && (this->actionFunc != EnRailgibud_WalkToHome)) {
@@ -937,8 +937,8 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, GlobalContext* globalCtx) 
                 }
             }
         } else if (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO) {
-            this->actor.flags &= ~(0x8 | 0x1);
-            this->actor.flags |= (0x4 | 0x1);
+            this->actor.flags &= ~(ACTOR_FLAG_8 | ACTOR_FLAG_1);
+            this->actor.flags |= (ACTOR_FLAG_4 | ACTOR_FLAG_1);
             if (this->type == EN_RAILGIBUD_TYPE_REDEAD) {
                 this->actor.hintId = 0x2A;
             } else {
@@ -959,7 +959,8 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* global
             this->textId = 0x13B2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
-        } else if (((this->actor.flags & 9) == 9) && !(this->collider.base.acFlags & AC_HIT)) {
+        } else if (((this->actor.flags & (ACTOR_FLAG_8 | ACTOR_FLAG_1)) == 9) &&
+                   !(this->collider.base.acFlags & AC_HIT)) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
     } else {
@@ -1098,8 +1099,8 @@ void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, GlobalContext* globalCtx) 
 
     EnRailgibud_InitActorActionCommand(this);
     this->csAction = 99;
-    this->actor.flags |= 0x100000;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_100000;
+    this->actor.flags |= ACTOR_FLAG_10;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGibdoSkel, &gGibdoRedeadIdleAnim, this->jointTable,
