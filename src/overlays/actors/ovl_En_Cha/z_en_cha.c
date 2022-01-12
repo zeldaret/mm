@@ -104,8 +104,8 @@ void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
 }
 
 void EnCha_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnCha* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnCha* this = THIS;
 
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     this->actionFunc(this, globalCtx);

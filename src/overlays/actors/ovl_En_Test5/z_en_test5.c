@@ -33,8 +33,8 @@ void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc) {
 }
 
 void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    EnTest5* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnTest5* this = THIS;
     WaterBox* water;
     f32 ySurface; // Unused
 
@@ -80,8 +80,8 @@ void EnTest5_HandleBottleAction(EnTest5* this, GlobalContext* globalCtx) {
 }
 
 void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnTest5* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnTest5* this = THIS;
     Vec3f steamPos;
     CollisionPoly* poly; // Unused
     s32 pad;             // Unused

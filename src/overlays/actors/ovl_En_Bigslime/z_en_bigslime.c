@@ -316,8 +316,8 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx2) {
         (33 << 8) | 0x01, // Southern Swamp Frog Returned
         (33 << 8) | 0x02, // Laundry Pool Frog Returned
     };
-    EnBigslime* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnBigslime* this = THIS;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
