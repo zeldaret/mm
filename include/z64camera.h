@@ -471,6 +471,9 @@ typedef struct Camera {
 #define READ_SCALED_STATIC_DATA_VAL SCALED_STATIC_DATA(READ_STATIC_DATA_VAL)
 
 
+#define FLAGS_FIXED_DATA(flags) \
+    { flags,       CAM_DATA_FLAGS }
+
 
 /*================================
  *   Camera_Normal1() HEAP DATA
@@ -1160,6 +1163,17 @@ typedef struct {
  *================================
  */
 
+#define SUBJ1_FIXED_DATA(yOffset, data01, data02, data04, data19, data17, data18, fov, flags) \
+    { yOffset, CAM_DATA_Y_OFFSET }, \
+    { data01,  CAM_DATA_01 }, \
+    { data02,  CAM_DATA_02 }, \
+    { data04,  CAM_DATA_04 }, \
+    { data19,  CAM_DATA_19 }, \
+    { data17,  CAM_DATA_17 }, \
+    { data18,  CAM_DATA_18 }, \
+    { fov,     CAM_DATA_FOV }, \
+    { flags,   CAM_DATA_FLAGS }
+
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
@@ -1192,6 +1206,12 @@ typedef struct {
  *================================
  */
 
+#define UNIQ2_FIXED_DATA(yOffset, data01, fov, flags) \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
+    { data01,      CAM_DATA_01 }, \
+    { fov,         CAM_DATA_FOV }, \
+    { flags,       CAM_DATA_FLAGS }
+
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
@@ -1220,6 +1240,11 @@ typedef struct {
  *   Camera_Unique0() HEAP DATA
  *================================
  */
+
+#define UNIQ0_FIXED_DATA(yOffset, data04, flags) \
+    { yOffset,     CAM_DATA_Y_OFFSET }, \
+    { data04,      CAM_DATA_04 }, \
+    { flags,       CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x0 */ f32 unk_00;
@@ -1291,6 +1316,11 @@ typedef struct {
  *   Camera_Demo2() HEAP DATA
  *================================
  */
+
+#define DEMO2_FIXED_DATA(fov, data08, flags) \
+    { fov,    CAM_DATA_FOV }, \
+    { data08, CAM_DATA_08 }, \
+    { flags,  CAM_DATA_FLAGS }
 
 typedef struct {
     /* 0x00 */ f32 fov;
