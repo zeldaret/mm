@@ -8,6 +8,8 @@
 
 #define FLAGS 0x00000010
 
+#define THIS ((DoorSpiral*)thisx)
+
 #define GET_ORIENTATION_PARAM(this) ((((Actor*)(this))->params >> 7) & 0x1)
 #define GET_UNK145_PARAM(this) ((((Actor*)(this))->params >> 8) & 0x3)
 #define GET_TRANSITION_ID_PARAM(this) ((u16)((Actor*)(this))->params >> 10)
