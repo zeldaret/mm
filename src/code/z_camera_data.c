@@ -638,7 +638,7 @@ CameraModeValue D_801B574C[] = {
 };
 
 /*=====================================================================
- *                   Custom Data: TREASURE Setting
+ *                   Custom Data: LONG_CHEST_OPENING Setting
  *=====================================================================
  */
 
@@ -828,7 +828,7 @@ CameraModeValue sSetBoatCruiseModeNormalData[] = {
 };
 
 /*=====================================================================
- *                   Custom Data: CLIMEMAZE Setting
+ *                   Custom Data: VERTICAL_CLIMB Setting
  *=====================================================================
  */
 
@@ -837,11 +837,21 @@ CameraModeValue sSetVerticalClimbModeClimbData[] = {
                          50),
 };
 
+/*=====================================================================
+ *                   Custom Data: SIDED Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B5A64[] = {
     PARA1_FIXED_DATA(0, 400, 10, 0, 0xFFA6, 20, 5, 70, 50,
                      (SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_8 | PARA1_FLG_4 | PARA1_FLG_2),
                      70, 0),
 };
+
+/*=====================================================================
+ *                   Custom Data: DUNGEON2 Setting
+ *=====================================================================
+ */
 
 CameraModeValue sSetDungeon2ModeNormalData[] = {
     NORM1_FIXED_DATA(-10, 270, 300, 20, 0x001C, 20, 65, 60, 80,
@@ -867,6 +877,11 @@ CameraModeValue sSetDungeon2ModePushPullData[] = {
     PARA1_FIXED_DATA(0, 200, 5, 15, 0, 5, 5, 70, 30,
                      (SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_2), 30, 0),
 };
+
+/*=====================================================================
+ *                   Custom Data: BOSS_ODOLWA Setting
+ *=====================================================================
+ */
 
 CameraModeValue sSetBossOdolwaModeNormalData[] = {
     NORM1_FIXED_DATA(-20, 250, 350, 10, 24, 12, 40, 65, 80,
@@ -897,18 +912,38 @@ CameraModeValue sSetBossOdolwaModeStillData[] = {
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
+/*=====================================================================
+ *                   Custom Data: KEEP_BACK Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B5C80[] = {
     PARA1_FIXED_DATA(100, 300, -20, 40, 0, 4, 5, 80, 60,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_2), 60, 20),
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRCLE6 Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B5CB0[] = {
     FIXD2_FIXED_DATA(-40, 60, 0x3200, 10, 20, 60, (SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_2 | FIXD2_FLG_1)),
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRCLE7 Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B5CCC[] = {
     FIXD2_FIXED_DATA(-40, 40, 200, 10, 20, 60, (SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_20)),
 };
+
+/*=====================================================================
+ *                   Custom Data: MINI_BOSS Setting
+ *=====================================================================
+ */
 
 CameraModeValue sSetMiniBossModeNormalData[] = {
     NORM1_FIXED_DATA(-15, 220, 280, 17, 14, 5, 65, 70, 75,
@@ -934,27 +969,52 @@ CameraModeValue sSetMiniBossModeStillData[] = {
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
+/*=====================================================================
+ *                   Custom Data: RFIXED1 Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B5DC4[] = {
     FIXD1_FIXED_DATA(-40, 10, 60, (SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD1_FLG_10)),
 };
 
-CameraModeValue D_801B5DD4[] = {
+/*=====================================================================
+ *                   Custom Data: TRESURE1 Setting
+ *=====================================================================
+ */
+
+CameraModeValue sSetTreasureChestMinigameModeNormalData[] = {
     NORM1_FIXED_DATA(-20, 80, 120, -10, 15, 20, 40, 70, 70,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2)),
 };
 
-CameraModeValue D_801B5DFC[] = {
+CameraModeValue sSetTreasureChestMinigameModeTargetData[] = {
     PARA1_FIXED_DATA(0xFFC4, 0x0226, 0, 65, 0, 5, 5, 75, 50,
                      (SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_40 | PARA1_FLG_2), 60, 0),
 };
+
+/*=====================================================================
+ *                   Custom Data: BOMBBASKET Setting
+ *=====================================================================
+ */
 
 CameraModeValue D_801B5E2C[] = {
     FIXD2_FIXED_DATA(70, 50, 0x3200, 100, 30, 70, (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | FIXD2_FLG_1)),
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRCLE8 Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B5E48[] = {
     FIXD2_FIXED_DATA(-40, 40, 0x3200, 100, 20, 60, (SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_8)),
 };
+
+/*=====================================================================
+ *                   Custom Data: BIRDS_EYE_VIEW_1 Setting
+ *=====================================================================
+ */
 
 CameraModeValue D_801B5E64[] = {
     NORM1_FIXED_DATA(-20, 800, 800, 60, 50, 10, 50, 45, 90,
@@ -965,6 +1025,11 @@ CameraModeValue D_801B5E8C[] = {
     NORM1_FIXED_DATA(-20, 800, 800, 60, 100, 100, 100, 45, 20,
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
+
+/*=====================================================================
+ *                   Custom Data: DUNGEON3 Setting
+ *=====================================================================
+ */
 
 CameraModeValue sSetDungeon3ModeNormalData[] = {
     NORM1_FIXED_DATA(-30, 180, 250, -5, 18, 20, 60, 55, 50,
@@ -991,6 +1056,11 @@ CameraModeValue sSetDungeon3ModePushPullData[] = {
                      30, 0),
 };
 
+/*=====================================================================
+ *                   Custom Data: TELESCOPE Setting
+ *=====================================================================
+ */
+
 CameraModeValue sSetTelescopeModeNormalData[] = {
     SUBJ1_FIXED_DATA(0, 5, 50, 10, 0, 0, 0, 30, (SHRINKWINVAL_NONE | IFACE_ALPHA(2))),
 };
@@ -1006,6 +1076,11 @@ CameraModeValue sSetTelescopeModeFirstPersonData[] = {
 CameraModeValue sSetTelescopeModeDekuHideData[] = {
     SUBJ1_FIXED_DATA(0, 5, 50, 0x0001, 0, 0, 0, 45, (SHRINKWINVAL_NONE | IFACE_ALPHA(2) | SUBJ1_FLG_10)),
 };
+
+/*=====================================================================
+ *                   Custom Data: ROOM0 Setting
+ *=====================================================================
+ */
 
 CameraModeValue D_801B601C[] = {
     NORM1_FIXED_DATA(0xFFDD, 100, 220, 15, 0x0011, 12, 35, 65, 70,
@@ -1113,13 +1188,28 @@ CameraModeValue D_801B63CC[] = {
     PARA1_FIXED_DATA(0, 220, 50, 0, 0, 5, 5, 45, 50, (SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_2), 60, 0),
 };
 
+/*=====================================================================
+ *                   Custom Data: RCIRC0 Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B63FC[] = {
     FIXD2_FIXED_DATA(-10, 40, 0x3200, 100, 20, 60, (SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_10 | FIXD2_FLG_8)),
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRC9 Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B6418[] = {
     FIXD2_FIXED_DATA(-40, 40, 0x3200, 5, 25, 60, (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | FIXD2_FLG_4 | FIXD2_FLG_1)),
 };
+
+/*=====================================================================
+ *                   Custom Data: ONTHEPOLE Setting
+ *=====================================================================
+ */
 
 CameraModeValue D_801B6434[] = {
     NORM1_FIXED_DATA(-15, 60, 600, 35, 40, 20, 60, 45, 80, (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_2)),
@@ -1159,6 +1249,11 @@ CameraModeValue D_801B655C[] = {
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
+/*=====================================================================
+ *                   Custom Data: INBUSH Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B6584[] = {
     NORM1_FIXED_DATA(0, 260, 280, 20, 20, 12, 50, 60, 80,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2)),
@@ -1197,6 +1292,11 @@ CameraModeValue D_801B66C0[] = {
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
+/*=====================================================================
+ *                   Custom Data: BOSS_MAJORA Setting
+ *=====================================================================
+ */
+
 CameraModeValue sSetBossMajoraModeNormalData[] = {
     NORM1_FIXED_DATA(0, 280, 320, -5, 24, 12, 0x0020, 65, 80,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
@@ -1220,6 +1320,11 @@ CameraModeValue sSetBossMajoraModeStillData[] = {
     NORM1_FIXED_DATA(0, 280, 320, 0, 100, 100, 100, 65, 20,
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
+
+/*=====================================================================
+ *                   Custom Data: BOSS_TWINMOLD Setting
+ *=====================================================================
+ */
 
 CameraModeValue sSetBossTwinmoldModeNormalData[] = {
     NORM1_FIXED_DATA(20, 350, 400, 0, 0x001A, 12, 0x0020, 75, 70,
@@ -1249,6 +1354,11 @@ CameraModeValue sSetBossTwinmoldModeStillData[] = {
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_10 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
+/*=====================================================================
+ *                   Custom Data: BOSS_GOHT Setting
+ *=====================================================================
+ */
+
 CameraModeValue sSetBossGohtModeNormalData[] = {
     NORM1_FIXED_DATA(-20, 280, 320, 10, 20, 12, 50, 60, 80,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
@@ -1273,6 +1383,11 @@ CameraModeValue sSetBossGohtModeGoronDashData[] = {
     NORM1_FIXED_DATA(60, 200, 340, 10, 15, 10, 50, 85, 90,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_4 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
+
+/*=====================================================================
+ *                   Custom Data: BOSS_GYORG Setting
+ *=====================================================================
+ */
 
 CameraModeValue sSetBossGyorgModeNormalData[] = {
     JUMP3_FIXED_DATA(-20, 280, 320, 10, 20, 12, 40, 60, 80,
@@ -1309,6 +1424,11 @@ CameraModeValue sSetBossGyorgModeStillData[] = {
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
+/*=====================================================================
+ *                   Custom Data: PINNACLE_ROCK Setting
+ *=====================================================================
+ */
+
 CameraModeValue sSetPinnacleRockModeNormalData[] = {
     JUMP3_FIXED_DATA(-40, 250, 350, 30, 15, 5, 40, 60, 100,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_4)),
@@ -1344,6 +1464,11 @@ CameraModeValue sSetPinnacleRockModeGoronDashData[] = {
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_8 | JUMP3_FLG_4)),
 };
 
+/*=====================================================================
+ *                   Custom Data: NORMAL2 Setting
+ *=====================================================================
+ */
+
 CameraModeValue sSetNormal2ModeNormalData[] = {
     NORM1_FIXED_DATA(-10, 350, 400, 14, 25, 14, 60, 65, 70,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
@@ -1362,6 +1487,11 @@ CameraModeValue sSetNormal2ModeStillData[] = {
     NORM1_FIXED_DATA(-10, 350, 400, 14, 100, 100, 100, 65, 16,
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
+
+/*=====================================================================
+ *                   Custom Data: BOMBBOWL Setting
+ *=====================================================================
+ */
 
 CameraModeValue D_801B6C98[] = {
     NORM1_FIXED_DATA(-30, 300, 320, 15, 0x0016, 12, 30, 55, 60,
@@ -1388,10 +1518,20 @@ CameraModeValue D_801B6D4C[] = {
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRCA Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B6D74[] = {
     FIXD2_FIXED_DATA(-40, 60, 0x3200, 100, 20, 60,
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | FIXD2_FLG_8 | FIXD2_FLG_2 | FIXD2_FLG_1)),
 };
+
+/*=====================================================================
+ *                   Custom Data: WHIRLPOOL Setting
+ *=====================================================================
+ */
 
 CameraModeValue sSetWhirlpoolModeNormalData[] = {
     JUMP3_FIXED_DATA(-10, 280, 350, 50, 12, 5, 30, 60, 80,
@@ -1423,6 +1563,11 @@ CameraModeValue sSetWhirlpoolModeGoronDashData[] = {
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_10 | JUMP3_FLG_8 | JUMP3_FLG_4)),
 };
 
+/*=====================================================================
+ *                   Custom Data: CUCCO_SHACK Setting
+ *=====================================================================
+ */
+
 CameraModeValue sSetCuccoShackModeNormalData[] = {
     NORM1_FIXED_DATA(0xFFBA, 250, 0x01F4, 5, 30, 12, 45, 50, 70,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
@@ -1437,6 +1582,11 @@ CameraModeValue sSetCuccoShackModeDekuHideData[] = {
     NORM1_FIXED_DATA(-40, 250, 0x01F4, 5, 25, 12, 40, 50, 40,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_80 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
+
+/*=====================================================================
+ *                   Custom Data: GIANT Setting
+ *=====================================================================
+ */
 
 CameraModeValue sSetGiantModeNormalData[] = {
     NORM1_FIXED_DATA(-40, 150, 160, -15, 25, 14, 50, 50, 70,
@@ -1457,9 +1607,19 @@ CameraModeValue sSetGiantModeStillData[] = {
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | NORM1_FLG_20 | NORM1_FLG_2 | NORM1_FLG_1)),
 };
 
+/*=====================================================================
+ *                   Custom Data: SCENE0 Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B6FA0[] = {
     UNIQ2_FIXED_DATA(-40, 20, 60, (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | UNIQ2_FLG_20 | UNIQ2_FLG_10 | UNIQ2_FLG_2)),
 };
+
+/*=====================================================================
+ *                   Custom Data: ROOM1 Setting
+ *=====================================================================
+ */
 
 CameraModeValue D_801B6FB0[] = {
     NORM1_FIXED_DATA(-15, 120, 250, 16, 16, 5, 65, 60, 75,
@@ -1490,6 +1650,11 @@ CameraModeValue D_801B708C[] = {
                      (SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | PARA1_FLG_20 | PARA1_FLG_2), 80, 0),
 };
 
+/*=====================================================================
+ *                   Custom Data: WATER2 Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B70BC[] = {
     JUMP3_FIXED_DATA(-10, 270, 300, 20, 30, 20, 65, 60, 80,
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_80 | JUMP3_FLG_4)),
@@ -1509,6 +1674,11 @@ CameraModeValue D_801B7148[] = {
                      (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | JUMP3_FLG_8 | JUMP3_FLG_4)),
 };
 
+/*=====================================================================
+ *                   Custom Data: FORCEKEEP Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B7170[] = {
     KEEP1_FIXED_DATA(-30, 180, 200, 20, 40, -5, 10, 15, 45, 60,
                      (SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | KEEP1_FLG_10 | KEEP1_FLG_1), 30),
@@ -1519,24 +1689,49 @@ CameraModeValue D_801B71A0[] = {
                      (SHRINKWINVAL_MEDIUM | IFACE_ALPHA(0) | BATT1_FLG_10 | BATT1_FLG_2), 25, 40),
 };
 
+/*=====================================================================
+ *                   Custom Data: PARALLEL1 Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B71D4[] = {
     PARA1_FIXED_DATA(0, 400, 20, 20, 0, 20, 5, 70, 50, (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | PARA1_FLG_8 | PARA1_FLG_2),
                      80, 0),
 };
 
+/*=====================================================================
+ *                   Custom Data: START1 Setting
+ *=====================================================================
+ */
+
 CameraModeValue D_801B7204[] = {
     UNIQ0_FIXED_DATA(0, 100, (SHRINKWINVAL_NONE | IFACE_ALPHA(0) | UNIQ0_FLG_2)),
 };
+
+/*=====================================================================
+ *                   Custom Data: ROOM2 Setting
+ *=====================================================================
+ */
 
 CameraModeValue D_801B7210[] = {
     KEEP3_FIXED_DATA(-10, 120, 180, 50, 5, 10, 5, 70, 35, 50, 20, (SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | KEEP3_FLG_20),
                      60),
 };
 
+/*=====================================================================
+ *                   Custom Data: NORMAL4 Setting
+ *=====================================================================
+ */
+
 CameraModeValue sSetNormal4ModeTalkData[] = {
     KEEP3_FIXED_DATA(-20, 0x006E, 160, 80, 15, 10, 0, 70, 40, 50, 20,
                      (SHRINKWINVAL_LARGE | IFACE_ALPHA(5) | KEEP3_FLG_20), 50),
 };
+
+/*=====================================================================
+ *                   Custom Data: ELEGY_SHELL Setting
+ *=====================================================================
+ */
 
 CameraModeValue sSetElegyShellModeNormalData[] = {
     KEEP4_FIXED_DATA(-45, 150, -10, 165, 5, 70, (SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_2), 25, 30),
@@ -1558,6 +1753,11 @@ CameraModeValue sSetElegyShellModeDekuFlyData[] = {
     KEEP4_FIXED_DATA(0xFFC4, 150, 0xFFF4, 0xFF74, 30, 50,
                      (SHRINKWINVAL_PREV | IFACE_ALPHA(0xF) | KEEP4_FLG_8 | KEEP4_FLG_4), 25, 30),
 };
+
+/*=====================================================================
+ *                   Custom Data: DUNGEON4 Setting
+ *=====================================================================
+ */
 
 CameraModeValue sSetDungeon4ModeNormalData[] = {
     NORM1_FIXED_DATA(0, 150, 250, -5, 16, 5, 0x0034, 55, 80,
@@ -2271,8 +2471,8 @@ CameraMode sCamSetRFixed1Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_FIXD1, D_801B5DC4),
 };
 
-CameraMode sCamSetTresure1Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, D_801B5DD4),
+CameraMode sCamSetTreasureChestMinigameModes[] = {
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORM1, sSetTreasureChestMinigameModeNormalData),
     CAM_SETTING_MODE_NULL,
     CAM_SETTING_MODE_NULL,
     CAM_SETTING_MODE_NULL,
@@ -2282,7 +2482,7 @@ CameraMode sCamSetTresure1Modes[] = {
     CAM_SETTING_MODE_NULL,
     CAM_SETTING_MODE_NULL,
     CAM_SETTING_MODE_NULL,
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, D_801B5DFC),
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_PARA1, sSetTreasureChestMinigameModeTargetData),
 };
 
 CameraMode sCamSetBombBasketModes[] = {
@@ -3032,97 +3232,97 @@ CameraMode sCamSetDungeon4Modes[] = {
 };
 
 CameraSetting sCameraSettings[] = {
-    { 0x00000000, 0x00000000, NULL },                           // CAM_SET_NONE
-    { 0x3FFFFFFF, 0x00000005, sCamSetNormal0Modes },            // CAM_SET_NORMAL0
-    { 0x05FFEFF7, 0x00000005, sCamSetNormal3Modes },            // CAM_SET_NORMAL3
-    { 0x00000401, 0x00000005, sCamSetPivotDivingModes },        // CAM_SET_PIVOT_DIVING
-    { 0x00017E13, 0x80000005, sCamSetHorseModes },              // CAM_SET_HORSE
-    { 0x00000001, 0x80000005, sCamSetZoraDivingModes },         // CAM_SET_ZORA_DIVING
-    { 0x00000001, 0x8000000C, sCamSetPreRendFixedModes },       // CAM_SET_PREREND_FIXED
-    { 0x00000001, 0x8000000C, sCamSetPreRendPivotModes },       // CAM_SET_PREREND_PIVOT
-    { 0x00000001, 0xC0000007, sCamSetDoorCModes },              // CAM_SET_DOORC
-    { 0x00000001, 0xC000000E, sCamSetDemo0Modes },              // CAM_SET_DEMO0
-    { 0x00000001, 0x80000005, sCamSetFree0Modes },              // CAM_SET_FREE0
-    { 0x03FFFFFF, 0x00000005, sCamSetFukan0Modes },             // CAM_SET_BIRDS_EYE_VIEW_0
-    { 0x03FFFFFF, 0x00000005, sCamSetNormal1Modes },            // CAM_SET_NORMAL1
-    { 0x03FFFFFF, 0x80000005, sCamSetNanameModes },             // CAM_SET_NANAME
-    { 0x00001BD9, 0x80000005, sCamSetCirc0Modes },              // CAM_SET_CIRCLE0
-    { 0x000011D9, 0x80000005, sCamSetFixed0Modes },             // CAM_SET_FIXED0
-    { 0x00000001, 0x40000005, sCamSetSpiralDoorModes },         // CAM_SET_SPIRAL_DOOR
-    { 0x3FFFFFFF, 0x00000005, sCamSetDungeon0Modes },           // CAM_SET_DUNGEON0
-    { 0x0000002F, 0x00000005, sCamSetItem0Modes },              // CAM_SET_ITEM0
-    { 0x0000002F, 0x00000005, sCamSetItem1Modes },              // CAM_SET_ITEM1
-    { 0x0000002F, 0x00000005, sCamSetItem2Modes },              // CAM_SET_ITEM2
-    { 0x0000002F, 0x00000005, sCamSetItem3Modes },              // CAM_SET_ITEM3
-    { 0x00000001, 0x00000005, sCamSetNaviModes },               // CAM_SET_NAVI
-    { 0x0000002F, 0x00000005, sCamSetWarp0Modes },              // CAM_SET_WARP_PAD_MOON
-    { 0x0000002F, 0x00000005, sCamSetDeathModes },              // CAM_SET_DEATH
-    { 0x0000002F, 0x00000005, sCamSetRebirthModes },            // CAM_SET_REBIRTH
-    { 0x00000001, 0x40000005, sCamSetLongChestOpeningModes },   // CAM_SET_LONG_CHEST_OPENING
-    { 0x00000003, 0x00000005, sCamSetMaskTransformationModes }, // CAM_SET_MASK_TRANSFORMATION
-    { 0x00000001, 0x00000005, sCamSetAttentionModes },          // CAM_SET_ATTENTION
-    { 0x00000001, 0x00000005, sCamSetWarp1Modes },              // CAM_SET_WARP_PAD_ENTRANCE
-    { 0x03FFFFFF, 0x00000005, sCamSetDungeon1Modes },           // CAM_SET_DUNGEON1
-    { 0x00000001, 0x80000005, sCamSetFixed1Modes },             // CAM_SET_FIXED1
-    { 0x00000001, 0x80000005, sCamSetFixed2Modes },             // CAM_SET_FIXED2
-    { 0x00000001, 0x00000005, sCamSetMazeModes },               // CAM_SET_MAZE
-    { 0x00000001, 0x00000005, sCamSetRemoteBombModes },         // CAM_SET_REMOTEBOMB
-    { 0x00000001, 0x80000005, sCamSetCirc1Modes },              // CAM_SET_CIRCLE1
-    { 0x00000001, 0x80000005, sCamSetCirc2Modes },              // CAM_SET_CIRCLE2
-    { 0x00001BD9, 0x80000005, sCamSetCirc3Modes },              // CAM_SET_CIRCLE3
-    { 0x00000001, 0x80000005, sCamSetCirc4Modes },              // CAM_SET_CIRCLE4
-    { 0x000011D9, 0x80000005, sCamSetFixed3Modes },             // CAM_SET_FIXED3
-    { 0x03FFFFFF, 0x80000005, sCamSetTowerClimbModes },         // CAM_SET_TOWER_ASCENT
-    { 0x00000001, 0x80000005, sCamSetParallel0Modes },          // CAM_SET_PARALLEL0
-    { 0x00000001, 0x00000005, sCamSetNormDModes },              // CAM_SET_NORMALD
-    { 0x00000001, 0x00000005, sCamSetSubjectDModes },           // CAM_SET_SUBJECTD
-    { 0x00000001, 0xC0000008, sCamSetStart0Modes },             // CAM_SET_START0
-    { 0x00000001, 0xC0000008, sCamSetStart2Modes },             // CAM_SET_START2
-    { 0x00000001, 0x00000005, sCamSetStop0Modes },              // CAM_SET_STOP0
-    { 0x00003051, 0x00000005, sCamSetBoatCruiseModes },         // CAM_SET_BOAT_CRUISE
-    { 0x03FFFFFF, 0x00000005, sCamSetVerticalClimbModes },      // CAM_SET_VERTICAL_CLIMB
-    { 0x00000001, 0x00000005, sCamSetSidedModes },              // CAM_SET_SIDED
-    { 0x03FFFFFF, 0x00000005, sCamSetDungeon2Modes },           // CAM_SET_DUNGEON2
-    { 0x03FFFFFF, 0x00000005, sCamSetBossOdolwaModes },         // CAM_SET_BOSS_ODOLWA
-    { 0x03FFFFFF, 0x80000005, sCamSetKeepBackModes },           // CAM_SET_KEEPBACK
-    { 0x00000001, 0x80000005, sCamSetCirc6Modes },              // CAM_SET_CIRCLE6
-    { 0x00000001, 0x80000005, sCamSetCirc7Modes },              // CAM_SET_CIRCLE7
-    { 0x03FFFFFF, 0x00000005, sCamSetMiniBossModes },           // CAM_SET_MINI_BOSS
-    { 0x00000001, 0x80000005, sCamSetRFixed1Modes },            // CAM_SET_RFIXED1
-    { 0x00000401, 0x00000005, sCamSetTresure1Modes },           // CAM_SET_TREASURE_CHEST_MINIGAME
-    { 0x00000001, 0x80000005, sCamSetBombBasketModes },         // CAM_SET_HONEY_AND_DARLING_1
-    { 0x00000001, 0x80000005, sCamSetCirc8Modes },              // CAM_SET_CIRCLE8
-    { 0x03FFFFFF, 0x00000005, sCamSetFukan1Modes },             // CAM_SET_BIRDS_EYE_VIEW_1
-    { 0x03FFFFFF, 0x00000005, sCamSetDungeon3Modes },           // CAM_SET_DUNGEON3
-    { 0x00008441, 0x0000000A, sCamSetTelescopeModes },          // CAM_SET_TELESCOPE
-    { 0x3FFFFFFF, 0x00000005, sCamSetRoom0Modes },              // CAM_SET_ROOM0
-    { 0x00000001, 0x80000005, sCamSetRCirc0Modes },             // CAM_SET_RCIRC0
-    { 0x00001BD9, 0x80000005, sCamSetCirc9Modes },              // CAM_SET_CIRCLE9
-    { 0x03FFFFFF, 0x00000005, sCamSetOnThePoleModes },          // CAM_SET_ONTHEPOLE
-    { 0x03FFFFFF, 0x00000005, sCamSetInBushModes },             // CAM_SET_INBUSH
-    { 0x03FFFFFF, 0x00000005, sCamSetBossMajoraModes },         // CAM_SET_BOSS_MAJORA
-    { 0x03FFFFFF, 0x00000005, sCamSetBossTwinmoldModes },       // CAM_SET_BOSS_TWINMOLD
-    { 0x03FFFFFF, 0x00000005, sCamSetBossGohtModes },           // CAM_SET_BOSS_GOHT
-    { 0x05FFEFF7, 0x00000005, sCamSetBossGyorgModes },          // CAM_SET_BOSS_GYORG
-    { 0x00000001, 0x00000005, sCamSetConnect0Modes },           // CAM_SET_CONNECT0
-    { 0x05FFEFF7, 0x00000005, sCamSetPinnacleRockModes },       // CAM_SET_PINNACLE_ROCK
-    { 0x03FFFFFF, 0x00000005, sCamSetNormal2Modes },            // CAM_SET_NORMAL2
-    { 0x03FFFFFF, 0x00000005, sCamSetBombBowlModes },           // CAM_SET_HONEY_AND_DARLING_2
-    { 0x00000001, 0x80000005, sCamSetCircAModes },              // CAM_SET_CIRCLEA
-    { 0x05FFEFF7, 0x00000005, sCamSetWhirlpoolModes },          // CAM_SET_WHIRLPOOL
-    { 0x01FFFFDF, 0x00000005, sCamSetCuccoShackModes },         // CAM_SET_CUCCO_SHACK
-    { 0x03FFFFFF, 0x00000005, sCamSetGiantModes },              // CAM_SET_GIANT
-    { 0x00000001, 0x00000008, sCamSetScene0Modes },             // CAM_SET_SCENE0
-    { 0x03FFFFFF, 0x00000005, sCamSetRoom1Modes },              // CAM_SET_ROOM1
-    { 0x05FFEFF7, 0x00000005, sCamSetWater2Modes },             // CAM_SET_WATER2
-    { 0x03FFFFFF, 0x00000005, sCamSetWoodfallSwampModes },      // CAM_SET_WOODFALL_SWAMP
-    { 0x03FFFFFF, 0x00000005, sCamSetForceKeepModes },          // CAM_SET_FORCEKEEP
-    { 0x03FFFFFF, 0x80000005, sCamSetParallel1Modes },          // CAM_SET_PARALLEL1
-    { 0x00000001, 0xC0000008, sCamSetStart1Modes },             // CAM_SET_START1
-    { 0x03FFFFFF, 0x00000005, sCamSetRoom2Modes },              // CAM_SET_ROOM2
-    { 0x03FFFFFF, 0x00000005, sCamSetNorm4Modes },              // CAM_SET_NORMAL4
-    { 0x0000002F, 0x00000005, sCamSetElegyShellModes },         // CAM_SET_ELEGY_SHELL
-    { 0x03FFFFFF, 0x00000005, sCamSetDungeon4Modes },           // CAM_SET_DUNGEON4
+    { 0x00000000, 0x00000000, NULL },                              // CAM_SET_NONE
+    { 0x3FFFFFFF, 0x00000005, sCamSetNormal0Modes },               // CAM_SET_NORMAL0
+    { 0x05FFEFF7, 0x00000005, sCamSetNormal3Modes },               // CAM_SET_NORMAL3
+    { 0x00000401, 0x00000005, sCamSetPivotDivingModes },           // CAM_SET_PIVOT_DIVING
+    { 0x00017E13, 0x80000005, sCamSetHorseModes },                 // CAM_SET_HORSE
+    { 0x00000001, 0x80000005, sCamSetZoraDivingModes },            // CAM_SET_ZORA_DIVING
+    { 0x00000001, 0x8000000C, sCamSetPreRendFixedModes },          // CAM_SET_PREREND_FIXED
+    { 0x00000001, 0x8000000C, sCamSetPreRendPivotModes },          // CAM_SET_PREREND_PIVOT
+    { 0x00000001, 0xC0000007, sCamSetDoorCModes },                 // CAM_SET_DOORC
+    { 0x00000001, 0xC000000E, sCamSetDemo0Modes },                 // CAM_SET_DEMO0
+    { 0x00000001, 0x80000005, sCamSetFree0Modes },                 // CAM_SET_FREE0
+    { 0x03FFFFFF, 0x00000005, sCamSetFukan0Modes },                // CAM_SET_BIRDS_EYE_VIEW_0
+    { 0x03FFFFFF, 0x00000005, sCamSetNormal1Modes },               // CAM_SET_NORMAL1
+    { 0x03FFFFFF, 0x80000005, sCamSetNanameModes },                // CAM_SET_NANAME
+    { 0x00001BD9, 0x80000005, sCamSetCirc0Modes },                 // CAM_SET_CIRCLE0
+    { 0x000011D9, 0x80000005, sCamSetFixed0Modes },                // CAM_SET_FIXED0
+    { 0x00000001, 0x40000005, sCamSetSpiralDoorModes },            // CAM_SET_SPIRAL_DOOR
+    { 0x3FFFFFFF, 0x00000005, sCamSetDungeon0Modes },              // CAM_SET_DUNGEON0
+    { 0x0000002F, 0x00000005, sCamSetItem0Modes },                 // CAM_SET_ITEM0
+    { 0x0000002F, 0x00000005, sCamSetItem1Modes },                 // CAM_SET_ITEM1
+    { 0x0000002F, 0x00000005, sCamSetItem2Modes },                 // CAM_SET_ITEM2
+    { 0x0000002F, 0x00000005, sCamSetItem3Modes },                 // CAM_SET_ITEM3
+    { 0x00000001, 0x00000005, sCamSetNaviModes },                  // CAM_SET_NAVI
+    { 0x0000002F, 0x00000005, sCamSetWarp0Modes },                 // CAM_SET_WARP_PAD_MOON
+    { 0x0000002F, 0x00000005, sCamSetDeathModes },                 // CAM_SET_DEATH
+    { 0x0000002F, 0x00000005, sCamSetRebirthModes },               // CAM_SET_REBIRTH
+    { 0x00000001, 0x40000005, sCamSetLongChestOpeningModes },      // CAM_SET_LONG_CHEST_OPENING
+    { 0x00000003, 0x00000005, sCamSetMaskTransformationModes },    // CAM_SET_MASK_TRANSFORMATION
+    { 0x00000001, 0x00000005, sCamSetAttentionModes },             // CAM_SET_ATTENTION
+    { 0x00000001, 0x00000005, sCamSetWarp1Modes },                 // CAM_SET_WARP_PAD_ENTRANCE
+    { 0x03FFFFFF, 0x00000005, sCamSetDungeon1Modes },              // CAM_SET_DUNGEON1
+    { 0x00000001, 0x80000005, sCamSetFixed1Modes },                // CAM_SET_FIXED1
+    { 0x00000001, 0x80000005, sCamSetFixed2Modes },                // CAM_SET_FIXED2
+    { 0x00000001, 0x00000005, sCamSetMazeModes },                  // CAM_SET_MAZE
+    { 0x00000001, 0x00000005, sCamSetRemoteBombModes },            // CAM_SET_REMOTEBOMB
+    { 0x00000001, 0x80000005, sCamSetCirc1Modes },                 // CAM_SET_CIRCLE1
+    { 0x00000001, 0x80000005, sCamSetCirc2Modes },                 // CAM_SET_CIRCLE2
+    { 0x00001BD9, 0x80000005, sCamSetCirc3Modes },                 // CAM_SET_CIRCLE3
+    { 0x00000001, 0x80000005, sCamSetCirc4Modes },                 // CAM_SET_CIRCLE4
+    { 0x000011D9, 0x80000005, sCamSetFixed3Modes },                // CAM_SET_FIXED3
+    { 0x03FFFFFF, 0x80000005, sCamSetTowerClimbModes },            // CAM_SET_TOWER_ASCENT
+    { 0x00000001, 0x80000005, sCamSetParallel0Modes },             // CAM_SET_PARALLEL0
+    { 0x00000001, 0x00000005, sCamSetNormDModes },                 // CAM_SET_NORMALD
+    { 0x00000001, 0x00000005, sCamSetSubjectDModes },              // CAM_SET_SUBJECTD
+    { 0x00000001, 0xC0000008, sCamSetStart0Modes },                // CAM_SET_START0
+    { 0x00000001, 0xC0000008, sCamSetStart2Modes },                // CAM_SET_START2
+    { 0x00000001, 0x00000005, sCamSetStop0Modes },                 // CAM_SET_STOP0
+    { 0x00003051, 0x00000005, sCamSetBoatCruiseModes },            // CAM_SET_BOAT_CRUISE
+    { 0x03FFFFFF, 0x00000005, sCamSetVerticalClimbModes },         // CAM_SET_VERTICAL_CLIMB
+    { 0x00000001, 0x00000005, sCamSetSidedModes },                 // CAM_SET_SIDED
+    { 0x03FFFFFF, 0x00000005, sCamSetDungeon2Modes },              // CAM_SET_DUNGEON2
+    { 0x03FFFFFF, 0x00000005, sCamSetBossOdolwaModes },            // CAM_SET_BOSS_ODOLWA
+    { 0x03FFFFFF, 0x80000005, sCamSetKeepBackModes },              // CAM_SET_KEEPBACK
+    { 0x00000001, 0x80000005, sCamSetCirc6Modes },                 // CAM_SET_CIRCLE6
+    { 0x00000001, 0x80000005, sCamSetCirc7Modes },                 // CAM_SET_CIRCLE7
+    { 0x03FFFFFF, 0x00000005, sCamSetMiniBossModes },              // CAM_SET_MINI_BOSS
+    { 0x00000001, 0x80000005, sCamSetRFixed1Modes },               // CAM_SET_RFIXED1
+    { 0x00000401, 0x00000005, sCamSetTreasureChestMinigameModes }, // CAM_SET_TREASURE_CHEST_MINIGAME
+    { 0x00000001, 0x80000005, sCamSetBombBasketModes },            // CAM_SET_HONEY_AND_DARLING_1
+    { 0x00000001, 0x80000005, sCamSetCirc8Modes },                 // CAM_SET_CIRCLE8
+    { 0x03FFFFFF, 0x00000005, sCamSetFukan1Modes },                // CAM_SET_BIRDS_EYE_VIEW_1
+    { 0x03FFFFFF, 0x00000005, sCamSetDungeon3Modes },              // CAM_SET_DUNGEON3
+    { 0x00008441, 0x0000000A, sCamSetTelescopeModes },             // CAM_SET_TELESCOPE
+    { 0x3FFFFFFF, 0x00000005, sCamSetRoom0Modes },                 // CAM_SET_ROOM0
+    { 0x00000001, 0x80000005, sCamSetRCirc0Modes },                // CAM_SET_RCIRC0
+    { 0x00001BD9, 0x80000005, sCamSetCirc9Modes },                 // CAM_SET_CIRCLE9
+    { 0x03FFFFFF, 0x00000005, sCamSetOnThePoleModes },             // CAM_SET_ONTHEPOLE
+    { 0x03FFFFFF, 0x00000005, sCamSetInBushModes },                // CAM_SET_INBUSH
+    { 0x03FFFFFF, 0x00000005, sCamSetBossMajoraModes },            // CAM_SET_BOSS_MAJORA
+    { 0x03FFFFFF, 0x00000005, sCamSetBossTwinmoldModes },          // CAM_SET_BOSS_TWINMOLD
+    { 0x03FFFFFF, 0x00000005, sCamSetBossGohtModes },              // CAM_SET_BOSS_GOHT
+    { 0x05FFEFF7, 0x00000005, sCamSetBossGyorgModes },             // CAM_SET_BOSS_GYORG
+    { 0x00000001, 0x00000005, sCamSetConnect0Modes },              // CAM_SET_CONNECT0
+    { 0x05FFEFF7, 0x00000005, sCamSetPinnacleRockModes },          // CAM_SET_PINNACLE_ROCK
+    { 0x03FFFFFF, 0x00000005, sCamSetNormal2Modes },               // CAM_SET_NORMAL2
+    { 0x03FFFFFF, 0x00000005, sCamSetBombBowlModes },              // CAM_SET_HONEY_AND_DARLING_2
+    { 0x00000001, 0x80000005, sCamSetCircAModes },                 // CAM_SET_CIRCLEA
+    { 0x05FFEFF7, 0x00000005, sCamSetWhirlpoolModes },             // CAM_SET_WHIRLPOOL
+    { 0x01FFFFDF, 0x00000005, sCamSetCuccoShackModes },            // CAM_SET_CUCCO_SHACK
+    { 0x03FFFFFF, 0x00000005, sCamSetGiantModes },                 // CAM_SET_GIANT
+    { 0x00000001, 0x00000008, sCamSetScene0Modes },                // CAM_SET_SCENE0
+    { 0x03FFFFFF, 0x00000005, sCamSetRoom1Modes },                 // CAM_SET_ROOM1
+    { 0x05FFEFF7, 0x00000005, sCamSetWater2Modes },                // CAM_SET_WATER2
+    { 0x03FFFFFF, 0x00000005, sCamSetWoodfallSwampModes },         // CAM_SET_WOODFALL_SWAMP
+    { 0x03FFFFFF, 0x00000005, sCamSetForceKeepModes },             // CAM_SET_FORCEKEEP
+    { 0x03FFFFFF, 0x80000005, sCamSetParallel1Modes },             // CAM_SET_PARALLEL1
+    { 0x00000001, 0xC0000008, sCamSetStart1Modes },                // CAM_SET_START1
+    { 0x03FFFFFF, 0x00000005, sCamSetRoom2Modes },                 // CAM_SET_ROOM2
+    { 0x03FFFFFF, 0x00000005, sCamSetNorm4Modes },                 // CAM_SET_NORMAL4
+    { 0x0000002F, 0x00000005, sCamSetElegyShellModes },            // CAM_SET_ELEGY_SHELL
+    { 0x03FFFFFF, 0x00000005, sCamSetDungeon4Modes },              // CAM_SET_DUNGEON4
 };
 
 static s16 sGlobalCamDataSettings[26] = {
