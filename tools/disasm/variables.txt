@@ -505,7 +505,7 @@
     0x801B4EDC:("sSetPrerendPivotModeNormalData","UNK_TYPE1","",0x1),
     0x801B4EE4:("sSetDoorCModeNormalData","UNK_TYPE1","",0x1),
     0x801B4EF0:("D_801B4EF0","UNK_TYPE1","",0x1),
-    0x801B4EF4:("D_801B4EF4","UNK_TYPE1","",0x1),
+    0x801B4EF4:("sSetCutscenesModeNormalData","UNK_TYPE1","",0x1),
     0x801B4EF8:("D_801B4EF8","UNK_TYPE1","",0x1),
     0x801B4F20:("D_801B4F20","UNK_TYPE1","",0x1),
     0x801B4F50:("D_801B4F50","UNK_TYPE1","",0x1),

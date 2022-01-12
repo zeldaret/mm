@@ -375,9 +375,9 @@ typedef struct Camera {
     /* 0x074 */ Vec3f eyeNext;
     /* 0x080 */ Vec3f skyboxOffset;
     /* 0x08C */ struct GlobalContext* globalCtx;
-    /* 0x090 */ Actor* trackActor; // trackActor Is likely Actor* not Player*. This is the actor the camera focuses on
+    /* 0x090 */ Actor* trackActor; // the actor the camera is focused on. Most often Player, but can be any actor
     /* 0x094 */ PosRot trackActorPosRot;
-    /* 0x0A8 */ Actor* target; // targetedActor
+    /* 0x0A8 */ Actor* target; // the actor that is being z-targeted
     /* 0x0AC */ PosRot targetPosRot;
     /* 0x0C0 */ f32 rUpdateRateInv;
     /* 0x0C4 */ f32 pitchUpdateRateInv;
@@ -388,8 +388,8 @@ typedef struct Camera {
     /* 0x0D8 */ f32 xzSpeed;
     /* 0x0DC */ f32 dist;
     /* 0x0E0 */ f32 speedRatio;
-    /* 0x0E4 */ Vec3f atActorOffset; // Displacement from trackActor to at (Offset between camera's at-coordinates and centered actor's coordinates)
-    /* 0x0F0 */ Vec3f trackActorPosRelToCam; // Displacement from cam's trackActor pos to real-time trackActor pos (Offset between camera's trackActor-coordinates and centered actor's coordinates)
+    /* 0x0E4 */ Vec3f atActorOffset;
+    /* 0x0F0 */ Vec3f trackActorOffset;
     /* 0x0FC */ f32 fov;
     /* 0x100 */ f32 atLERPStepScale;
     /* 0x104 */ f32 playerFloorHeight;
@@ -422,8 +422,7 @@ typedef struct Camera {
     /* 0x158 */ s16 nextBgId;
     /* 0x15A */ s16 roll;
     /* 0x15C */ s16 paramFlags;
-    /* 0x15E */ s16 actionFuncState; // A state that starts at 0 when a new action function is started, and increments
-                                     // upwards as the action function reaches new states
+    /* 0x15E */ s16 actionFuncState; // Determines the current state of the camera action function
     /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 doorTimer2; // a door timer used when door cam is indexed from bgCamDataId
     /* 0x164 */ s16 camId;
@@ -1091,7 +1090,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 jfifId;
+    /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 fov;
     /* 0x0C */ s16 flags;
 } Fixed1FixedData; // size = 0x10

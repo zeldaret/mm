@@ -279,29 +279,17 @@ CameraModeValue sSetDoorCModeNormalData[] = {
  *=====================================================================
  */
 
-/* CAM_FUNC_DEMO1 */
 CameraModeValue D_801B4EF0[] = {
     FLAGS_FIXED_DATA((SHRINKWINVAL_LARGE | IFACE_ALPHA(2))),
 };
 
 /*=====================================================================
- *                   Custom Data:
+ *                   Custom Data: Various Cutscenes
  *=====================================================================
  */
 
-/**
- * Setting      Mode      Function
- * -------      ------    --------
- * FREE0        NORMAL    UNIQ6
- * NAVI         NORMAL    UNIQ6
- * TRANSFORM    NORMAL    DEMO4
- * TRANSFORM    JUMP      DEMO5
- * ATTENTION    NORMAL    DEMO1
- * WARP1        NORMAL    DEMO3
- * STOP0        NORMAL    UNIQ6
- * CONNECT0     NORMAL    DEMO0
- */
-CameraModeValue D_801B4EF4[] = {
+// Camera Settings: FREE0, NAVI, TRANSFORM, ATTENTION, WARP1, STOP0,  CONNECT0
+CameraModeValue sSetCutscenesModeNormalData[] = {
     FLAGS_FIXED_DATA((SHRINKWINVAL_PREV | IFACE_ALPHA(0xF))),
 };
 
@@ -1908,7 +1896,7 @@ CameraMode sCamSetDemo0Modes[] = {
 };
 
 CameraMode sCamSetFree0Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ6, D_801B4EF4),
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ6, sSetCutscenesModeNormalData),
 };
 
 CameraMode sCamSetFukan0Modes[] = {
@@ -2104,7 +2092,7 @@ CameraMode sCamSetItem3Modes[] = {
 };
 
 CameraMode sCamSetNaviModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ6, D_801B4EF4),
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ6, sSetCutscenesModeNormalData),
 };
 
 CameraMode sCamSetWarp0Modes[] = {
@@ -2139,16 +2127,16 @@ CameraMode sCamSetLongChestOpeningModes[] = {
 };
 
 CameraMode sCamSetMaskTransformationModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO4, D_801B4EF4),
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO5, D_801B4EF4),
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO4, sSetCutscenesModeNormalData),
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO5, sSetCutscenesModeNormalData),
 };
 
 CameraMode sCamSetAttentionModes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO1, D_801B4EF4),
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO1, sSetCutscenesModeNormalData),
 };
 
 CameraMode sCamSetWarp1Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO3, D_801B4EF4),
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO3, sSetCutscenesModeNormalData),
 };
 
 CameraMode sCamSetDungeon1Modes[] = {
@@ -2290,7 +2278,7 @@ CameraMode sCamSetStart2Modes[] = {
 };
 
 CameraMode sCamSetStop0Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ6, D_801B4EF4),
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_UNIQ6, sSetCutscenesModeNormalData),
 };
 
 CameraMode sCamSetBoatCruiseModes[] = {
@@ -2799,7 +2787,7 @@ CameraMode sCamSetBossGyorgModes[] = {
 };
 
 CameraMode sCamSetConnect0Modes[] = {
-    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO0, D_801B4EF4),
+    CAM_SETTING_MODE_ENTRY(CAM_FUNC_DEMO0, sSetCutscenesModeNormalData),
 };
 
 CameraMode sCamSetPinnacleRockModes[] = {

@@ -1340,8 +1340,8 @@ s32 func_800CDB6C(Camera* camera, VecSph* arg1, f32 yOffset, f32 arg3, f32* arg4
         sp44.pitch = 0;
         OLib_VecSphGeoToVec3f(&sp70, &sp44);
     } else {
-        temp_f0 = camera->atActorOffset.x + camera->trackActorPosRelToCam.x;
-        temp_f12 = camera->atActorOffset.z + camera->trackActorPosRelToCam.z;
+        temp_f0 = camera->atActorOffset.x + camera->trackActorOffset.x;
+        temp_f12 = camera->atActorOffset.z + camera->trackActorOffset.z;
         if (sqrtf(SQ(temp_f0) + SQ(temp_f12)) < arg3) {
             sp70.x = temp_f0;
             sp70.z = temp_f12;
@@ -1756,7 +1756,7 @@ void func_800CED90(Camera* camera, VecSph* arg1, VecSph* arg2, f32 arg3, f32 arg
         } else if (swing->atEyeColChk.norm.y > 0.50f) {
             swing->unk_64 = 0;
         } else {
-            Math3D_AngleBetweenVectors(&camera->trackActorPosRelToCam, &swing->eyeAtColChk.norm, &sp88);
+            Math3D_AngleBetweenVectors(&camera->trackActorOffset, &swing->eyeAtColChk.norm, &sp88);
             if (sp88 > 0.0f) {
                 swing->unk_64 = 0;
             }
@@ -2164,13 +2164,13 @@ s32 Camera_Normal1(Camera* camera) {
             dummy:; // TODO: Will this be needed?
             } else if (fixedData->unk_22 & NORM1_FLG_2) {
                 if ((camera->speedRatio > 0.1f) || (dynamicData->unk_0A > 0x4B0)) {
-                    OLib_Vec3fToVecSphGeo(&sp64, &camera->trackActorPosRelToCam);
+                    OLib_Vec3fToVecSphGeo(&sp64, &camera->trackActorOffset);
                     if (!(fixedData->unk_22 & NORM1_FLG_8) || !func_800CB924(camera)) {
                         spB4.yaw = Camera_CalcDefaultYaw(camera, sp9C.yaw, sp64.yaw, fixedData->unk_14, spC0);
                     }
                     if (!(fixedData->unk_22 & NORM1_FLG_8)) {
                         spB4.pitch = Camera_CalcDefaultPitch(camera, sp9C.pitch, fixedData->unk_20, dynamicData->unk_08);
-                    } else if ((camera->trackActorPosRelToCam.y > 0.0f) && func_800CB924(camera)) {
+                    } else if ((camera->trackActorOffset.y > 0.0f) && func_800CB924(camera)) {
                         spB4.pitch = Camera_CalcDefaultPitch(camera, sp9C.pitch, fixedData->unk_20, dynamicData->unk_08);
                     }
                 } else {
@@ -2409,7 +2409,7 @@ s32 Camera_Normal3(Camera* camera) {
         temp_f2 = 1.0f;
     } else {
         sp62 = SUB16(playerPosRot->rot.y, BINANG_ROT180(sp68.yaw));
-        OLib_Vec3fToVecSphGeo(&sp78, &camera->trackActorPosRelToCam);
+        OLib_Vec3fToVecSphGeo(&sp78, &camera->trackActorOffset);
         phi_v1_2 = playerPosRot->rot.y - sp78.yaw;
         if (phi_v1_2 < 0) {
             phi_v1_2 *= -1;
@@ -2767,7 +2767,7 @@ s32 Camera_Parallel1(Camera* camera) {
             }
 
             dynamicData->unk_24 = fixedData->unk_24;
-            dynamicData->unk_04 = sp38->pos.y - camera->trackActorPosRelToCam.y;
+            dynamicData->unk_04 = sp38->pos.y - camera->trackActorOffset.y;
             dynamicData->unk_26 = 1;
             camera->actionFuncState = 1;
             sCameraInterfaceFlags = fixedData->unk_26;
@@ -3039,7 +3039,7 @@ s32 Camera_Jump2(Camera* camera) {
 
         yNormal = 0.8f - (-0.2f * (68.0f / trackHeight));
 
-        if (camera->trackActorPosRelToCam.y > 0.0f) {
+        if (camera->trackActorOffset.y > 0.0f) {
             phi_f2 = -10.0f;
         } else {
             phi_f2 = 10.0f;
@@ -3084,9 +3084,9 @@ s32 Camera_Jump2(Camera* camera) {
             dynamicData->unk_08 = 10000;
         }
 
-        sp2C->pos.x -= camera->trackActorPosRelToCam.x;
-        sp2C->pos.y -= camera->trackActorPosRelToCam.y;
-        sp2C->pos.z -= camera->trackActorPosRelToCam.z;
+        sp2C->pos.x -= camera->trackActorOffset.x;
+        sp2C->pos.y -= camera->trackActorOffset.y;
+        sp2C->pos.z -= camera->trackActorOffset.z;
         dynamicData->unk_0C = 6;
         camera->actionFuncState++;
         camera->atLERPStepScale = fixedData->unk_1C;
@@ -3138,13 +3138,13 @@ s32 Camera_Jump2(Camera* camera) {
     } else if ((yNormal != BGCHECK_Y_MIN) && (sp2C->pos.y < yNormal)) {
         camera->pitchUpdateRateInv = Camera_LERPCeilF(20.0f, camera->pitchUpdateRateInv, 0.2f, 0.1f);
         camera->rUpdateRateInv = Camera_LERPCeilF(20.0f, camera->rUpdateRateInv, 0.2f, 0.1f);
-        if (camera->trackActorPosRelToCam.y > 1.0f) {
+        if (camera->trackActorOffset.y > 1.0f) {
             spB4.pitch = Camera_LERPCeilS(0x1F4, spA4.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
         }
     } else if ((sp2C->pos.y - dynamicData->unk_00) < trackHeight) {
         camera->pitchUpdateRateInv = Camera_LERPCeilF(20.0f, camera->pitchUpdateRateInv, 0.2f, 0.1f);
         camera->rUpdateRateInv = Camera_LERPCeilF(20.0f, camera->rUpdateRateInv, 0.2f, 0.1f);
-        if (camera->trackActorPosRelToCam.y > 1.0f) {
+        if (camera->trackActorOffset.y > 1.0f) {
             spB4.pitch = Camera_LERPCeilS(0x1F4, spA4.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
         }
     } else {
@@ -3339,12 +3339,12 @@ s32 Camera_Jump3(Camera* camera) {
 
     if (fixedData->unk_22 & JUMP3_FLG_80) {
         camera->yOffsetUpdateRate = Camera_LERPCeilF(0.01f, camera->yOffsetUpdateRate, spD0, 0.0001f);
-        // sp4C = sqrtf(SQXZ(camera->trackActorPosRelToCam));
+        // sp4C = sqrtf(SQXZ(camera->trackActorOffset));
         // if (1) {} // TODO: is needed? (helps a lot)
-        // temp_f0 = sqrtf((camera->trackActorPosRelToCam.x * camera->trackActorPosRelToCam.x) + (camera->trackActorPosRelToCam.z *
-        // camera->trackActorPosRelToCam.z)); if (1) {}
-        sp5C = sqrtf((camera->trackActorPosRelToCam.x * camera->trackActorPosRelToCam.x) +
-                     (camera->trackActorPosRelToCam.z * camera->trackActorPosRelToCam.z)) /
+        // temp_f0 = sqrtf((camera->trackActorOffset.x * camera->trackActorOffset.x) + (camera->trackActorOffset.z *
+        // camera->trackActorOffset.z)); if (1) {}
+        sp5C = sqrtf((camera->trackActorOffset.x * camera->trackActorOffset.x) +
+                     (camera->trackActorOffset.z * camera->trackActorOffset.z)) /
                Camera_GetRunSpeedLimit(camera);
         camera->speedRatio = OLib_ClampMaxDist(sp5C / Camera_GetRunSpeedLimit(camera), 1.8f);
         spCC = camera->speedRatio * 0.2f;
@@ -3609,7 +3609,7 @@ s32 Camera_Battle1(Camera* camera) {
         dynamicData->unk_12 = sp9C.yaw;
         dynamicData->unk_14 = sp9C.pitch;
         dynamicData->unk_00 = sp9C.r;
-        dynamicData->unk_04 = camera->trackActorPosRot.pos.y - camera->trackActorPosRelToCam.y;
+        dynamicData->unk_04 = camera->trackActorPosRot.pos.y - camera->trackActorOffset.y;
         if ((2.0f * fixedData->unk_04) < camera->dist) {
             camera->dist = 2.0f * fixedData->unk_04;
             sp94.r = camera->dist;
@@ -3975,7 +3975,7 @@ s32 Camera_KeepOn1(Camera* camera) {
         dynamicData->unk_12 = spC8.yaw;
         dynamicData->unk_14 = spC8.pitch;
         dynamicData->unk_00 = spC8.r;
-        dynamicData->unk_08 = sp3C->pos.y - camera->trackActorPosRelToCam.y;
+        dynamicData->unk_08 = sp3C->pos.y - camera->trackActorOffset.y;
         if ((2.0f * fixedData->unk_04) < camera->dist) {
             camera->dist = 2.0f * fixedData->unk_04;
             spC0.r = camera->dist;
@@ -4588,7 +4588,7 @@ s32 Camera_KeepOn4(Camera* camera) {
             Camera_SetUpdateRatesFastPitch(camera);
             Camera_UnsetFlags(camera, CAM_FLAG2_4 | CAM_FLAG2_2);
             dynamicData->unk_14 = fixedData->unk_1E;
-            dynamicData->unk_08 = sp38->pos.y - camera->trackActorPosRelToCam.y;
+            dynamicData->unk_08 = sp38->pos.y - camera->trackActorOffset.y;
 
             switch (fixedData->unk_1C & (KEEP4_FLG_8 | KEEP4_FLG_4 | KEEP4_FLG_2)) {
                 case KEEP4_FLG_2:
@@ -4657,7 +4657,7 @@ s32 Camera_KeepOn4(Camera* camera) {
             break;
 
         case 10:
-            dynamicData->unk_08 = sp38->pos.y - camera->trackActorPosRelToCam.y;
+            dynamicData->unk_08 = sp38->pos.y - camera->trackActorOffset.y;
             break;
     }
 
@@ -4740,7 +4740,7 @@ s32 Camera_Fixed1(Camera* camera) {
         dynamicData->trackActor = camera->trackActor;
 
         fixedData->unk_00 = READ_SCALED_STATIC_DATA_VAL * trackHeight;
-        fixedData->jfifId = READ_SCALED_STATIC_DATA_VAL;
+        fixedData->unk_04 = READ_SCALED_STATIC_DATA_VAL;
         fixedData->fov = READ_STATIC_DATA_VAL;
         fixedData->flags = READ_STATIC_DATA_VAL;
 
@@ -4782,26 +4782,26 @@ s32 Camera_Fixed1(Camera* camera) {
         }
 
         if (bgCamData->unk_0E != (s32)negOne) {
-            fixedData->jfifId = SCALED_STATIC_DATA(bgCamData->unk_0E);
+            fixedData->unk_04 = SCALED_STATIC_DATA(bgCamData->unk_0E);
         }
     }
 
     OLib_Vec3fDiffToVecSphGeo(&eyeAtOffset, eye, at);
-    Camera_LERPCeilVec3f(&dynamicData->eyePosRotTarget.pos, eye, fixedData->jfifId, fixedData->jfifId, 0.2f);
+    Camera_LERPCeilVec3f(&dynamicData->eyePosRotTarget.pos, eye, fixedData->unk_04, fixedData->unk_04, 0.2f);
     adjustedPos = playerPosRot->pos;
     adjustedPos.y += trackHeight;
     camera->dist = OLib_Vec3fDist(&adjustedPos, eye);
     eyeOffset.r = camera->dist;
-    eyeOffset.pitch = Camera_LERPCeilS(dynamicData->eyePosRotTarget.rot.x * -1, eyeAtOffset.pitch, fixedData->jfifId, 5);
-    eyeOffset.yaw = Camera_LERPCeilS(dynamicData->eyePosRotTarget.rot.y, eyeAtOffset.yaw, fixedData->jfifId, 5);
+    eyeOffset.pitch = Camera_LERPCeilS(dynamicData->eyePosRotTarget.rot.x * -1, eyeAtOffset.pitch, fixedData->unk_04, 5);
+    eyeOffset.yaw = Camera_LERPCeilS(dynamicData->eyePosRotTarget.rot.y, eyeAtOffset.yaw, fixedData->unk_04, 5);
     OLib_VecSphAddToVec3f(at, eye, &eyeOffset);
     camera->eyeNext = *eye;
     Camera_BGCheck(camera, eye, at);
-    camera->fov = Camera_LERPCeilF(fixedData->fov, camera->fov, fixedData->jfifId, 0.1f);
+    camera->fov = Camera_LERPCeilF(fixedData->fov, camera->fov, fixedData->unk_04, 0.1f);
     camera->roll = 0;
     camera->atLERPStepScale = 0.0f;
     Camera_UpdateAtActorOffset(camera, &playerPosRot->pos);
-    camera->roll = Camera_LERPCeilS(dynamicData->eyePosRotTarget.rot.z, camera->roll, fixedData->jfifId, 5);
+    camera->roll = Camera_LERPCeilS(dynamicData->eyePosRotTarget.rot.z, camera->roll, fixedData->unk_04, 5);
     return true;
 }
 
@@ -6969,7 +6969,7 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
     camera->inputDir.z = 0;
     camera->camDir = camera->inputDir;
     camera->xzSpeed = 0.0f;
-    camera->trackActorPosRelToCam.y = 0.0f;
+    camera->trackActorOffset.y = 0.0f;
     camera->at = playerPosShape.pos;
     camera->at.y += trackHeight;
 
@@ -7249,9 +7249,9 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             } else {
                 Actor_GetWorld(&trackActorPosRot, camera->trackActor);
             }
-            camera->trackActorPosRelToCam.x = trackActorPosRot.pos.x - camera->trackActorPosRot.pos.x;
-            camera->trackActorPosRelToCam.y = trackActorPosRot.pos.y - camera->trackActorPosRot.pos.y;
-            camera->trackActorPosRelToCam.z = trackActorPosRot.pos.z - camera->trackActorPosRot.pos.z;
+            camera->trackActorOffset.x = trackActorPosRot.pos.x - camera->trackActorPosRot.pos.x;
+            camera->trackActorOffset.y = trackActorPosRot.pos.y - camera->trackActorPosRot.pos.y;
+            camera->trackActorOffset.z = trackActorPosRot.pos.z - camera->trackActorPosRot.pos.z;
 
             // bg related to tracked actor
             sp98 = 0;
@@ -7287,16 +7287,16 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
                     camera->floorNorm.x = COLPOLY_GET_NORMAL(sp90->normal.x);
                     camera->floorNorm.y = COLPOLY_GET_NORMAL(sp90->normal.y);
                     camera->floorNorm.z = COLPOLY_GET_NORMAL(sp90->normal.z);
-                    camera->trackActorPosRelToCam.x -= meshActor->actor.world.pos.x - camera->meshActorPos.x;
-                    camera->trackActorPosRelToCam.y -= meshActor->actor.world.pos.y - camera->meshActorPos.y;
-                    camera->trackActorPosRelToCam.z -= meshActor->actor.world.pos.z - camera->meshActorPos.z;
+                    camera->trackActorOffset.x -= meshActor->actor.world.pos.x - camera->meshActorPos.x;
+                    camera->trackActorOffset.y -= meshActor->actor.world.pos.y - camera->meshActorPos.y;
+                    camera->trackActorOffset.z -= meshActor->actor.world.pos.z - camera->meshActorPos.z;
                     camera->meshActorPos = meshActor->actor.world.pos;
                 }
             }
 
             // Set camera speed
             runSpeedLimit = Camera_GetRunSpeedLimit(camera) * 1.5f;
-            sp84 = Camera_Vec3fMagnitude(&camera->trackActorPosRelToCam);
+            sp84 = Camera_Vec3fMagnitude(&camera->trackActorOffset);
             camera->xzSpeed = OLib_ClampMaxDist(sp84, runSpeedLimit);
             camera->speedRatio = OLib_ClampMaxDist(sp84 / runSpeedLimit, 1.8f);
             camera->trackActorPosRot = trackActorPosRot;
