@@ -29,30 +29,18 @@ const ActorInit En_Osn_InitVars = {
 };
 
 ActorAnimationEntry sAnimations[0x19] = {
-    { &object_osn_Anim_0201BC, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_002F74, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_0037C4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_004320, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_004C8C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_0094E4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_009BB8, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_00AC60, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_001614, 1.0f, 1.0f, 39.0f, 0, 0.0f },
-    { &object_osn_Anim_001034, 1.0f, 1.0f, 70.0f, 0, 0.0f },
-    { &object_osn_Anim_00AE9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_003A1C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_0055F8, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_007220, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_0000C4, 0.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_osn_Anim_0000C4, 0.0f, 1.0f, 1.0f, 2, 0.0f },
-    { &object_osn_Anim_006D48, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_001D6C, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_osn_Anim_002634, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_008D80, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_osn_Anim_005D78, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_osn_Anim_006564, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_0201BC, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_002F74, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_0037C4, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_004320, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_004C8C, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_0094E4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_009BB8, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_00AC60, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_001614, 1.0f, 1.0f, 39.0f, 0, 0.0f }, { &object_osn_Anim_001034, 1.0f, 1.0f, 70.0f, 0, 0.0f },
+    { &object_osn_Anim_00AE9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_003A1C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_0055F8, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_007220, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_0000C4, 0.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_osn_Anim_0000C4, 0.0f, 1.0f, 1.0f, 2, 0.0f },  { &object_osn_Anim_006D48, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_001D6C, 1.0f, 0.0f, 0.0f, 2, 0.0f },  { &object_osn_Anim_002634, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_008D80, 1.0f, 0.0f, 0.0f, 2, 0.0f },  { &object_osn_Anim_005D78, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_osn_Anim_006564, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &object_osn_Anim_008D80, 0.0f, 77.0f, 0.0f, 2, 0.0f },
 };
 
@@ -201,7 +189,7 @@ void func_80AD0998(EnOsn* this) {
 }
 
 void func_80AD0A24(EnOsn* this) {
-s16 sp1E = this->skelAnime.curFrame;
+    s16 sp1E = this->skelAnime.curFrame;
     s16 new_var = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
 
     if (this->unk_1EC == 0x15 && sp1E == new_var) {
@@ -622,7 +610,7 @@ void func_80AD1398(EnOsn* this) {
 void func_80AD144C(EnOsn* this, GlobalContext* globalCtx) {
     u32 sp1C = Flags_GetSwitch(globalCtx, 0);
     this->cutscene = this->actor.cutscene;
-    
+
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
     if (sp1C == 0) {
         this->actionFunc = func_80AD16A8;
@@ -779,7 +767,7 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
 
 void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
-    
+
     if ((temp_v0 == 6 || temp_v0 == 5) && func_80147624(globalCtx)) {
         if (this->unk_1EA & 0x20) {
             this->unk_1EA &= 0xFFDF;
@@ -883,7 +871,7 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor,
-                  Gfx** gfx) {
+                           Gfx** gfx) {
     EnOsn* this = (EnOsn*)actor;
 
     if (this->unk_1F0 && limbIndex == 0xB) {
@@ -937,18 +925,18 @@ void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
-        POLY_OPA_DISP =
-            SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw, &this->actor, POLY_OPA_DISP);
+        POLY_OPA_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                           this->skelAnime.dListCount, EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw,
+                                           &this->actor, POLY_OPA_DISP);
     } else {
         func_8012C2DC(globalCtx->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2588));
         gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk_1FC);
         Scene_SetRenderModeXlu(globalCtx, 1, 2U);
-        POLY_XLU_DISP =
-            SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw, &this->actor, POLY_XLU_DISP);
+        POLY_XLU_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                           this->skelAnime.dListCount, EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw,
+                                           &this->actor, POLY_XLU_DISP);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
