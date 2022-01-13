@@ -16,7 +16,9 @@ void Skin_UpdateVertices(MtxF* mtx, SkinVertex* skinVertices, SkinLimbModif* mod
     wTemp.y = mtx->wy;
     wTemp.z = mtx->wz;
 
-    mtx->wz = mtx->wy = mtx->wx = 0.0f;
+    mtx->wx = 0.0f;
+    mtx->wy = 0.0f;
+    mtx->wz = 0.0f;
 
     for (vertexEntry = skinVertices; vertexEntry < &skinVertices[modifEntry->vtxCount]; vertexEntry++) {
         vtx = &vtxBuf[vertexEntry->index];
@@ -25,9 +27,9 @@ void Skin_UpdateVertices(MtxF* mtx, SkinVertex* skinVertices, SkinLimbModif* mod
         vtx->n.ob[1] = pos->y;
         vtx->n.ob[2] = pos->z;
 
-        sp44.x = vertexEntry->x;
-        sp44.y = vertexEntry->y;
-        sp44.z = vertexEntry->z;
+        sp44.x = vertexEntry->normX;
+        sp44.y = vertexEntry->normY;
+        sp44.z = vertexEntry->normZ;
 
         SkinMatrix_Vec3fMtxFMultXYZ(mtx, &sp44, &normal);
 
