@@ -623,13 +623,12 @@ void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
     s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     if (gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE &&
-        (gSaveContext.inventory.questItems & gBitFlags[0xD]) == 0) {
-        if (gSaveContext.inventory.questItems) {}
+        (!CHECK_QUEST_ITEM(QUEST_SONG_HEALING))) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->actionFunc = func_80AD1634;
             return;
         }
-        if ((((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted != 0)) && (((s32)temp_v1) < 0x4000)) &&
+        if ((((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted != 0)) && ((temp_v1) < 0x4000)) &&
             (temp_v1 >= -0x3FFF)) {
             func_800B863C(&this->actor, globalCtx);
             this->actor.textId = 0xFFFF;
