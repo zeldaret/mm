@@ -18,8 +18,8 @@ void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnRailgibud_SetupWalkInCircles(EnRailgibud* this);
 void EnRailgibud_WalkInCircles(EnRailgibud* this, GlobalContext* globalCtx);
-void EnRailgibud_SetupAttemptPlayerStun(EnRailgibud* this);
-void EnRailgibud_AttemptPlayerStun(EnRailgibud* this, GlobalContext* globalCtx);
+void EnRailgibud_SetupAttemptPlayerFreeze(EnRailgibud* this);
+void EnRailgibud_AttemptPlayerFreeze(EnRailgibud* this, GlobalContext* globalCtx);
 void EnRailgibud_SetupWalkToPlayer(EnRailgibud* this);
 void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx);
 void EnRailgibud_SetupGrab(EnRailgibud* this);
@@ -36,7 +36,7 @@ void EnRailgibud_SetupDead(EnRailgibud* this);
 void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx);
 void EnRailgibud_SpawnDust(GlobalContext* globalCtx, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5);
 void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, GlobalContext* globalCtx);
-s32 EnRailgibud_PlayerInRangeWithCorrectStateToGrab(EnRailgibud* this, GlobalContext* globalCtx);
+s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_PlayerOutOfRange(EnRailgibud* this, GlobalContext* globalCtx);
 s32 EnRailgibud_MoveToIdealGrabPositionAndRotation(EnRailgibud* this, GlobalContext* globalCtx);
 void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* globalCtx);
@@ -301,7 +301,7 @@ void EnRailgibud_WalkInCircles(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->actor.xzDistToPlayer <= 100.0f) && func_800B715C(globalCtx) &&
         (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO)) {
         this->actor.home = this->actor.world;
-        EnRailgibud_SetupAttemptPlayerStun(this);
+        EnRailgibud_SetupAttemptPlayerFreeze(this);
     }
 
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
@@ -335,12 +335,12 @@ void EnRailgibud_WalkInCircles(EnRailgibud* this, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
 }
 
-void EnRailgibud_SetupAttemptPlayerStun(EnRailgibud* this) {
+void EnRailgibud_SetupAttemptPlayerFreeze(EnRailgibud* this) {
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_IDLE);
-    this->actionFunc = EnRailgibud_AttemptPlayerStun;
+    this->actionFunc = EnRailgibud_AttemptPlayerFreeze;
 }
 
-void EnRailgibud_AttemptPlayerStun(EnRailgibud* this, GlobalContext* globalCtx) {
+void EnRailgibud_AttemptPlayerFreeze(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 rot = this->actor.shape.rot.y + this->headRotation.y + this->upperBodyRotation.y;
     s16 yaw = BINANG_SUB(this->actor.yawTowardsPlayer, rot);
@@ -360,7 +360,7 @@ void EnRailgibud_SetupWalkToPlayer(EnRailgibud* this) {
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_WALK);
     this->actor.speedXZ = 0.4f;
 
-    if (this->actionFunc == EnRailgibud_AttemptPlayerStun) {
+    if (this->actionFunc == EnRailgibud_AttemptPlayerFreeze) {
         this->playerStunWaitTimer = 80;
     } else {
         this->playerStunWaitTimer = 20;
@@ -378,8 +378,7 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
 
-    if (EnRailgibud_PlayerInRangeWithCorrectStateToGrab(this, globalCtx) &&
-        Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
+    if (EnRailgibud_PlayerInRangeWithCorrectState(this, globalCtx) && Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
             if ((gSaveContext.playerForm == PLAYER_FORM_GORON) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
@@ -551,7 +550,7 @@ void EnRailgibud_WalkToHome(EnRailgibud* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 450);
         this->actor.world.rot = this->actor.shape.rot;
     }
-    if (EnRailgibud_PlayerInRangeWithCorrectStateToGrab(this, globalCtx)) {
+    if (EnRailgibud_PlayerInRangeWithCorrectState(this, globalCtx)) {
         if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
             Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
             EnRailgibud_SetupWalkToPlayer(this);
@@ -740,7 +739,7 @@ void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, GlobalContext* globalCtx) 
     this->headRotation.y = CLAMP(this->headRotation.y, -0x256F, 0x256F);
 }
 
-s32 EnRailgibud_PlayerInRangeWithCorrectStateToGrab(EnRailgibud* this, GlobalContext* globalCtx) {
+s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
@@ -1012,14 +1011,17 @@ void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRailgibud_UpdateWalkForwardState(this);
     EnRailgibud_CheckForGibdoMask(this, globalCtx);
     EnRailgibud_UpdateDamage(this, globalCtx);
+
     this->actionFunc(this, globalCtx);
     if (this->actionFunc != EnRailgibud_Stunned) {
         SkelAnime_Update(&this->skelAnime);
     }
+
     EnRailgibud_MoveWithGravity(this, globalCtx);
     EnRailgibud_UpdateCollision(this, globalCtx);
     EnRailgibud_MoveGrabbedPlayerAwayFromWall(this, globalCtx);
     EnRailgibud_UpdateEffect(this, globalCtx);
+
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
 }

@@ -18,8 +18,8 @@ void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnTalkGibud_SetupIdle(EnTalkGibud* this);
 void EnTalkGibud_Idle(EnTalkGibud* this, GlobalContext* globalCtx);
-void EnTalkGibud_SetupAttemptPlayerStun(EnTalkGibud* this);
-void EnTalkGibud_AttemptPlayerStun(EnTalkGibud* this, GlobalContext* globalCtx);
+void EnTalkGibud_SetupAttemptPlayerFreeze(EnTalkGibud* this);
+void EnTalkGibud_AttemptPlayerFreeze(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_SetupWalkToPlayer(EnTalkGibud* this);
 void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_SetupGrab(EnTalkGibud* this);
@@ -43,7 +43,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_SetupDisappear(EnTalkGibud* this);
 void EnTalkGibud_Disappear(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalCtx);
-s32 EnTalkGibud_PlayerInRangeWithCorrectStateToGrab(EnTalkGibud* this, GlobalContext* globalCtx);
+s32 EnTalkGibud_PlayerInRangeWithCorrectState(EnTalkGibud* this, GlobalContext* globalCtx);
 s32 EnTalkGibud_PlayerOutOfRange(EnTalkGibud* this, GlobalContext* globalCtx);
 void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, GlobalContext* globalCtx);
 s32 EnTalkGibud_MoveToIdealGrabPositionAndRotation(EnTalkGibud* this, GlobalContext* globalCtx);
@@ -292,19 +292,19 @@ void EnTalkGibud_SetupIdle(EnTalkGibud* this) {
  */
 void EnTalkGibud_Idle(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer <= 150.0f && func_800B715C(globalCtx)) {
-        EnTalkGibud_SetupAttemptPlayerStun(this);
+        EnTalkGibud_SetupAttemptPlayerFreeze(this);
     }
 
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
 }
 
-void EnTalkGibud_SetupAttemptPlayerStun(EnTalkGibud* this) {
+void EnTalkGibud_SetupAttemptPlayerFreeze(EnTalkGibud* this) {
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_IDLE);
-    this->actionFunc = EnTalkGibud_AttemptPlayerStun;
+    this->actionFunc = EnTalkGibud_AttemptPlayerFreeze;
 }
 
-void EnTalkGibud_AttemptPlayerStun(EnTalkGibud* this, GlobalContext* globalCtx) {
+void EnTalkGibud_AttemptPlayerFreeze(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 rot = this->actor.shape.rot.y + this->headRotation.y + this->upperBodyRotation.y;
     s16 yaw = BINANG_SUB(this->actor.yawTowardsPlayer, rot);
@@ -324,7 +324,7 @@ void EnTalkGibud_SetupWalkToPlayer(EnTalkGibud* this) {
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, EN_TALK_GIBUD_ANIMATION_WALK);
     this->actor.speedXZ = 0.4f;
 
-    if (this->actionFunc == EnTalkGibud_AttemptPlayerStun) {
+    if (this->actionFunc == EnTalkGibud_AttemptPlayerFreeze) {
         this->playerStunWaitTimer = 80;
     } else {
         this->playerStunWaitTimer = 20;
@@ -342,8 +342,7 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
 
-    if (EnTalkGibud_PlayerInRangeWithCorrectStateToGrab(this, globalCtx) &&
-        Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
+    if (EnTalkGibud_PlayerInRangeWithCorrectState(this, globalCtx) && Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
             if ((gSaveContext.playerForm == PLAYER_FORM_GORON) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
@@ -510,7 +509,7 @@ void EnTalkGibud_WalkToHome(EnTalkGibud* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 450);
         this->actor.world.rot = this->actor.shape.rot;
     }
-    if (EnTalkGibud_PlayerInRangeWithCorrectStateToGrab(this, globalCtx)) {
+    if (EnTalkGibud_PlayerInRangeWithCorrectState(this, globalCtx)) {
         if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
             Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
             EnTalkGibud_SetupWalkToPlayer(this);
@@ -890,7 +889,7 @@ void EnTalkGibud_FacePlayerWhenTalking(EnTalkGibud* this, GlobalContext* globalC
     Math_ScaledStepToS(&this->headRotation.y, target, 0x190);
 }
 
-s32 EnTalkGibud_PlayerInRangeWithCorrectStateToGrab(EnTalkGibud* this, GlobalContext* globalCtx) {
+s32 EnTalkGibud_PlayerInRangeWithCorrectState(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f) &&
@@ -1135,12 +1134,15 @@ void EnTalkGibud_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     EnTalkGibud_CheckForGibdoMask(this, globalCtx);
     EnTalkGibud_UpdateDamage(this, globalCtx);
+
     this->actionFunc(this, globalCtx);
+
     EnTalkGibud_PlayAnimation(this, globalCtx);
     EnTalkGibud_MoveWithGravity(this, globalCtx);
     EnTalkGibud_UpdateCollision(this, globalCtx);
     EnTalkGibud_MoveGrabbedPlayerAwayFromWall(this, globalCtx);
     EnTalkGibud_UpdateEffect(this, globalCtx);
+
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
 }

@@ -2,7 +2,7 @@
  * File: z_en_rd.c
  * Overlay: ovl_En_Rd
  * Description: Redead/Gibdo that cannot talk to the player.
- * 
+ *
  * A variety of different Redeads/Gibdos are represented by this actor;
  * one of the few things they all have in common is that none of them
  * can talk with the player, which separates them from Talk_Gibud and
@@ -14,7 +14,7 @@
  * - An invisible Redead.
  * - A crying Redead.
  * - A Gidbo that rises out of a "coffin"; this is leftover from OoT.
- * 
+ *
  * Another thing that separates this actor from Talk_Gibud and Railgibud
  * is that most Redead variations will "mourn" other fallen Redeads in
  * the same area by walking over to their corpse. Note that some Redeads,
@@ -34,7 +34,7 @@ void EnRd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRd_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 EnRd_IsHostile(GlobalContext* globalCtx);
+s32 EnRd_ShouldNotDance(GlobalContext* globalCtx);
 void EnRd_SetupIdle(EnRd* this);
 void EnRd_Idle(EnRd* this, GlobalContext* globalCtx);
 void EnRd_SetupSquattingDance(EnRd* this);
@@ -54,8 +54,8 @@ void EnRd_SetupWalkToParent(EnRd* this);
 void EnRd_WalkToParent(EnRd* this, GlobalContext* globalCtx);
 void EnRd_SetupGrab(EnRd* this);
 void EnRd_Grab(EnRd* this, GlobalContext* globalCtx);
-void EnRd_SetupAttemptPlayerStun(EnRd* this);
-void EnRd_AttemptPlayerStun(EnRd* this, GlobalContext* globalCtx);
+void EnRd_SetupAttemptPlayerFreeze(EnRd* this);
+void EnRd_AttemptPlayerFreeze(EnRd* this, GlobalContext* globalCtx);
 void EnRd_SetupGrabFail(EnRd* this);
 void EnRd_GrabFail(EnRd* this, GlobalContext* globalCtx);
 void EnRd_SetupTurnAwayAndShakeHead(EnRd* this);
@@ -219,7 +219,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (EN_RD_GET_TYPE(&this->actor) >= EN_RD_TYPE_GIBDO) {
         switch (EN_RD_GET_TYPE(&this->actor)) {
             case EN_RD_TYPE_SQUATTING_DANCE:
-                if (!EnRd_IsHostile(globalCtx)) {
+                if (!EnRd_ShouldNotDance(globalCtx)) {
                     EnRd_SetupSquattingDance(this);
                 } else {
                     this->actor.hintId = 0x2A;
@@ -229,7 +229,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
                 break;
 
             case EN_RD_TYPE_CLAPPING_DANCE:
-                if (!EnRd_IsHostile(globalCtx)) {
+                if (!EnRd_ShouldNotDance(globalCtx)) {
                     EnRd_SetupClappingDance(this);
                 } else {
                     this->actor.hintId = 0x2A;
@@ -239,7 +239,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
                 break;
 
             case EN_RD_TYPE_PIROUETTE:
-                if (!EnRd_IsHostile(globalCtx)) {
+                if (!EnRd_ShouldNotDance(globalCtx)) {
                     EnRd_SetupPirouette(this);
                 } else {
                     this->actor.hintId = 0x2A;
@@ -286,27 +286,42 @@ void EnRd_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void EnRd_UpdateParentForOtherRedeads(GlobalContext* globalCtx, EnRd* this, s32 setParent) {
-    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
+/**
+ * This function does two things depending on whether setParent is true or false.
+ * - If setParent is true, this function sets thisx to be the parent for all Redeads
+ *   in the area that are capable of mourning. This is used right when thisx first
+ *   dies to make the other Redeads mourn it.
+ * - If setParent is false, this function nulls out the parent for all Redeads in the
+ *   are whose parents is thisx. This is used when thisx is fading away to make the
+ *   other Redeads stop mourning over it.
+ */
+void EnRd_UpdateParentForOtherRedeads(GlobalContext* globalCtx, Actor* thisx, s32 setParent) {
+    Actor* enemyIterator = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
 
-    while (actor != NULL) {
-        if ((actor->id != ACTOR_EN_RD) || (this == (EnRd*)actor) ||
-            (EN_RD_GET_TYPE(actor) < EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING)) {
-            actor = actor->next;
+    while (enemyIterator != NULL) {
+        if ((enemyIterator->id != ACTOR_EN_RD) || (enemyIterator == thisx) ||
+            (EN_RD_GET_TYPE(enemyIterator) < EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING)) {
+            enemyIterator = enemyIterator->next;
             continue;
         }
 
         if (setParent) {
-            actor->parent = &this->actor;
-        } else if (this == (EnRd*)actor->parent) {
-            actor->parent = NULL;
+            enemyIterator->parent = thisx;
+        } else if (thisx == enemyIterator->parent) {
+            enemyIterator->parent = NULL;
         }
 
-        actor = actor->next;
+        enemyIterator = enemyIterator->next;
     }
 }
 
-s32 EnRd_IsHostile(GlobalContext* globalCtx) {
+/**
+ * Returns true if the various dancing Redead types *should not* be dancing
+ * and returns false if they *should* be dancing. The non-dancing Redeads
+ * do not call this function in the final game and thus don't care about
+ * what mask the player has equipped.
+ */
+s32 EnRd_ShouldNotDance(GlobalContext* globalCtx) {
     if ((Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) || (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) ||
         (Player_GetMask(globalCtx) == PLAYER_MASK_GARO)) {
         return false;
@@ -315,12 +330,17 @@ s32 EnRd_IsHostile(GlobalContext* globalCtx) {
     return true;
 }
 
-void EnRd_SetUpDanceIfConditionsMet(EnRd* this, GlobalContext* globalCtx) {
+/**
+ * If the Redead/Gibdo is a dancing Redead; if it isn't already dancing; if it isn't stunned,
+ * taking damage, dead, or currently grabbing the player; and if the player is wearing the
+ * appropriate mask, this function will make the Redead start dancing.
+ */
+void EnRd_SetupDanceIfConditionsMet(EnRd* this, GlobalContext* globalCtx) {
     if ((EN_RD_GET_TYPE(&this->actor) >= EN_RD_TYPE_SQUATTING_DANCE) && (this->actionFunc != EnRd_SquattingDance) &&
         (this->actionFunc != EnRd_ClappingDance) && (this->actionFunc != EnRd_Pirouette) &&
         (this->actionFunc != EnRd_Stunned) && (this->actionFunc != EnRd_Grab) && (this->actionFunc != EnRd_Damage) &&
         (this->actionFunc != EnRd_Dead)) {
-        if (!EnRd_IsHostile(globalCtx)) {
+        if (!EnRd_ShouldNotDance(globalCtx)) {
             this->setupDanceFunc(this);
         }
     }
@@ -344,6 +364,7 @@ void EnRd_Idle(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
+
     if ((EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_CRYING) && Animation_OnFrame(&this->skelAnime, 0.0f)) {
         if (Rand_ZeroOne() >= 0.5f) {
             Animation_PlayLoop(&this->skelAnime, &gGibdoRedeadSobbingAnim);
@@ -353,6 +374,8 @@ void EnRd_Idle(EnRd* this, GlobalContext* globalCtx) {
     } else {
         this->animationJudderTimer--;
         if (this->animationJudderTimer == 0) {
+            // This resets the idle animation back to its first frame, making the
+            // Redead/Gibdo appear to "judder" in place.
             this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 10.0f;
             this->skelAnime.curFrame = 0.0f;
         }
@@ -369,7 +392,7 @@ void EnRd_Idle(EnRd* this, GlobalContext* globalCtx) {
     } else {
         if (this->isMourning) {
             if (EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) {
-                EnRd_SetupAttemptPlayerStun(this);
+                EnRd_SetupAttemptPlayerFreeze(this);
             } else {
                 EnRd_SetupStandUp(this);
             }
@@ -378,7 +401,7 @@ void EnRd_Idle(EnRd* this, GlobalContext* globalCtx) {
         this->isMourning = false;
         if ((this->actor.xzDistToPlayer <= 150.0f) && func_800B715C(globalCtx)) {
             if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (!this->isMourning)) {
-                EnRd_SetupAttemptPlayerStun(this);
+                EnRd_SetupAttemptPlayerFreeze(this);
             } else {
                 EnRd_SetupStandUp(this);
             }
@@ -404,12 +427,13 @@ void EnRd_SquattingDance(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
+
     if (this->isMourning) {
-        EnRd_SetupAttemptPlayerStun(this);
+        EnRd_SetupAttemptPlayerFreeze(this);
     }
 
     this->isMourning = false;
-    if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
+    if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_ShouldNotDance(globalCtx) && func_800B715C(globalCtx)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
@@ -419,7 +443,7 @@ void EnRd_SquattingDance(EnRd* this, GlobalContext* globalCtx) {
         this->actionFunc = EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose;
     }
 
-    if (EnRd_IsHostile(globalCtx)) {
+    if (EnRd_ShouldNotDance(globalCtx)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
@@ -447,12 +471,13 @@ void EnRd_ClappingDance(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
+
     if (this->isMourning) {
-        EnRd_SetupAttemptPlayerStun(this);
+        EnRd_SetupAttemptPlayerFreeze(this);
     }
 
     this->isMourning = false;
-    if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
+    if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_ShouldNotDance(globalCtx) && func_800B715C(globalCtx)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
@@ -462,7 +487,7 @@ void EnRd_ClappingDance(EnRd* this, GlobalContext* globalCtx) {
         this->actionFunc = EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose;
     }
 
-    if (EnRd_IsHostile(globalCtx)) {
+    if (EnRd_ShouldNotDance(globalCtx)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
@@ -485,7 +510,7 @@ void EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose(EnRd* this, GlobalContext
     this->danceEndTimer++;
     if (this->danceEndTimer > 10) {
         if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (!this->isMourning)) {
-            EnRd_SetupAttemptPlayerStun(this);
+            EnRd_SetupAttemptPlayerFreeze(this);
         } else {
             EnRd_SetupStandUp(this);
         }
@@ -507,12 +532,13 @@ void EnRd_Pirouette(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 100, 0);
     Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 100, 0);
+
     if (this->isMourning) {
-        EnRd_SetupAttemptPlayerStun(this);
+        EnRd_SetupAttemptPlayerFreeze(this);
     }
 
     this->isMourning = false;
-    if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_IsHostile(globalCtx) && func_800B715C(globalCtx)) {
+    if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_ShouldNotDance(globalCtx) && func_800B715C(globalCtx)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
@@ -521,7 +547,7 @@ void EnRd_Pirouette(EnRd* this, GlobalContext* globalCtx) {
         this->actionFunc = EnRd_EndPirouetteWhenPlayerIsClose;
     }
 
-    if (EnRd_IsHostile(globalCtx)) {
+    if (EnRd_ShouldNotDance(globalCtx)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
             this->actor.hintId = 0x2D;
         } else {
@@ -558,7 +584,7 @@ void EnRd_EndPirouetteWhenPlayerIsClose(EnRd* this, GlobalContext* globalCtx) {
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, 2, -10.0f);
     } else if (this->pirouetteRotationalVelocity < 0x3E8) {
         if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (!this->isMourning)) {
-            EnRd_SetupAttemptPlayerStun(this);
+            EnRd_SetupAttemptPlayerFreeze(this);
         } else {
             EnRd_SetupStandUp(this);
         }
@@ -738,17 +764,23 @@ void EnRd_SetupWalkToParent(EnRd* this) {
     this->actionFunc = EnRd_WalkToParent;
 }
 
+/**
+ * When a Redead or Gibdo dies, it sets itself to be the parent for all other
+ * Redeads in the area that are capable of mourning. This function will make
+ * these Redeads walk over to the corpse and stand near until it begins to
+ * fade away.
+ */
 void EnRd_WalkToParent(EnRd* this, GlobalContext* globalCtx) {
     s32 pad;
     s16 yaw;
-    Vec3f sp2C;
+    Vec3f parentPos;
 
     if (this->actor.parent != NULL) {
-        sp2C = this->actor.parent->world.pos;
-        yaw = Actor_YawToPoint(&this->actor, &sp2C);
+        parentPos = this->actor.parent->world.pos;
+        yaw = Actor_YawToPoint(&this->actor, &parentPos);
 
         Math_SmoothStepToS(&this->actor.shape.rot.y, yaw, 1, 250, 0);
-        if (Actor_DistanceToPoint(&this->actor, &sp2C) >= 45.0f) {
+        if (Actor_DistanceToPoint(&this->actor, &parentPos) >= 45.0f) {
             this->actor.speedXZ = 0.4f;
         } else {
             this->actor.speedXZ = 0.0f;
@@ -870,14 +902,14 @@ void EnRd_Grab(EnRd* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnRd_SetupAttemptPlayerStun(EnRd* this) {
+void EnRd_SetupAttemptPlayerFreeze(EnRd* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f,
                      Animation_GetLastFrame(&gGibdoRedeadLookBackAnim), 2, 0.0f);
     this->action = EN_RD_ACTION_ATTEMPTING_PLAYER_STUN;
-    this->actionFunc = EnRd_AttemptPlayerStun;
+    this->actionFunc = EnRd_AttemptPlayerFreeze;
 }
 
-void EnRd_AttemptPlayerStun(EnRd* this, GlobalContext* globalCtx) {
+void EnRd_AttemptPlayerFreeze(EnRd* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 yaw =
         ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->headYRotation) - this->upperBodyYRotation;
@@ -949,7 +981,7 @@ void EnRd_StandUp(EnRd* this, GlobalContext* globalCtx) {
         if (this->actor.parent != NULL) {
             EnRd_SetupWalkToParent(this);
         } else {
-            EnRd_SetupAttemptPlayerStun(this);
+            EnRd_SetupAttemptPlayerFreeze(this);
         }
     }
 }
@@ -1030,7 +1062,7 @@ void EnRd_Dead(EnRd* this, GlobalContext* globalCtx) {
 
             if (this->alpha != 0) {
                 if (this->alpha == 180) {
-                    EnRd_UpdateParentForOtherRedeads(globalCtx, this, false);
+                    EnRd_UpdateParentForOtherRedeads(globalCtx, &this->actor, false);
                 }
                 this->actor.scale.y -= (75.0f / 1000000.0f);
                 this->alpha -= 5;
@@ -1084,7 +1116,7 @@ void EnRd_Stunned(EnRd* this, GlobalContext* globalCtx) {
 
     if (this->actor.colorFilterTimer == 0) {
         if (this->actor.colChkInfo.health == 0) {
-            EnRd_UpdateParentForOtherRedeads(globalCtx, this, true);
+            EnRd_UpdateParentForOtherRedeads(globalCtx, &this->actor, true);
             EnRd_SetupDead(this);
             Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x90);
         } else {
@@ -1188,7 +1220,7 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
 
         Actor_ApplyDamage(&this->actor);
         if (this->actor.colChkInfo.health == 0) {
-            EnRd_UpdateParentForOtherRedeads(globalCtx, this, true);
+            EnRd_UpdateParentForOtherRedeads(globalCtx, &this->actor, true);
             EnRd_SetupDead(this);
             Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, 0x90);
         } else {
@@ -1255,8 +1287,9 @@ void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
+
     EnRd_UpdateCollision(this, globalCtx);
-    EnRd_SetUpDanceIfConditionsMet(this, globalCtx);
+    EnRd_SetupDanceIfConditionsMet(this, globalCtx);
     EnRd_UpdateEffect(this, globalCtx);
 }
 
