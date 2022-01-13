@@ -5,6 +5,7 @@
  */
 
 #include "z_en_osn.h"
+#include "objects/object_osn/object_osn.h"
 
 #define FLAGS 0x00000019
 
@@ -28,31 +29,31 @@ const ActorInit En_Osn_InitVars = {
 };
 
 ActorAnimationEntry sAnimations[0x19] = {
-    { (AnimationHeader*)0x060201BC, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06002F74, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x060037C4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06004320, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06004C8C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x060094E4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06009BB8, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x0600AC60, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06001614, 1.0f, 1.0f, 39.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06001034, 1.0f, 1.0f, 70.0f, 0, 0.0f },
-    { (AnimationHeader*)0x0600AE9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06003A1C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x060055F8, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06007220, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x0600A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x060000C4, 0.0f, 0.0f, 0.0f, 2, 0.0f },
-    { (AnimationHeader*)0x060000C4, 0.0f, 1.0f, 1.0f, 2, 0.0f },
-    { (AnimationHeader*)0x06006D48, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06001D6C, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { (AnimationHeader*)0x06002634, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06008D80, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { (AnimationHeader*)0x06005D78, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { (AnimationHeader*)0x06006564, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x0600A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { (AnimationHeader*)0x06008D80, 0.0f, 77.0f, 0.0f, 2, 0.0f },
+    { &object_osn_Anim_0201BC, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_002F74, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_0037C4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_004320, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_004C8C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_0094E4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_009BB8, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_00AC60, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_001614, 1.0f, 1.0f, 39.0f, 0, 0.0f },
+    { &object_osn_Anim_001034, 1.0f, 1.0f, 70.0f, 0, 0.0f },
+    { &object_osn_Anim_00AE9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_003A1C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_0055F8, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_007220, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_0000C4, 0.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_osn_Anim_0000C4, 0.0f, 1.0f, 1.0f, 2, 0.0f },
+    { &object_osn_Anim_006D48, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_001D6C, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_osn_Anim_002634, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_008D80, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_osn_Anim_005D78, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_osn_Anim_006564, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_osn_Anim_008D80, 0.0f, 77.0f, 0.0f, 2, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -119,20 +120,20 @@ static InitChainEntry sInitChain[] = {
 Vec3f D_80AD2574 = { 0.0f, 0.0f, 0.0f };
 Vec3s D_80AD2580 = { 0x9920, -0x384, -0x320 };
 
-UNK_TYPE D_80AD2588 = 0x060166F8;
-UNK_TYPE D_80AD258C = 0x06016EF8;
-UNK_TYPE D_80AD2590 = 0x060176F8;
-UNK_TYPE D_80AD2594 = 0x06017EF8;
-UNK_TYPE D_80AD2598 = 0x060182F8;
+TexturePtr D_80AD2588 = object_osn_Tex_0166F8;
+TexturePtr D_80AD258C = object_osn_Tex_016EF8;
+TexturePtr D_80AD2590 = object_osn_Tex_0176F8;
+TexturePtr D_80AD2594 = object_osn_Tex_017EF8;
+TexturePtr D_80AD2598 = object_osn_Tex_0182F8;
 
-extern UNK_TYPE D_060192A0;
-extern UNK_TYPE D_060201BC;
-extern FlexSkeletonHeader D_060202F0;
+extern Gfx object_osn_DL_0192A0[];
+extern AnimationHeader object_osn_Anim_0201BC;
+extern FlexSkeletonHeader object_osn_Skel_0202F0;
 
-void func_80AD1634(EnOsn*, GlobalContext*);                /* extern */
-void func_80AD16A8(EnOsn*, GlobalContext*);                /* extern */
-void func_80AD14C8(EnOsn*, GlobalContext*);                /* extern */
-void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx); /* extern */
+void func_80AD1634(EnOsn*, GlobalContext*);
+void func_80AD16A8(EnOsn*, GlobalContext*);
+void func_80AD14C8(EnOsn*, GlobalContext*);
+void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx);
 
 void func_80AD0830(EnOsn* this, GlobalContext* globalCtx) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
@@ -190,35 +191,29 @@ s32 func_80AD08B0(GlobalContext* globalCtx) {
 }
 
 void func_80AD0998(EnOsn* this) {
-    s16 sp1E;
-    s16 new_var;
+    s16 sp1E = this->skelAnime.curFrame;
+    s16 new_var = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
 
-    sp1E = this->anime.curFrame;
-    new_var = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
     if (this->unk_1EC == 0x12 && sp1E == new_var) {
         this->unk_1EC = 0x13;
-        Actor_ChangeAnimation(&this->anime, sAnimations, 0x13);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0x13);
     }
 }
 
 void func_80AD0A24(EnOsn* this) {
-    s16 sp1E;
-    s16 new_var;
+s16 sp1E = this->skelAnime.curFrame;
+    s16 new_var = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
 
-    sp1E = this->anime.curFrame;
-    new_var = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
     if (this->unk_1EC == 0x15 && sp1E == new_var) {
         this->unk_1EC = 0x16;
-        Actor_ChangeAnimation(&this->anime, sAnimations, 0x16);
+        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0x16);
     }
 }
 
 void func_80AD0AB0(EnOsn* this) {
-    s16 sp1E;
-    s16 new_var;
+    s16 sp1E = this->skelAnime.curFrame;
+    s16 new_var = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
 
-    sp1E = this->anime.curFrame;
-    new_var = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
     if (sp1E == new_var) {
         this->unk_1FC -= 8;
         if (this->unk_1FC < 8) {
@@ -233,121 +228,121 @@ s32 func_80AD0B38(EnOsn* this, GlobalContext* globalCtx) {
         case 11:
             if ((this->unk_1F8 & 1) == 0) {
                 this->unk_1F8 |= 1;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 12:
             if ((this->unk_1F8 & 2) == 0) {
                 this->unk_1F8 |= 2;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 1:
             if ((this->unk_1F8 & 4) == 0) {
                 this->unk_1F8 |= 4;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 20:
             if ((this->unk_1F8 & 8) == 0) {
                 this->unk_1F8 |= 8;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 2:
             if ((this->unk_1F8 & 0x10) == 0) {
                 this->unk_1F8 |= 0x10;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 13:
             if ((this->unk_1F8 & 0x20) == 0) {
                 this->unk_1F8 |= 0x20;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 18:
             if ((this->unk_1F8 & 0x40) == 0) {
                 this->unk_1F8 |= 0x40;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 10:
             if ((this->unk_1F8 & 0x80) == 0) {
                 this->unk_1F8 |= 0x80;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 19:
             if ((this->unk_1F8 & 0x100) == 0) {
                 this->unk_1F8 |= 0x100;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 14:
             if ((this->unk_1F8 & 0x200) == 0) {
                 this->unk_1F8 |= 0x200;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 16:
             if ((this->unk_1F8 & 0x400) == 0) {
                 this->unk_1F8 |= 0x400;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 9:
             if ((this->unk_1F8 & 0x800) == 0) {
                 this->unk_1F8 |= 0x800;
-                return 0x1FD2U;
+                return 0x1FD2;
             }
             break;
         case 4:
             if ((this->unk_1F8 & 0x1000) == 0) {
                 this->unk_1F8 |= 0x1000;
-                return 0x1FD2U;
+                return 0x1FD2;
             }
             break;
         case 15:
             if ((this->unk_1F8 & 0x2000) == 0) {
                 this->unk_1F8 |= 0x2000;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 17:
             if ((this->unk_1F8 & 0x4000) == 0) {
                 this->unk_1F8 |= 0x4000;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 8:
             if ((this->unk_1F8 & 0x8000) == 0) {
                 this->unk_1F8 |= 0x8000;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 5:
             if ((this->unk_1F8 & 0x10000) == 0) {
                 this->unk_1F8 |= 0x10000;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 6:
             if ((this->unk_1F8 & 0x20000) == 0) {
                 this->unk_1F8 |= 0x20000;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 3:
             if ((this->unk_1F8 & 0x40000) == 0) {
                 this->unk_1F8 |= 0x40000;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         case 7:
             if ((this->unk_1F8 & 0x80000) == 0) {
                 this->unk_1F8 |= 0x80000;
-                return 0x1FD1U;
+                return 0x1FD1;
             }
             break;
         default:
@@ -355,9 +350,9 @@ s32 func_80AD0B38(EnOsn* this, GlobalContext* globalCtx) {
     }
     this->unk_1EA |= 0x20;
     if (gSaveContext.day == 3 && gSaveContext.time >= CLOCK_TIME(5, 0) && gSaveContext.time < CLOCK_TIME(6, 0)) {
-        return 0x2006U;
+        return 0x2006;
     }
-    return 0x1FCDU;
+    return 0x1FCD;
 }
 
 s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
@@ -452,37 +447,37 @@ s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
 void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
     switch (this->unk_1F4) {
         case 0x1FC8:
-            this->unk_1F4 = 0x1FC9U;
+            this->unk_1F4 = 0x1FC9;
             break;
 
         case 0x1FC9:
-            this->unk_1F4 = 0x1FCAU;
+            this->unk_1F4 = 0x1FCA;
             break;
 
         case 0x1FCA:
             if ((gSaveContext.day == 3 && gSaveContext.time >= CLOCK_TIME(5, 0)) &&
                 gSaveContext.time < CLOCK_TIME(6, 0)) {
-                this->unk_1F4 = 0x2007U;
+                this->unk_1F4 = 0x2007;
             } else {
-                this->unk_1F4 = 0x1FCBU;
+                this->unk_1F4 = 0x1FCB;
             }
             break;
 
         case 0x1FCB:
 
         case 0x2007:
-            this->unk_1F4 = 0x1FCCU;
+            this->unk_1F4 = 0x1FCC;
             this->unk_1EA |= 0x20;
             break;
 
         case 0x1FCE:
 
         case 0x1FD0:
-            this->unk_1F4 = 0x1FCFU;
+            this->unk_1F4 = 0x1FCF;
             break;
 
         case 0x1FCF:
-            this->unk_1F4 = 0x1FCAU;
+            this->unk_1F4 = 0x1FCA;
             break;
 
         case 0x1FD1:
@@ -492,137 +487,121 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
             break;
 
         case 0x1FD6:
-            this->unk_1F4 = 0x1FD7U;
+            this->unk_1F4 = 0x1FD7;
             break;
 
         case 0x1FD8:
-            this->unk_1F4 = 0x1FD9U;
+            this->unk_1F4 = 0x1FD9;
             break;
 
         case 0x1FDA:
-            this->unk_1F4 = 0x1FDBU;
+            this->unk_1F4 = 0x1FDB;
             break;
 
         case 0x1FDC:
-            this->unk_1F4 = 0x1FDDU;
+            this->unk_1F4 = 0x1FDD;
             break;
 
         case 0x1FDE:
-            this->unk_1F4 = 0x1FDFU;
+            this->unk_1F4 = 0x1FDF;
             break;
 
         case 0x1FE0:
-            this->unk_1F4 = 0x1FE1U;
+            this->unk_1F4 = 0x1FE1;
             break;
 
         case 0x1FE2:
-            this->unk_1F4 = 0x1FE3U;
+            this->unk_1F4 = 0x1FE3;
             break;
 
         case 0x1FE4:
-            this->unk_1F4 = 0x1FE5U;
+            this->unk_1F4 = 0x1FE5;
             break;
 
         case 0x1FE6:
-            this->unk_1F4 = 0x1FE7U;
+            this->unk_1F4 = 0x1FE7;
             break;
 
         case 0x1FE8:
-            this->unk_1F4 = 0x1FE9U;
+            this->unk_1F4 = 0x1FE9;
             break;
 
         case 0x1FEA:
-            this->unk_1F4 = 0x1FEBU;
+            this->unk_1F4 = 0x1FEB;
             break;
 
         case 0x1FEC:
-            this->unk_1F4 = 0x1FEDU;
+            this->unk_1F4 = 0x1FED;
             break;
 
         case 0x1FEE:
-            this->unk_1F4 = 0x1FEFU;
+            this->unk_1F4 = 0x1FEF;
             break;
 
         case 0x1FF0:
-            this->unk_1F4 = 0x1FF1U;
+            this->unk_1F4 = 0x1FF1;
             break;
 
         case 0x1FF2:
-            this->unk_1F4 = 0x1FF3U;
+            this->unk_1F4 = 0x1FF3;
             break;
 
         case 0x1FF4:
-            this->unk_1F4 = 0x1FF5U;
+            this->unk_1F4 = 0x1FF5;
             break;
 
         case 0x1FF6:
-            this->unk_1F4 = 0x1FF7U;
+            this->unk_1F4 = 0x1FF7;
             break;
 
         case 0x1FF8:
-            this->unk_1F4 = 0x1FF9U;
+            this->unk_1F4 = 0x1FF9;
             break;
 
         case 0x1FFA:
-            this->unk_1F4 = 0x1FFBU;
+            this->unk_1F4 = 0x1FFB;
             break;
 
         case 0x1FFC:
-            this->unk_1F4 = 0x1FFDU;
+            this->unk_1F4 = 0x1FFD;
             break;
 
         case 0x1FD7:
-
         case 0x1FDB:
-
         case 0x1FDD:
-
         case 0x1FDF:
-
         case 0x1FE1:
-
         case 0x1FE7:
-
         case 0x1FF1:
-
         case 0x1FF3:
-
         case 0x1FF7:
-
         case 0x1FF9:
 
         case 0x1FFB:
-            this->unk_1F4 = 0x1FD3U;
+            this->unk_1F4 = 0x1FD3;
             break;
 
         case 0x1FD9:
-
         case 0x1FE3:
-
         case 0x1FE9:
-
         case 0x1FEB:
-
         case 0x1FED:
-
         case 0x1FEF:
-
         case 0x1FF5:
 
         case 0x1FFD:
-            this->unk_1F4 = 0x1FD4U;
+            this->unk_1F4 = 0x1FD4;
             break;
 
         case 0x1FE5:
-            this->unk_1F4 = 0x1FFEU;
+            this->unk_1F4 = 0x1FFE;
             break;
 
         case 0x1FD3:
-
         case 0x1FD4:
 
         case 0x1FFE:
-            this->unk_1F4 = 0x1FD5U;
+            this->unk_1F4 = 0x1FD5;
             this->unk_1EA |= 0x20;
     }
 
@@ -632,20 +611,19 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
 void func_80AD1398(EnOsn* this) {
     this->cutscene = this->actor.cutscene;
     if (((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
-         (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32)) &&
+         (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) &&
         ((this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene),
           (gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE)) ||
-         (gSaveContext.inventory.items[gItemSlots[0x32]] == 0x32))) {
+         (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU))) {
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
     }
 }
 
 void func_80AD144C(EnOsn* this, GlobalContext* globalCtx) {
-    u32 sp1C;
-
-    sp1C = Flags_GetSwitch(globalCtx, 0);
+    u32 sp1C = Flags_GetSwitch(globalCtx, 0);
     this->cutscene = this->actor.cutscene;
-    Actor_ChangeAnimation(&this->anime, sAnimations, 0);
+    
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
     if (sp1C == 0) {
         this->actionFunc = func_80AD16A8;
     } else {
@@ -654,11 +632,10 @@ void func_80AD144C(EnOsn* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
-    s16 temp_v1;
-    temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if ((gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
-        (((*(gBitFlags + 0xD)) & gSaveContext.inventory.questItems) == 0)) {
+    if (gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE &&
+        (gSaveContext.inventory.questItems & gBitFlags[0xD]) == 0) {
         if (gSaveContext.inventory.questItems) {}
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->actionFunc = func_80AD1634;
@@ -770,12 +747,12 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
                     this->unk_1EC = 0;
                     break;
             }
-            Actor_ChangeAnimation(&this->anime, sAnimations, this->unk_1EC);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_1EC);
         }
 
         if ((this->unk_1EC == 5) && (globalCtx->sceneNum == 8) && (gSaveContext.sceneSetupIndex == 0xB) &&
             (globalCtx->csCtx.frames == 0x190)) {
-            Actor_PlaySfxAtPos(&this->actor, 0x697DU);
+            Actor_PlaySfxAtPos(&this->actor, 0x697D);
         }
         if (this->unk_1EC == 0x12) {
             func_80AD0998(this);
@@ -787,10 +764,10 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
             func_80AD0AB0(this);
         }
         if ((this->unk_1EC == 0x14) &&
-            (((Animation_OnFrame(&this->anime, 17.0f))) || (Animation_OnFrame(&this->anime, 27.0f)) ||
-             (Animation_OnFrame(&this->anime, 37.0f)) || (Animation_OnFrame(&this->anime, 47.0f)) ||
-             (Animation_OnFrame(&this->anime, 57.0f)) || (Animation_OnFrame(&this->anime, 67.0f)))) {
-            Actor_PlaySfxAtPos(&this->actor, 0x29B3U);
+            (((Animation_OnFrame(&this->skelAnime, 17.0f))) || (Animation_OnFrame(&this->skelAnime, 27.0f)) ||
+             (Animation_OnFrame(&this->skelAnime, 37.0f)) || (Animation_OnFrame(&this->skelAnime, 47.0f)) ||
+             (Animation_OnFrame(&this->skelAnime, 57.0f)) || (Animation_OnFrame(&this->skelAnime, 67.0f)))) {
+            Actor_PlaySfxAtPos(&this->actor, 0x29B3);
         }
         func_800EDF24(&this->actor, globalCtx, temp_v0);
         return;
@@ -801,9 +778,8 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx) {
-    u8 temp_v0;
-
-    temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    
     if ((temp_v0 == 6 || temp_v0 == 5) && func_80147624(globalCtx)) {
         if (this->unk_1EA & 0x20) {
             this->unk_1EA &= 0xFFDF;
@@ -825,7 +801,7 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(globalCtx, &this->anime, &D_060202F0, (AnimationHeader*)(&D_060201BC), 0, 0, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_osn_Skel_0202F0, &object_osn_Anim_0201BC, 0, 0, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -855,13 +831,13 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         case 1:
             this->unk_1EC = 0xF;
-            Actor_ChangeAnimation(&this->anime, sAnimations, this->unk_1EC);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_1EC);
             this->actionFunc = EnOsn_Idle;
             return;
 
         case 2:
             this->unk_1EC = 0x10;
-            Actor_ChangeAnimation(&this->anime, sAnimations, this->unk_1EC);
+            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_1EC);
             this->actionFunc = EnOsn_Idle;
             return;
 
@@ -879,7 +855,7 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnOsn_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnOsn* this = THIS;
 
-    SkelAnime_Free(&this->anime, globalCtx);
+    SkelAnime_Free(&this->skelAnime, globalCtx);
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -892,7 +868,7 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     sp34 = Flags_GetSwitch(globalCtx, 0);
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
-    SkelAnime_Update(&this->anime);
+    SkelAnime_Update(&this->skelAnime);
     if ((this->actor.params & 3) == 0) {
         if (sp34 != 0) {
             this->actor.flags |= 1;
@@ -906,7 +882,7 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_800E9250(globalCtx, &this->actor, (Vec3s*)this->unk_1D8, (Vec3s*)&this->unk_1D8[6], this->actor.focus.pos);
 }
 
-s32 func_80AD1DA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor,
+s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor,
                   Gfx** gfx) {
     EnOsn* this = (EnOsn*)actor;
 
@@ -919,7 +895,7 @@ s32 func_80AD1DA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_80AD1E28(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
+void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
     EnOsn* this = (EnOsn*)actor;
     Vec3f sp30 = D_80AD2574;
     Vec3s sp28 = D_80AD2580;
@@ -935,14 +911,10 @@ void func_80AD1E28(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_InsertZRotation_s(sp28.z, 1);
 
         gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList((*gfx)++, &D_060192A0);
+        gSPDisplayList((*gfx)++, &object_osn_DL_0192A0);
         Matrix_StatePop();
     }
 }
-
-s32 func_80AD1DA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor,
-                  Gfx** gfx);
-void func_80AD1E28(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx);
 
 void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     GraphicsContext* temp_s0;
@@ -966,8 +938,8 @@ void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
         POLY_OPA_DISP =
-            SkelAnime_DrawFlex(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
-                               func_80AD1DA8, func_80AD1E28, &this->actor, POLY_OPA_DISP);
+            SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                               EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         func_8012C2DC(globalCtx->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2588));
@@ -975,8 +947,8 @@ void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk_1FC);
         Scene_SetRenderModeXlu(globalCtx, 1, 2U);
         POLY_XLU_DISP =
-            SkelAnime_DrawFlex(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
-                               func_80AD1DA8, func_80AD1E28, &this->actor, POLY_XLU_DISP);
+            SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                               EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw, &this->actor, POLY_XLU_DISP);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
