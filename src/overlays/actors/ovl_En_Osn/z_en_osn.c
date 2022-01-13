@@ -214,121 +214,121 @@ void func_80AD0AB0(EnOsn* this) {
 s32 func_80AD0B38(EnOsn* this, GlobalContext* globalCtx) {
     switch (Player_GetMask(globalCtx)) {
         case 11:
-            if ((this->unk_1F8 & 1) == 0) {
+            if (!(this->unk_1F8 & 1)) {
                 this->unk_1F8 |= 1;
                 return 0x1FD1;
             }
             break;
         case 12:
-            if ((this->unk_1F8 & 2) == 0) {
+            if (!(this->unk_1F8 & 2)) {
                 this->unk_1F8 |= 2;
                 return 0x1FD1;
             }
             break;
         case 1:
-            if ((this->unk_1F8 & 4) == 0) {
+            if (!(this->unk_1F8 & 4)) {
                 this->unk_1F8 |= 4;
                 return 0x1FD1;
             }
             break;
         case 20:
-            if ((this->unk_1F8 & 8) == 0) {
+            if (!(this->unk_1F8 & 8)) {
                 this->unk_1F8 |= 8;
                 return 0x1FD1;
             }
             break;
         case 2:
-            if ((this->unk_1F8 & 0x10) == 0) {
+            if (!(this->unk_1F8 & 0x10)) {
                 this->unk_1F8 |= 0x10;
                 return 0x1FD1;
             }
             break;
         case 13:
-            if ((this->unk_1F8 & 0x20) == 0) {
+            if (!(this->unk_1F8 & 0x20)) {
                 this->unk_1F8 |= 0x20;
                 return 0x1FD1;
             }
             break;
         case 18:
-            if ((this->unk_1F8 & 0x40) == 0) {
+            if (!(this->unk_1F8 & 0x40)) {
                 this->unk_1F8 |= 0x40;
                 return 0x1FD1;
             }
             break;
         case 10:
-            if ((this->unk_1F8 & 0x80) == 0) {
+            if (!(this->unk_1F8 & 0x80)) {
                 this->unk_1F8 |= 0x80;
                 return 0x1FD1;
             }
             break;
         case 19:
-            if ((this->unk_1F8 & 0x100) == 0) {
+            if (!(this->unk_1F8 & 0x100)) {
                 this->unk_1F8 |= 0x100;
                 return 0x1FD1;
             }
             break;
         case 14:
-            if ((this->unk_1F8 & 0x200) == 0) {
+            if (!(this->unk_1F8 & 0x200)) {
                 this->unk_1F8 |= 0x200;
                 return 0x1FD1;
             }
             break;
         case 16:
-            if ((this->unk_1F8 & 0x400) == 0) {
+            if (!(this->unk_1F8 & 0x400)) {
                 this->unk_1F8 |= 0x400;
                 return 0x1FD1;
             }
             break;
         case 9:
-            if ((this->unk_1F8 & 0x800) == 0) {
+            if (!(this->unk_1F8 & 0x800)) {
                 this->unk_1F8 |= 0x800;
                 return 0x1FD2;
             }
             break;
         case 4:
-            if ((this->unk_1F8 & 0x1000) == 0) {
+            if (!(this->unk_1F8 & 0x1000)) {
                 this->unk_1F8 |= 0x1000;
                 return 0x1FD2;
             }
             break;
         case 15:
-            if ((this->unk_1F8 & 0x2000) == 0) {
+            if (!(this->unk_1F8 & 0x2000)) {
                 this->unk_1F8 |= 0x2000;
                 return 0x1FD1;
             }
             break;
         case 17:
-            if ((this->unk_1F8 & 0x4000) == 0) {
+            if (!(this->unk_1F8 & 0x4000)) {
                 this->unk_1F8 |= 0x4000;
                 return 0x1FD1;
             }
             break;
         case 8:
-            if ((this->unk_1F8 & 0x8000) == 0) {
+            if (!(this->unk_1F8 & 0x8000)) {
                 this->unk_1F8 |= 0x8000;
                 return 0x1FD1;
             }
             break;
         case 5:
-            if ((this->unk_1F8 & 0x10000) == 0) {
+            if (!(this->unk_1F8 & 0x10000)) {
                 this->unk_1F8 |= 0x10000;
                 return 0x1FD1;
             }
             break;
         case 6:
-            if ((this->unk_1F8 & 0x20000) == 0) {
+            if (!(this->unk_1F8 & 0x20000)) {
                 this->unk_1F8 |= 0x20000;
                 return 0x1FD1;
             }
             break;
         case 3:
-            if ((this->unk_1F8 & 0x40000) == 0) {
+            if (!(this->unk_1F8 & 0x40000)) {
                 this->unk_1F8 |= 0x40000;
                 return 0x1FD1;
             }
             break;
         case 7:
-            if ((this->unk_1F8 & 0x80000) == 0) {
+            if (!(this->unk_1F8 & 0x80000)) {
                 this->unk_1F8 |= 0x80000;
                 return 0x1FD1;
             }
