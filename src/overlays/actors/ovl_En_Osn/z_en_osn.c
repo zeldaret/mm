@@ -867,7 +867,7 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.flags &= -2;
         }
     }
-    func_800E9250(globalCtx, &this->actor, (Vec3s*)this->unk_1D8, (Vec3s*)&this->unk_1D8[6], this->actor.focus.pos);
+    func_800E9250(globalCtx, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
 }
 
 s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor,
@@ -875,7 +875,7 @@ s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     EnOsn* this = (EnOsn*)actor;
 
     if (this->unk_1F0 && limbIndex == 0xB) {
-        Matrix_InsertXRotation_s(this->unk_1DA, 1);
+        Matrix_InsertXRotation_s(this->unk_1D8.y, 1);
     }
     if ((this->unk_1EC == 9 || this->unk_1EC == 8) && limbIndex == 0xA) {
         *dList = 0;
