@@ -622,8 +622,7 @@ void func_80AD144C(EnOsn* this, GlobalContext* globalCtx) {
 void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
     s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE &&
-        (!CHECK_QUEST_ITEM(QUEST_SONG_HEALING))) {
+    if (gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE && (!CHECK_QUEST_ITEM(QUEST_SONG_HEALING))) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->actionFunc = func_80AD1634;
             return;
