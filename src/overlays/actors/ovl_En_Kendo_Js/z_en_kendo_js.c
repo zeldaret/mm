@@ -168,15 +168,15 @@ void func_80B2654C(EnKendoJs* this, GlobalContext* globalCtx) {
             this->unk_288 = 0x273C;
         } else if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
             switch (gSaveContext.playerForm) {
-                case 3:
+                case PLAYER_FORM_DEKU:
                     phi_v0 = 0;
                     break;
 
-                case 1:
+                case PLAYER_FORM_GORON:
                     phi_v0 = 1;
                     break;
 
-                case 2:
+                case PLAYER_FORM_ZORA:
                     phi_v0 = 2;
                     break;
 
