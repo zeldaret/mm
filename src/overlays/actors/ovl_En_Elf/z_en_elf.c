@@ -700,7 +700,7 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
     }
 
     if (this->fairyFlags & 0x2000) {
-        Actor_PickUp(&this->actor, globalCtx, 0xBA, 80.0f, 60.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MAX, 80.0f, 60.0f);
     }
 }
 

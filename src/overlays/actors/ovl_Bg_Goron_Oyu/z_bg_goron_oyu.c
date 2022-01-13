@@ -95,7 +95,7 @@ void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx) {
 
     if (dist.x >= 0.0f && dist.x <= this->waterBoxXLength && dist.z >= 0.0f && dist.z <= this->waterBoxZLength &&
         fabsf(dist.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-        Actor_PickUp(&this->dyna.actor, globalCtx, 0xBA, this->dyna.actor.xzDistToPlayer,
+        Actor_PickUp(&this->dyna.actor, globalCtx, GI_MAX, this->dyna.actor.xzDistToPlayer,
                      fabsf(this->dyna.actor.playerHeightRel));
     }
 }

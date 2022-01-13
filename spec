@@ -3993,8 +3993,7 @@ beginseg
     name "ovl_En_Kendo_Js"
     compress
     include "build/src/overlays/actors/ovl_En_Kendo_Js/z_en_kendo_js.o"
-    include "build/data/ovl_En_Kendo_Js/ovl_En_Kendo_Js.data.o"
-    include "build/data/ovl_En_Kendo_Js/ovl_En_Kendo_Js.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kendo_Js/ovl_En_Kendo_Js_reloc.o"
 endseg
 
 beginseg

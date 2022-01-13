@@ -765,9 +765,9 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_809C2BE4;
             }
         } else if (gSaveContext.weekEventReg[8] & 0x20) {
-            Actor_PickUp(&this->actor, globalCtx, 4, 300.0f, 300.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_RED, 300.0f, 300.0f);
         } else {
-            Actor_PickUp(&this->actor, globalCtx, 12, 300.0f, 300.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 300.0f, 300.0f);
         }
     }
 }

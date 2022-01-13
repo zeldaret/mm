@@ -508,9 +508,9 @@ void func_8095E660(EnIshi* this, GlobalContext* globalCtx) {
 
         if ((this->actor.xzDistToPlayer < 90.0f) && (sp30 == 0)) {
             if (sp38 == 1) {
-                Actor_PickUp(&this->actor, globalCtx, 0, 80.0f, 20.0f);
+                Actor_PickUp(&this->actor, globalCtx, GI_NONE, 80.0f, 20.0f);
             } else {
-                Actor_PickUp(&this->actor, globalCtx, 0, 50.0f, 10.0f);
+                Actor_PickUp(&this->actor, globalCtx, GI_NONE, 50.0f, 10.0f);
             }
         }
     }

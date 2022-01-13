@@ -515,7 +515,7 @@ void func_80A1C838(ObjFlowerpot* this, GlobalContext* globalCtx) {
                     s16 temp_v0_3 = this->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
 
                     if (ABS_ALT(temp_v0_3) >= 0x5556) {
-                        Actor_PickUp(&this->actor, globalCtx, 0, 36.0f, 30.0f);
+                        Actor_PickUp(&this->actor, globalCtx, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }
