@@ -4861,8 +4861,11 @@ beginseg
     name "ovl_En_Zow"
     compress
     include "build/src/overlays/actors/ovl_En_Zow/z_en_zow.o"
-    include "build/data/ovl_En_Zow/ovl_En_Zow.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Zow/ovl_En_Zow_reloc.o"
+#else
     include "build/data/ovl_En_Zow/ovl_En_Zow.reloc.o"
+#endif
 endseg
 
 beginseg
