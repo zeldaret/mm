@@ -1,7 +1,25 @@
 /*
  * File: z_en_rd.c
  * Overlay: ovl_En_Rd
- * Description: Redead/Gibdo (able to dance)
+ * Description: Redead/Gibdo that cannot talk to the player.
+ * 
+ * A variety of different Redeads/Gibdos are represented by this actor;
+ * one of the few things they all have in common is that none of them
+ * can talk with the player, which separates them from Talk_Gibud and
+ * Railgibud. Some of the different kinds of Redeads/Gibdos that this
+ * actor controls are:
+ * - Three different types of dancing Redeads. These are the only
+ *   Redead/Gidbo variations that are actually used in the final game.
+ * - A Redead frozen in a block of ice.
+ * - An invisible Redead.
+ * - A crying Redead.
+ * - A Gidbo that rises out of a "coffin"; this is leftover from OoT.
+ * 
+ * Another thing that separates this actor from Talk_Gibud and Railgibud
+ * is that most Redead variations will "mourn" other fallen Redeads in
+ * the same area by walking over to their corpse. Note that some Redeads,
+ * depending on their params, will refuse to mourn under certain
+ * circumstances, and all Gibdo variations will refuse to mourn as well.
  */
 
 #include "z_en_rd.h"
