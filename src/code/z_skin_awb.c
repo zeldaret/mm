@@ -15,13 +15,13 @@ void Skin_InitAnimatedLimb(GameState* gameState, Skin* skin, s32 limbIndex) {
     SkinLimb** skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
     SkinAnimatedLimbData* animatedLimbData =
         Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->segment);
-    SkinLimbModif* temp_v0 = Lib_SegmentedToVirtual(animatedLimbData->limbModifications);
+    SkinLimbModif* limbModifications = Lib_SegmentedToVirtual(animatedLimbData->limbModifications);
 
     for (i = 0; i < ARRAY_COUNT(skin->vtxTable->buf); i++) {
         Vtx* vertices = skin->vtxTable[limbIndex].buf[i];
         SkinLimbModif* modifEntry;
 
-        for (modifEntry = temp_v0; modifEntry < &temp_v0[animatedLimbData->limbModifCount]; modifEntry++) {
+        for (modifEntry = limbModifications; modifEntry < &limbModifications[animatedLimbData->limbModifCount]; modifEntry++) {
             SkinVertex* skinVertices = Lib_SegmentedToVirtual(modifEntry->skinVertices);
             SkinVertex* skinVtxEntry;
 
@@ -40,7 +40,7 @@ void Skin_InitAnimatedLimb(GameState* gameState, Skin* skin, s32 limbIndex) {
 }
 
 /**
- * Initializes a skin skeleton to looping animation, dynamically allocating the frame tables,
+ * Initialises a skin skeleton to looping animation, dynamically allocating the frame tables,
  * and dynamically allocating and initializing the Vtx and SkinLimbVtx buffers for its animated limbs
  */
 void Skin_Init(GameState* gameState, Skin* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader) {

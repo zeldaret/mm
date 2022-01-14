@@ -155,15 +155,15 @@ void Skin_DrawAnimatedLimb(GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s
 /**
  * Draw a limb of type SKIN_LIMB_TYPE_NORMAL, of the skeleton `skin` at index `limbIndex`
  */
-void Skin_DrawLimb(GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, Gfx* dlistOverride, s32 drawFlags) {
-    Gfx* gfx = dlistOverride;
+void Skin_DrawLimb(GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, Gfx* dListOverride, s32 drawFlags) {
+    Gfx* gfx = dListOverride;
     SkinLimb** skeleton;
 
     OPEN_DISPS(gfxCtx);
 
     skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
 
-    if (dlistOverride == NULL) {
+    if (dListOverride == NULL) {
         gfx = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->segment;
     }
 

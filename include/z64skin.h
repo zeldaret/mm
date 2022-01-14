@@ -8,24 +8,24 @@
  * It is used to initialise the Vtx used by an animated limb
  */
 typedef struct {
-    /* 0x00 */ u16 index;
-    /* 0x02 */ s16 s; // s and t are texture coordinates (also known as u and v)
-    /* 0x04 */ s16 t;
-    /* 0x06 */ s8 normX;
-    /* 0x07 */ s8 normY;
-    /* 0x08 */ s8 normZ;
-    /* 0x09 */ u8 alpha;
+    /* 0x0 */ u16 index;
+    /* 0x2 */ s16 s; // s and t are texture coordinates (also known as u and v)
+    /* 0x4 */ s16 t;
+    /* 0x6 */ s8 normX;
+    /* 0x7 */ s8 normY;
+    /* 0x8 */ s8 normZ;
+    /* 0x9 */ u8 alpha;
 } SkinVertex; // size = 0xA
 
 /**
  * Describes a position displacement and a scale to be applied to a limb at index `limbIndex`
  */
 typedef struct {
-    /* 0x00 */ u8 limbIndex;
-    /* 0x02 */ s16 x;
-    /* 0x04 */ s16 y;
-    /* 0x06 */ s16 z;
-    /* 0x08 */ u8 scale;
+    /* 0x0 */ u8 limbIndex;
+    /* 0x2 */ s16 x;
+    /* 0x4 */ s16 y;
+    /* 0x6 */ s16 z;
+    /* 0x8 */ u8 scale;
 } SkinTransformation; // size = 0xA
 
 typedef struct {
@@ -62,8 +62,8 @@ typedef struct {
 } SkinLimb; // size = 0x10
 
 typedef struct {
-    /* 0x000 */ u8 index; // alternates every draw cycle
-    /* 0x004 */ Vtx* buf[2]; // number of vertices in buffer determined by `totalVtxCount`
+    /* 0x0 */ u8 index; // alternates every draw cycle
+    /* 0x4 */ Vtx* buf[2]; // number of vertices in buffer determined by `totalVtxCount`
 } SkinLimbVtx; // size = 0xC
 
 typedef struct {
