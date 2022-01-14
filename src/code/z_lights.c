@@ -412,8 +412,7 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
 
         dl = func_8012C7FC(POLY_XLU_DISP);
 
-        gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4,
-                        0x00000080); //! This doesn't resolve to any of the macros in gdi.h
+        gDPSetDither(dl++, G_CD_NOISE);
 
         gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);

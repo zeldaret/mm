@@ -11,7 +11,7 @@ typedef void (*DmChar00ActionFunc)(struct DmChar00*, GlobalContext*);
 #define DMCHAR00_GET_F800(thisx) ((thisx)->params << 0xB)
 
 #define DMCHAR00_0 0
-#define DMCHAR00_1 0
+#define DMCHAR00_1 1
 
 typedef struct {
     /* 0x00 */ f32 unk_00;

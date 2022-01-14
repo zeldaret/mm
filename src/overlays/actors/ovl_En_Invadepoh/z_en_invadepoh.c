@@ -4476,7 +4476,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
 
         gfx = sp6C->polyXlu.p;
         gfx = func_8012C868(gfx);
-        gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
+        gDPSetDither(gfx++, G_CD_NOISE);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
         Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
