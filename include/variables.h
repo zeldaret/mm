@@ -3911,7 +3911,7 @@ extern UNK_TYPE D_0403C190;
 extern UNK_TYPE D_0403F230;
 extern UNK_TYPE D_04044300;
 extern Gfx D_04048DF0[];
-extern UNK_TYPE D_04050D10;
+extern Gfx D_04050D10[];
 extern Gfx D_04051180[];
 extern Gfx D_04051238[];
 extern AnimationHeader D_0405140C;
