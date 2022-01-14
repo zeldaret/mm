@@ -21,7 +21,8 @@ void Skin_InitAnimatedLimb(GameState* gameState, Skin* skin, s32 limbIndex) {
         Vtx* vertices = skin->vtxTable[limbIndex].buf[i];
         SkinLimbModif* modifEntry;
 
-        for (modifEntry = limbModifications; modifEntry < &limbModifications[animatedLimbData->limbModifCount]; modifEntry++) {
+        for (modifEntry = limbModifications; modifEntry < &limbModifications[animatedLimbData->limbModifCount];
+             modifEntry++) {
             SkinVertex* skinVertices = Lib_SegmentedToVirtual(modifEntry->skinVertices);
             SkinVertex* skinVtxEntry;
 
