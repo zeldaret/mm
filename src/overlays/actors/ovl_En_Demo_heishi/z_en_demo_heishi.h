@@ -26,7 +26,7 @@ typedef enum {
     /* 15 */ DEMOHEISHI_LIMB_RIGHT_HAND_WITH_SPEAR,
     /* 16 */ DEMOHEISHI_LIMB_HEAD,
     /* 17 */ DEMOHEISHI_LIMB_MAX
-} DemoheishiLimbs;
+} EnDemoheishiLimbs;
 
 typedef struct EnDemoheishi {
     /* 0x000 */ Actor actor;
