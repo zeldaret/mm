@@ -56,6 +56,8 @@ static ColliderCylinderInit sCylinderInit = {
     { 40, 40, 0, { 0, 0, 0 } },
 };
 
+static u16 sTextIds[] = { 0x1473 }; // "Huh? Don't tell me... That's..."
+
 void EnDemoheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDemoheishi* this = THIS;
 
@@ -104,8 +106,8 @@ void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
 
 void EnDemoheishi_SetupIdle(EnDemoheishi* this) {
     EnDemoheishi_ChangeAnimation(this, 0);
-    this->unk272 = 0;
-    this->actor.textId = 0x1473;  // "Huh? Don't tell me... that's..."
+    this->textIdIndex = 0;
+    this->actor.textId = sTextIds[this->textIdIndex];
     this->unk270 = 0;
     this->actionFunc = EnDemoheishi_Idle;
 }
@@ -131,7 +133,7 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this) {
 }
 
 void EnDemoheishi_Talk(EnDemoheishi* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx) != 0)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         EnDemoheishi_SetupIdle(this);
     }
@@ -142,8 +144,8 @@ void EnDemoheishi_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnDemoheishi* this = THIS;
 
     SkelAnime_Update(&this->skelAnime);
-    if (this->unk268 != 0) {
-        this->unk268--;
+    if (this->timer != 0) {
+        this->timer--;
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -164,7 +166,7 @@ s32 EnDemoheishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx**
                                   Actor* thisx) {
     EnDemoheishi* this = THIS;
 
-    if (limbIndex == 16) {
+    if (limbIndex == DEMOHEISHI_LIMB_HEAD) {
         rot->x += this->headRotX;
         rot->y += this->headRotY;
         rot->z += this->headRotZ;

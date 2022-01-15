@@ -7,11 +7,32 @@ struct EnDemoheishi;
 
 typedef void (*EnDemoheishiActionFunc)(struct EnDemoheishi*, GlobalContext*);
 
+typedef enum {
+    /* 0 */ DEMOHEISHI_LIMB_NONE,
+    /* 1 */ DEMOHEISHI_LIMB_ROOT,
+    /* 2 */ DEMOHEISHI_LIMB_PELVIS,
+    /* 3 */ DEMOHEISHI_LIMB_LEFT_THIGH,
+    /* 4 */ DEMOHEISHI_LIMB_LEFT_CALF,
+    /* 5 */ DEMOHEISHI_LIMB_LEFT_FOOT,
+    /* 6 */ DEMOHEISHI_LIMB_RIGHT_THIGH,
+    /* 7 */ DEMOHEISHI_LIMB_RIGHT_CALF,
+    /* 8 */ DEMOHEISHI_LIMB_RIGHT_FOOT,
+    /* 9 */ DEMOHEISHI_LIMB_TORSO,
+    /* 10 */ DEMOHEISHI_LIMB_LEFT_SHOULDER,
+    /* 11 */ DEMOHEISHI_LIMB_LEFT_FOREARM,
+    /* 12 */ DEMOHEISHI_LIMB_LEFT_HAND,
+    /* 13 */ DEMOHEISHI_LIMB_RIGHT_SHOULDER,
+    /* 14 */ DEMOHEISHI_LIMB_RIGHT_FOREARM,
+    /* 15 */ DEMOHEISHI_LIMB_RIGHT_HAND_WITH_SPEAR,
+    /* 16 */ DEMOHEISHI_LIMB_HEAD,
+    /* 17 */ DEMOHEISHI_LIMB_MAX
+} ObjectDemoheishiLimbs;
+
 typedef struct EnDemoheishi {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[17];
-    /* 0x1EE */ Vec3s morphTable[17];
+    /* 0x188 */ Vec3s jointTable[DEMOHEISHI_LIMB_MAX];
+    /* 0x1EE */ Vec3s morphTable[DEMOHEISHI_LIMB_MAX];
     /* 0x254 */ EnDemoheishiActionFunc actionFunc;
     /* 0x258 */ s16 headRotY;
     /* 0x25A */ s16 headRotX;
@@ -20,10 +41,10 @@ typedef struct EnDemoheishi {
     /* 0x260 */ s16 headRotXTarget;
     /* 0x262 */ s16 headRotZTarget;
     /* 0x264 */ s32 animIndex;
-    /* 0x268 */ s16 unk268;
+    /* 0x268 */ s16 timer;
     /* 0x26C */ f32 frameCount;
-    /* 0x270 */ s16 unk270;
-    /* 0x272 */ s16 unk272;
+    /* 0x270 */ s16 unk270;     // set and not used
+    /* 0x272 */ s16 textIdIndex;
     /* 0x274 */ ColliderCylinder colliderCylinder;
 } EnDemoheishi; //size = 0x2C0
 
