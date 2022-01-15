@@ -462,14 +462,6 @@ static const struct encoder *encoder(const char *name)
 		
 		return &zx7;
 	}*/
-	else if (!strcmp(name, "zlib"))
-	{
-		static const struct encoder zlib = {
-			.encfunc = zlibenc
-		};
-		
-		return &zlib;
-	}
 	else if (!strcmp(name, "aplib"))
 	{
 		static const struct encoder aplib = {
@@ -1120,7 +1112,7 @@ void rom_compress(struct rom *rom, int mb, int numThreads, bool matching)
 		comp_total += sz16;
 		
 		if (mb != 0 && dma->Pend > compsz)
-			die("ran out of compressed rom space (try increasing --mb)");
+			die("ran out of compressed rom space");
 	}
 
 	/* adaptive final size */
