@@ -1429,8 +1429,7 @@ beginseg
     name "ovl_Obj_Tsubo"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.o"
-    include "build/data/ovl_Obj_Tsubo/ovl_Obj_Tsubo.data.o"
-    include "build/data/ovl_Obj_Tsubo/ovl_Obj_Tsubo.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Tsubo/ovl_Obj_Tsubo_reloc.o"
 endseg
 
 beginseg
