@@ -47,6 +47,7 @@ typedef struct EnHeishi {
     /* 0x0272 */ s16 yawTowardsPlayer;
     /* 0x0274 */ f32 frameCount;
     /* 0x0278 */ s16 unk278;
+    /* 0x027C */ UNK_TYPE1 unk_27C[0x8];
     /* 0x0284 */ ColliderCylinder colliderCylinder;
 } EnHeishi; // size = 0x2D0
 
