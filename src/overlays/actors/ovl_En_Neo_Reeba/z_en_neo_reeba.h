@@ -16,7 +16,7 @@ typedef struct EnNeoReeba {
     /* 0x02AC */ EnNeoReebaActionFunc actionFunc;
     /* 0x02B0 */ Vec3f unk_2B0;
     /* 0x02BC */ Vec3f unk_2BC;
-    /* 0x02C8 */ char unk_2C8[0x30];
+    /* 0x02C8 */ Vec3f unk_2C8[0x4]; // limbPos
     /* 0x02F8 */ f32 unk_2F8;
     /* 0x02FC */ f32 unk_2FC;
     /* 0x0300 */ f32 unk_300;
@@ -25,7 +25,7 @@ typedef struct EnNeoReeba {
     /* 0x030A */ s16 unk_30A;
     /* 0x030C */ s16 unk_30C;
     /* 0x030E */ s16 unk_30E;
-    /* 0x0310 */ s8 unk_310;
+    /* 0x0310 */ u8 unk_310; // effect mode
 } EnNeoReeba; // size = 0x314
 
 extern const ActorInit En_Neo_Reeba_InitVars;
