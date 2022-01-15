@@ -78,14 +78,42 @@ static DamageTable sDamageTable = {
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xFFFFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK3,
+        { 0xF7CFFFFF, 0x00, 0x04 },
+        { 0xFFFFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 30, 50, -25, { 0, 0, 0 } },
 };
 
 static ColliderCylinderInit sCylinderInit2 = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7FFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK3,
+        { 0xF7CFFFFF, 0x00, 0x04 },
+        { 0xF7FFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 22, 42, -21, { 0, 0, 0 } },
 };
 
@@ -111,7 +139,7 @@ void EnTanron2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
-    
+
     if ((gGameInfo->data[0x520] != 0) || ((gSaveContext.eventInf[6] & 1) != 0)) {
         func_80BB69C0(this);
     } else {
@@ -154,10 +182,10 @@ void func_80BB69FC(EnTanron2* this, GlobalContext* globalCtx) {
         sp34 = Math_SmoothStepToF(&this->actor.world.pos.x, temp_s1->x, this->unk_15C, this->unk_160, 0.0f);
         sp30 = Math_SmoothStepToF(&this->actor.world.pos.y, temp_s1->y, this->unk_15C, this->unk_160, 0.0f);
         sp2C = Math_SmoothStepToF(&this->actor.world.pos.z, temp_s1->z, this->unk_15C, this->unk_160, 0.0f);
-        
+
         if ((this->unk_158 == 0) && ((sp34 + sp30 + sp2C) < 2.0f)) {
             this->unk_158 = 1;
-            Actor_PlaySfxAtPos(&this->actor,  NA_SE_EN_B_SLIME_EAT);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_B_SLIME_EAT);
         }
 
         Math_ApproachF(&this->unk_15C, 1.0f, 1.0f, 0.02f);
@@ -197,7 +225,7 @@ void func_80BB6BD8(EnTanron2* this, GlobalContext* globalCtx) {
         if (this->actor.world.pos.y <= this->actor.floorHeight) {
             this->actor.world.pos.y = this->actor.floorHeight;
 
-            Actor_PlaySfxAtPos(&this->actor,  NA_SE_EN_IKURA_JUMP2);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_JUMP2);
 
             sp2C = D_80BB8450->unk_6BC.x - this->actor.world.pos.x;
             sp28 = D_80BB8450->unk_6BC.z - this->actor.world.pos.z;
@@ -221,7 +249,9 @@ void func_80BB6BD8(EnTanron2* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    sp32 = Math_Atan2S(player->actor.world.pos.x - this->actor.world.pos.x, player->actor.world.pos.z - this->actor.world.pos.z) + (s16)Rand_ZeroFloat(20000.0f);
+                    sp32 = Math_Atan2S(player->actor.world.pos.x - this->actor.world.pos.x,
+                                       player->actor.world.pos.z - this->actor.world.pos.z) +
+                           (s16)Rand_ZeroFloat(20000.0f);
                     this->actor.speedXZ = Rand_ZeroFloat(7.0f) + 7.0f;
                     if ((this->unk_152 == 0) && (D_80BB8450->unk_1F6 == 0)) {
                         this->unk_158 = 1;
@@ -252,7 +282,7 @@ void func_80BB6BD8(EnTanron2* this, GlobalContext* globalCtx) {
                 func_80BB69C0(this);
             } else {
                 this->unk_150 = 10;
-                Actor_PlaySfxAtPos(&this->actor,  NA_SE_EN_IKURA_JUMP1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_JUMP1);
             }
         }
     }
@@ -285,9 +315,9 @@ void func_80BB6F78(EnTanron2* this, GlobalContext* globalCtx) {
 
                 if (this->actor.world.pos.y <= this->actor.floorHeight) {
                     this->actor.world.pos.y = this->actor.floorHeight;
-                    Actor_PlaySfxAtPos(&this->actor,  NA_SE_EN_IKURA_JUMP2);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_JUMP2);
                     if (D_80BB8450->unk_6F8 > 0.1f) {
-                        Actor_PlaySfxAtPos(&this->actor,  NA_SE_EV_OUT_OF_WATER_L);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER_L);
                     }
                     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 12.0f;
                     this->unk_14E = 5;
@@ -311,7 +341,7 @@ void func_80BB6F78(EnTanron2* this, GlobalContext* globalCtx) {
                         this->unk_159 = 0;
                     } else {
                         this->unk_150 = 0xA;
-                        Actor_PlaySfxAtPos(&this->actor,  NA_SE_EN_IKURA_JUMP1);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_JUMP1);
                     }
                 }
             }
@@ -339,7 +369,8 @@ void func_80BB71C8(EnTanron2* this, GlobalContext* globalCtx) {
         sp9C.y = spA8.y * -0.03f;
         sp9C.z = spA8.z * -0.03f;
 
-        EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp90, &spA8, &sp9C, &D_80BB81E8, &D_80BB81EC, Rand_ZeroFloat(100.0f) + 200.0f, Rand_ZeroFloat(5.0f) + 15.0f, 0);
+        EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp90, &spA8, &sp9C, &D_80BB81E8, &D_80BB81EC,
+                                          Rand_ZeroFloat(100.0f) + 200.0f, Rand_ZeroFloat(5.0f) + 15.0f, 0);
     }
 }
 
@@ -347,9 +378,9 @@ void func_80BB7398(EnTanron2* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80BB7408;
     if ((s8)this->actor.colChkInfo.health <= 0) {
         Enemy_StartFinishingBlow(globalCtx, &this->actor);
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30,  NA_SE_EN_IKURA_DEAD);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_IKURA_DEAD);
     } else {
-        Actor_PlaySfxAtPos(&this->actor,  NA_SE_EN_IKURA_DAMAGE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_DAMAGE);
     }
 }
 
@@ -395,7 +426,7 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
             if (acHitInfo->toucher.dmgFlags & 0x80) {
                 func_80BB6B80(this);
                 this->unk_158 = 1;
-                Actor_PlaySfxAtPos(&this->actor,  NA_SE_EN_IKURA_DAMAGE);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_DAMAGE);
                 if ((player->unk_730 != 0) && (&this->actor != player->unk_730)) {
                     player->unk_730 = &this->actor;
                     globalCtx->actorCtx.targetContext.arrowPointedActor = &this->actor;
@@ -416,24 +447,25 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
                         func_80BB7398(this, globalCtx);
                     }
                 } else {
-                    Actor_PlaySfxAtPos(&this->actor,  NA_SE_EN_IKURA_DAMAGE);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_DAMAGE);
                     goto block_18;
                 }
             }
         }
     }
 
-    if ((this->actionFunc == func_80BB69FC) && 
-        ((D_80BB8450->unk_1F6 == 1) || 
-        ((D_80BB8450->unk_1F7 != 0) && (Rand_ZeroOne() < 0.1f)))) {
+    if ((this->actionFunc == func_80BB69FC) &&
+        ((D_80BB8450->unk_1F6 == 1) || ((D_80BB8450->unk_1F7 != 0) && (Rand_ZeroOne() < 0.1f)))) {
         if (D_80BB8450->unk_1F7 != 0) {
             D_80BB8450->unk_1F7--;
         }
 
-block_18:
+    block_18:
         func_80BB6B80(this);
         this->unk_158 = 2;
-        Matrix_RotateY(Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x, this->actor.world.pos.z - D_80BB8450->unk_6BC.z), MTXMODE_NEW);
+        Matrix_RotateY(Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x,
+                                   this->actor.world.pos.z - D_80BB8450->unk_6BC.z),
+                       MTXMODE_NEW);
         Matrix_GetStateTranslationAndScaledZ(10.0f, &this->actor.velocity);
         this->unk_152 = Rand_ZeroFloat(100.0f) + 200.0f;
     } else if (D_80BB8450->unk_1F6 == 10) {
@@ -474,12 +506,14 @@ void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     if (this->actionFunc != func_80BB69FC) {
-        if ((this->actor.world.pos.x < (D_80BB8450->unk_6D8 + 20.0f)) || ((D_80BB8450->unk_6DC - 20.0f) < this->actor.world.pos.x)) {
+        if ((this->actor.world.pos.x < (D_80BB8450->unk_6D8 + 20.0f)) ||
+            ((D_80BB8450->unk_6DC - 20.0f) < this->actor.world.pos.x)) {
             this->actor.world.pos.x = this->actor.prevPos.x;
             this->actor.velocity.x *= -1.0f;
         }
 
-        if ((this->actor.world.pos.z < (D_80BB8450->unk_6E0 + 20.0f)) || ((D_80BB8450->unk_6E4 - 20.0f) < this->actor.world.pos.z)) {
+        if ((this->actor.world.pos.z < (D_80BB8450->unk_6E0 + 20.0f)) ||
+            ((D_80BB8450->unk_6E4 - 20.0f) < this->actor.world.pos.z)) {
             this->actor.world.pos.z = this->actor.prevPos.z;
             this->actor.velocity.z *= -1.0f;
         }
@@ -510,8 +544,9 @@ void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (this->actionFunc == func_80BB69FC) {
-            s16 atan = Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x, this->actor.world.pos.z - D_80BB8450->unk_6BC.z);
-            
+            s16 atan = Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x,
+                                   this->actor.world.pos.z - D_80BB8450->unk_6BC.z);
+
             if (ABS_ALT(BINANG_SUB(D_80BB8450->actor.yawTowardsPlayer, atan)) > 0x3000) {
                 this->unk_159 = 0;
                 this->actor.flags &= ~ACTOR_FLAG_1;
@@ -593,14 +628,16 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     for (i = 0; i < ARRAY_COUNT(D_80BB8458); i++) {
         if (D_80BB8458[i] != NULL) {
-            Matrix_InsertTranslation(D_80BB8458[i]->actor.world.pos.x, D_80BB8458[i]->actor.world.pos.y, D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
+            Matrix_InsertTranslation(D_80BB8458[i]->actor.world.pos.x, D_80BB8458[i]->actor.world.pos.y,
+                                     D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(D_80BB8458[i]->actor.scale.x, D_80BB8458[i]->actor.scale.y, 0.0f, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
             Matrix_Scale(0.13f, 0.14299999f, 0.13f, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(-D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_0034C8);
         }
     }
@@ -613,10 +650,12 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     tanron2 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
     while (tanron2 != NULL) {
         if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0)) {
-            Matrix_InsertTranslation(tanron2->world.pos.x, D_80BB8450->actor.floorHeight, tanron2->world.pos.z, MTXMODE_NEW);
+            Matrix_InsertTranslation(tanron2->world.pos.x, D_80BB8450->actor.floorHeight, tanron2->world.pos.z,
+                                     MTXMODE_NEW);
             Matrix_Scale(0.6f, 0.0f, 0.6f, MTXMODE_APPLY);
-            
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_004550);
         }
         tanron2 = tanron2->next;
@@ -631,16 +670,19 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     tanron2 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
     while (tanron2 != NULL) {
-        if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0) && (tanron2->world.pos.y <= tanron2->floorHeight)) {
-            Matrix_InsertTranslation(tanron2->world.pos.x, D_80BB8450->actor.floorHeight + 2.0f, tanron2->world.pos.z, MTXMODE_NEW);
+        if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0) &&
+            (tanron2->world.pos.y <= tanron2->floorHeight)) {
+            Matrix_InsertTranslation(tanron2->world.pos.x, D_80BB8450->actor.floorHeight + 2.0f, tanron2->world.pos.z,
+                                     MTXMODE_NEW);
             Matrix_Scale(D_80BB8454, 0.0f, D_80BB8454, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0377B0);
         }
         tanron2 = tanron2->next;
     }
-    
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
