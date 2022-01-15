@@ -38,7 +38,7 @@ $(shell mkdir -p $(foreach dir,$(SRC_DIRS),$(OBJ_DIR)/$(dir)))
 all: z64compress
 
 z64compress: $(O_FILES)
-	$(CC) $(TARGET_CFLAGS) $(CFLAGS) $(O_FILES) -lm -lpthread $(TARGET_LIBS) -o z64compress
+	$(CC) $(TARGET_CFLAGS) $(CFLAGS) $(O_FILES) -lm -lpthread -lz $(TARGET_LIBS) -o z64compress
 
 $(OBJ_DIR)/%.o: %.c
 	$(CC) -c $(TARGET_CFLAGS) $(CFLAGS) $< -o $@

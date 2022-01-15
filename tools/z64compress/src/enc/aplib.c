@@ -21,8 +21,8 @@ aplenc(
 	int nMaxCompressedSize = apultra_get_max_compressed_size(src_sz);
 	apultra_stats stats;
 	
-	int hlen = 8; /* header length; required due to MM's archives */
-	memset(dst, 0, hlen);
+	extern int g_hlen; /* header length */
+	memset(dst, 0, g_hlen);
 	memcpy(dst, "APL0", 4);
 	dst[4] = (src_sz >> 24);
 	dst[5] = (src_sz >> 16);
@@ -31,7 +31,7 @@ aplenc(
 	
 	*dst_sz = apultra_compress(
 		src
-		, dst + hlen
+		, dst + g_hlen
 		, src_sz
 		, nMaxCompressedSize
 		, 0 /* flags */
@@ -41,7 +41,7 @@ aplenc(
 		, &stats
 	);
 	
-	*dst_sz = *dst_sz + hlen;
+	*dst_sz = *dst_sz + g_hlen;
 	
 	return 0;
 }
