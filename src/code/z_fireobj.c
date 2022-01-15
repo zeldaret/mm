@@ -1,5 +1,6 @@
 #include "global.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 typedef enum {
     FIRE_STATE_0,
@@ -130,7 +131,7 @@ void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
             }
         } else if (player->unk_B28 == 0) {
             player->unk_B28 = 0xD2;
-            Audio_PlaySoundAtPosition(globalCtx, &fire->position, 20, NA_SE_EV_FLAME_IGNITION);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &fire->position, 20, NA_SE_EV_FLAME_IGNITION);
         } else if (player->unk_B28 < 0xC8) {
             player->unk_B28 = 0xC8;
         }
@@ -162,7 +163,7 @@ void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire) {
         Matrix_Scale(fire->xScale, fire->yScale, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }

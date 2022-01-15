@@ -315,7 +315,7 @@ Actor* func_80AF7CB0(EnPm* this, GlobalContext* globalCtx, u8 actorCat, s16 acto
     Actor* actor;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, phi_s0, actorCat, actorId);
+        actor = SubS_FindActor(globalCtx, phi_s0, actorCat, actorId);
         phi_s0 = actor;
 
         if (actor == NULL) {
@@ -338,7 +338,7 @@ Actor* func_80AF7CB0(EnPm* this, GlobalContext* globalCtx, u8 actorCat, s16 acto
     return phi_s0;
 }
 
-Actor* func_80AF7D60(GlobalContext* globalCtx, s32 arg1) {
+EnDoor* func_80AF7D60(GlobalContext* globalCtx, s32 arg1) {
     s32 phi_a1;
 
     switch (arg1) {
@@ -367,7 +367,7 @@ Actor* func_80AF7D60(GlobalContext* globalCtx, s32 arg1) {
             return NULL;
     }
 
-    return func_8013A7C0(globalCtx, phi_a1);
+    return SubS_FindDoor(globalCtx, phi_a1);
 }
 
 Actor* func_80AF7DC4(EnPm* this, GlobalContext* globalCtx, s32 arg2) {
@@ -375,7 +375,7 @@ Actor* func_80AF7DC4(EnPm* this, GlobalContext* globalCtx, s32 arg2) {
     Actor* actor;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, phi_s0, ACTORCAT_PROP, ACTOR_EN_PST);
+        actor = SubS_FindActor(globalCtx, phi_s0, ACTORCAT_PROP, ACTOR_EN_PST);
         phi_s0 = actor;
 
         if (actor == NULL) {
@@ -710,7 +710,7 @@ UNK_TYPE* func_80AF8540(EnPm* this, GlobalContext* globalCtx) {
 s32 func_80AF86F0(EnPm* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if ((this->unk_356 & 7) && func_800B84D0(&this->actor, globalCtx)) {
+    if ((this->unk_356 & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_8013AED4(&this->unk_356, 0, 7);
         this->unk_398 = 0;
         this->unk_378 = 0;
@@ -845,7 +845,7 @@ void func_80AF8BA8(s32 arg0) {
 
 void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 sp28 = func_80152498(&globalCtx->msgCtx);
+    s32 sp28 = Message_GetState(&globalCtx->msgCtx);
     u16 temp_a0 = globalCtx->msgCtx.unk11F04;
 
     if ((player->targetActor == &this->actor) && ((temp_a0 < 255) || (temp_a0 > 512)) && (sp28 == 3) &&
@@ -942,7 +942,7 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
     u16 sp56 = gSaveContext.time - 0x3FFC;
     u8 sp55 = this->actor.params & 0xFF;
-    Actor* sp50;
+    EnDoor* sp50;
     Vec3s* sp4C;
     Vec3f sp40;
     Vec3f sp34;
@@ -955,7 +955,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         this->unk_234 = func_8013BB34(globalCtx, sp55, D_80AFB430[arg2->unk0]);
     }
 
-    if ((sp50 != NULL) && (sp50->update != NULL)) {
+    if ((sp50 != NULL) && (sp50->actor.update != NULL)) {
         if (this->unk_234 != 0) {
             sp4C = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
             Math_Vec3s_ToVec3f(&sp40, &sp4C[0]);
@@ -964,7 +964,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             Math_Vec3f_Copy(&this->unk_278, &sp34);
             this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
-            temp = this->actor.world.rot.y - sp50->shape.rot.y;
+            temp = this->actor.world.rot.y - sp50->actor.shape.rot.y;
             if (ABS_ALT(temp) <= 0x4000) {
                 this->unk_260 = -0x4B;
             } else {
@@ -1024,8 +1024,8 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         this->unk_356 &= ~8;
         this->unk_356 &= ~0x10;
         if (this->unk_258 == 27) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROOM_CARTAIN);
-            Actor_UnsetSwitchFlag(globalCtx, 0);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
+            Flags_UnsetSwitch(globalCtx, 0);
         }
 
         switch (arg2->unk0) {
@@ -1089,8 +1089,8 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
         if (arg2->unk0 == 24) {
-            Actor_UnsetSwitchFlag(globalCtx, 0);
-            Actor_UnsetSwitchFlag(globalCtx, 1);
+            Flags_UnsetSwitch(globalCtx, 0);
+            Flags_UnsetSwitch(globalCtx, 1);
             this->unk_394 = 0;
             this->unk_368 = 60.0f;
             func_80AF7E98(this, 9);
@@ -1144,8 +1144,8 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
         switch (arg2->unk0) {
             case 27:
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROOM_CARTAIN);
-                Actor_SetSwitchFlag(globalCtx, 0);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
+                Flags_SetSwitch(globalCtx, 0);
                 this->unk_36C = 20;
                 func_8013AED4(&this->unk_356, 3, 7);
                 func_80AF7E98(this, 3);
@@ -1409,7 +1409,7 @@ s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
-    EnDoor* sp44 = (EnDoor*)func_80AF7D60(globalCtx, this->unk_258);
+    EnDoor* sp44 = func_80AF7D60(globalCtx, this->unk_258);
     Vec3f sp38;
     Vec3f* sp28;
     f32 temp;
@@ -1430,7 +1430,7 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
         Lib_Vec3f_TranslateAndRotateY(&this->unk_26C, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
         this->unk_36E += this->unk_374;
         if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMAN_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
         }
     }
     return false;
@@ -1449,7 +1449,7 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
 
     func_8013AF00(sp7C, 3, this->unk_234->count + 3);
     if (!(this->unk_356 & 8)) {
-        sp58 = D_801D15B0;
+        sp58 = gZeroVec3f;
         func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250, sp7C,
                       &sp58, this->unk_374);
         func_8013B878(globalCtx, this->unk_234, this->unk_250, &sp58);
@@ -1468,7 +1468,7 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
         sp58 = this->actor.world.pos;
     }
 
-    this->unk_238 = D_801D15B0;
+    this->unk_238 = gZeroVec3f;
 
     if (func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250, sp7C,
                       &this->unk_238, this->unk_374)) {
@@ -1485,7 +1485,7 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
         this->unk_238 = sp58;
     } else if ((this->unk_258 != 91) &&
                (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMAN_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 
     if ((this->unk_356 & 0x10) && (this->unk_258 == 90)) {
@@ -1533,7 +1533,7 @@ s32 func_80AFA170(EnPm* this, GlobalContext* globalCtx) {
             }
 
             if ((this->unk_384 == 11) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
             }
 
             if (this->unk_258 == 19) {
@@ -1569,7 +1569,7 @@ s32 func_80AFA334(EnPm* this, GlobalContext* globalCtx) {
 
         case 27:
             if (DECR(this->unk_36C) == 0) {
-                Actor_SetSwitchFlag(globalCtx, 1);
+                Flags_SetSwitch(globalCtx, 1);
             }
             break;
 
@@ -1578,7 +1578,7 @@ s32 func_80AFA334(EnPm* this, GlobalContext* globalCtx) {
         case 21:
         case 22:
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_VO_NP_SLEEP_OUT);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_NP_SLEEP_OUT);
             }
             break;
 
@@ -1714,7 +1714,7 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~1;
         sp2C.unk0 = 0;
     } else {
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= 1;
     }
 
@@ -1755,10 +1755,10 @@ void func_80AFA5FC(EnPm* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFA724(EnPm* this, GlobalContext* globalCtx) {
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
     if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMAN_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 }
 
@@ -1802,7 +1802,7 @@ void EnPm_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_80AF7E6C(this);
             func_80AF8AC8(this);
             func_8013C964(&this->actor, globalCtx, this->unk_368, 30.0f, this->unk_394, this->unk_356 & 7);
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
             func_80AF7F68(this, globalCtx);
         }
@@ -1827,7 +1827,7 @@ void func_80AFAA44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     switch (limbIndex) {
         case 15:
             if (ActorCutscene_GetCurrentIndex() == -1) {
-                Matrix_MultiplyVector3fByState(&D_801D15B0, &this->actor.focus.pos);
+                Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }
             if ((this->unk_356 & 0x8000) && !(gSaveContext.weekEventReg[90] & 4)) {
@@ -1843,10 +1843,10 @@ void func_80AFAA44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
         case 8:
             if ((this->unk_258 == 9) || (this->unk_258 == 20) || (this->unk_258 == 21) || (this->unk_258 == 22)) {
-                Matrix_MultiplyVector3fByState(&D_801D15B0, &sp2C);
+                Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             } else if (this->unk_258 == 24) {
-                Matrix_MultiplyVector3fByState(&D_801D15B0, &sp2C);
+                Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp2C);
                 Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp2C);
             }
             func_80AF8890(this, gfx, 2);

@@ -115,7 +115,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
@@ -129,7 +129,7 @@ s32 func_809275C0(ObjTsubo* this, GlobalContext* globalCtx) {
         chestFlag = ((unkParams & (0xFF << 2)) >> 2) & 0xFF;
     }
 
-    return (chestFlag < 0) == true || !Actor_GetChestFlag(globalCtx, chestFlag);
+    return (chestFlag < 0) == true || !Flags_GetTreasure(globalCtx, chestFlag);
 }
 
 void func_8092762C(ObjTsubo* this, GlobalContext* globalCtx) {
@@ -463,7 +463,7 @@ void func_80928914(ObjTsubo* this) {
 }
 
 void func_80928928(ObjTsubo* this, GlobalContext* globalCtx) {
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objBankIdx)) {
         this->actor.objBankIndex = this->objBankIdx;
@@ -519,7 +519,7 @@ void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx) {
             func_80927690(this, globalCtx);
         }
         func_80927818(this, globalCtx, 1);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x14, NA_SE_EV_POT_BROKEN);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x14, NA_SE_EV_POT_BROKEN);
         if (func_80927864(this, globalCtx) != 0) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -529,7 +529,7 @@ void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx) {
     }
     else {
         if (this->unk195 == 0) {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
             if ((this->actor.bgCheckFlags & 1) && DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId) == NULL) {
                 this->unk195 = 1;
@@ -552,7 +552,7 @@ void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx) {
                         absYawDiff = yawDiff;
                     }
                     if (absYawDiff >= 0x5556) {
-                        func_800B8A1C(&this->actor, globalCtx, 0, 36.0f, 30.0f);
+                        Actor_PickUp(&this->actor, globalCtx, 0, 36.0f, 30.0f);
                     }
                 }
             }
@@ -572,7 +572,7 @@ void func_80928D80(ObjTsubo* this, GlobalContext* globalCtx) {
     func_8092788C(this, globalCtx);
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->actor.room = globalCtx->roomCtx.currRoom.num;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         this->actor.flags &= ~(1 << 26);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
         func_80928E74(this);
@@ -621,7 +621,7 @@ void func_80928F18(ObjTsubo* this, GlobalContext* globalCtx) {
         else {
             func_80927690(this, globalCtx);
         }
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x14, NA_SE_EV_POT_BROKEN);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x14, NA_SE_EV_POT_BROKEN);
         if (func_80927864(this, globalCtx)) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -637,8 +637,8 @@ void func_80928F18(ObjTsubo* this, GlobalContext* globalCtx) {
         else {
             func_80927690(this, globalCtx);
         }
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x14, NA_SE_EV_POT_BROKEN);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EV_DIVE_INTO_WATER_L);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x14, NA_SE_EV_POT_BROKEN);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EV_DIVE_INTO_WATER_L);
         if (func_80927864(this, globalCtx)) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -647,7 +647,7 @@ void func_80928F18(ObjTsubo* this, GlobalContext* globalCtx) {
         }
     }
     else {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Math_StepToS(&D_80929504, D_80929500, 150);
         Math_StepToS(&D_8092950C, D_80929508, 150);
         this->actor.shape.rot.x += D_80929504;
@@ -708,11 +708,11 @@ void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx) {
     else if (this->actor.projectedPos.z < 811.0f) {
         if (this->actor.projectedPos.z > 300.0f) {
             this->actor.shape.shadowAlpha = (811 - (s32)this->actor.projectedPos.z) >> 1;
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         }
         else if (this->actor.projectedPos.z > -10.0f) {
             this->actor.shape.shadowAlpha = 255;
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         }
         else {
             this->actor.shape.shadowDraw = NULL;
@@ -728,7 +728,7 @@ void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
         if (this->unk19A >= 0) {
             if (this->unk19A == 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
                     this->unk19A = Rand_S16Offset(40, 80);
                 }
@@ -746,5 +746,5 @@ void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx) {
 void func_809294B0(Actor* this, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = (GlobalContext*)globalCtx2;
 
-    func_800BDFC0(globalCtx, sPotTypeData[OBJ_TSUBO_GET_TYPE(this)].unk8);
+    Gfx_DrawDListOpa(globalCtx, sPotTypeData[OBJ_TSUBO_GET_TYPE(this)].unk8);
 }

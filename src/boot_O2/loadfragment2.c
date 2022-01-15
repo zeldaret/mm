@@ -1,4 +1,5 @@
 #include "global.h"
+#include "system_malloc.h"
 
 UNK_TYPE4 D_80096C30 = 2;
 

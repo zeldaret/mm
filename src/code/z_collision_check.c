@@ -27,12 +27,12 @@ Vec3f D_801EE1C0;
 Vec3f D_801EE1D0;
 Vec3f D_801EE1E0;
 Vec3f D_801EE1F0;
-EffSparkParams D_801EE200;
+EffectSparkInit D_801EE200;
 TriNorm D_801EE6C8;
 TriNorm D_801EE700;
-EffSparkParams D_801EE738;
-EffSparkParams D_801EEC00;
-EffSparkParams D_801EF0C8;
+EffectSparkInit D_801EE738;
+EffectSparkInit D_801EEC00;
+EffectSparkInit D_801EF0C8;
 TriNorm D_801EF590;
 TriNorm D_801EF5C8;
 TriNorm D_801EF600;
@@ -1382,14 +1382,14 @@ void CollisionCheck_NoBlood(GlobalContext* globalCtx, Collider* collider, Vec3f*
 #ifdef NON_MATCHING
 // needs in-function static bss
 void CollisionCheck_BlueBlood(GlobalContext* globalCtx, Collider* collider, Vec3f* v) {
-    static EffSparkParams D_801EEC00;
+    static EffectSparkInit D_801EEC00;
     s32 effectIndex;
 
     D_801EEC00.position.x = v->x;
     D_801EEC00.position.x = v->y;
     D_801EEC00.position.x = v->z;
-    D_801EEC00.particleFactor1 = 5;
-    D_801EEC00.particleFactor2 = 5;
+    D_801EEC00.uDiv = 5;
+    D_801EEC00.vDiv = 5;
     D_801EEC00.colorStart[0].r = 10;
     D_801EEC00.colorStart[0].g = 10;
     D_801EEC00.colorStart[0].b = 200;
@@ -1422,12 +1422,12 @@ void CollisionCheck_BlueBlood(GlobalContext* globalCtx, Collider* collider, Vec3
     D_801EEC00.colorEnd[3].g = 0;
     D_801EEC00.colorEnd[3].b = 64;
     D_801EEC00.colorEnd[3].a = 0;
-    D_801EEC00.age = 0;
+    D_801EEC00.timer = 0;
     D_801EEC00.duration = 16;
-    D_801EEC00.velocity = 8.0f;
+    D_801EEC00.speed = 8.0f;
     D_801EEC00.gravity = -1.0f;
 
-    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EEC00);
+    Effect_Add(globalCtx, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EEC00);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_BlueBlood.s")
@@ -1440,14 +1440,14 @@ void CollisionCheck_BlueBlood(GlobalContext* globalCtx, Collider* collider, Vec3
 #ifdef NON_MATCHING
 // needs in-function static bss
 void CollisionCheck_GreenBlood(GlobalContext* globalCtx, Collider* collider, Vec3f* v) {
-    static EffSparkParams D_801EF0C8;
+    static EffectSparkInit D_801EF0C8;
     s32 effectIndex;
 
     D_801EF0C8.position.x = v->x;
     D_801EF0C8.position.x = v->y;
     D_801EF0C8.position.x = v->z;
-    D_801EF0C8.particleFactor1 = 5;
-    D_801EF0C8.particleFactor2 = 5;
+    D_801EF0C8.uDiv = 5;
+    D_801EF0C8.vDiv = 5;
     D_801EF0C8.colorStart[0].r = 10;
     D_801EF0C8.colorStart[0].g = 200;
     D_801EF0C8.colorStart[0].b = 10;
@@ -1480,11 +1480,11 @@ void CollisionCheck_GreenBlood(GlobalContext* globalCtx, Collider* collider, Vec
     D_801EF0C8.colorEnd[3].g = 64;
     D_801EF0C8.colorEnd[3].b = 0;
     D_801EF0C8.colorEnd[3].a = 0;
-    D_801EF0C8.age = 0;
+    D_801EF0C8.timer = 0;
     D_801EF0C8.duration = 16;
-    D_801EF0C8.velocity = 8.0f;
+    D_801EF0C8.speed = 8.0f;
     D_801EF0C8.gravity = -1.0f;
-    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EF0C8);
+    Effect_Add(globalCtx, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EF0C8);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_GreenBlood.s")
@@ -1525,7 +1525,7 @@ void CollisionCheck_HitSolid(GlobalContext* globalCtx, ColliderInfo* info, Colli
         if (collider->actor == NULL) {
             play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
-            func_8019F1C0(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
+            Audio_PlaySfxAtPos(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     } else if (flags == TOUCH_SFX_NORMAL) {
         EffectSsHitMark_SpawnFixedScale(globalCtx, 3, hitPos);
@@ -1539,14 +1539,14 @@ void CollisionCheck_HitSolid(GlobalContext* globalCtx, ColliderInfo* info, Colli
         if (collider->actor == NULL) {
             play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
-            func_8019F1C0(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
+            Audio_PlaySfxAtPos(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     } else if (flags == TOUCH_SFX_WOOD) {
         EffectSsHitMark_SpawnFixedScale(globalCtx, 1, hitPos);
         if (collider->actor == NULL) {
             play_sound(NA_SE_IT_REFLECTION_WOOD);
         } else {
-            func_8019F1C0(&collider->actor->projectedPos, NA_SE_IT_REFLECTION_WOOD);
+            Audio_PlaySfxAtPos(&collider->actor->projectedPos, NA_SE_IT_REFLECTION_WOOD);
         }
     }
 }
@@ -1557,13 +1557,13 @@ void CollisionCheck_HitSolid(GlobalContext* globalCtx, ColliderInfo* info, Colli
 s32 CollisionCheck_SwordHitAudio(Collider* at, ColliderInfo* acInfo) {
     if (at->actor != NULL && at->actor->category == ACTORCAT_PLAYER) {
         if (acInfo->elemType == ELEMTYPE_UNK0) {
-            func_8019F1C0(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE);
+            Audio_PlaySfxAtPos(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE);
         } else if (acInfo->elemType == ELEMTYPE_UNK1) {
-            func_8019F1C0(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE_HARD);
+            Audio_PlaySfxAtPos(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE_HARD);
         } else if (acInfo->elemType == ELEMTYPE_UNK2) {
-            func_8019F1C0(&at->actor->projectedPos, 0);
+            Audio_PlaySfxAtPos(&at->actor->projectedPos, 0);
         } else if (acInfo->elemType == ELEMTYPE_UNK3) {
-            func_8019F1C0(&at->actor->projectedPos, 0);
+            Audio_PlaySfxAtPos(&at->actor->projectedPos, 0);
         }
     }
     return 1;
@@ -1618,7 +1618,7 @@ void CollisionCheck_HitEffects(GlobalContext* globalCtx, Collider* at, ColliderI
         if (ac->actor == NULL) {
             play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
-            func_8019F1C0(&ac->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
+            Audio_PlaySfxAtPos(&ac->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     }
 }
@@ -3751,14 +3751,14 @@ void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
 #ifdef NON_MATCHING
 // needs in-function static bss
 void CollisionCheck_SpawnRedBlood(GlobalContext* globalCtx, Vec3f* v) {
-    static EffSparkParams D_801EE200;
+    static EffectSparkInit D_801EE200;
     s32 effectIndex;
 
     D_801EE200.position.x = v->x;
     D_801EE200.position.x = v->y;
     D_801EE200.position.x = v->z;
-    D_801EE200.particleFactor1 = 5;
-    D_801EE200.particleFactor2 = 5;
+    D_801EE200.uDiv = 5;
+    D_801EE200.vDiv = 5;
     D_801EE200.colorStart[0].r = 128;
     D_801EE200.colorStart[0].g = 0;
     D_801EE200.colorStart[0].b = 64;
@@ -3791,12 +3791,12 @@ void CollisionCheck_SpawnRedBlood(GlobalContext* globalCtx, Vec3f* v) {
     D_801EE200.colorEnd[3].g = 0;
     D_801EE200.colorEnd[3].b = 64;
     D_801EE200.colorEnd[3].a = 0;
-    D_801EE200.age = 0;
+    D_801EE200.timer = 0;
     D_801EE200.duration = 16;
-    D_801EE200.velocity = 8.0f;
+    D_801EE200.speed = 8.0f;
     D_801EE200.gravity = -1.0f;
 
-    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EE200);
+    Effect_Add(globalCtx, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EE200);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnRedBlood.s")
@@ -3809,14 +3809,14 @@ void CollisionCheck_SpawnRedBlood(GlobalContext* globalCtx, Vec3f* v) {
 #ifdef NON_MATCHING
 // needs in-function static bss
 void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
-    static EffSparkParams D_801EE738;
+    static EffectSparkInit D_801EE738;
     s32 effectIndex;
 
     D_801EE738.position.x = v->x;
     D_801EE738.position.x = v->y;
     D_801EE738.position.x = v->z;
-    D_801EE738.particleFactor1 = 5;
-    D_801EE738.particleFactor2 = 5;
+    D_801EE738.uDiv = 5;
+    D_801EE738.vDiv = 5;
     D_801EE738.colorStart[0].r = 255;
     D_801EE738.colorStart[0].g = 255;
     D_801EE738.colorStart[0].b = 255;
@@ -3849,12 +3849,12 @@ void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
     D_801EE738.colorEnd[3].g = 0;
     D_801EE738.colorEnd[3].b = 0;
     D_801EE738.colorEnd[3].a = 0;
-    D_801EE738.age = 0;
+    D_801EE738.timer = 0;
     D_801EE738.duration = 16;
-    D_801EE738.velocity = 8.0f;
+    D_801EE738.speed = 8.0f;
     D_801EE738.gravity = -1.0f;
 
-    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EE738);
+    Effect_Add(globalCtx, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EE738);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.s")
@@ -3864,7 +3864,7 @@ void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
  * Spawns streaks of light from hits against solid objects
  */
 void CollisionCheck_SpawnShieldParticles(GlobalContext* globalCtx, Vec3f* v) {
-    static EffShieldParticleInit shieldParticleInitMetal = {
+    static EffectShieldParticleInit shieldParticleInitMetal = {
         16,
         { 0, 0, 0 },
         { 0, 200, 255, 255 },
@@ -3889,7 +3889,7 @@ void CollisionCheck_SpawnShieldParticles(GlobalContext* globalCtx, Vec3f* v) {
     shieldParticleInitMetal.lightPoint.y = shieldParticleInitMetal.position.y;
     shieldParticleInitMetal.lightPoint.z = shieldParticleInitMetal.position.z;
 
-    Effect_Add(globalCtx, &effectIndex, 3, 0, 1, &shieldParticleInitMetal);
+    Effect_Add(globalCtx, &effectIndex, EFFECT_SHIELD_PARTICLE, 0, 1, &shieldParticleInitMetal);
 }
 
 /**
@@ -3905,7 +3905,7 @@ void CollisionCheck_SpawnShieldParticlesMetal(GlobalContext* globalCtx, Vec3f* v
  */
 void CollisionCheck_SpawnShieldParticlesMetalSound(GlobalContext* globalCtx, Vec3f* v, Vec3f* pos) {
     CollisionCheck_SpawnShieldParticles(globalCtx, v);
-    func_8019F1C0(pos, NA_SE_IT_SHIELD_REFLECT_SW);
+    Audio_PlaySfxAtPos(pos, NA_SE_IT_SHIELD_REFLECT_SW);
 }
 
 /**
@@ -3919,7 +3919,7 @@ void CollisionCheck_SpawnShieldParticlesMetal2(GlobalContext* globalCtx, Vec3f* 
  * Spawns streaks of light and makes a wooden sound
  */
 void CollisionCheck_SpawnShieldParticlesWood(GlobalContext* globalCtx, Vec3f* v, Vec3f* pos) {
-    static EffShieldParticleInit shieldParticleInitWood = {
+    static EffectShieldParticleInit shieldParticleInitWood = {
         16,
         { 0, 0, 0 },
         { 0, 200, 255, 255 },
@@ -3944,8 +3944,8 @@ void CollisionCheck_SpawnShieldParticlesWood(GlobalContext* globalCtx, Vec3f* v,
     shieldParticleInitWood.lightPoint.y = shieldParticleInitWood.position.y;
     shieldParticleInitWood.lightPoint.z = shieldParticleInitWood.position.z;
 
-    Effect_Add(globalCtx, &effectIndex, 3, 0, 1, &shieldParticleInitWood);
-    func_8019F1C0(pos, NA_SE_IT_REFLECTION_WOOD);
+    Effect_Add(globalCtx, &effectIndex, EFFECT_SHIELD_PARTICLE, 0, 1, &shieldParticleInitWood);
+    Audio_PlaySfxAtPos(pos, NA_SE_IT_REFLECTION_WOOD);
 }
 
 /**

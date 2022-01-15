@@ -5,6 +5,8 @@
  */
 
 #include "z_en_bigpo.h"
+#include "objects/object_bigpo/object_bigpo.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00001215
 
@@ -32,6 +34,7 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SpawnCutsceneStage7(EnBigpo* this);
 void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, GlobalContext* globalCtx);
 
+s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WellWaitForProximity(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, GlobalContext* globalCtx);
@@ -48,7 +51,6 @@ void EnBigpo_SpinAttack(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SetupSpinDown(EnBigpo* this);
 void EnBigpo_SpinningDown(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_CheckHealth(EnBigpo* this, GlobalContext* globalCtx);
-s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SetupDeath(EnBigpo* this);
 void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx);
@@ -79,17 +81,6 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_RevealedFire(Actor* thisx, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06001360;
-extern SkeletonHeader D_06005C18;
-extern AnimationHeader D_06000924;
-extern AnimationHeader D_06000924;
-extern AnimationHeader D_06000454;
-extern Gfx D_060041A0;
-extern Gfx D_06001BB0;
-extern Gfx D_060058B8;
-extern Gfx D_060042C8;
-extern Gfx D_060043F8;
 
 extern const ActorInit En_Bigpo_InitVars;
 
@@ -203,7 +194,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
         return;
     }
 
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005C18, &D_06000924, this->jointTable, this->morphTable,
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gBigpoSkeleton, &gBigpoFloatAnim, this->jointTable, this->morphTable,
                    ENBIGPO_LIMBCOUNT);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -216,7 +207,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
                                   255, 0);
     }
 
-    ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 45.0f);
+    ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 45.0f);
     thisx->bgCheckFlags |= 0x400;
     this->savedHeight = thisx->home.pos.y + 100.0f;
     this->mainColor.r = 255;
@@ -244,7 +235,7 @@ void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((this->actor.params != ENBIGPO_POSSIBLEFIRE) && (this->actor.params != ENBIGPO_CHOSENFIRE) &&
         (this->actor.params != ENBIGPO_REVEALEDFIRE) && (this->actor.params != ENBIGPO_UNK5)) {
-        // if NOT a fire type, *ENBIGPO_REGULAR and ENBIGPO_SUMMONED combat types only)
+        // if NOT a fire type, *ENBIGPO_REGULAR and ENBIGPO_SUMMONED (combat types only)
         if (1) {}
         globalCtx2 = globalCtx;
         for (fireCount = 0; fireCount < ARRAY_COUNT(this->fires); fireCount++) {
@@ -254,7 +245,7 @@ void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B61914(EnBigpo* this) {
+void EnBigpo_RotateSpawnCutsceneFires(EnBigpo* this) {
     EnBigpoFireEffect* firePtr;
     s32 i;
 
@@ -271,11 +262,13 @@ void EnBigpo_UpdateSpin(EnBigpo* this) {
 
     this->actor.shape.rot.y += this->rotVelocity;
     if ((oldYaw < 0) && (this->actor.shape.rot.y > 0)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_ROLL); // spinning sfx during spin attack
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_ROLL); // spinning sfx during spin attack
     }
 }
 
-// Lowers the position/eye of the camera during the Big Poe spawn cutscene
+/*
+ * Lowers the position/eye of the camera during the Big Poe spawn cutscene
+ */
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext) {
     Camera* subCam;
 
@@ -330,7 +323,7 @@ void EnBigpo_SpawnCutsceneStage1(EnBigpo* this, GlobalContext* globalCtx) {
 
     this->actor.draw = EnBigpo_DrawCircleFlames;
     this->actor.shape.rot.y = BINANG_ROT180(this->actor.yawTowardsPlayer);
-    func_80B61914(this);
+    EnBigpo_RotateSpawnCutsceneFires(this);
 
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
         this->fires[i].pos.y = this->actor.world.pos.y;
@@ -383,7 +376,7 @@ void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, GlobalContext* globalCtx) {
         this->actor.velocity.y += 0.25f;
     }
     this->actor.shape.rot.y += this->rotVelocity;
-    func_80B61914(this);
+    EnBigpo_RotateSpawnCutsceneFires(this);
 
     if (1) {}
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
@@ -402,10 +395,10 @@ void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, GlobalContext* globalCtx) {
  *          big poe starts to visibly appear
  */
 void EnBigpo_SpawnCutsceneStage5(EnBigpo* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_06001360);
+    Animation_PlayLoop(&this->skelAnime, &gBigpoAwakenStretchAnim);
     this->actor.draw = EnBigpo_DrawMainBigpo;
     Actor_SetScale(&this->actor, 0.014f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     this->actionFunc = EnBigpo_SpawnCutsceneStage6;
 }
 
@@ -420,7 +413,7 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.y += this->rotVelocity;
     alphaPlus = this->mainColor.a + 10; // decrease transparency
-    func_80B61914(this);
+    EnBigpo_RotateSpawnCutsceneFires(this);
     if (alphaPlus >= 90) {
         this->rotVelocity -= 0x80;
         this->actor.velocity.y -= 0.25f;
@@ -471,7 +464,7 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, GlobalContext* globalCtx) {
         Play_CameraSetAtEye(globalCtx, MAIN_CAM, &subCam->at, &subCam->eye);
         this->cutsceneSubCamId = SUBCAM_FREE;
         if (this->actor.params == ENBIGPO_SUMMONED) {
-            dampe = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
+            dampe = SubS_FindActor(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {
                 // if dampe exists, switch to viewing his running away cutscene
                 dampe->params = this->actor.cutscene;
@@ -493,7 +486,7 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->idleTimer = 32;
     this->actor.flags &= ~0x1; // targetable OFF
     this->actor.speedXZ = 0.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DISAPPEAR);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     this->actionFunc = EnBigpo_WarpingOut;
 }
 
@@ -515,8 +508,8 @@ void EnBigpo_SetupWarpIn(EnBigpo* this, GlobalContext* globalCtx) {
     f32 distance = CLAMP_MIN(this->actor.xzDistToPlayer, 200.0f);
     s16 randomYaw = (Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
-    Animation_PlayLoop(&this->skelAnime, &D_06001360);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+    Animation_PlayLoop(&this->skelAnime, &gBigpoAwakenStretchAnim);
     this->rotVelocity = 0x2000;
     this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->actor.world.pos.x;
     this->actor.world.pos.z = (Math_CosS(randomYaw) * distance) + player->actor.world.pos.z;
@@ -543,7 +536,7 @@ void EnBigpo_WarpingIn(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_SetupIdleFlying(EnBigpo* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06000924, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gBigpoFloatAnim, -5.0f);
     // if poe missed attack, idle 4 seconds, otherwise its reappearing: attack immediately
     this->idleTimer = (this->actionFunc == EnBigpo_SpinningDown) ? 80 : 0;
     this->hoverHeightCycleTimer = 40;
@@ -654,8 +647,8 @@ void EnBigpo_SpinningDown(EnBigpo* this, GlobalContext* globalCtx) {
  * called by EnBigpo_ApplyDamage
  */
 void EnBigpo_HitStun(EnBigpo* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000454, -6.0f);
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x10);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gBigpoShockAnim, -6.0f);
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 0x10);
     this->collider.base.acFlags &= ~AC_ON;
     func_800BE504(&this->actor, &this->collider);
     this->actionFunc = EnBigpo_CheckHealth;
@@ -714,13 +707,13 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx) {
 
         // not sure what we're turning this into, but its based on the timer
         modifiedTimer = ((f32)((this->idleTimer * 10) + 80) * 1.4000001f);
-        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modifiedTimer, 0, 2);
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &gZeroVec3f, modifiedTimer, 0, 2);
         tempVec.x = (2.0f * this->actor.world.pos.x) - tempVec.x;
         tempVec.z = (2.0f * this->actor.world.pos.z) - tempVec.z;
-        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modifiedTimer, 0, 2);
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &gZeroVec3f, modifiedTimer, 0, 2);
         tempVec.x = this->actor.world.pos.x;
         tempVec.z = this->actor.world.pos.z;
-        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modifiedTimer, 0, 2);
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &gZeroVec3f, modifiedTimer, 0, 2);
 
     } else if (this->idleTimer >= 28) {
         EnBigpo_SetupLanternDrop(this, globalCtx);
@@ -735,7 +728,7 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx) {
         func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // burning sfx
     }
     if (this->idleTimer == 18) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
     }
 }
 
@@ -761,10 +754,11 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx) {
 void EnBigpo_LanternFalling(EnBigpo* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
         if (this->switchFlags != 0xFF) {
-            Actor_SetSwitchFlag(globalCtx, this->switchFlags);
+            Flags_SetSwitch(globalCtx, this->switchFlags);
         }
 
-        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_BIGPO, 10, &D_060041A0);
+        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_BIGPO, 10,
+                                 gBigpoDrawLanternFallingDL);
         EnBigpo_SpawnScoopSoul(this);
     }
 }
@@ -805,7 +799,7 @@ void EnBigpo_SpawnScoopSoul(EnBigpo* this) {
     this->actor.scale.x = 0.0f;
     this->actor.scale.y = 0.0f;
     this->savedHeight = this->actor.world.pos.y;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_METAL_BOX_BOUND); // misnamed?
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_METAL_BOX_BOUND); // misnamed?
     this->actionFunc = EnBigpo_ScoopSoulAppearing;
 }
 
@@ -819,7 +813,7 @@ void EnBigpo_ScoopSoulAppearing(EnBigpo* this, GlobalContext* globalCtx) {
 
 void EnBigpo_SetupScoopSoulIdle(EnBigpo* this) {
     this->savedHeight = this->actor.world.pos.y;
-    Actor_SetHeight(&this->actor, -10.0f);
+    Actor_SetFocus(&this->actor, -10.0f);
     this->idleTimer = 400;    // 20 seconds
     this->actor.flags |= 0x1; // targetable ON
     this->actionFunc = EnBigpo_ScoopSoulIdle;
@@ -831,10 +825,10 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     } else if (this->idleTimer == 0) {
         // took too long, soul is leaving
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MAX, 35.0f, 60.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MAX, 35.0f, 60.0f);
         this->actor.world.pos.y = (sin_rad(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
     }
 }
@@ -1054,7 +1048,7 @@ void EnBigpo_FlameCircleCutscene(EnBigpo* this, GlobalContext* globalCtx) {
     this->idleTimer--;
     if (this->idleTimer == 0) {
         EnBigpo* parentPoh = (EnBigpo*)this->actor.parent;
-        Actor_SetSwitchFlag(globalCtx, this->switchFlags);
+        Flags_SetSwitch(globalCtx, this->switchFlags);
         Math_Vec3f_Copy(&parentPoh->fires[this->unk20C].pos, &this->actor.world.pos);
         Actor_MarkForDeath(&this->actor);
         if (this->unk20C == 0) {
@@ -1132,13 +1126,13 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
 
         if (Actor_ApplyDamage(&this->actor) == 0) {
             this->actor.flags &= ~0x1; // targetable OFF
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DEAD);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
                 func_801A2ED8();
             }
         } else {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DAMAGE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DAMAGE);
         }
 
         // light arrows
@@ -1173,23 +1167,23 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->unk20C = 0;
         }
         if (this->unk20C == 40) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
             EnBigpo_SetupWarpOut(this);
         }
     }
 
     this->actionFunc(this, globalCtx);
     if ((this->actionFunc != EnBigpo_SpawnCutsceneStage6) && (this->actionFunc != EnBigpo_SpawnCutsceneStage4)) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
     if (this->actionFunc == EnBigpo_LanternFalling) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 27.0f, 60.0f, 4);
     }
 
     if (this->actor.draw == EnBigpo_DrawScoopSoul) {
-        Actor_SetHeight(&this->actor, -10.0f);
+        Actor_SetFocus(&this->actor, -10.0f);
     } else {
-        Actor_SetHeight(&this->actor, 42.0f);
+        Actor_SetFocus(&this->actor, 42.0f);
     }
 
     EnBigpo_UpdateColor(this);
@@ -1252,7 +1246,7 @@ void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     if ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2) && (limbIndex == 8)) {
         gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList((*gfx)++, &D_060058B8);
+        gSPDisplayList((*gfx)++, &gBigpoDrawCrispyBodyDL);
     }
 
     if (limbIndex == 7) {
@@ -1305,7 +1299,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
         // fully visible OR fully transparent
         dispHead = POLY_OPA_DISP;
         gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
-        gSPSegment(&dispHead[1], 0x0C, &D_801AEFA0);
+        gSPSegment(&dispHead[1], 0x0C, &D_801AEFA0); // empty display list for no transparency
         gSPSegment(&dispHead[2], 0x08,
                    Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
@@ -1315,7 +1309,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         dispHead = POLY_XLU_DISP;
         gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
-        gSPSegment(&dispHead[1], 0x0C, &D_801AEF88);
+        gSPSegment(&dispHead[1], 0x0C, &D_801AEF88); // transparency display list
         gSPSegment(&dispHead[2], 0x08,
                    Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
@@ -1360,7 +1354,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, &D_06001BB0);
+    gSPDisplayList(POLY_XLU_DISP++, &gBigpoDrawSoulDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1384,7 +1378,7 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
         magnitude2 = (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f);
         Math_Vec3f_Scale(&vec1, magnitude2);
     } else {
-        Math_Vec3f_Copy(&vec1, &D_801D15B0);
+        Math_Vec3f_Copy(&vec1, &gZeroVec3f);
     }
 
     {
@@ -1412,9 +1406,9 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPMatrix(&dispHead[3], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(&dispHead[4], &D_060042C8);
+        gSPDisplayList(&dispHead[4], &gBigpoDrawLanternMainDL);
 
-        gSPDisplayList(&dispHead[5], &D_060043F8);
+        gSPDisplayList(&dispHead[5], &gBigpoDrawLanternPurpleTopDL);
 
         // fully transparent OR fully invisible
         if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
@@ -1461,7 +1455,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, &D_0407D590); // flame displaylist
+        gSPDisplayList(POLY_XLU_DISP++, &gGameplayKeepDrawFlameDL);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -1488,7 +1482,7 @@ void EnBigpo_RevealedFire(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, &D_0407D590); // flame displaylist
+    gSPDisplayList(POLY_XLU_DISP++, &gGameplayKeepDrawFlameDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
