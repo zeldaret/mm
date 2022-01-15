@@ -40,10 +40,10 @@
         <Texture Name="gSoldierShortsToLegTex" OutName="soldier_shorts_to_leg_tex" Format="ci8" Width="16" Height="16" Offset="0xCD40" />
         <Texture Name="gSoldierArmorTex" OutName="soldier_armor_tex" Format="ci8" Width="8" Height="8" Offset="0xCE40" />
         <Texture Name="gSoldierSkinShadowGradient1Tex" OutName="soldier_skin_shadow_gradient1_tex" Format="ci8" Width="8" Height="8" Offset="0xCE80" />
-        <Texture Name="gGenericLipsTex" OutName="generic_lips_tex" Format="ci8" Width="16" Height="16" Offset="0xCEC0" />
+        <Texture Name="gSoldierLipsText" OutName="soldier_lips_tex" Format="ci8" Width="16" Height="16" Offset="0xCEC0" />
         <Texture Name="gSoldierArmorCoatOfArmsTex" OutName="soldier_armor_coat_of_arms_tex" Format="ci8" Width="32" Height="32" Offset="0xCFC0" />
         <Texture Name="gSoldierArmorPlate2Tex" OutName="soldier_armor_plate2_tex" Format="i8" Width="16" Height="8" Offset="0xD3C0" />
-        <Texture Name="gGenericFingersTex" OutName="generic_fingers_tex" Format="ci8" Width="16" Height="16" Offset="0xD440" />
+        <Texture Name="gSoldierFingersTex" OutName="soldier_fingers_tex" Format="ci8" Width="16" Height="16" Offset="0xD440" />
         <Limb Name="gSoldierRootLimb" Type="Standard" Offset="0xD540" />
         <Limb Name="gSoldierPelvisLimb" Type="Standard" Offset="0xD54C" />
         <Limb Name="gSoldierLeftThighLimb" Type="Standard" Offset="0xD558" />
