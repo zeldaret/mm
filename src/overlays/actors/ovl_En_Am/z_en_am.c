@@ -171,7 +171,7 @@ void EnAm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnAm* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 300.0f / 7.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 300.0f / 7.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005948, &D_0600033C, this->jointTable, this->morphTable, 14);
     Collider_InitAndSetCylinder(globalCtx, &this->enemyCollider, &this->actor, &sEnemyCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->interactCollider, &this->actor, &sCylinderInit);
@@ -202,8 +202,8 @@ void EnAm_SpawnEffects(EnAm* this, GlobalContext* globalCtx) {
         effectPos.z = randPlusMinusPoint5Scaled(65.0f) + this->actor.world.pos.z;
         EffectSsKiraKira_SpawnSmall(globalCtx, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
     }
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_AMOS_WALK);
-    func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 0x12C, 0xF, 0);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_WALK);
+    Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 0x12C, 0xF, 0);
 }
 
 void func_808AFF9C(EnAm* this) {
@@ -235,8 +235,8 @@ void func_808B0040(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void func_808B00D8(EnAm* this) {
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_AMOS_WAVE);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_AMOS_VOICE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_WAVE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_VOICE);
     this->returnHomeTimer = 300;
     this->actionFunc = func_808B0124;
 }
@@ -376,7 +376,7 @@ void func_808B066C(EnAm* this, GlobalContext* globalCtx) {
         this->unk_23C = this->actor.yawTowardsPlayer;
         func_808B0208(this, globalCtx);
         if (this->unk_23C == this->actor.shape.rot.y) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_AMOS_VOICE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_VOICE);
             func_808B0358(this);
         }
     }
@@ -386,8 +386,8 @@ void EnAm_TakeDamage(EnAm* this, GlobalContext* globalCtx) {
     Animation_Change(&this->skelAnime, &D_06005B3C, 1.0f, 4.0f, Animation_GetLastFrame(&D_06005B3C) - 6, 2, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speedXZ = 6.0f;
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&D_06005B3C) - 10);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&D_06005B3C) - 10);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
     this->enemyCollider.base.acFlags &= ~1;
     this->textureBlend = 255;
     this->actionFunc = func_808B07A8;
@@ -429,7 +429,7 @@ void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
         if (bomb != NULL) {
             bomb->timer = 0;
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0xB0);
 
         for (i = 0; i < 8; i++) {
@@ -443,7 +443,7 @@ void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     } else if (!(this->explodeTimer & 3)) {
-        func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 4);
+        Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 4);
     }
     if (this->actor.world.rot.z < 0x1F40) {
         this->actor.world.rot.z += 0x320;
@@ -468,7 +468,7 @@ void func_808B0B4C(EnAm* this, GlobalContext* globalCtx) {
 s32 EnAm_UpdateDamage(EnAm* this, GlobalContext* globalCtx) {
     if (this->enemyCollider.base.acFlags & AC_HIT) {
         this->enemyCollider.base.acFlags &= ~AC_HIT;
-        func_800BE258(&this->actor, &this->enemyCollider.info);
+        Actor_SetDropFlag(&this->actor, &this->enemyCollider.info);
         if (!Actor_ApplyDamage(&this->actor)) {
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
         }
@@ -510,9 +510,9 @@ void EnAm_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->returnHomeTimer--;
     }
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 30.0f, 100.0f, 0x1D);
-    Actor_SetHeight(&this->actor, 64.0f);
+    Actor_SetFocus(&this->actor, 64.0f);
     Collider_UpdateCylinder(&this->actor, &this->enemyCollider);
     Collider_UpdateCylinder(&this->actor, &this->interactCollider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->enemyCollider.base);
