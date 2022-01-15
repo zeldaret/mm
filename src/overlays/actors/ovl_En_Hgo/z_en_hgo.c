@@ -41,9 +41,12 @@ const ActorInit En_Hgo_InitVars = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },  { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_0165F0, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_harfgibud_Anim_014220, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_harfgibud_Anim_0165F0, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_harfgibud_Anim_014220, 1.0f, 0.0f, 0.0f, 2, 0.0f },
     { &object_harfgibud_Anim_014A9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
 };
 
@@ -80,8 +83,8 @@ void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_harfgibud_Skel_012A58, &object_harfgibud_Anim_00B644, this->jointTable, this->morphTable,
-                       HGO_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_harfgibud_Skel_012A58, &object_harfgibud_Anim_00B644,
+                       this->jointTable, this->morphTable, HGO_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
