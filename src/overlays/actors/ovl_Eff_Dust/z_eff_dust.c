@@ -5,6 +5,7 @@
  */
 
 #include "z_eff_dust.h"
+#include "system_malloc.h"
 
 #define FLAGS 0x00000030
 
