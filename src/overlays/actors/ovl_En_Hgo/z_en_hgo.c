@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hgo.h"
+#include "objects/object_harfgibud/object_harfgibud.h"
 
 #define FLAGS 0x02000019
 
@@ -27,19 +28,6 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx);
 s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHgo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx);
 
-extern FlexSkeletonHeader D_06012A58;
-extern AnimationHeader D_0600B644;
-extern AnimationHeader D_06013684;
-extern AnimationHeader D_060152EC;
-extern AnimationHeader D_06015C70;
-extern AnimationHeader D_060165F0;
-extern AnimationHeader D_06014220;
-extern AnimationHeader D_06014A9C;
-extern Gfx D_0600F248[];
-extern TexturePtr D_06011138;
-extern TexturePtr D_06011938;
-extern TexturePtr D_06012138;
-
 const ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
     ACTORCAT_NPC,
@@ -53,10 +41,10 @@ const ActorInit En_Hgo_InitVars = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &D_0600B644, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06013684, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_060152EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },  { &D_06015C70, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_060165F0, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &D_06014220, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &D_06014A9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },  { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_harfgibud_Anim_0165F0, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_harfgibud_Anim_014220, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_harfgibud_Anim_014A9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -82,17 +70,17 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static TexturePtr sEyeTextures[] = {
-    &D_06011138,
-    &D_06011938,
-    &D_06012138,
+    object_harfgibud_Tex_011138,
+    object_harfgibud_Tex_011938,
+    object_harfgibud_Tex_012138,
 };
 
 void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHgo* this = THIS;
     s32 pad;
 
-    ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06012A58, &D_0600B644, this->jointTable, this->morphTable,
+    ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_harfgibud_Skel_012A58, &object_harfgibud_Anim_00B644, this->jointTable, this->morphTable,
                        HGO_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -137,12 +125,12 @@ void func_80BD0434(EnHgo* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD049C(EnHgo* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80BD04E0;
 }
 
 void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
             if (!(this->unk_310 & 4)) {
                 this->unk_310 |= 4;
@@ -183,7 +171,7 @@ void EnHgo_SetupDialogueHandler(EnHgo* this) {
 }
 
 void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
         case 1:
         case 2:
@@ -264,28 +252,28 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
             switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                 case 1:
                     this->unk_218 = 0;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 0);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
                     break;
                 case 2:
                     this->actor.draw = EnHgo_Draw;
                     this->unk_218 = 1;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 1);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
                     break;
                 case 3:
                     this->unk_218 = 2;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 2);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
                     break;
                 case 4:
                     this->unk_218 = 3;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
                     break;
                 case 5:
                     this->unk_218 = 4;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 4);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
                     break;
                 case 6:
                     this->unk_218 = 5;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 5);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -295,17 +283,17 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
                         this->unk_312 = 1;
                         if ((gSaveContext.sceneSetupIndex == 0) &&
                             ((globalCtx->csCtx.unk_12 == 2) || (globalCtx->csCtx.unk_12 == 4))) {
-                            Audio_PlayActorSound2(&this->actor, NA_SE_VO_GBVO02);
+                            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GBVO02);
                         }
                     }
                     break;
                 case 2:
                     this->unk_218 = 3;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
                     break;
                 case 5:
                     this->unk_218 = 6;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 6);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
             }
         }
 
@@ -385,6 +373,6 @@ void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx) {
                           EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
     Matrix_SetCurrentState(&this->unk_1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_0600F248);
+    gSPDisplayList(POLY_OPA_DISP++, object_harfgibud_DL_00F248);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
