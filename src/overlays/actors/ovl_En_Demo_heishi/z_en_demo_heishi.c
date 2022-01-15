@@ -56,8 +56,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 40, 40, 0, { 0, 0, 0 } },
 };
 
-static u16 sTextIds[] = { 0x1473 };
-
 void EnDemoheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDemoheishi* this = THIS;
 
@@ -107,7 +105,7 @@ void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
 void EnDemoheishi_SetupIdle(EnDemoheishi* this) {
     EnDemoheishi_ChangeAnimation(this, 0);
     this->unk272 = 0;
-    this->actor.textId = sTextIds[this->unk272];
+    this->actor.textId = 0x1473;  // "Huh? Don't tell me... that's..."
     this->unk270 = 0;
     this->actionFunc = EnDemoheishi_Idle;
 }
