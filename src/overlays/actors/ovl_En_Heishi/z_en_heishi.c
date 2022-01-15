@@ -60,21 +60,21 @@ void EnHeishi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable,
-                       this->morphTable, 17);
+                       this->morphTable, HEISHI_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->paramCopy = this->actor.params;
     this->yawTowardsPlayer = this->actor.world.rot.y;
 
     if (this->paramCopy == 0) {
         this->unk26C = 1;
-        if (((gSaveContext.weekEventReg[63] & 0x80) == 0) && ((gSaveContext.day != 3) || !gSaveContext.isNight)) {
+        if (!(gSaveContext.weekEventReg[63] & 0x80) && ((gSaveContext.day != 3) || !gSaveContext.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
         this->colliderCylinder.dim.radius = 30;
         this->colliderCylinder.dim.height = 60;
         this->colliderCylinder.dim.yShift = 0;
-        if (((gSaveContext.weekEventReg[63] & 0x80) != 0) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
+        if ((gSaveContext.weekEventReg[63] & 0x80) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -108,18 +108,19 @@ void EnHeishi_SetHeadRotation(EnHeishi* this) {
     s32 yaw = ABS_ALT(yawTemp);
 
     this->headRotXTarget = 0;
-    if ((this->actor.xzDistToPlayer < 200.0f) && (yaw < 20000)) {
+    if ((this->actor.xzDistToPlayer < 200.0f) && (yaw < 0x4E20)) {
         this->headRotXTarget = this->yawTowardsPlayer - this->actor.world.rot.y;
-        if (this->headRotXTarget > 10000) {
-            this->headRotXTarget = 10000;
-        } else if (this->headRotXTarget < -10000) {
-            this->headRotXTarget = -10000;
+        if (this->headRotXTarget > 0x2710) {
+            this->headRotXTarget = 0x2710;
+        } else if (this->headRotXTarget < -0x2710) {
+            this->headRotXTarget = -0x2710;
         }
     }
 }
 
 void EnHeishi_SetupIdle(EnHeishi* this) {
     s8 animIndex = 0;
+
     EnHeishi_ChangeAnimation(this, animIndex);
     this->unk278 = animIndex;
     this->actionFunc = EnHeishi_Idle;
@@ -133,12 +134,12 @@ void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnHeishi* this = THIS;
 
     SkelAnime_Update(&this->skelAnime);
-    if (this->unk270 != 0) {
-        this->unk270--;
+    if (this->timer != 0) {
+        this->timer--;
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if ((this->paramCopy != 0) && (gSaveContext.day == 3) && (gSaveContext.isNight != 0)) {
+    if ((this->paramCopy != 0) && (gSaveContext.day == 3) && gSaveContext.isNight) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->actionFunc(this, globalCtx);
@@ -161,13 +162,13 @@ s32 EnHeishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dLi
                               Actor* thisx) {
     EnHeishi* this = THIS;
 
-    if (limbIndex == 16) {
+    if (limbIndex == HEISHI_LIMB_HEAD) {
         rot->x += this->headRotX;
         rot->y += this->headRotY;
         rot->z += this->headRotZ;
     }
 
-    return 0;
+    return false;
 }
 
 void EnHeishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -175,5 +176,5 @@ void EnHeishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnHeishi_OverrideLimbDraw, 0, &this->actor);
+                          EnHeishi_OverrideLimbDraw, NULL, &this->actor);
 }
