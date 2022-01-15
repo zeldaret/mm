@@ -3896,7 +3896,7 @@ extern Gfx D_040301B0[];
 extern UNK_TYPE D_04032270;
 extern UNK_TYPE D_04035710;
 extern UNK_TYPE D_040367B0;
-extern UNK_TYPE D_040377B0;
+extern Gfx D_040377B0[];
 extern UNK_TYPE D_04037850;
 extern Gfx D_040378F0[]; // gExplosionSplashTex1
 extern Gfx D_04037DF0[]; // gExplosionSplashTex2
