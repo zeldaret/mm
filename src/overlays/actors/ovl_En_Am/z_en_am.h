@@ -7,6 +7,24 @@ struct EnAm;
 
 typedef void (*EnAmActionFunc)(struct EnAm*, GlobalContext*);
 
+typedef enum {
+    /* 00 */ AM_LIMB_NONE,
+    /* 01 */ AM_LIMB_1,
+    /* 02 */ AM_LIMB_2,
+    /* 03 */ AM_LIMB_3,
+    /* 04 */ AM_LIMB_4,
+    /* 05 */ AM_LIMB_5,
+    /* 06 */ AM_LIMB_6,
+    /* 07 */ AM_LIMB_7,
+    /* 08 */ AM_LIMB_8,
+    /* 09 */ AM_LIMB_9,
+    /* 10 */ AM_LIMB_10,
+    /* 11 */ AM_LIMB_11,
+    /* 12 */ AM_LIMB_12,
+    /* 13 */ AM_LIMB_13,
+    /* 14 */ AM_LIMB_MAX,
+} ObjectAmLimbs;
+
 typedef struct EnAm {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;

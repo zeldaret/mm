@@ -168,7 +168,8 @@ void EnAm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 300.0f / 7.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_am_Skel_005948, &object_am_Anim_00033C, this->jointTable, this->morphTable, 14);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_am_Skel_005948, &object_am_Anim_00033C, this->jointTable,
+                   this->morphTable, AM_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->enemyCollider, &this->actor, &sEnemyCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->interactCollider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -379,7 +380,8 @@ void func_808B066C(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void EnAm_TakeDamage(EnAm* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &object_am_Anim_005B3C, 1.0f, 4.0f, Animation_GetLastFrame(&object_am_Anim_005B3C) - 6, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_am_Anim_005B3C, 1.0f, 4.0f,
+                     Animation_GetLastFrame(&object_am_Anim_005B3C) - 6, 2, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speedXZ = 6.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&object_am_Anim_005B3C) - 10);
