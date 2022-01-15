@@ -94,18 +94,18 @@ void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
     s32 yaw = ABS_ALT(yawTemp);
 
     this->headRotXTarget = 0;
-    if ((this->actor.xzDistToPlayer < 200.0f) && (yaw < 20000)) {
+    if ((this->actor.xzDistToPlayer < 200.0f) && (yaw < 0x4E20)) {
         this->headRotXTarget = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
-        if (this->headRotXTarget > 10000) {
-            this->headRotXTarget = 10000;
-        } else if (this->headRotXTarget < -10000) {
-            this->headRotXTarget = -10000;
+        if (this->headRotXTarget > 0x2710) {
+            this->headRotXTarget = 0x2710;
+        } else if (this->headRotXTarget < -0x2710) {
+            this->headRotXTarget = -0x2710;
         }
     }
 }
 
 void EnDemoheishi_SetupIdle(EnDemoheishi* this) {
-    EnDemoheishi_ChangeAnimation(this, 0);
+    EnDemoheishi_ChangeAnimation(this, DEMOHEISHI_ANIMATION_STAND_HAND_ON_HIP);
     this->textIdIndex = 0;
     this->actor.textId = sTextIds[this->textIdIndex];
     this->unk270 = 0;

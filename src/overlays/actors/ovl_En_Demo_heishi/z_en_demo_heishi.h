@@ -8,6 +8,14 @@ struct EnDemoheishi;
 typedef void (*EnDemoheishiActionFunc)(struct EnDemoheishi*, GlobalContext*);
 
 typedef enum {
+    /*  0 */ DEMOHEISHI_ANIMATION_STAND_HAND_ON_HIP,
+    /*  1 */ DEMOHEISHI_ANIMATION_CHEER_WITH_SPEAR,
+    /*  2 */ DEMOHEISHI_ANIMATION_WAVE,
+    /*  3 */ DEMOHEISHI_ANIMATION_SIT_AND_REACH,
+    /*  4 */ DEMOHEISHI_ANIMATION_STAND_UP
+} DemoheishiAnimationIndex;
+
+typedef enum {
     /* 0 */ DEMOHEISHI_LIMB_NONE,
     /* 1 */ DEMOHEISHI_LIMB_ROOT,
     /* 2 */ DEMOHEISHI_LIMB_PELVIS,
@@ -26,7 +34,7 @@ typedef enum {
     /* 15 */ DEMOHEISHI_LIMB_RIGHT_HAND_WITH_SPEAR,
     /* 16 */ DEMOHEISHI_LIMB_HEAD,
     /* 17 */ DEMOHEISHI_LIMB_MAX
-} ObjectDemoheishiLimbs;
+} DemoheishiLimbs;
 
 typedef struct EnDemoheishi {
     /* 0x000 */ Actor actor;
