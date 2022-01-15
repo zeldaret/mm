@@ -5,10 +5,11 @@
  */
 
 #include "z_en_famos.h"
+#include "../ovl_En_Bom/z_en_bom.h"
 #include "objects/object_famos/object_famos.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000005
+#define FLAGS ACTOR_FLAG_4 | ACTOR_FLAG_1
 
 #define THIS ((EnFamos*)thisx)
 
@@ -120,10 +121,10 @@ void EnFamos_Init(Actor *thisx, GlobalContext *globalCtx) {
     if (this->actor.params != 0xFF) {
         path = &globalCtx->setupPathList[this->actor.params];
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
-        this->unk1D6 = path->count;
-        if (this->unk1D6 == 1) {
+        this->pathNodeCount = path->count;
+        if (this->pathNodeCount == 1) {
             this->pathPoints = NULL;
-            this->unk1D6 = 0;
+            this->pathNodeCount = 0;
         }
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawSquare, 30.0f);
@@ -145,8 +146,6 @@ void EnFamos_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->unk1F0 = (this->actor.shape.rot.x <= 0) ? 200.0f : this->actor.shape.rot.x * 40.0f * 0.1f;
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
-    //this->unk1D5 = newValue;
-    //this->unk1D8 = newValue;
     this->unk1D5 = 1;
     this->unk1D8 = 1;
     if (this->pathPoints != NULL) {
@@ -163,10 +162,59 @@ void EnFamos_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->collider3);
 }
 
+// debris?
+// todo rename vars
+void func_808ACB58(EnFamos *this) {
+    EnFamosParticle *particlePtr;
+    f32 randFloat;
+    s16 randOffset;
+    s16 randSmall;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ACB58.s")
+    this->unk1DE = 0x28;
+    particlePtr = &this->particles[0];
+    for (i = 0; i < 20; ++i, ++particlePtr) {
+        randSmall = (s16) (Rand_Next() >> 0x10);
+        randOffset = Rand_S16Offset(0x1800, 0x2800);
+        randFloat = Rand_ZeroFloat(5.0f) + 5.0f;
+        particlePtr->unkC.x = randFloat * Math_CosS(randOffset) * Math_SinS(randSmall);
+        particlePtr->unkC.y = Math_SinS(randOffset) * randFloat + 3.0f;
+        particlePtr->unkC.z = randFloat * Math_CosS(randOffset) * Math_CosS(randSmall);
+        particlePtr->unk18.x = (s16) (Rand_Next() >> 0x10);
+        particlePtr->unk18.y = (s16) (Rand_Next() >> 0x10);
+        particlePtr->unk18.z = (s16) (Rand_Next() >> 0x10);
+        particlePtr->unk0.x = (Math_SinS(randSmall) * 20.0f) + this->actor.world.pos.x;
+        particlePtr->unk0.y = this->actor.floorHeight;
+        particlePtr->unk0.z = (Math_CosS(randSmall) * 20.0f) + this->actor.world.pos.z;
+        particlePtr->unk20 = (Rand_ZeroFloat(0.0015f) + 0.002f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ACD2C.s")
+void func_808ACD2C(EnFamos *this) {
+    f32 randFloat;
+    s16 randSmaller;
+    s16 randSmall;
+    EnFamosParticle *particlePtr;
+    s32 i;
+
+    this->unk1DE = 0x28;
+    particlePtr = &this->particles[0];
+    for (i = 0; i < 20; ++i, ++particlePtr) {
+        randSmall = (s16) (Rand_Next() >> 0x10);
+        randSmaller = (s16) ((u32)Rand_Next() >> 0x12);
+        randFloat = Rand_ZeroFloat(6.0f) + 7.0f;
+        particlePtr->unkC.x = randFloat * Math_CosS(randSmaller) * Math_SinS(randSmall);
+        particlePtr->unkC.y = Math_SinS(randSmaller) * randFloat + 4.5f;
+        particlePtr->unkC.z = randFloat * Math_CosS(randSmaller) * Math_CosS(randSmall);
+        particlePtr->unk18.x = (s16) (Rand_Next() >> 0x10);
+        particlePtr->unk18.y = (s16) (Rand_Next() >> 0x10);
+        particlePtr->unk18.z = (s16) (Rand_Next() >> 0x10);
+        particlePtr->unk0.x = (Math_SinS(randSmall) * 20.0f) + this->actor.world.pos.x;
+        particlePtr->unk0.y = randPlusMinusPoint5Scaled(60.0f) + (this->actor.world.pos.y + 40.0f);
+        particlePtr->unk0.z = (Math_CosS(randSmall) * 20.0f) + this->actor.world.pos.z;
+        particlePtr->unk20 = (f32) (Rand_ZeroFloat(0.002f) + 0.0025000002f);
+    }
+}
 
 s32 func_808ACF1C(EnFamos *this, GlobalContext *globalCtx) {
     if ((Player_GetMask(globalCtx) != 0x10) && 
@@ -198,7 +246,7 @@ void func_808ACF98(EnFamos *this) {
 void func_808AD05C(EnFamos *this) {
     u8 scalled1E6;
 
-    if ((this->collider3.base.acFlags & AC_HIT)) {
+    if (this->collider3.base.acFlags & AC_HIT) {
         this->collider3.base.acFlags &= ~AC_HIT;
         if (this->unk1D5 == 1) {
             if (this->animatedMaterialIndex != 0) {
@@ -206,7 +254,7 @@ void func_808AD05C(EnFamos *this) {
                 Actor_PlaySfxAtPos(&this->actor, 0x3A92U);
             } else {
                 this->animatedMaterialIndex = 1;
-                this->unk1E0 = 0x64;
+                this->unk1E0 = 100;
                 Actor_PlaySfxAtPos(&this->actor, 0x3A91U);
                 Actor_PlaySfxAtPos(&this->actor, 0x3847U);
             }
@@ -252,7 +300,7 @@ void func_808AD18C(EnFamos *this, GlobalContext *globalCtx) {
 
 void func_808AD1F0(EnFamos *this) {
     if (this->unk1D8 != 0) {
-        if ( ++this->unk1D7 == this->unk1D6) {
+        if ( ++this->unk1D7 == this->pathNodeCount) {
             this->unk1D7 = 0;
         }
     } else {
@@ -301,9 +349,9 @@ void func_808AD3E8(EnFamos *this) {
 }
 
 void func_808AD42C(EnFamos *this, GlobalContext *globalCtx) {
-    f32 sp24 = Actor_XZDistanceToPoint((Actor *) this, &this->unk1F4);
+    f32 sp24 = Actor_XZDistanceToPoint(&this->actor, &this->unk1F4);
 
-    this->actor.shape.rot.y = Actor_YawToPoint((Actor *) this, &this->unk1F4);
+    this->actor.shape.rot.y = Actor_YawToPoint(&this->actor, &this->unk1F4);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_808ACF98(this);
     if (this->unk1D8 != 0) {
@@ -341,9 +389,9 @@ void func_808AD5B0(EnFamos *this, GlobalContext *globalCtx) {
 
     v0 = this->unk1E6 < 0 ? -this->unk1E6 : this->unk1E6;
     if (v0 >= 0x4001) {
-        func_800B9010((Actor *) this, 0x3294);
+        func_800B9010(&this->actor, 0x3294);
     } else {
-        func_800B9010((Actor *) this, 0x3293);
+        func_800B9010(&this->actor, 0x3293);
     }
 
     this->unk1DC--;
@@ -373,7 +421,7 @@ void func_808AD68C(EnFamos *this, GlobalContext *globalCtx) {
     abovePlayerPos.x = player->actor.world.pos.x;
     abovePlayerPos.y = player->actor.world.pos.y + 100.0f;
     abovePlayerPos.z = player->actor.world.pos.z;
-    this->actor.world.rot.x = -Actor_PitchToPoint((Actor *) this, &abovePlayerPos);
+    this->actor.world.rot.x = -Actor_PitchToPoint(&this->actor, &abovePlayerPos);
     Math_StepToF(&this->actor.speedXZ, 6.0f, 0.5f);
 
     floorValue = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
@@ -397,7 +445,7 @@ void func_808AD7EC(EnFamos *this) {
 
 
 void func_808AD840(EnFamos *this, GlobalContext *globalCtx) {
-    func_800B9010((Actor *) this, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
+    func_800B9010(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
     if (SkelAnime_Update(&this->skelAnime)) {
         func_808AD888(this);
     }
@@ -405,31 +453,31 @@ void func_808AD840(EnFamos *this, GlobalContext *globalCtx) {
 
 void func_808AD888(EnFamos *this) {
     this->actor.world.rot.x = -0x4000;
-    this->collider1.base.atFlags |= 1;
+    this->collider1.base.atFlags |= AT_ON;
     this->unk1DC = 4;
     this->actionFunc = func_808AD8B8;
 }
 
 void func_808AD8B8(EnFamos *this, GlobalContext *globalCtx) {
-    s32 hitGround;
+    s32 hitWall;
     u32 floorValue; // name is a guess
 
     Math_StepToF(&this->actor.speedXZ, 20.0f, 2.0f);
     this->unk1DC--;
     if (this->unk1DC == 0) {
-        this->collider3.base.acFlags = this->collider3.base.acFlags & 0xFFFE;
+        this->collider3.base.acFlags &= ~AC_ON;
     }
-    floorValue = func_800C9B18(&globalCtx->colCtx, (CollisionPoly *) this->actor.floorPoly, (s32) this->actor.floorBgId);
-    hitGround = this->actor.bgCheckFlags & 1;
-    if ( hitGround || this->actor.floorHeight == -32000.0f
+    floorValue = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    hitWall = this->actor.bgCheckFlags & BGCHECK_CHECK_WALL;
+    if ( hitWall || this->actor.floorHeight == BGCHECK_Y_MIN 
       || floorValue == 0xC || floorValue == 0xD) {
-        this->collider1.base.atFlags = this->collider1.base.atFlags & ~0x1;
-        this->collider2.base.atFlags |= 1;
-        if ( hitGround != 0) {
-            func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 0xF, 0xA);
-            func_8013ECE0(this->actor.xyzDistToPlayerSq, 0xB4, 20, 100);
+        this->collider1.base.atFlags &= ~AT_ON;
+        this->collider2.base.atFlags |= AT_ON;
+        if ( hitWall != 0) {
+            func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 15, 10);
+            func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             func_808ACB58(this);
-            Actor_SpawnAsChild(&globalCtx->actorCtx, (Actor *) this, globalCtx, 
+            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, 
                 1, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0);
 
             if (this->actor.child != NULL) {
@@ -439,50 +487,169 @@ void func_808AD8B8(EnFamos *this, GlobalContext *globalCtx) {
             if (this->animatedMaterialIndex != 0) {
                 this->unk1E2 = 0x46;
                 func_808ADD20(this);
-                return;
             } else {
                 this->unk1E2 = 0x14;
                 func_808ADA74(this);
-                return;
             }
         }
         else {
-            this->collider3.base.acFlags = this->collider3.base.acFlags | 1;
+            this->collider3.base.acFlags |= AC_ON;
             func_808ADB4C(this);
-            return;
-
         }
+    } else {
+        func_800B9010(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
     }
-
-    func_800B9010((Actor *) this, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
 }
 
+void func_808ADA74(EnFamos *this) {
+    Animation_PlayOnce(&this->skelAnime, &gFamosLowerSNSAnim);
+    SkelAnime_Update(&this->skelAnime);
+    this->collider3.base.acFlags |= AC_ON;
+    this->unk1DC = 3;
+    this->actor.speedXZ = 0.0f;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_EXPLOSION);
+    this->actionFunc = func_808ADAE8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADA74.s")
+void func_808ADAE8(EnFamos *this, GlobalContext *globalCtx) {
+    if (this->unk1DC == 0) {
+        this->collider2.base.atFlags &= ~AT_ON;
+    }
+    this->unk1DC--;
+    if (SkelAnime_Update(&this->skelAnime)) {
+        func_808ADB4C(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADAE8.s")
+void func_808ADB4C(EnFamos *this) {
+    this->actor.world.rot.x = 0x4000;
+    this->actionFunc = func_808ADB70;
+    this->actor.speedXZ = 0.0f;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADB4C.s")
+void func_808ADB70(EnFamos *this, GlobalContext *globalCtx) {
+    Math_StepToF(&this->actor.speedXZ, 5.0f, 0.3f);
+    if (this->actor.speedXZ > 1.0f) {
+        if (ABS_ALT(this->unk1E6) >= 0x4001) {
+            func_800B9010(&this->actor, 0x3294U);
+        } else {
+            func_800B9010(&this->actor, 0x3293U);
+        }
+    }
+    if (this->unk1EC < this->actor.world.pos.y || this->actor.bgCheckFlags & BGCHECK_CHECK_DYNA) {
+        this->actor.speedXZ = 0.0f;
+        func_808AD66C(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADB70.s")
+void func_808ADC40(EnFamos *this) {
+    this->unk1DC = 0x3C;
+    this->actionFunc = func_808ADC64;
+    this->actor.speedXZ = 0.0f;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADC40.s")
+void func_808ADC64(EnFamos *this, GlobalContext *globalCtx) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADC64.s")
+    func_808ACF98(&this->actor);
+    this->unk1DC--;
+    if ( func_808ACF1C(this, globalCtx)!= 0) {
+        func_808AD54C(this);
+    } else if (this->unk1DC == 0) {
+        func_808AD31C(this);
+    } else {
+        this->actor.shape.rot.y = (s32) (Math_SinS((s16) (this->unk1DC * 0x888)) * 8192.0f) + this->actor.world.rot.y;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADD20.s")
+void func_808ADD20(EnFamos *this) {
+    this->collider3.base.acFlags &= ~AC_ON;
+    this->unk1DC = 20;
+    this->actor.speedXZ = 0.0f;
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 20);
+    this->unk1E0 = -1;
+    // aiming for players feet?
+    this->actor.world.pos.y = this->actor.floorHeight - 60.0f;
+    Actor_PlaySfxAtPos(&this->actor, 0x3846);
+    this->actionFunc = func_808ADDA8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADDA8.s")
+void func_808ADDA8(EnFamos *this, GlobalContext *globalCtx) {
+    if (this->unk1DC == 0x11) {
+        this->collider2.base.atFlags &= ~AT_ON;
+    }
+    if (this->unk1DC == 0) {
+        func_808ADE00(this);
+    } else {
+        this->unk1DC--;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADE00.s")
+void func_808ADE00(EnFamos *this) {
+    this->actor.world.rot.x = 0x4000;
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 4);
+    this->unk1DC = 0x19;
+    Math_Vec3f_Copy(&this->unk1F4, &this->actor.world.pos);
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->actionFunc = func_808ADE74;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADE74.s")
+void func_808ADE74(EnFamos *this, GlobalContext *globalCtx) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADFA4.s")
+    Math_StepToF(&this->actor.speedXZ, 3.0f, 0.3f);
+    if (this->actor.colorFilterTimer == 0) {
+        Actor_SetColorFilter(&this->actor, 0x4000U, 0xFFU, 0, 4);
+    }
+    this->actor.world.pos.x = randPlusMinusPoint5Scaled(5.0f) + this->unk1F4.x;
+    this->actor.world.pos.z = randPlusMinusPoint5Scaled(5.0f) + this->unk1F4.z;
+    if (this->unk1DC == 1) {
+        EnBom* blast = (EnBom*) Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, 
+            this->actor.world.pos.x, this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 0);
+        if (blast != NULL) {
+            blast->timer = 0; // instant explosion
+        }
+        this->unk1DC--;
+    }
+    else if (this->unk1DC == 0) {
+        Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0xD0);
+        func_808ADFA4(this);
+    } else { 
+        this->unk1DC--;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808ADFF0.s")
+void func_808ADFA4(EnFamos *this) {
+    func_808ACD2C(this);
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.shape.shadowDraw = NULL;
+    this->actionFunc = func_808ADFF0;
+    this->actor.speedXZ = 0.0f;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/func_808AE030.s")
+void func_808ADFF0(EnFamos *this, GlobalContext *globalCtx) {
+    Actor *ourChild;
+
+    if (this->unk1DE == 0) {
+        ourChild = this->actor.child;
+        if (ourChild != NULL) {
+            ourChild->parent = NULL;
+        }
+        Actor_MarkForDeath(&this->actor);
+    }
+}
+
+void func_808AE030(EnFamos *this) {
+    EnFamosParticle* particle;
+    s32 i;
+
+    particle = &this->particles[0];
+    for (i = 0; i < 20; ++i, ++particle) {
+        particle->unkC.y -= 1.0f;
+        Math_Vec3f_Sum(&particle->unk0, &particle->unkC, &particle->unk0);
+        particle->unk18.x += (s16)(((u32)Rand_Next() >> 0x17) + 0x700);
+        particle->unk18.y += (s16)(((u32)Rand_Next() >> 0x17) + 0x900);
+        particle->unk18.z += (s16)(((u32)Rand_Next() >> 0x17) + 0xB00);
+    }
+}
 
 void EnFamos_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnFamos *this = THIS;
@@ -490,8 +657,7 @@ void EnFamos_Update(Actor *thisx, GlobalContext *globalCtx) {
     f32 oldHeight;
     s32 old1DA;
 
-    if ( this->unk1DE <= 0 || 
-          (this->unk1DE--, func_808AE030(this), (this->actionFunc != func_808ADFF0 ))) {
+    if ( this->unk1DE <= 0 || (this->unk1DE--, func_808AE030(this), (this->actionFunc != func_808ADFF0 ))) {
         old1DA = (s32) this->unk1DA;
         func_808AD05C(this);
         if (this->unk1E2 > 0) {
@@ -509,22 +675,22 @@ void EnFamos_Update(Actor *thisx, GlobalContext *globalCtx) {
         }
         if (this->unk1E0 >= 0) {
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
-            if (this->actionFunc == func_808AD8B8 && 
-                this->animatedMaterialIndex != 0 && (this->actor.bgCheckFlags & 1) != 0) {
+            // kinda surprised this is here and not in actionfunc
+            if (this->actionFunc == func_808AD8B8 && this->animatedMaterialIndex != 0 && (this->actor.bgCheckFlags & 1) != 0) {
                 this->actor.world.pos.y -= 60.0f;
             }
         }
         this->actor.focus.rot.y = this->actor.shape.rot.y;
         Collider_UpdateCylinder(&this->actor, &this->collider1);
-        if ((this->collider1.base.atFlags & 1) != 0) {
+        if (this->collider1.base.atFlags & AT_ON) {
             CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
         }
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-        if ((this->collider3.base.acFlags & 1) != 0) {
+        if (this->collider3.base.acFlags & AC_ON) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider3.base);
         }
-        if ((this->collider2.base.atFlags & 1) != 0) {
+        if (this->collider2.base.atFlags & AC_ON) {
             Collider_UpdateCylinder(&this->actor, &this->collider2);
             this->collider2.dim.pos.y = (s16) (s32) this->actor.floorHeight;
             CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
@@ -536,11 +702,13 @@ void EnFamos_Update(Actor *thisx, GlobalContext *globalCtx) {
 s32 func_808AE304(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor) {
     EnFamos* this = (EnFamos*) actor;
 
-    if (limbIndex == 1) {
+    if (limbIndex == 1) { // BODY
         Matrix_InsertTranslation(0.0f, 4000.0f, 0.0f, 1);
         Matrix_InsertZRotation_s(this->unk1E6, 1);
         Matrix_InsertTranslation(0.0f, -4000.0f, 0.0f, 1);
-    } else if (( this->unk1E0 < 0) && ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 5))) {
+    
+    // sword, shield, head (not body and not the emblem)
+    } else if (this->unk1E0 < 0 && (limbIndex == 3 || limbIndex == 4 || limbIndex == 5)) {
         *dList = NULL;
     }
 
@@ -551,8 +719,7 @@ s32 func_808AE304(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
 void func_808AE3A8(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *actor) {
     EnFamos* this = (EnFamos*) actor;
     
-    if (limbIndex == 2) {
-        limbIndex = limbIndex;
+    if (limbIndex == 2) { // emblem
         Matrix_GetStateTranslation(&actor->focus.pos);
         Collider_UpdateSpheres(limbIndex, &this->collider3);
     }
@@ -560,7 +727,6 @@ void func_808AE3A8(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
 
 void func_808AE3FC(EnFamos *this, GlobalContext *globalCtx) {
     s32 i;
-
   
     if (this->unk1DE > 0) {
         Gfx* dispOpa;
