@@ -24,6 +24,14 @@ void EnDemoheishi_Talk(EnDemoheishi* this, GlobalContext* globalCtx);
 s32 EnDemoheishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                   Actor* thisx);
 
+typedef enum {
+    /*  0 */ DEMOHEISHI_ANIMATION_STAND_HAND_ON_HIP,
+    /*  1 */ DEMOHEISHI_ANIMATION_CHEER_WITH_SPEAR,
+    /*  2 */ DEMOHEISHI_ANIMATION_WAVE,
+    /*  3 */ DEMOHEISHI_ANIMATION_SIT_AND_REACH,
+    /*  4 */ DEMOHEISHI_ANIMATION_STAND_UP
+} DemoheishiAnimationIndex;
+
 const ActorInit En_Demo_heishi_InitVars = {
     ACTOR_EN_DEMO_HEISHI,
     ACTORCAT_NPC,
