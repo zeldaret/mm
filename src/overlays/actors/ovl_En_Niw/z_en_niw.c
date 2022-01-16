@@ -6,7 +6,7 @@
 
 #include "z_en_niw.h"
 
-#define FLAGS 0x00800010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnNiw*)thisx)
 
@@ -122,7 +122,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->niwType = this->actor.params;
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    this->actor.flags |= 0x1; // targetable ON
+    this->actor.flags |= ACTOR_FLAG_1; // targetable ON
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
 
@@ -150,7 +150,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
         this->unkTimer250 = 30;
-        this->actor.flags &= ~0x1; // targetable OFF
+        this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
         this->unknownState28E = 4;
         this->actionFunc = EnNiw_Held;
         this->actor.speedXZ = 0.0f;
@@ -345,7 +345,7 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->sfxTimer1 = 30;
             this->unkTimer250 = 30;
-            this->actor.flags &= ~0x1; // targetable OFF
+            this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
             this->unknownState28E = 4;
             this->actor.speedXZ = 0.0f;
             this->actionFunc = EnNiw_Held;
@@ -441,7 +441,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
             this->actor.shape.rot.z = 0;
             rotZ = this->actor.shape.rot.z;
             this->unknownState28E = 5;
-            this->actor.flags |= 0x1; // targetable ON
+            this->actor.flags |= ACTOR_FLAG_1; // targetable ON
             this->actionFunc = EnNiw_Thrown;
             this->actor.shape.rot.y = rotZ;
             this->actor.shape.rot.x = rotZ;
@@ -459,7 +459,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.x = rotZ;
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         Math_Vec3f_Copy(&this->unk2BC, &vec3fcopy);
-        this->actor.flags |= 0x1; // targetable ON
+        this->actor.flags |= ACTOR_FLAG_1; // targetable ON
         this->actionFunc = EnNiw_Thrown;
     }
     func_80891320(this, globalCtx, 2);
@@ -497,7 +497,7 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
         this->sfxTimer1 = 30;
         this->unk2EC = 0;
         this->unkTimer250 = 30;
-        this->actor.flags &= ~0x1; // targetable OFF
+        this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
         this->unknownState28E = 4;
         this->actionFunc = EnNiw_Held;
         this->actor.speedXZ = 0.0f;
@@ -608,7 +608,7 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
     if (this->unkTimer252 == 0) {
         this->unkTimer252 = 10;
         this->yawTowardsPlayer = this->actor.yawTowardsPlayer;
-        this->actor.flags &= ~0x1; // targetable OFF
+        this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
         this->unknownState28E = 3;
         this->actionFunc = EnNiw_CuccoStorm;
     }

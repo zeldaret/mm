@@ -6,7 +6,7 @@
 
 #include "z_en_encount2.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnEncount2*)thisx)
 

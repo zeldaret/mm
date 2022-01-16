@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00100000
+#define FLAGS (ACTOR_FLAG_100000)
 
 #define THIS ((EnColMan*)thisx)
 
@@ -146,8 +146,8 @@ void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, GlobalContext* globa
 
 void func_80AFDF60(EnColMan* this) {
     this->actor.draw = func_80AFE584;
-    this->actor.flags |= 0x10;
-    this->actor.flags |= 0x20;
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_20;
     this->type = EN_COL_MAN_FALLING_ROCK;
     this->actionFunc = func_80AFDFB4;
     this->actor.shape.shadowScale = 5.0f;

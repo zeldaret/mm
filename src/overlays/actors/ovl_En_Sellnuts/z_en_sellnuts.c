@@ -6,7 +6,7 @@
 
 #include "z_en_sellnuts.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnSellnuts*)thisx)
 
@@ -528,7 +528,7 @@ void func_80ADBD64(EnSellnuts* this, GlobalContext* globalCtx) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_338 &= ~2;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_34C = 8;
         func_8013BC6C(&this->skelAnime, D_80ADD990, 8);
         this->actionFunc = func_80ADBE80;
@@ -708,7 +708,7 @@ void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         player->linearVelocity = 0.0f;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801518B0(globalCtx, this->unk_340, &this->actor);
         if (this->unk_340 == 0x625) {
             this->unk_338 |= 1;
@@ -721,7 +721,7 @@ void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80ADC6D0;
         }
     } else if (func_80ADB08C(globalCtx) < 80.0f) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, this->actor.xzDistToPlayer);
     }
 }
@@ -868,7 +868,7 @@ void func_80ADCC04(EnSellnuts* this, GlobalContext* globalCtx) {
         func_80ADAFC0(this);
         if (currentFrame == 0) {
             if (func_80ADB08C(globalCtx) < 9999.0f) {
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, globalCtx, 9999.0f);
             }
             this->unk_340 = 0x626;
@@ -885,7 +885,7 @@ void func_80ADCD3C(EnSellnuts* this, GlobalContext* globalCtx) {
         this->unk_338 |= 2;
         this->unk_338 |= 1;
         this->unk_340 = 0x626;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.gravity = -1.0f;
         this->actor.draw = EnSellnuts_Draw;
         this->unk_34A = 50;
@@ -1011,7 +1011,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.gravity = 0.0f;
         this->actor.draw = NULL;
         this->unk_34C = 20;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_35C = 1.0f;
         this->unk_358 = 1.0f;
         this->unk_354 = 1.0f;
@@ -1021,7 +1021,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->unk_338 |= 2;
         this->unk_338 &= ~1;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.gravity = 0.0f;
         this->actor.draw = NULL;
         this->unk_34C = 4;

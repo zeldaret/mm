@@ -6,7 +6,7 @@
 
 #include "z_obj_dinner.h"
 
-#define FLAGS 0x00000020
+#define FLAGS (ACTOR_FLAG_20)
 
 #define THIS ((ObjDinner*)thisx)
 
@@ -32,7 +32,7 @@ extern Gfx D_060011E0[];
 void ObjDinner_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjDinner* this = THIS;
 
-    if (gSaveContext.isNight != true || (CURRENT_DAY == 3 && gSaveContext.weekEventReg[0x16] & 1)) {
+    if (gSaveContext.isNight != true || (CURRENT_DAY == 3 && gSaveContext.weekEventReg[22] & 1)) {
         Actor_MarkForDeath(&this->actor);
     }
     Actor_SetScale(&this->actor, 0.1f);

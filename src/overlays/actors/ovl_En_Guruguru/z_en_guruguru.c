@@ -6,7 +6,7 @@
 
 #include "z_en_guruguru.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnGuruguru*)thisx)
 
@@ -89,9 +89,9 @@ void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (this->actor.params == 0) {
             func_80BC6E10(this);
         } else if (this->actor.params == 2) {
-            this->actor.flags |= 0x8000000;
+            this->actor.flags |= ACTOR_FLAG_8000000;
             this->actor.draw = NULL;
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = EnGuruguru_DoNothing;
         } else {
             Actor_MarkForDeath(&this->actor);

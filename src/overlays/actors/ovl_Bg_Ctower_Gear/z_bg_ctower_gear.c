@@ -6,7 +6,7 @@
 
 #include "z_bg_ctower_gear.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgCtowerGear*)thisx)
 
@@ -86,7 +86,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     int j;
     s16 rotZ;
 
-    flags = this->dyna.actor.flags & 0x40;
+    flags = this->dyna.actor.flags & ACTOR_FLAG_40;
     rotZ = this->dyna.actor.shape.rot.z & 0x1FFF;
     if ((flags != 0) && (rotZ < 0x1B58) && (rotZ >= 0x1388)) {
         Matrix_RotateY(this->dyna.actor.home.rot.y, MTXMODE_NEW);

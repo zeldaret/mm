@@ -6,7 +6,7 @@
 
 #include "z_obj_bean.h"
 
-#define FLAGS 0x00400000
+#define FLAGS (ACTOR_FLAG_400000)
 
 #define THIS ((ObjBean*)thisx)
 

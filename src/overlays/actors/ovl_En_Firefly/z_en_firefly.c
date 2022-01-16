@@ -7,7 +7,7 @@
 #include "z_en_firefly.h"
 #include "overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.h"
 
-#define FLAGS 0x00005005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
 
 #define THIS ((EnFirefly*)thisx)
 
@@ -133,7 +133,7 @@ void EnFirefly_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     if (this->actor.params & KEESE_INVISIBLE) {
-        this->actor.flags |= 0x80;
+        this->actor.flags |= ACTOR_FLAG_80;
         this->actor.params = KEESE_GET_MAIN_TYPE(thisx);
         this->isInvisible = true;
     }
@@ -333,7 +333,7 @@ void EnFirefly_SetupFall(EnFirefly* this, GlobalContext* globalCtx) {
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &D_0600017C, 0.0f, 6.0f, 6.0f, 2, 0.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_DEAD);
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
 
     if (this->isInvisible) {
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0x2000, 40);
@@ -363,7 +363,7 @@ void EnFirefly_SetupFall(EnFirefly* this, GlobalContext* globalCtx) {
         this->auraType = KEESE_AURA_NONE;
     }
 
-    if (this->actor.flags & 0x8000) {
+    if (this->actor.flags & ACTOR_FLAG_8000) {
         this->actor.speedXZ = 0.0f;
     }
 
@@ -375,7 +375,7 @@ void EnFirefly_Fall(EnFirefly* this, GlobalContext* globalCtx) {
     this->actor.colorFilterTimer = 40;
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
 
-    if (!(this->actor.flags & 0x8000)) {
+    if (!(this->actor.flags & ACTOR_FLAG_8000)) {
         if (this->unk_18F != 0xA) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x6800, 0x200);
             this->actor.shape.rot.y -= 0x300;
@@ -647,7 +647,7 @@ void EnFirefly_UpdateDamage(EnFirefly* this, GlobalContext* globalCtx) {
         } else {
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             this->actor.colChkInfo.health = 0;
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
 
             // Negate effects of fire on Fire Keese and Ice on Ice Keese
             if (((this->currentType == KEESE_FIRE) && (this->actor.colChkInfo.damageEffect == 2)) ||
@@ -680,7 +680,7 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
     EnFirefly_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
 
-    if (!(this->actor.flags & 0x8000)) {
+    if (!(this->actor.flags & ACTOR_FLAG_8000)) {
         if ((this->actor.colChkInfo.health == 0) || (this->actionFunc == EnFirefly_Stunned)) {
             Actor_MoveWithGravity(&this->actor);
         } else {

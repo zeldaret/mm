@@ -6,7 +6,7 @@
 
 #include "z_en_clear_tag.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnClearTag*)thisx)
 
@@ -399,7 +399,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f vel;
     Vec3f accel;
 
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     if (thisx->params >= 0) {
         this->activeTimer = 70;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);

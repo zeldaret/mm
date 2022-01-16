@@ -179,7 +179,7 @@ s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
             enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->world.pos);
             enHy->actor.world.rot.y = enHy->actor.shape.rot.y;
             enHy->actor.gravity = 0.0f;
-            enHy->actor.flags &= ~1;
+            enHy->actor.flags &= ~ACTOR_FLAG_1;
         }
     }
     return ret;
@@ -187,7 +187,7 @@ s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
 
 s32 EnHy_SetPointFowards(EnHy* enHy, GlobalContext* globalCtx, f32 gravity, s16 animIndex) {
     enHy->actor.gravity = gravity;
-    enHy->actor.flags |= 1;
+    enHy->actor.flags |= ACTOR_FLAG_1;
     EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
     enHy->curPoint++;
     return 0;

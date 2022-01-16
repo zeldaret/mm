@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Bg_Crace_Movebg/z_bg_crace_movebg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnDno*)thisx)
 
@@ -703,8 +703,8 @@ void func_80A72BA4(EnDno* this, GlobalContext* globalCtx) {
 
 void func_80A72C04(EnDno* this, GlobalContext* globalCtx) {
     func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->unk_32C);
-    this->actor.flags |= 0x8000000;
-    this->actor.flags &= ~(8 | 1);
+    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Math_Vec3f_Copy(&this->unk_334, &this->actor.world.pos);
     func_8013DCE0(globalCtx, &this->unk_334, &this->actor, &this->unk_340, globalCtx->setupPathList,
                   ENDNO_GET_7F(&this->actor), 1, 0, 1, 0);
@@ -817,7 +817,7 @@ void func_80A730A0(EnDno* this, GlobalContext* globalCtx) {
     this->unk_3AE += 1000;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     func_80A715DC(this, globalCtx);
-    func_800B9010(&this->actor, 0x2153);
+    func_800B9010(&this->actor, NA_SE_EV_BUTLER_FRY - SFX_FLAG);
     if (this->unk_340.unk_1C & 0x20) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_340.unk_20);
         this->actor.speedXZ = 0.0f;
@@ -829,8 +829,8 @@ void func_80A730A0(EnDno* this, GlobalContext* globalCtx) {
 }
 
 void func_80A73244(EnDno* this, GlobalContext* globalCtx) {
-    this->actor.flags &= ~0x8000000;
-    this->actor.flags |= (8 | 1);
+    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->unk_328 = 2;
     this->actor.speedXZ = 0.0f;
     Flags_UnsetSwitch(globalCtx, ENDNO_GET_3F80(&this->actor));

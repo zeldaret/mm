@@ -6,7 +6,7 @@
 
 #include "z_en_bji_01.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnBji01*)thisx)
 
@@ -100,9 +100,9 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x444);
     if (this->actor.params == ENBJI01_PARAMS_DEFAULT) {
         if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.playerHeightRel <= 10.0f)) {
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
         } else {
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
         }
     }
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
@@ -215,7 +215,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             break;
         case 4:
             if (func_80147624(globalCtx) != 0) {
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
@@ -243,7 +243,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             break;
         case 5:
             if (func_80147624(globalCtx) != 0) {
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x5DE:
                         func_8013E1C8(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
@@ -283,7 +283,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                     case 0x5F7:
                     case 0x5F8:
                         func_801477B4(globalCtx);
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
                         func_809CCE98(this, globalCtx);
                         break;
@@ -292,7 +292,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             break;
         case 6:
             this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
             func_809CCE98(this, globalCtx);
             break;
     }
@@ -359,7 +359,7 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_809CCE98(this, globalCtx);
             break;
         case 0x4C20: /* Observatory from Termina Field telescope */
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
             func_801A5BD0(0);
             Audio_QueueSeqCmd(0xE0000100);
             this->actor.params = ENBJI01_PARAMS_LOOKED_THROUGH_TELESCOPE;

@@ -6,7 +6,7 @@
 
 #include "z_obj_jg_gakki.h"
 
-#define FLAGS 0x00000020
+#define FLAGS (ACTOR_FLAG_20)
 
 #define THIS ((ObjJgGakki*)thisx)
 

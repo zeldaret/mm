@@ -236,10 +236,10 @@ void FireObj_Update(GlobalContext* globalCtx, FireObj* fire, Actor* actor) {
 
     FireObj_UpdateStateTransitions(globalCtx, fire);
     if (fire->state == 3) {
-        if ((fire->collision.base.acFlags & 2) && (fire->collision.info.acHitInfo->toucher.dmgFlags & 0x800)) {
+        if ((fire->collision.base.acFlags & AC_HIT) && (fire->collision.info.acHitInfo->toucher.dmgFlags & 0x800)) {
             FireObj_SetState(fire, fire->dynamicSizeStep, 0);
         }
-    } else if ((fire->collision.base.acFlags & 2) && (arrow->actor.update != NULL) &&
+    } else if ((fire->collision.base.acFlags & AC_HIT) && (arrow->actor.update != NULL) &&
                (arrow->actor.id == ACTOR_EN_ARROW)) {
         arrow->actor.params = 0;
         arrow->unk_1C0 = 0x800;

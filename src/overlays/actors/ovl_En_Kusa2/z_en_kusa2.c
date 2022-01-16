@@ -6,7 +6,7 @@
 
 #include "z_en_kusa2.h"
 
-#define FLAGS 0x00800010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnKusa2*)thisx)
 
@@ -280,7 +280,7 @@ void func_80A5BB40(EnKusa2* this, GlobalContext* globalCtx, s32 arg2) {
     f32 temp_f24;
     s16 temp_s0;
 
-    if (this->actor.flags & 0x40) {
+    if (this->actor.flags & ACTOR_FLAG_40) {
         for (i = 0; i <= arg2; i++) {
             temp_s0 = Rand_S16Offset(-16000, 32000) + this->actor.world.rot.y;
             temp_f20 = Math_SinS(temp_s0);
@@ -370,7 +370,7 @@ void func_80A5BF84(EnKusa2* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A5BFD8(EnKusa2* this, GlobalContext* globalCtx) {
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         s32 pad;
 
         func_80A5CF44(this);
@@ -858,7 +858,7 @@ void EnKusa2_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (!ENKUSA2_GET_1(&this->actor)) {
         this->actor.update = func_80A5E604;
         this->actor.draw = NULL;
-        this->actor.flags |= 0x20;
+        this->actor.flags |= ACTOR_FLAG_20;
         func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 1);
         this->unk_1BE = 0;
         if (D_80A5EAEC != 0) {

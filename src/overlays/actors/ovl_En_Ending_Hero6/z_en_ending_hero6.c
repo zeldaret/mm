@@ -6,7 +6,7 @@
 
 #include "z_en_ending_hero6.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnEndingHero6*)thisx)
 

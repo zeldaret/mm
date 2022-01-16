@@ -7,7 +7,7 @@
 #include "z_eff_dust.h"
 #include "system_malloc.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EffDust*)thisx)
 

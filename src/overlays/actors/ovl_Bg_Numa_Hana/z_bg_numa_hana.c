@@ -6,7 +6,7 @@
 
 #include "z_bg_numa_hana.h"
 
-#define FLAGS 0x00000410
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((BgNumaHana*)thisx)
 

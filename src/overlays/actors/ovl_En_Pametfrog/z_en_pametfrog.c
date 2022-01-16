@@ -9,7 +9,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnPametfrog*)thisx)
 
@@ -426,7 +426,7 @@ void EnPametfrog_SetupRearOnSnapper(EnPametfrog* this) {
         Animation_PlayOnce(&this->skelAnime, &gGekkoStandingIdleAnim);
     }
 
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.params = GEKKO_ON_SNAPPER;
     this->actionFunc = EnPametfrog_RearOnSnapper;
 }
@@ -503,7 +503,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx
     this->actor.velocity.y = 15.0f;
     this->actor.world.rot.y = BINANG_ROT180(this->actor.child->world.rot.y);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->timer = 30;
     this->collider.base.ocFlags1 |= OC1_ON;
     yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
@@ -683,7 +683,7 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
     } else {
         SkelAnime_Update(&this->skelAnime);
         this->timer--;
-        Matrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, 0);
+        Matrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, MTXMODE_NEW);
         Matrix_MultiplyVector3fByState(&this->unk_2D0, &vec);
         Math_Vec3f_Copy(&this->unk_2D0, &vec);
         Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
@@ -1172,7 +1172,7 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
 
     Animation_MorphToPlayOnce(&this->skelAnime, &gGekkoCallAnim, 3.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FROG_GREET);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.colChkInfo.health = 6;
     this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
@@ -1305,7 +1305,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
                 this->collider.base.acFlags &= ~AC_ON;
                 EnPametfrog_ApplyMagicArrowEffects(this, globalCtx);
                 Enemy_StartFinishingBlow(globalCtx, &this->actor);
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
                 func_801A2ED8();
                 EnPametfrog_SetupCutscene(this);
             } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ZORA_BARRIER) {

@@ -7,7 +7,7 @@
 #include "z_en_tru.h"
 #include "objects/object_tru/object_tru.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTru*)thisx)
 
@@ -1026,7 +1026,7 @@ s32 func_80A87DC0(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (ret == true) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.draw = NULL;
         this->unk_378 = NULL;
         this->unk_34E = 0;
@@ -1097,7 +1097,7 @@ void func_80A881E0(EnTru* this, GlobalContext* globalCtx) {
         this->unk_34E &= ~(0x1000 | 0x8);
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.flags &= ~0x100;
+        this->actor.flags &= ~ACTOR_FLAG_100;
         this->unk_1E8 = 0;
         this->actionFunc = func_80A87FD0;
     }

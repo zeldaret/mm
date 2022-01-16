@@ -6,7 +6,7 @@
 
 #include "z_en_fg.h"
 
-#define FLAGS 0x00004209
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_200 | ACTOR_FLAG_4000)
 
 #define THIS ((EnFg*)thisx)
 
@@ -183,7 +183,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
 
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_DEKUSTICK:
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.playSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
@@ -196,7 +196,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
         case FG_DMGEFFECT_HOOKSHOT:
             break;
         case FG_DMGEFFECT_ARROW:
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->skelAnime.playSpeed = 0.0f;
             rotY = this->collider.base.ac->world.rot.y;
             rotX = this->collider.base.ac->world.rot.x;
@@ -209,7 +209,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             this->actionFunc = EnFg_DoNothing;
             break;
         case FG_DMGEFFECT_EXPLOSION:
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
             if (1) {}
             this->actor.params = FG_BLACK;
@@ -244,7 +244,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
 
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_ARROW:
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             rotY = ac->world.rot.y;
@@ -260,7 +260,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
         case FG_DMGEFFECT_HOOKSHOT:
             break;
         case FG_DMGEFFECT_EXPLOSION:
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
             EnFg_UpdateAnimation(&this->skelAnime, 0);
             this->actor.params = FG_BLACK;
@@ -326,7 +326,7 @@ void EnFg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    this->actor.flags |= 0x4000;
+    this->actor.flags |= ACTOR_FLAG_4000;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.gravity = -1.6f;
     this->actionFunc = EnFg_Idle;

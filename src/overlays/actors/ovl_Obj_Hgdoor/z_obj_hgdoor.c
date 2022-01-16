@@ -6,7 +6,7 @@
 
 #include "z_obj_hgdoor.h"
 
-#define FLAGS 0x00100000
+#define FLAGS (ACTOR_FLAG_100000)
 
 #define THIS ((ObjHgdoor*)thisx)
 

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "z_en_kgy.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnKgy*)thisx)
 
@@ -116,7 +116,7 @@ void EnKgy_Init(Actor* thisx, GlobalContext* globalCtx) {
                               this->actor.world.pos.z, 255, 64, 64, -1);
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
     this->unk_300 = -1;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void EnKgy_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -473,7 +473,7 @@ void func_80B417B8(EnKgy* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         func_80B413C8(this);
-        this->actor.flags &= ~0x100;
+        this->actor.flags &= ~ACTOR_FLAG_100;
         this->actionFunc = func_80B419B0;
         func_80B40E18(this, 7);
     }
@@ -501,7 +501,7 @@ void func_80B418C4(EnKgy* this, GlobalContext* globalCtx) {
         func_80B413C8(this);
         ActorCutscene_SetIntentToPlay(this->unk_2D4[5]);
         this->actionFunc = func_80B41858;
-        this->actor.flags &= ~0x100;
+        this->actor.flags &= ~ACTOR_FLAG_100;
     }
     func_80B40EE8(this, globalCtx);
 }
@@ -588,7 +588,7 @@ void func_80B41C54(EnKgy* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->actionFunc = func_80B41C30;
-        this->actor.flags &= ~0x100;
+        this->actor.flags &= ~ACTOR_FLAG_100;
     }
     func_80B40EE8(this, globalCtx);
 }
@@ -596,7 +596,7 @@ void func_80B41C54(EnKgy* this, GlobalContext* globalCtx) {
 void func_80B41CBC(EnKgy* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80B40E18(this, this->actor.textId);
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, globalCtx, 4);
@@ -609,7 +609,7 @@ void func_80B41D64(EnKgy* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actionFunc = func_80B41CBC;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     } else {
         Actor_PickUp(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
@@ -872,7 +872,7 @@ void func_80B42660(EnKgy* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         func_80B413C8(this);
-        this->actor.flags &= ~0x100;
+        this->actor.flags &= ~ACTOR_FLAG_100;
         this->actionFunc = func_80B42714;
         func_80B40E18(this, 7);
     }
@@ -960,9 +960,9 @@ void func_80B4296C(EnKgy* this, GlobalContext* globalCtx) {
         }
         func_80B411DC(this, globalCtx, 0);
         func_80B40E18(this, this->actor.textId);
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_NONE);
     }
 }

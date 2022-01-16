@@ -6,7 +6,7 @@
 
 #include "z_dm_nb.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((DmNb*)thisx)
 
@@ -75,7 +75,7 @@ void DmNb_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008C40, NULL, this->jointTable, this->morphTable, 8);
     this->unk1F0 = -1;
     func_80C1DED0(this, 0);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80C1DF18;
 }

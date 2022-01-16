@@ -6,7 +6,7 @@
 
 #include "z_en_ending_hero.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnEndingHero*)thisx)
 
@@ -44,7 +44,7 @@ extern UNK_PTR D_0600A490[];
 void EnEndingHero_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero* this = THIS;
 
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;

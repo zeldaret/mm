@@ -7,7 +7,7 @@
 #include "z_en_hakurock.h"
 #include "overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnHakurock*)thisx)
 

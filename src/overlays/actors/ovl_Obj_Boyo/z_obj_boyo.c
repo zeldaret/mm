@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Kaizoku/z_en_kaizoku.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjBoyo*)thisx)
 

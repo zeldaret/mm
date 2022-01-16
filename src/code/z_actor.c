@@ -4576,7 +4576,8 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                 }
 
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
-                Matrix_Scale((effectScale * 0.005f) * 1.35f, (effectScale * 0.005f), (effectScale * 0.005f) * 1.35f, 1);
+                Matrix_Scale((effectScale * 0.005f) * 1.35f, (effectScale * 0.005f), (effectScale * 0.005f) * 1.35f,
+                             MTXMODE_APPLY);
 
                 sp74 = effectAlpha * 255.0f;
 
@@ -4675,7 +4676,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 for (i = 0; i < arg3; i++) {
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
+                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
                     temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
                     temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
                     temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
@@ -4686,7 +4687,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0234F0);
 
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
+                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
                     temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
                     temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
                     temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;

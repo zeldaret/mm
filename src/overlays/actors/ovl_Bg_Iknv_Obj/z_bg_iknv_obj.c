@@ -6,7 +6,7 @@
 
 #include "z_bg_iknv_obj.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgIknvObj*)thisx)
 
@@ -69,8 +69,8 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
         case IKNV_OBJ_WATERWHEEL:
             this->displayListPtr = D_06013058;
             this->actionFunc = BgIknvObj_UpdateWaterwheel;
-            this->dyna.actor.flags |= 0x100000;
-            this->dyna.actor.flags |= 0x10;
+            this->dyna.actor.flags |= ACTOR_FLAG_100000;
+            this->dyna.actor.flags |= ACTOR_FLAG_10;
             break;
         case IKNV_OBJ_RAISED_DOOR:
             this->displayListPtr = D_06011880;
@@ -137,7 +137,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx) {
     }
 
     if ((globalCtx->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 4) &&
-        (globalCtx->csCtx.frames == 0x5D7)) {
+        (globalCtx->csCtx.frames == 1495)) {
         func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }
 }

@@ -6,7 +6,7 @@
 
 #include "z_door_spiral.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define GET_ORIENTATION_PARAM(this) ((((Actor*)(this))->params >> 7) & 0x1)
 #define GET_UNK145_PARAM(this) ((((Actor*)(this))->params >> 8) & 0x3)
@@ -130,7 +130,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
             this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
         }
 
-        this->actor.flags |= 0x10000000;
+        this->actor.flags |= ACTOR_FLAG_10000000;
     }
 
     DoorSpiral_SetupAction(this, DoorSpiral_Wait);

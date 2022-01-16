@@ -6,7 +6,7 @@
 
 #include "z_obj_snowball2.h"
 
-#define FLAGS 0x00800000
+#define FLAGS (ACTOR_FLAG_800000)
 
 #define THIS ((ObjSnowball2*)thisx)
 

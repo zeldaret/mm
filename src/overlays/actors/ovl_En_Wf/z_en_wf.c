@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom_Chu/z_en_bom_chu.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
-#define FLAGS 0x00000415
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnWf*)thisx)
 
@@ -383,7 +383,7 @@ void func_809907D4(EnWf* this) {
     this->collider2.base.colType = COLTYPE_HIT3;
     this->collider3.base.colType = COLTYPE_HIT3;
     this->unk_2A0 = 80;
-    this->actor.flags &= ~0x400;
+    this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 80);
 }
 
@@ -394,7 +394,7 @@ void func_80990854(EnWf* this, GlobalContext* globalCtx) {
         this->collider3.base.colType = COLTYPE_HIT5;
         this->unk_2AC = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2B8, 10, 2, 0.3f, 0.2f);
-        this->actor.flags |= 0x400;
+        this->actor.flags |= ACTOR_FLAG_400;
     }
 }
 
@@ -542,7 +542,7 @@ void func_80990F0C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     this->actor.shape.shadowScale = 0.0f;
     this->actor.scale.y = 0.0f;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_2A0 = 60;
     this->actionFunc = func_80990F50;
 }
@@ -568,7 +568,7 @@ void func_80990F50(EnWf* this, GlobalContext* globalCtx) {
 void func_80990FC8(EnWf* this) {
     Animation_Change(&this->skelAnime, &D_060053D0, 0.5f, 0.0f, 7.0f, 3, 0.0f);
     this->unk_2A0 = 5;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = func_80991040;
 }
 
@@ -1172,7 +1172,7 @@ void func_80992D6C(EnWf* this) {
     if (this->actor.bgCheckFlags & 1) {
         this->actor.speedXZ = -6.0f;
     }
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_2A0 = 25;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
     this->actionFunc = func_80992E0C;

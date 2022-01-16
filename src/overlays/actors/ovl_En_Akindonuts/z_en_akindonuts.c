@@ -7,7 +7,7 @@
 #include "z_en_akindonuts.h"
 #include "objects/object_dnt/object_dnt.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAkindonuts*)thisx)
 
@@ -246,16 +246,16 @@ void func_80BED090(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        gSaveContext.weekEventReg[63] |= 0x8;
+        gSaveContext.weekEventReg[63] |= 8;
         gSaveContext.weekEventReg[63] &= (u8)~0x10;
     } else if (player->transformation == PLAYER_FORM_ZORA) {
-        gSaveContext.weekEventReg[63] &= (u8)~0x8;
+        gSaveContext.weekEventReg[63] &= (u8)~8;
         gSaveContext.weekEventReg[63] |= 0x10;
     } else if (player->transformation == PLAYER_FORM_GORON) {
-        gSaveContext.weekEventReg[63] |= 0x8;
+        gSaveContext.weekEventReg[63] |= 8;
         gSaveContext.weekEventReg[63] |= 0x10;
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        gSaveContext.weekEventReg[63] &= (u8)~0x8;
+        gSaveContext.weekEventReg[63] &= (u8)~8;
         gSaveContext.weekEventReg[63] &= (u8)~0x10;
     }
 }
@@ -630,7 +630,7 @@ void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
     switch (this->unk_33C) {
         case 0:
             if ((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.weekEventReg[62] & 2)) {
-                gSaveContext.weekEventReg[62] |= 0x2;
+                gSaveContext.weekEventReg[62] |= 2;
                 this->unk_33C = 0x15F0;
                 break;
             }
@@ -785,7 +785,7 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
 
         case 0x15FA:
             this->unk_33C = 0x160D;
-            gSaveContext.weekEventReg[62] |= 0x4;
+            gSaveContext.weekEventReg[62] |= 4;
             this->unk_32C |= 0x20;
             break;
 
@@ -1241,7 +1241,7 @@ void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_80BEEE10;
             } else if (this->unk_32C & 0x20) {
                 this->unk_32C &= ~0x20;
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_32C &= ~0x4;
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;

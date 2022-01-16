@@ -8,7 +8,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "overlays/actors/ovl_En_Encount4/z_en_encount4.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnSkb*)thisx)
 
@@ -232,7 +232,7 @@ void EnSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.floorHeight = this->actor.world.pos.y;
 
     if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 0)) {
-        this->actor.flags |= 0x100000;
+        this->actor.flags |= ACTOR_FLAG_100000;
     }
 
     switch (this->unk_3D6) {
@@ -249,7 +249,7 @@ void EnSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         default:
-            this->actor.flags &= ~0x100000;
+            this->actor.flags &= ~ACTOR_FLAG_100000;
             this->actor.hintId = 0x55;
             func_8099495C(this, globalCtx);
             break;
@@ -289,7 +289,7 @@ void func_80994DA8(EnSkb* this, GlobalContext* globalCtx) {
 
 void func_80994E2C(EnSkb* this) {
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_APPEAR);
     this->unk_3D0 = 0;
     this->unk_3DE = 0;
@@ -301,7 +301,7 @@ void func_80994E94(EnSkb* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     } else {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
 
     Math_ApproachZeroF(&this->actor.shape.yOffset, 1.0f, 800.0f);
@@ -352,8 +352,8 @@ void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80995190;
         this->actor.speedXZ = 0.0f;
     } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAIN) {
-        this->actor.flags |= (0x4 | 0x1);
-        this->actor.flags &= ~(0x8 | 0x1);
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->actor.hintId = 0x55;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_80995A30(this);
@@ -389,8 +389,8 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80995244(EnSkb* this, GlobalContext* globalCtx) {
-    this->actor.flags &= ~(0x8 | 0x1);
-    this->actor.flags |= (0x4 | 0x1);
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
     this->unk_3E2 = 0;
 
     switch (this->unk_3DE) {
@@ -424,8 +424,8 @@ void func_809952D8(EnSkb* this) {
 
 void func_8099533C(EnSkb* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(0x4 | 0x1);
-        this->actor.flags |= (0x8 | 0x1);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80994F7C(this, globalCtx);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
         this->actor.hintId = 0x55;
@@ -446,8 +446,8 @@ void func_809953E8(EnSkb* this) {
 
 void func_8099544C(EnSkb* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(0x4 | 0x1);
-        this->actor.flags |= (0x8 | 0x1);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80994F7C(this, globalCtx);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
         this->actor.hintId = 0x55;
@@ -483,8 +483,8 @@ void func_8099556C(EnSkb* this, GlobalContext* globalCtx) {
 
     this->actor.shape.rot.x = Math_SinS(this->unk_3D4 * sp26) * 20000.0f;
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(0x4 | 0x1);
-        this->actor.flags |= (0x8 | 0x1);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80994F7C(this, globalCtx);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f) &&
                (this->skelAnime.curFrame > 24.0f) && (this->skelAnime.curFrame < 28.0f)) {
@@ -538,7 +538,7 @@ void func_80995818(EnSkb* this, GlobalContext* globalCtx) {
 void func_809958F4(EnSkb* this) {
     Animation_Change(&this->skelAnime, &D_06003584, -1.0f, Animation_GetLastFrame(&D_06003584), 0.0f, 2, -4.0f);
     this->unk_3E4 = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
     this->unk_3DE = 1;
@@ -569,8 +569,8 @@ void func_80995A30(EnSkb* this) {
 
 void func_80995A8C(EnSkb* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(0x4 | 0x1);
-        this->actor.flags |= (0x8 | 0x1);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->actor.hintId = 0xFF;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, 12);
@@ -585,7 +585,7 @@ void func_80995A8C(EnSkb* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_3DA, 1, 0x2EE, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, 0x3830);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_WALK);
     }
 
     if ((this->actor.xzDistToPlayer > 800.0f) || func_80996594(this, globalCtx)) {
@@ -733,7 +733,7 @@ void func_809961E4(EnSkb* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = -6.0f;
     }
     this->unk_3E4 = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
     this->unk_3DE = 7;
     this->actionFunc = func_80996284;
@@ -793,7 +793,7 @@ void func_809963D8(EnSkb* this, GlobalContext* globalCtx) {
 void func_80996474(EnSkb* this) {
     this->unk_3D0 = 0;
     this->actor.draw = NULL;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_809964A0;
 }
 

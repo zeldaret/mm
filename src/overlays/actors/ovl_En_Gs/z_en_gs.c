@@ -7,7 +7,7 @@
 #include "z_en_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnGs*)thisx)
 
@@ -1024,7 +1024,7 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
         s16 sp2E;
         s16 sp2C;
 
-        if ((this->actor.flags & 0x40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
+        if ((this->actor.flags & ACTOR_FLAG_40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
             func_80999BC8(&this->actor, globalCtx);
             Actor_GetScreenPos(globalCtx, &this->actor, &sp2E, &sp2C);
             if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > 320) || (sp2C < 0) ||

@@ -183,7 +183,7 @@ void EffectShieldParticle_Draw(void* thisx, GraphicsContext* gfxCtx) {
             }
 
             SkinMatrix_SetTranslate(&spC4, this->position.x, this->position.y, this->position.z);
-            SkinMatrix_SetRotateRPY(&sp104, 0, elem->yaw, 0);
+            SkinMatrix_SetRotateRPY(&sp104, 0, elem->yaw, MTXMODE_NEW);
             SkinMatrix_MtxFMtxFMult(&spC4, &sp104, &sp84);
             SkinMatrix_SetRotateRPY(&sp104, 0, 0, elem->pitch);
             SkinMatrix_MtxFMtxFMult(&sp84, &sp104, &spC4);

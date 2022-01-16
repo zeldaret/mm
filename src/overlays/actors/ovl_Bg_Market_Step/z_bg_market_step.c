@@ -6,7 +6,7 @@
 
 #include "z_bg_market_step.h"
 
-#define FLAGS 0x10000020
+#define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_10000000)
 
 #define THIS ((BgMarketStep*)thisx)
 

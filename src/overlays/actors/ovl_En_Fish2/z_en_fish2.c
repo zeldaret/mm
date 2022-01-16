@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Mushi2/z_en_mushi2.h"
 #include "z_en_fish2.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnFish2*)thisx)
 
@@ -213,7 +213,7 @@ void EnFish2_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else if (this->actor.params != 0) {
         this->unk_2B4 = 10;
         this->actor.draw = NULL;
-        this->actor.flags |= 0x8000000;
+        this->actor.flags |= ACTOR_FLAG_8000000;
         this->actionFunc = func_80B2A01C;
     }
 }
@@ -898,8 +898,8 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
             gSaveContext.weekEventReg[81] &= (u8)~0x20;
             gSaveContext.weekEventReg[81] &= (u8)~0x40;
             gSaveContext.weekEventReg[81] &= (u8)~0x80;
-            gSaveContext.weekEventReg[82] &= (u8)~0x1;
-            gSaveContext.weekEventReg[82] &= (u8)~0x2;
+            gSaveContext.weekEventReg[82] &= (u8)~1;
+            gSaveContext.weekEventReg[82] &= (u8)~2;
         }
     }
 

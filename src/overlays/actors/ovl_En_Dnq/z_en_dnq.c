@@ -6,7 +6,7 @@
 
 #include "z_en_dnq.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnDnq*)thisx)
 
@@ -124,7 +124,7 @@ s32 func_80A52648(EnDnq* this, GlobalContext* globalCtx) {
 
     if (globalCtx->csCtx.state != 0) {
         if (!(this->unk_37C & 0x20)) {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_1DC = 0xFF;
             this->unk_37C |= 0x20;
         }
@@ -132,7 +132,7 @@ s32 func_80A52648(EnDnq* this, GlobalContext* globalCtx) {
         ret = true;
     } else {
         if (this->unk_37C & 0x20) {
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             this->unk_1DC = 0xFF;
             this->unk_37C &= ~0x20;
             func_8013AED4(&this->unk_37C, 3, 7);

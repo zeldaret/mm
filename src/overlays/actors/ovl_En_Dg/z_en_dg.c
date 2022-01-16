@@ -6,7 +6,7 @@
 
 #include "z_en_dg.h"
 
-#define FLAGS 0x00800019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnDg*)thisx)
 
@@ -357,9 +357,10 @@ void func_80989BF8(EnDg* this) {
     if (this->unk_286 < 14) {
         if (this->unk_286 % 2) {
             D_8098C2A8[this->unk_286].unk_04 =
-                0x3538 + ((gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & 0xF0) >> 4);
+                0x3538 + ((gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & (0x10 | 0x20 | 0x40 | 0x80)) >> 4);
         } else {
-            D_8098C2A8[this->unk_286].unk_04 = 0x3538 + (gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & 0xF);
+            D_8098C2A8[this->unk_286].unk_04 =
+                0x3538 + (gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & (1 | 2 | 4 | 8));
         }
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -394,10 +395,10 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
     D_8098C2A8_s* temp;
 
     if ((D_8098C2A0 != 0) && !(this->unk_280 & 1)) {
-        this->actor.flags |= 0x8000000;
+        this->actor.flags |= ACTOR_FLAG_8000000;
         this->unk_280 |= 1;
     } else if ((D_8098C2A0 == 0) && (this->unk_280 & 1)) {
-        this->actor.flags &= ~0x8000000;
+        this->actor.flags &= ~ACTOR_FLAG_8000000;
         this->unk_280 &= ~1;
     }
 
@@ -406,16 +407,16 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
         this->unk_290 = 1;
         D_8098C2FC = D_8098C2A8[this->unk_286];
         if (D_8098C2A0 == 0) {
-            this->actor.flags |= 0x8000000;
+            this->actor.flags |= ACTOR_FLAG_8000000;
             D_8098C2A0 = 1;
             this->unk_280 |= 1;
         }
 
         func_80989140(&this->skelAnime, sAnimations, 5);
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.speedXZ = 0.0f;
         if (Player_GetMask(globalCtx) == PLAYER_MASK_TRUTH) {
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
             func_800B8614(&this->actor, globalCtx, 100.0f);
             this->actionFunc = func_8098BBEC;
         } else {
@@ -838,7 +839,7 @@ void func_8098B004(EnDg* this, GlobalContext* globalCtx) {
 
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
-    if ((this->actor.xzDistToPlayer < 60.0f) && (this->collider.base.ocFlags1 & 2)) {
+    if ((this->actor.xzDistToPlayer < 60.0f) && (this->collider.base.ocFlags1 & OC1_HIT)) {
         this->actor.shape.rot.y += 0x71C;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
@@ -1054,9 +1055,9 @@ void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
 void func_8098BA64(EnDg* this, GlobalContext* globalCtx) {
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->unk_290 = 2;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         if (D_8098C2A0 != 0) {
-            this->actor.flags &= ~0x8000000;
+            this->actor.flags &= ~ACTOR_FLAG_8000000;
             D_8098C2A0 = 0;
             this->unk_280 &= ~1;
         }
@@ -1096,7 +1097,7 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
 
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80989D38(this, globalCtx);
         this->actionFunc = func_8098BC54;
     } else {

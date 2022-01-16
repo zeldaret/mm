@@ -6,7 +6,7 @@
 
 #include "z_en_baisen.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnBaisen*)thisx)
 

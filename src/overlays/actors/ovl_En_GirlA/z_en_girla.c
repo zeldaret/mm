@@ -6,7 +6,7 @@
 
 #include "z_en_girla.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnGirlA*)thisx)
 
@@ -538,7 +538,7 @@ void EnGirlA_InitalUpdate(EnGirlA* this, GlobalContext* globalCtx) {
     ShopItemEntry* shopItem = &sShopItemEntries[params];
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.objBankIndex = this->objIndex;
         this->actor.textId = shopItem->descriptionTextId;
         this->choiceTextId = shopItem->choiceTextId;
@@ -558,7 +558,7 @@ void EnGirlA_InitalUpdate(EnGirlA* this, GlobalContext* globalCtx) {
         this->itemParams = shopItem->params;
         this->drawFunc = shopItem->drawFunc;
         this->getItemDrawId = shopItem->getItemDrawId;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         Actor_SetScale(&this->actor, 0.25f);
         this->actor.shape.yOffset = 24.0f;
         this->actor.shape.shadowScale = 4.0f;

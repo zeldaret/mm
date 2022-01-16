@@ -6,7 +6,7 @@
 
 #include "z_en_railgibud.h"
 
-#define FLAGS 0x00000415
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnRailgibud*)thisx)
 
@@ -363,7 +363,7 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
 
 void func_80BA5DBC(EnRailgibud* this) {
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_3F2 = 0;
     this->unk_3F0 = 0;
     this->actionFunc = func_80BA5E18;
@@ -383,7 +383,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
                 Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
             } else if (!(player->stateFlags2 & 0x80)) {
                 Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
-                this->actor.flags |= 1;
+                this->actor.flags |= ACTOR_FLAG_1;
                 this->unk_3F0 = 2;
                 this->unk_3F2 = 0;
             }
@@ -412,7 +412,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
                     player->unk_AE8 = 100;
                 }
                 Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
-                this->actor.flags |= 1;
+                this->actor.flags |= ACTOR_FLAG_1;
                 this->unk_3F0 = 2;
                 this->unk_3F2 = 0;
             }
@@ -555,7 +555,7 @@ void func_80BA6604(EnRailgibud* this, GlobalContext* globalCtx) {
 
 void func_80BA6664(EnRailgibud* this) {
     Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->unk_3F2 = 0;
     this->actionFunc = func_80BA66C8;
@@ -568,7 +568,7 @@ void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             } else {
                 this->actor.draw = NULL;
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
                 this->actor.update = func_80BA7878;
             }
         } else {
@@ -829,10 +829,10 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->actionFunc != func_80BA5E18) && (this->actionFunc != func_80BA64AC) &&
         (this->actionFunc != func_80BA60B0) && (this->actionFunc != func_80BA61A0) &&
         (this->actionFunc != func_80BA66C8)) {
-        if ((this->actor.flags & 5) == 5) {
+        if CHECK_FLAG_ALL (this->actor.flags, (ACTOR_FLAG_1 | ACTOR_FLAG_4)) {
             if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
-                this->actor.flags &= ~5;
-                this->actor.flags |= 9;
+                this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+                this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 this->actor.hintId = 0xFF;
                 this->actor.textId = 0;
                 if ((this->actionFunc != func_80BA57F8) && (this->actionFunc != func_80BA62D4)) {
@@ -840,8 +840,8 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
                 }
             }
         } else if (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO) {
-            this->actor.flags &= ~(0x8 | 0x1);
-            this->actor.flags |= (0x4 | 0x1);
+            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+            this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
             if (this->unk_3F8 == 1) {
                 this->actor.hintId = 0x2A;
             } else {
@@ -861,7 +861,8 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
             this->textId = 0x13B2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
-        } else if (((this->actor.flags & 9) == 9) && !(this->collider.base.acFlags & AC_HIT)) {
+        } else if (CHECK_FLAG_ALL(this->actor.flags, (ACTOR_FLAG_1 | ACTOR_FLAG_8)) &&
+                   !(this->collider.base.acFlags & AC_HIT)) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
     } else {
@@ -993,8 +994,8 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
 
     func_80BA7C78(this);
     this->unk_3FE = 99;
-    this->actor.flags |= 0x100000;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_100000;
+    this->actor.flags |= ACTOR_FLAG_10;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);

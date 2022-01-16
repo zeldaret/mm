@@ -6,7 +6,7 @@
 
 #include "z_en_cow.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnCow*)thisx)
 
@@ -208,7 +208,7 @@ void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
 
 void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801477B4(globalCtx);
         this->actionFunc = EnCow_Idle;
     }
@@ -216,7 +216,7 @@ void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx) {
 
 void EnCow_GiveMilkEnd(EnCow* this, GlobalContext* globalCtx) {
     if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnCow_Idle;
     }
 }
@@ -232,7 +232,7 @@ void EnCow_GiveMilkWait(EnCow* this, GlobalContext* globalCtx) {
 
 void EnCow_GiveMilk(EnCow* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801477B4(globalCtx);
         this->actionFunc = EnCow_GiveMilkWait;
         Actor_PickUp(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
@@ -261,7 +261,7 @@ void EnCow_Talk(EnCow* this, GlobalContext* globalCtx) {
             this->actionFunc = EnCow_TalkEnd;
         }
     } else {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 170.0f);
         this->actor.textId = 0x32C8; //! @bug textId is reset to this no matter the intial value
     }
@@ -279,7 +279,7 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
                        ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
                 D_801BDAA4 = 0;
                 this->actionFunc = EnCow_Talk;
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, globalCtx, 170.0f);
                 this->actor.textId = 0x32C8; // Text to give milk after playing Epona's Song.
 
@@ -303,7 +303,7 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
                 } else {
                     this->actor.textId = 0x32CA; // Text if you don't have an empty bottle.
                 }
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, globalCtx, 170.0f);
                 this->actionFunc = EnCow_Talk;
             }

@@ -6,7 +6,7 @@
 
 #include "z_en_rd.h"
 
-#define FLAGS 0x00000415
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnRd*)thisx)
 
@@ -222,7 +222,7 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if (this->actor.params == ENRD_GET_3) {
-        this->actor.flags |= 0x80;
+        this->actor.flags |= ACTOR_FLAG_80;
     }
 
     if (this->actor.params == ENRD_GET_4) {
@@ -608,7 +608,7 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
                 func_808D53C0(this, globalCtx);
             }
         } else if (globalCtx->grabPlayer(globalCtx, player)) {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             func_808D586C(this);
         }
     } else if (this->actor.params > ENRD_GET_0) {
@@ -794,7 +794,7 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
                 globalCtx->damagePlayer(globalCtx, -8);
                 func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->unk_3EA = 20;
-                func_800B8E58(player, player->ageProperties->unk_92 + 0x6805);
+                func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
             }
             break;
 
@@ -809,7 +809,7 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
             this->actor.targetMode = 0;
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             this->unk_3ED = 10;
             this->unk_3EE = 15;
             func_808D4FE0(this, globalCtx);
@@ -918,7 +918,7 @@ void func_808D616C(EnRd* this) {
         this->actor.speedXZ = -2.0f;
     }
 
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3EF = 11;
     this->actionFunc = func_808D6200;
@@ -952,7 +952,7 @@ void func_808D6310(EnRd* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &D_06009298, -1.0f);
     this->unk_3EF = 12;
     this->unk_3D6 = 300;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->actionFunc = func_808D6388;

@@ -6,7 +6,7 @@
 
 #include "z_en_ending_hero2.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnEndingHero2*)thisx)
 
@@ -36,7 +36,7 @@ extern AnimationHeader D_060011C0;
 void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero2* this = THIS;
 
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;

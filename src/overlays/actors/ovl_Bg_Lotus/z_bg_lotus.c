@@ -101,7 +101,7 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
             }
             if (gSaveContext.playerForm != PLAYER_FORM_DEKU) {
                 this->timer = 40;
-                this->dyna.actor.flags |= 0x10;
+                this->dyna.actor.flags |= ACTOR_FLAG_10;
                 this->actionFunc = BgLotus_Sink;
                 return;
             }
@@ -154,7 +154,7 @@ void BgLotus_WaitToAppear(BgLotus* this, GlobalContext* globalCtx) {
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         Actor_SetScale(&this->dyna.actor, 0.1f);
         this->dyna.actor.world.pos.y = CLAMP_MIN(this->height, this->dyna.actor.floorHeight);
-        this->dyna.actor.flags &= ~0x10;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_10;
         this->timer2 = 96;
         this->actionFunc = BgLotus_Wait;
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;

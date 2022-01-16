@@ -6,7 +6,7 @@
 
 #include "z_en_kendo_js.h"
 
-#define FLAGS 0x0A000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnKendoJs*)thisx)
 

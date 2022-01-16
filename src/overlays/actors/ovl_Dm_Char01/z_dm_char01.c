@@ -6,7 +6,7 @@
 
 #include "z_dm_char01.h"
 
-#define FLAGS 0x02000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((DmChar01*)thisx)
 

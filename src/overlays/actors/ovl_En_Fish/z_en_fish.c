@@ -214,7 +214,7 @@ void EnFish_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_246 = (u32)Rand_Next() >> 0x10;
 
     if (sp36 == ENFISH_0) {
-        this->actor.flags |= 0x10;
+        this->actor.flags |= ACTOR_FLAG_10;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 8.0f);
         func_8091E810(this);
     } else if (sp36 == ENFISH_1) {
@@ -605,7 +605,7 @@ void func_8091ECF4(EnFish* this) {
     this->actor.gravity = 0.0f;
     this->actor.terminalVelocity = 0.0f;
     this->actor.shape.yOffset = 0.0f;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->unk_240 = 200;
     func_8091D660(this);
     this->unkFunc = func_8091ED70;
@@ -666,7 +666,7 @@ void func_8091EF30(EnFish* this) {
     if (this->actor.velocity.y < -1.0f) {
         this->actor.velocity.y = -1.0f;
     }
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->actor.home.pos.x = this->actor.world.pos.x;
     this->actor.home.pos.y = this->actor.world.pos.y - 20.0f;
     this->actor.home.pos.z = this->actor.world.pos.z;

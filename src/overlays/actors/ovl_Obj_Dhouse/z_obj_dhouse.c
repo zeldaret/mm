@@ -6,7 +6,7 @@
 
 #include "z_obj_dhouse.h"
 
-#define FLAGS 0x00400010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
 
 #define THIS ((ObjDhouse*)thisx)
 

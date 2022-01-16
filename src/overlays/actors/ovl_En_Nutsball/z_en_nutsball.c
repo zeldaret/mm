@@ -7,7 +7,7 @@
 #include "z_en_nutsball.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnNutsball*)thisx)
 
@@ -155,7 +155,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
 
-        this->actor.flags |= 0x1000000;
+        this->actor.flags |= ACTOR_FLAG_1000000;
 
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);

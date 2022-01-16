@@ -7,7 +7,7 @@
 #include "z_en_tanron3.h"
 #include "overlays/actors/ovl_Boss_03/z_boss_03.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron3*)thisx)
 
@@ -112,7 +112,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DA20, &D_0600DAAC, this->jointTable, this->morphTable, 10);
     Actor_SetScale(&this->actor, 0.02f);
     EnTanron3_SetupLive(this, globalCtx);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
     sGyorg = (Boss03*)this->actor.parent;

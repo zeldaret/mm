@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
-#define FLAGS 0x00000410
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((ObjSyokudai*)thisx)
 

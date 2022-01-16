@@ -6,7 +6,7 @@
 
 #include "z_en_sw.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnSw*)thisx)
 
@@ -289,7 +289,7 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
         temp = arg2;
     }
 
-    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, 0);
+    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
@@ -688,7 +688,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
         } else if (!func_808D90C4(this)) {
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             if (!ENSW_GET_3(&this->actor)) {
                 func_8013BC6C(&this->skelAnime, sAnimations, 3);
             }
@@ -1198,8 +1198,8 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
                 break;
 
             case 1:
-                this->actor.flags &= ~1;
-                this->actor.flags |= 0x10;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_10;
 
                 if (this->actor.world.rot.z < 0) {
                     this->unk_460 = -thisx->world.rot.z;
@@ -1219,8 +1219,8 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             case 2:
             case 3:
-                this->actor.flags &= ~1;
-                this->actor.flags |= 0x10;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_10;
 
                 if (this->actor.world.rot.z < 0) {
                     this->unk_460 = -thisx->world.rot.z;

@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Dg/z_en_dg.h"
 #include "objects/object_aob/object_aob.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnAob01*)thisx)
 
@@ -494,7 +494,7 @@ void func_809C2060(EnAob01* this, GlobalContext* globalCtx) {
     if (func_809C15BC(this)) {
         if (func_809C2EC4(this, globalCtx) && !(this->unk_2D2 & 0x100)) {
             if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, globalCtx, 100.0f);
                 this->unk_2D2 |= 8;
                 this->actionFunc = func_809C21E0;
@@ -528,7 +528,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
         }
         this->actor.textId = 0;
         this->unk_2D2 &= ~8;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = func_809C2060;
         return;
     }
@@ -543,7 +543,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
 
     if (this->unk_2D2 & 8) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
             func_80123E90(globalCtx, &this->actor);
             if (this->unk_2D2 & 4) {
                 func_809C16DC(this, globalCtx);
@@ -700,7 +700,7 @@ void func_809C2824(EnAob01* this, GlobalContext* globalCtx) {
 
 void func_809C28B8(EnAob01* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80123E90(globalCtx, &this->actor);
         this->unk_434 = gSaveContext.unk_3F5C;
         switch ((gSaveContext.eventInf[0] & 0xF8) >> 3) {
@@ -934,7 +934,7 @@ void EnAob01_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 0:
             func_809C2FA0();
             func_809C11EC(this, globalCtx);
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             this->actionFunc = func_809C2060;
             break;
 
@@ -945,7 +945,7 @@ void EnAob01_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_430 = this->actor.cutscene;
             func_809C2594(this, globalCtx);
             ActorCutscene_SetIntentToPlay(this->unk_430);
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             func_809C2F34(this, globalCtx);
             this->actionFunc = func_809C2824;
             break;
@@ -953,8 +953,8 @@ void EnAob01_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 3:
             func_809C2FA0();
             func_809C11EC(this, globalCtx);
-            this->actor.flags |= 1;
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_10000;
             this->actionFunc = func_809C28B8;
             break;
     }

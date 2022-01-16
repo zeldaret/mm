@@ -57,13 +57,13 @@ void EnCha_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Collider_UpdateCylinder(&this->actor, &this->collider);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.home.rot.z = 0;
     this->actionFunc = EnCha_Idle;
     this->actor.home.rot.x = this->actor.home.rot.z;
-    gSaveContext.weekEventReg[60] &= 0xFB;
+    gSaveContext.weekEventReg[60] &= (u8)~4;
 }
 
 void EnCha_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -87,7 +87,7 @@ void EnCha_Ring(EnCha* this, GlobalContext* globalCtx) {
 void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
     if (gSaveContext.weekEventReg[60] & 4) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
-        gSaveContext.weekEventReg[60] &= 0xFB;
+        gSaveContext.weekEventReg[60] &= (u8)~4;
         this->actor.home.rot.z = 0x7D0;
     }
     if (this->collider.base.acFlags & AC_HIT) {

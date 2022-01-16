@@ -6,7 +6,7 @@
 
 #include "z_dm_stk.h"
 
-#define FLAGS 0x02000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((DmStk*)thisx)
 
@@ -1529,7 +1529,7 @@ void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
 
     if (globalCtx->csCtx.state == 0) {
         func_80AA1AF8(this, globalCtx);
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->unk_328++;
         if (this->unk_328 > 800) {
             this->unk_328 = 0;
@@ -1547,7 +1547,7 @@ void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA27EC(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         func_80AA1AF8(this, globalCtx);
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
 
         if (this->unk_2E0 == 33) {
             this->actor.targetArrowOffset = 3100.0f;

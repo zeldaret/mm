@@ -6,7 +6,7 @@
 
 #include "z_en_ossan.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnOssan*)thisx)
 
@@ -1350,19 +1350,19 @@ u16 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
             this->animationIdx = 10;
-            if (gSaveContext.weekEventReg[0x12] & 0x10) {
+            if (gSaveContext.weekEventReg[18] & 0x10) {
                 return sWelcomeDekuTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_ZORA:
             this->animationIdx = 8;
-            if (gSaveContext.weekEventReg[0x12] & 8) {
+            if (gSaveContext.weekEventReg[18] & 8) {
                 return sWelcomeZoraTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_GORON:
             this->animationIdx = 6;
-            if (gSaveContext.weekEventReg[0x12] & 4) {
+            if (gSaveContext.weekEventReg[18] & 4) {
                 return sWelcomeGoronTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
@@ -1381,17 +1381,17 @@ u16 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
-            if (gSaveContext.weekEventReg[0x37] & 0x10) {
+            if (gSaveContext.weekEventReg[55] & 0x10) {
                 return sWelcomeDekuTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_ZORA:
-            if (gSaveContext.weekEventReg[0x37] & 8) {
+            if (gSaveContext.weekEventReg[55] & 8) {
                 return sWelcomeZoraTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_GORON:
-            if (gSaveContext.weekEventReg[0x37] & 4) {
+            if (gSaveContext.weekEventReg[55] & 4) {
                 return sWelcomeGoronTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
@@ -1402,22 +1402,22 @@ u16 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_SetHaveMet(EnOssan* this) {
     switch (this->textId) {
         case 0x06A9:
-            gSaveContext.weekEventReg[0x12] |= 0x10;
+            gSaveContext.weekEventReg[18] |= 0x10;
             break;
         case 0x06C6:
-            gSaveContext.weekEventReg[0x37] |= 0x10;
+            gSaveContext.weekEventReg[55] |= 0x10;
             break;
         case 0x06A7:
-            gSaveContext.weekEventReg[0x12] |= 8;
+            gSaveContext.weekEventReg[18] |= 8;
             break;
         case 0x06C4:
-            gSaveContext.weekEventReg[0x37] |= 8;
+            gSaveContext.weekEventReg[55] |= 8;
             break;
         case 0x06A5:
-            gSaveContext.weekEventReg[0x12] |= 4;
+            gSaveContext.weekEventReg[18] |= 4;
             break;
         case 0x06C2:
-            gSaveContext.weekEventReg[0x37] |= 4;
+            gSaveContext.weekEventReg[55] |= 4;
             break;
     }
 }
@@ -1427,7 +1427,7 @@ void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx) {
     ShopItem* shopItems;
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(globalCtx, &this->actor);
         shopItems = sShops[this->actor.params];
@@ -1495,7 +1495,7 @@ void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx) {
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
         this->blinkFunc = EnOssan_WaitForBlink;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         EnOssan_SetupAction(this, EnOssan_Idle);
     }
 }

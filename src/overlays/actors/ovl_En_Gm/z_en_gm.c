@@ -7,7 +7,7 @@
 #include "z_en_gm.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnGm*)thisx)
 
@@ -802,7 +802,7 @@ void func_8094F3D0(EnGm* this, GlobalContext* globalCtx) {
         this->unk_3AC = 0.0f;
     }
     Math_SmoothStepToF(&this->unk_3B0, this->unk_3AC, 0.8f, 40.0f, 10.0f);
-    Matrix_InsertTranslation(this->unk_3B0, 0.0f, 0.0f, 1);
+    Matrix_InsertTranslation(this->unk_3B0, 0.0f, 0.0f, MTXMODE_APPLY);
     this->unk_3F0 = sp28;
 }
 
@@ -963,7 +963,7 @@ s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
             this->unk_3B8 = arg2->unk8 - arg2->unk4;
             this->unk_3BA = sp56 - arg2->unk4;
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_3A4 |= 0x100;
             this->unk_3A4 |= 0x200;
             func_8094E054(this, globalCtx, 7);
@@ -1169,7 +1169,7 @@ s32 func_809501B8(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 s32 func_80950280(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
     s32 phi_v1;
 
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
     this->unk_3A4 = 0;
     this->unk_3C8 = 0;
@@ -1510,11 +1510,11 @@ void func_80950CDC(EnGm* this, GlobalContext* globalCtx) {
     if (!func_80133038(globalCtx, (void*)&D_80951820, &sp20) ||
         ((this->unk_258 != sp20.unk0) && !func_80950280(this, globalCtx, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         sp20.unk0 = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
     this->unk_258 = sp20.unk0;
     this->unk_268 = func_8094F074(this, globalCtx);
