@@ -512,7 +512,7 @@ void EnGinkoMan_SetupBankAward(EnGinkoMan* this) {
 
 void EnGinkoMan_BankAward(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        // ? when would bank have a parent?
+        // Parent is the player when starting to receive the award
         this->actor.parent = NULL;
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
@@ -535,7 +535,7 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
     this->actionFunc = EnGinkoMan_BankAward2;
 }
 
-// separate function to handle bank rewards... if the bank has a parent actor? might be unused
+// separate function to handle bank rewards... called while the player is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (!(gSaveContext.weekEventReg[10] & 8) && (this->curTextId == 0x45B)) {
@@ -543,11 +543,11 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
             // it!"
             gSaveContext.weekEventReg[10] |= 8;
             Message_StartTextbox(globalCtx, 0x47A, &this->actor);
-            this->curTextId = 0x47A; // "See! Doesn't it hold more than your old one?
+            this->curTextId = 0x47A; // Message after receiving reward for depositing 200 rupees.
         } else {
             Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
             Message_StartTextbox(globalCtx, 0x47B, &this->actor);
-            this->curTextId = 0x47B; // "Is that so?  Think it over, little guy!  So what are you gonna do?"
+            this->curTextId = 0x47B; // Message after receiving reward for depositing 1000 rupees.
         }
 
         EnGinkoMan_SetupDialogue(this);
@@ -633,8 +633,8 @@ void EnGinkoMan_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* arg) {
-    EnGinkoMan* this = (EnGinkoMan*)arg;
+                                Actor* thisx) {
+    EnGinkoMan* this = THIS;
 
     if (limbIndex == 15) {
         *dList = D_0600B1D8;
@@ -650,10 +650,10 @@ s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
         Matrix_InsertZRotation_s(-this->limb8Rot.x, MTXMODE_APPLY);
     }
 
-    return 0;
+    return false;
 }
 
-void EnGinkoMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
+void EnGinkoMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
 void EnGinkoMan_Draw(Actor* thisx, GlobalContext* globalCtx) {

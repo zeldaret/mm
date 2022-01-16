@@ -721,7 +721,7 @@ void func_808FB42C(EnRr* this, GlobalContext* globalCtx) {
         sp74.y = this->actor.world.pos.y + 20.0f;
         sp74.z = this->actor.world.pos.z;
         func_800B3030(globalCtx, &sp74, &gZeroVec3f, &gZeroVec3f, 100, 0, 0);
-        Audio_PlaySoundAtPosition(globalCtx, &sp74, 11, NA_SE_EN_EXTINCT);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &sp74, 11, NA_SE_EN_EXTINCT);
     } else {
         temp_f20 = this->actor.scale.y * 66.66667f;
 

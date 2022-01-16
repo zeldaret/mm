@@ -356,7 +356,7 @@ void func_80B7114C(EnRailSkb* this, GlobalContext* globalCtx) {
             this->unk_402 |= 1;
             func_80B712FC(this);
         } else {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
             func_80B71488(this);
         }
     } else if (this->unk_3F0 == 1) {
@@ -380,7 +380,7 @@ void func_80B7123C(EnRailSkb* this, GlobalContext* globalCtx) {
             this->unk_402 |= 1;
             func_80B712FC(this);
         } else {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
             func_80B71488(this);
         }
     }
@@ -882,7 +882,7 @@ void func_80B726B4(EnRailSkb* this, GlobalContext* globalCtx) {
         end = ARRAY_COUNT(this->unk_234);
     }
 
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < end; i++) {
         yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_234[i]);
@@ -968,7 +968,7 @@ void func_80B72970(EnRailSkb* this, GlobalContext* globalCtx) {
 
         if ((Actor_ApplyDamage(&this->actor) == 0) && (this->actor.colChkInfo.damageEffect != 3) &&
             (this->actor.colChkInfo.damageEffect != 4)) {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
             func_80B71488(this);
             return;
         }

@@ -26,8 +26,9 @@ void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
 
-s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg);
-void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg);
+s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                             Actor* thisx);
+void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 extern AnimationHeader D_06000FDC;
 extern AnimationHeader D_06005B58;
@@ -441,7 +442,7 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static void* sEyeTextures[] = { D_060049F0, D_06004E70, D_06005270 };
+    static TexturePtr sEyeTextures[] = { D_060049F0, D_06004E70, D_06005270 };
     EnBji01* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

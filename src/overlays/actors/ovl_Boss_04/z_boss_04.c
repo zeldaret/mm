@@ -551,7 +551,7 @@ void func_809ED2A0(Boss04* this, GlobalContext* globalCtx) {
     if ((this->unk_1F8 == 2) || (this->unk_1F8 == 5)) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                     this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_IT_BIG_BOMB_EXPLOSION);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_IT_BIG_BOMB_EXPLOSION);
     }
 
     if (this->unk_1FA == 3) {
