@@ -292,7 +292,6 @@ void EnYb_ReceiveMask(EnYb* this, GlobalContext* globalCtx) {
 }
 
 void EnYb_Talk(EnYb* this, GlobalContext* globalCtx) {
-
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     EnYb_UpdateAnimation(this, globalCtx);
