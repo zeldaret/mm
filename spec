@@ -2441,8 +2441,7 @@ beginseg
     name "ovl_En_Bom_Bowl_Man"
     compress
     include "build/src/overlays/actors/ovl_En_Bom_Bowl_Man/z_en_bom_bowl_man.o"
-    include "build/data/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man.data.o"
-    include "build/data/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man_reloc.o"
 endseg
 
 beginseg
