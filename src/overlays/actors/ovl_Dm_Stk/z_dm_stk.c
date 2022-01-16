@@ -1631,7 +1631,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_337].segment);
 
-                    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_stk2_Matanimheader_008658));
+                    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_stk2_Matanimheader_008658));
                     Gfx_DrawDListOpa(globalCtx, object_stk2_DL_007840);
                     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_336].segment);
 

@@ -1359,7 +1359,8 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_in_Skel_014EA8, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_in_Skel_014EA8, NULL, this->jointTable, this->morphTable,
+                       20);
     func_808F30B0(&this->skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->colliderCylinder);
     Collider_SetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -1535,9 +1536,9 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         TexturePtr sp38[] = { object_in_Tex_0035E0, object_in_Tex_004820, object_in_Tex_004C20, object_in_Tex_0043E0 };
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp38[this->unk482]));
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(&object_in_Tex_003520));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(object_in_Tex_003520));
     } else {
-        AnimatedMat_DrawStep(globalCtx, Lib_SegmentedToVirtual(&object_in_Matanimheader_001C30),
+        AnimatedMat_DrawStep(globalCtx, Lib_SegmentedToVirtual(object_in_Matanimheader_001C30),
                              this->unk4AC & 8 ? 1 : 0);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);

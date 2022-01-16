@@ -495,7 +495,8 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->skelAnime.animation == &object_boj_Anim_0008C0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+    if ((this->skelAnime.animation == &object_boj_Anim_0008C0) &&
+        Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }

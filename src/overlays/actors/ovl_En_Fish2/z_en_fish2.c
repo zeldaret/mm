@@ -157,8 +157,8 @@ void EnFish2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.params == 0) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fb_Skel_006190, &object_fb_Anim_0013AC, this->jointTable, this->morphTable,
-                           24);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fb_Skel_006190, &object_fb_Anim_0013AC,
+                           this->jointTable, this->morphTable, 24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
             if (gSaveContext.weekEventReg[81] & 0x10) {
@@ -1091,12 +1091,12 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (!ptr->unk_00) {
-            u32 phi_v0;
+            TexturePtr phi_v0;
 
             if (Rand_ZeroOne() < 0.5f) {
-                phi_v0 = &gameplay_keep_Tex_091CE0;
+                phi_v0 = gameplay_keep_Tex_091CE0;
             } else {
-                phi_v0 = &gameplay_keep_Tex_091BE0;
+                phi_v0 = gameplay_keep_Tex_091BE0;
             }
 
             ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));

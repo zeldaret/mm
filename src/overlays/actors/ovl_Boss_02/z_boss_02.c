@@ -1354,9 +1354,9 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     if (this->actor.params == 0) {
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&object_boss02_Tex_0003A0));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_boss02_Tex_0003A0));
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&object_boss02_Tex_0041A0));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_boss02_Tex_0041A0));
     }
 
     gSPSegment(POLY_OPA_DISP++, 0x0D, matrix);
@@ -2157,7 +2157,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
 
             if (this->unk_1D1C == (u32)(KREG(92) + 125)) {
                 TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt,
-                                       Lib_SegmentedToVirtual(&object_boss02_Tex_008650), 160, 180, 128, 40);
+                                       Lib_SegmentedToVirtual(object_boss02_Tex_008650), 160, 180, 128, 40);
             }
 
             if (this->unk_1D1C == (u32)(BREG(27) + 335)) {

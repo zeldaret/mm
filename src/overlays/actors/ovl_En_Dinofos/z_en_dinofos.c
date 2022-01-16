@@ -466,7 +466,8 @@ void func_8089B100(EnDinofos* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp3C;
 
-    Animation_Change(&this->skelAnime, &object_dinofos_Anim_001CCC, 1.0f, Animation_GetLastFrame(&object_dinofos_Anim_001CCC),
+    Animation_Change(&this->skelAnime, &object_dinofos_Anim_001CCC, 1.0f,
+                     Animation_GetLastFrame(&object_dinofos_Anim_001CCC),
                      Animation_GetLastFrame(&object_dinofos_Anim_001CCC), 2, 0.0f);
     func_800BE33C(&camera->eye, &camera->at, &this->unk_29A, true);
     Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &sp3C);

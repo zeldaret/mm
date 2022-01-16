@@ -196,8 +196,8 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (actor == NULL) {
             Actor_ProcessInitChain(thisx, sInitChain);
             ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 21.0f);
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dno_Skel_00E1F8, &object_dno_Anim_007CA4, this->jointTable,
-                               this->morphTable, 28);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dno_Skel_00E1F8, &object_dno_Anim_007CA4,
+                               this->jointTable, this->morphTable, 28);
             Collider_InitCylinder(globalCtx, &this->collider);
             Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
             Actor_UpdateBgCheckInfo(globalCtx, thisx, 0.0f, 0.0f, 0.0f, 4);

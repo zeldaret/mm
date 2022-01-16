@@ -58,7 +58,9 @@
         <DList Name="object_hanareyama_obj_DL_003578" Offset="0x3578" />
         <Texture Name="object_hanareyama_obj_Tex_003638" OutName="tex_003638" Format="i4" Width="64" Height="64" Offset="0x3638" />
         <Texture Name="object_hanareyama_obj_Tex_003E38" OutName="tex_003E38" Format="rgba16" Width="32" Height="32" Offset="0x3E38" />
-        <Blob Name="object_hanareyama_obj_Blob_004638" Size="0xD8" Offset="0x4638" /> <!-- array of 54 displaylist pointers --> 
+        <Array Name="object_hanareyama_obj_DLArray_004638" Count="54" Offset="0x4638">
+            <Pointer Type="Gfx"/>
+        </Array>
         <Array Name="object_hanareyama_obj_Vec_004710" Count="54" Offset="0x4710">
             <Vector Type="s16" Dimensions="3" />
         </Array>

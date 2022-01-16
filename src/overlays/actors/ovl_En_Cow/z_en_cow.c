@@ -346,8 +346,8 @@ void EnCow_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &gCowBodyChewAnim) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COW_CRY);
-            Animation_Change(&this->skelAnime, &gCowBodyMoveHeadAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowBodyMoveHeadAnim),
-                             ANIMMODE_ONCE, 1.0f);
+            Animation_Change(&this->skelAnime, &gCowBodyMoveHeadAnim, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&gCowBodyMoveHeadAnim), ANIMMODE_ONCE, 1.0f);
         } else {
             Animation_Change(&this->skelAnime, &gCowBodyChewAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowBodyChewAnim),
                              ANIMMODE_LOOP, 1.0f);

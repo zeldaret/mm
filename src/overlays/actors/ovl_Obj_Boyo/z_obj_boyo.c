@@ -65,7 +65,7 @@ void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->unk_190 = Lib_SegmentedToVirtual(&object_boyo_Matanimheader_000E88);
+    this->unk_190 = Lib_SegmentedToVirtual(object_boyo_Matanimheader_000E88);
 }
 
 void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {

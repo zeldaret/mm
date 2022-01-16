@@ -41,6 +41,6 @@ void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_smtower_Matanimheader_001788));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_smtower_Matanimheader_001788));
     Gfx_DrawDListXlu(globalCtx, object_smtower_DL_000520);
 }

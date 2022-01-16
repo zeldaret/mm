@@ -1224,8 +1224,8 @@ void func_80B44FEC(void) {
 }
 
 void func_80B45080(void) {
-    D_80B50400 = Lib_SegmentedToVirtual(&object_uch_Matanimheader_000560);
-    D_80B503FC = Lib_SegmentedToVirtual(&object_uch_Matanimheader_000550);
+    D_80B50400 = Lib_SegmentedToVirtual(object_uch_Matanimheader_000560);
+    D_80B503FC = Lib_SegmentedToVirtual(object_uch_Matanimheader_000550);
 }
 
 s32 func_80B450C0(f32* x1, f32* z1, f32 x2, f32 z2, f32 speed) {
@@ -3638,8 +3638,8 @@ void func_80B4B8BC(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(globalCtx, &this->actor);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, &object_dog_Anim_0021C8, this->jointTable, this->morphTable,
-                           13);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, &object_dog_Anim_0021C8,
+                           this->jointTable, this->morphTable, 13);
         func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &gZeroVec3s, 3000, 0.1f, 0.0f, 0.0f);
         func_80B44664(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);

@@ -152,7 +152,7 @@ void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
     s32 i;
-    Gfx** gfx = Lib_SegmentedToVirtual(object_hanareyama_obj_Blob_004638);
+    Gfx** gfx = Lib_SegmentedToVirtual(object_hanareyama_obj_DLArray_004638);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -177,7 +177,7 @@ void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
 
 void func_80A5063C(EnDnb* this, GlobalContext* globalCtx) {
     s32 i;
-    Gfx** gfx = Lib_SegmentedToVirtual(object_hanareyama_obj_Blob_004638);
+    Gfx** gfx = Lib_SegmentedToVirtual(object_hanareyama_obj_DLArray_004638);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 

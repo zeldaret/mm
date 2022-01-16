@@ -82,7 +82,7 @@ void DmChar07_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_002CD0);
             break;
         case DMCHAR07_CREDITS_STAGE:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_milkbar_Matanimheader_0105F8));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_milkbar_Matanimheader_0105F8));
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_007918);
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000240);
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000790);

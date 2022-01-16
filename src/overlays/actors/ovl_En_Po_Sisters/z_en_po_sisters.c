@@ -142,7 +142,8 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 50.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_po_sisters_Skel_0065C8, &object_po_sisters_Anim_0014CC, this->jointTable, this->morphTable, 12);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_po_sisters_Skel_0065C8, &object_po_sisters_Anim_0014CC,
+                   this->jointTable, this->morphTable, 12);
     this->unk_226 = 255;
     this->unk_227 = 255;
     this->unk_228 = 210;

@@ -1236,10 +1236,10 @@ void EnTru_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
 
 void EnTru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr D_80A8B408[] = {
-        &object_tru_Tex_018FA0,
-        &object_tru_Tex_0197A0,
-        &object_tru_Tex_019FA0,
-        &object_tru_Tex_0197A0,
+        object_tru_Tex_018FA0,
+        object_tru_Tex_0197A0,
+        object_tru_Tex_019FA0,
+        object_tru_Tex_0197A0,
     };
     s32 pad;
     EnTru* this = THIS;

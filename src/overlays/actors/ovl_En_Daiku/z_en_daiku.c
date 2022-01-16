@@ -295,8 +295,12 @@ s32 EnDaiku_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 }
 
 void EnDaiku_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Gfx* D_809440D4[] = { object_daiku_DL_0070C0, object_daiku_DL_006FB0, object_daiku_DL_006E80,
-                                 object_daiku_DL_006D70, };
+    static Gfx* D_809440D4[] = {
+        object_daiku_DL_0070C0,
+        object_daiku_DL_006FB0,
+        object_daiku_DL_006E80,
+        object_daiku_DL_006D70,
+    };
     EnDaiku* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

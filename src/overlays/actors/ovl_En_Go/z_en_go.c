@@ -2044,8 +2044,8 @@ void EnGo_TransfromLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
 
 void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr D_80A1670C[] = {
-        &object_oF1d_map_Tex_010438, &object_oF1d_map_Tex_010C38, &object_oF1d_map_Tex_011038,
-        &object_oF1d_map_Tex_010C38, &object_oF1d_map_Tex_010838,
+        object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_011038,
+        object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_010838,
     };
     EnGo* this = THIS;
 

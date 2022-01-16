@@ -130,8 +130,8 @@ void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp44;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_pamera_Skel_008448, &object_pamera_Anim_0005BC, this->jointTable, this->morphTable,
-                       PAMERA_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_pamera_Skel_008448, &object_pamera_Anim_0005BC,
+                       this->jointTable, this->morphTable, PAMERA_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit2);

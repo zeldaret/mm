@@ -186,7 +186,7 @@ void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_oyu_Matanimheader_000968));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_oyu_Matanimheader_000968));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000158);
     gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000080);
