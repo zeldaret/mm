@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_yb" Segment="6">
-        <Animation Name="gYbUnkAnim" Offset="0x200" />
+        <Animation Name="object_yb_Anim_000200" Offset="0x200" />
         <!-- since these blobs are right after the animation, and that animation doesnt work... assume this is part of why-->
         <!-- <Blob Name="object_yb_Blob_002080" Size="0x30" Offset="0x2080" /> -->
         <!-- <Blob Name="object_yb_Blob_002D50" Size="0x30" Offset="0x2D50" /> -->

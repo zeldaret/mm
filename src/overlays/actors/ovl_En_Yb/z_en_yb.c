@@ -68,7 +68,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 // crashes if I try to mod it in to look at it
 //  assumption: draw uses two different skeleton functions, might be incompatible
-static AnimationHeader* gYbUnusedAnimations[] = { &gYbUnkAnim };
+static AnimationHeader* gYbUnusedAnimations[] = { &object_yb_Anim_000200};
 
 static LinkAnimationHeader* gLinkAnimations[] = { &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00CF98 };
 
@@ -87,11 +87,11 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, EnYb_ActorShadowFunc, 20.0f);
 
     // I dont know why
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gYbSkeleton, &gYbUnkAnim,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200,
                        (void*)(((s32) & this->limbDrawTbl) & ~0xF), (void*)((s32) & this->transitionDrawTable & ~0xF),
                        ENYB_LIMBCOUNT);
 
-    Animation_PlayLoop(&this->skelAnime, &gYbUnkAnim);
+    Animation_PlayLoop(&this->skelAnime, &object_yb_Anim_000200);
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -103,7 +103,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnYb_SetAnimation(globalCtx, this, 2, 0, 0.0f);
 
     tempCutscene = this->actor.cutscene;
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); ++i) {
+    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
         this->cutscenes[i] = tempCutscene;
         if (tempCutscene != -1) {
             this->actor.cutscene = tempCutscene;
