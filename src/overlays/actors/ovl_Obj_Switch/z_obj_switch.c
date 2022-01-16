@@ -586,7 +586,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, GlobalContext* globalCtx) {
         case OBJSWITCH_SUBTYPE_RESET:
         case OBJSWITCH_SUBTYPE_RESET_INVERTED:
             if (!DynaPolyActor_IsInSwitchPressedState(&this->dyna) &&
-                (Player_InCsMode(globalCtx) == 0 || globalCtx->sceneNum == SCENE_SECOM)) {
+                (Player_InCsMode(&globalCtx->state) == 0 || globalCtx->sceneNum == SCENE_SECOM)) {
                 if (this->floorSwitchReleaseTimer <= 0) {
                     if (subType == OBJSWITCH_SUBTYPE_RESET) {
                         ObjSwitch_SetSwitchFlagState(this, globalCtx, false);
@@ -876,7 +876,7 @@ void ObjSwitch_LargeFloorSwitchDown(ObjSwitch* this, GlobalContext* globalCtx) {
             ObjSwitch_LargeFloorSwitchRiseUpInit(this);
         }
     } else if (subType == OBJSWITCH_SUBTYPE_RESET || subType == OBJSWITCH_SUBTYPE_RESET_INVERTED) {
-        if (!DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna) && !Player_InCsMode(globalCtx)) {
+        if (!DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna) && !Player_InCsMode(&globalCtx->state)) {
             if (this->floorSwitchReleaseTimer <= 0) {
                 if (OBJ_SWITCH_GET_SUBTYPE(&this->dyna.actor) == OBJSWITCH_SUBTYPE_RESET) {
                     ObjSwitch_SetSwitchFlagState(this, globalCtx, false);
@@ -936,7 +936,7 @@ void ObjSwitch_Update(Actor* thisx, GlobalContext* globalCtx) {
             break;
         case OBJSWITCH_TYPE_CRYSTAL:
         case OBJSWITCH_TYPE_CRYSTAL_TARGETABLE:
-            if (!Player_InCsMode(globalCtx)) {
+            if (!Player_InCsMode(&globalCtx->state)) {
                 if (this->disableCrystalSwitchTimer > 0) {
                     this->disableCrystalSwitchTimer--;
                 }
