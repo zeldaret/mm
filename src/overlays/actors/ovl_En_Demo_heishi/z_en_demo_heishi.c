@@ -64,7 +64,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 40, 40, 0, { 0, 0, 0 } },
 };
 
-static u16 sTextIds[] = { 0x1473 }; // "Huh? Don't tell me... That's..."
+static u16 sTextIds[] = { 0x1473 }; // Shiro initial intro text
 
 void EnDemoheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDemoheishi* this = THIS;
@@ -89,7 +89,7 @@ void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
         &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave, &gSoldierSitAndReach, &gSoldierStandUp,
     };
-    static u8 sAnimModes[] = { 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0 };
+    static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP };
 
     this->animIndex = animIndex;
     this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
@@ -98,11 +98,11 @@ void EnDemoheishi_ChangeAnimation(EnDemoheishi* this, s32 animIndex) {
 }
 
 void EnDemoheishi_SetHeadRotation(EnDemoheishi* this) {
-    s16 yawTemp = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
-    s32 yaw = ABS_ALT(yawTemp);
+    s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    s32 absYawDiff = ABS_ALT(yawDiff);
 
     this->headRotXTarget = 0;
-    if ((this->actor.xzDistToPlayer < 200.0f) && (yaw < 0x4E20)) {
+    if ((this->actor.xzDistToPlayer < 200.0f) && (absYawDiff < 0x4E20)) {
         this->headRotXTarget = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
         if (this->headRotXTarget > 0x2710) {
             this->headRotXTarget = 0x2710;
@@ -124,7 +124,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, GlobalContext* globalCtx) {
     s32 absYawDiff;
     s16 yawDiff;
 
-    this->actor.flags &= ~0x8000000;
+    this->actor.flags &= ~ACTOR_FLAG_8000000;
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absYawDiff = ABS_ALT(yawDiff);
 
