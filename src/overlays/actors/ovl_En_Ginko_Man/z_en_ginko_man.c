@@ -633,8 +633,8 @@ void EnGinkoMan_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* arg) {
-    EnGinkoMan* this = (EnGinkoMan*)arg;
+                                Actor* thisx) {
+    EnGinkoMan* this = THIS;
 
     if (limbIndex == 15) {
         *dList = D_0600B1D8;
@@ -650,10 +650,10 @@ s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
         Matrix_InsertZRotation_s(-this->limb8Rot.x, MTXMODE_APPLY);
     }
 
-    return 0;
+    return false;
 }
 
-void EnGinkoMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
+void EnGinkoMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
 void EnGinkoMan_Draw(Actor* thisx, GlobalContext* globalCtx) {

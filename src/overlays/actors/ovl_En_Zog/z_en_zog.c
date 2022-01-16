@@ -997,7 +997,7 @@ void EnZog_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B954C4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnZog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B959B8 = { 0.0f, 0.0f, 0.0f };
     EnZog* this = THIS;
 
@@ -1078,7 +1078,7 @@ void EnZog_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         POLY_OPA_DISP = &gfx[3];
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, NULL, func_80B954C4, &this->actor);
+                              this->skelAnime.dListCount, NULL, EnZog_PostLimbDraw, &this->actor);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
