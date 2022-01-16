@@ -960,7 +960,7 @@ void EnIg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-void EnIg_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx, Gfx** gfx) {
+void EnIg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx, Gfx** gfx) {
     EnIg* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
@@ -1008,8 +1008,8 @@ void EnIg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BF3534[this->unk_3F2]));
 
         POLY_OPA_DISP =
-            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnIg_OverrideLimbDraw, EnIg_PostLimbDraw, EnIg_UnkDraw, &this->actor, POLY_OPA_DISP);
+            SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnIg_OverrideLimbDraw, EnIg_PostLimbDraw, EnIg_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
         Matrix_SetCurrentState(&this->unk_190);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

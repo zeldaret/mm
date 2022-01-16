@@ -2041,7 +2041,7 @@ asm/non_matchings/code/z_skelanime/SkelAnime_DrawLimb.s,SkelAnime_DrawLimb,0x801
 asm/non_matchings/code/z_skelanime/SkelAnime_Draw.s,SkelAnime_Draw,0x80133B3C,0x68
 asm/non_matchings/code/z_skelanime/SkelAnime_DrawLimbSV.s,SkelAnime_DrawLimbSV,0x80133CDC,0x93
 asm/non_matchings/code/z_skelanime/SkelAnime_DrawFlexOpa.s,SkelAnime_DrawFlexOpa,0x80133F28,0x88
-asm/non_matchings/code/z_skelanime/func_80134148.s,func_80134148,0x80134148,0x9E
+asm/non_matchings/code/z_skelanime/SkelAnime_DrawTransformFlexLimbOpa.s,SkelAnime_DrawTransformFlexLimbOpa,0x80134148,0x9E
 asm/non_matchings/code/z_skelanime/SkelAnime_DrawTransformFlexOpa.s,SkelAnime_DrawTransformFlexOpa,0x801343C0,0x90
 asm/non_matchings/code/z_skelanime/SkelAnime_AnimateFrame.s,SkelAnime_AnimateFrame,0x80134600,0x49
 asm/non_matchings/code/z_skelanime/SkelAnime_GetTotalFrames.s,SkelAnime_GetTotalFrames,0x80134724,0x9
@@ -2170,8 +2170,8 @@ asm/non_matchings/code/z_snap/func_8013A4C4.s,func_8013A4C4,0x8013A4C4,0x10
 asm/non_matchings/code/z_snap/func_8013A504.s,func_8013A504,0x8013A504,0xB
 asm/non_matchings/code/z_snap/func_8013A530.s,func_8013A530,0x8013A530,0xA4
 asm/non_matchings/code/z_sub_s/SubS_FindDoor.s,SubS_FindDoor,0x8013A7C0,0x28
-asm/non_matchings/code/z_sub_s/func_8013A860.s,func_8013A860,0x8013A860,0xA8
-asm/non_matchings/code/z_sub_s/func_8013AB00.s,func_8013AB00,0x8013AB00,0x9B
+asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlexLimb.s,SubS_DrawTransformFlexLimb,0x8013A860,0xA8
+asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlex.s,SubS_DrawTransformFlex,0x8013AB00,0x9B
 asm/non_matchings/code/z_sub_s/func_8013AD6C.s,func_8013AD6C,0x8013AD6C,0xC
 asm/non_matchings/code/z_sub_s/func_8013AD9C.s,func_8013AD9C,0x8013AD9C,0x4E
 asm/non_matchings/code/z_sub_s/func_8013AED4.s,func_8013AED4,0x8013AED4,0xB
