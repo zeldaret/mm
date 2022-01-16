@@ -49,7 +49,7 @@ const ActorInit En_Bom_Bowl_Man_InitVars = {
     (ActorFunc)EnBomBowlMan_Draw,
 };
 
-static AnimationHeader* D_809C6128[] = {
+static AnimationHeader* sAnimations[] = {
     &object_cs_Anim_0064B8, &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
     &object_cs_Anim_002044, &object_cs_Anim_01007C, &object_cs_Anim_00349C, &object_cs_Anim_004960,
     &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_001A1C, &object_cs_Anim_003EE4,
@@ -109,8 +109,8 @@ void EnBomBowlMan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_809C493C(EnBomBowlMan* this, s32 arg1, f32 arg2) {
     this->unk_2F8 = arg1;
-    this->unk_2C4 = Animation_GetLastFrame(D_809C6128[arg1]);
-    Animation_Change(&this->skelAnime, D_809C6128[this->unk_2F8], arg2, 0.0f, this->unk_2C4, D_809C6178[this->unk_2F8],
+    this->unk_2C4 = Animation_GetLastFrame(sAnimations[arg1]);
+    Animation_Change(&this->skelAnime, sAnimations[this->unk_2F8], arg2, 0.0f, this->unk_2C4, D_809C6178[this->unk_2F8],
                      -4.0f);
 }
 
