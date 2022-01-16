@@ -107,7 +107,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.draw = NULL;
     this->alpha = 0;
     this->actor.velocity.y = -10.0f;
-    this->actor.minVelocityY = -10.0f;
+    this->actor.terminalVelocity = -10.0f;
     this->actor.gravity = -5.0f;
     switch (type) {
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
@@ -143,7 +143,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
                          Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), 2, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = 0.0f;
+        this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
     }
 
@@ -154,7 +154,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
                          Animation_GetLastFrame(&gGiantStruggleStartAnim), 0, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = 0.0f;
+        this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
         if (EnGiant_IsImprisoned(this)) {
             Actor_MarkForDeath(&this->actor);
@@ -318,10 +318,10 @@ void EnGiant_PlaySound(EnGiant* this) {
     if (this->actor.draw != NULL && this->alpha > 0) {
         if (this->animationId == GIANT_ANIMATION_WALKING_LOOP &&
             (Animation_OnFrame(&this->skelAnime, 40.0f) || Animation_OnFrame(&this->skelAnime, 100.0f))) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_WALK);
         }
         if (this->animationId == GIANT_ANIMATION_FALLING_OVER && Animation_OnFrame(&this->skelAnime, 40.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
         }
         if (this->sfxId != 0xFFFF &&
             ((this->animationId == GIANT_ANIMATION_BIG_CALL_START && this->skelAnime.curFrame >= 18.0f) ||
@@ -391,7 +391,7 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 blinkTimerTemp;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (this->blinkTimer == 0) {
