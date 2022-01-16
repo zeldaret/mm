@@ -635,7 +635,6 @@ beginseg
     include "build/data/code/code_80194790.data.o"
     include "build/src/code/audio/audio_playback.o"
     include "build/src/code/audio/audio_effects.o"
-    include "build/data/code/audio_effects.data.o"
     include "build/src/code/audio/audio_seqplayer.o"
     include "build/data/code/audio_seqplayer.data.o"
     include "build/data/code/audio_dramStack.data.o"
@@ -1754,8 +1753,7 @@ beginseg
     name "ovl_En_Mag"
     compress
     include "build/src/overlays/actors/ovl_En_Mag/z_en_mag.o"
-    include "build/data/ovl_En_Mag/ovl_En_Mag.data.o"
-    include "build/data/ovl_En_Mag/ovl_En_Mag.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mag/ovl_En_Mag_reloc.o"
 endseg
 
 beginseg
@@ -4750,8 +4748,7 @@ beginseg
     name "ovl_En_Hgo"
     compress
     include "build/src/overlays/actors/ovl_En_Hgo/z_en_hgo.o"
-    include "build/data/ovl_En_Hgo/ovl_En_Hgo.data.o"
-    include "build/data/ovl_En_Hgo/ovl_En_Hgo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hgo/ovl_En_Hgo_reloc.o"
 endseg
 
 beginseg
@@ -5030,8 +5027,7 @@ beginseg
     name "ovl_En_Ig"
     compress
     include "build/src/overlays/actors/ovl_En_Ig/z_en_ig.o"
-    include "build/data/ovl_En_Ig/ovl_En_Ig.data.o"
-    include "build/data/ovl_En_Ig/ovl_En_Ig.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ig/ovl_En_Ig_reloc.o"
 endseg
 
 beginseg
