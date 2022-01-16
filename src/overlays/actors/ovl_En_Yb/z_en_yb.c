@@ -68,7 +68,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 // crashes if I try to mod it in to look at it
 //  assumption: draw uses two different skeleton functions, might be incompatible
-static AnimationHeader* gYbUnusedAnimations[] = { &object_yb_Anim_000200};
+static AnimationHeader* gYbUnusedAnimations[] = { &object_yb_Anim_000200 };
 
 static LinkAnimationHeader* gLinkAnimations[] = { &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00CF98 };
 
