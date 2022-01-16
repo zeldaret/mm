@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define EN_NEO_REEBA_IS_LARGE(thisx) ((thisx)->params & 0x8000)
+
 struct EnNeoReeba;
 
 typedef void (*EnNeoReebaActionFunc)(struct EnNeoReeba*, GlobalContext*);
@@ -14,18 +16,18 @@ typedef struct EnNeoReeba {
     /* 0x01d4 */ Vec3s jointTable[18];
     /* 0x0240 */ Vec3s morphTable[18];
     /* 0x02AC */ EnNeoReebaActionFunc actionFunc;
-    /* 0x02B0 */ Vec3f unk_2B0;
-    /* 0x02BC */ Vec3f unk_2BC;
-    /* 0x02C8 */ Vec3f unk_2C8[0x4]; // limbPos
-    /* 0x02F8 */ f32 unk_2F8;
-    /* 0x02FC */ f32 unk_2FC;
-    /* 0x0300 */ f32 unk_300;
-    /* 0x0304 */ f32 unk_304;
-    /* 0x0308 */ s16 unk_308;
-    /* 0x030A */ s16 unk_30A;
-    /* 0x030C */ s16 unk_30C;
-    /* 0x030E */ s16 unk_30E;
-    /* 0x0310 */ u8 unk_310; // effect mode
+    /* 0x02B0 */ Vec3f targetPos;
+    /* 0x02BC */ Vec3f velToTarget;
+    /* 0x02C8 */ Vec3f limbPos[4];
+    /* 0x02F8 */ f32 sinkRiseRate;
+    /* 0x02FC */ f32 rotationSpeed;
+    /* 0x0300 */ f32 drawEffectAlpha;
+    /* 0x0304 */ f32 drawEffectScale;
+    /* 0x0308 */ s16 rotationAngle;
+    /* 0x030A */ s16 actionTimer;
+    /* 0x030C */ s16 sfxTimer;
+    /* 0x030E */ s16 stunTimer;
+    /* 0x0310 */ u8 drawEffectType;
 } EnNeoReeba; // size = 0x314
 
 extern const ActorInit En_Neo_Reeba_InitVars;
