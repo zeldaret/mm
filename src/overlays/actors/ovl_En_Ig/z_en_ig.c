@@ -165,7 +165,7 @@ EnDoor* func_80BF1200(GlobalContext* globalCtx, s32 arg1) {
             phi_a1 = -1;
             break;
     }
-    return (EnDoor*)SubS_FindDoor(globalCtx, phi_a1);
+    return SubS_FindDoor(globalCtx, phi_a1);
 }
 
 void func_80BF1258(EnIg* this) {
@@ -1007,9 +1007,9 @@ void EnIg_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BF3534[this->unk_3F2]));
 
-        POLY_OPA_DISP =
-            SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnIg_OverrideLimbDraw, EnIg_PostLimbDraw, EnIg_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
+        POLY_OPA_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                               this->skelAnime.dListCount, EnIg_OverrideLimbDraw, EnIg_PostLimbDraw,
+                                               EnIg_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
         Matrix_SetCurrentState(&this->unk_190);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
