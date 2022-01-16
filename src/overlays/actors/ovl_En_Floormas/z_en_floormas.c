@@ -683,7 +683,7 @@ void func_808D1ED4(EnFloormas* this, GlobalContext* globalCtx) {
     sp34.y = this->actor.world.pos.y + 15.0f;
     sp34.z = this->actor.world.pos.z;
     func_800B3030(globalCtx, &sp34, &gZeroVec3f, &gZeroVec3f, 150, -10, 2);
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
     this->actionFunc = func_808D1F7C;
 }
 

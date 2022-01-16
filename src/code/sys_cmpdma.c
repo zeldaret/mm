@@ -1,4 +1,5 @@
 #include "global.h"
+#include "system_malloc.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_cmpdma/func_80178750.s")
 
