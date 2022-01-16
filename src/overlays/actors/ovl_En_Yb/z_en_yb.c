@@ -103,7 +103,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnYb_SetAnimation(globalCtx, this, 2, 0, 0.0f);
 
     tempCutscene = this->actor.cutscene;
-    for (i = 0; i < 2; ++i) {
+    for (i = 0; i < ARRAY_COUNT(this->cutscenes); ++i) {
         this->cutscenes[i] = tempCutscene;
         if (tempCutscene != -1) {
             this->actor.cutscene = tempCutscene;
