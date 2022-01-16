@@ -94,7 +94,7 @@
         <Limb Name="object_jg_Standardlimb_01AF50" Type="Standard" Offset="0x1AF50" />
         <Limb Name="object_jg_Standardlimb_01AF5C" Type="Standard" Offset="0x1AF5C" />
         <Skeleton Name="object_jg_Skel_01AFF0" Type="Flex" LimbType="Standard" Offset="0x1AFF0" />
-        <Animation Name="object_jg_Anim_01B1E8" Offset="0x1B1E8" />
-        <Skeleton Name="object_jg_Skel_01B210" Type="Normal" LimbType="Standard" Offset="0x1B210" />
+        <Animation Name="gGoronElderDrumAnim" Offset="0x1B1E8" />
+        <Skeleton Name="gGoronElderDrumSkel" Type="Normal" LimbType="Standard" Offset="0x1B210" />
     </File>
 </Root>
