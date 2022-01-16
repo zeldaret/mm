@@ -71,9 +71,14 @@ void EnEndingHero_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-static UNK_PTR D_80C1E970[] = { object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90, object_dt_Tex_00A790,
-                                object_dt_Tex_00AB90 };
-static UNK_PTR D_80C1E984[] = { object_dt_Tex_007750, object_dt_Tex_00A390, object_dt_Tex_00A490 };
+static TexturePtr D_80C1E970[] = {
+    object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90, object_dt_Tex_00A790, object_dt_Tex_00AB90,
+};
+static TexturePtr D_80C1E984[] = {
+    object_dt_Tex_007750,
+    object_dt_Tex_00A390,
+    object_dt_Tex_00A490,
+};
 
 void EnEndingHero_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero* this = THIS;
