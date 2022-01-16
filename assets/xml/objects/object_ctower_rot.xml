@@ -67,7 +67,7 @@
         <!-- DLists and Collision -->
 
         <!-- CeilingCog -->
-        <DList Name="gClockTowerEmptyDL1" Offset="0x10820" />
+        <DList Name="gClockTowerEmpty1DL" Offset="0x10820" />
         <DList Name="gClockTowerCeilingCogDL" Offset="0x10828" />
         
         <!-- Corridor -->
@@ -81,7 +81,7 @@
         <Collision Name="gClockTowerOrganCol" Offset="0x16E70" />
         
         <!-- CenterCog -->
-        <DList Name="gClockTowerEmptyDL2" Offset="0x17010" />
+        <DList Name="gClockTowerEmpty2DL" Offset="0x17010" />
         <DList Name="gClockTowerCenterCogDL" Offset="0x17018" />
         
         <!-- StoneDoorMain -->
@@ -93,7 +93,7 @@
         <Collision Name="gClockTowerStoneDoorCol" Offset="0x17650" />
         
         <!-- WaterWheel -->
-        <DList Name="gClockTowerEmptyDL3" Offset="0x18110" />
+        <DList Name="gClockTowerEmpty3DL" Offset="0x18110" />
         <DList Name="gClockTowerWaterWheelDL" Offset="0x18118" />
         <Collision Name="gClockTowerWaterWheelCol" Offset="0x18588" />
     </File>
