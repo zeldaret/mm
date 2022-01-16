@@ -66,8 +66,8 @@ void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     AnimatedMat_Draw(globalCtx, D_80C16470);
-    func_800BDFC0(globalCtx, object_yado_obj_DL_000430);
-    func_800BE03C(globalCtx, object_yado_obj_DL_000320);
+    Gfx_DrawDListOpa(globalCtx, object_yado_obj_DL_000430);
+    Gfx_DrawDListXlu(globalCtx, object_yado_obj_DL_000320);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

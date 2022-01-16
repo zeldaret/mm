@@ -51,7 +51,7 @@ void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_haka_obj_Colheader_001588);
-    if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
+    if (Flags_GetClear(globalCtx, this->dyna.actor.room)) {
         func_80B6DE80(this);
         return;
     }
@@ -69,7 +69,7 @@ void func_80B6DC98(BgHakaCurtain* this) {
 }
 
 void func_80B6DCAC(BgHakaCurtain* this, GlobalContext* globalCtx) {
-    if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
+    if (Flags_GetClear(globalCtx, this->dyna.actor.room)) {
         func_80B6DCEC(this);
     }
 }
@@ -135,5 +135,5 @@ void BgHakaCurtain_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgHakaCurtain_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, object_haka_obj_DL_001410);
+    Gfx_DrawDListOpa(globalCtx, object_haka_obj_DL_001410);
 }

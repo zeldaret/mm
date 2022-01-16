@@ -80,7 +80,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152464.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152498.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_GetState.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015268C.s")
 

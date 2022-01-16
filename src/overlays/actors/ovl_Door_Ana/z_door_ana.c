@@ -209,5 +209,5 @@ void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BE03C(globalCtx, gameplay_field_keep_DL_000C40);
+    Gfx_DrawDListXlu(globalCtx, gameplay_field_keep_DL_000C40);
 }

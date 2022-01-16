@@ -100,9 +100,9 @@ void EnRecepgirl_Wait(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         EnRecepgirl_SetupTalk(this);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2000)) {
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
         if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
             this->actor.textId = 0x2367; // "... doesn't Kafei want to break off his engagement ... ?"
@@ -140,13 +140,13 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    temp_v0_2 = func_80152498(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC; // hear directions again?
         EnRecepgirl_SetupWait(this);
     } else if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
-            Actor_SetSwitchFlag(globalCtx, this->actor.params);
+            Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
 
             if (gSaveContext.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
@@ -192,7 +192,7 @@ s32 EnRecepgirl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     return false;
 }
 
-void EnRecepgirl_UnkLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnRecepgirl_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
@@ -209,8 +209,9 @@ void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, sEyeTextures[this->eyeTexIndex]);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnRecepgirl_OverrideLimbDraw, NULL, EnRecepgirl_UnkLimbDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnRecepgirl_OverrideLimbDraw, NULL,
+                                   EnRecepgirl_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

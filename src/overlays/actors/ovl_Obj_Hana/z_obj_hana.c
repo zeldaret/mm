@@ -48,5 +48,5 @@ void ObjHana_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjHana_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, object_hana_DL_000500);
+    Gfx_DrawDListOpa(globalCtx, object_hana_DL_000500);
 }

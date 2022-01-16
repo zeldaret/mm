@@ -422,7 +422,7 @@ void EnSob1_UpdateCursorPos(GlobalContext* globalCtx, EnSob1* this) {
     f32 xOffset = 0.0f;
     f32 yOffset = 17.0f;
 
-    func_800B8898(globalCtx, &this->items[this->cursorIdx]->actor, &x, &y);
+    Actor_GetScreenPos(globalCtx, &this->items[this->cursorIdx]->actor, &x, &y);
     this->cursorPos.x = x + xOffset;
     this->cursorPos.y = y + yOffset;
     this->cursorPos.z = 1.2f;
@@ -435,7 +435,7 @@ void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
         ActorCutscene_Stop(this->cutscene);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
-    func_800B84D0(&this->actor, globalCtx);
+    Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
@@ -502,7 +502,7 @@ void EnSob1_SetupLookToShopkeeperFromShelf(GlobalContext* globalCtx, EnSob1* thi
 }
 
 void EnSob1_EndingInteraction(EnSob1* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
         EnSob1_EndInteraction(globalCtx, this);
     }
 }
@@ -520,7 +520,7 @@ void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     this->headRotTarget = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -596,7 +596,7 @@ u8 EnSob1_SetCursorIndexFromNeutral(EnSob1* this, u8 shelfOffset) {
 }
 
 void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -636,7 +636,7 @@ s32 EnSob1_FacingShopkeeperDialogResult(EnSob1* this, GlobalContext* globalCtx) 
 
 void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
     s32 pad[2];
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
     u8 cursorIdx;
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
@@ -676,7 +676,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_TalkingToShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         EnSob1_StartShopping(globalCtx, this);
     }
 }
@@ -723,7 +723,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
             EnSob1_SetupAction(this, EnSob1_SetupIdle);
         }
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void EnSob1_SetupIdle(EnSob1* this, GlobalContext* globalCtx) {
@@ -763,7 +763,7 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
             }
         }
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     EnSob1_Walking(this, globalCtx);
 }
 
@@ -778,7 +778,7 @@ void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -818,10 +818,10 @@ void EnSob1_ItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80151938(globalCtx, 0x647);
     } else {
-        func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -896,7 +896,7 @@ s32 EnSob1_HasPlayerSelectedItem(GlobalContext* globalCtx, EnSob1* this, Input* 
 }
 
 void EnSob1_BrowseShelf(EnSob1* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
     s32 pad;
     u8 prevCursorIdx = this->cursorIdx;
     u8 cursorIdx;
@@ -926,7 +926,7 @@ void EnSob1_BrowseShelf(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnSob1* this) {
     Player* player = GET_PLAYER(globalCtx);
 
-    func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+    Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
@@ -1015,7 +1015,7 @@ void EnSob1_HandleCanBuyItem(GlobalContext* globalCtx, EnSob1* this) {
 }
 
 void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (EnSob1_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
@@ -1035,7 +1035,7 @@ void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_CannotBuy(EnSob1* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 5) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5) {
         if (func_80147624(globalCtx)) {
             this->actionFunc = this->tmpActionFunc;
             func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
@@ -1046,7 +1046,7 @@ void EnSob1_CannotBuy(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_CanBuy(EnSob1* this, GlobalContext* globalCtx) {
     EnGirlA* item;
 
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         this->shopItemSelectedTween = 0.0f;
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
@@ -1061,12 +1061,12 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         EnSob1_SetupAction(this, EnSob1_SetupItemPurchased);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     }
 }
 
 void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
@@ -1077,7 +1077,7 @@ void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1085,7 +1085,7 @@ void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);
@@ -1093,7 +1093,7 @@ void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
         player->stateFlags2 |= 0x20000000;
         func_801518B0(globalCtx, this->welcomeTextId, &this->actor);
         EnSob1_SetupStartShopping(globalCtx, this, true);
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1359,7 +1359,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
     if (EnSob1_AreObjectsLoaded(this, globalCtx)) {
         this->actor.flags &= ~0x10;
         this->actor.objBankIndex = this->objIndices[0];
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         posOffset = &sPosOffset[this->shopType];
         this->actor.world.pos.x += posOffset->x;
         this->actor.world.pos.y += posOffset->y;
@@ -1372,7 +1372,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
         EnSob1_GetCutscenes(this);
         this->cutscene = this->lookFowardCutscene;
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         sInitFuncs[this->shopType](this, globalCtx);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         this->actor.colChkInfo.cylRadius = 50;
@@ -1464,7 +1464,7 @@ void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnSob1_UpdateCursorAnim(this);
         Math_StepToS(&this->headRot, this->headRotTarget, 0x190);
         this->actionFunc(this, globalCtx);
-        Actor_SetHeight(&this->actor, 90.0f);
+        Actor_SetFocus(&this->actor, 90.0f);
         changeObjectFunc = this->changeObjectFunc;
         if (changeObjectFunc != NULL) {
             changeObjectFunc(this, globalCtx);

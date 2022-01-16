@@ -45,5 +45,5 @@ void BgLbfshot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 void BgLbfshot_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, object_lbfshot_DL_000228);
+    Gfx_DrawDListOpa(globalCtx, object_lbfshot_DL_000228);
 }

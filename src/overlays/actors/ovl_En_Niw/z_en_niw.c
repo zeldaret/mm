@@ -120,7 +120,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.flags |= 0x1; // targetable ON
 
-    ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
 
     SkelAnime_InitFlex(globalCtx, &this->skelanime, &object_niw_Skel_002530, &object_niw_Anim_0000E8, this->jointTable,
                        this->morphTable, ENNIW_LIMBCOUNT);
@@ -143,7 +143,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->niwType == ENNIW_TYPE_UNK2) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
         this->unkTimer250 = 30;
         this->actor.flags &= ~0x1; // targetable OFF
@@ -339,7 +339,7 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
     if (this->niwType == ENNIW_TYPE_REGULAR) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
             // picked up
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->sfxTimer1 = 30;
             this->unkTimer250 = 30;
             this->actor.flags &= ~0x1; // targetable OFF
@@ -348,7 +348,7 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
             this->actionFunc = EnNiw_Held;
             return;
         } else {
-            func_800B8BB0(&this->actor, globalCtx);
+            Actor_LiftActor(&this->actor, globalCtx);
         }
     } else {
         this->unkTimer252 = 10;
@@ -490,7 +490,7 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         // picked up again before could run off
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
         this->unk2EC = 0;
         this->unkTimer250 = 30;
@@ -500,7 +500,7 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 0.0f;
     } else {
         if (this->unkTimer252 > 5) {
-            func_800B8BB0(&this->actor, globalCtx);
+            Actor_LiftActor(&this->actor, globalCtx);
         }
         func_80891320(this, globalCtx, 2);
     }
@@ -600,7 +600,7 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
         this->unk264[1] = 0.0f;
         this->unk264[2] = 0.0f;
         this->unkTimer24C = 10;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
     }
     if (this->unkTimer252 == 0) {
         this->unkTimer252 = 10;
@@ -683,7 +683,7 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
             this->unkTimer260 = 10;
             this->sfxTimer1 = 30;
             this->unk29E = 1;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->unkTimer254 = 100;
             this->unk2EC = 0;
             EnNiw_SetupRunAway(this);
@@ -720,7 +720,7 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
                 this->unkTimer260 = 10;
                 this->sfxTimer1 = 30;
                 this->unk29E = 1;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
                 this->unkTimer254 = 100;
                 this->unk2EC = 0;
                 EnNiw_SetupRunAway(this);
@@ -803,8 +803,8 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot = this->actor.world.rot;
     this->actor.shape.shadowScale = 15.0f;
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, this->unk308);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_SetFocus(&this->actor, this->unk308);
+    Actor_MoveWithGravity(&this->actor);
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
 
@@ -876,16 +876,16 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnNiw_CheckRage(this, globalCtx);
         if ((this->flutterSfxTimer == 0) && (this->unknownState28E == 4)) {
             this->flutterSfxTimer = 7;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
         }
 
         if (this->sfxTimer1 == 0) {
             if (this->unknownState28E != 0) {
                 this->sfxTimer1 = 30;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_A); // attack cluck
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_A); // attack cluck
             } else {
                 this->sfxTimer1 = 300;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_N); // cluck
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_N); // cluck
             }
         }
 
@@ -904,7 +904,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnNiw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnNiw* this = THIS;
 
     if (limbIndex == 13) {
@@ -923,7 +923,7 @@ s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* 
         rot->y += (s16)this->limb7Roty;
         rot->z += (s16)this->limb7Rotz;
     }
-    return 0;
+    return false;
 }
 
 void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -931,7 +931,7 @@ void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
-                          EnNiw_LimbDraw, NULL, &this->actor);
+                          EnNiw_OverrideLimbDraw, NULL, &this->actor);
     EnNiw_DrawFeathers(this, globalCtx);
 }
 

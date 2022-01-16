@@ -127,7 +127,7 @@ static Vec3f D_80896B44 = { 0.0f, 0.45f, 0.0f };
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 70, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(minVelocityY, -40, ICHAIN_CONTINUE),
+    ICHAIN_F32(terminalVelocity, -40, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
@@ -140,10 +140,9 @@ void EnTite_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 j;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_tite_Skel_003A20, &object_tite_Anim_0012E4, this->jointTable,
-                   this->morphTable, 25);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 60.0f);
-    Actor_SetHeight(&this->actor, 20.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_tite_Skel_003A20, &object_tite_Anim_0012E4, this->jointTable, this->morphTable, 25);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
+    Actor_SetFocus(&this->actor, 20.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
@@ -259,7 +258,7 @@ void func_80893BCC(EnTite* this, GlobalContext* globalCtx) {
                 }
             }
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
     }
 }
 
@@ -270,7 +269,7 @@ void func_80893DD4(EnTite* this) {
     this->unk_2C8 = 0.5f;
     this->unk_2CC = 0.75f;
     this->unk_2C4 = 1.0f;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
     this->actor.flags &= ~0x200;
 }
 
@@ -279,7 +278,7 @@ void func_80893E54(EnTite* this, GlobalContext* globalCtx) {
         this->unk_2BB = 0;
         this->collider.base.colType = COLTYPE_HIT6;
         this->unk_2C4 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_2D0, 9, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D0, 9, 2, 0.2f, 0.2f);
         this->actor.flags |= 0x200;
     }
 }
@@ -323,10 +322,10 @@ void func_80894024(EnTite* this, GlobalContext* globalCtx) {
 void func_8089408C(EnTite* this, GlobalContext* globalCtx) {
     Animation_PlayOnce(&this->skelAnime, &object_tite_Anim_0004F8);
     if (!func_80893ADC(this)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
     } else {
         this->actor.world.pos.y += this->actor.depthInWater;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
     }
 
     if (this->actor.shape.yOffset < 0.0f) {
@@ -349,7 +348,7 @@ void func_8089408C(EnTite* this, GlobalContext* globalCtx) {
 
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= 1;
         this->actor.velocity.y = 10.0f;
     } else {
@@ -377,7 +376,7 @@ void func_808942B4(EnTite* this, GlobalContext* globalCtx) {
                 func_8089452C(this, globalCtx);
             } else {
                 this->actor.velocity.y = 0.0f;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
                 func_80894414(this);
             }
         }
@@ -400,7 +399,7 @@ void func_80894454(EnTite* this, GlobalContext* globalCtx) {
         if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (this->actor.xzDistToPlayer > 450.0f) ||
             (this->actor.playerHeightRel > 80.0f)) {
             func_80893ED4(this);
-        } else if (!Actor_IsActorFacingLink(&this->actor, 0x2328)) {
+        } else if (!Actor_IsFacingPlayer(&this->actor, 0x2328)) {
             func_808945EC(this);
         } else {
             func_80893A9C(this, globalCtx);
@@ -418,7 +417,7 @@ void func_8089452C(EnTite* this, GlobalContext* globalCtx) {
     sp2C.y += this->actor.depthInWater;
     this->actor.velocity.y *= 0.75f;
     EffectSsGRipple_Spawn(globalCtx, &sp2C, 0, 500, 0);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
     this->actionFunc = func_808945B4;
 }
 
@@ -454,9 +453,9 @@ void func_80894638(EnTite* this, GlobalContext* globalCtx) {
 
     if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
         if (func_80893ADC(this)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_WALK_WATER);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_WALK_WATER);
         } else {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_WALK);
         }
     }
 
@@ -464,7 +463,7 @@ void func_80894638(EnTite* this, GlobalContext* globalCtx) {
         (this->actor.playerHeightRel > 80.0f)) {
         func_80893ED4(this);
     } else if (((this->actor.bgCheckFlags & 1) || (func_80893ADC(this) && (this->actor.depthInWater < 10.0f))) &&
-               Actor_IsActorFacingLink(&this->actor, 0xE38)) {
+               Actor_IsFacingPlayer(&this->actor, 0xE38)) {
         if ((this->actor.xzDistToPlayer <= 180.0f) && (this->actor.playerHeightRel <= 80.0f)) {
             func_80893A9C(this, globalCtx);
         } else {
@@ -483,9 +482,9 @@ void func_8089484C(EnTite* this) {
     this->actor.speedXZ = 4.0f;
     if (func_80893ADC(this)) {
         this->actor.world.pos.y += this->actor.depthInWater;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP_WATER);
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_JUMP);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
     }
     this->actionFunc = func_80894910;
 }
@@ -496,7 +495,7 @@ void func_80894910(EnTite* this, GlobalContext* globalCtx) {
     Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 1.0f, 0.0f);
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.bgCheckFlags & 0x40) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER);
 
         if (func_80893ADC(this)) {
             Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
@@ -557,7 +556,7 @@ void func_80894BC8(EnTite* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.bgCheckFlags & 0x40) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
     } else {
         func_80893BCC(this, globalCtx);
     }
@@ -570,7 +569,7 @@ void func_80894BC8(EnTite* this, GlobalContext* globalCtx) {
              (ABS_ALT(this->actor.shape.rot.x) < 4000) && (ABS_ALT(this->actor.shape.rot.z) < 4000))) {
             func_80893ED4(this);
         } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.playerHeightRel <= 80.0f) &&
-                   Actor_IsActorFacingLink(&this->actor, 0x1770)) {
+                   Actor_IsFacingPlayer(&this->actor, 0x1770)) {
             func_80893A9C(this, globalCtx);
         } else {
             func_8089484C(this);
@@ -599,7 +598,7 @@ void func_80894E0C(EnTite* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.bgCheckFlags & 0x40) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_LAND_WATER2);
     } else {
         func_80893BCC(this, globalCtx);
     }
@@ -615,7 +614,7 @@ void func_80894E0C(EnTite* this, GlobalContext* globalCtx) {
                     (ABS_ALT(this->actor.shape.rot.x) < 4000) && (ABS_ALT(this->actor.shape.rot.z) < 4000))) {
             func_80893ED4(this);
         } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.playerHeightRel <= 80.0f) &&
-                   Actor_IsActorFacingLink(&this->actor, 0x1770)) {
+                   Actor_IsFacingPlayer(&this->actor, 0x1770)) {
             func_80893A9C(this, globalCtx);
         } else {
             func_8089484C(this);
@@ -632,7 +631,7 @@ void func_80895020(EnTite* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.colorFilterTimer = 0;
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_TEKU_DEAD);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_TEKU_DEAD);
     this->actor.flags &= ~1;
     this->actor.flags |= 0x10;
     this->unk_2BA = 1;
@@ -666,7 +665,7 @@ void func_808951B8(EnTite* this, GlobalContext* globalCtx) {
     if (this->unk_2BC == 0) {
         for (i = 0; i < ARRAY_COUNT(this->unk_2D0); i++) {
             func_800B3030(globalCtx, &this->unk_2D0[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 1);
-            Audio_PlaySoundAtPosition(globalCtx, &this->unk_2D0[i], 11, NA_SE_EN_EXTINCT);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->unk_2D0[i], 11, NA_SE_EN_EXTINCT);
         }
         Actor_MarkForDeath(&this->actor);
     } else {
@@ -679,7 +678,7 @@ void func_808951B8(EnTite* this, GlobalContext* globalCtx) {
 
 void func_808952EC(EnTite* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &object_tite_Anim_000A14, 1.5f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
     this->collider.base.acFlags &= ~AC_ON;
     func_80893A18(this);
     this->unk_2B9 = 1;
@@ -706,8 +705,8 @@ void func_80895424(EnTite* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         this->collider.base.acFlags |= AC_ON;
         if (this->actor.bgCheckFlags & 2) {
-            func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, 20.0f, 11, 4.0f, 0, 0, 0);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 20.0f, 11, 4.0f, 0, 0, 0);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
 
         if (this->unk_2BC == 0) {
@@ -723,7 +722,7 @@ void func_80895424(EnTite* this, GlobalContext* globalCtx) {
 void func_808955E4(EnTite* this) {
     this->unk_2B9 = 0;
     this->actor.velocity.y = 13.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
     this->actor.bgCheckFlags &= ~1;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80895640;
@@ -789,7 +788,7 @@ void func_80895738(EnTite* this, GlobalContext* globalCtx) {
         if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (this->actor.xzDistToPlayer > 450.0f) ||
             (this->actor.playerHeightRel > 80.0f)) {
             func_80893ED4(this);
-        } else if (!Actor_IsActorFacingLink(&this->actor, 0x2328)) {
+        } else if (!Actor_IsFacingPlayer(&this->actor, 0x2328)) {
             func_808945EC(this);
         } else {
             func_80893A9C(this, globalCtx);
@@ -827,7 +826,7 @@ void func_80895AC0(EnTite* this, GlobalContext* globalCtx) {
         if (Rand_ZeroOne() < 0.25f) {
             func_8089595C(this, globalCtx);
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_WALK);
     }
 
     if ((this->unk_2BC == 1) || (this->unk_2BC == -1)) {
@@ -873,7 +872,7 @@ void func_80895D08(EnTite* this, GlobalContext* globalCtx) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089595C(this, globalCtx);
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_WALK);
     }
     if ((this->actor.xzDistToPlayer < 240.0f) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         func_8089408C(this, globalCtx);
@@ -887,7 +886,7 @@ void func_80895D08(EnTite* this, GlobalContext* globalCtx) {
 
 void func_80895DE8(EnTite* this) {
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.shape.shadowDraw = func_800B3FC0;
+    this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
     this->skelAnime.playSpeed = 1.0f;
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_80895E28;
@@ -938,7 +937,7 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
             return;
         }
 
-        func_800BE258(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if ((this->unk_2BB != 10) || !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             func_80893E54(this, globalCtx);
@@ -954,8 +953,8 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
             if (this->actor.colChkInfo.damageEffect != 0xF) {
                 if (this->actor.colChkInfo.damageEffect == 5) {
                     this->unk_2BC = 40;
-                    func_800BCB70(&this->actor, 0, 200, 0, 40);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->unk_2BB = 32;
                     this->unk_2C8 = 0.5f;
                     this->unk_2C4 = 2.0f;
@@ -965,8 +964,8 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
 
                 if (this->actor.colChkInfo.damageEffect == 1) {
                     this->unk_2BC = 40;
-                    func_800BCB70(&this->actor, 0, 200, 0, 40);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80894DD0(this);
                     return;
                 }
@@ -994,12 +993,12 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
                                 this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
                 }
 
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
 
                 if (this->actor.colChkInfo.health == 0) {
                     func_80895020(this, globalCtx);
                 } else {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_TEKU_DAMAGE);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_DAMAGE);
 
                     if (this->unk_2B9 == 0) {
                         func_80894B2C(this);
@@ -1016,7 +1015,7 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
         this->actor.flags |= 1;
         if (this->actor.shape.yOffset < 0.0f) {
             this->actor.shape.yOffset = 0.0f;
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         }
         if (this->unk_2B9 != 0) {
             func_808955E4(this);
@@ -1055,7 +1054,7 @@ void EnTite_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     if (this->actionFunc != func_808951B8) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 40.0f, 20.0f, this->unk_2C0);
         func_808963B4(this, globalCtx);
         if (this->actor.bgCheckFlags & 1) {
@@ -1073,7 +1072,7 @@ void EnTite_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
         }
 
-        Actor_SetHeight(&this->actor, this->actor.scale.y * 2000.0f);
+        Actor_SetFocus(&this->actor, this->actor.scale.y * 2000.0f);
         this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
         this->collider.dim.worldSphere.center.y = (s32)this->actor.world.pos.y + 15;
         this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;

@@ -90,13 +90,13 @@ void DmNb_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
 }
 
-void DmNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void DmNb_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void DmNb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmNb* this = THIS;
 
     func_8012C5B0(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                  NULL, DmNb_UnkActorDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, NULL, NULL, DmNb_TransformLimbDraw, &this->actor);
 }

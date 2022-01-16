@@ -178,7 +178,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_1);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.playSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
             this->actor.scale.x *= 1.5f;
@@ -204,7 +204,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_0);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
             if (1) {}
             this->actor.params = FG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
@@ -220,14 +220,14 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
             break;
         default:
             if (DECR(this->timer) == 0) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_JUMP);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_JUMP);
                 EnFg_UpdateAnimation(&this->skelAnime, 3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
                 this->actionFunc = EnFg_Jump;
             }
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
@@ -255,7 +255,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
             break;
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~1;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_FROG_CRY_0);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
             EnFg_UpdateAnimation(&this->skelAnime, 0);
             this->actor.params = FG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
@@ -280,7 +280,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnFg_Idle;
                 this->actor.velocity.y = 0.0f;
             } else {
-                Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+                Actor_MoveWithGravity(&this->actor);
             }
     }
 }
@@ -307,16 +307,15 @@ void EnFg_Knockback(EnFg* this, GlobalContext* globalCtx) {
             EnFg_AddDust(&this->dustEffect[0], &this->actor.world.pos);
         }
         this->actor.shape.rot.x += 0x1000;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 
 void EnFg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFg* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fr_Skel_00B538, NULL, this->jointTable, this->morphTable,
-                       24);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fr_Skel_00B538, NULL, this->jointTable, this->morphTable, 24);
     EnFg_UpdateAnimation(&this->skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -355,8 +354,8 @@ void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A2D348(this, globalCtx);
 }
 
-s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg) {
-    EnFg* this = (EnFg*)arg;
+s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnFg* this = THIS;
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         *dList = NULL;
@@ -367,11 +366,11 @@ s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
             *dList = NULL;
         }
     }
-    return 0;
+    return false;
 }
 
-void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
-    EnFg* this = (EnFg*)arg;
+void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnFg* this = THIS;
     s16 pad;
     Vec3f vec1 = { 0.0f, 0.0f, 0.0f };
 

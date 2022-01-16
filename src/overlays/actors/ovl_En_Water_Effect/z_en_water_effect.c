@@ -198,11 +198,11 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
                     if (phi_v0) {
                         ptr->unk_00 = 0;
-                        Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_BOMB_DROP_WATER);
+                        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_BOMB_DROP_WATER);
                     } else {
                         ptr->unk_04.y = this->actor.floorHeight;
                         if (ptr->unk_2A == 0) {
-                            Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP_GRD);
+                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP_GRD);
                             ptr->unk_00 = 3;
                             ptr->unk_2C.x = 0.1f;
                             ptr->unk_2C.y = 0.6f;
@@ -215,7 +215,7 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             EffectSsGSplash_Spawn(globalCtx, &sp98, NULL, NULL, 1, 100);
                         } else {
                             ptr->unk_00 = 0;
-                            Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP);
+                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP);
                             EffectSsGRipple_Spawn(globalCtx, &ptr->unk_04, 70, 500, 0);
                             EffectSsGRipple_Spawn(globalCtx, &ptr->unk_04, 70, 500, 10);
                             Math_Vec3f_Copy(&sp98, &ptr->unk_04);
@@ -386,7 +386,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
     f32 temp_f0_2;
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp90;
-    Actor* rotaryRoom = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* rotaryRoom = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
     CollisionPoly* sp88;
     EnWaterEffectStruct* ptr = &this->unk_144[0];
     u8 phi_s5;
@@ -471,7 +471,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
                                 player->flameTimers[j] = Rand_S16Offset(0, 200);
                             }
                             player->isBurning = true;
-                            func_800B8E58(&player->actor, player->ageProperties->unk_92 + NA_SE_VO_LI_DEMO_DAMAGE);
+                            func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DEMO_DAMAGE);
                         }
                     }
 
@@ -493,7 +493,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
                             for (j = 0; j < 5; j++) {
                                 func_80A599E8(this, &ptr->unk_04, 2);
                             }
-                            Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_PLANT_BROKEN);
+                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_PLANT_BROKEN);
                         }
                         ptr->unk_2A++;
                     }

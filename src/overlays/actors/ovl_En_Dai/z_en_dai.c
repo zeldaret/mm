@@ -177,7 +177,7 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_12HAKUGINMAE) &&
         (globalCtx->csCtx.unk_12 == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
-            Actor_SetSwitchFlag(globalCtx, 20);
+            Flags_SetSwitch(globalCtx, 20);
             this->unk_1CE |= (0x80 | 0x10);
             this->unk_1CE &= ~(0x100 | 0x20);
             this->unk_1CC = 0xFF;
@@ -201,7 +201,7 @@ s32 func_80B3E7C8(EnDai* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if (this->unk_1CE & 7) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_8013AED4(&this->unk_1CE, 0, 7);
             this->actionFunc = func_80B3EF90;
             ret = true;
@@ -289,7 +289,7 @@ s32 func_80B3E96C(EnDai* this, GlobalContext* globalCtx) {
                 break;
 
             case 1:
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WEATHER_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0x1388, 0x708, 0x3E8, 0);
                 func_80B3E5DC(this, 3);
@@ -455,7 +455,7 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROLL_AND_FALL);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROLL_AND_FALL);
                     break;
 
                 case 3:
@@ -478,27 +478,27 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
 
         case 2:
             if (globalCtx->csCtx.frames == 360) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP3 - SFX_FLAG);
             }
             if (Animation_OnFrame(&this->skelAnime, 43.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_GORON_BOUND_1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
 
         case 3:
             if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP1);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
 
         case 4:
             if (Animation_OnFrame(&this->skelAnime, 30.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIGOLON_SLEEP2);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIGOLON_SLEEP2);
             }
             if (Animation_OnFrame(&this->skelAnime, 35.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_GORON_BOUND_0);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_0);
             }
             this->unk_1D6 = func_80B3E8BC(this, this->unk_1CC);
             break;
@@ -510,9 +510,8 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
 void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDai* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable,
-                       19);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable, 19);
     this->unk_A70 = -1;
     func_80B3E5DC(this, 0);
     Actor_SetScale(&this->actor, 0.2f);
@@ -568,8 +567,8 @@ void EnDai_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B3F598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                  Gfx** gfx) {
+s32 EnDai_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                           Gfx** gfx) {
     EnDai* this = THIS;
 
     if (!(this->unk_1CE & 0x40)) {
@@ -584,10 +583,10 @@ s32 func_80B3F598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         *dList = NULL;
     }
 
-    return 0;
+    return false;
 }
 
-void func_80B3F614(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnDai_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Vec3f D_80B3FE4C = { 0.0f, 0.0f, 0.0f };
 
     EnDai* this = THIS;
@@ -612,10 +611,10 @@ void func_80B3F614(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-void func_80B3F6EC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) {
+void EnDai_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx, Gfx** gfx) {
     EnDai* this = THIS;
 
-    switch (arg1) {
+    switch (limbIndex) {
         case 9:
             if (this->unk_1CE & 0x100) {
                 func_80B3EC84(this);
@@ -655,9 +654,9 @@ void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 255);
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE58[this->unk_1D6]));
 
-    POLY_XLU_DISP =
-        func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_XLU_DISP);
+    POLY_XLU_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                           this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
+                                           EnDai_TransformLimbDraw, &this->actor, POLY_XLU_DISP);
     if (this->unk_1CE & 0x40) {
         Matrix_SetCurrentState(&this->unk_18C);
 
@@ -688,9 +687,9 @@ void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE70[this->unk_1D6]));
 
-        POLY_OPA_DISP =
-            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_OPA_DISP);
+        POLY_OPA_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                               this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
+                                               EnDai_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
         Matrix_SetCurrentState(&this->unk_18C);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -707,9 +706,9 @@ void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_1CD);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE70[this->unk_1D6]));
 
-        POLY_XLU_DISP =
-            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_XLU_DISP);
+        POLY_XLU_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                               this->skelAnime.dListCount, EnDai_OverrideLimbDraw, EnDai_PostLimbDraw,
+                                               EnDai_TransformLimbDraw, &this->actor, POLY_XLU_DISP);
         Matrix_SetCurrentState(&this->unk_18C);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

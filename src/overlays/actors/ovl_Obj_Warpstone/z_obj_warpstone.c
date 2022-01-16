@@ -69,7 +69,7 @@ void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
-    Actor_SetHeight(&this->dyna.actor, 40.0f);
+    Actor_SetFocus(&this->dyna.actor, 40.0f);
 
     if (!OBJ_WARPSTONE_IS_ACTIVATED(OBJ_WARPSTONE_GET_ID(this))) {
         ObjWarpstone_SetupAction(this, ObjWarpstone_ClosedIdle);
@@ -100,7 +100,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalC
     if (this->dyna.actor.cutscene < 0 || ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         ObjWarpstone_SetupAction(this, ObjWarpstone_PlayOpeningCutscene);
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
@@ -136,9 +136,9 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->isTalking) {
-        if (func_800B867C(&this->dyna.actor, globalCtx) != 0) {
+        if (Actor_TextboxIsClosing(&this->dyna.actor, globalCtx)) {
             this->isTalking = false;
-        } else if ((func_80152498(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
+        } else if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
             if (globalCtx->msgCtx.choiceIndex != 0) {
                 func_8019F208();
                 globalCtx->msgCtx.unk11F22 = 0x4D;
@@ -149,11 +149,12 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
             }
         }
-    } else if (func_800B84D0(&this->dyna.actor, globalCtx)) {
+    } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
         this->isTalking = true;
     } else if (!this->actionFunc(this, globalCtx)) {
         func_800B863C(&this->dyna.actor, globalCtx);
     }
+
     Collider_ResetCylinderAC(globalCtx, &this->collider.base);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -164,7 +165,7 @@ void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     ObjWarpstone* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
 
-    func_800BDFC0(globalCtx, sOwlStatueDLs[this->modelIndex]);
+    Gfx_DrawDListOpa(globalCtx, sOwlStatueDLs[this->modelIndex]);
     if (this->dyna.actor.home.rot.x != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);

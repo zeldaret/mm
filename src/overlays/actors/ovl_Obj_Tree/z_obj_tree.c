@@ -141,7 +141,7 @@ void ObTree_SetupSway(ObjTree* this) {
     this->timer = 0;
     this->swayAmplitude = 546.0f;
     this->swayVelocity = 35 * 0x10000 / 360;
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_TREE_SWING);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_TREE_SWING);
     this->actionFunc = ObTree_Sway;
 }
 

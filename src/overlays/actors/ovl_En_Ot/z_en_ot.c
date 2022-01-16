@@ -148,9 +148,8 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ot_Skel_004800, &object_ot_Anim_0008D8, this->jointTable,
-                       this->morphTable, 19);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ot_Skel_004800, &object_ot_Anim_0008D8, this->jointTable, this->morphTable, 19);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Animation_Change(&this->skelAnime, sAnimations[0].animationSeg, 1.0f,
                      Animation_GetLastFrame(&sAnimations[0].animationSeg->common) * Rand_ZeroOne(),
@@ -332,7 +331,7 @@ void func_80B5BED4(EnOt* this, GlobalContext* globalCtx) {
                        0x38E);
     this->actor.speedXZ = 3.5f;
     this->actor.world.pos.y = this->unk_360->actor.world.pos.y;
-    Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
+    Actor_MoveWithoutGravityReverse(&this->actor);
 }
 
 void func_80B5BF60(EnOt* this, GlobalContext* globalCtx) {
@@ -371,7 +370,7 @@ void func_80B5BFB8(EnOt* this, GlobalContext* globalCtx) {
         func_80B5C684(this->unk_360, globalCtx);
         func_80B5C684(this, globalCtx);
     } else {
-        Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
+        Actor_MoveWithoutGravityReverse(&this->actor);
     }
 }
 
@@ -382,7 +381,7 @@ void func_80B5C154(EnOt* this, GlobalContext* globalCtx) {
         this->unk_38C = GI_HEART_PIECE;
         gSaveContext.weekEventReg[32] |= 1;
     }
-    func_800B8A1C(&this->actor, globalCtx, this->unk_38C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_PickUp(&this->actor, globalCtx, this->unk_38C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_80B5C1CC;
 }
 
@@ -392,7 +391,7 @@ void func_80B5C1CC(EnOt* this, GlobalContext* globalCtx) {
         func_80B5C244(this, globalCtx);
         func_80B5C244(this->unk_360, globalCtx);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->unk_38C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_PickUp(&this->actor, globalCtx, this->unk_38C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
@@ -530,7 +529,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
     if ((gSaveContext.weekEventReg[84] & 0x10) && (this->unk_33C == 1)) {
         this->actor.textId = 0;
         this->unk_384 = 1;
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk_3A0 = BINANG_ADD(sp3E, 0x4000);
             this->unk_360->unk_3A0 = this->unk_3A0;
             func_80B5C9A8(this, globalCtx);
@@ -555,7 +554,7 @@ void func_80B5C910(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5C950(EnOt* this, GlobalContext* globalCtx) {
     if (this->unk_32C & 8) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
         gSaveContext.weekEventReg[25] |= 4;
         func_80B5CAD0(this, globalCtx);
     }
@@ -576,7 +575,7 @@ void func_80B5C9D0(EnOt* this, GlobalContext* globalCtx) {
     this->actor.world.rot.x = this->actor.world.rot.x;
     this->actor.world.rot.y = this->actor.world.rot.y;
     this->actor.world.rot.z = this->actor.world.rot.z;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
     this->actionFunc = func_80B5CA30;
 }
 
@@ -611,7 +610,7 @@ void func_80B5CBA0(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5CBEC(EnOt* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_80B5CC88(this, globalCtx);
     } else {
@@ -643,7 +642,7 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 temp;
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             temp = Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))),
                                       3, 0xE38, 0x38E);
@@ -685,7 +684,7 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
     s32 pad;
 
     this->actor.textId = 0;
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80B5D114(this, globalCtx);
         return;
     }
@@ -739,7 +738,7 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
     u16 phi_a1;
     s32 temp;
 
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             temp = Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
             this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -894,7 +893,7 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
     func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
     this->actor.flags |= 0x8000000;
     this->actor.flags &= ~(0x8 | 0x1);
-    Actor_SetSwitchFlag(globalCtx, ENOT_GET_3F80(&this->actor));
+    Flags_SetSwitch(globalCtx, ENOT_GET_3F80(&this->actor));
     this->actionFunc = func_80B5D750;
 }
 
@@ -933,7 +932,7 @@ void EnOt_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnOt* this = THIS;
 
     if ((this->animIdx == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
     }
 
     this->actionFunc(this, globalCtx);
@@ -957,7 +956,7 @@ void EnOt_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.prevPos.y = this->actor.floorHeight + 50.0f;
     }
 
-    Actor_SetHeight(&this->actor, 12.0f);
+    Actor_SetFocus(&this->actor, 12.0f);
     SkelAnime_Update(&this->skelAnime);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -975,7 +974,7 @@ void func_80B5DAEC(Actor* thisx, GlobalContext* globalCtx) {
     EnOt* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 12.0f);
+    Actor_SetFocus(&this->actor, 12.0f);
     SkelAnime_Update(&this->skelAnime);
     func_80B5BB38(&this->unk_747, &this->unk_744, 0.7f);
     if (this->unk_32C & 0x400) {

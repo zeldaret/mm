@@ -49,5 +49,5 @@ void ObjVisiblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjVisiblock_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BE03C(globalCtx, object_visiblock_DL_000140);
+    Gfx_DrawDListXlu(globalCtx, object_visiblock_DL_000140);
 }

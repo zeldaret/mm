@@ -53,5 +53,5 @@ void BgMbarChair_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgMbarChair_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, object_mbar_obj_DL_000288);
+    Gfx_DrawDListOpa(globalCtx, object_mbar_obj_DL_000288);
 }

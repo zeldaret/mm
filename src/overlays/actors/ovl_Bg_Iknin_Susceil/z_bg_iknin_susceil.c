@@ -54,7 +54,7 @@ s32 func_80C0A740(BgIkninSusceil* this, GlobalContext* globalCtx) {
     Vec3f offset;
     Player* player = GET_PLAYER(globalCtx);
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
 
     return (D_80C0B0E8.x < offset.z) && (offset.z < D_80C0B0E8.y) && (offset.x > -240.0f) && (offset.x < D_80C0B0E4);
 }
@@ -91,7 +91,7 @@ s32 func_80C0A95C(BgIkninSusceil* this, GlobalContext* globalCtx) {
     Vec3f offset;
     f32 temp1, temp2, temp3, temp4;
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     for (i = 0; i < 7; i++) {
         temp3 = (D_80C0B0F0[i] * 80.0f) + 0.5f;
         temp4 = (D_80C0B0F0[i] * 80.0f) + 79.5f;
@@ -152,8 +152,8 @@ void func_80C0ABA8(BgIkninSusceil* this, GlobalContext* globalCtx) {
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
         func_80C0A86C(this, globalCtx, 4, 14, 1);
-        Actor_UnsetSwitchFlag(globalCtx, GET_SUSCEIL_SWITCHFLAG(this));
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
+        Flags_UnsetSwitch(globalCtx, GET_SUSCEIL_SWITCHFLAG(this));
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
     } else {
         func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
@@ -226,7 +226,7 @@ void BgIkninSusceil_Update(Actor* thisx, GlobalContext* globalCtx) {
     if ((this->unk168 == 0) && (this->unk166 > 0) && (player->stateFlags3 & 0x100) && (player->unk_B48 > 1000.0f)) {
         this->unk168 = 2;
         if ((func_80C0A95C(this, globalCtx) != 0) && (this->actionFunc != func_80C0AE5C)) {
-            func_800B8E58(&player->actor, NA_SE_PL_BODY_HIT);
+            func_800B8E58(player, NA_SE_PL_BODY_HIT);
             func_80C0AE3C(this);
         }
     }
@@ -257,5 +257,5 @@ void BgIkninSusceil_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
 
     AnimatedMat_Draw(globalCtx, this->animatedTexture);
-    func_800BDFC0(globalCtx, object_ikninside_obj_DL_00C308);
+    Gfx_DrawDListOpa(globalCtx, object_ikninside_obj_DL_00C308);
 }

@@ -102,7 +102,7 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnCow* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 72.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 72.0f);
 
     switch (EN_COW_TYPE(thisx)) {
         case EN_COW_TYPE_DEFAULT:
@@ -201,7 +201,7 @@ void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         this->actor.flags &= ~0x10000;
         func_801477B4(globalCtx);
         this->actionFunc = EnCow_Idle;
@@ -209,7 +209,7 @@ void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_GiveMilkEnd(EnCow* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->actor.flags &= ~0x10000;
         this->actionFunc = EnCow_Idle;
     }
@@ -220,21 +220,21 @@ void EnCow_GiveMilkWait(EnCow* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = EnCow_GiveMilkEnd;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
     }
 }
 
 void EnCow_GiveMilk(EnCow* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         this->actor.flags &= ~0x10000;
         func_801477B4(globalCtx);
         this->actionFunc = EnCow_GiveMilkWait;
-        func_800B8A1C(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
     }
 }
 
 void EnCow_CheckForEmptyBottle(EnCow* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (func_80114E90()) {
             func_80151938(globalCtx, 0x32C9); // Text to give milk.
             this->actionFunc = EnCow_GiveMilk;
@@ -246,7 +246,7 @@ void EnCow_CheckForEmptyBottle(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_Talk(EnCow* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (this->actor.textId == 0x32C8) { // Text to give milk after playing Epona's Song.
             this->actionFunc = EnCow_CheckForEmptyBottle;
         } else if (this->actor.textId == 0x32C9) { // Text to give milk.
@@ -339,15 +339,15 @@ void EnCow_Update(Actor* thisx, GlobalContext* globalCtx2) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliders[0].base);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliders[1].base);
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &gCowBodyChewAnim) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_COW_CRY);
-            Animation_Change(&this->skelAnime, &gCowBodyMoveHeadAnim, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&gCowBodyMoveHeadAnim), ANIMMODE_ONCE, 1.0f);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COW_CRY);
+            Animation_Change(&this->skelAnime, &gCowBodyMoveHeadAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowBodyMoveHeadAnim),
+                             ANIMMODE_ONCE, 1.0f);
         } else {
             Animation_Change(&this->skelAnime, &gCowBodyChewAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowBodyChewAnim),
                              ANIMMODE_LOOP, 1.0f);

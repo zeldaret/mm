@@ -223,7 +223,8 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (!EnMaYts_CheckValidSpawn(this, globalCtx)) {
         Actor_MarkForDeath(&this->actor);
     }
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
+
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, NULL, this->jointTable, this->morphTable,
                        MA1_LIMB_MAX);
     EnMaYts_InitAnimation(this, globalCtx);
@@ -295,7 +296,7 @@ void EnMaYts_SetupStartDialogue(EnMaYts* this) {
 void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (func_800B84D0(&this->actor, globalCtx)) { // if (Actor_IsTalking)
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (!(gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             if (!(gSaveContext.weekEventReg[0x41] & 0x80)) {
                 // Saying to non-human Link: "Cremia went to town."
@@ -352,7 +353,7 @@ void EnMaYts_SetupDialogueHandler(EnMaYts* this) {
 }
 
 void EnMaYts_DialogueHandler(EnMaYts* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5: // End message block
             EnMaYts_ChooseNextDialogue(this, globalCtx);
             break;
@@ -500,8 +501,9 @@ void EnMaYts_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80B8D12C(this, globalCtx);
 }
 
-s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg) {
-    EnMaYts* this = (EnMaYts*)arg;
+s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                             Actor* thisx) {
+    EnMaYts* this = THIS;
     Vec3s sp4;
 
     if (limbIndex == MA1_LIMB_HEAD) {
@@ -517,11 +519,11 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         rot->z += sp4.x;
     }
 
-    return 0;
+    return false;
 }
 
-void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
-    EnMaYts* this = (EnMaYts*)arg;
+void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnMaYts* this = THIS;
 
     if (limbIndex == MA1_LIMB_HEAD) {
         Matrix_GetStateTranslation(&this->actor.focus.pos);

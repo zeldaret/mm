@@ -55,5 +55,5 @@ void ObjKepnKoya_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKepnKoya_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, object_kepn_koya_DL_003478);
+    Gfx_DrawDListOpa(globalCtx, object_kepn_koya_DL_003478);
 }

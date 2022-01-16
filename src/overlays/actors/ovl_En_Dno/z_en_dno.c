@@ -120,8 +120,8 @@ void func_80A714B4(EnDno* this, GlobalContext* globalCtx) {
     do {
         actor = SubS_FindActor(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
-            if ((s32)ENDNO_GET_F(actor) == ENDNO_GET_F_1) {
-                Actor_SetSwitchFlag(globalCtx, ENDNO_GET_7F0(actor));
+            if (ENDNO_GET_F(actor) == ENDNO_GET_F_1) {
+                Flags_SetSwitch(globalCtx, ENDNO_GET_7F0(actor));
             }
             actor = actor->next;
         }
@@ -172,7 +172,7 @@ void func_80A71788(EnDno* this, GlobalContext* globalCtx) {
     do {
         actor = SubS_FindActor(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
-            Actor_UnsetSwitchFlag(globalCtx, ENDNO_GET_7F0(actor));
+            Flags_UnsetSwitch(globalCtx, ENDNO_GET_7F0(actor));
             actor = actor->next;
         }
     } while (actor != NULL);
@@ -195,9 +195,9 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         if (actor == NULL) {
             Actor_ProcessInitChain(thisx, sInitChain);
-            ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 21.0f);
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dno_Skel_00E1F8, &object_dno_Anim_007CA4,
-                               this->jointTable, this->morphTable, 28);
+            ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 21.0f);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dno_Skel_00E1F8, &object_dno_Anim_007CA4, this->jointTable,
+                               this->morphTable, 28);
             Collider_InitCylinder(globalCtx, &this->collider);
             Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
             Actor_UpdateBgCheckInfo(globalCtx, thisx, 0.0f, 0.0f, 0.0f, 4);
@@ -322,7 +322,7 @@ void func_80A71C3C(EnDno* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x222);
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         globalCtx->msgCtx.unk11F22 = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80A71E54(this, globalCtx);
@@ -357,7 +357,7 @@ void func_80A71E54(EnDno* this, GlobalContext* globalCtx) {
 
 void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->unk_466, 0, 0x16C);
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             if (!(this->unk_3B0 & 0x10) ||
                 Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xE38)) {
@@ -511,7 +511,7 @@ void func_80A724B8(EnDno* this, GlobalContext* globalCtx) {
         func_80A71424(&this->unk_466, 0, this->actor.yawTowardsPlayer, this->actor.home.rot.y, 0x2000, 0x2D8);
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80A725E0(this, globalCtx);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
@@ -519,11 +519,11 @@ void func_80A724B8(EnDno* this, GlobalContext* globalCtx) {
 }
 
 void func_80A7256C(EnDno* this, GlobalContext* globalCtx) {
-    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
+    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, EXCH_ITEM_MINUS1);
 }
 
 void func_80A72598(EnDno* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80A725E0(this, globalCtx);
     } else {
         func_80A7256C(this, globalCtx);
@@ -538,7 +538,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
     s32 pad[2];
 
     func_80A71424(&this->unk_466, 0, 0, 0, 0x2000, 0x16C);
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             switch (this->unk_328) {
                 case 0:
@@ -580,7 +580,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                 if (this->skelAnime.curFrame <= 23.0f) {
                     this->unk_452 = 3;
                     if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OPEN_AMBRELLA);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OPEN_AMBRELLA);
                     }
                 } else if (this->skelAnime.curFrame <= 24.0f) {
                     this->unk_452 = 4;
@@ -616,7 +616,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                         } else {
                             this->unk_458 = GI_MASK_SCENTS;
                         }
-                        func_800B8A1C(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
+                        Actor_PickUp(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
                         func_801477B4(globalCtx);
                         func_80A72B84(this, globalCtx);
                     }
@@ -680,7 +680,7 @@ void func_80A72BA4(EnDno* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = func_80A72598;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
     }
 }
 
@@ -692,9 +692,11 @@ void func_80A72C04(EnDno* this, GlobalContext* globalCtx) {
     func_8013DCE0(globalCtx, &this->unk_334, &this->actor, &this->unk_340, globalCtx->setupPathList,
                   ENDNO_GET_7F(&this->actor), 1, 0, 1, 0);
     func_8013DF3C(globalCtx, &this->unk_340);
+
     this->actor.world.rot.y = this->unk_340.unk_54.y;
     this->actor.world.rot.x = this->unk_340.unk_54.x;
-    Actor_SetSwitchFlag(globalCtx, ENDNO_GET_3F80(&this->actor));
+
+    Flags_SetSwitch(globalCtx, ENDNO_GET_3F80(&this->actor));
     this->actionFunc = func_80A730A0;
 }
 
@@ -814,7 +816,7 @@ void func_80A73244(EnDno* this, GlobalContext* globalCtx) {
     this->actor.flags |= (8 | 1);
     this->unk_328 = 2;
     this->actor.speedXZ = 0.0f;
-    Actor_UnsetSwitchFlag(globalCtx, ENDNO_GET_3F80(&this->actor));
+    Flags_UnsetSwitch(globalCtx, ENDNO_GET_3F80(&this->actor));
     gSaveContext.unk_3DD0[1] = 5;
     this->unk_44E = 0;
     this->actionFunc = func_80A732C8;
@@ -839,14 +841,14 @@ void func_80A732C8(EnDno* this, GlobalContext* globalCtx) {
             }
 
             if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOSE_AMBRELLA);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CLOSE_AMBRELLA);
                 this->unk_452 = 4;
             } else if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
                 this->unk_452 = 3;
             }
         }
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80A73408(EnDno* this, GlobalContext* globalCtx) {
@@ -897,7 +899,7 @@ void EnDno_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_SetHeight(&this->actor, 51.0f);
+    Actor_SetFocus(&this->actor, 51.0f);
 }
 
 void EnDno_Draw(Actor* thisx, GlobalContext* globalCtx) {

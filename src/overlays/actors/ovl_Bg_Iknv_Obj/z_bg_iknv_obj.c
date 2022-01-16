@@ -85,7 +85,7 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
             this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
             gSaveContext.weekEventReg[51] &= (u8)~0x10;
-            Actor_SetHeight(&this->dyna.actor, IREG(88));
+            Actor_SetFocus(&this->dyna.actor, IREG(88));
             break;
         default:
             Actor_MarkForDeath(&this->dyna.actor);
@@ -149,7 +149,7 @@ s32 func_80BD7E0C(BgIknvObj* this, s16 targetRotation, GlobalContext* globalCtx)
         func_800B9010(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
         return false;
     }
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
     return true;
 }
 

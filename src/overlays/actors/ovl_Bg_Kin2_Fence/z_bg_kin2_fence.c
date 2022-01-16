@@ -226,7 +226,7 @@ void BgKin2Fence_SetupPlayOpenCutscene(BgKin2Fence* this) {
 void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Actor_SetSwitchFlag(globalCtx, this->dyna.actor.params & 0x7F);
+        Flags_SetSwitch(globalCtx, this->dyna.actor.params & 0x7F);
         BgKin2Fence_SetupWaitBeforeOpen(this);
         return;
     }
@@ -270,5 +270,5 @@ void BgKin2Fence_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgKin2Fence_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, object_kin2_obj_DL_000828);
+    Gfx_DrawDListOpa(globalCtx, object_kin2_obj_DL_000828);
 }

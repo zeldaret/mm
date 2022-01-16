@@ -76,7 +76,7 @@ void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx) {
         func_80B40080(this);
     }
 
-    func_8019F1C0(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
+    Audio_PlaySfxAtPos(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
 void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx) {
@@ -93,8 +93,8 @@ void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx) {
 
     if (dist.x >= 0.0f && dist.x <= this->waterBoxXLength && dist.z >= 0.0f && dist.z <= this->waterBoxZLength &&
         fabsf(dist.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-        func_800B8A1C(&this->dyna.actor, globalCtx, 0xBA, this->dyna.actor.xzDistToPlayer,
-                      fabsf(this->dyna.actor.playerHeightRel));
+        Actor_PickUp(&this->dyna.actor, globalCtx, 0xBA, this->dyna.actor.xzDistToPlayer,
+                     fabsf(this->dyna.actor.playerHeightRel));
     }
 }
 

@@ -180,5 +180,5 @@ void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;
 
     AnimatedMat_Draw(globalCtx, this->unk_190);
-    func_800BDFC0(globalCtx, object_boyo_DL_000300);
+    Gfx_DrawDListOpa(globalCtx, object_boyo_DL_000300);
 }
