@@ -8,16 +8,16 @@ struct EnHeishi;
 typedef void (*EnHeishiActionFunc)(struct EnHeishi*, GlobalContext*);
 
 typedef enum {
-    /* 0 */ HEISHI_LIMB_NONE,
-    /* 1 */ HEISHI_LIMB_ROOT,
-    /* 2 */ HEISHI_LIMB_PELVIS,
-    /* 3 */ HEISHI_LIMB_LEFT_THIGH,
-    /* 4 */ HEISHI_LIMB_LEFT_CALF,
-    /* 5 */ HEISHI_LIMB_LEFT_FOOT,
-    /* 6 */ HEISHI_LIMB_RIGHT_THIGH,
-    /* 7 */ HEISHI_LIMB_RIGHT_CALF,
-    /* 8 */ HEISHI_LIMB_RIGHT_FOOT,
-    /* 9 */ HEISHI_LIMB_TORSO,
+    /*  0 */ HEISHI_LIMB_NONE,
+    /*  1 */ HEISHI_LIMB_ROOT,
+    /*  2 */ HEISHI_LIMB_PELVIS,
+    /*  3 */ HEISHI_LIMB_LEFT_THIGH,
+    /*  4 */ HEISHI_LIMB_LEFT_CALF,
+    /*  5 */ HEISHI_LIMB_LEFT_FOOT,
+    /*  6 */ HEISHI_LIMB_RIGHT_THIGH,
+    /*  7 */ HEISHI_LIMB_RIGHT_CALF,
+    /*  8 */ HEISHI_LIMB_RIGHT_FOOT,
+    /*  9 */ HEISHI_LIMB_TORSO,
     /* 10 */ HEISHI_LIMB_LEFT_SHOULDER,
     /* 11 */ HEISHI_LIMB_LEFT_FOREARM,
     /* 12 */ HEISHI_LIMB_LEFT_HAND,
@@ -42,11 +42,11 @@ typedef struct EnHeishi {
     /* 0x0262 */ s16 headRotZTarget;
     /* 0x0264 */ s32 animIndex;
     /* 0x0268 */ s32 paramCopy;
-    /* 0x026C */ s32 unk26C;
+    /* 0x026C */ s32 shouldSetHeadRotation;
     /* 0x0270 */ s16 timer;
     /* 0x0272 */ s16 yawTowardsPlayer;
     /* 0x0274 */ f32 frameCount;
-    /* 0x0278 */ s16 unk278;
+    /* 0x0278 */ s16 unk278;    // set and not used
     /* 0x027C */ UNK_TYPE1 unk_27C[0x8];
     /* 0x0284 */ ColliderCylinder colliderCylinder;
 } EnHeishi; // size = 0x2D0
