@@ -5,6 +5,7 @@
  */
 
 #include "z_en_po_sisters.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00005015
 
@@ -157,7 +158,7 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPoSisters* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 50.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 50.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_060065C8, &D_060014CC, this->jointTable, this->morphTable, 12);
     this->unk_226 = 255;
     this->unk_227 = 255;
@@ -302,7 +303,7 @@ void func_80B1AAE8(EnPoSisters* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (DECR(this->unk_192) == 0) {
         this->unk_192 = Rand_S16Offset(100, 50);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH2);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
     }
 }
 
@@ -406,7 +407,7 @@ void func_80B1B020(EnPoSisters* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y += ((s32)((this->skelAnime.endFrame + 1.0f) * 3.0f) - this->unk_192) * 0x180;
 
     if ((this->unk_192 == 18) || (this->unk_192 == 7)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_ROLL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_ROLL);
     } else if (this->unk_192 == 0) {
         func_80B1B0E0(this);
     }
@@ -444,13 +445,13 @@ void func_80B1B168(EnPoSisters* this, GlobalContext* globalCtx) {
                 this->collider.base.acFlags &= ~AC_HARD;
                 func_80B1AC40(this);
             } else {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH2);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
                 func_80B1BE4C(this, globalCtx);
             }
         }
     }
     if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_ROLL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_ROLL);
     }
 }
 
@@ -472,7 +473,7 @@ void func_80B1B2F0(EnPoSisters* this, GlobalContext* globalCtx) {
         if (this->unk_18C != 0) {
             func_80B1AC40(this);
         } else {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH2);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
             func_80B1BE4C(this, globalCtx);
         }
     }
@@ -489,7 +490,7 @@ void func_80B1B3A8(EnPoSisters* this) {
     }
 
     this->unk_191 &= ~(0x8 | 0x2 | 0x1);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
     this->actionFunc = func_80B1B444;
 }
 
@@ -556,8 +557,8 @@ void func_80B1B70C(EnPoSisters* this) {
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_191 &= ~(0x4 | 0x1);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DISAPPEAR);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH2);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DISAPPEAR);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
     this->actionFunc = func_80B1B7BC;
 }
 
@@ -587,7 +588,7 @@ void func_80B1B860(EnPoSisters* this, GlobalContext* globalCtx) {
 
     this->unk_192 = 15;
     this->actor.speedXZ = 0.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     this->unk_191 &= ~0x1;
     this->actionFunc = func_80B1B940;
 }
@@ -665,7 +666,7 @@ void func_80B1BA90(EnPoSisters* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_192 == 16) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
     }
 }
 
@@ -725,7 +726,7 @@ void func_80B1BE4C(EnPoSisters* this, s32 arg1) {
         sp34.x = this->actor.world.pos.x;
         sp34.y = this->actor.world.pos.y + 45.0f;
         sp34.z = this->actor.world.pos.z;
-        func_800B3030(arg1, &sp34, &D_801D15B0, &D_801D15B0, 150, 0, 3);
+        func_800B3030(arg1, &sp34, &gZeroVec3f, &gZeroVec3f, 150, 0, 3);
     }
     Lights_PointSetColorAndRadius(&this->lightInfo, 0, 0, 0, 0);
     this->actionFunc = func_80B1BF2C;
@@ -825,7 +826,7 @@ void func_80B1C0A4(EnPoSisters* this, GlobalContext* globalCtx) {
 
 void func_80B1C2E8(EnPoSisters* this) {
     Animation_PlayOnce(&this->skelAnime, &D_0600119C);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     this->unk_229 = 0;
     this->unk_191 = 0x20;
     this->actionFunc = func_80B1C340;
@@ -854,11 +855,11 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        func_800BE258(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if (this->unk_18D != 0) {
             ((EnPoSisters*)this->actor.parent)->unk_194--;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH2);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH2);
             func_80B1BE4C(this, globalCtx);
             if (Rand_ZeroOne() < 0.2f) {
                 sp3C.x = this->actor.world.pos.x;
@@ -878,10 +879,10 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
                 }
             } else {
                 if (Actor_ApplyDamage(&this->actor)) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DAMAGE);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DAMAGE);
                 } else {
                     Enemy_StartFinishingBlow(globalCtx, &this->actor);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_SISTER_DEAD);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_SISTER_DEAD);
                 }
 
                 if (this->actor.colChkInfo.damageEffect == 4) {
@@ -920,7 +921,7 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_80B1A894(this, globalCtx);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     if (this->unk_191 & 0x10) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 0.0f, 5);
@@ -933,7 +934,7 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.shadowAlpha = this->unk_229;
-    Actor_SetHeight(&this->actor, 40.0f);
+    Actor_SetFocus(&this->actor, 40.0f);
 
     if (this->unk_2F0 > 0.0f) {
         Math_StepToF(&this->unk_2F0, 0.0f, 0.05f);
@@ -1189,7 +1190,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Scale(phi_f20, phi_f20, phi_f20, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
 
     func_800BE680(globalCtx, &this->actor, this->unk_28C, ARRAY_COUNT(this->unk_28C),

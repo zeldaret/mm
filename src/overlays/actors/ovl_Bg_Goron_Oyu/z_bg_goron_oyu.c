@@ -78,7 +78,7 @@ void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx) {
         func_80B40080(this);
     }
 
-    func_8019F1C0(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
+    Audio_PlaySfxAtPos(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
 void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx) {
@@ -95,8 +95,8 @@ void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx) {
 
     if (dist.x >= 0.0f && dist.x <= this->waterBoxXLength && dist.z >= 0.0f && dist.z <= this->waterBoxZLength &&
         fabsf(dist.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-        func_800B8A1C(&this->dyna.actor, globalCtx, 0xBA, this->dyna.actor.xzDistToPlayer,
-                      fabsf(this->dyna.actor.playerHeightRel));
+        Actor_PickUp(&this->dyna.actor, globalCtx, 0xBA, this->dyna.actor.xzDistToPlayer,
+                     fabsf(this->dyna.actor.playerHeightRel));
     }
 }
 
@@ -133,7 +133,7 @@ void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx) {
 
         if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &pos1) < this->waterBoxPos.y) {
             pos1.y = this->waterBoxPos.y + 10.0f;
-            EffectSsIceSmoke_Spawn(globalCtx, &pos1, &vel1, &D_801D15B0, scale);
+            EffectSsIceSmoke_Spawn(globalCtx, &pos1, &vel1, &gZeroVec3f, scale);
         }
         pos2.x = (Rand_ZeroOne() * this->waterBoxXLength) + this->waterBoxPos.x;
         pos2.y = this->waterBoxPos.y + 100.0f;
@@ -145,7 +145,7 @@ void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx) {
 
         if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &pos2) < this->waterBoxPos.y) {
             pos2.y = this->waterBoxPos.y + 10.0f;
-            EffectSsIceSmoke_Spawn(globalCtx, &pos2, &vel2, &D_801D15B0, scale);
+            EffectSsIceSmoke_Spawn(globalCtx, &pos2, &vel2, &gZeroVec3f, scale);
         }
     }
 }

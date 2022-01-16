@@ -165,7 +165,7 @@ void EnFloormas_Init(Actor* thisx, GlobalContext* globalCtx2) {
     s32 params;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 50.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 50.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008FB0, &D_06009DB0, this->jointTable, this->morphTable, 25);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -236,7 +236,7 @@ void func_808D0930(EnFloormas* this, GlobalContext* globalCtx) {
         func_808D19D4((EnFloormas*)this->actor.child);
         func_808D19D4((EnFloormas*)this->actor.parent);
         func_808D19D4(this);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_KUSAMUSHI_HIDE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_HIDE);
     } else {
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x90);
         func_808D1ED4(this, globalCtx);
@@ -251,7 +251,7 @@ void func_808D09CC(EnFloormas* this) {
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_18E = 80;
     this->actor.flags &= ~(0x400 | 0x200);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_808D0A48(EnFloormas* this, GlobalContext* globalCtx) {
@@ -259,8 +259,8 @@ void func_808D0A48(EnFloormas* this, GlobalContext* globalCtx) {
         this->unk_18C = 0;
         this->collider.base.colType = COLTYPE_HIT0;
         this->unk_2C4 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_2D0, ARRAY_COUNT(this->unk_2D0), 2,
-                      this->actor.scale.x * 30.000002f, this->actor.scale.x * 20.0f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D0, ARRAY_COUNT(this->unk_2D0), 2,
+                              this->actor.scale.x * 30.000002f, this->actor.scale.x * 20.0f);
         if (this->actor.scale.x > 0.009f) {
             this->actor.flags |= 0x400;
         } else {
@@ -277,10 +277,10 @@ void func_808D0B08(EnFloormas* this) {
 
 void func_808D0B50(EnFloormas* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        if ((this->actor.xzDistToPlayer < 400.0f) && !Actor_IsActorFacingLink(&this->actor, 0x4000)) {
+        if ((this->actor.xzDistToPlayer < 400.0f) && !Actor_IsFacingPlayer(&this->actor, 0x4000)) {
             this->unk_190 = this->actor.yawTowardsPlayer;
             func_808D108C(this);
-        } else if ((this->actor.xzDistToPlayer < 280.0f) && Actor_IsActorFacingLink(&this->actor, 0x2000)) {
+        } else if ((this->actor.xzDistToPlayer < 280.0f) && Actor_IsFacingPlayer(&this->actor, 0x2000)) {
             func_808D1380(this, globalCtx);
         } else {
             func_808D0C14(this);
@@ -328,15 +328,15 @@ void func_808D0D70(EnFloormas* this, GlobalContext* globalCtx) {
 
     if ((temp_v0 != 0) || Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 24.0f) ||
         Animation_OnFrame(&this->skelAnime, 36.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FALL_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_WALK);
     }
 
-    if ((this->actor.xzDistToPlayer < 320.0f) && Actor_IsActorFacingLink(&this->actor, 0x4000)) {
+    if ((this->actor.xzDistToPlayer < 320.0f) && Actor_IsFacingPlayer(&this->actor, 0x4000)) {
         func_808D0F50(this);
     } else if (this->actor.bgCheckFlags & 8) {
         this->unk_190 = this->actor.wallYaw;
         func_808D108C(this);
-    } else if ((this->actor.xzDistToPlayer < 400.0f) && !Actor_IsActorFacingLink(&this->actor, 0x4000)) {
+    } else if ((this->actor.xzDistToPlayer < 400.0f) && !Actor_IsFacingPlayer(&this->actor, 0x4000)) {
         this->unk_190 = this->actor.yawTowardsPlayer;
         func_808D108C(this);
     } else if (this->unk_18E == 0) {
@@ -367,11 +367,11 @@ void func_808D0F80(EnFloormas* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f) ||
         Animation_OnFrame(&this->skelAnime, 24.0f) || Animation_OnFrame(&this->skelAnime, 36.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FALL_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_WALK);
     }
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x71C);
-    if ((this->actor.xzDistToPlayer < 280.0f) && Actor_IsActorFacingLink(&this->actor, 0x2000) &&
+    if ((this->actor.xzDistToPlayer < 280.0f) && Actor_IsFacingPlayer(&this->actor, 0x2000) &&
         !(this->actor.bgCheckFlags & 8)) {
         func_808D1380(this, globalCtx);
     } else if (this->actor.xzDistToPlayer > 400.0f) {
@@ -412,9 +412,9 @@ void func_808D11BC(EnFloormas* this, GlobalContext* globalCtx) {
     if (((this->skelAnime.playSpeed > 0.0f) && Animation_OnFrame(&this->skelAnime, 21.0f)) ||
         ((this->skelAnime.playSpeed < 0.0f) && Animation_OnFrame(&this->skelAnime, 6.0f))) {
         if (this->actor.scale.x > 0.009f) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_FALL_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_WALK);
         } else {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_SM_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_WALK);
         }
     }
 
@@ -433,8 +433,8 @@ void func_808D1380(EnFloormas* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
     this->actor.gravity = 0.0f;
     func_808D08D0(this);
-    func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, 15.0f, 6, 20.0f, 300, 100, 1);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_ATTACK);
+    Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 15.0f, 6, 20.0f, 300, 100, 1);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_ATTACK);
     this->actionFunc = func_808D1458;
 }
 
@@ -461,10 +461,10 @@ void func_808D14DC(EnFloormas* this, GlobalContext* globalCtx) {
     sp28.x = Math_SinS(this->actor.shape.rot.y + 0x6000) * 7.0f;
     sp28.z = Math_CosS(this->actor.shape.rot.y + 0x6000) * 7.0f;
 
-    func_800B1210(globalCtx, &sp34, &sp28, &D_801D15B0, 0x1C2, 0x64);
+    func_800B1210(globalCtx, &sp34, &sp28, &gZeroVec3f, 0x1C2, 0x64);
     sp28.x = Math_SinS(this->actor.shape.rot.y - 0x6000) * 7.0f;
     sp28.z = Math_CosS(this->actor.shape.rot.y - 0x6000) * 7.0f;
-    func_800B1210(globalCtx, &sp34, &sp28, &D_801D15B0, 0x1C2, 0x64);
+    func_800B1210(globalCtx, &sp34, &sp28, &gZeroVec3f, 0x1C2, 0x64);
     func_800B9010(&this->actor, NA_SE_EN_FLOORMASTER_SLIDING - SFX_FLAG);
 }
 
@@ -522,9 +522,9 @@ void func_808D17EC(EnFloormas* this, GlobalContext* globalCtx) {
 
         if (this->actor.velocity.y < -4.0f) {
             if (this->actor.scale.x > 0.009f) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_FALL_LAND);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_LAND);
             } else {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
             }
         }
     }
@@ -600,7 +600,7 @@ void func_808D1B44(EnFloormas* this, GlobalContext* globalCtx) {
         Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
     }
     if (this->actor.bgCheckFlags & 2) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
     }
 }
 
@@ -617,7 +617,7 @@ void func_808D1C1C(EnFloormas* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_SM_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_WALK);
     }
 
     if (this->unk_194 == 0) {
@@ -644,7 +644,7 @@ void func_808D1D6C(EnFloormas* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_SM_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_WALK);
     }
 
     flags = this->actor.bgCheckFlags & 8;
@@ -682,8 +682,8 @@ void func_808D1ED4(EnFloormas* this, GlobalContext* globalCtx) {
     sp34.x = this->actor.world.pos.x;
     sp34.y = this->actor.world.pos.y + 15.0f;
     sp34.z = this->actor.world.pos.z;
-    func_800B3030(globalCtx, &sp34, &D_801D15B0, &D_801D15B0, 150, -10, 2);
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
+    func_800B3030(globalCtx, &sp34, &gZeroVec3f, &gZeroVec3f, 150, -10, 2);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
     this->actionFunc = func_808D1F7C;
 }
 
@@ -712,7 +712,7 @@ void func_808D2040(EnFloormas* this, GlobalContext* globalCtx) {
     } else if (this->actor.bgCheckFlags & 2) {
         this->unk_18E = 50;
         this->actor.speedXZ = 0.0f;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
         func_808D1740(this);
     } else if ((this->actor.playerHeightRel < -10.0f) && (this->collider.base.ocFlags1 & OC1_HIT) &&
                (&player->actor == this->collider.base.oc)) {
@@ -774,10 +774,10 @@ void func_808D22C8(EnFloormas* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = -3.0f;
         func_808D1740(this);
     } else if ((this->unk_190 % 20) == 0) {
-        func_800B8E58(&player->actor, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->unk_92);
+        func_800B8E58(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->unk_92);
         globalCtx->damagePlayer(globalCtx, -4);
     }
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_SM_STICK - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_STICK - SFX_FLAG);
 }
 
 void func_808D2484(EnFloormas* this) {
@@ -814,7 +814,7 @@ void func_808D24F0(EnFloormas* this, GlobalContext* globalCtx) {
         this->collider.base.ocFlags1 |= OC1_ON;
     } else if (this->actor.bgCheckFlags & 2) {
         this->actor.speedXZ = 0.0f;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_LAND);
         func_808D1740(this);
     }
 
@@ -874,7 +874,7 @@ void func_808D2764(EnFloormas* this, GlobalContext* globalCtx) {
     this->actor.scale.y = this->actor.scale.z = this->actor.scale.x;
 
     if (((temp_f2 == 0.007f) || (temp_f2 == 0.004f)) && (temp_f2 != this->actor.scale.x)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_EXPAND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_EXPAND);
     }
 
     this->collider.dim.radius = sCylinderInit.dim.radius * 100.0f * this->actor.scale.x;
@@ -935,7 +935,7 @@ void func_808D2AF4(EnFloormas* this, GlobalContext* globalCtx) {
 void func_808D2B18(EnFloormas* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &D_06000590, -3.0f);
     func_800BE504(&this->actor, &this->collider);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
     this->actor.speedXZ = 5.0f;
     this->actor.velocity.y = 5.5f;
     if (this->actor.params == ENFLOORMAS_GET_7FFF_40) {
@@ -966,9 +966,9 @@ void func_808D2C08(EnFloormas* this, GlobalContext* globalCtx) {
 
     if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
         if (this->actor.scale.x > 0.009f) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         } else {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
     }
 
@@ -1017,7 +1017,7 @@ void func_808D2DC0(EnFloormas* this, GlobalContext* globalCtx) {
 void func_808D2E34(EnFloormas* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        func_800BE258(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
         if ((this->unk_18C != 10) || !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.colChkInfo.damageEffect == 0xE) {
                 func_808D0908(this);
@@ -1033,14 +1033,14 @@ void func_808D2E34(EnFloormas* this, GlobalContext* globalCtx) {
             if (this->collider.base.colType != COLTYPE_HARD) {
                 if (!Actor_ApplyDamage(&this->actor)) {
                     if (this->actor.scale.x > 0.009f) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
                     } else {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FLOORMASTER_SM_DEAD);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_DEAD);
                     }
                     Enemy_StartFinishingBlow(globalCtx, &this->actor);
                     this->actor.flags &= ~1;
                 } else if (this->actor.colChkInfo.damage != 0) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FALL_DAMAGE);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_DAMAGE);
                 }
 
                 func_808D0A48(this, globalCtx);
@@ -1055,13 +1055,13 @@ void func_808D2E34(EnFloormas* this, GlobalContext* globalCtx) {
                         func_808D2D6C(this);
                     } else if (this->actor.colChkInfo.damageEffect == 1) {
                         this->unk_18E = 40;
-                        func_800BCB70(&this->actor, 0, 255, 0, 40);
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         func_808D2D6C(this);
                     } else if (this->actor.colChkInfo.damageEffect == 5) {
                         this->unk_18E = 40;
-                        func_800BCB70(&this->actor, 0, 255, 0, 40);
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         this->unk_2C8 = 0.55f;
                         this->unk_2C4 = 2.0f;
                         this->unk_18C = 31;
@@ -1110,7 +1110,7 @@ void EnFloormas_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             if (this->actionFunc != func_808D22C8) {
-                Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+                Actor_MoveWithGravity(&this->actor);
             }
 
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, this->actor.scale.x * 3000.0f, 0.0f, 0x1D);
@@ -1131,7 +1131,7 @@ void EnFloormas_Update(Actor* thisx, GlobalContext* globalCtx) {
                 }
             }
 
-            Actor_SetHeight(&this->actor, this->actor.scale.x * 2500.0f);
+            Actor_SetFocus(&this->actor, this->actor.scale.x * 2500.0f);
             if (this->collider.base.colType == COLTYPE_HARD) {
                 if (this->unk_190 != 0) {
                     this->unk_190--;

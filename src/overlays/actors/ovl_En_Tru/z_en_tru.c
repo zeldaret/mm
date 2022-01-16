@@ -130,7 +130,7 @@ void func_80A85620(EnTruUnkStruct* arg0, Vec3f* arg1, f32 arg2, f32 arg3, f32 ar
             arg0->unk_01 = arg0->unk_02;
             arg0->unk_00 = 1;
             arg0->unk_04 = *arg1;
-            arg0->unk_1C = D_801D15B0;
+            arg0->unk_1C = gZeroVec3f;
             arg0->unk_10 = D_80A8B250;
             arg0->unk_28 = arg2;
             arg0->unk_2C = arg3;
@@ -190,8 +190,8 @@ void func_80A85AA4(EnTruUnkStruct* arg0, Vec3f* arg1, f32 arg2, f32 arg3, f32 ar
             arg0->unk_01 = arg0->unk_02;
             arg0->unk_00 = 2;
             arg0->unk_04 = *arg1;
-            arg0->unk_1C = D_801D15B0;
-            arg0->unk_10 = D_801D15B0;
+            arg0->unk_1C = gZeroVec3f;
+            arg0->unk_10 = gZeroVec3f;
             arg0->unk_28 = arg2;
             arg0->unk_2C = arg3;
             break;
@@ -350,23 +350,23 @@ s32 func_80A86460(EnTru* this) {
     f32 temp_f6;
     s16 phi_s1;
 
-    Math_Vec3f_Copy(&spB0, &D_801D15B0);
-    Math_Vec3f_Copy(&sp8C, &D_801D15B0);
-    Math_Vec3f_Copy(&spA4, &D_801D15B0);
-    Math_Vec3f_Copy(&sp98, &D_801D15B0);
+    Math_Vec3f_Copy(&spB0, &gZeroVec3f);
+    Math_Vec3f_Copy(&sp8C, &gZeroVec3f);
+    Math_Vec3f_Copy(&spA4, &gZeroVec3f);
+    Math_Vec3f_Copy(&sp98, &gZeroVec3f);
     phi_s1 = (Rand_ZeroOne() * 360.0f) * 182.0f;
     spB0.z = 20.0f;
     Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.world.rot.y, &spB0, &sp8C);
 
     for (i = 0; i < 8; i++, phi_s1 += 0x1FFE) {
-        Math_Vec3f_Copy(&spB0, &D_801D15B0);
+        Math_Vec3f_Copy(&spB0, &gZeroVec3f);
         spB0.y = 1.0f;
         spB0.z = Rand_ZeroOne() + 3.0f;
-        Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, phi_s1, &spB0, &sp98);
-        Math_Vec3f_Copy(&spB0, &D_801D15B0);
+        Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, phi_s1, &spB0, &sp98);
+        Math_Vec3f_Copy(&spB0, &gZeroVec3f);
         spB0.z = (Rand_ZeroOne() * 4.0f) + 12.0f;
         Lib_Vec3f_TranslateAndRotateY(&sp8C, phi_s1, &spB0, &spA4);
-        func_80A85E2C(this->unk_394, &spA4, &D_801D15B0, &sp98, 0.4f, 0.06f, 12.0f, 4);
+        func_80A85E2C(this->unk_394, &spA4, &gZeroVec3f, &sp98, 0.4f, 0.06f, 12.0f, 4);
     }
 
     return false;
@@ -378,7 +378,7 @@ s32 func_80A86674(EnTru* this) {
     Vec3f sp34;
 
     Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.world.rot.y, &D_80A8B3D8, &sp40);
-    Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, this->actor.world.rot.y, &D_80A8B3E4, &sp34);
+    Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, this->actor.world.rot.y, &D_80A8B3E4, &sp34);
     if (this->unk_390 == 1) {
         func_80A85E2C(this->unk_394, &sp40, &D_80A8B3F0, &sp34, 0.2f, 0.1f, 12.0f, 3);
     } else if (this->unk_390 == 2) {
@@ -396,12 +396,12 @@ s32 func_80A86770(EnTru* this) {
     s16 phi_s0 = Rand_ZeroOne() * 360.0f * 182.0f;
 
     for (i = 0; i < 4; i++, phi_s0 += 0x3FFC) {
-        Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, phi_s0, &D_801D15B0, &sp98);
+        Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, phi_s0, &gZeroVec3f, &sp98);
         sp98.y = this->actor.floorHeight + 1.0f;
         sp8C.x = Rand_ZeroOne() - 0.5f;
         sp8C.z = Rand_ZeroOne() - 0.5f;
         sp8C.y = Rand_ZeroOne() * 0.2f;
-        func_80A85E2C(this->unk_394, &sp98, &sp8C, &D_801D15B0, 1.0f, 0.04f, 28.0f, 4);
+        func_80A85E2C(this->unk_394, &sp98, &sp8C, &gZeroVec3f, 1.0f, 0.04f, 28.0f, 4);
     }
 
     return false;
@@ -661,16 +661,16 @@ s32 func_80A872AC(EnTru* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if (this->unk_34E & 7) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             if (player->transformation == PLAYER_FORM_HUMAN) {
                 this->unk_34E &= ~0x80;
             }
             this->unk_34E &= ~(0x4000 | 0x2000);
 
-            if ((player->unk_A87 == 35) || (player->unk_A87 == 36)) {
+            if ((player->exchangeItemId == 35) || (player->exchangeItemId == 36)) {
                 this->unk_34E |= 0x2000;
-                this->unk_38C = player->unk_A87;
-            } else if (player->unk_A87 != 0) {
+                this->unk_38C = player->exchangeItemId;
+            } else if (player->exchangeItemId != 0) {
                 this->unk_34E |= 0x4000;
             }
 
@@ -730,7 +730,7 @@ s32 func_80A87400(EnTru* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->actor.world.rot.y, phi_a1, 4, 3640);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if ((s32)(this->actor.floorHeight + 80.0f) >= (s32)this->actor.world.pos.y) {
         func_80A86770(this);
     }
@@ -801,7 +801,7 @@ s32 func_80A8777C(Actor* thisx, GlobalContext* globalCtx) {
     s32 temp_v0;
     s32 ret = 0;
 
-    temp_v0 = func_80152498(&globalCtx->msgCtx);
+    temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     switch (temp_v0) {
         default:
@@ -894,9 +894,9 @@ s32 func_80A87880(Actor* thisx, GlobalContext* globalCtx) {
                     this->unk_34E &= ~0x400;
                     func_80123D50(globalCtx, player, 18, 21);
                 }
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOUME_DRINK);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DRINK);
             } else if (Animation_OnFrame(&this->skelAnime, 90.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOUME_REGAIN);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_REGAIN);
             }
 
             if ((this->skelAnime.curFrame > 90.0f) && (this->skelAnime.curFrame < 95.0f)) {
@@ -931,7 +931,7 @@ s32 func_80A87B48(Actor* thisx, GlobalContext* globalCtx) {
         case 1:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 sp3E = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
-                Math_Vec3f_Copy(&sp4C, &D_801D15B0);
+                Math_Vec3f_Copy(&sp4C, &gZeroVec3f);
                 sp4C.z = 40.0f;
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, sp3E, &sp4C, &sp40);
                 func_80A85620(this->unk_394, &sp40, 2.0f, 0.08f, 60.0f);
@@ -940,7 +940,7 @@ s32 func_80A87B48(Actor* thisx, GlobalContext* globalCtx) {
                 this->unk_372 = 10;
                 this->unk_364++;
             } else if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOUME_MAGIC);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_MAGIC);
                 func_80A85AA4(this->unk_394, &this->unk_1F8, 1.0f, 0.1f, 40.0f);
             }
             break;
@@ -952,8 +952,8 @@ s32 func_80A87B48(Actor* thisx, GlobalContext* globalCtx) {
                     this->actor.shape.shadowDraw = NULL;
                     this->unk_34E |= (0x200 | 0x8);
                     this->unk_34E &= ~0x800;
-                    if (player->unk_A87 != 0) {
-                        player->unk_A87 = 0;
+                    if (player->exchangeItemId != 0) {
+                        player->exchangeItemId = 0;
                     }
                     func_80A86924(this, 12);
                 }
@@ -996,8 +996,8 @@ s32 func_80A87DC0(Actor* thisx, GlobalContext* globalCtx) {
 
         case 2:
             func_801A75E8(NA_SE_EN_KOUME_MAGIC);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOUME_AWAY);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOUME_LAUGH);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_AWAY);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_LAUGH);
             func_80A86924(this, 13);
             this->skelAnime.baseTransl.y = 0;
             this->skelAnime.moveFlags = 2;
@@ -1111,7 +1111,7 @@ void EnTru_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_tru_Skel_01AA60, NULL, this->jointTable, this->morphTable,
                        27);
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);

@@ -3,7 +3,7 @@
         <Animation Name="object_wiz_Anim_0007B0" Offset="0x7B0" />
         <Texture Name="object_wiz_Tex_0007C0" OutName="tex_0007C0" Format="i4" Width="32" Height="64" Offset="0x7C0" />
         <Texture Name="object_wiz_Tex_000BC0" OutName="tex_000BC0" Format="i4" Width="32" Height="32" Offset="0xBC0" />
-        <!-- <Blob Name="object_wiz_Blob_000DC0" Size="0x80" Offset="0xDC0" /> -->
+        <Texture Name="object_wiz_Tex_000DC0" OutName="tex_000DC0" Format="i4" Width="16" Height="16" Offset="0xDC0" />
         <DList Name="object_wiz_DL_000E70" Offset="0xE70" />
         <DList Name="object_wiz_DL_000F28" Offset="0xF28" />
         <DList Name="object_wiz_DL_000FD8" Offset="0xFD8" />

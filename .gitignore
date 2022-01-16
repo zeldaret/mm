@@ -34,6 +34,7 @@ tools/ido_recomp/* binary
 ctx.c
 graphs/
 *.c.m2c
+tools/**/*dSYM/
 tools/decomp-permuter/
 tools/mips_to_c/
 
