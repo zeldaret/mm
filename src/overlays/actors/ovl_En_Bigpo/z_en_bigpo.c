@@ -1218,6 +1218,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
  */
 void EnBigpo_UpdateFire(Actor* thisx, GlobalContext* globalCtx) {
     EnBigpo* this = THIS;
+
     this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
     this->actionFunc(this, globalCtx);
 }
