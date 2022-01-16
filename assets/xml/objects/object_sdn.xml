@@ -12,9 +12,15 @@
         <Animation Name="gSoldierStandUp" Offset="0x4770" />
         <Animation Name="gSoldierLookDown" Offset="0x4AC0" />
         <Animation Name="gSoldierComeUpHere" Offset="0x5320" />
+<<<<<<< HEAD
         <Animation Name="object_sdn_Anim_0057BC" Offset="0x57BC" /><!-- gSoldierHaltStart? -->
         <Animation Name="object_sdn_Anim_005D28" Offset="0x5D28" /><!-- gSoldierHaltIdle? -->
         <Animation Name="object_sdn_Anim_0064C0" Offset="0x64C0" /><!-- gSoldierHaltLoop? -->
+=======
+        <Animation Name="object_sdn_Anim_0057BC" Offset="0x57BC" /><!--gSoldierHaltStart?-->
+        <Animation Name="object_sdn_Anim_005D28" Offset="0x5D28" /><!--gSoldierHaltIdle?-->
+        <Animation Name="object_sdn_Anim_0064C0" Offset="0x64C0" /><!--gSoldierHaltLoop?-->
+>>>>>>> 6cc72118... fix object files to match demoheishi changes
         <Animation Name="gSoldierStandHandOnHip" Offset="0x6C18" />
         <DList Name="gSoldierTorsoDL" Offset="0x9EB0" />
         <DList Name="gSoldierHeadDL" Offset="0xA1A8" />
