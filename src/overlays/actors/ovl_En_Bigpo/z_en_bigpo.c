@@ -1223,19 +1223,19 @@ void EnBigpo_UpdateFire(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-s32 EnBigpo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor,
+s32 EnBigpo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                              Gfx** gfx) {
-    EnBigpo* this = (EnBigpo*)actor;
+    EnBigpo* this = THIS;
     // not fully invisible
     if (!(this->mainColor.a != 0 && limbIndex != 7) ||
         (this->actionFunc == EnBigpo_BurnAwayDeath && this->idleTimer >= 2)) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
-void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
-    EnBigpo* this = (EnBigpo*)actor;
+void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+    EnBigpo* this = THIS;
     s8 limbByte;
     Vec3f* v1ptr; // todo: figure out better names
     Vec3f* v2ptr;

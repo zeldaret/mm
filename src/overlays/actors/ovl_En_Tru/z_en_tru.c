@@ -1192,7 +1192,7 @@ void EnTru_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
 }
 
-void func_80A886D4(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnTru_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTru* this = THIS;
     s32 pad[3];
     s32 sp2C;
@@ -1250,8 +1250,9 @@ void EnTru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A8B408[this->unk_36E]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80A8B408[this->unk_36E]));
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnTru_OverrideLimbDraw, EnTru_PostLimbDraw, func_80A886D4, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnTru_OverrideLimbDraw, EnTru_PostLimbDraw,
+                                   EnTru_TransformLimbDraw, &this->actor);
     func_80A85788(this->unk_394, globalCtx);
     func_80A85BCC(this->unk_394, globalCtx);
     func_80A85F84(this->unk_394, globalCtx);

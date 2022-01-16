@@ -908,7 +908,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnNiw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnNiw* this = THIS;
 
     if (limbIndex == 13) {
@@ -927,7 +927,7 @@ s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* 
         rot->y += (s16)this->limb7Roty;
         rot->z += (s16)this->limb7Rotz;
     }
-    return 0;
+    return false;
 }
 
 void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -935,7 +935,7 @@ void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
-                          EnNiw_LimbDraw, NULL, &this->actor);
+                          EnNiw_OverrideLimbDraw, NULL, &this->actor);
     EnNiw_DrawFeathers(this, globalCtx);
 }
 

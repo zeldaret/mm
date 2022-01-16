@@ -1344,7 +1344,7 @@ void func_80AEF5F4(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-s32 func_80AEF65C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnTk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTk* this = THIS;
 
     if (limbIndex == 16) {
@@ -1354,7 +1354,7 @@ s32 func_80AEF65C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80AEF6A4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnTk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80AEFA84 = { 0.0f, 0.0f, 4600.0f };
     EnTk* this = THIS;
 
@@ -1394,7 +1394,7 @@ void EnTk_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     Matrix_RotateY(this->unk_318, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80AEF65C, func_80AEF6A4, &this->actor);
+                          EnTk_OverrideLimbDraw, EnTk_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

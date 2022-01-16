@@ -555,7 +555,7 @@ s32 EnPamera_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         rot->x += this->limb9Rot.y;
         rot->z += this->limb9Rot.x;
     }
-    return 0;
+    return false;
 }
 
 void EnPamera_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
