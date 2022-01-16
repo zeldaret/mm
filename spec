@@ -2324,9 +2324,11 @@ beginseg
     name "ovl_Obj_Grass"
     compress
     include "build/src/overlays/actors/ovl_Obj_Grass/z_obj_grass.o"
-    include "build/data/ovl_Obj_Grass/ovl_Obj_Grass.data.o"
-    include "build/data/ovl_Obj_Grass/ovl_Obj_Grass.bss.o"
+#ifdef NON_EQUIVALENT
+    include "build/src/overlays/actors/ovl_Obj_Grass/ovl_Obj_Grass_reloc.o"
+#else
     include "build/data/ovl_Obj_Grass/ovl_Obj_Grass.reloc.o"
+#endif
 endseg
 
 beginseg
