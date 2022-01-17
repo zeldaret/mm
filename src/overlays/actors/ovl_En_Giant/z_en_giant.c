@@ -11,15 +11,6 @@
 
 #define THIS ((EnGiant*)thisx)
 
-#define GIANT_TYPE_IS_NOT_TERMINA_FIELD(type) (type > GIANT_TYPE_OCEAN_TERMINA_FIELD)
-#define GIANT_TYPE_IS_TERMINA_FIELD(type) (type <= GIANT_TYPE_OCEAN_TERMINA_FIELD)
-#define GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type) \
-    (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS)
-#define GIANT_TYPE_IS_CHAMBER_OR_ENDING(type) \
-    (type >= GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING && type <= GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING)
-#define GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type) \
-    (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE)
-
 void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -28,6 +19,15 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx);
 void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx);
 void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx);
+
+#define GIANT_TYPE_IS_NOT_TERMINA_FIELD(type) (type > GIANT_TYPE_OCEAN_TERMINA_FIELD)
+#define GIANT_TYPE_IS_TERMINA_FIELD(type) (type <= GIANT_TYPE_OCEAN_TERMINA_FIELD)
+#define GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS)
+#define GIANT_TYPE_IS_CHAMBER_OR_ENDING(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING && type <= GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING)
+#define GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE)
 
 /**
  * These values are used to index into sAnimations to pick the appropriate animation.
