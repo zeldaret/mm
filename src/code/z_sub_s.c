@@ -301,20 +301,21 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E0A4.s")
 
-void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextAnimationIndex, s32* curAnimationIndex) {
-    AnimationSpeedInfo* animation = &animations[nextAnimationIndex];
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex,
+                                     s32* curIndex) {
+    AnimationSpeedInfo* animation = &animations[nextIndex];
     f32 startFrame = skelAnime->curFrame;
     f32 endFrame;
     f32 morphFrames;
 
-    if ((*curAnimationIndex < 0) || (nextAnimationIndex == *curAnimationIndex)) {
+    if ((*curIndex < 0) || (nextIndex == *curIndex)) {
         morphFrames = 0.0f;
-        if (*curAnimationIndex < 0) {
+        if (*curIndex < 0) {
             startFrame = 0.0f;
         }
     } else {
         morphFrames = animation->morphFrames;
-        if (nextAnimationIndex != *curAnimationIndex) {
+        if (nextIndex != *curIndex) {
             startFrame = 0.0f;
         }
     }
@@ -326,7 +327,7 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     }
     Animation_Change(skelAnime, animation->animation, animation->playSpeed, startFrame, endFrame, animation->mode,
                      morphFrames);
-    *curAnimationIndex = nextAnimationIndex;
+    *curIndex = nextIndex;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E2D4.s")

@@ -245,8 +245,7 @@ void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation,
-                   u16 index) {
+void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
     func_80A9FDB0(this, globalCtx);
 
     animation += index;

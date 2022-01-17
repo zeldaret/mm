@@ -2547,7 +2547,7 @@ void func_8013DF3C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
 s32 func_8013E054(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
 s32 func_8013E07C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
 s32 func_8013E0A4(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
-void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextAnimationIndex, s32* curAnimationIndex);
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex, s32* curIndex);
 s32 func_8013E2D4(Actor* actor, s16 arg1, s16 arg2, s32 arg3);
 s32 func_8013E3B8(Actor* actor, s16 cutscenes[], s16 len);
 void func_8013E4B0(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, Plane* plane);
