@@ -36,8 +36,8 @@ static AnimationInfo D_80A2ED00[] = { { &D_0600CC94, 1.0f, 0, -1.0f, 0, 0 } };
 
 void func_80A2E960(SkelAnime* arg0, AnimationInfo* animations, u16 index) {
     f32 frameCount;
-    animations += index;
 
+    animations += index;
     if (animations->frameCount < 0.0f) {
         frameCount = Animation_GetLastFrame(animations->animation);
     } else {
