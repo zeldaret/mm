@@ -216,6 +216,7 @@ void DmaMgr_Start(void) {
     {
         DmaEntry* iter = dmadata;
         u32 idx = 0;
+
         while (iter->vromEnd != 0) {
             iter++;
             idx++;
