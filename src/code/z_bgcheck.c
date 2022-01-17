@@ -4208,9 +4208,6 @@ s32 func_800C9AE4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return (func_800C9A4C(colCtx, poly, bgId) & 4) ? true : false;
 }
 
-/**
- * unused
- */
 u32 func_800C9B18(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
 }

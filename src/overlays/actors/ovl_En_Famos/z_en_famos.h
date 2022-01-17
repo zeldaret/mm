@@ -30,7 +30,7 @@ typedef struct EnFamos {
     /* 0x1D7 */ u8 currentPathNode;
     /* 0x1D8 */ u8 unk1D8;
     /* 0x1D9 */ u8 unk1D9;
-    /* 0x1DA */ s16 unk1DA; // counter
+    /* 0x1DA */ s16 hoverClk; // 30->0, repeat, for height adjustment
     /* 0x1DC */ s16 unk1DC;
     /* 0x1DE */ s16 unk1DE;
     /* 0x1E0 */ s16 unk1E0; // timer
