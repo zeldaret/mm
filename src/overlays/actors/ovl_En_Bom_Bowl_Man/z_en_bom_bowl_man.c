@@ -653,9 +653,12 @@ s32 func_809C5F44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-#include "z_en_bom_bowl_man_gfx.c"
+#include "overlays/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man.c"
 
-static TexturePtr D_809C6200[] = { D_809C61E0, D_809C61F0, D_809C61F0, D_809C61F0, D_809C61F0 };
+static TexturePtr D_809C6200[] = {
+    gEnBomBowlMan_D_809C61E0, gEnBomBowlMan_D_809C61F0, gEnBomBowlMan_D_809C61F0,
+    gEnBomBowlMan_D_809C61F0, gEnBomBowlMan_D_809C61F0,
+};
 
 static TexturePtr D_809C6214[] = {
     object_cs_Tex_00C520,
