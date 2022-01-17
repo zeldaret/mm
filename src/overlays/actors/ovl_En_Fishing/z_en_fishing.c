@@ -4228,7 +4228,7 @@ s32 EnFishing_LoachOverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx
         rot->y += this->unk_1C4[2];
     }
 
-    return 0;
+    return false;
 }
 
 void EnFishing_LoachPostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
