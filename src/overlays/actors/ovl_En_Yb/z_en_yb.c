@@ -380,7 +380,6 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
         func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 
-    // ?
     if (this->unkFlag410 & 1) {
         if (!(player->stateFlags2 & 0x8000000)) {
             this->unkFlag410 &= ~1;
