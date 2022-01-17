@@ -428,16 +428,16 @@ s32 Distortion_GetUnderwaterCurrentSpeed(Player* player) {
 }
 
 void Distortion_Update(void) {
-    static s16 depthCycle = 0x3F0;
-    static s16 screenPlaneCycle = 0x156;
+    static s16 depthPhase = 0x3F0;
+    static s16 screenPlanePhase = 0x156;
     static s16 countdownMax = 1;
     f32 xyScaleFactor;
     f32 zScaleFactor;
     f32 speedScaleFactor;
     f32 countdownRatio;
     f32 waterYScaleFactor;
-    f32 depthCycleSpeed;
-    f32 screenPlaneCycleSpeed;
+    f32 depthPhaseStep;
+    f32 screenPlanePhaseStep;
     f32 rotX;
     f32 rotY;
     f32 rotZ;
@@ -454,11 +454,11 @@ void Distortion_Update(void) {
     if (sDistortionContext.type != 0) {
         if (sDistortionContext.type & 0x800) {
             sDistortionContext.countdown = 2;
-            depthCycle = 0x3F0;
-            screenPlaneCycle = 0x156;
+            depthPhase = 0x3F0;
+            screenPlanePhase = 0x156;
 
-            depthCycleSpeed = 0.0f;
-            screenPlaneCycleSpeed = 170.0f;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 170.0f;
 
             rotX = 0.0f;
             rotY = 0.0f;
@@ -474,12 +474,12 @@ void Distortion_Update(void) {
         } else if (sDistortionContext.type & 0x400) {
             if (sDistortionContext.state == DISTORTION_SETUP) {
                 countdownMax = sDistortionContext.countdown;
-                depthCycle = 0x3F0;
-                screenPlaneCycle = 0x156;
+                depthPhase = 0x3F0;
+                screenPlanePhase = 0x156;
             }
 
-            depthCycleSpeed = 0.0f;
-            screenPlaneCycleSpeed = 50.0f / countdownMax;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 50.0f / countdownMax;
 
             rotX = 0.0f;
             rotY = 0.0f;
@@ -495,12 +495,12 @@ void Distortion_Update(void) {
         } else if (sDistortionContext.type & 0x200) {
             if (sDistortionContext.state == DISTORTION_SETUP) {
                 countdownMax = sDistortionContext.countdown;
-                depthCycle = 0x1FC;
-                screenPlaneCycle = 0x156;
+                depthPhase = 0x1FC;
+                screenPlanePhase = 0x156;
             }
 
-            depthCycleSpeed = -5.0f;
-            screenPlaneCycleSpeed = 5.0f;
+            depthPhaseStep = -5.0f;
+            screenPlanePhaseStep = 5.0f;
 
             rotX = 0.0f;
             rotY = 0.0f;
@@ -516,12 +516,12 @@ void Distortion_Update(void) {
         } else if (sDistortionContext.type & 0x100) {
             if (sDistortionContext.state == DISTORTION_SETUP) {
                 countdownMax = sDistortionContext.countdown;
-                depthCycle = 0x2710;
-                screenPlaneCycle = 0x3E8;
+                depthPhase = 0x2710;
+                screenPlanePhase = 0x3E8;
             }
 
-            depthCycleSpeed = 0.0f;
-            screenPlaneCycleSpeed = 150.0f;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 150.0f;
 
             rotX = 0;
             rotY = 0;
@@ -541,12 +541,12 @@ void Distortion_Update(void) {
         } else if (sDistortionContext.type & 0x80) {
             if (sDistortionContext.state == DISTORTION_SETUP) {
                 countdownMax = sDistortionContext.countdown;
-                depthCycle = 0x4B0;
-                screenPlaneCycle = 0x7D0;
+                depthPhase = 0x4B0;
+                screenPlanePhase = 0x7D0;
             }
 
-            depthCycleSpeed = 0.0f;
-            screenPlaneCycleSpeed = 150.0f;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 150.0f;
 
             rotX = 0;
             rotY = 0;
@@ -562,12 +562,12 @@ void Distortion_Update(void) {
         } else if (sDistortionContext.type & 0x40) {
             if (sDistortionContext.state == DISTORTION_SETUP) {
                 countdownMax = sDistortionContext.countdown;
-                depthCycle = 0x9C4;
-                screenPlaneCycle = 0xBB8;
+                depthPhase = 0x9C4;
+                screenPlanePhase = 0xBB8;
             }
 
-            depthCycleSpeed = 0.0f;
-            screenPlaneCycleSpeed = 150.0f;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 150.0f;
 
             rotX = 0;
             rotY = 0;
@@ -587,15 +587,15 @@ void Distortion_Update(void) {
         } else if (sDistortionContext.type & 0x20) {
             sDistortionContext.countdown = 2;
             if (sDistortionContext.state == DISTORTION_SETUP) {
-                depthCycle = 0x9C4;
-                screenPlaneCycle = 0xBB8;
+                depthPhase = 0x9C4;
+                screenPlanePhase = 0xBB8;
             }
 
-            depthCycle += 0xB1;
-            screenPlaneCycle -= 0x2B;
+            depthPhase += 0xB1;
+            screenPlanePhase -= 0x2B;
 
-            depthCycleSpeed = -107.0f;
-            screenPlaneCycleSpeed = 158.0f;
+            depthPhaseStep = -107.0f;
+            screenPlanePhaseStep = 158.0f;
 
             rotX = 0.2f;
             rotY = 1.7f;
@@ -612,12 +612,12 @@ void Distortion_Update(void) {
         } else if (sDistortionContext.type & 0x10) {
             if (sDistortionContext.state == DISTORTION_SETUP) {
                 countdownMax = sDistortionContext.countdown;
-                depthCycle = 0x760;
-                screenPlaneCycle = 0x1BC;
+                depthPhase = 0x760;
+                screenPlanePhase = 0x1BC;
             }
 
-            depthCycleSpeed = 248.0f;
-            screenPlaneCycleSpeed = -90.0f;
+            depthPhaseStep = 248.0f;
+            screenPlanePhaseStep = -90.0f;
 
             rotX = 0.0f;
             rotY = 0.0f;
@@ -632,8 +632,8 @@ void Distortion_Update(void) {
             zScaleFactor = xyScaleFactor = countdownRatio;
             speedScaleFactor = 1.0f;
         } else if (sDistortionContext.type & 8) {
-            depthCycle = 0x3F0;
-            screenPlaneCycle = 0x156;
+            depthPhase = 0x3F0;
+            screenPlanePhase = 0x156;
 
             sDistortionContext.countdown = 2;
             player = GET_PLAYER(globalCtx);
@@ -642,8 +642,8 @@ void Distortion_Update(void) {
                 Actor_GetWorldPosShapeRot(&playerPosRot, &player->actor);
             }
 
-            depthCycleSpeed = 359.2f;
-            screenPlaneCycleSpeed = -18.5f;
+            depthPhaseStep = 359.2f;
+            screenPlanePhaseStep = -18.5f;
 
             rotX = 0.0f;
             rotY = 0.0f;
@@ -684,14 +684,14 @@ void Distortion_Update(void) {
             zScaleFactor = -xyScaleFactor;
             speedScaleFactor = 1.0f;
         } else if (sDistortionContext.type & 4) {
-            depthCycle = 0x3F0;
-            screenPlaneCycle = 0x156;
+            depthPhase = 0x3F0;
+            screenPlanePhase = 0x156;
 
             sDistortionContext.countdown = 2;
             player = GET_PLAYER(globalCtx);
 
-            depthCycleSpeed = 359.2f;
-            screenPlaneCycleSpeed = -18.5f;
+            depthPhaseStep = 359.2f;
+            screenPlanePhaseStep = -18.5f;
 
             rotX = 0.0f;
             rotY = 0.0f;
@@ -733,12 +733,12 @@ void Distortion_Update(void) {
             zScaleFactor = 0.9f - xyScaleFactor;
         } else if (sDistortionContext.type & 1) {
             // Gives a small mirage-like appearance
-            depthCycle = 0x3F0;
-            screenPlaneCycle = 0x156;
+            depthPhase = 0x3F0;
+            screenPlanePhase = 0x156;
 
             sDistortionContext.countdown = 2;
-            depthCycleSpeed = 0.0f;
-            screenPlaneCycleSpeed = 150.0f;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 150.0f;
 
             rotX = 0.0f;
             rotY = 0.0f;
@@ -756,17 +756,17 @@ void Distortion_Update(void) {
             return;
         }
 
-        depthCycle += DEGF_TO_BINANG(depthCycleSpeed);
-        screenPlaneCycle += DEGF_TO_BINANG(screenPlaneCycleSpeed);
+        depthPhase += DEGF_TO_BINANG(depthPhaseStep);
+        screenPlanePhase += DEGF_TO_BINANG(screenPlanePhaseStep);
 
         View_SetDistortionDirRot(&sDistortionContext.globalCtx->view,
-                                 Math_CosS(depthCycle) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
-                                 Math_SinS(depthCycle) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
-                                 Math_SinS(screenPlaneCycle) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
+                                 Math_CosS(depthPhase) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
+                                 Math_SinS(depthPhase) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
+                                 Math_SinS(screenPlanePhase) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
         View_SetDistortionScale(&sDistortionContext.globalCtx->view,
-                                (Math_SinS(screenPlaneCycle) * (xScale * xyScaleFactor)) + 1.0f,
-                                (Math_CosS(screenPlaneCycle) * (yScale * xyScaleFactor)) + 1.0f,
-                                (Math_CosS(depthCycle) * (zScale * zScaleFactor)) + 1.0f);
+                                (Math_SinS(screenPlanePhase) * (xScale * xyScaleFactor)) + 1.0f,
+                                (Math_CosS(screenPlanePhase) * (yScale * xyScaleFactor)) + 1.0f,
+                                (Math_CosS(depthPhase) * (zScale * zScaleFactor)) + 1.0f);
         View_SetDistortionSpeed(&sDistortionContext.globalCtx->view, speed * speedScaleFactor);
 
         sDistortionContext.state = DISTORTION_ACTIVE;
