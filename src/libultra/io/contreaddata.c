@@ -47,7 +47,7 @@ void __osPackReadData() {
         __osContPifRam.ramarray[i] = 0;
     }
 
-    __osContPifRam.pifstatus = 1;
+    __osContPifRam.status = 1;
     readformat.dummy = 255;
     readformat.txsize = 1;
     readformat.rxsize = 4;

@@ -5,6 +5,8 @@
  */
 
 #include "z_en_baguo.h"
+#include "objects/object_gmo/object_gmo.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000005
 
@@ -106,16 +108,11 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
 };
 
-extern Gfx D_060014C8;
-extern Gfx D_060018C8;
-extern Gfx D_06001CC8;
-extern SkeletonHeader D_060020E8;
-
 void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_060020E8, NULL, this->jointTable, this->morphTable, 3);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gNejironSkel, NULL, this->jointTable, this->morphTable, 3);
     this->actor.hintId = 0xB;
     this->maxDistanceFromHome = 240.0f;
     this->maxDistanceFromHome += this->actor.world.rot.z * 40.0f;
@@ -148,7 +145,7 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx) {
     this->action = NEJIRON_ACTION_INACTIVE;
     if (this->actor.xzDistToPlayer < 200.0f && Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
         this->actor.draw = EnBaguo_DrawBody;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.world.rot.z = 0;
         this->actor.world.rot.x = this->actor.world.rot.z;
         this->actor.flags &= ~0x8000000;
@@ -162,8 +159,8 @@ void EnBaguo_EmergeFromUnderground(EnBaguo* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y += 0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((globalCtx->gameplayFrames % 8) == 0) {
-        func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10, 8.0f,
-                      500, 10, 1);
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f,
+                                 10, 8.0f, 500, 10, 1);
     }
     Math_ApproachF(&this->actor.shape.shadowScale, 50.0f, 0.3f, 5.0f);
     Math_ApproachF(&this->actor.shape.yOffset, 2700.0f, 100.0f, 500.0f);
@@ -191,9 +188,9 @@ void EnBaguo_Idle(EnBaguo* this, GlobalContext* globalCtx) {
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) > 200.0f) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
                 if ((globalCtx->gameplayFrames % 8) == 0) {
-                    func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos,
-                                  this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_VOICE);
+                    Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos,
+                                             this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_VOICE);
                 }
             }
         }
@@ -203,8 +200,8 @@ void EnBaguo_Idle(EnBaguo* this, GlobalContext* globalCtx) {
 
     yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absoluteYaw = ABS_ALT(yaw);
-    Math_Vec3f_Copy(&this->targetRotation, &D_801D15B0);
-    Math_Vec3f_Copy(&this->currentRotation, &D_801D15B0);
+    Math_Vec3f_Copy(&this->targetRotation, &gZeroVec3f);
+    Math_Vec3f_Copy(&this->currentRotation, &gZeroVec3f);
     if (absoluteYaw < 0x2000) {
         this->targetRotation.x = 2000.0f;
     } else {
@@ -255,7 +252,7 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
             this->actor.world.rot.z -= (s16)this->currentRotation.z;
         }
     }
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
 }
 
 void EnBaguo_SetupRetreatUnderground(EnBaguo* this) {
@@ -268,8 +265,8 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y -= 0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((globalCtx->gameplayFrames % 8) == 0) {
-        func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10, 8.0f,
-                      500, 10, 1);
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f,
+                                 10, 8.0f, 500, 10, 1);
     }
     Math_ApproachF(&this->actor.shape.yOffset, -3000.0f, 100.0f, 500.0f);
     Math_ApproachZeroF(&this->actor.shape.shadowScale, 0.3f, 5.0f);
@@ -277,7 +274,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx) {
         this->actor.shape.yOffset = -3000.0f;
         this->actor.draw = EnBaguo_DrawBody;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.flags |= 0x8000000;
         this->actor.flags &= ~1;
         this->actionFunc = EnBaguo_UndergroundIdle;
@@ -314,7 +311,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
         if ((this->collider.base.acFlags & AC_HIT || i)) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (i || this->actor.colChkInfo.damageEffect == NEJIRON_DMGEFF_KILL) {
-                func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
                 this->action = NEJIRON_ACTION_EXPLODING;
                 this->actor.speedXZ = 0.0f;
                 this->actor.shape.shadowScale = 0.0f;
@@ -332,8 +329,8 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
 
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_POP);
-                Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_DEAD);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_DEAD);
                 this->timer = 30;
                 this->actor.flags |= 0x8000000;
                 this->actor.flags &= ~1;
@@ -350,7 +347,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
 void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo* this = THIS;
 
-    Actor_SetHeight(&this->actor, 30.0f);
+    Actor_SetFocus(&this->actor, 30.0f);
     EnBaguo_UpdateParticles(this, globalCtx);
     EnBaguo_CheckForDetonation(this, globalCtx);
     this->actionFunc(this, globalCtx);
@@ -372,7 +369,7 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
                 this->blinkTimer = Rand_ZeroFloat(60.0f) + 20.0f;
             }
         }
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
         if (this->action != NEJIRON_ACTION_INACTIVE) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -390,7 +387,7 @@ void EnBaguo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { &D_060014C8, &D_060018C8, &D_06001CC8 };
+    static TexturePtr sEyeTextures[] = { &gNejironEyeOpenTex, &gNejironEyeHalfTex, &gNejironEyeClosedTex };
     EnBaguo* this = THIS;
     Gfx* gfx;
     s32 eyeIndex;
@@ -483,7 +480,7 @@ void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
             Matrix_Scale(particle->scale, particle->scale, particle->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 1, 255, 255, 255, 255);
-            gSPDisplayList(POLY_OPA_DISP++, &D_0401FA40);
+            gSPDisplayList(POLY_OPA_DISP++, &gameplay_keep_DL_01FA40);
         }
     }
     CLOSE_DISPS(gfxCtx);

@@ -202,7 +202,7 @@ void EnMinislime_AddIceShardEffect(EnMinislime* this) {
     }
 
     this->frozenAlpha = 0;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_BROKEN);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_BROKEN);
 }
 
 void EnMinislime_AddIceSmokeEffect(EnMinislime* this, GlobalContext* globalCtx) {
@@ -215,7 +215,7 @@ void EnMinislime_AddIceSmokeEffect(EnMinislime* this, GlobalContext* globalCtx) 
     vel.x = randPlusMinusPoint5Scaled(1.5f);
     vel.z = randPlusMinusPoint5Scaled(1.5f);
     vel.y = 2.0f;
-    EffectSsIceSmoke_Spawn(globalCtx, &pos, &vel, &D_801D15B0, 500);
+    EffectSsIceSmoke_Spawn(globalCtx, &pos, &vel, &gZeroVec3f, 500);
 }
 
 void EnMinislime_SetupDisappear(EnMinislime* this) {
@@ -391,7 +391,7 @@ void EnMinislime_SetupGrowAndShrink(EnMinislime* this) {
     this->actor.scale.x = 0.19f;
     this->actor.scale.y = 0.044999998f;
     this->actor.scale.z = 0.19f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_SLIME_JUMP2);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_JUMP2);
     this->actionFunc = EnMinislime_GrowAndShrink;
 }
 
@@ -453,7 +453,7 @@ void EnMinislime_Idle(EnMinislime* this, GlobalContext* globalCtx) {
 void EnMinislime_SetupBounce(EnMinislime* this) {
     this->actor.speedXZ = 0.0f;
     this->bounceTimer = (this->actionFunc == EnMinislime_GrowAndShrink) ? 1 : 4;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_SLIME_JUMP1);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_JUMP1);
     this->actionFunc = EnMinislime_Bounce;
 }
 
@@ -736,9 +736,9 @@ void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((this->actionFunc != EnMinislime_Disappear) && (this->actionFunc != EnMinislime_Despawn)) {
         if (this->actionFunc == EnMinislime_MoveToBigslime) {
-            Actor_SetVelocityAndMoveXYRotation(&this->actor);
+            Actor_MoveWithoutGravity(&this->actor);
         } else {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
         }
 
         EnMinislime_CheckBackgroundCollision(this);

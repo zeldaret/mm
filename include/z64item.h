@@ -275,7 +275,7 @@ typedef enum {
     /* 0x07 */ GI_RUPEE_HUGE,
     /* 0x08 */ GI_WALLET_ADULT,
     /* 0x09 */ GI_WALLET_GIANT,
-    /* 0x0A */ GI_0A, //Recovery Heart / Blue Rupee?
+    /* 0x0A */ GI_RECOVERY_HEART,
     /* 0x0C */ GI_HEART_PIECE = 0x0C,
     /* 0x0D */ GI_HEART_CONTAINER,
     /* 0x16 */ GI_BOMBS_10 = 0x16,
@@ -299,6 +299,7 @@ typedef enum {
     /* 0x3C */ GI_KEY_SMALL = 0x3C,
     /* 0x3E */ GI_MAP = 0x3E,
     /* 0x3F */ GI_COMPASS,
+    /* 0x52 */ GI_SCALE_GOLD = 0x52, // Assumed, used in En_Fishing
     /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
     /* 0x5A */ GI_5A,
     /* 0x5B */ GI_POTION_RED = 0x5B,
@@ -343,6 +344,7 @@ typedef enum {
     /* 0x9F */ GI_SHIELD_HERO_2, // Code that treats this as hero's shield is unused, so take with a grain of salt
     /* 0xA1 */ GI_LETTER_TO_MAMA = 0xA1,
     /* 0xA9 */ GI_BOTTLE = 0xA9,
+    /* 0xAB */ GI_PENDANT_OF_MEMORIES = 0xAB,
     /* 0xBA */ GI_MAX = 0xBA
 } GetItemID;
 
@@ -372,5 +374,13 @@ typedef enum {
     /* 0x67 */ GID_SWORD_GILDED,
     /* 0x68 */ GID_SWORD_GREAT_FAIRY
 } GetItemDrawID;
+
+// TODO: fill
+typedef enum {
+    /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
+    /* 0x00 */ EXCH_ITEM_NONE,
+    /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
+    /* 0x2A */ EXCH_ITEM_2A = 0x2A // MOON_TEAR?
+} ExchangeItemID;
 
 #endif

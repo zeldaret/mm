@@ -150,7 +150,7 @@ void func_80867C8C(func_80867BDC_a0* arg0, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023210);
         }
         Matrix_StatePop();
-        gSPMatrix(POLY_XLU_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
@@ -206,7 +206,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->iceSmokeTimer = 0;
     this->unk_1F3 = 0;
     this->dyna.actor.gravity = -5.5f;
-    this->dyna.actor.minVelocityY = -50.0f;
+    this->dyna.actor.terminalVelocity = -50.0f;
     this->switchFlag = this->dyna.actor.world.rot.z;
     this->dyna.actor.floorHeight = this->dyna.actor.world.pos.y;
     if (this->dyna.actor.world.rot.x == 180) {
@@ -221,7 +221,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
     thisx->shape.rot.x = this->dyna.actor.world.rot.x;
     this->getItem = (thisx->params >> 5) & 0x7F;
 
-    if (Actor_GetChestFlag(globalCtx, (this->dyna.actor.params & 0x1F)) || this->getItem == 0) {
+    if (Flags_GetTreasure(globalCtx, (this->dyna.actor.params & 0x1F)) || this->getItem == 0) {
         this->alpha = 255;
         this->iceSmokeTimer = 100;
         EnBox_SetupAction(this, EnBox_Open);
@@ -239,7 +239,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
         this->dyna.actor.flags |= 0x10;
     } else if ((this->type == ENBOX_TYPE_ROOM_CLEAR_BIG || this->type == ENBOX_TYPE_ROOM_CLEAR_SMALL) &&
-               !Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
+               !Flags_GetClear(globalCtx, this->dyna.actor.room)) {
         EnBox_SetupAction(this, EnBox_AppearOnRoomClear);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         if (this->movementFlags & ENBOX_MOVE_0x80) {
@@ -273,22 +273,22 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->movementFlags |= ENBOX_MOVE_STICK_TO_GROUND;
     }
 
-    if (this->getItem == 0x11 && !Actor_GetChestFlag(globalCtx, this->dyna.actor.params & 0x1F)) {
+    if (this->getItem == 0x11 && !Flags_GetTreasure(globalCtx, this->dyna.actor.params & 0x1F)) {
         this->dyna.actor.flags |= 0x10;
     }
 
     this->dyna.actor.shape.rot.y += 0x8000;
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z = 0;
 
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_box_Skel_0066A0, &object_box_Anim_00043C, &this->jointTable,
-                   &this->morphTable, 5);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_box_Skel_0066A0, &object_box_Anim_00043C, this->jointTable,
+                   this->morphTable, 5);
     Animation_Change(&this->skelAnime, &object_box_Anim_00043C, 1.5f, animFrame, animFrameEnd, 2, 0.0f);
     if (func_800BE63C(this) != 0) {
         Actor_SetScale(&this->dyna.actor, 0.0075f);
-        Actor_SetHeight(&this->dyna.actor, 20.0f);
+        Actor_SetFocus(&this->dyna.actor, 20.0f);
     } else {
         Actor_SetScale(&this->dyna.actor, 0.01f);
-        Actor_SetHeight(&this->dyna.actor, 40.0f);
+        Actor_SetFocus(&this->dyna.actor, 40.0f);
     }
 
     this->cutsceneIdxA = -1;
@@ -363,7 +363,7 @@ void EnBox_Fall(EnBox* this, GlobalContext* globalCtx) {
             this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
             EnBox_SetupAction(this, EnBox_WaitOpen);
         }
-        func_8019F1C0(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_BOUND);
+        Audio_PlaySfxAtPos(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_BOUND);
         EnBox_SpawnDust(this, globalCtx);
     }
     yDiff = this->dyna.actor.world.pos.y - this->dyna.actor.floorHeight;
@@ -401,10 +401,10 @@ void EnBox_AppearSwitchFlag(EnBox* this, GlobalContext* globalCtx) {
 
 void EnBox_AppearOnRoomClear(EnBox* this, GlobalContext* globalCtx) {
     func_800B8C50(&this->dyna.actor, globalCtx);
-    if (Actor_GetRoomClearedTemp(globalCtx, this->dyna.actor.room)) {
+    if (Flags_GetClearTemp(globalCtx, this->dyna.actor.room)) {
         if (ActorCutscene_GetCanPlayNext(this->cutsceneIdxA)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutsceneIdxA, &this->dyna.actor);
-            Actor_SetRoomCleared(globalCtx, this->dyna.actor.room);
+            Flags_SetClear(globalCtx, this->dyna.actor.room);
             EnBox_SetupAction(this, func_80868AFC);
             this->unk_1A0 = -30;
         } else {
@@ -418,7 +418,7 @@ void func_80868AFC(EnBox* this, GlobalContext* globalCtx) {
         EnBox_SetupAction(this, func_80868B74);
         this->unk_1A0 = 0;
         func_80867FBC(&this->unk_1F4, globalCtx, (this->movementFlags & ENBOX_MOVE_0x80) != 0);
-        func_8019F1C0(&this->dyna.actor.projectedPos, 0x287B);
+        Audio_PlaySfxAtPos(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
     }
 }
 
@@ -489,28 +489,28 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
             this->movementFlags |= ENBOX_MOVE_0x20;
         } else {
             if (this->getItem == GI_HEART_PIECE || this->getItem == GI_5A) {
-                Actor_SetCollectibleFlag(globalCtx, this->collectableFlag);
+                Flags_SetCollectible(globalCtx, this->collectableFlag);
             }
-            Actor_SetChestFlag(globalCtx, this->dyna.actor.params & 0x1F);
+            Flags_SetTreasure(globalCtx, this->dyna.actor.params & 0x1F);
         }
     } else {
         player = GET_PLAYER(globalCtx);
-        Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
+        Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
         if (offset.z > -50.0f && offset.z < 0.0f && fabsf(offset.y) < 10.0f && fabsf(offset.x) < 20.0f &&
-            Actor_IsLinkFacingActor(&this->dyna.actor, 0x3000, globalCtx)) {
+            Player_IsFacingActor(&this->dyna.actor, 0x3000, globalCtx)) {
             if ((this->getItem == GI_HEART_PIECE || this->getItem == GI_5A) &&
-                Actor_GetCollectibleFlag(globalCtx, this->collectableFlag)) {
-                this->getItem = GI_0A;
+                Flags_GetCollectible(globalCtx, this->collectableFlag)) {
+                this->getItem = GI_RECOVERY_HEART;
             }
             if (this->getItem == 0x7C && INV_CONTENT(ITEM_MASK_CAPTAIN) == ITEM_MASK_CAPTAIN) {
-                this->getItem = GI_0A;
+                this->getItem = GI_RECOVERY_HEART;
             }
             if (this->getItem == 0x7D && INV_CONTENT(ITEM_MASK_GIANT) == ITEM_MASK_GIANT) {
-                this->getItem = GI_0A;
+                this->getItem = GI_RECOVERY_HEART;
             }
-            func_800B8B84(&this->dyna.actor, globalCtx, -this->getItem);
+            Actor_PickUpNearby(&this->dyna.actor, globalCtx, -this->getItem);
         }
-        if (Actor_GetChestFlag(globalCtx, this->dyna.actor.params & 0x1F)) {
+        if (Flags_GetTreasure(globalCtx, this->dyna.actor.params & 0x1F)) {
             EnBox_SetupAction(this, EnBox_Open);
         }
     }
@@ -554,7 +554,7 @@ void EnBox_Open(EnBox* this, GlobalContext* globalCtx) {
             sfxId = NA_SE_EV_TBOX_OPEN;
         }
         if (sfxId != 0) {
-            func_8019F1C0(&this->dyna.actor.projectedPos, sfxId);
+            Audio_PlaySfxAtPos(&this->dyna.actor.projectedPos, sfxId);
         }
         if (this->skelAnime.jointTable[3].z > 0) {
             this->unk_1A8 = (0x7D00 - this->skelAnime.jointTable[3].z) * 0.00006f;
@@ -602,7 +602,7 @@ void EnBox_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->movementFlags &= ~ENBOX_MOVE_STICK_TO_GROUND;
         EnBox_ClipToGround(this, globalCtx);
     }
-    if (this->getItem == 0x11 && !Actor_GetChestFlag(globalCtx, this->dyna.actor.params & 0x1F)) {
+    if (this->getItem == 0x11 && !Flags_GetTreasure(globalCtx, this->dyna.actor.params & 0x1F)) {
         globalCtx->actorCtx.unk5 |= 8;
     }
     this->actionFunc(this, globalCtx);
@@ -610,10 +610,10 @@ void EnBox_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->movementFlags |= ENBOX_MOVE_IMMOBILE;
     }
     if (!(this->movementFlags & ENBOX_MOVE_IMMOBILE)) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+        Actor_MoveWithGravity(&this->dyna.actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
     }
-    Actor_SetHeight(&this->dyna.actor, 40.0f);
+    Actor_SetFocus(&this->dyna.actor, 40.0f);
     if (this->getItem == 0x76 && this->actionFunc == EnBox_Open && this->skelAnime.curFrame > 45.0f &&
         this->iceSmokeTimer < 100) {
         EnBox_SpawnIceSmoke(this, globalCtx);
