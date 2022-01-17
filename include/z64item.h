@@ -31,7 +31,7 @@ typedef enum {
     /* 0x05 */ QUEST_SWORD,
     /* 0x06 */ QUEST_SONG_SONATA,
     /* 0x07 */ QUEST_SONG_LULLABY,
-    /* 0x08 */ QUEST_SONG_NOVA,
+    /* 0x08 */ QUEST_STATUS_NEW_WAVE,
     /* 0x09 */ QUEST_SONG_ELEGY,
     /* 0x0A */ QUEST_SONG_OATH,
     /* 0x0B */ QUEST_SONG_SARIA,
