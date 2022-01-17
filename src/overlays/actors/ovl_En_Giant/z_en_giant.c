@@ -1,7 +1,7 @@
 /*
  * File: z_en_giant.c
  * Overlay: ovl_En_Giant
- * Description: Giant 
+ * Description: Giant
  */
 
 #include "z_en_giant.h"
