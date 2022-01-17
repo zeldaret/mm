@@ -1072,7 +1072,7 @@ s32 func_800CD44C(Camera* camera, VecSph* diffSph, CamColChk* eyeChk, CamColChk*
     Vec3f* at = &camera->at;
     s32 pad1[2];
     s32 atEyeBgId;
-    s32 eyeAtBgId; 
+    s32 eyeAtBgId;
     s32 ret;
     f32 cosEyeAt;
     s32 pad2[9];

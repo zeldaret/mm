@@ -327,7 +327,7 @@ s32 func_80BF17BC(EnIg* this, GlobalContext* globalCtx) {
                 case 4:
                     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
                         Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)),
-                                      this->actor.child);
+                                              this->actor.child);
                     }
                     this->unk_3F6++;
                     ret = true;

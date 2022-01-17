@@ -30,7 +30,6 @@ void Camera_SetUpdateRatesSlow(Camera* camera);
 void Camera_UpdateAtActorOffset(Camera* camera, Vec3f* actorOffset);
 s32 func_800CBB88(Camera* camera);
 
-
 extern CameraSetting sCameraSettings[];
 extern GlobalContext* D_801EDC28;
 extern s16 sNextUID;
@@ -43,7 +42,6 @@ extern s32 sCameraNegOne;
 extern s32 sCameraInitSceneTimer;
 extern s32 sUpdateCameraDirection;
 extern s32 sIsFalse;
-
 
 /*===============================================================*/
 /*                    Camera Public Functions                    */
