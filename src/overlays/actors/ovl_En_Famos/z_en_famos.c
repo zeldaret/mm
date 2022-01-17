@@ -141,9 +141,9 @@ void EnFamos_Init(Actor *thisx, GlobalContext *globalCtx) {
         animatedMaterialsVirtualized = sTrue;
     }
     
-    this->actor.colChkInfo.mass = 0xFA;
+    this->actor.colChkInfo.mass = 0xFA; // not heavy, heavy is 0xFE
     this->unk1EC = this->actor.world.pos.y;
-    this->unk1F0 = (this->actor.shape.rot.x <= 0) ? 200.0f : this->actor.shape.rot.x * 40.0f * 0.1f;
+    this->unk1F0 = (this->actor.shape.rot.x <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
     this->unk1D5 = 1;
@@ -157,6 +157,7 @@ void EnFamos_Init(Actor *thisx, GlobalContext *globalCtx) {
 
 void EnFamos_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnFamos *this = THIS;
+
     Collider_DestroyCylinder(globalCtx, &this->collider1);
     Collider_DestroyCylinder(globalCtx, &this->collider2);
     Collider_DestroyJntSph(globalCtx, &this->collider3);
@@ -174,19 +175,19 @@ void func_808ACB58(EnFamos *this) {
     this->unk1DE = 0x28;
     particlePtr = &this->particles[0];
     for (i = 0; i < 20; ++i, ++particlePtr) {
-        randSmall = (s16) (Rand_Next() >> 0x10);
+        randSmall = Rand_Next() >> 0x10;
         randOffset = Rand_S16Offset(0x1800, 0x2800);
         randFloat = Rand_ZeroFloat(5.0f) + 5.0f;
         particlePtr->unkC.x = randFloat * Math_CosS(randOffset) * Math_SinS(randSmall);
         particlePtr->unkC.y = Math_SinS(randOffset) * randFloat + 3.0f;
         particlePtr->unkC.z = randFloat * Math_CosS(randOffset) * Math_CosS(randSmall);
-        particlePtr->unk18.x = (s16) (Rand_Next() >> 0x10);
-        particlePtr->unk18.y = (s16) (Rand_Next() >> 0x10);
-        particlePtr->unk18.z = (s16) (Rand_Next() >> 0x10);
+        particlePtr->unk18.x = Rand_Next() >> 0x10;
+        particlePtr->unk18.y = Rand_Next() >> 0x10;
+        particlePtr->unk18.z = Rand_Next() >> 0x10;
         particlePtr->unk0.x = (Math_SinS(randSmall) * 20.0f) + this->actor.world.pos.x;
         particlePtr->unk0.y = this->actor.floorHeight;
         particlePtr->unk0.z = (Math_CosS(randSmall) * 20.0f) + this->actor.world.pos.z;
-        particlePtr->unk20 = (Rand_ZeroFloat(0.0015f) + 0.002f);
+        particlePtr->unk20 = Rand_ZeroFloat(0.0015f) + (1/500.0f);
     }
 }
 
@@ -200,26 +201,27 @@ void func_808ACD2C(EnFamos *this) {
     this->unk1DE = 0x28;
     particlePtr = &this->particles[0];
     for (i = 0; i < 20; ++i, ++particlePtr) {
-        randSmall = (s16) (Rand_Next() >> 0x10);
-        randSmaller = (s16) ((u32)Rand_Next() >> 0x12);
+        randSmall = Rand_Next() >> 0x10;
+        randSmaller = (u32) Rand_Next() >> 0x12;
         randFloat = Rand_ZeroFloat(6.0f) + 7.0f;
         particlePtr->unkC.x = randFloat * Math_CosS(randSmaller) * Math_SinS(randSmall);
         particlePtr->unkC.y = Math_SinS(randSmaller) * randFloat + 4.5f;
         particlePtr->unkC.z = randFloat * Math_CosS(randSmaller) * Math_CosS(randSmall);
-        particlePtr->unk18.x = (s16) (Rand_Next() >> 0x10);
-        particlePtr->unk18.y = (s16) (Rand_Next() >> 0x10);
-        particlePtr->unk18.z = (s16) (Rand_Next() >> 0x10);
-        particlePtr->unk0.x = (Math_SinS(randSmall) * 20.0f) + this->actor.world.pos.x;
+        particlePtr->unk18.x = Rand_Next() >> 0x10;
+        particlePtr->unk18.y = Rand_Next() >> 0x10;
+        particlePtr->unk18.z = Rand_Next() >> 0x10;
+        particlePtr->unk0.x = Math_SinS(randSmall) * 20.0f + this->actor.world.pos.x;
         particlePtr->unk0.y = randPlusMinusPoint5Scaled(60.0f) + (this->actor.world.pos.y + 40.0f);
-        particlePtr->unk0.z = (Math_CosS(randSmall) * 20.0f) + this->actor.world.pos.z;
-        particlePtr->unk20 = (f32) (Rand_ZeroFloat(0.002f) + 0.0025000002f);
+        particlePtr->unk0.z = Math_CosS(randSmall) * 20.0f + this->actor.world.pos.z;
+        // not quite 1/400 or 0.0025, 0xB -> 0xA
+        particlePtr->unk20 = Rand_ZeroFloat(0.002f) + 0.0025000002f;
     }
 }
 
 s32 func_808ACF1C(EnFamos *this, GlobalContext *globalCtx) {
-    if ((Player_GetMask(globalCtx) != 0x10) && 
-      (Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->unk200) < this->unk1F0) && 
-      (Actor_IsFacingPlayer(&this->actor, 0x5000) != 0)) {
+    if (Player_GetMask(globalCtx) != 0x10 && 
+      Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->unk200) < this->unk1F0 && 
+      Actor_IsFacingPlayer(&this->actor, 0x5000)) {
       return true;
     }else{
       return false;
@@ -233,9 +235,9 @@ void func_808ACF98(EnFamos *this) {
     }
 
     this->unk1DA--;
-    this->actor.world.pos.y = (Math_SinS((this->unk1DA * 2184)) * 10.0f) + this->unk1EC;
+    this->actor.world.pos.y = (Math_SinS(this->unk1DA * 2184) * 10.0f) + this->unk1EC;
 
-    if (ABS_ALT(this->unk1E6) >= 0x4001) {
+    if (ABS_ALT(this->unk1E6) > 0x4000) {
         func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
     } else { 
         func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
@@ -261,7 +263,6 @@ void func_808AD05C(EnFamos *this) {
             this->unk1D5 = 0;
         }
     } else {
-        // not DECR, good grief
         if (this->unk1E0 > 0) {
             this->unk1E0--;
             if (this->unk1E0 == 0) {
@@ -300,14 +301,15 @@ void func_808AD18C(EnFamos *this, GlobalContext *globalCtx) {
 
 void func_808AD1F0(EnFamos *this) {
     if (this->unk1D8 != 0) {
-        if ( ++this->unk1D7 == this->pathNodeCount) {
-            this->unk1D7 = 0;
+        if ( ++this->currentPathNode == this->pathNodeCount) {
+            this->currentPathNode = 0;
         }
     } else {
         this->unk1D8 = 1;
     }
-    Math_Vec3s_ToVec3f(&this->unk1F4, &this->pathPoints[this->unk1D7]);
-    this->unk1E4 = Actor_YawToPoint(&this->actor, &this->unk1F4);
+
+    Math_Vec3s_ToVec3f(&this->targetDest, &this->pathPoints[this->currentPathNode]);
+    this->unk1E4 = Actor_YawToPoint(&this->actor, &this->targetDest);
     this->actionFunc = func_808AD294;
     this->actor.speedXZ = 0.0f;
 }
@@ -328,7 +330,7 @@ void func_808AD294(EnFamos *this, GlobalContext *globalCtx) {
 
 void func_808AD31C(EnFamos *this) {
     this->unk1E4 = Actor_YawToPoint(&this->actor, &this->unk200);
-    Math_Vec3f_Copy(&this->unk1F4, &this->unk200);
+    Math_Vec3f_Copy(&this->targetDest, &this->unk200);
     this->actionFunc = func_808AD378;
     this->actor.speedXZ = 0.0f;
 }
@@ -344,14 +346,14 @@ void func_808AD378(EnFamos *this, GlobalContext *globalCtx) {
 
 void func_808AD3E8(EnFamos *this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actor.world.rot.x = -Actor_PitchToPoint(&this->actor, &this->unk1F4);
+    this->actor.world.rot.x = -Actor_PitchToPoint(&this->actor, &this->targetDest);
     this->actionFunc = func_808AD42C;
 }
 
 void func_808AD42C(EnFamos *this, GlobalContext *globalCtx) {
-    f32 sp24 = Actor_XZDistanceToPoint(&this->actor, &this->unk1F4);
+    f32 sp24 = Actor_XZDistanceToPoint(&this->actor, &this->targetDest);
 
-    this->actor.shape.rot.y = Actor_YawToPoint(&this->actor, &this->unk1F4);
+    this->actor.shape.rot.y = Actor_YawToPoint(&this->actor, &this->targetDest);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_808ACF98(this);
     if (this->unk1D8 != 0) {
@@ -384,18 +386,15 @@ void func_808AD54C(EnFamos *this) {
 }
 
 void func_808AD5B0(EnFamos *this, GlobalContext *globalCtx) {
-    s32 v0;
     s32 temp1DC;
 
-    v0 = this->unk1E6 < 0 ? -this->unk1E6 : this->unk1E6;
-    if (v0 >= 0x4001) {
+    if (ABS_ALT(this->unk1E6) > 0x4000) {
         func_800B9010(&this->actor, 0x3294);
     } else {
         func_800B9010(&this->actor, 0x3293);
     }
 
-    this->unk1DC--;
-    if (this->unk1DC == 0) {
+    if (--this->unk1DC == 0) {
         this->actor.world.pos.y = this->unk1EC;
         func_808AD66C(this);
     } else {
@@ -410,11 +409,10 @@ void func_808AD66C(EnFamos *this) {
 }
 
 void func_808AD68C(EnFamos *this, GlobalContext *globalCtx) {
-    Player *player;
+    Player *player = GET_PLAYER(globalCtx);
     Vec3f abovePlayerPos;
-    u32 floorValue; // name is a guess
+    u32 surfaceType; // name is a guess
 
-    player = GET_PLAYER(globalCtx);
     func_808ACF98(this);
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x800);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -424,9 +422,9 @@ void func_808AD68C(EnFamos *this, GlobalContext *globalCtx) {
     this->actor.world.rot.x = -Actor_PitchToPoint(&this->actor, &abovePlayerPos);
     Math_StepToF(&this->actor.speedXZ, 6.0f, 0.5f);
 
-    floorValue = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if (this->actor.xzDistToPlayer < 30.0f && this->actor.floorHeight > -32000.0f 
-      && floorValue != 0xC && floorValue != 0xD) {
+      && surfaceType != 0xC && surfaceType != 0xD) {
         func_808AD7EC(this);
 
     } else if ((Player_GetMask(globalCtx) == 0x10) 
@@ -460,20 +458,20 @@ void func_808AD888(EnFamos *this) {
 
 void func_808AD8B8(EnFamos *this, GlobalContext *globalCtx) {
     s32 hitWall;
-    u32 floorValue; // name is a guess
+    u32 surfaceType; // name is a guess
 
     Math_StepToF(&this->actor.speedXZ, 20.0f, 2.0f);
     this->unk1DC--;
     if (this->unk1DC == 0) {
         this->collider3.base.acFlags &= ~AC_ON;
     }
-    floorValue = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     hitWall = this->actor.bgCheckFlags & BGCHECK_CHECK_WALL;
     if ( hitWall || this->actor.floorHeight == BGCHECK_Y_MIN 
-      || floorValue == 0xC || floorValue == 0xD) {
+      || surfaceType == 0xC || surfaceType == 0xD) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
-        if ( hitWall != 0) {
+        if (hitWall) {
             func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 15, 10);
             func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             func_808ACB58(this);
@@ -588,7 +586,7 @@ void func_808ADE00(EnFamos *this) {
     this->actor.world.rot.x = 0x4000;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 4);
     this->unk1DC = 0x19;
-    Math_Vec3f_Copy(&this->unk1F4, &this->actor.world.pos);
+    Math_Vec3f_Copy(&this->targetDest, &this->actor.world.pos);
     this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = func_808ADE74;
 }
@@ -597,13 +595,15 @@ void func_808ADE74(EnFamos *this, GlobalContext *globalCtx) {
 
     Math_StepToF(&this->actor.speedXZ, 3.0f, 0.3f);
     if (this->actor.colorFilterTimer == 0) {
-        Actor_SetColorFilter(&this->actor, 0x4000U, 0xFFU, 0, 4);
+        Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 4);
     }
-    this->actor.world.pos.x = randPlusMinusPoint5Scaled(5.0f) + this->unk1F4.x;
-    this->actor.world.pos.z = randPlusMinusPoint5Scaled(5.0f) + this->unk1F4.z;
+
+    this->actor.world.pos.x = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.x;
+    this->actor.world.pos.z = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.z;
     if (this->unk1DC == 1) {
         EnBom* blast = (EnBom*) Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, 
-            this->actor.world.pos.x, this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 0);
+            this->actor.world.pos.x, this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 
+            0, 0, 0, 0);
         if (blast != NULL) {
             blast->timer = 0; // instant explosion
         }

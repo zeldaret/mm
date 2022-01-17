@@ -1147,7 +1147,7 @@ s32 func_800DFC68(Camera* camera);
 // void func_800DFC90(void);
 s16 func_800DFCB4(Camera* camera);
 s16 func_800DFCDC(Camera* camera);
-// void func_800DFD04(void);
+s32 func_800DFD04(Camera* camera, s32 arg1, s16 y, s32 countdown);
 // void func_800DFD78(void);
 // UNK_TYPE4 func_800DFEF0(s32 param_1, u16 param_2);
 // UNK_TYPE4 func_800DFF18(Camera* iParm1, UNK_TYPE2 uParm2);
