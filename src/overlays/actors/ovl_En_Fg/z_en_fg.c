@@ -117,11 +117,11 @@ s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
+            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
         }
-        Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                         sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
-                         sAnimations[animIndex].transitionRate);
+        Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
+                         sAnimations[animIndex].startFrame, frameCount, sAnimations[animIndex].mode,
+                         sAnimations[animIndex].morphFrames);
     }
     return ret;
 }

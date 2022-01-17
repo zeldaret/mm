@@ -598,7 +598,7 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
 void func_80BB2944(EnGeg* this, GlobalContext* globalCtx) {
     u8 sp27 = Message_GetState(&globalCtx->msgCtx);
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_4AC].animationSeg);
+    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_4AC].animation);
 
     if (this->unk_4AC == 19) {
         if (curFrame == lastFrame) {
@@ -694,7 +694,7 @@ void func_80BB2B1C(EnGeg* this, GlobalContext* globalCtx) {
 
 void func_80BB2E00(EnGeg* this, GlobalContext* globalCtx) {
     s16 sp2E = this->skelAnime.curFrame;
-    s16 sp2C = Animation_GetLastFrame(sAnimations[this->unk_4AC].animationSeg);
+    s16 sp2C = Animation_GetLastFrame(sAnimations[this->unk_4AC].animation);
 
     if (this->unk_4AC == 2) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);

@@ -205,7 +205,26 @@ Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCat
     return closestActor;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BC6C.s")
+s32 func_8013BC6C(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 index) {
+    s32 frameCount;
+    s32 frame;
+
+    animations += index;
+    frameCount = animations->frameCount;
+    if (animations->frameCount < 0) {
+        frameCount = Animation_GetLastFrame(&animations->animation->common);
+    }
+    frame = animations->startFrame;
+    if (frame >= frameCount || frame < 0) {
+        return false;
+    }
+    if (animations->playSpeed < 0.0f) {
+        SWAP(s32, frameCount, frame);
+    }
+    Animation_Change(skelAnime, animations->animation, animations->playSpeed, frame, frameCount, animations->mode,
+                     animations->morphFrames);
+    return true;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BD40.s")
 
@@ -282,7 +301,33 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E0A4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E1C8.s")
+void func_8013E1C8(SkelAnime* skelAnime, struct_80B8E1A8* animations, s32 nextAnimationIndex, s32* curAnimationIndex) {
+    struct_80B8E1A8* animation = &animations[nextAnimationIndex];
+    f32 frame = skelAnime->curFrame;
+    f32 frameCount;
+    f32 morphFrames;
+
+    if ((*curAnimationIndex < 0) || (nextAnimationIndex == *curAnimationIndex)) {
+        morphFrames = 0.0f;
+        if (*curAnimationIndex < 0) {
+            frame = 0.0f;
+        }
+    } else {
+        morphFrames = animation->morphFrames;
+        if (nextAnimationIndex != *curAnimationIndex) {
+            frame = 0.0f;
+        }
+    }
+    if (animation->playSpeed >= 0.0f) {
+        frameCount = Animation_GetLastFrame(&animation->animation->common);
+    } else {
+        frame = Animation_GetLastFrame(&animation->animation->common);
+        frameCount = 0.0f;
+    }
+    Animation_Change(skelAnime, animation->animation, animation->playSpeed, frame, frameCount, animation->mode,
+                     morphFrames);
+    *curAnimationIndex = nextAnimationIndex;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E2D4.s")
 

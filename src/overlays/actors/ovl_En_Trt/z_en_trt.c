@@ -112,12 +112,12 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s3
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animations->animationSeg);
+        frameCount = Animation_GetLastFrame(animations->animation);
     } else {
         frameCount = animations->frameCount;
     }
-    Animation_Change(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
-                     animations->mode, animations->transitionRate);
+    Animation_Change(skelAnime, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
+                     animations->mode, animations->morphFrames);
 }
 
 s32 EnTrt_TestItemSelected(GlobalContext* globalCtx) {

@@ -158,10 +158,10 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004800, &D_060008D8, this->jointTable, this->morphTable, 19);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Animation_Change(&this->skelAnime, sAnimations[0].animationSeg, 1.0f,
-                     Animation_GetLastFrame(&sAnimations[0].animationSeg->common) * Rand_ZeroOne(),
-                     Animation_GetLastFrame(&sAnimations[0].animationSeg->common), sAnimations[0].mode,
-                     sAnimations[0].transitionRate);
+    Animation_Change(&this->skelAnime, sAnimations[0].animation, 1.0f,
+                     Animation_GetLastFrame(&sAnimations[0].animation->common) * Rand_ZeroOne(),
+                     Animation_GetLastFrame(&sAnimations[0].animation->common), sAnimations[0].mode,
+                     sAnimations[0].morphFrames);
     this->unk_346 = ENOT_GET_7F(&this->actor);
     this->unk_344 = this->actor.world.rot.z;
     this->actor.world.rot.z = 0;

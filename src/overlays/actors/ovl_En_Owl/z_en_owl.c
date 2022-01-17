@@ -40,7 +40,7 @@ void func_8095C484(EnOwl* this);
 void func_8095CCF4(Actor* thisx, GlobalContext* globalCtx);
 void func_8095D074(Actor* thisx, GlobalContext* globalCtx);
 void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc, SkelAnime* skelAnime,
-                      AnimationHeader* animationSeg, f32 transitionRate);
+                      AnimationHeader* animationSeg, f32 morphFrames);
 
 typedef enum {
     /* 0x00 */ OWL_REPEAT,
@@ -1197,10 +1197,10 @@ void func_8095D074(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc, SkelAnime* skelAnime,
-                      AnimationHeader* animationSeg, f32 transitionRate) {
+                      AnimationHeader* animationSeg, f32 morphFrames) {
     this->skelAnime3 = skelAnime;
     Animation_Change(this->skelAnime3, animationSeg, 1.0f, 0.0f, Animation_GetLastFrame(animationSeg), 2,
-                     transitionRate);
+                     morphFrames);
     this->actionFunc = actionFunc;
     this->unk_414 = unkFunc;
 }

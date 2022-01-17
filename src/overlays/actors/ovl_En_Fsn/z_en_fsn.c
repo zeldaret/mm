@@ -712,7 +712,7 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
     if (this->animationIdx == 4) {
         s16 curFrame = this->skelAnime.curFrame;
-        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
+        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
         if (curFrame == frameCount) {
             this->animationIdx = 5;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
@@ -746,7 +746,7 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;

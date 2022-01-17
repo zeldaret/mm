@@ -47,11 +47,11 @@ s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
         isChanged = true;
         frameCount = animations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(&animations[animIndex].animationSeg->common);
+            frameCount = Animation_GetLastFrame(&animations[animIndex].animation->common);
         }
-        Animation_Change(skelAnime, animations[animIndex].animationSeg, animations[animIndex].playbackSpeed,
-                         animations[animIndex].frame, frameCount, animations[animIndex].mode,
-                         animations[animIndex].transitionRate);
+        Animation_Change(skelAnime, animations[animIndex].animation, animations[animIndex].playSpeed,
+                         animations[animIndex].startFrame, frameCount, animations[animIndex].mode,
+                         animations[animIndex].morphFrames);
     }
     return isChanged;
 }

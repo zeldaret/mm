@@ -1143,7 +1143,7 @@ void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
 
 void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 sp24 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp24 = Animation_GetLastFrame(&sAnimations[this->unk_338].animation->common);
     s16 phi_v0;
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
@@ -1285,7 +1285,7 @@ void func_80BEF18C(EnAkindonuts* this, GlobalContext* globalCtx) {
 void func_80BEF20C(EnAkindonuts* this, GlobalContext* globalCtx) {
     u8 sp27 = Message_GetState(&globalCtx->msgCtx);
     s16 sp24 = this->skelAnime.curFrame;
-    s16 sp22 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp22 = Animation_GetLastFrame(&sAnimations[this->unk_338].animation->common);
 
     if (this->unk_356 == 40) {
         this->unk_338 = 5;
@@ -1347,7 +1347,7 @@ void func_80BEF4B8(EnAkindonuts* this, GlobalContext* globalCtx) {
 
 void func_80BEF518(EnAkindonuts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 sp24 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp24 = Animation_GetLastFrame(&sAnimations[this->unk_338].animation->common);
 
     switch (sp26) {
         case 10:
@@ -1454,7 +1454,7 @@ void func_80BEF770(EnAkindonuts* this, GlobalContext* globalCtx) {
 void func_80BEF83C(EnAkindonuts* this, GlobalContext* globalCtx) {
     Vec3f sp34;
     s16 sp32 = this->skelAnime.curFrame;
-    s16 sp30 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp30 = Animation_GetLastFrame(&sAnimations[this->unk_338].animation->common);
 
     if (sp32 == sp30) {
         Math_SmoothStepToS(&this->unk_362, 0x1C71, 3, 0x100, 0);

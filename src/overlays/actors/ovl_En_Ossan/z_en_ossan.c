@@ -356,7 +356,7 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = sAnimations[this->actor.params];
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(animations[this->animationIdx].animationSeg);
+    s16 frameCount = Animation_GetLastFrame(animations[this->animationIdx].animation);
 
     if (this->animationIdx == 3) {
         frameCount = 0;
