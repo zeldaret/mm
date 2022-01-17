@@ -1075,8 +1075,7 @@ s32 func_800CD44C(Camera* camera, VecSph* diffSph, CamColChk* eyeChk, CamColChk*
     s32 eyeAtBgId;
     s32 ret;
     f32 cosEyeAt;
-    s32 pad2[9];
-    void* sp2C;
+    CamColChk sp2C;
 
     eyeChk->pos = camera->eyeNext;
 
@@ -1094,14 +1093,14 @@ s32 func_800CD44C(Camera* camera, VecSph* diffSph, CamColChk* eyeChk, CamColChk*
         }
 
         if (checkEye & 1) {
-            memcpy(&sp2C, atChk, 40);
+            memcpy(&sp2C, atChk, sizeof(CamColChk));
         }
 
         eyeAtBgId = Camera_BgCheckInfo(camera, &camera->eye, atChk);
 
         if (eyeAtBgId == 0) {
             if (checkEye & 1) {
-                memcpy(atChk, &sp2C, 40);
+                memcpy(atChk, &sp2C, sizeof(CamColChk));
             } else {
                 return 3;
             }

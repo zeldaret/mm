@@ -48,7 +48,7 @@ extern s32 sIsFalse;
 /*===============================================================*/
 
 Camera* Camera_Create(View* view, CollisionContext* colCtx, GlobalContext* globalCtx) {
-    Camera* newCamera = ZeldaArena_Malloc(sizeof(*newCamera));
+    Camera* newCamera = ZeldaArena_Malloc(sizeof(Camera));
 
     if (newCamera != NULL) {
         Camera_Init(newCamera, view, colCtx, globalCtx);
@@ -68,7 +68,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
     s16 curUID;
     s16 j;
 
-    __osMemset(camera, 0, sizeof(*camera));
+    __osMemset(camera, 0, sizeof(Camera));
 
     camera->globalCtx = D_801EDC28 = globalCtx;
     curUID = sNextUID;
@@ -409,7 +409,7 @@ s32 Camera_SetSwordDistortion(Camera* camera) {
     return true;
 }
 
-s32 Camera_IsWearingGiantsMask(Camera* camera) {
+s32 Camera_RequestGiantsMaskSetting(Camera* camera) {
     Player* player = GET_PLAYER(camera->globalCtx);
 
     if ((camera->camId == CAM_ID_MAIN) && (camera->trackActor == &GET_PLAYER(camera->globalCtx)->actor) &&
@@ -538,7 +538,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             if ((camera->flags2 & CAM_FLAG2_1) && (camera->flags2 & CAM_FLAG2_4) && !(camera->flags2 & CAM_FLAG2_400) &&
                 (!(camera->flags2 & CAM_FLAG2_200) || Camera_IsUnderwaterAsZora(camera)) &&
                 !(camera->flags2 & (s16)CAM_FLAG2_8000) && !Camera_IsMountedOnHorse(camera) &&
-                !Camera_IsWearingGiantsMask(camera) && !Camera_IsDekuHovering(camera) && (sp98 != 0)) {
+                !Camera_RequestGiantsMaskSetting(camera) && !Camera_IsDekuHovering(camera) && (sp98 != 0)) {
 
                 bgCamDataId = Camera_GetBgCamDataId(camera, &bgId, sp90);
                 if ((bgCamDataId != -1) && (camera->bgId == BGCHECK_SCENE)) {
@@ -1112,7 +1112,7 @@ s32 Camera_Copy(Camera* dstCam, Camera* srcCam) {
 /**
  * Unused Remnant of OoT/Debug
  */
-s32 Camera_GetDbgCamEnabled(void) {
+s32 Camera_IsDbgCamEnabled(void) {
     return 0;
 }
 

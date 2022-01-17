@@ -2719,8 +2719,8 @@ s32 Camera_KeepOn4(Camera* camera) {
     KeepOn4DynamicData* dynamicData = CAM_GET_DYNAMIC_DATA(KeepOn4);
     f32 trackHeight;
     s32 bgId;
-    s16 sp82;       // mode
-    Player* player; // sp7C
+    s16 camMode;
+    Player* player;
     Vec3f* data;
     CameraModeValue* values;
     PosRot sp60;
@@ -2741,25 +2741,25 @@ s32 Camera_KeepOn4(Camera* camera) {
         player = (Player*)camera->trackActor;
         switch (((Player*)camera->trackActor)->transformation) {
             case PLAYER_FORM_DEKU:
-                sp82 = CAM_MODE_DEKUSHOOT;
+                camMode = CAM_MODE_DEKUSHOOT;
                 break;
             case PLAYER_FORM_GORON:
-                sp82 = CAM_MODE_GORONDASH;
+                camMode = CAM_MODE_GORONDASH;
                 break;
             case PLAYER_FORM_ZORA:
-                sp82 = CAM_MODE_DEKUFLY;
+                camMode = CAM_MODE_DEKUFLY;
                 break;
             case PLAYER_FORM_FIERCE_DEITY:
-                sp82 = CAM_MODE_JUMP;
+                camMode = CAM_MODE_JUMP;
                 break;
             default:
-                sp82 = CAM_MODE_NORMAL;
+                camMode = CAM_MODE_NORMAL;
                 break;
         }
 
         trackHeight = Camera_GetTrackedActorHeight(camera) - (player->unk_AB8 * camera->trackActor->scale.y);
     } else {
-        sp82 = CAM_MODE_NORMAL;
+        camMode = CAM_MODE_NORMAL;
         trackHeight = Camera_GetTrackedActorHeight(camera);
     }
 
@@ -2773,7 +2773,7 @@ s32 Camera_KeepOn4(Camera* camera) {
 
     Camera_UnsetFlags(camera, CAM_FLAG2_10);
     if (RELOAD_PARAMS) {
-        values = sCameraSettings[camera->setting].cameraModes[sp82].values;
+        values = sCameraSettings[camera->setting].cameraModes[camMode].values;
         new_var = -0.5f;
         fixedData->unk_00 =
             READ_SCALED_STATIC_DATA_VAL * trackHeight * ((1.0f + new_var) - ((68.0f / trackHeight) * new_var));
@@ -2959,9 +2959,8 @@ s32 Camera_Fixed1(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&sp7C, at, eye);
 
     if (!RELOAD_PARAMS) {
-        // Pass
     } else {
-        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values; // sp54
+        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
         bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
         Camera_Vec3sToVec3f(&dynamicData->eyePosRotTarget.pos, &bgCamData->pos);
 
