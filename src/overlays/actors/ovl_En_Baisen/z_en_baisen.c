@@ -63,7 +63,7 @@ static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6
 
 static AnimationHeader* D_80BE8E4C[] = { &D_060011C0, &D_060008B4, &D_06008198 };
 
-static u8 animModes[] = { 0, 0 };
+static u8 animModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 
 void EnBaisen_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBaisen* this = THIS;
