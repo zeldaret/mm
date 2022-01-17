@@ -1201,7 +1201,8 @@ void func_80992E0C(EnWf* this, GlobalContext* globalCtx) {
         Vec3f sp60;
 
         if (this->unk_2A0 == 25) {
-            func_800F0590(globalCtx, &this->actor.world.pos, 36, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            SoundSource_PlaySfxEachFrameAtFixedWorldPos(globalCtx, &this->actor.world.pos, 36,
+                                                        NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         }
 
         this->unk_2A0--;
@@ -1545,7 +1546,7 @@ void EnWf_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80993E50(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnWf_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnWf* this = THIS;
 
     if ((limbIndex == 17) || (limbIndex == 18)) {
@@ -1554,7 +1555,7 @@ s32 func_80993E50(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80993E94(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnWf_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 D_809942FC[] = {
         -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, -1, 2, -1, 3, 4, 5, 6, -1, -1, 7, 8, 9,
     };
@@ -1592,7 +1593,7 @@ void EnWf_Draw(Actor* thisx, GlobalContext* globalCtx) {
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, func_80993E50, func_80993E94, &this->actor);
+                              this->skelAnime.dListCount, EnWf_OverrideLimbDraw, EnWf_PostLimbDraw, &this->actor);
         func_800BE680(globalCtx, &this->actor, this->unk_2B8, 10, this->unk_2B0, this->unk_2B4, this->unk_2AC,
                       this->unk_296);
     }

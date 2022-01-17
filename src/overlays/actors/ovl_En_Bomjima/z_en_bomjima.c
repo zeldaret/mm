@@ -421,7 +421,7 @@ void func_80BFEB64(EnBomjima* this, GlobalContext* globalCtx) {
                 sp40.y = this->unk_2F0->actor.world.pos.y - randPlusMinusPoint5Scaled(40.0f);
                 sp40.z = (Math_CosS(sp3E) * (Rand_ZeroFloat(20.0f) + 40.0f)) + this->unk_2F0->actor.world.pos.z;
 
-                Audio_PlaySoundAtPosition(globalCtx, &sp40, 50, NA_SE_EV_BOMBERS_SHOT_EXPLOSUIN);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &sp40, 50, NA_SE_EV_BOMBERS_SHOT_EXPLOSUIN);
                 EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &sp40);
                 this->unk_2BC++;
 

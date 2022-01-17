@@ -859,7 +859,7 @@ Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 param
             spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                                        spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
             if (!Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F)) {
-                Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
         } else {
             spawnedActor =
@@ -867,7 +867,7 @@ Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 param
                             spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
             if (param20000 == 0) {
                 if (!Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F)) {
-                    Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 }
             }
         }
@@ -925,7 +925,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, s32 para
                             spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
         }
         if (Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F) == 0) {
-            Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
         }
     } else {
         params = func_800A7650(params & 0xFF);
@@ -1081,7 +1081,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
             if (gSaveContext.save.playerData.health <= 0x10) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, 2);
-                Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }
 

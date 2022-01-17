@@ -410,9 +410,9 @@ void func_80A54CEC(ObjHugebombiwa* this, GlobalContext* globalCtx) {
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
         } else {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_SNOWBALL_BROKEN);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_SNOWBALL_BROKEN);
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {

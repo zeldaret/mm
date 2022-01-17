@@ -2,7 +2,7 @@
 #define _MACROS_H_
 
 #include "libc/stdint.h"
-#include "convert.h"
+#include "ultra64/convert.h"
 #include "z64.h"
 
 #define SCREEN_WIDTH  320
@@ -45,7 +45,7 @@
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
-//#define LINK_IS_CHILD (gSaveContext.save.linkAge != 0)
+#define LINK_IS_CHILD (gSaveContext.save.linkAge == 1)
 #define LINK_IS_ADULT (gSaveContext.save.linkAge == 0)
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
@@ -125,6 +125,21 @@ extern GraphicsContext* __gfxCtx;
     { { x, y, z }, 0, { s, t }, { cr, cg, cb, a }, }
 
 #define GRAPH_ALLOC(gfxCtx, size) ((void*)((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size))))
+
+// Custom gbi macro
+#define gDPSetTileCustom(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt)                    \
+    {                                                                                                                  \
+        gDPPipeSync(pkt);                                                                                              \
+        gDPTileSync(pkt);                                                                                              \
+        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_LOADTILE, 0, cmt, maskt, shiftt, cms, \
+                   masks, shifts);                                                                                     \
+        gDPTileSync(pkt);                                                                                              \
+        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt,  \
+                   cms, masks, shifts);                                                                                \
+        gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC,                                \
+                       ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                          \
+    }                                                                                                                  \
+    (void)0
 
 #define ALIGN8(val) (((val) + 7) & ~7)
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)

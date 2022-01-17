@@ -1586,7 +1586,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     if (limbIndex == 17) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
 void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1605,7 +1605,7 @@ void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static void* sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
+    static TexturePtr sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
     EnFsn* this = THIS;
     s32 pad;
     s16 i;

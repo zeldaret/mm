@@ -611,7 +611,7 @@ s32 func_808A6580(EnSt* this, GlobalContext* globalCtx) {
             if (ENST_GET_3F(&this->actor) != ENST_3F_63) {
                 Flags_SetSwitch(globalCtx, ENST_GET_3F(&this->actor));
             }
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
 
             this->actor.flags &= ~1;

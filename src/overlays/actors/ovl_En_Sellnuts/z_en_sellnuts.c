@@ -1127,7 +1127,7 @@ s32 EnSellnuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
 void EnSellnuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-void func_80ADD7CC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnSellnuts_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnSellnuts* this = THIS;
 
     if (((this->unk_350 == 1) || (this->unk_350 == 3)) && ((limbIndex == 23) || (limbIndex == 24))) {
@@ -1148,6 +1148,7 @@ void EnSellnuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSellnuts* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnSellnuts_OverrideLimbDraw, EnSellnuts_PostLimbDraw, func_80ADD7CC, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnSellnuts_OverrideLimbDraw, EnSellnuts_PostLimbDraw,
+                                   EnSellnuts_TransformLimbDraw, &this->actor);
 }

@@ -79,12 +79,15 @@ animdict = {
     "func_800B8214": "Actor_GetWorld",
     "func_800B8248": "Actor_GetWorldPosShapeRot",
     "func_800BE22C": "Actor_ApplyDamage",
-    "func_800F0568": "Audio_PlaySoundAtPosition",
+    "Audio_PlaySoundAtPosition": "SoundSource_PlaySfxAtFixedWorldPos",
+    "func_800F0590": "SoundSource_PlaySfxEachFrameAtFixedWorldPos",
     "func_8016970C": "Play_CameraSetAtEye",
     "func_800BBA88": "Enemy_StartFinishingBlow",
     "ShrinkWindow_Step": "ShrinkWindow_Update",
     "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
     "func_801A89A8": "Audio_QueueSeqCmd",
+    "func_8019F1C0": "Audio_PlaySfxAtPos",
+    "func_801A72CC": "Audio_StopSfxByPos",
     "SkelAnime_LodDrawLimb(": "SkelAnime_DrawLimbLod(",
     "SkelAnime_LodDraw(": "SkelAnime_DrawLod(",
     "SkelAnime_LodDrawLimbSV(": "SkelAnime_DrawFlexLimbLod(",
@@ -387,6 +390,11 @@ animdict = {
     "func_800A81F0": "EffectBlure_AddVertex",
     "func_800A8514": "EffectBlure_AddSpace",
     "Effect_GetParams": "Effect_GetByIndex",
+    "func_801343C0": "SkelAnime_DrawTransformFlexOpa",
+    "func_80134148": "SkelAnime_DrawTransformFlexLimbOpa",
+    "func_8013AB00": "SubS_DrawTransformFlex",
+    "func_8013A860": "SubS_DrawTransformFlexLimb",
+    
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",

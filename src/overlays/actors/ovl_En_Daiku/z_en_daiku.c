@@ -297,7 +297,8 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-s32 func_80943E18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnDaiku_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                             Actor* thisx) {
     EnDaiku* this = THIS;
 
     if (limbIndex == 15) {
@@ -305,10 +306,10 @@ s32 func_80943E18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         rot->z += this->unk_25E;
     }
 
-    return 0;
+    return false;
 }
 
-void func_80943E60(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDaiku_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Gfx* D_809440D4[] = { D_060070C0, D_06006FB0, D_06006E80, D_06006D70 };
     EnDaiku* this = THIS;
 
@@ -355,7 +356,7 @@ void EnDaiku_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80943E18, func_80943E60, &this->actor);
+                          EnDaiku_OverrideLimbDraw, EnDaiku_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
