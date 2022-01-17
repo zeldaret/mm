@@ -1,4 +1,5 @@
 #include "global.h"
+#include "os_malloc.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/boot/boot_800862E0/SystemArena_MallocMin1.s")
 
