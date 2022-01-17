@@ -205,7 +205,7 @@ Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCat
     return closestActor;
 }
 
-s32 func_8013BC6C(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index) {
+s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index) {
     s32 endFrame;
     s32 startFrame;
 
@@ -301,7 +301,7 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E0A4.s")
 
-void func_8013E1C8(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextAnimationIndex, s32* curAnimationIndex) {
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextAnimationIndex, s32* curAnimationIndex) {
     AnimationSpeedInfo* animation = &animations[nextAnimationIndex];
     f32 startFrame = skelAnime->curFrame;
     f32 endFrame;

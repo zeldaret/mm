@@ -108,7 +108,7 @@ s32 func_80A5257C(EnDnq* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_398 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80A5349C, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80A5349C, arg1);
     }
 
     return ret;

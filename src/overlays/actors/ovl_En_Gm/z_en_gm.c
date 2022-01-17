@@ -246,7 +246,7 @@ s32 func_8094E054(EnGm* this, GlobalContext* globalCtx, s32 arg2) {
     if (phi_v1) {
         if (tmp >= 0) {
             this->unk_3E8 = arg2;
-            ret = func_8013BC6C(&this->skelAnime, D_80951CC0, arg2);
+            ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80951CC0, arg2);
             this->unk_3A8 = this->skelAnime.playSpeed;
         }
     }

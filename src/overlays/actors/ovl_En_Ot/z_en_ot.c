@@ -169,7 +169,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.gravity = 0.0f;
     func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
     this->unk_744.r = 255;
@@ -306,7 +306,7 @@ void func_80B5BB38(Color_RGB8* arg0, Color_RGB8* arg1, f32 arg2) {
 }
 
 void func_80B5BDA8(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
     func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     this->actionFunc = func_80B5BE04;
 }
@@ -328,7 +328,7 @@ void func_80B5BE04(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5BE88(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
     this->actionFunc = func_80B5BED4;
 }
 
@@ -343,7 +343,7 @@ void func_80B5BED4(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5BF60(EnOt* this, GlobalContext* globalCtx) {
     this->unk_32C |= 0x40;
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5BFB8;
 }
 
@@ -416,8 +416,8 @@ void func_80B5C25C(EnOt* this, GlobalContext* globalCtx) {
     if ((this->unk_33C == 2) && (this->unk_32C & 0x80) && (this->unk_360->unk_32C & 0x80)) {
         this->unk_32C |= 0x100;
         this->unk_360->unk_32C |= 0x100;
-        func_8013E1C8(&this->skelAnime, sAnimations, 2, &this->animIdx);
-        func_8013E1C8(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIdx);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIdx);
+        SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIdx);
         this->actor.flags |= 0x8000000;
         this->actor.flags &= ~(0x8 | 0x1);
         this->unk_360->actor.flags |= 0x8000000;
@@ -495,7 +495,7 @@ void func_80B5C64C(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5C684(EnOt* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5C6DC;
 }
 
@@ -641,7 +641,7 @@ void func_80B5CCA0(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5CCF4(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5CD40;
 }
 
@@ -682,7 +682,7 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
 void func_80B5CE6C(EnOt* this, GlobalContext* globalCtx) {
     this->unk_384 = 0;
     this->unk_32C |= 0x20;
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5CEC8;
 }
 
@@ -737,7 +737,7 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5D114(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5D160;
 }
 
@@ -897,7 +897,7 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
     this->unk_2C0.unk_2C.z = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.speedXZ = 0.0f;
-    func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
     this->actor.flags |= 0x8000000;
     this->actor.flags &= ~(0x8 | 0x1);
     Flags_SetSwitch(globalCtx, ENOT_GET_3F80(&this->actor));

@@ -201,7 +201,7 @@ s32 func_80BF1284(EnIg* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_3FC = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
         this->unk_3D4 = this->skelAnime.playSpeed;
     }
 

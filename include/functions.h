@@ -2414,7 +2414,6 @@ void LinkAnimation_AnimateFrame(GlobalContext* globalCtx, SkelAnime* skelAnime);
 s32 LinkAnimation_Loop(GlobalContext* globalCtx, SkelAnime* skelAnime);
 s32 LinkAnimation_Once(GlobalContext* globalCtx, SkelAnime* skelAnime);
 void Animation_SetMorph(GlobalContext* globalCtx, SkelAnime* skelAnime, f32 morphFrames);
-
 void LinkAnimation_Change(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* animation, f32 playSpeed, f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames);
 void LinkAnimation_PlayOnce(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* animation);
 void LinkAnimation_PlayOnceSetSpeed(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* animation, f32 playSpeed);
@@ -2430,7 +2429,6 @@ void LinkAnimation_BlendToMorph(GlobalContext* globalCtx, SkelAnime* skelAnime, 
 void LinkAnimation_EndLoop(SkelAnime* skelAnime);
 s32 Animation_OnFrameImpl(SkelAnime* skelAnime, f32 frame, f32 updateRate);
 s32 LinkAnimation_OnFrame(SkelAnime* skelAnime, f32 frame);
-
 void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
 void SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
 void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation);
@@ -2519,7 +2517,7 @@ s32 func_8013B6B0(Path* path, f32* arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg
 void func_8013B878(GlobalContext* globalCtx, Path* path, s32 arg2, Vec3f* arg3);
 Path* func_8013BB34(GlobalContext* globalCtx, u8 arg1, s32 arg2);
 Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId);
-s32 func_8013BC6C(SkelAnime* skelAnime, AnimationInfoS* arg1, s32 arg2);
+s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index);
 s32 func_8013BD40(Actor* actor, Path* path, s32 arg2);
 Path* func_8013BEDC(GlobalContext* globalCtx, u8 arg1, u8 arg2, s32* arg3);
 s32 func_8013C068(Path* path, s32 arg1, Vec3f* arg2, f32 arg3, s32 arg4);
@@ -2549,7 +2547,7 @@ void func_8013DF3C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
 s32 func_8013E054(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
 s32 func_8013E07C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
 s32 func_8013E0A4(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
-void func_8013E1C8(SkelAnime* skelAnime, AnimationSpeedInfo animations[], s32 animationIndex, s32* actorAnimationIndex);
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextAnimationIndex, s32* curAnimationIndex);
 s32 func_8013E2D4(Actor* actor, s16 arg1, s16 arg2, s32 arg3);
 s32 func_8013E3B8(Actor* actor, s16 cutscenes[], s16 len);
 void func_8013E4B0(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, Plane* plane);

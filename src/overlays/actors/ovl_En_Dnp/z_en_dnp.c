@@ -146,7 +146,7 @@ s32 func_80B3CC38(EnDnp* this, s32 arg1) {
 
     if (arg1 != this->unk_340) {
         this->unk_340 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
     }
 
     return ret;

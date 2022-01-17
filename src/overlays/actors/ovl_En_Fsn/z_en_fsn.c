@@ -703,7 +703,7 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
     this->blinkTimer = 20;
     this->animationIdx = 4;
     this->eyeTextureIdx = 0;
-    func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
     this->actionFunc = EnFsn_Idle;
 }
 
@@ -715,7 +715,7 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
         s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
         if (curFrame == frameCount) {
             this->animationIdx = 5;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         }
     } else if (this->flags & ENFSN_HAGGLE) {
     dummy:;
@@ -751,7 +751,7 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
         this->animationIdx = 11;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
     } else {
         if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -759,16 +759,16 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
         if (this->flags & ENFSN_CALM_DOWN) {
             this->flags &= ~ENFSN_CALM_DOWN;
             this->animationIdx = 5;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         } else if (this->flags & ENFSN_OFFER_FINAL_PRICE) {
             this->flags &= ~ENFSN_OFFER_FINAL_PRICE;
             this->animationIdx = 12;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         } else {
             if (this->animationIdx == 12) {
                 if (curFrame == frameCount) {
                     this->animationIdx = 5;
-                    func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
                 } else {
                     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -1416,7 +1416,7 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags |= 1;
         this->actor.targetMode = 0;
         this->animationIdx = 0;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         this->actionFunc = EnFsn_IdleBackroom;
     }
 }

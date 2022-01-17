@@ -690,7 +690,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             this->actor.flags &= ~1;
             if (!ENSW_GET_3(&this->actor)) {
-                func_8013BC6C(&this->skelAnime, sAnimations, 3);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
             }
 
             switch (this->actor.colChkInfo.damageEffect) {
@@ -1172,7 +1172,7 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (!func_808D9968(this, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005298, NULL, this->jointTable, this->morphTable, 30);
-        func_8013BC6C(&this->skelAnime, sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
         this->skelAnime.playSpeed = 4.0f;
 
         Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);

@@ -92,7 +92,7 @@ void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, D_809CDC7C, 0, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 0, &this->animationIndex);
     this->actor.textId = 0;
     this->actionFunc = func_809CCEE8;
 }
@@ -201,7 +201,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
             }
             break;
     }
-    func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     this->actionFunc = EnBji01_DialogueHandler;
 }
 
@@ -247,7 +247,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                 this->actor.flags &= ~0x10000;
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x5DE:
-                        func_8013E1C8(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
                         func_80151938(globalCtx, 0x5DF);
                         break;
                     case 0x5E4:
@@ -298,7 +298,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             break;
     }
     if ((this->animationIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
-        func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     }
 }
 
@@ -316,7 +316,7 @@ void EnBji01_DoNothing(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     this->actionFunc = func_809CD70C;
 }
 

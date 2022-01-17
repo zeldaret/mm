@@ -782,7 +782,7 @@ s32 func_80A12C48(EnGo* this, GlobalContext* globalCtx, s32 arg2) {
     if (objIdx2 >= 0) {
         gSegments[6] = PHYSICAL_TO_VIRTUAL2(globalCtx->objectCtx.status[objIdx2].segment);
         this->unk_3DC = arg2;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg2);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
         this->unk_398 = this->skelAnime.playSpeed;
         gSegments[6] = PHYSICAL_TO_VIRTUAL2(globalCtx->objectCtx.status[objIdx].segment);
     }

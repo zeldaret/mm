@@ -374,19 +374,19 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
             switch (this->animationIdx) {
                 case 1:
                     this->animationIdx = 2;
-                    func_8013BC6C(&this->skelAnime, animations, 2);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 2);
                     break;
                 case 2:
                     EnOssan_SetHaveMet(this);
                     this->textId = EnOssan_GetWelcomeCuriosityShopMan(this, globalCtx);
-                    func_8013BC6C(&this->skelAnime, animations, this->animationIdx);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, this->animationIdx);
                     break;
                 case 4:
                 case 6:
                 case 8:
                 case 10:
                     this->animationIdx++;
-                    func_8013BC6C(&this->skelAnime, animations, this->animationIdx);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, this->animationIdx);
                     func_801518B0(globalCtx, this->textId, &this->actor);
                     EnOssan_SetupStartShopping(globalCtx, this, false);
                     break;
@@ -395,16 +395,16 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
                 case 9:
                 case 11:
                     this->animationIdx = 3;
-                    func_8013BC6C(&this->skelAnime, animations, 3);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 3);
                     break;
                 case 3:
                     this->animationIdx = 1;
-                    func_8013BC6C(&this->skelAnime, animations, 1);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
                     EnOssan_SetupAction(this, EnOssan_Idle);
                     break;
                 default:
                     this->animationIdx = 1;
-                    func_8013BC6C(&this->skelAnime, animations, 1);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
                     EnOssan_SetupAction(this, EnOssan_Idle);
                     break;
             }
@@ -531,7 +531,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
     if (talkState == 5 && func_80147624(globalCtx)) {
         if (this->animationIdx == 9 && this->actor.params == ENOSSAN_PART_TIME_WORKER) {
             this->animationIdx = 1;
-            func_8013BC6C(&this->skelAnime, animations, 1);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
         }
         this->flags &= ~LOOKED_AT_PLAYER;
         if (player->transformation == PLAYER_FORM_DEKU) {
@@ -548,7 +548,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
     if (talkState == 10 && this->actor.params == ENOSSAN_PART_TIME_WORKER &&
         player->transformation == PLAYER_FORM_ZORA && func_80147624(globalCtx)) {
         this->animationIdx = 9;
-        func_8013BC6C(&this->skelAnime, animations, 9);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 9);
     }
     if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -564,7 +564,7 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, GlobalContext* globalCtx
             func_8019F208();
             if (this->actor.params == ENOSSAN_PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA) {
                 this->animationIdx = 9;
-                func_8013BC6C(&this->skelAnime, animations, 9);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 9);
             }
             EnOssan_SetupAction(this, EnOssan_TalkToShopkeeper);
             func_80151938(globalCtx, sTalkOptionTextIds[this->actor.params]);
@@ -633,7 +633,7 @@ void EnOssan_TalkToShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->animationIdx == 9 && this->actor.params == ENOSSAN_PART_TIME_WORKER) {
             this->animationIdx = 1;
-            func_8013BC6C(&this->skelAnime, animations, 1);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
         }
         EnOssan_StartShopping(globalCtx, this);
     }
@@ -1490,7 +1490,7 @@ void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx) {
         this->shopItemSelectedTween = 0.0f;
         Actor_SetScale(&this->actor, sActorScales[this->actor.params]);
         this->animationIdx = 1;
-        func_8013BC6C(&this->skelAnime, sAnimations[this->actor.params], 1);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations[this->actor.params], 1);
         EnOssan_SpawnShopItems(this, globalCtx, shopItems);
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;

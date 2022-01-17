@@ -368,7 +368,7 @@ void func_80BB1FCC(EnGeg* this, GlobalContext* globalCtx) {
 
 void func_80BB2020(EnGeg* this, GlobalContext* globalCtx) {
     gSegments[6] = PHYSICAL_TO_VIRTUAL2(globalCtx->objectCtx.status[this->unk_248].segment);
-    func_8013BC6C(&this->skelAnime, sAnimations, this->unk_4AC);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->unk_4AC);
 }
 
 s32 func_80BB2088(EnGeg* this, GlobalContext* globalCtx) {

@@ -37,7 +37,7 @@ s32 func_80C1DED0(DmNb* this, s32 arg1) {
 
     if (arg1 != this->unk1F0) {
         this->unk1F0 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80C1E200, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80C1E200, arg1);
     }
     return ret;
 }

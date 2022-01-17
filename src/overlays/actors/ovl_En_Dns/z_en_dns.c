@@ -116,7 +116,7 @@ s32 func_8092C63C(EnDns* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_2F8 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
     }
 
     return ret;

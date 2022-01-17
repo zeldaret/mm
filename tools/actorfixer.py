@@ -389,6 +389,9 @@ animdict = {
     "func_80134148": "SkelAnime_DrawTransformFlexLimbOpa",
     "func_8013AB00": "SubS_DrawTransformFlex",
     "func_8013A860": "SubS_DrawTransformFlexLimb",
+    "func_8013BC6C": "SubS_ChangeAnimationByInfoS",
+    "func_8013E1C8": "SubS_ChangeAnimationBySpeedInfo"
+
     
 
     # Structs members
