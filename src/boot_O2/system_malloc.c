@@ -1,4 +1,5 @@
 #include "global.h"
+#include "os_malloc.h"
 
 Arena gSystemArena;
 
@@ -29,8 +30,8 @@ void* SystemArena_Calloc(u32 elements, size_t size) {
     return ptr;
 }
 
-void SystemArena_AnalyzeArena(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated) {
-    __osAnalyzeArena(&gSystemArena, maxFreeBlock, bytesFree, bytesAllocated);
+void SystemArena_GetSizes(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated) {
+    __osGetSizes(&gSystemArena, maxFreeBlock, bytesFree, bytesAllocated);
 }
 
 u32 SystemArena_CheckArena(void) {
