@@ -661,8 +661,8 @@ asm/non_matchings/code/z_camera/Camera_IsUsingZoraFins.s,Camera_IsUsingZoraFins,
 asm/non_matchings/code/z_camera/func_800CBC30.s,func_800CBC30,0x800CBC30,0x15
 asm/non_matchings/code/z_camera/func_800CBC84.s,func_800CBC84,0x800CBC84,0xC8
 asm/non_matchings/code/z_camera/func_800CBFA4.s,func_800CBFA4,0x800CBFA4,0x17
-asm/non_matchings/code/z_camera/Camera_BGCheckInfo.s,Camera_BGCheckInfo,0x800CC000,0x4A
-asm/non_matchings/code/z_camera/Camera_BGCheck.s,Camera_BGCheck,0x800CC128,0x27
+asm/non_matchings/code/z_camera/Camera_BgCheckInfo.s,Camera_BgCheckInfo,0x800CC000,0x4A
+asm/non_matchings/code/z_camera/Camera_BgCheck.s,Camera_BgCheck,0x800CC128,0x27
 asm/non_matchings/code/z_camera/Camera_CheckOOB.s,Camera_CheckOOB,0x800CC1C4,0x27
 asm/non_matchings/code/z_camera/func_800CC260.s,func_800CC260,0x800CC260,0x8A
 asm/non_matchings/code/z_camera/Camera_GetFloorYNorm.s,Camera_GetFloorYNorm,0x800CC488,0x39
