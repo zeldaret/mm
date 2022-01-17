@@ -12,11 +12,11 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801954CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_80195508.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/AudioPlayback_GetInstrumentInner.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801955DC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/AudioPlayback_GetDrum.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801956C0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/AudioPlayback_GetSfx.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801957B4.s")
 

@@ -21,6 +21,14 @@
 #define AIBUF_LEN 0x580
 
 typedef enum {
+    /* 0 */ AUDIO_MODE_STEREO,
+    /* 1 */ AUDIO_MODE_HEADSET,
+    /* 2 */ AUDIO_MODE_UNK,
+    /* 3 */ AUDIO_MODE_MONO,
+    /* 4 */ AUDIO_MODE_SURROUND,
+} AudioSoundMode;
+
+typedef enum {
     /* 0 */ ADSR_STATE_DISABLED,
     /* 1 */ ADSR_STATE_INITIAL,
     /* 2 */ ADSR_STATE_START_LOOP,
@@ -34,11 +42,10 @@ typedef enum {
 
 typedef enum {
     /* 0 */ MEDIUM_RAM,
-    /* 1 */ MEDIUM_UNK1,
+    /* 1 */ MEDIUM_UNK,
     /* 2 */ MEDIUM_CART,
     /* 3 */ MEDIUM_DISK_DRIVE,
-    /* 4 */ MEDIUM_UNK4,
-    /* 5 */ MEDIUM_UNK5
+    /* 5 */ MEDIUM_RAM_UNLOADED = 5
 } SampleMedium;
 
 typedef enum {
