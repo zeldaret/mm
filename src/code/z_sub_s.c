@@ -281,7 +281,17 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
     return actor;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D9C8.s")
+s32 func_8013D9C8(GlobalContext* globalCtx, s16* limbRotTableY, s16* limbRotTableZ, s32 limbCount) {
+    s32 i;
+    u32 frames = globalCtx->gameplayFrames;
+
+    for (i = 0; i < limbCount; i++) {
+        limbRotTableY[i] = (i * 50 + 0x814) * frames;
+        limbRotTableZ[i] = (i * 50 + 0x940) * frames;
+    }
+    
+    return true;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013DB90.s")
 

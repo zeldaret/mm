@@ -2538,7 +2538,7 @@ s16 func_8013D83C(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
 s8 func_8013D8DC(s8 arg0, GlobalContext* globalCtx);
 s8 func_8013D924(s16 arg0, GlobalContext* globalCtx);
 Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId);
-s32 func_8013D9C8(GlobalContext* globalCtx, s16* arg1, s16* arg2, s32 arg3);
+s32 func_8013D9C8(GlobalContext* globalCtx, s16* limbRotTableY, s16* limbRotTableZ, s32 limbCount);
 s32 func_8013DB90(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2);
 s32 func_8013DC40(Path* arg0, s32 arg1, s32 arg2, Vec3f* arg3);
 void func_8013DCE0(GlobalContext* globalCtx, Vec3f* arg1, Actor* arg2, struct_8013DF3C_arg1* arg3, Path* arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, u8 arg9);
