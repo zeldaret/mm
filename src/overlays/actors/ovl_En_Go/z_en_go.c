@@ -769,7 +769,7 @@ s32 func_80A12B78(EnGo* this, GlobalContext* globalCtx) {
 s32 func_80A12C48(EnGo* this, GlobalContext* globalCtx, s32 arg2) {
     s8 objIdx = this->actor.objBankIndex;
     s8 objIdx2 = -1;
-    s32 ret = 0;
+    s32 ret = false;
 
     if ((arg2 >= 18) && (this->unk_289 >= 0)) {
         objIdx2 = this->unk_289;

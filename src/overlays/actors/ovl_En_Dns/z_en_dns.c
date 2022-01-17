@@ -91,7 +91,7 @@ void func_8092C5C0(EnDns* this) {
 
 s32 func_8092C63C(EnDns* this, s32 arg1) {
     s32 phi_v1 = false;
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (arg1) {
         case 0:

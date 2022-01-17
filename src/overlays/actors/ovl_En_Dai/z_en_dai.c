@@ -154,7 +154,7 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
     };
 
     s32 phi_v1 = false;
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (arg1) {
         case 0:

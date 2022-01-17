@@ -33,7 +33,7 @@ extern FlexSkeletonHeader D_06008C40;
 static AnimationInfoS D_80C1E200[] = { &D_06000990, 1.0f, 0, -1, 0, 0 };
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
-    s32 ret = 0;
+    s32 ret = false;
 
     if (arg1 != this->unk1F0) {
         this->unk1F0 = arg1;
