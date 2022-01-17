@@ -300,12 +300,12 @@ void func_808AD05C(EnFamos* this) {
         if (this->unk1D5 == 1) {
             if (this->animatedMaterialIndex != 0) {
                 this->animatedMaterialIndex = 0;
-                Actor_PlaySfxAtPos(&this->actor, 0x3A92U);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FAMOS_REVERSE2);
             } else {
                 this->animatedMaterialIndex = 1;
                 this->unk1E0 = 100;
-                Actor_PlaySfxAtPos(&this->actor, 0x3A91U);
-                Actor_PlaySfxAtPos(&this->actor, 0x3847U);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FAMOS_REVERSE1);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
             }
             this->unk1D5 = 0;
         }
@@ -313,7 +313,7 @@ void func_808AD05C(EnFamos* this) {
         if (this->unk1E0 > 0) {
             if (--this->unk1E0 == 0) {
                 if (this->animatedMaterialIndex != 0) {
-                    Actor_PlaySfxAtPos(&this->actor, 0x3A92U);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FAMOS_REVERSE2);
                 }
                 this->animatedMaterialIndex = 0;
                 this->unk1D5 = 0;
@@ -433,9 +433,9 @@ void func_808AD54C(EnFamos* this) {
 
 void func_808AD5B0(EnFamos* this, GlobalContext* globalCtx) {
     if (ABS_ALT(this->unk1E6) > 0x4000) {
-        func_800B9010(&this->actor, 0x3294);
+        func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
     } else {
-        func_800B9010(&this->actor, 0x3293);
+        func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
     }
 
     if (--this->unk1DC == 0) {
@@ -571,9 +571,9 @@ void func_808ADB70(EnFamos* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 5.0f, 0.3f);
     if (this->actor.speedXZ > 1.0f) {
         if (ABS_ALT(this->unk1E6) > 0x4000) {
-            func_800B9010(&this->actor, 0x3294U);
+            func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
         } else {
-            func_800B9010(&this->actor, 0x3293U);
+            func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
         }
     }
     if (this->unk1EC < this->actor.world.pos.y || this->actor.bgCheckFlags & BGCHECK_CHECK_DYNA) {
@@ -609,7 +609,7 @@ void func_808ADD20(EnFamos* this) {
     this->unk1E0 = -1;
     // aiming for players feet?
     this->actor.world.pos.y = this->actor.floorHeight - 60.0f;
-    Actor_PlaySfxAtPos(&this->actor, 0x3846);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
     this->actionFunc = func_808ADDA8;
 }
 
