@@ -211,8 +211,7 @@ void EnAni_FallToGround(EnAni* this, GlobalContext* globalCtx) {
     s32 pad;
     s16 quakeValue;
 
-    // if hit the ground
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECK_CHECK_WALL) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actionFunc = EnAni_LandOnFoot;
         this->actor.velocity.x = 0.0f;
