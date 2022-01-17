@@ -416,7 +416,7 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                     case 10:
                         if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
                             func_801477B4(globalCtx);
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0xD, &this->unk_32C);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 13, &this->unk_32C);
                             func_80A71B68(this, globalCtx);
                         }
                         break;
