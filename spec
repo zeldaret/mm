@@ -925,8 +925,7 @@ beginseg
     name "ovl_Door_Shutter"
     compress
     include "build/src/overlays/actors/ovl_Door_Shutter/z_door_shutter.o"
-    include "build/data/ovl_Door_Shutter/ovl_Door_Shutter.data.o"
-    include "build/data/ovl_Door_Shutter/ovl_Door_Shutter.reloc.o"
+    include "build/src/overlays/actors/ovl_Door_Shutter/ovl_Door_Shutter_reloc.o"
 endseg
 
 beginseg

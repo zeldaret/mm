@@ -74,6 +74,8 @@
 #define CUR_FORM_EQUIP(button) (gSaveContext.equips.buttonItems[CUR_FORM][button])
 #define CHECK_QUEST_ITEM(item) (((void)0, gSaveContext.inventory.questItems) & gBitFlags[item])
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.inventory.questItems = (((void)0, gSaveContext.inventory.questItems) & (-1 - gBitFlags[item])))
+#define CHECK_DUNGEON_ITEM(item) (gSaveContext.inventory.dungeonItems[(void)0, gSaveContext.mapIndex] & gBitFlags[item])
+#define DUNGEON_KEY_COUNT (gSaveContext.inventory.dungeonKeys[(void)0, gSaveContext.mapIndex])
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
