@@ -60,7 +60,7 @@ extern AnimationHeader D_060064E0;
 extern AnimationHeader D_0600697C;
 extern AnimationHeader D_06006D90;
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &D_060064E0, 1.0f, 0.0f, 0.0f, 0, -4.0 },  { &D_06003584, 1.0f, 0.0f, 0.0f, 2, -1.0f },
     { &D_06002190, 0.6f, 0.0f, 0.0f, 3, 4.0f },  { &D_06002AC8, 1.0f, 0.0f, 0.0f, 2, -4.0 },
     { &D_0600270C, 1.0f, 0.0f, 0.0f, 2, -4.0 },  { &D_0600697C, 1.0f, 0.0f, 0.0f, 0, -4.0 },

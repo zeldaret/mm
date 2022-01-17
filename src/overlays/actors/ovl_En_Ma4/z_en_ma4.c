@@ -140,7 +140,7 @@ void EnMa4_UpdateEyes(EnMa4* this) {
     }
 }
 
-static struct_80B8E1A8 sAnimationInfo[] = {
+static AnimationSpeedInfo sAnimationInfo[] = {
     { &D_06009E58, 1.0f, 0, 0.0f }, { &D_06009E58, 1.0f, 0, -6.0f }, // Idle anim
     { &D_06002A8C, 1.0f, 0, 0.0f }, { &D_06002A8C, 1.0f, 0, -6.0f }, // Looking around anim
     { &D_06018948, 1.0f, 2, 0.0f }, { &D_06018948, 1.0f, 2, -6.0f }, // Starts holding hands anim

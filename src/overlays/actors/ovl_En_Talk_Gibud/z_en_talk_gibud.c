@@ -103,7 +103,7 @@ const ActorInit En_Talk_Gibud_InitVars = {
     (ActorFunc)EnTalkGibud_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &object_rd_Anim_006678, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_006B08, 0.5f, 0.0f, 0.0f, 3, 0.0f },
     { &object_rd_Anim_006EEC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_0073A4, 0.0f, 0.0f, 0.0f, 2, -8.0f },
     { &object_rd_Anim_007BBC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_0081A8, 1.0f, 0.0f, 0.0f, 0, -8.0f },

@@ -72,7 +72,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 /* Animations struct */
-static struct_80B8E1A8 D_809CDC7C[] = {
+static AnimationSpeedInfo D_809CDC7C[] = {
     { &D_06000FDC, 1.0f, 0, 0.0f },  /* Looking through telescope */
     { &D_06005B58, 1.0f, 0, 10.0f }, /* Breathing? Unused? */
     { &D_06000AB0, 1.0f, 0, 0.0f },  /* Talking */

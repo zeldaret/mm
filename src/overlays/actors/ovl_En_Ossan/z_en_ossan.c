@@ -85,7 +85,7 @@ const ActorInit En_Ossan_InitVars = {
     (ActorFunc)NULL,
 };
 
-static ActorAnimationEntryS sAnimationsCuriosityShopMan[] = {
+static AnimationInfoS sAnimationsCuriosityShopMan[] = {
     { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
     { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
     { &D_0600CB3C, 1.0f, 0, -1, 2, 0 },  { &D_0600D354, 1.0f, 0, -1, 0, 0 }, { &D_060138B0, 1.0f, 0, -1, 2, 0 },
@@ -93,7 +93,7 @@ static ActorAnimationEntryS sAnimationsCuriosityShopMan[] = {
     { &D_0600DE34, 1.0f, 0, -1, 2, 0 },
 };
 
-static ActorAnimationEntryS sAnimationsPartTimeWorker[] = {
+static AnimationInfoS sAnimationsPartTimeWorker[] = {
     { &D_06009D34, 1.0f, 0, -1, 0, -10 }, { &D_06009D34, 1.0f, 0, -1, 0, -10 }, { &D_06009D34, 1.0f, 0, -1, 2, 0 },
     { &D_06009D34, -1.0f, 0, -1, 2, 0 },  { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },
     { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },   { &D_0600A460, 1.0f, 0, -1, 2, -5 },
@@ -102,7 +102,7 @@ static ActorAnimationEntryS sAnimationsPartTimeWorker[] = {
 
 static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };
 
-static ActorAnimationEntryS* sAnimations[] = { sAnimationsCuriosityShopMan, sAnimationsPartTimeWorker };
+static AnimationInfoS* sAnimations[] = { sAnimationsCuriosityShopMan, sAnimationsPartTimeWorker };
 
 static f32 sActorScales[] = { 0.01f, 0.01f };
 
@@ -354,7 +354,7 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
-    ActorAnimationEntryS* animations = sAnimations[this->actor.params];
+    AnimationInfoS* animations = sAnimations[this->actor.params];
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(animations[this->animationIdx].animation);
 
@@ -522,7 +522,7 @@ u8 EnOssan_CursorLeft(EnOssan* this, u8 cursorIdx, u8 shelfSlotMax) {
 }
 
 void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
-    ActorAnimationEntryS* animations = sAnimations[this->actor.params];
+    AnimationInfoS* animations = sAnimations[this->actor.params];
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
@@ -556,7 +556,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, GlobalContext* globalCtx) {
-    ActorAnimationEntryS* animations = sAnimations[this->actor.params];
+    AnimationInfoS* animations = sAnimations[this->actor.params];
     Player* player = GET_PLAYER(globalCtx);
 
     switch (globalCtx->msgCtx.choiceIndex) {
@@ -628,7 +628,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_TalkToShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
-    ActorAnimationEntryS* animations = sAnimations[this->actor.params];
+    AnimationInfoS* animations = sAnimations[this->actor.params];
 
     if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->animationIdx == 9 && this->actor.params == ENOSSAN_PART_TIME_WORKER) {

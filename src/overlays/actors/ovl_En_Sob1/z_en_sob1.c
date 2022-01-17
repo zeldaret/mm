@@ -68,7 +68,7 @@ extern TexturePtr D_06010438;
 extern TexturePtr D_06010C38;
 extern TexturePtr D_06011038;
 
-static ActorAnimationEntryS sAnimationsBombShopkeeper[] = {
+static AnimationInfoS sAnimationsBombShopkeeper[] = {
     { &D_06009120, 2.0f, 0, -1, 0, 20 },
     { &D_06008268, 1.0f, 0, -1, 2, 0 },
     { &D_060087BC, 1.0f, 0, -1, 0, 0 },
@@ -166,7 +166,7 @@ static Vec3f sPosOffset[] = {
     { 0.0f, -4.0f, 0.0f },
 };
 
-void EnSob1_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
+void EnSob1_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animations, s32 idx) {
     f32 frameCount;
 
     animations += idx;

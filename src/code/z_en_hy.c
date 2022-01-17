@@ -23,7 +23,7 @@ extern AnimationHeader D_0600FC1C;
 extern AnimationHeader D_0600FEE4;
 extern AnimationHeader D_06010330;
 
-static ActorAnimationEntryS animations[] = {
+static AnimationInfoS animations[] = {
     { &D_0600007C, 1.0f, 0, -1, 0, 0 },  { &D_06001494, 1.0f, 0, -1, 0, 0 },  { &D_06001494, 1.0f, 0, -1, 0, -8 },
     { &D_06001908, 1.0f, 0, -1, 0, 0 },  { &D_06001908, 1.0f, 0, -1, 0, -8 }, { &D_060008C0, 1.0f, 0, -1, 0, 0 },
     { &D_06005DC4, 1.0f, 0, -1, 0, 0 },  { &D_06000FDC, 1.0f, 0, -1, 0, 0 },  { &D_06000AB0, 1.0f, 0, -1, 0, -8 },

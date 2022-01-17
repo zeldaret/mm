@@ -112,7 +112,7 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
+static AnimationInfoS sAnimations[] = {
     { &object_dai_Anim_0048B4, 1.0f, 0, -1, 0, 0 }, { &object_dai_Anim_0048B4, 1.0f, 0, -1, 0, -4 },
     { &object_dai_Anim_005100, 1.0f, 0, -1, 0, 0 }, { &object_dai_Anim_005100, 1.0f, 0, -1, 0, -4 },
     { &object_dai_Anim_0010F8, 1.0f, 0, -1, 2, 0 }, { &object_dai_Anim_001E44, 1.0f, 0, -1, 0, -4 },

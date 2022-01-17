@@ -80,7 +80,7 @@ extern TexturePtr D_0600B0B8;
 extern TexturePtr D_0600B8B8;
 extern TexturePtr D_0600C0B8;
 
-static ActorAnimationEntryS sAnimations[] = {
+static AnimationInfoS sAnimations[] = {
     { &D_0600DE68, 1.0f, 0, -1, 2, 0 }, { &D_0600EE98, 1.0f, 0, -1, 2, 0 }, { &D_0600FD34, 1.0f, 0, -1, 0, 0 },
     { &D_060030EC, 1.0f, 0, -1, 2, 0 }, { &D_06003D78, 1.0f, 0, -1, 2, 0 }, { &D_0600D52C, 1.0f, 0, -1, 0, 0 },
     { &D_06000A44, 1.0f, 0, -1, 0, 0 }, { &D_06001EF4, 1.0f, 0, -1, 0, 0 }, { &D_06002224, 1.0f, 0, -1, 0, 0 },
@@ -107,7 +107,7 @@ static ShopItem sShop[] = {
     { SI_POTION_BLUE, { -12, 32, -36 } },
 };
 
-void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
+void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animations, s32 idx) {
     f32 frameCount;
 
     animations += idx;

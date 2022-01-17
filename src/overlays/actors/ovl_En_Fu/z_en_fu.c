@@ -82,7 +82,7 @@ static Vec3f D_80964B0C = { 0.0f, 60.0f, -8.0f };
 static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &D_060053E0, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06001F74, 1.0f, 0.0f, 0.0f, 0, -4.0f },
     { &D_06002F64, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06004904, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &D_06005304, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06005304, 1.0f, 0.0f, 0.0f, 0, 0.0f },

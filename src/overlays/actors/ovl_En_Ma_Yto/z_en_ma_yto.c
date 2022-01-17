@@ -138,7 +138,7 @@ extern void* D_060142D8[];
 // gCremiaWoodenBox
 extern Gfx D_06005430[];
 
-static struct_80B8E1A8 sAnimationInfo[] = {
+static AnimationSpeedInfo sAnimationInfo[] = {
     { &D_0600A174, 1.0f, 0, 0.0f }, { &D_0600A174, 1.0f, 0, -6.0f },  //
     { &D_0600AF7C, 1.0f, 2, 0.0f }, { &D_0600AF7C, 1.0f, 2, -6.0f },  //
     { &D_06000CC0, 1.0f, 0, 0.0f }, { &D_06000CC0, 1.0f, 0, -6.0f },  //

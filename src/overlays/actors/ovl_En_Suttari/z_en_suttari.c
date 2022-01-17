@@ -59,7 +59,7 @@ const ActorInit En_Suttari_InitVars = {
     (ActorFunc)EnSuttari_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &D_0600071C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_060128F4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &D_06011F84, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_06012E84, 1.0f, 0.0f, 0.0f, 0, -6.0f },
     { &D_0601139C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_0600071C, 2.0f, 0.0f, 0.0f, 0, 0.0f },

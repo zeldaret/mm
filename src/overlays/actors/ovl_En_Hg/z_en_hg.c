@@ -112,7 +112,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, 0x80,
 };
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &D_0600260C, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06009D44, 1.0f, 0.0f, 0.0f, 0, -4.0f },
     { &D_0600A164, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06000370, 1.0f, 0.0f, 0.0f, 2, 0.0f },
     { &D_06001138, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &D_060015D4, 1.0f, 0.0f, 0.0f, 2, 0.0f },

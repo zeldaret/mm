@@ -45,7 +45,7 @@ const ActorInit En_Aob_01_InitVars = {
     (ActorFunc)EnAob01_Draw,
 };
 
-static ActorAnimationEntry D_809C3790[6] = {
+static AnimationInfo D_809C3790[6] = {
     { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_aob_Anim_0068B4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
     { &object_aob_Anim_00700C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_aob_Anim_0058EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },
     { &object_aob_Anim_006040, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, 0, -6.0f },

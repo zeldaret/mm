@@ -102,7 +102,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 5, 33, -20, { 0, 0, 0 } },
 };
 
-static struct_80B8E1A8 sAnimations[] = {
+static AnimationSpeedInfo sAnimations[] = {
     { &D_06004B30, 1.0f, 0, -5.0f },
     { &D_060008D8, 1.0f, 0, -5.0f },
     { &D_06000420, 1.0f, 0, 0.0f },

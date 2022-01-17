@@ -105,7 +105,7 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 20, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS D_80A8B2D8[] = {
+static AnimationInfoS D_80A8B2D8[] = {
     { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, -4 },
     { &object_tru_Anim_0108AC, 1.0f, 0, -1, 2, -4 }, { &object_tru_Anim_009348, 1.0f, 0, -1, 2, 0 },
     { &object_tru_Anim_00EEDC, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, 0 },

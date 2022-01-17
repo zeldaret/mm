@@ -105,7 +105,7 @@ static ColliderCylinderInitType1 sCylinderInit = {
     { 27, 32, 0, { 0, 0, 0 } },
 };
 
-static ActorAnimationEntryS D_80ADD990[] = {
+static AnimationInfoS D_80ADD990[] = {
     { &D_06005488, 1.0f, 0, -1, 0, 0 },  { &D_0600B0B4, 1.0f, 0, -1, 0, 0 },  { &D_06004AA0, 1.0f, 0, -1, 2, 0 },
     { &D_06004E38, 1.0f, 0, -1, 2, 0 },  { &D_060029E8, 1.0f, 0, -1, 2, 0 },  { &D_06005CA8, 1.0f, 0, -1, 2, 0 },
     { &D_060038CC, 1.0f, 0, -1, 0, 0 },  { &D_06003CC0, 1.0f, 0, -1, 0, 0 },  { &D_060012F4, 1.0f, 0, -1, 2, 0 },

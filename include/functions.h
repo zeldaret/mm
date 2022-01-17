@@ -782,7 +782,7 @@ s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3, u
 void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3);
 void func_800BD9E0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
 void func_800BDAA0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
-void Actor_ChangeAnimation(SkelAnime* skelAnime, ActorAnimationEntry* animation, s32 index);
+void Actor_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* animation, s32 index);
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx);
 
 void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist);
@@ -2519,7 +2519,7 @@ s32 func_8013B6B0(Path* path, f32* arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg
 void func_8013B878(GlobalContext* globalCtx, Path* path, s32 arg2, Vec3f* arg3);
 Path* func_8013BB34(GlobalContext* globalCtx, u8 arg1, s32 arg2);
 Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId);
-s32 func_8013BC6C(SkelAnime* skelAnime, ActorAnimationEntryS* arg1, s32 arg2);
+s32 func_8013BC6C(SkelAnime* skelAnime, AnimationInfoS* arg1, s32 arg2);
 s32 func_8013BD40(Actor* actor, Path* path, s32 arg2);
 Path* func_8013BEDC(GlobalContext* globalCtx, u8 arg1, u8 arg2, s32* arg3);
 s32 func_8013C068(Path* path, s32 arg1, Vec3f* arg2, f32 arg3, s32 arg4);
@@ -2549,7 +2549,7 @@ void func_8013DF3C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
 s32 func_8013E054(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
 s32 func_8013E07C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
 s32 func_8013E0A4(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
-void func_8013E1C8(SkelAnime* skelAnime, struct_80B8E1A8 animations[], s32 animationIndex, s32* actorAnimationIndex);
+void func_8013E1C8(SkelAnime* skelAnime, AnimationSpeedInfo animations[], s32 animationIndex, s32* actorAnimationIndex);
 s32 func_8013E2D4(Actor* actor, s16 arg1, s16 arg2, s32 arg3);
 s32 func_8013E3B8(Actor* actor, s16 cutscenes[], s16 len);
 void func_8013E4B0(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, Plane* plane);

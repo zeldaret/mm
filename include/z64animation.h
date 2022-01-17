@@ -323,7 +323,7 @@ typedef struct {
     /* 0x0C */ f32 frameCount;
     /* 0x10 */ u8 mode;
     /* 0x14 */ f32 morphFrames;
-} ActorAnimationEntry; // size = 0x18
+} AnimationInfo; // size = 0x18
 
 typedef struct {
     /* 0x00 */ AnimationHeader* animation;
@@ -332,13 +332,13 @@ typedef struct {
     /* 0x0A */ s16 frameCount;
     /* 0x0C */ u8 mode;
     /* 0x0E */ s16 morphFrames;
-} ActorAnimationEntryS; // size = 0x10
+} AnimationInfoS; // size = 0x10
 
-typedef struct struct_80B8E1A8 {
+typedef struct AnimationSpeedInfo {
     /* 0x00 */ AnimationHeader* animation;
     /* 0x04 */ f32 playSpeed;
     /* 0x08 */ u8 mode;
     /* 0x0C */ f32 morphFrames;
-} struct_80B8E1A8; // size = 0x10
+} AnimationSpeedInfo; // size = 0x10
 
 #endif

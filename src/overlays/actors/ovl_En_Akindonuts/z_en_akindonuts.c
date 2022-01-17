@@ -62,7 +62,7 @@ static ColliderCylinderInitType1 sCylinderInit = {
     { 27, 32, 0, { 0, 0, 0 } },
 };
 
-static ActorAnimationEntryS sAnimations[] = {
+static AnimationInfoS sAnimations[] = {
     { &object_dnt_Anim_005488, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_00B0B4, 1.0f, 0, -1, 0, 0 },
     { &object_dnt_Anim_004AA0, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_004E38, 1.0f, 0, -1, 2, 0 },
     { &object_dnt_Anim_0029E8, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_005CA8, 1.0f, 0, -1, 2, 0 },

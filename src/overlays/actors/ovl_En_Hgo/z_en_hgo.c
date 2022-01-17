@@ -40,7 +40,7 @@ const ActorInit En_Hgo_InitVars = {
     (ActorFunc)EnHgo_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, 0, -4.0f },
     { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },

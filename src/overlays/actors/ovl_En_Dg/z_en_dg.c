@@ -139,7 +139,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
+static AnimationInfoS sAnimations[] = {
     { &D_060021C8, 1.0f, 0, -1, 0, 0 },   { &D_060021C8, 1.0f, 0, -1, 0, -6 },  { &D_06001BD8, 1.0f, 0, -1, 0, 0 },
     { &D_06000998, 1.0f, 0, -1, 0, -6 },  { &D_06001FB0, 1.0f, 0, -1, 2, -6 },  { &D_06001FB0, 1.0f, 0, -1, 4, -6 },
     { &D_06001048, 1.0f, 0, -1, 2, -6 },  { &D_06001348, 1.0f, 0, -1, 0, -6 },  { &D_06001048, 1.0f, 0, 27, 2, -6 },
@@ -152,7 +152,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) {
+void func_80989140(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
     f32 frameCount;
 
     arg1 += arg2;

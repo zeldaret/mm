@@ -84,7 +84,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
+static AnimationInfoS sAnimations[] = {
     { &D_060007D8, 1.0f, 0, -1, 2, -4 }, { &D_060021DC, 1.0f, 0, -1, 0, 0 },  { &D_060021DC, 1.0f, 0, -1, 0, -4 },
     { &D_060026B8, 1.0f, 0, -1, 2, -4 }, { &D_06004D08, 1.0f, 0, -1, 2, -4 }, { &D_060071F4, 1.0f, 0, -1, 2, -4 },
     { &D_06007960, 1.0f, 0, -1, 0, -4 }, { &D_06008588, 1.0f, 0, -1, 2, 0 },  { &D_0600A900, 1.0f, 0, -1, 0, -4 },

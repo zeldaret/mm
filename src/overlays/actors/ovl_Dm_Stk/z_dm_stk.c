@@ -189,7 +189,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &D_0601C21C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &D_0601D3D0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &D_06001030, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0601D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &D_0601D008, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &D_06015C14, 1.0f, 0.0f, -1.0f, 0, 0.0f },
@@ -245,7 +245,7 @@ void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, ActorAnimationEntry* animation,
+void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation,
                    u16 index) {
     func_80A9FDB0(this, globalCtx);
 

@@ -152,7 +152,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
+static AnimationInfoS sAnimations[] = {
     { &object_st_Anim_000304, 1.0f, 0, -1, 0, 0 },  { &object_st_Anim_005B98, 1.0f, 0, -1, 2, -4 },
     { &object_st_Anim_000304, 4.0f, 0, -1, 2, -4 }, { &object_st_Anim_000304, 1.0f, 0, -1, 0, -4 },
     { &object_st_Anim_0055A8, 1.0f, 0, -1, 2, -4 }, { &object_st_Anim_000304, 8.0f, 0, -1, 0, -4 },

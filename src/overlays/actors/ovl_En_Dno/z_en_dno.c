@@ -62,7 +62,7 @@ extern AnimationHeader D_06009100;
 extern FlexSkeletonHeader D_0600E1F8;
 extern u8 D_801C20C0;
 
-static struct_80B8E1A8 sAnimations[] = {
+static AnimationSpeedInfo sAnimations[] = {
     { &D_06000470, 1.0f, 2, 0.0f }, { &D_060008F0, 1.0f, 2, 0.0f }, { &D_06000F6C, 1.0f, 0, 0.0f },
     { &D_06001A50, 1.0f, 2, 0.0f }, { &D_06002530, 1.0f, 2, 0.0f }, { &D_06003320, 1.0f, 2, 0.0f },
     { &D_060036D0, 1.0f, 0, 0.0f }, { &D_060041CC, 1.0f, 2, 0.0f }, { &D_06004DD8, 1.0f, 2, 0.0f },

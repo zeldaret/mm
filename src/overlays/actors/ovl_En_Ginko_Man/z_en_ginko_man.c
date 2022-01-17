@@ -49,7 +49,7 @@ const ActorInit En_Ginko_Man_InitVars = {
     (ActorFunc)EnGinkoMan_Draw,
 };
 
-ActorAnimationEntry animations[] = {
+AnimationInfo animations[] = {
     { &D_060008C0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
     { &D_060043F0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
     { &D_06004F40, 1.0f, 0.0f, 0.0f, 2, -4.0f },
