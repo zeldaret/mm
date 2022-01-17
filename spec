@@ -7382,7 +7382,17 @@ beginseg
     compress
     romalign 0x1000
     number 6
-    include "build/assets/objects/object_obj_tokeidai/object_obj_tokeidai.o"
+    include "build/assets/objects/object_obj_tokeidai/textures.o"
+    include "build/assets/objects/object_obj_tokeidai/termina_field_walls.o"
+    include "build/assets/objects/object_obj_tokeidai/counterweight.o"
+    include "build/assets/objects/object_obj_tokeidai/exterior_gear.o"
+    include "build/assets/objects/object_obj_tokeidai/clock_center_and_hand.o"
+    include "build/assets/objects/object_obj_tokeidai/sun_and_moon_panel.o"
+    include "build/assets/objects/object_obj_tokeidai/minute_ring.o"
+    include "build/assets/objects/object_obj_tokeidai/unused_tower_wall.o"
+    include "build/assets/objects/object_obj_tokeidai/staircase_to_rooftop.o"
+    include "build/assets/objects/object_obj_tokeidai/clock_tower_clock_face.o"
+    include "build/assets/objects/object_obj_tokeidai/wall_clock_clock_face.o"
 endseg
 
 beginseg
