@@ -6,15 +6,15 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/D_801E030C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_8018EF88.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/AudioLoad_InitSampleDmaBuffers.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_8018F220.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/AudioLoad_IsFontLoadComplete.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_8018F298.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_8018F310.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_8018F388.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/AudioLoad_SetFontLoadStatus.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_8018F3B8.s")
 
@@ -94,7 +94,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80190BB0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80190F50.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/AudioLoad_InitSlowLoads.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80190F64.s")
 
@@ -112,7 +112,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80191460.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80191568.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/AudioLoad_InitAsyncLoads.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80191598.s")
 
@@ -146,7 +146,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80192514.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80192990.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/AudioLoad_LoadPermanentSamples.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80192AD0.s")
 
@@ -158,4 +158,4 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80192B54.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_80192BAC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/AudioLoad_InitScriptLoads.s")

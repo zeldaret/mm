@@ -6,17 +6,17 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_80194E60.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_80194F20.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/AudioPlayback_NoteDisable.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_80194F84.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801954CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_80195508.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/AudioPlayback_GetInstrumentInner.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801955DC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/AudioPlayback_GetDrum.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801956C0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/AudioPlayback_GetSfx.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801957B4.s")
 
@@ -34,7 +34,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_80195DEC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_80195E3C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/AudioPlayback_InitNoteFreeList.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_80195EE0.s")
 
@@ -42,7 +42,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_8019617C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801961BC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/AudioPlayback_AudioListRemove.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801961E8.s")
 
@@ -60,4 +60,4 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801965F0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/func_801968C4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_playback/AudioPlayback_NoteInitAll.s")
