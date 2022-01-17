@@ -148,7 +148,7 @@ static AnimationSpeedInfo sAnimationInfo[] = {
     { &D_06018948, 1.0f, ANIMMODE_ONCE, 0.0f },
     { &D_06018948, 1.0f, ANIMMODE_ONCE, -6.0f }, // Starts holding hands anim
     { &D_0601B76C, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &D_0601B76C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Holnding hands anim
+    { &D_0601B76C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Holding hands anim
     { &D_06007328, 1.0f, ANIMMODE_LOOP, 0.0f },
     { &D_06007328, 1.0f, ANIMMODE_LOOP, -6.0f }, // Walking anim
     { &D_06014088, 1.0f, ANIMMODE_LOOP, 0.0f },
