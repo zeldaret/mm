@@ -691,6 +691,7 @@ void AudioHeap_LoadFilter(s16* filter, s32 lowPassCutoff, s32 highPassCutoff) {
     s32 k;
     s32 cutOff;
 
+    //! @bug filter is never set if (lowPassCutoff == highPassCutoff) and does not equal 0
     if (lowPassCutoff == 0 && highPassCutoff == 0) {
         // Identity filter
         AudioHeap_LoadLowPassFilter(filter, 0);
@@ -712,6 +713,7 @@ void AudioHeap_LoadFilter(s16* filter, s32 lowPassCutoff, s32 highPassCutoff) {
 
             k += highPassCutoff - lowPassCutoff - 1;
             for (i = 0; i < 8; i++) {
+                //! @bug should be gBandStopFilterData[8 * k + i];
                 filter[i] = gBandStopFilterData[k + i];
             }
         } else if (highPassCutoff < lowPassCutoff) {
@@ -724,6 +726,7 @@ void AudioHeap_LoadFilter(s16* filter, s32 lowPassCutoff, s32 highPassCutoff) {
 
             k += lowPassCutoff - highPassCutoff - 1;
             for (i = 0; i < 8; i++) {
+                //! @bug should be gBandPassFilterData[8 * k + i];
                 filter[i] = gBandPassFilterData[k + i];
             }
         }
