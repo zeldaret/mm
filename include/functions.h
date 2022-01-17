@@ -8,7 +8,7 @@ void Idle_ThreadEntry(void* arg);
 void ViConfig_UpdateVi(u32 arg0);
 void ViConfig_UpdateBlack(void);
 s32 DmaMgr_DMARomToRam(u32 src, void* dst, size_t size);
-void DmaMgr_DmaCallback0(OSPiHandle* piHandle, OSIoMesg* mb, s32 direction);
+s32 DmaMgr_DmaHandler(OSPiHandle* piHandle, OSIoMesg* mb, s32 direction);
 DmaEntry* DmaMgr_FindDmaEntry(u32 vromAddr);
 u32 DmaMgr_TranslateVromToRom(u32 vromAddr);
 s32 DmaMgr_FindDmaIndex(u32 vromAddr);

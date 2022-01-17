@@ -56,7 +56,7 @@ END:
     return ret;
 }
 
-void DmaMgr_DmaCallback0(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
+s32 DmaMgr_DmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
     osEPiStartDma(pihandle, mb, direction);
 }
 
