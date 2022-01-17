@@ -894,7 +894,7 @@ void EnGeg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80BB1FCC(this, globalCtx);
     func_80BB2088(this, globalCtx);
     func_80BB1C8C(this);
-    func_8013D9C8(globalCtx, &this->unk_238, &this->unk_232, 3);
+    SubS_FillLimbRotTables(globalCtx, this->unk_238, this->unk_232, ARRAY_COUNT(this->unk_238));
     func_80BB1D04(this);
     func_80BB178C(this, globalCtx);
 }

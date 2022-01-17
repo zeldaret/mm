@@ -2204,7 +2204,7 @@ asm/non_matchings/code/z_sub_s/func_8013D83C.s,func_8013D83C,0x8013D83C,0x28
 asm/non_matchings/code/z_sub_s/func_8013D8DC.s,func_8013D8DC,0x8013D8DC,0x12
 asm/non_matchings/code/z_sub_s/func_8013D924.s,func_8013D924,0x8013D924,0xF
 asm/non_matchings/code/z_sub_s/SubS_FindActor.s,SubS_FindActor,0x8013D960,0x1A
-asm/non_matchings/code/z_sub_s/func_8013D9C8.s,func_8013D9C8,0x8013D9C8,0x72
+asm/non_matchings/code/z_sub_s/SubS_FillLimbRotTables.s,SubS_FillLimbRotTables,0x8013D9C8,0x72
 asm/non_matchings/code/z_sub_s/func_8013DB90.s,func_8013DB90,0x8013DB90,0x2C
 asm/non_matchings/code/z_sub_s/func_8013DC40.s,func_8013DC40,0x8013DC40,0x23
 asm/non_matchings/code/z_sub_s/func_8013DCCC.s,func_8013DCCC,0x8013DCCC,0x5

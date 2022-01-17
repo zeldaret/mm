@@ -392,6 +392,7 @@ animdict = {
     "func_8013A860": "SubS_DrawTransformFlexLimb",
     "func_8013BC6C": "SubS_ChangeAnimationByInfoS",
     "func_8013E1C8": "SubS_ChangeAnimationBySpeedInfo",
+    "func_8013D9C8": "SubS_FillLimbRotTables",
 
     
 

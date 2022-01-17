@@ -1360,7 +1360,7 @@ s32 func_80950690(EnGm* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_8013D9C8(globalCtx, this->unk_3D8, this->unk_3D2, ARRAY_COUNT(this->unk_3D2));
+    SubS_FillLimbRotTables(globalCtx, this->unk_3D8, this->unk_3D2, ARRAY_COUNT(this->unk_3D8));
 
     return false;
 }
@@ -1548,16 +1548,11 @@ void func_80950DB8(EnGm* this, GlobalContext* globalCtx) {
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&sp34, &sp40), 4, 0x2AA8);
         }
     }
-    func_8013D9C8(globalCtx, this->unk_3D8, this->unk_3D2, 3);
+    SubS_FillLimbRotTables(globalCtx, this->unk_3D8, this->unk_3D2, ARRAY_COUNT(this->unk_3D8));
 }
 
 void func_80950F2C(EnGm* this, GlobalContext* globalCtx) {
-    s32 sp50[] = {
-        0,
-        0,
-        3,
-        2,
-    };
+    s32 sp50[] = { 0, 0, 3, 2 };
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     Vec3f sp3C;

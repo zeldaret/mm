@@ -507,7 +507,7 @@ void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
             Math_SmoothStepToS(&this->unk2E2.y, 0, 4, 0x3E8, 1);
         }
     }
-    func_8013D9C8(globalCtx, this->unk2FA, this->unk31A, 16);
+    SubS_FillLimbRotTables(globalCtx, this->unk2FA, this->unk31A, ARRAY_COUNT(this->unk2FA));
 }
 
 s16 func_80BAB698(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {

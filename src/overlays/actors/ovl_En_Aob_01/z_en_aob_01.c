@@ -483,7 +483,7 @@ void func_809C1EC8(EnAob01* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->unk_2E0.y, 0, 4, 1000, 1);
     }
     func_809C10B0(this, 3);
-    func_8013D9C8(globalCtx, this->unk_2F8, this->unk_318, 0x10);
+    SubS_FillLimbRotTables(globalCtx, this->unk_2F8, this->unk_318, ARRAY_COUNT(this->unk_2F8));
     func_809C165C(this, globalCtx);
     if (player->stateFlags1 & 0x20) {
         func_809C1124();

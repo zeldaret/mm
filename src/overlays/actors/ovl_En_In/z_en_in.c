@@ -298,7 +298,7 @@ void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
     }
     func_808F322C(this, 3);
     func_808F3178(this, globalCtx);
-    func_8013D9C8(globalCtx, this->unk376, this->unk39E, 20);
+    SubS_FillLimbRotTables(globalCtx, this->unk376, this->unk39E, ARRAY_COUNT(this->unk376));
 }
 
 void func_808F35AC(EnIn* this, GlobalContext* globalCtx) {

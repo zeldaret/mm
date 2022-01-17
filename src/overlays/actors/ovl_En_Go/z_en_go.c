@@ -1580,7 +1580,7 @@ void func_80A14B30(EnGo* this, GlobalContext* globalCtx) {
         this->actor.shape.yOffset = 0.0f;
     }
 
-    func_8013D9C8(globalCtx, &this->unk_3CE[0], &this->unk_3C8[0], 3);
+    SubS_FillLimbRotTables(globalCtx, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
     Math_ApproachS(&this->actor.shape.rot.y, sp26, 4, 0x2AA8);
 }
 
@@ -1734,7 +1734,7 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
                 }
             }
 
-            func_8013D9C8(globalCtx, this->unk_3CE, this->unk_3C8, 3);
+            SubS_FillLimbRotTables(globalCtx, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
             func_800EDF24(&this->actor, globalCtx, sp2C);
         }
     }
@@ -1854,7 +1854,7 @@ void func_80A157C4(EnGo* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&sp34, &sp40), 4, 0x2AA8);
         }
-        func_8013D9C8(globalCtx, this->unk_3CE, this->unk_3C8, 3);
+        SubS_FillLimbRotTables(globalCtx, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
         return;
     }
 

@@ -2690,7 +2690,7 @@
     0x8013D8DC:("func_8013D8DC",),
     0x8013D924:("func_8013D924",),
     0x8013D960:("SubS_FindActor",),
-    0x8013D9C8:("func_8013D9C8",),
+    0x8013D9C8:("SubS_FillLimbRotTables",),
     0x8013DB90:("func_8013DB90",),
     0x8013DC40:("func_8013DC40",),
     0x8013DCCC:("func_8013DCCC",),
