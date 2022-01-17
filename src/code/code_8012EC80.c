@@ -553,7 +553,7 @@ s32 Inventory_IsMapVisible(s16 sceneNum) {
     return false;
 }
 
-static u16 gScenesPerTingleMap[6][12] = {
+static u16 sScenesPerTingleMap[6][12] = {
     {
         // Clock Town Tingle Map
         SCENE_00KEIKOKU,
@@ -630,7 +630,7 @@ static u16 gScenesPerTingleMap[6][12] = {
 void Inventory_SetMapVisibility(s16 tingleIndex) {
     s16 i = 0;
     s16 index = 0;
-    u16(*tingleMapSceneIndices)[] = &gScenesPerTingleMap[tingleIndex];
+    u16(*tingleMapSceneIndices)[] = &sScenesPerTingleMap[tingleIndex];
 
     if ((tingleIndex >= 0) && (tingleIndex < 6)) {
         while (true) {
@@ -664,17 +664,17 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
             i++;
         }
 
-        if ((*tingleMapSceneIndices) == gScenesPerTingleMap[0]) {
+        if ((*tingleMapSceneIndices) == sScenesPerTingleMap[0]) {
             gSaveContext.mapsVisible |= 3;
-        } else if ((*tingleMapSceneIndices) == gScenesPerTingleMap[1]) {
+        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[1]) {
             gSaveContext.mapsVisible |= 0x1C;
-        } else if ((*tingleMapSceneIndices) == gScenesPerTingleMap[2]) {
+        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[2]) {
             gSaveContext.mapsVisible |= 0xE0;
-        } else if ((*tingleMapSceneIndices) == gScenesPerTingleMap[3]) {
+        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[3]) {
             gSaveContext.mapsVisible |= 0x100;
-        } else if ((*tingleMapSceneIndices) == gScenesPerTingleMap[4]) {
+        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[4]) {
             gSaveContext.mapsVisible |= 0x1E00;
-        } else if ((*tingleMapSceneIndices) == gScenesPerTingleMap[5]) {
+        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[5]) {
             gSaveContext.mapsVisible |= 0x6000;
         }
     }
