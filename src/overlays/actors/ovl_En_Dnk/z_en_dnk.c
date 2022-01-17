@@ -154,8 +154,8 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
             if (frame < 0) {
                 frame = frameCount;
             }
-            Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
-                             frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].morphFrames);
+            Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed, frame,
+                             frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].morphFrames);
         }
     }
     return sp30;
