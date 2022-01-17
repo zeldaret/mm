@@ -37,7 +37,7 @@ extern Gfx D_06005458[];
 static AnimationInfo animations[] = { { &D_0600788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f } };
 
 void func_80C25D40(EnRsn* this) {
-    Actor_ChangeAnimation(&this->skelAnime, animations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, animations, 0);
     this->actionFunc = func_80C25D84;
 }
 

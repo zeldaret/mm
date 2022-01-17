@@ -155,7 +155,7 @@ void EnHg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BCF354(EnHg* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80BCF398;
 }
 
@@ -173,7 +173,7 @@ void func_80BCF398(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCF468(EnHg* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     this->actionFunc = func_80BCF4AC;
 }
 
@@ -197,7 +197,7 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCF5F0(EnHg* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80BCF634;
 }
 
@@ -210,7 +210,7 @@ void func_80BCF634(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCF68C(EnHg* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
     this->actionFunc = func_80BCF6D0;
 }
 
@@ -284,17 +284,17 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
             switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                 case 1:
                     this->currentAnimation = 0;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
                     break;
                 case 2:
                     this->cutscenes[2] = 0;
                     this->currentAnimation = 3;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                     break;
                 case 3:
                     this->cutscenes[2] = 0;
                     this->currentAnimation = 5;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
                     break;
                 case 4:
                     this->cutscenes[2] = 0;
@@ -302,11 +302,11 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
                     if ((this->unk218 == 1) || (this->unk218 == 3)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 7);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 7);
                     break;
                 case 5:
                     this->currentAnimation = 1;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                     break;
                 case 6:
                     gSaveContext.weekEventReg[0x4B] |= 0x20;
@@ -318,11 +318,11 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
                 switch (this->currentAnimation) {
                     case 3:
                         this->currentAnimation = 4;
-                        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
                         break;
                     case 5:
                         this->currentAnimation = 6;
-                        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
                         break;
                 }
             }

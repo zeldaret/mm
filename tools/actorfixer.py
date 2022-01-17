@@ -213,7 +213,8 @@ animdict = {
     "func_800BE2B8": "Actor_SetDropFlagJntSph",
     "Actor_TitleCardCreate": "TitleCard_InitBossName",
     "func_800B867C": "Actor_TextboxIsClosing",
-    "func_800BDC5C": "Actor_ChangeAnimation",
+    "func_800BDC5C": "Actor_ChangeAnimationByInfo",
+    "Actor_ChangeAnimation": "Actor_ChangeAnimationByInfo",
     "func_80152498": "Message_GetState",
     "func_800B8898": "Actor_GetScreenPos",
     "Audio_PlayActorSound2": "Actor_PlaySfxAtPos",
@@ -390,7 +391,7 @@ animdict = {
     "func_8013AB00": "SubS_DrawTransformFlex",
     "func_8013A860": "SubS_DrawTransformFlexLimb",
     "func_8013BC6C": "SubS_ChangeAnimationByInfoS",
-    "func_8013E1C8": "SubS_ChangeAnimationBySpeedInfo"
+    "func_8013E1C8": "SubS_ChangeAnimationBySpeedInfo",
 
     
 

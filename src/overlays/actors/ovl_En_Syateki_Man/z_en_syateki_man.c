@@ -216,7 +216,7 @@ void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         u16 sp22;
 
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
         sp22 = Text_GetFaceReaction(globalCtx, 0x31);
         if (sp22 != 0) {
             func_801518B0(globalCtx, sp22, &this->actor);
@@ -419,7 +419,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (this->skelAnime.animation == &D_0600D2F8) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
         }
     }
 }

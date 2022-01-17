@@ -782,7 +782,7 @@ s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3, u
 void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3);
 void func_800BD9E0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
 void func_800BDAA0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
-void Actor_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* animation, s32 index);
+void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animation, s32 index);
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx);
 
 void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist);
