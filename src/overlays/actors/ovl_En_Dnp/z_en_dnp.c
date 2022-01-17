@@ -85,15 +85,19 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS sAnimations[] = {
-    { &D_060007D8, 1.0f, 0, -1, 2, -4 }, { &D_060021DC, 1.0f, 0, -1, 0, 0 },  { &D_060021DC, 1.0f, 0, -1, 0, -4 },
-    { &D_060026B8, 1.0f, 0, -1, 2, -4 }, { &D_06004D08, 1.0f, 0, -1, 2, -4 }, { &D_060071F4, 1.0f, 0, -1, 2, -4 },
-    { &D_06007960, 1.0f, 0, -1, 0, -4 }, { &D_06008588, 1.0f, 0, -1, 2, 0 },  { &D_0600A900, 1.0f, 0, -1, 0, -4 },
-    { &D_0600AEB8, 1.0f, 0, -1, 0, -4 }, { &D_0600B754, 1.0f, 0, -1, 2, -4 }, { &D_0600674C, 1.0f, 0, -1, 0, -4 },
-    { &D_0600BAD8, 1.0f, 0, -1, 2, -4 }, { &D_06006B74, 1.0f, 0, -1, 0, -4 }, { &D_06012428, 1.0f, 0, -1, 0, -4 },
-    { &D_0600B324, 1.0f, 0, -1, 0, 0 },  { &D_0600B324, 1.0f, 0, -1, 0, -4 }, { &D_060115B8, 1.0f, 0, -1, 0, -4 },
-    { &D_060115B8, 1.0f, 0, -1, 0, 0 },  { &D_0600923C, 1.0f, 0, -1, 2, -4 }, { &D_06009AA0, 1.0f, 0, -1, 0, -4 },
-    { &D_0600125C, 1.0f, 0, -1, 2, -4 }, { &D_060017F8, 1.0f, 0, -1, 2, 0 },  { &D_06001C1C, 1.0f, 0, -1, 0, -4 },
-    { &D_060057AC, 1.0f, 0, -1, 2, 0 },  { &D_0600625C, 1.0f, 0, -1, 0, -4 },
+    { &D_060007D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_060021DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_060021DC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_060026B8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &D_06004D08, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_060071F4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &D_06007960, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_06008588, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_0600A900, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_0600AEB8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_0600B754, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_0600674C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_0600BAD8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_06006B74, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_06012428, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_0600B324, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_0600B324, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_060115B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_060115B8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_0600923C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &D_06009AA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_0600125C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &D_060017F8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  { &D_06001C1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_060057AC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  { &D_0600625C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 static s32 D_80B3DE58[] = {

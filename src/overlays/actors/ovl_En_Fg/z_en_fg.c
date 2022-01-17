@@ -102,10 +102,10 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &D_06001534, 1.0f, 0, -1, 0, 0 },
-    { &D_06001534, 1.0f, 0, -1, 0, -4 },
-    { &D_060011C0, 1.0f, 0, -1, 0, -4 },
-    { &D_060007BC, 1.0f, 0, -1, 2, -4 },
+    { &D_06001534, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_06001534, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_060011C0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_060007BC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 };
 
 s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {

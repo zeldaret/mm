@@ -60,11 +60,11 @@ const ActorInit En_Suttari_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &D_0600071C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_060128F4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_06011F84, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_06012E84, 1.0f, 0.0f, 0.0f, 0, -6.0f },
-    { &D_0601139C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_0600071C, 2.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_06011F84, 2.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_06011C38, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &D_06010BDC, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &D_0600071C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, { &D_060128F4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06011F84, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, { &D_06012E84, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
+    { &D_0601139C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, { &D_0600071C, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06011F84, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, { &D_06011C38, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_06010BDC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {

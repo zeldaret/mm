@@ -63,13 +63,19 @@ const ActorInit En_Rail_Skb_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_skb_Anim_0064E0, 0.96f, 0.0f, 0.0f, 0, -4.0f }, { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, 2, -1.0f },
-    { &object_skb_Anim_002190, 0.6f, 0.0f, 0.0f, 3, 4.0f },   { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, 2, -4.0f },
-    { &object_skb_Anim_00270C, 1.0f, 0.0f, 0.0f, 2, -4.0f },  { &object_skb_Anim_00697C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_skb_Anim_006D90, 1.0f, 0.0f, 0.0f, 0, -4.0f },  { &object_skb_Anim_001D1C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, 2, -8.0f },  { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, 2, -16.0f },
-    { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, 2, -8.0f },  { &object_skb_Anim_0015EC, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &object_skb_Anim_0009E4, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_skb_Anim_0064E0, 0.96f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_skb_Anim_002190, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f },
+    { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_skb_Anim_00270C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &object_skb_Anim_00697C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_skb_Anim_006D90, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_skb_Anim_001D1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },
+    { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_skb_Anim_0015EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_skb_Anim_0009E4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {

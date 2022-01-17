@@ -113,10 +113,10 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &D_0600260C, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06009D44, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_0600A164, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06000370, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &D_06001138, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &D_060015D4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &D_06001960, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &D_0600AE1C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &D_0600260C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, { &D_06009D44, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &D_0600A164, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, { &D_06000370, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_06001138, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },  { &D_060015D4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_06001960, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },  { &D_0600AE1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static u32 D_80BD00C8 = false;

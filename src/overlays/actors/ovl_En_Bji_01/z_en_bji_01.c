@@ -73,10 +73,10 @@ static ColliderCylinderInit sCylinderInit = {
 
 /* Animations struct */
 static AnimationSpeedInfo D_809CDC7C[] = {
-    { &D_06000FDC, 1.0f, 0, 0.0f },  /* Looking through telescope */
-    { &D_06005B58, 1.0f, 0, 10.0f }, /* Breathing? Unused? */
-    { &D_06000AB0, 1.0f, 0, 0.0f },  /* Talking */
-    { &D_0600066C, 1.0f, 2, -5.0f }, /* Scratching chin? */
+    { &D_06000FDC, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Looking through telescope */
+    { &D_06005B58, 1.0f, ANIMMODE_LOOP, 10.0f }, /* Breathing? Unused? */
+    { &D_06000AB0, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Talking */
+    { &D_0600066C, 1.0f, ANIMMODE_ONCE, -5.0f }, /* Scratching chin? */
 };
 
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {

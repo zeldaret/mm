@@ -69,9 +69,9 @@ extern TexturePtr D_06010C38;
 extern TexturePtr D_06011038;
 
 static AnimationInfoS sAnimationsBombShopkeeper[] = {
-    { &D_06009120, 2.0f, 0, -1, 0, 20 },
-    { &D_06008268, 1.0f, 0, -1, 2, 0 },
-    { &D_060087BC, 1.0f, 0, -1, 0, 0 },
+    { &D_06009120, 2.0f, 0, -1, ANIMMODE_LOOP, 20 },
+    { &D_06008268, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_060087BC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Sob1_InitVars = {

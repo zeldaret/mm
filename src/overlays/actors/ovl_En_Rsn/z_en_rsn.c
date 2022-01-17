@@ -34,7 +34,7 @@ extern AnimationHeader D_06009120;
 extern AnimationHeader D_0600788C;
 extern Gfx D_06005458[];
 
-static AnimationInfo animations[] = { { &D_0600788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f } };
+static AnimationInfo animations[] = { { &D_0600788C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };
 
 void func_80C25D40(EnRsn* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, animations, 0);

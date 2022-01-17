@@ -86,18 +86,22 @@ const ActorInit En_Ossan_InitVars = {
 };
 
 static AnimationInfoS sAnimationsCuriosityShopMan[] = {
-    { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
-    { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
-    { &D_0600CB3C, 1.0f, 0, -1, 2, 0 },  { &D_0600D354, 1.0f, 0, -1, 0, 0 }, { &D_060138B0, 1.0f, 0, -1, 2, 0 },
-    { &D_0601430C, 1.0f, 0, -1, 0, 0 },  { &D_0600B9D8, 1.0f, 0, -1, 2, 0 }, { &D_0600C26C, 1.0f, 0, -1, 0, 0 },
-    { &D_0600DE34, 1.0f, 0, -1, 2, 0 },
+    { &D_06012C34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, { &D_060131FC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_0600C58C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, { &D_0600C58C, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_0600E3EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, { &D_0600F00C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_0600CB3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, { &D_0600D354, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_060138B0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, { &D_0601430C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_0600B9D8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, { &D_0600C26C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_0600DE34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 static AnimationInfoS sAnimationsPartTimeWorker[] = {
-    { &D_06009D34, 1.0f, 0, -1, 0, -10 }, { &D_06009D34, 1.0f, 0, -1, 0, -10 }, { &D_06009D34, 1.0f, 0, -1, 2, 0 },
-    { &D_06009D34, -1.0f, 0, -1, 2, 0 },  { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },
-    { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },   { &D_0600A460, 1.0f, 0, -1, 2, -5 },
-    { &D_0600A460, 1.0f, 0, -1, 0, -5 },  { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },
+    { &D_06009D34, 1.0f, 0, -1, ANIMMODE_LOOP, -10 }, { &D_06009D34, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
+    { &D_06009D34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   { &D_06009D34, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_06009D34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   { &D_06009D34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_06009D34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   { &D_06009D34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_0600A460, 1.0f, 0, -1, ANIMMODE_ONCE, -5 },  { &D_0600A460, 1.0f, 0, -1, ANIMMODE_LOOP, -5 },
+    { &D_06009D34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   { &D_06009D34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };

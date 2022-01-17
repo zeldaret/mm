@@ -83,10 +83,10 @@ static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
 static AnimationInfo sAnimations[] = {
-    { &D_060053E0, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06001F74, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_06002F64, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06004904, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_06005304, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06005304, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_0600BAC4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &D_060053E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, { &D_06001F74, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &D_06002F64, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, { &D_06004904, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, { &D_06005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_0600BAC4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -57,9 +57,9 @@ const ActorInit En_Syateki_Man_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &D_0600D9D0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_0600DFEC, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_0600D2F8, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &D_0600D9D0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &D_0600DFEC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &D_0600D2F8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
 };
 
 static s16 D_809C91C8[] = {

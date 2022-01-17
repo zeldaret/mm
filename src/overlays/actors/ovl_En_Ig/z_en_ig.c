@@ -113,11 +113,16 @@ static ColliderSphereInit sSphereInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_dai_Anim_0048B4, 1.0f, 0, -1, 0, 0 }, { &object_dai_Anim_0048B4, 1.0f, 0, -1, 0, -4 },
-    { &object_dai_Anim_005100, 1.0f, 0, -1, 0, 0 }, { &object_dai_Anim_005100, 1.0f, 0, -1, 0, -4 },
-    { &object_dai_Anim_0010F8, 1.0f, 0, -1, 2, 0 }, { &object_dai_Anim_001E44, 1.0f, 0, -1, 0, -4 },
-    { &object_dai_Anim_0014BC, 1.0f, 0, -1, 2, 0 }, { &object_dai_Anim_003CAC, 1.0f, 0, -1, 2, -4 },
-    { &object_dai_Anim_0040E0, 1.0f, 0, -1, 0, 0 }, { &object_dai_Anim_0040E0, 1.0f, 0, -1, 0, -4 },
+    { &object_dai_Anim_0048B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dai_Anim_0048B4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dai_Anim_005100, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dai_Anim_005100, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dai_Anim_0010F8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dai_Anim_001E44, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dai_Anim_0014BC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dai_Anim_003CAC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dai_Anim_0040E0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dai_Anim_0040E0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 Actor* func_80BF1150(EnIg* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId) {

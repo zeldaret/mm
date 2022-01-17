@@ -147,11 +147,13 @@ static ColliderSphereInit sSphereInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS D_80951CC0[13] = {
-    { &D_06009CDC, 1.0f, 0, -1, 0, 0 },  { &D_06009CDC, 1.0f, 0, -1, 0, -4 }, { &D_0600A5E0, 1.0f, 0, -1, 0, 0 },
-    { &D_0600A70C, 1.0f, 0, 1, 0, 0 },   { &D_06008090, 1.0f, 0, -1, 0, 0 },  { &D_0600898C, 1.0f, 0, -1, 2, -4 },
-    { &D_06009450, 1.0f, 0, -1, 2, -4 }, { &D_0600AD18, 1.0f, 0, -1, 0, 0 },  { &D_0600AD18, 1.0f, 0, -1, 0, -4 },
-    { &D_0600B8B0, 1.0f, 0, -1, 2, 0 },  { &D_0600BA80, 1.0f, 0, -1, 0, -4 }, { &D_0600C03C, 1.0f, 0, -1, 0, -4 },
-    { &D_0600B990, 1.0f, 0, -1, 0, -4 },
+    { &D_06009CDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_06009CDC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_0600A5E0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_0600A70C, 1.0f, 0, 1, ANIMMODE_LOOP, 0 },
+    { &D_06008090, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_0600898C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &D_06009450, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_0600AD18, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_0600AD18, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_0600B8B0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_0600BA80, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_0600C03C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_0600B990, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 Actor* func_8094DEE0(EnGm* this, GlobalContext* globalCtx, u8 arg2, s16 arg3) {

@@ -179,12 +179,15 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &D_06001D10, 1.0f, 0, -1, 0, 0 },  { &D_06001D10, 1.0f, 0, -1, 0, -4 }, { &D_06014F8C, 1.0f, 0, -1, 0, 0 },
-    { &D_06014F8C, 1.0f, 0, -1, 0, -4 }, { &D_06000CB0, 1.0f, 0, -1, 0, -4 }, { &D_060003B4, 1.0f, 0, -1, 0, -4 },
-    { &D_06001BE0, 1.0f, 0, -1, 0, -4 }, { &D_06015918, 1.0f, 0, -1, 0, -4 }, { &D_0601C0B0, 1.0f, 0, -1, 0, 0 },
-    { &D_0601C0B0, 1.0f, 0, -1, 0, -4 }, { &D_0601A140, 1.0f, 0, -1, 0, 0 },  { &D_0601A140, 1.0f, 0, -1, 0, -4 },
-    { &D_0601B904, 1.0f, 0, -1, 0, 0 },  { &D_0601B904, 1.0f, 0, -1, 0, -4 }, { &D_0601B3C4, 1.0f, 0, -1, 0, 0 },
-    { &D_0601B3C4, 0.0f, 0, -1, 2, 0 },  { &D_0601B3C4, 1.0f, 0, -1, 0, -4 }, { &D_06019EB4, 1.0f, 0, -1, 2, -4 },
+    { &D_06001D10, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_06001D10, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_06014F8C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_06014F8C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_06000CB0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_060003B4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_06001BE0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_06015918, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_0601C0B0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_0601C0B0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_0601A140, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_0601A140, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_0601B904, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_0601B904, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_0601B3C4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_0601B3C4, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_0601B3C4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_06019EB4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 };
 
 static u16 D_808F6C0C[] = {

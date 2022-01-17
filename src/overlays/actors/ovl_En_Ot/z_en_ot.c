@@ -103,9 +103,9 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static AnimationSpeedInfo sAnimations[] = {
-    { &D_06004B30, 1.0f, 0, -5.0f },
-    { &D_060008D8, 1.0f, 0, -5.0f },
-    { &D_06000420, 1.0f, 0, 0.0f },
+    { &D_06004B30, 1.0f, ANIMMODE_LOOP, -5.0f },
+    { &D_060008D8, 1.0f, ANIMMODE_LOOP, -5.0f },
+    { &D_06000420, 1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static InitChainEntry sInitChain[] = {

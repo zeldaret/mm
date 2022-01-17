@@ -139,18 +139,18 @@ extern void* D_060142D8[];
 extern Gfx D_06005430[];
 
 static AnimationSpeedInfo sAnimationInfo[] = {
-    { &D_0600A174, 1.0f, 0, 0.0f }, { &D_0600A174, 1.0f, 0, -6.0f },  //
-    { &D_0600AF7C, 1.0f, 2, 0.0f }, { &D_0600AF7C, 1.0f, 2, -6.0f },  //
-    { &D_06000CC0, 1.0f, 0, 0.0f }, { &D_06000CC0, 1.0f, 0, -6.0f },  //
-    { &D_06016720, 1.0f, 0, 0.0f }, { &D_06016720, 1.0f, 0, -8.0f },  //
-    { &D_06005314, 1.0f, 0, 0.0f }, { &D_06005314, 1.0f, 0, -8.0f },  //
-    { &D_060093E8, 1.0f, 0, 0.0f }, { &D_060093E8, 1.0f, 0, -10.0f }, //
-    { &D_06007E28, 1.0f, 0, 0.0f }, { &D_06007E28, 1.0f, 0, -8.0f },  //
-    { &D_060070EC, 1.0f, 0, 0.0f }, { &D_060070EC, 1.0f, 0, -8.0f },  //
-    { &D_06003D54, 1.0f, 0, 0.0f }, { &D_06003D54, 1.0f, 0, -8.0f },  //
-    { &D_06001FD0, 1.0f, 0, 0.0f }, { &D_06001FD0, 1.0f, 0, -8.0f },  //
-    { &D_060030B4, 1.0f, 0, 0.0f }, { &D_060030B4, 1.0f, 0, -8.0f },  //
-    { &D_06004370, 1.0f, 0, 0.0f }, { &D_06004370, 1.0f, 0, -8.0f },  //
+    { &D_0600A174, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_0600A174, 1.0f, ANIMMODE_LOOP, -6.0f },  //
+    { &D_0600AF7C, 1.0f, ANIMMODE_ONCE, 0.0f }, { &D_0600AF7C, 1.0f, ANIMMODE_ONCE, -6.0f },  //
+    { &D_06000CC0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06000CC0, 1.0f, ANIMMODE_LOOP, -6.0f },  //
+    { &D_06016720, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06016720, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &D_06005314, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06005314, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &D_060093E8, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_060093E8, 1.0f, ANIMMODE_LOOP, -10.0f }, //
+    { &D_06007E28, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06007E28, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &D_060070EC, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_060070EC, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &D_06003D54, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06003D54, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &D_06001FD0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06001FD0, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &D_060030B4, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_060030B4, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &D_06004370, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06004370, 1.0f, ANIMMODE_LOOP, -8.0f },  //
 };
 
 static void* sMouthTextures[] = {

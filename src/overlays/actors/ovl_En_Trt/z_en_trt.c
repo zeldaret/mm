@@ -81,10 +81,11 @@ extern TexturePtr D_0600B8B8;
 extern TexturePtr D_0600C0B8;
 
 static AnimationInfoS sAnimations[] = {
-    { &D_0600DE68, 1.0f, 0, -1, 2, 0 }, { &D_0600EE98, 1.0f, 0, -1, 2, 0 }, { &D_0600FD34, 1.0f, 0, -1, 0, 0 },
-    { &D_060030EC, 1.0f, 0, -1, 2, 0 }, { &D_06003D78, 1.0f, 0, -1, 2, 0 }, { &D_0600D52C, 1.0f, 0, -1, 0, 0 },
-    { &D_06000A44, 1.0f, 0, -1, 0, 0 }, { &D_06001EF4, 1.0f, 0, -1, 0, 0 }, { &D_06002224, 1.0f, 0, -1, 0, 0 },
-    { &D_06002CB0, 1.0f, 0, -1, 0, 0 },
+    { &D_0600DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, { &D_0600EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_0600FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, { &D_060030EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_06003D78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, { &D_0600D52C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_06000A44, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, { &D_06001EF4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &D_06002224, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, { &D_06002CB0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Trt_InitVars = {

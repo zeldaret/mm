@@ -82,16 +82,26 @@ const ActorInit En_Railgibud_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &D_06006678, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06006B08, 0.5f, 0.0f, 0.0f, 3, 0.0f },
-    { &D_06006EEC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060073A4, 0.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &D_06007BBC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060081A8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_06009298, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_06009900, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &D_0600A450, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_0600ABE0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_060113EC, 0.4f, 0.0f, 0.0f, 1, -8.0f }, { &D_0601216C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_060118D8, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06011DB8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_0600A450, 3.0f, 0.0f, 0.0f, 2, -6.0f }, { &D_06005DF4, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &D_060061E4, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06001600, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_060009C4, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_06000F1C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &D_06006678, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &D_06006B08, 0.5f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 0.0f },
+    { &D_06006EEC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &D_060073A4, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &D_06007BBC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &D_060081A8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &D_06009298, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &D_06009900, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &D_0600A450, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &D_0600ABE0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &D_060113EC, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -8.0f },
+    { &D_0601216C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &D_060118D8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &D_06011DB8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &D_0600A450, 3.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -6.0f },
+    { &D_06005DF4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &D_060061E4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &D_06001600, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &D_060009C4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &D_06000F1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {

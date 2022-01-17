@@ -153,10 +153,14 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_st_Anim_000304, 1.0f, 0, -1, 0, 0 },  { &object_st_Anim_005B98, 1.0f, 0, -1, 2, -4 },
-    { &object_st_Anim_000304, 4.0f, 0, -1, 2, -4 }, { &object_st_Anim_000304, 1.0f, 0, -1, 0, -4 },
-    { &object_st_Anim_0055A8, 1.0f, 0, -1, 2, -4 }, { &object_st_Anim_000304, 8.0f, 0, -1, 0, -4 },
-    { &object_st_Anim_000304, 6.0f, 0, -1, 2, -4 }, { &object_st_Anim_005B98, 2.0f, 0, -1, 0, -4 },
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_st_Anim_005B98, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_st_Anim_000304, 4.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_st_Anim_000304, 8.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_st_Anim_000304, 6.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_st_Anim_005B98, 2.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 void func_808A5050(EnSt* this, GlobalContext* globalCtx) {

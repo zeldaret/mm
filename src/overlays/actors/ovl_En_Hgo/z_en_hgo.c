@@ -41,13 +41,13 @@ const ActorInit En_Hgo_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_0165F0, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_014220, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_harfgibud_Anim_014A9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_0165F0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_014220, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_harfgibud_Anim_014A9C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {

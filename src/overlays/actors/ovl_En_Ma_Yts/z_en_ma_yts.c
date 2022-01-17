@@ -112,17 +112,28 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static AnimationSpeedInfo sAnimationInfo[] = {
-    { &D_06009E58, 1.0f, 0, 0.0f }, { &D_06009E58, 1.0f, 0, -6.0f }, // Idle anim
-    { &D_06018948, 1.0f, 2, 0.0f }, { &D_06018948, 1.0f, 2, -6.0f }, // Starts holding hands anim
-    { &D_0601B76C, 1.0f, 0, 0.0f }, { &D_0601B76C, 1.0f, 0, -6.0f }, // Holnding hands anim
-    { &D_06007328, 1.0f, 0, 0.0f }, { &D_06007328, 1.0f, 0, -6.0f }, // Walking anim
-    { &D_06014088, 1.0f, 0, 0.0f }, { &D_06014088, 1.0f, 0, -6.0f }, //
-    { &D_06002A8C, 1.0f, 0, 0.0f }, { &D_06002A8C, 1.0f, 0, -6.0f }, // Looking around anim
-    { &D_06015B7C, 1.0f, 0, 0.0f }, { &D_06015B7C, 1.0f, 0, -6.0f }, // Shoot arrow anim
-    { &D_06007D98, 1.0f, 0, 0.0f }, { &D_06007D98, 1.0f, 0, -6.0f }, // Sitting anim
-    { &D_0600852C, 1.0f, 0, 0.0f }, { &D_0600852C, 1.0f, 0, -6.0f }, // Sitting traumatized anim
-    { &D_06008F6C, 1.0f, 0, 0.0f }, { &D_06008F6C, 1.0f, 0, -6.0f }, // Sitting sad anim
-    { &D_060180DC, 1.0f, 2, 0.0f }, { &D_060180DC, 1.0f, 2, -6.0f }, // Turns around anim
+    { &D_06009E58, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06009E58, 1.0f, ANIMMODE_LOOP, -6.0f }, // Idle anim
+    { &D_06018948, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_06018948, 1.0f, ANIMMODE_ONCE, -6.0f }, // Starts holding hands anim
+    { &D_0601B76C, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_0601B76C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Holnding hands anim
+    { &D_06007328, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06007328, 1.0f, ANIMMODE_LOOP, -6.0f }, // Walking anim
+    { &D_06014088, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06014088, 1.0f, ANIMMODE_LOOP, -6.0f }, //
+    { &D_06002A8C, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06002A8C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Looking around anim
+    { &D_06015B7C, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06015B7C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Shoot arrow anim
+    { &D_06007D98, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06007D98, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting anim
+    { &D_0600852C, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_0600852C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting traumatized anim
+    { &D_06008F6C, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06008F6C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting sad anim
+    { &D_060180DC, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_060180DC, 1.0f, ANIMMODE_ONCE, -6.0f }, // Turns around anim
 };
 
 static void* sMouthTextures[] = {

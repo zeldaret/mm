@@ -129,13 +129,13 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &D_060005BC, 1.0f, 0, 0.0f, 0, -4.0f }, { &D_06008AE0, 1.0f, 0, 0.0f, 0, -4.0f },
-    { &D_06008E38, 1.0f, 0, 0.0f, 0, -4.0f }, { &D_0600A844, 1.0f, 0, 0.0f, 0, -4.0f },
-    { &D_0600B0C4, 1.0f, 0, 0.0f, 0, -4.0f }, { &D_06009870, 1.0f, 0, 0.0f, 0, 0.0f },
-    { &D_06009F54, 1.0f, 0, 0.0f, 0, 0.0f },  { &D_0600B5B0, 1.0f, 0, 0.0f, 0, 0.0f },
-    { &D_0600BCC4, 1.0f, 0, 0.0f, 0, 0.0f },  { &D_0600D9DC, 1.0f, 0, 0.0f, 0, 0.0f },
-    { &D_0600E16C, 1.0f, 0, 0.0f, 0, 0.0f },  { &D_0600C9F4, 1.0f, 0, 0.0f, 2, 0.0f },
-    { &D_0600D0F0, 1.0f, 0, 0.0f, 0, 0.0f },
+    { &D_060005BC, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f }, { &D_06008AE0, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &D_06008E38, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f }, { &D_0600A844, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &D_0600B0C4, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f }, { &D_06009870, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06009F54, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },  { &D_0600B5B0, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_0600BCC4, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },  { &D_0600D9DC, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_0600E16C, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },  { &D_0600C9F4, 1.0f, 0, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_0600D0F0, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static Vec3f D_80BDA5F0 = { 1000.0f, 0.0f, 0.0f };

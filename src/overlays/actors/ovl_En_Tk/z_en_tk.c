@@ -121,9 +121,10 @@ static u32 D_80AEF85C[] = {
 };
 
 static AnimationSpeedInfo D_80AEF868[] = {
-    { &D_06001FA8, 1.0f, 0, -10.0f }, { &D_06001FA8, 2.0f, 0, -10.0f }, { &D_060030A4, 1.0f, 0, -10.0f },
-    { &D_06001144, 1.0f, 2, -10.0f }, { &D_06003724, 1.0f, 2, -10.0f }, { &D_06003FB8, 1.0f, 0, -10.0f },
-    { &D_060020C8, 1.0f, 0, -10.0f }, { &D_06003B10, 1.0f, 0, -10.0f },
+    { &D_06001FA8, 1.0f, ANIMMODE_LOOP, -10.0f }, { &D_06001FA8, 2.0f, ANIMMODE_LOOP, -10.0f },
+    { &D_060030A4, 1.0f, ANIMMODE_LOOP, -10.0f }, { &D_06001144, 1.0f, ANIMMODE_ONCE, -10.0f },
+    { &D_06003724, 1.0f, ANIMMODE_ONCE, -10.0f }, { &D_06003FB8, 1.0f, ANIMMODE_LOOP, -10.0f },
+    { &D_060020C8, 1.0f, ANIMMODE_LOOP, -10.0f }, { &D_06003B10, 1.0f, ANIMMODE_LOOP, -10.0f },
 };
 
 static s32 D_80AEF8E8[2] = { 0, 0 };

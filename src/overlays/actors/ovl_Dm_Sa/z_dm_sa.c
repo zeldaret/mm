@@ -32,7 +32,7 @@ const ActorInit Dm_Sa_InitVars = {
 extern FlexSkeletonHeader D_06013328;
 extern AnimationHeader D_0600CC94;
 
-static AnimationInfo D_80A2ED00[] = { { &D_0600CC94, 1.0f, 0, -1.0f, 0, 0 } };
+static AnimationInfo D_80A2ED00[] = { { &D_0600CC94, 1.0f, 0, -1.0f, ANIMMODE_LOOP, 0 } };
 
 void func_80A2E960(SkelAnime* arg0, AnimationInfo* animations, u16 index) {
     f32 frameCount;

@@ -61,13 +61,19 @@ extern AnimationHeader D_0600697C;
 extern AnimationHeader D_06006D90;
 
 static AnimationInfo sAnimations[] = {
-    { &D_060064E0, 1.0f, 0.0f, 0.0f, 0, -4.0 },  { &D_06003584, 1.0f, 0.0f, 0.0f, 2, -1.0f },
-    { &D_06002190, 0.6f, 0.0f, 0.0f, 3, 4.0f },  { &D_06002AC8, 1.0f, 0.0f, 0.0f, 2, -4.0 },
-    { &D_0600270C, 1.0f, 0.0f, 0.0f, 2, -4.0 },  { &D_0600697C, 1.0f, 0.0f, 0.0f, 0, -4.0 },
-    { &D_06006D90, 1.0f, 0.0f, 0.0f, 0, -4.0 },  { &D_06001D1C, 1.0f, 0.0f, 0.0f, 0, -4.0 },
-    { &D_06003584, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_06003584, 1.0f, 0.0f, 0.0f, 2, -16.0f },
-    { &D_06002AC8, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060015EC, 1.0f, 0.0f, 0.0f, 2, -4.0 },
-    { &D_060009E4, 1.0f, 0.0f, 0.0f, 0, -4.0 },
+    { &D_060064E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &D_06003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &D_06002190, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f },
+    { &D_06002AC8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
+    { &D_0600270C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
+    { &D_0600697C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &D_06006D90, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &D_06001D1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &D_06003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &D_06003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },
+    { &D_06002AC8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &D_060015EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
+    { &D_060009E4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
 };
 
 static Vec3f D_80997468[] = {

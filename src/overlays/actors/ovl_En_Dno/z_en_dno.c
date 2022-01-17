@@ -63,13 +63,16 @@ extern FlexSkeletonHeader D_0600E1F8;
 extern u8 D_801C20C0;
 
 static AnimationSpeedInfo sAnimations[] = {
-    { &D_06000470, 1.0f, 2, 0.0f }, { &D_060008F0, 1.0f, 2, 0.0f }, { &D_06000F6C, 1.0f, 0, 0.0f },
-    { &D_06001A50, 1.0f, 2, 0.0f }, { &D_06002530, 1.0f, 2, 0.0f }, { &D_06003320, 1.0f, 2, 0.0f },
-    { &D_060036D0, 1.0f, 0, 0.0f }, { &D_060041CC, 1.0f, 2, 0.0f }, { &D_06004DD8, 1.0f, 2, 0.0f },
-    { &D_06005F98, 1.0f, 0, 0.0f }, { &D_06006488, 1.0f, 2, 0.0f }, { &D_060073E4, 1.0f, 0, 0.0f },
-    { &D_060077A8, 1.0f, 0, 0.0f }, { &D_06007CA4, 1.0f, 0, 0.0f }, { &D_06008324, 1.0f, 0, 0.0f },
-    { &D_06008AE4, 1.0f, 2, 0.0f }, { &D_06009100, 1.0f, 2, 0.0f }, { &D_060051E4, 1.0f, 2, 0.0f },
-    { &D_06005E20, 1.0f, 0, 0.0f }, { &D_06006F84, 1.0f, 0, 0.0f },
+    { &D_06000470, 1.0f, ANIMMODE_ONCE, 0.0f }, { &D_060008F0, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_06000F6C, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06001A50, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_06002530, 1.0f, ANIMMODE_ONCE, 0.0f }, { &D_06003320, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_060036D0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_060041CC, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_06004DD8, 1.0f, ANIMMODE_ONCE, 0.0f }, { &D_06005F98, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06006488, 1.0f, ANIMMODE_ONCE, 0.0f }, { &D_060073E4, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_060077A8, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06007CA4, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &D_06008324, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06008AE4, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_06009100, 1.0f, ANIMMODE_ONCE, 0.0f }, { &D_060051E4, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &D_06005E20, 1.0f, ANIMMODE_LOOP, 0.0f }, { &D_06006F84, 1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 const ActorInit En_Dno_InitVars = {

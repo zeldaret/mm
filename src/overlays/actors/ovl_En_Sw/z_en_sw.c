@@ -149,10 +149,10 @@ static DamageTable sDamageTable2 = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &D_06000304, 1.0f, 0, -1, 3, 0 },
-    { &D_06000304, 1.0f, 0, -1, 3, -4 },
-    { &D_060055A8, 1.0f, 0, -1, 1, -4 },
-    { &D_06005B98, 1.0f, 0, -1, 1, -4 },
+    { &D_06000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, 0 },
+    { &D_06000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, -4 },
+    { &D_060055A8, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
+    { &D_06005B98, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
 };
 
 void func_808D8940(EnSw* this, GlobalContext* globalCtx) {

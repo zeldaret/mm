@@ -187,19 +187,30 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, 0, 0 },     { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, 0, -4 },
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, 0 },     { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, -4 },
-    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, 2, 0 },    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, 0, 0 },
-    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, 0, -4 },    { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, 2, -4 },
-    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, 0, 0 },     { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, 2, -4 },
+    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 
-    { &object_taisou_Anim_004DD4, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_0016C8, 1.0f, 0, -1, 0, 0 },
-    { &object_taisou_Anim_00283C, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_007764, 1.0f, 0, -1, 0, 0 },
-    { &object_taisou_Anim_005EE0, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_002C48, 1.0f, 0, -1, 0, 0 },
-    { &object_taisou_Anim_0031D8, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_005790, 1.0f, 0, -1, 0, 0 },
+    { &object_taisou_Anim_004DD4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_0016C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_00283C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_007764, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_005EE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_002C48, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_0031D8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_005790, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 
-    { &object_hakugin_demo_Anim_001420, 1.0f, 0, -1, 2, 0 }, { &object_hakugin_demo_Anim_001A4C, 1.0f, 0, -1, 0, -4 },
-    { &object_hakugin_demo_Anim_002704, 1.0f, 0, -1, 2, 0 }, { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, 0, -4 },
+    { &object_hakugin_demo_Anim_001420, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_hakugin_demo_Anim_001A4C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hakugin_demo_Anim_002704, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 EnGoStruct* func_80A10FD0(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {

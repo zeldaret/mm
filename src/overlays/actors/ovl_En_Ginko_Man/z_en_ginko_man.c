@@ -50,11 +50,11 @@ const ActorInit En_Ginko_Man_InitVars = {
 };
 
 AnimationInfo animations[] = {
-    { &D_060008C0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_060043F0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_06004F40, 1.0f, 0.0f, 0.0f, 2, -4.0f },
-    { &D_06000AC4, 1.0f, 0.0f, 0.0f, 0, -4.0f }, // looking around for customers
-    { &D_06004A7C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &D_060008C0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &D_060043F0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &D_06004F40, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &D_06000AC4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, // looking around for customers
+    { &D_06004A7C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
 };
 
 void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {

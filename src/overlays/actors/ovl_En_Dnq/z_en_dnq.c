@@ -75,13 +75,16 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS D_80A5349C[] = {
-    { &D_06008328, 1.0f, 0, -1, 0, 0 },  { &D_06008328, 1.0f, 0, -1, 0, -4 }, { &D_06007528, 1.0f, 0, -1, 2, -4 },
-    { &D_060006F0, 1.0f, 0, -1, 2, 0 },  { &D_06000BF8, 1.0f, 0, -1, 0, -4 }, { &D_06002690, 0.0f, 0, -1, 2, 0 },
-    { &D_06002690, 1.0f, 0, -1, 2, -4 }, { &D_06003408, 1.0f, 0, -1, 0, -4 }, { &D_06006984, 1.0f, 0, -1, 2, -4 },
-    { &D_06005E18, 1.0f, 0, -1, 2, -4 }, { &D_06005A14, 1.0f, 0, -1, 2, -4 }, { &D_06005284, 1.0f, 0, -1, 2, -4 },
-    { &D_06001AEC, 1.0f, 0, -1, 2, 0 },  { &D_06001100, 1.0f, 0, -1, 2, 0 },  { &D_06004EA0, 1.0f, 0, -1, 0, -4 },
-    { &D_0600F504, 1.0f, 0, -1, 0, -4 }, { &D_060047B8, 1.0f, 0, -1, 0, -4 }, { &D_06003DBC, 1.0f, 0, -1, 2, -4 },
-    { &D_06005A14, 1.0f, 0, -1, 0, -4 }, { &D_06003DBC, 1.0f, 0, -1, 0, -4 },
+    { &D_06008328, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_06008328, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_06007528, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_060006F0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_06000BF8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_06002690, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_06002690, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_06003408, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_06006984, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_06005E18, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &D_06005A14, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_06005284, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &D_06001AEC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  { &D_06001100, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &D_06004EA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_0600F504, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &D_060047B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_06003DBC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &D_06005A14, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_06003DBC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 void func_80A52530(GlobalContext* globalCtx, EnDnq* this) {

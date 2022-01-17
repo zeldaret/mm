@@ -148,9 +148,11 @@ s32 func_80B3E5B4(EnDai* this, GlobalContext* globalCtx) {
 
 s32 func_80B3E5DC(EnDai* this, s32 arg1) {
     static AnimationInfoS D_80B3FBFC[] = {
-        { &D_060079E4, 1.0f, 0, -1, 0, 0 },  { &D_060079E4, 1.0f, 0, -1, 0, -4 }, { &D_06007354, 1.0f, 0, -1, 2, -4 },
-        { &D_06000CEC, 1.0f, 0, -1, 2, -4 }, { &D_060069DC, 1.0f, 0, -1, 2, -4 }, { &D_0600563C, 1.0f, 0, -1, 2, 0 },
-        { &D_0600563C, 1.0f, 0, -1, 2, -4 }, { &D_06002E58, 1.0f, 0, -1, 0, -4 }, { &D_06006590, 1.0f, 0, -1, 2, -4 },
+        { &D_060079E4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_060079E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &D_06007354, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_06000CEC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &D_060069DC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_0600563C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+        { &D_0600563C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, { &D_06002E58, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &D_06006590, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     };
 
     s32 phi_v1 = false;
