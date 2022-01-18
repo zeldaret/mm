@@ -2707,11 +2707,7 @@ beginseg
     name "ovl_Bg_Dblue_Movebg"
     compress
     include "build/src/overlays/actors/ovl_Bg_Dblue_Movebg/z_bg_dblue_movebg.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Bg_Dblue_Movebg/ovl_Bg_Dblue_Movebg_reloc.o"
-#else
-    include "build/data/ovl_Bg_Dblue_Movebg/ovl_Bg_Dblue_Movebg.reloc.o"
-#endif
 endseg
 
 beginseg

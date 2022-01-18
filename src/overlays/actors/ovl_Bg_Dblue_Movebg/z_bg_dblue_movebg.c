@@ -8,7 +8,7 @@
 #include "objects/object_dblue_object/object_dblue_object.h"
 #include "overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgDblueMovebg*)thisx)
 
@@ -29,9 +29,6 @@ void func_80A2AED0(BgDblueMovebg* this, GlobalContext* globalCtx);
 void func_80A2B1A0(BgDblueMovebg* this, GlobalContext* globalCtx);
 void func_80A2B274(Actor* thisx, GlobalContext* globalCtx);
 void func_80A2B308(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_060052B8[];
-extern Gfx D_0600CD10[];
 
 static BgDblueMovebg* D_80A2BBF0;
 
@@ -110,36 +107,25 @@ static InitChainEntry sInitChain[] = {
 
 static Vec3f D_80A2B988 = { 1785.0f, 0.0f, 220.0f };
 
-#ifdef NON_MATCHING
-// Useless v0 stores
 s32 func_80A29A80(GlobalContext* globalCtx, s32 arg1, s32 arg2) {
     s32 sp2C = 1;
-    s32 end;
-    s32 end2;
-    s32 end3;
+    s32 val;
+    s32 val2;
 
     if (arg2 < 14) {
-        s32 a;
-        end = D_80A2B870[arg2][0];
-        end3 = D_80A2B870[arg2][1];
-        a = end;
+        val = D_80A2B870[arg2][0];
+        val2 = D_80A2B870[arg2][1];
 
-        if (end != 0) {
-            end--;
-            end2 = arg1 + end;
-            do {
-                if ((1 << end) & end3) {
-                    if (!Flags_GetSwitch(globalCtx, end2)) {
-                        sp2C = 0;
-                        break;
-                    }
-                } else if (Flags_GetSwitch(globalCtx, end2)) {
+        while (val--) {
+            if ((1 << val) & val2) {
+                if (!Flags_GetSwitch(globalCtx, arg1 + val)) {
                     sp2C = 0;
                     break;
                 }
-                end--;
-                end2--;
-            } while (end != 0);
+            } else if (Flags_GetSwitch(globalCtx, arg1 + val)) {
+                sp2C = 0;
+                break;
+            }
         }
     } else {
         sp2C = 0;
@@ -166,9 +152,6 @@ s32 func_80A29A80(GlobalContext* globalCtx, s32 arg1, s32 arg2) {
     }
     return sp2C;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dblue_Movebg/func_80A29A80.s")
-#endif
 
 void BgDblueMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -282,7 +265,7 @@ void BgDblueMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
             Math_Vec3f_Sum(&this->unk_190, &this->dyna.actor.world.pos, &this->unk_190);
             Math_Vec3f_Sum(&this->unk_19C, &this->dyna.actor.world.pos, &this->unk_19C);
             D_80A2BBF0 = this;
-            this->dyna.actor.flags |= 0x20;
+            this->dyna.actor.flags |= ACTOR_FLAG_20;
             this->actionFunc = func_80A2AED0;
             break;
 
@@ -293,7 +276,7 @@ void BgDblueMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 11:
             this->unk_1CC = D_80A2B96C[func_80A29A80(globalCtx, this->unk_1C0, this->unk_1BC)];
             D_80A2BBF0 = this;
-            this->dyna.actor.flags |= 0x20;
+            this->dyna.actor.flags |= ACTOR_FLAG_20;
             this->dyna.actor.update = Actor_Noop;
             this->dyna.actor.draw = func_80A2B274;
             break;
@@ -791,7 +774,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    if ((this->unk_160 == 9) || (this->unk_160 == 8) || (this->dyna.actor.flags & 0x40)) {
+    if ((this->unk_160 == 9) || (this->unk_160 == 8) || (this->dyna.actor.flags & ACTOR_FLAG_40)) {
         if (this->unk_16C != NULL) {
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(this->unk_16C));
         }
