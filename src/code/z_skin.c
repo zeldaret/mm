@@ -1,6 +1,7 @@
 #include "global.h"
 #include "z64skin.h"
 
+// 60 is an arbitrary number which specifies the max amount of limbs per skeleton this system supports
 MtxF gSkinLimbMatrices[60];
 
 static s32 sUnused;
@@ -91,7 +92,7 @@ void Skin_ApplyLimbModifications(GraphicsContext* gfxCtx, Skin* skin, s32 limbIn
 
             SkinMatrix_Vec3fMtxFMultXYZ(&gSkinLimbMatrices[limbTransformations[0].limbIndex], &spAC, &spDC);
         } else if (arg3) {
-            transformationEntry = &limbTransformations[modif->transformIndex];
+            transformationEntry = &limbTransformations[modif->unk_04];
 
             spA0.x = transformationEntry->x;
             spA0.y = transformationEntry->y;
@@ -118,8 +119,8 @@ void Skin_ApplyLimbModifications(GraphicsContext* gfxCtx, Skin* skin, s32 limbIn
             }
         }
 
-        Skin_UpdateVertices(&gSkinLimbMatrices[limbTransformations[modif->transformIndex].limbIndex], skinVertices,
-                            modif, vtxBuf, &spDC);
+        Skin_UpdateVertices(&gSkinLimbMatrices[limbTransformations[modif->unk_04].limbIndex], skinVertices, modif,
+                            vtxBuf, &spDC);
     }
 
     gSPSegment(POLY_OPA_DISP++, 0x08, vtxEntry->buf[vtxEntry->index]);

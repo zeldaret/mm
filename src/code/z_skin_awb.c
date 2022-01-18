@@ -127,14 +127,14 @@ s32 func_801387D4(Skin* skin, SkinLimb** skeleton, MtxF* limbMatrices, u8 parent
 
     if (limb->child != LIMB_DONE) {
         ret = func_801387D4(skin, skeleton, limbMatrices, limbIndex, limb->child);
-        if (ret) { // func_801387D4 only returns false
+        if (ret) {
             return ret;
         }
     }
 
     if (limb->sibling != LIMB_DONE) {
         ret = func_801387D4(skin, skeleton, limbMatrices, parentIndex, limb->sibling);
-        if (ret) { // func_801387D4 only returns false
+        if (ret) {
             return ret;
         }
     }
@@ -196,7 +196,7 @@ s32 Skin_ApplyAnimTransformations(Skin* skin, MtxF* limbMatrices, Actor* actor, 
         actor->world.pos.z);
 
     ret = func_801387D4(skin, Lib_SegmentedToVirtual(skin->skeletonHeader->segment), limbMatrices, LIMB_DONE, 0);
-    if (!ret) { // func_801387D4 only returns false
+    if (!ret) {
         return ret;
     }
 

@@ -3,6 +3,10 @@
 
 #include "z64animation.h"
 
+struct GraphicsContext;
+struct GameState;
+struct GlobalContext;
+
 /**
  * Holds a compact version of a vertex used in the Skin system
  * It is used to initialise the Vtx used by an animated limb
@@ -29,16 +33,16 @@ typedef struct {
 } SkinTransformation; // size = 0xA
 
 typedef struct {
-    /* 0x00 */ u16 vtxCount; // number of vertices in this modif entry
-    /* 0x02 */ u16 transformCount;
-    /* 0x04 */ u16 transformIndex; // index of limbTransformations
+    /* 0x00 */ u16 vtxCount; // number of skinVertices in this modif entry
+    /* 0x02 */ u16 transformCount; // count of limbTransformations
+    /* 0x04 */ u16 unk_04; // index of limbTransformations
     /* 0x08 */ SkinVertex* skinVertices;
     /* 0x0C */ SkinTransformation* limbTransformations;
 } SkinLimbModif; // size = 0x10
 
 typedef struct {
     /* 0x00 */ u16 totalVtxCount; // total vertex count for all modif entries
-    /* 0x02 */ u16 limbModifCount;
+    /* 0x02 */ u16 limbModifCount; // count of limbModifCount
     /* 0x04 */ SkinLimbModif* limbModifications;
     /* 0x08 */ Gfx* dlist;
 } SkinAnimatedLimbData; // size = 0xC
@@ -58,7 +62,7 @@ typedef struct {
     /* 0x06 */ u8 child;
     /* 0x07 */ u8 sibling;
     /* 0x08 */ s32 segmentType; // Type of data contained in segment
-    /* 0x0C */ void* segment; // Gfx* if segmentType is SKIN_LIMB_TYPE_NORMAL, SkinAnimatedLimbData if segmentType is SKIN_LIMB_TYPE_NORMAL, NULL otherwise
+    /* 0x0C */ void* segment; // Gfx* if segmentType is SKIN_LIMB_TYPE_NORMAL, SkinAnimatedLimbData if segmentType is SKIN_LIMB_TYPE_ANIMATED, NULL otherwise
 } SkinLimb; // size = 0x10
 
 typedef struct {
@@ -79,5 +83,24 @@ typedef s32 (*SkinOverrideLimbDraw)(struct Actor*, struct GlobalContext*, s32, S
 
 #define SKIN_DRAW_FLAG_CUSTOM_TRANSFORMS (1 << 0)
 #define SKIN_DRAW_FLAG_CUSTOM_MATRIX     (1 << 1)
+
+
+void Skin_UpdateVertices(MtxF* mtx, SkinVertex* skinVertices, SkinLimbModif* modifEntry, Vtx* vtxBuf, Vec3f* pos);
+void Skin_ApplyLimbModifications(struct GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s32 arg3);
+void Skin_DrawAnimatedLimb(struct GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s32 arg3, s32 drawFlags);
+void Skin_DrawLimb(struct GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, Gfx* dListOverride, s32 drawFlags);
+void func_80138228(Actor* actor, struct GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw, s32 setTranslation);
+void func_80138258(Actor* actor, struct GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation);
+void func_8013828C(Actor* actor, struct GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation, s32 arg6);
+void func_801382C4(Actor* actor, struct GlobalContext* globalCtx, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation, s32 arg6, s32 drawFlags);
+void Skin_GetLimbPos(Skin* skin, s32 limbIndex, Vec3f* offset, Vec3f* dst);
+void Skin_GetVertexPos(Skin* skin, s32 limbIndex, s32 vtxIndex, Vec3f* dst);
+
+void func_80138410(Skin* skin);
+void Skin_InitAnimatedLimb(struct GameState* gameState, Skin* skin, s32 limbIndex);
+void Skin_Init(struct GameState* gameState, Skin* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader);
+void Skin_Free(struct GameState* gameState, Skin* skin);
+s32 func_801387D4(Skin* skin, SkinLimb** skeleton, MtxF* limbMatrices, u8 parentIndex, u8 limbIndex);
+s32 Skin_ApplyAnimTransformations(Skin* skin, MtxF* limbMatrices, Actor* actor, s32 setTranslation);
 
 #endif
