@@ -20,22 +20,19 @@ typedef struct func_80867BDC_a0 {
 } func_80867BDC_a0; //size 0x24
 
 typedef enum {
-    /*
-    only values 1-12 are used explicitly, other values (like 0) default to another separate behavior
-    */
-    /*  0 */ ENBOX_TYPE_BIG_DEFAULT,
-    /*  1 */ ENBOX_TYPE_ROOM_CLEAR_BIG,         // appear on room clear, store temp clear as permanent clear
-    /*  2 */ ENBOX_TYPE_DECORATED_BIG,          // boss key chest, different look, same as ENBOX_TYPE_BIG_DEFAULT otherwise
-    /*  3 */ ENBOX_TYPE_SWITCH_FLAG_FALL_BIG,   // falling, appear on switch flag set
-    /*  4 */ ENBOX_TYPE_4,                      // big, drawn differently
-    /*  5 */ ENBOX_TYPE_SMALL,                  // same as ENBOX_TYPE_BIG_DEFAULT but small
-    /*  6 */ ENBOX_TYPE_6,                      // small, drawn differently
-    /*  7 */ ENBOX_TYPE_ROOM_CLEAR_SMALL,       // use room clear, store temp clear as perm clear
-    /*  8 */ ENBOX_TYPE_SWITCH_FLAG_FALL_SMALL, // falling, appear on switch flag set
-    /*  9 */ ENBOX_TYPE_9,                      // big, has something more to do with player and message context?
-    /* 10 */ ENBOX_TYPE_10,                     // like 9
-    /* 11 */ ENBOX_TYPE_SWITCH_FLAG_BIG,        // big, appear on switch flag set
-    /* 12 */ ENBOX_TYPE_12
+    /*  0 */ ENBOX_TYPE_BIG,                    // big
+    /*  1 */ ENBOX_TYPE_BIG_ROOM_CLEAR,         // appear on room clear, store temp clear as permanent clear
+    /*  2 */ ENBOX_TYPE_BIG_ORNATE,             // boss key chest
+    /*  3 */ ENBOX_TYPE_BIG_SWITCH_FLAG_FALL,   // falling, appear on switch flag set
+    /*  4 */ ENBOX_TYPE_BIG_INVISIBLE,          // big, revealed with lens of truth or when opened
+    /*  5 */ ENBOX_TYPE_SMALL,                  // small
+    /*  6 */ ENBOX_TYPE_SMALL_INVISIBLE,        // small, revealed with lens of truth or when opened
+    /*  7 */ ENBOX_TYPE_SMALL_ROOM_CLEAR,       // use room clear, store temp clear as perm clear
+    /*  8 */ ENBOX_TYPE_SMALL_SWITCH_FLAG_FALL, // falling, appear on switch flag set
+    /*  9 */ ENBOX_TYPE_BIG_SONG_ZELDAS_LULLABY,// NOT IMPLEMENTED, behaves like big chest
+    /* 10 */ ENBOX_TYPE_BIG_SONG_SUNS,          // NOT IMPLEMENTED, behaves like big chest
+    /* 11 */ ENBOX_TYPE_BIG_SWITCH_FLAG,        // big, appear on switch flag set
+    /* 12 */ ENBOX_TYPE_SMALL_SWITCH_FLAG       // small, appear on switch flag set
 } EnBoxType;
 
 typedef struct EnBox {
@@ -62,5 +59,10 @@ typedef struct EnBox {
 } EnBox; // size = 0x224
 
 extern const ActorInit En_Box_InitVars;
+
+#define ENBOX_GET_TYPE(thisx) (((thisx)->params >> 12) & 0xF)
+#define ENBOX_GET_ITEM(thisx) (((thisx)->params >> 5) & 0x7F)
+#define ENBOX_GET_CHEST_FLAG(thisx) ((thisx)->params & 0x1F)
+#define ENBOX_GET_SWITCH_FLAG(thisx) ((thisx)->world.rot.z)
 
 #endif // Z_EN_BOX_H

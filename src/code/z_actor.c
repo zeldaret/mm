@@ -2003,11 +2003,11 @@ s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRa
 
     if (!(player->stateFlags1 & 0x3C7080) && Player_GetExplosiveHeld(player) < 0) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
-            if (((getItemId == GI_MASK_CIRCUS_LEADER) || (getItemId == GI_PENDANT_OF_MEMORIES) ||
-                 (getItemId == GI_DEED_LAND) ||
-                 (((player->heldActor != NULL) || (actor == player->targetActor)) &&
+            if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
+                 getItemId == GI_DEED_LAND ||
+                 ((player->heldActor != NULL || actor == player->targetActor) &&
                   (getItemId > GI_NONE && getItemId < GI_MAX))) ||
-                (!(player->stateFlags1 & 0x20000800))) {
+                !(player->stateFlags1 & 0x20000800)) {
                 s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
                 s32 absYawDiff = ABS_ALT(yawDiff);
 
@@ -4438,9 +4438,10 @@ void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex) {
     }
 }
 
-s32 func_800BE63C(struct EnBox* chest) {
-    if (chest->type == 5 || chest->type == 6 || chest->type == 7 || chest->type == 8 ||
-        chest->type == 0xC) {
+s32 Actor_IsSmallChest(struct EnBox* chest) {
+    if (chest->type == ENBOX_TYPE_SMALL || chest->type == ENBOX_TYPE_SMALL_INVISIBLE ||
+        chest->type == ENBOX_TYPE_SMALL_ROOM_CLEAR || chest->type == ENBOX_TYPE_SMALL_SWITCH_FLAG_FALL ||
+        chest->type == ENBOX_TYPE_SMALL_SWITCH_FLAG) {
         return true;
     }
     return false;

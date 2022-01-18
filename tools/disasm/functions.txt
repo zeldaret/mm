@@ -892,7 +892,7 @@
     0x800BE504:("func_800BE504",),
     0x800BE568:("func_800BE568",),
     0x800BE5CC:("func_800BE5CC",),
-    0x800BE63C:("func_800BE63C",),
+    0x800BE63C:("Actor_IsSmallChest",),
     0x800BE680:("func_800BE680",),
     0x800BF7CC:("Actor_SpawnIceEffects",),
     0x800BF9A0:("ActorOverlayTable_FaultPrint",),
