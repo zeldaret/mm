@@ -96,7 +96,7 @@ void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENSTH_F_2:
-            if (func_8012F22C(globalCtx->sceneNum) >= SCENE_DEKUTES) {
+            if (func_8012F22C(globalCtx->sceneNum) >= 30) {
                 this->actionFunc = func_80B67DA0;
             } else {
                 Actor_MarkForDeath(&this->actor);
@@ -108,7 +108,7 @@ void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENSTH_F_3:
-            if ((gSaveContext.roomInf[126][0] & 0xFFFF) >= 0x1E) {
+            if ((gSaveContext.roomInf[126][0] & 0xFFFF) >= 30) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -131,7 +131,7 @@ void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENSTH_F_5:
-            if (!(gSaveContext.weekEventReg[13] & 0x20) || (func_8012F22C(globalCtx->sceneNum) < SCENE_DEKUTES)) {
+            if (!(gSaveContext.weekEventReg[13] & 0x20) || (func_8012F22C(globalCtx->sceneNum) < 30)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -437,7 +437,7 @@ void func_80B67984(EnSth* this, GlobalContext* globalCtx) {
             sp1E = 0x918;
         }
         func_80B670A4(this, 2);
-    } else if (func_8012F22C(globalCtx->sceneNum) >= SCENE_DEKUTES) {
+    } else if (func_8012F22C(globalCtx->sceneNum) >= 30) {
         if (INV_CONTENT(ITEM_MASK_TRUTH) == ITEM_MASK_TRUTH) {
             this->unk_29C |= 4;
             sp1E = 0x919;
@@ -550,7 +550,7 @@ void func_80B67DA0(EnSth* this, GlobalContext* globalCtx) {
 void func_80B67E20(Actor* thisx, GlobalContext* globalCtx) {
     EnSth* this = THIS;
 
-    if (func_8012F22C(globalCtx->sceneNum) >= SCENE_DEKUTES) {
+    if (func_8012F22C(globalCtx->sceneNum) >= 30) {
         this->actor.update = func_80B680A8;
         this->actor.draw = func_80B6849C;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -571,7 +571,7 @@ void EnSth_Update(Actor* thisx, GlobalContext* globalCtx) {
             Animation_PlayLoop(&this->skelAnime, &ovl_En_Sth_Anim_0045B4);
             this->unk_29A = 1;
             if ((gSaveContext.weekEventReg[34] & 0x10) || (gSaveContext.weekEventReg[34] & 0x20) ||
-                (gSaveContext.weekEventReg[34] & 0x40) || (func_8012F22C(globalCtx->sceneNum) >= SCENE_DEKUTES)) {
+                (gSaveContext.weekEventReg[34] & 0x40) || (func_8012F22C(globalCtx->sceneNum) >= 30)) {
                 func_80B670A4(this, 3);
             }
         } else {
@@ -601,7 +601,7 @@ void EnSth_Update(Actor* thisx, GlobalContext* globalCtx) {
                 break;
         }
 
-        if ((ENSTH_GET_F(&this->actor) == ENSTH_F_4) && (func_8012F22C(globalCtx->sceneNum) < SCENE_DEKUTES)) {
+        if ((ENSTH_GET_F(&this->actor) == ENSTH_F_4) && (func_8012F22C(globalCtx->sceneNum) < 30)) {
             this->actor.update = func_80B67E20;
             this->actor.draw = NULL;
             this->actor.flags &= ~ACTOR_FLAG_1;
