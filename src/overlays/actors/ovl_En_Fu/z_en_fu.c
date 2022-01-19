@@ -633,10 +633,10 @@ void func_80962A10(EnFu* this, GlobalContext* globalCtx) {
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
     this->unk_53C = 0;
-    if ((fuKaiten->rotationSpeed < 300) || (fuKaiten->bouceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
+    if ((fuKaiten->rotationSpeed < 300) || (fuKaiten->bounceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 300, 10, 5, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 600, 20, 10, 10);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
         return;
     }
 
@@ -670,11 +670,11 @@ void func_80962BCC(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bouceHeight < 30.0f) || (fuKaiten->bounceSpeed < 600)) {
+    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bounceHeight < 30.0f) || (fuKaiten->bounceSpeed < 600)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 100, 10, 5, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 600, 20, 10, 10);
         Math_SmoothStepToF(&fuKaiten->elevation, 10.0f, 0.1f, 1.0f, 1.0f);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 30.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 30.0f, 0.1f, 1.0f, 1.0f);
         return;
     }
 
@@ -702,10 +702,10 @@ void func_80962D60(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bouceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
+    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bounceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 100, 10, 5, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 600, 20, 10, 10);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
         return;
     }
 
@@ -850,11 +850,11 @@ void func_80963350(EnFu* this, GlobalContext* globalCtx) {
         D_80964C24 = 1;
     }
 
-    if ((fuKaiten->rotationSpeed != 0) || (fuKaiten->bounceSpeed != 0) || (fuKaiten->bouceHeight > 0.0f) ||
+    if ((fuKaiten->rotationSpeed != 0) || (fuKaiten->bounceSpeed != 0) || (fuKaiten->bounceHeight > 0.0f) ||
         !func_809638F8(globalCtx)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 0, 10, 10, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 0, 10, 15, 5);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 0.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 0.0f, 0.1f, 1.0f, 1.0f);
         Math_SmoothStepToF(&fuKaiten->elevation, 0.0f, 0.1f, 1.0f, 1.0f);
         func_80962EBC(this, globalCtx);
     } else if (D_80964C24 == 1) {

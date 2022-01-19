@@ -162,8 +162,8 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    ObjWarpstone* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    ObjWarpstone* this = THIS;
 
     Gfx_DrawDListOpa(globalCtx, sOwlStatueDLs[this->modelIndex]);
     if (this->dyna.actor.home.rot.x != 0) {

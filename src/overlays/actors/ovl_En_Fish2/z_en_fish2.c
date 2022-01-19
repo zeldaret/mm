@@ -933,8 +933,8 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
     static f32 D_80B2B3A8[] = {
         0.0f, 40.0f, -40.0f, 0.0f, 0.0f, 0.0f,
     };
-    EnFish2* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnFish2* this = THIS;
 
     if ((this->actionFunc != func_80B295A4) && (this->actor.params != 1)) {
         SkelAnime_Update(&this->skelAnime);

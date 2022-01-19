@@ -256,11 +256,12 @@ void EffectTireMark_Draw(void* thisx, GraphicsContext* gfxCtx) {
 
                 if ((elem - 1)->flags & 1) {
                     if (!(elem->flags & 1)) {
+                        s32 requiredScopeTemp;
+
                         vtx[i * 2 + 0].v.tc[0] = 0;
                         vtx[i * 2 + 0].v.tc[1] = 0;
                         vtx[i * 2 + 1].v.tc[0] = 0;
                         vtx[i * 2 + 1].v.tc[1] = 1024;
-                    dummy_label:;
                     } else if ((i >= 2) && !((elem - 2)->flags & 1)) {
                         vtx[i * 2 - 2].v.tc[0] = 0;
                         vtx[i * 2 - 2].v.tc[1] = 0;

@@ -510,8 +510,8 @@ void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
-    DemoKankyo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    DemoKankyo* this = THIS;
     s16 i;
     f32 scaleAlpha;
     Vec3f worldPos;
@@ -601,8 +601,8 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
 
 // draw, giants and moon
 void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
-    DemoKankyo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    DemoKankyo* this = THIS;
     s16 i;
     f32 alphaScale;
 

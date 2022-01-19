@@ -72,8 +72,8 @@ void ObjMilkBin_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    ObjMilkBin* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    ObjMilkBin* this = THIS;
 
     if (this->type == OBJ_MILK_BIN_TYPE_1) {
         if (gSaveContext.weekEventReg[0x16] & 1) {

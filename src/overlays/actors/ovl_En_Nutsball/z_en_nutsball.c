@@ -86,10 +86,9 @@ void EnNutsball_InitColliderParams(EnNutsball* this) {
     this->collider.info.toucher.damage = 2;
 }
 
-void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
     EnNutsball* this = THIS;
-    GlobalContext* globalCtx2 = globalCtx;
-
     Player* player = GET_PLAYER(globalCtx);
     Vec3f worldPos;
     Vec3s worldRot;
@@ -139,11 +138,11 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 5.0f, 10.0f, 0x7);
 
         if (this->actor.bgCheckFlags & 8) {
-            if (func_800C9A4C(&globalCtx2->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
+            if (func_800C9A4C(&globalCtx->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
                 this->actor.bgCheckFlags &= ~8;
-                if (BgCheck_EntityLineTest1(&globalCtx2->colCtx, &this->actor.prevPos, &worldPos,
-                                            &this->actor.world.pos, &poly, true, false, false, true, &bgId)) {
-                    if (func_800C9A4C(&globalCtx2->colCtx, poly, bgId) & 0x30) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.prevPos, &worldPos, &this->actor.world.pos,
+                                            &poly, true, false, false, true, &bgId)) {
+                    if (func_800C9A4C(&globalCtx->colCtx, poly, bgId) & 0x30) {
                         this->actor.world.pos.x += this->actor.velocity.x * 0.01f;
                         this->actor.world.pos.z += this->actor.velocity.z * 0.01f;
                     } else {
@@ -162,7 +161,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
         if (this->timer < this->timerThreshold) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx2->colChkCtx, &this->collider.base);
         }
     }
 }
