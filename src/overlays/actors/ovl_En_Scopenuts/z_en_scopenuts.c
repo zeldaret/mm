@@ -673,7 +673,7 @@ void EnScopenuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnScopenuts* this = THIS;
 
-    if (!(gSaveContext.weekEventReg[74] & 0x40) && (INV_CONTENT(ITEM_OCARINA) == ITEM_NONE)) {
+    if (!(gSaveContext.weekEventReg[74] & 0x40) && (gSaveContext.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
