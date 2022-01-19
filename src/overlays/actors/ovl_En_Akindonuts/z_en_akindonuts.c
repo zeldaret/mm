@@ -264,19 +264,19 @@ s32 func_80BED140(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if ((gSaveContext.weekEventReg[63] & 0x8) && !(gSaveContext.weekEventReg[63] & 0x10)) {
+        if ((gSaveContext.weekEventReg[63] & 8) && !(gSaveContext.weekEventReg[63] & 0x10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_ZORA) {
-        if (!(gSaveContext.weekEventReg[63] & 0x8) && (gSaveContext.weekEventReg[63] & 0x10)) {
+        if (!(gSaveContext.weekEventReg[63] & 8) && (gSaveContext.weekEventReg[63] & 0x10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_GORON) {
-        if ((gSaveContext.weekEventReg[63] & 0x8) && (gSaveContext.weekEventReg[63] & 0x10)) {
+        if ((gSaveContext.weekEventReg[63] & 8) && (gSaveContext.weekEventReg[63] & 0x10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (!(gSaveContext.weekEventReg[63] & 0x8) && !(gSaveContext.weekEventReg[63] & 0x10)) {
+        if (!(gSaveContext.weekEventReg[63] & 8) && !(gSaveContext.weekEventReg[63] & 0x10)) {
             return true;
         }
     }

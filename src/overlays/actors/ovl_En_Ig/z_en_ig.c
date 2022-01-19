@@ -538,7 +538,7 @@ s32 func_80BF1DF4(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
             this->unk_3E0 = arg2->unk8 - arg2->unk4;
             this->unk_3E2 = sp56 - arg2->unk4;
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_3D0 |= 0x100;
             func_80BF1284(this, 3);
             this->actor.gravity = 0.0f;
@@ -647,7 +647,7 @@ s32 func_80BF2368(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->actor.targetMode = 0;
     this->unk_3D0 = 0;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
 
     switch (arg2->unk0) {
         case 5:
@@ -843,11 +843,11 @@ void func_80BF2AF8(EnIg* this, GlobalContext* globalCtx) {
     if (!func_80133038(globalCtx, D_80BF3260, &sp20) ||
         ((this->unk_298.unk0 != sp20.unk0) && !func_80BF2368(this, globalCtx, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         sp20.unk0 = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
     this->unk_2A8 = func_80BF146C(this, globalCtx);
     this->unk_298.unk0 = sp20.unk0;

@@ -109,7 +109,7 @@ void EnHgo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BD03EC(EnHgo* this) {
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_80BD0410;
 }
 

@@ -683,7 +683,7 @@ void func_80AD84C0(EnKame* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((globalCtx->actorCtx.unk2 != 0) && (this->actor.xyzDistToPlayerSq < 40000.0f) &&
+    if ((globalCtx->actorCtx.unk2 != 0) && (this->actor.xyzDistToPlayerSq < SQ(200.0f)) &&
         (this->collider.base.acFlags & AC_ON)) {
         func_80AD7018(this, globalCtx);
         func_80AD7C54(this);
