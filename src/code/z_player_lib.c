@@ -33,46 +33,354 @@ s16 D_801BFDA0[] = {
     OBJECT_MASK_NUTS,
 };
 
-struct _struct_D_801BFDD0_0x8 {
-    /* 0x0 */ u8 unk_0;                             /* inferred */
-    /* 0x1 */ u8 unk_1;                             /* inferred */
-    /* 0x2 */ u8 unk_2;                             /* inferred */
-    ///* 0x3 */ char pad_3[1];
-    /* 0x4 */ Gfx* unk_4;                            /* inferred */
+typedef struct {
+    /* 0x0 */ Color_RGB8 color;
+    /* 0x4 */ Gfx* dlist;
+} struct_801BFDD0; // size = 0x08
+
+struct_801BFDD0 D_801BFDD0[] = {
+    { { 180, 200, 255 }, object_link_goron_DL_00BDD8 },
+    { { 155, 0, 0 }, object_link_goron_DL_014690 },
+    { { 255, 0, 0 }, object_link_goron_DL_011AB8 },
 };
 
-struct _struct_D_801BFDD0_0x8 D_801BFDD0[3] = {
-    { 0xB4, 0xC8, 0xFF, 0x600BDD8 },
-    { 0x9B, 0, 0, 0x6014690 },
-    { 0xFF, 0, 0, 0x6011AB8 },
+
+// bss
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} struct_801F58B0; // size = 0x1C
+
+extern struct_801F58B0 D_801F58B0[3][3];
+
+extern struct_801F58B0 D_801F59AC[][3];
+
+extern Vec3f D_801F59B0[2];
+
+extern s32 D_801F59C8[2];
+
+typedef struct {
+    /* 0x00 */ s16 unk_0;
+    /* 0x02 */ s16 unk_2;
+    /* 0x04 */ s16 unk_4;
+    /* 0x06 */ s16 unk_6;
+    /* 0x08 */ s16 unk_8;
+} struct_801F59D0;
+
+extern struct_801F59D0 D_801F59D0;
+
+extern s32 D_801F59E0;
+
+extern s32 D_801F59E4;
+
+extern Vec3f D_801F59E8;
+
+extern s32 D_801F59F4;
+extern s32 D_801F59F8;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
+
+
+
+
+
+s32 Player_HoldsTwoHandedWeapon(Player* player);
+
+
+s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
+    if (arg1 == 0){
+        func_80169E6C(globalCtx, 0, 0xBFF);
+        if (globalCtx->sceneNum == SCENE_KAKUSIANA){
+            return 1;
+        }
+    }
+
+    gSaveContext.respawn[0].data = 0;
+    return arg1;
+}
+
+s32 func_80122744(GlobalContext* globalCtx, PlayerLib_80122744_arg1* arg1, u32 arg2, Vec3s* arg3) {
+    arg1->unk_00 = arg2;
+    arg1->unk_01 = 0;
+    arg1->unk_04 = arg3;
+    return 1;
+}
+
+s32 func_80122760(GlobalContext* globalCtx, PlayerLib_80122744_arg1* arg1, f32 arg2) {
+    if (arg1->unk_01 < arg1->unk_00) {
+        Player* player = GET_PLAYER(globalCtx);
+        Vec3f sp30;
+        s32 pad;
+        s16 yaw;
+        f32 distXZ;
+
+        Math_Vec3s_ToVec3f(&sp30, &arg1->unk_04[arg1->unk_01]);
+        yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &sp30);
+        func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, arg2, yaw);
+        globalCtx->actorCtx.unk268 = 1;
+        distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &sp30);
+
+        if ((fabsf(player->actor.world.pos.y - sp30.y) < 50.0f) && (distXZ < arg2)) {
+            arg1->unk_01++;
+        }
+
+        return 0;
+    }
+
+    return 1;
+}
+
+void func_80122868(GlobalContext* globalCtx, Player* player) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    if (player->invincibilityTimer > 0) {
+        s32 phi_v0 = 50 - player->invincibilityTimer;
+
+        phi_v0 = CLAMP(phi_v0, 8, 40);
+
+        player->unk_B5F += phi_v0;
+        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0xFF, 0, 0, 0, 0, 0xFA0 - (s32) (Math_CosS((player->unk_B5F << 8)) * 2000.0f));
+    } else if (gSaveContext.unk_1016 != 0) {
+        player->unk_B5F += 10;
+        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0xFF, 0, 0, 0xFA0 - (s32) (Math_CosS((player->unk_B5F << 8)) * 2000.0f));
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_801229A0(GlobalContext* globalCtx, Player* player) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    if ((gSaveContext.unk_1016 != 0) || (player->invincibilityTimer > 0)) {
+        POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
+}
+
+// Load mask?
+void func_801229FC(Player* player) {
+    if (player->maskObjectLoading == 1) {
+        // TODO: check if player->maskId is unsigned
+        s16 temp_s1 = D_801BFDA0[(u8)player->maskId-1];
+
+        osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
+        DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[temp_s1].vromStart, gObjectTable[temp_s1].vromEnd - gObjectTable[temp_s1].vromStart, 0, &player->maskObjectLoadQueue, NULL);
+        player->maskObjectLoading += 1;
+    } else if (player->maskObjectLoading == 2) {
+        if (osRecvMesg(&player->maskObjectLoadQueue, NULL, 0) == 0) {
+            player->maskObjectLoading = 0;
+
+            if (player->currentMask == PLAYER_MASK_GREAT_FAIRY) {
+                s32 i;
+
+                for (i = 0; i < ARRAY_COUNT(D_801F58B0); i++) {
+                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]), &player->bodyPartsPos[7]);
+                }
+            }
+        }
+    } else if ((player->currentMask != 0) && (player->currentMask != (u8)player->maskId)) {
+        player->maskObjectLoading = 1;
+        player->maskId = player->currentMask;
+    } else if (player->currentMask == 8) {
+        s32 i;
+
+        for (i = 0; i < ARRAY_COUNT(D_801F59C8); i++) {
+            D_801F59C8[i] += Rand_S16Offset(4, 0x17) + (s32) (fabsf(player->linearVelocity) * 50.0f);
+        }
+    }
+}
+
+void func_80122BA4(GraphicsContext** gfxCtx, struct_80122D44_arg1* arg1, s32 arg2, s32 arg3) {
+    if (arg2 == arg1->unk_00) {
+        s32 index;
+
+        arg1->unk_01--;
+        if (arg1->unk_01 < 0) {
+            arg1->unk_01 = 3;
+        }
+
+        index = arg1->unk_01;
+        arg1->unk_04[index].unk_00 = arg1->unk_00;
+        arg1->unk_04[index].unk_01 = arg3;
+        Matrix_CopyCurrentState(&arg1->unk_04[index].unk_04);
+
+        arg1->unk_00 = 0;
+    }
+}
+
+void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
+    struct_80122D44_arg1_unk_04* temp_v1 = &arg1->unk_04[0];
+    s32 phi_a1;
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++, temp_v1++) {
+        // Can't be `temp_v1->unk_01 != 0`
+        if (temp_v1->unk_01) {
+            phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
+            if (phi_a1 >= temp_v1->unk_01) {
+                temp_v1->unk_01 = 0;
+            } else {
+                temp_v1->unk_01 -= phi_a1;
+            }
+        }
+    }
+}
+
+void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
+    struct_801BFDD0* temp_s3;
+    struct_80122D44_arg1_unk_04* phi_s2 = arg1->unk_04;
+    s32 phi_s6 = false;
+    s32 i;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    for (i = 0; i != ARRAY_COUNT(arg1->unk_04); i++) {
+        if ((phi_s2->unk_01 != 0) && (phi_s2->unk_01 != 0xFF)) {
+            temp_s3 = &D_801BFDD0[phi_s2->unk_00 - 1];
+            Matrix_SetCurrentState(&phi_s2->unk_04);
+
+            gDPPipeSync(POLY_XLU_DISP++);
+
+            if (!phi_s6 && phi_s2->unk_00 == 2) {
+                AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_link_goron_Matanimheader_013138));
+                phi_s6 = true;
+            }
+
+            Scene_SetRenderModeXlu(globalCtx, 1, 2);
+            gDPSetEnvColor(POLY_XLU_DISP++, temp_s3->color.r, temp_s3->color.g, temp_s3->color.b, phi_s2->unk_01);
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            gSPDisplayList(POLY_XLU_DISP++, temp_s3->dlist);
+        }
+
+        phi_s2++;
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+
+u8 D_801BFDE8[PLAYER_MASK_MAX-1] = {
+    ITEM_MASK_TRUTH,         // PLAYER_MASK_TRUTH
+    ITEM_MASK_KAFEIS_MASK,   // PLAYER_MASK_KAFEIS_MASK
+    ITEM_MASK_ALL_NIGHT,     // PLAYER_MASK_ALL_NIGHT
+    ITEM_MASK_BUNNY,         // PLAYER_MASK_BUNNY
+    ITEM_MASK_KEATON,        // PLAYER_MASK_KEATON
+    ITEM_MASK_GARO,          // PLAYER_MASK_GARO
+    ITEM_MASK_ROMANI,        // PLAYER_MASK_ROMANI
+    ITEM_MASK_CIRCUS_LEADER, // PLAYER_MASK_CIRCUS_LEADER
+    ITEM_MASK_POSTMAN,       // PLAYER_MASK_POSTMAN
+    ITEM_MASK_COUPLE,        // PLAYER_MASK_COUPLE
+    ITEM_MASK_GREAT_FAIRY,   // PLAYER_MASK_GREAT_FAIRY
+    ITEM_MASK_GIBDO,         // PLAYER_MASK_GIBDO
+    ITEM_MASK_DON_GERO,      // PLAYER_MASK_DON_GERO
+    ITEM_MASK_KAMARO,        // PLAYER_MASK_KAMARO
+    ITEM_MASK_CAPTAIN,       // PLAYER_MASK_CAPTAIN
+    ITEM_MASK_STONE,         // PLAYER_MASK_STONE
+    ITEM_MASK_BREMEN,        // PLAYER_MASK_BREMEN
+    ITEM_MASK_BLAST,         // PLAYER_MASK_BLAST
+    ITEM_MASK_SCENTS,        // PLAYER_MASK_SCENTS
+    ITEM_MASK_GIANT,         // PLAYER_MASK_GIANT
+    ITEM_MASK_FIERCE_DEITY,  // PLAYER_MASK_FIERCE_DEITY
+    ITEM_MASK_GORON,         // PLAYER_MASK_GORON
+    ITEM_MASK_ZORA,          // PLAYER_MASK_ZORA
+    ITEM_MASK_DEKU,          // PLAYER_MASK_DEKU
 };
 
-u8 D_801BFDE8[] = {
-    0x36,
-    0x37,
-    0x38,
-    0x39,
-    0x3A,
-    0x3B,
-    0x3C,
-    0x3D,
-    0x3E,
-    0x3F,
-    0x40,
-    0x41,
-    0x42,
-    0x43,
-    0x44,
-    0x45,
-    0x46,
-    0x47,
-    0x48,
-    0x49,
-    0x35,
-    0x33,
-    0x34,
-    0x32,
-};
+
+
+u8 func_80122ED8(s32 index) {
+    return D_801BFDE8[index];
+}
+
+// Player_GetCurrentMaskItemId
+u8 func_80122EEC(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (player->currentMask != PLAYER_MASK_NONE) {
+        return func_80122ED8(player->currentMask - 1);
+    }
+
+    return ITEM_NONE;
+}
+
+void func_80122F28(Player* player) {
+    if ((player->actor.category == ACTORCAT_PLAYER) && (!(player->stateFlags1 & (0x20000000 | 0xA00000 | 0xC00))) && (!(player->stateFlags2 & 1))) {
+        if (player->doorType < 0) {
+            ActorCutscene_SetIntentToPlay(0x7C);
+        } else {
+            ActorCutscene_SetIntentToPlay(0x7D);
+        }
+    }
+}
+
+s32 func_80122F9C(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    return (player->stateFlags2 & 0x80000) && player->unk_AE7 == 2;
+}
+
+s32 func_80122FCC(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    return (player->stateFlags2 & 0x80000) && (player->unk_AE7 == 1 || player->unk_AE7 == 3);
+}
+
+void func_8012300C(GlobalContext* globalCtx, s32 arg1) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    player->unk_B2B = arg1;
+}
+
+void func_8012301C(Player* player, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    s32 pad;
+
+    player->unk_AE7++;
+
+    if (player->unk_AE7 == 2) {
+        s16 objectId = gLinkFormObjectIndexes[((void)0, gSaveContext.playerForm)];
+
+        gActorOverlayTable->initInfo->objectId = objectId;
+        func_8012F73C(&globalCtx->objectCtx, player->actor.objBankIndex, objectId);
+        player->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_KEEP);
+    } else if (player->unk_AE7 >= 3) {
+        s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, gActorOverlayTable->initInfo->objectId);
+
+        if (Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
+            player->actor.objBankIndex = objBankIndex;
+            player->actor.shape.rot.z = gSaveContext.playerForm + 1;
+            player->actor.init = func_80160AF8;
+            player->actor.update = func_80160B80;
+            player->actor.draw = func_80160BC0;
+            gSaveContext.equippedMask = 0;
+        }
+    }
+}
 
 FlexSkeletonHeader* D_801BFE00[] = {
     (FlexSkeletonHeader* )0x0600D878,
@@ -247,93 +555,253 @@ s16 D_801BFE14[][18] = {
 
 u16 D_801BFF34[4] = { 2, 4, 1, 0 };
 
+
+// OoT's Player_SetBootData?
+void func_80123140(GlobalContext* globalCtx, Player* player) {
+    s16* bootRegs;
+    s32 currentBoots;
+    f32 scale;
+
+    if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
+        gGameInfo->data[0x1B] = 0x4B0;
+    } else {
+        gGameInfo->data[0x1B] = 0x7D0;
+    }
+
+    gGameInfo->data[0x30] = 0x172;
+
+    currentBoots = player->currentBoots;
+    if (currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) {
+        if (player->stateFlags1 & 0x8000000) {
+            currentBoots++;
+        }
+        if (player->transformation == PLAYER_FORM_GORON) {
+            gGameInfo->data[0x30] = 0xC8;
+        }
+    } else if (currentBoots == PLAYER_BOOTS_GIANT) {
+        gGameInfo->data[0x30] = 0xAA;
+    }
+
+    bootRegs = D_801BFE14[currentBoots];
+    gGameInfo->data[0x13] = bootRegs[0];
+    gGameInfo->data[0x1E] = bootRegs[1];
+    gGameInfo->data[0x20] = bootRegs[2];
+    gGameInfo->data[0x22] = bootRegs[3];
+    gGameInfo->data[0x23] = bootRegs[4];
+    gGameInfo->data[0x24] = bootRegs[5];
+    gGameInfo->data[0x25] = bootRegs[6];
+    gGameInfo->data[0x26] = bootRegs[7];
+    gGameInfo->data[0x27] = bootRegs[8];
+    gGameInfo->data[0x2B] = bootRegs[9];
+    gGameInfo->data[0x2D] = bootRegs[10];
+    gGameInfo->data[0x44] = bootRegs[11];
+    gGameInfo->data[0x45] = bootRegs[12];
+    gGameInfo->data[0x3A2] = bootRegs[13];
+    gGameInfo->data[0x3A3] = bootRegs[14];
+    gGameInfo->data[0x3A4] = bootRegs[15];
+    gGameInfo->data[0x3A5] = bootRegs[16];
+    gGameInfo->data[0x23F] = bootRegs[17];
+
+    if (globalCtx->roomCtx.currRoom.unk3 == 2) {
+        gGameInfo->data[0x2D] = 0x1F4;
+    }
+
+    if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
+        scale = 0.015f;
+    } else {
+        scale = 0.01f;
+    }
+
+    Actor_SetScale(&player->actor, scale);
+}
+
+
+s32 Player_InBlockingCsMode(GlobalContext* globalCtx, Player* player) {
+    return (player->stateFlags1 & 0x20000280) || player->csMode != 0 || globalCtx->sceneLoadFlag == 0x14 ||
+           globalCtx->unk_18B4A != 0 || (player->stateFlags1 & 1) || (player->stateFlags3 & 0x80) ||
+           globalCtx->actorCtx.unk268 != 0;
+}
+
+s32 Player_InCsMode(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    return Player_InBlockingCsMode(globalCtx, player) || player->unk_AA5 == 5;
+}
+
+s32 func_80123420(Player* player) {
+    return player->stateFlags3 & 0x80000000;
+}
+
+s32 func_80123434(Player* player) {
+    return player->stateFlags1 & (0x40000000 | 0x30000);
+}
+
+s32 func_80123448(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    return (player->stateFlags1 & 0x400000) && (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == 0));
+}
+
+s32 func_801234B0(Player* player) {
+    return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
+}
+
+s32 func_801234D4(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    return 
+        (player->stateFlags2 & 8) 
+        ||
+        player->actor.speedXZ != 0.0f 
+        || 
+        (
+            (player->transformation != PLAYER_FORM_ZORA) 
+            && 
+            (player->stateFlags1 & 0x8000000)
+        )
+        || 
+        (
+            (player->transformation == PLAYER_FORM_ZORA) 
+            && 
+            (player->stateFlags1 & 0x8000000) 
+            && 
+            (
+                !(player->actor.bgCheckFlags & 1)
+                || 
+                (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)
+            )
+        );
+}
+
+s32 func_80123590(GlobalContext* globalCtx, Actor* actor) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if ((player->stateFlags1 & 0x800) && (player->heldActor == actor)) {
+        player->interactRangeActor = NULL;
+        player->heldActor = NULL;
+        player->actor.child = NULL;
+        player->stateFlags1 &= ~0x800;
+        return 1;
+    }
+    return 0;
+}
+
+s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (player->stateFlags3 & 0x1000) {
+        player->unk_B08[0] = arg1;
+        player->unk_B08[1] += arg1 * 0.05f;
+        player->currentYaw = arg2;
+        player->actor.home.rot.y = arg2;
+        player->actor.shape.rot.y = arg2;
+        player->unk_B8C = 4;
+        player->invincibilityTimer = 20;
+
+        return true;
+    }
+
+    return false;
+}
+
+s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
+    s32 ret;
+
+    if (arg2 >= 4) {
+        return 0xFF;
+    }
+
+    if (arg2 == 0) {
+        s32 phi_v1 = func_8012EC80(globalCtx);
+
+        if (phi_v1 >= 0xFD) {
+            return phi_v1;
+        }
+
+        if ((player->currentMask == PLAYER_MASK_BLAST) && (globalCtx->interfaceCtx.unk_21E == 0x18)) {
+            return 0xF0;
+        }
+
+        if ((player->currentMask == PLAYER_MASK_BREMEN) && (globalCtx->interfaceCtx.unk_21E == 0x1A)) {
+            return 0xF1;
+        }
+
+        if ((player->currentMask == PLAYER_MASK_KAMARO) && (globalCtx->interfaceCtx.unk_21E == 0x19)) {
+            return 0xF2;
+        }
+
+        return phi_v1;
+    } else if (arg2 == 1) {
+        return (gSaveContext.buttonStatus[1] != 0xFF) ? gSaveContext.equips.buttonItems[0][1] :
+                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][1] : 0xFF;
+    } else if (arg2 == 2) {
+        return (gSaveContext.buttonStatus[2] != 0xFF) ? gSaveContext.equips.buttonItems[0][2] :
+                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][2] : 0xFF;
+    } else {
+        return (gSaveContext.buttonStatus[3] != 0xFF) ? gSaveContext.equips.buttonItems[0][3] :
+                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][3] : 0xFF;
+    }
+}
+
+s32 func_80123810(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s32 temp_v0;
+    s32 sp24;
+    s32 i;
+
+    if (gSaveContext.unk_06 == 0) {
+        if (CHECK_BTN_ANY(CONTROLLER1(globalCtx)->press.button, BTN_A | BTN_B)) {
+            globalCtx->interfaceCtx.unk_222 = 0;
+            globalCtx->interfaceCtx.unk_224 = 0;
+            Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
+            return -1;
+        }
+    } else {
+        gSaveContext.unk_06--;
+    }
+
+    for (i = 0; i < ARRAY_COUNT(D_801BFF34) - 1; i++) {
+        if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, D_801BFF34[i])) {
+            i++;
+            sp24 = func_8012364C(globalCtx, player, i);
+
+            globalCtx->interfaceCtx.unk_222 = 0;
+            globalCtx->interfaceCtx.unk_224 = 0;
+            Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
+            if ((sp24 >= 0xFD) || (temp_v0 = globalCtx->unk_18794(globalCtx, player, sp24, i), (temp_v0 < 0))) {
+                play_sound(0x4806);
+                return -1;
+            } else {
+                s32 pad;
+
+                player->heldItemButton = i;
+                return temp_v0;
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+
 // sActionModelGroups
 u8 D_801BFF3C[] = {
-    3,
-    0xD,
-    0xA,
-    2,
-    2,
-    2,
-    5,
-    0xA,
-    0xE,
-    6,
-    6,
-    6,
-    6,
-    9,
-    7,
-    7,
-    7,
-    8,
-    3,
-    3,
-    0xB,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    0xC,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    3,
-    0,
+    3,   0xD, 0xA, 2,   2,   2,   5,   0xA, 0xE, 6,   6,   6,   6,   9,   7,   7,   7,   8,   3,   3,   0xB,
+    0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC,
+    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
+    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   0,
 };
+
+s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
+    s32 modelGroup = D_801BFF3C[actionParam];
+
+    if ((modelGroup == 2) && func_801234B0(player)) {
+        return 1;
+    }
+    return modelGroup;
+}
+
 
 u8 D_801BFF90[] = { 0, 6, 4, 3, 1, 0, 0, 0 };
 
@@ -569,11 +1037,11 @@ Gfx* D_801C026C[] = {
     (Gfx* )0x0601DFA8,
 };
 
-s32 D_801C0294[PLAYER_FORM_MAX] = { 0x6006C38, 0x600A220, 0x600C020, 0x6003AB8, 0x600D3D8 };
-s32 D_801C02A8[PLAYER_FORM_MAX] = { 0x6006EB8, 0x600A500, 0x600C270, 0x6003BC0, 0x600E1C8 };
-s32 D_801C02BC[PLAYER_FORM_MAX] = { 0x6006410, 0x6009A98, 0x600B820, 0x60036B0, 0x600CCE0 };
-s32 D_801C02D0[PLAYER_FORM_MAX] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6018490 };
-s32 D_801C02E4[PLAYER_FORM_MAX] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6017B40 };
+Gfx* D_801C0294[PLAYER_FORM_MAX] = { 0x6006C38, 0x600A220, 0x600C020, 0x6003AB8, 0x600D3D8 };
+Gfx* D_801C02A8[PLAYER_FORM_MAX] = { 0x6006EB8, 0x600A500, 0x600C270, 0x6003BC0, 0x600E1C8 };
+Gfx* D_801C02BC[PLAYER_FORM_MAX] = { 0x6006410, 0x6009A98, 0x600B820, 0x60036B0, 0x600CCE0 };
+Gfx* D_801C02D0[PLAYER_FORM_MAX] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6018490 };
+Gfx* D_801C02E4[PLAYER_FORM_MAX] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6017B40 };
 
 // sPlayerDListGroups
 Gfx** D_801C02F8[] = {
@@ -600,183 +1068,183 @@ Gfx** D_801C02F8[] = {
 struct_80124618 D_801C0340[] = {
     { 0, { 0, 0, 0 } },
     { 5, { 0, 0, 0 } },
-    { 7, { 0x64, 0x64, 0x64 } },
-    { 9, { 0x6E, 0x6E, 0x6E } },
-    { 0xB, { 0x64, 0x64, 0x64 } },
+    { 7, { 100, 100, 100 } },
+    { 9, { 110, 110, 110 } },
+    { 11, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0368[] = {
     { 0, { 0, 0, 0 } },
     { 4, { 0, 0, 0 } },
-    { 6, { 0x78, 0x96, 0x3C } },
-    { 8, { 0x82, 0x50, 0xA0 } },
-    { 9, { 0x64, 0x64, 0x64 } },
-    { 0xA, { 0x5A, 0x64, 0x5A } },
-    { 0xB, { 0x64, 0x64, 0x64 } },
+    { 6, { 120, 150, 60 } },
+    { 8, { 130, 80, 160 } },
+    { 9, { 100, 100, 100 } },
+    { 10, { 90, 100, 90 } },
+    { 11, { 100, 100, 100 } },
 };
 struct_80124618 D_801C03A0[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 2, { 0x78, 0x78, 0x78 } },
-    { 6, { 0x5A, 0x5A, 0x5A } },
-    { 7, { 0x5D, 0x5D, 0x5D } },
+    { 0, { 100, 100, 100 } },
+    { 2, { 120, 120, 120 } },
+    { 6, { 90, 90, 90 } },
+    { 7, { 93, 93, 93 } },
 };
 struct_80124618 D_801C03C0[] = {
-    { 0, { 0xC8, 0x64, 0x6E } },
-    { 2, { 0x5A, 0x64, 0x64 } },
-    { 3, { 0x64, 0x64, 0x64 } },
-    { 7, { 0x64, 0x64, 0x64 } },
+    { 0, { 200, 100, 110 } },
+    { 2, { 90, 100, 100 } },
+    { 3, { 100, 100, 100 } },
+    { 7, { 100, 100, 100 } },
 };
 struct_80124618 D_801C03E0[] = {
-    { 0, { 0x64, 0x64, 0x6E } },
-    { 2, { 0x3C, 0x64, 0x50 } },
-    { 3, { 0x82, 0x69, 0x6E } },
-    { 7, { 0x82, 0x69, 0x6E } },
-    { 0xA, { 0x64, 0x64, 0x64 } },
-    { 0x13, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 110 } },
+    { 2, { 60, 100, 80 } },
+    { 3, { 130, 105, 110 } },
+    { 7, { 130, 105, 110 } },
+    { 10, { 100, 100, 100 } },
+    { 19, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0410[] = {
     { 0, { 0, 0, 0 } },
-    { 2, { 0x50, 0x6E, 0x50 } },
-    { 3, { 0x64, 0x64, 0x64 } },
+    { 2, { 80, 110, 80 } },
+    { 3, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0428[] = {
     { 0, { 0, 0, 0 } },
     { 6, { 0, 0, 0 } },
-    { 7, { 0x3C, 0x3C, 0x32 } },
-    { 8, { 0x78, 0x82, 0x64 } },
-    { 9, { 0x64, 0x78, 0x50 } },
-    { 0xB, { 0x64, 0x64, 0x64 } },
-    { 0xD, { 0x64, 0x64, 0x64 } },
+    { 7, { 60, 60, 50 } },
+    { 8, { 120, 130, 100 } },
+    { 9, { 100, 120, 80 } },
+    { 11, { 100, 100, 100 } },
+    { 13, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0460[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 5, { 0x64, 0x64, 0x64 } },
-    { 7, { 0x64, 0x4A, 0x50 } },
-    { 8, { 0x64, 0xB4, 0x82 } },
-    { 0xA, { 0x64, 0x50, 0x50 } },
-    { 0xD, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 5, { 100, 100, 100 } },
+    { 7, { 100, 74, 80 } },
+    { 8, { 100, 180, 130 } },
+    { 10, { 100, 80, 80 } },
+    { 13, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0490[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 1, { 0x64, 0x64, 0x64 } },
-    { 2, { 0x5A, 0x64, 0x69 } },
-    { 4, { 0x6E, 0x64, 0x64 } },
-    { 5, { 0x5A, 0x64, 0x69 } },
-    { 6, { 0x64, 0x64, 0x64 } },
-    { 7, { 0x5A, 0x64, 0x69 } },
-    { 8, { 0x64, 0x64, 0x64 } },
-    { 9, { 0x5A, 0x64, 0x69 } },
-    { 0xA, { 0x64, 0x64, 0x64 } },
-    { 0xB, { 0x5A, 0x64, 0x69 } },
-    { 0xC, { 0x6E, 0x64, 0x64 } },
-    { 0xD, { 0x64, 0x64, 0x64 } },
-    { 0xE, { 0x5A, 0x64, 0x69 } },
-    { 0xF, { 0x5A, 0x64, 0x69 } },
-    { 0x11, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 1, { 100, 100, 100 } },
+    { 2, { 90, 100, 105 } },
+    { 4, { 110, 100, 100 } },
+    { 5, { 90, 100, 105 } },
+    { 6, { 100, 100, 100 } },
+    { 7, { 90, 100, 105 } },
+    { 8, { 100, 100, 100 } },
+    { 9, { 90, 100, 105 } },
+    { 10, { 100, 100, 100 } },
+    { 11, { 90, 100, 105 } },
+    { 12, { 110, 100, 100 } },
+    { 13, { 100, 100, 100 } },
+    { 14, { 90, 100, 105 } },
+    { 15, { 90, 100, 105 } },
+    { 17, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0510[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 4, { 0x64, 0x64, 0x64 } },
-    { 5, { 0x5A, 0x6E, 0x64 } },
-    { 6, { 0x6E, 0x69, 0x64 } },
-    { 8, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 4, { 100, 100, 100 } },
+    { 5, { 90, 110, 100 } },
+    { 6, { 110, 105, 100 } },
+    { 8, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0538[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 5, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 5, { 100, 100, 100 } },
     { 6, { 0, 0, 0 } },
-    { 8, { 0x64, 0x64, 0x64 } },
-    { 0xE, { 0x64, 0x64, 0x64 } },
+    { 8, { 100, 100, 100 } },
+    { 14, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0560[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 2, { 0x5F, 0x5F, 0x64 } },
-    { 3, { 0x69, 0x69, 0x64 } },
-    { 5, { 0x66, 0x66, 0x66 } },
+    { 0, { 100, 100, 100 } },
+    { 2, { 95, 95, 100 } },
+    { 3, { 105, 105, 100 } },
+    { 5, { 102, 102, 102 } },
 };
 struct_80124618 D_801C0580[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 9, { 0x64, 0x64, 0x64 } },
-    { 0xA, { 0x96, 0x96, 0x96 } },
-    { 0xC, { 0, 0, 0 } },
-    { 0xE, { 0, 0, 0 } },
+    { 0, { 100, 100, 100 } },
+    { 9, { 100, 100, 100 } },
+    { 10, { 150, 150, 150 } },
+    { 12, { 0, 0, 0 } },
+    { 14, { 0, 0, 0 } },
 };
 struct_80124618 D_801C05A8[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 6, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 6, { 100, 100, 100 } },
     { 7, { 0, 0, 0 } },
-    { 0x11, { 0, 0, 0 } },
+    { 17, { 0, 0, 0 } },
 };
-struct_80124618 D_801C05C8[] = { { 0, { 0, 0, 0 } }, { 0x11, { 0x32, 0x32, 0x32 } } };
-struct_80124618 D_801C05D8[] = { { 0, { 0, 0, 0 } }, { 5, { 0, 0, 0 } }, { 9, { 0x64, 0x64, 0x64 } } };
+struct_80124618 D_801C05C8[] = { { 0, { 0, 0, 0 } }, { 17, { 50, 50, 50 } } };
+struct_80124618 D_801C05D8[] = { { 0, { 0, 0, 0 } }, { 5, { 0, 0, 0 } }, { 9, { 100, 100, 100 } } };
 struct_80124618 D_801C05F0[] = {
     { 0, { 0x64, 0x64, 0x64 } },
-    { 5, { 0x64, 0x64, 0x64 } },
+    { 5, { 100, 100, 100 } },
     { 9, { 0, 0, 0 } },
 };
 struct_80124618 D_801C0608[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 0xA, { 0x64, 0x64, 0x64 } },
-    { 0x20, { 0x64, 0x73, 0x69 } },
-    { 0x3A, { 0x64, 0x65, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 10, { 100, 100, 100 } },
+    { 32, { 100, 115, 105 } },
+    { 58, { 100, 101, 100 } },
 };
 struct_80124618 D_801C0628[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 5, { 0x64, 0x64, 0x64 } },
-    { 0xF, { 0x64, 0x64, 0x69 } },
-    { 0x19, { 0x64, 0x64, 0x69 } },
-    { 0x22, { 0x64, 0x64, 0x64 } },
-    { 0x2E, { 0x64, 0x64, 0x64 } },
-    { 0x39, { 0x64, 0x64, 0x69 } },
-    { 0x43, { 0x64, 0x64, 0x69 } },
-    { 0x4C, { 0x64, 0x64, 0x64 } },
-    { 0x4E, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 5, { 100, 100, 100 } },
+    { 15, { 100, 100, 105 } },
+    { 25, { 100, 100, 105 } },
+    { 34, { 100, 100, 100 } },
+    { 46, { 100, 100, 100 } },
+    { 57, { 100, 100, 105 } },
+    { 67, { 100, 100, 105 } },
+    { 76, { 100, 100, 100 } },
+    { 78, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0678[] = {
     { 0, { 0, 0, 0 } },
     { 6, { 0, 0, 0 } },
-    { 8, { 0x64, 0x64, 0x64 } },
-    { 0xB, { 0x64, 0x64, 0x64 } },
+    { 8, { 100, 100, 100 } },
+    { 11, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0698[] = {
     { 0, { 0, 0, 0 } },
-    { 7, { 0x460, 0x70, 0x70 } },
-    { 8, { 0x8C, 0xA8, 0xA8 } },
-    { 0xB, { 0x8C, 0x8C, 0x8C } },
+    { 7, { 1120, 112, 112 } },
+    { 8, { 140, 168, 168 } },
+    { 11, { 140, 140, 140 } },
 };
 struct_80124618 D_801C06B8[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 7, { 0x64, 0x64, 0x64 } },
-    { 8, { 0x46, 0x1E, 0x46 } },
-    { 0xA, { 0, 0, 0 } },
-    { 0xE, { 0, 0, 0 } },
+    { 0, { 100, 100, 100 } },
+    { 7, { 100, 100, 100 } },
+    { 8, { 70, 30, 70 } },
+    { 10, { 0, 0, 0 } },
+    { 14, { 0, 0, 0 } },
 };
-struct_80124618 D_801C06E0[] = { { 0, { 0x8C, 0x8C, 0x8C } }, { 1, { 0, 0, 0 } }, { 0xE, { 0, 0, 0 } } };
+struct_80124618 D_801C06E0[] = { { 0, { 140, 140, 140 } }, { 1, { 0, 0, 0 } }, { 14, { 0, 0, 0 } } };
 struct_80124618 D_801C06F8[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 5, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 5, { 100, 100, 100 } },
     { 6, { 0, 0, 0 } },
-    { 0xA, { 0, 0, 0 } },
+    { 10, { 0, 0, 0 } },
 };
-struct_80124618 D_801C0718[] = { { 0, { 0x8C, 0x8C, 0x8C } }, { 1, { 0, 0, 0 } }, { 0xA, { 0, 0, 0 } } };
-struct_80124618 D_801C0730[] = { { 0, { 0x64, 0x64, 0x64 } }, { 0xD, { 0x64, 0x64, 0x64 } } };
-struct_80124618 D_801C0740[] = { { 0, { 0x8C, 0x8C, 0x8C } }, { 0xD, { 0x8C, 0x8C, 0x8C } } };
+struct_80124618 D_801C0718[] = { { 0, { 140, 140, 140 } }, { 1, { 0, 0, 0 } }, { 10, { 0, 0, 0 } } };
+struct_80124618 D_801C0730[] = { { 0, { 100, 100, 100 } }, { 13, { 100, 100, 100 } } };
+struct_80124618 D_801C0740[] = { { 0, { 140, 140, 140 } }, { 13, { 140, 140, 140 } } };
 struct_80124618 D_801C0750[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 5, { 0x64, 0x64, 0x64 } },
-    { 6, { 0xC8, 0xC8, 0xC8 } },
-    { 0xA, { 0xC8, 0xC8, 0xC8 } },
-    { 0xB, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 5, { 100, 100, 100 } },
+    { 6, { 200, 200, 200 } },
+    { 10, { 200, 200, 200 } },
+    { 11, { 100, 100, 100 } },
 };
 
 
 u8 D_801C0778[] = { 0, 0, 0, 0, 0, 0x64, 0xC8, 0xFF, 0xFF, 0xFF, 0xC8, 0x64 };
 
 struct_80124618 D_801C0784[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 0xE, { 0x64, 0x64, 0x64 } },
-    { 0xF, { 0xC8, 0xC8, 0xC8 } },
-    { 0x10, { 0xC8, 0xC8, 0xC8 } },
-    { 0x12, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 14, { 100, 100, 100 } },
+    { 15, { 200, 200, 200 } },
+    { 16, { 200, 200, 200 } },
+    { 18, { 100, 100, 100 } },
 };
 
 u8 D_801C07AC[] = {
@@ -802,627 +1270,7 @@ u8 D_801C07AC[] = {
     0,
 };
 
-struct_80124618 D_801C07C0[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 0xA, { 0x64, 0x64, 0x64 } },
-    { 0xB, { 0x64, 0x78, 0x78 } },
-    { 0xC, { 0x64, 0x78, 0x78 } },
-    { 0xE, { 0x64, 0x64, 0x64 } },
-    { 0x13, { 0x64, 0x64, 0x64 } },
-};
 
-struct_80124618 D_801C07F0[] = {
-    { 0, { 0x28, 0x3C, 0x46 } },
-    { 3, { 0x28, 0x3C, 0x46 } },
-    { 4, { 0x4B, 0x5A, 0x55 } },
-    { 5, { 0x6E, 0x78, 0x64 } },
-    { 7, { 0x64, 0x64, 0x64 } },
-    { 8, { 0x64, 0x64, 0x64 } },
-};
-struct_80124618 D_801C0820[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 7, { 0x64, 0x64, 0x64 } },
-    { 0xC, { 0x28, 0x3C, 0x46 } },
-};
-struct_80124618 D_801C0838[] = {
-    { 0, { 0x28, 0x3C, 0x46 } },
-    { 7, { 0x28, 0x3C, 0x46 } },
-    { 0xC, { 0x64, 0x64, 0x64 } },
-};
-
-Gfx D_801C0850[] = { { { 0xD9FFFFFF, 0x400 } }, { { 0xDF000000, 0 } } };
-Gfx D_801C0860[] = { { { 0xD9FFFFFF, 0x200 } }, { { 0xDF000000, 0 } } };
-
-UNK_PTR D_801C0870[] = {
-    (void* )0x06000000,
-    (void* )0x06000800,
-    (void* )0x06001000,
-    (void* )0x06001800,
-    (void* )0x06002000,
-    (void* )0x06002800,
-    (void* )0x06003000,
-    (void* )0x06003800,
-};
-void* D_801C0890[] = {
-    (void* )0x06004000,
-    (void* )0x06004400,
-    (void* )0x06004800,
-    (void* )0x06004C00,
-};
-u8 D_801C08A0[][2] = {
-    { 0, 0 },
-    { 1, 0 },
-    { 2, 0 },
-    { 0, 0 },
-    { 1, 0 },
-    { 2, 0 },
-    { 4, 0 },
-    { 5, 1 },
-    { 7, 2 },
-    { 0, 2 },
-    { 3, 0 },
-    { 4, 0 },
-    { 2, 2 },
-    { 1, 1 },
-    { 0, 2 },
-    { 0, 3 },
-};
-
-Vec3f D_801C08C0[] = {
-    { 1304.0f, 0.0f, 0.0f },
-    { 1156.0f, 0.0f, 0.0f },
-    { 1406.0f, 0.0f, 0.0f },
-    { 408.0f, 0.0f, 0.0f },
-    { 695.0f, 0.0f, 0.0f },
-};
-
-f32 D_801C08FC[5] = { 1265.0f, 1056.0f, 1506.0f, 359.0f, 826.0f };
-f32 D_801C0910[5] = { 170.0416f, 133.63359f, 197.68358f, 16.646399f, 48.302498f };
-f32 D_801C0924[5] = { 10.019104f, 22.120003f, -29.12001f, 3.7582989f, -19.925102f };
-f32 D_801C0938[5] = { 5.0f, 4.0f, 1.0f, 1.0f, 3.0f };
-
-
-
-// bss
-
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-} struct_801F58B0; // size = 0x1C
-
-extern struct_801F58B0 D_801F58B0[3][3];
-
-extern struct_801F58B0 D_801F59AC[][3];
-
-extern Vec3f D_801F59B0[2];
-
-extern s32 D_801F59C8[2];
-
-typedef struct {
-    /* 0x00 */ s16 unk_0;
-    /* 0x02 */ s16 unk_2;
-    /* 0x04 */ s16 unk_4;
-    /* 0x06 */ s16 unk_6;
-    /* 0x08 */ s16 unk_8;
-} struct_801F59D0;
-
-extern struct_801F59D0 D_801F59D0;
-
-extern s32 D_801F59E0;
-
-extern s32 D_801F59E4;
-
-extern Vec3f D_801F59E8;
-
-extern s32 D_801F59F4;
-extern s32 D_801F59F8;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
-
-
-
-
-
-s32 Player_HoldsTwoHandedWeapon(Player* player);
-
-
-s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
-    if (arg1 == 0){
-        func_80169E6C(globalCtx, 0, 0xBFF);
-        if (globalCtx->sceneNum == SCENE_KAKUSIANA){
-            return 1;
-        }
-    }
-
-    gSaveContext.respawn[0].data = 0;
-    return arg1;
-}
-
-s32 func_80122744(GlobalContext* globalCtx, PlayerLib_80122744_arg1* arg1, u32 arg2, Vec3s* arg3) {
-    arg1->unk_00 = arg2;
-    arg1->unk_01 = 0;
-    arg1->unk_04 = arg3;
-    return 1;
-}
-
-s32 func_80122760(GlobalContext* globalCtx, PlayerLib_80122744_arg1* arg1, f32 arg2) {
-    if (arg1->unk_01 < arg1->unk_00) {
-        Player* player = GET_PLAYER(globalCtx);
-        Vec3f sp30;
-        s32 pad;
-        s16 yaw;
-        f32 distXZ;
-
-        Math_Vec3s_ToVec3f(&sp30, &arg1->unk_04[arg1->unk_01]);
-        yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &sp30);
-        func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, arg2, yaw);
-        globalCtx->actorCtx.unk268 = 1;
-        distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &sp30);
-
-        if ((fabsf(player->actor.world.pos.y - sp30.y) < 50.0f) && (distXZ < arg2)) {
-            arg1->unk_01++;
-        }
-
-        return 0;
-    }
-
-    return 1;
-}
-
-void func_80122868(GlobalContext* globalCtx, Player* player) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-
-    if (player->invincibilityTimer > 0) {
-        s32 phi_v0 = 50 - player->invincibilityTimer;
-
-        phi_v0 = CLAMP(phi_v0, 8, 40);
-
-        player->unk_B5F += phi_v0;
-        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0xFF, 0, 0, 0, 0, 0xFA0 - (s32) (Math_CosS((player->unk_B5F << 8)) * 2000.0f));
-    } else if (gSaveContext.unk_1016 != 0) {
-        player->unk_B5F += 10;
-        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0xFF, 0, 0, 0xFA0 - (s32) (Math_CosS((player->unk_B5F << 8)) * 2000.0f));
-    }
-
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
-}
-
-void func_801229A0(GlobalContext* globalCtx, Player* player) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-
-    if ((gSaveContext.unk_1016 != 0) || (player->invincibilityTimer > 0)) {
-        POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
-    }
-
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
-}
-
-void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
-}
-
-// Load mask?
-void func_801229FC(Player* player) {
-    if (player->maskObjectLoading == 1) {
-        // TODO: check if player->maskId is unsigned
-        s16 temp_s1 = D_801BFDA0[(u8)player->maskId-1];
-
-        osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
-        DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[temp_s1].vromStart, gObjectTable[temp_s1].vromEnd - gObjectTable[temp_s1].vromStart, 0, &player->maskObjectLoadQueue, NULL);
-        player->maskObjectLoading += 1;
-    } else if (player->maskObjectLoading == 2) {
-        if (osRecvMesg(&player->maskObjectLoadQueue, NULL, 0) == 0) {
-            player->maskObjectLoading = 0;
-
-            if (player->currentMask == PLAYER_MASK_GREAT_FAIRY) {
-                s32 i;
-
-                for (i = 0; i < ARRAY_COUNT(D_801F58B0); i++) {
-                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]), &player->bodyPartsPos[7]);
-                }
-            }
-        }
-    } else if ((player->currentMask != 0) && (player->currentMask != (u8)player->maskId)) {
-        player->maskObjectLoading = 1;
-        player->maskId = player->currentMask;
-    } else if (player->currentMask == 8) {
-        s32 i;
-
-        for (i = 0; i < ARRAY_COUNT(D_801F59C8); i++) {
-            D_801F59C8[i] += Rand_S16Offset(4, 0x17) + (s32) (fabsf(player->linearVelocity) * 50.0f);
-        }
-    }
-}
-
-void func_80122BA4(GraphicsContext** gfxCtx, struct_80122D44_arg1* arg1, s32 arg2, s32 arg3) {
-    if (arg2 == arg1->unk_00) {
-        s32 index;
-
-        arg1->unk_01--;
-        if (arg1->unk_01 < 0) {
-            arg1->unk_01 = 3;
-        }
-
-        index = arg1->unk_01;
-        arg1->unk_04[index].unk_00 = arg1->unk_00;
-        arg1->unk_04[index].unk_01 = arg3;
-        Matrix_CopyCurrentState(&arg1->unk_04[index].unk_04);
-
-        arg1->unk_00 = 0;
-    }
-}
-
-void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
-    struct_80122D44_arg1_unk_04* temp_v1 = &arg1->unk_04[0];
-    s32 phi_a1;
-    s32 i;
-
-    for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++, temp_v1++) {
-        if (temp_v1->unk_01) {
-            phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
-            if (phi_a1 >= temp_v1->unk_01) {
-                temp_v1->unk_01 = 0;
-            } else {
-                temp_v1->unk_01 -= phi_a1;
-            }
-        }
-    }
-}
-
-void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
-    struct _struct_D_801BFDD0_0x8* temp_s3;
-    struct_80122D44_arg1_unk_04* phi_s2 = arg1->unk_04;
-    s32 phi_s6 = false;
-    s32 i;
-
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-
-    for (i = 0; i != ARRAY_COUNT(arg1->unk_04); i++) {
-        if ((phi_s2->unk_01 != 0) && (phi_s2->unk_01 != 0xFF)) {
-            temp_s3 = &D_801BFDD0[phi_s2->unk_00 - 1];
-            Matrix_SetCurrentState(&phi_s2->unk_04);
-
-            gDPPipeSync(POLY_XLU_DISP++);
-
-            if (!phi_s6 && phi_s2->unk_00 == 2) {
-                AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_link_goron_Matanimheader_013138));
-                phi_s6 = true;
-            }
-
-            Scene_SetRenderModeXlu(globalCtx, 1, 2);
-            gDPSetEnvColor(POLY_XLU_DISP++, temp_s3->unk_0, temp_s3->unk_1, temp_s3->unk_2, phi_s2->unk_01);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-            gSPDisplayList(POLY_XLU_DISP++, temp_s3->unk_4);
-        }
-
-        phi_s2++;
-    }
-
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
-}
-
-u8 func_80122ED8(s32 index) {
-    return D_801BFDE8[index];
-}
-
-u8 func_80122EEC(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-
-    if (player->currentMask != PLAYER_MASK_NONE) {
-        return func_80122ED8(player->currentMask - 1);
-    } else {
-        return 0xFF;
-    }
-}
-
-void func_80122F28(Player* player) {
-    if ((player->actor.category == ACTORCAT_PLAYER) && (!(player->stateFlags1 & (0x20000000 | 0xA00000 | 0xC00))) && (!(player->stateFlags2 & 1))) {
-        if (player->doorType < 0) {
-            ActorCutscene_SetIntentToPlay(0x7C);
-        } else {
-            ActorCutscene_SetIntentToPlay(0x7D);
-        }
-    }
-}
-
-s32 func_80122F9C(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-
-    return (player->stateFlags2 & 0x80000) && player->unk_AE7 == 2;
-}
-
-s32 func_80122FCC(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-
-    return (player->stateFlags2 & 0x80000) && (player->unk_AE7 == 1 || player->unk_AE7 == 3);
-}
-
-void func_8012300C(GlobalContext* globalCtx, s32 arg1) {
-    Player* player = GET_PLAYER(globalCtx);
-
-    player->unk_B2B = arg1;
-}
-
-void func_8012301C(Player* player, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
-    s32 pad;
-
-    player->unk_AE7++;
-
-    if (player->unk_AE7 == 2) {
-        s16 objectId = gLinkFormObjectIndexes[((void)0, gSaveContext.playerForm)];
-
-        gActorOverlayTable->initInfo->objectId = objectId;
-        func_8012F73C(&globalCtx->objectCtx, player->actor.objBankIndex, objectId);
-        player->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, 1);
-    } else if (player->unk_AE7 >= 3) {
-        s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, gActorOverlayTable->initInfo->objectId);
-
-        if (Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
-            player->actor.objBankIndex = objBankIndex;
-            player->actor.shape.rot.z = gSaveContext.playerForm + 1;
-            player->actor.init = func_80160AF8;
-            player->actor.update = func_80160B80;
-            player->actor.draw = func_80160BC0;
-            gSaveContext.equippedMask = 0;
-        }
-    }
-}
-
-// OoT's Player_SetBootData?
-void func_80123140(GlobalContext* globalCtx, Player* player) {
-    s16* bootRegs;
-    s32 currentBoots;
-    f32 scale;
-
-    if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
-        gGameInfo->data[0x1B] = 0x4B0;
-    } else {
-        gGameInfo->data[0x1B] = 0x7D0;
-    }
-
-    gGameInfo->data[0x30] = 0x172;
-
-    currentBoots = player->currentBoots;
-    if (currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) {
-        if (player->stateFlags1 & 0x8000000) {
-            currentBoots++;
-        }
-        if (player->transformation == PLAYER_FORM_GORON) {
-            gGameInfo->data[0x30] = 0xC8;
-        }
-    } else if (currentBoots == PLAYER_BOOTS_GIANT) {
-        gGameInfo->data[0x30] = 0xAA;
-    }
-
-    bootRegs = D_801BFE14[currentBoots];
-    gGameInfo->data[0x13] = bootRegs[0];
-    gGameInfo->data[0x1E] = bootRegs[1];
-    gGameInfo->data[0x20] = bootRegs[2];
-    gGameInfo->data[0x22] = bootRegs[3];
-    gGameInfo->data[0x23] = bootRegs[4];
-    gGameInfo->data[0x24] = bootRegs[5];
-    gGameInfo->data[0x25] = bootRegs[6];
-    gGameInfo->data[0x26] = bootRegs[7];
-    gGameInfo->data[0x27] = bootRegs[8];
-    gGameInfo->data[0x2B] = bootRegs[9];
-    gGameInfo->data[0x2D] = bootRegs[10];
-    gGameInfo->data[0x44] = bootRegs[11];
-    gGameInfo->data[0x45] = bootRegs[12];
-    gGameInfo->data[0x3A2] = bootRegs[13];
-    gGameInfo->data[0x3A3] = bootRegs[14];
-    gGameInfo->data[0x3A4] = bootRegs[15];
-    gGameInfo->data[0x3A5] = bootRegs[16];
-    gGameInfo->data[0x23F] = bootRegs[17];
-
-    if (globalCtx->roomCtx.currRoom.unk3 == 2) {
-        gGameInfo->data[0x2D] = 0x1F4;
-    }
-
-    if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
-        scale = 0.015f;
-    } else {
-        scale = 0.01f;
-    }
-
-    Actor_SetScale(&player->actor, scale);
-}
-
-
-s32 Player_InBlockingCsMode(GlobalContext* globalCtx, Player* player) {
-    return (player->stateFlags1 & 0x20000280) || player->csMode != 0 || globalCtx->sceneLoadFlag == 0x14 ||
-           globalCtx->unk_18B4A != 0 || (player->stateFlags1 & 1) || (player->stateFlags3 & 0x80) ||
-           globalCtx->actorCtx.unk268 != 0;
-}
-
-s32 Player_InCsMode(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-
-    return Player_InBlockingCsMode(globalCtx, player) || player->unk_AA5 == 5;
-}
-
-s32 func_80123420(Player* player) {
-    return player->stateFlags3 & 0x80000000;
-}
-
-s32 func_80123434(Player* player) {
-    return player->stateFlags1 & (0x40000000 | 0x30000);
-}
-
-s32 func_80123448(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-
-    return (player->stateFlags1 & 0x400000) && (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == 0));
-}
-
-s32 func_801234B0(Player* player) {
-    return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
-}
-
-s32 func_801234D4(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-
-    return 
-        (player->stateFlags2 & 8) 
-        ||
-        player->actor.speedXZ != 0.0f 
-        || 
-        (
-            (player->transformation != PLAYER_FORM_ZORA) 
-            && 
-            (player->stateFlags1 & 0x8000000)
-        )
-        || 
-        (
-            (player->transformation == PLAYER_FORM_ZORA) 
-            && 
-            (player->stateFlags1 & 0x8000000) 
-            && 
-            (
-                !(player->actor.bgCheckFlags & 1)
-                || 
-                (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)
-            )
-        );
-}
-
-s32 func_80123590(GlobalContext* globalCtx, Actor* actor) {
-    Player* player = GET_PLAYER(globalCtx);
-
-    if ((player->stateFlags1 & 0x800) && (player->heldActor == actor)) {
-        player->interactRangeActor = NULL;
-        player->heldActor = NULL;
-        player->actor.child = NULL;
-        player->stateFlags1 &= ~0x800;
-        return 1;
-    }
-    return 0;
-}
-
-s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
-    Player* player = GET_PLAYER(globalCtx);
-
-    if (player->stateFlags3 & 0x1000) {
-        player->unk_B08[0] = arg1;
-        player->unk_B08[1] += arg1 * 0.05f;
-        player->currentYaw = arg2;
-        player->actor.home.rot.y = arg2;
-        player->actor.shape.rot.y = arg2;
-        player->unk_B8C = 4;
-        player->invincibilityTimer = 20;
-
-        return true;
-    }
-
-    return false;
-}
-
-s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
-    s32 ret;
-
-    if (arg2 >= 4) {
-        return 0xFF;
-    }
-
-    if (arg2 == 0) {
-        s32 phi_v1 = func_8012EC80(globalCtx);
-
-        if (phi_v1 >= 0xFD) {
-            return phi_v1;
-        }
-
-        if ((player->currentMask == PLAYER_MASK_BLAST) && (globalCtx->interfaceCtx.unk_21E == 0x18)) {
-            return 0xF0;
-        }
-
-        if ((player->currentMask == PLAYER_MASK_BREMEN) && (globalCtx->interfaceCtx.unk_21E == 0x1A)) {
-            return 0xF1;
-        }
-
-        if ((player->currentMask == PLAYER_MASK_KAMARO) && (globalCtx->interfaceCtx.unk_21E == 0x19)) {
-            return 0xF2;
-        }
-
-        return phi_v1;
-    } else if (arg2 == 1) {
-        return (gSaveContext.buttonStatus[1] != 0xFF) ? gSaveContext.equips.buttonItems[0][1] :
-                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][1] : 0xFF;
-    } else if (arg2 == 2) {
-        return (gSaveContext.buttonStatus[2] != 0xFF) ? gSaveContext.equips.buttonItems[0][2] :
-                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][2] : 0xFF;
-    } else {
-        return (gSaveContext.buttonStatus[3] != 0xFF) ? gSaveContext.equips.buttonItems[0][3] :
-                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][3] : 0xFF;
-    }
-}
-
-s32 func_80123810(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-    s32 temp_v0;
-    s32 sp24;
-    s32 i;
-
-    if (gSaveContext.unk_06 == 0) {
-        if (CHECK_BTN_ANY(CONTROLLER1(globalCtx)->press.button, BTN_A | BTN_B)) {
-            globalCtx->interfaceCtx.unk_222 = 0;
-            globalCtx->interfaceCtx.unk_224 = 0;
-            Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
-            return -1;
-        }
-    } else {
-        gSaveContext.unk_06--;
-    }
-
-    for (i = 0; i < ARRAY_COUNT(D_801BFF34) - 1; i++) {
-        if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, D_801BFF34[i])) {
-            i++;
-            sp24 = func_8012364C(globalCtx, player, i);
-
-            globalCtx->interfaceCtx.unk_222 = 0;
-            globalCtx->interfaceCtx.unk_224 = 0;
-            Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
-            if ((sp24 >= 0xFD) || (temp_v0 = globalCtx->unk_18794(globalCtx, player, sp24, i), (temp_v0 < 0))) {
-                play_sound(0x4806);
-                return -1;
-            } else {
-                s32 pad;
-
-                player->heldItemButton = i;
-                return temp_v0;
-            }
-        }
-    }
-
-    return 0;
-}
-
-s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
-    s32 modelGroup = D_801BFF3C[actionParam];
-
-    if ((modelGroup == 2) && func_801234B0(player)) {
-        return 1;
-    }
-    return modelGroup;
-}
 
 // Player_SetModelsForHoldingShield?
 void func_801239AC(Player* player) {
@@ -1788,6 +1636,83 @@ void func_80124618(struct_80124618* arg0, f32 curFrame, Vec3f* arg2) {
     arg2->z = LERPIMP(temp_f14, arg0->unk_2.z, progress) * 0.01f;
 }
 
+
+struct_80124618 D_801C07C0[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 0xA, { 0x64, 0x64, 0x64 } },
+    { 0xB, { 0x64, 0x78, 0x78 } },
+    { 0xC, { 0x64, 0x78, 0x78 } },
+    { 0xE, { 0x64, 0x64, 0x64 } },
+    { 0x13, { 0x64, 0x64, 0x64 } },
+};
+
+struct_80124618 D_801C07F0[] = {
+    { 0, { 0x28, 0x3C, 0x46 } },
+    { 3, { 0x28, 0x3C, 0x46 } },
+    { 4, { 0x4B, 0x5A, 0x55 } },
+    { 5, { 0x6E, 0x78, 0x64 } },
+    { 7, { 0x64, 0x64, 0x64 } },
+    { 8, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0820[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 7, { 0x64, 0x64, 0x64 } },
+    { 0xC, { 0x28, 0x3C, 0x46 } },
+};
+struct_80124618 D_801C0838[] = {
+    { 0, { 0x28, 0x3C, 0x46 } },
+    { 7, { 0x28, 0x3C, 0x46 } },
+    { 0xC, { 0x64, 0x64, 0x64 } },
+};
+
+Gfx D_801C0850[] = { 
+    gsSPSetGeometryMode(G_CULL_BACK),
+    gsSPEndDisplayList(),
+};
+Gfx D_801C0860[] = {
+    gsSPSetGeometryMode(G_CULL_FRONT),
+    gsSPEndDisplayList(),
+};
+
+
+
+// Textures probably
+UNK_PTR D_801C0870[] = {
+    (void* )0x06000000,
+    (void* )0x06000800,
+    (void* )0x06001000,
+    (void* )0x06001800,
+    (void* )0x06002000,
+    (void* )0x06002800,
+    (void* )0x06003000,
+    (void* )0x06003800,
+};
+void* D_801C0890[] = {
+    (void* )0x06004000,
+    (void* )0x06004400,
+    (void* )0x06004800,
+    (void* )0x06004C00,
+};
+u8 D_801C08A0[][2] = {
+    { 0, 0 },
+    { 1, 0 },
+    { 2, 0 },
+    { 0, 0 },
+    { 1, 0 },
+    { 2, 0 },
+    { 4, 0 },
+    { 5, 1 },
+    { 7, 2 },
+    { 0, 2 },
+    { 3, 0 },
+    { 4, 0 },
+    { 2, 2 },
+    { 1, 1 },
+    { 0, 2 },
+    { 0, 3 },
+};
+
+
 // OoT's func_8008F470
 void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor) {
     s32 eyeIndex = (jointTable[0x16].x & 0xF) - 1; // eyeIndex
@@ -1826,6 +1751,19 @@ void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
+
+Vec3f D_801C08C0[PLAYER_FORM_MAX] = {
+    { 1304.0f, 0.0f, 0.0f },
+    { 1156.0f, 0.0f, 0.0f },
+    { 1406.0f, 0.0f, 0.0f },
+    { 408.0f, 0.0f, 0.0f },
+    { 695.0f, 0.0f, 0.0f },
+};
+
+f32 D_801C08FC[PLAYER_FORM_MAX] = { 1265.0f, 1056.0f, 1506.0f, 359.0f, 826.0f };
+f32 D_801C0910[PLAYER_FORM_MAX] = { 170.0416f, 133.63359f, 197.68358f, 16.646399f, 48.302498f };
+f32 D_801C0924[PLAYER_FORM_MAX] = { 10.019104f, 22.120003f, -29.12001f, 3.7582989f, -19.925102f };
+f32 D_801C0938[PLAYER_FORM_MAX] = { 5.0f, 4.0f, 1.0f, 1.0f, 3.0f };
 
 void func_80124870(GlobalContext* globalCtx, Player* player, SkelAnime* skelAnime, Vec3f* pos, Vec3s* rot, s32 arg5, s32 arg6, s32 arg7) {
     CollisionPoly* spA4;
@@ -2205,7 +2143,7 @@ void func_80125500(GlobalContext* globalCtx, Player* player, s32 limbIndex, Vec3
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x144 */ f32 unk_144;
-} ActorUnknown;
+} ActorUnknown; // size >= 0x144
 
 extern Vec3f* D_801F59DC;
 
@@ -2271,6 +2209,7 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         if (*dList != NULL) {
             D_801F59DC++;
         }
+
         if (limbIndex == 0xB) {
             rot->x += player->unk_AAC.z;
             rot->y -= player->unk_AAC.y;
@@ -2282,7 +2221,7 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                     Matrix_JointPosition(pos, rot);
                     func_80125340();
                     func_80125318(pos, rot);
-                    if (sp50 != 0) {
+                    if (sp50 != NULL) {
                         f32 temp;
 
                         player->unk_AF0[0].x = 1.0f - (((ActorUnknown*)sp50)->unk_144 * 0.03f);
@@ -3406,20 +3345,18 @@ void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2
 
 #ifdef NON_EQUIVALENT
 // Not sure about equivalency
-void func_801284A0(GlobalContext* globalCtx, Player* player) {
+void func_801284A0(GlobalContext *globalCtx, Player *player) {
     Mtx* sp90;
     Vec3f sp84;
     Vec3f sp78;
     u32 sp6C;
     Mtx* temp_v0;
-    struct_801F58B0 (*phi_s0)[3];
     s32 i;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-
     sp90 = GRAPH_ALLOC(globalCtx->state.gfxCtx, 6*sizeof(Mtx));
-
     sp6C = globalCtx->gameplayFrames;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x0B, sp90);
 
