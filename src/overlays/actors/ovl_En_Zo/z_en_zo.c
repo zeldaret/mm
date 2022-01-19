@@ -150,7 +150,7 @@ s32 EnZo_PlayWalkingSound(EnZo* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
-    return false;
+    return 0;
 }
 
 void EnZo_Blink(EnZo* this, s32 maxEyeIndex) {
@@ -301,7 +301,7 @@ s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         rot->y += (s16)(Math_SinS(this->limbRotY[limbIndex]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->limbRotZ[limbIndex]) * 200.0f);
     }
-    return 0;
+    return false;
 }
 
 void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
