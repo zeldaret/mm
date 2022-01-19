@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_dnt/object_dnt.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnScopenuts*)thisx)
 
@@ -309,7 +309,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
                 this->unk_328 &= ~1;
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_328 &= ~4;
                 this->unk_348 = 8;
                 func_8013BC6C(&this->skelAnime, D_80BCCB6C, 8);
@@ -673,7 +673,7 @@ void EnScopenuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnScopenuts* this = THIS;
 
-    if (((gSaveContext.weekEventReg[74] & 0x40) == 0) && (gSaveContext.inventory.items[0] == 0xFF)) {
+    if (!(gSaveContext.weekEventReg[74] & 0x40) && (INV_CONTENT(ITEM_OCARINA) == ITEM_NONE)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -692,20 +692,20 @@ void EnScopenuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_328 |= 4;
     this->actor.speedXZ = 0.0f;
 
-    if (((this->actor.params & 0x3E0) >> 5) == 0) {
+    if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
         if (gSaveContext.weekEventReg[52] & 0x40) {
             Actor_MarkForDeath(&this->actor);
         } else if (globalCtx->actorCtx.unk5 & 2) {
-            this->path = func_8013D648(globalCtx, (this->actor.params & 0xFC00) >> 0xA, 0x3F);
+            this->path = func_8013D648(globalCtx, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             this->actor.draw = NULL;
             this->actionFunc = func_80BCAFA8;
             this->actor.gravity = 0.0f;
         } else {
             Actor_MarkForDeath(&this->actor);
         }
-    } else if (((this->actor.params & 0x3E0) >> 5) == 1) {
+    } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
         if (gSaveContext.weekEventReg[52] & 0x40) {
-            this->path = func_8013D648(globalCtx, (this->actor.params & 0xFC00) >> 0xA, 0x3F);
+            this->path = func_8013D648(globalCtx, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             if (this->path == NULL) {
                 Actor_MarkForDeath(&this->actor);
             } else {
@@ -748,7 +748,8 @@ void EnScopenuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80BCAE78(this, globalCtx);
 }
 
-s32 func_80BCC828(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnScopenuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                 Actor* thisx) {
     EnScopenuts* this = THIS;
 
     if (((this->unk_348 == 4) && (this->unk_35A == 0)) || ((this->unk_348 == 8) && (this->unk_35A == 0)) ||
@@ -789,10 +790,10 @@ s32 func_80BCC828(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80BCC9CC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnScopenuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-void func_80BCC9E4(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnScopenuts_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnScopenuts* this = THIS;
 
     if (((this->unk_35A == 1) || (this->unk_35A == 2)) && ((limbIndex == 23) || (limbIndex == 24))) {
@@ -812,6 +813,7 @@ void EnScopenuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnScopenuts* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  func_80BCC828, func_80BCC9CC, func_80BCC9E4, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnScopenuts_OverrideLimbDraw, EnScopenuts_PostLimbDraw,
+                                   EnScopenuts_TransformLimbDraw, &this->actor);
 }
