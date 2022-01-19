@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 
-#define FLAGS 0x80000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnRg*)thisx)
 
@@ -20,7 +20,7 @@ void EnRg_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80BF4EBC(EnRg* this, GlobalContext* globalCtx);
 void func_80BF4FC4(EnRg* this, GlobalContext* globalCtx);
 
-static s32 D_80BF5C10;
+s32 D_80BF5C10;
 
 const ActorInit En_Rg_InitVars = {
     ACTOR_EN_RG,
@@ -111,31 +111,51 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static s32 D_80BF57E4[][4] = {
+s32 D_80BF57E4[][4] = {
     { 0, 0, 0, 0 },     { 0, 0, 0, 0 },     { 0, 0, 0, 0 },     { 0, 0, 0, 0 },     { 1, 1, 1, 1 },
     { 11, 11, 8, 10 },  { 16, 12, 12, 14 }, { 19, 15, 15, 18 }, { 25, 17, 18, 22 }, { 29, 20, 23, 28 },
     { 39, 24, 28, 33 }, { 43, 27, 33, 37 }, { 46, 28, 36, 37 }, { 51, 30, 38, 39 }, { 54, 33, 42, 40 },
     { 56, 34, 44, 41 }, { 60, 38, 50, 45 }, { 67, 42, 55, 49 }, { 74, 47, 61, 54 },
 };
 
-static ActorAnimationEntryS D_80BF5914[] = { { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, 0 },
-                                             { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, 2, 0 } };
+ActorAnimationEntryS D_80BF5914[] = {
+    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, 0 },
+    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, 2, 0 },
+};
 
-static TexturePtr D_80BF5934[] = {
+TexturePtr D_80BF5934[] = {
     gameplay_keep_Tex_08F7E0, gameplay_keep_Tex_08F3E0, gameplay_keep_Tex_08EFE0, gameplay_keep_Tex_08EBE0,
     gameplay_keep_Tex_08E7E0, gameplay_keep_Tex_08E3E0, gameplay_keep_Tex_08DFE0, gameplay_keep_Tex_08DBE0,
 };
 
-static Color_RGBA8 D_80BF5954[] = {
+Color_RGBA8 D_80BF5954[] = {
     { 255, 255, 255, 0 },
     { 170, 130, 90, 0 },
     { 0, 0, 0, 0 },
 };
 
-static Color_RGBA8 D_80BF5960[] = {
+Color_RGBA8 D_80BF5960[] = {
     { 255, 255, 255, 0 },
     { 100, 60, 20, 0 },
     { 0, 0, 0, 0 },
+};
+
+Vec3f D_80BF596C[] = {
+    { -2473.0f, 39.0f, 7318.0f },  { -2223.0f, 142.0f, 7184.0f }, { -2281.0f, 41.0f, 7718.0f },
+    { -2136.0f, 96.0f, 7840.0f },  { -2432.0f, 6.0f, 7857.0f },   { -2412.0f, 139.0f, 6872.0f },
+    { -2719.0f, 39.0f, 7110.0f },  { -2289.0f, 67.0f, 7463.0f },  { -2820.0f, 85.0f, 6605.0f },
+    { -2088.0f, 160.0f, 7584.0f }, { -2503.0f, 1.0f, 7643.0f },
+};
+
+EffectTireMarkInit D_80BF59F0 = {
+    0,
+    62,
+    { 0, 0, 15, 100 },
+};
+
+TexturePtr D_80BF59F8[] = {
+    object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_011038,
+    object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_010838,
 };
 
 void func_80BF3920(EnRgStruct* ptr, GlobalContext* globalCtx) {
@@ -360,25 +380,21 @@ s32 func_80BF43FC(EnRg* this) {
     s32 temp_s7 = ENRG_GET_7F80(&this->actor);
     s32 phi_s4 = -1;
     s16 phi_s6 = 0;
-    s32 phi_s0 = D_80BF57E4[this->unk_344][temp_s7];
     s32 temp_s5 = this->unk_344;
-    s32 temp;
-    s32 temp2;
+    s32 phi_s0 = D_80BF57E4[this->unk_344][temp_s7];
 
     while (true) {
-        temp = phi_s0 - 1;
-        func_8013C8B8(this->path, temp, &sp9C);
-        temp2 = phi_s0 + 1;
-        func_8013C8B8(this->path, temp2, &sp90);
+        func_8013C8B8(this->path, phi_s0 - 1, &sp9C);
+        func_8013C8B8(this->path, phi_s0 + 1, &sp90);
         if (Math3D_PointDistToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z,
                                      &sp8C, &sp88, &sp84) &&
-            (!phi_s6 || (phi_s4 == temp) || (sp84 < phi_f20))) {
+            (!phi_s6 || ((phi_s4 + 1) == phi_s0) || (sp84 < phi_f20))) {
             phi_s6 = 1;
             phi_f20 = sp84;
             phi_s4 = phi_s0;
         }
-        phi_s0 = temp2;
-        if ((temp_s5 == 18) || (temp2 >= D_80BF57E4[temp_s5 + 1][temp_s7])) {
+        phi_s0++;
+        if ((temp_s5 == 18) || (phi_s0 >= D_80BF57E4[temp_s5 + 1][temp_s7])) {
             break;
         }
     }
@@ -611,12 +627,6 @@ s32 func_80BF4D64(Vec3f* arg0) {
 }
 
 s32 func_80BF4DA8(EnRg* this) {
-    static Vec3f D_80BF596C[] = {
-        { -2473.0f, 39.0f, 7318.0f },  { -2223.0f, 142.0f, 7184.0f }, { -2281.0f, 41.0f, 7718.0f },
-        { -2136.0f, 96.0f, 7840.0f },  { -2432.0f, 6.0f, 7857.0f },   { -2412.0f, 139.0f, 6872.0f },
-        { -2719.0f, 39.0f, 7110.0f },  { -2289.0f, 67.0f, 7463.0f },  { -2820.0f, 85.0f, 6605.0f },
-        { -2088.0f, 160.0f, 7584.0f }, { -2503.0f, 1.0f, 7643.0f },
-    };
     s32 pad[4];
     s32 ret = false;
     f32 temp_f20;
@@ -722,11 +732,6 @@ void func_80BF4FC4(EnRg* this, GlobalContext* globalCtx) {
 }
 
 void EnRg_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static EffectTireMarkInit D_80BF59F0 = {
-        0,
-        62,
-        { 0, 0, 15, 100 },
-    };
     EnRg* this = THIS;
 
     if (gSaveContext.entranceIndex == 0xD010) {
@@ -750,7 +755,7 @@ void EnRg_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_33C = 1;
         }
 
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_310 = 8;
         this->actor.gravity = -1.0f;
         func_8013AED4(&this->unk_310, 3, 7);
@@ -853,9 +858,6 @@ s32 func_80BF5588(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnRg_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_80BF59F8[] = { object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38,
-                                       object_oF1d_map_Tex_011038, object_oF1d_map_Tex_010C38,
-                                       &object_oF1d_map_Tex_010838 };
     EnRg* this = THIS;
 
     if (!(this->unk_310 & 0x10)) {
