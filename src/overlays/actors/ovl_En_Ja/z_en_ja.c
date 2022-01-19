@@ -7,7 +7,7 @@
 #include "z_en_ja.h"
 #include "objects/object_boj/object_boj.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnJa*)thisx)
 
@@ -22,23 +22,23 @@ void func_80BC2EA4(EnJa* this);
 void func_80BC32D8(EnJa* this, GlobalContext* globalCtx);
 void func_80BC3594(EnJa* this, GlobalContext* globalCtx);
 
-static s32 D_80BC35F0[] = {
+s32 D_80BC35F0[] = {
     0x0C000301, 0x05020600, 0x1200080A, 0x00610304, 0x0002050A, 0x006C0304, 0x00010500,
 };
 
-static s32 D_80BC360C[] = {
+s32 D_80BC360C[] = {
     0x0E29370C, 0x170E2938, 0x0C180E29, 0x390C170E, 0x293A0C09, 0x0000180E, 0x293B0C09, 0x00001000,
 };
 
-static s32 D_80BC362C[] = {
+s32 D_80BC362C[] = {
     0x0E29400C, 0x170E2941, 0x0C180E29, 0x420C170E, 0x29430C09, 0x0000180E, 0x293B0C09, 0x00001000,
 };
 
-static s32 D_80BC364C[] = {
+s32 D_80BC364C[] = {
     0x0E293C0C, 0x170E293D, 0x0C180E29, 0x3E0C170E, 0x293F0C09, 0x0000180E, 0x293B0C09, 0x00001000,
 };
 
-static s32 D_80BC366C[] = {
+s32 D_80BC366C[] = {
     0x0E29440C, 0x170E2945, 0x0C180E29, 0x460C170E, 0x29470C09, 0x0000180E, 0x293B0C09, 0x00001000,
 };
 
@@ -54,10 +54,10 @@ const ActorInit En_Ja_InitVars = {
     (ActorFunc)EnJa_Draw,
 };
 
-static Vec3f D_80BC36AC = { -10.0f, 56.0f, 25.0f };
-static Vec3f D_80BC36B8 = { 0.0f, 60.0f, 20.0f };
-static Vec3f D_80BC36C4 = { 10.0f, 60.0f, 25.0f };
-static Vec3f D_80BC36D0 = { 0.0f, 58.0f, 20.0f };
+Vec3f D_80BC36AC = { -10.0f, 56.0f, 25.0f };
+Vec3f D_80BC36B8 = { 0.0f, 60.0f, 20.0f };
+Vec3f D_80BC36C4 = { 10.0f, 60.0f, 25.0f };
+Vec3f D_80BC36D0 = { 0.0f, 58.0f, 20.0f };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -81,10 +81,33 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS D_80BC3714[6] = {
+ActorAnimationEntryS sAnimations[] = {
     { &object_boj_Anim_002734, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, 0 },
     { &object_boj_Anim_002734, 1.0f, 0, -1, 0, -4 }, { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, -4 },
     { &object_boj_Anim_004078, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_005CE4, 1.0f, 0, -1, 0, 0 },
+};
+
+Vec3f D_80BC3774 = { -87.0f, 444.0f, -49.0f };
+Vec3f D_80BC3780 = { 600.0f, 0.0f, 0.0f };
+Vec3f D_80BC378C = { 400.0f, 0.0f, -400.0f };
+Vec3f D_80BC3798 = { 400.0, 0.0f, 400.0f };
+Vec3s D_80BC37A4 = { 0x7770, -0x4BC, -0x251C };
+
+Color_RGBA8 D_80BC37AC[] = {
+    { 200, 0, 80, 0 },
+    { 0, 130, 220, 0 },
+};
+
+Color_RGBA8 D_80BC37B4[] = {
+    { 255, 255, 255, 0 },
+    { 255, 255, 255, 0 },
+};
+
+TexturePtr D_80BC37BC[] = {
+    object_boj_Tex_0062B0,
+    object_boj_Tex_0063B0,
+    object_boj_Tex_0064B0,
+    object_boj_Tex_0063B0,
 };
 
 void func_80BC1900(EnJa* this) {
@@ -97,7 +120,7 @@ s32 func_80BC192C(EnJa* this, s32 arg1) {
 
     if (arg1 != this->unk_36C) {
         this->unk_36C = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80BC3714, arg1);
+        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
         this->unk_344 = this->skelAnime.playSpeed;
     }
 
@@ -298,11 +321,11 @@ void func_80BC21A8(EnJa* this, GlobalContext* globalCtx) {
     if (!func_80133038(globalCtx, D_80BC35F0, &sp18) ||
         ((this->unk_1D8.unk_00 != sp18.unk0) && !func_80BC20D0(this, globalCtx, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         sp18.unk0 = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
     this->unk_1D8.unk_00 = sp18.unk0;
     func_80BC2150(this, globalCtx);
@@ -403,11 +426,6 @@ s32 EnJa_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_80BC3774 = { -87.0f, 444.0f, -49.0f };
-    static Vec3f D_80BC3780 = { 600.0f, 0.0f, 0.0f };
-    static Vec3f D_80BC378C = { 400.0f, 0.0f, -400.0f };
-    static Vec3f D_80BC3798 = { 400.0, 0.0f, 400.0f };
-    static Vec3s D_80BC37A4 = { 0x7770, -0x4BC, -0x251C };
     s32 pad;
     EnJa* this = THIS;
     s32 pad2;
@@ -562,20 +580,6 @@ void EnJa_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnJa_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Color_RGBA8 D_80BC37AC[] = {
-        { 200, 0, 80, 0 },
-        { 0, 130, 220, 0 },
-    };
-    static Color_RGBA8 D_80BC37B4[] = {
-        { 255, 255, 255, 0 },
-        { 255, 255, 255, 0 },
-    };
-    static TexturePtr D_80BC37BC[] = {
-        object_boj_Tex_0062B0,
-        object_boj_Tex_0063B0,
-        object_boj_Tex_0064B0,
-        object_boj_Tex_0063B0,
-    };
     s32 pad;
     EnJa* this = THIS;
     s32 phi_t2;
@@ -600,8 +604,9 @@ void EnJa_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(D_80BC37BC[this->unk_362]));
         gDPPipeSync(POLY_OPA_DISP++);
 
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      EnJa_OverrideLimbDraw, EnJa_PostLimbDraw, EnJa_UnkDraw, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, EnJa_OverrideLimbDraw, EnJa_PostLimbDraw,
+                                       EnJa_UnkDraw, &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
