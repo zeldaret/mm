@@ -805,7 +805,7 @@ void EnAl_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80BDF914(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnAl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     switch (limbIndex) {
         case 3:
         case 11:
@@ -822,7 +822,7 @@ s32 func_80BDF914(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80BDF950(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnAl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnAl* this = THIS;
 
     switch (limbIndex) {
@@ -857,7 +857,7 @@ void func_80BDF950(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-void func_80BDFA34(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnAl_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnAl* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
@@ -897,8 +897,8 @@ void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_8012C28C(globalCtx->state.gfxCtx);
         Matrix_InsertTranslation(0.0f, 0.0f, 850.0f, MTXMODE_APPLY);
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                       this->skelAnime.dListCount, func_80BDF914, func_80BDF950, func_80BDFA34,
-                                       &this->actor);
+                                       this->skelAnime.dListCount, EnAl_OverrideLimbDraw, EnAl_PostLimbDraw,
+                                       EnAl_TransformDraw, &this->actor);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
             Matrix_SetCurrentState(&this->unk_190[i]);
