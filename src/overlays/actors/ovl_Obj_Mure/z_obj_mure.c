@@ -162,8 +162,8 @@ void ObjMure_SpawnActors0(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx) {
-    GlobalContext* globalCtx2 = globalCtx;
+void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
     Actor* actor = &this->actor;
     Vec3f spawnPos;
     s32 maxChildren = ObjMure_GetMaxChildSpawns(this);
@@ -172,7 +172,7 @@ void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx) {
     for (i = 0; i < maxChildren; i++) {
         ObjMure_GetSpawnPos(&spawnPos, &actor->world.pos, this->ptn, i);
         this->children[i] = Actor_SpawnAsChildAndCutscene(
-            &globalCtx->actorCtx, globalCtx, sSpawnActorIds[this->type], spawnPos.x, spawnPos.y, spawnPos.z,
+            &globalCtx2->actorCtx, globalCtx, sSpawnActorIds[this->type], spawnPos.x, spawnPos.y, spawnPos.z,
             actor->world.rot.x, actor->world.rot.y, actor->world.rot.z,
             (this->type == OBJMURE_TYPE_BUTTERFLY && i == 0) ? 1 : sSpawnParams[this->type], this->actor.cutscene,
             this->actor.unk20, NULL);

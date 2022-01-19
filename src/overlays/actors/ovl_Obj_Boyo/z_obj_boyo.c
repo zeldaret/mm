@@ -121,8 +121,8 @@ Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* nu
 }
 
 void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    ObjBoyo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    ObjBoyo* this = THIS;
     Actor* target;
     s32 num;
 

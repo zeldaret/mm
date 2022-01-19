@@ -805,8 +805,8 @@ void func_80B2E8E0(EnPoh* this) {
 }
 
 void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnPoh* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnPoh* this = THIS;
     s32 pad;
 
     if (this->colliderSph.base.atFlags & AT_HIT) {

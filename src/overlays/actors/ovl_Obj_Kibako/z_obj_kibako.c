@@ -133,8 +133,8 @@ void func_80926394(ObjKibako* this, GlobalContext* globalCtx) {
 }
 
 void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    ObjKibako* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    ObjKibako* this = THIS;
     s32 whichBankIndex;
 
     whichBankIndex = KIBAKO_BANK_INDEX(thisx);

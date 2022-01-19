@@ -671,7 +671,8 @@ void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_808BEBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnDekunuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                Actor* thisx) {
     EnDekunuts* this = THIS;
     f32 arg1, arg2, arg3;
     f32 currentFrame;
@@ -700,10 +701,10 @@ s32 func_808BEBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
             rot->z = this->actor.world.rot.x;
         }
     }
-    return 0;
+    return false;
 }
 
-void func_808BED30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDekunuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 D_808BEF98[] = {
         -1, -1, -1, 3, -1, 0, -1, 1, -1, 2, 0, 0,
     };
@@ -739,8 +740,8 @@ void func_808BED30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDekunuts* this = THIS;
 
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_808BEBD0, func_808BED30,
-                      &this->actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDekunuts_OverrideLimbDraw,
+                      EnDekunuts_PostLimbDraw, &this->actor);
     Matrix_SetStateRotationAndTranslation(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
                                           &this->actor.home.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);

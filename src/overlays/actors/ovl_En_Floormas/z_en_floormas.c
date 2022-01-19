@@ -159,8 +159,8 @@ static s8 D_808D393C[] = {
 static Color_RGBA8 D_808D3958 = { 0, 255, 0, 0 };
 
 void EnFloormas_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    EnFloormas* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnFloormas* this = THIS;
     s32 pad;
     s32 params;
 

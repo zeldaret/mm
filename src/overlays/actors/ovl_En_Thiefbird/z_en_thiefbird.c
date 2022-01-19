@@ -1008,8 +1008,8 @@ void func_80C12D00(EnThiefbird* this) {
 }
 
 void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnThiefbird* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnThiefbird* this = THIS;
 
     func_80C12B1C(this, globalCtx);
     this->actionFunc(this, globalCtx);

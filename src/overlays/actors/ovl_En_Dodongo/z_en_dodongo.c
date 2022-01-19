@@ -1025,8 +1025,8 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnDodongo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnDodongo* this = THIS;
 
     EnDodongo_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
