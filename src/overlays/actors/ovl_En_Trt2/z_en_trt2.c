@@ -7,7 +7,7 @@
 #include "z_en_trt2.h"
 #include "objects/object_trt/object_trt.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnTrt2*)thisx)
 
@@ -221,8 +221,8 @@ void func_80AD381C(EnTrt2* this, GlobalContext* globalCtx) {
             this->actor.world.pos.y -= 50.0f;
             this->unk_3D9 = 0;
             this->unk_3B2 = 0;
-            this->actor.flags &= ~1;
-            this->actor.flags |= 0x10;
+            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_10;
         }
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -700,7 +700,7 @@ s32 func_80AD4CCC(EnTrt2* this, GlobalContext* globalCtx) {
 void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
     static Vec3f D_80AD5904 = { 0.0f, 50.0f, 0.0 };
 
-    this->actor.flags &= ~0x10;
+    this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(globalCtx, &this->actor);
     Actor_SetScale(&this->actor, 0.008f);
     this->path = func_8013D648(globalCtx, ENTRT2_GET_FC00(&this->actor), 0x3F);
@@ -927,8 +927,9 @@ void func_80AD56E8(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD5978[this->unk_3B8]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD5978[this->unk_3B8]));
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnTrt2_OverrideLimbDraw, EnTrt2_PostLimbDraw, EnTrt2_UnkDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnTrt2_OverrideLimbDraw, EnTrt2_PostLimbDraw,
+                                   EnTrt2_UnkDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
