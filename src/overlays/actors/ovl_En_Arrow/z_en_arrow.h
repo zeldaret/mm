@@ -31,7 +31,6 @@ typedef struct {
     /* 0x0149 */ s8 unk_149;
     /* 0x014A */ s16 unk_14A;
     /* 0x014C */ s16 unk_14C;
-    /* 0x014E */ UNK_TYPE1 unk_14E[0x5A];
 } EnArrowBubble; // size = 0x1A8
 
 typedef struct EnArrow {
