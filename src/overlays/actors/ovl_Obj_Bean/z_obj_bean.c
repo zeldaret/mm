@@ -8,7 +8,7 @@
 #include "objects/object_mamenoki/object_mamenoki.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00400000
+#define FLAGS (ACTOR_FLAG_400000)
 
 #define THIS ((ObjBean*)thisx)
 
@@ -190,12 +190,12 @@ void func_80937130(ObjBean* this) {
 
 void func_80937160(ObjBean* this) {
     this->unk_1AC += 0x384;
-    if (this->unk_1AC >= 0x6000) {
+    if (this->unk_1AC > 0x5FFF) {
         this->unk_1AC = 0x5FFF;
     }
 
     this->unk_1AE += 0x258;
-    if (this->unk_1AE >= 0x4001) {
+    if (this->unk_1AE > 0x4000) {
         this->unk_1AE = 0x4000;
     }
 
@@ -264,7 +264,7 @@ s32 func_80937468(ObjBean* this, GlobalContext* globalCtx) {
 
     while (bgActor != NULL) {
         if ((bgActor->id == ACTOR_EN_HORSE) &&
-            (Math3D_Vec3fDistSq(&bgActor->world.pos, &this->dyna.actor.world.pos) < 10000.0f)) {
+            (Math3D_Vec3fDistSq(&bgActor->world.pos, &this->dyna.actor.world.pos) < SQ(100.0f))) {
             return true;
         }
         bgActor = bgActor->next;
@@ -283,7 +283,7 @@ ObjBean* func_809374F8(ObjBean* this, GlobalContext* globalCtx) {
 
             if (!params2 && (bgActor->room == this->dyna.actor.room) && !OBJBEAN_GET_80(bgActor) &&
                 (params == OBJBEAN_GET_7F(bgActor, 0)) &&
-                (Math3D_Vec3fDistSq(&bgActor->world.pos, &this->dyna.actor.world.pos) < 100.0f)) {
+                (Math3D_Vec3fDistSq(&bgActor->world.pos, &this->dyna.actor.world.pos) < SQ(10.0f))) {
                 break;
             }
         }
@@ -375,7 +375,7 @@ void ObjBean_Init(Actor* thisx, GlobalContext* globalCtx) {
             Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit2);
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         }
-        this->dyna.actor.flags |= 0x10;
+        this->dyna.actor.flags |= ACTOR_FLAG_10;
         func_80937C10(this);
         if (!func_80936D58(this, globalCtx)) {
             Actor_MarkForDeath(&this->dyna.actor);
@@ -545,7 +545,7 @@ void func_80937FC8(ObjBean* this, GlobalContext* globalCtx) {
     this->unk_1E8(this);
 
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
-        if (Player_GetExchangeItemId(globalCtx) == 0x2E) {
+        if (Player_GetExchangeItemId(globalCtx) == EXCH_ITEM_2E) {
             func_809383B4(this);
             Flags_SetSwitch(globalCtx, OBJBEAN_GET_3F80(&this->dyna.actor, 0));
         }
@@ -669,7 +669,7 @@ void func_80938444(ObjBean* this, GlobalContext* globalCtx) {
     } else {
         this->unk_1B2 = 1;
     }
-    func_800B9010(&this->dyna.actor, 0xC6);
+    func_800B9010(&this->dyna.actor, NA_SE_PL_PLANT_GROW_UP - SFX_FLAG);
 }
 
 void func_809384E8(ObjBean* this) {
@@ -724,7 +724,7 @@ void func_8093868C(ObjBean* this, GlobalContext* globalCtx) {
 }
 
 void func_80938704(ObjBean* this) {
-    this->dyna.actor.flags |= 0x10;
+    this->dyna.actor.flags |= ACTOR_FLAG_10;
     this->dyna.actor.draw = NULL;
     this->actionFunc = func_80938728;
 }
@@ -755,7 +755,7 @@ void func_80938780(ObjBean* this, GlobalContext* globalCtx) {
 }
 
 void func_80938804(ObjBean* this) {
-    this->dyna.actor.flags &= ~0x10;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_10;
     this->dyna.actor.draw = func_80938E00;
     this->actionFunc = func_80938834;
 }
@@ -770,7 +770,7 @@ void func_80938834(ObjBean* this, GlobalContext* globalCtx) {
 void func_80938874(ObjBean* this) {
     this->actionFunc = func_809388A8;
     this->dyna.actor.draw = func_80938E00;
-    this->dyna.actor.flags |= 0x10;
+    this->dyna.actor.flags |= ACTOR_FLAG_10;
     this->dyna.actor.speedXZ = 0.0f;
 }
 
@@ -787,7 +787,7 @@ void func_809388A8(ObjBean* this, GlobalContext* globalCtx) {
 }
 
 void func_8093892C(ObjBean* this) {
-    this->dyna.actor.flags |= 0x10;
+    this->dyna.actor.flags |= ACTOR_FLAG_10;
     this->dyna.actor.draw = func_80938E00;
     this->actionFunc = func_80938958;
 }
@@ -800,7 +800,7 @@ void func_80938958(ObjBean* this, GlobalContext* globalCtx) {
 }
 
 void func_80938998(ObjBean* this) {
-    this->dyna.actor.flags |= 0x10;
+    this->dyna.actor.flags |= ACTOR_FLAG_10;
     this->dyna.actor.draw = NULL;
     this->actionFunc = func_809389BC;
 }
@@ -816,7 +816,7 @@ void func_809389BC(ObjBean* this, GlobalContext* globalCtx) {
 
 void func_80938A14(ObjBean* this) {
     this->dyna.actor.draw = NULL;
-    this->dyna.actor.flags |= 0x10;
+    this->dyna.actor.flags |= ACTOR_FLAG_10;
     this->unk_1B2 = 100;
     func_80937130(this);
     this->actionFunc = func_80938A5C;
@@ -831,7 +831,7 @@ void func_80938A5C(ObjBean* this, GlobalContext* globalCtx) {
 }
 
 void func_80938AA4(ObjBean* this) {
-    this->dyna.actor.flags |= 0x10;
+    this->dyna.actor.flags |= ACTOR_FLAG_10;
     this->dyna.actor.draw = func_80938E00;
     this->unk_1B2 = 30;
     this->actionFunc = func_80938AD8;
