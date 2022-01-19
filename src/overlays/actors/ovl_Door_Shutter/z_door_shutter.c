@@ -129,7 +129,7 @@ void DoorShutter_SetupAction(DoorShutter* this, DoorShutterActionFunc actionFunc
 }
 
 s32 func_808A0900(DoorShutter* this, GlobalContext* globalCtx) {
-    TransitionActorEntry* transitionEntry = &globalCtx->doorCtx.transitionActorList[(u16)this->actor.params >> 0xA];
+    TransitionActorEntry* transitionEntry = &globalCtx->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)];
     s8 frontRoom = transitionEntry->sides[0].room;
 
     if (frontRoom == transitionEntry->sides[1].room) {
@@ -169,7 +169,7 @@ s32 DoorShutter_SetupDoor(DoorShutter* this, GlobalContext* globalCtx) {
             return true;
         }
     } else if ((doorType == 2) || (doorType == 7)) {
-        if (!Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
+        if (!Flags_GetSwitch(globalCtx, DOORSHUTTER_GET_7F(&this->actor))) {
             DoorShutter_SetupAction(this, func_808A1548);
             this->unk_168 = 1.0f;
             return true;
@@ -193,7 +193,7 @@ void DoorShutter_Init(Actor* thisx, GlobalContext* globalCtx2) {
     s8 objId;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->doorType = (this->actor.params >> 7) & 7;
+    this->doorType = DOORSHUTTER_GET_380(&this->actor);
     sp24 = D_808A2240[this->doorType];
 
     if (sp24 < 0) {
@@ -232,7 +232,7 @@ void DoorShutter_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk_163 = sp24;
 
     if ((this->doorType == 4) || (this->doorType == 5)) {
-        if (!Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
+        if (!Flags_GetSwitch(globalCtx, DOORSHUTTER_GET_7F(&this->actor))) {
             this->unk_166 = 10;
         }
     }
@@ -244,7 +244,7 @@ void DoorShutter_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DoorShutter* this = THIS;
 
     if (this->actor.room >= 0) {
-        s32 transitionActorId = (u16)this->actor.params >> 0xA;
+        s32 transitionActorId = DOORSHUTTER_GET_FC00(&this->actor);
 
         globalCtx->doorCtx.transitionActorList[transitionActorId].id =
             -globalCtx->doorCtx.transitionActorList[transitionActorId].id;
@@ -333,7 +333,7 @@ void func_808A1090(DoorShutter* this, GlobalContext* globalCtx) {
         DoorShutter_SetupAction(this, func_808A1684);
         this->actor.velocity.y = 0.0f;
         if (this->unk_166 != 0) {
-            Flags_SetSwitch(globalCtx, this->actor.params & 0x7F);
+            Flags_SetSwitch(globalCtx, DOORSHUTTER_GET_7F(&this->actor));
             if (this->doorType != 5) {
                 gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex]--;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
@@ -358,7 +358,7 @@ void func_808A1090(DoorShutter* this, GlobalContext* globalCtx) {
             }
 
             if (this->doorType == 6) {
-                if (gSaveContext.healthCapacity < ((this->actor.params & 0x1F) * 0x10)) {
+                if (gSaveContext.healthCapacity < (DOORSHUTTER_GET_1F(&this->actor) * 0x10)) {
                     player->doorType = -1;
                     this->actor.textId = 0x14FC;
                 }
@@ -459,7 +459,7 @@ s32 func_808A1478(DoorShutter* this, GlobalContext* globalCtx, f32 arg2) {
 
 void func_808A1548(DoorShutter* this, GlobalContext* globalCtx) {
     if (func_808A1478(this, globalCtx, 1.0f)) {
-        if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
+        if (Flags_GetSwitch(globalCtx, DOORSHUTTER_GET_7F(&this->actor))) {
             this->unk_160 = this->actor.cutscene;
             if (ActorCutscene_GetCanPlayNext(this->unk_160)) {
                 ActorCutscene_StartAndSetUnkLinkFields(this->unk_160, &this->actor);
@@ -480,7 +480,7 @@ void func_808A1548(DoorShutter* this, GlobalContext* globalCtx) {
 }
 
 void func_808A1618(DoorShutter* this, GlobalContext* globalCtx) {
-    if ((this->unk_15C == 0) && !Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
+    if ((this->unk_15C == 0) && !Flags_GetSwitch(globalCtx, DOORSHUTTER_GET_7F(&this->actor))) {
         DoorShutter_SetupAction(this, func_808A1548);
     } else {
         func_808A1090(this, globalCtx);
@@ -543,8 +543,9 @@ void func_808A1884(DoorShutter* this, GlobalContext* globalCtx) {
     if (this->actor.room >= 0) {
         Actor_OffsetOfPointInActorCoords(&this->actor, &sp44, &player->actor.world.pos);
 
-        this->actor.room =
-            globalCtx->doorCtx.transitionActorList[(u16)this->actor.params >> 0xA].sides[(sp44.z < 0.0f) ? 0 : 1].room;
+        this->actor.room = globalCtx->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)]
+                               .sides[(sp44.z < 0.0f) ? 0 : 1]
+                               .room;
 
         if (room != this->actor.room) {
             Room temp = globalCtx->roomCtx.currRoom;
@@ -676,7 +677,7 @@ void DoorShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         if (sp44->unk_04 != 0) {
             TransitionActorEntry* transitionEntry =
-                &globalCtx->doorCtx.transitionActorList[(u16)this->actor.params >> 0xA];
+                &globalCtx->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)];
 
             if ((globalCtx->roomCtx.prevRoom.num >= 0) ||
                 (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {

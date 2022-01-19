@@ -7,6 +7,11 @@ struct DoorShutter;
 
 typedef void (*DoorShutterActionFunc)(struct DoorShutter*, GlobalContext*);
 
+#define DOORSHUTTER_GET_1F(thisx) ((thisx)->params & 0x1F)
+#define DOORSHUTTER_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define DOORSHUTTER_GET_380(thisx) (((thisx)->params >> 7) & 7)
+#define DOORSHUTTER_GET_FC00(thisx) ((u16)((thisx)->params >> 0xA))
+
 typedef struct DoorShutter {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ UNK_TYPE1 unk144[0x18];
