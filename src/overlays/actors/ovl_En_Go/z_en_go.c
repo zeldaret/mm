@@ -1993,7 +1993,7 @@ s32 EnGo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return false;
 }
 
-void EnGo_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnGo_TransfromLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnGo* this = THIS;
     u16 temp_v0;
     s32 phi_v1;
@@ -2044,7 +2044,7 @@ void EnGo_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_TYPE D_80A1670C[] = {
+    static TexturePtr D_80A1670C[] = {
         &object_oF1d_map_Tex_010438, &object_oF1d_map_Tex_010C38, &object_oF1d_map_Tex_011038,
         &object_oF1d_map_Tex_010C38, &object_oF1d_map_Tex_010838,
     };
@@ -2060,8 +2060,9 @@ void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk_3DC == 14) {
             Matrix_InsertTranslation(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
         }
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      EnGo_OverrideLimbDraw, NULL, EnGo_UnkDraw, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, EnGo_OverrideLimbDraw, NULL, EnGo_TransfromLimbDraw,
+                                       &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else {
