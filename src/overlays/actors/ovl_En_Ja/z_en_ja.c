@@ -87,29 +87,6 @@ ActorAnimationEntryS sAnimations[] = {
     { &object_boj_Anim_004078, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_005CE4, 1.0f, 0, -1, 0, 0 },
 };
 
-Vec3f D_80BC3774 = { -87.0f, 444.0f, -49.0f };
-Vec3f D_80BC3780 = { 600.0f, 0.0f, 0.0f };
-Vec3f D_80BC378C = { 400.0f, 0.0f, -400.0f };
-Vec3f D_80BC3798 = { 400.0, 0.0f, 400.0f };
-Vec3s D_80BC37A4 = { 0x7770, -0x4BC, -0x251C };
-
-Color_RGBA8 D_80BC37AC[] = {
-    { 200, 0, 80, 0 },
-    { 0, 130, 220, 0 },
-};
-
-Color_RGBA8 D_80BC37B4[] = {
-    { 255, 255, 255, 0 },
-    { 255, 255, 255, 0 },
-};
-
-TexturePtr D_80BC37BC[] = {
-    object_boj_Tex_0062B0,
-    object_boj_Tex_0063B0,
-    object_boj_Tex_0064B0,
-    object_boj_Tex_0063B0,
-};
-
 void func_80BC1900(EnJa* this) {
     this->skelAnime.playSpeed = this->unk_344;
     SkelAnime_Update(&this->skelAnime);
@@ -426,6 +403,11 @@ s32 EnJa_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_80BC3774 = { -87.0f, 444.0f, -49.0f };
+    static Vec3f D_80BC3780 = { 600.0f, 0.0f, 0.0f };
+    static Vec3f D_80BC378C = { 400.0f, 0.0f, -400.0f };
+    static Vec3f D_80BC3798 = { 400.0, 0.0f, 400.0f };
+    static Vec3s D_80BC37A4 = { 0x7770, -0x4BC, -0x251C };
     s32 pad;
     EnJa* this = THIS;
     s32 pad2;
@@ -580,6 +562,20 @@ void EnJa_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnJa_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    static Color_RGBA8 D_80BC37AC[] = {
+        { 200, 0, 80, 0 },
+        { 0, 130, 220, 0 },
+    };
+    static Color_RGBA8 D_80BC37B4[] = {
+        { 255, 255, 255, 0 },
+        { 255, 255, 255, 0 },
+    };
+    static TexturePtr D_80BC37BC[] = {
+        object_boj_Tex_0062B0,
+        object_boj_Tex_0063B0,
+        object_boj_Tex_0064B0,
+        object_boj_Tex_0063B0,
+    };
     s32 pad;
     EnJa* this = THIS;
     s32 phi_t2;
