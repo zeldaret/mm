@@ -2087,28 +2087,14 @@ void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
     }
 }
 
-#ifdef NON_EQUIVALENT
-// This is weird...
 void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9, s16* arg10, f32* arg11, s32 arg12) {
     Vec3f sp44;
     f32 sp40;
+    s16 temp_v0;
     s16 sp3C;
+    f32 temp_f14;
     f32 sp34;
     f32 sp30;
-    //s32 sp28;
-    //s32 sp24;
-    //f32 temp_f0;
-    f32 temp_f14;
-    //s16 temp_v0;
-    //s16 temp_v1;
-    //s32 temp_cond;
-    s16 temp_v0_2;
-    s16 phi_a1;
-    //s32 phi_v1;
-    //s16 phi_v0;
-    //s32 phi_a2;
-    //s32 phi_v1_2;
-    s16 a9;
 
     sp34 = Math_CosS(arg1) * arg0;
     sp30 = Math_SinS(arg1) * -arg0;
@@ -2121,24 +2107,20 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
     sp40 = sqrtf(SQ(sp44.x) + SQ(sp44.z));
 
     sp3C = (sp40 <= 1.0f) ? arg3 : Math_FAtan2F(sp44.z, sp44.x);
+    sp40 = (Math_CosS(sp3C - arg3) * sp40) + arg8;
 
-    temp_f14 = (Math_CosS(sp3C - arg3) * sp40) + arg8;
-
-    if (ABS_ALT(sp3C - arg3) > 0x4000) {
-        sp3C = BINANG_SUB(BINANG_ROT180(sp3C), arg3);
+    if (ABS_ALT(BINANG_SUB(sp3C, arg3)) > 0x4000) {
+        sp3C = BINANG_ROT180(sp3C);
     }
+    sp3C = sp3C - arg3;
 
-    temp_v0_2 = Math_FAtan2F(sp44.y, temp_f14);
+    temp_v0 = Math_FAtan2F(sp44.y, sp40);
+    temp_v0 = CLAMP(temp_v0, (s16)-arg9, arg9);
+    // fake match?
     if (sp3C) {}
-    a9 = -arg9;
-    temp_v0_2 = CLAMP(temp_v0_2, a9, arg9);
 
-    func_80124F18(arg6, arg7, temp_v0_2, 20.0f, 2000.0f);
+    func_80124F18(arg6, arg7, temp_v0, 20.0f, 2000.0f);
 }
-#else
-void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9, s16* arg10, f32* arg11, UNK_TYPE arg12);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124FF0.s")
-#endif
 
 void func_801251C4(Player* player, Vec3f* arg1) {
     Vec3f sp4C;
