@@ -70,6 +70,9 @@ void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
 
 
 
+s32 D_801F59F4;
+s32 D_801F59F8;
+
 
 
 s32 Player_HoldsTwoHandedWeapon(Player* player);
@@ -1590,6 +1593,7 @@ s32 func_801242DC(GlobalContext* globalCtx) {
 
     return sp1C + 1;
 }
+
 #ifdef NON_MATCHING
 void func_80124420(Player* player) {
     s16 sp2C;
@@ -1796,7 +1800,7 @@ void func_80124870(GlobalContext* globalCtx, Player* player, SkelAnime* skelAnim
     f32 sp9C;
     Vec3f sp90;
     Vec3f sp84;
-    Vec3f sp78;
+    Vec3f footprintPos;
     f32 sp74;
     f32 sp70;
     f32 temp_f18;
@@ -1827,11 +1831,11 @@ void func_80124870(GlobalContext* globalCtx, Player* player, SkelAnime* skelAnim
     Matrix_JointPosition(&D_801C08C0[player->transformation], &skelAnime->jointTable[arg6]);
     Matrix_InsertTranslation(D_801C08FC[player->transformation], 0.0f, 0.0f, 1);
     Matrix_GetStateTranslation(&sp84);
-    Matrix_GetStateTranslationAndScaledY(-300.0f, &sp78);
+    Matrix_GetStateTranslationAndScaledY(-300.0f, &footprintPos);
     Matrix_StatePop();
 
-    sp78.y += 15.0f;
-    sp9C = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &spA4, &spA0, &sp78) + temp_f20 + (player->unk_ABC * player->actor.scale.y);
+    footprintPos.y += 15.0f;
+    sp9C = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &spA4, &spA0, &footprintPos) + temp_f20 + (player->unk_ABC * player->actor.scale.y);
     if (sp84.y < sp9C) {
         sp68 = sp84.x - sp90.x;
         temp_f16 = sp84.y - sp90.y;
@@ -1839,7 +1843,7 @@ void func_80124870(GlobalContext* globalCtx, Player* player, SkelAnime* skelAnim
         temp_f0 = sqrtf(SQ(sp68) + SQ(temp_f16) + SQ(sp60));
 
         sp58 = (SQ(temp_f0) + sp70) / (2.0f * temp_f0);
-        
+
         temp_f20 = sp74 - SQ(sp58);
         if (sp74 < SQ(sp58)) {
             temp_f20 = 0.0f;
@@ -1875,8 +1879,8 @@ void func_80124870(GlobalContext* globalCtx, Player* player, SkelAnime* skelAnim
 
         temp_v0_4 = func_800C99D4(&globalCtx->colCtx, spA4, spA0);
         if ((temp_v0_4 >= 2) && (temp_v0_4 < 4) && (SurfaceType_IsWallDamage(&globalCtx->colCtx, spA4, spA0) == 0)) {
-            sp78.y = sp9C;
-            EffectSsGFire_Spawn(globalCtx, &sp78);
+            footprintPos.y = sp9C;
+            EffectSsGFire_Spawn(globalCtx, &footprintPos);
         }
     }
 }
@@ -1898,7 +1902,7 @@ void func_80124CC4(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
     Matrix_MultiplyVector3fByState(&D_801C094C, &sp70);
 
     if (BgCheck_AnyLineTest3(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
-        if (func_800B90AC(globalCtx, actor, poly, bgId, &sp64) == 0 || BgCheck_ProjectileLineTest(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
+        if (!func_800B90AC(globalCtx, actor, poly, bgId, &sp64) || BgCheck_ProjectileLineTest(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &poly, 1, 1, 1, 1, &bgId)) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 7);
@@ -1928,108 +1932,6 @@ s32 D_801C0958 = false;
 
 Gfx** D_801C095C[] = { D_801C013C, D_801C0114 };
 Gfx** D_801C0964[] = { D_801C01CC, D_801C01A4 };
-
-u8 D_801C096C[] = { 9, 9, 9, 0 };
-
-Vec3f D_801C0970[] = {
-    { 0.0f, 400.0f, 0.0f },
-    { 0.0f, 1400.0f, -1000.0f },
-    { 0.0f, -400.0f, 1000.0f },
-};
-
-static Vec3f D_801C0994[] = {
-    { 5000.0f, 400.0f, 0.0f },
-    { 5000.0f, -400.0f, 1000.0f },
-    { 5000.0f, 1400.0f, -1000.0f },
-};
-
-Vec3f D_801C09B8[] = {
-    { 0.0f, 750.0f, 750.0f },
-    { 1500.0f, 1500.0f, 1500.0f },
-    { -2500.0f, -2000.0f, -3000.0f },
-};
-
-
-Vec3f D_801C09DC[] = {
-    { 900.0f, 300.0f, 100.0f },
-    { 1300.0f, 700.0f, -300.0f },
-    { 500.0f, -100.0f, 500.0f },
-};
-Vec3f D_801C0A00[] = {
-    { -2500.0f, 1400.0f, 1100.0f },
-    { -2900.0f, 1000.0f, 1500.0f },
-    { -2100.0f, 1800.0f, 700.0f },
-};
-Vec3f D_801C0A24[] = {
-    { 0.0f, 0.0f, 0.0f },
-    { -800.0f, 800.0f, 800.0f },
-    { -800.0f, -800.0f, -800.0f },
-};
-Vec3f D_801C0A48[] = {
-    { 2000.0f, 0.0f, 0.0f },
-    { 2800.0f, -800.0f, -800.0f },
-    { 2800.0f, 800.0f, 800.0f },
-};
-Vec3f D_801C0A6C[] = {
-    { -400.0f, 800.0f, 0.0f },
-    { -5000.0f, -500.0f, -4000.0f },
-    { -5000.0f, 8000.0f, 4000.0f },
-};
-Vec3f D_801C0A90[] = {
-    { -400.0f, 1800.0f, 0.0f },
-    { 5000.0f, 8000.0f, 4000.0f },
-    { 5000.0f, -500.0f, -4000.0f },
-};
-
-
-
-Gfx* D_801C0AB4[] = { (Gfx* )0x0600CC38, (Gfx* )0x0600CDA0 };
-Gfx* D_801C0ABC[] = { (Gfx* )0x06010868, (Gfx* )0x06010978 };
-Vec3f D_801C0AC4[] = { { 5400.0f, 1700.0f, 1800.0f }, { 5400.0f, 1700.0f, -1800.0f } };
-Vec3f D_801C0ADC[] = { { 5250.0f, 570.0f, 2400.0f }, { 5250.0f, 570.0f, -2400.0f } };
-struct_80124618* D_801C0AF4[] = { D_801C0678, D_801C0698 };
-struct_80124618* D_801C0AFC[] = { D_801C06B8, D_801C06E0 };
-struct_80124618* D_801C0B04[] = { D_801C06F8, D_801C0718 };
-struct_80124618* D_801C0B0C[] = { D_801C0730, D_801C0740 };
-Gfx* D_801C0B14[] = { (Gfx* )0x06008760, (Gfx* )0x06008660 };
-
-
-u8 D_801C0B1C[] = {
-    0x0C, 0x0F,
-};
-
-Gfx* D_801C0B20[] = {
-    object_mask_truth_DL_0001A0,
-    object_mask_kerfay_DL_000D40,
-    object_mask_yofukasi_DL_000490,
-    object_mask_rabit_DL_000610,
-    object_mask_ki_tan_DL_0004A0,
-    object_mask_json_DL_0004C0,
-    object_mask_romerny_DL_0007A0,
-    object_mask_zacho_DL_000700,
-    object_mask_posthat_DL_000290,
-    object_mask_meoto_DL_0005A0,
-    object_mask_bigelf_DL_0016F0,
-    object_mask_gibudo_DL_000250,
-    object_mask_gero_DL_000DC0,
-    object_mask_dancer_DL_000EF0,
-    object_mask_skj_DL_0009F0,
-    object_mask_stone_DL_000820,
-    object_mask_bree_DL_0003C0,
-    object_mask_bakuretu_DL_0005C0,
-    object_mask_bu_san_DL_000710,
-    object_mask_kyojin_DL_000380,
-    gameplay_keep_DL_00B260,
-    gameplay_keep_DL_005A10,
-    gameplay_keep_DL_005360,
-    gameplay_keep_DL_0056C0,
-    object_mask_boy_DL_000900,
-    object_mask_goron_DL_0014A0,
-    object_mask_zora_DL_000DB0,
-    object_mask_nuts_DL_001D90,
-};
-
-Vec3f D_801C0B90[] = { { 950.0f, -800.0f, 300.0f }, { 950.0f, -800.0f, -300.0f } };
 
 
 
@@ -2168,9 +2070,6 @@ typedef struct {
 } ActorUnknown; // size >= 0x144
 
 
-
-s32 D_801F59F4;
-s32 D_801F59F8;
 
 s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
@@ -2523,6 +2422,7 @@ s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, WeaponInfo* 
     }
 }
 
+u8 D_801C096C[PLAYER_SHIELD_MAX] = { COLTYPE_METAL, COLTYPE_METAL, COLTYPE_METAL, };
 
 void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* arg2, Vec3f arg3[4]) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
@@ -2541,6 +2441,108 @@ void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* arg2,
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &arg2->base);
     }
 }
+
+
+Vec3f D_801C0970[] = {
+    { 0.0f, 400.0f, 0.0f },
+    { 0.0f, 1400.0f, -1000.0f },
+    { 0.0f, -400.0f, 1000.0f },
+};
+
+static Vec3f D_801C0994[] = {
+    { 5000.0f, 400.0f, 0.0f },
+    { 5000.0f, -400.0f, 1000.0f },
+    { 5000.0f, 1400.0f, -1000.0f },
+};
+
+Vec3f D_801C09B8[] = {
+    { 0.0f, 750.0f, 750.0f },
+    { 1500.0f, 1500.0f, 1500.0f },
+    { -2500.0f, -2000.0f, -3000.0f },
+};
+
+
+Vec3f D_801C09DC[] = {
+    { 900.0f, 300.0f, 100.0f },
+    { 1300.0f, 700.0f, -300.0f },
+    { 500.0f, -100.0f, 500.0f },
+};
+Vec3f D_801C0A00[] = {
+    { -2500.0f, 1400.0f, 1100.0f },
+    { -2900.0f, 1000.0f, 1500.0f },
+    { -2100.0f, 1800.0f, 700.0f },
+};
+Vec3f D_801C0A24[] = {
+    { 0.0f, 0.0f, 0.0f },
+    { -800.0f, 800.0f, 800.0f },
+    { -800.0f, -800.0f, -800.0f },
+};
+Vec3f D_801C0A48[] = {
+    { 2000.0f, 0.0f, 0.0f },
+    { 2800.0f, -800.0f, -800.0f },
+    { 2800.0f, 800.0f, 800.0f },
+};
+Vec3f D_801C0A6C[] = {
+    { -400.0f, 800.0f, 0.0f },
+    { -5000.0f, -500.0f, -4000.0f },
+    { -5000.0f, 8000.0f, 4000.0f },
+};
+Vec3f D_801C0A90[] = {
+    { -400.0f, 1800.0f, 0.0f },
+    { 5000.0f, 8000.0f, 4000.0f },
+    { 5000.0f, -500.0f, -4000.0f },
+};
+
+
+
+Gfx* D_801C0AB4[] = { (Gfx* )0x0600CC38, (Gfx* )0x0600CDA0 };
+Gfx* D_801C0ABC[] = { (Gfx* )0x06010868, (Gfx* )0x06010978 };
+Vec3f D_801C0AC4[] = { { 5400.0f, 1700.0f, 1800.0f }, { 5400.0f, 1700.0f, -1800.0f } };
+Vec3f D_801C0ADC[] = { { 5250.0f, 570.0f, 2400.0f }, { 5250.0f, 570.0f, -2400.0f } };
+struct_80124618* D_801C0AF4[] = { D_801C0678, D_801C0698 };
+struct_80124618* D_801C0AFC[] = { D_801C06B8, D_801C06E0 };
+struct_80124618* D_801C0B04[] = { D_801C06F8, D_801C0718 };
+struct_80124618* D_801C0B0C[] = { D_801C0730, D_801C0740 };
+Gfx* D_801C0B14[] = { (Gfx* )0x06008760, (Gfx* )0x06008660 };
+
+
+u8 D_801C0B1C[] = {
+    0x0C, 0x0F,
+};
+
+Gfx* D_801C0B20[] = {
+    object_mask_truth_DL_0001A0,
+    object_mask_kerfay_DL_000D40,
+    object_mask_yofukasi_DL_000490,
+    object_mask_rabit_DL_000610,
+    object_mask_ki_tan_DL_0004A0,
+    object_mask_json_DL_0004C0,
+    object_mask_romerny_DL_0007A0,
+    object_mask_zacho_DL_000700,
+    object_mask_posthat_DL_000290,
+    object_mask_meoto_DL_0005A0,
+    object_mask_bigelf_DL_0016F0,
+    object_mask_gibudo_DL_000250,
+    object_mask_gero_DL_000DC0,
+    object_mask_dancer_DL_000EF0,
+    object_mask_skj_DL_0009F0,
+    object_mask_stone_DL_000820,
+    object_mask_bree_DL_0003C0,
+    object_mask_bakuretu_DL_0005C0,
+    object_mask_bu_san_DL_000710,
+    object_mask_kyojin_DL_000380,
+    gameplay_keep_DL_00B260,
+    gameplay_keep_DL_005A10,
+    gameplay_keep_DL_005360,
+    gameplay_keep_DL_0056C0,
+    object_mask_boy_DL_000900,
+    object_mask_goron_DL_0014A0,
+    object_mask_zora_DL_000DB0,
+    object_mask_nuts_DL_001D90,
+};
+
+Vec3f D_801C0B90[] = { { 950.0f, -800.0f, 300.0f }, { 950.0f, -800.0f, -300.0f } };
+
 
 void func_8012669C(GlobalContext* globalCtx, Player* player, Vec3f* arg2, Vec3f* arg3) {
     Vec3f sp3C;
