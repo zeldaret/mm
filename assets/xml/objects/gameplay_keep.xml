@@ -1179,7 +1179,9 @@
         <DList Name="gameplay_keep_DL_054C90" Offset="0x54C90" />
         <Texture Name="gameplay_keep_Tex_054D90" OutName="tex_054D90" Format="i4" Width="16" Height="16" Offset="0x54D90" />
         <Texture Name="gameplay_keep_Tex_054E10" OutName="tex_054E10" Format="i8" Width="16" Height="16" Offset="0x54E10" />
-        <Blob Name="gameplay_keep_Blob_054F10" Size="0x10" Offset="0x54F10" />
+
+        <TextureAnimation Name="gameplay_keep_Matanimheader_054F18" Offset="0x54F18" />
+
         <Texture Name="gameplay_keep_Tex_054F20" OutName="tex_054F20" Format="i8" Width="32" Height="32" Offset="0x54F20" />
         <DList Name="gameplay_keep_DL_055360" Offset="0x55360" />
         <DList Name="gameplay_keep_DL_055620" Offset="0x55620" />
