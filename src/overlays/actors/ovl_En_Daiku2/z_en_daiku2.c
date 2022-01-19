@@ -162,7 +162,7 @@ s32 func_80BE64C0(EnDaiku2* this, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
     if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && !Flags_GetSwitch(globalCtx, this->unk_278) && (bomb != NULL) &&
         (bomb->actor.id == ACTOR_EN_BOM)) {
-        if (bomb->unk_1F9 == 0) {
+        if (!bomb->isPowderKeg) {
             this->actor.textId = 0x32D3;
         } else {
             this->actor.textId = 0x32D4;
