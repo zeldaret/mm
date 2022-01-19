@@ -7,7 +7,7 @@
 #include "z_en_al.h"
 #include "objects/object_al/object_al.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAl*)thisx)
 
@@ -19,19 +19,19 @@ void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80BDF5E8(EnAl* this, GlobalContext* globalCtx);
 void func_80BDF6C4(EnAl* this, GlobalContext* globalCtx);
 
-static s32 D_80BDFC70[] = {
+s32 D_80BDFC70[] = {
     0x0C00030D, 0x02120006, 0x0001050E, 0x12000600, 0x02020800, 0x0A002F02, 0x0A000A37,
     0x23020A37, 0x0B2D0D02, 0x0B2D1400, 0x01050E0B, 0x2D140001, 0x0C000206, 0x0E0A370B,
     0x2D010E0A, 0x370B2D03, 0x0E0A000A, 0x37010400, 0x01000000,
 };
 
-static s32 D_80BDFCBC[] = {
+s32 D_80BDFCBC[] = {
     0x09000017, 0x0E27A50C, 0x09000018, 0x0E27A60C, 0x09000017, 0x0E27A70C, 0x09000018, 0x0E27A80C,
     0x09000017, 0x0E27A90C, 0x09000018, 0x0E27AA0C, 0x09000017, 0x0E27AB0C, 0x09000018, 0x0E27AC0C,
     0x09000017, 0x0E27AD2D, 0x000B2D00, 0x080C1159, 0x08090000, 0x10000000,
 };
 
-static s32 D_80BDFD14[] = {
+s32 D_80BDFD14[] = {
     0x00562000, 0xA2090000, 0x170E2AA6, 0x0C090000, 0x180E2AA7, 0x0C090000, 0x170E2AA8, 0x0C090000,
     0x180E2AA9, 0x0C090000, 0x170E2AAA, 0x0C090000, 0x180E2AAB, 0x0C090000, 0x170E2AAC, 0x0C090000,
     0x170E2AAD, 0x0C0F2AAE, 0x0C090000, 0x180E2AAF, 0x0C090000, 0x170E2AB0, 0x0C090000, 0x170E2AB1,
@@ -40,33 +40,33 @@ static s32 D_80BDFD14[] = {
     0x0A0C1156, 0x20121009, 0x0000170E, 0x2AEA0C09, 0x0000180E, 0x2AEB0C09, 0x00001210,
 };
 
-static s32 D_80BDFDD0[] = { 0x005C0800, 0x0B0E2AE5, 0x2D000811, 0x5C080C10, 0x0E2AE62D, 0x00080C10 };
+s32 D_80BDFDD0[] = { 0x005C0800, 0x0B0E2AE5, 0x2D000811, 0x5C080C10, 0x0E2AE62D, 0x00080C10 };
 
-static s32 D_80BDFDE8[] = { 0x0900000E, 0x2B192D00, 0x080C1509, 0x00001210 };
+s32 D_80BDFDE8[] = { 0x0900000E, 0x2B192D00, 0x080C1509, 0x00001210 };
 
-static s32 D_80BDFDF8[] = {
+s32 D_80BDFDF8[] = {
     0x09000000, 0x39040071, 0x0E2B1A0C, 0x0F00FF1E, 0x00330018, 0x000D0000, 0x0E2B1B2D, 0x00080C15, 0x09000012,
     0x102C2B1C, 0x0C2F0000, 0x0C19FFDC, 0x2C2B1D0C, 0x2F00000C, 0x0F2B1E0C, 0x0F2B1F0C, 0x122A002E, 0x00390800,
     0x1306006F, 0x00001300, 0x6F2F0000, 0x2E2D0023, 0x0C07000C, 0x06000500, 0x00130005, 0x0C070000, 0x0E2B202D,
     0x00080C16, 0x11390411, 0x390819FF, 0xA60E2B3C, 0x2D00080C, 0x19FF9C00,
 };
 
-static s32 D_80BDFE7C[] = { 0x0E2A9C2D, 0x00080C10 };
+s32 D_80BDFE7C[] = { 0x0E2A9C2D, 0x00080C10 };
 
-static s32 D_80BDFE84[] = { 0x0E2A9D2D, 0x00080C10 };
+s32 D_80BDFE84[] = { 0x0E2A9D2D, 0x00080C10 };
 
-static s32 D_80BDFE8C[] = {
+s32 D_80BDFE8C[] = {
     0x00390200, 0x0F0E2A9E, 0x0C0F2A9F, 0x0C0F2AA0, 0x0C190004, 0x0E2AA00C, 0x05000000, 0x1A001A30, 0x0E2AA20C,
     0x1206008F, 0x00001300, 0x8F2F0000, 0x2E2D002C, 0x2D00080C, 0x10310E2A, 0xA12D0008, 0x0C113902, 0x10000000,
 };
 
-static s32 D_80BDFED4[] = {
+s32 D_80BDFED4[] = {
     0x0900002C, 0x2B1D0C2F, 0x00000C0F, 0x2B1E0C0F, 0x2B1F0C12, 0x2A002E00, 0x39080013,
     0x06006F00, 0x0013006F, 0x2F00002E, 0x2D00230C, 0x07000C06, 0x00050000, 0x1300050C,
     0x0700000E, 0x2B202D00, 0x080C1611, 0x39041139, 0x08150900, 0x00121000,
 };
 
-static s32 D_80BDFF24[] = {
+s32 D_80BDFF24[] = {
     0x0900002C, 0x2B1C0C0F, 0x00FF1E00, 0x33000DFF, 0xF000000E, 0x2B1B2D00, 0x080C1509, 0x00001210,
     0x2C2B1D0C, 0x2F00000C, 0x0F2B1E0C, 0x0F2B1F0C, 0x122A002E, 0x00390800, 0x1306006F, 0x00001300,
     0x6F2F0000, 0x2E2D0023, 0x0C07000C, 0x06000500, 0x00130005, 0x0C070000, 0x0E2B202D, 0x00080C16,
@@ -112,6 +112,13 @@ static ActorAnimationEntryS sAnimations[] = {
     { &object_al_Anim_00DBE0, 1.0f, 0, -1, 0, -4 }, { &object_al_Anim_00ACA0, 1.0f, 0, -1, 2, 0 },
     { &object_al_Anim_00ACA0, -1.0f, 0, -1, 2, 0 }, { &object_al_Anim_00CA28, 1.0f, 0, -1, 0, -4 },
     { &object_al_Anim_00BCA4, 1.0f, 0, -1, 2, 0 },  { &object_al_Anim_00A764, 1.0f, 0, -1, 0, -4 },
+};
+
+Vec3f D_80BE0070 = { 1000.0f, 0.0f, 0.0f };
+
+Gfx* D_80BE007C[] = {
+    object_al_DL_006598, object_al_DL_005920, object_al_DL_005878,
+    object_al_DL_0057D0, object_al_DL_005728, object_al_DL_005680,
 };
 
 Actor* func_80BDE1A0(EnAl* this, GlobalContext* globalCtx, u8 arg0, s16 arg1) {
@@ -493,7 +500,7 @@ void func_80BDED20(EnAl* this) {
 
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
 
-    if (this->unk_368->id == 0) {
+    if (this->unk_368->id == ACTOR_PLAYER) {
         sp40.y = ((Player*)this->unk_368)->bodyPartsPos[7].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_368->focus.pos);
@@ -650,7 +657,7 @@ s32 func_80BDF308(EnAl* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 s32 func_80BDF390(EnAl* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
     s32 ret;
 
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
     this->unk_4F0 = 0;
     this->unk_4C2 = 0;
@@ -733,11 +740,11 @@ void func_80BDF5E8(EnAl* this, GlobalContext* globalCtx) {
     if (!func_80133038(globalCtx, D_80BDFC70, &sp20) ||
         ((this->unk_35C != sp20.unk0) && !func_80BDF390(this, globalCtx, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         sp20.unk0 = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
     this->unk_35C = sp20.unk0;
     this->unk_368 = func_80BDE384(this, globalCtx);
@@ -816,7 +823,6 @@ s32 func_80BDF914(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void func_80BDF950(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_80BE0070 = { 1000.0f, 0.0f, 0.0f };
     EnAl* this = THIS;
 
     switch (limbIndex) {
@@ -882,10 +888,6 @@ void func_80BDFA34(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Gfx* D_80BE007C[] = {
-        object_al_DL_006598, object_al_DL_005920, object_al_DL_005878,
-        object_al_DL_0057D0, object_al_DL_005728, object_al_DL_005680,
-    };
     EnAl* this = THIS;
     s32 i;
 
@@ -894,8 +896,9 @@ void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         func_8012C28C(globalCtx->state.gfxCtx);
         Matrix_InsertTranslation(0.0f, 0.0f, 850.0f, MTXMODE_APPLY);
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      func_80BDF914, func_80BDF950, func_80BDFA34, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, func_80BDF914, func_80BDF950, func_80BDFA34,
+                                       &this->actor);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
             Matrix_SetCurrentState(&this->unk_190[i]);
