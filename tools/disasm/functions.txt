@@ -14005,7 +14005,7 @@
     0x80B529E4:("EnGk_Update",),
     0x80B52AD4:("EnGk_OverrideLimbDraw",),
     0x80B52AF0:("EnGk_PostLimbDraw",),
-    0x80B52D8C:("EnGk_UnkDraw",),
+    0x80B52D8C:("EnGk_TransformDraw",),
     0x80B52F74:("EnGk_Draw",),
     0x80B53840:("func_80B53840",),
     0x80B539CC:("func_80B539CC",),

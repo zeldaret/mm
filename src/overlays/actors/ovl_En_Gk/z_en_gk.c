@@ -1172,7 +1172,7 @@ void EnGk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-void EnGk_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnGk* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
@@ -1261,7 +1261,7 @@ void EnGk_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnGk_OverrideLimbDraw, EnGk_PostLimbDraw,
-                                       EnGk_UnkDraw, &this->actor);
+                                       EnGk_TransformDraw, &this->actor);
 
         if (ENGK_GET_F(&this->actor) != ENGK_F_2) {
             func_8012C2DC(globalCtx->state.gfxCtx);
