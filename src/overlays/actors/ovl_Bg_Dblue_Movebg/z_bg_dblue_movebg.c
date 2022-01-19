@@ -30,16 +30,16 @@ void func_80A2B1A0(BgDblueMovebg* this, GlobalContext* globalCtx);
 void func_80A2B274(Actor* thisx, GlobalContext* globalCtx);
 void func_80A2B308(Actor* thisx, GlobalContext* globalCtx);
 
-static BgDblueMovebg* D_80A2BBF0;
+BgDblueMovebg* D_80A2BBF0;
 
 typedef struct {
     u8 unk_00;
     u8 unk_01;
 } BgDblueMovebgUnkStruct;
 
-static BgDblueMovebgUnkStruct D_80A2BBF4;
+BgDblueMovebgUnkStruct D_80A2BBF4;
 
-static u8 D_80A2B870[][2] = {
+u8 D_80A2B870[][2] = {
     { 0x01, 0x01 }, { 0x01, 0x00 }, { 0x02, 0x03 }, { 0x02, 0x01 }, { 0x02, 0x02 }, { 0x02, 0x00 }, { 0x03, 0x07 },
     { 0x03, 0x03 }, { 0x03, 0x05 }, { 0x03, 0x01 }, { 0x03, 0x06 }, { 0x03, 0x02 }, { 0x03, 0x04 }, { 0x03, 0x00 },
 };
@@ -56,7 +56,7 @@ const ActorInit Bg_Dblue_Movebg_InitVars = {
     (ActorFunc)BgDblueMovebg_Draw,
 };
 
-static Gfx* D_80A2B8AC[] = {
+Gfx* D_80A2B8AC[] = {
     NULL,
     object_dblue_object_DL_0069D8,
     NULL,
@@ -71,11 +71,11 @@ static Gfx* D_80A2B8AC[] = {
     NULL,
 };
 
-static Gfx* D_80A2B8DC[] = {
+Gfx* D_80A2B8DC[] = {
     NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, object_dblue_object_DL_00CAA0, NULL,
 };
 
-static CollisionHeader* D_80A2B90C[] = {
+CollisionHeader* D_80A2B90C[] = {
     NULL,
     &object_dblue_object_Colheader_006EA8,
     NULL,
@@ -90,13 +90,13 @@ static CollisionHeader* D_80A2B90C[] = {
     NULL,
 };
 
-static AnimatedMaterial* D_80A2B93C[] = {
+AnimatedMaterial* D_80A2B93C[] = {
     NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, object_dblue_object_Matanimheader_00CC18, NULL,
 };
 
-static s16 D_80A2B96C[] = { 0, 0x16C, -0x16C, 0 };
+s16 D_80A2B96C[] = { 0, 0x16C, -0x16C, 0 };
 
-static s16 D_80A2B974[] = { -1, -1 };
+s16 D_80A2B974[] = { -1, -1 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
@@ -105,7 +105,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-static Vec3f D_80A2B988 = { 1785.0f, 0.0f, 220.0f };
+Vec3f D_80A2B988 = { 1785.0f, 0.0f, 220.0f };
 
 s32 func_80A29A80(GlobalContext* globalCtx, s32 arg1, s32 arg2) {
     s32 sp2C = 1;
