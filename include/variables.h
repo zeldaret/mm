@@ -1351,7 +1351,7 @@ extern s16 gItemPrices[];
 extern u16 gScenesPerRegion[11][27];
 extern u32 D_801C2410[];
 extern s16 gLinkFormObjectIndexes[8];
-extern RomFile objectFileTable[643];
+extern RomFile gObjectTable[643];
 extern SceneTableEntry gSceneTable[];
 extern UNK_PTR D_801C5C50;
 // extern UNK_TYPE1 D_801C5C9C;

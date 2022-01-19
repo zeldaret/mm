@@ -1013,7 +1013,7 @@ void func_801229FC(Player* player) {
         s16 temp_s1 = D_801BFDA0[(u8)player->maskId-1];
 
         osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
-        DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, objectFileTable[temp_s1].vromStart, objectFileTable[temp_s1].vromEnd - objectFileTable[temp_s1].vromStart, 0, &player->maskObjectLoadQueue, NULL);
+        DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[temp_s1].vromStart, gObjectTable[temp_s1].vromEnd - gObjectTable[temp_s1].vromStart, 0, &player->maskObjectLoadQueue, NULL);
         player->maskObjectLoading += 1;
     } else if (player->maskObjectLoading == 2) {
         if (osRecvMesg(&player->maskObjectLoadQueue, NULL, 0) == 0) {
@@ -2186,7 +2186,7 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
     // clang-format off
     sp30 = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210); phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);
     // clang-format on
-    
+
     for (i = 0; i < 80; i++) {
         sp30[i].v.cn[3] = (phi_a0[i] * player->unk_B62) >> 8;
     }
@@ -2271,13 +2271,11 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
             player->unk_AB2.x = player->unk_B90 - player->unk_B94;
             Matrix_InsertRotation(rot->x, rot->y, rot->z, 1);
             func_80125318(pos, rot);
-        } else {
-            if (player->unk_AAA != 0) {
-                Matrix_InsertTranslation(pos->x, ((Math_CosS(player->unk_AAA) - 1.0f) * 200.0f) + pos->y, pos->z, 1);
-                Matrix_InsertXRotation_s(player->unk_AAA, 1);
-                Matrix_InsertRotation(rot->x, rot->y, rot->z, 1);
-                func_80125318(pos, rot);
-            }
+        } else if (player->unk_AAA != 0) {
+            Matrix_InsertTranslation(pos->x, ((Math_CosS(player->unk_AAA) - 1.0f) * 200.0f) + pos->y, pos->z, 1);
+            Matrix_InsertXRotation_s(player->unk_AAA, 1);
+            Matrix_InsertRotation(rot->x, rot->y, rot->z, 1);
+            func_80125318(pos, rot);
         }
     } else {
         if (*dList != NULL) {
@@ -2378,9 +2376,6 @@ void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* arg2, Vec3s* ar
     func_80124618(arg1, player->skelAnime.curFrame, player->unk_AF0);
     Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
 }
-
-extern Gfx** D_801C095C[];
-extern Gfx** D_801C0964[];
 
 #ifdef NON_EQUIVALENT
 s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
@@ -2950,7 +2945,7 @@ void func_80127594(GlobalContext* globalCtx, Actor* actor) {
     }
 
     POLY_XLU_DISP = gfx;
-    
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
@@ -2964,16 +2959,12 @@ void func_80127594(GlobalContext* globalCtx, Player* player);
 // regalloc
 void func_801278F8(GlobalContext* globalCtx, Player* player) {
     static Gfx D_801C0BC0[] = {
-        0xFB000000,
-        0x000000FF,
-        0xDF000000,
-        0
+        gsDPSetEnvColor(0, 0, 0, 255),
+        gsSPEndDisplayList(),
     };
     static Gfx D_801C0BD0[] = {
-        0xE200001C,
-        0xC81049F8,
-        0xDF000000,
-        0
+        gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+        gsSPEndDisplayList(),
     };
     s32 phi_a0;
 
@@ -3005,16 +2996,12 @@ void func_801278F8(GlobalContext* globalCtx, Player* player) {
 }
 #else
 Gfx D_801C0BC0[] = {
-    0xFB000000,
-    0x000000FF,
-    0xDF000000,
-    0
+    gsDPSetEnvColor(0, 0, 0, 255),
+    gsSPEndDisplayList(),
 };
 Gfx D_801C0BD0[] = {
-    0xE200001C,
-    0xC81049F8,
-    0xDF000000,
-    0
+    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+    gsSPEndDisplayList(),
 };
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801278F8.s")
 #endif
