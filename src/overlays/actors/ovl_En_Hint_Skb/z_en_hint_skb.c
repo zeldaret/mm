@@ -7,7 +7,7 @@
 #include "z_en_hint_skb.h"
 #include "objects/object_skb/object_skb.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnHintSkb*)thisx)
 
@@ -577,8 +577,8 @@ void func_80C20D64(EnHintSkb* this, GlobalContext* globalCtx) {
         (this->actionFunc == func_80C1FE80)) {
         if (this->actionFunc != func_80C2077C) {
             if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
-                this->actor.flags &= ~(0x4 | 0x1);
-                this->actor.flags |= 9;
+                this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+                this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 this->actor.hintId = 255;
                 this->actor.textId = 0;
                 if (this->actionFunc == func_80C1FE80) {
@@ -587,8 +587,8 @@ void func_80C20D64(EnHintSkb* this, GlobalContext* globalCtx) {
                 func_80C2075C(this);
             }
         } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAIN) {
-            this->actor.flags &= ~(0x8 | 0x1);
-            this->actor.flags |= 5;
+            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+            this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
             this->actor.hintId = 0x55;
             this->actor.textId = 0;
             if (this->skelAnime.animation == &object_skb_Anim_00697C) {
@@ -831,7 +831,8 @@ void EnHintSkb_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80C21320(this, globalCtx);
 }
 
-s32 func_80C21858(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnHintSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                               Actor* thisx) {
     EnHintSkb* this = THIS;
     f32 temp_f10;
 
@@ -847,7 +848,7 @@ s32 func_80C21858(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     } else if (limbIndex == 10) {
         Matrix_GetStateTranslation(&this->actor.focus.pos);
     } else if ((limbIndex == 12) && (this->unk_3DE == 1)) {
-        Matrix_InsertZRotation_s(0x71C, 1);
+        Matrix_InsertZRotation_s(0x71C, MTXMODE_APPLY);
     }
 
     if (((limbIndex == 11) || (limbIndex == 12)) && (this->unk_3E8 & 2)) {
@@ -857,7 +858,7 @@ s32 func_80C21858(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80C219D4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnHintSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80C21E70 = { 800.0f, 1200.0f, 0.0f };
     EnHintSkb* this = THIS;
 
@@ -891,8 +892,8 @@ void EnHintSkb_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk_2DC = 0;
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80C21858, func_80C219D4,
-                      &this->actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnHintSkb_OverrideLimbDraw,
+                      EnHintSkb_PostLimbDraw, &this->actor);
     if (this->unk_3E2 > 0) {
         func_800BE680(globalCtx, &this->actor, this->unk_22C, this->unk_2DC, this->unk_2D8, 0.5f, this->unk_2D4,
                       this->unk_3E9);
