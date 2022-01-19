@@ -9,7 +9,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_knight/object_knight.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss06*)thisx)
 
@@ -150,7 +150,7 @@ void Boss06_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_200[i] = temp_v0[i];
     }
 
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void Boss06_Destroy(Actor* thisx, GlobalContext* globalCtx) {
