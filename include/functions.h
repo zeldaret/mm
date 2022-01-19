@@ -2035,7 +2035,7 @@ void func_801229A0(GlobalContext* globalCtx, Player* player);
 void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1);
 // void func_80122D44(void);
 u8 func_80122ED8(s32 index);
-// void func_80122EEC(void);
+// void Player_CurMaskToItemId(void);
 void func_80122F28(Player* player);
 // void func_80122F9C(void);
 // void func_80122FCC(void);

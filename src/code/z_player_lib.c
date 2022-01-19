@@ -1,48 +1,36 @@
 #include "global.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_link_nuts/object_link_nuts.h"
+
+#include "objects/object_link_boy/object_link_boy.h"
 #include "objects/object_link_goron/object_link_goron.h"
 #include "objects/object_link_zora/object_link_zora.h"
+#include "objects/object_link_nuts/object_link_nuts.h"
+#include "objects/object_link_child/object_link_child.h"
 #include "objects/object_mask_meoto/object_mask_meoto.h"
+
+#include "objects/object_mask_truth/object_mask_truth.h"
+#include "objects/object_mask_kerfay/object_mask_kerfay.h"
+#include "objects/object_mask_yofukasi/object_mask_yofukasi.h"
+#include "objects/object_mask_rabit/object_mask_rabit.h"
+#include "objects/object_mask_ki_tan/object_mask_ki_tan.h"
+#include "objects/object_mask_json/object_mask_json.h"
+#include "objects/object_mask_romerny/object_mask_romerny.h"
+#include "objects/object_mask_zacho/object_mask_zacho.h"
+#include "objects/object_mask_posthat/object_mask_posthat.h"
+#include "objects/object_mask_bigelf/object_mask_bigelf.h"
+#include "objects/object_mask_gibudo/object_mask_gibudo.h"
+#include "objects/object_mask_gero/object_mask_gero.h"
+#include "objects/object_mask_dancer/object_mask_dancer.h"
+#include "objects/object_mask_skj/object_mask_skj.h"
+#include "objects/object_mask_stone/object_mask_stone.h"
+#include "objects/object_mask_bree/object_mask_bree.h"
 #include "objects/object_mask_bakuretu/object_mask_bakuretu.h"
-
-s16 D_801BFDA0[] = {
-    OBJECT_MASK_TRUTH, 
-    OBJECT_MASK_KERFAY,
-    OBJECT_MASK_YOFUKASI, 
-    OBJECT_MASK_RABIT,
-    OBJECT_MASK_KI_TAN, 
-    OBJECT_MASK_JSON,
-    OBJECT_MASK_ROMERNY, 
-    OBJECT_MASK_ZACHO,
-    OBJECT_MASK_POSTHAT, 
-    OBJECT_MASK_MEOTO,
-    OBJECT_MASK_BIGELF, 
-    OBJECT_MASK_GIBUDO,
-    OBJECT_MASK_GERO, 
-    OBJECT_MASK_DANCER,
-    OBJECT_MASK_SKJ, 
-    OBJECT_MASK_STONE,
-    OBJECT_MASK_BREE, 
-    OBJECT_MASK_BAKURETU,
-    OBJECT_MASK_BU_SAN, 
-    OBJECT_MASK_KYOJIN,
-    OBJECT_MASK_BOY, 
-    OBJECT_MASK_GORON,
-    OBJECT_MASK_ZORA, 
-    OBJECT_MASK_NUTS,
-};
-
-typedef struct {
-    /* 0x0 */ Color_RGB8 color;
-    /* 0x4 */ Gfx* dlist;
-} struct_801BFDD0; // size = 0x08
-
-struct_801BFDD0 D_801BFDD0[] = {
-    { { 180, 200, 255 }, object_link_goron_DL_00BDD8 },
-    { { 155, 0, 0 }, object_link_goron_DL_014690 },
-    { { 255, 0, 0 }, object_link_goron_DL_011AB8 },
-};
+#include "objects/object_mask_bu_san/object_mask_bu_san.h"
+#include "objects/object_mask_kyojin/object_mask_kyojin.h"
+#include "objects/object_mask_boy/object_mask_boy.h"
+#include "objects/object_mask_goron/object_mask_goron.h"
+#include "objects/object_mask_zora/object_mask_zora.h"
+#include "objects/object_mask_nuts/object_mask_nuts.h"
 
 
 // bss
@@ -158,10 +146,10 @@ void func_80122868(GlobalContext* globalCtx, Player* player) {
         phi_v0 = CLAMP(phi_v0, 8, 40);
 
         player->unk_B5F += phi_v0;
-        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0xFF, 0, 0, 0, 0, 0xFA0 - (s32) (Math_CosS((player->unk_B5F << 8)) * 2000.0f));
+        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 0, 0, 4000 - (s32) (Math_CosS((player->unk_B5F << 8)) * 2000.0f));
     } else if (gSaveContext.unk_1016 != 0) {
         player->unk_B5F += 10;
-        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0xFF, 0, 0, 0xFA0 - (s32) (Math_CosS((player->unk_B5F << 8)) * 2000.0f));
+        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 255, 0, 0, 4000 - (s32) (Math_CosS((player->unk_B5F << 8)) * 2000.0f));
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -179,6 +167,36 @@ void func_801229A0(GlobalContext* globalCtx, Player* player) {
 
 void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
+
+
+s16 D_801BFDA0[] = {
+    OBJECT_MASK_TRUTH, 
+    OBJECT_MASK_KERFAY,
+    OBJECT_MASK_YOFUKASI, 
+    OBJECT_MASK_RABIT,
+    OBJECT_MASK_KI_TAN, 
+    OBJECT_MASK_JSON,
+    OBJECT_MASK_ROMERNY, 
+    OBJECT_MASK_ZACHO,
+    OBJECT_MASK_POSTHAT, 
+    OBJECT_MASK_MEOTO,
+    OBJECT_MASK_BIGELF, 
+    OBJECT_MASK_GIBUDO,
+    OBJECT_MASK_GERO, 
+    OBJECT_MASK_DANCER,
+    OBJECT_MASK_SKJ, 
+    OBJECT_MASK_STONE,
+    OBJECT_MASK_BREE, 
+    OBJECT_MASK_BAKURETU,
+    OBJECT_MASK_BU_SAN, 
+    OBJECT_MASK_KYOJIN,
+    OBJECT_MASK_BOY, 
+    OBJECT_MASK_GORON,
+    OBJECT_MASK_ZORA, 
+    OBJECT_MASK_NUTS,
+};
+
+
 
 // Load mask?
 void func_801229FC(Player* player) {
@@ -249,6 +267,19 @@ void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
     }
 }
 
+
+typedef struct {
+    /* 0x0 */ Color_RGB8 color;
+    /* 0x4 */ Gfx* dlist;
+} struct_801BFDD0; // size = 0x08
+
+struct_801BFDD0 D_801BFDD0[] = {
+    { { 180, 200, 255 }, object_link_goron_DL_00BDD8 },
+    { { 155, 0, 0 }, object_link_goron_DL_014690 },
+    { { 255, 0, 0 }, object_link_goron_DL_011AB8 },
+};
+
+
 void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
     struct_801BFDD0* temp_s3;
     struct_80122D44_arg1_unk_04* phi_s2 = arg1->unk_04;
@@ -311,14 +342,11 @@ u8 D_801BFDE8[PLAYER_MASK_MAX-1] = {
     ITEM_MASK_DEKU,          // PLAYER_MASK_DEKU
 };
 
-
-
-u8 func_80122ED8(s32 index) {
-    return D_801BFDE8[index];
+u8 func_80122ED8(s32 maskIdMinusOne) {
+    return D_801BFDE8[maskIdMinusOne];
 }
 
-// Player_GetCurrentMaskItemId
-u8 func_80122EEC(GlobalContext* globalCtx) {
+u8 Player_CurMaskToItemId(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (player->currentMask != PLAYER_MASK_NONE) {
@@ -383,11 +411,11 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
 }
 
 FlexSkeletonHeader* D_801BFE00[] = {
-    (FlexSkeletonHeader* )0x0600D878,
-    (FlexSkeletonHeader* )0x06017A84,
-    (FlexSkeletonHeader* )0x06012C34,
-    (FlexSkeletonHeader* )0x0600BA24,
-    (FlexSkeletonHeader* )0x0601E244,
+    &object_link_boy_Skel_00D878,
+    &object_link_goron_Skel_017A84,
+    &object_link_zora_Skel_012C34,
+    &object_link_nuts_Skel_00BA24,
+    &object_link_child_Skel_01E244,
 };
 
 s16 D_801BFE14[][18] = {
@@ -553,8 +581,6 @@ s16 D_801BFE14[][18] = {
     },
 };
 
-u16 D_801BFF34[4] = { 2, 4, 1, 0 };
-
 
 // OoT's Player_SetBootData?
 void func_80123140(GlobalContext* globalCtx, Player* player) {
@@ -563,12 +589,12 @@ void func_80123140(GlobalContext* globalCtx, Player* player) {
     f32 scale;
 
     if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
-        gGameInfo->data[0x1B] = 0x4B0;
+         REG(27) = 0x4B0;
     } else {
-        gGameInfo->data[0x1B] = 0x7D0;
+         REG(27) = 0x7D0;
     }
 
-    gGameInfo->data[0x30] = 0x172;
+     REG(48) = 0x172;
 
     currentBoots = player->currentBoots;
     if (currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) {
@@ -576,34 +602,34 @@ void func_80123140(GlobalContext* globalCtx, Player* player) {
             currentBoots++;
         }
         if (player->transformation == PLAYER_FORM_GORON) {
-            gGameInfo->data[0x30] = 0xC8;
+             REG(48) = 0xC8;
         }
     } else if (currentBoots == PLAYER_BOOTS_GIANT) {
-        gGameInfo->data[0x30] = 0xAA;
+         REG(48) = 0xAA;
     }
 
     bootRegs = D_801BFE14[currentBoots];
-    gGameInfo->data[0x13] = bootRegs[0];
-    gGameInfo->data[0x1E] = bootRegs[1];
-    gGameInfo->data[0x20] = bootRegs[2];
-    gGameInfo->data[0x22] = bootRegs[3];
-    gGameInfo->data[0x23] = bootRegs[4];
-    gGameInfo->data[0x24] = bootRegs[5];
-    gGameInfo->data[0x25] = bootRegs[6];
-    gGameInfo->data[0x26] = bootRegs[7];
-    gGameInfo->data[0x27] = bootRegs[8];
-    gGameInfo->data[0x2B] = bootRegs[9];
-    gGameInfo->data[0x2D] = bootRegs[10];
-    gGameInfo->data[0x44] = bootRegs[11];
-    gGameInfo->data[0x45] = bootRegs[12];
-    gGameInfo->data[0x3A2] = bootRegs[13];
-    gGameInfo->data[0x3A3] = bootRegs[14];
-    gGameInfo->data[0x3A4] = bootRegs[15];
-    gGameInfo->data[0x3A5] = bootRegs[16];
-    gGameInfo->data[0x23F] = bootRegs[17];
+     REG(19) = bootRegs[0];
+     REG(30) = bootRegs[1];
+     REG(32) = bootRegs[2];
+     REG(34) = bootRegs[3];
+     REG(35) = bootRegs[4];
+     REG(36) = bootRegs[5];
+     REG(37) = bootRegs[6];
+     REG(38) = bootRegs[7];
+     REG(39) = bootRegs[8];
+     REG(43) = bootRegs[9];
+     REG(45) = bootRegs[10];
+     REG(68) = bootRegs[11];
+     REG(69) = bootRegs[12];
+    IREG(66) = bootRegs[13];
+    IREG(67) = bootRegs[14];
+    IREG(68) = bootRegs[15];
+    IREG(69) = bootRegs[16];
+    MREG(95) = bootRegs[17];
 
     if (globalCtx->roomCtx.currRoom.unk3 == 2) {
-        gGameInfo->data[0x2D] = 0x1F4;
+         REG(45) = 0x1F4;
     }
 
     if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
@@ -731,17 +757,24 @@ s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
         }
 
         return phi_v1;
-    } else if (arg2 == 1) {
+    }
+
+    if (arg2 == 1) {
         return (gSaveContext.buttonStatus[1] != 0xFF) ? gSaveContext.equips.buttonItems[0][1] :
                 (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][1] : 0xFF;
-    } else if (arg2 == 2) {
+    }
+
+    if (arg2 == 2) {
         return (gSaveContext.buttonStatus[2] != 0xFF) ? gSaveContext.equips.buttonItems[0][2] :
                 (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][2] : 0xFF;
-    } else {
-        return (gSaveContext.buttonStatus[3] != 0xFF) ? gSaveContext.equips.buttonItems[0][3] :
-                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][3] : 0xFF;
     }
+
+    return (gSaveContext.buttonStatus[3] != 0xFF) ? gSaveContext.equips.buttonItems[0][3] :
+                (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.equips.buttonItems[0][3] : 0xFF;
 }
+
+
+u16 D_801BFF34[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 
 s32 func_80123810(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -760,7 +793,7 @@ s32 func_80123810(GlobalContext* globalCtx) {
         gSaveContext.unk_06--;
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_801BFF34) - 1; i++) {
+    for (i = 0; i < ARRAY_COUNT(D_801BFF34); i++) {
         if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, D_801BFF34[i])) {
             i++;
             sp24 = func_8012364C(globalCtx, player, i);
@@ -785,8 +818,7 @@ s32 func_80123810(GlobalContext* globalCtx) {
 
 
 
-// sActionModelGroups
-u8 D_801BFF3C[] = {
+u8 sActionModelGroups[] = {
     3,   0xD, 0xA, 2,   2,   2,   5,   0xA, 0xE, 6,   6,   6,   6,   9,   7,   7,   7,   8,   3,   3,   0xB,
     0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC, 0xC,
     3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
@@ -794,7 +826,7 @@ u8 D_801BFF3C[] = {
 };
 
 s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
-    s32 modelGroup = D_801BFF3C[actionParam];
+    s32 modelGroup = sActionModelGroups[actionParam];
 
     if ((modelGroup == 2) && func_801234B0(player)) {
         return 1;
@@ -803,19 +835,31 @@ s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
 }
 
 
-u8 D_801BFF90[] = { 0, 6, 4, 3, 1, 0, 0, 0 };
+u8 D_801BFF90[PLAYER_FORM_MAX] = { 
+    PLAYER_BOOTS_FIERCE_DEITY,  // PLAYER_FORM_FIERCE_DEITY
+    PLAYER_BOOTS_GORON,         // PLAYER_FORM_GORON
+    PLAYER_BOOTS_ZORA_LAND,     // PLAYER_FORM_ZORA
+    PLAYER_BOOTS_DEKU,          // PLAYER_FORM_DEKU
+    PLAYER_BOOTS_HYLIAN,        // PLAYER_FORM_HUMAN
+};
 
-u8 D_801BFF98[] = { 1, 3, 2, 0, 1, 0, 0, 0 };
+u8 D_801BFF98[PLAYER_FORM_MAX] = {
+    1,  // PLAYER_FORM_FIERCE_DEITY
+    3,  // PLAYER_FORM_GORON
+    2,  // PLAYER_FORM_ZORA
+    0,  // PLAYER_FORM_DEKU
+    1,  // PLAYER_FORM_HUMAN
+};
 
 typedef struct {
     /* 0x00 */ u8 flag;
     /* 0x02 */ u16 textId;
 } TextTriggerEntry; // size = 0x04
 
-TextTriggerEntry D_801BFFA0[] = { { 1, 0x26FC }, { 2, 0x26FD }, { 0, 0 }, { 2, 0x26FD } };
+TextTriggerEntry D_801BFFA0[] = { { 1, 0x26FC }, { 2, 0x26FD }, { 0, 0 }, { 2, 0x26FD }, };
 
 // gPlayerModelTypes
-u8 D_801BFFB0[0xF][5] = {
+u8 D_801BFFB0[][5] = {
     { 2, 0, 8, 0xC, 0x10 },
     { 1, 2, 7, 0xF, 0x10 },
     { 1, 2, 8, 0xD, 0x10 },
@@ -1177,7 +1221,7 @@ struct_80124618 D_801C05A8[] = {
 struct_80124618 D_801C05C8[] = { { 0, { 0, 0, 0 } }, { 17, { 50, 50, 50 } } };
 struct_80124618 D_801C05D8[] = { { 0, { 0, 0, 0 } }, { 5, { 0, 0, 0 } }, { 9, { 100, 100, 100 } } };
 struct_80124618 D_801C05F0[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
     { 5, { 100, 100, 100 } },
     { 9, { 0, 0, 0 } },
 };
@@ -1237,7 +1281,7 @@ struct_80124618 D_801C0750[] = {
 };
 
 
-u8 D_801C0778[] = { 0, 0, 0, 0, 0, 0x64, 0xC8, 0xFF, 0xFF, 0xFF, 0xC8, 0x64 };
+u8 D_801C0778[] = { 0, 0, 0, 0, 0, 100, 200, 255, 255, 255, 200, 100 };
 
 struct_80124618 D_801C0784[] = {
     { 0, { 100, 100, 100 } },
@@ -1260,13 +1304,13 @@ u8 D_801C07AC[] = {
     0,
     0,
     0,
-    0x64,
-    0xC8,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xC8,
-    0x64,
+    100,
+    200,
+    255,
+    255,
+    255,
+    200,
+    100,
     0,
 };
 
@@ -1306,7 +1350,7 @@ void Player_SetModels(Player* player, s32 modelGroup) {
     player->sheathType = D_801BFFB0[modelGroup][3];
 
     if (player->sheathType == 14) {
-        if (gSaveContext.equips.buttonItems[CUR_FORM][0] == 0xFF) {
+        if (gSaveContext.equips.buttonItems[CUR_FORM][0] == ITEM_NONE) {
             player->sheathType = 15;
         }
     }
@@ -1638,31 +1682,31 @@ void func_80124618(struct_80124618* arg0, f32 curFrame, Vec3f* arg2) {
 
 
 struct_80124618 D_801C07C0[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 0xA, { 0x64, 0x64, 0x64 } },
-    { 0xB, { 0x64, 0x78, 0x78 } },
-    { 0xC, { 0x64, 0x78, 0x78 } },
-    { 0xE, { 0x64, 0x64, 0x64 } },
-    { 0x13, { 0x64, 0x64, 0x64 } },
+    { 0, { 100, 100, 100 } },
+    { 10, { 100, 100, 100 } },
+    { 11, { 100, 120, 120 } },
+    { 12, { 100, 120, 120 } },
+    { 14, { 100, 100, 100 } },
+    { 19, { 100, 100, 100 } },
 };
 
 struct_80124618 D_801C07F0[] = {
-    { 0, { 0x28, 0x3C, 0x46 } },
-    { 3, { 0x28, 0x3C, 0x46 } },
-    { 4, { 0x4B, 0x5A, 0x55 } },
-    { 5, { 0x6E, 0x78, 0x64 } },
-    { 7, { 0x64, 0x64, 0x64 } },
-    { 8, { 0x64, 0x64, 0x64 } },
+    { 0, { 40, 60, 70 } },
+    { 3, { 40, 60, 70 } },
+    { 4, { 75, 90, 85 } },
+    { 5, { 110, 120, 100 } },
+    { 7, { 100, 100, 100 } },
+    { 8, { 100, 100, 100 } },
 };
 struct_80124618 D_801C0820[] = {
-    { 0, { 0x64, 0x64, 0x64 } },
-    { 7, { 0x64, 0x64, 0x64 } },
-    { 0xC, { 0x28, 0x3C, 0x46 } },
+    { 0, { 100, 100, 100 } },
+    { 7, { 100, 100, 100 } },
+    { 12, { 40, 60, 70 } },
 };
 struct_80124618 D_801C0838[] = {
-    { 0, { 0x28, 0x3C, 0x46 } },
-    { 7, { 0x28, 0x3C, 0x46 } },
-    { 0xC, { 0x64, 0x64, 0x64 } },
+    { 0, { 40, 60, 70 } },
+    { 7, { 40, 60, 70 } },
+    { 12, { 100, 100, 100 } },
 };
 
 Gfx D_801C0850[] = { 
@@ -1974,34 +2018,34 @@ u8 D_801C0B1C[] = {
 };
 
 Gfx* D_801C0B20[] = {
-    (Gfx* )0x0A0001A0,
-    (Gfx* )0x0A000D40,
-    (Gfx* )0x0A000490,
-    (Gfx* )0x0A000610,
-    (Gfx* )0x0A0004A0,
-    (Gfx* )0x0A0004C0,
-    (Gfx* )0x0A0007A0,
-    (Gfx* )0x0A000700,
-    (Gfx* )0x0A000290,
-    (Gfx* )0x0A0005A0,
-    (Gfx* )0x0A0016F0,
-    (Gfx* )0x0A000250,
-    (Gfx* )0x0A000DC0,
-    (Gfx* )0x0A000EF0,
-    (Gfx* )0x0A0009F0,
-    (Gfx* )0x0A000820,
-    (Gfx* )0x0A0003C0,
-    (Gfx* )0x0A0005C0,
-    (Gfx* )0x0A000710,
-    (Gfx* )0x0A000380,
-    (Gfx* )0x0400B260,
-    (Gfx* )0x04005A10,
-    (Gfx* )0x04005360,
-    (Gfx* )0x040056C0,
-    (Gfx* )0x0A000900,
-    (Gfx* )0x0A0014A0,
-    (Gfx* )0x0A000DB0,
-    (Gfx* )0x0A001D90,
+    object_mask_truth_DL_0001A0,
+    object_mask_kerfay_DL_000D40,
+    object_mask_yofukasi_DL_000490,
+    object_mask_rabit_DL_000610,
+    object_mask_ki_tan_DL_0004A0,
+    object_mask_json_DL_0004C0,
+    object_mask_romerny_DL_0007A0,
+    object_mask_zacho_DL_000700,
+    object_mask_posthat_DL_000290,
+    object_mask_meoto_DL_0005A0,
+    object_mask_bigelf_DL_0016F0,
+    object_mask_gibudo_DL_000250,
+    object_mask_gero_DL_000DC0,
+    object_mask_dancer_DL_000EF0,
+    object_mask_skj_DL_0009F0,
+    object_mask_stone_DL_000820,
+    object_mask_bree_DL_0003C0,
+    object_mask_bakuretu_DL_0005C0,
+    object_mask_bu_san_DL_000710,
+    object_mask_kyojin_DL_000380,
+    gameplay_keep_DL_00B260,
+    gameplay_keep_DL_005A10,
+    gameplay_keep_DL_005360,
+    gameplay_keep_DL_0056C0,
+    object_mask_boy_DL_000900,
+    object_mask_goron_DL_0014A0,
+    object_mask_zora_DL_000DB0,
+    object_mask_nuts_DL_001D90,
 };
 
 Vec3f D_801C0B90[] = { { 950.0f, -800.0f, 300.0f }, { 950.0f, -800.0f, -300.0f } };
@@ -2031,11 +2075,8 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
     s16 temp_v0;
     s16 sp3C;
     f32 temp_f14;
-    f32 sp34;
-    f32 sp30;
-
-    sp34 = Math_CosS(arg1) * arg0;
-    sp30 = Math_SinS(arg1) * -arg0;
+    f32 sp34 = Math_CosS(arg1) * arg0;
+    f32 sp30 = Math_SinS(arg1) * -arg0;
 
     arg5->x = (Math_SinS(arg3) * sp30) + arg2->x;
     arg5->y = arg2->y + sp34;
@@ -2188,7 +2229,7 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
             Matrix_InsertZRotation_s(player->unk_B88, 1);
             Matrix_InsertRotation(rot->x, rot->y, rot->z, 1);
             func_80125318(pos, rot);
-        } else if ((player->stateFlags3 & 0x2000) != 0) {
+        } else if (player->stateFlags3 & 0x2000) {
             func_801251C4(player, &sp54);
             sp54.x -= player->actor.world.pos.x;
             sp54.y -= player->actor.world.pos.y;
@@ -2303,7 +2344,7 @@ void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* arg2, Vec3s* ar
     Matrix_JointPosition(arg2, arg3);
     func_80125318(arg2, arg3);
     func_80124618(arg1, player->skelAnime.curFrame, player->unk_AF0);
-    Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
+    Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
 }
 
 #ifdef NON_EQUIVALENT
@@ -2336,7 +2377,7 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                     //if ((player->leftHandType == 2) && (player->transformation == PLAYER_FORM_HUMAN) && (temp_v1 = (s32) (gSaveContext.equips.equipment & *gEquipMasks) >> *gEquipShifts, (temp_v1 != 0))) 
                     if ((player->leftHandType == 2) && 
                         (player->transformation == PLAYER_FORM_HUMAN) && 
-                        ((phi_v0 = CUR_EQUIP_VALUE(0), phi_v0 != 0))) {
+                        ((phi_v0 = CUR_EQUIP_VALUE(EQUIP_SWORD), phi_v0 != 0))) {
                         phi_a0 = &D_801C018C[phi_v0 - 1];
                     } else {
                         //temp_v0_2 = player->skelAnime.jointTable->unk_84 & 0xF000;
@@ -2357,7 +2398,7 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                     func_80125CE0(player, D_801C0750, pos, rot);
                 }
             } else if (player->transformation == PLAYER_FORM_ZORA) {
-                if (((player->stateFlags1 & 2) != 0) || ((player->stateFlags1 & 0x400) != 0) || ((func_801242B4(player) != 0))) {
+                if (((player->stateFlags1 & 2) != 0) || ((player->stateFlags1 & 0x400) != 0) || func_801242B4(player)) {
                     *dList = object_link_zora_DL_00FDF0;
                 } else {
                     phi_a1 = player->skelAnime.animation == &gameplay_keep_Linkanim_00E3E8 && player->skelAnime.curFrame >= 6.0f;
@@ -2374,7 +2415,7 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 }
             }
         } else if (limbIndex == 0x13) {
-            if ((player->transformation == PLAYER_FORM_ZORA) && ((((player->stateFlags1 & 2) != 0)) || ((player->stateFlags1 & 0x400) != 0) ||  (func_801242B4(player) != 0))) {
+            if ((player->transformation == PLAYER_FORM_ZORA) && ((((player->stateFlags1 & 2) != 0)) || ((player->stateFlags1 & 0x400) != 0) ||  func_801242B4(player))) {
                 *dList = object_link_zora_DL_00FBB8;
             } else {
                 phi_v1 = player->rightHandDLists;
@@ -2407,7 +2448,7 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         } else if (limbIndex == 0x14) {
             Gfx** phi_v1_2 = player->sheathDLists;
             if (player->transformation == PLAYER_FORM_HUMAN) {
-                s32 val = CUR_EQUIP_VALUE_VOID(0);
+                s32 val = CUR_EQUIP_VALUE_VOID(EQUIP_SWORD);
                 if (val != 0) {
                     if ((player->sheathType == 0xE) || (player->sheathType == 0xC)) {
                         phi_v1_2 = &D_801C00BC[val - 1][0];
@@ -2422,7 +2463,7 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         } else if ((limbIndex == 0xC) && (player->transformation == PLAYER_FORM_ZORA)) {
             //Matrix_Scale((player->unk_B08[2] * 1.0f) + 1.0f, 1.0f, 1.0f, 1);
             // super important (* 1)
-            Matrix_Scale((player->unk_B08[2] * 1) + 1.0f, 1.0f, 1.0f, 1);
+            Matrix_Scale((player->unk_B08[2] * 1) + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
         }
     }
     return 0;
@@ -2809,10 +2850,10 @@ void func_80127594(GlobalContext* globalCtx, Actor* actor) {
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    
+
     gfx = POLY_XLU_DISP;
 
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < ARRAY_COUNT(D_801C0B90); i++) {
         temp_f22 = (D_801F59C8[i] / 400.0f) * 0.1f;
         Matrix_MultiplyVector3fByState(&D_801C0B90[i], &D_801F59B0[i]);
 
@@ -2942,13 +2983,13 @@ Color_RGBA8 D_801C0BFC = { 0, 0, 0x64, 0 };
 
 Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
 
-Vec3f D_801C0C0C[3] = {
+Vec3f D_801C0C0C[] = {
     { 174.0f, -1269.0f, -1.0f },
     { 401.0f, -729.0f, -701.0f },
     { 401.0f, -729.0f, 699.0f },
 };
 
-Vec3f D_801C0C30[3] = {
+Vec3f D_801C0C30[] = {
     { 74.0f, -1269.0f, -1.0f },
     { 301.0f, -729.0f, -701.0f },
     { 301.0f, -729.0f, 699.0f },
@@ -3363,7 +3404,7 @@ void func_801284A0(GlobalContext *globalCtx, Player *player) {
     Matrix_MultiplyVector3fByState(&D_801C0C00, &D_801C0C54[1].unk_08);
     Math_Vec3f_Lerp(&player->bodyPartsPos[7], &player->bodyPartsPos[0], 0.2f, &D_801C0C54[1].unk_08);
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(D_801C0C0C); i++) {
         Matrix_MultiplyVector3fByState(&D_801C0C0C[i], &sp84);
         Matrix_MultiplyVector3fByState(&D_801C0C30[i], &sp78);
 
@@ -3411,8 +3452,8 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
             //sp68 = globalCtx->state.gfxCtx;
 
             Matrix_StatePush();
-            Matrix_InsertTranslation(-323.67f, 412.15f, -969.96f, 1);
-            Matrix_InsertRotation(-0x32BE, -0x50DE, -0x7717, 1);
+            Matrix_InsertTranslation(-323.67f, 412.15f, -969.96f, MTXMODE_APPLY);
+            Matrix_InsertRotation(-0x32BE, -0x50DE, -0x7717, MTXMODE_APPLY);
             //temp_v0_2 = sp68->polyOpa.p;
             //sp68->polyOpa.p = temp_v0_2 + 8;
             //temp_v0_2->words.w0 = 0xDA380003;
@@ -3438,9 +3479,9 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
         //sp58 = globalCtx->state.gfxCtx;
 
         Matrix_StatePush();
-        Matrix_InsertTranslation(-428.26f, 267.2f, -33.82f, 1);
-        Matrix_InsertRotation(-0x8000, 0, 0x4000, 1);
-        Matrix_Scale(1.0f, player->unk_B08[1], 1.0f, 1);
+        Matrix_InsertTranslation(-428.26f, 267.2f, -33.82f, MTXMODE_APPLY);
+        Matrix_InsertRotation(-0x8000, 0, 0x4000, MTXMODE_APPLY);
+        Matrix_Scale(1.0f, player->unk_B08[1], 1.0f, MTXMODE_APPLY);
 
         //temp_v0_4 = sp58->polyOpa.p;
         //sp58->polyOpa.p = temp_v0_4 + 8;
@@ -3517,8 +3558,8 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
         //} else {
         //    phi_v1 = (s32) temp_v0_10;
         //}
-        //sp26 = (s16) (s32) ((((f32) (gGameInfo->data[0x394] + 0x14) * (f32) phi_v1) / 100.0f) * Math_SinS(temp_a0_2));
-        sp26 = (s16) (s32) ((((f32) (gGameInfo->data[0x394] + 0x14) * ABS_ALT(player->unk_AB2.x)) / 100.0f) * sins_1);
+        //sp26 = (s16) (s32) ((((f32) (IREG(52) + 0x14) * (f32) phi_v1) / 100.0f) * Math_SinS(temp_a0_2));
+        sp26 = (s16) (s32) ((((f32) (IREG(52) + 0x14) * ABS_ALT(player->unk_AB2.x)) / 100.0f) * sins_1);
 
 
         sins_2 = Math_SinS(player->unk_B88);
@@ -3527,8 +3568,8 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
         //if ((s32) temp_v0_11 < 0) {
         //    phi_v1_2 = (s16) -(s32) temp_v0_11;
         //}
-        //sp24 = (s16) (s32) ((((f32) (gGameInfo->data[0x395] + 0xF) * (f32) phi_v1_2) / 100.0f) * Math_SinS(player->unk_B88));
-        sp24 = (s16) (s32) ((((f32) (gGameInfo->data[0x395] + 0xF) * ABS_ALT(player->unk_AB2.y)) / 100.0f) * sins_2);
+        //sp24 = (s16) (s32) ((((f32) (IREG(53) + 0xF) * (f32) phi_v1_2) / 100.0f) * Math_SinS(player->unk_B88));
+        sp24 = (s16) (s32) ((((f32) (IREG(53) + 0xF) * ABS_ALT(player->unk_AB2.y)) / 100.0f) * sins_2);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
         //sp20 = globalCtx->state.gfxCtx;

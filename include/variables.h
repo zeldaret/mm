@@ -1178,7 +1178,7 @@ extern UNK_PTR D_801BF5C0;
 // extern UNK_TYPE1 D_801BFE00;
 // extern UNK_TYPE1 D_801BFE14;
 // extern UNK_TYPE2 D_801BFF34;
-// extern UNK_TYPE1 D_801BFF3C;
+// extern UNK_TYPE1 sActionModelGroups;
 // extern UNK_TYPE1 D_801BFF90;
 // extern UNK_TYPE1 D_801BFF98;
 // extern UNK_TYPE1 D_801BFFA0;
