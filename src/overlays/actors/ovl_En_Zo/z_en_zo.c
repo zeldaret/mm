@@ -63,7 +63,7 @@ static DamageTable sDamageTable = {
     /* Explosives     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
     /* Zora boomerang */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
     /* Normal arrow   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_ZO_DMG_EFF_NONE6   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
     /* Hookshot       */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
     /* Goron punch    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
     /* Sword          */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
@@ -150,7 +150,7 @@ s32 EnZo_PlayWalkingSound(EnZo* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
-    return 0;
+    return false;
 }
 
 void EnZo_Blink(EnZo* this, s32 maxEyeIndex) {
