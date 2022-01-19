@@ -6,7 +6,20 @@
 #include "objects/object_mask_meoto/object_mask_meoto.h"
 #include "objects/object_mask_bakuretu/object_mask_bakuretu.h"
 
-extern s16 D_801BFDA0[];
+s16 D_801BFDA0[] = {
+    0x01DE, 0x01FF,
+    0x025D, 0x01DB,
+    0x01DA, 0x01FE,
+    0x0219, 0x024C,
+    0x0221, 0x025E,
+    0x0200, 0x01FD,
+    0x025C, 0x025F,
+    0x01DC, 0x024E,
+    0x0252, 0x01DD,
+    0x01D9, 0x0214,
+    0x01E4, 0x01E1,
+    0x01E2, 0x01E3,
+};
 
 struct _struct_D_801BFDD0_0x8 {
     /* 0x0 */ u8 unk_0;                             /* inferred */
@@ -15,44 +28,314 @@ struct _struct_D_801BFDD0_0x8 {
     ///* 0x3 */ char pad_3[1];
     /* 0x4 */ Gfx* unk_4;                            /* inferred */
 };
-extern struct _struct_D_801BFDD0_0x8 D_801BFDD0[3];/* = {
+
+struct _struct_D_801BFDD0_0x8 D_801BFDD0[3] = {
     { 0xB4, 0xC8, 0xFF, 0x600BDD8 },
     { 0x9B, 0, 0, 0x6014690 },
     { 0xFF, 0, 0, 0x6011AB8 },
-};*/
+};
 
-extern u8 D_801BFDE8[];
+u8 D_801BFDE8[] = {
+    0x36,
+    0x37,
+    0x38,
+    0x39,
+    0x3A,
+    0x3B,
+    0x3C,
+    0x3D,
+    0x3E,
+    0x3F,
+    0x40,
+    0x41,
+    0x42,
+    0x43,
+    0x44,
+    0x45,
+    0x46,
+    0x47,
+    0x48,
+    0x49,
+    0x35,
+    0x33,
+    0x34,
+    0x32,
+};
 
-extern FlexSkeletonHeader* D_801BFE00[];
+FlexSkeletonHeader* D_801BFE00[] = {
+    (FlexSkeletonHeader* )0x0600D878,
+    (FlexSkeletonHeader* )0x06017A84,
+    (FlexSkeletonHeader* )0x06012C34,
+    (FlexSkeletonHeader* )0x0600BA24,
+    (FlexSkeletonHeader* )0x0601E244,
+};
 
-extern s16 D_801BFE14[][18];
+s16 D_801BFE14[][18] = {
+    {
+        0xC8,
+        0x29A,
+        0xC8,
+        0x2BC,
+        0x16E,
+        0xC8,
+        0x258,
+        0xAF,
+        0x3C,
+        0x320,
+        0x3E8,
+        -0x64,
+        0x258,
+        0x24E,
+        0x320,
+        0x7D,
+        0x12C,
+        0x41,
+    },
+    {
+        0xC8,
+        0x3E8,
+        0x12C,
+        0x320,
+        0x1F4,
+        0x190,
+        0x320,
+        0x190,
+        0x78,
+        0x320,
+        0x226,
+        -0x64,
+        0x258,
+        0x21C,
+        0x2EE,
+        0x7D,
+        0x190,
+        0xC8,
+    },
+    {
+        0x64,
+        0x3E8,
+        0x12C,
+        0x320,
+        0xFA,
+        0xC8,
+        0x320,
+        0xC8,
+        0x5A,
+        0x320,
+        0x15E,
+        -0x50,
+        0x258,
+        0x21C,
+        0x2EE,
+        0x3C,
+        0xC8,
+        0xC8,
+    },
+    {
+        0xC8,
+        0x3E8,
+        0x12C,
+        0x2BC,
+        0x226,
+        0x10E,
+        0x258,
+        0x3E8,
+        0x78,
+        0x320,
+        0x258,
+        -0x64,
+        0x258,
+        0x24E,
+        0x2EE,
+        0x7D,
+        0xC8,
+        0x82,
+    },
+    {
+        0xC8,
+        0x3E8,
+        0x12C,
+        0x2BC,
+        0x226,
+        0x10E,
+        0x2BC,
+        0x12C,
+        0x78,
+        0x320,
+        0x258,
+        -0x64,
+        0x258,
+        0x24E,
+        0x2EE,
+        0x7D,
+        0xC8,
+        0x82,
+    },
+    {
+        0xC8,
+        0x3E8,
+        0x12C,
+        0x2BC,
+        0x226,
+        0x10E,
+        0x2BC,
+        0x12C,
+        0x78,
+        0x320,
+        0x258,
+        -0x64,
+        0x258,
+        0x24E,
+        0x2EE,
+        0x7D,
+        0xC8,
+        0x82,
+    },
+    {
+        0xC8,
+        0x3E8,
+        0x12C,
+        0x2BC,
+        0x226,
+        0x10E,
+        0x2BC,
+        0xC8,
+        0x78,
+        0x320,
+        0x258,
+        -0x8C,
+        0x258,
+        0x24E,
+        0x2EE,
+        0x7D,
+        0xC8,
+        0x82,
+    },
+    {
+        0x50,
+        0x320,
+        0x96,
+        0x2BC,
+        0x1E0,
+        0x10E,
+        0x258,
+        0x32,
+        0x78,
+        0x320,
+        0x12C,
+        -0x28,
+        0x190,
+        0x21C,
+        0x10E,
+        0x19,
+        0,
+        0x50,
+    },
+};
 
-extern u16 D_801BFF34[4];
+u16 D_801BFF34[4] = { 2, 4, 1, 0 };
 
 // sActionModelGroups
-extern u8 D_801BFF3C[];
+u8 D_801BFF3C[] = {
+    3,
+    0xD,
+    0xA,
+    2,
+    2,
+    2,
+    5,
+    0xA,
+    0xE,
+    6,
+    6,
+    6,
+    6,
+    9,
+    7,
+    7,
+    7,
+    8,
+    3,
+    3,
+    0xB,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    0xC,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    0,
+};
 
-extern u8 D_801BFF90[];
+u8 D_801BFF90[] = { 0, 6, 4, 3, 1, 0, 0, 0 };
 
-extern u8 D_801BFF98[];
+u8 D_801BFF98[] = { 1, 3, 2, 0, 1, 0, 0, 0 };
 
 typedef struct {
     /* 0x00 */ u8 flag;
     /* 0x02 */ u16 textId;
 } TextTriggerEntry; // size = 0x04
 
-extern TextTriggerEntry D_801BFFA0[];
-
-struct _struct_D_801BFFB0_0x5 {
-    /* 0x0 */ u8 unk_0;                             /* inferred */
-    /* 0x1 */ u8 unk_1;                             /* inferred */
-    /* 0x2 */ u8 unk_2;                             /* inferred */
-    /* 0x3 */ u8 unk_3;                             /* inferred */
-    /* 0x4 */ u8 unk_4;                             /* inferred */
-};                                                  /* size = 0x5 */
+TextTriggerEntry D_801BFFA0[] = { { 1, 0x26FC }, { 2, 0x26FD }, { 0, 0 }, { 2, 0x26FD } };
 
 // gPlayerModelTypes
-extern u8 D_801BFFB0[0xF][5];/* = {
+u8 D_801BFFB0[0xF][5] = {
     { 2, 0, 8, 0xC, 0x10 },
     { 1, 2, 7, 0xF, 0x10 },
     { 1, 2, 8, 0xD, 0x10 },
@@ -68,57 +351,220 @@ extern u8 D_801BFFB0[0xF][5];/* = {
     { 0, 5, 6, 0xE, 0x10 },
     { 0, 2, 6, 0xF, 0x10 },
     { 0, 1, 7, 0xE, 0x10 },
-};*/
+};
 
-extern Gfx* D_801BFFFC[];
+Gfx* D_801BFFFC[] = {
+    (Gfx* )0x060049E0,
+    (Gfx* )0x060049E0,
+    (Gfx* )0x06008C00,
+    (Gfx* )0x06008C00,
+    (Gfx* )0x0600AB40,
+    (Gfx* )0x0600AB40,
+    (Gfx* )0x06002C20,
+    (Gfx* )0x06002C20,
+    (Gfx* )0x0600BDB0,
+    (Gfx* )0x0600BDB0,
+};
 
 typedef struct {
     Gfx* unk_00;
     Gfx* unk_04;
 } Gfx1;
-extern Gfx1 D_801C0024[];
+Gfx1 D_801C0024[] = {
+    { (Gfx* )0x0601DC28, (Gfx* )0x0601DC28 },
+    { (Gfx* )0x0601DC48, (Gfx* )0x0601DC48 },
+};
 
-extern Gfx* D_801C0034[];
+Gfx* D_801C0034[] = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    (Gfx* )0x060035F0,
+    (Gfx* )0x060035F0,
+    (Gfx* )0x0601DA90,
+    (Gfx* )0x0601DA90,
+};
 
-extern Gfx* D_801C005C[];
+Gfx* D_801C005C[] = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    (Gfx* )0x060035F0,
+    (Gfx* )0x060035F0,
+    (Gfx* )0x0601DA90,
+    (Gfx* )0x0601DA90,
+};
 
-extern Gfx* D_801C0084[];
+Gfx* D_801C0084[] = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    (Gfx* )0x060035F0,
+    (Gfx* )0x060035F0,
+    (Gfx* )0x0601DA90,
+    (Gfx* )0x0601DA90,
+};
 
-extern Gfx* D_801C00AC[][2];
-extern Gfx* D_801C00BC[][2];
+Gfx* D_801C00AC[][2] = {
+    { (Gfx* )0x0601DBC8, (Gfx* )0x0601DBC8 },
+    { (Gfx* )0x0601DC18, (Gfx* )0x0601DC18 },
+};
+Gfx* D_801C00BC[][2] = {
+    { (Gfx* )0x0601DAD8, (Gfx* )0x0601DAD8 },
+    { (Gfx* )0x0601DB40, (Gfx* )0x0601DB40 },
+    { (Gfx* )0x0601DB60, (Gfx* )0x0601DB60 },
+};
 
-extern Gfx* D_801C00D4[][2];
-
-extern Gfx* D_801C00EC[];
-extern Gfx* D_801C0114[];
-extern Gfx* D_801C013C[];
-extern Gfx* D_801C0164[];
-
-extern Gfx* D_801C018C[][2];
-
-extern Gfx* D_801C01A4[];
-extern Gfx* D_801C01CC[];
-extern Gfx* D_801C01F4[];
-extern Gfx* D_801C021C[];
-extern Gfx* D_801C0244[];
-extern Gfx* D_801C026C[];
+Gfx* D_801C00D4[][2] = {
+    { (Gfx* )0x06017700, (Gfx* )0x06017700 },
+    { (Gfx* )0x06017338, (Gfx* )0x06017338 },
+    { (Gfx* )0x06016B80, (Gfx* )0x06016B80 },
+};
 
 
-#if 0
-static s32 D_801C0294[5] = { 0x6006C38, 0x600A220, 0x600C020, 0x6003AB8, 0x600D3D8 };
-static s32 D_801C02A8[5] = { 0x6006EB8, 0x600A500, 0x600C270, 0x6003BC0, 0x600E1C8 };
-static s32 D_801C02BC[5] = { 0x6006410, 0x6009A98, 0x600B820, 0x60036B0, 0x600CCE0 };
-static s32 D_801C02D0[5] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6018490 };
-static s32 D_801C02E4[5] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6017B40 };
-#endif
-extern Gfx* D_801C0294[PLAYER_FORM_MAX];
-extern Gfx* D_801C02A8[PLAYER_FORM_MAX];
-extern Gfx* D_801C02BC[PLAYER_FORM_MAX];
-extern Gfx* D_801C02D0[PLAYER_FORM_MAX];
-extern Gfx* D_801C02E4[PLAYER_FORM_MAX];
+Gfx* D_801C00EC[] = {
+    (Gfx* )0x060080F0,
+    (Gfx* )0x060080F0,
+    (Gfx* )0x0600A500,
+    (Gfx* )0x0600A500,
+    (Gfx* )0x0600FDF0,
+    (Gfx* )0x0600FDF0,
+    (Gfx* )0x06003BC0,
+    (Gfx* )0x06003BC0,
+    (Gfx* )0x0601DCD8,
+    (Gfx* )0x0601DCD8,
+};
+Gfx* D_801C0114[] = {
+    (Gfx* )0x06006EB8,
+    (Gfx* )0x06006EB8,
+    (Gfx* )0x0600A500,
+    (Gfx* )0x0600A500,
+    (Gfx* )0x0600FDF0,
+    (Gfx* )0x0600FDF0,
+    (Gfx* )0x06003BC0,
+    (Gfx* )0x06003BC0,
+    (Gfx* )0x0600D528,
+    (Gfx* )0x0600D528,
+};
+Gfx* D_801C013C[] = {
+    (Gfx* )0x06006EB8,
+    (Gfx* )0x06006EB8,
+    (Gfx* )0x0600DE68,
+    (Gfx* )0x0600DE68,
+    (Gfx* )0x0600C270,
+    (Gfx* )0x0600C270,
+    (Gfx* )0x06003BC0,
+    (Gfx* )0x06003BC0,
+    (Gfx* )0x0600E1C8,
+    (Gfx* )0x0600E1C8,
+};
+Gfx* D_801C0164[] = {
+    (Gfx* )0x06006EB8,
+    (Gfx* )0x06006EB8,
+    (Gfx* )0x0600A500,
+    (Gfx* )0x0600A500,
+    (Gfx* )0x0600C270,
+    (Gfx* )0x0600C270,
+    (Gfx* )0x06003BC0,
+    (Gfx* )0x06003BC0,
+    (Gfx* )0x0601DC68,
+    (Gfx* )0x0601DC68,
+};
+Gfx* D_801C018C[][2] = {
+    { (Gfx* )0x0601DC68, (Gfx* )0x0601DC68 },
+    { (Gfx* )0x0601DC88, (Gfx* )0x0601DC88 },
+    { (Gfx* )0x0601DCA8, (Gfx* )0x0601DCA8 },
+};
+Gfx* D_801C01A4[] = {
+    (Gfx* )0x060067D8,
+    (Gfx* )0x060067D8,
+    (Gfx* )0x06009EF8,
+    (Gfx* )0x06009EF8,
+    (Gfx* )0x0600FBB8,
+    (Gfx* )0x0600FBB8,
+    (Gfx* )0x060038C0,
+    (Gfx* )0x060038C0,
+    (Gfx* )0x0600D058,
+    (Gfx* )0x0600D058,
+};
+Gfx* D_801C01CC[] = {
+    (Gfx* )0x060067D8,
+    (Gfx* )0x060067D8,
+    (Gfx* )0x0600E7E8,
+    (Gfx* )0x0600E7E8,
+    (Gfx* )0x0600BBE0,
+    (Gfx* )0x0600BBE0,
+    (Gfx* )0x060038C0,
+    (Gfx* )0x060038C0,
+    (Gfx* )0x0600E738,
+    (Gfx* )0x0600E738,
+};
+Gfx* D_801C01F4[] = {
+    (Gfx* )0x060067D8,
+    (Gfx* )0x060067D8,
+    (Gfx* )0x06009EF8,
+    (Gfx* )0x06009EF8,
+    (Gfx* )0x0600FBB8,
+    (Gfx* )0x0600FBB8,
+    (Gfx* )0x060038C0,
+    (Gfx* )0x060038C0,
+    (Gfx* )0x0601DD18,
+    (Gfx* )0x0601DD18,
+};
+Gfx* D_801C021C[] = {
+    (Gfx* )0x060067D8,
+    (Gfx* )0x060067D8,
+    (Gfx* )0x06009EF8,
+    (Gfx* )0x06009EF8,
+    (Gfx* )0x0600FBB8,
+    (Gfx* )0x0600FBB8,
+    (Gfx* )0x060038C0,
+    (Gfx* )0x060038C0,
+    (Gfx* )0x0600ED18,
+    (Gfx* )0x0600ED18,
+};
+Gfx* D_801C0244[] = {
+    (Gfx* )0x060067D8,
+    (Gfx* )0x060067D8,
+    (Gfx* )0x06009EF8,
+    (Gfx* )0x06009EF8,
+    (Gfx* )0x0600FBB8,
+    (Gfx* )0x0600FBB8,
+    (Gfx* )0x060038C0,
+    (Gfx* )0x060038C0,
+    (Gfx* )0x0601DCF8,
+    (Gfx* )0x0601DCF8,
+};
+Gfx* D_801C026C[] = {
+    (Gfx* )0x06006EB8,
+    (Gfx* )0x06006EB8,
+    (Gfx* )0x06011468,
+    (Gfx* )0x06011468,
+    (Gfx* )0x06010D08,
+    (Gfx* )0x06010D08,
+    (Gfx* )0x06003BC0,
+    (Gfx* )0x06003BC0,
+    (Gfx* )0x0601DFA8,
+    (Gfx* )0x0601DFA8,
+};
+
+s32 D_801C0294[PLAYER_FORM_MAX] = { 0x6006C38, 0x600A220, 0x600C020, 0x6003AB8, 0x600D3D8 };
+s32 D_801C02A8[PLAYER_FORM_MAX] = { 0x6006EB8, 0x600A500, 0x600C270, 0x6003BC0, 0x600E1C8 };
+s32 D_801C02BC[PLAYER_FORM_MAX] = { 0x6006410, 0x6009A98, 0x600B820, 0x60036B0, 0x600CCE0 };
+s32 D_801C02D0[PLAYER_FORM_MAX] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6018490 };
+s32 D_801C02E4[PLAYER_FORM_MAX] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6017B40 };
 
 // sPlayerDListGroups
-extern Gfx** D_801C02F8[]; /* = {
+Gfx** D_801C02F8[] = {
     D_801C0114,
     D_801C013C,
     D_801C0164,
@@ -137,137 +583,401 @@ extern Gfx** D_801C02F8[]; /* = {
     D_801C0084,
     D_801BFFFC,
     NULL,
-};*/
+};
 
-extern struct_80124618 D_801C0340[];
-extern struct_80124618 D_801C0368[];
+struct_80124618 D_801C0340[] = {
+    { 0, { 0, 0, 0 } },
+    { 5, { 0, 0, 0 } },
+    { 7, { 0x64, 0x64, 0x64 } },
+    { 9, { 0x6E, 0x6E, 0x6E } },
+    { 0xB, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0368[] = {
+    { 0, { 0, 0, 0 } },
+    { 4, { 0, 0, 0 } },
+    { 6, { 0x78, 0x96, 0x3C } },
+    { 8, { 0x82, 0x50, 0xA0 } },
+    { 9, { 0x64, 0x64, 0x64 } },
+    { 0xA, { 0x5A, 0x64, 0x5A } },
+    { 0xB, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C03A0[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 2, { 0x78, 0x78, 0x78 } },
+    { 6, { 0x5A, 0x5A, 0x5A } },
+    { 7, { 0x5D, 0x5D, 0x5D } },
+};
+struct_80124618 D_801C03C0[] = {
+    { 0, { 0xC8, 0x64, 0x6E } },
+    { 2, { 0x5A, 0x64, 0x64 } },
+    { 3, { 0x64, 0x64, 0x64 } },
+    { 7, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C03E0[] = {
+    { 0, { 0x64, 0x64, 0x6E } },
+    { 2, { 0x3C, 0x64, 0x50 } },
+    { 3, { 0x82, 0x69, 0x6E } },
+    { 7, { 0x82, 0x69, 0x6E } },
+    { 0xA, { 0x64, 0x64, 0x64 } },
+    { 0x13, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0410[] = {
+    { 0, { 0, 0, 0 } },
+    { 2, { 0x50, 0x6E, 0x50 } },
+    { 3, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0428[] = {
+    { 0, { 0, 0, 0 } },
+    { 6, { 0, 0, 0 } },
+    { 7, { 0x3C, 0x3C, 0x32 } },
+    { 8, { 0x78, 0x82, 0x64 } },
+    { 9, { 0x64, 0x78, 0x50 } },
+    { 0xB, { 0x64, 0x64, 0x64 } },
+    { 0xD, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0460[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 5, { 0x64, 0x64, 0x64 } },
+    { 7, { 0x64, 0x4A, 0x50 } },
+    { 8, { 0x64, 0xB4, 0x82 } },
+    { 0xA, { 0x64, 0x50, 0x50 } },
+    { 0xD, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0490[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 1, { 0x64, 0x64, 0x64 } },
+    { 2, { 0x5A, 0x64, 0x69 } },
+    { 4, { 0x6E, 0x64, 0x64 } },
+    { 5, { 0x5A, 0x64, 0x69 } },
+    { 6, { 0x64, 0x64, 0x64 } },
+    { 7, { 0x5A, 0x64, 0x69 } },
+    { 8, { 0x64, 0x64, 0x64 } },
+    { 9, { 0x5A, 0x64, 0x69 } },
+    { 0xA, { 0x64, 0x64, 0x64 } },
+    { 0xB, { 0x5A, 0x64, 0x69 } },
+    { 0xC, { 0x6E, 0x64, 0x64 } },
+    { 0xD, { 0x64, 0x64, 0x64 } },
+    { 0xE, { 0x5A, 0x64, 0x69 } },
+    { 0xF, { 0x5A, 0x64, 0x69 } },
+    { 0x11, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0510[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 4, { 0x64, 0x64, 0x64 } },
+    { 5, { 0x5A, 0x6E, 0x64 } },
+    { 6, { 0x6E, 0x69, 0x64 } },
+    { 8, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0538[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 5, { 0x64, 0x64, 0x64 } },
+    { 6, { 0, 0, 0 } },
+    { 8, { 0x64, 0x64, 0x64 } },
+    { 0xE, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0560[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 2, { 0x5F, 0x5F, 0x64 } },
+    { 3, { 0x69, 0x69, 0x64 } },
+    { 5, { 0x66, 0x66, 0x66 } },
+};
+struct_80124618 D_801C0580[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 9, { 0x64, 0x64, 0x64 } },
+    { 0xA, { 0x96, 0x96, 0x96 } },
+    { 0xC, { 0, 0, 0 } },
+    { 0xE, { 0, 0, 0 } },
+};
+struct_80124618 D_801C05A8[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 6, { 0x64, 0x64, 0x64 } },
+    { 7, { 0, 0, 0 } },
+    { 0x11, { 0, 0, 0 } },
+};
+struct_80124618 D_801C05C8[] = { { 0, { 0, 0, 0 } }, { 0x11, { 0x32, 0x32, 0x32 } } };
+struct_80124618 D_801C05D8[] = { { 0, { 0, 0, 0 } }, { 5, { 0, 0, 0 } }, { 9, { 0x64, 0x64, 0x64 } } };
+struct_80124618 D_801C05F0[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 5, { 0x64, 0x64, 0x64 } },
+    { 9, { 0, 0, 0 } },
+};
+struct_80124618 D_801C0608[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 0xA, { 0x64, 0x64, 0x64 } },
+    { 0x20, { 0x64, 0x73, 0x69 } },
+    { 0x3A, { 0x64, 0x65, 0x64 } },
+};
+struct_80124618 D_801C0628[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 5, { 0x64, 0x64, 0x64 } },
+    { 0xF, { 0x64, 0x64, 0x69 } },
+    { 0x19, { 0x64, 0x64, 0x69 } },
+    { 0x22, { 0x64, 0x64, 0x64 } },
+    { 0x2E, { 0x64, 0x64, 0x64 } },
+    { 0x39, { 0x64, 0x64, 0x69 } },
+    { 0x43, { 0x64, 0x64, 0x69 } },
+    { 0x4C, { 0x64, 0x64, 0x64 } },
+    { 0x4E, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0678[] = {
+    { 0, { 0, 0, 0 } },
+    { 6, { 0, 0, 0 } },
+    { 8, { 0x64, 0x64, 0x64 } },
+    { 0xB, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0698[] = {
+    { 0, { 0, 0, 0 } },
+    { 7, { 0x460, 0x70, 0x70 } },
+    { 8, { 0x8C, 0xA8, 0xA8 } },
+    { 0xB, { 0x8C, 0x8C, 0x8C } },
+};
+struct_80124618 D_801C06B8[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 7, { 0x64, 0x64, 0x64 } },
+    { 8, { 0x46, 0x1E, 0x46 } },
+    { 0xA, { 0, 0, 0 } },
+    { 0xE, { 0, 0, 0 } },
+};
+struct_80124618 D_801C06E0[] = { { 0, { 0x8C, 0x8C, 0x8C } }, { 1, { 0, 0, 0 } }, { 0xE, { 0, 0, 0 } } };
+struct_80124618 D_801C06F8[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 5, { 0x64, 0x64, 0x64 } },
+    { 6, { 0, 0, 0 } },
+    { 0xA, { 0, 0, 0 } },
+};
+struct_80124618 D_801C0718[] = { { 0, { 0x8C, 0x8C, 0x8C } }, { 1, { 0, 0, 0 } }, { 0xA, { 0, 0, 0 } } };
+struct_80124618 D_801C0730[] = { { 0, { 0x64, 0x64, 0x64 } }, { 0xD, { 0x64, 0x64, 0x64 } } };
+struct_80124618 D_801C0740[] = { { 0, { 0x8C, 0x8C, 0x8C } }, { 0xD, { 0x8C, 0x8C, 0x8C } } };
+struct_80124618 D_801C0750[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 5, { 0x64, 0x64, 0x64 } },
+    { 6, { 0xC8, 0xC8, 0xC8 } },
+    { 0xA, { 0xC8, 0xC8, 0xC8 } },
+    { 0xB, { 0x64, 0x64, 0x64 } },
+};
 
-extern struct_80124618 D_801C03A0[];
 
-extern struct_80124618 D_801C03C0[];
-extern struct_80124618 D_801C03E0[];
+u8 D_801C0778[] = { 0, 0, 0, 0, 0, 0x64, 0xC8, 0xFF, 0xFF, 0xFF, 0xC8, 0x64 };
 
-extern struct_80124618 D_801C0410[];
-extern struct_80124618 D_801C0428[];
+struct_80124618 D_801C0784[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 0xE, { 0x64, 0x64, 0x64 } },
+    { 0xF, { 0xC8, 0xC8, 0xC8 } },
+    { 0x10, { 0xC8, 0xC8, 0xC8 } },
+    { 0x12, { 0x64, 0x64, 0x64 } },
+};
 
-extern struct_80124618 D_801C0460[];
+u8 D_801C07AC[] = {
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0x64,
+    0xC8,
+    0xFF,
+    0xFF,
+    0xFF,
+    0xC8,
+    0x64,
+    0,
+};
 
-extern struct_80124618 D_801C0490[];
-extern struct_80124618 D_801C0510[];
+struct_80124618 D_801C07C0[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 0xA, { 0x64, 0x64, 0x64 } },
+    { 0xB, { 0x64, 0x78, 0x78 } },
+    { 0xC, { 0x64, 0x78, 0x78 } },
+    { 0xE, { 0x64, 0x64, 0x64 } },
+    { 0x13, { 0x64, 0x64, 0x64 } },
+};
 
-extern struct_80124618 D_801C0538[];
-extern struct_80124618 D_801C0560[];
+struct_80124618 D_801C07F0[] = {
+    { 0, { 0x28, 0x3C, 0x46 } },
+    { 3, { 0x28, 0x3C, 0x46 } },
+    { 4, { 0x4B, 0x5A, 0x55 } },
+    { 5, { 0x6E, 0x78, 0x64 } },
+    { 7, { 0x64, 0x64, 0x64 } },
+    { 8, { 0x64, 0x64, 0x64 } },
+};
+struct_80124618 D_801C0820[] = {
+    { 0, { 0x64, 0x64, 0x64 } },
+    { 7, { 0x64, 0x64, 0x64 } },
+    { 0xC, { 0x28, 0x3C, 0x46 } },
+};
+struct_80124618 D_801C0838[] = {
+    { 0, { 0x28, 0x3C, 0x46 } },
+    { 7, { 0x28, 0x3C, 0x46 } },
+    { 0xC, { 0x64, 0x64, 0x64 } },
+};
 
-extern struct_80124618 D_801C0580[];
-extern struct_80124618 D_801C05A8[];
+Gfx D_801C0850[] = { { { 0xD9FFFFFF, 0x400 } }, { { 0xDF000000, 0 } } };
+Gfx D_801C0860[] = { { { 0xD9FFFFFF, 0x200 } }, { { 0xDF000000, 0 } } };
 
-extern struct_80124618 D_801C05C8[];
-extern struct_80124618 D_801C05D8[];
+UNK_PTR D_801C0870[] = {
+    (void* )0x06000000,
+    (void* )0x06000800,
+    (void* )0x06001000,
+    (void* )0x06001800,
+    (void* )0x06002000,
+    (void* )0x06002800,
+    (void* )0x06003000,
+    (void* )0x06003800,
+};
+void* D_801C0890[] = {
+    (void* )0x06004000,
+    (void* )0x06004400,
+    (void* )0x06004800,
+    (void* )0x06004C00,
+};
+u8 D_801C08A0[][2] = {
+    { 0, 0 },
+    { 1, 0 },
+    { 2, 0 },
+    { 0, 0 },
+    { 1, 0 },
+    { 2, 0 },
+    { 4, 0 },
+    { 5, 1 },
+    { 7, 2 },
+    { 0, 2 },
+    { 3, 0 },
+    { 4, 0 },
+    { 2, 2 },
+    { 1, 1 },
+    { 0, 2 },
+    { 0, 3 },
+};
 
-extern struct_80124618 D_801C05F0[];
+Vec3f D_801C08C0[] = {
+    { 1304.0f, 0.0f, 0.0f },
+    { 1156.0f, 0.0f, 0.0f },
+    { 1406.0f, 0.0f, 0.0f },
+    { 408.0f, 0.0f, 0.0f },
+    { 695.0f, 0.0f, 0.0f },
+};
 
-extern struct_80124618 D_801C0608[];
-extern struct_80124618 D_801C0628[];
+f32 D_801C08FC[5] = { 1265.0f, 1056.0f, 1506.0f, 359.0f, 826.0f };
+f32 D_801C0910[5] = { 170.0416f, 133.63359f, 197.68358f, 16.646399f, 48.302498f };
+f32 D_801C0924[5] = { 10.019104f, 22.120003f, -29.12001f, 3.7582989f, -19.925102f };
+f32 D_801C0938[5] = { 5.0f, 4.0f, 1.0f, 1.0f, 3.0f };
 
-extern struct_80124618 D_801C0678[];
-extern struct_80124618 D_801C0698[];
-extern struct_80124618 D_801C06B8[];
-extern struct_80124618 D_801C06E0[];
-extern struct_80124618 D_801C06F8[];
-extern struct_80124618 D_801C0718[];
-extern struct_80124618 D_801C0730[];
-extern struct_80124618 D_801C0740[];
+Vec3f D_801C094C = { -500.0f, -100.0f, 0.0f };
 
-extern struct_80124618 D_801C0750[];
+s32 D_801C0958 = false;
 
-extern u8 D_801C0778[];
+Gfx** D_801C095C[] = { D_801C013C, D_801C0114 };
+Gfx** D_801C0964[] = { D_801C01CC, D_801C01A4 };
 
-extern struct_80124618 D_801C0784[];
+u8 D_801C096C[] = { 9, 9, 9, 0 };
 
-extern u8 D_801C07AC[];
-
-extern struct_80124618 D_801C07C0[];
-
-extern struct_80124618 D_801C07F0[];
-extern struct_80124618 D_801C0820[];
-extern struct_80124618 D_801C0838[];
-
-extern Gfx D_801C0850[];
-extern Gfx D_801C0860[];
-
-extern UNK_PTR D_801C0870[];
-extern void* D_801C0890[];
-extern u8 D_801C08A0[][2];
-
-extern Vec3f D_801C08C0[];
-
-extern f32 D_801C08FC[];
-extern f32 D_801C0910[];
-extern f32 D_801C0924[];
-extern f32 D_801C0938[];
-
-extern Vec3f D_801C094C;
-
-extern s32 D_801C0958 /* = false */;
-
-extern Gfx** D_801C095C[];
-extern Gfx** D_801C0964[];
-
-extern u8 D_801C096C[];
-
-#if 0
-Vec3f D_801C0970[3] = {
+Vec3f D_801C0970[] = {
     { 0.0f, 400.0f, 0.0f },
     { 0.0f, 1400.0f, -1000.0f },
     { 0.0f, -400.0f, 1000.0f },
 };
-#endif
 
-extern Vec3f D_801C0970[3];
-
-#if 0
-static Vec3f D_801C0994[3] = {
+static Vec3f D_801C0994[] = {
     { 5000.0f, 400.0f, 0.0f },
     { 5000.0f, -400.0f, 1000.0f },
     { 5000.0f, 1400.0f, -1000.0f },
 };
-#endif
-extern Vec3f D_801C0994[];
 
-#if 0
-Vec3f D_801C09B8[3] = {
+Vec3f D_801C09B8[] = {
     { 0.0f, 750.0f, 750.0f },
     { 1500.0f, 1500.0f, 1500.0f },
     { -2500.0f, -2000.0f, -3000.0f },
 };
-#endif
-extern Vec3f D_801C09B8[];
 
-extern Vec3f D_801C09DC[];
-extern Vec3f D_801C0A00[];
 
-extern Vec3f D_801C0A24[];
-extern Vec3f D_801C0A48[];
-extern Vec3f D_801C0A6C[];
-extern Vec3f D_801C0A90[];
+Vec3f D_801C09DC[] = {
+    { 900.0f, 300.0f, 100.0f },
+    { 1300.0f, 700.0f, -300.0f },
+    { 500.0f, -100.0f, 500.0f },
+};
+Vec3f D_801C0A00[] = {
+    { -2500.0f, 1400.0f, 1100.0f },
+    { -2900.0f, 1000.0f, 1500.0f },
+    { -2100.0f, 1800.0f, 700.0f },
+};
+Vec3f D_801C0A24[] = {
+    { 0.0f, 0.0f, 0.0f },
+    { -800.0f, 800.0f, 800.0f },
+    { -800.0f, -800.0f, -800.0f },
+};
+Vec3f D_801C0A48[] = {
+    { 2000.0f, 0.0f, 0.0f },
+    { 2800.0f, -800.0f, -800.0f },
+    { 2800.0f, 800.0f, 800.0f },
+};
+Vec3f D_801C0A6C[] = {
+    { -400.0f, 800.0f, 0.0f },
+    { -5000.0f, -500.0f, -4000.0f },
+    { -5000.0f, 8000.0f, 4000.0f },
+};
+Vec3f D_801C0A90[] = {
+    { -400.0f, 1800.0f, 0.0f },
+    { 5000.0f, 8000.0f, 4000.0f },
+    { 5000.0f, -500.0f, -4000.0f },
+};
 
-extern Gfx* D_801C0AB4[];
-extern Gfx* D_801C0ABC[];
-extern Vec3f D_801C0AC4[];
-extern Vec3f D_801C0ADC[];
 
-extern struct_80124618* D_801C0AF4[];
-extern struct_80124618* D_801C0AFC[];
-extern struct_80124618* D_801C0B04[];
-extern struct_80124618* D_801C0B0C[];
 
-extern Gfx* D_801C0B14[];
+Gfx* D_801C0AB4[] = { (Gfx* )0x0600CC38, (Gfx* )0x0600CDA0 };
+Gfx* D_801C0ABC[] = { (Gfx* )0x06010868, (Gfx* )0x06010978 };
+Vec3f D_801C0AC4[] = { { 5400.0f, 1700.0f, 1800.0f }, { 5400.0f, 1700.0f, -1800.0f } };
+Vec3f D_801C0ADC[] = { { 5250.0f, 570.0f, 2400.0f }, { 5250.0f, 570.0f, -2400.0f } };
+struct_80124618* D_801C0AF4[] = { D_801C0678, D_801C0698 };
+struct_80124618* D_801C0AFC[] = { D_801C06B8, D_801C06E0 };
+struct_80124618* D_801C0B04[] = { D_801C06F8, D_801C0718 };
+struct_80124618* D_801C0B0C[] = { D_801C0730, D_801C0740 };
+Gfx* D_801C0B14[] = { (Gfx* )0x06008760, (Gfx* )0x06008660 };
 
-extern Gfx* D_801C0B1C[];
 
-extern Gfx* D_801C0B20[];
+u8 D_801C0B1C[] = {
+    0x0C, 0x0F,
+    0x00, 0x00 // ?
+};
 
-extern Vec3f D_801C0B90[2];
+Gfx* D_801C0B20[] = {
+    (Gfx* )0x0A0001A0,
+    (Gfx* )0x0A000D40,
+    (Gfx* )0x0A000490,
+    (Gfx* )0x0A000610,
+    (Gfx* )0x0A0004A0,
+    (Gfx* )0x0A0004C0,
+    (Gfx* )0x0A0007A0,
+    (Gfx* )0x0A000700,
+    (Gfx* )0x0A000290,
+    (Gfx* )0x0A0005A0,
+    (Gfx* )0x0A0016F0,
+    (Gfx* )0x0A000250,
+    (Gfx* )0x0A000DC0,
+    (Gfx* )0x0A000EF0,
+    (Gfx* )0x0A0009F0,
+    (Gfx* )0x0A000820,
+    (Gfx* )0x0A0003C0,
+    (Gfx* )0x0A0005C0,
+    (Gfx* )0x0A000710,
+    (Gfx* )0x0A000380,
+    (Gfx* )0x0400B260,
+    (Gfx* )0x04005A10,
+    (Gfx* )0x04005360,
+    (Gfx* )0x040056C0,
+    (Gfx* )0x0A000900,
+    (Gfx* )0x0A0014A0,
+    (Gfx* )0x0A000DB0,
+    (Gfx* )0x0A001D90,
+};
+
+Vec3f D_801C0B90[] = { { 950.0f, -800.0f, 300.0f }, { 950.0f, -800.0f, -300.0f } };
 
 
 
@@ -2129,7 +2839,7 @@ s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
         gSPDisplayList(POLY_OPA_DISP++, player->actor.velocity.y < -6.0f ? object_link_nuts_DL_008AA0 : object_link_nuts_DL_008C50);
 
         // fake match?
-        Matrix_GetStateTranslation(&player->bodyPartsPos[*((u8*)D_801C0B1C + arg2)]);
+        Matrix_GetStateTranslation(&player->bodyPartsPos[D_801C0B1C[arg2]]);
         Matrix_StatePop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -2252,85 +2962,11 @@ void func_80127594(GlobalContext* globalCtx, Actor* actor) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
-extern Vec3f D_801C0BA8;
-extern Vec3f D_801C0BB4;
+Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
+Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")
 void func_80127594(GlobalContext* globalCtx, Player* player);
 #endif
-
-// Gfx?
-extern UNK_TYPE D_801C0BC0;
-
-// Gfx?
-extern UNK_TYPE D_801C0BD0;
-
-extern Vec3f D_801C0BE0;
-
-extern Vec3f D_801C0BEC;
-
-extern Color_RGBA8 D_801C0BF8;
-
-extern Color_RGBA8 D_801C0BFC;
-
-//Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
-extern Vec3f D_801C0C00;
-
-/*
-Vec3f D_801C0C0C[3] = {
-    { 174.0f, -1269.0f, -1.0f },
-    { 401.0f, -729.0f, -701.0f },
-    { 401.0f, -729.0f, 699.0f },
-};
-*/
-extern Vec3f D_801C0C0C[3];
-
-/*
-Vec3f D_801C0C30[3] = {
-    { 74.0f, -1269.0f, -1.0f },
-    { 301.0f, -729.0f, -701.0f },
-    { 301.0f, -729.0f, 699.0f },
-};
-*/
-extern Vec3f D_801C0C30[3];
-
-typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ Vec3f unk_08;
-    /* 0x14 */ char unk_14[0x04];
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-} struct_80128388_arg1; // size = 0x1C
-
-extern struct_80128388_arg1 D_801C0C54[3];
-
-extern Color_RGB8 D_801C0CA8[];
-
-extern Vec3f D_801C0CE8[];
-
-extern Vec3f D_801C0D24[];
-
-extern Vec3f D_801C0D60;
-extern Vec3f D_801C0D6C;
-
-extern f32 D_801C0D78[];
-extern Gfx** D_801C0D94;
-extern f32 D_801C0D98;
-extern f32 D_801C0D9C;
-extern f32 D_801C0DA0;
-extern Vec3f D_801C0DA8[];
-extern Vec3f D_801C0DD8;
-extern Vec3f D_801C0DE4;
-extern Gfx* D_801C0DF0[];
-extern Vec2f D_801C0E04[];
-extern Gfx* D_801C0E2C[];
-extern Vec3f D_801C0E40[];
-extern Vec3f D_801C0E7C;
-extern Vec3f D_801C0E94;
-extern Vec3f D_801C0EA0;
-extern Vec3f D_801C0EAC;
-extern Vec3s D_801C0EB8;
 
 #ifdef NON_MATCHING
 // regalloc
@@ -2376,8 +3012,174 @@ void func_801278F8(GlobalContext* globalCtx, Player* player) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
+Gfx D_801C0BC0[] = {
+    0xFB000000,
+    0x000000FF,
+    0xDF000000,
+    0
+};
+Gfx D_801C0BD0[] = {
+    0xE200001C,
+    0xC81049F8,
+    0xDF000000,
+    0
+};
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801278F8.s")
 #endif
+
+Vec3f D_801C0BE0 = { 0.0f, 0.3f, 0.0f };
+Vec3f D_801C0BEC = { 0.0f, -0.025f, 0.0f };
+Color_RGBA8 D_801C0BF8 = { 0xFA, 0x64, 0x64, 0 };
+Color_RGBA8 D_801C0BFC = { 0, 0, 0x64, 0 };
+
+Vec3f D_801C0C00 = { 0.0f, 20.0f, 0.0f };
+
+Vec3f D_801C0C0C[3] = {
+    { 174.0f, -1269.0f, -1.0f },
+    { 401.0f, -729.0f, -701.0f },
+    { 401.0f, -729.0f, 699.0f },
+};
+
+Vec3f D_801C0C30[3] = {
+    { 74.0f, -1269.0f, -1.0f },
+    { 301.0f, -729.0f, -701.0f },
+    { 301.0f, -729.0f, 699.0f },
+};
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ Vec3f unk_08;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} struct_80128388_arg1; // size = 0x1C
+
+//extern struct_80128388_arg1 D_801C0C54[3];
+struct_80128388_arg1 D_801C0C54[] = {
+    {
+        0.0f,
+        0x0000, 0x8000,
+        {0.0f, 0.0f, 0.0f},
+        0x00000000,
+        0x0000, 0x0000,
+    },{
+        16.7999992371f,
+        0x0000, 0x0000,
+        {0.0f, 0.0f, 0.0f},
+        0x41A00000,
+        0x1388, 0x1388,
+    },{
+        30.0f,
+        0x0000, 0x0000,
+        {0.0f, 0.0f, 0.0f},
+        0x41A00000,
+        0x1F40, 0x2EE0,
+    }
+};
+
+Color_RGB8 D_801C0CA8[] = {
+    { 0xFF, 0xFF, 0xFF },
+    { 0x50, 0x50, 0xFF },
+    { 0x88, 0xC0, 0xFF },
+    { 0x88, 0xC0, 0xFF },
+    { 0xB8, 0xE8, 0xE8 },
+    { 0xF8, 0xC8, 0 },
+    { 0xFF, 0xB4, 0 },
+    { 0, 0x80, 0 },
+    { 0xFC, 0xEE, 0 },
+    { 0x83, 0, 0xAE },
+    { 0x40, 0x40, 0x20 },
+    { 0, 0, 0xFF },
+    { 0xFF, 0, 0xFF },
+    { 0xFF, 0, 0xFF },
+    { 0xFF, 0, 0 },
+    { 0, 0, 0xFF },
+    { 0, 0xC8, 0 },
+    { 0xFF, 0xFF, 0xFF },
+    { 0xFF, 0xFF, 0xFF },
+    { 0xFF, 0xFF, 0xFF },
+    { 0x50, 0x50, 0xFF },
+};
+
+Vec3f D_801C0CE8[5] = {
+    { 0.0f, 0.0f, 0.0f },
+    { 300.0f, 300.0f, -230.0f },
+    { 0.0f, 90.0f, -50.0f },
+    { 0.0f, 20.0f, -60.0f },
+    { 0.0f, 0.0f, 0.0f },
+};
+Vec3f D_801C0D24[5] = {
+    { 200.0f, 300.0f, 0.0f },
+    { 200.0f, 200.0f, 0.0f },
+    { 200.0f, 300.0f, 0.0f },
+    { 200.0f, 150.0f, 0.0f },
+    { 200.0f, 200.0f, 0.0f },
+};
+Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
+Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
+
+f32 D_801C0D78[] = { 0.0f, 3000.0f, 3000.0f, 4000.0f, 5500.0f, -1.0f, 2500.0f };
+
+Gfx** D_801C0D94 = (Gfx** )0x06017818;
+
+f32 D_801C0D98 = -35.0f;
+
+f32 D_801C0D9C = -395.0f;
+f32 D_801C0DA0 = 0.0f;
+
+f32 D_801C0DA4 = 0.0f;
+
+Vec3f D_801C0DA8[4] = {
+    { -4500.0f, -3000.0f, -600.0f },
+    { 1500.0f, -3000.0f, -600.0f },
+    { -4500.0f, 3000.0f, -600.0f },
+    { 1500.0f, 3000.0f, -600.0f },
+};
+
+Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
+Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
+Gfx* D_801C0DF0[] = {
+    (Gfx* )0x06010590,
+    (Gfx* )0x06010368,
+    (Gfx* )0x06010140,
+    (Gfx* )0x0600FF18,
+    (Gfx* )0x0600FCF0,
+};
+
+Vec2f D_801C0E04[] = {
+    { 140.0f, -130.0f },
+    { 0.0f, -200.0f },
+    { -160.0f, 0.0f },
+    { 220.0f, -200.0f },
+    { 0.0f, 0.0f },
+};
+
+Gfx* D_801C0E2C[] = {
+    (Gfx* )0x06007A28,
+    (Gfx* )0x060077D0,
+    (Gfx* )0x06007548,
+    (Gfx* )0x06007900,
+    (Gfx* )0x060076A0,
+};
+Vec3f D_801C0E40[] = {
+    { 0.0f, 0.0f, 0.0f },
+    { -578.3f, -1100.9f, 0.0f },
+    { -189.5f, -594.87f, 0.0f },
+    { -570.0f, -812.0f, 0.0f },
+    { -230.0f, -520.0f, 0.0f },
+};
+Vec3f D_801C0E7C = { 1100.0f, -700.0f, 0.0f };
+
+// unused
+Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
+
+Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
+Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
+Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
+Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
+
 
 void func_80127A60(GlobalContext* globalCtx) {
     Mtx* temp_a1 = GRAPH_ALLOC(globalCtx->state.gfxCtx, 2*sizeof(Mtx));
@@ -2716,7 +3518,7 @@ s32 func_80128640(GlobalContext* globalCtx, Player* player, Gfx* dlist) {
             // sp68->polyOpa.p = temp_v0_3 + 8;
             // temp_v0_3->words.w0 = 0xDE000000;
             // temp_v0_3->words.w1 = D_801C0B1C[sp6C];
-            gSPDisplayList(POLY_OPA_DISP++, D_801C0B1C[sp6C]);
+            gSPDisplayList(POLY_OPA_DISP++, D_801C0B20[sp6C-1]);
 
             Matrix_StatePop();
 
@@ -2861,7 +3663,6 @@ void func_80128B74(GlobalContext* globalCtx, Player* player, s32 limbIndex) {
 
     Actor_SetFeetPos(&player->actor, limbIndex, 9, footPos, 6, footPos);
 }
-
 
 
 #if 0
