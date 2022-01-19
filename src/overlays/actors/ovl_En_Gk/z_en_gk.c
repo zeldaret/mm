@@ -7,7 +7,7 @@
 #include "z_en_gk.h"
 #include "objects/object_gk/object_gk.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnGk*)thisx)
 
@@ -112,6 +112,22 @@ static ActorAnimationEntry sAnimations[] = {
     { &object_gk_Anim_00AAEC, 1.0f, 0.0f, 0.0f, 0, 0.0f },
 };
 
+Color_RGBA8 D_80B533A0 = { 255, 255, 255, 255 };
+Color_RGBA8 D_80B533A4 = { 50, 150, 150, 0 };
+
+Vec3f D_80B533A8 = { 0.0f, 0.0f, 0.0f };
+Vec3f D_80B533B4 = { 0.0f, 0.0f, 0.0f };
+Vec3f D_80B533C0 = { 0.0f, 0.0f, 0.0f };
+Vec3f D_80B533CC = { 1100.0f, -100.0f, 0.0f };
+Vec3f D_80B533D8 = { 1100.0f, -100.0f, 0.0f };
+
+TexturePtr D_80B533E4[] = {
+    object_gk_Tex_00F720,
+    object_gk_Tex_00FF20,
+    object_gk_Tex_010720,
+    object_gk_Tex_010F20,
+};
+
 u16 func_80B50410(EnGk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -140,28 +156,26 @@ u16 func_80B50410(EnGk* this, GlobalContext* globalCtx) {
                 this->unk_1E4 |= 1;
                 return 0xE81;
             }
-        } else {
-            if (!(gSaveContext.weekEventReg[41] & 1)) {
-                switch (this->unk_31C) {
-                    case 0xE82:
-                        return 0xE83;
-                    case 0xE83:
-                        return 0xE7D;
-                    case 0xE7D:
-                        return 0xE7E;
-                    case 0xE7E:
-                        return 0xE7F;
-                    case 0xE7F:
-                        gSaveContext.weekEventReg[41] |= 1;
-                        this->unk_1E4 |= 1;
-                        return 0xE80;
-                    default:
-                        return 0xE82;
-                }
-            } else {
-                this->unk_1E4 |= 1;
-                return 0xE81;
+        } else if (!(gSaveContext.weekEventReg[41] & 1)) {
+            switch (this->unk_31C) {
+                case 0xE82:
+                    return 0xE83;
+                case 0xE83:
+                    return 0xE7D;
+                case 0xE7D:
+                    return 0xE7E;
+                case 0xE7E:
+                    return 0xE7F;
+                case 0xE7F:
+                    gSaveContext.weekEventReg[41] |= 1;
+                    this->unk_1E4 |= 1;
+                    return 0xE80;
+                default:
+                    return 0xE82;
             }
+        } else {
+            this->unk_1E4 |= 1;
+            return 0xE81;
         }
     } else if (globalCtx->sceneNum == SCENE_GORONRACE) {
         if (player->transformation == PLAYER_FORM_GORON) {
@@ -272,8 +286,6 @@ void func_80B50954(EnGk* this) {
 }
 
 void func_80B509A8(EnGk* this, GlobalContext* globalCtx) {
-    static Color_RGBA8 D_80B533A0 = { 255, 255, 255, 255 };
-    static Color_RGBA8 D_80B533A4 = { 50, 150, 150, 0 };
     Vec3f sp4C;
     s16 phi_s1 = 0;
 
@@ -296,6 +308,7 @@ void func_80B509A8(EnGk* this, GlobalContext* globalCtx) {
         sp4C.y = -0.5f;
         phi_s1 = 10;
     }
+
     EffectSsDtBubble_SpawnCustomColor(globalCtx, &this->unk_2E8, &this->unk_300, &sp4C, &D_80B533A0, &D_80B533A4,
                                       Rand_S16Offset(15, 15), phi_s1, 0);
     EffectSsDtBubble_SpawnCustomColor(globalCtx, &this->unk_2F4, &this->unk_30C, &sp4C, &D_80B533A0, &D_80B533A4,
@@ -918,9 +931,9 @@ void func_80B52340(EnGk* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80B52430;
         }
         func_801518B0(globalCtx, this->unk_31C, &this->actor);
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 100.0f);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);
@@ -1049,16 +1062,16 @@ void EnGk_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (!(gSaveContext.weekEventReg[22] & 4)) {
             this->actionFunc = func_80B51FD0;
             this->actor.draw = NULL;
-            this->actor.flags |= 0x10;
-            this->actor.flags &= ~1;
+            this->actor.flags |= ACTOR_FLAG_10;
+            this->actor.flags &= ~ACTOR_FLAG_1;
         } else {
             Actor_MarkForDeath(&this->actor);
         }
     } else if (!(gSaveContext.weekEventReg[22] & 4)) {
         this->unk_2E4 = 0;
         this->unk_318 = this->actor.cutscene;
-        this->actor.flags |= 0x10;
-        this->actor.flags |= 0x02000000;
+        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_2000000;
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
         this->actionFunc = func_80B5202C;
     } else {
@@ -1078,7 +1091,7 @@ void EnGk_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     if ((ENGK_GET_F(&this->actor) == ENGK_F_1) ||
-        ((ENGK_GET_F(&this->actor) == ENGK_F_0) && !(gSaveContext.weekEventReg[0x16] & 4))) {
+        ((ENGK_GET_F(&this->actor) == ENGK_F_0) && !(gSaveContext.weekEventReg[22] & 4))) {
         func_80B507A0(this, globalCtx);
         SkelAnime_Update(&this->skelAnime);
         func_800E9250(globalCtx, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
@@ -1098,11 +1111,6 @@ s32 EnGk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnGk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_80B533A8 = { 0.0f, 0.0f, 0.0f };
-    static Vec3f D_80B533B4 = { 0.0f, 0.0f, 0.0f };
-    static Vec3f D_80B533C0 = { 0.0f, 0.0f, 0.0f };
-    static Vec3f D_80B533CC = { 1100.0f, -100.0f, 0.0f };
-    static Vec3f D_80B533D8 = { 1100.0f, -100.0f, 0.0f };
     EnGk* this = THIS;
     Vec3f sp58 = D_80B533A8;
     Vec3f sp4C = D_80B533B4;
@@ -1224,12 +1232,6 @@ void EnGk_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnGk_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_80B533E4[] = {
-        object_gk_Tex_00F720,
-        object_gk_Tex_00FF20,
-        object_gk_Tex_010720,
-        object_gk_Tex_010F20,
-    };
     s32 pad;
     EnGk* this = THIS;
     Vec3f sp5C;
@@ -1257,8 +1259,9 @@ void EnGk_Draw(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B533E4[this->unk_2E0]));
 
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      EnGk_OverrideLimbDraw, EnGk_PostLimbDraw, EnGk_UnkDraw, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, EnGk_OverrideLimbDraw, EnGk_PostLimbDraw,
+                                       EnGk_UnkDraw, &this->actor);
 
         if (ENGK_GET_F(&this->actor) != ENGK_F_2) {
             func_8012C2DC(globalCtx->state.gfxCtx);
