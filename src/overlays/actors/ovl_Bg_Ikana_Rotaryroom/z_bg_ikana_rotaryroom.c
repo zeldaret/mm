@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Torch2/z_en_torch2.h"
 #include "objects/object_ikana_obj/object_ikana_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgIkanaRotaryroom*)thisx)
 
@@ -109,8 +109,9 @@ static ColliderJntSphInit sJntSphInit2 = {
     sJntSphElementsInit2,
 };
 
-static Vec3f D_80B8216C = { 225.0f, -280.0f, -210.0f };
-static Vec3f D_80B82178 = { -255.0f, -280.0f, 210.0f };
+Vec3f D_80B8216C = { 225.0f, -280.0f, -210.0f };
+
+Vec3f D_80B82178 = { -255.0f, -280.0f, 210.0f };
 
 typedef struct {
     /* 0x00 */ s8 unk_00;
@@ -118,23 +119,23 @@ typedef struct {
     /* 0x04 */ Vec3f unk_04;
 } BgIkanaRotaryroomStruct4; // size = 0x10
 
-static BgIkanaRotaryroomStruct4 D_80B82184[2][2] = {
+BgIkanaRotaryroomStruct4 D_80B82184[2][2] = {
     { { 0, 0, { -375.0f, -170.0f, 0.0f } }, { 0, 0, { 375.0f, -170.0f, 0.0f } } },
     { { 0, 0, { -435.0f, -180.0f, 0.0f } }, { 0, 1, { 435.0f, -180.0f, 0.0f } } },
 };
 
-static Vec3s D_80B821C4[] = {
+Vec3s D_80B821C4[] = {
     { -150, 194, -120 }, { -120, 194, -30 }, { -150, 194, 120 }, { 120, 194, 120 }, { 180, 194, 30 },
     { 150, 194, -90 },   { 60, 194, -120 },  { -60, 194, 90 },   { 30, 194, 120 },  { 49, 194, -105 },
 };
 
-static f32 D_80B82200[] = { 64.0f, 66.0f, 66.0f, 30.0f, 41.0f };
+f32 D_80B82200[] = { 64.0f, 66.0f, 66.0f, 30.0f, 41.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-static CollisionHeader* D_80B82218[] = { &object_ikana_obj_Colheader_006368, &object_ikana_obj_Colheader_0084F8 };
+CollisionHeader* D_80B82218[] = { &object_ikana_obj_Colheader_006368, &object_ikana_obj_Colheader_0084F8 };
 
 void func_80B802E0(BgIkanaRotaryroom* this) {
     s32 pad;
@@ -313,14 +314,14 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         actor = actor->next;
     }
 
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_2D0); i++) {
         this->unk_2D0[i].unk_00 = NULL;
     }
 
     actor = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     i = 0;
     while (actor != NULL) {
-        if ((actor->id == ACTOR_EN_TORCH2) && (actor->update != NULL) && (i < 4)) {
+        if ((actor->id == ACTOR_EN_TORCH2) && (actor->update != NULL) && (i < ARRAY_COUNT(this->unk_2D0))) {
             this->unk_2D0[i].unk_00 = actor;
 
             Matrix_StatePush();
@@ -337,14 +338,14 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         actor = actor->next;
     }
 
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_3E0); i++) {
         this->unk_3E0[i].unk_00 = NULL;
     }
 
     actor = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
     i = 0;
     while (actor != NULL) {
-        if ((actor->update != NULL) && (actor->id != ACTOR_EN_WATER_EFFECT) && (i < 4)) {
+        if ((actor->update != NULL) && (actor->id != ACTOR_EN_WATER_EFFECT) && (i < ARRAY_COUNT(this->unk_3E0))) {
             this->unk_3E0[i].unk_00 = actor;
             this->unk_3E0[i].unk_44 = actor->shape.rot;
             this->unk_3E0[i].unk_4C = 0.0f;
@@ -490,7 +491,7 @@ s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
         Matrix_StatePop();
 
-        if (Math3D_Vec3fDistSq(&sp34, &sp28) < 3.0f) {
+        if (Math3D_Vec3fDistSq(&sp34, &sp28) < SQ(1.7320508075688772f)) {
             if (!Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
                 sp24 = true;
             }
