@@ -8,6 +8,8 @@
 
 #define FLAGS 0x00000010
 
+#define THIS ((DoorSpiral*)thisx)
+
 #define GET_ORIENTATION_PARAM(this) ((((Actor*)(this))->params >> 7) & 0x1)
 #define GET_UNK145_PARAM(this) ((((Actor*)(this))->params >> 8) & 0x3)
 #define GET_TRANSITION_ID_PARAM(this) ((u16)((Actor*)(this))->params >> 10)
@@ -182,7 +184,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
-    DoorSpiral* this = (DoorSpiral*)thisx;
+    DoorSpiral* this = THIS;
     s32 pad;
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
     s8 objBankId;
@@ -308,7 +310,7 @@ void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
 }
 
 void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
-    DoorSpiral* this = (DoorSpiral*)thisx;
+    DoorSpiral* this = THIS;
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
@@ -319,7 +321,7 @@ void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    DoorSpiral* this = (DoorSpiral*)thisx;
+    DoorSpiral* this = THIS;
 
     if (this->actor.objBankIndex == this->bankIndex) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
