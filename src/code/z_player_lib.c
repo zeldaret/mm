@@ -7,18 +7,30 @@
 #include "objects/object_mask_bakuretu/object_mask_bakuretu.h"
 
 s16 D_801BFDA0[] = {
-    0x01DE, 0x01FF,
-    0x025D, 0x01DB,
-    0x01DA, 0x01FE,
-    0x0219, 0x024C,
-    0x0221, 0x025E,
-    0x0200, 0x01FD,
-    0x025C, 0x025F,
-    0x01DC, 0x024E,
-    0x0252, 0x01DD,
-    0x01D9, 0x0214,
-    0x01E4, 0x01E1,
-    0x01E2, 0x01E3,
+    OBJECT_MASK_TRUTH, 
+    OBJECT_MASK_KERFAY,
+    OBJECT_MASK_YOFUKASI, 
+    OBJECT_MASK_RABIT,
+    OBJECT_MASK_KI_TAN, 
+    OBJECT_MASK_JSON,
+    OBJECT_MASK_ROMERNY, 
+    OBJECT_MASK_ZACHO,
+    OBJECT_MASK_POSTHAT, 
+    OBJECT_MASK_MEOTO,
+    OBJECT_MASK_BIGELF, 
+    OBJECT_MASK_GIBUDO,
+    OBJECT_MASK_GERO, 
+    OBJECT_MASK_DANCER,
+    OBJECT_MASK_SKJ, 
+    OBJECT_MASK_STONE,
+    OBJECT_MASK_BREE, 
+    OBJECT_MASK_BAKURETU,
+    OBJECT_MASK_BU_SAN, 
+    OBJECT_MASK_KYOJIN,
+    OBJECT_MASK_BOY, 
+    OBJECT_MASK_GORON,
+    OBJECT_MASK_ZORA, 
+    OBJECT_MASK_NUTS,
 };
 
 struct _struct_D_801BFDD0_0x8 {
@@ -2077,20 +2089,26 @@ void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
 
 #ifdef NON_EQUIVALENT
 // This is weird...
-void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9, s16* arg10, f32* arg11, UNK_TYPE arg12) {
+void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9, s16* arg10, f32* arg11, s32 arg12) {
     Vec3f sp44;
     f32 sp40;
-    volatile s16 sp3C;
+    s16 sp3C;
     f32 sp34;
     f32 sp30;
     //s32 sp28;
     //s32 sp24;
+    //f32 temp_f0;
     f32 temp_f14;
-    s32 temp_v0_2;
+    //s16 temp_v0;
+    //s16 temp_v1;
+    //s32 temp_cond;
+    s16 temp_v0_2;
     s16 phi_a1;
     //s32 phi_v1;
-    s32 phi_v0;
-    s16 phi_a2;
+    //s16 phi_v0;
+    //s32 phi_a2;
+    //s32 phi_v1_2;
+    s16 a9;
 
     sp34 = Math_CosS(arg1) * arg0;
     sp30 = Math_SinS(arg1) * -arg0;
@@ -2101,31 +2119,21 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
 
     Math_Vec3f_Diff(arg5, arg4, &sp44);
     sp40 = sqrtf(SQ(sp44.x) + SQ(sp44.z));
-    if (sp40 <= 1.0f) {
-        phi_a1 = arg3;
-    } else {
-        phi_a1 = Math_FAtan2F(sp44.z, sp44.x);
-    }
 
-    phi_v0 = phi_a1 - arg3;
-    //sp24 = (s32) phi_v0;
-    //sp28 = (s32) phi_v0;
-    temp_f14 = (Math_CosS(phi_v0) * sp40) + arg8;
+    sp3C = (sp40 <= 1.0f) ? arg3 : Math_FAtan2F(sp44.z, sp44.x);
 
-    if (ABS_ALT(phi_v0) > 0x4000) {
-        phi_v0 = (s16) BINANG_ROT180(phi_a1) - arg3;
+    temp_f14 = (Math_CosS(sp3C - arg3) * sp40) + arg8;
+
+    if (ABS_ALT(sp3C - arg3) > 0x4000) {
+        sp3C = BINANG_SUB(BINANG_ROT180(sp3C), arg3);
     }
-    sp3C = phi_v0;
 
     temp_v0_2 = Math_FAtan2F(sp44.y, temp_f14);
-    phi_a2 = (s32) arg9 * -1;
-    phi_a2 = phi_a2;
-    if ((temp_v0_2 >= (s32) phi_a2)) {
+    if (sp3C) {}
+    a9 = -arg9;
+    temp_v0_2 = CLAMP(temp_v0_2, a9, arg9);
 
-        phi_a2 = CLAMP_MAX(temp_v0_2, arg9);
-    }
-
-    func_80124F18(arg6, arg7, phi_a2, 20.0f, 2000.0f);
+    func_80124F18(arg6, arg7, temp_v0_2, 20.0f, 2000.0f);
 }
 #else
 void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8, s16 arg9, s16* arg10, f32* arg11, UNK_TYPE arg12);
