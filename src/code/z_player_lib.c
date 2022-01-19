@@ -42,13 +42,13 @@ typedef struct {
     /* 0x1A */ s16 unk_1A;
 } struct_801F58B0; // size = 0x1C
 
-extern struct_801F58B0 D_801F58B0[3][3];
+struct_801F58B0 D_801F58B0[3][3];
 
-extern struct_801F58B0 D_801F59AC[][3];
+UNK_TYPE D_801F59AC;
 
-extern Vec3f D_801F59B0[2];
+Vec3f D_801F59B0[2];
 
-extern s32 D_801F59C8[2];
+s32 D_801F59C8[2];
 
 typedef struct {
     /* 0x00 */ s16 unk_0;
@@ -58,17 +58,18 @@ typedef struct {
     /* 0x08 */ s16 unk_8;
 } struct_801F59D0;
 
-extern struct_801F59D0 D_801F59D0;
+struct_801F59D0 D_801F59D0;
 
-extern s32 D_801F59E0;
+Vec3f* D_801F59DC;
 
-extern s32 D_801F59E4;
+s32 D_801F59E0;
 
-extern Vec3f D_801F59E8;
+s32 D_801F59E4;
 
-extern s32 D_801F59F4;
-extern s32 D_801F59F8;
+Vec3f D_801F59E8;
 
+s32 D_801F59F4;
+s32 D_801F59F8;
 
 
 
@@ -2186,7 +2187,6 @@ typedef struct {
     /* 0x144 */ f32 unk_144;
 } ActorUnknown; // size >= 0x144
 
-extern Vec3f* D_801F59DC;
 
 s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
