@@ -93,8 +93,8 @@ void func_80B965D0(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    EnZot* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnZot* this = THIS;
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
