@@ -271,12 +271,12 @@ void EnBigokuta_IdleAboveWater(EnBigokuta* this, GlobalContext* globalCtx) {
 }
 
 void EnBigokuta_UpdateOrSetupCam(EnBigokuta* this, GlobalContext* globalCtx) {
-
     if (this->actor.cutscene != -1) {
         if (this->camId != 0) {
             EnBigokuta_MoveCamera(this, globalCtx);
         } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             Camera* camera = Play_GetCamera(globalCtx, 0);
+
             EnBigokuta_SetupCutsceneCamera(this, globalCtx, &camera->at, &camera->eye);
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
