@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Ossan/z_en_ossan.h"
 #include "objects/object_bba/object_bba.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnBaba*)thisx)
 
@@ -104,13 +104,13 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static s32 D_80BAA488[] = {
+s32 D_80BAA488[] = {
     0x0C000119, 0x0A006E14, 0x02000000, 0x1E080F00, 0x1E030400, 0x01050E00, 0x00001E02, 0x05050000,
 };
 
-static s32 D_80BAA4A8[] = { -1, -1, 0 };
+s32 D_80BAA4A8[] = { -1, -1, 0 };
 
-static u16 D_80BAA4B4[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+u16 D_80BAA4B4[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
 
 s32 func_80BA8820(EnBaba* this, GlobalContext* globalCtx) {
     this->unk_144 = (EnOssan*)SubS_FindActor(globalCtx, &this->unk_144->actor, ACTORCAT_NPC, ACTOR_EN_OSSAN);
@@ -239,8 +239,8 @@ void func_80BA886C(EnBaba* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BA8C4C(GlobalContext* globalCtx, u16 arg1) {
-    globalCtx->nextEntranceIndex = arg1;
+void func_80BA8C4C(GlobalContext* globalCtx, u16 nextEntrance) {
+    globalCtx->nextEntranceIndex = nextEntrance;
     globalCtx->unk_1887F = 0x40;
     gSaveContext.nextTransition = 0x40;
     globalCtx->sceneLoadFlag = 0x14;
@@ -430,7 +430,7 @@ void func_80BA9480(EnBaba* this, GlobalContext* globalCtx) {
 
     this->actor.draw = EnBaba_Draw;
     this->unk_40A |= 0x80;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
 
     if (globalCtx->sceneNum == SCENE_BOMYA) {
         this->unk_40A |= 2;
@@ -473,7 +473,7 @@ void func_80BA9480(EnBaba* this, GlobalContext* globalCtx) {
     } else {
         this->unk_40A |= 2;
         if (ENBABA_GET_C000(&this->actor) == ENBABA_C000_2) {
-            this->actor.flags &= -2;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_40C = 5;
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
             this->actionFunc = func_80BA9E00;
@@ -494,12 +494,12 @@ void func_80BA9758(EnBaba* this, GlobalContext* globalCtx) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_80BA886C(this, globalCtx);
             if (this->unk_40A & 8) {
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
             }
             this->actionFunc = func_80BA98EC;
         } else if (this->actor.xzDistToPlayer < 100.0f) {
             if (this->unk_40A & 8) {
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
             }
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
@@ -564,7 +564,7 @@ void func_80BA9AB8(EnBaba* this, GlobalContext* globalCtx) {
         this->unk_40A |= 0x40;
         this->actionFunc = func_80BA9B24;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, 0x8D, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MASK_BLAST, 300.0f, 300.0f);
     }
 }
 
@@ -586,11 +586,11 @@ void func_80BA9B80(EnBaba* this, GlobalContext* globalCtx) {
     if (!func_80133038(globalCtx, D_80BAA488, &sp20) ||
         ((this->unk_434 != sp20.unk0) && !func_80BA9110(this, globalCtx, &sp20))) {
         this->unk_40A &= ~0x80;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         sp20.unk0 = false;
     } else {
         this->unk_40A |= 0x80;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
     this->unk_434 = sp20.unk0;
 
@@ -598,7 +598,7 @@ void func_80BA9B80(EnBaba* this, GlobalContext* globalCtx) {
 
     if (this->unk_40A & 2) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_801518B0(globalCtx, 0x2A39, &this->actor);
+            func_801518B0(globalCtx, 0x2A39, &this->actor); // "I'm sorry"
             this->actionFunc = func_80BA9848;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
             func_800B863C(&this->actor, globalCtx);
@@ -723,7 +723,7 @@ void EnBaba_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     }
 }
 
-void EnBaba_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnBaba_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -739,8 +739,9 @@ void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&object_bba_Tex_0092A0));
 
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      EnBaba_OverrideLimbDraw, EnBaba_PostLimbDraw, EnBaba_UnkDraw, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, EnBaba_OverrideLimbDraw, EnBaba_PostLimbDraw,
+                                       EnBaba_TransformDraw, &this->actor);
 
         if (this->unk_40A & 0x80) {
             if ((this->unk_40C == 3) || (this->unk_40C == 4)) {
@@ -753,7 +754,7 @@ void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             sp40.x = sp40.y = sp40.z = 0.3f;
-            func_800BC620(&sp4C, &sp40, 0xFF, globalCtx);
+            func_800BC620(&sp4C, &sp40, 255, globalCtx);
         }
     }
 
