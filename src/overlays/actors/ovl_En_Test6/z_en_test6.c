@@ -114,14 +114,14 @@ void func_80A90730(EnTest6* this, GlobalContext* globalCtx) {
     this->actor.home.pos = player->actor.world.pos;
     this->actor.home.rot = player->actor.shape.rot;
 
-    switch (this->actor.params) {
-        case 24:
-        case 25:
+    switch (ENTEST6_GET(&this->actor)) {
+        case ENTEST6_24:
+        case ENTEST6_25:
             func_80A91690(this, globalCtx);
             ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[8]);
             return;
 
-        case 26:
+        case ENTEST6_26:
             func_80A920C8(this, globalCtx);
             ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[8]);
             return;
@@ -304,7 +304,8 @@ void EnTest6_Init(Actor* thisx, GlobalContext* globalCtx2) {
     EnTest6* this = THIS;
     s32 i;
 
-    if (((this->actor.params == 0x18) || (this->actor.params == 0x19) || (this->actor.params == 0x1A)) &&
+    if (((ENTEST6_GET(&this->actor) == ENTEST6_24) || (ENTEST6_GET(&this->actor) == ENTEST6_25) ||
+         (ENTEST6_GET(&this->actor) == ENTEST6_26)) &&
         (globalCtx->unk_1879C[8] == -1)) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -351,9 +352,9 @@ void EnTest6_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
 }
 
 void func_80A9156C(EnTest6* this, GlobalContext* globalCtx) {
-    switch (this->actor.params) {
-        case 24:
-        case 25:
+    switch (ENTEST6_GET(&this->actor)) {
+        case ENTEST6_24:
+        case ENTEST6_25:
             if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[8])) {
                 ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[8]);
             } else {
@@ -363,7 +364,7 @@ void func_80A9156C(EnTest6* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 26:
+        case ENTEST6_26:
             if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[8])) {
                 ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[8]);
             } else {
@@ -386,9 +387,9 @@ void func_80A91690(EnTest6* this, GlobalContext* globalCtx) {
     this->unk_274 = 90;
     this->unk_27A = 100;
     this->unk_286 = 0;
-    if (this->actor.params == 0x19) {
+    if (ENTEST6_GET(&this->actor) == ENTEST6_25) {
         play_sound(NA_SE_SY_TIME_CONTROL_SLOW);
-    } else if (this->actor.params == 0x18) {
+    } else if (ENTEST6_GET(&this->actor) == ENTEST6_24) {
         play_sound(NA_SE_SY_TIME_CONTROL_NORMAL);
     }
 }
@@ -438,7 +439,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
 
             if (this->unk_27A == 90) {
                 this->unk_282 = 0;
-                if (this->actor.params == 0x18) {
+                if (ENTEST6_GET(&this->actor) == ENTEST6_24) {
                     this->unk_27C = 0x200;
                     this->unk_150 = 0.0f;
                     sp4C = -100.0f;
@@ -490,7 +491,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
 
             this->unk_278 -= this->unk_27C;
             temp_s0 = this->unk_278;
-            if (this->actor.params == 0x18) {
+            if (ENTEST6_GET(&this->actor) == ENTEST6_24) {
                 this->unk_27C += 8;
                 this->unk_150 += this->unk_14C;
             } else {
@@ -509,7 +510,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
             if (this->unk_254 != NULL) {
                 for (i = 0; i < ARRAY_COUNT(this->unk_254[0]); i++) {
                     (*this->unk_254)[i].x += 2.0f * ((2.0f * Rand_ZeroOne()) - 1.0f);
-                    if (this->actor.params == 0x18) {
+                    if (ENTEST6_GET(&this->actor) == ENTEST6_24) {
                         (*this->unk_254)[i].y += 1.0f;
                     } else {
                         if (1) {}
@@ -593,9 +594,9 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
     } else if ((this->unk_27A <= 60) && (this->unk_27A > 40) &&
                (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
         this->unk_286 = 1;
-        if (this->actor.params == 0x19) {
+        if (ENTEST6_GET(&this->actor) == ENTEST6_25) {
             func_801A75E8(NA_SE_SY_TIME_CONTROL_SLOW);
-        } else if (this->actor.params == 0x18) {
+        } else if (ENTEST6_GET(&this->actor) == ENTEST6_24) {
             func_801A75E8(NA_SE_SY_TIME_CONTROL_NORMAL);
         }
     }

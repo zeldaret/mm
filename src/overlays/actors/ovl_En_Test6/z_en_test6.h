@@ -7,6 +7,14 @@ struct EnTest6;
 
 typedef void (*EnTest6ActionFunc)(struct EnTest6*, GlobalContext*);
 
+#define ENTEST6_GET(thisx) ((thisx)->params)
+
+enum {
+    /* 24 */ ENTEST6_24 = 24,
+    /* 25 */ ENTEST6_25,
+    /* 26 */ ENTEST6_26,
+};
+
 typedef struct {
     /* 0x00 */ LightNode* node;
     /* 0x04 */ LightInfo info;
