@@ -457,7 +457,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
 
                 this->unk_254 = ZeldaArena_Malloc(0x300);
                 if (this->unk_254 != NULL) {
-                    for (i = 0; i < 64; i++) {
+                    for (i = 0; i < ARRAY_COUNT(this->unk_254[0]); i++) {
                         (*this->unk_254)[i].x = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + temp_s3->eye.x +
                                                 ((temp_s3->at.x - temp_s3->eye.x) * .2f);
                         (*this->unk_254)[i].y = (((2.0f * Rand_ZeroOne()) - 1.0f) * 120.0f) + temp_s3->eye.y +
@@ -507,7 +507,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_254 != NULL) {
-                for (i = 0; i < 64; i++) {
+                for (i = 0; i < ARRAY_COUNT(this->unk_254[0]); i++) {
                     (*this->unk_254)[i].x += 2.0f * ((2.0f * Rand_ZeroOne()) - 1.0f);
                     if (this->actor.params == 0x18) {
                         (*this->unk_254)[i].y += 1.0f;
@@ -1123,7 +1123,7 @@ void func_80A93298(EnTest6* this, GlobalContext* globalCtx) {
     this->unk_27C += (s16)this->unk_154;
     this->unk_27E = (s16)((this->unk_154 / 200.0f) * 256.0f);
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_254[0]); i++) {
         temp_s3 += 0x1000;
         cos = Math_CosS(temp_s3) * this->unk_150;
         sin = Math_SinS(temp_s3) * this->unk_150;
@@ -1272,7 +1272,7 @@ void func_80A939E8(EnTest6* this, GlobalContext* globalCtx2) {
             }
 
             if (this->unk_254 != NULL) {
-                for (i = 0; i < 64; i++) {
+                for (i = 0; i < ARRAY_COUNT(this->unk_254[0]); i++) {
                     temp_f20 = Rand_ZeroOne() * 0.0025f;
                     Matrix_InsertTranslation((*this->unk_254)[i].x, (*this->unk_254)[i].y, (*this->unk_254)[i].z,
                                              MTXMODE_NEW);
