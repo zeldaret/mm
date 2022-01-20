@@ -2235,14 +2235,13 @@ void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else {
-        Actor* temp_v0_3;
+        Actor* boomerangActor = player->boomerangActor;
         Vec3f sp58;
         Vec3f sp4C;
 
-        temp_v0_3 = player->boomerangActor;
         if (!(player->stateFlags1 & PLAYER_STATE1_2000000) ||
-            ((player->boomerangActor != 0) && (player->boomerangActor->params != arg2) &&
-             (((temp_v0_3->child == NULL)) || (temp_v0_3->child->params != arg2)))) {
+            ((player->boomerangActor != NULL) && (player->boomerangActor->params != arg2) &&
+             (((boomerangActor->child == NULL)) || (boomerangActor->child->params != arg2)))) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             if ((player->skelAnime.animation != &gameplay_keep_Linkanim_00E3E0) &&
@@ -2348,7 +2347,7 @@ s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
         }
 
         Matrix_StatePush();
-        Matrix_InsertTranslation(0.0f, 150.0f, 0.0f, 1);
+        Matrix_InsertTranslation(0.0f, 150.0f, 0.0f, MTXMODE_APPLY);
         func_80124618(sp3C[0], player->skelAnime.curFrame, &player->unk_AF0[1]);
         Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, 1);
 
@@ -2356,10 +2355,10 @@ s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
 
         gSPDisplayList(POLY_OPA_DISP++, D_801C0B14[arg2]);
 
-        Matrix_InsertTranslation(2150.0f, 0.0f, 0.0f, 1);
-        Matrix_InsertXRotation_s(player->unk_B8A, 1);
+        Matrix_InsertTranslation(2150.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(player->unk_B8A, MTXMODE_APPLY);
         func_80124618(sp3C[1], player->skelAnime.curFrame, &player->unk_AF0[1]);
-        Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, 1);
+        Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -2372,9 +2371,10 @@ s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-        return 1;
+        return true;
     }
-    return 0;
+
+    return false;
 }
 
 s32 func_80127438(GlobalContext* globalCtx, Player* player, s32 maskId) {
@@ -2882,12 +2882,11 @@ void func_80127DA4(GlobalContext* globalCtx, struct_801F58B0 arg1[], struct_8012
 #endif
 
 void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2, Mtx** arg3) {
-    struct_801F58B0* phi_s1;
+    struct_801F58B0* phi_s1 = &arg0[1];
     Vec3f sp58;
     Vec3s sp50;
     s32 i;
 
-    phi_s1 = &arg0[1];
     sp58.y = 0.0f;
     sp58.z = 0.0f;
     sp50.x = 0;
@@ -3167,8 +3166,9 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
 
     if (limbIndex == PLAYER_LIMB_L_HAND) {
         Math_Vec3f_Copy(&player->leftHandWorld.pos, D_801F59DC);
-        if ((*dList1 != 0) && (func_801271B0(globalCtx, player, 0) == 0) && !func_80128640(globalCtx, player, *dList1) && (&gameplay_keep_Linkanim_00E218 == player->skelAnime.animation)) {
-            func_80127488(globalCtx, player, D_801C0778[(s32) player->skelAnime.curFrame]);
+        if ((*dList1 != 0) && !func_801271B0(globalCtx, player, 0) && !func_80128640(globalCtx, player, *dList1) &&
+            (&gameplay_keep_Linkanim_00E218 == player->skelAnime.animation)) {
+            func_80127488(globalCtx, player, D_801C0778[(s32)player->skelAnime.curFrame]);
         }
 
         if (player->actor.scale.y >= 0.0f) {
@@ -3193,7 +3193,11 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                     player->heldActor->world.rot.y = temp_v0;
                 }
             } else {
-                if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) || ((player->transformation != PLAYER_FORM_ZORA) && ((player->heldItemActionParam == 7) || ((player->swordState != 0) && ((player->swordAnimation != 0x19)) && (player->swordAnimation != 0x1A))))) {
+                if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) ||
+                    ((player->transformation != PLAYER_FORM_ZORA) &&
+                     ((player->heldItemActionParam == 7) ||
+                      ((player->swordState != 0) && ((player->swordAnimation != 0x19)) &&
+                       (player->swordAnimation != 0x1A))))) {
                     if (player->heldItemActionParam == 7) {
                         D_801C0994->x = player->unk_B08[1] * 5000.0f;
                     } else {
@@ -3212,7 +3216,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 OPEN_DISPS(globalCtx->state.gfxCtx);
 
                 Matrix_StatePush();
-                Matrix_InsertTranslation(D_801C0D9C, D_801C0D9C, D_801C0DA0, 1);
+                Matrix_InsertTranslation(D_801C0D9C, D_801C0D9C, D_801C0DA0, MTXMODE_APPLY);
                 if ((player->stateFlags3 & PLAYER_STATE3_40) && (player->unk_B28 >= 0) && (player->unk_ACC < 0xB)) {
                     Matrix_GetStateTranslation(&sp20C);
                     temp_f0 = Math_Vec3f_DistXYZ(D_801F59DC, &sp20C);
@@ -3229,7 +3233,8 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 }
                 Matrix_Scale(1.0f, player->unk_B08[0], 1.0f, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                 gSPDisplayList(POLY_XLU_DISP++, D_801C0D94);
 
@@ -3266,7 +3271,8 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 func_80126B8C(globalCtx, player);
             }
             if ((player->unk_B2A != 0) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
-                if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->unk_B2A != 0) && (player->exchangeItemId != EXCH_ITEM_NONE)) {
+                if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->unk_B2A != 0) &&
+                    (player->exchangeItemId != EXCH_ITEM_NONE)) {
                     Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
                 } else {
                     D_801F59E8.x = (player->bodyPartsPos[0xF].x + player->leftHandWorld.pos.x) * 0.5f;
@@ -3284,7 +3290,10 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
     } else if (limbIndex == PLAYER_LIMB_R_FOREARM) {
         func_80126BD0(globalCtx, player, 1);
     } else if (limbIndex == PLAYER_LIMB_TORSO) {
-        if ((player->transformation == PLAYER_FORM_GORON) && (( ( &gameplay_keep_Linkanim_00E1F8 == player->skelAnime.animation)) || ((&gameplay_keep_Linkanim_00E200 == player->skelAnime.animation) != 0) || (&gameplay_keep_Linkanim_00E1F0 == player->skelAnime.animation))) {
+        if ((player->transformation == PLAYER_FORM_GORON) &&
+            (((&gameplay_keep_Linkanim_00E1F8 == player->skelAnime.animation)) ||
+             ((&gameplay_keep_Linkanim_00E200 == player->skelAnime.animation) != 0) ||
+             (&gameplay_keep_Linkanim_00E1F0 == player->skelAnime.animation))) {
             s32 i;
 
             OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -3310,7 +3319,8 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
             Matrix_StatePush();
             Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(POLY_XLU_DISP++, object_link_goron_DL_00FC18);
 
@@ -3320,7 +3330,8 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 Matrix_StatePush();
                 Matrix_Scale(sp178[i].x, sp178[i].y, sp178[i].z, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, D_801C0DF0[i]);
 
                 Matrix_StatePop();
@@ -3329,7 +3340,13 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
-        if ((*dList1 != NULL) && ((player->currentMask != PLAYER_MASK_NONE)) && ((((player->transformation == PLAYER_FORM_HUMAN)) && ((&gameplay_keep_Linkanim_00D0C8 != player->skelAnime.animation) || (player->skelAnime.curFrame >= 12.0f))) || ((player->transformation != PLAYER_FORM_HUMAN) && ((s32) player->currentMask >= PLAYER_MASK_FIERCE_DEITY) && (player->currentMask != (player->transformation + PLAYER_MASK_FIERCE_DEITY)) && (player->skelAnime.curFrame >= 10.0f)))) {
+        if ((*dList1 != NULL) && ((player->currentMask != PLAYER_MASK_NONE)) &&
+            ((((player->transformation == PLAYER_FORM_HUMAN)) &&
+              ((&gameplay_keep_Linkanim_00D0C8 != player->skelAnime.animation) ||
+               (player->skelAnime.curFrame >= 12.0f))) ||
+             ((player->transformation != PLAYER_FORM_HUMAN) && ((s32)player->currentMask >= PLAYER_MASK_FIERCE_DEITY) &&
+              (player->currentMask != (player->transformation + PLAYER_MASK_FIERCE_DEITY)) &&
+              (player->skelAnime.curFrame >= 10.0f)))) {
             if (func_80127438(globalCtx, player, player->currentMask)) {
                 sp154 = player->currentMask - 1;
 
@@ -3352,10 +3369,13 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                     Matrix_InsertTranslation(temp_s0_6->x, temp_s0_6->y, 0.0f, 1);
                     Matrix_Scale(1.0f, 1.0f - player->unk_B08[5], 1.0f - player->unk_B08[4], 1);
 
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                     Matrix_StatePop();
-                    if ((&gameplay_keep_Linkanim_00D0C8 == player->skelAnime.animation && (player->skelAnime.curFrame >= 51.0f)) || (&gameplay_keep_Linkanim_00D0D0 == player->skelAnime.animation)) {
+                    if ((&gameplay_keep_Linkanim_00D0C8 == player->skelAnime.animation &&
+                         (player->skelAnime.curFrame >= 51.0f)) ||
+                        (&gameplay_keep_Linkanim_00D0D0 == player->skelAnime.animation)) {
                         sp154 += 4;
                     }
                 }
@@ -3371,19 +3391,22 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 func_80124618(D_801C0410, player->skelAnime.curFrame, player->unk_AF0);
                 Matrix_StatePush();
 
-                Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, object_link_nuts_DL_00A348);
 
                 Matrix_StatePop();
 
                 CLOSE_DISPS(globalCtx->state.gfxCtx);
-            } else if (&gameplay_keep_Linkanim_00E2B0 ==  player->skelAnime.animation || (&gameplay_keep_Linkanim_00E2A8 == player->skelAnime.animation) || (&gameplay_keep_Linkanim_00D300 == player->skelAnime.animation)) {
+            } else if (&gameplay_keep_Linkanim_00E2B0 == player->skelAnime.animation ||
+                       (&gameplay_keep_Linkanim_00E2A8 == player->skelAnime.animation) ||
+                       (&gameplay_keep_Linkanim_00D300 == player->skelAnime.animation)) {
                 s32 i;
 
                 OPEN_DISPS(globalCtx->state.gfxCtx);
 
-                if (&gameplay_keep_Linkanim_00E2B0 ==  player->skelAnime.animation) {
+                if (&gameplay_keep_Linkanim_00E2B0 == player->skelAnime.animation) {
                     s32 i;
 
                     func_80124618(D_801C0340, player->skelAnime.curFrame, &spD4);
@@ -3420,14 +3443,16 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 Matrix_StatePush();
                 Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].x, player->unk_AF0[0].x, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, object_link_nuts_DL_007390);
                 Matrix_StatePop();
 
                 for (i = 0; i < ARRAY_COUNT(D_801C0E2C); i++) {
                     Matrix_StatePush();
                     Matrix_Scale(spF0[i].x, spF0[i].y, spF0[i].z, MTXMODE_APPLY);
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     gSPDisplayList(POLY_XLU_DISP++, D_801C0E2C[i]);
                     Matrix_StatePop();
                 }
@@ -3447,7 +3472,8 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 Matrix_Scale(0.7f, 0.7f, 0.7f, 1);
             }
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, (u8)player->unk_AE8);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054C90);
 
@@ -3461,7 +3487,10 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
             } else {
                 Matrix_MultiplyVector3fByState(&D_801C0E7C, &player->actor.focus.pos);
                 Matrix_MultiplyVector3fByState(&D_801C0E94, D_801F59DC);
-                if (((&gameplay_keep_Linkanim_00E298 == player->skelAnime.animation) || (&gameplay_keep_Linkanim_00E2F0 == player->unk_284.animation) || (((player->stateFlags3 & PLAYER_STATE3_40) != 0) && ((player->heldActor != 0)))) && (player->heldActor != 0)) {
+                if (((&gameplay_keep_Linkanim_00E298 == player->skelAnime.animation) ||
+                     (&gameplay_keep_Linkanim_00E2F0 == player->unk_284.animation) ||
+                     (((player->stateFlags3 & PLAYER_STATE3_40) != 0) && ((player->heldActor != 0)))) &&
+                    (player->heldActor != 0)) {
                     Matrix_StatePush();
                     Matrix_MultiplyVector3fByState(&D_801C0EA0, &player->heldActor->world.pos);
                     Matrix_InsertRotation(0, 0x4000, 0, MTXMODE_APPLY);
@@ -3477,10 +3506,12 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
         Matrix_GetStateTranslationAndScaledX(3000.0f, &sp5C);
         Matrix_GetStateTranslationAndScaledX(2300.0f, &sp50);
         if (func_80126440(globalCtx, NULL, player->swordInfo, &sp5C, &sp50) != 0) {
-            EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[0]), &player->swordInfo[0].tip, &player->swordInfo[0].base);
+            EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[0]), &player->swordInfo[0].tip,
+                                  &player->swordInfo[0].base);
         }
     } else if (limbIndex == PLAYER_LIMB_R_SHIN) {
-        if ((player->swordState != 0) && (((player->swordAnimation == 0x1D)) || (player->swordAnimation == 0x12) || (player->swordAnimation == 0x15))) {
+        if ((player->swordState != 0) && (((player->swordAnimation == 0x1D)) || (player->swordAnimation == 0x12) ||
+                                          (player->swordAnimation == 0x15))) {
             func_8012669C(globalCtx, player, D_801C0A48, D_801C0A24);
         }
     } else if (limbIndex == PLAYER_LIMB_WAIST) {
@@ -3489,7 +3520,9 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
             func_8012669C(globalCtx, player, D_801C0A90, D_801C0A6C);
         }
     } else if (limbIndex == PLAYER_LIMB_SHEATH) {
-        if ((*dList1 != NULL) && (player->transformation == PLAYER_FORM_HUMAN) && (player->currentShield != PLAYER_SHIELD_NONE) && (((player->sheathType == 0xE)) || (player->sheathType == 0xF))) {
+        if ((*dList1 != NULL) && (player->transformation == PLAYER_FORM_HUMAN) &&
+            (player->currentShield != PLAYER_SHIELD_NONE) &&
+            (((player->sheathType == 0xE)) || (player->sheathType == 0xF))) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             gSPDisplayList(POLY_XLU_DISP++, *D_801C00AC[player->currentShield - 1]);
@@ -3497,7 +3530,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
         if (player->actor.scale.y >= 0.0f) {
-            if (( player->rightHandType != 8) && ( player->rightHandType != 0xFF)) {
+            if ((player->rightHandType != 8) && (player->rightHandType != 0xFF)) {
                 Matrix_JointPosition(&D_801C0EAC, &D_801C0EB8);
                 Matrix_CopyCurrentState(&player->shieldMf);
             }
