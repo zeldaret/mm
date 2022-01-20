@@ -6,7 +6,6 @@
 #include "objects/object_link_zora/object_link_zora.h"
 #include "objects/object_link_nuts/object_link_nuts.h"
 #include "objects/object_link_child/object_link_child.h"
-#include "objects/object_mask_meoto/object_mask_meoto.h"
 
 #include "objects/object_mask_truth/object_mask_truth.h"
 #include "objects/object_mask_kerfay/object_mask_kerfay.h"
@@ -17,6 +16,7 @@
 #include "objects/object_mask_romerny/object_mask_romerny.h"
 #include "objects/object_mask_zacho/object_mask_zacho.h"
 #include "objects/object_mask_posthat/object_mask_posthat.h"
+#include "objects/object_mask_meoto/object_mask_meoto.h"
 #include "objects/object_mask_bigelf/object_mask_bigelf.h"
 #include "objects/object_mask_gibudo/object_mask_gibudo.h"
 #include "objects/object_mask_gero/object_mask_gero.h"
@@ -556,20 +556,20 @@ s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
     }
 
     if (arg2 == 1) {
-        return (gSaveContext.buttonStatus[1] != 0xFF) ? gSaveContext.equips.buttonItems[0][1]
-               : (gSaveContext.unk_3F22 == 0x10)      ? gSaveContext.equips.buttonItems[0][1]
-                                                      : 0xFF;
+        return (gSaveContext.buttonStatus[1] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][1]
+               : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][1]
+                                                              : ITEM_NONE;
     }
 
     if (arg2 == 2) {
-        return (gSaveContext.buttonStatus[2] != 0xFF) ? gSaveContext.equips.buttonItems[0][2]
-               : (gSaveContext.unk_3F22 == 0x10)      ? gSaveContext.equips.buttonItems[0][2]
-                                                      : 0xFF;
+        return (gSaveContext.buttonStatus[2] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][2]
+               : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][2]
+                                                              : ITEM_NONE;
     }
 
-    return (gSaveContext.buttonStatus[3] != 0xFF) ? gSaveContext.equips.buttonItems[0][3]
-           : (gSaveContext.unk_3F22 == 0x10)      ? gSaveContext.equips.buttonItems[0][3]
-                                                  : 0xFF;
+    return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][3]
+           : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][3]
+                                                          : ITEM_NONE;
 }
 
 u16 D_801BFF34[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
@@ -600,7 +600,7 @@ s32 func_80123810(GlobalContext* globalCtx) {
             globalCtx->interfaceCtx.unk_224 = 0;
             Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
             if ((sp24 >= 0xFD) || (temp_v0 = globalCtx->unk_18794(globalCtx, player, sp24, i), (temp_v0 < 0))) {
-                play_sound(0x4806);
+                play_sound(NA_SE_SY_ERROR);
                 return -1;
             } else {
                 s32 pad;
@@ -658,17 +658,20 @@ TextTriggerEntry D_801BFFA0[] = {
     { 2, 0x26FD },
 };
 
-// gPlayerModelTypes
-u8 D_801BFFB0[][5] = {
+u8 gPlayerModelTypes[][5] = {
     { 2, 0, 8, 0xC, 0x10 }, { 1, 2, 7, 0xF, 0x10 },   { 1, 2, 8, 0xD, 0x10 }, { 0, 0, 6, 0xE, 0x10 },
     { 0, 0, 6, 0xE, 0x10 }, { 3, 3, 7, 0xE, 0x10 },   { 4, 1, 9, 0xE, 0x10 }, { 5, 0, 6, 0xE, 0x10 },
     { 0, 4, 6, 0xE, 0x10 }, { 4, 0, 0xB, 0xE, 0x10 }, { 3, 1, 7, 0xE, 0x10 }, { 0, 0, 0xA, 0xE, 0x10 },
     { 0, 5, 6, 0xE, 0x10 }, { 0, 2, 6, 0xF, 0x10 },   { 0, 1, 7, 0xE, 0x10 },
 };
 
-Gfx* D_801BFFFC[] = {
-    (Gfx*)0x060049E0, (Gfx*)0x060049E0, (Gfx*)0x06008C00, (Gfx*)0x06008C00, (Gfx*)0x0600AB40,
-    (Gfx*)0x0600AB40, (Gfx*)0x06002C20, (Gfx*)0x06002C20, (Gfx*)0x0600BDB0, (Gfx*)0x0600BDB0,
+/* DLists groups start */
+// Note: Only the ones with size 2*PLAYER_FORM_MAX
+
+Gfx* D_801BFFFC[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0049E0,   object_link_boy_DL_0049E0,   object_link_goron_DL_008C00, object_link_goron_DL_008C00,
+    object_link_zora_DL_00AB40,  object_link_zora_DL_00AB40,  object_link_nuts_DL_002C20,  object_link_nuts_DL_002C20,
+    object_link_child_DL_00BDB0, object_link_child_DL_00BDB0,
 };
 
 typedef struct {
@@ -680,16 +683,43 @@ Gfx1 D_801C0024[] = {
     { (Gfx*)0x0601DC48, (Gfx*)0x0601DC48 },
 };
 
-Gfx* D_801C0034[] = {
-    NULL, NULL, NULL, NULL, NULL, NULL, (Gfx*)0x060035F0, (Gfx*)0x060035F0, (Gfx*)0x0601DA90, (Gfx*)0x0601DA90,
+Gfx* D_801C0034[2 * PLAYER_FORM_MAX] = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    object_link_nuts_DL_0035F0,
+    object_link_nuts_DL_0035F0,
+    object_link_child_DL_01DA90,
+    object_link_child_DL_01DA90,
 };
 
-Gfx* D_801C005C[] = {
-    NULL, NULL, NULL, NULL, NULL, NULL, (Gfx*)0x060035F0, (Gfx*)0x060035F0, (Gfx*)0x0601DA90, (Gfx*)0x0601DA90,
+Gfx* D_801C005C[2 * PLAYER_FORM_MAX] = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    object_link_nuts_DL_0035F0,
+    object_link_nuts_DL_0035F0,
+    object_link_child_DL_01DA90,
+    object_link_child_DL_01DA90,
 };
 
-Gfx* D_801C0084[] = {
-    NULL, NULL, NULL, NULL, NULL, NULL, (Gfx*)0x060035F0, (Gfx*)0x060035F0, (Gfx*)0x0601DA90, (Gfx*)0x0601DA90,
+Gfx* D_801C0084[2 * PLAYER_FORM_MAX] = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    object_link_nuts_DL_0035F0,
+    object_link_nuts_DL_0035F0,
+    object_link_child_DL_01DA90,
+    object_link_child_DL_01DA90,
 };
 
 Gfx* D_801C00AC[][2] = {
@@ -698,6 +728,7 @@ Gfx* D_801C00AC[][2] = {
     // object_link_child_DL_01DC18
     { (Gfx*)0x0601DC18, (Gfx*)0x0601DC18 },
 };
+
 Gfx* D_801C00BC[][2] = {
     { (Gfx*)0x0601DAD8, (Gfx*)0x0601DAD8 },
     { (Gfx*)0x0601DB40, (Gfx*)0x0601DB40 },
@@ -710,51 +741,73 @@ Gfx* D_801C00D4[][2] = {
     { (Gfx*)0x06016B80, (Gfx*)0x06016B80 },
 };
 
-Gfx* D_801C00EC[] = {
-    (Gfx*)0x060080F0, (Gfx*)0x060080F0, (Gfx*)0x0600A500, (Gfx*)0x0600A500, (Gfx*)0x0600FDF0,
-    (Gfx*)0x0600FDF0, (Gfx*)0x06003BC0, (Gfx*)0x06003BC0, (Gfx*)0x0601DCD8, (Gfx*)0x0601DCD8,
+Gfx* D_801C00EC[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0080F0,   object_link_boy_DL_0080F0,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
+    object_link_zora_DL_00FDF0,  object_link_zora_DL_00FDF0,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    object_link_child_DL_01DCD8, object_link_child_DL_01DCD8,
 };
-Gfx* D_801C0114[] = {
-    (Gfx*)0x06006EB8, (Gfx*)0x06006EB8, (Gfx*)0x0600A500, (Gfx*)0x0600A500, (Gfx*)0x0600FDF0,
-    (Gfx*)0x0600FDF0, (Gfx*)0x06003BC0, (Gfx*)0x06003BC0, (Gfx*)0x0600D528, (Gfx*)0x0600D528,
+
+Gfx* D_801C0114[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
+    object_link_zora_DL_00FDF0,  object_link_zora_DL_00FDF0,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    object_link_child_DL_00D528, object_link_child_DL_00D528,
 };
-Gfx* D_801C013C[] = {
-    (Gfx*)0x06006EB8, (Gfx*)0x06006EB8, (Gfx*)0x0600DE68, (Gfx*)0x0600DE68, (Gfx*)0x0600C270,
-    (Gfx*)0x0600C270, (Gfx*)0x06003BC0, (Gfx*)0x06003BC0, (Gfx*)0x0600E1C8, (Gfx*)0x0600E1C8,
+
+Gfx* D_801C013C[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00DE68, object_link_goron_DL_00DE68,
+    object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    object_link_child_DL_00E1C8, object_link_child_DL_00E1C8,
 };
-Gfx* D_801C0164[] = {
-    (Gfx*)0x06006EB8, (Gfx*)0x06006EB8, (Gfx*)0x0600A500, (Gfx*)0x0600A500, (Gfx*)0x0600C270,
-    (Gfx*)0x0600C270, (Gfx*)0x06003BC0, (Gfx*)0x06003BC0, (Gfx*)0x0601DC68, (Gfx*)0x0601DC68,
+
+Gfx* D_801C0164[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_00A500, object_link_goron_DL_00A500,
+    object_link_zora_DL_00C270,  object_link_zora_DL_00C270,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    object_link_child_DL_01DC68, object_link_child_DL_01DC68,
 };
+
 Gfx* D_801C018C[][2] = {
     { (Gfx*)0x0601DC68, (Gfx*)0x0601DC68 },
     { (Gfx*)0x0601DC88, (Gfx*)0x0601DC88 },
     { (Gfx*)0x0601DCA8, (Gfx*)0x0601DCA8 },
 };
-Gfx* D_801C01A4[] = {
-    (Gfx*)0x060067D8, (Gfx*)0x060067D8, (Gfx*)0x06009EF8, (Gfx*)0x06009EF8, (Gfx*)0x0600FBB8,
-    (Gfx*)0x0600FBB8, (Gfx*)0x060038C0, (Gfx*)0x060038C0, (Gfx*)0x0600D058, (Gfx*)0x0600D058,
+
+Gfx* D_801C01A4[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    object_link_child_DL_00D058, object_link_child_DL_00D058,
 };
-Gfx* D_801C01CC[] = {
-    (Gfx*)0x060067D8, (Gfx*)0x060067D8, (Gfx*)0x0600E7E8, (Gfx*)0x0600E7E8, (Gfx*)0x0600BBE0,
-    (Gfx*)0x0600BBE0, (Gfx*)0x060038C0, (Gfx*)0x060038C0, (Gfx*)0x0600E738, (Gfx*)0x0600E738,
+
+Gfx* D_801C01CC[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_00E7E8, object_link_goron_DL_00E7E8,
+    object_link_zora_DL_00BBE0,  object_link_zora_DL_00BBE0,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    object_link_child_DL_00E738, object_link_child_DL_00E738,
 };
-Gfx* D_801C01F4[] = {
-    (Gfx*)0x060067D8, (Gfx*)0x060067D8, (Gfx*)0x06009EF8, (Gfx*)0x06009EF8, (Gfx*)0x0600FBB8,
-    (Gfx*)0x0600FBB8, (Gfx*)0x060038C0, (Gfx*)0x060038C0, (Gfx*)0x0601DD18, (Gfx*)0x0601DD18,
+
+Gfx* D_801C01F4[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    object_link_child_DL_01DD18, object_link_child_DL_01DD18,
 };
-Gfx* D_801C021C[] = {
-    (Gfx*)0x060067D8, (Gfx*)0x060067D8, (Gfx*)0x06009EF8, (Gfx*)0x06009EF8, (Gfx*)0x0600FBB8,
-    (Gfx*)0x0600FBB8, (Gfx*)0x060038C0, (Gfx*)0x060038C0, (Gfx*)0x0600ED18, (Gfx*)0x0600ED18,
+
+Gfx* D_801C021C[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    object_link_child_DL_00ED18, object_link_child_DL_00ED18,
 };
-Gfx* D_801C0244[] = {
-    (Gfx*)0x060067D8, (Gfx*)0x060067D8, (Gfx*)0x06009EF8, (Gfx*)0x06009EF8, (Gfx*)0x0600FBB8,
-    (Gfx*)0x0600FBB8, (Gfx*)0x060038C0, (Gfx*)0x060038C0, (Gfx*)0x0601DCF8, (Gfx*)0x0601DCF8,
+
+Gfx* D_801C0244[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,   object_link_boy_DL_0067D8,   object_link_goron_DL_009EF8, object_link_goron_DL_009EF8,
+    object_link_zora_DL_00FBB8,  object_link_zora_DL_00FBB8,  object_link_nuts_DL_0038C0,  object_link_nuts_DL_0038C0,
+    object_link_child_DL_01DCF8, object_link_child_DL_01DCF8,
 };
-Gfx* D_801C026C[] = {
-    (Gfx*)0x06006EB8, (Gfx*)0x06006EB8, (Gfx*)0x06011468, (Gfx*)0x06011468, (Gfx*)0x06010D08,
-    (Gfx*)0x06010D08, (Gfx*)0x06003BC0, (Gfx*)0x06003BC0, (Gfx*)0x0601DFA8, (Gfx*)0x0601DFA8,
+
+Gfx* D_801C026C[2 * PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006EB8,   object_link_boy_DL_006EB8,   object_link_goron_DL_011468, object_link_goron_DL_011468,
+    object_link_zora_DL_010D08,  object_link_zora_DL_010D08,  object_link_nuts_DL_003BC0,  object_link_nuts_DL_003BC0,
+    object_link_child_DL_01DFA8, object_link_child_DL_01DFA8,
 };
+
+/* DLists groups end */
 
 Gfx* D_801C0294[PLAYER_FORM_MAX] = { 0x6006C38, 0x600A220, 0x600C020, 0x6003AB8, 0x600D3D8 };
 Gfx* D_801C02A8[PLAYER_FORM_MAX] = { 0x6006EB8, 0x600A500, 0x600C270, 0x6003BC0, 0x600E1C8 };
@@ -762,8 +815,7 @@ Gfx* D_801C02BC[PLAYER_FORM_MAX] = { 0x6006410, 0x6009A98, 0x600B820, 0x60036B0,
 Gfx* D_801C02D0[PLAYER_FORM_MAX] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6018490 };
 Gfx* D_801C02E4[PLAYER_FORM_MAX] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6017B40 };
 
-// sPlayerDListGroups
-Gfx** D_801C02F8[] = {
+Gfx** sPlayerDListGroups[] = {
     D_801C0114, D_801C013C, D_801C0164, D_801C00EC, D_801C0114, D_801C026C, D_801C01A4, D_801C01CC, D_801C01CC,
     D_801C01F4, D_801C021C, D_801C0244, D_801C0034, D_801C005C, D_801C0084, D_801C0084, D_801BFFFC, NULL,
 };
@@ -835,8 +887,15 @@ struct_80124618 D_801C05A8[] = {
     { 7, { 0, 0, 0 } },
     { 17, { 0, 0, 0 } },
 };
-struct_80124618 D_801C05C8[] = { { 0, { 0, 0, 0 } }, { 17, { 50, 50, 50 } } };
-struct_80124618 D_801C05D8[] = { { 0, { 0, 0, 0 } }, { 5, { 0, 0, 0 } }, { 9, { 100, 100, 100 } } };
+struct_80124618 D_801C05C8[] = {
+    { 0, { 0, 0, 0 } },
+    { 17, { 50, 50, 50 } },
+};
+struct_80124618 D_801C05D8[] = {
+    { 0, { 0, 0, 0 } },
+    { 5, { 0, 0, 0 } },
+    { 9, { 100, 100, 100 } },
+};
 struct_80124618 D_801C05F0[] = {
     { 0, { 100, 100, 100 } },
     { 5, { 100, 100, 100 } },
@@ -875,9 +934,19 @@ struct_80124618 D_801C06F8[] = {
     { 6, { 0, 0, 0 } },
     { 10, { 0, 0, 0 } },
 };
-struct_80124618 D_801C0718[] = { { 0, { 140, 140, 140 } }, { 1, { 0, 0, 0 } }, { 10, { 0, 0, 0 } } };
-struct_80124618 D_801C0730[] = { { 0, { 100, 100, 100 } }, { 13, { 100, 100, 100 } } };
-struct_80124618 D_801C0740[] = { { 0, { 140, 140, 140 } }, { 13, { 140, 140, 140 } } };
+struct_80124618 D_801C0718[] = {
+    { 0, { 140, 140, 140 } },
+    { 1, { 0, 0, 0 } },
+    { 10, { 0, 0, 0 } },
+};
+struct_80124618 D_801C0730[] = {
+    { 0, { 100, 100, 100 } },
+    { 13, { 100, 100, 100 } },
+};
+struct_80124618 D_801C0740[] = {
+    { 0, { 140, 140, 140 } },
+    { 13, { 140, 140, 140 } },
+};
 struct_80124618 D_801C0750[] = {
     { 0, { 100, 100, 100 } },  { 5, { 100, 100, 100 } },  { 6, { 200, 200, 200 } },
     { 10, { 200, 200, 200 } }, { 11, { 100, 100, 100 } },
@@ -902,7 +971,7 @@ void func_801239AC(Player* player) {
                 if (!func_801234B0(player)) {
                     D_801F59E0 = player->transformation * 2;
                     player->rightHandType = 8;
-                    player->rightHandDLists = &D_801C02F8[8][D_801F59E0];
+                    player->rightHandDLists = &sPlayerDListGroups[8][D_801F59E0];
 
                     if (player->sheathType == 14) {
                         player->sheathType = 12;
@@ -910,7 +979,7 @@ void func_801239AC(Player* player) {
                         player->sheathType = 13;
                     }
 
-                    player->sheathDLists = &D_801C02F8[player->sheathType][D_801F59E0];
+                    player->sheathDLists = &sPlayerDListGroups[player->sheathType][D_801F59E0];
                     player->modelAnimType = 2;
                     player->heldItemActionParam = -1;
                 }
@@ -923,9 +992,9 @@ void Player_SetModels(Player* player, s32 modelGroup) {
     u8* aux;
 
     D_801F59E0 = player->transformation * 2;
-    player->leftHandType = D_801BFFB0[modelGroup][1];
-    player->rightHandType = D_801BFFB0[modelGroup][2];
-    player->sheathType = D_801BFFB0[modelGroup][3];
+    player->leftHandType = gPlayerModelTypes[modelGroup][1];
+    player->rightHandType = gPlayerModelTypes[modelGroup][2];
+    player->sheathType = gPlayerModelTypes[modelGroup][3];
 
     if (player->sheathType == 14) {
         if (gSaveContext.equips.buttonItems[CUR_FORM][0] == ITEM_NONE) {
@@ -933,12 +1002,12 @@ void Player_SetModels(Player* player, s32 modelGroup) {
         }
     }
 
-    aux = D_801BFFB0[modelGroup];
+    aux = gPlayerModelTypes[modelGroup];
 
-    player->leftHandDLists = &D_801C02F8[aux[1]][D_801F59E0];
-    player->rightHandDLists = &D_801C02F8[aux[2]][D_801F59E0];
-    player->sheathDLists = &D_801C02F8[aux[3]][D_801F59E0];
-    player->waistDLists = &D_801C02F8[aux[4]][D_801F59E0];
+    player->leftHandDLists = &sPlayerDListGroups[aux[1]][D_801F59E0];
+    player->rightHandDLists = &sPlayerDListGroups[aux[2]][D_801F59E0];
+    player->sheathDLists = &sPlayerDListGroups[aux[3]][D_801F59E0];
+    player->waistDLists = &sPlayerDListGroups[aux[4]][D_801F59E0];
 
     func_801239AC(player);
 }
@@ -949,7 +1018,7 @@ void Player_SetModelGroup(Player* player, s32 modelGroup) {
     if (modelGroup == 1) {
         player->modelAnimType = 0;
     } else {
-        player->modelAnimType = D_801BFFB0[modelGroup][0];
+        player->modelAnimType = gPlayerModelTypes[modelGroup][0];
     }
 
     if ((player->modelAnimType < 3) &&
@@ -1615,6 +1684,7 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
     // clang-format on
 
     for (i = 0; i < 80; i++) {
+        // Editing the Vtxs in object itself
         sp30[i].v.cn[3] = (phi_a0[i] * player->unk_B62) >> 8;
     }
 
@@ -1836,14 +1906,10 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 phi_a0 = &D_801C013C[D_801F59E0];
                 D_801F59F4 = 1;
             } else {
-                // CUR_EQUIP_VALUE
-                // if ((player->leftHandType == 2) && (player->transformation == PLAYER_FORM_HUMAN) && (temp_v1 = (s32)
-                // (gSaveContext.equips.equipment & *gEquipMasks) >> *gEquipShifts, (temp_v1 != 0)))
                 if ((player->leftHandType == 2) && (player->transformation == PLAYER_FORM_HUMAN) &&
                     ((phi_v0 = CUR_EQUIP_VALUE(EQUIP_SWORD), phi_v0 != 0))) {
                     phi_a0 = &D_801C018C[phi_v0 - 1];
                 } else {
-                    // temp_v0_2 = player->skelAnime.jointTable->unk_84 & 0xF000;
                     phi_v0 = player->skelAnime.jointTable[0x16].x & 0xF000;
                     if (phi_v0 != 0) {
                         phi_v0 = (phi_v0 >> 0xC) - 1;
@@ -1989,25 +2055,27 @@ s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, WeaponInfo* 
         Math_Vec3f_Copy(&weaponInfo->base, arg4);
         weaponInfo->active = 1;
 
-        return 1;
-    } else if ((weaponInfo->tip.x == arg3->x) && (weaponInfo->tip.y == arg3->y) && (weaponInfo->tip.z == arg3->z) &&
-               (weaponInfo->base.x == arg4->x) && (weaponInfo->base.y == arg4->y) && (weaponInfo->base.z == arg4->z)) {
+        return true;
+    }
+
+    if ((weaponInfo->tip.x == arg3->x) && (weaponInfo->tip.y == arg3->y) && (weaponInfo->tip.z == arg3->z) &&
+        (weaponInfo->base.x == arg4->x) && (weaponInfo->base.y == arg4->y) && (weaponInfo->base.z == arg4->z)) {
         if (collider != NULL) {
             Collider_ResetQuadAT(globalCtx, &collider->base);
         }
 
-        return 0;
-    } else {
-        if (collider != NULL) {
-            Collider_SetQuadVertices(collider, arg4, arg3, &weaponInfo->base, &weaponInfo->tip);
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &collider->base);
-        }
-        Math_Vec3f_Copy(&weaponInfo->base, arg4);
-        Math_Vec3f_Copy(&weaponInfo->tip, arg3);
-        weaponInfo->active = 1;
-
-        return 1;
+        return false;
     }
+
+    if (collider != NULL) {
+        Collider_SetQuadVertices(collider, arg4, arg3, &weaponInfo->base, &weaponInfo->tip);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &collider->base);
+    }
+    Math_Vec3f_Copy(&weaponInfo->base, arg4);
+    Math_Vec3f_Copy(&weaponInfo->tip, arg3);
+    weaponInfo->active = 1;
+
+    return true;
 }
 
 u8 D_801C096C[PLAYER_SHIELD_MAX] = {
@@ -2121,7 +2189,7 @@ void func_8012669C(GlobalContext* globalCtx, Player* player, Vec3f* arg2, Vec3f*
     Matrix_MultiplyVector3fByState(arg3, &sp30);
 
     if (player->swordState != 0) {
-        if ((func_80126440(globalCtx, NULL, &player->swordInfo[0], &sp3C, &sp30) != 0) &&
+        if (func_80126440(globalCtx, NULL, &player->swordInfo[0], &sp3C, &sp30) &&
             (player->transformation != PLAYER_FORM_GORON) && (!(player->stateFlags1 & PLAYER_STATE1_400000))) {
             EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[0]), &player->swordInfo[0].tip,
                                   &player->swordInfo[0].base);
@@ -2316,8 +2384,8 @@ void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
             Matrix_MultiplyVector3fByState(&D_801C0AC4[arg2], &sp58);
             Matrix_MultiplyVector3fByState(&D_801C0ADC[arg2], &sp4C);
 
-            if ((func_80126440(globalCtx, NULL, &player->swordInfo[arg2], &sp58, &sp4C) != 0) &&
-                ((player->stateFlags1 & PLAYER_STATE1_8000000))) {
+            if (func_80126440(globalCtx, NULL, &player->swordInfo[arg2], &sp58, &sp4C) &&
+                (player->stateFlags1 & PLAYER_STATE1_8000000)) {
                 EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[arg2]), &player->swordInfo[arg2].tip,
                                       &player->swordInfo[arg2].base);
             }
