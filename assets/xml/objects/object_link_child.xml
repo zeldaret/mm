@@ -128,7 +128,14 @@
         <Mtx Name="object_link_child_Mtx_01DB00" Offset="0x1DB00" />
         <DList Name="object_link_child_DL_01DB40" Offset="0x1DB40" />
         <DList Name="object_link_child_DL_01DB60" Offset="0x1DB60" />
+
+        <DList Name="object_link_child_DL_01DBC8" Offset="0x1DBC8" />
+        <DList Name="object_link_child_DL_01DC18" Offset="0x1DC18" />
+
+
+        <DList Name="object_link_child_DL_01DC28" Offset="0x1DC28" />
         <!-- <Blob Name="object_link_child_Blob_01DB88" Size="0x1B0" Offset="0x1DB88" /> -->
+
         <DList Name="object_link_child_DL_01DFA8" Offset="0x1DFA8" />
         <Limb Name="object_link_child_Lodlimb_01E0A0" Type="LOD" Offset="0x1E0A0" />
         <Limb Name="object_link_child_Lodlimb_01E0B0" Type="LOD" Offset="0x1E0B0" />
