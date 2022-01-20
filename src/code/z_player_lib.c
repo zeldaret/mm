@@ -1639,6 +1639,7 @@ void func_80125500(GlobalContext* globalCtx, Player* player, s32 limbIndex, Vec3
     }
 }
 
+// Probably EnArrow, waiting for it to be decomped
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x144 */ f32 unk_144;
@@ -2037,7 +2038,7 @@ Vec3f D_801C0970[] = {
     { 0.0f, -400.0f, 1000.0f },
 };
 
-static Vec3f D_801C0994[] = {
+Vec3f D_801C0994[] = {
     { 5000.0f, 400.0f, 0.0f },
     { 5000.0f, -400.0f, 1000.0f },
     { 5000.0f, 1400.0f, -1000.0f },
@@ -3158,7 +3159,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
     Vec3f* temp_s0_10;
     Vec2f* temp_s0_6;
 
-    if (*dList2 != 0) {
+    if (*dList2 != NULL) {
         Matrix_GetStateTranslation(D_801F59DC);
     }
 
