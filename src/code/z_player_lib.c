@@ -1632,9 +1632,9 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
 #endif
 
 void func_80125500(GlobalContext* globalCtx, Player* player, s32 limbIndex, Vec3f* pos, Vec3s* rot) {
-    if (limbIndex == 7) {
+    if (limbIndex == PLAYER_LIMB_L_THIGH) {
         func_80124870(globalCtx, player, &player->skelAnime, pos, rot, 7, 8, 9);
-    } else if (limbIndex == 4) {
+    } else if (limbIndex == PLAYER_LIMB_R_THIGH) {
         func_80124870(globalCtx, player, &player->skelAnime, pos, rot, 4, 5, 6);
     }
 }
@@ -1656,7 +1656,7 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     struct_80124618* phi_v0_2;
     struct_80124618* phi_v1_2;
 
-    if (limbIndex == 1) {
+    if (limbIndex == PLAYER_LIMB_ROOT) {
         D_801F59F4 = (s32)player->leftHandType;
         D_801F59F8 = (s32)player->rightHandType;
         D_801F59DC = &player->swordInfo[2].base;
@@ -1708,7 +1708,7 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
             D_801F59DC++;
         }
 
-        if (limbIndex == 0xB) {
+        if (limbIndex == PLAYER_LIMB_HEAD) {
             rot->x += player->unk_AAC.z;
             rot->y -= player->unk_AAC.y;
             rot->z += player->unk_AAC.x;
@@ -1736,7 +1736,7 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                     Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
                 }
             }
-        } else if (limbIndex == 0x15) {
+        } else if (limbIndex == PLAYER_LIMB_TORSO) {
             if ((player->skelAnime.animation == &gameplay_keep_Linkanim_00E1F8) ||
                 (player->skelAnime.animation == &gameplay_keep_Linkanim_00E260) ||
                 (player->skelAnime.animation == &gameplay_keep_Linkanim_00E248) ||
@@ -1774,7 +1774,7 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 }
                 Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, 1);
             }
-        } else if (limbIndex == 0xA) {
+        } else if (limbIndex == PLAYER_LIMB_UPPER) {
             s16 phi_a0_2;
             s16 rot_temp = 0x44C;
 
@@ -1824,7 +1824,7 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     s32 phi_v0;
 
     if (!func_80125580(globalCtx, limbIndex, dList, pos, rot, player)) {
-        if (limbIndex == 0x10) {
+        if (limbIndex == PLAYER_LIMB_L_HAND) {
             phi_a0 = player->leftHandDLists;
             if (player->stateFlags3 & PLAYER_STATE3_2000) {
                 rot->z -= player->unk_B8C;
@@ -1877,7 +1877,7 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                     }
                 }
             }
-        } else if (limbIndex == 0x13) {
+        } else if (limbIndex == PLAYER_LIMB_R_HAND) {
             if ((player->transformation == PLAYER_FORM_ZORA) &&
                 (((player->stateFlags1 & PLAYER_STATE1_2)) || (player->stateFlags1 & PLAYER_STATE1_400) ||
                  func_801242B4(player))) {
@@ -1911,7 +1911,7 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                     func_80125CE0(player, D_801C0784, pos, rot);
                 }
             }
-        } else if (limbIndex == 0x14) {
+        } else if (limbIndex == PLAYER_LIMB_SHEATH) {
             Gfx** phi_v1_2 = player->sheathDLists;
             if (player->transformation == PLAYER_FORM_HUMAN) {
                 s32 val = CUR_EQUIP_VALUE_VOID(EQUIP_SWORD);
@@ -1924,12 +1924,14 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 }
             }
             *dList = phi_v1_2[D_801F59E4];
-        } else if (limbIndex == 2) {
+        } else if (limbIndex == PLAYER_LIMB_WAIST) {
             *dList = player->waistDLists[D_801F59E4];
-        } else if ((limbIndex == 0xC) && (player->transformation == PLAYER_FORM_ZORA)) {
-            // Matrix_Scale((player->unk_B08[2] * 1.0f) + 1.0f, 1.0f, 1.0f, 1);
-            // super important (* 1)
-            Matrix_Scale((player->unk_B08[2] * 1) + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+        } else if (limbIndex == PLAYER_LIMB_HAT) {
+            if (player->transformation == PLAYER_FORM_ZORA) {
+                // Matrix_Scale((player->unk_B08[2] * 1.0f) + 1.0f, 1.0f, 1.0f, 1);
+                // super important (* 1)
+                Matrix_Scale((player->unk_B08[2] * 1) + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+            }
         }
     }
     return 0;
@@ -1947,13 +1949,13 @@ s32 func_801262C8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     if (func_80125580(globalCtx, limbIndex, dList, pos, rot, actor) == 0) {
         if (player->unk_AA5 != 3) {
             *dList = NULL;
-        } else if (limbIndex == 0xF) {
+        } else if (limbIndex == PLAYER_LIMB_L_FOREARM) {
             *dList = D_801C0294[player->transformation];
-        } else if (limbIndex == 0x10) {
+        } else if (limbIndex == PLAYER_LIMB_L_HAND) {
             *dList = D_801C02A8[player->transformation];
-        } else if (limbIndex == 0x11) {
+        } else if (limbIndex == PLAYER_LIMB_R_SHOULDER) {
             *dList = D_801C02BC[player->transformation];
-        } else if (limbIndex == 0x13) {
+        } else if (limbIndex == PLAYER_LIMB_R_HAND) {
             if (Player_HoldsHookshot(player)) {
                 *dList = D_801C02E4[player->transformation];
             } else {
@@ -3163,7 +3165,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
         Matrix_GetStateTranslation(D_801F59DC);
     }
 
-    if (limbIndex == 0x10) {
+    if (limbIndex == PLAYER_LIMB_L_HAND) {
         Math_Vec3f_Copy(&player->leftHandWorld.pos, D_801F59DC);
         if ((*dList1 != 0) && (func_801271B0(globalCtx, player, 0) == 0) && !func_80128640(globalCtx, player, *dList1) && (&gameplay_keep_Linkanim_00E218 == player->skelAnime.animation)) {
             func_80127488(globalCtx, player, D_801C0778[(s32) player->skelAnime.curFrame]);
@@ -3203,7 +3205,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 func_8018219C(&player->mf_CC4, &player->leftHandWorld.rot, 0);
             }
         }
-    } else if (limbIndex == 0x13) {
+    } else if (limbIndex == PLAYER_LIMB_R_HAND) {
         sp224 = player->heldActor;
         if (*dList1 != 0) {
             if (player->rightHandType == 9) {
@@ -3264,7 +3266,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 func_80126B8C(globalCtx, player);
             }
             if ((player->unk_B2A != 0) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
-                if (((player->stateFlags1 & PLAYER_STATE1_400) == 0) && (player->unk_B2A != 0) && (player->exchangeItemId != EXCH_ITEM_NONE)) {
+                if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->unk_B2A != 0) && (player->exchangeItemId != EXCH_ITEM_NONE)) {
                     Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
                 } else {
                     D_801F59E8.x = (player->bodyPartsPos[0xF].x + player->leftHandWorld.pos.x) * 0.5f;
@@ -3277,11 +3279,11 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 }
             }
         }
-    } else if (limbIndex == 0xF) {
+    } else if (limbIndex == PLAYER_LIMB_L_FOREARM) {
         func_80126BD0(globalCtx, player, 0);
-    } else if (limbIndex == 0x12) {
+    } else if (limbIndex == PLAYER_LIMB_R_FOREARM) {
         func_80126BD0(globalCtx, player, 1);
-    } else if (limbIndex == 0x15) {
+    } else if (limbIndex == PLAYER_LIMB_TORSO) {
         if ((player->transformation == PLAYER_FORM_GORON) && (( ( &gameplay_keep_Linkanim_00E1F8 == player->skelAnime.animation)) || ((&gameplay_keep_Linkanim_00E200 == player->skelAnime.animation) != 0) || (&gameplay_keep_Linkanim_00E1F0 == player->skelAnime.animation))) {
             s32 i;
 
@@ -3326,7 +3328,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
-    } else if (limbIndex == 0xB) {
+    } else if (limbIndex == PLAYER_LIMB_HEAD) {
         if ((*dList1 != NULL) && ((player->currentMask != PLAYER_MASK_NONE)) && ((((player->transformation == PLAYER_FORM_HUMAN)) && ((&gameplay_keep_Linkanim_00D0C8 != player->skelAnime.animation) || (player->skelAnime.curFrame >= 12.0f))) || ((player->transformation != PLAYER_FORM_HUMAN) && ((s32) player->currentMask >= PLAYER_MASK_FIERCE_DEITY) && (player->currentMask != (player->transformation + PLAYER_MASK_FIERCE_DEITY)) && (player->skelAnime.curFrame >= 10.0f)))) {
             if (func_80127438(globalCtx, player, player->currentMask)) {
                 sp154 = player->currentMask - 1;
@@ -3380,7 +3382,6 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 s32 i;
 
                 OPEN_DISPS(globalCtx->state.gfxCtx);
-                //spE4 = globalCtx->state.gfxCtx;
 
                 if (&gameplay_keep_Linkanim_00E2B0 ==  player->skelAnime.animation) {
                     s32 i;
@@ -3472,22 +3473,22 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 }
             }
         }
-    } else if ((limbIndex == 0xC) && (player->stateFlags3 & PLAYER_STATE3_100000)) {
+    } else if ((limbIndex == PLAYER_LIMB_HAT) && (player->stateFlags3 & PLAYER_STATE3_100000)) {
         Matrix_GetStateTranslationAndScaledX(3000.0f, &sp5C);
         Matrix_GetStateTranslationAndScaledX(2300.0f, &sp50);
         if (func_80126440(globalCtx, NULL, player->swordInfo, &sp5C, &sp50) != 0) {
             EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[0]), &player->swordInfo[0].tip, &player->swordInfo[0].base);
         }
-    } else if (limbIndex == 5) {
+    } else if (limbIndex == PLAYER_LIMB_R_SHIN) {
         if ((player->swordState != 0) && (((player->swordAnimation == 0x1D)) || (player->swordAnimation == 0x12) || (player->swordAnimation == 0x15))) {
             func_8012669C(globalCtx, player, D_801C0A48, D_801C0A24);
         }
-    } else if (limbIndex == 2) {
+    } else if (limbIndex == PLAYER_LIMB_WAIST) {
         if ((player->swordState != 0) && (player->swordAnimation == 0x1A)) {
             Math_Vec3f_Copy(&player->unk_AF0[1], &player->swordInfo[0].base);
             func_8012669C(globalCtx, player, D_801C0A90, D_801C0A6C);
         }
-    } else if (limbIndex == 0x14) {
+    } else if (limbIndex == PLAYER_LIMB_SHEATH) {
         if ((*dList1 != NULL) && (player->transformation == PLAYER_FORM_HUMAN) && (player->currentShield != PLAYER_SHIELD_NONE) && (((player->sheathType == 0xE)) || (player->sheathType == 0xF))) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
