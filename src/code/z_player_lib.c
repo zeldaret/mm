@@ -666,7 +666,7 @@ u8 gPlayerModelTypes[][5] = {
 };
 
 /* DLists groups start */
-// Note: Only the ones with size 2*PLAYER_FORM_MAX
+// Note: Only the ones with size 2 * PLAYER_FORM_MAX
 
 Gfx* D_801BFFFC[2 * PLAYER_FORM_MAX] = {
     object_link_boy_DL_0049E0,   object_link_boy_DL_0049E0,   object_link_goron_DL_008C00, object_link_goron_DL_008C00,
@@ -678,9 +678,9 @@ typedef struct {
     Gfx* unk_00;
     Gfx* unk_04;
 } Gfx1;
-Gfx1 D_801C0024[] = {
-    { (Gfx*)0x0601DC28, (Gfx*)0x0601DC28 },
-    { (Gfx*)0x0601DC48, (Gfx*)0x0601DC48 },
+Gfx1 D_801C0024[PLAYER_SHIELD_MAX-1] = {
+    { object_link_child_DL_01DC28, object_link_child_DL_01DC28 },
+    { object_link_child_DL_01DC48, object_link_child_DL_01DC48 },
 };
 
 Gfx* D_801C0034[2 * PLAYER_FORM_MAX] = {
@@ -723,22 +723,20 @@ Gfx* D_801C0084[2 * PLAYER_FORM_MAX] = {
 };
 
 Gfx* D_801C00AC[][2] = {
-    // object_link_child_DL_01DBC8
-    { (Gfx*)0x0601DBC8, (Gfx*)0x0601DBC8 },
-    // object_link_child_DL_01DC18
-    { (Gfx*)0x0601DC18, (Gfx*)0x0601DC18 },
+    { object_link_child_DL_01DBC8, object_link_child_DL_01DBC8 },
+    { object_link_child_DL_01DC18, object_link_child_DL_01DC18 },
 };
 
 Gfx* D_801C00BC[][2] = {
-    { (Gfx*)0x0601DAD8, (Gfx*)0x0601DAD8 },
-    { (Gfx*)0x0601DB40, (Gfx*)0x0601DB40 },
-    { (Gfx*)0x0601DB60, (Gfx*)0x0601DB60 },
+    { object_link_child_DL_01DAD8, object_link_child_DL_01DAD8 },
+    { object_link_child_DL_01DB40, object_link_child_DL_01DB40 },
+    { object_link_child_DL_01DB60, object_link_child_DL_01DB60 },
 };
 
 Gfx* D_801C00D4[][2] = {
-    { (Gfx*)0x06017700, (Gfx*)0x06017700 },
-    { (Gfx*)0x06017338, (Gfx*)0x06017338 },
-    { (Gfx*)0x06016B80, (Gfx*)0x06016B80 },
+    { object_link_child_DL_017700, object_link_child_DL_017700 },
+    { object_link_child_DL_017338, object_link_child_DL_017338 },
+    { object_link_child_DL_016B80, object_link_child_DL_016B80 },
 };
 
 Gfx* D_801C00EC[2 * PLAYER_FORM_MAX] = {
@@ -766,9 +764,9 @@ Gfx* D_801C0164[2 * PLAYER_FORM_MAX] = {
 };
 
 Gfx* D_801C018C[][2] = {
-    { (Gfx*)0x0601DC68, (Gfx*)0x0601DC68 },
-    { (Gfx*)0x0601DC88, (Gfx*)0x0601DC88 },
-    { (Gfx*)0x0601DCA8, (Gfx*)0x0601DCA8 },
+    { object_link_child_DL_01DC68, object_link_child_DL_01DC68 },
+    { object_link_child_DL_01DC88, object_link_child_DL_01DC88 },
+    { object_link_child_DL_01DCA8, object_link_child_DL_01DCA8 },
 };
 
 Gfx* D_801C01A4[2 * PLAYER_FORM_MAX] = {
@@ -1979,8 +1977,10 @@ s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
             }
         } else if (limbIndex == PLAYER_LIMB_SHEATH) {
             Gfx** phi_v1_2 = player->sheathDLists;
+
             if (player->transformation == PLAYER_FORM_HUMAN) {
                 s32 val = CUR_EQUIP_VALUE_VOID(EQUIP_SWORD);
+
                 if (val != 0) {
                     if ((player->sheathType == 0xE) || (player->sheathType == 0xC)) {
                         phi_v1_2 = &D_801C00BC[val - 1][0];
@@ -2695,7 +2695,8 @@ Vec3f D_801C0DA8[4] = {
 Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
 Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
 Gfx* D_801C0DF0[] = {
-    (Gfx*)0x06010590, (Gfx*)0x06010368, (Gfx*)0x06010140, (Gfx*)0x0600FF18, (Gfx*)0x0600FCF0,
+    object_link_goron_DL_010590, object_link_goron_DL_010368, object_link_goron_DL_010140,
+    object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
 };
 
 Vec2f D_801C0E04[] = {
@@ -2703,7 +2704,8 @@ Vec2f D_801C0E04[] = {
 };
 
 Gfx* D_801C0E2C[] = {
-    (Gfx*)0x06007A28, (Gfx*)0x060077D0, (Gfx*)0x06007548, (Gfx*)0x06007900, (Gfx*)0x060076A0,
+    object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
+    object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
 };
 Vec3f D_801C0E40[] = {
     { 0.0f, 0.0f, 0.0f },       { -578.3f, -1100.9f, 0.0f }, { -189.5f, -594.87f, 0.0f },
@@ -3358,54 +3360,55 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
     } else if (limbIndex == PLAYER_LIMB_R_FOREARM) {
         func_80126BD0(globalCtx, player, 1);
     } else if (limbIndex == PLAYER_LIMB_TORSO) {
-        if ((player->transformation == PLAYER_FORM_GORON) &&
-            (((&gameplay_keep_Linkanim_00E1F8 == player->skelAnime.animation)) ||
-             ((&gameplay_keep_Linkanim_00E200 == player->skelAnime.animation) != 0) ||
-             (&gameplay_keep_Linkanim_00E1F0 == player->skelAnime.animation))) {
-            s32 i;
+        if (player->transformation == PLAYER_FORM_GORON) {
+            if ((&gameplay_keep_Linkanim_00E1F8 == player->skelAnime.animation) ||
+                ((&gameplay_keep_Linkanim_00E200 == player->skelAnime.animation) != 0) ||
+                (&gameplay_keep_Linkanim_00E1F0 == player->skelAnime.animation)) {
+                s32 i;
 
-            OPEN_DISPS(globalCtx->state.gfxCtx);
+                OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            if (&gameplay_keep_Linkanim_00E200 == player->skelAnime.animation) {
-                f32* phi_v0 = &player->unk_B08[2];
+                if (&gameplay_keep_Linkanim_00E200 == player->skelAnime.animation) {
+                    f32* phi_v0 = &player->unk_B08[2];
 
-                for (i = 0; i < ARRAY_COUNT(sp178); i++) {
-                    func_80124618(D_801C0510, *phi_v0, &sp178[i]);
+                    for (i = 0; i < ARRAY_COUNT(sp178); i++) {
+                        func_80124618(D_801C0510, *phi_v0, &sp178[i]);
 
-                    phi_v0++;
+                        phi_v0++;
+                    }
+                } else {
+                    if (&gameplay_keep_Linkanim_00E1F8 == player->skelAnime.animation) {
+                        func_8012536C();
+                        func_80124618(D_801C0428, player->skelAnime.curFrame, &player->unk_AF0[1]);
+                    }
+
+                    for (i = 0; i < ARRAY_COUNT(sp178); i++) {
+                        Math_Vec3f_Copy(&sp178[i], &player->unk_AF0[1]);
+                    }
                 }
-            } else {
-                if (&gameplay_keep_Linkanim_00E1F8 == player->skelAnime.animation) {
-                    func_8012536C();
-                    func_80124618(D_801C0428, player->skelAnime.curFrame, &player->unk_AF0[1]);
-                }
-
-                for (i = 0; i < ARRAY_COUNT(sp178); i++) {
-                    Math_Vec3f_Copy(&sp178[i], &player->unk_AF0[1]);
-                }
-            }
-            Matrix_StatePush();
-            Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-            gSPDisplayList(POLY_XLU_DISP++, object_link_goron_DL_00FC18);
-
-            Matrix_StatePop();
-
-            for (i = 0; i < ARRAY_COUNT(sp178); i++) {
                 Matrix_StatePush();
-                Matrix_Scale(sp178[i].x, sp178[i].y, sp178[i].z, MTXMODE_APPLY);
+                Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_801C0DF0[i]);
+
+                gSPDisplayList(POLY_XLU_DISP++, object_link_goron_DL_00FC18);
 
                 Matrix_StatePop();
-            }
 
-            CLOSE_DISPS(globalCtx->state.gfxCtx);
+                for (i = 0; i < ARRAY_COUNT(sp178); i++) {
+                    Matrix_StatePush();
+                    Matrix_Scale(sp178[i].x, sp178[i].y, sp178[i].z, MTXMODE_APPLY);
+
+                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPDisplayList(POLY_XLU_DISP++, D_801C0DF0[i]);
+
+                    Matrix_StatePop();
+                }
+
+                CLOSE_DISPS(globalCtx->state.gfxCtx);
+            }
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
         if ((*dList1 != NULL) && ((player->currentMask != PLAYER_MASK_NONE)) &&
@@ -3597,6 +3600,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
+
         if (player->actor.scale.y >= 0.0f) {
             if ((player->rightHandType != 8) && (player->rightHandType != 0xFF)) {
                 Matrix_JointPosition(&D_801C0EAC, &D_801C0EB8);

@@ -135,7 +135,13 @@
 
         <DList Name="object_link_child_DL_01DC28" Offset="0x1DC28" />
 
+        <DList Name="object_link_child_DL_01DC48" Offset="0x1DC48" />
+
         <DList Name="object_link_child_DL_01DC68" Offset="0x1DC68" />
+
+        <DList Name="object_link_child_DL_01DC88" Offset="0x1DC88" />
+
+        <DList Name="object_link_child_DL_01DCA8" Offset="0x1DCA8" />
 
         <DList Name="object_link_child_DL_01DCD8" Offset="0x1DCD8" />
         <DList Name="object_link_child_DL_01DCF8" Offset="0x1DCF8" />
