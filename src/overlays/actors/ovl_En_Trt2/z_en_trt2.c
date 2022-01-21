@@ -146,7 +146,7 @@ void func_80AD3530(EnTrt2* this, GlobalContext* globalCtx) {
     func_80AD46F8(this);
     if (this->path != NULL) {
         phi_a1 = func_80AD48F8(this->path, this->unk_1E4, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & BGCHECK_CHECK_ONE_FACE) {
+        if (this->actor.bgCheckFlags & 8) {
             phi_a1 = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 1000, 1);
@@ -251,7 +251,7 @@ void func_80AD38B8(EnTrt2* this, GlobalContext* globalCtx) {
             }
         }
 
-        if (this->actor.bgCheckFlags & BGCHECK_CHECK_ONE_FACE) {
+        if (this->actor.bgCheckFlags & 8) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
                 ActorCutscene_Stop(this->unk_3DA);
                 this->unk_3D9 = 2;
@@ -314,7 +314,7 @@ void func_80AD3BE4(EnTrt2* this, GlobalContext* globalCtx) {
 void func_80AD3C94(EnTrt2* this, GlobalContext* globalCtx) {
     if (this->actor.world.pos.y < 5.0f) {
         func_80AD4A78(this, globalCtx);
-        if (this->actor.bgCheckFlags & BGCHECK_IGNORE_CEILING) {
+        if (this->actor.bgCheckFlags & 1) {
             this->unk_3B2 = 0xF;
         }
     }
@@ -648,7 +648,7 @@ s32 func_80AD4B4C(EnTrt2* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 0.0f;
         func_80AD349C(this);
         this->unk_3B4 = this->unk_3B2;
-        if (this->actor.bgCheckFlags & BGCHECK_IGNORE_CEILING) {
+        if (this->actor.bgCheckFlags & 1) {
             if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
                 this->unk_3A8 = 0x84F;
             }
@@ -668,7 +668,7 @@ s32 func_80AD4B4C(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80AD4C4C(EnTrt2* this) {
-    if (this->actor.bgCheckFlags & BGCHECK_IGNORE_CEILING) {
+    if (this->actor.bgCheckFlags & 1) {
         if (this->actor.xzDistToPlayer < 100.0f) {
             return true;
         }
@@ -682,8 +682,7 @@ s32 func_80AD4CCC(EnTrt2* this, GlobalContext* globalCtx) {
     s16 sp1E = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted &&
-        !(this->actor.bgCheckFlags & BGCHECK_IGNORE_CEILING) &&
+    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted && !(this->actor.bgCheckFlags & 1) &&
         ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_FIERCE_DEITY))) {
         this->actor.speedXZ = 0.0f;
         this->actor.velocity.y = 1.5f;
