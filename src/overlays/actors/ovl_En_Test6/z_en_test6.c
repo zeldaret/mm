@@ -18,16 +18,6 @@ void EnTest6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 struct EnTest6Struct;
 
-void func_80A90D34(EnTest6* this, GlobalContext* globalCtx, struct EnTest6Struct* ptr);
-void func_80A90FC0(EnTest6* this, GlobalContext* globalCtx, struct EnTest6Struct* ptr);
-void EnTest6_SetupAction(EnTest6* this, EnTest6ActionFunc actionFunc);
-void func_80A9156C(EnTest6* this, GlobalContext* globalCtx);
-void func_80A91690(EnTest6* this, GlobalContext* globalCtx);
-void func_80A91760(EnTest6* this, GlobalContext* globalCtx);
-void func_80A920C8(EnTest6* this, GlobalContext* globalCtx);
-void func_80A92188(EnTest6* this, GlobalContext* globalCtx);
-void func_80A92950(EnTest6* this, GlobalContext* globalCtx);
-
 typedef void (*EnTest6StructFunc)(EnTest6*, GlobalContext*, struct EnTest6Struct*);
 
 typedef struct EnTest6Struct {
@@ -38,6 +28,16 @@ typedef struct EnTest6Struct {
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ EnTest6StructFunc unk_14;
 } EnTest6Struct; // size = 0x18
+
+void func_80A90D34(EnTest6* this, GlobalContext* globalCtx, EnTest6Struct* ptr);
+void func_80A90FC0(EnTest6* this, GlobalContext* globalCtx, EnTest6Struct* ptr);
+void EnTest6_SetupAction(EnTest6* this, EnTest6ActionFunc actionFunc);
+void func_80A9156C(EnTest6* this, GlobalContext* globalCtx);
+void func_80A91690(EnTest6* this, GlobalContext* globalCtx);
+void func_80A91760(EnTest6* this, GlobalContext* globalCtx);
+void func_80A920C8(EnTest6* this, GlobalContext* globalCtx);
+void func_80A92188(EnTest6* this, GlobalContext* globalCtx);
+void func_80A92950(EnTest6* this, GlobalContext* globalCtx);
 
 EnTest6Struct D_80A94910[12];
 
