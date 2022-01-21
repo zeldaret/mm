@@ -456,7 +456,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
                     this->unk_20C[i].z = player->actor.world.pos.z;
                 }
 
-                this->unk_254 = ZeldaArena_Malloc(0x300);
+                this->unk_254 = ZeldaArena_Malloc(sizeof(Vec3f) * 64);
                 if (this->unk_254 != NULL) {
                     for (i = 0; i < ARRAY_COUNT(this->unk_254[0]); i++) {
                         (*this->unk_254)[i].x = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + temp_s3->eye.x +
@@ -575,9 +575,9 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
         sp54.z = (Math_CosS(player->actor.world.rot.y) * 80.0f) + sp6C.z;
         sp4C *= 0.75f;
 
-        sp60.x = temp_s3->eye.x + ((sp54.x - temp_s3->eye.x) * sp4C);
-        sp60.y = temp_s3->eye.y + ((sp54.y - temp_s3->eye.y) * sp4C);
-        sp60.z = temp_s3->eye.z + ((sp54.z - temp_s3->eye.z) * sp4C);
+        sp60.x = F32_LERPIMP(temp_s3->eye.x, sp54.x, sp4C);
+        sp60.y = F32_LERPIMP(temp_s3->eye.y, sp54.y, sp4C);
+        sp60.z = F32_LERPIMP(temp_s3->eye.z, sp54.z, sp4C);
 
         Play_CameraSetAtEye(globalCtx, this->unk_284, &sp6C, &sp60);
     } else if ((this->unk_27A < 11) && (this->unk_27A > 0)) {
@@ -857,39 +857,39 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                 this->unk_27C = 0;
                 player->actor.shape.shadowDraw = NULL;
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x != 0) {
-                    this->unk_154 = globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.x != 0) {
+                    this->unk_154 = (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.x;
                 } else {
                     this->unk_154 = 150.0f;
                 }
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.y != 0) {
-                    this->unk_280 = globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.y;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.y != 0) {
+                    this->unk_280 = globalCtx->csCtx.npcActions[temp_v0]->unk0C.y;
                 } else {
                     this->unk_280 = 38;
                 }
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.z != 0) {
-                    this->unk_150 = globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.z;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.z != 0) {
+                    this->unk_150 = (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.z;
                 } else {
                     this->unk_150 = 480.0f;
                 }
                 break;
 
             case 3:
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x != 0) {
-                    this->unk_154 += globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.x != 0) {
+                    this->unk_154 += (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.x;
                 }
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.y != 0) {
-                    this->unk_280 += (s16)globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.y;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.y != 0) {
+                    this->unk_280 += (s16)globalCtx->csCtx.npcActions[temp_v0]->unk0C.y;
 
                 } else {
                     this->unk_280 += 6;
                 }
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.z != 0) {
-                    this->unk_158 = globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.z;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.z != 0) {
+                    this->unk_158 = (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.z;
                 } else {
                     this->unk_158 = -32.0f;
                 }
@@ -897,30 +897,30 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                 break;
 
             case 4:
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x != 0) {
-                    this->unk_154 += globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.x != 0) {
+                    this->unk_154 += (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.x;
                 }
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.y != 0) {
-                    this->unk_280 += (s16)globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.y;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.y != 0) {
+                    this->unk_280 += (s16)globalCtx->csCtx.npcActions[temp_v0]->unk0C.y;
                 } else {
                     this->unk_280 -= 4;
                 }
                 break;
 
             case 5:
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x != 0) {
-                    this->unk_154 += globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.x != 0) {
+                    this->unk_154 += (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.x;
                 }
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.y != 0) {
-                    this->unk_280 += (s16)globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.y;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.y != 0) {
+                    this->unk_280 += (s16)globalCtx->csCtx.npcActions[temp_v0]->unk0C.y;
                 } else {
                     this->unk_280 -= 8;
                 }
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.z != 0) {
-                    this->unk_158 += globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.z;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.z != 0) {
+                    this->unk_158 += (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.z;
                 } else {
                     this->unk_158 += 20.0f;
                 }
@@ -938,20 +938,20 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                 this->unk_27C = 0;
                 player->actor.shape.shadowDraw = NULL;
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x != 0) {
-                    this->unk_154 = globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.x != 0) {
+                    this->unk_154 = (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.x;
                 } else {
                     this->unk_154 = 100.0f;
                 }
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.y != 0) {
-                    this->unk_14C = globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.y;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.y != 0) {
+                    this->unk_14C = (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.y;
                 } else {
                     this->unk_14C = 20.0f;
                 }
 
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.z != 0) {
-                    this->unk_150 = globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.z;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.z != 0) {
+                    this->unk_150 = (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.z;
                 } else {
                     this->unk_150 = 300.0f;
                 }
@@ -959,8 +959,8 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                 break;
 
             case 7:
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x != 0) {
-                    this->unk_158 = globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.x != 0) {
+                    this->unk_158 = (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.x;
                 } else {
                     this->unk_158 = -5.0f;
                 }
@@ -968,8 +968,8 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                 break;
 
             case 8:
-                if (globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x != 0) {
-                    this->unk_158 += globalCtx->csCtx.npcActions[temp_v0]->unk0Cu.x;
+                if (globalCtx->csCtx.npcActions[temp_v0]->unk0C.x != 0) {
+                    this->unk_158 += (u32)globalCtx->csCtx.npcActions[temp_v0]->unk0C.x;
                 } else {
                     this->unk_158 += 2.0f;
                 }
@@ -1100,7 +1100,7 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
             }
         }
     }
-    this->unk_278 += 1;
+    this->unk_278++;
 }
 
 void func_80A93298(EnTest6* this, GlobalContext* globalCtx) {
@@ -1119,7 +1119,7 @@ void func_80A93298(EnTest6* this, GlobalContext* globalCtx) {
 
     temp_s3 = this->unk_27C;
     temp_s4 = (s32)(Math_SinS(globalCtx->state.frames) * 12000.0f) + temp_s3 + 0x4E20;
-    phi_s2 = (globalCtx->state.frames & 60) * 1024;
+    phi_s2 = (globalCtx->state.frames & 0x3C) * 1024;
     phi_s2 *= (this->unk_154 / 200.0f);
     this->unk_27C += (s16)this->unk_154;
     this->unk_27E = (s16)((this->unk_154 / 200.0f) * 256.0f);
@@ -1128,7 +1128,7 @@ void func_80A93298(EnTest6* this, GlobalContext* globalCtx) {
         temp_s3 += 0x1000;
         cos = Math_CosS(temp_s3) * this->unk_150;
         sin = Math_SinS(temp_s3) * this->unk_150;
-        Matrix_InsertTranslation(cos, phi_f24, sin, 0);
+        Matrix_InsertTranslation(cos, phi_f24, sin, MTXMODE_NEW);
         Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
         Matrix_Scale(0.8f, 0.8f, 0.8f, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(phi_s2, MTXMODE_APPLY);
@@ -1246,14 +1246,14 @@ void func_80A939E8(EnTest6* this, GlobalContext* globalCtx2) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     switch (this->unk_274) {
-        case 0x5B:
-        case 0x5D:
+        case 91:
+        case 93:
             Lights_PointSetPosition(&this->lights[0].info, player->actor.world.pos.x, player->actor.world.pos.y - 10.0f,
                                     player->actor.world.pos.z);
             Lights_PointSetColorAndRadius(&this->lights[0].info, 245, 245, 200, this->unk_282);
             break;
 
-        case 0x5F:
+        case 95:
             this->unk_148 = POLY_XLU_DISP;
 
             for (i = 0; i < ARRAY_COUNT(this->unk_20C); i++) {
@@ -1296,13 +1296,13 @@ void func_80A939E8(EnTest6* this, GlobalContext* globalCtx2) {
             Lights_PointSetColorAndRadius(&this->lights[0].info, 250, 250, 100, this->unk_282);
             break;
 
-        case 0x5A:
-        case 0x5C:
-        case 0x5E:
-        case 0x60:
-        case 0x61:
-        case 0x62:
-        case 0x63:
+        case 90:
+        case 92:
+        case 94:
+        case 96:
+        case 97:
+        case 98:
+        case 99:
             break;
     }
 

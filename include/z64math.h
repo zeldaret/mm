@@ -35,12 +35,6 @@ typedef struct {
 } Vec3i; // size = 0x0C
 
 typedef struct {
-    /* 0x00 */ u32 x;
-    /* 0x04 */ u32 y;
-    /* 0x08 */ u32 z;
-} Vec3u; // size = 0x0C
-
-typedef struct {
     /* 0x00 */ Vec3s center;
     /* 0x06 */ s16   radius;
 } Sphere16; // size = 0x08
