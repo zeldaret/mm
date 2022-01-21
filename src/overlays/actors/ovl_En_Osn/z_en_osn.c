@@ -7,7 +7,7 @@
 #include "z_en_osn.h"
 #include "objects/object_osn/object_osn.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_8 | ACTOR_FLAG_1)
 
 #define THIS ((EnOsn*)thisx)
 
@@ -179,10 +179,10 @@ s32 func_80AD08B0(GlobalContext* globalCtx) {
 }
 
 void func_80AD0998(EnOsn* this) {
-    s16 sp1E = this->skelAnime.curFrame;
-    s16 new_var = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
-
-    if (this->unk_1EC == 0x12 && sp1E == new_var) {
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
+    
+    if (this->unk_1EC == 0x12 && curFrame == lastFrame) {
         this->unk_1EC = 0x13;
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0x13);
     }
@@ -199,10 +199,10 @@ void func_80AD0A24(EnOsn* this) {
 }
 
 void func_80AD0AB0(EnOsn* this) {
-    s16 sp1E = this->skelAnime.curFrame;
-    s16 new_var = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
-
-    if (sp1E == new_var) {
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
+    
+    if (curFrame == lastFrame) {
         this->unk_1FC -= 8;
         if (this->unk_1FC < 8) {
             this->unk_1FC = 0;
@@ -213,121 +213,121 @@ void func_80AD0AB0(EnOsn* this) {
 
 s32 func_80AD0B38(EnOsn* this, GlobalContext* globalCtx) {
     switch (Player_GetMask(globalCtx)) {
-        case 11:
+        case PLAYER_MASK_GREAT_FAIRY:
             if (!(this->unk_1F8 & 1)) {
                 this->unk_1F8 |= 1;
                 return 0x1FD1;
             }
             break;
-        case 12:
+        case PLAYER_MASK_GIBDO:
             if (!(this->unk_1F8 & 2)) {
                 this->unk_1F8 |= 2;
                 return 0x1FD1;
             }
             break;
-        case 1:
+        case PLAYER_MASK_TRUTH:
             if (!(this->unk_1F8 & 4)) {
                 this->unk_1F8 |= 4;
                 return 0x1FD1;
             }
             break;
-        case 20:
+        case PLAYER_MASK_GIANT:
             if (!(this->unk_1F8 & 8)) {
                 this->unk_1F8 |= 8;
                 return 0x1FD1;
             }
             break;
-        case 2:
+        case PLAYER_MASK_KAFEIS_MASK:
             if (!(this->unk_1F8 & 0x10)) {
                 this->unk_1F8 |= 0x10;
                 return 0x1FD1;
             }
             break;
-        case 13:
+        case PLAYER_MASK_DON_GERO:
             if (!(this->unk_1F8 & 0x20)) {
                 this->unk_1F8 |= 0x20;
                 return 0x1FD1;
             }
             break;
-        case 18:
+        case PLAYER_MASK_BLAST:
             if (!(this->unk_1F8 & 0x40)) {
                 this->unk_1F8 |= 0x40;
                 return 0x1FD1;
             }
             break;
-        case 10:
+        case PLAYER_MASK_COUPLE:
             if (!(this->unk_1F8 & 0x80)) {
                 this->unk_1F8 |= 0x80;
                 return 0x1FD1;
             }
             break;
-        case 19:
+        case PLAYER_MASK_SCENTS:
             if (!(this->unk_1F8 & 0x100)) {
                 this->unk_1F8 |= 0x100;
                 return 0x1FD1;
             }
             break;
-        case 14:
+        case PLAYER_MASK_KAMARO:
             if (!(this->unk_1F8 & 0x200)) {
                 this->unk_1F8 |= 0x200;
                 return 0x1FD1;
             }
             break;
-        case 16:
+        case PLAYER_MASK_STONE:
             if (!(this->unk_1F8 & 0x400)) {
                 this->unk_1F8 |= 0x400;
                 return 0x1FD1;
             }
             break;
-        case 9:
+        case PLAYER_MASK_POSTMAN:
             if (!(this->unk_1F8 & 0x800)) {
                 this->unk_1F8 |= 0x800;
                 return 0x1FD2;
             }
             break;
-        case 4:
+        case PLAYER_MASK_BUNNY:
             if (!(this->unk_1F8 & 0x1000)) {
                 this->unk_1F8 |= 0x1000;
                 return 0x1FD2;
             }
             break;
-        case 15:
+        case PLAYER_MASK_CAPTAIN:
             if (!(this->unk_1F8 & 0x2000)) {
                 this->unk_1F8 |= 0x2000;
                 return 0x1FD1;
             }
             break;
-        case 17:
+        case PLAYER_MASK_BREMEN:
             if (!(this->unk_1F8 & 0x4000)) {
                 this->unk_1F8 |= 0x4000;
                 return 0x1FD1;
             }
             break;
-        case 8:
+        case PLAYER_MASK_CIRCUS_LEADER:
             if (!(this->unk_1F8 & 0x8000)) {
                 this->unk_1F8 |= 0x8000;
                 return 0x1FD1;
             }
             break;
-        case 5:
+        case PLAYER_MASK_KEATON:
             if (!(this->unk_1F8 & 0x10000)) {
                 this->unk_1F8 |= 0x10000;
                 return 0x1FD1;
             }
             break;
-        case 6:
+        case PLAYER_MASK_GARO:
             if (!(this->unk_1F8 & 0x20000)) {
                 this->unk_1F8 |= 0x20000;
                 return 0x1FD1;
             }
             break;
-        case 3:
+        case PLAYER_MASK_ALL_NIGHT:
             if (!(this->unk_1F8 & 0x40000)) {
                 this->unk_1F8 |= 0x40000;
                 return 0x1FD1;
             }
             break;
-        case 7:
+        case PLAYER_MASK_ROMANI:
             if (!(this->unk_1F8 & 0x80000)) {
                 this->unk_1F8 |= 0x80000;
                 return 0x1FD1;
@@ -828,7 +828,7 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
             return;
 
         case 3:
-            this->actor.flags &= -2;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = func_80AD16A8;
             return;
 
@@ -857,12 +857,12 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if ((this->actor.params & 3) == 0) {
         if (sp34 != 0) {
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             func_80AD0830(this, globalCtx);
             this->actor.draw = EnOsn_Draw;
         } else {
-            this->actor.draw = 0;
-            this->actor.flags &= -2;
+            this->actor.draw = NULL;
+            this->actor.flags &= ~ACTOR_FLAG_1;
         }
     }
     func_800E9250(globalCtx, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
@@ -931,7 +931,7 @@ void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2588));
         gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk_1FC);
-        Scene_SetRenderModeXlu(globalCtx, 1, 2U);
+        Scene_SetRenderModeXlu(globalCtx, 1, 2);
         POLY_XLU_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                            this->skelAnime.dListCount, EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw,
                                            &this->actor, POLY_XLU_DISP);
