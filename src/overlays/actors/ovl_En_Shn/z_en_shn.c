@@ -116,7 +116,7 @@ s32 func_80AE61C0(EnShn* this) {
     } else {
         phi_f0 = 80.0f;
     }
-    return Actor_IsActorFacingLinkAndWithinRange(&this->actor, phi_f0, 0x238C);
+    return Actor_IsFacingAndNearPlayer(&this->actor, phi_f0, 0x238C);
 }
 
 Player* func_80AE625C(EnShn* this, GlobalContext* globalCtx) {
@@ -188,14 +188,14 @@ s32 func_80AE68F0(EnShn* this, GlobalContext* globalCtx) {
     s32 ret = 0;
 
     if (this->unk1D8 & 7) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
             this->unk1D8 &= ~0x180;
-            if (player->unk_A87 == 0x13) {
+            if (player->exchangeItemId == 0x13) {
                 this->unk1D8 |= 0x80;
-                this->unk2E4 = player->unk_A87;
-            } else if (player->unk_A87) {
+                this->unk2E4 = player->exchangeItemId;
+            } else if (player->exchangeItemId) {
                 this->unk1D8 |= 0x100;
-                this->unk2E4 = player->unk_A87;
+                this->unk2E4 = player->exchangeItemId;
             }
             func_8013AED4(&this->unk1D8, 0, 7);
             this->unk1DC = func_80AE6880(this, globalCtx);
