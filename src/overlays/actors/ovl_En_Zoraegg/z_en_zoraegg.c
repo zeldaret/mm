@@ -577,7 +577,7 @@ void func_80B32BB8(EnZoraegg* this, GlobalContext* globalCtx) {
     func_80B31C40(this, globalCtx);
     func_80B31D64(this, globalCtx, 13, 0.0f);
 
-    if (this->actor.bgCheckFlags & BGCHECK_CHECK_WALL) {
+    if (this->actor.bgCheckFlags & 0x1) {
         this->actionFunc = func_80B32B70;
     }
 
