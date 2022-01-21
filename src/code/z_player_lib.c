@@ -807,11 +807,11 @@ Gfx* D_801C026C[2 * PLAYER_FORM_MAX] = {
 
 /* DLists groups end */
 
-Gfx* D_801C0294[PLAYER_FORM_MAX] = { 0x6006C38, 0x600A220, 0x600C020, 0x6003AB8, 0x600D3D8 };
-Gfx* D_801C02A8[PLAYER_FORM_MAX] = { 0x6006EB8, 0x600A500, 0x600C270, 0x6003BC0, 0x600E1C8 };
-Gfx* D_801C02BC[PLAYER_FORM_MAX] = { 0x6006410, 0x6009A98, 0x600B820, 0x60036B0, 0x600CCE0 };
-Gfx* D_801C02D0[PLAYER_FORM_MAX] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6018490 };
-Gfx* D_801C02E4[PLAYER_FORM_MAX] = { 0x60067D8, 0x60038C0, 0x600FBB8, 0x60038C0, 0x6017B40 };
+Gfx* D_801C0294[PLAYER_FORM_MAX] = { 0x06006C38, 0x0600A220, 0x0600C020, 0x06003AB8, 0x0600D3D8 };
+Gfx* D_801C02A8[PLAYER_FORM_MAX] = { 0x06006EB8, 0x0600A500, 0x0600C270, 0x06003BC0, 0x0600E1C8 };
+Gfx* D_801C02BC[PLAYER_FORM_MAX] = { 0x06006410, 0x06009A98, 0x0600B820, 0x060036B0, 0x0600CCE0 };
+Gfx* D_801C02D0[PLAYER_FORM_MAX] = { 0x060067D8, 0x060038C0, 0x0600FBB8, 0x060038C0, 0x06018490 };
+Gfx* D_801C02E4[PLAYER_FORM_MAX] = { 0x060067D8, 0x060038C0, 0x0600FBB8, 0x060038C0, 0x06017B40 };
 
 Gfx** sPlayerDListGroups[] = {
     D_801C0114, D_801C013C, D_801C0164, D_801C00EC, D_801C0114, D_801C026C, D_801C01A4, D_801C01CC, D_801C01CC,
@@ -2125,41 +2125,54 @@ Vec3f D_801C09DC[] = {
     { 1300.0f, 700.0f, -300.0f },
     { 500.0f, -100.0f, 500.0f },
 };
+
 Vec3f D_801C0A00[] = {
     { -2500.0f, 1400.0f, 1100.0f },
     { -2900.0f, 1000.0f, 1500.0f },
     { -2100.0f, 1800.0f, 700.0f },
 };
+
 Vec3f D_801C0A24[] = {
     { 0.0f, 0.0f, 0.0f },
     { -800.0f, 800.0f, 800.0f },
     { -800.0f, -800.0f, -800.0f },
 };
+
 Vec3f D_801C0A48[] = {
     { 2000.0f, 0.0f, 0.0f },
     { 2800.0f, -800.0f, -800.0f },
     { 2800.0f, 800.0f, 800.0f },
 };
+
 Vec3f D_801C0A6C[] = {
     { -400.0f, 800.0f, 0.0f },
     { -5000.0f, -500.0f, -4000.0f },
     { -5000.0f, 8000.0f, 4000.0f },
 };
+
 Vec3f D_801C0A90[] = {
     { -400.0f, 1800.0f, 0.0f },
     { 5000.0f, 8000.0f, 4000.0f },
     { 5000.0f, -500.0f, -4000.0f },
 };
 
-Gfx* D_801C0AB4[] = { (Gfx*)0x0600CC38, (Gfx*)0x0600CDA0 };
-Gfx* D_801C0ABC[] = { (Gfx*)0x06010868, (Gfx*)0x06010978 };
-Vec3f D_801C0AC4[] = { { 5400.0f, 1700.0f, 1800.0f }, { 5400.0f, 1700.0f, -1800.0f } };
-Vec3f D_801C0ADC[] = { { 5250.0f, 570.0f, 2400.0f }, { 5250.0f, 570.0f, -2400.0f } };
-struct_80124618* D_801C0AF4[] = { D_801C0678, D_801C0698 };
-struct_80124618* D_801C0AFC[] = { D_801C06B8, D_801C06E0 };
-struct_80124618* D_801C0B04[] = { D_801C06F8, D_801C0718 };
-struct_80124618* D_801C0B0C[] = { D_801C0730, D_801C0740 };
-Gfx* D_801C0B14[] = { (Gfx*)0x06008760, (Gfx*)0x06008660 };
+Gfx* D_801C0AB4[] = { object_link_zora_DL_00CC38, object_link_zora_DL_00CDA0, };
+
+Gfx* D_801C0ABC[] = { object_link_zora_DL_010868, object_link_zora_DL_010978, };
+
+Vec3f D_801C0AC4[] = { { 5400.0f, 1700.0f, 1800.0f }, { 5400.0f, 1700.0f, -1800.0f }, };
+
+Vec3f D_801C0ADC[] = { { 5250.0f, 570.0f, 2400.0f }, { 5250.0f, 570.0f, -2400.0f }, };
+
+struct_80124618* D_801C0AF4[] = { D_801C0678, D_801C0698, };
+
+struct_80124618* D_801C0AFC[] = { D_801C06B8, D_801C06E0, };
+
+struct_80124618* D_801C0B04[] = { D_801C06F8, D_801C0718, };
+
+struct_80124618* D_801C0B0C[] = { D_801C0730, D_801C0740, };
+
+Gfx* D_801C0B14[] = { object_link_nuts_DL_008760, object_link_nuts_DL_008660, };
 
 u8 D_801C0B1C[] = {
     0x0C,
@@ -2397,49 +2410,50 @@ void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
 }
 
 s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
-    if ((player->transformation == PLAYER_FORM_DEKU) &&
-        (((player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D0)) ||
-         (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D8) ||
-         (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2E8) ||
-         (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278))) {
-        struct_80124618** sp3C = D_801C0AF4;
+    if (player->transformation == PLAYER_FORM_DEKU) {
+        if (((player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D0)) ||
+            (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D8) ||
+            (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2E8) ||
+            (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278)) {
+            struct_80124618** sp3C = D_801C0AF4;
 
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+            OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D8) {
-            sp3C = D_801C0AFC;
-        } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278) {
-            sp3C = D_801C0B0C;
-        } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2E8) {
-            sp3C = D_801C0B04;
+            if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2D8) {
+                sp3C = D_801C0AFC;
+            } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E278) {
+                sp3C = D_801C0B0C;
+            } else if (player->skelAnime.animation == &gameplay_keep_Linkanim_00E2E8) {
+                sp3C = D_801C0B04;
+            }
+
+            Matrix_StatePush();
+            Matrix_InsertTranslation(0.0f, 150.0f, 0.0f, MTXMODE_APPLY);
+            func_80124618(sp3C[0], player->skelAnime.curFrame, &player->unk_AF0[1]);
+            Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, 1);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            gSPDisplayList(POLY_OPA_DISP++, D_801C0B14[arg2]);
+
+            Matrix_InsertTranslation(2150.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_InsertXRotation_s(player->unk_B8A, MTXMODE_APPLY);
+            func_80124618(sp3C[1], player->skelAnime.curFrame, &player->unk_AF0[1]);
+            Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, MTXMODE_APPLY);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            // Close flower / Open flower
+            gSPDisplayList(POLY_OPA_DISP++,
+                        player->actor.velocity.y < -6.0f ? object_link_nuts_DL_008AA0 : object_link_nuts_DL_008C50);
+
+            Matrix_GetStateTranslation(&player->bodyPartsPos[D_801C0B1C[arg2]]);
+            Matrix_StatePop();
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+
+            return true;
         }
-
-        Matrix_StatePush();
-        Matrix_InsertTranslation(0.0f, 150.0f, 0.0f, MTXMODE_APPLY);
-        func_80124618(sp3C[0], player->skelAnime.curFrame, &player->unk_AF0[1]);
-        Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, 1);
-
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-        gSPDisplayList(POLY_OPA_DISP++, D_801C0B14[arg2]);
-
-        Matrix_InsertTranslation(2150.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(player->unk_B8A, MTXMODE_APPLY);
-        func_80124618(sp3C[1], player->skelAnime.curFrame, &player->unk_AF0[1]);
-        Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, MTXMODE_APPLY);
-
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-        // Close flower / Open flower
-        gSPDisplayList(POLY_OPA_DISP++,
-                       player->actor.velocity.y < -6.0f ? object_link_nuts_DL_008AA0 : object_link_nuts_DL_008C50);
-
-        Matrix_GetStateTranslation(&player->bodyPartsPos[D_801C0B1C[arg2]]);
-        Matrix_StatePop();
-
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
-
-        return true;
     }
 
     return false;
@@ -2676,7 +2690,7 @@ Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
 
 f32 D_801C0D78[] = { 0.0f, 3000.0f, 3000.0f, 4000.0f, 5500.0f, -1.0f, 2500.0f };
 
-Gfx* D_801C0D94 = 0x06017818;
+Gfx* D_801C0D94 = object_link_child_DL_017818;
 
 f32 D_801C0D98 = -35.0f;
 
@@ -3281,6 +3295,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
         }
     } else if (limbIndex == PLAYER_LIMB_R_HAND) {
         sp224 = player->heldActor;
+
         if (*dList1 != 0) {
             if (player->rightHandType == 9) {
                 OPEN_DISPS(globalCtx->state.gfxCtx);
