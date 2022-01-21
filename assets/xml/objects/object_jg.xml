@@ -73,39 +73,39 @@
 
         <!-- Goron Elder Limbs -->
         <Limb Name="gGoronElderRootLimb" Type="Standard" EnumName="EN_JG_LIMB_ROOT" Offset="0x1ADD0" />
-        <Limb Name="gGoronElderUpperBodyRootLimb" EnumName="EN_JG_LIMB_UPPER_BODY_ROOT" Type="Standard" Offset="0x1ADDC" />
-        <Limb Name="gGoronElderLowerTorsoLimb" EnumName="EN_JG_LIMB_LOWER_TORSO" Type="Standard" Offset="0x1ADE8" />
-        <Limb Name="gGoronElderUpperTorsoLimb" EnumName="EN_JG_LIMB_UPPER_TORSO" Type="Standard" Offset="0x1ADF4" />
-        <Limb Name="gGoronElderLeftArmRootLimb" EnumName="EN_JG_LIMB_LEFT_ARM_ROOT" Type="Standard" Offset="0x1AE00" />
-        <Limb Name="gGoronElderLeftShoulderAndUpperArmLimb" EnumName="EN_JG_LIMB_LEFT_SHOULDER_AND_UPPER_ARM" Type="Standard" Offset="0x1AE0C" />
-        <Limb Name="gGoronElderLeftForearmLimb" EnumName="EN_JG_LIMB_LEFT_FOREARM" Type="Standard" Offset="0x1AE18" />
-        <Limb Name="gGoronElderLeftWristLimb" EnumName="EN_JG_LIMB_LEFT_WRIST" Type="Standard" Offset="0x1AE24" />
-        <Limb Name="gGoronElderLeftHandAndThumbLimb" EnumName="EN_JG_LIMB_LEFT_HAND_AND_THUMB" Type="Standard" Offset="0x1AE30" />
-        <Limb Name="gGoronElderLeftFingersLimb" EnumName="EN_JG_LIMB_LEFT_FINGERS" Type="Standard" Offset="0x1AE3C" />
-        <Limb Name="gGoronElderRightArmRootLimb" EnumName="EN_JG_LIMB_RIGHT_ARM_ROOT" Type="Standard" Offset="0x1AE48" />
-        <Limb Name="gGoronElderRightShoulderAndUpperArmLimb" EnumName="EN_JG_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM" Type="Standard" Offset="0x1AE54" />
-        <Limb Name="gGoronElderRightForearmLimb" EnumName="EN_JG_LIMB_RIGHT_FOREARM" Type="Standard" Offset="0x1AE60" />
-        <Limb Name="gGoronElderRightWristLimb" EnumName="EN_JG_LIMB_RIGHT_WRIST" Type="Standard" Offset="0x1AE6C" />
-        <Limb Name="gGoronElderRightHandAndThumbLimb" EnumName="EN_JG_LIMB_RIGHT_HAND_AND_THUMB" Type="Standard" Offset="0x1AE78" />
-        <Limb Name="gGoronElderRightFingersLimb" EnumName="EN_JG_LIMB_RIGHT_FINGERS" Type="Standard" Offset="0x1AE84" />
-        <Limb Name="gGoronElderNeckLimb" EnumName="EN_JG_LIMB_NECK" Type="Standard" Offset="0x1AE90" />
-        <Limb Name="gGoronElderLeftHairEndLimb" EnumName="EN_JG_LIMB_LEFT_HAIR_END" Type="Standard" Offset="0x1AE9C" />
-        <Limb Name="gGoronElderRightHairEndLimb" EnumName="EN_JG_LIMB_RIGHT_HAIR_END" Type="Standard" Offset="0x1AEA8" />
-        <Limb Name="gGoronElderHairBackLimb" EnumName="EN_JG_LIMB_HAIR_BACK" Type="Standard" Offset="0x1AEB4" />
-        <Limb Name="gGoronElderHeadLimb" EnumName="EN_JG_LIMB_HEAD" Type="Standard" Offset="0x1AEC0" />
-        <Limb Name="gGoronElderLowerLipLimb" EnumName="EN_JG_LIMB_LOWER_LIP" Type="Standard" Offset="0x1AECC" />
-        <Limb Name="gGoronElderBeardRootLimb" EnumName="EN_JG_LIMB_BEARD_ROOT" Type="Standard" Offset="0x1AED8" />
-        <Limb Name="gGoronElderUpperBeardLimb" EnumName="EN_JG_LIMB_UPPER_BEARD" Type="Standard" Offset="0x1AEE4" />
-        <Limb Name="gGoronElderLowerBeardLimb" EnumName="EN_JG_LIMB_LOWER_BEARD" Type="Standard" Offset="0x1AEF0" />
-        <Limb Name="gGoronElderPelvisLimb" EnumName="EN_JG_LIMB_PELVIS" Type="Standard" Offset="0x1AEFC" />
-        <Limb Name="gGoronElderLeftLegRootLimb" EnumName="EN_JG_LIMB_LEFT_LEG_ROOT" Type="Standard" Offset="0x1AF08" />
-        <Limb Name="gGoronElderLeftThighLimb" EnumName="EN_JG_LIMB_LEFT_THIGH" Type="Standard" Offset="0x1AF14" />
-        <Limb Name="gGoronElderLeftShinLimb" EnumName="EN_JG_LIMB_LEFT_SHIN" Type="Standard" Offset="0x1AF20" />
-        <Limb Name="gGoronElderLeftFootLimb" EnumName="EN_JG_LIMB_LEFT_FOOT" Type="Standard" Offset="0x1AF2C" />
-        <Limb Name="gGoronElderRightLegRootLimb" EnumName="EN_JG_LIMB_RIGHT_LEG_ROOT" Type="Standard" Offset="0x1AF38" />
-        <Limb Name="gGoronElderRightThighLimb" EnumName="EN_JG_LIMB_RIGHT_THIGH" Type="Standard" Offset="0x1AF44" />
-        <Limb Name="gGoronElderRightShinLimb" EnumName="EN_JG_LIMB_RIGHT_SHIN" Type="Standard" Offset="0x1AF50" />
-        <Limb Name="gGoronElderRightFootLimb" EnumName="EN_JG_LIMB_RIGHT_FOOT" Type="Standard" Offset="0x1AF5C" />
+        <Limb Name="gGoronElderUpperBodyRootLimb" Type="Standard" EnumName="EN_JG_LIMB_UPPER_BODY_ROOT" Offset="0x1ADDC" />
+        <Limb Name="gGoronElderLowerTorsoLimb" Type="Standard" EnumName="EN_JG_LIMB_LOWER_TORSO" Offset="0x1ADE8" />
+        <Limb Name="gGoronElderUpperTorsoLimb" Type="Standard" EnumName="EN_JG_LIMB_UPPER_TORSO" Offset="0x1ADF4" />
+        <Limb Name="gGoronElderLeftArmRootLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_ARM_ROOT" Offset="0x1AE00" />
+        <Limb Name="gGoronElderLeftShoulderAndUpperArmLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_SHOULDER_AND_UPPER_ARM" Offset="0x1AE0C" />
+        <Limb Name="gGoronElderLeftForearmLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_FOREARM" Offset="0x1AE18" />
+        <Limb Name="gGoronElderLeftWristLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_WRIST" Offset="0x1AE24" />
+        <Limb Name="gGoronElderLeftHandAndThumbLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_HAND_AND_THUMB" Offset="0x1AE30" />
+        <Limb Name="gGoronElderLeftFingersLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_FINGERS" Offset="0x1AE3C" />
+        <Limb Name="gGoronElderRightArmRootLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_ARM_ROOT" Offset="0x1AE48" />
+        <Limb Name="gGoronElderRightShoulderAndUpperArmLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM" Offset="0x1AE54" />
+        <Limb Name="gGoronElderRightForearmLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_FOREARM" Offset="0x1AE60" />
+        <Limb Name="gGoronElderRightWristLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_WRIST" Offset="0x1AE6C" />
+        <Limb Name="gGoronElderRightHandAndThumbLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_HAND_AND_THUMB" Offset="0x1AE78" />
+        <Limb Name="gGoronElderRightFingersLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_FINGERS" Offset="0x1AE84" />
+        <Limb Name="gGoronElderNeckLimb" Type="Standard" EnumName="EN_JG_LIMB_NECK" Offset="0x1AE90" />
+        <Limb Name="gGoronElderLeftHairEndLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_HAIR_END" Offset="0x1AE9C" />
+        <Limb Name="gGoronElderRightHairEndLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_HAIR_END" Offset="0x1AEA8" />
+        <Limb Name="gGoronElderHairBackLimb" Type="Standard" EnumName="EN_JG_LIMB_HAIR_BACK" Offset="0x1AEB4" />
+        <Limb Name="gGoronElderHeadLimb" Type="Standard" EnumName="EN_JG_LIMB_HEAD" Offset="0x1AEC0" />
+        <Limb Name="gGoronElderLowerLipLimb" Type="Standard" EnumName="EN_JG_LIMB_LOWER_LIP" Offset="0x1AECC" />
+        <Limb Name="gGoronElderBeardRootLimb" Type="Standard" EnumName="EN_JG_LIMB_BEARD_ROOT" Offset="0x1AED8" />
+        <Limb Name="gGoronElderUpperBeardLimb" Type="Standard" EnumName="EN_JG_LIMB_UPPER_BEARD" Offset="0x1AEE4" />
+        <Limb Name="gGoronElderLowerBeardLimb" Type="Standard" EnumName="EN_JG_LIMB_LOWER_BEARD" Offset="0x1AEF0" />
+        <Limb Name="gGoronElderPelvisLimb" Type="Standard" EnumName="EN_JG_LIMB_PELVIS" Offset="0x1AEFC" />
+        <Limb Name="gGoronElderLeftLegRootLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_LEG_ROOT" Offset="0x1AF08" />
+        <Limb Name="gGoronElderLeftThighLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_THIGH" Offset="0x1AF14" />
+        <Limb Name="gGoronElderLeftShinLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_SHIN" Offset="0x1AF20" />
+        <Limb Name="gGoronElderLeftFootLimb" Type="Standard" EnumName="EN_JG_LIMB_LEFT_FOOT" Offset="0x1AF2C" />
+        <Limb Name="gGoronElderRightLegRootLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_LEG_ROOT" Offset="0x1AF38" />
+        <Limb Name="gGoronElderRightThighLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_THIGH" Offset="0x1AF44" />
+        <Limb Name="gGoronElderRightShinLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_SHIN" Offset="0x1AF50" />
+        <Limb Name="gGoronElderRightFootLimb" Type="Standard" EnumName="EN_JG_LIMB_RIGHT_FOOT" Offset="0x1AF5C" />
 
         <!-- Goron Elder Skeleton -->
         <Skeleton Name="gGoronElderSkel" Type="Flex" LimbType="Standard" LimbNone="EN_JG_LIMB_NONE" LimbMax="EN_JG_LIMB_MAX" EnumName="EnJgLimbs" Offset="0x1AFF0" />
