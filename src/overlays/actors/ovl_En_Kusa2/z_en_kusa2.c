@@ -342,7 +342,7 @@ void func_80A5BDB0(EnKusa2* this, GlobalContext* globalCtx) {
     sp50.z = this->actor.world.pos.z;
     EffectSsGSplash_Spawn(globalCtx, &sp50, NULL, NULL, 0, 280);
     EffectSsGRipple_Spawn(globalCtx, &sp50, 300, 700, 0);
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
 }
 
 void func_80A5BF38(EnKusa2* this, s32 arg1) {
@@ -375,7 +375,7 @@ s32 func_80A5BFD8(EnKusa2* this, GlobalContext* globalCtx) {
 
         func_80A5CF44(this);
         func_80A5BD14(this, globalCtx, (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000000) ? 1 : 0);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         func_80A5BD94(this);
         Actor_MarkForDeath(&this->actor);
         return true;
@@ -959,7 +959,7 @@ void func_80A5D7C4(EnKusa2* this, GlobalContext* globalCtx) {
     s16 sp2A;
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_PL_PULL_UP_PLANT);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_PL_PULL_UP_PLANT);
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.shape.shadowAlpha = 60;
         this->actor.room = -1;
@@ -1200,7 +1200,7 @@ void func_80A5E210(EnKusa2* this, GlobalContext* globalCtx) {
         this->actor.speedXZ *= 0.4f;
         if (this->actor.bgCheckFlags & 2) {
             func_80A5D178(this);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_KUSAMUSHI_HIDE);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_KUSAMUSHI_HIDE);
         }
     }
 

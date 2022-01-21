@@ -816,7 +816,7 @@ void EnFirefly_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gfx = POLY_OPA_DISP;
     }
 
-    gSPDisplayList(gfx, &sSetupDL[150]);
+    gSPDisplayList(gfx, &sSetupDL[6 * 25]);
 
     if (this->currentType == KEESE_FIRE) {
         gDPSetEnvColor(&gfx[1], 0, 0, 0, 0);
