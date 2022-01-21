@@ -717,30 +717,32 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
             this->animationIdx = 5;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
         }
-    } else if (this->flags & ENFSN_HAGGLE) {
-    dummy:;
+        return;
+    }
+
+    if (this->flags & ENFSN_HAGGLE) {
         this->actionFunc = EnFsn_Haggle;
-    } else {
-    dummy2:;
-        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            if (this->cutsceneState == 0) {
-                if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                    ActorCutscene_Stop(0x7C);
-                }
-                this->cutscene = this->lookToShopkeeperCutscene;
-                ActorCutscene_SetIntentToPlay(this->cutscene);
-                this->cutsceneState = 1;
+        return;
+    }
+
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        if (this->cutsceneState == 0) {
+            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+                ActorCutscene_Stop(0x7C);
             }
-            this->actor.textId = EnFsn_GetWelcome(globalCtx);
-            func_801518B0(globalCtx, this->actor.textId, &this->actor);
-            player->actor.world.pos.x = 1.0f;
-            player->actor.world.pos.z = -34.0f;
-            this->actionFunc = EnFsn_BeginInteraction;
-        } else if (((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= 15.0f)) &&
-                   (player->actor.world.pos.y > 0.0f) &&
-                   ((player->actor.world.pos.z >= -35.0f) && (player->actor.world.pos.z <= -20.0f))) {
-            func_800B8614(&this->actor, globalCtx, 400.0f);
+            this->cutscene = this->lookToShopkeeperCutscene;
+            ActorCutscene_SetIntentToPlay(this->cutscene);
+            this->cutsceneState = 1;
         }
+        this->actor.textId = EnFsn_GetWelcome(globalCtx);
+        func_801518B0(globalCtx, this->actor.textId, &this->actor);
+        player->actor.world.pos.x = 1.0f;
+        player->actor.world.pos.z = -34.0f;
+        this->actionFunc = EnFsn_BeginInteraction;
+    } else if (((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= 15.0f)) &&
+               (player->actor.world.pos.y > 0.0f) &&
+               ((player->actor.world.pos.z >= -35.0f) && (player->actor.world.pos.z <= -20.0f))) {
+        func_800B8614(&this->actor, globalCtx, 400.0f);
     }
 }
 
@@ -1585,7 +1587,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     if (limbIndex == 17) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
 void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1604,7 +1606,7 @@ void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static void* sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
+    static TexturePtr sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
     EnFsn* this = THIS;
     s32 pad;
     s16 i;

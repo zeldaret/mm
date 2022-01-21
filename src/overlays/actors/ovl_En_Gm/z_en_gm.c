@@ -1649,7 +1649,7 @@ void EnGm_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_809513AC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnGm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnGm* this = THIS;
     s32 phi_v0;
@@ -1684,7 +1684,7 @@ s32 func_809513AC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_809514BC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnGm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80951E24 = { 1400.0f, 0.0f, 0.0f };
     EnGm* this = THIS;
     s32 pad[4];
@@ -1710,7 +1710,7 @@ void func_809514BC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-void func_80951594(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnGm* this = THIS;
     s32 phi_v0 = 1;
     s32 phi_v1 = 0;
@@ -1762,8 +1762,9 @@ void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80951E30[this->unk_3CE]));
 
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      func_809513AC, func_809514BC, func_80951594, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, EnGm_OverrideLimbDraw, EnGm_PostLimbDraw,
+                                       EnGm_TransformLimbDraw, &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
