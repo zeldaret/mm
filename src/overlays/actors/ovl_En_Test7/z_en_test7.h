@@ -9,6 +9,12 @@ typedef void (*EnTest7ActionFunc)(struct EnTest7*, GlobalContext*);
 typedef void (*EnTest7UnkFunc)(struct EnTest7*, GlobalContext*);
 typedef void (*EnTest7UnkDrawFunc)(Actor*, GlobalContext*);
 
+#define ENTEST7_GET(thisx) ((thisx)->params)
+
+#define ENTEST7_MINUS1 -1
+#define ENTEST7_26 0x26
+#define ENTEST7_1C 0x1C
+
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;

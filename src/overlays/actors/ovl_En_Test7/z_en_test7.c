@@ -82,7 +82,7 @@ void func_80AF0838(EnTest7Struct2* arg0) {
 }
 
 void func_80AF0984(EnTest7Struct2* arg0, Vec3f* arg1, s32 arg2) {
-    s16 sp26 = Rand_ZeroOne() * 65535.0f;
+    s16 sp26 = Rand_ZeroOne() * 0xFFFF;
     f32 sp20;
     f32 temp_f0;
     f32 temp_f0_2;
@@ -109,16 +109,16 @@ void func_80AF0984(EnTest7Struct2* arg0, Vec3f* arg1, s32 arg2) {
     arg0->unk_24 = 0.0f;
     arg0->unk_28 = 0.0f;
     arg0->unk_2C = 0.25f;
-    arg0->unk_30.x = Rand_ZeroOne() * 65536.0f;
-    arg0->unk_30.y = Rand_ZeroOne() * 65536.0f;
-    arg0->unk_30.z = Rand_ZeroOne() * 65536.0f;
+    arg0->unk_30.x = Rand_ZeroOne() * 0x10000;
+    arg0->unk_30.y = Rand_ZeroOne() * 0x10000;
+    arg0->unk_30.z = Rand_ZeroOne() * 0x10000;
     arg0->unk_04 = 60;
 
     if (Rand_ZeroOne() < 0.9f) {
         arg0->unk_00 = 1;
-        arg0->unk_30.x = Rand_ZeroOne() * 65536.0f;
-        arg0->unk_30.y = Rand_ZeroOne() * 65536.0f;
-        arg0->unk_30.z = Rand_ZeroOne() * 65536.0f;
+        arg0->unk_30.x = Rand_ZeroOne() * 0x10000;
+        arg0->unk_30.y = Rand_ZeroOne() * 0x10000;
+        arg0->unk_30.z = Rand_ZeroOne() * 0x10000;
         arg0->unk_36 = 0;
         arg0->unk_38 = 0;
         arg0->unk_3A = 0;
@@ -417,7 +417,7 @@ void EnTest7_Init(Actor* thisx, GlobalContext* globalCtx2) {
     func_80AF0838(this->unk_15C);
     func_80AF1730(&this->unk_148);
 
-    if (this->actor.params == -1) {
+    if (ENTEST7_GET(&this->actor) == ENTEST7_MINUS1) {
         func_80AF082C(this, func_80AF2938);
         EnTest7_SetupAction(this, NULL);
     } else {
@@ -463,7 +463,7 @@ void func_80AF1A2C(EnTest7* this, GlobalContext* globalCtx) {
 
     func_800FD59C(globalCtx, &sp30, sp2C);
     func_800FD654(globalCtx, &sp34, sp2C);
-    func_800FD698(globalCtx, 0x7D0, 0xFA0, sp2C);
+    func_800FD698(globalCtx, 2000, 4000, sp2C);
 
     if (this->unk_1E54 >= 10) {
         Camera* camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
@@ -496,7 +496,7 @@ void func_80AF1B68(EnTest7* this, GlobalContext* globalCtx) {
             this->unk_144 &= ~1;
             player->actor.draw = NULL;
         }
-    } else if (this->unk_1E54 >= 0x57) {
+    } else if (this->unk_1E54 >= 87) {
         func_80AF082C(this, func_80AF1F48);
         this->unk_144 &= -9;
         this->unk_148.unk_10 -= 0x2EE0;
@@ -566,7 +566,7 @@ void func_80AF1E44(EnTest7* this, GlobalContext* globalCtx) {
 
 void func_80AF1F48(EnTest7* this, GlobalContext* globalCtx) {
     s32 pad;
-    s32 temp = this->unk_1E54 - 0x56;
+    s32 temp = this->unk_1E54 - 86;
     f32 temp_f0 = temp / 10.0f;
     Vec3f sp20;
 
@@ -578,7 +578,7 @@ void func_80AF1F48(EnTest7* this, GlobalContext* globalCtx) {
 
     this->unk_144 |= 4;
 
-    if (this->unk_1E54 >= 0x60) {
+    if (this->unk_1E54 >= 96) {
         func_80AF082C(this, func_80AF2030);
         this->unk_144 &= ~0x10;
     }
@@ -588,7 +588,7 @@ void func_80AF1F48(EnTest7* this, GlobalContext* globalCtx) {
 
 void func_80AF2030(EnTest7* this, GlobalContext* globalCtx) {
     s32 pad;
-    s32 temp = this->unk_1E54 - 0x60;
+    s32 temp = this->unk_1E54 - 96;
     f32 sp1C = 1.0f - (temp / 4.00000000000000001f);
     Camera* camera;
     f32 temp_f2;
@@ -669,12 +669,12 @@ void func_80AF2350(EnTest7* this, GlobalContext* globalCtx) {
 
     if (globalCtx->sceneNum == SCENE_SECOM) {
         globalCtx->nextEntranceIndex = 0x2060;
-    } else if (this->actor.params == 0x26) {
+    } else if (ENTEST7_GET(&this->actor) == ENTEST7_26) {
         func_80169F78(globalCtx);
         gSaveContext.respawn[2].playerParams = (gSaveContext.respawn[2].playerParams & 0xFF) | 0x600;
         gSaveContext.respawnFlag = -6;
     } else {
-        globalCtx->nextEntranceIndex = D_80AF3438[this->actor.params - 28];
+        globalCtx->nextEntranceIndex = D_80AF3438[ENTEST7_GET(&this->actor) - ENTEST7_1C];
         if ((globalCtx->nextEntranceIndex == 0x84A0) && (gSaveContext.weekEventReg[20] & 2)) {
             globalCtx->nextEntranceIndex = 0xCA0;
         } else if ((globalCtx->nextEntranceIndex == 0x9A80) && (gSaveContext.weekEventReg[33] & 0x80)) {
@@ -749,7 +749,7 @@ void func_80AF2854(EnTest7* this, GlobalContext* globalCtx) {
     if ((this->unk_1E54 >= 12) && (this->unk_1E54 < 31)) {
         temp = (this->unk_1E54 - 12) / 18.0f;
         func_80AF24D8(this, globalCtx, temp);
-    } else if ((this->unk_1E54 >= 79) && (this->unk_1E54 < 0x60)) {
+    } else if ((this->unk_1E54 >= 79) && (this->unk_1E54 < 96)) {
         temp = (this->unk_1E54 - 79) / 16.000000001f;
         func_80AF2654(this, globalCtx, temp);
     }
@@ -795,7 +795,7 @@ void func_80AF29C0(EnTest7* this, GlobalContext* globalCtx) {
 void func_80AF2AE8(EnTest7* this, GlobalContext* globalCtx) {
     Camera* camera;
 
-    if (ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[8]) == 0) {
+    if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[8])) {
         ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[8]);
         return;
     }
