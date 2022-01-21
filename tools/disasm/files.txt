@@ -245,7 +245,7 @@
             0x80096930 : "__osMemcpy",
 
             # .data section
-            0x800969C0 : "rsp_boot",
+            0x800969C0 : "rspboot",
             0x80096B20 : "idle",
             0x80096B40 : "viconfig",
             0x80096B50 : "z_std_dma",
@@ -503,7 +503,9 @@
             0x801AAAA0 : "z_construct",
 
             # .data section
-            0x801AAAB0 : "rsp",
+            0x801AAAB0 : "aspMain",
+            0x801ABAB0 : "gspS2DEX2.fifo",
+            0x801AD370 : "njpgdspMain",
             0x801ADE60 : "",
             0x801ADEC0 : "z_en_item00",
             0x801AE240 : "z_eff_blure",
@@ -675,7 +677,11 @@
             0x801E1070 : "code_801A7B10",
             0x801E1100 : "audio_init_params",
             0x801E1110 : "z_game_over",
-            0x801E1180 : "rsp",
+            0x801E1180 : "audio_tables",
+            0x801E1E80 : "aspMain",
+            0x801E2160 : "gspF3DZEX2.NoN.PosLight.fifo",
+            0x801E3BB0 : "gspS2DEX2.fifo",
+            0x801E3F40 : "njpgdspMain",
 
             # .bss section
             0x801E3FA0 : "code_801E3FA0",
