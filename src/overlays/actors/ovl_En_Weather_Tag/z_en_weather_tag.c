@@ -61,7 +61,7 @@ void EnWeatherTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnWeatherTag* this = (EnWeatherTag*)thisx;
+    EnWeatherTag* this = THIS;
     s32 pad;
     Path* path;
     s32 pathID;
@@ -481,7 +481,7 @@ void func_80967608(EnWeatherTag* this, GlobalContext* globalCtx) {
 }
 
 void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnWeatherTag* this = (EnWeatherTag*)thisx;
+    EnWeatherTag* this = THIS;
     u16 oldTime;
 
     this->actionFunc(this, globalCtx);

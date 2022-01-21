@@ -1797,7 +1797,7 @@ extern UNK_PTR D_801DB478[7];
 // extern UNK_TYPE1 D_801DB494;
 // extern UNK_TYPE1 D_801DB49C;
 // extern UNK_TYPE2 D_801DB4A0;
-extern UNK_TYPE D_801DB4A4;
+extern Vec3f D_801DB4A4;
 extern f32 D_801DB4B0;
 extern s8 D_801DB4B8;
 // extern UNK_TYPE1 D_801DB4C0;

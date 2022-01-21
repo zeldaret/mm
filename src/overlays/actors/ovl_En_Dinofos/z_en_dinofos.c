@@ -1355,8 +1355,8 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
 }
 
 void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnDinofos* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnDinofos* this = THIS;
     s32 pad;
     Vec3f sp30;
 

@@ -277,7 +277,7 @@ u8 func_80BB1B14(EnGeg* this, GlobalContext* globalCtx) {
                 return 0;
             }
 
-            if (((EnBom*)explosive)->unk_1F9 == 0) {
+            if (((EnBom*)explosive)->isPowderKeg == 0) {
                 return 2;
             }
 
