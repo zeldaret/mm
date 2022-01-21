@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for Big Poes -->
     <File Name="object_bigpo" Segment="6">
         <Animation Name="gBigpoSwingLampAttackAnim" Offset="0x158" />
         <Animation Name="gBigpoShockAnim" Offset="0x454" />

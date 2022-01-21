@@ -434,9 +434,9 @@ void func_80897A94(EnPeehat* this, GlobalContext* globalCtx) {
         func_808982E0(this);
     } else if ((this->colliderCylinder.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & 1)) {
         func_800B3030(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 40, 7, 0);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
         if (!(this->actor.bgCheckFlags & 1)) {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_PIHAT_SM_DEAD);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_PIHAT_SM_DEAD);
         }
         Actor_MarkForDeath(&this->actor);
     } else if (this->colliderTris.base.atFlags & AT_HIT) {
@@ -586,8 +586,8 @@ void func_80898338(EnPeehat* this, GlobalContext* globalCtx) {
     if (Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f)) {
         if (this->actor.params != 0) {
             func_800B3030(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 40, 7, 0);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_EXTINCT);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_PIHAT_SM_DEAD);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_EXTINCT);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_PIHAT_SM_DEAD);
             Actor_MarkForDeath(&this->actor);
         } else {
             func_80897864(this);

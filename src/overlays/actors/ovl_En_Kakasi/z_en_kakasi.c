@@ -45,7 +45,8 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx);
 
 void EnKakasi_SetupDialogue(EnKakasi* this);
 
-void EnKakasi_LimbDraw(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, struct Actor* actor);
+void EnKakasi_PostLimbDraw(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
+                           struct Actor* thisx);
 
 static ColliderCylinderInit D_80971D80 = {
     {
@@ -1011,7 +1012,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx) {
 
         if (globalCtx->sceneNum == SCENE_8ITEMSHOP) {
             EffectSsGSplash_Spawn(globalCtx, &tempWorldPos, 0, 0, 0, randPlusMinusPoint5Scaled(100.0f) + 200.0f);
-            Audio_PlaySoundAtPosition(globalCtx, &tempWorldPos, 0x32, NA_SE_EV_BOMB_DROP_WATER);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &tempWorldPos, 0x32, NA_SE_EV_BOMB_DROP_WATER);
 
         } else {
             Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos,
@@ -1153,8 +1154,8 @@ void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnKakasi_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
-    EnKakasi* this = (EnKakasi*)actor;
+void EnKakasi_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnKakasi* this = THIS;
 
     if (limbIndex == 4) {
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk1BC);
@@ -1165,5 +1166,5 @@ void EnKakasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
-                          NULL, EnKakasi_LimbDraw, &this->actor);
+                          NULL, EnKakasi_PostLimbDraw, &this->actor);
 }
