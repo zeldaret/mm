@@ -27,8 +27,8 @@ void func_80BCF6D0(EnHg* this, GlobalContext* globalCtx);
 void func_80BCF8A0(EnHg* this, GlobalContext* globalCtx);
 void func_80BCF93C(EnHg* this);
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx);
-s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg);
-void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg);
+s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 extern AnimationHeader D_06000370;
 extern AnimationHeader D_06001138;
@@ -401,7 +401,7 @@ void EnHg_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    return 0;
+    return false;
 }
 
 void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
