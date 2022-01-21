@@ -266,7 +266,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGibdoSkel, &gGibdoRedeadIdleAnim, this->jointTable,
-                       this->morphTable, REDEAD_GIBDO_LIMB_MAX);
+                       this->morphTable, GIBDO_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -579,7 +579,7 @@ void EnRailgibud_Damage(EnRailgibud* this, GlobalContext* globalCtx) {
         if ((this->effectTimer > 0) && (this->effectType == 0) && (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
             this->actor.hintId = 0x2A;
             SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
-                               REDEAD_GIBDO_LIMB_MAX);
+                               GIBDO_LIMB_MAX);
             this->type = EN_RAILGIBUD_TYPE_REDEAD;
         }
 
@@ -651,7 +651,7 @@ void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->deathTimer == 20) && (this->effectTimer > 0) && (this->effectType == 0) &&
         (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
-                           REDEAD_GIBDO_LIMB_MAX);
+                           GIBDO_LIMB_MAX);
         this->type = EN_RAILGIBUD_TYPE_REDEAD;
     }
 }
@@ -1036,9 +1036,9 @@ s32 EnRailgibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
                                  Actor* thisx, Gfx** gfx) {
     EnRailgibud* this = THIS;
 
-    if (limbIndex == REDEAD_GIBDO_LIMB_UPPER_BODY_ROOT) {
+    if (limbIndex == GIBDO_LIMB_UPPER_BODY_ROOT) {
         rot->y += this->upperBodyRotation.y;
-    } else if (limbIndex == REDEAD_GIBDO_LIMB_HEAD_ROOT) {
+    } else if (limbIndex == GIBDO_LIMB_HEAD_ROOT) {
         rot->y += this->headRotation.y;
     }
 
@@ -1050,14 +1050,13 @@ void EnRailgibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     EnRailgibud* this = THIS;
 
     if ((this->effectTimer != 0) &&
-        ((limbIndex == REDEAD_GIBDO_LIMB_LEFT_THIGH) || (limbIndex == REDEAD_GIBDO_LIMB_LEFT_LOWER_LEG) ||
-         (limbIndex == REDEAD_GIBDO_LIMB_LEFT_FOOT) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_THIGH) ||
-         (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_LOWER_LEG) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_FOOT) ||
-         (limbIndex == REDEAD_GIBDO_LIMB_TORSO) || (limbIndex == REDEAD_GIBDO_LIMB_LEFT_SHOULDER_AND_UPPER_ARM) ||
-         (limbIndex == REDEAD_GIBDO_LIMB_LEFT_FOREARM) || (limbIndex == REDEAD_GIBDO_LIMB_LEFT_HAND) ||
-         (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) ||
-         (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_FOREARM) || (limbIndex == REDEAD_GIBDO_LIMB_RIGHT_HAND) ||
-         (limbIndex == REDEAD_GIBDO_LIMB_HEAD) || (limbIndex == REDEAD_GIBDO_LIMB_PELVIS))) {
+        ((limbIndex == GIBDO_LIMB_LEFT_THIGH) || (limbIndex == GIBDO_LIMB_LEFT_SHIN) ||
+         (limbIndex == GIBDO_LIMB_LEFT_FOOT) || (limbIndex == GIBDO_LIMB_RIGHT_THIGH) ||
+         (limbIndex == GIBDO_LIMB_RIGHT_SHIN) || (limbIndex == GIBDO_LIMB_RIGHT_FOOT) ||
+         (limbIndex == GIBDO_LIMB_TORSO) || (limbIndex == GIBDO_LIMB_LEFT_SHOULDER_AND_UPPER_ARM) ||
+         (limbIndex == GIBDO_LIMB_LEFT_FOREARM) || (limbIndex == GIBDO_LIMB_LEFT_HAND) ||
+         (limbIndex == GIBDO_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) || (limbIndex == GIBDO_LIMB_RIGHT_FOREARM) ||
+         (limbIndex == GIBDO_LIMB_RIGHT_HAND) || (limbIndex == GIBDO_LIMB_HEAD) || (limbIndex == GIBDO_LIMB_PELVIS))) {
         Matrix_GetStateTranslation(&this->limbPos[this->limbIndex]);
         this->limbIndex++;
     }
@@ -1107,7 +1106,7 @@ void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, GlobalContext* globalCtx) 
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGibdoSkel, &gGibdoRedeadIdleAnim, this->jointTable,
-                       this->morphTable, REDEAD_GIBDO_LIMB_MAX);
+                       this->morphTable, GIBDO_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);

@@ -2,7 +2,7 @@
 #define Z_EN_RAILGIBUD_H
 
 #include "global.h"
-#include "overlays/actors/ovl_En_Rd/z_en_rd.h"
+#include "objects/object_rd/object_rd.h"
 
 struct EnRailgibud;
 
@@ -25,8 +25,8 @@ typedef struct EnRailgibud {
     /* 0x029C */ s32 pathCount;
     /* 0x02A0 */ f32 effectAlpha;
     /* 0x02A4 */ f32 effectScale;
-    /* 0x02A8 */ Vec3s jointTable[REDEAD_GIBDO_LIMB_MAX];
-    /* 0x0344 */ Vec3s morphTable[REDEAD_GIBDO_LIMB_MAX];
+    /* 0x02A8 */ Vec3s jointTable[GIBDO_LIMB_MAX];
+    /* 0x0344 */ Vec3s morphTable[GIBDO_LIMB_MAX];
     /* 0x03E0 */ Vec3s headRotation;
     /* 0x03E6 */ Vec3s upperBodyRotation;
     /* 0x03EC */ s16 shouldWalkForward; // Only used by the "main" Gibdo

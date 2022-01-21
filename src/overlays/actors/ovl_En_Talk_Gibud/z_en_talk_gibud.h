@@ -2,7 +2,7 @@
 #define Z_EN_TALK_GIBUD_H
 
 #include "global.h"
-#include "overlays/actors/ovl_En_Rd/z_en_rd.h"
+#include "objects/object_rd/object_rd.h"
 
 #define EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx) ((thisx)->params & 0xF)
 #define EN_TALK_GIBUD_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF0) >> 4)
@@ -23,8 +23,8 @@ typedef struct EnTalkGibud {
     /* 0x298 */ s32 switchFlag;
     /* 0x29C */ f32 effectAlpha;
     /* 0x2A0 */ f32 effectScale;
-    /* 0x2A4 */ Vec3s jointTable[REDEAD_GIBDO_LIMB_MAX];
-    /* 0x340 */ Vec3s morphTable[REDEAD_GIBDO_LIMB_MAX];
+    /* 0x2A4 */ Vec3s jointTable[GIBDO_LIMB_MAX];
+    /* 0x340 */ Vec3s morphTable[GIBDO_LIMB_MAX];
     /* 0x3DC */ s16 textId;
     /* 0x3DE */ Vec3s headRotation;
     /* 0x3E4 */ Vec3s upperBodyRotation;
