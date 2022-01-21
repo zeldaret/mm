@@ -5,7 +5,6 @@
  */
 
 #include "z_en_baguo.h"
-#include "objects/object_gmo/object_gmo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000005

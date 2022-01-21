@@ -2,17 +2,11 @@
 #define Z_EN_BAGUO_H
 
 #include "global.h"
+#include "objects/object_gmo/object_gmo.h"
 
 struct EnBaguo;
 
 typedef void (*EnBaguoActionFunc)(struct EnBaguo*, GlobalContext*);
-
-typedef enum {
-    /* 0 */ NEJIRON_LIMB_NONE,
-    /* 1 */ NEJIRON_LIMB_BODY,
-    /* 2 */ NEJIRON_LIMB_EYES,
-    /* 3 */ NEJIRON_LIMB_MAX,
-} NejironLimbs;
 
 /**
  * When a Nejiron explodes, rock particles fly out from where it exploded.
