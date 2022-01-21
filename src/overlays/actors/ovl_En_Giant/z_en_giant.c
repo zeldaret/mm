@@ -5,7 +5,6 @@
  */
 
 #include "z_en_giant.h"
-#include "objects/object_giant/object_giant.h"
 
 #define FLAGS 0x00000030
 

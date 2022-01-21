@@ -2,6 +2,7 @@
 #define Z_EN_GIANT_H
 
 #include "global.h"
+#include "objects/object_giant/object_giant.h"
 
 #define GIANT_TYPE(thisx) ((thisx)->params & 0xF)
 
@@ -36,26 +37,6 @@ typedef enum {
     /* 14 */ GIANT_TYPE_SWAMP_CLOCK_TOWER_FAILURE,
     /* 15 */ GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE,
 } GiantType;
-
-typedef enum {
-    /*  0 */ GIANT_LIMB_NONE,
-    /*  1 */ GIANT_LIMB_HEAD,
-    /*  2 */ GIANT_LIMB_LEFT_THIGH,
-    /*  3 */ GIANT_LIMB_LEFT_LOWER_LEG,
-    /*  4 */ GIANT_LIMB_LEFT_FOOT,
-    /*  5 */ GIANT_LIMB_RIGHT_THIGH,
-    /*  6 */ GIANT_LIMB_RIGHT_LOWER_LEG,
-    /*  7 */ GIANT_LIMB_RIGHT_FOOT,
-    /*  8 */ GIANT_LIMB_LEFT_SHOULDER,
-    /*  9 */ GIANT_LIMB_LEFT_UPPER_ARM,
-    /* 10 */ GIANT_LIMB_LEFT_FOREARM,
-    /* 11 */ GIANT_LIMB_LEFT_HAND,
-    /* 12 */ GIANT_LIMB_RIGHT_SHOULDER,
-    /* 13 */ GIANT_LIMB_RIGHT_UPPER_ARM,
-    /* 14 */ GIANT_LIMB_RIGHT_FOREARM,
-    /* 15 */ GIANT_LIMB_RIGHT_HAND,
-    /* 16 */ GIANT_LIMB_MAX,
-} EnGiantLimbs;
 
 struct EnGiant;
 
