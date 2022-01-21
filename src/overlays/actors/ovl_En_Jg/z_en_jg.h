@@ -2,48 +2,10 @@
 #define Z_EN_JG_H
 
 #include "global.h"
+#include "objects/object_jg/object_jg.h"
 
 #define EN_JG_IS_IN_GORON_SHRINE(thisx) ((thisx)->params & 0x1)
 #define EN_JG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
-
-typedef enum {
-    /*  0 */ EN_JG_LIMB_NONE,
-    /*  1 */ EN_JG_LIMB_ROOT, // Root of Upper Body Root and Pelvis
-    /*  2 */ EN_JG_LIMB_UPPER_BODY_ROOT, // Root of Lower Torso and Upper Torso
-    /*  3 */ EN_JG_LIMB_LOWER_TORSO,
-    /*  4 */ EN_JG_LIMB_UPPER_TORSO, // Root of Left Arm Root, Right Arm Root, and Neck
-    /*  5 */ EN_JG_LIMB_LEFT_ARM_ROOT,
-    /*  6 */ EN_JG_LIMB_LEFT_SHOULDER_AND_UPPER_ARM,
-    /*  7 */ EN_JG_LIMB_LEFT_FOREARM,
-    /*  8 */ EN_JG_LIMB_LEFT_WRIST, // Root of Left Hand and Thumb and Left Fingers
-    /*  9 */ EN_JG_LIMB_LEFT_HAND_AND_THUMB,
-    /* 10 */ EN_JG_LIMB_LEFT_FINGERS,
-    /* 11 */ EN_JG_LIMB_RIGHT_ARM_ROOT,
-    /* 12 */ EN_JG_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM,
-    /* 13 */ EN_JG_LIMB_RIGHT_FOREARM,
-    /* 14 */ EN_JG_LIMB_RIGHT_WRIST,  // Root of Right Hand and Thumb and Right Fingers
-    /* 15 */ EN_JG_LIMB_RIGHT_HAND_AND_THUMB,
-    /* 16 */ EN_JG_LIMB_RIGHT_FINGERS,
-    /* 17 */ EN_JG_LIMB_NECK, // Root of Left Hair End, Right Hair End, Hair Back, and Head
-    /* 18 */ EN_JG_LIMB_LEFT_HAIR_END,
-    /* 19 */ EN_JG_LIMB_RIGHT_HAIR_END,
-    /* 20 */ EN_JG_LIMB_HAIR_BACK,
-    /* 21 */ EN_JG_LIMB_HEAD,
-    /* 22 */ EN_JG_LIMB_LOWER_LIP,
-    /* 23 */ EN_JG_LIMB_BEARD_ROOT,
-    /* 24 */ EN_JG_LIMB_UPPER_BEARD,
-    /* 25 */ EN_JG_LIMB_LOWER_BEARD,
-    /* 26 */ EN_JG_LIMB_PELVIS, // Root of Left Leg Root and Right Leg Root
-    /* 27 */ EN_JG_LIMB_LEFT_LEG_ROOT,
-    /* 28 */ EN_JG_LIMB_LEFT_THIGH,
-    /* 29 */ EN_JG_LIMB_LEFT_SHIN,
-    /* 30 */ EN_JG_LIMB_LEFT_FOOT,
-    /* 31 */ EN_JG_LIMB_RIGHT_LEG_ROOT,
-    /* 32 */ EN_JG_LIMB_RIGHT_THIGH,
-    /* 33 */ EN_JG_LIMB_RIGHT_SHIN,
-    /* 34 */ EN_JG_LIMB_RIGHT_FOOT,
-    /* 35 */ EN_JG_LIMB_MAX,
-} EnJgLimbs;
 
 struct EnJg;
 
