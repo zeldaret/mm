@@ -119,18 +119,18 @@
         <Texture Name="gGyorgSmallFishTex" OutName="small_fish" Format="ci4" Width="64" Height="64" Offset="0xD190" />
 
         <!-- Small Fishes Limbs -->
-        <Limb Name="gGyorgSmallFishRootLimb" Type="Standard" Offset="0xD990" />
-        <Limb Name="gGyorgSmallFishBodyRootLimb" Type="Standard" Offset="0xD99C" />
-        <Limb Name="gGyorgSmallFishTrunkRootLimb" Type="Standard" Offset="0xD9A8" />
-        <Limb Name="gGyorgSmallFishTailFinLimb" Type="Standard" Offset="0xD9B4" />
-        <Limb Name="gGyorgSmallFishTrunkLimb" Type="Standard" Offset="0xD9C0" />
-        <Limb Name="gGyorgSmallFishLeftFinLimb" Type="Standard" Offset="0xD9CC" />
-        <Limb Name="gGyorgSmallFishDorsalFinLimb" Type="Standard" Offset="0xD9D8" />
-        <Limb Name="gGyorgSmallFishRightFinLimb" Type="Standard" Offset="0xD9E4" />
-        <Limb Name="gGyorgSmallFishHeadLimb" Type="Standard" Offset="0xD9F0" />
+        <Limb Name="gGyorgSmallFishRootLimb" Type="Standard" EnumName="EN_TANRON3_LIMB_ROOT" Offset="0xD990" />
+        <Limb Name="gGyorgSmallFishBodyRootLimb" Type="Standard" EnumName="EN_TANRON3_LIMB_BODY_ROOT" Offset="0xD99C" />
+        <Limb Name="gGyorgSmallFishTrunkRootLimb" Type="Standard" EnumName="EN_TANRON3_LIMB_TRUNK_ROOT" Offset="0xD9A8" />
+        <Limb Name="gGyorgSmallFishTailFinLimb" Type="Standard" EnumName="EN_TANRON3_LIMB_TAIL_FIN" Offset="0xD9B4" />
+        <Limb Name="gGyorgSmallFishTrunkLimb" Type="Standard" EnumName="EN_TANRON3_LIMB_TRUNK" Offset="0xD9C0" />
+        <Limb Name="gGyorgSmallFishLeftFinLimb" Type="Standard" EnumName="EN_TANRON3_LIMB_LEFT_FIN" Offset="0xD9CC" />
+        <Limb Name="gGyorgSmallFishDorsalFinLimb" Type="Standard" EnumName="EN_TANRON3_LIMB_DORSAL_FIN" Offset="0xD9D8" />
+        <Limb Name="gGyorgSmallFishRightFinLimb" Type="Standard" EnumName="EN_TANRON3_LIMB_RIGHT_FIN" Offset="0xD9E4" />
+        <Limb Name="gGyorgSmallFishHeadLimb" Type="Standard" EnumName="EN_TANRON3_LIMB_HEAD" Offset="0xD9F0" />
 
         <!-- Small Fishes Skeleton -->
-        <Skeleton Name="gGyorgSmallFishSkel" Type="Flex" LimbType="Standard" Offset="0xDA20" />
+        <Skeleton Name="gGyorgSmallFishSkel" Type="Flex" LimbType="Standard" LimbNone="EN_TANRON3_LIMB_NONE" LimbMax="EN_TANRON3_LIMB_MAX" EnumName="Tanron3Limbs" Offset="0xDA20" />
 
         <!-- Small Fishes Animation -->
         <Animation Name="gGyorgSmallFishSwimAnim" Offset="0xDAAC" /> <!-- Original name is "minibus_b_swim" -->

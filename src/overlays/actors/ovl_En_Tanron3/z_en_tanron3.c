@@ -5,7 +5,6 @@
  */
 
 #include "z_en_tanron3.h"
-#include "objects/object_boss03/object_boss03.h"
 #include "overlays/actors/ovl_Boss_03/z_boss_03.h"
 
 #define FLAGS 0x00000035

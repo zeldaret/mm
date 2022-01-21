@@ -2,6 +2,7 @@
 #define Z_EN_TANRON3_H
 
 #include "global.h"
+#include "objects/object_boss03/object_boss03.h"
 
 struct EnTanron3;
 
@@ -19,20 +20,6 @@ typedef struct {
     /* 0x34 */ Vec3f unk_34;
     /* 0x40 */ char unk_40[0x4];
 } UnkTanron3Effect;
-
-typedef enum {
-    /*  0 */ EN_TANRON3_LIMB_NONE,
-    /*  1 */ EN_TANRON3_LIMB_ROOT, // Root of Body Root and Head
-    /*  2 */ EN_TANRON3_LIMB_BODY_ROOT, // Root of Trunk Root
-    /*  3 */ EN_TANRON3_LIMB_TRUNK_ROOT, // Root of Tail Fin and Trunk
-    /*  4 */ EN_TANRON3_LIMB_TAIL_FIN,
-    /*  5 */ EN_TANRON3_LIMB_TRUNK,
-    /*  6 */ EN_TANRON3_LIMB_LEFT_FIN,
-    /*  7 */ EN_TANRON3_LIMB_DORSAL_FIN,
-    /*  8 */ EN_TANRON3_LIMB_RIGHT_FIN,
-    /*  9 */ EN_TANRON3_LIMB_HEAD,
-    /* 10 */ EN_TANRON3_LIMB_MAX
-} Tanron3Limbs;
 
 typedef struct EnTanron3 {
     /* 0x000 */ Actor actor;
