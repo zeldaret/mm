@@ -912,7 +912,7 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
             Vec3f sp6C;
             s32 i;
 
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
 
             for (i = 0; i < 10; i++) {
                 Math_Vec3f_Copy(&sp6C, &this->actor.world.pos);
@@ -937,8 +937,8 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
     static f32 D_80B2B3A8[] = {
         0.0f, 40.0f, -40.0f, 0.0f, 0.0f, 0.0f,
     };
-    EnFish2* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnFish2* this = THIS;
 
     if ((this->actionFunc != func_80B295A4) && (this->actor.params != 1)) {
         SkelAnime_Update(&this->skelAnime);
