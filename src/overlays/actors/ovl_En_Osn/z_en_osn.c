@@ -181,7 +181,7 @@ s32 func_80AD08B0(GlobalContext* globalCtx) {
 void func_80AD0998(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
-    
+
     if (this->unk_1EC == 0x12 && curFrame == lastFrame) {
         this->unk_1EC = 0x13;
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0x13);
@@ -201,7 +201,7 @@ void func_80AD0A24(EnOsn* this) {
 void func_80AD0AB0(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
-    
+
     if (curFrame == lastFrame) {
         this->unk_1FC -= 8;
         if (this->unk_1FC < 8) {
