@@ -445,30 +445,26 @@ size_t CutsceneCommand::GetCommandSize()
 
 CutsceneCameraPoint::CutsceneCameraPoint(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex)
 {
-	const uint8_t* data = rawData.data();
+	continueFlag = rawData.at(rawDataIndex + 0);
+	cameraRoll = rawData.at(rawDataIndex + 1);
+	nextPointFrame = BitConverter::ToInt16BE(rawData, rawDataIndex + 2);
+	viewAngle = BitConverter::ToFloatBE(rawData, rawDataIndex + 4);
 
-	continueFlag = data[rawDataIndex + 0];
-	cameraRoll = data[rawDataIndex + 1];
-	nextPointFrame = BitConverter::ToInt16BE(data, rawDataIndex + 2);
-	viewAngle = BitConverter::ToFloatBE(data, rawDataIndex + 4);
+	posX = BitConverter::ToInt16BE(rawData, rawDataIndex + 8);
+	posY = BitConverter::ToInt16BE(rawData, rawDataIndex + 10);
+	posZ = BitConverter::ToInt16BE(rawData, rawDataIndex + 12);
 
-	posX = BitConverter::ToInt16BE(data, rawDataIndex + 8);
-	posY = BitConverter::ToInt16BE(data, rawDataIndex + 10);
-	posZ = BitConverter::ToInt16BE(data, rawDataIndex + 12);
-
-	unused = BitConverter::ToInt16BE(data, rawDataIndex + 14);
+	unused = BitConverter::ToInt16BE(rawData, rawDataIndex + 14);
 }
 
 CutsceneCommandSetCameraPos::CutsceneCommandSetCameraPos(const std::vector<uint8_t>& rawData,
                                                          uint32_t rawDataIndex)
 	: CutsceneCommand(rawData, rawDataIndex)
 {
-	const uint8_t* data = rawData.data();
-
-	base = BitConverter::ToUInt16BE(data, rawDataIndex + 0);
-	startFrame = BitConverter::ToUInt16BE(data, rawDataIndex + 2);
-	endFrame = BitConverter::ToUInt16BE(data, rawDataIndex + 4);
-	unused = BitConverter::ToUInt16BE(data, rawDataIndex + 6);
+	base = BitConverter::ToUInt16BE(rawData, rawDataIndex + 0);
+	startFrame = BitConverter::ToUInt16BE(rawData, rawDataIndex + 2);
+	endFrame = BitConverter::ToUInt16BE(rawData, rawDataIndex + 4);
+	unused = BitConverter::ToUInt16BE(rawData, rawDataIndex + 6);
 
 	entries = std::vector<CutsceneCameraPoint*>();
 
@@ -994,23 +990,21 @@ size_t CutsceneCommandTextbox::GetCommandSize()
 
 ActorAction::ActorAction(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex)
 {
-	const uint8_t* data = rawData.data();
-
-	action = (uint16_t)BitConverter::ToInt16BE(data, rawDataIndex + 0);
-	startFrame = (uint16_t)BitConverter::ToInt16BE(data, rawDataIndex + 2);
-	endFrame = (uint16_t)BitConverter::ToInt16BE(data, rawDataIndex + 4);
-	rotX = (uint16_t)BitConverter::ToInt16BE(data, rawDataIndex + 6);
-	rotY = (uint16_t)BitConverter::ToInt16BE(data, rawDataIndex + 8);
-	rotZ = (uint16_t)BitConverter::ToInt16BE(data, rawDataIndex + 10);
-	startPosX = BitConverter::ToInt32BE(data, rawDataIndex + 12);
-	startPosY = BitConverter::ToInt32BE(data, rawDataIndex + 16);
-	startPosZ = BitConverter::ToInt32BE(data, rawDataIndex + 20);
-	endPosX = BitConverter::ToInt32BE(data, rawDataIndex + 24);
-	endPosY = BitConverter::ToInt32BE(data, rawDataIndex + 28);
-	endPosZ = BitConverter::ToInt32BE(data, rawDataIndex + 32);
-	normalX = BitConverter::ToFloatBE(data, rawDataIndex + 36);
-	normalY = BitConverter::ToFloatBE(data, rawDataIndex + 40);
-	normalZ = BitConverter::ToFloatBE(data, rawDataIndex + 44);
+	action = (uint16_t)BitConverter::ToInt16BE(rawData, rawDataIndex + 0);
+	startFrame = (uint16_t)BitConverter::ToInt16BE(rawData, rawDataIndex + 2);
+	endFrame = (uint16_t)BitConverter::ToInt16BE(rawData, rawDataIndex + 4);
+	rotX = (uint16_t)BitConverter::ToInt16BE(rawData, rawDataIndex + 6);
+	rotY = (uint16_t)BitConverter::ToInt16BE(rawData, rawDataIndex + 8);
+	rotZ = (uint16_t)BitConverter::ToInt16BE(rawData, rawDataIndex + 10);
+	startPosX = BitConverter::ToInt32BE(rawData, rawDataIndex + 12);
+	startPosY = BitConverter::ToInt32BE(rawData, rawDataIndex + 16);
+	startPosZ = BitConverter::ToInt32BE(rawData, rawDataIndex + 20);
+	endPosX = BitConverter::ToInt32BE(rawData, rawDataIndex + 24);
+	endPosY = BitConverter::ToInt32BE(rawData, rawDataIndex + 28);
+	endPosZ = BitConverter::ToInt32BE(rawData, rawDataIndex + 32);
+	normalX = BitConverter::ToFloatBE(rawData, rawDataIndex + 36);
+	normalY = BitConverter::ToFloatBE(rawData, rawDataIndex + 40);
+	normalZ = BitConverter::ToFloatBE(rawData, rawDataIndex + 44);
 }
 
 CutsceneCommandActorAction::CutsceneCommandActorAction(const std::vector<uint8_t>& rawData,
@@ -1128,22 +1122,20 @@ size_t CutsceneCommandEnd::GetCommandSize()
 
 SpecialActionEntry::SpecialActionEntry(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex)
 {
-	const uint8_t* data = rawData.data();
-
-	base = BitConverter::ToUInt16BE(data, rawDataIndex + 0);
-	startFrame = BitConverter::ToUInt16BE(data, rawDataIndex + 2);
-	endFrame = BitConverter::ToUInt16BE(data, rawDataIndex + 4);
-	unused0 = BitConverter::ToUInt16BE(data, rawDataIndex + 6);
-	unused1 = BitConverter::ToUInt32BE(data, rawDataIndex + 8);
-	unused2 = BitConverter::ToUInt32BE(data, rawDataIndex + 12);
-	unused3 = BitConverter::ToUInt32BE(data, rawDataIndex + 16);
-	unused4 = BitConverter::ToUInt32BE(data, rawDataIndex + 20);
-	unused5 = BitConverter::ToUInt32BE(data, rawDataIndex + 24);
-	unused6 = BitConverter::ToUInt32BE(data, rawDataIndex + 28);
-	unused7 = BitConverter::ToUInt32BE(data, rawDataIndex + 32);
-	unused8 = BitConverter::ToUInt32BE(data, rawDataIndex + 36);
-	unused9 = BitConverter::ToUInt32BE(data, rawDataIndex + 40);
-	unused10 = BitConverter::ToUInt32BE(data, rawDataIndex + 44);
+	base = BitConverter::ToUInt16BE(rawData, rawDataIndex + 0);
+	startFrame = BitConverter::ToUInt16BE(rawData, rawDataIndex + 2);
+	endFrame = BitConverter::ToUInt16BE(rawData, rawDataIndex + 4);
+	unused0 = BitConverter::ToUInt16BE(rawData, rawDataIndex + 6);
+	unused1 = BitConverter::ToUInt32BE(rawData, rawDataIndex + 8);
+	unused2 = BitConverter::ToUInt32BE(rawData, rawDataIndex + 12);
+	unused3 = BitConverter::ToUInt32BE(rawData, rawDataIndex + 16);
+	unused4 = BitConverter::ToUInt32BE(rawData, rawDataIndex + 20);
+	unused5 = BitConverter::ToUInt32BE(rawData, rawDataIndex + 24);
+	unused6 = BitConverter::ToUInt32BE(rawData, rawDataIndex + 28);
+	unused7 = BitConverter::ToUInt32BE(rawData, rawDataIndex + 32);
+	unused8 = BitConverter::ToUInt32BE(rawData, rawDataIndex + 36);
+	unused9 = BitConverter::ToUInt32BE(rawData, rawDataIndex + 40);
+	unused10 = BitConverter::ToUInt32BE(rawData, rawDataIndex + 44);
 }
 
 CutsceneCommandSpecialAction::CutsceneCommandSpecialAction(const std::vector<uint8_t>& rawData,
