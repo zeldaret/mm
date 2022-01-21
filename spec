@@ -4037,8 +4037,7 @@ beginseg
     name "ovl_En_Zoraegg"
     compress
     include "build/src/overlays/actors/ovl_En_Zoraegg/z_en_zoraegg.o"
-    include "build/data/ovl_En_Zoraegg/ovl_En_Zoraegg.data.o"
-    include "build/data/ovl_En_Zoraegg/ovl_En_Zoraegg.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Zoraegg/ovl_En_Zoraegg_reloc.o"
 endseg
 
 beginseg
