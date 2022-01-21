@@ -599,6 +599,7 @@ s32 func_80123810(GlobalContext* globalCtx) {
             globalCtx->interfaceCtx.unk_222 = 0;
             globalCtx->interfaceCtx.unk_224 = 0;
             Interface_ChangeAlpha(globalCtx->msgCtx.unk_120BC);
+
             if ((sp24 >= 0xFD) || (temp_v0 = globalCtx->unk_18794(globalCtx, player, sp24, i), (temp_v0 < 0))) {
                 play_sound(NA_SE_SY_ERROR);
                 return -1;
@@ -1139,9 +1140,9 @@ s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRan
     if ((this->itemActionParam == PLAYER_AP_STICK) && (this->unk_B28 != 0)) {
         Math_Vec3f_Diff(&this->swordInfo[0].tip, pos, &diff);
         return ((SQ(diff.x) + SQ(diff.z)) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 u8 Player_GetStrength(void) {
@@ -1585,7 +1586,7 @@ void func_80124CC4(GlobalContext* globalCtx, Player* player, f32 arg2) {
                 sp50 = (sp54 / 200.0f) * 0.08f;
             }
             Matrix_InsertTranslation(sp64.x, sp64.y, sp64.z, MTXMODE_NEW);
-            Matrix_Scale(sp50, sp50, sp50, 1);
+            Matrix_Scale(sp50, sp50, sp50, MTXMODE_APPLY);
 
             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
