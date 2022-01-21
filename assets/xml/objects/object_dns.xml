@@ -25,19 +25,19 @@
         <Texture Name="object_dns_Tex_002968" OutName="tex_002968" Format="rgba16" Width="8" Height="8" Offset="0x2968" />
         <Texture Name="object_dns_Tex_0029E8" OutName="tex_0029E8" Format="rgba16" Width="8" Height="8" Offset="0x29E8" />
         <DList Name="object_dns_DL_002C48" Offset="0x2C48" />
-        <Limb Name="object_dns_Standardlimb_002D18" Type="Standard" Offset="0x2D18" />
-        <Limb Name="object_dns_Standardlimb_002D24" Type="Standard" Offset="0x2D24" />
-        <Limb Name="object_dns_Standardlimb_002D30" Type="Standard" Offset="0x2D30" />
-        <Limb Name="object_dns_Standardlimb_002D3C" Type="Standard" Offset="0x2D3C" />
-        <Limb Name="object_dns_Standardlimb_002D48" Type="Standard" Offset="0x2D48" />
-        <Limb Name="object_dns_Standardlimb_002D54" Type="Standard" Offset="0x2D54" />
-        <Limb Name="object_dns_Standardlimb_002D60" Type="Standard" Offset="0x2D60" />
-        <Limb Name="object_dns_Standardlimb_002D6C" Type="Standard" Offset="0x2D6C" />
-        <Limb Name="object_dns_Standardlimb_002D78" Type="Standard" Offset="0x2D78" />
-        <Limb Name="object_dns_Standardlimb_002D84" Type="Standard" Offset="0x2D84" />
-        <Limb Name="object_dns_Standardlimb_002D90" Type="Standard" Offset="0x2D90" />
-        <Limb Name="object_dns_Standardlimb_002D9C" Type="Standard" Offset="0x2D9C" />
-        <Skeleton Name="object_dns_Skel_002DD8" Type="Normal" LimbType="Standard" Offset="0x2DD8" />
+        <Limb Name="object_dns_Standardlimb_002D18" Type="Standard" EnumName="OBJECT_DNS_LIMB_01" Offset="0x2D18" />
+        <Limb Name="object_dns_Standardlimb_002D24" Type="Standard" EnumName="OBJECT_DNS_LIMB_02" Offset="0x2D24" />
+        <Limb Name="object_dns_Standardlimb_002D30" Type="Standard" EnumName="OBJECT_DNS_LIMB_03" Offset="0x2D30" />
+        <Limb Name="object_dns_Standardlimb_002D3C" Type="Standard" EnumName="OBJECT_DNS_LIMB_04" Offset="0x2D3C" />
+        <Limb Name="object_dns_Standardlimb_002D48" Type="Standard" EnumName="OBJECT_DNS_LIMB_05" Offset="0x2D48" />
+        <Limb Name="object_dns_Standardlimb_002D54" Type="Standard" EnumName="OBJECT_DNS_LIMB_06" Offset="0x2D54" />
+        <Limb Name="object_dns_Standardlimb_002D60" Type="Standard" EnumName="OBJECT_DNS_LIMB_07" Offset="0x2D60" />
+        <Limb Name="object_dns_Standardlimb_002D6C" Type="Standard" EnumName="OBJECT_DNS_LIMB_08" Offset="0x2D6C" />
+        <Limb Name="object_dns_Standardlimb_002D78" Type="Standard" EnumName="OBJECT_DNS_LIMB_09" Offset="0x2D78" />
+        <Limb Name="object_dns_Standardlimb_002D84" Type="Standard" EnumName="OBJECT_DNS_LIMB_0A" Offset="0x2D84" />
+        <Limb Name="object_dns_Standardlimb_002D90" Type="Standard" EnumName="OBJECT_DNS_LIMB_0B" Offset="0x2D90" />
+        <Limb Name="object_dns_Standardlimb_002D9C" Type="Standard" EnumName="OBJECT_DNS_LIMB_0C" Offset="0x2D9C" />
+        <Skeleton Name="object_dns_Skel_002DD8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_DNS_LIMB_NONE" LimbMax="OBJECT_DNS_LIMB_MAX" EnumName="object_dns_Limbs" Offset="0x2DD8" />
         <Animation Name="object_dns_Anim_003310" Offset="0x3310" />
         <Animation Name="object_dns_Anim_0034EC" Offset="0x34EC" />
     </File>

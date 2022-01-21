@@ -31,27 +31,27 @@
         <Texture Name="object_yb_Tex_0057F8" OutName="tex_0057F8" Format="ci8" Width="16" Height="16" Offset="0x57F8" />
         <Texture Name="object_yb_Tex_0058F8" OutName="tex_0058F8" Format="ci8" Width="32" Height="32" Offset="0x58F8" />
         <Texture Name="object_yb_Tex_005CF8" OutName="tex_005CF8" Format="i8" Width="16" Height="16" Offset="0x5CF8" />
-        <Limb Name="object_yb_Standardlimb_005DF8" Type="Standard" Offset="0x5DF8" />
-        <Limb Name="object_yb_Standardlimb_005E04" Type="Standard" Offset="0x5E04" />
-        <Limb Name="object_yb_Standardlimb_005E10" Type="Standard" Offset="0x5E10" />
-        <Limb Name="object_yb_Standardlimb_005E1C" Type="Standard" Offset="0x5E1C" />
-        <Limb Name="object_yb_Standardlimb_005E28" Type="Standard" Offset="0x5E28" />
-        <Limb Name="object_yb_Standardlimb_005E34" Type="Standard" Offset="0x5E34" />
-        <Limb Name="object_yb_Standardlimb_005E40" Type="Standard" Offset="0x5E40" />
-        <Limb Name="object_yb_Standardlimb_005E4C" Type="Standard" Offset="0x5E4C" />
-        <Limb Name="object_yb_Standardlimb_005E58" Type="Standard" Offset="0x5E58" />
-        <Limb Name="object_yb_Standardlimb_005E64" Type="Standard" Offset="0x5E64" />
-        <Limb Name="object_yb_Standardlimb_005E70" Type="Standard" Offset="0x5E70" />
-        <Limb Name="object_yb_Standardlimb_005E7C" Type="Standard" Offset="0x5E7C" />
-        <Limb Name="object_yb_Standardlimb_005E88" Type="Standard" Offset="0x5E88" />
-        <Limb Name="object_yb_Standardlimb_005E94" Type="Standard" Offset="0x5E94" />
-        <Limb Name="object_yb_Standardlimb_005EA0" Type="Standard" Offset="0x5EA0" />
-        <Limb Name="object_yb_Standardlimb_005EAC" Type="Standard" Offset="0x5EAC" />
-        <Limb Name="object_yb_Standardlimb_005EB8" Type="Standard" Offset="0x5EB8" />
-        <Limb Name="object_yb_Standardlimb_005EC4" Type="Standard" Offset="0x5EC4" />
-        <Limb Name="object_yb_Standardlimb_005ED0" Type="Standard" Offset="0x5ED0" />
-        <Limb Name="object_yb_Standardlimb_005EDC" Type="Standard" Offset="0x5EDC" />
-        <Limb Name="object_yb_Standardlimb_005EE8" Type="Standard" Offset="0x5EE8" />
-        <Skeleton Name="object_yb_Skel_005F48" Type="Flex" LimbType="Standard" Offset="0x5F48" />
+        <Limb Name="object_yb_Standardlimb_005DF8" Type="Standard" EnumName="OBJECT_YB_LIMB_01" Offset="0x5DF8" />
+        <Limb Name="object_yb_Standardlimb_005E04" Type="Standard" EnumName="OBJECT_YB_LIMB_02" Offset="0x5E04" />
+        <Limb Name="object_yb_Standardlimb_005E10" Type="Standard" EnumName="OBJECT_YB_LIMB_03" Offset="0x5E10" />
+        <Limb Name="object_yb_Standardlimb_005E1C" Type="Standard" EnumName="OBJECT_YB_LIMB_04" Offset="0x5E1C" />
+        <Limb Name="object_yb_Standardlimb_005E28" Type="Standard" EnumName="OBJECT_YB_LIMB_05" Offset="0x5E28" />
+        <Limb Name="object_yb_Standardlimb_005E34" Type="Standard" EnumName="OBJECT_YB_LIMB_06" Offset="0x5E34" />
+        <Limb Name="object_yb_Standardlimb_005E40" Type="Standard" EnumName="OBJECT_YB_LIMB_07" Offset="0x5E40" />
+        <Limb Name="object_yb_Standardlimb_005E4C" Type="Standard" EnumName="OBJECT_YB_LIMB_08" Offset="0x5E4C" />
+        <Limb Name="object_yb_Standardlimb_005E58" Type="Standard" EnumName="OBJECT_YB_LIMB_09" Offset="0x5E58" />
+        <Limb Name="object_yb_Standardlimb_005E64" Type="Standard" EnumName="OBJECT_YB_LIMB_0A" Offset="0x5E64" />
+        <Limb Name="object_yb_Standardlimb_005E70" Type="Standard" EnumName="OBJECT_YB_LIMB_0B" Offset="0x5E70" />
+        <Limb Name="object_yb_Standardlimb_005E7C" Type="Standard" EnumName="OBJECT_YB_LIMB_0C" Offset="0x5E7C" />
+        <Limb Name="object_yb_Standardlimb_005E88" Type="Standard" EnumName="OBJECT_YB_LIMB_0D" Offset="0x5E88" />
+        <Limb Name="object_yb_Standardlimb_005E94" Type="Standard" EnumName="OBJECT_YB_LIMB_0E" Offset="0x5E94" />
+        <Limb Name="object_yb_Standardlimb_005EA0" Type="Standard" EnumName="OBJECT_YB_LIMB_0F" Offset="0x5EA0" />
+        <Limb Name="object_yb_Standardlimb_005EAC" Type="Standard" EnumName="OBJECT_YB_LIMB_10" Offset="0x5EAC" />
+        <Limb Name="object_yb_Standardlimb_005EB8" Type="Standard" EnumName="OBJECT_YB_LIMB_11" Offset="0x5EB8" />
+        <Limb Name="object_yb_Standardlimb_005EC4" Type="Standard" EnumName="OBJECT_YB_LIMB_12" Offset="0x5EC4" />
+        <Limb Name="object_yb_Standardlimb_005ED0" Type="Standard" EnumName="OBJECT_YB_LIMB_13" Offset="0x5ED0" />
+        <Limb Name="object_yb_Standardlimb_005EDC" Type="Standard" EnumName="OBJECT_YB_LIMB_14" Offset="0x5EDC" />
+        <Limb Name="object_yb_Standardlimb_005EE8" Type="Standard" EnumName="OBJECT_YB_LIMB_15" Offset="0x5EE8" />
+        <Skeleton Name="object_yb_Skel_005F48" Type="Flex" LimbType="Standard" LimbNone="OBJECT_YB_LIMB_NONE" LimbMax="OBJECT_YB_LIMB_MAX" EnumName="object_yb_Limbs" Offset="0x5F48" />
     </File>
 </Root>

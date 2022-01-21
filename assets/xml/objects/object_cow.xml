@@ -14,12 +14,12 @@
         <Texture Name="object_cow_Tex_003CC0" OutName="tex_003CC0" Format="ci8" Width="8" Height="16" Offset="0x3CC0" />
         <Texture Name="object_cow_Tex_003D40" OutName="tex_003D40" Format="rgba16" Width="16" Height="16" Offset="0x3D40" />
         <Texture Name="object_cow_Tex_003F40" OutName="tex_003F40" Format="ci8" Width="8" Height="16" Offset="0x3F40" />
-        <Limb Name="object_cow_Standardlimb_003FC0" Type="Standard" Offset="0x3FC0" />
-        <Limb Name="object_cow_Standardlimb_003FCC" Type="Standard" Offset="0x3FCC" />
-        <Limb Name="object_cow_Standardlimb_003FD8" Type="Standard" Offset="0x3FD8" />
-        <Limb Name="object_cow_Standardlimb_003FE4" Type="Standard" Offset="0x3FE4" />
-        <Limb Name="object_cow_Standardlimb_003FF0" Type="Standard" Offset="0x3FF0" />
-        <Skeleton Name="gCowBodySkel" Type="Flex" LimbType="Standard" Offset="0x4010" />
+        <Limb Name="object_cow_Standardlimb_003FC0" Type="Standard" EnumName="OBJECT_COW_LIMB_01" Offset="0x3FC0" />
+        <Limb Name="object_cow_Standardlimb_003FCC" Type="Standard" EnumName="OBJECT_COW_LIMB_02" Offset="0x3FCC" />
+        <Limb Name="object_cow_Standardlimb_003FD8" Type="Standard" EnumName="OBJECT_COW_LIMB_03" Offset="0x3FD8" />
+        <Limb Name="object_cow_Standardlimb_003FE4" Type="Standard" EnumName="OBJECT_COW_LIMB_04" Offset="0x3FE4" />
+        <Limb Name="object_cow_Standardlimb_003FF0" Type="Standard" EnumName="OBJECT_COW_LIMB_05" Offset="0x3FF0" />
+        <Skeleton Name="gCowBodySkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_COW_LIMB_NONE" LimbMax="OBJECT_COW_LIMB_MAX" EnumName="object_cow_Limbs" Offset="0x4010" />
         <Animation Name="gCowBodyMoveHeadAnim" Offset="0x4264" />
         <Animation Name="gCowTailIdleAnim" Offset="0x4348" />
         <DList Name="object_cow_DL_0046F0" Offset="0x46F0" />
@@ -27,12 +27,12 @@
         <DList Name="object_cow_DL_0048D0" Offset="0x48D0" />
         <DList Name="object_cow_DL_0049D0" Offset="0x49D0" />
         <DList Name="object_cow_DL_004AD0" Offset="0x4AD0" />
-        <Limb Name="object_cow_Standardlimb_004BE0" Type="Standard" Offset="0x4BE0" />
-        <Limb Name="object_cow_Standardlimb_004BEC" Type="Standard" Offset="0x4BEC" />
-        <Limb Name="object_cow_Standardlimb_004BF8" Type="Standard" Offset="0x4BF8" />
-        <Limb Name="object_cow_Standardlimb_004C04" Type="Standard" Offset="0x4C04" />
-        <Limb Name="object_cow_Standardlimb_004C10" Type="Standard" Offset="0x4C10" />
-        <Skeleton Name="gCowTailSkel" Type="Flex" LimbType="Standard" Offset="0x4C30" />
+        <Limb Name="object_cow_Standardlimb_004BE0" Type="Standard" EnumName="OBJECT_COW_LIMB_01" Offset="0x4BE0" />
+        <Limb Name="object_cow_Standardlimb_004BEC" Type="Standard" EnumName="OBJECT_COW_LIMB_02" Offset="0x4BEC" />
+        <Limb Name="object_cow_Standardlimb_004BF8" Type="Standard" EnumName="OBJECT_COW_LIMB_03" Offset="0x4BF8" />
+        <Limb Name="object_cow_Standardlimb_004C04" Type="Standard" EnumName="OBJECT_COW_LIMB_04" Offset="0x4C04" />
+        <Limb Name="object_cow_Standardlimb_004C10" Type="Standard" EnumName="OBJECT_COW_LIMB_05" Offset="0x4C10" />
+        <Skeleton Name="gCowTailSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_COW_LIMB_NONE" LimbMax="OBJECT_COW_LIMB_MAX" EnumName="object_cow_Limbs" Offset="0x4C30" />
         <Animation Name="gCowTailSwishAnim" Offset="0x4E98" />
     </File>
 </Root>

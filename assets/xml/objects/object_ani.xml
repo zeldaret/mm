@@ -6,22 +6,22 @@
         <Animation Name="object_ani_Anim_001584" Offset="0x1584" />
         <Animation Name="object_ani_Anim_001D48" Offset="0x1D48" />
         <Animation Name="object_ani_Anim_0027A0" Offset="0x27A0" />
-        <Limb Name="object_ani_Standardlimb_0027B0" Type="Standard" Offset="0x27B0" />
-        <Limb Name="object_ani_Standardlimb_0027BC" Type="Standard" Offset="0x27BC" />
-        <Limb Name="object_ani_Standardlimb_0027C8" Type="Standard" Offset="0x27C8" />
-        <Limb Name="object_ani_Standardlimb_0027D4" Type="Standard" Offset="0x27D4" />
-        <Limb Name="object_ani_Standardlimb_0027E0" Type="Standard" Offset="0x27E0" />
-        <Limb Name="object_ani_Standardlimb_0027EC" Type="Standard" Offset="0x27EC" />
-        <Limb Name="object_ani_Standardlimb_0027F8" Type="Standard" Offset="0x27F8" />
-        <Limb Name="object_ani_Standardlimb_002804" Type="Standard" Offset="0x2804" />
-        <Limb Name="object_ani_Standardlimb_002810" Type="Standard" Offset="0x2810" />
-        <Limb Name="object_ani_Standardlimb_00281C" Type="Standard" Offset="0x281C" />
-        <Limb Name="object_ani_Standardlimb_002828" Type="Standard" Offset="0x2828" />
-        <Limb Name="object_ani_Standardlimb_002834" Type="Standard" Offset="0x2834" />
-        <Limb Name="object_ani_Standardlimb_002840" Type="Standard" Offset="0x2840" />
-        <Limb Name="object_ani_Standardlimb_00284C" Type="Standard" Offset="0x284C" />
-        <Limb Name="object_ani_Standardlimb_002858" Type="Standard" Offset="0x2858" />
-        <Skeleton Name="object_ani_Skel_0028A0" Type="Flex" LimbType="Standard" Offset="0x28A0" />
+        <Limb Name="object_ani_Standardlimb_0027B0" Type="Standard" EnumName="OBJECT_ANI_LIMB_01" Offset="0x27B0" />
+        <Limb Name="object_ani_Standardlimb_0027BC" Type="Standard" EnumName="OBJECT_ANI_LIMB_02" Offset="0x27BC" />
+        <Limb Name="object_ani_Standardlimb_0027C8" Type="Standard" EnumName="OBJECT_ANI_LIMB_03" Offset="0x27C8" />
+        <Limb Name="object_ani_Standardlimb_0027D4" Type="Standard" EnumName="OBJECT_ANI_LIMB_04" Offset="0x27D4" />
+        <Limb Name="object_ani_Standardlimb_0027E0" Type="Standard" EnumName="OBJECT_ANI_LIMB_05" Offset="0x27E0" />
+        <Limb Name="object_ani_Standardlimb_0027EC" Type="Standard" EnumName="OBJECT_ANI_LIMB_06" Offset="0x27EC" />
+        <Limb Name="object_ani_Standardlimb_0027F8" Type="Standard" EnumName="OBJECT_ANI_LIMB_07" Offset="0x27F8" />
+        <Limb Name="object_ani_Standardlimb_002804" Type="Standard" EnumName="OBJECT_ANI_LIMB_08" Offset="0x2804" />
+        <Limb Name="object_ani_Standardlimb_002810" Type="Standard" EnumName="OBJECT_ANI_LIMB_09" Offset="0x2810" />
+        <Limb Name="object_ani_Standardlimb_00281C" Type="Standard" EnumName="OBJECT_ANI_LIMB_0A" Offset="0x281C" />
+        <Limb Name="object_ani_Standardlimb_002828" Type="Standard" EnumName="OBJECT_ANI_LIMB_0B" Offset="0x2828" />
+        <Limb Name="object_ani_Standardlimb_002834" Type="Standard" EnumName="OBJECT_ANI_LIMB_0C" Offset="0x2834" />
+        <Limb Name="object_ani_Standardlimb_002840" Type="Standard" EnumName="OBJECT_ANI_LIMB_0D" Offset="0x2840" />
+        <Limb Name="object_ani_Standardlimb_00284C" Type="Standard" EnumName="OBJECT_ANI_LIMB_0E" Offset="0x284C" />
+        <Limb Name="object_ani_Standardlimb_002858" Type="Standard" EnumName="OBJECT_ANI_LIMB_0F" Offset="0x2858" />
+        <Skeleton Name="object_ani_Skel_0028A0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ANI_LIMB_NONE" LimbMax="OBJECT_ANI_LIMB_MAX" EnumName="object_ani_Limbs" Offset="0x28A0" />
         <DList Name="object_ani_DL_004860" Offset="0x4860" />
         <DList Name="object_ani_DL_004A50" Offset="0x4A50" />
         <DList Name="object_ani_DL_004B38" Offset="0x4B38" />

@@ -45,29 +45,29 @@
         <DList Name="object_kgy_DL_00F180" Offset="0xF180" />
         <TextureAnimation Name="object_kgy_Matanimheader_00F6A0" Offset="0xF6A0" />
         <Texture Name="object_kgy_Tex_00F6B0" OutName="tex_00F6B0" Format="i8" Width="16" Height="16" Offset="0xF6B0" />
-        <Limb Name="object_kgy_Standardlimb_00F7B0" Type="Standard" Offset="0xF7B0" />
-        <Limb Name="object_kgy_Standardlimb_00F7BC" Type="Standard" Offset="0xF7BC" />
-        <Limb Name="object_kgy_Standardlimb_00F7C8" Type="Standard" Offset="0xF7C8" />
-        <Limb Name="object_kgy_Standardlimb_00F7D4" Type="Standard" Offset="0xF7D4" />
-        <Limb Name="object_kgy_Standardlimb_00F7E0" Type="Standard" Offset="0xF7E0" />
-        <Limb Name="object_kgy_Standardlimb_00F7EC" Type="Standard" Offset="0xF7EC" />
-        <Limb Name="object_kgy_Standardlimb_00F7F8" Type="Standard" Offset="0xF7F8" />
-        <Limb Name="object_kgy_Standardlimb_00F804" Type="Standard" Offset="0xF804" />
-        <Limb Name="object_kgy_Standardlimb_00F810" Type="Standard" Offset="0xF810" />
-        <Limb Name="object_kgy_Standardlimb_00F81C" Type="Standard" Offset="0xF81C" />
-        <Limb Name="object_kgy_Standardlimb_00F828" Type="Standard" Offset="0xF828" />
-        <Limb Name="object_kgy_Standardlimb_00F834" Type="Standard" Offset="0xF834" />
-        <Limb Name="object_kgy_Standardlimb_00F840" Type="Standard" Offset="0xF840" />
-        <Limb Name="object_kgy_Standardlimb_00F84C" Type="Standard" Offset="0xF84C" />
-        <Limb Name="object_kgy_Standardlimb_00F858" Type="Standard" Offset="0xF858" />
-        <Limb Name="object_kgy_Standardlimb_00F864" Type="Standard" Offset="0xF864" />
-        <Limb Name="object_kgy_Standardlimb_00F870" Type="Standard" Offset="0xF870" />
-        <Limb Name="object_kgy_Standardlimb_00F87C" Type="Standard" Offset="0xF87C" />
-        <Limb Name="object_kgy_Standardlimb_00F888" Type="Standard" Offset="0xF888" />
-        <Limb Name="object_kgy_Standardlimb_00F894" Type="Standard" Offset="0xF894" />
-        <Limb Name="object_kgy_Standardlimb_00F8A0" Type="Standard" Offset="0xF8A0" />
-        <Limb Name="object_kgy_Standardlimb_00F8AC" Type="Standard" Offset="0xF8AC" />
-        <Skeleton Name="object_kgy_Skel_00F910" Type="Flex" LimbType="Standard" Offset="0xF910" />
+        <Limb Name="object_kgy_Standardlimb_00F7B0" Type="Standard" EnumName="OBJECT_KGY_LIMB_01" Offset="0xF7B0" />
+        <Limb Name="object_kgy_Standardlimb_00F7BC" Type="Standard" EnumName="OBJECT_KGY_LIMB_02" Offset="0xF7BC" />
+        <Limb Name="object_kgy_Standardlimb_00F7C8" Type="Standard" EnumName="OBJECT_KGY_LIMB_03" Offset="0xF7C8" />
+        <Limb Name="object_kgy_Standardlimb_00F7D4" Type="Standard" EnumName="OBJECT_KGY_LIMB_04" Offset="0xF7D4" />
+        <Limb Name="object_kgy_Standardlimb_00F7E0" Type="Standard" EnumName="OBJECT_KGY_LIMB_05" Offset="0xF7E0" />
+        <Limb Name="object_kgy_Standardlimb_00F7EC" Type="Standard" EnumName="OBJECT_KGY_LIMB_06" Offset="0xF7EC" />
+        <Limb Name="object_kgy_Standardlimb_00F7F8" Type="Standard" EnumName="OBJECT_KGY_LIMB_07" Offset="0xF7F8" />
+        <Limb Name="object_kgy_Standardlimb_00F804" Type="Standard" EnumName="OBJECT_KGY_LIMB_08" Offset="0xF804" />
+        <Limb Name="object_kgy_Standardlimb_00F810" Type="Standard" EnumName="OBJECT_KGY_LIMB_09" Offset="0xF810" />
+        <Limb Name="object_kgy_Standardlimb_00F81C" Type="Standard" EnumName="OBJECT_KGY_LIMB_0A" Offset="0xF81C" />
+        <Limb Name="object_kgy_Standardlimb_00F828" Type="Standard" EnumName="OBJECT_KGY_LIMB_0B" Offset="0xF828" />
+        <Limb Name="object_kgy_Standardlimb_00F834" Type="Standard" EnumName="OBJECT_KGY_LIMB_0C" Offset="0xF834" />
+        <Limb Name="object_kgy_Standardlimb_00F840" Type="Standard" EnumName="OBJECT_KGY_LIMB_0D" Offset="0xF840" />
+        <Limb Name="object_kgy_Standardlimb_00F84C" Type="Standard" EnumName="OBJECT_KGY_LIMB_0E" Offset="0xF84C" />
+        <Limb Name="object_kgy_Standardlimb_00F858" Type="Standard" EnumName="OBJECT_KGY_LIMB_0F" Offset="0xF858" />
+        <Limb Name="object_kgy_Standardlimb_00F864" Type="Standard" EnumName="OBJECT_KGY_LIMB_10" Offset="0xF864" />
+        <Limb Name="object_kgy_Standardlimb_00F870" Type="Standard" EnumName="OBJECT_KGY_LIMB_11" Offset="0xF870" />
+        <Limb Name="object_kgy_Standardlimb_00F87C" Type="Standard" EnumName="OBJECT_KGY_LIMB_12" Offset="0xF87C" />
+        <Limb Name="object_kgy_Standardlimb_00F888" Type="Standard" EnumName="OBJECT_KGY_LIMB_13" Offset="0xF888" />
+        <Limb Name="object_kgy_Standardlimb_00F894" Type="Standard" EnumName="OBJECT_KGY_LIMB_14" Offset="0xF894" />
+        <Limb Name="object_kgy_Standardlimb_00F8A0" Type="Standard" EnumName="OBJECT_KGY_LIMB_15" Offset="0xF8A0" />
+        <Limb Name="object_kgy_Standardlimb_00F8AC" Type="Standard" EnumName="OBJECT_KGY_LIMB_16" Offset="0xF8AC" />
+        <Skeleton Name="object_kgy_Skel_00F910" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KGY_LIMB_NONE" LimbMax="OBJECT_KGY_LIMB_MAX" EnumName="object_kgy_Limbs" Offset="0xF910" />
         <Animation Name="object_kgy_Anim_0101F0" Offset="0x101F0" />
         <Animation Name="object_kgy_Anim_010B84" Offset="0x10B84" />
     </File>

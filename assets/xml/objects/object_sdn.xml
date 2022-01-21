@@ -44,23 +44,23 @@
         <Texture Name="object_sdn_Tex_00CFC0" OutName="tex_00CFC0" Format="ci8" Width="32" Height="32" Offset="0xCFC0" />
         <Texture Name="object_sdn_Tex_00D3C0" OutName="tex_00D3C0" Format="i8" Width="16" Height="8" Offset="0xD3C0" />
         <Texture Name="object_sdn_Tex_00D440" OutName="tex_00D440" Format="ci8" Width="16" Height="16" Offset="0xD440" />
-        <Limb Name="object_sdn_Standardlimb_00D540" Type="Standard" Offset="0xD540" />
-        <Limb Name="object_sdn_Standardlimb_00D54C" Type="Standard" Offset="0xD54C" />
-        <Limb Name="object_sdn_Standardlimb_00D558" Type="Standard" Offset="0xD558" />
-        <Limb Name="object_sdn_Standardlimb_00D564" Type="Standard" Offset="0xD564" />
-        <Limb Name="object_sdn_Standardlimb_00D570" Type="Standard" Offset="0xD570" />
-        <Limb Name="object_sdn_Standardlimb_00D57C" Type="Standard" Offset="0xD57C" />
-        <Limb Name="object_sdn_Standardlimb_00D588" Type="Standard" Offset="0xD588" />
-        <Limb Name="object_sdn_Standardlimb_00D594" Type="Standard" Offset="0xD594" />
-        <Limb Name="object_sdn_Standardlimb_00D5A0" Type="Standard" Offset="0xD5A0" />
-        <Limb Name="object_sdn_Standardlimb_00D5AC" Type="Standard" Offset="0xD5AC" />
-        <Limb Name="object_sdn_Standardlimb_00D5B8" Type="Standard" Offset="0xD5B8" />
-        <Limb Name="object_sdn_Standardlimb_00D5C4" Type="Standard" Offset="0xD5C4" />
-        <Limb Name="object_sdn_Standardlimb_00D5D0" Type="Standard" Offset="0xD5D0" />
-        <Limb Name="object_sdn_Standardlimb_00D5DC" Type="Standard" Offset="0xD5DC" />
-        <Limb Name="object_sdn_Standardlimb_00D5E8" Type="Standard" Offset="0xD5E8" />
-        <Limb Name="object_sdn_Standardlimb_00D5F4" Type="Standard" Offset="0xD5F4" />
-        <Skeleton Name="object_sdn_Skel_00D640" Type="Flex" LimbType="Standard" Offset="0xD640" />
+        <Limb Name="object_sdn_Standardlimb_00D540" Type="Standard" EnumName="OBJECT_SDN_LIMB_01" Offset="0xD540" />
+        <Limb Name="object_sdn_Standardlimb_00D54C" Type="Standard" EnumName="OBJECT_SDN_LIMB_02" Offset="0xD54C" />
+        <Limb Name="object_sdn_Standardlimb_00D558" Type="Standard" EnumName="OBJECT_SDN_LIMB_03" Offset="0xD558" />
+        <Limb Name="object_sdn_Standardlimb_00D564" Type="Standard" EnumName="OBJECT_SDN_LIMB_04" Offset="0xD564" />
+        <Limb Name="object_sdn_Standardlimb_00D570" Type="Standard" EnumName="OBJECT_SDN_LIMB_05" Offset="0xD570" />
+        <Limb Name="object_sdn_Standardlimb_00D57C" Type="Standard" EnumName="OBJECT_SDN_LIMB_06" Offset="0xD57C" />
+        <Limb Name="object_sdn_Standardlimb_00D588" Type="Standard" EnumName="OBJECT_SDN_LIMB_07" Offset="0xD588" />
+        <Limb Name="object_sdn_Standardlimb_00D594" Type="Standard" EnumName="OBJECT_SDN_LIMB_08" Offset="0xD594" />
+        <Limb Name="object_sdn_Standardlimb_00D5A0" Type="Standard" EnumName="OBJECT_SDN_LIMB_09" Offset="0xD5A0" />
+        <Limb Name="object_sdn_Standardlimb_00D5AC" Type="Standard" EnumName="OBJECT_SDN_LIMB_0A" Offset="0xD5AC" />
+        <Limb Name="object_sdn_Standardlimb_00D5B8" Type="Standard" EnumName="OBJECT_SDN_LIMB_0B" Offset="0xD5B8" />
+        <Limb Name="object_sdn_Standardlimb_00D5C4" Type="Standard" EnumName="OBJECT_SDN_LIMB_0C" Offset="0xD5C4" />
+        <Limb Name="object_sdn_Standardlimb_00D5D0" Type="Standard" EnumName="OBJECT_SDN_LIMB_0D" Offset="0xD5D0" />
+        <Limb Name="object_sdn_Standardlimb_00D5DC" Type="Standard" EnumName="OBJECT_SDN_LIMB_0E" Offset="0xD5DC" />
+        <Limb Name="object_sdn_Standardlimb_00D5E8" Type="Standard" EnumName="OBJECT_SDN_LIMB_0F" Offset="0xD5E8" />
+        <Limb Name="object_sdn_Standardlimb_00D5F4" Type="Standard" EnumName="OBJECT_SDN_LIMB_10" Offset="0xD5F4" />
+        <Skeleton Name="object_sdn_Skel_00D640" Type="Flex" LimbType="Standard" LimbNone="OBJECT_SDN_LIMB_NONE" LimbMax="OBJECT_SDN_LIMB_MAX" EnumName="object_sdn_Limbs" Offset="0xD640" />
         <Animation Name="object_sdn_Anim_00DC7C" Offset="0xDC7C" />
     </File>
 </Root>

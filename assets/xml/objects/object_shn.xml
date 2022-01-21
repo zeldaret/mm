@@ -66,22 +66,22 @@
         <Animation Name="object_shn_Anim_00D9D0" Offset="0xD9D0" />
         <Animation Name="object_shn_Anim_00DFEC" Offset="0xDFEC" />
         <Animation Name="object_shn_Anim_00E6C4" Offset="0xE6C4" />
-        <Limb Name="object_shn_Standardlimb_00E6E0" Type="Standard" Offset="0xE6E0" />
-        <Limb Name="object_shn_Standardlimb_00E6EC" Type="Standard" Offset="0xE6EC" />
-        <Limb Name="object_shn_Standardlimb_00E6F8" Type="Standard" Offset="0xE6F8" />
-        <Limb Name="object_shn_Standardlimb_00E704" Type="Standard" Offset="0xE704" />
-        <Limb Name="object_shn_Standardlimb_00E710" Type="Standard" Offset="0xE710" />
-        <Limb Name="object_shn_Standardlimb_00E71C" Type="Standard" Offset="0xE71C" />
-        <Limb Name="object_shn_Standardlimb_00E728" Type="Standard" Offset="0xE728" />
-        <Limb Name="object_shn_Standardlimb_00E734" Type="Standard" Offset="0xE734" />
-        <Limb Name="object_shn_Standardlimb_00E740" Type="Standard" Offset="0xE740" />
-        <Limb Name="object_shn_Standardlimb_00E74C" Type="Standard" Offset="0xE74C" />
-        <Limb Name="object_shn_Standardlimb_00E758" Type="Standard" Offset="0xE758" />
-        <Limb Name="object_shn_Standardlimb_00E764" Type="Standard" Offset="0xE764" />
-        <Limb Name="object_shn_Standardlimb_00E770" Type="Standard" Offset="0xE770" />
-        <Limb Name="object_shn_Standardlimb_00E77C" Type="Standard" Offset="0xE77C" />
-        <Limb Name="object_shn_Standardlimb_00E788" Type="Standard" Offset="0xE788" />
-        <Skeleton Name="object_shn_Skel_00E7D0" Type="Flex" LimbType="Standard" Offset="0xE7D0" />
+        <Limb Name="object_shn_Standardlimb_00E6E0" Type="Standard" EnumName="OBJECT_SHN_LIMB_01" Offset="0xE6E0" />
+        <Limb Name="object_shn_Standardlimb_00E6EC" Type="Standard" EnumName="OBJECT_SHN_LIMB_02" Offset="0xE6EC" />
+        <Limb Name="object_shn_Standardlimb_00E6F8" Type="Standard" EnumName="OBJECT_SHN_LIMB_03" Offset="0xE6F8" />
+        <Limb Name="object_shn_Standardlimb_00E704" Type="Standard" EnumName="OBJECT_SHN_LIMB_04" Offset="0xE704" />
+        <Limb Name="object_shn_Standardlimb_00E710" Type="Standard" EnumName="OBJECT_SHN_LIMB_05" Offset="0xE710" />
+        <Limb Name="object_shn_Standardlimb_00E71C" Type="Standard" EnumName="OBJECT_SHN_LIMB_06" Offset="0xE71C" />
+        <Limb Name="object_shn_Standardlimb_00E728" Type="Standard" EnumName="OBJECT_SHN_LIMB_07" Offset="0xE728" />
+        <Limb Name="object_shn_Standardlimb_00E734" Type="Standard" EnumName="OBJECT_SHN_LIMB_08" Offset="0xE734" />
+        <Limb Name="object_shn_Standardlimb_00E740" Type="Standard" EnumName="OBJECT_SHN_LIMB_09" Offset="0xE740" />
+        <Limb Name="object_shn_Standardlimb_00E74C" Type="Standard" EnumName="OBJECT_SHN_LIMB_0A" Offset="0xE74C" />
+        <Limb Name="object_shn_Standardlimb_00E758" Type="Standard" EnumName="OBJECT_SHN_LIMB_0B" Offset="0xE758" />
+        <Limb Name="object_shn_Standardlimb_00E764" Type="Standard" EnumName="OBJECT_SHN_LIMB_0C" Offset="0xE764" />
+        <Limb Name="object_shn_Standardlimb_00E770" Type="Standard" EnumName="OBJECT_SHN_LIMB_0D" Offset="0xE770" />
+        <Limb Name="object_shn_Standardlimb_00E77C" Type="Standard" EnumName="OBJECT_SHN_LIMB_0E" Offset="0xE77C" />
+        <Limb Name="object_shn_Standardlimb_00E788" Type="Standard" EnumName="OBJECT_SHN_LIMB_0F" Offset="0xE788" />
+        <Skeleton Name="object_shn_Skel_00E7D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_SHN_LIMB_NONE" LimbMax="OBJECT_SHN_LIMB_MAX" EnumName="object_shn_Limbs" Offset="0xE7D0" />
         <DList Name="object_shn_DL_00F2D0" Offset="0xF2D0" />
         <Texture Name="object_shn_TLUT_00F790" OutName="tlut_00F790" Format="rgba16" Width="16" Height="16" Offset="0xF790" />
         <Texture Name="object_shn_TLUT_00F990" OutName="tlut_00F990" Format="rgba16" Width="16" Height="16" Offset="0xF990" />

@@ -34,25 +34,25 @@
         <Texture Name="object_bigokuta_Tex_006590" OutName="tex_006590" Format="rgba16" Width="16" Height="16" Offset="0x6590" />
         <Texture Name="object_bigokuta_Tex_006790" OutName="tex_006790" Format="rgba16" Width="8" Height="16" Offset="0x6790" />
         <Texture Name="object_bigokuta_Tex_006890" OutName="tex_006890" Format="rgba16" Width="16" Height="16" Offset="0x6890" />
-        <Limb Name="object_bigokuta_Standardlimb_006A90" Type="Standard" Offset="0x6A90" />
-        <Limb Name="object_bigokuta_Standardlimb_006A9C" Type="Standard" Offset="0x6A9C" />
-        <Limb Name="object_bigokuta_Standardlimb_006AA8" Type="Standard" Offset="0x6AA8" />
-        <Limb Name="object_bigokuta_Standardlimb_006AB4" Type="Standard" Offset="0x6AB4" />
-        <Limb Name="object_bigokuta_Standardlimb_006AC0" Type="Standard" Offset="0x6AC0" />
-        <Limb Name="object_bigokuta_Standardlimb_006ACC" Type="Standard" Offset="0x6ACC" />
-        <Limb Name="object_bigokuta_Standardlimb_006AD8" Type="Standard" Offset="0x6AD8" />
-        <Limb Name="object_bigokuta_Standardlimb_006AE4" Type="Standard" Offset="0x6AE4" />
-        <Limb Name="object_bigokuta_Standardlimb_006AF0" Type="Standard" Offset="0x6AF0" />
-        <Limb Name="object_bigokuta_Standardlimb_006AFC" Type="Standard" Offset="0x6AFC" />
-        <Limb Name="object_bigokuta_Standardlimb_006B08" Type="Standard" Offset="0x6B08" />
-        <Limb Name="object_bigokuta_Standardlimb_006B14" Type="Standard" Offset="0x6B14" />
-        <Limb Name="object_bigokuta_Standardlimb_006B20" Type="Standard" Offset="0x6B20" />
-        <Limb Name="object_bigokuta_Standardlimb_006B2C" Type="Standard" Offset="0x6B2C" />
-        <Limb Name="object_bigokuta_Standardlimb_006B38" Type="Standard" Offset="0x6B38" />
-        <Limb Name="object_bigokuta_Standardlimb_006B44" Type="Standard" Offset="0x6B44" />
-        <Limb Name="object_bigokuta_Standardlimb_006B50" Type="Standard" Offset="0x6B50" />
-        <Limb Name="object_bigokuta_Standardlimb_006B5C" Type="Standard" Offset="0x6B5C" />
-        <Limb Name="object_bigokuta_Standardlimb_006B68" Type="Standard" Offset="0x6B68" />
-        <Skeleton Name="object_bigokuta_Skel_006BC0" Type="Flex" LimbType="Standard" Offset="0x6BC0" />
+        <Limb Name="object_bigokuta_Standardlimb_006A90" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_01" Offset="0x6A90" />
+        <Limb Name="object_bigokuta_Standardlimb_006A9C" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_02" Offset="0x6A9C" />
+        <Limb Name="object_bigokuta_Standardlimb_006AA8" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_03" Offset="0x6AA8" />
+        <Limb Name="object_bigokuta_Standardlimb_006AB4" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_04" Offset="0x6AB4" />
+        <Limb Name="object_bigokuta_Standardlimb_006AC0" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_05" Offset="0x6AC0" />
+        <Limb Name="object_bigokuta_Standardlimb_006ACC" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_06" Offset="0x6ACC" />
+        <Limb Name="object_bigokuta_Standardlimb_006AD8" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_07" Offset="0x6AD8" />
+        <Limb Name="object_bigokuta_Standardlimb_006AE4" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_08" Offset="0x6AE4" />
+        <Limb Name="object_bigokuta_Standardlimb_006AF0" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_09" Offset="0x6AF0" />
+        <Limb Name="object_bigokuta_Standardlimb_006AFC" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0A" Offset="0x6AFC" />
+        <Limb Name="object_bigokuta_Standardlimb_006B08" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0B" Offset="0x6B08" />
+        <Limb Name="object_bigokuta_Standardlimb_006B14" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0C" Offset="0x6B14" />
+        <Limb Name="object_bigokuta_Standardlimb_006B20" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0D" Offset="0x6B20" />
+        <Limb Name="object_bigokuta_Standardlimb_006B2C" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0E" Offset="0x6B2C" />
+        <Limb Name="object_bigokuta_Standardlimb_006B38" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_0F" Offset="0x6B38" />
+        <Limb Name="object_bigokuta_Standardlimb_006B44" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_10" Offset="0x6B44" />
+        <Limb Name="object_bigokuta_Standardlimb_006B50" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_11" Offset="0x6B50" />
+        <Limb Name="object_bigokuta_Standardlimb_006B5C" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_12" Offset="0x6B5C" />
+        <Limb Name="object_bigokuta_Standardlimb_006B68" Type="Standard" EnumName="OBJECT_BIGOKUTA_LIMB_13" Offset="0x6B68" />
+        <Skeleton Name="object_bigokuta_Skel_006BC0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BIGOKUTA_LIMB_NONE" LimbMax="OBJECT_BIGOKUTA_LIMB_MAX" EnumName="object_bigokuta_Limbs" Offset="0x6BC0" />
     </File>
 </Root>
