@@ -678,7 +678,7 @@ typedef struct {
     Gfx* unk_00;
     Gfx* unk_04;
 } Gfx1;
-Gfx1 D_801C0024[PLAYER_SHIELD_MAX-1] = {
+Gfx1 D_801C0024[PLAYER_SHIELD_MAX - 1] = {
     { object_link_child_DL_01DC28, object_link_child_DL_01DC28 },
     { object_link_child_DL_01DC48, object_link_child_DL_01DC48 },
 };
@@ -807,11 +807,38 @@ Gfx* D_801C026C[2 * PLAYER_FORM_MAX] = {
 
 /* DLists groups end */
 
-Gfx* D_801C0294[PLAYER_FORM_MAX] = { 0x06006C38, 0x0600A220, 0x0600C020, 0x06003AB8, 0x0600D3D8 };
-Gfx* D_801C02A8[PLAYER_FORM_MAX] = { 0x06006EB8, 0x0600A500, 0x0600C270, 0x06003BC0, 0x0600E1C8 };
-Gfx* D_801C02BC[PLAYER_FORM_MAX] = { 0x06006410, 0x06009A98, 0x0600B820, 0x060036B0, 0x0600CCE0 };
-Gfx* D_801C02D0[PLAYER_FORM_MAX] = { 0x060067D8, 0x060038C0, 0x0600FBB8, 0x060038C0, 0x06018490 };
-Gfx* D_801C02E4[PLAYER_FORM_MAX] = { 0x060067D8, 0x060038C0, 0x0600FBB8, 0x060038C0, 0x06017B40 };
+Gfx* D_801C0294[PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006C38,  object_link_goron_DL_00A220, object_link_zora_DL_00C020,
+    object_link_nuts_DL_003AB8, object_link_child_DL_00D3D8,
+};
+
+Gfx* D_801C02A8[PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006EB8,  object_link_goron_DL_00A500, object_link_zora_DL_00C270,
+    object_link_nuts_DL_003BC0, object_link_child_DL_00E1C8,
+};
+
+Gfx* D_801C02BC[PLAYER_FORM_MAX] = {
+    object_link_boy_DL_006410,  object_link_goron_DL_009A98, object_link_zora_DL_00B820,
+    object_link_nuts_DL_0036B0, object_link_child_DL_00CCE0,
+};
+
+Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,
+    0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
+                // dlist, maybe a typo?
+    object_link_zora_DL_00FBB8,
+    object_link_nuts_DL_0038C0,
+    object_link_child_DL_018490,
+};
+
+Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
+    object_link_boy_DL_0067D8,
+    0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
+                // dlist, maybe a typo?
+    object_link_zora_DL_00FBB8,
+    object_link_nuts_DL_0038C0,
+    object_link_child_DL_017B40,
+};
 
 Gfx** sPlayerDListGroups[] = {
     D_801C0114, D_801C013C, D_801C0164, D_801C00EC, D_801C0114, D_801C026C, D_801C01A4, D_801C01CC, D_801C01CC,
@@ -1367,17 +1394,18 @@ Gfx D_801C0860[] = {
     gsSPEndDisplayList(),
 };
 
-// Textures probably
-UNK_PTR D_801C0870[] = {
-    (void*)0x06000000, (void*)0x06000800, (void*)0x06001000, (void*)0x06001800,
-    (void*)0x06002000, (void*)0x06002800, (void*)0x06003000, (void*)0x06003800,
+static TexturePtr sEyesTextures[] = {
+    object_link_child_Tex_000000, object_link_child_Tex_000800, object_link_child_Tex_001000, object_link_child_Tex_001800,
+    object_link_child_Tex_002000, object_link_child_Tex_002800, object_link_child_Tex_003000, object_link_child_Tex_003800,
 };
-void* D_801C0890[] = {
-    (void*)0x06004000,
-    (void*)0x06004400,
-    (void*)0x06004800,
-    (void*)0x06004C00,
+
+static TexturePtr sMouthTextures[] = {
+    object_link_child_Tex_004000,
+    object_link_child_Tex_004400,
+    object_link_child_Tex_004800,
+    object_link_child_Tex_004C00,
 };
+
 u8 D_801C08A0[][2] = {
     { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 0 }, { 1, 0 }, { 2, 0 }, { 4, 0 }, { 5, 1 },
     { 7, 2 }, { 0, 2 }, { 3, 0 }, { 4, 0 }, { 2, 2 }, { 1, 1 }, { 0, 2 }, { 0, 3 },
@@ -1407,13 +1435,13 @@ void func_801246F4(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
         }
     }
 
-    gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual(D_801C0870[eyeIndex]));
+    gSPSegment(&dl[0], 0x08, Lib_SegmentedToVirtual(sEyesTextures[eyeIndex]));
 
     if (mouthIndex < 0) {
         mouthIndex = D_801C08A0[face][1];
     }
 
-    gSPSegment(&dl[1], 0x09, Lib_SegmentedToVirtual(D_801C0890[mouthIndex]));
+    gSPSegment(&dl[1], 0x09, Lib_SegmentedToVirtual(sMouthTextures[mouthIndex]));
 
     POLY_OPA_DISP = &dl[2];
 
@@ -2156,23 +2184,50 @@ Vec3f D_801C0A90[] = {
     { 5000.0f, -500.0f, -4000.0f },
 };
 
-Gfx* D_801C0AB4[] = { object_link_zora_DL_00CC38, object_link_zora_DL_00CDA0, };
+Gfx* D_801C0AB4[] = {
+    object_link_zora_DL_00CC38,
+    object_link_zora_DL_00CDA0,
+};
 
-Gfx* D_801C0ABC[] = { object_link_zora_DL_010868, object_link_zora_DL_010978, };
+Gfx* D_801C0ABC[] = {
+    object_link_zora_DL_010868,
+    object_link_zora_DL_010978,
+};
 
-Vec3f D_801C0AC4[] = { { 5400.0f, 1700.0f, 1800.0f }, { 5400.0f, 1700.0f, -1800.0f }, };
+Vec3f D_801C0AC4[] = {
+    { 5400.0f, 1700.0f, 1800.0f },
+    { 5400.0f, 1700.0f, -1800.0f },
+};
 
-Vec3f D_801C0ADC[] = { { 5250.0f, 570.0f, 2400.0f }, { 5250.0f, 570.0f, -2400.0f }, };
+Vec3f D_801C0ADC[] = {
+    { 5250.0f, 570.0f, 2400.0f },
+    { 5250.0f, 570.0f, -2400.0f },
+};
 
-struct_80124618* D_801C0AF4[] = { D_801C0678, D_801C0698, };
+struct_80124618* D_801C0AF4[] = {
+    D_801C0678,
+    D_801C0698,
+};
 
-struct_80124618* D_801C0AFC[] = { D_801C06B8, D_801C06E0, };
+struct_80124618* D_801C0AFC[] = {
+    D_801C06B8,
+    D_801C06E0,
+};
 
-struct_80124618* D_801C0B04[] = { D_801C06F8, D_801C0718, };
+struct_80124618* D_801C0B04[] = {
+    D_801C06F8,
+    D_801C0718,
+};
 
-struct_80124618* D_801C0B0C[] = { D_801C0730, D_801C0740, };
+struct_80124618* D_801C0B0C[] = {
+    D_801C0730,
+    D_801C0740,
+};
 
-Gfx* D_801C0B14[] = { object_link_nuts_DL_008760, object_link_nuts_DL_008660, };
+Gfx* D_801C0B14[] = {
+    object_link_nuts_DL_008760,
+    object_link_nuts_DL_008660,
+};
 
 u8 D_801C0B1C[] = {
     0x0C,
@@ -2432,7 +2487,8 @@ s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
             func_80124618(sp3C[0], player->skelAnime.curFrame, &player->unk_AF0[1]);
             Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, 1);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(POLY_OPA_DISP++, D_801C0B14[arg2]);
 
@@ -2441,11 +2497,12 @@ s32 func_801271B0(GlobalContext* globalCtx, Player* player, s32 arg2) {
             func_80124618(sp3C[1], player->skelAnime.curFrame, &player->unk_AF0[1]);
             Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             // Close flower / Open flower
             gSPDisplayList(POLY_OPA_DISP++,
-                        player->actor.velocity.y < -6.0f ? object_link_nuts_DL_008AA0 : object_link_nuts_DL_008C50);
+                           player->actor.velocity.y < -6.0f ? object_link_nuts_DL_008AA0 : object_link_nuts_DL_008C50);
 
             Matrix_GetStateTranslation(&player->bodyPartsPos[D_801C0B1C[arg2]]);
             Matrix_StatePop();
@@ -2658,16 +2715,15 @@ typedef struct {
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ Vec3f unk_08;
-    /* 0x14 */ s32 unk_14;
+    /* 0x14 */ f32 unk_14;
     /* 0x18 */ s16 unk_18;
     /* 0x1A */ s16 unk_1A;
 } struct_80128388_arg1; // size = 0x1C
 
-// extern struct_80128388_arg1 D_801C0C54[3];
 struct_80128388_arg1 D_801C0C54[] = {
-    { 0.0f, 0x0000, 0x8000, { 0.0f, 0.0f, 0.0f }, 0x00000000, 0x0000, 0x0000 },
-    { 16.7999992371f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 0x41A00000, 0x1388, 0x1388 },
-    { 30.0f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 0x41A00000, 0x1F40, 0x2EE0 },
+    { 0.0f, 0x0000, 0x8000, { 0.0f, 0.0f, 0.0f }, 0.0f, 0x0000, 0x0000 },
+    { 16.7999992371f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1388, 0x1388 },
+    { 30.0f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1F40, 0x2EE0 },
 };
 
 Color_RGB8 D_801C0CA8[] = {
