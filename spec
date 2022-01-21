@@ -3742,9 +3742,11 @@ beginseg
     name "ovl_En_Test7"
     compress
     include "build/src/overlays/actors/ovl_En_Test7/z_en_test7.o"
-    include "build/data/ovl_En_Test7/ovl_En_Test7.data.o"
-    include "build/data/ovl_En_Test7/ovl_En_Test7.bss.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Test7/ovl_En_Test7_reloc.o"
+#else
     include "build/data/ovl_En_Test7/ovl_En_Test7.reloc.o"
+#endif
 endseg
 
 beginseg
