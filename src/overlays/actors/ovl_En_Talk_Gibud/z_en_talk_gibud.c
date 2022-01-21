@@ -5,7 +5,6 @@
  */
 
 #include "z_en_talk_gibud.h"
-#include "objects/object_rd/object_rd.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
