@@ -1035,7 +1035,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
         Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
                                  this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(4.0f, this->unk_1AC, 4.0f, MTXMODE_APPLY);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_0044D8));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0044D8));
         Gfx_DrawDListXlu(globalCtx, object_warp1_DL_003230);
         return;
     }
@@ -1054,7 +1054,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
                              MTXMODE_NEW);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_0057D8));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0057D8));
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1066,7 +1066,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_004690);
     gfxCtx = globalCtx->state.gfxCtx;
 
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_007238));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_007238));
     Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                              MTXMODE_NEW);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);

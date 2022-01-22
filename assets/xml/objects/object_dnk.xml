@@ -9,7 +9,9 @@
         <Texture Name="object_dnk_Tex_001380" OutName="tex_001380" Format="rgba16" Width="16" Height="16" Offset="0x1380" />
         <Texture Name="object_dnk_Tex_001580" OutName="tex_001580" Format="rgba16" Width="8" Height="8" Offset="0x1580" />
         <Texture Name="object_dnk_Tex_001600" OutName="tex_001600" Format="rgba16" Width="8" Height="8" Offset="0x1600" />
-        <!-- <Blob Name="object_dnk_Blob_001680" Size="0x180" Offset="0x1680" /> -->
+        <Texture Name="object_dnk_Tex_001680" OutName="tex_001680" Format="rgba16" Width="8" Height="8" Offset="0x1680" />
+        <Texture Name="object_dnk_Tex_001700" OutName="tex_001700" Format="rgba16" Width="8" Height="8" Offset="0x1700" />
+        <Texture Name="object_dnk_Tex_001780" OutName="tex_001780" Format="rgba16" Width="8" Height="8" Offset="0x1780" />
         <DList Name="object_dnk_DL_001DD0" Offset="0x1DD0" />
         <DList Name="object_dnk_DL_001E58" Offset="0x1E58" />
         <DList Name="object_dnk_DL_001E68" Offset="0x1E68" />

@@ -17,7 +17,9 @@
         <Texture Name="object_zo_Tex_004460" OutName="tex_004460" Format="ci8" Width="32" Height="32" Offset="0x4460" />
         <Texture Name="object_zo_Tex_004860" OutName="tex_004860" Format="ci8" Width="32" Height="64" Offset="0x4860" />
         <Texture Name="object_zo_Tex_005060" OutName="tex_005060" Format="ci8" Width="8" Height="8" Offset="0x5060" />
-        <!-- <Blob Name="object_zo_Blob_0050A0" Size="0x1800" Offset="0x50A0" /> -->
+        <Texture Name="object_zo_Tex_0050A0" OutName="tex_0050A0" Format="rgba16" Width="32" Height="32" Offset="0x50A0" />
+        <Texture Name="object_zo_Tex_0058A0" OutName="tex_0058A0" Format="rgba16" Width="32" Height="32" Offset="0x58A0" />
+        <Texture Name="object_zo_Tex_0060A0" OutName="tex_0060A0" Format="rgba16" Width="32" Height="32" Offset="0x60A0" />
         <Texture Name="object_zo_Tex_0068A0" OutName="tex_0068A0" Format="rgba16" Width="32" Height="32" Offset="0x68A0" />
         <Texture Name="object_zo_Tex_0070A0" OutName="tex_0070A0" Format="ci8" Width="16" Height="16" Offset="0x70A0" />
         <Texture Name="object_zo_Tex_0071A0" OutName="tex_0071A0" Format="ci8" Width="8" Height="8" Offset="0x71A0" />

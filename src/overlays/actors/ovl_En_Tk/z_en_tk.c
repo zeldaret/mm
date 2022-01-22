@@ -7,6 +7,7 @@
 #include "z_en_tk.h"
 #include "overlays/actors/ovl_Bg_Danpei_Movebg/z_bg_danpei_movebg.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "objects/object_tk/object_tk.h"
 
 #define FLAGS 0x00000009
 
@@ -59,19 +60,6 @@ void func_80AEF2C8(Actor* thisx, GlobalContext* globalCtx);
 void func_80AEF2D8(Actor* thisx, GlobalContext* globalCtx);
 void func_80AEF5F4(Actor* thisx, GlobalContext* globalCtx);
 
-extern AnimationHeader D_06001144;
-extern AnimationHeader D_06001FA8;
-extern AnimationHeader D_060020C8;
-extern AnimationHeader D_060030A4;
-extern AnimationHeader D_06003724;
-extern AnimationHeader D_06003B10;
-extern AnimationHeader D_06003FB8;
-extern UNK_PTR D_06004390;
-extern UNK_PTR D_06004B90;
-extern UNK_PTR D_06005390;
-extern Gfx D_0600B530[];
-extern FlexSkeletonHeader D_0600B9E8;
-
 static s32 D_80AF0050;
 
 static u32 D_80AEF800[] = {
@@ -121,9 +109,10 @@ static u32 D_80AEF85C[] = {
 };
 
 static struct_80B8E1A8 D_80AEF868[] = {
-    { &D_06001FA8, 1.0f, 0, -10.0f }, { &D_06001FA8, 2.0f, 0, -10.0f }, { &D_060030A4, 1.0f, 0, -10.0f },
-    { &D_06001144, 1.0f, 2, -10.0f }, { &D_06003724, 1.0f, 2, -10.0f }, { &D_06003FB8, 1.0f, 0, -10.0f },
-    { &D_060020C8, 1.0f, 0, -10.0f }, { &D_06003B10, 1.0f, 0, -10.0f },
+    { &object_tk_Anim_001FA8, 1.0f, 0, -10.0f }, { &object_tk_Anim_001FA8, 2.0f, 0, -10.0f },
+    { &object_tk_Anim_0030A4, 1.0f, 0, -10.0f }, { &object_tk_Anim_001144, 1.0f, 2, -10.0f },
+    { &object_tk_Anim_003724, 1.0f, 2, -10.0f }, { &object_tk_Anim_003FB8, 1.0f, 0, -10.0f },
+    { &object_tk_Anim_0020C8, 1.0f, 0, -10.0f }, { &object_tk_Anim_003B10, 1.0f, 0, -10.0f },
 };
 
 static s32 D_80AEF8E8[2] = { 0, 0 };
@@ -236,8 +225,10 @@ void EnTk_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B9E8, NULL, this->jointTable, this->morphTable, 18);
-    Animation_Change(&this->skelAnime, &D_060030A4, 1.0f, 0.0f, Animation_GetLastFrame(&D_060030A4.common), 0, 0.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_tk_Skel_00B9E8, NULL, this->jointTable, this->morphTable,
+                       18);
+    Animation_Change(&this->skelAnime, &object_tk_Anim_0030A4, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&object_tk_Anim_0030A4.common), 0, 0.0f);
     this->unk_318 = 0;
     this->unk_2D4 = -1;
     Actor_SetScale(&this->actor, 0.01f);
@@ -1369,7 +1360,7 @@ void EnTk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
                 OPEN_DISPS(globalCtx->state.gfxCtx);
 
-                gSPDisplayList(POLY_OPA_DISP++, D_0600B530);
+                gSPDisplayList(POLY_OPA_DISP++, object_tk_DL_00B530);
 
                 CLOSE_DISPS(globalCtx->state.gfxCtx);
                 break;
@@ -1378,10 +1369,10 @@ void EnTk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnTk_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_80AEFA90[] = {
-        &D_06004390,
-        &D_06004B90,
-        &D_06005390,
+    static TexturePtr D_80AEFA90[] = {
+        object_tk_Tex_004390,
+        object_tk_Tex_004B90,
+        object_tk_Tex_005390,
     };
     s32 pad;
     EnTk* this = THIS;

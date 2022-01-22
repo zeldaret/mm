@@ -992,8 +992,8 @@ void EnIg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
 
 void EnIg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr D_80BF3534[] = {
-        &object_dai_Tex_0107B0, &object_dai_Tex_010FB0, &object_dai_Tex_0117B0,
-        &object_dai_Tex_011FB0, &object_dai_Tex_0127B0,
+        object_dai_Tex_0107B0, object_dai_Tex_010FB0, object_dai_Tex_0117B0,
+        object_dai_Tex_011FB0, object_dai_Tex_0127B0,
     };
     s32 pad;
     EnIg* this = THIS;
