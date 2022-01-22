@@ -2,7 +2,7 @@
 
 UnkRumbleStruct D_801F69D0;
 
-void func_8013EC10(s32 arg0) {
+void func_8013EC10(UNK_TYPE arg0) {
     func_80182CE0(&D_801F69D0);
     func_80175474(&D_801F69D0);
 }
@@ -64,7 +64,7 @@ void func_8013EDD0(void) {
     func_80183058(&D_801F69D0);
 }
 
-u32 func_8013EE04(void) {
+s32 func_8013EE04(void) {
     return func_801754C0(0);
 }
 
