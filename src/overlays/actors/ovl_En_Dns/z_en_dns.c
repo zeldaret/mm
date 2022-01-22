@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dns.h"
+#include "objects/object_dns/object_dns.h"
 
 #define FLAGS 0x00000019
 
@@ -18,20 +19,6 @@ void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_8092D330(EnDns* this, GlobalContext* globalCtx);
 void EnDns_DoNothing(EnDns* this, GlobalContext* globalCtx);
 void func_8092D4D8(EnDns* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060002A8;
-extern AnimationHeader D_06000734;
-extern AnimationHeader D_060008F4;
-extern AnimationHeader D_06000BD8;
-extern AnimationHeader D_06000D58;
-extern AnimationHeader D_06000FEC;
-extern TexturePtr D_060028E8;
-extern TexturePtr D_06002968;
-extern TexturePtr D_060029E8;
-extern Gfx D_06002C48[];
-extern SkeletonHeader D_06002DD8;
-extern AnimationHeader D_06003310;
-extern AnimationHeader D_060034EC;
 
 static s32 D_8092DCB0[] = {
     0x00172000, 0x050E082F, 0x0C100E08, 0x200C1000, 0x00172000, 0x050E0830, 0x0C100E08, 0x210C1000,
@@ -74,10 +61,11 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06003310, 1.0f, 0, -1, 0, 0 },  { &D_06003310, 1.0f, 0, -1, 0, -4 }, { &D_060034EC, 1.0f, 0, -1, 0, 0 },
-    { &D_060034EC, 1.0f, 0, -1, 0, -4 }, { &D_060008F4, 1.0f, 0, -1, 2, 0 },  { &D_06000BD8, 1.0f, 0, -1, 0, 0 },
-    { &D_06000D58, 1.0f, 0, -1, 2, 0 },  { &D_06000FEC, 1.0f, 0, -1, 0, 0 },  { &D_060002A8, 1.0f, 0, -1, 2, 0 },
-    { &D_06000734, 1.0f, 0, -1, 2, 0 },
+    { &object_dns_Anim_003310, 1.0f, 0, -1, 0, 0 }, { &object_dns_Anim_003310, 1.0f, 0, -1, 0, -4 },
+    { &object_dns_Anim_0034EC, 1.0f, 0, -1, 0, 0 }, { &object_dns_Anim_0034EC, 1.0f, 0, -1, 0, -4 },
+    { &object_dns_Anim_0008F4, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000BD8, 1.0f, 0, -1, 0, 0 },
+    { &object_dns_Anim_000D58, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000FEC, 1.0f, 0, -1, 0, 0 },
+    { &object_dns_Anim_0002A8, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000734, 1.0f, 0, -1, 2, 0 },
 };
 
 void func_8092C5C0(EnDns* this) {
@@ -376,7 +364,7 @@ void func_8092D108(EnDns* this, GlobalContext* globalCtx) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06002C48);
+    gSPDisplayList(POLY_OPA_DISP++, object_dns_DL_002C48);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -495,7 +483,7 @@ void EnDns_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002DD8, NULL, this->jointTable, this->morphTable, 13);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dns_Skel_002DD8, NULL, this->jointTable, this->morphTable, 13);
     this->unk_2F8 = -1;
     func_8092C63C(this, 2);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -616,7 +604,8 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_8092DE1C[] = { &D_060028E8, &D_06002968, &D_060029E8, &D_06002968 };
+    static TexturePtr D_8092DE1C[] = { object_dns_Tex_0028E8, object_dns_Tex_002968, object_dns_Tex_0029E8,
+                                       object_dns_Tex_002968 };
     EnDns* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

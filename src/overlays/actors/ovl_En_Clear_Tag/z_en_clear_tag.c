@@ -5,6 +5,7 @@
  */
 
 #include "z_en_clear_tag.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000035
 
@@ -81,8 +82,18 @@ static f32 sLightRayMaxScale[] = {
     25.0f, 100.0f, 48.0f, 20.0f, 32.0f,
 };
 
-static Gfx* sSplashTex[] = {
-    D_040378F0, D_04037DF0, D_040382F0, D_040387F0, D_04038CF0, D_040391F0, D_040396F0, D_04039BF0, NULL, NULL, NULL,
+static TexturePtr sSplashTex[] = {
+    gExplosionSplashTex1,
+    gExplosionSplashTex2,
+    gExplosionSplashTex3,
+    gExplosionSplashTex4,
+    gExplosionSplashTex5,
+    gExplosionSplashTex6,
+    gExplosionSplashTex7,
+    gExplosionSplashTex8,
+    NULL,
+    NULL,
+    NULL,
 };
 
 #include "overlays/ovl_En_Clear_Tag/ovl_En_Clear_Tag.c"
@@ -820,7 +831,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 Matrix_SetCurrentState(&mtxF);
                 Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_04030100);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_030100);
             }
         }
     }
@@ -986,7 +997,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                         Matrix_RotateStateAroundXAxis(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
                         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        gSPDisplayList(POLY_XLU_DISP++, D_0403A0F0);
+                        gSPDisplayList(POLY_XLU_DISP++, gExplosionSplashDL);
                     }
                 }
             }

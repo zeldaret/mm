@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ginko_man.h"
+#include "objects/object_boj/object_boj.h"
 
 #define FLAGS 0x00000009
 
@@ -29,14 +30,6 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx);
 void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx);
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_0600C240; // object_ginko_skeleton
-extern Gfx D_0600B1D8[];              // object_ginko_limb15_dlist
-extern AnimationHeader D_060008C0;    // object_ginko_floorsmacking_anim
-extern AnimationHeader D_060043F0;    // object_ginko_sitting_anim
-extern AnimationHeader D_06004A7C;    // object_ginko_amazed_anim
-extern AnimationHeader D_06004F40;    // object_ginko_stamp_reach_anim
-extern AnimationHeader D_06000AC4;    // object_ginko_advertising_anim
-
 const ActorInit En_Ginko_Man_InitVars = {
     ACTOR_EN_GINKO_MAN,
     ACTORCAT_NPC,
@@ -50,11 +43,11 @@ const ActorInit En_Ginko_Man_InitVars = {
 };
 
 ActorAnimationEntry animations[] = {
-    { &D_060008C0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_060043F0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_06004F40, 1.0f, 0.0f, 0.0f, 2, -4.0f },
-    { &D_06000AC4, 1.0f, 0.0f, 0.0f, 0, -4.0f }, // looking around for customers
-    { &D_06004A7C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_boj_Anim_0008C0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_boj_Anim_0043F0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_boj_Anim_004F40, 1.0f, 0.0f, 0.0f, 2, -4.0f },
+    { &object_boj_Anim_000AC4, 1.0f, 0.0f, 0.0f, 0, -4.0f }, // looking around for customers
+    { &object_boj_Anim_004A7C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
 };
 
 void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -69,7 +62,8 @@ void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->isStampChecked = false;
     this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
     this->serviceFee = 0;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600C240, &D_060043F0, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boj_Skel_00C240, &object_boj_Anim_0043F0, this->jointTable,
+                       this->morphTable, 16);
     EnGinkoMan_SetupIdle(this);
 }
 
@@ -501,7 +495,8 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->skelAnime.animation == &D_060008C0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+    if ((this->skelAnime.animation == &object_boj_Anim_0008C0) &&
+        Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }
@@ -601,12 +596,12 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer > 160.0f) {
         if (this->animTimer == 0) {
-            if (this->skelAnime.animation != &D_06004A7C) {
+            if (this->skelAnime.animation != &object_boj_Anim_004A7C) {
                 this->animTimer = 40;
                 Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_ADVERTISING);
             }
         }
-    } else if ((this->animTimer == 0) && (this->skelAnime.animation != &D_06000AC4)) {
+    } else if ((this->animTimer == 0) && (this->skelAnime.animation != &object_boj_Anim_000AC4)) {
         this->animTimer = 40;
         Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_AMAZED);
     }
@@ -616,7 +611,7 @@ void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx) {
 
 void EnGinkoMan_FacePlayer(EnGinkoMan* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (this->skelAnime.animation != &D_06004A7C) {
+    if (this->skelAnime.animation != &object_boj_Anim_004A7C) {
         func_800E9250(globalCtx, &this->actor, &this->limb15Rot, &this->limb8Rot, this->actor.focus.pos);
     } else {
         func_800E8F08(&this->limb15Rot, &this->limb8Rot);
@@ -637,7 +632,7 @@ s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     EnGinkoMan* this = THIS;
 
     if (limbIndex == 15) {
-        *dList = D_0600B1D8;
+        *dList = object_boj_DL_00B1D8;
     }
 
     if (limbIndex == 15) {

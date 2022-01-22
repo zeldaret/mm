@@ -5,6 +5,7 @@
  */
 
 #include "z_en_syateki_man.h"
+#include "objects/object_shn/object_shn.h"
 
 #define FLAGS 0x08000019
 
@@ -34,16 +35,6 @@ void func_809C8808(EnSyatekiMan* this, GlobalContext* globalCtx);
 void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx);
 void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx);
 
-extern UNK_PTR D_06005AC8;
-extern UNK_PTR D_060062C8;
-extern AnimationHeader D_0600D2F8;
-extern AnimationHeader D_0600D9D0;
-extern AnimationHeader D_0600DFEC;
-extern FlexSkeletonHeader D_0600E7D0;
-extern Gfx D_0600F2D0[];
-extern UNK_PTR D_0600FB90;
-extern UNK_PTR D_06010390;
-
 const ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
     ACTORCAT_NPC,
@@ -57,9 +48,9 @@ const ActorInit En_Syateki_Man_InitVars = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &D_0600D9D0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_0600DFEC, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_0600D2F8, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &object_shn_Anim_00D9D0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_shn_Anim_00DFEC, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_shn_Anim_00D2F8, 1.0f, 0.0f, 0.0f, 2, -8.0f },
 };
 
 static s16 D_809C91C8[] = {
@@ -141,11 +132,11 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600DFEC, this->jointTable, this->morphTable,
-                           16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_shn_Skel_00E7D0, &object_shn_Anim_00DFEC,
+                           this->jointTable, this->morphTable, 16);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600D9D0, this->jointTable, this->morphTable,
-                           16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_shn_Skel_00E7D0, &object_shn_Anim_00D9D0,
+                           this->jointTable, this->morphTable, 16);
     }
 
     this->actor.colChkInfo.cylRadius = 100;
@@ -417,7 +408,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if (this->skelAnime.animation == &D_0600D2F8) {
+    if (this->skelAnime.animation == &object_shn_Anim_00D2F8) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
         }
@@ -1251,7 +1242,7 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
     EnSyatekiMan* this = THIS;
 
     if ((globalCtx->sceneNum == SCENE_SYATEKI_MIZU) && (limbIndex == 15)) {
-        *dList = D_0600F2D0;
+        *dList = object_shn_DL_00F2D0;
     }
 
     if (limbIndex == 15) {
@@ -1276,22 +1267,22 @@ void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
 }
 
 void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_809C94B8[] = {
-        &D_06005AC8,
-        &D_060062C8,
-        &D_060062C8,
+    static TexturePtr D_809C94B8[] = {
+        object_shn_Tex_005AC8,
+        object_shn_Tex_0062C8,
+        object_shn_Tex_0062C8,
     };
     EnSyatekiMan* this = THIS;
     s32 pad;
 
     if (globalCtx->sceneNum == SCENE_SYATEKI_MIZU) {
-        D_809C94B8[0] = &D_0600FB90;
-        D_809C94B8[1] = &D_06010390;
-        D_809C94B8[2] = &D_06010390;
+        D_809C94B8[0] = object_shn_Tex_00FB90;
+        D_809C94B8[1] = object_shn_Tex_010390;
+        D_809C94B8[2] = object_shn_Tex_010390;
     } else {
-        D_809C94B8[0] = &D_06005AC8;
-        D_809C94B8[1] = &D_060062C8;
-        D_809C94B8[2] = &D_060062C8;
+        D_809C94B8[0] = object_shn_Tex_005AC8;
+        D_809C94B8[1] = object_shn_Tex_0062C8;
+        D_809C94B8[2] = object_shn_Tex_0062C8;
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

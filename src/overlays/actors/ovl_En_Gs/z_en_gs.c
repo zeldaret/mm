@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gs.h"
+#include "objects/object_gs/object_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x02000019
@@ -35,10 +36,6 @@ s32 func_80998F9C(EnGs* this, GlobalContext* globalCtx);
 s32 func_809995A4(EnGs* this, GlobalContext* globalCtx);
 void func_80999A8C(EnGs* this, GlobalContext* globalCtx);
 void func_80999AC0(EnGs* this);
-
-extern Gfx D_06000950[];
-extern Gfx D_060009D0[];
-extern Gfx D_06000A60[];
 
 const ActorInit En_Gs_InitVars = {
     ACTOR_EN_GS,
@@ -1086,10 +1083,10 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000950);
+    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000950);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_1FA.r, this->unk_1FA.g, this->unk_1FA.b, 255);
-    gSPDisplayList(POLY_OPA_DISP++, D_060009D0);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000A60);
+    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_0009D0);
+    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000A60);
 
     Matrix_StatePop();
 

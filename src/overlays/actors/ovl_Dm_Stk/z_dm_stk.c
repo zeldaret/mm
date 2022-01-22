@@ -5,6 +5,9 @@
  */
 
 #include "z_dm_stk.h"
+#include "objects/object_stk/object_stk.h"
+#include "objects/object_stk2/object_stk2.h"
+#include "objects/object_stk3/object_stk3.h"
 
 #define FLAGS 0x02000030
 
@@ -29,96 +32,6 @@ void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx);
 void func_80AA1C64(DmStk* this, GlobalContext* globalCtx);
 void func_80AA2720(DmStk* this, GlobalContext* globalCtx);
 void func_80AA27EC(DmStk* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_0600055C;
-extern AnimationHeader D_06001030;
-extern AnimationHeader D_0600130C;
-extern AnimationHeader D_06001374;
-extern AnimationHeader D_06001EDC;
-extern AnimationHeader D_06002774;
-extern AnimationHeader D_06002CD8;
-extern AnimationHeader D_06003068;
-extern AnimationHeader D_060035C8;
-extern AnimationHeader D_060039F0;
-extern AnimationHeader D_06004554;
-extern AnimationHeader D_06004580;
-extern Gfx D_060046B0[];
-extern AnimationHeader D_060049C8;
-extern AnimationHeader D_060051C0;
-extern Gfx D_060053C0[];
-extern Gfx D_06005870[];
-extern AnimationHeader D_06005F44;
-extern Gfx D_06006BB0[];
-extern AnimationHeader D_060070DC;
-extern Gfx D_06007840[];
-extern Gfx D_060079F0[];
-extern Gfx D_060084C0[];
-extern UNK_TYPE D_06008658;
-extern Gfx D_060087B0[];
-extern Gfx D_06008A80[];
-extern Gfx D_060090C0[];
-extern Gfx D_06009710[];
-extern Gfx D_06009AC0[];
-extern Gfx D_06009DA0[];
-extern Gfx D_0600A530[];
-extern Gfx D_0600A5C0[];
-extern Gfx D_0600AE30[];
-extern Gfx D_0600AEC0[];
-extern AnimationHeader D_0600BB2C;
-extern AnimationHeader D_0600C270;
-extern AnimationHeader D_0600C964;
-extern Gfx D_0600CAD0[];
-extern AnimationHeader D_0600CBB8;
-extern AnimationHeader D_0600D830;
-extern AnimationHeader D_0600E6EC;
-extern AnimationHeader D_0600EEC0;
-extern AnimationHeader D_060101A4;
-extern AnimationHeader D_06010B60;
-extern AnimationHeader D_060110B4;
-extern AnimationHeader D_06011FB0;
-extern AnimationHeader D_06012A58;
-extern FlexSkeletonHeader D_06013328;
-extern AnimationHeader D_060141E4;
-extern AnimationHeader D_06014920;
-extern AnimationHeader D_06015028;
-extern AnimationHeader D_06015C14;
-extern AnimationHeader D_06016508;
-extern Gfx D_06016620[];
-extern AnimationHeader D_06016910;
-extern AnimationHeader D_06018ED0;
-extern AnimationHeader D_0601AA80;
-extern AnimationHeader D_0601C114;
-extern AnimationHeader D_0601C21C;
-extern AnimationHeader D_0601D008;
-extern AnimationHeader D_0601D07C;
-extern AnimationHeader D_0601D3D0;
-extern AnimationHeader D_0601DDE0;
-extern AnimationHeader D_0601EF50;
-extern AnimationHeader D_0601F9E4;
-extern AnimationHeader D_06020CAC;
-extern AnimationHeader D_0602200C;
-extern AnimationHeader D_0602336C;
-extern AnimationHeader D_060259F4;
-extern AnimationHeader D_060266C8;
-extern AnimationHeader D_06026CF4;
-extern AnimationHeader D_06027CF4;
-extern AnimationHeader D_06028F28;
-extern AnimationHeader D_06029A04;
-extern AnimationHeader D_0602A2D8;
-extern AnimationHeader D_0602AD54;
-extern AnimationHeader D_0602DC64;
-extern AnimationHeader D_0602E9A0;
-extern AnimationHeader D_0602FA70;
-extern AnimationHeader D_0603021C;
-extern AnimationHeader D_06031210;
-extern AnimationHeader D_060322FC;
-extern AnimationHeader D_06032AE0;
-extern AnimationHeader D_0603323C;
-extern AnimationHeader D_06034FD8;
-extern AnimationHeader D_06036964;
-extern AnimationHeader D_06037B94;
-extern AnimationHeader D_0603967C;
-extern AnimationHeader D_0603A8F8;
 
 const ActorInit Dm_Stk_InitVars = {
     ACTOR_DM_STK,
@@ -190,42 +103,42 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &D_0601C21C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &D_0601D3D0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06001030, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0601D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0601D008, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &D_06015C14, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_060070DC, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &D_0600D830, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0600055C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0600130C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0600C270, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0600CBB8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0601AA80, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0601D07C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06016910, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_06018ED0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0601DDE0, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0601EF50, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0602DC64, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0602E9A0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0602DC64, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0602E9A0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_060035C8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_060049C8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_060259F4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_060266C8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06026CF4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0601C114, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &D_06004580, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_06020CAC, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0602200C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0602336C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06002774, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_06003068, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_060101A4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_06010B60, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0602A2D8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0601F9E4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &D_06029A04, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &D_0602AD54, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &D_0600BB2C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0600C964, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_060110B4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_06011FB0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06012A58, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_060141E4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0600E6EC, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0600EEC0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06027CF4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_06028F28, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0603323C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &D_06031210, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_060322FC, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_06032AE0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_0603021C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &D_06036964, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &D_06016508, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_06015028, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06014920, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0602FA70, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06037B94, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0603967C, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &D_0603967C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_0603A8F8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06034FD8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_06005F44, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06002CD8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_060039F0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06004554, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_060051C0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &D_06001374, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &D_06001EDC, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_01C21C, 1.0f, 0.0f, -1.0f, 0, 0.0f },  { &object_stk_Anim_01D3D0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_001030, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },  { &object_stk_Anim_015C14, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_0070DC, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_00D830, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_00055C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00130C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_00C270, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00CBB8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_01AA80, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01D07C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_016910, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_018ED0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_01DDE0, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01EF50, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_0035C8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_0049C8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_0259F4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_0266C8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_026CF4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01C114, 1.0f, 0.0f, -1.0f, 2, 0.0f },
+    { &object_stk2_Anim_004580, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_020CAC, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_02200C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02336C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_002774, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_003068, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_0101A4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_010B60, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_02A2D8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01F9E4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
+    { &object_stk2_Anim_029A04, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_02AD54, 1.0f, 0.0f, -1.0f, 2, 0.0f },
+    { &object_stk_Anim_00BB2C, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_00C964, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_0110B4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_011FB0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_012A58, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_0141E4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_00E6EC, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00EEC0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_027CF4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_028F28, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_03323C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_031210, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_0322FC, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_032AE0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_03021C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_036964, 1.0f, 0.0f, -1.0f, 2, 0.0f },
+    { &object_stk_Anim_016508, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_015028, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk_Anim_014920, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk2_Anim_02FA70, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_037B94, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, 2, 0.0f },
+    { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_03A8F8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk2_Anim_034FD8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_005F44, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk3_Anim_002CD8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_0039F0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk3_Anim_004554, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_0051C0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &object_stk3_Anim_001374, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_001EDC, 1.0f, 0.0f, -1.0f, 0, 0.0f },
 };
 
 void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
@@ -965,7 +878,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.targetArrowOffset = 1100.0f;
         this->unk_334 = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013328, NULL, NULL, NULL, 0);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_stk_Skel_013328, NULL, NULL, NULL, 0);
         func_80A9FE3C(this, globalCtx, &this->skelAnime, &sAnimations[this->unk_2E0], 0);
     }
 
@@ -1680,11 +1593,11 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if ((this->unk_2E0 == 69) || (this->unk_2E0 == 11) || (this->unk_2E0 == 71)) {
-            gSPDisplayList(POLY_OPA_DISP++, D_0600AEC0);
-            gSPDisplayList(POLY_OPA_DISP++, D_0600AE30);
+            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00AEC0);
+            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00AE30);
         } else {
-            gSPDisplayList(POLY_OPA_DISP++, D_0600A5C0);
-            gSPDisplayList(POLY_OPA_DISP++, D_0600A530);
+            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00A5C0);
+            gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00A530);
         }
 
         switch (this->unk_32C) {
@@ -1699,16 +1612,16 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                     }
                     POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->unk_2E8, this->unk_2EC, this->unk_2F0,
                                                this->unk_2F4, this->unk_2F8, this->unk_2FC);
-                    gSPDisplayList(POLY_OPA_DISP++, D_06006BB0);
+                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
                     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
                 } else {
-                    gSPDisplayList(POLY_OPA_DISP++, D_06006BB0);
+                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
                 }
                 break;
 
             case 2:
-                gSPDisplayList(POLY_OPA_DISP++, D_06006BB0);
-                gSPDisplayList(POLY_OPA_DISP++, D_06005870);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_005870);
 
                 if (Cutscene_CheckActorAction(globalCtx, 0x201) &&
                     (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x201)]->action == 2) &&
@@ -1719,8 +1632,8 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_337].segment);
 
-                    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06008658));
-                    Gfx_DrawDListOpa(globalCtx, D_06007840);
+                    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_stk2_Matanimheader_008658));
+                    Gfx_DrawDListOpa(globalCtx, object_stk2_DL_007840);
                     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_336].segment);
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_336].segment);
@@ -1743,20 +1656,20 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         switch (this->unk_32D) {
             case 0:
-                gSPDisplayList(POLY_OPA_DISP++, D_06009AC0);
-                gSPDisplayList(POLY_OPA_DISP++, D_060046B0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009AC0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0046B0);
                 break;
 
             case 1:
-                gSPDisplayList(POLY_OPA_DISP++, D_06009710);
-                gSPDisplayList(POLY_OPA_DISP++, D_060053C0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009710);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0053C0);
                 break;
 
             case 3:
-                gSPDisplayList(POLY_OPA_DISP++, D_06009DA0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_009DA0);
 
                 if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && (gSaveContext.sceneSetupIndex == 1)) {
-                    gSPDisplayList(POLY_OPA_DISP++, D_0600CAD0);
+                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00CAD0);
                 }
                 break;
 
@@ -1767,7 +1680,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, D_06006BB0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
                 break;
         }
 
@@ -1784,33 +1697,33 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 break;
 
             case 1:
-                gSPDisplayList(POLY_OPA_DISP++, D_060084C0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0084C0);
                 break;
 
             case 2:
-                gSPDisplayList(POLY_OPA_DISP++, D_060090C0);
-                gSPDisplayList(POLY_OPA_DISP++, D_060079F0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0079F0);
                 break;
 
             case 3:
                 if ((globalCtx->sceneNum != SCENE_LOST_WOODS) || (gSaveContext.sceneSetupIndex != 1)) {
-                    gSPDisplayList(POLY_OPA_DISP++, D_0600CAD0);
+                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_00CAD0);
                 }
-                gSPDisplayList(POLY_OPA_DISP++, D_060090C0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
                 break;
 
             case 4:
-                gSPDisplayList(POLY_OPA_DISP++, D_060090C0);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0090C0);
                 break;
 
             case 6:
-                gSPDisplayList(POLY_OPA_DISP++, D_06008A80);
-                gSPDisplayList(POLY_OPA_DISP++, D_06016620);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_008A80);
+                gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_016620);
                 break;
 
             case 9:
                 if (this->unk_2E4 == 255) {
-                    gSPDisplayList(POLY_OPA_DISP++, D_060087B0);
+                    gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_0087B0);
                 }
                 break;
         }
@@ -1830,7 +1743,7 @@ void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_33B != 0) {
         if (this->actor.params == 1) {
-            Gfx_DrawDListOpa(globalCtx, D_06006BB0);
+            Gfx_DrawDListOpa(globalCtx, object_stk_DL_006BB0);
             return;
         }
 

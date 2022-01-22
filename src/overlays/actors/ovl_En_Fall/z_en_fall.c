@@ -520,7 +520,7 @@ void EnFall_FireBall_SetPerVertexAlpha(f32 fireBallAlpha) {
 
     s32 pad;
     u8 perVertexAlphaTable[5];
-    Vtx* vertices = Lib_SegmentedToVirtual(&object_fall_Vtx_0004C0);
+    Vtx* vertices = Lib_SegmentedToVirtual(object_fall_Vtx_0004C0);
     s32 i;
 
     if (fireBallAlpha > 1.0f) {
@@ -838,7 +838,7 @@ void EnFall_FireRing_Draw(Actor* thisx, GlobalContext* globalCtx) {
             this->fireRingAlpha = 1.0f;
         }
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_fall_Matanimheader_004E38));
+        AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(object_fall_Matanimheader_004E38));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_8012C2DC(globalCtx->state.gfxCtx);
         gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
@@ -853,7 +853,7 @@ void EnFall_MoonsTear_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_moonston_Matanimheader_001220));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_moonston_Matanimheader_001220));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_moonston_DL_000400);
