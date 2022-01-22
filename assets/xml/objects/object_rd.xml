@@ -20,32 +20,32 @@
         <DList Name="object_rd_DL_004F58" Offset="0x4F58" />
         <DList Name="object_rd_DL_005068" Offset="0x5068" />
         <DList Name="object_rd_DL_005160" Offset="0x5160" />
-        <Limb Name="object_rd_Standardlimb_005258" Type="Standard" EnumName="OBJECT_RD_LIMB_01" Offset="0x5258" />
-        <Limb Name="object_rd_Standardlimb_005264" Type="Standard" EnumName="OBJECT_RD_LIMB_02" Offset="0x5264" />
-        <Limb Name="object_rd_Standardlimb_005270" Type="Standard" EnumName="OBJECT_RD_LIMB_03" Offset="0x5270" />
-        <Limb Name="object_rd_Standardlimb_00527C" Type="Standard" EnumName="OBJECT_RD_LIMB_04" Offset="0x527C" />
-        <Limb Name="object_rd_Standardlimb_005288" Type="Standard" EnumName="OBJECT_RD_LIMB_05" Offset="0x5288" />
-        <Limb Name="object_rd_Standardlimb_005294" Type="Standard" EnumName="OBJECT_RD_LIMB_06" Offset="0x5294" />
-        <Limb Name="object_rd_Standardlimb_0052A0" Type="Standard" EnumName="OBJECT_RD_LIMB_07" Offset="0x52A0" />
-        <Limb Name="object_rd_Standardlimb_0052AC" Type="Standard" EnumName="OBJECT_RD_LIMB_08" Offset="0x52AC" />
-        <Limb Name="object_rd_Standardlimb_0052B8" Type="Standard" EnumName="OBJECT_RD_LIMB_09" Offset="0x52B8" />
-        <Limb Name="object_rd_Standardlimb_0052C4" Type="Standard" EnumName="OBJECT_RD_LIMB_0A" Offset="0x52C4" />
-        <Limb Name="object_rd_Standardlimb_0052D0" Type="Standard" EnumName="OBJECT_RD_LIMB_0B" Offset="0x52D0" />
-        <Limb Name="object_rd_Standardlimb_0052DC" Type="Standard" EnumName="OBJECT_RD_LIMB_0C" Offset="0x52DC" />
-        <Limb Name="object_rd_Standardlimb_0052E8" Type="Standard" EnumName="OBJECT_RD_LIMB_0D" Offset="0x52E8" />
-        <Limb Name="object_rd_Standardlimb_0052F4" Type="Standard" EnumName="OBJECT_RD_LIMB_0E" Offset="0x52F4" />
-        <Limb Name="object_rd_Standardlimb_005300" Type="Standard" EnumName="OBJECT_RD_LIMB_0F" Offset="0x5300" />
-        <Limb Name="object_rd_Standardlimb_00530C" Type="Standard" EnumName="OBJECT_RD_LIMB_10" Offset="0x530C" />
-        <Limb Name="object_rd_Standardlimb_005318" Type="Standard" EnumName="OBJECT_RD_LIMB_11" Offset="0x5318" />
-        <Limb Name="object_rd_Standardlimb_005324" Type="Standard" EnumName="OBJECT_RD_LIMB_12" Offset="0x5324" />
-        <Limb Name="object_rd_Standardlimb_005330" Type="Standard" EnumName="OBJECT_RD_LIMB_13" Offset="0x5330" />
-        <Limb Name="object_rd_Standardlimb_00533C" Type="Standard" EnumName="OBJECT_RD_LIMB_14" Offset="0x533C" />
-        <Limb Name="object_rd_Standardlimb_005348" Type="Standard" EnumName="OBJECT_RD_LIMB_15" Offset="0x5348" />
-        <Limb Name="object_rd_Standardlimb_005354" Type="Standard" EnumName="OBJECT_RD_LIMB_16" Offset="0x5354" />
-        <Limb Name="object_rd_Standardlimb_005360" Type="Standard" EnumName="OBJECT_RD_LIMB_17" Offset="0x5360" />
-        <Limb Name="object_rd_Standardlimb_00536C" Type="Standard" EnumName="OBJECT_RD_LIMB_18" Offset="0x536C" />
-        <Limb Name="object_rd_Standardlimb_005378" Type="Standard" EnumName="OBJECT_RD_LIMB_19" Offset="0x5378" />
-        <Skeleton Name="object_rd_Skel_0053E8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RD_LIMB_NONE" LimbMax="OBJECT_RD_LIMB_MAX" EnumName="object_rd_Limbs" Offset="0x53E8" />
+        <Limb Name="object_rd_Standardlimb_005258" Type="Standard" EnumName="OBJECT_RD_1_LIMB_01" Offset="0x5258" />
+        <Limb Name="object_rd_Standardlimb_005264" Type="Standard" EnumName="OBJECT_RD_1_LIMB_02" Offset="0x5264" />
+        <Limb Name="object_rd_Standardlimb_005270" Type="Standard" EnumName="OBJECT_RD_1_LIMB_03" Offset="0x5270" />
+        <Limb Name="object_rd_Standardlimb_00527C" Type="Standard" EnumName="OBJECT_RD_1_LIMB_04" Offset="0x527C" />
+        <Limb Name="object_rd_Standardlimb_005288" Type="Standard" EnumName="OBJECT_RD_1_LIMB_05" Offset="0x5288" />
+        <Limb Name="object_rd_Standardlimb_005294" Type="Standard" EnumName="OBJECT_RD_1_LIMB_06" Offset="0x5294" />
+        <Limb Name="object_rd_Standardlimb_0052A0" Type="Standard" EnumName="OBJECT_RD_1_LIMB_07" Offset="0x52A0" />
+        <Limb Name="object_rd_Standardlimb_0052AC" Type="Standard" EnumName="OBJECT_RD_1_LIMB_08" Offset="0x52AC" />
+        <Limb Name="object_rd_Standardlimb_0052B8" Type="Standard" EnumName="OBJECT_RD_1_LIMB_09" Offset="0x52B8" />
+        <Limb Name="object_rd_Standardlimb_0052C4" Type="Standard" EnumName="OBJECT_RD_1_LIMB_0A" Offset="0x52C4" />
+        <Limb Name="object_rd_Standardlimb_0052D0" Type="Standard" EnumName="OBJECT_RD_1_LIMB_0B" Offset="0x52D0" />
+        <Limb Name="object_rd_Standardlimb_0052DC" Type="Standard" EnumName="OBJECT_RD_1_LIMB_0C" Offset="0x52DC" />
+        <Limb Name="object_rd_Standardlimb_0052E8" Type="Standard" EnumName="OBJECT_RD_1_LIMB_0D" Offset="0x52E8" />
+        <Limb Name="object_rd_Standardlimb_0052F4" Type="Standard" EnumName="OBJECT_RD_1_LIMB_0E" Offset="0x52F4" />
+        <Limb Name="object_rd_Standardlimb_005300" Type="Standard" EnumName="OBJECT_RD_1_LIMB_0F" Offset="0x5300" />
+        <Limb Name="object_rd_Standardlimb_00530C" Type="Standard" EnumName="OBJECT_RD_1_LIMB_10" Offset="0x530C" />
+        <Limb Name="object_rd_Standardlimb_005318" Type="Standard" EnumName="OBJECT_RD_1_LIMB_11" Offset="0x5318" />
+        <Limb Name="object_rd_Standardlimb_005324" Type="Standard" EnumName="OBJECT_RD_1_LIMB_12" Offset="0x5324" />
+        <Limb Name="object_rd_Standardlimb_005330" Type="Standard" EnumName="OBJECT_RD_1_LIMB_13" Offset="0x5330" />
+        <Limb Name="object_rd_Standardlimb_00533C" Type="Standard" EnumName="OBJECT_RD_1_LIMB_14" Offset="0x533C" />
+        <Limb Name="object_rd_Standardlimb_005348" Type="Standard" EnumName="OBJECT_RD_1_LIMB_15" Offset="0x5348" />
+        <Limb Name="object_rd_Standardlimb_005354" Type="Standard" EnumName="OBJECT_RD_1_LIMB_16" Offset="0x5354" />
+        <Limb Name="object_rd_Standardlimb_005360" Type="Standard" EnumName="OBJECT_RD_1_LIMB_17" Offset="0x5360" />
+        <Limb Name="object_rd_Standardlimb_00536C" Type="Standard" EnumName="OBJECT_RD_1_LIMB_18" Offset="0x536C" />
+        <Limb Name="object_rd_Standardlimb_005378" Type="Standard" EnumName="OBJECT_RD_1_LIMB_19" Offset="0x5378" />
+        <Skeleton Name="object_rd_Skel_0053E8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RD_1_LIMB_NONE" LimbMax="OBJECT_RD_1_LIMB_MAX" EnumName="object_rd_1_Limbs" Offset="0x53E8" />
         <Animation Name="object_rd_Anim_005DF4" Offset="0x5DF4" />
         <Animation Name="object_rd_Anim_0061E4" Offset="0x61E4" />
         <Animation Name="object_rd_Anim_006678" Offset="0x6678" />
@@ -80,32 +80,32 @@
         <DList Name="object_rd_DL_010768" Offset="0x10768" />
         <DList Name="object_rd_DL_010848" Offset="0x10848" />
         <DList Name="object_rd_DL_010910" Offset="0x10910" />
-        <Limb Name="object_rd_Standardlimb_0109F8" Type="Standard" EnumName="OBJECT_RD_LIMB_01" Offset="0x109F8" />
-        <Limb Name="object_rd_Standardlimb_010A04" Type="Standard" EnumName="OBJECT_RD_LIMB_02" Offset="0x10A04" />
-        <Limb Name="object_rd_Standardlimb_010A10" Type="Standard" EnumName="OBJECT_RD_LIMB_03" Offset="0x10A10" />
-        <Limb Name="object_rd_Standardlimb_010A1C" Type="Standard" EnumName="OBJECT_RD_LIMB_04" Offset="0x10A1C" />
-        <Limb Name="object_rd_Standardlimb_010A28" Type="Standard" EnumName="OBJECT_RD_LIMB_05" Offset="0x10A28" />
-        <Limb Name="object_rd_Standardlimb_010A34" Type="Standard" EnumName="OBJECT_RD_LIMB_06" Offset="0x10A34" />
-        <Limb Name="object_rd_Standardlimb_010A40" Type="Standard" EnumName="OBJECT_RD_LIMB_07" Offset="0x10A40" />
-        <Limb Name="object_rd_Standardlimb_010A4C" Type="Standard" EnumName="OBJECT_RD_LIMB_08" Offset="0x10A4C" />
-        <Limb Name="object_rd_Standardlimb_010A58" Type="Standard" EnumName="OBJECT_RD_LIMB_09" Offset="0x10A58" />
-        <Limb Name="object_rd_Standardlimb_010A64" Type="Standard" EnumName="OBJECT_RD_LIMB_0A" Offset="0x10A64" />
-        <Limb Name="object_rd_Standardlimb_010A70" Type="Standard" EnumName="OBJECT_RD_LIMB_0B" Offset="0x10A70" />
-        <Limb Name="object_rd_Standardlimb_010A7C" Type="Standard" EnumName="OBJECT_RD_LIMB_0C" Offset="0x10A7C" />
-        <Limb Name="object_rd_Standardlimb_010A88" Type="Standard" EnumName="OBJECT_RD_LIMB_0D" Offset="0x10A88" />
-        <Limb Name="object_rd_Standardlimb_010A94" Type="Standard" EnumName="OBJECT_RD_LIMB_0E" Offset="0x10A94" />
-        <Limb Name="object_rd_Standardlimb_010AA0" Type="Standard" EnumName="OBJECT_RD_LIMB_0F" Offset="0x10AA0" />
-        <Limb Name="object_rd_Standardlimb_010AAC" Type="Standard" EnumName="OBJECT_RD_LIMB_10" Offset="0x10AAC" />
-        <Limb Name="object_rd_Standardlimb_010AB8" Type="Standard" EnumName="OBJECT_RD_LIMB_11" Offset="0x10AB8" />
-        <Limb Name="object_rd_Standardlimb_010AC4" Type="Standard" EnumName="OBJECT_RD_LIMB_12" Offset="0x10AC4" />
-        <Limb Name="object_rd_Standardlimb_010AD0" Type="Standard" EnumName="OBJECT_RD_LIMB_13" Offset="0x10AD0" />
-        <Limb Name="object_rd_Standardlimb_010ADC" Type="Standard" EnumName="OBJECT_RD_LIMB_14" Offset="0x10ADC" />
-        <Limb Name="object_rd_Standardlimb_010AE8" Type="Standard" EnumName="OBJECT_RD_LIMB_15" Offset="0x10AE8" />
-        <Limb Name="object_rd_Standardlimb_010AF4" Type="Standard" EnumName="OBJECT_RD_LIMB_16" Offset="0x10AF4" />
-        <Limb Name="object_rd_Standardlimb_010B00" Type="Standard" EnumName="OBJECT_RD_LIMB_17" Offset="0x10B00" />
-        <Limb Name="object_rd_Standardlimb_010B0C" Type="Standard" EnumName="OBJECT_RD_LIMB_18" Offset="0x10B0C" />
-        <Limb Name="object_rd_Standardlimb_010B18" Type="Standard" EnumName="OBJECT_RD_LIMB_19" Offset="0x10B18" />
-        <Skeleton Name="object_rd_Skel_010B88" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RD_LIMB_NONE" LimbMax="OBJECT_RD_LIMB_MAX" EnumName="object_rd_Limbs" Offset="0x10B88" />
+        <Limb Name="object_rd_Standardlimb_0109F8" Type="Standard" EnumName="OBJECT_RD_2_LIMB_01" Offset="0x109F8" />
+        <Limb Name="object_rd_Standardlimb_010A04" Type="Standard" EnumName="OBJECT_RD_2_LIMB_02" Offset="0x10A04" />
+        <Limb Name="object_rd_Standardlimb_010A10" Type="Standard" EnumName="OBJECT_RD_2_LIMB_03" Offset="0x10A10" />
+        <Limb Name="object_rd_Standardlimb_010A1C" Type="Standard" EnumName="OBJECT_RD_2_LIMB_04" Offset="0x10A1C" />
+        <Limb Name="object_rd_Standardlimb_010A28" Type="Standard" EnumName="OBJECT_RD_2_LIMB_05" Offset="0x10A28" />
+        <Limb Name="object_rd_Standardlimb_010A34" Type="Standard" EnumName="OBJECT_RD_2_LIMB_06" Offset="0x10A34" />
+        <Limb Name="object_rd_Standardlimb_010A40" Type="Standard" EnumName="OBJECT_RD_2_LIMB_07" Offset="0x10A40" />
+        <Limb Name="object_rd_Standardlimb_010A4C" Type="Standard" EnumName="OBJECT_RD_2_LIMB_08" Offset="0x10A4C" />
+        <Limb Name="object_rd_Standardlimb_010A58" Type="Standard" EnumName="OBJECT_RD_2_LIMB_09" Offset="0x10A58" />
+        <Limb Name="object_rd_Standardlimb_010A64" Type="Standard" EnumName="OBJECT_RD_2_LIMB_0A" Offset="0x10A64" />
+        <Limb Name="object_rd_Standardlimb_010A70" Type="Standard" EnumName="OBJECT_RD_2_LIMB_0B" Offset="0x10A70" />
+        <Limb Name="object_rd_Standardlimb_010A7C" Type="Standard" EnumName="OBJECT_RD_2_LIMB_0C" Offset="0x10A7C" />
+        <Limb Name="object_rd_Standardlimb_010A88" Type="Standard" EnumName="OBJECT_RD_2_LIMB_0D" Offset="0x10A88" />
+        <Limb Name="object_rd_Standardlimb_010A94" Type="Standard" EnumName="OBJECT_RD_2_LIMB_0E" Offset="0x10A94" />
+        <Limb Name="object_rd_Standardlimb_010AA0" Type="Standard" EnumName="OBJECT_RD_2_LIMB_0F" Offset="0x10AA0" />
+        <Limb Name="object_rd_Standardlimb_010AAC" Type="Standard" EnumName="OBJECT_RD_2_LIMB_10" Offset="0x10AAC" />
+        <Limb Name="object_rd_Standardlimb_010AB8" Type="Standard" EnumName="OBJECT_RD_2_LIMB_11" Offset="0x10AB8" />
+        <Limb Name="object_rd_Standardlimb_010AC4" Type="Standard" EnumName="OBJECT_RD_2_LIMB_12" Offset="0x10AC4" />
+        <Limb Name="object_rd_Standardlimb_010AD0" Type="Standard" EnumName="OBJECT_RD_2_LIMB_13" Offset="0x10AD0" />
+        <Limb Name="object_rd_Standardlimb_010ADC" Type="Standard" EnumName="OBJECT_RD_2_LIMB_14" Offset="0x10ADC" />
+        <Limb Name="object_rd_Standardlimb_010AE8" Type="Standard" EnumName="OBJECT_RD_2_LIMB_15" Offset="0x10AE8" />
+        <Limb Name="object_rd_Standardlimb_010AF4" Type="Standard" EnumName="OBJECT_RD_2_LIMB_16" Offset="0x10AF4" />
+        <Limb Name="object_rd_Standardlimb_010B00" Type="Standard" EnumName="OBJECT_RD_2_LIMB_17" Offset="0x10B00" />
+        <Limb Name="object_rd_Standardlimb_010B0C" Type="Standard" EnumName="OBJECT_RD_2_LIMB_18" Offset="0x10B0C" />
+        <Limb Name="object_rd_Standardlimb_010B18" Type="Standard" EnumName="OBJECT_RD_2_LIMB_19" Offset="0x10B18" />
+        <Skeleton Name="object_rd_Skel_010B88" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RD_2_LIMB_NONE" LimbMax="OBJECT_RD_2_LIMB_MAX" EnumName="object_rd_2_Limbs" Offset="0x10B88" />
         <Animation Name="object_rd_Anim_0113EC" Offset="0x113EC" />
         <Animation Name="object_rd_Anim_0118D8" Offset="0x118D8" />
         <Animation Name="object_rd_Anim_011DB8" Offset="0x11DB8" />

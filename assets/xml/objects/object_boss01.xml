@@ -62,58 +62,58 @@
         <DList Name="object_boss01_DL_00E3E8" Offset="0xE3E8" />
         <Texture Name="object_boss01_TLUT_00E558" OutName="tlut_00E558" Format="rgba16" Width="4" Height="4" Offset="0xE558" />
         <Texture Name="object_boss01_Tex_00E578" OutName="tex_00E578" Format="ci4" Width="64" Height="64" Offset="0xE578" />
-        <Limb Name="object_boss01_Standardlimb_00ED78" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_01" Offset="0xED78" />
-        <Limb Name="object_boss01_Standardlimb_00ED84" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_02" Offset="0xED84" />
-        <Limb Name="object_boss01_Standardlimb_00ED90" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_03" Offset="0xED90" />
-        <Limb Name="object_boss01_Standardlimb_00ED9C" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_04" Offset="0xED9C" />
-        <Limb Name="object_boss01_Standardlimb_00EDA8" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_05" Offset="0xEDA8" />
-        <Limb Name="object_boss01_Standardlimb_00EDB4" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_06" Offset="0xEDB4" />
-        <Limb Name="object_boss01_Standardlimb_00EDC0" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_07" Offset="0xEDC0" />
-        <Limb Name="object_boss01_Standardlimb_00EDCC" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_08" Offset="0xEDCC" />
-        <Limb Name="object_boss01_Standardlimb_00EDD8" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_09" Offset="0xEDD8" />
-        <Limb Name="object_boss01_Standardlimb_00EDE4" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0A" Offset="0xEDE4" />
-        <Limb Name="object_boss01_Standardlimb_00EDF0" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0B" Offset="0xEDF0" />
-        <Limb Name="object_boss01_Standardlimb_00EDFC" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0C" Offset="0xEDFC" />
-        <Limb Name="object_boss01_Standardlimb_00EE08" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0D" Offset="0xEE08" />
-        <Limb Name="object_boss01_Standardlimb_00EE14" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0E" Offset="0xEE14" />
-        <Limb Name="object_boss01_Standardlimb_00EE20" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0F" Offset="0xEE20" />
-        <Limb Name="object_boss01_Standardlimb_00EE2C" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_10" Offset="0xEE2C" />
-        <Limb Name="object_boss01_Standardlimb_00EE38" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_11" Offset="0xEE38" />
-        <Limb Name="object_boss01_Standardlimb_00EE44" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_12" Offset="0xEE44" />
-        <Limb Name="object_boss01_Standardlimb_00EE50" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_13" Offset="0xEE50" />
-        <Limb Name="object_boss01_Standardlimb_00EE5C" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_14" Offset="0xEE5C" />
-        <Limb Name="object_boss01_Standardlimb_00EE68" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_15" Offset="0xEE68" />
-        <Limb Name="object_boss01_Standardlimb_00EE74" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_16" Offset="0xEE74" />
-        <Limb Name="object_boss01_Standardlimb_00EE80" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_17" Offset="0xEE80" />
-        <Limb Name="object_boss01_Standardlimb_00EE8C" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_18" Offset="0xEE8C" />
-        <Limb Name="object_boss01_Standardlimb_00EE98" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_19" Offset="0xEE98" />
-        <Limb Name="object_boss01_Standardlimb_00EEA4" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_1A" Offset="0xEEA4" />
-        <Limb Name="object_boss01_Standardlimb_00EEB0" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_1B" Offset="0xEEB0" />
-        <Limb Name="object_boss01_Standardlimb_00EEBC" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_1C" Offset="0xEEBC" />
-        <Limb Name="object_boss01_Standardlimb_00EEC8" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_1D" Offset="0xEEC8" />
-        <Limb Name="object_boss01_Standardlimb_00EED4" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_1E" Offset="0xEED4" />
-        <Limb Name="object_boss01_Standardlimb_00EEE0" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_1F" Offset="0xEEE0" />
-        <Limb Name="object_boss01_Standardlimb_00EEEC" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_20" Offset="0xEEEC" />
-        <Limb Name="object_boss01_Standardlimb_00EEF8" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_21" Offset="0xEEF8" />
-        <Limb Name="object_boss01_Standardlimb_00EF04" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_22" Offset="0xEF04" />
-        <Limb Name="object_boss01_Standardlimb_00EF10" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_23" Offset="0xEF10" />
-        <Limb Name="object_boss01_Standardlimb_00EF1C" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_24" Offset="0xEF1C" />
-        <Limb Name="object_boss01_Standardlimb_00EF28" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_25" Offset="0xEF28" />
-        <Limb Name="object_boss01_Standardlimb_00EF34" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_26" Offset="0xEF34" />
-        <Limb Name="object_boss01_Standardlimb_00EF40" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_27" Offset="0xEF40" />
-        <Limb Name="object_boss01_Standardlimb_00EF4C" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_28" Offset="0xEF4C" />
-        <Limb Name="object_boss01_Standardlimb_00EF58" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_29" Offset="0xEF58" />
-        <Limb Name="object_boss01_Standardlimb_00EF64" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_2A" Offset="0xEF64" />
-        <Limb Name="object_boss01_Standardlimb_00EF70" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_2B" Offset="0xEF70" />
-        <Limb Name="object_boss01_Standardlimb_00EF7C" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_2C" Offset="0xEF7C" />
-        <Limb Name="object_boss01_Standardlimb_00EF88" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_2D" Offset="0xEF88" />
-        <Limb Name="object_boss01_Standardlimb_00EF94" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_2E" Offset="0xEF94" />
-        <Limb Name="object_boss01_Standardlimb_00EFA0" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_2F" Offset="0xEFA0" />
-        <Limb Name="object_boss01_Standardlimb_00EFAC" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_30" Offset="0xEFAC" />
-        <Limb Name="object_boss01_Standardlimb_00EFB8" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_31" Offset="0xEFB8" />
-        <Limb Name="object_boss01_Standardlimb_00EFC4" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_32" Offset="0xEFC4" />
-        <Limb Name="object_boss01_Standardlimb_00EFD0" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_33" Offset="0xEFD0" />
-        <Skeleton Name="object_boss01_Skel_00F0A8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS01_LIMB_NONE" LimbMax="OBJECT_BOSS01_LIMB_MAX" EnumName="object_boss01_Limbs" Offset="0xF0A8" />
+        <Limb Name="object_boss01_Standardlimb_00ED78" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_01" Offset="0xED78" />
+        <Limb Name="object_boss01_Standardlimb_00ED84" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_02" Offset="0xED84" />
+        <Limb Name="object_boss01_Standardlimb_00ED90" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_03" Offset="0xED90" />
+        <Limb Name="object_boss01_Standardlimb_00ED9C" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_04" Offset="0xED9C" />
+        <Limb Name="object_boss01_Standardlimb_00EDA8" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_05" Offset="0xEDA8" />
+        <Limb Name="object_boss01_Standardlimb_00EDB4" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_06" Offset="0xEDB4" />
+        <Limb Name="object_boss01_Standardlimb_00EDC0" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_07" Offset="0xEDC0" />
+        <Limb Name="object_boss01_Standardlimb_00EDCC" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_08" Offset="0xEDCC" />
+        <Limb Name="object_boss01_Standardlimb_00EDD8" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_09" Offset="0xEDD8" />
+        <Limb Name="object_boss01_Standardlimb_00EDE4" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_0A" Offset="0xEDE4" />
+        <Limb Name="object_boss01_Standardlimb_00EDF0" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_0B" Offset="0xEDF0" />
+        <Limb Name="object_boss01_Standardlimb_00EDFC" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_0C" Offset="0xEDFC" />
+        <Limb Name="object_boss01_Standardlimb_00EE08" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_0D" Offset="0xEE08" />
+        <Limb Name="object_boss01_Standardlimb_00EE14" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_0E" Offset="0xEE14" />
+        <Limb Name="object_boss01_Standardlimb_00EE20" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_0F" Offset="0xEE20" />
+        <Limb Name="object_boss01_Standardlimb_00EE2C" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_10" Offset="0xEE2C" />
+        <Limb Name="object_boss01_Standardlimb_00EE38" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_11" Offset="0xEE38" />
+        <Limb Name="object_boss01_Standardlimb_00EE44" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_12" Offset="0xEE44" />
+        <Limb Name="object_boss01_Standardlimb_00EE50" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_13" Offset="0xEE50" />
+        <Limb Name="object_boss01_Standardlimb_00EE5C" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_14" Offset="0xEE5C" />
+        <Limb Name="object_boss01_Standardlimb_00EE68" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_15" Offset="0xEE68" />
+        <Limb Name="object_boss01_Standardlimb_00EE74" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_16" Offset="0xEE74" />
+        <Limb Name="object_boss01_Standardlimb_00EE80" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_17" Offset="0xEE80" />
+        <Limb Name="object_boss01_Standardlimb_00EE8C" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_18" Offset="0xEE8C" />
+        <Limb Name="object_boss01_Standardlimb_00EE98" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_19" Offset="0xEE98" />
+        <Limb Name="object_boss01_Standardlimb_00EEA4" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_1A" Offset="0xEEA4" />
+        <Limb Name="object_boss01_Standardlimb_00EEB0" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_1B" Offset="0xEEB0" />
+        <Limb Name="object_boss01_Standardlimb_00EEBC" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_1C" Offset="0xEEBC" />
+        <Limb Name="object_boss01_Standardlimb_00EEC8" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_1D" Offset="0xEEC8" />
+        <Limb Name="object_boss01_Standardlimb_00EED4" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_1E" Offset="0xEED4" />
+        <Limb Name="object_boss01_Standardlimb_00EEE0" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_1F" Offset="0xEEE0" />
+        <Limb Name="object_boss01_Standardlimb_00EEEC" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_20" Offset="0xEEEC" />
+        <Limb Name="object_boss01_Standardlimb_00EEF8" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_21" Offset="0xEEF8" />
+        <Limb Name="object_boss01_Standardlimb_00EF04" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_22" Offset="0xEF04" />
+        <Limb Name="object_boss01_Standardlimb_00EF10" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_23" Offset="0xEF10" />
+        <Limb Name="object_boss01_Standardlimb_00EF1C" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_24" Offset="0xEF1C" />
+        <Limb Name="object_boss01_Standardlimb_00EF28" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_25" Offset="0xEF28" />
+        <Limb Name="object_boss01_Standardlimb_00EF34" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_26" Offset="0xEF34" />
+        <Limb Name="object_boss01_Standardlimb_00EF40" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_27" Offset="0xEF40" />
+        <Limb Name="object_boss01_Standardlimb_00EF4C" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_28" Offset="0xEF4C" />
+        <Limb Name="object_boss01_Standardlimb_00EF58" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_29" Offset="0xEF58" />
+        <Limb Name="object_boss01_Standardlimb_00EF64" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_2A" Offset="0xEF64" />
+        <Limb Name="object_boss01_Standardlimb_00EF70" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_2B" Offset="0xEF70" />
+        <Limb Name="object_boss01_Standardlimb_00EF7C" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_2C" Offset="0xEF7C" />
+        <Limb Name="object_boss01_Standardlimb_00EF88" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_2D" Offset="0xEF88" />
+        <Limb Name="object_boss01_Standardlimb_00EF94" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_2E" Offset="0xEF94" />
+        <Limb Name="object_boss01_Standardlimb_00EFA0" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_2F" Offset="0xEFA0" />
+        <Limb Name="object_boss01_Standardlimb_00EFAC" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_30" Offset="0xEFAC" />
+        <Limb Name="object_boss01_Standardlimb_00EFB8" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_31" Offset="0xEFB8" />
+        <Limb Name="object_boss01_Standardlimb_00EFC4" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_32" Offset="0xEFC4" />
+        <Limb Name="object_boss01_Standardlimb_00EFD0" Type="Standard" EnumName="OBJECT_BOSS01_1_LIMB_33" Offset="0xEFD0" />
+        <Skeleton Name="object_boss01_Skel_00F0A8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS01_1_LIMB_NONE" LimbMax="OBJECT_BOSS01_1_LIMB_MAX" EnumName="object_boss01_1_Limbs" Offset="0xF0A8" />
         <Animation Name="object_boss01_Anim_00F918" Offset="0xF918" />
         <Animation Name="object_boss01_Anim_00FDEC" Offset="0xFDEC" />
         <Animation Name="object_boss01_Anim_00FF94" Offset="0xFF94" />
@@ -163,27 +163,27 @@
         <Texture Name="object_boss01_Tex_022020" OutName="tex_022020" Format="rgba16" Width="8" Height="8" Offset="0x22020" />
         <DList Name="object_boss01_DL_0220A0" Offset="0x220A0" />
         <DList Name="object_boss01_DL_022118" Offset="0x22118" />
-        <Limb Name="object_boss01_Standardlimb_022190" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_01" Offset="0x22190" />
-        <Limb Name="object_boss01_Standardlimb_02219C" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_02" Offset="0x2219C" />
-        <Limb Name="object_boss01_Standardlimb_0221A8" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_03" Offset="0x221A8" />
-        <Limb Name="object_boss01_Standardlimb_0221B4" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_04" Offset="0x221B4" />
-        <Limb Name="object_boss01_Standardlimb_0221C0" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_05" Offset="0x221C0" />
-        <Limb Name="object_boss01_Standardlimb_0221CC" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_06" Offset="0x221CC" />
-        <Limb Name="object_boss01_Standardlimb_0221D8" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_07" Offset="0x221D8" />
-        <Limb Name="object_boss01_Standardlimb_0221E4" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_08" Offset="0x221E4" />
-        <Limb Name="object_boss01_Standardlimb_0221F0" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_09" Offset="0x221F0" />
-        <Limb Name="object_boss01_Standardlimb_0221FC" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0A" Offset="0x221FC" />
-        <Limb Name="object_boss01_Standardlimb_022208" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0B" Offset="0x22208" />
-        <Limb Name="object_boss01_Standardlimb_022214" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0C" Offset="0x22214" />
-        <Limb Name="object_boss01_Standardlimb_022220" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0D" Offset="0x22220" />
-        <Limb Name="object_boss01_Standardlimb_02222C" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0E" Offset="0x2222C" />
-        <Limb Name="object_boss01_Standardlimb_022238" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_0F" Offset="0x22238" />
-        <Limb Name="object_boss01_Standardlimb_022244" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_10" Offset="0x22244" />
-        <Limb Name="object_boss01_Standardlimb_022250" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_11" Offset="0x22250" />
-        <Limb Name="object_boss01_Standardlimb_02225C" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_12" Offset="0x2225C" />
-        <Limb Name="object_boss01_Standardlimb_022268" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_13" Offset="0x22268" />
-        <Limb Name="object_boss01_Standardlimb_022274" Type="Standard" EnumName="OBJECT_BOSS01_LIMB_14" Offset="0x22274" />
-        <Skeleton Name="object_boss01_Skel_0222D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS01_LIMB_NONE" LimbMax="OBJECT_BOSS01_LIMB_MAX" EnumName="object_boss01_Limbs" Offset="0x222D0" />
+        <Limb Name="object_boss01_Standardlimb_022190" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_01" Offset="0x22190" />
+        <Limb Name="object_boss01_Standardlimb_02219C" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_02" Offset="0x2219C" />
+        <Limb Name="object_boss01_Standardlimb_0221A8" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_03" Offset="0x221A8" />
+        <Limb Name="object_boss01_Standardlimb_0221B4" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_04" Offset="0x221B4" />
+        <Limb Name="object_boss01_Standardlimb_0221C0" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_05" Offset="0x221C0" />
+        <Limb Name="object_boss01_Standardlimb_0221CC" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_06" Offset="0x221CC" />
+        <Limb Name="object_boss01_Standardlimb_0221D8" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_07" Offset="0x221D8" />
+        <Limb Name="object_boss01_Standardlimb_0221E4" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_08" Offset="0x221E4" />
+        <Limb Name="object_boss01_Standardlimb_0221F0" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_09" Offset="0x221F0" />
+        <Limb Name="object_boss01_Standardlimb_0221FC" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_0A" Offset="0x221FC" />
+        <Limb Name="object_boss01_Standardlimb_022208" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_0B" Offset="0x22208" />
+        <Limb Name="object_boss01_Standardlimb_022214" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_0C" Offset="0x22214" />
+        <Limb Name="object_boss01_Standardlimb_022220" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_0D" Offset="0x22220" />
+        <Limb Name="object_boss01_Standardlimb_02222C" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_0E" Offset="0x2222C" />
+        <Limb Name="object_boss01_Standardlimb_022238" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_0F" Offset="0x22238" />
+        <Limb Name="object_boss01_Standardlimb_022244" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_10" Offset="0x22244" />
+        <Limb Name="object_boss01_Standardlimb_022250" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_11" Offset="0x22250" />
+        <Limb Name="object_boss01_Standardlimb_02225C" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_12" Offset="0x2225C" />
+        <Limb Name="object_boss01_Standardlimb_022268" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_13" Offset="0x22268" />
+        <Limb Name="object_boss01_Standardlimb_022274" Type="Standard" EnumName="OBJECT_BOSS01_2_LIMB_14" Offset="0x22274" />
+        <Skeleton Name="object_boss01_Skel_0222D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS01_2_LIMB_NONE" LimbMax="OBJECT_BOSS01_2_LIMB_MAX" EnumName="object_boss01_2_Limbs" Offset="0x222D0" />
         <Animation Name="object_boss01_Anim_022550" Offset="0x22550" />
     </File>
 </Root>

@@ -37,32 +37,32 @@
         <Texture Name="object_pp_Tex_008918" OutName="tex_008918" Format="rgba16" Width="32" Height="32" Offset="0x8918" />
         <Texture Name="object_pp_Tex_009118" OutName="tex_009118" Format="rgba16" Width="16" Height="16" Offset="0x9118" />
         <Texture Name="object_pp_Tex_009318" OutName="tex_009318" Format="i4" Width="32" Height="32" Offset="0x9318" />
-        <Limb Name="object_pp_Standardlimb_009518" Type="Standard" EnumName="OBJECT_PP_LIMB_01" Offset="0x9518" />
-        <Limb Name="object_pp_Standardlimb_009524" Type="Standard" EnumName="OBJECT_PP_LIMB_02" Offset="0x9524" />
-        <Limb Name="object_pp_Standardlimb_009530" Type="Standard" EnumName="OBJECT_PP_LIMB_03" Offset="0x9530" />
-        <Limb Name="object_pp_Standardlimb_00953C" Type="Standard" EnumName="OBJECT_PP_LIMB_04" Offset="0x953C" />
-        <Limb Name="object_pp_Standardlimb_009548" Type="Standard" EnumName="OBJECT_PP_LIMB_05" Offset="0x9548" />
-        <Limb Name="object_pp_Standardlimb_009554" Type="Standard" EnumName="OBJECT_PP_LIMB_06" Offset="0x9554" />
-        <Limb Name="object_pp_Standardlimb_009560" Type="Standard" EnumName="OBJECT_PP_LIMB_07" Offset="0x9560" />
-        <Limb Name="object_pp_Standardlimb_00956C" Type="Standard" EnumName="OBJECT_PP_LIMB_08" Offset="0x956C" />
-        <Limb Name="object_pp_Standardlimb_009578" Type="Standard" EnumName="OBJECT_PP_LIMB_09" Offset="0x9578" />
-        <Limb Name="object_pp_Standardlimb_009584" Type="Standard" EnumName="OBJECT_PP_LIMB_0A" Offset="0x9584" />
-        <Limb Name="object_pp_Standardlimb_009590" Type="Standard" EnumName="OBJECT_PP_LIMB_0B" Offset="0x9590" />
-        <Limb Name="object_pp_Standardlimb_00959C" Type="Standard" EnumName="OBJECT_PP_LIMB_0C" Offset="0x959C" />
-        <Limb Name="object_pp_Standardlimb_0095A8" Type="Standard" EnumName="OBJECT_PP_LIMB_0D" Offset="0x95A8" />
-        <Limb Name="object_pp_Standardlimb_0095B4" Type="Standard" EnumName="OBJECT_PP_LIMB_0E" Offset="0x95B4" />
-        <Limb Name="object_pp_Standardlimb_0095C0" Type="Standard" EnumName="OBJECT_PP_LIMB_0F" Offset="0x95C0" />
-        <Limb Name="object_pp_Standardlimb_0095CC" Type="Standard" EnumName="OBJECT_PP_LIMB_10" Offset="0x95CC" />
-        <Limb Name="object_pp_Standardlimb_0095D8" Type="Standard" EnumName="OBJECT_PP_LIMB_11" Offset="0x95D8" />
-        <Limb Name="object_pp_Standardlimb_0095E4" Type="Standard" EnumName="OBJECT_PP_LIMB_12" Offset="0x95E4" />
-        <Limb Name="object_pp_Standardlimb_0095F0" Type="Standard" EnumName="OBJECT_PP_LIMB_13" Offset="0x95F0" />
-        <Limb Name="object_pp_Standardlimb_0095FC" Type="Standard" EnumName="OBJECT_PP_LIMB_14" Offset="0x95FC" />
-        <Limb Name="object_pp_Standardlimb_009608" Type="Standard" EnumName="OBJECT_PP_LIMB_15" Offset="0x9608" />
-        <Limb Name="object_pp_Standardlimb_009614" Type="Standard" EnumName="OBJECT_PP_LIMB_16" Offset="0x9614" />
-        <Limb Name="object_pp_Standardlimb_009620" Type="Standard" EnumName="OBJECT_PP_LIMB_17" Offset="0x9620" />
-        <Limb Name="object_pp_Standardlimb_00962C" Type="Standard" EnumName="OBJECT_PP_LIMB_18" Offset="0x962C" />
-        <Limb Name="object_pp_Standardlimb_009638" Type="Standard" EnumName="OBJECT_PP_LIMB_19" Offset="0x9638" />
-        <Skeleton Name="object_pp_Skel_0096A8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PP_LIMB_NONE" LimbMax="OBJECT_PP_LIMB_MAX" EnumName="object_pp_Limbs" Offset="0x96A8" />
+        <Limb Name="object_pp_Standardlimb_009518" Type="Standard" EnumName="OBJECT_PP_1_LIMB_01" Offset="0x9518" />
+        <Limb Name="object_pp_Standardlimb_009524" Type="Standard" EnumName="OBJECT_PP_1_LIMB_02" Offset="0x9524" />
+        <Limb Name="object_pp_Standardlimb_009530" Type="Standard" EnumName="OBJECT_PP_1_LIMB_03" Offset="0x9530" />
+        <Limb Name="object_pp_Standardlimb_00953C" Type="Standard" EnumName="OBJECT_PP_1_LIMB_04" Offset="0x953C" />
+        <Limb Name="object_pp_Standardlimb_009548" Type="Standard" EnumName="OBJECT_PP_1_LIMB_05" Offset="0x9548" />
+        <Limb Name="object_pp_Standardlimb_009554" Type="Standard" EnumName="OBJECT_PP_1_LIMB_06" Offset="0x9554" />
+        <Limb Name="object_pp_Standardlimb_009560" Type="Standard" EnumName="OBJECT_PP_1_LIMB_07" Offset="0x9560" />
+        <Limb Name="object_pp_Standardlimb_00956C" Type="Standard" EnumName="OBJECT_PP_1_LIMB_08" Offset="0x956C" />
+        <Limb Name="object_pp_Standardlimb_009578" Type="Standard" EnumName="OBJECT_PP_1_LIMB_09" Offset="0x9578" />
+        <Limb Name="object_pp_Standardlimb_009584" Type="Standard" EnumName="OBJECT_PP_1_LIMB_0A" Offset="0x9584" />
+        <Limb Name="object_pp_Standardlimb_009590" Type="Standard" EnumName="OBJECT_PP_1_LIMB_0B" Offset="0x9590" />
+        <Limb Name="object_pp_Standardlimb_00959C" Type="Standard" EnumName="OBJECT_PP_1_LIMB_0C" Offset="0x959C" />
+        <Limb Name="object_pp_Standardlimb_0095A8" Type="Standard" EnumName="OBJECT_PP_1_LIMB_0D" Offset="0x95A8" />
+        <Limb Name="object_pp_Standardlimb_0095B4" Type="Standard" EnumName="OBJECT_PP_1_LIMB_0E" Offset="0x95B4" />
+        <Limb Name="object_pp_Standardlimb_0095C0" Type="Standard" EnumName="OBJECT_PP_1_LIMB_0F" Offset="0x95C0" />
+        <Limb Name="object_pp_Standardlimb_0095CC" Type="Standard" EnumName="OBJECT_PP_1_LIMB_10" Offset="0x95CC" />
+        <Limb Name="object_pp_Standardlimb_0095D8" Type="Standard" EnumName="OBJECT_PP_1_LIMB_11" Offset="0x95D8" />
+        <Limb Name="object_pp_Standardlimb_0095E4" Type="Standard" EnumName="OBJECT_PP_1_LIMB_12" Offset="0x95E4" />
+        <Limb Name="object_pp_Standardlimb_0095F0" Type="Standard" EnumName="OBJECT_PP_1_LIMB_13" Offset="0x95F0" />
+        <Limb Name="object_pp_Standardlimb_0095FC" Type="Standard" EnumName="OBJECT_PP_1_LIMB_14" Offset="0x95FC" />
+        <Limb Name="object_pp_Standardlimb_009608" Type="Standard" EnumName="OBJECT_PP_1_LIMB_15" Offset="0x9608" />
+        <Limb Name="object_pp_Standardlimb_009614" Type="Standard" EnumName="OBJECT_PP_1_LIMB_16" Offset="0x9614" />
+        <Limb Name="object_pp_Standardlimb_009620" Type="Standard" EnumName="OBJECT_PP_1_LIMB_17" Offset="0x9620" />
+        <Limb Name="object_pp_Standardlimb_00962C" Type="Standard" EnumName="OBJECT_PP_1_LIMB_18" Offset="0x962C" />
+        <Limb Name="object_pp_Standardlimb_009638" Type="Standard" EnumName="OBJECT_PP_1_LIMB_19" Offset="0x9638" />
+        <Skeleton Name="object_pp_Skel_0096A8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PP_1_LIMB_NONE" LimbMax="OBJECT_PP_1_LIMB_MAX" EnumName="object_pp_1_Limbs" Offset="0x96A8" />
         <Animation Name="object_pp_Anim_009A74" Offset="0x9A74" />
         <Animation Name="object_pp_Anim_00A304" Offset="0xA304" />
         <Animation Name="object_pp_Anim_00A844" Offset="0xA844" />
@@ -100,32 +100,32 @@
         <Texture Name="object_pp_Tex_0119D8" OutName="tex_0119D8" Format="rgba16" Width="32" Height="32" Offset="0x119D8" />
         <Texture Name="object_pp_Tex_0121D8" OutName="tex_0121D8" Format="rgba16" Width="16" Height="16" Offset="0x121D8" />
         <Texture Name="object_pp_Tex_0123D8" OutName="tex_0123D8" Format="i4" Width="32" Height="32" Offset="0x123D8" />
-        <Limb Name="object_pp_Standardlimb_0125D8" Type="Standard" EnumName="OBJECT_PP_LIMB_01" Offset="0x125D8" />
-        <Limb Name="object_pp_Standardlimb_0125E4" Type="Standard" EnumName="OBJECT_PP_LIMB_02" Offset="0x125E4" />
-        <Limb Name="object_pp_Standardlimb_0125F0" Type="Standard" EnumName="OBJECT_PP_LIMB_03" Offset="0x125F0" />
-        <Limb Name="object_pp_Standardlimb_0125FC" Type="Standard" EnumName="OBJECT_PP_LIMB_04" Offset="0x125FC" />
-        <Limb Name="object_pp_Standardlimb_012608" Type="Standard" EnumName="OBJECT_PP_LIMB_05" Offset="0x12608" />
-        <Limb Name="object_pp_Standardlimb_012614" Type="Standard" EnumName="OBJECT_PP_LIMB_06" Offset="0x12614" />
-        <Limb Name="object_pp_Standardlimb_012620" Type="Standard" EnumName="OBJECT_PP_LIMB_07" Offset="0x12620" />
-        <Limb Name="object_pp_Standardlimb_01262C" Type="Standard" EnumName="OBJECT_PP_LIMB_08" Offset="0x1262C" />
-        <Limb Name="object_pp_Standardlimb_012638" Type="Standard" EnumName="OBJECT_PP_LIMB_09" Offset="0x12638" />
-        <Limb Name="object_pp_Standardlimb_012644" Type="Standard" EnumName="OBJECT_PP_LIMB_0A" Offset="0x12644" />
-        <Limb Name="object_pp_Standardlimb_012650" Type="Standard" EnumName="OBJECT_PP_LIMB_0B" Offset="0x12650" />
-        <Limb Name="object_pp_Standardlimb_01265C" Type="Standard" EnumName="OBJECT_PP_LIMB_0C" Offset="0x1265C" />
-        <Limb Name="object_pp_Standardlimb_012668" Type="Standard" EnumName="OBJECT_PP_LIMB_0D" Offset="0x12668" />
-        <Limb Name="object_pp_Standardlimb_012674" Type="Standard" EnumName="OBJECT_PP_LIMB_0E" Offset="0x12674" />
-        <Limb Name="object_pp_Standardlimb_012680" Type="Standard" EnumName="OBJECT_PP_LIMB_0F" Offset="0x12680" />
-        <Limb Name="object_pp_Standardlimb_01268C" Type="Standard" EnumName="OBJECT_PP_LIMB_10" Offset="0x1268C" />
-        <Limb Name="object_pp_Standardlimb_012698" Type="Standard" EnumName="OBJECT_PP_LIMB_11" Offset="0x12698" />
-        <Limb Name="object_pp_Standardlimb_0126A4" Type="Standard" EnumName="OBJECT_PP_LIMB_12" Offset="0x126A4" />
-        <Limb Name="object_pp_Standardlimb_0126B0" Type="Standard" EnumName="OBJECT_PP_LIMB_13" Offset="0x126B0" />
-        <Limb Name="object_pp_Standardlimb_0126BC" Type="Standard" EnumName="OBJECT_PP_LIMB_14" Offset="0x126BC" />
-        <Limb Name="object_pp_Standardlimb_0126C8" Type="Standard" EnumName="OBJECT_PP_LIMB_15" Offset="0x126C8" />
-        <Limb Name="object_pp_Standardlimb_0126D4" Type="Standard" EnumName="OBJECT_PP_LIMB_16" Offset="0x126D4" />
-        <Limb Name="object_pp_Standardlimb_0126E0" Type="Standard" EnumName="OBJECT_PP_LIMB_17" Offset="0x126E0" />
-        <Limb Name="object_pp_Standardlimb_0126EC" Type="Standard" EnumName="OBJECT_PP_LIMB_18" Offset="0x126EC" />
-        <Limb Name="object_pp_Standardlimb_0126F8" Type="Standard" EnumName="OBJECT_PP_LIMB_19" Offset="0x126F8" />
-        <Skeleton Name="object_pp_Skel_012768" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PP_LIMB_NONE" LimbMax="OBJECT_PP_LIMB_MAX" EnumName="object_pp_Limbs" Offset="0x12768" />
+        <Limb Name="object_pp_Standardlimb_0125D8" Type="Standard" EnumName="OBJECT_PP_2_LIMB_01" Offset="0x125D8" />
+        <Limb Name="object_pp_Standardlimb_0125E4" Type="Standard" EnumName="OBJECT_PP_2_LIMB_02" Offset="0x125E4" />
+        <Limb Name="object_pp_Standardlimb_0125F0" Type="Standard" EnumName="OBJECT_PP_2_LIMB_03" Offset="0x125F0" />
+        <Limb Name="object_pp_Standardlimb_0125FC" Type="Standard" EnumName="OBJECT_PP_2_LIMB_04" Offset="0x125FC" />
+        <Limb Name="object_pp_Standardlimb_012608" Type="Standard" EnumName="OBJECT_PP_2_LIMB_05" Offset="0x12608" />
+        <Limb Name="object_pp_Standardlimb_012614" Type="Standard" EnumName="OBJECT_PP_2_LIMB_06" Offset="0x12614" />
+        <Limb Name="object_pp_Standardlimb_012620" Type="Standard" EnumName="OBJECT_PP_2_LIMB_07" Offset="0x12620" />
+        <Limb Name="object_pp_Standardlimb_01262C" Type="Standard" EnumName="OBJECT_PP_2_LIMB_08" Offset="0x1262C" />
+        <Limb Name="object_pp_Standardlimb_012638" Type="Standard" EnumName="OBJECT_PP_2_LIMB_09" Offset="0x12638" />
+        <Limb Name="object_pp_Standardlimb_012644" Type="Standard" EnumName="OBJECT_PP_2_LIMB_0A" Offset="0x12644" />
+        <Limb Name="object_pp_Standardlimb_012650" Type="Standard" EnumName="OBJECT_PP_2_LIMB_0B" Offset="0x12650" />
+        <Limb Name="object_pp_Standardlimb_01265C" Type="Standard" EnumName="OBJECT_PP_2_LIMB_0C" Offset="0x1265C" />
+        <Limb Name="object_pp_Standardlimb_012668" Type="Standard" EnumName="OBJECT_PP_2_LIMB_0D" Offset="0x12668" />
+        <Limb Name="object_pp_Standardlimb_012674" Type="Standard" EnumName="OBJECT_PP_2_LIMB_0E" Offset="0x12674" />
+        <Limb Name="object_pp_Standardlimb_012680" Type="Standard" EnumName="OBJECT_PP_2_LIMB_0F" Offset="0x12680" />
+        <Limb Name="object_pp_Standardlimb_01268C" Type="Standard" EnumName="OBJECT_PP_2_LIMB_10" Offset="0x1268C" />
+        <Limb Name="object_pp_Standardlimb_012698" Type="Standard" EnumName="OBJECT_PP_2_LIMB_11" Offset="0x12698" />
+        <Limb Name="object_pp_Standardlimb_0126A4" Type="Standard" EnumName="OBJECT_PP_2_LIMB_12" Offset="0x126A4" />
+        <Limb Name="object_pp_Standardlimb_0126B0" Type="Standard" EnumName="OBJECT_PP_2_LIMB_13" Offset="0x126B0" />
+        <Limb Name="object_pp_Standardlimb_0126BC" Type="Standard" EnumName="OBJECT_PP_2_LIMB_14" Offset="0x126BC" />
+        <Limb Name="object_pp_Standardlimb_0126C8" Type="Standard" EnumName="OBJECT_PP_2_LIMB_15" Offset="0x126C8" />
+        <Limb Name="object_pp_Standardlimb_0126D4" Type="Standard" EnumName="OBJECT_PP_2_LIMB_16" Offset="0x126D4" />
+        <Limb Name="object_pp_Standardlimb_0126E0" Type="Standard" EnumName="OBJECT_PP_2_LIMB_17" Offset="0x126E0" />
+        <Limb Name="object_pp_Standardlimb_0126EC" Type="Standard" EnumName="OBJECT_PP_2_LIMB_18" Offset="0x126EC" />
+        <Limb Name="object_pp_Standardlimb_0126F8" Type="Standard" EnumName="OBJECT_PP_2_LIMB_19" Offset="0x126F8" />
+        <Skeleton Name="object_pp_Skel_012768" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PP_2_LIMB_NONE" LimbMax="OBJECT_PP_2_LIMB_MAX" EnumName="object_pp_2_Limbs" Offset="0x12768" />
         <Animation Name="object_pp_Anim_012AE4" Offset="0x12AE4" />
     </File>
 </Root>
