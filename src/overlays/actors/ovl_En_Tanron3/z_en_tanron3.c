@@ -113,7 +113,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->atCollider, &this->actor, &sCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSmallFishSkel, &gGyorgSmallFishSwimAnim, this->jointTable,
-                       this->morphTable, EN_TANRON3_LIMB_MAX);
+                       this->morphTable, GYORG_SMALL_FISH_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.02f);
     EnTanron3_SetupLive(this, globalCtx);
     this->actor.flags &= ~1;
@@ -431,15 +431,15 @@ s32 EnTanron3_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
                                Actor* thisx) {
     EnTanron3* this = THIS;
 
-    if (limbIndex == EN_TANRON3_LIMB_ROOT) {
+    if (limbIndex == GYORG_SMALL_FISH_LIMB_ROOT) {
         rot->y += this->bodyRotation;
     }
 
-    if (limbIndex == EN_TANRON3_LIMB_TRUNK_ROOT) {
+    if (limbIndex == GYORG_SMALL_FISH_LIMB_TRUNK_ROOT) {
         rot->y += this->trunkRotation;
     }
 
-    if (limbIndex == EN_TANRON3_LIMB_TAIL_FIN) {
+    if (limbIndex == GYORG_SMALL_FISH_LIMB_TAIL_FIN) {
         rot->y += this->tailRotation;
     }
 

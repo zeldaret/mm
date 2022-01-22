@@ -24,8 +24,8 @@ typedef struct {
 typedef struct EnTanron3 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[EN_TANRON3_LIMB_MAX];
-    /* 0x1C4 */ Vec3s morphTable[EN_TANRON3_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[GYORG_SMALL_FISH_LIMB_MAX];
+    /* 0x1C4 */ Vec3s morphTable[GYORG_SMALL_FISH_LIMB_MAX];
     /* 0x200 */ s16 timer;
     /* 0x202 */ u8 isNonHostile; // If true, the fish will not move towards the player to attack them
     /* 0x203 */ u8 isBeached; // If true, the fish is on the central platform flopping around
