@@ -27,7 +27,10 @@
         <Texture Name="object_fu_Tex_0056E0" OutName="tex_0056E0" Format="ci8" Width="32" Height="32" Offset="0x56E0" />
         <Texture Name="object_fu_Tex_005AE0" OutName="tex_005AE0" Format="ci8" Width="32" Height="32" Offset="0x5AE0" />
         <Texture Name="object_fu_Tex_005EE0" OutName="tex_005EE0" Format="ci8" Width="8" Height="8" Offset="0x5EE0" />
-        <!-- <Blob Name="object_fu_Blob_005F20" Size="0xC00" Offset="0x5F20" /> -->
+        <Texture Name="object_fu_Tex_005F20" OutName="tex_005F20" Format="ci8" Width="32" Height="32" Offset="0x5F20" />
+        <Texture Name="object_fu_Tex_006320" OutName="tex_006320" Format="ci8" Width="32" Height="32" Offset="0x6320" />
+        <Texture Name="object_fu_Tex_006720" OutName="tex_006720" Format="ci8" Width="32" Height="16" Offset="0x6720" />
+        <Texture Name="object_fu_Tex_006920" OutName="tex_006920" Format="ci8" Width="32" Height="16" Offset="0x6920" />
         <Texture Name="object_fu_Tex_006B20" OutName="tex_006B20" Format="ci8" Width="8" Height="16" Offset="0x6B20" />
         <Limb Name="object_fu_Standardlimb_006BA0" Type="Standard" Offset="0x6BA0" />
         <Limb Name="object_fu_Standardlimb_006BAC" Type="Standard" Offset="0x6BAC" />
