@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_icicle.h"
+#include "objects/object_icicle/object_icicle.h"
 
 #define FLAGS 0x00000000
 
@@ -60,9 +61,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern Gfx D_060000D0[];
-extern CollisionHeader D_06000294;
-
 void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgIcicle* this = THIS;
@@ -71,7 +69,7 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(thisx, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000294);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_icicle_Colheader_000294);
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
     Collider_UpdateCylinder(thisx, &this->collider);
@@ -245,5 +243,5 @@ void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIcicle_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, D_060000D0);
+    Gfx_DrawDListOpa(globalCtx, object_icicle_DL_0000D0);
 }

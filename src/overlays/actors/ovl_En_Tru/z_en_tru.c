@@ -69,6 +69,7 @@ const ActorInit En_Tru_InitVars = {
 };
 
 #include "overlays/ovl_En_Tru/ovl_En_Tru.c"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 static Vec3f D_80A8B250 = { 0.0f, 0.02f, 0.0f };
 
@@ -79,8 +80,8 @@ static Color_RGBA8 D_80A8B25C[] = {
 
 static f32 D_80A8B274[] = { 60.0f, 255.0f, 60.0f };
 
-static UNK_TYPE D_80A8B280[] = {
-    &D_0408F7E0, &D_0408F3E0, &D_0408EFE0, &D_0408EBE0, &D_0408E7E0, &D_0408E3E0, &D_0408DFE0, &D_0408DBE0,
+static TexturePtr D_80A8B280[] = {
+    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -1243,10 +1244,10 @@ void EnTru_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
 
 void EnTru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr D_80A8B408[] = {
-        &object_tru_Tex_018FA0,
-        &object_tru_Tex_0197A0,
-        &object_tru_Tex_019FA0,
-        &object_tru_Tex_0197A0,
+        object_tru_Tex_018FA0,
+        object_tru_Tex_0197A0,
+        object_tru_Tex_019FA0,
+        object_tru_Tex_0197A0,
     };
     s32 pad;
     EnTru* this = THIS;

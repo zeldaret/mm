@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kakasi.h"
+#include "objects/object_ka/object_ka.h"
 
 #define FLAGS 0x02000019
 
@@ -125,18 +126,10 @@ typedef enum {
     /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
 } EnKakasi_Animations;
 
-extern AnimationHeader D_06007444;
-extern AnimationHeader D_0600686C;
-extern AnimationHeader D_060081A4;
-extern AnimationHeader D_06007B90;
-extern AnimationHeader D_060071EC;
-extern AnimationHeader D_06007444;
-extern AnimationHeader D_0600686C;
-extern AnimationHeader D_060081A4;
-extern AnimationHeader D_06000214;
-
 static AnimationHeader* kakasiAnimations[] = {
-    &D_06007444, &D_0600686C, &D_060081A4, &D_06007B90, &D_060071EC, &D_06007444, &D_0600686C, &D_060081A4, &D_06000214,
+    &object_ka_Anim_007444, &object_ka_Anim_00686C, &object_ka_Anim_0081A4,
+    &object_ka_Anim_007B90, &object_ka_Anim_0071EC, &object_ka_Anim_007444,
+    &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
 };
 
 static u8 sAnimModes[] = {
@@ -150,15 +143,13 @@ void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-extern FlexSkeletonHeader D_060065B0;
-
 void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
     s32 tempCutscene;
     s32 i;
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80971D80);
-    SkelAnime_InitFlex(globalCtx, &this->skelanime, &D_060065B0, &D_06000214, 0, 0, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelanime, &object_ka_Skel_0065B0, &object_ka_Anim_000214, 0, 0, 0);
 
     this->songSummonDist = GET_KAKASI_SUMMON_DISTANCE(this) * 20.0f;
     if (this->songSummonDist < 40.0f) {

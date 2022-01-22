@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hg.h"
+#include "objects/object_harfgibud/object_harfgibud.h"
 
 #define FLAGS 0x02100019
 
@@ -29,17 +30,6 @@ void func_80BCF93C(EnHg* this);
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx);
 s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-
-extern AnimationHeader D_06000370;
-extern AnimationHeader D_06001138;
-extern AnimationHeader D_060015D4;
-extern AnimationHeader D_06001960;
-extern AnimationHeader D_0600260C;
-extern Gfx D_06005E28[];
-extern FlexSkeletonHeader D_06008580;
-extern AnimationHeader D_06009D44;
-extern AnimationHeader D_0600A164;
-extern AnimationHeader D_0600AE1C;
 
 const ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
@@ -113,10 +103,14 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &D_0600260C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, { &D_06009D44, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &D_0600A164, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, { &D_06000370, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &D_06001138, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },  { &D_060015D4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &D_06001960, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },  { &D_0600AE1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_00260C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_harfgibud_Anim_009D44, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_harfgibud_Anim_00A164, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_harfgibud_Anim_000370, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_harfgibud_Anim_001138, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_0015D4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_harfgibud_Anim_001960, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_00AE1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static u32 D_80BD00C8 = false;
@@ -127,8 +121,8 @@ void EnHg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008580, &D_0600260C, this->jointTable, this->morphTable,
-                       HG_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_harfgibud_Skel_008580, &object_harfgibud_Anim_00260C,
+                       this->jointTable, this->morphTable, HG_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -422,6 +416,6 @@ void EnHg_Draw(Actor* thisx, GlobalContext* globalCtx) {
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
     Matrix_SetCurrentState(&this->unk1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06005E28);
+    gSPDisplayList(POLY_OPA_DISP++, object_harfgibud_DL_005E28);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

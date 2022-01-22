@@ -7,8 +7,11 @@
 extern u64 rspbootTextStart[];
 extern u64 rspbootTextEnd[];
 
-u64* initialgspUcodeText = gspF3DEX2_NoN_fifoTextStart;
-u64* initialgspUcodeData = gspF3DEX2_NoN_fifoDataStart;
+extern u64 gspF3DZEX2_NoN_PosLight_fifoTextStart[];
+extern u64 gspF3DZEX2_NoN_PosLight_fifoDataStart[];
+
+u64* initialgspUcodeText = gspF3DZEX2_NoN_PosLight_fifoTextStart;
+u64* initialgspUcodeData = gspF3DZEX2_NoN_PosLight_fifoDataStart;
 
 u64* SysUcode_GetUCodeBoot(void) {
     return rspbootTextStart;

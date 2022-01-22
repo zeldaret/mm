@@ -6,6 +6,7 @@
 
 #include "z_en_pm.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "objects/object_mm/object_mm.h"
 
 #define FLAGS 0x00000039
 
@@ -18,25 +19,6 @@ void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx);
 void func_80AFA5FC(EnPm* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000468;
-extern AnimationHeader D_0600099C;
-extern AnimationHeader D_06000FC4;
-extern AnimationHeader D_06001F84;
-extern AnimationHeader D_06002238;
-extern UNK_PTR D_06002750;
-extern UNK_PTR D_06002950;
-extern Gfx D_06008348[];
-extern Gfx D_060083E0[];
-extern Gfx D_060085C8[];
-extern FlexSkeletonHeader D_060096E8;
-extern AnimationHeader D_060099B4;
-extern AnimationHeader D_0600A4E0;
-extern AnimationHeader D_0600A8D8;
-extern AnimationHeader D_0600B09C;
-extern AnimationHeader D_0600BA78;
-extern AnimationHeader D_0600C32C;
-extern AnimationHeader D_0600C640;
 
 // Game scripts
 static UNK_TYPE D_80AFAD80[] = {
@@ -249,13 +231,20 @@ static ColliderSphereInit sSphereInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS sAnimations[] = {
-    { &D_06002238, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_06002238, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &D_0600A4E0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  { &D_0600B09C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &D_0600B09C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_0600BA78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &D_0600C32C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &D_060099B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &D_06000FC4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_0600A8D8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &D_0600099C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_06001F84, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &D_06000468, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &D_0600C640, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_002238, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_002238, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_mm_Anim_00A4E0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_mm_Anim_00B09C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_00B09C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_mm_Anim_00BA78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_mm_Anim_00C32C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_mm_Anim_0099B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_000FC4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_00A8D8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_00099C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_001F84, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_mm_Anim_000468, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_00C640, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 s32 func_80AF7B40(void) {
@@ -756,19 +745,19 @@ void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
     switch (arg2) {
         case 0:
             if (this->unk_356 & 0x800) {
-                gSPDisplayList((*gfx)++, D_06008348);
+                gSPDisplayList((*gfx)++, object_mm_DL_008348);
             }
             break;
 
         case 1:
             if (this->unk_356 & 0x1000) {
-                gSPDisplayList((*gfx)++, D_060085C8);
+                gSPDisplayList((*gfx)++, object_mm_DL_0085C8);
             }
             break;
 
         case 2:
             if (this->unk_356 & 0x1000) {
-                gSPDisplayList((*gfx)++, D_060083E0);
+                gSPDisplayList((*gfx)++, object_mm_DL_0083E0);
             }
             break;
     }
@@ -1768,7 +1757,8 @@ void EnPm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPm* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060096E8, NULL, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable,
+                       16);
     this->unk_384 = -1;
     func_80AF7E98(this, 0);
     Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -1887,9 +1877,9 @@ void EnPm_TransformLimbDraw(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gf
 }
 
 void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_80AFB914[] = {
-        &D_06002950,
-        &D_06002750,
+    static TexturePtr D_80AFB914[] = {
+        object_mm_Tex_002950,
+        object_mm_Tex_002750,
     };
     EnPm* this = THIS;
     s32 pad;

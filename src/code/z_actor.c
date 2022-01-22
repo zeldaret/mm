@@ -320,13 +320,12 @@ void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 y) {
 void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
     f32 spEC;
     f32 temp_f12;
-    f32 temp_f20;
     f32 shadowScaleZ;
     f32 temp_f22;
     f32 temp_f24;
     f32 temp_f8;
-    MtxF sp94;
     s32 lightNum;
+    MtxF sp94;
     s32 numLights;
     s8 phi_v1;
     u8 temp_v0;
@@ -342,7 +341,8 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
 
         spEC = actor->world.pos.y - actor->floorHeight;
         if (spEC > 20.0f) {
-            temp_f20 = actor->shape.shadowScale;
+            f32 temp_f20 = actor->shape.shadowScale;
+
             temp_v0 = actor->shape.shadowAlpha;
             actor->shape.shadowScale *= 0.3f;
             temp_f12 = (spEC - 20.0f) * 0.02f;
@@ -350,7 +350,6 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
             ActorShadow_DrawCircle(actor, mapper, globalCtx);
             actor->shape.shadowScale = temp_f20;
             actor->shape.shadowAlpha = temp_v0;
-        dummy_label_111649:;
         } else if (spEC >= -1.0f) {
             numLights = mapper->numLights - 2;
 
@@ -377,8 +376,8 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
 
             for (j = 0; j < 2; j++, phi_s0++) {
                 if (phi_s0->l.dir[1] > 0) {
-                    lightNum = (ABS_ALT(phi_s0->l.dir[1]) * (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2])) -
-                               (lightNumMax * ((void)0, 8));
+                    lightNum = ((phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2]) * ABS_ALT(phi_s0->l.dir[1])) -
+                               (8 * lightNumMax);
                     if (lightNum > 0) {
                         ActorShadow_DrawFoot(globalCtx, phi_s0, &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
                     }
