@@ -5,6 +5,7 @@
  */
 
 #include "z_en_rr.h"
+#include "objects/object_rr/object_rr.h"
 
 #define FLAGS 0x00000405
 
@@ -25,8 +26,6 @@ void func_808FB710(EnRr* this, GlobalContext* globalCtx);
 
 void func_808FAD1C(EnRr* this, GlobalContext* globalCtx);
 void func_808FB398(EnRr* this, GlobalContext* globalCtx);
-
-extern Gfx D_06000470[];
 
 const ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
@@ -721,7 +720,7 @@ void func_808FB42C(EnRr* this, GlobalContext* globalCtx) {
         sp74.y = this->actor.world.pos.y + 20.0f;
         sp74.z = this->actor.world.pos.z;
         func_800B3030(globalCtx, &sp74, &gZeroVec3f, &gZeroVec3f, 100, 0, 0);
-        Audio_PlaySoundAtPosition(globalCtx, &sp74, 11, NA_SE_EN_EXTINCT);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &sp74, 11, NA_SE_EN_EXTINCT);
     } else {
         temp_f20 = this->actor.scale.y * 66.66667f;
 
@@ -931,7 +930,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
     this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;
 
-    gSPDisplayList(POLY_OPA_DISP++, D_06000470);
+    gSPDisplayList(POLY_OPA_DISP++, object_rr_DL_000470);
 
     func_800BE680(globalCtx, &this->actor, this->unk_234, ARRAY_COUNT(this->unk_234),
                   this->actor.scale.y * 66.66667f * this->unk_220, this->unk_224, this->unk_21C, this->unk_1E0);

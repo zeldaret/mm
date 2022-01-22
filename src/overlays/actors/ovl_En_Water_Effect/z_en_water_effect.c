@@ -198,11 +198,11 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
                     if (phi_v0) {
                         ptr->unk_00 = 0;
-                        Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_BOMB_DROP_WATER);
+                        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_BOMB_DROP_WATER);
                     } else {
                         ptr->unk_04.y = this->actor.floorHeight;
                         if (ptr->unk_2A == 0) {
-                            Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP_GRD);
+                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP_GRD);
                             ptr->unk_00 = 3;
                             ptr->unk_2C.x = 0.1f;
                             ptr->unk_2C.y = 0.6f;
@@ -215,7 +215,7 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             EffectSsGSplash_Spawn(globalCtx, &sp98, NULL, NULL, 1, 100);
                         } else {
                             ptr->unk_00 = 0;
-                            Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP);
+                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_WATERDROP);
                             EffectSsGRipple_Spawn(globalCtx, &ptr->unk_04, 70, 500, 0);
                             EffectSsGRipple_Spawn(globalCtx, &ptr->unk_04, 70, 500, 10);
                             Math_Vec3f_Copy(&sp98, &ptr->unk_04);
@@ -285,7 +285,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             if (!phi_s4) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_08DBE0));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                 phi_s4++;
@@ -317,7 +317,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             if (!phi_s4) {
                 func_8012C448(gfxCtx);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_08DBE0));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 phi_s4++;
@@ -493,7 +493,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
                             for (j = 0; j < 5; j++) {
                                 func_80A599E8(this, &ptr->unk_04, 2);
                             }
-                            Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 30, NA_SE_EV_PLANT_BROKEN);
+                            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 30, NA_SE_EV_PLANT_BROKEN);
                         }
                         ptr->unk_2A++;
                     }
@@ -624,7 +624,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
     if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_778)) {
         if (this->unk_E2C > 1.0f) {
             func_8012C2DC(globalCtx->state.gfxCtx);
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_water_effect_Matanimheader_000DE0));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000DE0));
             Matrix_Scale(this->unk_DC8[1].y, this->unk_DC8[1].z, this->unk_DC8[1].y, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -637,7 +637,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
 
         if (this->unk_E30 > 1.0f) {
             func_8012C2DC(globalCtx->state.gfxCtx);
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_water_effect_Matanimheader_000E0C));
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E0C));
             Matrix_Scale(this->unk_DC8[2].y, this->unk_DC8[2].z, this->unk_DC8[2].y, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -653,7 +653,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
 
     if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_780)) {
         func_8012C2DC(globalCtx->state.gfxCtx);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_water_effect_Matanimheader_000E40));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E40));
         Matrix_Scale(this->unk_DC8[3].y, this->unk_DC8[3].z, this->unk_DC8[3].y, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -665,7 +665,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
 
     if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_780)) {
         func_8012C2DC(globalCtx->state.gfxCtx);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_water_effect_Matanimheader_000E58));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E58));
         Matrix_Scale(this->unk_DC8[4].y, this->unk_DC8[4].z, this->unk_DC8[4].y, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -681,7 +681,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
                 if (!phi_s4) {
                     func_8012C448(globalCtx->state.gfxCtx);
 
-                    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_08DBE0));
+                    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
                     gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                     gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                     phi_s4++;

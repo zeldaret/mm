@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kakasi.h"
+#include "objects/object_ka/object_ka.h"
 
 #define FLAGS 0x02000019
 
@@ -45,7 +46,8 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx);
 
 void EnKakasi_SetupDialogue(EnKakasi* this);
 
-void EnKakasi_LimbDraw(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, struct Actor* actor);
+void EnKakasi_PostLimbDraw(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
+                           struct Actor* thisx);
 
 static ColliderCylinderInit D_80971D80 = {
     {
@@ -124,18 +126,10 @@ typedef enum {
     /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
 } EnKakasi_Animations;
 
-extern AnimationHeader D_06007444;
-extern AnimationHeader D_0600686C;
-extern AnimationHeader D_060081A4;
-extern AnimationHeader D_06007B90;
-extern AnimationHeader D_060071EC;
-extern AnimationHeader D_06007444;
-extern AnimationHeader D_0600686C;
-extern AnimationHeader D_060081A4;
-extern AnimationHeader D_06000214;
-
 static AnimationHeader* kakasiAnimations[] = {
-    &D_06007444, &D_0600686C, &D_060081A4, &D_06007B90, &D_060071EC, &D_06007444, &D_0600686C, &D_060081A4, &D_06000214,
+    &object_ka_Anim_007444, &object_ka_Anim_00686C, &object_ka_Anim_0081A4,
+    &object_ka_Anim_007B90, &object_ka_Anim_0071EC, &object_ka_Anim_007444,
+    &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
 };
 
 static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
@@ -147,15 +141,13 @@ void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-extern FlexSkeletonHeader D_060065B0;
-
 void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
     s32 tempCutscene;
     s32 i;
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80971D80);
-    SkelAnime_InitFlex(globalCtx, &this->skelanime, &D_060065B0, &D_06000214, 0, 0, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelanime, &object_ka_Skel_0065B0, &object_ka_Anim_000214, 0, 0, 0);
 
     this->songSummonDist = GET_KAKASI_SUMMON_DISTANCE(this) * 20.0f;
     if (this->songSummonDist < 40.0f) {
@@ -1011,7 +1003,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx) {
 
         if (globalCtx->sceneNum == SCENE_8ITEMSHOP) {
             EffectSsGSplash_Spawn(globalCtx, &tempWorldPos, 0, 0, 0, randPlusMinusPoint5Scaled(100.0f) + 200.0f);
-            Audio_PlaySoundAtPosition(globalCtx, &tempWorldPos, 0x32, NA_SE_EV_BOMB_DROP_WATER);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &tempWorldPos, 0x32, NA_SE_EV_BOMB_DROP_WATER);
 
         } else {
             Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos,
@@ -1153,8 +1145,8 @@ void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnKakasi_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
-    EnKakasi* this = (EnKakasi*)actor;
+void EnKakasi_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnKakasi* this = THIS;
 
     if (limbIndex == 4) {
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk1BC);
@@ -1165,5 +1157,5 @@ void EnKakasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
-                          NULL, EnKakasi_LimbDraw, &this->actor);
+                          NULL, EnKakasi_PostLimbDraw, &this->actor);
 }
