@@ -23,8 +23,8 @@ typedef struct EnJg {
     /* 0x1E8 */ Actor* drum;
     /* 0x1EC */ Vec3s unusedRotation1; // probably meant to be a head rotation to look at the player
     /* 0x1F2 */ Vec3s unusedRotation2; // probably meant to be a body rotation to look at the player
-    /* 0x1F8 */ Vec3s jointTable[EN_JG_LIMB_MAX];
-    /* 0x2CA */ Vec3s morphTable[EN_JG_LIMB_MAX];
+    /* 0x1F8 */ Vec3s jointTable[GORON_ELDER_LIMB_MAX];
+    /* 0x2CA */ Vec3s morphTable[GORON_ELDER_LIMB_MAX];
     /* 0x39C */ s16 rootRotationWhenTalking;
     /* 0x39E */ s16 animationIndex;
     /* 0x3A0 */ s16 action;

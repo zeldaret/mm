@@ -993,7 +993,7 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronElderSkel, &gGoronElderIdleAnim, this->jointTable,
-                       this->morphTable, EN_JG_LIMB_MAX);
+                       this->morphTable, GORON_ELDER_LIMB_MAX);
 
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -1054,7 +1054,7 @@ void EnJg_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnJg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnJg* this = THIS;
 
-    if (limbIndex == EN_JG_LIMB_ROOT) {
+    if (limbIndex == GORON_ELDER_LIMB_ROOT) {
         if (this->flags & FLAG_LOOKING_AT_PLAYER) {
             Math_SmoothStepToS(&this->rootRotationWhenTalking, this->actor.yawTowardsPlayer - this->actor.shape.rot.y,
                                5, 0x1000, 0x100);
@@ -1071,11 +1071,11 @@ s32 EnJg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnJg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnJg* this = THIS;
 
-    if (limbIndex == EN_JG_LIMB_HEAD) {
+    if (limbIndex == GORON_ELDER_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&sFocusOffset, &this->actor.focus.pos);
     }
 
-    if (limbIndex == EN_JG_LIMB_LOWER_LIP) {
+    if (limbIndex == GORON_ELDER_LIMB_LOWER_LIP) {
         Matrix_MultiplyVector3fByState(&sBreathPosOffset, &this->breathPos);
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
         Matrix_MultiplyVector3fByState(&sBreathVelOffset, &this->breathVelocity);
