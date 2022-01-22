@@ -1,6 +1,6 @@
 #include "global.h"
 
-extern UnkRumbleStruct D_801F69D0;
+UnkRumbleStruct D_801F69D0;
 
 void func_8013EC10(s32 arg0) {
     func_80182CE0(&D_801F69D0);
@@ -32,7 +32,7 @@ void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3) {
     s32 phi_v0;
     s32 i;
 
-    if (D_801DF094 < xyzDistToPlayerSq) {
+    if (SQ(1000.0f) < xyzDistToPlayerSq) {
         phi_v0 = 1000;
     } else {
         phi_v0 = sqrtf(xyzDistToPlayerSq);
