@@ -11,7 +11,7 @@ typedef void (*ObjCombActionFunc)(struct ObjComb*, GlobalContext*);
 #define OBJCOMB_GET_10(thisx) (((thisx)->params >> 4) & 0x1)
 #define OBJCOMB_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define OBJCOMB_GET_3F(thisx) ((thisx)->params & 0x3F)
-#define OBJCOMB_GET_80(thisx) (((thisx)->params >> 7) & 0x80)
+#define OBJCOMB_GET_80(thisx) (((thisx)->params >> 7) & 0x1)
 #define OBJCOMB_GET_7F00(thisx) (((thisx)->params >> 0x8) & 0x7F)
 #define OBJCOMB_GET_8000(thisx) (((thisx)->params >> 0xE) & 2)
 

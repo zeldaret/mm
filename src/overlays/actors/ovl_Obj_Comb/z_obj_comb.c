@@ -357,7 +357,7 @@ void ObjComb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_8098DC44(ObjComb* this) {
-    this->unk_1AC = 12000;
+    this->unk_1AC = 0x2EE0;
     this->actionFunc = func_8098DC60;
 }
 
@@ -371,7 +371,7 @@ void func_8098DC60(ObjComb* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~AC_HIT;
     }
 
-    this->unk_1A8 -= 50;
+    this->unk_1A8 -= 0x32;
     if (this->unk_1A8 < 0) {
         this->unk_1A8 = 0;
     }
@@ -385,11 +385,11 @@ void func_8098DC60(ObjComb* this, GlobalContext* globalCtx) {
             s32 dmgFlags = this->collider.elements->info.acHitInfo->toucher.dmgFlags;
 
             if (dmgFlags & 0x13820) {
-                this->unk_1A8 = 3500;
-                this->unk_1AC = 14000;
+                this->unk_1A8 = 0xDAC;
+                this->unk_1AC = 0x36B0;
             } else {
-                this->unk_1A8 = 1500;
-                this->unk_1AC = 12000;
+                this->unk_1A8 = 0x5DC;
+                this->unk_1AC = 0x2EE0;
             }
 
             if ((this->unk_1B2 <= 0) && (dmgFlags & 0x13820)) {
@@ -457,14 +457,14 @@ void func_8098DEA0(ObjComb* this, GlobalContext* globalCtx) {
             this->actor.gravity = -1.5f;
             this->actor.velocity.y *= 0.96f;
 
-            this->unk_1AE += 500;
-            if (this->unk_1AE > 2000) {
-                this->unk_1AE = 2000;
+            this->unk_1AE += 0x1F4;
+            if (this->unk_1AE > 0x7D0) {
+                this->unk_1AE = 0x7D0;
             }
 
-            this->unk_1B0 += 200;
-            if (this->unk_1B0 > 600) {
-                this->unk_1B0 = 600;
+            this->unk_1B0 += 0xC8;
+            if (this->unk_1B0 > 0x258) {
+                this->unk_1B0 = 0x258;
             }
             func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
         }
