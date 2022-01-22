@@ -112,7 +112,7 @@
 
         <!-- Drum Animation, Limb, and Skeleton -->
         <Animation Name="gGoronElderDrumTakeOutAnim" Offset="0x1B1E8" /> <!-- Original name is "jggakki_dasu" ("get out") -->
-        <Limb Name="gGoronElderDrumLimb" Type="Standard" Offset="0x1B200" />
-        <Skeleton Name="gGoronElderDrumSkel" Type="Normal" LimbType="Standard" Offset="0x1B210" />
+        <Limb Name="gGoronElderDrumLimb" Type="Standard" EnumName="GORON_ELDER_DRUM_LIMB_ROOT" Offset="0x1B200" />
+        <Skeleton Name="gGoronElderDrumSkel" Type="Normal" LimbType="Standard" LimbNone="GORON_ELDER_DRUM_LIMB_NONE" LimbMax="GORON_ELDER_DRUM_LIMB_MAX" EnumName="GoronElderDrumLimbs"Offset="0x1B210" />
     </File>
 </Root>
