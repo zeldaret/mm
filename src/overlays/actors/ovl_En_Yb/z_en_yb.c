@@ -88,7 +88,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // I dont know why
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200,
-                      (uintptr_t)this->limbDrawTbl & ~0xF, (uintptr_t)this->transitionDrawTable & ~0xF,
+                      (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF,
                        ENYB_LIMBCOUNT);
 
     Animation_PlayLoop(&this->skelAnime, &object_yb_Anim_000200);
@@ -153,22 +153,22 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx
         if (this->currentAnimIndex == 2) {
             // regalloc without temp
             // almost 1/2250.0f, but thats off by 0x1 in rodata
-            f32 tempScale = (((27.0f - this->shadowPos.y) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
-            actor->scale.x = tempScale;
+            f32 tempScale = (((27.0f - this->shadowPos.y) + thisx->world.pos.y) * 0.00044444448f) + 0.01f;
+            thisx->scale.x = tempScale;
         }
-        Math_Vec3f_Copy(&oldPos, &actor->world.pos);
-        Math_Vec3f_Copy(&actor->world.pos, &this->shadowPos);
-        func_800B4AEC(globalCtx, actor, 50.0f);
+        Math_Vec3f_Copy(&oldPos, &thisx->world.pos);
+        Math_Vec3f_Copy(&thisx->world.pos, &this->shadowPos);
+        func_800B4AEC(globalCtx, thisx, 50.0f);
 
         if (oldPos.y < this->actor.floorHeight) {
-            actor->world.pos.y = this->actor.floorHeight;
+            thisx->world.pos.y = this->actor.floorHeight;
         } else {
-            actor->world.pos.y = oldPos.y;
+            thisx->world.pos.y = oldPos.y;
         }
 
-        ActorShadow_DrawCircle(actor, mapper, globalCtx);
-        Math_Vec3f_Copy(&actor->world.pos, &oldPos);
-        actor->scale.x = 0.01f;
+        ActorShadow_DrawCircle(thisx, mapper, globalCtx);
+        Math_Vec3f_Copy(&thisx->world.pos, &oldPos);
+        thisx->scale.x = 0.01f;
     }
 }
 
