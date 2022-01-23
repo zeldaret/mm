@@ -645,7 +645,7 @@ void EnBigokuta_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         } else if (limbPosIndex < 8) {
             Matrix_GetStateTranslation(&this->limbPos[limbPosIndex]);
         } else {
-            for (i = 0; i < ARRAY_COUNT(this->limbPos) - 8; i++) {
+            for (i = 0; i < ARRAY_COUNT(D_80AC45D0); i++) {
                 Matrix_MultiplyVector3fByState(&D_80AC45D0[i], &this->limbPos[limbPosIndex + i]);
             }
         }
