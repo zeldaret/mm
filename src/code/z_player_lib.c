@@ -1900,9 +1900,9 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* arg2, Vec3s* arg3) {
-    Matrix_JointPosition(arg2, arg3);
-    func_80125318(arg2, arg3);
+void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* pos, Vec3s* rot) {
+    Matrix_JointPosition(pos, rot);
+    func_80125318(pos, rot);
     func_80124618(arg1, player->skelAnime.curFrame, player->unk_AF0);
     Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
 }
