@@ -30,7 +30,7 @@ void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx);
 void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx);
 
 // custom shadow function
-void EnYb_ActorShadowFunc(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
+void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx);
 void EnYb_SetAnimation(GlobalContext*, EnYb*, s16, u8, f32);
 s32 EnYb_CanTalk(EnYb* this, GlobalContext* globalCtx);
 
@@ -88,7 +88,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // I dont know why
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200,
-                       (void*)(((s32) & this->limbDrawTbl) & ~0xF), (void*)((s32) & this->transitionDrawTable & ~0xF),
+                      (uintptr_t)this->limbDrawTbl & ~0xF, (uintptr_t)this->transitionDrawTable & ~0xF,
                        ENYB_LIMBCOUNT);
 
     Animation_PlayLoop(&this->skelAnime, &object_yb_Anim_000200);
@@ -145,9 +145,9 @@ void func_80BFA2FC(GlobalContext* globalCtx) {
 /**
  * custom shadow draw function of type ActorShadowFunc
  */
-void EnYb_ActorShadowFunc(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
+void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx) {
     Vec3f oldPos;
-    EnYb* this = (EnYb*)actor;
+    EnYb* this = THIS;
 
     if (this->alpha > 0) {
         if (this->currentAnimIndex == 2) {
@@ -434,8 +434,8 @@ void EnYb_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnYb_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
-    EnYb* this = (EnYb*)actor;
+void EnYb_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnYb* this = THIS;
 
     if (limbIndex == 11) {
         Matrix_MultiplyVector3fByState(&D_80BFB2F4, &this->actor.focus.pos);
@@ -445,8 +445,8 @@ void EnYb_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 }
 
-void EnYb_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
-    EnYb* this = (EnYb*)actor;
+void EnYb_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+    EnYb* this = THIS;
 
     if (limbIndex == 11) {
         Matrix_MultiplyVector3fByState(&D_80BFB300, &this->actor.focus.pos);
