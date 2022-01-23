@@ -9,7 +9,7 @@
 #include "objects/object_famos/object_famos.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS ACTOR_FLAG_4 | ACTOR_FLAG_1
+#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_1)
 
 #define THIS ((EnFamos*)thisx)
 
@@ -36,7 +36,6 @@ void func_808ADD20(EnFamos* this);
 void func_808ADE00(EnFamos* this);
 void func_808ADFA4(EnFamos* this);
 
-// action funcs
 void func_808ADFF0(EnFamos* this, GlobalContext* globalCtx);
 void func_808AD18C(EnFamos* this, GlobalContext* globalCtx);
 void func_808AD294(EnFamos* this, GlobalContext* globalCtx);
@@ -267,7 +266,7 @@ void func_808ACD2C(EnFamos* this) {
 }
 
 s32 func_808ACF1C(EnFamos* this, GlobalContext* globalCtx) {
-    if (Player_GetMask(globalCtx) != 0x10 &&
+    if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE &&
         Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->unk200) < this->unk1F0 &&
         Actor_IsFacingPlayer(&this->actor, 0x5000)) {
         return true;
@@ -291,7 +290,6 @@ void func_808ACF98(EnFamos* this) {
     }
 }
 
-// todo sfx
 void func_808AD05C(EnFamos* this) {
     u8 scalled1E6;
 
@@ -367,9 +365,7 @@ void func_808AD294(EnFamos* this, GlobalContext* globalCtx) {
     }
     if (func_808ACF1C(this, globalCtx)) {
         func_808AD54C(this);
-        return;
-    }
-    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk1E4, 0x200)) {
+    } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk1E4, 0x200)) {
         func_808AD3E8(this);
     }
 }
@@ -442,7 +438,7 @@ void func_808AD5B0(EnFamos* this, GlobalContext* globalCtx) {
         this->actor.world.pos.y = this->unk1EC;
         func_808AD66C(this);
     } else {
-        this->actor.world.pos.y = (Math_SinS((this->unk1DC) * 0x1000) * 30.0f) + this->unk1EC;
+        this->actor.world.pos.y = (Math_SinS(this->unk1DC * 0x1000) * 30.0f) + this->unk1EC;
     }
 }
 
@@ -467,11 +463,11 @@ void func_808AD68C(EnFamos* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 6.0f, 0.5f);
 
     surfaceType = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-    if (this->actor.xzDistToPlayer < 30.0f && this->actor.floorHeight > -32000.0f && surfaceType != 0xC &&
+    if (this->actor.xzDistToPlayer < 30.0f && this->actor.floorHeight > BGCHECK_Y_MIN && surfaceType != 0xC &&
         surfaceType != 0xD) {
         func_808AD7EC(this);
 
-    } else if ((Player_GetMask(globalCtx) == 0x10) ||
+    } else if (Player_GetMask(globalCtx) == PLAYER_MASK_STONE ||
                this->unk1F0 < Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->unk200) ||
                Actor_IsFacingPlayer(&this->actor, 0x6000) == 0) {
         func_808ADC40(this);
@@ -500,26 +496,25 @@ void func_808AD888(EnFamos* this) {
 }
 
 void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
-    s32 hitWall;
+    s32 hitFloor;
     u32 surfaceType;
 
     Math_StepToF(&this->actor.speedXZ, 20.0f, 2.0f);
-    this->unk1DC--;
-    if (this->unk1DC == 0) {
+    if (--this->unk1DC == 0) {
         this->collider3.base.acFlags &= ~AC_ON;
     }
 
     surfaceType = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-    hitWall = this->actor.bgCheckFlags & BGCHECK_CHECK_WALL;
-    if (hitWall || this->actor.floorHeight == BGCHECK_Y_MIN || surfaceType == 0xC || surfaceType == 0xD) {
+    hitFloor = this->actor.bgCheckFlags & 1; // on floor
+    if (hitFloor || this->actor.floorHeight == BGCHECK_Y_MIN || surfaceType == 0xC || surfaceType == 0xD) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
-        if (hitWall) {
+        if (hitFloor) {
             func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 15, 10);
             func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             func_808ACB58(this);
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, 1, this->actor.world.pos.x,
-                               this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0);
+            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TEST, this->actor.world.pos.x,
+                               this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x0);
 
             if (this->actor.child != NULL) {
                 Actor_SetScale(this->actor.child, 0.015f);
@@ -576,7 +571,7 @@ void func_808ADB70(EnFamos* this, GlobalContext* globalCtx) {
             func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
         }
     }
-    if (this->unk1EC < this->actor.world.pos.y || this->actor.bgCheckFlags & BGCHECK_CHECK_DYNA) {
+    if (this->unk1EC < this->actor.world.pos.y || this->actor.bgCheckFlags & 0x10) { // touching ceiling
         this->actor.speedXZ = 0.0f;
         func_808AD66C(this);
     }
@@ -597,6 +592,7 @@ void func_808ADC64(EnFamos* this, GlobalContext* globalCtx) {
     } else if (this->unk1DC == 0) {
         func_808AD31C(this);
     } else {
+        // cast req
         this->actor.shape.rot.y = (s32)(Math_SinS(this->unk1DC * 0x888) * 8192.0f) + this->actor.world.rot.y;
     }
 }
@@ -716,7 +712,8 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk1E0 >= 0) {
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
             if (this->actionFunc == func_808AD8B8 && this->animatedMaterialIndex != 0 &&
-                this->actor.bgCheckFlags & BGCHECK_CHECK_WALL) {
+                this->actor.bgCheckFlags & 1) { // on floor
+
                 this->actor.world.pos.y -= 60.0f;
             }
         }
