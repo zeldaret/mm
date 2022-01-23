@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_yb/object_yb.h"
 
-#define FLAGS ACTOR_FLAG_2000000 | ACTOR_FLAG_10 | ACTOR_FLAG_8 | ACTOR_FLAG_1
+#define FLAGS (ACTOR_FLAG_2000000 | ACTOR_FLAG_10 | ACTOR_FLAG_8 | ACTOR_FLAG_1)
 
 #define THIS ((EnYb*)thisx)
 
@@ -182,12 +182,12 @@ void EnYb_SetAnimation(GlobalContext* globalCtx, EnYb* this, s16 animIndex, u8 a
             if (animIndex > 0) {
                 if (animMode == 0) {
                     LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
-                                         Animation_GetLastFrame(&gLinkAnimations[animIndex - 1]->common), 0,
+                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0,
                                          transitionRate);
                 } else {
                     // unused case, called once with animMode = 0
                     LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
-                                         Animation_GetLastFrame(&gLinkAnimations[animIndex - 1]->common), 0,
+                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0,
                                          transitionRate);
                 }
             } else {
