@@ -5,6 +5,7 @@
  */
 
 #include "z_en_niw.h"
+#include "objects/object_niw/object_niw.h"
 
 #define FLAGS 0x00800010
 
@@ -31,11 +32,6 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx);
 void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
-
-extern FlexSkeletonHeader D_06002530;
-extern AnimationHeader D_060000E8;
-extern Gfx D_060023B0[]; // gNiwFeatherMaterialDL
-extern Gfx D_06002428[]; // gNiwFeatherDL
 
 // turned on during cucco storm, but not read by anything?
 // maybe read by En_Attack_Niw
@@ -126,8 +122,8 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
 
-    SkelAnime_InitFlex(globalCtx, &this->skelanime, &D_06002530, &D_060000E8, this->jointTable, this->morphTable,
-                       ENNIW_LIMBCOUNT);
+    SkelAnime_InitFlex(globalCtx, &this->skelanime, &object_niw_Skel_002530, &object_niw_Anim_0000E8, this->jointTable,
+                       this->morphTable, ENNIW_LIMBCOUNT);
     Math_Vec3f_Copy(&this->unk2A4, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk2B0, &this->actor.world.pos);
 
@@ -327,7 +323,8 @@ void func_808917F8(EnNiw* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 void EnNiw_SetupIdle(EnNiw* this) {
-    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8), 0, -10.0f);
+    Animation_Change(&this->skelanime, &object_niw_Anim_0000E8, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&object_niw_Anim_0000E8), 0, -10.0f);
     this->unknownState28E = 0;
     this->actionFunc = EnNiw_Idle;
 }
@@ -629,7 +626,8 @@ void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
 }
 
 void EnNiw_SetupRunAway(EnNiw* this) {
-    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8), 0, -10.0f);
+    Animation_Change(&this->skelanime, &object_niw_Anim_0000E8, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&object_niw_Anim_0000E8), 0, -10.0f);
     this->unk29A = Rand_ZeroFloat(1.99f);
     this->unknownState28E = 7;
     this->actionFunc = EnNiw_RunAway;
@@ -1002,7 +1000,7 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
         if (feather->isEnabled == true) {
             // Apply the feather material if it has not already been applied.
             if (!isMaterialApplied) {
-                gSPDisplayList(POLY_XLU_DISP++, D_060023B0);
+                gSPDisplayList(POLY_XLU_DISP++, gNiwFeatherMaterialDL);
                 isMaterialApplied++;
             }
 
@@ -1014,7 +1012,7 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_XLU_DISP++, D_06002428);
+            gSPDisplayList(POLY_XLU_DISP++, gNiwFeatherDL);
         }
     }
 

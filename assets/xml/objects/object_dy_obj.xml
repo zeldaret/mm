@@ -15,6 +15,9 @@
         <Texture Name="object_dy_obj_Tex_00D240" OutName="tex_00D240" Format="i4" Width="32" Height="32" Offset="0xD240" />
         <Texture Name="object_dy_obj_Tex_00D440" OutName="tex_00D440" Format="i8" Width="16" Height="16" Offset="0xD440" />
         <Texture Name="object_dy_obj_Tex_00D540" OutName="tex_00D540" Format="i8" Width="32" Height="64" Offset="0xD540" />
+        <Array Name="object_dy_obj_Vtx_00DD40" Count="27" Offset="0xDD40">
+            <Vtx/>
+        </Array>
         <DList Name="object_dy_obj_DL_00DEF0" Offset="0xDEF0" />
         <DList Name="object_dy_obj_DL_013810" Offset="0x13810" />
         <DList Name="object_dy_obj_DL_013928" Offset="0x13928" />
