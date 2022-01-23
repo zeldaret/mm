@@ -35,16 +35,16 @@
         <Texture Name="gYbEyeTex" OutName="yb_eye" Format="ci8" Width="32" Height="32" Offset="0x58F8" />
         <Texture Name="gYbPantsTex" OutName="yb_pants" Format="i8" Width="16" Height="16" Offset="0x5CF8" />
         <!-- some limbs wont highlight in z64utils, some guesswork here -->
-        <Limb Name="gYbRoot5DF8Limb" Type="Standard" Offset="0x5DF8" />
+        <Limb Name="gYbRootLimb" Type="Standard" Offset="0x5DF8" />
         <Limb Name="gYbPantsLimb" Type="Standard" Offset="0x5E04" />
-        <Limb Name="gYbRoot5E10Limb" Type="Standard" Offset="0x5E10" />
+        <Limb Name="gYbLegsRootLimb" Type="Standard" Offset="0x5E10" />
         <Limb Name="gYbRightThighLimb" Type="Standard" Offset="0x5E1C" />
         <Limb Name="gYbRightCalfLimb" Type="Standard" Offset="0x5E28" />
         <Limb Name="gYbRightFootLimb" Type="Standard" Offset="0x5E34" />
         <Limb Name="gYbLeftThighLimb" Type="Standard" Offset="0x5E40" />
         <Limb Name="gYbLeftCalfLimb" Type="Standard" Offset="0x5E4C" />
         <Limb Name="gYbLeftFootLimb" Type="Standard" Offset="0x5E58" />
-        <Limb Name="gYbEmpty5E64Limb" Type="Standard" Offset="0x5E64" />
+        <Limb Name="gYbChestRootLimb" Type="Standard" Offset="0x5E64" />
         <Limb Name="gYbHeadLimb" Type="Standard" Offset="0x5E70" />
         <Limb Name="gYbPonyTailLimb" Type="Standard" Offset="0x5E7C" />
         <Limb Name="gYbEmpty5E88Limb" Type="Standard" Offset="0x5E88" />
