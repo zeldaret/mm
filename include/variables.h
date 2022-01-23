@@ -358,8 +358,7 @@ extern OSMesgQueue viEventQueue;
 extern u16 viRetrace;
 extern DmaEntry dmadata[1568];
 // extern UNK_TYPE1 D_80186028;
-// extern UNK_TYPE1 D_801AAAB0;
-extern u64 gJpegUCode[];
+extern u64 aspMainTextStart[];
 extern ActorInit En_A_Obj_InitVars;
 extern ColliderCylinderInit enAObjCylinderInit;
 extern InitChainEntry enAObjInitVar;
@@ -1827,7 +1826,7 @@ extern UNK_PTR D_801DB478[7];
 // extern UNK_TYPE1 D_801DB494;
 // extern UNK_TYPE1 D_801DB49C;
 // extern UNK_TYPE2 D_801DB4A0;
-extern UNK_TYPE D_801DB4A4;
+extern Vec3f D_801DB4A4;
 extern f32 D_801DB4B0;
 extern s8 D_801DB4B8;
 // extern UNK_TYPE1 D_801DB4C0;
@@ -3086,15 +3085,11 @@ extern const s16 gAudioTatumInit[];
 extern const AudioContextInitSizes gAudioContextInitSizes;
 // extern UNK_TYPE4 D_801E1108;
 // extern UNK_TYPE4 D_801E110C;
-// extern UNK_TYPE2 D_801E1180;
-// extern UNK_TYPE1 D_801E1420;
-// extern UNK_TYPE2 D_801E1630;
-// extern UNK_TYPE1 D_801E1E40;
-// extern UNK_TYPE1 D_801E1E80;
-extern u64 gspF3DEX2_NoN_fifoTextStart[];
-extern u64 gspF3DEX2_NoN_fifoDataStart[];
-extern u64 gJpegUCodeData[];
-// extern UNK_TYPE1 D_801E3FA0;
+// extern UNK_TYPE2 gSoundFontTable;
+// extern UNK_TYPE1 gSequenceFontTable;
+// extern UNK_TYPE2 gSequenceTable;
+// extern UNK_TYPE1 gSampleBankTable;
+extern u64 aspMainDataStart[];
 
 // bss
 // extern UNK_TYPE1 D_801ED890;
@@ -3640,244 +3635,6 @@ extern u8 gSystemHeap[UNK_SIZE];
 extern u8 D_80780000[0x4600];
 extern u8 D_80784600[0x56200];
 extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
-
-// keep objects
-
-extern Gfx D_040008D0[];
-extern Gfx D_040032B0[];
-extern UNK_TYPE D_0400CF58;
-extern UNK_TYPE D_0400CF88;
-extern UNK_TYPE D_0400CF98;
-extern UNK_TYPE D_0400D0A8;
-extern UNK_TYPE D_0400D0B0;
-extern UNK_TYPE D_0400D0C8;
-extern UNK_TYPE D_0400D100;
-extern UNK_TYPE D_0400D218;
-extern UNK_TYPE D_0400D220;
-extern UNK_TYPE D_0400D228;
-extern UNK_TYPE D_0400D2D0;
-extern UNK_TYPE D_0400D3E8;
-extern UNK_TYPE D_0400D3F8;
-extern UNK_TYPE D_0400D488;
-extern UNK_TYPE D_0400D490;
-extern UNK_TYPE D_0400D500;
-extern UNK_TYPE D_0400D520;
-extern UNK_TYPE D_0400D568;
-extern UNK_TYPE D_0400D638;
-extern UNK_TYPE D_0400D660;
-extern UNK_TYPE D_0400D698;
-extern UNK_TYPE D_0400D728;
-extern UNK_TYPE D_0400D9C8;
-extern UNK_TYPE D_0400D9D0;
-extern UNK_TYPE D_0400DA70;
-extern UNK_TYPE D_0400DA88;
-extern UNK_TYPE D_0400DAA8;
-extern UNK_TYPE D_0400DAC0;
-extern UNK_TYPE D_0400DAC8;
-extern UNK_TYPE D_0400DAD8;
-extern UNK_TYPE D_0400DAE0;
-extern UNK_TYPE D_0400DAF0;
-extern UNK_TYPE D_0400DB10;
-extern UNK_TYPE D_0400DB18;
-extern UNK_TYPE D_0400DB30;
-extern UNK_TYPE D_0400DBB0;
-extern UNK_TYPE D_0400DBE8;
-extern UNK_TYPE D_0400DC48;
-extern UNK_TYPE D_0400DC50;
-extern UNK_TYPE D_0400DCA8;
-extern UNK_TYPE D_0400DCD0;
-extern UNK_TYPE D_0400DCD8;
-extern UNK_TYPE D_0400DCF8;
-extern UNK_TYPE D_0400DD30;
-extern UNK_TYPE D_0400DD38;
-extern UNK_TYPE D_0400DD40;
-extern UNK_TYPE D_0400DD50;
-extern UNK_TYPE D_0400DD58;
-extern UNK_TYPE D_0400DD80;
-extern UNK_TYPE D_0400DDB0;
-extern UNK_TYPE D_0400DDF8;
-extern UNK_TYPE D_0400DE00;
-extern UNK_TYPE D_0400DE08;
-extern UNK_TYPE D_0400DE10;
-extern UNK_TYPE D_0400DE28;
-extern UNK_TYPE D_0400DE30;
-extern UNK_TYPE D_0400DE58;
-extern UNK_TYPE D_0400DE60;
-extern UNK_TYPE D_0400DEA0;
-extern UNK_TYPE D_0400DEA8;
-extern UNK_TYPE D_0400DF78;
-extern UNK_TYPE D_0400DF90;
-extern UNK_TYPE D_0400DFA0;
-extern UNK_TYPE D_0400DFD0;
-extern UNK_TYPE D_0400DFE0;
-extern UNK_TYPE D_0400DFE8;
-extern UNK_TYPE D_0400DFF8;
-extern UNK_TYPE D_0400E000;
-extern UNK_TYPE D_0400E070;
-extern UNK_TYPE D_0400E088;
-extern UNK_TYPE D_0400E120;
-extern UNK_TYPE D_0400E150;
-extern UNK_TYPE D_0400E1F0;
-extern UNK_TYPE D_0400E200;
-extern UNK_TYPE D_0400E208;
-extern UNK_TYPE D_0400E270;
-extern UNK_TYPE D_0400E290;
-extern UNK_TYPE D_0400E2A8;
-extern UNK_TYPE D_0400E2B8;
-extern UNK_TYPE D_0400E2C0;
-extern UNK_TYPE D_0400E2D0;
-extern UNK_TYPE D_0400E2D8;
-extern UNK_TYPE D_0400E2E8;
-extern UNK_TYPE D_0400E318;
-extern UNK_TYPE D_0400E398;
-extern UNK_TYPE D_0400E3A0;
-extern UNK_TYPE D_0400E3A8;
-extern UNK_TYPE D_0400E3C0;
-extern UNK_TYPE D_0400E3D8;
-extern UNK_TYPE D_0400E408;
-extern UNK_TYPE D_0400E410;
-extern UNK_TYPE D_0400E418;
-extern UNK_TYPE D_04012860;
-extern UNK_TYPE D_040128BC;
-extern u64 D_04014570[];
-extern UNK_TYPE D_04015FA0;
-extern UNK_TYPE D_04016360;
-extern UNK_TYPE D_0401A4D0;
-extern UNK_TYPE D_0401A538;
-extern Gfx D_0401A620[];
-extern Gfx D_0401C430[];
-extern UNK_TYPE D_0401F740;
-extern UNK_TYPE D_0401F7C0;
-extern UNK_TYPE D_0401F8C0;
-extern UNK_TYPE D_0401FA40;
-extern UNK_TYPE D_04020BB8;
-extern UNK_TYPE D_040221B8;
-extern UNK_TYPE D_04023100;
-extern UNK_TYPE D_04023130;
-extern Gfx D_04023210[];
-extern UNK_TYPE D_04023288;
-extern Gfx D_04023348[];
-extern Gfx D_04023428[];
-extern UNK_TYPE D_04025DD0;
-extern UNK_TYPE D_040281DC;
-extern UNK_TYPE D_04028FEC;
-extern AnimationHeader D_04029140;
-extern Gfx D_04029CB0[];
-extern Gfx D_04029CF0[];
-extern UNK_TYPE D_04029D20;
-extern Gfx D_0402E510[];
-extern AnimationHeader D_0402E65C;
-extern AnimationHeader D_0402F0EC;
-extern Gfx D_04030100[]; // Floor shockwave ring
-extern Gfx D_040301B0[];
-extern UNK_TYPE D_04032270;
-extern UNK_TYPE D_04035710;
-extern UNK_TYPE D_040367B0;
-extern UNK_TYPE D_040377B0;
-extern UNK_TYPE D_04037850;
-extern Gfx D_040378F0[]; // gExplosionSplashTex1
-extern Gfx D_04037DF0[]; // gExplosionSplashTex2
-extern Gfx D_040382F0[]; // gExplosionSplashTex3
-extern Gfx D_040387F0[]; // gExplosionSplashTex4
-extern Gfx D_04038CF0[]; // gExplosionSplashTex5
-extern Gfx D_040391F0[]; // gExplosionSplashTex6
-extern Gfx D_040396F0[]; // gExplosionSplashTex7
-extern Gfx D_04039BF0[]; // gExplosionSplashTex8
-extern Gfx D_0403A0F0[]; // gExplosionSplashDL
-extern UNK_TYPE D_0403C190;
-extern UNK_TYPE D_0403F230;
-extern UNK_TYPE D_04044300;
-extern Gfx D_04048DF0[];
-extern UNK_TYPE D_04050D10;
-extern Gfx D_04051180[];
-extern Gfx D_04051238[];
-extern AnimationHeader D_0405140C;
-extern Gfx D_040527F0[];
-extern Gfx D_040528B0[];
-extern Gfx D_04054A90[];
-extern u64 D_04054F20[];
-extern UNK_TYPE D_04055628;
-extern Gfx D_04057B10[];
-extern Gfx D_04058BA0[];
-extern Gfx D_04089070[];
-extern TexturePtr D_0408DBE0[]; // gDust1Tex
-extern TexturePtr D_0408DFE0[]; // gDust2Tex
-extern TexturePtr D_0408E3E0[]; // gDust3Tex
-extern TexturePtr D_0408E7E0[]; // gDust4Tex
-extern TexturePtr D_0408EBE0[]; // gDust5Tex
-extern TexturePtr D_0408EFE0[]; // gDust6Tex
-extern TexturePtr D_0408F3E0[]; // gDust7Tex
-extern TexturePtr D_0408F7E0[]; // gDust8Tex
-extern UNK_TYPE D_04050550;
-extern Gfx D_04050648[];
-extern Gfx D_040506E0[];
-extern UNK_TYPE D_040510B0;
-extern UNK_TYPE D_04054940;
-extern Gfx D_0405AAB0[];
-extern UNK_TYPE D_0405B6F0;
-extern UNK_TYPE D_0405BEF0;
-extern UNK_TYPE D_0405C6F0;
-extern UNK_TYPE D_0405CEF0;
-extern UNK_TYPE D_0405E6F0;
-extern Gfx D_0405F6F0[];
-extern UNK_TYPE D_0405F7C0;
-extern UNK_TYPE D_0405FFC0;
-extern UNK_TYPE D_040607C0;
-extern UNK_TYPE D_04060FC0;
-extern UNK_TYPE D_040617C0;
-extern UNK_TYPE D_04061FC0;
-extern UNK_TYPE D_04061FE0;
-extern UNK_TYPE D_04062000;
-extern UNK_TYPE D_04062020;
-extern UNK_TYPE D_04062040;
-extern UNK_TYPE D_04062060;
-extern Gfx D_040622C0[];
-extern Gfx D_0406AB30[];
-extern UNK_TYPE D_0406B730;
-extern UNK_TYPE D_0406BB0C;
-extern UNK_TYPE D_0406F380;
-extern Gfx D_040706E0[];
-extern UNK_TYPE D_04073F00;
-extern UNK_TYPE D_04075400;
-extern Gfx D_04076BC0[];
-extern UNK_TYPE D_04079B10;
-extern Gfx D_0407AB10[]; // sun (sparkles when small) displaylist
-extern Gfx D_0407AB58[];
-extern UNK_TYPE D_0407AFB0;
-extern UNK_TYPE D_0407D650;
-extern UNK_TYPE D_0407F218;
-extern UNK_TYPE D_040815D0;
-extern UNK_TYPE D_04081628;
-extern UNK_TYPE D_04083534;
-extern UNK_TYPE D_04091BE0;
-extern UNK_TYPE D_04091CE0;
-extern TexturePtr D_04091DE0[];
-extern TexturePtr D_04091FE0[];
-extern TexturePtr D_040921E0[];
-extern TexturePtr D_040923E0[];
-
-extern Gfx D_05000C40[];
-extern UNK_TYPE D_05001D20;
-extern Gfx D_050061E8[];
-extern Gfx D_05006420[];
-extern Gfx D_050066B0[];
-extern UNK_TYPE D_05007498;
-extern Gfx D_05007890[];
-extern Gfx D_050078A0[];
-extern Gfx D_05007938[];
-extern Gfx D_05007980[];
-extern UNK_TYPE D_05007E00;
-extern UNK_TYPE D_05008018;
-extern UNK_TYPE D_050085F0;
-extern Gfx D_05017EA0[]; // pot displaylist
-extern Gfx D_05018090[]; // pot break shard displaylist
-extern UNK_TYPE D_050182A8;
-extern UNK_TYPE D_0501B508;
-extern UNK_TYPE D_0501C058;
-extern Gfx D_0501D980[];
-extern Gfx D_050219E0[];
-extern UNK_TYPE D_05023008;
-extern UNK_TYPE D_0502324C;
 
 // other segments
 extern GfxMasterList D_0E000000;
