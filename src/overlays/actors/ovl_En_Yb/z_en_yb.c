@@ -182,13 +182,11 @@ void EnYb_SetAnimation(GlobalContext* globalCtx, EnYb* this, s16 animIndex, u8 a
             if (animIndex > 0) {
                 if (animMode == 0) {
                     LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
-                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0,
-                                         transitionRate);
+                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0, transitionRate);
                 } else {
                     // unused case, called once with animMode = 0
                     LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
-                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0,
-                                         transitionRate);
+                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0, transitionRate);
                 }
             } else {
                 // unused case, called once with animIndex = 2
