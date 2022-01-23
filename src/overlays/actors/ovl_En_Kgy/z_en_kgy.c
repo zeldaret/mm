@@ -7,6 +7,8 @@
 #include "overlays/actors/ovl_En_Kbt/z_en_kbt.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "z_en_kgy.h"
+#include "objects/object_kgy/object_kgy.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000009
 
@@ -31,24 +33,6 @@ void func_80B425A0(EnKgy* this, GlobalContext* globalCtx);
 void func_80B42714(EnKgy* this, GlobalContext* globalCtx);
 void func_80B42D28(EnKgy* this, GlobalContext* globalCtx);
 
-extern AnimationHeader D_060008FC;
-extern AnimationHeader D_06001764;
-extern Gfx D_04001D00[];
-extern AnimationHeader D_06001EA4;
-extern Gfx D_040021A8[];
-extern AnimationHeader D_0600292C;
-extern AnimationHeader D_06003334;
-extern AnimationHeader D_06003D88;
-extern AnimationHeader D_060042E4;
-extern AnimationHeader D_06004B98;
-extern Gfx D_0600E8F0[];
-extern Gfx D_0600EE58[];
-extern Gfx D_0600F180[];
-extern Gfx D_0600F6A0[];
-extern FlexSkeletonHeader D_0600F910;
-extern AnimationHeader D_06010B84;
-extern AnimationHeader D_060101F0;
-
 const ActorInit En_Kgy_InitVars = {
     ACTOR_EN_KGY,
     ACTORCAT_NPC,
@@ -67,7 +51,8 @@ void EnKgy_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600F910, &D_06004B98, this->jointTable, this->morphTable, 23);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_kgy_Skel_00F910, &object_kgy_Anim_004B98, this->jointTable,
+                       this->morphTable, 23);
     this->unk_2D2 = -1;
     this->unk_29C = 0;
     this->unk_2E4 = 0;
@@ -127,8 +112,9 @@ void EnKgy_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 transitionRate) {
     static AnimationHeader* sAnimations[] = {
-        &D_06004B98, &D_060008FC, &D_0600292C, &D_060042E4, &D_060101F0,
-        &D_06001764, &D_06003334, &D_06010B84, &D_06001EA4, &D_06003D88,
+        &object_kgy_Anim_004B98, &object_kgy_Anim_0008FC, &object_kgy_Anim_00292C, &object_kgy_Anim_0042E4,
+        &object_kgy_Anim_0101F0, &object_kgy_Anim_001764, &object_kgy_Anim_003334, &object_kgy_Anim_010B84,
+        &object_kgy_Anim_001EA4, &object_kgy_Anim_003D88,
     };
 
     Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
@@ -1155,20 +1141,20 @@ void func_80B43074(EnKgy* this, GlobalContext* globalCtx) {
     Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
 
     if (func_80B40D8C(globalCtx)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(D_0600F6A0));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_kgy_Matanimheader_00F6A0));
     } else {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(D_0600EE58));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_kgy_Matanimheader_00EE58));
     }
 
     gfx = POLY_OPA_DISP;
     gSPMatrix(gfx, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (func_80B40D8C(globalCtx)) {
-        gSPDisplayList(&gfx[1], D_04001D00);
-        gSPDisplayList(&gfx[2], D_0600F180);
+        gSPDisplayList(&gfx[1], gameplay_keep_DL_001D00);
+        gSPDisplayList(&gfx[2], object_kgy_DL_00F180);
     } else {
-        gSPDisplayList(&gfx[1], D_040021A8);
-        gSPDisplayList(&gfx[2], D_0600E8F0);
+        gSPDisplayList(&gfx[1], gameplay_keep_DL_0021A8);
+        gSPDisplayList(&gfx[2], object_kgy_DL_00E8F0);
     }
     POLY_OPA_DISP = &gfx[3];
 
