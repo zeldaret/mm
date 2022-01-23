@@ -1,10 +1,154 @@
+/*
+ * File: z_sub_s.c
+ * Description: Various miscellaneous helpers
+ */
+
 #include "global.h"
+#include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013A7C0.s")
+/**
+ * Finds the first EnDoor instance with unk_1A4 == 5 and the specified unk_1A5.
+ */
+EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 unk_1A5) {
+    Actor* actor = NULL;
+    EnDoor* door;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013A860.s")
+    while (true) {
+        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        door = (EnDoor*)actor;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AB00.s")
+        if (actor == NULL) {
+            break;
+        }
+
+        if ((door->unk_1A4 == 5) && (door->unk_1A5 == (u8)unk_1A5)) {
+            break;
+        }
+
+        if (actor->next == NULL) {
+            door = NULL;
+            break;
+        }
+
+        actor = actor->next;
+    }
+
+    return door;
+}
+
+Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
+                                OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
+                                TransformLimbDraw transformLimbDraw, Actor* actor, Mtx** mtx, Gfx* gfx) {
+    StandardLimb* limb;
+    Gfx* newDList;
+    Gfx* limbDList;
+    Vec3f pos;
+    Vec3s rot;
+
+    Matrix_StatePush();
+    limb = Lib_SegmentedToVirtual(skeleton[limbIndex]);
+    limbIndex++;
+    rot = jointTable[limbIndex];
+    pos.x = limb->jointPos.x;
+    pos.y = limb->jointPos.y;
+    pos.z = limb->jointPos.z;
+    newDList = limbDList = limb->dList;
+
+    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, limbIndex, &newDList, &pos, &rot, actor, &gfx)) {
+        Matrix_JointPosition(&pos, &rot);
+        Matrix_StatePush();
+
+        transformLimbDraw(globalCtx, limbIndex, actor, &gfx);
+
+        if (newDList != NULL) {
+            Matrix_ToMtx(*mtx);
+            gSPMatrix(gfx++, *mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(gfx++, newDList);
+            (*mtx)++;
+        } else if (limbDList != NULL) {
+            Matrix_ToMtx(*mtx);
+            (*mtx)++;
+        }
+        Matrix_StatePop();
+    }
+    if (postLimbDraw != NULL) {
+        postLimbDraw(globalCtx, limbIndex, &limbDList, &rot, actor, &gfx);
+    }
+    if (limb->child != LIMB_DONE) {
+        gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                                         transformLimbDraw, actor, mtx, gfx);
+    }
+    Matrix_StatePop();
+    if (limb->sibling != LIMB_DONE) {
+        gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                                         transformLimbDraw, actor, mtx, gfx);
+    }
+    return gfx;
+}
+
+/**
+ * Draw all limbs of type `StandardLimb` in a given flexible skeleton
+ * Limbs in a flexible skeleton have meshes that can stretch to line up with other limbs.
+ * An array of matrices is dynamically allocated so each limb can access any transform to ensure its meshes line up.
+ *
+ * Also makes use of a `TransformLimbDraw`, which transforms limbs based on world coordinates, as opposed to local limb
+ * coordinates.
+ * Note that the `TransformLimbDraw` does not have a NULL check, so must be provided even if empty.
+ */
+Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
+                            OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
+                            TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx) {
+    StandardLimb* rootLimb;
+    s32 pad;
+    Gfx* newDlist;
+    Gfx* limbDList;
+    Vec3f pos;
+    Vec3s rot;
+    Mtx* mtx = GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(dListCount * sizeof(Mtx)));
+
+    if (skeleton == NULL) {
+        return NULL;
+    }
+
+    gSPSegment(gfx++, 0x0D, mtx);
+    Matrix_StatePush();
+    rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
+    pos.x = jointTable->x;
+    pos.y = jointTable->y;
+    pos.z = jointTable->z;
+    rot = jointTable[1];
+    newDlist = rootLimb->dList;
+    limbDList = rootLimb->dList;
+
+    if (overrideLimbDraw == NULL || !overrideLimbDraw(globalCtx, 1, &newDlist, &pos, &rot, actor, &gfx)) {
+        Matrix_JointPosition(&pos, &rot);
+        Matrix_StatePush();
+
+        transformLimbDraw(globalCtx, 1, actor, &gfx);
+
+        if (newDlist != NULL) {
+            Matrix_ToMtx(mtx);
+            gSPMatrix(gfx++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(gfx++, newDlist);
+            mtx++;
+        } else if (limbDList != NULL) {
+            Matrix_ToMtx(mtx);
+            mtx++;
+        }
+        Matrix_StatePop();
+    }
+
+    if (postLimbDraw != NULL) {
+        postLimbDraw(globalCtx, 1, &limbDList, &rot, actor, &gfx);
+    }
+
+    if (rootLimb->child != LIMB_DONE) {
+        gfx = SubS_DrawTransformFlexLimb(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw,
+                                         postLimbDraw, transformLimbDraw, actor, &mtx, gfx);
+    }
+    Matrix_StatePop();
+    return gfx;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AD6C.s")
 
@@ -26,7 +170,40 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BB34.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BB7C.s")
+/**
+ * Finds the nearest actor instance of a specified Id and category to an actor.
+ */
+Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
+    Actor* actorTmp;
+    f32 dist;
+    Actor* closestActor = NULL;
+    f32 minDist = 99999.0f;
+    s32 isSetup = false;
+
+    do {
+        actorIter = SubS_FindActor(globalCtx, actorIter, actorCategory, actorId);
+
+        actorTmp = actorIter;
+        if (actorTmp == NULL) {
+            break;
+        }
+        actorIter = actorTmp;
+
+        if (actorIter != actor) {
+            dist = Actor_DistanceBetweenActors(actor, actorIter);
+            if (!isSetup || dist < minDist) {
+                closestActor = actorIter;
+                minDist = dist;
+                isSetup = true;
+            }
+        }
+
+        actorIter = actorIter->next;
+    } while (actorIter != NULL);
+
+    return closestActor;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BC6C.s")
 
@@ -68,7 +245,22 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D924.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_ActorCategoryIterateById.s")
+/**
+ * Finds the first actor instance of a specified Id and category.
+ */
+Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
+    Actor* actor = actorListStart;
+
+    if (actor == NULL) {
+        actor = globalCtx->actorCtx.actorLists[actorCategory].first;
+    }
+
+    while (actor != NULL && actorId != actor->id) {
+        actor = actor->next;
+    }
+
+    return actor;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D9C8.s")
 
@@ -100,7 +292,27 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E5CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E640.s")
+/**
+ * Finds the first actor instance of a specified Id and category verified with a custom callback.
+ * The callback should return `true` when the actor is succesfully verified.
+ */
+Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
+                            s16 actorId, void* verifyData, VerifyActor verifyActor) {
+    Actor* actorIter = actorListStart;
+
+    if (actorListStart == NULL) {
+        actorIter = globalCtx->actorCtx.actorLists[actorCategory].first;
+    }
+
+    while (actorIter != NULL && (actorId != actorIter->id ||
+                                 (actorId == actorIter->id &&
+                                  (verifyActor == NULL ||
+                                   (verifyActor != NULL && !verifyActor(globalCtx, actor, actorIter, verifyData)))))) {
+        actorIter = actorIter->next;
+    }
+
+    return actorIter;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E748.s")
 

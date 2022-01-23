@@ -148,9 +148,9 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         func_80C10290(this);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2000)) {
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
         if (Player_GetMask(globalCtx) == 2) {
             this->actor.textId = 0x2367;
@@ -188,7 +188,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         }
     }
 
-    temp_v0_2 = func_80152498(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC;
         func_80C10148(this);
@@ -197,7 +197,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
     
     if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) {
-            Actor_SetSwitchFlag(globalCtx, this->actor.params);
+            Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
             if ((gSaveContext.weekEventReg[63] & 0x80)) {
                 this->actor.textId = 0x2ADF;
@@ -262,7 +262,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -273,7 +273,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
 (We can delete the `GLOBAL_ASM` lines now.)
 
-The worst part of documentation is finding somewhere to start. We have a decent place to start here, though, in that we already know the function (or rather, the use) of a couple of the functions, namely the LimbDraws. So we can rename `func_80C10558` to `EnRecepgirl_OverrideLimbDraw` and `func_80C10590` to `EnRecepgirl_UnkLimbDraw`. Remember to do a global rename so that the functions in the assembly are renamed, use `rename_global_asm`,
+The worst part of documentation is finding somewhere to start. We have a decent place to start here, though, in that we already know the function (or rather, the use) of a couple of the functions, namely the LimbDraws. So we can rename `func_80C10558` to `EnRecepgirl_OverrideLimbDraw` and `func_80C10590` to `EnRecepgirl_TransformLimbDraw`. Remember to do a global rename so that the functions in the assembly are renamed, use `rename_global_asm`,
 ```
 $ ./tools/rename_global_asm.py
 asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10558.s --> asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_OverrideLimbDraw.s
@@ -476,9 +476,9 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         func_80C10290(this);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2000)) {
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
         if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
             this->actor.textId = 0x2367; // "... doesn't Kafei want to break off his engagement ... ?"
@@ -514,13 +514,13 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    temp_v0_2 = func_80152498(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC; // hear directions again?
         func_80C10148(this);
     } else if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
-            Actor_SetSwitchFlag(globalCtx, this->actor.params);
+            Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
             if (gSaveContext.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
                 this->actor.textId = 0x2ADF; // Mayor's office is on the left (meeting ended)
@@ -546,7 +546,7 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
     }
 }
 ```
-All this branching is to make the conversation look more diverse and interesting. Notably, though, `func_80C1019C` is set to start with, and is only changed when `func_800B84D0(&this->actor, globalCtx) != 0`. This is something to do with talking. The other function handles the rest of the conversation, and hands back to the first if `func_80152498(&globalCtx->msgCtx) == 2`. This function is *something* to do with the text state, which will require `z_message` to be decomped. However, observation in-game will reveal this is something to do with ending dialogue. So we can conclude that the action functions are `EnRecepgirl_Wait` and `EnRecepgirl_Talk`. The setup functions are thus `EnRecepgirl_SetupWait` and `EnRecepgirl_SetupTalk`.
+All this branching is to make the conversation look more diverse and interesting. Notably, though, `func_80C1019C` is set to start with, and is only changed when `Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0`. This is something to do with talking. The other function handles the rest of the conversation, and hands back to the first if `Message_GetState(&globalCtx->msgCtx) == 2`. This function is *something* to do with the text state, which will require `z_message` to be decomped. However, observation in-game will reveal this is something to do with ending dialogue. So we can conclude that the action functions are `EnRecepgirl_Wait` and `EnRecepgirl_Talk`. The setup functions are thus `EnRecepgirl_SetupWait` and `EnRecepgirl_SetupTalk`.
 
 For more complex actors, we have a tool called `graphovl.py` that can produce function flow graphs for actors: running 
 ```

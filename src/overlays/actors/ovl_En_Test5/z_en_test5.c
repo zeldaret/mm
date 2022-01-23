@@ -33,10 +33,10 @@ void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc) {
 }
 
 void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    EnTest5* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnTest5* this = THIS;
     WaterBox* water;
-    f32 ySurface; // Unused
+    f32 ySurface;
 
     // If not spawned above a water source, immediately despawn
     if (!WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
@@ -66,25 +66,25 @@ void EnTest5_HandleBottleAction(EnTest5* this, GlobalContext* globalCtx) {
 
     player = GET_PLAYER(globalCtx);
 
-    if (player->unk_388 == NULL || player->unk_384 != GI_MAX) {
+    if (player->interactRangeActor == NULL || player->getItemId != GI_MAX) {
         Math_Vec3f_DistXYZAndStoreDiff(&this->minPos, &player->actor.world.pos, &playerPosRelativeToWater);
 
         // Make sure that the player is within the bounds of the water and deep enough to grab some
         if (playerPosRelativeToWater.x >= 0.0f && playerPosRelativeToWater.x <= this->xLength &&
             playerPosRelativeToWater.z >= 0.0f && playerPosRelativeToWater.z <= this->zLength &&
             fabsf(playerPosRelativeToWater.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-            func_800B8A1C(&this->actor, globalCtx, GI_MAX, this->actor.xzDistToPlayer,
-                          fabsf(this->actor.playerHeightRel));
+            Actor_PickUp(&this->actor, globalCtx, GI_MAX, this->actor.xzDistToPlayer,
+                         fabsf(this->actor.playerHeightRel));
         }
     }
 }
 
 void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnTest5* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnTest5* this = THIS;
     Vec3f steamPos;
-    CollisionPoly* poly; // Unused
-    s32 pad;             // Unused
+    CollisionPoly* poly;
+    s32 pad;
 
     this->actionFunc(this, globalCtx);
 

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_railgibud.h"
+#include "objects/object_rd/object_rd.h"
 
 #define FLAGS 0x00000415
 
@@ -47,28 +48,6 @@ void func_80BA7D04(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7D30(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA8050(Actor* thisx, GlobalContext* globalCtx);
 
-extern AnimationHeader D_060009C4;
-extern AnimationHeader D_06000F1C;
-extern AnimationHeader D_06001600;
-extern FlexSkeletonHeader D_060053E8;
-extern AnimationHeader D_06005DF4;
-extern AnimationHeader D_060061E4;
-extern AnimationHeader D_06006678;
-extern AnimationHeader D_06006B08;
-extern AnimationHeader D_06006EEC;
-extern AnimationHeader D_060073A4;
-extern AnimationHeader D_06007BBC;
-extern AnimationHeader D_060081A8;
-extern AnimationHeader D_06009298;
-extern AnimationHeader D_06009900;
-extern AnimationHeader D_0600A450;
-extern AnimationHeader D_0600ABE0;
-extern FlexSkeletonHeader D_06010B88;
-extern AnimationHeader D_060113EC;
-extern AnimationHeader D_060118D8;
-extern AnimationHeader D_06011DB8;
-extern AnimationHeader D_0601216C;
-
 const ActorInit En_Railgibud_InitVars = {
     ACTOR_EN_RAILGIBUD,
     ACTORCAT_ENEMY,
@@ -82,16 +61,16 @@ const ActorInit En_Railgibud_InitVars = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &D_06006678, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06006B08, 0.5f, 0.0f, 0.0f, 3, 0.0f },
-    { &D_06006EEC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060073A4, 0.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &D_06007BBC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060081A8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_06009298, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_06009900, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &D_0600A450, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_0600ABE0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_060113EC, 0.4f, 0.0f, 0.0f, 1, -8.0f }, { &D_0601216C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_060118D8, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06011DB8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_0600A450, 3.0f, 0.0f, 0.0f, 2, -6.0f }, { &D_06005DF4, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &D_060061E4, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06001600, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_060009C4, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_06000F1C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_006678, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_006B08, 0.5f, 0.0f, 0.0f, 3, 0.0f },
+    { &object_rd_Anim_006EEC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_0073A4, 0.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &object_rd_Anim_007BBC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_0081A8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_009298, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_009900, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &object_rd_Anim_00A450, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_00ABE0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_0113EC, 0.4f, 0.0f, 0.0f, 1, -8.0f }, { &object_rd_Anim_01216C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_0118D8, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_011DB8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_00A450, 3.0f, 0.0f, 0.0f, 2, -6.0f }, { &object_rd_Anim_005DF4, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &object_rd_Anim_0061E4, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_001600, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_0009C4, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_000F1C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -212,15 +191,16 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_402 = gSaveContext.time;
     this->unk_404 = 0;
     this->unk_3F8 = 0;
-    this->unk_400 = 0;
+    this->textId = 0;
     this->unk_3FA = 0;
     if (this->actor.parent == NULL) {
         this->unk_3EC = 1;
         this->unk_3EE = 1;
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0, this->jointTable,
+                       this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -239,7 +219,7 @@ void EnRailgibud_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80BA57A8(EnRailgibud* this) {
     this->actor.speedXZ = 0.6f;
-    func_800BDC5C(&this->skelAnime, sAnimations, 10);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
     this->actionFunc = func_80BA57F8;
 }
 
@@ -283,11 +263,11 @@ void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
     } else {
         this->unk_298 = 0;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80BA59F0(EnRailgibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 9);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 9);
     this->actionFunc = func_80BA5A34;
 }
 
@@ -300,14 +280,14 @@ void func_80BA5A34(EnRailgibud* this, GlobalContext* globalCtx) {
         player->actor.freezeTimer = 60;
         func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
         func_80123E90(globalCtx, &this->actor);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
         func_80BA5AF0(this);
     }
     func_80BA6B9C(this, globalCtx);
 }
 
 void func_80BA5AF0(EnRailgibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 10);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
     this->actor.speedXZ = 0.4f;
     if (this->actionFunc == func_80BA5A34) {
         this->unk_3F2 = 80;
@@ -325,7 +305,7 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
     this->actor.world.rot = this->actor.shape.rot;
     Math_SmoothStepToS(&this->unk_3E2, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->unk_3E8, 0, 1, 0x64, 0);
-    if (func_80BA6D10(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
+    if (func_80BA6D10(this, globalCtx) && Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         if ((this->unk_3F4 == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
             if ((gSaveContext.playerForm == PLAYER_FORM_GORON) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
@@ -339,7 +319,7 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
                 this->unk_3F2 = 60;
                 func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
                 func_80123E90(globalCtx, &this->actor);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             } else {
                 this->unk_3F2--;
             }
@@ -355,14 +335,14 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((globalCtx->gameplayFrames & 95) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
 void func_80BA5DBC(EnRailgibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
     this->actor.flags &= ~1;
     this->unk_3F2 = 0;
     this->unk_3F0 = 0;
@@ -380,9 +360,9 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
             sp34 = func_80BA7088(this, globalCtx);
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (sp34 == 1)) {
                 this->unk_3F0 = 1;
-                func_800BDC5C(&this->skelAnime, sAnimations, 0);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
             } else if (!(player->stateFlags2 & 0x80)) {
-                func_800BDC5C(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
                 this->actor.flags |= 1;
                 this->unk_3F0 = 2;
                 this->unk_3F2 = 0;
@@ -395,7 +375,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
 
                 sp32 = player->ageProperties->unk_92 + 0x6805;
                 globalCtx->damagePlayer(globalCtx, -8);
-                func_800B8E58(&player->actor, sp32);
+                func_800B8E58(player, sp32);
                 func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->unk_3F2 = 0;
             } else {
@@ -403,7 +383,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
             }
 
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_ATTACK);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
 
             if (!(player->stateFlags2 & 0x80) || (player->unk_B62 != 0)) {
@@ -411,7 +391,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
                     player->stateFlags2 &= ~0x80;
                     player->unk_AE8 = 100;
                 }
-                func_800BDC5C(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
                 this->actor.flags |= 1;
                 this->unk_3F0 = 2;
                 this->unk_3F2 = 0;
@@ -431,8 +411,8 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA6054(EnRailgibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 7);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 7);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->actor.speedXZ = -2.0f;
     this->actionFunc = func_80BA60B0;
 }
@@ -453,7 +433,7 @@ void func_80BA60B0(EnRailgibud* this, GlobalContext* globalCtx) {
 
 void func_80BA6158(EnRailgibud* this) {
     this->unk_3F2 = 0;
-    func_800BDC5C(&this->skelAnime, sAnimations, 10);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
     this->actionFunc = func_80BA61A0;
 }
 
@@ -470,7 +450,7 @@ void func_80BA61A0(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA6284(EnRailgibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 10);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
     this->actor.speedXZ = 0.4f;
     this->actionFunc = func_80BA62D4;
 }
@@ -495,15 +475,15 @@ void func_80BA62D4(EnRailgibud* this, GlobalContext* globalCtx) {
     }
     if (func_80BA6D10(this, globalCtx)) {
         if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
-            Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
+            Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
             func_80BA5AF0(this);
         }
     }
 }
 
 void func_80BA6440(EnRailgibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 7);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 7);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3F2 = 0;
     this->unk_3F4 = 0;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -521,7 +501,8 @@ void func_80BA64AC(EnRailgibud* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if ((this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
             this->actor.hintId = 0x2A;
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
+                               this->morphTable, 26);
             this->unk_3F8 = 1;
         }
         func_80BA6284(this);
@@ -532,9 +513,9 @@ void func_80BA6584(EnRailgibud* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_3F2 = 10;
     if (this->unk_3F6 != 0) {
-        func_800BCB70(&this->actor, 0, 0xC8, 0, 0x28);
+        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
     } else {
-        func_800BCB70(&this->actor, 0, 0xC8, 0, 0x28);
+        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
     }
     this->actionFunc = func_80BA6604;
 }
@@ -554,9 +535,9 @@ void func_80BA6604(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA6664(EnRailgibud* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 6);
+    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
     this->actor.flags &= ~1;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DEAD);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->unk_3F2 = 0;
     this->actionFunc = func_80BA66C8;
 }
@@ -584,7 +565,8 @@ void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_3F2 == 20) && (this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
+                           this->morphTable, 26);
         this->unk_3F8 = 1;
     }
 }
@@ -699,7 +681,7 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
 
         switch (this->actor.colChkInfo.damageEffect) {
             case 15:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 if (player->unk_ADC != 0) {
                     this->unk_405 = player->unk_ADD;
                 }
@@ -720,7 +702,7 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
                 break;
 
             case 2:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     func_80BA6664(this);
                 } else {
@@ -732,7 +714,7 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
                 break;
 
             case 4:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     func_80BA6664(this);
                 } else {
@@ -790,7 +772,7 @@ s32 func_80BA7088(EnRailgibud* this, GlobalContext* globalCtx) {
 void func_80BA71E4(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->actionFunc == func_80BA5B64) || (this->actionFunc == func_80BA62D4) ||
         (this->actionFunc == func_80BA64AC)) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 
@@ -854,28 +836,28 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
-    if ((this->unk_400 == 0) && (this->unk_3F8 == 0)) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+    if ((this->textId == 0) && (this->unk_3F8 == 0)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk_3FA = 1;
             func_801518B0(globalCtx, 0x13B2, &this->actor);
-            this->unk_400 = 0x13B2;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
+            this->textId = 0x13B2;
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
         } else if (((this->actor.flags & 9) == 9) && !(this->collider.base.acFlags & AC_HIT)) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
     } else {
-        switch (func_80152498(&globalCtx->msgCtx)) {
+        switch (Message_GetState(&globalCtx->msgCtx)) {
             case 5:
                 if (func_80147624(globalCtx)) {
                     func_801518B0(globalCtx, 0x13B3, &this->actor);
-                    this->unk_400 = 0x13B3;
+                    this->textId = 0x13B3;
                 }
                 break;
 
             case 6:
                 if (func_80147624(globalCtx)) {
-                    this->unk_400 = 0;
+                    this->textId = 0;
                     this->unk_3FA = 0;
                     this->actor.speedXZ = 0.6f;
                 }
@@ -995,8 +977,9 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
     this->unk_3FE = 99;
     this->actor.flags |= 0x100000;
     this->actor.flags |= 0x10;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0, this->jointTable,
+                       this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -1067,37 +1050,37 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
             switch (globalCtx->csCtx.npcActions[sp2C]->unk0) {
                 case 1:
                     this->unk_3F0 = 9;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 9);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 9);
                     break;
 
                 case 2:
                     this->unk_3F0 = 15;
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_WEAKENED2);
-                    func_800BDC5C(&this->skelAnime, sAnimations, 15);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_WEAKENED2);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 15);
                     break;
 
                 case 3:
                     this->unk_3F0 = 17;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 17);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 17);
                     break;
 
                 case 4:
                     this->unk_3F0 = 18;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 18);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 18);
                     break;
 
                 case 5:
                     this->unk_3F0 = 10;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 10);
+                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             if (this->unk_3F0 == 15) {
                 this->unk_3F0 = 16;
-                func_800BDC5C(&this->skelAnime, sAnimations, 16);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 16);
             } else if (this->unk_3F0 == 18) {
                 this->unk_3F0 = 19;
-                func_800BDC5C(&this->skelAnime, sAnimations, 19);
+                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 19);
                 func_80BA7D14(this);
             }
         }
@@ -1115,9 +1098,9 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
             case 5:
                 if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                     if (globalCtx->csCtx.frames < 280) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
                     } else {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_WEAKENED1);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_WEAKENED1);
                     }
                 }
                 break;

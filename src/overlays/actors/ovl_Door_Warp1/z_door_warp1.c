@@ -327,7 +327,7 @@ void func_808B90CC(DoorWarp1* this, GlobalContext* globalCtx) {
         DoorWarp1_SetupAction(this, func_808B921C);
     }
 
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WARP_HOLE_ENERGY - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE_ENERGY - SFX_FLAG);
 }
 
 void func_808B921C(DoorWarp1* this, GlobalContext* globalCtx) {
@@ -348,14 +348,14 @@ void func_808B921C(DoorWarp1* this, GlobalContext* globalCtx) {
         DoorWarp1_SetupAction(this, func_808B93A0);
     }
 
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
 }
 
 void func_808B93A0(DoorWarp1* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((func_80152498(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 4 && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
@@ -371,7 +371,7 @@ void func_808B93A0(DoorWarp1* this, GlobalContext* globalCtx) {
         }
     }
     func_808BB8D4(this, globalCtx, 1);
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
 }
 
 void func_808B94A4(DoorWarp1* this, GlobalContext* globalCtx) {
@@ -379,7 +379,7 @@ void func_808B94A4(DoorWarp1* this, GlobalContext* globalCtx) {
         DoorWarp1_SetupAction(this, func_808B921C);
     }
     func_808BB8D4(this, globalCtx, 1);
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BOSS_WARP_HOLE - SFX_FLAG);
 }
 
 void func_808B9524(DoorWarp1* this, GlobalContext* globalCtx) {
@@ -414,14 +414,14 @@ void func_808B958C(DoorWarp1* this, GlobalContext* globalCtx) {
     }
 
     Math_SmoothStepToF(&this->unk_1A8, 6.0f, 0.2f, 0.02f, 0.01f);
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_LINK_WARP - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_LINK_WARP - SFX_FLAG);
 }
 
 void func_808B96A0(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B96B0(DoorWarp1* this, GlobalContext* globalCtx) {
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     Math_SmoothStepToF(&this->unk_1B0, 255.0f, 0.4f, 10.0f, 0.01f);
     Math_SmoothStepToF(&this->unk_1B4, 255.0f, 0.4f, 10.0f, 0.01f);
 
@@ -441,11 +441,11 @@ void func_808B96B0(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B977C(DoorWarp1* this, GlobalContext* globalCtx) {
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     if (func_808B866C(this, globalCtx) && !func_801690CC(globalCtx)) {
         Player* player = GET_PLAYER(globalCtx);
 
-        func_801A5CFC(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        Audio_PlaySfxGeneral(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
         func_800B7298(globalCtx, &this->dyna.actor, 9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
@@ -514,7 +514,7 @@ void func_808B9B30(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B9BE8(DoorWarp1* this, GlobalContext* globalCtx) {
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     Math_SmoothStepToF(&this->unk_1B0, 255.0f, 0.2f, 2.0f, 0.1f);
     Math_SmoothStepToF(&this->unk_1B4, 255.0f, 0.2f, 2.0f, 0.1f);
     if (this->unk_1C4 < 10) {
@@ -546,7 +546,7 @@ void func_808B9CE8(DoorWarp1* this, GlobalContext* globalCtx) {
     }
 
     if (!Actor_HasParent(&this->dyna.actor, globalCtx)) {
-        func_800B8A1C(&this->dyna.actor, globalCtx, func_808B849C(this, globalCtx) + 84, 30.0f, 80.0f);
+        Actor_PickUp(&this->dyna.actor, globalCtx, func_808B849C(this, globalCtx) + 84, 30.0f, 80.0f);
         return;
     }
 
@@ -579,7 +579,7 @@ void func_808B9CE8(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B9E94(DoorWarp1* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 2) {
+    if (Message_GetState(&globalCtx->msgCtx) == 2) {
         this->unk_1CE = 110;
         DoorWarp1_SetupAction(this, func_808B9ED8);
     }
@@ -593,7 +593,7 @@ void func_808B9ED8(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B9F10(DoorWarp1* this, GlobalContext* globalCtx) {
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     if ((this->unk_203 == 0) && func_808B866C(this, globalCtx) && !func_801690CC(globalCtx) && (this->unk_203 == 0)) {
         Player* player = GET_PLAYER(globalCtx);
 
@@ -619,7 +619,7 @@ void func_808B9FD0(DoorWarp1* this, GlobalContext* globalCtx) {
         ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[9]);
     } else {
         ActorCutscene_Start(globalCtx->unk_1879C[9], NULL);
-        func_801A5CFC(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        Audio_PlaySfxGeneral(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
         Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f,
                              Animation_GetLastFrame(&object_warp1_Anim_001374.common),
                              Animation_GetLastFrame(&object_warp1_Anim_001374.common), 2, 40.0f, 1);
@@ -1015,7 +1015,7 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808BB4C4(DoorWarp1* this, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, object_warp1_DL_0076C0);
+    Gfx_DrawDListOpa(globalCtx, object_warp1_DL_0076C0);
 }
 
 #ifdef NON_MATCHING
@@ -1035,8 +1035,8 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
         Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
                                  this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(4.0f, this->unk_1AC, 4.0f, MTXMODE_APPLY);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_0044D8));
-        func_800BE03C(globalCtx, object_warp1_DL_003230);
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0044D8));
+        Gfx_DrawDListXlu(globalCtx, object_warp1_DL_003230);
         return;
     }
 
@@ -1054,7 +1054,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
                              MTXMODE_NEW);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_0057D8));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0057D8));
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1066,7 +1066,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_004690);
     gfxCtx = globalCtx->state.gfxCtx;
 
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_007238));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_007238));
     Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                              MTXMODE_NEW);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);

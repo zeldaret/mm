@@ -5,6 +5,7 @@
  */
 
 #include "z_item_b_heart.h"
+#include "objects/object_gi_hearts/object_gi_hearts.h"
 
 #define FLAGS 0x00000000
 
@@ -36,13 +37,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-extern Gfx D_06001290[];
-extern Gfx D_06001470[];
-
 void ItemBHeart_Init(Actor* thisx, GlobalContext* globalCtx) {
     ItemBHeart* this = THIS;
 
-    if (Actor_GetCollectibleFlag(globalCtx, 0x1F)) {
+    if (Flags_GetCollectible(globalCtx, 0x1F)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -69,10 +67,10 @@ void ItemBHeart_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!(this->unk_168 < 0.5f)) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
-            Actor_SetCollectibleFlag(globalCtx, 0x1F);
+            Flags_SetCollectible(globalCtx, 0x1F);
             Actor_MarkForDeath(&this->actor);
         } else {
-            func_800B8A1C(&this->actor, globalCtx, GI_HEART_CONTAINER, 30.0f, 80.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_HEART_CONTAINER, 30.0f, 80.0f);
         }
     }
 }
@@ -90,7 +88,7 @@ void ItemBHeart_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    blueWarpActor = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    blueWarpActor = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (blueWarpActor != NULL) {
         if ((blueWarpActor->id == ACTOR_DOOR_WARP1) && (blueWarpActor->projectedPos.z > this->actor.projectedPos.z)) {
@@ -103,13 +101,13 @@ void ItemBHeart_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (flag || thisx->world.rot.y != 0) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_06001290);
-        gSPDisplayList(POLY_XLU_DISP++, D_06001470);
+        gSPDisplayList(POLY_XLU_DISP++, object_gi_hearts_DL_001290);
+        gSPDisplayList(POLY_XLU_DISP++, object_gi_hearts_DL_001470);
     } else {
         func_8012C28C(globalCtx->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_06001290);
-        gSPDisplayList(POLY_OPA_DISP++, D_06001470);
+        gSPDisplayList(POLY_OPA_DISP++, object_gi_hearts_DL_001290);
+        gSPDisplayList(POLY_OPA_DISP++, object_gi_hearts_DL_001470);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

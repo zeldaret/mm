@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ms.h"
+#include "objects/object_ms/object_ms.h"
 
 #define FLAGS 0x00000009
 
@@ -56,17 +57,15 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-extern AnimationHeader D_060005EC;
-extern FlexSkeletonHeader D_06003DC0;
-
 void EnMs_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMs* this = THIS;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06003DC0, &D_060005EC, this->jointTable, this->morphTable, 9);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ms_Skel_003DC0, &object_ms_Anim_0005EC, this->jointTable,
+                       this->morphTable, 9);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     Actor_SetScale(&this->actor, 0.015f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE; // Eating Magic Beans all day will do that to you
     this->actionFunc = EnMs_Wait;
@@ -90,7 +89,7 @@ void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x932; // "[...] So you liked my Magic Beans [...]"
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnMs_Talk;
     } else if ((this->actor.xzDistToPlayer < 90.0f) && (ABS_ALT(yawDiff) < 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 90.0f);
@@ -98,7 +97,7 @@ void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
 }
 
 void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 6:
             if (func_80147624(globalCtx) != 0) {
                 this->actionFunc = EnMs_Wait;
@@ -108,8 +107,8 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
         case 5:
             if (func_80147624(globalCtx) != 0) {
                 func_801477B4(globalCtx);
-                func_800B8A1C(&this->actor, globalCtx, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
-                              this->actor.playerHeightRel);
+                Actor_PickUp(&this->actor, globalCtx, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
+                             this->actor.playerHeightRel);
                 this->actionFunc = EnMs_Sell;
             }
             break;
@@ -127,7 +126,7 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
                             func_80151938(globalCtx, 0x937); // "[...] You can't carry anymore."
                         } else {
                             func_8019F208();
-                            func_800B8A1C(&this->actor, globalCtx, GI_MAGIC_BEANS, 90.0f, 10.0f);
+                            Actor_PickUp(&this->actor, globalCtx, GI_MAGIC_BEANS, 90.0f, 10.0f);
                             func_801159EC(-10);
                             this->actionFunc = EnMs_Sell;
                         }
@@ -152,12 +151,12 @@ void EnMs_Sell(EnMs* this, GlobalContext* globalCtx) {
         func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = EnMs_TalkAfterPurchase;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_PickUp(&this->actor, globalCtx, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
 void EnMs_TalkAfterPurchase(EnMs* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80151938(globalCtx, 0x936); // "You can plant 'em whenever you want [...]"
         this->actionFunc = EnMs_Talk;
     } else {
@@ -169,7 +168,7 @@ void EnMs_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnMs* this = THIS;
 
-    Actor_SetHeight(&this->actor, 20.0f);
+    Actor_SetFocus(&this->actor, 20.0f);
     this->actor.targetArrowOffset = 500.0f;
     Actor_SetScale(&this->actor, 0.015f);
     SkelAnime_Update(&this->skelAnime);

@@ -6,6 +6,7 @@
 
 #include "z_en_pm.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "objects/object_mm/object_mm.h"
 
 #define FLAGS 0x00000039
 
@@ -18,25 +19,6 @@ void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx);
 void func_80AFA5FC(EnPm* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000468;
-extern AnimationHeader D_0600099C;
-extern AnimationHeader D_06000FC4;
-extern AnimationHeader D_06001F84;
-extern AnimationHeader D_06002238;
-extern UNK_PTR D_06002750;
-extern UNK_PTR D_06002950;
-extern Gfx D_06008348[];
-extern Gfx D_060083E0[];
-extern Gfx D_060085C8[];
-extern FlexSkeletonHeader D_060096E8;
-extern AnimationHeader D_060099B4;
-extern AnimationHeader D_0600A4E0;
-extern AnimationHeader D_0600A8D8;
-extern AnimationHeader D_0600B09C;
-extern AnimationHeader D_0600BA78;
-extern AnimationHeader D_0600C32C;
-extern AnimationHeader D_0600C640;
 
 // Game scripts
 static UNK_TYPE D_80AFAD80[] = {
@@ -249,11 +231,13 @@ static ColliderSphereInit sSphereInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06002238, 1.0f, 0, -1, 0, 0 },  { &D_06002238, 1.0f, 0, -1, 0, -4 }, { &D_0600A4E0, 1.0f, 0, -1, 2, 0 },
-    { &D_0600B09C, 1.0f, 0, -1, 0, 0 },  { &D_0600B09C, 1.0f, 0, -1, 0, -4 }, { &D_0600BA78, 1.0f, 0, -1, 2, 0 },
-    { &D_0600C32C, 1.0f, 0, -1, 0, -4 }, { &D_060099B4, 1.0f, 0, -1, 0, 0 },  { &D_06000FC4, 1.0f, 0, -1, 0, 0 },
-    { &D_0600A8D8, 1.0f, 0, -1, 0, 0 },  { &D_0600099C, 1.0f, 0, -1, 0, 0 },  { &D_06001F84, 1.0f, 0, -1, 2, 0 },
-    { &D_06000468, 1.0f, 0, -1, 0, 0 },  { &D_0600C640, 1.0f, 0, -1, 0, 0 },
+    { &object_mm_Anim_002238, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_002238, 1.0f, 0, -1, 0, -4 },
+    { &object_mm_Anim_00A4E0, 1.0f, 0, -1, 2, 0 },  { &object_mm_Anim_00B09C, 1.0f, 0, -1, 0, 0 },
+    { &object_mm_Anim_00B09C, 1.0f, 0, -1, 0, -4 }, { &object_mm_Anim_00BA78, 1.0f, 0, -1, 2, 0 },
+    { &object_mm_Anim_00C32C, 1.0f, 0, -1, 0, -4 }, { &object_mm_Anim_0099B4, 1.0f, 0, -1, 0, 0 },
+    { &object_mm_Anim_000FC4, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_00A8D8, 1.0f, 0, -1, 0, 0 },
+    { &object_mm_Anim_00099C, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_001F84, 1.0f, 0, -1, 2, 0 },
+    { &object_mm_Anim_000468, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_00C640, 1.0f, 0, -1, 0, 0 },
 };
 
 s32 func_80AF7B40(void) {
@@ -315,7 +299,7 @@ Actor* func_80AF7CB0(EnPm* this, GlobalContext* globalCtx, u8 actorCat, s16 acto
     Actor* actor;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, phi_s0, actorCat, actorId);
+        actor = SubS_FindActor(globalCtx, phi_s0, actorCat, actorId);
         phi_s0 = actor;
 
         if (actor == NULL) {
@@ -338,7 +322,7 @@ Actor* func_80AF7CB0(EnPm* this, GlobalContext* globalCtx, u8 actorCat, s16 acto
     return phi_s0;
 }
 
-Actor* func_80AF7D60(GlobalContext* globalCtx, s32 arg1) {
+EnDoor* func_80AF7D60(GlobalContext* globalCtx, s32 arg1) {
     s32 phi_a1;
 
     switch (arg1) {
@@ -367,7 +351,7 @@ Actor* func_80AF7D60(GlobalContext* globalCtx, s32 arg1) {
             return NULL;
     }
 
-    return func_8013A7C0(globalCtx, phi_a1);
+    return SubS_FindDoor(globalCtx, phi_a1);
 }
 
 Actor* func_80AF7DC4(EnPm* this, GlobalContext* globalCtx, s32 arg2) {
@@ -375,7 +359,7 @@ Actor* func_80AF7DC4(EnPm* this, GlobalContext* globalCtx, s32 arg2) {
     Actor* actor;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, phi_s0, ACTORCAT_PROP, ACTOR_EN_PST);
+        actor = SubS_FindActor(globalCtx, phi_s0, ACTORCAT_PROP, ACTOR_EN_PST);
         phi_s0 = actor;
 
         if (actor == NULL) {
@@ -710,7 +694,7 @@ UNK_TYPE* func_80AF8540(EnPm* this, GlobalContext* globalCtx) {
 s32 func_80AF86F0(EnPm* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if ((this->unk_356 & 7) && func_800B84D0(&this->actor, globalCtx)) {
+    if ((this->unk_356 & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_8013AED4(&this->unk_356, 0, 7);
         this->unk_398 = 0;
         this->unk_378 = 0;
@@ -754,19 +738,19 @@ void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
     switch (arg2) {
         case 0:
             if (this->unk_356 & 0x800) {
-                gSPDisplayList((*gfx)++, D_06008348);
+                gSPDisplayList((*gfx)++, object_mm_DL_008348);
             }
             break;
 
         case 1:
             if (this->unk_356 & 0x1000) {
-                gSPDisplayList((*gfx)++, D_060085C8);
+                gSPDisplayList((*gfx)++, object_mm_DL_0085C8);
             }
             break;
 
         case 2:
             if (this->unk_356 & 0x1000) {
-                gSPDisplayList((*gfx)++, D_060083E0);
+                gSPDisplayList((*gfx)++, object_mm_DL_0083E0);
             }
             break;
     }
@@ -845,7 +829,7 @@ void func_80AF8BA8(s32 arg0) {
 
 void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 sp28 = func_80152498(&globalCtx->msgCtx);
+    s32 sp28 = Message_GetState(&globalCtx->msgCtx);
     u16 temp_a0 = globalCtx->msgCtx.unk11F04;
 
     if ((player->targetActor == &this->actor) && ((temp_a0 < 255) || (temp_a0 > 512)) && (sp28 == 3) &&
@@ -942,7 +926,7 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
     u16 sp56 = gSaveContext.time - 0x3FFC;
     u8 sp55 = this->actor.params & 0xFF;
-    Actor* sp50;
+    EnDoor* sp50;
     Vec3s* sp4C;
     Vec3f sp40;
     Vec3f sp34;
@@ -955,7 +939,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         this->unk_234 = func_8013BB34(globalCtx, sp55, D_80AFB430[arg2->unk0]);
     }
 
-    if ((sp50 != NULL) && (sp50->update != NULL)) {
+    if ((sp50 != NULL) && (sp50->actor.update != NULL)) {
         if (this->unk_234 != 0) {
             sp4C = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
             Math_Vec3s_ToVec3f(&sp40, &sp4C[0]);
@@ -964,7 +948,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             Math_Vec3f_Copy(&this->unk_278, &sp34);
             this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
-            temp = this->actor.world.rot.y - sp50->shape.rot.y;
+            temp = this->actor.world.rot.y - sp50->actor.shape.rot.y;
             if (ABS_ALT(temp) <= 0x4000) {
                 this->unk_260 = -0x4B;
             } else {
@@ -1024,8 +1008,8 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         this->unk_356 &= ~8;
         this->unk_356 &= ~0x10;
         if (this->unk_258 == 27) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROOM_CARTAIN);
-            Actor_UnsetSwitchFlag(globalCtx, 0);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
+            Flags_UnsetSwitch(globalCtx, 0);
         }
 
         switch (arg2->unk0) {
@@ -1089,8 +1073,8 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
         if (arg2->unk0 == 24) {
-            Actor_UnsetSwitchFlag(globalCtx, 0);
-            Actor_UnsetSwitchFlag(globalCtx, 1);
+            Flags_UnsetSwitch(globalCtx, 0);
+            Flags_UnsetSwitch(globalCtx, 1);
             this->unk_394 = 0;
             this->unk_368 = 60.0f;
             func_80AF7E98(this, 9);
@@ -1144,8 +1128,8 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
         switch (arg2->unk0) {
             case 27:
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROOM_CARTAIN);
-                Actor_SetSwitchFlag(globalCtx, 0);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
+                Flags_SetSwitch(globalCtx, 0);
                 this->unk_36C = 20;
                 func_8013AED4(&this->unk_356, 3, 7);
                 func_80AF7E98(this, 3);
@@ -1409,7 +1393,7 @@ s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
-    EnDoor* sp44 = (EnDoor*)func_80AF7D60(globalCtx, this->unk_258);
+    EnDoor* sp44 = func_80AF7D60(globalCtx, this->unk_258);
     Vec3f sp38;
     Vec3f* sp28;
     f32 temp;
@@ -1430,7 +1414,7 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
         Lib_Vec3f_TranslateAndRotateY(&this->unk_26C, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
         this->unk_36E += this->unk_374;
         if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMAN_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
         }
     }
     return false;
@@ -1485,7 +1469,7 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
         this->unk_238 = sp58;
     } else if ((this->unk_258 != 91) &&
                (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMAN_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 
     if ((this->unk_356 & 0x10) && (this->unk_258 == 90)) {
@@ -1533,7 +1517,7 @@ s32 func_80AFA170(EnPm* this, GlobalContext* globalCtx) {
             }
 
             if ((this->unk_384 == 11) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
             }
 
             if (this->unk_258 == 19) {
@@ -1569,7 +1553,7 @@ s32 func_80AFA334(EnPm* this, GlobalContext* globalCtx) {
 
         case 27:
             if (DECR(this->unk_36C) == 0) {
-                Actor_SetSwitchFlag(globalCtx, 1);
+                Flags_SetSwitch(globalCtx, 1);
             }
             break;
 
@@ -1578,7 +1562,7 @@ s32 func_80AFA334(EnPm* this, GlobalContext* globalCtx) {
         case 21:
         case 22:
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_VO_NP_SLEEP_OUT);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_NP_SLEEP_OUT);
             }
             break;
 
@@ -1714,7 +1698,7 @@ void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~1;
         sp2C.unk0 = 0;
     } else {
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= 1;
     }
 
@@ -1755,10 +1739,10 @@ void func_80AFA5FC(EnPm* this, GlobalContext* globalCtx) {
 }
 
 void func_80AFA724(EnPm* this, GlobalContext* globalCtx) {
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
     if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_POSTMAN_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK);
     }
 }
 
@@ -1766,7 +1750,8 @@ void EnPm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPm* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060096E8, NULL, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable,
+                       16);
     this->unk_384 = -1;
     func_80AF7E98(this, 0);
     Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -1802,15 +1787,15 @@ void EnPm_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_80AF7E6C(this);
             func_80AF8AC8(this);
             func_8013C964(&this->actor, globalCtx, this->unk_368, 30.0f, this->unk_394, this->unk_356 & 7);
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
             func_80AF7F68(this, globalCtx);
         }
     }
 }
 
-s32 func_80AFAA04(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                  Gfx** gfx) {
+s32 EnPm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                          Gfx** gfx) {
     EnPm* this = THIS;
 
     if (limbIndex == 15) {
@@ -1819,7 +1804,7 @@ s32 func_80AFAA04(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80AFAA44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnPm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnPm* this = THIS;
     s32 pad;
     Vec3f sp2C;
@@ -1854,7 +1839,7 @@ void func_80AFAA44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-void func_80AFABAC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) {
+void EnPm_TransformLimbDraw(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) {
     EnPm* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
@@ -1885,9 +1870,9 @@ void func_80AFABAC(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gfx** gfx) 
 }
 
 void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_80AFB914[] = {
-        &D_06002950,
-        &D_06002750,
+    static TexturePtr D_80AFB914[] = {
+        object_mm_Tex_002950,
+        object_mm_Tex_002750,
     };
     EnPm* this = THIS;
     s32 pad;
@@ -1901,9 +1886,9 @@ void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AFB914[0]));
 
-        POLY_OPA_DISP =
-            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80AFAA04, func_80AFAA44, func_80AFABAC, &this->actor, POLY_OPA_DISP);
+        POLY_OPA_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                               this->skelAnime.dListCount, EnPm_OverrideLimbDraw, EnPm_PostLimbDraw,
+                                               EnPm_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

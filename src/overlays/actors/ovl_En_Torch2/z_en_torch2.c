@@ -5,6 +5,8 @@
  */
 
 #include "z_en_torch2.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+
 #define FLAGS 0x00000010
 
 #define THIS ((EnTorch2*)thisx)
@@ -43,11 +45,11 @@ static InitChainEntry sInitChain[] = {
 // Shells for each of Link's different forms
 // (Playing elegy as Fierce Deity puts down a human shell)
 static Gfx* sShellDLists[] = {
-    D_0401C430, // Human
-    D_04048DF0, // Zora
-    D_04089070, // Deku
-    D_04057B10, // Goron
-    D_0401C430, // Human
+    gameplay_keep_DL_01C430, // Human
+    gameplay_keep_DL_048DF0, // Zora
+    gameplay_keep_DL_089070, // Deku
+    gameplay_keep_DL_057B10, // Goron
+    gameplay_keep_DL_01C430, // Human
 };
 
 void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -88,7 +90,7 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.gravity = -1.0f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
 
     if (this->framesUntilNextState == 0) {
@@ -140,7 +142,7 @@ void EnTorch2_UpdateDeath(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->actor.gravity = -1.0f;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 
@@ -154,11 +156,11 @@ void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->alpha == 0xFF) {
         Scene_SetRenderModeXlu(globalCtx, 0, 0x01);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
-        func_800BDFC0(globalCtx, gfx);
+        Gfx_DrawDListOpa(globalCtx, gfx);
     } else {
         Scene_SetRenderModeXlu(globalCtx, 1, 0x02);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alpha);
-        func_800BE03C(globalCtx, gfx);
+        Gfx_DrawDListXlu(globalCtx, gfx);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

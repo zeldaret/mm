@@ -6,6 +6,7 @@
 
 #include "z_en_tanron3.h"
 #include "overlays/actors/ovl_Boss_03/z_boss_03.h"
+#include "objects/object_boss03/object_boss03.h"
 
 #define FLAGS 0x00000035
 
@@ -78,9 +79,6 @@ static ColliderCylinderInit sUnusedCylinderInit = {
     { 20, 20, -10, { 0, 0, 0 } },
 };
 
-extern FlexSkeletonHeader D_0600DA20;
-extern AnimationHeader D_0600DAAC;
-
 void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
     UnkTanron3Effect* effectPtr = (UnkTanron3Effect*)globalCtx->specialEffects;
     s16 i;
@@ -109,7 +107,8 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
     Collider_InitAndSetCylinder(globalCtx, &this->atCollider, &this->actor, &sCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DA20, &D_0600DAAC, this->jointTable, this->morphTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boss03_Skel_00DA20, &object_boss03_Anim_00DAAC,
+                       this->jointTable, this->morphTable, 10);
     Actor_SetScale(&this->actor, 0.02f);
     EnTanron3_SetupLive(this, globalCtx);
     this->actor.flags &= ~1;
@@ -143,7 +142,7 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
 
 void EnTanron3_SetupLive(EnTanron3* this, GlobalContext* globalCtx) {
     this->actionFunc = EnTanron3_Live;
-    Animation_MorphToLoop(&this->skelAnime, &D_0600DAAC, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss03_Anim_00DAAC, -10.0f);
     this->rotationStep = 0;
     this->rotationScale = 5;
     this->workTimer[TANRON3_WORK_TIMER_PICK_NEW_DEVIATION] = 50;
@@ -199,7 +198,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 Math_Vec3f_Copy(&this->targetPos, &player->actor.world.pos);
                 if (!(this->timer & 0xF)) {
                     if (Rand_ZeroOne() < 0.5f && this->actor.xzDistToPlayer <= 200.0f) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
                     }
                 }
 
@@ -260,7 +259,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
         Math_ApproachS(&this->rotationStep, this->targetRotationStep, 1, 0x100);
 
         Math_ApproachF(&this->actor.speedXZ, this->targetSpeedXZ, 1.0f, this->speedMaxStep);
-        Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
+        Actor_MoveWithoutGravityReverse(&this->actor);
     } else {
         switch (this->isBeached) {
             case false:
@@ -315,7 +314,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 }
                 break;
         }
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     this->currentRotationAngle += this->nextRotationAngle;
@@ -341,11 +340,11 @@ void EnTanron3_SetupDie(EnTanron3* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = Math_FAtan2F(zDistance, xDistance);
     this->workTimer[TANRON3_WORK_TIMER_DIE] = 6;
     this->actor.speedXZ = 10.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
 }
 
 void EnTanron3_Die(EnTanron3* this, GlobalContext* globalCtx) {
-    Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
+    Actor_MoveWithoutGravityReverse(&this->actor);
     if (this->workTimer[TANRON3_WORK_TIMER_DIE] == 0) {
         EnTanron3_SpawnBubbles(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
@@ -407,7 +406,7 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
             splashPos.y = this->waterSurfaceYPos + 10.0f;
             splashPos.z = this->actor.world.pos.z;
             EffectSsGSplash_Spawn(globalCtx, &splashPos, NULL, NULL, 1, 500);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         }
     }
 

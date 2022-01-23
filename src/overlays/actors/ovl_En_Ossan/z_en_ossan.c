@@ -5,6 +5,9 @@
  */
 
 #include "z_en_ossan.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_fsn/object_fsn.h"
+#include "objects/object_ani/object_ani.h"
 
 #define FLAGS 0x00000019
 
@@ -50,29 +53,6 @@ void EnOssan_GetCutscenes(EnOssan* this, GlobalContext* globalCtx);
 s32 EnOssan_ReturnItemToShelf(EnOssan* this);
 s32 EnOssan_TakeItemOffShelf(EnOssan* this);
 
-extern FlexSkeletonHeader D_060028A0;
-extern TexturePtr D_06005BC0;
-extern TexturePtr D_06006498;
-extern TexturePtr D_06006B18;
-extern TexturePtr D_06006D40;
-extern TexturePtr D_06006F18;
-extern TexturePtr D_06007140;
-extern AnimationHeader D_06009D34;
-extern AnimationHeader D_0600A460;
-extern AnimationHeader D_0600CB3C;
-extern AnimationHeader D_0600DE34;
-extern AnimationHeader D_0600E3EC;
-extern AnimationHeader D_0600C58C;
-extern AnimationHeader D_0600F00C;
-extern AnimationHeader D_0600B9D8;
-extern AnimationHeader D_0600C26C;
-extern AnimationHeader D_0600D354;
-extern AnimationHeader D_06012C34;
-extern AnimationHeader D_060131FC;
-extern FlexSkeletonHeader D_06013320;
-extern AnimationHeader D_060138B0;
-extern AnimationHeader D_0601430C;
-
 const ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,
@@ -86,18 +66,22 @@ const ActorInit En_Ossan_InitVars = {
 };
 
 static ActorAnimationEntryS sAnimationsCuriosityShopMan[] = {
-    { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
-    { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
-    { &D_0600CB3C, 1.0f, 0, -1, 2, 0 },  { &D_0600D354, 1.0f, 0, -1, 0, 0 }, { &D_060138B0, 1.0f, 0, -1, 2, 0 },
-    { &D_0601430C, 1.0f, 0, -1, 0, 0 },  { &D_0600B9D8, 1.0f, 0, -1, 2, 0 }, { &D_0600C26C, 1.0f, 0, -1, 0, 0 },
-    { &D_0600DE34, 1.0f, 0, -1, 2, 0 },
+    { &object_fsn_Anim_012C34, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_0131FC, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C58C, -1.0f, 0, -1, 2, 0 },
+    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00F00C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00D354, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_01430C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C26C, 1.0f, 0, -1, 0, 0 },
+    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, 2, 0 },
 };
 
 static ActorAnimationEntryS sAnimationsPartTimeWorker[] = {
-    { &D_06009D34, 1.0f, 0, -1, 0, -10 }, { &D_06009D34, 1.0f, 0, -1, 0, -10 }, { &D_06009D34, 1.0f, 0, -1, 2, 0 },
-    { &D_06009D34, -1.0f, 0, -1, 2, 0 },  { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },
-    { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },   { &D_0600A460, 1.0f, 0, -1, 2, -5 },
-    { &D_0600A460, 1.0f, 0, -1, 0, -5 },  { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, -10 }, { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, -10 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, -1.0f, 0, -1, 2, 0 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
+    { &object_ani_Anim_00A460, 1.0f, 0, -1, 2, -5 },  { &object_ani_Anim_00A460, 1.0f, 0, -1, 0, -5 },
+    { &object_ani_Anim_009D34, 1.0f, 0, -1, 2, 0 },   { &object_ani_Anim_009D34, 1.0f, 0, -1, 0, 0 },
 };
 
 static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };
@@ -256,7 +240,7 @@ void EnOssan_UpdateCursorPos(GlobalContext* globalCtx, EnOssan* this) {
     s16 x;
     s16 y;
 
-    func_800B8898(globalCtx, &this->items[this->cursorIdx]->actor, &x, &y);
+    Actor_GetScreenPos(globalCtx, &this->items[this->cursorIdx]->actor, &x, &y);
     this->cursorPos.x = x;
     this->cursorPos.y = y;
 }
@@ -264,7 +248,7 @@ void EnOssan_UpdateCursorPos(GlobalContext* globalCtx, EnOssan* this) {
 void EnOssan_EndInteraction(GlobalContext* globalCtx, EnOssan* this) {
     Player* player = GET_PLAYER(globalCtx);
 
-    func_800B84D0(&this->actor, globalCtx);
+    Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
@@ -330,7 +314,7 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     func_8013D9C8(globalCtx, this->limbRotTableY, this->limbRotTableZ, 19);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         player->stateFlags2 |= 0x20000000;
         EnOssan_SetupAction(this, EnOssan_BeginInteraction);
         if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
@@ -523,7 +507,7 @@ u8 EnOssan_CursorLeft(EnOssan* this, u8 cursorIdx, u8 shelfSlotMax) {
 
 void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = sAnimations[this->actor.params];
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
@@ -551,7 +535,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
         func_8013BC6C(&this->skelAnime, animations, 9);
     }
     if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
     }
 }
 
@@ -581,7 +565,7 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, GlobalContext* globalCtx
 }
 
 void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
     u8 cursorIdx;
@@ -630,7 +614,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_TalkToShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = sAnimations[this->actor.params];
 
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->animationIdx == 9 && this->actor.params == ENOSSAN_PART_TIME_WORKER) {
             this->animationIdx = 1;
             func_8013BC6C(&this->skelAnime, animations, 1);
@@ -804,7 +788,7 @@ s32 EnOssan_HasPlayerSelectedItem(GlobalContext* globalCtx, EnOssan* this, Input
 }
 
 void EnOssan_BrowseLeftShelf(EnOssan* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
     s32 pad;
     u8 prevCursorIndex = this->cursorIdx;
     u8 cursorIdx;
@@ -862,7 +846,7 @@ void EnOssan_BrowseLeftShelf(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_BrowseRightShelf(EnOssan* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
     s32 pad;
     u8 prevCursorIndex = this->cursorIdx;
     u8 cursorIdx;
@@ -946,7 +930,7 @@ void EnOssan_LookToShopkeeperFromShelf(EnOssan* this, GlobalContext* globalCtx) 
 void EnOssan_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnOssan* this) {
     Player* player = GET_PLAYER(globalCtx);
 
-    func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+    Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
@@ -1014,7 +998,7 @@ void EnOssan_HandleCanBuyItem(GlobalContext* globalCtx, EnOssan* this) {
 }
 
 void EnOssan_SelectItem(EnOssan* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (EnOssan_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
@@ -1034,7 +1018,7 @@ void EnOssan_SelectItem(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_CannotBuy(EnOssan* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
     }
@@ -1043,7 +1027,7 @@ void EnOssan_CannotBuy(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_CanBuy(EnOssan* this, GlobalContext* globalCtx) {
     EnGirlA* item;
 
-    if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         this->shopItemSelectedTween = 0.0f;
         EnOssan_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
@@ -1058,12 +1042,12 @@ void EnOssan_BuyItemWithFanfare(EnOssan* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         EnOssan_SetupAction(this, EnOssan_SetupItemPurchased);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     }
 }
 
 void EnOssan_SetupItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         EnOssan_SetupAction(this, EnOssan_ItemPurchased);
@@ -1074,12 +1058,12 @@ void EnOssan_SetupItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
 void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
     Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
@@ -1097,7 +1081,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
                         player->stateFlags2 |= 0x20000000;
                         func_801518B0(globalCtx, this->textId, &this->actor);
                         EnOssan_SetupStartShopping(globalCtx, this, true);
-                        func_800B85E0(&this->actor, globalCtx, 100.0f, -1);
+                        func_800B85E0(&this->actor, globalCtx, 100.0f, EXCH_ITEM_MINUS1);
                         break;
                     case 1:
                     default:
@@ -1115,7 +1099,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
         player->stateFlags2 |= 0x20000000;
         func_801518B0(globalCtx, this->textId, &this->actor);
         EnOssan_SetupStartShopping(globalCtx, this, true);
-        func_800B85E0(&this->actor, globalCtx, 100.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 100.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1136,10 +1120,10 @@ void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80151938(globalCtx, 0x642);
     } else {
-        func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1329,12 +1313,14 @@ void EnOssan_Blink(EnOssan* this) {
 }
 
 void EnOssan_InitCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013320, &D_06012C34, this->jointTable, this->morphTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fsn_Skel_013320, &object_fsn_Anim_012C34, this->jointTable,
+                       this->morphTable, 19);
     this->actor.draw = EnOssan_DrawCuriosityShopMan;
 }
 
 void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060028A0, &D_06009D34, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ani_Skel_0028A0, &object_ani_Anim_009D34, this->jointTable,
+                       this->morphTable, 16);
     this->actor.draw = EnOssan_DrawPartTimeWorker;
 }
 
@@ -1429,9 +1415,9 @@ void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->actor.flags &= ~0x10;
         this->actor.objBankIndex = this->objIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         shopItems = sShops[this->actor.params];
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         sInitFuncs[this->actor.params](this, globalCtx);
         this->textId = sWelcomeHumanTextIds[this->actor.params];
         EnOssan_GetCutscenes(this, globalCtx);
@@ -1518,7 +1504,7 @@ void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnOssan_UpdateCursorAnim(this);
         func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
         this->actionFunc(this, globalCtx);
-        Actor_SetHeight(&this->actor, 90.0f);
+        Actor_SetFocus(&this->actor, 90.0f);
         SkelAnime_Update(&this->skelAnime);
     } else {
         this->actionFunc(this, globalCtx);
@@ -1537,8 +1523,8 @@ void EnOssan_DrawCursor(GlobalContext* globalCtx, EnOssan* this, f32 x, f32 y, f
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
-        gDPLoadTextureBlock_4b(OVERLAY_DISP++, &D_0401F740, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
-                               G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0,
+                               G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
         ulx = (x - w) * 4.0f;
         uly = (y - w) * 4.0f;
@@ -1589,7 +1575,7 @@ void EnOssan_DrawStickDirectionPrompts(GlobalContext* globalCtx, EnOssan* this) 
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F8C0);
+        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F8C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPLoadSync(OVERLAY_DISP++);
@@ -1610,7 +1596,7 @@ void EnOssan_DrawStickDirectionPrompts(GlobalContext* globalCtx, EnOssan* this) 
                                 this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
                                 this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F7C0);
+        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F7C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPLoadSync(OVERLAY_DISP++);
@@ -1677,7 +1663,7 @@ void EnOssan_PostLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbIndex,
 }
 
 void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
+    static TexturePtr sEyeTextures[] = { object_fsn_Tex_005BC0, object_fsn_Tex_006D40, object_fsn_Tex_007140 };
     EnOssan* this = THIS;
     s32 pad;
 
@@ -1692,7 +1678,7 @@ void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnOssan_DrawPartTimeWorker(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { &D_06006498, &D_06006B18, &D_06006F18 };
+    static TexturePtr sEyeTextures[] = { object_ani_Tex_006498, object_ani_Tex_006B18, object_ani_Tex_006F18 };
     EnOssan* this = THIS;
     s32 pad;
 

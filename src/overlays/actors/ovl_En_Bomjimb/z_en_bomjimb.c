@@ -76,7 +76,7 @@ void EnBomjimb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBomjimb* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -2.0f;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &object_cs_Anim_0064B8, this->jointTable,
                        this->morphTable, 21);
@@ -181,20 +181,20 @@ void func_80C011CC(EnBomjimb* this) {
     if ((this->unk_2DC == 5) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2DC == 19) &&
         (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2DC == 18) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 
     if ((this->unk_2DC == 7) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 }
 
@@ -447,7 +447,7 @@ void func_80C01CD0(EnBomjimb* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_2C0 == 0) && (this->unk_2E4->bgCheckFlags & 1)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_PUT_DOWN_WOODBOX);
         this->unk_2C0 = 1;
     }
 
@@ -501,7 +501,7 @@ void func_80C0201C(EnBomjimb* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_2CA = 10;
         this->actionFunc = func_80C02A14;
     } else {
@@ -691,7 +691,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     if (gSaveContext.unk_FE6 > 4) {
         func_801A3098(0x922);
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
     }
 
     switch (this->unk_2C8) {
@@ -747,7 +747,7 @@ void func_80C02A14(EnBomjimb* this, GlobalContext* globalCtx) {
         player->actor.freezeTimer = 3;
         if (this->unk_2E0 == 0) {
             if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_HUMAN_BOUND);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
                 this->unk_2E0 = 1;
             }
         }
@@ -757,7 +757,7 @@ void func_80C02A14(EnBomjimb* this, GlobalContext* globalCtx) {
         player->actor.freezeTimer = 3;
     }
 
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         if ((this->unk_2CA == 8) && (gSaveContext.unk_FE6 >= 5)) {
             func_80C02CA4(this, globalCtx);
@@ -776,7 +776,7 @@ void func_80C02BCC(EnBomjimb* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 5000, 0);
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
-        if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
             func_801477B4(globalCtx);
             this->unk_2C0 = 1;
             player->stateFlags1 &= ~0x10000000;
@@ -829,11 +829,11 @@ void EnBomjimb_Update(Actor* thisx, GlobalContext* globalCtx2) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     func_80C011CC(this);
-    Actor_SetHeight(&this->actor, 20.0f);
+    Actor_SetFocus(&this->actor, 20.0f);
 
     this->actionFunc(this, globalCtx);
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     if (this->unk_2CA == 0) {
         if ((this->unk_2E4 != NULL) && (this->unk_2E4->update != NULL)) {
@@ -897,13 +897,12 @@ void EnBomjimb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gEnBomjimb_D_80C03250, gEnBomjimb_D_80C03250,
     };
     static TexturePtr D_80C03274[] = {
-        &object_cs_Tex_00C520,
-        &object_cs_Tex_00CD20,
-        &object_cs_Tex_00D520,
+        object_cs_Tex_00C520,
+        object_cs_Tex_00CD20,
+        object_cs_Tex_00D520,
     };
     static TexturePtr D_80C03280[] = {
-        &object_cs_Tex_00E620, &object_cs_Tex_00EA20, &object_cs_Tex_00EE20,
-        &object_cs_Tex_00DD20, &object_cs_Tex_00F220,
+        object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
     };
     EnBomjimb* this = THIS;
 
