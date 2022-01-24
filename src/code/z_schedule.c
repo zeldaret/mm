@@ -25,7 +25,6 @@ s32 Schedule_FlagCheckL(GlobalContext* globalCtx, u8** script, ScheduleResult* r
 s32 Schedule_TimeRangeCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
     s32 inRange = 0;
     ScheduleCmdTimeRangeCheckS* cmd = (ScheduleCmdTimeRangeCheckS*)*script;
-
     f32 f;
     u16 start;
     u16 end;
@@ -59,7 +58,6 @@ s32 Schedule_TimeRangeCheckS(GlobalContext* globalCtx, u8** script, ScheduleResu
 s32 Schedule_TimeRangeCheckL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
     s32 inRange = false;
     ScheduleCmdTimeRangeCheckL* cmd = (ScheduleCmdTimeRangeCheckL*)*script;
-
     f32 f;
     u16 start;
     u16 end;

@@ -1,5 +1,5 @@
-#ifndef _Z64SCHEDULE_H_
-#define _Z64SCHEDULE_H_
+#ifndef Z64SCHEDULE_H
+#define Z64SCHEDULE_H
 
 #include "ultra64.h"
 

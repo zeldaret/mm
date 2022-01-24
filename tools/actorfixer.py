@@ -389,7 +389,7 @@ animdict = {
     "func_80134148": "SkelAnime_DrawTransformFlexLimbOpa",
     "func_8013AB00": "SubS_DrawTransformFlex",
     "func_8013A860": "SubS_DrawTransformFlexLimb",
-    
+    "func_80133038": "Schedule_RunScript",
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",
@@ -467,20 +467,20 @@ def replace_anim_all(repo):
         for filename in files:
             if(filename.endswith('.s')):
                 file = subdir + os.sep + filename
-                replace_anim(file)                
+                replace_anim(file)
 
     for subdir, dirs, files in os.walk(repo + os.sep + 'data'):
         for filename in files:
             if(filename.endswith('.s')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
-                
+
     for subdir, dirs, files in os.walk(repo + os.sep + 'docs'):
         for filename in files:
             if(filename.endswith('.md')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
-              
+
     for subdir, dirs, files in os.walk(repo + os.sep + 'tools' + os.sep + 'sizes'):
         for filename in files:
             if(filename.endswith('.csv')):
