@@ -34,7 +34,7 @@ typedef struct EnShn {
     /* 0x18C */ char pad18C[0x4C];
     /* 0x1D8 */ u16 unk1D8;
     /* 0x1DA */ u16 unk1DA;
-    /* 0x1DC */ s32 *unk1DC;
+    /* 0x1DC */ UNK_TYPE4 *unk1DC;
     /* 0x1E0 */ s32 unk1E0;
     /* 0x1E4 */ Player *unk1E4;
     /* 0x1E8 */ Vec3f unk1E8;

@@ -21,35 +21,41 @@ s32 func_80AE6704(EnShn* this, GlobalContext* globalCtx);
 void func_80AE6D40(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_80AE6D90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
 
-s32 D_80AE6F00[] = { 0x00170800, 0x0B0E09C4, 0x0C0F09C5, 0x0C111708, 0x03018C04, 0x018E1901, 0x860F00FF, 0x1E001300,
-                     0x00011501, 0x47280012, 0x28001928, 0x002D2800, 0x5D280093, 0x28003319, 0x00472C09, 0xE70C2F00,
-                     0x000C1210, 0x2C09CB0C, 0x2F00000C, 0x0F09CC0C, 0x0F09CD0C, 0x0500A500, 0xCB00CB2C, 0x09D10C2F,
-                     0x00000C0F, 0x09D20C19, 0xFFE62C09, 0xD30C2F00, 0x000C0F09, 0xD40C0F09, 0xD50C0500, 0x9200B200,
-                     0xB22C09D9, 0x0C2F0000, 0x0C0F09DA, 0x0C102C09, 0xE80C2F00, 0x000C0F09, 0xE90C0F09, 0xEA0C0057,
-                     0x04001712, 0x06000C00, 0x0013000C, 0x0C115704, 0x0700000E, 0x09EB0C12, 0x16101206, 0x00060000,
-                     0x1300060C, 0x07FFEC2C, 0x09EC0C2F, 0x00000C0F, 0x09ED0C0F, 0x09EE0C00, 0x57040017, 0x1206000C,
-                     0x00001300, 0x0C0C1157, 0x04070000, 0x0E09EF0C, 0x12161012, 0x06000600, 0x00130006, 0x0C07FFEC,
-                     0x12060004, 0x00001300, 0x040C0700, 0x000E09CE, 0x0C161012, 0x06000200, 0x00130002, 0x0C070000,
-                     0x0E09D80C, 0x16100C0F, 0x09CF0C1C, 0x05011509, 0x0000100E, 0x09D60C19, 0xFFF10037, 0x40001C2C,
-                     0x09DB0C2F, 0x00000C0F, 0x09DC0C0F, 0x09DD0C0F, 0x09DE0C0F, 0x09DF0C11, 0x3740102C, 0x09E00C2F,
-                     0x00000C0F, 0x09E10C0F, 0x09E20C10, 0x00374000, 0x180E09DB, 0x0C0F09DC, 0x0C0F09DD, 0x0C0F09DE,
-                     0x0C0F09DF, 0x0C113740, 0x100E09E0, 0x0C0F09E1, 0x0C0F09E2, 0x0C100E09, 0xC90C0F09, 0xCA0C100E,
-                     0x09C60C10, 0x001402FF, 0xED0E09C8, 0x0C19FE69 };
+extern Gfx D_0600B738[];
+extern FlexSkeletonHeader D_0600E7D0;
+extern AnimationHeader D_0600D9D0;
+extern AnimationHeader D_0600E6C4;
 
-s32 D_80AE70B0[] = { 0x0E09D00C, 0x16100000 };
+static UNK_TYPE D_80AE6F00[] = {
+    0x00170800, 0x0B0E09C4, 0x0C0F09C5, 0x0C111708, 0x03018C04, 0x018E1901, 0x860F00FF, 0x1E001300, 0x00011501,
+    0x47280012, 0x28001928, 0x002D2800, 0x5D280093, 0x28003319, 0x00472C09, 0xE70C2F00, 0x000C1210, 0x2C09CB0C,
+    0x2F00000C, 0x0F09CC0C, 0x0F09CD0C, 0x0500A500, 0xCB00CB2C, 0x09D10C2F, 0x00000C0F, 0x09D20C19, 0xFFE62C09,
+    0xD30C2F00, 0x000C0F09, 0xD40C0F09, 0xD50C0500, 0x9200B200, 0xB22C09D9, 0x0C2F0000, 0x0C0F09DA, 0x0C102C09,
+    0xE80C2F00, 0x000C0F09, 0xE90C0F09, 0xEA0C0057, 0x04001712, 0x06000C00, 0x0013000C, 0x0C115704, 0x0700000E,
+    0x09EB0C12, 0x16101206, 0x00060000, 0x1300060C, 0x07FFEC2C, 0x09EC0C2F, 0x00000C0F, 0x09ED0C0F, 0x09EE0C00,
+    0x57040017, 0x1206000C, 0x00001300, 0x0C0C1157, 0x04070000, 0x0E09EF0C, 0x12161012, 0x06000600, 0x00130006,
+    0x0C07FFEC, 0x12060004, 0x00001300, 0x040C0700, 0x000E09CE, 0x0C161012, 0x06000200, 0x00130002, 0x0C070000,
+    0x0E09D80C, 0x16100C0F, 0x09CF0C1C, 0x05011509, 0x0000100E, 0x09D60C19, 0xFFF10037, 0x40001C2C, 0x09DB0C2F,
+    0x00000C0F, 0x09DC0C0F, 0x09DD0C0F, 0x09DE0C0F, 0x09DF0C11, 0x3740102C, 0x09E00C2F, 0x00000C0F, 0x09E10C0F,
+    0x09E20C10, 0x00374000, 0x180E09DB, 0x0C0F09DC, 0x0C0F09DD, 0x0C0F09DE, 0x0C0F09DF, 0x0C113740, 0x100E09E0,
+    0x0C0F09E1, 0x0C0F09E2, 0x0C100E09, 0xC90C0F09, 0xCA0C100E, 0x09C60C10, 0x001402FF, 0xED0E09C8, 0x0C19FE69
+};
 
-s32 D_80AE70B8[] = { 0x28001228, 0x00152800, 0x28280055, 0x28008A28, 0x002D1900, 0x402C09E7, 0x0C12102C, 0x09CB2F00,
-                     0x000C0F09, 0xCC0C0F09, 0xCD0C0500, 0xA000C600, 0xC62C09D1, 0x2F00000C, 0x0F09D20C, 0x19FFE72C,
-                     0x09D32F00, 0x000C0F09, 0xD40C0F09, 0xD50C0500, 0x8F00AF00, 0xAF2C09D9, 0x2F00000C, 0x0F09DA0C,
-                     0x102C09E8, 0x2F00000C, 0x0F09E90C, 0x0F09EA0C, 0x00570400, 0x17120600, 0x0C000013, 0x000C0C11,
-                     0x57040700, 0x000E09EB, 0x0C121610, 0x12060006, 0x00001300, 0x060C07FF, 0xEC2C09EC, 0x2F00000C,
-                     0x0F09ED0C, 0x0F09EE0C, 0x00570800, 0x17120600, 0x0C000013, 0x000C0C11, 0x57080700, 0x000E09EF,
-                     0x0C121610, 0x12060006, 0x00001300, 0x060C07FF, 0xEC120600, 0x04000013, 0x00040C07, 0x00000E09,
-                     0xCE0C1610, 0x12060002, 0x00001300, 0x020C0700, 0x000E09D8, 0x0C16100C, 0x0F09CF0C, 0x1C050115,
-                     0x09000010, 0x0E09D60C, 0x19FFF100 };
+static UNK_TYPE D_80AE70B0[] = { 0x0E09D00C, 0x16100000 };
 
-s32 D_80AE71C4[] = { 0x00374000, 0x1C2C09DB, 0x0C2F0000, 0x0C0F09DC, 0x0C0F09DD, 0x0C0F09DE, 0x0C0F09DF,
-                     0x0C113740, 0x102C09E0, 0x0C2F0000, 0x0C0F09E1, 0x0C0F09E2, 0x0C100000 };
+static UNK_TYPE D_80AE70B8[] = { 0x28001228, 0x00152800, 0x28280055, 0x28008A28, 0x002D1900, 0x402C09E7, 0x0C12102C,
+                                 0x09CB2F00, 0x000C0F09, 0xCC0C0F09, 0xCD0C0500, 0xA000C600, 0xC62C09D1, 0x2F00000C,
+                                 0x0F09D20C, 0x19FFE72C, 0x09D32F00, 0x000C0F09, 0xD40C0F09, 0xD50C0500, 0x8F00AF00,
+                                 0xAF2C09D9, 0x2F00000C, 0x0F09DA0C, 0x102C09E8, 0x2F00000C, 0x0F09E90C, 0x0F09EA0C,
+                                 0x00570400, 0x17120600, 0x0C000013, 0x000C0C11, 0x57040700, 0x000E09EB, 0x0C121610,
+                                 0x12060006, 0x00001300, 0x060C07FF, 0xEC2C09EC, 0x2F00000C, 0x0F09ED0C, 0x0F09EE0C,
+                                 0x00570800, 0x17120600, 0x0C000013, 0x000C0C11, 0x57080700, 0x000E09EF, 0x0C121610,
+                                 0x12060006, 0x00001300, 0x060C07FF, 0xEC120600, 0x04000013, 0x00040C07, 0x00000E09,
+                                 0xCE0C1610, 0x12060002, 0x00001300, 0x020C0700, 0x000E09D8, 0x0C16100C, 0x0F09CF0C,
+                                 0x1C050115, 0x09000010, 0x0E09D60C, 0x19FFF100 };
+
+static UNK_TYPE D_80AE71C4[] = { 0x00374000, 0x1C2C09DB, 0x0C2F0000, 0x0C0F09DC, 0x0C0F09DD, 0x0C0F09DE, 0x0C0F09DF,
+                                 0x0C113740, 0x102C09E0, 0x0C2F0000, 0x0C0F09E1, 0x0C0F09E2, 0x0C100000 };
 
 const ActorInit En_Shn_InitVars = {
     ACTOR_EN_SHN,
@@ -63,15 +69,12 @@ const ActorInit En_Shn_InitVars = {
     (ActorFunc)EnShn_Draw,
 };
 
-s32 D_80AE7218[] = { 0x0600D9D0, 0x3F800000, 0x0000FFFF, 0x00000000, 0x0600D9D0, 0x3F800000, 0x0000FFFF, 0x0000FFFC,
-                     0x0600E6C4, 0x3F800000, 0x0000FFFF, 0x00000000, 0x0600E6C4, 0x3F800000, 0x0000FFFF, 0x0000FFFC };
+static ActorAnimationEntryS D_80AE7218[] = { { &D_0600D9D0, 1.0f, 0, -1, 0, 0 },
+                                             { &D_0600D9D0, 1.0f, 0, -1, 0, -4 },
+                                             { &D_0600E6C4, 1.0f, 0, -1, 0, 0 },
+                                             { &D_0600E6C4, 1.0f, 0, -1, 0, -4 } };
 
-s32 D_80AE7258[] = { 0, 2, 3, 8, 10, 1 };
-
-s32 D_80AE7270[] = { 0x44960000, 0x00000000, 0x00000000, 0x00000000 };
-
-extern UNK_TYPE D_0600B738;
-extern UNK_TYPE D_0600E7D0;
+static s32 D_80AE7258[] = { 0, 2, 3, 8, 10, 1 };
 
 void func_80AE6130(EnShn* this) {
     this->skelAnime.playSpeed = this->unk2CC;
@@ -120,10 +123,10 @@ Player* func_80AE625C(EnShn* this, GlobalContext* globalCtx) {
 }
 
 void func_80AE626C(EnShn* this) {
-    s32 topBun; // Vec3f Sandwhich
+    s32 topPad; // Vec3f Sandwhich
     Vec3f sp44;
     Vec3f b;
-    s32 bottomBun;
+    s32 bottomPad;
 
     Math_Vec3f_Copy(&sp44, &this->unk1E4->actor.world.pos);
     Math_Vec3f_Copy(&b, &this->actor.world.pos);
@@ -271,7 +274,7 @@ s32 func_80AE6704(EnShn* thisx, GlobalContext* globalCtx) {
     return ret;
 }
 
-s32* func_80AE6880(EnShn* this, GlobalContext* globalCtx) {
+UNK_TYPE* func_80AE6880(EnShn* this, GlobalContext* globalCtx) {
     if (this->unk2BE != 0) {
         return D_80AE70B0;
     }
@@ -291,7 +294,7 @@ s32 func_80AE68F0(EnShn* this, GlobalContext* globalCtx) {
     s32 ret = 0;
 
     if (this->unk1D8 & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk1D8 &= ~0x180;
             if (player->exchangeItemId == EXCH_ITEM_13) {
                 this->unk1D8 |= 0x80;
@@ -386,17 +389,20 @@ void EnShn_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 // OverrideLimb
 s32 func_80AE6CF0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnShn* this = THIS;
+
     if (limbIndex == SHN_LIMB_HEAD) {
-        func_80AE6488(thisx, globalCtx);
-        *dList = &D_0600B738;
+        func_80AE6488(this, globalCtx);
+        *dList = D_0600B738;
     }
     return false;
 }
 
+static Vec3f D_80AE7270 = { 1200.0f, 0.0f, 0.0f };
 // PostLimb
 void func_80AE6D40(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == SHN_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(D_80AE7270, &thisx->focus.pos);
+        Matrix_MultiplyVector3fByState(&D_80AE7270, &thisx->focus.pos);
         Math_Vec3s_Copy(&thisx->focus.rot, &thisx->world.rot);
     }
 }
