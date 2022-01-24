@@ -28,7 +28,7 @@
         <Texture Name="object_zm_Tex_0082A8" OutName="tex_0082A8" Format="ci8" Width="8" Height="8" Offset="0x82A8" />
         <Texture Name="object_zm_Tex_0082E8" OutName="tex_0082E8" Format="ci8" Width="32" Height="32" Offset="0x82E8" />
         <Texture Name="object_zm_Tex_0086E8" OutName="tex_0086E8" Format="ci8" Width="32" Height="32" Offset="0x86E8" />
-        <!-- <Blob Name="object_zm_Blob_008AE8" Size="0x400" Offset="0x8AE8" /> -->
+        <Texture Name="object_zm_Tex_008AE8" OutName="tex_008AE8" Format="ci8" Width="32" Height="32" Offset="0x8AE8" />
         <Texture Name="object_zm_Tex_008EE8" OutName="tex_008EE8" Format="ci8" Width="16" Height="16" Offset="0x8EE8" />
         <Texture Name="object_zm_Tex_008FE8" OutName="tex_008FE8" Format="rgba16" Width="32" Height="32" Offset="0x8FE8" />
         <Texture Name="object_zm_Tex_0097E8" OutName="tex_0097E8" Format="rgba16" Width="8" Height="8" Offset="0x97E8" />
@@ -36,7 +36,8 @@
         <Texture Name="object_zm_Tex_009968" OutName="tex_009968" Format="ci8" Width="16" Height="16" Offset="0x9968" />
         <Texture Name="object_zm_Tex_009A68" OutName="tex_009A68" Format="rgba16" Width="16" Height="16" Offset="0x9A68" />
         <Texture Name="object_zm_Tex_009C68" OutName="tex_009C68" Format="ci8" Width="32" Height="32" Offset="0x9C68" />
-        <!-- <Blob Name="object_zm_Blob_00A068" Size="0x800" Offset="0xA068" /> -->
+        <Texture Name="object_zm_Tex_00A068" OutName="tex_00A068" Format="ci8" Width="32" Height="32" Offset="0xA068" />
+        <Texture Name="object_zm_Tex_00A468" OutName="tex_00A468" Format="ci8" Width="32" Height="32" Offset="0xA468" />
         <Limb Name="object_zm_Standardlimb_00A868" Type="Standard" Offset="0xA868" />
         <Limb Name="object_zm_Standardlimb_00A874" Type="Standard" Offset="0xA874" />
         <Limb Name="object_zm_Standardlimb_00A880" Type="Standard" Offset="0xA880" />
