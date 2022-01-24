@@ -20,21 +20,102 @@ void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80950CDC(EnGm* this, GlobalContext* globalCtx);
 void func_80950DB8(EnGm* this, GlobalContext* globalCtx);
 
-static u32 D_80951820[] = {
-    0x0D000101, 0x360A0061, 0x25020600, 0x09001902, 0x0900090A, 0x0D02090A, 0x090F0105, 0x0E090A09, 0x0F0F0E09,
-    0x00090A18, 0x0E060009, 0x00060A00, 0x6C490209, 0x0A090F3D, 0x02090F0A, 0x0031020A, 0x000A0525, 0x020C0F0C,
-    0x1419020C, 0x140C320D, 0x020C320C, 0x3701050E, 0x0C320C37, 0x0C0E0C14, 0x0C32160E, 0x0C0F0C14, 0x0B0E0A00,
-    0x0A050A0E, 0x090F0A00, 0x150E090A, 0x090F090B, 0x00120085, 0x020A000A, 0x0579020A, 0x050A0A6D, 0x020A0A0A,
-    0x1E61020A, 0x1E0A2855, 0x020A280A, 0x2D49020A, 0x2D0A373D, 0x020A370B, 0x2D31020B, 0x2D0B3725, 0x020B370C,
-    0x0019020C, 0x000C0F0D, 0x020C0F0C, 0x1401050E, 0x0C0F0C14, 0x110E0C00, 0x0C0F1D0E, 0x0B370C00, 0x130E0B2D,
-    0x0B371C0E, 0x0A370B2D, 0x020E0A2D, 0x0A371B0E, 0x0A280A2D, 0x120E0A1E, 0x0A281A0E, 0x0A0A0A1E, 0x010E0A05,
-    0x0A0A190E, 0x0A000A05, 0x100A0015, 0x31020C37, 0x0D002502, 0x0D000D19, 0x19020D19, 0x15050D02, 0x15370505,
-    0x01050E15, 0x37050505, 0x0E0D1915, 0x05030E0D, 0x000D191E, 0x0E0C370D, 0x0014050D, 0x000200AB, 0x01320100,
-    0x880A0061, 0x31020600, 0x12002502, 0x12001500, 0x19021500, 0x150A0D02, 0x150A150F, 0x01050E15, 0x0A150F0F,
-    0x0E150015, 0x0A180E12, 0x00150006, 0x0E060012, 0x00070A00, 0x6C250215, 0x0A150F19, 0x02150F15, 0x190D0215,
-    0x19151E01, 0x050E1519, 0x151E0E0E, 0x150F1519, 0x170E150A, 0x150F0D0A, 0x00152502, 0x151E152D, 0x1902152D,
-    0x160A0D02, 0x160A0600, 0x01050E16, 0x0A060005, 0x0E152D16, 0x0A1E0E15, 0x1E152D14, 0x050A0061, 0x19020600,
-    0x12000D02, 0x12000600, 0x01050E00, 0x00000008, 0x0E060012, 0x00070505,
+static u8 D_80951820[] = {
+/* 0x0000 */ SCHEDULE_CMD_DAY_CHECK_L(1, 0x013B - 0x0005),
+/* 0x0005 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_YADOYA, 0x002E - 0x0009),
+/* 0x0009 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 6,  0,  9,  0, 0x0028 - 0x000F),
+/* 0x000F */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 9,  0,  9, 10, 0x0022 - 0x0015),
+/* 0x0015 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 9, 10,  9, 15, 0x001C - 0x001B),
+/* 0x001B */ SCHEDULE_CMD_END(),
+/* 0x001C */ SCHEDULE_CMD_RETURN_TIME( 9, 10,  9, 15, 15),
+/* 0x0022 */ SCHEDULE_CMD_RETURN_TIME( 9,  0,  9, 10, 24),
+/* 0x0028 */ SCHEDULE_CMD_RETURN_TIME( 6,  0,  9,  0,  6),
+/* 0x002E */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_TOWN, 0x007B - 0x0032),
+/* 0x0032 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 9, 10,  9, 15, 0x0075 - 0x0038),
+/* 0x0038 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 9, 15, 10,  0, 0x006F - 0x003E),
+/* 0x003E */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(10,  0, 10,  5, 0x0069 - 0x0044),
+/* 0x0044 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(12, 15, 12, 20, 0x0063 - 0x004A),
+/* 0x004A */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(12, 20, 12, 50, 0x005D - 0x0050),
+/* 0x0050 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(12, 50, 12, 55, 0x0057 - 0x0056),
+/* 0x0056 */ SCHEDULE_CMD_END(),
+/* 0x0057 */ SCHEDULE_CMD_RETURN_TIME(12, 50, 12, 55, 12),
+/* 0x005D */ SCHEDULE_CMD_RETURN_TIME(12, 20, 12, 50, 22),
+/* 0x0063 */ SCHEDULE_CMD_RETURN_TIME(12, 15, 12, 20, 11),
+/* 0x0069 */ SCHEDULE_CMD_RETURN_TIME(10,  0, 10,  5, 10),
+/* 0x006F */ SCHEDULE_CMD_RETURN_TIME( 9, 15, 10,  0, 21),
+/* 0x0075 */ SCHEDULE_CMD_RETURN_TIME( 9, 10,  9, 15,  9),
+/* 0x007B */ SCHEDULE_CMD_SCENE_CHECK_L(SCENE_SONCHONOIE, 0x0105 - 0x0080),
+/* 0x0080 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(10,  0, 10,  5, 0x00FF - 0x0086),
+/* 0x0086 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(10,  5, 10, 10, 0x00F9 - 0x008C),
+/* 0x008C */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(10, 10, 10, 30, 0x00F3 - 0x0092),
+/* 0x0092 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(10, 30, 10, 40, 0x00ED - 0x0098),
+/* 0x0098 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(10, 40, 10, 45, 0x00E7 - 0x009E),
+/* 0x009E */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(10, 45, 10, 55, 0x00E1 - 0x00A4),
+/* 0x00A4 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(10, 55, 11, 45, 0x00DB - 0x00AA),
+/* 0x00AA */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(11, 45, 11, 55, 0x00D5 - 0x00B0),
+/* 0x00B0 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(11, 55, 12,  0, 0x00CF - 0x00B6),
+/* 0x00B6 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(12,  0, 12, 15, 0x00C9 - 0x00BC),
+/* 0x00BC */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(12, 15, 12, 20, 0x00C3 - 0x00C2),
+/* 0x00C2 */ SCHEDULE_CMD_END(),
+/* 0x00C3 */ SCHEDULE_CMD_RETURN_TIME(12, 15, 12, 20, 17),
+/* 0x00C9 */ SCHEDULE_CMD_RETURN_TIME(12,  0, 12, 15, 29),
+/* 0x00CF */ SCHEDULE_CMD_RETURN_TIME(11, 55, 12,  0, 19),
+/* 0x00D5 */ SCHEDULE_CMD_RETURN_TIME(11, 45, 11, 55, 28),
+/* 0x00DB */ SCHEDULE_CMD_RETURN_TIME(10, 55, 11, 45,  2),
+/* 0x00E1 */ SCHEDULE_CMD_RETURN_TIME(10, 45, 10, 55, 27),
+/* 0x00E7 */ SCHEDULE_CMD_RETURN_TIME(10, 40, 10, 45, 18),
+/* 0x00ED */ SCHEDULE_CMD_RETURN_TIME(10, 30, 10, 40, 26),
+/* 0x00F3 */ SCHEDULE_CMD_RETURN_TIME(10, 10, 10, 30,  1),
+/* 0x00F9 */ SCHEDULE_CMD_RETURN_TIME(10,  5, 10, 10, 25),
+/* 0x00FF */ SCHEDULE_CMD_RETURN_TIME(10,  0, 10,  5, 16),
+/* 0x0105 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_MILK_BAR, 0x013A - 0x0109),
+/* 0x0109 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(12, 55, 13,  0, 0x0134 - 0x010F),
+/* 0x010F */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(13,  0, 13, 25, 0x012E - 0x0115),
+/* 0x0115 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(13, 25, 21,  5, 0x0128 - 0x011B),
+/* 0x011B */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(21, 55,  5,  5, 0x0122 - 0x0121),
+/* 0x0121 */ SCHEDULE_CMD_END(),
+/* 0x0122 */ SCHEDULE_CMD_RETURN_TIME(21, 55,  5,  5,  5),
+/* 0x0128 */ SCHEDULE_CMD_RETURN_TIME(13, 25, 21,  5,  3),
+/* 0x012E */ SCHEDULE_CMD_RETURN_TIME(13,  0, 13, 25, 30),
+/* 0x0134 */ SCHEDULE_CMD_RETURN_TIME(12, 55, 13,  0, 20),
+/* 0x013A */ SCHEDULE_CMD_END(),
+/* 0x013B */ SCHEDULE_CMD_DAY_CHECK_L(2, 0x01EB - 0x0140),
+/* 0x0140 */ SCHEDULE_CMD_FLAG_CHECK_L(0x32, 0x01, 0x01CD - 0x0145),
+/* 0x0145 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_YADOYA, 0x017A - 0x0149),
+/* 0x0149 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 6,  0, 18,  0, 0x0174 - 0x014F),
+/* 0x014F */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(18,  0, 21,  0, 0x016E - 0x0155),
+/* 0x0155 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(21,  0, 21, 10, 0x0168 - 0x015B),
+/* 0x015B */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(21, 10, 21, 15, 0x0162 - 0x0161),
+/* 0x0161 */ SCHEDULE_CMD_END(),
+/* 0x0162 */ SCHEDULE_CMD_RETURN_TIME(21, 10, 21, 15, 15),
+/* 0x0168 */ SCHEDULE_CMD_RETURN_TIME(21,  0, 21, 10, 24),
+/* 0x016E */ SCHEDULE_CMD_RETURN_TIME(18,  0, 21,  0,  6),
+/* 0x0174 */ SCHEDULE_CMD_RETURN_TIME( 6,  0, 18,  0,  7),
+/* 0x017A */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_TOWN, 0x01A3 - 0x017E),
+/* 0x017E */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(21, 10, 21, 15, 0x019D - 0x0184),
+/* 0x0184 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(21, 15, 21, 25, 0x0197 - 0x018A),
+/* 0x018A */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(21, 25, 21, 30, 0x0191 - 0x0190),
+/* 0x0190 */ SCHEDULE_CMD_END(),
+/* 0x0191 */ SCHEDULE_CMD_RETURN_TIME(21, 25, 21, 30, 14),
+/* 0x0197 */ SCHEDULE_CMD_RETURN_TIME(21, 15, 21, 25, 23),
+/* 0x019D */ SCHEDULE_CMD_RETURN_TIME(21, 10, 21, 15, 13),
+/* 0x01A3 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_MILK_BAR, 0x01CC - 0x01A7),
+/* 0x01A7 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(21, 30, 21, 45, 0x01C6 - 0x01AD),
+/* 0x01AD */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(21, 45, 22, 10, 0x01C0 - 0x01B3),
+/* 0x01B3 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(22, 10,  6,  0, 0x01BA - 0x01B9),
+/* 0x01B9 */ SCHEDULE_CMD_END(),
+/* 0x01BA */ SCHEDULE_CMD_RETURN_TIME(22, 10,  6,  0,  5),
+/* 0x01C0 */ SCHEDULE_CMD_RETURN_TIME(21, 45, 22, 10, 30),
+/* 0x01C6 */ SCHEDULE_CMD_RETURN_TIME(21, 30, 21, 45, 20),
+/* 0x01CC */ SCHEDULE_CMD_END(),
+/* 0x01CD */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_YADOYA, 0x01EA - 0x01D1),
+/* 0x01D1 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 6,  0, 18,  0, 0x01E4 - 0x01D7),
+/* 0x01D7 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(18,  0,  6,  0, 0x01DE - 0x01DD),
+/* 0x01DD */ SCHEDULE_CMD_END(),
+/* 0x01DE */ SCHEDULE_CMD_RETURN_TIME( 0,  0,  0,  0,  8),
+/* 0x01E4 */ SCHEDULE_CMD_RETURN_TIME( 6,  0, 18,  0,  7),
+/* 0x01EA */ SCHEDULE_CMD_END(),
+/* 0x01EB */ SCHEDULE_CMD_END(),
 };
 
 static s32 D_80951A0C[] = {
@@ -882,7 +963,7 @@ s32 func_8094F53C(EnGm* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2, u8 arg3, s16 arg4) {
+s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2, u8 arg3, s16 arg4) {
     u8 sp4F = ENGM_GET_FF(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
@@ -894,8 +975,8 @@ s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->unk_234 = NULL;
     actor = func_8094DEE0(this, globalCtx, arg3, arg4);
 
-    if (D_80951A0C[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80951A0C[arg2->unk0]);
+    if (D_80951A0C[arg2->result] >= 0) {
+        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80951A0C[arg2->result]);
     }
 
     if ((actor != NULL) && (actor->update != NULL)) {
@@ -912,8 +993,8 @@ s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp56 = gSaveContext.time - 0x3FFC;
+s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+    u16 sp56 = SCHEDULE_TIME_NOW;
     u8 sp55 = ENGM_GET_FF(&this->actor);
     EnDoor* sp50;
     Vec3s* sp4C;
@@ -923,10 +1004,10 @@ s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
 
     this->unk_234 = NULL;
-    sp50 = func_8094DF90(globalCtx, arg2->unk0);
+    sp50 = func_8094DF90(globalCtx, arg2->result);
 
-    if (D_80951A0C[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp55, D_80951A0C[arg2->unk0]);
+    if (D_80951A0C[arg2->result] >= 0) {
+        this->unk_234 = func_8013BB34(globalCtx, sp55, D_80951A0C[arg2->result]);
     }
 
     if ((sp50 != NULL) && (sp50->actor.update != NULL)) {
@@ -945,8 +1026,8 @@ s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
                 this->unk_261 = 75;
             }
 
-            this->unk_3B8 = arg2->unk8 - arg2->unk4;
-            this->unk_3BA = sp56 - arg2->unk4;
+            this->unk_3B8 = arg2->time1 - arg2->time0;
+            this->unk_3BA = sp56 - arg2->time0;
             this->actor.flags &= ~1;
             this->unk_3A4 |= 0x100;
             this->unk_3A4 |= 0x200;
@@ -958,16 +1039,16 @@ s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_8094FAC4(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp2E = gSaveContext.time - 0x3FFC;
+s32 func_8094FAC4(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
+    u16 sp2E = SCHEDULE_TIME_NOW;
     u16 phi_v1;
     u8 sp2B = ENGM_GET_FF(&this->actor);
     s32 pad;
     s32 ret = false;
 
     this->unk_234 = NULL;
-    if (D_80951A0C[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp2B, D_80951A0C[arg2->unk0]);
+    if (D_80951A0C[arg2->result] >= 0) {
+        this->unk_234 = func_8013BB34(globalCtx, sp2B, D_80951A0C[arg2->result]);
     }
 
     if ((this->unk_234 != NULL) && (this->unk_234->count < 3)) {
@@ -978,13 +1059,13 @@ s32 func_8094FAC4(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         if ((this->unk_258 < 9) && (this->unk_258 != 0) && (this->unk_3C4 >= 0)) {
             phi_v1 = sp2E;
         } else {
-            phi_v1 = arg2->unk4;
+            phi_v1 = arg2->time0;
         }
 
-        if (arg2->unk8 < phi_v1) {
-            this->unk_248 = (phi_v1 - arg2->unk8) + 0xFFFF;
+        if (arg2->time1 < phi_v1) {
+            this->unk_248 = (phi_v1 - arg2->time1) + 0xFFFF;
         } else {
-            this->unk_248 = arg2->unk8 - phi_v1;
+            this->unk_248 = arg2->time1 - phi_v1;
         }
 
         this->unk_254 = sp2E - phi_v1;
@@ -1003,7 +1084,7 @@ s32 func_8094FAC4(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_8094FCC4(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_8094FCC4(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     static Vec3f D_80951D90 = { 64.0f, 0.0f, -122.0f };
     s32 ret = false;
 
@@ -1023,7 +1104,7 @@ s32 func_8094FCC4(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_8094FD88(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_8094FD88(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
 
     if (func_8094F7D0(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL)) {
@@ -1036,7 +1117,7 @@ s32 func_8094FD88(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_8094FE10(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_8094FE10(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 ret = false;
     Actor* al;
 
@@ -1057,7 +1138,7 @@ s32 func_8094FE10(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     static Vec3f D_80951D9C = { 64.0f, 0.0f, -122.0f };
     u8 sp4F = ENGM_GET_FF(&this->actor);
     Vec3s* sp48;
@@ -1068,8 +1149,8 @@ s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->unk_234 = NULL;
 
-    if (D_80951A0C[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80951A0C[arg2->unk0]);
+    if (D_80951A0C[arg2->result] >= 0) {
+        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80951A0C[arg2->result]);
     }
 
     if (this->unk_234 != NULL) {
@@ -1099,7 +1180,7 @@ s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return ret;
 }
 
-s32 func_80950088(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80950088(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     static Vec3f D_80951DA8 = { 278.0f, 0.0f, 223.0f };
     static Vec3s D_80951DB4 = { 0x0000, 0xC000, 0x0000 };
     s32 pad;
@@ -1114,7 +1195,7 @@ s32 func_80950088(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return true;
 }
 
-s32 func_80950120(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80950120(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     static Vec3f D_80951DBC = { -525.0f, 214.0f, 515.0f };
     static Vec3s D_80951DC8 = { 0x0000, 0x38E0, 0x0000 };
     s32 pad;
@@ -1129,7 +1210,7 @@ s32 func_80950120(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return true;
 }
 
-s32 func_809501B8(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_809501B8(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     static Vec3f D_80951DD0 = { -334.0f, 225.0f, 903.0f };
     static Vec3s D_80951DDC = { 0x0000, 0x7FFF, 0x0000 };
     s32 pad;
@@ -1150,7 +1231,7 @@ s32 func_809501B8(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     return true;
 }
 
-s32 func_80950280(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
+s32 func_80950280(EnGm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     s32 phi_v1;
 
     this->actor.flags |= 1;
@@ -1161,7 +1242,7 @@ s32 func_80950280(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->unk_3CC = 8;
     this->unk_3B4 = 40.0f;
 
-    switch (arg2->unk0) {
+    switch (arg2->result) {
         case 1:
             phi_v1 = func_8094FD88(this, globalCtx, arg2);
             break;
@@ -1486,21 +1567,20 @@ void func_80950C24(EnGm* this, GlobalContext* globalCtx) {
 }
 
 void func_80950CDC(EnGm* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
-    struct_80133038_arg2 sp20;
+    ScheduleResult sp20;
 
-    this->unk_3C4 = REG(15) + *unk_14;
+    this->unk_3C4 = REG(15) + ((void)0, gSaveContext.unk_14);
 
-    if (!func_80133038(globalCtx, (void*)&D_80951820, &sp20) ||
-        ((this->unk_258 != sp20.unk0) && !func_80950280(this, globalCtx, &sp20))) {
+    if (!Schedule_RunScript(globalCtx, D_80951820, &sp20) ||
+        ((this->unk_258 != sp20.result) && !func_80950280(this, globalCtx, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~1;
-        sp20.unk0 = 0;
+        sp20.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= 1;
     }
-    this->unk_258 = sp20.unk0;
+    this->unk_258 = sp20.result;
     this->unk_268 = func_8094F074(this, globalCtx);
     func_80950C24(this, globalCtx);
 }

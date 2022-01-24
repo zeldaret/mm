@@ -183,11 +183,11 @@ def disassemble_unk_script(data_file, offset):
                         arg_formatted = f"0x{arg_value:02X}"
                     elif cmd == 0x08:
                         if arg_value == 0:
-                            arg_formatted = "SCH_ITEM_CHECK_ROOM_KEY"
+                            arg_formatted = "SCHEDULE_ITEM_CHECK_ROOM_KEY"
                         elif arg_value == 1:
-                            arg_formatted = "SCH_ITEM_CHECK_LETTER_KAFEI"
+                            arg_formatted = "SCHEDULE_ITEM_CHECK_LETTER_TO_KAFEI"
                         elif arg_value == 2:
-                            arg_formatted = "SCH_ITEM_CHECK_MASK_ROMANI"
+                            arg_formatted = "SCHEDULE_ITEM_CHECK_MASK_ROMANI"
                         else:
                             arg_formatted = f"0x{arg_value:02X}"
                     else:

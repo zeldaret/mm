@@ -119,7 +119,7 @@ s32 Schedule_ItemCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* r
     ScheduleCmdItemCheckS* cmd = (ScheduleCmdItemCheckS*)*script;
 
     if (((cmd->which == SCHEDULE_ITEM_CHECK_ROOM_KEY) && (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_ROOM_KEY)) ||
-        ((cmd->which == SCHEDULE_ITEM_CHECK_LETTER_KAFEI) && (INV_CONTENT(ITEM_LETTER_KAFEI) == ITEM_LETTER_KAFEI)) ||
+        ((cmd->which == SCHEDULE_ITEM_CHECK_LETTER_TO_KAFEI) && (INV_CONTENT(ITEM_LETTER_TO_KAFEI) == ITEM_LETTER_TO_KAFEI)) ||
         ((cmd->which == SCHEDULE_ITEM_CHECK_MASK_ROMANI) && (Player_GetMask(globalCtx) == PLAYER_MASK_ROMANI))) {
         *script = *script + cmd->offset;
     }

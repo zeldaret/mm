@@ -47,7 +47,7 @@ typedef enum {
 
 typedef enum {
     /* 0 */ SCHEDULE_ITEM_CHECK_ROOM_KEY,
-    /* 1 */ SCHEDULE_ITEM_CHECK_LETTER_KAFEI,
+    /* 1 */ SCHEDULE_ITEM_CHECK_LETTER_TO_KAFEI,
     /* 2 */ SCHEDULE_ITEM_CHECK_MASK_ROMANI,
 } ScheduleItemCheck;
 
