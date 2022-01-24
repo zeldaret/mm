@@ -812,10 +812,10 @@ typedef struct {
     /* 0x01 */ s8 delay;
     /* 0x02 */ s8 medium;
     /* 0x04 */ u8* ramAddr;
-    /* 0x08 */ u32 curDevAddr;
+    /* 0x08 */ uintptr_t curDevAddr;
     /* 0x0C */ u8* curRamAddr;
     /* 0x10 */ u32 bytesRemaining;
-    /* 0x14 */ u32 chunkSize;
+    /* 0x14 */ size_t chunkSize;
     /* 0x18 */ s32 unkMediumParam;
     /* 0x1C */ u32 retMsg;
     /* 0x20 */ OSMesgQueue* retQueue;
@@ -829,11 +829,11 @@ typedef struct {
     /* 0x01 */ u8 seqOrFontId;
     /* 0x02 */ u16 instId;
     /* 0x04 */ s32 unkMediumParam;
-    /* 0x08 */ s32 curDevAddr;
+    /* 0x08 */ uintptr_t curDevAddr;
     /* 0x0C */ u8* curRamAddr;
     /* 0x10 */ u8* ramAddr;
     /* 0x14 */ s32 status;
-    /* 0x18 */ s32 bytesRemaining;
+    /* 0x18 */ u32 bytesRemaining;
     /* 0x1C */ s8* isDone;
     /* 0x20 */ SoundFontSample sample;
     /* 0x30 */ OSMesgQueue msgqueue;
@@ -868,7 +868,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8* ramAddr;
-    /* 0x04 */ u32 devAddr;
+    /* 0x04 */ uintptr_t devAddr;
     /* 0x08 */ u16 sizeUnused;
     /* 0x0A */ u16 size;
     /* 0x0C */ u8 unused;
@@ -927,10 +927,10 @@ typedef struct {
     /* 0x2868 */ SoundFont* soundFonts;
     /* 0x286C */ AudioBufferParameters audioBufferParameters;
     /* 0x2994 */ f32 unk_2870;
-    /* 0x2898 */ s32 sampleDmaBufSize1;
-    /* 0x289C */ s32 sampleDmaBufSize2;
+    /* 0x2898 */ size_t sampleDmaBufSize1;
+    /* 0x289C */ size_t sampleDmaBufSize2;
     /* 0x28A0 */ char unk_287C[0x10];
-    /* 0x28B0 */ s32 sampleDmaBufSize;
+    /* 0x28B0 */ size_t sampleDmaBufSize;
     /* 0x28B4 */ s32 maxAudioCmds;
     /* 0x28B8 */ s32 numNotes;
     /* 0x2898 */ s16 tempoInternalToExternal;
@@ -980,7 +980,7 @@ typedef struct {
     /* 0x444C */ s32 audioResetFadeOutFramesLeft;
     /* 0x4450 */ f32* unk_3520;
     /* 0x4454 */ u8* audioHeap;
-    /* 0x4458 */ u32 audioHeapSize;
+    /* 0x4458 */ size_t audioHeapSize;
     /* 0x445C */ Note* notes;
     /* 0x4460 */ SequencePlayer seqPlayers[5];
     /* 0x4B40 */ SequenceLayer sequenceLayers[80];
@@ -1021,9 +1021,9 @@ typedef struct {
 } NoteSubAttributes; // size = 0x1A
 
 typedef struct {
-    /* 0x0 */ u32 heapSize;
-    /* 0x4 */ u32 initPoolSize;
-    /* 0x8 */ u32 permanentPoolSize;
+    /* 0x0 */ size_t heapSize;
+    /* 0x4 */ size_t initPoolSize;
+    /* 0x8 */ size_t permanentPoolSize;
 } AudioContextInitSizes; // size = 0xC
 
 typedef struct {

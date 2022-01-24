@@ -12,7 +12,7 @@
     0x80080514:("Idle_ThreadEntry",),
     0x800805E0:("ViConfig_UpdateVi",),
     0x80080748:("ViConfig_UpdateBlack",),
-    0x80080790:("DmaMgr_DMARomToRam",),
+    0x80080790:("DmaMgr_DmaRomToRam",),
     0x800808D4:("DmaMgr_DmaHandler",),
     0x800808F4:("DmaMgr_FindDmaEntry",),
     0x80080950:("DmaMgr_TranslateVromToRom",),
