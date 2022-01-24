@@ -1507,8 +1507,7 @@ beginseg
     name "ovl_Obj_Bombiwa"
     compress
     include "build/src/overlays/actors/ovl_Obj_Bombiwa/z_obj_bombiwa.o"
-    include "build/data/ovl_Obj_Bombiwa/ovl_Obj_Bombiwa.data.o"
-    include "build/data/ovl_Obj_Bombiwa/ovl_Obj_Bombiwa.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Bombiwa/ovl_Obj_Bombiwa_reloc.o"
 endseg
 
 beginseg
