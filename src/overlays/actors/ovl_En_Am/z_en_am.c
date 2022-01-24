@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 #include "objects/object_am/object_am.h"
 
-#define FLAGS 0x00000405
+#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_4 | ACTOR_FLAG_1)
 
 #define THIS ((EnAm*)thisx)
 
@@ -200,7 +200,7 @@ void EnAm_SpawnEffects(EnAm* this, GlobalContext* globalCtx) {
         EffectSsKiraKira_SpawnSmall(globalCtx, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
     }
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_WALK);
-    Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 0x12C, 0xF, 0);
+    Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, 0);
 }
 
 void func_808AFF9C(EnAm* this) {
@@ -226,8 +226,8 @@ void func_808B0040(EnAm* this, GlobalContext* globalCtx) {
         this->textureBlend -= 10;
     } else {
         this->textureBlend = 0;
-        this->actor.flags &= ~1;
-        this->unk_23A = 0;
+        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->unkFlag = 0;
     }
 }
 
@@ -247,7 +247,7 @@ void func_808B0124(EnAm* this, GlobalContext* globalCtx) {
 
     if (this->textureBlend + 20 >= 255) {
         this->textureBlend = 255;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->enemyCollider.info.bumper.dmgFlags = 0x81C2C788;
         this->interactCollider.info.bumper.dmgFlags = 0x760D3877;
         this->enemyCollider.base.atFlags |= AT_ON;
@@ -273,13 +273,13 @@ void func_808B0208(EnAm* this, GlobalContext* globalCtx) {
     }
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 8.0f) != 0) {
-        this->actor.speedXZ = this->unk_240;
+        this->actor.speedXZ = this->speed;
         this->actor.velocity.y = 12.0f;
     } else if (this->skelAnime.curFrame > 11.0f) {
         if (!(this->actor.bgCheckFlags & 1)) {
             this->skelAnime.curFrame = 11.0f;
         } else {
-            Math_ScaledStepToS(&this->actor.world.rot.y, this->unk_23C, 0x1F40);
+            Math_ScaledStepToS(&this->actor.world.rot.y, this->armosYaw, 0x1F40);
             this->actor.speedXZ = 0.0f;
             if (this->actor.bgCheckFlags & 2) {
                 EnAm_SpawnEffects(this, globalCtx);
@@ -296,12 +296,12 @@ void func_808B0358(EnAm* this) {
     this->explodeTimer = 3;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->unk_240 = 6.0f;
+    this->speed = 6.0f;
     this->actionFunc = func_808B03C0;
 }
 
 void func_808B03C0(EnAm* this, GlobalContext* globalCtx) {
-    this->unk_23C = this->actor.yawTowardsPlayer;
+    this->armosYaw = this->actor.yawTowardsPlayer;
     func_808B0208(this, globalCtx);
     if (this->actor.bgCheckFlags & 2) {
         this->explodeTimer--;
@@ -315,21 +315,21 @@ void func_808B03C0(EnAm* this, GlobalContext* globalCtx) {
 
 void func_808B0460(EnAm* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->unk_240 = 0.0f;
-    this->unk_23C = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->speed = 0.0f;
+    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     this->actionFunc = func_808B04A8;
 }
 
 void func_808B04A8(EnAm* this, GlobalContext* globalCtx) {
     func_808B0208(this, globalCtx);
-    if (this->unk_23C == this->actor.world.rot.y) {
+    if (this->armosYaw == this->actor.world.rot.y) {
         func_808B057C(this);
     }
 }
 
 void func_808B04E4(EnAm* this) {
-    this->unk_240 = 0.0f;
-    this->unk_23C = this->actor.home.rot.y;
+    this->speed = 0.0f;
+    this->armosYaw = this->actor.home.rot.y;
     this->actionFunc = func_808B0508;
 }
 
@@ -345,14 +345,14 @@ void func_808B0508(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void func_808B057C(EnAm* this) {
-    this->unk_240 = 6.0f;
-    this->unk_23C = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->speed = 6.0f;
+    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     this->explodeTimer = 1;
     this->actionFunc = func_808B05C8;
 }
 
 void func_808B05C8(EnAm* this, GlobalContext* globalCtx) {
-    this->unk_23C = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    this->armosYaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     func_808B0208(this, globalCtx);
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 8.0f) {
         func_808B04E4(this);
@@ -362,7 +362,7 @@ void func_808B05C8(EnAm* this, GlobalContext* globalCtx) {
 void func_808B0640(EnAm* this) {
     this->explodeTimer = 0x28;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->unk_240 = 0.0f;
+    this->speed = 0.0f;
     this->actionFunc = func_808B066C;
 }
 
@@ -370,9 +370,9 @@ void func_808B066C(EnAm* this, GlobalContext* globalCtx) {
     if (this->explodeTimer != 0) {
         this->explodeTimer--;
     } else {
-        this->unk_23C = this->actor.yawTowardsPlayer;
+        this->armosYaw = this->actor.yawTowardsPlayer;
         func_808B0208(this, globalCtx);
-        if (this->unk_23C == this->actor.shape.rot.y) {
+        if (this->armosYaw == this->actor.shape.rot.y) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_VOICE);
             func_808B0358(this);
         }
@@ -386,7 +386,7 @@ void EnAm_TakeDamage(EnAm* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 6.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&object_am_Anim_005B3C) - 10);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
-    this->enemyCollider.base.acFlags &= ~1;
+    this->enemyCollider.base.acFlags &= ~AC_ON;
     this->textureBlend = 255;
     this->actionFunc = func_808B07A8;
 }
@@ -407,9 +407,9 @@ void func_808B0820(EnAm* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &object_am_Anim_000238, 4.0f);
     this->explodeTimer = 64;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->actor.speedXZ = 0.0f;
-    this->unk_240 = 6.0f;
+    this->speed = 6.0f;
     this->actionFunc = func_808B0894;
 }
 
@@ -419,7 +419,7 @@ void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
     s32 pad;
 
     this->explodeTimer--;
-    this->unk_23C = this->actor.yawTowardsPlayer;
+    this->armosYaw = this->actor.yawTowardsPlayer;
     func_808B0208(this, globalCtx);
     if (this->explodeTimer == 1) {
         EnBom* bomb = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
@@ -478,8 +478,8 @@ s32 EnAm_UpdateDamage(EnAm* this, GlobalContext* globalCtx) {
         }
         this->enemyCollider.base.atFlags &= ~AT_HIT;
         if (this->actor.colChkInfo.damageEffect == 0x4) {
-            this->unk_248 = 0.7f;
-            this->unk_244 = 4.0f;
+            this->effectScale = 0.7f;
+            this->effectAlpha = 4.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->enemyCollider.info.bumper.hitPos.x,
                         this->enemyCollider.info.bumper.hitPos.y, this->enemyCollider.info.bumper.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -519,12 +519,12 @@ void EnAm_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->interactCollider.base);
     if (this->enemyCollider.base.atFlags & AC_ON) {
-        this->actor.flags |= 0x1000000;
+        this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->enemyCollider.base);
     }
-    Math_StepToF(&this->unk_244, 0.0f, 0.05f);
-    this->unk_248 = (this->unk_244 + 1.0f) * 0.35f;
-    this->unk_248 = (this->unk_248 > 0.7f) ? 0.7f : this->unk_248;
+    Math_StepToF(&this->effectAlpha, 0.0f, 0.05f);
+    this->effectScale = (this->effectAlpha + 1.0f) * 0.35f;
+    this->effectScale = (this->effectScale > 0.7f) ? 0.7f : this->effectScale;
 }
 
 void EnAm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -567,6 +567,6 @@ void EnAm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     POLY_OPA_DISP = &gfx[2];
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnAm_PostLimbDraw,
                       &this->actor);
-    func_800BE680(globalCtx, &this->actor, this->limbPos, 13, this->unk_248, 0.0f, this->unk_244, 20);
+    func_800BE680(globalCtx, &this->actor, this->limbPos, 13, this->effectScale, 0.0f, this->effectAlpha, 20);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
