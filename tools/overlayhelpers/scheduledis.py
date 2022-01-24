@@ -210,7 +210,7 @@ def disassemble_unk_script(data_file, offset):
 
         args = ", ".join(args_formatted) if len(args_formatted) != 0 else ""
 
-        out += f"/* 0x{off:04X} */ {cmd_name}({args}),\n"
+        out += f"    /* 0x{off:04X} */ {cmd_name}({args}),\n"
 
         off += cmd_len
 
