@@ -15,12 +15,11 @@ void EnShn_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnShn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnShn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnShn_Draw(Actor* thisx, GlobalContext* globalCtx);
-
 void func_80AE69E8(EnShn* this, GlobalContext* globalCtx);
 void func_80AE6A64(EnShn* this, GlobalContext* globalCtx);
 s32 func_80AE6704(EnShn* this, GlobalContext* globalCtx);
-
-s32 func_80AE6D90(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx);
+void func_80AE6D40(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+void func_80AE6D90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
 
 s32 D_80AE6F00[] = { 0x00170800, 0x0B0E09C4, 0x0C0F09C5, 0x0C111708, 0x03018C04, 0x018E1901, 0x860F00FF, 0x1E001300,
                      0x00011501, 0x47280012, 0x28001928, 0x002D2800, 0x5D280093, 0x28003319, 0x00472C09, 0xE70C2F00,
@@ -177,25 +176,50 @@ void func_80AE63A8(EnShn* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Shn/func_80AE6488.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Shn/func_80AE6488.s")
+void func_80AE6488(EnShn* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s32 msgState;
+    f32 phi_f0_2;
+    f32 phi_f0;
+
+    msgState = Message_GetState(&globalCtx->msgCtx);
+    this->unk2D4 += (this->unk2D0 != 0.0f) ? 40.0f : -40.0f;
+    this->unk2D4 = CLAMP(this->unk2D4, 0.0f, 80.0f);
+    Matrix_InsertTranslation(this->unk2D4, 0.0f, 0.0f, 1);
+    if ((&this->actor == player->targetActor) &&
+        ((globalCtx->msgCtx.unk11F04 < 0xFF) || (globalCtx->msgCtx.unk11F04 >= 0x201)) && (msgState == 3) &&
+        (this->unk2DC == 3)) {
+        if ((globalCtx->state.frames & 1) == 0) {
+            if (this->unk2D0 != 0.0f) {
+                this->unk2D0 = 0.0f;
+            } else {
+                this->unk2D0 = 1.0f;
+            }
+        }
+    } else {
+        this->unk2D0 = 0.0f;
+    }
+    this->unk2DC = msgState;
+}
 
 s32 func_80AE65F4(EnShn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 new_var = globalCtx->msgCtx.unk11F04;
+    u16 temp = globalCtx->msgCtx.unk11F04;
 
     if (player->stateFlags1 & 0x40) {
-        if (this->unk1DA != new_var) {
+        if (this->unk1DA != temp) {
             if ((this->unk1D8 & 0x80) || (this->unk1D8 & 0x100)) {
                 this->unk1D8 |= 8;
                 func_80AE615C(this, 1);
             }
-            if (new_var == 0x9C5) {
+            if (temp == 0x9C5) {
                 if (1) {}
                 this->unk1D8 |= 8;
                 func_80AE615C(this, 1);
             }
         }
-        this->unk1DA = new_var;
+        this->unk1DA = temp;
         this->unk1D8 |= 0x40;
     } else if (this->unk1D8 & 0x40) {
         if (!(gSaveContext.weekEventReg[0x17] & 8)) {
@@ -323,7 +347,7 @@ void EnShn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnShn* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, NULL, &this->unk1FA, &this->unk25A, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, NULL, &this->unk1FA, &this->unk25A, SHN_LIMB_MAX);
     this->unk2E8 = -1;
     if (gSaveContext.weekEventReg[0x17] & 8) {
         func_80AE615C(this, 0);
@@ -362,58 +386,51 @@ void EnShn_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 // OverrideLimb
 s32 func_80AE6CF0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 15) {
+    if (limbIndex == SHN_LIMB_HEAD) {
         func_80AE6488(thisx, globalCtx);
         *dList = &D_0600B738;
     }
-    return 0;
+    return false;
 }
 
 // PostLimb
 void func_80AE6D40(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 15) {
+    if (limbIndex == SHN_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(D_80AE7270, &thisx->focus.pos);
         Math_Vec3s_Copy(&thisx->focus.rot, &thisx->world.rot);
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Shn/func_80AE6D90.s")
-// void func_80AE6D90(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx)
-// {
-//     EnShn* this = THIS;
-//     u16 temp_v0;
-//     s32 phi_v0;
-//     s32 phi_v1;
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Shn/func_80AE6D90.s")
+void func_80AE6D90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+    EnShn* this = THIS;
+    s32 phi_v0;
+    s32 phi_v1;
 
-//     temp_v0 = this->unk1D8;
-//     phi_v1 = 0;
-//     if ((temp_v0 & 0x20) == 0)
-//     {
-//         if ((temp_v0 & 0x10) != 0)
-//         {
-//             phi_v0 = 1;
-//             phi_v1 = 1;
-//         }
-//         else
-//         {
-//             phi_v0 = 1;
-//         }
-//     }
-//     else
-//     {
-//         phi_v0 = 0;
-//     }
-//     if (limbIndex == 0xF)
-//     {
-//         func_8013AD9C((s16) (this->unk2BA + 0x4000), (s16) (this->unk2BC + thisx->shape.rot.y + 0x4000), thisx +
-//         0x1E8, thisx + 0x1F4, phi_v0, phi_v1); Matrix_StatePop(); Matrix_InsertTranslation(this->unk1E8,
-//         this->unk1EC, this->unk1F0, 0); Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, 1);
-//         Matrix_RotateY(this->unk1F6, 1);
-//         Matrix_InsertXRotation_s(this->unk1F4, 1);
-//         Matrix_InsertZRotation_s(this->unk1F8, 1);
-//         Matrix_StatePush();
-//     }
-// }
+    if (!(this->unk1D8 & 0x20)) {
+        if (this->unk1D8 & 0x10) {
+            phi_v1 = 1;
+        } else {
+            phi_v1 = 0;
+        }
+        phi_v0 = 1;
+    } else {
+        phi_v1 = 0;
+        phi_v0 = 0;
+    }
+
+    if (limbIndex == SHN_LIMB_HEAD) {
+        func_8013AD9C((this->unk2BA + 0x4000), (this->unk2BC + this->actor.shape.rot.y + 0x4000), &this->unk1E8,
+                      &this->unk1F4, phi_v0, phi_v1);
+        Matrix_StatePop();
+        Matrix_InsertTranslation(this->unk1E8.x, this->unk1E8.y, this->unk1E8.z, 0);
+        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
+        Matrix_RotateY(this->unk1F4.y, 1);
+        Matrix_InsertXRotation_s(this->unk1F4.x, 1);
+        Matrix_InsertZRotation_s(this->unk1F4.z, 1);
+        Matrix_StatePush();
+    }
+}
 
 void EnShn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnShn* this = THIS;
