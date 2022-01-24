@@ -7,6 +7,7 @@
 #include "z_en_dodongo.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
+#include "objects/object_dodongo/object_dodongo.h"
 
 #define FLAGS 0x00000405
 
@@ -33,16 +34,6 @@ void func_8087864C(EnDodongo* this);
 void func_808786C8(EnDodongo* this, GlobalContext* globalCtx);
 void func_80878724(EnDodongo* this);
 void func_808787B0(EnDodongo* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060013C4;
-extern AnimationHeader D_06001A44;
-extern AnimationHeader D_060028F0;
-extern AnimationHeader D_06003088;
-extern AnimationHeader D_06003B14;
-extern AnimationHeader D_060042C4;
-extern AnimationHeader D_06004C20;
-extern SkeletonHeader D_06008318;
-extern AnimationHeader D_06008B1C;
 
 const ActorInit En_Dodongo_InitVars = {
     ACTOR_EN_DODONGO,
@@ -304,7 +295,8 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_330.a = 200;
     Math_Vec3f_Copy(&this->unk_314, &D_801C5DB0);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 48.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06008318, &D_06004C20, this->jointTable, this->morphTable, 31);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dodongo_Skel_008318, &object_dodongo_Anim_004C20,
+                   this->jointTable, this->morphTable, 31);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
     Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);
@@ -545,7 +537,7 @@ s32 func_80877278(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_808773C4(EnDodongo* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06004C20, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_dodongo_Anim_004C20, -4.0f);
     this->actor.speedXZ = 0.0f;
     this->timer = Rand_S16Offset(30, 50);
     this->actionFunc = func_80877424;
@@ -565,7 +557,7 @@ void func_80877424(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_80877494(EnDodongo* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06008B1C, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_dodongo_Anim_008B1C, -4.0f);
     this->actor.speedXZ = this->unk_334 * 1.5f;
     this->timer = Rand_S16Offset(50, 70);
     this->actionFunc = func_80877500;
@@ -624,7 +616,7 @@ void func_808777A8(EnDodongo* this) {
     s32 i;
     Sphere16* sph;
 
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_060028F0, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dodongo_Anim_0028F0, -4.0f);
     this->actor.speedXZ = 0.0f;
 
     for (i = 0; i < ARRAY_COUNT(this->collider3Elements); i++) {
@@ -689,7 +681,7 @@ void func_8087784C(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_80877D50(EnDodongo* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_06003088);
+    Animation_PlayOnce(&this->skelAnime, &object_dodongo_Anim_003088);
     this->actionFunc = func_80877D90;
 }
 
@@ -701,7 +693,7 @@ void func_80877D90(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_80877DE0(EnDodongo* this) {
-    Animation_Change(&this->skelAnime, &D_060028F0, -1.0f, 35.0f, 0.0f, 2, -4.0f);
+    Animation_Change(&this->skelAnime, &object_dodongo_Anim_0028F0, -1.0f, 35.0f, 0.0f, 2, -4.0f);
     this->actor.flags |= 0x10;
     this->timer = 25;
     this->actionFunc = func_80877E60;
@@ -813,10 +805,10 @@ void func_80878354(EnDodongo* this) {
     this->unk_306 = (0xFFFF - ABS_ALT(yDiff)) / 15;
 
     if (yDiff >= 0) {
-        sp18 = &D_060042C4;
+        sp18 = &object_dodongo_Anim_0042C4;
         this->unk_306 = -this->unk_306;
     } else {
-        sp18 = &D_06003B14;
+        sp18 = &object_dodongo_Anim_003B14;
     }
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_TAIL);
@@ -879,7 +871,7 @@ void func_808785B0(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_8087864C(EnDodongo* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06001A44, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dodongo_Anim_001A44, -4.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_DAMAGE);
     this->timer = 0;
     this->unk_304 = 0;
@@ -899,7 +891,7 @@ void func_808786C8(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_80878724(EnDodongo* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_060013C4, -8.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dodongo_Anim_0013C4, -8.0f);
     this->timer = 0;
     this->unk_304 = 0;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_DEAD);
@@ -1025,8 +1017,8 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnDodongo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnDodongo* this = THIS;
 
     EnDodongo_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);

@@ -167,8 +167,10 @@ typedef struct {
     /* 0x5 */ Color_RGB8 envColor;
 } FireObjLightParams; // size = 0x8
 
+#define FONT_CHAR_TEX_WIDTH  16
+#define FONT_CHAR_TEX_HEIGHT 16
 //! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
-#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2)
+#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
 
 // Font textures are loaded into here
 typedef struct {
@@ -884,23 +886,6 @@ typedef struct {
     /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
 } MessageContext; // size = 0x120E0
 
-typedef struct ArenaNode {
-    /* 0x0 */ s16 magic; // Should always be 0x7373
-    /* 0x2 */ s16 isFree;
-    /* 0x4 */ size_t size;
-    /* 0x8 */ struct ArenaNode* next;
-    /* 0xC */ struct ArenaNode* prev;
-} ArenaNode; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ ArenaNode* head;
-    /* 0x04 */ void* start;
-    /* 0x08 */ OSMesgQueue lock;
-    /* 0x20 */ u8 unk20;
-    /* 0x21 */ u8 isInit;
-    /* 0x22 */ u8 flag;
-} Arena; // size = 0x24
-
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
     /* 0x4 */ void* (*callback)(void*, void*);
@@ -1412,7 +1397,7 @@ typedef struct EnHy {
 typedef struct {
     /* 0x0 */ u8 unk0;
     /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8;
+    /* 0x8 */ s32 unk8; // game script pointer?
 } struct_80133038_arg2; // size = 0xC
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);

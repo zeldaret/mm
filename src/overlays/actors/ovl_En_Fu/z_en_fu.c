@@ -10,6 +10,8 @@
 #include "overlays/actors/ovl_Bg_Fu_Kaiten/z_bg_fu_kaiten.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "z_en_fu.h"
+#include "objects/object_mu/object_mu.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x0A000019
 
@@ -54,16 +56,6 @@ void func_80964694(EnFu* this, EnFuUnkStruct* ptr, Vec3f* arg2, s32 len);
 void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len);
 void func_80964950(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len);
 
-extern AnimationHeader D_06001F74;
-extern AnimationHeader D_06002F64;
-extern AnimationHeader D_06004904;
-extern AnimationHeader D_06005304;
-extern AnimationHeader D_060053E0;
-extern Gfx D_0600B0A0[];
-extern Gfx D_0600B0E0[];
-extern FlexSkeletonHeader D_0600B2B0;
-extern AnimationHeader D_0600BAC4;
-
 const ActorInit En_Fu_InitVars = {
     ACTOR_EN_FU,
     ACTORCAT_NPC,
@@ -83,10 +75,10 @@ static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &D_060053E0, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06001F74, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_06002F64, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06004904, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_06005304, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06005304, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_0600BAC4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_mu_Anim_0053E0, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_mu_Anim_001F74, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_mu_Anim_002F64, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_mu_Anim_004904, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_mu_Anim_00BAC4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -200,8 +192,8 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (fuKaiten != NULL) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B2B0, &D_06001F74, this->jointTable, this->morphTable,
-                           21);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mu_Skel_00B2B0, &object_mu_Anim_001F74,
+                           this->jointTable, this->morphTable, 21);
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -641,10 +633,10 @@ void func_80962A10(EnFu* this, GlobalContext* globalCtx) {
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
     this->unk_53C = 0;
-    if ((fuKaiten->rotationSpeed < 300) || (fuKaiten->bouceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
+    if ((fuKaiten->rotationSpeed < 300) || (fuKaiten->bounceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 300, 10, 5, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 600, 20, 10, 10);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
         return;
     }
 
@@ -678,11 +670,11 @@ void func_80962BCC(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bouceHeight < 30.0f) || (fuKaiten->bounceSpeed < 600)) {
+    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bounceHeight < 30.0f) || (fuKaiten->bounceSpeed < 600)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 100, 10, 5, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 600, 20, 10, 10);
         Math_SmoothStepToF(&fuKaiten->elevation, 10.0f, 0.1f, 1.0f, 1.0f);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 30.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 30.0f, 0.1f, 1.0f, 1.0f);
         return;
     }
 
@@ -710,10 +702,10 @@ void func_80962D60(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bouceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
+    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bounceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 100, 10, 5, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 600, 20, 10, 10);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
         return;
     }
 
@@ -858,11 +850,11 @@ void func_80963350(EnFu* this, GlobalContext* globalCtx) {
         D_80964C24 = 1;
     }
 
-    if ((fuKaiten->rotationSpeed != 0) || (fuKaiten->bounceSpeed != 0) || (fuKaiten->bouceHeight > 0.0f) ||
+    if ((fuKaiten->rotationSpeed != 0) || (fuKaiten->bounceSpeed != 0) || (fuKaiten->bounceHeight > 0.0f) ||
         !func_809638F8(globalCtx)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 0, 10, 10, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 0, 10, 15, 5);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 0.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 0.0f, 0.1f, 1.0f, 1.0f);
         Math_SmoothStepToF(&fuKaiten->elevation, 0.0f, 0.1f, 1.0f, 1.0f);
         func_80962EBC(this, globalCtx);
     } else if (D_80964C24 == 1) {
@@ -1459,17 +1451,17 @@ void func_80964950(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
     for (i = 0; i < len; i++, ptr++) {
         if (ptr->unk_36 == 1) {
             if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, D_0600B0A0);
+                gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
                 flag = true;
             }
             Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_00, ptr->unk_00, ptr->unk_00, MTXMODE_APPLY);
 
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0405E6F0));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_0600B0E0);
+            gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
         }
     }
 
