@@ -692,14 +692,15 @@ typedef struct {
 } AudioSpec; // size = 0x38
 
 /**
- * The audio buffer stores the fully processed digital audio before it is sent to the digital-analog converter (DAC) to
- * play on the speakers. The audio buffer is written to by the rsp after processing audio commands, and the audio buffer
- * is read by the audio interface which sends the data to the DAC. This struct parameterizes that buffer.
+ * The audio buffer stores the fully processed digital audio before it is sent to the audio interface (AI), then to the
+ * digital-analog converter (DAC), then to play on the speakers. The audio buffer is written to by the rsp after
+ * processing audio commands, and the audio buffer is read by AI which sends the data to the DAC.
+ * This struct parameterizes that buffer.
  */
 typedef struct {
     /* 0x00 */ s16 specUnk4;
     /* 0x02 */ u16 samplingFreq; // Target sampling rate in Hz
-    /* 0x04 */ u16 aiSamplingFreq; // True sampling rate set to the audio interface (ai) for the audio digital-analog converter (dac)
+    /* 0x04 */ u16 aiSamplingFreq; // True sampling rate set to the audio interface (AI) for the audio digital-analog converter (DAC)
     /* 0x06 */ s16 samplesPerFrameTarget;
     /* 0x08 */ s16 maxAiBufferLength;
     /* 0x0A */ s16 minAiBufferLength;
@@ -947,8 +948,8 @@ typedef struct {
     /* 0x28C0 */ AudioTask rspTask[2];
     /* 0x2980 */ f32 unk_2960;
     /* 0x2984*/ s32 refreshRate;
-    /* 0x2988 */ s16* aiBuffers[3];
-    /* 0x2994 */ s16 aiBufLengths[3];
+    /* 0x2988 */ s16* aiBuffers[3]; // Pointers to the audio buffer allocated on the audio heap. Stores fully processed digital audio before transferring to the audio interface (AI)
+    /* 0x2994 */ s16 aiBufLengths[3]; // Number of bytes to transfer to the audio interface buffer
     /* 0x299C */ u32 audioRandom;
     /* 0x29A0 */ s32 audioErrorFlags;
     /* 0x29A4 */ volatile u32 resetTimer;
