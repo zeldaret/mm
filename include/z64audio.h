@@ -666,8 +666,8 @@ typedef struct {
 } ReverbSettings; // size = 0x18
 
 /**
- * The high-level audio specifications requested when initializing or reseting the audio heap.
- * Most often resets scene transitions, but will highly depend on game play.
+ * The high-level audio specifications requested when initializing or resetting the audio heap.
+ * Most often resets during scene transitions, but will highly depend on game play.
  */ 
 typedef struct {
     /* 0x00 */ u32 samplingFreq; // Target sampling rate in Hz
