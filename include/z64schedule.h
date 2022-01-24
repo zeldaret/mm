@@ -3,35 +3,52 @@
 
 #include "ultra64.h"
 
-// TODO use
+/*
+  Schedule is a subsystem that acts as a way to make decisions based on the
+  time and scene (and a limited selection of items). It is utilized by writing
+  a script that is encoded into bytecode and ran, returning the result in a
+  struct. The returned result can be a value or a encoded time value.
+
+  The scripts contain 2 kinds of instructions:
+  - Checks with jumps (relative offsets, either 1-byte offsets (short, *_S),
+                       or 2-byte offsets (long, *_L))
+  - Returns
+
+  Scripts are stored as u8[]. They are built using the macros are the bottom of
+  this file. The scheduledis.py script can be used to convert any scripts in
+  actor data into the macros.
+*/
+
+// Macro to convert the time format used in the save struct into the format used in Schedule
 #define SCHEDULE_CONVERT_TIME(time) ((time) - 0x10000 / 360 * 90)
+#define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(gSaveContext.time)
 
 typedef enum {
-    /* 00 */ SCH_CMD_ID_FLAG_CHECK_S,
-    /* 01 */ SCH_CMD_ID_FLAG_CHECK_L,
-    /* 02 */ SCH_CMD_ID_TIME_RANGE_CHECK_S,
-    /* 03 */ SCH_CMD_ID_TIME_RANGE_CHECK_L,
-    /* 04 */ SCH_CMD_ID_RETURN_L,
-    /* 05 */ SCH_CMD_ID_END,
-    /* 06 */ SCH_CMD_ID_RETURN_EMPTY,
-    /* 07 */ SCH_CMD_ID_NOP,
-    /* 08 */ SCH_CMD_ID_ITEM_CHECK_S,
-    /* 09 */ SCH_CMD_ID_RETURN_S,
-    /* 10 */ SCH_CMD_ID_SCENE_CHECK_S,
-    /* 11 */ SCH_CMD_ID_SCENE_CHECK_L,
-    /* 12 */ SCH_CMD_ID_DAY_CHECK_S,
-    /* 13 */ SCH_CMD_ID_DAY_CHECK_L,
-    /* 14 */ SCH_CMD_ID_RETURN_TIME,
-    /* 15 */ SCH_CMD_ID_TIME_CHECK_S,
-    /* 16 */ SCH_CMD_ID_TIME_CHECK_L,
-    /* 17 */ SCH_CMD_ID_JUMP_S,
-    /* 18 */ SCH_CMD_ID_JUMP_L,
+    /* 00 */ SCHEDULE_CMD_ID_FLAG_CHECK_S,       // Checks if a weekEventReg flag is set and jumps if so, short range jump
+    /* 01 */ SCHEDULE_CMD_ID_FLAG_CHECK_L,       // Checks if a weekEventReg flag is set and jumps if so, long range jump
+    /* 02 */ SCHEDULE_CMD_ID_TIME_RANGE_CHECK_S, // Checks if the current time is within the range of the two provided times and jumps if so, short range jump
+    /* 03 */ SCHEDULE_CMD_ID_TIME_RANGE_CHECK_L, // Checks if the current time is within the range of the two provided times and jumps if so, long range jump
+    /* 04 */ SCHEDULE_CMD_ID_RETURN_L,           // Returns 2-byte value (Note: bugged as the return value size is only 1 byte in the struct)
+    /* 05 */ SCHEDULE_CMD_ID_END,                // Ends script without returning anything
+    /* 06 */ SCHEDULE_CMD_ID_RETURN_EMPTY,       // Ends script and indicates return without changing existing value
+    /* 07 */ SCHEDULE_CMD_ID_NOP,                // No-Op
+    /* 08 */ SCHEDULE_CMD_ID_ITEM_CHECK_S,       // Special check based on items or masks and jumps if check passes, short range jump
+    /* 09 */ SCHEDULE_CMD_ID_RETURN_S,           // Returns byte value
+    /* 10 */ SCHEDULE_CMD_ID_SCENE_CHECK_S,      // Checks if the current scene is SceneNum and jumps if not, short range jump
+    /* 11 */ SCHEDULE_CMD_ID_SCENE_CHECK_L,      // Checks if the current scene is SceneNum and jumps if not, long range jump
+    /* 12 */ SCHEDULE_CMD_ID_DAY_CHECK_S,        // Checks if the current day is Day and jumps if not, short range jump
+    /* 13 */ SCHEDULE_CMD_ID_DAY_CHECK_L,        // Checks if the current day is Day and jumps if not, long range jump
+    /* 14 */ SCHEDULE_CMD_ID_RETURN_TIME,        // Returns 2 time values
+    /* 15 */ SCHEDULE_CMD_ID_TIME_CHECK_S,       // Jumps if the current time is less than the command time, short range jump
+    /* 16 */ SCHEDULE_CMD_ID_TIME_CHECK_L,       // Jumps if the current time is less than the command time, long range jump
+    /* 17 */ SCHEDULE_CMD_ID_JUMP_S,             // Always jump, short range jump
+    /* 18 */ SCHEDULE_CMD_ID_JUMP_L,             // Always jump, long range jump
 } ScheduleCommandID;
 
 typedef enum {
-    /* 0 */ SCH_ITEM_CHECK_ROOM_KEY,
-    /* 1 */ SCH_ITEM_CHECK_LETTER_KAFEI,
-    /* 2 */ SCH_ITEM_CHECK_MASK_ROMANI,
+    /* 0 */ SCHEDULE_ITEM_CHECK_ROOM_KEY,
+    /* 1 */ SCHEDULE_ITEM_CHECK_LETTER_KAFEI,
+    /* 2 */ SCHEDULE_ITEM_CHECK_MASK_ROMANI,
 } ScheduleItemCheck;
 
 typedef struct {
@@ -171,68 +188,61 @@ typedef struct {
 #define SCHEDULE_PACK_S16(val) \
     ((val) >> 8) & 0xFF, (val) & 0xFF
 
-// TODO static?
-#define SCHEDULE_START(name) \
-    static u8 name[] = {
-
 #define SCHEDULE_CMD_FLAG_CHECK_S(index, mask, offset) \
-    SCH_CMD_ID_FLAG_CHECK_S, (index), (mask), (offset)
+    SCHEDULE_CMD_ID_FLAG_CHECK_S, (index), (mask), (offset)
 
 #define SCHEDULE_CMD_FLAG_CHECK_L(index, mask, offset) \
-    SCH_CMD_ID_FLAG_CHECK_L, (index), (mask), SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_FLAG_CHECK_L, (index), (mask), SCHEDULE_PACK_S16(offset)
 
 #define SCHEDULE_CMD_TIME_RANGE_CHECK_S(startHr, startMin, endHr, endMin, offset) \
-    SCH_CMD_ID_TIME_RANGE_CHECK_S, (startHr), (startMin), (endHr), (endMin), (offset)
+    SCHEDULE_CMD_ID_TIME_RANGE_CHECK_S, (startHr), (startMin), (endHr), (endMin), (offset)
 
 #define SCHEDULE_CMD_TIME_RANGE_CHECK_L(startHr, startMin, endHr, endMin, offset) \
-    SCH_CMD_ID_TIME_RANGE_CHECK_L, (startHr), (startMin), (endHr), (endMin), SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_TIME_RANGE_CHECK_L, (startHr), (startMin), (endHr), (endMin), SCHEDULE_PACK_S16(offset)
 
 #define SCHEDULE_CMD_RETURN_L(ret) \
-    SCH_CMD_ID_RETURN_L, SCHEDULE_PACK_S16(ret)
+    SCHEDULE_CMD_ID_RETURN_L, SCHEDULE_PACK_S16(ret)
 
 #define SCHEDULE_CMD_END() \
-    SCH_CMD_ID_END
+    SCHEDULE_CMD_ID_END
 
 #define SCHEDULE_CMD_RETURN_EMPTY() \
-    SCH_CMD_ID_RETURN_EMPTY,
+    SCHEDULE_CMD_ID_RETURN_EMPTY,
 
 #define SCHEDULE_CMD_NOP(unk0, unk1, unk2) \
-    SCH_CMD_ID_NOP, (unk0), (unk1), (unk2)
+    SCHEDULE_CMD_ID_NOP, (unk0), (unk1), (unk2)
 
 #define SCHEDULE_CMD_ITEM_CHECK_S(which, offset) \
-    SCH_CMD_ID_ITEM_CHECK_S, (which), (offset)
+    SCHEDULE_CMD_ID_ITEM_CHECK_S, (which), (offset)
 
 #define SCHEDULE_CMD_RETURN_S(ret) \
-    SCH_CMD_ID_RETURN_S, (ret)
+    SCHEDULE_CMD_ID_RETURN_S, (ret)
 
 #define SCHEDULE_CMD_SCENE_CHECK_S(scene, offset) \
-    SCH_CMD_ID_SCENE_CHECK_S, SCHEDULE_PACK_S16(scene), (offset)
+    SCHEDULE_CMD_ID_SCENE_CHECK_S, SCHEDULE_PACK_S16(scene), (offset)
 
 #define SCHEDULE_CMD_SCENE_CHECK_L(scene, offset) \
-    SCH_CMD_ID_SCENE_CHECK_L, SCHEDULE_PACK_S16(scene), SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_SCENE_CHECK_L, SCHEDULE_PACK_S16(scene), SCHEDULE_PACK_S16(offset)
 
 #define SCHEDULE_CMD_DAY_CHECK_S(day, offset) \
-    SCH_CMD_ID_DAY_CHECK_S, SCHEDULE_PACK_S16(day), (offset)
+    SCHEDULE_CMD_ID_DAY_CHECK_S, SCHEDULE_PACK_S16(day), (offset)
 
 #define SCHEDULE_CMD_DAY_CHECK_L(day, offset) \
-    SCH_CMD_ID_DAY_CHECK_L, SCHEDULE_PACK_S16(day), SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_DAY_CHECK_L, SCHEDULE_PACK_S16(day), SCHEDULE_PACK_S16(offset)
 
 #define SCHEDULE_CMD_RETURN_TIME(time0Hr, time0Min, time1Hr, time1Min, ret) \
-    SCH_CMD_ID_RETURN_TIME, (time0Hr), (time0Min), (time1Hr), (time1Min), (ret)
+    SCHEDULE_CMD_ID_RETURN_TIME, (time0Hr), (time0Min), (time1Hr), (time1Min), (ret)
 
 #define SCHEDULE_CMD_TIME_CHECK_S(timeHr, timeMin, offset) \
-    SCH_CMD_ID_TIME_CHECK_S, (timeHr), (timeMin), (offset)
+    SCHEDULE_CMD_ID_TIME_CHECK_S, (timeHr), (timeMin), (offset)
 
 #define SCHEDULE_CMD_TIME_CHECK_L(timeHr, timeMin, offset) \
-    SCH_CMD_ID_TIME_CHECK_L, (timeHr), (timeMin), SCHEDULE_PACK_S16(offset)
+    SCHEDULE_CMD_ID_TIME_CHECK_L, (timeHr), (timeMin), SCHEDULE_PACK_S16(offset)
 
 #define SCHEDULE_CMD_JUMP_S(offset) \
-    SCH_CMD_ID_JUMP_S, (offset)
+    SCHEDULE_CMD_ID_JUMP_S, (offset)
 
 #define SCHEDULE_CMD_JUMP_L(offset) \
-    SCH_CMD_ID_JUMP_L, SCHEDULE_PACK_S16(offset)
-
-#define SCHEDULE_END \
-    };
+    SCHEDULE_CMD_ID_JUMP_L, SCHEDULE_PACK_S16(offset)
 
 #endif

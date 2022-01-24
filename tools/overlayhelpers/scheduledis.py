@@ -6,32 +6,6 @@
 import argparse, os, struct
 from actor_symbols import resolve_symbol
 
-"""
-
-Cmd Id  Handler         Cmd Len     Cmd Fmt         Cmd Args                            Terminal        Cmd Name            Cmd Desc
-
-0x00    func_801323D0   0x04        C UU S          Flag, Skip                          False           FLAG_CHECK_S        Checks if a weekEventReg flag is set and skips if so, short range jump
-0x01    func_80132428   0x05        C UU SS         Flag, Skip                          False           FLAG_CHECK_L        Checks if a weekEventReg flag is set and skips if so, long range jump
-0x02    func_80132494   0x06        C U U U U S     Hr1, Min1, Hr2, Min2, Skip          False           TIME_RANGE_CHECK_S  Checks if the current time is within the range of the two provided times and skips if so, short range jump
-0x03    func_801326B8   0x07        C U U U U SS    Hr1, Min1, Hr2, Min2, Skip          False           TIME_RANGE_CHECK_L  Checks if the current time is within the range of the two provided times and skips if so, long range jump
-0x04    func_801328F0   0x03        C UU            Data                                True            SCRIPT_DATA         Sets unk0 to Data and unkC to 1 and stops running the script
-0x05    func_80132920   0x01        C                                                   True            END_0               Sets unkC to 0 and stops running the script
-0x06    func_80132938   0x01        C                                                   True            END_1               Sets unkC to 1 and stops running the script
-0x07    func_80132954   0x04        C U U U         Unk1, Unk2, Unk3                    False           NOP                 No-Op, possibly stubbed functionality
-0x08    func_8013296C   0x03        C U S           ItemOrMaskCheck, Skip               False           ITEM_CHECK          Special check based on ItemOrMaskCheck and skip if check passes
-0x09    func_80132A18   0x02        C U             Data                                True            SCRIPT_DATA_2       Set unk0 to Data and unkC to 1 and stops running the script
-0x0A    func_80132A3C   0x04        C SS S          SceneNum, Skip                      False           SCENE_CHECK_S       Checks if the current scene is SceneNum and skips if not, short range jump
-0x0B    func_80132A80   0x05        C SS SS         SceneNum, Skip                      False           SCENE_CHECK_L       Checks if the current scene is SceneNum and skips if not, long range jump
-0x0C    func_80132AD8   0x04        C SS S          Day, Skip                           False           DAY_CHECK_S         Checks if the current day is Day and skips if not, short range jump
-0x0D    func_80132B24   0x05        C SS SS         Day, Skip                           False           DAY_CHECK_L         Checks if the current day is Day and skips if not, long range jump
-0x0E    func_80132B84   0x06        C U U U U U     Min1, Hr1, Min2, Hr2, Data          True            SCRIPT_TIME_DATA    Set unk0 to Data, unk4 and unk8 to time 1 and time 2 and unkC to 1 and stops running the script
-0x0F    func_80132D70   0x04        C U U S         Min, Hr, Skip                       False           TIME_CHECK_S        Skips if the current time is less than the command time, short range jump
-0x10    func_80132E9C   0x05        C U U SS        Min, Hr, Skip                       False           TIME_CHECK_L        Skips if the current time is less than the command time, long range jump
-0x11    func_80132FDC   0x02        C S             Skip                                False           JUMP_S              Simple short range jump
-0x12    func_80133000   0x03        C SS            Skip                                False           JUMP_L              Simple long range jump
-
-"""
-
 cmd_info = [
     ('SCHEDULE_CMD_FLAG_CHECK_S',       0x04, '>BBb',   (2, )),
     ('SCHEDULE_CMD_FLAG_CHECK_L',       0x05, '>BBh',   (2, )),
@@ -180,10 +154,9 @@ def disassemble_unk_script(data_file, offset):
     cmd = None
     branch_targets = []
 
-    out = "SCHEDULE_START(sEventScript)\n"
+    out = "static u8 sEventScript[] = {\n"
 
     # Keep trying to disassemble until it hits a terminator and no commands branch past it
-    # TODO schedules don't seem to end on returns
     while any([branch >= off for branch in branch_targets]) or cmd not in [0x04, 0x05, 0x06, 0x09]:
         cmd = read_bytes(data_file, offset + off, 1)[0]
 
@@ -242,7 +215,7 @@ def disassemble_unk_script(data_file, offset):
         off += cmd_len
 
     out = out.strip()
-    out += "\nSCHEDULE_END"
+    out += "\n};"
 
     print(out)
 

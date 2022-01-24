@@ -120,7 +120,7 @@ static u16 D_80BAE800[] = {
     4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6,
 };
 
-SCHEDULE_START(D_80BAE820)
+static u8 D_80BAE820[] = {
 /* 0x0000 */ SCHEDULE_CMD_DAY_CHECK_S(2, 0x0080 - 0x0004),
 /* 0x0004 */ SCHEDULE_CMD_FLAG_CHECK_S(0x21, 0x08, 0x007F - 0x0008),
 /* 0x0008 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_ICHIBA, 0x003D - 0x000C),
@@ -168,7 +168,7 @@ SCHEDULE_START(D_80BAE820)
 /* 0x00CD */ SCHEDULE_CMD_RETURN_TIME(18,  0, 19,  0, 12),
 /* 0x00D3 */ SCHEDULE_CMD_END(),
 /* 0x00D4 */ SCHEDULE_CMD_END(),
-SCHEDULE_END
+};
 
 static s32 D_80BAE8F8[] = {
     -1, -1, -1, -1, -1, -1, 1, 2, 0, 3, 1, 2, 0, 0, 3, 0,
@@ -673,7 +673,7 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
 }
 
 s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unkStruct) {
-    u16 sp26 = gSaveContext.time - 0x3FFC;
+    u16 sp26 = SCHEDULE_TIME_NOW;
     u16 pad1;
     u8 sp23 = ENSUTTARI_GET_PATH(&this->actor);
     u16 pad2;
@@ -716,7 +716,7 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, ScheduleResult* unk
     UNK_TYPE sp24;
 
     sp47 = ENSUTTARI_GET_PATH(&this->actor);
-    sp44 = gSaveContext.time - 0x3FFC;
+    sp44 = SCHEDULE_TIME_NOW;
     if (this->unk428 == 10 || this->unk428 == 11 || this->unk428 == 2) {
         return 0;
     }

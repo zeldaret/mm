@@ -62,12 +62,12 @@ void func_80AEF5F4(Actor* thisx, GlobalContext* globalCtx);
 
 static s32 D_80AF0050;
 
-SCHEDULE_START(D_80AEF800)
+static u8 D_80AEF800[] = {
 /* 0x0000 */ SCHEDULE_CMD_TIME_RANGE_CHECK_L( 6,  0, 18,  0, 0x0008 - 0x0007),
 /* 0x0007 */ SCHEDULE_CMD_END(),
 /* 0x0008 */ SCHEDULE_CMD_RETURN_TIME( 6,  0, 18,  0,  1),
 /* 0x000E */ SCHEDULE_CMD_END(),
-SCHEDULE_END
+};
 
 const ActorInit En_Tk_InitVars = {
     ACTOR_EN_TK,
@@ -502,7 +502,7 @@ s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
 }
 
 s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
-    u16 sp1E = gSaveContext.time - 0x3FFC;
+    u16 sp1E = SCHEDULE_TIME_NOW;
     u8 params = ENTK_GET_F800(&this->actor);
     u16 phi_a1;
     s32 idx = arg2->result - 1;

@@ -20,7 +20,7 @@ void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx);
 void func_80AFA5FC(EnPm* this, GlobalContext* globalCtx);
 
-SCHEDULE_START(D_80AFAD80)
+static u8 D_80AFAD80[] = {
 /* 0x0000 */ SCHEDULE_CMD_DAY_CHECK_L(1, 0x0240 - 0x0005),
 /* 0x0005 */ SCHEDULE_CMD_TIME_RANGE_CHECK_L( 9,  0, 12,  0, 0x0117 - 0x000C),
 /* 0x000C */ SCHEDULE_CMD_TIME_RANGE_CHECK_L(12,  0, 13,  1, 0x010C - 0x0013),
@@ -305,9 +305,9 @@ SCHEDULE_START(D_80AFAD80)
 /* 0x0584 */ SCHEDULE_CMD_RETURN_L(20),
 /* 0x0587 */ SCHEDULE_CMD_END(),
 /* 0x0588 */ SCHEDULE_CMD_END(),
-SCHEDULE_END
+};
 
-SCHEDULE_START(D_80AFB30C)
+static u8 D_80AFB30C[] = {
 /* 0x0000 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_POSTHOUSE, 0x0032 - 0x0004),
 /* 0x0004 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0,  0,  0, 10, 0x002C - 0x000A),
 /* 0x000A */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0, 10,  0, 13, 0x0029 - 0x0010),
@@ -345,9 +345,9 @@ SCHEDULE_START(D_80AFB30C)
 /* 0x00A6 */ SCHEDULE_CMD_RETURN_TIME( 0, 59,  1,  9, 88),
 /* 0x00AC */ SCHEDULE_CMD_RETURN_TIME( 0, 56,  0, 59, 36),
 /* 0x00B2 */ SCHEDULE_CMD_END(),
-SCHEDULE_END
+};
 
-SCHEDULE_START(D_80AFB3C0)
+static u8 D_80AFB3C0[] = {
 /* 0x0000 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_TOWN, 0x001D - 0x0004),
 /* 0x0004 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0, 10,  0, 13, 0x0017 - 0x000A),
 /* 0x000A */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0, 13,  0, 23, 0x0011 - 0x0010),
@@ -361,9 +361,9 @@ SCHEDULE_START(D_80AFB3C0)
 /* 0x002E */ SCHEDULE_CMD_RETURN_TIME( 0, 10,  0, 13, 37),
 /* 0x0034 */ SCHEDULE_CMD_RETURN_TIME( 0,  0,  0, 10, 89),
 /* 0x003A */ SCHEDULE_CMD_END(),
-SCHEDULE_END
+};
 
-SCHEDULE_START(D_80AFB3FC)
+static u8 D_80AFB3FC[] = {
 /* 0x0000 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_TOWN, 0x001D - 0x0004),
 /* 0x0004 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S(18,  0,  6,  0, 0x0017 - 0x000A),
 /* 0x000A */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 5,  0,  5, 10, 0x0011 - 0x0010),
@@ -371,15 +371,15 @@ SCHEDULE_START(D_80AFB3FC)
 /* 0x0011 */ SCHEDULE_CMD_RETURN_TIME( 5,  0,  5, 10, 91),
 /* 0x0017 */ SCHEDULE_CMD_RETURN_TIME(18,  0,  6,  0, 29),
 /* 0x001D */ SCHEDULE_CMD_END(),
-SCHEDULE_END
+};
 
-SCHEDULE_START(D_80AFB41C)
+static u8 D_80AFB41C[] = {
 /* 0x0000 */ SCHEDULE_CMD_SCENE_CHECK_S(SCENE_TOWN, 0X0011 - 0X0004),
 /* 0x0004 */ SCHEDULE_CMD_TIME_RANGE_CHECK_S( 0,  0,  0, 10, 0X000B - 0X000A),
 /* 0x000A */ SCHEDULE_CMD_END(),
 /* 0x000B */ SCHEDULE_CMD_RETURN_TIME( 0,  0,  0, 10, 91),
 /* 0x0011 */ SCHEDULE_CMD_END(),
-SCHEDULE_END
+};
 
 static s32 D_80AFB430[] = {
     -1, 0, 4, 1,  0,  0, 1, 4,  -1, -1, 15, 5, 0, 3, -1, -1, 1, 2, 11, 3, -1, -1, -1, 0, 0, 0, 0, 0, 1,  12, -1,
@@ -1220,7 +1220,7 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2, u8
 }
 
 s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
-    u16 sp56 = gSaveContext.time - 0x3FFC;
+    u16 sp56 = SCHEDULE_TIME_NOW;
     u8 sp55 = this->actor.params & 0xFF;
     EnDoor* sp50;
     Vec3s* sp4C;
@@ -1268,7 +1268,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
 }
 
 s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
-    u16 sp2E = (u16)(gSaveContext.time - 0x3FFC);
+    u16 sp2E = SCHEDULE_TIME_NOW;
     u16 phi_v1;
     u8 sp2B = this->actor.params & 0xFF;
     s32 pad;
