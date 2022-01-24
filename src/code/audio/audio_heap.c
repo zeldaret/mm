@@ -289,27 +289,33 @@ void AudioHeap_SessionPoolsInit(AudioPoolSplit4* split) {
     AudioHeap_AllocPoolInit(&gAudioContext.notesAndBuffersPool,
                             AudioHeap_Alloc(&gAudioContext.audioSessionPool, split->wantSeqSize), split->wantSeqSize);
     AudioHeap_AllocPoolInit(&gAudioContext.cachePool,
-                            AudioHeap_Alloc(&gAudioContext.audioSessionPool, split->wantCustomSize), split->wantCustomSize);
+                            AudioHeap_Alloc(&gAudioContext.audioSessionPool, split->wantCustomSize),
+                            split->wantCustomSize);
 }
 
 void AudioHeap_CachePoolInit(AudioPoolSplit2* split) {
     gAudioContext.cachePool.cur = gAudioContext.cachePool.start;
 
     AudioHeap_AllocPoolInit(&gAudioContext.persistentCommonPool,
-                            AudioHeap_Alloc(&gAudioContext.cachePool, split->wantPersistentSize), split->wantPersistentSize);
+                            AudioHeap_Alloc(&gAudioContext.cachePool, split->wantPersistentSize),
+                            split->wantPersistentSize);
     AudioHeap_AllocPoolInit(&gAudioContext.temporaryCommonPool,
-                            AudioHeap_Alloc(&gAudioContext.cachePool, split->wantTemporarySize), split->wantTemporarySize);
+                            AudioHeap_Alloc(&gAudioContext.cachePool, split->wantTemporarySize),
+                            split->wantTemporarySize);
 }
 
 void AudioHeap_PersistentCachesInit(AudioPoolSplit3* split) {
     gAudioContext.persistentCommonPool.cur = gAudioContext.persistentCommonPool.start;
 
     AudioHeap_AllocPoolInit(&gAudioContext.seqCache.persistent.pool,
-                            AudioHeap_Alloc(&gAudioContext.persistentCommonPool, split->wantSeqSize), split->wantSeqSize);
+                            AudioHeap_Alloc(&gAudioContext.persistentCommonPool, split->wantSeqSize),
+                            split->wantSeqSize);
     AudioHeap_AllocPoolInit(&gAudioContext.fontCache.persistent.pool,
-                            AudioHeap_Alloc(&gAudioContext.persistentCommonPool, split->wantFontSize), split->wantFontSize);
+                            AudioHeap_Alloc(&gAudioContext.persistentCommonPool, split->wantFontSize),
+                            split->wantFontSize);
     AudioHeap_AllocPoolInit(&gAudioContext.sampleBankCache.persistent.pool,
-                            AudioHeap_Alloc(&gAudioContext.persistentCommonPool, split->wantSampleSize), split->wantSampleSize);
+                            AudioHeap_Alloc(&gAudioContext.persistentCommonPool, split->wantSampleSize),
+                            split->wantSampleSize);
 
     AudioHeap_PersistentCacheClear(&gAudioContext.seqCache.persistent);
     AudioHeap_PersistentCacheClear(&gAudioContext.fontCache.persistent);
@@ -320,11 +326,14 @@ void AudioHeap_TemporaryCachesInit(AudioPoolSplit3* split) {
     gAudioContext.temporaryCommonPool.cur = gAudioContext.temporaryCommonPool.start;
 
     AudioHeap_AllocPoolInit(&gAudioContext.seqCache.temporary.pool,
-                            AudioHeap_Alloc(&gAudioContext.temporaryCommonPool, split->wantSeqSize), split->wantSeqSize);
+                            AudioHeap_Alloc(&gAudioContext.temporaryCommonPool, split->wantSeqSize),
+                            split->wantSeqSize);
     AudioHeap_AllocPoolInit(&gAudioContext.fontCache.temporary.pool,
-                            AudioHeap_Alloc(&gAudioContext.temporaryCommonPool, split->wantFontSize), split->wantFontSize);
+                            AudioHeap_Alloc(&gAudioContext.temporaryCommonPool, split->wantFontSize),
+                            split->wantFontSize);
     AudioHeap_AllocPoolInit(&gAudioContext.sampleBankCache.temporary.pool,
-                            AudioHeap_Alloc(&gAudioContext.temporaryCommonPool, split->wantSampleSize), split->wantSampleSize);
+                            AudioHeap_Alloc(&gAudioContext.temporaryCommonPool, split->wantSampleSize),
+                            split->wantSampleSize);
 
     AudioHeap_TemporaryCacheClear(&gAudioContext.seqCache.temporary);
     AudioHeap_TemporaryCacheClear(&gAudioContext.fontCache.temporary);
@@ -875,7 +884,8 @@ void AudioHeap_Init(void) {
 
     gAudioContext.sampleDmaCount = 0;
     gAudioContext.audioBufferParameters.samplingFreq = spec->samplingFreq;
-    gAudioContext.audioBufferParameters.aiSamplingFreq = osAiSetFrequency(gAudioContext.audioBufferParameters.samplingFreq);
+    gAudioContext.audioBufferParameters.aiSamplingFreq =
+        osAiSetFrequency(gAudioContext.audioBufferParameters.samplingFreq);
 
     gAudioContext.audioBufferParameters.samplesPerFrameTarget =
         ((gAudioContext.audioBufferParameters.samplingFreq / gAudioContext.refreshRate) + 0xF) & 0xFFF0;
@@ -926,8 +936,8 @@ void AudioHeap_Init(void) {
     }
 
     // Determine the maximum allowable number of audio command list entries for the rsp microcode
-    gAudioContext.maxAudioCmds = gAudioContext.numNotes * 20 * gAudioContext.audioBufferParameters.updatesPerFrame +
-                                 spec->numReverbs * 30 + 800;
+    gAudioContext.maxAudioCmds =
+        gAudioContext.numNotes * 20 * gAudioContext.audioBufferParameters.updatesPerFrame + spec->numReverbs * 30 + 800;
 
     persistentSize = spec->persistentSeqSize + spec->persistentFontSize + spec->persistentSampleSize + 0x10;
     temporarySize = spec->temporarySeqSize + spec->temporaryFontSize + spec->temporarySampleSize + 0x10;
@@ -1014,7 +1024,7 @@ void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size) {
 
     addr = AudioHeap_Alloc(&gAudioContext.permanentPool, size);
     gAudioContext.permanentCache[index].ptr = addr;
-    
+
     if (addr == NULL) {
         return NULL;
     }
