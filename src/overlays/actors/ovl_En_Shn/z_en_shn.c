@@ -2,10 +2,11 @@
  * File: z_en_shn.c
  * Overlay: ovl_En_Shn
  * Description: Swamp Tourist Center Guide
- * Shashin
+ * Shashin(Shn) ~ Photo
  */
 
 #include "z_en_shn.h"
+#include "objects/object_shn/object_shn.h"
 
 #define FLAGS 0x00000009
 
@@ -21,11 +22,12 @@ s32 func_80AE6704(EnShn* this, GlobalContext* globalCtx);
 void func_80AE6D40(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_80AE6D90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
 
-extern Gfx D_0600B738[];
-extern FlexSkeletonHeader D_0600E7D0;
-extern AnimationHeader D_0600D9D0;
-extern AnimationHeader D_0600E6C4;
+extern Gfx D_0600B738[]; // Swamp Tour guide Head
+extern FlexSkeletonHeader D_0600E7D0; // object_shn_Skel_00E7D0
+extern AnimationHeader D_0600D9D0; // object_shn_Anim_00D9D0
+extern AnimationHeader D_0600E6C4; // object_shn_Anim_00E6C4
 
+// Could be something related to text/dialogue?
 static UNK_TYPE D_80AE6F00[] = {
     0x00170800, 0x0B0E09C4, 0x0C0F09C5, 0x0C111708, 0x03018C04, 0x018E1901, 0x860F00FF, 0x1E001300, 0x00011501,
     0x47280012, 0x28001928, 0x002D2800, 0x5D280093, 0x28003319, 0x00472C09, 0xE70C2F00, 0x000C1210, 0x2C09CB0C,
@@ -69,7 +71,7 @@ const ActorInit En_Shn_InitVars = {
     (ActorFunc)EnShn_Draw,
 };
 
-static ActorAnimationEntryS D_80AE7218[] = { { &D_0600D9D0, 1.0f, 0, -1, 0, 0 },
+static ActorAnimationEntryS sAnimations[] = { { &D_0600D9D0, 1.0f, 0, -1, 0, 0 },
                                              { &D_0600D9D0, 1.0f, 0, -1, 0, -4 },
                                              { &D_0600E6C4, 1.0f, 0, -1, 0, 0 },
                                              { &D_0600E6C4, 1.0f, 0, -1, 0, -4 } };
@@ -90,7 +92,7 @@ s32 func_80AE615C(EnShn* this, s32 arg1) {
     }
     if (phi_v0 != 0) {
         this->unk2E8 = arg1;
-        phi_v1 = func_8013BC6C(&this->skelAnime, D_80AE7218, arg1);
+        phi_v1 = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
         this->unk2CC = this->skelAnime.playSpeed;
     }
     return phi_v1;
@@ -165,7 +167,7 @@ void func_80AE63A8(EnShn* this, GlobalContext* globalCtx) {
         this->unk1D8 &= 0xFFEF;
         this->unk2BA = 0;
         this->unk2BC = 0;
-        this->unk2CA = 0x14;
+        this->unk2CA = 20;
         return;
     }
     if (this->unk2CA == 0) {
@@ -193,7 +195,7 @@ void func_80AE6488(EnShn* this, GlobalContext* globalCtx) {
     if ((&this->actor == player->targetActor) &&
         ((globalCtx->msgCtx.unk11F04 < 0xFF) || (globalCtx->msgCtx.unk11F04 >= 0x201)) && (msgState == 3) &&
         (this->unk2DC == 3)) {
-        if ((globalCtx->state.frames & 1) == 0) {
+        if (!(globalCtx->state.frames & 1)) {
             if (this->unk2D0 != 0.0f) {
                 this->unk2D0 = 0.0f;
             } else {
@@ -240,7 +242,7 @@ s32 func_80AE6704(EnShn* thisx, GlobalContext* globalCtx) {
 
     switch (this->unk2C6) {
         case 0:
-            if (!CHECK_QUEST_ITEM(QUEST_UNK_19)) {
+            if (!CHECK_QUEST_ITEM(QUEST_PICTOGRAPH_PICTURE)) {
                 this->unk2C6 = 6;
                 ret = 1;
             } else {
@@ -255,7 +257,7 @@ s32 func_80AE6704(EnShn* thisx, GlobalContext* globalCtx) {
             if (func_8013A4C4(D_80AE7258[this->unk2C6])) {
                 this->unk2C6 = 6;
                 ret = 1;
-                REMOVE_QUEST_ITEM(QUEST_UNK_19);
+                REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH_PICTURE);
             } else {
                 this->unk2C6++;
             }
@@ -334,7 +336,7 @@ void func_80AE6A64(EnShn* this, GlobalContext* globalCtx) {
         func_8013AED4(&this->unk1D8, 3, 7);
         this->unk1D8 &= 0xFFF7;
         this->unk1D8 |= 0x20;
-        this->unk2CA = 0x14;
+        this->unk2CA = 20;
         this->unk1E0 = 0;
         this->unk2BE = 0;
         this->actionFunc = func_80AE69E8;
