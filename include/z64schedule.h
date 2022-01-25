@@ -117,7 +117,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
-    /* 0x1 */ u8 res; // TODO rename
+    /* 0x1 */ u8 result;
 } ScheduleCmdReturnS; // size = 0x2
 
 typedef struct {
@@ -156,7 +156,7 @@ typedef struct {
     /* 0x2 */ u8 time0Min;
     /* 0x3 */ u8 time1Hr;
     /* 0x4 */ u8 time1Min;
-    /* 0x5 */ u8 res; // TODO rename? (updadte macros too)
+    /* 0x5 */ u8 result;
 } ScheduleCmdReturnTime; // size = 0x6
 
 typedef struct {
@@ -200,8 +200,8 @@ typedef struct {
 #define SCHEDULE_CMD_TIME_RANGE_CHECK_L(startHr, startMin, endHr, endMin, offset) \
     SCHEDULE_CMD_ID_TIME_RANGE_CHECK_L, (startHr), (startMin), (endHr), (endMin), SCHEDULE_PACK_S16(offset)
 
-#define SCHEDULE_CMD_RETURN_L(ret) \
-    SCHEDULE_CMD_ID_RETURN_L, SCHEDULE_PACK_S16(ret)
+#define SCHEDULE_CMD_RETURN_L(result) \
+    SCHEDULE_CMD_ID_RETURN_L, SCHEDULE_PACK_S16(result)
 
 #define SCHEDULE_CMD_END() \
     SCHEDULE_CMD_ID_END
@@ -215,8 +215,8 @@ typedef struct {
 #define SCHEDULE_CMD_ITEM_CHECK_S(which, offset) \
     SCHEDULE_CMD_ID_ITEM_CHECK_S, (which), (offset)
 
-#define SCHEDULE_CMD_RETURN_S(ret) \
-    SCHEDULE_CMD_ID_RETURN_S, (ret)
+#define SCHEDULE_CMD_RETURN_S(result) \
+    SCHEDULE_CMD_ID_RETURN_S, (result)
 
 #define SCHEDULE_CMD_SCENE_CHECK_S(scene, offset) \
     SCHEDULE_CMD_ID_SCENE_CHECK_S, SCHEDULE_PACK_S16(scene), (offset)
@@ -230,8 +230,8 @@ typedef struct {
 #define SCHEDULE_CMD_DAY_CHECK_L(day, offset) \
     SCHEDULE_CMD_ID_DAY_CHECK_L, SCHEDULE_PACK_S16(day), SCHEDULE_PACK_S16(offset)
 
-#define SCHEDULE_CMD_RETURN_TIME(time0Hr, time0Min, time1Hr, time1Min, ret) \
-    SCHEDULE_CMD_ID_RETURN_TIME, (time0Hr), (time0Min), (time1Hr), (time1Min), (ret)
+#define SCHEDULE_CMD_RETURN_TIME(time0Hr, time0Min, time1Hr, time1Min, result) \
+    SCHEDULE_CMD_ID_RETURN_TIME, (time0Hr), (time0Min), (time1Hr), (time1Min), (result)
 
 #define SCHEDULE_CMD_TIME_CHECK_S(timeHr, timeMin, offset) \
     SCHEDULE_CMD_ID_TIME_CHECK_S, (timeHr), (timeMin), (offset)

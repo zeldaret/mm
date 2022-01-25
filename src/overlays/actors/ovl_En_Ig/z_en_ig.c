@@ -259,7 +259,7 @@ void func_80BF13E4(EnIg* this) {
 Actor* func_80BF146C(EnIg* this, GlobalContext* globalCtx) {
     Actor* retActor;
 
-    if (this->unk_298.result == 3) {
+    if (this->scheduleResult == 3) {
         retActor = func_80BF1150(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AN);
     } else {
         retActor = &GET_PLAYER(globalCtx)->actor;
@@ -387,7 +387,7 @@ s32 func_80BF17BC(EnIg* this, GlobalContext* globalCtx) {
 }
 
 s32* func_80BF1920(EnIg* this, GlobalContext* globalCtx) {
-    switch (this->unk_298.result) {
+    switch (this->scheduleResult) {
         case 3:
             this->unk_3F8 = func_80BF17BC;
             return D_80BF335C;
@@ -421,8 +421,8 @@ s32 func_80BF19A0(EnIg* this, GlobalContext* globalCtx) {
             this->unk_3F6 = 0;
             this->unk_3F8 = NULL;
             this->actor.child = this->unk_2A8;
-            this->unk_298.time0 = func_80BF1920(this, globalCtx);
-            if ((this->unk_298.result != 2) && (this->unk_298.result != 3) && (this->unk_298.result != 4)) {
+            this->unk_29C = func_80BF1920(this, globalCtx);
+            if ((this->scheduleResult != 2) && (this->scheduleResult != 3) && (this->scheduleResult != 4)) {
                 this->unk_3D0 |= 0x20;
             }
             this->actionFunc = func_80BF2BD4;
@@ -443,7 +443,7 @@ void func_80BF1A60(EnIg* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BF1AE0(EnIg* this, GlobalContext* globalCtx) {
-    switch (this->unk_298.result) {
+    switch (this->scheduleResult) {
         case 3:
             func_80BF1284(this, 0);
             break;
@@ -562,9 +562,9 @@ s32 func_80BF1DF4(EnIg* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
             Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
 
             if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, sp50->actor.shape.rot.y)) <= 0x4000) {
-                *((s8*)&this->unk_298.hasResult) = -75; // ???
+                this->unk_2A4 = -75;
             } else {
-                *((s8*)&this->unk_298.hasResult) = 75;
+                this->unk_2A4 = 75;
             }
 
             this->unk_3E0 = arg2->time1 - arg2->time0;
@@ -597,7 +597,7 @@ s32 func_80BF1FA8(EnIg* this, GlobalContext* globalCtx, ScheduleResult* arg2) {
     }
 
     if (this->unk_274 != NULL) {
-        temp_t8 = this->unk_298.result;
+        temp_t8 = this->scheduleResult;
         if ((temp_t8 < 10) && (temp_t8 != 0) && (this->unk_3EC >= 0)) {
             phi_v1 = sp2E;
         } else {
@@ -723,7 +723,7 @@ s32 func_80BF2400(EnIg* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BF2470(EnIg* this, GlobalContext* globalCtx) {
-    EnDoor* sp44 = func_80BF1200(globalCtx, this->unk_298.result);
+    EnDoor* sp44 = func_80BF1200(globalCtx, this->scheduleResult);
     Vec3f sp38;
     f32 temp;
     s32 pad;
@@ -731,7 +731,7 @@ s32 func_80BF2470(EnIg* this, GlobalContext* globalCtx) {
     if (!func_8013AD6C(globalCtx) && (this->unk_3EC != 0)) {
         if ((sp44 != NULL) && (sp44->actor.update != NULL)) {
             if (((f32)this->unk_3E2 / this->unk_3E0) <= 0.9f) {
-                sp44->unk_1A7 = *(s8*)&this->unk_298.hasResult;
+                sp44->unk_1A7 = this->unk_2A4;
             } else {
                 sp44->unk_1A7 = 0;
             }
@@ -833,7 +833,7 @@ s32 func_80BF293C(EnIg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BF2A50(EnIg* this, GlobalContext* globalCtx) {
-    switch (this->unk_298.result) {
+    switch (this->scheduleResult) {
         case 10:
         case 11:
         case 12:
@@ -871,7 +871,7 @@ void func_80BF2AF8(EnIg* this, GlobalContext* globalCtx) {
     this->unk_3EC = REG(15) + ((void)0, gSaveContext.unk_14);
 
     if (!Schedule_RunScript(globalCtx, D_80BF3260, &sp20) ||
-        ((this->unk_298.result != sp20.result) && !func_80BF2368(this, globalCtx, &sp20))) {
+        ((this->scheduleResult != sp20.result) && !func_80BF2368(this, globalCtx, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~1;
         sp20.result = 0;
@@ -880,7 +880,7 @@ void func_80BF2AF8(EnIg* this, GlobalContext* globalCtx) {
         this->actor.flags |= 1;
     }
     this->unk_2A8 = func_80BF146C(this, globalCtx);
-    this->unk_298.result = sp20.result;
+    this->scheduleResult = sp20.result;
     func_80BF2A50(this, globalCtx);
 }
 
@@ -889,14 +889,14 @@ void func_80BF2BD4(EnIg* this, GlobalContext* globalCtx) {
     Vec3f sp38;
     Vec3f sp2C;
 
-    if (func_8010BF58(&this->actor, globalCtx, this->unk_298.time0, this->unk_3F8, &this->unk_298.time1)) {
+    if (func_8010BF58(&this->actor, globalCtx, this->unk_29C, this->unk_3F8, &this->unk_2A0)) {
         func_8013AED4(&this->unk_3D0, 3, 7);
         this->unk_3D0 &= ~0x20;
         this->unk_3D0 |= 0x200;
         this->unk_3EE = 20;
-        this->unk_298.time1 = 0;
+        this->unk_2A0 = 0;
         this->actionFunc = func_80BF2AF8;
-    } else if (((this->unk_298.result != 2) && (this->unk_298.result != 4)) &&
+    } else if (((this->scheduleResult != 2) && (this->scheduleResult != 4)) &&
                ((this->unk_2A8 != NULL) && (this->unk_2A8->update != NULL))) {
         Math_Vec3f_Copy(&sp38, &this->unk_2A8->world.pos);
         Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
@@ -917,7 +917,7 @@ void EnIg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetSphere(globalCtx, &this->collider2, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk_298.result = 0;
+    this->scheduleResult = 0;
     this->actor.gravity = 0.0f;
     this->actionFunc = func_80BF2AF8;
     this->actionFunc(this, globalCtx);
@@ -939,7 +939,7 @@ void EnIg_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80BF1B40(this, globalCtx);
 
-    if (this->unk_298.result != 0) {
+    if (this->scheduleResult != 0) {
         func_80BF1258(this);
         func_80BF13E4(this);
         func_80BF15EC(this);
@@ -1028,7 +1028,7 @@ void EnIg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnIg* this = THIS;
 
-    if (this->unk_298.result != 0) {
+    if (this->scheduleResult != 0) {
         func_8012C28C(globalCtx->state.gfxCtx);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);

@@ -145,9 +145,8 @@ scene_names = [
 ]
 
 def read_bytes(data_file, offset, len):
-    with open(data_file,"rb") as infile:
-        infile.seek(offset)
-        return bytearray(infile.read(len))
+    data_file.seek(offset)
+    return bytearray(data_file.read(len))
 
 def disassemble_unk_script(data_file, offset):
     off = 0
@@ -235,7 +234,8 @@ def main():
 
     print(hex(file_result[1]), "in", file_result[0].split(os.sep)[-1])
 
-    disassemble_unk_script(file_result[0], file_result[1])
+    with open(file_result[0],"rb") as data_file:
+        disassemble_unk_script(data_file, file_result[1])
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,11 @@
 #include "global.h"
 
+#define SCHEDULE_CALC_TIME(hour, minute, dest, temp) \
+    (temp) = (hour) * 60.0f; \
+    (temp) += (minute); \
+    (dest) = (temp) * 45.5f; /* 45.5f = (0x10000 / 60 / 24.0f) */ \
+    (dest) = SCHEDULE_CONVERT_TIME(dest);
+
 s32 Schedule_FlagCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
     ScheduleCmdFlagCheckS* cmd = (ScheduleCmdFlagCheckS*)*script;
     u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
@@ -17,7 +23,6 @@ s32 Schedule_FlagCheckL(GlobalContext* globalCtx, u8** script, ScheduleResult* r
 
     if (gSaveContext.weekEventReg[flag >> 8] & (flag & 0xFF)) {
         *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
-        ;
     }
 
     return false;
@@ -31,15 +36,9 @@ s32 Schedule_TimeRangeCheckS(GlobalContext* globalCtx, u8** script, ScheduleResu
     u16 end;
     u16 now;
 
-    f = cmd->startHr * 60.0f;
-    f += cmd->startMin;
-    start = f * 45.5f;
-    start = SCHEDULE_CONVERT_TIME(start);
+    SCHEDULE_CALC_TIME(cmd->startHr, cmd->startMin, start, f);
 
-    f = cmd->endHr * 60.0f;
-    f += cmd->endMin;
-    end = f * 45.5f;
-    end = SCHEDULE_CONVERT_TIME(end);
+    SCHEDULE_CALC_TIME(cmd->endHr, cmd->endMin, end, f);
     end -= 1;
 
     now = SCHEDULE_TIME_NOW;
@@ -63,15 +62,9 @@ s32 Schedule_TimeRangeCheckL(GlobalContext* globalCtx, u8** script, ScheduleResu
     u16 end;
     u16 now;
 
-    f = cmd->startHr * 60.0f;
-    f += cmd->startMin;
-    start = f * 45.5f;
-    start = SCHEDULE_CONVERT_TIME(start);
+    SCHEDULE_CALC_TIME(cmd->startHr, cmd->startMin, start, f);
 
-    f = cmd->endHr * 60.0f;
-    f += cmd->endMin;
-    end = f * 45.5f;
-    end = SCHEDULE_CONVERT_TIME(end);
+    SCHEDULE_CALC_TIME(cmd->endHr, cmd->endMin, end, f);
     end -= 1;
 
     now = SCHEDULE_TIME_NOW;
@@ -128,7 +121,7 @@ s32 Schedule_ItemCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* r
 s32 Schedule_ReturnS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
     ScheduleCmdReturnS* cmd = (ScheduleCmdReturnS*)*script;
 
-    result->result = cmd->res;
+    result->result = cmd->result;
     result->hasResult = true;
 
     return true;
@@ -184,18 +177,12 @@ s32 Schedule_ReturnTime(GlobalContext* globalCtx, u8** script, ScheduleResult* r
     u16 time0;
     u16 time1;
 
-    f = cmd->time0Hr * 60.0f;
-    f += cmd->time0Min;
-    time0 = f * 45.5f;
-    time0 = SCHEDULE_CONVERT_TIME(time0);
+    SCHEDULE_CALC_TIME(cmd->time0Hr, cmd->time0Min, time0, f);
 
-    f = cmd->time1Hr * 60.0f;
-    f += cmd->time1Min;
-    time1 = f * 45.5f;
-    time1 = SCHEDULE_CONVERT_TIME(time1);
+    SCHEDULE_CALC_TIME(cmd->time1Hr, cmd->time1Min, time1, f);
     time1 -= 1;
 
-    result->result = cmd->res;
+    result->result = cmd->result;
     result->time0 = time0;
     result->time1 = time1;
     result->hasResult = true;
@@ -209,10 +196,7 @@ s32 Schedule_TimeCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* r
     u16 testTime;
     u16 now;
 
-    f = cmd->timeHr * 60.0f;
-    f += cmd->timeMin;
-    testTime = f * 45.5f;
-    testTime = SCHEDULE_CONVERT_TIME(testTime);
+    SCHEDULE_CALC_TIME(cmd->timeHr, cmd->timeMin, testTime, f);
 
     now = SCHEDULE_TIME_NOW;
 
@@ -229,10 +213,7 @@ s32 Schedule_TimeCheckL(GlobalContext* globalCtx, u8** script, ScheduleResult* r
     u16 testTime;
     u16 now;
 
-    f = (cmd->timeHr * 60.0f);
-    f += cmd->timeMin;
-    testTime = f * 45.5f;
-    testTime = SCHEDULE_CONVERT_TIME(testTime);
+    SCHEDULE_CALC_TIME(cmd->timeHr, cmd->timeMin, testTime, f);
 
     now = SCHEDULE_TIME_NOW;
 
@@ -257,45 +238,35 @@ s32 Schedule_JumpL(GlobalContext* globalCtx, u8** script, ScheduleResult* result
     return false;
 }
 
-static s32 (*sCmdFuncs[])(GlobalContext*, u8**, ScheduleResult*) = { Schedule_FlagCheckS,
-                                                                     Schedule_FlagCheckL,
-                                                                     Schedule_TimeRangeCheckS,
-                                                                     Schedule_TimeRangeCheckL,
-                                                                     Schedule_ReturnL,
-                                                                     Schedule_End,
-                                                                     Schedule_ReturnEmpty,
-                                                                     Schedule_Nop,
-                                                                     Schedule_ItemCheckS,
-                                                                     Schedule_ReturnS,
-                                                                     Schedule_SceneCheckS,
-                                                                     Schedule_SceneCheckL,
-                                                                     Schedule_DayCheckS,
-                                                                     Schedule_DayCheckL,
-                                                                     Schedule_ReturnTime,
-                                                                     Schedule_TimeCheckS,
-                                                                     Schedule_TimeCheckL,
-                                                                     Schedule_JumpS,
-                                                                     Schedule_JumpL };
+static s32 (*sCmdFuncs[])(GlobalContext*, u8**, ScheduleResult*) = {
+    Schedule_FlagCheckS, Schedule_FlagCheckL, Schedule_TimeRangeCheckS, Schedule_TimeRangeCheckL,
+    Schedule_ReturnL,    Schedule_End,        Schedule_ReturnEmpty,     Schedule_Nop,
+    Schedule_ItemCheckS, Schedule_ReturnS,    Schedule_SceneCheckS,     Schedule_SceneCheckL,
+    Schedule_DayCheckS,  Schedule_DayCheckL,  Schedule_ReturnTime,      Schedule_TimeCheckS,
+    Schedule_TimeCheckL, Schedule_JumpS,      Schedule_JumpL,
+};
 
-static u8 sCmdSizes[] = { sizeof(ScheduleCmdFlagCheckS),
-                          sizeof(ScheduleCmdFlagCheckL),
-                          sizeof(ScheduleCmdTimeRangeCheckS),
-                          sizeof(ScheduleCmdTimeRangeCheckL),
-                          sizeof(ScheduleCmdReturnL),
-                          sizeof(ScheduleCmdBase),
-                          sizeof(ScheduleCmdBase),
-                          sizeof(ScheduleCmdNop),
-                          sizeof(ScheduleCmdItemCheckS),
-                          sizeof(ScheduleCmdReturnS),
-                          sizeof(ScheduleCmdSceneCheckS),
-                          sizeof(ScheduleCmdSceneCheckL),
-                          sizeof(ScheduleCmdDayCheckS),
-                          sizeof(ScheduleCmdDayCheckL),
-                          sizeof(ScheduleCmdReturnTime),
-                          sizeof(ScheduleCmdTimeCheckS),
-                          sizeof(ScheduleCmdTimeCheckL),
-                          sizeof(ScheduleCmdJumpS),
-                          sizeof(ScheduleCmdJumpL) };
+static u8 sCmdSizes[] = {
+    sizeof(ScheduleCmdFlagCheckS),
+    sizeof(ScheduleCmdFlagCheckL),
+    sizeof(ScheduleCmdTimeRangeCheckS),
+    sizeof(ScheduleCmdTimeRangeCheckL),
+    sizeof(ScheduleCmdReturnL),
+    sizeof(ScheduleCmdBase),
+    sizeof(ScheduleCmdBase),
+    sizeof(ScheduleCmdNop),
+    sizeof(ScheduleCmdItemCheckS),
+    sizeof(ScheduleCmdReturnS),
+    sizeof(ScheduleCmdSceneCheckS),
+    sizeof(ScheduleCmdSceneCheckL),
+    sizeof(ScheduleCmdDayCheckS),
+    sizeof(ScheduleCmdDayCheckL),
+    sizeof(ScheduleCmdReturnTime),
+    sizeof(ScheduleCmdTimeCheckS),
+    sizeof(ScheduleCmdTimeCheckL),
+    sizeof(ScheduleCmdJumpS),
+    sizeof(ScheduleCmdJumpL),
+};
 
 s32 Schedule_RunScript(GlobalContext* globalCtx, u8* script, ScheduleResult* result) {
     u8 size;

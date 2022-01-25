@@ -26,7 +26,10 @@ typedef struct EnIg {
     /* 0x028C */ s32 unk_28C;
     /* 0x0290 */ s32 unk_290;
     /* 0x0294 */ s32 unk_294;
-    /* 0x0298 */ ScheduleResult unk_298;
+    /* 0x0298 */ u8 scheduleResult;
+    /* 0x029C */ s32* unk_29C;
+    /* 0x02A0 */ s32 unk_2A0;
+    /* 0x02A4 */ s8 unk_2A4;
     /* 0x02A8 */ Actor* unk_2A8;
     /* 0x02AC */ UNK_TYPE1 unk2AC[0x4];
     /* 0x02B0 */ Vec3f unk_2B0;
