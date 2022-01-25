@@ -1,9 +1,9 @@
 #include "global.h"
 
-#define SCHEDULE_CALC_TIME(hour, minute, dest, temp) \
-    (temp) = (hour) * 60.0f; \
-    (temp) += (minute); \
-    (dest) = (temp) * 45.5f; /* 45.5f = (0x10000 / 60 / 24.0f) */ \
+#define SCHEDULE_CALC_TIME(hour, minute, dest, temp)            \
+    (temp) = (hour)*60.0f;                                      \
+    (temp) += (minute);                                         \
+    (dest) = (temp)*45.5f; /* 45.5f = (0x10000 / 60 / 24.0f) */ \
     (dest) = SCHEDULE_CONVERT_TIME(dest);
 
 s32 Schedule_FlagCheckS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
