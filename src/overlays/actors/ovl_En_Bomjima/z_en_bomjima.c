@@ -421,7 +421,7 @@ void func_80BFEB64(EnBomjima* this, GlobalContext* globalCtx) {
                 sp40.y = this->unk_2F0->actor.world.pos.y - randPlusMinusPoint5Scaled(40.0f);
                 sp40.z = (Math_CosS(sp3E) * (Rand_ZeroFloat(20.0f) + 40.0f)) + this->unk_2F0->actor.world.pos.z;
 
-                Audio_PlaySoundAtPosition(globalCtx, &sp40, 50, NA_SE_EV_BOMBERS_SHOT_EXPLOSUIN);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &sp40, 50, NA_SE_EV_BOMBERS_SHOT_EXPLOSUIN);
                 EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &sp40);
                 this->unk_2BC++;
 
@@ -1101,13 +1101,12 @@ void EnBomjima_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gEnBomjima_D_80C00B18, gEnBomjima_D_80C00B18,
     };
     static TexturePtr D_80C00B3C[] = {
-        &object_cs_Tex_00C520,
-        &object_cs_Tex_00CD20,
-        &object_cs_Tex_00D520,
+        object_cs_Tex_00C520,
+        object_cs_Tex_00CD20,
+        object_cs_Tex_00D520,
     };
     static TexturePtr D_80C00B48[] = {
-        &object_cs_Tex_00E620, &object_cs_Tex_00EA20, &object_cs_Tex_00EE20,
-        &object_cs_Tex_00DD20, &object_cs_Tex_00F220,
+        object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
     };
     EnBomjima* this = THIS;
 

@@ -5,6 +5,8 @@
  */
 
 #include "z_en_goroiwa.h"
+#include "objects/object_goroiwa/object_goroiwa.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x80000010
 
@@ -29,21 +31,6 @@ void func_80941F54(EnGoroiwa* this);
 void func_80941FA4(EnGoroiwa* this, GlobalContext* globalCtx);
 void func_80942084(EnGoroiwa* this);
 void func_809420F0(EnGoroiwa* this, GlobalContext* globalCtx);
-
-extern Gfx D_060032E0[];
-extern Gfx D_060082D0[];
-extern Gfx D_06005C20[];
-extern Gfx D_06003B40[];
-extern Gfx D_06008B90[];
-extern Gfx D_060042B0[];
-extern Gfx D_06004960[];
-extern Gfx D_06004EF0[];
-extern Gfx D_060003B0[];
-extern Gfx D_060028E0[];
-extern Gfx D_06002D70[];
-extern Gfx D_060072F0[];
-extern Gfx D_060077D0[];
-extern Gfx D_06007C60[];
 
 const ActorInit En_Goroiwa_InitVars = {
     ACTOR_EN_GOROIWA,
@@ -94,9 +81,9 @@ static f32 D_80942DFC[] = {
 };
 
 static Gfx* D_80942E0C[][3] = {
-    { D_060042B0, D_06004960, D_06004EF0 },
-    { D_060003B0, D_060028E0, D_06002D70 },
-    { D_060072F0, D_060077D0, D_06007C60 },
+    { object_goroiwa_DL_0042B0, object_goroiwa_DL_004960, object_goroiwa_DL_004EF0 },
+    { object_goroiwa_DL_0003B0, object_goroiwa_DL_0028E0, object_goroiwa_DL_002D70 },
+    { object_goroiwa_DL_0072F0, object_goroiwa_DL_0077D0, object_goroiwa_DL_007C60 },
 };
 
 static Color_RGBA8 D_80942E30[] = {
@@ -965,7 +952,7 @@ void func_80941060(EnGoroiwa* this, GlobalContext* globalCtx) {
 }
 
 void func_80941274(EnGoroiwa* this, GlobalContext* globalCtx) {
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_SNOWBALL_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_SNOWBALL_BROKEN);
 }
 
 void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -1577,9 +1564,9 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
     Vec3s sp80;
 
     if (params == ENGOROIWA_C000_1) {
-        phi_fp = D_060032E0;
+        phi_fp = object_goroiwa_DL_0032E0;
     } else {
-        phi_fp = D_060082D0;
+        phi_fp = object_goroiwa_DL_0082D0;
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1E8); i++) {
@@ -1609,7 +1596,7 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_04076BC0);
+                gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
                 CLOSE_DISPS(globalCtx->state.gfxCtx);
             }
@@ -1619,9 +1606,9 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
 
 void EnGoroiwa_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static Gfx* D_80942EB4[] = {
-        D_06005C20,
-        D_06003B40,
-        D_06008B90,
+        object_goroiwa_DL_005C20,
+        object_goroiwa_DL_003B40,
+        object_goroiwa_DL_008B90,
     };
     EnGoroiwa* this = THIS;
     s32 params = ENGOROIWA_GET_C000(&this->actor);

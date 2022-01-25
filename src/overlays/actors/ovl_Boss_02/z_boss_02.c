@@ -7,6 +7,8 @@
 #include "z_boss_02.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
+#include "objects/object_boss02/object_boss02.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000035
 
@@ -28,36 +30,6 @@ void func_809DD0CC(GlobalContext* globalCtx);
 void func_809DD2F8(GlobalContext* globalCtx);
 void func_809DD934(Boss02* this, GlobalContext* globalCtx);
 void func_809DEAC4(Boss02* this, GlobalContext* globalCtx);
-
-extern Gfx D_06000230[];
-extern Gfx D_060002E0[];
-extern UNK_TYPE D_060003A0;
-extern UNK_TYPE D_060041A0;
-extern UNK_TYPE D_06008650;
-extern SkeletonHeader D_06009B10;
-extern AnimationHeader D_06009C78;
-extern Gfx D_0600ECF0[];
-extern Gfx D_0600EF90[];
-extern Gfx D_0600F310[];
-extern Gfx D_0600F690[];
-extern Gfx D_0600FA10[];
-extern Gfx D_0600FD90[];
-extern Gfx D_06010110[];
-extern Gfx D_06010490[];
-extern Gfx D_06010810[];
-extern Gfx D_06010B90[];
-extern Gfx D_06010F10[];
-extern Gfx D_06011290[];
-extern Gfx D_06011610[];
-extern Gfx D_06011990[];
-extern Gfx D_06011D10[];
-extern Gfx D_06012090[];
-extern Gfx D_06012410[];
-extern Gfx D_06012790[];
-extern Gfx D_06012B10[];
-extern Gfx D_06012E90[];
-extern Gfx D_06013210[];
-extern Gfx D_06013590[];
 
 static u8 D_809E0420;
 static u8 D_809E0421;
@@ -624,7 +596,8 @@ void Boss02_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.colChkInfo.health = 20;
         Actor_SetScale(&this->actor, 0.01f);
-        SkelAnime_Init(globalCtx, &this->skelAnime, &D_06009B10, &D_06009C78, this->jointTable, this->morphTable, 13);
+        SkelAnime_Init(globalCtx, &this->skelAnime, &object_boss02_Skel_009B10, &object_boss02_Anim_009C78,
+                       this->jointTable, this->morphTable, 13);
         Collider_InitAndSetJntSph(globalCtx, &this->colliderSphere1, &this->actor, &sJntSphInit1,
                                   this->colliderSphere1Elements);
         Collider_InitAndSetJntSph(globalCtx, &this->colliderSphere2, &this->actor, &sJntSphInit2,
@@ -663,7 +636,7 @@ void func_809DAA98(Boss02* this, GlobalContext* globalCtx) {
 
 void func_809DAAA8(Boss02* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809DAB78;
-    Animation_MorphToLoop(&this->skelAnime, &D_06009C78, 0.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_boss02_Anim_009C78, 0.0f);
     if (D_809E042C->unk_1D20 != 0) {
         this->unk_0144 = 10;
     } else {
@@ -1103,7 +1076,7 @@ void func_809DBFB4(Boss02* this, GlobalContext* globalCtx) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
                     this->unk_015C = 1;
                 } else {
-                    func_8019F1C0(&this->unk_167C, NA_SE_EN_INBOSS_DAMAGE_OLD);
+                    Audio_PlaySfxAtPos(&this->unk_167C, NA_SE_EN_INBOSS_DAMAGE_OLD);
                     this->unk_015C = 10;
                 }
 
@@ -1351,9 +1324,12 @@ void func_809DC78C(Actor* thisx, GlobalContext* globalCtx) {
 // matrix stuff at the start?
 void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     static Gfx* D_809DFA9C[] = {
-        D_0600ECF0, D_0600EF90, D_0600F310, D_0600F690, D_0600FA10, D_0600FD90, D_06010110, D_06010490,
-        D_06010810, D_06010B90, D_06010F10, D_06011290, D_06011610, D_06011990, D_06011D10, D_06012090,
-        D_06012410, D_06012790, D_06012B10, D_06012E90, D_06013210, D_06013590,
+        object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690,
+        object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
+        object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290,
+        object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
+        object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90,
+        object_boss02_DL_013210, object_boss02_DL_013590,
     };
     static Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
     Boss02* this = THIS;
@@ -1378,9 +1354,9 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     if (this->actor.params == 0) {
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_060003A0));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_boss02_Tex_0003A0));
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_060041A0));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_boss02_Tex_0041A0));
     }
 
     gSPSegment(POLY_OPA_DISP++, 0x0D, matrix);
@@ -1490,9 +1466,12 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 }
 #else
 static Gfx* D_809DFA9C[] = {
-    D_0600ECF0, D_0600EF90, D_0600F310, D_0600F690, D_0600FA10, D_0600FD90, D_06010110, D_06010490,
-    D_06010810, D_06010B90, D_06010F10, D_06011290, D_06011610, D_06011990, D_06011D10, D_06012090,
-    D_06012410, D_06012790, D_06012B10, D_06012E90, D_06013210, D_06013590,
+    object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690,
+    object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
+    object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290,
+    object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
+    object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90,
+    object_boss02_DL_013210, object_boss02_DL_013590,
 };
 static Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/Boss02_Draw.s")
@@ -1562,7 +1541,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(D_809E0438); i++, effect++) {
         if (effect->unk_24 == 1) {
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, D_06000230);
+                gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_000230);
                 gDPSetEnvColor(POLY_XLU_DISP++, 185, 140, 70, 128);
                 flag++;
             }
@@ -1583,7 +1562,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_060002E0);
+            gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_0002E0);
         }
     }
 
@@ -1604,7 +1583,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_0401A620);
+            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_01A620);
         }
     }
 
@@ -1612,7 +1591,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
     for (i = 0, flag = false; i < ARRAY_COUNT(D_809E0438); i++, effect++) {
         if (effect->unk_24 == 4) {
             if (!flag) { //! @bug - dev forgot to set flag to 1, should only apply to first entry?
-                gSPDisplayList(POLY_XLU_DISP++, D_04023348);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);
             }
 
@@ -1624,7 +1603,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_04023428);
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
         }
     }
 
@@ -1632,7 +1611,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
     for (i = 0, flag = false; i < ARRAY_COUNT(D_809E0438); i++, effect++) {
         if (effect->unk_24 == 2) {
             if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, D_06000230);
+                gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_000230);
                 gDPSetEnvColor(POLY_XLU_DISP++, 30, 30, 30, 128);
                 flag++;
             }
@@ -1648,7 +1627,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_060002E0);
+            gSPDisplayList(POLY_XLU_DISP++, object_boss02_DL_0002E0);
         }
     }
 
@@ -2178,7 +2157,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
 
             if (this->unk_1D1C == (u32)(KREG(92) + 125)) {
                 TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt,
-                                       Lib_SegmentedToVirtual(&D_06008650), 160, 180, 128, 40);
+                                       Lib_SegmentedToVirtual(object_boss02_Tex_008650), 160, 180, 128, 40);
             }
 
             if (this->unk_1D1C == (u32)(BREG(27) + 335)) {

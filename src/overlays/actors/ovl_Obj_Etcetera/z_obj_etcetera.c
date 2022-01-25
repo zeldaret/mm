@@ -53,8 +53,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 14, 0, { 0, 0, 0 } },
 };
 
-extern ColliderCylinderInit D_80A7C790;
-
 static s16 objectIds[] = {
     GAMEPLAY_KEEP,
     GAMEPLAY_KEEP,

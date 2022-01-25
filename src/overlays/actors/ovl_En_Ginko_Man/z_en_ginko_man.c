@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ginko_man.h"
+#include "objects/object_boj/object_boj.h"
 
 #define FLAGS 0x00000009
 
@@ -29,14 +30,6 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx);
 void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx);
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_0600C240; // object_ginko_skeleton
-extern Gfx D_0600B1D8[];              // object_ginko_limb15_dlist
-extern AnimationHeader D_060008C0;    // object_ginko_floorsmacking_anim
-extern AnimationHeader D_060043F0;    // object_ginko_sitting_anim
-extern AnimationHeader D_06004A7C;    // object_ginko_amazed_anim
-extern AnimationHeader D_06004F40;    // object_ginko_stamp_reach_anim
-extern AnimationHeader D_06000AC4;    // object_ginko_advertising_anim
-
 const ActorInit En_Ginko_Man_InitVars = {
     ACTOR_EN_GINKO_MAN,
     ACTORCAT_NPC,
@@ -50,11 +43,11 @@ const ActorInit En_Ginko_Man_InitVars = {
 };
 
 ActorAnimationEntry animations[] = {
-    { &D_060008C0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_060043F0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_06004F40, 1.0f, 0.0f, 0.0f, 2, -4.0f },
-    { &D_06000AC4, 1.0f, 0.0f, 0.0f, 0, -4.0f }, // looking around for customers
-    { &D_06004A7C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_boj_Anim_0008C0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_boj_Anim_0043F0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &object_boj_Anim_004F40, 1.0f, 0.0f, 0.0f, 2, -4.0f },
+    { &object_boj_Anim_000AC4, 1.0f, 0.0f, 0.0f, 0, -4.0f }, // looking around for customers
+    { &object_boj_Anim_004A7C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
 };
 
 void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -69,7 +62,8 @@ void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->isStampChecked = false;
     this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
     this->serviceFee = 0;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600C240, &D_060043F0, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boj_Skel_00C240, &object_boj_Anim_0043F0, this->jointTable,
+                       this->morphTable, 16);
     EnGinkoMan_SetupIdle(this);
 }
 
@@ -501,7 +495,8 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->skelAnime.animation == &D_060008C0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+    if ((this->skelAnime.animation == &object_boj_Anim_0008C0) &&
+        Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }
@@ -512,7 +507,7 @@ void EnGinkoMan_SetupBankAward(EnGinkoMan* this) {
 
 void EnGinkoMan_BankAward(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        // ? when would bank have a parent?
+        // Parent is the player when starting to receive the award
         this->actor.parent = NULL;
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
@@ -535,7 +530,7 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
     this->actionFunc = EnGinkoMan_BankAward2;
 }
 
-// separate function to handle bank rewards... if the bank has a parent actor? might be unused
+// separate function to handle bank rewards... called while the player is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (!(gSaveContext.weekEventReg[10] & 8) && (this->curTextId == 0x45B)) {
@@ -543,11 +538,11 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
             // it!"
             gSaveContext.weekEventReg[10] |= 8;
             func_801518B0(globalCtx, 0x47A, &this->actor);
-            this->curTextId = 0x47A; // "See! Doesn't it hold more than your old one?
+            this->curTextId = 0x47A; // Message after receiving reward for depositing 200 rupees.
         } else {
             Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
             func_801518B0(globalCtx, 0x47B, &this->actor);
-            this->curTextId = 0x47B; // "Is that so?  Think it over, little guy!  So what are you gonna do?"
+            this->curTextId = 0x47B; // Message after receiving reward for depositing 1000 rupees.
         }
 
         EnGinkoMan_SetupDialogue(this);
@@ -601,12 +596,12 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer > 160.0f) {
         if (this->animTimer == 0) {
-            if (this->skelAnime.animation != &D_06004A7C) {
+            if (this->skelAnime.animation != &object_boj_Anim_004A7C) {
                 this->animTimer = 40;
                 Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_ADVERTISING);
             }
         }
-    } else if ((this->animTimer == 0) && (this->skelAnime.animation != &D_06000AC4)) {
+    } else if ((this->animTimer == 0) && (this->skelAnime.animation != &object_boj_Anim_000AC4)) {
         this->animTimer = 40;
         Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_AMAZED);
     }
@@ -616,7 +611,7 @@ void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx) {
 
 void EnGinkoMan_FacePlayer(EnGinkoMan* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (this->skelAnime.animation != &D_06004A7C) {
+    if (this->skelAnime.animation != &object_boj_Anim_004A7C) {
         func_800E9250(globalCtx, &this->actor, &this->limb15Rot, &this->limb8Rot, this->actor.focus.pos);
     } else {
         func_800E8F08(&this->limb15Rot, &this->limb8Rot);
@@ -633,11 +628,11 @@ void EnGinkoMan_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* arg) {
-    EnGinkoMan* this = (EnGinkoMan*)arg;
+                                Actor* thisx) {
+    EnGinkoMan* this = THIS;
 
     if (limbIndex == 15) {
-        *dList = D_0600B1D8;
+        *dList = object_boj_DL_00B1D8;
     }
 
     if (limbIndex == 15) {
@@ -650,10 +645,10 @@ s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
         Matrix_InsertZRotation_s(-this->limb8Rot.x, MTXMODE_APPLY);
     }
 
-    return 0;
+    return false;
 }
 
-void EnGinkoMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
+void EnGinkoMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
 void EnGinkoMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
