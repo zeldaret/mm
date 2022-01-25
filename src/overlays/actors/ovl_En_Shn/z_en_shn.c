@@ -22,10 +22,10 @@ s32 func_80AE6704(EnShn* this, GlobalContext* globalCtx);
 void func_80AE6D40(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_80AE6D90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
 
-extern Gfx D_0600B738[]; // Swamp Tour guide Head
+extern Gfx D_0600B738[];              // Swamp Tour guide Head
 extern FlexSkeletonHeader D_0600E7D0; // object_shn_Skel_00E7D0
-extern AnimationHeader D_0600D9D0; // object_shn_Anim_00D9D0
-extern AnimationHeader D_0600E6C4; // object_shn_Anim_00E6C4
+extern AnimationHeader D_0600D9D0;    // object_shn_Anim_00D9D0
+extern AnimationHeader D_0600E6C4;    // object_shn_Anim_00E6C4
 
 // Could be something related to text/dialogue?
 static UNK_TYPE D_80AE6F00[] = {
@@ -72,9 +72,9 @@ const ActorInit En_Shn_InitVars = {
 };
 
 static ActorAnimationEntryS sAnimations[] = { { &D_0600D9D0, 1.0f, 0, -1, 0, 0 },
-                                             { &D_0600D9D0, 1.0f, 0, -1, 0, -4 },
-                                             { &D_0600E6C4, 1.0f, 0, -1, 0, 0 },
-                                             { &D_0600E6C4, 1.0f, 0, -1, 0, -4 } };
+                                              { &D_0600D9D0, 1.0f, 0, -1, 0, -4 },
+                                              { &D_0600E6C4, 1.0f, 0, -1, 0, 0 },
+                                              { &D_0600E6C4, 1.0f, 0, -1, 0, -4 } };
 
 static s32 D_80AE7258[] = { 0, 2, 3, 8, 10, 1 };
 
