@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ending_hero4.h"
+#include "objects/object_sdn/object_sdn.h"
 
 #define FLAGS 0x00000009
 
@@ -30,9 +31,6 @@ const ActorInit En_Ending_Hero4_InitVars = {
     (ActorFunc)EnEndingHero4_Draw,
 };
 
-extern FlexSkeletonHeader D_0600D640;
-extern AnimationHeader D_06002A84;
-
 void EnEndingHero4_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero4* this = THIS;
 
@@ -40,7 +38,7 @@ void EnEndingHero4_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D640, &D_06002A84, this->jointTable, this->morphTable, 17);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierCheerWithSpear, this->jointTable, this->morphTable, 17);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     func_80C23748(this);
 }
