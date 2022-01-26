@@ -7,25 +7,25 @@ import argparse, os, struct
 from actor_symbols import resolve_symbol
 
 cmd_info = [
-    ('SCHEDULE_CMD_FLAG_CHECK_S',       0x04, '>BBb',   (2, )),
-    ('SCHEDULE_CMD_FLAG_CHECK_L',       0x05, '>BBh',   (2, )),
-    ('SCHEDULE_CMD_TIME_RANGE_CHECK_S', 0x06, '>BBBBb', (4, )),
-    ('SCHEDULE_CMD_TIME_RANGE_CHECK_L', 0x07, '>BBBBh', (4, )),
-    ('SCHEDULE_CMD_RETURN_L',           0x03, '>H',     (   )),
-    ('SCHEDULE_CMD_END',                0x01, '',       (   )),
-    ('SCHEDULE_CMD_RETURN_EMPTY',       0x01, '',       (   )),
-    ('SCHEDULE_CMD_NOP',                0x04, '>BBB',   (   )),
-    ('SCHEDULE_CMD_ITEM_CHECK_S',       0x03, '>Bb',    (1, )),
-    ('SCHEDULE_CMD_RETURN_S',           0x02, '>B',     (   )),
-    ('SCHEDULE_CMD_SCENE_CHECK_S',      0x04, '>Hb',    (1, )),
-    ('SCHEDULE_CMD_SCENE_CHECK_L',      0x05, '>Hh',    (1, )),
-    ('SCHEDULE_CMD_DAY_CHECK_S',        0x04, '>Hb',    (1, )),
-    ('SCHEDULE_CMD_DAY_CHECK_L',        0x05, '>Hh',    (1, )),
-    ('SCHEDULE_CMD_RETURN_TIME',        0x06, '>BBBBB', (   )),
-    ('SCHEDULE_CMD_TIME_CHECK_S',       0x04, '>BBb',   (2, )),
-    ('SCHEDULE_CMD_TIME_CHECK_L',       0x05, '>BBh',   (2, )),
-    ('SCHEDULE_CMD_JUMP_S',             0x02, '>b',     (0, )),
-    ('SCHEDULE_CMD_JUMP_L',             0x03, '>h',     (0, )),
+    ('SCHEDULE_CMD_CHECK_FLAG_S',        0x04, '>BBb',   (2, )),
+    ('SCHEDULE_CMD_CHECK_FLAG_L',        0x05, '>BBh',   (2, )),
+    ('SCHEDULE_CMD_CHECK_TIME_RANGE_S',  0x06, '>BBBBb', (4, )),
+    ('SCHEDULE_CMD_CHECK_TIME_RANGE_L',  0x07, '>BBBBh', (4, )),
+    ('SCHEDULE_CMD_RET_VAL_L',           0x03, '>H',     (   )),
+    ('SCHEDULE_CMD_RET_NONE',            0x01, '',       (   )),
+    ('SCHEDULE_CMD_RET_EMPTY',           0x01, '',       (   )),
+    ('SCHEDULE_CMD_NOP',                 0x04, '>BBB',   (   )),
+    ('SCHEDULE_CMD_CHECK_MISC_S',        0x03, '>Bb',    (1, )),
+    ('SCHEDULE_CMD_RET_VAL_S',           0x02, '>B',     (   )),
+    ('SCHEDULE_CMD_CHECK_SCENE_S',       0x04, '>Hb',    (1, )),
+    ('SCHEDULE_CMD_CHECK_SCENE_L',       0x05, '>Hh',    (1, )),
+    ('SCHEDULE_CMD_CHECK_DAY_S',         0x04, '>Hb',    (1, )),
+    ('SCHEDULE_CMD_CHECK_DAY_L',         0x05, '>Hh',    (1, )),
+    ('SCHEDULE_CMD_RET_TIME',            0x06, '>BBBBB', (   )),
+    ('SCHEDULE_CMD_CHECK_BEFORE_TIME_S', 0x04, '>BBb',   (2, )),
+    ('SCHEDULE_CMD_CHECK_BEFORE_TIME_L', 0x05, '>BBh',   (2, )),
+    ('SCHEDULE_CMD_BRANCH_S',            0x02, '>b',     (0, )),
+    ('SCHEDULE_CMD_BRANCH_L',            0x03, '>h',     (0, )),
 ]
 
 scene_names = [
@@ -182,11 +182,11 @@ def disassemble_unk_script(data_file, offset):
                         arg_formatted = f"0x{arg_value:02X}"
                     elif cmd == 0x08:
                         if arg_value == 0:
-                            arg_formatted = "SCHEDULE_ITEM_CHECK_ROOM_KEY"
+                            arg_formatted = "SCHEDULE_CHECK_MISC_ROOM_KEY"
                         elif arg_value == 1:
-                            arg_formatted = "SCHEDULE_ITEM_CHECK_LETTER_TO_KAFEI"
+                            arg_formatted = "SCHEDULE_CHECK_MISC_LETTER_TO_KAFEI"
                         elif arg_value == 2:
-                            arg_formatted = "SCHEDULE_ITEM_CHECK_MASK_ROMANI"
+                            arg_formatted = "SCHEDULE_CHECK_MISC_MASK_ROMANI"
                         else:
                             arg_formatted = f"0x{arg_value:02X}"
                     else:
