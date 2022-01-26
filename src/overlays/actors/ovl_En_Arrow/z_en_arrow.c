@@ -106,7 +106,7 @@ void EnArrow_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetQuad(globalCtx, &this->collider, &this->actor, &sQuadInit);
 
     if (this->actor.params < ENARROW_6) {
-        this->collider.info.toucherFlags &= ~(TOUCH_10 | TOUCH_SFX_HARD);
+        this->collider.info.toucherFlags &= ~(TOUCH_SFX_WOOD | TOUCH_SFX_HARD);
         this->collider.info.toucherFlags |= 0;
     }
 
@@ -256,8 +256,8 @@ void func_8088A894(EnArrow* this, GlobalContext* globalCtx) {
     temp_f0 = sp4C / temp_f0;
     Math_Vec3f_Scale(&sp68, temp_f0);
     Math_Vec3f_Sum(&this->unk_264->world.pos, &sp68, &sp5C);
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->unk_264->world.pos, &sp5C, &sp50, &sp74, 1, 1, 1, 1,
-                                &sp44)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->unk_264->world.pos, &sp5C, &sp50, &sp74, true, true, true,
+                                true, &sp44)) {
         this->unk_264->world.pos.x = ((sp5C.x <= sp50.x) ? 1.0f : -1.0f) + sp50.x;
         this->unk_264->world.pos.y = ((sp5C.y <= sp50.y) ? 1.0f : -1.0f) + sp50.y;
         this->unk_264->world.pos.z = ((sp5C.z <= sp50.z) ? 1.0f : -1.0f) + sp50.z;
@@ -491,7 +491,8 @@ void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx) {
             Math_Vec3f_Sum(&this->unk_228, &this->unk_268, &sp60);
             Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_268, &sp54);
 
-            if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp60, &sp54, &sp9C, &spAC, 1, 1, 1, 1, &spA8)) {
+            if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp60, &sp54, &sp9C, &spAC, true, true, true, true,
+                                        &spA8)) {
                 this->unk_264->world.pos.x = ((sp54.x <= sp9C.x) ? 1.0f : -1.0f) + sp9C.x;
                 this->unk_264->world.pos.y = ((sp54.y <= sp9C.y) ? 1.0f : -1.0f) + sp9C.y;
                 this->unk_264->world.pos.z = ((sp54.z <= sp9C.z) ? 1.0f : -1.0f) + sp9C.z;
@@ -567,25 +568,26 @@ void EnArrow_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-} EnArrowVecs;
+    /* 0x00 */ Vec3f unk_00[2];
+    /* 0x18 */ Vec3f unk_18[2][2];
+    /* 0x48 */ Vec3f unk_48;
+} EnArrowUnkStruct; // size = 0x54
 
-void func_8088B88C(GlobalContext* globalCtx, EnArrow* this, EnArrowVecs* arg2) {
-    EnArrowVecs* sp4C;
+void func_8088B88C(GlobalContext* globalCtx, EnArrow* this, EnArrowUnkStruct* arg2) {
+    Vec3f* sp4C;
     Vec3f sp40;
     Vec3f sp34;
     s32 sp30;
 
-    Matrix_MultiplyVector3fByState(&arg2[3].unk_00, &this->unk_234);
+    Matrix_MultiplyVector3fByState(&arg2->unk_48, &this->unk_234);
     if (func_8088ACE0 == this->actionFunc) {
         if (this->unk_244 == 0) {
-            sp4C = arg2;
+            sp4C = &arg2->unk_00[0];
         } else {
-            sp4C = arg2 + 1 + (globalCtx->gameplayFrames % 2);
+            sp4C = &arg2->unk_18[globalCtx->gameplayFrames % 2][0];
         }
-        Matrix_MultiplyVector3fByState(&sp4C->unk_00, &sp40);
-        Matrix_MultiplyVector3fByState(&sp4C->unk_0C, &sp34);
+        Matrix_MultiplyVector3fByState(&sp4C[0], &sp40);
+        Matrix_MultiplyVector3fByState(&sp4C[1], &sp34);
         if (this->actor.params < ENARROW_8) {
             sp30 = this->actor.params < ENARROW_6;
             if (this->unk_264 == 0) {
@@ -602,33 +604,39 @@ void func_8088B88C(GlobalContext* globalCtx, EnArrow* this, EnArrowVecs* arg2) {
 }
 
 void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static EnArrowVecs D_8088C2EC[] = {
+    static EnArrowUnkStruct D_8088C2EC[] = {
         {
-            { 400.0f, 400.0f, 0.0f },
-            { -400.0f, 400.0f, 0.0f },
-        },
-        {
-            { 400.0f, 400.0f, 1500.0f },
-            { -400.0f, 400.0f, 1500.0f },
-        },
-        {
-            { 400.0f, 400.0f, 1500.0f },
-            { -400.0f, 400.0f, 1500.0f },
-        },
-        {
+            {
+                { 400.0f, 400.0f, 0.0f },
+                { -400.0f, 400.0f, 0.0f },
+            },
+            {
+                {
+                    { 400.0f, 400.0f, 1500.0f },
+                    { -400.0f, 400.0f, 1500.0f },
+                },
+                {
+                    { 400.0f, 400.0f, 1500.0f },
+                    { -400.0f, 400.0f, 1500.0f },
+                },
+            },
             { 0.0f, 0.0f, -300.0f },
-            { 20.0f, -20.0f, 20.0f },
         },
         {
-            { 20.0f, -20.0f, 20.0f },
-            { 20.0f, -20.0f, 20.0f },
-        },
-        {
-            { -20.0f, 20.0f, 20.0f },
-            { -20.0f, -20.0f, 20.0f },
-        },
-        {
-            { 20.0f, 20.0f, 20.0f },
+            {
+                { 20.0f, -20.0f, 20.0f },
+                { 20.0f, -20.0f, 20.0f },
+            },
+            {
+                {
+                    { 20.0f, -20.0f, 20.0f },
+                    { -20.0f, 20.0f, 20.0f },
+                },
+                {
+                    { -20.0f, -20.0f, 20.0f },
+                    { 20.0f, 20.0f, 20.0f },
+                },
+            },
             { 0.0f, 0.0f, 20.0f },
         },
     };
@@ -647,7 +655,7 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         if (this->bubble.unk_149 >= 0) {
-            func_8088B88C(globalCtx, this, (EnArrowVecs*)&D_8088C2EC[3].unk_0C);
+            func_8088B88C(globalCtx, this, &D_8088C2EC[1]);
         } else {
             Collider_ResetQuadAT(globalCtx, &this->collider.base);
         }

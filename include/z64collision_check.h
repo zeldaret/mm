@@ -368,7 +368,6 @@ typedef enum {
 #define TOUCH_SFX_HARD (1 << 3) // Always uses hard deflection sound
 #define TOUCH_SFX_WOOD (2 << 3) // Always uses wood deflection sound
 #define TOUCH_SFX_NONE (3 << 3) // No hit sound effect
-#define TOUCH_10 (1 << 4) // Unk
 #define TOUCH_AT_HITMARK (1 << 5) // Draw hitmarks for every AT collision
 #define TOUCH_DREW_HITMARK (1 << 6) // Already drew hitmark for this frame
 #define TOUCH_UNK7 (1 << 7) // Unknown purpose. Used by some enemy quads
