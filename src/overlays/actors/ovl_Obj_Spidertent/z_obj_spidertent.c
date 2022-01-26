@@ -375,24 +375,19 @@ s32 func_80B2FB94(Vec3f* arg0, f32 arg1, TriNorm* triNorm, Vec3f* arg3, f32* arg
     return false;
 }
 
-#ifdef NON_MATCHING
-// Vertex pointers
 s32 func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
     Vec3f sp84;
     Vec3f sp78;
-    s32 i;
-    Vec3f* vtxPtr;
-    Vec3f sp4C[3];
     Vec3f* vtx;
     Vec3f* vtx2;
-
-    vtx = &triNorm->vtx[0];
-    vtx2 = &triNorm->vtx[2];
-    vtxPtr = &triNorm->vtx[0];
+    Vec3f sp4C[3];
+    s32 i;
 
     if (triNorm->plane.normal.x > 0.5f) {
+        vtx = &triNorm->vtx[0];
+        vtx2 = &triNorm->vtx[2];
 
-        for (i = 0; i < ARRAY_COUNT(sp4C); i++) {
+        for (i = 0; i < ARRAY_COUNT(sp4C); i++, vtx = &triNorm->vtx[i]) {
             sp84.x = 0.0f;
             sp84.y = vtx->y - arg1->y;
             sp84.z = vtx->z - arg1->z;
@@ -403,70 +398,53 @@ s32 func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
 
             Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
 
-            vtxPtr++;
             vtx2 = vtx;
-            vtx = vtxPtr;
         }
 
         return ((sp4C[0].x >= 0.0f) && (sp4C[1].x >= 0.0f) && (sp4C[2].x >= 0.0f)) ||
                ((sp4C[0].x < 0.0f) && (sp4C[1].x < 0.0f) && (sp4C[2].x < 0.0f));
-    } else {
-        // vtx = &triNorm->vtx[0];
-        // vtx2 = &triNorm->vtx[2];
-        // vtxPtr = &triNorm->vtx[0];
+    } else if (triNorm->plane.normal.y > 0.5f) {
+        vtx = &triNorm->vtx[0];
+        vtx2 = &triNorm->vtx[2];
 
-        if (triNorm->plane.normal.y > 0.5f) {
-            vtx = &triNorm->vtx[0];
-            vtx2 = &triNorm->vtx[2];
-            vtxPtr = &triNorm->vtx[0];
+        for (i = 0; i < ARRAY_COUNT(sp4C); i++, vtx = &triNorm->vtx[i]) {
+            sp84.x = vtx->x - arg1->x;
+            sp84.y = 0.0f;
+            sp84.z = vtx->z - arg1->z;
 
-            for (i = 0; i < ARRAY_COUNT(sp4C); i++) {
-                sp84.x = vtx->x - arg1->x;
-                sp84.y = 0.0f;
-                sp84.z = vtx->z - arg1->z;
+            sp78.x = vtx2->x - arg1->x;
+            sp78.y = 0.0f;
+            sp78.z = vtx2->z - arg1->z;
 
-                sp78.x = vtx2->x - arg1->x;
-                sp78.y = 0.0f;
-                sp78.z = vtx2->z - arg1->z;
+            Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
 
-                Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
-
-                vtxPtr++;
-                vtx2 = vtx;
-                vtx = vtxPtr;
-            }
-
-            return ((sp4C[0].y >= 0.0f) && (sp4C[1].y >= 0.0f) && (sp4C[2].y >= 0.0f)) ||
-                   ((sp4C[0].y < 0.0f) && (sp4C[1].y < 0.0f) && (sp4C[2].y < 0.0f));
-        } else {
-            vtx = &triNorm->vtx[0];
-            vtx2 = &triNorm->vtx[2];
-            vtxPtr = &triNorm->vtx[0];
-
-            for (i = 0; i < ARRAY_COUNT(sp4C); i++) {
-                sp84.x = vtx->x - arg1->x;
-                sp84.y = vtx->y - arg1->y;
-                sp84.z = 0.0f;
-
-                sp78.x = vtx2->x - arg1->x;
-                sp78.y = vtx2->y - arg1->y;
-                sp78.z = 0.0f;
-
-                Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
-
-                vtxPtr++;
-                vtx2 = vtx;
-                vtx = vtxPtr;
-            }
-
-            return ((sp4C[0].z >= 0.0f) && (sp4C[1].z >= 0.0f) && (sp4C[2].z >= 0.0f)) ||
-                   ((sp4C[0].z < 0.0f) && (sp4C[1].z < 0.0f) && (sp4C[2].z < 0.0f));
+            vtx2 = vtx;
         }
+
+        return ((sp4C[0].y >= 0.0f) && (sp4C[1].y >= 0.0f) && (sp4C[2].y >= 0.0f)) ||
+               ((sp4C[0].y < 0.0f) && (sp4C[1].y < 0.0f) && (sp4C[2].y < 0.0f));
+    } else {
+        vtx = &triNorm->vtx[0];
+        vtx2 = &triNorm->vtx[2];
+
+        for (i = 0; i < ARRAY_COUNT(sp4C); i++, vtx = &triNorm->vtx[i]) {
+            sp84.x = vtx->x - arg1->x;
+            sp84.y = vtx->y - arg1->y;
+            sp84.z = 0.0f;
+
+            sp78.x = vtx2->x - arg1->x;
+            sp78.y = vtx2->y - arg1->y;
+            sp78.z = 0.0f;
+
+            Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
+
+            vtx2 = vtx;
+        }
+
+        return ((sp4C[0].z >= 0.0f) && (sp4C[1].z >= 0.0f) && (sp4C[2].z >= 0.0f)) ||
+               ((sp4C[0].z < 0.0f) && (sp4C[1].z < 0.0f) && (sp4C[2].z < 0.0f));
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B2FC98.s")
-#endif
 
 void func_80B300F4(ObjSpidertent* thisx, GlobalContext* globalCtx, TriNorm* triNorm, Vec3f* arg3, f32 arg4, s32 arg5) {
     ObjSpidertent* this = THIS;
