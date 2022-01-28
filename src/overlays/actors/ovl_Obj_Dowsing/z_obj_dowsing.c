@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_dowsing.c
+ * Overlay: ovl_Obj_Dowsing
+ * Description:
+ */
+
 #include "z_obj_dowsing.h"
 
 #define FLAGS 0x00000010
@@ -8,7 +14,9 @@ void ObjDowsing_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx);
+s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, GlobalContext* globalCtx);
+
 const ActorInit Obj_Dowsing_InitVars = {
     ACTOR_OBJ_DOWSING,
     ACTORCAT_ITEMACTION,
@@ -20,14 +28,43 @@ const ActorInit Obj_Dowsing_InitVars = {
     (ActorFunc)ObjDowsing_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/func_80B23D50.asm")
+s32 ObjDowsing_GetFlag(ObjDowsing* this, GlobalContext* globalCtx) {
+    s32 type = DOWSING_GET_TYPE(&this->actor);
+    s32 flag = DOWSING_GET_FLAG(&this->actor);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/func_80B23DD0.asm")
+    if (type == DOWSING_COLLECTIBLE) {
+        return Flags_GetCollectible(globalCtx, flag);
+    } else if (type == DOWSING_CHEST) {
+        return Flags_GetTreasure(globalCtx, flag);
+    } else if (type == DOWSING_SWITCH) {
+        return Flags_GetSwitch(globalCtx, flag);
+    } else {
+        return 0;
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/ObjDowsing_Init.asm")
+s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, GlobalContext* globalCtx) {
+    if (ObjDowsing_GetFlag(this, globalCtx)) {
+        Actor_MarkForDeath(&this->actor);
+        return true;
+    }
+    return false;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/ObjDowsing_Destroy.asm")
+void ObjDowsing_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjDowsing* this = THIS;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Dowsing_0x80B23D50/ObjDowsing_Update.asm")
+    ObjDowsing_CheckValidSpawn(this, globalCtx);
+}
+
+void ObjDowsing_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
+
+void ObjDowsing_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjDowsing* this = THIS;
+
+    if (!ObjDowsing_CheckValidSpawn(this, globalCtx)) {
+        func_800B8C50(thisx, globalCtx);
+    }
+}

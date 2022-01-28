@@ -1,0 +1,6 @@
+0,makerom
+1,boot
+2,dmadata
+31,code
+1135,elf_message_field
+1136,elf_message_ydan

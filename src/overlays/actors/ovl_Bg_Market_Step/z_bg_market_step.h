@@ -1,7 +1,7 @@
 #ifndef Z_BG_MARKET_STEP_H
 #define Z_BG_MARKET_STEP_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgMarketStep;
 

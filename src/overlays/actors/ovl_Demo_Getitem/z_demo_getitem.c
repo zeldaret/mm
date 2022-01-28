@@ -1,3 +1,9 @@
+/*
+ * File: z_demo_getitem.c
+ * Overlay: ovl_Demo_Getitem
+ * Description: Cutscene object for Great Fairy's Mask and Great Fairy's Sword
+ */
+
 #include "z_demo_getitem.h"
 
 #define FLAGS 0x00000030
@@ -8,7 +14,7 @@ void DemoGetitem_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoGetitem_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoGetitem_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Demo_Getitem_InitVars = {
     ACTOR_DEMO_GETITEM,
     ACTORCAT_BG,
@@ -20,16 +26,17 @@ const ActorInit Demo_Getitem_InitVars = {
     (ActorFunc)DemoGetitem_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/DemoGetitem_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/DemoGetitem_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Getitem/DemoGetitem_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/func_80A4FB10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Getitem/DemoGetitem_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/func_80A4FB68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Getitem/func_80A4FB10.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/DemoGetitem_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Getitem/func_80A4FB68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Getitem_0x80A4FA40/func_80A4FCF0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Getitem/DemoGetitem_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Getitem/func_80A4FCF0.s")

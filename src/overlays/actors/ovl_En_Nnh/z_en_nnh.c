@@ -1,3 +1,9 @@
+/*
+ * File: z_en_nnh.c
+ * Overlay: ovl_En_Nnh
+ * Description: Twisted Corpse of Deku Butler's Son
+ */
+
 #include "z_en_nnh.h"
 
 #define FLAGS 0x00000019
@@ -71,7 +77,7 @@ void func_80C08828(EnNnh* this) {
 }
 
 void func_80C0883C(EnNnh* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0x228U, &this->actor);
         func_80C088A4(this);
         return;
@@ -84,7 +90,7 @@ void func_80C088A4(EnNnh* this) {
 }
 
 void func_80C088B8(EnNnh* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         func_80C08828(this);
     }
 }

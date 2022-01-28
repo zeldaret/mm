@@ -1,7 +1,7 @@
 #ifndef Z_EN_NIW_H
 #define Z_EN_NIW_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnNiw;
 
@@ -25,8 +25,8 @@ typedef struct {
 typedef struct EnNiw {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelanime;
-    /* 0x188 */ Vec3s limbDrawTbl[ENNIW_LIMBCOUNT];
-    /* 0x1E8 */ Vec3s transitionDrawtable[ENNIW_LIMBCOUNT];
+    /* 0x188 */ Vec3s jointTable[ENNIW_LIMBCOUNT];
+    /* 0x1E8 */ Vec3s morphTable[ENNIW_LIMBCOUNT];
     /* 0x248 */ EnNiwActionFunc actionFunc;
     /* 0x24C */ s16 unkTimer24C;
     /* 0x24E */ s16 unkTimer24E;
@@ -86,12 +86,5 @@ typedef struct EnNiw {
 #define ENNIW_TYPE_UNK2 2
 // the attacking cuccos are not here, they are a different actor:
 //  ovl_En_Attack_Niw
-
-extern FlexSkeletonHeader D_06002530;
-extern AnimationHeader D_060000E8;
-
-// feather display list?
-extern Gfx D_060023B0[];
-extern Gfx D_06002428[];
 
 #endif // Z_EN_NIW_H

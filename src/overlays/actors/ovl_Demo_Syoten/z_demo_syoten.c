@@ -1,3 +1,9 @@
+/*
+ * File: z_demo_syoten.c
+ * Overlay: ovl_Demo_Syoten
+ * Description: Ikana Canyon Cleansing Cutscene Effects
+ */
+
 #include "z_demo_syoten.h"
 
 #define FLAGS 0x00000030
@@ -9,7 +15,7 @@ void DemoSyoten_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoSyoten_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoSyoten_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Demo_Syoten_InitVars = {
     ACTOR_DEMO_SYOTEN,
     ACTORCAT_ITEMACTION,
@@ -21,40 +27,46 @@ const ActorInit Demo_Syoten_InitVars = {
     (ActorFunc)DemoSyoten_Update,
     (ActorFunc)DemoSyoten_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/DemoSyoten_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/DemoSyoten_Destroy.asm")
+extern UNK_TYPE D_0600023C;
+extern UNK_TYPE D_06001298;
+extern UNK_TYPE D_060018C0;
+extern UNK_TYPE D_06002880;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C16760.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/DemoSyoten_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C16818.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/DemoSyoten_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C168D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16760.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C16974.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16818.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C16A64.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C168D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C16A74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16974.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C16BD4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16A64.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C16DD4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16A74.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C16EAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16BD4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C17008.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16DD4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/DemoSyoten_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16EAC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C170F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C17008.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C173B4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/DemoSyoten_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C17468.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C170F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/DemoSyoten_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C173B4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Syoten_0x80C16480/func_80C17690.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C17468.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/DemoSyoten_Draw.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C17690.s")

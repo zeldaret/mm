@@ -1,8 +1,7 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
-    u32 size;
+    size_t size;
 
     objectCtx->status[objectCtx->num].id = id;
     size = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
@@ -24,8 +23,8 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
     return objectCtx->num - 1;
 }
 
-void Object_InitBank(GameState* gamestate, ObjectContext* objectCtx) {
-    GlobalContext* globalCtx = (GlobalContext*)gamestate;
+void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
     s32 pad;
     u32 spaceSize;
     s32 i;
@@ -50,18 +49,18 @@ void Object_InitBank(GameState* gamestate, ObjectContext* objectCtx) {
     for (i = 0; i < OBJECT_EXCHANGE_BANK_MAX; i++) { objectCtx->status[i].id = 0; }
     // clang-format on
 
-    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&gamestate->heap, spaceSize);
+    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&gameState->heap, spaceSize);
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
-    gSegments[4] = PHYSICAL_TO_VIRTUAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
+    gSegments[0x04] = PHYSICAL_TO_VIRTUAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
 }
 
 void Object_UpdateBank(ObjectContext* objectCtx) {
     s32 i;
     ObjectStatus* status = &objectCtx->status[0];
     RomFile* objectFile;
-    u32 size;
+    size_t size;
 
     for (i = 0; i < objectCtx->num; i++) {
         if (status->id < 0) {
@@ -205,7 +204,7 @@ void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
         colHeader->waterBoxes = (WaterBox*)Lib_SegmentedToVirtual(colHeader->waterBoxes);
     }
 
-    BgCheck_Init(&globalCtx->colCtx, globalCtx, colHeader);
+    BgCheck_Allocate(&globalCtx->colCtx, globalCtx, colHeader);
 }
 
 // SceneTableEntry Header Command 0x04: Room List
@@ -222,14 +221,14 @@ void Scene_HeaderCmdEntranceList(GlobalContext* globalCtx, SceneCmd* cmd) {
 // SceneTableEntry Header Command 0x07: Special Files
 void Scene_HeaderCmdSpecialFiles(GlobalContext* globalCtx, SceneCmd* cmd) {
     static RomFile tatlMessageFiles[2] = {
-        { (u32)_elf_message_fieldSegmentRomStart, (u32)_elf_message_fieldSegmentRomEnd },
-        { (u32)_elf_message_ydanSegmentRomStart, (u32)_elf_message_ydanSegmentRomEnd },
+        { SEGMENT_ROM_START(elf_message_field), SEGMENT_ROM_END(elf_message_field) },
+        { SEGMENT_ROM_START(elf_message_ydan), SEGMENT_ROM_END(elf_message_ydan) },
     };
 
     if (cmd->specialFiles.subKeepIndex != 0) {
         globalCtx->objectCtx.subKeepIndex = Object_Spawn(&globalCtx->objectCtx, cmd->specialFiles.subKeepIndex);
         // TODO: Segment number enum?
-        gSegments[5] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment);
+        gSegments[0x05] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment);
     }
 
     if (cmd->specialFiles.cUpElfMsgNum != 0) {
@@ -316,7 +315,7 @@ void Scene_HeaderCmdLightList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x0D: Path List
 void Scene_HeaderCmdPathList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->setupPathList = (void*)Lib_SegmentedToVirtual(cmd->pathList.segment);
+    globalCtx->setupPathList = (Path*)Lib_SegmentedToVirtual(cmd->pathList.segment);
 }
 
 // SceneTableEntry Header Command 0x0E: Transition Actor List
@@ -345,17 +344,17 @@ void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
 s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
     static RomFile sceneTextureFiles[9] = {
         { 0, 0 }, // Default
-        { (u32)_scene_texture_01SegmentRomStart, (u32)_scene_texture_01SegmentRomEnd },
-        { (u32)_scene_texture_02SegmentRomStart, (u32)_scene_texture_02SegmentRomEnd },
-        { (u32)_scene_texture_03SegmentRomStart, (u32)_scene_texture_03SegmentRomEnd },
-        { (u32)_scene_texture_04SegmentRomStart, (u32)_scene_texture_04SegmentRomEnd },
-        { (u32)_scene_texture_05SegmentRomStart, (u32)_scene_texture_05SegmentRomEnd },
-        { (u32)_scene_texture_06SegmentRomStart, (u32)_scene_texture_06SegmentRomEnd },
-        { (u32)_scene_texture_07SegmentRomStart, (u32)_scene_texture_07SegmentRomEnd },
-        { (u32)_scene_texture_08SegmentRomStart, (u32)_scene_texture_08SegmentRomEnd },
+        { SEGMENT_ROM_START(scene_texture_01), SEGMENT_ROM_END(scene_texture_01) },
+        { SEGMENT_ROM_START(scene_texture_02), SEGMENT_ROM_END(scene_texture_02) },
+        { SEGMENT_ROM_START(scene_texture_03), SEGMENT_ROM_END(scene_texture_03) },
+        { SEGMENT_ROM_START(scene_texture_04), SEGMENT_ROM_END(scene_texture_04) },
+        { SEGMENT_ROM_START(scene_texture_05), SEGMENT_ROM_END(scene_texture_05) },
+        { SEGMENT_ROM_START(scene_texture_06), SEGMENT_ROM_END(scene_texture_06) },
+        { SEGMENT_ROM_START(scene_texture_07), SEGMENT_ROM_END(scene_texture_07) },
+        { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
     };
     u32 vromStart = sceneTextureFiles[fileIndex].vromStart;
-    u32 size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
+    size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
         globalCtx->roomCtx.unk74 = THA_AllocEndAlign16(&globalCtx->state.heap, size);
@@ -394,7 +393,7 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
         globalCtx->envCtx.unk_2 = 0;
     }
 
-    if ((gSaveContext.inventory.items[0] == 0xFF) && (globalCtx->envCtx.unk_2 != 0)) {
+    if ((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (globalCtx->envCtx.unk_2 != 0)) {
         globalCtx->envCtx.unk_2 = 5;
     }
 
@@ -450,7 +449,7 @@ void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
     globalCtx->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
 
-    if (gSaveContext.seqIndex == 0xFF || func_801A8A50(0) == 0x57) {
+    if (gSaveContext.seqIndex == (u8)NA_BGM_DISABLED || func_801A8A50(0) == NA_BGM_FINAL_HOURS) {
         audio_setBGM(cmd->soundSettings.bgmId);
     }
 }

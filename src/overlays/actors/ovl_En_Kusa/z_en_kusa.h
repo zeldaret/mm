@@ -1,7 +1,7 @@
 #ifndef Z_EN_KUSA_H
 #define Z_EN_KUSA_H
 
-#include <global.h>
+#include "global.h"
 
 #define GET_KUSA_COLLECTIBLE_ID(x) (((x->actor.params >> 8) & 0x7F) << 8)
 #define GET_KUSA__RAND_COLLECTIBLE_ID(x) ((x->actor.params >> 8) & 0xF)

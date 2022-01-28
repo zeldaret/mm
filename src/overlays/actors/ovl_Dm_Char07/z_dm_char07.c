@@ -1,6 +1,6 @@
 /*
  * File: z_dm_char07.c
- * Overlay: Dm_Char07
+ * Overlay: ovl_Dm_Char07
  * Description: Different Milk Bar Objects (Stage, Credits Stage, Spotlights, Dishes)
  */
 
@@ -61,8 +61,8 @@ void DmChar07_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->dyna.actor.params == DMCHAR07_STAGE) {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         this->isStage = 1;
-        BcCheck3_BgActorInit(&this->dyna, 0);
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06006688);
+        DynaPolyActor_Init(&this->dyna, 0);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06006688);
     } else {
         Actor_SetScale(&this->dyna.actor, 1.0f);
     }
@@ -73,7 +73,7 @@ void DmChar07_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DmChar07* this = THIS;
 
     if (this->isStage) {
-        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
 

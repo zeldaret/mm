@@ -1,5 +1,6 @@
 /*
  * File: z_obj_hana.c
+ * Overlay: ovl_Obj_Hana
  * Description: Orange Graveyard Flower
  */
 
@@ -48,5 +49,5 @@ void ObjHana_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjHana_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000500);
+    Gfx_DrawDListOpa(globalCtx, D_06000500);
 }

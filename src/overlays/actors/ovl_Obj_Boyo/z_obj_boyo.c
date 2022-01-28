@@ -104,7 +104,7 @@ Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* nu
 
     if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
         *num = 0;
-        return &PLAYER->actor;
+        return &GET_PLAYER(globalCtx)->actor;
     }
 
     if (this->collider.base.ocFlags1 & OC2_UNK1) {
@@ -121,8 +121,8 @@ Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* nu
 }
 
 void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    ObjBoyo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    ObjBoyo* this = THIS;
     Actor* target;
     s32 num;
 
@@ -182,5 +182,5 @@ void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjBoyo* this = THIS;
 
     AnimatedMat_Draw(globalCtx, this->unk_190);
-    func_800BDFC0(globalCtx, D_06000300);
+    Gfx_DrawDListOpa(globalCtx, D_06000300);
 }

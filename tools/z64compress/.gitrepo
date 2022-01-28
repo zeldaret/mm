@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/z64me/z64compress.git
+	branch = main
+	commit = 5da3132606e4fd427a8d72b8428e4f921cd6e56f
+	parent = 837eb1c80687fe9b57a3c7b841547c33feeed6c7
+	method = merge
+	cmdver = 0.4.3

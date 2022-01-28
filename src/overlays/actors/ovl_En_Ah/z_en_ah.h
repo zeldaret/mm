@@ -1,13 +1,17 @@
 #ifndef Z_EN_AH_H
 #define Z_EN_AH_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnAh;
 
+typedef void (*EnAhActionFunc)(struct EnAh*, GlobalContext*);
+
 typedef struct EnAh {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1C0];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x44];
+    /* 0x0188 */ EnAhActionFunc actionFunc;
+    /* 0x018C */ char unk_18C[0x178];
 } EnAh; // size = 0x304
 
 extern const ActorInit En_Ah_InitVars;

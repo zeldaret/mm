@@ -1,3 +1,9 @@
+/*
+ * File: z_en_weather_tag.c
+ * Overlay: ovl_En_Weather_Tag
+ * Description: Local weather changes
+ */
+
 #include "z_en_weather_tag.h"
 
 #define FLAGS 0x00000010
@@ -44,7 +50,6 @@ const ActorInit En_Weather_Tag_InitVars = {
 extern f32 D_801F4E74;
 extern u8 D_801BDBB8;
 extern u8 D_801BDBB4;
-extern u8 D_801BDBB0;
 extern u8 D_801F4E30;
 extern s16 D_801F4E7A;
 
@@ -56,7 +61,7 @@ void EnWeatherTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnWeatherTag* this = (EnWeatherTag*)thisx;
+    EnWeatherTag* this = THIS;
     s32 pad;
     Path* path;
     s32 pathID;
@@ -111,7 +116,7 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 // called WeatherTag_CheckEnableWeatherEffect in OOT, that's where "weatherMode" came from
 u8 func_80966608(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20, u16 new24,
                  u8 weatherMode) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     u8 returnVal = 0;
 
     if (WEATHER_TAG_RANGE100(this) > Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
@@ -141,7 +146,7 @@ u8 func_80966608(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_
 // called WeatherTag_CheckRestoreWeather in OOT
 u8 func_80966758(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20,
                  u16 new24) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     u8 returnVal = 0;
 
     if (WEATHER_TAG_RANGE100(this) < Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
@@ -167,7 +172,7 @@ u8 func_80966758(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_
 
 // modify wind?
 void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 distance;
     f32 partialResult;
 
@@ -355,8 +360,6 @@ void func_80966FEC(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// non-matching: two instructions are swapped
 // type 4_2 pirates fortres only?
 void func_80967060(EnWeatherTag* this, GlobalContext* globalCtx) {
     Vec3f vec1;
@@ -368,16 +371,12 @@ void func_80967060(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     func_80169474(globalCtx, &vec1, &vec2);
 
-    // 0x428C0000 = 70.0f
-    // ca4:  lwc1    $f0,0x18(sp)    | ca4:  lui     at,0x428c
-    // ca8:  lui     at,0x428c       | ca8:  lwc1    $f0,0x18(sp)
-    if (globalCtx->view.fovy < 25.0f && (vec2.x >= 70.0f && vec2.x < 250.0f) && (vec2.y >= 30.0f && vec2.y < 210.0f)) {
-        EnWeatherTag_SetupAction(this, func_80967148);
+    if (globalCtx->view.fovy < 25.0f) {
+        if ((vec2.x >= 70.0f) && (vec2.x < 250.0f) && (vec2.y >= 30.0f) && (vec2.y < 210.0f)) {
+            EnWeatherTag_SetupAction(this, func_80967148);
+        }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Weather_Tag_0x80966410/func_80967060.asm")
-#endif
 
 // type 4_3, start cutscene then die?
 void func_80967148(EnWeatherTag* this, GlobalContext* globalCtx) {
@@ -415,23 +414,16 @@ void EnWeatherTag_Unused_80967250(EnWeatherTag* this, GlobalContext* globalCtx) 
     }
 }
 
-#ifdef NON_MATCHING
-// non_matching: the parameters for func_800BCCDC are correct, but out of order
 // WEATHERTAG_TYPE_WATERMURK: (pinnacle rock, zora cape, zora coast)
 void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     f32 distance;
     f32 range;
     f32 strength = 0.0f;
 
-    // the parameters here are correct but loaded in the wrong order
-    // eec:  addiu   a3,s0,0x24    | eec:  lw      a0,0x150(s0)   4
-    // ef0:  sw      v0,0x3c(sp)   | ef0:  lbu     a1,0x14c(s0)   3
-    // ef4:  lbu     a1,0x14c(s0)  | ef4:  sw      zero,0x10(sp)  5
-    // ef8:  lw      a0,0x150(s0)  | ef8:  addiu   a3,s0,0x24     1
-    // efc:  sw      zero,0x10(sp) | efc:  sw      v0,0x3c(sp)    2
-    func_800BCCDC(this->pathPoints, this->pathCount, &player->actor.world.pos, &this->actor.world.pos, 0);
+    func_800BCCDC(this->pathPoints, this->pathCount, &GET_PLAYER(globalCtx)->actor.world.pos, &this->actor.world.pos,
+                  0);
 
     distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
     range = WEATHER_TAG_RANGE100(this);
@@ -452,14 +444,11 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&globalCtx->envCtx.unk_8C.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Weather_Tag_0x80966410/func_809672DC.asm")
-#endif
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene
 // (milk road day 2 approaching ranch it rains, walking away towards termfield no rain)
 void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this)) {
         if (CURRENT_DAY == 2) {
@@ -483,14 +472,15 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN 2
 void func_80967608(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&PLAYER->actor, &this->actor)) {
+    if ((WEATHER_TAG_RANGE100(this) + 10.0f) <
+        Actor_XZDistanceBetweenActors(&GET_PLAYER(globalCtx)->actor, &this->actor)) {
         D_801BDBB0 = 0;
         EnWeatherTag_SetupAction(this, func_809674C8);
     }
 }
 
 void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnWeatherTag* this = (EnWeatherTag*)thisx;
+    EnWeatherTag* this = THIS;
     u16 oldTime;
 
     this->actionFunc(this, globalCtx);
@@ -502,7 +492,7 @@ void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.time = (u16)REG(0xF) + oldTime; // cast req
         if (REG(0xF) != 0) {
             oldTime = gSaveContext.time;
-            gSaveContext.time = (gSaveContext.unk_16) + oldTime;
+            gSaveContext.time = (u16)gSaveContext.unk_14 + oldTime;
         }
     }
 }

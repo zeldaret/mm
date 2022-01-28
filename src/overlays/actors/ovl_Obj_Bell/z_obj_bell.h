@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_BELL_H
 #define Z_OBJ_BELL_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjBell;
 
@@ -11,7 +11,7 @@ typedef struct ObjBell {
     /* 0x1B4 */ ColliderSphere collider2;
     /* 0x20C */ s16 unk_20C; // bell rotation angle?
     /* 0x20E */ s16 unk_20E;
-    /* 0x20E */ s16 unk_20F;
+    /* 0x210 */ s16 unk_210;
     /* 0x212 */ s16 unk_212;
     /* 0x214 */ s16 unk_214;
     /* 0x216 */ char unk_216[0x06];

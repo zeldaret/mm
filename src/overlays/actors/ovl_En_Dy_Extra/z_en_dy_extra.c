@@ -1,3 +1,9 @@
+/*
+ * File: z_en_dy_extra.c
+ * Overlay: ovl_En_Dy_Extra
+ * Description: Great Fairy beam
+ */
+
 #include "z_en_dy_extra.h"
 
 #define FLAGS 0x00000030
@@ -76,9 +82,9 @@ void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnDyExtra* this = THIS;
 
     DECR(this->unk14C);
-    Audio_PlayActorSound2(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {

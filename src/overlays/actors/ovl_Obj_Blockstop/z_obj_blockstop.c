@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_blockstop.c
+ * Overlay: ovl_Obj_Blockstop
+ * Description: Push Block Trigger - Blockstop switch triggered by pushblock (Snowhead)
+ */
+
 #include "z_obj_blockstop.h"
 
 #define FLAGS 0x00000010
@@ -7,7 +13,9 @@
 void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_809466F0(ObjBlockstop* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit Obj_Blockstop_InitVars = {
     ACTOR_OBJ_BLOCKSTOP,
     ACTORCAT_PROP,
@@ -19,12 +27,13 @@ const ActorInit Obj_Blockstop_InitVars = {
     (ActorFunc)ObjBlockstop_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Blockstop_0x809466A0/ObjBlockstop_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Blockstop_0x809466A0/func_809466F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/ObjBlockstop_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Blockstop_0x809466A0/func_809467E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/func_809466F0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Blockstop_0x809466A0/ObjBlockstop_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/func_809467E8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/ObjBlockstop_Update.s")

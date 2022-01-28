@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_mu_pict.c
+ * Overlay: ovl_Obj_Mu_Pict
+ * Description: Handles dialogue for checking the Garo/Gibdo poster in the Music Box House
+ */
+
 #include "z_obj_mu_pict.h"
 
 #define FLAGS 0x00000009
@@ -57,7 +63,7 @@ void func_80C06B5C(ObjMuPict* this) {
 void func_80C06B70(ObjMuPict* this, GlobalContext* globalCtx) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (this->actor.cutscene < 0) {
             func_80C06DC8(this, globalCtx);
             func_80C06CC4(this);
@@ -92,7 +98,7 @@ void func_80C06CC4(ObjMuPict* this) {
 }
 
 void func_80C06CD8(ObjMuPict* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
         case 1:
         case 2:
@@ -116,7 +122,7 @@ void func_80C06CD8(ObjMuPict* this, GlobalContext* globalCtx) {
 }
 
 void func_80C06D90(ObjMuPict* this, GlobalContext* globalCtx) {
-    Actor* actorPtr = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* actorPtr = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actorPtr != NULL) {
         if (actorPtr->id == ACTOR_EN_HGO) {

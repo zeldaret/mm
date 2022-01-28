@@ -1,3 +1,9 @@
+/*
+ * File: z_en_scopecoin.c
+ * Overlay: ovl_En_Scopecoin
+ * Description: Termina Field rupees visible from the telescope
+ */
+
 #include "z_en_scopecoin.h"
 
 #define FLAGS 0x00000030
@@ -29,8 +35,8 @@ void func_80BFCFA0(EnScopecoin* this, GlobalContext* globalCtx) {
 }
 
 void func_80BFCFB8(EnScopecoin* this, GlobalContext* globalCtx) {
-    if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
-        Item_DropCollectible(globalCtx, &this->actor.world.pos, 2);
+    if (Flags_GetCollectible(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
+        Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_RUPEE_RED);
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -39,7 +45,7 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnScopecoin* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
-    ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 10.0f);
+    ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 10.0f);
     this->unk148 = (this->actor.params & 0xF);
     if (this->unk148 < 0 || this->unk148 >= 8) {
         this->unk148 = 0;
@@ -47,7 +53,7 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (globalCtx->actorCtx.unk5 & 2) {
         if (this->unk148 == 2 || this->unk148 == 6) {
-            if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
+            if (Flags_GetCollectible(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -57,7 +63,7 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     if (this->unk148 == 2 || this->unk148 == 6) {
-        if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
+        if (Flags_GetCollectible(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->actor.draw = NULL;

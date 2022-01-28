@@ -1,7 +1,7 @@
 #ifndef Z_EN_M_FIRE1_H
 #define Z_EN_M_FIRE1_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnMFire1;
 

@@ -1,13 +1,17 @@
 #ifndef Z_EN_BOMBERS_H
 #define Z_EN_BOMBERS_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnBombers;
 
+typedef void (*EnBombersActionFunc)(struct EnBombers*, GlobalContext*);
+
 typedef struct EnBombers {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1D0];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x140];
+    /* 0x0284 */ EnBombersActionFunc actionFunc;
+    /* 0x0288 */ char unk_288[0x8C];
 } EnBombers; // size = 0x314
 
 extern const ActorInit En_Bombers_InitVars;

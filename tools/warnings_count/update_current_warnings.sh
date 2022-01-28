@@ -8,4 +8,5 @@ cd "$DIR/../.."
 
 make distclean
 make setup 2> tools/warnings_count/warnings_setup_current.txt
+make disasm 2> tools/warnings_count/warnings_disasm_current.txt
 make all 2> tools/warnings_count/warnings_build_current.txt

@@ -207,7 +207,7 @@ typedef enum {
     /* 0x0C3 */ OBJECT_GI_SHIELD_3,
     /* 0x0C4 */ OBJECT_UNSET_C4,
     /* 0x0C5 */ OBJECT_UNSET_C5,
-    /* 0x0C6 */ OBJECT_GI_BEAN,
+    /* 0x0C6 */ OBJECT_GI_MAGIC_BEANS,
     /* 0x0C7 */ OBJECT_GI_FISH,
     /* 0x0C8 */ OBJECT_UNSET_C8,
     /* 0x0C9 */ OBJECT_UNSET_C9,
@@ -651,7 +651,8 @@ typedef enum {
     /* 0x27F */ OBJECT_LBFSHOT,
     /* 0x280 */ OBJECT_FUSEN,
     /* 0x281 */ OBJECT_ENDING_OBJ,
-    /* 0x282 */ OBJECT_GI_MASK13
+    /* 0x282 */ OBJECT_GI_MASK13,
+    /* 0x283 */ OBJECT_ID_MAX
 } ObjectID;
 
 #endif

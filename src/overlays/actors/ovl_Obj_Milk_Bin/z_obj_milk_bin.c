@@ -72,8 +72,8 @@ void ObjMilkBin_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    ObjMilkBin* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    ObjMilkBin* this = THIS;
 
     if (this->type == OBJ_MILK_BIN_TYPE_1) {
         if (gSaveContext.weekEventReg[0x16] & 1) {
@@ -100,6 +100,6 @@ void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjMilkBin* this = THIS;
 
     if (!(this->disableDraw & 1)) {
-        func_800BDFC0(globalCtx, D_060004B0);
+        Gfx_DrawDListOpa(globalCtx, D_060004B0);
     }
 }

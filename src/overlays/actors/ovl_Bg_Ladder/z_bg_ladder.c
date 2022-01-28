@@ -3,6 +3,7 @@
  * Overlay: ovl_Bg_Ladder
  * Description: Wooden Ladder
  */
+
 #include "z_bg_ladder.h"
 
 #define FLAGS 0x00000010
@@ -60,17 +61,17 @@ void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
     // Has to be `thisx` instead of `&this->actor` to match
     this->switchFlag = GET_BGLADDER_SWITCHFLAG(thisx);
     thisx->params = GET_BGLADDER_SIZE(thisx);
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    DynaPolyActor_Init(&this->dyna, 0);
     size = thisx->params;
 
     if (size == LADDER_SIZE_12RUNG) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060001D8);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060001D8);
     } else if (size == LADDER_SIZE_16RUNG) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000408);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000408);
     } else if (size == LADDER_SIZE_20RUNG) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000638);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000638);
     } else if (size == LADDER_SIZE_24RUNG) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000868);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000868);
     } else {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
@@ -93,7 +94,7 @@ void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgLadder_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgLadder* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgLadder_ActionWait(BgLadder* this, GlobalContext* globalCtx) {
@@ -109,7 +110,7 @@ void BgLadder_ActionStartCutscene(BgLadder* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->dyna.actor.draw = BgLadder_Draw;
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
         this->action = BgLadder_ActionFadeIn;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);

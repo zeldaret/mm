@@ -41,13 +41,13 @@ extern Gfx D_06000040[];           // Lilypad model
 void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgLotus* this = THIS;
     s32 pad;
-    s32 sp2C;
+    s32 bgId;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
-    this->dyna.actor.floorHeight =
-        func_800C411C(&globalCtx->colCtx, &thisx->floorPoly, &sp2C, &this->dyna.actor, &this->dyna.actor.world.pos);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
+    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &thisx->floorPoly, &bgId,
+                                                               &this->dyna.actor, &this->dyna.actor.world.pos);
     this->timer2 = 96;
     this->dyna.actor.world.rot.y = Rand_Next() >> 0x10;
     this->actionFunc = BgLotus_Wait;
@@ -56,7 +56,7 @@ void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgLotus_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgLotus* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgLotus_SetScaleXZ(BgLotus* this) {
@@ -93,13 +93,13 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
     } else {
         this->dyna.actor.world.pos.y = this->height;
 
-        if (func_800CAF70(&this->dyna)) {
+        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
             if (this->hasSpawnedRipples == 0) {
                 EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 0);
                 EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 8);
                 this->timer = 40;
             }
-            if (gSaveContext.playerForm != 3) {
+            if (gSaveContext.playerForm != PLAYER_FORM_DEKU) {
                 this->timer = 40;
                 this->dyna.actor.flags |= 0x10;
                 this->actionFunc = BgLotus_Sink;
@@ -165,13 +165,13 @@ void BgLotus_WaitToAppear(BgLotus* this, GlobalContext* globalCtx) {
 void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgLotus* this = THIS;
     s32 pad;
-    void* sp2C;
+    WaterBox* waterBox;
 
-    func_800CA1E8(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
-                  &this->height, &sp2C);
+    WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
+                           &this->height, &waterBox);
     this->actionFunc(this, globalCtx);
 }
 
 void BgLotus_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000040);
+    Gfx_DrawDListOpa(globalCtx, D_06000040);
 }

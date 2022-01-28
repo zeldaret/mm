@@ -1,9 +1,9 @@
 #ifndef _Z64LIGHT_H_
 #define _Z64LIGHT_H_
 
-#include <ultra64.h>
-#include <PR/gbi.h>
-#include <color.h>
+#include "ultra64.h"
+#include "PR/gbi.h"
+#include "color.h"
 
 typedef struct {
     /* 0x00 */ u8 ambientColor[3];
@@ -93,9 +93,7 @@ typedef enum LightType {
     /* 0x02 */ LIGHT_POINT_GLOW
 } LightType;
 
-typedef struct GlobalContext GlobalContext;
-
 typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
-typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, GlobalContext* globalCtx);
+typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct GlobalContext* globalCtx);
 
 #endif

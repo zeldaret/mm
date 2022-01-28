@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_BOYO_H
 #define Z_OBJ_BOYO_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjBoyo;
 

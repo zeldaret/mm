@@ -3,7 +3,7 @@
         <Scene Name="Z2_IKANA" Offset="0x0"/>
     </File>
     <File Name="Z2_IKANA_room_00" Segment="3" Game="MM">
-        <Texture Name="Z2_IKANA_room_00Tex_020A40" Format="rgb5a1" Width="64" Height="64" Offset="0x20A40"/>
+        <Texture Name="Z2_IKANA_room_00Tex_020A40" Format="rgba16" Width="64" Height="64" Offset="0x20A40"/>
 
         <Room Name="Z2_IKANA_room_00" Offset="0x0"/>
     </File>

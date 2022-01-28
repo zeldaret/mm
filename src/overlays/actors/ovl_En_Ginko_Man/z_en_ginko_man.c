@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ginko_man.c
+ * Overlay: ovl_En_Ginko_Man
+ * Description: Bank Teller
+ */
+
 #include "z_en_ginko_man.h"
 
 #define FLAGS 0x00000009
@@ -23,6 +29,14 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx);
 void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx);
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx);
 
+extern FlexSkeletonHeader D_0600C240; // object_ginko_skeleton
+extern Gfx D_0600B1D8[];              // object_ginko_limb15_dlist
+extern AnimationHeader D_060008C0;    // object_ginko_floorsmacking_anim
+extern AnimationHeader D_060043F0;    // object_ginko_sitting_anim
+extern AnimationHeader D_06004A7C;    // object_ginko_amazed_anim
+extern AnimationHeader D_06004F40;    // object_ginko_stamp_reach_anim
+extern AnimationHeader D_06000AC4;    // object_ginko_advertising_anim
+
 const ActorInit En_Ginko_Man_InitVars = {
     ACTOR_EN_GINKO_MAN,
     ACTORCAT_NPC,
@@ -36,46 +50,11 @@ const ActorInit En_Ginko_Man_InitVars = {
 };
 
 ActorAnimationEntry animations[] = {
-    {
-        object_ginko_floorsmacking_anim,
-        1.0f,
-        0.0f,
-        0.0f,
-        0,
-        -4.0f,
-    },
-    {
-        object_ginko_sitting_anim,
-        1.0f,
-        0.0f,
-        0.0f,
-        0,
-        -4.0f,
-    },
-    {
-        object_ginko_stamp_reach_anim,
-        1.0f,
-        0.0f,
-        0.0f,
-        2,
-        -4.0f,
-    },
-    {
-        object_ginko_advertising_anim,
-        1.0f,
-        0.0f,
-        0.0f,
-        0,
-        -4.0f,
-    }, // looking around for customers
-    {
-        object_ginko_amazed_anim,
-        1.0f,
-        0.0f,
-        0.0f,
-        0,
-        -4.0f,
-    },
+    { &D_060008C0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &D_060043F0, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { &D_06004F40, 1.0f, 0.0f, 0.0f, 2, -4.0f },
+    { &D_06000AC4, 1.0f, 0.0f, 0.0f, 0, -4.0f }, // looking around for customers
+    { &D_06004A7C, 1.0f, 0.0f, 0.0f, 0, -4.0f },
 };
 
 void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -90,8 +69,7 @@ void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->isStampChecked = false;
     this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
     this->serviceFee = 0;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, object_ginko_skeleton, object_ginko_sitting_anim, this->limbDrawTbl,
-                     this->transitionDrawTbl, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600C240, &D_060043F0, this->jointTable, this->morphTable, 16);
     EnGinkoMan_SetupIdle(this);
 }
 
@@ -100,7 +78,7 @@ void EnGinkoMan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnGinkoMan_SetupIdle(EnGinkoMan* this) {
     this->actor.flags |= 1; // targetable
-    func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+    Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
     this->actionFunc = EnGinkoMan_Idle;
 }
 
@@ -108,13 +86,13 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
     s32 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     EnGinkoMan_SwitchAnimation(this, globalCtx);
-    if (func_800B84D0(&this->actor, globalCtx)) { // Listen for dialogue start?
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
-            func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
+            Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
             func_801518B0(globalCtx, 0x44C, &this->actor);
             this->curTextId = 0x44C; // would you like to make an account
         } else {
-            func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+            Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
             if ((CURRENT_DAY == 3) && (gSaveContext.isNight == 1)) {
                 func_801518B0(globalCtx, 0x467, &this->actor);
                 this->curTextId = 0x467; // "What's this? You need somethin' on a day like this?
@@ -137,7 +115,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
 
     switch (this->curTextId) {
         case 0x44C: // "Hey there, little guy!  Won't you deposit some Rupees? (first dialogue)
-            func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+            Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
             if (gSaveContext.weekEventReg[10] & 8) {
                 func_801518B0(globalCtx, 0x44E, &this->actor);
                 this->curTextId = 0x44E; //" ...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
@@ -152,7 +130,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             this->curTextId = 0x44E; //" ...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
             break;
         case 0x44F: // "...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
-            func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
+            Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
             func_801518B0(globalCtx, 0x450, &this->actor);
             this->curTextId = 0x450; // "How much? How much?  [rupee prompt]
             break;
@@ -163,14 +141,14 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             if (this->isNewAccount == true) {
                 this->isNewAccount = false;
                 if (this->curTextId != 0x453) { // "That's it? That ain't nothing at all, big spender!
-                    func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+                    Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
                 }
 
                 func_801518B0(globalCtx, 0x461, &this->actor);
                 this->curTextId = 0x461; // So, little guy, what's your name?
             } else {
                 if (this->curTextId == 0x453) { // "That's it? That ain't nothing at all, big spender!
-                    func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
+                    Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
                 }
 
                 globalCtx->msgCtx.bankRupees = gSaveContext.roomInf[127][0] & 0xFFFF;
@@ -200,17 +178,17 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
                     func_801518B0(globalCtx, 0x45D, &this->actor);
                     this->curTextId = 0x45D; // "What's this? You've already saved up 5000 Rupees?!
                 } else if (this->previousBankValue < (s16)(gSaveContext.roomInf[127][0] & 0xFFFF)) {
-                    func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+                    Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
                     func_801518B0(globalCtx, 0x45E, &this->actor);
                     this->curTextId =
                         0x45E; // "...Hang on there, little guy.  I can't take any more deposits.  Sorry..."
                 } else {
-                    func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
+                    Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
                     func_801518B0(globalCtx, 0x460, &this->actor);
                     this->curTextId = 0x460; // "Come back and deposit some after you save up a bunch!"
                 }
             } else {
-                func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
+                Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
                 func_801518B0(globalCtx, 0x460, &this->actor);
                 this->curTextId = 0x460; // "Come back and deposit some after you save up a bunch!"
             }
@@ -240,7 +218,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             EnGinkoMan_SetupStamp(this); // stamp player
             break;
         case 0x465: // "There! Now I'll know you when I see you!"
-            func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
+            Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
             globalCtx->msgCtx.bankRupees = gSaveContext.roomInf[127][0] & 0xFFFF;
             func_801518B0(globalCtx, 0x45A, &this->actor);
             this->curTextId = 0x45A; // "All right, little guy, now I've got a total of [rupees] from you!"
@@ -297,7 +275,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             break;
         case 0x476: // "...You haven't deposited that many Rupees, so that much isn't available for withdrawal. Do the
                     // math!
-            func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+            Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
         case 0x475: // "What's this?  Look, little guy, you can't hold this many rupees! You got that?"
         case 0x47C: // "Is that so?  Think it over, little guy!  So what are you gonna do?"
         case 0x47D: // duplicate of 48
@@ -364,7 +342,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
             if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
                 if (gSaveContext.rupees < globalCtx->msgCtx.bankRupeesSelected) {
                     play_sound(NA_SE_SY_ERROR);
-                    func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+                    Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
                     func_801518B0(globalCtx, 0x459, &this->actor);
                     this->curTextId = 0x459; // HEY you dont have that much
                 } else {
@@ -376,7 +354,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                         func_801518B0(globalCtx, 0x454, &this->actor);
                         this->curTextId = 0x454; // Seriously? that's a lot. A lot!
                     } else {
-                        func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+                        Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
                         func_801518B0(globalCtx, 0x453, &this->actor);
                         this->curTextId = 0x453; // That's it? That aint nothing at all
                     }
@@ -394,7 +372,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                 }
             } else { // GINKOMAN_CHOICE_NO
                 func_8019F230();
-                func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+                Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
                 if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
                     func_801518B0(globalCtx, 0x456, &this->actor);
                     this->curTextId = 0x456; // Is that so? think about it
@@ -427,11 +405,10 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                 if ((s32)((gSaveContext.roomInf[127][0] & 0xFFFF)) <
                     ((s32)(globalCtx->msgCtx.bankRupeesSelected + this->serviceFee))) {
                     play_sound(NA_SE_SY_ERROR);
-                    func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
+                    Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
                     func_801518B0(globalCtx, 0x476, &this->actor);
                     this->curTextId = 0x476; // you dont have enough deposited to withdrawl
-                } else if (D_801C1E2C[CUR_UPG_VALUE(UPG_WALLET)] <
-                           (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.rupees)) {
+                } else if (CUR_CAPACITY(UPG_WALLET) < (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.rupees)) {
                     // check if wallet is big enough
                     play_sound(NA_SE_SY_ERROR);
                     func_801518B0(globalCtx, 0x475, &this->actor);
@@ -470,7 +447,7 @@ void EnGinkoMan_WaitForRupeeCount(EnGinkoMan* this, GlobalContext* globalCtx) {
         switch (this->curTextId) {
             case 0x450: // "How much? How much?" [rupee prompt] Set the amount with [Control Stick] and
                 if (globalCtx->msgCtx.bankRupeesSelected == 0) {
-                    func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+                    Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
                     func_801518B0(globalCtx, 0x457, &this->actor);
                     this->curTextId = 0x457; // Zero Rupees? Cruel joke!
                 } else {
@@ -500,7 +477,7 @@ void EnGinkoMan_SetupDialogue(EnGinkoMan* this) {
 }
 
 void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) { // get dialogue state?
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 2:
             EnGinkoMan_SetupIdle(this);
             break;
@@ -524,9 +501,8 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->skelAnime.animCurrentSeg == object_ginko_floorsmacking_anim) &&
-        func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
+    if ((this->skelAnime.animation == &D_060008C0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }
 
@@ -536,21 +512,21 @@ void EnGinkoMan_SetupBankAward(EnGinkoMan* this) {
 
 void EnGinkoMan_BankAward(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        // ? when would bank have a parent?
+        // Parent is the player when starting to receive the award
         this->actor.parent = NULL;
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
         if (!(gSaveContext.weekEventReg[10] & 8)) {
-            func_800B8A1C(&this->actor, globalCtx, CUR_UPG_VALUE(UPG_WALLET) + 8, 500.0f, 100.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
-            func_800B8A1C(&this->actor, globalCtx, 2, 500.0f, 100.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }
     } else if (this->curTextId == 0x45C) { // "Whats this, you already saved up 5000?"
-        func_800B8A1C(&this->actor, globalCtx, 2, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_BLUE, 500.0f, 100.0f);
     } else if (!(gSaveContext.weekEventReg[59] & 8)) {
-        func_800B8A1C(&this->actor, globalCtx, 12, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 2, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_BLUE, 500.0f, 100.0f);
     }
 }
 
@@ -559,54 +535,54 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
     this->actionFunc = EnGinkoMan_BankAward2;
 }
 
-// separate function to handle bank rewards... if the bank has a parent actor? might be unused
+// separate function to handle bank rewards... called while the player is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (!(gSaveContext.weekEventReg[10] & 8) && (this->curTextId == 0x45B)) {
             // "What's this? You've already saved up 200 Rupees!?!  Well, little guy, here's your special gift. Take
             // it!"
             gSaveContext.weekEventReg[10] |= 8;
             func_801518B0(globalCtx, 0x47A, &this->actor);
-            this->curTextId = 0x47A; // "See! Doesn't it hold more than your old one?
+            this->curTextId = 0x47A; // Message after receiving reward for depositing 200 rupees.
         } else {
-            func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+            Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
             func_801518B0(globalCtx, 0x47B, &this->actor);
-            this->curTextId = 0x47B; // "Is that so?  Think it over, little guy!  So what are you gonna do?"
+            this->curTextId = 0x47B; // Message after receiving reward for depositing 1000 rupees.
         }
 
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
-        if ((func_80152498(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
             if (!(gSaveContext.weekEventReg[59] & 8)) {
                 gSaveContext.weekEventReg[59] |= 8;
             }
             EnGinkoMan_SetupIdle(this);
         }
     } else {
-        func_800B85E0(&this->actor, globalCtx, 500.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 
 void EnGinkoMan_SetupStamp(EnGinkoMan* this) {
-    func_800BDC5C(&this->skelAnime, animations, GINKO_REACHING);
+    Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_REACHING);
     this->actionFunc = EnGinkoMan_Stamp;
 }
 
 void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
     if ((this->curTextId == 0x464) // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
-        && (func_801378B8(&this->skelAnime, 10.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO); // "stamp"
+        && (Animation_OnFrame(&this->skelAnime, 10.0f))) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO); // "stamp"
     }
 
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->curTextId) {
             case 0x464: // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
-                func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+                Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
                 func_801518B0(globalCtx, 0x465, &this->actor);
                 this->curTextId = 0x465; // "There! Now I'll know you when I see you!"
                 break;
             case 0x469: // "Excuse me, but let me take a look at you..."
-                func_800BDC5C(&this->skelAnime, animations, GINKO_SITTING);
+                Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
                 globalCtx->msgCtx.bankRupees = (gSaveContext.roomInf[127][0] & 0xFFFF);
                 if ((CURRENT_DAY == 3) && (gSaveContext.isNight == 1)) {
                     func_801518B0(globalCtx, 0x46C, &this->actor);
@@ -625,22 +601,22 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer > 160.0f) {
         if (this->animTimer == 0) {
-            if (this->skelAnime.animCurrentSeg != object_ginko_amazed_anim) {
+            if (this->skelAnime.animation != &D_06004A7C) {
                 this->animTimer = 40;
-                func_800BDC5C(&this->skelAnime, animations, GINKO_ADVERTISING);
+                Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_ADVERTISING);
             }
         }
-    } else if ((this->animTimer == 0) && (this->skelAnime.animCurrentSeg != object_ginko_advertising_anim)) {
+    } else if ((this->animTimer == 0) && (this->skelAnime.animation != &D_06000AC4)) {
         this->animTimer = 40;
-        func_800BDC5C(&this->skelAnime, animations, GINKO_AMAZED);
+        Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_AMAZED);
     }
 
     DECR(this->animTimer);
 }
 
 void EnGinkoMan_FacePlayer(EnGinkoMan* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if (this->skelAnime.animCurrentSeg != object_ginko_amazed_anim) {
+    SkelAnime_Update(&this->skelAnime);
+    if (this->skelAnime.animation != &D_06004A7C) {
         func_800E9250(globalCtx, &this->actor, &this->limb15Rot, &this->limb8Rot, this->actor.focus.pos);
     } else {
         func_800E8F08(&this->limb15Rot, &this->limb8Rot);
@@ -661,20 +637,20 @@ s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     EnGinkoMan* this = THIS;
 
     if (limbIndex == 15) {
-        *dList = object_ginko_limb15_dlist;
+        *dList = D_0600B1D8;
     }
 
     if (limbIndex == 15) {
-        SysMatrix_InsertTranslation(1500.0f, 0.0f, 0.0f, 1);
-        SysMatrix_InsertXRotation_s(this->limb15Rot.y, 1);
-        SysMatrix_InsertZRotation_s(this->limb15Rot.x, 1);
-        SysMatrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, 1);
+        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->limb15Rot.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->limb15Rot.x, MTXMODE_APPLY);
+        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == 8) {
-        SysMatrix_InsertXRotation_s(-this->limb8Rot.y, 1);
-        SysMatrix_InsertZRotation_s(-this->limb8Rot.x, 1);
+        Matrix_InsertXRotation_s(-this->limb8Rot.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(-this->limb8Rot.x, MTXMODE_APPLY);
     }
 
-    return 0;
+    return false;
 }
 
 void EnGinkoMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -691,8 +667,8 @@ void EnGinkoMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 50, 80, 0, 0));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     &EnGinkoMan_OverrideLimbDraw, &EnGinkoMan_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnGinkoMan_OverrideLimbDraw, EnGinkoMan_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

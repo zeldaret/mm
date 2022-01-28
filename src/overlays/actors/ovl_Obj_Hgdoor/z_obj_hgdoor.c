@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_hgdoor.c
+ * Overlay: ovl_Obj_Hgdoor
+ * Description: Music Box House - Closet Door
+ */
+
 #include "z_obj_hgdoor.h"
 
 #define FLAGS 0x00100000
@@ -43,7 +49,7 @@ static s32 unused = 0;
 static s32 unused2 = 0;
 
 void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actorIterator) {
         if ((actorIterator->id == ACTOR_OBJ_HGDOOR) && (&this->dyna.actor != actorIterator)) {
@@ -55,7 +61,7 @@ void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
 }
 
 void ObjHgdoor_SetParent(ObjHgdoor* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actorIterator) {
         if (actorIterator->id == ACTOR_EN_HG) {
@@ -72,13 +78,13 @@ void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* header = NULL;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, 1);
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
-        BgCheck_RelocateMeshHeader(&D_06001D10, &header);
+        CollisionHeader_GetVirtual(&D_06001D10, &header);
     } else {
-        BgCheck_RelocateMeshHeader(&D_060018C0, &header);
+        CollisionHeader_GetVirtual(&D_060018C0, &header);
     }
-    this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, header);
+    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, header);
     this->rotation = 0;
     this->timer = 0;
     this->cutscene = this->dyna.actor.cutscene;
@@ -88,7 +94,7 @@ void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjHgdoor_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjHgdoor* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this) {
@@ -97,7 +103,7 @@ void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this) {
 
 void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, GlobalContext* globalCtx) {
     if (!(gSaveContext.weekEventReg[75] & 0x20) && !(gSaveContext.weekEventReg[52] & 0x20) &&
-        (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.yDistToPlayer < 40.0f) &&
+        (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.playerHeightRel < 40.0f) &&
         OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         ObjHgdoor_SetChild(this, globalCtx);
         ObjHgdoor_SetParent(this, globalCtx);
@@ -136,7 +142,7 @@ void func_80BD4358(ObjHgdoor* this, GlobalContext* globalCtx) {
             this->unk166 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
             switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                 case 1:
-                    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
+                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
                         this->dyna.actor.parent->colChkInfo.health = 1;
                     }

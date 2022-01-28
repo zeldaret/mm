@@ -1,9 +1,9 @@
 #ifndef _Z64SCENE_H_
 #define _Z64SCENE_H_
 
-#include <ultra64.h>
-#include <z64dma.h>
-#include <unk.h>
+#include "ultra64.h"
+#include "z64dma.h"
+#include "unk.h"
 
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
@@ -215,8 +215,8 @@ typedef struct {
 } SCmdMinimapChests;
 
 typedef struct {
-    /* 0x0 */ u32 opaqueDl;
-    /* 0x4 */ u32 translucentDl;
+    /* 0x0 */ Gfx* opaqueDl;
+    /* 0x4 */ Gfx* translucentDl;
 } RoomMeshType0Params; // size = 0x8
 
 // Fields TODO
@@ -295,7 +295,7 @@ typedef struct {
     /* 0x04 */ s16   id;
     /* 0x06 */ Vec3s pos;
     /* 0x0C */ s16   rotY;
-    /* 0x0E */ s16   params;
+    /* 0x0E */ u16   params;
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
@@ -349,7 +349,6 @@ typedef struct {
     /* 0xA */ u8 unk_A;
     /* 0xB */ u8 drawConfig;
     /* 0xC */ u8 unk_C;
-    /* 0xD */ char pad_D[3];
 } SceneTableEntry; // size = 0x10;
 
 typedef struct {
@@ -470,7 +469,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 count; // number of points in the path
-    /* 0x01 */ s8 unk1;
+    /* 0x01 */ u8 unk1;
     /* 0x02 */ s16 unk2;
     /* 0x04 */ Vec3s* points; // Segment Address to the array of points
 } Path; // size = 0x8

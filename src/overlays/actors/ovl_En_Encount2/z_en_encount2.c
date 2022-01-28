@@ -1,3 +1,9 @@
+/*
+ * File: z_en_encount2.c
+ * Overlay: ovl_En_Encount2
+ * Description: Astral Observatory - Majora's Mask Balloon
+ */
+
 #include "z_en_encount2.h"
 
 #define FLAGS 0x00000010
@@ -13,7 +19,7 @@ void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_SetIdle(EnEncount2* this);
-void EnEncount2_InitParticles(EnEncount2* this, Vec3f* vec, s16 fadeDelay);
+void EnEncount2_InitParticles(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
 void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx);
 void EnEncount2_DrawParticles(EnEncount2* this, GlobalContext* globalCtx);
 
@@ -57,20 +63,54 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 static DamageTable sDamageTable = {
-    0xF0, 0xF0, 0x00, 0xF0, 0xE1, 0xE1, 0x00, 0xE1, 0xF0, 0xF0, 0xF0, 0xE1, 0xE1, 0xE1, 0xF0, 0xF0,
-    0xE1, 0xF0, 0xF0, 0xF0, 0x00, 0x00, 0xE1, 0xF0, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0,
+    /* Deku Nut       */ DMG_ENTRY(0, 0xF),
+    /* Deku Stick     */ DMG_ENTRY(0, 0xF),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(0, 0xF),
+    /* Zora boomerang */ DMG_ENTRY(1, 0xE),
+    /* Normal arrow   */ DMG_ENTRY(1, 0xE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(1, 0xE),
+    /* Goron punch    */ DMG_ENTRY(0, 0xF),
+    /* Sword          */ DMG_ENTRY(0, 0xF),
+    /* Goron pound    */ DMG_ENTRY(0, 0xF),
+    /* Fire arrow     */ DMG_ENTRY(1, 0xE),
+    /* Ice arrow      */ DMG_ENTRY(1, 0xE),
+    /* Light arrow    */ DMG_ENTRY(1, 0xE),
+    /* Goron spikes   */ DMG_ENTRY(0, 0xF),
+    /* Deku spin      */ DMG_ENTRY(0, 0xF),
+    /* Deku bubble    */ DMG_ENTRY(1, 0xE),
+    /* Deku launch    */ DMG_ENTRY(0, 0xF),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0xF),
+    /* Zora barrier   */ DMG_ENTRY(0, 0xF),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0xE),
+    /* Zora punch     */ DMG_ENTRY(0, 0xF),
+    /* Spin attack    */ DMG_ENTRY(0, 0xF),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
+
+extern Gfx D_06000A00[];
+extern Gfx D_06000D78[];
+extern CollisionHeader D_06002420;
 
 void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck_RelocateMeshHeader(&D_06002420, &colHeader);
-    this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
-    ActorShape_Init(&this->dyna.actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    this->dyna.actor.colChkInfo.mass = 0xFF;
+    DynaPolyActor_Init(&this->dyna, 0);
+    CollisionHeader_GetVirtual(&D_06002420, &colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
+    this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colElement);
 
     this->dyna.actor.targetMode = 6;
@@ -99,12 +139,12 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
 void EnEncount2_SetIdle(EnEncount2* this) {
-    this->isPopped = 0;
+    this->isPopped = false;
     this->actionFunc = EnEncount2_Idle;
 }
 
@@ -114,7 +154,7 @@ void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->scale, 0.1f, 0.3f, 0.01f);
     if ((this->collider.base.acFlags & AC_HIT) && (this->dyna.actor.colChkInfo.damageEffect == 0xE)) {
         this->dyna.actor.colChkInfo.health = 0;
-        this->isPopped = 1;
+        this->isPopped = true;
         this->actionFunc = EnEncount2_Popped;
     }
 }
@@ -125,14 +165,14 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&curPos, &this->dyna.actor.world.pos);
     curPos.y += 60.0f;
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 0xFF, 0xFF, 0xC8,
-                0x0001);
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
+                CLEAR_TAG_LARGE_EXPLOSION);
 
-    for (i = 0; i != 100; ++i) {
+    for (i = 0; i < ARRAY_COUNT(this->particles) / 2; ++i) {
         EnEncount2_InitParticles(this, &curPos, 10);
     }
 
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }
@@ -140,7 +180,7 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
 void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx) {
     if (this->deathTimer == 0) {
         if (this->switchFlag >= 0) {
-            Actor_SetSwitchFlag(globalCtx, this->switchFlag);
+            Flags_SetSwitch(globalCtx, this->switchFlag);
         }
         Actor_MarkForDeath(&this->dyna.actor);
     }
@@ -153,10 +193,10 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     DECR(this->deathTimer);
 
     this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
-    Actor_SetHeight(&this->dyna.actor, 30.0f);
+    Actor_SetFocus(&this->dyna.actor, 30.0f);
     Actor_SetScale(&this->dyna.actor, this->scale);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+    Actor_MoveWithGravity(&this->dyna.actor);
     EnEncount2_UpdateParticles(this, globalCtx);
 
     if (!this->isPopped) {
@@ -168,21 +208,21 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
-    if (this->isPopped != 1) {
-        func_800BDFC0(globalCtx, D_06000A00);
-        func_800BDFC0(globalCtx, D_06000D78);
+    if (this->isPopped != true) {
+        Gfx_DrawDListOpa(globalCtx, D_06000A00);
+        Gfx_DrawDListOpa(globalCtx, D_06000D78);
     }
     EnEncount2_DrawParticles(this, globalCtx);
 }
 
-void EnEncount2_InitParticles(EnEncount2* this, Vec3f* vec, s16 fadeDelay) {
+void EnEncount2_InitParticles(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
     s16 i;
     EnEncount2Particle* sPtr = this->particles;
 
-    for (i = 0; i < 200; ++i) {
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, sPtr++) {
         if (!sPtr->enabled) {
-            sPtr->enabled = 1;
-            sPtr->pos = *vec;
+            sPtr->enabled = true;
+            sPtr->pos = *pos;
             sPtr->alphaFadeDelay = fadeDelay;
             sPtr->alpha = 0xFF;
 
@@ -197,7 +237,6 @@ void EnEncount2_InitParticles(EnEncount2* this, Vec3f* vec, s16 fadeDelay) {
             sPtr->scale = (Rand_ZeroFloat(1.0f) * 0.5f) + 2.0f;
             return;
         }
-        sPtr++;
     }
 }
 
@@ -205,7 +244,7 @@ void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
     s32 i;
     EnEncount2Particle* sPtr = this->particles;
 
-    for (i = 0; i < 200; i += 2) {
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, sPtr++) {
         if (sPtr->enabled) {
             sPtr->pos.x += sPtr->vel.x;
             sPtr->pos.y += sPtr->vel.y;
@@ -213,24 +252,7 @@ void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
             sPtr->vel.x += sPtr->accel.x;
             sPtr->vel.y += sPtr->accel.y;
             sPtr->vel.z += sPtr->accel.z;
-            if (sPtr->alphaFadeDelay != 0) {
-                sPtr->alphaFadeDelay--;
-            } else {
-                sPtr->alpha -= 10;
-                if (sPtr->alpha < 10) {
-                    sPtr->enabled = 0;
-                }
-            }
-        }
-        sPtr++;
 
-        if (sPtr->enabled) {
-            sPtr->pos.x += sPtr->vel.x;
-            sPtr->pos.y += sPtr->vel.y;
-            sPtr->pos.z += sPtr->vel.z;
-            sPtr->vel.x += sPtr->accel.x;
-            sPtr->vel.y += sPtr->accel.y;
-            sPtr->vel.z += sPtr->accel.z;
             if (sPtr->alphaFadeDelay != 0) {
                 sPtr->alphaFadeDelay--;
             } else {
@@ -240,8 +262,34 @@ void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
                 }
             }
         }
-        sPtr++;
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Encount2_0x808E1560/EnEncount2_DrawParticles.asm")
+void EnEncount2_DrawParticles(EnEncount2* this, GlobalContext* globalCtx) {
+    s16 i;
+    EnEncount2Particle* sPtr;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+
+    OPEN_DISPS(gfxCtx);
+    sPtr = this->particles;
+    func_8012C28C(gfxCtx);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, sPtr++) {
+        if (sPtr->enabled) {
+            Matrix_InsertTranslation(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
+            Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
+            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(&D_04079B10));
+            gSPDisplayList(POLY_XLU_DISP++, D_0407AB10);
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
+            gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, sPtr->alpha);
+            Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+            Matrix_InsertZRotation_f(DEGTORAD(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, D_0407AB58);
+        }
+    }
+    CLOSE_DISPS(gfxCtx);
+}

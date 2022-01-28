@@ -1,3 +1,9 @@
+/*
+ * File: z_item_inbox.c
+ * Overlay: ovl_Item_Inbox
+ * Description:
+ */
+
 #include "z_item_inbox.h"
 
 #define FLAGS 0x00000009
@@ -34,7 +40,7 @@ void ItemInbox_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ItemInbox_Idle(ItemInbox* this, GlobalContext* globalCtx) {
-    if (Actor_GetChestFlag(globalCtx, (this->actor.params >> 8) & 0x1F)) {
+    if (Flags_GetTreasure(globalCtx, (this->actor.params >> 8) & 0x1F)) {
         Actor_MarkForDeath(&this->actor);
     }
 }

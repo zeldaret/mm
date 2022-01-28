@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 #define ATOI(i, a)                           \
     for (i = 0; *a >= '0' && *a <= '9'; a++) \
@@ -8,7 +7,7 @@
 #define _PROUT(fmt, _size)                 \
     if (_size > 0) {                       \
         arg = (void*)pfn(arg, fmt, _size); \
-        if (arg != 0)                      \
+        if (arg != NULL)                   \
             x.nchar += _size;              \
         else                               \
             return x.nchar;                \
@@ -26,22 +25,16 @@
         }                            \
     }
 
-#define FLAGS_SPACE 1
-#define FLAGS_PLUS 2
-#define FLAGS_MINUS 4
-#define FLAGS_HASH 8
-#define FLAGS_ZERO 16
-
 char spaces[] = "                                ";
 char zeroes[] = "00000000000000000000000000000000";
 
-int _Printf(printf_func pfn, void* arg, const char* fmt, va_list ap) {
+int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap) {
     _Pft x;
     x.nchar = 0;
     while (1) {
         const char* s;
-        unsigned char c;
-        unsigned char* t;
+        u8 c;
+        const char* t;
 
         static const char fchar[] = " +-#0";
         static const u32 fbit[] = { FLAGS_SPACE, FLAGS_PLUS, FLAGS_MINUS, FLAGS_HASH, FLAGS_ZERO, 0 };

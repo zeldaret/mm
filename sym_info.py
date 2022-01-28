@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import os.path
 import argparse
+import os.path
 
 parser = argparse.ArgumentParser(
     description="Display various information about a symbol or address."
@@ -10,7 +10,7 @@ parser.add_argument(
     "name",
     type=str,
     default="",
-    help="symbol name or ROM/RAM address to lookup"
+    help="symbol name or VROM/VRAM address to lookup"
 )
 parser.add_argument(
     "-e",
@@ -73,10 +73,10 @@ def search_address(target_addr):
                 continue
 
             if rom == target_addr or (is_ram and ram == target_addr):
-                return f"{sym} (RAM 0x{ram:X}, ROM 0x{rom:X}, {cur_file})"
+                return f"{sym} (VRAM 0x{ram:X}, VROM 0x{rom:X}, {cur_file})"
             if rom > target_addr or (is_ram and ram > target_addr):
                 offset = target_addr - prev_ram if is_ram else target_addr - prev_rom
-                return f"at 0x{offset:X} bytes inside {prev_sym} (RAM 0x{prev_ram:X}, ROM 0x{prev_rom:X}, {prev_file})"
+                return f"at 0x{offset:X} bytes inside {prev_sym} (VRAM 0x{prev_ram:X}, VROM 0x{prev_rom:X}, {prev_file})"
 
             prev_ram = ram
             prev_rom = rom
@@ -134,6 +134,6 @@ except ValueError:
         sym_rom = sym_info[0]
         sym_file = sym_info[1]
         sym_ram = sym_info[2]
-        print(f"Symbol {args.name} (RAM: 0x{sym_ram:08X}, ROM: 0x{sym_rom:06X}, {sym_file})")
+        print(f"Symbol {args.name} (VRAM: 0x{sym_ram:08X}, VROM: 0x{sym_rom:06X}, {sym_file})")
     else:
         print(f"Symbol {args.name} not found in map file {mymap}")

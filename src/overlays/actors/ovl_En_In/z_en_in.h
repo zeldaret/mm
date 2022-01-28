@@ -1,7 +1,7 @@
 #ifndef Z_EN_IN_H
 #define Z_EN_IN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnIn;
 
@@ -16,7 +16,7 @@ typedef enum {
 } EnInType;
 
 #define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)
-#define ENIN_GET_WALKING_FLAG(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
+#define ENIN_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
 
 typedef struct EnIn {
     /* 0x000 */ Actor actor;
@@ -28,23 +28,18 @@ typedef struct EnIn {
     /* 0x238 */ char unk238[0x4];
     /* 0x23C */ u8 unk23C;
     /* 0x23D */ u8 unk23D;
-    /* 0x240 */ u8 *unk240;
+    /* 0x240 */ Path* path;
     /* 0x244 */ s16 unk244;
     /* 0x248 */ Vec3f unk248;
     /* 0x254 */ Vec3f unk254;
     /* 0x260 */ u8 unk260;
     /* 0x261 */ u8 unk261;
-    /* 0x262 */ Vec3s limbDrawTbl[20];
-    /* 0x2DA */ Vec3s transitionDrawTbl[20];
-    /* 0x352 */ s16 unk352;
-    /* 0x354 */ s16 unk354;
-    /* 0x356 */ char unk356[0x2];
-    /* 0x358 */ s16 unk358;
-    /* 0x35A */ s16 unk35A;
-    /* 0x35C */ char unk35C[0x2];
-    /* 0x35E */ s16 unk35E;
-    /* 0x360 */ s16 unk360;
-    /* 0x362 */ char unk362[0x14];
+    /* 0x262 */ Vec3s jointTable[20];
+    /* 0x2DA */ Vec3s morphTable[20];
+    /* 0x352 */ Vec3s unk352;
+    /* 0x358 */ Vec3s unk358;
+    /* 0x35E */ Vec3s unk35E;
+    /* 0x364 */ char unk364[0x12];
     /* 0x376 */ s16 unk376[20];
     /* 0x39E */ s16 unk39E[20];
     /* 0x3C6 */ char unk3C6[0xBC];

@@ -1,6 +1,14 @@
+/*
+ * File: z_door_spiral.c
+ * Overlay: ovl_Door_Spiral
+ * Description: Staircase
+ */
+
 #include "z_door_spiral.h"
 
 #define FLAGS 0x00000010
+
+#define THIS ((DoorSpiral*)thisx)
 
 #define GET_ORIENTATION_PARAM(this) ((((Actor*)(this))->params >> 7) & 0x1)
 #define GET_UNK145_PARAM(this) ((((Actor*)(this))->params >> 8) & 0x3)
@@ -176,7 +184,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
-    DoorSpiral* this = (DoorSpiral*)thisx;
+    DoorSpiral* this = THIS;
     s32 pad;
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
     s8 objBankId;
@@ -199,7 +207,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
-    Actor_SetHeight(&this->actor, 60.0f);
+    Actor_SetFocus(&this->actor, 60.0f);
 }
 
 void DoorSpiral_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -223,7 +231,7 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, GlobalContext* globalCtx) {
  */
 f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32 yOffset, f32 spiralWidth,
                                  f32 spiralHeight) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f target;
     Vec3f offset;
 
@@ -231,7 +239,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
     target.y = player->actor.world.pos.y + yOffset;
     target.z = player->actor.world.pos.z;
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &offset, &target);
+    Actor_OffsetOfPointInActorCoords(&this->actor, &offset, &target);
 
     if ((spiralWidth < fabsf(offset.x)) || (spiralHeight < fabsf(offset.y))) {
         return FLT_MAX;
@@ -244,9 +252,9 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
  * Checks if the player should climb the stairs.
  */
 s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
-    if (!(func_801233E4(globalCtx))) {
+    if (!Player_InCsMode(&globalCtx->state)) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
         f32 dist =
             DoorSpiral_GetDistFromPlayer(globalCtx, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
@@ -277,7 +285,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
     if (this->shouldClimb) {
         DoorSpiral_SetupAction(this, DoorSpiral_PlayerClimb);
     } else if (DoorSpiral_PlayerShouldClimb(this, globalCtx)) {
-        player = PLAYER;
+        player = GET_PLAYER(globalCtx);
 
         player->doorType = 4;
         player->doorDirection = this->orientation;
@@ -293,7 +301,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
  * Player is climbing the stairs.
  */
 void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(player->stateFlags1 & 0x20000000)) {
         DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
@@ -302,9 +310,9 @@ void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
 }
 
 void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
-    DoorSpiral* this = (DoorSpiral*)thisx;
+    DoorSpiral* this = THIS;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((!(player->stateFlags1 & 0x100004C0)) || (this->actionFunc == DoorSpiral_WaitForObject)) {
         this->actionFunc(this, globalCtx);
@@ -313,7 +321,7 @@ void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void DoorSpiral_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
-    DoorSpiral* this = (DoorSpiral*)thisx;
+    DoorSpiral* this = THIS;
 
     if (this->actor.objBankIndex == this->bankIndex) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];

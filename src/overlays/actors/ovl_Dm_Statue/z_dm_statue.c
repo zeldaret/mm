@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_statue.c
+ * Overlay: ovl_Dm_Statue
+ * Description: Pillars of water in Giant's Chamber
+ */
+
 #include "z_dm_statue.h"
 
 #define FLAGS 0x04000030
@@ -38,5 +44,5 @@ void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx) {
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06001788));
-    func_800BE03C(globalCtx, D_06000520);
+    Gfx_DrawDListXlu(globalCtx, D_06000520);
 }

@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_ikana_ray.c
+ * Overlay: ovl_Bg_Ikana_Ray
+ * Description: Large light ray in Stone Tower Temple
+ */
+
 #include "z_bg_ikana_ray.h"
 
 #define FLAGS 0x00000000
@@ -53,6 +59,9 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+extern Gfx D_06001100[];
+extern AnimatedMaterial D_06001228[];
+
 void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaRay* this = THIS;
     ColliderCylinder* collision = &this->collision;
@@ -62,7 +71,7 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, collision, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collision);
 
-    this->animatedTextures = (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
+    this->animatedTextures = (AnimatedMaterial*)Lib_SegmentedToVirtual(D_06001228);
 
     if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
         BgIkanaRay_SetActivated(this);
@@ -110,5 +119,5 @@ void BgIkanaRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaRay* this = THIS;
 
     AnimatedMat_Draw(globalCtx, this->animatedTextures);
-    func_800BE03C(globalCtx, object_ikana_obj_001100);
+    Gfx_DrawDListXlu(globalCtx, D_06001100);
 }

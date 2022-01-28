@@ -1,15 +1,17 @@
 #ifndef Z_EN_MM_H
 #define Z_EN_MM_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnMm;
 
-typedef struct EnMm {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x54];
-} EnMm; // size = 0x198
+typedef void (*EnMmActionFunc)(struct EnMm*, GlobalContext*);
 
-extern const ActorInit En_Mm_InitVars;
+typedef struct EnMm {
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ ColliderCylinder collider;
+    /* 0x0190 */ s16 unk_190;
+    /* 0x0194 */ EnMmActionFunc actionFunc;
+} EnMm; // size = 0x198
 
 #endif // Z_EN_MM_H

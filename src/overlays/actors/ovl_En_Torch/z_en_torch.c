@@ -1,3 +1,9 @@
+/*
+ * File: z_en_torch.c
+ * Overlay: ovl_En_Torch
+ * Description: Grotto chest spawner
+ */
+
 #include "z_en_torch.h"
 
 #define FLAGS 0x00000000

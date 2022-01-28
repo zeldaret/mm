@@ -1,3 +1,9 @@
+/*
+ * File: z_en_talk.c
+ * Overlay: ovl_En_Talk
+ * Description: Green Target Spot (e.g., Indigo-Go's Poster)
+ */
+
 #include "z_en_talk.h"
 
 #define FLAGS 0x00000009
@@ -7,8 +13,9 @@
 void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx);
+void func_80BDE058(EnTalk* this, GlobalContext* globalCtx);
+void func_80BDE090(EnTalk* this, GlobalContext* globalCtx);
 
-/*
 const ActorInit En_Talk_InitVars = {
     ACTOR_EN_TALK,
     ACTORCAT_ITEMACTION,
@@ -20,14 +27,43 @@ const ActorInit En_Talk_InitVars = {
     (ActorFunc)EnTalk_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/EnTalk_Init.asm")
+void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnTalk* this = THIS;
+    s8 targetMode = this->actor.home.rot.x - 0x1;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/EnTalk_Destroy.asm")
+    if (targetMode >= 0 && targetMode < 7) {
+        this->actor.targetMode = targetMode;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/func_80BDE058.asm")
+    Actor_SetScale(&this->actor, 1.0f);
+    this->actionFunc = func_80BDE090;
+    this->actor.textId = ENTALK_GET_TEXT_ID(&this->actor);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/func_80BDE090.asm")
+void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/EnTalk_Update.asm")
+void func_80BDE058(EnTalk* this, GlobalContext* globalCtx) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
+        this->actionFunc = func_80BDE090;
+    }
+}
+
+void func_80BDE090(EnTalk* this, GlobalContext* globalCtx) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        this->actionFunc = func_80BDE058;
+        return;
+    }
+
+    if ((this->actor.xzDistToPlayer < 40.0f && Player_IsFacingActor(&this->actor, 0x3000, globalCtx)) ||
+        this->actor.isTargeted) {
+        func_800B8614(&this->actor, globalCtx, 120.0f);
+    }
+}
+
+void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnTalk* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+}

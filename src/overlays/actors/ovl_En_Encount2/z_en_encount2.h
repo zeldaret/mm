@@ -1,7 +1,7 @@
 #ifndef Z_EN_ENCOUNT2_H
 #define Z_EN_ENCOUNT2_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnEncount2;
 
@@ -16,7 +16,6 @@ typedef struct EnEncount2Particle{
    /* 0x18 */ Vec3f vel;
    /* 0x24 */ Vec3f accel;
    /* 0x30 */ f32 scale;
-
 } EnEncount2Particle; // size = 0x34
 
 typedef struct EnEncount2 {
@@ -35,10 +34,5 @@ typedef struct EnEncount2 {
 #define GET_ENCOUNT2_SWITCH_FLAG(actor) ((s16)(((Actor*)actor)->params & 0x7F))
 
 extern const ActorInit En_Encount2_InitVars;
-
-extern CollisionHeader D_06002420;
-
-extern Gfx D_06000A00[];
-extern Gfx D_06000D78[];
 
 #endif // Z_EN_ENCOUNT2_H

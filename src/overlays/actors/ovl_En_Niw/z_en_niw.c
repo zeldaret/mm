@@ -8,15 +8,17 @@
 
 #define FLAGS 0x00800010
 
+#define THIS ((EnNiw*)thisx)
+
 void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnNiw_SetupIdle(EnNiw* this);
-void func_808919E8(EnNiw* this, GlobalContext* globalCtx);
+void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_SetupRunning(EnNiw* this);
-void func_808924B0(EnNiw* this, GlobalContext* globalCtx);
+void EnNiw_SetupRunAway(EnNiw* this);
+void EnNiw_RunAway(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_Trigger(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_Upset(EnNiw* this, GlobalContext* globalCtx);
@@ -25,11 +27,15 @@ void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx);
-void func_808932B0(EnNiw* this, GlobalContext* globalCtx); // draw feather
+void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx);
 void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
-s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* actor);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
+
+extern FlexSkeletonHeader D_06002530;
+extern AnimationHeader D_060000E8;
+extern Gfx D_060023B0[]; // gNiwFeatherMaterialDL
+extern Gfx D_06002428[]; // gNiwFeatherDL
 
 // turned on during cucco storm, but not read by anything?
 // maybe read by En_Attack_Niw
@@ -104,7 +110,7 @@ static Vec3f D_808934E8 = {
 static s32 pad = 0;
 
 void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnNiw* this = (EnNiw*)thisx;
+    EnNiw* this = THIS;
     Vec3f dTemp = D_808934C4;
 
     if (this->actor.params < 0) { // all neg values become zero
@@ -118,10 +124,10 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.flags |= 0x1; // targetable ON
 
-    ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
 
-    SkelAnime_InitSV(globalCtx, &this->skelanime, &D_06002530, &D_060000E8, this->limbDrawTbl,
-                     this->transitionDrawtable, ENNIW_LIMBCOUNT);
+    SkelAnime_InitFlex(globalCtx, &this->skelanime, &D_06002530, &D_060000E8, this->jointTable, this->morphTable,
+                       ENNIW_LIMBCOUNT);
     Math_Vec3f_Copy(&this->unk2A4, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk2B0, &this->actor.world.pos);
 
@@ -141,7 +147,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->niwType == ENNIW_TYPE_UNK2) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
         this->unkTimer250 = 30;
         this->actor.flags &= ~0x1; // targetable OFF
@@ -157,7 +163,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnNiw* this = (EnNiw*)thisx;
+    EnNiw* this = THIS;
 
     if (this->niwType == ENNIW_TYPE_REGULAR) {
         Collider_DestroyCylinder(globalCtx, &this->collider);
@@ -269,14 +275,14 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
     Actor* attackNiw;
 
     if ((this->unkTimer252 == 0) && (this->unk290 < 7)) {
-        xView = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
-        yView = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
-        zView = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
+        xView = globalCtx->view.at.x - globalCtx->view.eye.x;
+        yView = globalCtx->view.at.y - globalCtx->view.eye.y;
+        zView = globalCtx->view.at.z - globalCtx->view.eye.z;
         newNiwPos.x = ((Rand_ZeroOne() - 0.5f) * xView) + globalCtx->view.eye.x;
         newNiwPos.y = randPlusMinusPoint5Scaled(0.3f) + (globalCtx->view.eye.y + 50.0f + (yView * 0.5f));
         newNiwPos.z = ((Rand_ZeroOne() - 0.5f) * zView) + globalCtx->view.eye.z;
-        attackNiw = Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_ATTACK_NIW,
-                                          newNiwPos.x, newNiwPos.y, newNiwPos.z, 0, 0, 0, 0);
+        attackNiw = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_ATTACK_NIW, newNiwPos.x,
+                                       newNiwPos.y, newNiwPos.z, 0, 0, 0, 0);
 
         if (attackNiw) {
             this->unk290++;
@@ -321,25 +327,22 @@ void func_808917F8(EnNiw* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 void EnNiw_SetupIdle(EnNiw* this) {
-    SkelAnime_ChangeAnim(&this->skelanime, &D_060000E8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_060000E8.common), 0,
-                         -10.0f);
+    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8), 0, -10.0f);
     this->unknownState28E = 0;
-    this->actionFunc = func_808919E8;
+    this->actionFunc = EnNiw_Idle;
 }
 
-#ifdef NON_MATCHING
-// non-matching: stack offset and regalloc
-// EnNiw_Idle
-void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
+    f32 posX2;
+    f32 posZ2;
+    f32 posX1 = randPlusMinusPoint5Scaled(100.0f);
+    f32 posZ1 = randPlusMinusPoint5Scaled(100.0f);
     s16 s16tmp;
-    Vec3f newPos;
 
-    newPos.y = randPlusMinusPoint5Scaled(100.0f);
-    newPos.z = randPlusMinusPoint5Scaled(100.0f);
     if (this->niwType == ENNIW_TYPE_REGULAR) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
             // picked up
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->sfxTimer1 = 30;
             this->unkTimer250 = 30;
             this->actor.flags &= ~0x1; // targetable OFF
@@ -348,7 +351,7 @@ void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
             this->actionFunc = EnNiw_Held;
             return;
         } else {
-            func_800B8BB0(&this->actor, globalCtx);
+            Actor_LiftActor(&this->actor, globalCtx);
         }
     } else {
         this->unkTimer252 = 10;
@@ -369,24 +372,20 @@ void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
         if (this->unk298 > 7) {
             this->unkTimer252 = Rand_ZeroFloat(30.0f);
             this->unk298 = Rand_ZeroFloat(3.99f);
-            // (3.99..) is loaded into f12 for rand_zero, but f12 never released
-            // b18:    jal     Rand_ZeroFloat              b18:    jal     Rand_ZeroFloat
-            // b1c:    lwc1    $f12,%lo(D_80893554)(at)  i b1c:    lwc1    $f12,%lo(.rodata+0x54)(at)
-            // b20:    lwc1    $f12,0x34(sp)             r b20:    lwc1    $f2,0x2c(sp)
 
-            if (newPos.y < 0.0f) {
-                newPos.y -= 100.0f;
+            if (posX1 < 0.0f) {
+                posX1 -= 100.0f;
             } else {
-                newPos.y += 100.0f;
+                posX1 += 100.0f;
             }
-            if (newPos.z < 0.0f) {
-                newPos.z -= 100.0f;
+            if (posZ1 < 0.0f) {
+                posZ1 -= 100.0f;
             } else {
-                newPos.z += 100.0f;
+                posZ1 += 100.0f;
             }
 
-            this->unk2B0.x = this->unk2A4.x + newPos.y;
-            this->unk2B0.z = this->unk2A4.z + newPos.z;
+            this->unk2B0.x = this->unk2A4.x + posX1;
+            this->unk2B0.z = this->unk2A4.z + posZ1;
 
         } else {
             this->unkTimer250 = 4;
@@ -404,35 +403,31 @@ void func_808919E8(EnNiw* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.world.pos.z, this->unk2B0.z, 1.0f, this->unk300);
         Math_ApproachF(&this->unk300, 3.0f, 1.0f, 0.3f);
 
-        newPos.x = this->unk2B0.x - this->actor.world.pos.x;
-        newPos.z = this->unk2B0.z - this->actor.world.pos.z;
+        posX2 = this->unk2B0.x - this->actor.world.pos.x;
+        posZ2 = this->unk2B0.z - this->actor.world.pos.z;
 
-        if (fabsf(newPos.x) < 10.0f) {
-            newPos.x = 0.0;
+        if (fabsf(posX2) < 10.0f) {
+            posX2 = 0;
         }
-        if (fabsf(newPos.z) < 10.0f) {
-            newPos.z = 0.0;
+        if (fabsf(posZ2) < 10.0f) {
+            posZ2 = 0;
         }
 
-        if ((newPos.x == 0.0f) && (newPos.z == 0.0f)) {
+        if ((posX2 == 0.0f) && (posZ2 == 0.0f)) {
             this->unkTimer250 = 0;
             this->unk298 = 7;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_Atan2S(newPos.x, newPos.z), 3, this->unk304, 0);
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_Atan2S(posX2, posZ2), 3, this->unk304, 0);
         Math_ApproachF(&this->unk304, 10000.0f, 1.0f, 1000.0f);
     }
     func_80891320(this, globalCtx, s16tmp);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808919E8.asm")
-#endif
 
 void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
-    Vec3f vec3fcopy;
+    Vec3f vec3fcopy = D_808934DC;
     s16 rotZ;
 
-    vec3fcopy = D_808934DC;
     if (this->unkTimer250 == 0) {
         this->unk29E = 2;
         this->unkTimer250 = (s32)(Rand_ZeroFloat(1.0f) * 10.0f) + 10;
@@ -491,14 +486,14 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
             this->unkTimer254 = 100;
             this->unkTimer250 = 0;
             this->unk2EC = 0;
-            EnNiw_SetupRunning(this);
+            EnNiw_SetupRunAway(this);
             return;
         }
     }
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         // picked up again before could run off
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
         this->unk2EC = 0;
         this->unkTimer250 = 30;
@@ -508,7 +503,7 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 0.0f;
     } else {
         if (this->unkTimer252 > 5) {
-            func_800B8BB0(&this->actor, globalCtx);
+            Actor_LiftActor(&this->actor, globalCtx);
         }
         func_80891320(this, globalCtx, 2);
     }
@@ -528,13 +523,13 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 0x20) {
         // still touching water
         this->actor.gravity = 0.0f;
-        if (this->actor.yDistToWater > 15.0f) {
+        if (this->actor.depthInWater > 15.0f) {
             this->actor.world.pos.y += 2.0f;
         }
         if (this->unkTimer250 == 0) {
             this->unkTimer250 = 30;
             Math_Vec3f_Copy(&ripplePos, &this->actor.world.pos);
-            ripplePos.y += this->actor.yDistToWater;
+            ripplePos.y += this->actor.depthInWater;
 
             EffectSsGRipple_Spawn(globalCtx, &ripplePos, 100, 500, 30);
         }
@@ -559,7 +554,7 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
             this->unkTimer250 = 0;
             this->actor.velocity.y = 0.0f;
             if (!this->isStormActive) {
-                EnNiw_SetupRunning(this);
+                EnNiw_SetupRunAway(this);
             } else {
                 this->unknownState28E = 3;
                 this->actionFunc = EnNiw_CuccoStorm;
@@ -608,7 +603,7 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
         this->unk264[1] = 0.0f;
         this->unk264[2] = 0.0f;
         this->unkTimer24C = 10;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
     }
     if (this->unkTimer252 == 0) {
         this->unkTimer252 = 10;
@@ -633,50 +628,37 @@ void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnNiw_SetupRunning(EnNiw* this) {
-    SkelAnime_ChangeAnim(&this->skelanime, &D_060000E8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_060000E8.common), 0,
-                         -10.0f);
+void EnNiw_SetupRunAway(EnNiw* this) {
+    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8), 0, -10.0f);
     this->unk29A = Rand_ZeroFloat(1.99f);
     this->unknownState28E = 7;
-    this->actionFunc = func_808924B0; // running away
+    this->actionFunc = EnNiw_RunAway;
     this->actor.speedXZ = 4.0f;
 }
 
-#ifdef NON_MATCHING
-// bad regalloc, center of first if block
-// actionfunc: running away from link
-void func_808924B0(EnNiw* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
-    Vec3f tempVec3f;
+void EnNiw_RunAway(EnNiw* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    Vec3f tempVec3f = D_808934E8;
     s16 temp298;
     f32 dX;
     f32 dZ;
 
-    // it actually wants to copy to stack... not modify, then pass to veccopy
-    // and it does it BEFORE the if block, this is just unoptimized.
-    tempVec3f = D_808934E8;
     if (this->unkTimer254 == 0) {
-        // the assignements in this block never want to align properly
-        // its not lineswap, as 800k permuter with only lineswap didn't find a solution
-        this->unk298 = 0;
+        this->unk2A4.x = this->unk2B0.x = this->actor.world.pos.x;
+        this->unk2A4.y = this->unk2B0.y = this->actor.world.pos.y;
+        this->unk2A4.z = this->unk2B0.z = this->actor.world.pos.z;
 
-        this->unk2A4.x = this->actor.world.pos.x;
-        this->unk2A4.y = this->actor.world.pos.y;
-        this->unk2A4.z = this->actor.world.pos.z;
-        this->unk2B0.x = this->actor.world.pos.x;
-        this->unk2B0.y = this->actor.world.pos.y;
-        this->unk2B0.z = this->actor.world.pos.z;
+        this->unkTimer252 = this->unkTimer250 = this->unk298 = 0;
+        this->unk300 = this->unk304 = 0;
 
-        this->unkTimer252 = this->unkTimer250 = this->unk298;
+        this->actor.speedXZ = 0;
+
         this->unk264[8] = 0;
         this->unk264[6] = 0;
         this->unk264[5] = 0;
         this->unk264[7] = 0;
-        this->unk304 = 0;
-        this->unk300 = 0;
-        this->actor.speedXZ = 0;
         Math_Vec3f_Copy(&this->unk2BC, &tempVec3f);
-        EnNiw_SetupIdle(&this->actor);
+        EnNiw_SetupIdle(this);
     } else {
         if (this->unk2BC.x != 90000.0f) {
             dX = this->actor.world.pos.x - this->unk2BC.x;
@@ -690,11 +672,7 @@ void func_808924B0(EnNiw* this, GlobalContext* globalCtx) {
         func_80891320(this, globalCtx, 2);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808924B0.asm")
-#endif
 
-// check if on the ground after running, once on the ground, start idling
 void EnNiw_LandBeforeIdle(EnNiw* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         EnNiw_SetupIdle(this);
@@ -702,15 +680,15 @@ void EnNiw_LandBeforeIdle(EnNiw* this, GlobalContext* globalCtx) {
 }
 
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
-    if ((!this->isStormActive) && (this->unkTimer260 == 0) && (this->niwType == ENNIW_TYPE_REGULAR)) {
+    if (!this->isStormActive && (this->unkTimer260 == 0) && (this->niwType == ENNIW_TYPE_REGULAR)) {
         if ((this->unknownState28E != 7) && (this->unk2BC.x != 90000.0f)) {
             this->unkTimer260 = 10;
             this->sfxTimer1 = 30;
             this->unk29E = 1;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->unkTimer254 = 100;
             this->unk2EC = 0;
-            EnNiw_SetupRunning(this);
+            EnNiw_SetupRunAway(this);
         }
 
         if (this->collider.base.acFlags & AC_HIT) {
@@ -744,20 +722,20 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
                 this->unkTimer260 = 10;
                 this->sfxTimer1 = 30;
                 this->unk29E = 1;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
                 this->unkTimer254 = 100;
                 this->unk2EC = 0;
-                EnNiw_SetupRunning(this);
+                EnNiw_SetupRunAway(this);
             }
         }
     }
 }
 
 void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnNiw* this = (EnNiw*)thisx;
+    EnNiw* this = THIS;
     s8 pad0;
     s16 i;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 pad1;
     s16 featherCount;
     Vec3f pos;
@@ -827,17 +805,17 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot = this->actor.world.rot;
     this->actor.shape.shadowScale = 15.0f;
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, this->unk308);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_SetFocus(&this->actor, this->unk308);
+    Actor_MoveWithGravity(&this->actor);
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
 
-    if ((this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= 32000.0f)) {
+    if (this->actor.floorHeight <= BGCHECK_Y_MIN || this->actor.floorHeight >= BGCHECK_Y_MAX) {
         // if cucco is off the map?
         Vec3f camera;
-        camera.x = globalCtx->view.focalPoint.x - globalCtx->view.eye.x;
-        camera.y = globalCtx->view.focalPoint.y - globalCtx->view.eye.y;
-        camera.z = globalCtx->view.focalPoint.z - globalCtx->view.eye.z;
+        camera.x = globalCtx->view.at.x - globalCtx->view.eye.x;
+        camera.y = globalCtx->view.at.y - globalCtx->view.eye.y;
+        camera.z = globalCtx->view.at.z - globalCtx->view.eye.z;
         camResult = camera.y / sqrtf(SQXYZ(camera));
 
         this->actor.world.pos.x = this->actor.home.pos.x;
@@ -878,14 +856,14 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unknownState28E = 8;
         this->isStormActive = false;
         this->actionFunc = EnNiw_LandBeforeIdle;
-        return; // still required even with the else/else
+        return;
 
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 15.0f) &&
+    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 15.0f) &&
                (this->unknownState28E != 6)) {
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
-        pos.y += this->actor.yDistToWater;
+        pos.y += this->actor.depthInWater;
         this->unkTimer250 = 30;
         EffectSsGSplash_Spawn(globalCtx, &pos, 0, 0, 0, 400);
         this->unkTimer252 = 0;
@@ -900,16 +878,16 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnNiw_CheckRage(this, globalCtx);
         if ((this->flutterSfxTimer == 0) && (this->unknownState28E == 4)) {
             this->flutterSfxTimer = 7;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
         }
 
         if (this->sfxTimer1 == 0) {
             if (this->unknownState28E != 0) {
                 this->sfxTimer1 = 30;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_A); // attack cluck
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_A); // attack cluck
             } else {
                 this->sfxTimer1 = 300;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHICKEN_CRY_N); // cluck
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_N); // cluck
             }
         }
 
@@ -928,8 +906,8 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
-    EnNiw* this = (EnNiw*)actor;
+s32 EnNiw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnNiw* this = THIS;
 
     if (limbIndex == 13) {
         rot->y += (s16)this->limbDRot;
@@ -947,16 +925,16 @@ s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* 
         rot->y += (s16)this->limb7Roty;
         rot->z += (s16)this->limb7Rotz;
     }
-    return 0;
+    return false;
 }
 
 void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnNiw* this = (EnNiw*)thisx;
+    EnNiw* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->skelanime.skeleton, this->skelanime.limbDrawTbl, this->skelanime.dListCount,
-                     EnNiw_LimbDraw, NULL, &this->actor);
-    func_808932B0(this, globalCtx);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
+                          EnNiw_OverrideLimbDraw, NULL, &this->actor);
+    EnNiw_DrawFeathers(this, globalCtx);
 }
 
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale) {
@@ -1010,51 +988,35 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
-// non-equiv: not even close
 // feather draw function
-void func_808932B0(EnNiw* this, GlobalContext* globalCtx) {
-    // vanilla wants to load this early (and other values)
-    //  but it needs to be stored in a s register not v/a
-    // EnNiwFeather* feathers = &this->feathers;
-    u8 flag = 0;
+void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    u8 isMaterialApplied = false;
+    EnNiwFeather* feather = &this->feathers[0];
+    s16 i;
 
-    // permuter thinks this might be int which makes sense...
-    // but the end of the loop converts type, int reemoves it
-    // s16 i;
-    s32 i;
-
-    if (globalCtx->state.gfxCtx) {}
-    if (this->feathers) {}
-
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-
+    OPEN_DISPS(gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    for (i = 0; i < ARRAY_COUNT(this->feathers); i++) {
-        if (this->feathers[i].isEnabled == true) {
-            if (flag == 0) {
+    for (i = 0; i < ARRAY_COUNT(this->feathers); i++, feather++) {
+        if (feather->isEnabled == true) {
+            // Apply the feather material if it has not already been applied.
+            if (!isMaterialApplied) {
                 gSPDisplayList(POLY_XLU_DISP++, D_060023B0);
-
-                flag++;
+                isMaterialApplied++;
             }
 
-            SysMatrix_InsertTranslation(this->feathers[i].pos.x, this->feathers[i].pos.y, this->feathers[i].pos.z,
-                                        MTXMODE_NEW);
-            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
-            Matrix_Scale(this->feathers[i].scale, this->feathers[i].scale, 1.0f, MTXMODE_APPLY);
-            SysMatrix_InsertZRotation_f(this->feathers[i].zRot, MTXMODE_APPLY);
-            SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Scale(feather->scale, feather->scale, 1.0f, MTXMODE_APPLY);
+            Matrix_InsertZRotation_f(feather->zRot, MTXMODE_APPLY);
+            Matrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(POLY_XLU_DISP++, D_06002428);
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Niw_0x80891060/func_808932B0.asm")
-#endif

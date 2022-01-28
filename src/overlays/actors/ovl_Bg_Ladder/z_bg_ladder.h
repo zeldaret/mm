@@ -1,7 +1,7 @@
 #ifndef Z_BG_LADDER_H
 #define Z_BG_LADDER_H
 
-#include <global.h>
+#include "global.h"
 
 #define GET_BGLADDER_SIZE(actor) ((actor)->params & 0xFF)
 #define GET_BGLADDER_SWITCHFLAG(actor) (((actor)->params >> 8) & 0xFF)

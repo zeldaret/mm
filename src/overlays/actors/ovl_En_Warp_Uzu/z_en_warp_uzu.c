@@ -81,8 +81,8 @@ void func_80A66208(EnWarpUzu* this, GlobalContext* globalCtx) {
     Vec3f sp24;
 
     this->actor.textId = 0;
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
-    SysMatrix_MultiplyVector3fByState(&D_80A664FC, &sp24);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_MultiplyVector3fByState(&D_80A664FC, &sp24);
     Math_Vec3f_Sum(&this->actor.world.pos, &sp24, &this->actor.focus.pos);
     Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.shape.rot);
     this->actionFunc = func_80A66278;
@@ -95,8 +95,8 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
     s16 phi_v1;
 
     do {
-        player = PLAYER;
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        player = GET_PLAYER(globalCtx);
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_80A66384(this, globalCtx);
         } else {
             phi_a0 = ABS((s16)(Actor_YawBetweenActors(&this->actor, &player->actor) - this->actor.shape.rot.y));
@@ -133,5 +133,5 @@ void EnWarpUzu_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000EC0);
+    Gfx_DrawDListOpa(globalCtx, D_06000EC0);
 }
