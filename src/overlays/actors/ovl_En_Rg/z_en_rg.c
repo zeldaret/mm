@@ -337,8 +337,8 @@ s32 func_80BF4220(EnRg* this, GlobalContext* globalCtx, Actor* arg2) {
     Vec3f sp34;
 
     if (Actor_ActorAIsFacingAndNearActorB(&this->actor, arg2, 400.0f, 0x2000) &&
-        !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &arg2->world.pos, &sp34, &sp44, 1, 0, 0, 1,
-                                 &sp40)) {
+        !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &arg2->world.pos, &sp34, &sp44, true,
+                                 false, false, true, &sp40)) {
         return true;
     }
     return false;
