@@ -3758,7 +3758,7 @@ extern UNK_TYPE D_04028FEC;
 extern AnimationHeader D_04029140;
 extern Gfx D_04029CB0[];
 extern Gfx D_04029CF0[];
-extern UNK_TYPE D_04029D20;
+extern Gfx D_04029D20[];
 extern Gfx D_0402E510[];
 extern AnimationHeader D_0402E65C;
 extern AnimationHeader D_0402F0EC;

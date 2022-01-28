@@ -4567,8 +4567,7 @@ beginseg
     name "ovl_Obj_Kinoko"
     compress
     include "build/src/overlays/actors/ovl_Obj_Kinoko/z_obj_kinoko.o"
-    include "build/data/ovl_Obj_Kinoko/ovl_Obj_Kinoko.data.o"
-    include "build/data/ovl_Obj_Kinoko/ovl_Obj_Kinoko.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Kinoko/ovl_Obj_Kinoko_reloc.o"
 endseg
 
 beginseg
