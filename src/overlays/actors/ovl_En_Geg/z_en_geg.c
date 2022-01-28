@@ -1025,10 +1025,10 @@ void EnGeg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
 
 void func_80BB3BE0(EnGeg* this, GlobalContext* globalCtx) {
     static TexturePtr D_80BB4088[] = {
-        &object_oF1d_map_Tex_010438,
-        &object_oF1d_map_Tex_010C38,
-        &object_oF1d_map_Tex_011038,
-        &object_oF1d_map_Tex_010838,
+        object_oF1d_map_Tex_010438,
+        object_oF1d_map_Tex_010C38,
+        object_oF1d_map_Tex_011038,
+        object_oF1d_map_Tex_010838,
     };
     s32 pad;
 

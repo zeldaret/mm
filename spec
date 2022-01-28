@@ -5180,8 +5180,7 @@ beginseg
     name "ovl_Obj_Kzsaku"
     compress
     include "build/src/overlays/actors/ovl_Obj_Kzsaku/z_obj_kzsaku.o"
-    include "build/data/ovl_Obj_Kzsaku/ovl_Obj_Kzsaku.data.o"
-    include "build/data/ovl_Obj_Kzsaku/ovl_Obj_Kzsaku.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Kzsaku/ovl_Obj_Kzsaku_reloc.o"
 endseg
 
 beginseg
@@ -9204,56 +9203,64 @@ beginseg
     name "scene_texture_01"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_01.o"
+    number 6
+    include "build/assets/misc/scene_texture_01/scene_texture_01.o"
 endseg
 
 beginseg
     name "scene_texture_02"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_02.o"
+    number 6
+    include "build/assets/misc/scene_texture_02/scene_texture_02.o"
 endseg
 
 beginseg
     name "scene_texture_03"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_03.o"
+    number 6
+    include "build/assets/misc/scene_texture_03/scene_texture_03.o"
 endseg
 
 beginseg
     name "scene_texture_04"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_04.o"
+    number 6
+    include "build/assets/misc/scene_texture_04/scene_texture_04.o"
 endseg
 
 beginseg
     name "scene_texture_05"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_05.o"
+    number 6
+    include "build/assets/misc/scene_texture_05/scene_texture_05.o"
 endseg
 
 beginseg
     name "scene_texture_06"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_06.o"
+    number 6
+    include "build/assets/misc/scene_texture_06/scene_texture_06.o"
 endseg
 
 beginseg
     name "scene_texture_07"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_07.o"
+    number 6
+    include "build/assets/misc/scene_texture_07/scene_texture_07.o"
 endseg
 
 beginseg
     name "scene_texture_08"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_08.o"
+    number 6
+    include "build/assets/misc/scene_texture_08/scene_texture_08.o"
 endseg
 
 beginseg

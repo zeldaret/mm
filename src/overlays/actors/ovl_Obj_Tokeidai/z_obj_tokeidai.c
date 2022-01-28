@@ -50,7 +50,7 @@ const ActorInit Obj_Tokeidai_InitVars = {
     ACTOR_OBJ_TOKEIDAI,
     ACTORCAT_PROP,
     FLAGS,
-    OBJECT_OBJECT_UNSET_TOKEIDAI,
+    OBJECT_OBJ_TOKEIDAI,
     sizeof(ObjTokeidai),
     (ActorFunc)ObjTokeidai_Init,
     (ActorFunc)ObjTokeidai_Destroy,
