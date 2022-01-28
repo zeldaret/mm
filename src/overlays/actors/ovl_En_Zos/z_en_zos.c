@@ -7,7 +7,7 @@
 #include "z_en_zos.h"
 #include "objects/object_zos/object_zos.h"
 
-#define FLAGS 0x02000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnZos*)thisx)
 
@@ -88,7 +88,7 @@ void EnZos_Init(Actor* thisx, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             }
 
-            if (gSaveContext.weekEventReg[78] & 0x1) {
+            if (gSaveContext.weekEventReg[78] & 1) {
                 this->actionFunc = func_80BBC24C;
             } else {
                 this->actionFunc = func_80BBC14C;
@@ -349,21 +349,21 @@ void func_80BBB718(EnZos* this, GlobalContext* globalCtx) {
                 func_80BBAE84(this, 5, 0);
                 this->unk_2B6 |= 8;
                 gSaveContext.weekEventReg[40] |= 0x20;
-            } else if (gSaveContext.weekEventReg[39] & 0x8) {
+            } else if (gSaveContext.weekEventReg[39] & 8) {
                 player->actor.textId = 0x1241;
             } else {
                 player->actor.textId = 0x1237;
-                gSaveContext.weekEventReg[39] |= 0x8;
+                gSaveContext.weekEventReg[39] |= 8;
                 func_80BBAE84(this, 4, 0);
                 this->unk_2B6 |= 4;
             }
             this->actionFunc = func_80BBB8AC;
         } else if (sp24 < 0) {
-            if (gSaveContext.weekEventReg[39] & 0x8) {
+            if (gSaveContext.weekEventReg[39] & 8) {
                 func_80151938(globalCtx, 0x1241);
             } else {
                 func_80151938(globalCtx, 0x1237);
-                gSaveContext.weekEventReg[39] |= 0x8;
+                gSaveContext.weekEventReg[39] |= 8;
                 func_80BBAE84(this, 4, 0);
                 this->unk_2B6 |= 4;
             }
@@ -559,7 +559,7 @@ void func_80BBBFBC(EnZos* this, GlobalContext* globalCtx) {
     u16 textId;
 
     if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.weekEventReg[79] & 0x1) {
+        if (gSaveContext.weekEventReg[79] & 1) {
             textId = 0x125B;
         } else if (gSaveContext.weekEventReg[78] & 0x80) {
             textId = 0x125A;
@@ -626,7 +626,7 @@ void func_80BBC22C(EnZos* this, GlobalContext* globalCtx) {
 
 void func_80BBC24C(EnZos* this, GlobalContext* globalCtx) {
     func_80BBB0D4(this, globalCtx);
-    if (gSaveContext.weekEventReg[79] & 0x1) {
+    if (gSaveContext.weekEventReg[79] & 1) {
         this->actionFunc = func_80BBC22C;
         func_80BBAE84(this, 7, 2);
     }
