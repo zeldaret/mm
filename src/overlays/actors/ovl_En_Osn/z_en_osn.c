@@ -28,7 +28,7 @@ const ActorInit En_Osn_InitVars = {
     (ActorFunc)EnOsn_Draw,
 };
 
-ActorAnimationEntry sAnimations[0x19] = {
+static ActorAnimationEntry sAnimations[] = {
     { &object_osn_Anim_0201BC, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_002F74, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &object_osn_Anim_0037C4, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_004320, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &object_osn_Anim_004C8C, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_0094E4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
@@ -189,10 +189,10 @@ void func_80AD0998(EnOsn* this) {
 }
 
 void func_80AD0A24(EnOsn* this) {
-    s16 sp1E = this->skelAnime.curFrame;
-    s16 new_var = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
 
-    if (this->unk_1EC == 0x15 && sp1E == new_var) {
+    if (this->unk_1EC == 0x15 && curFrame == lastFrame) {
         this->unk_1EC = 0x16;
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0x16);
     }
@@ -628,7 +628,7 @@ void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
             return;
         }
         if ((((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted != 0)) && ((temp_v1) < 0x4000)) &&
-            (temp_v1 >= -0x3FFF)) {
+            (temp_v1 > -0x4000)) {
             func_800B863C(&this->actor, globalCtx);
             this->actor.textId = 0xFFFF;
         }
@@ -638,7 +638,7 @@ void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
             func_801518B0(globalCtx, this->unk_1F4, &this->actor);
             this->actionFunc = func_80AD19A0;
         } else if ((((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted != 0)) && (temp_v1 < 0x4000)) &&
-                   (temp_v1 >= -0x3FFF)) {
+                   (temp_v1 > -0x4000)) {
             func_800B863C(&this->actor, globalCtx);
         }
     }
@@ -738,7 +738,7 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
 
         if ((this->unk_1EC == 5) && (globalCtx->sceneNum == 8) && (gSaveContext.sceneSetupIndex == 0xB) &&
             (globalCtx->csCtx.frames == 0x190)) {
-            Actor_PlaySfxAtPos(&this->actor, 0x697D);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_OMVO00);
         }
         if (this->unk_1EC == 0x12) {
             func_80AD0998(this);
@@ -753,7 +753,7 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
             (((Animation_OnFrame(&this->skelAnime, 17.0f))) || (Animation_OnFrame(&this->skelAnime, 27.0f)) ||
              (Animation_OnFrame(&this->skelAnime, 37.0f)) || (Animation_OnFrame(&this->skelAnime, 47.0f)) ||
              (Animation_OnFrame(&this->skelAnime, 57.0f)) || (Animation_OnFrame(&this->skelAnime, 67.0f)))) {
-            Actor_PlaySfxAtPos(&this->actor, 0x29B3);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OMENYA_WALK);
         }
         func_800EDF24(&this->actor, globalCtx, temp_v0);
         return;
@@ -768,7 +768,7 @@ void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx) {
 
     if ((temp_v0 == 6 || temp_v0 == 5) && func_80147624(globalCtx)) {
         if (this->unk_1EA & 0x20) {
-            this->unk_1EA &= 0xFFDF;
+            this->unk_1EA &= ~0x20;
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = func_80AD14C8;
@@ -791,7 +791,7 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->unk_1FC = -1;
+    this->unk_1FC = 255;
     switch (this->actor.params & 3) {
         case 0:
             if (((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC030)) ||
@@ -872,7 +872,7 @@ s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
                            Gfx** gfx) {
     EnOsn* this = (EnOsn*)actor;
 
-    if (this->unk_1F0 && limbIndex == 0xB) {
+    if (this->unk_1F0 && limbIndex == 11) {
         Matrix_InsertXRotation_s(this->unk_1D8.y, 1);
     }
     if ((this->unk_1EC == 9 || this->unk_1EC == 8) && limbIndex == 0xA) {
@@ -889,12 +889,12 @@ void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     if (limbIndex == 0xB) {
         Matrix_MultiplyVector3fByState(&sp30, &actor->focus.pos);
     }
-    if (((this->unk_1EC == 0x11) || (this->unk_1EC == 0x15) || (this->unk_1EC == 0x16)) && (limbIndex == 6)) {
+    if (((this->unk_1EC == 17) || (this->unk_1EC == 21) || (this->unk_1EC == 22)) && (limbIndex == 6)) {
         Matrix_StatePush();
-        Matrix_InsertTranslation(-400.0f, 1100.0f, -200.0f, 1);
-        Matrix_InsertXRotation_s(sp28.x, 1);
-        Matrix_RotateY(sp28.y, 1);
-        Matrix_InsertZRotation_s(sp28.z, 1);
+        Matrix_InsertTranslation(-400.0f, 1100.0f, -200.0f, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(sp28.x, MTXMODE_APPLY);
+        Matrix_RotateY(sp28.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(sp28.z, MTXMODE_APPLY);
 
         gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList((*gfx)++, &object_osn_DL_0192A0);
