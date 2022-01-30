@@ -26,12 +26,12 @@ void func_80AD4FE4(EnTrt2* this, GlobalContext* globalCtx);
 void func_80AD5234(EnTrt2* this, GlobalContext* globalCtx);
 void func_80AD56E8(Actor* thisx, GlobalContext* globalCtx);
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_trt_Anim_00DE68, 1.0f, 0, -1, 2, 0 }, { &object_trt_Anim_00EE98, 1.0f, 0, -1, 2, 0 },
-    { &object_trt_Anim_00FD34, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_0030EC, 1.0f, 0, -1, 2, 0 },
-    { &object_trt_Anim_003D78, 1.0f, 0, -1, 2, 0 }, { &object_trt_Anim_00D52C, 1.0f, 0, -1, 0, 0 },
-    { &object_trt_Anim_000A44, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_001EF4, 1.0f, 0, -1, 0, 0 },
-    { &object_trt_Anim_002224, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_002CB0, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_trt_Anim_00DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, { &object_trt_Anim_00EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, { &object_trt_Anim_0030EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_003D78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, { &object_trt_Anim_00D52C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_000A44, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, { &object_trt_Anim_001EF4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_002224, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, { &object_trt_Anim_002CB0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Trt2_InitVars = {
@@ -103,18 +103,18 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-void func_80AD3380(SkelAnime* skelAnime, ActorAnimationEntryS* animation, s32 arg2) {
+void func_80AD3380(SkelAnime* skelAnime, AnimationInfoS* animation, s32 arg2) {
     f32 phi_f0;
 
     animation += arg2;
 
     if (animation->frameCount < 0) {
-        phi_f0 = Animation_GetLastFrame(animation->animationSeg);
+        phi_f0 = Animation_GetLastFrame(animation->animation);
     } else {
         phi_f0 = animation->frameCount;
     }
-    Animation_Change(skelAnime, animation->animationSeg, animation->playbackSpeed, animation->frame, phi_f0,
-                     animation->mode, animation->transitionRate);
+    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, phi_f0,
+                     animation->mode, animation->morphFrames);
 }
 
 void func_80AD341C(EnTrt2* this, GlobalContext* globalCtx) {
