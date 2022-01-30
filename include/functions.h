@@ -2062,7 +2062,7 @@ void func_80123DA4(Player* player);
 void func_80123E90(GlobalContext* globalCtx, Actor* actor);
 void func_80123F2C(GlobalContext* globalCtx, s32 arg1);
 s32 func_80123F48(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3);
-// void func_80124020(void);
+s32 func_80124020(void);
 u8 Player_GetMask(GlobalContext* globalCtx);
 void Player_RemoveMask(GlobalContext* globalCtx);
 s32 func_8012405C(GlobalContext* globalCtx);

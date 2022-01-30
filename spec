@@ -1336,8 +1336,7 @@ beginseg
     name "ovl_Obj_Oshihiki"
     compress
     include "build/src/overlays/actors/ovl_Obj_Oshihiki/z_obj_oshihiki.o"
-    include "build/data/ovl_Obj_Oshihiki/ovl_Obj_Oshihiki.data.o"
-    include "build/data/ovl_Obj_Oshihiki/ovl_Obj_Oshihiki.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Oshihiki/ovl_Obj_Oshihiki_reloc.o"
 endseg
 
 beginseg
