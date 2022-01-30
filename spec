@@ -3431,8 +3431,7 @@ beginseg
     name "ovl_En_Bigokuta"
     compress
     include "build/src/overlays/actors/ovl_En_Bigokuta/z_en_bigokuta.o"
-    include "build/data/ovl_En_Bigokuta/ovl_En_Bigokuta.data.o"
-    include "build/data/ovl_En_Bigokuta/ovl_En_Bigokuta.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bigokuta/ovl_En_Bigokuta_reloc.o"
 endseg
 
 beginseg
