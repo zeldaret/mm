@@ -2223,8 +2223,7 @@ beginseg
     name "ovl_En_Zo"
     compress
     include "build/src/overlays/actors/ovl_En_Zo/z_en_zo.o"
-    include "build/data/ovl_En_Zo/ovl_En_Zo.data.o"
-    include "build/data/ovl_En_Zo/ovl_En_Zo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Zo/ovl_En_Zo_reloc.o"
 endseg
 
 beginseg
