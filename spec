@@ -4700,8 +4700,7 @@ beginseg
     name "ovl_En_Scopenuts"
     compress
     include "build/src/overlays/actors/ovl_En_Scopenuts/z_en_scopenuts.o"
-    include "build/data/ovl_En_Scopenuts/ovl_En_Scopenuts.data.o"
-    include "build/data/ovl_En_Scopenuts/ovl_En_Scopenuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Scopenuts/ovl_En_Scopenuts_reloc.o"
 endseg
 
 beginseg
