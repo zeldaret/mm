@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ma_yto.h"
+#include "objects/object_ma2/object_ma2.h"
 
 #define FLAGS 0x02100009
 
@@ -108,60 +109,31 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-extern FlexSkeletonHeader D_06015C28;
-
-extern AnimationHeader D_0600A174;
-extern AnimationHeader D_0600AF7C;
-extern AnimationHeader D_06000CC0;
-extern AnimationHeader D_06016720;
-extern AnimationHeader D_06005314;
-extern AnimationHeader D_060093E8;
-extern AnimationHeader D_06007E28;
-extern AnimationHeader D_060070EC;
-extern AnimationHeader D_06003D54;
-extern AnimationHeader D_06001FD0;
-extern AnimationHeader D_060030B4;
-extern AnimationHeader D_06004370;
-
-extern void* D_06014AD8[];
-extern void* D_06014ED8[];
-extern void* D_060152D8[];
-extern void* D_060156D8[];
-
-extern void* D_06011AD8[];
-extern void* D_060122D8[];
-extern void* D_06012AD8[];
-extern void* D_060132D8[];
-extern void* D_06013AD8[];
-extern void* D_060142D8[];
-
-// gCremiaWoodenBox
-extern Gfx D_06005430[];
-
 static struct_80B8E1A8 sAnimationInfo[] = {
-    { &D_0600A174, 1.0f, 0, 0.0f }, { &D_0600A174, 1.0f, 0, -6.0f },  //
-    { &D_0600AF7C, 1.0f, 2, 0.0f }, { &D_0600AF7C, 1.0f, 2, -6.0f },  //
-    { &D_06000CC0, 1.0f, 0, 0.0f }, { &D_06000CC0, 1.0f, 0, -6.0f },  //
-    { &D_06016720, 1.0f, 0, 0.0f }, { &D_06016720, 1.0f, 0, -8.0f },  //
-    { &D_06005314, 1.0f, 0, 0.0f }, { &D_06005314, 1.0f, 0, -8.0f },  //
-    { &D_060093E8, 1.0f, 0, 0.0f }, { &D_060093E8, 1.0f, 0, -10.0f }, //
-    { &D_06007E28, 1.0f, 0, 0.0f }, { &D_06007E28, 1.0f, 0, -8.0f },  //
-    { &D_060070EC, 1.0f, 0, 0.0f }, { &D_060070EC, 1.0f, 0, -8.0f },  //
-    { &D_06003D54, 1.0f, 0, 0.0f }, { &D_06003D54, 1.0f, 0, -8.0f },  //
-    { &D_06001FD0, 1.0f, 0, 0.0f }, { &D_06001FD0, 1.0f, 0, -8.0f },  //
-    { &D_060030B4, 1.0f, 0, 0.0f }, { &D_060030B4, 1.0f, 0, -8.0f },  //
-    { &D_06004370, 1.0f, 0, 0.0f }, { &D_06004370, 1.0f, 0, -8.0f },  //
+    { &object_ma2_Anim_00A174, 1.0f, 0, 0.0f }, { &object_ma2_Anim_00A174, 1.0f, 0, -6.0f },  //
+    { &object_ma2_Anim_00AF7C, 1.0f, 2, 0.0f }, { &object_ma2_Anim_00AF7C, 1.0f, 2, -6.0f },  //
+    { &object_ma2_Anim_000CC0, 1.0f, 0, 0.0f }, { &object_ma2_Anim_000CC0, 1.0f, 0, -6.0f },  //
+    { &object_ma2_Anim_016720, 1.0f, 0, 0.0f }, { &object_ma2_Anim_016720, 1.0f, 0, -8.0f },  //
+    { &object_ma2_Anim_005314, 1.0f, 0, 0.0f }, { &object_ma2_Anim_005314, 1.0f, 0, -8.0f },  //
+    { &object_ma2_Anim_0093E8, 1.0f, 0, 0.0f }, { &object_ma2_Anim_0093E8, 1.0f, 0, -10.0f }, //
+    { &object_ma2_Anim_007E28, 1.0f, 0, 0.0f }, { &object_ma2_Anim_007E28, 1.0f, 0, -8.0f },  //
+    { &object_ma2_Anim_0070EC, 1.0f, 0, 0.0f }, { &object_ma2_Anim_0070EC, 1.0f, 0, -8.0f },  //
+    { &object_ma2_Anim_003D54, 1.0f, 0, 0.0f }, { &object_ma2_Anim_003D54, 1.0f, 0, -8.0f },  //
+    { &object_ma2_Anim_001FD0, 1.0f, 0, 0.0f }, { &object_ma2_Anim_001FD0, 1.0f, 0, -8.0f },  //
+    { &object_ma2_Anim_0030B4, 1.0f, 0, 0.0f }, { &object_ma2_Anim_0030B4, 1.0f, 0, -8.0f },  //
+    { &object_ma2_Anim_004370, 1.0f, 0, 0.0f }, { &object_ma2_Anim_004370, 1.0f, 0, -8.0f },  //
 };
 
-static void* sMouthTextures[] = {
-    D_06014AD8,
-    D_06014ED8,
-    D_060152D8,
-    D_060156D8,
+static TexturePtr sMouthTextures[] = {
+    object_ma2_Tex_014AD8,
+    object_ma2_Tex_014ED8,
+    object_ma2_Tex_0152D8,
+    object_ma2_Tex_0156D8,
 };
 
-static void* sEyesTextures[] = {
-    D_06011AD8, D_060122D8, D_06012AD8, D_060132D8, D_06013AD8, D_060142D8,
+static TexturePtr sEyesTextures[] = {
+    object_ma2_Tex_011AD8, object_ma2_Tex_0122D8, object_ma2_Tex_012AD8,
+    object_ma2_Tex_0132D8, object_ma2_Tex_013AD8, object_ma2_Tex_0142D8,
 };
 
 void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -189,7 +161,7 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06015C28, NULL, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma2_Skel_015C28, NULL, this->jointTable, this->morphTable,
                        MA2_LIMB_MAX);
     EnMaYto_InitAnimation(this, globalCtx);
 
@@ -464,7 +436,7 @@ void EnMaYto_DefaultDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3000, 0x100);
-    if (this->textId == 0x3395 && this->skelAnime.animation == &D_0600AF7C &&
+    if (this->textId == 0x3395 && this->skelAnime.animation == &object_ma2_Anim_00AF7C &&
         Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnMaYto_ChangeAnim(this, 4);
     }
@@ -1081,7 +1053,7 @@ void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, GlobalContext* globalCtx) {
         }
 
         func_800EDF24(&this->actor, globalCtx, csActionIndex);
-        if (D_80B915F0 == 2 && this->skelAnime.animation == &D_06001FD0 &&
+        if (D_80B915F0 == 2 && this->skelAnime.animation == &object_ma2_Anim_001FD0 &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMaYto_ChangeAnim(this, 20);
         }
@@ -1464,12 +1436,14 @@ s32 EnMaYto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         rot->x += sp4.y;
         rot->z += sp4.x;
     } else if (limbIndex == MA2_LIMB_TORSO) {
-        if (this->skelAnime.animation != &D_06007E28 && this->skelAnime.animation != &D_06003D54) {
+        if (this->skelAnime.animation != &object_ma2_Anim_007E28 &&
+            this->skelAnime.animation != &object_ma2_Anim_003D54) {
             sp4 = this->unk_1D8.unk_0E;
 
             rot->x += sp4.y;
-            if (this->skelAnime.animation == &D_0600A174 || this->skelAnime.animation == &D_060070EC ||
-                this->skelAnime.animation == &D_06003D54) {
+            if (this->skelAnime.animation == &object_ma2_Anim_00A174 ||
+                this->skelAnime.animation == &object_ma2_Anim_0070EC ||
+                this->skelAnime.animation == &object_ma2_Anim_003D54) {
                 rot->z += sp4.x;
             }
         }
@@ -1492,7 +1466,7 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (this->type == MA_YTO_TYPE_BARN && (gSaveContext.weekEventReg[0x16] & 1)) { // Alieans defeated
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_06005430);
+        gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBox);
     }
     func_8012C28C(globalCtx->state.gfxCtx);
 

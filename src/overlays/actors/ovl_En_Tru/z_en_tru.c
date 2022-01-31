@@ -69,6 +69,7 @@ const ActorInit En_Tru_InitVars = {
 };
 
 #include "overlays/ovl_En_Tru/ovl_En_Tru.c"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 static Vec3f D_80A8B250 = { 0.0f, 0.02f, 0.0f };
 
@@ -79,8 +80,8 @@ static Color_RGBA8 D_80A8B25C[] = {
 
 static f32 D_80A8B274[] = { 60.0f, 255.0f, 60.0f };
 
-static UNK_TYPE D_80A8B280[] = {
-    &D_0408F7E0, &D_0408F3E0, &D_0408EFE0, &D_0408EBE0, &D_0408E7E0, &D_0408E3E0, &D_0408DFE0, &D_0408DBE0,
+static TexturePtr D_80A8B280[] = {
+    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -1192,7 +1193,7 @@ void EnTru_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
 }
 
-void func_80A886D4(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnTru_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTru* this = THIS;
     s32 pad[3];
     s32 sp2C;
@@ -1235,10 +1236,10 @@ void func_80A886D4(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
 void EnTru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr D_80A8B408[] = {
-        &object_tru_Tex_018FA0,
-        &object_tru_Tex_0197A0,
-        &object_tru_Tex_019FA0,
-        &object_tru_Tex_0197A0,
+        object_tru_Tex_018FA0,
+        object_tru_Tex_0197A0,
+        object_tru_Tex_019FA0,
+        object_tru_Tex_0197A0,
     };
     s32 pad;
     EnTru* this = THIS;
@@ -1250,8 +1251,9 @@ void EnTru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A8B408[this->unk_36E]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80A8B408[this->unk_36E]));
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnTru_OverrideLimbDraw, EnTru_PostLimbDraw, func_80A886D4, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnTru_OverrideLimbDraw, EnTru_PostLimbDraw,
+                                   EnTru_TransformLimbDraw, &this->actor);
     func_80A85788(this->unk_394, globalCtx);
     func_80A85BCC(this->unk_394, globalCtx);
     func_80A85F84(this->unk_394, globalCtx);

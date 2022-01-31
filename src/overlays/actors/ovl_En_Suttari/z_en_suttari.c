@@ -7,6 +7,7 @@
 #include "z_en_suttari.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "objects/object_boj/object_boj.h"
 
 #define FLAGS 0x00000019
 
@@ -36,17 +37,6 @@ void func_80BADE14(EnSuttari* this, GlobalContext* globalCtx);
 void func_80BADE8C(EnSuttari* this, GlobalContext* globalCtx);
 void func_80BADF3C(EnSuttari* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_0600C240;
-extern AnimationHeader D_0600071C;
-extern AnimationHeader D_06010BDC;
-extern AnimationHeader D_0601139C;
-extern AnimationHeader D_06011F84;
-extern AnimationHeader D_06011C38;
-extern AnimationHeader D_060128F4;
-extern AnimationHeader D_06012E84;
-extern Gfx D_0600AF90[];
-extern Gfx D_06013380[];
-
 const ActorInit En_Suttari_InitVars = {
     ACTOR_EN_SUTTARI,
     ACTORCAT_NPC,
@@ -60,11 +50,11 @@ const ActorInit En_Suttari_InitVars = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &D_0600071C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_060128F4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_06011F84, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_06012E84, 1.0f, 0.0f, 0.0f, 0, -6.0f },
-    { &D_0601139C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_0600071C, 2.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_06011F84, 2.0f, 0.0f, 0.0f, 0, 0.0f }, { &D_06011C38, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &D_06010BDC, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_boj_Anim_00071C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_boj_Anim_0128F4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_boj_Anim_011F84, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_boj_Anim_012E84, 1.0f, 0.0f, 0.0f, 0, -6.0f },
+    { &object_boj_Anim_01139C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_boj_Anim_00071C, 2.0f, 0.0f, 0.0f, 0, 0.0f },
+    { &object_boj_Anim_011F84, 2.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_boj_Anim_011C38, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+    { &object_boj_Anim_010BDC, 1.0f, 0.0f, 0.0f, 0, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -908,7 +898,8 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600C240, &D_0600071C, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boj_Skel_00C240, &object_boj_Anim_00071C, this->jointTable,
+                       this->morphTable, 16);
     this->actor.draw = EnSuttari_Draw;
     this->actor.flags |= 1;
     if (globalCtx->sceneNum == SCENE_IKANA) {
@@ -1471,7 +1462,7 @@ s32 EnSuttari_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     EnSuttari* this = THIS;
 
     if (limbIndex == 15) {
-        *dList = D_0600AF90;
+        *dList = object_boj_DL_00AF90;
         if (!(this->flags1 & 4)) {
             Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk3F2, MTXMODE_APPLY);
@@ -1514,7 +1505,7 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
                 } else {
                     func_8012C28C(globalCtx->state.gfxCtx);
                     OPEN_DISPS(globalCtx->state.gfxCtx);
-                    gSPDisplayList(POLY_OPA_DISP++, D_06013380);
+                    gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_013380);
                     CLOSE_DISPS(globalCtx->state.gfxCtx);
                 }
             }
@@ -1525,7 +1516,7 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     }
 }
 
-void EnSuttari_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnSuttari_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnSuttari_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -1540,8 +1531,9 @@ void EnSuttari_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(globalCtx->state.gfxCtx, 255, 255, 255, 0));
         gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 55, 55, 255, 0));
         gDPPipeSync(POLY_OPA_DISP++);
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      EnSuttari_OverrideLimbDraw, EnSuttari_PostLimbDraw, EnSuttari_UnkDraw, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, EnSuttari_OverrideLimbDraw, EnSuttari_PostLimbDraw,
+                                       EnSuttari_TransformLimbDraw, &this->actor);
         if (this->flags1 & 0x80) {
             func_8012C2DC(globalCtx->state.gfxCtx);
             sp5C = this->actor.world.pos;
