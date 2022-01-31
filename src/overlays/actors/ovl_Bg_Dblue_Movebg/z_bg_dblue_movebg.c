@@ -408,7 +408,7 @@ void func_80A2A444(BgDblueMovebg* this, GlobalContext* globalCtx) {
     sp20 = Math_StepToS(&this->unk_18A, 900, this->unk_188);
     temp_v0 = this->unk_18A * this->unk_17E;
     this->dyna.actor.shape.rot.y =
-        (s32)((this->unk_18C + (temp_v0)) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
+        (s32)((this->unk_18C + temp_v0) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
 
     if ((player->stateFlags2 & 0x10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =
