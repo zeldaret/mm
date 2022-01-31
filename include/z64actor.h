@@ -18,7 +18,6 @@ struct Lights;
 struct CollisionPoly;
 
 struct EnBox;
-struct EnDoor;
 
 typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* globalCtx);
 
@@ -1169,6 +1168,8 @@ typedef enum {
 #define ACTOR_FLAG_20000000      (1 << 29)
 // 
 #define ACTOR_FLAG_40000000      (1 << 30)
+// 
+#define ACTOR_FLAG_80000000      (1 << 31)
 
 typedef enum {
     /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
