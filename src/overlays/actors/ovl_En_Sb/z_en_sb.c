@@ -5,6 +5,7 @@
  */
 
 #include "z_en_sb.h"
+#include "objects/object_sb/object_sb.h"
 
 #define FLAGS 0x00000005
 
@@ -103,13 +104,6 @@ static Vec3f sFlamePosOffsets[] = {
     { 0.0f, 0.0f, -5.0f },
 };
 
-extern FlexSkeletonHeader D_06002BF0;
-extern AnimationHeader D_06000194;
-extern AnimationHeader D_0600004C;
-extern AnimationHeader D_06000124;
-extern AnimationHeader D_06002C8C;
-extern AnimationHeader D_060000B4;
-
 void EnSb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnSb* this = THIS;
 
@@ -117,7 +111,8 @@ void EnSb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = 0xA;
     this->actor.colChkInfo.health = 2;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06002BF0, &D_06000194, this->jointTable, this->morphTable, 9);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_sb_Skel_002BF0, &object_sb_Anim_000194, this->jointTable,
+                       this->morphTable, 9);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->isDead = false;
@@ -149,45 +144,49 @@ void EnSb_SpawnBubbles(GlobalContext* globalCtx, EnSb* this) {
 }
 
 void EnSb_SetupWaitClosed(EnSb* this) {
-    Animation_Change(&this->skelAnime, &D_0600004C, 1.0f, 0, Animation_GetLastFrame(&D_0600004C), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, Animation_GetLastFrame(&object_sb_Anim_00004C),
+                     2, 0.0f);
     this->state = SHELLBLADE_WAIT_CLOSED;
     this->actionFunc = EnSb_Idle;
 }
 
 void EnSb_SetupOpen(EnSb* this) {
-    Animation_Change(&this->skelAnime, &D_06000194, 1.0f, 0, Animation_GetLastFrame(&D_06000194), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_sb_Anim_000194, 1.0f, 0, Animation_GetLastFrame(&object_sb_Anim_000194),
+                     2, 0.0f);
     this->state = SHELLBLADE_OPEN;
     this->actionFunc = EnSb_Open;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupWaitOpen(EnSb* this) {
-    Animation_Change(&this->skelAnime, &D_06002C8C, 1.0f, 0, Animation_GetLastFrame(&D_06002C8C), 0, 0.0f);
+    Animation_Change(&this->skelAnime, &object_sb_Anim_002C8C, 1.0f, 0, Animation_GetLastFrame(&object_sb_Anim_002C8C),
+                     0, 0.0f);
     this->state = SHELLBLADE_WAIT_OPEN;
     this->actionFunc = EnSb_WaitOpen;
 }
 
 void EnSb_SetupLunge(EnSb* this) {
-    f32 frameCount = Animation_GetLastFrame(&D_06000124);
+    f32 frameCount = Animation_GetLastFrame(&object_sb_Anim_000124);
     f32 playbackSpeed = this->actor.depthInWater > 0.0f ? 1.0f : 0.0f;
 
-    Animation_Change(&this->skelAnime, &D_06000124, playbackSpeed, 0.0f, frameCount, 2, 0);
+    Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, frameCount, 2, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupBounce(EnSb* this) {
-    Animation_Change(&this->skelAnime, &D_060000B4, 1.0f, 0, Animation_GetLastFrame(&D_060000B4), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_sb_Anim_0000B4, 1.0f, 0, Animation_GetLastFrame(&object_sb_Anim_0000B4),
+                     2, 0.0f);
     this->state = SHELLBLADE_BOUNCE;
     this->actionFunc = EnSb_Bounce;
 }
 
 void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
-    f32 frameCount = Animation_GetLastFrame(&D_0600004C);
+    f32 frameCount = Animation_GetLastFrame(&object_sb_Anim_00004C);
 
     if (this->state != SHELLBLADE_WAIT_CLOSED) {
-        Animation_Change(&this->skelAnime, &D_0600004C, 1.0f, 0, frameCount, 2, 0.0f);
+        Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, frameCount, 2, 0.0f);
     }
     this->state = SHELLBLADE_WAIT_CLOSED;
     if (changeSpeed) {
@@ -217,7 +216,7 @@ void EnSb_Idle(EnSb* this, GlobalContext* globalCtx) {
 void EnSb_Open(EnSb* this, GlobalContext* globalCtx) {
     f32 currentFrame = this->skelAnime.curFrame;
 
-    if (Animation_GetLastFrame(&D_06000194) <= currentFrame) {
+    if (Animation_GetLastFrame(&object_sb_Anim_000194) <= currentFrame) {
         this->vulnerableTimer = 20;
         EnSb_SetupWaitOpen(this);
     } else {
@@ -281,7 +280,7 @@ void EnSb_Lunge(EnSb* this, GlobalContext* globalCtx) {
 void EnSb_Bounce(EnSb* this, GlobalContext* globalCtx) {
     s32 pad;
     f32 currentFrame = currentFrame = this->skelAnime.curFrame;
-    f32 frameCount = frameCount = Animation_GetLastFrame(&D_060000B4);
+    f32 frameCount = frameCount = Animation_GetLastFrame(&object_sb_Anim_0000B4);
 
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     if (currentFrame == frameCount) {

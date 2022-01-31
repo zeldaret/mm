@@ -5,6 +5,12 @@
  */
 
 #include "z_en_sob1.h"
+#include "objects/object_rs/object_rs.h"
+#include "objects/object_zo/object_zo.h"
+#include "objects/object_mastergolon/object_mastergolon.h"
+#include "objects/object_masterzoora/object_masterzoora.h"
+#include "objects/object_oF1d_map/object_oF1d_map.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000019
 
@@ -48,30 +54,10 @@ s32 EnSob1_TakeItemOffShelf(EnSob1* this);
 s32 EnSob1_ReturnItemToShelf(EnSob1* this);
 s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
 
-extern UNK_TYPE D_0401F740;
-extern UNK_TYPE D_0401F8C0;
-extern UNK_TYPE D_0401F7C0;
-extern AnimationHeader D_06009120;
-extern AnimationHeader D_06008268;
-extern FlexSkeletonHeader D_0600D208;
-extern AnimationHeader D_0600078C;
-extern AnimationHeader D_060087BC;
-extern FlexSkeletonHeader D_06011AC8;
-extern AnimationHeader D_060000FC;
-extern FlexSkeletonHeader D_06009220;
-extern Gfx D_06000970[];
-extern UNK_TYPE D_06005458;
-extern TexturePtr D_060050A0;
-extern TexturePtr D_060058A0;
-extern TexturePtr D_060060A0;
-extern TexturePtr D_06010438;
-extern TexturePtr D_06010C38;
-extern TexturePtr D_06011038;
-
 static ActorAnimationEntryS sAnimationsBombShopkeeper[] = {
-    { &D_06009120, 2.0f, 0, -1, 0, 20 },
-    { &D_06008268, 1.0f, 0, -1, 2, 0 },
-    { &D_060087BC, 1.0f, 0, -1, 0, 0 },
+    { &object_rs_Anim_009120, 2.0f, 0, -1, 0, 20 },
+    { &object_rs_Anim_008268, 1.0f, 0, -1, 2, 0 },
+    { &object_rs_Anim_0087BC, 1.0f, 0, -1, 0, 0 },
 };
 
 const ActorInit En_Sob1_InitVars = {
@@ -722,7 +708,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     s32 pad;
     f32 distSq;
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
-    s16 animLastFrame = Animation_GetLastFrame(&D_06009120) / (s16)this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&object_rs_Anim_009120) / (s16)this->skelAnime.playSpeed;
 
     Math_SmoothStepToS(
         &this->actor.world.rot.y,
@@ -743,7 +729,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_SetupIdle(EnSob1* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
 
-    if (Animation_GetLastFrame(&D_06008268) == curFrame) {
+    if (Animation_GetLastFrame(&object_rs_Anim_008268) == curFrame) {
         EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, 2);
         EnSob1_SetupAction(this, EnSob1_Idle);
     }
@@ -1334,23 +1320,27 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D208, NULL, this->jointTable, this->morphTable, 20);
-    gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
-    Animation_Change(&this->skelAnime, &D_0600078C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600078C), 0, 0.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, 20);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
+    Animation_Change(&this->skelAnime, &object_masterzoora_Anim_00078C, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&object_masterzoora_Anim_00078C), 0, 0.0f);
     this->actor.draw = EnSob1_DrawZoraShopkeeper;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
 
 void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011AC8, NULL, this->jointTable, this->morphTable, 18);
-    gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
-    Animation_Change(&this->skelAnime, &D_060000FC, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000FC), 0, 0.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
+                       this->morphTable, 18);
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
+    Animation_Change(&this->skelAnime, &object_mastergolon_Anim_0000FC, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&object_mastergolon_Anim_0000FC), 0, 0.0f);
     this->actor.draw = EnSob1_DrawGoronShopkeeper;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
 
 void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06009220, &D_06009120, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rs_Skel_009220, &object_rs_Anim_009120, this->jointTable,
+                       this->morphTable, 16);
     this->actor.draw = EnSob1_DrawBombShopkeeper;
     this->changeObjectFunc = NULL;
     this->skelAnime.playSpeed = 2.0f;
@@ -1495,8 +1485,8 @@ void EnSob1_DrawCursor(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
-        gDPLoadTextureBlock_4b(OVERLAY_DISP++, &D_0401F740, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
-                               G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0,
+                               G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
         ulx = (x - w) * 4.0f;
         uly = (y - w + -12.0f) * 4.0f;
@@ -1547,7 +1537,7 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F8C0);
+        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F8C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPLoadSync(OVERLAY_DISP++);
@@ -1568,7 +1558,7 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
                                this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
                                this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F7C0);
+        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F7C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPLoadSync(OVERLAY_DISP++);
@@ -1616,7 +1606,7 @@ s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbInde
 void EnSob1_PostLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (limbIndex == 11) {
-        gSPDisplayList(POLY_OPA_DISP++, D_06000970);
+        gSPDisplayList(POLY_OPA_DISP++, object_rs_DL_000970);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1632,7 +1622,7 @@ Gfx* EnSob1_EndDList(GraphicsContext* gfxCtx) {
 }
 
 void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sZoraShopkeeperEyeTextures[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
+    static TexturePtr sZoraShopkeeperEyeTextures[] = { gZoraEyeOpenTex, gZoraEyeHalfTex, gZoraEyeClosedTex };
     EnSob1* this = THIS;
     s32 pad;
     s32 i;
@@ -1655,7 +1645,8 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sGoronShopkeeperEyeTextures[] = { &D_06010438, &D_06010C38, &D_06011038 };
+    static TexturePtr sGoronShopkeeperEyeTextures[] = { object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38,
+                                                        object_oF1d_map_Tex_011038 };
     EnSob1* this = THIS;
     s32 pad;
     s32 i;
@@ -1683,7 +1674,7 @@ void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_06005458));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_rs_Tex_005458));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnSob1_OverrideLimbDrawBombShopkeeper, EnSob1_PostLimbDrawBombShopkeeper, &this->actor);
     for (i = 0; i < ARRAY_COUNT(this->items); i++) {
