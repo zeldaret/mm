@@ -6,6 +6,7 @@
 
 #include "overlays/actors/ovl_Obj_Bean/z_obj_bean.h"
 #include "z_en_mushi2.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -30,8 +31,6 @@ void func_80A6AE14(EnMushi2* this);
 void func_80A6AE7C(EnMushi2* this, GlobalContext* globalCtx);
 void func_80A6B078(EnMushi2* this);
 void func_80A6B0D8(EnMushi2* this, GlobalContext* globalCtx);
-
-extern SkeletonHeader D_040527A0;
 
 const ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
@@ -751,8 +750,9 @@ void EnMushi2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.home.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_80A68F24(this);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_040527A0, &D_0405140C, this->jointTable, this->morphTable, 24);
-    Animation_Change(&this->skelAnime, &D_0405140C, 1.0f, 0.0f, 0.0f, 1, 0.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_0527A0, &gameplay_keep_Anim_05140C,
+                   this->jointTable, this->morphTable, 24);
+    Animation_Change(&this->skelAnime, &gameplay_keep_Anim_05140C, 1.0f, 0.0f, 0.0f, 1, 0.0f);
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     func_80A68808(this);
