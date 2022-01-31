@@ -1320,8 +1320,7 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zo_Skel_00D208, NULL, this->jointTable, this->morphTable,
-                       20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, 20);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
     Animation_Change(&this->skelAnime, &object_masterzoora_Anim_00078C, 1.0f, 0.0f,
                      Animation_GetLastFrame(&object_masterzoora_Anim_00078C), 0, 0.0f);
@@ -1623,8 +1622,7 @@ Gfx* EnSob1_EndDList(GraphicsContext* gfxCtx) {
 }
 
 void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sZoraShopkeeperEyeTextures[] = { object_zo_Tex_0050A0, object_zo_Tex_0058A0,
-                                                       object_zo_Tex_0060A0 };
+    static TexturePtr sZoraShopkeeperEyeTextures[] = { gZoraEyeOpenTex, gZoraEyeHalfTex, gZoraEyeClosedTex };
     EnSob1* this = THIS;
     s32 pad;
     s32 i;
