@@ -290,7 +290,7 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_StatePop();
     }
 
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_248); i++) {
         this->unk_248[i].unk_00 = NULL;
     }
 
@@ -491,7 +491,7 @@ s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
         Matrix_StatePop();
 
-        if (Math3D_Vec3fDistSq(&sp34, &sp28) < SQ(1.7320508075688772f)) {
+        if (Math3D_Vec3fDistSq(&sp34, &sp28) < 3.0f) {
             if (!Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
                 sp24 = true;
             }
