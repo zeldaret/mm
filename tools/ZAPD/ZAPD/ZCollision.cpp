@@ -256,32 +256,28 @@ size_t ZCollisionHeader::GetRawDataSize() const
 
 PolygonEntry::PolygonEntry(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex)
 {
-	const uint8_t* data = rawData.data();
-
-	type = BitConverter::ToUInt16BE(data, rawDataIndex + 0);
-	vtxA = BitConverter::ToUInt16BE(data, rawDataIndex + 2);
-	vtxB = BitConverter::ToUInt16BE(data, rawDataIndex + 4);
-	vtxC = BitConverter::ToUInt16BE(data, rawDataIndex + 6);
-	a = BitConverter::ToUInt16BE(data, rawDataIndex + 8);
-	b = BitConverter::ToUInt16BE(data, rawDataIndex + 10);
-	c = BitConverter::ToUInt16BE(data, rawDataIndex + 12);
-	d = BitConverter::ToUInt16BE(data, rawDataIndex + 14);
+	type = BitConverter::ToUInt16BE(rawData, rawDataIndex + 0);
+	vtxA = BitConverter::ToUInt16BE(rawData, rawDataIndex + 2);
+	vtxB = BitConverter::ToUInt16BE(rawData, rawDataIndex + 4);
+	vtxC = BitConverter::ToUInt16BE(rawData, rawDataIndex + 6);
+	a = BitConverter::ToUInt16BE(rawData, rawDataIndex + 8);
+	b = BitConverter::ToUInt16BE(rawData, rawDataIndex + 10);
+	c = BitConverter::ToUInt16BE(rawData, rawDataIndex + 12);
+	d = BitConverter::ToUInt16BE(rawData, rawDataIndex + 14);
 }
 
 WaterBoxHeader::WaterBoxHeader(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex)
 {
-	const uint8_t* data = rawData.data();
-
-	xMin = BitConverter::ToInt16BE(data, rawDataIndex + 0);
-	ySurface = BitConverter::ToInt16BE(data, rawDataIndex + 2);
-	zMin = BitConverter::ToInt16BE(data, rawDataIndex + 4);
-	xLength = BitConverter::ToInt16BE(data, rawDataIndex + 6);
-	zLength = BitConverter::ToInt16BE(data, rawDataIndex + 8);
+	xMin = BitConverter::ToInt16BE(rawData, rawDataIndex + 0);
+	ySurface = BitConverter::ToInt16BE(rawData, rawDataIndex + 2);
+	zMin = BitConverter::ToInt16BE(rawData, rawDataIndex + 4);
+	xLength = BitConverter::ToInt16BE(rawData, rawDataIndex + 6);
+	zLength = BitConverter::ToInt16BE(rawData, rawDataIndex + 8);
 
 	if (Globals::Instance->game == ZGame::OOT_SW97)
-		properties = BitConverter::ToInt16BE(data, rawDataIndex + 10);
+		properties = BitConverter::ToInt16BE(rawData, rawDataIndex + 10);
 	else
-		properties = BitConverter::ToInt32BE(data, rawDataIndex + 12);
+		properties = BitConverter::ToInt32BE(rawData, rawDataIndex + 12);
 }
 
 std::string WaterBoxHeader::GetBodySourceCode() const
