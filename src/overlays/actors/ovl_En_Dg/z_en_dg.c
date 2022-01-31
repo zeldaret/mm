@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dg.h"
+#include "objects/object_dog/object_dog.h"
 
 #define FLAGS 0x00800019
 
@@ -35,17 +36,6 @@ void func_8098BA64(EnDg* this, GlobalContext* globalCtx);
 void func_8098BB10(EnDg* this, GlobalContext* globalCtx);
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx);
 void func_8098BC54(EnDg* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000998;
-extern AnimationHeader D_06001048;
-extern AnimationHeader D_06001348;
-extern AnimationHeader D_06001560;
-extern AnimationHeader D_060017C0;
-extern AnimationHeader D_06001A84;
-extern AnimationHeader D_06001BD8;
-extern AnimationHeader D_06001FB0;
-extern AnimationHeader D_060021C8;
-extern FlexSkeletonHeader D_060080F0;
 
 const ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
@@ -140,12 +130,14 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_060021C8, 1.0f, 0, -1, 0, 0 },   { &D_060021C8, 1.0f, 0, -1, 0, -6 },  { &D_06001BD8, 1.0f, 0, -1, 0, 0 },
-    { &D_06000998, 1.0f, 0, -1, 0, -6 },  { &D_06001FB0, 1.0f, 0, -1, 2, -6 },  { &D_06001FB0, 1.0f, 0, -1, 4, -6 },
-    { &D_06001048, 1.0f, 0, -1, 2, -6 },  { &D_06001348, 1.0f, 0, -1, 0, -6 },  { &D_06001048, 1.0f, 0, 27, 2, -6 },
-    { &D_06001048, 1.0f, 28, -1, 2, -6 }, { &D_06001048, 1.0f, 54, 54, 2, -6 }, { &D_060021C8, -1.5f, -1, 0, 0, -6 },
-    { &D_06001560, 1.0f, 0, -1, 2, 0 },   { &D_06001A84, 1.2f, 0, -1, 2, 0 },   { &D_060017C0, 1.2f, 0, -1, 2, 0 },
-    { &D_060021C8, 0.5f, 0, -1, 0, 0 },
+    { &object_dog_Anim_0021C8, 1.0f, 0, -1, 0, 0 },   { &object_dog_Anim_0021C8, 1.0f, 0, -1, 0, -6 },
+    { &object_dog_Anim_001BD8, 1.0f, 0, -1, 0, 0 },   { &object_dog_Anim_000998, 1.0f, 0, -1, 0, -6 },
+    { &object_dog_Anim_001FB0, 1.0f, 0, -1, 2, -6 },  { &object_dog_Anim_001FB0, 1.0f, 0, -1, 4, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, -1, 2, -6 },  { &object_dog_Anim_001348, 1.0f, 0, -1, 0, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, 27, 2, -6 },  { &object_dog_Anim_001048, 1.0f, 28, -1, 2, -6 },
+    { &object_dog_Anim_001048, 1.0f, 54, 54, 2, -6 }, { &object_dog_Anim_0021C8, -1.5f, -1, 0, 0, -6 },
+    { &object_dog_Anim_001560, 1.0f, 0, -1, 2, 0 },   { &object_dog_Anim_001A84, 1.2f, 0, -1, 2, 0 },
+    { &object_dog_Anim_0017C0, 1.2f, 0, -1, 2, 0 },   { &object_dog_Anim_0021C8, 0.5f, 0, -1, 0, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -1116,7 +1108,8 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, NULL, this->jointTable, this->morphTable, 13);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, NULL, this->jointTable, this->morphTable,
+                       13);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -1174,11 +1167,11 @@ void EnDg_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_8098BFB8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    return 0;
+s32 EnDg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    return false;
 }
 
-void func_8098BFD4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDg* this = THIS;
     Vec3f sp20 = { 0.0f, 20.0f, 0.0f };
 
@@ -1231,7 +1224,7 @@ void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_8098BFB8, func_8098BFD4, &this->actor);
+                          EnDg_OverrideLimbDraw, EnDg_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

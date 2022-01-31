@@ -16,8 +16,8 @@
         <Texture Name="object_niw_Tex_001880" OutName="tex_001880" Format="rgba16" Width="32" Height="32" Offset="0x1880" />
         <Texture Name="object_niw_Tex_002080" OutName="tex_002080" Format="rgba16" Width="8" Height="16" Offset="0x2080" />
         <Texture Name="object_niw_Tex_002180" OutName="tex_002180" Format="rgba16" Width="16" Height="16" Offset="0x2180" />
-        <DList Name="object_niw_DL_0023B0" Offset="0x23B0" />
-        <DList Name="object_niw_DL_002428" Offset="0x2428" />
+        <DList Name="gNiwFeatherMaterialDL" Offset="0x23B0" />
+        <DList Name="gNiwFeatherDL" Offset="0x2428" />
         <Limb Name="object_niw_Standardlimb_002440" Type="Standard" Offset="0x2440" />
         <Limb Name="object_niw_Standardlimb_00244C" Type="Standard" Offset="0x244C" />
         <Limb Name="object_niw_Standardlimb_002458" Type="Standard" Offset="0x2458" />
