@@ -31,7 +31,7 @@ typedef struct {
     /* 0x149 */ s8 unk_149;
     /* 0x14A */ s16 unk_14A;
     /* 0x14C */ s16 unk_14C;
-} EnArrowBubble; // size = 0x1A8
+} EnArrowBubble; // size = 0x150
 
 typedef struct EnArrow {
     /* 0x000 */ Actor actor;
