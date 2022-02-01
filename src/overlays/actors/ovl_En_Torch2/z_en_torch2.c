@@ -5,6 +5,8 @@
  */
 
 #include "z_en_torch2.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+
 #define FLAGS 0x00000010
 
 #define THIS ((EnTorch2*)thisx)
@@ -43,11 +45,11 @@ static InitChainEntry sInitChain[] = {
 // Shells for each of Link's different forms
 // (Playing elegy as Fierce Deity puts down a human shell)
 static Gfx* sShellDLists[] = {
-    D_0401C430, // Human
-    D_04048DF0, // Zora
-    D_04089070, // Deku
-    D_04057B10, // Goron
-    D_0401C430, // Human
+    gameplay_keep_DL_01C430, // Human
+    gameplay_keep_DL_048DF0, // Zora
+    gameplay_keep_DL_089070, // Deku
+    gameplay_keep_DL_057B10, // Goron
+    gameplay_keep_DL_01C430, // Human
 };
 
 void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx) {

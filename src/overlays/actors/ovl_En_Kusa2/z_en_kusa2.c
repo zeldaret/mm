@@ -5,6 +5,8 @@
  */
 
 #include "z_en_kusa2.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00800010
 
@@ -1308,8 +1310,8 @@ void EnKusa2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A5E6F0(Actor* thisx, GlobalContext* globalCtx) {
     static Gfx* D_80A5EB68[] = {
-        D_040528B0,
-        D_040527F0,
+        gameplay_keep_DL_0528B0,
+        gameplay_keep_DL_0527F0,
     };
     EnKusa2* this = THIS;
     s32 i;
@@ -1341,7 +1343,7 @@ void func_80A5E80C(GlobalContext* globalCtx, s32 arg1) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, arg1);
-    gSPDisplayList(POLY_XLU_DISP++, D_05007938);
+    gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_007938);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1354,7 +1356,7 @@ void EnKusa2_Draw(Actor* thisx, GlobalContext* globalCtx) {
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }
-        Gfx_DrawDListOpa(globalCtx, D_050078A0);
+        Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
     } else if (this->actor.projectedPos.z < 1300.0f) {
         func_80A5E80C(globalCtx, (1300.0f - this->actor.projectedPos.z) * 2.55f);
     }
@@ -1368,14 +1370,14 @@ void func_80A5E9B4(Actor* thisx, GlobalContext* globalCtx) {
     sp18.z = thisx->shape.rot.z + D_80A5EAFC.z;
     Matrix_SetStateRotationAndTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    Gfx_DrawDListOpa(globalCtx, D_050078A0);
+    Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
 }
 
 void func_80A5EA48(Actor* thisx, GlobalContext* globalCtx) {
     EnKusa2* this = THIS;
 
     if (this->unk_1CF == 0xFF) {
-        Gfx_DrawDListOpa(globalCtx, D_050078A0);
+        Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
     } else {
         func_80A5E80C(globalCtx, this->unk_1CF);
     }
