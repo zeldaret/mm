@@ -1,7 +1,7 @@
 /*
  * File: z_en_famos.c
  * Overlay: ovl_En_Famos
- * Description: Death Armos
+ * Description: Death Armos (floating statue enemy in Inverted Stone Tower Temple)
  */
 
 #include "z_en_famos.h"
@@ -158,6 +158,8 @@ static InitChainEntry sInitChain[] = {
 
 static s32 animatedMaterialsVirtualized = false;
 
+#define GET_FAMOS_PATH(thisx) (thisx->params)
+
 void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFamos* this = THIS;
     Path* path;
@@ -165,7 +167,7 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     int i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (this->actor.params != 0xFF) {
+    if (GET_FAMOS_PATH(thisx) != 0xFF) {
         path = &globalCtx->setupPathList[this->actor.params];
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
         this->pathNodeCount = path->count;
@@ -181,6 +183,7 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
     Collider_InitAndSetJntSph(globalCtx, &this->collider3, &this->actor, &sJntSphInit, &this->collider3Elements);
 
+    // init animated materials
     if (!animatedMaterialsVirtualized) {
         for (i = 0; i < ARRAY_COUNT(D_808AE6B0); i++) {
             D_808AE6B0[i] = Lib_SegmentedToVirtual(D_808AE6B0[i]);
@@ -188,7 +191,7 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
         animatedMaterialsVirtualized = sTrue;
     }
 
-    this->actor.colChkInfo.mass = 0xFA; // not heavy, heavy is 0xFE
+    this->actor.colChkInfo.mass = 0xFA; // not heavy (heavy = 0xFE)
     this->unk1EC = this->actor.world.pos.y;
     this->unk1F0 = (this->actor.shape.rot.x <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
     this->actor.shape.rot.x = 0;
@@ -216,55 +219,56 @@ void func_808ACB58(EnFamos* this) {
     EnFamosParticle* particlePtr;
     f32 randFloat;
     s16 randOffset;
-    s16 randSmall;
+    s16 randVelDirection;
     s32 i;
 
     this->unk1DE = 0x28;
     particlePtr = &this->particles[0];
-    for (i = 0; i < 20; ++i, ++particlePtr) {
-        randSmall = Rand_Next() >> 0x10;
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particlePtr++) {
+        randVelDirection = Rand_Next() >> 0x10;
         randOffset = Rand_S16Offset(0x1800, 0x2800);
         randFloat = Rand_ZeroFloat(5.0f) + 5.0f;
-        particlePtr->unkC.x = randFloat * Math_CosS(randOffset) * Math_SinS(randSmall);
-        particlePtr->unkC.y = Math_SinS(randOffset) * randFloat + 3.0f;
-        particlePtr->unkC.z = randFloat * Math_CosS(randOffset) * Math_CosS(randSmall);
-        particlePtr->unk18.x = Rand_Next() >> 0x10;
-        particlePtr->unk18.y = Rand_Next() >> 0x10;
-        particlePtr->unk18.z = Rand_Next() >> 0x10;
-        particlePtr->unk0.x = (Math_SinS(randSmall) * 20.0f) + this->actor.world.pos.x;
-        particlePtr->unk0.y = this->actor.floorHeight;
-        particlePtr->unk0.z = (Math_CosS(randSmall) * 20.0f) + this->actor.world.pos.z;
-        particlePtr->unk20 = Rand_ZeroFloat(0.0015f) + (1 / 500.0f);
+        particlePtr->velocity.x = randFloat * Math_CosS(randOffset) * Math_SinS(randVelDirection);
+        particlePtr->velocity.y = Math_SinS(randOffset) * randFloat + 3.0f;
+        particlePtr->velocity.z = randFloat * Math_CosS(randOffset) * Math_CosS(randVelDirection);
+        particlePtr->rotation.x = Rand_Next() >> 0x10;
+        particlePtr->rotation.y = Rand_Next() >> 0x10;
+        particlePtr->rotation.z = Rand_Next() >> 0x10;
+        particlePtr->pos.x = (Math_SinS(randVelDirection) * 20.0f) + this->actor.world.pos.x;
+        particlePtr->pos.y = this->actor.floorHeight;
+        particlePtr->pos.z = (Math_CosS(randVelDirection) * 20.0f) + this->actor.world.pos.z;
+        particlePtr->scale = Rand_ZeroFloat(0.0015f) + (1 / 500.0f);
     }
 }
 
 void func_808ACD2C(EnFamos* this) {
     f32 randFloat;
     s16 randSmaller;
-    s16 randSmall;
+    s16 randVelDirection;
     EnFamosParticle* particlePtr;
     s32 i;
 
     this->unk1DE = 0x28;
     particlePtr = &this->particles[0];
-    for (i = 0; i < 20; ++i, ++particlePtr) {
-        randSmall = Rand_Next() >> 0x10;
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particlePtr++) {
+        randVelDirection = Rand_Next() >> 0x10;
         randSmaller = (u32)Rand_Next() >> 0x12;
         randFloat = Rand_ZeroFloat(6.0f) + 7.0f;
-        particlePtr->unkC.x = randFloat * Math_CosS(randSmaller) * Math_SinS(randSmall);
-        particlePtr->unkC.y = Math_SinS(randSmaller) * randFloat + 4.5f;
-        particlePtr->unkC.z = randFloat * Math_CosS(randSmaller) * Math_CosS(randSmall);
-        particlePtr->unk18.x = Rand_Next() >> 0x10;
-        particlePtr->unk18.y = Rand_Next() >> 0x10;
-        particlePtr->unk18.z = Rand_Next() >> 0x10;
-        particlePtr->unk0.x = Math_SinS(randSmall) * 20.0f + this->actor.world.pos.x;
-        particlePtr->unk0.y = randPlusMinusPoint5Scaled(60.0f) + (this->actor.world.pos.y + 40.0f);
-        particlePtr->unk0.z = Math_CosS(randSmall) * 20.0f + this->actor.world.pos.z;
+        particlePtr->velocity.x = randFloat * Math_CosS(randSmaller) * Math_SinS(randVelDirection);
+        particlePtr->velocity.y = Math_SinS(randSmaller) * randFloat + 4.5f;
+        particlePtr->velocity.z = randFloat * Math_CosS(randSmaller) * Math_CosS(randVelDirection);
+        particlePtr->rotation.x = Rand_Next() >> 0x10;
+        particlePtr->rotation.y = Rand_Next() >> 0x10;
+        particlePtr->rotation.z = Rand_Next() >> 0x10;
+        particlePtr->pos.x = Math_SinS(randVelDirection) * 20.0f + this->actor.world.pos.x;
+        particlePtr->pos.y = randPlusMinusPoint5Scaled(60.0f) + (this->actor.world.pos.y + 40.0f);
+        particlePtr->pos.z = Math_CosS(randVelDirection) * 20.0f + this->actor.world.pos.z;
         // not quite 1/400 or 0.0025, 0xB -> 0xA
-        particlePtr->unk20 = Rand_ZeroFloat(0.002f) + 0.0025000002f;
+        particlePtr->scale = Rand_ZeroFloat(0.002f) + 0.0025000002f;
     }
 }
 
+// is player seen
 s32 func_808ACF1C(EnFamos* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE &&
         Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->unk200) < this->unk1F0 &&
@@ -470,6 +474,7 @@ void func_808AD68C(EnFamos* this, GlobalContext* globalCtx) {
     } else if (Player_GetMask(globalCtx) == PLAYER_MASK_STONE ||
                this->unk1F0 < Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->unk200) ||
                Actor_IsFacingPlayer(&this->actor, 0x6000) == 0) {
+        // drop agro?
         func_808ADC40(this);
     }
 }
@@ -583,6 +588,7 @@ void func_808ADC40(EnFamos* this) {
     this->actor.speedXZ = 0.0f;
 }
 
+// drop agro?
 void func_808ADC64(EnFamos* this, GlobalContext* globalCtx) {
 
     func_808ACF98(&this->actor);
@@ -640,13 +646,13 @@ void func_808ADE74(EnFamos* this, GlobalContext* globalCtx) {
     this->actor.world.pos.z = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.z;
     if (this->unk1DC == 1) {
         EnBom* blast = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                           this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 0);
+                                           this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 0x0000);
         if (blast != NULL) {
             blast->timer = 0; // instant explosion
         }
         this->unk1DC--;
     } else if (this->unk1DC == 0) {
-        Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0xD0);
+        Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0xD0); // random item from table 0xD
         func_808ADFA4(this);
     } else {
         this->unk1DC--;
@@ -674,16 +680,17 @@ void func_808ADFF0(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 void func_808AE030(EnFamos* this) {
-    EnFamosParticle* particle;
+    EnFamosParticle* particlePtr;
     s32 i;
 
-    particle = &this->particles[0];
-    for (i = 0; i < 20; ++i, ++particle) {
-        particle->unkC.y -= 1.0f;
-        Math_Vec3f_Sum(&particle->unk0, &particle->unkC, &particle->unk0);
-        particle->unk18.x += (s16)(((u32)Rand_Next() >> 0x17) + 0x700);
-        particle->unk18.y += (s16)(((u32)Rand_Next() >> 0x17) + 0x900);
-        particle->unk18.z += (s16)(((u32)Rand_Next() >> 0x17) + 0xB00);
+    particlePtr = &this->particles[0];
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particlePtr++) {
+        particlePtr->velocity.y -= 1.0f;
+        Math_Vec3f_Sum(&particlePtr->pos, &particlePtr->velocity, &particlePtr->pos);
+        // all casts seem required
+        particlePtr->rotation.x += (s16)(((u32)Rand_Next() >> 0x17) + 0x700);
+        particlePtr->rotation.y += (s16)(((u32)Rand_Next() >> 0x17) + 0x900);
+        particlePtr->rotation.z += (s16)(((u32)Rand_Next() >> 0x17) + 0xB00);
     }
 }
 
@@ -691,7 +698,7 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFamos* this = THIS;
     f32 oldHeight;
-    s32 hoverClkOld;
+    s32 hoverClkOld; // where does it change?
 
     if (this->unk1DE <= 0 || (this->unk1DE--, func_808AE030(this), (this->actionFunc != func_808ADFF0))) {
         hoverClkOld = this->hoverClk;
@@ -765,12 +772,13 @@ void func_808AE3A8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
+// draw particles? when/what are these? the dirt it sends flying?
 void func_808AE3FC(EnFamos* this, GlobalContext* globalCtx) {
     s32 i;
 
     if (this->unk1DE > 0) {
         Gfx* dispOpa;
-        EnFamosParticle* particle;
+        EnFamosParticle* particlePtr;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
         dispOpa = POLY_OPA_DISP;
@@ -781,18 +789,18 @@ void func_808AE3FC(EnFamos* this, GlobalContext* globalCtx) {
 
         gDPSetEnvColor(&dispOpa[2], 255, 255, 255, 255);
 
-        particle = &this->particles[0];
-        for (i = 0; i < 20; i++) {
-            Matrix_SetStateRotationAndTranslation(particle->unk0.x, particle->unk0.y, particle->unk0.z,
-                                                  &particle->unk18);
-            Matrix_Scale(particle->unk20, particle->unk20, particle->unk20, 1);
+        particlePtr = &this->particles[0];
+        for (i = 0; i < ARRAY_COUNT(this->particles); i++, particlePtr++) {
+            
+            Matrix_SetStateRotationAndTranslation(particlePtr->pos.x, particlePtr->pos.y, particlePtr->pos.z,
+                                                  &particlePtr->rotation);
+            Matrix_Scale(particlePtr->scale, particlePtr->scale, particlePtr->scale, 1);
 
             gSPMatrix(&dispOpa[3 + (i * 2)], Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(&dispOpa[4 + (i * 2)], &gameplay_keep_DL_06AB30);
 
-            particle++;
         }
 
         POLY_OPA_DISP = &dispOpa[3 + (20 * 2)];

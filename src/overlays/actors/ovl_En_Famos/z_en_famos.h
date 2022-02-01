@@ -7,19 +7,17 @@ struct EnFamos;
 
 typedef void (*EnFamosActionFunc)(struct EnFamos*, GlobalContext*);
 
-
 typedef struct EnFamosParticle {
-    /* 00 */ Vec3f unk0;
-    /* 0C */ Vec3f unkC;
-    /* 18 */ Vec3s unk18;
-    /* 20 */ f32   unk20;
+    /* 00 */ Vec3f pos;
+    /* 0C */ Vec3f velocity;
+    /* 18 */ Vec3s rotation;
+    /* 20 */ f32   scale;
 } EnFamosParticle; // size = 0x24
 
 #define FAMOS_LIMB_COUNT 0x6
 
 typedef struct EnFamos {
     /* 0x000 */ Actor actor;
-    ///* 0x144 */ char unk_144[0x4D0];
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s limbDrawTbl[FAMOS_LIMB_COUNT];
     /* 0x1AC */ Vec3s transitionDrawTbl[FAMOS_LIMB_COUNT];
@@ -44,7 +42,7 @@ typedef struct EnFamos {
     /* 0x200 */ Vec3f unk200; // current pos? why not use actor.pos
     /* 0x20C */ ColliderCylinder collider1;
     /* 0x258 */ ColliderCylinder collider2;
-    /* 0x2A4 */ ColliderJntSph collider3; // collider for his chest emblem
+    /* 0x2A4 */ ColliderJntSph   collider3; // collider for his chest emblem
     /* 0x2C4 */ ColliderJntSphElement collider3Elements;
     /* 0x340 */ char unk340[0x40];
     /* 0x344 */ EnFamosParticle particles[0x14];
