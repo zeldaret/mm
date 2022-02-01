@@ -873,8 +873,11 @@
         <Texture Name="gameplay_keep_Tex_01F740" OutName="tex_01F740" Format="ia4" Width="16" Height="16" Offset="0x1F740" />
         <Texture Name="gameplay_keep_Tex_01F7C0" OutName="tex_01F7C0" Format="ia8" Width="16" Height="16" Offset="0x1F7C0" />
         <Texture Name="gameplay_keep_Tex_01F8C0" OutName="tex_01F8C0" Format="ia8" Width="16" Height="24" Offset="0x1F8C0" />
-        <DList Name="gameplay_keep_DL_01FA40" Offset="0x1FA40" />
-        <Texture Name="gameplay_keep_Tex_01FBE0" OutName="tex_01FBE0" Format="rgba16" Width="32" Height="32" Offset="0x1FBE0" />
+
+        <!-- Boulder Fragments -->
+        <DList Name="gBoulderFragmentsDL" Offset="0x1FA40" />
+        <Texture Name="gBoulderFragmentsTex" OutName="boulder_fragments" Format="rgba16" Width="32" Height="32" Offset="0x1FBE0" />
+
         <Animation Name="gameplay_keep_Anim_0204B4" Offset="0x204B4" />
         <Animation Name="gameplay_keep_Anim_0205A0" Offset="0x205A0" />
         <Animation Name="gameplay_keep_Anim_020658" Offset="0x20658" />
