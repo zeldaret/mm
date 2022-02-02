@@ -119,7 +119,7 @@ void EnDemoheishi_SetupIdle(EnDemoheishi* this) {
     EnDemoheishi_ChangeAnimation(this, DEMOHEISHI_ANIMATION_STAND_HAND_ON_HIP);
     this->textIdIndex = 0;
     this->actor.textId = sTextIds[this->textIdIndex];
-    this->unk270 = 0;
+    this->isTalking = false;
     this->actionFunc = EnDemoheishi_Idle;
 }
 
@@ -139,7 +139,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, GlobalContext* globalCtx) {
 }
 
 void EnDemoheishi_SetupTalk(EnDemoheishi* this) {
-    this->unk270 = 1;
+    this->isTalking = true;
     this->actionFunc = EnDemoheishi_Talk;
 }
 
