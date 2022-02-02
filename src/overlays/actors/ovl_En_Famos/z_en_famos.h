@@ -19,11 +19,11 @@ typedef struct EnFamosParticle {
 typedef struct EnFamos {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s limbDrawTbl[FAMOS_LIMB_COUNT];
-    /* 0x1AC */ Vec3s transitionDrawTbl[FAMOS_LIMB_COUNT];
+    /* 0x188 */ Vec3s jointTable[FAMOS_LIMB_COUNT];
+    /* 0x1AC */ Vec3s morphTable[FAMOS_LIMB_COUNT];
     /* 0x1D0 */ EnFamosActionFunc actionFunc;
     /* 0x1D4 */ u8 animatedMaterialIndex;
-    /* 0x1D5 */ u8 unk1D5;
+    /* 0x1D5 */ u8 stableRotation; // starts 1, set to zero when flipped, then updated by rotation to 1 if upright or regular, zero is transitioning?
     /* 0x1D6 */ u8 pathNodeCount;
     /* 0x1D7 */ u8 currentPathNode;
     /* 0x1D8 */ u8 unk1D8;
@@ -31,7 +31,7 @@ typedef struct EnFamos {
     /* 0x1DA */ s16 hoverClk; // 30->0, repeat, for height adjustment
     /* 0x1DC */ s16 unk1DC;
     /* 0x1DE */ s16 unk1DE;
-    /* 0x1E0 */ s16 unk1E0; // timer
+    /* 0x1E0 */ s16 flippedTimer;
     /* 0x1E2 */ s16 unk1E2;
     /* 0x1E4 */ s16 unk1E4;
     /* 0x1E6 */ s16 unk1E6;
@@ -42,7 +42,7 @@ typedef struct EnFamos {
     /* 0x200 */ Vec3f unk200; // current pos? why not use actor.pos
     /* 0x20C */ ColliderCylinder collider1;
     /* 0x258 */ ColliderCylinder collider2;
-    /* 0x2A4 */ ColliderJntSph   collider3; // collider for his chest emblem
+    /* 0x2A4 */ ColliderJntSph   emblemCollider;
     /* 0x2C4 */ ColliderJntSphElement collider3Elements;
     /* 0x340 */ char unk340[0x40];
     /* 0x344 */ EnFamosParticle particles[0x14];

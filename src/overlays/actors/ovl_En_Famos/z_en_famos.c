@@ -20,9 +20,9 @@ void EnFamos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_808ACB58(EnFamos* this);
 void func_808ACD2C(EnFamos* this);
-void func_808AD05C(EnFamos* this);
-void func_808AD170(EnFamos* this);
-void func_808AD1F0(EnFamos* this);
+void EnFamos_UpdateFlipStatus(EnFamos* this);
+void EnFamos_SetupStillIdle(EnFamos* this);
+void EnFamos_SetupPathingIdle(EnFamos* this);
 void func_808AD31C(EnFamos* this);
 void func_808AD3E8(EnFamos* this);
 void func_808AD54C(EnFamos* this);
@@ -31,14 +31,14 @@ void func_808AD7EC(EnFamos* this);
 void func_808AD888(EnFamos* this);
 void func_808ADA74(EnFamos* this);
 void func_808ADB4C(EnFamos* this);
-void func_808ADC40(EnFamos* this);
+void EnFamos_SetupDropAgro(EnFamos* this);
 void func_808ADD20(EnFamos* this);
 void func_808ADE00(EnFamos* this);
 void func_808ADFA4(EnFamos* this);
 
 void func_808ADFF0(EnFamos* this, GlobalContext* globalCtx);
-void func_808AD18C(EnFamos* this, GlobalContext* globalCtx);
-void func_808AD294(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_StillIdle(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_PathingIdle(EnFamos* this, GlobalContext* globalCtx);
 void func_808AD378(EnFamos* this, GlobalContext* globalCtx);
 void func_808AD42C(EnFamos* this, GlobalContext* globalCtx);
 void func_808AD5B0(EnFamos* this, GlobalContext* globalCtx);
@@ -47,12 +47,12 @@ void func_808AD840(EnFamos* this, GlobalContext* globalCtx);
 void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx);
 void func_808ADAE8(EnFamos* this, GlobalContext* globalCtx);
 void func_808ADB70(EnFamos* this, GlobalContext* globalCtx);
-void func_808ADC64(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_DropAgro(EnFamos* this, GlobalContext* globalCtx);
 void func_808ADDA8(EnFamos* this, GlobalContext* globalCtx);
 void func_808ADE74(EnFamos* this, GlobalContext* globalCtx);
 void func_808ADFF0(EnFamos* this, GlobalContext* globalCtx);
 
-s32 func_808ACF1C(EnFamos* this, GlobalContext* globalCtx);
+s32 EnFamos_IsPlayerSeen(EnFamos* this, GlobalContext* globalCtx);
 
 s32 func_808AE304(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
 void func_808AE3A8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
@@ -149,7 +149,10 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-static AnimatedMaterial* D_808AE6B0[] = { gFamosAnimTex1, gFamosAnimTex2 };
+// normal is greenish, flipped its orange/yellowish
+#define FAMOS_ANIMATED_MATERIAL_NORMAL 0
+#define FAMOS_ANIMATED_MATERIAL_FLIPPED 1
+static AnimatedMaterial* sAnimatedMaterials[] = { gFamosNormalGlowingEmblemAnimTex , gFamosFlippedGlowingEmblemAnimTex };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 15, ICHAIN_CONTINUE),
@@ -160,6 +163,7 @@ static s32 animatedMaterialsVirtualized = false;
 
 #define GET_FAMOS_PATH(thisx) (thisx->params)
 
+// in savestate KZ its 8040DAE0
 void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFamos* this = THIS;
     Path* path;
@@ -177,16 +181,16 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawSquare, 30.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gFamosSkeleton, &gFamosLowerSNSAnim, this->limbDrawTbl,
-                   this->transitionDrawTbl, 6);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gFamosSkeleton, &gFamosLowerSNSAnim, this->jointTable,
+                   this->morphTable, 6);
     Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
-    Collider_InitAndSetJntSph(globalCtx, &this->collider3, &this->actor, &sJntSphInit, &this->collider3Elements);
+    Collider_InitAndSetJntSph(globalCtx, &this->emblemCollider, &this->actor, &sJntSphInit, &this->collider3Elements);
 
     // init animated materials
     if (!animatedMaterialsVirtualized) {
-        for (i = 0; i < ARRAY_COUNT(D_808AE6B0); i++) {
-            D_808AE6B0[i] = Lib_SegmentedToVirtual(D_808AE6B0[i]);
+        for (i = 0; i < ARRAY_COUNT(sAnimatedMaterials); i++) {
+            sAnimatedMaterials[i] = Lib_SegmentedToVirtual(sAnimatedMaterials[i]);
         }
         animatedMaterialsVirtualized = sTrue;
     }
@@ -196,12 +200,12 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk1F0 = (this->actor.shape.rot.x <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
-    this->unk1D5 = 1;
+    this->stableRotation = true;
     this->unk1D8 = 1;
     if (this->pathPoints != NULL) {
-        func_808AD1F0(this);
+        EnFamos_SetupPathingIdle(this);
     } else {
-        func_808AD170(this);
+        EnFamos_SetupStillIdle(this);
     }
 }
 
@@ -210,7 +214,7 @@ void EnFamos_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_DestroyCylinder(globalCtx, &this->collider1);
     Collider_DestroyCylinder(globalCtx, &this->collider2);
-    Collider_DestroyJntSph(globalCtx, &this->collider3);
+    Collider_DestroyJntSph(globalCtx, &this->emblemCollider);
 }
 
 // debris?
@@ -268,8 +272,7 @@ void func_808ACD2C(EnFamos* this) {
     }
 }
 
-// is player seen
-s32 func_808ACF1C(EnFamos* this, GlobalContext* globalCtx) {
+s32 EnFamos_IsPlayerSeen(EnFamos* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE &&
         Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->unk200) < this->unk1F0 &&
         Actor_IsFacingPlayer(&this->actor, 0x5000)) {
@@ -279,14 +282,16 @@ s32 func_808ACF1C(EnFamos* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808ACF98(EnFamos* this) {
+// KZ: 8040DF30
+void EnFamos_UpdateBobbingHeight(EnFamos* this) {
     if (this->hoverClk == 0) {
-        this->hoverClk = 30;
+        this->hoverClk = 30; // half way down decending
     }
 
     this->hoverClk--;
     this->actor.world.pos.y = (Math_SinS(this->hoverClk * 2184) * 10.0f) + this->unk1EC;
 
+    // is famos upside down
     if (ABS_ALT(this->unk1E6) > 0x4000) {
         func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
     } else {
@@ -294,60 +299,63 @@ void func_808ACF98(EnFamos* this) {
     }
 }
 
-void func_808AD05C(EnFamos* this) {
-    u8 scalled1E6;
+void EnFamos_UpdateFlipStatus(EnFamos* this) {
+    u8 famosRotTest;
 
-    if (this->collider3.base.acFlags & AC_HIT) {
-        this->collider3.base.acFlags &= ~AC_HIT;
-        if (this->unk1D5 == 1) {
-            if (this->animatedMaterialIndex != 0) {
-                this->animatedMaterialIndex = 0;
+    if (this->emblemCollider.base.acFlags & AC_HIT) { // light arrow collision, flip 
+        this->emblemCollider.base.acFlags &= ~AC_HIT;
+        if (this->stableRotation == true) {
+            if (this->animatedMaterialIndex != FAMOS_ANIMATED_MATERIAL_NORMAL) {
+                this->animatedMaterialIndex = FAMOS_ANIMATED_MATERIAL_NORMAL;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FAMOS_REVERSE2);
             } else {
-                this->animatedMaterialIndex = 1;
-                this->unk1E0 = 100;
+                this->animatedMaterialIndex = FAMOS_ANIMATED_MATERIAL_FLIPPED;
+                this->flippedTimer = 100;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FAMOS_REVERSE1);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
             }
-            this->unk1D5 = 0;
+            this->stableRotation = false;
         }
-    } else {
-        if (this->unk1E0 > 0) {
-            if (--this->unk1E0 == 0) {
-                if (this->animatedMaterialIndex != 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FAMOS_REVERSE2);
-                }
-                this->animatedMaterialIndex = 0;
-                this->unk1D5 = 0;
+    } else if (this->flippedTimer > 0) { // currently flipped, timer remaining
+        if (--this->flippedTimer == 0) { // timer finished
+            if (this->animatedMaterialIndex != FAMOS_ANIMATED_MATERIAL_NORMAL) {
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FAMOS_REVERSE2);
             }
+            this->animatedMaterialIndex = FAMOS_ANIMATED_MATERIAL_NORMAL;
+            this->stableRotation = false;
         }
     }
-    if (this->unk1D5 == 0) {
-        if (this->animatedMaterialIndex != 0) {
-            scalled1E6 = Math_ScaledStepToS(&this->unk1E6, -0x8000, 0x1000);
+
+    if (this->stableRotation == false) {
+        if (this->animatedMaterialIndex != FAMOS_ANIMATED_MATERIAL_NORMAL) {
+            famosRotTest = Math_ScaledStepToS(&this->unk1E6, -0x8000, 0x1000);
         } else {
-            scalled1E6 = Math_ScaledStepToS(&this->unk1E6, 0, 0x1000);
+            famosRotTest = Math_ScaledStepToS(&this->unk1E6, 0, 0x1000);
         }
-        this->unk1D5 = scalled1E6;
+        this->stableRotation = famosRotTest; // sets true when flipping is done
     }
 }
 
-void func_808AD170(EnFamos* this) {
-    this->actionFunc = func_808AD18C;
+/**
+ * If Famos path is 0xFF, famos floats still in the air without a path to follow
+ * ( unused )
+ */
+void EnFamos_SetupStillIdle(EnFamos* this) {
+    this->actionFunc = EnFamos_StillIdle;
     this->actor.speedXZ = 0.0f;
 }
 
-void func_808AD18C(EnFamos* this, GlobalContext* globalCtx) {
-    func_808ACF98(this);
+void EnFamos_StillIdle(EnFamos* this, GlobalContext* globalCtx) {
+    EnFamos_UpdateBobbingHeight(this);
     if (this->unk1D8 != 0) {
         Math_Vec3f_Copy(&this->unk200, &this->actor.world.pos);
     }
-    if (func_808ACF1C(this, globalCtx)) {
+    if (EnFamos_IsPlayerSeen(this, globalCtx)) {
         func_808AD54C(this);
     }
 }
 
-void func_808AD1F0(EnFamos* this) {
+void EnFamos_SetupPathingIdle(EnFamos* this) {
     if (this->unk1D8 != 0) {
         if (++this->currentPathNode == this->pathNodeCount) {
             this->currentPathNode = 0;
@@ -358,22 +366,24 @@ void func_808AD1F0(EnFamos* this) {
 
     Math_Vec3s_ToVec3f(&this->targetDest, &this->pathPoints[this->currentPathNode]);
     this->unk1E4 = Actor_YawToPoint(&this->actor, &this->targetDest);
-    this->actionFunc = func_808AD294;
+    this->actionFunc = EnFamos_PathingIdle;
     this->actor.speedXZ = 0.0f;
 }
 
-void func_808AD294(EnFamos* this, GlobalContext* globalCtx) {
-    func_808ACF98(this);
+void EnFamos_PathingIdle(EnFamos* this, GlobalContext* globalCtx) {
+    EnFamos_UpdateBobbingHeight(this);
     if (this->unk1D8 != 0) {
         Math_Vec3f_Copy(&this->unk200, &this->actor.world.pos);
     }
-    if (func_808ACF1C(this, globalCtx)) {
+    if (EnFamos_IsPlayerSeen(this, globalCtx)) {
         func_808AD54C(this);
     } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk1E4, 0x200)) {
         func_808AD3E8(this);
     }
 }
 
+// kz: 8040E2B0
+// does not go off during attack?
 void func_808AD31C(EnFamos* this) {
     this->unk1E4 = Actor_YawToPoint(&this->actor, &this->unk200);
     Math_Vec3f_Copy(&this->targetDest, &this->unk200);
@@ -382,8 +392,8 @@ void func_808AD31C(EnFamos* this) {
 }
 
 void func_808AD378(EnFamos* this, GlobalContext* globalCtx) {
-    func_808ACF98(this);
-    if (func_808ACF1C(this, globalCtx)) {
+    EnFamos_UpdateBobbingHeight(this);
+    if (EnFamos_IsPlayerSeen(this, globalCtx)) {
         func_808AD54C(this);
     } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk1E4, 0x200)) {
         func_808AD3E8(this);
@@ -401,17 +411,17 @@ void func_808AD42C(EnFamos* this, GlobalContext* globalCtx) {
 
     this->actor.shape.rot.y = Actor_YawToPoint(&this->actor, &this->targetDest);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    func_808ACF98(this);
+    EnFamos_UpdateBobbingHeight(this);
     if (this->unk1D8 != 0) {
         Math_Vec3f_Copy(&this->unk200, &this->actor.world.pos);
     }
-    if (func_808ACF1C(this, globalCtx)) {
+    if (EnFamos_IsPlayerSeen(this, globalCtx)) {
         func_808AD54C(this);
     } else if (distance < 20.0f) {
         if (this->pathPoints != 0) {
-            func_808AD1F0(this);
+            EnFamos_SetupPathingIdle(this);
         } else {
-            func_808AD170(this);
+            EnFamos_SetupStillIdle(this);
         }
     } else if (distance < 40.0f) {
         Math_StepToF(&this->actor.speedXZ, 0.5f, 0.3f);
@@ -420,6 +430,7 @@ void func_808AD42C(EnFamos* this, GlobalContext* globalCtx) {
     }
 }
 
+// EnFamos_SetupChase
 void func_808AD54C(EnFamos* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk1DC = 8;
@@ -446,6 +457,7 @@ void func_808AD5B0(EnFamos* this, GlobalContext* globalCtx) {
     }
 }
 
+
 void func_808AD66C(EnFamos* this) {
     this->hoverClk = 0;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -457,7 +469,7 @@ void func_808AD68C(EnFamos* this, GlobalContext* globalCtx) {
     Vec3f abovePlayerPos;
     u32 surfaceType;
 
-    func_808ACF98(this);
+    EnFamos_UpdateBobbingHeight(this);
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x800);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     abovePlayerPos.x = player->actor.world.pos.x;
@@ -475,7 +487,7 @@ void func_808AD68C(EnFamos* this, GlobalContext* globalCtx) {
                this->unk1F0 < Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->unk200) ||
                Actor_IsFacingPlayer(&this->actor, 0x6000) == 0) {
         // drop agro?
-        func_808ADC40(this);
+        EnFamos_SetupDropAgro(this);
     }
 }
 
@@ -506,7 +518,7 @@ void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
 
     Math_StepToF(&this->actor.speedXZ, 20.0f, 2.0f);
     if (--this->unk1DC == 0) {
-        this->collider3.base.acFlags &= ~AC_ON;
+        this->emblemCollider.base.acFlags &= ~AC_ON;
     }
 
     surfaceType = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
@@ -525,7 +537,7 @@ void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
                 Actor_SetScale(this->actor.child, 0.015f);
             }
 
-            if (this->animatedMaterialIndex != 0) {
+            if (this->animatedMaterialIndex != FAMOS_ANIMATED_MATERIAL_NORMAL) {
                 this->unk1E2 = 0x46;
                 func_808ADD20(this);
             } else {
@@ -533,7 +545,7 @@ void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
                 func_808ADA74(this);
             }
         } else {
-            this->collider3.base.acFlags |= AC_ON;
+            this->emblemCollider.base.acFlags |= AC_ON;
             func_808ADB4C(this);
         }
     } else {
@@ -544,7 +556,7 @@ void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
 void func_808ADA74(EnFamos* this) {
     Animation_PlayOnce(&this->skelAnime, &gFamosLowerSNSAnim);
     SkelAnime_Update(&this->skelAnime);
-    this->collider3.base.acFlags |= AC_ON;
+    this->emblemCollider.base.acFlags |= AC_ON;
     this->unk1DC = 3;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_EXPLOSION);
@@ -582,18 +594,18 @@ void func_808ADB70(EnFamos* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808ADC40(EnFamos* this) {
+
+void EnFamos_SetupDropAgro(EnFamos* this) {
     this->unk1DC = 60;
-    this->actionFunc = func_808ADC64;
+    this->actionFunc = EnFamos_DropAgro;
     this->actor.speedXZ = 0.0f;
 }
 
-// drop agro?
-void func_808ADC64(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_DropAgro(EnFamos* this, GlobalContext* globalCtx) {
 
-    func_808ACF98(&this->actor);
+    EnFamos_UpdateBobbingHeight(this);
     this->unk1DC--;
-    if (func_808ACF1C(this, globalCtx) != 0) {
+    if (EnFamos_IsPlayerSeen(this, globalCtx) != 0) {
         func_808AD54C(this);
     } else if (this->unk1DC == 0) {
         func_808AD31C(this);
@@ -604,11 +616,11 @@ void func_808ADC64(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 void func_808ADD20(EnFamos* this) {
-    this->collider3.base.acFlags &= ~AC_ON;
+    this->emblemCollider.base.acFlags &= ~AC_ON;
     this->unk1DC = 20;
     this->actor.speedXZ = 0.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 20);
-    this->unk1E0 = -1;
+    this->flippedTimer = -1;
     // aiming for players feet?
     this->actor.world.pos.y = this->actor.floorHeight - 60.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
@@ -702,7 +714,7 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk1DE <= 0 || (this->unk1DE--, func_808AE030(this), (this->actionFunc != func_808ADFF0))) {
         hoverClkOld = this->hoverClk;
-        func_808AD05C(this);
+        EnFamos_UpdateFlipStatus(this);
         if (this->unk1E2 > 0) {
             if (--this->unk1E2 == 0) {
                 this->actor.child->parent = NULL;
@@ -716,9 +728,9 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->unk1EC += this->actor.world.pos.y - oldHeight;
         }
 
-        if (this->unk1E0 >= 0) {
+        if (this->flippedTimer >= 0) {
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
-            if (this->actionFunc == func_808AD8B8 && this->animatedMaterialIndex != 0 &&
+            if (this->actionFunc == func_808AD8B8 && this->animatedMaterialIndex != FAMOS_ANIMATED_MATERIAL_NORMAL &&
                 this->actor.bgCheckFlags & 1) { // on floor
 
                 this->actor.world.pos.y -= 60.0f;
@@ -733,8 +745,8 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-        if (this->collider3.base.acFlags & AC_ON) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider3.base);
+        if (this->emblemCollider.base.acFlags & AC_ON) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->emblemCollider.base);
         }
 
         if (this->collider2.base.atFlags & AC_ON) {
@@ -754,7 +766,7 @@ s32 func_808AE304(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         Matrix_InsertZRotation_s(this->unk1E6, 1);
         Matrix_InsertTranslation(0.0f, -4000.0f, 0.0f, 1);
 
-    } else if (this->unk1E0 < 0 && (limbIndex == 3 || limbIndex == 4 || limbIndex == 5)) {
+    } else if (this->flippedTimer < 0 && (limbIndex == 3 || limbIndex == 4 || limbIndex == 5)) {
         // sword, shield, head (not body and not the emblem)
         *dList = NULL;
     }
@@ -768,7 +780,7 @@ void func_808AE3A8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
     if (limbIndex == 2) { // emblem
         Matrix_GetStateTranslation(&actor->focus.pos);
-        Collider_UpdateSpheres(limbIndex, &this->collider3);
+        Collider_UpdateSpheres(limbIndex, &this->emblemCollider);
     }
 }
 
@@ -814,7 +826,7 @@ void EnFamos_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     if (this->actionFunc != func_808ADFF0) {
-        AnimatedMat_Draw(globalCtx, D_808AE6B0[this->animatedMaterialIndex]);
+        AnimatedMat_Draw(globalCtx, sAnimatedMaterials[this->animatedMaterialIndex]);
         SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_808AE304, func_808AE3A8,
                           &this->actor);
         if (this->actor.colorFilterTimer != 0) {

@@ -22,7 +22,7 @@
         <Limb Name="gFamosHeadLimb" Type="Standard" Offset="0x3D18" />
         <Skeleton Name="gFamosSkeleton" Type="Normal" LimbType="Standard" Offset="0x3D38" />
         <Animation Name="gFamosLowerSNSAnim" Offset="0x3DC8" />
-        <TextureAnimation Name="gFamosAnimTex1" Offset="0x3E30" />
-        <TextureAnimation Name="gFamosAnimTex2" Offset="0x3E38" />
+        <TextureAnimation Name="gFamosNormalGlowingEmblemAnimTex" Offset="0x3E30" />
+        <TextureAnimation Name="gFamosFlippedGlowingEmblemAnimTex" Offset="0x3E38" />
     </File>
 </Root>
