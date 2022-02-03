@@ -26,10 +26,10 @@
         <DList Name="gSoldierLeftHandDL" Offset="0xB120" />
         <DList Name="gSoldierPelvisDL" Offset="0xB438" />
         <DList Name="gSoldierRightThighDL" Offset="0xB5B0" />
-        <DList Name="gSoldierRightCalfDL" Offset="0xB698" />
+        <DList Name="gSoldierRightShinDL" Offset="0xB698" />
         <DList Name="gSoldierRightFootDL" Offset="0xB988" />
         <DList Name="gSoldierLeftThighDL" Offset="0xBAD0" />
-        <DList Name="gSoldierLeftCalfDL" Offset="0xBBB8" />
+        <DList Name="gSoldierLeftShinDL" Offset="0xBBB8" />
         <DList Name="gSoldierLeftFootDL" Offset="0xBEB8" />
         <Texture Name="gSoldierSkinTLUT" OutName="soldier_skin_tlut" Format="rgba16" Width="16" Height="16" Offset="0xC000" />
         <Texture Name="gSoldierGeneralTLUT" OutName="soldier_general_tlut" Format="rgba16" Width="16" Height="16" Offset="0xC200" />
