@@ -16,6 +16,13 @@ typedef struct EnFamosParticle {
 
 #define FAMOS_LIMB_COUNT 0x6
 
+// delayTimer gets reused:
+//   after spotting player, counts frames until first attack (8)
+//   after lost agro, measures frames looking around before returning to home (60)
+//   before smash attack, counts frames before disabling emblem colider (4)
+//   after smash attack collision, counts frames before rising (3)
+//   after smash attack finish, counts frames rising above ground before next attempt (20)
+
 typedef struct EnFamos {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -23,13 +30,13 @@ typedef struct EnFamos {
     /* 0x1AC */ Vec3s morphTable[FAMOS_LIMB_COUNT];
     /* 0x1D0 */ EnFamosActionFunc actionFunc;
     /* 0x1D4 */ u8 animatedMaterialIndex;
-    /* 0x1D5 */ u8 stableRotation; // starts 1, set to zero when flipped, then updated by rotation to 1 if upright or regular, zero is transitioning?
+    /* 0x1D5 */ u8 stableRotation;
     /* 0x1D6 */ u8 pathNodeCount;
     /* 0x1D7 */ u8 currentPathNode;
     /* 0x1D8 */ u8 unk1D8;
     /* 0x1D9 */ u8 unk1D9;
     /* 0x1DA */ s16 hoverClk; // 30->0, repeat, for height adjustment
-    /* 0x1DC */ s16 unk1DC;
+    /* 0x1DC */ s16 delayTimer; // reused for different functions
     /* 0x1DE */ s16 unk1DE;
     /* 0x1E0 */ s16 flippedTimer;
     /* 0x1E2 */ s16 unk1E2;

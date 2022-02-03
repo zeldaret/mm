@@ -23,13 +23,13 @@ void func_808ACD2C(EnFamos* this);
 void EnFamos_UpdateFlipStatus(EnFamos* this);
 void EnFamos_SetupStillIdle(EnFamos* this);
 void EnFamos_SetupPathingIdle(EnFamos* this);
-void func_808AD31C(EnFamos* this);
-void func_808AD3E8(EnFamos* this);
-void func_808AD54C(EnFamos* this);
-void func_808AD66C(EnFamos* this);
-void func_808AD7EC(EnFamos* this);
-void func_808AD888(EnFamos* this);
-void func_808ADA74(EnFamos* this);
+void EnFamos_SetupTurnHome(EnFamos* this);
+void EnFamos_SetupReturnHome(EnFamos* this);
+void EnFamos_SetupAlert(EnFamos* this);
+void EnFamos_SetupChase(EnFamos* this);
+void EnFamos_SetupAttackAim(EnFamos* this);
+void EnFamos_SetupAttack(EnFamos* this);
+void EnFamos_SetupFinishAttack(EnFamos* this);
 void func_808ADB4C(EnFamos* this);
 void EnFamos_SetupDropAgro(EnFamos* this);
 void func_808ADD20(EnFamos* this);
@@ -39,13 +39,13 @@ void func_808ADFA4(EnFamos* this);
 void func_808ADFF0(EnFamos* this, GlobalContext* globalCtx);
 void EnFamos_StillIdle(EnFamos* this, GlobalContext* globalCtx);
 void EnFamos_PathingIdle(EnFamos* this, GlobalContext* globalCtx);
-void func_808AD378(EnFamos* this, GlobalContext* globalCtx);
-void func_808AD42C(EnFamos* this, GlobalContext* globalCtx);
-void func_808AD5B0(EnFamos* this, GlobalContext* globalCtx);
-void func_808AD68C(EnFamos* this, GlobalContext* globalCtx);
-void func_808AD840(EnFamos* this, GlobalContext* globalCtx);
-void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx);
-void func_808ADAE8(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_TurnHome(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_ReturnHome(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_Alert(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_Chase(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_AttackAim(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_FinishAttack(EnFamos* this, GlobalContext* globalCtx);
 void func_808ADB70(EnFamos* this, GlobalContext* globalCtx);
 void EnFamos_DropAgro(EnFamos* this, GlobalContext* globalCtx);
 void func_808ADDA8(EnFamos* this, GlobalContext* globalCtx);
@@ -54,8 +54,6 @@ void func_808ADFF0(EnFamos* this, GlobalContext* globalCtx);
 
 s32 EnFamos_IsPlayerSeen(EnFamos* this, GlobalContext* globalCtx);
 
-s32 func_808AE304(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
-void func_808AE3A8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
 // draw func extension
 void func_808AE3FC(EnFamos* this, GlobalContext* globalCtx);
 
@@ -152,7 +150,7 @@ static ColliderJntSphInit sJntSphInit = {
 // normal is greenish, flipped its orange/yellowish
 #define FAMOS_ANIMATED_MATERIAL_NORMAL 0
 #define FAMOS_ANIMATED_MATERIAL_FLIPPED 1
-static AnimatedMaterial* sAnimatedMaterials[] = { gFamosNormalGlowingEmblemAnimTex , gFamosFlippedGlowingEmblemAnimTex };
+static AnimatedMaterial* sEmblemAnimatedMaterials[] = { gFamosNormalGlowingEmblemAnimTex , gFamosFlippedGlowingEmblemAnimTex };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 15, ICHAIN_CONTINUE),
@@ -189,8 +187,8 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // init animated materials
     if (!animatedMaterialsVirtualized) {
-        for (i = 0; i < ARRAY_COUNT(sAnimatedMaterials); i++) {
-            sAnimatedMaterials[i] = Lib_SegmentedToVirtual(sAnimatedMaterials[i]);
+        for (i = 0; i < ARRAY_COUNT(sEmblemAnimatedMaterials); i++) {
+            sEmblemAnimatedMaterials[i] = Lib_SegmentedToVirtual(sEmblemAnimatedMaterials[i]);
         }
         animatedMaterialsVirtualized = sTrue;
     }
@@ -299,6 +297,10 @@ void EnFamos_UpdateBobbingHeight(EnFamos* this) {
     }
 }
 
+/**
+ * checks if hit with light arrow
+ * also checks if previously flipped, handles flip timer
+ */
 void EnFamos_UpdateFlipStatus(EnFamos* this) {
     u8 famosRotTest;
 
@@ -337,8 +339,7 @@ void EnFamos_UpdateFlipStatus(EnFamos* this) {
 }
 
 /**
- * If Famos path is 0xFF, famos floats still in the air without a path to follow
- * ( unused )
+ * (unused) If Famos path is 0xFF, famos floats still in the air without a path to follow
  */
 void EnFamos_SetupStillIdle(EnFamos* this) {
     this->actionFunc = EnFamos_StillIdle;
@@ -351,7 +352,7 @@ void EnFamos_StillIdle(EnFamos* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->unk200, &this->actor.world.pos);
     }
     if (EnFamos_IsPlayerSeen(this, globalCtx)) {
-        func_808AD54C(this);
+        EnFamos_SetupAlert(this);
     }
 }
 
@@ -376,37 +377,38 @@ void EnFamos_PathingIdle(EnFamos* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->unk200, &this->actor.world.pos);
     }
     if (EnFamos_IsPlayerSeen(this, globalCtx)) {
-        func_808AD54C(this);
+        EnFamos_SetupAlert(this);
     } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk1E4, 0x200)) {
-        func_808AD3E8(this);
+        EnFamos_SetupReturnHome(this);
     }
 }
 
 // kz: 8040E2B0
-// does not go off during attack?
-void func_808AD31C(EnFamos* this) {
+// armos lost player, turning to face back toward home
+void EnFamos_SetupTurnHome(EnFamos* this) {
     this->unk1E4 = Actor_YawToPoint(&this->actor, &this->unk200);
     Math_Vec3f_Copy(&this->targetDest, &this->unk200);
-    this->actionFunc = func_808AD378;
+    this->actionFunc = EnFamos_TurnHome;
     this->actor.speedXZ = 0.0f;
 }
 
-void func_808AD378(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_TurnHome(EnFamos* this, GlobalContext* globalCtx) {
     EnFamos_UpdateBobbingHeight(this);
     if (EnFamos_IsPlayerSeen(this, globalCtx)) {
-        func_808AD54C(this);
+        EnFamos_SetupAlert(this);
     } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk1E4, 0x200)) {
-        func_808AD3E8(this);
+        EnFamos_SetupReturnHome(this);
     }
 }
 
-void func_808AD3E8(EnFamos* this) {
+// flying straight to home location
+void EnFamos_SetupReturnHome(EnFamos* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.x = -Actor_PitchToPoint(&this->actor, &this->targetDest);
-    this->actionFunc = func_808AD42C;
+    this->actionFunc = EnFamos_ReturnHome;
 }
 
-void func_808AD42C(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_ReturnHome(EnFamos* this, GlobalContext* globalCtx) {
     f32 distance = Actor_XZDistanceToPoint(&this->actor, &this->targetDest);
 
     this->actor.shape.rot.y = Actor_YawToPoint(&this->actor, &this->targetDest);
@@ -416,7 +418,7 @@ void func_808AD42C(EnFamos* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->unk200, &this->actor.world.pos);
     }
     if (EnFamos_IsPlayerSeen(this, globalCtx)) {
-        func_808AD54C(this);
+        EnFamos_SetupAlert(this);
     } else if (distance < 20.0f) {
         if (this->pathPoints != 0) {
             EnFamos_SetupPathingIdle(this);
@@ -430,41 +432,43 @@ void func_808AD42C(EnFamos* this, GlobalContext* globalCtx) {
     }
 }
 
-// EnFamos_SetupChase
-void func_808AD54C(EnFamos* this) {
+// famos first spots player, pauses for a 8 frames figuring out what to do
+void EnFamos_SetupAlert(EnFamos* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->unk1DC = 8;
+    this->delayTimer = 8;
     this->actor.speedXZ = 0.0f;
     if (this->unk1D8 == 1) {
         this->unk1D8 = 0;
         Math_Vec3f_Copy(&this->unk200, &this->actor.world.pos);
     }
-    this->actionFunc = func_808AD5B0;
+    this->actionFunc = EnFamos_Alert;
 }
 
-void func_808AD5B0(EnFamos* this, GlobalContext* globalCtx) {
+// famos first spots player !
+void EnFamos_Alert(EnFamos* this, GlobalContext* globalCtx) {
     if (ABS_ALT(this->unk1E6) > 0x4000) {
         func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
     } else {
         func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
     }
 
-    if (--this->unk1DC == 0) {
+    if (--this->delayTimer == 0) {
         this->actor.world.pos.y = this->unk1EC;
-        func_808AD66C(this);
+        EnFamos_SetupChase(this);
     } else {
-        this->actor.world.pos.y = (Math_SinS(this->unk1DC * 0x1000) * 30.0f) + this->unk1EC;
+        this->actor.world.pos.y = (Math_SinS(this->delayTimer * 0x1000) * 30.0f) + this->unk1EC;
     }
 }
 
-
-void func_808AD66C(EnFamos* this) {
+// start chasing player
+void EnFamos_SetupChase(EnFamos* this) {
     this->hoverClk = 0;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actionFunc = func_808AD68C;
+    this->actionFunc = EnFamos_Chase;
 }
 
-void func_808AD68C(EnFamos* this, GlobalContext* globalCtx) {
+// start chasing player
+void EnFamos_Chase(EnFamos* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f abovePlayerPos;
     u32 surfaceType;
@@ -481,7 +485,7 @@ void func_808AD68C(EnFamos* this, GlobalContext* globalCtx) {
     surfaceType = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if (this->actor.xzDistToPlayer < 30.0f && this->actor.floorHeight > BGCHECK_Y_MIN && surfaceType != 0xC &&
         surfaceType != 0xD) {
-        func_808AD7EC(this);
+        EnFamos_SetupAttackAim(this);
 
     } else if (Player_GetMask(globalCtx) == PLAYER_MASK_STONE ||
                this->unk1F0 < Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->unk200) ||
@@ -491,33 +495,34 @@ void func_808AD68C(EnFamos* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808AD7EC(EnFamos* this) {
+void EnFamos_SetupAttackAim(EnFamos* this) {
     Animation_PlayOnce(&this->skelAnime, &gFamosShakeAnim);
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_VOICE);
-    this->actionFunc = func_808AD840;
+    this->actionFunc = EnFamos_AttackAim;
 }
 
-void func_808AD840(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_AttackAim(EnFamos* this, GlobalContext* globalCtx) {
     func_800B9010(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
     if (SkelAnime_Update(&this->skelAnime)) {
-        func_808AD888(this);
+        EnFamos_SetupAttack(this);
     }
 }
 
-void func_808AD888(EnFamos* this) {
+void EnFamos_SetupAttack(EnFamos* this) {
     this->actor.world.rot.x = -0x4000;
     this->collider1.base.atFlags |= AT_ON;
-    this->unk1DC = 4;
-    this->actionFunc = func_808AD8B8;
+    this->delayTimer = 4;
+    this->actionFunc = EnFamos_Attack;
 }
 
-void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx) {
+//void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
     s32 hitFloor;
     u32 surfaceType;
 
     Math_StepToF(&this->actor.speedXZ, 20.0f, 2.0f);
-    if (--this->unk1DC == 0) {
+    if (--this->delayTimer == 0) {
         this->emblemCollider.base.acFlags &= ~AC_ON;
     }
 
@@ -530,6 +535,7 @@ void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
             func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 15, 10);
             func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             func_808ACB58(this);
+            // crator
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TEST, this->actor.world.pos.x,
                                this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x0);
 
@@ -542,7 +548,7 @@ void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
                 func_808ADD20(this);
             } else {
                 this->unk1E2 = 0x14;
-                func_808ADA74(this);
+                EnFamos_SetupFinishAttack(this);
             }
         } else {
             this->emblemCollider.base.acFlags |= AC_ON;
@@ -553,32 +559,36 @@ void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808ADA74(EnFamos* this) {
+// collide with player/ground
+void EnFamos_SetupFinishAttack(EnFamos* this) {
     Animation_PlayOnce(&this->skelAnime, &gFamosLowerSNSAnim);
     SkelAnime_Update(&this->skelAnime);
     this->emblemCollider.base.acFlags |= AC_ON;
-    this->unk1DC = 3;
+    this->delayTimer = 3;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_EXPLOSION);
-    this->actionFunc = func_808ADAE8;
+    this->actionFunc = EnFamos_FinishAttack;
 }
 
-void func_808ADAE8(EnFamos* this, GlobalContext* globalCtx) {
-    if (this->unk1DC == 0) {
+// collide with player
+void EnFamos_FinishAttack(EnFamos* this, GlobalContext* globalCtx) {
+    if (this->delayTimer == 0) {
         this->collider2.base.atFlags &= ~AT_ON;
     }
-    this->unk1DC--;
+    this->delayTimer--;
     if (SkelAnime_Update(&this->skelAnime)) {
         func_808ADB4C(this);
     }
 }
 
+// recover from ground hit?
 void func_808ADB4C(EnFamos* this) {
     this->actor.world.rot.x = 0x4000;
     this->actionFunc = func_808ADB70;
     this->actor.speedXZ = 0.0f;
 }
 
+// recover from ground hit?
 void func_808ADB70(EnFamos* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 5.0f, 0.3f);
     if (this->actor.speedXZ > 1.0f) {
@@ -590,13 +600,14 @@ void func_808ADB70(EnFamos* this, GlobalContext* globalCtx) {
     }
     if (this->unk1EC < this->actor.world.pos.y || this->actor.bgCheckFlags & 0x10) { // touching ceiling
         this->actor.speedXZ = 0.0f;
-        func_808AD66C(this);
+        EnFamos_SetupChase(this);
     }
 }
 
 
+// scanning for player
 void EnFamos_SetupDropAgro(EnFamos* this) {
-    this->unk1DC = 60;
+    this->delayTimer = 60;
     this->actionFunc = EnFamos_DropAgro;
     this->actor.speedXZ = 0.0f;
 }
@@ -604,20 +615,22 @@ void EnFamos_SetupDropAgro(EnFamos* this) {
 void EnFamos_DropAgro(EnFamos* this, GlobalContext* globalCtx) {
 
     EnFamos_UpdateBobbingHeight(this);
-    this->unk1DC--;
+    this->delayTimer--;
     if (EnFamos_IsPlayerSeen(this, globalCtx) != 0) {
-        func_808AD54C(this);
-    } else if (this->unk1DC == 0) {
-        func_808AD31C(this);
+        EnFamos_SetupAlert(this);
+    } else if (this->delayTimer == 0) {
+        EnFamos_SetupTurnHome(this);
     } else {
         // cast req
-        this->actor.shape.rot.y = (s32)(Math_SinS(this->unk1DC * 0x888) * 8192.0f) + this->actor.world.rot.y;
+        this->actor.shape.rot.y = (s32)(Math_SinS(this->delayTimer * 0x888) * 8192.0f) + this->actor.world.rot.y;
     }
 }
 
+// 8040ECB4 in kz
+// every frame of rising away from
 void func_808ADD20(EnFamos* this) {
     this->emblemCollider.base.acFlags &= ~AC_ON;
-    this->unk1DC = 20;
+    this->delayTimer = 20;
     this->actor.speedXZ = 0.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 20);
     this->flippedTimer = -1;
@@ -628,20 +641,20 @@ void func_808ADD20(EnFamos* this) {
 }
 
 void func_808ADDA8(EnFamos* this, GlobalContext* globalCtx) {
-    if (this->unk1DC == 17) {
+    if (this->delayTimer == 17) {
         this->collider2.base.atFlags &= ~AT_ON;
     }
-    if (this->unk1DC == 0) {
+    if (this->delayTimer == 0) {
         func_808ADE00(this);
     } else {
-        this->unk1DC--;
+        this->delayTimer--;
     }
 }
 
 void func_808ADE00(EnFamos* this) {
     this->actor.world.rot.x = 0x4000;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 4);
-    this->unk1DC = 25;
+    this->delayTimer = 25;
     Math_Vec3f_Copy(&this->targetDest, &this->actor.world.pos);
     this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = func_808ADE74;
@@ -656,18 +669,18 @@ void func_808ADE74(EnFamos* this, GlobalContext* globalCtx) {
 
     this->actor.world.pos.x = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.x;
     this->actor.world.pos.z = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.z;
-    if (this->unk1DC == 1) {
+    if (this->delayTimer == 1) {
         EnBom* blast = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
                                            this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 0x0000);
         if (blast != NULL) {
             blast->timer = 0; // instant explosion
         }
-        this->unk1DC--;
-    } else if (this->unk1DC == 0) {
+        this->delayTimer--;
+    } else if (this->delayTimer == 0) {
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0xD0); // random item from table 0xD
         func_808ADFA4(this);
     } else {
-        this->unk1DC--;
+        this->delayTimer--;
     }
 }
 
@@ -730,7 +743,7 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         if (this->flippedTimer >= 0) {
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
-            if (this->actionFunc == func_808AD8B8 && this->animatedMaterialIndex != FAMOS_ANIMATED_MATERIAL_NORMAL &&
+            if (this->actionFunc == EnFamos_Attack && this->animatedMaterialIndex != FAMOS_ANIMATED_MATERIAL_NORMAL &&
                 this->actor.bgCheckFlags & 1) { // on floor
 
                 this->actor.world.pos.y -= 60.0f;
@@ -758,8 +771,8 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // override limb draw
-s32 func_808AE304(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
-    EnFamos* this = (EnFamos*)actor;
+s32 func_808AE304(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnFamos* this = THIS;
 
     if (limbIndex == 1) { // BODY
         Matrix_InsertTranslation(0.0f, 4000.0f, 0.0f, 1);
@@ -775,11 +788,11 @@ s32 func_808AE304(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 // post limb draw
-void func_808AE3A8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
-    EnFamos* this = (EnFamos*)actor;
+void func_808AE3A8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnFamos* this = THIS;
 
     if (limbIndex == 2) { // emblem
-        Matrix_GetStateTranslation(&actor->focus.pos);
+        Matrix_GetStateTranslation(&this->actor.focus.pos);
         Collider_UpdateSpheres(limbIndex, &this->emblemCollider);
     }
 }
@@ -826,7 +839,7 @@ void EnFamos_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     if (this->actionFunc != func_808ADFF0) {
-        AnimatedMat_Draw(globalCtx, sAnimatedMaterials[this->animatedMaterialIndex]);
+        AnimatedMat_Draw(globalCtx, sEmblemAnimatedMaterials[this->animatedMaterialIndex]);
         SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_808AE304, func_808AE3A8,
                           &this->actor);
         if (this->actor.colorFilterTimer != 0) {
