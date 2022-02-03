@@ -47,10 +47,10 @@
         <Limb Name="gSoldierRootLimb" Type="Standard" Offset="0xD540" />
         <Limb Name="gSoldierPelvisLimb" Type="Standard" Offset="0xD54C" />
         <Limb Name="gSoldierLeftThighLimb" Type="Standard" Offset="0xD558" />
-        <Limb Name="gSoldierLeftCalfLimb" Type="Standard" Offset="0xD564" />
+        <Limb Name="gSoldierLeftShinLimb" Type="Standard" Offset="0xD564" />
         <Limb Name="gSoldierLeftFootLimb" Type="Standard" Offset="0xD570" />
         <Limb Name="gSoldierRightThighLimb" Type="Standard" Offset="0xD57C" />
-        <Limb Name="gSoldierRightCalfLimb" Type="Standard" Offset="0xD588" />
+        <Limb Name="gSoldierRightShinLimb" Type="Standard" Offset="0xD588" />
         <Limb Name="gSoldierRightFootLimb" Type="Standard" Offset="0xD594" />
         <Limb Name="gSoldierTorsoLimb" Type="Standard" Offset="0xD5A0" />
         <Limb Name="gSoldierLeftShoulderLimb" Type="Standard" Offset="0xD5AC" />
