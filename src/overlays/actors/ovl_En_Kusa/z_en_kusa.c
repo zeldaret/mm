@@ -6,6 +6,8 @@
 
 #include "z_en_kusa.h"
 #include "objects/object_kusa/object_kusa.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
 
 #define FLAGS 0x00800010
 
@@ -14,23 +16,19 @@
 void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Update(Actor* thisx, GlobalContext* globalCtx);
-
 s32 EnKusa_SnapToFloor(EnKusa* this, GlobalContext* globalCtx, f32 yOffset);
 void EnKusa_DropCollectible(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_UpdateVelY(EnKusa* this);
 void EnKusa_RandScaleVecToZero(Vec3f* vec, f32 scaleFactor);
 void EnKusa_SetScaleSmall(EnKusa* this);
-
 s32 EnKusa_GetWaterBox(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_SetupWaitObject(EnKusa* this);
 void EnKusa_WaitObject(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_Main(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_SetupLiftedUp(EnKusa* this);
 void EnKusa_LiftedUp(EnKusa* this, GlobalContext* globalCtx);
-
 void EnKusa_WaitObject(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_SetupMain(EnKusa* this);
-
 void EnKusa_SetupFall(EnKusa* this);
 void EnKusa_Fall(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_SetupCut(EnKusa* this);
@@ -94,14 +92,14 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 0, 12, 30, MASS_IMMOVABLE };
 
-static Vec3f D_80936714[] = {
+static Vec3f sUnitDirections[] = {
     { 0.0f, 0.7071f, 0.7071f },
     { 0.7071f, 0.7071f, 0.0f },
     { 0.0f, 0.7071f, -0.7071f },
     { -0.7071f, 0.7071f, 0.0f },
 };
 
-static s16 D_80936744[] = { 108, 102, 96, 84, 66, 55, 42, 38 };
+static s16 sFragmentScales[] = { 108, 102, 96, 84, 66, 55, 42, 38 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_CONTINUE),
@@ -111,10 +109,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
-
-extern Gfx D_040527F0[];
-extern Gfx D_040528B0[];
-extern UNK_TYPE D_060002E0;
 
 /**
  * @brief Updates the state of the provided matrix
@@ -295,36 +289,36 @@ void EnKusa_SpawnFragments(EnKusa* this, GlobalContext* globalCtx) {
     Vec3f velocity;
     Vec3f pos;
     s32 i;
-    s32 index;
-    Vec3f* scale;
+    s32 scaleIndex;
+    Vec3f* directon;
     s32 pad;
 
-    for (i = 0; i < ARRAY_COUNT(D_80936714); i++) {
-        scale = &D_80936714[i];
+    for (i = 0; i < ARRAY_COUNT(sUnitDirections); i++) {
+        directon = &sUnitDirections[i];
 
-        pos.x = this->actor.world.pos.x + (scale->x * this->actor.scale.x * 20.0f);
-        pos.y = this->actor.world.pos.y + (scale->y * this->actor.scale.y * 20.0f) + 10.0f;
-        pos.z = this->actor.world.pos.z + (scale->z * this->actor.scale.z * 20.0f);
+        pos.x = this->actor.world.pos.x + (directon->x * this->actor.scale.x * 20.0f);
+        pos.y = this->actor.world.pos.y + (directon->y * this->actor.scale.y * 20.0f) + 10.0f;
+        pos.z = this->actor.world.pos.z + (directon->z * this->actor.scale.z * 20.0f);
         velocity.x = (Rand_ZeroOne() - 0.5f) * 8.0f;
         velocity.y = Rand_ZeroOne() * 10.0f;
         velocity.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
 
-        index = (s32)(Rand_ZeroOne() * 111.1f) & 7;
+        scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) & 7;
 
-        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -0x64, 0x40, 0x28, 3, 0, D_80936744[index], 0, 0, 0x50,
-                             -1, 1, D_040527F0);
+        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -0x64, 0x40, 0x28, 3, 0, sFragmentScales[scaleIndex], 0,
+                             0, 0x50, -1, 1, gameplay_keep_DL_0527F0);
 
-        pos.x = this->actor.world.pos.x + (scale->x * this->actor.scale.x * 40.0f);
-        pos.y = this->actor.world.pos.y + (scale->y * this->actor.scale.y * 40.0f) + 10.0f;
-        pos.z = this->actor.world.pos.z + (scale->z * this->actor.scale.z * 40.0f);
+        pos.x = this->actor.world.pos.x + (directon->x * this->actor.scale.x * 40.0f);
+        pos.y = this->actor.world.pos.y + (directon->y * this->actor.scale.y * 40.0f) + 10.0f;
+        pos.z = this->actor.world.pos.z + (directon->z * this->actor.scale.z * 40.0f);
         velocity.x = (Rand_ZeroOne() - 0.5f) * 6.0f;
         velocity.y = Rand_ZeroOne() * 10.0f;
         velocity.z = (Rand_ZeroOne() - 0.5f) * 6.0f;
 
-        index = (s32)(Rand_ZeroOne() * 111.1f) % 7;
+        scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) % 7;
 
-        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -0x64, 0x40, 0x28, 3, 0, D_80936744[index], 0, 0, 0x50,
-                             -1, 1, D_040528B0);
+        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -0x64, 0x40, 0x28, 3, 0, sFragmentScales[scaleIndex], 0,
+                             0, 0x50, -1, 1, gameplay_keep_DL_0528B0);
     }
 }
 
@@ -732,7 +726,7 @@ void EnKusa_DrawBush(Actor* thisx, GlobalContext* globalCtx2) {
             (this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
             EnKusa_GetMtxState(&D_80936AD8[this->kusaMtxIdx]);
         }
-        Gfx_DrawDListOpa(globalCtx, D_050078A0);
+        Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
     } else if (this->actor.projectedPos.z < 1300.0f) {
         s32 alpha;
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -740,7 +734,7 @@ void EnKusa_DrawBush(Actor* thisx, GlobalContext* globalCtx2) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, alpha);
-        gSPDisplayList(POLY_XLU_DISP++, D_05007938);
+        gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_007938);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
