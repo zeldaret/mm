@@ -56,6 +56,11 @@ struct DynaPolyActor;
 // CollisionContext flags
 #define BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW 1
 
+typedef enum {
+    /* 0 */ CONVEYOR_WATER,
+    /* 1 */ CONVEYOR_FLOOR
+} ConveyorType;
+
 typedef struct {
     /* 0x0 */ Vec3s pos;
 } BgVertex; // size = 0x6

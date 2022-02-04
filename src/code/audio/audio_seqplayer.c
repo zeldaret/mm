@@ -12,7 +12,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197A54.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197AA4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_SequenceChannelDisable.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197B14.s")
 
@@ -26,7 +26,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_AudioListPushBack.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197E48.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_AudioListPopBack.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197E88.s")
 
