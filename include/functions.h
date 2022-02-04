@@ -3374,7 +3374,7 @@ void* AudioHeap_AllocDmaMemory(AudioAllocPool* pool, size_t size);
 void* AudioHeap_Alloc(AudioAllocPool* pool, size_t size);
 void AudioHeap_AllocPoolInit(AudioAllocPool* pool, void* addr, size_t size);
 void AudioHeap_PopCache(s32 tableType);
-void AudioHeap_InitMainPools(size_t initPoolSize);
+void AudioHeap_InitMainPool(size_t initPoolSize);
 void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id);
 void* AudioHeap_SearchCaches(s32 tableType, s32 cache, s32 id);
 void AudioHeap_LoadFilter(s16* filter, s32 lowPassCutoff, s32 highPassCutoff);
