@@ -6,8 +6,8 @@
         <TextureAnimation Name="object_in_Matanimheader_001C30" Offset="0x1C30" />
         <Animation Name="object_in_Anim_001D10" Offset="0x1D10" />
         <!-- <Blob Name="object_in_Blob_001D20" Size="0x1738" Offset="0x1D20" /> -->
-        <!-- <Texture Name="object_in_TLUT_003458" OutName="tlut_003458" Format="rgba16" Width="16" Height="16" Offset="0x3458" /> -->
-        <!-- <Blob Name="object_in_Blob_003658" Size="0x388" Offset="0x3658" /> -->
+        <Texture Name="object_in_Tex_003520" OutName="tex_003520" Format="ci8" Width="8" Height="8" Offset="0x3520" />
+        <Texture Name="object_in_Tex_0035E0" OutName="tex_0035E0" Format="ci8" Width="32" Height="32" Offset="0x35E0" />
         <Texture Name="object_in_Tex_0039E0" OutName="tex_0039E0" Format="rgba16" Width="16" Height="16" Offset="0x39E0" />
         <Texture Name="object_in_Tex_003BE0" OutName="tex_003BE0" Format="ci8" Width="16" Height="16" Offset="0x3BE0" />
         <Texture Name="object_in_Tex_003CE0" OutName="tex_003CE0" Format="ci8" Width="16" Height="16" Offset="0x3CE0" />
@@ -17,9 +17,10 @@
         <Texture Name="object_in_Tex_004120" OutName="tex_004120" Format="rgba16" Width="8" Height="16" Offset="0x4120" />
         <Texture Name="object_in_Tex_004220" OutName="tex_004220" Format="ci8" Width="8" Height="16" Offset="0x4220" />
         <Texture Name="object_in_Tex_0042A0" OutName="tex_0042A0" Format="ci8" Width="16" Height="16" Offset="0x42A0" />
-        <!-- <Blob Name="object_in_Blob_0043A0" Size="0x440" Offset="0x43A0" /> -->
+        <Texture Name="object_in_Tex_0043E0" OutName="tex_0043E0" Format="ci8" Width="32" Height="32" Offset="0x43E0" />
         <Texture Name="object_in_Tex_0047E0" OutName="tex_0047E0" Format="ci8" Width="8" Height="8" Offset="0x47E0" />
-        <!-- <Blob Name="object_in_Blob_004820" Size="0x800" Offset="0x4820" /> -->
+        <Texture Name="object_in_Tex_004820" OutName="tex_004820" Format="ci8" Width="32" Height="32" Offset="0x4820" />
+        <Texture Name="object_in_Tex_004C20" OutName="tex_004C20" Format="ci8" Width="32" Height="32" Offset="0x4C20" />
         <DList Name="object_in_DL_006780" Offset="0x6780" />
         <DList Name="object_in_DL_0073E8" Offset="0x73E8" />
         <DList Name="object_in_DL_007510" Offset="0x7510" />
