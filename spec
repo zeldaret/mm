@@ -1473,8 +1473,7 @@ beginseg
     name "ovl_Obj_Ice_Poly"
     compress
     include "build/src/overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.o"
-    include "build/data/ovl_Obj_Ice_Poly/ovl_Obj_Ice_Poly.data.o"
-    include "build/data/ovl_Obj_Ice_Poly/ovl_Obj_Ice_Poly.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Ice_Poly/ovl_Obj_Ice_Poly_reloc.o"
 endseg
 
 beginseg
