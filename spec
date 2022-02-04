@@ -1490,9 +1490,7 @@ beginseg
     name "ovl_En_Kusa"
     compress
     include "build/src/overlays/actors/ovl_En_Kusa/z_en_kusa.o"
-    include "build/data/ovl_En_Kusa/ovl_En_Kusa.data.o"
-    include "build/data/ovl_En_Kusa/ovl_En_Kusa.bss.o"
-    include "build/data/ovl_En_Kusa/ovl_En_Kusa.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kusa/ovl_En_Kusa_reloc.o"
 endseg
 
 beginseg
