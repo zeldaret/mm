@@ -38,7 +38,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B7BC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_InitMainPools.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_InitMainPool.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B95C.s")
 

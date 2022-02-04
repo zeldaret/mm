@@ -3384,7 +3384,7 @@ void AudioHeap_AllocPoolInit(AudioAllocPool* pool, void* mem, size_t size);
 // void func_8018B768(void);
 // void func_8018B77C(void);
 // void func_8018B7BC(void);
-void AudioHeap_InitMainPools(s32 initPoolSize);
+void AudioHeap_InitMainPool(s32 initPoolSize);
 // void func_8018B95C(void);
 // void func_8018B9E0(void);
 // void func_8018BA64(void);

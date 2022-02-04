@@ -3083,7 +3083,7 @@ asm/non_matchings/code/audio_heap/func_8018B768.s,func_8018B768,0x8018B768,0x5
 asm/non_matchings/code/audio_heap/func_8018B77C.s,func_8018B77C,0x8018B77C,0xC
 asm/non_matchings/code/audio_heap/func_8018B7AC.s,func_8018B7AC,0x8018B7AC,0x4
 asm/non_matchings/code/audio_heap/func_8018B7BC.s,func_8018B7BC,0x8018B7BC,0x50
-asm/non_matchings/code/audio_heap/AudioHeap_InitMainPools.s,AudioHeap_InitMainPools,0x8018B8FC,0x18
+asm/non_matchings/code/audio_heap/AudioHeap_InitMainPool.s,AudioHeap_InitMainPool,0x8018B8FC,0x18
 asm/non_matchings/code/audio_heap/func_8018B95C.s,func_8018B95C,0x8018B95C,0x21
 asm/non_matchings/code/audio_heap/func_8018B9E0.s,func_8018B9E0,0x8018B9E0,0x21
 asm/non_matchings/code/audio_heap/func_8018BA64.s,func_8018BA64,0x8018BA64,0x31

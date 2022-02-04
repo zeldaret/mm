@@ -3565,7 +3565,7 @@
     0x8018B77C:("func_8018B77C",),
     0x8018B7AC:("func_8018B7AC",),
     0x8018B7BC:("func_8018B7BC",),
-    0x8018B8FC:("AudioHeap_InitMainPools",),
+    0x8018B8FC:("AudioHeap_InitMainPool",),
     0x8018B95C:("func_8018B95C",),
     0x8018B9E0:("func_8018B9E0",),
     0x8018BA64:("func_8018BA64",),
