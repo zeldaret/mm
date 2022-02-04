@@ -52,7 +52,10 @@
         <Texture Name="object_dnp_Tex_00F5D0" OutName="tex_00F5D0" Format="rgba16" Width="16" Height="16" Offset="0xF5D0" />
         <Texture Name="object_dnp_Tex_00F7D0" OutName="tex_00F7D0" Format="rgba16" Width="32" Height="32" Offset="0xF7D0" />
         <Texture Name="object_dnp_Tex_00FFD0" OutName="tex_00FFD0" Format="rgba16" Width="16" Height="32" Offset="0xFFD0" />
-        <!-- <Blob Name="object_dnp_Blob_0103D0" Size="0x800" Offset="0x103D0" /> -->
+        <Texture Name="object_dnp_Tex_0103D0" OutName="tex_0103D0" Format="rgba16" Width="16" Height="16" Offset="0x103D0" />
+        <Texture Name="object_dnp_Tex_0105D0" OutName="tex_0105D0" Format="rgba16" Width="16" Height="16" Offset="0x105D0" />
+        <Texture Name="object_dnp_Tex_0107D0" OutName="tex_0107D0" Format="rgba16" Width="16" Height="16" Offset="0x107D0" />
+        <Texture Name="object_dnp_Tex_0109D0" OutName="tex_0109D0" Format="rgba16" Width="16" Height="16" Offset="0x109D0" />
         <Limb Name="object_dnp_Standardlimb_010BD0" Type="Standard" Offset="0x10BD0" />
         <Limb Name="object_dnp_Standardlimb_010BDC" Type="Standard" Offset="0x10BDC" />
         <Limb Name="object_dnp_Standardlimb_010BE8" Type="Standard" Offset="0x10BE8" />

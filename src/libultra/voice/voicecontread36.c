@@ -13,9 +13,9 @@ s32 __osVoiceContRead36(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[36]) {
 
         ptr = (u8*)&__osPfsPifRam;
 
-        if ((__osContLastPoll != 9) || (port != D_80097FB0)) {
+        if ((__osContLastPoll != 9) || (port != __osPfsLastChannel)) {
             __osContLastPoll = 9;
-            D_80097FB0 = port;
+            __osPfsLastChannel = port;
 
             for (i = 0; i < port; i++, *ptr++ = 0) {
                 ;

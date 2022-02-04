@@ -7,6 +7,7 @@
 #include "z_en_dno.h"
 #include "overlays/actors/ovl_Bg_Crace_Movebg/z_bg_crace_movebg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_dno/object_dno.h"
 
 #define FLAGS 0x00000039
 
@@ -39,37 +40,19 @@ void func_80A732C8(EnDno* this, GlobalContext* globalCtx);
 s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-extern AnimationHeader D_06000470;
-extern AnimationHeader D_060008F0;
-extern AnimationHeader D_06000F6C;
-extern AnimationHeader D_06001A50;
-extern AnimationHeader D_06002530;
-extern AnimationHeader D_06003320;
-extern AnimationHeader D_060036D0;
-extern AnimationHeader D_060041CC;
-extern AnimationHeader D_06004DD8;
-extern AnimationHeader D_060051E4;
-extern AnimationHeader D_06005E20;
-extern AnimationHeader D_06005F98;
-extern AnimationHeader D_06006488;
-extern AnimationHeader D_06006F84;
-extern AnimationHeader D_060073E4;
-extern AnimationHeader D_060077A8;
-extern AnimationHeader D_06007CA4;
-extern AnimationHeader D_06008324;
-extern AnimationHeader D_06008AE4;
-extern AnimationHeader D_06009100;
-extern FlexSkeletonHeader D_0600E1F8;
 extern u8 D_801C20C0;
 
 static struct_80B8E1A8 sAnimations[] = {
-    { &D_06000470, 1.0f, 2, 0.0f }, { &D_060008F0, 1.0f, 2, 0.0f }, { &D_06000F6C, 1.0f, 0, 0.0f },
-    { &D_06001A50, 1.0f, 2, 0.0f }, { &D_06002530, 1.0f, 2, 0.0f }, { &D_06003320, 1.0f, 2, 0.0f },
-    { &D_060036D0, 1.0f, 0, 0.0f }, { &D_060041CC, 1.0f, 2, 0.0f }, { &D_06004DD8, 1.0f, 2, 0.0f },
-    { &D_06005F98, 1.0f, 0, 0.0f }, { &D_06006488, 1.0f, 2, 0.0f }, { &D_060073E4, 1.0f, 0, 0.0f },
-    { &D_060077A8, 1.0f, 0, 0.0f }, { &D_06007CA4, 1.0f, 0, 0.0f }, { &D_06008324, 1.0f, 0, 0.0f },
-    { &D_06008AE4, 1.0f, 2, 0.0f }, { &D_06009100, 1.0f, 2, 0.0f }, { &D_060051E4, 1.0f, 2, 0.0f },
-    { &D_06005E20, 1.0f, 0, 0.0f }, { &D_06006F84, 1.0f, 0, 0.0f },
+    { &object_dno_Anim_000470, 1.0f, 2, 0.0f }, { &object_dno_Anim_0008F0, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_000F6C, 1.0f, 0, 0.0f }, { &object_dno_Anim_001A50, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_002530, 1.0f, 2, 0.0f }, { &object_dno_Anim_003320, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_0036D0, 1.0f, 0, 0.0f }, { &object_dno_Anim_0041CC, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_004DD8, 1.0f, 2, 0.0f }, { &object_dno_Anim_005F98, 1.0f, 0, 0.0f },
+    { &object_dno_Anim_006488, 1.0f, 2, 0.0f }, { &object_dno_Anim_0073E4, 1.0f, 0, 0.0f },
+    { &object_dno_Anim_0077A8, 1.0f, 0, 0.0f }, { &object_dno_Anim_007CA4, 1.0f, 0, 0.0f },
+    { &object_dno_Anim_008324, 1.0f, 0, 0.0f }, { &object_dno_Anim_008AE4, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_009100, 1.0f, 2, 0.0f }, { &object_dno_Anim_0051E4, 1.0f, 2, 0.0f },
+    { &object_dno_Anim_005E20, 1.0f, 0, 0.0f }, { &object_dno_Anim_006F84, 1.0f, 0, 0.0f },
 };
 
 const ActorInit En_Dno_InitVars = {
@@ -213,8 +196,8 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (actor == NULL) {
             Actor_ProcessInitChain(thisx, sInitChain);
             ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 21.0f);
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E1F8, &D_06007CA4, this->jointTable,
-                               this->morphTable, 28);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dno_Skel_00E1F8, &object_dno_Anim_007CA4,
+                               this->jointTable, this->morphTable, 28);
             Collider_InitCylinder(globalCtx, &this->collider);
             Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
             Actor_UpdateBgCheckInfo(globalCtx, thisx, 0.0f, 0.0f, 0.0f, 4);

@@ -31,10 +31,11 @@
         <Texture Name="object_bji_Tex_004870" OutName="tex_004870" Format="ci8" Width="8" Height="8" Offset="0x4870" />
         <Texture Name="object_bji_Tex_0048B0" OutName="tex_0048B0" Format="ci8" Width="16" Height="16" Offset="0x48B0" />
         <Texture Name="object_bji_Tex_0049B0" OutName="tex_0049B0" Format="ci8" Width="8" Height="8" Offset="0x49B0" />
-        <!-- <Blob Name="object_bji_Blob_0049F0" Size="0x400" Offset="0x49F0" /> -->
+        <Texture Name="object_bji_Tex_0049F0" OutName="tex_0049F0" Format="ci8" Width="32" Height="32" Offset="0x49F0" />
         <Texture Name="object_bji_Tex_004DF0" OutName="tex_004DF0" Format="ci8" Width="8" Height="8" Offset="0x4DF0" />
         <Texture Name="object_bji_Tex_004E30" OutName="tex_004E30" Format="ci8" Width="8" Height="8" Offset="0x4E30" />
-        <!-- <Blob Name="object_bji_Blob_004E70" Size="0x82C" Offset="0x4E70" /> -->
+        <Texture Name="object_bji_Tex_004E70" OutName="tex_004E70" Format="ci8" Width="32" Height="32" Offset="0x4E70" />
+        <Texture Name="object_bji_Tex_005270" OutName="tex_005270" Format="ci8" Width="32" Height="32" Offset="0x5270" />
         <Limb Name="object_bji_Standardlimb_00569C" Type="Standard" Offset="0x569C" />
         <Limb Name="object_bji_Standardlimb_0056A8" Type="Standard" Offset="0x56A8" />
         <Limb Name="object_bji_Standardlimb_0056B4" Type="Standard" Offset="0x56B4" />
