@@ -711,7 +711,7 @@ f32 gBendPitchTwoSemitonesFrequencies[] = {
     1.117368f, 1.118385f, 1.119403f, 1.120422f, 1.121441f, 1.122462f,
 };
 
-f32 gNoteFrequencies[] = {
+f32 gPitchFrequencies[] = {
     /* 0x00 */ 0.105112f,   // PITCH_A0
     /* 0x01 */ 0.111362f,   // PITCH_BFLAT0
     /* 0x02 */ 0.117984f,   // PITCH_B0

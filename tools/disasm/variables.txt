@@ -2264,7 +2264,7 @@
     0x801D4D90:("gWaveSamples","s16*","[9]",0x24),
     0x801D4DB4:("gBendPitchOneOctaveFrequencies","f32","[256]",0x400),
     0x801D51B4:("gBendPitchTwoSemitonesFrequencies","f32","[256]",0x400),
-    0x801D55B4:("gNoteFrequencies","f32","[128]",0x200),
+    0x801D55B4:("gPitchFrequencies","f32","[128]",0x200),
     0x801D57B4:("gDefaultShortNoteVelocityTable","UNK_TYPE1","",0x1),
     0x801D57C4:("gDefaultShortNoteGateTimeTable","UNK_TYPE1","",0x1),
     0x801D57D4:("gDefaultEnvelope","UNK_TYPE1","",0x1),

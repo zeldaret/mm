@@ -1648,7 +1648,7 @@ extern f32 gBendPitchOneOctaveFrequencies[256];
 // extern UNK_TYPE1 D_801D4FB4;
 // extern UNK_TYPE4 gBendPitchTwoSemitonesFrequencies;
 // extern UNK_TYPE4 D_801D53B4;
-// extern UNK_TYPE1 gNoteFrequencies;
+// extern UNK_TYPE1 gPitchFrequencies;
 // extern UNK_TYPE1 gDefaultShortNoteVelocityTable;
 // extern UNK_TYPE1 gDefaultShortNoteGateTimeTable;
 // extern UNK_TYPE1 gDefaultEnvelope;
