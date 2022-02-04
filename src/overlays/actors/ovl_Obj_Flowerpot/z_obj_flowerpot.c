@@ -428,8 +428,11 @@ void ObjFlowerpot_Init(Actor* thisx, GlobalContext* globalCtx) {
     D_80A1D400++;
 }
 
-void ObjFlowerpot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyJntSph(globalCtx, &THIS->collider);
+void ObjFlowerpot_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    ObjFlowerpot* this = THIS;
+
+    Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
 void func_80A1C818(ObjFlowerpot* this) {
