@@ -1,5 +1,6 @@
 <Root>
-    <!-- "20SICHITAI2" -->
+    <!-- "Z2_20SICHITAI2" -->
+    <ExternalFile XmlPath="misc/scene_texture_06.xml" OutPath="misc/scene_texture_06/"/>
     <File Name="southern_swamp_clear_scene" Segment="2" Game="MM">
         <Scene Name="southern_swamp_clear_scene" Offset="0x0"/>
     </File>

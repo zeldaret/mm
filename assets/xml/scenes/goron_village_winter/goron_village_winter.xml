@@ -1,5 +1,6 @@
 <Root>
     <!-- "Z2_11GORONNOSATO" -->
+    <ExternalFile XmlPath="misc/scene_texture_04.xml" OutPath="misc/scene_texture_04/"/>
     <File Name="goron_village_winter_scene" Segment="2" Game="MM">
         <Scene Name="goron_village_winter_scene" Offset="0x0"/>
     </File>

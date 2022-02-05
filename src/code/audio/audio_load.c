@@ -8,7 +8,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_8018EF88.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_8018F220.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/AudioLoad_IsFontLoadComplete.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_load/func_8018F298.s")
 

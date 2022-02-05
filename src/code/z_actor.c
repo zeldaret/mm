@@ -320,13 +320,12 @@ void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 y) {
 void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
     f32 spEC;
     f32 temp_f12;
-    f32 temp_f20;
     f32 shadowScaleZ;
     f32 temp_f22;
     f32 temp_f24;
     f32 temp_f8;
-    MtxF sp94;
     s32 lightNum;
+    MtxF sp94;
     s32 numLights;
     s8 phi_v1;
     u8 temp_v0;
@@ -342,7 +341,8 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
 
         spEC = actor->world.pos.y - actor->floorHeight;
         if (spEC > 20.0f) {
-            temp_f20 = actor->shape.shadowScale;
+            f32 temp_f20 = actor->shape.shadowScale;
+
             temp_v0 = actor->shape.shadowAlpha;
             actor->shape.shadowScale *= 0.3f;
             temp_f12 = (spEC - 20.0f) * 0.02f;
@@ -350,7 +350,6 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
             ActorShadow_DrawCircle(actor, mapper, globalCtx);
             actor->shape.shadowScale = temp_f20;
             actor->shape.shadowAlpha = temp_v0;
-        dummy_label_111649:;
         } else if (spEC >= -1.0f) {
             numLights = mapper->numLights - 2;
 
@@ -377,8 +376,8 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
 
             for (j = 0; j < 2; j++, phi_s0++) {
                 if (phi_s0->l.dir[1] > 0) {
-                    lightNum = (ABS_ALT(phi_s0->l.dir[1]) * (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2])) -
-                               (lightNumMax * ((void)0, 8));
+                    lightNum = ((phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2]) * ABS_ALT(phi_s0->l.dir[1])) -
+                               (8 * lightNumMax);
                     if (lightNum > 0) {
                         ActorShadow_DrawFoot(globalCtx, phi_s0, &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
                     }
@@ -2234,11 +2233,11 @@ void func_800B9120(ActorContext* actorCtx) {
 
 void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry* actorEntry) {
     ActorOverlay* overlayEntry;
-    u32* cycleFlags;
+    CycleSceneFlags* cycleFlags;
     s32 i;
 
     gSaveContext.weekEventReg[92] |= 0x80;
-    cycleFlags = gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
+    cycleFlags = &gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
 
     bzero(actorCtx, sizeof(ActorContext));
     ActorOverlayTable_Init();
@@ -2252,14 +2251,14 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
         overlayEntry++;
     }
 
-    actorCtx->flags.chest = cycleFlags[0];
-    actorCtx->flags.switches[0] = cycleFlags[1];
-    actorCtx->flags.switches[1] = cycleFlags[2];
+    actorCtx->flags.chest = cycleFlags->chest;
+    actorCtx->flags.switches[0] = cycleFlags->swch0;
+    actorCtx->flags.switches[1] = cycleFlags->swch1;
     if (globalCtx->sceneNum == SCENE_INVERTED_STONE_TOWER_TEMPLE) {
-        cycleFlags = gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
+        cycleFlags = &gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
-    actorCtx->flags.collectible[0] = cycleFlags[4];
-    actorCtx->flags.clearedRoom = cycleFlags[3];
+    actorCtx->flags.collectible[0] = cycleFlags->collectible;
+    actorCtx->flags.clearedRoom = cycleFlags->clearedRoom;
 
     TitleCard_ContextInit(&globalCtx->state, &actorCtx->titleCtxt);
     func_800B6468(globalCtx);

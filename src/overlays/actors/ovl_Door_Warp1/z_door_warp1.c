@@ -552,28 +552,27 @@ void func_808B9CE8(DoorWarp1* this, GlobalContext* globalCtx) {
 
     switch (globalCtx->sceneNum) {
         case SCENE_ODOLWAS_LAIR:
-            gSaveContext.roomInf[126][3] =
-                (((void)0, gSaveContext.roomInf[126][3]) & 0xFFFFFF00) | (((u8)gSaveContext.roomInf[126][4]) & 0xFF);
+            gSaveContext.unk_ECC[0] =
+                (((void)0, gSaveContext.unk_ECC[0]) & 0xFFFFFF00) | (((u8)gSaveContext.unk_ECC[1]) & 0xFF);
             break;
 
         case SCENE_GOHTS_LAIR:
-            gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0xFFFF00FF) |
-                                           ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 8);
+            gSaveContext.unk_ECC[0] =
+                (((void)0, gSaveContext.unk_ECC[0]) & 0xFFFF00FF) | ((((u8)gSaveContext.unk_ECC[1]) & 0xFF) << 8);
             break;
 
         case SCENE_TWINMOLDS_LAIR:
-            gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0xFF00FFFF) |
-                                           ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 0x10);
+            gSaveContext.unk_ECC[0] =
+                (((void)0, gSaveContext.unk_ECC[0]) & 0xFF00FFFF) | ((((u8)gSaveContext.unk_ECC[1]) & 0xFF) << 0x10);
             break;
 
         case SCENE_GYORGS_LAIR:
-            gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0x00FFFFFF) |
-                                           ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 0x18);
+            gSaveContext.unk_ECC[0] =
+                (((void)0, gSaveContext.unk_ECC[0]) & 0x00FFFFFF) | ((((u8)gSaveContext.unk_ECC[1]) & 0xFF) << 0x18);
             break;
     }
 
-    gSaveContext.roomInf[126][4] =
-        (gSaveContext.roomInf[126][4] & 0xFFFFFF00) | ((((u8)gSaveContext.roomInf[126][4]) + 1) & 0xFF);
+    gSaveContext.unk_ECC[1] = (gSaveContext.unk_ECC[1] & 0xFFFFFF00) | ((((u8)gSaveContext.unk_ECC[1]) + 1) & 0xFF);
     Item_Give(globalCtx, func_808B849C(this, globalCtx) + (ITEM_REMAINS_ODOLWA - 1));
     DoorWarp1_SetupAction(this, func_808B9E94);
 }
@@ -656,19 +655,19 @@ void func_808BA10C(DoorWarp1* this, GlobalContext* globalCtx) {
 
             switch (phi_v0_2) {
                 case 0:
-                    phi_a0 = gSaveContext.roomInf[126][3] & 0xFF;
+                    phi_a0 = gSaveContext.unk_ECC[0] & 0xFF;
                     break;
 
                 case 1:
-                    phi_a0 = (gSaveContext.roomInf[126][3] & 0xFF00) >> 8;
+                    phi_a0 = (gSaveContext.unk_ECC[0] & 0xFF00) >> 8;
                     break;
 
                 case 2:
-                    phi_a0 = (gSaveContext.roomInf[126][3] & 0xFF0000) >> 0x10;
+                    phi_a0 = (gSaveContext.unk_ECC[0] & 0xFF0000) >> 0x10;
                     break;
 
                 case 3:
-                    phi_a0 = (gSaveContext.roomInf[126][3] & 0xFF000000) >> 0x18;
+                    phi_a0 = (gSaveContext.unk_ECC[0] & 0xFF000000) >> 0x18;
                     break;
 
                 default:
@@ -1035,7 +1034,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
         Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
                                  this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(4.0f, this->unk_1AC, 4.0f, MTXMODE_APPLY);
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_0044D8));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0044D8));
         Gfx_DrawDListXlu(globalCtx, object_warp1_DL_003230);
         return;
     }
@@ -1054,7 +1053,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
                              MTXMODE_NEW);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_0057D8));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0057D8));
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1066,7 +1065,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_004690);
     gfxCtx = globalCtx->state.gfxCtx;
 
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_warp1_Matanimheader_007238));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_007238));
     Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                              MTXMODE_NEW);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);

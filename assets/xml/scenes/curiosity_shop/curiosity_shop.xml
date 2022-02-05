@@ -1,5 +1,6 @@
 <Root>
     <!-- "Z2_AYASHIISHOP" -->
+    <ExternalFile XmlPath="misc/scene_texture_02.xml" OutPath="misc/scene_texture_02/"/>
     <File Name="curiosity_shop_scene" Segment="2" Game="MM">
         <Scene Name="curiosity_shop_scene" Offset="0x0"/>
     </File>

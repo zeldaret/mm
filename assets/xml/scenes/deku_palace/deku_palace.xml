@@ -1,5 +1,6 @@
 <Root>
     <!-- "Z2_22DEKUCITY" -->
+    <ExternalFile XmlPath="misc/scene_texture_06.xml" OutPath="misc/scene_texture_06/"/>
     <File Name="deku_palace_scene" Segment="2" Game="MM">
         <Scene Name="deku_palace_scene" Offset="0x0"/>
     </File>

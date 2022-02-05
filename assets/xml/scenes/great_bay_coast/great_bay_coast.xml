@@ -1,5 +1,6 @@
 <Root>
     <!-- "Z2_30GYOSON" -->
+    <ExternalFile XmlPath="misc/scene_texture_05.xml" OutPath="misc/scene_texture_05/"/>
     <File Name="great_bay_coast_scene" Segment="2" Game="MM">
         <Scene Name="great_bay_coast_scene" Offset="0x0"/>
     </File>

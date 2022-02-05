@@ -5,6 +5,7 @@
  */
 
 #include "z_en_sellnuts.h"
+#include "objects/object_dnt/object_dnt.h"
 
 #define FLAGS 0x00000039
 
@@ -33,28 +34,6 @@ void func_80ADC8C4(EnSellnuts* this, GlobalContext* globalCtx);
 void func_80ADCA64(EnSellnuts* this, GlobalContext* globalCtx);
 s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2);
 f32 func_80ADCFE8(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3);
-
-extern AnimationHeader D_06000994;
-extern AnimationHeader D_060012F4;
-extern Gfx D_06001350[];
-extern AnimationHeader D_06001BC8;
-extern AnimationHeader D_06001E2C;
-extern AnimationHeader D_06002268;
-extern AnimationHeader D_06002670;
-extern AnimationHeader D_060029E8;
-extern AnimationHeader D_06002F08;
-extern AnimationHeader D_06003438;
-extern AnimationHeader D_060038CC;
-extern AnimationHeader D_06003CC0;
-extern AnimationHeader D_06004700;
-extern AnimationHeader D_06004AA0;
-extern AnimationHeader D_06004E38;
-extern AnimationHeader D_06005488;
-extern AnimationHeader D_0600577C;
-extern AnimationHeader D_06005CA8;
-extern Gfx D_06008290[];
-extern FlexSkeletonHeader D_0600AC70;
-extern AnimationHeader D_0600B0B4;
 
 static u16 D_80ADD910[] = {
     0x0614,
@@ -106,14 +85,18 @@ static ColliderCylinderInitType1 sCylinderInit = {
 };
 
 static ActorAnimationEntryS D_80ADD990[] = {
-    { &D_06005488, 1.0f, 0, -1, 0, 0 },  { &D_0600B0B4, 1.0f, 0, -1, 0, 0 },  { &D_06004AA0, 1.0f, 0, -1, 2, 0 },
-    { &D_06004E38, 1.0f, 0, -1, 2, 0 },  { &D_060029E8, 1.0f, 0, -1, 2, 0 },  { &D_06005CA8, 1.0f, 0, -1, 2, 0 },
-    { &D_060038CC, 1.0f, 0, -1, 0, 0 },  { &D_06003CC0, 1.0f, 0, -1, 0, 0 },  { &D_060012F4, 1.0f, 0, -1, 2, 0 },
-    { &D_06004700, 1.0f, 0, -1, 2, 0 },  { &D_06001BC8, 1.0f, 0, -1, 0, 0 },  { &D_06003438, 1.0f, 0, -1, 2, 0 },
-    { &D_06001E2C, 1.0f, 0, -1, 0, 0 },  { &D_06000994, 1.0f, 0, -1, 0, 0 },  { &D_06002268, 1.0f, 0, -1, 2, 0 },
-    { &D_06002F08, 1.0f, 0, -1, 0, 0 },  { &D_0600577C, 1.0f, 0, -1, 0, -4 }, { &D_060029E8, 1.0f, 8, -1, 2, 0 },
-    { &D_060029E8, 1.0f, 4, -1, 2, -4 }, { &D_060029E8, 1.0f, 0, -1, 2, 0 },  { &D_06001BC8, 1.0f, 0, -1, 0, 0 },
-    { &D_060012F4, -1.0f, 0, -1, 2, 0 }, { &D_06002670, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_005488, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_00B0B4, 1.0f, 0, -1, 0, 0 },
+    { &object_dnt_Anim_004AA0, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_004E38, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_0029E8, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_005CA8, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_0038CC, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_003CC0, 1.0f, 0, -1, 0, 0 },
+    { &object_dnt_Anim_0012F4, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_004700, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_003438, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_001E2C, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_000994, 1.0f, 0, -1, 0, 0 },
+    { &object_dnt_Anim_002268, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_002F08, 1.0f, 0, -1, 0, 0 },
+    { &object_dnt_Anim_00577C, 1.0f, 0, -1, 0, -4 }, { &object_dnt_Anim_0029E8, 1.0f, 8, -1, 2, 0 },
+    { &object_dnt_Anim_0029E8, 1.0f, 4, -1, 2, -4 }, { &object_dnt_Anim_0029E8, 1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_0012F4, -1.0f, 0, -1, 2, 0 },
+    { &object_dnt_Anim_002670, 1.0f, 0, -1, 2, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -479,7 +462,7 @@ void func_80ADBAB8(EnSellnuts* this, GlobalContext* globalCtx) {
     }
 
     if ((sp27 == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = func_80ADBBEC;
         func_800B7298(globalCtx, NULL, 0x13);
@@ -525,7 +508,7 @@ void func_80ADBD64(EnSellnuts* this, GlobalContext* globalCtx) {
     }
 
     if ((sp27 == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_338 &= ~2;
         this->actor.flags &= ~1;
@@ -567,7 +550,7 @@ void func_80ADBE80(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADBFA0(EnSellnuts* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (this->unk_34C == 0) {
             this->actionFunc = func_80ADB544;
@@ -730,7 +713,7 @@ void func_80ADC6D0(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.day == 3) {
@@ -760,7 +743,7 @@ void func_80ADC7B4(EnSellnuts* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     } else if ((this->unk_366 == 1) && (temp == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_366 = 0;
         ActorCutscene_Stop(this->cutscene);
@@ -962,7 +945,8 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600AC70, &D_06005488, this->jointTable, this->morphTable, 28);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dnt_Skel_00AC70, &object_dnt_Anim_005488, this->jointTable,
+                       this->morphTable, 28);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
@@ -1115,9 +1099,9 @@ s32 EnSellnuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
 
     if (limbIndex == 26) {
         if ((this->unk_34C == 6) || (this->unk_34C == 5) || (this->unk_34C == 7)) {
-            *dList = D_06001350;
+            *dList = object_dnt_DL_001350;
         } else {
-            *dList = D_06008290;
+            *dList = object_dnt_DL_008290;
         }
     }
 
