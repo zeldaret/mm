@@ -1,7 +1,7 @@
 #ifndef Z_EN_CNE_01_H
 #define Z_EN_CNE_01_H
 
-#include "global.h"
+#include "z_en_hy.h"
 
 struct EnCne01;
 
