@@ -1148,8 +1148,8 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((gSaveContext.sunsSongState != SUNSSONG_INACTIVE) && (this->actor.shape.rot.x == 0) && (!this->stunnedBySunsSong) &&
-        (this->action != EN_RD_ACTION_DAMAGE) && (this->action != EN_RD_ACTION_DEAD) &&
+    if ((gSaveContext.sunsSongState != SUNSSONG_INACTIVE) && (this->actor.shape.rot.x == 0) &&
+        (!this->stunnedBySunsSong) && (this->action != EN_RD_ACTION_DAMAGE) && (this->action != EN_RD_ACTION_DEAD) &&
         (this->action != EN_RD_ACTION_STUNNED)) {
         EnRd_SetupStunned(this);
         return;
