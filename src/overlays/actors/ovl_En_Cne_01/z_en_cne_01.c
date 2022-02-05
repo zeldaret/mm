@@ -144,7 +144,7 @@ s32 func_809CB4A0(EnCne01* this, GlobalContext* globalCtx) {
 }
 
 void EnCne01_FinishInit(EnHy* this, GlobalContext* globalCtx) {
-    if (EnHy_Init(this, globalCtx, &object_cne_Skel_0000F0, 11)) {
+    if (EnHy_Init(this, globalCtx, &gCneSkel, ENHY_ANIMATION_OS_ANIME_11)) {
         this->actor.flags |= 1;
         this->actor.draw = EnCne01_Draw;
         this->waitingOnInit = false;
@@ -199,11 +199,11 @@ void EnCne01_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->enHy.animObjIndex = func_8013D924(OBJECT_OS_ANIME, globalCtx);
     this->enHy.headObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
-    this->enHy.skel2ObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
-    this->enHy.skel1ObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
+    this->enHy.skelUpperObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
+    this->enHy.skelLowerObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
 
-    if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skel2ObjIndex < 0) ||
-        (this->enHy.skel1ObjIndex < 0)) {
+    if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
+        (this->enHy.skelLowerObjIndex < 0)) {
         Actor_MarkForDeath(&this->enHy.actor);
     }
     this->enHy.actor.draw = NULL;
@@ -244,31 +244,32 @@ s32 EnCne01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == CNE_LIMB_HEAD) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->enHy.headObjIndex].segment);
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.headObjIndex].segment);
-        *dList = object_cne_DL_001300;
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.skel1ObjIndex].segment);
+        *dList = gCneHeadBrownHairDL;
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
-    if (limbIndex == 15) {
+    if (limbIndex == CNE_LIMB_HEAD) {
         Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->enHy.headRot.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(-this->enHy.headRot.x, MTXMODE_APPLY);
         Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 8) {
+    if (limbIndex == CNE_LIMB_TORSO) {
         Matrix_InsertXRotation_s(-this->enHy.torsoRot.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(-this->enHy.torsoRot.x, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == 15) && this->enHy.inMsgState3 && ((globalCtx->state.frames % 2) == 0)) {
+    if ((limbIndex == CNE_LIMB_HEAD) && this->enHy.inMsgState3 && ((globalCtx->state.frames % 2) == 0)) {
         Matrix_InsertTranslation(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 12)) {
+    if ((limbIndex == CNE_LIMB_TORSO) || (limbIndex == CNE_LIMB_LEFT_UPPER_ARM) ||
+        (limbIndex == CNE_LIMB_RIGHT_UPPER_ARM)) {
         rot->y += (s16)(Math_SinS(this->enHy.limbRotTableY[limbIndex]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->enHy.limbRotTableZ[limbIndex]) * 200.0f);
     }
@@ -281,14 +282,14 @@ void EnCne01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 7) {
+    if (limbIndex == CNE_LIMB_RIGHT_FOOT) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->enHy.skel2ObjIndex].segment);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.skel2ObjIndex].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
+        gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == CNE_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.actor.focus.pos);
     }
 }

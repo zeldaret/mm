@@ -114,9 +114,9 @@ s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeleton
 
     if ((func_8013D8DC(enHy->animObjIndex, globalCtx) == true) &&
         (func_8013D8DC(enHy->headObjIndex, globalCtx) == true) &&
-        (func_8013D8DC(enHy->skel2ObjIndex, globalCtx) == true) &&
-        (func_8013D8DC(enHy->skel1ObjIndex, globalCtx) == true)) {
-        enHy->actor.objBankIndex = enHy->skel1ObjIndex;
+        (func_8013D8DC(enHy->skelUpperObjIndex, globalCtx) == true) &&
+        (func_8013D8DC(enHy->skelLowerObjIndex, globalCtx) == true)) {
+        enHy->actor.objBankIndex = enHy->skelLowerObjIndex;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->actor.objBankIndex].segment);
