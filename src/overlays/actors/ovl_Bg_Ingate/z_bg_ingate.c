@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_ingate.h"
+#include "objects/object_sichitai_obj/object_sichitai_obj.h"
 
 #define FLAGS 0x00000030
 
@@ -15,7 +16,17 @@ void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
+Actor* func_80953A90(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId);
+
+s32 func_80953BEC(BgIngate* this);
+void func_80953B40(BgIngate* this);
+void func_80953F8C(BgIngate* this, GlobalContext* globalCtx);
+void func_80953F9C(BgIngate* this, GlobalContext* globalCtx);
+void func_809541B8(BgIngate* this, GlobalContext* globalCtx);
+void func_809542A0(BgIngate* this, GlobalContext* globalCtx);
+void func_80954340(BgIngate* this, GlobalContext* globalCtx);
+void func_809543D4(BgIngate* this, GlobalContext* globalCtx);
+
 const ActorInit Bg_Ingate_InitVars = {
     ACTOR_BG_INGATE,
     ACTORCAT_BG,
@@ -28,41 +39,342 @@ const ActorInit Bg_Ingate_InitVars = {
     (ActorFunc)BgIngate_Draw,
 };
 
-#endif
+Actor* func_80953A90(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId) {
+    Actor* foundActor = NULL;
+    Actor* temp_v0;
 
-extern UNK_TYPE D_060006B0;
-extern UNK_TYPE D_060016DC;
+    while (true) {
+        foundActor = SubS_FindActor(globalCtx, foundActor, actorCat, actorId);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953A90.s")
+        if ((foundActor == NULL) || (this != (BgIngate*)foundActor) && (foundActor->update != NULL)) {
+            break;
+        }
+
+        temp_v0 = foundActor->next;
+        if (temp_v0 == NULL) {
+            foundActor = NULL;
+            break;
+        }
+        foundActor = temp_v0;
+    }
+
+    return foundActor;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953B40.s")
+// void func_80953B40(BgIngate* this) {
+//     s32 temp_t8;
+//     u16 temp_t7;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953BEC.s")
+//     if ((gSaveContext.eventInf[3] & 0x20) == 0) {
+//         this->unk180 = 0xFA0;
+//         this->unk168 = 4;
+//     } else {
+//         this->unk180 = 0x7D0;
+//         this->unk168 = 1;
+//     }
+//     this->unk188 = 2;
+//     this->unk18C = 0;
+//     temp_t7 = this->unk160 & ~1;
+//     temp_t8 = temp_t7 & 0xFFFF;
+//     this->unk160 = temp_t7;
+//     this->unk184 = (s32)this->unk180 / (s32)(this->unk164->count - 2);
+//     this->unk160 = temp_t8 & ~2;
+// }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953DA8.s")
+s32 func_80953BEC(BgIngate* this) {
+    f32 sp74[265];
+    Vec3f sp68;
+    Vec3f sp5C;
+    Vec3f sp50;
+    s16 temp_v0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953E38.s")
+    func_8013AF00(sp74, 3, this->unk164->count + 3);
+    if ((this->unk160 & 1) == 0) {
+        sp50 = gZeroVec3f;
+        func_8013B6B0(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188, sp74,
+                      &sp50, this->unk168);
+        this->unk160 |= 1;
+    } else {
+        sp50 = this->unk170;
+    }
+    this->dyna.actor.world.pos.x = sp50.x;
+    this->dyna.actor.world.pos.z = sp50.z;
+    this->unk170 = gZeroVec3f;
+    if (func_8013B6B0(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188, sp74,
+                      &this->unk170, this->unk168) != 0) {
+        this->unk160 |= 2;
+    } else {
+        sp68 = this->dyna.actor.world.pos;
+        sp5C = this->unk170;
+        temp_v0 = Math_Vec3f_Yaw(&sp68, &sp5C);
+        this->dyna.actor.world.rot.y = temp_v0;
+        this->dyna.actor.shape.rot.y = temp_v0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953EA4.s")
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953F14.s")
+s32 func_80953DA8(BgIngate* this, GlobalContext* globalCtx) {
+    Camera* camera = Play_GetCamera(globalCtx, 0);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953F8C.s")
+    if ((gSaveContext.eventInf[3] & 0x20) != 0) {
+        func_800B7298(globalCtx, &this->dyna.actor, 7);
+    } else {
+        gSaveContext.eventInf[4] |= 2;
+    }
+    func_800DFAC8(camera, 0x2F);
+    globalCtx->unk_1887C = 0x63;
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953F9C.s")
+void func_80953E38(GlobalContext* globalCtx) {
+    func_800DFAC8(Play_GetCamera(globalCtx, 0), 1);
+    if ((gSaveContext.eventInf[3] & 0x20) == 0) {
+        gSaveContext.eventInf[4] &= 0xFD;
+    }
+    globalCtx->unk_1887C = -1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_809541B8.s")
+void func_80953EA4(BgIngate* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_809542A0.s")
+    func_800B7298(globalCtx, &this->dyna.actor, 0x3A);
+    player->unk_3A0.x = this->dyna.actor.world.pos.x;
+    player->unk_3A0.z = this->dyna.actor.world.pos.z;
+    this->unk160 &= ~0x4;
+    this->unk16A = 0x1E;
+    this->actionFunc = func_80954340;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80954340.s")
+void func_80953F14(BgIngate* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_809543D4.s")
+    player->actor.shape.rot.y = this->dyna.actor.shape.rot.y;
+    player->actor.world.rot.y = player->actor.shape.rot.y;
+    player->currentYaw = player->actor.shape.rot.y;
+    player->actor.focus.rot.y = player->actor.shape.rot.y;
+    this->unk160 |= 0x10;
+    func_80953DA8(this, globalCtx);
+    if (this->unk164 != 0) {
+        func_80953B40(this);
+    }
+    this->unk16E = -1;
+    this->actionFunc = func_80953F9C;
+}
+
+void func_80953F8C(BgIngate* this, GlobalContext* globalCtx) {
+}
+
+void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    Camera* camera = Play_GetCamera(globalCtx, 0);
+
+    if ((gSaveContext.eventInf[4] & 1) == 0) {
+        if (!(gSaveContext.eventInf[3] & 0x20) && ((this->unk160 & 0x10) != 0) && (this->unk16C == 0)) {
+            this->dyna.actor.textId = 0x9E3;
+            func_801518B0(globalCtx, this->dyna.actor.textId, NULL);
+            this->unk160 &= ~0x10;
+        }
+        if ((this->unk160 & 2) != 0) {
+            if (this->unk164->unk1 != 0xFF) {
+                func_80953E38(globalCtx);
+                func_800B7298(globalCtx, &this->dyna.actor, 7);
+                this->dyna.actor.textId = 0x9E4;
+                func_801518B0(globalCtx, this->dyna.actor.textId, NULL);
+                this->unk16C += 1;
+                gSaveContext.weekEventReg[0x5A] |= 0x40;
+                this->actionFunc = func_809543D4;
+            } else {
+                if ((gSaveContext.eventInf[3] & 0x20) == 0) {
+                    gSaveContext.eventInf[4] &= 0xFD;
+                } else {
+                    gSaveContext.eventInf[4] |= 1;
+                }
+                this->actionFunc = func_809542A0;
+            }
+        } else if ((ActorCutscene_GetCurrentIndex() == -1) && (this->unk164 != 0)) {
+            // This sound macro doesn't exist??
+            Actor_PlaySfxAtPos(&this->dyna.actor, 0x211E);
+            func_80953BEC(this);
+        }
+    }
+    if (ActorCutscene_GetCurrentIndex() != this->unk16E) {
+        if (ActorCutscene_GetCurrentIndex() != -1) {
+            func_800DFAC8(camera, 1);
+            player->stateFlags1 |= 0x20;
+            globalCtx->actorCtx.unk5 &= ~0x4;
+        } else {
+            func_800DFAC8(camera, 0x2F);
+            player->stateFlags1 &= ~0x20;
+        }
+    }
+    this->unk16E = ActorCutscene_GetCurrentIndex();
+}
+
+void func_809541B8(BgIngate* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (this->unk160 & 0x4) {
+        if ((player->transformation == PLAYER_FORM_HUMAN) && (player->actor.bgCheckFlags & 1) &&
+            (this->dyna.actor.xzDistToPlayer < 40.0f)) {
+            if (this->dyna.actor.playerHeightRel > 15.0f) {
+                func_800B7298(globalCtx, &this->dyna.actor, 7);
+                this->dyna.actor.textId = 0x9E6;
+                func_801518B0(globalCtx, this->dyna.actor.textId, NULL);
+                this->actionFunc = func_809543D4;
+            }
+        }
+    } else if (DynaPolyActor_IsInRidingMovingState(&this->dyna) == 0) {
+        this->unk160 |= 4;
+    }
+}
+
+void func_809542A0(BgIngate* this, GlobalContext* globalCtx) {
+    if ((gSaveContext.eventInf[5] & 1) != 0) {
+        globalCtx->nextEntranceIndex = 0xA820;
+        gSaveContext.eventInf[5] &= 0xFE;
+    } else {
+        globalCtx->nextEntranceIndex = 0xA810;
+    }
+    gSaveContext.nextCutsceneIndex = 0;
+    globalCtx->sceneLoadFlag = 0x14;
+    globalCtx->unk_1887F = 3;
+    gSaveContext.nextTransition = 3;
+    this->actionFunc = func_80953F8C;
+    gSaveContext.weekEventReg[90] &= 0xBF;
+    func_800FE498();
+}
+
+void func_80954340(BgIngate* this, GlobalContext* globalCtx) {
+    if (!DECR(this->unk16A)) {
+        if (this->unk164 != 0) {
+            func_800B7298(globalCtx, &this->dyna.actor, 6U);
+            this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
+            func_80953F14(this, globalCtx);
+            func_800FE484();
+        }
+    }
+}
+
+void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
+    u8 talkState;
+
+    talkState = Message_GetState(&globalCtx->msgCtx);
+    if (((talkState == 4) || (talkState == 5)) && func_80147624(globalCtx)) {
+        switch (this->dyna.actor.textId) {
+            case 0x9E4:
+                this->dyna.actor.textId = 0x9E5;
+                func_80151938(globalCtx, this->dyna.actor.textId);
+                break;
+            case 0x9E5:
+                if (globalCtx->msgCtx.choiceIndex == 0) {
+                    func_800B7298(globalCtx, &this->dyna.actor, 6);
+                    this->unk160 &= ~0x4;
+                    this->actionFunc = func_809541B8;
+                    func_800FE498();
+                    func_8019F208();
+                } else {
+                    if (this->unk164 != 0) {
+                        this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
+                    }
+                    func_80953F14(this, globalCtx);
+                    gSaveContext.weekEventReg[0x5A] &= 0xBF;
+                    func_8019F230();
+                }
+                func_801477B4(globalCtx);
+                break;
+            case 0x9E6:
+                if (globalCtx->msgCtx.choiceIndex == 0) {
+                    func_80953EA4(this, globalCtx);
+                    gSaveContext.weekEventReg[0x5A] &= 0xBF;
+                    func_8019F208();
+                } else {
+                    this = this;
+                    func_800B7298(globalCtx, &this->dyna.actor, 6);
+                    this->unk160 &= ~0x4;
+                    this->actionFunc = func_809541B8;
+                    func_800FE498();
+                    func_8019F230();
+                }
+                func_801477B4(globalCtx);
+                break;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/BgIngate_Init.s")
+// void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx) {
+//     Vec3f sp20;
+//     s32 phi_a2;
+//     Vec3s* sp38;
+//     Vec3f sp2C;
+//     BgIngate* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/BgIngate_Destroy.s")
+//     if (func_80953A90(this, globalCtx, ACTORCAT_BG, ACTOR_BG_INGATE) == 0) {
+//         DynaPolyActor_Init(&this->dyna, 3);
+//         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_sichitai_obj_Colheader_0016DC);
+//         this->unk160 = 0;
+//         this->unk160 |= 0x8;
+//         this->unk160 |= 0x10;
+//         Actor_SetScale(&this->dyna.actor, 1.0f);
+//         this->unk164 = func_8013BB34(globalCtx, this->dyna.actor.params & 0xFF, 0);
+//         this->dyna.actor.room = -1;
+//         if ((gSaveContext.weekEventReg[0x14] & 2) != 0) {
+//             gSaveContext.weekEventReg[0x5A] &= 0xBF;
+//         }
+//         if ((!(gSaveContext.eventInf[3] & 0x20)) && (gSaveContext.weekEventReg[0x5A] & 0x40)) {
+//             phi_a2 = 1;
+//             this->unk16C = 1;
+//             this->actionFunc = func_809541B8;
+//         } else {
+//             phi_a2 = 0;
+//             if (globalCtx->curSpawn == 6) {
+//                 func_80953F14(this, globalCtx);
+//                 if (gSaveContext.eventInf[3] & 0x20) {
+//                     func_80112AFC(globalCtx);
+//                 } else {
+//                     gSaveContext.eventInf[4] |= 2;
+//                 }
+//             } else {
+//                 this->actionFunc = func_80953F8C;
+//             }
+//         }
+//         this->unk164 = func_8013BB34(globalCtx, this->dyna.actor.params & 0xFF, phi_a2);
+//         if (this->unk164 != 0) {
+//             sp38 = Lib_SegmentedToVirtual(this->unk164->points);
+//             Math_Vec3s_ToVec3f(&sp20, &sp38[0]);
+//             Math_Vec3s_ToVec3f(&sp2C, &sp38[1]);
+//             this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&sp2C, &sp20);
+//             this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
+//             this->dyna.actor.world.pos.x = sp2C.x;
+//             this->dyna.actor.world.pos.y = -15.0f;
+//             this->dyna.actor.world.pos.z = sp2C.z;
+//         }
+//         this->unk164 = func_8013BB34(globalCtx, this->dyna.actor.params & 0xFF, 0);
+//         return;
+//     }
+//     Actor_MarkForDeath(&this->dyna.actor);
+// }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/BgIngate_Update.s")
+void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    BgIngate* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/BgIngate_Draw.s")
+    if ((this->unk160 & 8) != 0) {
+        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    }
+}
+
+void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx) {
+    BgIngate* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+}
+
+void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, object_sichitai_obj_DL_0006B0);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
