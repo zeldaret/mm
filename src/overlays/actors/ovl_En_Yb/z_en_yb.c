@@ -358,7 +358,7 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
 
     EnYb_UpdateAnimation(this, globalCtx);
     if (this->actor.xzDistToPlayer < 180.0f && fabsf(this->actor.playerHeightRel) < 50.0f &&
-        globalCtx->msgCtx.unk1202A == 3 && globalCtx->msgCtx.unk1202E == 7 &&
+        globalCtx->msgCtx.ocarinaMode == 3 && globalCtx->msgCtx.unk1202E == 7 &&
         gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
