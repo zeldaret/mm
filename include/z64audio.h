@@ -117,23 +117,23 @@ typedef enum {
 } OcarinaButtonIdx;
 
 typedef enum {
-    /* 0x0 */ NOTE_C4,
-    /* 0x1 */ NOTE_DFLAT4,
-    /* 0x2 */ NOTE_D4,
-    /* 0x3 */ NOTE_EFLAT4,
-    /* 0x4 */ NOTE_E4,
-    /* 0x5 */ NOTE_F4,
-    /* 0x6 */ NOTE_GFLAT4,
-    /* 0x7 */ NOTE_G4,
-    /* 0x8 */ NOTE_AFLAT4,
-    /* 0x9 */ NOTE_A4,
-    /* 0xA */ NOTE_BFLAT4,
-    /* 0xB */ NOTE_B4,
-    /* 0xC */ NOTE_C5,
-    /* 0xD */ NOTE_DFLAT5,
-    /* 0xE */ NOTE_D5,
-    /* 0xF */ NOTE_EFLAT5,
-    /* -1  */ NOTE_NONE = 0xFF
+    /* 0x0 */ OCARINA_PITCH_C4,
+    /* 0x1 */ OCARINA_PITCH_DFLAT4,
+    /* 0x2 */ OCARINA_PITCH_D4,
+    /* 0x3 */ OCARINA_PITCH_EFLAT4,
+    /* 0x4 */ OCARINA_PITCH_E4,
+    /* 0x5 */ OCARINA_PITCH_F4,
+    /* 0x6 */ OCARINA_PITCH_GFLAT4,
+    /* 0x7 */ OCARINA_PITCH_G4,
+    /* 0x8 */ OCARINA_PITCH_AFLAT4,
+    /* 0x9 */ OCARINA_PITCH_A4,
+    /* 0xA */ OCARINA_PITCH_BFLAT4,
+    /* 0xB */ OCARINA_PITCH_B4,
+    /* 0xC */ OCARINA_PITCH_C5,
+    /* 0xD */ OCARINA_PITCH_DFLAT5,
+    /* 0xE */ OCARINA_PITCH_D5,
+    /* 0xF */ OCARINA_PITCH_EFLAT5,
+    /* -1  */ OCARINA_PITCH_NONE = 0xFF
 } OcarinaNoteIdx;
 
 typedef enum {

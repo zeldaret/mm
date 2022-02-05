@@ -621,7 +621,7 @@ beginseg
     pad_text
     pad_text
     pad_text
-    include "build/data/code/audio_data.data.o"
+    include "build/src/code/audio/audio_data.o"
     include "build/src/code/audio/audio_synthesis.o"
     include "build/data/code/audio_synthesis.data.o"
     include "build/src/code/audio/audio_heap.o"
@@ -1473,8 +1473,7 @@ beginseg
     name "ovl_Obj_Ice_Poly"
     compress
     include "build/src/overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.o"
-    include "build/data/ovl_Obj_Ice_Poly/ovl_Obj_Ice_Poly.data.o"
-    include "build/data/ovl_Obj_Ice_Poly/ovl_Obj_Ice_Poly.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Ice_Poly/ovl_Obj_Ice_Poly_reloc.o"
 endseg
 
 beginseg
@@ -1497,8 +1496,7 @@ beginseg
     name "ovl_Obj_Bean"
     compress
     include "build/src/overlays/actors/ovl_Obj_Bean/z_obj_bean.o"
-    include "build/data/ovl_Obj_Bean/ovl_Obj_Bean.data.o"
-    include "build/data/ovl_Obj_Bean/ovl_Obj_Bean.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Bean/ovl_Obj_Bean_reloc.o"
 endseg
 
 beginseg
@@ -9292,7 +9290,8 @@ beginseg
     name "parameter_static"
     compress
     romalign 0x1000
-    include "build/baserom/parameter_static.o"
+    include "build/assets/interface/parameter_static/parameter_static.o"
+    number 2
 endseg
 
 beginseg
