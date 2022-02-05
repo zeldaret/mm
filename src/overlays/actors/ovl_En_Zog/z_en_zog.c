@@ -65,9 +65,9 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-static TexturePtr D_80B958AC[] = { &object_zog_Tex_024750, &object_zog_Tex_024F50, &object_zog_Tex_025750 };
+static TexturePtr D_80B958AC[] = { object_zog_Tex_024750, object_zog_Tex_024F50, object_zog_Tex_025750 };
 
-static TexturePtr D_80B958B8[] = { &object_zog_Tex_025F50, &object_zog_Tex_026750 };
+static TexturePtr D_80B958B8[] = { object_zog_Tex_025F50, object_zog_Tex_026750 };
 
 static AnimationHeader* D_80B958C0[] = {
     &object_zog_Anim_00FC0C, &object_zog_Anim_0106B0, &object_zog_Anim_0166F4, &object_zog_Anim_017170,

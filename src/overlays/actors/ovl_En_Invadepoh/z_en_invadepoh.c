@@ -3,9 +3,14 @@
  * Overlay: ovl_En_Invadepoh
  * Description: Ranch nighttime actors
  */
-#include "prevent_bss_reordering.h"
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_ma1/object_ma1.h"
+#include "objects/object_ma2/object_ma2.h"
+#include "objects/object_dog/object_dog.h"
+#include "objects/object_cow/object_cow.h"
+#include "objects/object_uch/object_uch.h"
 
 #define FLAGS 0x00000010
 
@@ -170,56 +175,6 @@ void func_80B45A4C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 void func_80B45A94(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 void func_80B45B1C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 
-extern AnimatedMaterial D_06000550;
-extern AnimatedMaterial D_06000560;
-
-extern AnimationHeader D_06000608;
-extern AnimationHeader D_060006C8;
-extern AnimationHeader D_06000998;
-extern AnimationHeader D_06001560;
-extern AnimationHeader D_06001674;
-extern AnimationHeader D_06001BD8;
-extern AnimationHeader D_06001D80;
-extern AnimationHeader D_060021C8;
-extern AnimationHeader D_06002A8C;
-extern AnimationHeader D_06004264;
-extern AnimationHeader D_06004E98;
-extern AnimationHeader D_06007328;
-extern AnimationHeader D_06009E58;
-extern AnimationHeader D_0600A174;
-extern AnimationHeader D_06014088;
-extern AnimationHeader D_06016720;
-
-extern FlexSkeletonHeader D_060080F0;
-extern FlexSkeletonHeader D_06004010;
-extern FlexSkeletonHeader D_06004C30;
-extern FlexSkeletonHeader D_06004E50;
-extern FlexSkeletonHeader D_06013928;
-extern FlexSkeletonHeader D_06015C28;
-
-extern Gfx D_0600FFC8[];
-extern Gfx D_060107C8[];
-extern Gfx D_06010FC8[];
-extern Gfx D_060117C8[];
-extern Gfx D_06011FC8[];
-extern Gfx D_060127C8[];
-extern Gfx D_06012BC8[];
-extern Gfx D_06012FC8[];
-extern Gfx D_060133C8[];
-extern Gfx D_06011AD8[];
-extern Gfx D_060122D8[];
-extern Gfx D_06012AD8[];
-extern Gfx D_060132D8[];
-extern Gfx D_06013AD8[];
-extern Gfx D_060142D8[];
-extern Gfx D_06014AD8[];
-extern Gfx D_06014ED8[];
-extern Gfx D_060152D8[];
-extern Gfx D_060156D8[];
-extern Gfx D_060003B0[];
-extern Gfx D_06000720[];
-extern Gfx D_06000080[];
-
 extern s32 D_801BDA9C;
 
 const ActorInit En_Invadepoh_InitVars = {
@@ -298,28 +253,29 @@ static Vec3f D_80B4E934 = { 216.0f, -20.0f, 1395.0f };
 
 static s32 D_80B4E940 = 0;
 
-static Gfx* D_80B4E944[] = {
-    D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8,
+static TexturePtr D_80B4E944[] = {
+    object_ma1_Tex_00FFC8, object_ma1_Tex_0107C8, object_ma1_Tex_010FC8, object_ma1_Tex_0117C8, object_ma1_Tex_011FC8,
 };
 
-static Gfx* D_80B4E958[] = {
-    D_060127C8,
-    D_06012BC8,
-    D_06012FC8,
-    D_060133C8,
+static TexturePtr D_80B4E958[] = {
+    object_ma1_Tex_0127C8,
+    object_ma1_Tex_012BC8,
+    object_ma1_Tex_012FC8,
+    object_ma1_Tex_0133C8,
 };
 
 static s8 D_80B4E968 = 0;
 
-static Gfx* D_80B4E96C[] = {
-    D_06011AD8, D_060122D8, D_06012AD8, D_060132D8, D_06013AD8, D_060142D8,
+static TexturePtr D_80B4E96C[] = {
+    object_ma2_Tex_011AD8, object_ma2_Tex_0122D8, object_ma2_Tex_012AD8,
+    object_ma2_Tex_0132D8, object_ma2_Tex_013AD8, object_ma2_Tex_0142D8,
 };
 
-static Gfx* D_80B4E984[] = {
-    D_06014AD8,
-    D_06014ED8,
-    D_060152D8,
-    D_060156D8,
+static TexturePtr D_80B4E984[] = {
+    object_ma2_Tex_014AD8,
+    object_ma2_Tex_014ED8,
+    object_ma2_Tex_0152D8,
+    object_ma2_Tex_0156D8,
 };
 
 static s8 D_80B4E994 = 0;
@@ -1236,7 +1192,7 @@ void func_80B44EFC(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 void func_80B44F58(void) {
     s32 i;
-    Gfx** iter;
+    TexturePtr* iter;
 
     if (!D_80B4E968) {
         D_80B4E968 = true;
@@ -1252,7 +1208,7 @@ void func_80B44F58(void) {
 
 void func_80B44FEC(void) {
     s32 i;
-    Gfx** iter;
+    TexturePtr* iter;
 
     if (!D_80B4E994) {
         D_80B4E994 = true;
@@ -1267,8 +1223,8 @@ void func_80B44FEC(void) {
 }
 
 void func_80B45080(void) {
-    D_80B50400 = Lib_SegmentedToVirtual(&D_06000560);
-    D_80B503FC = Lib_SegmentedToVirtual(&D_06000550);
+    D_80B50400 = Lib_SegmentedToVirtual(object_uch_Matanimheader_000560);
+    D_80B503FC = Lib_SegmentedToVirtual(object_uch_Matanimheader_000550);
 }
 
 s32 func_80B450C0(f32* x1, f32* z1, f32 x2, f32 z2, f32 speed) {
@@ -2158,7 +2114,7 @@ void func_80B474DC(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B47568(EnInvadepoh* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06001D80, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_uch_Anim_001D80, -6.0f);
     this->collider.base.atFlags &= ~0x1;
     this->collider.base.acFlags &= ~0x1;
     this->collider.base.ocFlags1 &= ~0x1;
@@ -2200,8 +2156,8 @@ void func_80B47600(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B4770C(EnInvadepoh* this) {
-    if (this->skelAnime.animation != &D_06001D80) {
-        Animation_MorphToLoop(&this->skelAnime, &D_06001D80, -6.0f);
+    if (this->skelAnime.animation != &object_uch_Anim_001D80) {
+        Animation_MorphToLoop(&this->skelAnime, &object_uch_Anim_001D80, -6.0f);
     }
     this->collider.base.atFlags |= 1;
     this->collider.base.acFlags |= 1;
@@ -2229,7 +2185,7 @@ void func_80B47830(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~1;
     this->collider.base.acFlags &= ~1;
     this->collider.base.ocFlags1 |= 1;
-    Animation_PlayLoop(&this->skelAnime, &D_060006C8);
+    Animation_PlayLoop(&this->skelAnime, &object_uch_Anim_0006C8);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
     this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
@@ -2254,7 +2210,7 @@ void func_80B47938(EnInvadepoh* this) {
     this->collider.base.atFlags &= ~1;
     this->collider.base.acFlags &= ~1;
     this->collider.base.ocFlags1 &= ~1;
-    Animation_PlayLoop(&this->skelAnime, &D_06000608);
+    Animation_PlayLoop(&this->skelAnime, &object_uch_Anim_000608);
     this->actor.flags &= ~1;
     this->actionTimer = 10;
     this->alienAlpha = 255;
@@ -2325,8 +2281,8 @@ void func_80B47BAC(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B45080();
         this->actor.update = func_80B47D30;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004E50, &D_06001D80, this->jointTable, this->morphTable,
-                           14);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_uch_Skel_004E50, &object_uch_Anim_001D80,
+                           this->jointTable, this->morphTable, 14);
         this->skelAnime.curFrame = (this->actor.params & 7) * this->skelAnime.endFrame * 0.125f;
         func_80B444BC(this, globalCtx);
         func_80B442E4(this);
@@ -2408,8 +2364,8 @@ void func_80B47FA8(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectDependency(globalCtx, thisx);
         this->actor.update = func_80B48060;
         this->actor.draw = func_80B4E158;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004010, NULL, this->jointTable, this->morphTable, 6);
-        Animation_PlayLoop(&this->skelAnime, &D_06004264);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowBodySkel, NULL, this->jointTable, this->morphTable, 6);
+        Animation_PlayLoop(&this->skelAnime, &gCowBodyMoveHeadAnim);
     }
 }
 
@@ -2451,8 +2407,8 @@ void func_80B481C4(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectDependency(globalCtx, &this->actor);
         this->actor.update = func_80B4827C;
         this->actor.draw = func_80B4E1B0;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004C30, NULL, this->jointTable, this->morphTable, 6);
-        Animation_PlayLoop(&this->skelAnime, &D_06004E98);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowTailSkel, NULL, this->jointTable, this->morphTable, 6);
+        Animation_PlayLoop(&this->skelAnime, &gCowTailSwishAnim);
     }
 }
 
@@ -2469,7 +2425,7 @@ void func_80B4827C(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80B482D4(EnInvadepoh* this) {
     this->actionTimer = 40;
-    Animation_MorphToLoop(&this->skelAnime, &D_06002A8C, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_002A8C, -10.0f);
     this->actor.draw = NULL;
     this->actionFunc = func_80B48324;
 }
@@ -2485,7 +2441,7 @@ void func_80B48324(EnInvadepoh* this, GlobalContext* globalCtx) {
 
 void func_80B48374(EnInvadepoh* this) {
     this->actionTimer = 60;
-    Animation_MorphToLoop(&this->skelAnime, &D_06002A8C, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_002A8C, -10.0f);
     this->actor.draw = func_80B4E324;
     this->actionFunc = func_80B483CC;
 }
@@ -2517,7 +2473,7 @@ void func_80B4843C(EnInvadepoh* this) {
     this->behaviorInfo.unk44 = 0.1f;
     this->behaviorInfo.unk48 = 2000;
     this->actionTimer = 50;
-    Animation_Change(&this->skelAnime, &D_06007328, 2.0f, 0.0f, 0.0f, 0, -5.0f);
+    Animation_Change(&this->skelAnime, &object_ma1_Anim_007328, 2.0f, 0.0f, 0.0f, 0, -5.0f);
     this->actor.draw = func_80B4E324;
     this->actionFunc = func_80B484EC;
 }
@@ -2547,7 +2503,7 @@ void func_80B48588(EnInvadepoh* this) {
     this->behaviorInfo.unk42 = 0;
     this->behaviorInfo.unk44 = 0.28f;
     this->behaviorInfo.unk48 = 7000;
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06009E58, -10.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
     this->actor.draw = func_80B4E324;
     this->actionFunc = func_80B48610;
 }
@@ -2564,10 +2520,10 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4873C;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58,
+                           this->jointTable, this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 5000, 0.05f, 0.3f, 0.12f);
-        Animation_PlayLoop(&this->skelAnime, &D_06009E58);
+        Animation_PlayLoop(&this->skelAnime, &object_ma1_Anim_009E58);
         func_80B482D4(this);
     }
 }
@@ -2600,7 +2556,7 @@ void func_80B487B4(EnInvadepoh* this) {
     substruct->unk26.z = 0;
     substruct->unk30 = 0.1f;
     substruct->unk2C = 800;
-    Animation_MorphToLoop(&this->skelAnime, &D_06014088, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_014088, -10.0f);
     this->actionFunc = func_80B48848;
 }
 
@@ -2660,7 +2616,7 @@ void func_80B48948(EnInvadepoh* this) {
         substruct->unk2C = 1000;
     }
 
-    Animation_MorphToLoop(&this->skelAnime, &D_06009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
     this->actionFunc = func_80B48AD4;
 }
 
@@ -2731,7 +2687,7 @@ void func_80B48DE4(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     this->actor.speedXZ = 0.0f;
-    Animation_MorphToLoop(&this->skelAnime, &D_06009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
     this->behaviorInfo.unk4C = 0;
     substruct->unk30 = 0.05f;
     substruct->unk2C = 1200;
@@ -2768,8 +2724,8 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.update = func_80B490F0;
         this->actor.draw = func_80B4E324;
         this->actor.textId = 0x3330;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58,
+                           this->jointTable, this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B444F4(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
@@ -3038,7 +2994,7 @@ void func_80B49B1C(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B49BD0(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &D_06014088, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_014088, -10.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3082,7 +3038,7 @@ void func_80B49DA0(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
     this->behaviorInfo.unk4C = 0;
-    Animation_MorphToLoop(&this->skelAnime, &D_06009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
     this->actionFunc = func_80B49DFC;
 }
 
@@ -3120,8 +3076,8 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
+                           this->jointTable, this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B44540(this, globalCtx);
         func_80B44570(this);
@@ -3187,7 +3143,7 @@ void func_80B4A1B8(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4A2C0(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &D_06009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3246,7 +3202,7 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B4A570(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06002A8C, -10.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_ma1_Anim_002A8C, -10.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3265,7 +3221,7 @@ void func_80B4A5E4(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B4A614(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &D_06014088, 0.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_014088, 0.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3308,7 +3264,7 @@ void func_80B4A7C0(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
     this->behaviorInfo.unk4C = 0;
-    Animation_MorphToLoop(&this->skelAnime, &D_06009E58, 0.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, 0.0f);
     this->actionFunc = func_80B4A81C;
 }
 
@@ -3351,8 +3307,8 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
+                           this->jointTable, this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B44620(this, globalCtx);
         if ((sp38 < CLOCK_TIME(2, 15)) || (sp38 >= CLOCK_TIME(6, 0))) {
@@ -3526,9 +3482,9 @@ void func_80B4B0C4(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4B218;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
-                           23);
-        Animation_MorphToLoop(&this->skelAnime, &D_06009E58, 0.0f);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
+                           this->jointTable, this->morphTable, 23);
+        Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, 0.0f);
         substruct = &this->behaviorInfo;
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 2000, 0.08f, 0.3f, 0.03f);
         substruct->unk30 = 0.08f;
@@ -3575,7 +3531,7 @@ void func_80B4B3DC(EnInvadepoh* this) {
 }
 
 void func_80B4B430(EnInvadepoh* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_060021C8, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_dog_Anim_0021C8, -6.0f);
     this->actionTimer = Rand_S16Offset(50, 80);
     this->actionFunc = func_80B4B484;
 }
@@ -3598,7 +3554,7 @@ void func_80B4B484(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B4B510(EnInvadepoh* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06001BD8, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_dog_Anim_001BD8, -6.0f);
     this->actionTimer = Rand_S16Offset(50, 200);
     this->actionFunc = func_80B4B564;
 }
@@ -3642,7 +3598,7 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B4B724(EnInvadepoh* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000998, -6.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dog_Anim_000998, -6.0f);
     this->actionFunc = func_80B4B768;
 }
 
@@ -3662,7 +3618,7 @@ void func_80B4B768(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B4B820(EnInvadepoh* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06001560, -6.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dog_Anim_001560, -6.0f);
     this->actionFunc = func_80B4B864;
 }
 
@@ -3681,8 +3637,8 @@ void func_80B4B8BC(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(globalCtx, &this->actor);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, &D_060021C8, this->jointTable, this->morphTable,
-                           13);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, &object_dog_Anim_0021C8,
+                           this->jointTable, this->morphTable, 13);
         func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &gZeroVec3s, 3000, 0.1f, 0.0f, 0.0f);
         func_80B44664(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
@@ -3762,7 +3718,7 @@ void func_80B4BA84(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4BBE0(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &D_06016720, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma2_Anim_016720, -6.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3843,7 +3799,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B4BFFC(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
-    Animation_MorphToLoop(&this->skelAnime, &D_0600A174, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma2_Anim_00A174, -6.0f);
     this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4C058;
 }
@@ -3875,7 +3831,7 @@ void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B4C1BC(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
-    Animation_MorphToLoop(&this->skelAnime, &D_0600A174, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma2_Anim_00A174, -6.0f);
     this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4C218;
 }
@@ -3915,8 +3871,8 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44FEC();
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06015C28, &D_06016720, this->jointTable, this->morphTable,
-                           22);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma2_Skel_015C28, &object_ma2_Anim_016720,
+                           this->jointTable, this->morphTable, 22);
         func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
         if (currentTime < 0xD5A0) {
@@ -3978,7 +3934,7 @@ void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B4C6C8(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &D_06014088, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_014088, -10.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -4068,7 +4024,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B4CAB0(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 4000;
-    Animation_MorphToLoop(&this->skelAnime, &D_06009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
     this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4CB0C;
 }
@@ -4097,7 +4053,7 @@ void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
 void func_80B4CC70(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
-    Animation_MorphToLoop(&this->skelAnime, &D_06009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
     this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4CCCC;
 }
@@ -4136,8 +4092,8 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->jointTable, this->morphTable,
-                           23);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088,
+                           this->jointTable, this->morphTable, 23);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B446D0(this, globalCtx);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -4196,7 +4152,7 @@ void func_80B4D15C(EnInvadepoh* this) {
     s32 temp_v1 = this->actor.params & 7;
     unkstruct80B4EE0C* temp_v0;
 
-    Animation_PlayLoop(&this->skelAnime, &D_06001674);
+    Animation_PlayLoop(&this->skelAnime, &object_uch_Anim_001674);
     this->skelAnime.curFrame = ((this->actor.params & 7) * this->skelAnime.endFrame) * 0.25f;
     this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
@@ -4248,7 +4204,7 @@ void func_80B4D290(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B4D3E4(EnInvadepoh* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_06001674);
+    Animation_PlayLoop(&this->skelAnime, &object_uch_Anim_001674);
     this->skelAnime.curFrame = (this->actor.params & 7) * this->skelAnime.endFrame * 0.25f;
     this->alienAlpha = 255;
     this->actor.draw = NULL;
@@ -4325,8 +4281,8 @@ void func_80B4D670(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B45080();
         this->actor.update = func_80B4D760;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004E50, &D_06001674, this->jointTable, this->morphTable,
-                           14);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_uch_Skel_004E50, &object_uch_Anim_001674,
+                           this->jointTable, this->morphTable, 14);
         if (invadepohType < 3) {
             func_80B453F4(this, globalCtx, invadepohType);
             func_80B4D15C(this);
@@ -4371,7 +4327,7 @@ void func_80B4D7B8(GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, temp_s5, 0, 0x20, 0x40, 1, 0, temp_s6, 0x20, 0x40));
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, &D_0402E510);
+            gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_02E510);
         }
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -4448,10 +4404,10 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
             gDPSetEnvColor(spBC++, 255, 255, 255, this->alienBeamAlpha * (150.0f / 255.0f));
             Matrix_InsertMatrix(&D_80B502A0, MTXMODE_NEW);
             gSPMatrix(spBC++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(spBC++, D_06000080);
+            gSPDisplayList(spBC++, object_uch_DL_000080);
             Matrix_InsertMatrix(&D_80B502E0, MTXMODE_NEW);
             gSPMatrix(spBC++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(spBC++, D_06000080);
+            gSPDisplayList(spBC++, object_uch_DL_000080);
             spB8->polyXlu.p = spBC;
         }
     }
@@ -4463,7 +4419,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
                      MTXMODE_APPLY);
         gSPMatrix(spCC->polyXlu.p++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(spCC->polyXlu.p++, D_06000720);
+        gSPDisplayList(spCC->polyXlu.p++, object_uch_DL_000720);
     }
 
     if (this->drawAlien) {
@@ -4486,10 +4442,10 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_InsertTranslation(sp74.x, sp74.y, sp74.z, MTXMODE_NEW);
         Matrix_Scale(0.25f, 0.25f, 0.25f, MTXMODE_APPLY);
         alpha2 = this->alienAlpha * (100.0f / 255.0f);
-        gSPDisplayList(gfx++, D_04029CB0);
+        gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
         gDPSetPrimColor(gfx++, 0, 0, 240, 180, 100, alpha2);
         gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(gfx++, D_04029CF0);
+        gSPDisplayList(gfx++, gameplay_keep_DL_029CF0);
         sp6C->polyXlu.p = gfx;
         if ((this->alienAlpha > 128) && func_80B456A8(globalCtx, &sp74)) {
             func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, sp74, 10.0f, 9.0f,
@@ -4546,7 +4502,7 @@ void func_80B4E2AC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
     if (limbIndex == 19) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        gSPDisplayList(POLY_OPA_DISP++, D_060003B0);
+        gSPDisplayList(POLY_OPA_DISP++, object_ma1_DL_0003B0);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else if (limbIndex == 14) {
         Matrix_MultiplyVector3fByState(&D_80B4EE30, &this->actor.focus.pos);
@@ -4584,7 +4540,7 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0x80, 255, 255, 0, 180);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
-    gSPDisplayList(POLY_XLU_DISP++, D_04023210);
+    gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
     if (func_80B456A8(globalCtx, &sp5C)) {
         func_800F9824(globalCtx, &globalCtx->envCtx, &globalCtx->view, globalCtx->state.gfxCtx, sp5C, 20.0f, 9.0f, 0,
                       0);

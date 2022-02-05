@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dnp.h"
+#include "objects/object_dnp/object_dnp.h"
 
 #define FLAGS 0x00000019
 
@@ -20,35 +21,6 @@ void func_80B3D2D4(EnDnp* this, GlobalContext* globalCtx);
 void func_80B3D338(EnDnp* this, GlobalContext* globalCtx);
 void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx);
 void func_80B3D558(EnDnp* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060007D8;
-extern AnimationHeader D_0600125C;
-extern AnimationHeader D_060017F8;
-extern AnimationHeader D_06001C1C;
-extern AnimationHeader D_060021DC;
-extern AnimationHeader D_060026B8;
-extern AnimationHeader D_06004D08;
-extern AnimationHeader D_060057AC;
-extern AnimationHeader D_0600625C;
-extern AnimationHeader D_0600674C;
-extern AnimationHeader D_06006B74;
-extern AnimationHeader D_060071F4;
-extern AnimationHeader D_06007960;
-extern AnimationHeader D_06008588;
-extern AnimationHeader D_0600923C;
-extern AnimationHeader D_06009AA0;
-extern AnimationHeader D_0600A900;
-extern AnimationHeader D_0600AEB8;
-extern AnimationHeader D_0600B324;
-extern AnimationHeader D_0600B754;
-extern AnimationHeader D_0600BAD8;
-extern Gfx D_060103D0[];
-extern Gfx D_060105D0[];
-extern Gfx D_060107D0[];
-extern Gfx D_060109D0[];
-extern FlexSkeletonHeader D_06010D60;
-extern AnimationHeader D_060115B8;
-extern AnimationHeader D_06012428;
 
 const ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
@@ -85,15 +57,19 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_060007D8, 1.0f, 0, -1, 2, -4 }, { &D_060021DC, 1.0f, 0, -1, 0, 0 },  { &D_060021DC, 1.0f, 0, -1, 0, -4 },
-    { &D_060026B8, 1.0f, 0, -1, 2, -4 }, { &D_06004D08, 1.0f, 0, -1, 2, -4 }, { &D_060071F4, 1.0f, 0, -1, 2, -4 },
-    { &D_06007960, 1.0f, 0, -1, 0, -4 }, { &D_06008588, 1.0f, 0, -1, 2, 0 },  { &D_0600A900, 1.0f, 0, -1, 0, -4 },
-    { &D_0600AEB8, 1.0f, 0, -1, 0, -4 }, { &D_0600B754, 1.0f, 0, -1, 2, -4 }, { &D_0600674C, 1.0f, 0, -1, 0, -4 },
-    { &D_0600BAD8, 1.0f, 0, -1, 2, -4 }, { &D_06006B74, 1.0f, 0, -1, 0, -4 }, { &D_06012428, 1.0f, 0, -1, 0, -4 },
-    { &D_0600B324, 1.0f, 0, -1, 0, 0 },  { &D_0600B324, 1.0f, 0, -1, 0, -4 }, { &D_060115B8, 1.0f, 0, -1, 0, -4 },
-    { &D_060115B8, 1.0f, 0, -1, 0, 0 },  { &D_0600923C, 1.0f, 0, -1, 2, -4 }, { &D_06009AA0, 1.0f, 0, -1, 0, -4 },
-    { &D_0600125C, 1.0f, 0, -1, 2, -4 }, { &D_060017F8, 1.0f, 0, -1, 2, 0 },  { &D_06001C1C, 1.0f, 0, -1, 0, -4 },
-    { &D_060057AC, 1.0f, 0, -1, 2, 0 },  { &D_0600625C, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_0007D8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, 0 },
+    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0026B8, 1.0f, 0, -1, 2, -4 },
+    { &object_dnp_Anim_004D08, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0071F4, 1.0f, 0, -1, 2, -4 },
+    { &object_dnp_Anim_007960, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_008588, 1.0f, 0, -1, 2, 0 },
+    { &object_dnp_Anim_00A900, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00AEB8, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_00B754, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_00674C, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_00BAD8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_006B74, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_012428, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, 0 },
+    { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, 0 },  { &object_dnp_Anim_00923C, 1.0f, 0, -1, 2, -4 },
+    { &object_dnp_Anim_009AA0, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00125C, 1.0f, 0, -1, 2, -4 },
+    { &object_dnp_Anim_0017F8, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_001C1C, 1.0f, 0, -1, 0, -4 },
+    { &object_dnp_Anim_0057AC, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_00625C, 1.0f, 0, -1, 0, -4 },
 };
 
 static s32 D_80B3DE58[] = {
@@ -358,7 +334,8 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDnp* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 16.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010D60, NULL, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dnp_Skel_010D60, NULL, this->jointTable, this->morphTable,
+                       26);
     this->unk_340 = -1;
     func_80B3CC38(this, 15);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -489,11 +466,11 @@ void EnDnp_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
 }
 
 void EnDnp_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Gfx* D_80B3DEAC[] = {
-        D_060103D0,
-        D_060105D0,
-        D_060107D0,
-        D_060109D0,
+    static TexturePtr D_80B3DEAC[] = {
+        object_dnp_Tex_0103D0,
+        object_dnp_Tex_0105D0,
+        object_dnp_Tex_0107D0,
+        object_dnp_Tex_0109D0,
     };
     EnDnp* this = THIS;
 

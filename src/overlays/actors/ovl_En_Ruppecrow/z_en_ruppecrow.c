@@ -623,8 +623,8 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, GlobalContext* globalCtx) {
 }
 
 void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    EnRuppecrow* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnRuppecrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_crow_Skel_0010C0, &object_crow_Anim_0000F0, this->joinTable,
