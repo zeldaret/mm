@@ -526,8 +526,8 @@ void func_80BBBDE0(EnZos* this, GlobalContext* globalCtx) {
 
     func_80BBB0D4(this, globalCtx);
 
-    if (globalCtx->msgCtx.unk1202A == 0x2A) {
-        globalCtx->msgCtx.unk1202A = 4;
+    if (globalCtx->msgCtx.ocarinaMode == 0x2A) {
+        globalCtx->msgCtx.ocarinaMode = 4;
         this->actionFunc = func_80BBBB84;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 120.0f);
