@@ -1373,29 +1373,43 @@ typedef struct {
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
 
+struct EnHy;
+
+typedef void (*EnHyActionFunc)(struct EnHy*, GlobalContext*);
 typedef struct EnHy {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ UNK_TYPE1 unk_144[0x8];
+    /* 0x144 */ EnHyActionFunc actionFunc;
+    /* 0x148 */ EnHyActionFunc tmpActionFunc;
     /* 0x14C */ SkelAnime skelAnime;
-    /* 0x190 */ s8 unk190;
-    /* 0x191 */ s8 unk191;
-    /* 0x192 */ s8 unk192;
+    /* 0x190 */ s8 headObjIndex; // Limb 15 Head
+    /* 0x191 */ s8 skel2ObjIndex; // Limbs 8-14 Upper
+    /* 0x192 */ s8 skel1ObjIndex; // Limbs 1-7 Lower
     /* 0x193 */ s8 animObjIndex;
     /* 0x194 */ ColliderCylinder collider;
-    /* 0x1E0 */ UNK_TYPE1 unk_1E0[0x4];
+    /* 0x1E0 */ u16 textId;
+    /* 0x1E2 */ u8 waitingOnInit;
+    /* 0x1E3 */ u8 inMsgState3;
     /* 0x1E4 */ Path* path;
     /* 0x1E8 */ s16 curPoint;
-    /* 0x1EA */ UNK_TYPE1 unk_1EA[0x2];
     /* 0x1EC */ Vec3f leftFootPos;
     /* 0x1F8 */ Vec3f rightFootPos;
     /* 0x204 */ u8 isLeftFootOnGround;
     /* 0x205 */ u8 isRightFootOnGround;
     /* 0x206 */ Vec3s jointTable[16];
     /* 0x266 */ Vec3s morphTable[16];
-    /* 0x2C6 */ UNK_TYPE1 unk_2C6[0x120];
+    /* 0x2C6 */ Vec3s focusTarget;
+    /* 0x2CC */ Vec3s headRot;
+    /* 0x2D2 */ Vec3s torsoRot;
+    /* 0x2D8 */ Vec3s tmpFocusTarget;
+    /* 0x2DE */ Vec3s tmpHeadRot;
+    /* 0x2E4 */ Vec3s tmpTorsoRot;
+    /* 0x2EA */ s16 limbRotTableY[16];
+    /* 0x30A */ s16 limbRotTableZ[16];
+    /* 0x32C */ Vec3f bodyPartsPos[15];
+    /* 0x3E0 */ UNK_TYPE1 unk_3E0[0x6];
     /* 0x3E6 */ s16 eyeTexIndex;
     /* 0x3E8 */ s16 blinkTimer;
-} EnHy;
+} EnHy; // size = 0x3EC
 
 typedef struct {
     /* 0x0 */ u8 unk0;
