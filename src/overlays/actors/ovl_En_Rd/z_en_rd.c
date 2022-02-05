@@ -280,8 +280,8 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnRd_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnRd* this = THIS;
 
-    if (gSaveContext.unk_3F58 != 0) {
-        gSaveContext.unk_3F58 = 0;
+    if (gSaveContext.sunsSongState != SUNSSONG_INACTIVE) {
+        gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
@@ -1082,7 +1082,7 @@ void EnRd_SetupStunned(EnRd* this) {
     this->stunTimer = 10;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (gSaveContext.unk_3F58 != 0) {
+    if (gSaveContext.sunsSongState != SUNSSONG_INACTIVE) {
         this->stunnedBySunsSong = true;
         this->sunsSongStunTimer = 600;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
@@ -1109,7 +1109,7 @@ void EnRd_Stunned(EnRd* this, GlobalContext* globalCtx) {
 
             if (this->sunsSongStunTimer == 0) {
                 this->stunnedBySunsSong = false;
-                gSaveContext.unk_3F58 = 0;
+                gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
             }
         }
     }
@@ -1148,7 +1148,7 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((gSaveContext.unk_3F58 != 0) && (this->actor.shape.rot.x == 0) && (!this->stunnedBySunsSong) &&
+    if ((gSaveContext.sunsSongState != SUNSSONG_INACTIVE) && (this->actor.shape.rot.x == 0) && (!this->stunnedBySunsSong) &&
         (this->action != EN_RD_ACTION_DAMAGE) && (this->action != EN_RD_ACTION_DEAD) &&
         (this->action != EN_RD_ACTION_STUNNED)) {
         EnRd_SetupStunned(this);
@@ -1259,8 +1259,8 @@ void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRd* this = THIS;
 
     EnRd_UpdateDamage(this, globalCtx);
-    if ((gSaveContext.unk_3F58 != 0) && (!this->stunnedBySunsSong)) {
-        gSaveContext.unk_3F58 = 0;
+    if ((gSaveContext.sunsSongState != SUNSSONG_INACTIVE) && (!this->stunnedBySunsSong)) {
+        gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
     }
 
     if ((this->damageEffect != EN_RD_DMGEFF_UNUSED_6) &&
