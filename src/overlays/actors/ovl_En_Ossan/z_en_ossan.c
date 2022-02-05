@@ -76,12 +76,12 @@ static ActorAnimationEntryS sAnimationsCuriosityShopMan[] = {
 };
 
 static ActorAnimationEntryS sAnimationsPartTimeWorker[] = {
-    { &gAniStandingNormalAnim, 1.0f, 0, -1, 0, -10 }, { &gAniStandingNormalAnim, 1.0f, 0, -1, 0, -10 },
-    { &gAniStandingNormalAnim, 1.0f, 0, -1, 2, 0 },   { &gAniStandingNormalAnim, -1.0f, 0, -1, 2, 0 },
-    { &gAniStandingNormalAnim, 1.0f, 0, -1, 2, 0 },   { &gAniStandingNormalAnim, 1.0f, 0, -1, 0, 0 },
-    { &gAniStandingNormalAnim, 1.0f, 0, -1, 2, 0 },   { &gAniStandingNormalAnim, 1.0f, 0, -1, 0, 0 },
-    { &gAniHandBehindHeadApologyAnim, 1.0f, 0, -1, 2, -5 },  { &gAniHandBehindHeadApologyAnim, 1.0f, 0, -1, 0, -5 },
-    { &gAniStandingNormalAnim, 1.0f, 0, -1, 2, 0 },   { &gAniStandingNormalAnim, 1.0f, 0, -1, 0, 0 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, 0, -10 },       { &gAniStandingNormalAnim, 1.0f, 0, -1, 0, -10 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, 2, 0 },         { &gAniStandingNormalAnim, -1.0f, 0, -1, 2, 0 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, 2, 0 },         { &gAniStandingNormalAnim, 1.0f, 0, -1, 0, 0 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, 2, 0 },         { &gAniStandingNormalAnim, 1.0f, 0, -1, 0, 0 },
+    { &gAniHandBehindHeadApologyAnim, 1.0f, 0, -1, 2, -5 }, { &gAniHandBehindHeadApologyAnim, 1.0f, 0, -1, 0, -5 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, 2, 0 },         { &gAniStandingNormalAnim, 1.0f, 0, -1, 0, 0 },
 };
 
 static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };
@@ -1678,7 +1678,7 @@ void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnOssan_DrawPartTimeWorker(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { gAniOpenEyeTex, gAniClosingEyeTex, gAniClosedEyeTex};
+    static TexturePtr sEyeTextures[] = { gAniOpenEyeTex, gAniClosingEyeTex, gAniClosedEyeTex };
     EnOssan* this = THIS;
     s32 pad;
 
