@@ -162,7 +162,6 @@ beginseg
     include "build/src/libultra/voice/voicesetadconverter.o"
     include "build/src/libultra/io/aisetfreq.o"
     include "build/src/libultra/io/contramread.o"
-    include "build/data/boot/contramread.data.o"
     include "build/src/libultra/voice/voicecontwrite20.o"
     include "build/src/libultra/io/crc.o"
     include "build/src/libultra/os/getactivequeue.o"
@@ -622,7 +621,7 @@ beginseg
     pad_text
     pad_text
     pad_text
-    include "build/data/code/audio_data.data.o"
+    include "build/src/code/audio/audio_data.o"
     include "build/src/code/audio/audio_synthesis.o"
     include "build/data/code/audio_synthesis.data.o"
     include "build/src/code/audio/audio_heap.o"
@@ -1336,8 +1335,7 @@ beginseg
     name "ovl_Obj_Oshihiki"
     compress
     include "build/src/overlays/actors/ovl_Obj_Oshihiki/z_obj_oshihiki.o"
-    include "build/data/ovl_Obj_Oshihiki/ovl_Obj_Oshihiki.data.o"
-    include "build/data/ovl_Obj_Oshihiki/ovl_Obj_Oshihiki.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Oshihiki/ovl_Obj_Oshihiki_reloc.o"
 endseg
 
 beginseg
@@ -1475,8 +1473,7 @@ beginseg
     name "ovl_Obj_Ice_Poly"
     compress
     include "build/src/overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.o"
-    include "build/data/ovl_Obj_Ice_Poly/ovl_Obj_Ice_Poly.data.o"
-    include "build/data/ovl_Obj_Ice_Poly/ovl_Obj_Ice_Poly.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Ice_Poly/ovl_Obj_Ice_Poly_reloc.o"
 endseg
 
 beginseg
@@ -1499,8 +1496,7 @@ beginseg
     name "ovl_Obj_Bean"
     compress
     include "build/src/overlays/actors/ovl_Obj_Bean/z_obj_bean.o"
-    include "build/data/ovl_Obj_Bean/ovl_Obj_Bean.data.o"
-    include "build/data/ovl_Obj_Bean/ovl_Obj_Bean.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Bean/ovl_Obj_Bean_reloc.o"
 endseg
 
 beginseg
@@ -2224,8 +2220,7 @@ beginseg
     name "ovl_En_Zo"
     compress
     include "build/src/overlays/actors/ovl_En_Zo/z_en_zo.o"
-    include "build/data/ovl_En_Zo/ovl_En_Zo.data.o"
-    include "build/data/ovl_En_Zo/ovl_En_Zo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Zo/ovl_En_Zo_reloc.o"
 endseg
 
 beginseg
@@ -2563,9 +2558,11 @@ beginseg
     name "ovl_Boss_06"
     compress
     include "build/src/overlays/actors/ovl_Boss_06/z_boss_06.o"
-    include "build/data/ovl_Boss_06/ovl_Boss_06.data.o"
-    include "build/data/ovl_Boss_06/ovl_Boss_06.bss.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Boss_06/ovl_Boss_06_reloc.o"
+#else
     include "build/data/ovl_Boss_06/ovl_Boss_06.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -3432,8 +3429,7 @@ beginseg
     name "ovl_En_Bigokuta"
     compress
     include "build/src/overlays/actors/ovl_En_Bigokuta/z_en_bigokuta.o"
-    include "build/data/ovl_En_Bigokuta/ovl_En_Bigokuta.data.o"
-    include "build/data/ovl_En_Bigokuta/ovl_En_Bigokuta.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bigokuta/ovl_En_Bigokuta_reloc.o"
 endseg
 
 beginseg
@@ -3588,8 +3584,7 @@ beginseg
     name "ovl_En_Trt2"
     compress
     include "build/src/overlays/actors/ovl_En_Trt2/z_en_trt2.o"
-    include "build/data/ovl_En_Trt2/ovl_En_Trt2.data.o"
-    include "build/data/ovl_En_Trt2/ovl_En_Trt2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Trt2/ovl_En_Trt2_reloc.o"
 endseg
 
 beginseg
@@ -4615,8 +4610,7 @@ beginseg
     name "ovl_En_Zos"
     compress
     include "build/src/overlays/actors/ovl_En_Zos/z_en_zos.o"
-    include "build/data/ovl_En_Zos/ovl_En_Zos.data.o"
-    include "build/data/ovl_En_Zos/ovl_En_Zos.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Zos/ovl_En_Zos_reloc.o"
 endseg
 
 beginseg
@@ -4704,8 +4698,7 @@ beginseg
     name "ovl_En_Scopenuts"
     compress
     include "build/src/overlays/actors/ovl_En_Scopenuts/z_en_scopenuts.o"
-    include "build/data/ovl_En_Scopenuts/ovl_En_Scopenuts.data.o"
-    include "build/data/ovl_En_Scopenuts/ovl_En_Scopenuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Scopenuts/ovl_En_Scopenuts_reloc.o"
 endseg
 
 beginseg
@@ -5031,9 +5024,11 @@ beginseg
     name "ovl_En_Rg"
     compress
     include "build/src/overlays/actors/ovl_En_Rg/z_en_rg.o"
-    include "build/data/ovl_En_Rg/ovl_En_Rg.data.o"
-    include "build/data/ovl_En_Rg/ovl_En_Rg.bss.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Rg/ovl_En_Rg_reloc.o"
+#else
     include "build/data/ovl_En_Rg/ovl_En_Rg.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -5177,8 +5172,7 @@ beginseg
     name "ovl_Obj_Kzsaku"
     compress
     include "build/src/overlays/actors/ovl_Obj_Kzsaku/z_obj_kzsaku.o"
-    include "build/data/ovl_Obj_Kzsaku/ovl_Obj_Kzsaku.data.o"
-    include "build/data/ovl_Obj_Kzsaku/ovl_Obj_Kzsaku.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Kzsaku/ovl_Obj_Kzsaku_reloc.o"
 endseg
 
 beginseg
@@ -5386,8 +5380,7 @@ beginseg
     name "ovl_En_Hint_Skb"
     compress
     include "build/src/overlays/actors/ovl_En_Hint_Skb/z_en_hint_skb.o"
-    include "build/data/ovl_En_Hint_Skb/ovl_En_Hint_Skb.data.o"
-    include "build/data/ovl_En_Hint_Skb/ovl_En_Hint_Skb.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hint_Skb/ovl_En_Hint_Skb_reloc.o"
 endseg
 
 beginseg
@@ -9201,56 +9194,64 @@ beginseg
     name "scene_texture_01"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_01.o"
+    number 6
+    include "build/assets/misc/scene_texture_01/scene_texture_01.o"
 endseg
 
 beginseg
     name "scene_texture_02"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_02.o"
+    number 6
+    include "build/assets/misc/scene_texture_02/scene_texture_02.o"
 endseg
 
 beginseg
     name "scene_texture_03"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_03.o"
+    number 6
+    include "build/assets/misc/scene_texture_03/scene_texture_03.o"
 endseg
 
 beginseg
     name "scene_texture_04"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_04.o"
+    number 6
+    include "build/assets/misc/scene_texture_04/scene_texture_04.o"
 endseg
 
 beginseg
     name "scene_texture_05"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_05.o"
+    number 6
+    include "build/assets/misc/scene_texture_05/scene_texture_05.o"
 endseg
 
 beginseg
     name "scene_texture_06"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_06.o"
+    number 6
+    include "build/assets/misc/scene_texture_06/scene_texture_06.o"
 endseg
 
 beginseg
     name "scene_texture_07"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_07.o"
+    number 6
+    include "build/assets/misc/scene_texture_07/scene_texture_07.o"
 endseg
 
 beginseg
     name "scene_texture_08"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_08.o"
+    number 6
+    include "build/assets/misc/scene_texture_08/scene_texture_08.o"
 endseg
 
 beginseg
@@ -9288,7 +9289,8 @@ beginseg
     name "parameter_static"
     compress
     romalign 0x1000
-    include "build/baserom/parameter_static.o"
+    include "build/assets/interface/parameter_static/parameter_static.o"
+    number 2
 endseg
 
 beginseg
