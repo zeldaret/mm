@@ -398,7 +398,7 @@ void func_80C2077C(EnHintSkb* this, GlobalContext* globalCtx) {
             func_801518B0(globalCtx, 0x1147, &this->actor);
             this->unk_3E6 = 0x1147;
             if (this->skelAnime.animation == &object_skb_Anim_00697C) {
-                globalCtx->msgCtx.unk11F22 = 0x44;
+                globalCtx->msgCtx.msgMode = 0x44;
                 this->actor.speedXZ = 2.4f;
                 this->actor.gravity = -1.0f;
                 this->actor.velocity.y = 3.0f;

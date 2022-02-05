@@ -99,7 +99,7 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
         }
     }
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_809CD028(this, globalCtx);
     } else {

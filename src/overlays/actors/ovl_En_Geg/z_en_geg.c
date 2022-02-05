@@ -551,7 +551,7 @@ void func_80BB26EC(EnGeg* this, GlobalContext* globalCtx) {
 
             case 0xD61:
                 ActorCutscene_Stop(this->unk_498);
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_230 &= ~0x10;
                 this->actionFunc = func_80BB221C;
@@ -567,14 +567,14 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         switch (this->unk_496) {
             case 0xD63:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_80BB221C;
                 break;
 
             case 0xD69:
                 this->unk_49A = this->unk_49C[6];
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_80BB2520;
                 break;
@@ -582,7 +582,7 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
             case 0xD6D:
             case 0xD6F:
             case 0xD8A:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_80BB31B8;
                 break;
@@ -590,7 +590,7 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
             case 0xD72:
             case 0xD75:
             case 0xD8B:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_230 &= ~0x10;
                 this->unk_49A = this->unk_49C[7];
@@ -617,7 +617,7 @@ void func_80BB2944(EnGeg* this, GlobalContext* globalCtx) {
         }
     } else if ((sp27 == 5) && func_80147624(globalCtx)) {
         if (this->unk_496 == 0xD67) {
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->unk_49A = this->unk_49C[4];
             this->actionFunc = func_80BB2520;
@@ -634,7 +634,7 @@ void func_80BB2A54(EnGeg* this, GlobalContext* globalCtx) {
             ActorCutscene_Stop(this->unk_498);
             this->unk_230 &= ~0x10;
             this->unk_244 = 65;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = func_80BB347C;
         } else {

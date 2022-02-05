@@ -677,7 +677,7 @@ s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, GlobalContext* gl
                 return EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO;
             }
         }
-        if (func_80114F2C(requestedItem->item)) {
+        if (Interface_HasItemInBottle(requestedItem->item)) {
             return EN_TALK_GIBUD_REQUESTED_ITEM_MET;
         }
     }

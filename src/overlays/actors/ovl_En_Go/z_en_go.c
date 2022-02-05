@@ -534,7 +534,7 @@ s32 func_80A1222C(EnGo* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 ret = false;
 
-    if (((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.unk1202A == 3) &&
+    if (((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.ocarinaMode == 3) &&
          (globalCtx->msgCtx.unk1202E == 1) && (this->unk_3EC == 0) && (this->actor.xzDistToPlayer < 400.0f)) ||
         (!(gSaveContext.weekEventReg[22] & 4) && (globalCtx->sceneNum == SCENE_16GORON_HOUSE) &&
          (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (globalCtx->csCtx.unk_12 == 1))) {

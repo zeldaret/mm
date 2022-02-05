@@ -469,7 +469,7 @@ void func_80ADBAB8(EnSellnuts* this, GlobalContext* globalCtx) {
     }
 
     if ((sp27 == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = func_80ADBBEC;
         func_800B7298(globalCtx, NULL, 0x13);
@@ -515,7 +515,7 @@ void func_80ADBD64(EnSellnuts* this, GlobalContext* globalCtx) {
     }
 
     if ((sp27 == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_338 &= ~2;
         this->actor.flags &= ~1;
@@ -557,7 +557,7 @@ void func_80ADBE80(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADBFA0(EnSellnuts* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (this->unk_34C == 0) {
             this->actionFunc = func_80ADB544;
@@ -720,7 +720,7 @@ void func_80ADC6D0(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.day == 3) {
@@ -750,7 +750,7 @@ void func_80ADC7B4(EnSellnuts* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     } else if ((this->unk_366 == 1) && (temp == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_366 = 0;
         ActorCutscene_Stop(this->cutscene);

@@ -757,7 +757,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
                         if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
-                            if (func_80114E90()) {
+                            if (Interface_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
@@ -903,7 +903,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x347E:
                     func_808F35D8(this, globalCtx);
-                    if (func_80114E90()) {
+                    if (Interface_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
                         Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                         ret = true;
@@ -1009,7 +1009,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
                         if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
-                            if (func_80114E90()) {
+                            if (Interface_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
@@ -1107,7 +1107,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x34A1:
                     func_808F35D8(this, globalCtx);
-                    if (func_80114E90()) {
+                    if (Interface_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
                         Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                         ret = true;
