@@ -328,7 +328,7 @@ void func_80AD3CEC(EnTrt2* this, GlobalContext* globalCtx) {
         func_801518B0(globalCtx, this->unk_3A8, &this->actor);
         this->unk_3D8 = false;
     } else if ((sp27 == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         func_80AD3380(&this->skelAnime, sAnimations, 6);
         this->unk_3B2 = 4;
@@ -343,7 +343,7 @@ void func_80AD3DA4(EnTrt2* this, GlobalContext* globalCtx) {
         this->unk_3B2 = 11;
         return;
     } else if (this->unk_3A8 == 0x88F) {
-        if (func_80114E90()) {
+        if (Interface_HasEmptyBottle()) {
             this->unk_3B2 = 11;
         } else {
             this->unk_3B2 = 10;
@@ -355,8 +355,8 @@ void func_80AD3DA4(EnTrt2* this, GlobalContext* globalCtx) {
 
 void func_80AD3E34(EnTrt2* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        if (func_80114E90()) {
-            globalCtx->msgCtx.unk11F22 = 0x43;
+        if (Interface_HasEmptyBottle()) {
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->unk_3B2 = 12;
         } else {
@@ -373,7 +373,7 @@ void func_80AD3EF0(EnTrt2* this, GlobalContext* globalCtx) {
 
     if (temp_v0 == 6) {
         if (func_80147624(globalCtx)) {
-            if ((func_80114E90() && !(gSaveContext.weekEventReg[84] & 0x40)) ||
+            if ((Interface_HasEmptyBottle() && !(gSaveContext.weekEventReg[84] & 0x40)) ||
                 !(gSaveContext.weekEventReg[12] & 0x10)) {
                 this->unk_3B2 = 12;
             } else {
@@ -384,7 +384,7 @@ void func_80AD3EF0(EnTrt2* this, GlobalContext* globalCtx) {
             }
         }
     } else if ((temp_v0 == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_3B2 = 12;
     }
@@ -428,7 +428,7 @@ void func_80AD417C(EnTrt2* this, GlobalContext* globalCtx) {
             func_80AD349C(this);
             func_80AD3DA4(this, globalCtx);
         } else {
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             if (this->unk_3A8 == 0x84C) {
                 func_80AD3380(&this->skelAnime, sAnimations, 6);
@@ -510,7 +510,7 @@ void func_80AD4550(EnTrt2* this, GlobalContext* globalCtx) {
     }
 
     if ((sp23 == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
     }
 }
