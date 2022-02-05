@@ -3,7 +3,7 @@
  * Description: Unused System for NPCs (includes animation, door interaction, blinking, pathing, and collider helpers)
  */
 
-#include "global.h"
+#include "z_en_hy.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/object_aob/object_aob.h"
 #include "objects/object_bba/object_bba.h"
@@ -45,7 +45,7 @@ s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 isChanged = false;
 
-    if (animIndex >= 0 && animIndex <= 20) {
+    if (animIndex >= ENHY_ANIMATION_AOB_0 && animIndex < ENHY_ANIMATION_MAX) {
         isChanged = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
