@@ -22,11 +22,9 @@ typedef struct EnOsn {
     /* 0x01F0 */ u8 unk_1F0;
     /* 0x01F1 */ UNK_TYPE1 unk_1F1[0x3];
     /* 0x01F4 */ u16 unk_1F4;
-    /* 0x01F6 */ char unk_1F6[0x2];
-    /* 0x01F8 */ s32 unk_1F8;
-    /* 0x01FC */ u8 unk_1FC;
-    /* 0x01FD */ char unk_1FD[0x3];
-} EnOsn; // size = 0x200
+    /* 0x01F6 */ s32 unk_1F6;
+    /* 0x01FA */ u8 unk_1FA;
+} EnOsn; // size = 0x1FB
 
 extern const ActorInit En_Osn_InitVars;
 

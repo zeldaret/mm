@@ -203,9 +203,9 @@ void func_80AD0AB0(EnOsn* this) {
     s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_1EC].animation);
 
     if (curFrame == lastFrame) {
-        this->unk_1FC -= 8;
-        if (this->unk_1FC < 8) {
-            this->unk_1FC = 0;
+        this->unk_1FA -= 8;
+        if (this->unk_1FA < 8) {
+            this->unk_1FA = 0;
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -214,122 +214,122 @@ void func_80AD0AB0(EnOsn* this) {
 s32 func_80AD0B38(EnOsn* this, GlobalContext* globalCtx) {
     switch (Player_GetMask(globalCtx)) {
         case PLAYER_MASK_GREAT_FAIRY:
-            if (!(this->unk_1F8 & 1)) {
-                this->unk_1F8 |= 1;
+            if (!(this->unk_1F6 & 1)) {
+                this->unk_1F6 |= 1;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_GIBDO:
-            if (!(this->unk_1F8 & 2)) {
-                this->unk_1F8 |= 2;
+            if (!(this->unk_1F6 & 2)) {
+                this->unk_1F6 |= 2;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_TRUTH:
-            if (!(this->unk_1F8 & 4)) {
-                this->unk_1F8 |= 4;
+            if (!(this->unk_1F6 & 4)) {
+                this->unk_1F6 |= 4;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_GIANT:
-            if (!(this->unk_1F8 & 8)) {
-                this->unk_1F8 |= 8;
+            if (!(this->unk_1F6 & 8)) {
+                this->unk_1F6 |= 8;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_KAFEIS_MASK:
-            if (!(this->unk_1F8 & 0x10)) {
-                this->unk_1F8 |= 0x10;
+            if (!(this->unk_1F6 & 0x10)) {
+                this->unk_1F6 |= 0x10;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_DON_GERO:
-            if (!(this->unk_1F8 & 0x20)) {
-                this->unk_1F8 |= 0x20;
+            if (!(this->unk_1F6 & 0x20)) {
+                this->unk_1F6 |= 0x20;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_BLAST:
-            if (!(this->unk_1F8 & 0x40)) {
-                this->unk_1F8 |= 0x40;
+            if (!(this->unk_1F6 & 0x40)) {
+                this->unk_1F6 |= 0x40;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_COUPLE:
-            if (!(this->unk_1F8 & 0x80)) {
-                this->unk_1F8 |= 0x80;
+            if (!(this->unk_1F6 & 0x80)) {
+                this->unk_1F6 |= 0x80;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_SCENTS:
-            if (!(this->unk_1F8 & 0x100)) {
-                this->unk_1F8 |= 0x100;
+            if (!(this->unk_1F6 & 0x100)) {
+                this->unk_1F6 |= 0x100;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_KAMARO:
-            if (!(this->unk_1F8 & 0x200)) {
-                this->unk_1F8 |= 0x200;
+            if (!(this->unk_1F6 & 0x200)) {
+                this->unk_1F6 |= 0x200;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_STONE:
-            if (!(this->unk_1F8 & 0x400)) {
-                this->unk_1F8 |= 0x400;
+            if (!(this->unk_1F6 & 0x400)) {
+                this->unk_1F6 |= 0x400;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_POSTMAN:
-            if (!(this->unk_1F8 & 0x800)) {
-                this->unk_1F8 |= 0x800;
+            if (!(this->unk_1F6 & 0x800)) {
+                this->unk_1F6 |= 0x800;
                 return 0x1FD2;
             }
             break;
         case PLAYER_MASK_BUNNY:
-            if (!(this->unk_1F8 & 0x1000)) {
-                this->unk_1F8 |= 0x1000;
+            if (!(this->unk_1F6 & 0x1000)) {
+                this->unk_1F6 |= 0x1000;
                 return 0x1FD2;
             }
             break;
         case PLAYER_MASK_CAPTAIN:
-            if (!(this->unk_1F8 & 0x2000)) {
-                this->unk_1F8 |= 0x2000;
+            if (!(this->unk_1F6 & 0x2000)) {
+                this->unk_1F6 |= 0x2000;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_BREMEN:
-            if (!(this->unk_1F8 & 0x4000)) {
-                this->unk_1F8 |= 0x4000;
+            if (!(this->unk_1F6 & 0x4000)) {
+                this->unk_1F6 |= 0x4000;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_CIRCUS_LEADER:
-            if (!(this->unk_1F8 & 0x8000)) {
-                this->unk_1F8 |= 0x8000;
+            if (!(this->unk_1F6 & 0x8000)) {
+                this->unk_1F6 |= 0x8000;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_KEATON:
-            if (!(this->unk_1F8 & 0x10000)) {
-                this->unk_1F8 |= 0x10000;
+            if (!(this->unk_1F6 & 0x10000)) {
+                this->unk_1F6 |= 0x10000;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_GARO:
-            if (!(this->unk_1F8 & 0x20000)) {
-                this->unk_1F8 |= 0x20000;
+            if (!(this->unk_1F6 & 0x20000)) {
+                this->unk_1F6 |= 0x20000;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_ALL_NIGHT:
-            if (!(this->unk_1F8 & 0x40000)) {
-                this->unk_1F8 |= 0x40000;
+            if (!(this->unk_1F6 & 0x40000)) {
+                this->unk_1F6 |= 0x40000;
                 return 0x1FD1;
             }
             break;
         case PLAYER_MASK_ROMANI:
-            if (!(this->unk_1F8 & 0x80000)) {
-                this->unk_1F8 |= 0x80000;
+            if (!(this->unk_1F6 & 0x80000)) {
+                this->unk_1F6 |= 0x80000;
                 return 0x1FD1;
             }
             break;
@@ -786,7 +786,7 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->unk_1FC = 255;
+    this->unk_1FA = 255;
     switch (ENOSN_GET_3(THIS)) {
         case 0:
             if (((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC030)) ||
@@ -902,7 +902,7 @@ void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    if (this->unk_1FC == 0xFF) {
+    if (this->unk_1FA == 0xFF) {
         func_8012C28C(globalCtx->state.gfxCtx);
         if ((this->unk_1EC == 0xB) || (this->unk_1EC == 0xC) || (this->unk_1EC == 0x17) ||
             (globalCtx->msgCtx.unk11F04 == 0x1FCA)) {
@@ -924,7 +924,7 @@ void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2588));
         gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk_1FC);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk_1FA);
         Scene_SetRenderModeXlu(globalCtx, 1, 2);
         POLY_XLU_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                            this->skelAnime.dListCount, EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw,
