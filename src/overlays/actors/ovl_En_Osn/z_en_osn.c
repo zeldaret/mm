@@ -808,28 +808,27 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
                 return;
             }
             func_80AD144C(this, globalCtx);
-            return;
+            break;
 
         case 1:
             this->unk_1EC = 0xF;
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_1EC);
             this->actionFunc = EnOsn_Idle;
-            return;
+            break;
 
         case 2:
             this->unk_1EC = 0x10;
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_1EC);
             this->actionFunc = EnOsn_Idle;
-            return;
+            break;
 
         case 3:
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = func_80AD16A8;
-            return;
+            break;
 
         default:
             Actor_MarkForDeath(&this->actor);
-            return;
     }
 }
 
