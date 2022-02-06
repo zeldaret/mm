@@ -467,7 +467,6 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
             break;
 
         case 0x1FD1:
-
         case 0x1FD2:
             this->unk_1F4 = func_80AD08B0(globalCtx);
             break;
@@ -593,12 +592,14 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
 
 void func_80AD1398(EnOsn* this) {
     this->cutscene = this->actor.cutscene;
-    if (((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
-         (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) &&
-        ((this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene),
-          (gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE)) ||
-         (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU))) {
-        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
+    if ((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
+         (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
+         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
+         
+         if ((gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE) ||
+             (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
+            this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
+        }
     }
 }
 
