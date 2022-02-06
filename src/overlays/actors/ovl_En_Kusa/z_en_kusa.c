@@ -16,6 +16,7 @@
 void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Update(Actor* thisx, GlobalContext* globalCtx);
+
 s32 EnKusa_SnapToFloor(EnKusa* this, GlobalContext* globalCtx, f32 yOffset);
 void EnKusa_DropCollectible(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_UpdateVelY(EnKusa* this);
@@ -24,11 +25,11 @@ void EnKusa_SetScaleSmall(EnKusa* this);
 s32 EnKusa_GetWaterBox(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_SetupWaitObject(EnKusa* this);
 void EnKusa_WaitObject(EnKusa* this, GlobalContext* globalCtx);
-void EnKusa_Main(EnKusa* this, GlobalContext* globalCtx);
+void EnKusa_WaitForInteract(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_SetupLiftedUp(EnKusa* this);
 void EnKusa_LiftedUp(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_WaitObject(EnKusa* this, GlobalContext* globalCtx);
-void EnKusa_SetupMain(EnKusa* this);
+void EnKusa_SetupInteract(EnKusa* this);
 void EnKusa_SetupFall(EnKusa* this);
 void EnKusa_Fall(EnKusa* this, GlobalContext* globalCtx);
 void EnKusa_SetupCut(EnKusa* this);
@@ -114,12 +115,11 @@ static InitChainEntry sInitChain[] = {
  * @brief Updates the state of the provided matrix
  *
  * @param[in]     matrix  Matrix to update the current state
- *
  */
 void EnKusa_GetMtxState(MtxF* matrix) {
     MtxF* mtxState = Matrix_GetCurrentState();
-    f32* tmp = (f32*)&mtxState->mf[0];
-    f32* tmp2 = (f32*)&matrix->mf[0];
+    f32* tmp = &mtxState->mf[0][0];
+    f32* tmp2 = &matrix->mf[0][0];
     s32 i;
 
     for (i = 0; i < 16; i++) {
@@ -152,11 +152,11 @@ void EnKusa_Sway(void) {
     f32 temp_f28;
     f32 temp_f30;
 
-    D_80936CD8 += 70;
-    D_80936CDA += 300;
-    D_80936CDC += 700;
-    D_80936CDE += 1300;
-    D_80936CE0 += 8900;
+    D_80936CD8 += 0x46;
+    D_80936CDA += 0x12C;
+    D_80936CDC += 0x2BC;
+    D_80936CDE += 0x514;
+    D_80936CE0 += 0x22C4;
 
     temp_f28 = Math_SinS(D_80936CD8);
     spBC = Math_SinS(D_80936CDA);
@@ -180,7 +180,7 @@ void EnKusa_Sway(void) {
     sp7C[7] = (spB4 - temp_f20) * temp_f22 * temp_f24 * temp_f12 * 0.0015f;
 
     for (i = 0; i < ARRAY_COUNT(D_80936AD8); i++) {
-        ptr = (f32*)&D_80936AD8[i].mf[0];
+        ptr = &D_80936AD8[i].mf[0][0];
 
         tempf1 = sp7C[(i + 0) & 7];
         tempf2 = sp7C[(i + 1) & 7];
@@ -210,6 +210,16 @@ void EnKusa_Sway(void) {
     }
 }
 
+/**
+ * @brief Detects if a bush is able to snap to the floor. BgCheck_EntityRaycastFloor5 will give the intersect point
+ *        if no poit is found, a false value is returned.
+ *
+ * @param this
+ * @param globalCtx
+ * @param yOffset offset of Y coordinate, can be positive or negative.
+ *
+ * @return true/false if the bush is able to snap to the floor and is above BGCHECK_Y_MIN
+ */
 s32 EnKusa_SnapToFloor(EnKusa* this, GlobalContext* globalCtx, f32 yOffset) {
     s32 pad;
     CollisionPoly* poly;
@@ -235,17 +245,17 @@ void EnKusa_DropCollectible(EnKusa* this, GlobalContext* globalCtx) {
     s32 collectible;
     s32 collectableParams;
 
-    if ((GET_KUSA_TYPE(this) == 2) || (GET_KUSA_TYPE(this) == 0)) {
-        if (!((this->actor.params >> 0xC) & 1)) {
+    if ((GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_GRASS) || (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_BUSH)) {
+        if (!(KUSA_GET_PARAMS_0C(&this->actor) & 0x1)) {
             Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos,
-                                       GET_KUSA_RAND_COLLECTIBLE_ID(this) * 0x10);
+                                       KUSA_GET_RAND_COLLECTIBLE_ID(&this->actor) * 0x10);
         }
-    } else if (GET_KUSA_TYPE(this) == 1) {
+    } else if (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_REGROW_GRASS) {
         Item_DropCollectible(globalCtx, &this->actor.world.pos, 3);
     } else {
-        collectible = func_800A8150((this->actor.params >> 2) & 0x3F);
+        collectible = func_800A8150(KUSA_GET_PARAMS_02(&this->actor) & 0x3F);
         if (collectible >= 0) {
-            collectableParams = GET_KUSA_COLLECTIBLE_ID(this);
+            collectableParams = KUSA_GET_COLLECTIBLE_ID(&this->actor);
             Item_DropCollectible(globalCtx, &this->actor.world.pos, (collectableParams << 8) | collectible);
         }
     }
@@ -272,7 +282,7 @@ void EnKusa_RandScaleVecToZero(Vec3f* vec, f32 scaleFactor) {
 }
 
 /**
- * @brief Creates a small scale version of grass bush
+ * @brief Creates a small scale version of grass
  *
  */
 void EnKusa_SetScaleSmall(EnKusa* this) {
@@ -305,8 +315,8 @@ void EnKusa_SpawnFragments(EnKusa* this, GlobalContext* globalCtx) {
 
         scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) & 7;
 
-        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -0x64, 0x40, 0x28, 3, 0, sFragmentScales[scaleIndex], 0,
-                             0, 0x50, -1, 1, gameplay_keep_DL_0527F0);
+        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0,
+                             0x50, -1, 1, gKusaLeafMiddle);
 
         pos.x = this->actor.world.pos.x + (directon->x * this->actor.scale.x * 40.0f);
         pos.y = this->actor.world.pos.y + (directon->y * this->actor.scale.y * 40.0f) + 10.0f;
@@ -317,17 +327,14 @@ void EnKusa_SpawnFragments(EnKusa* this, GlobalContext* globalCtx) {
 
         scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) % 7;
 
-        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -0x64, 0x40, 0x28, 3, 0, sFragmentScales[scaleIndex], 0,
-                             0, 0x50, -1, 1, gameplay_keep_DL_0528B0);
+        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0,
+                             0x50, -1, 1, gKusaLeafTip);
     }
 }
 
-/**
- * @brief Spawns bugs
- *
- */
 void EnKusa_SpawnBugs(EnKusa* this, GlobalContext* globalCtx) {
     u32 numBugs = 0;
+
     for (numBugs = 0; numBugs < 3; numBugs++) {
         Actor* bug = Actor_SpawnAsChildAndCutscene(
             &globalCtx->actorCtx, globalCtx, ACTOR_EN_INSECT, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -353,10 +360,6 @@ s32 EnKusa_GetWaterBox(EnKusa* this, GlobalContext* globalCtx) {
     return false;
 }
 
-/**
- * @brief Initializes colliders for actor
- *
- */
 void EnKusa_InitCollider(Actor* thisx, GlobalContext* globalCtx) {
     EnKusa* this = THIS;
 
@@ -368,7 +371,7 @@ void EnKusa_InitCollider(Actor* thisx, GlobalContext* globalCtx) {
 void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKusa* this = THIS;
     s32 pad;
-    s32 kusaType = GET_KUSA_TYPE(this);
+    s32 kusaType = GET_KUSA_TYPE(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
@@ -380,10 +383,10 @@ void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (kusaType == ENKUSA_TYPE_BUSH) {
         this->actor.shape.shadowScale = 1.0f;
-        this->actor.shape.shadowAlpha = 0x3C;
+        this->actor.shape.shadowAlpha = 60;
     } else {
         this->actor.shape.shadowScale = 0.9f;
-        this->actor.shape.shadowAlpha = 0x46;
+        this->actor.shape.shadowAlpha = 70;
     }
 
     if (this->actor.shape.rot.y == 0) {
@@ -395,11 +398,11 @@ void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    if (EnKusa_GetWaterBox(this, globalCtx) != 0) {
-        this->unk198 |= 1;
+    if (EnKusa_GetWaterBox(this, globalCtx)) {
+        this->isInWater |= 1;
     }
 
-    this->objIndex = Object_GetIndex(&globalCtx->objectCtx, objectIds[(this->actor.params & 3)]);
+    this->objIndex = Object_GetIndex(&globalCtx->objectCtx, objectIds[(GET_KUSA_TYPE(&this->actor))]);
     if (this->objIndex < 0) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -417,7 +420,7 @@ void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx) {
         kusaGameplayFrames = globalCtx->gameplayFrames;
     }
     this->kusaMtxIdx = D_809366B0 & 7;
-    D_809366B0 += 1;
+    D_809366B0++;
 }
 
 void EnKusa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -432,20 +435,20 @@ void EnKusa_SetupWaitObject(EnKusa* this) {
 }
 
 /**
- * @brief Waits for object to be loaded then draws the appropriate actor
+ * @brief Waits for object to be loaded then draws the appropriate model
  *
  */
 void EnKusa_WaitObject(EnKusa* this, GlobalContext* globalCtx) {
-    s16 pad;
+    s32 pad;
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex) != 0) {
-        s32 kusa_type = GET_KUSA_TYPE(this);
-        if (this->isCut != 0) {
+        s32 kusaType = GET_KUSA_TYPE(&this->actor);
+        if (this->isCut) {
             EnKusa_SetupCut(this);
         } else {
-            EnKusa_SetupMain(this);
+            EnKusa_SetupInteract(this);
         }
-        if (kusa_type == ENKUSA_TYPE_BUSH) {
+        if (kusaType == ENKUSA_TYPE_BUSH) {
             this->actor.draw = EnKusa_DrawBush;
         } else {
             this->actor.draw = EnKusa_DrawGrass;
@@ -455,8 +458,8 @@ void EnKusa_WaitObject(EnKusa* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnKusa_SetupMain(EnKusa* this) {
-    this->actionFunc = EnKusa_Main;
+void EnKusa_SetupInteract(EnKusa* this) {
+    this->actionFunc = EnKusa_WaitForInteract;
     this->actor.flags &= ~0x10;
 }
 
@@ -464,26 +467,26 @@ void EnKusa_SetupMain(EnKusa* this) {
  * @brief Handles the main logic and control flow for all kusa types
  *
  */
-void EnKusa_Main(EnKusa* this, GlobalContext* globalCtx) {
+void EnKusa_WaitForInteract(EnKusa* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         EnKusa_SetupLiftedUp(this);
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x14, NA_SE_PL_PULL_UP_PLANT);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_PL_PULL_UP_PLANT);
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
 
     } else if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         EnKusa_SpawnFragments(this, globalCtx);
         EnKusa_DropCollectible(this, globalCtx);
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x14, NA_SE_EV_PLANT_BROKEN);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
 
-        if ((this->actor.params >> 4) & 1) {
-            if (GET_KUSA_TYPE(this) != 3) {
+        if ((KUSA_GET_PARAMS_04(&this->actor)) & 1) {
+            if (GET_KUSA_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
                 EnKusa_SpawnBugs(this, globalCtx);
             }
         }
-        if (GET_KUSA_TYPE(this) == ENKUSA_TYPE_BUSH) {
+        if (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_BUSH) {
             Actor_MarkForDeath(&this->actor);
         } else {
             EnKusa_SetupCut(this);
@@ -502,7 +505,7 @@ void EnKusa_Main(EnKusa* this, GlobalContext* globalCtx) {
             if (this->actor.xzDistToPlayer < 400.0f) {
                 CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
-                    if (GET_KUSA_TYPE(this) != ENKUSA_TYPE_GRASS_2) {
+                    if (GET_KUSA_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
                         Actor_LiftActor(&this->actor, globalCtx);
                     }
                 }
@@ -569,12 +572,12 @@ void EnKusa_Fall(EnKusa* this, GlobalContext* globalCtx) {
     }
     this->timer++;
     if (((this->actor.bgCheckFlags & 0xB)) || (wasHit) || ((this->timer) >= 100)) {
-        if ((this->actor.bgCheckFlags & 0x20) == 0) {
+        if (!(this->actor.bgCheckFlags & 0x20)) {
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         }
         EnKusa_SpawnFragments(this, globalCtx);
         EnKusa_DropCollectible(this, globalCtx);
-        switch (GET_KUSA_TYPE(this)) {
+        switch (GET_KUSA_TYPE(&this->actor)) {
             case ENKUSA_TYPE_BUSH:
             case ENKUSA_TYPE_GRASS:
                 Actor_MarkForDeath(&this->actor);
@@ -627,7 +630,7 @@ void EnKusa_Fall(EnKusa* this, GlobalContext* globalCtx) {
 }
 
 void EnKusa_SetupCut(EnKusa* this) {
-    switch (GET_KUSA_TYPE(this)) {
+    switch (GET_KUSA_TYPE(&this->actor)) {
         case ENKUSA_TYPE_GRASS:
         case ENKUSA_TYPE_GRASS_2:
             this->actionFunc = EnKusa_DoNothing;
@@ -674,7 +677,7 @@ void EnKusa_SetupUprootedWaitRegrow(EnKusa* this) {
 void EnKusa_UprootedWaitRegrow(EnKusa* this, GlobalContext* globalCtx) {
     this->timer++;
     if ((this->timer) > 120) {
-        if ((Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 0.6f)) && (this->timer >= 170)) {
+        if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 0.6f) && (this->timer >= 170)) {
             EnKusa_SetupRegrow(this);
         }
     }
@@ -695,7 +698,7 @@ void EnKusa_Regrow(EnKusa* this, GlobalContext* globalCtx) {
     this->actor.scale.z = this->actor.scale.x;
     if (isFullyGrown) {
         Actor_SetScale(&this->actor, 0.4f);
-        EnKusa_SetupMain(this);
+        EnKusa_SetupInteract(this);
         this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
     }
 }
@@ -706,7 +709,7 @@ void EnKusa_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     this->actionFunc(this, globalCtx);
 
-    if (this->isCut != 0) {
+    if (this->isCut) {
         this->actor.shape.yOffset = -6.25f;
     } else {
         this->actor.shape.yOffset = 0.0f;
@@ -721,34 +724,42 @@ void EnKusa_DrawBush(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnKusa* this = THIS;
 
-    if ((this->actor.projectedPos.z <= 1200.0f) || ((this->unk198 & 1) && (this->actor.projectedPos.z < 1300.0f))) {
-        if ((globalCtx->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == EnKusa_Main) &&
+    if ((this->actor.projectedPos.z <= 1200.0f) || ((this->isInWater & 1) && (this->actor.projectedPos.z < 1300.0f))) {
+
+        if ((globalCtx->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract) &&
             (this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
             EnKusa_GetMtxState(&D_80936AD8[this->kusaMtxIdx]);
         }
-        Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
+
+        Gfx_DrawDListOpa(globalCtx, gKusaBushType1);
+
     } else if (this->actor.projectedPos.z < 1300.0f) {
         s32 alpha;
+
         OPEN_DISPS(globalCtx->state.gfxCtx);
+
         alpha = (1300.0f - this->actor.projectedPos.z) * 2.55f;
         func_8012C2DC(globalCtx->state.gfxCtx);
+
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, alpha);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_007938);
+        gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2);
+
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
 
 void EnKusa_DrawGrass(Actor* thisx, GlobalContext* globalCtx) {
     EnKusa* this = THIS;
-    if (this->isCut != 0) {
-        Gfx_DrawDListOpa(globalCtx, object_kusa_DL_0002E0);
+
+    if (this->isCut) {
+        Gfx_DrawDListOpa(globalCtx, gKusaStump);
     } else {
-        if ((globalCtx->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == EnKusa_Main)) {
+        if ((globalCtx->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
                 EnKusa_GetMtxState(&D_80936AD8[this->kusaMtxIdx]);
             }
         }
-        Gfx_DrawDListOpa(globalCtx, object_kusa_DL_000140);
+        Gfx_DrawDListOpa(globalCtx, gKusaSprout);
     }
 }

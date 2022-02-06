@@ -22,14 +22,18 @@ typedef struct EnKusa {
     /* 0x195 */ s8 objIndex;
     /* 0x196 */ s8 kusaMtxIdx;
     /* 0x197 */ u8 isCut;
-    /* 0x198 */ u8 unk198;
+    /* 0x198 */ u8 isInWater;
 } EnKusa; // size = 0x19C
 
 extern const ActorInit En_Kusa_InitVars;
 
-#define GET_KUSA_COLLECTIBLE_ID(x) (((x->actor.params >> 8) & 0x7F))
-#define GET_KUSA_RAND_COLLECTIBLE_ID(x) ((x->actor.params >> 8) & 0xF)
+#define KUSA_GET_COLLECTIBLE_ID(thisx) ((((thisx)->params >> 8) & 0x7F))
+#define KUSA_GET_RAND_COLLECTIBLE_ID(thisx) (((thisx)->params >> 8) & 0xF)
+#define KUSA_GET_PARAMS_02(thisx) ((thisx)->params >> 0x2)
+#define KUSA_GET_PARAMS_04(thisx) ((thisx)->params >> 0x4)
+#define KUSA_GET_PARAMS_0C(thisx) ((thisx)->params >> 0xC)
 
-#define GET_KUSA_TYPE(this)(this->actor.params & 0x3)
+
+#define GET_KUSA_TYPE(thisx)((thisx)->params & 0x3)
 
 #endif // Z_EN_KUSA_H
