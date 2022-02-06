@@ -81,7 +81,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
 
     EnGinkoMan_SwitchAnimation(this, globalCtx);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
+        if ((gSaveContext.bankRupees & 0xFFFF) == 0) {
             Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
             func_801518B0(globalCtx, 0x44C, &this->actor);
             this->curTextId = 0x44C; // would you like to make an account
@@ -145,7 +145,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
                     Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
                 }
 
-                globalCtx->msgCtx.bankRupees = gSaveContext.roomInf[127][0] & 0xFFFF;
+                globalCtx->msgCtx.bankRupees = gSaveContext.bankRupees & 0xFFFF;
                 func_801518B0(globalCtx, 0x45A, &this->actor);
                 this->curTextId = 0x45A; // "All right, little guy, now I've got a total of [rupees] from you!"
             }
@@ -156,22 +156,22 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             this->curTextId = 0x44E; //" ...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
             break;
         case 0x45A: // "All right, little guy, now I've got a total of [rupees] from you!"
-            if (((gSaveContext.roomInf[127][0] & 0xFFFF) >= 200) && (this->previousBankValue < 200) &&
+            if (((gSaveContext.bankRupees & 0xFFFF) >= 200) && (this->previousBankValue < 200) &&
                 !(gSaveContext.weekEventReg[59] & 0x40)) {
                 gSaveContext.weekEventReg[59] |= 0x40;
                 func_801518B0(globalCtx, 0x45B, &this->actor);
                 this->curTextId = 0x45B; // "What's this? You've already saved up 200 Rupees!?!
-            } else if (((gSaveContext.roomInf[127][0] & 0xFFFF) >= 1000) && ((this->previousBankValue) < 1000) &&
+            } else if (((gSaveContext.bankRupees & 0xFFFF) >= 1000) && ((this->previousBankValue) < 1000) &&
                        !(gSaveContext.weekEventReg[59] & 0x80)) {
                 gSaveContext.weekEventReg[59] |= 0x80;
                 func_801518B0(globalCtx, 0x45C, &this->actor);
                 this->curTextId = 0x45C; // "What's this? You've already saved up 1000 Rupees!?!
-            } else if ((gSaveContext.roomInf[127][0] & 0xFFFF) >= 5000) {
+            } else if ((gSaveContext.bankRupees & 0xFFFF) >= 5000) {
                 if ((this->previousBankValue < 5000) && !(gSaveContext.weekEventReg[60] & 1)) {
                     gSaveContext.weekEventReg[60] |= 1;
                     func_801518B0(globalCtx, 0x45D, &this->actor);
                     this->curTextId = 0x45D; // "What's this? You've already saved up 5000 Rupees?!
-                } else if (this->previousBankValue < (s16)(gSaveContext.roomInf[127][0] & 0xFFFF)) {
+                } else if (this->previousBankValue < (s16)(gSaveContext.bankRupees & 0xFFFF)) {
                     Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
                     func_801518B0(globalCtx, 0x45E, &this->actor);
                     this->curTextId =
@@ -208,12 +208,12 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             this->curTextId = 0x464; // Hey, relax! It doesn't leave any marks
             break;
         case 0x464: // Hey, relax! It doesn't leave any marks
-            globalCtx->msgCtx.unk11F22 = 0x44;
+            globalCtx->msgCtx.msgMode = 0x44;
             EnGinkoMan_SetupStamp(this); // stamp player
             break;
         case 0x465: // "There! Now I'll know you when I see you!"
             Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
-            globalCtx->msgCtx.bankRupees = gSaveContext.roomInf[127][0] & 0xFFFF;
+            globalCtx->msgCtx.bankRupees = gSaveContext.bankRupees & 0xFFFF;
             func_801518B0(globalCtx, 0x45A, &this->actor);
             this->curTextId = 0x45A; // "All right, little guy, now I've got a total of [rupees] from you!"
             break;
@@ -229,7 +229,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
         case 0x46C: // "Ah, yes...[Link], right?  If I remember, you're the little guy who deposited [rupees]."
         case 0x47E: // "Your deposits total [rupees]."
             if (this->choiceDepositWithdrawl == GINKOMAN_CHOICE_DEPOSIT) {
-                if ((u32)(gSaveContext.roomInf[127][0] & 0xFFFF) >= 5000) {
+                if ((u32)(gSaveContext.bankRupees & 0xFFFF) >= 5000) {
                     func_801518B0(globalCtx, 0x45F, &this->actor);
                     this->curTextId = 0x45F; // "Excuuuse me! But I can't take anymore deposits!
                 } else if (gSaveContext.rupees == 0) {
@@ -280,12 +280,12 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
         case 0x473: // Use it wisely...
         case 0x474: // "Aw, you're taking out all that?  If you spend it like that, it'll all be gone before you know
                     // it!"
-            if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
+            if ((gSaveContext.bankRupees & 0xFFFF) == 0) {
                 func_801518B0(globalCtx, 0x478, &this->actor);
                 //  "Look, little guy, all the Rupees you deposited are gone, so you can't use that stamp anymore."
                 this->curTextId = 0x478;
             } else {
-                globalCtx->msgCtx.bankRupees = gSaveContext.roomInf[127][0] & 0xFFFF;
+                globalCtx->msgCtx.bankRupees = gSaveContext.bankRupees & 0xFFFF;
                 func_801518B0(globalCtx, 0x45A, &this->actor);
                 this->curTextId = 0x45A; // "All right, little guy, now I've got a total of [rupees] from you!"
             }
@@ -311,7 +311,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
     switch (this->curTextId) {
         case 0x44E: // "...So, what'll it be?
             if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
-                if ((gSaveContext.roomInf[127][0] & 0xFFFF) >= 5000) {
+                if ((gSaveContext.bankRupees & 0xFFFF) >= 5000) {
                     play_sound(NA_SE_SY_ERROR);
                     func_801518B0(globalCtx, 0x45F, &this->actor);
                     this->curTextId = 0x45F; // bank full, cannot accept more
@@ -353,21 +353,20 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                         this->curTextId = 0x453; // That's it? That aint nothing at all
                     }
 
-                    if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
+                    if ((gSaveContext.bankRupees & 0xFFFF) == 0) {
                         this->isNewAccount = true;
                     }
 
                     func_801159EC((s16)-globalCtx->msgCtx.bankRupeesSelected);
-                    this->previousBankValue = gSaveContext.roomInf[127][0] & 0xFFFF;
-                    if (1) {} // Needed to match
-                    gSaveContext.roomInf[127][0] =
-                        (gSaveContext.roomInf[127][0] & 0xFFFF0000) |
-                        ((gSaveContext.roomInf[127][0] & 0xFFFF) + globalCtx->msgCtx.bankRupeesSelected);
+                    this->previousBankValue = gSaveContext.bankRupees & 0xFFFF;
+                    gSaveContext.bankRupees =
+                        ((gSaveContext.bankRupees & 0xFFFF) + globalCtx->msgCtx.bankRupeesSelected) |
+                        (gSaveContext.bankRupees & 0xFFFF0000);
                 }
             } else { // GINKOMAN_CHOICE_NO
                 func_8019F230();
                 Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
-                if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
+                if ((gSaveContext.bankRupees & 0xFFFF) == 0) {
                     func_801518B0(globalCtx, 0x456, &this->actor);
                     this->curTextId = 0x456; // Is that so? think about it
                 } else {
@@ -396,7 +395,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
             break;
         case 0x471: // Are you really withdrawling [selected rupees]?
             if (globalCtx->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
-                if ((s32)((gSaveContext.roomInf[127][0] & 0xFFFF)) <
+                if ((s32)((gSaveContext.bankRupees & 0xFFFF)) <
                     ((s32)(globalCtx->msgCtx.bankRupeesSelected + this->serviceFee))) {
                     play_sound(NA_SE_SY_ERROR);
                     Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_FLOORSMACKING);
@@ -420,11 +419,11 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                         this->curTextId = 0x472; // It's a waste to take out such a tiny bit
                     }
 
-                    this->previousBankValue = (s16)(gSaveContext.roomInf[127][0] & 0xFFFF);
-                    gSaveContext.roomInf[127][0] =
-                        (gSaveContext.roomInf[127][0] & 0xFFFF0000) |
-                        (((gSaveContext.roomInf[127][0] & 0xFFFF) - globalCtx->msgCtx.bankRupeesSelected) -
-                         this->serviceFee);
+                    this->previousBankValue = (s16)(gSaveContext.bankRupees & 0xFFFF);
+                    gSaveContext.bankRupees =
+                        (((gSaveContext.bankRupees & 0xFFFF) - globalCtx->msgCtx.bankRupeesSelected) -
+                         this->serviceFee) |
+                        (gSaveContext.bankRupees & 0xFFFF0000);
                     func_801159EC(globalCtx->msgCtx.bankRupeesSelected);
                 }
             } else {
@@ -578,7 +577,7 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
                 break;
             case 0x469: // "Excuse me, but let me take a look at you..."
                 Actor_ChangeAnimation(&this->skelAnime, animations, GINKO_SITTING);
-                globalCtx->msgCtx.bankRupees = (gSaveContext.roomInf[127][0] & 0xFFFF);
+                globalCtx->msgCtx.bankRupees = (gSaveContext.bankRupees & 0xFFFF);
                 if ((CURRENT_DAY == 3) && (gSaveContext.isNight == 1)) {
                     func_801518B0(globalCtx, 0x46C, &this->actor);
                     this->curTextId = 0x46C; // "Ah, yes...[Link], right?

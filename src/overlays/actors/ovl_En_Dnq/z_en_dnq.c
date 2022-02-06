@@ -332,7 +332,7 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
 
     if (!(gSaveContext.weekEventReg[23] & 0x20)) {
         this->unk_390 = 70.0f;
-        if (func_80114F2C(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) &&
+        if (Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) &&
             (Message_GetState(&globalCtx->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
             if ((DECR(this->unk_384) == 0) && (gSaveContext.weekEventReg[29] & 0x40)) {
                 func_801518B0(globalCtx, 0x969, NULL);
