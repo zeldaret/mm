@@ -43,7 +43,7 @@ void View_Init(View* view, GraphicsContext* gfxCtx) {
     view->zFar = 12800.0f;
     view->eye.z = -1.0f;
 
-    View_InitCameraQuake(view);
+    View_InitDistortion(view);
 }
 
 void View_SetViewOrientation(View* view, Vec3f* eye, Vec3f* at, Vec3f* up) {
@@ -187,87 +187,93 @@ void View_SetScissorForLetterbox(View* view) {
     CLOSE_DISPS(view->gfxCtx);
 }
 
-s32 View_SetQuakeRotation(View* view, f32 x, f32 y, f32 z) {
-    view->quakeRot.x = x;
-    view->quakeRot.y = y;
-    view->quakeRot.z = z;
+s32 View_SetDistortionDirRot(View* view, f32 dirRotX, f32 dirRotY, f32 dirRotZ) {
+    view->distortionDirRot.x = dirRotX;
+    view->distortionDirRot.y = dirRotY;
+    view->distortionDirRot.z = dirRotZ;
     return 1;
 }
 
-s32 View_SetQuakeScale(View* view, f32 x, f32 y, f32 z) {
-    view->quakeScale.x = x;
-    view->quakeScale.y = y;
-    view->quakeScale.z = z;
+s32 View_SetDistortionScale(View* view, f32 scaleX, f32 scaleY, f32 scaleZ) {
+    view->distortionScale.x = scaleX;
+    view->distortionScale.y = scaleY;
+    view->distortionScale.z = scaleZ;
     return 1;
 }
 
-s32 View_SetQuakeSpeed(View* view, f32 speed) {
-    view->quakeSpeed = speed;
+s32 View_SetDistortionSpeed(View* view, f32 speed) {
+    view->distortionSpeed = speed;
     return 1;
 }
 
-s32 View_InitCameraQuake(View* view) {
-    view->quakeRot.x = 0.0f;
-    view->quakeRot.y = 0.0f;
-    view->quakeRot.z = 0.0f;
-    view->quakeScale.x = 1.0f;
-    view->quakeScale.y = 1.0f;
-    view->quakeScale.z = 1.0f;
-    view->currQuakeRot = view->quakeRot;
-    view->currQuakeScale = view->quakeScale;
-    view->quakeSpeed = 0.0f;
+s32 View_InitDistortion(View* view) {
+    view->distortionDirRot.x = 0.0f;
+    view->distortionDirRot.y = 0.0f;
+    view->distortionDirRot.z = 0.0f;
+    view->distortionScale.x = 1.0f;
+    view->distortionScale.y = 1.0f;
+    view->distortionScale.z = 1.0f;
+    view->curDistortionDirRot = view->distortionDirRot;
+    view->curDistortionScale = view->distortionScale;
+    view->distortionSpeed = 0.0f;
     return 1;
 }
 
-s32 View_ClearQuake(View* view) {
-    view->quakeRot.x = 0.0f;
-    view->quakeRot.y = 0.0f;
-    view->quakeRot.z = 0.0f;
-    view->quakeScale.x = 1.0f;
-    view->quakeScale.y = 1.0f;
-    view->quakeScale.z = 1.0f;
-    view->quakeSpeed = 1.0f;
+s32 View_ClearDistortion(View* view) {
+    view->distortionDirRot.x = 0.0f;
+    view->distortionDirRot.y = 0.0f;
+    view->distortionDirRot.z = 0.0f;
+    view->distortionScale.x = 1.0f;
+    view->distortionScale.y = 1.0f;
+    view->distortionScale.z = 1.0f;
+    view->distortionSpeed = 1.0f;
     return 1;
 }
 
-s32 View_SetQuake(View* view, Vec3f rot, Vec3f scale, f32 speed) {
-    view->quakeRot = rot;
-    view->quakeScale = scale;
-    view->quakeSpeed = speed;
+s32 View_SetDistortion(View* view, Vec3f dirRot, Vec3f scale, f32 speed) {
+    view->distortionDirRot = dirRot;
+    view->distortionScale = scale;
+    view->distortionSpeed = speed;
     return 1;
 }
 
-s32 View_StepQuake(View* view, Mtx* matrix) {
-    MtxF mf;
+s32 View_StepDistortion(View* view, Mtx* projectionMtx) {
+    MtxF projectionMtxF;
 
-    if (view->quakeSpeed == 0.0f) {
-        return 0;
-    } else if (view->quakeSpeed == 1.0f) {
-        view->currQuakeRot = view->quakeRot;
-        view->currQuakeScale = view->quakeScale;
-        view->quakeSpeed = 0.0f;
+    if (view->distortionSpeed == 0.0f) {
+        return false;
+    } else if (view->distortionSpeed == 1.0f) {
+        view->curDistortionDirRot = view->distortionDirRot;
+        view->curDistortionScale = view->distortionScale;
+        view->distortionSpeed = 0.0f;
     } else {
-        view->currQuakeRot.x += ((view->quakeRot.x - view->currQuakeRot.x) * view->quakeSpeed);
-        view->currQuakeRot.y += ((view->quakeRot.y - view->currQuakeRot.y) * view->quakeSpeed);
-        view->currQuakeRot.z += ((view->quakeRot.z - view->currQuakeRot.z) * view->quakeSpeed);
+        view->curDistortionDirRot.x =
+            F32_LERPIMP(view->curDistortionDirRot.x, view->distortionDirRot.x, view->distortionSpeed);
+        view->curDistortionDirRot.y =
+            F32_LERPIMP(view->curDistortionDirRot.y, view->distortionDirRot.y, view->distortionSpeed);
+        view->curDistortionDirRot.z =
+            F32_LERPIMP(view->curDistortionDirRot.z, view->distortionDirRot.z, view->distortionSpeed);
 
-        view->currQuakeScale.x += ((view->quakeScale.x - view->currQuakeScale.x) * view->quakeSpeed);
-        view->currQuakeScale.y += ((view->quakeScale.y - view->currQuakeScale.y) * view->quakeSpeed);
-        view->currQuakeScale.z += ((view->quakeScale.z - view->currQuakeScale.z) * view->quakeSpeed);
+        view->curDistortionScale.x =
+            F32_LERPIMP(view->curDistortionScale.x, view->distortionScale.x, view->distortionSpeed);
+        view->curDistortionScale.y =
+            F32_LERPIMP(view->curDistortionScale.y, view->distortionScale.y, view->distortionSpeed);
+        view->curDistortionScale.z =
+            F32_LERPIMP(view->curDistortionScale.z, view->distortionScale.z, view->distortionSpeed);
     }
 
-    Matrix_FromRSPMatrix(matrix, &mf);
-    Matrix_SetCurrentState(&mf);
-    Matrix_RotateStateAroundXAxis(view->currQuakeRot.x);
-    Matrix_InsertYRotation_f(view->currQuakeRot.y, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(view->currQuakeRot.z, MTXMODE_APPLY);
-    Matrix_Scale(view->currQuakeScale.x, view->currQuakeScale.y, view->currQuakeScale.z, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(-view->currQuakeRot.z, MTXMODE_APPLY);
-    Matrix_InsertYRotation_f(-view->currQuakeRot.y, MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis(-view->currQuakeRot.x);
-    Matrix_ToMtx(matrix);
+    Matrix_FromRSPMatrix(projectionMtx, &projectionMtxF);
+    Matrix_SetCurrentState(&projectionMtxF);
+    Matrix_RotateStateAroundXAxis(view->curDistortionDirRot.x);
+    Matrix_InsertYRotation_f(view->curDistortionDirRot.y, MTXMODE_APPLY);
+    Matrix_InsertZRotation_f(view->curDistortionDirRot.z, MTXMODE_APPLY);
+    Matrix_Scale(view->curDistortionScale.x, view->curDistortionScale.y, view->curDistortionScale.z, MTXMODE_APPLY);
+    Matrix_InsertZRotation_f(-view->curDistortionDirRot.z, MTXMODE_APPLY);
+    Matrix_InsertYRotation_f(-view->curDistortionDirRot.y, MTXMODE_APPLY);
+    Matrix_RotateStateAroundXAxis(-view->curDistortionDirRot.x);
+    Matrix_ToMtx(projectionMtx);
 
-    return 1;
+    return true;
 }
 
 void View_RenderView(View* view, s32 uParm2) {
@@ -309,8 +315,8 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
 
     guPerspective(projection, &view->normal, view->fovy, aspect, view->zNear, view->zFar, view->scale);
     view->projection = *projection;
-    //! @bug: This cast of `projection` is invalid
-    View_StepQuake(view, (Mtx*)projection);
+
+    View_StepDistortion(view, projection);
 
     gSPPerspNormalize(POLY_OPA_DISP++, view->normal);
     gSPMatrix(POLY_OPA_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
