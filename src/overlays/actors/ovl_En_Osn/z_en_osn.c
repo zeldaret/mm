@@ -787,7 +787,7 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_1FC = 255;
-    switch (this->actor.params & 3) {
+    switch (ENOSN_GET_3(THIS)) {
         case 0:
             if (((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC030)) ||
                 (gSaveContext.entranceIndex == 0xC060)) {
@@ -868,10 +868,10 @@ s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     EnOsn* this = (EnOsn*)actor;
 
     if (this->unk_1F0 && limbIndex == 11) {
-        Matrix_InsertXRotation_s(this->unk_1D8.y, 1);
+        Matrix_InsertXRotation_s(this->unk_1D8.y, MTXMODE_APPLY);
     }
-    if ((this->unk_1EC == 9 || this->unk_1EC == 8) && limbIndex == 0xA) {
-        *dList = 0;
+    if ((this->unk_1EC == 9 || this->unk_1EC == 8) && limbIndex == 10) {
+        *dList = NULL;
     }
     return 0;
 }

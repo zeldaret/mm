@@ -30,4 +30,6 @@ typedef struct EnOsn {
 
 extern const ActorInit En_Osn_InitVars;
 
+#define ENOSN_GET_3(this) ((thisx)->params & 3) 
+
 #endif // Z_EN_OSN_H
