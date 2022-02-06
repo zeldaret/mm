@@ -452,14 +452,12 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
             break;
 
         case 0x1FCB:
-
         case 0x2007:
             this->unk_1F4 = 0x1FCC;
             this->unk_1EA |= 0x20;
             break;
 
         case 0x1FCE:
-
         case 0x1FD0:
             this->unk_1F4 = 0x1FCF;
             break;
@@ -564,7 +562,6 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
         case 0x1FF3:
         case 0x1FF7:
         case 0x1FF9:
-
         case 0x1FFB:
             this->unk_1F4 = 0x1FD3;
             break;
@@ -576,7 +573,6 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
         case 0x1FED:
         case 0x1FEF:
         case 0x1FF5:
-
         case 0x1FFD:
             this->unk_1F4 = 0x1FD4;
             break;
@@ -587,7 +583,6 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
 
         case 0x1FD3:
         case 0x1FD4:
-
         case 0x1FFE:
             this->unk_1F4 = 0x1FD5;
             this->unk_1EA |= 0x20;
