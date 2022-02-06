@@ -137,7 +137,7 @@ s32 func_809CB4A0(EnCne01* this, GlobalContext* globalCtx) {
 
     Actor_GetScreenPos(globalCtx, &this->enHy.actor, &x, &y);
     //! @bug: Both x and y conditionals are always true, || should be an &&
-    if (!this->enHy.waitingOnInit && ((x >= 0) || (x < 320)) && ((y >= 0) || (y < 240))) {
+    if (!this->enHy.waitingOnInit && ((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
         func_800B85E0(&this->enHy.actor, globalCtx, 30.0f, EXCH_ITEM_2E);
     }
     return true;
