@@ -316,7 +316,7 @@ void EnKusa_SpawnFragments(EnKusa* this, GlobalContext* globalCtx) {
         scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) & 7;
 
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0,
-                             0x50, -1, 1, gKusaLeafMiddle);
+                             0x50, -1, 1, gKakeraLeafMiddle);
 
         pos.x = this->actor.world.pos.x + (directon->x * this->actor.scale.x * 40.0f);
         pos.y = this->actor.world.pos.y + (directon->y * this->actor.scale.y * 40.0f) + 10.0f;
@@ -328,7 +328,7 @@ void EnKusa_SpawnFragments(EnKusa* this, GlobalContext* globalCtx) {
         scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) % 7;
 
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0,
-                             0x50, -1, 1, gKusaLeafTip);
+                             0x50, -1, 1, gKakeraLeafTip);
     }
 }
 

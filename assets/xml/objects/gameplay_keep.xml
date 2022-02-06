@@ -1169,8 +1169,8 @@
         <Limb Name="gameplay_keep_Standardlimb_05272C" Type="Standard" Offset="0x5272C" />
         <Limb Name="gameplay_keep_Standardlimb_052738" Type="Standard" Offset="0x52738" />
         <Skeleton Name="gameplay_keep_Skel_0527A0" Type="Normal" LimbType="Standard" Offset="0x527A0" />
-        <DList Name="gKusaLeafMiddle" Offset="0x527F0" />
-        <DList Name="gKusaLeafTip" Offset="0x528B0" />
+        <DList Name="gKakeraLeafMiddle" Offset="0x527F0" />
+        <DList Name="gKakeraLeafTip" Offset="0x528B0" />
         <Texture Name="gameplay_keep_Tex_052940" OutName="tex_052940" Format="rgba16" Width="32" Height="32" Offset="0x52940" />
         <Texture Name="gameplay_keep_Tex_053140" OutName="tex_053140" Format="rgba16" Width="32" Height="32" Offset="0x53140" />
         <Texture Name="gameplay_keep_Tex_053940" OutName="tex_053940" Format="i4" Width="64" Height="64" Offset="0x53940" />

@@ -303,8 +303,8 @@ void func_809375C8(ObjBean* this, GlobalContext* globalCtx) {
 
 void func_809375F4(ObjBean* this, GlobalContext* globalCtx) {
     static Gfx* D_80939024[] = {
-        gameplay_keep_DL_0527F0,
-        gameplay_keep_DL_0528B0,
+        gKakeraLeafMiddle,
+        gKakeraLeafTip,
     };
     Vec3f spC4;
     Vec3f spB8;

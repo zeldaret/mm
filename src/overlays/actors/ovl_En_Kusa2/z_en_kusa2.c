@@ -1310,8 +1310,8 @@ void EnKusa2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A5E6F0(Actor* thisx, GlobalContext* globalCtx) {
     static Gfx* D_80A5EB68[] = {
-        gKusaLeafTip,
-        gKusaLeafMiddle,
+        gKakeraLeafTip,
+        gKakeraLeafMiddle,
     };
     EnKusa2* this = THIS;
     s32 i;

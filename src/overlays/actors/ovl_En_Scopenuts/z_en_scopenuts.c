@@ -79,7 +79,7 @@ static ActorAnimationEntryS sAnimations[] = {
     { &object_dnt_Anim_002670, 1.0f, 0, -1, 2, 0 },
 };
 
-Gfx* D_80BCCCDC[] = { gKusaLeafMiddle, gKusaLeafTip };
+Gfx* D_80BCCCDC[] = { gKakeraLeafMiddle, gKakeraLeafTip };
 
 Vec3f D_80BCCCE4 = { 0.0f, -0.5f, 0.0f };
 
