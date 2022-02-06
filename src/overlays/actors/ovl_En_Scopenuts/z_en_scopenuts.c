@@ -307,7 +307,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
         if (func_80147624(globalCtx)) {
             if (this->unk_328 & 1) {
                 this->unk_328 &= ~1;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_328 &= ~4;
@@ -330,7 +330,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
                         func_801518B0(globalCtx, this->unk_33C, &this->actor);
                     } else {
                         func_8019F208();
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         func_801159EC(this->unk_358 * -1);
                         this->actionFunc = func_80BCB90C;
