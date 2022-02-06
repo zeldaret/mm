@@ -617,12 +617,12 @@ void func_80AD144C(EnOsn* this, GlobalContext* globalCtx) {
 void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
     s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE && (!CHECK_QUEST_ITEM(QUEST_SONG_HEALING))) {
+    if (gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE && !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->actionFunc = func_80AD1634;
             return;
         }
-        if ((((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted != 0)) && ((temp_v1) < 0x4000)) &&
+        if ((((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (temp_v1 < 0x4000)) &&
             (temp_v1 > -0x4000)) {
             func_800B863C(&this->actor, globalCtx);
             this->actor.textId = 0xFFFF;
@@ -632,7 +632,7 @@ void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
             this->unk_1F4 = (s16)func_80AD0E10(this, globalCtx);
             func_801518B0(globalCtx, this->unk_1F4, &this->actor);
             this->actionFunc = func_80AD19A0;
-        } else if ((((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted != 0)) && (temp_v1 < 0x4000)) &&
+        } else if ((((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (temp_v1 < 0x4000)) &&
                    (temp_v1 > -0x4000)) {
             func_800B863C(&this->actor, globalCtx);
         }
@@ -731,8 +731,8 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_1EC);
         }
 
-        if ((this->unk_1EC == 5) && (globalCtx->sceneNum == 8) && (gSaveContext.sceneSetupIndex == 0xB) &&
-            (globalCtx->csCtx.frames == 0x190)) {
+        if ((this->unk_1EC == 5) && (globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 0xB) &&
+            (globalCtx->csCtx.frames == 400)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_OMVO00);
         }
         if (this->unk_1EC == 0x12) {
@@ -791,10 +791,10 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 0:
             if (((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC030)) ||
                 (gSaveContext.entranceIndex == 0xC060)) {
-                this->unk_1EA = (u16)(this->unk_1EA | 1);
+                this->unk_1EA |= 1;
             }
             this->unk_1F0 = 1;
-            if (globalCtx->sceneNum == 0x63) {
+            if (globalCtx->sceneNum == SCENE_INSIDETOWER) {
                 if ((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC060)) {
                     this->actionFunc = func_80AD16A8;
                     return;
