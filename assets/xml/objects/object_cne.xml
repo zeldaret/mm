@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Object for Unusued Hyrule Market NPC -->
     <File Name="object_cne" Segment="6">
         <!-- The textures used by these limbs aren't 64-bit aligned -->
         <Limb Name="gCnePelvisLimb" LimbType="Standard" EnumName="CNE_LIMB_PELVIS" Offset="0x0"/>
