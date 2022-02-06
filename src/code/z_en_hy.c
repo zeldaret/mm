@@ -121,7 +121,7 @@ s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeleton
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->actor.objBankIndex].segment);
         SkelAnime_InitFlex(globalCtx, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
-                           16);
+                           ENHY_LIMB_MAX);
         EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
     }
 
