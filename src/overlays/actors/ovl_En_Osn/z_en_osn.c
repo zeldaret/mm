@@ -764,7 +764,7 @@ void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx) {
     if ((temp_v0 == 6 || temp_v0 == 5) && func_80147624(globalCtx)) {
         if (this->unk_1EA & 0x20) {
             this->unk_1EA &= ~0x20;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = func_80AD14C8;
         } else {
