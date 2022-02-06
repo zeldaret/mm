@@ -850,7 +850,7 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
-    if ((this->actor.params & 3) == 0) {
+    if (!(ENOSN_GET_3(THIS))) {
         if (sp34 != 0) {
             this->actor.flags |= ACTOR_FLAG_1;
             func_80AD0830(this, globalCtx);
