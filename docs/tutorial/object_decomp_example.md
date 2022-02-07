@@ -73,3 +73,39 @@ if (limbIndex == KINGS_CHAMBER_DEKU_GUARD_HEAD_LIMB) {
     [...]
 }
 ```
+
+## Step 2: Naming the animations
+
+Now that we have the skeleton figured out, it's time to name all the animations. In the Skeleton Viewer, you can hit the "play" button on any animation to see what it looks like. Note that some objects have multiple skeletons, and selecting an animation that is associated with a different skeleton than the one you're looking at can cause odd behavior. Try to give each animation a descriptive name based on what it looks like. If you're struggling;
+- Try viewing the animation in game. In what contexts does this animation play?
+- Try analyzing the code for the actor to see when the animation is used. Is this animation ever referenced?
+- If you're still really struggling, Majora's Mask 3D contains the original animation names for the majority of animations in the game. These original names can help you figure out what the developers were originally intending. Explaining how to find these animations in MM3D is outside of the scope of this document, so just ask in Discord if you want to try this.
+
+After naming the animations, the end result will look something like this:
+```xml
+<Animation Name="gKingsChamberDekuGuardDanceAnim" Offset="0x2A8" />
+<Animation Name="gKingsChamberDekuGuardFlipAnim" Offset="0x734" />
+<Animation Name="gKingsChamberDekuGuardSurpriseStartAnim" Offset="0x8F4" />
+<Animation Name="gKingsChamberDekuGuardSurpriseLoopAnim" Offset="0xBD8" />
+<Animation Name="gKingsChamberDekuGuardRunStartAnim" Offset="0xD58" />
+<Animation Name="gKingsChamberDekuGuardRunLoopAnim" Offset="0xFEC" />
+[...]
+<Animation Name="gKingsChamberDekuGuardIdleAnim" Offset="0x3310" />
+<Animation Name="gKingsChamberDekuGuardBouncingIdleAnim" Offset="0x34EC" />
+```
+
+Once again, we can run `./extract_assets.py -s objects/object_dns` to extract the object, and we can update the animation names in `z_en_dns.c` to use our new names like so:
+```c
+static ActorAnimationEntryS sAnimations[] = {
+    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, 0, 0 },
+    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, 0, -4 },
+    { &gKingsChamberDekuGuardBouncingIdleAnim, 1.0f, 0, -1, 0, 0 },
+    { &gKingsChamberDekuGuardBouncingIdleAnim, 1.0f, 0, -1, 0, -4 },
+    { &gKingsChamberDekuGuardSurpriseStartAnim, 1.0f, 0, -1, 2, 0 },
+    { &gKingsChamberDekuGuardSurpriseLoopAnim, 1.0f, 0, -1, 0, 0 },
+    { &gKingsChamberDekuGuardRunStartAnim, 1.0f, 0, -1, 2, 0 },
+    { &gKingsChamberDekuGuardRunLoopAnim, 1.0f, 0, -1, 0, 0 },
+    { &gKingsChamberDekuGuardDanceAnim, 1.0f, 0, -1, 2, 0 },
+    { &gKingsChamberDekuGuardFlipAnim, 1.0f, 0, -1, 2, 0 },
+};
+```
