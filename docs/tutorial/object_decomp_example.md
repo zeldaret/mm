@@ -188,3 +188,35 @@ gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlower);
 ```
 
 Since we've now named every single thing in the actor, we can delete all symbols associated with `ovl_En_Dns` in [undefined_syms](../../undefined_syms.txt).
+
+## Step #5: Naming limb display lists
+
+Now that we've named everything that's used externally by the actor, we just need to clean up the rest of the unnamed stuff in the XML. Let's start by naming the display lists for each limb. There are two ways you can determine which display list is associated with a given limb. One way is to click on the limb in Z64Utils; it will tell you what display list is used for that limb:
+
+![Showing the head limb's display list in Z64Utils](images/z64utils_dns_limb_dlist.png)
+
+Another way is to simply check `object_dns.c`. Each limb lists its own display list like this:
+```c
+StandardLimb gKingsChamberDekuGuardHeadLimb = { 
+    { 0, 1300, 0 }, KINGS_CHAMBER_DEKU_GUARD_STALK_LIMB - 1, KINGS_CHAMBER_DEKU_GUARD_LEFT_FOOT_LIMB - 1,
+    object_dns_DL_0018B8
+};
+```
+
+Either way you go about it, you should be able to name all the limb display lists like so:
+```xml
+<DList Name="gKingsChamberDekuGuardRightFootDL" Offset="0x1640" />
+<DList Name="gKingsChamberDekuGuardLeftFootDL" Offset="0x16F0" />
+<DList Name="gKingsChamberDekuGuardMouthDL" Offset="0x17A0" />
+<DList Name="gKingsChamberDekuGuardHeadDL" Offset="0x18B8" />
+<DList Name="gKingsChamberDekuGuardStalkDL" Offset="0x19B8" />
+<DList Name="gKingsChamberDekuGuardEyesDL" Offset="0x1A50" />
+<DList Name="gKingsChamberDekuGuardTorsoDL" Offset="0x1AD8" />
+<DList Name="gKingsChamberDekuGuardLeftMustacheDL" Offset="0x1B90" />
+<DList Name="gKingsChamberDekuGuardRightMustacheDL" Offset="0x1C20" />
+<DList Name="gKingsChamberDekuGuardLeftLeafDL" Offset="0x1CB0" />
+<DList Name="gKingsChamberDekuGuardCenterLeafDL" Offset="0x1D40" />
+<DList Name="gKingsChamberDekuGuardRightLeafDL" Offset="0x1DD8" />
+```
+
+Run `./extract_assets.py -s objects/object_dns` once again, since it will help in the next step to have all of our display lists named.
