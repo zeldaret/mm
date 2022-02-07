@@ -242,7 +242,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
             break;
         case 0x11:
-            gSaveContext.unk_3F58 = 1;
+            gSaveContext.sunsSongState = 1;
             break;
         case 0x12:
             if (!gSaveContext.isNight) {

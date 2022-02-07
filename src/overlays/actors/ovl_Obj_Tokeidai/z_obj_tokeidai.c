@@ -336,7 +336,8 @@ void ObjTokeidai_ExteriorGear_Collapse(ObjTokeidai* this, GlobalContext* globalC
 }
 
 void ObjTokeidai_ExteriorGear_OpenedIdle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x84) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 2) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x84) &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 2) {
         this->actionFunc = ObjTokeidai_ExteriorGear_Collapse;
         this->actor.speedXZ = this->actor.scale.y * 5.0f;
         this->actor.velocity.y = 0.0f;
@@ -438,7 +439,8 @@ void ObjTokeidai_TerminaFieldWalls_Collapse(ObjTokeidai* this, GlobalContext* gl
 }
 
 void ObjTokeidai_TerminaFieldWalls_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x84) != 0 && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 1) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x84) != 0 &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x84)]->action == 1) {
         this->actionFunc = ObjTokeidai_TerminaFieldWalls_Collapse;
     }
 }

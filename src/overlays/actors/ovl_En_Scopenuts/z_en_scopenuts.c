@@ -286,7 +286,7 @@ void func_80BCB52C(EnScopenuts* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_33C = func_80BCAF0C(this);
-        func_801518B0(globalCtx, this->unk_33C, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
         this->actionFunc = func_80BCB6D0;
     } else if (((this->actor.xzDistToPlayer < 100.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
@@ -316,7 +316,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_80BCBA00;
             } else {
                 this->unk_33C = func_80BCAF0C(this);
-                func_801518B0(globalCtx, this->unk_33C, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
             }
         }
     } else if (temp_v0 == 4) {
@@ -327,7 +327,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1636;
                         this->unk_328 |= 1;
-                        func_801518B0(globalCtx, this->unk_33C, &this->actor);
+                        Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
                     } else {
                         func_8019F208();
                         globalCtx->msgCtx.msgMode = 0x43;
@@ -344,7 +344,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
                         this->unk_33C = 0x1635;
                         this->unk_328 |= 1;
                     }
-                    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
                     break;
             }
         }
@@ -368,7 +368,7 @@ void func_80BCB980(EnScopenuts* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_33C = 0x1637;
         this->unk_328 |= 1;
-        func_801518B0(globalCtx, this->unk_33C, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
         this->actionFunc = func_80BCB6D0;
     } else {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);

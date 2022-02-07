@@ -699,7 +699,8 @@ void EnFall_RisingDebris_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1C2) && globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1C2)]->action == 5) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1C2) &&
+        globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1C2)]->action == 5) {
         if (!(this->flags & FLAG_FIRE_RING_APPEARS)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
         }

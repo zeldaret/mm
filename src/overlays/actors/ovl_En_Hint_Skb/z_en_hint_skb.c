@@ -389,7 +389,7 @@ void func_80C2077C(EnHintSkb* this, GlobalContext* globalCtx) {
         this->unk_3E0 = 1;
         if (this->unk_3DC == 0) {
             this->unk_3DC = 1;
-            func_801518B0(globalCtx, 0x1147, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1147, &this->actor);
             this->unk_3E6 = 0x1147;
             if (this->skelAnime.animation == &object_skb_Anim_00697C) {
                 globalCtx->msgCtx.msgMode = 0x44;
@@ -400,7 +400,7 @@ void func_80C2077C(EnHintSkb* this, GlobalContext* globalCtx) {
             }
         } else {
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, 11);
-            func_801518B0(globalCtx, 0x1148, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1148, &this->actor);
             this->unk_3E6 = 0x1148;
         }
         func_80C208BC(this);
@@ -456,7 +456,7 @@ void func_80C208D0(EnHintSkb* this, GlobalContext* globalCtx) {
 
         if ((this->skelAnime.animation == &object_skb_Anim_003584) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            func_801518B0(globalCtx, 0x1147, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1147, &this->actor);
             this->unk_3E6 = 0x1147;
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
         }
@@ -473,37 +473,37 @@ void func_80C20A74(EnHintSkb* this, GlobalContext* globalCtx) {
 
     switch (params) {
         case 1:
-            func_801518B0(globalCtx, 0x1149, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1149, &this->actor);
             this->unk_3E6 = 0x1149;
             break;
 
         case 2:
-            func_801518B0(globalCtx, 0x114A, &this->actor);
+            Message_StartTextbox(globalCtx, 0x114A, &this->actor);
             this->unk_3E6 = 0x114A;
             break;
 
         case 3:
-            func_801518B0(globalCtx, 0x114B, &this->actor);
+            Message_StartTextbox(globalCtx, 0x114B, &this->actor);
             this->unk_3E6 = 0x114B;
             break;
 
         case 4:
-            func_801518B0(globalCtx, 0x114C, &this->actor);
+            Message_StartTextbox(globalCtx, 0x114C, &this->actor);
             this->unk_3E6 = 0x114C;
             break;
 
         case 5:
-            func_801518B0(globalCtx, 0x114D, &this->actor);
+            Message_StartTextbox(globalCtx, 0x114D, &this->actor);
             this->unk_3E6 = 0x114D;
             break;
 
         case 6:
-            func_801518B0(globalCtx, 0x114E, &this->actor);
+            Message_StartTextbox(globalCtx, 0x114E, &this->actor);
             this->unk_3E6 = 0x114E;
             break;
 
         default:
-            func_801518B0(globalCtx, 0x1149, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1149, &this->actor);
             this->unk_3E6 = 0x1149;
             break;
     }
@@ -514,11 +514,11 @@ void func_80C20B88(EnHintSkb* this, GlobalContext* globalCtx) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
             this->unk_3E8 |= 0x10;
-            func_801518B0(globalCtx, 0x1150, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1150, &this->actor);
             this->unk_3E6 = 0x1150;
         } else {
             func_8019F230();
-            func_801518B0(globalCtx, 0x1152, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1152, &this->actor);
             this->unk_3E6 = 0x1152;
         }
     }
@@ -531,7 +531,7 @@ void func_80C20C24(EnHintSkb* this, GlobalContext* globalCtx) {
 
     switch (this->unk_3E6) {
         case 0x1147:
-            func_801518B0(globalCtx, 0x1148, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1148, &this->actor);
             this->unk_3E6 = 0x1148;
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, 11);
             break;
@@ -546,17 +546,17 @@ void func_80C20C24(EnHintSkb* this, GlobalContext* globalCtx) {
         case 0x114C:
         case 0x114D:
         case 0x114E:
-            func_801518B0(globalCtx, 0x114F, &this->actor);
+            Message_StartTextbox(globalCtx, 0x114F, &this->actor);
             this->unk_3E6 = 0x114F;
             break;
 
         case 0x1152:
-            func_801518B0(globalCtx, 0x1151, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1151, &this->actor);
             this->unk_3E6 = 0x1151;
             break;
 
         case 0x1150:
-            func_801518B0(globalCtx, 0x1151, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1151, &this->actor);
             this->unk_3E6 = 0x1151;
             break;
 

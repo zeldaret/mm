@@ -440,6 +440,7 @@ animdict = {
     "player->unk_38C": "player->mountSide",
     "player->unk_394": "player->csMode",
     "globalCtx->actorCtx.actorList[": "globalCtx->actorCtx.actorLists[",
+    "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
 
     # Variables
     "D_0407D590": "gGameplayKeepDrawFlameDL",
