@@ -691,15 +691,17 @@ void Inventory_SaveDekuPlaygroundHighScore(s16 timerId) {
     gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.unk_3DE0[timerId];
 
     for (i = 0; i < 8; i++) {
-        gSaveContext.save.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] = gSaveContext.save.playerData.playerName[i];
+        gSaveContext.save.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] =
+            gSaveContext.save.playerData.playerName[i];
     }
 }
 
 void Inventory_IncrementSkullTokenCount(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         // Swamp Spider House (increment high bits of skullTokenCount)
-        gSaveContext.save.skullTokenCount = ((u16)(((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
-                                       (gSaveContext.save.skullTokenCount & 0xFFFF);
+        gSaveContext.save.skullTokenCount =
+            ((u16)(((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
+            (gSaveContext.save.skullTokenCount & 0xFFFF);
     } else {
         // Ocean Spider House (increment low bits of skullTokenCount)
         gSaveContext.save.skullTokenCount =
@@ -723,5 +725,6 @@ void Inventory_SaveLotteryCodeGuess(GlobalContext* globalCtx) {
     lotteryCodeGuess = ((globalCtx->msgCtx.unk12054 & 0xF) << 8);  // First Digit
     lotteryCodeGuess |= ((globalCtx->msgCtx.unk12056 & 0xF) << 4); // Second Digit
     lotteryCodeGuess |= (globalCtx->msgCtx.unk12058 & 0xF);        // Third Digit
-    gSaveContext.save.lotteryCodeGuess = (gSaveContext.save.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
+    gSaveContext.save.lotteryCodeGuess =
+        (gSaveContext.save.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
 }
