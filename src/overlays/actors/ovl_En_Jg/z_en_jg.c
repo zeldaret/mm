@@ -411,7 +411,7 @@ void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx) {
             (this->textId == TEXTID_JG_THINK_IT_OVER_SLOWLY) ||
             (this->textId == TEXTID_JG_GO_BEYOND_TWIN_ISLANDS_CAVE)) {
             // There is nothing more to say after these lines, so end the current conversation.
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_GoronShrineIdle;
@@ -476,7 +476,7 @@ void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, GlobalContext* globalCtx) {
         }
     } else if (this->animationIndex == EN_JG_ANIMATION_SURPRISE_LOOP) {
         if ((messageState == 5) && (func_80147624(globalCtx))) {
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->animationIndex = EN_JG_ANIMATION_WALK;
@@ -535,7 +535,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
         if ((temp == TEXTID_JG_THIS_IS_OUR_PROBLEM_FIRST) || (temp == TEXTID_JG_THIS_IS_OUR_PROBLEM_REPEAT) ||
             (temp == TEXTID_JG_SO_COLD_I_CANT_PLAY) || (temp == TEXTID_JG_I_AM_COUNTING_ON_YOU)) {
             // There is nothing more to say after these lines, so end the current conversation.
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_SetupWalk;
@@ -547,7 +547,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
             if (!(gSaveContext.weekEventReg[0x18] & 0x80)) {
                 // The player hasn't talked to the Goron Child at least once, so they can't learn
                 // the Lullaby Intro. End the current conversation with the player.
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->actionFunc = EnJg_SetupWalk;
@@ -561,7 +561,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
                 // To get to this point, the player *has* talked to the Goron Child, but doesn't
                 // already have the Lullaby or Lullaby Intro. End the current conversation and
                 // start the cutscene that teaches the Lullaby Intro.
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->cutscene = EnJg_GetCutsceneForTeachingLullabyIntro(this);
@@ -652,7 +652,7 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
 
 void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) != 0) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = EnJg_FrozenIdle;
     }
