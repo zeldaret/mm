@@ -32,6 +32,8 @@
 	- Fake symbols
 	- Inlining
 
+- [Documenting a decompiled file](documenting.md)
+
 ## [Object Decompilation](object_decomp.md) (TODO)
 - Object files
 - How we decompile objects
