@@ -126,13 +126,13 @@ void func_80AD341C(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD349C(EnTrt2* this) {
-    if ((gSaveContext.weekEventReg[85] & 0x10) && !(gSaveContext.weekEventReg[84] & 0x40)) {
+    if ((gSaveContext.save.weekEventReg[85] & 0x10) && !(gSaveContext.save.weekEventReg[84] & 0x40)) {
         this->unk_3A8 = 0x88F;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
-    } else if (gSaveContext.weekEventReg[16] & 0x10) {
+    } else if (gSaveContext.save.weekEventReg[16] & 0x10) {
         this->unk_3A8 = 0x838;
-    } else if (gSaveContext.weekEventReg[17] & 1) {
+    } else if (gSaveContext.save.weekEventReg[17] & 1) {
         this->unk_3A8 = 0x84D;
     } else {
         this->unk_3A8 = 0x849;
@@ -360,7 +360,7 @@ void func_80AD3E34(EnTrt2* this, GlobalContext* globalCtx) {
             globalCtx->msgCtx.unk12023 = 4;
             this->unk_3B2 = 12;
         } else {
-            gSaveContext.weekEventReg[85] |= 0x10;
+            gSaveContext.save.weekEventReg[85] |= 0x10;
             this->unk_3A8 = 0x88E;
             func_801518B0(globalCtx, this->unk_3A8, &this->actor);
             this->unk_3B2 = 10;
@@ -373,11 +373,11 @@ void func_80AD3EF0(EnTrt2* this, GlobalContext* globalCtx) {
 
     if (temp_v0 == 6) {
         if (func_80147624(globalCtx)) {
-            if ((Interface_HasEmptyBottle() && !(gSaveContext.weekEventReg[84] & 0x40)) ||
-                !(gSaveContext.weekEventReg[12] & 0x10)) {
+            if ((Interface_HasEmptyBottle() && !(gSaveContext.save.weekEventReg[84] & 0x40)) ||
+                !(gSaveContext.save.weekEventReg[12] & 0x10)) {
                 this->unk_3B2 = 12;
             } else {
-                gSaveContext.weekEventReg[85] |= 0x10;
+                gSaveContext.save.weekEventReg[85] |= 0x10;
                 this->unk_3A8 = 0x88E;
                 func_801518B0(globalCtx, this->unk_3A8, &this->actor);
                 this->unk_3B2 = 10;
@@ -392,13 +392,13 @@ void func_80AD3EF0(EnTrt2* this, GlobalContext* globalCtx) {
 
 void func_80AD3FF4(EnTrt2* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        if (!(gSaveContext.weekEventReg[12] & 0x10)) {
-            gSaveContext.weekEventReg[12] |= 0x10;
+        if (!(gSaveContext.save.weekEventReg[12] & 0x10)) {
+            gSaveContext.save.weekEventReg[12] |= 0x10;
         }
-        gSaveContext.weekEventReg[84] |= 0x40;
+        gSaveContext.save.weekEventReg[84] |= 0x40;
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
-    } else if (gSaveContext.weekEventReg[12] & 0x10) {
+    } else if (gSaveContext.save.weekEventReg[12] & 0x10) {
         Actor_PickUp(&this->actor, globalCtx, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_BOTTLE_POTION_RED, 300.0f, 300.0f);
@@ -724,20 +724,20 @@ void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
     this->unk_3B8 = 0;
     this->unk_3BC = func_80AD4608;
 
-    if (gSaveContext.weekEventReg[12] & 8) {
+    if (gSaveContext.save.weekEventReg[12] & 8) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
-    if (gSaveContext.weekEventReg[84] & 0x40) {
+    if (gSaveContext.save.weekEventReg[84] & 0x40) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
     if ((globalCtx->sceneNum == SCENE_20SICHITAI) || (globalCtx->sceneNum == SCENE_20SICHITAI2)) {
-        if (gSaveContext.day == 2) {
-            if (!(gSaveContext.weekEventReg[15] & 0x80)) {
-                gSaveContext.weekEventReg[15] |= 0x80;
+        if (gSaveContext.save.day == 2) {
+            if (!(gSaveContext.save.weekEventReg[15] & 0x80)) {
+                gSaveContext.save.weekEventReg[15] |= 0x80;
                 this->unk_3B2 = 3;
             } else {
                 Actor_MarkForDeath(&this->actor);
@@ -747,14 +747,14 @@ void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-    } else if (gSaveContext.day == 2) {
-        if (gSaveContext.weekEventReg[15] & 0x80) {
+    } else if (gSaveContext.save.day == 2) {
+        if (gSaveContext.save.weekEventReg[15] & 0x80) {
             this->unk_3B2 = 4;
         } else {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-    } else if (gSaveContext.day == 3) {
+    } else if (gSaveContext.save.day == 3) {
         this->unk_3B2 = 4;
     }
     this->actionFunc = func_80AD4FE4;

@@ -87,7 +87,7 @@ static InitChainEntry sInitChain[] = {
  * angle can differ from the target angle if the panel is in
  * the middle of rotating.
  */
-s32 ObjTokeidai_GetTargetSunMoonDiskRotation() {
+s32 ObjTokeidai_GetTargetSunMoonPanelRotation() {
     if (gSaveContext.save.isNight) {
         return 0x8000;
     }
@@ -610,7 +610,7 @@ void ObjTokeidai_SetupTowerOpening(ObjTokeidai* this) {
 void ObjTokeidai_DoNothing(ObjTokeidai* this, GlobalContext* globalCtx) {
 }
 
-void ObjTokeidai_StaircaseIntoTower_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
+void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) ||
         (gSaveContext.save.weekEventReg[8] & 0x40)) {
         this->actor.draw = ObjTokeidai_Draw;

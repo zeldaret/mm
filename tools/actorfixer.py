@@ -394,7 +394,6 @@ animdict = {
     "func_80134148": "SkelAnime_DrawTransformFlexLimbOpa",
     "func_8013AB00": "SubS_DrawTransformFlex",
     "func_8013A860": "SubS_DrawTransformFlexLimb",
-    
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",
@@ -438,6 +437,9 @@ animdict = {
     "gSaveContext.unk_FE6": "gSaveContext.save.bombersCaughtNum",
     "gSaveContext.unk_FE7": "gSaveContext.save.bombersCaughtOrder",
     "gSaveContext.linkAge": "gSaveContext.save.linkAge",
+    "gSaveContext.dekuPlaygroundHighScores": "gSaveContext.save.dekuPlaygroundHighScores",
+    "gSaveContext.lotteryCodeGuess": "gSaveContext.save.lotteryCodeGuess",
+    "gSaveContext.playerName": "gSaveContext.save.playerData.playerName",
     "player->unk_A87": "player->exchangeItemId",
     "player->leftHandActor": "player->heldActor",
     "player->unk_384": "player->getItemId",

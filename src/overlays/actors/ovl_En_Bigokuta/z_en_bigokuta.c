@@ -110,7 +110,7 @@ void EnBigokuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
 
-    if (gSaveContext.weekEventReg[20] & 2 ||
+    if (gSaveContext.save.weekEventReg[20] & 2 ||
         ((this->actor.params != 0xFF) && Flags_GetSwitch(globalCtx, this->actor.params))) {
         Actor_MarkForDeath(&this->actor);
     } else {
