@@ -2,14 +2,13 @@
  * File: z_en_ani.c
  * Overlay: ovl_En_Ani
  * Description: Man in Tree in South Termina Field
- *    while his character is the same as the part time worker,
- *    that is just the EnOssan actor using object_ani
+ *    version in shop at night is EnOssan actor using object_ani
  */
 
 #include "z_en_ani.h"
 #include "objects/object_ani/object_ani.h"
 
-#define FLAGS ACTOR_FLAG_8 | ACTOR_FLAG_1
+#define FLAGS (ACTOR_FLAG_8 | ACTOR_FLAG_1)
 
 #define THIS ((EnAni*)thisx)
 
@@ -83,6 +82,7 @@ void EnAni_DefaultBlink(EnAni* this) {
     if (DECR(this->blinkTimer) == 0) {
         this->blinkTimer = Rand_S16Offset(60, 60);
     }
+
     this->eyeState = this->blinkTimer;
     if (this->eyeState >= 3) {
         this->eyeState = 0;
@@ -141,6 +141,7 @@ void EnAni_Init(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.eventInf[1] &= (u8)~0x10;
 
     } else { // ANI_TYPE_STANDING
+        // ( unused code )
         // for some reason standing he has a large collider
         // possibly he was meant to be a blocking npc like bomber
         this->collider2.dim.radius = 60;
@@ -211,7 +212,7 @@ void EnAni_FallToGround(EnAni* this, GlobalContext* globalCtx) {
     s32 pad;
     s16 quakeValue;
 
-    if (this->actor.bgCheckFlags & 1) { // standing on the ground
+    if (this->actor.bgCheckFlags & 1) { // hit the ground
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actionFunc = EnAni_LandOnFoot;
         this->actor.velocity.x = 0.0f;
@@ -316,20 +317,22 @@ void EnAni_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnAni_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
-    EnAni* this = (EnAni*)actor;
-    if (limbIndex == 15) { // HEAD
+s32 EnAni_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnAni* this = THIS;
+
+    if (limbIndex == OBJECT_ANI_LIMB_HEAD) {
         rot->x += this->headRot.y;
         rot->z += this->headRot.x;
     }
+
     return false;
 }
 
-void EnAni_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
+void EnAni_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_809686A4 = { 800.0f, 500.0f, 0.0f };
 
-    if (limbIndex == 15) { // HEAD
-        Matrix_MultiplyVector3fByState(&D_809686A4, &actor->focus.pos);
+    if (limbIndex == OBJECT_ANI_LIMB_HEAD) {
+        Matrix_MultiplyVector3fByState(&D_809686A4, &thisx->focus.pos);
     }
 }
 
