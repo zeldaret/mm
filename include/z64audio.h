@@ -11,12 +11,22 @@
 
 #define MAX_CHANNELS_PER_BANK 3
 
+#define AUDIO_LERPIMP(v0, v1, t) (v0 + ((v1 - v0) * t))
+
 #define ADSR_DISABLE 0
 #define ADSR_HANG -1
 #define ADSR_GOTO -2
 #define ADSR_RESTART -3
 
 #define AIBUF_LEN 0x580
+
+typedef enum {
+    /* 0 */ AUDIO_MODE_STEREO,
+    /* 1 */ AUDIO_MODE_HEADSET,
+    /* 2 */ AUDIO_MODE_UNK,
+    /* 3 */ AUDIO_MODE_MONO,
+    /* 4 */ AUDIO_MODE_SURROUND,
+} AudioSoundMode;
 
 typedef enum {
     /* 0 */ ADSR_STATE_DISABLED,
@@ -99,23 +109,23 @@ typedef enum {
 } OcarinaButtonIdx;
 
 typedef enum {
-    /* 0x0 */ NOTE_C4,
-    /* 0x1 */ NOTE_DFLAT4,
-    /* 0x2 */ NOTE_D4,
-    /* 0x3 */ NOTE_EFLAT4,
-    /* 0x4 */ NOTE_E4,
-    /* 0x5 */ NOTE_F4,
-    /* 0x6 */ NOTE_GFLAT4,
-    /* 0x7 */ NOTE_G4,
-    /* 0x8 */ NOTE_AFLAT4,
-    /* 0x9 */ NOTE_A4,
-    /* 0xA */ NOTE_BFLAT4,
-    /* 0xB */ NOTE_B4,
-    /* 0xC */ NOTE_C5,
-    /* 0xD */ NOTE_DFLAT5,
-    /* 0xE */ NOTE_D5,
-    /* 0xF */ NOTE_EFLAT5,
-    /* -1  */ NOTE_NONE = 0xFF
+    /* 0x0 */ OCARINA_PITCH_C4,
+    /* 0x1 */ OCARINA_PITCH_DFLAT4,
+    /* 0x2 */ OCARINA_PITCH_D4,
+    /* 0x3 */ OCARINA_PITCH_EFLAT4,
+    /* 0x4 */ OCARINA_PITCH_E4,
+    /* 0x5 */ OCARINA_PITCH_F4,
+    /* 0x6 */ OCARINA_PITCH_GFLAT4,
+    /* 0x7 */ OCARINA_PITCH_G4,
+    /* 0x8 */ OCARINA_PITCH_AFLAT4,
+    /* 0x9 */ OCARINA_PITCH_A4,
+    /* 0xA */ OCARINA_PITCH_BFLAT4,
+    /* 0xB */ OCARINA_PITCH_B4,
+    /* 0xC */ OCARINA_PITCH_C5,
+    /* 0xD */ OCARINA_PITCH_DFLAT5,
+    /* 0xE */ OCARINA_PITCH_D5,
+    /* 0xF */ OCARINA_PITCH_EFLAT5,
+    /* -1  */ OCARINA_PITCH_NONE = 0xFF
 } OcarinaNoteIdx;
 
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
@@ -154,10 +164,10 @@ typedef struct NotePool {
 // extrapolates exponentially in the wrong direction in that case, but that
 // doesn't prevent seqplayer from doing it, AFAICT.
 typedef struct {
-    /* 0x00 */ u8 mode; // bit 0x80 denotes something; the rest are an index 0-5
-    /* 0x02 */ u16 cur;
-    /* 0x04 */ u16 speed;
-    /* 0x08 */ f32 extent;
+    /* 0x0 */ u8 mode; // bit 0x80 denotes something; the rest are an index 0-5
+    /* 0x2 */ u16 cur;
+    /* 0x4 */ u16 speed;
+    /* 0x8 */ f32 extent;
 } Portamento; // size = 0xC
 
 typedef struct {
@@ -298,7 +308,7 @@ typedef struct {
     /* 0x000 */ u8 fontDmaInProgress : 1;
     /* 0x000 */ u8 recalculateVolume : 1;
     /* 0x000 */ u8 stopScript : 1;
-    /* 0x000 */ u8 unk_0b1 : 1;
+    /* 0x000 */ u8 applyBend : 1;
     /* 0x001 */ u8 state;
     /* 0x002 */ u8 noteAllocPolicy;
     /* 0x003 */ u8 muteBehavior;
@@ -324,7 +334,7 @@ typedef struct {
     /* 0x028 */ f32 muteVolumeScale;
     /* 0x02C */ f32 fadeVolumeScale;
     /* 0x030 */ f32 appliedFadeVolume;
-    /* 0x034 */ f32 unk_34;
+    /* 0x034 */ f32 bend;
     /* 0x038 */ struct SequenceChannel* channels[16];
     /* 0x078 */ SeqScriptState scriptState;
     /* 0x094 */ u8* shortNoteVelocityTable;
@@ -401,17 +411,6 @@ typedef struct VibratoSubStruct {
     /* 0xA */ u16 vibratoExtentChangeDelay;
     /* 0xC */ u16 vibratoDelay;
 } VibratoSubStruct; // size = 0xE
-
-typedef struct SequenceChannelSubStruct {
-    /* 0x0 */ u8 enabled : 1;
-    /* 0x0 */ u8 finished : 1;
-    /* 0x0 */ u8 stopScript : 1;
-    /* 0x0 */ u8 stopSomething2 : 1; // sets SequenceLayer.stopSomething
-    /* 0x0 */ u8 hasInstrument : 1;
-    /* 0x0 */ u8 stereoHeadsetEffects : 1;
-    /* 0x0 */ u8 largeNotes : 1; // notes specify duration and velocity
-    /* 0x0 */ u8 unused : 1;
-} SequenceChannelSubStruct; // size = 0x1
 
 // Also known as a SubTrack, according to sm64 debug strings.
 typedef struct SequenceChannel {
@@ -530,7 +529,7 @@ typedef struct SequenceLayer {
     /* 0x30 */ Portamento portamento;
     /* 0x3C */ struct Note* note;
     /* 0x40 */ f32 freqScale;
-    /* 0x44 */ f32 unk_34;
+    /* 0x44 */ f32 bend;
     /* 0x48 */ f32 velocitySquare2;
     /* 0x4C */ f32 velocitySquare; // not sure which one of those corresponds to the sm64 original
     /* 0x50 */ f32 noteVelocity;
