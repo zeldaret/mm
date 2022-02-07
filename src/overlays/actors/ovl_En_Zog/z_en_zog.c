@@ -628,7 +628,7 @@ void func_80B9451C(EnZog* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B94470;
-    } else if ((globalCtx->msgCtx.unk1202A == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((globalCtx->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
         if ((globalCtx->msgCtx.unk1202E == 7) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
@@ -716,7 +716,7 @@ void func_80B948A8(EnZog* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B946FC;
-    } else if ((globalCtx->msgCtx.unk1202A == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((globalCtx->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
         if ((globalCtx->msgCtx.unk1202E == 7) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;

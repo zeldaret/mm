@@ -86,8 +86,7 @@ void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80B97100;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zo_Skel_00D208, &object_zo_Anim_004248, this->jointTable,
-                       this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
     Animation_PlayLoop(&this->skelAnime, &object_zo_Anim_00DE20);
     this->unk_2F0 = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -236,7 +235,7 @@ void EnZot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80B96BEC(EnZot* this, s16 arg1, u8 arg2) {
     static AnimationHeader* sAnimations[] = {
-        &object_zo_Anim_00DE20, &object_zo_Anim_002898, &object_zo_Anim_00F4E8, &object_zo_Anim_00E400,
+        &object_zo_Anim_00DE20, &gZoraWalkAnim,         &object_zo_Anim_00F4E8, &object_zo_Anim_00E400,
         &object_zo_Anim_00FDF0, &object_zo_Anim_010B18, &object_zo_Anim_011424, &object_zo_Anim_00EDF0,
         &object_zo_Anim_00DF54, &object_zo_Anim_00DF54,
     };
@@ -1139,7 +1138,7 @@ void func_80B98BF4(EnZot* this, GlobalContext* globalCtx) {
 
 void func_80B98CA8(EnZot* this, GlobalContext* globalCtx) {
     if (func_800B8718(&this->actor, &globalCtx->state)) {
-        globalCtx->msgCtx.unk1202A = 4;
+        globalCtx->msgCtx.ocarinaMode = 4;
         func_8019B544(0xFFFF);
         this->actionFunc = func_80B98BF4;
         this->actor.flags |= 0x10000;
@@ -1386,9 +1385,9 @@ void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
 void EnZot_Draw(Actor* thisx, GlobalContext* globalCtx) {
     TexturePtr sp4C[] = {
-        object_zo_Tex_0050A0,
-        object_zo_Tex_0058A0,
-        object_zo_Tex_0060A0,
+        gZoraEyeOpenTex,
+        gZoraEyeHalfTex,
+        gZoraEyeClosedTex,
     };
     EnZot* this = THIS;
 

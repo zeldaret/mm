@@ -3465,7 +3465,7 @@ void func_80B4B024(EnInvadepoh* this) {
 
 void func_80B4B048(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (globalCtx->msgCtx.unk120B1 == 0) {
-        if (globalCtx->msgCtx.unk11F22 == 0) {
+        if (globalCtx->msgCtx.msgMode == 0) {
             D_80B4E998 = 1;
         } else if ((Message_GetState(&globalCtx->msgCtx) == 6) || (Message_GetState(&globalCtx->msgCtx) == 5)) {
             D_80B4E998 = 1;

@@ -99,7 +99,7 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
 
     if (talkState == 5) {
         if (func_80147624(globalCtx)) {
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             func_80B3C260(this);
         }
@@ -118,7 +118,7 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
                     break;
                 case 2:
                     func_8019F230();
-                    globalCtx->msgCtx.unk11F22 = 0x43;
+                    globalCtx->msgCtx.msgMode = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     func_80B3C260(this);
             }

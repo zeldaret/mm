@@ -4919,7 +4919,6 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
 
                         gSaveContext.save.unk_EE4 &= 0xFFFFFF00;
                         gSaveContext.save.unk_EE4 |= ((s16)D_809171CC & 0x7F);
-
                         temp = (gSaveContext.save.unk_EE4 & 0x7F000000) >> 0x18;
                         if (temp < D_809171CC) {
                             gSaveContext.save.unk_EE4 &= 0xFFFFFF;
